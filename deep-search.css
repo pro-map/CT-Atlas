@@ -25,6 +25,8 @@
 #deepSearchRun:disabled{opacity:.55;cursor:wait}
 #deepSearchStatus{margin-top:12px;min-height:32px;font:600 8px/1.5 Arial,sans-serif;color:#8fa4af}
 .deep-status.working{color:#e0bb61}.deep-status.success{color:#76d19b}.deep-status.warning{color:#e0bb61}.deep-status.error{color:#e37a7a}
+.deep-status.working::before{content:"";display:inline-block;width:9px;height:9px;margin-right:6px;vertical-align:-1px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:ct-spin .8s linear infinite}
+@keyframes ct-spin{to{transform:rotate(360deg)}}
 #deepSearchResult{min-width:0;overflow:auto;padding:17px 20px 24px}
 #deepSearchResultTopline{display:flex;gap:16px;justify-content:space-between;align-items:flex-start;padding:0 0 13px;border-bottom:1px solid rgba(83,150,188,.22)}
 #deepSearchResultTitle{font:900 15px/1.25 Arial,sans-serif;letter-spacing:.07em;color:#e4f4fb}

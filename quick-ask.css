@@ -21,6 +21,8 @@
 #quickAskRun:disabled{opacity:.55;cursor:wait}
 #quickAskStatus{margin-top:12px;min-height:20px;font:600 8px/1.5 Arial,sans-serif;color:#a291b0}
 .qa-status.working{color:#d8b761}.qa-status.success{color:#7fd1a0}.qa-status.warning{color:#d8b761}.qa-status.error{color:#e0807f}
+.qa-status.working::before{content:"";display:inline-block;width:9px;height:9px;margin-right:6px;vertical-align:-1px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:ct-spin .8s linear infinite}
+@keyframes ct-spin{to{transform:rotate(360deg)}}
 #quickAskAnswerBlock{margin-top:14px;padding-top:14px;border-top:1px solid rgba(139,101,171,.2)}
 .qa-badge{display:inline-block;padding:4px 8px;border:1px solid;font:800 7px/1 Arial,sans-serif;letter-spacing:.09em}
 .qa-badge.grounded{color:#7ed19c;border-color:rgba(126,209,156,.4);background:rgba(50,130,85,.09)}

@@ -3873,6 +3873,21 @@ html, body {
 .report-status.success { color: #9bcbb4; }
 .report-status.warning { color: #d4b976; }
 .report-status.error { color: #e6a3a3; }
+.report-status.working::before {
+    content: "";
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    margin-right: 6px;
+    vertical-align: -1px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: ct-spin .8s linear infinite;
+}
+@keyframes ct-spin {
+    to { transform: rotate(360deg); }
+}
 
 #reportGeneratorResult {
     margin-top: 15px;
