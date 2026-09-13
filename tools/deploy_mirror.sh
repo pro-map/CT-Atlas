@@ -12,10 +12,16 @@ STAGING=_pages_mirror
 rm -rf "$STAGING"
 mkdir -p "$STAGING"
 
-cp index.html privacy.html robots.txt ct-atlas.png interpol-logo.png events.json \
+cp index.html privacy.html robots.txt events.json \
    deep-search.js deep-search.css quick-ask.js quick-ask.css feedback.js feedback.css \
    usage-admin.js usage-admin.css usage-auth-fix.js \
    "$STAGING"/
+
+# index.html references the logo as "CT-ATLAS.png" (exact case) -- GitHub
+# Pages serves it fine regardless of case, but Cloudflare Workers assets are
+# an exact-match lookup, so the on-disk lowercase ct-atlas.png must be
+# copied under the exact uppercase name the page actually requests.
+cp ct-atlas.png "$STAGING/CT-ATLAS.png"
 
 cat > "$STAGING/wrangler.toml" <<'EOF'
 name = "ct-atlas-mirror"
