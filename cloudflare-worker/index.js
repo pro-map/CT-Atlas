@@ -27,6 +27,10 @@ import { handleQuickAsk, QUICK_ASK_VERSION } from "./quick-ask.js";
 import { handleFeedback, FEEDBACK_VERSION } from "./feedback.js";
 export default {
 async fetch(request, env, ctx) {
+// A fresh per-request copy, never a mutation of the shared env object --
+// concurrent requests in the same isolate must never see each other's
+// Origin. See corsHeaders() in shared.js for how this is consumed.
+env = { ...env, __requestOrigin: request.headers.get("Origin") || "" };
 const url = new URL(request.url);
 if (request.method === "OPTIONS") {
 return new Response(null, { status: 204, headers: corsHeaders(env) });

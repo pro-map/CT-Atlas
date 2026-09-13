@@ -136,9 +136,21 @@ sources and catches hallucination -- follow exactly):
   the report with speculation.
 `;
 
+// Reflects the actual request's Origin when it's on the allowlist (the main
+// site plus any mirror hosted elsewhere for networks that block the main
+// domain -- see EXTRA_ALLOWED_ORIGINS), otherwise falls back to the primary
+// ALLOWED_ORIGIN. env.__requestOrigin is set once per request in index.js's
+// fetch() via a fresh {...env} copy (never by mutating the shared env
+// object), so concurrent requests in the same isolate can never see each
+// other's origin.
 function corsHeaders(env) {
+  const requestOrigin = env.__requestOrigin || "";
+  const allowlist = [env.ALLOWED_ORIGIN, ...String(env.EXTRA_ALLOWED_ORIGINS || "").split(",")]
+    .map(v => String(v || "").trim())
+    .filter(Boolean);
+  const origin = allowlist.includes(requestOrigin) ? requestOrigin : (env.ALLOWED_ORIGIN || "*");
   return {
-    "Access-Control-Allow-Origin": env.ALLOWED_ORIGIN || "*",
+    "Access-Control-Allow-Origin": origin,
     "Access-Control-Allow-Methods": "POST,OPTIONS,GET",
     "Access-Control-Allow-Headers": "Content-Type,X-Session-Token",
     "Content-Type": "application/json; charset=utf-8"
