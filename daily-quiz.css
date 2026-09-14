@@ -1,4 +1,4 @@
-#dailyQuizButton{grid-column:1/-1;width:100%;margin:0;padding:9px 10px;border:1px solid rgba(181,141,57,.55);background:linear-gradient(180deg,rgba(83,62,21,.62),rgba(42,30,10,.88));color:#ead18a;font:700 8px/1.2 Arial,sans-serif;letter-spacing:.12em;cursor:pointer;text-transform:uppercase;box-shadow:inset 0 0 0 1px rgba(255,255,255,.025),0 0 13px rgba(181,141,57,.08)}
+#dailyQuizButton{grid-column:1/-1;width:100%;margin:4px 0 3px;padding:9px 10px;border:1px solid rgba(181,141,57,.55);background:linear-gradient(180deg,rgba(83,62,21,.62),rgba(42,30,10,.88));color:#ead18a;font:700 8px/1.2 Arial,sans-serif;letter-spacing:.12em;cursor:pointer;text-transform:uppercase;box-shadow:inset 0 0 0 1px rgba(255,255,255,.025),0 0 13px rgba(181,141,57,.08)}
 #dailyQuizButton:hover{border-color:#dfbb64;background:linear-gradient(180deg,rgba(111,82,27,.72),rgba(55,38,11,.94));color:#fff1b3}
 #dailyQuizPanel{position:fixed;inset:0;z-index:3120;display:none;pointer-events:none;background:rgba(2,10,15,.12)}
 #dailyQuizPanel.open{display:block}
