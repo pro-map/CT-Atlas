@@ -7,7 +7,7 @@ const source=fs.readFileSync('cloudflare-worker/shared.js','utf8').replace(/expo
 function harness(){
  const c=vm.createContext({crypto,fetch:async()=>({}),TextEncoder});
  vm.runInContext(source,c);
- return vm.runInContext('({corsHeaders,isAllowedUser,passwordHashForUser,getAllowedUsers})',c);
+ return vm.runInContext('({corsHeaders,isAllowedUser,passwordHashForUser,getAllowedUsers,matchesRegion})',c);
 }
 
 test('corsHeaders allows the primary ALLOWED_ORIGIN when the request comes from it',()=>{
@@ -58,4 +58,12 @@ test('secret-backed auth overrides the legacy compatibility roster',()=>{
  assert.equal(h.isAllowedUser('group-i-1',env),false);
  assert.equal(h.passwordHashForUser('analyst',env),hash);
  assert.deepEqual(Array.from(h.getAllowedUsers(env)),['analyst']);
+});
+
+
+test('country filters accept ISO country codes and common frontend aliases',()=>{
+ const h=harness();
+ assert.equal(h.matchesRegion({country:'Democratic Republic of the Congo',country_code:'CD'},'Congo (Democratic Rep.)'),true);
+ assert.equal(h.matchesRegion({country:'Czechia',country_code:'CZ'},'Czech Republic'),true);
+ assert.equal(h.matchesRegion({country:'Côte d’Ivoire',country_code:'CI'},"Côte d'Ivoire"),true);
 });
