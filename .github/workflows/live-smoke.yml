@@ -53,6 +53,9 @@ jobs:
           for (const key of ["ok", "deep_search", "quiz_tracking"]) {
             if (health[key] !== true) throw new Error("Worker health flag is not true: " + key);
           }
+          if (health.auth_mode !== "secret") {
+            throw new Error("Worker authentication is not using the required secret mode: " + health.auth_mode);
+          }
           console.log("Worker health valid:", health.version, health.auth_mode);
           NODE
 
