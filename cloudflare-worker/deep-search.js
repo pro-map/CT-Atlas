@@ -5,6 +5,7 @@ import {
   normalizeUsername,
   isAllowedUser,
   gateCall,
+  parseEventDate,
   extractGeminiText,
   sha256
 } from "./shared.js";
@@ -1219,18 +1220,19 @@ function candidateMapEvents(db, window) {
   const all = Array.isArray(db) ? db : (Array.isArray(db?.events) ? db.events : []);
   const cutoff = window.startDt.getTime() - (14 * 86400000);
   return all.filter(event => {
-    const raw = event?.event_date || event?.occurrence_date || event?.published || event?.last_reported;
-    if (!raw) return true;
-    const dt = new Date(raw);
-    return Number.isNaN(dt.getTime()) || dt.getTime() >= cutoff;
-  }).map(event => ({
-    id: String(event?.id || event?._mapKey || ""),
-    title: cleanText(event?.title, 500),
-    original_title: cleanText(event?.original_title, 500),
-    url: cleanText(event?.url, 1200),
-    published: String(event?.event_date || event?.occurrence_date || event?.published || ""),
-    country: cleanText(event?.country, 100)
-  }));
+    const dt = parseEventDate(event);
+    return !dt || dt.getTime() >= cutoff;
+  }).map(event => {
+    const dt = parseEventDate(event);
+    return {
+      id: String(event?.id || event?._mapKey || ""),
+      title: cleanText(event?.title, 500),
+      original_title: cleanText(event?.original_title, 500),
+      url: cleanText(event?.url, 1200),
+      published: dt ? dt.toISOString() : "",
+      country: cleanText(event?.country, 100)
+    };
+  });
 }
 
 function compareWithAtlas(rows, mapEvents) {
