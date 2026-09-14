@@ -204,13 +204,16 @@ function injectAdminUi(){
             <div class="admin-usage-metric"><span>SEARCHES</span><strong id="adminSearches">—</strong></div>
             <div class="admin-usage-metric"><span>REPORT REQUESTS</span><strong id="adminReportRequests">—</strong></div>
             <div class="admin-usage-metric"><span>AI REPORTS</span><strong id="adminAiReports">—</strong></div>
+            <div class="admin-usage-metric"><span>QUIZ ANSWERS</span><strong id="adminQuizAnswers">—</strong></div>
+            <div class="admin-usage-metric"><span>QUIZ CORRECT</span><strong id="adminQuizCorrect">—</strong></div>
+            <div class="admin-usage-metric"><span>QUIZ SCORE</span><strong id="adminQuizScore">—</strong></div>
           </div>
           <div id="adminUsageStatus">Select a period to load usage statistics.</div>
           <div class="admin-usage-table-wrap">
             <table id="adminUsageTable">
               <thead>
                 <tr>
-                  <th>USER</th><th>LOGINS</th><th>SEARCHES</th><th>REPORTS</th><th>AI</th><th>CACHE</th><th>LAST ACTIVE</th>
+                  <th>USER</th><th>LOGINS</th><th>SEARCHES</th><th>REPORTS</th><th>AI</th><th>CACHE</th><th>QUIZ</th><th>CORRECT</th><th>SCORE</th><th>LAST ACTIVE</th>
                 </tr>
               </thead>
               <tbody id="adminUsageRows"></tbody>
@@ -298,6 +301,11 @@ async function loadAdmin(period){
     document.getElementById("adminSearches").textContent=Number(summary.searches||0);
     document.getElementById("adminReportRequests").textContent=Number(summary.report_requests||0);
     document.getElementById("adminAiReports").textContent=Number(summary.reports_generated||0);
+    const quizAnswers=Number(summary.quiz_answers||0);
+    const quizCorrect=Number(summary.quiz_correct||0);
+    document.getElementById("adminQuizAnswers").textContent=quizAnswers;
+    document.getElementById("adminQuizCorrect").textContent=quizCorrect;
+    document.getElementById("adminQuizScore").textContent=quizAnswers?Math.round(100*quizCorrect/quizAnswers)+"%":"—";
 
     if(rows){
       rows.innerHTML=(payload.users||[]).map(item=>`
@@ -308,6 +316,9 @@ async function loadAdmin(period){
           <td>${Number(item.report_requests||0)}</td>
           <td>${Number(item.reports_generated||0)}</td>
           <td>${Number(item.cached_reports||0)}</td>
+          <td>${Number(item.quiz_answers||0)}</td>
+          <td>${Number(item.quiz_correct||0)}</td>
+          <td>${Number(item.quiz_answers||0)?Math.round(100*Number(item.quiz_correct||0)/Number(item.quiz_answers||0))+"%":"—"}</td>
           <td>${escapeCell(lastActive(item.last_activity))}</td>
         </tr>`).join("");
     }

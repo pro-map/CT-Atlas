@@ -103,7 +103,10 @@ export class ReportGate {
           "cached_reports",
           "blocked_report_requests",
           "quick_ask_requests",
-          "feedback_submissions"
+          "feedback_submissions",
+          "quiz_answers",
+          "quiz_correct",
+          "quiz_incorrect"
         ]) {
           row[metric] =
             Number(row[metric] || 0) +
@@ -121,7 +124,7 @@ export class ReportGate {
 
     const summary = {
       active_users: rows.filter(row =>
-        ["logins", "searches", "report_requests", "reports_generated", "cached_reports"]
+        ["logins", "searches", "report_requests", "reports_generated", "cached_reports", "quiz_answers"]
           .some(metric => Number(row[metric] || 0) > 0)
       ).length,
       logins: 0,
@@ -133,7 +136,10 @@ export class ReportGate {
       cached_reports: 0,
       blocked_report_requests: 0,
       quick_ask_requests: 0,
-      feedback_submissions: 0
+      feedback_submissions: 0,
+      quiz_answers: 0,
+      quiz_correct: 0,
+      quiz_incorrect: 0
     };
 
     for (const row of rows) {
@@ -147,7 +153,10 @@ export class ReportGate {
         "cached_reports",
         "blocked_report_requests",
         "quick_ask_requests",
-        "feedback_submissions"
+        "feedback_submissions",
+        "quiz_answers",
+        "quiz_correct",
+        "quiz_incorrect"
       ]) {
         summary[metric] += Number(row[metric] || 0);
       }
@@ -368,6 +377,40 @@ export class ReportGate {
       }
 
       return Response.json({ ok: true });
+    }
+
+    if (url.pathname === "/quiz-answer-record") {
+      const username = normalizeUsername(body.username);
+      const quizDate = String(body.quiz_date || "");
+      const correct = body.correct === true;
+
+      if (!isAllowedUser(username)) {
+        return Response.json({ error: "Unknown user." }, { status: 400 });
+      }
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(quizDate)) {
+        return Response.json({ error: "Invalid quiz date." }, { status: 400 });
+      }
+
+      const answerKey = `quiz-answer:${quizDate}:${username}`;
+      const existing = await this.state.storage.get(answerKey);
+      if (existing) {
+        return Response.json({ ok: true, already_recorded: true, correct: existing.correct === true });
+      }
+
+      const answer = {
+        username,
+        quiz_date: quizDate,
+        correct,
+        answered_at: new Date(now).toISOString()
+      };
+      await this.state.storage.put(answerKey, answer);
+      await this.incrementUsage(username, {
+        quiz_answers: 1,
+        quiz_correct: correct ? 1 : 0,
+        quiz_incorrect: correct ? 0 : 1
+      }, now);
+
+      return Response.json({ ok: true, already_recorded: false, correct });
     }
 
     if (url.pathname === "/usage-increment") {

@@ -1,6 +1,10 @@
 (function(){
 "use strict";
 
+const API_BASE="https://ct-report-generator.fairpeace.workers.dev";
+const TOKEN_KEY="ct_map_session_token";
+const USER_KEY="ct_map_username";
+
 function esc(value){
   return String(value??"").replace(/&/g,"&amp;").replace(/</g,"&lt;")
     .replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
@@ -11,6 +15,20 @@ function ensureCss(){
   const link=document.createElement("link");
   link.id="dailyQuizCss"; link.rel="stylesheet"; link.href="daily-quiz.css?v=1";
   document.head.appendChild(link);
+}
+
+async function recordAnswer(quiz,selectedIndex){
+  const username=String(sessionStorage.getItem(USER_KEY)||"").trim().toLowerCase();
+  const token=String(sessionStorage.getItem(TOKEN_KEY)||"");
+  if(!username||!token||!quiz.date)return;
+  try{
+    const response=await fetch(API_BASE+"/quiz-answer",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","X-Session-Token":token},
+      body:JSON.stringify({username,quiz_date:quiz.date,selected_index:selectedIndex})
+    });
+    if(!response.ok)console.warn("Quiz result was not recorded:",await response.text());
+  }catch(error){console.warn("Quiz result was not recorded:",error);}
 }
 
 async function inject(){
@@ -49,6 +67,7 @@ async function inject(){
     const source=quiz.source_url?`<a class="daily-quiz-source" href="${esc(quiz.source_url)}" target="_blank" rel="noopener noreferrer">VERIFY SOURCE ↗</a>`:"";
     result.innerHTML=`<strong>${verdict}</strong> ${esc(quiz.explanation||"")}<br>${source}`;
     result.classList.add("visible");
+    recordAnswer(quiz,chosen);
   }));
 }
 

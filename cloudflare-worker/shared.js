@@ -200,6 +200,9 @@ function usageTemplate(username = "") {
     blocked_report_requests: 0,
     quick_ask_requests: 0,
     feedback_submissions: 0,
+    quiz_answers: 0,
+    quiz_correct: 0,
+    quiz_incorrect: 0,
     last_activity: ""
   };
 }
