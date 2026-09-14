@@ -299,6 +299,63 @@ const REPORT_REGION_COUNTRY_CODES = Object.freeze({
   ])
 });
 
+const REPORT_COUNTRY_CODE_ALIASES = Object.freeze({
+  "congo democratic rep": "CD",
+  "democratic republic of the congo": "CD",
+  "drc": "CD",
+  "cote d ivoire": "CI",
+  "ivory coast": "CI",
+  "czech republic": "CZ",
+  "czechia": "CZ",
+  "viet nam": "VN",
+  "vietnam": "VN",
+  "swaziland": "SZ",
+  "eswatini": "SZ",
+  "turkey": "TR",
+  "turkiye": "TR",
+  "russia": "RU",
+  "russian federation": "RU",
+  "iran": "IR",
+  "islamic republic of iran": "IR",
+  "syria": "SY",
+  "syrian arab republic": "SY",
+  "laos": "LA",
+  "moldova": "MD",
+  "republic of moldova": "MD",
+  "palestine": "PS",
+  "state of palestine": "PS",
+  "bolivia": "BO",
+  "venezuela": "VE",
+  "tanzania": "TZ",
+  "united states": "US",
+  "united states of america": "US",
+  "usa": "US",
+  "uk": "GB",
+  "united kingdom": "GB",
+  "great britain": "GB",
+  "south korea": "KR",
+  "republic of korea": "KR",
+  "north korea": "KP",
+  "democratic peoples republic of korea": "KP",
+  "uae": "AE",
+  "united arab emirates": "AE"
+});
+
+function foldRegionLabel(value) {
+  return String(value || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[’']/g, " ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+function countryCodeForLabel(value) {
+  return REPORT_COUNTRY_CODE_ALIASES[foldRegionLabel(value)] || "";
+}
+
 function matchesRegion(event, region) {
   const selected = String(region || "").trim().toUpperCase();
   if (!selected || selected === "GLOBAL") return true;
@@ -321,9 +378,20 @@ function matchesRegion(event, region) {
     return (labelAliases[selected] || []).some(alias => storedRegion.includes(alias));
   }
 
-  const target = String(region || "").trim().toLowerCase();
+  const target = foldRegionLabel(region);
+  const selectedCode = countryCodeForLabel(region);
+  const eventCode = String(event?.country_code || event?.country_iso2 || event?.countryCode || event?.iso2 || "")
+    .trim()
+    .toUpperCase();
+  if (selectedCode && eventCode === selectedCode) return true;
+
   return [event?.country, event?.region, event?.city]
-    .some(v => String(v || "").trim().toLowerCase() === target);
+    .some(value => {
+      const candidate = foldRegionLabel(value);
+      return candidate === target || (
+        selectedCode && countryCodeForLabel(value) === selectedCode
+      );
+    });
 }
 
 function compactEvent(event) {
