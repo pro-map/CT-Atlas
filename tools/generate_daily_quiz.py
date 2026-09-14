@@ -52,6 +52,9 @@ Return ONLY valid JSON with these keys: category, question, options, correct_ind
 
 Rules:
 - Write in clear professional English.
+- Target an intermediate-to-advanced audience of counter-terrorism analysts. Never ask elementary general-knowledge questions such as the year of 9/11, the country where a globally famous attack occurred, or the basic expansion of a well-known acronym.
+- Prefer questions that require genuine professional knowledge: distinctions between UN resolutions or sanctions regimes; organisational lineages, mergers, splits and aliases; regional branches and leadership histories; foreign terrorist fighter frameworks; financing typologies; propaganda ecosystems; international legal instruments; or less-obvious facts about significant attacks and investigations.
+- Make all three distractors credible to a knowledgeable reader. Avoid obviously absurd countries, dates, names or organisations.
 - Ask exactly one timeless factual question and provide exactly 3 plausible, mutually exclusive answers.
 - Cover varied counter-terrorism knowledge: terrorist organisations and areas of operation; aliases and leaders; nationality or biography of historically significant terrorists; dates and locations of major attacks; ideology; financing; recruitment; propaganda; travel and foreign terrorist fighters; weapons; CBRN; maritime terrorism; online activity and emerging technology; international CT instruments and institutions.
 - Do not ask about graphic details, tactics that facilitate harm, classified information, political opinion, disputed attribution, or facts likely to change.
