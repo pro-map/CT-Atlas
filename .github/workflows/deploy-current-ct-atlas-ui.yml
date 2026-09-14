@@ -41,6 +41,9 @@ jobs:
           grep -q 'OFFICIAL REGIONS' index.html
           grep -q 'MEMBER COUNTRIES' index.html
           grep -q 'INTERPOL_CT_events_' index.html
+          test -s daily-quiz.js
+          test -s daily-quiz.css
+          grep -q 'dailyQuizButton' daily-quiz.js
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6
       - name: Upload website
