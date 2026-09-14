@@ -1,76 +1,70 @@
 (function(){
-"use strict";
-
-const API_BASE="https://ct-report-generator.fairpeace.workers.dev";
-const TOKEN_KEY="ct_map_session_token";
-const USER_KEY="ct_map_username";
-
-function esc(value){
-  return String(value??"").replace(/&/g,"&amp;").replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+'use strict';
+const API='https://ct-report-generator.fairpeace.workers.dev';
+let session='', box=null, busy=false, quiz=null, pending=null, answered=false;
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+const identity=()=>document.body.classList.contains('locked')?'':sessionStorage.getItem('ct_map_session_token')||'';
+async function api(path,body){
+  const token=session;
+  const r=await fetch(API+path,{method:body?'POST':'GET',cache:'no-store',
+    headers:{'X-Session-Token':token,'Content-Type':'application/json'},
+    ...(body?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(20000)});
+  if(token!==identity())throw new Error('Session changed.');
+  const data=await r.json();
+  if(!r.ok)throw new Error(data.error||'Unable to confirm your answer.');
+  return data;
 }
-
-function ensureCss(){
-  if(document.getElementById("dailyQuizCss"))return;
-  const link=document.createElement("link");
-  link.id="dailyQuizCss"; link.rel="stylesheet"; link.href="daily-quiz.css?v=1";
-  document.head.appendChild(link);
+function status(message){box.querySelector('.daily-quiz-result').textContent=message;box.querySelector('.daily-quiz-result').classList.add('visible');}
+function lock(value){box.querySelectorAll('.daily-quiz-option').forEach(b=>b.disabled=value);}
+function showAnswer(a){
+  answered=true;pending=null;lock(true);
+  box.querySelectorAll('.daily-quiz-option').forEach((b,i)=>{
+    if(a.quiz_id===quiz.id && i===a.correct_index)b.classList.add('correct');
+    else if(a.quiz_id===quiz.id && i===a.selected_index)b.classList.add('wrong');
+  });
+  const result=box.querySelector('.daily-quiz-result');
+  result.innerHTML=`<strong>${a.correct?'Correct.':'Incorrect.'}</strong> First answer recorded. ${esc(a.explanation||'')}`;
+  if(/^https:\/\//i.test(a.source_url||''))result.innerHTML+=`<br><a class="daily-quiz-source" href="${esc(a.source_url)}" target="_blank" rel="noopener noreferrer">VERIFY SOURCE ↗</a>`;
+  result.classList.add('visible');
 }
-
-async function recordAnswer(quiz,selectedIndex){
-  const username=String(sessionStorage.getItem(USER_KEY)||"").trim().toLowerCase();
-  const token=String(sessionStorage.getItem(TOKEN_KEY)||"");
-  if(!username||!token||!quiz.date)return;
+function retry(fn){
+  const button=document.createElement('button');button.type='button';button.className='daily-quiz-option';button.textContent='RETRY CONFIRMATION';
+  button.addEventListener('click',()=>{button.remove();fn();});box.querySelector('.daily-quiz-result').appendChild(button);
+}
+async function submit(index){
+  if(busy||answered)return;
+  busy=true;pending=index;lock(true);status('Saving your first answer…');
+  try{showAnswer(await api('/quiz-answer',{quiz_id:quiz.id,selected_index:pending}));}
+  catch(e){status(e.message+' No result is confirmed on this screen yet.');retry(()=>submit(pending));}
+  finally{busy=false;}
+}
+async function load(){
+  if(busy)return;busy=true;status('Loading your quiz and recorded attempt…');
   try{
-    const response=await fetch(API_BASE+"/quiz-answer",{
-      method:"POST",
-      headers:{"Content-Type":"application/json","X-Session-Token":token},
-      body:JSON.stringify({username,quiz_date:quiz.date,selected_index:selectedIndex})
-    });
-    if(!response.ok)console.warn("Quiz result was not recorded:",await response.text());
-  }catch(error){console.warn("Quiz result was not recorded:",error);}
+    const data=await api('/quiz-state');quiz=data.quiz;
+    box.querySelector('.daily-quiz-question').textContent=quiz.question;
+    box.querySelector('.daily-quiz-head span').textContent=quiz.date;
+    const options=box.querySelector('.daily-quiz-options');
+    options.innerHTML=quiz.options.map((o,i)=>`<button class="daily-quiz-option" type="button" data-index="${i}">${esc(o)}</button>`).join('');
+    options.querySelectorAll('button').forEach((b,i)=>b.addEventListener('click',()=>submit(i)));
+    if(data.answered)showAnswer(data.answer);
+    else status('Your first answer and score are visible to the administrator. Educational quiz, not a secure exam.');
+  }catch(e){status(e.message);retry(load);}
+  finally{busy=false;}
 }
-
-async function inject(){
-  if(document.getElementById("dailyQuiz"))return;
-  ensureCss();
-  let quiz;
-  try{
-    const response=await fetch("daily-quiz.json?ts="+Date.now(),{cache:"no-store"});
-    if(!response.ok)throw new Error("Quiz unavailable");
-    quiz=await response.json();
-    if(!quiz.question||!Array.isArray(quiz.options)||quiz.options.length!==3)throw new Error("Invalid quiz");
-  }catch(error){console.warn("Daily quiz unavailable:",error);return;}
-
-  const host=document.getElementById("deepSearchButton")||document.getElementById("reportGeneratorButton");
-  if(!host)return;
-  const box=document.createElement("section");
-  box.id="dailyQuiz";
-  box.setAttribute("aria-label","Quiz of the Day");
-  box.innerHTML=`
-    <div class="daily-quiz-head">Quiz of the Day <span>${esc(quiz.category||"CT knowledge")}</span></div>
-    <div class="daily-quiz-question">${esc(quiz.question)}</div>
-    <div class="daily-quiz-options">${quiz.options.map((option,index)=>`<button class="daily-quiz-option" type="button" data-index="${index}">${esc(option)}</button>`).join("")}</div>
-    <div class="daily-quiz-result" aria-live="polite"></div>`;
-  host.insertAdjacentElement("afterend",box);
-
-  box.querySelectorAll(".daily-quiz-option").forEach(button=>button.addEventListener("click",()=>{
-    const chosen=Number(button.dataset.index);
-    const correct=Number(quiz.correct_index);
-    box.querySelectorAll(".daily-quiz-option").forEach((item,index)=>{
-      item.disabled=true;
-      if(index===correct)item.classList.add("correct");
-      else if(index===chosen)item.classList.add("wrong");
-    });
-    const result=box.querySelector(".daily-quiz-result");
-    const verdict=chosen===correct?"Correct.":"Incorrect.";
-    const source=quiz.source_url?`<a class="daily-quiz-source" href="${esc(quiz.source_url)}" target="_blank" rel="noopener noreferrer">VERIFY SOURCE ↗</a>`:"";
-    result.innerHTML=`<strong>${verdict}</strong> ${esc(quiz.explanation||"")}<br>${source}`;
-    result.classList.add("visible");
-    recordAnswer(quiz,chosen);
-  }));
+function check(){
+  const token=identity();
+  if(token===session && box)return;
+  if(busy)return;
+  if(box){box.remove();box=null;}session=token;answered=false;pending=null;
+  const host=document.getElementById('deepSearchButton');
+  if(!token||!host)return;
+  if(!document.getElementById('dailyQuizCss')){
+    const link=document.createElement('link');link.id='dailyQuizCss';link.rel='stylesheet';link.href='daily-quiz.css?v=2';document.head.appendChild(link);
+  }
+  box=document.createElement('section');box.id='dailyQuiz';box.setAttribute('aria-label','Quiz of the Day');
+  box.innerHTML='<div class="daily-quiz-head">Quiz of the Day <span></span></div><div class="daily-quiz-question"></div><div class="daily-quiz-options"></div><div class="daily-quiz-result visible" aria-live="polite"></div>';
+  host.insertAdjacentElement('afterend',box);load();
 }
-
-if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(inject,80));
-else setTimeout(inject,80);
+setInterval(check,1000);check();
 })();

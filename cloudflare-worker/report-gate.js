@@ -53,6 +53,13 @@ export class ReportGate {
   }
 
   async usageStats(period) {
+    const readKeys = async keys => {
+      const result = new Map();
+      for (let i=0; i<keys.length; i+=128) {
+        for (const [k,v] of await this.state.storage.get(keys.slice(i,i+128))) result.set(k,v);
+      }
+      return result;
+    };
     const users = Array.from(ALLOWED_USERS);
     const rowsByUser = new Map(
       users.map(username => [username, usageTemplate(username)])
@@ -60,7 +67,7 @@ export class ReportGate {
 
     if (period === "all") {
       const keys = users.map(username => `usage-total:${username}`);
-      const stored = await this.state.storage.get(keys);
+      const stored = await readKeys(keys);
 
       for (const username of users) {
         const value = stored.get(`usage-total:${username}`);
@@ -83,7 +90,7 @@ export class ReportGate {
         }
       }
 
-      const stored = await this.state.storage.get(keys);
+      const stored = await readKeys(keys);
 
       for (const [key, value] of stored.entries()) {
         if (!value) continue;
@@ -392,25 +399,43 @@ export class ReportGate {
       }
 
       const answerKey = `quiz-answer:${quizDate}:${username}`;
-      const existing = await this.state.storage.get(answerKey);
+      return this.state.storage.transaction(async txn => {
+      const existing = await txn.get(answerKey);
       if (existing) {
-        return Response.json({ ok: true, already_recorded: true, correct: existing.correct === true });
+        return Response.json({ ok: true, already_recorded: true, ...existing });
       }
 
       const answer = {
         username,
         quiz_date: quizDate,
         correct,
+        selected_index: body.selected_index,
+        quiz_id: body.quiz_id,
+        correct_index: body.correct_index,
+        explanation: body.explanation,
+        source_url: body.source_url,
         answered_at: new Date(now).toISOString()
       };
-      await this.state.storage.put(answerKey, answer);
-      await this.incrementUsage(username, {
-        quiz_answers: 1,
-        quiz_correct: correct ? 1 : 0,
-        quiz_incorrect: correct ? 0 : 1
-      }, now);
+      for (const key of [`usage-total:${username}`, `usage-day:${parisDayKey(now)}:${username}`]) {
+        const row = {...usageTemplate(username), ...await txn.get(key)};
+        row.quiz_answers = Number(row.quiz_answers || 0) + 1;
+        row.quiz_correct = Number(row.quiz_correct || 0) + (correct ? 1 : 0);
+        row.quiz_incorrect = Number(row.quiz_incorrect || 0) + (correct ? 0 : 1);
+        row.last_activity = answer.answered_at;
+        await txn.put(key, row);
+      }
+      await txn.put(answerKey, answer);
+      return Response.json({ ok: true, already_recorded: false, ...answer });
+      });
+    }
 
-      return Response.json({ ok: true, already_recorded: false, correct });
+    if (url.pathname === "/quiz-state") {
+      const username = normalizeUsername(body.username);
+      if (!isAllowedUser(username) || !/^\d{4}-\d{2}-\d{2}$/.test(String(body.quiz_date || ""))) {
+        return Response.json({error: "Invalid quiz state request."}, {status: 400});
+      }
+      const answer = await this.state.storage.get(`quiz-answer:${body.quiz_date}:${username}`);
+      return Response.json({ok: true, answered: Boolean(answer), answer: answer || null});
     }
 
     if (url.pathname === "/usage-increment") {

@@ -5337,7 +5337,7 @@ Visible rate
                 <div class="label">Translated languages</div>
             </div>
             <div class="mini-metric">
-                <div class="value">119</div>
+                <div class="value" id="collectionQueryCount">—</div>
                 <div class="label">Queries</div>
             </div>
         </div>
@@ -5381,7 +5381,7 @@ Visible rate
 
       <div class="health-section">
         <div class="health-section-title">UPDATE SCHEDULE</div>
-        <div class="health-row"><span>Automated updates</span><strong>00:17 · 06:17 · 12:17 · 18:17</strong></div>
+        <div class="health-row"><span>Automated updates</span><strong>10:17 · 18:17</strong></div>
         <div class="health-row"><span>Timezone</span><strong>Europe/Paris</strong></div>
         <div class="health-row"><span>Next scheduled update</span><strong id="healthNextUpdate">—</strong></div>
       </div>
@@ -5399,7 +5399,7 @@ Visible rate
         <div class="health-section-title">COLLECTION</div>
         <div class="health-row"><span>Collection languages</span><strong>11 total</strong></div>
         <div class="health-row"><span>Translated languages</span><strong>10 → English</strong></div>
-        <div class="health-row"><span>Search queries</span><strong>119</strong></div>
+        <div class="health-row"><span>Search queries</span><strong id="healthQueryCount">—</strong></div>
         <div class="health-row"><span>Retention window</span><strong>180 days</strong></div>
       </div>
 
@@ -6698,6 +6698,10 @@ fetch(
 
 .then(
     data => {
+        for (const id of ['collectionQueryCount', 'healthQueryCount']) {
+            const element = document.getElementById(id);
+            if (element) element.textContent = Number.isFinite(data.search_query_count) ? data.search_query_count : '—';
+        }
 
 
         allEvents =
@@ -11751,7 +11755,7 @@ function calculateNextScheduledUpdate(){
   const now=new Date();
   const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Paris",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(now).reduce((a,p)=>{a[p.type]=p.value;return a},{});
   const current=Number(parts.hour)*60+Number(parts.minute);
-  const schedule=[17,377,737,1097];
+  const schedule=[617,1097];
   let next=schedule.find(v=>v>current),tomorrow=false;
   if(next==null){next=schedule[0];tomorrow=true;}
   const h=Math.floor(next/60),m=next%60,label=String(h).padStart(2,"0")+":"+String(m).padStart(2,"0");
@@ -13441,7 +13445,7 @@ function renderWeeklyAnalysisPanel() {
             "No weekly report has been generated yet.";
 
         report.textContent =
-            "The first weekly comparative analysis will be generated during the next successful collector run. Thereafter, a new report is scheduled for Sunday from the 06:17 Europe/Paris update, with retry opportunities at 12:17 and 18:17 if necessary.";
+            "The first weekly comparative analysis will be generated during the next successful collector run. Thereafter, a new report is scheduled for Sunday from the 10:17 Europe/Paris update, with a retry opportunity at 18:17 if necessary.";
 
         return;
     }

@@ -33,6 +33,9 @@ jobs:
           node --check cloudflare-worker/shared.js
           node --check cloudflare-worker/report-gate.js
           node --check cloudflare-worker/index.js
+          node --check cloudflare-worker/quiz.js
+          node --test tests/*.test.cjs
+          python3 tests/quiz_source_test.py
 
       - name: Deploy Worker
-        run: npx wrangler@latest deploy --config cloudflare-worker/wrangler.toml
+        run: npx wrangler@latest deploy --keep-vars --config cloudflare-worker/wrangler.toml

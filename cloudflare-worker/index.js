@@ -25,6 +25,7 @@ callGemini
 import { handleDeepSearch, DEEP_SEARCH_VERSION } from "./deep-search.js";
 import { handleQuickAsk, QUICK_ASK_VERSION } from "./quick-ask.js";
 import { handleFeedback, FEEDBACK_VERSION } from "./feedback.js";
+import { handleQuiz } from "./quiz.js";
 export default {
 async fetch(request, env, ctx) {
 // A fresh per-request copy, never a mutation of the shared env object --
@@ -36,7 +37,7 @@ if (request.method === "OPTIONS") {
 return new Response(null, { status: 204, headers: corsHeaders(env) });
 }
 if (url.pathname === "/health" && request.method === "GET") {
-return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.27", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, quiz_tracking: true, model: "gemini-3.5-flash-lite" }, 200, env);
+return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.28", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, quiz_tracking: true, quiz_protocol: 2, model: "gemini-3.5-flash-lite" }, 200, env);
 }
 if (url.pathname === "/auth-login" && request.method === "POST") {
 let authBody;
@@ -98,30 +99,7 @@ if (!["today", "7", "30", "all"].includes(period)) return jsonResponse({ error: 
 const statsResponse = await gateCall(env, "/usage-stats", { period });
 return jsonResponse(await statsResponse.json(), statsResponse.status, env);
 }
-if (url.pathname === "/quiz-answer" && request.method === "POST") {
-let quizBody;
-try { quizBody = await request.json(); } catch { return jsonResponse({ error: "Invalid JSON request." }, 400, env); }
-const username = normalizeUsername(quizBody.username);
-const quizDate = cleanText(quizBody.quiz_date, 16);
-const selectedIndex = Number(quizBody.selected_index);
-const token = cleanText(request.headers.get("X-Session-Token"), 160);
-if (!isAllowedUser(username)) return jsonResponse({ error: "Unknown user." }, 400, env);
-if (!token) return jsonResponse({ error: "Authenticated session required." }, 401, env);
-const sessionResponse = await gateCall(env, "/session-get", { session_token: token });
-const session = await sessionResponse.json();
-if (!sessionResponse.ok || session?.username !== username) return jsonResponse({ error: "Unauthorized session." }, 401, env);
-if (!/^\d{4}-\d{2}-\d{2}$/.test(quizDate) || ![0, 1, 2].includes(selectedIndex)) return jsonResponse({ error: "Invalid quiz answer." }, 400, env);
-const quizResponse = await fetch(env.QUIZ_URL || "https://ct-atlas.com/daily-quiz.json", { cf: { cacheTtl: 60, cacheEverything: true } });
-if (!quizResponse.ok) return jsonResponse({ error: "Unable to verify the current quiz." }, 503, env);
-const currentQuiz = await quizResponse.json().catch(() => ({}));
-if (String(currentQuiz.date || "") !== quizDate || ![0, 1, 2].includes(Number(currentQuiz.correct_index))) return jsonResponse({ error: "This quiz is no longer current." }, 409, env);
-const recordResponse = await gateCall(env, "/quiz-answer-record", {
-  username,
-  quiz_date: quizDate,
-  correct: selectedIndex === Number(currentQuiz.correct_index)
-});
-return jsonResponse(await recordResponse.json(), recordResponse.status, env);
-}
+if (["/quiz-answer", "/quiz-state"].includes(url.pathname)) return handleQuiz(request, env);
 if (url.pathname === "/deep-search" && request.method === "POST") {
 return handleDeepSearch(request, env, ctx);
 }

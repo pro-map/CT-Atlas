@@ -5,6 +5,10 @@ on:
     branches:
       - main
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Daily CT Intelligence Map Update", "Apply CT Atlas usage upgrade", "Deploy current CT Atlas UI"]
+    types: [completed]
+    branches: [main]
 
 permissions:
   contents: read
@@ -15,6 +19,7 @@ concurrency:
 
 jobs:
   deploy-mirror:
+    if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_repository.full_name == github.repository) }}
     runs-on: ubuntu-latest
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -29,6 +34,7 @@ jobs:
           else
             echo "configured=false" >> "$GITHUB_OUTPUT"
             echo "::warning::Cloudflare mirror deployment skipped. Add CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID as GitHub Actions repository secrets."
+            exit 1
           fi
 
       - name: Checkout the exact main revision

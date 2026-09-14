@@ -6,6 +6,10 @@ on:
       - main
     paths:
       - "index.html"
+      - "privacy.html"
+      - "daily-quiz.*"
+      - "quick-ask.*"
+      - "feedback.*"
       - "tools/usage_upgrade.patch"
       - "usage-admin.js"
       - "usage-admin.css"
