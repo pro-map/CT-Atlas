@@ -64,3 +64,11 @@ GET /health must report deep_search_version: deep-search-v5.9-local-language-pdf
 Validation: node --test tests/deep-search-recall.test.cjs (5 mocked tests).
 These verify priority, fallback requests, request limits, error handling and bounded
 PDF pagination. Live search recall and actual browser PDF rendering are not verified.
+
+## Authentication secret
+
+The complete account roster is stored only in the Cloudflare Worker secret
+AUTH_USERS_JSON as a JSON object mapping each username to its SHA-256 password
+hash. The Worker rejects authentication when the secret is missing, malformed
+or incomplete; there is no hard-coded compatibility roster. Do not commit the
+JSON or password hashes to the repository.

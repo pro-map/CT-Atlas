@@ -23,60 +23,43 @@ const FEEDBACK_GLOBAL_DAILY_LIMIT = 200;
 // as-is -- folded into the cache key in index.js's /report handler.
 const REPORT_GENERATOR_VERSION = "report-v3-hub-severity-not-volume";
 
-const USER_PASSWORD_HASHES = Object.freeze({
-  "group-i-1": "73b888d49521429ac698cda951475bd0f6d16fc01821c3f527f8bfd3fa612b36",
-  "group-i-2": "82beedc71b740984031f2c8f1c06c3bd8eabd9bfcf9efe6e2261a4580066e8d3",
-  "group-i-3": "6b037fadbaa6a6933fb8a662257646b001b29c3a3cda5caef57bd11925a5701e",
-  "group-i-4": "75b0708f31cf68a1ad50bb9d426d891401a5e722a6b8731fe5200f1d75caab74",
-  "group-i-5": "f5a58623f390a1b152ac8950cd0914055114fa7b1bfe0e15c35fd48cb066b10b",
-  "group-i-6": "b43b773a5ec3194d878e662cd611571d38a6baeb1611222608e5e69d5f4266a5",
-  "group-i-7": "fc4bd24ea1b1437c67ce076d15a36ba148fed82d44cd96e532b8c28ac8de1765",
-  "group-i-8": "295da608e659c3950cb8776ec145bdb6f3fc7dab5519ad49e30db6fd60023141",
-  "group-i-9": "64c92799eae33fb86e4329f43cee6e6b7c0120fa6edfd1d8cd786f2d14ede02b",
-  "group-i-10": "454cac06f14cb79e546d644b1e2576b4e141e2f6917a43bc43b062cf67dc6cbd",
-  "group-p-1": "93cbf70eef3baab340976ad537077afb5c38dce7c5ffe964d54dac648edff968",
-  "group-p-2": "d24a9c21b53df643a7778674dbdf1826265b1f5b77e14b6821f336795d4b3ab8",
-  "group-p-3": "cf13d1814c71f7cdbb90b6559aee12184bd1aeaff92a4ad9e2b96ca7b9895280",
-  "group-p-4": "85b8d0b0c2d862c7b6e874e223bf5360fd28a44019326726210948db4511b167",
-  "group-p-5": "29b970c5a82b74d24070d78b4f9ca0d5c7113a879eca580a257e81a35aefc186",
-  "group-p-6": "e8a2245e69cc63f55e3b141ebaca289dc4f173f5c749372a8bb9318043811003",
-  "group-p-7": "7ef18ab77ed8627e1fadca823f8b163515752e568b5c3c85846fcd955c1b5f2c",
-  "group-p-8": "035f5d60182c6bbdf31aab6a39cecc44a2c066db9f1bf546730b53b21dfe2c41",
-  "group-p-9": "b8e8d43141df6e7a76a9db469a8eab54628a549406e065d1b4128c2881978544",
-  "group-p-10": "e6c95500fec415b85667a95429ffbdc6b691a707ca89bade0881e60a07014933",
-  "group-s-1": "9ccc578509bdea17f0212cb37a99bed3cbfb42cf7d1c157f0a0ab005b76dd1bf",
-  "group-s-2": "d81738545bc7e21533bea9d9419433be8fe4de084c64075ec62c40e556f59b53",
-  "group-s-3": "d7de141b33a926541943fcaa483951ae4e5303960b629c940f384f7d52cdb3fb",
-  "group-s-4": "b152bdd07ba8c232943eb73b5fcda859cf1f1621bcc754fc84956b7557cc782e",
-  "group-s-5": "814c7c21d08e70773ffc03941250006562cdc753df326d10772cfdaaa07c07c3",
-  "group-s-6": "c092a04684cacc72c079a86d0ff3f64eda5a4233e2023a7a4509aa0e78c97acd",
-  "group-s-7": "6e5b35be120ebaaa86f957abbbd0475ab4ec15965751dac4149e2ea9ee0e5ba0",
-  "group-s-8": "063bc0425b83c89430482bcfd08f954cebea9281d08cd222db64a0a47319f4df",
-  "group-s-9": "b86b4935ca24fedcf6b96a05133f858cd5a8b659c78cf680c32db3fe369c0dcf",
-  "group-s-10": "a4dd7ccbb89e2f7c10ad6d40feeae20df386e78ba815f2cbf6f29b98f7d45e51",
-  "admin": "a7cdf5d0586b392473dd0cd08c9ba833240006a8a7310bf9bc8bf1aefdfaeadb"
-});
-const LEGACY_ALLOWED_USERS = new Set(Object.keys(USER_PASSWORD_HASHES));
-
 function authUsersFromEnv(env) {
   const raw = String(env?.AUTH_USERS_JSON || "").trim();
-  if (!raw) return USER_PASSWORD_HASHES;
+  if (!raw) {
+    console.error("AUTH_USERS_JSON is missing; rejecting all logins.");
+    return Object.freeze({});
+  }
 
   try {
     const parsed = JSON.parse(raw);
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
       throw new Error("AUTH_USERS_JSON must be a JSON object.");
     }
-    const entries = Object.entries(parsed)
-      .map(([username, hash]) => [
-        normalizeUsername(username),
-        String(hash || "").trim().toLowerCase()
-      ])
-      .filter(([username, hash]) =>
-        /^[a-z0-9][a-z0-9._-]{0,63}$/.test(username) &&
-        /^[a-f0-9]{64}$/.test(hash)
-      );
-    if (!entries.length) throw new Error("AUTH_USERS_JSON contains no valid users.");
+
+    const rawEntries = Object.entries(parsed);
+    if (!rawEntries.length) {
+      throw new Error("AUTH_USERS_JSON contains no users.");
+    }
+
+    const entries = rawEntries.map(([username, hash]) => [
+      normalizeUsername(username),
+      String(hash || "").trim().toLowerCase()
+    ]);
+    const seen = new Set();
+
+    for (const [username, hash] of entries) {
+      if (
+        !/^[a-z0-9][a-z0-9._-]{0,63}$/.test(username) ||
+        !/^[a-f0-9]{64}$/.test(hash)
+      ) {
+        throw new Error("AUTH_USERS_JSON contains an invalid username or SHA-256 hash.");
+      }
+      if (seen.has(username)) {
+        throw new Error("AUTH_USERS_JSON contains duplicate usernames.");
+      }
+      seen.add(username);
+    }
+
     return Object.freeze(Object.fromEntries(entries));
   } catch (error) {
     console.error("Invalid AUTH_USERS_JSON; rejecting all logins.", error);
@@ -87,8 +70,6 @@ function authUsersFromEnv(env) {
 function getAllowedUsers(env) {
   return new Set(Object.keys(authUsersFromEnv(env)));
 }
-
-const ALLOWED_USERS = LEGACY_ALLOWED_USERS;
 
 const REPORT_SCHEMA = {
   type: "object",
@@ -214,7 +195,7 @@ function passwordHashForUser(username, env) {
 }
 
 function authMode(env) {
-  return String(env?.AUTH_USERS_JSON || "").trim() ? "secret" : "legacy-fallback";
+  return String(env?.AUTH_USERS_JSON || "").trim() ? "secret" : "secret-missing";
 }
 
 function parisDayKey(timestamp = Date.now()) {
@@ -685,8 +666,6 @@ export {
   FEEDBACK_COOLDOWN_MS,
   FEEDBACK_DAILY_LIMIT,
   FEEDBACK_GLOBAL_DAILY_LIMIT,
-  USER_PASSWORD_HASHES,
-  ALLOWED_USERS,
   getAllowedUsers,
   passwordHashForUser,
   authMode,

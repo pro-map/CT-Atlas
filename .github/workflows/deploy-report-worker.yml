@@ -39,15 +39,16 @@ jobs:
           node --test tests/*.test.cjs
           python3 tests/quiz_source_test.py
 
-      - name: Provision secret-backed auth (when configured)
-        env:
-          CT_ATLAS_AUTH_USERS_JSON: ${{ secrets.CT_ATLAS_AUTH_USERS_JSON }}
+      - name: Verify required auth secret
+        shell: bash
         run: |
-          if [ -n "$CT_ATLAS_AUTH_USERS_JSON" ]; then
-            printf '%s' "$CT_ATLAS_AUTH_USERS_JSON" | npx wrangler@latest secret put AUTH_USERS_JSON --config cloudflare-worker/wrangler.toml
-          else
-            echo "::warning::CT_ATLAS_AUTH_USERS_JSON is not configured; Worker remains in legacy authentication compatibility mode."
+          set -euo pipefail
+          secret_list="$(npx wrangler@latest secret list --config cloudflare-worker/wrangler.toml)"
+          if ! printf '%s' "$secret_list" | grep -q 'AUTH_USERS_JSON'; then
+            echo "::error::Cloudflare secret AUTH_USERS_JSON is missing. Refusing to deploy the Worker."
+            exit 1
           fi
+          echo "AUTH_USERS_JSON is provisioned in Cloudflare."
 
       - name: Deploy Worker
         run: npx wrangler@latest deploy --keep-vars --config cloudflare-worker/wrangler.toml

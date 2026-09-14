@@ -5,7 +5,7 @@ const vm=require('node:vm');
 const source=fs.readFileSync('cloudflare-worker/shared.js','utf8').replace(/export /g,'');
 
 function harness(){
- const c=vm.createContext({crypto,fetch:async()=>({}),TextEncoder});
+ const c=vm.createContext({crypto,fetch:async()=>({}),TextEncoder,console});
  vm.runInContext(source,c);
  return vm.runInContext('({corsHeaders,isAllowedUser,passwordHashForUser,getAllowedUsers,matchesRegion})',c);
 }
@@ -50,7 +50,7 @@ test('corsHeaders handles a missing EXTRA_ALLOWED_ORIGINS and a missing __reques
 });
 
 
-test('secret-backed auth overrides the legacy compatibility roster',()=>{
+test('secret-backed auth uses only the configured roster',()=>{
  const h=harness();
  const hash='a'.repeat(64);
  const env={AUTH_USERS_JSON:JSON.stringify({analyst:hash})};
@@ -60,6 +60,13 @@ test('secret-backed auth overrides the legacy compatibility roster',()=>{
  assert.deepEqual(Array.from(h.getAllowedUsers(env)),['analyst']);
 });
 
+
+test('missing AUTH_USERS_JSON never activates the legacy roster',()=>{
+ const h=harness();
+ assert.equal(h.isAllowedUser('group-i-1',{}),false);
+ assert.equal(h.passwordHashForUser('group-i-1',{}),'');
+ assert.deepEqual(Array.from(h.getAllowedUsers({})),[]);
+});
 
 test('country filters accept ISO country codes and common frontend aliases',()=>{
  const h=harness();

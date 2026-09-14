@@ -21,5 +21,5 @@ class_name = "ReportGate"
 type = "durable-object"
 storage = "sqlite"
 
-# AUTH_USERS_JSON is a Cloudflare secret containing {"username":"sha256(password)"}.
-# Provision it before removing the legacy compatibility fallback from shared.js.
+# AUTH_USERS_JSON is a required Cloudflare secret containing {"username":"sha256(password)"}.
+# The Worker rejects all logins when this secret is missing or invalid; never commit it.
