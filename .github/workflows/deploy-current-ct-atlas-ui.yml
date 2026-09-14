@@ -8,6 +8,10 @@ on:
       - ".github/workflows/deploy-current-ct-atlas-ui.yml"
       - "deep-search.js"
       - "deep-search.css"
+      - "index.html"
+      - "daily-quiz.js"
+      - "daily-quiz.css"
+      - "feedback.css"
   workflow_dispatch:
 
 permissions:
@@ -44,6 +48,9 @@ jobs:
           test -s daily-quiz.js
           test -s daily-quiz.css
           grep -q 'dailyQuizButton' daily-quiz.js
+          grep -q 'launcher.insertBefore(trigger,launcher.firstChild)' daily-quiz.js
+          grep -q 'margin:4px 0 3px;padding:9px 10px' daily-quiz.css
+          grep -q 'anchor.insertAdjacentElement("afterend",button)' feedback.js
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6
       - name: Upload website
