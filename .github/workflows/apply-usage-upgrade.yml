@@ -59,7 +59,7 @@ jobs:
           normalized = text.replace("\r\n", "\n").replace("\r", "\n")
           p.write_bytes(normalized.replace("\n", "\r\n").encode("utf-8"))
           PY
-          grep -q '"admin"' index.html
+          grep -q 'isAdmin' usage-admin.js
           grep -q 'usage-admin.js' index.html
           grep -q 'usage-auth-fix.js' index.html
           grep -q 'usage-admin.css' index.html
