@@ -37,7 +37,7 @@ if (request.method === "OPTIONS") {
 return new Response(null, { status: 204, headers: corsHeaders(env) });
 }
 if (url.pathname === "/health" && request.method === "GET") {
-return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.28", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, quiz_tracking: true, quiz_protocol: 2, model: "gemini-3.5-flash-lite" }, 200, env);
+return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.29", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite" }, 200, env);
 }
 if (url.pathname === "/auth-login" && request.method === "POST") {
 let authBody;
@@ -98,6 +98,17 @@ const period = cleanText(url.searchParams.get("period") || "today", 16);
 if (!["today", "7", "30", "all"].includes(period)) return jsonResponse({ error: "Unsupported statistics period." }, 400, env);
 const statsResponse = await gateCall(env, "/usage-stats", { period });
 return jsonResponse(await statsResponse.json(), statsResponse.status, env);
+}
+if (url.pathname === "/quiz-history" && request.method === "GET") {
+const token = cleanText(request.headers.get("X-Session-Token"), 160);
+if (!token) return jsonResponse({ error: "Admin session required." }, 401, env);
+const sessionResponse = await gateCall(env, "/session-get", { session_token: token });
+const session = await sessionResponse.json();
+if (!sessionResponse.ok || session?.username !== "admin") return jsonResponse({ error: "Admin access required." }, 403, env);
+const period = cleanText(url.searchParams.get("period") || "today", 16);
+if (!["today", "7", "30", "all"].includes(period)) return jsonResponse({ error: "Unsupported history period." }, 400, env);
+const historyResponse = await gateCall(env, "/quiz-history", { period, username: "admin" });
+return jsonResponse(await historyResponse.json(), historyResponse.status, env);
 }
 if (["/quiz-answer", "/quiz-state"].includes(url.pathname)) return handleQuiz(request, env);
 if (url.pathname === "/deep-search" && request.method === "POST") {

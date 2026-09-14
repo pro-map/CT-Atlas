@@ -80,6 +80,28 @@ def load_history():
         return []
 
 
+def record_in_history(history, quiz):
+    if not isinstance(quiz, dict):
+        return history[-365:]
+    date = str(quiz.get("date") or "")
+    question = str(quiz.get("question") or "").strip()
+    if not date or not question:
+        return history[-365:]
+    already_present = any(
+        isinstance(item, dict)
+        and str(item.get("date") or "") == date
+        and str(item.get("question") or "").strip() == question
+        for item in history
+    )
+    if not already_present:
+        history.append({
+            "date": date,
+            "question": question,
+            "category": str(quiz.get("category") or "")
+        })
+    return history[-365:]
+
+
 def extract_json(text):
     text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip(), flags=re.I)
     start, end = text.find("{"), text.rfind("}")
@@ -106,10 +128,20 @@ def validate(quiz):
 
 def main():
     today = datetime.now(ZoneInfo('Europe/Paris')).date().isoformat()
-    if QUIZ_PATH.exists() and json.loads(QUIZ_PATH.read_text(encoding='utf-8')).get('date') == today:
-        print('Quiz already published for today; retaining it.'); return
-    api_key = os.environ["GEMINI_API_KEY"]
     history = load_history()
+    if QUIZ_PATH.exists():
+        try:
+            current = json.loads(QUIZ_PATH.read_text(encoding="utf-8"))
+        except (FileNotFoundError, json.JSONDecodeError):
+            current = None
+        if isinstance(current, dict) and current.get("date") == today:
+            history = record_in_history(history, current)
+            HISTORY_PATH.write_text(
+                json.dumps(history, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8"
+            )
+            print('Quiz already published for today; retaining it.'); return
+    api_key = os.environ["GEMINI_API_KEY"]
     recent = [str(item.get("question", "")) for item in history[-365:] if isinstance(item, dict)]
     prompt = f"""You create the daily professional knowledge quiz for CT Atlas, an OSINT counter-terrorism analytical platform.
 Return ONLY valid JSON with these keys: category, question, options, correct_index, explanation, source_url.
@@ -136,8 +168,8 @@ Rules:
     verify_source(api_key, quiz)
 
     QUIZ_PATH.write_text(json.dumps(quiz, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    history.append({"date": quiz["date"], "question": quiz["question"], "category": quiz["category"]})
-    HISTORY_PATH.write_text(json.dumps(history[-365:], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    history = record_in_history(history, quiz)
+    HISTORY_PATH.write_text(json.dumps(history, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Daily quiz generated: {quiz['question']}")
 
 

@@ -30,6 +30,15 @@ class QuizSourceTests(unittest.TestCase):
             q.verify_source('test',data)
             self.assertIn('source_checked_at',data)
 
+    def test_history_entry_is_idempotent(self):
+        quiz={"date":"2026-09-14","question":"Q","category":"C"}
+        history=[]
+        q.record_in_history(history, quiz)
+        q.record_in_history(history, quiz)
+        self.assertEqual(len(history), 1)
+        self.assertEqual(history[0]["category"], "C")
+
+
     def test_challenge_rejected(self):
         response=types.SimpleNamespace(status_code=202,headers={},text='')
         with patch.object(q.requests,'get',return_value=response,create=True):

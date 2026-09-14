@@ -10,12 +10,22 @@ function harness(){
  const storage={
   get:async k=>{if(Array.isArray(k)){assert.ok(k.length<=128);return new Map(k.filter(x=>db.has(x)).map(x=>[x,structuredClone(db.get(x))]));}return structuredClone(db.get(k));},
   put:async(k,v)=>{if(fail)throw Error('storage failure');db.set(k,structuredClone(v));},
+  list:async options=>{
+    const prefix=String(options?.prefix||"");
+    let entries=[...db.entries()]
+      .filter(([k])=>String(k).startsWith(prefix))
+      .sort(([a],[b])=>String(a).localeCompare(String(b)));
+    if(options?.startAfter)entries=entries.filter(([k])=>String(k)>String(options.startAfter));
+    if(options?.reverse)entries.reverse();
+    if(options?.limit)entries=entries.slice(0,options.limit);
+    return new Map(entries);
+  },
   transaction:async fn=>{const saved=structuredClone(db);try{return await fn(storage);}catch(e){db=saved;throw e;}}
  };
  const g=new c.Gate({storage},{});
  return {g,db,fail:()=>{fail=true;},call:async(path,body)=>(await g.fetch(new Request('https://internal'+path,{method:'POST',body:JSON.stringify(body)}))).json()};
 }
-const attempt={username:'group-i-1',quiz_date:'2026-09-14',quiz_id:'test',correct:false,selected_index:2,correct_index:1,explanation:'Evidence',source_url:'https://un.org/'};
+const attempt={username:'group-i-1',quiz_date:'2026-09-14',quiz_id:'test',correct:false,selected_index:2,correct_index:1,category:'C',question:'Q?',options:['A','B','C'],explanation:'Evidence',source_url:'https://un.org/'};
 test('quiz keeps first answer and restores it after reload',async()=>{
  const h=harness();await h.call('/quiz-answer-record',attempt);
  const retry=await h.call('/quiz-answer-record',{...attempt,correct:true,selected_index:1});
@@ -33,6 +43,25 @@ test('storage failure does not leave a counted attempt',async()=>{
  const h=harness();h.fail();await assert.rejects(h.call('/quiz-answer-record',attempt));
  assert.equal((await h.call('/quiz-state',attempt)).answered,false);
 });
+test('admin quiz history returns given and correct answer labels',async()=>{
+ const h=harness();await h.call('/quiz-answer-record',attempt);
+ const history=await h.call('/quiz-history',{username:'admin',period:'all'});
+ assert.equal(history.total,1);
+ assert.equal(history.answers[0].selected_answer,'C');
+ assert.equal(history.answers[0].correct_answer,'B');
+ assert.equal(history.answers[0].correct,false);
+ const retry=await h.call('/quiz-answer-record',{...attempt,correct:true,selected_index:1});
+ assert.equal(retry.already_recorded,true);
+ assert.equal((await h.call('/quiz-history',{username:'admin',period:'all'})).answers[0].correct_answer,'B');
+});
+
+test('quiz history rejects non-admin access',async()=>{
+ const h=harness();
+ const response=await h.call('/quiz-history',{username:'group-i-1',period:'all'});
+ assert.equal(response.error,'Admin access required.');
+});
+
+
 function apiHarness(){
  const q={date:'2026-09-14',question:'Q?',options:['A','B','C'],correct_index:1,explanation:'E',source_url:'https://un.org/'};
  const calls=[];

@@ -220,6 +220,18 @@ function injectAdminUi(){
               <tbody id="adminUsageRows"></tbody>
             </table>
           </div>
+          <div id="adminQuizHistorySection">
+            <div id="adminQuizHistoryTitle">QUIZ ANSWER HISTORY</div>
+            <div id="adminQuizHistoryStatus">Select a period to load recorded quiz attempts.</div>
+            <div class="admin-usage-table-wrap">
+              <table id="adminQuizHistoryTable">
+                <thead>
+                  <tr><th>DATE</th><th>USER</th><th>CATEGORY</th><th>QUESTION</th><th>ANSWER GIVEN</th><th>CORRECT ANSWER</th><th>RESULT</th><th>ANSWERED</th><th>SOURCE</th></tr>
+                </thead>
+                <tbody id="adminQuizHistoryRows"></tbody>
+              </table>
+            </div>
+          </div>
           <div id="adminUsageNote">
             Temporary test-phase report limits: 5 report requests per user per day and at least 20 minutes between requests. Admin is exempt. Search text itself is not transmitted or retained.
           </div>
@@ -268,20 +280,88 @@ function lastActive(value){
   });
 }
 
+
+async function loadQuizHistory(period,currentToken){
+  const status=document.getElementById("adminQuizHistoryStatus");
+  const rows=document.getElementById("adminQuizHistoryRows");
+
+  if(!currentToken){
+    if(status)status.textContent="Admin quiz history requires an authenticated Worker session. Sign in again.";
+    if(rows)rows.innerHTML="";
+    return;
+  }
+
+  if(status)status.textContent="Loading recorded quiz attempts…";
+
+  try{
+    const response=await nativeFetch(
+      API_BASE+"/quiz-history?period="+encodeURIComponent(period),
+      {
+        method:"GET",
+        headers:{"X-Session-Token":currentToken}
+      }
+    );
+    const payload=await response.json();
+
+    if(!response.ok){
+      throw new Error(payload.error||"Unable to load quiz history.");
+    }
+
+    const answers=Array.isArray(payload.answers)?payload.answers:[];
+    if(rows){
+      rows.innerHTML=answers.length?answers.map(item=>{
+        const result=item.correct===true
+          ? "<span class=\"quiz-result-correct\">CORRECT</span>"
+          : "<span class=\"quiz-result-wrong\">INCORRECT</span>";
+        const sourceUrl=String(item.source_url||"");
+        const source=/^https:\/\//i.test(sourceUrl)
+          ? "<a href=\""+escapeCell(sourceUrl)+"\" target=\"_blank\" rel=\"noopener noreferrer\">SOURCE ↗</a>"
+          : "—";
+        return "<tr>"+
+          "<td>"+escapeCell(item.quiz_date||"—")+"</td>"+
+          "<td>"+escapeCell(item.username||"—")+"</td>"+
+          "<td>"+escapeCell(item.category||"—")+"</td>"+
+          "<td class=\"admin-quiz-question\">"+escapeCell(item.question||"Question not stored for this attempt")+"</td>"+
+          "<td>"+escapeCell(item.selected_answer||"—")+"</td>"+
+          "<td class=\"admin-quiz-correct\">"+escapeCell(item.correct_answer||"—")+"</td>"+
+          "<td>"+result+"</td>"+
+          "<td>"+escapeCell(lastActive(item.answered_at))+"</td>"+
+          "<td>"+source+"</td>"+
+        "</tr>";
+      }).join(""):"<tr><td colspan=\"9\">No recorded quiz attempts for this period.</td></tr>";
+    }
+
+    if(status){
+      status.textContent="Updated "+new Date().toLocaleTimeString("en-GB",{
+        hour:"2-digit",
+        minute:"2-digit"
+      })+" · "+(payload.period_label||period)+" · "+Number(payload.total||answers.length)+" attempts";
+    }
+  }catch(error){
+    if(status)status.textContent=error.message||"Unable to load quiz history.";
+    if(rows)rows.innerHTML="";
+  }
+}
+
 async function loadAdmin(period){
   if(!isAdmin())return;
 
   const status=document.getElementById("adminUsageStatus");
   const rows=document.getElementById("adminUsageRows");
+  const historyStatus=document.getElementById("adminQuizHistoryStatus");
+  const historyRows=document.getElementById("adminQuizHistoryRows");
   const currentToken=token();
 
   if(!currentToken){
     if(status)status.textContent="Admin statistics require an authenticated Worker session. Sign in again.";
     if(rows)rows.innerHTML="";
+    if(historyStatus)historyStatus.textContent="Admin quiz history requires an authenticated Worker session. Sign in again.";
+    if(historyRows)historyRows.innerHTML="";
     return;
   }
 
   if(status)status.textContent="Loading usage statistics…";
+  loadQuizHistory(period,currentToken);
 
   try{
     const response=await nativeFetch(

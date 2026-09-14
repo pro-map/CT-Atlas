@@ -1,4 +1,4 @@
-import{ALLOWED_USERS,REPORT_COOLDOWN_MS,SESSION_TTL_MS,QUICK_ASK_COOLDOWN_MS,QUICK_ASK_DAILY_LIMIT,QUICK_ASK_GLOBAL_DAILY_LIMIT,FEEDBACK_COOLDOWN_MS,FEEDBACK_DAILY_LIMIT,FEEDBACK_GLOBAL_DAILY_LIMIT,normalizeUsername,isAllowedUser,parisDayKey,usageTemplate}from"./shared.js";
+import{ALLOWED_USERS,REPORT_COOLDOWN_MS,SESSION_TTL_MS,QUICK_ASK_COOLDOWN_MS,QUICK_ASK_DAILY_LIMIT,QUICK_ASK_GLOBAL_DAILY_LIMIT,FEEDBACK_COOLDOWN_MS,FEEDBACK_DAILY_LIMIT,FEEDBACK_GLOBAL_DAILY_LIMIT,normalizeUsername,isAllowedUser,parisDayKey,usageTemplate,cleanText}from"./shared.js";
 export class ReportGate {
   constructor(state, env) {
     this.state = state;
@@ -183,6 +183,94 @@ export class ReportGate {
       users: rows
     };
   }
+
+  async quizHistory(period) {
+    const dateKeys = new Set();
+    if (period !== "all") {
+      const days = period === "today" ? 1 : Number(period);
+      for (let offset = 0; offset < days; offset++) {
+        dateKeys.add(parisDayKey(Date.now() - offset * 86400000));
+      }
+    }
+
+    const rows = [];
+    let startAfter = "";
+    for (let page = 0; page < 100; page++) {
+      const options = { prefix: "quiz-answer:", limit: 1000 };
+      if (startAfter) options.startAfter = startAfter;
+      const batch = await this.state.storage.list(options);
+      if (!batch || !batch.size) break;
+
+      for (const [key, value] of batch.entries()) {
+        if (!value || typeof value !== "object") continue;
+        const parts = String(key).split(":");
+        const quizDate = String(value.quiz_date || parts[1] || "");
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(quizDate)) continue;
+        if (dateKeys.size && !dateKeys.has(quizDate)) continue;
+
+        const username = normalizeUsername(value.username || parts.slice(2).join(":"));
+        if (!isAllowedUser(username)) continue;
+
+        const selectedIndex = Number.isInteger(value.selected_index)
+          ? value.selected_index
+          : Number(value.selected_index);
+        const correctIndex = Number.isInteger(value.correct_index)
+          ? value.correct_index
+          : Number(value.correct_index);
+        const optionsList = Array.isArray(value.options)
+          ? value.options.map(item => cleanText(item, 160)).slice(0, 3)
+          : [];
+        const answerLabel = (index, fallback) =>
+          Number.isInteger(index) && index >= 0
+            ? (optionsList[index] || fallback)
+            : fallback;
+        const sourceUrl = /^https:\/\//i.test(String(value.source_url || ""))
+          ? cleanText(value.source_url, 1200)
+          : "";
+
+        rows.push({
+          username,
+          quiz_date: quizDate,
+          category: cleanText(value.category, 120),
+          question: cleanText(value.question, 500),
+          options: optionsList,
+          selected_index: Number.isInteger(selectedIndex) ? selectedIndex : null,
+          selected_answer: cleanText(value.selected_answer, 160) || answerLabel(selectedIndex, "—"),
+          correct_index: Number.isInteger(correctIndex) ? correctIndex : null,
+          correct_answer: cleanText(value.correct_answer, 160) || answerLabel(correctIndex, "—"),
+          correct: value.correct === true,
+          quiz_id: cleanText(value.quiz_id, 128),
+          explanation: cleanText(value.explanation, 700),
+          source_url: sourceUrl,
+          source_checked_at: cleanText(value.source_checked_at, 64),
+          answered_at: cleanText(value.answered_at, 64)
+        });
+      }
+
+      const keys = Array.from(batch.keys());
+      const lastKey = keys[keys.length - 1];
+      if (batch.size < 1000 || !lastKey || lastKey === startAfter) break;
+      startAfter = lastKey;
+    }
+
+    rows.sort((a, b) =>
+      String(b.answered_at || b.quiz_date).localeCompare(String(a.answered_at || a.quiz_date))
+    );
+    const periodLabel =
+      period === "today" ? "Today · Europe/Paris" :
+      period === "7" ? "Last 7 days · Europe/Paris" :
+      period === "30" ? "Last 30 days · Europe/Paris" :
+      "All time";
+
+    return {
+      period,
+      period_label: periodLabel,
+      generated_at: new Date().toISOString(),
+      total: rows.length,
+      answers: rows
+    };
+  }
+
 
   async fetch(request) {
     const url = new URL(request.url);
@@ -386,6 +474,18 @@ export class ReportGate {
       return Response.json({ ok: true });
     }
 
+    if (url.pathname === "/quiz-history") {
+      const username = normalizeUsername(body.username);
+      if (username !== "admin") {
+        return Response.json({ error: "Admin access required." }, { status: 403 });
+      }
+      const period = String(body.period || "today");
+      if (!["today", "7", "30", "all"].includes(period)) {
+        return Response.json({ error: "Unsupported history period." }, { status: 400 });
+      }
+      return Response.json(await this.quizHistory(period));
+    }
+
     if (url.pathname === "/quiz-answer-record") {
       const username = normalizeUsername(body.username);
       const quizDate = String(body.quiz_date || "");
@@ -405,6 +505,10 @@ export class ReportGate {
         return Response.json({ ok: true, already_recorded: true, ...existing });
       }
 
+      const quizOptions = Array.isArray(body.options)
+        ? body.options.map(item => cleanText(item, 160)).slice(0, 3)
+        : [];
+
       const answer = {
         username,
         quiz_date: quizDate,
@@ -412,8 +516,20 @@ export class ReportGate {
         selected_index: body.selected_index,
         quiz_id: body.quiz_id,
         correct_index: body.correct_index,
-        explanation: body.explanation,
-        source_url: body.source_url,
+        category: cleanText(body.category, 120),
+        question: cleanText(body.question, 500),
+        options: quizOptions,
+        selected_answer: Number.isInteger(body.selected_index)
+          ? cleanText(quizOptions[body.selected_index], 160)
+          : "",
+        correct_answer: Number.isInteger(body.correct_index)
+          ? cleanText(quizOptions[body.correct_index], 160)
+          : "",
+        source_checked_at: cleanText(body.source_checked_at, 64),
+        explanation: cleanText(body.explanation, 700),
+        source_url: /^https:\/\//i.test(String(body.source_url || ""))
+          ? cleanText(body.source_url, 1200)
+          : "",
         answered_at: new Date(now).toISOString()
       };
       for (const key of [`usage-total:${username}`, `usage-day:${parisDayKey(now)}:${username}`]) {

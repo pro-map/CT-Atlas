@@ -36,6 +36,8 @@ export async function handleQuiz(request, env) {
     const recorded = await gateCall(env, '/quiz-answer-record', {
       ...payload, quiz_id:id, selected_index:body.selected_index,
       correct:body.selected_index===q.correct_index, correct_index:q.correct_index,
+      category:q.category, question:q.question, options:q.options,
+      source_checked_at:q.source_checked_at,
       explanation:q.explanation, source_url:q.source_url
     });
     return reply(await recorded.json(), recorded.status);
