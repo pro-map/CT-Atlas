@@ -124,7 +124,7 @@ function loadDailyQuiz(){
   if(document.getElementById("dailyQuizClientScript"))return;
   const script=document.createElement("script");
   script.id="dailyQuizClientScript";
-  script.src="daily-quiz.js?v=2";
+  script.src="daily-quiz.js?v=3";
   script.defer=true;
   document.head.appendChild(script);
 }
