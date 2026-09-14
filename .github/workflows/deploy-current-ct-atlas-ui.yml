@@ -9,6 +9,7 @@ on:
       - "deep-search.js"
       - "deep-search.css"
       - "index.html"
+      - "ct-atlas-runtime.json"
       - "daily-quiz.js"
       - "daily-quiz.css"
       - "feedback.css"

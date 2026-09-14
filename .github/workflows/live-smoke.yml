@@ -1,0 +1,70 @@
+name: CT Atlas live smoke test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "ct-atlas-runtime.json"
+      - "daily-quiz.json"
+      - "cloudflare-worker/**"
+      - "cloudflare-worker/wrangler.toml"
+      - ".github/workflows/live-smoke.yml"
+  schedule:
+    - cron: "47 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ct-atlas-live-smoke
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check public assets
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/ >/tmp/index.html
+          curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/ct-atlas-runtime.json >/tmp/runtime.json
+          curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/daily-quiz.json >/tmp/quiz.json
+          node - <<'NODE'
+          const fs = require("fs");
+          const runtime = JSON.parse(fs.readFileSync("/tmp/runtime.json", "utf8"));
+          const quiz = JSON.parse(fs.readFileSync("/tmp/quiz.json", "utf8"));
+          if (runtime.ai_selection_threshold !== 60) throw new Error("Runtime threshold drift");
+          if (!Array.isArray(runtime.language_codes) || runtime.language_codes.length !== 12) throw new Error("Runtime language drift");
+          if (!Array.isArray(quiz.options) || quiz.options.length !== 3) throw new Error("Quiz shape invalid");
+          if (!Number.isInteger(quiz.correct_index) || quiz.correct_index < 0 || quiz.correct_index > 2) throw new Error("Quiz answer invalid");
+          console.log("Public assets valid.");
+          NODE
+
+      - name: Check Worker health
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --max-time 25 https://ct-report-generator.fairpeace.workers.dev/health >/tmp/health.json
+          node - <<'NODE'
+          const fs = require("fs");
+          const health = JSON.parse(fs.readFileSync("/tmp/health.json", "utf8"));
+          for (const key of ["ok", "deep_search", "quiz_tracking"]) {
+            if (health[key] !== true) throw new Error("Worker health flag is not true: " + key);
+          }
+          console.log("Worker health valid:", health.version, health.auth_mode);
+          NODE
+
+      - name: Check CORS allowlist
+        run: |
+          set -euo pipefail
+          origins=(
+            "https://ct-atlas.com"
+            "https://ct-atlas-mirror.fairpeace.workers.dev"
+            "https://pro-map.github.io"
+          )
+          for origin in "${origins[@]}"; do
+            curl --fail --silent --show-error --max-time 25               -D /tmp/cors.headers               -o /dev/null               -X OPTIONS               -H "Origin: $origin"               -H "Access-Control-Request-Method: POST"               https://ct-report-generator.fairpeace.workers.dev/health
+            grep -Fi "Access-Control-Allow-Origin: $origin" /tmp/cors.headers
+          done

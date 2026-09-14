@@ -56,7 +56,39 @@ const USER_PASSWORD_HASHES = Object.freeze({
   "group-s-10": "a4dd7ccbb89e2f7c10ad6d40feeae20df386e78ba815f2cbf6f29b98f7d45e51",
   "admin": "a7cdf5d0586b392473dd0cd08c9ba833240006a8a7310bf9bc8bf1aefdfaeadb"
 });
-const ALLOWED_USERS = new Set(Object.keys(USER_PASSWORD_HASHES));
+const LEGACY_ALLOWED_USERS = new Set(Object.keys(USER_PASSWORD_HASHES));
+
+function authUsersFromEnv(env) {
+  const raw = String(env?.AUTH_USERS_JSON || "").trim();
+  if (!raw) return USER_PASSWORD_HASHES;
+
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      throw new Error("AUTH_USERS_JSON must be a JSON object.");
+    }
+    const entries = Object.entries(parsed)
+      .map(([username, hash]) => [
+        normalizeUsername(username),
+        String(hash || "").trim().toLowerCase()
+      ])
+      .filter(([username, hash]) =>
+        /^[a-z0-9][a-z0-9._-]{0,63}$/.test(username) &&
+        /^[a-f0-9]{64}$/.test(hash)
+      );
+    if (!entries.length) throw new Error("AUTH_USERS_JSON contains no valid users.");
+    return Object.freeze(Object.fromEntries(entries));
+  } catch (error) {
+    console.error("Invalid AUTH_USERS_JSON; rejecting all logins.", error);
+    return Object.freeze({});
+  }
+}
+
+function getAllowedUsers(env) {
+  return new Set(Object.keys(authUsersFromEnv(env)));
+}
+
+const ALLOWED_USERS = LEGACY_ALLOWED_USERS;
 
 const REPORT_SCHEMA = {
   type: "object",
@@ -153,6 +185,7 @@ function corsHeaders(env) {
     "Access-Control-Allow-Origin": origin,
     "Access-Control-Allow-Methods": "POST,OPTIONS,GET",
     "Access-Control-Allow-Headers": "Content-Type,X-Session-Token",
+    "Vary": "Origin",
     "Content-Type": "application/json; charset=utf-8"
   };
 }
@@ -172,8 +205,16 @@ function normalizeUsername(value) {
   return cleanText(value, 64).toLowerCase();
 }
 
-function isAllowedUser(username) {
-  return ALLOWED_USERS.has(normalizeUsername(username));
+function isAllowedUser(username, env) {
+  return getAllowedUsers(env).has(normalizeUsername(username));
+}
+
+function passwordHashForUser(username, env) {
+  return authUsersFromEnv(env)[normalizeUsername(username)] || "";
+}
+
+function authMode(env) {
+  return String(env?.AUTH_USERS_JSON || "").trim() ? "secret" : "legacy-fallback";
 }
 
 function parisDayKey(timestamp = Date.now()) {
@@ -259,6 +300,65 @@ const REPORT_REGION_COUNTRY_CODES = Object.freeze({
   ])
 });
 
+const REPORT_COUNTRY_CODE_ALIASES = Object.freeze({
+  "congo": "CG",
+  "republic of the congo": "CG",
+  "congo democratic rep": "CD",
+  "democratic republic of the congo": "CD",
+  "drc": "CD",
+  "cote d ivoire": "CI",
+  "ivory coast": "CI",
+  "czech republic": "CZ",
+  "czechia": "CZ",
+  "viet nam": "VN",
+  "vietnam": "VN",
+  "swaziland": "SZ",
+  "eswatini": "SZ",
+  "turkey": "TR",
+  "turkiye": "TR",
+  "russia": "RU",
+  "russian federation": "RU",
+  "iran": "IR",
+  "islamic republic of iran": "IR",
+  "syria": "SY",
+  "syrian arab republic": "SY",
+  "laos": "LA",
+  "moldova": "MD",
+  "republic of moldova": "MD",
+  "palestine": "PS",
+  "state of palestine": "PS",
+  "bolivia": "BO",
+  "venezuela": "VE",
+  "tanzania": "TZ",
+  "united states": "US",
+  "united states of america": "US",
+  "usa": "US",
+  "uk": "GB",
+  "united kingdom": "GB",
+  "great britain": "GB",
+  "south korea": "KR",
+  "republic of korea": "KR",
+  "north korea": "KP",
+  "democratic peoples republic of korea": "KP",
+  "uae": "AE",
+  "united arab emirates": "AE"
+});
+
+function foldRegionLabel(value) {
+  return String(value || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[’']/g, " ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+function countryCodeForLabel(value) {
+  return REPORT_COUNTRY_CODE_ALIASES[foldRegionLabel(value)] || "";
+}
+
 function matchesRegion(event, region) {
   const selected = String(region || "").trim().toUpperCase();
   if (!selected || selected === "GLOBAL") return true;
@@ -281,9 +381,20 @@ function matchesRegion(event, region) {
     return (labelAliases[selected] || []).some(alias => storedRegion.includes(alias));
   }
 
-  const target = String(region || "").trim().toLowerCase();
+  const target = foldRegionLabel(region);
+  const selectedCode = countryCodeForLabel(region);
+  const eventCode = String(event?.country_code || event?.country_iso2 || event?.countryCode || event?.iso2 || "")
+    .trim()
+    .toUpperCase();
+  if (selectedCode && eventCode === selectedCode) return true;
+
   return [event?.country, event?.region, event?.city]
-    .some(v => String(v || "").trim().toLowerCase() === target);
+    .some(value => {
+      const candidate = foldRegionLabel(value);
+      return candidate === target || (
+        selectedCode && countryCodeForLabel(value) === selectedCode
+      );
+    });
 }
 
 function compactEvent(event) {
@@ -576,6 +687,9 @@ export {
   FEEDBACK_GLOBAL_DAILY_LIMIT,
   USER_PASSWORD_HASHES,
   ALLOWED_USERS,
+  getAllowedUsers,
+  passwordHashForUser,
+  authMode,
   REPORT_SCHEMA,
   SYSTEM_INSTRUCTION,
   corsHeaders,

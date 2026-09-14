@@ -9,7 +9,8 @@ function harness(){
  let db=new Map(), fail=false;
  const storage={
   get:async k=>{if(Array.isArray(k)){assert.ok(k.length<=128);return new Map(k.filter(x=>db.has(x)).map(x=>[x,structuredClone(db.get(x))]));}return structuredClone(db.get(k));},
-  put:async(k,v)=>{if(fail)throw Error('storage failure');db.set(k,structuredClone(v));},
+  put:async(k,v)=>{if(fail)throw Error('storage failure');if(k&&typeof k==='object'&&!Array.isArray(k)){for(const [key,value] of Object.entries(k))db.set(key,structuredClone(value));}else db.set(k,structuredClone(v));},
+  delete:async k=>{db.delete(k);},
   list:async options=>{
     const prefix=String(options?.prefix||"");
     let entries=[...db.entries()]
@@ -84,4 +85,23 @@ test('quiz API rejects stale question and non-integer choice',async()=>{
 test('quiz identity and correctness come from server, never client claims',async()=>{
  const h=apiHarness();await h.call('/quiz-answer',{quiz_id:'current-id',username:'admin',selected_index:0,correct:true});
  const record=h.calls.find(c=>c.path==='/quiz-answer-record');assert.equal(record.payload.username,'group-i-1');assert.equal(record.payload.correct,false);
+});
+
+
+test('quota reservation rolls back on failure and counts only committed work',async()=>{
+ const h=harness();
+ const first=await h.call('/quick-ask-acquire',{username:'group-i-1'});
+ assert.ok(first.reservation_id);
+ const released=await h.call('/quota-release',{
+  username:'group-i-1',kind:'quick_ask',reservation_id:first.reservation_id
+ });
+ assert.equal(released.released,true);
+ const second=await h.call('/quick-ask-acquire',{username:'group-i-1'});
+ assert.ok(second.reservation_id);
+ const committed=await h.call('/quota-commit',{
+  username:'group-i-1',kind:'quick_ask',reservation_id:second.reservation_id
+ });
+ assert.equal(committed.committed,true);
+ const row=(await h.g.usageStats('all')).users.find(x=>x.username==='group-i-1');
+ assert.equal(row.quick_ask_requests,1);
 });

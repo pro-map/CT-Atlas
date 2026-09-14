@@ -12,7 +12,7 @@ STAGING=_pages_mirror
 rm -rf "$STAGING"
 mkdir -p "$STAGING"
 
-cp index.html privacy.html robots.txt events.json \
+cp index.html privacy.html robots.txt events.json ct-atlas-runtime.json \
    deep-search.js deep-search.css quick-ask.js quick-ask.css feedback.js feedback.css \
    daily-quiz.js daily-quiz.css daily-quiz.json \
    usage-admin.js usage-admin.css usage-auth-fix.js \

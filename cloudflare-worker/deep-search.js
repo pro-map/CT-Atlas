@@ -5,6 +5,7 @@ import {
   normalizeUsername,
   isAllowedUser,
   gateCall,
+  parseEventDate,
   extractGeminiText,
   sha256
 } from "./shared.js";
@@ -1219,18 +1220,19 @@ function candidateMapEvents(db, window) {
   const all = Array.isArray(db) ? db : (Array.isArray(db?.events) ? db.events : []);
   const cutoff = window.startDt.getTime() - (14 * 86400000);
   return all.filter(event => {
-    const raw = event?.event_date || event?.occurrence_date || event?.published || event?.last_reported;
-    if (!raw) return true;
-    const dt = new Date(raw);
-    return Number.isNaN(dt.getTime()) || dt.getTime() >= cutoff;
-  }).map(event => ({
-    id: String(event?.id || event?._mapKey || ""),
-    title: cleanText(event?.title, 500),
-    original_title: cleanText(event?.original_title, 500),
-    url: cleanText(event?.url, 1200),
-    published: String(event?.event_date || event?.occurrence_date || event?.published || ""),
-    country: cleanText(event?.country, 100)
-  }));
+    const dt = parseEventDate(event);
+    return !dt || dt.getTime() >= cutoff;
+  }).map(event => {
+    const dt = parseEventDate(event);
+    return {
+      id: String(event?.id || event?._mapKey || ""),
+      title: cleanText(event?.title, 500),
+      original_title: cleanText(event?.original_title, 500),
+      url: cleanText(event?.url, 1200),
+      published: dt ? dt.toISOString() : "",
+      country: cleanText(event?.country, 100)
+    };
+  });
 }
 
 function compareWithAtlas(rows, mapEvents) {
@@ -1424,7 +1426,7 @@ function languageDiagnostics(plan, retrieval, priorityLanguages = []) {
 async function authenticateDeepSearch(request, body, env) {
   const username = normalizeUsername(body.user_id || body.username);
   const token = cleanText(request.headers.get("X-Session-Token"), 160);
-  if (!username || !isAllowedUser(username)) return { error: jsonResponse({ error: "Unknown or missing user." }, 400, env) };
+  if (!username || !isAllowedUser(username, env)) return { error: jsonResponse({ error: "Unknown or missing user." }, 400, env) };
   if (!token) return { error: jsonResponse({ error: "Authenticated session required. Please sign in again." }, 401, env) };
   const sessionResponse = await gateCall(env, "/session-get", { session_token: token });
   const session = await sessionResponse.json().catch(() => ({}));
@@ -1468,6 +1470,10 @@ export async function handleDeepSearch(request, env, ctx) {
     if (cached?.hit && cached?.report) {
       const commitResponse = await gateCall(env, "/commit-report", { permitId, username });
       if (!commitResponse.ok) throw new Error("Unable to finalize Deep Search allowance.");
+      ctx?.waitUntil?.(gateCall(env, "/usage-increment", {
+        username,
+        metrics: { cached_reports: 1 }
+      }).catch(error => console.error("Deep Search usage record failed", error)));
       return jsonResponse({ ...cached.report, cached: true }, 200, env);
     }
 
@@ -1599,6 +1605,10 @@ export async function handleDeepSearch(request, env, ctx) {
       throw new Error(commitError?.error || "Unable to finalize Deep Search allowance.");
     }
 
+    ctx?.waitUntil?.(gateCall(env, "/usage-increment", {
+      username,
+      metrics: { reports_generated: 1 }
+    }).catch(error => console.error("Deep Search usage record failed", error)));
     return jsonResponse({ ...report, cached: false }, 200, env);
   } catch (error) {
     console.error("Deep Search failure", error);

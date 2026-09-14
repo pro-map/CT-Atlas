@@ -7,7 +7,7 @@ const source=fs.readFileSync('cloudflare-worker/shared.js','utf8').replace(/expo
 function harness(){
  const c=vm.createContext({crypto,fetch:async()=>({}),TextEncoder});
  vm.runInContext(source,c);
- return vm.runInContext('({corsHeaders})',c);
+ return vm.runInContext('({corsHeaders,isAllowedUser,passwordHashForUser,getAllowedUsers,matchesRegion})',c);
 }
 
 test('corsHeaders allows the primary ALLOWED_ORIGIN when the request comes from it',()=>{
@@ -47,4 +47,24 @@ test('corsHeaders handles a missing EXTRA_ALLOWED_ORIGINS and a missing __reques
  const h=harness();
  assert.equal(h.corsHeaders({ALLOWED_ORIGIN:'https://ct-atlas.com'})['Access-Control-Allow-Origin'],'https://ct-atlas.com');
  assert.equal(h.corsHeaders({})['Access-Control-Allow-Origin'],'*','no ALLOWED_ORIGIN configured at all falls back to *, matching the pre-existing behaviour');
+});
+
+
+test('secret-backed auth overrides the legacy compatibility roster',()=>{
+ const h=harness();
+ const hash='a'.repeat(64);
+ const env={AUTH_USERS_JSON:JSON.stringify({analyst:hash})};
+ assert.equal(h.isAllowedUser('analyst',env),true);
+ assert.equal(h.isAllowedUser('group-i-1',env),false);
+ assert.equal(h.passwordHashForUser('analyst',env),hash);
+ assert.deepEqual(Array.from(h.getAllowedUsers(env)),['analyst']);
+});
+
+
+test('country filters accept ISO country codes and common frontend aliases',()=>{
+ const h=harness();
+ assert.equal(h.matchesRegion({country:'Republic of the Congo',country_code:'CG'},'Congo'),true);
+ assert.equal(h.matchesRegion({country:'Democratic Republic of the Congo',country_code:'CD'},'Congo (Democratic Rep.)'),true);
+ assert.equal(h.matchesRegion({country:'Czechia',country_code:'CZ'},'Czech Republic'),true);
+ assert.equal(h.matchesRegion({country:'Côte d’Ivoire',country_code:'CI'},"Côte d'Ivoire"),true);
 });
