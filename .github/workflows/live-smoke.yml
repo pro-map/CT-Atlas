@@ -59,8 +59,12 @@ jobs:
       - name: Check CORS allowlist
         run: |
           set -euo pipefail
-          for origin in             https://ct-atlas.com             https://ct-atlas-mirror.fairpeace.workers.dev             https://pro-map.github.io
-          do
-            curl --fail --silent --show-error --max-time 25 -D /tmp/cors.headers -o /dev/null               -X OPTIONS               -H "Origin: $origin"               -H "Access-Control-Request-Method: POST"               https://ct-report-generator.fairpeace.workers.dev/health
+          origins=(
+            "https://ct-atlas.com"
+            "https://ct-atlas-mirror.fairpeace.workers.dev"
+            "https://pro-map.github.io"
+          )
+          for origin in "${origins[@]}"; do
+            curl --fail --silent --show-error --max-time 25               -D /tmp/cors.headers               -o /dev/null               -X OPTIONS               -H "Origin: $origin"               -H "Access-Control-Request-Method: POST"               https://ct-report-generator.fairpeace.workers.dev/health
             grep -Fi "Access-Control-Allow-Origin: $origin" /tmp/cors.headers
           done
