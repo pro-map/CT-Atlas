@@ -185,6 +185,7 @@ function corsHeaders(env) {
     "Access-Control-Allow-Origin": origin,
     "Access-Control-Allow-Methods": "POST,OPTIONS,GET",
     "Access-Control-Allow-Headers": "Content-Type,X-Session-Token",
+    "Vary": "Origin",
     "Content-Type": "application/json; charset=utf-8"
   };
 }
@@ -300,6 +301,8 @@ const REPORT_REGION_COUNTRY_CODES = Object.freeze({
 });
 
 const REPORT_COUNTRY_CODE_ALIASES = Object.freeze({
+  "congo": "CG",
+  "republic of the congo": "CG",
   "congo democratic rep": "CD",
   "democratic republic of the congo": "CD",
   "drc": "CD",
