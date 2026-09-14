@@ -23,7 +23,9 @@ function harness(){
   },
   transaction:async fn=>{const saved=structuredClone(db);try{return await fn(storage);}catch(e){db=saved;throw e;}}
  };
- const g=new c.Gate({storage},{});
+ const testHash='a'.repeat(64);
+ const testEnv={AUTH_USERS_JSON:JSON.stringify({admin:testHash,'group-i-1':testHash,'group-i-2':testHash})};
+ const g=new c.Gate({storage},testEnv);
  return {g,db,fail:()=>{fail=true;},call:async(path,body)=>(await g.fetch(new Request('https://internal'+path,{method:'POST',body:JSON.stringify(body)}))).json()};
 }
 const attempt={username:'group-i-1',quiz_date:'2026-09-14',quiz_id:'test',correct:false,selected_index:2,correct_index:1,category:'C',question:'Q?',options:['A','B','C'],explanation:'Evidence',source_url:'https://un.org/'};
