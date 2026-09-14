@@ -20,6 +20,12 @@ function refreshAdminUsageButton(){
   if(button) button.hidden=currentUser()!=="admin";
 }
 
+function enforceSessionExpiry(){
+  const raw=String(sessionStorage.getItem(EXPIRY_KEY)||"");
+  const expires=Date.parse(raw);
+  if(Number.isFinite(expires)&&expires<=Date.now()) lockLocalSession();
+}
+
 function lockLocalSession(){
   sessionStorage.removeItem("ct_map_authorized");
   sessionStorage.removeItem(USER_KEY);
@@ -90,11 +96,12 @@ function loadDailyQuiz(){
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
+  enforceSessionExpiry();
   refreshAdminUsageButton();
   loadDeepSearch();
   loadDailyQuiz();
   loadQuickAsk();
   loadFeedback();
-  setInterval(refreshAdminUsageButton,1000);
+  setInterval(()=>{ enforceSessionExpiry(); refreshAdminUsageButton(); },30000);
 });
 })();
