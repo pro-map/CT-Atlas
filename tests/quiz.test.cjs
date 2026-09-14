@@ -9,7 +9,7 @@ function harness(){
  let db=new Map(), fail=false;
  const storage={
   get:async k=>{if(Array.isArray(k)){assert.ok(k.length<=128);return new Map(k.filter(x=>db.has(x)).map(x=>[x,structuredClone(db.get(x))]));}return structuredClone(db.get(k));},
-  put:async(k,v)=>{if(fail)throw Error('storage failure');db.set(k,structuredClone(v));},
+  put:async(k,v)=>{if(fail)throw Error('storage failure');if(k&&typeof k==='object'&&!Array.isArray(k)){for(const [key,value] of Object.entries(k))db.set(key,structuredClone(value));}else db.set(k,structuredClone(v));},
   delete:async k=>{db.delete(k);},
   list:async options=>{
     const prefix=String(options?.prefix||"");
