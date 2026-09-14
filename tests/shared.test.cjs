@@ -63,6 +63,7 @@ test('secret-backed auth overrides the legacy compatibility roster',()=>{
 
 test('country filters accept ISO country codes and common frontend aliases',()=>{
  const h=harness();
+ assert.equal(h.matchesRegion({country:'Republic of the Congo',country_code:'CG'},'Congo'),true);
  assert.equal(h.matchesRegion({country:'Democratic Republic of the Congo',country_code:'CD'},'Congo (Democratic Rep.)'),true);
  assert.equal(h.matchesRegion({country:'Czechia',country_code:'CZ'},'Czech Republic'),true);
  assert.equal(h.matchesRegion({country:'Côte d’Ivoire',country_code:'CI'},"Côte d'Ivoire"),true);
