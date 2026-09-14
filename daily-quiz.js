@@ -50,7 +50,7 @@ async function load(){
     options.innerHTML=quiz.options.map((option,index)=>"<button class=\"daily-quiz-option\" type=\"button\" data-index=\""+index+"\">"+esc(option)+"</button>").join("");
     options.querySelectorAll("button").forEach((button,index)=>button.addEventListener("click",()=>submit(index)));
     if(data.answered)showAnswer(data.answer);
-    else status("Your first answer and score are visible to the administrator. Educational quiz, not a secure exam.");
+    else status("Educational quiz, not a secure exam.");
   }catch(error){status(error.message);retry(load);}
   finally{busy=false;}
 }
