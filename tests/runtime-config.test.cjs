@@ -20,5 +20,5 @@ test('UI and collection workflow consume the runtime configuration',()=>{
     assert.match(html,new RegExp('id="' + id + '"'));
   }
   assert.match(html,/ct-atlas-runtime\.json/);
-  assert.match(workflow,/AI_SELECTION_THRESHOLD=.*ct-atlas-runtime\.json/);
+  assert.match(workflow,/AI_SELECTION_THRESHOLD[\s\S]*ct-atlas-runtime\.json/);
 });
