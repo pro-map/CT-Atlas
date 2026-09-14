@@ -1,4 +1,36 @@
 import{getAllowedUsers,REPORT_COOLDOWN_MS,SESSION_TTL_MS,QUICK_ASK_COOLDOWN_MS,QUICK_ASK_DAILY_LIMIT,QUICK_ASK_GLOBAL_DAILY_LIMIT,FEEDBACK_COOLDOWN_MS,FEEDBACK_DAILY_LIMIT,FEEDBACK_GLOBAL_DAILY_LIMIT,normalizeUsername,isAllowedUser,parisDayKey,usageTemplate,cleanText}from"./shared.js";
+
+const ADMIN_DISPLAY_NAMES=Object.freeze({
+  "group-i-1":"Ed",
+  "group-i-2":"Stephen",
+  "group-i-3":"Kayla",
+  "group-i-4":"Bridget",
+  "group-i-5":"Alexandru",
+  "group-i-6":"Oskaras",
+  "group-i-7":"Elodie",
+  "group-i-8":"Marius",
+  "group-i-9":"Kiara",
+  "group-i-10":"Sebastien",
+  "group-p-1":"Dritan",
+  "group-p-2":"Allyson",
+  "group-p-3":"Roberto",
+  "group-p-4":"Daniele",
+  "group-p-5":"Simon",
+  "group-p-6":"Zaydoun",
+  "group-p-7":"Saleh",
+  "group-p-8":"Lasha",
+  "group-p-9":"Saad",
+  "group-s-1":"Maddy",
+  "group-s-3":"Andreas",
+  "group-s-5":"Liman",
+  "group-s-6":"Juan",
+  "group-s-7":"Thierry"
+});
+
+function withAdminDisplayName(row){
+  const displayName=ADMIN_DISPLAY_NAMES[normalizeUsername(row?.username)]||"";
+  return displayName?{...row,display_name:displayName}:row;
+}
 export class ReportGate {
   constructor(state, env) {
     this.state = state;
@@ -180,7 +212,7 @@ export class ReportGate {
       period_label: periodLabel,
       generated_at: new Date().toISOString(),
       summary,
-      users: rows
+      users: rows.map(withAdminDisplayName)
     };
   }
 
@@ -267,7 +299,7 @@ export class ReportGate {
       period_label: periodLabel,
       generated_at: new Date().toISOString(),
       total: rows.length,
-      answers: rows
+      answers: rows.map(withAdminDisplayName)
     };
   }
 

@@ -161,6 +161,13 @@ function escapeCell(value){
     .replace(/'/g,"&#039;");
 }
 
+
+function adminUserLabel(item,fallback=""){
+  const username=String(item?.username||fallback||"");
+  const displayName=String(item?.display_name||"").trim();
+  return displayName?username+" — "+displayName:username;
+}
+
 function refreshAdminButton(){
   const button=document.getElementById("adminUsageButton");
   if(button)button.hidden=!isAdmin();
@@ -319,7 +326,7 @@ async function loadQuizHistory(period,currentToken){
           : "—";
         return "<tr>"+
           "<td>"+escapeCell(item.quiz_date||"—")+"</td>"+
-          "<td>"+escapeCell(item.username||"—")+"</td>"+
+          "<td>"+escapeCell(adminUserLabel(item,"—"))+"</td>"+
           "<td>"+escapeCell(item.category||"—")+"</td>"+
           "<td class=\"admin-quiz-question\">"+escapeCell(item.question||"Question not stored for this attempt")+"</td>"+
           "<td>"+escapeCell(item.selected_answer||"—")+"</td>"+
@@ -392,7 +399,7 @@ async function loadAdmin(period){
     if(rows){
       rows.innerHTML=(payload.users||[]).map(item=>`
         <tr>
-          <td>${escapeCell(item.username||"")}</td>
+          <td>${escapeCell(adminUserLabel(item))}</td>
           <td>${Number(item.logins||0)}</td>
           <td>${Number(item.searches||0)}</td>
           <td>${Number(item.report_requests||0)}</td>
