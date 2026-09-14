@@ -1,0 +1,9 @@
+{
+  "date": "2026-09-14",
+  "category": "Major attacks",
+  "question": "In which year did the coordinated 11 September attacks take place in the United States?",
+  "options": ["1998", "2001", "2004"],
+  "correct_index": 1,
+  "explanation": "The attacks took place on 11 September 2001 in New York, Virginia and Pennsylvania.",
+  "source_url": "https://www.fbi.gov/history/famous-cases/911-investigation"
+}

@@ -120,9 +120,19 @@ function loadFeedback(){
   document.head.appendChild(script);
 }
 
+function loadDailyQuiz(){
+  if(document.getElementById("dailyQuizClientScript"))return;
+  const script=document.createElement("script");
+  script.id="dailyQuizClientScript";
+  script.src="daily-quiz.js?v=1";
+  script.defer=true;
+  document.head.appendChild(script);
+}
+
 document.addEventListener("DOMContentLoaded",()=>{
   refreshAdminUsageButton();
   loadDeepSearch();
+  loadDailyQuiz();
   loadQuickAsk();
   loadFeedback();
   setInterval(refreshAdminUsageButton,1000);

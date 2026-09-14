@@ -1,0 +1,14 @@
+#dailyQuiz{margin:8px 0 12px;padding:10px;border:1px solid rgba(181,141,57,.5);background:linear-gradient(180deg,rgba(83,62,21,.22),rgba(8,25,36,.88));color:#dbe9f0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)}
+.daily-quiz-head{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:8px;color:#dfbb64;font:900 8px/1 Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.daily-quiz-head span{color:#708c9b;font-size:6px;letter-spacing:.06em}
+.daily-quiz-question{margin-bottom:9px;color:#e5f1f6;font:700 9px/1.45 Arial,sans-serif}
+.daily-quiz-options{display:grid;gap:5px}
+.daily-quiz-option{width:100%;padding:7px 8px;text-align:left;border:1px solid rgba(83,137,166,.34);background:rgba(7,21,31,.78);color:#bcd0da;font:700 7.5px/1.35 Arial,sans-serif;cursor:pointer}
+.daily-quiz-option:hover:not(:disabled){border-color:#4ba2d1;color:#fff;background:rgba(18,61,84,.7)}
+.daily-quiz-option:disabled{cursor:default}
+.daily-quiz-option.correct{border-color:#4fa978;background:rgba(43,126,79,.2);color:#88dbab}
+.daily-quiz-option.wrong{border-color:#bf6262;background:rgba(139,49,49,.16);color:#ec9999}
+.daily-quiz-result{display:none;margin-top:9px;padding:8px;border-left:2px solid #b58d39;background:rgba(181,141,57,.07);color:#aebfc7;font:600 7.5px/1.5 Arial,sans-serif}
+.daily-quiz-result.visible{display:block}
+.daily-quiz-result strong{color:#e7c56f}
+.daily-quiz-source{display:inline-block;margin-top:5px;color:#5fb7e8;text-decoration:none;font-weight:800}
