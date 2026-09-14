@@ -1424,7 +1424,7 @@ function languageDiagnostics(plan, retrieval, priorityLanguages = []) {
 async function authenticateDeepSearch(request, body, env) {
   const username = normalizeUsername(body.user_id || body.username);
   const token = cleanText(request.headers.get("X-Session-Token"), 160);
-  if (!username || !isAllowedUser(username)) return { error: jsonResponse({ error: "Unknown or missing user." }, 400, env) };
+  if (!username || !isAllowedUser(username, env)) return { error: jsonResponse({ error: "Unknown or missing user." }, 400, env) };
   if (!token) return { error: jsonResponse({ error: "Authenticated session required. Please sign in again." }, 401, env) };
   const sessionResponse = await gateCall(env, "/session-get", { session_token: token });
   const session = await sessionResponse.json().catch(() => ({}));
@@ -1468,6 +1468,10 @@ export async function handleDeepSearch(request, env, ctx) {
     if (cached?.hit && cached?.report) {
       const commitResponse = await gateCall(env, "/commit-report", { permitId, username });
       if (!commitResponse.ok) throw new Error("Unable to finalize Deep Search allowance.");
+      ctx?.waitUntil?.(gateCall(env, "/usage-increment", {
+        username,
+        metrics: { cached_reports: 1 }
+      }).catch(error => console.error("Deep Search usage record failed", error)));
       return jsonResponse({ ...cached.report, cached: true }, 200, env);
     }
 
@@ -1599,6 +1603,10 @@ export async function handleDeepSearch(request, env, ctx) {
       throw new Error(commitError?.error || "Unable to finalize Deep Search allowance.");
     }
 
+    ctx?.waitUntil?.(gateCall(env, "/usage-increment", {
+      username,
+      metrics: { reports_generated: 1 }
+    }).catch(error => console.error("Deep Search usage record failed", error)));
     return jsonResponse({ ...report, cached: false }, 200, env);
   } catch (error) {
     console.error("Deep Search failure", error);

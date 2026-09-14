@@ -11,7 +11,7 @@ ALLOWED_ORIGIN = "https://ct-atlas.com"
 # Comma-separated list of additional origins allowed to call this API --
 # mirrors of the static site hosted elsewhere (e.g. for networks that block
 # the main domain). See corsHeaders() in shared.js.
-EXTRA_ALLOWED_ORIGINS = "https://ct-atlas-mirror.fairpeace.workers.dev"
+EXTRA_ALLOWED_ORIGINS = "https://ct-atlas-mirror.fairpeace.workers.dev,https://pro-map.github.io"
 
 [[durable_objects.bindings]]
 name = "REPORT_GATE"
@@ -20,3 +20,6 @@ class_name = "ReportGate"
 [exports.ReportGate]
 type = "durable-object"
 storage = "sqlite"
+
+# AUTH_USERS_JSON is a Cloudflare secret containing {"username":"sha256(password)"}.
+# Provision it before removing the legacy compatibility fallback from shared.js.

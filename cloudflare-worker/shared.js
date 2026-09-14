@@ -56,7 +56,39 @@ const USER_PASSWORD_HASHES = Object.freeze({
   "group-s-10": "a4dd7ccbb89e2f7c10ad6d40feeae20df386e78ba815f2cbf6f29b98f7d45e51",
   "admin": "a7cdf5d0586b392473dd0cd08c9ba833240006a8a7310bf9bc8bf1aefdfaeadb"
 });
-const ALLOWED_USERS = new Set(Object.keys(USER_PASSWORD_HASHES));
+const LEGACY_ALLOWED_USERS = new Set(Object.keys(USER_PASSWORD_HASHES));
+
+function authUsersFromEnv(env) {
+  const raw = String(env?.AUTH_USERS_JSON || "").trim();
+  if (!raw) return USER_PASSWORD_HASHES;
+
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      throw new Error("AUTH_USERS_JSON must be a JSON object.");
+    }
+    const entries = Object.entries(parsed)
+      .map(([username, hash]) => [
+        normalizeUsername(username),
+        String(hash || "").trim().toLowerCase()
+      ])
+      .filter(([username, hash]) =>
+        /^[a-z0-9][a-z0-9._-]{0,63}$/.test(username) &&
+        /^[a-f0-9]{64}$/.test(hash)
+      );
+    if (!entries.length) throw new Error("AUTH_USERS_JSON contains no valid users.");
+    return Object.freeze(Object.fromEntries(entries));
+  } catch (error) {
+    console.error("Invalid AUTH_USERS_JSON; rejecting all logins.", error);
+    return Object.freeze({});
+  }
+}
+
+function getAllowedUsers(env) {
+  return new Set(Object.keys(authUsersFromEnv(env)));
+}
+
+const ALLOWED_USERS = LEGACY_ALLOWED_USERS;
 
 const REPORT_SCHEMA = {
   type: "object",
@@ -172,8 +204,16 @@ function normalizeUsername(value) {
   return cleanText(value, 64).toLowerCase();
 }
 
-function isAllowedUser(username) {
-  return ALLOWED_USERS.has(normalizeUsername(username));
+function isAllowedUser(username, env) {
+  return getAllowedUsers(env).has(normalizeUsername(username));
+}
+
+function passwordHashForUser(username, env) {
+  return authUsersFromEnv(env)[normalizeUsername(username)] || "";
+}
+
+function authMode(env) {
+  return String(env?.AUTH_USERS_JSON || "").trim() ? "secret" : "legacy-fallback";
 }
 
 function parisDayKey(timestamp = Date.now()) {
@@ -576,6 +616,9 @@ export {
   FEEDBACK_GLOBAL_DAILY_LIMIT,
   USER_PASSWORD_HASHES,
   ALLOWED_USERS,
+  getAllowedUsers,
+  passwordHashForUser,
+  authMode,
   REPORT_SCHEMA,
   SYSTEM_INSTRUCTION,
   corsHeaders,

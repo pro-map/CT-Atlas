@@ -1,0 +1,27 @@
+{
+  "version": "2026-09-14",
+  "update_times": [
+    "10:17",
+    "18:17"
+  ],
+  "timezone": "Europe/Paris",
+  "ai_selection_threshold": 60,
+  "collection_languages": 12,
+  "translated_languages": 11,
+  "language_codes": [
+    "fr",
+    "ar",
+    "de",
+    "es",
+    "it",
+    "tr",
+    "ru",
+    "ur",
+    "fa",
+    "he",
+    "en",
+    "ps"
+  ],
+  "retention_days": 180,
+  "git_pages_enabled": true
+}

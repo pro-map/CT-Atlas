@@ -114,3 +114,16 @@ test('sanitizeAnswerText trims and caps length without breaking on the cut',()=>
  const result=h.sanitizeAnswerText('  padded text  ',6);
  assert.equal(result,'padded');
 });
+
+
+test('matches local events written in Arabic script',()=>{
+ const h=harness();
+ const events=[event({
+  id:'arabic-1',
+  title:'هجوم لتنظيم الدولة في أفغانستان',
+  summary:'تقرير عن هجوم مسلح في أفغانستان'
+ })];
+ const result=h.localEventMatches(events,'ما هو الهجوم في أفغانستان؟');
+ assert.equal(result.length,1);
+ assert.equal(result[0].id,'arabic-1');
+});

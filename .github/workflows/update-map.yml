@@ -93,13 +93,21 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           AI_SELECTION_MODEL: "gemini-3.5-flash-lite"
-          AI_SELECTION_THRESHOLD: "60"
           AI_SELECTION_BATCH_SIZE: "25"
           AI_SELECTION_MAX_CALLS_PER_RUN: "30"
           AI_SELECTION_DAILY_CALL_BUDGET: "60"
           AI_SELECTION_RECENT_PRIORITY_DAYS: "3"
         run: |
           set -euo pipefail
+          AI_SELECTION_THRESHOLD="$(python - <<'PY'
+          import json
+          with open("ct-atlas-runtime.json", encoding="utf-8") as handle:
+              config = json.load(handle)
+          print(int(config["ai_selection_threshold"]))
+          PY
+          )"
+          export AI_SELECTION_THRESHOLD
+          echo "AI selection threshold from ct-atlas-runtime.json: $AI_SELECTION_THRESHOLD"
           if [ -z "$GEMINI_API_KEY" ]; then
             echo "GEMINI_API_KEY GitHub secret is missing."
             exit 1

@@ -97,7 +97,7 @@ async function handleFeedback(request, env) {
   const kind = cleanText(body.kind, 20);
 
   if (!username) return jsonResponse({ error: "Missing user identifier." }, 400, env);
-  if (!isAllowedUser(username)) return jsonResponse({ error: "Unknown user." }, 400, env);
+  if (!isAllowedUser(username, env)) return jsonResponse({ error: "Unknown user." }, 400, env);
   if (!token) return jsonResponse({ error: "Authenticated session required. Please sign in again." }, 401, env);
   if (!FEEDBACK_KINDS.has(kind)) return jsonResponse({ error: "Unsupported feedback type." }, 400, env);
 
@@ -113,18 +113,34 @@ async function handleFeedback(request, env) {
 
   const acquireResponse = await gateCall(env, "/feedback-acquire", { username });
   const acquire = await acquireResponse.json();
-  if (!acquireResponse.ok) {
+  if (!acquireResponse.ok || !acquire?.reservation_id) {
     return jsonResponse({
       error: acquire?.error || "Feedback limit reached.",
       retry_after_seconds: acquire?.retry_after_seconds
-    }, acquireResponse.status, env);
+    }, acquireResponse.status || 429, env);
   }
 
+  const reservationId = String(acquire.reservation_id);
   const { subject, text } = buildEmail(username, body);
 
   try {
     await sendFeedbackEmail(env, subject, text);
+    const commitResponse = await gateCall(env, "/quota-commit", {
+      username,
+      kind: "feedback",
+      reservation_id: reservationId
+    });
+    if (!commitResponse.ok) throw new Error("Unable to finalize feedback quota.");
   } catch (error) {
+    try {
+      await gateCall(env, "/quota-release", {
+        username,
+        kind: "feedback",
+        reservation_id: reservationId
+      });
+    } catch (releaseError) {
+      console.error("Feedback quota release failed", releaseError);
+    }
     console.error(error);
     return jsonResponse({ error: "Unable to send feedback right now. Please try again shortly." }, 503, env);
   }

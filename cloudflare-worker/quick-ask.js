@@ -124,10 +124,9 @@ function quickAskFold(text) {
 // through; whole-word matching (see quickAskWordSet) keeps this safe from
 // substring noise that a length-2 minimum would otherwise invite.
 function quickAskTokens(text) {
+  const tokens = quickAskFold(text).match(/[\p{L}\p{N}]+/gu) || [];
   return Array.from(new Set(
-    quickAskFold(text)
-      .split(/[^a-z0-9]+/)
-      .filter(token => token.length >= 2 && !QUICK_ASK_STOPWORDS.has(token))
+    tokens.filter(token => token.length >= 2 && !QUICK_ASK_STOPWORDS.has(token))
   ));
 }
 
@@ -142,7 +141,7 @@ function quickAskEventHaystack(event) {
 // like "isis" or "ai" match purely by accident inside unrelated words (e.g.
 // "isis" inside "crisis", "ai" inside "said" or "remain").
 function quickAskWordSet(haystackText) {
-  return new Set(haystackText.split(/[^a-z0-9]+/).filter(Boolean));
+  return new Set(haystackText.match(/[\p{L}\p{N}]+/gu) || []);
 }
 
 // Pure, dependency-free local matcher: no AI call, just keyword overlap
@@ -249,7 +248,7 @@ async function handleQuickAsk(request, env) {
   const question = cleanText(body.question, QUICK_ASK_MAX_QUESTION_LENGTH);
 
   if (!username) return jsonResponse({ error: "Missing user identifier." }, 400, env);
-  if (!isAllowedUser(username)) return jsonResponse({ error: "Unknown user." }, 400, env);
+  if (!isAllowedUser(username, env)) return jsonResponse({ error: "Unknown user." }, 400, env);
   if (!token) return jsonResponse({ error: "Authenticated session required. Please sign in again." }, 401, env);
   if (!question) return jsonResponse({ error: "Please enter a question." }, 400, env);
 
@@ -273,22 +272,33 @@ async function handleQuickAsk(request, env) {
     version: QUICK_ASK_VERSION
   }));
 
-  const cachedResponse = await gateCall(env, "/cache-get", { cacheKey });
-  const cached = await cachedResponse.json();
-  if (cached?.hit && cached?.report) {
-    return jsonResponse({ ...cached.report, cached: true }, 200, env);
-  }
-
   const acquireResponse = await gateCall(env, "/quick-ask-acquire", { username });
   const acquire = await acquireResponse.json();
-  if (!acquireResponse.ok) {
+  if (!acquireResponse.ok || !acquire?.reservation_id) {
     return jsonResponse({
       error: acquire?.error || "Quick question limit reached.",
       retry_after_seconds: acquire?.retry_after_seconds
-    }, acquireResponse.status, env);
+    }, acquireResponse.status || 429, env);
   }
 
+  const reservationId = String(acquire.reservation_id);
+  const finalizeQuota = async path => {
+    const response = await gateCall(env, path, {
+      username,
+      kind: "quick_ask",
+      reservation_id: reservationId
+    });
+    if (!response.ok) throw new Error("Unable to finalize Quick Ask quota.");
+  };
+
   try {
+    const cachedResponse = await gateCall(env, "/cache-get", { cacheKey });
+    const cached = await cachedResponse.json();
+    if (cached?.hit && cached.report) {
+      await finalizeQuota("/quota-commit");
+      return jsonResponse({ ...cached.report, cached: true }, 200, env);
+    }
+
     const generated = await callQuickAskGemini(env, question, matchedCompact);
     const answer = sanitizeAnswerText(generated.answer, 5000);
     const matchedIds = new Set(matchedCompact.map(e => e.id));
@@ -314,8 +324,10 @@ async function handleQuickAsk(request, env) {
       expires_at: Date.now() + QUICK_ASK_CACHE_TTL_MS
     });
 
+    await finalizeQuota("/quota-commit");
     return jsonResponse({ ...result, cached: false }, 200, env);
   } catch (error) {
+    try { await finalizeQuota("/quota-release"); } catch (releaseError) { console.error("Quick Ask quota release failed", releaseError); }
     console.error(error);
     return jsonResponse({ error: cleanText(error?.message || "Quick answer failed.", 300) }, 503, env);
   }

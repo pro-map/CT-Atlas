@@ -1,4 +1,4 @@
-import{ALLOWED_USERS,REPORT_COOLDOWN_MS,SESSION_TTL_MS,QUICK_ASK_COOLDOWN_MS,QUICK_ASK_DAILY_LIMIT,QUICK_ASK_GLOBAL_DAILY_LIMIT,FEEDBACK_COOLDOWN_MS,FEEDBACK_DAILY_LIMIT,FEEDBACK_GLOBAL_DAILY_LIMIT,normalizeUsername,isAllowedUser,parisDayKey,usageTemplate,cleanText}from"./shared.js";
+import{getAllowedUsers,REPORT_COOLDOWN_MS,SESSION_TTL_MS,QUICK_ASK_COOLDOWN_MS,QUICK_ASK_DAILY_LIMIT,QUICK_ASK_GLOBAL_DAILY_LIMIT,FEEDBACK_COOLDOWN_MS,FEEDBACK_DAILY_LIMIT,FEEDBACK_GLOBAL_DAILY_LIMIT,normalizeUsername,isAllowedUser,parisDayKey,usageTemplate,cleanText}from"./shared.js";
 export class ReportGate {
   constructor(state, env) {
     this.state = state;
@@ -7,7 +7,7 @@ export class ReportGate {
 
   async incrementUsage(username, metrics = {}, now = Date.now()) {
     username = normalizeUsername(username);
-    if (!isAllowedUser(username)) return null;
+    if (!isAllowedUser(username, this.env)) return null;
 
     const totalKey = `usage-total:${username}`;
     const dayKey = `usage-day:${parisDayKey(now)}:${username}`;
@@ -60,7 +60,7 @@ export class ReportGate {
       }
       return result;
     };
-    const users = Array.from(ALLOWED_USERS);
+    const users = Array.from(getAllowedUsers(this.env));
     const rowsByUser = new Map(
       users.map(username => [username, usageTemplate(username)])
     );
@@ -131,7 +131,7 @@ export class ReportGate {
 
     const summary = {
       active_users: rows.filter(row =>
-        ["logins", "searches", "report_requests", "reports_generated", "cached_reports", "quiz_answers"]
+        ["logins", "searches", "report_requests", "reports_generated", "cached_reports", "quick_ask_requests", "feedback_submissions", "quiz_answers"]
           .some(metric => Number(row[metric] || 0) > 0)
       ).length,
       logins: 0,
@@ -209,7 +209,7 @@ export class ReportGate {
         if (dateKeys.size && !dateKeys.has(quizDate)) continue;
 
         const username = normalizeUsername(value.username || parts.slice(2).join(":"));
-        if (!isAllowedUser(username)) continue;
+        if (!isAllowedUser(username, this.env)) continue;
 
         const selectedIndex = Number.isInteger(value.selected_index)
           ? value.selected_index
@@ -361,7 +361,7 @@ export class ReportGate {
     if (url.pathname === "/session-create") {
       const username = normalizeUsername(body.username);
 
-      if (!isAllowedUser(username)) {
+      if (!isAllowedUser(username, this.env)) {
         return Response.json({ error: "Unknown user." }, { status: 400 });
       }
 
@@ -411,10 +411,16 @@ export class ReportGate {
       });
     }
 
+    if (url.pathname === "/session-revoke") {
+      const token = cleanText(body.session_token, 160);
+      if (token) await this.state.storage.delete("session:" + token);
+      return Response.json({ ok: true });
+    }
+
     if (url.pathname === "/login-record") {
       const username = normalizeUsername(body.username);
 
-      if (!isAllowedUser(username)) {
+      if (!isAllowedUser(username, this.env)) {
         return Response.json({ error: "Unknown user." }, { status: 400 });
       }
 
@@ -453,7 +459,7 @@ export class ReportGate {
       const username = normalizeUsername(body.username);
       const action = String(body.action || "");
 
-      if (!isAllowedUser(username)) {
+      if (!isAllowedUser(username, this.env)) {
         return Response.json({ error: "Unknown user." }, { status: 400 });
       }
 
@@ -491,7 +497,7 @@ export class ReportGate {
       const quizDate = String(body.quiz_date || "");
       const correct = body.correct === true;
 
-      if (!isAllowedUser(username)) {
+      if (!isAllowedUser(username, this.env)) {
         return Response.json({ error: "Unknown user." }, { status: 400 });
       }
       if (!/^\d{4}-\d{2}-\d{2}$/.test(quizDate)) {
@@ -547,7 +553,7 @@ export class ReportGate {
 
     if (url.pathname === "/quiz-state") {
       const username = normalizeUsername(body.username);
-      if (!isAllowedUser(username) || !/^\d{4}-\d{2}-\d{2}$/.test(String(body.quiz_date || ""))) {
+      if (!isAllowedUser(username, this.env) || !/^\d{4}-\d{2}-\d{2}$/.test(String(body.quiz_date || ""))) {
         return Response.json({error: "Invalid quiz state request."}, {status: 400});
       }
       const answer = await this.state.storage.get(`quiz-answer:${body.quiz_date}:${username}`);
@@ -557,7 +563,7 @@ export class ReportGate {
     if (url.pathname === "/usage-increment") {
       const username = normalizeUsername(body.username);
 
-      if (!isAllowedUser(username)) {
+      if (!isAllowedUser(username, this.env)) {
         return Response.json({ error: "Unknown user." }, { status: 400 });
       }
 
@@ -575,106 +581,157 @@ export class ReportGate {
       return Response.json(await this.usageStats(period));
     }
 
+
+    if (url.pathname === "/quota-commit" || url.pathname === "/quota-release") {
+      const username = normalizeUsername(body.username);
+      const reservationId = cleanText(body.reservation_id, 100);
+      const kind = cleanText(body.kind, 40);
+      const metricByKind = {
+        quick_ask: "quick_ask_requests",
+        feedback: "feedback_submissions"
+      };
+      const metric = metricByKind[kind];
+      const reservationKey = `quota-reservation:${reservationId}`;
+      const reservation = reservationId ? await this.state.storage.get(reservationKey) : null;
+
+      if (!metric || !reservation || reservation.username !== username || reservation.kind !== kind) {
+        return Response.json({ error: "Invalid or expired quota reservation." }, { status: 409 });
+      }
+
+      if (url.pathname === "/quota-release") {
+        const restore = reservation.restore || {};
+        if (Object.keys(restore).length) await this.state.storage.put(restore);
+        await this.state.storage.delete(reservationKey);
+        return Response.json({ ok: true, released: true });
+      }
+
+      await this.incrementUsage(username, { [metric]: 1 }, now);
+      await this.state.storage.delete(reservationKey);
+      return Response.json({ ok: true, committed: true });
+    }
+
     if (url.pathname === "/quick-ask-acquire") {
       const username = normalizeUsername(body.username);
+      const reservationId = crypto.randomUUID();
 
-      if (!isAllowedUser(username)) {
+      if (!isAllowedUser(username, this.env)) {
         return Response.json({ error: "Unknown user." }, { status: 400 });
       }
 
+      const restore = {};
       if (username !== "admin") {
+        const dayBucket = parisDayKey(now);
         const lastKey = `quick-ask-last:${username}`;
-        const last = Number((await this.state.storage.get(lastKey)) || 0);
-        const elapsed = now - last;
+        const userDayKey = `quick-ask-day:${dayBucket}:${username}`;
+        const globalDayKey = `quick-ask-global-day:${dayBucket}`;
+        const [last, userDay, globalDay] = await Promise.all([
+          this.state.storage.get(lastKey),
+          this.state.storage.get(userDayKey),
+          this.state.storage.get(globalDayKey)
+        ]);
+        const lastValue = Number(last || 0);
+        const userDayValue = Number(userDay || 0);
+        const globalDayValue = Number(globalDay || 0);
+        const elapsed = now - lastValue;
 
-        if (last && elapsed < QUICK_ASK_COOLDOWN_MS) {
+        if (lastValue && elapsed < QUICK_ASK_COOLDOWN_MS) {
           return Response.json({
             error: "Please wait a few seconds between quick questions.",
             retry_after_seconds: Math.ceil((QUICK_ASK_COOLDOWN_MS - elapsed) / 1000)
           }, { status: 429 });
         }
-
-        const dayBucket = parisDayKey(now);
-        const userDayKey = `quick-ask-day:${dayBucket}:${username}`;
-        const userDay = Number((await this.state.storage.get(userDayKey)) || 0);
-
-        if (userDay >= QUICK_ASK_DAILY_LIMIT) {
+        if (userDayValue >= QUICK_ASK_DAILY_LIMIT) {
           return Response.json({
             error: `Temporary test-phase limit: maximum ${QUICK_ASK_DAILY_LIMIT} quick questions per user per day. Admin is exempt.`,
             daily_limit: QUICK_ASK_DAILY_LIMIT
           }, { status: 429 });
         }
-
-        const globalDayKey = `quick-ask-global-day:${dayBucket}`;
-        const globalDay = Number((await this.state.storage.get(globalDayKey)) || 0);
-
-        if (globalDay >= QUICK_ASK_GLOBAL_DAILY_LIMIT) {
+        if (globalDayValue >= QUICK_ASK_GLOBAL_DAILY_LIMIT) {
           return Response.json({
             error: "Daily quick-question limit reached for all users.",
             retry_after_seconds: 3600
           }, { status: 429 });
         }
 
+        restore[lastKey] = lastValue;
+        restore[userDayKey] = userDayValue;
+        restore[globalDayKey] = globalDayValue;
         await this.state.storage.put({
           [lastKey]: now,
-          [userDayKey]: userDay + 1,
-          [globalDayKey]: globalDay + 1
+          [userDayKey]: userDayValue + 1,
+          [globalDayKey]: globalDayValue + 1
         });
       }
 
-      await this.incrementUsage(username, { quick_ask_requests: 1 }, now);
-      return Response.json({ ok: true });
+      await this.state.storage.put(`quota-reservation:${reservationId}`, {
+        kind: "quick_ask",
+        username,
+        created_at: now,
+        restore
+      });
+      return Response.json({ ok: true, reservation_id: reservationId });
     }
 
     if (url.pathname === "/feedback-acquire") {
       const username = normalizeUsername(body.username);
+      const reservationId = crypto.randomUUID();
 
-      if (!isAllowedUser(username)) {
+      if (!isAllowedUser(username, this.env)) {
         return Response.json({ error: "Unknown user." }, { status: 400 });
       }
 
+      const restore = {};
       if (username !== "admin") {
+        const dayBucket = parisDayKey(now);
         const lastKey = `feedback-last:${username}`;
-        const last = Number((await this.state.storage.get(lastKey)) || 0);
-        const elapsed = now - last;
+        const userDayKey = `feedback-day:${dayBucket}:${username}`;
+        const globalDayKey = `feedback-global-day:${dayBucket}`;
+        const [last, userDay, globalDay] = await Promise.all([
+          this.state.storage.get(lastKey),
+          this.state.storage.get(userDayKey),
+          this.state.storage.get(globalDayKey)
+        ]);
+        const lastValue = Number(last || 0);
+        const userDayValue = Number(userDay || 0);
+        const globalDayValue = Number(globalDay || 0);
+        const elapsed = now - lastValue;
 
-        if (last && elapsed < FEEDBACK_COOLDOWN_MS) {
+        if (lastValue && elapsed < FEEDBACK_COOLDOWN_MS) {
           return Response.json({
             error: "Please wait a moment before sending more feedback.",
             retry_after_seconds: Math.ceil((FEEDBACK_COOLDOWN_MS - elapsed) / 1000)
           }, { status: 429 });
         }
-
-        const dayBucket = parisDayKey(now);
-        const userDayKey = `feedback-day:${dayBucket}:${username}`;
-        const userDay = Number((await this.state.storage.get(userDayKey)) || 0);
-
-        if (userDay >= FEEDBACK_DAILY_LIMIT) {
+        if (userDayValue >= FEEDBACK_DAILY_LIMIT) {
           return Response.json({
             error: `Maximum ${FEEDBACK_DAILY_LIMIT} feedback submissions per user per day. Admin is exempt.`,
             daily_limit: FEEDBACK_DAILY_LIMIT
           }, { status: 429 });
         }
-
-        const globalDayKey = `feedback-global-day:${dayBucket}`;
-        const globalDay = Number((await this.state.storage.get(globalDayKey)) || 0);
-
-        if (globalDay >= FEEDBACK_GLOBAL_DAILY_LIMIT) {
+        if (globalDayValue >= FEEDBACK_GLOBAL_DAILY_LIMIT) {
           return Response.json({
             error: "Daily feedback limit reached for all users.",
             retry_after_seconds: 3600
           }, { status: 429 });
         }
 
+        restore[lastKey] = lastValue;
+        restore[userDayKey] = userDayValue;
+        restore[globalDayKey] = globalDayValue;
         await this.state.storage.put({
           [lastKey]: now,
-          [userDayKey]: userDay + 1,
-          [globalDayKey]: globalDay + 1
+          [userDayKey]: userDayValue + 1,
+          [globalDayKey]: globalDayValue + 1
         });
       }
 
-      await this.incrementUsage(username, { feedback_submissions: 1 }, now);
-      return Response.json({ ok: true });
+      await this.state.storage.put(`quota-reservation:${reservationId}`, {
+        kind: "feedback",
+        username,
+        created_at: now,
+        restore
+      });
+      return Response.json({ ok: true, reservation_id: reservationId });
     }
 
     if (url.pathname !== "/acquire") {
@@ -683,7 +740,7 @@ export class ReportGate {
 
     const username = normalizeUsername(body.username);
 
-    if (!isAllowedUser(username)) {
+    if (!isAllowedUser(username, this.env)) {
       return Response.json({ error: "Unknown user." }, { status: 400 });
     }
 
