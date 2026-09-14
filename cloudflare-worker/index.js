@@ -67,7 +67,7 @@ const token = cleanText(request.headers.get("X-Session-Token"), 160);
 if (!token) return jsonResponse({ error: "Session expired." }, 401, env);
 const sessionResponse = await gateCall(env, "/session-get", { session_token: token });
 const session = await sessionResponse.json().catch(() => ({}));
-if (!sessionResponse.ok || !session?.username) return jsonResponse({ error: "Session expired." }, 401, env);
+if (!sessionResponse.ok || !session?.username || !isAllowedUser(session.username, env)) return jsonResponse({ error: "Session expired." }, 401, env);
 return jsonResponse({ ok: true, username: session.username, expires_at: session.expires_at }, 200, env);
 }
 if (url.pathname === "/session-revoke" && request.method === "POST") {
