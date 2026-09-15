@@ -15,6 +15,7 @@ import requests
 QUIZ_PATH = Path("daily-quiz.json")
 HISTORY_PATH = Path("daily-quiz-history.json")
 MODEL = os.getenv("DAILY_QUIZ_MODEL", "gemini-3.5-flash-lite")
+QUIZ_GENERATION_ATTEMPTS = max(1, int(os.getenv("DAILY_QUIZ_GENERATION_ATTEMPTS", "4")))
 SOURCE_DOMAINS = ('un.org', 'europa.eu', 'interpol.int', 'nato.int', 'fatf-gafi.org', 'fbi.gov', 'state.gov', 'justice.gov', 'dni.gov', 'gov.uk')
 
 
@@ -48,15 +49,22 @@ def ai_json(api_key, prompt, temperature=0):
 
 def verify_source(api_key, quiz):
     url = quiz['source_url']
-    for _ in range(5):
-        if not trusted_url(url): raise ValueError('Unapproved source host')
-        response = requests.get(url, timeout=25, allow_redirects=False, headers={'User-Agent': 'CT-Atlas-Quiz/2.0'})
-        if response.status_code in (301, 302, 303, 307, 308):
-            from urllib.parse import urljoin
-            url = urljoin(url, response.headers.get('Location', ''))
-            continue
-        break
-    if response.status_code != 200 or 'text/html' not in response.headers.get('Content-Type', '').lower():
+    if not trusted_url(url):
+        raise ValueError('Unapproved source host')
+    response = requests.get(
+        url,
+        timeout=25,
+        allow_redirects=True,
+        headers={
+            'User-Agent': 'CT-Atlas-Quiz/2.0',
+            'Accept': 'text/html,application/xhtml+xml'
+        }
+    )
+    url = response.url or url
+    if not trusted_url(url):
+        raise ValueError('Source redirect leaves approved domains')
+    content_type = response.headers.get('Content-Type', '').lower()
+    if response.status_code != 200 or not any(kind in content_type for kind in ('text/html', 'application/xhtml+xml')):
         raise ValueError('Source is inaccessible or not HTML')
     parser = SourceText(); parser.feed(response.text)
     text = ' '.join(' '.join(parser.parts).split())[:24000]
@@ -160,12 +168,33 @@ Rules:
 - Randomise the correct answer position.
 - Do not repeat or substantially paraphrase any of these recent questions: {json.dumps(recent, ensure_ascii=False)}
 """
-    quiz = ai_json(api_key, prompt, 0.8)
-    quiz["date"] = today
-    validate(quiz)
-    if any(SequenceMatcher(None, quiz['question'].casefold(), q.casefold()).ratio()>0.85 for q in recent):
-        raise ValueError('Repeated quiz rejected')
-    verify_source(api_key, quiz)
+    quiz = None
+    last_error = None
+    for attempt in range(1, QUIZ_GENERATION_ATTEMPTS + 1):
+        attempt_prompt = prompt
+        if attempt > 1:
+            attempt_prompt += """
+A previous candidate failed validation or source verification. Generate a completely different candidate.
+Use a different, directly accessible HTTPS HTML page on an approved institutional domain; do not reuse
+the previous source URL or question, and avoid pages that require JavaScript, a bot challenge, or a PDF.
+"""
+        try:
+            candidate = ai_json(api_key, attempt_prompt, 0.8)
+            candidate["date"] = today
+            validate(candidate)
+            if any(SequenceMatcher(None, candidate['question'].casefold(), q.casefold()).ratio()>0.85 for q in recent):
+                raise ValueError('Repeated quiz rejected')
+            print(f"Quiz candidate {attempt}/{QUIZ_GENERATION_ATTEMPTS}: {candidate['source_url']}")
+            verify_source(api_key, candidate)
+            quiz = candidate
+            break
+        except Exception as exc:
+            last_error = exc
+            print(f"Quiz candidate {attempt}/{QUIZ_GENERATION_ATTEMPTS} rejected: {exc}")
+    if quiz is None:
+        raise RuntimeError(
+            f"Daily quiz generation failed after {QUIZ_GENERATION_ATTEMPTS} attempts: {last_error}"
+        )
 
     QUIZ_PATH.write_text(json.dumps(quiz, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     history = record_in_history(history, quiz)

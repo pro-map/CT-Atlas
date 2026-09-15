@@ -151,7 +151,7 @@ jobs:
           fi
 
       - name: Generate Quiz of the Day with the first daily update
-        if: ${{ github.event_name == 'schedule' && github.event.schedule == '17 10 * * *' && steps.collect.outcome == 'success' }}
+        if: ${{ always() && github.event_name == 'schedule' && github.event.schedule == '17 10 * * *' && steps.checkout.outcome == 'success' }}
         continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -191,14 +191,16 @@ jobs:
               if not isinstance(db, dict) or not isinstance(db.get("events"), list):
                   raise RuntimeError("Invalid database checkpoint; recovery artifact retained")
               subprocess.run(["git", "add", "--", "events.json"], check=True)
-              for generated in ("daily-quiz.json", "daily-quiz-history.json"):
-                  if Path(generated).exists():
-                      subprocess.run(["git", "add", "--", generated], check=True)
           else:
               # Collector failed: preserve its AI/RSS cache, keep the published DB.
               tracked = subprocess.run(["git", "ls-files", "--error-unmatch", "events.json"], capture_output=True)
               if tracked.returncode == 0:
                   subprocess.run(["git", "restore", "--staged", "--worktree", "events.json"], check=True)
+          # A quiz is independent of collection and can be published when collection
+          # or geolocation fails, provided the quiz step produced valid files.
+          for generated in ("daily-quiz.json", "daily-quiz-history.json"):
+              if Path(generated).exists():
+                  subprocess.run(["git", "add", "--", generated], check=True)
           PY
           if git diff --cached --quiet; then
             echo "No database or cache changes to commit."

@@ -1,9 +1,13 @@
 {
-  "date": "2026-09-14",
-  "category": "UN sanctions architecture",
-  "question": "Which UN Security Council resolution originally established the sanctions committee that later became the ISIL (Da’esh) and Al-Qaida Sanctions Committee?",
-  "options": ["Resolution 1267 (1999)", "Resolution 1373 (2001)", "Resolution 1540 (2004)"],
-  "correct_index": 0,
-  "explanation": "Resolution 1267 (1999) established the committee concerning the Taliban. The regime was subsequently modified and now covers ISIL (Da’esh), Al-Qaida and associated individuals, groups, undertakings and entities.",
-  "source_url": "https://main.un.org/securitycouncil/en/sanctions/1267"
+  "date": "2026-09-15",
+  "category": "Terrorist financing standards",
+  "question": "Which FATF Recommendation specifically addresses targeted financial sanctions related to terrorism and terrorist financing?",
+  "options": [
+    "Recommendation 5",
+    "Recommendation 6",
+    "Recommendation 8"
+  ],
+  "correct_index": 1,
+  "explanation": "Recommendation 6 addresses targeted financial sanctions related to terrorism and terrorist financing. Recommendation 5 concerns criminalising terrorist financing, while Recommendation 8 concerns focused, risk-based measures for non-profit organisations.",
+  "source_url": "https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Fatf-recommendations.html"
 }
