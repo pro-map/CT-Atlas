@@ -12,6 +12,8 @@ on:
       - "ct-atlas-runtime.json"
       - "daily-quiz.js"
       - "daily-quiz.css"
+      - "daily-quiz.json"
+      - "daily-quiz-history.json"
       - "feedback.css"
   workflow_dispatch:
 
