@@ -195,7 +195,7 @@ function injectAdminUi(){
         <div id="adminUsageHeader">
           <div>
             <div id="adminUsageTitle">ADMIN · USAGE STATISTICS</div>
-            <div id="adminUsageSubtitle">Per-user activity · no search terms are stored</div>
+            <div id="adminUsageSubtitle">Per-user activity · question text is not stored</div>
           </div>
           <button id="adminUsageClose" type="button" aria-label="Close admin usage statistics">×</button>
         </div>
@@ -209,8 +209,10 @@ function injectAdminUi(){
           <div id="adminUsageSummary">
             <div class="admin-usage-metric"><span>ACTIVE USERS</span><strong id="adminActiveUsers">—</strong></div>
             <div class="admin-usage-metric"><span>SEARCHES</span><strong id="adminSearches">—</strong></div>
-            <div class="admin-usage-metric"><span>REPORT REQUESTS</span><strong id="adminReportRequests">—</strong></div>
-            <div class="admin-usage-metric"><span>AI REPORTS</span><strong id="adminAiReports">—</strong></div>
+            <div class="admin-usage-metric"><span>GENERATOR REQUESTS</span><strong id="adminGeneratorRequests">—</strong></div>
+            <div class="admin-usage-metric"><span>DEEP SEARCH REQUESTS</span><strong id="adminDeepSearchRequests">—</strong></div>
+            <div class="admin-usage-metric"><span>AI QUESTIONS</span><strong id="adminAiQuestions">—</strong></div>
+            <div class="admin-usage-metric"><span>CACHED REPORTS</span><strong id="adminCachedReports">—</strong></div>
             <div class="admin-usage-metric"><span>QUIZ ANSWERS</span><strong id="adminQuizAnswers">—</strong></div>
             <div class="admin-usage-metric"><span>QUIZ CORRECT</span><strong id="adminQuizCorrect">—</strong></div>
             <div class="admin-usage-metric"><span>QUIZ INCORRECT</span><strong id="adminQuizIncorrect">—</strong></div>
@@ -221,7 +223,7 @@ function injectAdminUi(){
             <table id="adminUsageTable">
               <thead>
                 <tr>
-                  <th>USER</th><th>LOGINS</th><th>SEARCHES</th><th>REPORTS</th><th>AI</th><th>CACHE</th><th>QUIZ</th><th>CORRECT</th><th>INCORRECT</th><th>SCORE</th><th>LAST ACTIVE</th>
+                  <th>USER</th><th>LOGINS</th><th>SEARCHES</th><th>GENERATOR</th><th>DEEP SEARCH</th><th>AI QUESTIONS</th><th>CACHE</th><th>QUIZ</th><th>CORRECT</th><th>INCORRECT</th><th>SCORE</th><th>LAST ACTIVE</th>
                 </tr>
               </thead>
               <tbody id="adminUsageRows"></tbody>
@@ -240,7 +242,7 @@ function injectAdminUi(){
             </div>
           </div>
           <div id="adminUsageNote">
-            Temporary test-phase report limits: 5 report requests per user per day and at least 20 minutes between requests. Admin is exempt. Search text itself is not transmitted or retained.
+            Report Generator and Deep Search are counted separately. AI QUESTIONS counts CT Atlas AI / Quick Ask questions. Question text itself is not transmitted or stored. Temporary test-phase report limits: 5 report requests per user per day and at least 20 minutes between requests. Admin is exempt.
           </div>
         </div>
       </div>
@@ -387,8 +389,10 @@ async function loadAdmin(period){
     const summary=payload.summary||{};
     document.getElementById("adminActiveUsers").textContent=Number(summary.active_users||0);
     document.getElementById("adminSearches").textContent=Number(summary.searches||0);
-    document.getElementById("adminReportRequests").textContent=Number(summary.report_requests||0);
-    document.getElementById("adminAiReports").textContent=Number(summary.reports_generated||0);
+    document.getElementById("adminGeneratorRequests").textContent=Number(summary.report_generator_requests||0);
+    document.getElementById("adminDeepSearchRequests").textContent=Number(summary.deep_search_requests||0);
+    document.getElementById("adminAiQuestions").textContent=Number(summary.quick_ask_requests||0);
+    document.getElementById("adminCachedReports").textContent=Number(summary.cached_reports||0);
     const quizAnswers=Number(summary.quiz_answers||0);
     const quizCorrect=Number(summary.quiz_correct||0);
     document.getElementById("adminQuizAnswers").textContent=quizAnswers;
@@ -402,8 +406,9 @@ async function loadAdmin(period){
           <td>${escapeCell(adminUserLabel(item))}</td>
           <td>${Number(item.logins||0)}</td>
           <td>${Number(item.searches||0)}</td>
-          <td>${Number(item.report_requests||0)}</td>
-          <td>${Number(item.reports_generated||0)}</td>
+          <td>${Number(item.report_generator_requests||0)}</td>
+          <td>${Number(item.deep_search_requests||0)}</td>
+          <td>${Number(item.quick_ask_requests||0)}</td>
           <td>${Number(item.cached_reports||0)}</td>
           <td>${Number(item.quiz_answers||0)}</td>
           <td>${Number(item.quiz_correct||0)}</td>

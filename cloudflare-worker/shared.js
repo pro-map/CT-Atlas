@@ -217,6 +217,8 @@ function usageTemplate(username = "") {
     map_searches: 0,
     event_list_searches: 0,
     report_requests: 0,
+    report_generator_requests: 0,
+    deep_search_requests: 0,
     reports_generated: 0,
     cached_reports: 0,
     blocked_report_requests: 0,

@@ -138,6 +138,8 @@ export class ReportGate {
           "map_searches",
           "event_list_searches",
           "report_requests",
+          "report_generator_requests",
+          "deep_search_requests",
           "reports_generated",
           "cached_reports",
           "blocked_report_requests",
@@ -163,7 +165,7 @@ export class ReportGate {
 
     const summary = {
       active_users: rows.filter(row =>
-        ["logins", "searches", "report_requests", "reports_generated", "cached_reports", "quick_ask_requests", "feedback_submissions", "quiz_answers"]
+        ["logins", "searches", "report_requests", "report_generator_requests", "deep_search_requests", "reports_generated", "cached_reports", "quick_ask_requests", "feedback_submissions", "quiz_answers"]
           .some(metric => Number(row[metric] || 0) > 0)
       ).length,
       logins: 0,
@@ -171,6 +173,8 @@ export class ReportGate {
       map_searches: 0,
       event_list_searches: 0,
       report_requests: 0,
+      report_generator_requests: 0,
+      deep_search_requests: 0,
       reports_generated: 0,
       cached_reports: 0,
       blocked_report_requests: 0,
@@ -188,6 +192,8 @@ export class ReportGate {
         "map_searches",
         "event_list_searches",
         "report_requests",
+        "report_generator_requests",
+        "deep_search_requests",
         "reports_generated",
         "cached_reports",
         "blocked_report_requests",
@@ -771,6 +777,15 @@ export class ReportGate {
     }
 
     const username = normalizeUsername(body.username);
+    // Both Report Generator and Deep Search use this shared gate. The kind
+    // selects the dedicated usage counter while report_requests remains the
+    // backwards-compatible aggregate total.
+    const requestKind = cleanText(body.kind, 40) === "deep_search"
+      ? "deep_search"
+      : "report_generator";
+    const requestMetric = requestKind === "deep_search"
+      ? "deep_search_requests"
+      : "report_generator_requests";
 
     if (!isAllowedUser(username, this.env)) {
       return Response.json({ error: "Unknown user." }, { status: 400 });
@@ -866,7 +881,8 @@ export class ReportGate {
     await this.state.storage.put("active", active);
 
     await this.incrementUsage(username, {
-      report_requests: 1
+      report_requests: 1,
+      [requestMetric]: 1
     }, now);
 
     return Response.json({

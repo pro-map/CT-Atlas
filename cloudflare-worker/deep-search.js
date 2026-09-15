@@ -1454,7 +1454,7 @@ export async function handleDeepSearch(request, env, ctx) {
     question: question.toLowerCase(), version: DEEP_SEARCH_VERSION
   }));
 
-  const permitResponse = await gateCall(env, "/acquire", { username });
+  const permitResponse = await gateCall(env, "/acquire", { username, kind: "deep_search" });
   const permit = await permitResponse.json().catch(() => ({}));
   if (!permitResponse.ok || !permit?.permit_id) {
     return jsonResponse({

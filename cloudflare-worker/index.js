@@ -168,7 +168,7 @@ const db = await dbResponse.json();
 const allEvents = Array.isArray(db) ? db : (Array.isArray(db.events) ? db.events : []);
 const databaseVersion = cleanText(db.updated_at || db.generated_at || db.last_updated || "unknown", 100);
 const cacheKey = await sha256(JSON.stringify({ region, topic, periodDays, compare, databaseVersion, version: REPORT_GENERATOR_VERSION }));
-const permitResponse = await gateCall(env, "/acquire", { username });
+const permitResponse = await gateCall(env, "/acquire", { username, kind: "report_generator" });
 const permit = await permitResponse.json();
 if (!permitResponse.ok || !permit?.permit_id) return jsonResponse({ error: permit?.error || "Report capacity temporarily unavailable.", retry_after_seconds: permit?.retry_after_seconds || 20 }, permitResponse.status || 429, env);
 const permitId = permit.permit_id;
