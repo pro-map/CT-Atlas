@@ -22,7 +22,7 @@ class QuizSourceTests(unittest.TestCase):
 
     def test_source_requires_real_supporting_passage(self):
         text='This is verified supporting evidence. ' * 20
-        response=types.SimpleNamespace(status_code=200,headers={'Content-Type':'text/html'},text='<p>'+text+'</p>')
+        response=types.SimpleNamespace(status_code=200,url='https://un.org/',headers={'Content-Type':'text/html'},text='<p>'+text+'</p>')
         data={'source_url':'https://un.org/'}
         with patch.object(q.requests,'get',return_value=response,create=True), patch.object(q,'ai_json',return_value={'supported':True,'unambiguous':True,'evidence':'Invented passage'}):
             with self.assertRaises(ValueError):q.verify_source('test',data)
@@ -40,7 +40,7 @@ class QuizSourceTests(unittest.TestCase):
 
 
     def test_challenge_rejected(self):
-        response=types.SimpleNamespace(status_code=202,headers={},text='')
+        response=types.SimpleNamespace(status_code=202,url='https://un.org/',headers={},text='')
         with patch.object(q.requests,'get',return_value=response,create=True):
             with self.assertRaises(ValueError):q.verify_source('test',{'source_url':'https://un.org/'})
 
