@@ -32,9 +32,20 @@ jobs:
       - name: Check public assets
         run: |
           set -euo pipefail
-          curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/ >/tmp/index.html
+          for attempt in {1..18}; do
+            if curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/ >/tmp/index.html \
+              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/pdf-export.js >/tmp/pdf-export.js \
+              && grep -q 'pdf-export.js' /tmp/index.html \
+              && grep -q 'window.CTAtlasPdf' /tmp/pdf-export.js; then
+              break
+            fi
+            if [ "$attempt" -eq 18 ]; then
+              echo "Updated PDF assets did not become available in time" >&2
+              exit 1
+            fi
+            sleep 10
+          done
           curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/ct-atlas-runtime.json >/tmp/runtime.json
-          curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/pdf-export.js >/tmp/pdf-export.js
           curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/daily-quiz.json >/tmp/quiz.json
           node - <<'NODE'
           const fs = require("fs");
