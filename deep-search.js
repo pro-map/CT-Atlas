@@ -364,121 +364,79 @@ async function copyReport(){
   catch(_){setStatus("Clipboard access was unavailable.","warning");}
 }
 
-let pdfLibrariesPromise=null;
-function loadPdfLibraries(){
-  if(pdfLibrariesPromise)return pdfLibrariesPromise;
-  const load=(src,ready)=>ready()?Promise.resolve():new Promise((resolve,reject)=>{
-    const script=document.createElement("script");
-    script.src=src;
-    script.onload=()=>ready()?resolve():reject(new Error("PDF library did not initialise."));
-    script.onerror=()=>{script.remove();reject(new Error("Unable to load PDF library. Please retry."));};
-    document.head.appendChild(script);
-  });
-  pdfLibrariesPromise=Promise.all([
-    load("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js",()=>window.html2canvas),
-    load("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",()=>window.jspdf?.jsPDF)
-  ]).catch(error=>{pdfLibrariesPromise=null;throw error;});
-  return pdfLibrariesPromise;
-}
-
-// Render one bounded canvas per page, even for a very long evidence pack.
-async function savePagedPdf(shell,filename){
-  const pdf=new window.jspdf.jsPDF({unit:"mm",format:"a4",orientation:"portrait"});
-  const width=shell.offsetWidth;
-  const pageHeight=Math.floor(width*275/190);
-  const height=shell.scrollHeight;
-  // Prefer block boundaries to keep source cards and paragraphs together.
-  const top=shell.getBoundingClientRect().top;
-  const boundaries=[...shell.querySelectorAll("h1,h2,p,.pdf-source")]
-    .map(el=>Math.floor(el.getBoundingClientRect().top-top)).filter(y=>y>0);
-  let offset=0,page=0;
-  while(offset<height){
-    let end=Math.min(offset+pageHeight,height);
-    if(end<height){
-      const candidates=boundaries.filter(y=>y>offset+pageHeight*0.65&&y<=end);
-      if(candidates.length)end=Math.max(...candidates);
-    }
-    const canvas=await window.html2canvas(shell,{
-      scale:2,useCORS:true,logging:false,backgroundColor:"#ffffff",
-      scrollX:0,scrollY:0,windowWidth:width,windowHeight:1120,
-      x:0,y:offset,width,height:end-offset
-    });
-    if(!canvas.width||!canvas.height)throw new Error("PDF page could not be rendered.");
-    if(page++)pdf.addPage();
-    pdf.addImage(canvas.toDataURL("image/jpeg",0.98),"JPEG",10,10,190,(end-offset)*190/width);
-    canvas.width=canvas.height=0;
-    offset=end;
-  }
-  pdf.save(filename);
-}
-
 function pdfSafeName(value){
   return String(value||"Deep-Search").replace(/[^a-z0-9_-]+/gi,"-").replace(/^-+|-+$/g,"").slice(0,70)||"Deep-Search";
 }
 
-// The PDF evidence pack is a rasterised image (html2canvas + jsPDF), so the
-// URL text is never clickable there anyway. A very long unbroken
-// word-break:break-all string (Google News redirect URLs run 200+ chars)
-// has caused corrupted/overlapping text in that render pipeline; showing a
-// shortened form sidesteps the failure mode and is more readable in a
-// printed report besides — the live web view already just shows an
-// "OPEN ARTICLE" button rather than the raw URL, for the same reason.
-function pdfDisplayUrl(url,maxLength=100){
+function pdfDisplayUrl(url,maxLength=110){
   const value=String(url||"");
-  if(value.length<=maxLength)return value;
-  return value.slice(0,maxLength)+"…";
+  return value.length<=maxLength?value:value.slice(0,maxLength)+"…";
 }
 
 async function downloadPdf(){
   if(!lastPayload)return;
   const button=document.getElementById("deepSearchPrint");
   const original=button?.textContent||"DOWNLOAD PDF";
+  const pdf=window.CTAtlasPdf;
+  if(!pdf){setStatus("PDF export is not available. Reload CT Atlas and retry.","error");return;}
   if(button){button.disabled=true;button.textContent="BUILDING PDF…";}
-  let shell=null;
   try{
-    await loadPdfLibraries();
     const cited=new Set(lastPayload.grounding?.cited_source_ids||[]);
     const evidence=[...(lastPayload.evidence||[])].sort((a,b)=>(cited.has(b.id)?1:0)-(cited.has(a.id)?1:0));
     const languages=Array.isArray(lastPayload.languages_searched)?lastPayload.languages_searched:[];
     const retrieved=lastPayload.retrieval||{};
     const stamp=new Date(lastPayload.generated_at||Date.now());
     const fileStamp=stamp.toISOString().replace(/[:T]/g,"-").slice(0,16);
-    const filename=`CT-Atlas-Deep-Search-${fileStamp}-${pdfSafeName(lastPayload.title)}.pdf`;
-
-    shell=document.createElement("section");
-    shell.style.cssText="position:absolute;left:0;top:0;z-index:2147483000;width:780px;height:auto;overflow:visible;background:#fff;color:#111;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;padding:30px;box-sizing:border-box;pointer-events:none";
-    shell.innerHTML=`
-      <div style="font-size:11px;letter-spacing:1.5px;color:#6b7280;font-weight:700">CT ATLAS · DEEP SEARCH</div>
-      <h1 style="font-size:24px;line-height:1.2;margin:8px 0 10px">${esc(lastPayload.title||"CT Atlas Deep Search")}${hasFetchIssue(lastPayload)?` <span style="color:#b45309;font-weight:800;font-size:18px" title="${esc(FETCH_ISSUE_TITLE)}">⚠</span>`:""}</h1>
-      <div style="font-size:11px;color:#4b5563;margin-bottom:18px"><strong>Question:</strong> ${esc(lastPayload.question||"")}<br><strong>Generated:</strong> ${esc(stamp.toLocaleString("en-GB"))} · <strong>Period:</strong> ${esc(lastPayload.detected_period?.label||"unknown")} · <strong>Model:</strong> ${esc(lastPayload.model||"Gemini")}</div>
-      <div style="display:flex;flex-wrap:wrap;gap:7px;margin:0 0 20px">
-        ${[["Articles",retrieved.articles_retrieved],["Unique events",retrieved.unique_event_clusters],["Evidence",retrieved.evidence_events_used_for_analysis],["Atlas matches",retrieved.matched_to_atlas],["Potential gaps",retrieved.potential_atlas_gaps],["Citation coverage",`${Number(lastPayload.grounding?.citation_coverage_percent||0)}%`]].map(([k,v])=>`<div style="border:1px solid #d1d5db;border-radius:6px;padding:7px 10px;min-width:92px"><div style="font-size:9px;color:#6b7280;text-transform:uppercase">${esc(k)}</div><div style="font-size:16px;font-weight:700">${esc(v??0)}</div></div>`).join("")}
-      </div>
-      <h2 style="font-size:15px;border-bottom:1px solid #d1d5db;padding-bottom:5px;margin:24px 0 10px">SEARCH COVERAGE</h2>
-      <div style="display:flex;flex-wrap:wrap;gap:5px">${languages.map(item=>{const queryCount=Number(item.query_count||0);const successCount=Number(item.successful_queries||0);return `<div style="border:1px solid #d1d5db;border-radius:5px;padding:5px 7px;font-size:10px"><strong>${esc(item.name||item.code)}</strong> · ${Number(item.article_count||0)} articles · Google ${Number(item.google_news_articles||0)} · GDELT ${Number(item.gdelt_articles||0)} · ${successCount}/${queryCount||1} queries succeeded</div>`;}).join("")}</div>
-      <h2 style="font-size:15px;border-bottom:1px solid #d1d5db;padding-bottom:5px;margin:26px 0 10px">ANALYTICAL REPORT</h2>
-      <div style="font-size:12px">${formatAnalysis(lastPayload.analysis||"")}</div>
-      <h2 style="font-size:15px;border-bottom:1px solid #d1d5db;padding-bottom:5px;margin:28px 0 10px">EVIDENCE PACK</h2>
-      ${evidence.map(item=>`<div class="pdf-source" style="border-top:1px solid #e5e7eb;padding:9px 0;page-break-inside:avoid"><div style="font-weight:700">${esc(item.id)} · ${esc(item.source||"Source")}${cited.has(item.id)?" · CITED":""}</div><div style="font-size:12px;margin:2px 0">${esc(item.title||"")}</div><div style="font-size:10px;color:#6b7280">${esc(fmtDate(item.published))} · ${esc(String(item.language||"").toUpperCase())} · ${engineLabel(item.search_engine)}</div>${item.url?`<div style="font-size:9px;word-break:break-all;color:#1d4ed8">${esc(pdfDisplayUrl(item.url))}</div>`:""}</div>`).join("")}
-      <div style="margin-top:24px;border-top:1px solid #d1d5db;padding-top:9px;font-size:9px;color:#6b7280">This analytical tool is an independent OSINT prototype created for research and analytical purposes. The information displayed is derived from open sources and automated AI-assisted processing. It should not be considered verified intelligence and must be independently validated before any operational or decision-making use.</div>`;
-    shell.id="ctAtlasDeepPdfSource";
-    document.body.appendChild(shell);
-    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
-    if(document.fonts?.ready){try{await document.fonts.ready;}catch(_){}}
-    const rect=shell.getBoundingClientRect();
-    if(shell.scrollHeight<100||rect.width<100)throw new Error("PDF source did not render correctly.");
-
-    await savePagedPdf(shell,filename);
+    const blocks=[
+      {text:"QUESTION",type:"heading"},
+      {text:lastPayload.question||"",type:"question"},
+      {text:"Generated: "+stamp.toLocaleString("en-GB")+" · Period: "+(lastPayload.detected_period?.label||"unknown")+" · Model: "+(lastPayload.model||"Gemini"),type:"meta"},
+      {text:"SEARCH SUMMARY",type:"heading"},
+      {text:"Articles: "+Number(retrieved.articles_retrieved||0)+" · Unique events: "+Number(retrieved.unique_event_clusters||0)+" · Evidence used: "+Number(retrieved.evidence_events_used_for_analysis||0)+" · Atlas matches: "+Number(retrieved.matched_to_atlas||0)+" · Potential gaps: "+Number(retrieved.potential_atlas_gaps||0)+" · Citation coverage: "+Number(lastPayload.grounding?.citation_coverage_percent||0)+"%",type:"highlight"}
+    ];
+    if(hasFetchIssue(lastPayload))blocks.push({text:"Retrieval warning: "+FETCH_ISSUE_TITLE,type:"meta"});
+    if(languages.length){
+      blocks.push({text:"SEARCH COVERAGE",type:"heading"});
+      languages.forEach(item=>{
+        const queryCount=Number(item.query_count||0);
+        const successCount=Number(item.successful_queries||0);
+        blocks.push({
+          text:String(item.name||item.code||"Language")+" · "+Number(item.article_count||0)+" articles · Google "+Number(item.google_news_articles||0)+" · GDELT "+Number(item.gdelt_articles||0)+" · "+successCount+"/"+(queryCount||1)+" queries succeeded",
+          type:"small"
+        });
+      });
+    }
+    blocks.push({text:"ANALYTICAL REPORT",type:"heading"});
+    blocks.push(...pdf.blocksFromElement(document.getElementById("deepSearchReport")));
+    if(evidence.length){
+      blocks.push({text:"EVIDENCE PACK",type:"heading"});
+      evidence.forEach(item=>{
+        const lines=[
+          String(item.id||"Source")+" · "+String(item.source||"Source")+(cited.has(item.id)?" · CITED":""),
+          String(item.title||""),
+          fmtDate(item.published)+" · "+String(item.language||"").toUpperCase()+" · "+engineLabel(item.search_engine)
+        ];
+        if(item.url)lines.push(pdfDisplayUrl(item.url));
+        blocks.push({text:lines.filter(Boolean).join("\n"),type:"source"});
+      });
+    }
+    await pdf.download({
+      filename:"CT-Atlas-Deep-Search-"+fileStamp+"-"+pdfSafeName(lastPayload.title),
+      eyebrow:"CT ATLAS · DEEP SEARCH",
+      title:lastPayload.title||"CT Atlas Deep Search",
+      meta:"Evidence-based OSINT research report",
+      blocks,
+      footer:"This analytical tool is an independent OSINT prototype created for research and analytical purposes. The information displayed is derived from open sources and automated AI-assisted processing. It should not be considered verified intelligence and must be independently validated before any operational or decision-making use."
+    });
     setStatus("PDF downloaded successfully.","success");
   }catch(error){
     setStatus(error?.message||"PDF download failed.","error");
   }finally{
-    if(shell) shell.remove();
     if(button){button.disabled=false;button.textContent=original;}
   }
 }
 
-          document.addEventListener("keydown",event=>{if(event.key==="Escape")close();});
+document.addEventListener("keydown",event=>{if(event.key==="Escape")close();});
 document.addEventListener("DOMContentLoaded",inject);
 if(document.readyState!=="loading")inject();
 })();

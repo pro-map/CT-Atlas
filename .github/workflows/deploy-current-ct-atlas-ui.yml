@@ -6,8 +6,12 @@ on:
       - main
     paths:
       - ".github/workflows/deploy-current-ct-atlas-ui.yml"
+      - "pdf-export.js"
       - "deep-search.js"
       - "deep-search.css"
+      - "quick-ask.js"
+      - "quick-ask.css"
+      - "usage-auth-fix.js"
       - "index.html"
       - "ct-atlas-runtime.json"
       - "daily-quiz.js"
@@ -48,6 +52,13 @@ jobs:
           grep -q 'OFFICIAL REGIONS' index.html
           grep -q 'MEMBER COUNTRIES' index.html
           grep -q 'INTERPOL_CT_events_' index.html
+          test -s pdf-export.js
+          grep -q 'window.CTAtlasPdf' pdf-export.js
+          grep -q 'DOWNLOAD PDF' index.html
+          if grep -q 'window.onload=()=>window.print()' index.html; then
+            echo "Legacy print dialog code is still present" >&2
+            exit 1
+          fi
           test -s daily-quiz.js
           test -s daily-quiz.css
           grep -q 'dailyQuizButton' daily-quiz.js

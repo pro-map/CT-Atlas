@@ -24,6 +24,11 @@
 .qa-status.working::before{content:"";display:inline-block;width:9px;height:9px;margin-right:6px;vertical-align:-1px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:ct-spin .8s linear infinite}
 @keyframes ct-spin{to{transform:rotate(360deg)}}
 #quickAskAnswerBlock{margin-top:14px;padding-top:14px;border-top:1px solid rgba(139,101,171,.2)}
+#quickAskAnswerTopline{display:flex;align-items:flex-start;justify-content:space-between;gap:9px}
+#quickAskActions{display:flex;gap:6px;flex:0 0 auto}
+#quickAskActions button{padding:6px 8px;border:1px solid rgba(151,111,207,.5);background:#1b0d27;color:#d8c6e8;font:800 7px/1 Arial,sans-serif;letter-spacing:.07em;cursor:pointer}
+#quickAskActions button:hover{border-color:#b48be0;color:#fff}
+#quickAskActions button:disabled{opacity:.55;cursor:wait}
 .qa-badge{display:inline-block;padding:4px 8px;border:1px solid;font:800 7px/1 Arial,sans-serif;letter-spacing:.09em}
 .qa-badge.grounded{color:#7ed19c;border-color:rgba(126,209,156,.4);background:rgba(50,130,85,.09)}
 .qa-badge.general{color:#d8b761;border-color:rgba(216,183,97,.4);background:rgba(140,105,20,.09)}
@@ -37,4 +42,4 @@
 .qa-cited-item a{color:#b48be0;text-decoration:none;font-weight:800;margin-left:auto}
 .qa-cited-item a:hover{color:#d1aef2}
 #quickAskDisclaimer{margin-top:16px;padding:10px;border:1px solid rgba(152,118,204,.25);background:rgba(90,60,130,.09);color:#b9a0cf;font:500 7.5px/1.5 Arial,sans-serif}
-@media(max-width:560px){#quickAskPanel{padding:4px}#quickAskWindow{width:99vw;max-height:98vh}}
+@media(max-width:560px){#quickAskPanel{padding:4px}#quickAskWindow{width:99vw;max-height:98vh}#quickAskAnswerTopline{display:block}#quickAskActions{margin-top:8px}}

@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - "index.html"
+      - "pdf-export.js"
+      - "deep-search.js"
+      - "quick-ask.js"
       - "ct-atlas-runtime.json"
       - "daily-quiz.json"
       - "cloudflare-worker/**"
@@ -31,10 +34,16 @@ jobs:
           set -euo pipefail
           curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/ >/tmp/index.html
           curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/ct-atlas-runtime.json >/tmp/runtime.json
+          curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/pdf-export.js >/tmp/pdf-export.js
           curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/daily-quiz.json >/tmp/quiz.json
           node - <<'NODE'
           const fs = require("fs");
           const runtime = JSON.parse(fs.readFileSync("/tmp/runtime.json", "utf8"));
+          const html = fs.readFileSync("/tmp/index.html", "utf8");
+          const pdfExporter = fs.readFileSync("/tmp/pdf-export.js", "utf8");
+          if (!html.includes("pdf-export.js") || !html.includes("DOWNLOAD PDF")) throw new Error("PDF download UI missing");
+          if (html.includes("window.onload=()=>window.print()")) throw new Error("Legacy print dialog still deployed");
+          if (!pdfExporter.includes("window.CTAtlasPdf")) throw new Error("PDF exporter missing");
           const quiz = JSON.parse(fs.readFileSync("/tmp/quiz.json", "utf8"));
           if (runtime.ai_selection_threshold !== 60) throw new Error("Runtime threshold drift");
           if (!Array.isArray(runtime.language_codes) || runtime.language_codes.length !== 12) throw new Error("Runtime language drift");

@@ -5,6 +5,7 @@ const API_BASE="https://ct-report-generator.fairpeace.workers.dev";
 const TOKEN_KEY="ct_map_session_token";
 const USER_KEY="ct_map_username";
 let backendReady=false;
+let lastPayload=null;
 
 function esc(value){
   return String(value??"")
@@ -71,7 +72,13 @@ function inject(){
           <div id="quickAskStatus"></div>
 
           <div id="quickAskAnswerBlock" hidden>
-            <div id="quickAskGroundBadge"></div>
+            <div id="quickAskAnswerTopline">
+              <div id="quickAskGroundBadge"></div>
+              <div id="quickAskActions">
+                <button id="quickAskCopy" type="button">COPY</button>
+                <button id="quickAskPdf" type="button">DOWNLOAD PDF</button>
+              </div>
+            </div>
             <div id="quickAskAnswerText"></div>
             <div id="quickAskCitedEvents"></div>
           </div>
@@ -87,6 +94,8 @@ function inject(){
   document.getElementById("quickAskClose")?.addEventListener("click",close);
   document.getElementById("quickAskPanel")?.addEventListener("click",event=>{if(event.target.id==="quickAskPanel")close();});
   document.getElementById("quickAskRun")?.addEventListener("click",run);
+  document.getElementById("quickAskCopy")?.addEventListener("click",copyAnswer);
+  document.getElementById("quickAskPdf")?.addEventListener("click",downloadAnswerPdf);
   document.getElementById("quickAskQuestion")?.addEventListener("keydown",event=>{
     if((event.ctrlKey||event.metaKey)&&event.key==="Enter")run();
   });
@@ -126,6 +135,7 @@ function setStatus(message,type=""){
 }
 
 function render(payload){
+  lastPayload=payload;
   const block=document.getElementById("quickAskAnswerBlock");
   if(block)block.hidden=false;
 
@@ -155,6 +165,69 @@ function render(payload){
   }
 }
 
+async function copyAnswer(){
+  if(!lastPayload)return;
+  const question=String(document.getElementById("quickAskQuestion")?.value||"").trim();
+  const cited=Array.isArray(lastPayload.cited_events)?lastPayload.cited_events:[];
+  const sources=cited.map(item=>{
+    const label=String(item.title||item.id||"Untitled event");
+    return label+(item.url?"\n"+String(item.url):"");
+  }).join("\n\n");
+  const text="CT ATLAS AI\n\nQUESTION\n"+question+"\n\nANSWER\n"+String(lastPayload.answer||"")+(sources?"\n\nCT ATLAS RECORDS USED\n"+sources:"");
+  try{
+    await navigator.clipboard.writeText(text);
+    setStatus("Question and answer copied to clipboard.","success");
+  }catch(_){
+    setStatus("Clipboard access was unavailable.","warning");
+  }
+}
+
+async function downloadAnswerPdf(){
+  if(!lastPayload)return;
+  const button=document.getElementById("quickAskPdf");
+  const original=button?.textContent||"DOWNLOAD PDF";
+  const pdf=window.CTAtlasPdf;
+  if(!pdf){setStatus("PDF export is not available. Reload CT Atlas and retry.","error");return;}
+  if(button){button.disabled=true;button.textContent="BUILDING PDF…";}
+  try{
+    const question=String(document.getElementById("quickAskQuestion")?.value||"").trim();
+    const cited=Array.isArray(lastPayload.cited_events)?lastPayload.cited_events:[];
+    const grounded=Boolean(lastPayload.grounded_in_ct_atlas_data)&&cited.length>0;
+    const blocks=[
+      {text:"QUESTION",type:"heading"},
+      {text:question,type:"question"},
+      {text:grounded?"GROUNDED IN CT ATLAS DATA":"GENERAL KNOWLEDGE · NOT FROM CT ATLAS DATABASE",type:"badge"},
+      {text:"ANSWER",type:"heading"},
+      {text:String(lastPayload.answer||""),type:"body"}
+    ];
+    if(cited.length){
+      blocks.push({text:"CT ATLAS RECORDS USED",type:"heading"});
+      cited.forEach(item=>{
+        const lines=[
+          String(item.title||item.id||"Untitled event"),
+          [item.country||"",item.date?fmtDate(item.date):"",item.source||""].filter(Boolean).join(" · ")
+        ];
+        if(item.url)lines.push(String(item.url));
+        blocks.push({text:lines.filter(Boolean).join("\n"),type:"source"});
+      });
+    }
+    const stamp=new Date().toISOString().replace(/[:T]/g,"-").slice(0,16);
+    await pdf.download({
+      filename:"CT-Atlas-AI-"+stamp+"-"+pdf.safeFilename(question.slice(0,55),"Question"),
+      eyebrow:"CT ATLAS · AI QUESTION",
+      title:"CT ATLAS AI",
+      meta:new Date().toLocaleString("en-GB"),
+      blocks,
+      footer:document.getElementById("quickAskDisclaimer")?.textContent||"AI-assisted answer. Independently verify before operational use."
+    });
+    setStatus("PDF downloaded successfully.","success");
+  }catch(error){
+    setStatus(error?.message||"PDF download failed.","error");
+  }finally{
+    if(button){button.disabled=false;button.textContent=original;}
+  }
+}
+
 async function run(){
   if(!backendReady){setStatus("CT Atlas AI backend is not available.","warning");return;}
   const question=String(document.getElementById("quickAskQuestion")?.value||"").trim();
@@ -165,6 +238,7 @@ async function run(){
   if(button){button.disabled=true;button.textContent="THINKING…";}
   const block=document.getElementById("quickAskAnswerBlock");
   if(block)block.hidden=true;
+  lastPayload=null;
   setStatus("Asking CT Atlas AI…","working");
 
   try{

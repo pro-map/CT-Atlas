@@ -63,7 +63,7 @@ function loadDeepSearch(){
   if(document.getElementById("deepSearchClientScript"))return;
   const script=document.createElement("script");
   script.id="deepSearchClientScript";
-  script.src="deep-search.js?v=2";
+  script.src="deep-search.js?v=3";
   script.defer=true;
   document.head.appendChild(script);
 }
@@ -72,7 +72,7 @@ function loadQuickAsk(){
   if(document.getElementById("quickAskClientScript"))return;
   const script=document.createElement("script");
   script.id="quickAskClientScript";
-  script.src="quick-ask.js?v=2";
+  script.src="quick-ask.js?v=3";
   script.defer=true;
   document.head.appendChild(script);
 }

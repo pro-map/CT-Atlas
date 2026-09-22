@@ -4618,6 +4618,7 @@ html, body {
 
 </style>
 
+<script src="pdf-export.js?v=20260922" defer></script>
 <script src="usage-admin.js?v=usage-split-20260915" defer></script>
 <script src="usage-auth-fix.js" defer></script>
 
@@ -5533,7 +5534,7 @@ Visible rate
           </div>
           <div id="reportResultActions">
             <button id="reportCopyButton" type="button">COPY</button>
-            <button id="reportPrintButton" type="button">PRINT / PDF</button>
+            <button id="reportPrintButton" type="button">DOWNLOAD PDF</button>
           </div>
         </div>
         <div id="reportResultContent"></div>
@@ -13296,103 +13297,105 @@ function copyGeneratedReport() {
 }
 
 
-function printGeneratedReport() {
+async function downloadGeneratedReportPdf() {
+    const button = document.getElementById("reportPrintButton");
+    const status = document.getElementById("reportGeneratorStatus");
+    const originalText = button?.textContent || "DOWNLOAD PDF";
+    const pdf = window.CTAtlasPdf;
 
-    const title =
-        document.getElementById(
-            "reportResultTitle"
-        )?.textContent
-        ||
-        "Analytical Report";
-
-    const meta =
-        document.getElementById(
-            "reportResultMeta"
-        )?.textContent
-        ||
-        "";
-
-    const body =
-        document.getElementById(
-            "reportResultContent"
-        )?.innerHTML
-        ||
-        "";
-
-    const coverage =
-        document.getElementById(
-            "reportCitationCoverage"
-        )?.textContent
-        ||
-        "";
-
-    const sources =
-        document.getElementById(
-            "reportResultSources"
-        )?.innerHTML
-        ||
-        "";
-
-    const printWindow =
-        window.open(
-            "",
-            "_blank",
-            "noopener,noreferrer"
-        );
-
-    if (!printWindow) {
+    if (!pdf) {
+        if (status) {
+            status.textContent = "PDF export is not available. Reload CT Atlas and retry.";
+            status.className = "report-status error";
+        }
         return;
     }
 
-    printWindow.document.write(
-        `
-        <!doctype html>
-        <html>
-        <head>
-          <meta charset="utf-8">
-          <title>${escapeHtml(title)}</title>
-          <style>
-            body{font-family:Arial,sans-serif;margin:36px;color:#111;line-height:1.55}
-            h1{font-size:20px;margin-bottom:6px}
-            .meta{font-size:11px;color:#555;margin-bottom:20px}
-            .generated-report-section{font-weight:800;font-size:15px;color:#176082;margin:20px 0 8px;border-bottom:1px solid #b8d8e7;padding-bottom:5px}
-            .generated-report-break{height:12px}
-            .disclaimer{margin-top:28px;font-size:9px;color:#666;border-top:1px solid #ddd;padding-top:10px}
-            .coverage{font-size:10px;color:#176082;margin-bottom:14px}
-            .deep-citation{display:inline-block;margin:0 1px;padding:0 3px;border:1px solid #d9b65a;border-radius:2px;background:#fbf1d8;color:#8a6a1f;font-weight:800;white-space:nowrap}
-            .report-sources-heading{font-weight:800;font-size:15px;color:#176082;margin:26px 0 10px;border-bottom:1px solid #b8d8e7;padding-bottom:5px}
-            .deep-evidence{padding:9px 0;border-top:1px solid #e0e0e0;page-break-inside:avoid}
-            .deep-evidence-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:10px;color:#555}
-            .deep-evidence-head strong{color:#176082}
-            .report-source-badge{margin-left:auto;padding:2px 5px;border:1px solid #ccc;font-size:8px;color:#666}
-            .deep-evidence-title{margin-top:4px;font-size:12px;color:#111}
-            .deep-evidence-meta{margin-top:2px;font-size:9px;color:#777}
-            .deep-evidence-links{margin-top:4px;font-size:9px}
-            .deep-evidence-links a{color:#1d5fa8}
-          
-#sessionActions{display:flex;align-items:center;gap:7px;margin-left:8px;flex:0 0 auto}
-#sessionUserLabel{max-width:92px;overflow:hidden;text-overflow:ellipsis;color:#89a6b8;font-size:8px;letter-spacing:.05em;text-transform:uppercase}
-#logoutButton{padding:5px 7px;background:#0a1d29;color:#9bb9c9;border:1px solid #315265;border-radius:2px;font-size:7px;font-weight:750;letter-spacing:.08em;cursor:pointer}
-#logoutButton:hover{color:#edf7fb;border-color:#5b8aa4;background:#102b3c}
-@media (max-width: 1180px){#sessionUserLabel{display:none}}
-</style>
-        </head>
-        <body>
-          <h1>${escapeHtml(title)}</h1>
-          <div class="meta">${escapeHtml(meta)}</div>
-          <div class="coverage">${escapeHtml(coverage)}</div>
-          <div>${body}</div>
-          <div>${sources}</div>
-          <div class="disclaimer">AI-assisted analysis based on deduplicated open-source events. It does not constitute verified intelligence and must be independently validated before operational or decision-making use.</div>
-          <script>window.onload=()=>window.print();<\/script>
-        </body>
-        </html>
-        `
-    );
+    if (button) {
+        button.disabled = true;
+        button.textContent = "BUILDING PDF…";
+    }
 
-    printWindow.document.close();
+    try {
+        const title =
+            document.getElementById("reportResultTitle")?.textContent
+            ||
+            "Analytical Report";
+
+        const meta =
+            document.getElementById("reportResultMeta")?.textContent
+            ||
+            "";
+
+        const coverage =
+            document.getElementById("reportCitationCoverage")?.textContent
+            ||
+            "";
+
+        const blocks = [];
+
+        if (coverage) {
+            blocks.push({
+                text: coverage,
+                type: "highlight"
+            });
+        }
+
+        blocks.push(
+            ...pdf.blocksFromElement(
+                document.getElementById("reportResultContent")
+            )
+        );
+
+        blocks.push(
+            ...pdf.blocksFromElement(
+                document.getElementById("reportResultSources")
+            )
+        );
+
+        const stamp = new Date()
+            .toISOString()
+            .replace(/[:T]/g, "-")
+            .slice(0, 16);
+
+        await pdf.download({
+            filename:
+                "CT-Atlas-Report-"
+                +
+                stamp
+                +
+                "-"
+                +
+                pdf.safeFilename(title, "Analytical-Report"),
+            eyebrow: "CT ATLAS · REPORT GENERATOR",
+            title,
+            meta,
+            blocks,
+            footer:
+                document.getElementById("reportGeneratorDisclaimer")?.textContent
+                ||
+                "AI-assisted analysis based on deduplicated open-source events. It does not constitute verified intelligence and must be independently validated before operational or decision-making use."
+        });
+
+        if (status) {
+            status.textContent = "PDF downloaded successfully.";
+            status.className = "report-status success";
+        }
+    } catch (error) {
+        if (status) {
+            status.textContent =
+                error?.message
+                ||
+                "PDF download failed.";
+            status.className = "report-status error";
+        }
+    } finally {
+        if (button) {
+            button.disabled = false;
+            button.textContent = originalText;
+        }
+    }
 }
-
 
 function formatWeeklyDate(
     value
@@ -13843,7 +13846,7 @@ document.addEventListener(
             "reportPrintButton"
         )?.addEventListener(
             "click",
-            printGeneratedReport
+            downloadGeneratedReportPdf
         );
 
         document.getElementById(
