@@ -394,13 +394,9 @@ test('pdfDisplayUrl truncates long URLs so the PDF never renders a 200+ char unb
  const shortUrl='https://example.com/short';
  assert.equal(vm.runInContext('pdfDisplayUrl',c)(shortUrl),shortUrl);
 });
-test('long PDF export renders bounded canvases and advances to the final page',async()=>{
+test('Deep Search PDF export uses the shared dependency-free downloader',()=>{
  const js=fs.readFileSync('deep-search.js','utf8');
- const fn=js.slice(js.indexOf('async function savePagedPdf'),js.indexOf('\nfunction pdfSafeName'));
- const captures=[];let images=0,saved=false;
- const c=vm.createContext({window:{jspdf:{jsPDF:class{addPage(){}addImage(){images++}save(){saved=true}}},html2canvas:async(s,o)=>{captures.push(o);return {width:1560,height:o.height*2,toDataURL:()=>''}}}});
- vm.runInContext(fn,c);
- await c.savePagedPdf({offsetWidth:780,scrollHeight:45000,getBoundingClientRect:()=>({top:0}),querySelectorAll:()=>[]},'test.pdf');
- assert.ok(saved);assert.ok(images>35);assert.ok(captures.every(o=>o.height<=1130));
- assert.equal(captures.at(-1).y+captures.at(-1).height,45000);
+ assert.match(js,/const pdf=window\.CTAtlasPdf/);
+ assert.match(js,/await pdf\.download\(/);
+ assert.doesNotMatch(js,/cdnjs|html2canvas|jspdf/i);
 });

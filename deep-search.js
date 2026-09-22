@@ -368,7 +368,7 @@ function pdfSafeName(value){
   return String(value||"Deep-Search").replace(/[^a-z0-9_-]+/gi,"-").replace(/^-+|-+$/g,"").slice(0,70)||"Deep-Search";
 }
 
-function pdfDisplayUrl(url,maxLength=110){
+function pdfDisplayUrl(url,maxLength=100){
   const value=String(url||"");
   return value.length<=maxLength?value:value.slice(0,maxLength)+"…";
 }
