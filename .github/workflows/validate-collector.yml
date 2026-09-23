@@ -1,0 +1,70 @@
+name: Validate CT Atlas collector
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "collector.py"
+      - ".github/workflows/validate-collector.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Compile collector
+        run: python -m py_compile collector.py
+      - name: Validate weekly analytical generator
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          src = Path("collector.py").read_text(encoding="utf-8")
+          required = [
+              'AI_WEEKLY_VERSION = "weekly-analysis-v2-analytical-synthesis"',
+              "Your job is ANALYSIS, not counting, listing, or paraphrasing reporting.",
+              "ARTICLE / REPORTING COUNTS ARE NOT FINDINGS",
+              "def _weekly_analysis_quality_issue",
+              'return True, "analytical_quality_upgrade"',
+              'quality_feedback = ""',
+              "QUALITY CORRECTION FROM THE PREVIOUS ATTEMPT",
+              '"version":\n                    AI_WEEKLY_VERSION',
+              "AI_WEEKLY_MAX_PREVIOUS_EVENTS = 70",
+              "AI_WEEKLY_ATTEMPTS = 4",
+          ]
+          for marker in required:
+              if marker not in src:
+                  raise SystemExit(f"Missing weekly analytical marker: {marker}")
+
+          collect_start = src.index("def collect_all(*args, **kwargs):")
+          collect_end = src.index("\ndef selection_compact_text(", collect_start)
+          collect = src[collect_start:collect_end]
+          if "quality_feedback" in collect:
+              raise SystemExit("Weekly quality state leaked into collect_all")
+
+          select_start = src.index("def call_ai_selection_batch(")
+          select_end = src.index("\ndef process_ai_selection_batch(", select_start)
+          selection = src[select_start:select_end]
+          if "QUALITY CORRECTION FROM THE PREVIOUS ATTEMPT" in selection:
+              raise SystemExit("Weekly quality correction leaked into article selection")
+
+          weekly_start = src.index("def generate_weekly_analysis(")
+          weekly_end = src.index("\ndef save_database(", weekly_start)
+          weekly = src[weekly_start:weekly_end]
+          if "QUALITY CORRECTION FROM THE PREVIOUS ATTEMPT" not in weekly:
+              raise SystemExit("Weekly quality retry is not scoped to weekly generator")
+          if "quality_issue = _weekly_analysis_quality_issue" not in weekly:
+              raise SystemExit("Weekly quality gate missing")
+          print("Collector weekly analytical validation OK")
+          PY
