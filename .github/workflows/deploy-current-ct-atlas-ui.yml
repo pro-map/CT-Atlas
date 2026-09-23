@@ -17,6 +17,8 @@ on:
       - "crypto-launcher.js"
       - "usage-auth-fix.js"
       - "index.html"
+      - "main.html"
+      - "social.html"
       - "ct-atlas-runtime.json"
       - "daily-quiz.js"
       - "daily-quiz.css"
@@ -76,6 +78,15 @@ jobs:
           grep -q 'Behavioral Pattern Detection' crypto.html
           grep -q 'Case Workspace' crypto.html
           grep -q 'Monitoring & Alerts' crypto.html
+          test -s main.html
+          test -s social.html
+          grep -q 'Map and Intel Analysis' main.html
+          grep -q 'Cryptocurrency Investigations' main.html
+          grep -q 'Social Media Analysis' main.html
+          grep -q 'UNDER CONSTRUCTION' social.html
+          grep -q 'main.html' crypto.html
+          grep -q 'reportResultVisuals' index.html
+          grep -q 'deepSearchVisuals' deep-search.js
           node --check crypto.js
           node --check crypto-launcher.js
       - name: Configure GitHub Pages
