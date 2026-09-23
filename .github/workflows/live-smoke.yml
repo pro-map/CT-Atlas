@@ -8,6 +8,10 @@ on:
       - "pdf-export.js"
       - "deep-search.js"
       - "quick-ask.js"
+      - "crypto.html"
+      - "crypto.js"
+      - "crypto.css"
+      - "crypto-launcher.js"
       - "ct-atlas-runtime.json"
       - "daily-quiz.json"
       - "cloudflare-worker/**"
@@ -35,8 +39,14 @@ jobs:
           for attempt in {1..18}; do
             if curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/ >/tmp/index.html \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/pdf-export.js >/tmp/pdf-export.js \
+              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/crypto.html >/tmp/crypto.html \
+              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/crypto.js >/tmp/crypto.js \
               && grep -q 'pdf-export.js' /tmp/index.html \
-              && grep -q 'window.CTAtlasPdf' /tmp/pdf-export.js; then
+              && grep -q 'window.CTAtlasPdf' /tmp/pdf-export.js \
+              && grep -q 'Behavioral Pattern Detection' /tmp/crypto.html \
+              && grep -q 'Case Workspace' /tmp/crypto.html \
+              && grep -q 'detectPatterns' /tmp/crypto.js \
+              && grep -q 'crypto-workspace' /tmp/crypto.js; then
               break
             fi
             if [ "$attempt" -eq 18 ]; then
@@ -73,6 +83,9 @@ jobs:
           for (const key of ["ok", "deep_search", "quiz_tracking"]) {
             if (health[key] !== true) throw new Error("Worker health flag is not true: " + key);
           }
+          if (!health.crypto_version) throw new Error("Crypto backend version missing");
+          if (!health.crypto_workspace_version) throw new Error("Crypto workspace version missing");
+          if (!health.crypto_providers || health.crypto_providers.bitcoin !== true) throw new Error("Bitcoin Crypto provider health missing");
           if (health.auth_mode !== "secret") {
             throw new Error("Worker authentication is not using the required secret mode: " + health.auth_mode);
           }
