@@ -159,6 +159,38 @@ function renderPages(options){
 
   function drawBlock(input){
     const block=typeof input==="string"?{text:input,type:"body"}:input||{};
+    if(block.type==="image"&&block.image){
+      const image=block.image;
+      const naturalWidth=Number(image.naturalWidth||image.width||0);
+      const naturalHeight=Number(image.naturalHeight||image.height||0);
+      if(naturalWidth>0&&naturalHeight>0){
+        const maxImageHeight=430;
+        const scale=Math.min(CONTENT_WIDTH/naturalWidth,maxImageHeight/naturalHeight,1.5);
+        const width=Math.max(1,Math.round(naturalWidth*scale));
+        const height=Math.max(1,Math.round(naturalHeight*scale));
+        const caption=clean(block.caption||block.text||"");
+        setFont(context,14,"600");
+        const captionLines=caption?wrapText(context,caption,CONTENT_WIDTH):[];
+        const captionHeight=captionLines.length?captionLines.length*20+8:0;
+        ensureSpace(height+captionHeight+24);
+        y+=8;
+        const x=MARGIN_X+Math.max(0,(CONTENT_WIDTH-width)/2);
+        context.drawImage(image,x,y,width,height);
+        y+=height+7;
+        if(captionLines.length){
+          setFont(context,14,"600");
+          context.fillStyle="#53636c";
+          context.direction="ltr";
+          context.textAlign="left";
+          for(const line of captionLines){
+            context.fillText(line,MARGIN_X,y+14);
+            y+=20;
+          }
+        }
+        y+=9;
+        return;
+      }
+    }
     const text=clean(block.text);
     if(!text)return;
     const style={...(styles[block.type]||styles.body),...(block.style||{})};
@@ -262,7 +294,22 @@ function blocksFromElement(root){
   function visit(element){
     if(!(element instanceof Element))return;
     if(element.matches("script,style,button"))return;
+    if(element.matches("img[data-pdf-image]")){
+      const src=String(element.currentSrc||element.src||"").trim();
+      if(src){
+        blocks.push({
+          type:"image",
+          src,
+          caption:clean(element.getAttribute("data-pdf-caption")||element.alt||"")
+        });
+      }
+      return;
+    }
     const text=clean(element.innerText||element.textContent||"");
+    if(!text&&element.children.length){
+      Array.from(element.children).forEach(visit);
+      return;
+    }
     if(!text)return;
     if(element.matches("h1,h2,h3,h4,h5,h6,.generated-report-section,.report-sources-heading,.qa-cited-head")){
       blocks.push({text,type:"heading"});
@@ -291,10 +338,38 @@ function blocksFromElement(root){
   return blocks;
 }
 
+function loadPdfImage(src){
+  return new Promise(resolve=>{
+    const image=new Image();
+    image.crossOrigin="anonymous";
+    image.decoding="async";
+    const finish=value=>resolve(value);
+    image.onload=()=>finish(image);
+    image.onerror=()=>finish(null);
+    try{image.src=src;}catch(_){finish(null);}
+  });
+}
+
+async function prepareBlocks(blocks){
+  const prepared=[];
+  for(const raw of Array.isArray(blocks)?blocks:[]){
+    const block=raw||{};
+    if(block.type==="image"&&block.src){
+      const image=await loadPdfImage(String(block.src));
+      if(image)prepared.push({...block,image});
+      else if(clean(block.caption||block.text||""))prepared.push({text:clean(block.caption||block.text||""),type:"small"});
+    }else{
+      prepared.push(block);
+    }
+  }
+  return prepared;
+}
+
 async function download(options={}){
   await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
   if(document.fonts?.ready){try{await document.fonts.ready;}catch(_){}}
-  const images=renderPages(options);
+  const preparedOptions={...options,blocks:await prepareBlocks(options.blocks||[])};
+  const images=renderPages(preparedOptions);
   const bytes=buildPdf(images);
   const blob=new Blob([bytes],{type:"application/pdf"});
   const url=URL.createObjectURL(blob);
