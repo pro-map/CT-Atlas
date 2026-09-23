@@ -8997,7 +8997,6 @@ def generate_weekly_analysis(events, existing_weekly=None):
     now_paris = datetime.now(
         PARIS_TZ
     )
-
     print()
     print("=" * 70)
     print("GEMINI WEEKLY CT CRIMINAL ANALYSIS")
@@ -9454,6 +9453,44 @@ def main():
             f"Existing database loaded: "
             f"{len(existing)} events"
         )
+
+    # Progressive migration of the retained six-month database to the
+    # incident/case model. Prioritise legacy records whose old category could
+    # distort attack/CT-operation counts. ai_select_events mutates the supplied
+    # event objects in place, so we keep the historical record even if a fresh
+    # relevance decision would no longer select it.
+    legacy_incident_records = [
+        event for event in existing
+        if not event.get("primary_event_type") or not event.get("incident_id")
+    ]
+
+    def _incident_backfill_priority(event):
+        categories = set(event.get("categories") or ([event.get("category")] if event.get("category") else []))
+        if "Attacks" in categories:
+            tier = 0
+        elif "Counter Terrorism Action" in categories:
+            tier = 1
+        elif "Arrests" in categories:
+            tier = 2
+        elif "Legal / Judicial" in categories:
+            tier = 3
+        else:
+            tier = 4
+        dt = event_datetime(event) or datetime.min.replace(tzinfo=timezone.utc)
+        return (tier, -dt.timestamp())
+
+    if legacy_incident_records:
+        legacy_incident_records.sort(key=_incident_backfill_priority)
+        incident_backfill_batch = legacy_incident_records[:120]
+        print(
+            f"Incident-model migration: reclassifying {len(incident_backfill_batch)} "
+            f"of {len(legacy_incident_records)} legacy records (attack-related first)."
+        )
+        migrated = ai_select_events(incident_backfill_batch)
+        if migrated is None:
+            print("Incident-model migration incomplete this run; preserving existing records and retrying later.")
+        else:
+            print("Incident-model migration batch completed.")
 
     fresh = exclude_reviewed_articles(collect_all(days), existing)
 
