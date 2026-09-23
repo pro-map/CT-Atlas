@@ -9,13 +9,14 @@ import {
   extractGeminiText,
   sha256
 } from "./shared.js";
+import { createSourcePreviews } from "./source-preview.js";
 
 const DEEP_SEARCH_MAX_QUERIES = 24;
 const DEEP_SEARCH_RESULTS_PER_QUERY = 30;
 const DEEP_SEARCH_MAX_EVIDENCE = 48;
 const DEEP_SEARCH_CACHE_TTL_MS = 4 * 60 * 60 * 1000;
 const DEEP_SEARCH_MODEL = "gemini-3.5-flash-lite";
-export const DEEP_SEARCH_VERSION = "deep-search-v6-question-driven-period";
+export const DEEP_SEARCH_VERSION = "deep-search-v7-source-previews";
 
 // There is no period selector any more -- the analyst's own question is the
 // only source of a time window. The planner LLM (see PLAN_SCHEMA's
@@ -1536,7 +1537,8 @@ export async function handleDeepSearch(request, env, ctx) {
       database_version: databaseVersion,
       language_search_coverage: languagesSearched,
       priority_languages: priorityLanguages,
-      evidence
+      evidence,
+      source_previews: sourcePreviews
     };
 
     const generatedRaw = await callGeminiJson(
@@ -1551,6 +1553,12 @@ export async function handleDeepSearch(request, env, ctx) {
     const gaps = evidence.filter(item => item.atlas_status === "potential_gap").length;
     const inAtlas = evidence.length - gaps;
     const successfulQueries = retrieval.waves.filter(item => item.ok).length;
+    const citedSourceIds = new Set(metrics?.cited_source_ids || []);
+    const previewCandidates = [...evidence].sort((a,b) =>
+      (citedSourceIds.has(b.id) ? 1 : 0) - (citedSourceIds.has(a.id) ? 1 : 0) ||
+      Number(b.source_count || 1) - Number(a.source_count || 1)
+    );
+    const sourcePreviews = await createSourcePreviews(env, previewCandidates, { maxImages: 2, maxAttempts: 2 });
 
     const report = {
       title: generated.title || "CT Atlas Deep Search",
