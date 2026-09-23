@@ -23,3 +23,9 @@ storage = "sqlite"
 
 # AUTH_USERS_JSON is a required Cloudflare secret containing {"username":"sha256(password)"}.
 # The Worker rejects all logins when this secret is missing or invalid; never commit it.
+
+
+# Crypto Intelligence provider secrets (configure in Cloudflare, never commit values):
+#   ETHERSCAN_API_KEY  -> Etherscan API V2 for Ethereum and supported EVM chains.
+#   TRONGRID_API_KEY   -> TronGrid Mainnet API key sent as TRON-PRO-API-KEY.
+# Bitcoin uses Blockstream Esplora's public read-only API and needs no secret.
