@@ -9477,7 +9477,7 @@ def main():
         else:
             tier = 4
         dt = event_datetime(event) or datetime.min.replace(tzinfo=timezone.utc)
-        return (tier, -dt.timestamp())
+        return (tier, -dt.toordinal())
 
     if legacy_incident_records:
         legacy_incident_records.sort(key=_incident_backfill_priority)
