@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CT ATLAS — Crypto Intelligence</title>
 <link rel="icon" href="CT-ATLAS.png">
-<link rel="stylesheet" href="crypto.css?v=3">
+<link rel="stylesheet" href="crypto.css?v=4">
 </head>
 <body>
 <div class="crypto-shell">
@@ -81,6 +81,128 @@
             <label class="crypto-field compact"><span>Graph: maximum nodes</span><select id="filterGraphNodes"><option value="20">20</option><option value="40" selected>40</option><option value="60">60</option><option value="80">80</option></select></label>
           </div>
         </article>
+
+        <section class="crypto-intel-grid">
+          <article class="crypto-card">
+            <div class="crypto-card-head">
+              <div>
+                <div class="crypto-card-title">Behavioral Pattern Detection</div>
+                <div class="crypto-card-note">Heuristics describe observed transaction behavior — not criminal intent.</div>
+              </div>
+            </div>
+            <div class="crypto-card-body">
+              <div id="cryptoPatternList" class="intel-list"></div>
+            </div>
+          </article>
+
+          <article class="crypto-card">
+            <div class="crypto-card-head">
+              <div>
+                <div class="crypto-card-title">Exposure Engine</div>
+                <div class="crypto-card-note">Direct and indirect exposure to analyst-sourced labels/watchlists.</div>
+              </div>
+            </div>
+            <div class="crypto-card-body">
+              <div id="cryptoExposureSummary" class="intel-list"></div>
+            </div>
+          </article>
+
+          <article class="crypto-card">
+            <div class="crypto-card-head">
+              <div>
+                <div class="crypto-card-title">Path Finder</div>
+                <div class="crypto-card-note">Find shortest observed paths inside the currently traced network.</div>
+              </div>
+            </div>
+            <div class="crypto-card-body intel-form">
+              <label class="crypto-field compact"><span>Target address (optional)</span><input id="pathTarget" autocomplete="off" spellcheck="false" placeholder="Wallet address"></label>
+              <label class="crypto-field compact"><span>Or target category</span><select id="pathCategory"><option value="">Any category</option><option>CT WATCHLIST</option><option>SANCTIONS</option><option>DARKNET</option><option>MIXER</option><option>EXCHANGE</option><option>BRIDGE</option><option>DEX</option><option>GAMBLING</option><option>SCAM/FRAUD</option></select></label>
+              <label class="crypto-field compact"><span>Max hops</span><select id="pathMaxHops"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option></select></label>
+              <button id="pathFindButton" class="crypto-small-button trace-button" type="button">FIND PATH</button>
+              <div id="pathResult" class="intel-result"></div>
+            </div>
+          </article>
+
+          <article class="crypto-card">
+            <div class="crypto-card-head">
+              <div>
+                <div class="crypto-card-title">Labels & Attribution</div>
+                <div class="crypto-card-note">Every sensitive attribution requires source + confidence.</div>
+              </div>
+              <button id="labelSeedButton" class="crypto-small-button" type="button">LABEL SEED</button>
+            </div>
+            <div class="crypto-card-body">
+              <div id="labelForm" class="intel-form" hidden>
+                <label class="crypto-field compact"><span>Address</span><input id="labelAddress" autocomplete="off" spellcheck="false"></label>
+                <label class="crypto-field compact"><span>Label / entity</span><input id="labelName" maxlength="120" placeholder="Exchange / alias / service"></label>
+                <label class="crypto-field compact"><span>Category</span><select id="labelCategory"><option>CT WATCHLIST</option><option>SANCTIONS</option><option>DARKNET</option><option>MIXER</option><option>EXCHANGE</option><option>BRIDGE</option><option>DEX</option><option>GAMBLING</option><option>SCAM/FRAUD</option><option>SERVICE</option><option>PERSON/ALIAS</option><option>ORGANIZATION</option><option>DONATION CAMPAIGN</option><option>UNKNOWN SERVICE</option><option>OTHER</option></select></label>
+                <label class="crypto-field compact"><span>Confidence</span><select id="labelConfidence"><option>HIGH</option><option selected>MEDIUM</option><option>LOW</option></select></label>
+                <label class="crypto-field compact"><span>Source type</span><input id="labelSourceType" maxlength="60" placeholder="Official / OSINT / Analyst"></label>
+                <label class="crypto-field compact"><span>Source title</span><input id="labelSourceTitle" maxlength="240" placeholder="Document / article / designation"></label>
+                <label class="crypto-field compact"><span>Source URL (https)</span><input id="labelSourceUrl" maxlength="1200" placeholder="https://…"></label>
+                <label class="crypto-field compact"><span>Notes</span><input id="labelNotes" maxlength="1200" placeholder="Analytical caveat / context"></label>
+                <div class="intel-actions"><button id="labelSaveButton" class="crypto-small-button trace-button" type="button">SAVE LABEL</button><button id="labelCancelButton" class="crypto-small-button" type="button">CANCEL</button></div>
+              </div>
+              <div id="cryptoLabelList" class="intel-list"></div>
+            </div>
+          </article>
+
+          <article class="crypto-card">
+            <div class="crypto-card-head">
+              <div>
+                <div class="crypto-card-title">Case Workspace</div>
+                <div class="crypto-card-note">Persist investigation seeds, notes and saved paths.</div>
+              </div>
+              <button id="caseNewButton" class="crypto-small-button" type="button">NEW CASE</button>
+            </div>
+            <div class="crypto-card-body intel-form">
+              <label class="crypto-field compact"><span>Active case</span><select id="caseSelect"><option value="">No case selected</option></select></label>
+              <div id="caseCreateForm" class="intel-form" hidden>
+                <label class="crypto-field compact"><span>Case name</span><input id="caseName" maxlength="160" placeholder="Operation / investigation name"></label>
+                <label class="crypto-field compact"><span>Description</span><input id="caseDescription" maxlength="1600" placeholder="Scope / objective"></label>
+                <button id="caseCreateButton" class="crypto-small-button trace-button" type="button">CREATE CASE</button>
+              </div>
+              <div class="intel-actions">
+                <button id="caseAddSeedButton" class="crypto-small-button" type="button">ADD CURRENT SEED</button>
+                <button id="caseSavePathButton" class="crypto-small-button" type="button">SAVE CURRENT PATH</button>
+              </div>
+              <label class="crypto-field compact"><span>Analyst note</span><input id="caseNote" maxlength="1800" placeholder="Add a note to the active case"></label>
+              <button id="caseAddNoteButton" class="crypto-small-button" type="button">ADD NOTE</button>
+              <div id="caseDetail" class="intel-result"></div>
+            </div>
+          </article>
+
+          <article class="crypto-card">
+            <div class="crypto-card-head">
+              <div>
+                <div class="crypto-card-title">Monitoring & Alerts</div>
+                <div class="crypto-card-note">Persist a baseline and compare against fresh on-chain activity when checked.</div>
+              </div>
+              <button id="monitorSeedButton" class="crypto-small-button" type="button">MONITOR SEED</button>
+            </div>
+            <div class="crypto-card-body intel-form">
+              <label class="crypto-field compact"><span>Alert if single transfer ≥</span><input id="monitorMinAmount" inputmode="decimal" placeholder="Optional"></label>
+              <label class="crypto-field compact"><span>24h aggregate ≥</span><input id="monitorAggregate" inputmode="decimal" placeholder="Optional"></label>
+              <label class="crypto-field compact"><span>24h tx count ≥</span><input id="monitorVelocity" inputmode="numeric" placeholder="Optional"></label>
+              <label class="crypto-field compact"><span>Dormant days before reactivation</span><input id="monitorDormantDays" inputmode="numeric" placeholder="Optional"></label>
+              <button id="monitorCheckButton" class="crypto-small-button trace-button" type="button">CHECK MONITORED NOW</button>
+              <div id="monitorStatus" class="intel-result"></div>
+              <div id="cryptoAlerts" class="intel-list"></div>
+            </div>
+          </article>
+
+          <article class="crypto-card">
+            <div class="crypto-card-head">
+              <div>
+                <div class="crypto-card-title">Cross-Chain / Service Detection</div>
+                <div class="crypto-card-note">Known contract labels and transaction metadata can reveal probable bridge / DEX / mixer touchpoints.</div>
+              </div>
+            </div>
+            <div class="crypto-card-body">
+              <div id="crossChainFindings" class="intel-list"></div>
+            </div>
+          </article>
+        </section>
 
         <div class="crypto-grid">
           <article class="crypto-card">
@@ -159,6 +281,6 @@
     </div>
   </main>
 </div>
-<script src="crypto.js?v=3"></script>
+<script src="crypto.js?v=4"></script>
 </body>
 </html>
