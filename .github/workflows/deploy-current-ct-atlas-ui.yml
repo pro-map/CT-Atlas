@@ -11,6 +11,10 @@ on:
       - "deep-search.css"
       - "quick-ask.js"
       - "quick-ask.css"
+      - "crypto.html"
+      - "crypto.js"
+      - "crypto.css"
+      - "crypto-launcher.js"
       - "usage-auth-fix.js"
       - "index.html"
       - "ct-atlas-runtime.json"
@@ -65,6 +69,15 @@ jobs:
           grep -q 'launcher.insertBefore(trigger,launcher.firstChild)' daily-quiz.js
           grep -q 'margin:4px 0 3px;padding:9px 10px' daily-quiz.css
           grep -q 'anchor.insertAdjacentElement("afterend",button)' feedback.js
+          test -s crypto.html
+          test -s crypto.js
+          test -s crypto.css
+          test -s crypto-launcher.js
+          grep -q 'Behavioral Pattern Detection' crypto.html
+          grep -q 'Case Workspace' crypto.html
+          grep -q 'Monitoring & Alerts' crypto.html
+          node --check crypto.js
+          node --check crypto-launcher.js
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6
       - name: Upload website
