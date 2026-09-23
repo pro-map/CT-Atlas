@@ -173,3 +173,70 @@ button,input,select{font:inherit}
   .crypto-field.compact.wide{grid-column:auto}
   .crypto-kpis{grid-template-columns:1fr 1fr}
 }
+
+
+/* =========================================================
+   CRYPTO INTELLIGENCE V3 — MULTI-HOP TRACE
+========================================================= */
+.crypto-graph-head{align-items:flex-end}
+.crypto-graph-controls{display:flex;align-items:end;justify-content:flex-end;gap:7px;flex-wrap:wrap}
+.crypto-mini-field{display:block}
+.crypto-mini-field span{display:block;margin:0 0 4px;color:#728c9b;font-size:7px;font-weight:900;letter-spacing:.1em}
+.crypto-mini-field select{min-height:30px;border:1px solid #405563;border-radius:4px;background:#202f3b;color:white;padding:5px 7px;font-size:8px}
+.trace-button{border-color:#4f7ea0;background:#21465a}
+.trace-button:hover{background:#2c607a}
+.trace-button:disabled{opacity:.5;cursor:wait}
+.crypto-trace-status{padding:8px 12px;border-bottom:1px solid #2c404e;background:#101d26;color:#86a0af;font-size:8px;line-height:1.45}
+.crypto-trace-status.working{color:#dfbd67}
+.crypto-trace-status.success{color:#86d1a2}
+.crypto-trace-status.error{color:#e38a8a}
+
+#flowGraph{height:620px}
+.graph-hop-ring{fill:none;stroke-width:2;pointer-events:none;opacity:.92}
+.graph-hop-ring.h1{stroke:#58c6e8}
+.graph-hop-ring.h2{stroke:#e0b457;stroke-dasharray:5 3}
+.graph-hop-ring.h3{stroke:#e078c5;stroke-dasharray:2 3}
+.graph-hop-badge{
+  fill:#0d1820;
+  stroke-width:1.2;
+  pointer-events:none;
+}
+.graph-hop-badge.h1{stroke:#58c6e8}.graph-hop-badge.h2{stroke:#e0b457}.graph-hop-badge.h3{stroke:#e078c5}
+.graph-hop-text{
+  fill:#f4f8fa;
+  font:900 7px/1 Arial,sans-serif;
+  pointer-events:none;
+}
+.graph-expand-control{cursor:pointer}
+.graph-expand-control circle{fill:#0e1a22;stroke:#eaf7fc;stroke-width:1.5}
+.graph-expand-control text{fill:#fff;font:900 14px/1 Arial,sans-serif;pointer-events:none}
+.graph-expand-control.expanded circle{fill:#214f39;stroke:#74d29c}
+.graph-expand-control.loading circle{fill:#665329;stroke:#e0bc68}
+.graph-expand-control.disabled{opacity:.35;cursor:not-allowed}
+.graph-expand-control:hover:not(.disabled) circle{fill:#28647b;stroke:#fff}
+.graph-node.trace-expanded{filter:drop-shadow(0 0 9px rgba(113,216,163,.32))}
+.graph-edge.hop2{stroke-opacity:.72}
+.graph-edge.hop3{stroke-opacity:.62}
+.graph-edge.trace-link{stroke-dasharray:0}
+.legend-hop{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-2px;margin-right:5px;background:transparent;border:2px solid}
+.legend-hop.h1{border-color:#58c6e8}
+.legend-hop.h2{border-color:#e0b457;border-style:dashed}
+.legend-hop.h3{border-color:#e078c5;border-style:dotted}
+
+.crypto-hop-cell{white-space:nowrap}
+.crypto-hop-badge{display:inline-block;min-width:24px;padding:3px 5px;border-radius:3px;text-align:center;font-size:7px;font-weight:900;letter-spacing:.06em}
+.crypto-hop-badge.h0{background:#166a89;color:#dff7ff}
+.crypto-hop-badge.h1{background:#19485b;color:#9be0f6}
+.crypto-hop-badge.h2{background:#57451f;color:#f4d47b}
+.crypto-hop-badge.h3{background:#5b2c52;color:#efa1dc}
+.crypto-source-address{display:block;margin-top:4px;color:#718997;font-size:7px;max-width:120px;overflow:hidden;text-overflow:ellipsis}
+
+@media(max-width:900px){
+  .crypto-graph-head{align-items:flex-start;flex-direction:column}
+  .crypto-graph-controls{justify-content:flex-start}
+  #flowGraph{height:520px}
+}
+@media(max-width:580px){
+  #flowGraph{height:430px}
+  .crypto-graph-controls{gap:5px}
+}
