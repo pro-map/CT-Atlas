@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CT ATLAS — Crypto Intelligence</title>
 <link rel="icon" href="CT-ATLAS.png">
-<link rel="stylesheet" href="crypto.css?v=2">
+<link rel="stylesheet" href="crypto.css?v=3">
 </head>
 <body>
 <div class="crypto-shell">
@@ -84,19 +84,29 @@
 
         <div class="crypto-grid">
           <article class="crypto-card">
-            <div class="crypto-card-head">
+            <div class="crypto-card-head crypto-graph-head">
               <div>
-                <div class="crypto-card-title">Transaction Flow Graph</div>
-                <div class="crypto-card-note">Click a node to open that address in a new CT Atlas Crypto tab · drag nodes to reorganize the network</div>
+                <div class="crypto-card-title">Multi-Hop Transaction Flow Graph</div>
+                <div class="crypto-card-note">Node click = open in new tab · + = expand inside this graph · drag = reposition</div>
               </div>
-              <button id="cryptoResetGraph" class="crypto-small-button" type="button">RESET LAYOUT</button>
+              <div class="crypto-graph-controls">
+                <label class="crypto-mini-field"><span>MAX HOP</span><select id="traceMaxDepth"><option value="2">H2</option><option value="3" selected>H3</option></select></label>
+                <label class="crypto-mini-field"><span>BRANCH</span><select id="traceBranch"><option value="3" selected>Top 3</option><option value="5">Top 5</option><option value="8">Top 8</option></select></label>
+                <button id="cryptoAutoTrace" class="crypto-small-button trace-button" type="button">AUTO TRACE</button>
+                <button id="cryptoClearTrace" class="crypto-small-button" type="button">CLEAR TRACE</button>
+                <button id="cryptoResetGraph" class="crypto-small-button" type="button">RESET LAYOUT</button>
+              </div>
             </div>
+            <div id="cryptoTraceStatus" class="crypto-trace-status">H1 is built from the seed wallet. Expand nodes manually with +, or auto-trace the strongest branches to H2/H3.</div>
             <svg id="flowGraph" viewBox="0 0 820 460" role="img" aria-label="Transaction flow graph"></svg>
             <div class="graph-legend">
               <span><i class="legend-dot seed"></i>seed</span>
               <span><i class="legend-dot incoming"></i>incoming only</span>
               <span><i class="legend-dot outgoing"></i>outgoing only</span>
               <span><i class="legend-dot both"></i>bidirectional</span>
+              <span><i class="legend-hop h1"></i>H1</span>
+              <span><i class="legend-hop h2"></i>H2</span>
+              <span><i class="legend-hop h3"></i>H3</span>
               <span><i class="legend-line in"></i>incoming flow</span>
               <span><i class="legend-line out"></i>outgoing flow</span>
               <span>node size / edge width reflect linked record count, not ownership probability</span>
@@ -127,7 +137,7 @@
           </div>
           <div class="crypto-table-wrap">
             <table class="crypto-table">
-              <thead><tr><th>Time</th><th>Direction</th><th>Asset</th><th>Amount</th><th>Counterparty</th><th>Transaction</th></tr></thead>
+              <thead><tr><th>Hop / source</th><th>Time</th><th>Direction</th><th>Asset</th><th>Amount</th><th>Counterparty</th><th>Transaction</th></tr></thead>
               <tbody id="cryptoTableBody"></tbody>
             </table>
           </div>
@@ -149,6 +159,6 @@
     </div>
   </main>
 </div>
-<script src="crypto.js?v=2"></script>
+<script src="crypto.js?v=3"></script>
 </body>
 </html>
