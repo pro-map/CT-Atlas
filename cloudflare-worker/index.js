@@ -30,6 +30,7 @@ import { handleQuiz } from "./quiz.js";
 import { handleCrypto, CRYPTO_VERSION } from "./crypto.js";
 import { handleCryptoWorkspace, CRYPTO_WORKSPACE_VERSION } from "./crypto-workspace.js";
 import { runCryptoMonitor, CRYPTO_MONITOR_VERSION } from "./crypto-monitor.js";
+import { createSourcePreviews, handleSourceImage, SOURCE_PREVIEW_VERSION } from "./source-preview.js";
 export default {
 async fetch(request, env, ctx) {
 // A fresh per-request copy, never a mutation of the shared env object --
@@ -41,7 +42,7 @@ if (request.method === "OPTIONS") {
 return new Response(null, { status: 204, headers: corsHeaders(env) });
 }
 if (url.pathname === "/health" && request.method === "GET") {
-return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.31", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_auto_monitoring: true, crypto_monitor_schedule: "every 6 hours", crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
+return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.31", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_auto_monitoring: true, crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
 }
 if (url.pathname === "/auth-login" && request.method === "POST") {
 let authBody;
@@ -155,6 +156,9 @@ return handleCrypto(request, env);
 if (url.pathname === "/crypto-workspace" && ["GET","POST"].includes(request.method)) {
 return handleCryptoWorkspace(request, env);
 }
+if (url.pathname.startsWith("/source-image/") && request.method === "GET") {
+return handleSourceImage(request, env);
+}
 if (url.pathname !== "/report" || request.method !== "POST") return jsonResponse({ error: "Not found" }, 404, env);
 let body;
 try { body = await request.json(); } catch { return jsonResponse({ error: "Invalid JSON request." }, 400, env); }
@@ -222,7 +226,14 @@ const meta = `${region === "GLOBAL" ? "Global" : region} · ${topic === "ALL" ? 
 const analysisText = String(generated.analysis || "").trim();
 const grounding = citationMetrics(analysisText, allSourced.map(e => e.source_id));
 const sources = allSourced.map(e => ({ id: e.source_id, title: e.title, source: e.source, url: e.url, date: e.date, country: e.country, source_count: e.source_count, relevance: e.relevance }));
-const report = { title: cleanText(generated.title || `CT Analytical Report — ${region}`, 180), analysis: analysisText, meta, database_version: databaseVersion, generated_at: new Date().toISOString(), sources, grounding };
+const citedSourceIds = new Set(grounding?.cited_source_ids || []);
+const previewCandidates = [...sources].sort((a,b) =>
+  (citedSourceIds.has(b.id) ? 1 : 0) - (citedSourceIds.has(a.id) ? 1 : 0) ||
+  Number(b.relevance || 0) - Number(a.relevance || 0) ||
+  Number(b.source_count || 1) - Number(a.source_count || 1)
+);
+const sourcePreviews = await createSourcePreviews(env, previewCandidates, { maxImages: 2, maxAttempts: 3 });
+const report = { title: cleanText(generated.title || `CT Analytical Report — ${region}`, 180), analysis: analysisText, meta, database_version: databaseVersion, generated_at: new Date().toISOString(), sources, grounding, source_previews: sourcePreviews };
 await gateCall(env, "/cache-put", { cacheKey, report, expires_at: Date.now() + CACHE_TTL_MS });
 const commitResponse = await gateCall(env, "/commit-report", { permitId, username });
 if (!commitResponse.ok) {
