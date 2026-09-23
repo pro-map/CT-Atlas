@@ -2,7 +2,9 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
-const source=fs.readFileSync('cloudflare-worker/deep-search.js','utf8').replace(/^import[\s\S]*?from "\.\/shared.js";\s*/,'').replace(/export /g,'');
+const source=fs.readFileSync('cloudflare-worker/deep-search.js','utf8')
+  .replace(/import\s*\{[\s\S]*?\}\s*from\s*["']\.\/[^"']+["'];\s*/g,'')
+  .replace(/export /g,'');
 function harness(fetch){
  const c=vm.createContext({fetch,URL,URLSearchParams,AbortSignal,setTimeout:fn=>fn(),cleanText:(v,n)=>String(v||'').trim().slice(0,n),parseEventDate:(event)=>{for(const key of ['event_date','occurrence_date','occurred_at','incident_date','attack_date','published_at','publication_date','published','pub_date','date','updated_at']){if(!event?.[key])continue;const d=new Date(event[key]);if(!Number.isNaN(d.getTime()))return d;}return null}});
  vm.runInContext(source,c);
