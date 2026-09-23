@@ -165,6 +165,26 @@
               <div class="intel-actions">
                 <button id="caseAddSeedButton" class="crypto-small-button" type="button">ADD CURRENT SEED</button>
                 <button id="caseSavePathButton" class="crypto-small-button" type="button">SAVE CURRENT PATH</button>
+                <button id="caseOffchainToggle" class="crypto-small-button" type="button">ADD OFF-CHAIN NODE</button>
+                <button id="caseCrosschainToggle" class="crypto-small-button" type="button">ADD CROSS-CHAIN LINK</button>
+              </div>
+              <div id="offchainForm" class="intel-form" hidden>
+                <label class="crypto-field compact"><span>Node type</span><select id="offchainType"><option>PERSON/ALIAS</option><option>ORGANIZATION</option><option>TELEGRAM CHANNEL</option><option>SOCIAL ACCOUNT</option><option>DOCUMENT</option><option>CT EVENT</option><option>DONATION CAMPAIGN</option><option>OTHER</option></select></label>
+                <label class="crypto-field compact"><span>Label</span><input id="offchainLabel" maxlength="180" placeholder="Alias / organisation / channel / document"></label>
+                <label class="crypto-field compact"><span>Linked wallet</span><input id="offchainLinkedAddress" maxlength="180" placeholder="Defaults to current seed"></label>
+                <label class="crypto-field compact"><span>Source URL</span><input id="offchainSourceUrl" maxlength="1200" placeholder="https://…"></label>
+                <label class="crypto-field compact"><span>Notes</span><input id="offchainNotes" maxlength="1200" placeholder="Relationship / evidentiary context"></label>
+                <button id="offchainSaveButton" class="crypto-small-button trace-button" type="button">SAVE OFF-CHAIN NODE</button>
+              </div>
+              <div id="crosschainForm" class="intel-form" hidden>
+                <label class="crypto-field compact"><span>From wallet</span><input id="crosschainFromAddress" maxlength="180" placeholder="Defaults to current seed"></label>
+                <label class="crypto-field compact"><span>Destination chain</span><select id="crosschainToChain"><option value="bitcoin">Bitcoin</option><option value="ethereum">Ethereum</option><option value="bsc">BNB Smart Chain</option><option value="polygon">Polygon</option><option value="arbitrum">Arbitrum One</option><option value="base">Base</option><option value="tron">TRON</option></select></label>
+                <label class="crypto-field compact"><span>Destination wallet</span><input id="crosschainToAddress" maxlength="180" placeholder="Destination address"></label>
+                <label class="crypto-field compact"><span>Bridge / service</span><input id="crosschainService" maxlength="120" placeholder="Across / Stargate / other"></label>
+                <label class="crypto-field compact"><span>Confidence</span><select id="crosschainConfidence"><option>HIGH</option><option selected>MEDIUM</option><option>LOW</option></select></label>
+                <label class="crypto-field compact"><span>Source URL</span><input id="crosschainSourceUrl" maxlength="1200" placeholder="https://…"></label>
+                <label class="crypto-field compact"><span>Notes</span><input id="crosschainNotes" maxlength="1200" placeholder="Why these addresses are linked across chains"></label>
+                <button id="crosschainSaveButton" class="crypto-small-button trace-button" type="button">SAVE CROSS-CHAIN LINK</button>
               </div>
               <label class="crypto-field compact"><span>Analyst note</span><input id="caseNote" maxlength="1800" placeholder="Add a note to the active case"></label>
               <button id="caseAddNoteButton" class="crypto-small-button" type="button">ADD NOTE</button>
@@ -229,6 +249,8 @@
               <span><i class="legend-hop h1"></i>H1</span>
               <span><i class="legend-hop h2"></i>H2</span>
               <span><i class="legend-hop h3"></i>H3</span>
+              <span><i class="legend-shape offchain"></i>off-chain entity</span>
+              <span><i class="legend-shape crosschain"></i>cross-chain link</span>
               <span><i class="legend-line in"></i>incoming flow</span>
               <span><i class="legend-line out"></i>outgoing flow</span>
               <span>node size / edge width reflect linked record count, not ownership probability</span>
