@@ -4064,7 +4064,6 @@ def collect_all(*args, **kwargs):
     """Retry the entire collection once if Google News broadly fails."""
     attempts = max(1, GOOGLE_NEWS_GLOBAL_RETRY_ATTEMPTS)
     last_error = None
-    quality_feedback = ""
 
     for attempt in range(1, attempts + 1):
         try:
@@ -4537,18 +4536,6 @@ def call_ai_selection_batch(
         AI_SELECTION_ATTEMPTS + 1,
     ):
         try:
-            body["input"] = (
-                base_input
-                +
-                (
-                    "\n\nQUALITY CORRECTION FROM THE PREVIOUS ATTEMPT: "
-                    + quality_feedback
-                    + ". Rewrite the full report and correct this weakness."
-                    if quality_feedback
-                    else ""
-                )
-            )
-
             response = requests.post(
                 GEMINI_INTERACTIONS_URL,
                 headers=headers,
@@ -8857,34 +8844,13 @@ def _weekly_compact_event(event, index):
                 1
             ),
         "primary_event_type":
-            clean_text(
-                event.get(
-                    "primary_event_type",
-                    ""
-                )
-            ),
+            clean_text(event.get("primary_event_type", "")),
         "incident_id":
-            clean_text(
-                event.get(
-                    "incident_id",
-                    ""
-                )
-            ),
+            clean_text(event.get("incident_id", "")),
         "is_attack":
-            bool(
-                event.get(
-                    "is_attack",
-                    False
-                )
-            ),
+            bool(event.get("is_attack", False)),
         "canonical_event":
-            selection_compact_text(
-                event.get(
-                    "ai_canonical_event",
-                    ""
-                ),
-                360,
-            ),
+            selection_compact_text(event.get("ai_canonical_event", ""), 360),
         "actor_or_group":
             selection_compact_text(
                 event.get("group")
@@ -9226,9 +9192,9 @@ def generate_weekly_analysis(events, existing_weekly=None):
 
     base_input = (
         "Produce the weekly comparative CT criminal-analysis assessment using "
-        "only the supplied data. Treat the statistics as diagnostic context, "
-        "not as findings. Build the assessment from the underlying distinct "
-        "incidents and explain operational meaning.\n\n"
+        "only the supplied data. Treat statistics as diagnostic context, not "
+        "as findings. Build the assessment from distinct incidents and explain "
+        "their operational meaning.\n\n"
         +
         json.dumps(
             payload,
@@ -9269,12 +9235,25 @@ def generate_weekly_analysis(events, existing_weekly=None):
     }
 
     last_error = None
+    quality_feedback = ""
 
     for attempt in range(
         1,
         AI_WEEKLY_ATTEMPTS + 1,
     ):
         try:
+            body["input"] = (
+                base_input
+                +
+                (
+                    "\n\nQUALITY CORRECTION FROM THE PREVIOUS ATTEMPT: "
+                    + quality_feedback
+                    + ". Rewrite the full assessment and correct this weakness."
+                    if quality_feedback
+                    else ""
+                )
+            )
+
             response = requests.post(
                 GEMINI_INTERACTIONS_URL,
                 headers=headers,
