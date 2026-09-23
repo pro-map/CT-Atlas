@@ -62,3 +62,114 @@ button,input,select{font:inherit}
 .crypto-sampling{margin-top:7px;color:#8ba0ad}
 @media(max-width:900px){.crypto-kpis{grid-template-columns:1fr 1fr}.crypto-grid{grid-template-columns:1fr}.crypto-search{grid-template-columns:1fr 1fr}.crypto-search .crypto-field:first-child{grid-column:1/-1}#cryptoRun{grid-column:1/-1}}
 @media(max-width:580px){.crypto-header{padding:11px 12px}.crypto-brand img{width:42px;height:42px}.crypto-title{font-size:14px}.crypto-main{padding:11px}.crypto-search{grid-template-columns:1fr}.crypto-search .crypto-field:first-child,#cryptoRun{grid-column:auto}.crypto-kpis{grid-template-columns:1fr 1fr}.crypto-topline{flex-direction:column}.crypto-explorer{width:100%;text-align:center}#flowGraph{height:320px}}
+
+
+/* =========================================================
+   CRYPTO INTELLIGENCE V2 — SPECIALIZED FILTERS + DRAGGABLE GRAPH
+========================================================= */
+.crypto-filter-card{margin-bottom:12px}
+.crypto-filter-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;padding:12px}
+.crypto-field.compact span{font-size:8px}
+.crypto-field.compact input,.crypto-field.compact select{min-height:36px;padding:7px 8px;font-size:10px}
+.crypto-field.compact.wide{grid-column:span 2}
+.crypto-small-button{flex:0 0 auto;border:1px solid #456171;background:#203442;color:#dce9ef;border-radius:4px;padding:7px 9px;font-size:8px;font-weight:900;letter-spacing:.08em;cursor:pointer}
+.crypto-small-button:hover{background:#2b4656;border-color:#6e98aa}
+.crypto-kpis{grid-template-columns:repeat(5,minmax(0,1fr))}
+.crypto-table-actions .crypto-small-button{display:inline-block}
+
+#flowGraph{
+  height:460px;
+  touch-action:none;
+  user-select:none;
+  background:
+    radial-gradient(circle at 50% 48%,rgba(66,145,174,.13),transparent 34%),
+    linear-gradient(rgba(63,89,103,.10) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(63,89,103,.10) 1px,transparent 1px),
+    linear-gradient(180deg,#101f29,#09141b);
+  background-size:auto,32px 32px,32px 32px,auto;
+}
+.graph-label{
+  fill:#f2f8fb;
+  font-size:10px;
+  font-weight:800;
+  font-family:Arial,sans-serif;
+  pointer-events:none;
+  paint-order:stroke;
+  stroke:#09141b;
+  stroke-width:3px;
+  stroke-linejoin:round;
+}
+.graph-sub{
+  fill:#b4c7d1;
+  font-size:8px;
+  font-weight:700;
+  font-family:Arial,sans-serif;
+  pointer-events:none;
+  paint-order:stroke;
+  stroke:#09141b;
+  stroke-width:2.4px;
+}
+.graph-node{
+  fill:#26404d;
+  stroke:#789baa;
+  stroke-width:1.6;
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,.5));
+  transition:stroke-width .12s ease,filter .12s ease;
+}
+.graph-node.seed{fill:#167ea4;stroke:#9ee7ff;stroke-width:2.6;filter:drop-shadow(0 0 9px rgba(62,199,247,.42))}
+.graph-node.incoming{fill:#17704d;stroke:#6ce2a7}
+.graph-node.outgoing{fill:#9a4938;stroke:#ff9a82}
+.graph-node.both{fill:#67459c;stroke:#c9a4ff}
+.graph-node.selected{stroke:#ffffff;stroke-width:3.2;filter:drop-shadow(0 0 9px rgba(255,255,255,.4))}
+.graph-node.unsearchable{stroke-dasharray:3 3;opacity:.78}
+.graph-counterparty,.graph-seed{cursor:grab}
+.graph-counterparty.dragging,.graph-seed.dragging{cursor:grabbing}
+.graph-counterparty:hover .graph-node{stroke-width:3;filter:drop-shadow(0 0 8px rgba(255,255,255,.22))}
+.graph-edge{stroke-opacity:.8;stroke-linecap:round}
+.graph-edge.in{stroke:#46d890}
+.graph-edge.out{stroke:#ff8268}
+.graph-edge.dim{stroke-opacity:.28}
+.graph-edge-label{
+  fill:#c4d5dd;
+  font:800 7px/1 Arial,sans-serif;
+  paint-order:stroke;
+  stroke:#0a151c;
+  stroke-width:2.5px;
+  pointer-events:none;
+}
+.graph-legend{gap:14px;font-size:8px;background:#101d26}
+.legend-dot{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:-1px;margin-right:5px;border:1px solid rgba(255,255,255,.55)}
+.legend-dot.seed{background:#167ea4}.legend-dot.incoming{background:#17704d}.legend-dot.outgoing{background:#9a4938}.legend-dot.both{background:#67459c}
+.legend-line.in{background:#46d890}.legend-line.out{background:#ff8268}
+
+.crypto-filter-active{color:#9fd5e9!important}
+.crypto-filter-empty{padding:18px!important;color:#8096a3}
+.crypto-table .counterparty-link{
+  color:#a8d9ef;
+  background:transparent;
+  border:0;
+  padding:0;
+  font:inherit;
+  cursor:pointer;
+  text-align:left;
+}
+.crypto-table .counterparty-link:hover{text-decoration:underline;color:white}
+.crypto-type-badge{display:inline-block;margin-left:5px;padding:2px 4px;border:1px solid #405563;border-radius:3px;color:#8ea5b5;font-size:7px;font-weight:800;letter-spacing:.05em}
+.crypto-status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:0}
+.crypto-status-dot.confirmed{background:#55c987}.crypto-status-dot.pending{background:#d6ae55}.crypto-status-dot.failed{background:#e26e6e}
+
+@media(max-width:1180px){
+  .crypto-filter-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .crypto-field.compact.wide{grid-column:span 2}
+  .crypto-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  .crypto-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .crypto-field.compact.wide{grid-column:1/-1}
+  #flowGraph{height:390px}
+}
+@media(max-width:480px){
+  .crypto-filter-grid{grid-template-columns:1fr}
+  .crypto-field.compact.wide{grid-column:auto}
+  .crypto-kpis{grid-template-columns:1fr 1fr}
+}
