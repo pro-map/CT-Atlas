@@ -1031,7 +1031,7 @@ function monitorSeed(){
   watch.updated_at=new Date().toISOString();
   scheduleWorkspaceSave();
   renderAlerts();
-  document.getElementById("monitorStatus").textContent="Seed is monitored. Baseline snapshot saved.";
+  document.getElementById("monitorStatus").textContent="Seed is monitored. Baseline saved; automatic checks rotate every 6 hours. CHECK NOW remains available.";
 }
 
 async function checkMonitored(){
