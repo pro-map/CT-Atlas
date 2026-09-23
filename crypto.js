@@ -25,7 +25,23 @@ const SERVICE_REGISTRY={
   ethereum:{
     "0x7a250d5630b4cf539739df2c5dacab4c659f2488":{name:"Uniswap V2 Router",category:"DEX"},
     "0xe592427a0aece92de3edee1f18e0157c05861564":{name:"Uniswap V3 SwapRouter",category:"DEX"},
-    "0x1111111254eeb25477b68fb85ed929f73a960582":{name:"1inch Router",category:"DEX"}
+    "0x1111111254eeb25477b68fb85ed929f73a960582":{name:"1inch Router",category:"DEX"},
+    "0x77b2043768d28e9c9ab44e1abfc95944bce57931":{name:"Stargate Native Pool",category:"BRIDGE"},
+    "0xc026395860db2d07ee33e05fe50ed7bd583189c7":{name:"Stargate USDC Pool",category:"BRIDGE"},
+    "0x933597a323eb81cae705c5bc29985172fd5a3973":{name:"Stargate USDT Pool",category:"BRIDGE"}
+  },
+  bsc:{
+    "0x138eb30f73bc423c6455c53df6d89cb01d9ebc63":{name:"Stargate USDT Pool",category:"BRIDGE"},
+    "0x962bd449e630b0d928f308ce63f1a21f02576057":{name:"Stargate USDC Pool",category:"BRIDGE"}
+  },
+  polygon:{
+    "0x9aa02d4fae7f58b8e8f34c66e756cc734dac7fe4":{name:"Stargate USDC Pool",category:"BRIDGE"},
+    "0xd47b03ee6d86cf251ee7860fb2acf9f91b9fd4d7":{name:"Stargate USDT Pool",category:"BRIDGE"}
+  },
+  arbitrum:{
+    "0xa45b5130f36cdca45667738e2a258ab09f4a5f7f":{name:"Stargate Native Pool",category:"BRIDGE"},
+    "0xe8cdf27acd73a434d661c84887215f7598e7d0d3":{name:"Stargate USDC Pool",category:"BRIDGE"},
+    "0xce8cca271ebc0533920c83d39f417ed6a0abb7d0":{name:"Stargate USDT Pool",category:"BRIDGE"}
   }
 };
 
