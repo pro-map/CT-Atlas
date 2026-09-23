@@ -80,3 +80,41 @@ test("crypto backend exposes a non-empty version and expected EVM chains",()=>{
     assert.ok(h.EVM_CHAINS[chain]);
   }
 });
+
+
+test("crypto UI exposes specialized forensic filters",()=>{
+  const html=fs.readFileSync("crypto.html","utf8");
+  for(const id of [
+    "filterDirection","filterAsset","filterType","filterStatus","filterMinAmount",
+    "filterMaxAmount","filterFromDate","filterToDate","filterText",
+    "filterGraphMinLinks","filterGraphNodes"
+  ]){
+    assert.ok(html.includes('id="'+id+'"'),"missing specialized filter "+id);
+  }
+});
+
+test("graph node navigation opens a new CT Atlas Crypto tab with autorun",()=>{
+  const client=fs.readFileSync("crypto.js","utf8");
+  assert.ok(client.includes('url.searchParams.set("q",address)'));
+  assert.ok(client.includes('url.searchParams.set("chain",chain)'));
+  assert.ok(client.includes('url.searchParams.set("autorun","1")'));
+  assert.ok(client.includes('window.open(url.toString(),"_blank")'));
+});
+
+test("crypto graph supports pointer dragging and layout reset",()=>{
+  const client=fs.readFileSync("crypto.js","utf8");
+  const html=fs.readFileSync("crypto.html","utf8");
+  assert.ok(client.includes('group.addEventListener("pointerdown"'));
+  assert.ok(client.includes('group.addEventListener("pointermove"'));
+  assert.ok(client.includes('graphPositions=new Map()'));
+  assert.ok(html.includes('id="cryptoResetGraph"'));
+});
+
+test("graph has relationship colors and enlarged drag canvas",()=>{
+  const css=fs.readFileSync("crypto.css","utf8");
+  const html=fs.readFileSync("crypto.html","utf8");
+  for(const cls of [".graph-node.incoming",".graph-node.outgoing",".graph-node.both",".graph-node.seed"]){
+    assert.ok(css.includes(cls),"missing graph relation style "+cls);
+  }
+  assert.ok(html.includes('viewBox="0 0 820 460"'));
+});
