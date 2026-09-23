@@ -16,6 +16,18 @@ let tracePayloads=new Map();
 let traceExpanded=new Set();
 let traceBusy=new Set();
 let currentNetworkModel=null;
+let cryptoWorkspace={version:"crypto-workspace-v1",labels:[],watchlist:[],cases:[],alerts:[]};
+let activeCaseId="";
+let lastFoundPath=null;
+let workspaceSaveTimer=null;
+
+const SERVICE_REGISTRY={
+  ethereum:{
+    "0x7a250d5630b4cf539739df2c5dacab4c659f2488":{name:"Uniswap V2 Router",category:"DEX"},
+    "0xe592427a0aece92de3edee1f18e0157c05861564":{name:"Uniswap V3 SwapRouter",category:"DEX"},
+    "0x1111111254eeb25477b68fb85ed929f73a960582":{name:"1inch Router",category:"DEX"}
+  }
+};
 
 function token(){return String(sessionStorage.getItem(TOKEN_KEY)||"");}
 function user(){return String(sessionStorage.getItem(USER_KEY)||"").trim().toLowerCase();}
