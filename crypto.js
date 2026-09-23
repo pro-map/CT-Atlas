@@ -1450,6 +1450,44 @@ function attachGraphInteraction(svg,group,node,payload,isSeed=false){
   }
 }
 
+function attachAuxGraphInteraction(svg,group,key,onClick){
+  let state=null;
+  group.addEventListener("pointerdown",event=>{
+    if(event.button!==0)return;
+    const p=clientPointToSvg(svg,event);
+    const current=graphPositions.get(key)||{x:p.x,y:p.y};
+    state={pointerId:event.pointerId,startX:p.x,startY:p.y,offsetX:p.x-current.x,offsetY:p.y-current.y,moved:false};
+    group.classList.add("dragging");
+    try{group.setPointerCapture(event.pointerId);}catch(_){}
+    event.preventDefault();
+  });
+  group.addEventListener("pointermove",event=>{
+    if(!state||event.pointerId!==state.pointerId)return;
+    const p=clientPointToSvg(svg,event);
+    if(Math.hypot(p.x-state.startX,p.y-state.startY)>5)state.moved=true;
+    const next={
+      x:Math.max(40,Math.min(960,p.x-state.offsetX)),
+      y:Math.max(40,Math.min(610,p.y-state.offsetY))
+    };
+    graphPositions.set(key,next);
+    group.setAttribute("transform","translate("+next.x+" "+next.y+")");
+    updateGraphEdges(svg);
+    event.preventDefault();
+  });
+  const finish=event=>{
+    if(!state||event.pointerId!==state.pointerId)return;
+    const moved=state.moved;
+    state=null;
+    group.classList.remove("dragging");
+    try{group.releasePointerCapture(event.pointerId);}catch(_){}
+    if(!moved&&typeof onClick==="function")onClick();
+  };
+  group.addEventListener("pointerup",finish);
+  group.addEventListener("pointercancel",event=>{
+    if(state&&event.pointerId===state.pointerId){state=null;group.classList.remove("dragging");}
+  });
+}
+
 async function fetchAddressAnalysis(address,chain,limit=40){
   const response=await fetch(API_BASE+"/crypto-analyze",{
     method:"POST",
@@ -1603,10 +1641,11 @@ function renderGraph(payload){
     if(!p)continue;
     const isSeed=node.depth===0;
     if(isSeed){
+      const seedLabel=labelForAddress(node.id,payload.chain);
       html+='<g class="graph-seed" data-key="'+esc(node.key)+'" transform="translate('+p.x+" "+p.y+')">'+
         '<circle class="graph-node seed" cx="0" cy="0" r="35"></circle>'+
-        '<text class="graph-label" x="0" y="-3" text-anchor="middle">SEED</text>'+
-        '<text class="graph-sub" x="0" y="13" text-anchor="middle">'+esc(short(node.id,6))+"</text>"+
+        '<text class="graph-label" x="0" y="-3" text-anchor="middle">'+esc(seedLabel?.name?short(seedLabel.name,10):"SEED")+'</text>'+
+        '<text class="graph-sub" x="0" y="13" text-anchor="middle">'+esc(seedLabel?.category||short(node.id,6))+"</text>"+
         "</g>";
       continue;
     }
@@ -1625,12 +1664,57 @@ function renderGraph(payload){
       "<title>"+esc(title)+"</title>"+
       '<circle class="graph-hop-ring '+hopClass+'" cx="0" cy="0" r="'+ringRadius+'"></circle>'+
       '<circle class="graph-node '+node.relation+(node.expanded?" trace-expanded":"")+(node.searchable?"":" unsearchable")+'" cx="0" cy="0" r="'+radius+'"></circle>'+
-      '<text class="graph-label" x="0" y="-2" text-anchor="middle">'+esc(short(node.id,5))+"</text>"+
-      '<text class="graph-sub" x="0" y="12" text-anchor="middle">'+node.total+" tx"+(assets?" · "+esc(short(assets,6)):"")+"</text>"+
+      '<text class="graph-label" x="0" y="-2" text-anchor="middle">'+esc(labelForAddress(node.id,payload.chain)?.name?short(labelForAddress(node.id,payload.chain).name,9):short(node.id,5))+"</text>"+
+      '<text class="graph-sub" x="0" y="12" text-anchor="middle">'+esc(labelForAddress(node.id,payload.chain)?.category||(node.total+" tx"+(assets?" · "+short(assets,6):"")))+"</text>"+
       '<g class="graph-hop-badge '+hopClass+'" transform="translate('+(-radius-5)+" "+(-radius-5)+')"><circle class="graph-hop-badge '+hopClass+'" cx="0" cy="0" r="10"></circle><text class="graph-hop-text" x="0" y="2.5" text-anchor="middle">H'+node.depth+"</text></g>"+
       '<g class="graph-expand-control '+expandClass+'" data-key="'+esc(node.key)+'" transform="translate('+(radius+5)+" "+(-radius-5)+')" role="button" aria-label="Expand '+esc(node.id)+' in graph"><circle cx="0" cy="0" r="11"></circle><text x="0" y="5" text-anchor="middle">'+expandText+"</text></g>"+
       "</g>";
   }
+
+  const active=activeCase();
+  const visibleKeys=new Set(model.nodes.map(node=>node.key));
+  const offchainNodes=(active?.offchain_nodes||[]).filter(item=>{
+    const linkedKey=normalizeAddressForChain(item.linked_address,payload.chain);
+    return visibleKeys.has(linkedKey);
+  });
+  offchainNodes.forEach((item,index)=>{
+    const linkedKey=normalizeAddressForChain(item.linked_address,payload.chain);
+    const base=graphPositions.get(linkedKey);
+    if(!base)return;
+    const key="offchain:"+item.id;
+    if(!graphPositions.has(key)){
+      const angle=(index%8)*(Math.PI/4);
+      graphPositions.set(key,{x:Math.max(45,Math.min(955,base.x+95*Math.cos(angle))),y:Math.max(45,Math.min(605,base.y+95*Math.sin(angle)))});
+    }
+    const p=graphPositions.get(key);
+    html+='<g class="graph-edge-group graph-aux-edge" data-from="'+esc(linkedKey)+'" data-to="'+esc(key)+'"><line class="graph-edge offchain-link" x1="'+base.x+'" y1="'+base.y+'" x2="'+p.x+'" y2="'+p.y+'"></line></g>';
+    html+='<g class="graph-aux-node offchain-node" data-aux-key="'+esc(key)+'" transform="translate('+p.x+" "+p.y+')">'+
+      '<title>'+esc(item.type+" · "+item.label+(item.notes?" · "+item.notes:""))+'</title>'+
+      '<rect x="-44" y="-20" width="88" height="40" rx="7" ry="7"></rect>'+
+      '<text class="graph-label" x="0" y="-2" text-anchor="middle">'+esc(short(item.label,11))+'</text>'+
+      '<text class="graph-sub" x="0" y="12" text-anchor="middle">'+esc(short(item.type,12))+'</text></g>';
+  });
+
+  const crossLinks=(active?.crosschain_links||[]).filter(link=>
+    link.from_chain===payload.chain&&visibleKeys.has(normalizeAddressForChain(link.from_address,payload.chain))
+  );
+  crossLinks.forEach((link,index)=>{
+    const fromKey=normalizeAddressForChain(link.from_address,payload.chain);
+    const base=graphPositions.get(fromKey);
+    if(!base)return;
+    const key="crosschain:"+link.id;
+    if(!graphPositions.has(key)){
+      const angle=Math.PI/6+(index%8)*(Math.PI/4);
+      graphPositions.set(key,{x:Math.max(50,Math.min(950,base.x+125*Math.cos(angle))),y:Math.max(50,Math.min(600,base.y+125*Math.sin(angle)))});
+    }
+    const p=graphPositions.get(key);
+    html+='<g class="graph-edge-group graph-aux-edge" data-from="'+esc(fromKey)+'" data-to="'+esc(key)+'"><line class="graph-edge crosschain-link" x1="'+base.x+'" y1="'+base.y+'" x2="'+p.x+'" y2="'+p.y+'"></line></g>';
+    html+='<g class="graph-aux-node crosschain-node" data-aux-key="'+esc(key)+'" data-to-chain="'+esc(link.to_chain)+'" data-to-address="'+esc(link.to_address)+'" transform="translate('+p.x+" "+p.y+')" tabindex="0" role="button">'+
+      '<title>'+esc((link.service||"Cross-chain link")+" · "+link.confidence+" · "+link.to_chain+" · "+link.to_address)+'</title>'+
+      '<polygon points="0,-29 38,0 0,29 -38,0"></polygon>'+
+      '<text class="graph-label" x="0" y="-2" text-anchor="middle">'+esc(short(link.service||link.to_chain,10))+'</text>'+
+      '<text class="graph-sub" x="0" y="12" text-anchor="middle">'+esc(link.to_chain.toUpperCase()+" · "+short(link.to_address,5))+'</text></g>';
+  });
 
   if(model.nodes.length<=1){
     html+='<text class="graph-label" x="500" y="405" text-anchor="middle">No counterparties match the current filters</text>';
@@ -1648,6 +1732,19 @@ function renderGraph(payload){
     const node=nodeByKey.get(key);
     if(!node)return;
     attachGraphInteraction(svg,group,node,payload,false);
+  });
+
+  svg.querySelectorAll(".graph-aux-node.offchain-node").forEach(group=>{
+    const key=String(group.dataset.auxKey||"");
+    attachAuxGraphInteraction(svg,group,key,null);
+  });
+  svg.querySelectorAll(".graph-aux-node.crosschain-node").forEach(group=>{
+    const key=String(group.dataset.auxKey||"");
+    attachAuxGraphInteraction(svg,group,key,()=>{
+      const address=String(group.dataset.toAddress||"");
+      const chain=String(group.dataset.toChain||"");
+      if(address&&chain)openCryptoSearch(address,chain);
+    });
   });
 
   svg.querySelectorAll(".graph-expand-control").forEach(control=>{
