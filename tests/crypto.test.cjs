@@ -154,3 +154,63 @@ test("trace graph supports explicit H1 H2 H3 visual depth",()=>{
     assert.ok(css.includes(cls),"missing hop visual "+cls);
   }
 });
+
+
+test("crypto intelligence workspace exposes Chainalysis/TRM-style analytical modules",()=>{
+  const html=fs.readFileSync("crypto.html","utf8");
+  const client=fs.readFileSync("crypto.js","utf8");
+  for(const id of [
+    "cryptoPatternList","cryptoExposureSummary","pathFindButton","labelSeedButton",
+    "caseNewButton","monitorSeedButton","monitorCheckButton","crossChainFindings"
+  ]){
+    assert.ok(html.includes('id="'+id+'"'),"missing intelligence control "+id);
+  }
+  for(const fn of [
+    "detectPatterns","exposureFindings","shortestPath","saveLabel",
+    "monitorSeed","checkMonitored","crossChainFindings"
+  ]){
+    assert.ok(client.includes("function "+fn)||client.includes("async function "+fn),"missing "+fn);
+  }
+});
+
+test("case workspace supports PDF export, off-chain nodes and cross-chain links",()=>{
+  const html=fs.readFileSync("crypto.html","utf8");
+  const client=fs.readFileSync("crypto.js","utf8");
+  assert.ok(html.includes('id="caseExportPdfButton"'));
+  assert.ok(html.includes('id="caseOffchainToggle"'));
+  assert.ok(html.includes('id="caseCrosschainToggle"'));
+  assert.ok(html.includes('src="pdf-export.js'));
+  assert.ok(client.includes("async function exportCasePdf"));
+  assert.ok(client.includes("function saveOffchainNode"));
+  assert.ok(client.includes("function saveCrosschainLink"));
+});
+
+test("persistent Crypto workspace is authenticated and routed through Worker storage",()=>{
+  const index=fs.readFileSync("cloudflare-worker/index.js","utf8");
+  const gate=fs.readFileSync("cloudflare-worker/report-gate.js","utf8");
+  const auth=fs.readFileSync("usage-auth-fix.js","utf8");
+  assert.ok(index.includes('"/crypto-workspace"'));
+  assert.ok(index.includes("handleCryptoWorkspace"));
+  assert.ok(gate.includes('"/crypto-workspace-get"'));
+  assert.ok(gate.includes('"/crypto-workspace-put"'));
+  assert.ok(auth.includes("crypto-workspace"));
+});
+
+test("graph renders sourced off-chain and cross-chain entities with draggable interactions",()=>{
+  const client=fs.readFileSync("crypto.js","utf8");
+  const css=fs.readFileSync("crypto.css","utf8");
+  assert.ok(client.includes("attachAuxGraphInteraction"));
+  assert.ok(client.includes("offchain-node"));
+  assert.ok(client.includes("crosschain-node"));
+  assert.ok(css.includes(".graph-aux-node.offchain-node"));
+  assert.ok(css.includes(".graph-aux-node.crosschain-node"));
+  assert.ok(css.includes(".graph-edge.crosschain-link"));
+});
+
+test("service detection registry includes DEX and verified bridge categories",()=>{
+  const client=fs.readFileSync("crypto.js","utf8");
+  assert.ok(client.includes("Uniswap V2 Router"));
+  assert.ok(client.includes("Stargate USDC Pool"));
+  assert.ok(client.includes('category:"DEX"'));
+  assert.ok(client.includes('category:"BRIDGE"'));
+});
