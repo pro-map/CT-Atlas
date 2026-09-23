@@ -99,6 +99,112 @@ async function providerHealth(){
   }
 }
 
+function makeId(prefix){
+  const id=(globalThis.crypto&&typeof globalThis.crypto.randomUUID==="function")
+    ? globalThis.crypto.randomUUID()
+    : Date.now().toString(36)+Math.random().toString(36).slice(2);
+  return prefix+"-"+id;
+}
+
+async function loadCryptoWorkspace(){
+  try{
+    const response=await fetch(API_BASE+"/crypto-workspace?user_id="+encodeURIComponent(user()),{
+      headers:sessionHeaders(),cache:"no-store"
+    });
+    const payload=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(payload.error||"Unable to load Crypto workspace.");
+    cryptoWorkspace=payload.workspace||cryptoWorkspace;
+    cryptoWorkspace.labels=Array.isArray(cryptoWorkspace.labels)?cryptoWorkspace.labels:[];
+    cryptoWorkspace.watchlist=Array.isArray(cryptoWorkspace.watchlist)?cryptoWorkspace.watchlist:[];
+    cryptoWorkspace.cases=Array.isArray(cryptoWorkspace.cases)?cryptoWorkspace.cases:[];
+    cryptoWorkspace.alerts=Array.isArray(cryptoWorkspace.alerts)?cryptoWorkspace.alerts:[];
+    renderWorkspaceUi();
+    return true;
+  }catch(error){
+    console.warn("Crypto workspace load failed",error);
+    setStatus("Crypto analysis is available, but the persistent investigation workspace could not be loaded.","warning");
+    return false;
+  }
+}
+
+async function saveCryptoWorkspace(){
+  document.body.classList.add("workspace-saving");
+  try{
+    const response=await fetch(API_BASE+"/crypto-workspace",{
+      method:"POST",
+      headers:sessionHeaders({"Content-Type":"application/json"}),
+      body:JSON.stringify({user_id:user(),workspace:cryptoWorkspace})
+    });
+    const payload=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(payload.error||"Unable to save Crypto workspace.");
+    cryptoWorkspace=payload.workspace||cryptoWorkspace;
+    return true;
+  }catch(error){
+    console.warn("Crypto workspace save failed",error);
+    setStatus(error?.message||"Unable to save Crypto workspace.","warning");
+    return false;
+  }finally{
+    document.body.classList.remove("workspace-saving");
+  }
+}
+
+function scheduleWorkspaceSave(){
+  clearTimeout(workspaceSaveTimer);
+  workspaceSaveTimer=setTimeout(()=>saveCryptoWorkspace(),250);
+}
+
+function normalizeAddressForChain(address,chain){
+  const value=String(address||"");
+  return ["ethereum","bsc","polygon","arbitrum","base"].includes(chain)?value.toLowerCase():value;
+}
+
+function labelForAddress(address,chain=lastPayload?.chain){
+  const normalized=normalizeAddressForChain(address,chain);
+  return (cryptoWorkspace.labels||[]).find(label=>
+    label.chain===chain&&normalizeAddressForChain(label.address,chain)===normalized
+  )||null;
+}
+
+function watchesForAddress(address,chain=lastPayload?.chain){
+  const normalized=normalizeAddressForChain(address,chain);
+  return (cryptoWorkspace.watchlist||[]).filter(item=>
+    item.chain===chain&&normalizeAddressForChain(item.address,chain)===normalized
+  );
+}
+
+function categoryTargets(category,chain=lastPayload?.chain){
+  const target=String(category||"").toUpperCase();
+  const values=new Set();
+  for(const label of cryptoWorkspace.labels||[]){
+    if(label.chain===chain&&String(label.category||"").toUpperCase()===target){
+      values.add(normalizeAddressForChain(label.address,chain));
+    }
+  }
+  for(const watch of cryptoWorkspace.watchlist||[]){
+    if(watch.chain!==chain)continue;
+    if((watch.categories||[]).map(x=>String(x).toUpperCase()).includes(target)){
+      values.add(normalizeAddressForChain(watch.address,chain));
+    }
+  }
+  return values;
+}
+
+function visibleRelevantLabels(){
+  if(!lastPayload)return [];
+  const visible=new Set([normalizeAddressForChain(lastPayload.query,lastPayload.chain)]);
+  for(const node of currentNetworkModel?.nodes||[])visible.add(node.key);
+  return (cryptoWorkspace.labels||[]).filter(label=>
+    label.chain===lastPayload.chain&&visible.has(normalizeAddressForChain(label.address,label.chain))
+  );
+}
+
+function renderWorkspaceUi(){
+  renderLabelList();
+  renderCaseUi();
+  renderAlerts();
+  if(lastPayload?.kind==="address")renderIntelligencePanels();
+}
+
 function kpi(label,value){
   return '<div class="crypto-kpi"><div class="crypto-kpi-value">'+esc(value)+'</div><div class="crypto-kpi-label">'+esc(label)+'</div></div>';
 }
