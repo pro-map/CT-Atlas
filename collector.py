@@ -112,7 +112,7 @@ AI_SELECTION_BATCH_SIZE = max(
     ),
 )
 
-AI_SELECTION_VERSION = "gemini-ct-selection-v5-actor-group"
+AI_SELECTION_VERSION = "gemini-ct-selection-v6-incident-model"
 AI_SELECTION_CACHE_FILE = "ai_article_selection_cache.json"
 
 AI_SELECTION_ATTEMPTS = 5
@@ -209,10 +209,10 @@ lot of routine wire copy (many short items about the same court case, minor
 detentions, or a story simply getting picked up and translated by many
 outlets) -- none of that reflects real operational activity on the ground.
 A location only qualifies as a hub/hotspot when the supplied
-top_countries_by_attack_ct_action_activity / top_regions_by_attack_ct_action_activity
-fields show a genuinely high count of Attacks or Counter Terrorism Action
-events specifically -- actual attacks, armed clashes, or offensive/combat
-counter-terrorism operations (raids, sieges, captures). A high count of
+top_countries_by_incident_activity / top_regions_by_incident_activity fields
+show genuinely high DISTINCT incident counts. unique_attacks counts only
+records explicitly classified is_attack=true; judicial/arrest/reporting
+volume must never be interpreted as attack frequency. A high count of
 plain "Arrests" (routine, no-combat custody) does NOT by itself make
 somewhere a hub, even at high volume -- only a large-scale, combat-linked
 operation (which the data already classifies as Counter Terrorism Action)
@@ -3673,6 +3673,33 @@ AI_SELECTION_SCHEMA = {
                     "actor_group": {
                         "type": "string"
                     },
+                    "primary_event_type": {
+                        "type": "string",
+                        "enum": [
+                            "ATTACK",
+                            "ATTEMPTED_ATTACK",
+                            "DISRUPTED_PLOT",
+                            "CT_OPERATION",
+                            "ARREST",
+                            "JUDICIAL",
+                            "FINANCING",
+                            "WEAPONS",
+                            "ONLINE_CYBER_AI",
+                            "CBRN",
+                            "PIRACY",
+                            "OTHER_CT"
+                        ]
+                    },
+                    "is_attack": {
+                        "type": "boolean"
+                    },
+                    "incident_anchor": {
+                        "type": "string"
+                    },
+                    "update_type": {
+                        "type": "string",
+                        "enum": ["INITIAL", "FOLLOW_UP", "ARREST_UPDATE", "INVESTIGATION_UPDATE", "JUDICIAL_UPDATE", "OTHER_UPDATE"]
+                    },
                     "reason": {
                         "type": "string"
                     },
@@ -3687,6 +3714,10 @@ AI_SELECTION_SCHEMA = {
                     "english_summary",
                     "canonical_event",
                     "actor_group",
+                    "primary_event_type",
+                    "is_attack",
+                    "incident_anchor",
+                    "update_type",
                     "reason",
                 ],
             },
@@ -3889,6 +3920,30 @@ An event can legitimately carry both "Attacks" and "Counter Terrorism Action"
 when terrorists attacked first and were then killed/captured by responding
 forces. A routine arrest with no combat should carry "Arrests" only, never
 "Counter Terrorism Action".
+
+INCIDENT / CASE MODEL (mandatory):
+- primary_event_type is mutually exclusive and describes WHAT THE CURRENT
+  RECORD ITSELF reports, not the historical event mentioned in background.
+- Set is_attack=true ONLY when the current record describes an actual
+  terrorist/militant act of violence that occurred. A trial, arrest,
+  investigation, anniversary or later update ABOUT an attack is not an attack.
+- ATTEMPTED_ATTACK means violence was attempted but the attack did not
+  successfully occur; DISRUPTED_PLOT means authorities disrupted a plot before
+  an attack attempt.
+- CT_OPERATION means an offensive/combat counter-terrorism operation by
+  authorities. ARREST is non-combat custody. JUDICIAL is charges, trial,
+  conviction, sentencing, appeal or extradition.
+- incident_anchor must identify the UNDERLYING real-world incident/case in a
+  short stable English form, including the best-supported place and date when
+  available. Follow-up reporting about the same case MUST reuse the same
+  conceptual anchor rather than describing the new article. Example:
+  "Solingen attack Germany 2024-08-23". If the record is an unrelated new
+  arrest/case, give it its own anchor.
+- update_type=INITIAL for the underlying incident itself; otherwise use the
+  appropriate FOLLOW_UP/ARREST_UPDATE/INVESTIGATION_UPDATE/JUDICIAL_UPDATE.
+These fields are used to count DISTINCT incidents in country analysis. Never
+turn multiple articles or follow-up developments about one case into multiple
+attacks.
 
 Keep the reason concise and specific.
 """
@@ -4847,6 +4902,36 @@ def apply_ai_selection(
             "actor_group"
         )
     )
+
+    primary_event_type = clean_text(result.get("primary_event_type") or "OTHER_CT").upper()
+    allowed_primary_types = {
+        "ATTACK", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT", "CT_OPERATION",
+        "ARREST", "JUDICIAL", "FINANCING", "WEAPONS", "ONLINE_CYBER_AI",
+        "CBRN", "PIRACY", "OTHER_CT",
+    }
+    if primary_event_type not in allowed_primary_types:
+        primary_event_type = "OTHER_CT"
+
+    is_attack = bool(result.get("is_attack")) and primary_event_type == "ATTACK"
+    incident_anchor = clean_text(result.get("incident_anchor") or canonical_event or english_title)
+    update_type = clean_text(result.get("update_type") or "OTHER_UPDATE").upper()
+    allowed_update_types = {
+        "INITIAL", "FOLLOW_UP", "ARREST_UPDATE", "INVESTIGATION_UPDATE",
+        "JUDICIAL_UPDATE", "OTHER_UPDATE",
+    }
+    if update_type not in allowed_update_types:
+        update_type = "OTHER_UPDATE"
+
+    event["primary_event_type"] = primary_event_type
+    event["is_attack"] = is_attack
+    event["incident_anchor"] = incident_anchor
+    event["update_type"] = update_type
+
+    if incident_anchor:
+        normalized_anchor = unicodedata.normalize("NFKD", incident_anchor)
+        normalized_anchor = "".join(ch for ch in normalized_anchor if not unicodedata.combining(ch))
+        normalized_anchor = re.sub(r"[^a-z0-9]+", " ", normalized_anchor.lower()).strip()
+        event["incident_id"] = "inc-" + hashlib.sha256(normalized_anchor.encode("utf-8")).hexdigest()[:16]
 
     event[
         "translated_to_english"
@@ -8517,59 +8602,60 @@ def _weekly_event_time(event):
     )
 
 
-# Real "hub" activity per the analyst's own definition: sustained attacks or
-# offensive/combat counter-terrorism operations (raids, clashes, captures).
-# Deliberately excludes "Arrests" (plain, no-combat custody -- can be high in
-# volume purely because a country's courts/police generate a lot of routine
-# wire copy, without a single attack or clash happening) and every other
-# category, so a country's rank here can never be driven by reporting volume
-# on financing, legal proceedings, CBRN or online-radicalization stories.
-HIGH_SEVERITY_HUB_CATEGORIES = {"Attacks", "Counter Terrorism Action"}
-
-
 def _weekly_geo_breakdown(events, field_name, limit=8):
     """
-    Ranks locations by ACTUAL high-severity activity (attacks/clashes/combat
-    CT operations), not by raw event or article count -- a location with a
-    lot of routine arrest/legal reporting must never outrank one with real
-    attacks just because more articles were written about it. total_events
-    and categories are still reported for context, but they are not what
-    determines the ranking or ordering below.
+    Incident-based geographic picture. Raw records/articles never determine
+    operational significance. Distinct incident_id values are counted once,
+    with attacks counted only when is_attack is explicitly true.
     """
-    totals = Counter()
-    high_severity = Counter()
-    categories_by_location = defaultdict(Counter)
+    records = Counter()
+    incident_sets = defaultdict(lambda: defaultdict(set))
 
     for event in events:
         location = clean_text(event.get(field_name, ""))
         if not location:
             continue
 
-        totals[location] += 1
+        records[location] += 1
+        incident_id = clean_text(event.get("incident_id") or event.get("id") or "")
+        if not incident_id:
+            continue
 
-        categories = event.get("categories") or (
-            [event.get("category")] if event.get("category") else []
-        )
-        categories = set(categories)
+        primary = clean_text(event.get("primary_event_type") or "OTHER_CT").upper()
+        if bool(event.get("is_attack")) and primary == "ATTACK":
+            incident_sets[location]["ATTACK"].add(incident_id)
+        elif primary in {
+            "CT_OPERATION", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT", "ARREST",
+            "JUDICIAL", "FINANCING", "WEAPONS", "ONLINE_CYBER_AI", "CBRN",
+            "PIRACY", "OTHER_CT",
+        }:
+            incident_sets[location][primary].add(incident_id)
 
-        for category in categories:
-            if category:
-                categories_by_location[location][category] += 1
-
-        if categories & HIGH_SEVERITY_HUB_CATEGORIES:
-            high_severity[location] += 1
+    def count(location, kind):
+        return len(incident_sets[location].get(kind, set()))
 
     ranked = sorted(
-        totals.keys(),
-        key=lambda location: (-high_severity[location], -totals[location]),
+        records.keys(),
+        key=lambda location: (
+            -count(location, "ATTACK"),
+            -count(location, "CT_OPERATION"),
+            -count(location, "DISRUPTED_PLOT"),
+            location,
+        ),
     )[:limit]
 
     return [
         {
             "name": location,
-            "attacks_or_ct_action_events": high_severity[location],
-            "total_events": totals[location],
-            "top_categories": categories_by_location[location].most_common(3),
+            "unique_attacks": count(location, "ATTACK"),
+            "attempted_attacks": count(location, "ATTEMPTED_ATTACK"),
+            "disrupted_plots": count(location, "DISRUPTED_PLOT"),
+            "unique_ct_operations": count(location, "CT_OPERATION"),
+            "arrest_cases": count(location, "ARREST"),
+            "judicial_cases": count(location, "JUDICIAL"),
+            "financing_cases": count(location, "FINANCING"),
+            "weapons_cases": count(location, "WEAPONS"),
+            "reporting_records": records[location],
         }
         for location in ranked
     ]
@@ -8621,13 +8707,13 @@ def _weekly_stats(events):
             _weekly_category_counts(
                 events
             ),
-        "top_countries_by_attack_ct_action_activity":
+        "top_countries_by_incident_activity":
             _weekly_geo_breakdown(
                 events,
                 "country",
                 10,
             ),
-        "top_regions_by_attack_ct_action_activity":
+        "top_regions_by_incident_activity":
             _weekly_geo_breakdown(
                 events,
                 "region",
