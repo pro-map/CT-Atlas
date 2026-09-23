@@ -29,3 +29,9 @@ storage = "sqlite"
 #   ETHERSCAN_API_KEY  -> Etherscan API V2 for Ethereum and supported EVM chains.
 #   TRONGRID_API_KEY   -> TronGrid Mainnet API key sent as TRON-PRO-API-KEY.
 # Bitcoin uses Blockstream Esplora's public read-only API and needs no secret.
+
+
+# Automatic Crypto watchlist monitoring. The Worker rotates a maximum of
+# 8 monitored wallets per run to protect explorer/API and subrequest quotas.
+[triggers]
+crons = ["17 */6 * * *"]
