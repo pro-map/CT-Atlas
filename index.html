@@ -5856,6 +5856,8 @@ Visible rate
             if (!response.ok || !payload.ok || !payload.username) throw new Error("Session expired.");
             sessionStorage.setItem(TOKEN_EXPIRY_KEY, String(payload.expires_at || ""));
             unlock(payload.username);
+            const workspace = new URLSearchParams(window.location.search).get("workspace");
+            if (workspace !== "map") window.location.replace("main.html");
         } catch (restoreError) {
             console.warn("Session restore failed:", restoreError);
             lock();
