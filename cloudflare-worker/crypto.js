@@ -554,6 +554,17 @@ async function analyzeTron(target, limit, env) {
   };
 }
 
+async function analyzeCryptoAddress(address, chain, limit, env) {
+  const target = detectCryptoInput(address, chain);
+  if (target.error) throw new Error(target.error);
+  if (target.kind !== "address") throw new Error("Automatic monitoring supports wallet addresses only.");
+  const bounded = clamp(Math.trunc(finiteNumber(limit, 50)), 10, 100);
+  if (target.chain === "bitcoin") return analyzeBitcoin(target, bounded);
+  if (target.chain === "tron") return analyzeTron(target, bounded, env);
+  if (EVM_CHAIN_KEYS.has(target.chain)) return analyzeEvm(target, bounded, env);
+  throw new Error("Unsupported blockchain.");
+}
+
 async function authenticate(request, env, username) {
   const token = cleanText(request.headers.get("X-Session-Token"), 160);
   if (!token) return { error: "Authenticated session required.", status: 401 };
@@ -608,5 +619,6 @@ export {
   detectCryptoInput,
   aggregateFlows,
   buildObservations,
+  analyzeCryptoAddress,
   handleCrypto
 };
