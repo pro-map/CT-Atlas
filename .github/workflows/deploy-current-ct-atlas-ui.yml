@@ -87,6 +87,9 @@ jobs:
           grep -q 'main.html' crypto.html
           grep -q 'reportResultVisuals' index.html
           grep -q 'deepSearchVisuals' deep-search.js
+          grep -q 'V12 — COMPACT HEADER' index.html
+          grep -q '#sessionActions {' index.html
+          grep -q -- '-webkit-line-clamp: 3' index.html
           grep -q 'class="time-button active"' index.html
           grep -q 'data-days="90"' index.html
           grep -q 'let selectedDays =' index.html
