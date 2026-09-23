@@ -402,6 +402,693 @@ function openCryptoSearch(address,chain){
   }
 }
 
+function maxCountInWindow(rows,windowMs){
+  const times=rows.map(row=>Date.parse(row.time||"")).filter(Number.isFinite).sort((a,b)=>a-b);
+  let best=0,left=0;
+  for(let right=0;right<times.length;right++){
+    while(times[right]-times[left]>windowMs)left++;
+    best=Math.max(best,right-left+1);
+  }
+  return best;
+}
+
+function amountCluster(rows){
+  const values=rows.map(row=>Math.abs(Number(row.amount))).filter(x=>Number.isFinite(x)&&x>0).sort((a,b)=>a-b);
+  let best=[];
+  for(let i=0;i<values.length;i++){
+    const anchor=values[i];
+    const cluster=values.filter(value=>Math.abs(value-anchor)/Math.max(anchor,1e-12)<=0.03);
+    if(cluster.length>best.length)best=cluster;
+  }
+  return best;
+}
+
+function detectPatterns(){
+  const rows=allTraceRows(true);
+  const patterns=[];
+  if(!rows.length)return patterns;
+
+  const bySource=new Map();
+  for(const row of rows){
+    const key=String(row._trace_source||"");
+    if(!bySource.has(key))bySource.set(key,[]);
+    bySource.get(key).push(row);
+  }
+
+  for(const [source,sourceRows] of bySource){
+    const incoming=sourceRows.filter(row=>row.direction==="IN");
+    const outgoing=sourceRows.filter(row=>row.direction==="OUT");
+    const inCp=new Set(incoming.flatMap(row=>row.counterparties||[]));
+    const outCp=new Set(outgoing.flatMap(row=>row.counterparties||[]));
+
+    if(inCp.size>=4){
+      patterns.push({
+        name:"FAN-IN / CONSOLIDATION",
+        severity:inCp.size>=10?"medium":"low",
+        metric:inCp.size+" incoming counterparties",
+        detail:"Multiple observed counterparties converge on "+short(source,8)+". This is a structural consolidation pattern only."
+      });
+    }
+    if(outCp.size>=4){
+      patterns.push({
+        name:"FAN-OUT / DISPERSION",
+        severity:outCp.size>=10?"medium":"low",
+        metric:outCp.size+" outgoing counterparties",
+        detail:short(source,8)+" distributes value to multiple observed counterparties."
+      });
+    }
+
+    const velocity=maxCountInWindow(sourceRows,24*3600000);
+    if(velocity>=10){
+      patterns.push({
+        name:"HIGH VELOCITY",
+        severity:velocity>=30?"high":"medium",
+        metric:velocity+" records / 24h",
+        detail:"High transaction frequency is observed in a rolling 24-hour window."
+      });
+    }
+    const burst=maxCountInWindow(sourceRows,3600000);
+    if(burst>=6){
+      patterns.push({
+        name:"BURST ACTIVITY",
+        severity:burst>=15?"high":"medium",
+        metric:burst+" records / 1h",
+        detail:"A concentrated burst of on-chain activity is present in the returned sample."
+      });
+    }
+
+    const times=sourceRows.map(row=>Date.parse(row.time||"")).filter(Number.isFinite).sort((a,b)=>a-b);
+    let maxGap=0;
+    for(let i=1;i<times.length;i++)maxGap=Math.max(maxGap,times[i]-times[i-1]);
+    if(maxGap>=30*86400000){
+      patterns.push({
+        name:"DORMANT → ACTIVE",
+        severity:"low",
+        metric:Math.floor(maxGap/86400000)+" day observed gap",
+        detail:"The returned history contains a long inactivity gap followed by later activity. Full lifetime history may be required to confirm dormancy."
+      });
+    }
+
+    const cluster=amountCluster(outgoing);
+    if(cluster.length>=4){
+      const center=cluster.reduce((sum,x)=>sum+x,0)/cluster.length;
+      patterns.push({
+        name:"REPEATED SIMILAR AMOUNTS",
+        severity:"low",
+        metric:cluster.length+" transfers near "+fmtNumber(center),
+        detail:"Several outgoing transfers have closely similar values (±3%). This can reflect batching, splitting, payroll-like activity or other benign/illicit processes."
+      });
+    }
+
+    const incomingSorted=incoming.filter(row=>Number.isFinite(Date.parse(row.time||""))).sort((a,b)=>Date.parse(a.time)-Date.parse(b.time));
+    const outgoingSorted=outgoing.filter(row=>Number.isFinite(Date.parse(row.time||""))).sort((a,b)=>Date.parse(a.time)-Date.parse(b.time));
+    let passThrough=0;
+    for(const inc of incomingSorted){
+      const it=Date.parse(inc.time);
+      const ia=Math.abs(Number(inc.amount)||0);
+      const match=outgoingSorted.find(out=>{
+        const dt=Date.parse(out.time)-it;
+        const oa=Math.abs(Number(out.amount)||0);
+        return dt>=0&&dt<=6*3600000&&ia>0&&oa>=ia*0.5&&oa<=ia*1.5;
+      });
+      if(match)passThrough++;
+    }
+    if(passThrough>=2){
+      patterns.push({
+        name:"RAPID PASS-THROUGH",
+        severity:passThrough>=5?"high":"medium",
+        metric:passThrough+" matched receive/send pairs ≤6h",
+        detail:"Incoming value is followed by similarly sized outgoing value within six hours. This does not by itself establish layering or common ownership."
+      });
+    }
+  }
+
+  const model=currentNetworkModel;
+  if(model&&model.maxVisibleDepth>=2){
+    const degree=new Map();
+    for(const edge of model.edges){
+      degree.set(edge.fromKey,(degree.get(edge.fromKey)||0)+1);
+      degree.set(edge.toKey,(degree.get(edge.toKey)||0)+1);
+    }
+    const chainLike=model.nodes.filter(node=>node.depth>0&&node.depth<model.maxVisibleDepth&&(degree.get(node.key)||0)<=3);
+    if(chainLike.length>=2){
+      patterns.push({
+        name:"POSSIBLE PEELING-LIKE CHAIN",
+        severity:"low",
+        metric:chainLike.length+" low-branch intermediate nodes",
+        detail:"The traced graph contains a narrow multi-hop continuation resembling a peeling-chain topology. Confirmation requires full transaction/value analysis and should not be inferred from topology alone."
+      });
+    }
+  }
+
+  const unique=new Map();
+  for(const item of patterns){
+    const key=item.name+"|"+item.metric+"|"+item.detail;
+    if(!unique.has(key))unique.set(key,item);
+  }
+  return [...unique.values()].slice(0,20);
+}
+
+function directedAdjacency(){
+  const adjacency=new Map();
+  for(const edge of currentNetworkModel?.edges||[]){
+    if(!adjacency.has(edge.fromKey))adjacency.set(edge.fromKey,[]);
+    adjacency.get(edge.fromKey).push(edge.toKey);
+  }
+  return adjacency;
+}
+
+function shortestPath(targetSet,maxHops=4){
+  if(!currentNetworkModel)return null;
+  const root=currentNetworkModel.rootKey;
+  const targets=new Set([...targetSet].map(value=>normalizeAddressForChain(value,lastPayload.chain)));
+  if(targets.has(root))return [root];
+  const adjacency=directedAdjacency();
+  const queue=[[root,[root]]];
+  const visited=new Set([root]);
+  while(queue.length){
+    const [node,path]=queue.shift();
+    const hops=path.length-1;
+    if(hops>=maxHops)continue;
+    for(const next of adjacency.get(node)||[]){
+      if(visited.has(next))continue;
+      const nextPath=[...path,next];
+      if(targets.has(next))return nextPath;
+      visited.add(next);
+      queue.push([next,nextPath]);
+    }
+  }
+  return null;
+}
+
+function displayAddressForKey(key){
+  const node=(currentNetworkModel?.nodes||[]).find(item=>item.key===key);
+  if(node)return node.id;
+  const label=(cryptoWorkspace.labels||[]).find(item=>normalizeAddressForChain(item.address,item.chain)===key&&item.chain===lastPayload?.chain);
+  return label?.address||key;
+}
+
+function exposureFindings(){
+  if(!lastPayload||!currentNetworkModel)return [];
+  const sensitive=new Set(["CT WATCHLIST","SANCTIONS","DARKNET","MIXER","EXCHANGE","BRIDGE","DEX","GAMBLING","SCAM/FRAUD"]);
+  const findings=[];
+  const seen=new Set();
+
+  const candidates=[];
+  for(const label of cryptoWorkspace.labels||[]){
+    if(label.chain!==lastPayload.chain||!sensitive.has(String(label.category||"").toUpperCase()))continue;
+    candidates.push({address:label.address,category:label.category,name:label.name,confidence:label.confidence,source:"label"});
+  }
+  for(const watch of cryptoWorkspace.watchlist||[]){
+    if(watch.chain!==lastPayload.chain)continue;
+    for(const category of watch.categories||[]){
+      if(sensitive.has(String(category).toUpperCase())){
+        candidates.push({address:watch.address,category,name:watch.label||short(watch.address,8),confidence:"ANALYST",source:"watchlist"});
+      }
+    }
+  }
+
+  for(const item of candidates){
+    const key=normalizeAddressForChain(item.address,lastPayload.chain);
+    if(seen.has(item.category+"|"+key))continue;
+    seen.add(item.category+"|"+key);
+    const path=shortestPath(new Set([key]),3);
+    if(!path||path.length<2)continue;
+    findings.push({
+      ...item,
+      hop:path.length-1,
+      path
+    });
+  }
+
+  const rootEntry=tracePayloads.get(currentNetworkModel.rootKey);
+  const rootRows=rootEntry?filterRows(rootEntry.payload):[];
+  const totalOutgoing=rootRows.filter(row=>row.direction==="OUT").reduce((sum,row)=>sum+Math.abs(Number(row.amount)||0),0);
+  const directValueByCategory=new Map();
+  for(const row of rootRows.filter(row=>row.direction==="OUT")){
+    const cps=(row.counterparties||[]).filter(Boolean);
+    if(!cps.length)continue;
+    const share=Math.abs(Number(row.amount)||0)/cps.length;
+    for(const cp of cps){
+      const label=labelForAddress(cp,lastPayload.chain);
+      if(label&&sensitive.has(String(label.category||"").toUpperCase())){
+        directValueByCategory.set(label.category,(directValueByCategory.get(label.category)||0)+share);
+      }
+    }
+  }
+
+  return findings.sort((a,b)=>a.hop-b.hop||String(a.category).localeCompare(String(b.category))).map(item=>({
+    ...item,
+    direct_share:item.hop===1&&totalOutgoing>0
+      ? Math.min(100,100*(directValueByCategory.get(item.category)||0)/totalOutgoing)
+      : null
+  }));
+}
+
+function renderPatterns(){
+  const box=document.getElementById("cryptoPatternList");
+  if(!box)return;
+  const patterns=detectPatterns();
+  if(!patterns.length){
+    box.innerHTML='<div class="intel-result">No configured behavioral pattern crossed its heuristic threshold in the currently traced/filtered sample.</div>';
+    return;
+  }
+  box.innerHTML=patterns.map(item=>
+    '<div class="intel-item"><div class="intel-item-head"><div class="intel-title">'+esc(item.name)+'</div>'+
+    '<span class="intel-badge '+esc(item.severity)+'">'+esc(item.severity.toUpperCase())+'</span></div>'+
+    '<div class="intel-meta">'+esc(item.metric)+'</div><div class="intel-detail">'+esc(item.detail)+'</div></div>'
+  ).join("");
+}
+
+function renderExposure(){
+  const box=document.getElementById("cryptoExposureSummary");
+  if(!box)return;
+  const findings=exposureFindings();
+  if(!findings.length){
+    box.innerHTML='<div class="intel-result">No path from the seed to a currently labelled sensitive category was observed within H1–H3.</div>';
+    return;
+  }
+  box.innerHTML=findings.map(item=>{
+    const label=item.name||short(item.address,8);
+    const share=item.direct_share!==null
+      ? '<div class="exposure-row"><span>Direct value</span><span class="exposure-bar"><i style="width:'+Math.max(2,item.direct_share)+'%"></i></span><strong>'+item.direct_share.toFixed(1)+'%</strong></div>'
+      :"";
+    return '<div class="intel-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.category)+' · H'+item.hop+'</div>'+
+      '<div class="intel-meta">'+esc(label)+' · '+esc(short(item.address,9))+'</div></div><span class="intel-badge exposure">EXPOSURE</span></div>'+
+      share+'<div class="intel-detail">Observed path: '+item.path.map(key=>esc(short(displayAddressForKey(key),6))).join(" → ")+'</div></div>';
+  }).join("");
+}
+
+function renderPath(path){
+  const box=document.getElementById("pathResult");
+  if(!box)return;
+  if(!path){
+    box.textContent="No observed directed path matched the current target within the configured hop limit.";
+    return;
+  }
+  lastFoundPath=path;
+  box.innerHTML='<div class="intel-meta">SHORTEST OBSERVED PATH · '+(path.length-1)+' HOP(S)</div><div class="intel-path">'+
+    path.map((key,index)=>'<span class="intel-path-node" title="'+esc(displayAddressForKey(key))+'">'+esc(short(displayAddressForKey(key),7))+'</span>'+
+      (index<path.length-1?'<span class="intel-path-arrow">→</span>':"")).join("")+
+    "</div>";
+}
+
+function runPathFinder(){
+  if(!currentNetworkModel)return;
+  const target=String(document.getElementById("pathTarget")?.value||"").trim();
+  const category=String(document.getElementById("pathCategory")?.value||"").trim();
+  const maxHops=Math.max(1,Math.min(4,Number(document.getElementById("pathMaxHops")?.value||3)||3));
+  let targets=new Set();
+  if(target)targets.add(normalizeAddressForChain(target,lastPayload.chain));
+  else if(category)targets=categoryTargets(category,lastPayload.chain);
+  else{
+    document.getElementById("pathResult").textContent="Enter a target address or choose a target category.";
+    return;
+  }
+  renderPath(shortestPath(targets,maxHops));
+}
+
+function renderLabelList(){
+  const box=document.getElementById("cryptoLabelList");
+  if(!box)return;
+  const labels=lastPayload?visibleRelevantLabels():(cryptoWorkspace.labels||[]).slice(0,50);
+  if(!labels.length){
+    box.innerHTML='<div class="intel-result">No sourced labels are attached to the currently visible network.</div>';
+    return;
+  }
+  box.innerHTML=labels.map(label=>{
+    const source=label.source_url
+      ? '<a href="'+esc(label.source_url)+'" target="_blank" rel="noopener noreferrer">'+esc(label.source_title||label.source_url)+'</a>'
+      : esc(label.source_title||label.source_type||"Analyst source");
+    return '<div class="intel-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(label.name||label.category)+'</div>'+
+      '<div class="intel-meta">'+esc(label.category)+' · '+esc(short(label.address,9))+'</div></div>'+
+      '<span class="intel-badge '+String(label.confidence||"low").toLowerCase()+'">'+esc(label.confidence||"LOW")+'</span></div>'+
+      '<div class="label-source">SOURCE: '+source+'</div>'+
+      (label.notes?'<div class="intel-detail">'+esc(label.notes)+'</div>':"")+
+      '<div class="intel-actions"><button type="button" class="crypto-small-button label-delete" data-id="'+esc(label.id)+'">DELETE</button></div></div>';
+  }).join("");
+  box.querySelectorAll(".label-delete").forEach(button=>button.addEventListener("click",()=>{
+    cryptoWorkspace.labels=(cryptoWorkspace.labels||[]).filter(item=>item.id!==button.dataset.id);
+    scheduleWorkspaceSave();renderWorkspaceUi();renderFilteredViews();
+  }));
+}
+
+function openLabelForm(address){
+  const form=document.getElementById("labelForm");
+  if(!form)return;
+  form.hidden=false;
+  document.getElementById("labelAddress").value=address||lastPayload?.query||"";
+  document.getElementById("labelName").focus();
+}
+
+function saveLabel(){
+  const address=String(document.getElementById("labelAddress")?.value||"").trim();
+  if(!lastPayload||!isSearchableAddress(address,lastPayload.chain)){
+    setStatus("Enter a valid address on the current blockchain before saving a label.","warning");
+    return;
+  }
+  const name=String(document.getElementById("labelName")?.value||"").trim();
+  const sourceTitle=String(document.getElementById("labelSourceTitle")?.value||"").trim();
+  const sourceType=String(document.getElementById("labelSourceType")?.value||"").trim();
+  if(!name||(!sourceTitle&&!sourceType)){
+    setStatus("A label/entity name and a source description are required.","warning");
+    return;
+  }
+  const item={
+    id:makeId("label"),
+    chain:lastPayload.chain,
+    address,
+    name,
+    category:String(document.getElementById("labelCategory")?.value||"OTHER"),
+    confidence:String(document.getElementById("labelConfidence")?.value||"LOW"),
+    source_type:sourceType,
+    source_title:sourceTitle,
+    source_url:String(document.getElementById("labelSourceUrl")?.value||"").trim(),
+    notes:String(document.getElementById("labelNotes")?.value||"").trim(),
+    created_at:new Date().toISOString()
+  };
+  const key=normalizeAddressForChain(address,lastPayload.chain);
+  cryptoWorkspace.labels=(cryptoWorkspace.labels||[]).filter(label=>
+    !(label.chain===lastPayload.chain&&normalizeAddressForChain(label.address,label.chain)===key&&label.category===item.category)
+  );
+  cryptoWorkspace.labels.unshift(item);
+  document.getElementById("labelForm").hidden=true;
+  scheduleWorkspaceSave();
+  renderWorkspaceUi();renderFilteredViews();
+  setStatus("Sourced analyst label saved.","success");
+}
+
+function renderCaseUi(){
+  const select=document.getElementById("caseSelect");
+  const detail=document.getElementById("caseDetail");
+  if(!select||!detail)return;
+  const cases=cryptoWorkspace.cases||[];
+  select.innerHTML='<option value="">No case selected</option>'+cases.map(item=>
+    '<option value="'+esc(item.id)+'">'+esc(item.name)+' · '+esc(item.status||"OPEN")+'</option>'
+  ).join("");
+  if(activeCaseId&&cases.some(item=>item.id===activeCaseId))select.value=activeCaseId;
+  else activeCaseId="";
+
+  const active=cases.find(item=>item.id===activeCaseId);
+  if(!active){detail.textContent="Select or create a case to persist seeds, paths and analyst notes.";return;}
+  detail.innerHTML='<div class="intel-title">'+esc(active.name)+'</div>'+
+    '<div class="intel-detail">'+esc(active.description||"No description")+'</div>'+
+    '<div class="intel-meta">SEEDS</div><div>'+((active.seed_addresses||[]).map(address=>'<span class="case-pill">'+esc(short(address,8))+'</span>').join("")||"—")+'</div>'+
+    '<div class="intel-meta" style="margin-top:7px">SAVED PATHS · '+(active.saved_paths||[]).length+'</div>'+
+    '<div class="intel-meta" style="margin-top:7px">NOTES · '+(active.notes||[]).length+'</div>';
+}
+
+function createCase(){
+  const name=String(document.getElementById("caseName")?.value||"").trim();
+  if(!name){setStatus("Enter a case name.","warning");return;}
+  const item={
+    id:makeId("case"),name,
+    description:String(document.getElementById("caseDescription")?.value||"").trim(),
+    status:"OPEN",chain:lastPayload?.chain||"",seed_addresses:[],saved_paths:[],notes:[],
+    created_at:new Date().toISOString()
+  };
+  cryptoWorkspace.cases.unshift(item);
+  activeCaseId=item.id;
+  document.getElementById("caseCreateForm").hidden=true;
+  scheduleWorkspaceSave();renderCaseUi();
+}
+
+function activeCase(){
+  return (cryptoWorkspace.cases||[]).find(item=>item.id===activeCaseId)||null;
+}
+
+function addSeedToCase(){
+  const item=activeCase();
+  if(!item||!lastPayload?.query){setStatus("Select a case first.","warning");return;}
+  item.seed_addresses=Array.isArray(item.seed_addresses)?item.seed_addresses:[];
+  if(!item.seed_addresses.includes(lastPayload.query))item.seed_addresses.push(lastPayload.query);
+  item.chain=item.chain||lastPayload.chain;
+  item.updated_at=new Date().toISOString();
+  scheduleWorkspaceSave();renderCaseUi();setStatus("Current seed added to case.","success");
+}
+
+function savePathToCase(){
+  const item=activeCase();
+  if(!item){setStatus("Select a case first.","warning");return;}
+  if(!lastFoundPath||lastFoundPath.length<2){setStatus("Run Path Finder first, then save the resulting path.","warning");return;}
+  item.saved_paths=Array.isArray(item.saved_paths)?item.saved_paths:[];
+  item.saved_paths.unshift({
+    id:makeId("path"),
+    name:"Path "+new Date().toLocaleString(),
+    nodes:lastFoundPath.map(displayAddressForKey),
+    created_at:new Date().toISOString()
+  });
+  scheduleWorkspaceSave();renderCaseUi();setStatus("Current path saved to case.","success");
+}
+
+function addCaseNote(){
+  const item=activeCase();
+  const input=document.getElementById("caseNote");
+  const text=String(input?.value||"").trim();
+  if(!item){setStatus("Select a case first.","warning");return;}
+  if(!text){setStatus("Enter an analyst note.","warning");return;}
+  item.notes=Array.isArray(item.notes)?item.notes:[];
+  item.notes.unshift({id:makeId("note"),text,created_at:new Date().toISOString()});
+  input.value="";
+  scheduleWorkspaceSave();renderCaseUi();
+}
+
+function snapshotFromPayload(payload){
+  const rows=(payload.transactions||[]).slice().sort((a,b)=>String(b.time||"").localeCompare(String(a.time||"")));
+  const now=Date.now(),dayAgo=now-86400000;
+  const recent=rows.filter(row=>{
+    const t=Date.parse(row.time||"");
+    return Number.isFinite(t)&&t>=dayAgo;
+  });
+  return {
+    checked_at:new Date().toISOString(),
+    newest_tx_id:String(rows[0]?.id||""),
+    newest_tx_time:String(rows[0]?.time||""),
+    tx_count:recent.length,
+    aggregate_value:recent.reduce((sum,row)=>sum+Math.abs(Number(row.amount)||0),0)
+  };
+}
+
+function addAlert(alert){
+  const signature=[alert.watch_id,alert.type,alert.tx_id||"",alert.title].join("|");
+  const exists=(cryptoWorkspace.alerts||[]).some(item=>
+    [item.watch_id,item.type,item.tx_id||"",item.title].join("|")===signature
+  );
+  if(exists)return false;
+  cryptoWorkspace.alerts.unshift({
+    id:makeId("alert"),
+    created_at:new Date().toISOString(),
+    acknowledged:false,
+    ...alert
+  });
+  cryptoWorkspace.alerts=cryptoWorkspace.alerts.slice(0,1000);
+  return true;
+}
+
+function monitorSeed(){
+  if(!lastPayload||lastPayload.kind!=="address")return;
+  const thresholds={
+    min_amount:Number(document.getElementById("monitorMinAmount")?.value)||null,
+    aggregate_24h:Number(document.getElementById("monitorAggregate")?.value)||null,
+    velocity_24h:Number(document.getElementById("monitorVelocity")?.value)||null,
+    dormant_days:Number(document.getElementById("monitorDormantDays")?.value)||null
+  };
+  const key=normalizeAddressForChain(lastPayload.query,lastPayload.chain);
+  let watch=(cryptoWorkspace.watchlist||[]).find(item=>
+    item.chain===lastPayload.chain&&normalizeAddressForChain(item.address,item.chain)===key
+  );
+  if(!watch){
+    watch={
+      id:makeId("watch"),chain:lastPayload.chain,address:lastPayload.query,
+      label:labelForAddress(lastPayload.query,lastPayload.chain)?.name||short(lastPayload.query,9),
+      categories:labelForAddress(lastPayload.query,lastPayload.chain)?.category?[labelForAddress(lastPayload.query,lastPayload.chain).category]:[],
+      enabled:true,created_at:new Date().toISOString()
+    };
+    cryptoWorkspace.watchlist.unshift(watch);
+  }
+  watch.thresholds=thresholds;
+  watch.last_snapshot=snapshotFromPayload(lastPayload);
+  watch.updated_at=new Date().toISOString();
+  scheduleWorkspaceSave();
+  renderAlerts();
+  document.getElementById("monitorStatus").textContent="Seed is monitored. Baseline snapshot saved.";
+}
+
+async function checkMonitored(){
+  const button=document.getElementById("monitorCheckButton");
+  const status=document.getElementById("monitorStatus");
+  const watches=(cryptoWorkspace.watchlist||[]).filter(item=>item.enabled!==false);
+  if(!watches.length){status.textContent="No monitored wallets.";return;}
+  if(button){button.disabled=true;button.textContent="CHECKING…";}
+  let created=0,checked=0;
+  try{
+    for(const watch of watches.slice(0,50)){
+      status.textContent="Checking "+(checked+1)+"/"+Math.min(watches.length,50)+" · "+short(watch.address,8);
+      try{
+        const fresh=await fetchAddressAnalysis(watch.address,watch.chain,100);
+        const previous=watch.last_snapshot||null;
+        const snap=snapshotFromPayload(fresh);
+        const rows=fresh.transactions||[];
+        const previousTime=Date.parse(previous?.newest_tx_time||"");
+        const newRows=Number.isFinite(previousTime)
+          ? rows.filter(row=>Date.parse(row.time||"")>previousTime)
+          : [];
+
+        if(previous&&snap.newest_tx_id&&snap.newest_tx_id!==previous.newest_tx_id){
+          if(addAlert({
+            watch_id:watch.id,chain:watch.chain,address:watch.address,type:"NEW_TRANSACTION",severity:"LOW",
+            title:"New transaction observed",detail:"A transaction newer than the saved monitoring baseline was observed.",
+            tx_id:snap.newest_tx_id
+          }))created++;
+        }
+
+        const min=Number(watch.thresholds?.min_amount);
+        if(Number.isFinite(min)&&min>0){
+          for(const row of newRows.filter(row=>Math.abs(Number(row.amount)||0)>=min).slice(0,10)){
+            if(addAlert({
+              watch_id:watch.id,chain:watch.chain,address:watch.address,type:"LARGE_TRANSFER",severity:"MEDIUM",
+              title:"Transfer threshold crossed",detail:fmtNumber(row.amount)+" "+String(row.asset||"")+" crossed the configured single-transfer threshold.",
+              tx_id:row.id
+            }))created++;
+          }
+        }
+
+        const aggregate=Number(watch.thresholds?.aggregate_24h);
+        if(Number.isFinite(aggregate)&&aggregate>0&&snap.aggregate_value>=aggregate){
+          if(addAlert({
+            watch_id:watch.id,chain:watch.chain,address:watch.address,type:"AGGREGATE_24H",severity:"MEDIUM",
+            title:"24h aggregate threshold crossed",detail:fmtNumber(snap.aggregate_value)+" observed aggregate value across the returned last-24h sample."
+          }))created++;
+        }
+
+        const velocity=Number(watch.thresholds?.velocity_24h);
+        if(Number.isFinite(velocity)&&velocity>0&&snap.tx_count>=velocity){
+          if(addAlert({
+            watch_id:watch.id,chain:watch.chain,address:watch.address,type:"VELOCITY_24H",severity:"MEDIUM",
+            title:"24h velocity threshold crossed",detail:snap.tx_count+" transaction records observed in the last 24 hours."
+          }))created++;
+        }
+
+        const dormant=Number(watch.thresholds?.dormant_days);
+        if(previous&&Number.isFinite(dormant)&&dormant>0&&Number.isFinite(previousTime)&&snap.newest_tx_time){
+          const gap=Date.parse(snap.newest_tx_time)-previousTime;
+          if(gap>=dormant*86400000&&snap.newest_tx_id!==previous.newest_tx_id){
+            if(addAlert({
+              watch_id:watch.id,chain:watch.chain,address:watch.address,type:"REACTIVATION",severity:"MEDIUM",
+              title:"Activity after configured dormant interval",detail:"New activity followed an observed gap of at least "+dormant+" days.",
+              tx_id:snap.newest_tx_id
+            }))created++;
+          }
+        }
+
+        for(const row of newRows.slice(0,30)){
+          for(const cp of row.counterparties||[]){
+            const label=labelForAddress(cp,watch.chain);
+            if(label&&["CT WATCHLIST","SANCTIONS","DARKNET","MIXER"].includes(label.category)){
+              if(addAlert({
+                watch_id:watch.id,chain:watch.chain,address:watch.address,type:"WATCHLIST_EXPOSURE",severity:"HIGH",
+                title:"New direct exposure to "+label.category,
+                detail:"New transaction relationship observed with sourced label "+(label.name||short(cp,8))+".",
+                tx_id:row.id
+              }))created++;
+            }
+          }
+        }
+
+        watch.last_snapshot=snap;
+        watch.updated_at=new Date().toISOString();
+        checked++;
+      }catch(error){
+        console.warn("Monitor check failed",watch.address,error);
+      }
+      await sleep(250);
+    }
+    scheduleWorkspaceSave();renderAlerts();
+    status.textContent="Monitoring check complete · "+checked+" wallet(s) checked · "+created+" new alert(s).";
+  }finally{
+    if(button){button.disabled=false;button.textContent="CHECK MONITORED NOW";}
+  }
+}
+
+function renderAlerts(){
+  const box=document.getElementById("cryptoAlerts");
+  if(!box)return;
+  const alerts=(cryptoWorkspace.alerts||[]).slice(0,30);
+  if(!alerts.length){box.innerHTML='<div class="intel-result">No saved monitoring alerts.</div>';return;}
+  box.innerHTML=alerts.map(item=>
+    '<div class="intel-item alert-item '+String(item.severity||"low").toLowerCase()+'"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.title)+'</div>'+
+    '<div class="intel-meta">'+esc(item.type)+' · '+esc(short(item.address,8))+' · '+esc(fmtTime(item.created_at))+'</div></div>'+
+    '<span class="intel-badge '+String(item.severity||"low").toLowerCase()+'">'+esc(item.severity||"LOW")+'</span></div>'+
+    '<div class="intel-detail">'+esc(item.detail||"")+'</div></div>'
+  ).join("");
+}
+
+function knownServiceFor(address,chain){
+  const key=normalizeAddressForChain(address,chain);
+  const manual=labelForAddress(address,chain);
+  if(manual&&["BRIDGE","DEX","MIXER","EXCHANGE"].includes(manual.category)){
+    return {name:manual.name||manual.category,category:manual.category,source:"ANALYST LABEL"};
+  }
+  return SERVICE_REGISTRY[chain]?.[key]||null;
+}
+
+function crossChainFindings(){
+  if(!lastPayload)return [];
+  const findings=[];
+  const seen=new Set();
+  for(const row of allTraceRows(true)){
+    const addresses=[...(row.counterparties||[]),row.to_address,row.contract_address,row.token_contract].filter(Boolean);
+    for(const address of addresses){
+      const service=knownServiceFor(address,lastPayload.chain);
+      if(!service)continue;
+      const key=service.category+"|"+normalizeAddressForChain(address,lastPayload.chain)+"|"+row.id;
+      if(seen.has(key))continue;
+      seen.add(key);
+      findings.push({
+        service,address,tx_id:row.id,time:row.time,source_wallet:row._trace_source,
+        asset:row.asset,amount:row.amount
+      });
+    }
+    const fn=String(row.function_name||row.contract_type||"").toLowerCase();
+    if(/bridge|swap|router|exchange/.test(fn)){
+      const key="metadata|"+row.id;
+      if(!seen.has(key)){
+        seen.add(key);
+        findings.push({
+          service:{name:row.function_name||row.contract_type,category:/bridge/.test(fn)?"BRIDGE":"DEX",source:"TRANSACTION METADATA"},
+          address:row.to_address||"",tx_id:row.id,time:row.time,source_wallet:row._trace_source,asset:row.asset,amount:row.amount
+        });
+      }
+    }
+  }
+  return findings.slice(0,50);
+}
+
+function renderCrossChain(){
+  const box=document.getElementById("crossChainFindings");
+  if(!box)return;
+  const findings=crossChainFindings();
+  if(!findings.length){
+    box.innerHTML='<div class="intel-result">No known labelled bridge/DEX/mixer/service touchpoint was detected in the currently traced sample. Absence here is not proof of absence.</div>';
+    return;
+  }
+  box.innerHTML=findings.map(item=>
+    '<div class="intel-item crosschain-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.service.category)+' · '+esc(item.service.name)+'</div>'+
+    '<div class="intel-meta">'+esc(item.service.source)+' · '+esc(fmtTime(item.time))+'</div></div><span class="intel-badge category">'+esc(item.service.category)+'</span></div>'+
+    '<div class="intel-detail">Source '+esc(short(item.source_wallet,8))+' · '+esc(fmtNumber(item.amount))+' '+esc(item.asset||"")+
+    (item.tx_id?' · TX '+esc(short(item.tx_id,8)):"")+'</div></div>'
+  ).join("");
+}
+
+function renderIntelligencePanels(){
+  renderPatterns();
+  renderExposure();
+  renderLabelList();
+  renderCaseUi();
+  renderAlerts();
+  renderCrossChain();
+}
+
 function renderKpis(payload,filteredRows){
   const box=document.getElementById("cryptoKpis");
   if(!box)return;
