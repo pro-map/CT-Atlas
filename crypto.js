@@ -824,7 +824,7 @@ function createCase(){
   const item={
     id:makeId("case"),name,
     description:String(document.getElementById("caseDescription")?.value||"").trim(),
-    status:"OPEN",chain:lastPayload?.chain||"",seed_addresses:[],saved_paths:[],notes:[],
+    status:"OPEN",chain:lastPayload?.chain||"",seed_addresses:[],saved_paths:[],notes:[],offchain_nodes:[],crosschain_links:[],
     created_at:new Date().toISOString()
   };
   cryptoWorkspace.cases.unshift(item);
@@ -1207,7 +1207,9 @@ function renderCrossChain(){
   box.innerHTML=findings.map(item=>
     '<div class="intel-item crosschain-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.service.category)+' · '+esc(item.service.name)+'</div>'+
     '<div class="intel-meta">'+esc(item.service.source)+' · '+esc(fmtTime(item.time))+'</div></div><span class="intel-badge category">'+esc(item.service.category)+'</span></div>'+
-    '<div class="intel-detail">Source '+esc(short(item.source_wallet,8))+' · '+esc(fmtNumber(item.amount))+' '+esc(item.asset||"")+
+    '<div class="intel-detail">Source '+esc(short(item.source_wallet,8))+
+    (item.amount==null?"":' · '+esc(fmtNumber(item.amount))+' '+esc(item.asset||""))+
+    (item.destination_chain?' · → '+esc(String(item.destination_chain).toUpperCase()):"")+
     (item.tx_id?' · TX '+esc(short(item.tx_id,8)):"")+'</div></div>'
   ).join("");
 }
