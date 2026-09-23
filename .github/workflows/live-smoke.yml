@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - "index.html"
+      - "main.html"
+      - "social.html"
       - "pdf-export.js"
       - "deep-search.js"
       - "quick-ask.js"
@@ -41,12 +43,17 @@ jobs:
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/pdf-export.js >/tmp/pdf-export.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/crypto.html >/tmp/crypto.html \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/crypto.js >/tmp/crypto.js \
+              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/main.html >/tmp/main.html \
+              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.html >/tmp/social.html \
               && grep -q 'pdf-export.js' /tmp/index.html \
               && grep -q 'window.CTAtlasPdf' /tmp/pdf-export.js \
               && grep -q 'Behavioral Pattern Detection' /tmp/crypto.html \
               && grep -q 'Case Workspace' /tmp/crypto.html \
               && grep -q 'detectPatterns' /tmp/crypto.js \
-              && grep -q 'crypto-workspace' /tmp/crypto.js; then
+              && grep -q 'crypto-workspace' /tmp/crypto.js \
+              && grep -q 'Map and Intel Analysis' /tmp/main.html \
+              && grep -q 'Cryptocurrency Investigations' /tmp/main.html \
+              && grep -q 'UNDER CONSTRUCTION' /tmp/social.html; then
               break
             fi
             if [ "$attempt" -eq 18 ]; then
@@ -87,7 +94,10 @@ jobs:
           if (!health.crypto_workspace_version) throw new Error("Crypto workspace version missing");
           if (!health.crypto_monitor_version) throw new Error("Crypto monitor version missing");
           if (health.crypto_auto_monitoring !== true) throw new Error("Crypto automatic monitoring flag missing");
+          if (!health.source_preview_version) throw new Error("Source preview version missing");
           if (!health.crypto_providers || health.crypto_providers.bitcoin !== true) throw new Error("Bitcoin Crypto provider health missing");
+          if (health.crypto_providers.evm !== true) throw new Error("ETHERSCAN_API_KEY is not active in the Worker");
+          if (health.crypto_providers.tron !== true) throw new Error("TRONGRID_API_KEY is not active in the Worker");
           if (health.auth_mode !== "secret") {
             throw new Error("Worker authentication is not using the required secret mode: " + health.auth_mode);
           }
