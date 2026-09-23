@@ -84,6 +84,9 @@ function inject(){
             <div class="deep-section-head">ANALYTICAL REPORT</div>
             <div id="deepSearchReport"></div>
 
+            <div class="deep-section-head">KEY SOURCE VISUALS</div>
+            <div id="deepSearchVisuals"></div>
+
             <div class="deep-section-head">SOURCES CITED / EVIDENCE PACK</div>
             <div id="deepSearchEvidence"></div>
 
@@ -268,6 +271,20 @@ function languageCoverageHtml(payload){
   }).join("");
 }
 
+function sourcePreviewsHtml(payload){
+  const previews=Array.isArray(payload?.source_previews)?payload.source_previews:[];
+  if(!previews.length)return '<div class="deep-visual-empty">No usable source image was available from the cited articles.</div>';
+  return '<div class="deep-visual-grid">'+previews.map(item=>{
+    const src=item.image_path?API_BASE+item.image_path:"";
+    if(!src)return "";
+    const caption=[item.source_id,item.source,item.title].filter(Boolean).join(" · ");
+    return `<figure class="deep-source-visual">
+      <img src="${esc(src)}" alt="${esc(item.title||"Source article preview")}" crossorigin="anonymous" loading="eager" data-pdf-image data-pdf-caption="${esc(caption)}">
+      <figcaption><strong>${esc(item.source||"Source")}</strong>${esc(item.title||"")}</figcaption>
+    </figure>`;
+  }).filter(Boolean).join("")+'</div>';
+}
+
 function evidenceHtml(payload){
   const evidence=Array.isArray(payload.evidence)?payload.evidence:[];
   const cited=new Set(payload.grounding?.cited_source_ids||[]);
@@ -321,6 +338,7 @@ function render(rawPayload){
 
   document.getElementById("deepSearchLanguageCoverage").innerHTML=languageCoverageHtml(payload);
   document.getElementById("deepSearchReport").innerHTML=formatAnalysis(payload.analysis||"");
+  document.getElementById("deepSearchVisuals").innerHTML=sourcePreviewsHtml(payload);
   document.getElementById("deepSearchEvidence").innerHTML=evidenceHtml(payload);
 }
 
@@ -408,6 +426,10 @@ async function downloadPdf(){
     }
     blocks.push({text:"ANALYTICAL REPORT",type:"heading"});
     blocks.push(...pdf.blocksFromElement(document.getElementById("deepSearchReport")));
+    if((lastPayload.source_previews||[]).length){
+      blocks.push({text:"KEY SOURCE VISUALS",type:"heading"});
+      blocks.push(...pdf.blocksFromElement(document.getElementById("deepSearchVisuals")));
+    }
     if(evidence.length){
       blocks.push({text:"EVIDENCE PACK",type:"heading"});
       evidence.forEach(item=>{
