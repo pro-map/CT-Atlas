@@ -240,3 +240,77 @@ button,input,select{font:inherit}
   #flowGraph{height:430px}
   .crypto-graph-controls{gap:5px}
 }
+
+
+/* =========================================================
+   CRYPTO INTELLIGENCE V4 — INVESTIGATION WORKSPACE
+========================================================= */
+.crypto-intel-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin-bottom:12px;
+}
+.intel-list{display:flex;flex-direction:column;gap:7px}
+.intel-item{
+  border:1px solid #2f4654;
+  background:#111d26;
+  border-radius:5px;
+  padding:9px 10px;
+}
+.intel-item-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.intel-title{font-size:9px;font-weight:900;letter-spacing:.07em;color:#e9f2f6}
+.intel-meta{font-size:7px;color:#77909f;text-transform:uppercase;letter-spacing:.06em}
+.intel-detail{margin-top:5px;font-size:9px;line-height:1.5;color:#a8bcc7}
+.intel-badge{
+  display:inline-block;
+  padding:3px 6px;
+  border:1px solid #405563;
+  border-radius:999px;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.05em;
+}
+.intel-badge.high{border-color:#a94a4a;color:#f0a1a1;background:#32191b}
+.intel-badge.medium{border-color:#a27935;color:#e7c06f;background:#302718}
+.intel-badge.low{border-color:#436b7a;color:#99cadb;background:#162a33}
+.intel-badge.pattern{border-color:#6c5a9d;color:#c6b5ff;background:#241d36}
+.intel-badge.exposure{border-color:#8f5d3d;color:#efad83;background:#2d2018}
+.intel-badge.category{border-color:#427150;color:#95d8aa;background:#17291d}
+.intel-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.intel-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.intel-form>.intel-actions,.intel-form>.intel-result,.intel-form>#cryptoAlerts{grid-column:1/-1}
+#labelForm{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #2d414d}
+.intel-result{font-size:9px;line-height:1.55;color:#9eb2bd}
+.intel-path{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:6px}
+.intel-path-node{
+  font:800 8px/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  border:1px solid #405563;
+  background:#192934;
+  padding:5px 6px;
+  border-radius:4px;
+  color:#dbeaf0;
+}
+.intel-path-arrow{color:#7893a2;font-size:10px}
+.pattern-metric{display:inline-block;margin-right:8px;color:#8ea5b2}
+.exposure-row{display:grid;grid-template-columns:100px 1fr auto;gap:7px;align-items:center}
+.exposure-bar{height:7px;background:#1d2f39;border-radius:999px;overflow:hidden}
+.exposure-bar>i{display:block;height:100%;background:linear-gradient(90deg,#4a7c91,#ba7755);border-radius:999px}
+.label-source{margin-top:4px;color:#8196a2;font-size:8px}
+.label-source a{color:#9fd2e6;text-decoration:none}
+.label-source a:hover{text-decoration:underline}
+.case-pill{display:inline-block;margin:2px 4px 2px 0;padding:3px 5px;border:1px solid #3d5968;border-radius:3px;font-size:7px;color:#b4cad4}
+.alert-item{border-left:3px solid #6a8794}
+.alert-item.high{border-left-color:#d35d5d}
+.alert-item.medium{border-left-color:#d7aa4c}
+.alert-item.low{border-left-color:#5da17a}
+.crosschain-item{border-left:3px solid #7b68b5}
+.crosschain-service{font:800 8px/1 ui-monospace,SFMono-Regular,Consolas,monospace;color:#cabaff}
+.workspace-saving{opacity:.62}
+@media(max-width:1100px){
+  .crypto-intel-grid{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .intel-form{grid-template-columns:1fr}
+  .intel-form>.intel-actions,.intel-form>.intel-result,.intel-form>#cryptoAlerts{grid-column:auto}
+}
