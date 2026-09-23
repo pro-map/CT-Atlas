@@ -85,6 +85,8 @@ jobs:
           }
           if (!health.crypto_version) throw new Error("Crypto backend version missing");
           if (!health.crypto_workspace_version) throw new Error("Crypto workspace version missing");
+          if (!health.crypto_monitor_version) throw new Error("Crypto monitor version missing");
+          if (health.crypto_auto_monitoring !== true) throw new Error("Crypto automatic monitoring flag missing");
           if (!health.crypto_providers || health.crypto_providers.bitcoin !== true) throw new Error("Bitcoin Crypto provider health missing");
           if (health.auth_mode !== "secret") {
             throw new Error("Worker authentication is not using the required secret mode: " + health.auth_mode);
