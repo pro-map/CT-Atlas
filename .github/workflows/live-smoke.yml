@@ -7,6 +7,8 @@ on:
       - "index.html"
       - "main.html"
       - "social.html"
+      - "social.js"
+      - "social.css"
       - "pdf-export.js"
       - "deep-search.js"
       - "quick-ask.js"
@@ -45,6 +47,8 @@ jobs:
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/crypto.js >/tmp/crypto.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/main.html >/tmp/main.html \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.html >/tmp/social.html \
+              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.js >/tmp/social.js \
+              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.css >/tmp/social.css \
               && grep -q 'pdf-export.js' /tmp/index.html \
               && grep -q 'window.CTAtlasPdf' /tmp/pdf-export.js \
               && grep -q 'Behavioral Pattern Detection' /tmp/crypto.html \
@@ -53,7 +57,9 @@ jobs:
               && grep -q 'crypto-workspace' /tmp/crypto.js \
               && grep -q 'Map and Intel Analysis' /tmp/main.html \
               && grep -q 'Cryptocurrency Investigations' /tmp/main.html \
-              && grep -q 'UNDER CONSTRUCTION' /tmp/social.html; then
+              && grep -q 'RUN SOCMINT INVESTIGATION' /tmp/social.html \
+              && grep -q 'social-investigate' /tmp/social.js \
+              && grep -q 'DOWNLOAD PDF' /tmp/social.html; then
               break
             fi
             if [ "$attempt" -eq 18 ]; then
@@ -101,6 +107,8 @@ jobs:
           if (!health.crypto_monitor_version) throw new Error("Crypto monitor version missing");
           if (health.crypto_auto_monitoring !== true) throw new Error("Crypto automatic monitoring flag missing");
           if (!health.source_preview_version) throw new Error("Source preview version missing");
+          if (!health.social_intel_version) throw new Error("SOCMINT backend version missing");
+          if (health.social_intel !== true) throw new Error("SOCMINT backend flag missing");
           if (!health.crypto_providers || health.crypto_providers.bitcoin !== true) throw new Error("Bitcoin Crypto provider health missing");
           if (health.crypto_providers.evm !== true) throw new Error("ETHERSCAN_API_KEY is not active in the Worker");
           if (health.crypto_providers.tron !== true) throw new Error("TRONGRID_API_KEY is not active in the Worker");
