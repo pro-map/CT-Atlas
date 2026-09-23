@@ -224,6 +224,7 @@ function usageTemplate(username = "") {
     cached_reports: 0,
     blocked_report_requests: 0,
     quick_ask_requests: 0,
+    social_intel_requests: 0,
     feedback_submissions: 0,
     quiz_answers: 0,
     quiz_correct: 0,
