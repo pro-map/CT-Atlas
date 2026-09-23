@@ -309,7 +309,7 @@ function renderTable(payload,rows){
     const tokenBadge=isTokenRow(row,payload)?'<span class="crypto-type-badge">TOKEN</span>':'<span class="crypto-type-badge">NATIVE</span>';
     const statusHtml='<span class="crypto-status-dot '+status+'"></span>'+status.toUpperCase();
     return "<tr>"+
-      "<td>"+esc(fmtTime(row.time))+"<br><span class="crypto-card-note">"+statusHtml+"</span></td>"+
+      "<td>"+esc(fmtTime(row.time))+"<br><span class=\"crypto-card-note\">"+statusHtml+"</span></td>"+
       '<td class="'+cls+'">'+esc(dir||"—")+"</td>"+
       "<td>"+esc(row.asset||"—")+tokenBadge+"</td>"+
       "<td>"+esc(fmtNumber(row.amount))+"</td>"+
