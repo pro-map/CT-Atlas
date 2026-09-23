@@ -10,6 +10,8 @@ on:
       - "daily-quiz.*"
       - "quick-ask.*"
       - "feedback.*"
+      - "crypto.*"
+      - "tests/crypto*.test.cjs"
       - "tools/usage_upgrade.patch"
       - "usage-admin.js"
       - "usage-admin.css"
@@ -69,6 +71,11 @@ jobs:
           node --check usage-admin.js
           node --check usage-auth-fix.js
           node --check deep-search.js
+          node --check crypto.js
+          node --check crypto-launcher.js
+          node --check cloudflare-worker/crypto.js
+          node --check cloudflare-worker/crypto-workspace.js
+          node --test tests/crypto.test.cjs tests/crypto-workspace.test.cjs
           node --check cloudflare-worker/shared.js
           node --check cloudflare-worker/report-gate.js
           node --check cloudflare-worker/deep-search.js
