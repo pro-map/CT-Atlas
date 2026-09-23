@@ -316,6 +316,115 @@ export class ReportGate {
     const body = await request.json().catch(()=>({}));
     const now = Date.now();
 
+    if (url.pathname === "/crypto-monitor-targets") {
+      const limit = Math.max(1, Math.min(8, Number(body.limit || 8)));
+      const stored = await this.state.storage.list({ prefix: "crypto-workspace:" });
+      const targets = [];
+      const sensitive = new Set(["CT WATCHLIST","SANCTIONS","DARKNET","MIXER"]);
+
+      for (const [key, workspace] of stored.entries()) {
+        const username = normalizeUsername(workspace?.username || String(key).slice("crypto-workspace:".length));
+        if (!isAllowedUser(username, this.env)) continue;
+        const labels = Array.isArray(workspace?.labels) ? workspace.labels : [];
+        for (const watch of Array.isArray(workspace?.watchlist) ? workspace.watchlist : []) {
+          if (watch?.enabled === false || !watch?.chain || !watch?.address || !watch?.id) continue;
+          const sensitiveLabels = labels
+            .filter(label => label?.chain === watch.chain && sensitive.has(String(label?.category || "").toUpperCase()))
+            .slice(0, 500)
+            .map(label => ({
+              address: cleanText(label.address, 180),
+              name: cleanText(label.name, 120),
+              category: cleanText(label.category, 48).toUpperCase(),
+              confidence: cleanText(label.confidence, 16).toUpperCase(),
+              source_title: cleanText(label.source_title, 240)
+            }));
+          targets.push({
+            username,
+            watch: {
+              id: cleanText(watch.id, 80),
+              chain: cleanText(watch.chain, 24).toLowerCase(),
+              address: cleanText(watch.address, 180),
+              label: cleanText(watch.label, 120),
+              thresholds: watch.thresholds || {},
+              last_snapshot: watch.last_snapshot || null
+            },
+            sensitive_labels: sensitiveLabels
+          });
+        }
+      }
+
+      targets.sort((a,b) => (a.username + ":" + a.watch.id).localeCompare(b.username + ":" + b.watch.id));
+      if (!targets.length) return Response.json({ ok: true, targets: [], total: 0 });
+
+      const cursorRaw = Number((await this.state.storage.get("crypto-monitor-cursor")) || 0);
+      const cursor = ((cursorRaw % targets.length) + targets.length) % targets.length;
+      const selected = [];
+      for (let i = 0; i < Math.min(limit, targets.length); i++) {
+        selected.push(targets[(cursor + i) % targets.length]);
+      }
+      await this.state.storage.put("crypto-monitor-cursor", (cursor + selected.length) % targets.length);
+      return Response.json({ ok: true, targets: selected, total: targets.length, cursor });
+    }
+
+    if (url.pathname === "/crypto-monitor-update") {
+      const username = normalizeUsername(body.username);
+      const watchId = cleanText(body.watch_id, 80);
+      if (!isAllowedUser(username, this.env) || !watchId) {
+        return Response.json({ error: "Invalid monitoring update." }, { status: 400 });
+      }
+      const key = `crypto-workspace:${username}`;
+      const workspace = await this.state.storage.get(key);
+      if (!workspace || !Array.isArray(workspace.watchlist)) {
+        return Response.json({ error: "Crypto workspace not found." }, { status: 404 });
+      }
+      const watch = workspace.watchlist.find(item => item?.id === watchId);
+      if (!watch) return Response.json({ error: "Monitored wallet not found." }, { status: 404 });
+
+      const snapshot = body.snapshot && typeof body.snapshot === "object" ? body.snapshot : null;
+      if (snapshot) {
+        watch.last_snapshot = {
+          checked_at: cleanText(snapshot.checked_at, 64),
+          newest_tx_id: cleanText(snapshot.newest_tx_id, 180),
+          newest_tx_time: cleanText(snapshot.newest_tx_time, 64),
+          tx_count: Number(snapshot.tx_count || 0),
+          aggregate_value: Number(snapshot.aggregate_value || 0)
+        };
+        watch.updated_at = new Date(now).toISOString();
+      }
+
+      workspace.alerts = Array.isArray(workspace.alerts) ? workspace.alerts : [];
+      const signatures = new Set(workspace.alerts.map(item =>
+        [item?.watch_id, item?.type, item?.tx_id || "", item?.title].join("|")
+      ));
+      let added = 0;
+      for (const raw of Array.isArray(body.alerts) ? body.alerts.slice(0, 40) : []) {
+        const alert = {
+          id: cleanText(raw?.id || crypto.randomUUID(), 80),
+          watch_id: watchId,
+          chain: cleanText(raw?.chain || watch.chain, 24).toLowerCase(),
+          address: cleanText(raw?.address || watch.address, 180),
+          type: cleanText(raw?.type, 64).toUpperCase(),
+          severity: ["HIGH","MEDIUM","LOW"].includes(cleanText(raw?.severity, 16).toUpperCase())
+            ? cleanText(raw.severity, 16).toUpperCase()
+            : "LOW",
+          title: cleanText(raw?.title, 180),
+          detail: cleanText(raw?.detail, 1200),
+          tx_id: cleanText(raw?.tx_id, 180),
+          created_at: cleanText(raw?.created_at, 64) || new Date(now).toISOString(),
+          acknowledged: false
+        };
+        const signature = [alert.watch_id, alert.type, alert.tx_id || "", alert.title].join("|");
+        if (!alert.type || !alert.title || signatures.has(signature)) continue;
+        signatures.add(signature);
+        workspace.alerts.unshift(alert);
+        added++;
+      }
+      workspace.alerts = workspace.alerts.slice(0, 1000);
+      workspace.updated_at = new Date(now).toISOString();
+      await this.state.storage.put(key, workspace);
+      return Response.json({ ok: true, alerts_added: added });
+    }
+
     if (url.pathname === "/crypto-workspace-get") {
       const username = normalizeUsername(body.username);
       if (!isAllowedUser(username, this.env)) {
