@@ -202,6 +202,9 @@ function categoryTargets(category,chain=lastPayload?.chain){
       values.add(normalizeAddressForChain(watch.address,chain));
     }
   }
+  for(const [address,service] of Object.entries(SERVICE_REGISTRY[chain]||{})){
+    if(String(service.category||"").toUpperCase()===target)values.add(normalizeAddressForChain(address,chain));
+  }
   return values;
 }
 
@@ -916,6 +919,60 @@ function saveCrosschainLink(){
   setStatus("Sourced cross-chain link saved to the active case.","success");
 }
 
+async function exportCasePdf(){
+  const item=activeCase();
+  if(!item){setStatus("Select a case first.","warning");return;}
+  if(!window.CTAtlasPdf?.download){setStatus("PDF export library is unavailable.","error");return;}
+
+  const patterns=detectPatterns();
+  const exposure=exposureFindings();
+  const cross=crossChainFindings();
+  const labels=visibleRelevantLabels();
+
+  const blocks=[
+    {text:"CASE SUMMARY",type:"heading"},
+    {text:item.description||"No description provided.",type:"body"},
+    {text:"STATUS: "+(item.status||"OPEN")+" · CHAIN: "+(item.chain||lastPayload?.chain||"—"),type:"meta"},
+    {text:"SEED ADDRESSES",type:"heading"},
+    {text:(item.seed_addresses||[]).join("\n")||"No seeds saved.",type:"body"},
+    {text:"BEHAVIORAL PATTERNS",type:"heading"},
+    ...((patterns.length?patterns:[{name:"No configured pattern threshold crossed",metric:"",detail:""}]).map(p=>({
+      text:p.name+(p.metric?" · "+p.metric:"")+(p.detail?"\n"+p.detail:""),type:"body"
+    }))),
+    {text:"EXPOSURE",type:"heading"},
+    ...((exposure.length?exposure:[{category:"No labelled H1-H3 exposure observed",hop:"",name:"",address:""}]).map(e=>({
+      text:e.category+(e.hop?" · H"+e.hop:"")+(e.name?" · "+e.name:"")+(e.address?"\n"+e.address:""),type:"body"
+    }))),
+    {text:"SOURCED LABELS",type:"heading"},
+    ...((labels.length?labels:[{name:"No visible sourced labels",category:"",confidence:"",address:""}]).map(label=>({
+      text:(label.name||"")+(label.category?" · "+label.category:"")+(label.confidence?" · "+label.confidence:"")+(label.address?"\n"+label.address:"")+(label.source_title?"\nSource: "+label.source_title:""),type:"source"
+    }))),
+    {text:"SAVED PATHS",type:"heading"},
+    ...((item.saved_paths||[]).map(path=>({text:(path.name||"Path")+"\n"+(path.nodes||[]).join(" → "),type:"body"}))),
+    {text:"OFF-CHAIN ENTITIES",type:"heading"},
+    ...((item.offchain_nodes||[]).map(node=>({text:(node.type||"OTHER")+" · "+node.label+"\nLinked wallet: "+(node.linked_address||"—")+(node.notes?"\n"+node.notes:""),type:"body"}))),
+    {text:"CROSS-CHAIN LINKS",type:"heading"},
+    ...((item.crosschain_links||[]).map(link=>({text:(link.service||"Cross-chain")+" · "+link.confidence+"\n"+link.from_chain+": "+link.from_address+"\n→ "+link.to_chain+": "+link.to_address+(link.notes?"\n"+link.notes:""),type:"body"}))),
+    {text:"DETECTED SERVICE / BRIDGE / DEX TOUCHPOINTS",type:"heading"},
+    ...((cross.length?cross:[{service:{category:"None observed",name:""},source_wallet:"",tx_id:""}]).map(entry=>({
+      text:(entry.service?.category||"")+" · "+(entry.service?.name||"")+(entry.source_wallet?"\nSource wallet: "+entry.source_wallet:"")+(entry.tx_id?"\nTX: "+entry.tx_id:""),type:"body"
+    }))),
+    {text:"ANALYST NOTES",type:"heading"},
+    ...((item.notes||[]).map(note=>({text:note.text,type:"body"}))),
+    {text:"ANALYTICAL LIMITATIONS",type:"heading"},
+    {text:"CT Atlas Crypto uses bounded public blockchain samples and analyst-sourced labels. On-chain transaction linkage does not establish identity, common ownership, criminality, terrorist financing, intent, or custody. Heuristic pattern detection and H1-H3 exposure calculations require independent validation before operational or evidentiary use.",type:"footer"}
+  ];
+
+  await window.CTAtlasPdf.download({
+    filename:"CT-Atlas-Crypto-"+item.name,
+    eyebrow:"CT ATLAS · CRYPTO INTELLIGENCE CASE",
+    title:item.name,
+    meta:"Generated "+new Date().toISOString()+" · user "+user(),
+    blocks,
+    footer:"CT Atlas Crypto · analyst workspace export"
+  });
+}
+
 function snapshotFromPayload(payload){
   const rows=(payload.transactions||[]).slice().sort((a,b)=>String(b.time||"").localeCompare(String(a.time||"")));
   const now=Date.now(),dayAgo=now-86400000;
@@ -1123,6 +1180,18 @@ function crossChainFindings(){
         });
       }
     }
+  }
+  const active=activeCase();
+  for(const link of active?.crosschain_links||[]){
+    if(link.from_chain!==lastPayload.chain)continue;
+    const key="case-link|"+link.id;
+    if(seen.has(key))continue;
+    seen.add(key);
+    findings.push({
+      service:{name:link.service||"Analyst cross-chain link",category:"BRIDGE",source:"CASE LINK · "+(link.confidence||"LOW")},
+      address:link.to_address,tx_id:"",time:link.created_at,source_wallet:link.from_address,asset:"",amount:null,
+      destination_chain:link.to_chain
+    });
   }
   return findings.slice(0,50);
 }
@@ -1866,6 +1935,7 @@ function bind(){
   document.getElementById("cryptoRun")?.addEventListener("click",run);
   document.getElementById("cryptoQuery")?.addEventListener("keydown",event=>{if(event.key==="Enter")run();});
   document.getElementById("cryptoResetFilters")?.addEventListener("click",()=>resetFilterControls(true));
+  document.getElementById("cryptoClearFilter")?.addEventListener("click",()=>resetFilterControls(true));
   document.getElementById("cryptoResetGraph")?.addEventListener("click",()=>{
     graphPositions=new Map();
     renderFilteredViews();
@@ -1889,6 +1959,7 @@ function bind(){
   });
   document.getElementById("caseAddSeedButton")?.addEventListener("click",addSeedToCase);
   document.getElementById("caseSavePathButton")?.addEventListener("click",savePathToCase);
+  document.getElementById("caseExportPdfButton")?.addEventListener("click",()=>exportCasePdf().catch(error=>setStatus(error?.message||"Case PDF export failed.","error")));
   document.getElementById("caseAddNoteButton")?.addEventListener("click",addCaseNote);
   document.getElementById("caseOffchainToggle")?.addEventListener("click",()=>{
     const form=document.getElementById("offchainForm");
