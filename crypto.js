@@ -811,6 +811,7 @@ function renderCaseUi(){
     '<div class="intel-detail">'+esc(active.description||"No description")+'</div>'+
     '<div class="intel-meta">SEEDS</div><div>'+((active.seed_addresses||[]).map(address=>'<span class="case-pill">'+esc(short(address,8))+'</span>').join("")||"—")+'</div>'+
     '<div class="intel-meta" style="margin-top:7px">SAVED PATHS · '+(active.saved_paths||[]).length+'</div>'+
+    '<div class="intel-meta" style="margin-top:7px">OFF-CHAIN NODES · '+(active.offchain_nodes||[]).length+' · CROSS-CHAIN LINKS · '+(active.crosschain_links||[]).length+'</div>'+
     '<div class="intel-meta" style="margin-top:7px">NOTES · '+(active.notes||[]).length+'</div>';
 }
 
@@ -867,6 +868,52 @@ function addCaseNote(){
   item.notes.unshift({id:makeId("note"),text,created_at:new Date().toISOString()});
   input.value="";
   scheduleWorkspaceSave();renderCaseUi();
+}
+
+function saveOffchainNode(){
+  const item=activeCase();
+  if(!item){setStatus("Select a case first.","warning");return;}
+  const label=String(document.getElementById("offchainLabel")?.value||"").trim();
+  if(!label){setStatus("Enter an off-chain node label.","warning");return;}
+  const linked=String(document.getElementById("offchainLinkedAddress")?.value||lastPayload?.query||"").trim();
+  item.offchain_nodes=Array.isArray(item.offchain_nodes)?item.offchain_nodes:[];
+  item.offchain_nodes.unshift({
+    id:makeId("offchain"),
+    type:String(document.getElementById("offchainType")?.value||"OTHER"),
+    label,
+    linked_address:linked,
+    source_url:String(document.getElementById("offchainSourceUrl")?.value||"").trim(),
+    notes:String(document.getElementById("offchainNotes")?.value||"").trim(),
+    created_at:new Date().toISOString()
+  });
+  document.getElementById("offchainForm").hidden=true;
+  scheduleWorkspaceSave();renderCaseUi();renderFilteredViews();
+  setStatus("Off-chain node saved to the active case.","success");
+}
+
+function saveCrosschainLink(){
+  const item=activeCase();
+  if(!item||!lastPayload){setStatus("Select a case first.","warning");return;}
+  const from=String(document.getElementById("crosschainFromAddress")?.value||lastPayload.query||"").trim();
+  const to=String(document.getElementById("crosschainToAddress")?.value||"").trim();
+  const toChain=String(document.getElementById("crosschainToChain")?.value||"").trim();
+  if(!from||!to||!toChain){setStatus("From wallet, destination chain and destination wallet are required.","warning");return;}
+  item.crosschain_links=Array.isArray(item.crosschain_links)?item.crosschain_links:[];
+  item.crosschain_links.unshift({
+    id:makeId("crosschain"),
+    from_chain:lastPayload.chain,
+    from_address:from,
+    to_chain:toChain,
+    to_address:to,
+    service:String(document.getElementById("crosschainService")?.value||"").trim(),
+    confidence:String(document.getElementById("crosschainConfidence")?.value||"MEDIUM"),
+    source_url:String(document.getElementById("crosschainSourceUrl")?.value||"").trim(),
+    notes:String(document.getElementById("crosschainNotes")?.value||"").trim(),
+    created_at:new Date().toISOString()
+  });
+  document.getElementById("crosschainForm").hidden=true;
+  scheduleWorkspaceSave();renderCaseUi();renderFilteredViews();
+  setStatus("Sourced cross-chain link saved to the active case.","success");
 }
 
 function snapshotFromPayload(payload){
@@ -1746,6 +1793,18 @@ function bind(){
   document.getElementById("caseAddSeedButton")?.addEventListener("click",addSeedToCase);
   document.getElementById("caseSavePathButton")?.addEventListener("click",savePathToCase);
   document.getElementById("caseAddNoteButton")?.addEventListener("click",addCaseNote);
+  document.getElementById("caseOffchainToggle")?.addEventListener("click",()=>{
+    const form=document.getElementById("offchainForm");
+    form.hidden=!form.hidden;
+    if(!form.hidden&&lastPayload)document.getElementById("offchainLinkedAddress").value=lastPayload.query||"";
+  });
+  document.getElementById("caseCrosschainToggle")?.addEventListener("click",()=>{
+    const form=document.getElementById("crosschainForm");
+    form.hidden=!form.hidden;
+    if(!form.hidden&&lastPayload)document.getElementById("crosschainFromAddress").value=lastPayload.query||"";
+  });
+  document.getElementById("offchainSaveButton")?.addEventListener("click",saveOffchainNode);
+  document.getElementById("crosschainSaveButton")?.addEventListener("click",saveCrosschainLink);
   document.getElementById("monitorSeedButton")?.addEventListener("click",monitorSeed);
   document.getElementById("monitorCheckButton")?.addEventListener("click",checkMonitored);
 
