@@ -314,3 +314,37 @@ button,input,select{font:inherit}
   .intel-form{grid-template-columns:1fr}
   .intel-form>.intel-actions,.intel-form>.intel-result,.intel-form>#cryptoAlerts{grid-column:auto}
 }
+
+
+.graph-aux-node{cursor:grab}
+.graph-aux-node.dragging{cursor:grabbing}
+.graph-aux-node.offchain-node rect{
+  fill:#20313d;
+  stroke:#9aaab3;
+  stroke-width:1.6;
+  stroke-dasharray:5 3;
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,.45));
+}
+.graph-aux-node.offchain-node:hover rect{stroke:#fff;stroke-width:2.5}
+.graph-aux-node.crosschain-node polygon{
+  fill:#3b2b57;
+  stroke:#c39beb;
+  stroke-width:1.8;
+  filter:drop-shadow(0 0 7px rgba(178,127,225,.25));
+}
+.graph-aux-node.crosschain-node:hover polygon{stroke:#fff;stroke-width:2.6}
+.graph-edge.offchain-link{
+  stroke:#9aaab3;
+  stroke-width:1.5;
+  stroke-dasharray:6 5;
+  stroke-opacity:.58;
+}
+.graph-edge.crosschain-link{
+  stroke:#c084df;
+  stroke-width:2;
+  stroke-dasharray:3 4;
+  stroke-opacity:.82;
+}
+.legend-shape{display:inline-block;vertical-align:-2px;margin-right:5px}
+.legend-shape.offchain{width:13px;height:10px;border:1.5px dashed #9aaab3;border-radius:2px}
+.legend-shape.crosschain{width:10px;height:10px;border:1.5px solid #c39beb;background:#3b2b57;transform:rotate(45deg)}
