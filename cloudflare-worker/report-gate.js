@@ -316,6 +316,36 @@ export class ReportGate {
     const body = await request.json().catch(()=>({}));
     const now = Date.now();
 
+    if (url.pathname === "/source-image-token-put") {
+      const imageUrl = cleanText(body.image_url, 1500);
+      if (!imageUrl) return Response.json({ error: "Missing image URL." }, { status: 400 });
+      const token = crypto.randomUUID();
+      const expiresAt = Math.min(
+        Number(body.expires_at || (now + 86400000)),
+        now + 86400000
+      );
+      await this.state.storage.put("source-image-token:" + token, {
+        image_url: imageUrl,
+        source_id: cleanText(body.source_id, 40),
+        title: cleanText(body.title, 300),
+        source: cleanText(body.source, 160),
+        article_url: cleanText(body.article_url, 1500),
+        expires_at: expiresAt
+      });
+      return Response.json({ ok: true, token, expires_at: expiresAt });
+    }
+
+    if (url.pathname === "/source-image-token-get") {
+      const token = cleanText(body.token, 100);
+      const key = "source-image-token:" + token;
+      const value = token ? await this.state.storage.get(key) : null;
+      if (!value || Number(value.expires_at || 0) < now) {
+        if (value) await this.state.storage.delete(key);
+        return Response.json({ error: "Preview token expired or not found." }, { status: 404 });
+      }
+      return Response.json({ ok: true, ...value });
+    }
+
     if (url.pathname === "/crypto-monitor-targets") {
       const limit = Math.max(1, Math.min(8, Number(body.limit || 8)));
       const stored = await this.state.storage.list({ prefix: "crypto-workspace:" });
