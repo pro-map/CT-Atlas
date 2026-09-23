@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CT ATLAS — Crypto Intelligence</title>
+<link rel="icon" href="ct-atlas.png">
+<link rel="stylesheet" href="crypto.css?v=1">
+</head>
+<body>
+<div class="crypto-shell">
+  <header class="crypto-header">
+    <div class="crypto-brand">
+      <img src="ct-atlas.png" alt="CT Atlas">
+      <div>
+        <div class="crypto-title">CRYPTO INTELLIGENCE</div>
+        <div class="crypto-subtitle">CT ATLAS · ON-CHAIN ANALYSIS WORKSPACE</div>
+      </div>
+    </div>
+    <a class="crypto-back" href="index.html">← CT ATLAS</a>
+  </header>
+
+  <main class="crypto-main">
+    <section class="crypto-search" aria-label="Crypto search">
+      <label class="crypto-field">
+        <span>Wallet address / transaction hash</span>
+        <input id="cryptoQuery" autocomplete="off" spellcheck="false" placeholder="BTC, EVM or TRON address — or a transaction hash">
+      </label>
+      <label class="crypto-field">
+        <span>Blockchain</span>
+        <select id="cryptoChain">
+          <option value="auto">Auto detect</option>
+          <option value="bitcoin">Bitcoin</option>
+          <option value="ethereum">Ethereum</option>
+          <option value="bsc">BNB Smart Chain</option>
+          <option value="polygon">Polygon</option>
+          <option value="arbitrum">Arbitrum One</option>
+          <option value="base">Base</option>
+          <option value="tron">TRON</option>
+        </select>
+      </label>
+      <button id="cryptoRun" type="button">ANALYSE</button>
+      <div class="crypto-hint">Current scope: deterministic on-chain address/transaction analysis, recent flow graph and counterparties. Auto-detection is safe for addresses; ambiguous transaction hashes require an explicit blockchain selection.</div>
+    </section>
+
+    <div id="cryptoStatus" class="crypto-status"></div>
+    <div id="providerStrip" class="crypto-provider-strip" aria-live="polite"></div>
+
+    <section id="cryptoResult" class="crypto-result" hidden>
+      <div class="crypto-topline">
+        <div>
+          <div id="cryptoResultQuery" class="crypto-query"></div>
+          <div id="cryptoResultMeta" class="crypto-meta"></div>
+        </div>
+        <a id="cryptoExplorer" class="crypto-explorer" href="#" target="_blank" rel="noopener noreferrer">OPEN EXPLORER ↗</a>
+      </div>
+
+      <div id="cryptoKpis" class="crypto-kpis"></div>
+
+      <div id="addressView">
+        <div class="crypto-grid">
+          <article class="crypto-card">
+            <div class="crypto-card-head">
+              <div>
+                <div class="crypto-card-title">Transaction Flow Graph</div>
+                <div class="crypto-card-note">Click a counterparty to filter the transaction table</div>
+              </div>
+            </div>
+            <svg id="flowGraph" viewBox="0 0 820 390" role="img" aria-label="Transaction flow graph"></svg>
+            <div class="graph-legend">
+              <span><i class="legend-line in"></i>incoming</span>
+              <span><i class="legend-line out"></i>outgoing</span>
+              <span>edge thickness reflects linked record count, not ownership probability</span>
+            </div>
+          </article>
+
+          <article class="crypto-card">
+            <div class="crypto-card-head">
+              <div class="crypto-card-title">Automated Observations</div>
+              <div class="crypto-card-note">Deterministic summary · no identity inference</div>
+            </div>
+            <div class="crypto-card-body">
+              <ul id="cryptoObservations" class="crypto-observations"></ul>
+              <div id="cryptoSampling" class="crypto-sampling"></div>
+            </div>
+          </article>
+        </div>
+
+        <article class="crypto-card crypto-table-card">
+          <div class="crypto-card-head">
+            <div>
+              <div class="crypto-card-title">Transactions</div>
+              <div id="cryptoTableNote" class="crypto-card-note"></div>
+            </div>
+            <div class="crypto-table-actions">
+              <button id="cryptoClearFilter" type="button">CLEAR COUNTERPARTY FILTER</button>
+            </div>
+          </div>
+          <div class="crypto-table-wrap">
+            <table class="crypto-table">
+              <thead><tr><th>Time</th><th>Direction</th><th>Asset</th><th>Amount</th><th>Counterparty</th><th>Transaction</th></tr></thead>
+              <tbody id="cryptoTableBody"></tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+
+      <article id="transactionView" class="crypto-card" hidden>
+        <div class="crypto-card-head">
+          <div class="crypto-card-title">Transaction Details</div>
+        </div>
+        <div class="crypto-card-body">
+          <pre id="cryptoTransactionJson" class="crypto-transaction-json"></pre>
+        </div>
+      </article>
+    </section>
+
+    <div class="crypto-disclaimer">
+      CT Atlas Crypto displays public blockchain data retrieved from external explorer/node APIs. Transaction linkage is not identity attribution, common ownership, criminality, terrorist financing, or proof of control. Multi-input Bitcoin transactions, smart-contract execution and token routing can require specialist interpretation. Validate significant findings against the source explorer and other evidence before operational use.
+    </div>
+  </main>
+</div>
+<script src="crypto.js?v=1"></script>
+</body>
+</html>
