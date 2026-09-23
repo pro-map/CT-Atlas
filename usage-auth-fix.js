@@ -5,7 +5,7 @@ const TOKEN_KEY="ct_map_session_token";
 const USER_KEY="ct_map_username";
 const EXPIRY_KEY="ct_map_session_expires";
 const priorFetch=window.fetch.bind(window);
-const protectedPath=/\/((?:session-check|session-revoke|login|report|deep-search|quick-ask|feedback|crypto-analyze|usage-record|usage-stats|quiz-state|quiz-answer|quiz-history|quiz-answer-record))(?:\?|$)/;
+const protectedPath=/\/((?:session-check|session-revoke|login|report|deep-search|quick-ask|feedback|crypto-analyze|crypto-workspace|usage-record|usage-stats|quiz-state|quiz-answer|quiz-history|quiz-answer-record))(?:\?|$)/;
 
 function sessionToken(){
   return String(sessionStorage.getItem(TOKEN_KEY)||"");
