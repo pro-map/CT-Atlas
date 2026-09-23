@@ -4646,6 +4646,149 @@ html, body {
 
 
 /* ============================================================
+   V12 — COMPACT HEADER / MAXIMUM MAP HEIGHT
+   ============================================================ */
+#header {
+    gap: 6px !important;
+    padding: 6px 10px !important;
+    min-height: 80px !important;
+    align-items: stretch !important;
+}
+#brand {
+    order: 1 !important;
+    flex-basis: 285px !important;
+}
+#sessionActions {
+    order: 2 !important;
+    flex: 0 0 auto !important;
+    min-width: 0 !important;
+    max-width: 142px !important;
+    margin: 0 !important;
+    padding: 0 5px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 3px !important;
+    white-space: nowrap !important;
+    border-left: 1px solid rgba(92,132,156,.18);
+    border-right: 1px solid rgba(92,132,156,.12);
+}
+#sessionUserLabel {
+    display: inline-block !important;
+    max-width: 43px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    color: #829aa9 !important;
+    font-size: 6.6px !important;
+    font-weight: 800 !important;
+    letter-spacing: .04em !important;
+    text-transform: uppercase !important;
+}
+#mainHubButton,
+#logoutButton {
+    flex: 0 0 auto !important;
+    min-height: 24px !important;
+    padding: 4px 6px !important;
+    border-radius: 3px !important;
+    font-size: 6.6px !important;
+    line-height: 1 !important;
+    letter-spacing: .035em !important;
+}
+#updated {
+    order: 3 !important;
+    flex-basis: 94px !important;
+    min-width: 94px !important;
+    max-width: 94px !important;
+    padding: 4px 0 0 7px !important;
+    font-size: 7.6px !important;
+}
+#lastUpdated {
+    font-size: 7.2px !important;
+    line-height: 1.2 !important;
+}
+#headerCasualties24 {
+    column-gap: 4px !important;
+    margin-top: 3px !important;
+}
+#headerCasualtiesWindow {
+    font-size: 4.8px !important;
+    margin-bottom: 0 !important;
+}
+.header-casualty-group {
+    padding-top: 2px !important;
+}
+.header-casualty-group-label {
+    font-size: 5.2px !important;
+    margin-bottom: 0 !important;
+}
+.header-casualty-label {
+    font-size: 4.8px !important;
+}
+.header-casualty strong {
+    font-size: 9px !important;
+}
+#headerSituationBrief {
+    order: 4 !important;
+    min-height: 68px !important;
+    max-height: 68px !important;
+    padding: 6px 9px 7px !important;
+    overflow: hidden !important;
+}
+#headerSituationTopline {
+    margin-bottom: 4px !important;
+    gap: 5px !important;
+}
+#headerSituationText {
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 3 !important;
+    overflow: hidden !important;
+    max-height: 39px !important;
+    font-size: 9.8px !important;
+    line-height: 1.32 !important;
+}
+#headerSituationActions {
+    gap: 4px !important;
+}
+#weeklyAnalysisButton,
+#keyDevelopmentsButton {
+    min-height: 22px !important;
+    padding: 3px 6px !important;
+    font-size: 6.3px !important;
+}
+#commandMeta {
+    order: 5 !important;
+    flex: 0 0 0 !important;
+}
+@media (max-width: 1250px) {
+    #brand { flex-basis: 245px !important; }
+    #sessionActions {
+        max-width: 130px !important;
+        padding-left: 3px !important;
+        padding-right: 3px !important;
+    }
+    #sessionUserLabel {
+        max-width: 35px !important;
+        font-size: 6px !important;
+    }
+    #updated {
+        flex-basis: 88px !important;
+        min-width: 88px !important;
+        max-width: 88px !important;
+    }
+    #headerSituationText { font-size: 9.4px !important; }
+}
+@media (max-width: 1000px) {
+    #sessionUserLabel { display: none !important; }
+    #sessionActions { max-width: 86px !important; }
+    #mainHubButton,
+    #logoutButton {
+        padding: 4px 5px !important;
+        font-size: 6px !important;
+    }
+}
+
+/* ============================================================
    REPORT GENERATOR — VALID COMPARISON COVERAGE
    ============================================================ */
 .report-compare.is-unavailable {
