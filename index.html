@@ -857,6 +857,21 @@ body {
     font-weight: bold;
 }
 
+#mainHubButton,
+#logoutButton {
+    border: 1px solid #405563;
+    border-radius: 4px;
+    padding: 7px 9px;
+    background: #202f3b;
+    color: white;
+    cursor: pointer;
+    font-size: 8px;
+    font-weight: 850;
+    letter-spacing: .06em;
+}
+#mainHubButton:hover,
+#logoutButton:hover { background: #2b3e4c; }
+
 #access-error {
     min-height: 18px;
     margin-top: 12px;
@@ -4738,6 +4753,7 @@ html, body {
 
     <div id="sessionActions">
         <span id="sessionUserLabel" aria-live="polite"></span>
+        <button id="mainHubButton" type="button" onclick="window.location.href='main.html'">MAIN</button>
         <button id="logoutButton" type="button">SIGN OUT</button>
     </div>
 
@@ -5772,6 +5788,7 @@ Visible rate
             passwordInput.value = "";
             error.textContent = "";
             unlock(payload.username || username);
+            window.location.href = "main.html";
         } catch (loginError) {
             console.error(loginError);
             error.textContent = loginError?.message || "Authentication unavailable. Please retry.";
