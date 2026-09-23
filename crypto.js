@@ -9,8 +9,13 @@ const FILTER_IDS=[
   "filterMaxAmount","filterFromDate","filterToDate","filterText",
   "filterGraphMinLinks","filterGraphNodes"
 ];
+
 let lastPayload=null;
 let graphPositions=new Map();
+let tracePayloads=new Map();
+let traceExpanded=new Set();
+let traceBusy=new Set();
+let currentNetworkModel=null;
 
 function token(){return String(sessionStorage.getItem(TOKEN_KEY)||"");}
 function user(){return String(sessionStorage.getItem(USER_KEY)||"").trim().toLowerCase();}
@@ -35,11 +40,22 @@ function setStatus(message,type=""){
   el.textContent=message;
   el.className="crypto-status"+(type?" "+type:"");
 }
+function setTraceStatus(message,type=""){
+  const el=document.getElementById("cryptoTraceStatus");
+  if(!el)return;
+  el.textContent=message;
+  el.className="crypto-trace-status"+(type?" "+type:"");
+}
 function sessionHeaders(extra={}){
   return {"X-Session-Token":token(),...extra};
 }
 function redirectToLogin(){
   window.location.href="index.html";
+}
+function sleep(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
+function traceKey(address,chain){
+  const value=String(address||"");
+  return ["ethereum","bsc","polygon","arbitrum","base"].includes(chain)?value.toLowerCase():value;
 }
 
 async function verifySession(){
@@ -114,7 +130,14 @@ function readFilters(){
     to:String(document.getElementById("filterToDate")?.value||""),
     text:String(document.getElementById("filterText")?.value||"").trim().toLowerCase(),
     graphMinLinks:Math.max(1,Math.min(99,Number(document.getElementById("filterGraphMinLinks")?.value||1)||1)),
-    graphNodes:Math.max(5,Math.min(40,Number(document.getElementById("filterGraphNodes")?.value||20)||20))
+    graphNodes:Math.max(20,Math.min(80,Number(document.getElementById("filterGraphNodes")?.value||40)||40))
+  };
+}
+
+function traceSettings(){
+  return {
+    maxDepth:Math.max(2,Math.min(3,Number(document.getElementById("traceMaxDepth")?.value||3)||3)),
+    branch:Math.max(3,Math.min(8,Number(document.getElementById("traceBranch")?.value||3)||3))
   };
 }
 
@@ -181,6 +204,86 @@ function activeFilterLabels(){
   return labels;
 }
 
+function traceEntries(){
+  return [...tracePayloads.values()].sort((a,b)=>a.depth-b.depth||String(a.address).localeCompare(String(b.address)));
+}
+
+function allTraceRows(filtered=true){
+  const rows=[];
+  const seen=new Set();
+  for(const entry of traceEntries()){
+    const sourceRows=filtered?filterRows(entry.payload):(entry.payload.transactions||[]);
+    for(const row of sourceRows){
+      const key=[entry.key,row.id,row.asset,row.direction,(row.counterparties||[]).join(",")].join("|");
+      if(seen.has(key))continue;
+      seen.add(key);
+      rows.push({...row,_trace_source:entry.address,_trace_depth:entry.depth});
+    }
+  }
+  return rows.sort((a,b)=>String(b.time||"").localeCompare(String(a.time||"")));
+}
+
+function populateAssetFilter(){
+  const select=document.getElementById("filterAsset");
+  if(!select)return;
+  const current=String(select.value||"all");
+  const assets=[...new Set(traceEntries().flatMap(entry=>(entry.payload.transactions||[]).map(row=>String(row.asset||"").trim())).filter(Boolean))]
+    .sort((a,b)=>a.localeCompare(b));
+  select.innerHTML='<option value="all">All assets</option>'+
+    assets.map(asset=>'<option value="'+esc(asset)+'">'+esc(asset)+'</option>').join("");
+  select.value=assets.includes(current)?current:"all";
+}
+
+function resetFilterControls(renderNow=true){
+  const defaults={
+    filterDirection:"all",filterAsset:"all",filterType:"all",filterStatus:"all",
+    filterMinAmount:"",filterMaxAmount:"",filterFromDate:"",filterToDate:"",
+    filterText:"",filterGraphMinLinks:"1",filterGraphNodes:"40"
+  };
+  for(const [id,value] of Object.entries(defaults)){
+    const el=document.getElementById(id);
+    if(el)el.value=value;
+  }
+  populateAssetFilter();
+  if(renderNow)renderFilteredViews();
+}
+
+function renderFilterSummary(rows){
+  const el=document.getElementById("cryptoFilterSummary");
+  if(!el||!lastPayload)return;
+  const total=allTraceRows(false).length;
+  const labels=activeFilterLabels();
+  el.textContent=rows.length+" of "+total+" records across "+tracePayloads.size+" analyzed wallet(s)"+
+    (labels.length?" · "+labels.join(" · "):" · no transaction filters active");
+  el.classList.toggle("crypto-filter-active",labels.length>0);
+}
+
+function isSearchableAddress(address,chain){
+  const value=String(address||"");
+  if(["ethereum","bsc","polygon","arbitrum","base"].includes(chain))return /^0x[a-fA-F0-9]{40}$/.test(value);
+  if(chain==="tron")return /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(value);
+  if(chain==="bitcoin")return /^(?:bc1[ac-hj-np-z02-9]{11,71}|[13][a-km-zA-HJ-NP-Z1-9]{24,33})$/i.test(value);
+  return false;
+}
+
+function openCryptoSearch(address,chain){
+  if(!isSearchableAddress(address,chain)){
+    setStatus("This provider returned an encoded/non-searchable counterparty address for the current chain. You can still inspect linked transactions.","warning");
+    return;
+  }
+  const url=new URL("crypto.html",window.location.href);
+  url.search="";
+  url.searchParams.set("q",address);
+  url.searchParams.set("chain",chain);
+  url.searchParams.set("autorun","1");
+  const child=window.open(url.toString(),"_blank");
+  if(child){
+    try{child.opener=null;}catch(_){}
+  }else{
+    setStatus("The browser blocked the new CT Atlas Crypto tab. Allow pop-ups for CT Atlas and try again.","warning");
+  }
+}
+
 function renderKpis(payload,filteredRows){
   const box=document.getElementById("cryptoKpis");
   if(!box)return;
@@ -197,18 +300,16 @@ function renderKpis(payload,filteredRows){
     return;
   }
 
-  const all=Array.isArray(payload.transactions)?payload.transactions:[];
-  const rows=filteredRows||all;
+  const rows=filteredRows||[];
   const counterparties=new Set(rows.flatMap(row=>Array.isArray(row.counterparties)?row.counterparties:[]).filter(Boolean));
-  const incoming=rows.filter(row=>row.direction==="IN").length;
-  const outgoing=rows.filter(row=>row.direction==="OUT").length;
+  const maxDepth=currentNetworkModel?.maxVisibleDepth??0;
   const balance=payload.balance?fmtNumber(payload.balance.amount)+" "+String(payload.balance.asset||""):"—";
   box.innerHTML=[
-    kpi("Current balance",balance),
-    kpi("Sample records",String(all.length)),
+    kpi("Seed balance",balance),
     kpi("Filtered records",String(rows.length)),
-    kpi("Counterparties",String(counterparties.size)),
-    kpi("Direction mix",incoming+" IN · "+outgoing+" OUT")
+    kpi("Analyzed wallets",String(tracePayloads.size)),
+    kpi("Visible nodes",String(currentNetworkModel?.nodes?.length||counterparties.size)),
+    kpi("Trace depth","H"+String(maxDepth))
   ].join("");
 }
 
@@ -222,74 +323,14 @@ function renderObservations(payload){
   if(sampling)sampling.textContent=payload.sampling_note||"";
 }
 
-function populateAssetFilter(payload){
-  const select=document.getElementById("filterAsset");
-  if(!select)return;
-  const current=String(select.value||"all");
-  const assets=[...new Set((payload.transactions||[]).map(row=>String(row.asset||"").trim()).filter(Boolean))]
-    .sort((a,b)=>a.localeCompare(b));
-  select.innerHTML='<option value="all">All assets</option>'+
-    assets.map(asset=>'<option value="'+esc(asset)+'">'+esc(asset)+'</option>').join("");
-  select.value=assets.includes(current)?current:"all";
-}
-
-function resetFilterControls(renderNow=true){
-  const defaults={
-    filterDirection:"all",filterAsset:"all",filterType:"all",filterStatus:"all",
-    filterMinAmount:"",filterMaxAmount:"",filterFromDate:"",filterToDate:"",
-    filterText:"",filterGraphMinLinks:"1",filterGraphNodes:"20"
-  };
-  for(const [id,value] of Object.entries(defaults)){
-    const el=document.getElementById(id);
-    if(el)el.value=value;
-  }
-  if(lastPayload)populateAssetFilter(lastPayload);
-  if(renderNow)renderFilteredViews();
-}
-
-function renderFilterSummary(rows){
-  const el=document.getElementById("cryptoFilterSummary");
-  if(!el||!lastPayload)return;
-  const total=(lastPayload.transactions||[]).length;
-  const labels=activeFilterLabels();
-  el.textContent=rows.length+" of "+total+" records"+(labels.length?" · "+labels.join(" · "):" · no transaction filters active");
-  el.classList.toggle("crypto-filter-active",labels.length>0);
-}
-
-function isSearchableAddress(address,chain){
-  const value=String(address||"");
-  if(["ethereum","bsc","polygon","arbitrum","base"].includes(chain))return /^0x[a-fA-F0-9]{40}$/.test(value);
-  if(chain==="tron")return /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(value);
-  if(chain==="bitcoin")return /^(?:bc1[ac-hj-np-z02-9]{11,71}|[13][a-km-zA-HJ-NP-Z1-9]{24,33})$/i.test(value);
-  return false;
-}
-
-function openCryptoSearch(address,chain){
-  if(!isSearchableAddress(address,chain)){
-    setStatus("This provider returned an encoded/non-searchable counterparty address for the current chain. You can still drag the node and inspect linked transactions.","warning");
-    return;
-  }
-  const url=new URL("crypto.html",window.location.href);
-  url.search="";
-  url.searchParams.set("q",address);
-  url.searchParams.set("chain",chain);
-  url.searchParams.set("autorun","1");
-  const child=window.open(url.toString(),"_blank");
-  if(child){
-    try{child.opener=null;}catch(_){}
-  }else{
-    setStatus("The browser blocked the new CT Atlas Crypto tab. Allow pop-ups for CT Atlas and try again.","warning");
-  }
-}
-
 function renderTable(payload,rows){
   const tbody=document.getElementById("cryptoTableBody");
   const note=document.getElementById("cryptoTableNote");
   if(!tbody)return;
-  if(note)note.textContent=rows.length+" filtered record(s) · click a counterparty to open a new CT Atlas Crypto analysis";
+  if(note)note.textContent=rows.length+" filtered record(s) across "+tracePayloads.size+" analyzed wallet(s) · counterparty click opens a new CT Atlas Crypto analysis";
 
   if(!rows.length){
-    tbody.innerHTML='<tr><td colspan="6" class="crypto-filter-empty">No transaction records match the current filters.</td></tr>';
+    tbody.innerHTML='<tr><td colspan="7" class="crypto-filter-empty">No transaction records match the current filters.</td></tr>';
     return;
   }
 
@@ -308,8 +349,10 @@ function renderTable(payload,rows){
     const status=rowStatus(row);
     const tokenBadge=isTokenRow(row,payload)?'<span class="crypto-type-badge">TOKEN</span>':'<span class="crypto-type-badge">NATIVE</span>';
     const statusHtml='<span class="crypto-status-dot '+status+'"></span>'+status.toUpperCase();
+    const depth=Math.max(0,Math.min(3,Number(row._trace_depth)||0));
     return "<tr>"+
-      "<td>"+esc(fmtTime(row.time))+"<br><span class=\"crypto-card-note\">"+statusHtml+"</span></td>"+
+      '<td class="crypto-hop-cell"><span class="crypto-hop-badge h'+depth+'">H'+depth+'</span><span class="crypto-source-address" title="'+esc(row._trace_source||"")+'">'+esc(short(row._trace_source||"",7))+"</span></td>"+
+      "<td>"+esc(fmtTime(row.time))+'<br><span class="crypto-card-note">'+statusHtml+"</span></td>"+
       '<td class="'+cls+'">'+esc(dir||"—")+"</td>"+
       "<td>"+esc(row.asset||"—")+tokenBadge+"</td>"+
       "<td>"+esc(fmtNumber(row.amount))+"</td>"+
@@ -323,15 +366,16 @@ function renderTable(payload,rows){
   });
 }
 
-function buildGraphModel(payload,rows){
-  const seed=String(payload.query||"");
+function neighborStats(payload,rows){
+  const source=String(payload.query||"");
   const map=new Map();
 
   function nodeFor(address){
-    let node=map.get(address);
+    const key=traceKey(address,payload.chain);
+    let node=map.get(key);
     if(!node){
-      node={id:address,incoming:0,outgoing:0,total:0,assets:new Set()};
-      map.set(address,node);
+      node={id:address,key,incoming:0,outgoing:0,total:0,assets:new Set()};
+      map.set(key,node);
     }
     return node;
   }
@@ -340,7 +384,7 @@ function buildGraphModel(payload,rows){
     const direction=String(row.direction||"").toUpperCase();
     const unique=[...new Set((row.counterparties||[]).filter(Boolean))];
     for(const cp of unique){
-      if(String(cp).toLowerCase()===seed.toLowerCase())continue;
+      if(traceKey(cp,payload.chain)===traceKey(source,payload.chain))continue;
       const node=nodeFor(cp);
       node.total+=1;
       if(row.asset)node.assets.add(String(row.asset));
@@ -349,32 +393,121 @@ function buildGraphModel(payload,rows){
     }
   }
 
+  return [...map.values()].sort((a,b)=>b.total-a.total||b.incoming+b.outgoing-(a.incoming+a.outgoing));
+}
+
+function buildNetworkModel(payload){
+  const root=String(payload.query||"");
+  const rootKey=traceKey(root,payload.chain);
   const f=readFilters();
-  const nodes=[...map.values()]
-    .filter(node=>node.total>=f.graphMinLinks)
-    .sort((a,b)=>b.total-a.total||b.incoming+b.outgoing-(a.incoming+a.outgoing))
-    .slice(0,f.graphNodes)
-    .map(node=>({
-      ...node,
-      assets:[...node.assets].sort(),
-      relation:node.incoming>0&&node.outgoing>0?"both":node.incoming>0?"incoming":"outgoing"
-    }));
+  const settings=traceSettings();
+  const nodes=new Map();
+  const edges=new Map();
 
-  return {seed,nodes};
+  function ensureNode(address,depth){
+    const key=traceKey(address,payload.chain);
+    let node=nodes.get(key);
+    if(!node){
+      node={id:address,key,depth,total:0,incoming:0,outgoing:0,assets:new Set()};
+      nodes.set(key,node);
+    }else{
+      node.depth=Math.min(node.depth,depth);
+    }
+    return node;
+  }
+
+  function addEdge(from,to,count,assets,hop){
+    if(!count)return;
+    const fromKey=traceKey(from,payload.chain);
+    const toKey=traceKey(to,payload.chain);
+    const key=fromKey+"|"+toKey;
+    let edge=edges.get(key);
+    if(!edge){
+      edge={from,to,fromKey,toKey,count:0,assets:new Set(),hop};
+      edges.set(key,edge);
+    }
+    edge.count+=count;
+    edge.hop=Math.min(edge.hop,hop);
+    (assets||[]).forEach(asset=>edge.assets.add(asset));
+  }
+
+  ensureNode(root,0);
+
+  const entries=traceEntries().filter(entry=>entry.depth<settings.maxDepth);
+  for(const entry of entries){
+    const source=entry.address;
+    const sourceNode=ensureNode(source,entry.depth);
+    const rows=filterRows(entry.payload);
+    const neighbors=neighborStats(entry.payload,rows)
+      .filter(node=>node.total>=f.graphMinLinks)
+      .slice(0,entry.depth===0?Math.min(14,f.graphNodes-1):settings.branch);
+
+    for(const neighbor of neighbors){
+      const childDepth=Math.min(settings.maxDepth,entry.depth+1);
+      const child=ensureNode(neighbor.id,childDepth);
+      child.total+=neighbor.total;
+      child.incoming+=neighbor.incoming;
+      child.outgoing+=neighbor.outgoing;
+      neighbor.assets.forEach(asset=>child.assets.add(asset));
+      sourceNode.total+=neighbor.total;
+
+      const assets=[...neighbor.assets];
+      if(neighbor.incoming>0)addEdge(neighbor.id,source,neighbor.incoming,assets,childDepth);
+      if(neighbor.outgoing>0)addEdge(source,neighbor.id,neighbor.outgoing,assets,childDepth);
+    }
+  }
+
+  let nodeList=[...nodes.values()];
+  const keepKeys=new Set([rootKey,...traceEntries().map(entry=>entry.key)]);
+  if(nodeList.length>f.graphNodes){
+    const retained=nodeList
+      .sort((a,b)=>{
+        const ak=keepKeys.has(a.key)?1:0,bk=keepKeys.has(b.key)?1:0;
+        return bk-ak||a.depth-b.depth||b.total-a.total;
+      })
+      .slice(0,f.graphNodes);
+    const retainedKeys=new Set(retained.map(node=>node.key));
+    nodeList=retained;
+    for(const [key,edge] of edges){
+      if(!retainedKeys.has(edge.fromKey)||!retainedKeys.has(edge.toKey))edges.delete(key);
+    }
+  }
+
+  nodeList.forEach(node=>{
+    node.assets=[...node.assets].sort();
+    node.relation=node.incoming>0&&node.outgoing>0?"both":node.incoming>0?"incoming":"outgoing";
+    node.expanded=traceExpanded.has(node.key);
+    node.busy=traceBusy.has(node.key);
+    node.searchable=isSearchableAddress(node.id,payload.chain);
+  });
+
+  const depthByKey=new Map(nodeList.map(node=>[node.key,node.depth]));
+  const edgeList=[...edges.values()].map(edge=>({
+    ...edge,
+    assets:[...edge.assets].sort(),
+    fromDepth:depthByKey.get(edge.fromKey)??0,
+    toDepth:depthByKey.get(edge.toKey)??0
+  }));
+  const maxVisibleDepth=nodeList.reduce((max,node)=>Math.max(max,node.depth),0);
+
+  return {root,rootKey,nodes:nodeList,edges:edgeList,maxVisibleDepth,settings};
 }
 
-function defaultGraphPosition(id,index,total,isSeed){
-  if(isSeed)return {x:410,y:230};
-  const radius=total>22?180:total>12?165:145;
-  const angle=-Math.PI/2+(Math.PI*2*index/Math.max(total,1));
-  return {x:410+Math.cos(angle)*radius,y:230+Math.sin(angle)*radius};
+function defaultGraphPosition(node,index,totalAtDepth){
+  if(node.depth===0)return {x:500,y:325};
+  const radius=node.depth===1?150:node.depth===2?245:305;
+  const angleOffset=node.depth===1?-Math.PI/2:node.depth===2?-Math.PI/2+0.28:-Math.PI/2+0.52;
+  const angle=angleOffset+(Math.PI*2*index/Math.max(totalAtDepth,1));
+  return {x:500+Math.cos(angle)*radius,y:325+Math.sin(angle)*radius};
 }
 
-function graphPosition(id,index,total,isSeed){
-  if(graphPositions.has(id))return graphPositions.get(id);
-  const pos=defaultGraphPosition(id,index,total,isSeed);
-  graphPositions.set(id,pos);
-  return pos;
+function ensureGraphPositions(model){
+  for(const depth of [0,1,2,3]){
+    const group=model.nodes.filter(node=>node.depth===depth);
+    group.forEach((node,index)=>{
+      if(!graphPositions.has(node.key))graphPositions.set(node.key,defaultGraphPosition(node,index,group.length));
+    });
+  }
 }
 
 function updateGraphEdges(svg){
@@ -391,7 +524,7 @@ function updateGraphEdges(svg){
     const label=group.querySelector("text");
     if(label){
       label.setAttribute("x",(a.x+b.x)/2);
-      label.setAttribute("y",(a.y+b.y)/2-5);
+      label.setAttribute("y",(a.y+b.y)/2-6);
     }
   });
 }
@@ -403,12 +536,13 @@ function clientPointToSvg(svg,event){
   return matrix?point.matrixTransform(matrix.inverse()):{x:event.clientX,y:event.clientY};
 }
 
-function attachGraphInteraction(svg,group,id,payload,searchable,isSeed=false){
+function attachGraphInteraction(svg,group,node,payload,isSeed=false){
   let state=null;
   group.addEventListener("pointerdown",event=>{
     if(event.button!==0)return;
+    if(event.target.closest?.(".graph-expand-control"))return;
     const p=clientPointToSvg(svg,event);
-    const current=graphPositions.get(id)||{x:p.x,y:p.y};
+    const current=graphPositions.get(node.key)||{x:p.x,y:p.y};
     state={pointerId:event.pointerId,startX:p.x,startY:p.y,offsetX:p.x-current.x,offsetY:p.y-current.y,moved:false};
     group.classList.add("dragging");
     try{group.setPointerCapture(event.pointerId);}catch(_){}
@@ -419,10 +553,10 @@ function attachGraphInteraction(svg,group,id,payload,searchable,isSeed=false){
     const p=clientPointToSvg(svg,event);
     if(Math.hypot(p.x-state.startX,p.y-state.startY)>5)state.moved=true;
     const next={
-      x:Math.max(35,Math.min(785,p.x-state.offsetX)),
-      y:Math.max(35,Math.min(425,p.y-state.offsetY))
+      x:Math.max(40,Math.min(960,p.x-state.offsetX)),
+      y:Math.max(40,Math.min(610,p.y-state.offsetY))
     };
-    graphPositions.set(id,next);
+    graphPositions.set(node.key,next);
     group.setAttribute("transform","translate("+next.x+" "+next.y+")");
     updateGraphEdges(svg);
     event.preventDefault();
@@ -433,7 +567,7 @@ function attachGraphInteraction(svg,group,id,payload,searchable,isSeed=false){
     state=null;
     group.classList.remove("dragging");
     try{group.releasePointerCapture(event.pointerId);}catch(_){}
-    if(!moved&&!isSeed&&searchable)openCryptoSearch(id,payload.chain);
+    if(!moved&&!isSeed&&node.searchable)openCryptoSearch(node.id,payload.chain);
   };
   group.addEventListener("pointerup",finish);
   group.addEventListener("pointercancel",event=>{
@@ -441,95 +575,256 @@ function attachGraphInteraction(svg,group,id,payload,searchable,isSeed=false){
   });
   if(!isSeed){
     group.addEventListener("keydown",event=>{
-      if((event.key==="Enter"||event.key===" ")&&searchable){
-        event.preventDefault();openCryptoSearch(id,payload.chain);
+      if((event.key==="Enter"||event.key===" ")&&node.searchable){
+        event.preventDefault();openCryptoSearch(node.id,payload.chain);
       }
     });
   }
 }
 
-function renderGraph(payload,rows){
+async function fetchAddressAnalysis(address,chain,limit=40){
+  const response=await fetch(API_BASE+"/crypto-analyze",{
+    method:"POST",
+    headers:sessionHeaders({"Content-Type":"application/json"}),
+    body:JSON.stringify({user_id:user(),query:address,chain,limit})
+  });
+  const payload=await response.json().catch(()=>({}));
+  if(response.status===401){redirectToLogin();throw new Error("Session expired.");}
+  if(!response.ok)throw new Error(payload.error||"Unable to expand this wallet.");
+  if(payload.kind!=="address")throw new Error("Only wallet addresses can be expanded in the trace graph.");
+  return payload;
+}
+
+async function expandTraceNode(address,options={}){
+  if(!lastPayload||lastPayload.kind!=="address")return false;
+  const model=currentNetworkModel||buildNetworkModel(lastPayload);
+  const key=traceKey(address,lastPayload.chain);
+  const node=model.nodes.find(item=>item.key===key);
+  if(!node)throw new Error("This node is no longer visible under the current filters.");
+  if(node.depth>=model.settings.maxDepth){
+    setTraceStatus("This node is already at the configured maximum depth H"+model.settings.maxDepth+".","error");
+    return false;
+  }
+  if(!node.searchable){
+    setTraceStatus("This node is not available in a searchable address format from the current provider.","error");
+    return false;
+  }
+  if(traceExpanded.has(key)){
+    if(!options.quiet)setTraceStatus("This wallet has already been expanded in the current trace.","success");
+    return true;
+  }
+  if(traceBusy.has(key))return false;
+
+  traceBusy.add(key);
+  renderFilteredViews();
+  if(!options.quiet)setTraceStatus("Expanding "+short(address,9)+" from H"+node.depth+" to H"+(node.depth+1)+"…","working");
+
+  try{
+    const payload=await fetchAddressAnalysis(address,lastPayload.chain,40);
+    tracePayloads.set(key,{key,address,payload,depth:node.depth});
+    traceExpanded.add(key);
+    populateAssetFilter();
+    renderFilteredViews();
+    if(!options.quiet){
+      setTraceStatus("Expanded "+short(address,9)+". The graph now includes up to H"+Math.min(model.settings.maxDepth,node.depth+1)+".","success");
+    }
+    return true;
+  }catch(error){
+    if(!options.quiet)setTraceStatus(error?.message||"Trace expansion failed.","error");
+    throw error;
+  }finally{
+    traceBusy.delete(key);
+    renderFilteredViews();
+  }
+}
+
+async function autoTrace(){
+  if(!lastPayload||lastPayload.kind!=="address")return;
+  const button=document.getElementById("cryptoAutoTrace");
+  const settings=traceSettings();
+  if(button){button.disabled=true;button.textContent="TRACING…";}
+  setTraceStatus("Automatic trace started. CT Atlas expands only the strongest searchable branches to limit provider load.","working");
+
+  let expandedCount=0;
+  try{
+    for(let depth=1;depth<settings.maxDepth;depth++){
+      currentNetworkModel=buildNetworkModel(lastPayload);
+      const candidates=currentNetworkModel.nodes
+        .filter(node=>node.depth===depth&&node.searchable&&!traceExpanded.has(node.key))
+        .sort((a,b)=>b.total-a.total)
+        .slice(0,settings.branch);
+
+      if(!candidates.length)continue;
+
+      for(let i=0;i<candidates.length;i++){
+        const node=candidates[i];
+        setTraceStatus(
+          "Auto trace H"+depth+" → H"+(depth+1)+" · "+(i+1)+"/"+candidates.length+
+          " · "+short(node.id,8),
+          "working"
+        );
+        try{
+          const ok=await expandTraceNode(node.id,{quiet:true});
+          if(ok)expandedCount++;
+        }catch(error){
+          console.warn("Auto-trace node skipped",node.id,error);
+        }
+        await sleep(400);
+      }
+    }
+    renderFilteredViews();
+    setTraceStatus(
+      expandedCount
+        ? "Automatic trace complete: "+expandedCount+" wallet(s) expanded, visible network depth H"+(currentNetworkModel?.maxVisibleDepth||0)+"."
+        : "Automatic trace found no additional searchable branches to expand under the current filters.",
+      "success"
+    );
+  }catch(error){
+    setTraceStatus(error?.message||"Automatic trace failed.","error");
+  }finally{
+    if(button){button.disabled=false;button.textContent="AUTO TRACE";}
+  }
+}
+
+function clearTrace(){
+  if(!lastPayload||lastPayload.kind!=="address")return;
+  const root=String(lastPayload.query||"");
+  const key=traceKey(root,lastPayload.chain);
+  tracePayloads=new Map([[key,{key,address:root,payload:lastPayload,depth:0}]]);
+  traceExpanded=new Set([key]);
+  traceBusy=new Set();
+  graphPositions=new Map();
+  populateAssetFilter();
+  renderFilteredViews();
+  setTraceStatus("Trace cleared. H1 is rebuilt from the seed wallet only.","success");
+}
+
+function renderGraph(payload){
   const svg=document.getElementById("flowGraph");
   if(!svg)return;
 
-  const model=buildGraphModel(payload,rows);
-  const seed=model.seed,nodes=model.nodes;
-  const seedPos=graphPosition(seed,0,nodes.length,true);
+  const model=buildNetworkModel(payload);
+  currentNetworkModel=model;
+  ensureGraphPositions(model);
+
+  const nodeByKey=new Map(model.nodes.map(node=>[node.key,node]));
   let html='<defs>'+
     '<marker id="arrowIn" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#46d890"></path></marker>'+
     '<marker id="arrowOut" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#ff8268"></path></marker>'+
     '</defs>';
 
-  nodes.forEach((node,index)=>graphPosition(node.id,index,nodes.length,false));
-
-  for(const node of nodes){
-    const cpPos=graphPositions.get(node.id);
-    if(node.incoming>0){
-      const width=Math.min(8,1.3+Math.log2(1+node.incoming)*1.25);
-      html+='<g class="graph-edge-group" data-from="'+esc(node.id)+'" data-to="'+esc(seed)+'">'+
-        '<line class="graph-edge in" x1="'+cpPos.x+'" y1="'+cpPos.y+'" x2="'+seedPos.x+'" y2="'+seedPos.y+'" stroke-width="'+width+'" marker-end="url(#arrowIn)"></line>'+
-        (node.incoming>1?'<text class="graph-edge-label" x="'+((cpPos.x+seedPos.x)/2)+'" y="'+((cpPos.y+seedPos.y)/2-5)+'">'+node.incoming+" IN</text>":"")+
-        "</g>";
-    }
-    if(node.outgoing>0){
-      const width=Math.min(8,1.3+Math.log2(1+node.outgoing)*1.25);
-      html+='<g class="graph-edge-group" data-from="'+esc(seed)+'" data-to="'+esc(node.id)+'">'+
-        '<line class="graph-edge out" x1="'+seedPos.x+'" y1="'+seedPos.y+'" x2="'+cpPos.x+'" y2="'+cpPos.y+'" stroke-width="'+width+'" marker-end="url(#arrowOut)"></line>'+
-        (node.outgoing>1?'<text class="graph-edge-label" x="'+((cpPos.x+seedPos.x)/2)+'" y="'+((cpPos.y+seedPos.y)/2-5)+'">'+node.outgoing+" OUT</text>":"")+
-        "</g>";
-    }
+  for(const edge of model.edges){
+    const a=graphPositions.get(edge.fromKey),b=graphPositions.get(edge.toKey);
+    if(!a||!b)continue;
+    const fromNode=nodeByKey.get(edge.fromKey),toNode=nodeByKey.get(edge.toKey);
+    const sourceDepth=Math.min(fromNode?.depth??0,toNode?.depth??0);
+    const targetDepth=Math.max(fromNode?.depth??0,toNode?.depth??0);
+    const className=targetDepth>=3?"hop3":targetDepth>=2?"hop2":"";
+    const outgoing=fromNode&&toNode&&fromNode.depth<=toNode.depth;
+    const edgeClass=outgoing?"out":"in";
+    const width=Math.min(8,1.2+Math.log2(1+edge.count)*1.2);
+    const marker=outgoing?"arrowOut":"arrowIn";
+    html+='<g class="graph-edge-group" data-from="'+esc(edge.fromKey)+'" data-to="'+esc(edge.toKey)+'">'+
+      '<line class="graph-edge trace-link '+edgeClass+' '+className+'" x1="'+a.x+'" y1="'+a.y+'" x2="'+b.x+'" y2="'+b.y+'" stroke-width="'+width+'" marker-end="url(#'+marker+')"></line>'+
+      (edge.count>1?'<text class="graph-edge-label" x="'+((a.x+b.x)/2)+'" y="'+((a.y+b.y)/2-6)+'">'+edge.count+" tx</text>":"")+
+      "</g>";
   }
 
-  html+='<g class="graph-seed" data-id="'+esc(seed)+'" transform="translate('+seedPos.x+" "+seedPos.y+')">'+
-    '<circle class="graph-node seed" cx="0" cy="0" r="34"></circle>'+
-    '<text class="graph-label" x="0" y="-2" text-anchor="middle">SEED</text>'+
-    '<text class="graph-sub" x="0" y="13" text-anchor="middle">'+esc(short(seed,6))+"</text>"+
-    "</g>";
+  for(const node of model.nodes){
+    const p=graphPositions.get(node.key);
+    if(!p)continue;
+    const isSeed=node.depth===0;
+    if(isSeed){
+      html+='<g class="graph-seed" data-key="'+esc(node.key)+'" transform="translate('+p.x+" "+p.y+')">'+
+        '<circle class="graph-node seed" cx="0" cy="0" r="35"></circle>'+
+        '<text class="graph-label" x="0" y="-3" text-anchor="middle">SEED</text>'+
+        '<text class="graph-sub" x="0" y="13" text-anchor="middle">'+esc(short(node.id,6))+"</text>"+
+        "</g>";
+      continue;
+    }
 
-  nodes.forEach(node=>{
-    const p=graphPositions.get(node.id);
-    const searchable=isSearchableAddress(node.id,payload.chain);
-    const radius=Math.min(28,14+Math.log2(1+node.total)*3);
-    const assets=node.assets.slice(0,3).join(" · ");
-    const title=(searchable?"Click: open new CT Atlas Crypto analysis. ":"")+
-      "Drag: reposition. "+node.total+" linked record(s). "+node.incoming+" incoming / "+node.outgoing+" outgoing."+
-      (assets?" Assets: "+assets:"");
-    html+='<g class="graph-counterparty" data-id="'+esc(node.id)+'" transform="translate('+p.x+" "+p.y+')" tabindex="0" role="button" aria-label="'+esc(title)+'">'+
+    const radius=Math.min(29,14+Math.log2(1+Math.max(1,node.total))*3);
+    const assets=node.assets.slice(0,2).join(" · ");
+    const title="H"+node.depth+" · "+node.total+" linked record(s)"+
+      (assets?" · "+assets:"")+
+      (node.searchable?" · click node: open new tab · +: expand in graph":" · provider address format cannot be expanded");
+    const hopClass="h"+Math.min(3,node.depth);
+    const expandClass=node.busy?"loading":node.expanded?"expanded":node.depth>=model.settings.maxDepth||!node.searchable?"disabled":"";
+    const expandText=node.busy?"…":node.expanded?"✓":"+";
+    const ringRadius=radius+5;
+
+    html+='<g class="graph-counterparty" data-key="'+esc(node.key)+'" transform="translate('+p.x+" "+p.y+')" tabindex="0" role="button" aria-label="'+esc(title)+'">'+
       "<title>"+esc(title)+"</title>"+
-      '<circle class="graph-node '+node.relation+(searchable?"":" unsearchable")+'" cx="0" cy="0" r="'+radius+'"></circle>'+
-      '<text class="graph-label" x="0" y="-1" text-anchor="middle">'+esc(short(node.id,5))+"</text>"+
-      '<text class="graph-sub" x="0" y="13" text-anchor="middle">'+node.total+" tx"+(assets?" · "+esc(short(assets,8)):"")+"</text>"+
+      '<circle class="graph-hop-ring '+hopClass+'" cx="0" cy="0" r="'+ringRadius+'"></circle>'+
+      '<circle class="graph-node '+node.relation+(node.expanded?" trace-expanded":"")+(node.searchable?"":" unsearchable")+'" cx="0" cy="0" r="'+radius+'"></circle>'+
+      '<text class="graph-label" x="0" y="-2" text-anchor="middle">'+esc(short(node.id,5))+"</text>"+
+      '<text class="graph-sub" x="0" y="12" text-anchor="middle">'+node.total+" tx"+(assets?" · "+esc(short(assets,6)):"")+"</text>"+
+      '<g class="graph-hop-badge '+hopClass+'" transform="translate('+(-radius-5)+" "+(-radius-5)+')"><circle class="graph-hop-badge '+hopClass+'" cx="0" cy="0" r="10"></circle><text class="graph-hop-text" x="0" y="2.5" text-anchor="middle">H'+node.depth+"</text></g>"+
+      '<g class="graph-expand-control '+expandClass+'" data-key="'+esc(node.key)+'" transform="translate('+(radius+5)+" "+(-radius-5)+')" role="button" aria-label="Expand '+esc(node.id)+' in graph"><circle cx="0" cy="0" r="11"></circle><text x="0" y="5" text-anchor="middle">'+expandText+"</text></g>"+
       "</g>";
-  });
+  }
 
-  if(!nodes.length){
-    html+='<text class="graph-label" x="410" y="230" text-anchor="middle">No counterparties match the current graph filters</text>';
+  if(model.nodes.length<=1){
+    html+='<text class="graph-label" x="500" y="405" text-anchor="middle">No counterparties match the current filters</text>';
   }
 
   svg.innerHTML=html;
   updateGraphEdges(svg);
 
+  const seedNode=model.nodes.find(node=>node.depth===0);
   const seedGroup=svg.querySelector(".graph-seed");
-  if(seedGroup)attachGraphInteraction(svg,seedGroup,seed,payload,false,true);
+  if(seedNode&&seedGroup)attachGraphInteraction(svg,seedGroup,seedNode,payload,true);
+
   svg.querySelectorAll(".graph-counterparty").forEach(group=>{
-    const id=String(group.dataset.id||"");
-    attachGraphInteraction(svg,group,id,payload,isSearchableAddress(id,payload.chain),false);
+    const key=String(group.dataset.key||"");
+    const node=nodeByKey.get(key);
+    if(!node)return;
+    attachGraphInteraction(svg,group,node,payload,false);
   });
+
+  svg.querySelectorAll(".graph-expand-control").forEach(control=>{
+    const key=String(control.dataset.key||"");
+    const node=nodeByKey.get(key);
+    if(!node)return;
+    control.addEventListener("pointerdown",event=>{event.stopPropagation();});
+    control.addEventListener("pointerup",event=>{event.stopPropagation();});
+    control.addEventListener("click",event=>{
+      event.stopPropagation();
+      if(control.classList.contains("disabled")||control.classList.contains("loading")||control.classList.contains("expanded"))return;
+      expandTraceNode(node.id).catch(error=>console.warn(error));
+    });
+  });
+
+  setTraceStatus(
+    "Network: "+model.nodes.length+" visible node(s) · "+tracePayloads.size+" analyzed wallet(s) · visible depth H"+model.maxVisibleDepth+
+    " · max depth H"+model.settings.maxDepth+" · branch "+model.settings.branch,
+    ""
+  );
 }
 
 function renderFilteredViews(){
   if(!lastPayload||lastPayload.kind!=="address")return;
-  const rows=filterRows(lastPayload);
+  const rows=allTraceRows(true);
   renderFilterSummary(rows);
+  renderGraph(lastPayload);
   renderKpis(lastPayload,rows);
   renderTable(lastPayload,rows);
-  renderGraph(lastPayload,rows);
+}
+
+function resetTraceState(payload){
+  tracePayloads=new Map();
+  traceExpanded=new Set();
+  traceBusy=new Set();
+  graphPositions=new Map();
+  currentNetworkModel=null;
+  const address=String(payload.query||"");
+  const key=traceKey(address,payload.chain);
+  tracePayloads.set(key,{key,address,payload,depth:0});
+  traceExpanded.add(key);
 }
 
 function render(payload){
   lastPayload=payload;
-  graphPositions=new Map();
-
   const result=document.getElementById("cryptoResult");
   if(result)result.hidden=false;
   document.getElementById("cryptoResultQuery").textContent=payload.query||"";
@@ -548,8 +843,9 @@ function render(payload){
   }else{
     if(addressView)addressView.hidden=false;
     if(transactionView)transactionView.hidden=true;
+    resetTraceState(payload);
     resetFilterControls(false);
-    populateAssetFilter(payload);
+    populateAssetFilter();
     renderObservations(payload);
     renderFilteredViews();
   }
@@ -608,6 +904,10 @@ function bind(){
     graphPositions=new Map();
     renderFilteredViews();
   });
+  document.getElementById("cryptoClearTrace")?.addEventListener("click",clearTrace);
+  document.getElementById("cryptoAutoTrace")?.addEventListener("click",autoTrace);
+  document.getElementById("traceMaxDepth")?.addEventListener("change",()=>renderFilteredViews());
+  document.getElementById("traceBranch")?.addEventListener("change",()=>renderFilteredViews());
 
   FILTER_IDS.forEach(id=>{
     const el=document.getElementById(id);
