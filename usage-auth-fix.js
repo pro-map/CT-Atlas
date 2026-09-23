@@ -86,14 +86,6 @@ function loadFeedback(){
   document.head.appendChild(script);
 }
 
-function loadCryptoLauncher(){
-  if(document.getElementById("cryptoLauncherScript"))return;
-  const script=document.createElement("script");
-  script.id="cryptoLauncherScript";
-  script.src="crypto-launcher.js?v=1";
-  script.defer=true;
-  document.head.appendChild(script);
-}
 
 function loadDailyQuiz(){
   if(document.getElementById("dailyQuizClientScript"))return;
@@ -111,7 +103,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   loadDailyQuiz();
   loadQuickAsk();
   loadFeedback();
-  loadCryptoLauncher();
   setInterval(()=>{ enforceSessionExpiry(); refreshAdminUsageButton(); },30000);
 });
 })();
