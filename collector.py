@@ -8261,6 +8261,601 @@ def _trend_payload(event, index):
                 or
                 ""
             ),
+        "ai_relevance_score":
+            int(
+                event.get("ai_relevance_score", 0)
+                or
+                0
+            ),
+        "source_count":
+            int(
+                event.get("source_count", 1)
+                or
+                1
+            ),
+        "article_count":
+            int(
+                event.get("article_count", 1)
+                or
+                1
+            ),
+        "primary_source":
+            clean_text(
+                event.get("source", "")
+            ),
+    }
+
+
+def _trend_fallback(candidates, generated_at, reason=""):
+    developments = []
+
+    for event in candidates[:5]:
+        relevance = int(
+            event.get(
+                "ai_relevance_score",
+                0,
+            )
+            or
+            0
+        )
+
+        if relevance >= 90:
+            severity = "HIGH"
+        else:
+            severity = "SIGNIFICANT"
+
+        categories = list(
+            event.get("categories")
+            or
+            ([event.get("category")] if event.get("category") else [])
+        )
+
+        location = ", ".join(
+            value
+            for value in [
+                clean_text(event.get("city", "")),
+                clean_text(event.get("region", "")),
+                clean_text(event.get("country", "")),
+            ]
+            if value
+        )
+
+        developments.append(
+            {
+                "event_id": str(
+                    event.get("id")
+                    or
+                    event.get("_mapKey")
+                    or
+                    ""
+                ),
+                "severity": severity,
+                "category": (
+                    categories[0]
+                    if categories
+                    else
+                    "CT Development"
+                ),
+                "headline": selection_compact_text(
+                    event.get("title"),
+                    220,
+                ),
+                "detail": selection_compact_text(
+                    event.get("summary"),
+                    420,
+                ),
+                "location": location,
+            }
+        )
+
+    return {
+        "status": "fallback",
+        "model": AI_TREND_MODEL,
+        "window_hours": 24,
+        "generated_at": generated_at,
+        "candidate_events": len(candidates),
+        "overview": (
+            "AI trend synthesis was unavailable for this update. "
+            "The highest-relevance CT events reported or updated in the last "
+            "24 hours are shown below without additional analytical synthesis."
+        ),
+        "developments": developments,
+        "warning": reason,
+    }
+
+
+def generate_24h_trend_summary(events):
+    generated_at = datetime.now(
+        timezone.utc
+    ).isoformat()
+
+    cutoff = datetime.now(
+        timezone.utc
+    ) - timedelta(
+        hours=24
+    )
+
+    recent = []
+
+    for event in events:
+        recency = _trend_recency(
+            event
+        )
+
+        if (
+            recency is not None
+            and
+            recency >= cutoff
+        ):
+            recent.append(
+                event
+            )
+
+    recent.sort(
+        key=_trend_priority,
+        reverse=True,
+    )
+
+    recent = recent[
+        :AI_TREND_MAX_CANDIDATES
+    ]
+
+    print()
+    print("=" * 70)
+    print("GEMINI 24H SENSITIVE TREND SUMMARY")
+    print("=" * 70)
+    print(
+        f"Recent candidate events: {len(recent)}"
+    )
+    print(
+        f"Trend model: {AI_TREND_MODEL}"
+    )
+
+    if not recent:
+        print(
+            "No CT events reported/updated in the last 24 hours."
+        )
+
+        return {
+            "status": "ok",
+            "model": AI_TREND_MODEL,
+            "window_hours": 24,
+            "generated_at": generated_at,
+            "candidate_events": 0,
+            "overview": (
+                "No significant CT developments were available for the "
+                "24-hour trend brief at the time of this update."
+            ),
+            "developments": [],
+        }
+
+    api_key = os.getenv(
+        "GEMINI_API_KEY"
+    )
+
+    if not api_key:
+        print(
+            "Trend summary fallback: GEMINI_API_KEY unavailable."
+        )
+        return _trend_fallback(
+            recent,
+            generated_at,
+            "GEMINI_API_KEY unavailable",
+        )
+
+    batch = [
+        _trend_payload(
+            event,
+            index,
+        )
+        for index, event in enumerate(
+            recent
+        )
+    ]
+
+    body = {
+        "model": AI_TREND_MODEL,
+        "input": (
+            "Produce the 24-hour sensitive CT developments brief from the "
+            "deduplicated events below. Use only these records.\n\n"
+            +
+            json.dumps(
+                {"events": batch},
+                ensure_ascii=False,
+            )
+        ),
+        "system_instruction": AI_TREND_INSTRUCTIONS,
+        "store": False,
+        "response_format": {
+            "type": "text",
+            "mime_type": "application/json",
+            "schema": AI_TREND_SCHEMA,
+        },
+        "generation_config": {
+            "max_output_tokens": 8000,
+            "thinking_level": "minimal",
+        },
+    }
+
+    headers = {
+        "x-goog-api-key": api_key,
+        "Content-Type": "application/json",
+    }
+
+    last_error = None
+
+    for attempt in range(
+        1,
+        AI_TREND_ATTEMPTS + 1,
+    ):
+        try:
+            response = requests.post(
+                GEMINI_INTERACTIONS_URL,
+                headers=headers,
+                json=body,
+                timeout=AI_TREND_TIMEOUT,
+            )
+
+            if response.status_code == 429:
+                last_error = "Gemini trend quota exceeded (429)"
+                print(
+                    f"   Trend attempt {attempt}/{AI_TREND_ATTEMPTS}: 429"
+                )
+                time.sleep(
+                    attempt * 5
+                )
+                continue
+
+            if response.status_code >= 500:
+                last_error = (
+                    "Gemini trend temporary error "
+                    f"{response.status_code}"
+                )
+                print(
+                    f"   Trend attempt {attempt}/{AI_TREND_ATTEMPTS}: "
+                    f"HTTP {response.status_code}"
+                )
+                time.sleep(
+                    attempt * 4
+                )
+                continue
+
+            response.raise_for_status()
+
+            output_text = extract_interaction_text(
+                response.json()
+            )
+
+            result = json.loads(
+                output_text
+            )
+
+            developments = result.get(
+                "developments",
+                []
+            )
+
+            if not isinstance(
+                developments,
+                list,
+            ):
+                developments = []
+
+            result[
+                "developments"
+            ] = developments[:6]
+
+            result.update(
+                {
+                    "status": "ok",
+                    "model": AI_TREND_MODEL,
+                    "window_hours": 24,
+                    "generated_at": generated_at,
+                    "candidate_events": len(recent),
+                }
+            )
+
+            print(
+                f"Trend summary generated: {len(result['developments'])} "
+                "priority developments."
+            )
+
+            return result
+
+        except Exception as error:
+            last_error = str(
+                error
+            )
+            print(
+                f"   Trend attempt {attempt}/{AI_TREND_ATTEMPTS} failed: "
+                f"{error}"
+            )
+            time.sleep(
+                attempt * 3
+            )
+
+    print(
+        "Trend summary AI unavailable; using safe fallback."
+    )
+
+    return _trend_fallback(
+        recent,
+        generated_at,
+        last_error or "Unknown Gemini trend error",
+    )
+
+
+
+
+def load_existing_weekly_analysis():
+    try:
+        with open(
+            OUTPUT_FILE,
+            "r",
+            encoding="utf-8",
+        ) as file:
+            data = json.load(
+                file
+            )
+
+        weekly = data.get(
+            "weekly_analysis"
+        )
+
+        return (
+            weekly
+            if isinstance(
+                weekly,
+                dict,
+            )
+            else
+            {}
+        )
+
+    except Exception:
+        return {}
+
+
+def _weekly_event_time(event):
+    """
+    Prefer explicit occurrence/incident dates when available.
+    Fall back to the event's report/update recency so the weekly analysis
+    remains usable for records that do not yet carry a structured event date.
+    """
+    for field in (
+        "event_date",
+        "occurrence_date",
+        "occurred_at",
+        "incident_date",
+        "attack_date",
+    ):
+        dt = _parse_iso_utc(
+            event.get(
+                field
+            )
+        )
+
+        if dt is not None:
+            return dt
+
+    return _trend_recency(
+        event
+    )
+
+
+def _weekly_geo_breakdown(events, field_name, limit=8):
+    """
+    Incident-based geographic picture. Raw records/articles never determine
+    operational significance. Distinct incident_id values are counted once,
+    with attacks counted only when is_attack is explicitly true.
+    """
+    records = Counter()
+    incident_sets = defaultdict(lambda: defaultdict(set))
+
+    for event in events:
+        location = clean_text(event.get(field_name, ""))
+        if not location:
+            continue
+
+        records[location] += 1
+        incident_id = clean_text(event.get("incident_id") or event.get("id") or "")
+        if not incident_id:
+            continue
+
+        primary = clean_text(event.get("primary_event_type") or "OTHER_CT").upper()
+        if bool(event.get("is_attack")) and primary == "ATTACK":
+            incident_sets[location]["ATTACK"].add(incident_id)
+        elif primary in {
+            "CT_OPERATION", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT", "ARREST",
+            "JUDICIAL", "FINANCING", "WEAPONS", "ONLINE_CYBER_AI", "CBRN",
+            "PIRACY", "OTHER_CT",
+        }:
+            incident_sets[location][primary].add(incident_id)
+
+    def count(location, kind):
+        return len(incident_sets[location].get(kind, set()))
+
+    ranked = sorted(
+        records.keys(),
+        key=lambda location: (
+            -count(location, "ATTACK"),
+            -count(location, "CT_OPERATION"),
+            -count(location, "DISRUPTED_PLOT"),
+            location,
+        ),
+    )[:limit]
+
+    return [
+        {
+            "name": location,
+            "unique_attacks": count(location, "ATTACK"),
+            "attempted_attacks": count(location, "ATTEMPTED_ATTACK"),
+            "disrupted_plots": count(location, "DISRUPTED_PLOT"),
+            "unique_ct_operations": count(location, "CT_OPERATION"),
+            "arrest_cases": count(location, "ARREST"),
+            "judicial_cases": count(location, "JUDICIAL"),
+            "financing_cases": count(location, "FINANCING"),
+            "weapons_cases": count(location, "WEAPONS"),
+            "reporting_records": records[location],
+        }
+        for location in ranked
+    ]
+
+
+def _weekly_category_counts(events):
+    counter = Counter()
+
+    for event in events:
+        categories = (
+            event.get(
+                "categories"
+            )
+            or
+            (
+                [
+                    event.get(
+                        "category"
+                    )
+                ]
+                if event.get(
+                    "category"
+                )
+                else
+                []
+            )
+        )
+
+        for category in set(
+            categories
+        ):
+            if category:
+                counter[
+                    category
+                ] += 1
+
+    return dict(
+        counter
+    )
+
+
+def _weekly_stats(events):
+    return {
+        "event_count":
+            len(
+                events
+            ),
+        "categories":
+            _weekly_category_counts(
+                events
+            ),
+        "top_countries_by_incident_activity":
+            _weekly_geo_breakdown(
+                events,
+                "country",
+                10,
+            ),
+        "top_regions_by_incident_activity":
+            _weekly_geo_breakdown(
+                events,
+                "region",
+                8,
+            ),
+    }
+
+
+def _weekly_compact_event(event, index):
+    return {
+        "event_id":
+            str(
+                event.get(
+                    "id"
+                )
+                or
+                f"weekly-{index}"
+            ),
+        "title":
+            selection_compact_text(
+                event.get(
+                    "title"
+                ),
+                320,
+            ),
+        "summary":
+            selection_compact_text(
+                event.get(
+                    "summary"
+                ),
+                600,
+            ),
+        "categories":
+            list(
+                event.get(
+                    "categories"
+                )
+                or
+                (
+                    [
+                        event.get(
+                            "category"
+                        )
+                    ]
+                    if event.get(
+                        "category"
+                    )
+                    else
+                    []
+                )
+            ),
+        "country":
+            clean_text(
+                event.get(
+                    "country",
+                    ""
+                )
+            ),
+        "region":
+            clean_text(
+                event.get(
+                    "region",
+                    ""
+                )
+            ),
+        "city":
+            clean_text(
+                event.get(
+                    "city",
+                    ""
+                )
+            ),
+        "event_or_report_time":
+            (
+                _weekly_event_time(
+                    event
+                ).isoformat()
+                if _weekly_event_time(
+                    event
+                )
+                else
+                ""
+            ),
+        "ai_relevance_score":
+            int(
+                event.get(
+                    "ai_relevance_score",
+                    0,
+                )
+                or
+                0
+            ),
+        "source_count":
+            int(
+                event.get(
+                    "source_count",
+                    1,
+                )
+                or
+                1
+            ),
         "primary_event_type":
             clean_text(
                 event.get(
