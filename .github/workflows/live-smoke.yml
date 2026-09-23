@@ -70,6 +70,8 @@ jobs:
           const html = fs.readFileSync("/tmp/index.html", "utf8");
           const pdfExporter = fs.readFileSync("/tmp/pdf-export.js", "utf8");
           if (!html.includes("pdf-export.js") || !html.includes("DOWNLOAD PDF")) throw new Error("PDF download UI missing");
+          if (!/class="time-button active"\s+data-days="90"/.test(html)) throw new Error("MAP default is not 90 days");
+          if (/class="time-button active"\s+data-days="180"/.test(html)) throw new Error("6M must not be the MAP default");
           if (html.includes("window.onload=()=>window.print()")) throw new Error("Legacy print dialog still deployed");
           if (!pdfExporter.includes("window.CTAtlasPdf")) throw new Error("PDF exporter missing");
           const quiz = JSON.parse(fs.readFileSync("/tmp/quiz.json", "utf8"));
