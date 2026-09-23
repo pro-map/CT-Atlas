@@ -21,7 +21,7 @@ const FEEDBACK_GLOBAL_DAILY_LIMIT = 200;
 // Bump whenever the report SHAPE changes (new fields, schema, citation
 // rules) so an existing cache entry from before the change is never served
 // as-is -- folded into the cache key in index.js's /report handler.
-const REPORT_GENERATOR_VERSION = "report-v3-hub-severity-not-volume";
+const REPORT_GENERATOR_VERSION = "report-v4-distinct-incidents-confirmed-attacks";
 
 function authUsersFromEnv(env) {
   const raw = String(env?.AUTH_USERS_JSON || "").trim();
@@ -97,8 +97,10 @@ OUTLOOK / WATCHPOINTS
 SOURCE / CONFIDENCE NOTES
 
 When a comparison period is supplied, focus on WHAT CHANGED between the current
-period and the immediately preceding equivalent period. Distinguish reporting
-volume from evidence of an actual operational change whenever possible.
+period and the immediately preceding equivalent period. Distinguish reporting volume from evidence of an actual operational change.
+ARTICLES measure reporting; records measure developments; distinct incident_id
+values measure operational cases. Never use record/article counts as a proxy
+for attack counts.
 
 HUB / HOTSPOT RULE (critical -- this has been a real error in past reports):
 in GEOGRAPHIC PATTERNS, never call a country or region a "hub", an "emerging
@@ -108,13 +110,12 @@ country's press produces a lot of routine wire copy (many short items about
 the same court case, minor detentions, or a story simply getting picked up
 and translated by many outlets) -- none of that reflects real operational
 activity on the ground. A location only qualifies as a hub/hotspot when
-top_countries_by_attack_ct_action_activity shows a genuinely high count of
-Attacks or Counter Terrorism Action events specifically -- actual attacks,
-armed clashes, or offensive/combat counter-terrorism operations (raids,
-sieges, captures). A high count of plain "Arrests" (routine, no-combat
-custody) does NOT by itself make somewhere a hub, even at high volume --
-only a large-scale, combat-linked operation (already classified as Counter
-Terrorism Action) counts. When you cite a country as significant, name
+top_countries_by_incident_activity shows genuinely high DISTINCT operational
+incident counts. unique_attacks counts only incident IDs whose current record
+was explicitly classified primary_event_type=ATTACK and is_attack=true.
+Attempted attacks, disrupted plots, CT operations, arrests and judicial cases
+are separate measures. reporting_records is collection/reporting volume only
+and MUST NEVER be treated as attack frequency or threat intensity. When you cite a country as significant, name
 whether that significance comes from attacks it suffered, combat CT
 operations conducted there, or something else -- never leave it ambiguous
 whether you mean "lots of attacks happened here" versus "lots of articles
@@ -390,6 +391,11 @@ function compactEvent(event) {
     region: cleanText(event.region, 100),
     city: cleanText(event.city, 100),
     actor_group: cleanText(event.actor_group, 100),
+    primary_event_type: cleanText(event.primary_event_type, 40),
+    is_attack: event.is_attack === true,
+    incident_id: cleanText(event.incident_id, 80),
+    incident_anchor: cleanText(event.incident_anchor, 220),
+    update_type: cleanText(event.update_type, 40),
     date: parseEventDate(event)?.toISOString() || "",
     source: cleanText(event.source, 140),
     url: cleanText(event.url, 1200),
@@ -424,53 +430,71 @@ function citationMetrics(analysis, validIds) {
   };
 }
 
-// Real "hub" activity per the analyst's own definition: sustained attacks or
-// offensive/combat counter-terrorism operations (raids, clashes, captures).
-// Deliberately excludes "Arrests" (plain, no-combat custody -- can be high in
-// volume purely because a country's courts/police generate a lot of routine
-// wire copy, without a single attack or clash happening) and every other
-// category, so a country's rank can never be driven by reporting volume on
-// financing, legal proceedings, CBRN or online-radicalization stories.
-const HIGH_SEVERITY_HUB_CATEGORIES = new Set(["Attacks", "Counter Terrorism Action"]);
-
 function stats(events) {
   const category = {};
-  const totals = {};
-  const highSeverity = {};
-  const categoriesByCountry = {};
+  const reportingRecords = {};
+  const incidentSets = {};
+
+  const bucket = (country, type) => {
+    incidentSets[country] ||= {};
+    incidentSets[country][type] ||= new Set();
+    return incidentSets[country][type];
+  };
+
   for (const e of events) {
-    const cats = eventCategories(e);
-    for (const c of cats) category[c] = (category[c] || 0) + 1;
-    const co = cleanText(e.country, 80);
-    if (!co) continue;
-    totals[co] = (totals[co] || 0) + 1;
-    if (cats.some(c => HIGH_SEVERITY_HUB_CATEGORIES.has(c))) {
-      highSeverity[co] = (highSeverity[co] || 0) + 1;
+    for (const c of eventCategories(e)) category[c] = (category[c] || 0) + 1;
+    const country = cleanText(e.country, 80);
+    if (!country) continue;
+
+    reportingRecords[country] = (reportingRecords[country] || 0) + 1;
+    const incidentId = cleanText(e.incident_id || e.id || e._mapKey || "", 100);
+    if (!incidentId) continue;
+
+    const primary = cleanText(e.primary_event_type || "OTHER_CT", 40).toUpperCase();
+    if (e.is_attack === true && primary === "ATTACK") {
+      bucket(country, "ATTACK").add(incidentId);
+    } else {
+      bucket(country, primary).add(incidentId);
     }
-    const byCat = categoriesByCountry[co] || (categoriesByCountry[co] = {});
-    for (const c of cats) byCat[c] = (byCat[c] || 0) + 1;
   }
-  // Ranked by ACTUAL attack/CT-action activity, never by raw event/article
-  // volume -- see HIGH_SEVERITY_HUB_CATEGORIES above.
-  const topCountries = Object.keys(totals)
-    .sort((a, b) => (highSeverity[b] || 0) - (highSeverity[a] || 0) || totals[b] - totals[a])
+
+  const count = (country, type) => incidentSets[country]?.[type]?.size || 0;
+  const countries = Object.keys(reportingRecords)
+    .sort((a, b) =>
+      count(b, "ATTACK") - count(a, "ATTACK") ||
+      count(b, "CT_OPERATION") - count(a, "CT_OPERATION") ||
+      count(b, "DISRUPTED_PLOT") - count(a, "DISRUPTED_PLOT") ||
+      a.localeCompare(b)
+    )
     .slice(0, 10)
     .map(name => ({
       name,
-      attacks_or_ct_action_events: highSeverity[name] || 0,
-      total_events: totals[name],
-      top_categories: Object.entries(categoriesByCountry[name])
-        .sort((a, b) => b[1] - a[1]).slice(0, 3)
+      unique_attacks: count(name, "ATTACK"),
+      attempted_attacks: count(name, "ATTEMPTED_ATTACK"),
+      disrupted_plots: count(name, "DISRUPTED_PLOT"),
+      unique_ct_operations: count(name, "CT_OPERATION"),
+      arrest_cases: count(name, "ARREST"),
+      judicial_cases: count(name, "JUDICIAL"),
+      financing_cases: count(name, "FINANCING"),
+      weapons_cases: count(name, "WEAPONS"),
+      reporting_records: reportingRecords[name]
     }));
-  return { event_count: events.length, categories: category, top_countries_by_attack_ct_action_activity: topCountries };
+
+  return {
+    record_count: events.length,
+    categories: category,
+    top_countries_by_incident_activity: countries
+  };
 }
 
 function priority(event) {
   const cats = eventCategories(event);
   let score = Number(event.ai_relevance_score || 0);
-  if (cats.includes("Attacks")) score += 40;
-  if (cats.includes("Counter Terrorism Action")) score += 35;
-  if (cats.includes("Arrests")) score += 25;
+  const primary = cleanText(event.primary_event_type || "", 40).toUpperCase();
+  if (event.is_attack === true && primary === "ATTACK") score += 40;
+  if (primary === "CT_OPERATION") score += 35;
+  if (primary === "DISRUPTED_PLOT" || primary === "ATTEMPTED_ATTACK") score += 30;
+  if (primary === "ARREST") score += 20;
   score += Math.min(20, Number(event.source_count || 1) * 3);
   return score;
 }
