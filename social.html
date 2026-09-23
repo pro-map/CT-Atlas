@@ -6,41 +6,215 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CT ATLAS — Social Media Analysis</title>
 <link rel="icon" href="CT-ATLAS.png">
-<style>
-*{box-sizing:border-box}html,body{height:100%;margin:0;font-family:Arial,Helvetica,sans-serif;background:#0d1620;color:white}
-.social-shell{min-height:100%;display:flex;flex-direction:column}
-.social-header{height:78px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:#111d28;border-bottom:1px solid #314252}
-.social-brand{display:flex;align-items:center;gap:12px}.social-brand img{height:48px}.social-title{font-size:16px;font-weight:900;letter-spacing:.06em}.social-sub{margin-top:5px;color:#8097a5;font-size:9px;letter-spacing:.12em}
-.main-button{display:inline-block;border:1px solid #405563;border-radius:4px;padding:9px 13px;background:#202f3b;color:white;text-decoration:none;font-size:9px;font-weight:900;letter-spacing:.08em}
-.social-main{flex:1;display:flex;align-items:center;justify-content:center;padding:28px}
-.placeholder{width:min(680px,100%);padding:46px;text-align:center;border:1px solid #344958;border-radius:8px;background:linear-gradient(180deg,#172630,#111d26);box-shadow:0 20px 55px rgba(0,0,0,.28)}
-.placeholder-icon{width:66px;height:66px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;border:1px solid #526672;border-radius:10px;background:#18252c;color:#a7b7c0;font-size:18px;font-weight:900}
-.placeholder h1{margin:0;font-size:24px}.badge{display:inline-block;margin-top:14px;padding:6px 9px;border:1px solid #765f34;background:#2b2516;color:#e0c279;border-radius:3px;font-size:9px;font-weight:900;letter-spacing:.1em}
-.placeholder p{margin:22px auto 0;max-width:500px;color:#91a5b1;font-size:12px;line-height:1.7}
-</style>
+<link rel="stylesheet" href="social.css?v=1">
 </head>
 <body>
 <div class="social-shell">
-<header class="social-header">
-  <div class="social-brand"><img src="CT-ATLAS.png" alt="CT Atlas"><div><div class="social-title">SOCIAL MEDIA ANALYSIS</div><div class="social-sub">CT ATLAS · SOCMINT WORKSPACE</div></div></div>
-  <a class="main-button" href="main.html">MAIN</a>
-</header>
-<main class="social-main"><section class="placeholder">
-  <div class="placeholder-icon">SOC</div>
-  <h1>Social Media Analysis</h1>
-  <div class="badge">UNDER CONSTRUCTION</div>
-  <p>This workspace is reserved for future SOCMINT analysis functions. No collection or analytical action is currently performed from this page.</p>
-</section></main>
+  <header class="social-header">
+    <div class="social-brand">
+      <img src="CT-ATLAS.png" alt="CT Atlas">
+      <div>
+        <div class="social-title">SOCIAL MEDIA ANALYSIS</div>
+        <div class="social-sub">CT ATLAS · PUBLIC-SOURCE SOCMINT WORKSPACE</div>
+      </div>
+    </div>
+    <div class="social-header-actions">
+      <span id="socialUser">VERIFYING SESSION…</span>
+      <a class="main-button" href="main.html">MAIN</a>
+    </div>
+  </header>
+
+  <main class="social-main">
+    <section class="social-query-panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-kicker">INVESTIGATION INPUT</div>
+          <h1>Run SOCMINT Investigation</h1>
+        </div>
+        <span class="agent-badge">GEMINI AGENT</span>
+      </div>
+
+      <div class="social-note">
+        Public OSINT only. Do not enter non-public operational or personal data into a free-tier external AI service.
+      </div>
+
+      <form id="socialForm">
+        <div class="field full">
+          <label for="socialMode">SEARCH MODE</label>
+          <select id="socialMode">
+            <option value="discover">Discover + Analyze public web</option>
+            <option value="urls_only">Analyze known public URLs</option>
+          </select>
+          <div class="field-help">Discovery uses Gemini Google Search grounding when available. Known URLs use URL Context.</div>
+        </div>
+
+        <div class="field full">
+          <label for="socialTarget">TARGET / SUBJECT</label>
+          <input id="socialTarget" type="text" placeholder="Person, group, channel, campaign, network, event or topic">
+        </div>
+
+        <div class="field">
+          <label for="socialUsernames">USERNAMES / HANDLES</label>
+          <textarea id="socialUsernames" rows="3" placeholder="@handle1&#10;@handle2"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="socialKeywords">ALIASES / KEYWORDS</label>
+          <textarea id="socialKeywords" rows="3" placeholder="Alias, slogan, hashtag, organization name…"></textarea>
+        </div>
+
+        <div class="field full">
+          <label>PLATFORMS</label>
+          <div class="platform-grid">
+            <label><input type="checkbox" name="platform" value="Telegram" checked> Telegram</label>
+            <label><input type="checkbox" name="platform" value="X"> X</label>
+            <label><input type="checkbox" name="platform" value="Facebook"> Facebook</label>
+            <label><input type="checkbox" name="platform" value="Instagram"> Instagram</label>
+            <label><input type="checkbox" name="platform" value="TikTok"> TikTok</label>
+            <label><input type="checkbox" name="platform" value="YouTube"> YouTube</label>
+            <label><input type="checkbox" name="platform" value="Reddit"> Reddit</label>
+            <label><input type="checkbox" name="platform" value="VK"> VK</label>
+          </div>
+        </div>
+
+        <div class="field full">
+          <label for="socialUrls">KNOWN PUBLIC URLS</label>
+          <textarea id="socialUrls" rows="4" placeholder="One public URL per line. Up to 20 URLs."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="socialRegions">COUNTRIES / REGIONS</label>
+          <input id="socialRegions" type="text" placeholder="France, Tunisia, Sahel…">
+        </div>
+
+        <div class="field">
+          <label for="socialLanguages">LANGUAGES</label>
+          <input id="socialLanguages" type="text" placeholder="Arabic, French, English…">
+        </div>
+
+        <div class="field">
+          <label for="socialFrom">FROM</label>
+          <input id="socialFrom" type="date">
+        </div>
+
+        <div class="field">
+          <label for="socialTo">TO</label>
+          <input id="socialTo" type="date">
+        </div>
+
+        <div class="field full">
+          <label for="socialObjective">ANALYTICAL QUESTION / OBJECTIVE</label>
+          <textarea id="socialObjective" rows="4" placeholder="Example: Identify public accounts and aliases linked to this target, assess cross-platform associations, narratives, geographic indicators and any publicly exposed crypto wallets."></textarea>
+        </div>
+
+        <button id="socialRunButton" class="run-button" type="submit">RUN SOCMINT INVESTIGATION</button>
+        <div id="socialStatus" class="social-status" aria-live="polite"></div>
+      </form>
+
+      <section class="history-block">
+        <div class="history-head">RECENT INVESTIGATIONS</div>
+        <div id="socialHistory" class="history-list">
+          <div class="empty-state">No saved SOCMINT reports yet.</div>
+        </div>
+      </section>
+    </section>
+
+    <section class="social-report-panel">
+      <div id="socialEmpty" class="report-empty">
+        <div class="report-empty-icon">SOC</div>
+        <h2>SOCMINT Report</h2>
+        <p>Fill the investigation fields and run the agent. Results will be structured as an analytical report with source coverage, findings, confidence and watchpoints.</p>
+      </div>
+
+      <article id="socialReport" class="social-report" hidden>
+        <div class="report-toolbar">
+          <div>
+            <div class="panel-kicker">SOCMINT ASSESSMENT</div>
+            <h2 id="reportTitle"></h2>
+            <div id="reportMeta" class="report-meta"></div>
+          </div>
+          <button id="socialPdfButton" class="secondary-button" type="button">DOWNLOAD PDF</button>
+        </div>
+
+        <section class="report-section">
+          <h3>EXECUTIVE ASSESSMENT</h3>
+          <div id="reportExecutive" class="report-prose"></div>
+        </section>
+
+        <section class="report-section">
+          <h3>KEY FINDINGS</h3>
+          <div id="reportFindings" class="finding-list"></div>
+        </section>
+
+        <section class="report-grid">
+          <div class="report-section">
+            <h3>SOURCE COVERAGE</h3>
+            <div id="reportCoverage" class="report-prose"></div>
+          </div>
+          <div class="report-section">
+            <h3>IDENTITY & ALIAS FINDINGS</h3>
+            <div id="reportIdentity" class="report-prose"></div>
+          </div>
+          <div class="report-section">
+            <h3>NETWORK & ASSOCIATIONS</h3>
+            <div id="reportNetwork" class="report-prose"></div>
+          </div>
+          <div class="report-section">
+            <h3>CONTENT & NARRATIVE</h3>
+            <div id="reportNarrative" class="report-prose"></div>
+          </div>
+          <div class="report-section">
+            <h3>ACTIVITY & TIMELINE</h3>
+            <div id="reportTimeline" class="report-prose"></div>
+          </div>
+          <div class="report-section">
+            <h3>LOCATIONS & TRAVEL SIGNALS</h3>
+            <div id="reportLocations" class="report-prose"></div>
+          </div>
+          <div class="report-section">
+            <h3>FINANCIAL / CRYPTO INDICATORS</h3>
+            <div id="reportFinancial" class="report-prose"></div>
+          </div>
+          <div class="report-section">
+            <h3>CT RELEVANCE</h3>
+            <div id="reportCt" class="report-prose"></div>
+          </div>
+        </section>
+
+        <section class="report-section">
+          <h3>ENTITIES / IDENTIFIERS</h3>
+          <div class="table-wrap">
+            <table class="social-table">
+              <thead><tr><th>Type</th><th>Value</th><th>Platform</th><th>Confidence</th><th>Basis</th></tr></thead>
+              <tbody id="reportEntities"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="report-section">
+          <h3>OUTLOOK / WATCHPOINTS</h3>
+          <div id="reportWatchpoints" class="watch-list"></div>
+        </section>
+
+        <section class="report-section">
+          <h3>ANALYTICAL GAPS / LIMITATIONS</h3>
+          <div id="reportGaps" class="report-prose"></div>
+        </section>
+
+        <section class="report-section">
+          <h3>SOURCES</h3>
+          <div id="reportSources" class="source-list"></div>
+        </section>
+
+        <div class="report-disclaimer">
+          Public-source analytical output. Similar usernames, content, imagery, contacts or activity patterns do not by themselves establish identity, control, criminality or terrorist affiliation. Significant findings require independent analyst validation.
+        </div>
+      </article>
+    </section>
+  </main>
 </div>
-<script>
-(async function(){
- const token=String(sessionStorage.getItem("ct_map_session_token")||"");
- if(!token){location.replace("index.html");return;}
- try{
-  const r=await fetch("https://ct-report-generator.fairpeace.workers.dev/session-check",{headers:{"X-Session-Token":token},cache:"no-store"});
-  const p=await r.json().catch(()=>({})); if(!r.ok||!p.ok)throw new Error();
- }catch(_){location.replace("index.html");}
-})();
-</script>
+
+<script src="pdf-export.js?v=2"></script>
+<script src="social.js?v=1"></script>
 </body>
 </html>
