@@ -90,6 +90,7 @@ jobs:
           grep -q 'V12 — COMPACT HEADER' index.html
           grep -q '#sessionActions {' index.html
           grep -q -- '-webkit-line-clamp: 3' index.html
+          grep -q 'max-height: 42px' index.html
           grep -q 'class="time-button active"' index.html
           grep -q 'data-days="30"' index.html
           grep -q 'let selectedDays =' index.html
