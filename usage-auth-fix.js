@@ -5,7 +5,7 @@ const TOKEN_KEY="ct_map_session_token";
 const USER_KEY="ct_map_username";
 const EXPIRY_KEY="ct_map_session_expires";
 const priorFetch=window.fetch.bind(window);
-const protectedPath=/\/((?:session-check|session-revoke|login|report|deep-search|quick-ask|feedback|usage-record|usage-stats|quiz-state|quiz-answer|quiz-history|quiz-answer-record))(?:\?|$)/;
+const protectedPath=/\/((?:session-check|session-revoke|login|report|deep-search|quick-ask|feedback|crypto-analyze|usage-record|usage-stats|quiz-state|quiz-answer|quiz-history|quiz-answer-record))(?:\?|$)/;
 
 function sessionToken(){
   return String(sessionStorage.getItem(TOKEN_KEY)||"");
@@ -86,6 +86,15 @@ function loadFeedback(){
   document.head.appendChild(script);
 }
 
+function loadCryptoLauncher(){
+  if(document.getElementById("cryptoLauncherScript"))return;
+  const script=document.createElement("script");
+  script.id="cryptoLauncherScript";
+  script.src="crypto-launcher.js?v=1";
+  script.defer=true;
+  document.head.appendChild(script);
+}
+
 function loadDailyQuiz(){
   if(document.getElementById("dailyQuizClientScript"))return;
   const script=document.createElement("script");
@@ -102,6 +111,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   loadDailyQuiz();
   loadQuickAsk();
   loadFeedback();
+  loadCryptoLauncher();
   setInterval(()=>{ enforceSessionExpiry(); refreshAdminUsageButton(); },30000);
 });
 })();
