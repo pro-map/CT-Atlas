@@ -87,6 +87,14 @@ jobs:
           grep -q 'main.html' crypto.html
           grep -q 'reportResultVisuals' index.html
           grep -q 'deepSearchVisuals' deep-search.js
+          grep -q 'class="time-button active"' index.html
+          grep -q 'data-days="90"' index.html
+          grep -q 'let selectedDays =' index.html
+          grep -q '    90;' index.html
+          if grep -q 'loadCryptoLauncher' usage-auth-fix.js; then
+            echo "Crypto launcher must not load inside MAP workspace" >&2
+            exit 1
+          fi
           node --check crypto.js
           node --check crypto-launcher.js
       - name: Configure GitHub Pages
