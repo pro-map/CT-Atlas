@@ -75,6 +75,7 @@ jobs:
           if (/class="time-button active"\s+data-days="180"/.test(html)) throw new Error("6M must not be the MAP default");
           if (!html.includes("V12 — COMPACT HEADER")) throw new Error("Compact header controls missing");
           if (!html.includes("-webkit-line-clamp: 3")) throw new Error("Situation 24H clamp missing");
+          if (!html.includes("max-height: 42px")) throw new Error("Situation 24H text height missing");
           if (html.includes("window.onload=()=>window.print()")) throw new Error("Legacy print dialog still deployed");
           if (!pdfExporter.includes("window.CTAtlasPdf")) throw new Error("PDF exporter missing");
           const quiz = JSON.parse(fs.readFileSync("/tmp/quiz.json", "utf8"));
