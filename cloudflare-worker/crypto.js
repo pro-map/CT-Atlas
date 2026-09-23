@@ -287,6 +287,11 @@ function evmRows(address, nativeRows, tokenRows, chain) {
       amount: finiteNumber(tx.value) / 1e18,
       fee: finiteNumber(tx.gasUsed) * finiteNumber(tx.gasPrice) / 1e18,
       counterparties: [direction === "OUT" ? tx.to : tx.from].filter(Boolean),
+      from_address: cleanText(tx.from || "", 80),
+      to_address: cleanText(tx.to || "", 80),
+      method_id: cleanText(tx.methodId || "", 24),
+      function_name: cleanText(tx.functionName || "", 180),
+      input_present: Boolean(tx.input && tx.input !== "0x"),
       explorer_url: chain.explorer + "/tx/" + tx.hash,
       failed: String(tx.isError || "0") === "1"
     };
@@ -312,6 +317,8 @@ function evmRows(address, nativeRows, tokenRows, chain) {
       amount,
       fee: null,
       counterparties: [direction === "OUT" ? tx.to : tx.from].filter(Boolean),
+      from_address: cleanText(tx.from || "", 80),
+      to_address: cleanText(tx.to || "", 80),
       explorer_url: chain.explorer + "/tx/" + tx.hash,
       failed: false
     };
@@ -436,6 +443,8 @@ function tronTokenRows(address, rows) {
       amount,
       fee: null,
       counterparties: [direction === "OUT" ? to : from].filter(Boolean),
+      from_address: cleanText(from, 80),
+      to_address: cleanText(to, 80),
       explorer_url: "https://tronscan.org/#/transaction/" + (tx.transaction_id || "")
     };
   });
@@ -459,6 +468,8 @@ function tronTrxRows(address, outgoingRows, incomingRows) {
       amount: amountSun / 1e6,
       fee: null,
       counterparties: counterparty ? [String(counterparty)] : [],
+      from_address: cleanText(value.owner_address || "", 100),
+      to_address: cleanText(value.to_address || "", 100),
       explorer_url: "https://tronscan.org/#/transaction/" + id,
       contract_type: cleanText(contract?.type || "", 80)
     });
