@@ -29,6 +29,7 @@ import { handleFeedback, FEEDBACK_VERSION } from "./feedback.js";
 import { handleQuiz } from "./quiz.js";
 import { handleCrypto, CRYPTO_VERSION } from "./crypto.js";
 import { handleCryptoWorkspace, CRYPTO_WORKSPACE_VERSION } from "./crypto-workspace.js";
+import { runCryptoMonitor, CRYPTO_MONITOR_VERSION } from "./crypto-monitor.js";
 export default {
 async fetch(request, env, ctx) {
 // A fresh per-request copy, never a mutation of the shared env object --
@@ -40,7 +41,7 @@ if (request.method === "OPTIONS") {
 return new Response(null, { status: 204, headers: corsHeaders(env) });
 }
 if (url.pathname === "/health" && request.method === "GET") {
-return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.31", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
+return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.31", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_auto_monitoring: true, crypto_monitor_schedule: "every 6 hours", crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
 }
 if (url.pathname === "/auth-login" && request.method === "POST") {
 let authBody;
@@ -235,6 +236,11 @@ console.error(error);
 const status = Number(error?.code) === 429 ? 429 : 503;
 return jsonResponse({ error: cleanText(error?.message || "Report generation failed.", 300), ...(status === 429 ? { retry_after_seconds: 300 } : {}) }, status, env);
 } finally { ctx.waitUntil(gateCall(env, "/release", { permitId, username })); }
+},
+async scheduled(controller, env, ctx) {
+  ctx.waitUntil(
+    runCryptoMonitor(env).catch(error => console.error("Scheduled Crypto monitoring failed", error))
+  );
 }
 };
 export { ReportGate } from "./report-gate.js";
