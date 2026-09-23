@@ -27,6 +27,7 @@ import { handleDeepSearch, DEEP_SEARCH_VERSION } from "./deep-search.js";
 import { handleQuickAsk, QUICK_ASK_VERSION } from "./quick-ask.js";
 import { handleFeedback, FEEDBACK_VERSION } from "./feedback.js";
 import { handleQuiz } from "./quiz.js";
+import { handleCrypto, CRYPTO_VERSION } from "./crypto.js";
 export default {
 async fetch(request, env, ctx) {
 // A fresh per-request copy, never a mutation of the shared env object --
@@ -38,7 +39,7 @@ if (request.method === "OPTIONS") {
 return new Response(null, { status: 204, headers: corsHeaders(env) });
 }
 if (url.pathname === "/health" && request.method === "GET") {
-return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.30", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
+return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.31", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
 }
 if (url.pathname === "/auth-login" && request.method === "POST") {
 let authBody;
@@ -145,6 +146,9 @@ return handleQuickAsk(request, env);
 }
 if (url.pathname === "/feedback" && request.method === "POST") {
 return handleFeedback(request, env);
+}
+if (url.pathname === "/crypto-analyze" && request.method === "POST") {
+return handleCrypto(request, env);
 }
 if (url.pathname !== "/report" || request.method !== "POST") return jsonResponse({ error: "Not found" }, 404, env);
 let body;
