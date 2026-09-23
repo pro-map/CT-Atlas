@@ -145,6 +145,7 @@ export class ReportGate {
           "cached_reports",
           "blocked_report_requests",
           "quick_ask_requests",
+          "social_intel_requests",
           "feedback_submissions",
           "quiz_answers",
           "quiz_correct",
@@ -166,7 +167,7 @@ export class ReportGate {
 
     const summary = {
       active_users: rows.filter(row =>
-        ["logins", "searches", "report_requests", "report_generator_requests", "deep_search_requests", "reports_generated", "cached_reports", "quick_ask_requests", "feedback_submissions", "quiz_answers"]
+        ["logins", "searches", "report_requests", "report_generator_requests", "deep_search_requests", "reports_generated", "cached_reports", "quick_ask_requests", "social_intel_requests", "feedback_submissions", "quiz_answers"]
           .some(metric => Number(row[metric] || 0) > 0)
       ).length,
       logins: 0,
@@ -180,6 +181,7 @@ export class ReportGate {
       cached_reports: 0,
       blocked_report_requests: 0,
       quick_ask_requests: 0,
+      social_intel_requests: 0,
       feedback_submissions: 0,
       quiz_answers: 0,
       quiz_correct: 0,
@@ -199,6 +201,7 @@ export class ReportGate {
         "cached_reports",
         "blocked_report_requests",
         "quick_ask_requests",
+        "social_intel_requests",
         "feedback_submissions",
         "quiz_answers",
         "quiz_correct",
@@ -453,6 +456,60 @@ export class ReportGate {
       workspace.updated_at = new Date(now).toISOString();
       await this.state.storage.put(key, workspace);
       return Response.json({ ok: true, alerts_added: added });
+    }
+
+    if (url.pathname === "/social-workspace-get") {
+      const username = normalizeUsername(body.username);
+      if (!isAllowedUser(username, this.env)) {
+        return Response.json({ error: "Unknown user." }, { status: 400 });
+      }
+      const key = `social-workspace:${username}`;
+      const workspace = (await this.state.storage.get(key)) || {
+        version: "socmint-v1-public-web-report",
+        username,
+        reports: [],
+        updated_at: new Date(now).toISOString()
+      };
+      return Response.json({ ok: true, workspace });
+    }
+
+    if (url.pathname === "/social-workspace-put") {
+      const username = normalizeUsername(body.username);
+      if (!isAllowedUser(username, this.env)) {
+        return Response.json({ error: "Unknown user." }, { status: 400 });
+      }
+      const workspace = body.workspace && typeof body.workspace === "object" ? body.workspace : null;
+      if (!workspace) {
+        return Response.json({ error: "Missing social workspace." }, { status: 400 });
+      }
+      const safeWorkspace = {
+        version: cleanText(workspace.version || "socmint-v1-public-web-report", 80),
+        username,
+        reports: Array.isArray(workspace.reports) ? workspace.reports.slice(0, 50) : [],
+        updated_at: new Date(now).toISOString()
+      };
+      await this.state.storage.put(`social-workspace:${username}`, safeWorkspace);
+      return Response.json({ ok: true, workspace: safeWorkspace });
+    }
+
+    if (url.pathname === "/social-report-delete") {
+      const username = normalizeUsername(body.username);
+      const reportId = cleanText(body.report_id, 80);
+      if (!isAllowedUser(username, this.env)) {
+        return Response.json({ error: "Unknown user." }, { status: 400 });
+      }
+      const key = `social-workspace:${username}`;
+      const workspace = (await this.state.storage.get(key)) || {
+        version: "socmint-v1-public-web-report",
+        username,
+        reports: []
+      };
+      workspace.reports = Array.isArray(workspace.reports)
+        ? workspace.reports.filter(item => cleanText(item?.id, 80) !== reportId).slice(0, 50)
+        : [];
+      workspace.updated_at = new Date(now).toISOString();
+      await this.state.storage.put(key, workspace);
+      return Response.json({ ok: true, workspace });
     }
 
     if (url.pathname === "/crypto-workspace-get") {
