@@ -31,6 +31,7 @@ import { handleCrypto, CRYPTO_VERSION } from "./crypto.js";
 import { handleCryptoWorkspace, CRYPTO_WORKSPACE_VERSION } from "./crypto-workspace.js";
 import { runCryptoMonitor, CRYPTO_MONITOR_VERSION } from "./crypto-monitor.js";
 import { createSourcePreviews, handleSourceImage, SOURCE_PREVIEW_VERSION } from "./source-preview.js";
+import { handleSocialInvestigate, handleSocialWorkspace, SOCIAL_INTEL_VERSION } from "./social-intel.js";
 export default {
 async fetch(request, env, ctx) {
 // A fresh per-request copy, never a mutation of the shared env object --
@@ -42,7 +43,7 @@ if (request.method === "OPTIONS") {
 return new Response(null, { status: 204, headers: corsHeaders(env) });
 }
 if (url.pathname === "/health" && request.method === "GET") {
-return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.31", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_auto_monitoring: true, crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
+return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.31", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_auto_monitoring: true, crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, social_intel_version: SOCIAL_INTEL_VERSION, social_intel: true, crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
 }
 if (url.pathname === "/auth-login" && request.method === "POST") {
 let authBody;
@@ -155,6 +156,12 @@ return handleCrypto(request, env);
 }
 if (url.pathname === "/crypto-workspace" && ["GET","POST"].includes(request.method)) {
 return handleCryptoWorkspace(request, env);
+}
+if (url.pathname === "/social-investigate" && request.method === "POST") {
+return handleSocialInvestigate(request, env);
+}
+if (url.pathname === "/social-workspace" && ["GET","POST"].includes(request.method)) {
+return handleSocialWorkspace(request, env);
 }
 if (url.pathname.startsWith("/source-image/") && request.method === "GET") {
 return handleSourceImage(request, env);
