@@ -116,5 +116,41 @@ test("graph has relationship colors and enlarged drag canvas",()=>{
   for(const cls of [".graph-node.incoming",".graph-node.outgoing",".graph-node.both",".graph-node.seed"]){
     assert.ok(css.includes(cls),"missing graph relation style "+cls);
   }
-  assert.ok(html.includes('viewBox="0 0 820 460"'));
+  assert.ok(html.includes('viewBox="0 0 1000 650"'));
+});
+
+
+test("crypto graph exposes H2 H3 progressive tracing controls",()=>{
+  const html=fs.readFileSync("crypto.html","utf8");
+  const client=fs.readFileSync("crypto.js","utf8");
+  for(const id of ["traceMaxDepth","traceBranch","cryptoAutoTrace","cryptoClearTrace"]){
+    assert.ok(html.includes('id="'+id+'"'),"missing trace control "+id);
+  }
+  assert.ok(client.includes("async function expandTraceNode"));
+  assert.ok(client.includes("async function autoTrace"));
+  assert.ok(client.includes("fetchAddressAnalysis"));
+});
+
+test("multi-hop graph keeps node click navigation separate from plus expansion",()=>{
+  const client=fs.readFileSync("crypto.js","utf8");
+  assert.ok(client.includes('event.target.closest?.(".graph-expand-control")'));
+  assert.ok(client.includes('svg.querySelectorAll(".graph-expand-control")'));
+  assert.ok(client.includes("expandTraceNode(node.id)"));
+  assert.ok(client.includes("openCryptoSearch(node.id,payload.chain)"));
+});
+
+test("trace table records hop and source wallet context",()=>{
+  const html=fs.readFileSync("crypto.html","utf8");
+  const client=fs.readFileSync("crypto.js","utf8");
+  assert.ok(html.includes("<th>Hop / source</th>"));
+  assert.ok(client.includes("_trace_source"));
+  assert.ok(client.includes("_trace_depth"));
+  assert.ok(client.includes("crypto-hop-badge"));
+});
+
+test("trace graph supports explicit H1 H2 H3 visual depth",()=>{
+  const css=fs.readFileSync("crypto.css","utf8");
+  for(const cls of [".graph-hop-ring.h1",".graph-hop-ring.h2",".graph-hop-ring.h3",".legend-hop.h1",".legend-hop.h2",".legend-hop.h3"]){
+    assert.ok(css.includes(cls),"missing hop visual "+cls);
+  }
 });
