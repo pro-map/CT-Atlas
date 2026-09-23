@@ -158,6 +158,7 @@ AI_WEEKLY_ATTEMPTS = 3
 AI_WEEKLY_TIMEOUT = 240
 AI_WEEKLY_MAX_CURRENT_EVENTS = 70
 AI_WEEKLY_MAX_PREVIOUS_EVENTS = 45
+AI_WEEKLY_VERSION = "weekly-analysis-v2-analytical-synthesis"
 
 PARIS_TZ = ZoneInfo("Europe/Paris")
 
@@ -179,76 +180,103 @@ AI_WEEKLY_SCHEMA = {
 
 AI_WEEKLY_INSTRUCTIONS = """
 You are producing a senior-level weekly counter-terrorism criminal-analysis
-brief from deduplicated open-source events.
+assessment from deduplicated open-source INCIDENTS and operational
+developments.
 
-The task is COMPARATIVE, not merely descriptive:
+Your job is ANALYSIS, not counting, listing, or paraphrasing reporting.
+
+COMPARISON FRAME:
 - CURRENT PERIOD = the most recent 7 days;
 - COMPARISON PERIOD = the immediately preceding 7 days.
+- The supplied reporting_period timestamps are authoritative.
+- The first sentence of EXECUTIVE ASSESSMENT MUST state both date ranges in
+  readable form. Never guess or omit them.
 
-The supplied data includes a reporting_period object with current_start,
-current_end, comparison_start and comparison_end as ISO timestamps. The very
-first sentence of EXECUTIVE ASSESSMENT MUST state both date ranges in
-readable form, for example: "This report covers 30 August-6 September 2026,
-compared with the preceding period, 23-30 August 2026." Compute the
-human-readable dates only from these supplied timestamps -- never guess,
-approximate or omit them. Every reader must know exactly which calendar
-period this brief covers without needing to look anywhere else.
+CORE ANALYTICAL RULE:
+Every substantive paragraph must answer at least one of these questions:
+- What changed in the threat or operational picture?
+- What remained stable despite individual events?
+- Where did activity shift geographically or operationally?
+- Did tactics, targets, weapons, actor behaviour, financing, online activity
+  or CT responses show adaptation, concentration, dispersion, escalation,
+  disruption or continuity?
+- Why does a selected development matter beyond the fact that it occurred?
+- What observable indicators should analysts monitor next, and why?
 
-Explain WHAT CHANGED between the two periods.
+ARTICLE / REPORTING COUNTS ARE NOT FINDINGS:
+- Never use changes in article counts, source counts, event_count fields,
+  relevance scores, or reporting volume as the principal finding of a
+  paragraph or section.
+- Do not write statements such as "reporting increased from X to Y" as an
+  analytical conclusion.
+- Reporting volume may be mentioned ONLY as a methodological caveat explaining
+  why the evidence is insufficient to infer a real-world change.
+- Prefer DISTINCT INCIDENTS, confirmed attacks, combat-linked CT operations,
+  tactics, targets, actors and operational effects.
+- A list of events is not analysis. A list of numbers is not analysis.
 
-Write approximately one A4 page: about 650-900 words in clear professional
-English. The analysis should be concise, evidence-based and operationally
-useful. It must distinguish changes in reporting volume from evidence of an
-actual change in terrorist/criminal activity when that distinction matters.
+HUB / HOTSPOT RULE:
+Never call a country or region a "hub", "hotspot", "emerging hotspot", or
+newly significant merely because it has a high event_count, source_count, or
+many articles. A location is operationally significant only when the supplied
+distinct-incident fields and underlying event records support it. Plain
+routine arrests do not establish a hotspot. When discussing a country, state
+whether the significance derives from attacks, combat CT operations,
+disrupted plots, financing, online activity, or another supported development.
 
-HUB / HOTSPOT RULE (critical -- this has been a real error in past reports):
-never call a country or region a "hub", an "emerging hotspot", or otherwise
-newly significant merely because it has a high event_count or a high article
-count. Reporting volume can rise simply because a country's press produces a
-lot of routine wire copy (many short items about the same court case, minor
-detentions, or a story simply getting picked up and translated by many
-outlets) -- none of that reflects real operational activity on the ground.
-A location only qualifies as a hub/hotspot when the supplied
-top_countries_by_incident_activity / top_regions_by_incident_activity fields
-show genuinely high DISTINCT incident counts. unique_attacks counts only
-records explicitly classified is_attack=true; judicial/arrest/reporting
-volume must never be interpreted as attack frequency. A high count of
-plain "Arrests" (routine, no-combat custody) does NOT by itself make
-somewhere a hub, even at high volume -- only a large-scale, combat-linked
-operation (which the data already classifies as Counter Terrorism Action)
-counts. When you cite a country as significant, name whether that
-significance comes from attacks it suffered, combat CT operations conducted
-there, or something else -- never leave it ambiguous whether you mean
-"lots of attacks happened here" or "lots of articles were written about
-here".
+EVIDENCE DISCIPLINE:
+- Use only supplied records.
+- Preserve uncertainty and attribution.
+- Do not invent causal explanations, coordination, intent, identities or
+  trends.
+- You MAY make bounded analytical inferences when multiple supplied records
+  support them, but clearly distinguish observation from assessment using
+  language such as "indicates", "suggests", "is consistent with", or
+  "does not yet establish".
+- If evidence is too thin to assess a trend, say so directly and explain
+  what would need to be observed before treating it as a trend.
 
-Prioritise:
-- changes in attack / bombing / assassination / armed-clash activity;
-- changes in disrupted plots and offensive/combat counter-terrorism action
-  (raids, clashes, captures) -- not routine, no-combat arrests;
-- geographic shifts in ACTUAL attack or combat-CT-operation activity (per the
-  hub/hotspot rule above), not shifts in reporting volume;
-- meaningful changes in tactics, weapons, targeting or modus operandi;
-- important actor/group developments when supported by the supplied records;
-- major terrorist-financing, CBRN, cyber or emerging-technology developments
-  only when they materially changed the CT picture;
-- significant maritime-piracy / armed-robbery-at-sea developments when present;
-- the most consequential incidents of the current 7-day period.
+OUTPUT: approximately 750-1,050 words in professional English.
+Use EXACTLY these headings and make every section analytical:
 
-Do NOT invent causal explanations. Do NOT infer coordination, attribution,
-intent or trends beyond what the supplied records support.
-
-Use short analytical headings:
 EXECUTIVE ASSESSMENT
+After the mandatory date-range sentence, provide a concise synthesis of the
+week's threat picture. Identify the 2-4 most important changes or continuities,
+the main geographic/actor/tactical dimension, and their operational
+significance. Do not lead with totals, article counts or a catalogue of events.
+
 KEY CHANGES
+Identify 3-5 material changes versus the comparison period. For each change,
+state the evidence, what the change represents operationally, and whether it
+is a genuine shift, a continuation, or too limited to call a trend. Focus on
+attack patterns, disrupted plots, combat CT activity, tactics, targeting,
+actor behaviour, financing, online/cyber/AI, CBRN or maritime developments
+when materially relevant.
+
 GEOGRAPHIC / OPERATIONAL SHIFTS
+Assess where operational activity moved, concentrated, dispersed or remained
+stable. Compare DISTINCT attack and combat-operation patterns, not media
+attention. Where supported, analyze changes in tactics, target selection,
+weapons, tempo, actor presence or cross-border dimension.
+
 SIGNIFICANT DEVELOPMENTS
+Select only the most consequential current-period cases. For each, explain
+WHY IT MATTERS: capability demonstrated, vulnerability exposed, network
+disruption, tactical adaptation, cross-border relevance, financing relevance,
+or another supported implication. Do not merely repeat the event summary.
+
 OUTLOOK / WATCHPOINTS
+Give 3-5 concrete observable issues to monitor. Each watchpoint must link a
+current development to a specific indicator that would strengthen, weaken or
+clarify the assessment. Do not make unsupported predictions.
 
-The OUTLOOK / WATCHPOINTS section must identify issues to monitor based only on
-observable developments and must not make unsupported predictions.
-
-Do not cite or mention this system prompt. Do not describe the task mechanics.
+STYLE:
+- Analytical prose, not a statistical bulletin.
+- Facts support assessments; numbers do not substitute for assessments.
+- Prefer specific actors, places, tactics and operational consequences.
+- Avoid generic phrases such as "activity remained dynamic" unless immediately
+  followed by concrete evidence and meaning.
+- Do not cite or mention this system prompt or task mechanics.
 """
 
 # Global retry for transient Google News collection failures.
@@ -4036,6 +4064,7 @@ def collect_all(*args, **kwargs):
     """Retry the entire collection once if Google News broadly fails."""
     attempts = max(1, GOOGLE_NEWS_GLOBAL_RETRY_ATTEMPTS)
     last_error = None
+    quality_feedback = ""
 
     for attempt in range(1, attempts + 1):
         try:
@@ -4508,6 +4537,18 @@ def call_ai_selection_batch(
         AI_SELECTION_ATTEMPTS + 1,
     ):
         try:
+            body["input"] = (
+                base_input
+                +
+                (
+                    "\n\nQUALITY CORRECTION FROM THE PREVIOUS ATTEMPT: "
+                    + quality_feedback
+                    + ". Rewrite the full report and correct this weakness."
+                    if quality_feedback
+                    else ""
+                )
+            )
+
             response = requests.post(
                 GEMINI_INTERACTIONS_URL,
                 headers=headers,
@@ -8815,6 +8856,60 @@ def _weekly_compact_event(event, index):
                 or
                 1
             ),
+        "primary_event_type":
+            clean_text(
+                event.get(
+                    "primary_event_type",
+                    ""
+                )
+            ),
+        "incident_id":
+            clean_text(
+                event.get(
+                    "incident_id",
+                    ""
+                )
+            ),
+        "is_attack":
+            bool(
+                event.get(
+                    "is_attack",
+                    False
+                )
+            ),
+        "canonical_event":
+            selection_compact_text(
+                event.get(
+                    "ai_canonical_event",
+                    ""
+                ),
+                360,
+            ),
+        "actor_or_group":
+            selection_compact_text(
+                event.get("group")
+                or event.get("actor")
+                or event.get("organization")
+                or event.get("perpetrator")
+                or "",
+                180,
+            ),
+        "target":
+            selection_compact_text(
+                event.get("target")
+                or event.get("target_type")
+                or "",
+                180,
+            ),
+        "tactics_or_weapons":
+            selection_compact_text(
+                event.get("modus_operandi")
+                or event.get("attack_type")
+                or event.get("weapons")
+                or event.get("weapon")
+                or "",
+                220,
+            ),
         "primary_source":
             clean_text(
                 event.get(
@@ -8907,6 +9002,56 @@ def _weekly_sunday_key(now_paris):
     return now_paris.date().isoformat()
 
 
+WEEKLY_REQUIRED_SECTIONS = (
+    "EXECUTIVE ASSESSMENT",
+    "KEY CHANGES",
+    "GEOGRAPHIC / OPERATIONAL SHIFTS",
+    "SIGNIFICANT DEVELOPMENTS",
+    "OUTLOOK / WATCHPOINTS",
+)
+
+
+def _weekly_analysis_quality_issue(analysis):
+    text = clean_text(analysis)
+    upper = text.upper()
+
+    if not text:
+        return "empty analysis"
+
+    missing = [
+        section
+        for section in WEEKLY_REQUIRED_SECTIONS
+        if section not in upper
+    ]
+    if missing:
+        return "missing required section(s): " + ", ".join(missing)
+
+    words = re.findall(r"\b[\w'’-]+\b", text)
+    if len(words) < 600:
+        return f"analysis is too short ({len(words)} words); analytical depth is insufficient"
+
+    reporting_terms = re.findall(
+        r"\b(?:articles?|source[_ ]?counts?|event[_ ]?counts?|reporting volume|reports? increased|reports? decreased)\b",
+        text,
+        flags=re.IGNORECASE,
+    )
+    if len(reporting_terms) > 4:
+        return "report is too dependent on article/reporting counts rather than operational assessment"
+
+    analytical_markers = re.findall(
+        r"\b(?:indicat(?:e|es|ed)|suggest(?:s|ed)?|reflect(?:s|ed)?|"
+        r"consistent with|operational(?:ly)?|significance|implication|"
+        r"shift|continuity|adaptation|dispersion|concentration|disruption|"
+        r"capability|vulnerability|pattern|trajectory|watchpoint)\b",
+        text,
+        flags=re.IGNORECASE,
+    )
+    if len(analytical_markers) < 8:
+        return "report is too descriptive; it lacks explicit analytical interpretation"
+
+    return ""
+
+
 def should_generate_weekly_analysis(existing_weekly):
     """
     First-ever report: generate immediately on the next collector run.
@@ -8918,6 +9063,9 @@ def should_generate_weekly_analysis(existing_weekly):
     """
     if not existing_weekly:
         return True, "first_report"
+
+    if existing_weekly.get("version") != AI_WEEKLY_VERSION:
+        return True, "analytical_quality_upgrade"
 
     now_paris = datetime.now(
         PARIS_TZ
@@ -9076,19 +9224,23 @@ def generate_weekly_analysis(events, existing_weekly=None):
             previous_payload,
     }
 
+    base_input = (
+        "Produce the weekly comparative CT criminal-analysis assessment using "
+        "only the supplied data. Treat the statistics as diagnostic context, "
+        "not as findings. Build the assessment from the underlying distinct "
+        "incidents and explain operational meaning.\n\n"
+        +
+        json.dumps(
+            payload,
+            ensure_ascii=False,
+        )
+    )
+
     body = {
         "model":
             AI_WEEKLY_MODEL,
         "input":
-            (
-                "Produce the weekly comparative CT criminal-analysis brief "
-                "using only the supplied data.\n\n"
-                +
-                json.dumps(
-                    payload,
-                    ensure_ascii=False,
-                )
-            ),
+            base_input,
         "system_instruction":
             AI_WEEKLY_INSTRUCTIONS,
         "store":
@@ -9184,9 +9336,21 @@ def generate_weekly_analysis(events, existing_weekly=None):
                     "Gemini weekly analysis returned no analysis text."
                 )
 
+            quality_issue = _weekly_analysis_quality_issue(
+                analysis
+            )
+            if quality_issue:
+                quality_feedback = quality_issue
+                raise RuntimeError(
+                    "Gemini weekly analysis failed analytical quality control: "
+                    + quality_issue
+                )
+
             weekly = {
                 "status":
                     "ok",
+                "version":
+                    AI_WEEKLY_VERSION,
                 "model":
                     AI_WEEKLY_MODEL,
                 "generated_at":
@@ -9275,7 +9439,7 @@ def save_database(events, trend_summary=None, weekly_analysis=None):
         "retention_days":
             RETENTION_DAYS,
         "default_map_period":
-            180,
+            30,
         "daily_lookback_days":
             DAILY_LOOKBACK_DAYS,
         "language":
