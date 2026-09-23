@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CT ATLAS — Main</title>
+<link rel="icon" href="CT-ATLAS.png">
+<style>
+*{box-sizing:border-box}
+html,body{min-height:100%;margin:0;font-family:Arial,Helvetica,sans-serif;background:#0d1620;color:#fff}
+body{display:flex;min-height:100vh}
+.hub{width:min(1080px,calc(100vw - 36px));margin:auto;padding:34px 0}
+.hub-header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-bottom:22px;border-bottom:1px solid #314252}
+.hub-brand{display:flex;align-items:center;gap:14px}
+.hub-brand img{width:64px;height:64px;object-fit:contain}
+.hub-title{font-size:24px;font-weight:900;letter-spacing:.08em}
+.hub-subtitle{margin-top:6px;color:#91a5b5;font-size:10px;letter-spacing:.15em;text-transform:uppercase}
+.hub-user{display:flex;align-items:center;gap:10px;color:#88a1b0;font-size:10px}
+.hub-signout{border:1px solid #405563;background:#17232e;color:#d7e4eb;border-radius:4px;padding:9px 12px;cursor:pointer;font-size:9px;font-weight:800;letter-spacing:.06em}
+.hub-intro{margin:28px 0 20px;color:#9eb2bd;font-size:12px;line-height:1.6}
+.hub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.hub-card{min-height:270px;display:flex;flex-direction:column;padding:22px;border:1px solid #344958;border-radius:8px;background:linear-gradient(180deg,#172630,#111d26);color:#fff;text-decoration:none;box-shadow:0 12px 30px rgba(0,0,0,.24);transition:transform .15s ease,border-color .15s ease,background .15s ease}
+.hub-card:hover{transform:translateY(-3px);border-color:#6a8ca0;background:linear-gradient(180deg,#1c303d,#14242e)}
+.hub-card.crypto:hover{border-color:#796ba3}
+.hub-card.social:hover{border-color:#60717a}
+.hub-card-icon{width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:1px solid #48687a;border-radius:7px;background:#12232d;color:#8fd3f4;font-size:15px;font-weight:900;letter-spacing:.05em}
+.hub-card.crypto .hub-card-icon{border-color:#685789;color:#c4adf1;background:#211a31}
+.hub-card.social .hub-card-icon{border-color:#4a5e69;color:#9fb0ba;background:#18232a}
+.hub-card-title{margin-top:23px;font-size:17px;font-weight:900;line-height:1.25;letter-spacing:.025em}
+.hub-card-text{margin-top:10px;color:#8fa5b2;font-size:11px;line-height:1.6}
+.hub-card-foot{margin-top:auto;padding-top:22px;color:#8fcbea;font-size:9px;font-weight:900;letter-spacing:.09em}
+.hub-card.crypto .hub-card-foot{color:#c2a8ec}
+.hub-card.social .hub-card-foot{color:#98a6ad}
+.under{display:inline-block;margin-top:12px;padding:5px 7px;border:1px solid #705f38;background:#282316;color:#d6b96f;border-radius:3px;font-size:8px;font-weight:900;letter-spacing:.08em}
+.hub-footer{margin-top:24px;color:#647b89;font-size:9px;line-height:1.5}
+@media(max-width:760px){.hub-grid{grid-template-columns:1fr}.hub-header{align-items:flex-start;flex-direction:column}.hub-card{min-height:220px}}
+</style>
+</head>
+<body>
+<main class="hub">
+  <header class="hub-header">
+    <div class="hub-brand">
+      <img src="CT-ATLAS.png" alt="CT Atlas">
+      <div>
+        <div class="hub-title">CT ATLAS</div>
+        <div class="hub-subtitle">Analytical Workspaces</div>
+      </div>
+    </div>
+    <div class="hub-user"><span id="hubUser">VERIFYING SESSION…</span><button id="hubSignout" class="hub-signout" type="button">SIGN OUT</button></div>
+  </header>
+
+  <div class="hub-intro">Select an analytical workspace. All workspaces use the same authenticated CT Atlas session.</div>
+
+  <section class="hub-grid" aria-label="CT Atlas workspaces">
+    <a class="hub-card" href="index.html?workspace=map">
+      <div class="hub-card-icon">MAP</div>
+      <div class="hub-card-title">Map and Intel Analysis</div>
+      <div class="hub-card-text">Global CT intelligence map, event database, analytical reports, Deep Search, CT Atlas AI and daily analytical tools.</div>
+      <div class="hub-card-foot">OPEN WORKSPACE →</div>
+    </a>
+
+    <a class="hub-card crypto" href="crypto.html">
+      <div class="hub-card-icon">₿</div>
+      <div class="hub-card-title">Cryptocurrency Investigations</div>
+      <div class="hub-card-text">Multi-chain wallet and transaction analysis, H1-H3 tracing, cases, exposure, sourced attribution, monitoring and alerts.</div>
+      <div class="hub-card-foot">OPEN WORKSPACE →</div>
+    </a>
+
+    <a class="hub-card social" href="social.html">
+      <div class="hub-card-icon">SOC</div>
+      <div class="hub-card-title">Social Media Analysis</div>
+      <span class="under">UNDER CONSTRUCTION</span>
+      <div class="hub-card-text">Reserved workspace for future SOCMINT collection, account/network analysis and evidence-oriented social-media investigations.</div>
+      <div class="hub-card-foot">VIEW WORKSPACE →</div>
+    </a>
+  </section>
+
+  <div class="hub-footer">CT Atlas · independent OSINT prototype for research and analytical purposes.</div>
+</main>
+<script>
+(function(){
+"use strict";
+const API="https://ct-report-generator.fairpeace.workers.dev";
+const TOKEN="ct_map_session_token",USER="ct_map_username",EXPIRY="ct_map_session_expires",AUTHORIZED="ct_map_authorized";
+function clear(){for(const k of [TOKEN,USER,EXPIRY,AUTHORIZED])sessionStorage.removeItem(k);}
+async function verify(){
+  const token=String(sessionStorage.getItem(TOKEN)||"");
+  if(!token){location.replace("index.html");return;}
+  try{
+    const response=await fetch(API+"/session-check",{headers:{"X-Session-Token":token},cache:"no-store"});
+    const payload=await response.json().catch(()=>({}));
+    if(!response.ok||!payload.ok||!payload.username)throw new Error("Session expired");
+    sessionStorage.setItem(USER,String(payload.username).toLowerCase());
+    sessionStorage.setItem(AUTHORIZED,"yes");
+    sessionStorage.setItem(EXPIRY,String(payload.expires_at||""));
+    document.getElementById("hubUser").textContent=String(payload.username).toUpperCase();
+  }catch(_){clear();location.replace("index.html");}
+}
+async function signout(){
+  const token=String(sessionStorage.getItem(TOKEN)||"");
+  try{if(token)await fetch(API+"/session-revoke",{method:"POST",headers:{"X-Session-Token":token}});}catch(_){}
+  clear();location.replace("index.html");
+}
+document.getElementById("hubSignout").addEventListener("click",signout);
+verify();
+})();
+</script>
+</body>
+</html>
