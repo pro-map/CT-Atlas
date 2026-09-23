@@ -112,6 +112,31 @@ function sanitizeCase(item) {
           created_at: cleanText(note?.created_at, 64) || new Date().toISOString()
         }))
       : [],
+    offchain_nodes: Array.isArray(item?.offchain_nodes)
+      ? item.offchain_nodes.slice(0, 200).map(node => ({
+          id: cleanText(node?.id || crypto.randomUUID(), 80),
+          type: cleanText(node?.type, 40).toUpperCase(),
+          label: cleanText(node?.label, 180),
+          linked_address: safeAddress(node?.linked_address),
+          source_url: safeUrl(node?.source_url),
+          notes: cleanText(node?.notes, 1200),
+          created_at: cleanText(node?.created_at, 64) || new Date().toISOString()
+        })).filter(node => node.label)
+      : [],
+    crosschain_links: Array.isArray(item?.crosschain_links)
+      ? item.crosschain_links.slice(0, 200).map(link => ({
+          id: cleanText(link?.id || crypto.randomUUID(), 80),
+          from_chain: safeChain(link?.from_chain),
+          from_address: safeAddress(link?.from_address),
+          to_chain: safeChain(link?.to_chain),
+          to_address: safeAddress(link?.to_address),
+          service: cleanText(link?.service, 120),
+          confidence: safeConfidence(link?.confidence),
+          source_url: safeUrl(link?.source_url),
+          notes: cleanText(link?.notes, 1200),
+          created_at: cleanText(link?.created_at, 64) || new Date().toISOString()
+        })).filter(link => link.from_chain && link.from_address && link.to_chain && link.to_address)
+      : [],
     created_at: cleanText(item?.created_at, 64) || new Date().toISOString(),
     updated_at: new Date().toISOString()
   };
