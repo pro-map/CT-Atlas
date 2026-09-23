@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CT ATLAS — Crypto Intelligence</title>
 <link rel="icon" href="CT-ATLAS.png">
-<link rel="stylesheet" href="crypto.css?v=1">
+<link rel="stylesheet" href="crypto.css?v=2">
 </head>
 <body>
 <div class="crypto-shell">
@@ -59,19 +59,47 @@
       <div id="cryptoKpis" class="crypto-kpis"></div>
 
       <div id="addressView">
+        <article class="crypto-card crypto-filter-card">
+          <div class="crypto-card-head">
+            <div>
+              <div class="crypto-card-title">Specialized Transaction Filters</div>
+              <div id="cryptoFilterSummary" class="crypto-card-note">Filters update both the transaction table and the graph.</div>
+            </div>
+            <button id="cryptoResetFilters" class="crypto-small-button" type="button">RESET FILTERS</button>
+          </div>
+          <div class="crypto-filter-grid">
+            <label class="crypto-field compact"><span>Direction</span><select id="filterDirection"><option value="all">All directions</option><option value="IN">Incoming only</option><option value="OUT">Outgoing only</option><option value="SELF">Self / internal</option></select></label>
+            <label class="crypto-field compact"><span>Asset / token</span><select id="filterAsset"><option value="all">All assets</option></select></label>
+            <label class="crypto-field compact"><span>Transaction type</span><select id="filterType"><option value="all">Native + tokens</option><option value="native">Native coin only</option><option value="token">Token transfers only</option></select></label>
+            <label class="crypto-field compact"><span>Status</span><select id="filterStatus"><option value="all">All statuses</option><option value="confirmed">Confirmed / successful</option><option value="pending">Pending / unconfirmed</option><option value="failed">Failed</option></select></label>
+            <label class="crypto-field compact"><span>Minimum amount</span><input id="filterMinAmount" inputmode="decimal" placeholder="0"></label>
+            <label class="crypto-field compact"><span>Maximum amount</span><input id="filterMaxAmount" inputmode="decimal" placeholder="No maximum"></label>
+            <label class="crypto-field compact"><span>From date</span><input id="filterFromDate" type="date"></label>
+            <label class="crypto-field compact"><span>To date</span><input id="filterToDate" type="date"></label>
+            <label class="crypto-field compact wide"><span>Counterparty / TX / token contract</span><input id="filterText" autocomplete="off" spellcheck="false" placeholder="Address, tx hash, token name or contract"></label>
+            <label class="crypto-field compact"><span>Graph: min linked records</span><input id="filterGraphMinLinks" type="number" min="1" max="99" step="1" value="1"></label>
+            <label class="crypto-field compact"><span>Graph: maximum nodes</span><select id="filterGraphNodes"><option value="10">10</option><option value="20" selected>20</option><option value="30">30</option><option value="40">40</option></select></label>
+          </div>
+        </article>
+
         <div class="crypto-grid">
           <article class="crypto-card">
             <div class="crypto-card-head">
               <div>
                 <div class="crypto-card-title">Transaction Flow Graph</div>
-                <div class="crypto-card-note">Click a counterparty to filter the transaction table</div>
+                <div class="crypto-card-note">Click a node to open that address in a new CT Atlas Crypto tab · drag nodes to reorganize the network</div>
               </div>
+              <button id="cryptoResetGraph" class="crypto-small-button" type="button">RESET LAYOUT</button>
             </div>
             <svg id="flowGraph" viewBox="0 0 820 390" role="img" aria-label="Transaction flow graph"></svg>
             <div class="graph-legend">
-              <span><i class="legend-line in"></i>incoming</span>
-              <span><i class="legend-line out"></i>outgoing</span>
-              <span>edge thickness reflects linked record count, not ownership probability</span>
+              <span><i class="legend-dot seed"></i>seed</span>
+              <span><i class="legend-dot incoming"></i>incoming only</span>
+              <span><i class="legend-dot outgoing"></i>outgoing only</span>
+              <span><i class="legend-dot both"></i>bidirectional</span>
+              <span><i class="legend-line in"></i>incoming flow</span>
+              <span><i class="legend-line out"></i>outgoing flow</span>
+              <span>node size / edge width reflect linked record count, not ownership probability</span>
             </div>
           </article>
 
@@ -121,6 +149,6 @@
     </div>
   </main>
 </div>
-<script src="crypto.js?v=1"></script>
+<script src="crypto.js?v=2"></script>
 </body>
 </html>
