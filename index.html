@@ -3959,6 +3959,49 @@ html, body {
    loads on every page view regardless of whether Deep Search itself is
    opened -- see usage-auth-fix.js's loadDeepSearch(). Only the badge here
    (corroboration/relevance, not an Atlas gap/match) is Report-Generator-own. */
+#reportResultVisuals {
+    padding: 0 17px 18px;
+}
+.report-source-visuals-heading {
+    margin: 4px 0 9px;
+    color: #79c8f1;
+    font: 900 9px/1.25 Arial, sans-serif;
+    letter-spacing: .12em;
+}
+.report-source-visuals-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 10px;
+}
+.report-source-visual {
+    margin: 0;
+    border: 1px solid #2b4452;
+    background: #0b1820;
+}
+.report-source-visual img {
+    display: block;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background: #15242d;
+}
+.report-source-visual figcaption {
+    padding: 8px 9px 9px;
+    color: #9fb5c1;
+    font-size: 8px;
+    line-height: 1.45;
+}
+.report-source-visual figcaption strong {
+    display: block;
+    margin-bottom: 3px;
+    color: #dceaf0;
+    font-size: 9px;
+}
+@media (max-width: 640px) {
+    .report-source-visuals-grid { grid-template-columns: 1fr; }
+    .report-source-visual img { height: 160px; }
+}
+
 #reportResultSources {
     padding: 0 17px 18px;
     display: grid;
@@ -5554,6 +5597,7 @@ Visible rate
           </div>
         </div>
         <div id="reportResultContent"></div>
+        <div id="reportResultVisuals"></div>
         <div id="reportResultSources"></div>
         <div id="reportGeneratorDisclaimer">
           AI-assisted analysis based on deduplicated open-source events held in the map database. It does not constitute verified intelligence and must be independently validated before operational or decision-making use.
@@ -12379,6 +12423,9 @@ function renderTrendSummaryPanel() {
 const REPORT_GENERATOR_API_URL =
     "https://ct-report-generator.fairpeace.workers.dev/report";
 
+const REPORT_GENERATOR_API_BASE =
+    REPORT_GENERATOR_API_URL.replace(/\/report$/, "");
+
 
 function reportGeneratorUserId() {
     return String(sessionStorage.getItem("ct_map_username") || "").trim().toLowerCase();
@@ -12974,6 +13021,36 @@ function reportSectionHtml(
 }
 
 
+function reportSourcePreviewsHtml(previews) {
+    const list = Array.isArray(previews) ? previews : [];
+    if (!list.length) return "";
+
+    const cards = list.map(item => {
+        const src = item.image_path ? REPORT_GENERATOR_API_BASE + item.image_path : "";
+        if (!src) return "";
+        const caption = [item.source_id, item.source, item.title].filter(Boolean).join(" · ");
+        return `
+            <figure class="report-source-visual">
+                <img
+                    src="${escapeHtml(src)}"
+                    alt="${escapeHtml(item.title || "Source article preview")}"
+                    crossorigin="anonymous"
+                    loading="eager"
+                    data-pdf-image
+                    data-pdf-caption="${escapeHtml(caption)}"
+                >
+                <figcaption>
+                    <strong>${escapeHtml(item.source || "Source")}</strong>
+                    ${escapeHtml(item.title || "")}
+                </figcaption>
+            </figure>`;
+    }).filter(Boolean).join("");
+
+    if (!cards) return "";
+    return '<div class="report-source-visuals-heading">KEY SOURCE VISUALS</div><div class="report-source-visuals-grid">' + cards + '</div>';
+}
+
+
 function reportSourcesHtml(sources, grounding) {
 
     const list =
@@ -13218,6 +13295,13 @@ async function generateCustomReport() {
             );
 
         document.getElementById(
+            "reportResultVisuals"
+        ).innerHTML =
+            reportSourcePreviewsHtml(
+                payload.source_previews
+            );
+
+        document.getElementById(
             "reportResultSources"
         ).innerHTML =
             reportSourcesHtml(
@@ -13361,6 +13445,12 @@ async function downloadGeneratedReportPdf() {
         blocks.push(
             ...pdf.blocksFromElement(
                 document.getElementById("reportResultContent")
+            )
+        );
+
+        blocks.push(
+            ...pdf.blocksFromElement(
+                document.getElementById("reportResultVisuals")
             )
         );
 
