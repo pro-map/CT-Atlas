@@ -316,6 +316,42 @@ export class ReportGate {
     const body = await request.json().catch(()=>({}));
     const now = Date.now();
 
+    if (url.pathname === "/crypto-workspace-get") {
+      const username = normalizeUsername(body.username);
+      if (!isAllowedUser(username, this.env)) {
+        return Response.json({ error: "Unknown user." }, { status: 400 });
+      }
+      const key = `crypto-workspace:${username}`;
+      const workspace = (await this.state.storage.get(key)) || {
+        version: "crypto-workspace-v1",
+        username,
+        labels: [],
+        watchlist: [],
+        cases: [],
+        alerts: [],
+        updated_at: new Date(now).toISOString()
+      };
+      return Response.json({ ok: true, workspace });
+    }
+
+    if (url.pathname === "/crypto-workspace-put") {
+      const username = normalizeUsername(body.username);
+      if (!isAllowedUser(username, this.env)) {
+        return Response.json({ error: "Unknown user." }, { status: 400 });
+      }
+      const workspace = body.workspace && typeof body.workspace === "object" ? body.workspace : null;
+      if (!workspace) {
+        return Response.json({ error: "Missing crypto workspace." }, { status: 400 });
+      }
+      const key = `crypto-workspace:${username}`;
+      await this.state.storage.put(key, {
+        ...workspace,
+        username,
+        updated_at: new Date(now).toISOString()
+      });
+      return Response.json({ ok: true, workspace: { ...workspace, username, updated_at: new Date(now).toISOString() } });
+    }
+
     if (url.pathname === "/cache-get") {
       const entry = await this.state.storage.get("cache:" + body.cacheKey);
 
