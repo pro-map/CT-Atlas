@@ -75,7 +75,8 @@ jobs:
           node --check crypto-launcher.js
           node --check cloudflare-worker/crypto.js
           node --check cloudflare-worker/crypto-workspace.js
-          node --test tests/crypto.test.cjs tests/crypto-workspace.test.cjs
+          node --check cloudflare-worker/crypto-monitor.js
+          node --test tests/crypto.test.cjs tests/crypto-workspace.test.cjs tests/crypto-monitor.test.cjs
           node --check cloudflare-worker/shared.js
           node --check cloudflare-worker/report-gate.js
           node --check cloudflare-worker/deep-search.js
