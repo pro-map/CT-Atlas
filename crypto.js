@@ -1614,6 +1614,7 @@ function renderFilteredViews(){
   renderGraph(lastPayload);
   renderKpis(lastPayload,rows);
   renderTable(lastPayload,rows);
+  renderIntelligencePanels();
 }
 
 function resetTraceState(payload){
@@ -1713,6 +1714,24 @@ function bind(){
   document.getElementById("cryptoAutoTrace")?.addEventListener("click",autoTrace);
   document.getElementById("traceMaxDepth")?.addEventListener("change",()=>renderFilteredViews());
   document.getElementById("traceBranch")?.addEventListener("change",()=>renderFilteredViews());
+  document.getElementById("pathFindButton")?.addEventListener("click",runPathFinder);
+  document.getElementById("labelSeedButton")?.addEventListener("click",()=>openLabelForm(lastPayload?.query||""));
+  document.getElementById("labelSaveButton")?.addEventListener("click",saveLabel);
+  document.getElementById("labelCancelButton")?.addEventListener("click",()=>{document.getElementById("labelForm").hidden=true;});
+  document.getElementById("caseNewButton")?.addEventListener("click",()=>{
+    document.getElementById("caseCreateForm").hidden=false;
+    document.getElementById("caseName")?.focus();
+  });
+  document.getElementById("caseCreateButton")?.addEventListener("click",createCase);
+  document.getElementById("caseSelect")?.addEventListener("change",event=>{
+    activeCaseId=String(event.target.value||"");
+    renderCaseUi();
+  });
+  document.getElementById("caseAddSeedButton")?.addEventListener("click",addSeedToCase);
+  document.getElementById("caseSavePathButton")?.addEventListener("click",savePathToCase);
+  document.getElementById("caseAddNoteButton")?.addEventListener("click",addCaseNote);
+  document.getElementById("monitorSeedButton")?.addEventListener("click",monitorSeed);
+  document.getElementById("monitorCheckButton")?.addEventListener("click",checkMonitored);
 
   FILTER_IDS.forEach(id=>{
     const el=document.getElementById(id);
@@ -1728,6 +1747,7 @@ async function start(){
   const ok=await verifySession();
   if(!ok)return;
   await providerHealth();
+  await loadCryptoWorkspace();
   if(autoRun)run();
 }
 
