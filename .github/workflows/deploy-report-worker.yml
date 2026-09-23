@@ -39,6 +39,7 @@ jobs:
           node --check cloudflare-worker/crypto.js
           node --check cloudflare-worker/crypto-workspace.js
           node --check cloudflare-worker/crypto-monitor.js
+          node --check cloudflare-worker/source-preview.js
           node --check crypto.js
           node --test tests/*.test.cjs
           python3 tests/quiz_source_test.py
