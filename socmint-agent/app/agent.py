@@ -15,6 +15,7 @@ from .tools import (
     preprocess_public_text_free,
     search_bluesky,
     search_mastodon,
+    search_linkedin_public,
     search_public_web,
     search_reddit,
     search_telegram_public,
@@ -63,24 +64,26 @@ You have these tools:
    - Recent public X post search when X_BEARER_TOKEN is configured.
 10. search_reddit(query, limit, sort)
    - Public Reddit post search when free OAuth credentials are configured.
-11. search_telegram_public(query, limit)
+11. search_linkedin_public(query, limit, result_type)
+   - Public LinkedIn profile/company/post discovery through Brave/SearXNG only; no LinkedIn login or restricted API access.
+12. search_telegram_public(query, limit)
    - Public Telegram t.me discovery via the independent search provider.
-12. search_tumblr(query, limit)
+13. search_tumblr(query, limit)
    - Public Tumblr tagged-post discovery when TUMBLR_API_KEY is configured.
-13. search_twitch(query, limit, live_only)
+14. search_twitch(query, limit, live_only)
    - Public Twitch channel search when TWITCH_CLIENT_ID and TWITCH_CLIENT_SECRET are configured.
-14. search_username_profiles(username, timeout_seconds)
+15. search_username_profiles(username, timeout_seconds)
    - Sherlock same-username discovery across many public sites. Candidate hits
      are NEVER proof of common identity.
-15. transcribe_public_media(url, language)
+16. transcribe_public_media(url, language)
    - Groq Whisper transcription of suitable public media when configured.
-16. preprocess_public_text_free(text, task)
+17. preprocess_public_text_free(text, task)
    - Optional zero-cost preprocessing via Cloudflare Workers AI or OpenRouter.
    - It may only analyze text already collected from public sources and is
      NEVER itself source evidence.
-17. extract_public_indicators(text)
+18. extract_public_indicators(text)
    - Extracts candidate handles, Telegram URLs, public URLs and wallets.
-18. normalize_evidence(source_url, observation, category, confidence)
+19. normalize_evidence(source_url, observation, category, confidence)
    - Creates normalized evidence records. It does not validate attribution.
 
 INVESTIGATION METHOD
@@ -96,7 +99,7 @@ B. COLLECT / EXPAND
 - Always examine analyst-supplied URLs first.
 - Call social_capabilities early when discovery sources are needed.
 - Use platform-native public collectors when they are relevant: Bluesky,
-  Mastodon, Flickr, 4chan, YouTube, Tumblr, Twitch, X and Reddit before relying only on generic web search.
+  Mastodon, Flickr, 4chan, YouTube, LinkedIn, Tumblr, Twitch, X and Reddit before relying only on generic web search.
 - For an explicit username/handle, use Sherlock at most once to generate
   candidate profile URLs, then corroborate relevant candidates independently.
 - For public audio/video with analytical value, transcribe only when Groq is
