@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CT ATLAS — Facial Intelligence</title>
+<link rel="icon" href="CT-ATLAS.png">
+<link rel="stylesheet" href="facial.css?v=1">
+</head>
+<body>
+<div class="fi-shell">
+  <header class="fi-header">
+    <div class="fi-brand">
+      <img src="CT-ATLAS.png" alt="CT Atlas">
+      <div>
+        <div class="fi-title">FACIAL INTELLIGENCE</div>
+        <div class="fi-sub">CT ATLAS · VISUAL EVIDENCE ANALYSIS</div>
+      </div>
+    </div>
+    <div class="fi-actions">
+      <span id="fiUser">VERIFYING SESSION…</span>
+      <a class="main-button" href="main.html">MAIN</a>
+    </div>
+  </header>
+
+  <main class="fi-main">
+    <section class="fi-panel">
+      <div class="panel-kicker">VISUAL INPUT</div>
+      <h1>Analyze images and video</h1>
+      <p class="lead">Detect faces, assess crop quality, extract public metadata and OCR text, sample video frames, and identify duplicate or near-duplicate visuals.</p>
+      <div class="guardrail"><strong>NON-IDENTIFYING ANALYSIS.</strong> CT Atlas does not create biometric face embeddings, identify a person, or conclude that two faces belong to the same individual.</div>
+
+      <form id="fiForm">
+        <label class="dropzone" for="fiFiles">
+          <span class="drop-title">SELECT IMAGES OR VIDEOS</span>
+          <span class="drop-help">Up to 10 files · combined maximum 30 MB · JPG, PNG, WEBP, MP4, MOV, WEBM and common formats</span>
+          <input id="fiFiles" type="file" multiple accept="image/*,video/*">
+        </label>
+        <div id="fiFileList" class="file-list"></div>
+        <button id="fiRun" type="submit" class="run-button">RUN VISUAL ANALYSIS</button>
+        <div id="fiStatus" class="status" aria-live="polite"></div>
+      </form>
+
+      <section class="capabilities">
+        <div><b>Face detection</b><span>Bounding boxes + face crop quality</span></div>
+        <div><b>OCR</b><span>Visible text extraction with Tesseract</span></div>
+        <div><b>EXIF / GPS</b><span>Only metadata embedded in the uploaded file</span></div>
+        <div><b>Video sampling</b><span>Representative frames with timestamps</span></div>
+        <div><b>Visual similarity</b><span>Whole-image/frame perceptual hash comparison</span></div>
+        <div><b>Analyst control</b><span>No automated identity attribution</span></div>
+      </section>
+    </section>
+
+    <section class="fi-results">
+      <div id="fiEmpty" class="empty">
+        <div class="empty-icon">VIS</div>
+        <h2>Visual Intelligence Report</h2>
+        <p>Upload public or lawfully held media to begin local visual evidence processing on the CT Atlas analysis service.</p>
+      </div>
+
+      <div id="fiReport" hidden>
+        <div class="report-head">
+          <div>
+            <div class="panel-kicker">ANALYSIS RESULTS</div>
+            <h2>Visual Intelligence Report</h2>
+          </div>
+          <button id="fiDownload" class="secondary-button" type="button">DOWNLOAD JSON</button>
+        </div>
+        <div id="fiSummary" class="summary-grid"></div>
+        <section id="fiSimilaritySection" class="report-section" hidden>
+          <h3>VISUAL SIMILARITY</h3>
+          <div id="fiSimilarity" class="similarity-list"></div>
+        </section>
+        <div id="fiItems"></div>
+        <div class="disclaimer">Detection and similarity outputs are investigative aids only. Perceptual similarity describes image resemblance, not identity. Face detection does not establish who a person is.</div>
+      </div>
+    </section>
+  </main>
+</div>
+<script src="facial.js?v=1"></script>
+</body>
+</html>
