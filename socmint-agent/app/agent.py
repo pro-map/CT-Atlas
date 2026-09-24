@@ -241,6 +241,7 @@ root_agent = Agent(
         search_fourchan,
         search_bluesky,
         search_mastodon,
+        search_linkedin_public,
         search_youtube,
         search_x,
         search_reddit,
