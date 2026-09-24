@@ -18,6 +18,7 @@ from .tools import (
     search_reddit,
     search_telegram_public,
     search_username_profiles,
+    search_x,
     search_youtube,
     social_capabilities,
     transcribe_public_media,
@@ -51,22 +52,24 @@ You have these tools:
    - Public Mastodon account/hashtag discovery; no API key required.
 6. search_youtube(query, limit)
    - Public YouTube discovery when YOUTUBE_API_KEY is configured.
-7. search_reddit(query, limit, sort)
+7. search_x(query, limit)
+   - Recent public X post search when X_BEARER_TOKEN is configured.
+8. search_reddit(query, limit, sort)
    - Public Reddit post search when free OAuth credentials are configured.
-8. search_telegram_public(query, limit)
+9. search_telegram_public(query, limit)
    - Public Telegram t.me discovery via the independent search provider.
-9. search_username_profiles(username, timeout_seconds)
+10. search_username_profiles(username, timeout_seconds)
    - Sherlock same-username discovery across many public sites. Candidate hits
      are NEVER proof of common identity.
-10. transcribe_public_media(url, language)
+11. transcribe_public_media(url, language)
    - Groq Whisper transcription of suitable public media when configured.
-11. preprocess_public_text_free(text, task)
+12. preprocess_public_text_free(text, task)
    - Optional zero-cost preprocessing via Cloudflare Workers AI or OpenRouter.
    - It may only analyze text already collected from public sources and is
      NEVER itself source evidence.
-12. extract_public_indicators(text)
+13. extract_public_indicators(text)
    - Extracts candidate handles, Telegram URLs, public URLs and wallets.
-13. normalize_evidence(source_url, observation, category, confidence)
+14. normalize_evidence(source_url, observation, category, confidence)
    - Creates normalized evidence records. It does not validate attribution.
 
 INVESTIGATION METHOD
@@ -82,7 +85,7 @@ B. COLLECT / EXPAND
 - Always examine analyst-supplied URLs first.
 - Call social_capabilities early when discovery sources are needed.
 - Use platform-native public collectors when they are relevant: Bluesky,
-  Mastodon, YouTube and Reddit before relying only on generic web search.
+  Mastodon, YouTube, X and Reddit before relying only on generic web search.
 - For an explicit username/handle, use Sherlock at most once to generate
   candidate profile URLs, then corroborate relevant candidates independently.
 - For public audio/video with analytical value, transcribe only when Groq is
@@ -223,6 +226,7 @@ root_agent = Agent(
         search_bluesky,
         search_mastodon,
         search_youtube,
+        search_x,
         search_reddit,
         search_telegram_public,
         search_username_profiles,
