@@ -346,6 +346,7 @@ def social_capabilities() -> dict[str, Any]:
         "telegram_public_pages": True,
         "telegram_global_discovery": provider in {"brave", "searxng"},
         "youtube_api": bool(os.getenv("YOUTUBE_API_KEY", "").strip()),
+        "flickr_api": bool(os.getenv("FLICKR_API_KEY", "").strip()),
         "tumblr_api": bool(os.getenv("TUMBLR_API_KEY", "").strip()),
         "x_api": bool(os.getenv("X_BEARER_TOKEN", "").strip()),
         "reddit_oauth": reddit_ready,
@@ -605,6 +606,101 @@ def search_youtube(query: str, limit: int = 10) -> dict[str, Any]:
         return {
             "status": "error",
             "platform": "youtube",
+            "query": clean_query,
+            "results": [],
+            "error": _clean(exc, 600),
+        }
+
+
+def search_flickr(query: str, limit: int = 10) -> dict[str, Any]:
+    """Search PUBLIC Flickr photos with a non-commercial API key.
+
+    Returns public photo metadata only. Geolocation is included only when the
+    public photo record exposes it.
+    """
+    key = os.getenv("FLICKR_API_KEY", "").strip()
+    clean_query = _clean(query, 300)
+    requested = max(1, min(int(limit or 10), 50))
+    if not key:
+        return {
+            "status": "unavailable",
+            "platform": "flickr",
+            "results": [],
+            "reason": "FLICKR_API_KEY is not configured.",
+        }
+    if not clean_query:
+        return {"status": "error", "platform": "flickr", "results": [], "error": "Empty Flickr query."}
+
+    try:
+        response = requests.get(
+            "https://www.flickr.com/services/rest/",
+            params={
+                "method": "flickr.photos.search",
+                "api_key": key,
+                "text": clean_query,
+                "sort": "date-posted-desc",
+                "safe_search": 1,
+                "content_type": 1,
+                "media": "photos",
+                "extras": (
+                    "description,date_upload,date_taken,owner_name,geo,tags,"
+                    "views,url_m,url_l,path_alias"
+                ),
+                "per_page": requested,
+                "page": 1,
+                "format": "json",
+                "nojsoncallback": 1,
+            },
+            headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
+            timeout=DEFAULT_TIMEOUT,
+        )
+        response.raise_for_status()
+        payload = response.json()
+        if payload.get("stat") != "ok":
+            raise ValueError(_clean(payload.get("message") or "Flickr API error.", 400))
+        photos = (payload.get("photos") or {}).get("photo") or []
+        results: list[dict[str, Any]] = []
+        for photo in photos[:requested]:
+            photo_id = _clean(photo.get("id"), 120)
+            owner = _clean(photo.get("owner"), 180)
+            path_alias = _clean(photo.get("pathalias"), 180)
+            owner_segment = path_alias or owner
+            page_url = (
+                f"https://www.flickr.com/photos/{owner_segment}/{photo_id}/"
+                if owner_segment and photo_id
+                else ""
+            )
+            description = photo.get("description") or {}
+            results.append({
+                "type": "photo",
+                "id": photo_id,
+                "title": _clean(photo.get("title"), 500),
+                "description": _clean(
+                    description.get("_content") if isinstance(description, dict) else description,
+                    2500,
+                ),
+                "owner_id": owner,
+                "owner_name": _clean(photo.get("ownername"), 250),
+                "date_upload": _clean(photo.get("dateupload"), 80),
+                "date_taken": _clean(photo.get("datetaken"), 80),
+                "tags": _clean(photo.get("tags"), 1600),
+                "latitude": _clean(photo.get("latitude"), 80),
+                "longitude": _clean(photo.get("longitude"), 80),
+                "accuracy": _clean(photo.get("accuracy"), 40),
+                "views": _clean(photo.get("views"), 40),
+                "image_url": _clean(photo.get("url_l") or photo.get("url_m"), 1200),
+                "url": page_url,
+            })
+        return {
+            "status": "success",
+            "platform": "flickr",
+            "query": clean_query,
+            "results": results,
+        }
+    except Exception as exc:
+        return {
+            "status": "error",
+            "platform": "flickr",
             "query": clean_query,
             "results": [],
             "error": _clean(exc, 600),
