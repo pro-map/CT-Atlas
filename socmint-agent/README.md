@@ -189,3 +189,38 @@ those pages.
 
 Later, public-web discovery can be added independently with SearXNG or Brave
 without changing the CT Atlas Worker or UI.
+
+
+## Free social-source collectors
+
+The ADK agent now has dedicated PUBLIC-source collectors:
+
+- **Bluesky**: unauthenticated public AppView search for posts and accounts.
+- **Mastodon**: unauthenticated account/hashtag discovery on public instances.
+- **YouTube Data API**: enabled when `YOUTUBE_API_KEY` is configured.
+- **Reddit Data API**: enabled when `REDDIT_CLIENT_ID` and
+  `REDDIT_CLIENT_SECRET` are configured. OAuth is required; unauthenticated
+  Reddit API traffic is not used.
+- **Telegram public pages**: known `t.me` pages can be fetched directly;
+  discovery uses the configured independent public-web provider, avoiding
+  private chats and authentication-gated data.
+- **Groq Whisper**: enabled when `GROQ_API_KEY` is configured, for
+  transcription of suitable public audio/video URLs.
+- **Sherlock**: included for same-username discovery across public services.
+  Hits are candidate profiles only and never establish identity by themselves.
+
+Bluesky and basic Mastodon discovery require no key. All optional credentials
+must be stored as deployment secrets and never committed.
+
+### Optional free-tier secrets
+
+```
+BRAVE_SEARCH_API_KEY=
+YOUTUBE_API_KEY=
+REDDIT_CLIENT_ID=
+REDDIT_CLIENT_SECRET=
+GROQ_API_KEY=
+```
+
+The agent remains operational when any optional source is unavailable and
+records coverage limitations in its report.
