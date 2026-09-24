@@ -7,8 +7,13 @@ import {
   gateCall,
   extractGeminiText
 } from "./shared.js";
+import {
+  SOCIAL_AGENT_CLIENT_VERSION,
+  isSocialAgentConfigured,
+  runSocialAgent
+} from "./social-agent-client.js";
 
-const SOCIAL_INTEL_VERSION = "socmint-v2-free-tier-fallback";
+const SOCIAL_INTEL_VERSION = "socmint-v3-adk-agent-first";
 const SOCIAL_REPORT_LIMIT = 50;
 
 const SOCIAL_SCHEMA = {
@@ -205,6 +210,28 @@ function extractToolSources(payload) {
     }
   }
   return Array.from(byUrl.values()).slice(0,100);
+}
+
+function normalizeAgentSources(raw, query) {
+  const items = [];
+  const seen = new Set();
+  const add = (url, title = "", kind = "agent_public_source") => {
+    const safe = safePublicUrl(url);
+    if (!safe || seen.has(safe)) return;
+    seen.add(safe);
+    items.push({
+      url: safe,
+      title: cleanText(title, 300),
+      snippet: "",
+      kind: cleanText(kind, 60) || "agent_public_source"
+    });
+  };
+
+  for (const item of Array.isArray(raw?.sources) ? raw.sources : []) {
+    add(item?.url, item?.title, item?.kind);
+  }
+  for (const url of query.urls || []) add(url, "", "analyst_supplied");
+  return items.slice(0, 100);
 }
 
 function normalizeReport(raw, query, toolSources, model, discoveryMode) {
@@ -448,8 +475,10 @@ async function handleSocialInvestigate(request, env) {
   }
   const auth = await authenticate(request, env, username);
   if (!auth.ok) return jsonResponse({ error: auth.error }, auth.status, env);
-  if (!env.GEMINI_API_KEY) {
-    return jsonResponse({ error: "Gemini API key is not configured." }, 503, env);
+
+  const agentConfigured = isSocialAgentConfigured(env);
+  if (!agentConfigured && !env.GEMINI_API_KEY) {
+    return jsonResponse({ error: "Neither the SOCMINT ADK agent nor Gemini fallback is configured." }, 503, env);
   }
 
   const query = sanitizeRequest(body);
@@ -458,6 +487,50 @@ async function handleSocialInvestigate(request, env) {
   }
   if (query.mode === "urls_only" && !query.urls.length) {
     return jsonResponse({ error: "Analyze URLs mode requires at least one public URL." }, 400, env);
+  }
+
+  if (agentConfigured) {
+    try {
+      const agentResult = await runSocialAgent(env, username, query);
+      const sources = normalizeAgentSources(agentResult.report, query);
+      const report = normalizeReport(
+        agentResult.report,
+        query,
+        sources,
+        "ADK · " + cleanText(agentResult.meta?.agent_version || SOCIAL_AGENT_CLIENT_VERSION, 80),
+        "adk_agent"
+      );
+      report.agent_meta = {
+        agent: true,
+        client_version: SOCIAL_AGENT_CLIENT_VERSION,
+        agent_version: cleanText(agentResult.meta?.agent_version, 80),
+        investigation_id: cleanText(agentResult.meta?.session_id, 100),
+        event_count: Number(agentResult.meta?.event_count || 0),
+        max_llm_calls: Number(agentResult.meta?.max_llm_calls || 0)
+      };
+      await persistReport(env, username, report);
+      return jsonResponse({ ok: true, report, agent: true }, 200, env);
+    } catch (error) {
+      const status = Number(error?.status || 0);
+      if (status === 429 || /QUOTA/.test(String(error?.code || ""))) {
+        return jsonResponse({
+          error: "The SOCMINT ADK agent reached its Gemini quota. Retry later; previous reports remain available.",
+          code: "SOCMINT_AGENT_QUOTA_EXHAUSTED",
+          retry_after_seconds: error?.retry_after_seconds || null
+        }, 429, env);
+      }
+      console.error("SOCMINT ADK agent failed; using Gemini fallback when available.", {
+        code: error?.code,
+        status,
+        message: cleanText(error?.message, 500)
+      });
+      if (!env.GEMINI_API_KEY) {
+        return jsonResponse({
+          error: "The SOCMINT ADK agent is temporarily unavailable and no Gemini fallback is configured.",
+          code: "SOCMINT_AGENT_UNAVAILABLE"
+        }, 503, env);
+      }
+    }
   }
 
   let result;
@@ -531,6 +604,7 @@ async function handleSocialInvestigate(request, env) {
 
 export {
   SOCIAL_INTEL_VERSION,
+  SOCIAL_AGENT_CLIENT_VERSION,
   SOCIAL_SCHEMA,
   sanitizeRequest,
   extractToolSources,
