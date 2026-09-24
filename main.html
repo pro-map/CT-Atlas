@@ -21,17 +21,12 @@ body{display:flex;min-height:100vh}
 .hub-intro{margin:28px 0 20px;color:#9eb2bd;font-size:12px;line-height:1.6}
 .hub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .hub-card{min-height:270px;display:flex;flex-direction:column;padding:22px;border:1px solid #344958;border-radius:8px;background:linear-gradient(180deg,#172630,#111d26);color:#fff;text-decoration:none;box-shadow:0 12px 30px rgba(0,0,0,.24);transition:transform .15s ease,border-color .15s ease,background .15s ease}
-.hub-card:hover{transform:translateY(-3px);border-color:#6a8ca0;background:linear-gradient(180deg,#1c303d,#14242e)}
-.hub-card.crypto:hover{border-color:#796ba3}
-.hub-card.social:hover{border-color:#60717a}
-.hub-card-icon{width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:1px solid #48687a;border-radius:7px;background:#12232d;color:#8fd3f4;font-size:15px;font-weight:900;letter-spacing:.05em}
-.hub-card.crypto .hub-card-icon{border-color:#685789;color:#c4adf1;background:#211a31}
-.hub-card.social .hub-card-icon{border-color:#4a5e69;color:#9fb0ba;background:#18232a}
+.hub-card:hover{transform:translateY(-3px);border-color:#607c8c;background:linear-gradient(180deg,#1b2d38,#14242e)}
+.hub-card-icon{width:58px;height:58px;display:flex;align-items:center;justify-content:center;border:1px solid #3f5867;border-radius:6px;background:#101d26}
+.hub-card-icon img{width:48px;height:48px;display:block;object-fit:contain}
 .hub-card-title{margin-top:23px;font-size:17px;font-weight:900;line-height:1.25;letter-spacing:.025em}
 .hub-card-text{margin-top:10px;color:#8fa5b2;font-size:11px;line-height:1.6}
-.hub-card-foot{margin-top:auto;padding-top:22px;color:#8fcbea;font-size:9px;font-weight:900;letter-spacing:.09em}
-.hub-card.crypto .hub-card-foot{color:#c2a8ec}
-.hub-card.social .hub-card-foot{color:#98a6ad}
+.hub-card-foot{margin-top:auto;padding-top:22px;color:#8fb6ca;font-size:9px;font-weight:900;letter-spacing:.09em}
 .under{display:inline-block;margin-top:12px;padding:5px 7px;border:1px solid #705f38;background:#282316;color:#d6b96f;border-radius:3px;font-size:8px;font-weight:900;letter-spacing:.08em}
 .hub-footer{margin-top:24px;color:#647b89;font-size:9px;line-height:1.5}
 @media(max-width:760px){.hub-grid{grid-template-columns:1fr}.hub-header{align-items:flex-start;flex-direction:column}.hub-card{min-height:220px}}
@@ -54,22 +49,22 @@ body{display:flex;min-height:100vh}
 
   <section class="hub-grid" aria-label="CT Atlas workspaces">
     <a class="hub-card" href="index.html?workspace=map">
-      <div class="hub-card-icon">MAP</div>
-      <div class="hub-card-title">Map and Intel Analysis</div>
+      <div class="hub-card-icon"><img src="intelligence-map.svg" alt="" aria-hidden="true"></div>
+      <div class="hub-card-title">Intelligence Map</div>
       <div class="hub-card-text">Global CT intelligence map, event database, analytical reports, Deep Search, CT Atlas AI and daily analytical tools.</div>
       <div class="hub-card-foot">OPEN WORKSPACE →</div>
     </a>
 
     <a class="hub-card crypto" href="crypto.html">
-      <div class="hub-card-icon">₿</div>
-      <div class="hub-card-title">Cryptocurrency Investigations</div>
+      <div class="hub-card-icon"><img src="crypto-intelligence.svg" alt="" aria-hidden="true"></div>
+      <div class="hub-card-title">Crypto Intelligence</div>
       <div class="hub-card-text">Multi-chain wallet and transaction analysis, H1-H3 tracing, cases, exposure, sourced attribution, monitoring and alerts.</div>
       <div class="hub-card-foot">OPEN WORKSPACE →</div>
     </a>
 
     <a class="hub-card social" href="social.html">
-      <div class="hub-card-icon">SOC</div>
-      <div class="hub-card-title">Social Media Analysis</div>
+      <div class="hub-card-icon"><img src="social-intelligence.svg" alt="" aria-hidden="true"></div>
+      <div class="hub-card-title">Social Intelligence</div>
       <div class="hub-card-text">AI-assisted public-source SOCMINT investigations with structured search fields, source-grounded findings, entity extraction and downloadable analytical reports.</div>
       <div class="hub-card-foot">OPEN WORKSPACE →</div>
     </a>
