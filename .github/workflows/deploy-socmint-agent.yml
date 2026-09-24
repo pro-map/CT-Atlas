@@ -121,7 +121,7 @@ jobs:
             --platform managed \
             --allow-unauthenticated \
             --quiet \
-            --set-env-vars "SOCMINT_AGENT_MODEL=gemini-2.5-flash-lite,SOCMINT_SEARCH_PROVIDER=$search_provider,GEMINI_API_KEY=$GEMINI_API_KEY,CT_ATLAS_AGENT_SHARED_SECRET=$AGENT_SHARED_SECRET,BRAVE_SEARCH_API_KEY=$BRAVE_SEARCH_API_KEY,YOUTUBE_API_KEY=$YOUTUBE_API_KEY,REDDIT_CLIENT_ID=$REDDIT_CLIENT_ID,REDDIT_CLIENT_SECRET=$REDDIT_CLIENT_SECRET,GROQ_API_KEY=$GROQ_API_KEY,GROQ_WHISPER_MODEL=whisper-large-v3-turbo,OPENROUTER_API_KEY=$OPENROUTER_API_KEY,OPENROUTER_FREE_MODEL=openrouter/free,CLOUDFLARE_AI_ACCOUNT_ID=$CLOUDFLARE_AI_ACCOUNT_ID,CLOUDFLARE_AI_API_TOKEN=$CLOUDFLARE_AI_API_TOKEN,CLOUDFLARE_AI_MODEL=@cf/meta/llama-3.1-8b-instruct"
+            --set-env-vars "SOCMINT_AGENT_MODEL=gemini-3.5-flash-lite,SOCMINT_SEARCH_PROVIDER=$search_provider,GEMINI_API_KEY=$GEMINI_API_KEY,CT_ATLAS_AGENT_SHARED_SECRET=$AGENT_SHARED_SECRET,BRAVE_SEARCH_API_KEY=$BRAVE_SEARCH_API_KEY,YOUTUBE_API_KEY=$YOUTUBE_API_KEY,REDDIT_CLIENT_ID=$REDDIT_CLIENT_ID,REDDIT_CLIENT_SECRET=$REDDIT_CLIENT_SECRET,GROQ_API_KEY=$GROQ_API_KEY,GROQ_WHISPER_MODEL=whisper-large-v3-turbo,OPENROUTER_API_KEY=$OPENROUTER_API_KEY,OPENROUTER_FREE_MODEL=openrouter/free,CLOUDFLARE_AI_ACCOUNT_ID=$CLOUDFLARE_AI_ACCOUNT_ID,CLOUDFLARE_AI_API_TOKEN=$CLOUDFLARE_AI_API_TOKEN,CLOUDFLARE_AI_MODEL=@cf/meta/llama-3.1-8b-instruct"
 
           service_url="$(gcloud run services describe "$SERVICE_NAME" \
             --project "$GCP_PROJECT_ID" \
@@ -137,6 +137,33 @@ jobs:
         run: |
           set -euo pipefail
           curl --fail --silent --show-error "$SOCMINT_AGENT_URL/health" | python -m json.tool
+
+      - name: Verify agent investigation
+        shell: bash
+        run: |
+          set -euo pipefail
+          payload='{"user_id":"ct_atlas_smoke","query":{"mode":"urls_only","target":"CT Atlas SOCMINT smoke test","usernames":[],"keywords":[],"platforms":[],"urls":["https://example.com/"],"countries_regions":[],"languages":["English"],"date_from":"","date_to":"","objective":"Fetch the supplied public page and return a minimal evidence-led SOCMINT report. Do not infer identity or wrongdoing."}}'
+          response_file="$(mktemp)"
+          status="$(curl --silent --show-error --output "$response_file" --write-out '%{http_code}' \
+            --max-time 110 \
+            -X POST "$SOCMINT_AGENT_URL/investigate" \
+            -H "Content-Type: application/json" \
+            -H "X-CT-Atlas-Agent-Key: $AGENT_SHARED_SECRET" \
+            --data "$payload")"
+          cat "$response_file" | python -m json.tool || cat "$response_file"
+          if [ "$status" -lt 200 ] || [ "$status" -ge 300 ]; then
+            echo "::error::SOCMINT /investigate smoke test failed with HTTP $status"
+            exit 1
+          fi
+          python - "$response_file" <<'PY'
+          import json, sys
+          with open(sys.argv[1], encoding="utf-8") as fh:
+              data=json.load(fh)
+          assert data.get("ok") is True
+          assert isinstance(data.get("report"), dict)
+          assert data["report"].get("executive_assessment")
+          print("SOCMINT /investigate smoke test passed.")
+          PY
 
       - name: Configure CT Atlas Worker bridge
         shell: bash
