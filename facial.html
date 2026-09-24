@@ -30,6 +30,7 @@
       <h1>Analyze images and video</h1>
       <p class="lead">Detect faces, assess crop quality, extract public metadata and OCR text, sample video frames, and identify duplicate or near-duplicate visuals.</p>
       <div class="guardrail"><strong>NON-IDENTIFYING ANALYSIS.</strong> CT Atlas does not create biometric face embeddings, identify a person, or conclude that two faces belong to the same individual.</div>
+      <div class="guardrail"><strong>RETENTION.</strong> Uploaded files are processed in memory on the analysis service and are not stored there. The report and any preview images returned to your browser persist only in this session unless you use Download JSON yourself.</div>
 
       <form id="fiForm">
         <label class="dropzone" for="fiFiles">
@@ -38,6 +39,10 @@
           <input id="fiFiles" type="file" multiple accept="image/*,video/*">
         </label>
         <div id="fiFileList" class="file-list"></div>
+        <label class="consent-check">
+          <input id="fiConsent" type="checkbox">
+          <span>I have a lawful basis to process this media (public/open-source material, or media I am otherwise authorised to analyse) and I accept responsibility for that determination.</span>
+        </label>
         <button id="fiRun" type="submit" class="run-button">RUN VISUAL ANALYSIS</button>
         <div id="fiStatus" class="status" aria-live="polite"></div>
       </form>

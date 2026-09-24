@@ -59,6 +59,7 @@ $("fiFiles").addEventListener("change",listFiles);
 $("fiForm").addEventListener("submit",async e=>{
  e.preventDefault();const files=[...$("fiFiles").files];const status=$("fiStatus");
  if(!files.length){status.className="status error";status.textContent="Select at least one image or video.";return;}
+ if(!$("fiConsent").checked){status.className="status error";status.textContent="Confirm you have a lawful basis to process this media before running analysis.";return;}
  if(files.length>10){status.className="status error";status.textContent="Maximum 10 files.";return;}
  const total=files.reduce((n,f)=>n+f.size,0);if(total>30*1024*1024){status.className="status error";status.textContent="Combined upload exceeds 30 MB.";return;}
  const token=String(sessionStorage.getItem(TOKEN)||"");const data=new FormData();files.forEach(f=>data.append("files",f,f.name));
