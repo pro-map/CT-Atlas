@@ -17,6 +17,10 @@ button,input,select{font:inherit}
 #cryptoRun{min-height:42px;border:1px solid #4d7f91;background:#234b5a;color:#fff;border-radius:4px;font-size:10px;font-weight:900;letter-spacing:.12em;cursor:pointer}
 #cryptoRun:disabled{opacity:.55;cursor:wait}
 .crypto-hint{grid-column:1/-1;color:#728b9b;font-size:10px;line-height:1.5}
+.crypto-example{display:inline-flex;align-items:center;gap:5px;margin-left:7px}
+.crypto-example-button{border:0;border-bottom:1px solid #5c8294;background:transparent;color:#9fc6d7;padding:1px 0;cursor:pointer;font:800 9px/1.4 Arial,sans-serif;letter-spacing:.02em}
+.crypto-example-button:hover{color:#fff;border-bottom-color:#a9c8d6}
+.crypto-example-button:focus-visible{outline:1px solid #7aa5b8;outline-offset:3px}
 .crypto-status{min-height:22px;margin:10px 2px 0;color:#8ea5b5;font-size:11px}
 .crypto-status.error{color:#e79292}.crypto-status.success{color:#7fc49c}.crypto-status.working{color:#d8b761}
 .crypto-provider-strip{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 16px}
@@ -61,7 +65,7 @@ button,input,select{font:inherit}
 .crypto-disclaimer{margin-top:14px;padding:11px;border:1px solid #344957;background:#111d28;color:#78909f;font-size:9px;line-height:1.6}
 .crypto-sampling{margin-top:7px;color:#8ba0ad}
 @media(max-width:900px){.crypto-kpis{grid-template-columns:1fr 1fr}.crypto-grid{grid-template-columns:1fr}.crypto-search{grid-template-columns:1fr 1fr}.crypto-search .crypto-field:first-child{grid-column:1/-1}#cryptoRun{grid-column:1/-1}}
-@media(max-width:580px){.crypto-header{padding:11px 12px}.crypto-brand img{width:42px;height:42px}.crypto-title{font-size:14px}.crypto-main{padding:11px}.crypto-search{grid-template-columns:1fr}.crypto-search .crypto-field:first-child,#cryptoRun{grid-column:auto}.crypto-kpis{grid-template-columns:1fr 1fr}.crypto-topline{flex-direction:column}.crypto-explorer{width:100%;text-align:center}#flowGraph{height:320px}}
+@media(max-width:580px){.crypto-header{padding:11px 12px}.crypto-brand img{width:42px;height:42px}.crypto-title{font-size:14px}.crypto-main{padding:11px}.crypto-search{grid-template-columns:1fr}.crypto-search .crypto-field:first-child,#cryptoRun{grid-column:auto}.crypto-kpis{grid-template-columns:1fr 1fr}.crypto-topline{flex-direction:column}.crypto-explorer{width:100%;text-align:center}#flowGraph{height:320px}.crypto-example{display:flex;margin:7px 0 0}}
 
 
 /* =========================================================
