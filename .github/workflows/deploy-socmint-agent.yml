@@ -6,6 +6,10 @@ on:
       - main
     paths:
       - "socmint-agent/**"
+      - "cloudflare-worker/social-intel.js"
+      - "cloudflare-worker/social-agent-client.js"
+      - "cloudflare-worker/index.js"
+      - "tests/social-intel.test.cjs"
       - ".github/workflows/deploy-socmint-agent.yml"
   workflow_dispatch:
 
@@ -30,6 +34,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+
+      - name: Run SOCMINT Worker tests
+        run: node --test tests/social-intel.test.cjs
 
       - name: Verify required deployment secrets
         shell: bash
