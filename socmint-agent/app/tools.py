@@ -346,6 +346,7 @@ def social_capabilities() -> dict[str, Any]:
         "telegram_public_pages": True,
         "telegram_global_discovery": provider in {"brave", "searxng"},
         "youtube_api": bool(os.getenv("YOUTUBE_API_KEY", "").strip()),
+        "x_api": bool(os.getenv("X_BEARER_TOKEN", "").strip()),
         "reddit_oauth": reddit_ready,
         "groq_whisper": bool(os.getenv("GROQ_API_KEY", "").strip()),
         "cloudflare_workers_ai": bool(
@@ -603,6 +604,84 @@ def search_youtube(query: str, limit: int = 10) -> dict[str, Any]:
         return {
             "status": "error",
             "platform": "youtube",
+            "query": clean_query,
+            "results": [],
+            "error": _clean(exc, 600),
+        }
+
+
+def search_x(query: str, limit: int = 10) -> dict[str, Any]:
+    """Search recent PUBLIC X posts with app-only Bearer Token authentication.
+
+    The collector intentionally requests post fields only, avoiding user
+    expansions so a basic search does not add separate user-read charges.
+    """
+    token = os.getenv("X_BEARER_TOKEN", "").strip()
+    clean_query = _clean(query, 500)
+    requested = max(1, min(int(limit or 10), 25))
+    if not token:
+        return {
+            "status": "unavailable",
+            "platform": "x",
+            "results": [],
+            "reason": "X_BEARER_TOKEN is not configured.",
+        }
+    if not clean_query:
+        return {"status": "error", "platform": "x", "results": [], "error": "Empty X query."}
+
+    try:
+        # X recent-search currently requires max_results >= 10.
+        api_count = max(10, requested)
+        response = requests.get(
+            "https://api.x.com/2/tweets/search/recent",
+            params={
+                "query": clean_query,
+                "max_results": api_count,
+                "tweet.fields": (
+                    "id,text,author_id,created_at,lang,conversation_id,"
+                    "possibly_sensitive,public_metrics,entities"
+                ),
+            },
+            headers={
+                "Authorization": f"Bearer {token}",
+                "User-Agent": USER_AGENT,
+                "Accept": "application/json",
+            },
+            timeout=DEFAULT_TIMEOUT,
+        )
+        response.raise_for_status()
+        payload = response.json()
+        results: list[dict[str, Any]] = []
+        for post in (payload.get("data") or [])[:requested]:
+            post_id = _clean(post.get("id"), 120)
+            results.append({
+                "type": "post",
+                "id": post_id,
+                "author_id": _clean(post.get("author_id"), 120),
+                "created_at": _clean(post.get("created_at"), 80),
+                "lang": _clean(post.get("lang"), 30),
+                "text": _clean(post.get("text"), 4000),
+                "conversation_id": _clean(post.get("conversation_id"), 120),
+                "possibly_sensitive": bool(post.get("possibly_sensitive", False)),
+                "public_metrics": post.get("public_metrics") or {},
+                "entities": post.get("entities") or {},
+                "url": f"https://x.com/i/web/status/{post_id}" if post_id else "",
+            })
+        return {
+            "status": "success",
+            "platform": "x",
+            "query": clean_query,
+            "results": results,
+            "meta": payload.get("meta") or {},
+            "cost_note": (
+                "This collector requests post resources only and does not request "
+                "user expansions."
+            ),
+        }
+    except Exception as exc:
+        return {
+            "status": "error",
+            "platform": "x",
             "query": clean_query,
             "results": [],
             "error": _clean(exc, 600),
