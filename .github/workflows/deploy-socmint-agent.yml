@@ -180,10 +180,15 @@ jobs:
 
       - name: Configure CT Atlas Worker bridge
         shell: bash
+        env:
+          BRAVE_SEARCH_API_KEY: ${{ secrets.BRAVE_SEARCH_API_KEY }}
         run: |
           set -euo pipefail
           printf '%s' "$SOCMINT_AGENT_URL" | npx wrangler@latest secret put SOCMINT_AGENT_URL --config cloudflare-worker/wrangler.toml
           printf '%s' "$AGENT_SHARED_SECRET" | npx wrangler@latest secret put SOCMINT_AGENT_SHARED_SECRET --config cloudflare-worker/wrangler.toml
+          if [ -n "${BRAVE_SEARCH_API_KEY:-}" ]; then
+            printf '%s' "$BRAVE_SEARCH_API_KEY" | npx wrangler@latest secret put BRAVE_SEARCH_API_KEY --config cloudflare-worker/wrangler.toml
+          fi
 
       - name: Verify agent investigation
         shell: bash
