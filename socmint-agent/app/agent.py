@@ -32,6 +32,14 @@ from .tools import (
 
 MODEL = os.getenv("SOCMINT_AGENT_MODEL", "gemini-3.5-flash-lite")
 
+# google-genai's own env-var auto-detection (GOOGLE_API_KEY vs GEMINI_API_KEY)
+# has shifted between SDK releases, and google-adk is pinned only to a wide
+# ">=2.0.0,<3.0.0" range with no lockfile -- a routine rebuild can silently
+# pick up a newer transitive google-genai release with different detection
+# behavior. Passing the key explicitly removes that ambiguity entirely,
+# regardless of which env var name the installed SDK version happens to read.
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+
 INSTRUCTION = """
 You are the CT Atlas SOCMINT Investigation Agent.
 
@@ -226,6 +234,11 @@ root_agent = Agent(
     model=Gemini(
         model=MODEL,
         retry_options=types.HttpRetryOptions(attempts=3),
+        # google-genai's own auto-detection only reads GOOGLE_API_KEY (see its
+        # own client.py docstring) -- Cloud Run is configured with
+        # GEMINI_API_KEY, so without this every real model call fails auth and
+        # gets reported as a 502 by server.py's generic exception handler.
+        client_kwargs={"api_key": GEMINI_API_KEY} if GEMINI_API_KEY else {},
     ),
     description=(
         "Public-source SOCMINT investigation agent for CT Atlas. It iteratively "

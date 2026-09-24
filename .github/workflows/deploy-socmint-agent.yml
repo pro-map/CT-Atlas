@@ -38,6 +38,18 @@ jobs:
       - name: Run SOCMINT Worker tests
         run: node --test tests/social-intel.test.cjs
 
+      - name: Set up Python for SOCMINT agent tests
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run SOCMINT agent tests
+        working-directory: socmint-agent
+        run: |
+          set -euo pipefail
+          pip install --quiet -e . pytest
+          pytest tests/ -q
+
       - name: Verify required deployment secrets
         shell: bash
         env:
