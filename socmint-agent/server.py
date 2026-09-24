@@ -96,7 +96,7 @@ async def health() -> dict[str, Any]:
         "service": "ct-atlas-socmint-adk-agent",
         "version": AGENT_SERVICE_VERSION,
         "app_name": APP_NAME,
-        "model": os.getenv("SOCMINT_AGENT_MODEL", "gemini-2.5-flash-lite"),
+        "model": os.getenv("SOCMINT_AGENT_MODEL", "gemini-3.5-flash-lite"),
         "google_search_grounding": False,
         "search_provider": os.getenv("SOCMINT_SEARCH_PROVIDER", "disabled"),
         "max_llm_calls": MAX_LLM_CALLS,
