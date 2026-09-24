@@ -343,6 +343,7 @@ def social_capabilities() -> dict[str, Any]:
     return {
         "status": "success",
         "bluesky_public": True,
+        "fourchan_public": True,
         "mastodon_public": True,
         "telegram_public_pages": True,
         "telegram_global_discovery": provider in {"brave", "searxng"},
@@ -646,6 +647,106 @@ def _twitch_access_token() -> str:
     _twitch_token_cache["token"] = token
     _twitch_token_cache["expires_at"] = now + max(300, int(payload.get("expires_in") or 3600))
     return token
+
+
+def search_fourchan(
+    query: str,
+    boards: str = "pol,int,news",
+    limit: int = 10,
+) -> dict[str, Any]:
+    """Search PUBLIC 4chan catalog posts without authentication.
+
+    The official 4chan API is read-only. Requests are deliberately serialized
+    to respect the API rule of no more than one request per second.
+    """
+    clean_query = _clean(query, 200).lower()
+    requested = max(1, min(int(limit or 10), 25))
+    board_list = [
+        re.sub(r"[^a-z0-9]", "", part.lower())
+        for part in str(boards or "pol,int,news").split(",")
+    ]
+    board_list = [b for b in board_list if b][:3]
+    if not clean_query:
+        return {"status": "error", "platform": "4chan", "results": [], "error": "Empty 4chan query."}
+    if not board_list:
+        board_list = ["pol"]
+
+    results: list[dict[str, Any]] = []
+    errors: list[str] = []
+    try:
+        for idx, board in enumerate(board_list):
+            if idx:
+                time.sleep(1.05)
+            response = requests.get(
+                f"https://a.4cdn.org/{board}/catalog.json",
+                headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
+                timeout=DEFAULT_TIMEOUT,
+            )
+            response.raise_for_status()
+            pages = response.json()
+            for page in pages:
+                for thread in page.get("threads") or []:
+                    candidates = [thread] + list(thread.get("last_replies") or [])
+                    matched = False
+                    matched_text = ""
+                    for post in candidates:
+                        subject = _clean(post.get("sub"), 500)
+                        comment_html = str(post.get("com") or "")
+                        comment = _clean(
+                            BeautifulSoup(comment_html, "html.parser").get_text(" ", strip=True),
+                            3000,
+                        )
+                        combined = (subject + " " + comment).lower()
+                        if clean_query in combined:
+                            matched = True
+                            matched_text = _clean((subject + " " + comment), 3000)
+                            break
+                    if not matched:
+                        continue
+                    thread_no = str(thread.get("no") or "")
+                    results.append({
+                        "type": "thread",
+                        "board": board,
+                        "thread_id": thread_no,
+                        "subject": _clean(thread.get("sub"), 500),
+                        "text": matched_text,
+                        "time": thread.get("time"),
+                        "replies": int(thread.get("replies") or 0),
+                        "images": int(thread.get("images") or 0),
+                        "unique_ips": thread.get("unique_ips"),
+                        "url": (
+                            f"https://boards.4chan.org/{board}/thread/{thread_no}"
+                            if thread_no else ""
+                        ),
+                        "source": "4chan_official_read_only_api",
+                    })
+                    if len(results) >= requested:
+                        return {
+                            "status": "success",
+                            "platform": "4chan",
+                            "query": clean_query,
+                            "boards": board_list,
+                            "results": results,
+                            "source_disclosure": "Source data: 4chan public read-only JSON API.",
+                        }
+        return {
+            "status": "success" if not errors else "partial",
+            "platform": "4chan",
+            "query": clean_query,
+            "boards": board_list,
+            "results": results[:requested],
+            "errors": errors,
+            "source_disclosure": "Source data: 4chan public read-only JSON API.",
+        }
+    except Exception as exc:
+        return {
+            "status": "error",
+            "platform": "4chan",
+            "query": clean_query,
+            "boards": board_list,
+            "results": results[:requested],
+            "error": _clean(exc, 600),
+        }
 
 
 def search_twitch(query: str, limit: int = 10, live_only: bool = False) -> dict[str, Any]:
