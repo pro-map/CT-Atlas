@@ -1,0 +1,56 @@
+name: Validate SOCMINT ADK agent
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "socmint-agent/**"
+      - ".github/workflows/validate-socmint-agent.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Compile agent sources
+        run: |
+          python -m py_compile             socmint-agent/app/__init__.py             socmint-agent/app/agent.py             socmint-agent/app/tools.py             socmint-agent/server.py
+
+      - name: Install ADK agent
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ./socmint-agent pytest
+
+      - name: Validate ADK imports and structure
+        working-directory: socmint-agent
+        env:
+          GEMINI_API_KEY: test-placeholder-not-used
+          SOCMINT_AGENT_ALLOW_INSECURE_LOCAL: "1"
+        run: |
+          python - <<'PY'
+          from app.agent import app, root_agent
+          from server import api, MAX_LLM_CALLS
+          assert app.name == "app"
+          assert root_agent.name == "ct_atlas_socmint_agent"
+          assert MAX_LLM_CALLS == 12
+          assert api.title == "CT Atlas SOCMINT ADK Agent"
+          print("ADK agent imports and structure are valid.")
+          PY
+
+      - name: Run agent unit tests
+        working-directory: socmint-agent
+        env:
+          GEMINI_API_KEY: test-placeholder-not-used
+        run: pytest -q tests
