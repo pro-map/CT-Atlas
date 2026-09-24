@@ -15,6 +15,7 @@ from google.genai import types
 from pydantic import BaseModel, Field
 
 from app.agent import root_agent
+from app.tools import social_capabilities
 
 
 APP_NAME = "app"
@@ -99,6 +100,7 @@ async def health() -> dict[str, Any]:
         "google_search_grounding": False,
         "search_provider": os.getenv("SOCMINT_SEARCH_PROVIDER", "disabled"),
         "max_llm_calls": MAX_LLM_CALLS,
+        "social_sources": social_capabilities(),
     }
 
 
