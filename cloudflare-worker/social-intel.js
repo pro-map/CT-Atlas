@@ -8,7 +8,7 @@ import {
   extractGeminiText
 } from "./shared.js";
 
-const SOCIAL_INTEL_VERSION = "socmint-v1-public-web-report";
+const SOCIAL_INTEL_VERSION = "socmint-v2-free-tier-fallback";
 const SOCIAL_REPORT_LIMIT = 50;
 
 const SOCIAL_SCHEMA = {
@@ -191,14 +191,14 @@ function extractToolSources(payload) {
     }
     if (step?.type === "url_context_result") {
       for (const item of Array.isArray(step.result) ? step.result : []) {
-        add(item?.url, item?.title, item?.snippet, "url_context");
+        add(item?.url || item?.retrieved_url || item?.uri, item?.title, item?.snippet, "url_context");
       }
     }
     if (step?.type === "model_output") {
       for (const part of Array.isArray(step.content) ? step.content : []) {
         for (const annotation of Array.isArray(part?.annotations) ? part.annotations : []) {
           if (annotation?.type === "url_citation") {
-            add(annotation?.url, annotation?.title, "", "citation");
+            add(annotation?.url || annotation?.uri, annotation?.title, "", "citation");
           }
         }
       }
