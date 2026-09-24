@@ -189,7 +189,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          payload='{"user_id":"ct_atlas_smoke","query":{"mode":"urls_only","target":"CT Atlas SOCMINT smoke test","usernames":[],"keywords":[],"platforms":[],"urls":["https://example.com/"],"countries_regions":[],"languages":["English"],"date_from":"","date_to":"","objective":"Fetch the supplied public page and return a minimal evidence-led SOCMINT report. Do not infer identity or wrongdoing."}}'
+          payload='{"user_id":"ct_atlas_smoke","query":{"smoke_test":true,"mode":"urls_only","target":"CT Atlas SOCMINT smoke test","usernames":[],"keywords":[],"platforms":[],"urls":["https://example.com/"],"countries_regions":[],"languages":["English"],"date_from":"","date_to":"","objective":"Fetch exactly this supplied public page once and return the smallest valid evidence-led report."}}'
           response_file="$(mktemp)"
           curl_exit=0
           status="$(curl --silent --show-error --output "$response_file" --write-out '%{http_code}' \
