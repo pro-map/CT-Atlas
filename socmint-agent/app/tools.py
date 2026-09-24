@@ -348,6 +348,11 @@ def social_capabilities() -> dict[str, Any]:
         "youtube_api": bool(os.getenv("YOUTUBE_API_KEY", "").strip()),
         "reddit_oauth": reddit_ready,
         "groq_whisper": bool(os.getenv("GROQ_API_KEY", "").strip()),
+        "cloudflare_workers_ai": bool(
+            os.getenv("CLOUDFLARE_AI_ACCOUNT_ID", "").strip()
+            and os.getenv("CLOUDFLARE_AI_API_TOKEN", "").strip()
+        ),
+        "openrouter_free": bool(os.getenv("OPENROUTER_API_KEY", "").strip()),
         "sherlock_username_discovery": True,
         "independent_web_search": provider in {"brave", "searxng"},
         "search_provider": provider or "disabled",
@@ -831,6 +836,143 @@ def search_username_profiles(username: str, timeout_seconds: int = 45) -> dict[s
             "results": [],
             "error": _clean(exc, 600),
         }
+
+
+
+def preprocess_public_text_free(
+    text: str,
+    task: str = "Extract named entities, aliases, URLs, locations and concise themes.",
+) -> dict[str, Any]:
+    """Preprocess already-PUBLIC text with an optional zero-cost model provider.
+
+    Provider order: Cloudflare Workers AI, then OpenRouter Free Router.
+    Model output is analytical assistance only and MUST NOT be cited as source
+    evidence or used to invent facts absent from the supplied public text.
+    """
+    source_text = _clean(text, 16000)
+    instruction = _clean(task, 1200)
+    if not source_text:
+        return {"status": "error", "error": "Empty text.", "provider": "none", "response": ""}
+
+    cf_account = os.getenv("CLOUDFLARE_AI_ACCOUNT_ID", "").strip()
+    cf_token = os.getenv("CLOUDFLARE_AI_API_TOKEN", "").strip()
+    if cf_account and cf_token:
+        try:
+            model = os.getenv(
+                "CLOUDFLARE_AI_MODEL",
+                "@cf/meta/llama-3.1-8b-instruct",
+            ).strip() or "@cf/meta/llama-3.1-8b-instruct"
+            endpoint = (
+                f"https://api.cloudflare.com/client/v4/accounts/{cf_account}"
+                f"/ai/run/{model}"
+            )
+            response = requests.post(
+                endpoint,
+                headers={
+                    "Authorization": f"Bearer {cf_token}",
+                    "Content-Type": "application/json",
+                    "User-Agent": USER_AGENT,
+                },
+                json={
+                    "messages": [
+                        {
+                            "role": "system",
+                            "content": (
+                                "Analyze only the supplied public-source text. "
+                                "Do not add facts not present in it."
+                            ),
+                        },
+                        {
+                            "role": "user",
+                            "content": instruction + "\n\nPUBLIC TEXT:\n" + source_text,
+                        },
+                    ]
+                },
+                timeout=45,
+            )
+            response.raise_for_status()
+            payload = response.json()
+            result = payload.get("result") or {}
+            answer = result.get("response")
+            if not answer and isinstance(result.get("choices"), list):
+                choice = (result.get("choices") or [{}])[0]
+                answer = ((choice.get("message") or {}).get("content"))
+            return {
+                "status": "success",
+                "provider": "cloudflare_workers_ai",
+                "model": model,
+                "response": _clean(answer, 12000),
+                "caveat": "Model output is preprocessing, not source evidence.",
+            }
+        except Exception as exc:
+            cf_error = _clean(exc, 500)
+    else:
+        cf_error = ""
+
+    or_key = os.getenv("OPENROUTER_API_KEY", "").strip()
+    if or_key:
+        try:
+            response = requests.post(
+                "https://openrouter.ai/api/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {or_key}",
+                    "Content-Type": "application/json",
+                    "User-Agent": USER_AGENT,
+                    "HTTP-Referer": "https://ct-atlas.com",
+                    "X-Title": "CT Atlas SOCMINT",
+                },
+                json={
+                    "model": os.getenv("OPENROUTER_FREE_MODEL", "openrouter/free").strip()
+                    or "openrouter/free",
+                    "messages": [
+                        {
+                            "role": "system",
+                            "content": (
+                                "Analyze only the supplied public-source text. "
+                                "Do not add facts not present in it."
+                            ),
+                        },
+                        {
+                            "role": "user",
+                            "content": instruction + "\n\nPUBLIC TEXT:\n" + source_text,
+                        },
+                    ],
+                    "temperature": 0.1,
+                },
+                timeout=45,
+            )
+            response.raise_for_status()
+            payload = response.json()
+            choices = payload.get("choices") or []
+            answer = ""
+            if choices:
+                answer = ((choices[0].get("message") or {}).get("content") or "")
+            return {
+                "status": "success",
+                "provider": "openrouter_free",
+                "model": _clean(payload.get("model"), 200) or "openrouter/free",
+                "response": _clean(answer, 12000),
+                "caveat": "Model output is preprocessing, not source evidence.",
+            }
+        except Exception as exc:
+            return {
+                "status": "error",
+                "provider": "openrouter_free",
+                "response": "",
+                "error": _clean(exc, 600),
+                "cloudflare_error": cf_error,
+            }
+
+    return {
+        "status": "unavailable",
+        "provider": "none",
+        "response": "",
+        "reason": (
+            "No free preprocessing provider is configured. Set Cloudflare "
+            "Workers AI credentials or OPENROUTER_API_KEY."
+        ),
+        "cloudflare_error": cf_error,
+    }
 
 
 def normalize_evidence(
