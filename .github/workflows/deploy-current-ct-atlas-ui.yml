@@ -24,6 +24,10 @@ on:
       - "social.html"
       - "social.js"
       - "social.css"
+      - "facial.html"
+      - "facial.js"
+      - "facial.css"
+      - "facial-intelligence.svg"
       - "ct-atlas-runtime.json"
       - "daily-quiz.js"
       - "daily-quiz.css"
@@ -88,9 +92,18 @@ jobs:
           grep -q 'Intelligence Map' main.html
           grep -q 'Crypto Intelligence' main.html
           grep -q 'Social Intelligence' main.html
+          grep -q 'Facial Intelligence' main.html
           test -s intelligence-map.svg
           test -s crypto-intelligence.svg
           test -s social-intelligence.svg
+          test -s facial-intelligence.svg
+          test -s facial.html
+          test -s facial.js
+          test -s facial.css
+          grep -q 'RUN VISUAL ANALYSIS' facial.html
+          grep -q 'visual-analyze' facial.js
+          grep -q 'NON-IDENTIFYING ANALYSIS' facial.html
+          node --check facial.js
           grep -q 'Bitcoin Genesis Address — Satoshi Nakamoto' crypto.html
           grep -q 'cryptoGenesisExample' crypto.js
           test -s social.js
