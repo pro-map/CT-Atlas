@@ -61,9 +61,9 @@ test("frontend contains authenticated hub and source visual surfaces",()=>{
   const social=fs.readFileSync("social.html","utf8");
   assert.ok(index.includes('window.location.href = "main.html"'));
   assert.ok(index.includes('id="mainHubButton"'));
-  assert.ok(main.includes("Map and Intel Analysis"));
-  assert.ok(main.includes("Cryptocurrency Investigations"));
-  assert.ok(main.includes("Social Media Analysis"));
+  assert.ok(main.includes("Intelligence Map"));
+  assert.ok(main.includes("Crypto Intelligence"));
+  assert.ok(main.includes("Social Intelligence"));
   assert.ok(social.includes("RUN SOCMINT INVESTIGATION"));
   assert.ok(index.includes('id="reportResultVisuals"'));
   assert.ok(deep.includes('id="deepSearchVisuals"'));
