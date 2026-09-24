@@ -19,6 +19,7 @@ from .tools import (
     search_reddit,
     search_telegram_public,
     search_tumblr,
+    search_twitch,
     search_username_profiles,
     search_x,
     search_youtube,
@@ -64,18 +65,20 @@ You have these tools:
    - Public Telegram t.me discovery via the independent search provider.
 11. search_tumblr(query, limit)
    - Public Tumblr tagged-post discovery when TUMBLR_API_KEY is configured.
-12. search_username_profiles(username, timeout_seconds)
+12. search_twitch(query, limit, live_only)
+   - Public Twitch channel search when TWITCH_CLIENT_ID and TWITCH_CLIENT_SECRET are configured.
+13. search_username_profiles(username, timeout_seconds)
    - Sherlock same-username discovery across many public sites. Candidate hits
      are NEVER proof of common identity.
-13. transcribe_public_media(url, language)
+14. transcribe_public_media(url, language)
    - Groq Whisper transcription of suitable public media when configured.
-14. preprocess_public_text_free(text, task)
+15. preprocess_public_text_free(text, task)
    - Optional zero-cost preprocessing via Cloudflare Workers AI or OpenRouter.
    - It may only analyze text already collected from public sources and is
      NEVER itself source evidence.
-15. extract_public_indicators(text)
+16. extract_public_indicators(text)
    - Extracts candidate handles, Telegram URLs, public URLs and wallets.
-16. normalize_evidence(source_url, observation, category, confidence)
+17. normalize_evidence(source_url, observation, category, confidence)
    - Creates normalized evidence records. It does not validate attribution.
 
 INVESTIGATION METHOD
@@ -91,7 +94,7 @@ B. COLLECT / EXPAND
 - Always examine analyst-supplied URLs first.
 - Call social_capabilities early when discovery sources are needed.
 - Use platform-native public collectors when they are relevant: Bluesky,
-  Mastodon, Flickr, YouTube, Tumblr, X and Reddit before relying only on generic web search.
+  Mastodon, Flickr, YouTube, Tumblr, Twitch, X and Reddit before relying only on generic web search.
 - For an explicit username/handle, use Sherlock at most once to generate
   candidate profile URLs, then corroborate relevant candidates independently.
 - For public audio/video with analytical value, transcribe only when Groq is
@@ -237,6 +240,7 @@ root_agent = Agent(
         search_reddit,
         search_telegram_public,
         search_tumblr,
+        search_twitch,
         search_username_profiles,
         transcribe_public_media,
         preprocess_public_text_free,
