@@ -124,13 +124,25 @@ async def investigate(
         },
     )
 
-    prompt = (
-        "Run a CT Atlas public-source SOCMINT investigation using this analyst "
-        "input. Work iteratively with your tools before producing the final "
-        "JSON report. Gemini Google Search grounding is unavailable; do not "
-        "attempt to use it.\n\n"
-        + json.dumps(request.query, ensure_ascii=False)
-    )
+    smoke_test = bool(request.query.get("smoke_test"))
+    if smoke_test:
+        prompt = (
+            "CT Atlas deployment smoke test. Use ONLY fetch_public_url on the single "
+            "supplied URL, do not call any discovery/search/username/social-platform "
+            "tools, and immediately return the smallest valid JSON report matching "
+            "the required schema. Do not perform iterative exploration.\n\n"
+            + json.dumps(request.query, ensure_ascii=False)
+        )
+        max_llm_calls = 3
+    else:
+        prompt = (
+            "Run a CT Atlas public-source SOCMINT investigation using this analyst "
+            "input. Work iteratively with your tools before producing the final "
+            "JSON report. Gemini Google Search grounding is unavailable; do not "
+            "attempt to use it.\n\n"
+            + json.dumps(request.query, ensure_ascii=False)
+        )
+        max_llm_calls = MAX_LLM_CALLS
 
     final_text = ""
     event_count = 0
@@ -143,7 +155,7 @@ async def investigate(
                 parts=[types.Part.from_text(text=prompt)],
             ),
             run_config=RunConfig(
-                max_llm_calls=MAX_LLM_CALLS,
+                max_llm_calls=max_llm_calls,
                 custom_metadata={
                     "ct_atlas_module": "socmint",
                     "investigation_id": session_id,
@@ -172,6 +184,6 @@ async def investigate(
             "agent_version": AGENT_SERVICE_VERSION,
             "session_id": session_id,
             "event_count": event_count,
-            "max_llm_calls": MAX_LLM_CALLS,
+            "max_llm_calls": max_llm_calls,
         },
     }
