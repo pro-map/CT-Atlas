@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+<title id="title">Intelligence Map</title>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8 14l15-6 18 7 15-6v40l-15 6-18-7-15 6z" stroke="#7f96a5" stroke-width="2"/>
+  <path d="M23 8v40M41 15v40" stroke="#445b69" stroke-width="1.5"/>
+  <path d="M15 35l10-7 12 5 11-9" stroke="#6f8796" stroke-width="1.7"/>
+  <circle cx="15" cy="35" r="2.8" fill="#172630" stroke="#8da1ad" stroke-width="1.2"/>
+  <circle cx="37" cy="33" r="2.8" fill="#5f8fab" stroke="#a4c5d5" stroke-width="1.2"/>
+  <circle cx="48" cy="24" r="2.8" fill="#172630" stroke="#8da1ad" stroke-width="1.2"/>
+  <path d="M32 10.5c-5.1 0-9.2 4.1-9.2 9.2 0 7.1 9.2 17 9.2 17s9.2-9.9 9.2-17c0-5.1-4.1-9.2-9.2-9.2z" fill="#5f8fab" stroke="#b3cad6" stroke-width="1.2"/>
+  <circle cx="32" cy="19.7" r="3.2" fill="#0d1620"/>
+</g>
+</svg>
