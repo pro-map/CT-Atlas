@@ -19,7 +19,7 @@ function harness(){
     fetch:async()=>{throw new Error("network not used in unit tests");}
   });
   vm.runInContext(source,context);
-  return vm.runInContext("({detectCryptoInput,aggregateFlows,buildObservations,EVM_CHAINS,CRYPTO_VERSION})",context);
+  return vm.runInContext("({detectCryptoInput,aggregateFlows,buildObservations,detectSuspiciousPatterns,tronTrxRows,EVM_CHAINS,CRYPTO_VERSION})",context);
 }
 
 test("auto-detects common BTC, EVM and TRON address formats",()=>{
@@ -213,4 +213,45 @@ test("service detection registry includes DEX and verified bridge categories",()
   assert.ok(client.includes("Stargate USDC Pool"));
   assert.ok(client.includes('category:"DEX"'));
   assert.ok(client.includes('category:"BRIDGE"'));
+});
+
+test("detectSuspiciousPatterns flags a rapid pass-through of comparable in/out value",()=>{
+  const h=harness();
+  const now=Date.now();
+  const seed="seedaddress";
+  const rows=[
+    {direction:"IN",amount:10,time:new Date(now-1000*60*5).toISOString(),counterparties:["a"]},
+    {direction:"IN",amount:9,time:new Date(now-1000*60*4).toISOString(),counterparties:["b"]},
+    {direction:"OUT",amount:9,time:new Date(now-1000*60*3).toISOString(),counterparties:["c"]},
+    {direction:"OUT",amount:9,time:new Date(now-1000*60*2).toISOString(),counterparties:["d"]}
+  ];
+  const patterns=h.detectSuspiciousPatterns(rows,seed);
+  const passThrough=patterns.find(p=>p.code==="RAPID_PASS_THROUGH");
+  assert.ok(passThrough,"expected a RAPID_PASS_THROUGH flag for balanced in/out flow");
+  assert.match(passThrough.explanation,/not proof|not by itself|does not establish/i,"the pattern must hedge that it is not proof of wrongdoing");
+});
+
+test("detectSuspiciousPatterns returns nothing for a single quiet transaction",()=>{
+  const h=harness();
+  const rows=[{direction:"IN",amount:1,time:new Date().toISOString(),counterparties:["a"]}];
+  assert.equal(h.detectSuspiciousPatterns(rows,"seed").length,0);
+});
+
+test("regression: tronTrxRows ignores TriggerSmartContract calls, only real TRX transfers produce a row",()=>{
+  const h=harness();
+  const address="TSeedAddress0000000000000000000";
+  const smartContractCall={
+    txID:"contract-call-1",
+    block_timestamp:Date.now(),
+    raw_data:{contract:[{type:"TriggerSmartContract",parameter:{value:{owner_address:address,to_address:"TSomeContract"}}}]}
+  };
+  const realTransfer={
+    txID:"real-transfer-1",
+    block_timestamp:Date.now(),
+    raw_data:{contract:[{type:"TransferContract",parameter:{value:{owner_address:address,to_address:"TRecipient",amount:5000000}}}]}
+  };
+  const rows=h.tronTrxRows(address,[smartContractCall,realTransfer],[]);
+  assert.equal(rows.length,1,"the TriggerSmartContract call must not produce a phantom TRX row");
+  assert.equal(rows[0].id,"real-transfer-1");
+  assert.equal(rows[0].amount,5);
 });

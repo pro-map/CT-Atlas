@@ -3,3 +3,5 @@
 # itself a source of truth.
 _pages_mirror/
 .wrangler/
+__pycache__/
+*.pyc
