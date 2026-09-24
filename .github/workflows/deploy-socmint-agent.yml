@@ -72,11 +72,35 @@ jobs:
         shell: bash
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BRAVE_SEARCH_API_KEY: ${{ secrets.BRAVE_SEARCH_API_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          CLOUDFLARE_AI_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_AI_ACCOUNT_ID }}
+          CLOUDFLARE_AI_API_TOKEN: ${{ secrets.CLOUDFLARE_AI_API_TOKEN }}
         run: |
           set -euo pipefail
-          gcloud run deploy "$SERVICE_NAME"             --source ./socmint-agent             --project "$GCP_PROJECT_ID"             --region "$GCP_REGION"             --platform managed             --allow-unauthenticated             --quiet             --set-env-vars "SOCMINT_AGENT_MODEL=gemini-2.5-flash-lite,SOCMINT_SEARCH_PROVIDER=disabled,GEMINI_API_KEY=$GEMINI_API_KEY,CT_ATLAS_AGENT_SHARED_SECRET=$AGENT_SHARED_SECRET"
 
-          service_url="$(gcloud run services describe "$SERVICE_NAME"             --project "$GCP_PROJECT_ID"             --region "$GCP_REGION"             --format='value(status.url)')"
+          search_provider="disabled"
+          if [ -n "${BRAVE_SEARCH_API_KEY:-}" ]; then
+            search_provider="brave"
+          fi
+
+          gcloud run deploy "$SERVICE_NAME" \
+            --source ./socmint-agent \
+            --project "$GCP_PROJECT_ID" \
+            --region "$GCP_REGION" \
+            --platform managed \
+            --allow-unauthenticated \
+            --quiet \
+            --set-env-vars "SOCMINT_AGENT_MODEL=gemini-2.5-flash-lite,SOCMINT_SEARCH_PROVIDER=$search_provider,GEMINI_API_KEY=$GEMINI_API_KEY,CT_ATLAS_AGENT_SHARED_SECRET=$AGENT_SHARED_SECRET,BRAVE_SEARCH_API_KEY=$BRAVE_SEARCH_API_KEY,YOUTUBE_API_KEY=$YOUTUBE_API_KEY,REDDIT_CLIENT_ID=$REDDIT_CLIENT_ID,REDDIT_CLIENT_SECRET=$REDDIT_CLIENT_SECRET,GROQ_API_KEY=$GROQ_API_KEY,GROQ_WHISPER_MODEL=whisper-large-v3-turbo,OPENROUTER_API_KEY=$OPENROUTER_API_KEY,OPENROUTER_FREE_MODEL=openrouter/free,CLOUDFLARE_AI_ACCOUNT_ID=$CLOUDFLARE_AI_ACCOUNT_ID,CLOUDFLARE_AI_API_TOKEN=$CLOUDFLARE_AI_API_TOKEN,CLOUDFLARE_AI_MODEL=@cf/meta/llama-3.1-8b-instruct"
+
+          service_url="$(gcloud run services describe "$SERVICE_NAME" \
+            --project "$GCP_PROJECT_ID" \
+            --region "$GCP_REGION" \
+            --format='value(status.url)')"
 
           test -n "$service_url"
           echo "SOCMINT_AGENT_URL=$service_url" >> "$GITHUB_ENV"
