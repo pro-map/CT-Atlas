@@ -1918,6 +1918,17 @@ async function run(){
   }
 }
 
+const GENESIS_TEST_ADDRESS="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa";
+
+function loadGenesisExample(){
+  const input=document.getElementById("cryptoQuery");
+  const chain=document.getElementById("cryptoChain");
+  if(input)input.value=GENESIS_TEST_ADDRESS;
+  if(chain)chain.value="bitcoin";
+  setStatus("Bitcoin Genesis Address example loaded. Select ANALYSE to run the test.","");
+  input?.focus();
+}
+
 function applyUrlQuery(){
   const params=new URLSearchParams(window.location.search);
   const q=String(params.get("q")||"").trim();
@@ -1935,6 +1946,7 @@ function applyUrlQuery(){
 
 function bind(){
   document.getElementById("cryptoRun")?.addEventListener("click",run);
+  document.getElementById("cryptoGenesisExample")?.addEventListener("click",loadGenesisExample);
   document.getElementById("cryptoQuery")?.addEventListener("keydown",event=>{if(event.key==="Enter")run();});
   document.getElementById("cryptoResetFilters")?.addEventListener("click",()=>resetFilterControls(true));
   document.getElementById("cryptoClearFilter")?.addEventListener("click",()=>resetFilterControls(true));
