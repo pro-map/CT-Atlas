@@ -1,0 +1,108 @@
+name: Deploy SOCMINT ADK agent
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "socmint-agent/**"
+      - ".github/workflows/deploy-socmint-agent.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ct-atlas-socmint-agent
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      GCP_REGION: ${{ vars.GCP_REGION || 'europe-west1' }}
+      SERVICE_NAME: ct-atlas-socmint-agent
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Verify required deployment secrets
+        shell: bash
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          set -euo pipefail
+          missing=0
+          for item in GCP_PROJECT_ID GCP_SA_KEY GEMINI_API_KEY CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID; do
+            if [ -z "${!item:-}" ]; then
+              echo "::error::Required GitHub secret $item is missing."
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v3
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Enable required Google Cloud APIs
+        run: |
+          gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com
+
+      - name: Generate agent bridge secret
+        shell: bash
+        run: |
+          set -euo pipefail
+          secret="$(openssl rand -hex 32)"
+          echo "::add-mask::$secret"
+          echo "AGENT_SHARED_SECRET=$secret" >> "$GITHUB_ENV"
+
+      - name: Deploy ADK agent to Cloud Run
+        shell: bash
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          set -euo pipefail
+          gcloud run deploy "$SERVICE_NAME"             --source ./socmint-agent             --project "$GCP_PROJECT_ID"             --region "$GCP_REGION"             --platform managed             --allow-unauthenticated             --quiet             --set-env-vars "SOCMINT_AGENT_MODEL=gemini-2.5-flash-lite,SOCMINT_SEARCH_PROVIDER=disabled,GEMINI_API_KEY=$GEMINI_API_KEY,CT_ATLAS_AGENT_SHARED_SECRET=$AGENT_SHARED_SECRET"
+
+          service_url="$(gcloud run services describe "$SERVICE_NAME"             --project "$GCP_PROJECT_ID"             --region "$GCP_REGION"             --format='value(status.url)')"
+
+          test -n "$service_url"
+          echo "SOCMINT_AGENT_URL=$service_url" >> "$GITHUB_ENV"
+          echo "SOCMINT agent deployed."
+
+      - name: Verify agent health
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error "$SOCMINT_AGENT_URL/health" | python -m json.tool
+
+      - name: Configure CT Atlas Worker bridge
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s' "$SOCMINT_AGENT_URL" | npx wrangler@latest secret put SOCMINT_AGENT_URL --config cloudflare-worker/wrangler.toml
+          printf '%s' "$AGENT_SHARED_SECRET" | npx wrangler@latest secret put SOCMINT_AGENT_SHARED_SECRET --config cloudflare-worker/wrangler.toml
+
+      - name: Deploy CT Atlas Worker with ADK bridge
+        run: npx wrangler@latest deploy --keep-vars --config cloudflare-worker/wrangler.toml
+
+      - name: Verify Worker reports ADK agent configured
+        shell: bash
+        run: |
+          set -euo pipefail
+          health="$(curl --fail --silent --show-error https://ct-report-generator.fairpeace.workers.dev/health)"
+          printf '%s\n' "$health" | python -m json.tool
+          printf '%s' "$health" | grep -q '"social_agent_configured":true'
+          echo "SOCMINT ADK agent is active in CT Atlas."
