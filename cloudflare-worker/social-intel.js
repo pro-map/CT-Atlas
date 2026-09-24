@@ -697,17 +697,60 @@ async function geminiSocmint(env, query, useSearch) {
   throw lastError || new Error("No SOCMINT Gemini model was available.");
 }
 
+// Reports can carry LLM-generated or agent-relayed content of arbitrary
+// shape (including, in principle, a client-influenced field), and were
+// persisted completely raw before this function existed -- no length caps,
+// no type checks, and nothing stopping a report from smuggling its own
+// user_id/username into storage. This bounds every field's type/length and
+// strips identity fields from nested content before anything is written.
+function sanitizeSocialReport(report) {
+  if (!report || typeof report !== "object") return null;
+  const safe = {};
+  const walk = (value, maxLen = 4000) => {
+    if (typeof value === "string") return cleanText(value, maxLen);
+    if (typeof value === "number" || typeof value === "boolean") return value;
+    if (value === null || value === undefined) return null;
+    if (Array.isArray(value)) return value.slice(0, 80).map(item => walk(item, maxLen));
+    if (typeof value === "object") {
+      const out = {};
+      for (const [key, child] of Object.entries(value)) {
+        if (key === "user_id" || key === "username") continue;
+        out[key] = walk(child, maxLen);
+      }
+      return out;
+    }
+    return cleanText(String(value), maxLen);
+  };
+
+  for (const [key, value] of Object.entries(report)) {
+    if (key === "user_id" || key === "username") continue;
+    safe[key] = walk(value, key === "source_url" || key === "url" || key === "source_urls" ? 1500 : 8000);
+  }
+
+  safe.id = cleanText(String(safe.id || crypto.randomUUID()), 80);
+  safe.generated_at = cleanText(String(safe.generated_at || new Date().toISOString()), 64);
+  safe.title = cleanText(String(safe.title || "CT Atlas SOCMINT Assessment"), 220);
+  safe.version = cleanText(String(safe.version || SOCIAL_INTEL_VERSION), 80);
+  safe.query = safe.query && typeof safe.query === "object" ? safe.query : {};
+  safe.sources = Array.isArray(safe.sources) ? safe.sources.slice(0, 100) : [];
+  safe.key_findings = Array.isArray(safe.key_findings) ? safe.key_findings.slice(0, 12) : [];
+  safe.entities = Array.isArray(safe.entities) ? safe.entities.slice(0, 60) : [];
+  safe.watchpoints = Array.isArray(safe.watchpoints) ? safe.watchpoints.slice(0, 10) : [];
+  return safe;
+}
+
 async function persistReport(env, username, report) {
   const currentResponse = await gateCall(env, "/social-workspace-get", { username });
   const currentPayload = await currentResponse.json().catch(() => ({}));
   const workspace = currentPayload?.workspace && typeof currentPayload.workspace === "object"
     ? currentPayload.workspace
     : { version: SOCIAL_INTEL_VERSION, username, reports: [] };
+  const safeReport = sanitizeSocialReport(report);
   const reports = Array.isArray(workspace.reports) ? workspace.reports : [];
-  reports.unshift(report);
+  reports.unshift(safeReport || { id: crypto.randomUUID(), generated_at: new Date().toISOString(), title: "CT Atlas SOCMINT Assessment" });
   workspace.version = SOCIAL_INTEL_VERSION;
   workspace.username = username;
-  workspace.reports = reports.slice(0, SOCIAL_REPORT_LIMIT);
+  workspace.reports = reports.map(item => sanitizeSocialReport(item)).filter(Boolean).slice(0, SOCIAL_REPORT_LIMIT);
   workspace.updated_at = new Date().toISOString();
   await gateCall(env, "/social-workspace-put", { username, workspace });
   await gateCall(env, "/usage-increment", { username, metrics: { social_intel_requests: 1 } });

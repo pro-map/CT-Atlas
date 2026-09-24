@@ -26,7 +26,7 @@ function harness(){
     crypto:{randomUUID:()=>"00000000-0000-4000-8000-000000000000"}
   });
   vm.runInContext(source,context);
-  return vm.runInContext("({sanitizeRequest,extractToolSources,SOCIAL_INTEL_VERSION,socmintModels})",context);
+  return vm.runInContext("({sanitizeRequest,extractToolSources,sanitizeSocialReport,SOCIAL_INTEL_VERSION,socmintModels})",context);
 }
 
 test("SOCMINT request normalizes search fields and public URLs",()=>{
@@ -112,4 +112,35 @@ test("SOCMINT fallback builds an evidence-synthesis pipeline",()=>{
   assert.ok(source.includes("direct_public_page"));
   assert.ok(source.includes("search_result"));
   assert.ok(!source.includes("The primary SOCMINT agent did not complete the investigation. Independent Brave discovery nevertheless identified"));
+});
+
+test("sanitizeSocialReport strips identity fields and caps array/string lengths before persistence",()=>{
+  const h=harness();
+  const report={
+    id:"real-id",
+    title:"x".repeat(500),
+    user_id:"admin",
+    username:"admin",
+    key_findings:Array.from({length:20},(_,i)=>({finding:`f${i}`})),
+    nested:{user_id:"should-be-stripped",note:"kept"}
+  };
+  const safe=h.sanitizeSocialReport(report);
+  assert.equal(safe.id,"real-id");
+  assert.equal(safe.title.length,220);
+  assert.equal(safe.user_id,undefined,"top-level user_id must never be persisted");
+  assert.equal(safe.username,undefined,"top-level username must never be persisted");
+  assert.equal(safe.nested.user_id,undefined,"nested user_id must be stripped too, not just top-level");
+  assert.equal(safe.nested.note,"kept");
+  assert.equal(safe.key_findings.length,12,"key_findings must be capped even if the source report was not");
+});
+
+test("sanitizeSocialReport fills in safe defaults for a malformed/empty report instead of throwing",()=>{
+  const h=harness();
+  const safe=h.sanitizeSocialReport({});
+  assert.equal(typeof safe.id,"string");
+  assert.ok(safe.id.length>0);
+  assert.equal(safe.title,"CT Atlas SOCMINT Assessment");
+  assert.equal(safe.sources.length,0);
+  assert.equal(h.sanitizeSocialReport(null),null);
+  assert.equal(h.sanitizeSocialReport("not an object"),null);
 });
