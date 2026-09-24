@@ -224,3 +224,16 @@ GROQ_API_KEY=
 
 The agent remains operational when any optional source is unavailable and
 records coverage limitations in its report.
+
+
+### Free AI preprocessing fallbacks
+
+For already-public text only, the agent can offload extraction/summarization to:
+
+- **Cloudflare Workers AI** using `CLOUDFLARE_AI_ACCOUNT_ID` and
+  `CLOUDFLARE_AI_API_TOKEN`.
+- **OpenRouter Free Router** using `OPENROUTER_API_KEY` with
+  `OPENROUTER_FREE_MODEL=openrouter/free`.
+
+These model outputs are never treated as source evidence. The final SOCMINT
+assessment must remain grounded in the original public URLs/API observations.
