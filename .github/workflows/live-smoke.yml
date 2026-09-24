@@ -55,8 +55,8 @@ jobs:
               && grep -q 'Case Workspace' /tmp/crypto.html \
               && grep -q 'detectPatterns' /tmp/crypto.js \
               && grep -q 'crypto-workspace' /tmp/crypto.js \
-              && grep -q 'Map and Intel Analysis' /tmp/main.html \
-              && grep -q 'Cryptocurrency Investigations' /tmp/main.html \
+              && grep -q 'Intelligence Map' /tmp/main.html \
+              && grep -q 'Crypto Intelligence' /tmp/main.html \
               && grep -q 'RUN SOCMINT INVESTIGATION' /tmp/social.html \
               && grep -q 'social-investigate' /tmp/social.js \
               && grep -q 'DOWNLOAD PDF' /tmp/social.html; then
