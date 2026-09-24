@@ -90,7 +90,7 @@ test("SOCMINT free-tier search prefers Gemini 2.5 Flash-Lite",()=>{
 test("SOCMINT UI contains friendly quota handling",()=>{
   const js=fs.readFileSync("social.js","utf8");
   const html=fs.readFileSync("social.html","utf8");
-  assert.ok(js.includes("SOCMINT_QUOTA"));
+  assert.ok(js.includes('/QUOTA/.test(error.code||"")'));
   assert.ok(js.includes("retryAfter"));
   assert.ok(html.includes("Gemini 2.5 Flash-Lite"));
 });
