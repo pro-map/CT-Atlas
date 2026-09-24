@@ -196,13 +196,23 @@ async function runInvestigation(event){
       method:"POST",headers:authHeaders(),body:JSON.stringify(payload)
     });
     const result=await response.json().catch(()=>({}));
-    if(!response.ok) throw new Error(result.error||"SOCMINT investigation failed.");
+    if(!response.ok){
+      const error=new Error(result.error||"SOCMINT investigation failed.");
+      error.code=result.code||"";
+      error.retryAfter=result.retry_after_seconds||null;
+      throw error;
+    }
     reports=[result.report,...reports.filter(x=>x.id!==result.report.id)].slice(0,50);
     renderHistory();
     renderReport(result.report);
     setStatus("SOCMINT report generated and saved.","success");
   }catch(error){
-    setStatus(error.message||"SOCMINT investigation failed.","error");
+    if(/QUOTA/.test(error.code||"")){
+      const suffix=error.retryAfter?" Retry after approximately "+error.retryAfter+" seconds if the limit is temporary.":"";
+      setStatus((error.message||"Gemini quota reached.")+suffix,"warning");
+    }else{
+      setStatus(error.message||"SOCMINT investigation failed.","error");
+    }
   }finally{
     button.disabled=false;
     button.textContent="RUN SOCMINT INVESTIGATION";
