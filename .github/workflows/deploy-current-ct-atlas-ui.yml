@@ -88,6 +88,9 @@ jobs:
           test -s social.js
           test -s social.css
           grep -q 'RUN SOCMINT INVESTIGATION' social.html
+          grep -q 'socialAgentBadge' social.html
+          grep -q 'ADK AGENT' social.js
+          grep -q 'GEMINI FALLBACK' social.js
           grep -q 'social-investigate' social.js
           grep -q 'DOWNLOAD PDF' social.html
           node --check social.js
