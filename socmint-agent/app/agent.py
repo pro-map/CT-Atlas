@@ -12,6 +12,7 @@ from .tools import (
     fetch_public_url,
     normalize_evidence,
     search_flickr,
+    search_fourchan,
     preprocess_public_text_free,
     search_bluesky,
     search_mastodon,
