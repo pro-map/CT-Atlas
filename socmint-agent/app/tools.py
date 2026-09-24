@@ -346,6 +346,7 @@ def social_capabilities() -> dict[str, Any]:
         "telegram_public_pages": True,
         "telegram_global_discovery": provider in {"brave", "searxng"},
         "youtube_api": bool(os.getenv("YOUTUBE_API_KEY", "").strip()),
+        "tumblr_api": bool(os.getenv("TUMBLR_API_KEY", "").strip()),
         "x_api": bool(os.getenv("X_BEARER_TOKEN", "").strip()),
         "reddit_oauth": reddit_ready,
         "groq_whisper": bool(os.getenv("GROQ_API_KEY", "").strip()),
@@ -604,6 +605,87 @@ def search_youtube(query: str, limit: int = 10) -> dict[str, Any]:
         return {
             "status": "error",
             "platform": "youtube",
+            "query": clean_query,
+            "results": [],
+            "error": _clean(exc, 600),
+        }
+
+
+def search_tumblr(query: str, limit: int = 10) -> dict[str, Any]:
+    """Search PUBLIC Tumblr posts by tag using the Tumblr API.
+
+    Tumblr's tagged endpoint is public-read oriented and requires only the
+    application's OAuth Consumer Key (used here as the API key).
+    """
+    key = os.getenv("TUMBLR_API_KEY", "").strip()
+    clean_query = _clean(query, 200).lstrip("#")
+    requested = max(1, min(int(limit or 10), 20))
+    if not key:
+        return {
+            "status": "unavailable",
+            "platform": "tumblr",
+            "results": [],
+            "reason": "TUMBLR_API_KEY is not configured.",
+        }
+    if not clean_query:
+        return {"status": "error", "platform": "tumblr", "results": [], "error": "Empty Tumblr tag."}
+
+    try:
+        response = requests.get(
+            "https://api.tumblr.com/v2/tagged",
+            params={
+                "tag": clean_query,
+                "limit": requested,
+                "api_key": key,
+            },
+            headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
+            timeout=DEFAULT_TIMEOUT,
+        )
+        response.raise_for_status()
+        payload = response.json()
+        posts = payload.get("response") or []
+        results: list[dict[str, Any]] = []
+        for post in posts[:requested]:
+            parts: list[str] = []
+            for block in post.get("content") or []:
+                if isinstance(block, dict) and block.get("type") == "text":
+                    text_value = _clean(block.get("text"), 1800)
+                    if text_value:
+                        parts.append(text_value)
+            body = " ".join(parts)
+            if not body:
+                body = _clean(
+                    post.get("summary")
+                    or post.get("caption")
+                    or post.get("body")
+                    or post.get("description"),
+                    2500,
+                )
+            results.append({
+                "type": "post",
+                "id": _clean(post.get("id_string") or post.get("id"), 120),
+                "blog_name": _clean(post.get("blog_name"), 250),
+                "post_url": _clean(post.get("post_url"), 1200),
+                "timestamp": post.get("timestamp"),
+                "date": _clean(post.get("date"), 80),
+                "summary": _clean(post.get("summary"), 1000),
+                "text": _clean(body, 3000),
+                "tags": [
+                    _clean(tag, 150)
+                    for tag in (post.get("tags") or [])[:30]
+                    if _clean(tag, 150)
+                ],
+            })
+        return {
+            "status": "success",
+            "platform": "tumblr",
+            "query": clean_query,
+            "results": results,
+        }
+    except Exception as exc:
+        return {
+            "status": "error",
+            "platform": "tumblr",
             "query": clean_query,
             "results": [],
             "error": _clean(exc, 600),
