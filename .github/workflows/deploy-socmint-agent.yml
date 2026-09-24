@@ -94,6 +94,41 @@ jobs:
           docker push "$image_uri"
           echo "SOCMINT_IMAGE_URI=$image_uri" >> "$GITHUB_ENV"
 
+      - name: Smoke test SOCMINT container startup
+        shell: bash
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          set -euo pipefail
+          docker rm -f socmint-startup-smoke >/dev/null 2>&1 || true
+          docker run -d --name socmint-startup-smoke -p 18080:8080 \
+            -e PORT=8080 \
+            -e GEMINI_API_KEY="$GEMINI_API_KEY" \
+            -e SOCMINT_AGENT_MODEL=gemini-3.5-flash-lite \
+            -e SOCMINT_SEARCH_PROVIDER=disabled \
+            -e CT_ATLAS_AGENT_SHARED_SECRET=startup-smoke \
+            "$SOCMINT_IMAGE_URI" >/dev/null
+          ok=0
+          for _ in $(seq 1 25); do
+            if curl --fail --silent http://127.0.0.1:18080/health >/tmp/socmint-health.json 2>/dev/null; then
+              ok=1
+              break
+            fi
+            running="$(docker inspect -f '{{.State.Running}}' socmint-startup-smoke 2>/dev/null || echo false)"
+            if [ "$running" != "true" ]; then
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ok" != "1" ]; then
+            echo "::error::SOCMINT container failed local startup smoke test"
+            docker logs socmint-startup-smoke || true
+            docker rm -f socmint-startup-smoke >/dev/null 2>&1 || true
+            exit 1
+          fi
+          cat /tmp/socmint-health.json | python -m json.tool
+          docker rm -f socmint-startup-smoke >/dev/null 2>&1 || true
+
       - name: Deploy ADK agent to Cloud Run
         shell: bash
         env:
