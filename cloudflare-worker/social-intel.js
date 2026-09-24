@@ -13,7 +13,7 @@ import {
   runSocialAgent
 } from "./social-agent-client.js";
 
-const SOCIAL_INTEL_VERSION = "socmint-v3-adk-agent-first";
+const SOCIAL_INTEL_VERSION = "socmint-v4-adk-safe-fallback";
 const SOCIAL_REPORT_LIMIT = 50;
 
 const SOCIAL_SCHEMA = {
@@ -489,6 +489,8 @@ async function handleSocialInvestigate(request, env) {
     return jsonResponse({ error: "Analyze URLs mode requires at least one public URL." }, 400, env);
   }
 
+  let agentFailure = null;
+
   if (agentConfigured) {
     try {
       const agentResult = await runSocialAgent(env, username, query);
@@ -519,24 +521,38 @@ async function handleSocialInvestigate(request, env) {
           retry_after_seconds: error?.retry_after_seconds || null
         }, 429, env);
       }
-      console.error("SOCMINT ADK agent failed; using Gemini fallback when available.", {
-        code: error?.code,
+      agentFailure = {
         status,
-        message: cleanText(error?.message, 500)
-      });
+        code: cleanText(error?.code, 120),
+        message: cleanText(error?.message, 700)
+      };
+      console.error("SOCMINT ADK agent failed.", agentFailure);
+
       if (!env.GEMINI_API_KEY) {
         return jsonResponse({
           error: "The SOCMINT ADK agent is temporarily unavailable and no Gemini fallback is configured.",
-          code: "SOCMINT_AGENT_UNAVAILABLE"
+          code: "SOCMINT_AGENT_UNAVAILABLE",
+          detail: agentFailure.message || null
         }, 503, env);
+      }
+
+      if (!query.urls.length) {
+        return jsonResponse({
+          error: "The SOCMINT ADK agent could not complete this investigation. CT Atlas does not use Gemini Google Search grounding for SOCMINT discovery. Retry the agent, or add known public URLs for URL-only fallback analysis. Generic web discovery requires an independent provider such as Brave or SearXNG.",
+          code: "SOCMINT_AGENT_UNAVAILABLE",
+          detail: agentFailure.message || null
+        }, status >= 400 && status < 600 ? status : 502, env);
       }
     }
   }
 
+  const urlOnlyAgentFallback = Boolean(agentFailure && query.urls.length);
   let result;
-  let discoveryMode = query.mode === "discover" ? "google_search+url_context" : "url_context";
+  let discoveryMode = urlOnlyAgentFallback
+    ? "url_context_agent_fallback"
+    : (query.mode === "discover" ? "google_search+url_context" : "url_context");
   try {
-    result = await geminiSocmint(env, query, query.mode === "discover");
+    result = await geminiSocmint(env, query, urlOnlyAgentFallback ? false : query.mode === "discover");
   } catch (error) {
     const status = Number(error?.status || 0);
 
@@ -563,14 +579,14 @@ async function handleSocialInvestigate(request, env) {
     } else if (query.mode === "discover" && !query.urls.length) {
       if (error?.quota || status === 429) {
         return jsonResponse({
-          error: "The free public-web SOCMINT search quota is currently exhausted. Retry later, or add known public URLs and use Analyze URLs. CT Atlas now uses Gemini 2.5 Flash-Lite first for free grounded discovery when that model is available to the API project.",
+          error: "Legacy Gemini public-web discovery is quota-limited. CT Atlas SOCMINT normally uses the ADK agent and its configured public collectors; add known public URLs for URL-only fallback analysis or configure an independent search provider.",
           code: "SOCMINT_SEARCH_QUOTA_EXHAUSTED",
           retry_after_seconds: error?.retry_after_seconds || null
         }, 429, env);
       }
       if ([400,403,404].includes(status)) {
         return jsonResponse({
-          error: "Public-web discovery is not available for this Gemini API project. Add known public URLs and use Analyze URLs. Gemini 3.x Google Search grounding is not available on the API Free Tier; CT Atlas will use Gemini 2.5 Flash-Lite for discovery when Google grants this project access to that model.",
+          error: "Legacy Gemini public-web discovery is unavailable for this API project. CT Atlas SOCMINT does not depend on Gemini Google Search grounding: use the ADK agent, add known public URLs for direct analysis, or configure an independent web-search provider such as Brave or SearXNG.",
           code: "SOCMINT_DISCOVERY_UNAVAILABLE"
         }, 424, env);
       }
