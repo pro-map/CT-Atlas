@@ -1,0 +1,14 @@
+[project]
+name = "ct-atlas-socmint-agent"
+version = "0.1.0"
+description = "CT Atlas ADK SOCMINT investigation agent"
+requires-python = ">=3.11"
+dependencies = [
+  "google-adk[gcp]>=2.0.0,<3.0.0",
+  "requests>=2.32,<3",
+  "beautifulsoup4>=4.12,<5",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
