@@ -5,6 +5,9 @@ import json
 import os
 import re
 import socket
+import subprocess
+import sys
+import time
 from html import unescape
 from typing import Any
 from urllib.parse import parse_qsl, urlencode, urljoin, urlsplit, urlunsplit
@@ -316,6 +319,515 @@ def search_public_web(query: str, limit: int = 8) -> dict[str, Any]:
             "status": "error",
             "provider": provider,
             "query": clean_query,
+            "results": [],
+            "error": _clean(exc, 600),
+        }
+
+
+
+_reddit_token_cache: dict[str, Any] = {"token": "", "expires_at": 0.0}
+
+
+def social_capabilities() -> dict[str, Any]:
+    """Report which free/public SOCMINT collectors are currently usable.
+
+    This returns configuration state only and never exposes API keys or secrets.
+    Bluesky and basic Mastodon discovery are public and need no key.
+    """
+    provider = os.getenv("SOCMINT_SEARCH_PROVIDER", "disabled").strip().lower()
+    reddit_ready = bool(
+        os.getenv("REDDIT_CLIENT_ID", "").strip()
+        and os.getenv("REDDIT_CLIENT_SECRET", "").strip()
+    )
+    return {
+        "status": "success",
+        "bluesky_public": True,
+        "mastodon_public": True,
+        "telegram_public_pages": True,
+        "telegram_global_discovery": provider in {"brave", "searxng"},
+        "youtube_api": bool(os.getenv("YOUTUBE_API_KEY", "").strip()),
+        "reddit_oauth": reddit_ready,
+        "groq_whisper": bool(os.getenv("GROQ_API_KEY", "").strip()),
+        "sherlock_username_discovery": True,
+        "independent_web_search": provider in {"brave", "searxng"},
+        "search_provider": provider or "disabled",
+        "notes": (
+            "Public collectors return candidate evidence only. Cross-platform "
+            "identity must be corroborated before attribution."
+        ),
+    }
+
+
+def search_bluesky(query: str, limit: int = 10, mode: str = "posts") -> dict[str, Any]:
+    """Search PUBLIC Bluesky posts or accounts without authentication.
+
+    mode='posts' uses app.bsky.feed.searchPosts.
+    mode='accounts' uses app.bsky.actor.searchActors.
+    """
+    clean_query = _clean(query, 400)
+    requested = max(1, min(int(limit or 10), 25))
+    selected = _clean(mode, 20).lower() or "posts"
+    if not clean_query:
+        return {"status": "error", "error": "Empty Bluesky query.", "results": []}
+
+    if selected not in {"posts", "accounts"}:
+        return {"status": "error", "error": "mode must be posts or accounts.", "results": []}
+
+    endpoint = (
+        "https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts"
+        if selected == "posts"
+        else "https://public.api.bsky.app/xrpc/app.bsky.actor.searchActors"
+    )
+    try:
+        response = requests.get(
+            endpoint,
+            params={"q": clean_query, "limit": requested},
+            headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
+            timeout=DEFAULT_TIMEOUT,
+        )
+        response.raise_for_status()
+        payload = response.json()
+        results: list[dict[str, Any]] = []
+
+        if selected == "accounts":
+            for actor in payload.get("actors", [])[:requested]:
+                handle = _clean(actor.get("handle"), 200)
+                results.append({
+                    "type": "account",
+                    "handle": handle,
+                    "display_name": _clean(actor.get("displayName"), 250),
+                    "did": _clean(actor.get("did"), 250),
+                    "description": _clean(actor.get("description"), 1000),
+                    "url": f"https://bsky.app/profile/{handle}" if handle else "",
+                    "source": "bluesky_public_api",
+                })
+        else:
+            for post in payload.get("posts", [])[:requested]:
+                author = post.get("author") or {}
+                record = post.get("record") or {}
+                handle = _clean(author.get("handle"), 200)
+                uri = _clean(post.get("uri"), 500)
+                rkey = uri.rsplit("/", 1)[-1] if "/" in uri else ""
+                results.append({
+                    "type": "post",
+                    "text": _clean(record.get("text"), 2500),
+                    "author_handle": handle,
+                    "author_display_name": _clean(author.get("displayName"), 250),
+                    "author_did": _clean(author.get("did"), 250),
+                    "created_at": _clean(record.get("createdAt"), 80),
+                    "indexed_at": _clean(post.get("indexedAt"), 80),
+                    "reply_count": int(post.get("replyCount") or 0),
+                    "repost_count": int(post.get("repostCount") or 0),
+                    "like_count": int(post.get("likeCount") or 0),
+                    "uri": uri,
+                    "url": (
+                        f"https://bsky.app/profile/{handle}/post/{rkey}"
+                        if handle and rkey else ""
+                    ),
+                    "source": "bluesky_public_api",
+                })
+        return {
+            "status": "success",
+            "platform": "bluesky",
+            "mode": selected,
+            "query": clean_query,
+            "results": results,
+        }
+    except Exception as exc:
+        return {
+            "status": "error",
+            "platform": "bluesky",
+            "query": clean_query,
+            "results": [],
+            "error": _clean(exc, 600),
+        }
+
+
+def search_mastodon(
+    query: str,
+    instance: str = "mastodon.social",
+    limit: int = 10,
+    result_type: str = "accounts",
+) -> dict[str, Any]:
+    """Search PUBLIC Mastodon accounts/hashtags on a chosen public instance.
+
+    Unauthenticated full-text status search is often unavailable, so this tool
+    is intended primarily for account and hashtag discovery.
+    """
+    clean_query = _clean(query, 400)
+    host = _clean(instance, 300).lower().replace("https://", "").replace("http://", "").strip("/")
+    requested = max(1, min(int(limit or 10), 20))
+    selected = _clean(result_type, 20).lower() or "accounts"
+    if selected not in {"accounts", "hashtags", "statuses"}:
+        return {"status": "error", "error": "result_type must be accounts, hashtags or statuses.", "results": []}
+    if not clean_query:
+        return {"status": "error", "error": "Empty Mastodon query.", "results": []}
+
+    try:
+        base = _validate_public_url(f"https://{host}")
+        response = requests.get(
+            base.rstrip("/") + "/api/v2/search",
+            params={
+                "q": clean_query,
+                "type": selected,
+                "limit": requested,
+                "resolve": "false",
+            },
+            headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
+            timeout=DEFAULT_TIMEOUT,
+        )
+        response.raise_for_status()
+        payload = response.json()
+        key = selected
+        rows = payload.get(key, [])[:requested]
+        results: list[dict[str, Any]] = []
+        if selected == "accounts":
+            for actor in rows:
+                results.append({
+                    "type": "account",
+                    "acct": _clean(actor.get("acct"), 300),
+                    "username": _clean(actor.get("username"), 200),
+                    "display_name": _clean(actor.get("display_name"), 250),
+                    "note": _clean(BeautifulSoup(str(actor.get("note") or ""), "html.parser").get_text(" ", strip=True), 1000),
+                    "url": _clean(actor.get("url"), 1000),
+                    "followers_count": int(actor.get("followers_count") or 0),
+                    "following_count": int(actor.get("following_count") or 0),
+                })
+        elif selected == "hashtags":
+            for tag in rows:
+                results.append({
+                    "type": "hashtag",
+                    "name": _clean(tag.get("name"), 200),
+                    "url": _clean(tag.get("url"), 1000),
+                })
+        else:
+            for status in rows:
+                account = status.get("account") or {}
+                results.append({
+                    "type": "status",
+                    "id": _clean(status.get("id"), 120),
+                    "url": _clean(status.get("url"), 1000),
+                    "created_at": _clean(status.get("created_at"), 80),
+                    "account": _clean(account.get("acct"), 300),
+                    "text": _clean(
+                        BeautifulSoup(str(status.get("content") or ""), "html.parser").get_text(" ", strip=True),
+                        2500,
+                    ),
+                })
+        return {
+            "status": "success",
+            "platform": "mastodon",
+            "instance": host,
+            "query": clean_query,
+            "result_type": selected,
+            "results": results,
+            "caveat": (
+                "Unauthenticated Mastodon search coverage depends on the selected "
+                "instance; public full-text status search may be unavailable."
+            ),
+        }
+    except Exception as exc:
+        return {
+            "status": "error",
+            "platform": "mastodon",
+            "instance": host,
+            "query": clean_query,
+            "results": [],
+            "error": _clean(exc, 600),
+        }
+
+
+def search_youtube(query: str, limit: int = 10) -> dict[str, Any]:
+    """Search PUBLIC YouTube videos/channels through the free Data API quota."""
+    key = os.getenv("YOUTUBE_API_KEY", "").strip()
+    clean_query = _clean(query, 400)
+    requested = max(1, min(int(limit or 10), 25))
+    if not key:
+        return {
+            "status": "unavailable",
+            "platform": "youtube",
+            "results": [],
+            "reason": "YOUTUBE_API_KEY is not configured.",
+        }
+    if not clean_query:
+        return {"status": "error", "platform": "youtube", "results": [], "error": "Empty YouTube query."}
+    try:
+        response = requests.get(
+            "https://www.googleapis.com/youtube/v3/search",
+            params={
+                "part": "snippet",
+                "q": clean_query,
+                "maxResults": requested,
+                "type": "video,channel",
+                "key": key,
+            },
+            headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
+            timeout=DEFAULT_TIMEOUT,
+        )
+        response.raise_for_status()
+        payload = response.json()
+        results: list[dict[str, Any]] = []
+        for item in payload.get("items", [])[:requested]:
+            ident = item.get("id") or {}
+            snippet = item.get("snippet") or {}
+            video_id = _clean(ident.get("videoId"), 120)
+            channel_id = _clean(ident.get("channelId"), 120)
+            kind = "video" if video_id else "channel"
+            url = (
+                f"https://www.youtube.com/watch?v={video_id}"
+                if video_id
+                else (f"https://www.youtube.com/channel/{channel_id}" if channel_id else "")
+            )
+            results.append({
+                "type": kind,
+                "title": _clean(snippet.get("title"), 400),
+                "description": _clean(snippet.get("description"), 1200),
+                "published_at": _clean(snippet.get("publishedAt"), 80),
+                "channel_title": _clean(snippet.get("channelTitle"), 300),
+                "channel_id": _clean(snippet.get("channelId") or channel_id, 120),
+                "video_id": video_id,
+                "url": url,
+            })
+        return {
+            "status": "success",
+            "platform": "youtube",
+            "query": clean_query,
+            "results": results,
+        }
+    except Exception as exc:
+        return {
+            "status": "error",
+            "platform": "youtube",
+            "query": clean_query,
+            "results": [],
+            "error": _clean(exc, 600),
+        }
+
+
+def _reddit_access_token() -> str:
+    now = time.time()
+    cached = str(_reddit_token_cache.get("token") or "")
+    if cached and float(_reddit_token_cache.get("expires_at") or 0) > now + 60:
+        return cached
+
+    client_id = os.getenv("REDDIT_CLIENT_ID", "").strip()
+    client_secret = os.getenv("REDDIT_CLIENT_SECRET", "").strip()
+    if not client_id or not client_secret:
+        return ""
+
+    user_agent = os.getenv("REDDIT_USER_AGENT", USER_AGENT).strip() or USER_AGENT
+    response = requests.post(
+        "https://www.reddit.com/api/v1/access_token",
+        auth=(client_id, client_secret),
+        data={"grant_type": "client_credentials"},
+        headers={"User-Agent": user_agent},
+        timeout=DEFAULT_TIMEOUT,
+    )
+    response.raise_for_status()
+    payload = response.json()
+    token = str(payload.get("access_token") or "").strip()
+    if not token:
+        raise ValueError("Reddit OAuth did not return an access token.")
+    _reddit_token_cache["token"] = token
+    _reddit_token_cache["expires_at"] = now + max(300, int(payload.get("expires_in") or 3600))
+    return token
+
+
+def search_reddit(query: str, limit: int = 10, sort: str = "new") -> dict[str, Any]:
+    """Search PUBLIC Reddit posts through OAuth free-access credentials."""
+    clean_query = _clean(query, 400)
+    requested = max(1, min(int(limit or 10), 25))
+    selected_sort = _clean(sort, 20).lower() or "new"
+    if selected_sort not in {"new", "relevance", "top", "hot", "comments"}:
+        selected_sort = "new"
+    if not os.getenv("REDDIT_CLIENT_ID", "").strip() or not os.getenv("REDDIT_CLIENT_SECRET", "").strip():
+        return {
+            "status": "unavailable",
+            "platform": "reddit",
+            "results": [],
+            "reason": "REDDIT_CLIENT_ID/REDDIT_CLIENT_SECRET are not configured.",
+        }
+    if not clean_query:
+        return {"status": "error", "platform": "reddit", "results": [], "error": "Empty Reddit query."}
+    try:
+        token = _reddit_access_token()
+        user_agent = os.getenv("REDDIT_USER_AGENT", USER_AGENT).strip() or USER_AGENT
+        response = requests.get(
+            "https://oauth.reddit.com/search",
+            params={
+                "q": clean_query,
+                "limit": requested,
+                "sort": selected_sort,
+                "type": "link",
+                "raw_json": 1,
+            },
+            headers={
+                "Authorization": f"bearer {token}",
+                "User-Agent": user_agent,
+                "Accept": "application/json",
+            },
+            timeout=DEFAULT_TIMEOUT,
+        )
+        response.raise_for_status()
+        payload = response.json()
+        results: list[dict[str, Any]] = []
+        for child in (payload.get("data") or {}).get("children", [])[:requested]:
+            data = child.get("data") or {}
+            permalink = _clean(data.get("permalink"), 1200)
+            results.append({
+                "type": "post",
+                "title": _clean(data.get("title"), 600),
+                "selftext": _clean(data.get("selftext"), 2500),
+                "author": _clean(data.get("author"), 200),
+                "subreddit": _clean(data.get("subreddit"), 200),
+                "created_utc": data.get("created_utc"),
+                "score": int(data.get("score") or 0),
+                "num_comments": int(data.get("num_comments") or 0),
+                "url": ("https://www.reddit.com" + permalink) if permalink.startswith("/") else permalink,
+                "external_url": _clean(data.get("url_overridden_by_dest") or data.get("url"), 1200),
+            })
+        return {
+            "status": "success",
+            "platform": "reddit",
+            "query": clean_query,
+            "sort": selected_sort,
+            "results": results,
+            "retention_note": (
+                "Respect Reddit deletion/retention requirements if results are persisted."
+            ),
+        }
+    except Exception as exc:
+        return {
+            "status": "error",
+            "platform": "reddit",
+            "query": clean_query,
+            "results": [],
+            "error": _clean(exc, 600),
+        }
+
+
+def search_telegram_public(query: str, limit: int = 10) -> dict[str, Any]:
+    """Discover PUBLIC Telegram pages using the configured independent web search.
+
+    Direct t.me URLs can always be inspected with fetch_public_url. Global
+    Telegram post discovery is not attempted through unofficial scraping.
+    """
+    clean_query = _clean(query, 350)
+    if not clean_query:
+        return {"status": "error", "platform": "telegram", "results": [], "error": "Empty Telegram query."}
+    result = search_public_web(f"site:t.me {clean_query}", limit)
+    result["platform"] = "telegram"
+    return result
+
+
+def transcribe_public_media(url: str, language: str = "") -> dict[str, Any]:
+    """Transcribe a PUBLIC audio/video URL with Groq Whisper when configured.
+
+    The URL must resolve to a public network target. The media URL is sent to
+    Groq for transcription, so use only material suitable for third-party
+    processing.
+    """
+    key = os.getenv("GROQ_API_KEY", "").strip()
+    if not key:
+        return {
+            "status": "unavailable",
+            "provider": "groq",
+            "reason": "GROQ_API_KEY is not configured.",
+            "text": "",
+        }
+    try:
+        safe_url = _validate_public_url(url)
+        payload: dict[str, str] = {
+            "model": os.getenv("GROQ_WHISPER_MODEL", "whisper-large-v3-turbo").strip()
+            or "whisper-large-v3-turbo",
+            "url": safe_url,
+            "response_format": "json",
+        }
+        clean_language = _clean(language, 10).lower()
+        if clean_language:
+            payload["language"] = clean_language
+        response = requests.post(
+            "https://api.groq.com/openai/v1/audio/transcriptions",
+            headers={"Authorization": f"Bearer {key}", "User-Agent": USER_AGENT},
+            data=payload,
+            timeout=90,
+        )
+        response.raise_for_status()
+        data = response.json()
+        return {
+            "status": "success",
+            "provider": "groq",
+            "model": payload["model"],
+            "source_url": safe_url,
+            "text": _clean(data.get("text"), 20000),
+        }
+    except Exception as exc:
+        return {
+            "status": "error",
+            "provider": "groq",
+            "source_url": _clean(url, 1200),
+            "text": "",
+            "error": _clean(exc, 600),
+        }
+
+
+def search_username_profiles(username: str, timeout_seconds: int = 45) -> dict[str, Any]:
+    """Use Sherlock to identify candidate PUBLIC profiles sharing a username.
+
+    This is discovery only. A matching username never proves that accounts are
+    controlled by the same person or organization.
+    """
+    value = str(username or "").strip().lstrip("@")
+    if not re.fullmatch(r"[A-Za-z0-9_.-]{2,64}", value):
+        return {
+            "status": "error",
+            "provider": "sherlock",
+            "results": [],
+            "error": "Username contains unsupported characters.",
+        }
+    timeout_value = max(10, min(int(timeout_seconds or 45), 60))
+    try:
+        proc = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "sherlock_project",
+                value,
+                "--print-found",
+                "--no-color",
+                "--timeout",
+                "4",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=timeout_value,
+            check=False,
+        )
+        output = (proc.stdout or "") + "\n" + (proc.stderr or "")
+        urls = list(dict.fromkeys(URL_RE.findall(output)))[:100]
+        return {
+            "status": "success" if proc.returncode in {0, 1} else "partial",
+            "provider": "sherlock",
+            "username": value,
+            "results": [{"url": url} for url in urls],
+            "caveat": (
+                "Same-username hits are candidate profiles only and require "
+                "independent corroboration before identity attribution."
+            ),
+        }
+    except subprocess.TimeoutExpired:
+        return {
+            "status": "partial",
+            "provider": "sherlock",
+            "username": value,
+            "results": [],
+            "error": "Sherlock timed out before completing the scan.",
+        }
+    except Exception as exc:
+        return {
+            "status": "error",
+            "provider": "sherlock",
+            "username": value,
             "results": [],
             "error": _clean(exc, 600),
         }
