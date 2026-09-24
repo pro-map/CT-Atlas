@@ -326,6 +326,7 @@ def search_public_web(query: str, limit: int = 8) -> dict[str, Any]:
 
 
 _reddit_token_cache: dict[str, Any] = {"token": "", "expires_at": 0.0}
+_twitch_token_cache: dict[str, Any] = {"token": "", "expires_at": 0.0}
 
 
 def social_capabilities() -> dict[str, Any]:
@@ -346,6 +347,10 @@ def social_capabilities() -> dict[str, Any]:
         "telegram_public_pages": True,
         "telegram_global_discovery": provider in {"brave", "searxng"},
         "youtube_api": bool(os.getenv("YOUTUBE_API_KEY", "").strip()),
+        "twitch_api": bool(
+            os.getenv("TWITCH_CLIENT_ID", "").strip()
+            and os.getenv("TWITCH_CLIENT_SECRET", "").strip()
+        ),
         "flickr_api": bool(os.getenv("FLICKR_API_KEY", "").strip()),
         "tumblr_api": bool(os.getenv("TUMBLR_API_KEY", "").strip()),
         "x_api": bool(os.getenv("X_BEARER_TOKEN", "").strip()),
@@ -606,6 +611,106 @@ def search_youtube(query: str, limit: int = 10) -> dict[str, Any]:
         return {
             "status": "error",
             "platform": "youtube",
+            "query": clean_query,
+            "results": [],
+            "error": _clean(exc, 600),
+        }
+
+
+def _twitch_access_token() -> str:
+    now = time.time()
+    cached = str(_twitch_token_cache.get("token") or "")
+    if cached and float(_twitch_token_cache.get("expires_at") or 0) > now + 60:
+        return cached
+
+    client_id = os.getenv("TWITCH_CLIENT_ID", "").strip()
+    client_secret = os.getenv("TWITCH_CLIENT_SECRET", "").strip()
+    if not client_id or not client_secret:
+        return ""
+
+    response = requests.post(
+        "https://id.twitch.tv/oauth2/token",
+        params={
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "grant_type": "client_credentials",
+        },
+        headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
+        timeout=DEFAULT_TIMEOUT,
+    )
+    response.raise_for_status()
+    payload = response.json()
+    token = str(payload.get("access_token") or "").strip()
+    if not token:
+        raise ValueError("Twitch OAuth did not return an access token.")
+    _twitch_token_cache["token"] = token
+    _twitch_token_cache["expires_at"] = now + max(300, int(payload.get("expires_in") or 3600))
+    return token
+
+
+def search_twitch(query: str, limit: int = 10, live_only: bool = False) -> dict[str, Any]:
+    """Search PUBLIC Twitch channels with server-side app credentials."""
+    client_id = os.getenv("TWITCH_CLIENT_ID", "").strip()
+    client_secret = os.getenv("TWITCH_CLIENT_SECRET", "").strip()
+    clean_query = _clean(query, 250)
+    requested = max(1, min(int(limit or 10), 20))
+    if not client_id or not client_secret:
+        return {
+            "status": "unavailable",
+            "platform": "twitch",
+            "results": [],
+            "reason": "TWITCH_CLIENT_ID/TWITCH_CLIENT_SECRET are not configured.",
+        }
+    if not clean_query:
+        return {"status": "error", "platform": "twitch", "results": [], "error": "Empty Twitch query."}
+
+    try:
+        token = _twitch_access_token()
+        response = requests.get(
+            "https://api.twitch.tv/helix/search/channels",
+            params={
+                "query": clean_query,
+                "first": requested,
+                "live_only": "true" if live_only else "false",
+            },
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Client-Id": client_id,
+                "User-Agent": USER_AGENT,
+                "Accept": "application/json",
+            },
+            timeout=DEFAULT_TIMEOUT,
+        )
+        response.raise_for_status()
+        payload = response.json()
+        results: list[dict[str, Any]] = []
+        for item in (payload.get("data") or [])[:requested]:
+            login = _clean(item.get("broadcaster_login"), 180)
+            results.append({
+                "type": "channel",
+                "broadcaster_id": _clean(item.get("id"), 120),
+                "login": login,
+                "display_name": _clean(item.get("display_name"), 250),
+                "language": _clean(item.get("broadcaster_language"), 40),
+                "game_id": _clean(item.get("game_id"), 120),
+                "game_name": _clean(item.get("game_name"), 250),
+                "title": _clean(item.get("title"), 600),
+                "is_live": bool(item.get("is_live")),
+                "started_at": _clean(item.get("started_at"), 80),
+                "thumbnail_url": _clean(item.get("thumbnail_url"), 1200),
+                "url": f"https://www.twitch.tv/{login}" if login else "",
+            })
+        return {
+            "status": "success",
+            "platform": "twitch",
+            "query": clean_query,
+            "live_only": bool(live_only),
+            "results": results,
+        }
+    except Exception as exc:
+        return {
+            "status": "error",
+            "platform": "twitch",
             "query": clean_query,
             "results": [],
             "error": _clean(exc, 600),
