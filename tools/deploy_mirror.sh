@@ -26,6 +26,13 @@ cp index.html main.html crypto.html social.html facial.html privacy.html robots.
 # copied under the exact uppercase name the page actually requests.
 cp ct-atlas.png "$STAGING/CT-ATLAS.png"
 
+for required in facial.html facial.js facial.css facial-intelligence.svg; do
+  if [ ! -s "$STAGING/$required" ]; then
+    echo "Mirror is missing required Facial Intelligence asset: $required" >&2
+    exit 1
+  fi
+done
+
 cat > "$STAGING/wrangler.toml" <<'EOF'
 name = "ct-atlas-mirror"
 compatibility_date = "2026-09-11"
