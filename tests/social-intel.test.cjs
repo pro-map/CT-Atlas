@@ -23,7 +23,7 @@ function harness(){
     crypto:{randomUUID:()=>"00000000-0000-4000-8000-000000000000"}
   });
   vm.runInContext(source,context);
-  return vm.runInContext("({sanitizeRequest,extractToolSources,SOCIAL_INTEL_VERSION})",context);
+  return vm.runInContext("({sanitizeRequest,extractToolSources,SOCIAL_INTEL_VERSION,socmintModels})",context);
 }
 
 test("SOCMINT request normalizes search fields and public URLs",()=>{
@@ -78,7 +78,24 @@ test("SOCMINT UI contains investigation fields and report output",()=>{
   assert.ok(js.includes("/social-workspace"));
 });
 
+test("SOCMINT free-tier search prefers Gemini 2.5 Flash-Lite",()=>{
+  const h=harness();
+  const search=Array.from(h.socmintModels({},true));
+  const direct=Array.from(h.socmintModels({},false));
+  assert.equal(search[0],"gemini-2.5-flash-lite");
+  assert.ok(search.includes("gemini-2.5-flash"));
+  assert.ok(direct.includes("gemini-3.5-flash-lite"));
+});
+
+test("SOCMINT UI contains friendly quota handling",()=>{
+  const js=fs.readFileSync("social.js","utf8");
+  const html=fs.readFileSync("social.html","utf8");
+  assert.ok(js.includes("SOCMINT_QUOTA"));
+  assert.ok(js.includes("retryAfter"));
+  assert.ok(html.includes("Gemini 2.5 Flash-Lite"));
+});
+
 test("SOCMINT version is explicit",()=>{
   const h=harness();
-  assert.match(h.SOCIAL_INTEL_VERSION,/socmint-v1/);
+  assert.match(h.SOCIAL_INTEL_VERSION,/socmint-v2/);
 });
