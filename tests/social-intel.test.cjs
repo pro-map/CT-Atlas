@@ -95,10 +95,10 @@ test("SOCMINT UI contains friendly quota handling",()=>{
   const html=fs.readFileSync("social.html","utf8");
   assert.ok(js.includes('/QUOTA/.test(error.code||"")'));
   assert.ok(js.includes("retryAfter"));
-  assert.ok(html.includes("ADK does not rely on Gemini Google Search grounding"));
+  assert.ok(html.includes("does not use Gemini Google Search grounding"));
 });
 
 test("SOCMINT version is explicit",()=>{
   const h=harness();
-  assert.match(h.SOCIAL_INTEL_VERSION,/socmint-v3/);
+  assert.match(h.SOCIAL_INTEL_VERSION,/socmint-v4/);
 });
