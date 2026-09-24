@@ -1,5 +1,6 @@
 from app.tools import (
     extract_public_indicators,
+    preprocess_public_text_free,
     search_reddit,
     search_youtube,
     social_capabilities,
@@ -34,3 +35,11 @@ def test_free_public_capabilities_and_optional_keys(monkeypatch):
     assert search_youtube("test")["status"] == "unavailable"
     assert search_reddit("test")["status"] == "unavailable"
     assert transcribe_public_media("https://example.org/audio.mp3")["status"] == "unavailable"
+
+
+def test_free_preprocessing_is_optional(monkeypatch):
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
+    monkeypatch.delenv("CLOUDFLARE_AI_ACCOUNT_ID", raising=False)
+    monkeypatch.delenv("CLOUDFLARE_AI_API_TOKEN", raising=False)
+    result = preprocess_public_text_free("public source text")
+    assert result["status"] == "unavailable"
