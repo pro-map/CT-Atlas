@@ -11,7 +11,15 @@ from .tools import (
     extract_public_indicators,
     fetch_public_url,
     normalize_evidence,
+    search_bluesky,
+    search_mastodon,
     search_public_web,
+    search_reddit,
+    search_telegram_public,
+    search_username_profiles,
+    search_youtube,
+    social_capabilities,
+    transcribe_public_media,
 )
 
 
@@ -30,16 +38,30 @@ The current CT Atlas Gemini API project does NOT have Google Search grounding.
 You do not have a built-in Google Search tool and must never claim that you do.
 
 You have these tools:
-1. search_public_web(query, limit)
-   - Optional independent public-web search.
-   - It may return status=unavailable when no provider is configured.
-   - If unavailable, DO NOT fail the investigation. Continue from analyst-
-     supplied URLs and links discovered on fetched pages.
-2. fetch_public_url(url)
+1. social_capabilities()
+   - Tells you which free/public collectors are currently configured.
+2. search_public_web(query, limit)
+   - Optional independent public-web search (Brave or SearXNG).
+3. fetch_public_url(url)
    - Retrieves a public page and returns text + public links.
-3. extract_public_indicators(text)
-   - Extracts candidate handles, Telegram URLs, public URLs and wallet strings.
-4. normalize_evidence(source_url, observation, category, confidence)
+4. search_bluesky(query, limit, mode)
+   - Public Bluesky post/account search; no API key required.
+5. search_mastodon(query, instance, limit, result_type)
+   - Public Mastodon account/hashtag discovery; no API key required.
+6. search_youtube(query, limit)
+   - Public YouTube discovery when YOUTUBE_API_KEY is configured.
+7. search_reddit(query, limit, sort)
+   - Public Reddit post search when free OAuth credentials are configured.
+8. search_telegram_public(query, limit)
+   - Public Telegram t.me discovery via the independent search provider.
+9. search_username_profiles(username, timeout_seconds)
+   - Sherlock same-username discovery across many public sites. Candidate hits
+     are NEVER proof of common identity.
+10. transcribe_public_media(url, language)
+   - Groq Whisper transcription of suitable public media when configured.
+11. extract_public_indicators(text)
+   - Extracts candidate handles, Telegram URLs, public URLs and wallets.
+12. normalize_evidence(source_url, observation, category, confidence)
    - Creates normalized evidence records. It does not validate attribution.
 
 INVESTIGATION METHOD
@@ -53,6 +75,13 @@ A. PLAN
 
 B. COLLECT / EXPAND
 - Always examine analyst-supplied URLs first.
+- Call social_capabilities early when discovery sources are needed.
+- Use platform-native public collectors when they are relevant: Bluesky,
+  Mastodon, YouTube and Reddit before relying only on generic web search.
+- For an explicit username/handle, use Sherlock at most once to generate
+  candidate profile URLs, then corroborate relevant candidates independently.
+- For public audio/video with analytical value, transcribe only when Groq is
+  configured and third-party processing is appropriate.
 - Use fetch_public_url on relevant public pages.
 - Use extract_public_indicators when page text contains candidate handles,
   links, Telegram references or wallets.
@@ -180,8 +209,16 @@ root_agent = Agent(
     ),
     instruction=INSTRUCTION,
     tools=[
+        social_capabilities,
         search_public_web,
         fetch_public_url,
+        search_bluesky,
+        search_mastodon,
+        search_youtube,
+        search_reddit,
+        search_telegram_public,
+        search_username_profiles,
+        transcribe_public_media,
         extract_public_indicators,
         normalize_evidence,
     ],
