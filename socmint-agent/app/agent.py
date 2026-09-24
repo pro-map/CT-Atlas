@@ -24,7 +24,7 @@ from .tools import (
 )
 
 
-MODEL = os.getenv("SOCMINT_AGENT_MODEL", "gemini-2.5-flash-lite")
+MODEL = os.getenv("SOCMINT_AGENT_MODEL", "gemini-3.5-flash-lite")
 
 INSTRUCTION = """
 You are the CT Atlas SOCMINT Investigation Agent.
