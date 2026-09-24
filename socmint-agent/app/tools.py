@@ -347,6 +347,7 @@ def social_capabilities() -> dict[str, Any]:
         "mastodon_public": True,
         "telegram_public_pages": True,
         "telegram_global_discovery": provider in {"brave", "searxng"},
+        "linkedin_public_discovery": provider in {"brave", "searxng"},
         "youtube_api": bool(os.getenv("YOUTUBE_API_KEY", "").strip()),
         "twitch_api": bool(
             os.getenv("TWITCH_CLIENT_ID", "").strip()
@@ -1172,6 +1173,54 @@ def search_reddit(query: str, limit: int = 10, sort: str = "new") -> dict[str, A
             "results": [],
             "error": _clean(exc, 600),
         }
+
+
+def search_linkedin_public(
+    query: str,
+    limit: int = 10,
+    result_type: str = "all",
+) -> dict[str, Any]:
+    """Discover PUBLIC LinkedIn pages through the configured web-search provider.
+
+    This does not use LinkedIn member APIs, authenticate to LinkedIn, or bypass
+    access controls. It only returns public LinkedIn URLs already exposed by an
+    independent search provider such as Brave or SearXNG.
+
+    result_type may be: all, people, companies, posts.
+    """
+    clean_query = _clean(query, 350)
+    requested = max(1, min(int(limit or 10), 10))
+    selected = _clean(result_type, 30).lower() or "all"
+    if selected not in {"all", "people", "companies", "posts"}:
+        return {
+            "status": "error",
+            "platform": "linkedin",
+            "results": [],
+            "error": "result_type must be all, people, companies or posts.",
+        }
+    if not clean_query:
+        return {
+            "status": "error",
+            "platform": "linkedin",
+            "results": [],
+            "error": "Empty LinkedIn query.",
+        }
+
+    site_filter = {
+        "people": "site:linkedin.com/in/",
+        "companies": "site:linkedin.com/company/",
+        "posts": "site:linkedin.com/posts/",
+        "all": "site:linkedin.com",
+    }[selected]
+
+    result = search_public_web(f"{site_filter} {clean_query}", requested)
+    result["platform"] = "linkedin"
+    result["result_type"] = selected
+    result["access_note"] = (
+        "Results come from public-web indexing only. LinkedIn login-gated or "
+        "non-public content is not accessed."
+    )
+    return result
 
 
 def search_telegram_public(query: str, limit: int = 10) -> dict[str, Any]:
