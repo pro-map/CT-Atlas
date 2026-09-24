@@ -10,7 +10,7 @@
 *{box-sizing:border-box}
 html,body{min-height:100%;margin:0;font-family:Arial,Helvetica,sans-serif;background:#0d1620;color:#fff}
 body{display:flex;min-height:100vh}
-.hub{width:min(1080px,calc(100vw - 36px));margin:auto;padding:34px 0}
+.hub{width:min(1280px,calc(100vw - 36px));margin:auto;padding:34px 0}
 .hub-header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-bottom:22px;border-bottom:1px solid #314252}
 .hub-brand{display:flex;align-items:center;gap:14px}
 .hub-brand img{width:64px;height:64px;object-fit:contain}
@@ -19,7 +19,7 @@ body{display:flex;min-height:100vh}
 .hub-user{display:flex;align-items:center;gap:10px;color:#88a1b0;font-size:10px}
 .hub-signout{border:1px solid #405563;background:#17232e;color:#d7e4eb;border-radius:4px;padding:9px 12px;cursor:pointer;font-size:9px;font-weight:800;letter-spacing:.06em}
 .hub-intro{margin:28px 0 20px;color:#9eb2bd;font-size:12px;line-height:1.6}
-.hub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.hub-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 .hub-card{min-height:270px;display:flex;flex-direction:column;padding:22px;border:1px solid #344958;border-radius:8px;background:linear-gradient(180deg,#172630,#111d26);color:#fff;text-decoration:none;box-shadow:0 12px 30px rgba(0,0,0,.24);transition:transform .15s ease,border-color .15s ease,background .15s ease}
 .hub-card:hover{transform:translateY(-3px);border-color:#607c8c;background:linear-gradient(180deg,#1b2d38,#14242e)}
 .hub-card-icon{width:58px;height:58px;display:flex;align-items:center;justify-content:center;border:1px solid #3f5867;border-radius:6px;background:#101d26}
@@ -66,6 +66,13 @@ body{display:flex;min-height:100vh}
       <div class="hub-card-icon"><img src="social-intelligence.svg" alt="" aria-hidden="true"></div>
       <div class="hub-card-title">Social Intelligence</div>
       <div class="hub-card-text">AI-assisted public-source SOCMINT investigations with structured search fields, source-grounded findings, entity extraction and downloadable analytical reports.</div>
+      <div class="hub-card-foot">OPEN WORKSPACE →</div>
+    </a>
+
+    <a class="hub-card facial" href="facial.html">
+      <div class="hub-card-icon"><img src="facial-intelligence.svg" alt="" aria-hidden="true"></div>
+      <div class="hub-card-title">Facial Intelligence</div>
+      <div class="hub-card-text">Non-identifying visual evidence analysis for images and video: face detection, frame extraction, OCR, EXIF/GPS, quality assessment and perceptual similarity.</div>
       <div class="hub-card-foot">OPEN WORKSPACE →</div>
     </a>
   </section>
