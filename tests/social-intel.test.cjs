@@ -4,7 +4,7 @@ const fs=require("node:fs");
 const vm=require("node:vm");
 
 let source=fs.readFileSync("cloudflare-worker/social-intel.js","utf8")
-  .replace(/import\s*\{[\s\S]*?\}\s*from\s*["']\.\/shared\.js["'];\s*/,"")
+  .replace(/import\s*\{[\s\S]*?\}\s*from\s*["']\.\/[^"']+["'];\s*/g,"")
   .replace(/export\s*\{[\s\S]*?\};\s*$/,"");
 
 function cleanText(value,max=700){
@@ -19,6 +19,9 @@ async function extractGeminiText(){throw new Error("not used");}
 function harness(){
   const context=vm.createContext({
     cleanText,normalizeUsername,isAllowedUser,jsonResponse,gateCall,extractGeminiText,
+    SOCIAL_AGENT_CLIENT_VERSION:"test-adk-client",
+    isSocialAgentConfigured:()=>false,
+    runSocialAgent:async()=>{throw new Error("not used");},
     URL,Set,Map,Array,Object,String,Number,RegExp,Date,JSON,console,
     crypto:{randomUUID:()=>"00000000-0000-4000-8000-000000000000"}
   });
