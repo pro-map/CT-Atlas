@@ -31,7 +31,7 @@
           <div class="panel-kicker">INVESTIGATION INPUT</div>
           <h1>Run SOCMINT Investigation</h1>
         </div>
-        <span class="agent-badge">GEMINI AGENT</span>
+        <span id="socialAgentBadge" class="agent-badge">SOCMINT AGENT</span>
       </div>
 
       <div class="social-note">
@@ -45,7 +45,7 @@
             <option value="discover">Discover + Analyze public web</option>
             <option value="urls_only">Analyze known public URLs</option>
           </select>
-          <div class="field-help">Discovery uses Gemini 2.5 Flash-Lite Google Search grounding when available to the API project. Known URLs use URL Context with a lightweight fallback model.</div>
+          <div class="field-help">ADK does not rely on Gemini Google Search grounding. It starts from known public URLs and can expand relevant links; optional external discovery can be enabled later. The current Gemini workflow remains available as fallback.</div>
         </div>
 
         <div class="field full">
