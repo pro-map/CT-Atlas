@@ -271,8 +271,45 @@ async function authenticate(request, env, username) {
   return { ok: true };
 }
 
-async function geminiSocmint(env, query, useSearch) {
-  const model = env.GEMINI_SOCMINT_MODEL || env.GEMINI_MODEL || "gemini-3.5-flash-lite";
+function uniqueModels(values) {
+  const out = [];
+  for (const value of values) {
+    const model = cleanText(value, 100);
+    if (model && !out.includes(model)) out.push(model);
+  }
+  return out;
+}
+
+function socmintModels(env, useSearch) {
+  if (useSearch) {
+    return uniqueModels([
+      env.GEMINI_SOCMINT_SEARCH_MODEL,
+      "gemini-2.5-flash-lite",
+      "gemini-2.5-flash"
+    ]);
+  }
+  return uniqueModels([
+    env.GEMINI_SOCMINT_MODEL,
+    env.GEMINI_MODEL,
+    "gemini-3.5-flash-lite",
+    "gemini-2.5-flash-lite"
+  ]);
+}
+
+function geminiFailure(response, detail, model, useSearch) {
+  const error = new Error(`Gemini SOCMINT request failed (${response.status}) on ${model}.`);
+  error.status = response.status;
+  error.model = model;
+  error.useSearch = useSearch;
+  error.retry_after_seconds = Number(response.headers.get("Retry-After") || 0) || null;
+  error.detail = cleanText(detail, 1600);
+  error.quota = response.status === 429 || /quota|rate limit|too_many_requests/i.test(error.detail);
+  error.unsupported = [400,403,404].includes(response.status) &&
+    /not available|unsupported|not supported|permission|access/i.test(error.detail);
+  return error;
+}
+
+async function geminiSocmintOnce(env, query, useSearch, model) {
   const tools = [];
   if (useSearch) tools.push({ type: "google_search", search_types: ["web_search"] });
   if (query.urls.length) tools.push({ type: "url_context" });
@@ -301,8 +338,7 @@ async function geminiSocmint(env, query, useSearch) {
       schema: SOCIAL_SCHEMA
     },
     generation_config: {
-      max_output_tokens: 12000,
-      thinking_level: "low"
+      max_output_tokens: 12000
     }
   };
   if (tools.length) body.tools = tools;
@@ -317,17 +353,44 @@ async function geminiSocmint(env, query, useSearch) {
   });
 
   if (!response.ok) {
-    const detail = cleanText(await response.text(), 1200);
-    const error = new Error(`Gemini SOCMINT error ${response.status}: ${detail}`);
-    error.status = response.status;
-    throw error;
+    const detail = await response.text();
+    throw geminiFailure(response, detail, model, useSearch);
   }
 
   const payload = await response.json();
   const rawText = await extractGeminiText(payload);
   const normalized = rawText.trim().replace(/^\`\`\`(?:json)?\s*/i,"").replace(/\s*\`\`\`$/i,"");
-  const parsed = JSON.parse(normalized);
+  let parsed;
+  try {
+    parsed = JSON.parse(normalized);
+  } catch (_) {
+    const error = new Error("Gemini returned a SOCMINT response that could not be parsed.");
+    error.status = 502;
+    error.model = model;
+    throw error;
+  }
   return { parsed, payload, model };
+}
+
+async function geminiSocmint(env, query, useSearch) {
+  const models = socmintModels(env, useSearch);
+  let lastError = null;
+
+  for (const model of models) {
+    try {
+      return await geminiSocmintOnce(env, query, useSearch, model);
+    } catch (error) {
+      lastError = error;
+      const status = Number(error?.status || 0);
+
+      // Try another model when the current model is unavailable, unsupported,
+      // temporarily rate-limited or the project has exhausted that model's quota.
+      if ([400,403,404,429,500,502,503,504].includes(status)) continue;
+      throw error;
+    }
+  }
+
+  throw lastError || new Error("No SOCMINT Gemini model was available.");
 }
 
 async function persistReport(env, username, report) {
@@ -403,16 +466,57 @@ async function handleSocialInvestigate(request, env) {
     result = await geminiSocmint(env, query, query.mode === "discover");
   } catch (error) {
     const status = Number(error?.status || 0);
-    if (query.mode === "discover" && query.urls.length && [400,403,404,429].includes(status)) {
-      discoveryMode = "url_context_fallback";
-      result = await geminiSocmint(env, query, false);
-    } else if (query.mode === "discover" && !query.urls.length && [400,403,404].includes(status)) {
+
+    if (query.mode === "discover" && query.urls.length && [400,403,404,429,500,502,503,504].includes(status)) {
+      // Search grounding can be unavailable or quota-limited on free projects.
+      // Preserve usefulness by analyzing analyst-supplied public URLs instead.
+      try {
+        discoveryMode = "url_context_fallback";
+        result = await geminiSocmint(env, query, false);
+      } catch (fallbackError) {
+        const fallbackStatus = Number(fallbackError?.status || 0);
+        if (fallbackError?.quota || fallbackStatus === 429) {
+          return jsonResponse({
+            error: "Gemini free-tier quota is currently exhausted. The SOCMINT query was not lost. Retry later, or reduce the number of URLs. Public-web discovery uses Gemini 2.5 Flash-Lite when available; URL-only analysis uses the lightest available model.",
+            code: "SOCMINT_QUOTA_EXHAUSTED",
+            retry_after_seconds: fallbackError?.retry_after_seconds || error?.retry_after_seconds || null
+          }, 429, env);
+        }
+        return jsonResponse({
+          error: cleanText(fallbackError?.message || "SOCMINT URL analysis is temporarily unavailable.", 700),
+          code: "SOCMINT_URL_ANALYSIS_UNAVAILABLE"
+        }, fallbackStatus >= 400 && fallbackStatus < 600 ? fallbackStatus : 502, env);
+      }
+    } else if (query.mode === "discover" && !query.urls.length) {
+      if (error?.quota || status === 429) {
+        return jsonResponse({
+          error: "The free public-web SOCMINT search quota is currently exhausted. Retry later, or add known public URLs and use Analyze URLs. CT Atlas now uses Gemini 2.5 Flash-Lite first for free grounded discovery when that model is available to the API project.",
+          code: "SOCMINT_SEARCH_QUOTA_EXHAUSTED",
+          retry_after_seconds: error?.retry_after_seconds || null
+        }, 429, env);
+      }
+      if ([400,403,404].includes(status)) {
+        return jsonResponse({
+          error: "Public-web discovery is not available for this Gemini API project. Add known public URLs and use Analyze URLs. Gemini 3.x Google Search grounding is not available on the API Free Tier; CT Atlas will use Gemini 2.5 Flash-Lite for discovery when Google grants this project access to that model.",
+          code: "SOCMINT_DISCOVERY_UNAVAILABLE"
+        }, 424, env);
+      }
       return jsonResponse({
-        error: "Public web discovery is not available with the current Gemini API tier/model. Add known public URLs and run Analyze URLs, or enable Google Search grounding for this API project.",
-        code: "SOCMINT_DISCOVERY_UNAVAILABLE"
-      }, 424, env);
+        error: "Public-web SOCMINT discovery is temporarily unavailable. Retry later or provide public URLs for direct analysis.",
+        code: "SOCMINT_DISCOVERY_TEMPORARY"
+      }, 503, env);
     } else {
-      return jsonResponse({ error: cleanText(error?.message || "SOCMINT generation failed.", 1200) }, status === 429 ? 429 : 502, env);
+      if (error?.quota || status === 429) {
+        return jsonResponse({
+          error: "Gemini free-tier quota is currently exhausted. Retry later; the SOCMINT workspace and previous reports remain available.",
+          code: "SOCMINT_QUOTA_EXHAUSTED",
+          retry_after_seconds: error?.retry_after_seconds || null
+        }, 429, env);
+      }
+      return jsonResponse({
+        error: cleanText(error?.message || "SOCMINT generation failed.", 700),
+        code: "SOCMINT_GENERATION_FAILED"
+      }, status >= 400 && status < 600 ? status : 502, env);
     }
   }
 
