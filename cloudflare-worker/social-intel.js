@@ -285,32 +285,205 @@ async function braveWorkerDiscovery(env, query) {
   return { provider: "brave", sources };
 }
 
+function htmlToEvidenceText(value) {
+  return cleanText(
+    String(value || "")
+      .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+      .replace(/<noscript\b[^>]*>[\s\S]*?<\/noscript>/gi, " ")
+      .replace(/<svg\b[^>]*>[\s\S]*?<\/svg>/gi, " ")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/&nbsp;|&#160;/gi, " ")
+      .replace(/&amp;/gi, "&")
+      .replace(/&quot;|&#34;/gi, '"')
+      .replace(/&#39;|&apos;/gi, "'")
+      .replace(/&lt;/gi, "<")
+      .replace(/&gt;/gi, ">"),
+    14000
+  );
+}
+
+async function fetchPublicEvidencePage(source) {
+  const url = safePublicUrl(source?.url);
+  if (!url) return { ...source, fetched: false, fetch_status: "invalid_url", evidence_text: "" };
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      redirect: "follow",
+      signal: controller.signal,
+      headers: {
+        "Accept": "text/html,application/xhtml+xml,text/plain;q=0.9,*/*;q=0.5",
+        "User-Agent": "CT-Atlas-Public-Research/1.0"
+      }
+    });
+    const type = String(response.headers.get("Content-Type") || "").toLowerCase();
+    const length = Number(response.headers.get("Content-Length") || 0);
+    if (!response.ok) {
+      return { ...source, fetched: false, fetch_status: "http_" + response.status, evidence_text: "" };
+    }
+    if (length > 2_000_000) {
+      return { ...source, fetched: false, fetch_status: "too_large", evidence_text: "" };
+    }
+    if (!type.includes("text/") && !type.includes("html") && !type.includes("json")) {
+      return { ...source, fetched: false, fetch_status: "non_text", evidence_text: "" };
+    }
+    const raw = (await response.text()).slice(0, 180000);
+    const evidenceText = type.includes("html") ? htmlToEvidenceText(raw) : cleanText(raw, 14000);
+    return {
+      ...source,
+      fetched: Boolean(evidenceText),
+      fetch_status: evidenceText ? "observed_public_page" : "empty",
+      observed_url: safePublicUrl(response.url) || url,
+      evidence_text: evidenceText
+    };
+  } catch (error) {
+    return {
+      ...source,
+      fetched: false,
+      fetch_status: error?.name === "AbortError" ? "timeout" : "fetch_error",
+      evidence_text: ""
+    };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function fetchBraveEvidencePages(sources) {
+  const selected = (Array.isArray(sources) ? sources : []).slice(0, 6);
+  const results = [];
+  for (const source of selected) {
+    results.push(await fetchPublicEvidencePage(source));
+  }
+  for (const source of (Array.isArray(sources) ? sources : []).slice(6, 10)) {
+    results.push({ ...source, fetched: false, fetch_status: "snippet_only", evidence_text: "" });
+  }
+  return results;
+}
+
+function sourceForReport(item) {
+  return {
+    url: safePublicUrl(item?.observed_url || item?.url),
+    title: cleanText(item?.title, 300),
+    snippet: cleanText(item?.snippet, 700),
+    kind: item?.fetched ? "direct_public_page" : "search_result",
+    observed_at: item?.fetched ? new Date().toISOString() : "",
+    retrieval_status: cleanText(item?.fetch_status, 40)
+  };
+}
+
+async function geminiEvidenceSynthesisOnce(env, query, evidence, model) {
+  const evidencePack = evidence.map((item, index) => ({
+    source_id: "S" + (index + 1),
+    url: safePublicUrl(item?.observed_url || item?.url),
+    title: cleanText(item?.title, 300),
+    brave_snippet: cleanText(item?.snippet, 700),
+    retrieval_status: cleanText(item?.fetch_status, 40),
+    public_page_text: cleanText(item?.evidence_text, 12000)
+  })).filter(item => item.url);
+
+  const input = [
+    "Produce the requested CT Atlas SOCMINT report from the evidence pack below.",
+    "The evidence was discovered through independent Brave Search. Some pages were directly retrieved by CT Atlas; others may be search-index snippets only.",
+    "Use ONLY the URLs and text/snippets in this evidence pack. Do not claim that a page was directly observed unless retrieval_status is observed_public_page.",
+    "Do not mention internal agent failures in the executive assessment. Put limitations in source_coverage or analytical_gaps.",
+    "Do not infer identity, affiliation, ownership, criminality or terrorist links beyond what the evidence supports.",
+    "Analyst query:",
+    JSON.stringify(query),
+    "Evidence pack:",
+    JSON.stringify(evidencePack)
+  ].join("\n\n");
+
+  const body = {
+    model,
+    input,
+    system_instruction: SOCIAL_SYSTEM,
+    store: false,
+    response_format: {
+      type: "text",
+      mime_type: "application/json",
+      schema: SOCIAL_SCHEMA
+    },
+    generation_config: {
+      max_output_tokens: 10000
+    }
+  };
+
+  const response = await fetch(GEMINI_URL, {
+    method: "POST",
+    headers: {
+      "x-goog-api-key": env.GEMINI_API_KEY,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (!response.ok) {
+    const detail = await response.text();
+    throw geminiFailure(response, detail, model, false);
+  }
+
+  const payload = await response.json();
+  const rawText = await extractGeminiText(payload);
+  const normalized = rawText.trim().replace(/^```(?:json)?\s*/i,"").replace(/\s*```$/i,"");
+  let parsed;
+  try {
+    parsed = JSON.parse(normalized);
+  } catch (_) {
+    const error = new Error("Gemini returned evidence synthesis that could not be parsed.");
+    error.status = 502;
+    error.model = model;
+    throw error;
+  }
+  return { parsed, payload, model };
+}
+
+async function geminiEvidenceSynthesis(env, query, evidence) {
+  const models = socmintModels(env, false);
+  let lastError = null;
+  for (const model of models) {
+    try {
+      return await geminiEvidenceSynthesisOnce(env, query, evidence, model);
+    } catch (error) {
+      lastError = error;
+      const status = Number(error?.status || 0);
+      if ([400,403,404,429,500,502,503,504].includes(status)) continue;
+      throw error;
+    }
+  }
+  throw lastError || new Error("No Gemini model was available for evidence synthesis.");
+}
+
 function buildDiscoveryOnlyReport(query, sources, agentFailure) {
   const count = sources.length;
+  const directlyObserved = sources.filter(item => item?.kind === "direct_public_page").length;
   const platforms = (query.platforms || []).join(", ") || "public web";
   return {
-    title: "CT Atlas SOCMINT Discovery Report",
+    title: "CT Atlas SOCMINT Evidence Review",
     executive_assessment: count
-      ? `The primary SOCMINT agent did not complete the investigation. Independent Brave discovery nevertheless identified ${count} candidate public source(s) relevant to the analyst query. These results are discovery leads only and have not been treated as proof of identity, ownership, affiliation or wrongdoing.`
-      : "The primary SOCMINT agent did not complete the investigation and independent public-web fallback did not identify usable sources.",
-    source_coverage: `Fallback discovery used Brave Search across ${platforms}. Source snippets and indexed URLs are retained as candidate evidence; direct page verification may still be required.`,
+      ? `Independent Brave discovery identified ${count} relevant public source(s). ${directlyObserved} source(s) were directly retrievable by CT Atlas. The available evidence is preserved for analyst review, but automated synthesis was unavailable; no unsupported identity, ownership, affiliation or wrongdoing conclusion has been drawn.`
+      : "Independent public-web fallback did not identify usable sources for this query.",
+    source_coverage: `Brave Search was used across ${platforms}. Directly retrieved pages are distinguished from search-index-only results. Search snippets are leads, not equivalent to direct observation.`,
     identity_alias_findings: "No identity attribution was made from search-index results alone.",
-    network_associations: "No network association is asserted without direct corroborating public evidence.",
-    content_narrative: "No substantive narrative assessment was produced because the analytical agent was unavailable.",
-    activity_timeline: "No reliable activity timeline was established from discovery metadata alone.",
-    locations_travel_signals: "No location or travel assessment was made from discovery metadata alone.",
-    financial_crypto_indicators: "No financial or crypto assessment was made from discovery metadata alone.",
-    ct_relevance: "No CT relevance assessment was made from discovery metadata alone.",
+    network_associations: "No network association is asserted without corroborating public evidence.",
+    content_narrative: "The collected public evidence is available in the source list, but automated synthesis was not available for this run.",
+    activity_timeline: "No reliable timeline was established without completed evidence synthesis.",
+    locations_travel_signals: "No location or travel conclusion was made without completed evidence synthesis.",
+    financial_crypto_indicators: "No financial or crypto conclusion was made without completed evidence synthesis.",
+    ct_relevance: "No CT relevance conclusion was made without completed evidence synthesis.",
     key_findings: [],
     entities: [],
     analytical_gaps: cleanText(
-      "Primary ADK analysis failed. " + (agentFailure?.message || "No detailed agent error was returned.") +
-      " Candidate URLs should be reviewed directly before analytical conclusions are drawn.",
+      "Automated evidence synthesis was unavailable. Technical detail: " +
+      (agentFailure?.message || "No detailed model error was returned.") +
+      " The source list remains available for direct analyst review.",
       4000
     ),
     watchpoints: count ? [{
-      issue: "Review discovered public sources",
-      indicator: "Open and validate the Brave-discovered URLs, then rerun URL-only analysis if needed."
+      issue: "Complete evidence synthesis",
+      indicator: "Review directly retrieved pages and rerun analysis when the synthesis model is available."
     }] : [],
     sources
   };
@@ -643,47 +816,76 @@ async function handleSocialInvestigate(request, env) {
       if (!query.urls.length) {
         const discovery = await braveWorkerDiscovery(env, query);
         if (discovery.sources.length) {
-          const fallbackQuery = { ...query, mode: "urls_only", urls: discovery.sources.map(item => item.url).slice(0, 10) };
+          const evidence = await fetchBraveEvidencePages(discovery.sources);
+          const reportSources = evidence.map(sourceForReport).filter(item => item.url);
+          const fallbackQuery = { ...query, mode: "urls_only", urls: reportSources.map(item => item.url).slice(0, 10) };
           try {
-            const fallbackResult = await geminiSocmint(env, fallbackQuery, false);
-            const analyzedSources = extractToolSources(fallbackResult.payload);
-            const merged = new Map();
-            for (const source of [...discovery.sources, ...analyzedSources]) {
-              if (source?.url) merged.set(source.url, { ...(merged.get(source.url) || {}), ...source });
-            }
-            const sources = Array.from(merged.values()).slice(0, 100);
+            const fallbackResult = await geminiEvidenceSynthesis(env, fallbackQuery, evidence);
             const report = normalizeReport(
               fallbackResult.parsed,
               fallbackQuery,
-              sources,
+              reportSources,
               fallbackResult.model,
-              "brave_worker+url_context_agent_fallback"
+              "brave_worker+direct_fetch+gemini_synthesis"
             );
             report.agent_meta = {
               agent: false,
               fallback: true,
+              fallback_stage: "evidence_synthesis",
               search_provider: "brave",
+              directly_observed_sources: evidence.filter(item => item?.fetched).length,
               agent_failure: agentFailure
             };
             await persistReport(env, username, report);
-            return jsonResponse({ ok: true, report, agent: false, fallback: "brave_worker_url_context" }, 200, env);
-          } catch (fallbackError) {
-            const report = normalizeReport(
-              buildDiscoveryOnlyReport(query, discovery.sources, agentFailure),
-              query,
-              discovery.sources,
-              "Brave Search fallback",
-              "brave_worker_discovery_only"
-            );
-            report.agent_meta = {
-              agent: false,
-              fallback: true,
-              search_provider: "brave",
-              agent_failure: agentFailure,
-              analysis_failure: cleanText(fallbackError?.message, 700)
-            };
-            await persistReport(env, username, report);
-            return jsonResponse({ ok: true, report, agent: false, fallback: "brave_worker_discovery_only" }, 200, env);
+            return jsonResponse({ ok: true, report, agent: false, fallback: "brave_evidence_synthesis" }, 200, env);
+          } catch (synthesisError) {
+            try {
+              const fallbackResult = await geminiSocmint(env, fallbackQuery, false);
+              const analyzedSources = extractToolSources(fallbackResult.payload);
+              const merged = new Map();
+              for (const source of [...reportSources, ...analyzedSources]) {
+                if (source?.url) merged.set(source.url, { ...(merged.get(source.url) || {}), ...source });
+              }
+              const sources = Array.from(merged.values()).slice(0, 100);
+              const report = normalizeReport(
+                fallbackResult.parsed,
+                fallbackQuery,
+                sources,
+                fallbackResult.model,
+                "brave_worker+url_context_secondary_fallback"
+              );
+              report.agent_meta = {
+                agent: false,
+                fallback: true,
+                fallback_stage: "url_context_secondary",
+                search_provider: "brave",
+                directly_observed_sources: evidence.filter(item => item?.fetched).length,
+                agent_failure: agentFailure,
+                synthesis_failure: cleanText(synthesisError?.message, 700)
+              };
+              await persistReport(env, username, report);
+              return jsonResponse({ ok: true, report, agent: false, fallback: "brave_url_context_secondary" }, 200, env);
+            } catch (fallbackError) {
+              const report = normalizeReport(
+                buildDiscoveryOnlyReport(query, reportSources, fallbackError),
+                query,
+                reportSources,
+                "Brave evidence fallback",
+                "brave_worker_evidence_only"
+              );
+              report.agent_meta = {
+                agent: false,
+                fallback: true,
+                fallback_stage: "evidence_only",
+                search_provider: "brave",
+                directly_observed_sources: evidence.filter(item => item?.fetched).length,
+                agent_failure: agentFailure,
+                synthesis_failure: cleanText(synthesisError?.message, 700),
+                analysis_failure: cleanText(fallbackError?.message, 700)
+              };
+              await persistReport(env, username, report);
+              return jsonResponse({ ok: true, report, agent: false, fallback: "brave_evidence_only" }, 200, env);
+            }
           }
         }
 
