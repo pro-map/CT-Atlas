@@ -18,6 +18,9 @@ on:
       - "usage-auth-fix.js"
       - "index.html"
       - "main.html"
+      - "intelligence-map.svg"
+      - "crypto-intelligence.svg"
+      - "social-intelligence.svg"
       - "social.html"
       - "social.js"
       - "social.css"
@@ -82,9 +85,14 @@ jobs:
           grep -q 'Monitoring & Alerts' crypto.html
           test -s main.html
           test -s social.html
-          grep -q 'Map and Intel Analysis' main.html
-          grep -q 'Cryptocurrency Investigations' main.html
-          grep -q 'Social Media Analysis' main.html
+          grep -q 'Intelligence Map' main.html
+          grep -q 'Crypto Intelligence' main.html
+          grep -q 'Social Intelligence' main.html
+          test -s intelligence-map.svg
+          test -s crypto-intelligence.svg
+          test -s social-intelligence.svg
+          grep -q 'Bitcoin Genesis Address — Satoshi Nakamoto' crypto.html
+          grep -q 'cryptoGenesisExample' crypto.js
           test -s social.js
           test -s social.css
           grep -q 'RUN SOCMINT INVESTIGATION' social.html
