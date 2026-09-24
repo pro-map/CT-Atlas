@@ -237,4 +237,5 @@ jobs:
           health="$(curl --fail --silent --show-error https://ct-report-generator.fairpeace.workers.dev/health)"
           printf '%s\n' "$health" | python -m json.tool
           printf '%s' "$health" | grep -q '"social_agent_configured":true'
-          echo "SOCMINT ADK agent is active in CT Atlas."
+          printf '%s' "$health" | grep -q '"social_worker_search_provider":"brave"'
+          echo "SOCMINT ADK agent and Brave Worker fallback are active in CT Atlas."
