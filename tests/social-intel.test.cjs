@@ -22,7 +22,7 @@ function harness(){
     SOCIAL_AGENT_CLIENT_VERSION:"test-adk-client",
     isSocialAgentConfigured:()=>false,
     runSocialAgent:async()=>{throw new Error("not used");},
-    URL,Set,Map,Array,Object,String,Number,RegExp,Date,JSON,console,
+    URL,Set,Map,Array,Object,String,Number,RegExp,Date,JSON,console,AbortController,setTimeout,clearTimeout,
     crypto:{randomUUID:()=>"00000000-0000-4000-8000-000000000000"}
   });
   vm.runInContext(source,context);
@@ -101,4 +101,15 @@ test("SOCMINT UI contains friendly quota handling",()=>{
 test("SOCMINT version is explicit",()=>{
   const h=harness();
   assert.match(h.SOCIAL_INTEL_VERSION,/socmint-v4/);
+});
+
+
+test("SOCMINT fallback builds an evidence-synthesis pipeline",()=>{
+  const source=fs.readFileSync("cloudflare-worker/social-intel.js","utf8");
+  assert.ok(source.includes("fetchBraveEvidencePages"));
+  assert.ok(source.includes("geminiEvidenceSynthesis"));
+  assert.ok(source.includes("brave_worker+direct_fetch+gemini_synthesis"));
+  assert.ok(source.includes("direct_public_page"));
+  assert.ok(source.includes("search_result"));
+  assert.ok(!source.includes("The primary SOCMINT agent did not complete the investigation. Independent Brave discovery nevertheless identified"));
 });
