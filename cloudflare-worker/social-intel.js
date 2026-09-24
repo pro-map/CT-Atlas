@@ -212,6 +212,110 @@ function extractToolSources(payload) {
   return Array.from(byUrl.values()).slice(0,100);
 }
 
+async function braveWorkerDiscovery(env, query) {
+  const key = String(env?.BRAVE_SEARCH_API_KEY || "").trim();
+  if (!key) return { provider: "disabled", sources: [] };
+
+  const terms = [];
+  if (query.target) terms.push(query.target);
+  for (const value of (query.usernames || []).slice(0, 3)) terms.push(value);
+  for (const value of (query.keywords || []).slice(0, 4)) terms.push(value);
+  const base = terms.filter(Boolean).join(" ").trim();
+  if (!base) return { provider: "brave", sources: [] };
+
+  const platformSites = {
+    LinkedIn: "site:linkedin.com",
+    YouTube: "site:youtube.com",
+    Telegram: "site:t.me",
+    Reddit: "site:reddit.com",
+    X: "site:x.com",
+    Twitter: "site:x.com",
+    Twitch: "site:twitch.tv",
+    Tumblr: "site:tumblr.com",
+    Facebook: "site:facebook.com",
+    Instagram: "site:instagram.com",
+    TikTok: "site:tiktok.com",
+    VK: "site:vk.com",
+    Bluesky: "site:bsky.app"
+  };
+
+  const queries = [];
+  const requestedPlatforms = (query.platforms || []).slice(0, 4);
+  for (const platform of requestedPlatforms) {
+    const site = platformSites[platform];
+    if (site) queries.push(`${base} ${site}`);
+  }
+  queries.push(base);
+
+  const seenQuery = new Set();
+  const seenUrl = new Set();
+  const sources = [];
+  for (const rawQuery of queries) {
+    const q = cleanText(rawQuery, 450);
+    if (!q || seenQuery.has(q) || sources.length >= 10) continue;
+    seenQuery.add(q);
+    try {
+      const response = await fetch("https://api.search.brave.com/res/v1/web/search?" + new URLSearchParams({
+        q,
+        count: "6"
+      }).toString(), {
+        headers: {
+          "Accept": "application/json",
+          "X-Subscription-Token": key
+        }
+      });
+      if (!response.ok) continue;
+      const payload = await response.json().catch(() => ({}));
+      for (const item of (payload?.web?.results || [])) {
+        const url = safePublicUrl(item?.url);
+        if (!url || seenUrl.has(url)) continue;
+        seenUrl.add(url);
+        sources.push({
+          url,
+          title: cleanText(item?.title, 300),
+          snippet: cleanText(item?.description, 700),
+          kind: "brave_search"
+        });
+        if (sources.length >= 10) break;
+      }
+    } catch (_) {
+      // Discovery fallback is best-effort; the ADK/URL analysis path remains authoritative.
+    }
+  }
+  return { provider: "brave", sources };
+}
+
+function buildDiscoveryOnlyReport(query, sources, agentFailure) {
+  const count = sources.length;
+  const platforms = (query.platforms || []).join(", ") || "public web";
+  return {
+    title: "CT Atlas SOCMINT Discovery Report",
+    executive_assessment: count
+      ? `The primary SOCMINT agent did not complete the investigation. Independent Brave discovery nevertheless identified ${count} candidate public source(s) relevant to the analyst query. These results are discovery leads only and have not been treated as proof of identity, ownership, affiliation or wrongdoing.`
+      : "The primary SOCMINT agent did not complete the investigation and independent public-web fallback did not identify usable sources.",
+    source_coverage: `Fallback discovery used Brave Search across ${platforms}. Source snippets and indexed URLs are retained as candidate evidence; direct page verification may still be required.`,
+    identity_alias_findings: "No identity attribution was made from search-index results alone.",
+    network_associations: "No network association is asserted without direct corroborating public evidence.",
+    content_narrative: "No substantive narrative assessment was produced because the analytical agent was unavailable.",
+    activity_timeline: "No reliable activity timeline was established from discovery metadata alone.",
+    locations_travel_signals: "No location or travel assessment was made from discovery metadata alone.",
+    financial_crypto_indicators: "No financial or crypto assessment was made from discovery metadata alone.",
+    ct_relevance: "No CT relevance assessment was made from discovery metadata alone.",
+    key_findings: [],
+    entities: [],
+    analytical_gaps: cleanText(
+      "Primary ADK analysis failed. " + (agentFailure?.message || "No detailed agent error was returned.") +
+      " Candidate URLs should be reviewed directly before analytical conclusions are drawn.",
+      4000
+    ),
+    watchpoints: count ? [{
+      issue: "Review discovered public sources",
+      indicator: "Open and validate the Brave-discovered URLs, then rerun URL-only analysis if needed."
+    }] : [],
+    sources
+  };
+}
+
 function normalizeAgentSources(raw, query) {
   const items = [];
   const seen = new Set();
@@ -537,8 +641,56 @@ async function handleSocialInvestigate(request, env) {
       }
 
       if (!query.urls.length) {
+        const discovery = await braveWorkerDiscovery(env, query);
+        if (discovery.sources.length) {
+          const fallbackQuery = { ...query, mode: "urls_only", urls: discovery.sources.map(item => item.url).slice(0, 10) };
+          try {
+            const fallbackResult = await geminiSocmint(env, fallbackQuery, false);
+            const analyzedSources = extractToolSources(fallbackResult.payload);
+            const merged = new Map();
+            for (const source of [...discovery.sources, ...analyzedSources]) {
+              if (source?.url) merged.set(source.url, { ...(merged.get(source.url) || {}), ...source });
+            }
+            const sources = Array.from(merged.values()).slice(0, 100);
+            const report = normalizeReport(
+              fallbackResult.parsed,
+              fallbackQuery,
+              sources,
+              fallbackResult.model,
+              "brave_worker+url_context_agent_fallback"
+            );
+            report.agent_meta = {
+              agent: false,
+              fallback: true,
+              search_provider: "brave",
+              agent_failure: agentFailure
+            };
+            await persistReport(env, username, report);
+            return jsonResponse({ ok: true, report, agent: false, fallback: "brave_worker_url_context" }, 200, env);
+          } catch (fallbackError) {
+            const report = normalizeReport(
+              buildDiscoveryOnlyReport(query, discovery.sources, agentFailure),
+              query,
+              discovery.sources,
+              "Brave Search fallback",
+              "brave_worker_discovery_only"
+            );
+            report.agent_meta = {
+              agent: false,
+              fallback: true,
+              search_provider: "brave",
+              agent_failure: agentFailure,
+              analysis_failure: cleanText(fallbackError?.message, 700)
+            };
+            await persistReport(env, username, report);
+            return jsonResponse({ ok: true, report, agent: false, fallback: "brave_worker_discovery_only" }, 200, env);
+          }
+        }
+
         return jsonResponse({
-          error: "The SOCMINT ADK agent could not complete this investigation. CT Atlas does not use Gemini Google Search grounding for SOCMINT discovery. Retry the agent, or add known public URLs for URL-only fallback analysis. Generic web discovery requires an independent provider such as Brave or SearXNG.",
+          error: env.BRAVE_SEARCH_API_KEY
+            ? "The SOCMINT agent failed and Brave fallback returned no usable public sources. Refine the target or add known public URLs."
+            : "The SOCMINT agent failed and the Worker-side independent search fallback is not configured. Add known public URLs or configure Brave for the Worker.",
           code: "SOCMINT_AGENT_UNAVAILABLE",
           detail: agentFailure.message || null
         }, status >= 400 && status < 600 ? status : 502, env);
