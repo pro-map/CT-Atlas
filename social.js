@@ -270,6 +270,24 @@ async function downloadPdf(){
   });
 }
 
+async function refreshAgentStatus(){
+  const badge=$("socialAgentBadge");
+  if(!badge)return;
+  try{
+    const response=await fetch(API+"/health",{cache:"no-store"});
+    const health=await response.json().catch(()=>({}));
+    if(response.ok&&health.social_agent_configured===true){
+      badge.textContent="ADK AGENT";
+      badge.title="CT Atlas SOCMINT is routed through the ADK investigation agent.";
+    }else{
+      badge.textContent="GEMINI FALLBACK";
+      badge.title="ADK agent is not configured yet; CT Atlas is using the existing Gemini SOCMINT workflow.";
+    }
+  }catch(_){
+    badge.textContent="SOCMINT AGENT";
+  }
+}
+
 async function verifySession(){
   const t=token();
   if(!t){location.replace("index.html");return false;}
@@ -287,6 +305,6 @@ document.addEventListener("DOMContentLoaded",async()=>{
   if(!await verifySession())return;
   $("socialForm").addEventListener("submit",runInvestigation);
   $("socialPdfButton").addEventListener("click",downloadPdf);
-  await loadWorkspace();
+  await Promise.all([loadWorkspace(),refreshAgentStatus()]);
 });
 })();
