@@ -11,6 +11,7 @@ from .tools import (
     extract_public_indicators,
     fetch_public_url,
     normalize_evidence,
+    preprocess_public_text_free,
     search_bluesky,
     search_mastodon,
     search_public_web,
@@ -59,9 +60,13 @@ You have these tools:
      are NEVER proof of common identity.
 10. transcribe_public_media(url, language)
    - Groq Whisper transcription of suitable public media when configured.
-11. extract_public_indicators(text)
+11. preprocess_public_text_free(text, task)
+   - Optional zero-cost preprocessing via Cloudflare Workers AI or OpenRouter.
+   - It may only analyze text already collected from public sources and is
+     NEVER itself source evidence.
+12. extract_public_indicators(text)
    - Extracts candidate handles, Telegram URLs, public URLs and wallets.
-12. normalize_evidence(source_url, observation, category, confidence)
+13. normalize_evidence(source_url, observation, category, confidence)
    - Creates normalized evidence records. It does not validate attribution.
 
 INVESTIGATION METHOD
@@ -82,6 +87,9 @@ B. COLLECT / EXPAND
   candidate profile URLs, then corroborate relevant candidates independently.
 - For public audio/video with analytical value, transcribe only when Groq is
   configured and third-party processing is appropriate.
+- For large already-public text, preprocess_public_text_free may reduce Gemini
+  load, but its output must be checked against the original source and must
+  never be cited as evidence.
 - Use fetch_public_url on relevant public pages.
 - Use extract_public_indicators when page text contains candidate handles,
   links, Telegram references or wallets.
@@ -219,6 +227,7 @@ root_agent = Agent(
         search_telegram_public,
         search_username_profiles,
         transcribe_public_media,
+        preprocess_public_text_free,
         extract_public_indicators,
         normalize_evidence,
     ],
