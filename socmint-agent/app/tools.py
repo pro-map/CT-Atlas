@@ -330,10 +330,15 @@ _twitch_token_cache: dict[str, Any] = {"token": "", "expires_at": 0.0}
 
 
 def social_capabilities() -> dict[str, Any]:
-    """Report which free/public SOCMINT collectors are currently usable.
+    """Report which SOCMINT collectors are currently usable.
+
+    Most of these are genuinely free/public (no key, or a free-tier key):
+    Bluesky and basic Mastodon discovery need no key at all. x_api is the one
+    exception -- X has required a paid API subscription (Basic tier or
+    higher) for search access since 2023, so x_api being true means a paid
+    subscription is configured, not a free source. See x_api_requires_paid_tier.
 
     This returns configuration state only and never exposes API keys or secrets.
-    Bluesky and basic Mastodon discovery are public and need no key.
     """
     provider = os.getenv("SOCMINT_SEARCH_PROVIDER", "disabled").strip().lower()
     reddit_ready = bool(
@@ -356,6 +361,7 @@ def social_capabilities() -> dict[str, Any]:
         "flickr_api": bool(os.getenv("FLICKR_API_KEY", "").strip()),
         "tumblr_api": bool(os.getenv("TUMBLR_API_KEY", "").strip()),
         "x_api": bool(os.getenv("X_BEARER_TOKEN", "").strip()),
+        "x_api_requires_paid_tier": True,
         "reddit_oauth": reddit_ready,
         "groq_whisper": bool(os.getenv("GROQ_API_KEY", "").strip()),
         "cloudflare_workers_ai": bool(

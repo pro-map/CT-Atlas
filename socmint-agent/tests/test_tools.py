@@ -31,6 +31,9 @@ def test_free_public_capabilities_and_optional_keys(monkeypatch):
     assert caps["youtube_api"] is False
     assert caps["reddit_oauth"] is False
     assert caps["groq_whisper"] is False
+    # X has required a paid API tier for search since 2023 -- this must never
+    # be reported as a free source alongside Bluesky/Mastodon/4chan.
+    assert caps["x_api_requires_paid_tier"] is True
 
     assert search_youtube("test")["status"] == "unavailable"
     assert search_reddit("test")["status"] == "unavailable"
