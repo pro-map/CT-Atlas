@@ -120,3 +120,72 @@ The agent must distinguish:
 A similar username, profile image, narrative, wallet mention or shared channel
 is never treated as proof of common identity, ownership or terrorist
 affiliation.
+
+
+## Connect the deployed agent to CT Atlas
+
+The Cloudflare Worker uses the ADK agent only when both values exist:
+
+- `SOCMINT_AGENT_URL` — the HTTPS base URL of the deployed agent service.
+- `SOCMINT_AGENT_SHARED_SECRET` — a long random secret shared with the agent
+  service as `CT_ATLAS_AGENT_SHARED_SECRET`.
+
+The agent service must receive the same secret:
+
+```
+CT_ATLAS_AGENT_SHARED_SECRET=<same-random-secret>
+```
+
+CT Atlas then calls:
+
+```
+POST <SOCMINT_AGENT_URL>/investigate
+X-CT-Atlas-Agent-Key: <shared-secret>
+```
+
+The Worker health endpoint exposes only:
+
+```json
+{
+  "social_agent_configured": true,
+  "social_agent_client_version": "..."
+}
+```
+
+It never exposes the URL or secret.
+
+When `social_agent_configured` is false, the Social Media Analysis page displays
+`GEMINI FALLBACK`. When both settings are present and the new Worker is
+deployed, the badge changes to `ADK AGENT`.
+
+### Cloudflare secret commands
+
+From a machine with Wrangler authenticated to the CT Atlas Cloudflare account:
+
+```bash
+cd cloudflare-worker
+npx wrangler secret put SOCMINT_AGENT_URL
+npx wrangler secret put SOCMINT_AGENT_SHARED_SECRET
+```
+
+The URL is not intrinsically sensitive, but storing both through Worker secrets
+keeps configuration simple.
+
+### Agent-side environment
+
+For a Cloud Run deployment, configure at least:
+
+```
+GEMINI_API_KEY=<AI Studio key>
+CT_ATLAS_AGENT_SHARED_SECRET=<same shared secret>
+SOCMINT_AGENT_MODEL=gemini-2.5-flash-lite
+SOCMINT_SEARCH_PROVIDER=disabled
+```
+
+Because Google Search grounding is unavailable on the current Gemini API
+project, leave `SOCMINT_SEARCH_PROVIDER=disabled` initially. The agent will
+still iterate through supplied public URLs and relevant links discovered from
+those pages.
+
+Later, public-web discovery can be added independently with SearXNG or Brave
+without changing the CT Atlas Worker or UI.
