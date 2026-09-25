@@ -4730,13 +4730,31 @@ html, body {
 #headerSituationBrief {
     order: 4 !important;
     min-height: 80px !important;
-    max-height: 80px !important;
-    padding: 5px 9px 6px !important;
+    /* No max-height: the old 80px cap sat ~6px below the end of a 3-line brief
+       (buttons row + title + 3 text lines) and clipped its last line under the
+       bar that separates the header from the map. The text keeps its own
+       3-line clamp, so the block cannot grow unbounded. */
+    max-height: none !important;
+    padding: 5px 9px 7px !important;
     overflow: hidden !important;
 }
+/* Title and buttons share one row (the title used to sit on a second row,
+   which is what pushed the text down). */
 #headerSituationTopline {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
     margin-bottom: 4px !important;
     gap: 5px !important;
+}
+#headerSituationTitle {
+    order: 0;
+    margin-top: 0 !important;
+}
+#headerSituationActions {
+    order: 1;
+    width: auto !important;
+    flex: 0 0 auto;
 }
 #headerSituationText {
     display: -webkit-box !important;
