@@ -28,6 +28,8 @@ on:
       - "facial.js"
       - "facial.css"
       - "facial-intelligence.svg"
+      - "tab-health.js"
+      - "tab-health.css"
       - "ct-atlas-runtime.json"
       - "daily-quiz.js"
       - "daily-quiz.css"

@@ -18,6 +18,7 @@ cp index.html main.html crypto.html social.html facial.html privacy.html robots.
    intelligence-map.svg crypto-intelligence.svg social-intelligence.svg facial-intelligence.svg \
    daily-quiz.js daily-quiz.css daily-quiz.json \
    usage-admin.js usage-admin.css usage-auth-fix.js \
+   tab-health.js tab-health.css \
    "$STAGING"/
 
 # index.html references the logo as "CT-ATLAS.png" (exact case) -- GitHub
@@ -26,7 +27,7 @@ cp index.html main.html crypto.html social.html facial.html privacy.html robots.
 # copied under the exact uppercase name the page actually requests.
 cp ct-atlas.png "$STAGING/CT-ATLAS.png"
 
-for required in facial.html facial.js facial.css facial-intelligence.svg; do
+for required in facial.html facial.js facial.css facial-intelligence.svg tab-health.js tab-health.css; do
   if [ ! -s "$STAGING/$required" ]; then
     echo "Mirror is missing required Facial Intelligence asset: $required" >&2
     exit 1

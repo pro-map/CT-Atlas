@@ -1,0 +1,44 @@
+/* Health status button + panel shared by the Crypto, Social and Facial tabs. */
+.th-group{display:flex;align-items:center;gap:8px}
+.th-button{display:inline-flex;align-items:center;gap:7px;border:1px solid #405563;background:#202f3b;color:#fff;border-radius:5px;padding:9px 12px;cursor:pointer;font-size:11px;font-weight:800;letter-spacing:.06em;font-family:inherit}
+.th-button:hover{background:#28394a;border-color:#5a7386}
+.th-button:focus-visible{outline:2px solid #74c5e8;outline-offset:2px}
+.th-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#71808b;flex:0 0 auto}
+.th-button[data-state="operational"] .th-dot,.th-banner-operational .th-dot{background:#66d9a7;box-shadow:0 0 6px rgba(102,217,167,.6)}
+.th-button[data-state="degraded"] .th-dot,.th-banner-degraded .th-dot{background:#e8c45f;box-shadow:0 0 6px rgba(232,196,95,.55)}
+.th-button[data-state="down"] .th-dot,.th-banner-down .th-dot{background:#f07a7a;box-shadow:0 0 6px rgba(240,122,122,.6)}
+
+.th-panel{position:fixed;top:72px;right:16px;z-index:5000;width:min(430px,calc(100vw - 24px));max-height:calc(100vh - 92px);overflow:auto;background:rgba(7,20,30,.98);border:1px solid #2a4658;border-radius:5px;box-shadow:0 20px 60px rgba(0,0,0,.55);color:#dce8ef;font-family:Arial,Helvetica,sans-serif}
+.th-panel[hidden]{display:none}
+.th-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px 11px;background:#0a1924;border-bottom:1px solid #294151;position:sticky;top:0}
+.th-title{font-size:11px;font-weight:800;letter-spacing:.11em;color:#edf4f8}
+.th-subtitle{margin-top:4px;color:#70899b;font-size:8px;letter-spacing:.08em;text-transform:uppercase}
+.th-close{width:26px;height:26px;padding:0;border:1px solid #294455;border-radius:3px;background:#0a1721;color:#9bb0be;font-size:18px;line-height:1;cursor:pointer}
+.th-body{padding:12px}
+.th-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:4px;border:1px solid #294151;background:#081720;font-size:11px;letter-spacing:.04em}
+.th-banner-operational{border-color:#2f6b52;color:#66d9a7}
+.th-banner-degraded{border-color:#7a6630;color:#e8c45f}
+.th-banner-down{border-color:#8a4a4a;color:#f0a1a1}
+.th-section{margin-top:10px;padding:10px;background:#081720;border:1px solid rgba(96,132,154,.18);border-radius:3px}
+.th-section-title{margin-bottom:6px;color:#9eb4c2;font-size:8px;font-weight:800;letter-spacing:.12em}
+.th-row{padding:6px 0;border-bottom:1px solid rgba(107,142,162,.09);font-size:10px;line-height:1.4}
+.th-row:last-child{border-bottom:0}
+.th-row-main{display:flex;justify-content:space-between;gap:14px;color:#8fa6b6}
+.th-row-main em{color:#5f7686;font-size:8px;font-style:normal;text-transform:uppercase;letter-spacing:.08em}
+.th-row-main strong{color:#dce8ef;font-weight:700;text-align:right}
+.th-detail{margin-top:2px;color:#6f8899;font-size:9px;word-break:break-word}
+.th-operational{color:#66d9a7!important}
+.th-configured{color:#8ec8e8!important}
+.th-degraded,.th-not_configured{color:#e8c45f!important}
+.th-down{color:#f07a7a!important}
+.th-unknown{color:#8fa6b6!important}
+.th-warning{margin-top:10px;padding:9px 10px;border:1px solid #7a6630;background:#302718;color:#e7c06f;border-radius:4px;font-size:9px;line-height:1.5}
+.th-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;color:#70899b;font-size:9px}
+.th-refresh{border:1px solid #405563;background:#202f3b;color:#fff;border-radius:4px;padding:6px 10px;font-size:9px;font-weight:800;letter-spacing:.06em;cursor:pointer}
+.th-refresh:disabled{opacity:.6;cursor:default}
+.th-note{margin-top:10px;padding:8px 10px;border-left:2px solid #29485b;background:rgba(3,11,17,.4);color:#647d8e;font-size:8px;line-height:1.55}
+
+@media(max-width:620px){
+  .th-panel{top:64px;right:8px;left:8px;width:auto}
+  .th-button{padding:8px 10px;font-size:10px}
+}

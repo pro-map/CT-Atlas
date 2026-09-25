@@ -9,6 +9,9 @@ on:
       - "social.html"
       - "social.js"
       - "social.css"
+      - "facial.html"
+      - "tab-health.js"
+      - "tab-health.css"
       - "pdf-export.js"
       - "deep-search.js"
       - "quick-ask.js"
@@ -50,6 +53,12 @@ jobs:
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.html >/tmp/social.html \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.js >/tmp/social.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.css >/tmp/social.css \
+              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/tab-health.js >/tmp/tab-health.js \
+              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/facial.html >/tmp/facial.html \
+              && grep -q '/health/status' /tmp/tab-health.js \
+              && grep -q 'data-health-scope="crypto"' /tmp/crypto.html \
+              && grep -q 'data-health-scope="social"' /tmp/social.html \
+              && grep -q 'data-health-scope="facial"' /tmp/facial.html \
               && grep -q 'pdf-export.js' /tmp/index.html \
               && grep -q 'window.CTAtlasPdf' /tmp/pdf-export.js \
               && grep -q 'Behavioral Pattern Detection' /tmp/crypto.html \
@@ -144,6 +153,27 @@ jobs:
             throw new Error("Worker authentication is not using the required secret mode: " + health.auth_mode);
           }
           console.log("Worker health valid:", health.version, health.auth_mode);
+          NODE
+
+      # The Health status button of the Crypto / Social / Facial tabs reads this
+      # endpoint. Only its shape and the Worker itself are asserted: an external
+      # provider or a Cloud Run cold start being briefly slow must not fail a deploy.
+      - name: Check live health status endpoint
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --max-time 40 https://ct-report-generator.fairpeace.workers.dev/health/status >/tmp/health-status.json
+          node - <<'NODE'
+          const fs = require("fs");
+          const raw = fs.readFileSync("/tmp/health-status.json", "utf8");
+          const status = JSON.parse(raw);
+          if (status.ok !== true) throw new Error("Health status is not ok");
+          const components = status.components || {};
+          for (const key of ["worker", "bitcoin", "evm", "tron", "sanctions", "agent", "visual", "brave", "gemini"]) {
+            if (!components[key] || typeof components[key].status !== "string") throw new Error("Health status component missing: " + key);
+          }
+          if (components.worker.status !== "operational") throw new Error("Worker component is not operational");
+          if (/secret|apikey|api_key/i.test(raw)) throw new Error("Health status must not expose credentials");
+          console.log("Health status:", Object.entries(components).map(([k, v]) => k + "=" + v.status).join(" "));
           NODE
 
       - name: Check CORS allowlist
