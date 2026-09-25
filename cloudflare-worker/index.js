@@ -56,7 +56,7 @@ crypto_monitor: CRYPTO_MONITOR_VERSION,
 sanctions: SANCTIONS_VERSION,
 social: SOCIAL_INTEL_VERSION,
 visual: VISUAL_INTEL_VERSION
-});
+}, Date.now(), { force: url.searchParams.get("refresh") === "1" });
 }
 if (url.pathname === "/auth-login" && request.method === "POST") {
 let authBody;

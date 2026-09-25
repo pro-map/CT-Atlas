@@ -9,8 +9,17 @@ import { sanctionsHealth } from "./sanctions.js";
 const HEALTH_STATUS_VERSION = "health-status-v1";
 
 const PROBE_TIMEOUT_MS = 7000;
+// Cloud Run services (SOCMINT agent, Facial) scale to zero when idle: the first
+// request after a quiet period pays a container cold start of several seconds.
+// That is slow, not down, so they get a much longer timeout.
+const COLD_START_TIMEOUT_MS = 25000;
 const SLOW_MS = 3500;
-const CACHE_MS = 60 * 1000;
+const CACHE_OK_MS = 60 * 1000;
+// A failure is cached only briefly so a transient one (or a service that has just
+// woken up) does not stay on screen for a minute.
+const CACHE_DOWN_MS = 10 * 1000;
+const FORCE_REFRESH_MIN_AGE_MS = 5 * 1000;
+const COLD_START_NOTE = "Slow response: likely a cold start after inactivity (the service scales to zero when idle).";
 
 let statusCache = { at: 0, body: null };
 
@@ -29,24 +38,31 @@ function redact(text, secrets) {
 // Runs one probe. The probe returns extra fields (and may set its own `status`,
 // e.g. "degraded"); a throw becomes "down". Latency above SLOW_MS is "degraded":
 // a Cloud Run cold start or an overloaded provider is worth seeing.
-async function timedProbe(run, secrets = []) {
+async function timedProbe(run, secrets = [], { coldStart = false } = {}) {
   const started = Date.now();
   try {
     const detail = (await run()) || {};
     const latency = Date.now() - started;
-    return { ...detail, status: detail.status || (latency > SLOW_MS ? "degraded" : "operational"), latency_ms: latency };
+    const slow = latency > SLOW_MS;
+    return {
+      ...detail,
+      status: detail.status || (slow ? "degraded" : "operational"),
+      latency_ms: latency,
+      ...(slow && coldStart ? { note: COLD_START_NOTE } : {})
+    };
   } catch (error) {
     const timedOut = error?.name === "TimeoutError" || error?.name === "AbortError";
+    const limit = coldStart ? COLD_START_TIMEOUT_MS : PROBE_TIMEOUT_MS;
     return {
       status: "down",
       latency_ms: Date.now() - started,
-      error: cleanText(timedOut ? "Timed out" : redact(error?.message || "Request failed", secrets), 160)
+      error: cleanText(timedOut ? "Timed out after " + Math.round(limit / 1000) + "s" : redact(error?.message || "Request failed", secrets), 160)
     };
   }
 }
 
-async function probeFetch(url, init = {}) {
-  const response = await fetch(url, { ...init, signal: AbortSignal.timeout(PROBE_TIMEOUT_MS) });
+async function probeFetch(url, init = {}, timeoutMs = PROBE_TIMEOUT_MS) {
+  const response = await fetch(url, { ...init, signal: AbortSignal.timeout(timeoutMs) });
   if (!response.ok) throw new Error("HTTP " + response.status);
   return response;
 }
@@ -128,7 +144,7 @@ function probeAgent(env) {
   const base = httpsBase(env?.SOCMINT_AGENT_URL);
   if (!base || !String(env?.SOCMINT_AGENT_SHARED_SECRET || "").trim()) return notConfigured();
   return timedProbe(async () => {
-    const payload = await (await probeFetch(base + "/health")).json();
+    const payload = await (await probeFetch(base + "/health", {}, COLD_START_TIMEOUT_MS)).json();
     if (!payload?.ok) throw new Error("Agent reported not ok");
     return {
       version: cleanText(payload.version, 80),
@@ -136,14 +152,14 @@ function probeAgent(env) {
       search_provider: cleanText(payload.search_provider, 40),
       collectors: booleanFlags(payload.social_sources)
     };
-  }, [base]);
+  }, [base], { coldStart: true });
 }
 
 function probeVisual(env) {
   const base = httpsBase(env?.VISUAL_INTEL_URL);
   if (!base || !String(env?.VISUAL_INTEL_SHARED_SECRET || "").trim()) return notConfigured();
   return timedProbe(async () => {
-    const payload = await (await probeFetch(base + "/health")).json();
+    const payload = await (await probeFetch(base + "/health", {}, COLD_START_TIMEOUT_MS)).json();
     if (!payload?.ok) throw new Error("Service reported not ok");
     return {
       version: cleanText(payload.version, 80),
@@ -151,7 +167,7 @@ function probeVisual(env) {
       ocr: cleanText(payload.ocr, 60),
       identity_recognition: payload.identity_recognition === true
     };
-  }, [base]);
+  }, [base], { coldStart: true });
 }
 
 // Credentials that are present but deliberately not exercised (each call would
@@ -183,9 +199,20 @@ async function buildHealthStatus(env, versions = {}) {
   };
 }
 
-async function handleHealthStatus(env, versions = {}, now = Date.now()) {
-  if (statusCache.body && now - statusCache.at < CACHE_MS) {
-    return jsonResponse({ ...statusCache.body, cached: true, age_seconds: Math.round((now - statusCache.at) / 1000) }, 200, env);
+function hasFailure(body) {
+  return Object.values(body?.components || {}).some(component => component?.status === "down");
+}
+
+// `force` (the panel's REFRESH button) bypasses the cache, but not more often than
+// every few seconds: the endpoint is public and each run spends provider quota.
+async function handleHealthStatus(env, versions = {}, now = Date.now(), { force = false } = {}) {
+  if (statusCache.body) {
+    const age = now - statusCache.at;
+    const ttl = hasFailure(statusCache.body) ? CACHE_DOWN_MS : CACHE_OK_MS;
+    const fresh = age < ttl && !(force && age >= FORCE_REFRESH_MIN_AGE_MS);
+    if (fresh) {
+      return jsonResponse({ ...statusCache.body, cached: true, age_seconds: Math.round(age / 1000) }, 200, env);
+    }
   }
   const body = await buildHealthStatus(env, versions);
   statusCache = { at: now, body };

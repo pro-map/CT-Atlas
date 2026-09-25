@@ -117,7 +117,7 @@ test("a failing dependency is 'down' with a short reason, and secrets are redact
   assert.equal(c.tron.status,"down");
   assert.equal(c.tron.error,"HTTP 503");
   assert.equal(c.agent.status,"down");
-  assert.equal(c.agent.error,"Timed out");
+  assert.equal(c.agent.error,"Timed out after 25s","the agent gets the long Cloud Run timeout, and the message says how long");
   assert.equal(c.bitcoin.status,"operational","one failing dependency must not affect the others");
 });
 
@@ -170,4 +170,74 @@ test("worker wiring: /health/status is routed and the UI tabs load the shared he
   const index=fs.readFileSync("cloudflare-worker/index.js","utf8");
   assert.ok(index.includes('"/health/status"'));
   assert.ok(index.includes("handleHealthStatus"));
+});
+
+test("a Cloud Run cold start is reported as slow ('degraded' with a note), not as unavailable",async()=>{
+  let clock=1_000_000;
+  class SlowDate extends Date{static now(){clock+=4000;return clock;}}
+  const {fetchImpl}=router();
+  const h=harness(fetchImpl,{Date:SlowDate});
+  const {body}=await h.handleHealthStatus(FULL_ENV);
+  for(const name of ["agent","visual"]){
+    assert.equal(body.components[name].status,"degraded",name);
+    assert.match(body.components[name].note,/cold start/i,name);
+    assert.equal(body.components[name].version.length>0,true,"a slow but successful probe must still carry its details");
+  }
+  assert.equal(body.components.bitcoin.note,undefined,"providers are not cold-start services");
+});
+
+test("Cloud Run services get a long timeout, ordinary providers keep the short one",async()=>{
+  const timeouts=[];
+  const spy={timeout:ms=>{timeouts.push(ms);return AbortSignal.timeout(ms);}};
+  const {fetchImpl,calls}=router();
+  const h=harness(fetchImpl,{AbortSignal:spy});
+  await h.handleHealthStatus(FULL_ENV);
+  assert.ok(timeouts.includes(25000),"agent/visual must allow a cold start");
+  assert.ok(timeouts.includes(7000),"providers keep the short timeout");
+  assert.equal(timeouts.filter(ms=>ms===25000).length,2,"exactly the two Cloud Run services");
+  assert.ok(calls.some(url=>url.includes("agent.example"))&&calls.some(url=>url.includes("visual.example")));
+});
+
+test("a failure is cached for only 10s, so a service that just woke up is not shown as down for a minute",async()=>{
+  let agentUp=false;
+  const {fetchImpl}=router({
+    "agent.example":async()=>{
+      if(!agentUp){const error=new Error("x");error.name="TimeoutError";throw error;}
+      return ok({ok:true,version:"v",model:"m",search_provider:"brave",social_sources:{}});
+    }
+  });
+  const h=harness(fetchImpl);
+  const t0=Date.now();
+  const first=await h.handleHealthStatus(FULL_ENV,{},t0);
+  assert.equal(first.body.components.agent.status,"down");
+  agentUp=true;
+  const within=await h.handleHealthStatus(FULL_ENV,{},t0+8_000);
+  assert.equal(within.body.cached,true,"within 10s the failure is still cached");
+  const after=await h.handleHealthStatus(FULL_ENV,{},t0+11_000);
+  assert.equal(after.body.cached,false);
+  assert.equal(after.body.components.agent.status,"operational");
+});
+
+test("a forced refresh bypasses the cache, but not more than once every 5s",async()=>{
+  const {fetchImpl,calls}=router();
+  const h=harness(fetchImpl);
+  const t0=Date.now();
+  await h.handleHealthStatus(FULL_ENV,{},t0);
+  const bitcoin=()=>calls.filter(url=>url.includes("blockstream")).length;
+  assert.equal(bitcoin(),1);
+  const tooSoon=await h.handleHealthStatus(FULL_ENV,{},t0+2_000,{force:true});
+  assert.equal(tooSoon.body.cached,true,"a spammed refresh must not hit the providers");
+  assert.equal(bitcoin(),1);
+  const allowed=await h.handleHealthStatus(FULL_ENV,{},t0+6_000,{force:true});
+  assert.equal(allowed.body.cached,false);
+  assert.equal(bitcoin(),2);
+});
+
+test("the panel's REFRESH asks for a fresh run and the browser waits long enough for a cold start",()=>{
+  const js=fs.readFileSync("tab-health.js","utf8");
+  assert.ok(js.includes('"?refresh=1"'));
+  assert.match(js,/FETCH_TIMEOUT_MS=45000/);
+  assert.ok(js.includes("component.note"),"the cold-start explanation must be shown");
+  const index=fs.readFileSync("cloudflare-worker/index.js","utf8");
+  assert.ok(index.includes('searchParams.get("refresh") === "1"'));
 });

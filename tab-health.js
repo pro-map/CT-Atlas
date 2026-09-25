@@ -8,7 +8,8 @@
 
 const API="https://ct-report-generator.fairpeace.workers.dev";
 const REFRESH_MS=60000;
-const FETCH_TIMEOUT_MS=15000;
+// The Worker may wait up to ~25s on a Cloud Run service that is waking up from idle.
+const FETCH_TIMEOUT_MS=45000;
 const script=document.currentScript;
 const scope=String((script&&script.dataset.healthScope)||"").toLowerCase();
 
@@ -106,6 +107,8 @@ function resolve(row,components){
 function detailFor(key,component){
   if(component.detail)return component.detail;
   const parts=[];
+  // e.g. "likely a cold start after inactivity": explains a slow-but-working service.
+  if(component.note)parts.push(component.note);
   if(component.block_height)parts.push("Block "+Number(component.block_height).toLocaleString("en-GB"));
   if(key==="sanctions"&&component.address_count){
     parts.push(Number(component.address_count).toLocaleString("en-GB")+" addresses"+(component.published?" · published "+component.published:""));
@@ -216,7 +219,8 @@ async function refresh(force){
   const controller=new AbortController();
   const abortTimer=setTimeout(()=>controller.abort(),FETCH_TIMEOUT_MS);
   try{
-    const response=await fetch(API+"/health/status",{cache:"no-store",signal:controller.signal});
+    // REFRESH asks the Worker for a fresh run instead of its cached answer.
+    const response=await fetch(API+"/health/status"+(force===true?"?refresh=1":""),{cache:"no-store",signal:controller.signal});
     if(!response.ok)throw new Error("HTTP "+response.status);
     const data=await response.json();
     if(!data||!data.components)throw new Error("Unexpected response");
