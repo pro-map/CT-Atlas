@@ -506,14 +506,79 @@ async function sha256(text) {
   return [...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,"0")).join("");
 }
 
-async function gateCall(env, path, payload) {
-  const id = env.REPORT_GATE.idFromName("global");
-  const stub = env.REPORT_GATE.get(id);
+let euGateMigrationPromise = null;
+
+function reportGateStub(env, jurisdiction = "") {
+  const namespace = jurisdiction && typeof env.REPORT_GATE?.jurisdiction === "function"
+    ? env.REPORT_GATE.jurisdiction(jurisdiction)
+    : env.REPORT_GATE;
+  const id = namespace.idFromName("global");
+  return namespace.get(id);
+}
+
+async function rawGateFetch(stub, path, payload = {}) {
   return stub.fetch("https://gate.internal" + path, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   });
+}
+
+async function ensureEuGateMigrated(env) {
+  if (typeof env.REPORT_GATE?.jurisdiction !== "function") return;
+  if (euGateMigrationPromise) return euGateMigrationPromise;
+
+  euGateMigrationPromise = (async () => {
+    const euStub = reportGateStub(env, "eu");
+    const statusResponse = await rawGateFetch(euStub, "/migration-status");
+    const status = await statusResponse.json().catch(() => ({}));
+    if (statusResponse.ok && status?.migrated) return;
+
+    const legacyStub = reportGateStub(env);
+    let startAfter = "";
+    let imported = 0;
+
+    for (let page = 0; page < 1000; page++) {
+      const exportResponse = await rawGateFetch(legacyStub, "/migration-export", { start_after: startAfter });
+      const exported = await exportResponse.json().catch(() => ({}));
+      if (!exportResponse.ok || !exported?.ok) {
+        throw new Error("Unable to export legacy CT Atlas Durable Object state.");
+      }
+
+      const entries = Array.isArray(exported.entries) ? exported.entries : [];
+      if (entries.length) {
+        const importResponse = await rawGateFetch(euStub, "/migration-import", { entries });
+        const importedPayload = await importResponse.json().catch(() => ({}));
+        if (!importResponse.ok || !importedPayload?.ok) {
+          throw new Error("Unable to import CT Atlas state into EU Durable Object.");
+        }
+        imported += Number(importedPayload.imported || 0);
+      }
+
+      if (!exported.has_more || !exported.last_key || exported.last_key === startAfter) break;
+      startAfter = exported.last_key;
+    }
+
+    const finalizeResponse = await rawGateFetch(euStub, "/migration-finalize", { imported });
+    if (!finalizeResponse.ok) throw new Error("Unable to finalize CT Atlas EU Durable Object migration.");
+
+    // Remove the legacy copy only after the EU object is fully populated and marked complete.
+    const retireResponse = await rawGateFetch(legacyStub, "/migration-retire", {});
+    if (!retireResponse.ok) {
+      console.warn("CT Atlas EU migration completed, but legacy Durable Object retirement failed.");
+    }
+  })().catch(error => {
+    euGateMigrationPromise = null;
+    throw error;
+  });
+
+  return euGateMigrationPromise;
+}
+
+async function gateCall(env, path, payload) {
+  await ensureEuGateMigrated(env);
+  const stub = reportGateStub(env, typeof env.REPORT_GATE?.jurisdiction === "function" ? "eu" : "");
+  return rawGateFetch(stub, path, payload);
 }
 
 async function extractGeminiText(payload) {
