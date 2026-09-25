@@ -5,3 +5,6 @@ _pages_mirror/
 .wrangler/
 __pycache__/
 *.pyc
+.env
+.env.*
+!.env.example
