@@ -36,7 +36,7 @@ concurrency:
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - name: Check public assets
         run: |
@@ -94,6 +94,20 @@ jobs:
           if (!Number.isInteger(quiz.correct_index) || quiz.correct_index < 0 || quiz.correct_index > 2) throw new Error("Quiz answer invalid");
           console.log("Public assets valid.");
           NODE
+
+      # The Worker and GitHub Pages deploy in parallel after a push, and the Worker
+      # only reads sanctions-crypto.json once Pages serves it. Give that up to ~6
+      # minutes to converge; the strict check below still fails if it never does.
+      - name: Wait for the Worker to load the sanctions list
+        run: |
+          for attempt in {1..24}; do
+            if curl --silent --max-time 25 https://ct-report-generator.fairpeace.workers.dev/health | grep -q '"sanctions":{"status":"ok"'; then
+              echo "Sanctions list loaded by the Worker."
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "Worker did not report a loaded sanctions list in time; the strict health check will decide."
 
       - name: Check Worker health
         run: |
