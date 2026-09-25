@@ -33,6 +33,7 @@ on:
       - "daily-quiz.css"
       - "daily-quiz.json"
       - "daily-quiz-history.json"
+      - "sanctions-crypto.json"
       - "feedback.css"
   workflow_dispatch:
 
