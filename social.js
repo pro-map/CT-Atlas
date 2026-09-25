@@ -47,6 +47,49 @@ function sourceLinks(urls){
   return (urls||[]).map(url=>'<a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(url)+'</a>').join("<br>");
 }
 
+function cryptoUrl(address){
+  const url=new URL("crypto.html",location.href);
+  url.searchParams.set("q",address);
+  url.searchParams.set("autorun","1");
+  return url.toString();
+}
+
+function renderWallets(report){
+  const section=$("reportWalletsSection");
+  const screening=report.wallet_screening;
+  const wallets=Array.isArray(screening?.wallets)?screening.wallets:[];
+  // Older reports have no screening block; reports without wallet strings have nothing to show.
+  if(!screening||!wallets.length){section.hidden=true;return;}
+  section.hidden=false;
+
+  const unscreened=screening.status==="unavailable";
+  const source=screening.list?.sources?.[0];
+  const notes=[];
+  if(unscreened){
+    notes.push("Sanctions screening was NOT performed"+(screening.reason?" ("+screening.reason+")":"")+". \"Not screened\" below is not a clean result.");
+  }else{
+    notes.push("Screened against "+(source?.name||"the sanctions list")+(source?.published?" · published "+source.published:"")+".");
+    if(screening.status==="stale")notes.push("The list is older than 7 days or could not be refreshed; recent designations may be missing.");
+  }
+  $("reportWalletsStatus").className="wallet-status"+(screening.hit?" hit":unscreened?" warn":"");
+  $("reportWalletsStatus").textContent=(screening.hit?"SANCTIONS MATCH · ":"")+notes.join(" ");
+
+  $("reportWallets").innerHTML=wallets.map(wallet=>{
+    const terrorism=Boolean(wallet.entities?.some(entity=>entity.terrorism));
+    const badge=wallet.listed
+      ? '<span class="confidence '+(terrorism?"LOW":"MEDIUM")+'">'+(terrorism?"TERRORISM PROGRAM":"SANCTIONS LIST")+'</span>'
+      : '<span class="confidence '+(wallet.screened?"HIGH":"MEDIUM")+'">'+(wallet.screened?"NO LIST MATCH":"NOT SCREENED")+'</span>';
+    return '<div class="finding wallet-item'+(wallet.listed?" listed":"")+'">'+
+      '<div class="finding-top"><div class="finding-title">'+esc(String(wallet.family||"").toUpperCase())+
+      (wallet.currency?' · '+esc(wallet.currency):'')+'</div>'+badge+'</div>'+
+      '<code class="wallet-address">'+esc(wallet.address)+'</code>'+
+      (wallet.listed&&wallet.summary?'<div class="finding-basis">Listed: '+esc(wallet.summary)+'</div>':'')+
+      '<div class="wallet-actions"><button type="button" class="secondary-button" data-crypto-address="'+esc(wallet.address)+'">ANALYSE IN CRYPTO ↗</button></div>'+
+      '</div>';
+  }).join("");
+  $("reportWalletsScope").textContent=screening.scope_note||"";
+}
+
 function renderReport(report){
   currentReport=report;
   $("socialEmpty").hidden=true;
@@ -94,6 +137,8 @@ function renderReport(report){
         <td>${esc(item.basis)}</td>
       </tr>`).join("")
     : '<tr><td colspan="5">No supported entities extracted.</td></tr>';
+
+  renderWallets(report);
 
   $("reportWatchpoints").innerHTML=(report.watchpoints||[]).length
     ? report.watchpoints.map(item=>`
@@ -245,6 +290,15 @@ function pdfBlocks(report){
   for(const entity of report.entities||[]){
     blocks.push({text:[entity.type,entity.value,entity.platform,entity.confidence].filter(Boolean).join(" · ")+"\n"+(entity.basis||"")+(entity.source_urls?.length?"\nSources: "+entity.source_urls.join(" · "):""),type:"body"});
   }
+  const screening=report.wallet_screening;
+  if(screening?.wallets?.length){
+    blocks.push({text:"WALLETS & SANCTIONS SCREENING",type:"heading"});
+    for(const wallet of screening.wallets){
+      const state=wallet.listed?"SANCTIONS LIST MATCH: "+(wallet.summary||""):(wallet.screened?"No list match":"NOT SCREENED");
+      blocks.push({text:[wallet.family,wallet.currency].filter(Boolean).join(" · ").toUpperCase()+"\n"+wallet.address+"\n"+state,type:"body"});
+    }
+    blocks.push({text:screening.scope_note||"",type:"body"});
+  }
   blocks.push({text:"OUTLOOK / WATCHPOINTS",type:"heading"});
   for(const item of report.watchpoints||[]){
     blocks.push({text:(item.issue||"")+"\nIndicator: "+(item.indicator||""),type:"body"});
@@ -305,6 +359,12 @@ document.addEventListener("DOMContentLoaded",async()=>{
   if(!await verifySession())return;
   $("socialForm").addEventListener("submit",runInvestigation);
   $("socialPdfButton").addEventListener("click",downloadPdf);
+  // window.open WITHOUT noopener: the new tab must inherit this tab's
+  // sessionStorage (same origin) or the Crypto page would ask to log in again.
+  $("reportWallets").addEventListener("click",event=>{
+    const button=event.target.closest("[data-crypto-address]");
+    if(button)window.open(cryptoUrl(button.dataset.cryptoAddress),"_blank");
+  });
   await Promise.all([loadWorkspace(),refreshAgentStatus()]);
 });
 })();

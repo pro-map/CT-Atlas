@@ -3,9 +3,12 @@ const assert=require("node:assert/strict");
 const fs=require("node:fs");
 const vm=require("node:vm");
 
-let source=fs.readFileSync("cloudflare-worker/social-intel.js","utf8")
+const stripModuleSyntax=file=>fs.readFileSync(file,"utf8")
   .replace(/import\s*\{[\s\S]*?\}\s*from\s*["']\.\/[^"']+["'];\s*/g,"")
   .replace(/export\s*\{[\s\S]*?\};\s*$/,"");
+let source=stripModuleSyntax("cloudflare-worker/social-intel.js");
+const addressUtilsSource=stripModuleSyntax("cloudflare-worker/address-utils.js");
+const sanctionsSource=stripModuleSyntax("cloudflare-worker/sanctions.js");
 
 function cleanText(value,max=700){
   return String(value||"").replace(/\s+/g," ").trim().slice(0,max);
@@ -16,8 +19,10 @@ function jsonResponse(body,status){return {body,status};}
 async function gateCall(){throw new Error("not used");}
 async function extractGeminiText(){throw new Error("not used");}
 
-function harness(){
+function harness(fetchImpl){
   const context=vm.createContext({
+    AbortSignal,
+    fetch:fetchImpl||(async()=>{throw new Error("network not used");}),
     cleanText,normalizeUsername,isAllowedUser,jsonResponse,gateCall,extractGeminiText,
     SOCIAL_AGENT_CLIENT_VERSION:"test-adk-client",
     isSocialAgentConfigured:()=>false,
@@ -25,8 +30,10 @@ function harness(){
     URL,Set,Map,Array,Object,String,Number,RegExp,Date,JSON,console,AbortController,setTimeout,clearTimeout,
     crypto:{randomUUID:()=>"00000000-0000-4000-8000-000000000000"}
   });
+  vm.runInContext(addressUtilsSource,context);
+  vm.runInContext(sanctionsSource,context);
   vm.runInContext(source,context);
-  return vm.runInContext("({sanitizeRequest,extractToolSources,sanitizeSocialReport,SOCIAL_INTEL_VERSION,socmintModels})",context);
+  return vm.runInContext("({sanitizeRequest,extractToolSources,sanitizeSocialReport,attachWalletScreening,SOCIAL_INTEL_VERSION,socmintModels})",context);
 }
 
 test("SOCMINT request normalizes search fields and public URLs",()=>{
@@ -100,7 +107,7 @@ test("SOCMINT UI contains friendly quota handling",()=>{
 
 test("SOCMINT version is explicit",()=>{
   const h=harness();
-  assert.match(h.SOCIAL_INTEL_VERSION,/socmint-v4/);
+  assert.match(h.SOCIAL_INTEL_VERSION,/socmint-v5/);
 });
 
 
@@ -143,4 +150,38 @@ test("sanitizeSocialReport fills in safe defaults for a malformed/empty report i
   assert.equal(safe.sources.length,0);
   assert.equal(h.sanitizeSocialReport(null),null);
   assert.equal(h.sanitizeSocialReport("not an object"),null);
+});
+
+test("every stored SOCMINT report gets wallet screening attached, and a listed wallet is flagged",async()=>{
+  const listed="TA3941uFAvmVibSkQ6fMJXxmaSNovX86mz";
+  const payload={
+    version:"sanctions-crypto-v1",retrieved_at:new Date().toISOString(),
+    sources:[{id:"OFAC_SDN",name:"OFAC SDN",published:"2026-09-23"}],
+    entities:[{id:"1",name:"EXAMPLE FINANCIER",programs:["SDGT"],terrorism:true,list:"OFAC_SDN"}],
+    addresses:[{a:listed,c:"USDT",f:"tron",e:[0]}]
+  };
+  const h=harness(async()=>({ok:true,status:200,json:async()=>payload}));
+  const report={
+    executive_assessment:"Channel repeatedly posts "+listed+" as a donation address.",
+    entities:[{type:"WALLET",value:listed,basis:"posted"},{type:"WALLET",value:"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",basis:"posted"}]
+  };
+  await h.attachWalletScreening({SANCTIONS_URL:"https://example.test/s.json"},report);
+  assert.equal(report.wallet_screening.status,"ok");
+  assert.equal(report.wallet_screening.hit,true);
+  assert.equal(report.wallet_screening.wallets_found,2);
+  assert.equal(report.wallet_screening.wallets[0].address,listed);
+});
+
+test("wallet screening never fails a report: an unreachable list yields status 'unavailable'",async()=>{
+  const h=harness(async()=>{throw new Error("network down");});
+  const report={executive_assessment:"Posts 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"};
+  await h.attachWalletScreening({SANCTIONS_URL:"https://example.test/s.json"},report);
+  assert.equal(report.wallet_screening.status,"unavailable");
+  assert.equal(report.wallet_screening.wallets_found,1);
+  assert.equal(report.wallet_screening.hit,false);
+});
+
+test("persistReport screens wallets before sanitising and storing the report",()=>{
+  const src=fs.readFileSync("cloudflare-worker/social-intel.js","utf8");
+  assert.match(src,/async function persistReport\(env, username, report\) \{\s*await attachWalletScreening\(env, report\);/);
 });

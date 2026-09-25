@@ -3,9 +3,11 @@ const assert=require("node:assert/strict");
 const fs=require("node:fs");
 const vm=require("node:vm");
 
-const source=fs.readFileSync("cloudflare-worker/sanctions.js","utf8")
+const stripModuleSyntax=file=>fs.readFileSync(file,"utf8")
   .replace(/^import[\s\S]*?from "\.\/[^"]+";\s*/gm,"")
   .replace(/export \{[\s\S]*?\};\s*$/,"");
+const addressUtilsSource=stripModuleSyntax("cloudflare-worker/address-utils.js");
+const source=stripModuleSyntax("cloudflare-worker/sanctions.js");
 
 function cleanText(value,max=10000){
   return String(value??"").replace(/\s+/g," ").trim().slice(0,max);
@@ -19,8 +21,9 @@ function harness(fetchImpl){
     console,
     fetch:async(...args)=>{calls.push(args);return fetchImpl(...args);}
   });
+  vm.runInContext(addressUtilsSource,context);
   vm.runInContext(source,context);
-  const api=vm.runInContext("({chainFamily,normalizeSanctionsAddress,buildSanctionsIndex,loadSanctions,resetSanctionsCache,screenAnalysis,sanctionsObservation,SANCTIONS_VERSION})",context);
+  const api=vm.runInContext("({chainFamily,normalizeSanctionsAddress,buildSanctionsIndex,loadSanctions,resetSanctionsCache,screenAnalysis,screenReportWallets,sanctionsObservation,SANCTIONS_VERSION})",context);
   return {api,calls};
 }
 
@@ -320,5 +323,104 @@ test("CI refreshes the sanctions list daily, publishes it, and smoke-tests the W
   assert.ok(smoke.includes("health.sanctions.status"));
   const deploy=fs.readFileSync(".github/workflows/deploy-report-worker.yml","utf8");
   assert.ok(deploy.includes("update_sanctions_test.py"));
-  assert.ok(deploy.includes("cloudflare-worker/sanctions.js"));
+  // Plain `node --check` accepts broken ES-module syntax, so every Worker module
+  // must be parsed as a module.
+  assert.ok(deploy.includes("cloudflare-worker/*.js"));
+  assert.ok(deploy.includes("--input-type=module --check"));
+});
+
+// --- wallets found in SOCMINT reports ---------------------------------------
+
+const GENESIS="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa";
+
+function socialReport(){
+  return {
+    query:{objective:"Check "+TRON+" if present"},
+    sources:[{url:"https://example.org/"+GENESIS}],
+    executive_assessment:"The channel posted a donation address "+TRON+" (USDT) on several occasions.",
+    financial_crypto_indicators:"Also lists "+GENESIS+" and a mistyped 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNb.",
+    key_findings:[{finding:"No wallet here",basis:"none"}],
+    entities:[
+      {type:"WALLET",value:"0x52908400098527886E0F7030069857D2E4169EE7",basis:"posted in channel"}
+    ],
+    watchpoints:[{issue:"donations",indicator:"new address rotation"}]
+  };
+}
+
+test("report wallets are checksum-validated, screened, and listed ones sort first",async()=>{
+  const {api}=harness(okFetch(fixture()));
+  const state=await api.loadSanctions(ENV);
+  const result=api.screenReportWallets(socialReport(),state);
+  assert.equal(result.status,"ok");
+  assert.equal(result.hit,true);
+  assert.equal(result.wallets_found,3,"tron + genesis + evm; the checksum-invalid lookalike must be dropped");
+  assert.equal(result.wallets[0].address,TRON);
+  assert.equal(result.wallets[0].listed,true);
+  assert.equal(result.wallets[0].entities[0].terrorism,true);
+  assert.match(result.wallets[0].summary,/ISIL KHORASAN/);
+  const genesis=result.wallets.find(wallet=>wallet.address===GENESIS);
+  assert.equal(genesis.listed,false);
+  assert.equal(genesis.screened,true);
+  assert.match(result.scope_note,/proves only that they are well-formed/);
+  assert.match(result.scope_note,/does NOT mean an address is safe/);
+});
+
+test("only what the investigation reports is screened: the analyst's query and the source list are ignored",async()=>{
+  const {api}=harness(okFetch(fixture()));
+  const state=await api.loadSanctions(ENV);
+  const report={query:{objective:TRON},sources:[{url:"https://x.test/"+TRON}],executive_assessment:"nothing observed"};
+  const result=api.screenReportWallets(report,state);
+  assert.equal(result.wallets_found,0);
+  assert.equal(result.hit,false);
+});
+
+test("an unavailable list marks report wallets as unscreened instead of clean",async()=>{
+  const {api}=harness(async()=>{throw new Error("down");});
+  const state=await api.loadSanctions(ENV);
+  const result=api.screenReportWallets(socialReport(),state);
+  assert.equal(result.status,"unavailable");
+  assert.equal(result.hit,false);
+  assert.ok(result.wallets.length>0);
+  assert.ok(result.wallets.every(wallet=>wallet.screened===false&&wallet.listed===false));
+  assert.ok(result.reason);
+});
+
+test("report wallet screening is capped and tolerates malformed reports",async()=>{
+  const {api}=harness(okFetch(fixture()));
+  const state=await api.loadSanctions(ENV);
+  assert.equal(api.screenReportWallets(null,state).wallets_found,0);
+  assert.equal(api.screenReportWallets({key_findings:"oops",entities:null},state).wallets_found,0);
+  const many=Array.from({length:60},(_,i)=>"0x"+i.toString(16).padStart(40,"0")).join(" ");
+  assert.equal(api.screenReportWallets({executive_assessment:many},state).wallets_found,40);
+});
+
+test("Social UI shows wallets with sanctions status, never treats 'not screened' as clean, and opens Crypto in a session-sharing tab",()=>{
+  const html=fs.readFileSync("social.html","utf8");
+  const client=fs.readFileSync("social.js","utf8");
+  const css=fs.readFileSync("social.css","utf8");
+  for(const id of ["reportWalletsSection","reportWalletsStatus","reportWallets","reportWalletsScope"]){
+    assert.ok(html.includes('id="'+id+'"'),"missing "+id);
+  }
+  assert.ok(client.includes("function renderWallets"));
+  assert.ok(client.includes("renderWallets(report);"));
+  assert.ok(client.includes("NOT SCREENED"));
+  assert.ok(client.includes("was NOT performed"));
+  // Older reports (no wallet_screening) and reports without wallets must hide the section.
+  assert.match(client,/if\(!screening\|\|!wallets\.length\)\{section\.hidden=true;return;\}/);
+  // window.open without noopener so the Crypto tab inherits sessionStorage (same origin).
+  assert.ok(client.includes('window.open(cryptoUrl(button.dataset.cryptoAddress),"_blank")'));
+  assert.ok(!client.includes("noopener,noreferrer\"),\"_blank\")"));
+  assert.ok(client.includes('url.searchParams.set("autorun","1")'));
+  assert.ok(client.includes("WALLETS & SANCTIONS SCREENING"),"the PDF export must include the screening");
+  assert.ok(css.includes(".wallet-status.hit")&&css.includes(".wallet-item.listed"));
+  assert.ok(html.includes("social.css?v=2")&&html.includes("social.js?v=2"),"asset versions must be bumped so browsers load the new UI");
+});
+
+test("Social platform choices include the free collectors and stay within the Worker's platform cap",()=>{
+  const html=fs.readFileSync("social.html","utf8");
+  const values=[...html.matchAll(/name="platform" value="([^"]+)"/g)].map(match=>match[1]);
+  for(const platform of ["Telegram","Bluesky","Mastodon","4chan","Odysee"])assert.ok(values.includes(platform),platform);
+  const worker=fs.readFileSync("cloudflare-worker/social-intel.js","utf8");
+  const cap=Number(worker.match(/listText\(body\.platforms, (\d+), 40\)/)[1]);
+  assert.ok(values.length<=cap,"more platform checkboxes ("+values.length+") than the Worker keeps ("+cap+")");
 });

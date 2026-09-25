@@ -62,6 +62,8 @@ jobs:
               && grep -q 'Crypto Intelligence' /tmp/main.html \
               && grep -q 'RUN SOCMINT INVESTIGATION' /tmp/social.html \
               && grep -q 'social-investigate' /tmp/social.js \
+              && grep -q 'reportWalletsSection' /tmp/social.html \
+              && grep -q 'renderWallets' /tmp/social.js \
               && grep -q 'DOWNLOAD PDF' /tmp/social.html; then
               break
             fi

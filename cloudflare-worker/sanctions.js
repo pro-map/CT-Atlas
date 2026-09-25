@@ -1,4 +1,5 @@
 import { cleanText } from "./shared.js";
+import { findWalletCandidates } from "./address-utils.js";
 
 // Sanctions screening for Crypto Intelligence: checks the analysed address and
 // every counterparty in the returned transaction sample against sanctioned
@@ -21,6 +22,18 @@ const SCOPE_NOTE =
   "No match does NOT mean an address is safe: coverage is limited to the listed source(s), and only the " +
   "counterparties visible in the recent transaction sample returned for this analysis were screened " +
   "(direct relationships only, no indirect exposure).";
+
+const WALLET_SCOPE_NOTE =
+  "Wallet strings were extracted from the report text and checksum-validated, which proves only that they are " +
+  "well-formed. A list match means this exact string appears on a sanctions list; it says nothing about who " +
+  "published or controls it. No match does NOT mean an address is safe: coverage is limited to the listed " +
+  "source(s) and only strings present in this report were screened.";
+const MAX_REPORT_WALLETS = 40;
+const REPORT_WALLET_FIELDS = [
+  "executive_assessment", "source_coverage", "identity_alias_findings", "network_associations",
+  "content_narrative", "activity_timeline", "locations_travel_signals", "financial_crypto_indicators",
+  "ct_relevance", "analytical_gaps"
+];
 
 let sanctionsCache = { loadedAt: 0, state: null };
 let sanctionsRetryAfter = 0;
@@ -254,6 +267,54 @@ function screenAnalysis(analysis, state, now = Date.now()) {
   return base;
 }
 
+// Text of a SOCMINT report that may carry wallet strings. The analyst's own
+// query (report.query) and the source list are deliberately excluded: only what
+// the investigation reports as observed is screened.
+function reportWalletText(report) {
+  const parts = REPORT_WALLET_FIELDS.map(key => report?.[key]);
+  for (const item of Array.isArray(report?.key_findings) ? report.key_findings : []) parts.push(item?.finding, item?.basis);
+  for (const item of Array.isArray(report?.entities) ? report.entities : []) parts.push(item?.value, item?.basis);
+  for (const item of Array.isArray(report?.watchpoints) ? report.watchpoints : []) parts.push(item?.issue, item?.indicator);
+  return parts.filter(Boolean).join("\n");
+}
+
+// Screens wallet strings found in a SOCMINT report. Same honesty rule as
+// screenAnalysis: status says whether screening actually ran, and "listed:false"
+// is only meaningful when status is ok/stale.
+function screenReportWallets(report, state, now = Date.now()) {
+  const candidates = findWalletCandidates(reportWalletText(report)).slice(0, MAX_REPORT_WALLETS);
+  const entities = Array.isArray(state?.entities) ? state.entities : [];
+  const screened = Boolean(state?.index);
+  const wallets = candidates.map(candidate => {
+    const item = screened ? state.index.get(indexKey(candidate.family, candidate.address)) : null;
+    const entry = {
+      address: cleanText(candidate.address, 180),
+      family: candidate.family,
+      screened,
+      listed: Boolean(item)
+    };
+    if (item) {
+      const matched = describeEntities(item, entities);
+      entry.currency = cleanText(item.c, 12);
+      entry.entities = matched;
+      entry.summary = summarizeEntities(matched);
+    }
+    return entry;
+  });
+  wallets.sort((a, b) => Number(b.listed) - Number(a.listed));
+  return {
+    version: SANCTIONS_VERSION,
+    status: state?.status || "unavailable",
+    checked_at: new Date(now).toISOString(),
+    hit: wallets.some(wallet => wallet.listed),
+    wallets_found: wallets.length,
+    wallets,
+    list: state?.meta || null,
+    scope_note: WALLET_SCOPE_NOTE,
+    ...(state?.reason ? { reason: state.reason } : {})
+  };
+}
+
 function sanctionsObservation(screening) {
   if (!screening?.hit) return "";
   const parts = [];
@@ -279,5 +340,6 @@ export {
   sanctionsHealth,
   resetSanctionsCache,
   screenAnalysis,
+  screenReportWallets,
   sanctionsObservation
 };

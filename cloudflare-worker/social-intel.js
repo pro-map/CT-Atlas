@@ -12,8 +12,9 @@ import {
   isSocialAgentConfigured,
   runSocialAgent
 } from "./social-agent-client.js";
+import { loadSanctions, screenReportWallets } from "./sanctions.js";
 
-const SOCIAL_INTEL_VERSION = "socmint-v4-adk-safe-fallback";
+const SOCIAL_INTEL_VERSION = "socmint-v5-wallet-screening";
 const SOCIAL_REPORT_LIMIT = 50;
 
 const SOCIAL_SCHEMA = {
@@ -155,7 +156,7 @@ function listText(value, maxItems=30, maxLen=120) {
 
 function sanitizeRequest(body) {
   const urls = listText(body.urls, 20, 1500).map(safePublicUrl).filter(Boolean);
-  const platforms = listText(body.platforms, 12, 40);
+  const platforms = listText(body.platforms, 16, 40);
   const mode = cleanText(body.mode, 24).toLowerCase() === "urls_only" ? "urls_only" : "discover";
   const dateFrom = cleanText(body.date_from, 16);
   const dateTo = cleanText(body.date_to, 16);
@@ -739,7 +740,25 @@ function sanitizeSocialReport(report) {
   return safe;
 }
 
+// Wallets an investigation reports are screened against the sanctions list here,
+// at the single point every report (agent, Brave fallback, URL-only) passes
+// through before it is stored and returned. Screening must never fail a report.
+async function attachWalletScreening(env, report) {
+  try {
+    report.wallet_screening = screenReportWallets(report, await loadSanctions(env));
+  } catch (error) {
+    console.error("SOCMINT wallet screening failed", error);
+    report.wallet_screening = screenReportWallets(report, {
+      status: "unavailable",
+      reason: cleanText(error?.message || "Wallet screening failed.", 200),
+      index: null,
+      meta: null
+    });
+  }
+}
+
 async function persistReport(env, username, report) {
+  await attachWalletScreening(env, report);
   const currentResponse = await gateCall(env, "/social-workspace-get", { username });
   const currentPayload = await currentResponse.json().catch(() => ({}));
   const workspace = currentPayload?.workspace && typeof currentPayload.workspace === "object"

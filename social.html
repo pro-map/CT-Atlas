@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CT ATLAS — Social Intelligence</title>
 <link rel="icon" href="CT-ATLAS.png">
-<link rel="stylesheet" href="social.css?v=1">
+<link rel="stylesheet" href="social.css?v=2">
 </head>
 <body>
 <div class="social-shell">
@@ -45,7 +45,7 @@
             <option value="discover">Discover + Analyze public web</option>
             <option value="urls_only">Analyze known public URLs</option>
           </select>
-          <div class="field-help">The ADK agent does not use Gemini Google Search grounding. It can use configured public collectors (including Bluesky, Mastodon, LinkedIn public-web discovery, public Telegram pages and username discovery) and analyze known public URLs. Generic web discovery requires an independent provider such as Brave or SearXNG when configured; Gemini remains only a URL-analysis fallback.</div>
+          <div class="field-help">The ADK agent does not use Gemini Google Search grounding. It can use configured public collectors (including Bluesky, Mastodon, Odysee, LinkedIn public-web discovery, public Telegram channel pages, Internet Archive captures and username discovery) and analyze known public URLs. Generic web discovery requires an independent provider such as Brave or SearXNG when configured; Gemini remains only a URL-analysis fallback.</div>
         </div>
 
         <div class="field full">
@@ -75,7 +75,12 @@
             <label><input type="checkbox" name="platform" value="YouTube"> YouTube</label>
             <label><input type="checkbox" name="platform" value="Reddit"> Reddit</label>
             <label><input type="checkbox" name="platform" value="VK"> VK</label>
+            <label><input type="checkbox" name="platform" value="Bluesky"> Bluesky</label>
+            <label><input type="checkbox" name="platform" value="Mastodon"> Mastodon</label>
+            <label><input type="checkbox" name="platform" value="4chan"> 4chan</label>
+            <label><input type="checkbox" name="platform" value="Odysee"> Odysee</label>
           </div>
+          <div class="field-help">Free collectors with no API key: Telegram (public channels only — nothing is joined), Bluesky, Mastodon, 4chan, Odysee and Internet Archive captures. YouTube, Reddit and X need API keys configured on the agent. Facebook, Instagram, TikTok and VK are reached only through public-web search and known URLs.</div>
         </div>
 
         <div class="field full">
@@ -192,6 +197,13 @@
           </div>
         </section>
 
+        <section id="reportWalletsSection" class="report-section" hidden>
+          <h3>WALLETS &amp; SANCTIONS SCREENING</h3>
+          <div id="reportWalletsStatus" class="wallet-status"></div>
+          <div id="reportWallets" class="finding-list"></div>
+          <div id="reportWalletsScope" class="finding-basis"></div>
+        </section>
+
         <section class="report-section">
           <h3>OUTLOOK / WATCHPOINTS</h3>
           <div id="reportWatchpoints" class="watch-list"></div>
@@ -216,6 +228,6 @@
 </div>
 
 <script src="pdf-export.js?v=2"></script>
-<script src="social.js?v=1"></script>
+<script src="social.js?v=2"></script>
 </body>
 </html>
