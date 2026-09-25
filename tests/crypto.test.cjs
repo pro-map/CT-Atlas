@@ -350,5 +350,17 @@ test("the Crypto test example makes no ownership or attribution claim in the UI"
   for(const text of [label,status]){
     assert.doesNotMatch(text,/belongs? to|owned by|controlled by|Islamic State|\bISIS\b|\bISIL\b|\bDaesh\b/i,text);
   }
-  assert.match(status,/not ownership/i);
+  assert.match(status,/not proof of common ownership/i);
+});
+
+test("the Crypto demo address is on the OFAC list, so the example always produces a sanctions match",()=>{
+  const client=fs.readFileSync("crypto.js","utf8");
+  const address=client.match(/const TEST_ADDRESS="([^"]+)"/)[1];
+  const list=JSON.parse(fs.readFileSync("sanctions-crypto.json","utf8"));
+  const entry=list.addresses.find(item=>item.f==="bitcoin"&&item.a===address);
+  assert.ok(entry,"the demo address is no longer on the sanctions list (delisted?): pick another listed address for the example");
+  assert.ok(entry.e.length>0&&list.entities[entry.e[0]],"the listed address must resolve to a designation");
+  // The demo is about exposure: the designation should own several listed addresses.
+  const siblings=list.addresses.filter(item=>item.f==="bitcoin"&&item.e.includes(entry.e[0]));
+  assert.ok(siblings.length>=5,"the demo relies on several listed addresses of the same designation, found "+siblings.length);
 });

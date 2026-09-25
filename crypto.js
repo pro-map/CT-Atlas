@@ -2033,17 +2033,19 @@ async function run(){
   }
 }
 
-// Address printed on a public "Al Sadaqah" fundraising banner (jihadist donation
-// appeal in Syria), used as a realistic test case: a live address with a few
-// dozen transactions. Its presence here says nothing about who controls it.
-const TEST_ADDRESS="15K9Zj1AU2hjT3ebZMtWqDsMv3fFxTNwpf";
+// Demo address: listed on the OFAC SDN list (sanctions-crypto.json; a test fails if a
+// refresh ever delists it), and chosen because one analysis shows most of the tool:
+// a sanctions match on the wallet itself, a dozen other listed wallets among its
+// counterparties, large-transfer / burst / dormant-reactivation patterns and a wide
+// graph to trace. Only the list's own attribution is stated; nothing else is claimed.
+const TEST_ADDRESS="3FoD1f6Tfnq3s8MYHgJqFPWv9cUrtUdBSv";
 
 function loadTestExample(){
   const input=document.getElementById("cryptoQuery");
   const chain=document.getElementById("cryptoChain");
   if(input)input.value=TEST_ADDRESS;
   if(chain)chain.value="bitcoin";
-  setStatus("Test address loaded (published on a public fundraising banner). On-chain analysis shows transaction relationships, not ownership. Select ANALYSE to run the test.","");
+  setStatus("Demo address loaded (listed on the OFAC SDN list). The analysis will show the sanctions match, listed counterparties, behavioural patterns and the transaction graph. Transaction links are not proof of common ownership. Select ANALYSE to run the test.","");
   input?.focus();
 }
 
