@@ -2033,14 +2033,17 @@ async function run(){
   }
 }
 
-const GENESIS_TEST_ADDRESS="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa";
+// Address printed on a public "Al Sadaqah" fundraising banner (jihadist donation
+// appeal in Syria), used as a realistic test case: a live address with a few
+// dozen transactions. Its presence here says nothing about who controls it.
+const TEST_ADDRESS="15K9Zj1AU2hjT3ebZMtWqDsMv3fFxTNwpf";
 
-function loadGenesisExample(){
+function loadTestExample(){
   const input=document.getElementById("cryptoQuery");
   const chain=document.getElementById("cryptoChain");
-  if(input)input.value=GENESIS_TEST_ADDRESS;
+  if(input)input.value=TEST_ADDRESS;
   if(chain)chain.value="bitcoin";
-  setStatus("Bitcoin Genesis Address example loaded. Select ANALYSE to run the test.","");
+  setStatus("Test address loaded (published on a public fundraising banner). On-chain analysis shows transaction relationships, not ownership. Select ANALYSE to run the test.","");
   input?.focus();
 }
 
@@ -2061,7 +2064,7 @@ function applyUrlQuery(){
 
 function bind(){
   document.getElementById("cryptoRun")?.addEventListener("click",run);
-  document.getElementById("cryptoGenesisExample")?.addEventListener("click",loadGenesisExample);
+  document.getElementById("cryptoTestExample")?.addEventListener("click",loadTestExample);
   document.getElementById("cryptoQuery")?.addEventListener("keydown",event=>{if(event.key==="Enter")run();});
   document.getElementById("cryptoResetFilters")?.addEventListener("click",()=>resetFilterControls(true));
   document.getElementById("cryptoClearFilter")?.addEventListener("click",()=>resetFilterControls(true));

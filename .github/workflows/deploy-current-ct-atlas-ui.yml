@@ -107,8 +107,8 @@ jobs:
           grep -q 'visual-analyze' facial.js
           grep -q 'NON-IDENTIFYING ANALYSIS' facial.html
           node --check facial.js
-          grep -q 'Bitcoin Genesis Address — Satoshi Nakamoto' crypto.html
-          grep -q 'cryptoGenesisExample' crypto.js
+          grep -q 'cryptoTestExample' crypto.html
+          grep -q 'cryptoTestExample' crypto.js
           test -s social.js
           test -s social.css
           grep -q 'RUN SOCMINT INVESTIGATION' social.html

@@ -25,7 +25,7 @@ function harness(fetchImpl){
   vm.runInContext(addressUtilsSource,context);
   vm.runInContext(sanctionsSource,context);
   vm.runInContext(source,context);
-  return vm.runInContext("({detectCryptoInput,aggregateFlows,buildObservations,detectSuspiciousPatterns,tronTrxRows,tronAddress,withSanctionsScreening,resetSanctionsCache,EVM_CHAINS,CRYPTO_VERSION})",context);
+  return vm.runInContext("({detectCryptoInput,aggregateFlows,buildObservations,detectSuspiciousPatterns,tronTrxRows,tronAddress,isValidWalletAddress,withSanctionsScreening,resetSanctionsCache,EVM_CHAINS,CRYPTO_VERSION})",context);
 }
 
 test("auto-detects common BTC, EVM and TRON address formats",()=>{
@@ -328,4 +328,27 @@ test("withSanctionsScreening reports 'unavailable' -- never a clean pass -- when
   assert.ok(result.sanctions_screening.reason);
   assert.equal(result.observations.length,0,"an unavailable list must not add observations");
   assert.equal(result.chain,"bitcoin","the analysis itself must still be returned");
+});
+
+test("the Crypto test example is a checksum-valid Bitcoin address the backend recognises, wired to its button",()=>{
+  const client=fs.readFileSync("crypto.js","utf8");
+  const html=fs.readFileSync("crypto.html","utf8");
+  const address=client.match(/const TEST_ADDRESS="([^"]+)"/)[1];
+  const h=harness();
+  assert.equal(h.isValidWalletAddress("bitcoin",address),true,"a mistyped example would silently test nothing");
+  assert.deepEqual(JSON.parse(JSON.stringify(h.detectCryptoInput(address,"auto"))),{chain:"bitcoin",kind:"address",value:address});
+  assert.ok(html.includes('id="cryptoTestExample"'));
+  assert.ok(client.includes('getElementById("cryptoTestExample")?.addEventListener("click",loadTestExample)'));
+});
+
+test("the Crypto test example makes no ownership or attribution claim in the UI",()=>{
+  const client=fs.readFileSync("crypto.js","utf8");
+  const html=fs.readFileSync("crypto.html","utf8");
+  const label=html.match(/id="cryptoTestExample"[^>]*>([^<]+)</)[1];
+  const status=client.match(/function loadTestExample[\s\S]*?setStatus\("([^"]+)"/)[1];
+  // Publishing an address on a banner is an observation; who controls it is a separate, sourced assessment.
+  for(const text of [label,status]){
+    assert.doesNotMatch(text,/belongs? to|owned by|controlled by|Islamic State|\bISIS\b|\bISIL\b|\bDaesh\b/i,text);
+  }
+  assert.match(status,/not ownership/i);
 });
