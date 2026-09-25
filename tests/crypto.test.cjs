@@ -3,23 +3,27 @@ const assert=require("node:assert/strict");
 const fs=require("node:fs");
 const vm=require("node:vm");
 
-let source=fs.readFileSync("cloudflare-worker/crypto.js","utf8")
-  .replace(/^import[\s\S]*?from "\.\/shared\.js";\s*/,"")
+const stripModuleSyntax=file=>fs.readFileSync(file,"utf8")
+  .replace(/^import[\s\S]*?from "\.\/[^"]+";\s*/gm,"")
   .replace(/export \{[\s\S]*?\};\s*$/,"");
+const sanctionsSource=stripModuleSyntax("cloudflare-worker/sanctions.js");
+const source=stripModuleSyntax("cloudflare-worker/crypto.js");
 
 function cleanText(value,max=10000){
   return String(value??"").replace(/\s+/g," ").trim().slice(0,max);
 }
 
-function harness(){
+function harness(fetchImpl){
   const context=vm.createContext({
     cleanText,
     URLSearchParams,
+    AbortSignal,
     console,
-    fetch:async()=>{throw new Error("network not used in unit tests");}
+    fetch:fetchImpl||(async()=>{throw new Error("network not used in unit tests");})
   });
+  vm.runInContext(sanctionsSource,context);
   vm.runInContext(source,context);
-  return vm.runInContext("({detectCryptoInput,aggregateFlows,buildObservations,detectSuspiciousPatterns,tronTrxRows,EVM_CHAINS,CRYPTO_VERSION})",context);
+  return vm.runInContext("({detectCryptoInput,aggregateFlows,buildObservations,detectSuspiciousPatterns,tronTrxRows,tronAddress,sha256,withSanctionsScreening,resetSanctionsCache,EVM_CHAINS,CRYPTO_VERSION})",context);
 }
 
 test("auto-detects common BTC, EVM and TRON address formats",()=>{
@@ -254,4 +258,81 @@ test("regression: tronTrxRows ignores TriggerSmartContract calls, only real TRX 
   assert.equal(rows.length,1,"the TriggerSmartContract call must not produce a phantom TRX row");
   assert.equal(rows[0].id,"real-transfer-1");
   assert.equal(rows[0].amount,5);
+});
+
+test("sha256 matches published FIPS 180-4 test vectors",()=>{
+  const h=harness();
+  const hex=bytes=>Array.from(bytes,b=>b.toString(16).padStart(2,"0")).join("");
+  assert.equal(hex(h.sha256(new TextEncoder().encode("abc"))),"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
+  assert.equal(hex(h.sha256(new Uint8Array(0))),"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
+  // 200 bytes spans several 64-byte blocks (cross-checked against Python hashlib).
+  assert.equal(hex(h.sha256(new TextEncoder().encode("a".repeat(200)))),"c2a908d98f5df987ade41b5fce213067efbcc21ef2240212a41e54b5e7c28ae5");
+});
+
+test("tronAddress converts TronGrid hex addresses to base58check and leaves other input alone",()=>{
+  const h=harness();
+  // USDT-TRC20 contract, hex from TronGrid, base58 as shown by Tronscan.
+  assert.equal(h.tronAddress("41a614f803b6fd780986a42c78ec9c7f77e6ded13c"),"TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t");
+  // Two sanctioned addresses decoded independently with Python.
+  assert.equal(h.tronAddress("4100be5e0c85be35948d97ad37f62d108243f89ae0"),"TA3941uFAvmVibSkQ6fMJXxmaSNovX86mz");
+  assert.equal(h.tronAddress("4100bf03f87539214307207c61b7f729ddc22977b8"),"TA39q3p75XRSWYAEaSF7dANtyksoa3sLge");
+  assert.equal(h.tronAddress("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"),"TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t");
+  assert.equal(h.tronAddress(""),"");
+  assert.equal(h.tronAddress(undefined),"");
+  assert.equal(h.tronAddress("41zz"),"41zz");
+});
+
+test("regression: tronTrxRows reports base58 counterparties so they match the analysed wallet",()=>{
+  const h=harness();
+  const seed="TA3941uFAvmVibSkQ6fMJXxmaSNovX86mz";
+  const rows=h.tronTrxRows(seed,[{
+    txID:"out-1",block_timestamp:Date.now(),
+    raw_data:{contract:[{type:"TransferContract",parameter:{value:{
+      owner_address:"4100be5e0c85be35948d97ad37f62d108243f89ae0",
+      to_address:"41a614f803b6fd780986a42c78ec9c7f77e6ded13c",amount:2000000}}}]}
+  }],[{
+    txID:"in-1",block_timestamp:Date.now()-1000,
+    raw_data:{contract:[{type:"TransferContract",parameter:{value:{
+      owner_address:"4100bf03f87539214307207c61b7f729ddc22977b8",
+      to_address:"4100be5e0c85be35948d97ad37f62d108243f89ae0",amount:1000000}}}]}
+  }]);
+  const out=rows.find(r=>r.id==="out-1");
+  const inn=rows.find(r=>r.id==="in-1");
+  assert.equal(out.from_address,seed);
+  assert.equal(out.counterparties[0],"TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t");
+  assert.equal(inn.counterparties[0],"TA39q3p75XRSWYAEaSF7dANtyksoa3sLge");
+  assert.equal(inn.to_address,seed);
+});
+
+const SANCTIONS_FIXTURE={
+  version:"sanctions-crypto-v1",
+  retrieved_at:new Date().toISOString(),
+  sources:[{id:"OFAC_SDN",name:"OFAC SDN",published:"2026-09-23"}],
+  entities:[{id:"1",name:"EXAMPLE TERROR FINANCIER",type:"individual",programs:["SDGT"],terrorism:true,list:"OFAC_SDN"}],
+  addresses:[{a:"TA3941uFAvmVibSkQ6fMJXxmaSNovX86mz",c:"USDT",f:"tron",e:[0]}]
+};
+
+test("withSanctionsScreening flags a sanctioned TRON counterparty end-to-end and adds a hedged observation",async()=>{
+  const h=harness(async()=>({ok:true,json:async()=>SANCTIONS_FIXTURE}));
+  const result=await h.withSanctionsScreening({
+    chain:"tron",kind:"address",query:"TSeedWallet00000000000000000000000",
+    transactions:[{id:"t1",direction:"OUT",time:"2026-09-01T00:00:00.000Z",counterparties:["TA3941uFAvmVibSkQ6fMJXxmaSNovX86mz"]}],
+    observations:["existing"]
+  },{SANCTIONS_URL:"https://example.test/sanctions.json"});
+  assert.equal(result.sanctions_screening.status,"ok");
+  assert.equal(result.sanctions_screening.hit,true);
+  assert.equal(result.sanctions_screening.counterparty_matches[0].entities[0].terrorism,true);
+  assert.match(result.observations[0],/SANCTIONS EXPOSURE/);
+  assert.equal(result.observations[1],"existing");
+});
+
+test("withSanctionsScreening reports 'unavailable' -- never a clean pass -- when the list cannot be loaded",async()=>{
+  const h=harness(async()=>{throw new Error("network down");});
+  const analysis={chain:"bitcoin",kind:"address",query:"bc1qseed",transactions:[],observations:[]};
+  const result=await h.withSanctionsScreening(analysis,{SANCTIONS_URL:"https://example.test/sanctions.json"});
+  assert.equal(result.sanctions_screening.status,"unavailable");
+  assert.equal(result.sanctions_screening.hit,false);
+  assert.ok(result.sanctions_screening.reason);
+  assert.equal(result.observations.length,0,"an unavailable list must not add observations");
+  assert.equal(result.chain,"bitcoin","the analysis itself must still be returned");
 });

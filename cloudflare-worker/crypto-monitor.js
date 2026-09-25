@@ -162,7 +162,43 @@ function buildMonitorAlerts(target, analysis, now = Date.now()) {
     }
   }
 
-  return { snapshot, alerts };
+  // Sanctions hits are the highest-value alerts and the gate keeps only the
+  // first 40 per update, so they go to the front. The gate de-duplicates on
+  // watch|type|tx|title, so a persistent hit alerts once, not every 6 hours.
+  const sanctionsAlerts = buildSanctionsAlerts(watch, analysis?.sanctions_screening);
+  return { snapshot, alerts: [...sanctionsAlerts, ...alerts] };
+}
+
+const MAX_SANCTIONS_ALERTS = 12;
+const SANCTIONS_CAVEAT = " A list match is not a determination of ownership or intent.";
+
+function buildSanctionsAlerts(watch, screening) {
+  if (!screening?.hit) return [];
+  const alerts = [];
+  if (screening.seed_match) {
+    alerts.push(alertBase(
+      watch,
+      "SANCTIONED_ADDRESS",
+      "HIGH",
+      "Monitored wallet appears on a sanctions list",
+      "This address is listed: " + cleanText(screening.seed_match.summary, 600) + "." + SANCTIONS_CAVEAT
+    ));
+  }
+  for (const match of screening.counterparty_matches || []) {
+    for (const txId of (match.tx_ids || []).slice(0, 3)) {
+      if (alerts.length >= MAX_SANCTIONS_ALERTS) return alerts;
+      alerts.push(alertBase(
+        watch,
+        "SANCTIONS_EXPOSURE",
+        "HIGH",
+        "Direct exposure to a sanctioned address",
+        "A transaction relationship with " + cleanText(match.address, 100) + " was observed; that address is listed: " +
+          cleanText(match.summary, 500) + "." + SANCTIONS_CAVEAT,
+        txId
+      ));
+    }
+  }
+  return alerts;
 }
 
 function providerAvailable(chain, env) {
@@ -235,5 +271,6 @@ export {
   MONITOR_BATCH_LIMIT,
   snapshotFromAnalysis,
   buildMonitorAlerts,
+  buildSanctionsAlerts,
   runCryptoMonitor
 };

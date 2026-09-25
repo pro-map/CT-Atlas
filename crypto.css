@@ -281,6 +281,8 @@ button,input,select{font:inherit}
 .intel-badge.pattern{border-color:#6c5a9d;color:#c6b5ff;background:#241d36}
 .intel-badge.exposure{border-color:#8f5d3d;color:#efad83;background:#2d2018}
 .intel-badge.category{border-color:#427150;color:#95d8aa;background:#17291d}
+.intel-badge.clear{border-color:#427150;color:#95d8aa;background:#17291d}
+.intel-badge.unscreened{border-color:#a27935;color:#e7c06f;background:#302718}
 .intel-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
 .intel-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .intel-form>.intel-actions,.intel-form>.intel-result,.intel-form>#cryptoAlerts{grid-column:1/-1}
@@ -352,3 +354,11 @@ button,input,select{font:inherit}
 .legend-shape{display:inline-block;vertical-align:-2px;margin-right:5px}
 .legend-shape.offchain{width:13px;height:10px;border:1.5px dashed #9aaab3;border-radius:2px}
 .legend-shape.crosschain{width:10px;height:10px;border:1.5px solid #c39beb;background:#3b2b57;transform:rotate(45deg)}
+
+/* Sanctions screening */
+.sanctions-card{margin-bottom:12px}
+.sanctions-card.hit{border-color:#a94a4a;box-shadow:0 0 0 1px rgba(169,74,74,.35)}
+.sanctions-card.unscreened{border-color:#a27935}
+.sanctions-address{display:block;margin-top:5px;font:800 8px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;color:#cfe0e8;word-break:break-all}
+.sanctions-warning{border:1px solid #a27935;background:#302718;color:#e7c06f;border-radius:5px;padding:8px 10px;font-size:9px;line-height:1.55}
+.sanctions-scope{font-size:8px;line-height:1.55;color:#77909f}

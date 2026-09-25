@@ -5,8 +5,9 @@ import {
   jsonResponse,
   gateCall
 } from "./shared.js";
+import { loadSanctions, screenAnalysis, sanctionsObservation } from "./sanctions.js";
 
-const CRYPTO_VERSION = "crypto-intel-v2-suspicious-patterns";
+const CRYPTO_VERSION = "crypto-intel-v3-sanctions-screening";
 
 const EVM_CHAINS = {
   ethereum: { chainid: "1", name: "Ethereum", symbol: "ETH", explorer: "https://etherscan.io" },
@@ -586,11 +587,93 @@ function tronHeaders(env) {
   };
 }
 
+// TronGrid's /v1/accounts/.../transactions endpoint returns raw_data addresses
+// as 21-byte hex ("41" + 20-byte account), not the base58check "T..." form users
+// paste and explorers show. Left as-is, the analysed wallet never matched its own
+// counterparties and sanctions/watchlist lookups could not match TRX transfers.
+// Base58check needs a double SHA-256; the Workers-native digest is async, so a
+// small synchronous implementation keeps the row builders synchronous.
+const BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+const TRON_HEX_ADDRESS_RE = /^41[0-9a-fA-F]{40}$/;
+
+function firstPrimes(count) {
+  const primes = [];
+  for (let n = 2; primes.length < count; n++) {
+    if (primes.every(prime => n % prime !== 0)) primes.push(n);
+  }
+  return primes;
+}
+
+// SHA-256 constants are the fractional parts of the cube/square roots of the
+// first primes (FIPS 180-4); deriving them avoids a 64-entry hand-typed table.
+const fractionBits = value => Math.floor((value - Math.floor(value)) * 4294967296) >>> 0;
+const SHA256_K = firstPrimes(64).map(prime => fractionBits(Math.cbrt(prime)));
+const SHA256_H0 = firstPrimes(8).map(prime => fractionBits(Math.sqrt(prime)));
+
+function sha256(bytes) {
+  const rotr = (x, n) => (x >>> n) | (x << (32 - n));
+  const length = bytes.length;
+  const padded = new Uint8Array(Math.ceil((length + 9) / 64) * 64);
+  padded.set(bytes);
+  padded[length] = 0x80;
+  const view = new DataView(padded.buffer);
+  view.setUint32(padded.length - 8, Math.floor((length * 8) / 4294967296));
+  view.setUint32(padded.length - 4, (length * 8) >>> 0);
+
+  const h = SHA256_H0.slice();
+  const w = new Uint32Array(64);
+  for (let offset = 0; offset < padded.length; offset += 64) {
+    for (let i = 0; i < 16; i++) w[i] = view.getUint32(offset + i * 4);
+    for (let i = 16; i < 64; i++) {
+      const s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ (w[i - 15] >>> 3);
+      const s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);
+      w[i] = (w[i - 16] + s0 + w[i - 7] + s1) >>> 0;
+    }
+    let [a, b, c, d, e, f, g, hh] = h;
+    for (let i = 0; i < 64; i++) {
+      const t1 = (hh + (rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)) + ((e & f) ^ (~e & g)) + SHA256_K[i] + w[i]) >>> 0;
+      const t2 = ((rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) >>> 0;
+      hh = g; g = f; f = e; e = (d + t1) >>> 0;
+      d = c; c = b; b = a; a = (t1 + t2) >>> 0;
+    }
+    [a, b, c, d, e, f, g, hh].forEach((value, i) => { h[i] = (h[i] + value) >>> 0; });
+  }
+  const digest = new Uint8Array(32);
+  const out = new DataView(digest.buffer);
+  h.forEach((value, i) => out.setUint32(i * 4, value));
+  return digest;
+}
+
+function base58Encode(bytes) {
+  let value = 0n;
+  for (const byte of bytes) value = value * 256n + BigInt(byte);
+  let encoded = "";
+  while (value > 0n) {
+    encoded = BASE58_ALPHABET[Number(value % 58n)] + encoded;
+    value /= 58n;
+  }
+  for (const byte of bytes) {
+    if (byte !== 0) break;
+    encoded = "1" + encoded;
+  }
+  return encoded;
+}
+
+// Hex ("41...") -> base58check "T..."; anything else is returned unchanged so
+// already-base58 addresses (e.g. from the TRC-20 endpoint) pass straight through.
+function tronAddress(value) {
+  const text = String(value ?? "").trim();
+  if (!TRON_HEX_ADDRESS_RE.test(text)) return text;
+  const payload = Uint8Array.from(text.match(/../g), pair => parseInt(pair, 16));
+  const checksum = sha256(sha256(payload)).slice(0, 4);
+  return base58Encode(Uint8Array.from([...payload, ...checksum]));
+}
+
 function tronTokenRows(address, rows) {
   const seed = address.toLowerCase();
   return (rows || []).map(tx => {
-    const from = String(tx.from || "");
-    const to = String(tx.to || "");
+    const from = tronAddress(tx.from);
+    const to = tronAddress(tx.to);
     const direction = from.toLowerCase() === seed && to.toLowerCase() === seed ? "SELF" : from.toLowerCase() === seed ? "OUT" : "IN";
     const decimals = clamp(finiteNumber(tx.token_info?.decimals, 0), 0, 30);
     let amount = finiteNumber(tx.value);
@@ -627,7 +710,9 @@ function tronTrxRows(address, outgoingRows, incomingRows) {
     if (String(contract?.type || "") !== "TransferContract") return;
     const value = contract?.parameter?.value || {};
     const amountSun = finiteNumber(value.amount, 0);
-    const counterparty = direction === "OUT" ? value.to_address : value.owner_address;
+    const ownerAddress = tronAddress(value.owner_address);
+    const toAddress = tronAddress(value.to_address);
+    const counterparty = direction === "OUT" ? toAddress : ownerAddress;
     const id = tx.txID || tx.txid || "";
     if (!id || merged.has(id)) return;
     merged.set(id, {
@@ -638,9 +723,9 @@ function tronTrxRows(address, outgoingRows, incomingRows) {
       asset: "TRX",
       amount: amountSun / 1e6,
       fee: null,
-      counterparties: counterparty ? [String(counterparty)] : [],
-      from_address: cleanText(value.owner_address || "", 100),
-      to_address: cleanText(value.to_address || "", 100),
+      counterparties: counterparty ? [counterparty] : [],
+      from_address: cleanText(ownerAddress, 100),
+      to_address: cleanText(toAddress, 100),
       explorer_url: "https://tronscan.org/#/transaction/" + id,
       contract_type: cleanText(contract?.type || "", 80)
     });
@@ -675,8 +760,8 @@ async function analyzeTron(target, limit, env) {
       transaction: {
         id: body?.txID || receipt?.id || target.value,
         contract_type: contract?.type || "",
-        owner_address: value.owner_address || "",
-        to_address: value.to_address || "",
+        owner_address: tronAddress(value.owner_address),
+        to_address: tronAddress(value.to_address),
         amount_trx: value.amount ? finiteNumber(value.amount) / 1e6 : null,
         fee_trx: receipt?.fee ? finiteNumber(receipt.fee) / 1e6 : 0,
         block_number: receipt?.blockNumber ?? null,
@@ -733,15 +818,45 @@ async function analyzeTron(target, limit, env) {
   };
 }
 
+// Screens a finished analysis against the sanctions list. A screening failure
+// must never break the analysis itself, and must never read as a clean pass:
+// it degrades to status "unavailable" so the UI says "not screened".
+async function withSanctionsScreening(result, env) {
+  let screening;
+  try {
+    screening = screenAnalysis(result, await loadSanctions(env));
+  } catch (error) {
+    console.error("Sanctions screening failed", error);
+    screening = screenAnalysis(result, {
+      status: "unavailable",
+      reason: cleanText(error?.message || "Sanctions screening failed.", 200),
+      index: null,
+      meta: null
+    });
+  }
+  const observation = sanctionsObservation(screening);
+  return {
+    ...result,
+    sanctions_screening: screening,
+    observations: observation ? [observation, ...(result.observations || [])] : result.observations
+  };
+}
+
+async function runAnalysis(target, limit, env) {
+  let result;
+  if (target.chain === "bitcoin") result = await analyzeBitcoin(target, limit);
+  else if (target.chain === "tron") result = await analyzeTron(target, limit, env);
+  else if (EVM_CHAIN_KEYS.has(target.chain)) result = await analyzeEvm(target, limit, env);
+  else throw new Error("Unsupported blockchain.");
+  return withSanctionsScreening(result, env);
+}
+
 async function analyzeCryptoAddress(address, chain, limit, env) {
   const target = detectCryptoInput(address, chain);
   if (target.error) throw new Error(target.error);
   if (target.kind !== "address") throw new Error("Automatic monitoring supports wallet addresses only.");
   const bounded = clamp(Math.trunc(finiteNumber(limit, 50)), 10, 100);
-  if (target.chain === "bitcoin") return analyzeBitcoin(target, bounded);
-  if (target.chain === "tron") return analyzeTron(target, bounded, env);
-  if (EVM_CHAIN_KEYS.has(target.chain)) return analyzeEvm(target, bounded, env);
-  throw new Error("Unsupported blockchain.");
+  return runAnalysis(target, bounded, env);
 }
 
 async function authenticate(request, env, username) {
@@ -774,11 +889,7 @@ async function handleCrypto(request, env) {
   const limit = clamp(Math.trunc(finiteNumber(body.limit, 50)), 10, 100);
 
   try {
-    let result;
-    if (target.chain === "bitcoin") result = await analyzeBitcoin(target, limit);
-    else if (target.chain === "tron") result = await analyzeTron(target, limit, env);
-    else if (EVM_CHAIN_KEYS.has(target.chain)) result = await analyzeEvm(target, limit, env);
-    else throw new Error("Unsupported blockchain.");
+    const result = await runAnalysis(target, limit, env);
 
     return jsonResponse({
       ok: true,
@@ -801,6 +912,9 @@ export {
   aggregateFlows,
   buildObservations,
   detectSuspiciousPatterns,
+  tronAddress,
+  sha256,
+  withSanctionsScreening,
   analyzeCryptoAddress,
   handleCrypto
 };

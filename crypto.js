@@ -1214,7 +1214,121 @@ function renderCrossChain(){
   ).join("");
 }
 
+function sanctionsEntries(){
+  if(!lastPayload)return [];
+  if(lastPayload.kind==="transaction")return [{key:"tx",address:lastPayload.query,depth:0,payload:lastPayload}];
+  return traceEntries();
+}
+
+// Groups every listed address found across all traced wallets, nearest hop first.
+function sanctionsHits(){
+  const isTransaction=lastPayload?.kind==="transaction";
+  const groups=new Map();
+  const add=(address,depth,role,via,match)=>{
+    const key=traceKey(address,lastPayload.chain);
+    const group=groups.get(key)||{address,depth,role,via:new Set(),in_count:0,out_count:0,last_seen:"",match};
+    group.depth=Math.min(group.depth,depth);
+    if(role==="wallet")group.role="wallet";
+    if(via)group.via.add(via);
+    group.in_count+=Number(match.received_from_count||0);
+    group.out_count+=Number(match.sent_to_count||0);
+    if(match.last_seen&&String(match.last_seen)>group.last_seen)group.last_seen=String(match.last_seen);
+    groups.set(key,group);
+  };
+  for(const entry of sanctionsEntries()){
+    const screening=entry.payload?.sanctions_screening;
+    if(!screening?.hit)continue;
+    if(screening.seed_match)add(entry.address,entry.depth,"wallet","",screening.seed_match);
+    for(const match of screening.counterparty_matches||[]){
+      add(match.address,entry.depth+1,isTransaction?"party":"counterparty",entry.address,match);
+    }
+  }
+  const terrorismRank=group=>group.match.entities?.some(entity=>entity.terrorism)?0:1;
+  return [...groups.values()].sort((a,b)=>
+    terrorismRank(a)-terrorismRank(b)||a.depth-b.depth||String(a.address).localeCompare(String(b.address))
+  );
+}
+
+function renderSanctions(){
+  const card=document.getElementById("cryptoSanctions");
+  const body=document.getElementById("cryptoSanctionsBody");
+  const badge=document.getElementById("cryptoSanctionsBadge");
+  const note=document.getElementById("cryptoSanctionsNote");
+  if(!card||!body||!badge||!note||!lastPayload)return;
+
+  const entries=sanctionsEntries();
+  const usable=entries.map(entry=>entry.payload?.sanctions_screening)
+    .filter(item=>item&&(item.status==="ok"||item.status==="stale"));
+  const rootScreening=lastPayload.sanctions_screening||null;
+  const hits=sanctionsHits();
+  const list=rootScreening?.list||usable[0]?.list||null;
+  const source=list?.sources?.[0];
+  const unscreened=!rootScreening||rootScreening.status==="unavailable";
+
+  note.textContent=source
+    ? (source.name||source.id)+(source.published?" · published "+source.published:"")+" · "+fmtNumber(list.address_count)+" listed addresses"
+    : "Checks the wallet and its counterparties against sanctioned digital-currency addresses.";
+
+  const warnings=[];
+  if(unscreened){
+    warnings.push("Sanctions screening was NOT performed for this analysis"+
+      (rootScreening?.reason?" ("+rootScreening.reason+")":" (this response carries no screening data)")+
+      ". The absence of a match below must not be read as a clean result.");
+  }else if(entries.length>usable.length){
+    warnings.push((entries.length-usable.length)+" of "+entries.length+" analysed wallet(s) could not be screened; results below are partial.");
+  }
+  if(usable.some(item=>item.status==="stale")){
+    warnings.push("The sanctions list is older than 7 days or could not be refreshed; recent designations may be missing.");
+  }
+
+  card.classList.toggle("hit",hits.length>0);
+  card.classList.toggle("unscreened",unscreened&&hits.length===0);
+  if(hits.length){
+    badge.className="intel-badge high";
+    badge.textContent=hits.length+(hits.length>1?" MATCHES":" MATCH");
+  }else if(unscreened){
+    badge.className="intel-badge unscreened";
+    badge.textContent="NOT SCREENED";
+  }else{
+    badge.className="intel-badge clear";
+    badge.textContent="NO MATCH";
+  }
+
+  const parts=warnings.map(text=>'<div class="sanctions-warning">'+esc(text)+'</div>');
+  for(const hit of hits){
+    const terrorism=Boolean(hit.match.entities?.some(entity=>entity.terrorism));
+    const role=hit.role==="wallet"?"ANALYSED WALLET":hit.role==="party"?"TRANSACTION PARTY":"COUNTERPARTY";
+    const via=[...hit.via];
+    let context="";
+    if(hit.role==="party"){
+      context="Input or output of this transaction.";
+    }else if(hit.role!=="wallet"){
+      context="Seen with "+via.slice(0,3).map(address=>short(address,8)).join(", ")+(via.length>3?" +"+(via.length-3)+" more":"")+
+        ": received from "+hit.in_count+"× · sent to "+hit.out_count+"× in the returned sample"+
+        (hit.last_seen?" · last "+fmtTime(hit.last_seen):"")+".";
+    }
+    parts.push(
+      '<div class="intel-item alert-item high"><div class="intel-item-head"><div>'+
+      '<div class="intel-title">'+esc(hit.match.summary||"Listed address")+'</div>'+
+      '<div class="intel-meta">'+role+' · H'+hit.depth+' · '+esc(hit.match.currency||"")+'</div></div>'+
+      '<span class="intel-badge '+(terrorism?"high":"medium")+'">'+(terrorism?"TERRORISM PROGRAM":"SANCTIONS LIST")+'</span></div>'+
+      '<code class="sanctions-address">'+esc(hit.address)+'</code>'+
+      (context?'<div class="intel-detail">'+esc(context)+'</div>':"")+
+      '</div>'
+    );
+  }
+  if(!hits.length&&!unscreened){
+    const checked=usable.reduce((sum,item)=>sum+Number(item.counterparties_checked||0),0);
+    parts.push('<div class="intel-result">No match among the analysed wallet(s) and '+checked+' screened counterpart'+(checked===1?"y":"ies")+
+      '. No match does not mean an address is safe.</div>');
+  }
+  const scope=rootScreening?.scope_note||usable[0]?.scope_note;
+  if(scope)parts.push('<div class="sanctions-scope">'+esc(scope)+'</div>');
+  body.innerHTML=parts.join("");
+}
+
 function renderIntelligencePanels(){
+  renderSanctions();
   renderPatterns();
   renderExposure();
   renderLabelList();
@@ -1877,6 +1991,7 @@ function render(payload){
     renderKpis(payload,[]);
     const pre=document.getElementById("cryptoTransactionJson");
     if(pre)pre.textContent=JSON.stringify(payload.transaction||{},null,2);
+    renderSanctions();
   }else{
     if(addressView)addressView.hidden=false;
     if(transactionView)transactionView.hidden=true;
