@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import ipaddress
 import json
 import os
@@ -10,7 +11,7 @@ import sys
 import time
 from html import unescape
 from typing import Any
-from urllib.parse import parse_qsl, urlencode, urljoin, urlsplit, urlunsplit
+from urllib.parse import parse_qsl, quote, urlencode, urljoin, urlsplit, urlunsplit
 
 import requests
 from bs4 import BeautifulSoup
@@ -28,6 +29,81 @@ TRON_RE = re.compile(r"\bT[1-9A-HJ-NP-Za-km-z]{33}\b")
 HANDLE_RE = re.compile(r"(?<![\w@])@[A-Za-z0-9_\.]{3,64}\b")
 TELEGRAM_RE = re.compile(r"https?://(?:t\.me|telegram\.me)/[A-Za-z0-9_+\-/]+", re.I)
 URL_RE = re.compile(r"https?://[^\s<>'\"\]\)]+", re.I)
+
+_BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+_BECH32_CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
+_BECH32_GENERATOR = (0x3B6A57B2, 0x26508E6D, 0x1EA119FA, 0x3D4233DD, 0x2A1462B3)
+_BECH32M_CONSTANT = 0x2BC830A3
+
+
+def _valid_base58check(value: str, versions: set[int]) -> bool:
+    """True for a 25-byte Base58Check string (1 version byte + 20 + 4 checksum)."""
+    number = 0
+    for char in value:
+        index = _BASE58_ALPHABET.find(char)
+        if index < 0:
+            return False
+        number = number * 58 + index
+    try:
+        raw = number.to_bytes(25, "big")
+    except OverflowError:
+        return False
+    if raw[0] not in versions:
+        return False
+    checksum = hashlib.sha256(hashlib.sha256(raw[:21]).digest()).digest()[:4]
+    return checksum == raw[21:]
+
+
+def _bech32_polymod(values: list[int]) -> int:
+    checksum = 1
+    for value in values:
+        top = checksum >> 25
+        checksum = ((checksum & 0x1FFFFFF) << 5) ^ value
+        for bit in range(5):
+            if (top >> bit) & 1:
+                checksum ^= _BECH32_GENERATOR[bit]
+    return checksum
+
+
+def _valid_bitcoin_bech32(value: str) -> bool:
+    if value != value.lower() and value != value.upper():
+        return False  # mixed case is invalid in bech32
+    text = value.lower()
+    if not text.startswith("bc1") or not 14 <= len(text) <= 90:
+        return False
+    data = text[3:]
+    if any(char not in _BECH32_CHARSET for char in data):
+        return False
+    values = [ord(c) >> 5 for c in "bc"] + [0] + [ord(c) & 31 for c in "bc"]
+    values += [_BECH32_CHARSET.index(c) for c in data]
+    expected = 1 if _BECH32_CHARSET.index(data[0]) == 0 else _BECH32M_CONSTANT
+    return _bech32_polymod(values) == expected
+
+
+def is_valid_wallet(kind: str, value: str) -> bool:
+    """Checksum validation. A pass proves only that the string is well-formed,
+    NOT that the address is in use or who controls it."""
+    if kind == "evm":
+        return bool(re.fullmatch(r"0x[a-fA-F0-9]{40}", value))
+    if kind == "tron":
+        return _valid_base58check(value, {0x41})
+    if kind == "bitcoin":
+        if value[:3].lower() == "bc1":
+            return _valid_bitcoin_bech32(value)
+        return _valid_base58check(value, {0x00, 0x05})
+    return False
+
+
+def find_wallets(text: str) -> dict[str, list[str]]:
+    """Regex candidates filtered by checksum: random base58-looking tokens that
+    merely resemble an address are dropped instead of being reported as wallets."""
+    value = str(text or "")
+    found: dict[str, list[str]] = {"bitcoin": [], "evm": [], "tron": []}
+    for kind, pattern in (("bitcoin", BTC_RE), ("evm", EVM_RE), ("tron", TRON_RE)):
+        for candidate in dict.fromkeys(pattern.findall(value)):
+            if is_valid_wallet(kind, candidate):
+                found[kind].append(candidate)
+    return found
 
 
 def _clean(value: Any, max_len: int = 4000) -> str:
@@ -203,20 +279,17 @@ def extract_public_indicators(text: str) -> dict[str, Any]:
     urls = list(dict.fromkeys(URL_RE.findall(value)))[:60]
     handles = list(dict.fromkeys(HANDLE_RE.findall(value)))[:60]
     telegram = list(dict.fromkeys(TELEGRAM_RE.findall(value)))[:40]
-    btc = list(dict.fromkeys(BTC_RE.findall(value)))[:30]
-    evm = list(dict.fromkeys(EVM_RE.findall(value)))[:30]
-    tron = list(dict.fromkeys(TRON_RE.findall(value)))[:30]
+    wallets = find_wallets(value)
     return {
         "status": "success",
         "handles": handles,
         "telegram_urls": telegram,
         "urls": urls,
-        "wallets": {
-            "bitcoin": btc,
-            "evm": evm,
-            "tron": tron,
-        },
-        "caveat": "Indicators are strings observed in source text; they are not attribution findings.",
+        "wallets": {kind: found[:30] for kind, found in wallets.items()},
+        "caveat": (
+            "Indicators are strings observed in source text; they are not attribution findings. "
+            "Wallet strings pass an address checksum, which proves only that they are well-formed."
+        ),
     }
 
 
@@ -351,7 +424,10 @@ def social_capabilities() -> dict[str, Any]:
         "fourchan_public": True,
         "mastodon_public": True,
         "telegram_public_pages": True,
+        "telegram_channel_reader": True,
         "telegram_global_discovery": provider in {"brave", "searxng"},
+        "wayback_captures": True,
+        "odysee_public": True,
         "linkedin_public_discovery": provider in {"brave", "searxng"},
         "youtube_api": bool(os.getenv("YOUTUBE_API_KEY", "").strip()),
         "twitch_api": bool(
@@ -1241,6 +1317,580 @@ def search_telegram_public(query: str, limit: int = 10) -> dict[str, Any]:
     result = search_public_web(f"site:t.me {clean_query}", limit)
     result["platform"] = "telegram"
     return result
+
+
+TELEGRAM_USERNAME_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_]{3,31}$")
+# t.me path segments that are services, not channel usernames.
+_TELEGRAM_SERVICE_PATHS = {
+    "joinchat", "addstickers", "addemoji", "addtheme", "proxy", "socks", "share",
+    "iv", "c", "login", "setlanguage", "boost", "giftcode", "invoice", "m", "contact",
+}
+_TELEGRAM_MAX_PAGES = 3
+_TELEGRAM_POST_TEXT_MAX = 1500
+_TELEGRAM_MEDIA_CLASSES = (
+    ("tgme_widget_message_photo_wrap", "photo"),
+    ("tgme_widget_message_video_player", "video"),
+    ("tgme_widget_message_roundvideo_player", "video_note"),
+    ("tgme_widget_message_voice", "voice"),
+    ("tgme_widget_message_document_wrap", "document"),
+    ("tgme_widget_message_poll", "poll"),
+    ("tgme_widget_message_sticker_wrap", "sticker"),
+    ("tgme_widget_message_location_wrap", "location"),
+)
+
+
+def _as_int(value: Any, default: int) -> int:
+    """Tool arguments come from an LLM and may be strings; never raise on them."""
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _normalize_telegram_channel(value: str) -> str:
+    """Public channel username from '@name', 'name', 't.me/name', 't.me/s/name',
+    or a post URL. Invite links, private (t.me/c/...) and service links are
+    refused: they cannot be read without joining, which this tool never does."""
+    raw = _clean(value, 300)
+    if not raw:
+        raise ValueError("Empty Telegram channel.")
+    match = re.match(r"^(?:https?://)?(?:www\.)?(?:t\.me|telegram\.me|telegram\.dog)/(.+)$", raw, re.I)
+    path = (match.group(1) if match else raw).split("?")[0].split("#")[0]
+    parts = [part for part in path.split("/") if part]
+    if parts and parts[0].lower() == "s":
+        parts = parts[1:]
+    if not parts:
+        raise ValueError("No channel username found.")
+    name = parts[0].lstrip("@")
+    if name.startswith("+") or name.lower() in _TELEGRAM_SERVICE_PATHS:
+        raise ValueError(
+            "Invite links, private (t.me/c/...) and service links are not readable; "
+            "only public channel usernames are supported."
+        )
+    if not TELEGRAM_USERNAME_RE.match(name):
+        raise ValueError("Not a valid public Telegram username.")
+    return name
+
+
+def _telegram_count(text: str) -> int | None:
+    """'1.44M' -> 1440000, '12.3K' -> 12300, '532' -> 532 (as displayed, approximate)."""
+    match = re.fullmatch(r"\s*([\d.,]+)\s*([KMB]?)\s*", str(text or ""), re.I)
+    if not match:
+        return None
+    try:
+        number = float(match.group(1).replace(",", ""))
+    except ValueError:
+        return None
+    factor = {"": 1, "K": 1_000, "M": 1_000_000, "B": 1_000_000_000}[match.group(2).upper()]
+    return int(round(number * factor))
+
+
+def _telegram_text(node: Any, max_len: int = _TELEGRAM_POST_TEXT_MAX) -> str:
+    """Post text with line breaks preserved (they carry meaning in lists of
+    wallets/contacts) but runs of whitespace collapsed."""
+    if node is None:
+        return ""
+    for br in node.find_all("br"):
+        br.replace_with("\n")
+    text = unescape(node.get_text())
+    text = re.sub(r"[ \t\r\f\v ]+", " ", text)
+    text = re.sub(r" *\n *", "\n", text)
+    text = re.sub(r"\n{3,}", "\n\n", text).strip()
+    return text[:max_len]
+
+
+def _telegram_channel_from_url(url: str) -> tuple[str, str]:
+    """('channel', '') for a public channel link, ('', 'invite') for an invite link."""
+    try:
+        return _normalize_telegram_channel(url), ""
+    except ValueError:
+        if re.search(r"(?:t\.me|telegram\.me)/(?:\+|joinchat/)", str(url or ""), re.I):
+            return "", "invite"
+        return "", ""
+
+
+def _parse_telegram_message(node: Any, channel: str) -> dict[str, Any] | None:
+    post_ref = str(node.get("data-post") or "")
+    if "/" not in post_ref:
+        return None
+    post_channel, _, post_id = post_ref.partition("/")
+    if not post_id.isdigit():
+        return None
+
+    def outside_reply(element: Any) -> bool:
+        return element.find_parent(class_="tgme_widget_message_reply") is None
+
+    text_node = node.select_one(".tgme_widget_message_text.js-message_text")
+    if text_node is None:
+        text_node = next(
+            (item for item in node.select(".tgme_widget_message_text") if outside_reply(item)), None
+        )
+    text = _telegram_text(text_node)
+
+    link_urls: list[str] = []
+    mentioned: list[str] = []
+    invites: list[str] = []
+    for anchor in (text_node.find_all("a", href=True) if text_node is not None else []):
+        href = str(anchor.get("href") or "").strip()
+        if not href.lower().startswith(("http://", "https://")):
+            continue
+        name, kind = _telegram_channel_from_url(href)
+        if kind == "invite":
+            invites.append(_clean(href, 300))
+        elif name:
+            if name.lower() != channel.lower():
+                mentioned.append(name)
+        else:
+            link_urls.append(_clean(href, 500))
+
+    date_link = node.select_one("a.tgme_widget_message_date")
+    time_tag = date_link.find("time") if date_link is not None else None
+    forwarded = None
+    forwarded_node = node.select_one(".tgme_widget_message_forwarded_from_name")
+    if forwarded_node is not None:
+        href = str(forwarded_node.get("href") or "")
+        source_channel, _ = _telegram_channel_from_url(href) if href else ("", "")
+        forwarded = {
+            "name": _clean(forwarded_node.get_text(" ", strip=True), 200),
+            "channel": source_channel,
+            "url": _clean(href, 300),
+        }
+    reply_node = node.select_one("a.tgme_widget_message_reply")
+
+    media = [label for css, label in _TELEGRAM_MEDIA_CLASSES if node.select_one("." + css)]
+    preview = None
+    preview_node = node.select_one("a.tgme_widget_message_link_preview")
+    if preview_node is not None:
+        site_node = preview_node.select_one(".link_preview_site_name")
+        title_node = preview_node.select_one(".link_preview_title")
+        preview = {
+            "url": _clean(preview_node.get("href"), 500),
+            "site": _clean(site_node.get_text(" ", strip=True) if site_node is not None else "", 120),
+            "title": _clean(title_node.get_text(" ", strip=True) if title_node is not None else "", 300),
+        }
+        if preview["url"] and preview["url"] not in link_urls:
+            link_urls.append(preview["url"])
+
+    views_node = node.select_one(".tgme_widget_message_views")
+    views_text = _clean(views_node.get_text(" ", strip=True), 20) if views_node is not None else ""
+    wallet_source = "\n".join([text] + link_urls)
+    wallets = find_wallets(wallet_source)
+    entry: dict[str, Any] = {
+        "id": int(post_id),
+        "url": f"https://t.me/{post_channel}/{post_id}",
+        "date": _clean(time_tag.get("datetime") if time_tag is not None else "", 40),
+        "text": text,
+        "views": _telegram_count(views_text),
+        "views_displayed": views_text,
+        "media": media,
+        "links": list(dict.fromkeys(link_urls))[:15],
+        "mentioned_channels": list(dict.fromkeys(mentioned))[:15],
+        "hashtags": list(dict.fromkeys(re.findall(r"#\w{2,60}", text)))[:15],
+        "wallets": {kind: found for kind, found in wallets.items() if found},
+    }
+    if forwarded:
+        entry["forwarded_from"] = forwarded
+    if reply_node is not None:
+        entry["reply_to_url"] = _clean(reply_node.get("href"), 300)
+    if preview:
+        entry["link_preview"] = preview
+    if invites:
+        entry["invite_links"] = list(dict.fromkeys(invites))[:10]
+    return entry
+
+
+def parse_telegram_preview(html: str, channel: str) -> dict[str, Any]:
+    """Parse one page of https://t.me/s/<channel> (the public web preview)."""
+    soup = BeautifulSoup(str(html or ""), "html.parser")
+
+    def text_of(selector: str, max_len: int = 500) -> str:
+        node = soup.select_one(selector)
+        return _clean(node.get_text(" ", strip=True), max_len) if node is not None else ""
+
+    counters: dict[str, str] = {}
+    for counter in soup.select(".tgme_channel_info_counter"):
+        value = counter.select_one(".counter_value")
+        kind = counter.select_one(".counter_type")
+        if value is not None and kind is not None:
+            counters[_clean(kind.get_text(), 40).lower()] = _clean(value.get_text(), 40)
+
+    description_node = soup.select_one(".tgme_channel_info_description")
+    info = {
+        "title": text_of(".tgme_channel_info_header_title", 200),
+        "username": text_of(".tgme_channel_info_header_username", 80),
+        "description": _telegram_text(description_node, 1200),
+        "counters": counters,
+    }
+
+    messages = [
+        parsed
+        for parsed in (_parse_telegram_message(node, channel) for node in soup.select(".tgme_widget_message[data-post]"))
+        if parsed is not None
+    ]
+    more = soup.select_one("a.tme_messages_more[data-before]")
+    next_before = None
+    if more is not None:
+        try:
+            next_before = int(str(more.get("data-before")))
+        except ValueError:
+            next_before = None
+    return {"info": info, "messages": messages, "next_before": next_before}
+
+
+def _telegram_network(messages: list[dict[str, Any]]) -> dict[str, Any]:
+    """Channels this channel forwards from / links to, external domains and wallets.
+
+    This is the cheap, high-value pivot for channel-network analysis: the agent
+    can read the most-referenced channels next. A forward or a link is an
+    observed relationship, not proof of affiliation or shared control."""
+    forwards: dict[str, dict[str, Any]] = {}
+    mentions: dict[str, int] = {}
+    domains: dict[str, int] = {}
+    invites: list[str] = []
+    hashtags: dict[str, int] = {}
+    wallets: dict[str, list[str]] = {"bitcoin": [], "evm": [], "tron": []}
+
+    for message in messages:
+        source = message.get("forwarded_from")
+        if source:
+            key = (source.get("channel") or source.get("name") or "").lower()
+            if key:
+                item = forwards.setdefault(
+                    key, {"channel": source.get("channel", ""), "name": source.get("name", ""), "count": 0}
+                )
+                item["count"] += 1
+        for name in message.get("mentioned_channels", []):
+            mentions[name] = mentions.get(name, 0) + 1
+        for url in message.get("links", []):
+            host = (urlsplit(url).hostname or "").lower().removeprefix("www.")
+            if host:
+                domains[host] = domains.get(host, 0) + 1
+        invites.extend(message.get("invite_links", []))
+        for tag in message.get("hashtags", []):
+            hashtags[tag.lower()] = hashtags.get(tag.lower(), 0) + 1
+        for kind, found in message.get("wallets", {}).items():
+            for address in found:
+                if address not in wallets[kind]:
+                    wallets[kind].append(address)
+
+    def ranked(counts: dict[str, int], key: str, limit: int) -> list[dict[str, Any]]:
+        return [{key: name, "count": count} for name, count in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[:limit]]
+
+    return {
+        "forwarded_from": sorted(forwards.values(), key=lambda item: (-item["count"], item["name"]))[:15],
+        "mentioned_channels": ranked(mentions, "channel", 15),
+        "external_domains": ranked(domains, "domain", 15),
+        "hashtags": ranked(hashtags, "hashtag", 15),
+        "invite_links": list(dict.fromkeys(invites))[:15],
+        "wallets": {kind: found[:30] for kind, found in wallets.items() if found},
+    }
+
+
+def read_telegram_channel(channel: str, pages: int = 1, before: int = 0) -> dict[str, Any]:
+    """Read recent posts of a PUBLIC Telegram channel from its public web preview.
+
+    Uses https://t.me/s/<channel>: the read-only page Telegram itself serves to
+    anyone without an account. Returns the latest ~20 posts per page (text,
+    date, views, forwards, links, media types, checksum-valid wallets) plus a
+    'network' summary of channels it forwards from or links to and external
+    domains -- use it to decide which related channels to read next.
+
+    NOT available through this tool: private channels, groups, invite links,
+    member lists, deleted posts, or any search inside Telegram. Nothing is joined.
+    Pass the returned next_before as `before` to read older posts.
+    """
+    try:
+        name = _normalize_telegram_channel(channel)
+    except ValueError as exc:
+        return {"status": "error", "platform": "telegram", "channel": _clean(channel, 200), "error": str(exc)}
+
+    requested_pages = max(1, min(_as_int(pages, 1), _TELEGRAM_MAX_PAGES))
+    cursor = max(0, _as_int(before, 0))
+    info: dict[str, Any] = {}
+    messages: list[dict[str, Any]] = []
+    seen_ids: set[int] = set()
+    next_before: int | None = None
+    try:
+        for index in range(requested_pages):
+            if index:
+                time.sleep(1.0)
+            url = f"https://t.me/s/{name}" + (f"?before={cursor}" if cursor else "")
+            response = _manual_fetch(url, timeout=15)
+            final_url = getattr(response, "_ct_atlas_final_url", url)
+            body = _read_limited(response)
+            response.close()
+            if "/s/" not in urlsplit(final_url).path:
+                # t.me redirects channels without a web preview to the normal page.
+                break
+            page = parse_telegram_preview(body.decode("utf-8", errors="replace"), name)
+            if not info and page["info"].get("title"):
+                info = page["info"]
+            for message in page["messages"]:
+                if message["id"] not in seen_ids:
+                    seen_ids.add(message["id"])
+                    messages.append(message)
+            next_before = page["next_before"]
+            if not next_before or not page["messages"]:
+                break
+            cursor = next_before
+    except Exception as exc:
+        return {
+            "status": "error",
+            "platform": "telegram",
+            "channel": name,
+            "messages": messages,
+            "error": _clean(exc, 500),
+        }
+
+    if not messages:
+        return {
+            "status": "unavailable",
+            "platform": "telegram",
+            "channel": name,
+            "reason": (
+                "No public web preview was returned: the channel may not exist, may be a "
+                "private channel or group, or may have its web preview disabled."
+            ),
+        }
+
+    messages.sort(key=lambda item: item["id"], reverse=True)
+    return {
+        "status": "success",
+        "platform": "telegram",
+        "channel": name,
+        "url": f"https://t.me/{name}",
+        "preview_url": f"https://t.me/s/{name}",
+        "info": info,
+        "messages": messages,
+        "messages_returned": len(messages),
+        "newest_id": messages[0]["id"],
+        "oldest_id": messages[-1]["id"],
+        "next_before": next_before,
+        "network": _telegram_network(messages),
+        "limits": (
+            "Only the public web preview was read: recent posts of a public channel. "
+            "No membership, private/joined chats, deleted posts or Telegram-internal search."
+        ),
+        "caveat": (
+            "Forwards, links and wallet strings are observed relationships, not proof of "
+            "affiliation, ownership or control. View and subscriber counts are as displayed "
+            "at retrieval time and are approximate."
+        ),
+    }
+
+
+_WAYBACK_MATCH_TYPES = {"exact", "prefix", "host", "domain"}
+
+
+def _wayback_target(url: str) -> str:
+    raw = str(url or "").strip()
+    parsed = urlsplit(raw if "://" in raw else "https://" + raw)
+    host = (parsed.hostname or "").lower()
+    if parsed.scheme not in ALLOWED_SCHEMES or not host or parsed.username or parsed.password:
+        raise ValueError("Enter a public http(s) URL.")
+    if host == "localhost" or host.endswith((".local", ".internal", ".localhost")):
+        raise ValueError("Local URLs are not allowed.")
+    try:
+        ipaddress.ip_address(host)
+        is_ip_literal = True
+    except ValueError:
+        is_ip_literal = False
+    if is_ip_literal and not _is_public_ip(host):
+        raise ValueError("Private network addresses are not allowed.")
+    return urlunsplit(parsed)
+
+
+def _wayback_captures(target: str, match_type: str, limit: int, newest: bool) -> list[dict[str, Any]]:
+    response = requests.get(
+        "https://web.archive.org/cdx/search/cdx",
+        params={
+            "url": target,
+            "matchType": match_type,
+            "output": "json",
+            "fl": "timestamp,original,statuscode,mimetype",
+            "filter": "statuscode:200",
+            "collapse": "digest",
+            "limit": -limit if newest else limit,
+        },
+        headers={"User-Agent": USER_AGENT},
+        timeout=25,
+    )
+    response.raise_for_status()
+    rows = response.json()
+    captures: list[dict[str, Any]] = []
+    for row in rows[1:] if rows else []:
+        if len(row) < 4:
+            continue
+        stamp, original = str(row[0]), str(row[1])
+        iso = ""
+        if re.fullmatch(r"\d{14}", stamp):
+            iso = f"{stamp[0:4]}-{stamp[4:6]}-{stamp[6:8]}T{stamp[8:10]}:{stamp[10:12]}:{stamp[12:14]}Z"
+        captures.append({
+            "timestamp": stamp,
+            "captured_at": iso,
+            "original": _clean(original, 600),
+            "status": _clean(row[2], 8),
+            "mimetype": _clean(row[3], 80),
+            "archive_url": f"https://web.archive.org/web/{stamp}/{original}",
+        })
+    return captures
+
+
+def wayback_snapshots(url: str, which: str = "both", limit: int = 5, match_type: str = "exact") -> dict[str, Any]:
+    """List Internet Archive (Wayback Machine) captures of a PUBLIC URL.
+
+    Use it when a page, profile or post is gone, changed or blocked: each capture
+    has an archive_url that fetch_public_url can read. which = earliest | latest |
+    both (default). match_type = exact | prefix | host | domain. Distinct captures
+    only (identical content is collapsed). A missing capture does NOT prove that
+    content never existed, and an archived page shows only what was public when
+    it was captured.
+    """
+    try:
+        target = _wayback_target(url)
+    except ValueError as exc:
+        return {"status": "error", "source": "internet_archive_cdx", "url": _clean(url, 500), "error": str(exc)}
+    side = _clean(which, 12).lower() or "both"
+    if side not in {"earliest", "latest", "both"}:
+        return {"status": "error", "source": "internet_archive_cdx", "url": target, "error": "which must be earliest, latest or both."}
+    matching = _clean(match_type, 12).lower() or "exact"
+    if matching not in _WAYBACK_MATCH_TYPES:
+        return {"status": "error", "source": "internet_archive_cdx", "url": target, "error": "match_type must be exact, prefix, host or domain."}
+    per_side = max(1, min(_as_int(limit, 5), 20))
+
+    try:
+        captures: list[dict[str, Any]] = []
+        if side in {"earliest", "both"}:
+            captures += _wayback_captures(target, matching, per_side, newest=False)
+        if side == "both":
+            time.sleep(1.0)
+        if side in {"latest", "both"}:
+            captures += _wayback_captures(target, matching, per_side, newest=True)
+    except Exception as exc:
+        return {
+            "status": "error",
+            "source": "internet_archive_cdx",
+            "url": target,
+            "error": _clean(exc, 500),
+            "note": "The Internet Archive rate-limits aggressively; retry later rather than repeatedly.",
+        }
+
+    unique = list({item["timestamp"] + item["original"]: item for item in captures}.values())
+    unique.sort(key=lambda item: item["timestamp"])
+    return {
+        "status": "success" if unique else "no_captures",
+        "source": "internet_archive_cdx",
+        "url": target,
+        "match_type": matching,
+        "captures": unique,
+        "first_capture": unique[0]["captured_at"] if unique else "",
+        "last_capture": unique[-1]["captured_at"] if unique else "",
+        "note": (
+            "Captures show what was public when archived. No capture does not prove content "
+            "never existed; a capture does not prove who published it."
+        ),
+    }
+
+
+def _odysee_url(canonical: str) -> str:
+    """lbry://@chan#9/title#7 -> https://odysee.com/@chan:9/title:7 (percent-encoded)."""
+    path = str(canonical or "").replace("lbry://", "", 1).replace("#", ":")
+    return "https://odysee.com/" + quote(path, safe="/:@") if path else ""
+
+
+def search_odysee(query: str, limit: int = 10, result_type: str = "content") -> dict[str, Any]:
+    """Search PUBLIC Odysee videos/posts (or channels) without an account or key.
+
+    result_type = content (default) | channels. Odysee is a common destination
+    for creators moved off mainstream platforms, so it is worth checking for
+    re-uploads. Search hits are leads: a title or channel name does not identify
+    a person or establish affiliation.
+    """
+    clean_query = _clean(query, 200)
+    requested = max(1, min(_as_int(limit, 10), 20))
+    kind = _clean(result_type, 12).lower() or "content"
+    if kind not in {"content", "channels"}:
+        return {"status": "error", "platform": "odysee", "results": [], "error": "result_type must be content or channels."}
+    if not clean_query:
+        return {"status": "error", "platform": "odysee", "results": [], "error": "Empty Odysee query."}
+
+    try:
+        found = requests.get(
+            "https://lighthouse.odysee.tv/search",
+            params={
+                "s": clean_query,
+                "size": requested,
+                "from": 0,
+                "nsfw": "false",
+                "claimType": "channel" if kind == "channels" else "file",
+            },
+            headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
+            timeout=DEFAULT_TIMEOUT,
+        )
+        found.raise_for_status()
+        ranked_ids = [str(item.get("claimId")) for item in found.json() if item.get("claimId")][:requested]
+        if not ranked_ids:
+            return {"status": "success", "platform": "odysee", "query": clean_query, "mode": kind, "results": []}
+
+        resolved = requests.post(
+            "https://api.na-backend.odysee.com/api/v1/proxy?m=claim_search",
+            json={
+                "jsonrpc": "2.0",
+                "method": "claim_search",
+                "params": {"claim_ids": ranked_ids, "page_size": len(ranked_ids), "no_totals": True},
+                "id": 1,
+            },
+            headers={"User-Agent": USER_AGENT},
+            timeout=DEFAULT_TIMEOUT,
+        )
+        resolved.raise_for_status()
+        items = {str(item.get("claim_id")): item for item in (resolved.json().get("result") or {}).get("items", [])}
+    except Exception as exc:
+        return {
+            "status": "error",
+            "platform": "odysee",
+            "query": clean_query,
+            "results": [],
+            "error": _clean(exc, 500),
+        }
+
+    results: list[dict[str, Any]] = []
+    for claim_id in ranked_ids:  # keep the search engine's relevance order
+        item = items.get(claim_id)
+        if not item:
+            continue
+        value = item.get("value") or {}
+        channel = item.get("signing_channel") or {}
+        timestamp = item.get("timestamp")
+        published = ""
+        if isinstance(timestamp, (int, float)):
+            published = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(timestamp))
+        entry: dict[str, Any] = {
+            "type": "channel" if kind == "channels" else "content",
+            "name": _clean(item.get("name"), 200),
+            "title": _clean(value.get("title"), 300),
+            "description": _clean(value.get("description"), 800),
+            "url": _odysee_url(item.get("canonical_url") or item.get("permanent_url") or ""),
+            "published_at": published,
+            "tags": [_clean(tag, 60) for tag in (value.get("tags") or [])[:10]],
+            "languages": [_clean(lang, 12) for lang in (value.get("languages") or [])[:5]],
+            "source": "odysee_lighthouse_public",
+        }
+        if kind == "content":
+            entry["channel"] = _clean(channel.get("name"), 200)
+            entry["channel_url"] = _odysee_url(channel.get("canonical_url") or "")
+            entry["media_type"] = _clean((value.get("source") or {}).get("media_type"), 60)
+            entry["stream_type"] = _clean(value.get("stream_type"), 20)
+        results.append(entry)
+
+    return {
+        "status": "success",
+        "platform": "odysee",
+        "mode": kind,
+        "query": clean_query,
+        "results": results,
+        "source_disclosure": "Source data: Odysee public search (Lighthouse) and public claim metadata.",
+    }
 
 
 def transcribe_public_media(url: str, language: str = "") -> dict[str, Any]:

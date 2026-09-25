@@ -17,7 +17,9 @@ from .tools import (
     search_bluesky,
     search_mastodon,
     search_linkedin_public,
+    search_odysee,
     search_public_web,
+    read_telegram_channel,
     search_reddit,
     search_telegram_public,
     search_tumblr,
@@ -27,6 +29,7 @@ from .tools import (
     search_youtube,
     social_capabilities,
     transcribe_public_media,
+    wayback_snapshots,
 )
 
 
@@ -77,22 +80,35 @@ You have these tools:
    - Public LinkedIn profile/company/post discovery through Brave/SearXNG only; no LinkedIn login or restricted API access.
 12. search_telegram_public(query, limit)
    - Public Telegram t.me discovery via the independent search provider.
-13. search_tumblr(query, limit)
+13. read_telegram_channel(channel, pages, before)
+   - Reads the latest posts of a PUBLIC Telegram channel from its public web
+     preview (no account, nothing joined): text, dates, views, forwards, links,
+     media types, checksum-valid wallets, and a "network" summary of channels it
+     forwards from or links to. Cannot read private channels, groups, invite
+     links, members or deleted posts, and cannot search inside Telegram.
+14. search_tumblr(query, limit)
    - Public Tumblr tagged-post discovery when TUMBLR_API_KEY is configured.
-14. search_twitch(query, limit, live_only)
+15. search_twitch(query, limit, live_only)
    - Public Twitch channel search when TWITCH_CLIENT_ID and TWITCH_CLIENT_SECRET are configured.
-15. search_username_profiles(username, timeout_seconds)
+16. search_odysee(query, limit, result_type)
+   - Keyless Odysee public search (content or channels); useful for re-uploads
+     and creators who moved off mainstream platforms.
+17. wayback_snapshots(url, which, limit, match_type)
+   - Internet Archive captures of a public URL (earliest/latest). Use for pages,
+     profiles or posts that are gone, changed or blocked; read a capture with
+     fetch_public_url(archive_url). No capture does not prove content never existed.
+18. search_username_profiles(username, timeout_seconds)
    - Sherlock same-username discovery across many public sites. Candidate hits
      are NEVER proof of common identity.
-16. transcribe_public_media(url, language)
+19. transcribe_public_media(url, language)
    - Groq Whisper transcription of suitable public media when configured.
-17. preprocess_public_text_free(text, task)
+20. preprocess_public_text_free(text, task)
    - Optional zero-cost preprocessing via Cloudflare Workers AI or OpenRouter.
    - It may only analyze text already collected from public sources and is
      NEVER itself source evidence.
-18. extract_public_indicators(text)
-   - Extracts candidate handles, Telegram URLs, public URLs and wallets.
-19. normalize_evidence(source_url, observation, category, confidence)
+21. extract_public_indicators(text)
+   - Extracts candidate handles, Telegram URLs, public URLs and checksum-valid wallets.
+22. normalize_evidence(source_url, observation, category, confidence)
    - Creates normalized evidence records. It does not validate attribution.
 
 INVESTIGATION METHOD
@@ -107,8 +123,9 @@ A. PLAN
 B. COLLECT / EXPAND
 - Always examine analyst-supplied URLs first.
 - Call social_capabilities early when discovery sources are needed.
-- Use platform-native public collectors when they are relevant: Bluesky,
-  Mastodon, Flickr, 4chan, YouTube, LinkedIn, Tumblr, Twitch, X and Reddit before relying only on generic web search.
+- Use platform-native public collectors when they are relevant: Telegram
+  channels, Bluesky, Mastodon, Odysee, Flickr, 4chan, YouTube, LinkedIn, Tumblr,
+  Twitch, X and Reddit before relying only on generic web search.
 - For an explicit username/handle, use Sherlock at most once to generate
   candidate profile URLs, then corroborate relevant candidates independently.
 - For public audio/video with analytical value, transcribe only when Groq is
@@ -119,6 +136,14 @@ B. COLLECT / EXPAND
 - Use fetch_public_url on relevant public pages.
 - Use extract_public_indicators when page text contains candidate handles,
   links, Telegram references or wallets.
+- Telegram: when a public channel is in scope (analyst-supplied, or found in
+  results/links), call read_telegram_channel. Read at most 5 channels, and
+  expand to another channel only when the "network" summary shows repeated
+  forwards or links (a single mention is weak). Invite links are reported but
+  never followed. Quote sparingly and never reproduce propaganda at length.
+- For gone or changed content, try wayback_snapshots once per URL and then read
+  the most relevant capture with fetch_public_url. Say clearly that it is an
+  archived copy, with its capture date.
 - Review the returned public links and follow only those materially relevant to
   the investigation.
 - If search_public_web is configured, use narrow searches based on target,
@@ -142,14 +167,18 @@ Address where supported:
 - propaganda, recruitment, facilitation or mobilization themes;
 - temporal changes or activity patterns;
 - geographic or travel indicators;
-- publicly exposed wallets/donation mechanisms;
+- publicly exposed wallets/donation mechanisms: list EVERY wallet you actually
+  observed as a WALLET entity with the complete, untruncated address and the
+  source URL (CT Atlas screens these against sanctions lists and links them to
+  the Crypto workspace; never invent or "complete" an address);
 - links to named organizations/events only where evidence supports them;
 - contradictions, rejected matches and important gaps.
 
 E. STOP CONDITIONS
 Keep the investigation bounded:
 - no more than 6 public-web search calls;
-- no more than 25 fetched URLs;
+- no more than 25 fetched URLs (each Telegram channel page and Wayback capture
+  counts as one);
 - no more than 10 newly discovered aliases/handles expanded;
 - stop earlier after two consecutive exploration steps produce no meaningful
   new evidence;
@@ -260,6 +289,9 @@ root_agent = Agent(
         search_x,
         search_reddit,
         search_telegram_public,
+        read_telegram_channel,
+        search_odysee,
+        wayback_snapshots,
         search_tumblr,
         search_twitch,
         search_username_profiles,
