@@ -6,6 +6,7 @@ const vm=require("node:vm");
 const stripModuleSyntax=file=>fs.readFileSync(file,"utf8")
   .replace(/^import[\s\S]*?from "\.\/[^"]+";\s*/gm,"")
   .replace(/export \{[\s\S]*?\};\s*$/,"");
+const addressUtilsSource=stripModuleSyntax("cloudflare-worker/address-utils.js");
 const sanctionsSource=stripModuleSyntax("cloudflare-worker/sanctions.js");
 const source=stripModuleSyntax("cloudflare-worker/crypto.js");
 
@@ -21,9 +22,10 @@ function harness(fetchImpl){
     console,
     fetch:fetchImpl||(async()=>{throw new Error("network not used in unit tests");})
   });
+  vm.runInContext(addressUtilsSource,context);
   vm.runInContext(sanctionsSource,context);
   vm.runInContext(source,context);
-  return vm.runInContext("({detectCryptoInput,aggregateFlows,buildObservations,detectSuspiciousPatterns,tronTrxRows,tronAddress,sha256,withSanctionsScreening,resetSanctionsCache,EVM_CHAINS,CRYPTO_VERSION})",context);
+  return vm.runInContext("({detectCryptoInput,aggregateFlows,buildObservations,detectSuspiciousPatterns,tronTrxRows,tronAddress,withSanctionsScreening,resetSanctionsCache,EVM_CHAINS,CRYPTO_VERSION})",context);
 }
 
 test("auto-detects common BTC, EVM and TRON address formats",()=>{
@@ -258,15 +260,6 @@ test("regression: tronTrxRows ignores TriggerSmartContract calls, only real TRX 
   assert.equal(rows.length,1,"the TriggerSmartContract call must not produce a phantom TRX row");
   assert.equal(rows[0].id,"real-transfer-1");
   assert.equal(rows[0].amount,5);
-});
-
-test("sha256 matches published FIPS 180-4 test vectors",()=>{
-  const h=harness();
-  const hex=bytes=>Array.from(bytes,b=>b.toString(16).padStart(2,"0")).join("");
-  assert.equal(hex(h.sha256(new TextEncoder().encode("abc"))),"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
-  assert.equal(hex(h.sha256(new Uint8Array(0))),"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
-  // 200 bytes spans several 64-byte blocks (cross-checked against Python hashlib).
-  assert.equal(hex(h.sha256(new TextEncoder().encode("a".repeat(200)))),"c2a908d98f5df987ade41b5fce213067efbcc21ef2240212a41e54b5e7c28ae5");
 });
 
 test("tronAddress converts TronGrid hex addresses to base58check and leaves other input alone",()=>{

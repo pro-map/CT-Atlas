@@ -5,6 +5,7 @@ import {
   jsonResponse,
   gateCall
 } from "./shared.js";
+import { tronAddress } from "./address-utils.js";
 import { loadSanctions, screenAnalysis, sanctionsObservation } from "./sanctions.js";
 
 const CRYPTO_VERSION = "crypto-intel-v3-sanctions-screening";
@@ -588,86 +589,9 @@ function tronHeaders(env) {
 }
 
 // TronGrid's /v1/accounts/.../transactions endpoint returns raw_data addresses
-// as 21-byte hex ("41" + 20-byte account), not the base58check "T..." form users
-// paste and explorers show. Left as-is, the analysed wallet never matched its own
-// counterparties and sanctions/watchlist lookups could not match TRX transfers.
-// Base58check needs a double SHA-256; the Workers-native digest is async, so a
-// small synchronous implementation keeps the row builders synchronous.
-const BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-const TRON_HEX_ADDRESS_RE = /^41[0-9a-fA-F]{40}$/;
-
-function firstPrimes(count) {
-  const primes = [];
-  for (let n = 2; primes.length < count; n++) {
-    if (primes.every(prime => n % prime !== 0)) primes.push(n);
-  }
-  return primes;
-}
-
-// SHA-256 constants are the fractional parts of the cube/square roots of the
-// first primes (FIPS 180-4); deriving them avoids a 64-entry hand-typed table.
-const fractionBits = value => Math.floor((value - Math.floor(value)) * 4294967296) >>> 0;
-const SHA256_K = firstPrimes(64).map(prime => fractionBits(Math.cbrt(prime)));
-const SHA256_H0 = firstPrimes(8).map(prime => fractionBits(Math.sqrt(prime)));
-
-function sha256(bytes) {
-  const rotr = (x, n) => (x >>> n) | (x << (32 - n));
-  const length = bytes.length;
-  const padded = new Uint8Array(Math.ceil((length + 9) / 64) * 64);
-  padded.set(bytes);
-  padded[length] = 0x80;
-  const view = new DataView(padded.buffer);
-  view.setUint32(padded.length - 8, Math.floor((length * 8) / 4294967296));
-  view.setUint32(padded.length - 4, (length * 8) >>> 0);
-
-  const h = SHA256_H0.slice();
-  const w = new Uint32Array(64);
-  for (let offset = 0; offset < padded.length; offset += 64) {
-    for (let i = 0; i < 16; i++) w[i] = view.getUint32(offset + i * 4);
-    for (let i = 16; i < 64; i++) {
-      const s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ (w[i - 15] >>> 3);
-      const s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);
-      w[i] = (w[i - 16] + s0 + w[i - 7] + s1) >>> 0;
-    }
-    let [a, b, c, d, e, f, g, hh] = h;
-    for (let i = 0; i < 64; i++) {
-      const t1 = (hh + (rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)) + ((e & f) ^ (~e & g)) + SHA256_K[i] + w[i]) >>> 0;
-      const t2 = ((rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) >>> 0;
-      hh = g; g = f; f = e; e = (d + t1) >>> 0;
-      d = c; c = b; b = a; a = (t1 + t2) >>> 0;
-    }
-    [a, b, c, d, e, f, g, hh].forEach((value, i) => { h[i] = (h[i] + value) >>> 0; });
-  }
-  const digest = new Uint8Array(32);
-  const out = new DataView(digest.buffer);
-  h.forEach((value, i) => out.setUint32(i * 4, value));
-  return digest;
-}
-
-function base58Encode(bytes) {
-  let value = 0n;
-  for (const byte of bytes) value = value * 256n + BigInt(byte);
-  let encoded = "";
-  while (value > 0n) {
-    encoded = BASE58_ALPHABET[Number(value % 58n)] + encoded;
-    value /= 58n;
-  }
-  for (const byte of bytes) {
-    if (byte !== 0) break;
-    encoded = "1" + encoded;
-  }
-  return encoded;
-}
-
-// Hex ("41...") -> base58check "T..."; anything else is returned unchanged so
-// already-base58 addresses (e.g. from the TRC-20 endpoint) pass straight through.
-function tronAddress(value) {
-  const text = String(value ?? "").trim();
-  if (!TRON_HEX_ADDRESS_RE.test(text)) return text;
-  const payload = Uint8Array.from(text.match(/../g), pair => parseInt(pair, 16));
-  const checksum = sha256(sha256(payload)).slice(0, 4);
-  return base58Encode(Uint8Array.from([...payload, ...checksum]));
-}
+// as 21-byte hex ("41...") rather than the base58check "T..." form users paste
+// and explorers show; tronAddress() converts so the analysed wallet matches its
+// own counterparties and sanctions/watchlist lookups can match TRX transfers.
 
 function tronTokenRows(address, rows) {
   const seed = address.toLowerCase();
@@ -912,8 +836,6 @@ export {
   aggregateFlows,
   buildObservations,
   detectSuspiciousPatterns,
-  tronAddress,
-  sha256,
   withSanctionsScreening,
   analyzeCryptoAddress,
   handleCrypto

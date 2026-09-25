@@ -32,17 +32,11 @@ jobs:
 
       - name: Validate Worker JavaScript
         run: |
-          node --check cloudflare-worker/shared.js
-          node --check cloudflare-worker/report-gate.js
-          node --check cloudflare-worker/index.js
-          node --check cloudflare-worker/quiz.js
-          node --check cloudflare-worker/crypto.js
-          node --check cloudflare-worker/crypto-workspace.js
-          node --check cloudflare-worker/crypto-monitor.js
-          node --check cloudflare-worker/sanctions.js
-          node --check cloudflare-worker/source-preview.js
-          node --check cloudflare-worker/social-intel.js
-          node --check cloudflare-worker/social-agent-client.js
+          # `node --check file.js` silently accepts syntax errors in ES modules
+          # (exit 0 even for an unterminated string), so parse them as modules.
+          for file in cloudflare-worker/*.js; do
+            node --input-type=module --check < "$file"
+          done
           node --check crypto.js
           node --test tests/*.test.cjs
           python3 tests/quiz_source_test.py
