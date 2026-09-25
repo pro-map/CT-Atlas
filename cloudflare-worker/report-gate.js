@@ -32,10 +32,100 @@ function withAdminDisplayName(row){
   const displayName=ADMIN_DISPLAY_NAMES[normalizeUsername(row?.username)]||"";
   return displayName?{...row,display_name:displayName}:row;
 }
+const SOCIAL_REPORT_RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
+const MIGRATION_PAGE_SIZE = 250;
+
 export class ReportGate {
   constructor(state, env) {
     this.state = state;
     this.env = env;
+  }
+
+  async scheduleExpiry(expiresAt) {
+    const when = Number(expiresAt || 0);
+    if (!Number.isFinite(when) || when <= 0) return;
+    const current = await this.state.storage.getAlarm();
+    if (current == null || when < current) {
+      await this.state.storage.setAlarm(when);
+    }
+  }
+
+  async pruneSocialWorkspace(workspace, now = Date.now()) {
+    if (!workspace || typeof workspace !== "object") return { workspace, changed: false, nextExpiry: null };
+    const reports = Array.isArray(workspace.reports) ? workspace.reports : [];
+    let changed = false;
+    let nextExpiry = null;
+    const kept = [];
+    for (const report of reports) {
+      const generated = Date.parse(String(report?.generated_at || ""));
+      if (Number.isFinite(generated)) {
+        const expiresAt = generated + SOCIAL_REPORT_RETENTION_MS;
+        if (expiresAt <= now) {
+          changed = true;
+          continue;
+        }
+        if (nextExpiry == null || expiresAt < nextExpiry) nextExpiry = expiresAt;
+      }
+      kept.push(report);
+    }
+    if (changed) {
+      workspace = { ...workspace, reports: kept, updated_at: new Date(now).toISOString() };
+    }
+    return { workspace, changed, nextExpiry };
+  }
+
+  async purgeExpired(now = Date.now()) {
+    let nextExpiry = null;
+    const track = value => {
+      const when = Number(value || 0);
+      if (Number.isFinite(when) && when > now && (nextExpiry == null || when < nextExpiry)) nextExpiry = when;
+    };
+
+    for (const prefix of ["cache:", "source-image-token:", "session:"]) {
+      let startAfter = "";
+      for (let page = 0; page < 100; page++) {
+        const options = { prefix, limit: 500 };
+        if (startAfter) options.startAfter = startAfter;
+        const batch = await this.state.storage.list(options);
+        if (!batch || !batch.size) break;
+        const expired = [];
+        for (const [key, value] of batch.entries()) {
+          const expiresAt = Number(value?.expires_at || 0);
+          if (expiresAt && expiresAt <= now) expired.push(key);
+          else track(expiresAt);
+        }
+        if (expired.length) await this.state.storage.delete(expired);
+        const keys = Array.from(batch.keys());
+        const lastKey = keys[keys.length - 1];
+        if (batch.size < 500 || !lastKey || lastKey === startAfter) break;
+        startAfter = lastKey;
+      }
+    }
+
+    let socialStartAfter = "";
+    for (let page = 0; page < 100; page++) {
+      const options = { prefix: "social-workspace:", limit: 250 };
+      if (socialStartAfter) options.startAfter = socialStartAfter;
+      const batch = await this.state.storage.list(options);
+      if (!batch || !batch.size) break;
+      for (const [key, workspace] of batch.entries()) {
+        const pruned = await this.pruneSocialWorkspace(workspace, now);
+        if (pruned.changed) await this.state.storage.put(key, pruned.workspace);
+        track(pruned.nextExpiry);
+      }
+      const keys = Array.from(batch.keys());
+      const lastKey = keys[keys.length - 1];
+      if (batch.size < 250 || !lastKey || lastKey === socialStartAfter) break;
+      socialStartAfter = lastKey;
+    }
+
+    return nextExpiry;
+  }
+
+  async alarm() {
+    const nextExpiry = await this.purgeExpired(Date.now());
+    if (nextExpiry != null) await this.state.storage.setAlarm(nextExpiry);
+    else await this.state.storage.deleteAlarm();
   }
 
   async incrementUsage(username, metrics = {}, now = Date.now()) {
@@ -319,6 +409,60 @@ export class ReportGate {
     const body = await request.json().catch(()=>({}));
     const now = Date.now();
 
+    if (url.pathname === "/migration-status") {
+      return Response.json({
+        ok: true,
+        migrated: Boolean(await this.state.storage.get("__eu_migration_complete")),
+        jurisdiction: this.state?.id?.jurisdiction || null
+      });
+    }
+
+    if (url.pathname === "/migration-export") {
+      const startAfter = cleanText(body.start_after, 1000);
+      const options = { limit: MIGRATION_PAGE_SIZE };
+      if (startAfter) options.startAfter = startAfter;
+      const batch = await this.state.storage.list(options);
+      const entries = Array.from(batch.entries())
+        .filter(([key]) => key !== "__eu_migration_complete")
+        .map(([key, value]) => [key, value]);
+      const lastKey = entries.length ? entries[entries.length - 1][0] : "";
+      return Response.json({
+        ok: true,
+        entries,
+        last_key: lastKey,
+        has_more: batch.size >= MIGRATION_PAGE_SIZE
+      });
+    }
+
+    if (url.pathname === "/migration-import") {
+      const entries = Array.isArray(body.entries) ? body.entries.slice(0, MIGRATION_PAGE_SIZE) : [];
+      const writes = {};
+      for (const item of entries) {
+        if (!Array.isArray(item) || item.length !== 2) continue;
+        const key = cleanText(item[0], 1200);
+        if (!key || key === "__eu_migration_complete") continue;
+        writes[key] = item[1];
+      }
+      if (Object.keys(writes).length) await this.state.storage.put(writes);
+      return Response.json({ ok: true, imported: Object.keys(writes).length });
+    }
+
+    if (url.pathname === "/migration-finalize") {
+      await this.state.storage.put("__eu_migration_complete", {
+        completed_at: new Date(now).toISOString(),
+        source: "legacy-global",
+        jurisdiction: this.state?.id?.jurisdiction || "eu"
+      });
+      const nextExpiry = await this.purgeExpired(now);
+      if (nextExpiry != null) await this.state.storage.setAlarm(nextExpiry);
+      return Response.json({ ok: true, migrated: true });
+    }
+
+    if (url.pathname === "/migration-retire") {
+      await this.state.storage.deleteAll();
+      return Response.json({ ok: true, retired: true });
+    }
+
     if (url.pathname === "/source-image-token-put") {
       const imageUrl = cleanText(body.image_url, 1500);
       if (!imageUrl) return Response.json({ error: "Missing image URL." }, { status: 400 });
@@ -335,6 +479,7 @@ export class ReportGate {
         article_url: cleanText(body.article_url, 1500),
         expires_at: expiresAt
       });
+      await this.scheduleExpiry(expiresAt);
       return Response.json({ ok: true, token, expires_at: expiresAt });
     }
 
@@ -464,12 +609,16 @@ export class ReportGate {
         return Response.json({ error: "Unknown user." }, { status: 400 });
       }
       const key = `social-workspace:${username}`;
-      const workspace = (await this.state.storage.get(key)) || {
+      let workspace = (await this.state.storage.get(key)) || {
         version: "socmint-v1-public-web-report",
         username,
         reports: [],
         updated_at: new Date(now).toISOString()
       };
+      const pruned = await this.pruneSocialWorkspace(workspace, now);
+      workspace = pruned.workspace;
+      if (pruned.changed) await this.state.storage.put(key, workspace);
+      if (pruned.nextExpiry != null) await this.scheduleExpiry(pruned.nextExpiry);
       return Response.json({ ok: true, workspace });
     }
 
@@ -482,13 +631,16 @@ export class ReportGate {
       if (!workspace) {
         return Response.json({ error: "Missing social workspace." }, { status: 400 });
       }
-      const safeWorkspace = {
+      let safeWorkspace = {
         version: cleanText(workspace.version || "socmint-v1-public-web-report", 80),
         username,
         reports: Array.isArray(workspace.reports) ? workspace.reports.slice(0, 50) : [],
         updated_at: new Date(now).toISOString()
       };
+      const pruned = await this.pruneSocialWorkspace(safeWorkspace, now);
+      safeWorkspace = pruned.workspace;
       await this.state.storage.put(`social-workspace:${username}`, safeWorkspace);
+      if (pruned.nextExpiry != null) await this.scheduleExpiry(pruned.nextExpiry);
       return Response.json({ ok: true, workspace: safeWorkspace });
     }
 
@@ -565,10 +717,12 @@ export class ReportGate {
     }
 
     if (url.pathname === "/cache-put") {
+      const expiresAt = Number(body.expires_at || 0);
       await this.state.storage.put("cache:" + body.cacheKey, {
         report: body.report,
-        expires_at: body.expires_at
+        expires_at: expiresAt
       });
+      await this.scheduleExpiry(expiresAt);
       return Response.json({ ok: true });
     }
 
@@ -652,6 +806,7 @@ export class ReportGate {
         created_at: new Date(now).toISOString(),
         expires_at: expiresAt
       });
+      await this.scheduleExpiry(expiresAt);
 
       return Response.json({
         session_token: sessionToken,
