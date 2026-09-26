@@ -5139,7 +5139,7 @@ Map layers
 <div class="layer-buttons">
 
 <button class="layer-button active" id="markersToggle">EVENTS</button>
-<button class="layer-button" id="heatToggle" title="Heat based only on attacks and armed clashes/combat">HEAT ZONES</button>
+<button class="layer-button active" id="heatToggle" title="Heat based only on attacks and armed clashes/combat">HEAT ZONES</button>
 <button class="layer-button" id="chronologyToggle">LIST / EXPORT</button>
 <button class="layer-button active" id="officesToggle">OUR OFFICES</button>
 <button class="layer-button" id="downloadMapButton">DOWNLOAD MAP</button>
@@ -6721,7 +6721,7 @@ let showMarkers =
 
 
 let showHeat =
-    false;
+    true;
 
 
 let searchText =
@@ -7959,8 +7959,12 @@ function renderEvents() {
     }
 
 
+    // Heat zones are ON by default, so a missing leaflet.heat plugin (CDN blocked or
+    // unreachable on a restricted network) must never stop the events from rendering.
     if (
         showHeat
+        &&
+        typeof L.heatLayer === "function"
     ) {
 
 
@@ -14419,6 +14423,29 @@ document.getElementById(
 
 );
 
+
+
+// If the heat plugin did not load, do not show a button that claims heat is on.
+if (
+    typeof L.heatLayer !== "function"
+) {
+
+    showHeat =
+        false;
+
+    const heatButton =
+        document.getElementById(
+            "heatToggle"
+        );
+
+    heatButton.classList.remove(
+        "active"
+    );
+
+    heatButton.title =
+        "Heat zones unavailable: the heat plugin could not be loaded";
+
+}
 
 
 document.getElementById(

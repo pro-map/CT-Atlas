@@ -55,3 +55,14 @@ test("the 6-month rolling retention already exists: the collector prunes events 
   const slackDays=3; // updates run twice a day; allow for a missed run or two
   assert.ok(Date.now()-oldest<=(180+slackDays)*86400000,"events.json holds data older than the retention window");
 });
+
+test("heat zones are on by default, the button says so, and a missing plugin cannot break the map",()=>{
+  assert.match(html,/let showHeat\s*=\s*true;/);
+  assert.match(html,/<button class="layer-button active" id="heatToggle"/);
+  // Both the render guard and the start-up fallback must tolerate the CDN plugin not loading.
+  assert.match(html,/showHeat\s*&&\s*typeof L\.heatLayer === "function"/);
+  assert.match(html,/typeof L\.heatLayer !== "function"[\s\S]{0,200}showHeat\s*=\s*false;/);
+  // The initial state and the button must agree (same rule as the period selector).
+  const activeLayers=[...html.matchAll(/<button class="layer-button( active)?" id="(\w+)"/g)].filter(match=>match[1]).map(match=>match[2]);
+  assert.ok(activeLayers.includes("heatToggle")&&activeLayers.includes("markersToggle"));
+});
