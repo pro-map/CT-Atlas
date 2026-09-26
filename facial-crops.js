@@ -431,7 +431,7 @@ async function copy(record){
 }
 
 // ---- Direct search: host ONE crop briefly, then open the engines on its URL ------------------
-// Only searchDirect() below leads here, and only from a click on a SEARCH menu entry.
+// Only requestSearch() below leads here, and only from a click on a SEARCH menu entry.
 
 // A small JPEG (re-encoded from the crop: canvas output carries no EXIF/GPS) under the size
 // the Worker accepts.
@@ -516,17 +516,67 @@ function confirmText(record,engines,hostedShare){
 
 // A browser lets one click open one tab: the engines that did not get a tab are offered as
 // real links (a click on a link is its own gesture, and rel=noreferrer keeps CT Atlas out of the request).
-function showMoreLinks(items){
+// "Reopen" repeats the opened ones, as a manual way back if a tab was closed or did not load.
+function moreLinks(items){
+  return items.map(item=>'<a class="fc-more-link" href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer">'+esc(item.engine.name)+'</a>').join(" ");
+}
+function showMoreLinks(queued,opened=[]){
   const box=$("fcMore");
   if(!box)return;
-  box.innerHTML=items.length
-    ?'<span>Also open:</span> '+items.map(item=>'<a class="fc-more-link" href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer">'+esc(item.engine.name)+'</a>').join(" ")
-    :"";
-  box.hidden=!items.length;
+  box.innerHTML=(queued.length?'<span>Also open:</span> '+moreLinks(queued):"")+
+    (opened.length?(queued.length?' ':"")+'<span>Reopen:</span> '+moreLinks(opened):"");
+  box.hidden=!(queued.length||opened.length);
 }
 
-async function searchDirect(record,engines){
+// In-page confirmation. The browser's built-in confirm box is NOT used: the search tab is opened in the same click,
+// takes the focus, and a dialog raised by the tab that just went to the background can be suppressed
+// by the browser, which reads as "cancel" (the tab appears and vanishes). This dialog belongs to the
+// page the analyst is looking at, and its OK button is itself a click, so the tabs are opened
+// inside that click and keep their permission to open.
+function askConsent(text,onAccept,onCancel){
+  const dialog=document.createElement("dialog");
+  dialog.className="fc-consent";
+  dialog.innerHTML='<div class="fc-consent-title">THIRD-PARTY FACE SEARCH</div><div class="fc-consent-text"></div>'+
+    '<div class="fc-consent-actions"><button type="button" class="fc-btn" data-fc-consent="cancel">CANCEL</button>'+
+    '<button type="button" class="fc-btn fc-btn-primary" data-fc-consent="ok">OK — HOST &amp; SEARCH</button></div>';
+  dialog.querySelector(".fc-consent-text").textContent=text;
+  let accepted=false;
+  dialog.addEventListener("click",event=>{
+    const choice=event.target.closest?.("[data-fc-consent]")?.dataset.fcConsent;
+    if(choice==="ok"){
+      accepted=true;
+      if(typeof dialog.close==="function")dialog.close();
+      dialog.remove();
+      onAccept();
+    }else if(choice==="cancel"){
+      if(typeof dialog.close==="function")dialog.close();else{dialog.remove();if(onCancel)onCancel();}
+    }
+  });
+  dialog.addEventListener("close",()=>{dialog.remove();if(!accepted&&onCancel)onCancel();});   // CANCEL or Escape
+  document.body.appendChild(dialog);
+  if(typeof dialog.showModal==="function")dialog.showModal();else dialog.setAttribute("open","");
+  const safe=dialog.querySelector('[data-fc-consent="cancel"]');
+  if(safe)safe.focus();     // the safe answer is the default one
+}
+let consentPrompt=askConsent;
+
+// Entry point of a direct search, called from a click. Nothing is opened or uploaded before the analyst
+// has confirmed every engine that is new for the current hosting.
+function requestSearch(record,engines){
   if(record.searching){setStatus("A search for face "+record.label+" is already in progress.");return;}
+  const hosted=shareUsable(record.share,Date.now());
+  const consented=hosted?record.consented:new Set();
+  const fresh=engines.filter(engine=>!consented.has(engine.id));
+  if(!fresh.length)return startSearch(record,engines);       // nothing new to confirm: open the tabs right in this click
+  let running;
+  consentPrompt(confirmText(record,fresh,hosted?record.share:null),
+    ()=>{running=startSearch(record,engines);},               // the OK click: still a user gesture
+    ()=>setStatus(hosted?"Search cancelled: the link was not given to "+fresh.map(engine=>engine.name).join(", ")+".":"Search cancelled: nothing was uploaded."));
+  return running;
+}
+
+async function startSearch(record,engines){
+  if(record.searching)return;
   record.searching=true;
   try{await runDirectSearch(record,engines);}
   finally{record.searching=false;}
@@ -534,33 +584,25 @@ async function searchDirect(record,engines){
 
 async function runDirectSearch(record,engines){
   showMoreLinks([]);
-  const windows=engines.map(()=>openPlaceholder());
+  const windows=engines.map(()=>openPlaceholder());       // synchronous: still inside the click / the OK click
   if(windows.every(win=>!win)){
     setStatus("The browser blocked the search window(s). Allow pop-ups for this site, then try again.","error");
     return;
   }
-  const closeAll=()=>windows.forEach(win=>{try{if(win)win.close();}catch(_){/* already closed */}});
   try{
-    const hosted=shareUsable(record.share,Date.now());
-    const consented=hosted?record.consented:new Set();
-    const fresh=engines.filter(engine=>!consented.has(engine.id));
-    if(fresh.length&&!window.confirm(confirmText(record,fresh,hosted?record.share:null))){
-      closeAll();
-      setStatus(hosted?"Search cancelled: the link was not given to "+fresh.map(engine=>engine.name).join(", ")+".":"Search cancelled: nothing was uploaded.");
-      return;
-    }
     setStatus("Hosting face "+record.label+" for a few minutes…");
     const share=await shareCrop(record);
     for(const engine of engines)record.consented.add(engine.id);
     const opened=[],queued=[];
     engines.forEach((engine,index)=>{
       const url=directSearchUrl(engine,share.url);
-      if(windows[index]){windows[index].location.replace(url);opened.push(engine);}
+      const win=windows[index];
+      if(win&&!win.closed){win.location.replace(url);opened.push({engine,url});}
       else queued.push({engine,url});
     });
-    showMoreLinks(queued);
+    showMoreLinks(queued,opened);
     const minutes=Math.max(1,Math.round((share.expiresAt-Date.now())/60000));
-    setStatus("Face "+record.label+": "+opened.map(engine=>engine.name).join(", ")+" opened on the hosted crop. The link stays valid for about "+minutes+" more minute(s), then the image is deleted automatically. Results are leads, not identifications."+
+    setStatus("Face "+record.label+": "+opened.map(item=>item.engine.name).join(", ")+" opened on the hosted crop. The link stays valid for about "+minutes+" more minute(s), then the image is deleted automatically. Results are leads, not identifications."+
       (queued.length?" Your browser opens one tab per click: use the links below for "+queued.map(item=>item.engine.name).join(", ")+".":""));
   }catch(error){
     // Fall back to the paste flow: each window goes to the engine's own upload page.
@@ -588,7 +630,7 @@ async function onClick(event){
       ?SEARCH_ALL_IDS.map(id=>SEARCH_ENGINES.find(item=>item.id===id))
       :[SEARCH_ENGINES.find(item=>item.id===target.dataset.fcEngine&&item.direct)].filter(Boolean);
     target.closest("details")?.removeAttribute("open");
-    if(engines.length)await searchDirect(record,engines);   // synchronous up to window.open: keeps the click's user activation
+    if(engines.length)await requestSearch(record,engines);   // synchronous up to the tabs: they are opened inside this click (or the OK click)
     return;
   }
   if(action==="search"){
@@ -656,7 +698,7 @@ function bindControls(){
   window.addEventListener("resize",()=>closeMenus());
 }
 
-root.CTAtlasFaceCrops={attach,helpers};
+root.CTAtlasFaceCrops={attach,helpers,setConsentPrompt:fn=>{consentPrompt=typeof fn==="function"?fn:askConsent;}};
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bindControls);
 else bindControls();
 })(typeof window!=="undefined"?window:globalThis);

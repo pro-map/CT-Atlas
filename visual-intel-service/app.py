@@ -6,6 +6,7 @@ import hmac
 import math
 import os
 import tempfile
+import threading
 from pathlib import Path
 from typing import Any
 
@@ -16,7 +17,7 @@ import pytesseract
 from fastapi import FastAPI, File, Header, HTTPException, UploadFile
 from PIL import ExifTags, Image, ImageOps
 
-SERVICE_VERSION = "ct-atlas-visual-intel-v1"
+SERVICE_VERSION = "ct-atlas-visual-intel-v2"
 MAX_FILES = 10
 MAX_TOTAL_BYTES = 30 * 1024 * 1024
 MAX_IMAGE_SIDE = 2200
@@ -24,8 +25,17 @@ MAX_VIDEO_FRAMES = 8
 
 api = FastAPI(title="CT Atlas Facial Intelligence", version=SERVICE_VERSION)
 
-FRONTAL = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-PROFILE = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_profileface.xml")
+# Face detection: YuNet (OpenCV model zoo, opencv/opencv_zoo, face_detection_yunet_2023mar.onnx). It replaces
+# the Haar frontal+profile cascades, which reported hands, arms, torsos and textures as faces. The model file
+# is pinned by checksum; if it is missing or altered the service falls back to a strict frontal-only Haar
+# cascade (and says so in /health). YuNet is a detector only: it produces no identity and no embedding.
+YUNET_NAME = "yunet_2023mar"
+YUNET_MODEL = Path(__file__).resolve().parent / "models" / "face_detection_yunet_2023mar.onnx"
+YUNET_SHA256 = "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4"
+FACE_SCORE_THRESHOLD = float(os.getenv("CT_ATLAS_FACE_SCORE_THRESHOLD", "0.75"))
+MIN_FACE_SIDE = 20  # pixels, in the analysed frame
+_DETECTOR_LOCK = threading.RLock()
+_DETECTOR: dict[str, Any] = {"loaded": False, "detector": None, "name": "", "error": ""}
 
 
 def _check_key(value: str | None) -> None:
@@ -69,24 +79,92 @@ def _dedupe_boxes(boxes: list[tuple[int, int, int, int]]) -> list[tuple[int, int
     return kept[:40]
 
 
+def _load_detector() -> tuple[Any, str]:
+    """YuNet (OpenCV's face detector, ~230 KB, no embeddings) when its pinned model file is intact,
+    otherwise a strict frontal-only Haar cascade. Loaded once."""
+    with _DETECTOR_LOCK:
+        if _DETECTOR["loaded"]:
+            return _DETECTOR["detector"], _DETECTOR["name"]
+        detector: Any = None
+        name = "opencv_haar_fallback"
+        try:
+            model_bytes = YUNET_MODEL.read_bytes()
+            if hashlib.sha256(model_bytes).hexdigest() != YUNET_SHA256:
+                raise ValueError("face detection model checksum mismatch")
+            detector = cv2.FaceDetectorYN.create(str(YUNET_MODEL), "", (320, 320), FACE_SCORE_THRESHOLD, 0.3, 5000)
+            name = YUNET_NAME
+        except Exception as exc:  # missing/corrupt model or an OpenCV build without FaceDetectorYN
+            _DETECTOR["error"] = _clean(exc, 200)
+            cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+            detector = None if cascade.empty() else cascade
+        _DETECTOR.update({"detector": detector, "name": name, "loaded": True})
+        return detector, name
+
+
+def _plausible_face(x: float, y: float, w: float, h: float, landmarks: np.ndarray) -> bool:
+    """A real face has its five landmarks (eyes, nose, mouth corners) in a face-shaped layout, in any
+    orientation. Arms, hands, torsos and textures that fool a detector rarely satisfy all of this."""
+    if min(w, h) < MIN_FACE_SIDE or not 0.6 <= h / w <= 2.2:
+        return False
+    right_eye, left_eye, nose, mouth_right, mouth_left = landmarks
+    eyes_mid = (right_eye + left_eye) / 2.0
+    mouth_mid = (mouth_right + mouth_left) / 2.0
+    axis = mouth_mid - eyes_mid
+    axis_len = float(np.linalg.norm(axis))
+    eye_dist = float(np.linalg.norm(right_eye - left_eye))
+    if axis_len < 1.0 or eye_dist < 1.0:
+        return False
+    margin = 0.3 * max(w, h)
+    for px, py in landmarks:
+        if px < x - margin or px > x + w + margin or py < y - margin or py > y + h + margin:
+            return False
+    if not 0.4 <= axis_len / eye_dist <= 4.0:
+        return False
+    nose_position = float(np.dot(nose - eyes_mid, axis) / (axis_len * axis_len))
+    return 0.1 <= nose_position <= 0.95
+
+
+def _detect_boxes(gray_or_bgr: np.ndarray) -> list[tuple[int, int, int, int, float]]:
+    """(x, y, w, h, score) boxes in the pixels of the given frame."""
+    detector, name = _load_detector()
+    h, w = gray_or_bgr.shape[:2]
+    boxes: list[tuple[int, int, int, int, float]] = []
+    if detector is None:
+        return boxes
+
+    if name == YUNET_NAME:
+        with _DETECTOR_LOCK:
+            detector.setInputSize((w, h))
+            _, rows = detector.detect(gray_or_bgr)
+        for row in ([] if rows is None else rows):
+            x, y, bw, bh = (float(v) for v in row[:4])
+            score = float(row[14])
+            landmarks = np.array(row[4:14], dtype=float).reshape(5, 2)
+            # Small faces are where false positives live: ask for more confidence from them.
+            if score < (0.85 if min(bw, bh) < 32 else FACE_SCORE_THRESHOLD):
+                continue
+            if not _plausible_face(x, y, bw, bh, landmarks):
+                continue
+            x0, y0 = max(0, int(round(x))), max(0, int(round(y)))
+            x1, y1 = min(w, int(round(x + bw))), min(h, int(round(y + bh)))
+            if x1 - x0 >= 2 and y1 - y0 >= 2:
+                boxes.append((x0, y0, x1 - x0, y1 - y0, score))
+        return boxes
+
+    gray = cv2.equalizeHist(cv2.cvtColor(gray_or_bgr, cv2.COLOR_BGR2GRAY))
+    with _DETECTOR_LOCK:
+        found = detector.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=8, minSize=(48, 48))
+    for row in found:
+        bx, by, bw, bh = (int(v) for v in row)
+        boxes.append((bx, by, bw, bh, 0.5))
+    return boxes
+
+
 def _detect_faces(frame: np.ndarray) -> list[dict[str, Any]]:
     work, scale = _resize_for_analysis(frame)
-    gray = cv2.cvtColor(work, cv2.COLOR_BGR2GRAY)
-    gray = cv2.equalizeHist(gray)
-
-    boxes: list[tuple[int, int, int, int]] = []
-    for detector in (FRONTAL, PROFILE):
-        if detector.empty():
-            continue
-        found = detector.detectMultiScale(
-            gray,
-            scaleFactor=1.08,
-            minNeighbors=5,
-            minSize=(36, 36),
-        )
-        boxes.extend(tuple(int(v) for v in row) for row in found)
-
-    boxes = _dedupe_boxes(boxes)
+    scored = _detect_boxes(work)
+    score_by_box = {(x, y, w, h): score for x, y, w, h, score in scored}
+    boxes = _dedupe_boxes([(x, y, w, h) for x, y, w, h, _ in scored])
     inv = 1.0 / scale
     h, w = frame.shape[:2]
     results: list[dict[str, Any]] = []
@@ -115,6 +193,7 @@ def _detect_faces(frame: np.ndarray) -> list[dict[str, Any]]:
             {
                 "face_id": index,
                 "box": {"x": x0, "y": y0, "w": x1 - x0, "h": y1 - y0},
+                "detection_score": round(float(score_by_box.get((x, y, fw, fh), 0.0)), 3),
                 "size_ratio": round(ratio, 4),
                 "sharpness": round(sharpness, 1),
                 "brightness": round(brightness, 1),
@@ -336,7 +415,8 @@ async def health() -> dict[str, Any]:
         "ok": True,
         "service": "ct-atlas-facial-intelligence",
         "version": SERVICE_VERSION,
-        "face_detection": "opencv_haar",
+        "face_detection": _load_detector()[1],
+        "face_detection_error": _DETECTOR["error"],
         "ocr": "tesseract",
         "visual_similarity": "perceptual_hash",
         "identity_recognition": False,

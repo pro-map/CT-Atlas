@@ -13,7 +13,8 @@ const MAX=140*1024;
 
 function harness(options={}){
   const {confirmAnswer=true,popupLimit=Infinity,token="tok-1",fetchImpl,clipboard=true}=options;
-  const elements=new Map(),listeners={},opened=[],confirms=[],fetchCalls=[],clipboardWrites=[];
+  const elements=new Map(),listeners={},opened=[],confirms=[],tabsAtPrompt=[],fetchCalls=[],clipboardWrites=[];
+  let answer=confirmAnswer;
   const el=id=>{
     if(!elements.has(id))elements.set(id,{id,dataset:{},style:{},hidden:false,disabled:false,textContent:"",className:"",value:"standard",checked:true,
       addEventListener:(type,fn)=>{(listeners[id]??={})[type]=fn;},removeAttribute(){}});
@@ -33,8 +34,7 @@ function harness(options={}){
       win.location={replace:u=>win.locations.push(u)};
       opened.push(win);
       return win;
-    },
-    confirm:text=>{confirms.push(text);return confirmAnswer;}
+    }
   };
   const cells={actions:{innerHTML:""},thumb:{innerHTML:""}};
   const document={readyState:"complete",getElementById:el,createElement:tag=>tag==="canvas"?makeCanvas():{},
@@ -60,7 +60,13 @@ function harness(options={}){
   });
   vm.runInContext(source,context);
   const crops=window.CTAtlasFaceCrops;
-  return {crops,el,listeners,opened,confirms,fetchCalls,clipboardWrites,window,cells,advance:ms=>{clock.offset+=ms;},
+  // The in-page confirmation is replaced by a scripted answer; tabsAtPrompt records how many tabs were already open.
+  crops.setConsentPrompt((text,accept,cancel)=>{
+    confirms.push(text);
+    tabsAtPrompt.push(opened.length);
+    if(answer)accept();else if(cancel)cancel();
+  });
+  return {crops,el,listeners,opened,confirms,tabsAtPrompt,fetchCalls,clipboardWrites,window,cells,setAnswer:value=>{answer=value;},advance:ms=>{clock.offset+=ms;},
     async attach(){
       // one 1000x640 image with a large face: its crop is 1000x640 (~235 KB), so it must be shrunk to be hosted
       await crops.attach({
@@ -94,11 +100,12 @@ test("JPEG download and COPY never touch the network",async()=>{
   assert.equal(h.opened.length,0);
 });
 
-test("one engine: opens a tab inside the click, asks first, hosts a SMALL copy, then sends the tab to the engine on that link",async()=>{
+test("one engine: asks BEFORE opening anything, then opens the tab, hosts a SMALL copy and sends the tab to the engine on that link",async()=>{
   const h=harness();
   await h.attach();
   await h.click("search-direct","yandex");
 
+  assert.deepEqual(h.tabsAtPrompt,[0],"no tab exists while the confirmation is on screen (a dialog raised from a tab that lost the focus can be suppressed)");
   assert.equal(h.opened.length,1);
   assert.equal(h.opened[0].url,"about:blank");
   assert.equal(h.opened[0].opener,null,"the search page gets no reference back to CT Atlas");
@@ -126,14 +133,12 @@ test("one engine: opens a tab inside the click, asks first, hosts a SMALL copy, 
   assert.match(h.status(),/deleted automatically/);
 });
 
-test("declining the confirmation uploads nothing and closes the tab",async()=>{
+test("declining the confirmation uploads nothing and never opens a tab",async()=>{
   const h=harness({confirmAnswer:false});
   await h.attach();
   await h.click("search-direct","bing");
   assert.equal(h.fetchCalls.length,0);
-  assert.equal(h.opened.length,1);
-  assert.equal(h.opened[0].closed,true);
-  assert.deepEqual(h.opened[0].locations,[]);
+  assert.equal(h.opened.length,0);
   assert.match(h.status(),/nothing was uploaded/);
 });
 
@@ -160,10 +165,10 @@ test("declining the confirmation for an additional engine hands it nothing",asyn
   const h=harness();
   await h.attach();
   await h.click("search-direct","yandex");
-  h.window.confirm=text=>{h.confirms.push(text);return false;};
+  h.setAnswer(false);
   await h.click("search-direct","baidu");
-  assert.equal(h.opened[1].closed,true);
-  assert.deepEqual(h.opened[1].locations,[]);
+  assert.equal(h.opened.length,1,"no tab for the declined engine");
+  assert.equal(h.fetchCalls.length,1);
   assert.match(h.status(),/the link was not given to Baidu Images/);
 });
 
@@ -252,13 +257,36 @@ test("search all: one confirmation and one upload for four tabs, each engine on 
   assert.ok(h.opened.every(win=>win.opener===null&&!win.closed));
 });
 
-test("pop-ups blocked: nothing is asked, nothing is uploaded, the analyst is told what to do",async()=>{
+test("pop-ups blocked: nothing is uploaded, no consent is recorded, the analyst is told what to do",async()=>{
   const h=harness({popupLimit:0});
   await h.attach();
   await h.click("search-direct","yandex");
-  assert.equal(h.confirms.length,0);
   assert.equal(h.fetchCalls.length,0);
   assert.match(h.status(),/Allow pop-ups/);
+  h.setAnswer(true);
+  await h.click("search-direct","yandex");
+  assert.equal(h.confirms.length,2,"nothing was hosted, so the engine is asked about again");
+});
+
+test("a search tab that was closed before the result arrived is offered as a link instead of being lost",async()=>{
+  let closeIt;
+  const h=harness({fetchImpl:async()=>{if(closeIt)closeIt();return {ok:true,status:200,json:async()=>({ok:true,url:SHARE_URL,ttl_seconds:600})};}});
+  await h.attach();
+  closeIt=()=>{h.opened[0].closed=true;};
+  await h.click("search-direct","yandex");
+  assert.deepEqual(h.opened[0].locations,[],"a closed tab is not navigated");
+  assert.match(h.el("fcMore").innerHTML,/Also open:.*Yandex Images/s);
+  assert.match(h.status(),/use the links below for Yandex Images/);
+});
+
+test("after a search every engine is also offered as a link to reopen (manual way back if a tab did not load)",async()=>{
+  const h=harness();
+  await h.attach();
+  await h.click("search-direct","yandex");
+  const box=h.el("fcMore");
+  assert.equal(box.hidden,false);
+  assert.match(box.innerHTML,/<span>Reopen:<\/span> <a class="fc-more-link" href="https:\/\/yandex\.com\/images\/search\?rpt=imageview&amp;url=/);
+  assert.match(box.innerHTML,/rel="noopener noreferrer"/);
 });
 
 test("default browsers allow ONE tab per click: search all opens one and offers the others as real links, with a single confirmation and upload",async()=>{
@@ -273,7 +301,8 @@ test("default browsers allow ONE tab per click: search all opens one and offers 
   const more=h.el("fcMore");
   assert.equal(more.hidden,false);
   const link=encodeURIComponent(SHARE_URL);
-  const hrefs=[...more.innerHTML.matchAll(/<a class="fc-more-link" href="([^"]+)" target="_blank" rel="noopener noreferrer">([^<]+)<\/a>/g)];
+  const also=more.innerHTML.split("<span>Reopen:</span>")[0];
+  const hrefs=[...also.matchAll(/<a class="fc-more-link" href="([^"]+)" target="_blank" rel="noopener noreferrer">([^<]+)<\/a>/g)];
   assert.deepEqual(hrefs.map(m=>m[2]),["Bing Visual Search","Google Images / Lens","TinEye"]);
   assert.deepEqual(hrefs.map(m=>m[1].replace(/&amp;/g,"&")),[
     "https://www.bing.com/images/search?view=detailv2&iss=sbi&form=SBIVSP&sbisrc=UrlPaste&q=imgurl:"+link,
@@ -295,7 +324,9 @@ test("search all with two tabs allowed: opens two, offers the remaining two as l
   assert.equal(h.opened.length,2);
   assert.equal(h.fetchCalls.length,1);
   assert.deepEqual(h.opened.map(win=>win.locations.length),[1,1]);
-  assert.equal((h.el("fcMore").innerHTML.match(/fc-more-link/g)||[]).length,2);
+  const html=h.el("fcMore").innerHTML;
+  assert.equal((html.split("<span>Reopen:</span>")[0].match(/fc-more-link/g)||[]).length,2,"the two engines without a tab");
+  assert.equal((html.split("<span>Reopen:</span>")[1].match(/fc-more-link/g)||[]).length,2,"the two that opened, to reopen");
   assert.match(h.status(),/use the links below for Google Images \/ Lens, TinEye/);
 });
 

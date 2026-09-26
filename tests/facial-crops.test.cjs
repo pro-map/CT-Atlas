@@ -153,12 +153,25 @@ test("PRIVACY GUARD: a crop leaves the browser only through an explicit SEARCH c
   // Exactly one network call, and it goes to the CT Atlas API's own hosting endpoint.
   assert.equal((src.match(/\bfetch\(/g)||[]).length,1);
   assert.ok(src.includes('fetch(api+"/face-share",{method:"POST"'));
-  // ...reachable from one place only (searchDirect), which only a click handler calls.
-  assert.equal((src.match(/shareCrop\(record\)/g)||[]).length,2,"definition + the single call in searchDirect");
-  assert.equal((src.match(/searchDirect\(record,engines\)/g)||[]).length,2,"definition + the single call in onClick");
-  const flow=src.slice(src.indexOf("async function searchDirect"),src.indexOf("async function onClick"));
-  assert.ok(flow.includes("window.confirm(")&&flow.indexOf("window.confirm(")<flow.indexOf("await shareCrop(record)"),"the confirmation comes before the upload");
-  assert.ok(flow.indexOf("openPlaceholder()")<flow.indexOf("window.confirm("),"the tab is opened first, inside the click's user activation");
+  // ...reachable from one place only (runDirectSearch), which is started only through requestSearch, which only a click handler calls.
+  assert.equal((src.match(/shareCrop\(record\)/g)||[]).length,2,"definition + the single call in runDirectSearch");
+  assert.equal((src.match(/runDirectSearch\(record,engines\)/g)||[]).length,2,"definition + the single call in startSearch");
+  assert.equal((src.match(/startSearch\(record,engines\)/g)||[]).length,3,"definition + the immediate path + the OK click of the confirmation");
+  assert.equal((src.match(/requestSearch\(record,engines\)/g)||[]).length,2,"definition + the single call in onClick");
+  // The confirmation is IN the page (window.confirm from a tab that just lost focus can be suppressed) and comes first:
+  // the only immediate path is for engines already confirmed for the current hosting.
+  assert.ok(!src.includes("window.confirm("),"no window.confirm: it is unreliable next to window.open");
+  const request=src.slice(src.indexOf("function requestSearch"),src.indexOf("async function startSearch"));
+  assert.ok(request.includes("consentPrompt(confirmText("));
+  assert.ok(request.indexOf("if(!fresh.length)return startSearch(record,engines)")>-1&&request.indexOf("if(!fresh.length)")<request.indexOf("consentPrompt("),"immediate start only when there is nothing new to confirm");
+  assert.ok(request.includes("()=>{running=startSearch(record,engines);}"),"the OK click starts the search");
+  const flow=src.slice(src.indexOf("async function runDirectSearch"),src.indexOf("async function onClick"));
+  assert.ok(flow.indexOf("openPlaceholder()")>-1&&flow.indexOf("openPlaceholder()")<flow.indexOf("await shareCrop(record)"),"tabs are opened synchronously, before the upload");
+  // The dialog: native <dialog>, safe default focus, OK calls onAccept inside its own click.
+  const dialog=src.slice(src.indexOf("function askConsent"),src.indexOf("let consentPrompt"));
+  assert.ok(dialog.includes('document.createElement("dialog")')&&dialog.includes("showModal"));
+  assert.ok(dialog.indexOf("onAccept();")>dialog.indexOf('choice==="ok"'),"OK runs the search inside the click handler");
+  assert.match(dialog,/safe\.focus\(\)/);
   // What is uploaded is the small re-encoded copy, never the full-size crop.
   const share=src.slice(src.indexOf("async function shareCrop"),src.indexOf("function openPlaceholder"));
   assert.ok(share.includes("const body=await shrinkForSearch(record)"));

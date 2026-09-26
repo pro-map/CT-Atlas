@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - "visual-intel-service/**"
+      - "tests/visual_intel_detector_test.py"
+      - "tests/fixtures/**"
       - "cloudflare-worker/visual-intel.js"
       - "cloudflare-worker/index.js"
       - ".github/workflows/deploy-visual-intel.yml"
@@ -71,6 +73,8 @@ jobs:
           set -euo pipefail
           image_uri="$GCP_REGION-docker.pkg.dev/$GCP_PROJECT_ID/$ARTIFACT_REPOSITORY/$SERVICE_NAME:$GITHUB_SHA"
           docker build -t "$image_uri" ./visual-intel-service
+          # The face detector must find the portrait's face and nothing else (no hands, torsos or textures).
+          docker run --rm -e VISUAL_SERVICE_DIR=/app -v "$PWD/tests:/tests:ro" "$image_uri" python /tests/visual_intel_detector_test.py
           docker push "$image_uri"
           echo "VISUAL_IMAGE_URI=$image_uri" >> "$GITHUB_ENV"
 
@@ -123,6 +127,22 @@ jobs:
           assert data.get("analysis_scope",{}).get("identity_recognition") is False
           assert data.get("analysis_scope",{}).get("biometric_embeddings") is False
           print("Facial Intelligence smoke test passed.")
+          PY
+
+      - name: Smoke test face detection on a real portrait
+        shell: bash
+        run: |
+          set -euo pipefail
+          health="$(curl --fail --silent --show-error "$VISUAL_INTEL_URL/health")"
+          printf '%s' "$health" | grep -q '"face_detection":"yunet_2023mar"' || { echo "Face detector is not YuNet: $health" >&2; exit 1; }
+          curl --fail --silent --show-error --max-time 90             -X POST "$VISUAL_INTEL_URL/analyze"             -H "X-CT-Atlas-Visual-Key: $VISUAL_SHARED_SECRET"             -F "files=@tests/fixtures/astronaut.jpg;type=image/jpeg" > /tmp/portrait.json
+          python - <<'PY'
+          import json
+          data = json.load(open("/tmp/portrait.json"))
+          item = data["files"][0]
+          assert item["face_count"] == 1, f"expected exactly 1 face, got {item['face_count']}"
+          assert item["faces"][0]["detection_score"] >= 0.75
+          print("Face detection smoke test passed:", item["faces"][0]["box"])
           PY
 
       - name: Deploy CT Atlas Worker bridge
