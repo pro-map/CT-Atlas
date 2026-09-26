@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CT ATLAS — Facial Intelligence</title>
 <link rel="icon" href="CT-ATLAS.png">
-<link rel="stylesheet" href="facial.css?v=1">
+<link rel="stylesheet" href="facial.css?v=2">
 <link rel="stylesheet" href="tab-health.css?v=1">
 </head>
 <body>
@@ -31,7 +31,7 @@
       <h1>Analyze images and video</h1>
       <p class="lead">Detect faces, assess crop quality, extract public metadata and OCR text, sample video frames, and identify duplicate or near-duplicate visuals.</p>
       <div class="guardrail"><strong>NON-IDENTIFYING ANALYSIS.</strong> CT Atlas does not create biometric face embeddings, identify a person, or conclude that two faces belong to the same individual.</div>
-      <div class="guardrail"><strong>RETENTION.</strong> Uploaded files are processed in memory on the analysis service and are not stored there. The report and any preview images returned to your browser persist only in this session unless you use Download JSON yourself.</div>
+      <div class="guardrail"><strong>RETENTION.</strong> Uploaded files are processed in memory on the analysis service and are not stored there. The report and any preview images returned to your browser persist only in this session unless you use Download JSON yourself. Face crops are cut in your browser; downloading them, or pasting one into a third-party search engine, is your own action and outside CT Atlas's retention controls.</div>
 
       <form id="fiForm">
         <label class="dropzone" for="fiFiles">
@@ -74,17 +74,39 @@
           <button id="fiDownload" class="secondary-button" type="button">DOWNLOAD JSON</button>
         </div>
         <div id="fiSummary" class="summary-grid"></div>
+        <section id="fcBar" class="fc-bar" hidden>
+          <div class="fc-bar-head">
+            <div>
+              <div class="panel-kicker">FACE CROPS</div>
+              <div class="fc-bar-title">Cut, download and search the detected faces</div>
+            </div>
+            <button id="fcZip" class="secondary-button" type="button" disabled>DOWNLOAD ALL (.ZIP)</button>
+          </div>
+          <div class="fc-options">
+            <label>Margin
+              <select id="fcMargin">
+                <option value="tight">Tight (face only)</option>
+                <option value="standard" selected>+30% context</option>
+                <option value="wide">+60% context</option>
+              </select>
+            </label>
+            <label class="fc-check"><input id="fcUpscale" type="checkbox" checked> Upscale small crops to 300 px</label>
+          </div>
+          <div id="fcStatus" class="fc-status" aria-live="polite"></div>
+          <div class="fc-notice"><strong>THIRD-PARTY SEARCH.</strong> Crops are cut in your browser and are never sent to CT Atlas. SEARCH copies a crop and opens a free search engine's upload page: the face reaches that service only when you paste it there. Results are leads, not identifications (look-alikes are common), and none of these services is operated or verified by CT Atlas.</div>
+        </section>
         <section id="fiSimilaritySection" class="report-section" hidden>
           <h3>VISUAL SIMILARITY</h3>
           <div id="fiSimilarity" class="similarity-list"></div>
         </section>
         <div id="fiItems"></div>
-        <div class="disclaimer">Detection and similarity outputs are investigative aids only. Perceptual similarity describes image resemblance, not identity. Face detection does not establish who a person is.</div>
+        <div class="disclaimer">Detection and similarity outputs are investigative aids only. Perceptual similarity describes image resemblance, not identity. Face detection does not establish who a person is, and matches returned by third-party reverse-image engines are unverified leads that require independent corroboration.</div>
       </div>
     </section>
   </main>
 </div>
-<script src="facial.js?v=1"></script>
+<script src="facial-crops.js?v=1"></script>
+<script src="facial.js?v=2"></script>
 <script src="tab-health.js?v=1" data-health-scope="facial"></script>
 </body>
 </html>

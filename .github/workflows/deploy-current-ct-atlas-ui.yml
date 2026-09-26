@@ -26,6 +26,7 @@ on:
       - "social.css"
       - "facial.html"
       - "facial.js"
+      - "facial-crops.js"
       - "facial.css"
       - "facial-intelligence.svg"
       - "tab-health.js"
@@ -107,6 +108,10 @@ jobs:
           grep -q 'visual-analyze' facial.js
           grep -q 'NON-IDENTIFYING ANALYSIS' facial.html
           node --check facial.js
+          test -s facial-crops.js
+          node --check facial-crops.js
+          grep -q 'CTAtlasFaceCrops' facial.js
+          grep -q 'THIRD-PARTY SEARCH' facial.html
           grep -q 'cryptoTestExample' crypto.html
           grep -q 'cryptoTestExample' crypto.js
           test -s social.js

@@ -10,6 +10,7 @@ on:
       - "social.js"
       - "social.css"
       - "facial.html"
+      - "facial-crops.js"
       - "tab-health.js"
       - "tab-health.css"
       - "pdf-export.js"
@@ -55,6 +56,9 @@ jobs:
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.css >/tmp/social.css \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/tab-health.js >/tmp/tab-health.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/facial.html >/tmp/facial.html \
+              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/facial-crops.js >/tmp/facial-crops.js \
+              && grep -q 'buildZip' /tmp/facial-crops.js \
+              && grep -q 'fcBar' /tmp/facial.html \
               && grep -q '/health/status' /tmp/tab-health.js \
               && grep -q 'data-health-scope="crypto"' /tmp/crypto.html \
               && grep -q 'data-health-scope="social"' /tmp/social.html \
