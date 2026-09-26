@@ -9418,7 +9418,7 @@ def save_database(events, trend_summary=None, weekly_analysis=None):
         "retention_days":
             RETENTION_DAYS,
         "default_map_period":
-            30,
+            7,
         "daily_lookback_days":
             DAILY_LOOKBACK_DAYS,
         "language":

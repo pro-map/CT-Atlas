@@ -126,9 +126,9 @@ jobs:
           grep -q -- '-webkit-line-clamp: 3' index.html
           grep -q 'max-height: 42px' index.html
           grep -q 'class="time-button active"' index.html
-          grep -q 'data-days="30"' index.html
+          grep -q 'data-days="7"' index.html
           grep -q 'let selectedDays =' index.html
-          grep -q '    30;' index.html
+          grep -q '    7;' index.html
           if grep -q 'loadCryptoLauncher' usage-auth-fix.js; then
             echo "Crypto launcher must not load inside MAP workspace" >&2
             exit 1

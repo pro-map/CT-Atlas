@@ -90,9 +90,11 @@ jobs:
           const html = fs.readFileSync("/tmp/index.html", "utf8");
           const pdfExporter = fs.readFileSync("/tmp/pdf-export.js", "utf8");
           if (!html.includes("pdf-export.js") || !html.includes("DOWNLOAD PDF")) throw new Error("PDF download UI missing");
-          if (!/class="time-button active"\s+data-days="30"/.test(html)) throw new Error("MAP default is not 30 days");
-          if (/class="time-button active"\s+data-days="90"/.test(html)) throw new Error("90D must not be the MAP default");
-          if (/class="time-button active"\s+data-days="180"/.test(html)) throw new Error("6M must not be the MAP default");
+          if (!/class="time-button active"\s+data-days="7"/.test(html)) throw new Error("MAP default is not 7 days");
+          for (const days of [1, 30, 90, 180]) {
+            if (new RegExp('class="time-button active"\\s+data-days="' + days + '"').test(html)) throw new Error(days + "-day period must not be the MAP default");
+          }
+          if (!/let selectedDays\s*=\s*7;/.test(html)) throw new Error("MAP initial selectedDays is not 7");
           if (!html.includes("V12 — COMPACT HEADER")) throw new Error("Compact header controls missing");
           if (!html.includes("-webkit-line-clamp: 3")) throw new Error("Situation 24H clamp missing");
           if (!html.includes("max-height: 42px")) throw new Error("Situation 24H text height missing");
