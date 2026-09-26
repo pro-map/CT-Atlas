@@ -41,6 +41,7 @@ jobs:
           node --test tests/*.test.cjs
           python3 tests/quiz_source_test.py
           python3 tests/update_sanctions_test.py
+          python3 tests/build_events_lite_test.py
 
       - name: Verify required auth secret
         shell: bash

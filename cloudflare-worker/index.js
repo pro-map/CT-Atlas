@@ -14,6 +14,7 @@ normalizeUsername,
 isAllowedUser,
 sha256,
 gateCall,
+fetchEventsDatabase,
 matchesRegion,
 matchesTopic,
 parseEventDate,
@@ -198,9 +199,9 @@ if (!token) return jsonResponse({ error: "Authenticated session required. Please
 const sessionResponse = await gateCall(env, "/session-get", { session_token: token });
 const session = await sessionResponse.json();
 if (!sessionResponse.ok || session?.username !== username) return jsonResponse({ error: "Unauthorized session." }, 401, env);
-const dbResponse = await fetch(env.EVENTS_URL, { cf: { cacheTtl: 60, cacheEverything: true } });
-if (!dbResponse.ok) return jsonResponse({ error: "Unable to read current events database." }, 503, env);
-const db = await dbResponse.json();
+const eventsDatabase = await fetchEventsDatabase(env);
+if (!eventsDatabase.ok) return jsonResponse({ error: "Unable to read current events database." }, 503, env);
+const db = eventsDatabase.db;
 const allEvents = Array.isArray(db) ? db : (Array.isArray(db.events) ? db.events : []);
 const databaseVersion = cleanText(db.updated_at || db.generated_at || db.last_updated || "unknown", 100);
 const cacheKey = await sha256(JSON.stringify({ region, topic, periodDays, compare, databaseVersion, version: REPORT_GENERATOR_VERSION }));

@@ -5,6 +5,7 @@ import {
   isAllowedUser,
   jsonResponse,
   gateCall,
+  fetchEventsDatabase,
   sha256,
   parseEventDate,
   compactEvent,
@@ -258,10 +259,10 @@ async function handleQuickAsk(request, env) {
     return jsonResponse({ error: "Unauthorized session." }, 401, env);
   }
 
-  const dbResponse = await fetch(env.EVENTS_URL, { cf: { cacheTtl: 60, cacheEverything: true } });
+  const eventsDatabase = await fetchEventsDatabase(env);
   let allEvents = [];
-  if (dbResponse.ok) {
-    const db = await dbResponse.json();
+  if (eventsDatabase.ok) {
+    const db = eventsDatabase.db;
     allEvents = Array.isArray(db) ? db : (Array.isArray(db.events) ? db.events : []);
   }
 

@@ -110,6 +110,47 @@ jobs:
           console.log("Public assets valid.");
           NODE
 
+      # events-lite.json is derived from events.json when the site is published. If it is
+      # missing the map and the Worker simply use events.json (warning only), but a lite file
+      # that disagrees with events.json must never be served. Retried because the two files
+      # can sit in the CDN cache a few minutes apart right after a publication.
+      - name: Check lightweight map data
+        run: |
+          set -uo pipefail
+          for attempt in 1 2 3 4 5 6 7 8; do
+            curl --fail --silent --show-error --max-time 90 -o /tmp/events.json https://ct-atlas.com/events.json || exit 1
+            status="$(curl --silent --show-error --max-time 90 -o /tmp/events-lite.json -w '%{http_code}' https://ct-atlas.com/events-lite.json)"
+            if [ "$status" != "200" ]; then
+              echo "::warning::events-lite.json is not published (HTTP $status); the map and the Worker use the full events.json."
+              exit 0
+            fi
+            if python3 - <<'PY'
+          import json, os, sys
+          full = json.load(open("/tmp/events.json", encoding="utf-8"))
+          lite = json.load(open("/tmp/events-lite.json", encoding="utf-8"))
+          problems = []
+          if len(lite["events"]) != len(full["events"]):
+              problems.append(f"{len(lite['events'])} lite events vs {len(full['events'])}")
+          elif [e["id"] for e in lite["events"]] != [e["id"] for e in full["events"]]:
+              problems.append("event ids differ")
+          if lite.get("last_updated") != full.get("last_updated"):
+              problems.append(f"last_updated {lite.get('last_updated')} vs {full.get('last_updated')}")
+          if os.path.getsize("/tmp/events-lite.json") >= 0.7 * os.path.getsize("/tmp/events.json"):
+              problems.append("lite file is not materially smaller")
+          if problems:
+              print("events-lite.json mismatch: " + "; ".join(problems), file=sys.stderr)
+              sys.exit(1)
+          print(f"events-lite.json consistent: {len(lite['events'])} events, "
+                f"{os.path.getsize('/tmp/events-lite.json') / 1e6:.1f} MB vs {os.path.getsize('/tmp/events.json') / 1e6:.1f} MB")
+          PY
+            then
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "events-lite.json still disagrees with events.json" >&2
+          exit 1
+
       # The Worker and GitHub Pages deploy in parallel after a push, and the Worker
       # only reads sanctions-crypto.json once Pages serves it. Give that up to ~6
       # minutes to converge; the strict check below still fails if it never does.

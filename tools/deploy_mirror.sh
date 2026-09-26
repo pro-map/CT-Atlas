@@ -21,6 +21,13 @@ cp index.html main.html crypto.html social.html facial.html privacy.html robots.
    tab-health.js tab-health.css \
    "$STAGING"/
 
+# Lightweight map data, derived from the events.json copied just above (so it can never be
+# older than it). If it cannot be built the mirror simply serves the full events.json.
+if ! python3 tools/build_events_lite.py --input events.json --output "$STAGING/events-lite.json"; then
+  rm -f "$STAGING/events-lite.json"
+  echo "warning: events-lite.json not built; the mirror will serve the full events.json" >&2
+fi
+
 # index.html references the logo as "CT-ATLAS.png" (exact case) -- GitHub
 # Pages serves it fine regardless of case, but Cloudflare Workers assets are
 # an exact-match lookup, so the on-disk lowercase ct-atlas.png must be

@@ -5,6 +5,7 @@ import {
   normalizeUsername,
   isAllowedUser,
   gateCall,
+  fetchEventsDatabase,
   parseEventDate,
   extractGeminiText,
   sha256
@@ -1521,9 +1522,9 @@ export async function handleDeepSearch(request, env, ctx) {
 
     let db = { events: [] }, databaseVersion = "unavailable";
     try {
-      const dbResponse = await fetch(env.EVENTS_URL, { cf: { cacheTtl: 60, cacheEverything: true } });
-      if (dbResponse.ok) {
-        db = await dbResponse.json();
+      const eventsDatabase = await fetchEventsDatabase(env);
+      if (eventsDatabase.ok) {
+        db = eventsDatabase.db;
         databaseVersion = cleanText(db.updated_at || db.generated_at || db.last_updated || "unknown", 100);
       }
     } catch (_) {}

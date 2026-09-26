@@ -5,6 +5,9 @@ compatibility_flags = []
 
 [vars]
 EVENTS_URL = "https://ct-atlas.com/events.json"
+# Lightweight copy of the events database (only the fields the Worker reads), published next to
+# events.json. The Worker falls back to EVENTS_URL if it is missing or unusable.
+EVENTS_LITE_URL = "https://ct-atlas.com/events-lite.json"
 QUIZ_URL = "https://ct-atlas.com/daily-quiz.json"
 SANCTIONS_URL = "https://ct-atlas.com/sanctions-crypto.json"
 GEMINI_MODEL = "gemini-3.5-flash-lite"

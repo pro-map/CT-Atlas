@@ -69,6 +69,8 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6
 
+      - name: Build lightweight map data (events-lite.json)
+        uses: ./.github/actions/build-events-lite
       - name: Upload current website
         uses: actions/upload-pages-artifact@v5
         with:

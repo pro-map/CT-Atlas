@@ -743,8 +743,36 @@ async function callGemini(env, input) {
   throw lastError || new Error("Gemini request failed.");
 }
 
+// Reads the events database for reports, Quick Ask and Deep Search. It prefers
+// events-lite.json (only the event fields the Worker reads, ~64% smaller; built at
+// publication time from the very events.json being deployed, so it is never older than
+// it) and falls back to the full events.json when the lite file is not configured,
+// missing, unreachable or unusable. Result: { ok, status, db, source }.
+async function fetchEventsDatabase(env) {
+  const options = { cf: { cacheTtl: 60, cacheEverything: true } };
+
+  if (env.EVENTS_LITE_URL) {
+    try {
+      const liteResponse = await fetch(env.EVENTS_LITE_URL, options);
+      if (liteResponse.ok) {
+        const lite = await liteResponse.json();
+        if (lite && Array.isArray(lite.events) && lite.events.length) {
+          return { ok: true, status: liteResponse.status, db: lite, source: "lite" };
+        }
+      }
+    } catch (_) {
+      // Fall through to the full database.
+    }
+  }
+
+  const response = await fetch(env.EVENTS_URL, options);
+  if (!response.ok) return { ok: false, status: response.status, db: null, source: "full" };
+  return { ok: true, status: response.status, db: await response.json(), source: "full" };
+}
+
 export {
   GEMINI_URL,
+  fetchEventsDatabase,
   ALLOWED_PERIODS,
   REPORT_GENERATOR_VERSION,
   MAX_EVENTS_CURRENT,

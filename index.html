@@ -6900,29 +6900,87 @@ function escapeHtml(
 
 
 
-fetch(
-    "events.json"
-)
+// The map reads events-lite.json: only the fields it uses (~64% smaller than events.json).
+// It is derived at publication time from the events.json being deployed, so it is never older
+// than it; if it is missing or unusable, fall back to the full file.
+function loadEventsDatabase() {
 
-.then(
-    response => {
+    return fetch(
+        "events-lite.json"
+    )
+    .then(
+        response => {
 
+            if (
+                !response.ok
+            ) {
 
-        if (
-            !response.ok
-        ) {
+                throw new Error(
+                    "events-lite.json unavailable"
+                );
 
-            throw new Error(
-                "Unable to load events.json"
-            );
+            }
+
+            return response.json();
 
         }
+    )
+    .then(
+        data => {
+
+            if (
+                !data
+                ||
+                !Array.isArray(
+                    data.events
+                )
+                ||
+                !data.events.length
+            ) {
+
+                throw new Error(
+                    "events-lite.json invalid"
+                );
+
+            }
+
+            window.eventsDataSource =
+                "events-lite.json";
+
+            return data;
+
+        }
+    )
+    .catch(
+        () => fetch(
+            "events.json"
+        )
+        .then(
+            response => {
+
+                if (
+                    !response.ok
+                ) {
+
+                    throw new Error(
+                        "Unable to load events.json"
+                    );
+
+                }
+
+                window.eventsDataSource =
+                    "events.json";
+
+                return response.json();
+
+            }
+        )
+    );
+
+}
 
 
-        return response.json();
-
-    }
-)
+loadEventsDatabase()
 
 .then(
     data => {
