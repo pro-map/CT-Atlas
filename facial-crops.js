@@ -2,9 +2,10 @@
 "use strict";
 
 // Face crops for Facial Intelligence: cuts each detected face out of the ORIGINAL
-// uploaded file, in the browser (canvas), so nothing extra leaves the machine and no
-// server change is needed. Crops can be downloaded as JPEG (one by one or as a ZIP)
-// and searched on free reverse-image engines.
+// uploaded file, in the browser (canvas), so nothing extra leaves the machine while
+// cropping. Crops can be downloaded as JPEG (one by one or as a ZIP) and searched on free
+// reverse-image engines. A crop leaves the browser only through an explicit SEARCH click
+// (see shareCrop) or when the user pastes it into a search page.
 //
 // The pure helpers at the top are unit-tested in Node; the DOM part is below.
 
@@ -122,18 +123,62 @@ function buildZip(entries,date=new Date()){
 
 // Free reverse-image tools. None of them accepts an upload from another site (tested:
 // Yandex ignores the file, TinEye sits behind a Cloudflare check, Bing redirects home,
-// Google Lens answers 403), so each is opened on its own upload page and the crop is put
-// on the clipboard for Ctrl+V. The crop reaches a third party only when the user pastes it.
+// Google Lens answers 403). Two ways to reach them:
+//   - "direct": the engine is opened on a URL of the crop (search-by-URL). That needs the
+//     crop to be reachable, so on an explicit click, and after a confirmation, this one
+//     crop is hosted for a few minutes by the CT Atlas Worker (see shareCrop below);
+//   - "paste": the engine's own upload page is opened and the crop is put on the clipboard
+//     for Ctrl+V. Nothing is uploaded by CT Atlas; the crop reaches the service only when
+//     the user pastes it. Used by engines that cannot search by URL, and as the fallback.
+const encode=encodeURIComponent;
 const SEARCH_ENGINES=Object.freeze([
-  {id:"yandex",name:"Yandex Images",url:"https://yandex.com/images/search?rpt=imageview",note:"free · strongest on faces"},
-  {id:"google",name:"Google Images / Lens",url:"https://images.google.com/",note:"free · camera icon"},
-  {id:"bing",name:"Bing Visual Search",url:"https://www.bing.com/visualsearch",note:"free"},
-  {id:"tineye",name:"TinEye",url:"https://tineye.com/",note:"free · limited daily searches"},
-  {id:"search4faces",name:"Search4faces",url:"https://search4faces.com/",note:"free · VK / OK / TikTok profiles"},
-  {id:"baidu",name:"Baidu Images",url:"https://image.baidu.com/",note:"free · Chinese web"}
+  {id:"yandex",name:"Yandex Images",url:"https://yandex.com/images/search?rpt=imageview",note:"free · strongest on faces",
+    direct:link=>"https://yandex.com/images/search?rpt=imageview&url="+encode(link)},
+  {id:"bing",name:"Bing Visual Search",url:"https://www.bing.com/visualsearch",note:"free",
+    direct:link=>"https://www.bing.com/images/search?view=detailv2&iss=sbi&form=SBIVSP&sbisrc=UrlPaste&q=imgurl:"+encode(link)},
+  {id:"google",name:"Google Images / Lens",url:"https://images.google.com/",note:"free",
+    direct:link=>"https://lens.google.com/uploadbyurl?url="+encode(link)},
+  {id:"tineye",name:"TinEye",url:"https://tineye.com/",note:"free · limited daily searches",
+    direct:link=>"https://tineye.com/search?url="+encode(link)},
+  {id:"baidu",name:"Baidu Images",url:"https://image.baidu.com/",note:"free · Chinese web",
+    direct:link=>"https://graph.baidu.com/details?isfromtusoupc=1&tn=pc&image="+encode(link)},
+  {id:"search4faces",name:"Search4faces",url:"https://search4faces.com/",note:"free · VK / OK / TikTok · paste only",direct:null}
 ]);
+const SEARCH_ALL_IDS=Object.freeze(["yandex","bing","google","tineye"]);
 
-const helpers={MARGINS,MIN_SIDE,MAX_UPSCALE,paddedBox,outputSize,mapBoxToSource,safeStem,cropFileName,uniqueName,crc32,buildZip,SEARCH_ENGINES};
+// What is hosted for a direct search: ONE crop, re-encoded small (the Worker refuses more
+// than 150 KB), with no metadata, deleted by the Worker after a few minutes.
+const MAX_SHARE_BYTES=140*1024;
+const MAX_SHARE_SIDE=900;
+const SHARE_MIN_LIFETIME_MS=90*1000;     // an engine needs a moment to download the image
+const SHARE_PATH_RE=/^\/face-share\/[A-Za-z0-9_-]{22}\.jpg$/;
+
+function shareDimensions(w,h,maxSide=MAX_SHARE_SIDE){
+  const longest=Math.max(w,h);
+  if(!longest||longest<=maxSide)return {w,h};      // never upscale
+  const scale=maxSide/longest;
+  return {w:Math.max(1,Math.round(w*scale)),h:Math.max(1,Math.round(h*scale))};
+}
+
+function directSearchUrl(engine,shareUrl){
+  if(!engine||typeof engine.direct!=="function")return null;
+  return engine.direct(shareUrl);
+}
+
+// The link the Worker returns is what gets handed to third-party engines: only accept one
+// that points at the CT Atlas API's own hosting path.
+function validShareUrl(value,api){
+  try{
+    const url=new URL(value);
+    return url.origin===new URL(api).origin&&SHARE_PATH_RE.test(url.pathname)&&!url.search&&!url.hash;
+  }catch(_){return false;}
+}
+
+function shareUsable(share,now){
+  return Boolean(share)&&Number.isFinite(share.expiresAt)&&share.expiresAt-now>SHARE_MIN_LIFETIME_MS;
+}
+
+const helpers={MARGINS,MIN_SIDE,MAX_UPSCALE,paddedBox,outputSize,mapBoxToSource,safeStem,cropFileName,uniqueName,crc32,buildZip,SEARCH_ENGINES,SEARCH_ALL_IDS,MAX_SHARE_BYTES,MAX_SHARE_SIDE,shareDimensions,directSearchUrl,validShareUrl,shareUsable};
 if(typeof module!=="undefined"&&module.exports)module.exports=helpers;
 if(typeof document==="undefined"){root.CTAtlasFaceCropsHelpers=helpers;return;}
 
@@ -251,9 +296,13 @@ function paintCell(record){
         '<button type="button" class="fc-btn" data-fc-action="copy" data-fc-key="'+esc(record.key)+'">COPY</button>'+
       '</div>'+
       '<details class="fc-search"><summary>SEARCH ▾</summary><div class="fc-menu">'+
-        SEARCH_ENGINES.map(engine=>
-          '<a class="fc-engine" href="'+esc(engine.url)+'" target="_blank" rel="noopener noreferrer" data-fc-action="search" data-fc-key="'+esc(record.key)+'" data-fc-engine="'+esc(engine.id)+'">'+
-          '<b>'+esc(engine.name)+'</b><span>'+esc(engine.note)+'</span></a>'
+        '<button type="button" class="fc-engine fc-all" data-fc-action="search-all" data-fc-key="'+esc(record.key)+'">'+
+          '<b>Search all ('+SEARCH_ALL_IDS.length+' tabs)</b><span>hosts this crop ~10 min · '+esc(SEARCH_ALL_IDS.map(id=>SEARCH_ENGINES.find(e=>e.id===id).name.split(" ")[0]).join(", "))+'</span></button>'+
+        SEARCH_ENGINES.map(engine=>engine.direct
+          ?'<button type="button" class="fc-engine" data-fc-action="search-direct" data-fc-key="'+esc(record.key)+'" data-fc-engine="'+esc(engine.id)+'">'+
+            '<b>'+esc(engine.name)+'</b><span>'+esc(engine.note)+' · direct result</span></button>'
+          :'<a class="fc-engine" href="'+esc(engine.url)+'" target="_blank" rel="noopener noreferrer" data-fc-action="search" data-fc-key="'+esc(record.key)+'" data-fc-engine="'+esc(engine.id)+'">'+
+            '<b>'+esc(engine.name)+'</b><span>'+esc(engine.note)+'</span></a>'
         ).join("")+
       '</div></details>';
   }
@@ -379,6 +428,104 @@ async function copy(record){
   }
 }
 
+// ---- Direct search: host ONE crop briefly, then open the engines on its URL ------------------
+// Only searchDirect() below leads here, and only from a click on a SEARCH menu entry.
+
+// A small JPEG (re-encoded from the crop: canvas output carries no EXIF/GPS) under the size
+// the Worker accepts.
+async function shrinkForSearch(record){
+  const bitmap=await createImageBitmap(record.blob);
+  try{
+    let {w,h}=shareDimensions(bitmap.width,bitmap.height);
+    for(let round=0;round<6;round++){
+      const canvas=document.createElement("canvas");
+      canvas.width=w;canvas.height=h;
+      const ctx=canvas.getContext("2d");
+      ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";
+      ctx.fillStyle="#fff";ctx.fillRect(0,0,w,h);
+      ctx.drawImage(bitmap,0,0,w,h);
+      for(const quality of [0.9,0.8,0.7,0.6]){
+        const blob=await canvasToBlob(canvas,"image/jpeg",quality);
+        if(blob.size<=MAX_SHARE_BYTES)return blob;
+      }
+      w=Math.max(1,Math.round(w*0.8));h=Math.max(1,Math.round(h*0.8));
+    }
+    throw new Error("the crop cannot be reduced under "+Math.round(MAX_SHARE_BYTES/1024)+" KB");
+  }finally{bitmap.close?.();}
+}
+
+async function shareCrop(record){
+  if(shareUsable(record.share,Date.now()))return record.share;      // already hosted, still fresh
+  const api=context&&context.api;
+  const token=context&&context.getToken?context.getToken():"";
+  if(!api||!token)throw new Error("your session is not available: sign in again");
+  const body=await shrinkForSearch(record);
+  let response;
+  try{
+    response=await fetch(api+"/face-share",{method:"POST",headers:{"X-Session-Token":token,"Content-Type":"image/jpeg"},body});
+  }catch(_){throw new Error("CT Atlas could not be reached");}
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok||!data.ok)throw new Error(data.error||"the temporary hosting refused the image (HTTP "+response.status+")");
+  if(!validShareUrl(data.url,api))throw new Error("the hosting answer was not a valid CT Atlas link");
+  const expiresAt=Date.parse(data.expires_at);
+  record.share={url:data.url,expiresAt:Number.isFinite(expiresAt)?expiresAt:Date.now()+9*60*1000};
+  return record.share;
+}
+
+// Opened synchronously inside the click (so pop-up blockers allow it), navigated once the
+// crop is hosted. Without an opener reference, the engine's page cannot reach CT Atlas.
+function openPlaceholder(){
+  let win=null;
+  try{win=window.open("about:blank","_blank");}catch(_){win=null;}
+  if(win){
+    try{
+      win.opener=null;
+      win.document.title="CT Atlas · preparing face search";
+      win.document.body.style.cssText="margin:0;padding:28px;font:14px system-ui,sans-serif;background:#0d1620;color:#cbd9e0";
+      win.document.body.textContent="Preparing the face search…";
+    }catch(_){/* a blocked document write is harmless */}
+  }
+  return win;
+}
+
+function confirmText(record,engines){
+  return "Search face "+record.label+" directly on "+engines.map(engine=>engine.name).join(", ")+"?\n\n"+
+    "These services can only search by web address, so this ONE crop (a small JPEG without metadata) will be hosted on CT Atlas's temporary storage (EU) for about 10 minutes. "+
+    "Anyone holding its unguessable link can view it during that time, it is downloaded by the search service(s) you picked, and it is deleted automatically afterwards.\n\n"+
+    "Nothing is uploaded unless you press OK.";
+}
+
+async function searchDirect(record,engines){
+  const windows=engines.map(()=>openPlaceholder());
+  if(windows.every(win=>!win)){
+    setStatus("The browser blocked the search window(s). Allow pop-ups for this site, then try again.","error");
+    return;
+  }
+  const closeAll=()=>windows.forEach(win=>{try{if(win)win.close();}catch(_){/* already closed */}});
+  try{
+    if(!shareUsable(record.share,Date.now())&&!window.confirm(confirmText(record,engines))){
+      closeAll();
+      setStatus("Search cancelled: nothing was uploaded.");
+      return;
+    }
+    setStatus("Hosting face "+record.label+" for a few minutes…");
+    const share=await shareCrop(record);
+    engines.forEach((engine,index)=>{if(windows[index])windows[index].location.replace(directSearchUrl(engine,share.url));});
+    const minutes=Math.max(1,Math.round((share.expiresAt-Date.now())/60000));
+    const opened=engines.filter((engine,index)=>windows[index]);
+    const blocked=engines.length-opened.length;
+    setStatus("Face "+record.label+": "+opened.map(engine=>engine.name).join(", ")+" opened on the hosted crop. The link stays valid for about "+minutes+" more minute(s), then the image is deleted automatically. Results are leads, not identifications."+
+      (blocked?" "+blocked+" tab(s) were blocked by the browser: allow pop-ups for this site to open them all.":""));
+  }catch(error){
+    // Fall back to the paste flow: each window goes to the engine's own upload page.
+    engines.forEach((engine,index)=>{try{if(windows[index])windows[index].location.replace(engine.url);}catch(_){/* window closed by the user */}});
+    const copied=await copy(record);
+    setStatus("Direct search unavailable ("+(error.message||"error")+"). "+(copied
+      ?"The crop was copied instead: on the engine's page open its image-upload box and press Ctrl+V."
+      :"Download the JPEG and drag it onto the engine's page."),"error");
+  }
+}
+
 async function onClick(event){
   const target=event.target.closest("[data-fc-action]");
   if(!target)return;
@@ -388,6 +535,14 @@ async function onClick(event){
   if(action==="download"){download(record.blob,record.name);setStatus("Downloaded "+record.name+".");return;}
   if(action==="copy"){
     if(await copy(record))setStatus("Face "+record.label+" copied to the clipboard.");
+    return;
+  }
+  if(action==="search-direct"||action==="search-all"){
+    const engines=action==="search-all"
+      ?SEARCH_ALL_IDS.map(id=>SEARCH_ENGINES.find(item=>item.id===id))
+      :[SEARCH_ENGINES.find(item=>item.id===target.dataset.fcEngine&&item.direct)].filter(Boolean);
+    target.closest("details")?.removeAttribute("open");
+    if(engines.length)await searchDirect(record,engines);   // synchronous up to window.open: keeps the click's user activation
     return;
   }
   if(action==="search"){
@@ -429,7 +584,7 @@ function closeMenus(except){
 function placeMenu(details){
   const menu=details.querySelector(".fc-menu");
   const rect=details.querySelector("summary").getBoundingClientRect();
-  const width=menu.offsetWidth||230,height=menu.offsetHeight||260;
+  const width=menu.offsetWidth||230,height=menu.offsetHeight||330;
   const left=Math.min(Math.max(8,rect.left),Math.max(8,window.innerWidth-width-8));
   let top=rect.bottom+4;
   if(top+height>window.innerHeight-8)top=Math.max(8,rect.top-height-4);

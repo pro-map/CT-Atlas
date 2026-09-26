@@ -169,6 +169,19 @@ jobs:
           done
           echo "Worker did not report a loaded sanctions list in time; the strict health check will decide."
 
+      # Same convergence wait for the temporary face hosting (Durable Object binding) that
+      # Facial Intelligence's direct reverse-image search relies on.
+      - name: Wait for the Worker to expose the face hosting
+        run: |
+          for attempt in {1..24}; do
+            if curl --silent --max-time 25 https://ct-report-generator.fairpeace.workers.dev/health | grep -q '"face_share_configured":true'; then
+              echo "Face hosting is configured in the Worker."
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "Worker did not report the face hosting in time; the strict health check will decide."
+
       - name: Check Worker health
         run: |
           set -euo pipefail
@@ -176,6 +189,8 @@ jobs:
           node - <<'NODE'
           const fs = require("fs");
           const health = JSON.parse(fs.readFileSync("/tmp/health.json", "utf8"));
+          if (!health.face_share_version) throw new Error("Face hosting version missing");
+          if (health.face_share_configured !== true) throw new Error("Face hosting (FACE_SHARE binding) is not configured in the Worker");
           for (const key of ["ok", "deep_search", "quiz_tracking"]) {
             if (health[key] !== true) throw new Error("Worker health flag is not true: " + key);
           }
@@ -203,6 +218,19 @@ jobs:
           }
           console.log("Worker health valid:", health.version, health.auth_mode);
           NODE
+
+      # Face hosting must refuse anonymous uploads and must never answer for an unknown link.
+      # Nothing is uploaded here.
+      - name: Check face hosting refuses anonymous access
+        run: |
+          set -euo pipefail
+          api=https://ct-report-generator.fairpeace.workers.dev
+          status="$(curl --silent --max-time 25 -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: image/jpeg' --data-binary 'x' "$api/face-share")"
+          [ "$status" = "401" ] || { echo "Anonymous upload answered HTTP $status (expected 401)" >&2; exit 1; }
+          headers="$(curl --silent --max-time 25 -D - -o /dev/null "$api/face-share/AAAAAAAAAAAAAAAAAAAAAA.jpg")"
+          echo "$headers" | head -1 | grep -q ' 404' || { echo "Unknown face link did not answer 404" >&2; exit 1; }
+          echo "$headers" | grep -qi '^cache-control: no-store' || { echo "Unknown face link is missing Cache-Control: no-store" >&2; exit 1; }
+          echo "Face hosting refuses anonymous uploads and unknown links."
 
       # The Health status button of the Crypto / Social / Facial tabs reads this
       # endpoint. Only its shape and the Worker itself are asserted: an external

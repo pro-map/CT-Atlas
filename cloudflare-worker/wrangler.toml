@@ -25,6 +25,16 @@ class_name = "ReportGate"
 type = "durable-object"
 storage = "sqlite"
 
+# Temporary (10 min) hosting of one face crop per object so reverse-image engines can fetch it
+# by URL; each object deletes itself. See face-share.js.
+[[durable_objects.bindings]]
+name = "FACE_SHARE"
+class_name = "FaceShare"
+
+[exports.FaceShare]
+type = "durable-object"
+storage = "sqlite"
+
 # AUTH_USERS_JSON is a required Cloudflare secret containing {"username":"sha256(password)"}.
 # The Worker rejects all logins when this secret is missing or invalid; never commit it.
 

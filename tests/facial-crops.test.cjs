@@ -97,13 +97,77 @@ test("search engines: free tools only, https, distinct, opened on their own uplo
   assert.ok(Object.isFrozen(engines));
 });
 
-test("PRIVACY GUARD: the crop script never sends anything anywhere by itself",()=>{
+test("direct search: every engine that can search by URL builds an https address carrying the encoded hosted-crop link",()=>{
+  const link="https://ct-report-generator.fairpeace.workers.dev/face-share/AAAAAAAAAAAAAAAAAAAAAA.jpg";
+  const direct=h.SEARCH_ENGINES.filter(engine=>engine.direct);
+  assert.deepEqual(direct.map(e=>e.id).sort(),["baidu","bing","google","tineye","yandex"]);
+  for(const engine of direct){
+    const url=h.directSearchUrl(engine,link);
+    assert.match(url,/^https:\/\/[a-z0-9.-]+\//,engine.id);
+    assert.ok(url.includes(encodeURIComponent(link)),engine.id+" must carry the URL-encoded link");
+    assert.ok(!url.includes(link),engine.id+" must not leave the link unencoded");
+    assert.equal(new URL(url).protocol,"https:");
+  }
+  const search4faces=h.SEARCH_ENGINES.find(e=>e.id==="search4faces");
+  assert.equal(h.directSearchUrl(search4faces,link),null,"Search4faces cannot search by URL: paste only");
+  assert.equal(h.directSearchUrl(null,link),null);
+  assert.deepEqual([...h.SEARCH_ALL_IDS],["yandex","bing","google","tineye"]);
+  for(const id of h.SEARCH_ALL_IDS)assert.ok(h.SEARCH_ENGINES.find(e=>e.id===id)?.direct,id+" must support direct search");
+});
+
+test("the hosted-crop link is only accepted when it points at the CT Atlas API's own hosting path",()=>{
+  const api="https://ct-report-generator.fairpeace.workers.dev";
+  const good=api+"/face-share/AbCdEfGhIjKlMnOpQrStUv.jpg";
+  assert.equal(h.validShareUrl(good,api),true);
+  for(const bad of [
+    "https://evil.example/face-share/AbCdEfGhIjKlMnOpQrStUv.jpg",
+    api+"/face-share/short.jpg",
+    api+"/face-share/AbCdEfGhIjKlMnOpQrStUv.png",
+    api+"/other/AbCdEfGhIjKlMnOpQrStUv.jpg",
+    api+"/face-share/AbCdEfGhIjKlMnOpQrStUv.jpg?x=1",
+    api+"/face-share/AbCdEfGhIjKlMnOpQrStUv.jpg#f",
+    "http://ct-report-generator.fairpeace.workers.dev/face-share/AbCdEfGhIjKlMnOpQrStUv.jpg",
+    "javascript:alert(1)","not a url","",undefined,null
+  ])assert.equal(h.validShareUrl(bad,api),false,String(bad));
+});
+
+test("hosted crops are re-sized down only, and a share is reused only while an engine still has time to download it",()=>{
+  assert.deepEqual(h.shareDimensions(300,300),{w:300,h:300},"small crops are never upscaled");
+  assert.deepEqual(h.shareDimensions(900,600),{w:900,h:600});
+  assert.deepEqual(h.shareDimensions(1800,1200),{w:900,h:600},"aspect ratio preserved");
+  assert.deepEqual(h.shareDimensions(1000,4000),{w:225,h:900});
+  assert.equal(h.MAX_SHARE_BYTES<150*1024,true,"under the Worker's 150 KB limit");
+  const now=1_000_000;
+  assert.equal(h.shareUsable({url:"u",expiresAt:now+5*60*1000},now),true);
+  assert.equal(h.shareUsable({url:"u",expiresAt:now+30*1000},now),false,"about to expire: host again");
+  assert.equal(h.shareUsable({url:"u",expiresAt:now-1},now),false);
+  assert.equal(h.shareUsable(null,now),false);
+  assert.equal(h.shareUsable({url:"u",expiresAt:NaN},now),false);
+});
+
+test("PRIVACY GUARD: a crop leaves the browser only through an explicit SEARCH click, after a confirmation, to the CT Atlas hosting endpoint",()=>{
   const src=read("facial-crops.js");
-  // A face may reach a third party only when the user pastes it into that service's own page.
-  for(const forbidden of ["fetch(","XMLHttpRequest","sendBeacon","FormData","WebSocket","window.open(","location.href","location.assign"]){
+  for(const forbidden of ["XMLHttpRequest","sendBeacon","FormData","WebSocket","location.href","location.assign","navigator.share"]){
     assert.ok(!src.includes(forbidden),"facial-crops.js must not use "+forbidden);
   }
-  // Engines are plain links the user clicks, without an opener reference.
+  // Exactly one network call, and it goes to the CT Atlas API's own hosting endpoint.
+  assert.equal((src.match(/\bfetch\(/g)||[]).length,1);
+  assert.ok(src.includes('fetch(api+"/face-share",{method:"POST"'));
+  // ...reachable from one place only (searchDirect), which only a click handler calls.
+  assert.equal((src.match(/shareCrop\(record\)/g)||[]).length,2,"definition + the single call in searchDirect");
+  assert.equal((src.match(/searchDirect\(record,engines\)/g)||[]).length,2,"definition + the single call in onClick");
+  const flow=src.slice(src.indexOf("async function searchDirect"),src.indexOf("async function onClick"));
+  assert.ok(flow.includes("window.confirm(")&&flow.indexOf("window.confirm(")<flow.indexOf("await shareCrop(record)"),"the confirmation comes before the upload");
+  assert.ok(flow.indexOf("openPlaceholder()")<flow.indexOf("window.confirm("),"the tab is opened first, inside the click's user activation");
+  // What is uploaded is the small re-encoded copy, never the full-size crop.
+  const share=src.slice(src.indexOf("async function shareCrop"),src.indexOf("function openPlaceholder"));
+  assert.ok(share.includes("const body=await shrinkForSearch(record)"));
+  assert.ok(!/body:\s*record\.blob/.test(share));
+  // Windows: about:blank only, no opener kept by the engine, navigation only through location.replace.
+  const opens=src.match(/window\.open\([^)]*\)/g)||[];
+  assert.deepEqual(opens,['window.open("about:blank","_blank")']);
+  assert.ok(src.includes("win.opener=null"));
+  // Paste-only engines are still plain links opened without an opener reference.
   assert.ok(src.includes('target="_blank" rel="noopener noreferrer"'));
 });
 
@@ -113,12 +177,14 @@ test("the UI wires the crops in, states the third-party disclosure, and keeps th
   for(const id of ["fcBar","fcZip","fcMargin","fcUpscale","fcStatus"])assert.ok(html.includes('id="'+id+'"'),id);
   assert.match(html,/<script src="facial-crops\.js\?v=\d+"><\/script>\s*<script src="facial\.js/,"crops module loads before facial.js");
   assert.ok(html.includes("THIRD-PARTY SEARCH"));
-  assert.match(html,/never sent to CT Atlas/);
+  assert.match(html,/hosted on CT Atlas's temporary storage for about 10 minutes/);
+  assert.match(html,/deleted automatically/);
+  assert.match(html,/after a confirmation/);
   assert.match(html,/only when you paste it there/);
   assert.match(html,/leads, not identifications/);
   assert.ok(html.includes("NON-IDENTIFYING ANALYSIS"),"the existing guardrail must remain");
   assert.match(html,/outside CT Atlas's retention controls/);
-  assert.ok(js.includes("window.CTAtlasFaceCrops?.attach({payload,files:lastFiles})"));
+  assert.ok(js.includes("window.CTAtlasFaceCrops?.attach({payload,files:lastFiles,api:API,getToken:()=>String(sessionStorage.getItem(TOKEN)||\"\")})"));
   assert.ok(js.includes("lastFiles=files"));
   assert.ok(js.includes('class="fc-thumb"')&&js.includes('class="fc-actions"'));
   // The consent checkbox required before analysis is untouched.

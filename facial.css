@@ -22,8 +22,9 @@
 .fc-search{margin-top:5px}
 .fc-search summary::-webkit-details-marker{display:none}
 /* Fixed, positioned by facial-crops.js on open: an absolute menu would be clipped by .preview-card{overflow:hidden}. */
-.fc-menu{position:fixed;z-index:3000;left:8px;top:8px;width:230px;padding:5px;border:1px solid #405563;background:#0a141b;border-radius:5px;box-shadow:0 14px 34px rgba(0,0,0,.45)}
-.fc-engine{display:flex;flex-direction:column;gap:2px;padding:7px 8px;border-radius:4px;text-decoration:none;color:#d7e4eb;font-size:9px}
+.fc-menu{position:fixed;z-index:3000;left:8px;top:8px;width:230px;max-height:calc(100vh - 16px);overflow-y:auto;padding:5px;border:1px solid #405563;background:#0a141b;border-radius:5px;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+.fc-engine{display:flex;flex-direction:column;gap:2px;width:100%;padding:7px 8px;border:0;border-radius:4px;background:none;text-align:left;font-family:inherit;text-decoration:none;color:#d7e4eb;font-size:9px;cursor:pointer}
 .fc-engine:hover{background:#17232e}
+.fc-all{margin-bottom:4px;border-bottom:1px solid #243640;border-radius:4px 4px 0 0}
 .fc-engine span{color:#748b97;font-size:8px}
 @media(max-width:900px){.fc-bar-head{flex-direction:column}.face-table th:nth-child(4),.face-table td:nth-child(4),.face-table th:nth-child(5),.face-table td:nth-child(5){display:none}}

@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CT ATLAS — Facial Intelligence</title>
 <link rel="icon" href="CT-ATLAS.png">
-<link rel="stylesheet" href="facial.css?v=2">
+<link rel="stylesheet" href="facial.css?v=3">
 <link rel="stylesheet" href="tab-health.css?v=1">
 </head>
 <body>
@@ -31,7 +31,7 @@
       <h1>Analyze images and video</h1>
       <p class="lead">Detect faces, assess crop quality, extract public metadata and OCR text, sample video frames, and identify duplicate or near-duplicate visuals.</p>
       <div class="guardrail"><strong>NON-IDENTIFYING ANALYSIS.</strong> CT Atlas does not create biometric face embeddings, identify a person, or conclude that two faces belong to the same individual.</div>
-      <div class="guardrail"><strong>RETENTION.</strong> Uploaded files are processed in memory on the analysis service and are not stored there. The report and any preview images returned to your browser persist only in this session unless you use Download JSON yourself. Face crops are cut in your browser; downloading them, or pasting one into a third-party search engine, is your own action and outside CT Atlas's retention controls.</div>
+      <div class="guardrail"><strong>RETENTION.</strong> Uploaded files are processed in memory on the analysis service and are not stored there. The report and any preview images returned to your browser persist only in this session unless you use Download JSON yourself. Face crops are cut in your browser and go nowhere until you click SEARCH. A direct SEARCH hosts that one crop on CT Atlas's temporary storage (EU) for about 10 minutes so the search engines can download it, then deletes it automatically. Downloading crops, or pasting one into a third-party search engine, is your own action and outside CT Atlas's retention controls.</div>
 
       <form id="fiForm">
         <label class="dropzone" for="fiFiles">
@@ -93,7 +93,7 @@
             <label class="fc-check"><input id="fcUpscale" type="checkbox" checked> Upscale small crops to 300 px</label>
           </div>
           <div id="fcStatus" class="fc-status" aria-live="polite"></div>
-          <div class="fc-notice"><strong>THIRD-PARTY SEARCH.</strong> Crops are cut in your browser and are never sent to CT Atlas. SEARCH copies a crop and opens a free search engine's upload page: the face reaches that service only when you paste it there. Results are leads, not identifications (look-alikes are common), and none of these services is operated or verified by CT Atlas.</div>
+          <div class="fc-notice"><strong>THIRD-PARTY SEARCH.</strong> Cutting, JPEG, ZIP and COPY happen only in your browser. To open an engine's results directly, SEARCH needs a web address for the image: after a confirmation, that one crop is hosted on CT Atlas's temporary storage for about 10 minutes (anyone holding its unguessable link can view it meanwhile), the engine downloads it, and it is then deleted automatically. Search4faces, and any failure, use copy-and-paste instead: the face reaches that service only when you paste it there. Results are leads, not identifications (look-alikes are common), and none of these services is operated or verified by CT Atlas.</div>
         </section>
         <section id="fiSimilaritySection" class="report-section" hidden>
           <h3>VISUAL SIMILARITY</h3>
@@ -105,8 +105,8 @@
     </section>
   </main>
 </div>
-<script src="facial-crops.js?v=1"></script>
-<script src="facial.js?v=2"></script>
+<script src="facial-crops.js?v=2"></script>
+<script src="facial.js?v=3"></script>
 <script src="tab-health.js?v=1" data-health-scope="facial"></script>
 </body>
 </html>

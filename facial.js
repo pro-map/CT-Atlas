@@ -55,7 +55,7 @@ function render(payload){
   return '<section class="media-item"><div class="media-head"><h3>'+esc(f.filename)+'</h3><div class="media-meta">IMAGE · '+esc(f.width)+'×'+esc(f.height)+' · '+esc(f.face_count)+' face(s)</div></div><div class="preview-grid">'+previewCard(f,fi+':0')+'</div>'+exif+'</section>';
  }).join("");
  // Cut the faces out of the original files, in the browser (see facial-crops.js).
- window.CTAtlasFaceCrops?.attach({payload,files:lastFiles});
+ window.CTAtlasFaceCrops?.attach({payload,files:lastFiles,api:API,getToken:()=>String(sessionStorage.getItem(TOKEN)||"")});
  if((payload.errors||[]).length)$("fiItems").insertAdjacentHTML("beforeend",'<section class="media-item"><h3>PROCESSING WARNINGS</h3><div class="ocr">'+esc(JSON.stringify(payload.errors,null,2))+'</div></section>');
 }
 $("fiFiles").addEventListener("change",listFiles);
