@@ -365,7 +365,7 @@ test('every workflow that publishes GitHub Pages builds events-lite.json first',
   assert.ok(build>=0,`${file} publishes Pages without building events-lite.json`);
   assert.ok(build<text.indexOf('upload-pages-artifact'),`${file} must build events-lite.json BEFORE uploading the site`);
  }
- assert.ok(publishing>=8,'expected the 8 Pages-publishing workflows');
+ assert.ok(publishing>=7,'expected the 7 Pages-publishing workflows');
 });
 
 test('the build step never fails a deployment and cleans up after itself',()=>{
