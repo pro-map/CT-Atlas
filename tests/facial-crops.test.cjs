@@ -157,14 +157,14 @@ test("PRIVACY GUARD: a crop leaves the browser only through an explicit SEARCH c
   assert.equal((src.match(/shareCrop\(record\)/g)||[]).length,2,"definition + the single call in runDirectSearch");
   assert.equal((src.match(/runDirectSearch\(record,engines\)/g)||[]).length,2,"definition + the single call in startSearch");
   assert.equal((src.match(/startSearch\(record,engines\)/g)||[]).length,3,"definition + the immediate path + the OK click of the confirmation");
-  assert.equal((src.match(/requestSearch\(record,engines\)/g)||[]).length,2,"definition + the single call in onClick");
+  assert.equal((src.match(/requestSearch\(record,engines,/g)||[]).length,3,"definition + the single call in onClick + the re-ask when the described hosting expired");
   // The confirmation is IN the page (window.confirm from a tab that just lost focus can be suppressed) and comes first:
   // the only immediate path is for engines already confirmed for the current hosting.
   assert.ok(!src.includes("window.confirm("),"no window.confirm: it is unreliable next to window.open");
   const request=src.slice(src.indexOf("function requestSearch"),src.indexOf("async function startSearch"));
   assert.ok(request.includes("consentPrompt(confirmText("));
   assert.ok(request.indexOf("if(!fresh.length)return startSearch(record,engines)")>-1&&request.indexOf("if(!fresh.length)")<request.indexOf("consentPrompt("),"immediate start only when there is nothing new to confirm");
-  assert.ok(request.includes("()=>{running=startSearch(record,engines);}"),"the OK click starts the search");
+  assert.ok(request.includes("running=startSearch(record,engines);"),"the OK click starts the search");
   const flow=src.slice(src.indexOf("async function runDirectSearch"),src.indexOf("async function onClick"));
   assert.ok(flow.indexOf("openPlaceholder()")>-1&&flow.indexOf("openPlaceholder()")<flow.indexOf("await shareCrop(record)"),"tabs are opened synchronously, before the upload");
   // The dialog: native <dialog>, safe default focus, OK calls onAccept inside its own click.
@@ -172,6 +172,10 @@ test("PRIVACY GUARD: a crop leaves the browser only through an explicit SEARCH c
   assert.ok(dialog.includes('document.createElement("dialog")')&&dialog.includes("showModal"));
   assert.ok(dialog.indexOf("onAccept();")>dialog.indexOf('choice==="ok"'),"OK runs the search inside the click handler");
   assert.match(dialog,/safe\.focus\(\)/);
+  assert.match(dialog,/aria-labelledby/);
+  assert.match(dialog,/aria-describedby/);
+  assert.match(dialog,/restoreFocus/,"focus goes back to the menu button after the dialog closes");
+  assert.ok(request.includes("shareUsable(record.share,Date.now())")&&request.includes("confirm again"),"OK re-checks that the hosting the dialog described still exists");
   // What is uploaded is the small re-encoded copy, never the full-size crop.
   const share=src.slice(src.indexOf("async function shareCrop"),src.indexOf("function openPlaceholder"));
   assert.ok(share.includes("const body=await shrinkForSearch(record)"));

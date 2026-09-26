@@ -24,8 +24,8 @@ function listFiles(){
 // prefix = "<file index>:<frame index>"; with the face id it keys the crop cells filled by facial-crops.js.
 function faceTable(faces,prefix){
  if(!faces?.length)return '<div class="media-meta">No face detected in this frame.</div>';
- return '<table class="face-table"><thead><tr><th>Crop</th><th>Face</th><th>Confidence</th><th>Quality</th><th>Sharpness</th><th>Brightness</th><th>Image area</th><th>Actions</th></tr></thead><tbody>'+
- faces.map(f=>{const key=esc(prefix+':'+f.face_id);return '<tr><td class="fc-thumb" data-fc-key="'+key+'"><span class="fc-pending">…</span></td><td>F'+esc(f.face_id)+'</td><td>'+(f.detection_score!=null?esc(Math.round(Number(f.detection_score)*100))+'%':'—')+'</td><td><span class="quality">'+esc(f.quality)+' '+esc(f.quality_score)+'</span></td><td>'+esc(f.sharpness)+'</td><td>'+esc(f.brightness)+'</td><td>'+esc((Number(f.size_ratio||0)*100).toFixed(1))+'%</td><td class="fc-actions" data-fc-key="'+key+'"></td></tr>';}).join("")+'</tbody></table>';
+ return '<div class="face-scroll"><table class="face-table"><thead><tr><th>Crop</th><th>Face</th><th>Confidence</th><th>Quality</th><th>Sharpness</th><th>Brightness</th><th>Image area</th><th>Actions</th></tr></thead><tbody>'+
+ faces.map(f=>{const key=esc(prefix+':'+f.face_id);return '<tr><td class="fc-thumb" data-fc-key="'+key+'"><span class="fc-pending">…</span></td><td>F'+esc(f.face_id)+'</td><td>'+(f.detection_score!=null?esc(Math.round(Number(f.detection_score)*100))+'%':'—')+'</td><td><span class="quality">'+esc(f.quality)+' '+esc(f.quality_score)+'</span></td><td>'+esc(f.sharpness)+'</td><td>'+esc(f.brightness)+'</td><td>'+esc((Number(f.size_ratio||0)*100).toFixed(1))+'%</td><td class="fc-actions" data-fc-key="'+key+'"></td></tr>';}).join("")+'</tbody></table></div>';
 }
 function previewCard(frame,prefix){
  return '<div class="preview-card">'+
@@ -45,6 +45,8 @@ function render(payload){
   [files.length,"FILES ANALYZED"],[frames,"IMAGES / FRAMES"],[faces,"FACE DETECTIONS"],[(payload.similarity_pairs||[]).length,"SIMILAR PAIRS"]
  ].map(x=>'<div class="summary-card"><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div>').join("");
  const pairs=payload.similarity_pairs||[];
+ // The analysis service says which detector ran: a fallback is less accurate and must not pass unnoticed.
+ $("fiDetectorNote").hidden=!/fallback/i.test(String(payload.face_detector||""));
  $("fiSimilaritySection").hidden=!pairs.length;
  $("fiSimilarity").innerHTML=pairs.map(p=>'<div class="similarity-row"><span>'+esc(p.a)+'</span><span class="sim-badge">'+esc(p.similarity)+' · d='+esc(p.phash_distance)+'</span><span>'+esc(p.b)+'</span></div>').join("");
  $("fiItems").innerHTML=files.map((f,fi)=>{
@@ -55,7 +57,7 @@ function render(payload){
   return '<section class="media-item"><div class="media-head"><h3>'+esc(f.filename)+'</h3><div class="media-meta">IMAGE · '+esc(f.width)+'×'+esc(f.height)+' · '+esc(f.face_count)+' face(s)</div></div><div class="preview-grid">'+previewCard(f,fi+':0')+'</div>'+exif+'</section>';
  }).join("");
  // On narrow screens the results sit below the form: bring them into view.
- {const top=$("fiReport").getBoundingClientRect().top;if(top>window.innerHeight*0.6)$("fiReport").scrollIntoView({behavior:"smooth",block:"start"});}
+ {const top=$("fiReport").getBoundingClientRect().top;const calm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;if(top>window.innerHeight*0.6)$("fiReport").scrollIntoView({behavior:calm?"auto":"smooth",block:"start"});}
  // Cut the faces out of the original files, in the browser (see facial-crops.js).
  window.CTAtlasFaceCrops?.attach({payload,files:lastFiles,api:API,getToken:()=>String(sessionStorage.getItem(TOKEN)||"")});
  if((payload.errors||[]).length)$("fiItems").insertAdjacentHTML("beforeend",'<section class="media-item"><h3>PROCESSING WARNINGS</h3><div class="ocr">'+esc(JSON.stringify(payload.errors,null,2))+'</div></section>');

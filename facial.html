@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CT ATLAS — Facial Intelligence</title>
 <link rel="icon" href="CT-ATLAS.png">
-<link rel="stylesheet" href="facial.css?v=5">
+<link rel="stylesheet" href="facial.css?v=6">
 <link rel="stylesheet" href="tab-health.css?v=1">
 </head>
 <body>
@@ -75,6 +75,7 @@
           <button id="fiDownload" class="secondary-button" type="button">DOWNLOAD JSON</button>
         </div>
         <div id="fiSummary" class="summary-grid"></div>
+        <div id="fiDetectorNote" class="fc-notice" hidden><strong>FALLBACK FACE DETECTOR.</strong> The main face-detection model could not be loaded on the analysis service, so a less accurate fallback ran: faces may be missed or wrongly reported, and no confidence is shown. Ask the administrator to check the service.</div>
         <section id="fcBar" class="fc-bar" hidden>
           <div class="fc-bar-head">
             <div>
@@ -107,8 +108,8 @@
     </section>
   </main>
 </div>
-<script src="facial-crops.js?v=4"></script>
-<script src="facial.js?v=4"></script>
+<script src="facial-crops.js?v=5"></script>
+<script src="facial.js?v=5"></script>
 <script src="tab-health.js?v=1" data-health-scope="facial"></script>
 </body>
 </html>

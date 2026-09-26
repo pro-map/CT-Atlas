@@ -8,6 +8,7 @@ skin-coloured shapes and textures.
 Run:  python3 tests/visual_intel_detector_test.py
 (also run inside the built container by .github/workflows/deploy-visual-intel.yml)
 """
+import asyncio
 import hashlib
 import os
 import sys
@@ -81,6 +82,11 @@ class DetectorLoads(unittest.TestCase):
             self.assertIsInstance(detector, cv2.CascadeClassifier)
             # It still works, and never returns more than a handful of boxes on a portrait.
             self.assertLessEqual(len(boxes(load())), 3)
+            # It has no confidence to report and must not invent one; the result says which detector ran.
+            self.assertTrue(all(face["detection_score"] is None for face in app._detect_faces(load())))
+            item = app._analyze_image("astronaut.jpg", FIXTURE.read_bytes())
+            self.assertEqual(item["face_detector"], "opencv_haar_fallback")
+            self.assertEqual(asyncio.run(app.health())["face_detection"], "opencv_haar_fallback")
         finally:
             app.YUNET_SHA256 = original
 
@@ -130,6 +136,56 @@ class DetectsRealFaces(unittest.TestCase):
         for name, frame in variants.items():
             with self.subTest(name):
                 self.assertEqual(len(boxes(frame)), 1, boxes(frame))
+
+
+class AnyFaceSize(unittest.TestCase):
+    """YuNet alone misses faces above ~550 px (score falls to ~0.6) and scores big look-alikes (the round mission
+    patch on the suit) above the threshold when the photo is 1500-2000 px. The pyramid must fix both."""
+
+    def test_big_faces_are_found_once(self):
+        base = load()
+        tight = base[19:219, 123:323]
+        cases = {f"tight face crop {size}px": cv2.resize(tight, (size, size)) for size in (600, 800, 1000, 1400, 1800, 2200)}
+        cases["wide crop, 1800 px wide"] = cv2.resize(base[0:300, 50:400], (1800, int(1800 * 300 / 350)))
+        cases["wide crop, 2200 px wide"] = cv2.resize(base[0:300, 50:400], (2200, int(2200 * 300 / 350)))
+        for width in (500, 700, 900):   # a phone selfie: 1650x2200 frame, face 500-900 px wide
+            canvas = np.full((2200, 1650, 3), 128, np.uint8)
+            face = cv2.resize(base[40:230, 120:330], (width, int(width * 190 / 210)))
+            canvas[600:600 + face.shape[0], (1650 - width) // 2:(1650 - width) // 2 + width] = face
+            cases[f"selfie, face {width}px wide"] = canvas
+        for name, frame in cases.items():
+            with self.subTest(name):
+                self.assertEqual(len(boxes(frame)), 1, boxes(frame))
+
+    def test_a_round_emblem_is_never_a_face_at_any_analysis_size(self):
+        base = load()
+        for interpolation in (cv2.INTER_LINEAR, cv2.INTER_CUBIC):
+            for size in range(1200, 2201, 50):
+                with self.subTest(size=size, interpolation=interpolation):
+                    found = boxes(cv2.resize(base, (size, size), interpolation=interpolation))
+                    self.assertEqual(len(found), 1, f"only the real face at {size}px, got {found}")
+
+    def test_the_committed_1600_px_regression_photo_has_one_face(self):
+        frame = cv2.imread(str(HERE / "fixtures" / "astronaut_1600.jpg"))
+        self.assertEqual(frame.shape[:2], (1600, 1600))
+        self.assertEqual(len(boxes(frame)), 1, boxes(frame))
+
+    def test_every_face_of_a_group_is_kept_at_any_resolution(self):
+        base = load()
+        tile = np.vstack([np.hstack([base, base]), np.hstack([base, cv2.flip(base, 1)])])
+        for size in (1024, 1600, 2200):
+            with self.subTest(size=size):
+                self.assertEqual(len(boxes(cv2.resize(tile, (size, size)))), 4)
+
+    def test_a_face_is_reported_once_even_though_several_pyramid_levels_see_it(self):
+        found = app._detect_faces(load())
+        self.assertEqual(len(found), 1)
+
+    def test_a_squeezed_face_is_kept(self):
+        base = load()
+        for factor in (0.6, 0.5):
+            with self.subTest(factor):
+                self.assertEqual(len(boxes(cv2.resize(base, None, fx=factor, fy=1.0))), 1)
 
 
 class RejectsNonFaces(unittest.TestCase):
@@ -190,6 +246,11 @@ class LandmarkGeometry(unittest.TestCase):
         for name, landmarks in bad.items():
             with self.subTest(name):
                 self.assertFalse(app._plausible_face(0, 0, 100, 120, landmarks))
+
+    def test_a_turned_head_with_eyes_close_together_is_still_a_face(self):
+        # 3/4 view: the inter-eye distance shrinks, so the eyes-to-mouth / eye-distance ratio grows (about 5 here).
+        turned = np.array([[44, 40], [62, 40], [58, 62], [42, 88], [62, 88]], float)
+        self.assertTrue(app._plausible_face(0, 0, 100, 120, turned))
 
     def test_boxes_that_are_too_small_or_the_wrong_shape_are_rejected(self):
         self.assertFalse(app._plausible_face(0, 0, 15, 15, self.GOOD * 0.15))

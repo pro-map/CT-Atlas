@@ -22,7 +22,8 @@ test("hidden elements really are hidden: the empty placeholder no longer pushes 
 
 test("on narrow screens (results stacked under the form) the report is scrolled into view after an analysis",()=>{
   const js=read("facial.js");
-  assert.match(js,/scrollIntoView\(\{behavior:"smooth",block:"start"\}\)/);
+  assert.match(js,/scrollIntoView\(\{behavior:calm\?"auto":"smooth",block:"start"\}\)/);
+  assert.match(js,/prefers-reduced-motion: reduce/);
   assert.ok(js.indexOf("scrollIntoView")<js.indexOf("CTAtlasFaceCrops?.attach"),"before the crops are cut");
 });
 
@@ -37,6 +38,10 @@ test("the face table shows the detector's confidence and its narrow-screen colum
   const css=read("facial.css");
   const hidden=[...css.matchAll(/\.face-table th:nth-child\((\d+)\)/g)].map(m=>Number(m[1]));
   assert.deepEqual([...new Set(hidden)].sort(),[5,6].sort(),"nth-child(5) and (6) = Sharpness and Brightness");
+  assert.match(js,/<div class="face-scroll"><table class="face-table">/,"the table scrolls inside its card instead of being clipped");
+  assert.match(js,/<\/tbody><\/table><\/div>/);
+  assert.match(css,/\.face-scroll\{[^}]*overflow-x:auto/);
+  assert.match(css,/@media\(max-width:1100px\)\{\.face-table th:nth-child\(5\)/,"the two spare columns are hidden before the table gets cramped");
   assert.equal(columns[4],"Sharpness");
   assert.equal(columns[5],"Brightness");
   // Each row has as many cells as the header has columns.
@@ -46,11 +51,20 @@ test("the face table shows the detector's confidence and its narrow-screen colum
 
 // ---------------------------------------------------------------- cache busting
 
+test("a fallback detector is announced on the page and shows no invented confidence",()=>{
+  const html=read("facial.html");
+  const js=read("facial.js");
+  assert.match(html,/<div id="fiDetectorNote" class="fc-notice" hidden>/);
+  assert.match(html,/FALLBACK FACE DETECTOR/);
+  assert.ok(js.includes('$("fiDetectorNote").hidden=!/fallback/i.test(String(payload.face_detector||""))'));
+  assert.ok(js.includes("f.detection_score!=null"),"a null score is shown as a dash, not as a number");
+});
+
 test("the page loads the changed assets under new version numbers so cached copies are not reused",()=>{
   const html=read("facial.html");
-  assert.match(html,/facial\.css\?v=([5-9]|\d{2,})"/);
-  assert.match(html,/facial-crops\.js\?v=([4-9]|\d{2,})"/);
-  assert.match(html,/facial\.js\?v=([4-9]|\d{2,})"/);
+  assert.match(html,/facial\.css\?v=([6-9]|\d{2,})"/);
+  assert.match(html,/facial-crops\.js\?v=([5-9]|\d{2,})"/);
+  assert.match(html,/facial\.js\?v=([5-9]|\d{2,})"/);
 });
 
 // ---------------------------------------------------------------- the face detection service

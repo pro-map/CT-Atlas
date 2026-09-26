@@ -33,7 +33,10 @@ YUNET_NAME = "yunet_2023mar"
 YUNET_MODEL = Path(__file__).resolve().parent / "models" / "face_detection_yunet_2023mar.onnx"
 YUNET_SHA256 = "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4"
 FACE_SCORE_THRESHOLD = float(os.getenv("CT_ATLAS_FACE_SCORE_THRESHOLD", "0.75"))
-MIN_FACE_SIDE = 20  # pixels, in the analysed frame
+MIN_FACE_SIDE = 20  # pixels, in the analysed pyramid level
+PYRAMID_BAND_MAX = 200  # a pyramid level owns faces whose box is at most this many pixels there
+PYRAMID_MIN_SIDE = 200  # the pyramid stops once the next level would be smaller than this
+OVERSIZED_FACE_SCORE = 0.85  # score required from boxes larger than the band (only the last level accepts them)
 _DETECTOR_LOCK = threading.RLock()
 _DETECTOR: dict[str, Any] = {"loaded": False, "detector": None, "name": "", "error": ""}
 
@@ -57,26 +60,6 @@ def _resize_for_analysis(frame: np.ndarray) -> tuple[np.ndarray, float]:
         return frame, 1.0
     scale = MAX_IMAGE_SIDE / float(largest)
     return cv2.resize(frame, (max(1, int(w * scale)), max(1, int(h * scale)))), scale
-
-
-def _iou(a: tuple[int, int, int, int], b: tuple[int, int, int, int]) -> float:
-    ax, ay, aw, ah = a
-    bx, by, bw, bh = b
-    x1, y1 = max(ax, bx), max(ay, by)
-    x2, y2 = min(ax + aw, bx + bw), min(ay + ah, by + bh)
-    if x2 <= x1 or y2 <= y1:
-        return 0.0
-    inter = (x2 - x1) * (y2 - y1)
-    union = aw * ah + bw * bh - inter
-    return inter / union if union else 0.0
-
-
-def _dedupe_boxes(boxes: list[tuple[int, int, int, int]]) -> list[tuple[int, int, int, int]]:
-    kept: list[tuple[int, int, int, int]] = []
-    for box in sorted(boxes, key=lambda b: b[2] * b[3], reverse=True):
-        if all(_iou(box, other) < 0.35 for other in kept):
-            kept.append(box)
-    return kept[:40]
 
 
 def _load_detector() -> tuple[Any, str]:
@@ -118,58 +101,102 @@ def _plausible_face(x: float, y: float, w: float, h: float, landmarks: np.ndarra
     for px, py in landmarks:
         if px < x - margin or px > x + w + margin or py < y - margin or py > y + h + margin:
             return False
-    if not 0.4 <= axis_len / eye_dist <= 4.0:
+    # The eyes come closer together as the head turns, so this ratio is only bounded loosely.
+    if not 0.4 <= axis_len / eye_dist <= 8.0:
         return False
     nose_position = float(np.dot(nose - eyes_mid, axis) / (axis_len * axis_len))
     return 0.1 <= nose_position <= 0.95
 
 
-def _detect_boxes(gray_or_bgr: np.ndarray) -> list[tuple[int, int, int, int, float]]:
-    """(x, y, w, h, score) boxes in the pixels of the given frame."""
-    detector, name = _load_detector()
-    h, w = gray_or_bgr.shape[:2]
-    boxes: list[tuple[int, int, int, int, float]] = []
-    if detector is None:
-        return boxes
-
-    if name == YUNET_NAME:
-        with _DETECTOR_LOCK:
-            detector.setInputSize((w, h))
-            _, rows = detector.detect(gray_or_bgr)
-        for row in ([] if rows is None else rows):
-            x, y, bw, bh = (float(v) for v in row[:4])
-            score = float(row[14])
-            landmarks = np.array(row[4:14], dtype=float).reshape(5, 2)
-            # Small faces are where false positives live: ask for more confidence from them.
-            if score < (0.85 if min(bw, bh) < 32 else FACE_SCORE_THRESHOLD):
-                continue
-            if not _plausible_face(x, y, bw, bh, landmarks):
-                continue
-            x0, y0 = max(0, int(round(x))), max(0, int(round(y)))
-            x1, y1 = min(w, int(round(x + bw))), min(h, int(round(y + bh)))
-            if x1 - x0 >= 2 and y1 - y0 >= 2:
-                boxes.append((x0, y0, x1 - x0, y1 - y0, score))
-        return boxes
-
-    gray = cv2.equalizeHist(cv2.cvtColor(gray_or_bgr, cv2.COLOR_BGR2GRAY))
+def _yunet_detections(image: np.ndarray) -> list[tuple[float, float, float, float, float, np.ndarray]]:
+    """Raw YuNet output for one image: (x, y, w, h, score, 5 landmarks)."""
+    detector, _ = _load_detector()
+    height, width = image.shape[:2]
     with _DETECTOR_LOCK:
-        found = detector.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=8, minSize=(48, 48))
-    for row in found:
-        bx, by, bw, bh = (int(v) for v in row)
-        boxes.append((bx, by, bw, bh, 0.5))
-    return boxes
+        detector.setInputSize((width, height))
+        _, rows = detector.detect(image)
+    return [
+        (float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[14]), np.array(row[4:14], dtype=float).reshape(5, 2))
+        for row in ([] if rows is None else rows)
+    ]
+
+
+def _overlap(a: tuple[Any, ...], b: tuple[Any, ...]) -> tuple[float, float]:
+    """(intersection / union, intersection / smaller box) of two boxes given as (x, y, w, h, ...)."""
+    ax, ay, aw, ah = a[:4]
+    bx, by, bw, bh = b[:4]
+    x1, y1 = max(ax, bx), max(ay, by)
+    x2, y2 = min(ax + aw, bx + bw), min(ay + ah, by + bh)
+    if x2 <= x1 or y2 <= y1:
+        return 0.0, 0.0
+    inter = (x2 - x1) * (y2 - y1)
+    union = aw * ah + bw * bh - inter
+    smaller = min(aw * ah, bw * bh)
+    return (inter / union if union else 0.0), (inter / smaller if smaller else 0.0)
+
+
+def _merge_detections(detections: list[tuple[int, int, int, int, float | None]]) -> list[tuple[int, int, int, int, float | None]]:
+    """The same face seen at two pyramid levels, or a box lying inside a better one, is reported once."""
+    kept: list[tuple[int, int, int, int, float | None]] = []
+    ranked = sorted(detections, key=lambda d: ((d[4] if d[4] is not None else 0.0), d[2] * d[3]), reverse=True)
+    for det in ranked:
+        if all(iou < 0.3 and inside < 0.7 for iou, inside in (_overlap(det, other) for other in kept)):
+            kept.append(det)
+    return kept
+
+
+def _detect_boxes(frame: np.ndarray) -> list[tuple[int, int, int, int, float | None]]:
+    """(x, y, w, h, score) face boxes in the pixels of `frame`. The score is None for the fallback cascade."""
+    detector, name = _load_detector()
+    height, width = frame.shape[:2]
+    if detector is None:
+        return []
+
+    if name != YUNET_NAME:
+        gray = cv2.equalizeHist(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY))
+        with _DETECTOR_LOCK:
+            found = detector.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=8, minSize=(48, 48))
+        return _merge_detections([(int(bx), int(by), int(bw), int(bh), None) for bx, by, bw, bh in found])
+
+    # YuNet is calibrated for faces up to a few hundred pixels. Fed a large frame at native size it MISSES big
+    # faces (their score falls to ~0.6 above ~550 px) and scores big look-alikes (a round emblem on a uniform)
+    # above the threshold. So the frame is analysed as a pyramid (1, 1/2, 1/4, ...): a level only owns the faces
+    # whose box is at most PYRAMID_BAND_MAX px there (the last level owns everything), which means every face
+    # is judged at a size the model handles and a look-alike that only fires at one oversized scale is dropped.
+    candidates: list[tuple[int, int, int, int, float | None]] = []
+    scale = 1.0
+    while True:
+        if scale == 1.0:
+            level = frame
+        else:
+            level = cv2.resize(frame, (max(1, round(width * scale)), max(1, round(height * scale))), interpolation=cv2.INTER_AREA)
+        is_last = min(width, height) * scale * 0.5 < PYRAMID_MIN_SIDE
+        for x, y, bw, bh, score, landmarks in _yunet_detections(level):
+            oversized = max(bw, bh) > PYRAMID_BAND_MAX
+            if oversized and not is_last:
+                continue
+            # Small faces and oversized boxes are where false positives live: ask for more confidence.
+            needed = OVERSIZED_FACE_SCORE if (oversized or min(bw, bh) < 32) else FACE_SCORE_THRESHOLD
+            if score < needed or not _plausible_face(x, y, bw, bh, landmarks):
+                continue
+            x0, y0 = max(0, round(x / scale)), max(0, round(y / scale))
+            x1, y1 = min(width, round((x + bw) / scale)), min(height, round((y + bh) / scale))
+            if x1 - x0 >= 2 and y1 - y0 >= 2:
+                candidates.append((x0, y0, x1 - x0, y1 - y0, score))
+        if is_last:
+            break
+        scale *= 0.5
+    return _merge_detections(candidates)
 
 
 def _detect_faces(frame: np.ndarray) -> list[dict[str, Any]]:
     work, scale = _resize_for_analysis(frame)
-    scored = _detect_boxes(work)
-    score_by_box = {(x, y, w, h): score for x, y, w, h, score in scored}
-    boxes = _dedupe_boxes([(x, y, w, h) for x, y, w, h, _ in scored])
+    boxes = sorted(_detect_boxes(work), key=lambda b: b[2] * b[3], reverse=True)[:40]
     inv = 1.0 / scale
     h, w = frame.shape[:2]
     results: list[dict[str, Any]] = []
 
-    for index, (x, y, fw, fh) in enumerate(boxes, start=1):
+    for index, (x, y, fw, fh, score) in enumerate(boxes, start=1):
         x0 = max(0, int(x * inv))
         y0 = max(0, int(y * inv))
         x1 = min(w, int((x + fw) * inv))
@@ -193,7 +220,8 @@ def _detect_faces(frame: np.ndarray) -> list[dict[str, Any]]:
             {
                 "face_id": index,
                 "box": {"x": x0, "y": y0, "w": x1 - x0, "h": y1 - y0},
-                "detection_score": round(float(score_by_box.get((x, y, fw, fh), 0.0)), 3),
+                # None when the fallback cascade produced the box: it has no confidence to report.
+                "detection_score": None if score is None else round(float(score), 3),
                 "size_ratio": round(ratio, 4),
                 "sharpness": round(sharpness, 1),
                 "brightness": round(brightness, 1),
@@ -321,6 +349,7 @@ def _analyze_frame(frame: np.ndarray, label: str, timestamp: float | None = None
     faces = _detect_faces(frame)
     return {
         "label": label,
+        "face_detector": _load_detector()[1],
         "timestamp_seconds": round(timestamp, 2) if timestamp is not None else None,
         "width": int(frame.shape[1]),
         "height": int(frame.shape[0]),
@@ -460,6 +489,7 @@ async def analyze(
     return {
         "ok": bool(results),
         "version": SERVICE_VERSION,
+        "face_detector": _load_detector()[1],
         "analysis_scope": {
             "face_detection": True,
             "face_quality": True,

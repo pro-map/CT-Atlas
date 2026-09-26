@@ -135,14 +135,17 @@ jobs:
           set -euo pipefail
           health="$(curl --fail --silent --show-error "$VISUAL_INTEL_URL/health")"
           printf '%s' "$health" | grep -q '"face_detection":"yunet_2023mar"' || { echo "Face detector is not YuNet: $health" >&2; exit 1; }
-          curl --fail --silent --show-error --max-time 90             -X POST "$VISUAL_INTEL_URL/analyze"             -H "X-CT-Atlas-Visual-Key: $VISUAL_SHARED_SECRET"             -F "files=@tests/fixtures/astronaut.jpg;type=image/jpeg" > /tmp/portrait.json
+          # The same portrait at 512 px and at 1600 px: the 1600 px one used to report the round mission patch as a second face.
+          curl --fail --silent --show-error --max-time 120 -X POST "$VISUAL_INTEL_URL/analyze" -H "X-CT-Atlas-Visual-Key: $VISUAL_SHARED_SECRET" -F "files=@tests/fixtures/astronaut.jpg;type=image/jpeg" -F "files=@tests/fixtures/astronaut_1600.jpg;type=image/jpeg" > /tmp/portrait.json
           python - <<'PY'
           import json
           data = json.load(open("/tmp/portrait.json"))
-          item = data["files"][0]
-          assert item["face_count"] == 1, f"expected exactly 1 face, got {item['face_count']}"
-          assert item["faces"][0]["detection_score"] >= 0.75
-          print("Face detection smoke test passed:", item["faces"][0]["box"])
+          assert data["face_detector"] == "yunet_2023mar", data["face_detector"]
+          assert len(data["files"]) == 2, "both portraits must be analysed"
+          for item in data["files"]:
+              assert item["face_count"] == 1, f"{item['filename']}: expected exactly 1 face, got {item['face_count']}"
+              assert item["faces"][0]["detection_score"] >= 0.75
+              print("Face detection smoke test passed:", item["filename"], item["faces"][0]["box"])
           PY
 
       - name: Deploy CT Atlas Worker bridge

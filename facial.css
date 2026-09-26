@@ -34,7 +34,9 @@
 .fc-engine:hover{background:#17232e}
 .fc-all{margin-bottom:4px;border-bottom:1px solid #243640;border-radius:4px 4px 0 0}
 .fc-engine span{color:#748b97;font-size:8px}
-@media(max-width:900px){.fc-bar-head{flex-direction:column}.face-table th:nth-child(5),.face-table td:nth-child(5),.face-table th:nth-child(6),.face-table td:nth-child(6){display:none}}
+.face-scroll{max-width:100%;overflow-x:auto}
+@media(max-width:1100px){.face-table th:nth-child(5),.face-table td:nth-child(5),.face-table th:nth-child(6),.face-table td:nth-child(6){display:none}}
+@media(max-width:900px){.fc-bar-head{flex-direction:column}}
 /* Confirmation shown before a crop is hosted for a direct search (facial-crops.js askConsent) */
 .fc-consent{max-width:520px;width:calc(100% - 32px);padding:18px;border:1px solid #5d8296;border-radius:8px;background:#0e1921;color:#e8f1f5;box-shadow:0 20px 60px rgba(0,0,0,.6)}
 .fc-consent::backdrop{background:rgba(3,8,12,.72)}
@@ -44,4 +46,5 @@
 .fc-consent-actions{display:flex;justify-content:flex-end;gap:8px}
 .fc-btn-primary{border-color:#5d8296;background:#1b3948}
 .fc-more span{margin-left:8px}
-.fc-more span:first-child{margin-left:0}
+.fc-more span:first-child,.fc-more-face+span{margin-left:0}
+.fc-more-face{color:#e8f1f5;font-size:9px;letter-spacing:.06em}

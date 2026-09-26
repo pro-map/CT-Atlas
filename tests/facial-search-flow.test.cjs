@@ -43,7 +43,12 @@ function harness(options={}){
   class TestURL extends URL{static createObjectURL(){return "blob:test";}static revokeObjectURL(){}}
   const okShare=async()=>({ok:true,status:200,json:async()=>({ok:true,url:SHARE_URL,expires_at:new Date(Date.now()+600000).toISOString(),ttl_seconds:600})});
   // Long timers (the 20 s upload timeout) fire almost at once so the timeout path can be tested.
-  const fastTimeout=(fn,ms)=>setTimeout(fn,ms>=10000?5:ms);
+  const longTimers=[];
+  const fastTimeout=(fn,ms)=>{
+    if(ms>=60000){longTimers.push({fn,cleared:false});return longTimers.length;}   // not scheduled: tests fire them by hand
+    return setTimeout(fn,ms>=10000?5:ms);
+  };
+  const clearTimer=id=>{if(typeof id==="number"&&longTimers[id-1])longTimers[id-1].cleared=true;else clearTimeout(id);};
   // The page sees a clock the test can move forward.
   const clock={offset:0};
   const realNow=Date.now.bind(Date);
@@ -52,7 +57,7 @@ function harness(options={}){
     static now(){return realNow()+clock.offset;}
   }
   const context=vm.createContext({
-    window,document,URL:TestURL,TextEncoder,Uint8Array,Blob,Date:TestDate,Promise,Number,Math,Error,JSON,setTimeout:fastTimeout,clearTimeout,AbortController,console,
+    window,document,URL:TestURL,TextEncoder,Uint8Array,Blob,Date:TestDate,Promise,Number,Math,Error,JSON,setTimeout:fastTimeout,clearTimeout:clearTimer,AbortController,console,
     navigator:clipboard?{clipboard:{write:async items=>{clipboardWrites.push(items);}}}:{},
     ClipboardItem:class{constructor(data){this.data=data;}},
     createImageBitmap:async input=>input&&input.w?{width:input.w,height:input.h,close(){}}:{width:1000,height:640,close(){}},
@@ -66,7 +71,7 @@ function harness(options={}){
     tabsAtPrompt.push(opened.length);
     if(answer)accept();else if(cancel)cancel();
   });
-  return {crops,el,listeners,opened,confirms,tabsAtPrompt,fetchCalls,clipboardWrites,window,cells,setAnswer:value=>{answer=value;},advance:ms=>{clock.offset+=ms;},
+  return {crops,el,listeners,opened,confirms,tabsAtPrompt,fireLongTimers:()=>longTimers.filter(t=>!t.cleared).forEach(t=>{t.cleared=true;t.fn();}),fetchCalls,clipboardWrites,window,cells,setAnswer:value=>{answer=value;},advance:ms=>{clock.offset+=ms;},
     async attach(){
       // one 1000x640 image with a large face: its crop is 1000x640 (~235 KB), so it must be shrunk to be hosted
       await crops.attach({
@@ -75,7 +80,7 @@ function harness(options={}){
       });
     },
     click(action,engine){
-      const target={dataset:{fcAction:action,fcKey:"0:0:1",...(engine?{fcEngine:engine}:{})},closest:()=>({removeAttribute(){}})};
+      const target={dataset:{fcAction:action,fcKey:"0:0:1",...(engine?{fcEngine:engine}:{})},closest:()=>({removeAttribute(){},querySelector:()=>null})};
       return listeners.fiItems.click({target:{closest:()=>target}});
     },
     status:()=>el("fcStatus").textContent
@@ -276,7 +281,9 @@ test("a search tab that was closed before the result arrived is offered as a lin
   await h.click("search-direct","yandex");
   assert.deepEqual(h.opened[0].locations,[],"a closed tab is not navigated");
   assert.match(h.el("fcMore").innerHTML,/Also open:.*Yandex Images/s);
-  assert.match(h.status(),/use the links below for Yandex Images/);
+  assert.match(h.status(),/search tab\(s\) were closed before the results could load/);
+  assert.doesNotMatch(h.status(),/opened on the hosted crop/,"it must not claim a tab opened when none did");
+  assert.doesNotMatch(h.status(),/one tab per click/,"and must not blame the browser's tab limit");
 });
 
 test("after a search every engine is also offered as a link to reopen (manual way back if a tab did not load)",async()=>{
@@ -310,7 +317,8 @@ test("default browsers allow ONE tab per click: search all opens one and offers 
     "https://tineye.com/search?url="+link
   ]);
   assert.match(h.status(),/Yandex Images opened on the hosted crop/);
-  assert.match(h.status(),/use the links below for Bing Visual Search, Google Images \/ Lens, TinEye/);
+  assert.match(h.status(),/Bing Visual Search, Google Images \/ Lens, TinEye got no tab/);
+  assert.match(h.status(),/use the links below/);
   // A later search clears the previous links; the other engines are already confirmed.
   await h.click("search-direct","yandex");
   assert.equal(h.el("fcMore").hidden,true);
@@ -327,7 +335,7 @@ test("search all with two tabs allowed: opens two, offers the remaining two as l
   const html=h.el("fcMore").innerHTML;
   assert.equal((html.split("<span>Reopen:</span>")[0].match(/fc-more-link/g)||[]).length,2,"the two engines without a tab");
   assert.equal((html.split("<span>Reopen:</span>")[1].match(/fc-more-link/g)||[]).length,2,"the two that opened, to reopen");
-  assert.match(h.status(),/use the links below for Google Images \/ Lens, TinEye/);
+  assert.match(h.status(),/Google Images \/ Lens, TinEye got no tab/);
 });
 
 test("if hosting fails the tab falls back to the engine's upload page and the crop is copied for Ctrl+V",async()=>{
@@ -377,6 +385,38 @@ test("Search4faces (no search-by-URL) stays a paste-only flow: no upload, no tab
   assert.equal(h.confirms.length,0);
   assert.equal(h.clipboardWrites.length,1);
   assert.match(h.status(),/Ctrl\+V/);
+});
+
+test("if the hosting the dialog described expires while the dialog is open, OK does not silently upload a new copy: it asks again",async()=>{
+  const h=harness();
+  await h.attach();
+  await h.click("search-direct","yandex");                       // hosting #1
+  h.advance(505*1000);                                            // 95 s left: still reusable when SEARCH ALL is clicked
+  let calls=0;
+  h.crops.setConsentPrompt((text,accept)=>{
+    h.confirms.push(text);
+    calls++;
+    if(calls===1)h.advance(20*1000);                              // the analyst reads for 20 s: the hosting is now gone
+    accept();
+  });
+  await h.click("search-all");
+  assert.equal(h.confirms.length,3,"1 for the first search + the dialog that described the old hosting + a new one");
+  assert.match(h.confirms[1],/already hosted/);
+  assert.match(h.confirms[2],/^Search face F1 directly on Yandex Images, Bing Visual Search, Google Images \/ Lens, TinEye/,"the new dialog describes a fresh hosting");
+  assert.doesNotMatch(h.confirms[2],/already hosted/);
+  assert.equal(h.fetchCalls.length,2,"one upload for each hosting, the second only after its own confirmation");
+});
+
+test("the links belong to one face and are removed when the hosting expires",async()=>{
+  const h=harness();
+  await h.attach();
+  await h.click("search-direct","yandex");
+  const box=h.el("fcMore");
+  assert.match(box.innerHTML,/<b class="fc-more-face">F1<\/b>/);
+  assert.equal(box.hidden,false);
+  h.fireLongTimers();                                             // the hosted image is deleted at that moment
+  assert.equal(box.hidden,true);
+  assert.equal(box.innerHTML,"");
 });
 
 test("the rendered menu offers search-all, five direct engines and one paste-only link, plus JPEG and COPY",async()=>{

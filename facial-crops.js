@@ -517,15 +517,23 @@ function confirmText(record,engines,hostedShare){
 // A browser lets one click open one tab: the engines that did not get a tab are offered as
 // real links (a click on a link is its own gesture, and rel=noreferrer keeps CT Atlas out of the request).
 // "Reopen" repeats the opened ones, as a manual way back if a tab was closed or did not load.
+// The links belong to one face and to one hosting: they are removed when that hosting expires.
+let moreTimer=null;
 function moreLinks(items){
   return items.map(item=>'<a class="fc-more-link" href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer">'+esc(item.engine.name)+'</a>').join(" ");
 }
-function showMoreLinks(queued,opened=[]){
+function showMoreLinks(queued,opened=[],record=null,expiresAt=0){
   const box=$("fcMore");
+  if(moreTimer){clearTimeout(moreTimer);moreTimer=null;}
   if(!box)return;
-  box.innerHTML=(queued.length?'<span>Also open:</span> '+moreLinks(queued):"")+
-    (opened.length?(queued.length?' ':"")+'<span>Reopen:</span> '+moreLinks(opened):"");
-  box.hidden=!(queued.length||opened.length);
+  const any=queued.length||opened.length;
+  box.innerHTML=any
+    ?(record?'<b class="fc-more-face">'+esc(record.label)+'</b> ':"")+
+      (queued.length?'<span>Also open:</span> '+moreLinks(queued):"")+
+      (opened.length?(queued.length?' ':"")+'<span>Reopen:</span> '+moreLinks(opened):"")
+    :"";
+  box.hidden=!any;
+  if(any&&expiresAt)moreTimer=setTimeout(()=>showMoreLinks([]),Math.max(0,expiresAt-Date.now()));   // the hosted image is gone by then
 }
 
 // In-page confirmation. The browser's built-in confirm box is NOT used: the search tab is opened in the same click,
@@ -533,13 +541,16 @@ function showMoreLinks(queued,opened=[]){
 // by the browser, which reads as "cancel" (the tab appears and vanishes). This dialog belongs to the
 // page the analyst is looking at, and its OK button is itself a click, so the tabs are opened
 // inside that click and keep their permission to open.
-function askConsent(text,onAccept,onCancel){
+function askConsent(text,onAccept,onCancel,returnFocus){
   const dialog=document.createElement("dialog");
   dialog.className="fc-consent";
-  dialog.innerHTML='<div class="fc-consent-title">THIRD-PARTY FACE SEARCH</div><div class="fc-consent-text"></div>'+
+  dialog.setAttribute("aria-labelledby","fcConsentTitle");
+  dialog.setAttribute("aria-describedby","fcConsentText");
+  dialog.innerHTML='<div class="fc-consent-title" id="fcConsentTitle">THIRD-PARTY FACE SEARCH</div><div class="fc-consent-text" id="fcConsentText"></div>'+
     '<div class="fc-consent-actions"><button type="button" class="fc-btn" data-fc-consent="cancel">CANCEL</button>'+
     '<button type="button" class="fc-btn fc-btn-primary" data-fc-consent="ok">OK — HOST &amp; SEARCH</button></div>';
   dialog.querySelector(".fc-consent-text").textContent=text;
+  const restoreFocus=()=>{try{if(returnFocus&&returnFocus.isConnected!==false)returnFocus.focus();}catch(_){/* the opener is gone */}};
   let accepted=false;
   dialog.addEventListener("click",event=>{
     const choice=event.target.closest?.("[data-fc-consent]")?.dataset.fcConsent;
@@ -547,12 +558,16 @@ function askConsent(text,onAccept,onCancel){
       accepted=true;
       if(typeof dialog.close==="function")dialog.close();
       dialog.remove();
+      restoreFocus();
       onAccept();
     }else if(choice==="cancel"){
-      if(typeof dialog.close==="function")dialog.close();else{dialog.remove();if(onCancel)onCancel();}
+      if(typeof dialog.close==="function")dialog.close();else{dialog.remove();restoreFocus();if(onCancel)onCancel();}
     }
   });
-  dialog.addEventListener("close",()=>{dialog.remove();if(!accepted&&onCancel)onCancel();});   // CANCEL or Escape
+  dialog.addEventListener("close",()=>{      // CANCEL or Escape (and the OK path, already handled)
+    dialog.remove();
+    if(!accepted){restoreFocus();if(onCancel)onCancel();}
+  });
   document.body.appendChild(dialog);
   if(typeof dialog.showModal==="function")dialog.showModal();else dialog.setAttribute("open","");
   const safe=dialog.querySelector('[data-fc-consent="cancel"]');
@@ -562,7 +577,7 @@ let consentPrompt=askConsent;
 
 // Entry point of a direct search, called from a click. Nothing is opened or uploaded before the analyst
 // has confirmed every engine that is new for the current hosting.
-function requestSearch(record,engines){
+function requestSearch(record,engines,returnFocus){
   if(record.searching){setStatus("A search for face "+record.label+" is already in progress.");return;}
   const hosted=shareUsable(record.share,Date.now());
   const consented=hosted?record.consented:new Set();
@@ -570,8 +585,18 @@ function requestSearch(record,engines){
   if(!fresh.length)return startSearch(record,engines);       // nothing new to confirm: open the tabs right in this click
   let running;
   consentPrompt(confirmText(record,fresh,hosted?record.share:null),
-    ()=>{running=startSearch(record,engines);},               // the OK click: still a user gesture
-    ()=>setStatus(hosted?"Search cancelled: the link was not given to "+fresh.map(engine=>engine.name).join(", ")+".":"Search cancelled: nothing was uploaded."));
+    ()=>{
+      if(hosted&&!shareUsable(record.share,Date.now())){
+        // The dialog described a hosting that has since expired: OK would upload a NEW copy, which is not what was
+        // explained. Ask again, describing the new hosting.
+        setStatus("The hosted link expired while the confirmation was open: confirm again.");
+        running=requestSearch(record,engines,returnFocus);
+        return;
+      }
+      running=startSearch(record,engines);                    // the OK click: still a user gesture
+    },
+    ()=>setStatus(hosted?"Search cancelled: the link was not given to "+fresh.map(engine=>engine.name).join(", ")+".":"Search cancelled: nothing was uploaded."),
+    returnFocus);
   return running;
 }
 
@@ -600,10 +625,13 @@ async function runDirectSearch(record,engines){
       if(win&&!win.closed){win.location.replace(url);opened.push({engine,url});}
       else queued.push({engine,url});
     });
-    showMoreLinks(queued,opened);
+    showMoreLinks(queued,opened,record,share.expiresAt);
     const minutes=Math.max(1,Math.round((share.expiresAt-Date.now())/60000));
-    setStatus("Face "+record.label+": "+opened.map(item=>item.engine.name).join(", ")+" opened on the hosted crop. The link stays valid for about "+minutes+" more minute(s), then the image is deleted automatically. Results are leads, not identifications."+
-      (queued.length?" Your browser opens one tab per click: use the links below for "+queued.map(item=>item.engine.name).join(", ")+".":""));
+    const names=items=>items.map(item=>item.engine.name).join(", ");
+    setStatus(opened.length
+      ?"Face "+record.label+": "+names(opened)+" opened on the hosted crop. The link stays valid for about "+minutes+" more minute(s), then the image is deleted automatically. Results are leads, not identifications."+
+        (queued.length?" "+names(queued)+" got no tab (a browser opens one tab per click, or the tab was closed): use the links below.":"")
+      :"Face "+record.label+": the search tab(s) were closed before the results could load. The crop stays hosted for about "+minutes+" more minute(s): use the links below ("+names(queued)+").");
   }catch(error){
     // Fall back to the paste flow: each window goes to the engine's own upload page.
     engines.forEach((engine,index)=>{try{if(windows[index])windows[index].location.replace(engine.url);}catch(_){/* window closed by the user */}});
@@ -629,8 +657,9 @@ async function onClick(event){
     const engines=action==="search-all"
       ?SEARCH_ALL_IDS.map(id=>SEARCH_ENGINES.find(item=>item.id===id))
       :[SEARCH_ENGINES.find(item=>item.id===target.dataset.fcEngine&&item.direct)].filter(Boolean);
+    const returnTo=target.closest("details")?.querySelector("summary")||null;   // where the focus goes back after the dialog
     target.closest("details")?.removeAttribute("open");
-    if(engines.length)await requestSearch(record,engines);   // synchronous up to the tabs: they are opened inside this click (or the OK click)
+    if(engines.length)await requestSearch(record,engines,returnTo);   // synchronous up to the tabs: they are opened inside this click (or the OK click)
     return;
   }
   if(action==="search"){
