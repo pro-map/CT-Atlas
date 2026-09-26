@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CT ATLAS — Facial Intelligence</title>
 <link rel="icon" href="CT-ATLAS.png">
-<link rel="stylesheet" href="facial.css?v=6">
+<link rel="stylesheet" href="facial.css?v=7">
 <link rel="stylesheet" href="tab-health.css?v=1">
 </head>
 <body>
@@ -95,8 +95,7 @@
             <label class="fc-check"><input id="fcUpscale" type="checkbox" checked> Upscale small crops to 300 px</label>
           </div>
           <div id="fcStatus" class="fc-status" aria-live="polite"></div>
-          <div id="fcMore" class="fc-more" hidden></div>
-          <div class="fc-notice"><strong>THIRD-PARTY SEARCH.</strong> Cutting, JPEG, ZIP and COPY happen only in your browser. To open an engine's results directly, SEARCH needs a web address for the image: after a confirmation, that one crop is hosted on CT Atlas's temporary storage for about 10 minutes (anyone holding its unguessable link can view it meanwhile), the engine downloads it (and applies its own retention rules to that copy), and CT Atlas then deletes its hosted copy automatically. Each further engine on the same crop asks for its own confirmation, and CT Atlas is not sent to the engines as the referring site. Search4faces, and any failure, use copy-and-paste instead: the face reaches that service only when you paste it there. Results are leads, not identifications (look-alikes are common), and none of these services is operated or verified by CT Atlas.</div>
+          <div class="fc-notice"><strong>THIRD-PARTY SEARCH.</strong> Cutting, JPEG, ZIP and COPY happen only in your browser. SEARCH opens Yandex Images and TinEye on the face. They can only search by web address, so after a confirmation that one crop is hosted on CT Atlas's temporary storage for about 10 minutes (anyone holding its unguessable link can view it meanwhile), the two engines download it (and apply their own retention rules to that copy), and CT Atlas then deletes its hosted copy automatically. If hosting fails, the crop is copied instead so you can paste it on the engine's own page: the face then reaches that service only when you paste it there. Your browser opens one tab per click, so a second engine may need one more click. CT Atlas is not sent to the engines as the referring site. Results are leads, not identifications (look-alikes are common), and neither service is operated or verified by CT Atlas.</div>
         </section>
         <section id="fiSimilaritySection" class="report-section" hidden>
           <h3>VISUAL SIMILARITY</h3>
@@ -108,8 +107,8 @@
     </section>
   </main>
 </div>
-<script src="facial-crops.js?v=5"></script>
-<script src="facial.js?v=5"></script>
+<script src="facial-crops.js?v=6"></script>
+<script src="facial.js?v=6"></script>
 <script src="tab-health.js?v=1" data-health-scope="facial"></script>
 </body>
 </html>

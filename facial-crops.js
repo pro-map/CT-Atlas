@@ -121,30 +121,19 @@ function buildZip(entries,date=new Date()){
   return out;
 }
 
-// Free reverse-image tools. None of them accepts an upload from another site (tested:
-// Yandex ignores the file, TinEye sits behind a Cloudflare check, Bing redirects home,
-// Google Lens answers 403). Two ways to reach them:
-//   - "direct": the engine is opened on a URL of the crop (search-by-URL). That needs the
-//     crop to be reachable, so on an explicit click, and after a confirmation, this one
-//     crop is hosted for a few minutes by the CT Atlas Worker (see shareCrop below);
-//   - "paste": the engine's own upload page is opened and the crop is put on the clipboard
-//     for Ctrl+V. Nothing is uploaded by CT Atlas; the crop reaches the service only when
-//     the user pastes it. Used by engines that cannot search by URL, and as the fallback.
+// The two reverse-image engines kept (the others returned nothing in real use): Yandex and TinEye. Neither accepts
+// an upload from another site, so the engine is opened on a URL of the crop (search-by-URL). That needs the crop
+// to be reachable: on an explicit click, and after a confirmation, this one crop is hosted for a few minutes by
+// the CT Atlas Worker (see shareCrop below). `url` is the engine's own upload page, used when hosting fails: the
+// crop is then put on the clipboard and the analyst pastes it there (it reaches the service only when pasted).
 const encode=encodeURIComponent;
 const SEARCH_ENGINES=Object.freeze([
   {id:"yandex",name:"Yandex Images",url:"https://yandex.com/images/search?rpt=imageview",note:"free · strongest on faces",
     direct:link=>"https://yandex.com/images/search?rpt=imageview&url="+encode(link)},
-  {id:"bing",name:"Bing Visual Search",url:"https://www.bing.com/visualsearch",note:"free",
-    direct:link=>"https://www.bing.com/images/search?view=detailv2&iss=sbi&form=SBIVSP&sbisrc=UrlPaste&q=imgurl:"+encode(link)},
-  {id:"google",name:"Google Images / Lens",url:"https://images.google.com/",note:"free",
-    direct:link=>"https://lens.google.com/uploadbyurl?url="+encode(link)},
   {id:"tineye",name:"TinEye",url:"https://tineye.com/",note:"free · limited daily searches",
-    direct:link=>"https://tineye.com/search?url="+encode(link)},
-  {id:"baidu",name:"Baidu Images",url:"https://image.baidu.com/",note:"free · Chinese web",
-    direct:link=>"https://graph.baidu.com/details?isfromtusoupc=1&tn=pc&image="+encode(link)},
-  {id:"search4faces",name:"Search4faces",url:"https://search4faces.com/",note:"free · VK / OK / TikTok · paste only",direct:null}
+    direct:link=>"https://tineye.com/search?url="+encode(link)}
 ]);
-const SEARCH_ALL_IDS=Object.freeze(["yandex","bing","google","tineye"]);
+const SEARCH_ALL_IDS=Object.freeze(["yandex","tineye"]);
 
 // What is hosted for a direct search: ONE crop, re-encoded small (the Worker refuses more
 // than 150 KB), with no metadata, deleted by the Worker after a few minutes.
@@ -296,23 +285,18 @@ function paintCell(record){
         '<button type="button" class="fc-btn" data-fc-action="download" data-fc-key="'+esc(record.key)+'">JPEG</button>'+
         '<button type="button" class="fc-btn" data-fc-action="copy" data-fc-key="'+esc(record.key)+'">COPY</button>'+
       '</div>'+
-      '<details class="fc-search"><summary>SEARCH ▾</summary><div class="fc-menu">'+
-        '<button type="button" class="fc-engine fc-all" data-fc-action="search-all" data-fc-key="'+esc(record.key)+'">'+
-          '<b>Search all ('+SEARCH_ALL_IDS.length+' tabs)</b><span>hosts this crop ~10 min · '+esc(SEARCH_ALL_IDS.map(id=>SEARCH_ENGINES.find(e=>e.id===id).name.split(" ")[0]).join(", "))+'</span></button>'+
-        SEARCH_ENGINES.map(engine=>engine.direct
-          ?'<button type="button" class="fc-engine" data-fc-action="search-direct" data-fc-key="'+esc(record.key)+'" data-fc-engine="'+esc(engine.id)+'">'+
-            '<b>'+esc(engine.name)+'</b><span>'+esc(engine.note)+' · direct result</span></button>'
-          :'<a class="fc-engine" href="'+esc(engine.url)+'" target="_blank" rel="noopener noreferrer" data-fc-action="search" data-fc-key="'+esc(record.key)+'" data-fc-engine="'+esc(engine.id)+'">'+
-            '<b>'+esc(engine.name)+'</b><span>'+esc(engine.note)+'</span></a>'
-        ).join("")+
-      '</div></details>';
+      '<div class="fc-buttons">'+
+        '<button type="button" class="fc-btn fc-btn-search" data-fc-action="search-all" data-fc-key="'+esc(record.key)+'" title="Host this crop for about 10 minutes and search it on Yandex Images and TinEye">SEARCH</button>'+
+      '</div>'+
+      '<div class="fc-search-note">Yandex + TinEye</div>'+
+      '<div class="fc-links" data-fc-links="'+esc(record.key)+'" hidden></div>';
   }
 }
 
 async function generate(){
   const token=++generation;
   release();
-  showMoreLinks([]);
+  clearAllLinks();
   const {payload,files}=context;
   const byName=new Map();
   const duplicates=new Set();
@@ -514,27 +498,59 @@ function confirmText(record,engines,hostedShare){
     "Nothing is uploaded unless you press OK.";
 }
 
-// A browser lets one click open one tab: the engines that did not get a tab are offered as
-// real links (a click on a link is its own gesture, and rel=noreferrer keeps CT Atlas out of the request).
-// "Reopen" repeats the opened ones, as a manual way back if a tab was closed or did not load.
-// The links belong to one face and to one hosting: they are removed when that hosting expires.
-let moreTimer=null;
+// A browser lets one click open ONE tab (unless the site is allowed to open pop-ups). An engine that got no tab is
+// offered as a real link, whose own click is a fresh gesture (rel=noreferrer keeps CT Atlas out of the request).
+// The links sit in the face's row, belong to that hosting and are removed when it expires; "Reopen" repeats the
+// engines that did open, as a manual way back if a tab was closed or did not load.
+const linkTimers=new Map();
 function moreLinks(items){
   return items.map(item=>'<a class="fc-more-link" href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer">'+esc(item.engine.name)+'</a>').join(" ");
 }
-function showMoreLinks(queued,opened=[],record=null,expiresAt=0){
-  const box=$("fcMore");
-  if(moreTimer){clearTimeout(moreTimer);moreTimer=null;}
-  if(!box)return;
-  const any=queued.length||opened.length;
-  box.innerHTML=any
-    ?(record?'<b class="fc-more-face">'+esc(record.label)+'</b> ':"")+
-      (queued.length?'<span>Also open:</span> '+moreLinks(queued):"")+
-      (opened.length?(queued.length?' ':"")+'<span>Reopen:</span> '+moreLinks(opened):"")
-    :"";
-  box.hidden=!any;
-  if(any&&expiresAt)moreTimer=setTimeout(()=>showMoreLinks([]),Math.max(0,expiresAt-Date.now()));   // the hosted image is gone by then
+function linksBox(key){
+  return document.querySelector('[data-fc-links="'+key+'"]');
 }
+function clearLinks(key){
+  if(linkTimers.has(key)){clearTimeout(linkTimers.get(key));linkTimers.delete(key);}
+  const box=linksBox(key);
+  if(box){box.innerHTML="";box.hidden=true;}
+}
+function clearAllLinks(){
+  for(const key of [...linkTimers.keys()])clearLinks(key);
+}
+function showLinks(record,queued,opened,expiresAt){
+  clearLinks(record.key);
+  const box=linksBox(record.key);
+  if(!box||!(queued.length||opened.length))return;
+  box.innerHTML=(queued.length?'<span>Also open:</span> '+moreLinks(queued):"")+
+    (opened.length?(queued.length?" ":"")+'<span>Reopen:</span> '+moreLinks(opened):"");
+  box.hidden=false;
+  if(expiresAt)linkTimers.set(record.key,setTimeout(()=>clearLinks(record.key),Math.max(0,expiresAt-Date.now())));   // the hosted image is gone by then
+}
+
+// "One more click": when the browser opened only the first engine, this in-page dialog holds a real link for the
+// others. A link click is its own gesture, so it works even when the browser lets a click open a single tab.
+function showNextStep(record,queued){
+  const dialog=document.createElement("dialog");
+  dialog.className="fc-consent fc-next";
+  dialog.setAttribute("aria-labelledby","fcNextTitle");
+  dialog.setAttribute("aria-describedby","fcNextText");
+  const names=queued.map(item=>item.engine.name).join(", ");
+  dialog.innerHTML='<div class="fc-consent-title" id="fcNextTitle">FACE '+esc(record.label)+' · ONE MORE CLICK</div>'+
+    '<div class="fc-consent-text" id="fcNextText">A browser opens one tab per click (or a tab was closed), so '+esc(names)+' did not open. Click below to open it'+
+    ' on the same hosted crop. (Allow pop-ups for this site in the browser to open both engines with a single click.)</div>'+
+    '<div class="fc-consent-actions"><button type="button" class="fc-btn" data-fc-next="close">LATER</button>'+
+    queued.map(item=>'<a class="fc-btn fc-btn-primary" href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer" data-fc-next="open">OPEN '+esc(item.engine.name.toUpperCase())+' ↗</a>').join("")+'</div>';
+  const dismiss=()=>{if(typeof dialog.close==="function")dialog.close();dialog.remove();};
+  dialog.addEventListener("click",event=>{
+    if(event.target.closest?.("[data-fc-next]"))setTimeout(dismiss,0);    // after the link's own navigation has started
+  });
+  dialog.addEventListener("close",()=>dialog.remove());
+  document.body.appendChild(dialog);
+  if(typeof dialog.showModal==="function")dialog.showModal();else dialog.setAttribute("open","");
+  const first=dialog.querySelector("a[data-fc-next]");
+  if(first)first.focus();
+}
+let nextStepPrompt=showNextStep;
 
 // In-page confirmation. The browser's built-in confirm box is NOT used: the search tab is opened in the same click,
 // takes the focus, and a dialog raised by the tab that just went to the background can be suppressed
@@ -608,7 +624,7 @@ async function startSearch(record,engines){
 }
 
 async function runDirectSearch(record,engines){
-  showMoreLinks([]);
+  clearLinks(record.key);
   const windows=engines.map(()=>openPlaceholder());       // synchronous: still inside the click / the OK click
   if(windows.every(win=>!win)){
     setStatus("The browser blocked the search window(s). Allow pop-ups for this site, then try again.","error");
@@ -625,13 +641,14 @@ async function runDirectSearch(record,engines){
       if(win&&!win.closed){win.location.replace(url);opened.push({engine,url});}
       else queued.push({engine,url});
     });
-    showMoreLinks(queued,opened,record,share.expiresAt);
+    showLinks(record,queued,opened,share.expiresAt);
     const minutes=Math.max(1,Math.round((share.expiresAt-Date.now())/60000));
     const names=items=>items.map(item=>item.engine.name).join(", ");
     setStatus(opened.length
       ?"Face "+record.label+": "+names(opened)+" opened on the hosted crop. The link stays valid for about "+minutes+" more minute(s), then the image is deleted automatically. Results are leads, not identifications."+
-        (queued.length?" "+names(queued)+" got no tab (a browser opens one tab per click, or the tab was closed): use the links below.":"")
-      :"Face "+record.label+": the search tab(s) were closed before the results could load. The crop stays hosted for about "+minutes+" more minute(s): use the links below ("+names(queued)+").");
+        (queued.length?" "+names(queued)+" got no tab (a browser opens one tab per click, or the tab was closed): use the window that just appeared, or the links in this row.":"")
+      :"Face "+record.label+": the search tab(s) were closed before the results could load. The crop stays hosted for about "+minutes+" more minute(s): use the window that just appeared, or the links in this row ("+names(queued)+").");
+    if(queued.length)nextStepPrompt(record,queued);
   }catch(error){
     // Fall back to the paste flow: each window goes to the engine's own upload page.
     engines.forEach((engine,index)=>{try{if(windows[index])windows[index].location.replace(engine.url);}catch(_){/* window closed by the user */}});
@@ -653,21 +670,9 @@ async function onClick(event){
     if(await copy(record))setStatus("Face "+record.label+" copied to the clipboard.");
     return;
   }
-  if(action==="search-direct"||action==="search-all"){
-    const engines=action==="search-all"
-      ?SEARCH_ALL_IDS.map(id=>SEARCH_ENGINES.find(item=>item.id===id))
-      :[SEARCH_ENGINES.find(item=>item.id===target.dataset.fcEngine&&item.direct)].filter(Boolean);
-    const returnTo=target.closest("details")?.querySelector("summary")||null;   // where the focus goes back after the dialog
-    target.closest("details")?.removeAttribute("open");
-    if(engines.length)await requestSearch(record,engines,returnTo);   // synchronous up to the tabs: they are opened inside this click (or the OK click)
-    return;
-  }
-  if(action==="search"){
-    // The link opens the engine's page natively (never popup-blocked); meanwhile put the crop on the clipboard.
-    const engine=SEARCH_ENGINES.find(item=>item.id===target.dataset.fcEngine);
-    const copied=await copy(record);
-    if(copied)setStatus("Face "+record.label+" copied. On "+engine.name+", open its image-upload box and press Ctrl+V (or drag the JPEG). The crop is sent to "+engine.name+" only when you paste it there.");
-    target.closest("details")?.removeAttribute("open");
+  if(action==="search-all"){
+    const engines=SEARCH_ALL_IDS.map(id=>SEARCH_ENGINES.find(item=>item.id===id));
+    await requestSearch(record,engines,target);   // synchronous up to the tabs: they are opened inside this click (or the OK click)
   }
 }
 
@@ -693,41 +698,15 @@ function attach(next){
   return generate();
 }
 
-// The engine menu is position:fixed (an absolute one would be clipped by the card), so it is
-// placed from the SEARCH button when it opens, flipped upward if there is no room below.
-function closeMenus(except){
-  document.querySelectorAll("details.fc-search[open]").forEach(details=>{if(details!==except)details.removeAttribute("open");});
-}
-function placeMenu(details){
-  const menu=details.querySelector(".fc-menu");
-  const rect=details.querySelector("summary").getBoundingClientRect();
-  const width=menu.offsetWidth||230,height=menu.offsetHeight||330;
-  const left=Math.min(Math.max(8,rect.left),Math.max(8,window.innerWidth-width-8));
-  let top=rect.bottom+4;
-  if(top+height>window.innerHeight-8)top=Math.max(8,rect.top-height-4);
-  menu.style.left=left+"px";menu.style.top=top+"px";
-}
-
 function bindControls(){
   $("fcMargin")?.addEventListener("change",()=>{if(context)generate();});
   $("fcUpscale")?.addEventListener("change",()=>{if(context)generate();});
   $("fcZip")?.addEventListener("click",downloadZip);
-  // 'toggle' does not bubble, hence the capture phase.
-  document.addEventListener("toggle",event=>{
-    const details=event.target;
-    if(details.matches?.("details.fc-search")&&details.open){closeMenus(details);placeMenu(details);}
-  },true);
-  document.addEventListener("click",event=>{if(!event.target.closest?.("details.fc-search"))closeMenus();});
-  // The menu scrolls itself on small screens: only a scroll OUTSIDE it closes it.
-  window.addEventListener("scroll",event=>{
-    const target=event.target;
-    if(target&&target.nodeType===1&&target.closest&&target.closest(".fc-menu"))return;
-    closeMenus();
-  },true);
-  window.addEventListener("resize",()=>closeMenus());
 }
 
-root.CTAtlasFaceCrops={attach,helpers,setConsentPrompt:fn=>{consentPrompt=typeof fn==="function"?fn:askConsent;}};
+root.CTAtlasFaceCrops={attach,helpers,
+  setConsentPrompt:fn=>{consentPrompt=typeof fn==="function"?fn:askConsent;},
+  setNextStepPrompt:fn=>{nextStepPrompt=typeof fn==="function"?fn:showNextStep;}};
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bindControls);
 else bindControls();
 })(typeof window!=="undefined"?window:globalThis);

@@ -119,12 +119,12 @@
     sends nothing. Only when you click SEARCH on a face crop (and confirm), that
     single crop &mdash; re-encoded as a small JPEG without metadata &mdash; is
     hosted for about 10 minutes by the CT Atlas backend so that the free
-    reverse-image search engine(s) you chose can download it, and it is then
+    reverse-image search engines (Yandex Images and TinEye) can download it, and it is then
     deleted automatically from CT Atlas's application storage. Anyone holding
-    the unguessable link can view the crop during that time, each further engine
-    on the same crop asks for its own confirmation, the engines' own retention
-    rules apply to what they download, and Cloudflare's provider-level recovery
-    records (see &ldquo;Retention&rdquo;) are outside CT Atlas's application-level deletion.</li>
+    the unguessable link can view the crop during that time, the engines' own
+    retention rules apply to what they download, and Cloudflare's provider-level
+    recovery records (see &ldquo;Retention&rdquo;) are outside CT Atlas's
+    application-level deletion.</li>
   </ul>
 
   <h1>What we don't collect</h1>
@@ -173,10 +173,11 @@
     necessary to answer Crypto Intelligence requests on supported chains.</li>
     <li><strong>GDELT, ACLED and other public reporting sources</strong> &mdash;
     provide open-source event or reporting data used by CT Atlas.</li>
-    <li><strong>Reverse-image search engines</strong> &mdash; Yandex, Bing, Google
-    Lens, TinEye and Baidu receive the temporary link of a face crop only when an
-    analyst clicks SEARCH and confirms. Search4faces receives a crop only when the
-    analyst pastes it there. These services are not operated by CT Atlas.</li>
+    <li><strong>Reverse-image search engines</strong> &mdash; Yandex Images and
+    TinEye receive the temporary link of a face crop only when an analyst clicks
+    SEARCH and confirms. If hosting is unavailable the analyst can paste the crop
+    into an engine's own page instead, and it then reaches that service only when
+    pasted. These services are not operated by CT Atlas.</li>
   </ul>
 
   <h1>Retention</h1>

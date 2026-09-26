@@ -84,35 +84,26 @@ test("buildZip produces an archive that Python's zipfile reads back byte for byt
   for(const entry of entries)assert.equal(read[entry.name],Buffer.from(entry.data).toString("hex"),entry.name);
 });
 
-test("search engines: free tools only, https, distinct, opened on their own upload page",()=>{
+test("search engines: exactly Yandex Images and TinEye (the others returned nothing in real use), free, https, opened by URL",()=>{
   const engines=h.SEARCH_ENGINES;
-  assert.ok(engines.length>=5);
-  assert.equal(new Set(engines.map(e=>e.id)).size,engines.length);
+  assert.equal(JSON.stringify(engines.map(e=>e.id)),JSON.stringify(["yandex","tineye"]));
+  assert.equal(JSON.stringify([...h.SEARCH_ALL_IDS]),JSON.stringify(["yandex","tineye"]));
+  const link="https://ct-report-generator.fairpeace.workers.dev/face-share/AAAAAAAAAAAAAAAAAAAAAA.jpg";
   for(const engine of engines){
-    assert.match(engine.url,/^https:\/\/[a-z0-9.-]+\//,engine.id);
+    assert.match(engine.url,/^https:\/\/[a-z0-9.-]+\//,engine.id+" (its own upload page, used when hosting fails)");
     assert.ok(engine.name&&engine.note,engine.id);
     assert.doesNotMatch(engine.note,/paid|subscription|credit/i,engine.id+" must be free");
-  }
-  for(const id of ["yandex","google","bing","tineye"])assert.ok(engines.some(e=>e.id===id),id);
-  assert.ok(Object.isFrozen(engines));
-});
-
-test("direct search: every engine that can search by URL builds an https address carrying the encoded hosted-crop link",()=>{
-  const link="https://ct-report-generator.fairpeace.workers.dev/face-share/AAAAAAAAAAAAAAAAAAAAAA.jpg";
-  const direct=h.SEARCH_ENGINES.filter(engine=>engine.direct);
-  assert.deepEqual(direct.map(e=>e.id).sort(),["baidu","bing","google","tineye","yandex"]);
-  for(const engine of direct){
     const url=h.directSearchUrl(engine,link);
     assert.match(url,/^https:\/\/[a-z0-9.-]+\//,engine.id);
     assert.ok(url.includes(encodeURIComponent(link)),engine.id+" must carry the URL-encoded link");
     assert.ok(!url.includes(link),engine.id+" must not leave the link unencoded");
-    assert.equal(new URL(url).protocol,"https:");
   }
-  const search4faces=h.SEARCH_ENGINES.find(e=>e.id==="search4faces");
-  assert.equal(h.directSearchUrl(search4faces,link),null,"Search4faces cannot search by URL: paste only");
+  assert.equal(h.directSearchUrl(engines[0],link),"https://yandex.com/images/search?rpt=imageview&url="+encodeURIComponent(link));
+  assert.equal(h.directSearchUrl(engines[1],link),"https://tineye.com/search?url="+encodeURIComponent(link));
   assert.equal(h.directSearchUrl(null,link),null);
-  assert.deepEqual([...h.SEARCH_ALL_IDS],["yandex","bing","google","tineye"]);
-  for(const id of h.SEARCH_ALL_IDS)assert.ok(h.SEARCH_ENGINES.find(e=>e.id===id)?.direct,id+" must support direct search");
+  assert.ok(Object.isFrozen(engines));
+  const source=read("facial-crops.js");
+  for(const removed of ["bing.com","lens.google.com","images.google.com","graph.baidu.com","search4faces"])assert.ok(!source.includes(removed),removed+" was removed");
 });
 
 test("the hosted-crop link is only accepted when it points at the CT Atlas API's own hosting path",()=>{
@@ -184,8 +175,15 @@ test("PRIVACY GUARD: a crop leaves the browser only through an explicit SEARCH c
   const opens=src.match(/window\.open\([^)]*\)/g)||[];
   assert.deepEqual(opens,['window.open("about:blank","_blank")']);
   assert.ok(src.includes("win.opener=null"));
-  // Paste-only engines are still plain links opened without an opener reference.
+  // Engines that got no tab are offered as plain links opened without an opener reference.
   assert.ok(src.includes('target="_blank" rel="noopener noreferrer"'));
+  // The "one more click" dialog holds a REAL link (its own click is its own gesture): no script opens anything
+  // from it, and only runDirectSearch (after the hosting succeeded) shows it.
+  const next=src.slice(src.indexOf("function showNextStep"),src.indexOf("let nextStepPrompt"));
+  assert.match(next,/<a class="fc-btn fc-btn-primary" href="'\+esc\(item\.url\)\+'" target="_blank" rel="noopener noreferrer"/);
+  assert.ok(!next.includes("window.open")&&!next.includes("fetch("));
+  assert.match(next,/aria-labelledby/);
+  assert.equal((src.match(/nextStepPrompt\(record,queued\)/g)||[]).length,1,"a single call, after the hosting succeeded");
 });
 
 test("the UI wires the crops in, states the third-party disclosure, and keeps the non-identification guardrails",()=>{
@@ -196,12 +194,14 @@ test("the UI wires the crops in, states the third-party disclosure, and keeps th
   assert.ok(html.includes("THIRD-PARTY SEARCH"));
   assert.match(html,/hosted on CT Atlas's temporary storage for about 10 minutes/);
   assert.match(html,/deletes its hosted copy automatically/);
-  assert.match(html,/its own retention rules/);
+  assert.match(html,/own retention rules/);
   assert.match(html,/after a confirmation/);
-  assert.match(html,/asks for its own confirmation/);
+  assert.match(html,/one tab per click/);
+  assert.match(html,/SEARCH opens Yandex Images and TinEye/);
   // Engines must not learn that the request came from CT Atlas (script navigations use the page's policy).
   assert.match(html,/<meta name="referrer" content="no-referrer">/);
-  assert.ok(html.includes('id="fcMore"'),"container for the engines that did not get a tab");
+  assert.ok(!html.includes('id="fcMore"'),"the links live in the face row now");
+  assert.ok(read("facial-crops.js").includes('data-fc-links='),"each row has its own place for engines that got no tab");
   assert.match(html,/only when you paste it there/);
   assert.match(html,/leads, not identifications/);
   assert.ok(html.includes("NON-IDENTIFYING ANALYSIS"),"the existing guardrail must remain");
@@ -218,6 +218,6 @@ test("the crop component ships everywhere the Facial page does",()=>{
   const ui=read(".github/workflows/deploy-current-ct-atlas-ui.yml");
   assert.ok(ui.includes('"facial-crops.js"'));
   const css=read("facial.css");
-  for(const selector of [".fc-bar",".fc-menu",".fc-engine",".fc-thumb"])assert.ok(css.includes(selector),selector);
-  assert.match(css,/\.fc-menu\{position:fixed/,"the menu must not be clipped by .preview-card{overflow:hidden}");
+  for(const selector of [".fc-bar",".fc-btn-search",".fc-links",".fc-more-link",".fc-consent",".fc-thumb"])assert.ok(css.includes(selector),selector);
+  for(const gone of [".fc-menu",".fc-engine",".fc-search summary"])assert.ok(!css.includes(gone),gone+" belonged to the removed engine menu");
 });
