@@ -60,6 +60,8 @@ jobs:
               && grep -q 'data-health-scope="social"' /tmp/social.html \
               && grep -q 'data-health-scope="facial"' /tmp/facial.html \
               && grep -q 'pdf-export.js' /tmp/index.html \
+              && tr -d '\r' < /tmp/index.html | tr '\n' ' ' | grep -qE 'class="time-button active"[[:space:]]+data-days="7"' \
+              && grep -q 'layer-button active" id="heatToggle"' /tmp/index.html \
               && grep -q 'window.CTAtlasPdf' /tmp/pdf-export.js \
               && grep -q 'Behavioral Pattern Detection' /tmp/crypto.html \
               && grep -q 'Case Workspace' /tmp/crypto.html \

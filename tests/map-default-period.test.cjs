@@ -66,3 +66,12 @@ test("heat zones are on by default, the button says so, and a missing plugin can
   const activeLayers=[...html.matchAll(/<button class="layer-button( active)?" id="(\w+)"/g)].filter(match=>match[1]).map(match=>match[2]);
   assert.ok(activeLayers.includes("heatToggle")&&activeLayers.includes("markersToggle"));
 });
+
+test("the live smoke test waits for GitHub Pages to publish the new map defaults before validating them",()=>{
+  // Pages and the smoke test start at the same push. Without this wait the strict node checks
+  // below could read the OLD index.html and fail a perfectly good deploy (seen on the 7-day change).
+  const smoke=fs.readFileSync(".github/workflows/live-smoke.yml","utf8");
+  const loop=smoke.slice(smoke.indexOf("for attempt in {1..18}"),smoke.indexOf("Updated PDF assets did not become available"));
+  assert.match(loop,/time-button active.*data-days="7"/,"the retry loop must wait for the 7-day default");
+  assert.ok(loop.includes('layer-button active" id="heatToggle"'),"the retry loop must wait for the heat default");
+});
