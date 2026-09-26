@@ -101,6 +101,27 @@ test('upload refuses non-JPEG content, wrong content types and oversize images',
  assert.equal(w.touched.length,1,'only the accepted image reached storage');
 });
 
+test('a body streamed without Content-Length is cut off at the cap instead of being buffered whole',async()=>{
+ const w=world();
+ let pulled=0;
+ const chunk=jpeg(60*1024);
+ const stream=new ReadableStream({pull(controller){
+  pulled++;
+  if(pulled>500){controller.close();return;}
+  controller.enqueue(chunk);
+ }});
+ const request=new Request('https://worker.test/face-share',{method:'POST',headers:{'Content-Type':'image/jpeg','X-Session-Token':'tok-alice'},body:stream,duplex:'half'});
+ assert.equal(request.headers.get('Content-Length'),null,'no declared length');
+ const r=await w.api.handleFaceShareUpload(request,w.env,w.clock.t);
+ assert.equal(r.status,413);
+ assert.ok(pulled<=6,'reading stopped right after the cap ('+pulled+' chunks pulled of 500)');
+ assert.equal(w.touched.length,0,'nothing reached storage');
+ // a streamed body under the cap still works
+ const small=new ReadableStream({start(controller){controller.enqueue(jpeg(700));controller.enqueue(jpeg(800));controller.close();}});
+ const ok=await w.api.handleFaceShareUpload(new Request('https://worker.test/face-share',{method:'POST',headers:{'Content-Type':'image/jpeg','X-Session-Token':'tok-alice'},body:small,duplex:'half'}),w.env,w.clock.t);
+ assert.equal(ok.status,200);
+});
+
 test('upload answers 503 when the hosting binding is not configured (and stores nothing)',async()=>{
  const w=world({noBinding:true});
  const r=await upload(w);
@@ -268,6 +289,9 @@ test('the Worker routes, exports and binds the hosting; health reports it; the m
 test('the upload route is not reachable without going through the session check',()=>{
  const module=fs.readFileSync('cloudflare-worker/face-share.js','utf8');
  const upload=module.slice(module.indexOf('async function handleFaceShareUpload'),module.indexOf('// Public on purpose'));
- assert.ok(upload.indexOf('/session-get')>-1&&upload.indexOf('/session-get')<upload.indexOf('arrayBuffer()'),'the session is verified before the body is read');
- assert.ok(upload.indexOf('isAllowedUser')<upload.indexOf('arrayBuffer()'));
+ const read=upload.indexOf('readBodyCapped(request');
+ assert.ok(read>-1,'the body is read through the capped reader');
+ assert.ok(!upload.includes('arrayBuffer()'),'never buffer the whole request');
+ assert.ok(upload.indexOf('/session-get')>-1&&upload.indexOf('/session-get')<read,'the session is verified before the body is read');
+ assert.ok(upload.indexOf('isAllowedUser')<read);
 });

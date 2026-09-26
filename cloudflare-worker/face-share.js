@@ -55,6 +55,32 @@ function resetFaceShareRateLimit() {
   recentUploads.clear();
 }
 
+// Reads the body chunk by chunk and stops as soon as it exceeds the cap, so a stream sent
+// without Content-Length can never be buffered whole. Returns null when the cap is exceeded.
+async function readBodyCapped(request, maxBytes) {
+  if (!request.body) return new Uint8Array(0);
+  const reader = request.body.getReader();
+  const chunks = [];
+  let total = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > maxBytes) {
+      await reader.cancel().catch(() => {});
+      return null;
+    }
+    chunks.push(value);
+  }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return bytes;
+}
+
 class FaceShare {
   constructor(state) {
     this.state = state;
@@ -121,8 +147,8 @@ async function handleFaceShareUpload(request, env, now = Date.now()) {
     return jsonResponse({ error: "Too many face searches this hour. Try again later." }, 429, env);
   }
 
-  const bytes = new Uint8Array(await request.arrayBuffer());
-  if (bytes.length > FACE_SHARE_MAX_BYTES) {
+  const bytes = await readBodyCapped(request, FACE_SHARE_MAX_BYTES);
+  if (!bytes) {
     return jsonResponse({ error: "Image exceeds " + Math.round(FACE_SHARE_MAX_BYTES / 1024) + " KB." }, 413, env);
   }
   if (!looksLikeJpeg(bytes)) return jsonResponse({ error: "The file is not a JPEG image." }, 415, env);

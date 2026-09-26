@@ -178,8 +178,13 @@ test("the UI wires the crops in, states the third-party disclosure, and keeps th
   assert.match(html,/<script src="facial-crops\.js\?v=\d+"><\/script>\s*<script src="facial\.js/,"crops module loads before facial.js");
   assert.ok(html.includes("THIRD-PARTY SEARCH"));
   assert.match(html,/hosted on CT Atlas's temporary storage for about 10 minutes/);
-  assert.match(html,/deleted automatically/);
+  assert.match(html,/deletes its hosted copy automatically/);
+  assert.match(html,/its own retention rules/);
   assert.match(html,/after a confirmation/);
+  assert.match(html,/asks for its own confirmation/);
+  // Engines must not learn that the request came from CT Atlas (script navigations use the page's policy).
+  assert.match(html,/<meta name="referrer" content="no-referrer">/);
+  assert.ok(html.includes('id="fcMore"'),"container for the engines that did not get a tab");
   assert.match(html,/only when you paste it there/);
   assert.match(html,/leads, not identifications/);
   assert.ok(html.includes("NON-IDENTIFYING ANALYSIS"),"the existing guardrail must remain");

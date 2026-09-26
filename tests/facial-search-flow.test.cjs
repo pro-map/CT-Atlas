@@ -42,8 +42,17 @@ function harness(options={}){
     querySelectorAll:()=>[],addEventListener(){},body:{appendChild(){}}};
   class TestURL extends URL{static createObjectURL(){return "blob:test";}static revokeObjectURL(){}}
   const okShare=async()=>({ok:true,status:200,json:async()=>({ok:true,url:SHARE_URL,expires_at:new Date(Date.now()+600000).toISOString(),ttl_seconds:600})});
+  // Long timers (the 20 s upload timeout) fire almost at once so the timeout path can be tested.
+  const fastTimeout=(fn,ms)=>setTimeout(fn,ms>=10000?5:ms);
+  // The page sees a clock the test can move forward.
+  const clock={offset:0};
+  const realNow=Date.now.bind(Date);
+  class TestDate extends Date{
+    constructor(...args){if(args.length)super(...args);else super(realNow()+clock.offset);}
+    static now(){return realNow()+clock.offset;}
+  }
   const context=vm.createContext({
-    window,document,URL:TestURL,TextEncoder,Uint8Array,Blob,Date,Promise,Number,Math,Error,JSON,setTimeout,console,
+    window,document,URL:TestURL,TextEncoder,Uint8Array,Blob,Date:TestDate,Promise,Number,Math,Error,JSON,setTimeout:fastTimeout,clearTimeout,AbortController,console,
     navigator:clipboard?{clipboard:{write:async items=>{clipboardWrites.push(items);}}}:{},
     ClipboardItem:class{constructor(data){this.data=data;}},
     createImageBitmap:async input=>input&&input.w?{width:input.w,height:input.h,close(){}}:{width:1000,height:640,close(){}},
@@ -51,7 +60,7 @@ function harness(options={}){
   });
   vm.runInContext(source,context);
   const crops=window.CTAtlasFaceCrops;
-  return {crops,el,listeners,opened,confirms,fetchCalls,clipboardWrites,window,cells,
+  return {crops,el,listeners,opened,confirms,fetchCalls,clipboardWrites,window,cells,advance:ms=>{clock.offset+=ms;},
     async attach(){
       // one 1000x640 image with a large face: its crop is 1000x640 (~235 KB), so it must be shrunk to be hosted
       await crops.attach({
@@ -97,7 +106,8 @@ test("one engine: opens a tab inside the click, asks first, hosts a SMALL copy, 
   assert.equal(h.confirms.length,1);
   assert.match(h.confirms[0],/Yandex Images/);
   assert.match(h.confirms[0],/about 10 minutes/);
-  assert.match(h.confirms[0],/deleted automatically/);
+  assert.match(h.confirms[0],/deletes its copy automatically/);
+  assert.match(h.confirms[0],/its own retention rules/);
   assert.match(h.confirms[0],/Nothing is uploaded unless you press OK/);
 
   assert.equal(h.fetchCalls.length,1);
@@ -127,24 +137,102 @@ test("declining the confirmation uploads nothing and closes the tab",async()=>{
   assert.match(h.status(),/nothing was uploaded/);
 });
 
-test("a second engine on the same crop reuses the hosted link: no new confirmation, no new upload",async()=>{
+test("a second engine on the same crop reuses the hosted link (no new upload) but is confirmed on its own; a repeat of a confirmed engine is not asked again",async()=>{
   const h=harness();
   await h.attach();
   await h.click("search-direct","yandex");
   await h.click("search-direct","tineye");
-  assert.equal(h.confirms.length,1);
-  assert.equal(h.fetchCalls.length,1);
+  assert.equal(h.fetchCalls.length,1,"one hosting for the crop");
+  assert.equal(h.confirms.length,2,"TinEye was never confirmed: it is asked about");
+  assert.match(h.confirms[1],/Also search face F1 on TinEye/);
+  assert.doesNotMatch(h.confirms[1],/Yandex/,"only the engine that is new is named");
+  assert.match(h.confirms[1],/already hosted/);
+  assert.match(h.confirms[1],/Nothing is shared with TinEye unless you press OK/);
   assert.equal(h.opened.length,2);
   assert.equal(h.opened[1].locations[0],"https://tineye.com/search?url="+encodeURIComponent(SHARE_URL));
+  await h.click("search-direct","yandex");
+  assert.equal(h.confirms.length,2,"Yandex was already confirmed for this hosting");
+  assert.equal(h.fetchCalls.length,1);
+  assert.equal(h.opened.length,3);
 });
 
-test("an expired hosted link is never reused: it is confirmed and hosted again",async()=>{
-  const h=harness({fetchImpl:async()=>({ok:true,status:200,json:async()=>({ok:true,url:SHARE_URL,expires_at:new Date(Date.now()+20*1000).toISOString()})})});
+test("declining the confirmation for an additional engine hands it nothing",async()=>{
+  const h=harness();
   await h.attach();
   await h.click("search-direct","yandex");
-  await h.click("search-direct","bing");
+  h.window.confirm=text=>{h.confirms.push(text);return false;};
+  await h.click("search-direct","baidu");
+  assert.equal(h.opened[1].closed,true);
+  assert.deepEqual(h.opened[1].locations,[]);
+  assert.match(h.status(),/the link was not given to Baidu Images/);
+});
+
+test("an expired hosted link is never reused: it is hosted again and every engine is confirmed again",async()=>{
+  const h=harness({fetchImpl:async()=>({ok:true,status:200,json:async()=>({ok:true,url:SHARE_URL,ttl_seconds:20})})});
+  await h.attach();
+  await h.click("search-direct","yandex");
+  await h.click("search-direct","yandex");
   assert.equal(h.fetchCalls.length,2,"a link about to expire is hosted again");
+  assert.equal(h.confirms.length,2,"a new hosting is a new decision, even for the same engine");
+  assert.match(h.confirms[1],/^Search face F1 directly on Yandex Images/);
+});
+
+test("confirmations belong to ONE hosting: after a re-hosting, an engine confirmed earlier is asked about again",async()=>{
+  const h=harness();
+  await h.attach();
+  await h.click("search-direct","yandex");                 // hosting #1, Yandex confirmed
+  h.advance(9.5*60*1000);                                  // <90 s left: the link is no longer reusable
+  await h.click("search-direct","bing");                   // hosting #2, Bing confirmed
+  assert.equal(h.fetchCalls.length,2);
   assert.equal(h.confirms.length,2);
+  await h.click("search-direct","yandex");                 // Yandex never saw hosting #2's link
+  assert.equal(h.confirms.length,3,"Yandex is asked again for the new link");
+  assert.match(h.confirms[2],/Also search face F1 on Yandex Images/);
+  assert.equal(h.fetchCalls.length,2,"but nothing is uploaded again");
+});
+
+test("the lifetime comes from the relative ttl, so a wrong clock on this computer changes nothing",async()=>{
+  const past=new Date(Date.now()-3600*1000).toISOString();
+  const skewed=harness({fetchImpl:async()=>({ok:true,status:200,json:async()=>({ok:true,url:SHARE_URL,expires_at:past,ttl_seconds:600})})});
+  await skewed.attach();
+  await skewed.click("search-direct","yandex");
+  await skewed.click("search-direct","yandex");
+  assert.equal(skewed.fetchCalls.length,1,"server timestamp in the past is ignored: the ttl says 10 minutes");
+  const future=new Date(Date.now()+3600*1000).toISOString();
+  const other=harness({fetchImpl:async()=>({ok:true,status:200,json:async()=>({ok:true,url:SHARE_URL,expires_at:future,ttl_seconds:20})})});
+  await other.attach();
+  await other.click("search-direct","yandex");
+  await other.click("search-direct","yandex");
+  assert.equal(other.fetchCalls.length,2,"a timestamp far in the future does not keep a 20 s link alive");
+});
+
+test("a stalled hosting request times out and falls back instead of leaving blank tabs",async()=>{
+  const fetchImpl=(url,init)=>new Promise((resolve,reject)=>{
+    init.signal.addEventListener("abort",()=>{const e=new Error("aborted");e.name="AbortError";reject(e);});
+  });
+  const h=harness({fetchImpl});
+  await h.attach();
+  await h.click("search-direct","bing");
+  assert.match(h.status(),/did not answer in time/);
+  assert.deepEqual(h.opened[0].locations,["https://www.bing.com/visualsearch"]);
+});
+
+test("repeated clicks while a search is in flight neither host twice nor ask twice",async()=>{
+  let release;
+  const gate=new Promise(resolve=>{release=resolve;});
+  const h=harness({fetchImpl:async()=>{await gate;return {ok:true,status:200,json:async()=>({ok:true,url:SHARE_URL,ttl_seconds:600})};}});
+  await h.attach();
+  const first=h.click("search-direct","yandex");
+  await new Promise(resolve=>setTimeout(resolve,20));
+  await h.click("search-direct","yandex");
+  assert.match(h.status(),/already in progress/);
+  assert.equal(h.opened.length,1,"the second click opens no second tab");
+  release();
+  await first;
+  assert.equal(h.fetchCalls.length,1);
+  assert.equal(h.confirms.length,1);
+  await h.click("search-direct","bing");
+  assert.equal(h.opened.length,2,"searching is possible again once the first finished");
 });
 
 test("search all: one confirmation and one upload for four tabs, each engine on the same link",async()=>{
@@ -173,14 +261,42 @@ test("pop-ups blocked: nothing is asked, nothing is uploaded, the analyst is tol
   assert.match(h.status(),/Allow pop-ups/);
 });
 
-test("search all with only some tabs allowed: uploads once, opens what it can, says how many were blocked",async()=>{
+test("default browsers allow ONE tab per click: search all opens one and offers the others as real links, with a single confirmation and upload",async()=>{
+  const h=harness({popupLimit:1});
+  await h.attach();
+  await h.click("search-all");
+  assert.equal(h.opened.length,1);
+  assert.equal(h.confirms.length,1);
+  assert.match(h.confirms[0],/Yandex Images, Bing Visual Search, Google Images \/ Lens, TinEye/,"the one confirmation names all four engines");
+  assert.equal(h.fetchCalls.length,1);
+  assert.equal(h.opened[0].locations.length,1);
+  const more=h.el("fcMore");
+  assert.equal(more.hidden,false);
+  const link=encodeURIComponent(SHARE_URL);
+  const hrefs=[...more.innerHTML.matchAll(/<a class="fc-more-link" href="([^"]+)" target="_blank" rel="noopener noreferrer">([^<]+)<\/a>/g)];
+  assert.deepEqual(hrefs.map(m=>m[2]),["Bing Visual Search","Google Images / Lens","TinEye"]);
+  assert.deepEqual(hrefs.map(m=>m[1].replace(/&amp;/g,"&")),[
+    "https://www.bing.com/images/search?view=detailv2&iss=sbi&form=SBIVSP&sbisrc=UrlPaste&q=imgurl:"+link,
+    "https://lens.google.com/uploadbyurl?url="+link,
+    "https://tineye.com/search?url="+link
+  ]);
+  assert.match(h.status(),/Yandex Images opened on the hosted crop/);
+  assert.match(h.status(),/use the links below for Bing Visual Search, Google Images \/ Lens, TinEye/);
+  // A later search clears the previous links; the other engines are already confirmed.
+  await h.click("search-direct","yandex");
+  assert.equal(h.el("fcMore").hidden,true);
+  assert.equal(h.confirms.length,1);
+});
+
+test("search all with two tabs allowed: opens two, offers the remaining two as links",async()=>{
   const h=harness({popupLimit:2});
   await h.attach();
   await h.click("search-all");
   assert.equal(h.opened.length,2);
   assert.equal(h.fetchCalls.length,1);
   assert.deepEqual(h.opened.map(win=>win.locations.length),[1,1]);
-  assert.match(h.status(),/2 tab\(s\) were blocked/);
+  assert.equal((h.el("fcMore").innerHTML.match(/fc-more-link/g)||[]).length,2);
+  assert.match(h.status(),/use the links below for Google Images \/ Lens, TinEye/);
 });
 
 test("if hosting fails the tab falls back to the engine's upload page and the crop is copied for Ctrl+V",async()=>{

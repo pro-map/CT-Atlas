@@ -120,9 +120,11 @@
     single crop &mdash; re-encoded as a small JPEG without metadata &mdash; is
     hosted for about 10 minutes by the CT Atlas backend so that the free
     reverse-image search engine(s) you chose can download it, and it is then
-    deleted automatically. Anyone holding the unguessable link can view the crop
-    during that time, and the engine's own retention rules apply to what it
-    downloads.</li>
+    deleted automatically from CT Atlas's application storage. Anyone holding
+    the unguessable link can view the crop during that time, each further engine
+    on the same crop asks for its own confirmation, the engines' own retention
+    rules apply to what they download, and Cloudflare's provider-level recovery
+    records (see &ldquo;Retention&rdquo;) are outside CT Atlas's application-level deletion.</li>
   </ul>
 
   <h1>What we don't collect</h1>

@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CT ATLAS — Facial Intelligence</title>
 <link rel="icon" href="CT-ATLAS.png">
-<link rel="stylesheet" href="facial.css?v=3">
+<link rel="stylesheet" href="facial.css?v=4">
 <link rel="stylesheet" href="tab-health.css?v=1">
 </head>
 <body>
@@ -93,7 +94,8 @@
             <label class="fc-check"><input id="fcUpscale" type="checkbox" checked> Upscale small crops to 300 px</label>
           </div>
           <div id="fcStatus" class="fc-status" aria-live="polite"></div>
-          <div class="fc-notice"><strong>THIRD-PARTY SEARCH.</strong> Cutting, JPEG, ZIP and COPY happen only in your browser. To open an engine's results directly, SEARCH needs a web address for the image: after a confirmation, that one crop is hosted on CT Atlas's temporary storage for about 10 minutes (anyone holding its unguessable link can view it meanwhile), the engine downloads it, and it is then deleted automatically. Search4faces, and any failure, use copy-and-paste instead: the face reaches that service only when you paste it there. Results are leads, not identifications (look-alikes are common), and none of these services is operated or verified by CT Atlas.</div>
+          <div id="fcMore" class="fc-more" hidden></div>
+          <div class="fc-notice"><strong>THIRD-PARTY SEARCH.</strong> Cutting, JPEG, ZIP and COPY happen only in your browser. To open an engine's results directly, SEARCH needs a web address for the image: after a confirmation, that one crop is hosted on CT Atlas's temporary storage for about 10 minutes (anyone holding its unguessable link can view it meanwhile), the engine downloads it (and applies its own retention rules to that copy), and CT Atlas then deletes its hosted copy automatically. Each further engine on the same crop asks for its own confirmation, and CT Atlas is not sent to the engines as the referring site. Search4faces, and any failure, use copy-and-paste instead: the face reaches that service only when you paste it there. Results are leads, not identifications (look-alikes are common), and none of these services is operated or verified by CT Atlas.</div>
         </section>
         <section id="fiSimilaritySection" class="report-section" hidden>
           <h3>VISUAL SIMILARITY</h3>
@@ -105,7 +107,7 @@
     </section>
   </main>
 </div>
-<script src="facial-crops.js?v=2"></script>
+<script src="facial-crops.js?v=3"></script>
 <script src="facial.js?v=3"></script>
 <script src="tab-health.js?v=1" data-health-scope="facial"></script>
 </body>

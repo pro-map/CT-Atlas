@@ -10,6 +10,10 @@
 .fc-check{display:flex;align-items:center;gap:6px}
 .fc-status{min-height:16px;margin-top:10px;color:#8fb6ca;font-size:9px;line-height:1.5}
 .fc-status.error{color:#e69393}
+.fc-more{margin-top:8px;color:#9ab0bc;font-size:9px}
+.fc-more[hidden]{display:none}
+.fc-more-link{display:inline-block;margin:0 0 0 6px;padding:5px 9px;border:1px solid #405563;border-radius:4px;background:#17232e;color:#d7e4eb;font-weight:800;text-decoration:none}
+.fc-more-link:hover{background:#20303d}
 .fc-notice{margin-top:10px;padding:9px 10px;border-left:3px solid #635b36;background:#201f18;color:#c8b887;font-size:8px;line-height:1.55}
 .fc-thumb{width:84px;vertical-align:middle}
 .fc-thumb img{display:block;max-width:72px;height:auto;border:1px solid #3a5060;border-radius:3px;background:#fff}

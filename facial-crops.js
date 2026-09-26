@@ -151,6 +151,7 @@ const SEARCH_ALL_IDS=Object.freeze(["yandex","bing","google","tineye"]);
 const MAX_SHARE_BYTES=140*1024;
 const MAX_SHARE_SIDE=900;
 const SHARE_MIN_LIFETIME_MS=90*1000;     // an engine needs a moment to download the image
+const UPLOAD_TIMEOUT_MS=20*1000;         // a stalled hosting request falls back to copy-and-paste
 const SHARE_PATH_RE=/^\/face-share\/[A-Za-z0-9_-]{22}\.jpg$/;
 
 function shareDimensions(w,h,maxSide=MAX_SHARE_SIDE){
@@ -311,6 +312,7 @@ function paintCell(record){
 async function generate(){
   const token=++generation;
   release();
+  showMoreLinks([]);
   const {payload,files}=context;
   const byName=new Map();
   const duplicates=new Set();
@@ -365,7 +367,7 @@ async function generate(){
       for(const face of faces){
         const key=job.fi+":"+job.ri+":"+face.face_id;
         const label="F"+face.face_id+(job.isVideo?" @ "+job.frame.timestamp_seconds+"s":"");
-        const record={key,label,state:"error",error:failure,name:uniqueName(cropFileName(job.fileName,face,job.isVideo?job.frame.timestamp_seconds:null),used)};
+        const record={key,label,state:"error",error:failure,consented:new Set(),name:uniqueName(cropFileName(job.fileName,face,job.isVideo?job.frame.timestamp_seconds:null),used)};
         if(!failure){
           try{
             const crop=cropFromSource(source,srcW,srcH,job.frame,face,opts);
@@ -460,15 +462,24 @@ async function shareCrop(record){
   const token=context&&context.getToken?context.getToken():"";
   if(!api||!token)throw new Error("your session is not available: sign in again");
   const body=await shrinkForSearch(record);
+  const controller=typeof AbortController==="function"?new AbortController():null;
+  const timer=setTimeout(()=>{if(controller)controller.abort();},UPLOAD_TIMEOUT_MS);
+  const sentAt=Date.now();
   let response;
   try{
-    response=await fetch(api+"/face-share",{method:"POST",headers:{"X-Session-Token":token,"Content-Type":"image/jpeg"},body});
-  }catch(_){throw new Error("CT Atlas could not be reached");}
+    response=await fetch(api+"/face-share",{method:"POST",headers:{"X-Session-Token":token,"Content-Type":"image/jpeg"},body,...(controller?{signal:controller.signal}:{})});
+  }catch(error){
+    throw new Error(error&&error.name==="AbortError"?"CT Atlas did not answer in time":"CT Atlas could not be reached");
+  }finally{clearTimeout(timer);}
   const data=await response.json().catch(()=>({}));
   if(!response.ok||!data.ok)throw new Error(data.error||"the temporary hosting refused the image (HTTP "+response.status+")");
   if(!validShareUrl(data.url,api))throw new Error("the hosting answer was not a valid CT Atlas link");
-  const expiresAt=Date.parse(data.expires_at);
-  record.share={url:data.url,expiresAt:Number.isFinite(expiresAt)?expiresAt:Date.now()+9*60*1000};
+  // The lifetime is taken from the relative ttl (measured from when the request left), not from
+  // the server's absolute timestamp, so a wrong clock on this computer cannot mislead it.
+  const ttl=Number(data.ttl_seconds);
+  const expiresAt=Number.isFinite(ttl)&&ttl>0?sentAt+ttl*1000:Date.parse(data.expires_at);
+  record.share={url:data.url,expiresAt:Number.isFinite(expiresAt)?expiresAt:sentAt+9*60*1000};
+  record.consented=new Set();       // a new hosting: every engine has to be confirmed again
   return record.share;
 }
 
@@ -488,14 +499,41 @@ function openPlaceholder(){
   return win;
 }
 
-function confirmText(record,engines){
-  return "Search face "+record.label+" directly on "+engines.map(engine=>engine.name).join(", ")+"?\n\n"+
+function confirmText(record,engines,hostedShare){
+  const names=engines.map(engine=>engine.name).join(", ");
+  if(hostedShare){
+    const minutes=Math.max(1,Math.round((hostedShare.expiresAt-Date.now())/60000));
+    return "Also search face "+record.label+" on "+names+"?\n\n"+
+      "This crop is already hosted on CT Atlas's temporary storage (EU) and will be deleted automatically in about "+minutes+" minute(s). "+
+      "Pressing OK gives the same link to "+names+", which will download the crop and apply its own retention rules to it.\n\n"+
+      "Nothing is shared with "+names+" unless you press OK.";
+  }
+  return "Search face "+record.label+" directly on "+names+"?\n\n"+
     "These services can only search by web address, so this ONE crop (a small JPEG without metadata) will be hosted on CT Atlas's temporary storage (EU) for about 10 minutes. "+
-    "Anyone holding its unguessable link can view it during that time, it is downloaded by the search service(s) you picked, and it is deleted automatically afterwards.\n\n"+
+    "Anyone holding its unguessable link can view it during that time, it is downloaded by the search service(s) you picked (each applies its own retention rules to what it downloads), and CT Atlas deletes its copy automatically afterwards.\n\n"+
     "Nothing is uploaded unless you press OK.";
 }
 
+// A browser lets one click open one tab: the engines that did not get a tab are offered as
+// real links (a click on a link is its own gesture, and rel=noreferrer keeps CT Atlas out of the request).
+function showMoreLinks(items){
+  const box=$("fcMore");
+  if(!box)return;
+  box.innerHTML=items.length
+    ?'<span>Also open:</span> '+items.map(item=>'<a class="fc-more-link" href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer">'+esc(item.engine.name)+'</a>').join(" ")
+    :"";
+  box.hidden=!items.length;
+}
+
 async function searchDirect(record,engines){
+  if(record.searching){setStatus("A search for face "+record.label+" is already in progress.");return;}
+  record.searching=true;
+  try{await runDirectSearch(record,engines);}
+  finally{record.searching=false;}
+}
+
+async function runDirectSearch(record,engines){
+  showMoreLinks([]);
   const windows=engines.map(()=>openPlaceholder());
   if(windows.every(win=>!win)){
     setStatus("The browser blocked the search window(s). Allow pop-ups for this site, then try again.","error");
@@ -503,19 +541,27 @@ async function searchDirect(record,engines){
   }
   const closeAll=()=>windows.forEach(win=>{try{if(win)win.close();}catch(_){/* already closed */}});
   try{
-    if(!shareUsable(record.share,Date.now())&&!window.confirm(confirmText(record,engines))){
+    const hosted=shareUsable(record.share,Date.now());
+    const consented=hosted?record.consented:new Set();
+    const fresh=engines.filter(engine=>!consented.has(engine.id));
+    if(fresh.length&&!window.confirm(confirmText(record,fresh,hosted?record.share:null))){
       closeAll();
-      setStatus("Search cancelled: nothing was uploaded.");
+      setStatus(hosted?"Search cancelled: the link was not given to "+fresh.map(engine=>engine.name).join(", ")+".":"Search cancelled: nothing was uploaded.");
       return;
     }
     setStatus("Hosting face "+record.label+" for a few minutes…");
     const share=await shareCrop(record);
-    engines.forEach((engine,index)=>{if(windows[index])windows[index].location.replace(directSearchUrl(engine,share.url));});
+    for(const engine of engines)record.consented.add(engine.id);
+    const opened=[],queued=[];
+    engines.forEach((engine,index)=>{
+      const url=directSearchUrl(engine,share.url);
+      if(windows[index]){windows[index].location.replace(url);opened.push(engine);}
+      else queued.push({engine,url});
+    });
+    showMoreLinks(queued);
     const minutes=Math.max(1,Math.round((share.expiresAt-Date.now())/60000));
-    const opened=engines.filter((engine,index)=>windows[index]);
-    const blocked=engines.length-opened.length;
     setStatus("Face "+record.label+": "+opened.map(engine=>engine.name).join(", ")+" opened on the hosted crop. The link stays valid for about "+minutes+" more minute(s), then the image is deleted automatically. Results are leads, not identifications."+
-      (blocked?" "+blocked+" tab(s) were blocked by the browser: allow pop-ups for this site to open them all.":""));
+      (queued.length?" Your browser opens one tab per click: use the links below for "+queued.map(item=>item.engine.name).join(", ")+".":""));
   }catch(error){
     // Fall back to the paste flow: each window goes to the engine's own upload page.
     engines.forEach((engine,index)=>{try{if(windows[index])windows[index].location.replace(engine.url);}catch(_){/* window closed by the user */}});
@@ -601,7 +647,12 @@ function bindControls(){
     if(details.matches?.("details.fc-search")&&details.open){closeMenus(details);placeMenu(details);}
   },true);
   document.addEventListener("click",event=>{if(!event.target.closest?.("details.fc-search"))closeMenus();});
-  window.addEventListener("scroll",()=>closeMenus(),true);
+  // The menu scrolls itself on small screens: only a scroll OUTSIDE it closes it.
+  window.addEventListener("scroll",event=>{
+    const target=event.target;
+    if(target&&target.nodeType===1&&target.closest&&target.closest(".fc-menu"))return;
+    closeMenus();
+  },true);
   window.addEventListener("resize",()=>closeMenus());
 }
 
