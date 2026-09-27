@@ -6176,6 +6176,21 @@ const map = L.map(
 // the international reference labels in English.
 // ============================================================
 
+// keepBuffer/updateWhenZooming: this base map is TWO full tile layers stacked (base +
+// English labels below), so every pan/zoom doubles the tile requests against the same Esri
+// host versus a single-layer basemap. A bigger keepBuffer retains/pre-renders more tiles
+// around the current viewport so a pan is more likely to reveal an already-loaded tile
+// instead of a blank/black one, and updateWhenZooming:false stops both layers from firing a
+// fresh request burst on every intermediate frame of a zoom gesture (only at zoom end).
+const TILE_LOAD_TUNING = {
+    keepBuffer:
+        6,
+
+    updateWhenZooming:
+        false
+};
+
+
 const englishBaseLayer =
 L.tileLayer(
 
@@ -6187,7 +6202,9 @@ L.tileLayer(
             "Tiles &copy; Esri &mdash; Sources: Esri, HERE, Garmin, OpenStreetMap contributors, and the GIS user community",
 
         maxZoom:
-            16
+            16,
+
+        ...TILE_LOAD_TUNING
 
     }
 
@@ -6210,7 +6227,9 @@ L.tileLayer(
             16,
 
         pane:
-            "overlayPane"
+            "overlayPane",
+
+        ...TILE_LOAD_TUNING
 
     }
 
@@ -6342,7 +6361,17 @@ L.markerClusterGroup({
         45,
 
     spiderfyOnMaxZoom:
-        true
+        true,
+
+    // renderEvents() rebuilds every marker (thousands of events) from scratch on load, on every
+    // filter/category/search change. Without chunking, addLayer() runs synchronously for all of
+    // them in one go and blocks the main thread -- the exact freeze/lag this option exists for.
+    // Chunked loading spreads that work over animation frames instead.
+    chunkedLoading:
+        true,
+
+    chunkDelay:
+        30
 
 });
 
@@ -7955,30 +7984,57 @@ function renderEvents() {
         showMarkers
     ) {
 
+        // Built up front and added in one bulk addLayers() call below instead of one
+        // addLayer() per event: addLayer() always inserts synchronously (chunkedLoading has
+        // no effect on it), while addLayers() is the method the cluster group actually
+        // chunks across animation frames -- with thousands of events, that bulk call is
+        // what keeps this from freezing the tab on every load/filter/search change.
+        const newMarkers =
+            [];
 
         visible.forEach(
 
             event => {
 
+                // A single malformed event must never stop the rest of the events in this
+                // batch from getting a marker: without this guard, one bad record throwing
+                // inside createMarker would abort this whole forEach, silently leaving every
+                // event after it in `visible` unmapped until the underlying data is fixed.
+                try {
 
-                const marker =
-                    createMarker(
-                        event
+                    const marker =
+                        createMarker(
+                            event
+                        );
+
+
+                    eventMarkerIndex.set(
+                        event._mapKey,
+                        marker
                     );
 
 
-                markerCluster.addLayer(
-                    marker
-                );
+                    newMarkers.push(
+                        marker
+                    );
 
+                } catch (markerError) {
 
-                eventMarkerIndex.set(
-                    event._mapKey,
-                    marker
-                );
+                    console.warn(
+                        "Skipping unmappable event:",
+                        event._mapKey,
+                        markerError
+                    );
+
+                }
 
             }
 
+        );
+
+
+        markerCluster.addLayers(
+            newMarkers
         );
 
 
@@ -8019,63 +8075,82 @@ function renderEvents() {
 
     // Heat zones are ON by default, so a missing leaflet.heat plugin (CDN blocked or
     // unreachable on a restricted network) must never stop the events from rendering.
+    // The map container can also still be mid-layout (e.g. right after the initial
+    // login unlock swaps it from visibility:hidden to visible) with a momentarily
+    // zero-height client rect: leaflet.heat sizes its canvas from that rect and throws
+    // (IndexSizeError) if it is 0, which -- uncaught -- would abort every call after
+    // renderEvents() in refreshDashboard() (updateCoverage, updateTrends, renderChronology,
+    // etc.). Wrapping this in try/catch keeps that guarantee real instead of just commented.
     if (
         showHeat
         &&
         typeof L.heatLayer === "function"
     ) {
 
+        try {
 
-        const heatPoints = visible
-            .filter(
-                event =>
-                    isHeatEligibleEvent(
-                        event
-                    )
-            )
-            .filter(
-                event =>
-                    event.location_precision
-                    ===
-                    "city"
-            )
-            .map(
-                event =>
-                    [
-                        Number(
-                            event.latitude
-                        ),
-                        Number(
-                            event.longitude
-                        ),
-                        1
-                    ]
+            const heatPoints = visible
+                .filter(
+                    event =>
+                        isHeatEligibleEvent(
+                            event
+                        )
+                )
+                .filter(
+                    event =>
+                        event.location_precision
+                        ===
+                        "city"
+                )
+                .map(
+                    event =>
+                        [
+                            Number(
+                                event.latitude
+                            ),
+                            Number(
+                                event.longitude
+                            ),
+                            1
+                        ]
+                );
+
+            heatLayer =
+            L.heatLayer(
+
+                heatPoints,
+
+                {
+
+                    radius:
+                        30,
+
+                    blur:
+                        24,
+
+                    maxZoom:
+                        7,
+
+                    minOpacity:
+                        0.30
+
+                }
+
+            ).addTo(
+                map
             );
 
-        heatLayer =
-        L.heatLayer(
+        } catch (heatError) {
 
-            heatPoints,
+            console.warn(
+                "Heat layer unavailable for this render:",
+                heatError
+            );
 
-            {
+            heatLayer =
+                null;
 
-                radius:
-                    30,
-
-                blur:
-                    24,
-
-                maxZoom:
-                    7,
-
-                minOpacity:
-                    0.30
-
-            }
-
-        ).addTo(
-            map
-        );
+        }
 
     }
 
