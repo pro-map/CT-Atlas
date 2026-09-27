@@ -13,6 +13,7 @@ on:
       - "quick-ask.css"
       - "crypto.html"
       - "crypto.js"
+      - "crypto-report.js"
       - "crypto.css"
       - "crypto-launcher.js"
       - "usage-auth-fix.js"
@@ -86,6 +87,10 @@ jobs:
           grep -q 'anchor.insertAdjacentElement("afterend",button)' feedback.js
           test -s crypto.html
           test -s crypto.js
+          test -s crypto-report.js
+          grep -q 'crypto-report.js' crypto.html
+          grep -q 'cryptoReportButton' crypto.html
+          grep -q 'exportFullReport' crypto.js
           test -s crypto.css
           test -s crypto-launcher.js
           grep -q 'Behavioral Pattern Detection' crypto.html
@@ -139,6 +144,8 @@ jobs:
             exit 1
           fi
           node --check crypto.js
+          node --check crypto-report.js
+          node --check pdf-export.js
           node --check crypto-launcher.js
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6

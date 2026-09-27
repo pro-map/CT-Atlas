@@ -18,6 +18,7 @@ on:
       - "quick-ask.js"
       - "crypto.html"
       - "crypto.js"
+      - "crypto-report.js"
       - "crypto.css"
       - "crypto-launcher.js"
       - "ct-atlas-runtime.json"
@@ -50,6 +51,7 @@ jobs:
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/pdf-export.js >/tmp/pdf-export.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/crypto.html >/tmp/crypto.html \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/crypto.js >/tmp/crypto.js \
+              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/crypto-report.js >/tmp/crypto-report.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/main.html >/tmp/main.html \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.html >/tmp/social.html \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.js >/tmp/social.js \
@@ -71,6 +73,9 @@ jobs:
               && grep -q 'Case Workspace' /tmp/crypto.html \
               && grep -q 'Sanctions Screening' /tmp/crypto.html \
               && grep -q 'renderSanctions' /tmp/crypto.js \
+              && grep -q 'exportFullReport' /tmp/crypto.js \
+              && grep -q 'CTAtlasCryptoReport' /tmp/crypto-report.js \
+              && grep -q 'cryptoReportButton' /tmp/crypto.html \
               && grep -q 'detectPatterns' /tmp/crypto.js \
               && grep -q 'crypto-workspace' /tmp/crypto.js \
               && grep -q 'Intelligence Map' /tmp/main.html \

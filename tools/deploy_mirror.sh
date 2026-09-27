@@ -14,7 +14,7 @@ mkdir -p "$STAGING"
 
 cp index.html main.html crypto.html social.html facial.html privacy.html robots.txt events.json ct-atlas-runtime.json \
    pdf-export.js deep-search.js deep-search.css quick-ask.js quick-ask.css feedback.js feedback.css \
-   crypto.js crypto.css crypto-launcher.js social.js social.css facial.js facial.css \
+   crypto.js crypto-report.js crypto.css crypto-launcher.js social.js social.css facial.js facial.css \
    intelligence-map.svg crypto-intelligence.svg social-intelligence.svg facial-intelligence.svg \
    daily-quiz.js daily-quiz.css daily-quiz.json \
    usage-admin.js usage-admin.css usage-auth-fix.js \

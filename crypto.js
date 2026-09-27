@@ -20,6 +20,7 @@ let cryptoWorkspace={version:"crypto-workspace-v1",labels:[],watchlist:[],cases:
 let activeCaseId="";
 let lastFoundPath=null;
 let workspaceSaveTimer=null;
+let reportUnfiltered=false;   // set only while the full report collects its data: every filter reads as "off"
 
 const SERVICE_REGISTRY={
   ethereum:{
@@ -250,6 +251,7 @@ function rowStatus(row){
 }
 
 function readFilters(){
+  if(reportUnfiltered)return {direction:"all",asset:"all",type:"all",status:"all",minAmount:null,maxAmount:null,from:"",to:"",text:"",graphMinLinks:1,graphNodes:40};
   const numberValue=id=>{
     const raw=String(document.getElementById(id)?.value||"").trim();
     if(!raw)return null;
@@ -973,6 +975,180 @@ async function exportCasePdf(){
   });
 }
 
+// ---------------------------------------------------------------------------
+// Full analysis report: everything on screen (and what the filters hide) in one PDF.
+// crypto-report.js turns the model below into the document; nothing here leaves the browser.
+// ---------------------------------------------------------------------------
+
+// Runs `fn` as if no transaction filter were set, so the report's sections use EVERY record, then puts the screen back.
+function withoutTransactionFilters(fn){
+  const previousFlag=reportUnfiltered,previousModel=currentNetworkModel;
+  reportUnfiltered=true;
+  try{
+    currentNetworkModel=buildNetworkModel(lastPayload);
+    return fn();
+  }finally{
+    reportUnfiltered=previousFlag;
+    currentNetworkModel=previousModel;
+  }
+}
+
+function flattenField(value){
+  if(value===null||value===undefined)return "";
+  if(Array.isArray(value))return value.map(flattenField).join(", ");
+  if(typeof value==="object")return JSON.stringify(value);
+  return String(value);
+}
+
+function thresholdsText(watch){
+  const limits=watch.thresholds||{},parts=[];
+  if(limits.min_amount!==null&&limits.min_amount!==undefined)parts.push("single transfer ≥ "+limits.min_amount);
+  if(limits.aggregate_24h!==null&&limits.aggregate_24h!==undefined)parts.push("24h aggregate ≥ "+limits.aggregate_24h);
+  if(limits.velocity_24h!==null&&limits.velocity_24h!==undefined)parts.push("24h tx count ≥ "+limits.velocity_24h);
+  if(limits.dormant_days!==null&&limits.dormant_days!==undefined)parts.push("dormant ≥ "+limits.dormant_days+" days");
+  return parts.join(" · ");
+}
+
+function caseContextForReport(){
+  const item=activeCase();
+  if(!item)return null;
+  return {
+    name:item.name,status:item.status,chain:item.chain,description:item.description,
+    notes:(item.notes||[]).map(note=>note.text),
+    savedPaths:(item.saved_paths||[]).map(path=>({name:path.name,nodes:path.nodes||[]})),
+    offchain:(item.offchain_nodes||[]).map(node=>({type:node.type,label:node.label,linked:node.linked_address,notes:node.notes})),
+    crosschain:(item.crosschain_links||[]).map(link=>({service:link.service,confidence:link.confidence,from:link.from_chain+": "+link.from_address,to:link.to_chain+": "+link.to_address,notes:link.notes}))
+  };
+}
+
+function collectReportModel(graphImage){
+  const payload=lastPayload;
+  const isTransaction=payload.kind==="transaction";
+  const base={
+    generatedAt:new Date().toISOString(),
+    user:user(),
+    subject:{
+      kind:isTransaction?"transaction":"address",chain:payload.chain,chainName:payload.chain_name,query:payload.query,
+      provider:payload.provider,explorerUrl:payload.explorer_url||"",generatedAt:payload.generated_at||""
+    },
+    observations:Array.isArray(payload.observations)?payload.observations:[],
+    samplingNote:payload.sampling_note||"",
+    sanctions:sanctionsView(),
+    filters:{active:isTransaction?[]:activeFilterLabels()},
+    caseContext:caseContextForReport()
+  };
+  if(isTransaction){
+    return {...base,counts:{},transactionFields:Object.entries(payload.transaction||{}).map(([key,value])=>[key,flattenField(value)])};
+  }
+
+  // The graph and its node table are the screen as the analyst arranged it; everything else uses all records.
+  const displayed=currentNetworkModel||buildNetworkModel(payload);
+  const nodeLabel=address=>labelForAddress(address,payload.chain)?.name||"";
+  let path=null;
+  if(Array.isArray(lastFoundPath)&&lastFoundPath.length>1){
+    const keys=new Set(displayed.nodes.map(node=>node.key));
+    if(lastFoundPath.every(key=>keys.has(key)))path={nodes:lastFoundPath.map(key=>displayAddressForKey(key))};
+  }
+  const derived=withoutTransactionFilters(()=>({
+    rows:allTraceRows(false),
+    patterns:detectPatterns(),
+    exposure:exposureFindings().map(item=>({...item,name:item.name||nodeLabel(item.address)})),
+    crossChain:crossChainFindings(),
+    labels:visibleRelevantLabels()
+  }));
+
+  const seen=new Set(),watchlist=[];
+  for(const address of [payload.query,...displayed.nodes.map(node=>node.id)]){
+    for(const item of watchesForAddress(address,payload.chain)){
+      if(seen.has(item.id))continue;
+      seen.add(item.id);
+      watchlist.push({label:item.label,address:item.address,enabled:item.enabled,thresholdsText:thresholdsText(item)});
+    }
+  }
+  const seedKey=normalizeAddressForChain(payload.query,payload.chain);
+  const alerts=(cryptoWorkspace.alerts||[]).filter(alert=>alert.chain===payload.chain&&normalizeAddressForChain(alert.address,alert.chain)===seedKey);
+
+  return {
+    ...base,
+    balance:payload.balance||null,
+    counts:{
+      wallets:tracePayloads.size,maxDepth:displayed.maxVisibleDepth,
+      transactions:derived.rows.length,transactionsListed:Math.min(derived.rows.length,window.CTAtlasCryptoReport.LIMITS.transactions),
+      graphNodes:displayed.nodes.length,patterns:derived.patterns.length,exposure:derived.exposure.length
+    },
+    patterns:derived.patterns,
+    exposure:derived.exposure,
+    path,
+    labels:derived.labels,
+    crossChain:derived.crossChain,
+    watchlist,alerts,
+    graph:{
+      image:graphImage||"",
+      statusLine:displayed.nodes.length+" visible node(s) · "+tracePayloads.size+" analysed wallet(s) · visible depth H"+displayed.maxVisibleDepth+" · max depth H"+displayed.settings.maxDepth+" · branch "+displayed.settings.branch,
+      nodes:displayed.nodes.map(node=>({address:node.id,label:nodeLabel(node.id),depth:node.depth,relation:node.relation,total:node.total,incoming:node.incoming,outgoing:node.outgoing,assets:node.assets})),
+      edges:displayed.edges.slice().sort((a,b)=>b.count-a.count).map(edge=>({from:edge.from,to:edge.to,count:edge.count,assets:edge.assets,hop:edge.hop}))
+    },
+    counterparties:neighborStats(payload,Array.isArray(payload.transactions)?payload.transactions:[]).map(node=>({
+      address:node.id,label:nodeLabel(node.id),incoming:node.incoming,outgoing:node.outgoing,total:node.total,assets:[...node.assets].sort()
+    })),
+    wallets:traceEntries().map(entry=>{
+      const screening=entry.payload?.sanctions_screening;
+      return {
+        address:entry.address,depth:entry.depth,records:(entry.payload?.transactions||[]).length,
+        screening:!screening||screening.status==="unavailable"?"not screened":screening.hit?"MATCH (see the sanctions section)":screening.status==="stale"?"no match (list older than 7 days)":"no match"
+      };
+    }),
+    transactions:derived.rows.map(row=>({
+      id:row.id,time:row.time,direction:String(row.direction||"").toUpperCase(),asset:row.asset,amount:row.amount,status:rowStatus(row),
+      counterparties:row.counterparties||[],tokenName:row.token_name||"",tokenContract:row.token_contract||"",
+      functionName:row.function_name||row.contract_type||"",depth:row._trace_depth,sourceWallet:row._trace_source
+    }))
+  };
+}
+
+// The graph as an image: the page's own SVG (its layout, hop rings, colours), made standalone so it renders outside crypto.css.
+async function graphImageForReport(){
+  const svg=document.getElementById("flowGraph");
+  if(!svg||lastPayload?.kind!=="address"||!window.CTAtlasCryptoReport?.standaloneGraphSvg)return "";
+  const markup=window.CTAtlasCryptoReport.standaloneGraphSvg(svg.outerHTML);
+  if(!markup)return "";
+  const url=URL.createObjectURL(new Blob([markup],{type:"image/svg+xml;charset=utf-8"}));
+  try{
+    const image=await new Promise((resolve,reject)=>{
+      const element=new Image();
+      element.onload=()=>resolve(element);
+      element.onerror=()=>reject(new Error("The graph image could not be rendered."));
+      element.src=url;
+    });
+    const canvas=document.createElement("canvas");
+    canvas.width=2000;canvas.height=1300;
+    canvas.getContext("2d").drawImage(image,0,0,canvas.width,canvas.height);
+    return canvas.toDataURL("image/png");
+  }catch(_){
+    return "";       // the report says so and carries the node table instead
+  }finally{
+    URL.revokeObjectURL(url);
+  }
+}
+
+async function exportFullReport(){
+  if(!lastPayload){setStatus("Run an analysis first.","warning");return;}
+  if(!window.CTAtlasPdf?.download||!window.CTAtlasCryptoReport?.build){setStatus("The report library is unavailable.","error");return;}
+  const button=document.getElementById("cryptoReportButton");
+  if(button)button.disabled=true;
+  setStatus("Building the full report…","");
+  try{
+    const image=await graphImageForReport();
+    const report=window.CTAtlasCryptoReport.build(collectReportModel(image));
+    const result=await window.CTAtlasPdf.download(report);
+    setStatus("Report downloaded: "+result.filename+" · "+result.pages+" page(s).","success");
+  }catch(error){
+    setStatus(error?.message||"Report generation failed.","error");
+  }finally{
+    if(button)button.disabled=false;
+  }
+}
+
 function snapshotFromPayload(payload){
   const rows=(payload.transactions||[]).slice().sort((a,b)=>String(b.time||"").localeCompare(String(a.time||"")));
   const now=Date.now(),dayAgo=now-86400000;
@@ -1249,13 +1425,8 @@ function sanctionsHits(){
   );
 }
 
-function renderSanctions(){
-  const card=document.getElementById("cryptoSanctions");
-  const body=document.getElementById("cryptoSanctionsBody");
-  const badge=document.getElementById("cryptoSanctionsBadge");
-  const note=document.getElementById("cryptoSanctionsNote");
-  if(!card||!body||!badge||!note||!lastPayload)return;
-
+// Everything the sanctions card shows, as data: the card renders it, and the full report reuses it word for word.
+function sanctionsView(){
   const entries=sanctionsEntries();
   const usable=entries.map(entry=>entry.payload?.sanctions_screening)
     .filter(item=>item&&(item.status==="ok"||item.status==="stale"));
@@ -1265,7 +1436,7 @@ function renderSanctions(){
   const source=list?.sources?.[0];
   const unscreened=!rootScreening||rootScreening.status==="unavailable";
 
-  note.textContent=source
+  const note=source
     ? (source.name||source.id)+(source.published?" · published "+source.published:"")+" · "+fmtNumber(list.address_count)+" listed addresses"
     : "Checks the wallet and its counterparties against sanctioned digital-currency addresses.";
 
@@ -1281,23 +1452,14 @@ function renderSanctions(){
     warnings.push("The sanctions list is older than 7 days or could not be refreshed; recent designations may be missing.");
   }
 
-  card.classList.toggle("hit",hits.length>0);
-  card.classList.toggle("unscreened",unscreened&&hits.length===0);
-  if(hits.length){
-    badge.className="intel-badge high";
-    badge.textContent=hits.length+(hits.length>1?" MATCHES":" MATCH");
-  }else if(unscreened){
-    badge.className="intel-badge unscreened";
-    badge.textContent="NOT SCREENED";
-  }else{
-    badge.className="intel-badge clear";
-    badge.textContent="NO MATCH";
-  }
+  let badge;
+  if(hits.length)badge={cls:"intel-badge high",text:hits.length+(hits.length>1?" MATCHES":" MATCH")};
+  else if(unscreened)badge={cls:"intel-badge unscreened",text:"NOT SCREENED"};
+  else badge={cls:"intel-badge clear",text:"NO MATCH"};
 
-  const parts=warnings.map(text=>'<div class="sanctions-warning">'+esc(text)+'</div>');
-  for(const hit of hits){
+  const hitViews=hits.map(hit=>{
     const terrorism=Boolean(hit.match.entities?.some(entity=>entity.terrorism));
-    const role=hit.role==="wallet"?"ANALYSED WALLET":hit.role==="party"?"TRANSACTION PARTY":"COUNTERPARTY";
+    const roleLabel=hit.role==="wallet"?"ANALYSED WALLET":hit.role==="party"?"TRANSACTION PARTY":"COUNTERPARTY";
     const via=[...hit.via];
     let context="";
     if(hit.role==="party"){
@@ -1307,23 +1469,51 @@ function renderSanctions(){
         ": received from "+hit.in_count+"× · sent to "+hit.out_count+"× in the returned sample"+
         (hit.last_seen?" · last "+fmtTime(hit.last_seen):"")+".";
     }
+    return {
+      title:hit.match.summary||"Listed address",
+      role:hit.role,roleLabel,depth:hit.depth,currency:hit.match.currency||"",
+      terrorism,address:hit.address,context
+    };
+  });
+
+  let noMatchText="";
+  if(!hits.length&&!unscreened){
+    const checked=usable.reduce((sum,item)=>sum+Number(item.counterparties_checked||0),0);
+    noMatchText="No match among the analysed wallet(s) and "+checked+" screened counterpart"+(checked===1?"y":"ies")+
+      ". No match does not mean an address is safe.";
+  }
+  const scope=rootScreening?.scope_note||usable[0]?.scope_note||"";
+  return {unscreened,badge,note,warnings,hits:hitViews,noMatchText,scope};
+}
+
+function renderSanctions(){
+  const card=document.getElementById("cryptoSanctions");
+  const body=document.getElementById("cryptoSanctionsBody");
+  const badge=document.getElementById("cryptoSanctionsBadge");
+  const note=document.getElementById("cryptoSanctionsNote");
+  if(!card||!body||!badge||!note||!lastPayload)return;
+
+  const view=sanctionsView();
+  note.textContent=view.note;
+  card.classList.toggle("hit",view.hits.length>0);
+  card.classList.toggle("unscreened",view.unscreened&&view.hits.length===0);
+  badge.className=view.badge.cls;
+  badge.textContent=view.badge.text;
+
+  const parts=view.warnings.map(text=>'<div class="sanctions-warning">'+esc(text)+'</div>');
+  for(const hit of view.hits){
     parts.push(
       '<div class="intel-item alert-item high"><div class="intel-item-head"><div>'+
-      '<div class="intel-title">'+esc(hit.match.summary||"Listed address")+'</div>'+
-      '<div class="intel-meta">'+role+' · H'+hit.depth+' · '+esc(hit.match.currency||"")+'</div></div>'+
-      '<span class="intel-badge '+(terrorism?"high":"medium")+'">'+(terrorism?"TERRORISM PROGRAM":"SANCTIONS LIST")+'</span></div>'+
+      '<div class="intel-title">'+esc(hit.title)+'</div>'+
+      '<div class="intel-meta">'+hit.roleLabel+' · H'+hit.depth+' · '+esc(hit.currency)+'</div></div>'+
+      '<span class="intel-badge '+(hit.terrorism?"high":"medium")+'">'+(hit.terrorism?"TERRORISM PROGRAM":"SANCTIONS LIST")+'</span></div>'+
       '<code class="sanctions-address">'+esc(hit.address)+'</code>'+
-      (context?'<div class="intel-detail">'+esc(context)+'</div>':"")+
+      (hit.context?'<div class="intel-detail">'+esc(hit.context)+'</div>':"")+
       '</div>'
     );
   }
-  if(!hits.length&&!unscreened){
-    const checked=usable.reduce((sum,item)=>sum+Number(item.counterparties_checked||0),0);
-    parts.push('<div class="intel-result">No match among the analysed wallet(s) and '+checked+' screened counterpart'+(checked===1?"y":"ies")+
-      '. No match does not mean an address is safe.</div>');
-  }
-  const scope=rootScreening?.scope_note||usable[0]?.scope_note;
-  if(scope)parts.push('<div class="sanctions-scope">'+esc(scope)+'</div>');
+  if(view.noMatchText)parts.push('<div class="intel-result">'+esc(view.noMatchText)+'</div>');
+  if(view.scope)parts.push('<div class="sanctions-scope">'+esc(view.scope)+'</div>');
   body.innerHTML=parts.join("");
 }
 
@@ -2093,6 +2283,7 @@ function bind(){
   });
   document.getElementById("caseAddSeedButton")?.addEventListener("click",addSeedToCase);
   document.getElementById("caseSavePathButton")?.addEventListener("click",savePathToCase);
+  document.getElementById("cryptoReportButton")?.addEventListener("click",exportFullReport);
   document.getElementById("caseExportPdfButton")?.addEventListener("click",()=>exportCasePdf().catch(error=>setStatus(error?.message||"Case PDF export failed.","error")));
   document.getElementById("caseAddNoteButton")?.addEventListener("click",addCaseNote);
   document.getElementById("caseOffchainToggle")?.addEventListener("click",()=>{

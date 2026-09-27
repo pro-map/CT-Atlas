@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CT ATLAS — Crypto Intelligence</title>
 <link rel="icon" href="CT-ATLAS.png">
-<link rel="stylesheet" href="crypto.css?v=4">
+<link rel="stylesheet" href="crypto.css?v=5">
 <link rel="stylesheet" href="tab-health.css?v=1">
 </head>
 <body>
@@ -57,7 +57,10 @@
           <div id="cryptoResultQuery" class="crypto-query"></div>
           <div id="cryptoResultMeta" class="crypto-meta"></div>
         </div>
-        <a id="cryptoExplorer" class="crypto-explorer" href="#" target="_blank" rel="noopener noreferrer">OPEN EXPLORER ↗</a>
+        <div class="crypto-topline-actions">
+          <button id="cryptoReportButton" class="crypto-report-button" type="button" title="One PDF with the sanctions screening, patterns, exposure, graph, counterparties and every transaction record">GENERATE FULL REPORT (PDF)</button>
+          <a id="cryptoExplorer" class="crypto-explorer" href="#" target="_blank" rel="noopener noreferrer">OPEN EXPLORER ↗</a>
+        </div>
       </div>
 
       <div id="cryptoKpis" class="crypto-kpis"></div>
@@ -321,8 +324,9 @@
     </div>
   </main>
 </div>
-<script src="pdf-export.js?v=2"></script>
-<script src="crypto.js?v=4"></script>
+<script src="pdf-export.js?v=4"></script>
+<script src="crypto-report.js?v=3"></script>
+<script src="crypto.js?v=5"></script>
 <script src="tab-health.js?v=1" data-health-scope="crypto"></script>
 </body>
 </html>

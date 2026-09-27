@@ -362,3 +362,8 @@ button,input,select{font:inherit}
 .sanctions-address{display:block;margin-top:5px;font:800 8px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;color:#cfe0e8;word-break:break-all}
 .sanctions-warning{border:1px solid #a27935;background:#302718;color:#e7c06f;border-radius:5px;padding:8px 10px;font-size:9px;line-height:1.55}
 .sanctions-scope{font-size:8px;line-height:1.55;color:#77909f}
+/* Full analysis report button (crypto-report.js) */
+.crypto-topline-actions{display:flex;flex:0 0 auto;align-items:flex-start;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.crypto-report-button{flex:0 0 auto;border:1px solid #4f7ea0;background:#21465a;color:#e6f2f7;border-radius:4px;padding:8px 10px;font-size:9px;font-weight:900;letter-spacing:.08em;cursor:pointer}
+.crypto-report-button:hover{background:#2c607a}
+.crypto-report-button:disabled{opacity:.5;cursor:wait}
