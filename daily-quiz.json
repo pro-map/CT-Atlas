@@ -1,13 +1,14 @@
 {
-  "date": "2026-09-15",
-  "category": "Terrorist financing standards",
-  "question": "Which FATF Recommendation specifically addresses targeted financial sanctions related to terrorism and terrorist financing?",
+  "category": "International CT Instruments and Institutions",
+  "question": "Which subsidiary body of the United Nations Security Council was established by Resolution 1373 to monitor the implementation of counter-terrorism measures by member states?",
   "options": [
-    "Recommendation 5",
-    "Recommendation 6",
-    "Recommendation 8"
+    "The Counter-Terrorism Committee (CTC)",
+    "The 1267 Sanctions Committee",
+    "The ISIL (Da'esh) and Al-Qaida Sanctions Committee"
   ],
-  "correct_index": 1,
-  "explanation": "Recommendation 6 addresses targeted financial sanctions related to terrorism and terrorist financing. Recommendation 5 concerns criminalising terrorist financing, while Recommendation 8 concerns focused, risk-based measures for non-profit organisations.",
-  "source_url": "https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Fatf-recommendations.html"
+  "correct_index": 0,
+  "explanation": "UN Security Council Resolution 1373, adopted unanimously in the wake of the September 11 attacks, established the Counter-Terrorism Committee (CTC) as a special body of the Council to monitor implementation of the resolution's sweeping counter-terrorism obligations.",
+  "source_url": "https://www.un.org/securitycouncil/ctc/content/about-us",
+  "date": "2026-09-27",
+  "source_checked_at": "2026-09-27T14:34:23.067324+00:00"
 }
