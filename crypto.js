@@ -763,14 +763,17 @@ function openLabelForm(address){
   const form=document.getElementById("labelForm");
   if(!form)return;
   form.hidden=false;
+  const chainSelect=document.getElementById("labelChain");
+  if(chainSelect&&lastPayload?.chain)chainSelect.value=lastPayload.chain;
   document.getElementById("labelAddress").value=address||lastPayload?.query||"";
   document.getElementById("labelName").focus();
 }
 
 function saveLabel(){
   const address=String(document.getElementById("labelAddress")?.value||"").trim();
-  if(!lastPayload||!isSearchableAddress(address,lastPayload.chain)){
-    setStatus("Enter a valid address on the current blockchain before saving a label.","warning");
+  const chain=String(document.getElementById("labelChain")?.value||lastPayload?.chain||"");
+  if(!chain||!isSearchableAddress(address,chain)){
+    setStatus("Select a chain and enter a valid address on it before saving a label.","warning");
     return;
   }
   const name=String(document.getElementById("labelName")?.value||"").trim();
@@ -782,7 +785,7 @@ function saveLabel(){
   }
   const item={
     id:makeId("label"),
-    chain:lastPayload.chain,
+    chain,
     address,
     name,
     category:String(document.getElementById("labelCategory")?.value||"OTHER"),
@@ -793,9 +796,9 @@ function saveLabel(){
     notes:String(document.getElementById("labelNotes")?.value||"").trim(),
     created_at:new Date().toISOString()
   };
-  const key=normalizeAddressForChain(address,lastPayload.chain);
+  const key=normalizeAddressForChain(address,chain);
   cryptoWorkspace.labels=(cryptoWorkspace.labels||[]).filter(label=>
-    !(label.chain===lastPayload.chain&&normalizeAddressForChain(label.address,label.chain)===key&&label.category===item.category)
+    !(label.chain===chain&&normalizeAddressForChain(label.address,label.chain)===key&&label.category===item.category)
   );
   cryptoWorkspace.labels.unshift(item);
   document.getElementById("labelForm").hidden=true;
@@ -903,15 +906,16 @@ function saveOffchainNode(){
 
 function saveCrosschainLink(){
   const item=activeCase();
-  if(!item||!lastPayload){setStatus("Select a case first.","warning");return;}
-  const from=String(document.getElementById("crosschainFromAddress")?.value||lastPayload.query||"").trim();
+  if(!item){setStatus("Select a case first.","warning");return;}
+  const fromChain=String(document.getElementById("crosschainFromChain")?.value||lastPayload?.chain||"").trim();
+  const from=String(document.getElementById("crosschainFromAddress")?.value||lastPayload?.query||"").trim();
   const to=String(document.getElementById("crosschainToAddress")?.value||"").trim();
   const toChain=String(document.getElementById("crosschainToChain")?.value||"").trim();
-  if(!from||!to||!toChain){setStatus("From wallet, destination chain and destination wallet are required.","warning");return;}
+  if(!fromChain||!from||!to||!toChain){setStatus("From chain, from wallet, destination chain and destination wallet are required.","warning");return;}
   item.crosschain_links=Array.isArray(item.crosschain_links)?item.crosschain_links:[];
   item.crosschain_links.unshift({
     id:makeId("crosschain"),
-    from_chain:lastPayload.chain,
+    from_chain:fromChain,
     from_address:from,
     to_chain:toChain,
     to_address:to,
@@ -1999,11 +2003,30 @@ function clearTrace(){
 }
 
 function renderGraph(payload){
+  stopPlaybackSilently();
   const svg=document.getElementById("flowGraph");
   if(!svg)return;
 
   const model=buildNetworkModel(payload);
   currentNetworkModel=model;
+  ensureGraphPositions(model);
+  paintGraphFrame(payload,model);
+
+  setTraceStatus(
+    "Network: "+model.nodes.length+" visible node(s) · "+tracePayloads.size+" analyzed wallet(s) · visible depth H"+model.maxVisibleDepth+
+    " · max depth H"+model.settings.maxDepth+" · branch "+model.settings.branch,
+    ""
+  );
+  updatePlaybackControls();
+}
+
+// Pure draw: given an already-built network model (the full one from renderGraph, or a
+// chronologically-filtered copy for playback -- see startPlayback below), paints the SVG and wires
+// up node/edge interactions. Never touches currentNetworkModel, so a playback frame can repaint the
+// graph without disturbing what every other panel (KPIs, patterns, exposure, the report...) reads.
+function paintGraphFrame(payload,model){
+  const svg=document.getElementById("flowGraph");
+  if(!svg)return;
   ensureGraphPositions(model);
 
   const nodeByKey=new Map(model.nodes.map(node=>[node.key,node]));
@@ -2152,12 +2175,174 @@ function renderGraph(payload){
       expandTraceNode(node.id).catch(error=>console.warn(error));
     });
   });
+}
 
-  setTraceStatus(
-    "Network: "+model.nodes.length+" visible node(s) · "+tracePayloads.size+" analyzed wallet(s) · visible depth H"+model.maxVisibleDepth+
-    " · max depth H"+model.settings.maxDepth+" · branch "+model.settings.branch,
-    ""
-  );
+// ---------------------------------------------------------------------------
+// Graph playback: replays the currently visible network's transactions in chronological order,
+// starting from just the seed node and adding each edge/node as its earliest underlying
+// transaction "happens". Purely a view over data already fetched (allTraceRows/currentNetworkModel);
+// nothing is refetched, and currentNetworkModel/graphPositions are never touched by a frame, so every
+// other panel (KPIs, patterns, exposure, the report...) keeps reading the real, full graph throughout.
+let playback=null;   // {timeline,index,playing,speedMs,timer,model,payload}
+
+// One entry per (transaction row, counterparty) that maps to an edge actually drawn in `model`,
+// i.e. exactly the edges/nodes paintGraphFrame would show for the FULL model -- an edge whose only
+// transactions are pending/undated, or that a lower node-cap/branch setting pruned away, is simply
+// never revealed mid-playback and appears (with everything else) once the playback reaches its end.
+function buildPlaybackTimeline(model,payload){
+  const edgeKeys=new Set(model.edges.map(edge=>edge.fromKey+"|"+edge.toKey));
+  const events=[];
+  for(const row of allTraceRows(true)){
+    const direction=String(row.direction||"").toUpperCase();
+    if(direction!=="IN"&&direction!=="OUT")continue;
+    const time=Date.parse(row.time||"");
+    if(!Number.isFinite(time))continue;
+    const sourceKey=traceKey(row._trace_source,payload.chain);
+    const counterparties=[...new Set((row.counterparties||[]).filter(Boolean))];
+    for(const counterparty of counterparties){
+      const cpKey=traceKey(counterparty,payload.chain);
+      if(cpKey===sourceKey)continue;
+      const fromKey=direction==="IN"?cpKey:sourceKey;
+      const toKey=direction==="IN"?sourceKey:cpKey;
+      const key=fromKey+"|"+toKey;
+      if(!edgeKeys.has(key))continue;
+      events.push({time,key,fromKey,toKey,txId:String(row.id||""),asset:String(row.asset||""),amount:row.amount,counterparty});
+    }
+  }
+  events.sort((a,b)=>a.time-b.time);
+  return events;
+}
+
+// A filtered copy of `model`: only the seed, plus nodes/edges reached by the first `count` events.
+function playbackFrameModel(model,timeline,count){
+  const revealedEdgeKeys=new Set();
+  const revealedNodeKeys=new Set([model.rootKey]);
+  for(let i=0;i<count&&i<timeline.length;i++){
+    const event=timeline[i];
+    revealedEdgeKeys.add(event.key);
+    revealedNodeKeys.add(event.fromKey);
+    revealedNodeKeys.add(event.toKey);
+  }
+  const atEnd=count>=timeline.length;
+  return {
+    ...model,
+    nodes:atEnd?model.nodes:model.nodes.filter(node=>revealedNodeKeys.has(node.key)),
+    edges:atEnd?model.edges:model.edges.filter(edge=>revealedEdgeKeys.has(edge.fromKey+"|"+edge.toKey))
+  };
+}
+
+function updatePlaybackControls(){
+  const toggle=document.getElementById("playbackToggle");
+  const stop=document.getElementById("playbackStop");
+  const speed=document.getElementById("playbackSpeed");
+  const scrubber=document.getElementById("playbackScrubber");
+  const status=document.getElementById("playbackStatus");
+  if(!toggle||!stop||!scrubber||!status)return;
+  const canPlay=Boolean(lastPayload&&lastPayload.kind==="address"&&currentNetworkModel&&currentNetworkModel.edges.length);
+  if(!playback){
+    toggle.textContent="▶ PLAYBACK";
+    toggle.disabled=!canPlay;
+    stop.disabled=true;
+    scrubber.disabled=true;
+    scrubber.max="0";
+    scrubber.value="0";
+    if(speed)speed.disabled=true;
+    status.textContent=canPlay?"":"Run an analysis with at least one dated transaction to replay the graph.";
+    return;
+  }
+  toggle.textContent=playback.playing?"⏸ PAUSE":"▶ RESUME";
+  toggle.disabled=false;
+  stop.disabled=false;
+  scrubber.disabled=false;
+  scrubber.max=String(playback.timeline.length);
+  scrubber.value=String(playback.index);
+  if(speed)speed.disabled=false;
+  const total=playback.timeline.length;
+  if(playback.index>=total){
+    status.textContent="Playback complete · "+total+" transaction(s) replayed.";
+  }else{
+    const event=playback.timeline[playback.index];
+    status.textContent="Transaction "+(playback.index+1)+"/"+total+" · "+fmtTime(new Date(event.time).toISOString())+
+      " · "+short(event.txId,8)+" · "+(event.asset||"")+" "+fmtNumber(event.amount);
+  }
+}
+
+function renderPlaybackFrame(){
+  if(!playback)return;
+  paintGraphFrame(playback.payload,playbackFrameModel(playback.model,playback.timeline,playback.index));
+  updatePlaybackControls();
+}
+
+function schedulePlaybackTick(){
+  if(!playback||!playback.playing)return;
+  clearTimeout(playback.timer);
+  playback.timer=setTimeout(()=>{
+    if(!playback)return;
+    if(playback.index>=playback.timeline.length){pausePlayback();return;}
+    playback.index+=1;
+    renderPlaybackFrame();
+    schedulePlaybackTick();
+  },playback.speedMs);
+}
+
+function startPlayback(){
+  if(!lastPayload||lastPayload.kind!=="address"||!currentNetworkModel){
+    setStatus("Run an address analysis first.","warning");
+    return;
+  }
+  if(playback){togglePlayback();return;}   // already running: the toggle button means pause/resume
+  const timeline=buildPlaybackTimeline(currentNetworkModel,lastPayload);
+  if(!timeline.length){
+    setTraceStatus("No dated transaction in the current view can be replayed (all pending, or filtered out).","error");
+    return;
+  }
+  const speedMs=Number(document.getElementById("playbackSpeed")?.value)||600;
+  playback={timeline,index:0,playing:true,speedMs,timer:null,model:currentNetworkModel,payload:lastPayload};
+  renderPlaybackFrame();
+  schedulePlaybackTick();
+}
+
+function pausePlayback(){
+  if(!playback)return;
+  clearTimeout(playback.timer);
+  playback.playing=false;
+  updatePlaybackControls();
+}
+
+function resumePlayback(){
+  if(!playback||playback.playing)return;
+  playback.playing=true;
+  schedulePlaybackTick();
+  updatePlaybackControls();
+}
+
+function togglePlayback(){
+  if(!playback){startPlayback();return;}
+  if(playback.playing)pausePlayback();else resumePlayback();
+}
+
+// Ends playback and repaints the full, current graph exactly as a normal render would -- used both
+// by the STOP button and, silently, whenever anything else re-renders the graph (a filter, AUTO
+// TRACE, an expansion, RESET LAYOUT, a new search) so playback can never go on looking at a graph
+// that has since changed underneath it.
+function stopPlaybackSilently(){
+  if(!playback)return;
+  clearTimeout(playback.timer);
+  playback=null;
+}
+
+function stopPlayback(){
+  if(!playback){updatePlaybackControls();return;}
+  stopPlaybackSilently();
+  if(lastPayload&&currentNetworkModel)paintGraphFrame(lastPayload,currentNetworkModel);
+  updatePlaybackControls();
+}
+
+function scrubPlayback(index){
+  if(!playback)return;
+  pausePlayback();
+  playback.index=Math.max(0,Math.min(playback.timeline.length,Number(index)||0));
+  renderPlaybackFrame();
 }
 
 function renderFilteredViews(){
@@ -2282,6 +2467,12 @@ function bind(){
     graphPositions=new Map();
     renderFilteredViews();
   });
+  document.getElementById("playbackToggle")?.addEventListener("click",togglePlayback);
+  document.getElementById("playbackStop")?.addEventListener("click",stopPlayback);
+  document.getElementById("playbackSpeed")?.addEventListener("change",event=>{
+    if(playback)playback.speedMs=Number(event.target.value)||600;
+  });
+  document.getElementById("playbackScrubber")?.addEventListener("input",event=>scrubPlayback(event.target.value));
   document.getElementById("cryptoClearTrace")?.addEventListener("click",clearTrace);
   document.getElementById("cryptoAutoTrace")?.addEventListener("click",autoTrace);
   document.getElementById("traceMaxDepth")?.addEventListener("change",()=>renderFilteredViews());
@@ -2312,7 +2503,11 @@ function bind(){
   document.getElementById("caseCrosschainToggle")?.addEventListener("click",()=>{
     const form=document.getElementById("crosschainForm");
     form.hidden=!form.hidden;
-    if(!form.hidden&&lastPayload)document.getElementById("crosschainFromAddress").value=lastPayload.query||"";
+    if(!form.hidden&&lastPayload){
+      document.getElementById("crosschainFromAddress").value=lastPayload.query||"";
+      const fromChain=document.getElementById("crosschainFromChain");
+      if(fromChain&&lastPayload.chain)fromChain.value=lastPayload.chain;
+    }
   });
   document.getElementById("offchainSaveButton")?.addEventListener("click",saveOffchainNode);
   document.getElementById("crosschainSaveButton")?.addEventListener("click",saveCrosschainLink);
