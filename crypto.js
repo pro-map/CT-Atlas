@@ -21,6 +21,11 @@ let activeCaseId="";
 let lastFoundPath=null;
 let workspaceSaveTimer=null;
 let reportUnfiltered=false;   // set only while the full report collects its data: every filter reads as "off"
+// The report must not drop a labelled or watched wallet just because the on-screen "max nodes" display
+// setting (20-80, a cosmetic cap for a readable picture) is lower: while collecting, the trace graph is
+// built with effectively no node cap (the branch/depth limits from #traceBranch and #traceMaxDepth still
+// apply, exactly as on screen -- only the display-density cap is lifted).
+const REPORT_GRAPH_NODE_CAP=100000;
 
 const SERVICE_REGISTRY={
   ethereum:{
@@ -251,7 +256,7 @@ function rowStatus(row){
 }
 
 function readFilters(){
-  if(reportUnfiltered)return {direction:"all",asset:"all",type:"all",status:"all",minAmount:null,maxAmount:null,from:"",to:"",text:"",graphMinLinks:1,graphNodes:40};
+  if(reportUnfiltered)return {direction:"all",asset:"all",type:"all",status:"all",minAmount:null,maxAmount:null,from:"",to:"",text:"",graphMinLinks:1,graphNodes:REPORT_GRAPH_NODE_CAP};
   const numberValue=id=>{
     const raw=String(document.getElementById(id)?.value||"").trim();
     if(!raw)return null;
@@ -1021,7 +1026,7 @@ function caseContextForReport(){
   };
 }
 
-function collectReportModel(graphImage){
+function collectReportModel(){
   const payload=lastPayload;
   const isTransaction=payload.kind==="transaction";
   const base={
@@ -1054,11 +1059,14 @@ function collectReportModel(graphImage){
     patterns:detectPatterns(),
     exposure:exposureFindings().map(item=>({...item,name:item.name||nodeLabel(item.address)})),
     crossChain:crossChainFindings(),
-    labels:visibleRelevantLabels()
+    labels:visibleRelevantLabels(),
+    // Captured here, not from `displayed`: this is the same graph exposure/labels/patterns were just computed
+    // from (no on-screen node-count cap), so a watched wallet reachable only past that cap is still found.
+    fullModel:currentNetworkModel
   }));
 
   const seen=new Set(),watchlist=[];
-  for(const address of [payload.query,...displayed.nodes.map(node=>node.id)]){
+  for(const address of [payload.query,...derived.fullModel.nodes.map(node=>node.id)]){
     for(const item of watchesForAddress(address,payload.chain)){
       if(seen.has(item.id))continue;
       seen.add(item.id);
@@ -1083,7 +1091,7 @@ function collectReportModel(graphImage){
     crossChain:derived.crossChain,
     watchlist,alerts,
     graph:{
-      image:graphImage||"",
+      image:"",
       statusLine:displayed.nodes.length+" visible node(s) · "+tracePayloads.size+" analysed wallet(s) · visible depth H"+displayed.maxVisibleDepth+" · max depth H"+displayed.settings.maxDepth+" · branch "+displayed.settings.branch,
       nodes:displayed.nodes.map(node=>({address:node.id,label:nodeLabel(node.id),depth:node.depth,relation:node.relation,total:node.total,incoming:node.incoming,outgoing:node.outgoing,assets:node.assets})),
       edges:displayed.edges.slice().sort((a,b)=>b.count-a.count).map(edge=>({from:edge.from,to:edge.to,count:edge.count,assets:edge.assets,hop:edge.hop}))
@@ -1107,6 +1115,11 @@ function collectReportModel(graphImage){
 }
 
 // The graph as an image: the page's own SVG (its layout, hop rings, colours), made standalone so it renders outside crypto.css.
+// Call renderGraph(lastPayload) (a synchronous repaint from the current, on-screen filters/case/trace state -- it
+// does not touch reportUnfiltered or any data the rest of the report reads) right before this, so the image matches
+// what collectReportModel() just read: otherwise a case switched or a wallet expanded since the last paint, with
+// no filter/trace change since, would leave the SVG showing a different graph (or another case's off-chain nodes)
+// than the node/edge tables built from the freshly rebuilt currentNetworkModel.
 async function graphImageForReport(){
   const svg=document.getElementById("flowGraph");
   if(!svg||lastPayload?.kind!=="address"||!window.CTAtlasCryptoReport?.standaloneGraphSvg)return "";
@@ -1138,8 +1151,13 @@ async function exportFullReport(){
   if(button)button.disabled=true;
   setStatus("Building the full report…","");
   try{
-    const image=await graphImageForReport();
-    const report=window.CTAtlasCryptoReport.build(collectReportModel(image));
+    // Fresh graph paint, then the data model, then the image -- all synchronous up to this point (no
+    // intervening await), so the node/edge tables and the graph image describe the same instant. Only
+    // then does the async image-loading and PDF assembly begin.
+    if(lastPayload.kind==="address")renderGraph(lastPayload);
+    const model=collectReportModel();
+    if(model.graph)model.graph.image=await graphImageForReport();
+    const report=window.CTAtlasCryptoReport.build(model);
     const result=await window.CTAtlasPdf.download(report);
     setStatus("Report downloaded: "+result.filename+" · "+result.pages+" page(s).","success");
   }catch(error){

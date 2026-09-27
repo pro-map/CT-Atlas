@@ -24,7 +24,10 @@ test("the button is bound, disabled while it works, and failures are reported in
   assert.match(body,/button\.disabled=true/);
   assert.match(body,/finally\{[\s\S]*button\.disabled=false/);
   assert.match(body,/catch\(error\)\{\s*setStatus\(error\?\.message\|\|"Report generation failed\.","error"\)/);
-  assert.match(body,/window\.CTAtlasCryptoReport\.build\(collectReportModel\(image\)\)/);
+  assert.match(body,/window\.CTAtlasCryptoReport\.build\(model\)/);
+  assert.match(body,/const model=collectReportModel\(\);/);
+  assert.match(body,/if\(model\.graph\)model\.graph\.image=await graphImageForReport\(\);/);
+  assert.match(body,/if\(lastPayload\.kind==="address"\)renderGraph\(lastPayload\);/);
   assert.match(body,/window\.CTAtlasPdf\.download\(report\)/);
   assert.match(body,/Run an analysis first/);
 });
@@ -40,12 +43,16 @@ test("PRIVACY: assembling the report never sends anything anywhere",()=>{
 test("the report uses EVERY record: filters read as off only while it collects, and the screen is restored",()=>{
   assert.match(js,/let reportUnfiltered=false;/);
   const read_=js.slice(js.indexOf("function readFilters(){"),js.indexOf("function traceSettings(){"));
-  assert.match(read_,/if\(reportUnfiltered\)return \{direction:"all",asset:"all",type:"all",status:"all",minAmount:null,maxAmount:null,from:"",to:"",text:"",graphMinLinks:1,graphNodes:40\};/);
+  assert.match(read_,/if\(reportUnfiltered\)return \{direction:"all",asset:"all",type:"all",status:"all",minAmount:null,maxAmount:null,from:"",to:"",text:"",graphMinLinks:1,graphNodes:REPORT_GRAPH_NODE_CAP\};/);
+  assert.match(js,/const REPORT_GRAPH_NODE_CAP=\d{4,};/,"the report must not cap graph nodes to the cosmetic on-screen display limit (20-80), or a labelled/watched wallet beyond it is wrongly reported as absent");
   const wrapper=js.slice(js.indexOf("function withoutTransactionFilters(fn){"),js.indexOf("function flattenField("));
   assert.match(wrapper,/const previousFlag=reportUnfiltered,previousModel=currentNetworkModel;/);
   assert.match(wrapper,/reportUnfiltered=true;[\s\S]*currentNetworkModel=buildNetworkModel\(lastPayload\);[\s\S]*finally\{\s*reportUnfiltered=previousFlag;\s*currentNetworkModel=previousModel;/,"restored even if collecting throws");
   const collect=js.slice(js.indexOf("function collectReportModel("),js.indexOf("async function graphImageForReport"));
   assert.match(collect,/allTraceRows\(false\)/);
+  assert.match(collect,/fullModel:currentNetworkModel/,"exposure/labels/patterns and the watchlist must share the same uncapped model");
+  assert.match(collect,/derived\.fullModel\.nodes\.map\(node=>node\.id\)/,"watchlist must not be scoped to the on-screen (possibly capped) graph");
+  assert.ok(!collect.includes("displayed.nodes.map(node=>node.id)"),"watchlist must not use the screen-capped node list");
   assert.match(collect,/withoutTransactionFilters\(\(\)=>\(\{[\s\S]*detectPatterns\(\)[\s\S]*exposureFindings\(\)[\s\S]*crossChainFindings\(\)[\s\S]*visibleRelevantLabels\(\)/);
   assert.match(collect,/activeFilterLabels\(\)/,"the filters that were on screen are stated in the report");
   assert.match(collect,/kind:isTransaction\?"transaction":"address"/);

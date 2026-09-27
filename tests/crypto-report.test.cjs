@@ -93,11 +93,14 @@ test("a transaction lookup gets its own, shorter report",()=>{
   assert.ok(!/TRANSACTION RECORDS|FLOW GRAPH/.test(all));
 });
 
-test("the summary states what was filtered on screen and that the report ignores those filters",()=>{
+test("the summary states what was filtered on screen and that the report ignores those filters, and separately discloses the graph's own display settings",()=>{
   const all=textOf(R.build(fixture()).blocks);
-  assert.match(all,/IN · MIN 0\.5 — every section except the graph uses ALL records regardless of these filters/);
+  assert.match(all,/Transaction filters active on screen\nIN · MIN 0\.5 — every section of this report \(including the graph's node and flow tables\) uses ALL records regardless of these filters/);
+  assert.match(all,/Graph display settings[^\n]*\n3 visible node\(s\) · 2 analysed wallet\(s\)/);
   const none=textOf(R.build(fixture({filters:{active:[]}})).blocks);
-  assert.match(none,/Filters active on screen\nnone/);
+  assert.match(none,/Transaction filters active on screen\nnone — this report already uses all records/);
+  const txReport=textOf(R.build({generatedAt:"2026-09-26T14:05:33.000Z",subject:{kind:"transaction",chain:"tron",chainName:"TRON",query:HASH(7),provider:"TronGrid"},counts:{},filters:{active:[]}}).blocks);
+  assert.ok(!txReport.includes("Graph display settings"),"a transaction lookup has no graph, so no graph-settings row");
 });
 
 // ---------------------------------------------------------------- the data itself
@@ -109,12 +112,12 @@ test("every transaction record is listed with its full hash and ALL its counterp
   const first=table.rows[0];
   assert.ok(first.detail.includes("TX "+HASH(1)));
   assert.ok(first.detail.includes(CP1)&&first.detail.includes(CP2),"both counterparties, never truncated or cut to a first character");
-  assert.match(first.detail,/From: /);
+  assert.match(first.detail,/Counterparty address\(es\): /,"neutral wording: a Bitcoin row can carry several input or output addresses at once, not a single sender/recipient");
   assert.ok(!first.detail.includes("Source wallet"),"H0 records do not repeat the seed on every line");
   const second=table.rows[1];
   assert.match(second.detail,/Token: Tether USD · contract 0xdac17f958d2ee523a2206206994597c13d831ec7/);
   assert.match(second.detail,/Method: transfer/);
-  assert.match(second.detail,/To: /);
+  assert.match(second.detail,/Counterparty address\(es\): /);
   assert.ok(second.detail.includes("Source wallet (H1): "+CP1));
   const third=table.rows[2];
   assert.equal(third.time,"Pending / unknown");
@@ -141,6 +144,32 @@ test("a very long record list is capped, and the report says so",()=>{
   assert.match(textOf(report.blocks),new RegExp("first "+R.LIMITS.transactions+" of "+(R.LIMITS.transactions+25)+" records"));
 });
 
+test("silently-truncated lists (patterns, touchpoints, counterparties) get a 'first N of M' notice, same as transactions",()=>{
+  const patterns=Array.from({length:R.LIMITS.patterns+3},(_,i)=>({name:"PATTERN "+i,severity:"low",metric:"m",detail:"d"}));
+  const crossChain=Array.from({length:R.LIMITS.crosschain+4},(_,i)=>({service:{category:"DEX",name:"S"+i},address:CP1,tx_id:HASH(i),time:"2026-09-20T00:00:00.000Z",source_wallet:SEED}));
+  const counterparties=Array.from({length:R.LIMITS.counterparties+5},(_,i)=>({address:CP1+i,label:"",incoming:1,outgoing:0,total:1,assets:["BTC"]}));
+  const report=R.build(fixture({patterns,crossChain,counterparties}));
+  const all=textOf(report.blocks);
+  assert.match(all,new RegExp("first "+R.LIMITS.patterns+" of "+(R.LIMITS.patterns+3)+" pattern\\(s\\)"));
+  assert.match(all,new RegExp("first "+R.LIMITS.crosschain+" of "+(R.LIMITS.crosschain+4)+" touchpoint\\(s\\)"));
+  assert.match(all,new RegExp("first "+R.LIMITS.counterparties+" of "+(R.LIMITS.counterparties+5)+" counterpart"));
+  // and no false notice when nothing was cut
+  const short=textOf(R.build(fixture()).blocks);
+  assert.ok(!/pattern\(s\) found; the report is capped/.test(short));
+  assert.ok(!/touchpoint\(s\) found; the report is capped/.test(short));
+});
+
+test("the seed's own row in the graph node table does not show a confusing 0/0/0, and the table explains what Records/In/Out mean",()=>{
+  const report=R.build(fixture());
+  const table=report.blocks.find(b=>b.type==="table"&&b.columns.some(c=>c.key==="in")&&b.columns.some(c=>c.key==="records")&&b.columns.length===6);
+  const seedRow=table.rows.find(row=>row.hop==="H0");
+  assert.deepEqual([seedRow.records,seedRow.in,seedRow.out],["—","—","—"]);
+  assert.match(seedRow.detail,/own record count is in the summary/);
+  const other=table.rows.find(row=>row.hop!=="H0");
+  assert.notEqual(other.records,"—");
+  assert.match(textOf(report.blocks),/Records \/ In \/ Out count each node's own linked transactions with other visible nodes/);
+});
+
 test("no table has a column called 'detail' (that name is the row's full-width line)",()=>{
   const report=R.build(fixture());
   for(const table of report.blocks.filter(b=>b.type==="table"))assert.ok(!table.columns.some(c=>c.key==="detail"),table.caption||"table");
@@ -164,14 +193,30 @@ test("empty analyses never crash and say plainly that nothing was found (scoped 
 // ---------------------------------------------------------------- wording
 
 test("NOT SCREENED is never presented as clean",()=>{
-  const report=R.build(fixture({sanctions:{badge:{text:"NOT SCREENED"},note:"",hits:[],noMatchText:"",scope:"",
+  const report=R.build(fixture({sanctions:{unscreened:true,badge:{text:"NOT SCREENED"},note:"",hits:[],noMatchText:"",scope:"",
     warnings:["Sanctions screening was NOT performed for this analysis (list unavailable). The absence of a match below must not be read as a clean result."]}}));
   const all=textOf(report.blocks);
   assert.match(all,/NOT SCREENED/);
   assert.match(all,/must not be read as a clean result/);
-  assert.ok(!/NO MATCH|No match among/.test(all.split("SANCTIONS-LIST SCREENING")[1].split("KEY OBSERVATIONS")[0]),"no 'no match' result in the sanctions section");
+  const section=all.split("SANCTIONS-LIST SCREENING")[1].split("KEY OBSERVATIONS")[0];
+  assert.ok(!/\bNO MATCH\b|No match among/.test(section),"no 'no match' result in the sanctions section");
+  assert.match(section,/see the coverage warning\(s\) below before treating this as clean/,"the bare badge line itself also refuses to look clean");
+  assert.match(all,/Sanctions data: not screened for this analysis\./,"METHOD & LIMITATIONS must not repeat the (unscreened) card note as if it were the list actually used");
   const noSx=R.build(fixture({sanctions:null}));
   assert.match(textOf(noSx.blocks),/NOT performed/);
+  assert.match(textOf(noSx.blocks),/Sanctions data: not screened for this analysis\./);
+});
+
+test("a plain 'no match' with a partial or stale coverage warning is qualified, not stated as a clean bill",()=>{
+  const report=R.build(fixture({sanctions:{unscreened:false,badge:{text:"NO MATCH"},note:"list",hits:[],noMatchText:"",scope:"",
+    warnings:["1 of 3 analysed wallet(s) could not be screened; results below are partial."]}}));
+  const section=textOf(report.blocks).split("SANCTIONS-LIST SCREENING")[1].split("KEY OBSERVATIONS")[0];
+  assert.match(section,/Result: NO MATCH — see the coverage warning\(s\) below before treating this as clean\./);
+  assert.match(section,/could not be screened; results below are partial/);
+  const clean=R.build(fixture({sanctions:{unscreened:false,badge:{text:"NO MATCH"},note:"list",hits:[],noMatchText:"No match among the analysed wallet(s) and 9 screened counterparties.",scope:"",warnings:[]}}));
+  const cleanSection=textOf(clean.blocks).split("SANCTIONS-LIST SCREENING")[1].split("KEY OBSERVATIONS")[0];
+  assert.match(cleanSection,/Result: NO MATCH\./);
+  assert.ok(!/coverage warning/.test(cleanSection));
 });
 
 test("a sanctions match is described as an address-string match, never as ownership or a determination",()=>{
@@ -220,6 +265,33 @@ test("hostile or oversized input is contained",()=>{
   assert.ok(all.length<400000);
   const filename=R.reportFilename(fixture({subject:{...fixture().subject,query:"../../etc/passwd é\n",chain:"bit coin"}}));
   assert.match(filename,/^[A-Za-z0-9-]+$/);
+});
+
+// ---------------------------------------------------------------- second-review fixes
+
+test("SANCTIONS-LIST SCREENING styling still uses stroke-opacity for hop2/hop3/off-chain/cross-chain edges, matching crypto.css exactly (a plain 'opacity' also fades the arrowhead, unlike on screen)",()=>{
+  const css=read("crypto.css");
+  for(const rule of [
+    /\.graph-edge\.hop2\{stroke-opacity:\.72\}/,
+    /\.graph-edge\.hop3\{stroke-opacity:\.62\}/,
+    /stroke-opacity:\.58;/,   // .offchain-link
+    /stroke-opacity:\.82;/    // .crosschain-link
+  ])assert.match(css,rule,"crypto.css no longer has this exact rule: update GRAPH_CSS to match");
+  for(const rule of [".graph-edge.hop2{stroke-opacity:.72}",".graph-edge.hop3{stroke-opacity:.62}","stroke-opacity:.58","stroke-opacity:.82"]){
+    assert.ok(R.GRAPH_CSS.includes(rule),rule+" must be stroke-opacity, not opacity, to match the screen exactly");
+  }
+  assert.ok(!/\.graph-edge\.(hop2|hop3|offchain-link|crosschain-link)\{[^}]*[^-]opacity:/.test(R.GRAPH_CSS),"no plain 'opacity' on these edge classes");
+});
+
+test("a control character anywhere in the live graph markup (a hostile or corrupted label) is stripped before the SVG is serialised, so the image is never silently dropped for that reason",()=>{
+  const poisoned=SVG.replace("bc1q…","bc1q\u0007\u000b\u0000hostile");
+  const out=R.standaloneGraphSvg(poisoned);
+  assert.ok(out,"still produces an SVG");
+  assert.ok(!/[\x00-\x08\x0B\x0C\x0E-\x1F]/.test(out),"no C0 control character reaches the output");
+  assert.ok(out.includes("bc1qhostile"));
+  const {spawnSync}=require("node:child_process");
+  const check=spawnSync("python3",["-c","import sys,xml.dom.minidom as m;m.parseString(sys.stdin.read().encode('utf-8'));print('ok')"],{input:out,encoding:"utf8"});
+  if(!(check.error||(check.status!==0&&/No module|not found/i.test(check.stderr||""))))assert.equal(check.status,0,check.stderr);
 });
 
 // ---------------------------------------------------------------- the graph image

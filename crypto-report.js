@@ -86,9 +86,12 @@ function summarySection(model){
   }
   rows.push(["Sanctions-list screening",badgeText(model.sanctions?.badge)||"—"]);
   if(model.filters?.active?.length){
-    rows.push(["Filters active on screen",model.filters.active.join(" · ")+" — every section except the graph uses ALL records regardless of these filters"]);
+    rows.push(["Transaction filters active on screen",model.filters.active.join(" · ")+" — every section of this report (including the graph's node and flow tables) uses ALL records regardless of these filters"]);
   }else{
-    rows.push(["Filters active on screen","none"]);
+    rows.push(["Transaction filters active on screen","none — this report already uses all records"]);
+  }
+  if(s.kind!=="transaction"&&model.graph?.statusLine){
+    rows.push(["Graph display settings (affect only the graph image and its node/flow tables below)",text(model.graph.statusLine)]);
   }
   return [heading("SUMMARY"),keyValueTable(rows)];
 }
@@ -101,9 +104,11 @@ function sanctionsSection(model){
     return blocks;
   }
   const hits=list(sx.hits);
-  blocks.push(hits.length?alert(badgeText(sx.badge)+" — listed address(es) found among the analysed wallet(s) and their counterparties in the returned sample."):body("Result: "+(badgeText(sx.badge)||"—")+"."));
+  const warnings=list(sx.warnings);
+  const qualifier=!hits.length&&warnings.length?" — see the coverage warning(s) below before treating this as clean.":".";
+  blocks.push(hits.length?alert(badgeText(sx.badge)+" — listed address(es) found among the analysed wallet(s) and their counterparties in the returned sample."):body("Result: "+(badgeText(sx.badge)||"—")+qualifier));
   if(sx.note)blocks.push(small(text(sx.note)));
-  for(const warning of list(sx.warnings))blocks.push(alert(text(warning)));
+  for(const warning of warnings)blocks.push(alert(text(warning)));
   for(const hit of hits){
     blocks.push(sub((hit.terrorism?"TERRORISM PROGRAM":"SANCTIONS LIST")+" · "+text(hit.roleLabel||hit.role)+" · H"+(num(hit.depth)??0)+(hit.currency?" · "+text(hit.currency):"")));
     blocks.push(mono(text(hit.address)));
@@ -112,6 +117,7 @@ function sanctionsSection(model){
   }
   if(!hits.length&&sx.noMatchText)blocks.push(body(text(sx.noMatchText)));
   blocks.push(small(text(sx.scope)||SANCTIONS_NOTE));
+  if(hits.some(hit=>hit.context))blocks.push(small("\"Last …\" dates in a hit's context above are shown in the analyst's own browser time zone; every other time in this report is UTC."));
   return blocks;
 }
 
@@ -125,7 +131,8 @@ function observationsSection(model){
 }
 
 function patternsSection(model){
-  const patterns=list(model.patterns).slice(0,LIMITS.patterns);
+  const all=list(model.patterns);
+  const patterns=all.slice(0,LIMITS.patterns);
   const blocks=[heading("BEHAVIOURAL PATTERNS"),small("Heuristics describe observed transaction behaviour — not criminal intent. Computed on every record of every analysed wallet.")];
   if(!patterns.length){
     blocks.push(noneRecorded("No configured behavioural pattern crossed its heuristic threshold in the analysed sample."));
@@ -136,6 +143,7 @@ function patternsSection(model){
       sev:{text:text(p.severity).toUpperCase(),bold:true,color:p.severity==="high"?"#8a1f2c":p.severity==="medium"?"#8a5a10":"#18252d"},
       name:text(p.name),metric:text(p.metric),note:text(p.detail)
     }))});
+  if(all.length>patterns.length)blocks.push(alert("This table lists the first "+patterns.length+" of "+all.length+" pattern(s) found; the report is capped to stay readable."));
   return blocks;
 }
 
@@ -184,12 +192,14 @@ function watchSection(model){
 }
 
 function crossChainSection(model){
-  const items=list(model.crossChain).slice(0,LIMITS.crosschain);
+  const all=list(model.crossChain);
+  const items=all.slice(0,LIMITS.crosschain);
   const blocks=[heading("SERVICE / BRIDGE / DEX TOUCHPOINTS"),small("Known labelled services observed in the analysed sample. A touchpoint shows that a record involved the service; it does not show where value ended up.")];
   if(!items.length){blocks.push(noneRecorded("No known labelled bridge, DEX, mixer or service touchpoint was detected in the analysed sample. Absence here is not proof of absence."));return blocks;}
   blocks.push({type:"table",fontSize:14,columns:[{key:"category",label:"Category",width:2},{key:"name",label:"Service",width:4},{key:"source",label:"Basis",width:3},{key:"time",label:"Time (UTC)",width:3}],
     rows:items.map(item=>({category:text(item.service?.category),name:text(item.service?.name)||"—",source:text(item.service?.source)||"Known service registry",time:item.time?fmtUtc(item.time):"—",
       detail:[item.address?"Address: "+text(item.address):"",item.source_wallet?"Source wallet: "+text(item.source_wallet):"",item.tx_id?"TX "+text(item.tx_id):"",item.destination_chain?"Destination chain: "+text(item.destination_chain):""].filter(Boolean).join("\n")}))});
+  if(all.length>items.length)blocks.push(alert("This table lists the first "+items.length+" of "+all.length+" touchpoint(s) found; the report is capped to stay readable."));
   return blocks;
 }
 
@@ -204,8 +214,12 @@ function graphSection(model){
   if(nodes.length){
     blocks.push({type:"table",caption:"Nodes of the graph ("+nodes.length+(list(g.nodes).length>nodes.length?" of "+list(g.nodes).length:"")+")",fontSize:14,
       columns:[{key:"hop",label:"Hop",width:1},{key:"role",label:"Direction",width:2.4},{key:"records",label:"Records",width:1.6,align:"right"},{key:"in",label:"In",width:1,align:"right"},{key:"out",label:"Out",width:1,align:"right"},{key:"assets",label:"Assets",width:3}],
-      rows:nodes.map(node=>({hop:"H"+(num(node.depth)??0),role:node.depth===0?"seed":text(node.relation),records:String(num(node.total)??"—"),in:String(num(node.incoming)??"—"),out:String(num(node.outgoing)??"—"),
-        assets:list(node.assets).join(", ")||"—",detail:text(node.address)+(node.label?"\nLabel: "+text(node.label):"")}))});
+      rows:nodes.map(node=>node.depth===0
+        ?{hop:"H0",role:"seed",records:"—",in:"—",out:"—",assets:list(node.assets).join(", ")||"—",detail:text(node.address)+(node.label?"\nLabel: "+text(node.label):"")+"\nThe seed's own record count is in the summary and in Transaction Records below."}
+        :{hop:"H"+(num(node.depth)??0),role:text(node.relation),records:String(num(node.total)??"—"),in:String(num(node.incoming)??"—"),out:String(num(node.outgoing)??"—"),
+          assets:list(node.assets).join(", ")||"—",detail:text(node.address)+(node.label?"\nLabel: "+text(node.label):"")}
+      )});
+    blocks.push(small("Records / In / Out count each node's own linked transactions with other visible nodes; they describe that node's position in the graph, not the seed's total activity."));
   }
   const edges=list(g.edges);
   if(edges.length){
@@ -218,12 +232,15 @@ function graphSection(model){
 }
 
 function counterpartiesSection(model){
-  const rows=list(model.counterparties).slice(0,LIMITS.counterparties);
+  const all=list(model.counterparties);
+  const rows=all.slice(0,LIMITS.counterparties);
   if(!rows.length)return [];
-  return [heading("SEED COUNTERPARTIES"),
+  const blocks=[heading("SEED COUNTERPARTIES"),
     {type:"table",caption:"Direct counterparties of the seed in the returned sample, most linked records first",fontSize:14,
       columns:[{key:"label",label:"Label",width:3},{key:"in",label:"In",width:1,align:"right"},{key:"out",label:"Out",width:1,align:"right"},{key:"total",label:"Records",width:1.6,align:"right"},{key:"assets",label:"Assets",width:3}],
       rows:rows.map(row=>({label:text(row.label)||"—",in:String(num(row.incoming)??0),out:String(num(row.outgoing)??0),total:String(num(row.total)??0),assets:list(row.assets).join(", ")||"—",detail:text(row.address)}))}];
+  if(all.length>rows.length)blocks.push(alert("This table lists the first "+rows.length+" of "+all.length+" counterpart(y/ies), by linked record count; the report is capped to stay readable."));
+  return blocks;
 }
 
 function walletsSection(model){
@@ -243,7 +260,7 @@ function transactionRows(model){
 function transactionsSection(model){
   const {rows,shown}=transactionRows(model);
   const blocks=[heading("TRANSACTION RECORDS")];
-  blocks.push(small("All records returned for the analysed wallet(s), newest first, without on-screen filters. Times are UTC. Amounts are in asset units. \"Source wallet\" is the analysed wallet the record belongs to; the same transaction seen from two analysed wallets appears once for each, so amounts must not be summed across rows."));
+  blocks.push(small("All records returned for the analysed wallet(s), newest first, without on-screen filters. Times are UTC. Amounts are in asset units. \"Source wallet\" is the analysed wallet the record belongs to; the same transaction seen from two analysed wallets appears once for each, so amounts must not be summed across rows. \"Counterparty address(es)\" lists every other address the provider attached to the record; for a Bitcoin transaction this can be several input or output addresses at once, not a single sender or recipient."));
   if(!shown.length){blocks.push(noneRecorded("No transaction records were returned for the analysed wallet(s)."));return blocks;}
   blocks.push({type:"table",fontSize:14,columns:[
       {key:"hop",label:"Wallet hop",width:1.7},{key:"time",label:"Time (UTC)",width:3.2},{key:"dir",label:"Dir",width:1.1},{key:"asset",label:"Asset",width:1.8},{key:"amount",label:"Amount",width:2.6,align:"right"},{key:"status",label:"Status",width:1.9}],
@@ -252,7 +269,7 @@ function transactionsSection(model){
       const lines=["TX "+text(row.id)];
       if(row.tokenName||row.tokenContract)lines.push("Token: "+(text(row.tokenName)||"—")+(row.tokenContract?" · contract "+text(row.tokenContract):""));
       if(row.functionName)lines.push("Method: "+text(row.functionName));
-      lines.push((row.direction==="IN"?"From: ":row.direction==="OUT"?"To: ":"Counterparties: ")+(cp.length?cp.join(", "):"—"));
+      lines.push("Counterparty address(es): "+(cp.length?cp.join(", "):"—"));
       if(num(row.depth)>0&&row.sourceWallet)lines.push("Source wallet (H"+(num(row.depth)??0)+"): "+text(row.sourceWallet));
       return {
         hop:"H"+(num(row.depth)??0),time:fmtUtc(row.time),
@@ -294,7 +311,8 @@ function caseSection(model){
 
 function methodSection(model){
   const blocks=[heading("METHOD & LIMITATIONS"),body(LIMITATIONS),small(DISCLAIMER)];
-  blocks.push(small("Data provider: "+(text(model.subject?.provider)||"—")+". Sanctions data: "+(text(model.sanctions?.note)||"list source not reported")+". This report was assembled locally in the analyst's browser from the analysis shown on screen."));
+  const sanctionsData=!model.sanctions||model.sanctions.unscreened?"not screened for this analysis":(text(model.sanctions.note)||"list source not reported");
+  blocks.push(small("Data provider: "+(text(model.subject?.provider)||"—")+". Sanctions data: "+sanctionsData+". This report was assembled locally in the analyst's browser from the analysis shown on screen."));
   return blocks;
 }
 
@@ -368,15 +386,19 @@ const GRAPH_CSS=[
   ".graph-hop-text{fill:#f4f8fa;font:900 7px Arial,sans-serif}",
   ".graph-edge{fill:none;stroke:#5d7f8c;stroke-opacity:.8;stroke-linecap:round}",
   ".graph-edge.in{stroke:#46d890}",".graph-edge.out{stroke:#ff8268}",
-  ".graph-edge.hop2{opacity:.72}",".graph-edge.hop3{opacity:.62}",
-  ".graph-edge.offchain-link{stroke:#9aaab3;stroke-width:1.5;stroke-dasharray:6 5;opacity:.58}",
-  ".graph-edge.crosschain-link{stroke:#c084df;stroke-width:2;stroke-dasharray:3 4;opacity:.82}",
+  ".graph-edge.hop2{stroke-opacity:.72}",".graph-edge.hop3{stroke-opacity:.62}",
+  ".graph-edge.offchain-link{stroke:#9aaab3;stroke-width:1.5;stroke-dasharray:6 5;stroke-opacity:.58}",
+  ".graph-edge.crosschain-link{stroke:#c084df;stroke-width:2;stroke-dasharray:3 4;stroke-opacity:.82}",
   ".graph-aux-node.offchain-node rect{fill:#20313d;stroke:#9aaab3;stroke-width:1.6;stroke-dasharray:5 3}",
   ".graph-aux-node.crosschain-node polygon{fill:#3b2b57;stroke:#c39beb;stroke-width:1.8}"
 ].join("");
 
 function standaloneGraphSvg(markup){
-  let svg=String(markup||"").trim();
+  // A label or note can contain arbitrary analyst text; XML 1.0 forbids most C0 control characters, and a single
+  // one anywhere in the markup would make the whole standalone document ill-formed, so the image silently fails
+  // to load. Stripped here (not just in text(), which only cleans the report's own text blocks) because this
+  // string is the page's live SVG markup, not a value that passed through this file's own formatting first.
+  let svg=String(markup||"").replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,"").trim();
   const open=svg.match(/^<svg\b([^>]*)>/i);
   if(!open||!/<\/svg>\s*$/i.test(svg))return "";
   let inner=svg.slice(open[0].length,svg.lastIndexOf("</svg>"));
