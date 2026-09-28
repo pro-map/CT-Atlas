@@ -166,11 +166,11 @@ function exposureSection(model){
 
 function labelsSection(model){
   const labels=list(model.labels).slice(0,LIMITS.labels);
-  const blocks=[heading("SOURCED LABELS"),small("Every sensitive attribution requires a source and a confidence level; a label records what the analyst attributed, not a verified fact.")];
-  if(!labels.length){blocks.push(noneRecorded("No analyst label applies to the seed or to the counterparties reached within the traced graph."));return blocks;}
-  blocks.push({type:"table",fontSize:14,columns:[{key:"name",label:"Label / entity",width:4},{key:"category",label:"Category",width:3},{key:"conf",label:"Confidence",width:2}],
-    rows:labels.map(label=>({name:text(label.name)||"—",category:text(label.category),conf:text(label.confidence)||"—",
-      detail:text(label.address)+"\nSource: "+(text(label.source_title)||text(label.source_type)||"Analyst source")+(label.source_url?" — "+text(label.source_url):"")+(label.notes?"\nNotes: "+text(label.notes):"")}))});
+  const blocks=[heading("SOURCED LABELS"),small("Labels preserve their source and confidence. Even an approved exchange label does not prove common ownership or control of connected wallets.")];
+  if(!labels.length){blocks.push(noneRecorded("No sourced label applies to the seed or to the counterparties reached within the traced graph."));return blocks;}
+  blocks.push({type:"table",fontSize:14,columns:[{key:"name",label:"Label / entity",width:4},{key:"category",label:"Category",width:2},{key:"role",label:"Wallet role",width:3},{key:"conf",label:"Confidence",width:2}],
+    rows:labels.map(label=>({name:text(label.name)||"—",category:text(label.category),role:text(label.wallet_role).replaceAll("_"," ")||"—",conf:text(label.confidence)||"—",
+      detail:text(label.address)+"\n"+(label.shared?"Shared CT Atlas registry · ":label.provider?text(label.provider)+" · ":"")+"Source: "+(text(label.source_title)||text(label.source_type)||"Analyst source")+(label.source_url?" — "+text(label.source_url):"")+(label.notes?"\nNotes: "+text(label.notes):"")}))});
   return blocks;
 }
 
