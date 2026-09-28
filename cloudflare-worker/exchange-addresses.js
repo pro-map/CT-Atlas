@@ -6,7 +6,7 @@ import {
   gateCall
 } from "./shared.js";
 
-const EXCHANGE_ADDRESS_VERSION = "crypto-exchange-addresses-v2";
+const EXCHANGE_ADDRESS_VERSION = "crypto-exchange-addresses-v3";
 const EVM_CHAIN_IDS = Object.freeze({ ethereum: "1", bsc: "56", polygon: "137", arbitrum: "42161", base: "8453" });
 const EVM_CHAINS = new Set(Object.keys(EVM_CHAIN_IDS));
 const CHAIN_SET = new Set(["bitcoin", "ethereum", "bsc", "polygon", "arbitrum", "base", "tron"]);
@@ -39,6 +39,63 @@ const OFFICIAL_SEED_LABELS = Object.freeze([
   source_url: "https://crypto.com/en/company-news/transparency-first",
   notes: "Explicitly published by Crypto.com as a cold wallet address. Historical disclosure from 11 Nov 2022; Crypto.com said this list represented only a portion of its reserves. Verify current control before relying on it."
 })));
+
+const BINANCE_SEED_LABELS = Object.freeze([
+  ...[
+    "34xp4vRoCGJym3xR7yCVPFHoCNxv4Twseo",
+    "3LYJfcfHPXYJreMsASk2jkn69LWEYKzexb",
+    "3M219KR5vEneNb47ewrPfWyb5jQ2DjxRP6",
+    "bc1qm34lsc65zpw79lxes69zkqmk6ee3ewf0j77s3h"
+  ].map(address => ({ chain: "bitcoin", address })),
+  ...[
+    "0xbe0eb53f46cd790cd13851d5eff43d12404d33e8",
+    "0xf977814e90da44bfa03b6295a0616a897441acec",
+    "0x5a52e96bacdabb82fd05763e25335261b270efcb",
+    "0x28c6c06298d514db089934071355e5743bf21d60",
+    "0x9696f59e4d72e237be84ffd425dcad154bf96976",
+    "0x21a31ee1afc51d94c2efccaa2092ad1028285549",
+    "0xdfd5293d8e347dfe59e90efd55b2956a1343963d",
+    "0x56eddb7aa87536c09ccc2793473599fd21a8b17f",
+    "0x4976a4a02f38326660d17bf34b431dc6e2eb2327",
+    "0xa344c7aDA83113B3B56941F6e85bf2Eb425949f3",
+    "0x47ac0Fb4F2D84898e4D9E7b4DaB3C24507a6D503"
+  ].map(address => ({ chain: "ethereum", address })),
+  ...[
+    "TV6MuMXfmLbBqPZvBHdwFsDnQeVfnmiuSi",
+    "TMuA6YqfCeX8EhbfYEg5y7S4DqzSJireY9",
+    "TWd4WrZ9wn84f5x1hZhL4DHvk738ns5jwb",
+    "TJDENsfBJs4RFETt1X1W8wMDc8M5XnJhCe",
+    "TAzsQ9Gx8eqFNFSKbeXrbi45CuVPHzA8wr",
+    "TQrY8tryqsYVCYS3MFbtffiPp2ccyn4STm",
+    "TNXoiAJ3dct8Fjg4M9fkLFh9S2v9TXc32G",
+    "TYASr5UV6HEcXatwdFQfmLVUqQQQMUxHLS"
+  ].map(address => ({ chain: "tron", address }))
+].map(entry => ({
+  ...entry,
+  name: "Binance",
+  wallet_role: "UNKNOWN",
+  confidence: "MEDIUM",
+  source_type: "Official exchange disclosure",
+  source_title: "Binance wallet address snapshot (10 Nov 2022)",
+  source_url: "https://www.binance.com/en-IN/blog/community/2895840147147652626",
+  notes: "Published in Binance's official 10 Nov 2022 wallet disclosure; snapshot 10 Nov 2022 00:00 UTC. The page states that this was not a complete data set. Role is not specified per address, and current control must be re-verified."
+})));
+
+const OKX_SEED_LABELS = Object.freeze([
+  { chain: "bitcoin", address: "3A1JRKqfGGxoq2qSHLv85u4zn935VR9ToL" },
+  { chain: "ethereum", address: "0xc5451b523d5fffe1351337a221688a62806ad91a" }
+].map(entry => ({
+  ...entry,
+  name: "OKX",
+  wallet_role: "PROOF_OF_RESERVES",
+  confidence: "MEDIUM",
+  source_type: "Official proof-of-reserves verification guide",
+  source_title: "OKX wallet reserve address verification examples (2022 snapshot)",
+  source_url: "https://www.okx.com/en-eu/help/how-to-verify-okx-ownership-and-balance-of-the-wallet-address",
+  notes: "Address appears as an OKX reserve-address example in the official verification guide. Historical example only, not the full current address list; verify ownership and snapshot before relying on it."
+})));
+
+const ALL_OFFICIAL_SEED_LABELS = Object.freeze([...OFFICIAL_SEED_LABELS, ...BINANCE_SEED_LABELS, ...OKX_SEED_LABELS]);
 
 function normalizeChain(value) {
   const chain = cleanText(value, 24).toLowerCase();
@@ -342,9 +399,9 @@ async function handleExchangeAddressLabels(request, env) {
 
   if (action === "seed") {
     if (!admin) return jsonResponse({ error: "Admin access required." }, 403, env);
-    const labels = OFFICIAL_SEED_LABELS.map(raw => sanitizeExchangeLabel(raw, { createdBy: username, reviewedBy: username }));
+    const labels = ALL_OFFICIAL_SEED_LABELS.map(raw => sanitizeExchangeLabel(raw, { createdBy: username, reviewedBy: username }));
     const response = await gateCall(env, "/crypto-exchange-labels-import", { labels, imported_by: username, skip_existing: true });
-    return jsonResponse({ ...(await response.json().catch(() => ({}))), seed: "crypto.com-2022", source_records: labels.length }, response.status, env);
+    return jsonResponse({ ...(await response.json().catch(() => ({}))), seed: "official-exchanges-2022", source_records: labels.length }, response.status, env);
   }
 
   return jsonResponse({ error: "Unsupported exchange label action." }, 400, env);
