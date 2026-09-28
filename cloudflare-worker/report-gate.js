@@ -858,6 +858,7 @@ export class ReportGate {
       const writes = {};
       const importedBy = cleanText(body.imported_by, 80);
       let importedCount = 0;
+      let skippedCount = 0;
       for (const label of Array.isArray(body.labels) ? body.labels.slice(0, 100) : []) {
         const addressKey = exchangeAddressKey(label?.chain, label?.address);
         if (!addressKey || label?.category !== "EXCHANGE" || !cleanText(label?.name, 120)) continue;
@@ -865,6 +866,10 @@ export class ReportGate {
         const sourceTitle = cleanText(label?.source_title, 240);
         const sourceType = cleanText(label?.source_type, 60);
         if (!sourceUrl && !sourceTitle && !sourceType) continue;
+        if (body.skip_existing === true && await this.state.storage.get(`crypto-exchange-label:${addressKey}`)) {
+          skippedCount++;
+          continue;
+        }
         writes[`crypto-exchange-label:${addressKey}`] = {
           ...label,
           address: addressKey.slice(addressKey.indexOf(":") + 1),
@@ -889,7 +894,7 @@ export class ReportGate {
         }
       }
       if (Object.keys(writes).length) await this.state.storage.put(writes);
-      return Response.json({ ok: true, imported: importedCount });
+      return Response.json({ ok: true, imported: importedCount, skipped: skippedCount });
     }
 
     if (url.pathname === "/crypto-exchange-proposals-migrate") {
