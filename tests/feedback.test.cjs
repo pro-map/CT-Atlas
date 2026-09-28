@@ -65,3 +65,37 @@ test('FEEDBACK_VERSION is exported',()=>{
  assert.equal(typeof h.FEEDBACK_VERSION,'string');
  assert.ok(h.FEEDBACK_VERSION.length>0);
 });
+
+test('buildEmail includes the selected workspace and its overall rating',()=>{
+ const {text,subject}=harness().buildEmail('group-p-2',{
+  kind:'evaluation',workspace:'crypto',rating:4
+ });
+ assert.match(subject,/Crypto Intelligence/);
+ assert.match(subject,/evaluation/);
+ assert.match(text,/Workspace: Crypto Intelligence/);
+ assert.match(text,/Overall rating: 4\/5/);
+ assert.match(text,/Feedback type: \(none\)/);
+});
+
+test('buildEmail formats a social workspace bug report',()=>{
+ const {text,subject}=harness().buildEmail('group-s-1',{
+  kind:'issue',workspace:'social',feedback_type:'bug',
+  description:'The social investigation returned no sources.'
+ });
+ assert.match(subject,/Social Media \(Beta\)/);
+ assert.match(subject,/bug report/);
+ assert.match(text,/Workspace: Social Media \(Beta\)/);
+ assert.match(text,/Feedback type: Bug report/);
+ assert.match(text,/The social investigation returned no sources\./);
+});
+
+test('buildEmail supports a rating and free-text comment in one submission',()=>{
+ const {text,subject}=harness().buildEmail('group-i-1',{
+  kind:'evaluation',workspace:'facial',rating:5,
+  feedback_type:'comment',description:'The image quality panel is useful.'
+ });
+ assert.match(subject,/evaluation \+ comment/);
+ assert.match(text,/Overall rating: 5\/5/);
+ assert.match(text,/Feedback type: Comment/);
+ assert.match(text,/The image quality panel is useful\./);
+});

@@ -17,6 +17,11 @@ on:
       - "crypto.css"
       - "crypto-launcher.js"
       - "usage-auth-fix.js"
+      - "usage-admin.js"
+      - "usage-admin.css"
+      - "feedback.js"
+      - "feedback.css"
+      - "tab-access.js"
       - "index.html"
       - "main.html"
       - "intelligence-map.svg"
@@ -84,7 +89,12 @@ jobs:
           grep -q 'dailyQuizButton' daily-quiz.js
           grep -q 'launcher.insertBefore(trigger,launcher.firstChild)' daily-quiz.js
           grep -q 'margin:4px 0 3px;padding:9px 10px' daily-quiz.css
-          grep -q 'anchor.insertAdjacentElement("afterend",button)' feedback.js
+          grep -q 'id="feedbackButton"' main.html
+          grep -q 'SEND FEEDBACK / REPORT BUG' main.html
+          grep -q 'fbWorkspace' feedback.js
+          grep -q 'tab-access-stats' usage-admin.js
+          grep -q 'data-ct-tab="map"' index.html
+          test -s tab-access.js
           test -s crypto.html
           test -s crypto.js
           test -s crypto-report.js
@@ -101,6 +111,7 @@ jobs:
           grep -q 'Intelligence Map' main.html
           grep -q 'Crypto Intelligence' main.html
           grep -q 'Social Intelligence' main.html
+          grep -q 'hub-beta">BETA' main.html
           grep -q 'Facial Intelligence' main.html
           test -s intelligence-map.svg
           test -s crypto-intelligence.svg

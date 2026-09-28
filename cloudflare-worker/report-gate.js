@@ -34,6 +34,10 @@ function withAdminDisplayName(row){
   return displayName?{...row,display_name:displayName}:row;
 }
 const SOCIAL_REPORT_RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
+const TAB_ACCESS_FIELDS = Object.freeze({ map: true, crypto: true, facial: true, social: true });
+function tabAccessTemplate(username = "") {
+  return { username, map: 0, crypto: 0, facial: 0, social: 0 };
+}
 const MIGRATION_PAGE_SIZE = 250;
 
 export class ReportGate {
@@ -174,6 +178,81 @@ export class ReportGate {
     });
 
     return total;
+  }
+
+  async recordTabAccess(username, tab, now = Date.now()) {
+    username = normalizeUsername(username);
+    tab = String(tab || "").trim().toLowerCase();
+    if (!isAllowedUser(username, this.env) || !Object.prototype.hasOwnProperty.call(TAB_ACCESS_FIELDS, tab)) return false;
+
+    const totalKey = "tab-access-total:" + username;
+    const dayKey = "tab-access-day:" + parisDayKey(now) + ":" + username;
+    await this.state.storage.transaction(async txn => {
+      const [storedTotal, storedDay] = await Promise.all([
+        txn.get(totalKey),
+        txn.get(dayKey)
+      ]);
+      const total = { ...tabAccessTemplate(username), ...(storedTotal || {}) };
+      const day = { ...tabAccessTemplate(username), ...(storedDay || {}) };
+      total[tab] = Number(total[tab] || 0) + 1;
+      day[tab] = Number(day[tab] || 0) + 1;
+      await txn.put({ [totalKey]: total, [dayKey]: day });
+    });
+    return true;
+  }
+
+  async tabAccessStats(period, now = Date.now()) {
+    if (!["today", "7", "30", "all"].includes(String(period))) {
+      throw new Error("Unsupported statistics period.");
+    }
+
+    const readKeys = async keys => {
+      const result = new Map();
+      for (let i = 0; i < keys.length; i += 128) {
+        for (const [key, value] of await this.state.storage.get(keys.slice(i, i + 128))) result.set(key, value);
+      }
+      return result;
+    };
+    const users = Array.from(getAllowedUsers(this.env));
+    const rows = new Map(users.map(username => [username, tabAccessTemplate(username)]));
+    const tabs = Object.keys(TAB_ACCESS_FIELDS);
+
+    if (period === "all") {
+      const stored = await readKeys(users.map(username => "tab-access-total:" + username));
+      for (const username of users) {
+        const value = stored.get("tab-access-total:" + username);
+        if (!value) continue;
+        const row = rows.get(username);
+        for (const tab of tabs) row[tab] = Number(value[tab] || 0);
+      }
+    } else {
+      const days = period === "today" ? 1 : Number(period);
+      const keys = [];
+      for (let offset = 0; offset < days; offset++) {
+        const day = parisDayKey(now - offset * 86400000);
+        for (const username of users) keys.push("tab-access-day:" + day + ":" + username);
+      }
+
+      for (const [key, value] of (await readKeys(keys)).entries()) {
+        if (!value) continue;
+        const username = normalizeUsername(String(key).split(":").pop());
+        const row = rows.get(username);
+        if (!row) continue;
+        for (const tab of tabs) row[tab] += Number(value[tab] || 0);
+      }
+    }
+
+    const periodLabel =
+      period === "today" ? "Today · Europe/Paris" :
+      period === "7" ? "Last 7 days · Europe/Paris" :
+      period === "30" ? "Last 30 days · Europe/Paris" :
+      "All time";
+
+    return {
+      period,
+      period_label: periodLabel,
+      users: users.map(username => withAdminDisplayName(rows.get(username)))
+    };
   }
 
   async usageStats(period) {
@@ -890,7 +969,10 @@ export class ReportGate {
         return Response.json({ error: "Unknown user." }, { status: 400 });
       }
 
-      if (action === "map_search") {
+      if (action === "tab_access") {
+        const recorded = await this.recordTabAccess(username, body.tab, now);
+        if (!recorded) return Response.json({ error: "Unsupported workspace tab." }, { status: 400 });
+      } else if (action === "map_search") {
         await this.incrementUsage(username, {
           searches: 1,
           map_searches: 1
@@ -996,6 +1078,14 @@ export class ReportGate {
 
       await this.incrementUsage(username, body.metrics || {}, now);
       return Response.json({ ok: true });
+    }
+
+    if (url.pathname === "/tab-access-stats") {
+      const username = normalizeUsername(body.username);
+      if (username !== "admin") return Response.json({ error: "Admin access required." }, { status: 403 });
+      const period = String(body.period || "today");
+      if (!["today", "7", "30", "all"].includes(period)) return Response.json({ error: "Unsupported statistics period." }, { status: 400 });
+      return Response.json(await this.tabAccessStats(period, now));
     }
 
     if (url.pathname === "/usage-stats") {

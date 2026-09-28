@@ -2,6 +2,7 @@
 "use strict";
 
 const API_BASE="https://ct-report-generator.fairpeace.workers.dev";
+const FEEDBACK_VERSION="feedback-v3-tab-feedback";
 const TOKEN_KEY="ct_map_session_token";
 const USER_KEY="ct_map_username";
 let backendReady=false;
@@ -14,185 +15,166 @@ function ensureCss(){
   const link=document.createElement("link");
   link.id="feedbackCss";
   link.rel="stylesheet";
-  link.href="feedback.css?v=1";
+  link.href="feedback.css?v=20260928";
   document.head.appendChild(link);
 }
 
-// Anchors off the Deep Search button when present (falls back to Report
-// Generator, and retries briefly) so it never depends on deep-search.js's
-// own load timing -- same pattern quick-ask.js used before it moved to the
-// small Download Map button group.
-function findAnchor(){
-  return document.getElementById("deepSearchButton")||document.getElementById("reportGeneratorButton");
-}
-
-// Keys/labels mirror cloudflare-worker/feedback.js's EVALUATION_ITEMS exactly,
-// so ratingValue()/payload.ratings keys line up with what buildEmail() reads.
-const EVALUATION_ITEMS=[
-  ["report_generator","Report Generator"],
-  ["deep_search","Deep Search (BETA)"],
-  ["ct_atlas_ai","CT Atlas AI"],
-  ["heat_map","Heat Map"],
-  ["situation_24h","Situation 24H"],
-  ["weekly_analysis","Weekly Analysis"],
-  ["key_developments","Key Developments"],
-  ["database","Events Database"],
-  ["security","Security Features"]
-];
-
-function ratingScale(name){
-  return [1,2,3,4,5].map(n=>
-    `<label class="fb-scale-opt"><input type="radio" name="${name}" value="${n}"><span>${n}</span></label>`
-  ).join("");
-}
-
-function evaluationItemHtml(key,label){
-  return `
-    <div class="fb-eval-item">
-      <div class="fb-rating">
-        <span class="fb-rating-label">${label}</span>
-        <div class="fb-scale">${ratingScale("fb-rating-"+key)}</div>
-      </div>
-      <textarea class="fb-item-comment" data-key="${key}" maxlength="1000" placeholder="Comments on ${label} (optional)"></textarea>
-    </div>`;
+function ratingScale(){
+  return [1,2,3,4,5].map(function(value){
+    return '<label class="fb-scale-opt"><input type="radio" name="fbOverallRating" value="'+value+'"><span>'+value+'</span></label>';
+  }).join("");
 }
 
 function inject(){
   ensureCss();
-  if(document.getElementById("feedbackPanel"))return;
+  const button=document.getElementById("feedbackButton");
+  if(!button||document.getElementById("feedbackPanel"))return;
 
-  const anchor=findAnchor();
-  if(!anchor){setTimeout(inject,150);return;}
+  document.body.insertAdjacentHTML("beforeend",
+    '<div id="feedbackPanel" aria-hidden="true">'+
+      '<div id="feedbackWindow" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">'+
+        '<div id="feedbackHeader">'+
+          '<div>'+
+            '<div id="feedbackTitle">SEND FEEDBACK / REPORT BUG</div>'+
+            '<div id="feedbackSubtitle">Choose a workspace and send an overall rating, a comment, a bug report, or both.</div>'+
+          '</div>'+
+          '<button id="feedbackClose" type="button" aria-label="Close feedback">×</button>'+
+        '</div>'+
+        '<div id="feedbackBody">'+
+          '<label class="fb-field">'+
+            '<span>WORKSPACE / TAB</span>'+
+            '<select id="fbWorkspace">'+
+              '<option value="general">General · all CT Atlas</option>'+
+              '<option value="map">Intelligence Map</option>'+
+              '<option value="crypto">Crypto Intelligence</option>'+
+              '<option value="facial">Facial Intelligence</option>'+
+              '<option value="social">Social Media (Beta)</option>'+
+            '</select>'+
+          '</label>'+
+          '<label class="fb-toggle"><input id="fbIncludeRating" type="checkbox"><span>Include an overall evaluation</span></label>'+
+          '<div id="fbRatingFields" class="fb-reveal" hidden>'+
+            '<div class="fb-prompt">How would you rate this workspace overall?</div>'+
+            '<div class="fb-scale" role="radiogroup" aria-label="Overall evaluation from one to five">'+ratingScale()+'</div>'+
+            '<div class="fb-hint">1 = poor · 5 = excellent</div>'+
+          '</div>'+
+          '<label class="fb-toggle"><input id="fbIncludeText" type="checkbox"><span>Add a comment or report a bug</span></label>'+
+          '<div id="fbTextFields" class="fb-reveal" hidden>'+
+            '<label class="fb-field">'+
+              '<span>MESSAGE TYPE</span>'+
+              '<select id="fbFeedbackType"><option value="comment">Comment</option><option value="bug">Report a bug</option></select>'+
+            '</label>'+
+            '<label class="fb-field">'+
+              '<span>COMMENT OR BUG DESCRIPTION</span>'+
+              '<textarea id="fbDescription" maxlength="3000" placeholder="Describe your comment or the bug, including what you expected and what happened."></textarea>'+
+            '</label>'+
+          '</div>'+
+          '<div id="feedbackBackendStatus" class="fb-backend-status" aria-live="polite">Checking feedback service…</div>'+
+          '<button id="feedbackSubmit" class="fb-submit" type="button">SEND</button>'+
+          '<div id="feedbackStatus" class="fb-status" aria-live="polite"></div>'+
+        '</div>'+
+      '</div>'+
+    '</div>');
 
-  if(!document.getElementById("feedbackButton")){
-    const button=document.createElement("button");
-    button.id="feedbackButton";
-    button.type="button";
-    button.textContent="SEND FEEDBACK";
-    anchor.insertAdjacentElement("afterend",button);
-  }
-
-  document.body.insertAdjacentHTML("beforeend",`
-    <div id="feedbackPanel" aria-hidden="true">
-      <div id="feedbackWindow" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
-        <div id="feedbackHeader">
-          <div>
-            <div id="feedbackTitle">SEND FEEDBACK</div>
-            <div id="feedbackSubtitle">Sent directly to the CT Atlas admin -- rate the tools, or report a problem any time.</div>
-          </div>
-          <button id="feedbackClose" type="button" aria-label="Close feedback">×</button>
-        </div>
-        <div id="feedbackBody">
-          <div class="fb-tabs">
-            <button class="fb-tab active" type="button" data-tab="evaluation">General evaluation</button>
-            <button class="fb-tab" type="button" data-tab="issue">Report an issue</button>
-          </div>
-
-          <div class="fb-pane active" data-pane="evaluation">
-            ${EVALUATION_ITEMS.map(([key,label])=>evaluationItemHtml(key,label)).join("")}
-            <label class="fb-field" style="margin-top:4px">
-              <span>OTHER -- ANYTHING NOT COVERED ABOVE</span>
-              <textarea id="fbOtherComments" maxlength="1000" placeholder="Optional"></textarea>
-            </label>
-            <button class="fb-submit" type="button" data-submit="evaluation">SEND EVALUATION</button>
-          </div>
-
-          <div class="fb-pane" data-pane="issue">
-            <label class="fb-field">
-              <span>CATEGORY</span>
-              <select id="fbIssueCategory">
-                <option value="Bug">Bug / error</option>
-                <option value="Incorrect data">Incorrect or misleading data</option>
-                <option value="Confusing UI">Confusing or hard to use</option>
-                <option value="Missing feature">Missing feature</option>
-                <option value="Other">Other</option>
-              </select>
-            </label>
-            <label class="fb-field">
-              <span>WHAT HAPPENED?</span>
-              <textarea id="fbIssueDescription" maxlength="3000" placeholder="Describe the problem -- what you did, what you expected, what happened instead"></textarea>
-            </label>
-            <button class="fb-submit" type="button" data-submit="issue">SEND ISSUE REPORT</button>
-          </div>
-
-          <div id="feedbackStatus" class="fb-status"></div>
-        </div>
-      </div>
-    </div>`);
-
-  document.getElementById("feedbackButton")?.addEventListener("click",open);
+  button.addEventListener("click",open);
   document.getElementById("feedbackClose")?.addEventListener("click",close);
-  document.getElementById("feedbackPanel")?.addEventListener("click",event=>{if(event.target.id==="feedbackPanel")close();});
-  document.querySelectorAll(".fb-tab").forEach(tab=>tab.addEventListener("click",()=>switchTab(tab.dataset.tab)));
-  document.querySelectorAll("[data-submit]").forEach(btn=>btn.addEventListener("click",()=>submit(btn.dataset.submit)));
+  document.getElementById("feedbackSubmit")?.addEventListener("click",submit);
+  document.getElementById("feedbackPanel")?.addEventListener("click",function(event){
+    if(event.target.id==="feedbackPanel")close();
+  });
+  document.getElementById("fbIncludeRating")?.addEventListener("change",function(){
+    document.getElementById("fbRatingFields").hidden=!this.checked;
+  });
+  document.getElementById("fbIncludeText")?.addEventListener("change",function(){
+    document.getElementById("fbTextFields").hidden=!this.checked;
+  });
   checkBackend();
 }
 
-function switchTab(name){
-  document.querySelectorAll(".fb-tab").forEach(tab=>tab.classList.toggle("active",tab.dataset.tab===name));
-  document.querySelectorAll(".fb-pane").forEach(pane=>pane.classList.toggle("active",pane.dataset.pane===name));
-  setStatus("");
-}
-
 async function checkBackend(){
-  const button=document.getElementById("feedbackButton");
-  if(!button)return;
+  const status=document.getElementById("feedbackBackendStatus");
+  const submitButton=document.getElementById("feedbackSubmit");
   try{
     const response=await fetch(API_BASE+"/health",{cache:"no-store"});
-    const payload=await response.json().catch(()=>({}));
-    backendReady=Boolean(response.ok&&payload.feedback_version);
+    const payload=await response.json().catch(function(){return {};});
+    backendReady=Boolean(response.ok&&payload.feedback_version===FEEDBACK_VERSION);
   }catch(_){backendReady=false;}
-  if(backendReady){
-    button.disabled=false; button.textContent="SEND FEEDBACK"; button.title="Send an evaluation or report a problem -- goes directly to the CT Atlas admin.";
-  }else{
-    button.disabled=true; button.textContent="SEND FEEDBACK · DEPLOY PENDING";
-    button.title="Feedback backend is not currently available.";
+  if(submitButton)submitButton.disabled=!backendReady;
+  if(status){
+    status.textContent=backendReady
+      ?"Feedback service ready. Your message is sent to the CT Atlas administrator."
+      :"Feedback service is updating or unavailable. Please try again shortly.";
+    status.className=backendReady?"fb-backend-status ready":"fb-backend-status warning";
   }
 }
 
 function open(){
   const panel=document.getElementById("feedbackPanel");
-  panel?.classList.add("open"); panel?.setAttribute("aria-hidden","false");
-}
-function close(){
-  const panel=document.getElementById("feedbackPanel");
-  panel?.classList.remove("open"); panel?.setAttribute("aria-hidden","true");
-}
-function setStatus(message,type=""){
-  const status=document.getElementById("feedbackStatus");
-  if(!status)return;
-  status.textContent=message; status.className=type?"fb-status "+type:"fb-status";
+  panel?.classList.add("open");
+  panel?.setAttribute("aria-hidden","false");
+  checkBackend();
+  document.getElementById("fbWorkspace")?.focus();
 }
 
-function ratingValue(name){
-  const checked=document.querySelector(`input[name="${name}"]:checked`);
+function close(){
+  const panel=document.getElementById("feedbackPanel");
+  panel?.classList.remove("open");
+  panel?.setAttribute("aria-hidden","true");
+}
+
+function setStatus(message,type){
+  const status=document.getElementById("feedbackStatus");
+  if(!status)return;
+  status.textContent=message;
+  status.className="fb-status"+(type?" "+type:"");
+}
+
+function ratingValue(){
+  const checked=document.querySelector('input[name="fbOverallRating"]:checked');
   return checked?Number(checked.value):null;
 }
 
-async function submit(kind){
-  if(!backendReady){setStatus("Feedback backend is not available.","warning");return;}
-  const username=user(), sessionToken=token();
-  if(!username||!sessionToken){setStatus("Sending feedback requires an authenticated CT Atlas session. Sign in again.","error");return;}
-
-  const button=document.querySelector(`[data-submit="${kind}"]`);
-  let payload={user_id:username,kind};
-
-  if(kind==="evaluation"){
-    const ratings={}, itemComments={};
-    for(const [key] of EVALUATION_ITEMS){
-      ratings[key]=ratingValue("fb-rating-"+key);
-      const field=document.querySelector(`.fb-item-comment[data-key="${key}"]`);
-      itemComments[key]=String(field?.value||"").trim();
-    }
-    payload.ratings=ratings;
-    payload.item_comments=itemComments;
-    payload.other_comments=String(document.getElementById("fbOtherComments")?.value||"").trim();
-  }else{
-    const description=String(document.getElementById("fbIssueDescription")?.value||"").trim();
-    if(description.length<5){setStatus("Please describe the issue.","warning");return;}
-    payload.category=String(document.getElementById("fbIssueCategory")?.value||"Other");
-    payload.description=description;
+async function submit(){
+  if(!backendReady){
+    setStatus("Feedback service is not ready yet. Please try again shortly.","warning");
+    checkBackend();
+    return;
   }
+
+  const username=user();
+  const sessionToken=token();
+  if(!username||!sessionToken){
+    setStatus("Sending feedback requires an authenticated CT Atlas session. Sign in again.","error");
+    return;
+  }
+
+  const includeRating=Boolean(document.getElementById("fbIncludeRating")?.checked);
+  const includeText=Boolean(document.getElementById("fbIncludeText")?.checked);
+  if(!includeRating&&!includeText){
+    setStatus("Choose an overall evaluation, a comment or bug report, or both.","warning");
+    return;
+  }
+
+  const rating=includeRating?ratingValue():null;
+  if(includeRating&&!rating){
+    setStatus("Select an overall rating from 1 to 5.","warning");
+    return;
+  }
+
+  const description=includeText?String(document.getElementById("fbDescription")?.value||"").trim():"";
+  if(includeText&&!description){
+    setStatus("Write a comment or describe the bug before sending.","warning");
+    return;
+  }
+
+  const button=document.getElementById("feedbackSubmit");
+  const payload={
+    user_id:username,
+    kind:includeRating?"evaluation":"issue",
+    workspace:String(document.getElementById("fbWorkspace")?.value||"general"),
+    rating:rating,
+    feedback_type:includeText?String(document.getElementById("fbFeedbackType")?.value||"comment"):"",
+    description:description
+  };
 
   if(button){button.disabled=true;button.textContent="SENDING…";}
   setStatus("Sending…","working");
@@ -203,25 +185,27 @@ async function submit(kind){
       headers:{"Content-Type":"application/json","X-Session-Token":sessionToken},
       body:JSON.stringify(payload)
     });
-    const result=await response.json().catch(()=>({}));
+    const result=await response.json().catch(function(){return {};});
     if(!response.ok){
       const retry=Number(result.retry_after_seconds||0);
-      throw new Error((result.error||"Sending feedback failed.")+(retry?` Retry in approximately ${Math.ceil(retry/60)} minute(s).`:""));
+      throw new Error((result.error||"Sending feedback failed.")+(retry?" Retry in approximately "+Math.ceil(retry/60)+" minute(s).":""));
     }
-    setStatus(kind==="evaluation"?"Evaluation sent -- thank you.":"Issue report sent -- thank you.","success");
-    if(kind==="evaluation"){
-      document.querySelectorAll('#feedbackPanel [data-pane="evaluation"] input[type="radio"]').forEach(r=>r.checked=false);
-      document.querySelectorAll('#feedbackPanel [data-pane="evaluation"] textarea').forEach(t=>t.value="");
-    }else{
-      document.getElementById("fbIssueDescription").value="";
-    }
-  }catch(error){setStatus(error?.message||"Sending feedback failed.","error");}
-  finally{
-    if(button){button.disabled=false;button.textContent=kind==="evaluation"?"SEND EVALUATION":"SEND ISSUE REPORT";}
+
+    setStatus("Thank you. Your feedback has been sent.","success");
+    document.getElementById("fbIncludeRating").checked=false;
+    document.getElementById("fbIncludeText").checked=false;
+    document.getElementById("fbRatingFields").hidden=true;
+    document.getElementById("fbTextFields").hidden=true;
+    document.querySelectorAll('#feedbackPanel input[name="fbOverallRating"]').forEach(function(input){input.checked=false;});
+    document.getElementById("fbDescription").value="";
+  }catch(error){
+    setStatus(error?.message||"Sending feedback failed.","error");
+  }finally{
+    if(button){button.disabled=!backendReady;button.textContent="SEND";}
   }
 }
 
-document.addEventListener("keydown",event=>{if(event.key==="Escape")close();});
+document.addEventListener("keydown",function(event){if(event.key==="Escape")close();});
 document.addEventListener("DOMContentLoaded",inject);
 if(document.readyState!=="loading")inject();
 })();

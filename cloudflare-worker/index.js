@@ -49,7 +49,7 @@ if (request.method === "OPTIONS") {
 return new Response(null, { status: 204, headers: corsHeaders(env) });
 }
 if (url.pathname === "/health" && request.method === "GET") {
-return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.31", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_auto_monitoring: true, sanctions_version: SANCTIONS_VERSION, sanctions: await sanctionsHealth(env), crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, social_intel_version: SOCIAL_INTEL_VERSION, social_intel: true, social_agent_client_version: SOCIAL_AGENT_CLIENT_VERSION, social_agent_configured: isSocialAgentConfigured(env), social_worker_search_provider: env.BRAVE_SEARCH_API_KEY ? "brave" : "disabled", visual_intel_version: VISUAL_INTEL_VERSION, visual_intel: true, visual_intel_configured: isVisualIntelConfigured(env), face_share_version: FACE_SHARE_VERSION, face_share_configured: Boolean(env.FACE_SHARE),crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
+return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.32", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_auto_monitoring: true, sanctions_version: SANCTIONS_VERSION, sanctions: await sanctionsHealth(env), crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, social_intel_version: SOCIAL_INTEL_VERSION, social_intel: true, social_agent_client_version: SOCIAL_AGENT_CLIENT_VERSION, social_agent_configured: isSocialAgentConfigured(env), social_worker_search_provider: env.BRAVE_SEARCH_API_KEY ? "brave" : "disabled", visual_intel_version: VISUAL_INTEL_VERSION, visual_intel: true, visual_intel_configured: isVisualIntelConfigured(env), face_share_version: FACE_SHARE_VERSION, face_share_configured: Boolean(env.FACE_SHARE),crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
 }
 if (url.pathname === "/health/status" && request.method === "GET") {
 return handleHealthStatus(env, {
@@ -130,8 +130,15 @@ if (!token) return jsonResponse({ error: "Authenticated session required." }, 40
 const sessionResponse = await gateCall(env, "/session-get", { session_token: token });
 const session = await sessionResponse.json();
 if (!sessionResponse.ok || session?.username !== username) return jsonResponse({ error: "Unauthorized session." }, 401, env);
-if (!["map_search", "event_list_search"].includes(action)) return jsonResponse({ error: "Unsupported usage action." }, 400, env);
-const recordResponse = await gateCall(env, "/usage-record", { username, action });
+let usagePayload = { username, action };
+if (action === "tab_access") {
+  const tab = cleanText(usageBody.tab, 16).toLowerCase();
+  if (!["map", "crypto", "facial", "social"].includes(tab)) return jsonResponse({ error: "Unsupported workspace tab." }, 400, env);
+  usagePayload.tab = tab;
+} else if (!["map_search", "event_list_search"].includes(action)) {
+  return jsonResponse({ error: "Unsupported usage action." }, 400, env);
+}
+const recordResponse = await gateCall(env, "/usage-record", usagePayload);
 return jsonResponse(await recordResponse.json(), recordResponse.status, env);
 }
 if (url.pathname === "/usage-stats" && request.method === "GET") {
@@ -143,6 +150,17 @@ if (!sessionResponse.ok || session?.username !== "admin") return jsonResponse({ 
 const period = cleanText(url.searchParams.get("period") || "today", 16);
 if (!["today", "7", "30", "all"].includes(period)) return jsonResponse({ error: "Unsupported statistics period." }, 400, env);
 const statsResponse = await gateCall(env, "/usage-stats", { period });
+return jsonResponse(await statsResponse.json(), statsResponse.status, env);
+}
+if (url.pathname === "/tab-access-stats" && request.method === "GET") {
+const token = cleanText(request.headers.get("X-Session-Token"), 160);
+if (!token) return jsonResponse({ error: "Admin session required." }, 401, env);
+const sessionResponse = await gateCall(env, "/session-get", { session_token: token });
+const session = await sessionResponse.json();
+if (!sessionResponse.ok || session?.username !== "admin") return jsonResponse({ error: "Admin access required." }, 403, env);
+const period = cleanText(url.searchParams.get("period") || "today", 16);
+if (!["today", "7", "30", "all"].includes(period)) return jsonResponse({ error: "Unsupported statistics period." }, 400, env);
+const statsResponse = await gateCall(env, "/tab-access-stats", { period, username: "admin" });
 return jsonResponse(await statsResponse.json(), statsResponse.status, env);
 }
 if (url.pathname === "/quiz-history" && request.method === "GET") {

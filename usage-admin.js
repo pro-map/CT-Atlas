@@ -174,87 +174,59 @@ function refreshAdminButton(){
 }
 
 function injectAdminUi(){
+  const mount=document.getElementById("mainAdminActions");
+  if(!mount)return;
+
+  let button=document.getElementById("adminUsageButton");
+  if(!button){
+    button=document.createElement("button");
+    button.id="adminUsageButton";
+    button.type="button";
+    button.textContent="ADMIN TAB ACCESS";
+    mount.appendChild(button);
+  }
+
   if(document.getElementById("adminUsagePanel")){
     refreshAdminButton();
     return;
   }
 
-  const launcher=document.getElementById("healthStatusLauncher");
-  if(launcher){
-    const button=document.createElement("button");
-    button.id="adminUsageButton";
-    button.type="button";
-    button.textContent="Admin Usage";
-    button.hidden=!isAdmin();
-    launcher.appendChild(button);
-  }
+  document.body.insertAdjacentHTML("beforeend",
+    '<div id="adminUsagePanel" aria-hidden="true">'+
+      '<div id="adminUsageWindow" role="dialog" aria-modal="true" aria-labelledby="adminUsageTitle">'+
+        '<div id="adminUsageHeader">'+
+          '<div>'+
+            '<div id="adminUsageTitle">ADMIN · TAB ACCESS</div>'+
+            '<div id="adminUsageSubtitle">Workspace opens per user</div>'+
+          '</div>'+
+          '<button id="adminUsageClose" type="button" aria-label="Close tab access statistics">×</button>'+
+        '</div>'+
+        '<div id="adminUsageBody">'+
+          '<div id="adminUsagePeriods">'+
+            '<button type="button" class="admin-period active" data-period="today">TODAY</button>'+
+            '<button type="button" class="admin-period" data-period="7">7 DAYS</button>'+
+            '<button type="button" class="admin-period" data-period="30">30 DAYS</button>'+
+            '<button type="button" class="admin-period" data-period="all">ALL TIME</button>'+
+          '</div>'+
+          '<div id="adminUsageStatus">Select a period to load tab access.</div>'+
+          '<div class="admin-usage-table-wrap">'+
+            '<table id="adminUsageTable">'+
+              '<thead><tr><th>USER</th><th>CRYPTO</th><th>FACIAL</th><th>MAP</th><th>SOCIAL</th></tr></thead>'+
+              '<tbody id="adminUsageRows"></tbody>'+
+            '</table>'+
+          '</div>'+
+          '<div id="adminUsageNote">Counts begin with this update. Each opened workspace page adds one. Searches, questions, reports, and their contents are not included in these statistics.</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>');
 
-  document.body.insertAdjacentHTML("beforeend",`
-    <div id="adminUsagePanel" aria-hidden="true">
-      <div id="adminUsageWindow" role="dialog" aria-modal="true" aria-labelledby="adminUsageTitle">
-        <div id="adminUsageHeader">
-          <div>
-            <div id="adminUsageTitle">ADMIN · USAGE STATISTICS</div>
-            <div id="adminUsageSubtitle">Per-user activity · question text is not stored</div>
-          </div>
-          <button id="adminUsageClose" type="button" aria-label="Close admin usage statistics">×</button>
-        </div>
-        <div id="adminUsageBody">
-          <div id="adminUsagePeriods">
-            <button type="button" class="admin-period active" data-period="today">TODAY</button>
-            <button type="button" class="admin-period" data-period="7">7 DAYS</button>
-            <button type="button" class="admin-period" data-period="30">30 DAYS</button>
-            <button type="button" class="admin-period" data-period="all">ALL TIME</button>
-          </div>
-          <div id="adminUsageSummary">
-            <div class="admin-usage-metric"><span>ACTIVE USERS</span><strong id="adminActiveUsers">—</strong></div>
-            <div class="admin-usage-metric"><span>SEARCHES</span><strong id="adminSearches">—</strong></div>
-            <div class="admin-usage-metric"><span>GENERATOR REQUESTS</span><strong id="adminGeneratorRequests">—</strong></div>
-            <div class="admin-usage-metric"><span>DEEP SEARCH REQUESTS</span><strong id="adminDeepSearchRequests">—</strong></div>
-            <div class="admin-usage-metric"><span>AI QUESTIONS</span><strong id="adminAiQuestions">—</strong></div>
-            <div class="admin-usage-metric"><span>CACHED REPORTS</span><strong id="adminCachedReports">—</strong></div>
-            <div class="admin-usage-metric"><span>QUIZ ANSWERS</span><strong id="adminQuizAnswers">—</strong></div>
-            <div class="admin-usage-metric"><span>QUIZ CORRECT</span><strong id="adminQuizCorrect">—</strong></div>
-            <div class="admin-usage-metric"><span>QUIZ INCORRECT</span><strong id="adminQuizIncorrect">—</strong></div>
-            <div class="admin-usage-metric"><span>QUIZ SCORE</span><strong id="adminQuizScore">—</strong></div>
-          </div>
-          <div id="adminUsageStatus">Select a period to load usage statistics.</div>
-          <div class="admin-usage-table-wrap">
-            <table id="adminUsageTable">
-              <thead>
-                <tr>
-                  <th>USER</th><th>LOGINS</th><th>SEARCHES</th><th>GENERATOR</th><th>DEEP SEARCH</th><th>AI QUESTIONS</th><th>CACHE</th><th>QUIZ</th><th>CORRECT</th><th>INCORRECT</th><th>SCORE</th><th>LAST ACTIVE</th>
-                </tr>
-              </thead>
-              <tbody id="adminUsageRows"></tbody>
-            </table>
-          </div>
-          <div id="adminQuizHistorySection">
-            <div id="adminQuizHistoryTitle">QUIZ ANSWER HISTORY</div>
-            <div id="adminQuizHistoryStatus">Select a period to load recorded quiz attempts.</div>
-            <div class="admin-usage-table-wrap">
-              <table id="adminQuizHistoryTable">
-                <thead>
-                  <tr><th>DATE</th><th>USER</th><th>CATEGORY</th><th>QUESTION</th><th>ANSWER GIVEN</th><th>CORRECT ANSWER</th><th>RESULT</th><th>ANSWERED</th><th>SOURCE</th></tr>
-                </thead>
-                <tbody id="adminQuizHistoryRows"></tbody>
-              </table>
-            </div>
-          </div>
-          <div id="adminUsageNote">
-            Report Generator and Deep Search are counted separately. AI QUESTIONS counts CT Atlas AI / Quick Ask questions. Question text itself is not transmitted or stored. Temporary test-phase report limits: 5 report requests per user per day and at least 20 minutes between requests. Admin is exempt.
-          </div>
-        </div>
-      </div>
-    </div>`);
-
-  document.getElementById("adminUsageButton")?.addEventListener("click",openAdmin);
+  button.addEventListener("click",openAdmin);
   document.getElementById("adminUsageClose")?.addEventListener("click",closeAdmin);
   document.getElementById("adminUsagePanel")?.addEventListener("click",event=>{
     if(event.target.id==="adminUsagePanel")closeAdmin();
   });
-  document.querySelectorAll(".admin-period").forEach(button=>{
-    button.addEventListener("click",function(){
+  document.querySelectorAll(".admin-period").forEach(periodButton=>{
+    periodButton.addEventListener("click",function(){
       document.querySelectorAll(".admin-period").forEach(item=>item.classList.remove("active"));
       this.classList.add("active");
       loadAdmin(this.dataset.period||"today");
@@ -262,7 +234,6 @@ function injectAdminUi(){
   });
   refreshAdminButton();
 }
-
 function openAdmin(){
   if(!isAdmin())return;
   const panel=document.getElementById("adminUsagePanel");
@@ -277,145 +248,41 @@ function closeAdmin(){
   panel?.setAttribute("aria-hidden","true");
 }
 
-function lastActive(value){
-  if(!value)return "—";
-  const date=new Date(value);
-  if(Number.isNaN(date.getTime()))return "—";
-  return date.toLocaleString("en-GB",{
-    day:"2-digit",
-    month:"2-digit",
-    hour:"2-digit",
-    minute:"2-digit"
-  });
-}
-
-
-async function loadQuizHistory(period,currentToken){
-  const status=document.getElementById("adminQuizHistoryStatus");
-  const rows=document.getElementById("adminQuizHistoryRows");
-
-  if(!currentToken){
-    if(status)status.textContent="Admin quiz history requires an authenticated Worker session. Sign in again.";
-    if(rows)rows.innerHTML="";
-    return;
-  }
-
-  if(status)status.textContent="Loading recorded quiz attempts…";
-
-  try{
-    const response=await nativeFetch(
-      API_BASE+"/quiz-history?period="+encodeURIComponent(period),
-      {
-        method:"GET",
-        headers:{"X-Session-Token":currentToken}
-      }
-    );
-    const payload=await response.json();
-
-    if(!response.ok){
-      throw new Error(payload.error||"Unable to load quiz history.");
-    }
-
-    const answers=Array.isArray(payload.answers)?payload.answers:[];
-    if(rows){
-      rows.innerHTML=answers.length?answers.map(item=>{
-        const result=item.correct===true
-          ? "<span class=\"quiz-result-correct\">CORRECT</span>"
-          : "<span class=\"quiz-result-wrong\">INCORRECT</span>";
-        const sourceUrl=String(item.source_url||"");
-        const source=/^https:\/\//i.test(sourceUrl)
-          ? "<a href=\""+escapeCell(sourceUrl)+"\" target=\"_blank\" rel=\"noopener noreferrer\">SOURCE ↗</a>"
-          : "—";
-        return "<tr>"+
-          "<td>"+escapeCell(item.quiz_date||"—")+"</td>"+
-          "<td>"+escapeCell(adminUserLabel(item,"—"))+"</td>"+
-          "<td>"+escapeCell(item.category||"—")+"</td>"+
-          "<td class=\"admin-quiz-question\">"+escapeCell(item.question||"Question not stored for this attempt")+"</td>"+
-          "<td>"+escapeCell(item.selected_answer||"—")+"</td>"+
-          "<td class=\"admin-quiz-correct\">"+escapeCell(item.correct_answer||"—")+"</td>"+
-          "<td>"+result+"</td>"+
-          "<td>"+escapeCell(lastActive(item.answered_at))+"</td>"+
-          "<td>"+source+"</td>"+
-        "</tr>";
-      }).join(""):"<tr><td colspan=\"9\">No recorded quiz attempts for this period.</td></tr>";
-    }
-
-    if(status){
-      status.textContent="Updated "+new Date().toLocaleTimeString("en-GB",{
-        hour:"2-digit",
-        minute:"2-digit"
-      })+" · "+(payload.period_label||period)+" · "+Number(payload.total||answers.length)+" attempts";
-    }
-  }catch(error){
-    if(status)status.textContent=error.message||"Unable to load quiz history.";
-    if(rows)rows.innerHTML="";
-  }
-}
-
 async function loadAdmin(period){
   if(!isAdmin())return;
 
   const status=document.getElementById("adminUsageStatus");
   const rows=document.getElementById("adminUsageRows");
-  const historyStatus=document.getElementById("adminQuizHistoryStatus");
-  const historyRows=document.getElementById("adminQuizHistoryRows");
   const currentToken=token();
 
   if(!currentToken){
-    if(status)status.textContent="Admin statistics require an authenticated Worker session. Sign in again.";
+    if(status)status.textContent="Admin tab access requires an authenticated Worker session. Sign in again.";
     if(rows)rows.innerHTML="";
-    if(historyStatus)historyStatus.textContent="Admin quiz history requires an authenticated Worker session. Sign in again.";
-    if(historyRows)historyRows.innerHTML="";
     return;
   }
 
-  if(status)status.textContent="Loading usage statistics…";
-  loadQuizHistory(period,currentToken);
+  if(status)status.textContent="Loading tab access…";
 
   try{
     const response=await nativeFetch(
-      API_BASE+"/usage-stats?period="+encodeURIComponent(period),
-      {
-        method:"GET",
-        headers:{"X-Session-Token":currentToken}
-      }
+      API_BASE+"/tab-access-stats?period="+encodeURIComponent(period),
+      {method:"GET",headers:{"X-Session-Token":currentToken}}
     );
     const payload=await response.json();
 
-    if(!response.ok){
-      throw new Error(payload.error||"Unable to load usage statistics.");
-    }
-
-    const summary=payload.summary||{};
-    document.getElementById("adminActiveUsers").textContent=Number(summary.active_users||0);
-    document.getElementById("adminSearches").textContent=Number(summary.searches||0);
-    document.getElementById("adminGeneratorRequests").textContent=Number(summary.report_generator_requests||0);
-    document.getElementById("adminDeepSearchRequests").textContent=Number(summary.deep_search_requests||0);
-    document.getElementById("adminAiQuestions").textContent=Number(summary.quick_ask_requests||0);
-    document.getElementById("adminCachedReports").textContent=Number(summary.cached_reports||0);
-    const quizAnswers=Number(summary.quiz_answers||0);
-    const quizCorrect=Number(summary.quiz_correct||0);
-    document.getElementById("adminQuizAnswers").textContent=quizAnswers;
-    document.getElementById("adminQuizCorrect").textContent=quizCorrect;
-    document.getElementById("adminQuizIncorrect").textContent=Number(summary.quiz_incorrect||0);
-    document.getElementById("adminQuizScore").textContent=quizAnswers?Math.round(100*quizCorrect/quizAnswers)+"%":"—";
+    if(!response.ok)throw new Error(payload.error||"Unable to load tab access.");
 
     if(rows){
-      rows.innerHTML=(payload.users||[]).map(item=>`
-        <tr>
-          <td>${escapeCell(adminUserLabel(item))}</td>
-          <td>${Number(item.logins||0)}</td>
-          <td>${Number(item.searches||0)}</td>
-          <td>${Number(item.report_generator_requests||0)}</td>
-          <td>${Number(item.deep_search_requests||0)}</td>
-          <td>${Number(item.quick_ask_requests||0)}</td>
-          <td>${Number(item.cached_reports||0)}</td>
-          <td>${Number(item.quiz_answers||0)}</td>
-          <td>${Number(item.quiz_correct||0)}</td>
-          <td>${Number(item.quiz_incorrect||0)}</td>
-          <td>${Number(item.quiz_answers||0)?Math.round(100*Number(item.quiz_correct||0)/Number(item.quiz_answers||0))+"%":"—"}</td>
-          <td>${escapeCell(lastActive(item.last_activity))}</td>
-        </tr>`).join("");
+      const users=Array.isArray(payload.users)?payload.users:[];
+      rows.innerHTML=users.map(item=>
+        "<tr>"+
+          "<td>"+escapeCell(adminUserLabel(item))+"</td>"+
+          "<td>"+Number(item.crypto||0)+"</td>"+
+          "<td>"+Number(item.facial||0)+"</td>"+
+          "<td>"+Number(item.map||0)+"</td>"+
+          "<td>"+Number(item.social||0)+"</td>"+
+        "</tr>"
+      ).join("")||'<tr><td colspan="5">No users found for this period.</td></tr>';
     }
 
     if(status){
@@ -425,10 +292,10 @@ async function loadAdmin(period){
       })+" · "+(payload.period_label||period);
     }
   }catch(error){
-    if(status)status.textContent=error.message||"Unable to load usage statistics.";
+    if(status)status.textContent=error.message||"Unable to load tab access.";
+    if(rows)rows.innerHTML="";
   }
 }
-
 document.addEventListener("click",event=>{
   if(event.target?.id==="access-button"){
     setTimeout(()=>{

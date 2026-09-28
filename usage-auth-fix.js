@@ -5,7 +5,7 @@ const TOKEN_KEY="ct_map_session_token";
 const USER_KEY="ct_map_username";
 const EXPIRY_KEY="ct_map_session_expires";
 const priorFetch=window.fetch.bind(window);
-const protectedPath=/\/((?:session-check|session-revoke|login|report|deep-search|quick-ask|feedback|crypto-analyze|crypto-workspace|usage-record|usage-stats|quiz-state|quiz-answer|quiz-history|quiz-answer-record))(?:\?|$)/;
+const protectedPath=/\/((?:session-check|session-revoke|login|report|deep-search|quick-ask|feedback|crypto-analyze|crypto-workspace|usage-record|usage-stats|tab-access-stats|quiz-state|quiz-answer|quiz-history|quiz-answer-record))(?:\?|$)/;
 
 function sessionToken(){
   return String(sessionStorage.getItem(TOKEN_KEY)||"");
@@ -77,16 +77,6 @@ function loadQuickAsk(){
   document.head.appendChild(script);
 }
 
-function loadFeedback(){
-  if(document.getElementById("feedbackClientScript"))return;
-  const script=document.createElement("script");
-  script.id="feedbackClientScript";
-  script.src="feedback.js?v=2";
-  script.defer=true;
-  document.head.appendChild(script);
-}
-
-
 function loadDailyQuiz(){
   if(document.getElementById("dailyQuizClientScript"))return;
   const script=document.createElement("script");
@@ -102,7 +92,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   loadDeepSearch();
   loadDailyQuiz();
   loadQuickAsk();
-  loadFeedback();
   setInterval(()=>{ enforceSessionExpiry(); refreshAdminUsageButton(); },30000);
 });
 })();
