@@ -11,10 +11,10 @@
 // control; a sanctions-list match is an address-string match, not a compliance determination; NOT SCREENED is never
 // presented as clean; absence statements are scoped to the sample, never absolute.
 
-const LIMITS=Object.freeze({transactions:1500,nodes:80,counterparties:40,labels:60,patterns:20,exposure:60,crosschain:50,alerts:20,notes:30,txDetailFields:60});
+const LIMITS=Object.freeze({transactions:1500,nodes:80,counterparties:40,labels:60,patterns:20,exchangeFindings:60,exposure:60,crosschain:50,alerts:20,notes:30,txDetailFields:60});
 
 const DISCLAIMER="Transaction linkage is not identity attribution, common ownership, criminality, terrorist financing, or proof of control. Multi-input Bitcoin transactions, smart-contract execution and token routing can require specialist interpretation. Validate significant findings against the source explorer and other evidence before operational use.";
-const LIMITATIONS="CT Atlas Crypto uses bounded public blockchain samples (the most recent records the provider returned for each analysed wallet, not a full archival crawl) and analyst-sourced labels. On-chain transaction linkage does not establish identity, common ownership, criminality, terrorist financing, intent, or custody. Heuristic pattern detection and H1-H3 exposure calculations describe observed transaction behaviour, not criminal intent, and require independent validation before operational or evidentiary use. Absence of a finding is limited to the sample analysed and is not proof of absence.";
+const LIMITATIONS="CT Atlas Crypto uses bounded public blockchain samples (the most recent records the provider returned for each analysed wallet, not a full archival crawl) and analyst-sourced labels. On-chain transaction linkage does not establish identity, common ownership, criminality, terrorist financing, intent, or custody. Exchange-behaviour scores are rules-based screening scores, not calibrated probabilities; a high-throughput wallet may be another exchange, bridge, payment service, protocol, or other service. Heuristic pattern detection and H1-H3 exposure calculations describe observed transaction behaviour, not criminal intent, and require independent validation before operational or evidentiary use. Absence of a finding is limited to the sample analysed and is not proof of absence.";
 const SANCTIONS_NOTE="A sanctions-list match means this exact address string appears on a published list; it is not a compliance determination and does not by itself show who controls the address. No match does NOT mean an address is safe: coverage is limited to the listed source(s), and only the counterparties visible in the recent transaction sample were screened (direct relationships only, no indirect exposure).";
 const NOT_SCREENED="Sanctions screening was NOT performed for this analysis, so the absence of a match must not be read as a clean result.";
 const HOPS="H0 is the seed wallet, H1 its direct counterparties; H2 and H3 are wallets the analyst expanded (+ or AUTO TRACE). A ring colour encodes a node's minimum hop. Node size and edge width reflect the number of linked records, not ownership probability.";
@@ -81,6 +81,7 @@ function summarySection(model){
       ["Transaction records in the sample",String(c.transactions??"—")+(c.transactionsListed!==undefined&&c.transactionsListed<c.transactions?" (first "+c.transactionsListed+" listed)":"")],
       ["Graph nodes shown",String(c.graphNodes??"—")],
       ["Behavioural patterns",String(c.patterns??"—")],
+      ["Exchange identification findings",String(c.exchangeFindings??"—")],
       ["Labelled exposure findings",String(c.exposure??"—")]
     );
   }
@@ -144,6 +145,28 @@ function patternsSection(model){
       name:text(p.name),metric:text(p.metric),note:text(p.detail)
     }))});
   if(all.length>patterns.length)blocks.push(alert("This table lists the first "+patterns.length+" of "+all.length+" pattern(s) found; the report is capped to stay readable."));
+  return blocks;
+}
+
+function exchangeSection(model){
+  const all=list(model.exchangeFindings);
+  const items=all.slice(0,LIMITS.exchangeFindings);
+  const blocks=[heading("EXCHANGE IDENTIFICATION"),small("Sourced address matches are separate from behavioural candidates. Candidate scores are rules-based screening scores, not calibrated probabilities or proof of ownership.")];
+  if(!items.length){
+    blocks.push(noneRecorded("No sourced exchange match or behavioural candidate at or above 80/100 was found in the analysed sample."));
+    return blocks;
+  }
+  for(const item of items){
+    const sourced=item.type==="sourced";
+    blocks.push(sub((text(item.name)||"Exchange finding")+(sourced?" · SOURCED LABEL · "+text(item.confidence||"MEDIUM"):" · HEURISTIC SCORE "+String(num(item.score)??"—")+"/100")));
+    if(item.address)blocks.push(mono(text(item.address)));
+    if(item.wallet_role)blocks.push(small("Wallet role: "+text(item.wallet_role).replaceAll("_"," ")+(item.depth!==undefined?" · trace H"+(num(item.depth)??0):"")));
+    if(item.interactions)blocks.push(small("Observed direct transaction links in this sample: "+String(num(item.interactions)??0)+". This does not establish control by the exchange."));
+    if(item.source_title)blocks.push(small("Source: "+text(item.source_title)+(item.source_url?" — "+text(item.source_url):"")));
+    if(list(item.evidence).length)for(const detail of item.evidence)blocks.push(bullet(text(detail)));
+    if(item.limitations)blocks.push(small(text(item.limitations)));
+  }
+  if(all.length>items.length)blocks.push(alert("This section lists the first "+items.length+" of "+all.length+" exchange finding(s)."));
   return blocks;
 }
 
@@ -342,6 +365,7 @@ function build(model){
   }else{
     blocks.push(
       ...patternsSection(m),
+      ...exchangeSection(m),
       ...exposureSection(m),
       ...labelsSection(m),
       ...crossChainSection(m),

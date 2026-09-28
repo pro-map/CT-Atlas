@@ -79,13 +79,12 @@ Exchange labels are stored in the existing `REPORT_GATE` Durable Object. Do not 
 a new Durable Object binding or move user workspaces: analyst labels remain private
 until their owner proposes them and an admin approves them.
 
-The Crypto admin panel can import 68 sourced chain/address labels: 10 Crypto.com
-cold wallets, 39 Binance BTC/Ethereum/TRON/BSC addresses, 17 Bybit EVM network
-entries, and 2 OKX BTC/Ethereum reserve-address examples. The Binance and Crypto.com
-lists date to November 2022 and are partial; the OKX addresses are examples from its
-official verification guide, not the full current downloadable list. The Bybit
-entries are a subset visible in its official PoR audit PDF. Each label carries its
-own source and historical-data caveat.
+The Crypto admin panel includes an importer for sourced starter addresses from
+Crypto.com, Binance, Bybit and OKX. The Binance and Crypto.com lists date to
+November 2022 and are partial; the OKX addresses are examples from its official
+verification guide, not the full current downloadable list. The Bybit entries are
+a subset visible in its official PoR audit PDF. Each label carries its own source
+and historical-data caveat.
 The admin-only `action=seed` route writes sourced labels into the shared registry and
 the Durable Object skips existing addresses. Verify current control before relying on
 any historic disclosure. Current full Binance/OKX files could not be fetched from
@@ -94,6 +93,9 @@ this environment; do not present these seed records as complete current PoR list
 - `/crypto-analyze` looks up approved registry labels for the query and its visible
   transaction counterparties. Labels include the chain, exchange name, wallet role,
   confidence, source and reviewer.
+- `/crypto-analyze` also returns exchange-behaviour screening for each analysed
+  wallet. A candidate is shown only at 80/100 or above; the rules-based score is not
+  a calibrated probability and does not prove exchange ownership or custody.
 - In Crypto → Labels & Attribution, analysts can propose an `EXCHANGE` label. Admins
   can review the queue, collect existing private exchange labels for review, or
   import verified CSV/JSON data. Imports are approved immediately and must include
@@ -122,6 +124,6 @@ Cloudflare secrets and must not be committed to Git. The current Worker can keep
 optional flags unset for a no-new-cost setup.
 
 Deploy `index.js`, `crypto.js`, `crypto-workspace.js`, `exchange-addresses.js`,
-`report-gate.js`, and their existing shared dependencies together to the existing
+`exchange-behavior.mjs`, `report-gate.js`, and their existing shared dependencies together to the existing
 Worker. GitHub Pages deploys only the Crypto UI; it does not deploy these Worker
 routes or Durable Object changes.
