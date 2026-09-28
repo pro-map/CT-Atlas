@@ -838,6 +838,7 @@ export {
   sha256,
   gateCall,
   extractGeminiText,
-  callGemini
+  callGemini,
+  waitBeforeGeminiRetry
 };
 

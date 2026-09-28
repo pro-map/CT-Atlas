@@ -8,7 +8,8 @@ import {
   fetchEventsDatabase,
   parseEventDate,
   extractGeminiText,
-  sha256
+  sha256,
+  waitBeforeGeminiRetry
 } from "./shared.js";
 import { createSourcePreviews } from "./source-preview.js";
 
@@ -17,6 +18,10 @@ const DEEP_SEARCH_RESULTS_PER_QUERY = 30;
 const DEEP_SEARCH_MAX_EVIDENCE = 48;
 const DEEP_SEARCH_CACHE_TTL_MS = 4 * 60 * 60 * 1000;
 const DEEP_SEARCH_MODEL = "gemini-3.5-flash-lite";
+// Used only when the primary model itself is overloaded/unavailable (429/5xx) -- alternating
+// models on retry recovers from a single model being temporarily out of capacity, the same
+// "high demand" condition callGemini() (Report Generator, shared.js) already retries around.
+const DEEP_SEARCH_FALLBACK_MODEL = "gemini-3.6-flash";
 export const DEEP_SEARCH_VERSION = "deep-search-v7-source-previews";
 
 // There is no period selector any more -- the analyst's own question is the
@@ -805,27 +810,55 @@ function googleNewsUrl(query, locale, window) {
   }).toString();
 }
 
+// Used for both the Deep Search planner and the final report synthesis. A single Gemini model
+// can be temporarily overloaded ("high demand... please try again later", HTTP 429 or 5xx)
+// without the service itself being down -- retrying the same request against an alternate model,
+// with backoff, recovers from exactly that instead of failing the whole search on one bad call.
 async function callGeminiJson(env, instruction, input, schema, maxOutputTokens) {
-  const response = await fetch(GEMINI_URL, {
-    method: "POST",
-    headers: { "x-goog-api-key": env.GEMINI_API_KEY, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: DEEP_SEARCH_MODEL,
-      input,
-      system_instruction: instruction,
-      store: false,
-      response_format: { type: "text", mime_type: "application/json", schema },
-      generation_config: { max_output_tokens: maxOutputTokens, thinking_level: "minimal" }
-    })
-  });
-  if (response.status === 429) {
-    const error = new Error("Gemini quota/capacity temporarily unavailable for Deep Search (429). Please retry later.");
-    error.code = 429; throw error;
+  const models = [DEEP_SEARCH_MODEL, DEEP_SEARCH_FALLBACK_MODEL];
+  const maxAttempts = 4;
+  let lastError = null;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const model = models[attempt % models.length];
+    let response;
+    try {
+      response = await fetch(GEMINI_URL, {
+        method: "POST",
+        headers: { "x-goog-api-key": env.GEMINI_API_KEY, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model,
+          input,
+          system_instruction: instruction,
+          store: false,
+          response_format: { type: "text", mime_type: "application/json", schema },
+          generation_config: { max_output_tokens: maxOutputTokens, thinking_level: "minimal" }
+        })
+      });
+    } catch (error) {
+      lastError = error;
+      if (attempt < maxAttempts - 1) { await waitBeforeGeminiRetry(attempt, null, maxAttempts - 1); continue; }
+      throw lastError;
+    }
+    if (response.status === 429 || response.status >= 500) {
+      lastError = response.status === 429
+        ? Object.assign(new Error("Gemini quota/capacity temporarily unavailable for Deep Search (429). Please retry later."), { code: 429 })
+        : new Error(`Gemini temporary error ${response.status} on ${model}`);
+      if (attempt < maxAttempts - 1) { await waitBeforeGeminiRetry(attempt, response, maxAttempts - 1); continue; }
+      throw lastError;
+    }
+    if (!response.ok) throw new Error(`Gemini Deep Search error ${response.status}: ${cleanText(await response.text(), 600)}`);
+    const payload = await response.json();
+    let raw;
+    try {
+      raw = (await extractGeminiText(payload)).trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "");
+      return JSON.parse(raw);
+    } catch (error) {
+      lastError = new Error("Gemini returned text, but Deep Search could not parse it as JSON.");
+      if (attempt < maxAttempts - 1) { await waitBeforeGeminiRetry(attempt, null, maxAttempts - 1); continue; }
+      throw lastError;
+    }
   }
-  if (!response.ok) throw new Error(`Gemini Deep Search error ${response.status}: ${cleanText(await response.text(), 600)}`);
-  const payload = await response.json();
-  const raw = (await extractGeminiText(payload)).trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "");
-  return JSON.parse(raw);
+  throw lastError || new Error("Gemini Deep Search request failed.");
 }
 
 function sanitizePlan(plan, fallbackQuestion) {
