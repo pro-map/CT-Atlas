@@ -12,3 +12,11 @@
 #adminQuizHistoryTable a{color:#65b8e5;text-decoration:none;font-weight:750;white-space:nowrap}
 .quiz-result-correct{color:#88dbab;font-weight:850}
 .quiz-result-wrong{color:#ec9999;font-weight:850}
+
+.admin-usage-section-title{margin:15px 0 7px;color:#94afbe;font-size:8px;font-weight:850;letter-spacing:.09em}
+#adminFeatureUsageTable{width:100%;border-collapse:collapse;min-width:1120px;background:rgba(5,15,22,.55)}
+#adminFeatureUsageTable th,#adminFeatureUsageTable td{padding:8px 9px;border-bottom:1px solid rgba(92,130,151,.14);text-align:left;font-size:8px;white-space:nowrap}
+#adminFeatureUsageTable th{color:#7896a7;background:#091923;font-weight:800;letter-spacing:.065em}
+#adminFeatureUsageTable td{color:#c5d5de}
+#adminFeatureUsageTable td:first-child{color:#e7f2f7;font-weight:700}
+

@@ -818,6 +818,11 @@ async function handleCrypto(request, env) {
     const result = await runAnalysis(target, limit, env);
     const exchangeLabels = await resolveExchangeLabels(result, env);
     const exchangeBehavior = detectExchangeBehavior(result, exchangeLabels);
+    try {
+      await gateCall(env, "/usage-increment", { username, metrics: { blockchain_searches: 1 } });
+    } catch (usageError) {
+      console.error("Blockchain search usage record failed", usageError);
+    }
 
     return jsonResponse({
       ok: true,
@@ -847,3 +852,4 @@ export {
   analyzeCryptoAddress,
   handleCrypto
 };
+

@@ -19,9 +19,10 @@ const ADMIN_DISPLAY_NAMES=Object.freeze({
   "group-p-6":"Zaydoun",
   "group-p-7":"Saleh",
   "group-p-8":"Lasha",
-  "group-p-9":"Saad",
+  "group-p-9":"MTS",
   "group-p-10":"Alexandre",
   "group-s-1":"Maddy",
+  "group-s-2":"Sebastien EDIS",
   "group-s-3":"Andreas",
   "group-s-4":"William Hippert",
   "group-s-5":"Liman",
@@ -330,6 +331,9 @@ export class ReportGate {
           "blocked_report_requests",
           "quick_ask_requests",
           "social_intel_requests",
+          "blockchain_searches",
+          "facial_extractions",
+          "facial_searches",
           "feedback_submissions",
           "quiz_answers",
           "quiz_correct",
@@ -351,7 +355,7 @@ export class ReportGate {
 
     const summary = {
       active_users: rows.filter(row =>
-        ["logins", "searches", "report_requests", "report_generator_requests", "deep_search_requests", "reports_generated", "cached_reports", "quick_ask_requests", "social_intel_requests", "feedback_submissions", "quiz_answers"]
+        ["logins", "searches", "report_requests", "report_generator_requests", "deep_search_requests", "reports_generated", "cached_reports", "quick_ask_requests", "social_intel_requests", "blockchain_searches", "facial_extractions", "facial_searches", "feedback_submissions", "quiz_answers"]
           .some(metric => Number(row[metric] || 0) > 0)
       ).length,
       logins: 0,
@@ -366,6 +370,9 @@ export class ReportGate {
       blocked_report_requests: 0,
       quick_ask_requests: 0,
       social_intel_requests: 0,
+      blockchain_searches: 0,
+      facial_extractions: 0,
+      facial_searches: 0,
       feedback_submissions: 0,
       quiz_answers: 0,
       quiz_correct: 0,
@@ -386,6 +393,9 @@ export class ReportGate {
         "blocked_report_requests",
         "quick_ask_requests",
         "social_intel_requests",
+        "blockchain_searches",
+        "facial_extractions",
+        "facial_searches",
         "feedback_submissions",
         "quiz_answers",
         "quiz_correct",
@@ -1185,6 +1195,8 @@ export class ReportGate {
           searches: 1,
           event_list_searches: 1
         }, now);
+      } else if (action === "facial_search") {
+        await this.incrementUsage(username, { facial_searches: 1 }, now);
       } else {
         return Response.json({ error: "Unsupported action." }, { status: 400 });
       }
@@ -1572,3 +1584,4 @@ export class ReportGate {
     });
   }
 }
+
