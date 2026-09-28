@@ -250,7 +250,14 @@ async function runInvestigation(event){
     reports=[result.report,...reports.filter(x=>x.id!==result.report.id)].slice(0,50);
     renderHistory();
     renderReport(result.report);
-    setStatus("SOCMINT report generated and saved.","success");
+    const sourceCount=Array.isArray(result.report?.sources)?result.report.sources.length:0;
+    if(result.fallback==="brave_evidence_only"){
+      setStatus("ADK analysis was unavailable; Brave returned "+sourceCount+" public source"+(sourceCount===1?"":"s")+" for analyst review. Report saved.","warning");
+    }else if(result.fallback){
+      setStatus("SOCMINT report generated through Brave fallback · "+sourceCount+" public source"+(sourceCount===1?"":"s")+" · saved.","success");
+    }else{
+      setStatus("SOCMINT report generated · "+sourceCount+" public source"+(sourceCount===1?"":"s")+" · saved.","success");
+    }
   }catch(error){
     if(/QUOTA/.test(error.code||"")){
       const suffix=error.retryAfter?" Retry after approximately "+error.retryAfter+" seconds if the limit is temporary.":"";

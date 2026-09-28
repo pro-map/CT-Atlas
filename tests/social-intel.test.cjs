@@ -33,7 +33,7 @@ function harness(fetchImpl){
   vm.runInContext(addressUtilsSource,context);
   vm.runInContext(sanctionsSource,context);
   vm.runInContext(source,context);
-  return vm.runInContext("({sanitizeRequest,extractToolSources,sanitizeSocialReport,attachWalletScreening,SOCIAL_INTEL_VERSION,socmintModels})",context);
+  return vm.runInContext("({sanitizeRequest,extractToolSources,sanitizeSocialReport,attachWalletScreening,needsIndependentDiscoveryFallback,SOCIAL_INTEL_VERSION,socmintModels})",context);
 }
 
 test("SOCMINT request normalizes search fields and public URLs",()=>{
@@ -110,6 +110,23 @@ test("SOCMINT version is explicit",()=>{
   assert.match(h.SOCIAL_INTEL_VERSION,/socmint-v5/);
 });
 
+
+test("empty ADK discovery evidence triggers the independent search fallback",()=>{
+  const h=harness();
+  assert.equal(h.needsIndependentDiscoveryFallback({mode:"discover",urls:[]},[]),true);
+  assert.equal(h.needsIndependentDiscoveryFallback({mode:"discover",urls:[]},[{url:"https://example.org/"}]),false);
+  assert.equal(h.needsIndependentDiscoveryFallback({mode:"urls_only",urls:["https://example.org/"]},[]),false);
+});
+
+test("SOCMINT discovery does not stop at ADK quota or an empty ADK report",()=>{
+  const src=fs.readFileSync("cloudflare-worker/social-intel.js","utf8");
+  assert.ok(src.includes("SOCMINT_AGENT_EMPTY_EVIDENCE"));
+  assert.ok(src.includes("const agentQuota = status === 429"));
+  assert.ok(src.includes("Brave is independent of Gemini"));
+  const quotaPos=src.indexOf("const agentQuota = status === 429");
+  const bravePos=src.indexOf("const discovery = await braveWorkerDiscovery",quotaPos);
+  assert.ok(bravePos>quotaPos,"Brave fallback must still run after ADK quota/empty evidence");
+});
 
 test("SOCMINT fallback builds an evidence-synthesis pipeline",()=>{
   const source=fs.readFileSync("cloudflare-worker/social-intel.js","utf8");

@@ -123,6 +123,11 @@ A. PLAN
 B. COLLECT / EXPAND
 - Always examine analyst-supplied URLs first.
 - Call social_capabilities early when discovery sources are needed.
+- In discover mode with no analyst-supplied URL, do NOT finish with an empty
+  report without attempting discovery. If independent web search is configured,
+  call search_public_web at least once using the strongest single identifier
+  (target OR one handle, not every term stuffed together). Also use a relevant
+  platform-native collector when the requested platform has one.
 - Use platform-native public collectors when they are relevant: Telegram
   channels, Bluesky, Mastodon, Odysee, Flickr, 4chan, YouTube, LinkedIn, Tumblr,
   Twitch, X and Reddit before relying only on generic web search.

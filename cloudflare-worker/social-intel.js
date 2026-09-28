@@ -14,7 +14,7 @@ import {
 } from "./social-agent-client.js";
 import { loadSanctions, screenReportWallets } from "./sanctions.js";
 
-const SOCIAL_INTEL_VERSION = "socmint-v5-wallet-screening";
+const SOCIAL_INTEL_VERSION = "socmint-v6-resilient-discovery";
 const SOCIAL_REPORT_LIMIT = 50;
 
 const SOCIAL_SCHEMA = {
@@ -217,12 +217,22 @@ async function braveWorkerDiscovery(env, query) {
   const key = String(env?.BRAVE_SEARCH_API_KEY || "").trim();
   if (!key) return { provider: "disabled", sources: [] };
 
-  const terms = [];
-  if (query.target) terms.push(query.target);
-  for (const value of (query.usernames || []).slice(0, 3)) terms.push(value);
-  for (const value of (query.keywords || []).slice(0, 4)) terms.push(value);
-  const base = terms.filter(Boolean).join(" ").trim();
-  if (!base) return { provider: "brave", sources: [] };
+  // Do not stuff every identifier into one query. A name + several handles +
+  // several keywords can easily produce zero search hits even when each
+  // identifier has useful public results on its own.
+  const anchors = [];
+  const addAnchor = value => {
+    const clean = cleanText(value, 260);
+    if (clean && !anchors.includes(clean)) anchors.push(clean);
+  };
+  addAnchor(query.target);
+  for (const value of (query.usernames || []).slice(0, 4)) addAnchor(value);
+  if (query.target) {
+    for (const value of (query.keywords || []).slice(0, 3)) addAnchor(query.target + " " + value);
+  } else {
+    for (const value of (query.keywords || []).slice(0, 4)) addAnchor(value);
+  }
+  if (!anchors.length) return { provider: "brave", sources: [] };
 
   const platformSites = {
     LinkedIn: "site:linkedin.com",
@@ -240,20 +250,30 @@ async function braveWorkerDiscovery(env, query) {
     Bluesky: "site:bsky.app"
   };
 
+  // Maximum six Brave calls: targeted platform queries first, then broad
+  // identifier queries. This improves recall without spending the whole quota
+  // on one over-constrained search string.
   const queries = [];
-  const requestedPlatforms = (query.platforms || []).slice(0, 4);
-  for (const platform of requestedPlatforms) {
+  for (const platform of (query.platforms || []).slice(0, 4)) {
     const site = platformSites[platform];
-    if (site) queries.push(`${base} ${site}`);
+    if (!site) continue;
+    for (const anchor of anchors.slice(0, 2)) {
+      queries.push(`${anchor} ${site}`);
+      if (queries.length >= 4) break;
+    }
+    if (queries.length >= 4) break;
   }
-  queries.push(base);
+  for (const anchor of anchors) {
+    if (queries.length >= 6) break;
+    queries.push(anchor);
+  }
 
   const seenQuery = new Set();
   const seenUrl = new Set();
   const sources = [];
   for (const rawQuery of queries) {
     const q = cleanText(rawQuery, 450);
-    if (!q || seenQuery.has(q) || sources.length >= 10) continue;
+    if (!q || seenQuery.has(q) || sources.length >= 12) continue;
     seenQuery.add(q);
     try {
       const response = await fetch("https://api.search.brave.com/res/v1/web/search?" + new URLSearchParams({
@@ -277,7 +297,7 @@ async function braveWorkerDiscovery(env, query) {
           snippet: cleanText(item?.description, 700),
           kind: "brave_search"
         });
-        if (sources.length >= 10) break;
+        if (sources.length >= 12) break;
       }
     } catch (_) {
       // Discovery fallback is best-effort; the ADK/URL analysis path remains authoritative.
@@ -510,6 +530,12 @@ function normalizeAgentSources(raw, query) {
   }
   for (const url of query.urls || []) add(url, "", "analyst_supplied");
   return items.slice(0, 100);
+}
+
+function needsIndependentDiscoveryFallback(query, sources) {
+  return query?.mode === "discover" &&
+    !(query?.urls || []).length &&
+    !(Array.isArray(sources) && sources.length);
 }
 
 function normalizeReport(raw, query, toolSources, model, discoveryMode) {
@@ -834,6 +860,12 @@ async function handleSocialInvestigate(request, env) {
     try {
       const agentResult = await runSocialAgent(env, username, query);
       const sources = normalizeAgentSources(agentResult.report, query);
+      if (needsIndependentDiscoveryFallback(query, sources)) {
+        const error = new Error("SOCMINT ADK agent completed without any usable public source.");
+        error.code = "SOCMINT_AGENT_EMPTY_EVIDENCE";
+        error.status = 502;
+        throw error;
+      }
       const report = normalizeReport(
         agentResult.report,
         query,
@@ -853,28 +885,19 @@ async function handleSocialInvestigate(request, env) {
       return jsonResponse({ ok: true, report, agent: true }, 200, env);
     } catch (error) {
       const status = Number(error?.status || 0);
-      if (status === 429 || /QUOTA/.test(String(error?.code || ""))) {
-        return jsonResponse({
-          error: "The SOCMINT ADK agent reached its Gemini quota. Retry later; previous reports remain available.",
-          code: "SOCMINT_AGENT_QUOTA_EXHAUSTED",
-          retry_after_seconds: error?.retry_after_seconds || null
-        }, 429, env);
-      }
+      const agentQuota = status === 429 || /QUOTA/.test(String(error?.code || ""));
       agentFailure = {
         status,
         code: cleanText(error?.code, 120),
-        message: cleanText(error?.message, 700)
+        message: cleanText(error?.message, 700),
+        quota: agentQuota
       };
       console.error("SOCMINT ADK agent failed.", agentFailure);
 
-      if (!env.GEMINI_API_KEY) {
-        return jsonResponse({
-          error: "The SOCMINT ADK agent is temporarily unavailable and no Gemini fallback is configured.",
-          code: "SOCMINT_AGENT_UNAVAILABLE",
-          detail: agentFailure.message || null
-        }, 503, env);
-      }
-
+      // Discovery must not die just because the ADK model is quota-limited or
+      // returned an empty report. Brave is independent of Gemini and can still
+      // provide public-source leads; if synthesis also fails, CT Atlas returns
+      // those sources as an evidence-only report instead of showing nothing.
       if (!query.urls.length) {
         const discovery = await braveWorkerDiscovery(env, query);
         if (discovery.sources.length) {
@@ -882,6 +905,7 @@ async function handleSocialInvestigate(request, env) {
           const reportSources = evidence.map(sourceForReport).filter(item => item.url);
           const fallbackQuery = { ...query, mode: "urls_only", urls: reportSources.map(item => item.url).slice(0, 10) };
           try {
+            if (!env.GEMINI_API_KEY) throw new Error("Gemini synthesis is not configured.");
             const fallbackResult = await geminiEvidenceSynthesis(env, fallbackQuery, evidence);
             const report = normalizeReport(
               fallbackResult.parsed,
@@ -951,13 +975,31 @@ async function handleSocialInvestigate(request, env) {
           }
         }
 
+        if (agentQuota) {
+          return jsonResponse({
+            error: env.BRAVE_SEARCH_API_KEY
+              ? "The SOCMINT agent reached its Gemini quota and Brave fallback found no usable public sources. Refine the target, select another platform, or add known public URLs."
+              : "The SOCMINT agent reached its Gemini quota and the independent Brave fallback is not configured.",
+            code: "SOCMINT_AGENT_QUOTA_EXHAUSTED",
+            retry_after_seconds: error?.retry_after_seconds || null,
+            detail: agentFailure.message || null
+          }, 429, env);
+        }
         return jsonResponse({
           error: env.BRAVE_SEARCH_API_KEY
-            ? "The SOCMINT agent failed and Brave fallback returned no usable public sources. Refine the target or add known public URLs."
-            : "The SOCMINT agent failed and the Worker-side independent search fallback is not configured. Add known public URLs or configure Brave for the Worker.",
+            ? "The SOCMINT agent returned no usable evidence and Brave fallback also found no public sources. Refine the target, try a username separately, select another platform, or add a known public URL."
+            : "The SOCMINT agent returned no usable evidence and the Worker-side independent search fallback is not configured. Add known public URLs or configure Brave for the Worker.",
           code: "SOCMINT_AGENT_UNAVAILABLE",
           detail: agentFailure.message || null
         }, status >= 400 && status < 600 ? status : 502, env);
+      }
+
+      if (!env.GEMINI_API_KEY) {
+        return jsonResponse({
+          error: "The SOCMINT ADK agent is temporarily unavailable and no Gemini fallback is configured.",
+          code: "SOCMINT_AGENT_UNAVAILABLE",
+          detail: agentFailure.message || null
+        }, 503, env);
       }
     }
   }
