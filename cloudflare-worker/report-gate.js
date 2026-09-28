@@ -39,6 +39,20 @@ function tabAccessTemplate(username = "") {
   return { username, map: 0, crypto: 0, facial: 0, social: 0 };
 }
 const MIGRATION_PAGE_SIZE = 250;
+const EXCHANGE_CHAINS = new Set(["bitcoin", "ethereum", "bsc", "polygon", "arbitrum", "base", "tron"]);
+const EXCHANGE_EVM_CHAINS = new Set(["ethereum", "bsc", "polygon", "arbitrum", "base"]);
+function exchangeAddressKey(chainValue, addressValue) {
+  const chain = cleanText(chainValue, 24).toLowerCase();
+  let address = cleanText(addressValue, 180);
+  if (!EXCHANGE_CHAINS.has(chain) || !address) return "";
+  if (EXCHANGE_EVM_CHAINS.has(chain)) address = address.toLowerCase();
+  const valid = EXCHANGE_EVM_CHAINS.has(chain)
+    ? /^0x[a-f0-9]{40}$/i.test(address)
+    : chain === "tron"
+      ? /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(address)
+      : /^(?:bc1[ac-hj-np-z02-9]{11,71}|[13][a-km-zA-HJ-NP-Z1-9]{24,33})$/i.test(address);
+  return valid ? `${chain}:${address}` : "";
+}
 
 export class ReportGate {
   constructor(state, env) {
@@ -86,7 +100,7 @@ export class ReportGate {
       if (Number.isFinite(when) && when > now && (nextExpiry == null || when < nextExpiry)) nextExpiry = when;
     };
 
-    for (const prefix of ["cache:", "source-image-token:", "session:"]) {
+    for (const prefix of ["cache:", "source-image-token:", "session:", "crypto-provider-label:"]) {
       let startAfter = "";
       for (let page = 0; page < 100; page++) {
         const options = { prefix, limit: 500 };
@@ -742,6 +756,190 @@ export class ReportGate {
       workspace.updated_at = new Date(now).toISOString();
       await this.state.storage.put(key, workspace);
       return Response.json({ ok: true, workspace });
+    }
+
+    if (url.pathname === "/crypto-exchange-labels-lookup") {
+      const entries = Array.isArray(body.entries) ? body.entries.slice(0, 100) : [];
+      const labels = [];
+      const cachedLabels = [];
+      for (const entry of entries) {
+        const addressKey = exchangeAddressKey(entry?.chain, entry?.address);
+        if (!addressKey) continue;
+        const approved = await this.state.storage.get(`crypto-exchange-label:${addressKey}`);
+        if (approved) labels.push(approved);
+        const cacheKey = `crypto-provider-label:${addressKey}`;
+        const cached = await this.state.storage.get(cacheKey);
+        if (cached && Number(cached.expires_at || 0) > now && cached.label) cachedLabels.push(cached.label);
+        else if (cached) await this.state.storage.delete(cacheKey);
+      }
+      return Response.json({ ok: true, labels, cached_labels: cachedLabels });
+    }
+
+    if (url.pathname === "/crypto-exchange-provider-put") {
+      const writes = {};
+      let nextExpiry = null;
+      for (const item of Array.isArray(body.entries) ? body.entries.slice(0, 100) : []) {
+        const addressKey = exchangeAddressKey(item?.entry?.chain, item?.entry?.address);
+        if (!addressKey || !item?.label || item.label.category !== "EXCHANGE") continue;
+        const expiresAt = Math.min(Number(item.expires_at || 0), now + 30 * 24 * 60 * 60 * 1000);
+        if (!Number.isFinite(expiresAt) || expiresAt <= now) continue;
+        writes[`crypto-provider-label:${addressKey}`] = { label: item.label, expires_at: expiresAt };
+        if (nextExpiry == null || expiresAt < nextExpiry) nextExpiry = expiresAt;
+      }
+      if (Object.keys(writes).length) await this.state.storage.put(writes);
+      if (nextExpiry != null) await this.scheduleExpiry(nextExpiry);
+      return Response.json({ ok: true, cached: Object.keys(writes).length });
+    }
+
+    if (url.pathname === "/crypto-exchange-proposal-create") {
+      const proposal = body.proposal && typeof body.proposal === "object" ? body.proposal : null;
+      const addressKey = exchangeAddressKey(proposal?.chain, proposal?.address);
+      if (!addressKey || !cleanText(proposal?.name, 120) || proposal?.category !== "EXCHANGE") {
+        return Response.json({ error: "Invalid exchange label proposal." }, { status: 400 });
+      }
+      const approved = await this.state.storage.get(`crypto-exchange-label:${addressKey}`);
+      if (approved) return Response.json({ ok: true, already_approved: true, label: approved });
+      const key = `crypto-exchange-proposal:${addressKey}`;
+      const existing = await this.state.storage.get(key);
+      if (existing?.status === "PENDING") return Response.json({ ok: true, already_pending: true, proposal: existing });
+      const safeProposal = {
+        ...proposal,
+        id: cleanText(proposal.id || crypto.randomUUID(), 80),
+        address: addressKey.slice(addressKey.indexOf(":") + 1),
+        category: "EXCHANGE",
+        status: "PENDING",
+        created_by: cleanText(proposal.created_by, 80),
+        created_at: new Date(now).toISOString(),
+        updated_at: new Date(now).toISOString(),
+        reviewed_by: "",
+        reviewed_at: ""
+      };
+      await this.state.storage.put(key, safeProposal);
+      return Response.json({ ok: true, proposal: safeProposal });
+    }
+
+    if (url.pathname === "/crypto-exchange-proposals-list") {
+      const batch = await this.state.storage.list({ prefix: "crypto-exchange-proposal:", limit: 1000 });
+      const proposals = Array.from(batch.values())
+        .filter(item => item?.status === "PENDING")
+        .sort((a, b) => String(b.created_at || "").localeCompare(String(a.created_at || "")))
+        .slice(0, 300);
+      return Response.json({ ok: true, proposals });
+    }
+
+    if (url.pathname === "/crypto-exchange-proposal-review") {
+      const proposalId = cleanText(body.proposal_id, 240);
+      const decision = cleanText(body.decision, 16).toLowerCase();
+      if (!proposalId || !["approve", "reject"].includes(decision)) {
+        return Response.json({ error: "Invalid exchange proposal decision." }, { status: 400 });
+      }
+      const batch = await this.state.storage.list({ prefix: "crypto-exchange-proposal:", limit: 1000 });
+      const match = Array.from(batch.entries()).find(([, item]) => item?.id === proposalId);
+      if (!match || match[1]?.status !== "PENDING") return Response.json({ error: "Pending proposal not found." }, { status: 404 });
+      const [key, proposal] = match;
+      const reviewed = {
+        ...proposal,
+        status: decision === "approve" ? "APPROVED" : "REJECTED",
+        reviewed_by: cleanText(body.reviewed_by, 80),
+        reviewed_at: new Date(now).toISOString(),
+        updated_at: new Date(now).toISOString()
+      };
+      await this.state.storage.put(key, reviewed);
+      if (decision === "approve") {
+        const addressKey = exchangeAddressKey(reviewed.chain, reviewed.address);
+        const approved = { ...reviewed, status: "APPROVED" };
+        delete approved.id;
+        await this.state.storage.put(`crypto-exchange-label:${addressKey}`, approved);
+      }
+      return Response.json({ ok: true, proposal: reviewed });
+    }
+
+    if (url.pathname === "/crypto-exchange-labels-import") {
+      const writes = {};
+      const importedBy = cleanText(body.imported_by, 80);
+      let importedCount = 0;
+      for (const label of Array.isArray(body.labels) ? body.labels.slice(0, 100) : []) {
+        const addressKey = exchangeAddressKey(label?.chain, label?.address);
+        if (!addressKey || label?.category !== "EXCHANGE" || !cleanText(label?.name, 120)) continue;
+        const sourceUrl = cleanText(label?.source_url, 1200);
+        const sourceTitle = cleanText(label?.source_title, 240);
+        const sourceType = cleanText(label?.source_type, 60);
+        if (!sourceUrl && !sourceTitle && !sourceType) continue;
+        writes[`crypto-exchange-label:${addressKey}`] = {
+          ...label,
+          address: addressKey.slice(addressKey.indexOf(":") + 1),
+          category: "EXCHANGE",
+          status: "APPROVED",
+          reviewed_by: importedBy,
+          reviewed_at: new Date(now).toISOString(),
+          updated_at: new Date(now).toISOString()
+        };
+        importedCount++;
+        const proposalKey = `crypto-exchange-proposal:${addressKey}`;
+        const pending = await this.state.storage.get(proposalKey);
+        if (pending?.status === "PENDING") {
+          writes[proposalKey] = {
+            ...pending,
+            status: "APPROVED",
+            reviewed_by: importedBy,
+            reviewed_at: new Date(now).toISOString(),
+            updated_at: new Date(now).toISOString(),
+            resolved_by_import: true
+          };
+        }
+      }
+      if (Object.keys(writes).length) await this.state.storage.put(writes);
+      return Response.json({ ok: true, imported: importedCount });
+    }
+
+    if (url.pathname === "/crypto-exchange-proposals-migrate") {
+      let startAfter = "";
+      let reviewed = 0;
+      let skipped = 0;
+      for (let page = 0; page < 100; page++) {
+        const options = { prefix: "crypto-workspace:", limit: 250 };
+        if (startAfter) options.startAfter = startAfter;
+        const batch = await this.state.storage.list(options);
+        if (!batch?.size) break;
+        for (const [key, workspace] of batch.entries()) {
+          const username = normalizeUsername(workspace?.username || key.slice("crypto-workspace:".length));
+          if (!isAllowedUser(username, this.env)) continue;
+          for (const label of Array.isArray(workspace?.labels) ? workspace.labels : []) {
+            if (String(label?.category || "").toUpperCase() !== "EXCHANGE") continue;
+            const addressKey = exchangeAddressKey(label?.chain, label?.address);
+            if (!addressKey || !cleanText(label?.name, 120)) { skipped++; continue; }
+            const proposalKey = `crypto-exchange-proposal:${addressKey}`;
+            const [approved, pending] = await Promise.all([
+              this.state.storage.get(`crypto-exchange-label:${addressKey}`),
+              this.state.storage.get(proposalKey)
+            ]);
+            if (approved || pending?.status === "PENDING") { skipped++; continue; }
+            const sourceTitle = cleanText(label?.source_title, 240);
+            const sourceType = cleanText(label?.source_type, 60);
+            const sourceUrl = cleanText(label?.source_url, 1200);
+            if (!sourceTitle && !sourceType && !/^https:\/\//i.test(sourceUrl)) { skipped++; continue; }
+            await this.state.storage.put(proposalKey, {
+              ...label,
+              id: crypto.randomUUID(),
+              address: addressKey.slice(addressKey.indexOf(":") + 1),
+              category: "EXCHANGE",
+              status: "PENDING",
+              created_by: username,
+              created_at: new Date(now).toISOString(),
+              updated_at: new Date(now).toISOString(),
+              reviewed_by: "",
+              reviewed_at: "",
+              migration_source: "private-workspace"
+            });
+            reviewed++;
+          }
+        }
+        const keys = Array.from(batch.keys());
+        const lastKey = keys[keys.length - 1];
+        if (batch.size < 250 || !lastKey || lastKey === startAfter) break;
+        startAfter = lastKey;
+      }
+      return Response.json({ ok: true, proposals_added: reviewed, skipped });
     }
 
     if (url.pathname === "/crypto-workspace-get") {
