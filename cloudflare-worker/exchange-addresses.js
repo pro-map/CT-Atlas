@@ -6,7 +6,7 @@ import {
   gateCall
 } from "./shared.js";
 
-const EXCHANGE_ADDRESS_VERSION = "crypto-exchange-addresses-v3";
+const EXCHANGE_ADDRESS_VERSION = "crypto-exchange-addresses-v4";
 const EVM_CHAIN_IDS = Object.freeze({ ethereum: "1", bsc: "56", polygon: "137", arbitrum: "42161", base: "8453" });
 const EVM_CHAINS = new Set(Object.keys(EVM_CHAIN_IDS));
 const CHAIN_SET = new Set(["bitcoin", "ethereum", "bsc", "polygon", "arbitrum", "base", "tron"]);
@@ -95,7 +95,62 @@ const OKX_SEED_LABELS = Object.freeze([
   notes: "Address appears as an OKX reserve-address example in the official verification guide. Historical example only, not the full current address list; verify ownership and snapshot before relying on it."
 })));
 
-const ALL_OFFICIAL_SEED_LABELS = Object.freeze([...OFFICIAL_SEED_LABELS, ...BINANCE_SEED_LABELS, ...OKX_SEED_LABELS]);
+const BINANCE_BSC_SEED_LABELS = Object.freeze([
+  "0xf977814e90da44bfa03b6295a0616a897441acec",
+  "0xBE0eB53F46cd790Cd13851d5EFf43D12404d33E8",
+  "0x5a52e96bacdabb82fd05763e25335261b270efcb",
+  "0x3c783c21a0383057d128bae431894a5c19f9cf06",
+  "0xdccf3b77da55107280bd850ea519df3705d1a75a",
+  "0x8894e0a0c962cb723c1976a4421c95949be2d4e3",
+  "0x515b72ed8a97f42c568d6a143232775018f133c8",
+  "0xbd612a3f30dca67bf60a39fd0d35e39b7ab80774",
+  "0x01c952174c24e1210d26961d456a77a39e1f0bb0",
+  "0x29bdfbf7d27462a2d115748ace2bd71a2646946c",
+  "0xe2fc31f816a9b94326492132018c3aecc4a93ae1",
+  "0x73f5ebe90f27b46ea12e5795d16c4b408b19cc6f",
+  "0x161ba15a5f335c9f06bb5bbb0a9ce14076fbb645",
+  "0x1fbe2acee135d991592f167ac371f3dd893a508b",
+  "0xeb2d2f1b8c558a40207669291fda468e50c8a0bb",
+  "0xa180fe01b906a1be37be6c534a3300785b20d947"
+].map(address => ({
+  chain: "bsc",
+  address,
+  name: "Binance",
+  wallet_role: "UNKNOWN",
+  confidence: "MEDIUM",
+  source_type: "Official exchange disclosure",
+  source_title: "Binance wallet address snapshot (10 Nov 2022; BEP20)",
+  source_url: "https://www.binance.com/en-IN/blog/community/2895840147147652626",
+  notes: "Address listed for BNB BEP20 on BSC in Binance's official 10 Nov 2022 disclosure. Historical snapshot; the source states the list was incomplete and current control should be re-verified."
+})));
+
+const BYBIT_SEED_LABELS = Object.freeze([
+  { chain: "ethereum", address: "0x1Db92e2EeBC8E0c075a02BeA49a2935BcD2dFCF4" },
+  { chain: "base", address: "0x1Db92e2EeBC8E0c075a02BeA49a2935BcD2dFCF4" },
+  { chain: "ethereum", address: "0x6Bd869be16359f9E26f0608A50497f6Ef122eE3E" },
+  { chain: "ethereum", address: "0x922fa922da1b0b28d0af5aa274d7326eaa108c3d" },
+  ...["ethereum", "bsc", "base", "polygon", "arbitrum"].map(chain => ({ chain, address: "0x88a1493366d48225fc3cefbdae9ebb23e323ade3" })),
+  ...["ethereum", "base"].map(chain => ({ chain, address: "0xA7A93fd0a276fc1C0197a5B5623eD117786eeD06" })),
+  ...["ethereum", "base"].map(chain => ({ chain, address: "0xbaed383ede0e5d9d72430661f3285daa77e9439f" })),
+  ...["ethereum", "arbitrum", "base", "bsc"].map(chain => ({ chain, address: "0xee5B5B923fFcE93A870B3104b7CA09c3db80047A" }))
+].map(entry => ({
+  ...entry,
+  name: "Bybit",
+  wallet_role: "PROOF_OF_RESERVES",
+  confidence: "MEDIUM",
+  source_type: "Official proof-of-reserves audit disclosure",
+  source_title: "Bybit PoR audit wallet list (official PDF)",
+  source_url: "https://www.bybit.com/common-static/cht-static/por/Bybit_PoR_Audit_Dec.pdf",
+  notes: "Listed in Bybit's official PoR audit PDF for the specified network. The report is a dated snapshot, not proof of present control; verify against the latest Bybit report before relying on this attribution."
+})));
+
+const ALL_OFFICIAL_SEED_LABELS = Object.freeze([
+  ...OFFICIAL_SEED_LABELS,
+  ...BINANCE_SEED_LABELS,
+  ...BINANCE_BSC_SEED_LABELS,
+  ...OKX_SEED_LABELS,
+  ...BYBIT_SEED_LABELS
+]);
 
 function normalizeChain(value) {
   const chain = cleanText(value, 24).toLowerCase();
