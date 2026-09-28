@@ -79,15 +79,17 @@ Exchange labels are stored in the existing `REPORT_GATE` Durable Object. Do not 
 a new Durable Object binding or move user workspaces: analyst labels remain private
 until their owner proposes them and an admin approves them.
 
-The Crypto admin panel can import 35 historically disclosed addresses: 10 Crypto.com
-cold wallets, 23 Binance BTC/Ethereum/TRON reserve wallets, and 2 OKX verification
-examples (one BTC, one ETH). The Binance and Crypto.com lists date to November 2022
-and are partial; the OKX addresses are examples from its official verification guide,
-not its full current downloadable list. Each label carries its own source and caveat.
+The Crypto admin panel can import 68 sourced chain/address labels: 10 Crypto.com
+cold wallets, 39 Binance BTC/Ethereum/TRON/BSC addresses, 17 Bybit EVM network
+entries, and 2 OKX BTC/Ethereum reserve-address examples. The Binance and Crypto.com
+lists date to November 2022 and are partial; the OKX addresses are examples from its
+official verification guide, not the full current downloadable list. The Bybit
+entries are a subset visible in its official PoR audit PDF. Each label carries its
+own source and historical-data caveat.
 The admin-only `action=seed` route writes sourced labels into the shared registry and
 the Durable Object skips existing addresses. Verify current control before relying on
-any historic disclosure. The full current OKX ZIP could not be fetched from this
-environment; do not present these seed records as a complete current PoR list.
+any historic disclosure. Current full Binance/OKX files could not be fetched from
+this environment; do not present these seed records as complete current PoR lists.
 
 - `/crypto-analyze` looks up approved registry labels for the query and its visible
   transaction counterparties. Labels include the chain, exchange name, wallet role,
