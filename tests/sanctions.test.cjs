@@ -413,7 +413,7 @@ test("Social UI shows wallets with sanctions status, never treats 'not screened'
   assert.ok(client.includes('url.searchParams.set("autorun","1")'));
   assert.ok(client.includes("WALLETS & SANCTIONS SCREENING"),"the PDF export must include the screening");
   assert.ok(css.includes(".wallet-status.hit")&&css.includes(".wallet-item.listed"));
-  assert.ok(html.includes("social.css?v=2")&&html.includes("social.js?v=2"),"asset versions must be bumped so browsers load the new UI");
+  assert.ok(html.includes("social.css?v=2")&&html.includes("social.js?v=3"),"asset versions must be bumped so browsers load the new UI");
 });
 
 test("Social platform choices include the free collectors and stay within the Worker's platform cap",()=>{

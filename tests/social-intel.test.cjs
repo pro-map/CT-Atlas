@@ -107,7 +107,7 @@ test("SOCMINT UI contains friendly quota handling",()=>{
 
 test("SOCMINT version is explicit",()=>{
   const h=harness();
-  assert.match(h.SOCIAL_INTEL_VERSION,/socmint-v5/);
+  assert.match(h.SOCIAL_INTEL_VERSION,/socmint-v6/);
 });
 
 
