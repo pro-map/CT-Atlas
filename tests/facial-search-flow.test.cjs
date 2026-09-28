@@ -256,7 +256,7 @@ test("a search tab that was closed before the result arrived is offered as a lin
   assert.deepEqual(h.opened[0].locations,[],"a closed tab is not navigated");
   assert.match(h.cells.links.innerHTML,/Also open:.*Yandex Images/s);
   assert.equal(h.nextSteps.length,1);
-  assert.match(h.status(),/Yandex Images got no tab/);
+  assert.match(h.status(),/Yandex search tab was closed before the results could load/);
 });
 
 test("if every tab was closed the status does not claim anything opened",async()=>{
