@@ -140,9 +140,14 @@ test("PRIVACY GUARD: a crop leaves the browser only through an explicit SEARCH c
   for(const forbidden of ["XMLHttpRequest","sendBeacon","FormData","WebSocket","location.href","location.assign","navigator.share"]){
     assert.ok(!src.includes(forbidden),"facial-crops.js must not use "+forbidden);
   }
-  // Exactly one network call, and it goes to the CT Atlas API's own hosting endpoint.
-  assert.equal((src.match(/\bfetch\(/g)||[]).length,1);
-  assert.ok(src.includes('fetch(api+"/face-share",{method:"POST"'));
+  // The resized crop is uploaded once to CT Atlas. A separate request records
+  // only the search action and username; no crop or image data leaves in telemetry.
+  assert.equal((src.match(/\bfetch\(/g)||[]).length,2);
+  assert.equal((src.match(/fetch\(api\+"\/face-share"/g)||[]).length,1);
+  assert.equal((src.match(/fetch\(api\+"\/usage-record"/g)||[]).length,1);
+  const usage=src.slice(src.indexOf("function recordFacialSearchUsage"),src.indexOf("async function startSearch"));
+  assert.ok(usage.includes('body:JSON.stringify({username,action:"facial_search"})'));
+  assert.ok(!usage.includes("record.blob")&&!usage.includes("record.file")&&!usage.includes("record.canvas"));
   // ...reachable from one place only (runDirectSearch), which is started only through requestSearch, which only a click handler calls.
   assert.equal((src.match(/shareCrop\(record\)/g)||[]).length,2,"definition + the single call in runDirectSearch");
   assert.equal((src.match(/runDirectSearch\(record,engines\)/g)||[]).length,2,"definition + the single call in startSearch");
