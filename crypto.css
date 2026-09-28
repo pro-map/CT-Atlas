@@ -283,6 +283,17 @@ button,input,select{font:inherit}
 .intel-badge.category{border-color:#427150;color:#95d8aa;background:#17291d}
 .intel-badge.clear{border-color:#427150;color:#95d8aa;background:#17291d}
 .intel-badge.unscreened{border-color:#a27935;color:#e7c06f;background:#302718}
+.exchange-proposal-field .checkbox-row{display:flex;align-items:center;gap:7px;text-transform:none;letter-spacing:0;color:#b8c8d0;font-size:9px;line-height:1.4}
+.exchange-proposal-field .checkbox-row span{display:inline;margin:0;color:#b8c8d0;font-size:9px;font-weight:400;letter-spacing:0;text-transform:none}
+.exchange-proposal-field .checkbox-row input{width:auto;min-height:0;margin:0;accent-color:#72a9bf}
+.exchange-admin{margin-top:12px;border-top:1px solid #2f4654;padding-top:10px}
+.exchange-admin summary{cursor:pointer;color:#a9c9d8;font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.exchange-admin-body{display:flex;flex-direction:column;gap:9px;padding-top:10px}
+.exchange-admin textarea{width:100%;min-height:110px;border:1px solid #405563;border-radius:4px;background:#202f3b;color:white;padding:9px 10px;resize:vertical;font:10px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace}
+.exchange-admin textarea:focus{border-color:#79a9bd;outline:none}
+.exchange-proposal-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.exchange-proposal-actions .crypto-small-button{padding:5px 7px}
+.exchange-source-badge{margin-left:5px}
 .intel-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
 .intel-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .intel-form>.intel-actions,.intel-form>.intel-result,.intel-form>#cryptoAlerts{grid-column:1/-1}
