@@ -2674,6 +2674,16 @@ function bind(){
     finally{button.disabled=false;}
   });
   document.getElementById("exchangeTemplateDownload")?.addEventListener("click",downloadExchangeTemplate);
+  document.getElementById("exchangeSeedOfficial")?.addEventListener("click",async event=>{
+    const button=event.currentTarget;button.disabled=true;
+    setExchangeAdminStatus("Importing the 10 historically disclosed Crypto.com cold wallet addresses…");
+    try{
+      const result=await exchangeApi("seed");
+      setExchangeAdminStatus((result.imported||0)+" Crypto.com addresses imported from the official Nov 2022 disclosure ("+(result.skipped||0)+" already present or skipped). Historical list; partial reserves.");
+      await refreshExchangeProposals();
+    }catch(error){setExchangeAdminStatus(error.message);}
+    finally{button.disabled=false;}
+  });
   document.getElementById("exchangeImportButton")?.addEventListener("click",importExchangeLabels);
   document.getElementById("exchangeImportFile")?.addEventListener("change",async event=>{
     const file=event.currentTarget.files?.[0];
