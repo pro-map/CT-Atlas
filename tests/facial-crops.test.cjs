@@ -84,10 +84,10 @@ test("buildZip produces an archive that Python's zipfile reads back byte for byt
   for(const entry of entries)assert.equal(read[entry.name],Buffer.from(entry.data).toString("hex"),entry.name);
 });
 
-test("search engines: exactly Yandex Images and TinEye (the others returned nothing in real use), free, https, opened by URL",()=>{
+test("search engine: exactly Yandex Images, free, https, opened by URL",()=>{
   const engines=h.SEARCH_ENGINES;
-  assert.equal(JSON.stringify(engines.map(e=>e.id)),JSON.stringify(["yandex","tineye"]));
-  assert.equal(JSON.stringify([...h.SEARCH_ALL_IDS]),JSON.stringify(["yandex","tineye"]));
+  assert.equal(JSON.stringify(engines.map(e=>e.id)),JSON.stringify(["yandex"]));
+  assert.equal(JSON.stringify([...h.SEARCH_ALL_IDS]),JSON.stringify(["yandex"]));
   const link="https://ct-report-generator.fairpeace.workers.dev/face-share/AAAAAAAAAAAAAAAAAAAAAA.jpg";
   for(const engine of engines){
     assert.match(engine.url,/^https:\/\/[a-z0-9.-]+\//,engine.id+" (its own upload page, used when hosting fails)");
@@ -99,11 +99,10 @@ test("search engines: exactly Yandex Images and TinEye (the others returned noth
     assert.ok(!url.includes(link),engine.id+" must not leave the link unencoded");
   }
   assert.equal(h.directSearchUrl(engines[0],link),"https://yandex.com/images/search?rpt=imageview&url="+encodeURIComponent(link));
-  assert.equal(h.directSearchUrl(engines[1],link),"https://tineye.com/search?url="+encodeURIComponent(link));
   assert.equal(h.directSearchUrl(null,link),null);
   assert.ok(Object.isFrozen(engines));
   const source=read("facial-crops.js");
-  for(const removed of ["bing.com","lens.google.com","images.google.com","graph.baidu.com","search4faces"])assert.ok(!source.includes(removed),removed+" was removed");
+  for(const removed of ["tineye.com","bing.com","lens.google.com","images.google.com","graph.baidu.com","search4faces"])assert.ok(!source.includes(removed),removed+" was removed");
 });
 
 test("the hosted-crop link is only accepted when it points at the CT Atlas API's own hosting path",()=>{
@@ -196,8 +195,7 @@ test("the UI wires the crops in, states the third-party disclosure, and keeps th
   assert.match(html,/deletes its hosted copy automatically/);
   assert.match(html,/own retention rules/);
   assert.match(html,/after a confirmation/);
-  assert.match(html,/one tab per click/);
-  assert.match(html,/SEARCH opens Yandex Images and TinEye/);
+  assert.match(html,/SEARCH opens Yandex Images/);
   // Engines must not learn that the request came from CT Atlas (script navigations use the page's policy).
   assert.match(html,/<meta name="referrer" content="no-referrer">/);
   assert.ok(!html.includes('id="fcMore"'),"the links live in the face row now");

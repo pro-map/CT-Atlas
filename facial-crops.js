@@ -121,8 +121,8 @@ function buildZip(entries,date=new Date()){
   return out;
 }
 
-// The two reverse-image engines kept (the others returned nothing in real use): Yandex and TinEye. Neither accepts
-// an upload from another site, so the engine is opened on a URL of the crop (search-by-URL). That needs the crop
+// Yandex Images is the reverse-image engine retained for face-crop searches. It does not accept
+// an upload from another site, so it is opened on a URL of the crop (search-by-URL). That needs the crop
 // to be reachable: on an explicit click, and after a confirmation, this one crop is hosted for a few minutes by
 // the CT Atlas Worker (see shareCrop below). `url` is the engine's own upload page, used when hosting fails: the
 // crop is then put on the clipboard and the analyst pastes it there (it reaches the service only when pasted).
@@ -130,10 +130,8 @@ const encode=encodeURIComponent;
 const SEARCH_ENGINES=Object.freeze([
   {id:"yandex",name:"Yandex Images",url:"https://yandex.com/images/search?rpt=imageview",note:"free · strongest on faces",
     direct:link=>"https://yandex.com/images/search?rpt=imageview&url="+encode(link)},
-  {id:"tineye",name:"TinEye",url:"https://tineye.com/",note:"free · limited daily searches",
-    direct:link=>"https://tineye.com/search?url="+encode(link)}
 ]);
-const SEARCH_ALL_IDS=Object.freeze(["yandex","tineye"]);
+const SEARCH_ALL_IDS=Object.freeze(["yandex"]);
 
 // What is hosted for a direct search: ONE crop, re-encoded small (the Worker refuses more
 // than 150 KB), with no metadata, deleted by the Worker after a few minutes.
@@ -286,9 +284,9 @@ function paintCell(record){
         '<button type="button" class="fc-btn" data-fc-action="copy" data-fc-key="'+esc(record.key)+'">COPY</button>'+
       '</div>'+
       '<div class="fc-buttons">'+
-        '<button type="button" class="fc-btn fc-btn-search" data-fc-action="search-all" data-fc-key="'+esc(record.key)+'" title="Host this crop for about 10 minutes and search it on Yandex Images and TinEye">SEARCH</button>'+
+        '<button type="button" class="fc-btn fc-btn-search" data-fc-action="search-all" data-fc-key="'+esc(record.key)+'" title="Host this crop for about 10 minutes and search it on Yandex Images">SEARCH</button>'+
       '</div>'+
-      '<div class="fc-search-note">Yandex + TinEye</div>'+
+      '<div class="fc-search-note">Yandex Images</div>'+
       '<div class="fc-links" data-fc-links="'+esc(record.key)+'" hidden></div>';
   }
 }
@@ -484,17 +482,17 @@ function openPlaceholder(){
 }
 
 function confirmText(record,engines,hostedShare){
-  const names=engines.map(engine=>engine.name).join(", ");
+  const name=engines[0]?.name||"Yandex Images";
   if(hostedShare){
     const minutes=Math.max(1,Math.round((hostedShare.expiresAt-Date.now())/60000));
-    return "Also search face "+record.label+" on "+names+"?\n\n"+
+    return "Also search face "+record.label+" on "+name+"?\n\n"+
       "This crop is already hosted on CT Atlas's temporary storage (EU) and will be deleted automatically in about "+minutes+" minute(s). "+
-      "Pressing OK gives the same link to "+names+", which will download the crop and apply its own retention rules to it.\n\n"+
-      "Nothing is shared with "+names+" unless you press OK.";
+      "Pressing OK gives the same link to "+name+", which will download the crop and apply its own retention rules to it.\n\n"+
+      "Nothing is shared with "+name+" unless you press OK.";
   }
-  return "Search face "+record.label+" directly on "+names+"?\n\n"+
-    "These services can only search by web address, so this ONE crop (a small JPEG without metadata) will be hosted on CT Atlas's temporary storage (EU) for about 10 minutes. "+
-    "Anyone holding its unguessable link can view it during that time, it is downloaded by the search service(s) you picked (each applies its own retention rules to what it downloads), and CT Atlas deletes its copy automatically afterwards.\n\n"+
+  return "Search face "+record.label+" directly on "+name+"?\n\n"+
+    "Yandex Images can only search by web address, so this ONE crop (a small JPEG without metadata) will be hosted on CT Atlas's temporary storage (EU) for about 10 minutes. "+
+    "Anyone holding its unguessable link can view it during that time, Yandex Images downloads it and applies its own retention rules to that copy, and CT Atlas deletes its copy automatically afterwards.\n\n"+
     "Nothing is uploaded unless you press OK.";
 }
 
@@ -527,8 +525,8 @@ function showLinks(record,queued,opened,expiresAt){
   if(expiresAt)linkTimers.set(record.key,setTimeout(()=>clearLinks(record.key),Math.max(0,expiresAt-Date.now())));   // the hosted image is gone by then
 }
 
-// "One more click": when the browser opened only the first engine, this in-page dialog holds a real link for the
-// others. A link click is its own gesture, so it works even when the browser lets a click open a single tab.
+// If the Yandex tab is closed after the hosted link is created, this in-page dialog provides
+// a real Yandex link. Its click is a fresh browser gesture.
 function showNextStep(record,queued){
   const dialog=document.createElement("dialog");
   dialog.className="fc-consent fc-next";
@@ -536,8 +534,7 @@ function showNextStep(record,queued){
   dialog.setAttribute("aria-describedby","fcNextText");
   const names=queued.map(item=>item.engine.name).join(", ");
   dialog.innerHTML='<div class="fc-consent-title" id="fcNextTitle">FACE '+esc(record.label)+' · ONE MORE CLICK</div>'+
-    '<div class="fc-consent-text" id="fcNextText">A browser opens one tab per click (or a tab was closed), so '+esc(names)+' did not open. Click below to open it'+
-    ' on the same hosted crop. (Allow pop-ups for this site in the browser to open both engines with a single click.)</div>'+
+    '<div class="fc-consent-text" id="fcNextText">The search tab did not stay open, so '+esc(names)+' could not load. Click below to open it on the same hosted crop.</div>'+
     '<div class="fc-consent-actions"><button type="button" class="fc-btn" data-fc-next="close">LATER</button>'+
     queued.map(item=>'<a class="fc-btn fc-btn-primary" href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer" data-fc-next="open">OPEN '+esc(item.engine.name.toUpperCase())+' ↗</a>').join("")+'</div>';
   const dismiss=()=>{if(typeof dialog.close==="function")dialog.close();dialog.remove();};
@@ -627,7 +624,7 @@ async function runDirectSearch(record,engines){
   clearLinks(record.key);
   const windows=engines.map(()=>openPlaceholder());       // synchronous: still inside the click / the OK click
   if(windows.every(win=>!win)){
-    setStatus("The browser blocked the search window(s). Allow pop-ups for this site, then try again.","error");
+    setStatus("The browser blocked the Yandex search window. Allow pop-ups for this site, then try again.","error");
     return;
   }
   try{
@@ -646,8 +643,8 @@ async function runDirectSearch(record,engines){
     const names=items=>items.map(item=>item.engine.name).join(", ");
     setStatus(opened.length
       ?"Face "+record.label+": "+names(opened)+" opened on the hosted crop. The link stays valid for about "+minutes+" more minute(s), then the image is deleted automatically. Results are leads, not identifications."+
-        (queued.length?" "+names(queued)+" got no tab (a browser opens one tab per click, or the tab was closed): use the window that just appeared, or the links in this row.":"")
-      :"Face "+record.label+": the search tab(s) were closed before the results could load. The crop stays hosted for about "+minutes+" more minute(s): use the window that just appeared, or the links in this row ("+names(queued)+").");
+        (queued.length?" "+names(queued)+" got no tab (it was blocked or closed): use the link in this row.":"")
+      :"Face "+record.label+": the Yandex search tab was closed before the results could load. The crop stays hosted for about "+minutes+" more minute(s): use the link in this row ("+names(queued)+").");
     if(queued.length)nextStepPrompt(record,queued);
   }catch(error){
     // Fall back to the paste flow: each window goes to the engine's own upload page.

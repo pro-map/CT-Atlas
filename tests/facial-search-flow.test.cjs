@@ -12,9 +12,7 @@ const API="https://api.test";
 const SHARE_URL=API+"/face-share/AAAAAAAAAAAAAAAAAAAAAA.jpg";
 const LINK=encodeURIComponent(SHARE_URL);
 const YANDEX="https://yandex.com/images/search?rpt=imageview&url="+LINK;
-const TINEYE="https://tineye.com/search?url="+LINK;
 const YANDEX_PAGE="https://yandex.com/images/search?rpt=imageview";
-const TINEYE_PAGE="https://tineye.com/";
 const MAX=140*1024;
 
 function harness(options={}){
@@ -98,7 +96,7 @@ function harness(options={}){
 
 // ---------------------------------------------------------------- what the page offers
 
-test("only Yandex Images and TinEye are offered, behind one SEARCH button (no engine menu)",async()=>{
+test("only Yandex Images is offered, behind one SEARCH button (no engine menu)",async()=>{
   const h=harness();
   await h.attach();
   const html=h.cells.actions.innerHTML;
@@ -106,11 +104,11 @@ test("only Yandex Images and TinEye are offered, behind one SEARCH button (no en
   assert.match(html,/data-fc-action="copy"/);
   assert.equal((html.match(/data-fc-action="search-all"/g)||[]).length,1);
   assert.match(html,/>SEARCH<\/button>/);
-  assert.match(html,/Yandex \+ TinEye/);
+  assert.match(html,/Yandex Images/);
   assert.match(html,/data-fc-links=/,"the row has its own place for engines that got no tab");
   assert.doesNotMatch(html,/<details|fc-menu|search-direct|Bing|Google|Baidu|Search4faces/i);
-  assert.equal(JSON.stringify(h.crops.helpers.SEARCH_ENGINES.map(engine=>engine.id)),JSON.stringify(["yandex","tineye"]));
-  assert.equal(JSON.stringify([...h.crops.helpers.SEARCH_ALL_IDS]),JSON.stringify(["yandex","tineye"]));
+  assert.equal(JSON.stringify(h.crops.helpers.SEARCH_ENGINES.map(engine=>engine.id)),JSON.stringify(["yandex"]));
+  assert.equal(JSON.stringify([...h.crops.helpers.SEARCH_ALL_IDS]),JSON.stringify(["yandex"]));
 });
 
 test("cutting the faces sends nothing anywhere",async()=>{
@@ -133,20 +131,20 @@ test("JPEG download and COPY never touch the network",async()=>{
 
 // ---------------------------------------------------------------- SEARCH
 
-test("SEARCH asks BEFORE opening anything, then opens both engines on ONE small hosted copy",async()=>{
+test("SEARCH asks BEFORE opening anything, then opens Yandex on ONE small hosted copy",async()=>{
   const h=harness();
   await h.attach();
   await h.click();
 
   assert.deepEqual(h.tabsAtPrompt,[0],"no tab exists while the confirmation is on screen (a dialog raised from a tab that lost the focus can be suppressed)");
   assert.equal(h.confirms.length,1);
-  assert.match(h.confirms[0],/^Search face F1 directly on Yandex Images, TinEye\?/);
+  assert.match(h.confirms[0],/^Search face F1 directly on Yandex Images\?/);
   assert.match(h.confirms[0],/about 10 minutes/);
   assert.match(h.confirms[0],/deletes its copy automatically/);
   assert.match(h.confirms[0],/its own retention rules/);
   assert.match(h.confirms[0],/Nothing is uploaded unless you press OK/);
 
-  assert.equal(h.opened.length,2,"one tab per engine");
+  assert.equal(h.opened.length,1,"one Yandex tab");
   assert.ok(h.opened.every(win=>win.url==="about:blank"&&win.opener===null),"blank tabs first, no reference back to CT Atlas");
   assert.equal(h.fetchCalls.length,1);
   const call=h.fetchCalls[0];
@@ -159,10 +157,9 @@ test("SEARCH asks BEFORE opening anything, then opens both engines on ONE small 
   assert.ok(call.init.body.w<=900&&call.init.body.h<=900,"downscaled to at most 900 px");
 
   assert.deepEqual(h.opened[0].locations,[YANDEX]);
-  assert.deepEqual(h.opened[1].locations,[TINEYE]);
-  assert.match(h.status(),/Yandex Images, TinEye opened on the hosted crop/);
+  assert.match(h.status(),/Yandex Images opened on the hosted crop/);
   assert.match(h.status(),/deleted automatically/);
-  assert.equal(h.nextSteps.length,0,"both opened: nothing more to click");
+  assert.equal(h.nextSteps.length,0,"Yandex opened: nothing more to click");
   assert.match(h.cells.links.innerHTML,/<span>Reopen:<\/span>/);
   assert.equal(h.cells.links.hidden,false);
 });
@@ -176,25 +173,6 @@ test("declining the confirmation uploads nothing and never opens a tab",async()=
   assert.match(h.status(),/nothing was uploaded/);
 });
 
-test("default browsers allow ONE tab per click: Yandex opens, TinEye is offered through a real link and a one-more-click prompt, with a single confirmation and upload",async()=>{
-  const h=harness({popupLimit:1});
-  await h.attach();
-  await h.click();
-  assert.equal(h.opened.length,1);
-  assert.equal(h.confirms.length,1);
-  assert.equal(h.fetchCalls.length,1);
-  assert.deepEqual(h.opened[0].locations,[YANDEX]);
-
-  const also=h.cells.links.innerHTML.split("<span>Reopen:</span>")[0];
-  assert.match(also,/<span>Also open:<\/span> <a class="fc-more-link" href="[^"]+" target="_blank" rel="noopener noreferrer">TinEye<\/a>/);
-  assert.equal(h.nextSteps.length,1,"the analyst is told, in the page, to click once more");
-  assert.equal(JSON.stringify(h.nextSteps[0].ids),JSON.stringify(["tineye"]));
-  assert.equal(h.nextSteps[0].urls[0],TINEYE);
-  assert.match(h.status(),/Yandex Images opened on the hosted crop/);
-  assert.match(h.status(),/TinEye got no tab/);
-  assert.match(h.status(),/window that just appeared/);
-});
-
 test("pop-ups blocked altogether: nothing is uploaded, no consent is recorded, the analyst is told what to do",async()=>{
   const h=harness({popupLimit:0});
   await h.attach();
@@ -205,16 +183,15 @@ test("pop-ups blocked altogether: nothing is uploaded, no consent is recorded, t
   assert.equal(h.confirms.length,2,"nothing was hosted, so it is asked about again");
 });
 
-test("searching the same face again while its hosting lives: no new confirmation, no new upload, both tabs open at once",async()=>{
+test("searching the same face again while its hosting lives: no new confirmation, no new upload, Yandex opens again",async()=>{
   const h=harness();
   await h.attach();
   await h.click();
   await h.click();
   assert.equal(h.confirms.length,1);
   assert.equal(h.fetchCalls.length,1);
-  assert.equal(h.opened.length,4);
-  assert.deepEqual(h.opened[2].locations,[YANDEX]);
-  assert.deepEqual(h.opened[3].locations,[TINEYE]);
+  assert.equal(h.opened.length,2);
+  assert.deepEqual(h.opened[1].locations,[YANDEX]);
 });
 
 test("an expired hosting is never reused: it is confirmed and hosted again",async()=>{
@@ -225,7 +202,7 @@ test("an expired hosting is never reused: it is confirmed and hosted again",asyn
   await h.click();
   assert.equal(h.fetchCalls.length,2);
   assert.equal(h.confirms.length,2,"a new hosting is a new decision");
-  assert.match(h.confirms[1],/^Search face F1 directly on Yandex Images, TinEye/);
+  assert.match(h.confirms[1],/^Search face F1 directly on Yandex Images/);
 });
 
 test("the lifetime comes from the relative ttl, so a wrong clock on this computer changes nothing",async()=>{
@@ -251,7 +228,7 @@ test("a stalled hosting request times out and falls back instead of leaving blan
   await h.attach();
   await h.click();
   assert.match(h.status(),/did not answer in time/);
-  assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE,TINEYE_PAGE]);
+  assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE]);
 });
 
 test("repeated clicks while a search is in flight neither host twice nor ask twice",async()=>{
@@ -263,7 +240,7 @@ test("repeated clicks while a search is in flight neither host twice nor ask twi
   await new Promise(resolve=>setTimeout(resolve,20));
   await h.click();
   assert.match(h.status(),/already in progress/);
-  assert.equal(h.opened.length,2,"the second click opens no further tabs");
+  assert.equal(h.opened.length,1,"the second click opens no further tabs");
   release();
   await first;
   assert.equal(h.fetchCalls.length,1);
@@ -274,13 +251,12 @@ test("a search tab that was closed before the result arrived is offered as a lin
   let closeIt;
   const h=harness({fetchImpl:async()=>{if(closeIt)closeIt();return {ok:true,status:200,json:async()=>({ok:true,url:SHARE_URL,ttl_seconds:600})};}});
   await h.attach();
-  closeIt=()=>{h.opened[1].closed=true;};                   // the TinEye tab is closed while hosting
+  closeIt=()=>{h.opened[0].closed=true;};                   // the Yandex tab is closed while hosting
   await h.click();
-  assert.deepEqual(h.opened[0].locations,[YANDEX]);
-  assert.deepEqual(h.opened[1].locations,[],"a closed tab is not navigated");
-  assert.match(h.cells.links.innerHTML,/Also open:.*TinEye/s);
+  assert.deepEqual(h.opened[0].locations,[],"a closed tab is not navigated");
+  assert.match(h.cells.links.innerHTML,/Also open:.*Yandex Images/s);
   assert.equal(h.nextSteps.length,1);
-  assert.match(h.status(),/TinEye got no tab/);
+  assert.match(h.status(),/Yandex Images got no tab/);
 });
 
 test("if every tab was closed the status does not claim anything opened",async()=>{
@@ -289,10 +265,10 @@ test("if every tab was closed the status does not claim anything opened",async()
   await h.attach();
   closeAll=()=>h.opened.forEach(win=>{win.closed=true;});
   await h.click();
-  assert.match(h.status(),/search tab\(s\) were closed before the results could load/);
+  assert.match(h.status(),/Yandex search tab was closed before the results could load/);
   assert.doesNotMatch(h.status(),/opened on the hosted crop/);
   assert.equal(h.nextSteps.length,1);
-  assert.equal(JSON.stringify(h.nextSteps[0].ids),JSON.stringify(["yandex","tineye"]));
+  assert.equal(JSON.stringify(h.nextSteps[0].ids),JSON.stringify(["yandex"]));
 });
 
 test("the row's links belong to one hosting and are removed when it expires",async()=>{
@@ -307,7 +283,7 @@ test("the row's links belong to one hosting and are removed when it expires",asy
 
 // ---------------------------------------------------------------- failures never lose the search
 
-test("if hosting fails both tabs fall back to the engines' own upload pages and the crop is copied for Ctrl+V",async()=>{
+test("if hosting fails the Yandex tab falls back to its upload page and the crop is copied for Ctrl+V",async()=>{
   const cases=[
     ["network down",async()=>{throw new Error("offline");},/could not be reached/],
     ["server refusal",async()=>({ok:false,status:503,json:async()=>({error:"Face search hosting is not configured."})}),/not configured/],
@@ -318,7 +294,7 @@ test("if hosting fails both tabs fall back to the engines' own upload pages and 
     const h=harness({fetchImpl});
     await h.attach();
     await h.click();
-    assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE,TINEYE_PAGE],label+": each engine's own upload page");
+    assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE],label+": Yandex upload page");
     assert.equal(h.clipboardWrites.length,1,label+": crop copied");
     assert.match(h.status(),expected,label);
     assert.match(h.status(),/Ctrl\+V/,label);
@@ -331,7 +307,7 @@ test("a hosting answer that is not a CT Atlas link is never handed to a search e
     const h=harness({fetchImpl:async()=>({ok:true,status:200,json:async()=>({ok:true,url,ttl_seconds:600})})});
     await h.attach();
     await h.click();
-    assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE,TINEYE_PAGE],String(url));
+    assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE],String(url));
     assert.ok(!h.opened.some(win=>win.locations.some(l=>l.includes("evil")||l.includes("javascript"))),String(url));
     assert.match(h.status(),/not a valid CT Atlas link/);
   }
@@ -343,5 +319,5 @@ test("without a session no upload is attempted",async()=>{
   await h.click();
   assert.equal(h.fetchCalls.length,0);
   assert.match(h.status(),/sign in again/);
-  assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE,TINEYE_PAGE]);
+  assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE]);
 });
