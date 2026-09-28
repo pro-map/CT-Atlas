@@ -632,18 +632,45 @@ async function extractGeminiText(payload) {
   );
 }
 
+const GEMINI_RETRY_BASE_DELAY_MS = 1000;
+const GEMINI_RETRY_MAX_DELAY_MS = 8000;
+
+function geminiRetryAfterMs(response) {
+  const value = String(response?.headers?.get?.("retry-after") || "").trim();
+  if (!value) return null;
+  const seconds = Number(value);
+  const delay = Number.isFinite(seconds) ? seconds * 1000 : Date.parse(value) - Date.now();
+  if (!Number.isFinite(delay)) return null;
+  return Math.max(0, Math.min(GEMINI_RETRY_MAX_DELAY_MS, delay));
+}
+
+function geminiRetryDelayMs(attempt, response) {
+  const retryAfter = geminiRetryAfterMs(response);
+  if (retryAfter !== null) return retryAfter;
+  const base = Math.min(GEMINI_RETRY_MAX_DELAY_MS, GEMINI_RETRY_BASE_DELAY_MS * (2 ** attempt));
+  return Math.round(base * (0.8 + Math.random() * 0.4));
+}
+
+async function waitBeforeGeminiRetry(attempt, response, lastAttempt) {
+  if (attempt >= lastAttempt) return;
+  await new Promise(resolve => setTimeout(resolve, geminiRetryDelayMs(attempt, response)));
+}
+
 async function callGemini(env, input) {
-  const models = [];
   const primaryModel = env.GEMINI_MODEL || "gemini-3.5-flash-lite";
-  const fallbackModel = env.GEMINI_FALLBACK_MODEL || "gemini-3.6-flash";
+  const defaultFallback = primaryModel === "gemini-3.6-flash"
+    ? "gemini-3.5-flash-lite"
+    : "gemini-3.6-flash";
+  const fallbackModel = env.GEMINI_FALLBACK_MODEL || defaultFallback;
+  const models = [];
   for (const model of [primaryModel, fallbackModel]) {
     if (model && !models.includes(model)) models.push(model);
   }
-
+  const maxAttempts = Math.max(3, models.length * 2);
   let lastError = null;
 
-  for (let attempt = 0; attempt < Math.max(3, models.length); attempt++) {
-    const model = models[Math.min(attempt, models.length - 1)];
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const model = models[attempt % models.length];
     const body = {
       model,
       input: "Produce the requested analytical report using only this JSON dataset:\n\n" + JSON.stringify(input),
@@ -672,7 +699,7 @@ async function callGemini(env, input) {
 
       if (response.status === 429 || response.status >= 500) {
         lastError = new Error(`Gemini temporary error ${response.status} on ${model}`);
-        await new Promise(r => setTimeout(r, (attempt + 1) * 2200));
+        await waitBeforeGeminiRetry(attempt, response, maxAttempts - 1);
         continue;
       }
 
@@ -682,11 +709,8 @@ async function callGemini(env, input) {
 
       const payload = await response.json();
       const status = String(payload?.status || "").toLowerCase();
-
       if (["failed", "cancelled"].includes(status)) {
-        throw new Error(
-          cleanText(payload?.error?.message || `Gemini interaction ${status}.`, 300)
-        );
+        throw new Error(cleanText(payload?.error?.message || `Gemini interaction ${status}.`, 300));
       }
 
       let raw;
@@ -694,8 +718,8 @@ async function callGemini(env, input) {
         raw = await extractGeminiText(payload);
       } catch (error) {
         lastError = error;
-        if (status === "incomplete" || attempt < 2) {
-          await new Promise(r => setTimeout(r, (attempt + 1) * 1200));
+        if (attempt < maxAttempts - 1 && (status === "incomplete" || /no readable output/i.test(String(error?.message || "")))) {
+          await waitBeforeGeminiRetry(attempt, null, maxAttempts - 1);
           continue;
         }
         throw error;
@@ -716,8 +740,8 @@ async function callGemini(env, input) {
           status: payload?.status,
           preview: normalizedRaw.slice(0, 500)
         });
-        if (attempt < 2) {
-          await new Promise(r => setTimeout(r, (attempt + 1) * 1200));
+        if (attempt < maxAttempts - 1) {
+          await waitBeforeGeminiRetry(attempt, null, maxAttempts - 1);
           continue;
         }
         throw lastError;
@@ -725,24 +749,26 @@ async function callGemini(env, input) {
 
       if (!parsed?.analysis) {
         lastError = new Error("Gemini returned an empty report.");
-        if (attempt < 2) continue;
+        if (attempt < maxAttempts - 1) {
+          await waitBeforeGeminiRetry(attempt, null, maxAttempts - 1);
+          continue;
+        }
         throw lastError;
       }
-
       return parsed;
     } catch (error) {
       lastError = error;
-      if (attempt < 2 && /temporary|incomplete|no readable output|could not be parsed|empty report/i.test(String(error?.message || ""))) {
-        await new Promise(r => setTimeout(r, (attempt + 1) * 1200));
+      const retryable = error instanceof TypeError ||
+        /temporary|incomplete|no readable output|could not be parsed|empty report/i.test(String(error?.message || ""));
+      if (attempt < maxAttempts - 1 && retryable) {
+        await waitBeforeGeminiRetry(attempt, null, maxAttempts - 1);
         continue;
       }
       throw error;
     }
   }
-
   throw lastError || new Error("Gemini request failed.");
 }
-
 // Reads the events database for reports, Quick Ask and Deep Search. It prefers
 // events-lite.json (only the event fields the Worker reads, ~64% smaller; built at
 // publication time from the very events.json being deployed, so it is never older than
