@@ -6,7 +6,7 @@ import {
   gateCall
 } from "./shared.js";
 
-const EXCHANGE_ADDRESS_VERSION = "crypto-exchange-addresses-v1";
+const EXCHANGE_ADDRESS_VERSION = "crypto-exchange-addresses-v2";
 const EVM_CHAIN_IDS = Object.freeze({ ethereum: "1", bsc: "56", polygon: "137", arbitrum: "42161", base: "8453" });
 const EVM_CHAINS = new Set(Object.keys(EVM_CHAIN_IDS));
 const CHAIN_SET = new Set(["bitcoin", "ethereum", "bsc", "polygon", "arbitrum", "base", "tron"]);
