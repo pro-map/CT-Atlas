@@ -2676,10 +2676,10 @@ function bind(){
   document.getElementById("exchangeTemplateDownload")?.addEventListener("click",downloadExchangeTemplate);
   document.getElementById("exchangeSeedOfficial")?.addEventListener("click",async event=>{
     const button=event.currentTarget;button.disabled=true;
-    setExchangeAdminStatus("Importing the 10 historically disclosed Crypto.com cold wallet addresses…");
+    setExchangeAdminStatus("Importing historically disclosed Binance, OKX and Crypto.com wallet addresses…");
     try{
       const result=await exchangeApi("seed");
-      setExchangeAdminStatus((result.imported||0)+" Crypto.com addresses imported from the official Nov 2022 disclosure ("+(result.skipped||0)+" already present or skipped). Historical list; partial reserves.");
+      setExchangeAdminStatus((result.imported||0)+" address(es) imported from "+(result.source_records||0)+" sourced rows ("+(result.skipped||0)+" already present). Lists are historical and partial; verify current control.");
       await refreshExchangeProposals();
     }catch(error){setExchangeAdminStatus(error.message);}
     finally{button.disabled=false;}
