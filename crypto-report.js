@@ -14,6 +14,8 @@
 const LIMITS=Object.freeze({transactions:1500,nodes:80,counterparties:40,labels:60,patterns:20,exchangeFindings:60,exposure:60,crosschain:50,alerts:20,notes:30,txDetailFields:60});
 
 const DISCLAIMER="Transaction linkage is not identity attribution, common ownership, criminality, terrorist financing, or proof of control. Multi-input Bitcoin transactions, smart-contract execution and token routing can require specialist interpretation. Validate significant findings against the source explorer and other evidence before operational use.";
+const EXCHANGE_LIMITATIONS="The 0–100 behaviour score is a rules-based screening score, not a calibrated probability. An exchange-like pattern can also come from bridges, payment services, protocols, or other high-throughput wallets; it does not confirm that the wallet is an exchange or identify its operator.";
+const LABEL_LIMITATIONS="Labels preserve their source and confidence. An approved exchange label is a sourced attribution, not a verified fact; it does not prove common ownership or control of connected wallets.";
 const LIMITATIONS="CT Atlas Crypto uses bounded public blockchain samples (the most recent records the provider returned for each analysed wallet, not a full archival crawl) and analyst-sourced labels. On-chain transaction linkage does not establish identity, common ownership, criminality, terrorist financing, intent, or custody. Exchange-behaviour scores are rules-based screening scores, not calibrated probabilities; a high-throughput wallet may be another exchange, bridge, payment service, protocol, or other service. Heuristic pattern detection and H1-H3 exposure calculations describe observed transaction behaviour, not criminal intent, and require independent validation before operational or evidentiary use. Absence of a finding is limited to the sample analysed and is not proof of absence.";
 const SANCTIONS_NOTE="A sanctions-list match means this exact address string appears on a published list; it is not a compliance determination and does not by itself show who controls the address. No match does NOT mean an address is safe: coverage is limited to the listed source(s), and only the counterparties visible in the recent transaction sample were screened (direct relationships only, no indirect exposure).";
 const NOT_SCREENED="Sanctions screening was NOT performed for this analysis, so the absence of a match must not be read as a clean result.";
@@ -151,7 +153,7 @@ function patternsSection(model){
 function exchangeSection(model){
   const all=list(model.exchangeFindings);
   const items=all.slice(0,LIMITS.exchangeFindings);
-  const blocks=[heading("EXCHANGE IDENTIFICATION"),small("Sourced address matches are separate from behavioural candidates. Candidate scores are rules-based screening scores, not calibrated probabilities or proof of ownership.")];
+  const blocks=[heading("EXCHANGE IDENTIFICATION"),small("Sourced address matches are listed separately from behavioural candidates."),small(EXCHANGE_LIMITATIONS)];
   if(!items.length){
     blocks.push(noneRecorded("No sourced exchange match or behavioural candidate at or above 80/100 was found in the analysed sample."));
     return blocks;
@@ -164,7 +166,6 @@ function exchangeSection(model){
     if(item.interactions)blocks.push(small("Observed direct transaction links in this sample: "+String(num(item.interactions)??0)+". This does not establish control by the exchange."));
     if(item.source_title)blocks.push(small("Source: "+text(item.source_title)+(item.source_url?" — "+text(item.source_url):"")));
     if(list(item.evidence).length)for(const detail of item.evidence)blocks.push(bullet(text(detail)));
-    if(item.limitations)blocks.push(small(text(item.limitations)));
   }
   if(all.length>items.length)blocks.push(alert("This section lists the first "+items.length+" of "+all.length+" exchange finding(s)."));
   return blocks;
@@ -189,8 +190,8 @@ function exposureSection(model){
 
 function labelsSection(model){
   const labels=list(model.labels).slice(0,LIMITS.labels);
-  const blocks=[heading("SOURCED LABELS"),small("Labels preserve their source and confidence. Even an approved exchange label does not prove common ownership or control of connected wallets.")];
-  if(!labels.length){blocks.push(noneRecorded("No sourced label applies to the seed or to the counterparties reached within the traced graph."));return blocks;}
+  const blocks=[heading("SOURCED LABELS"),small(LABEL_LIMITATIONS)];
+  if(!labels.length){blocks.push(noneRecorded("No analyst label applies to the seed or to the counterparties reached within the traced graph."));return blocks;}
   blocks.push({type:"table",fontSize:14,columns:[{key:"name",label:"Label / entity",width:4},{key:"category",label:"Category",width:2},{key:"role",label:"Wallet role",width:3},{key:"conf",label:"Confidence",width:2}],
     rows:labels.map(label=>({name:text(label.name)||"—",category:text(label.category),role:text(label.wallet_role).replaceAll("_"," ")||"—",conf:text(label.confidence)||"—",
       detail:text(label.address)+"\n"+(label.shared?"Shared CT Atlas registry · ":label.provider?text(label.provider)+" · ":"")+"Source: "+(text(label.source_title)||text(label.source_type)||"Analyst source")+(label.source_url?" — "+text(label.source_url):"")+(label.notes?"\nNotes: "+text(label.notes):"")}))});
@@ -437,7 +438,7 @@ function standaloneGraphSvg(markup){
     inner+"</svg>";
 }
 
-const api={build,standaloneGraphSvg,reportFilename,fmtAmount,fmtUtc,LIMITS,DISCLAIMER,LIMITATIONS,SANCTIONS_NOTE,NOT_SCREENED,GRAPH_CSS};
+const api={build,standaloneGraphSvg,reportFilename,fmtAmount,fmtUtc,LIMITS,DISCLAIMER,EXCHANGE_LIMITATIONS,LABEL_LIMITATIONS,LIMITATIONS,SANCTIONS_NOTE,NOT_SCREENED,GRAPH_CSS};
 if(typeof module!=="undefined"&&module.exports)module.exports=api;
 root.CTAtlasCryptoReport=api;
 })(typeof window!=="undefined"?window:globalThis);

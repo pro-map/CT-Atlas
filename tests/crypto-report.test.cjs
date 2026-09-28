@@ -69,7 +69,7 @@ test("an address report has every section, in a readable order, with the right t
   assert.match(report.filename,/^CT-Atlas-Crypto-Report-bitcoin-bc1q5rkr-jeqg0k-20260926-1405$/);
   assert.match(report.meta,/Bitcoin · Blockstream Esplora · generated 2026-09-26 14:05:33 UTC · analyst alice/);
   assert.deepEqual(headings(report.blocks),[
-    "SUMMARY","SANCTIONS-LIST SCREENING","KEY OBSERVATIONS","BEHAVIOURAL PATTERNS","LABELLED EXPOSURE (H1–H3)","SOURCED LABELS",
+    "SUMMARY","SANCTIONS-LIST SCREENING","KEY OBSERVATIONS","BEHAVIOURAL PATTERNS","EXCHANGE IDENTIFICATION","LABELLED EXPOSURE (H1–H3)","SOURCED LABELS",
     "SERVICE / BRIDGE / DEX TOUCHPOINTS","WATCHLIST & MONITORING","TRANSACTION FLOW GRAPH","SEED COUNTERPARTIES","ANALYSED WALLETS",
     "TRANSACTION RECORDS","ACTIVE CASE","METHOD & LIMITATIONS"
   ]);
@@ -190,6 +190,18 @@ test("empty analyses never crash and say plainly that nothing was found (scoped 
   assert.ok(!/NaN|undefined|\[object/.test(all));
 });
 
+test("exchange findings distinguish sourced labels from behaviour scores and show the screening caveat",()=>{
+  const report=R.build(fixture({exchangeFindings:[
+    {type:"sourced",name:"Binance",confidence:"MEDIUM",address:CP1,source_title:"Official wallet disclosure"},
+    {type:"behavioral",name:"Exchange-like hub",score:86,threshold:80,address:CP2,evidence:["Repeated, broad activity"],limitations:"Provider details are untrusted input."}
+  ]}));
+  const all=textOf(report.blocks);
+  assert.match(all,/Binance · SOURCED LABEL · MEDIUM/);
+  assert.match(all,/Exchange-like hub · HEURISTIC SCORE 86\/100/);
+  assert.ok(all.includes(R.EXCHANGE_LIMITATIONS));
+  assert.ok(!all.includes("Provider details are untrusted input."));
+});
+
 // ---------------------------------------------------------------- wording
 
 test("NOT SCREENED is never presented as clean",()=>{
@@ -232,7 +244,7 @@ test("a sanctions match is described as an address-string match, never as owners
 test("over-claiming words appear only inside the disclaimers that deny them",()=>{
   const report=R.build(fixture());
   const risky=/ownership|terrorist financing|criminality|identity attribution|proof of control|custody/i;
-  const allowed=new Set([R.DISCLAIMER,R.LIMITATIONS,R.SANCTIONS_NOTE]);
+  const allowed=new Set([R.DISCLAIMER,R.EXCHANGE_LIMITATIONS,R.LABEL_LIMITATIONS,R.LIMITATIONS,R.SANCTIONS_NOTE]);
   for(const block of report.blocks){
     const value=block.type==="table"?"":String(block.text||"");
     if(risky.test(value)){
