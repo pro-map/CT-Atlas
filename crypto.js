@@ -17,6 +17,7 @@ let traceExpanded=new Set();
 let traceBusy=new Set();
 let currentNetworkModel=null;
 let cryptoWorkspace={version:"crypto-workspace-v1",labels:[],watchlist:[],cases:[],alerts:[]};
+let sharedExchangeLabels=new Map();
 let activeCaseId="";
 let lastFoundPath=null;
 let workspaceSaveTimer=null;
@@ -111,10 +112,13 @@ async function providerHealth(){
     const response=await fetch(API_BASE+"/health",{cache:"no-store"});
     const payload=await response.json().catch(()=>({}));
     const providers=payload.crypto_providers||{};
+    const labelProviders=payload.crypto_exchange_label_providers||{};
     strip.innerHTML=[
       ["BITCOIN · BLOCKSTREAM",providers.bitcoin!==false],
       ["EVM · ETHERSCAN",Boolean(providers.evm)],
-      ["TRON · TRONGRID",Boolean(providers.tron)]
+      ["TRON · TRONGRID",Boolean(providers.tron)],
+      ["EVM EXCHANGE TAGS · ETHERSCAN PRO PLUS",Boolean(labelProviders.etherscan_enabled)],
+      ["TRON EXCHANGE TAGS · TRONSCAN KEY",Boolean(labelProviders.tronscan_enabled)]
     ].map(([label,on])=>'<span class="provider-chip '+(on?"on":"off")+'">'+esc(label)+" · "+(on?"READY":"KEY NOT CONFIGURED")+"</span>").join("");
   }catch(_){
     strip.innerHTML='<span class="provider-chip off">CRYPTO BACKEND STATUS UNAVAILABLE</span>';
@@ -180,11 +184,29 @@ function normalizeAddressForChain(address,chain){
   return ["ethereum","bsc","polygon","arbitrum","base"].includes(chain)?value.toLowerCase():value;
 }
 
+function exchangeLabelKey(address,chain){
+  return String(chain||"")+":"+normalizeAddressForChain(address,chain);
+}
+
+function absorbExchangeLabels(payload,replace=false){
+  if(replace)sharedExchangeLabels=new Map();
+  for(const raw of Array.isArray(payload?.exchange_labels)?payload.exchange_labels:[]){
+    if(String(raw?.category||"").toUpperCase()!=="EXCHANGE")continue;
+    const label={...raw,shared:true,id:"shared:"+exchangeLabelKey(raw.address,raw.chain)};
+    sharedExchangeLabels.set(exchangeLabelKey(label.address,label.chain),label);
+  }
+}
+
 function labelForAddress(address,chain=lastPayload?.chain){
   const normalized=normalizeAddressForChain(address,chain);
-  return (cryptoWorkspace.labels||[]).find(label=>
+  const personal=(cryptoWorkspace.labels||[]).find(label=>
     label.chain===chain&&normalizeAddressForChain(label.address,chain)===normalized
-  )||null;
+  );
+  if(personal)return personal;
+  const shared=sharedExchangeLabels.get(exchangeLabelKey(address,chain));
+  if(shared)return shared;
+  const builtin=SERVICE_REGISTRY[chain]?.[normalized];
+  return builtin?{...builtin,address,chain,confidence:"HIGH",source_type:"CT Atlas built-in service registry",source_title:"CT Atlas built-in service registry",builtin:true}:null;
 }
 
 function watchesForAddress(address,chain=lastPayload?.chain){
@@ -198,6 +220,11 @@ function categoryTargets(category,chain=lastPayload?.chain){
   const target=String(category||"").toUpperCase();
   const values=new Set();
   for(const label of cryptoWorkspace.labels||[]){
+    if(label.chain===chain&&String(label.category||"").toUpperCase()===target){
+      values.add(normalizeAddressForChain(label.address,chain));
+    }
+  }
+  for(const label of sharedExchangeLabels.values()){
     if(label.chain===chain&&String(label.category||"").toUpperCase()===target){
       values.add(normalizeAddressForChain(label.address,chain));
     }
@@ -218,13 +245,21 @@ function visibleRelevantLabels(){
   if(!lastPayload)return [];
   const visible=new Set([normalizeAddressForChain(lastPayload.query,lastPayload.chain)]);
   for(const node of currentNetworkModel?.nodes||[])visible.add(node.key);
-  return (cryptoWorkspace.labels||[]).filter(label=>
-    label.chain===lastPayload.chain&&visible.has(normalizeAddressForChain(label.address,label.chain))
-  );
+  const byAddress=new Map();
+  for(const label of cryptoWorkspace.labels||[]){
+    if(label.chain===lastPayload.chain&&visible.has(normalizeAddressForChain(label.address,label.chain))){
+      byAddress.set(exchangeLabelKey(label.address,label.chain),label);
+    }
+  }
+  for(const [key,label] of sharedExchangeLabels){
+    if(label.chain===lastPayload.chain&&visible.has(normalizeAddressForChain(label.address,label.chain))&&!byAddress.has(key))byAddress.set(key,label);
+  }
+  return [...byAddress.values()];
 }
 
 function renderWorkspaceUi(){
   renderLabelList();
+  renderExchangeAdminAccess();
   renderCaseUi();
   renderAlerts();
   if(lastPayload?.kind==="address")renderIntelligencePanels();
@@ -686,6 +721,98 @@ function renderPatterns(){
   ).join("");
 }
 
+function exchangeIdentificationFindings(){
+  if(!lastPayload||lastPayload.kind!=="address")return [];
+  const findings=new Map();
+  const chain=lastPayload.chain;
+  const addSourced=(address,label,depth=0,interactions=0)=>{
+    if(!label||String(label.category||"").toUpperCase()!=="EXCHANGE")return;
+    const key=exchangeLabelKey(address,chain);
+    const previous=findings.get(key);
+    findings.set(key,{
+      type:"sourced",
+      address,
+      chain,
+      name:label.name||"Exchange",
+      wallet_role:label.wallet_role||"UNKNOWN",
+      confidence:label.confidence||"MEDIUM",
+      source_type:label.source_type||"",
+      source_title:label.source_title||"",
+      source_url:label.source_url||"",
+      notes:label.notes||"",
+      depth:previous?.depth??depth,
+      interactions:(previous?.interactions||0)+interactions
+    });
+  };
+
+  for(const entry of traceEntries()){
+    addSourced(entry.address,labelForAddress(entry.address,chain),entry.depth,0);
+    for(const row of Array.isArray(entry.payload?.transactions)?entry.payload.transactions:[]){
+      for(const address of Array.isArray(row?.counterparties)?row.counterparties:[]){
+        addSourced(address,labelForAddress(address,chain),entry.depth,1);
+      }
+    }
+    const behavior=entry.payload?.exchange_behavior;
+    if(behavior?.status!=="behavioral_candidate"||Number(behavior.score)<80)continue;
+    const key=exchangeLabelKey(entry.address,chain);
+    if(findings.has(key))continue;
+    findings.set(key,{
+      type:"behavioral",
+      address:entry.address,
+      chain,
+      name:behavior.related_exchange?.name
+        ? "Exchange-like · repeated link to "+behavior.related_exchange.name
+        : "Exchange-like high-throughput hub",
+      score:Number(behavior.score),
+      threshold:Number(behavior.threshold)||80,
+      depth:entry.depth,
+      evidence:Array.isArray(behavior.evidence)?behavior.evidence:[],
+      metrics:behavior.metrics||{},
+      related_exchange:behavior.related_exchange||null,
+      limitations:behavior.limitations||"Rules-based screening score, not a calibrated probability; review the underlying transactions before attribution."
+    });
+  }
+  return [...findings.values()].sort((a,b)=>
+    (a.type===b.type?0:a.type==="sourced"?-1:1)||
+    Number(b.score||0)-Number(a.score||0)||
+    String(a.name).localeCompare(String(b.name))
+  );
+}
+
+function exchangeBehaviorForAddress(address,chain=lastPayload?.chain){
+  const entry=tracePayloads.get(traceKey(address,chain));
+  const behavior=entry?.payload?.exchange_behavior;
+  return behavior?.status==="behavioral_candidate"&&Number(behavior.score)>=80?behavior:null;
+}
+
+function renderExchangeIdentification(){
+  const box=document.getElementById("cryptoExchangeFindings");
+  if(!box)return;
+  const findings=exchangeIdentificationFindings();
+  if(!findings.length){
+    box.innerHTML='<div class="intel-result">No sourced exchange match or behavioural candidate at or above 80/100 was found in the currently analysed sample. Counterparties appear here only after their addresses are sourced or their wallets are expanded.</div>';
+    return;
+  }
+  box.innerHTML=findings.map(item=>{
+    const sourced=item.type==="sourced";
+    const source=item.source_url
+      ?'<a href="'+esc(item.source_url)+'" target="_blank" rel="noopener noreferrer">'+esc(item.source_title||item.source_url)+'</a>'
+      :esc(item.source_title||item.source_type||"Sourced exchange label");
+    const evidence=(item.evidence||[]).map(text=>esc(text)).join(" · ");
+    const meta=esc(item.chain.toUpperCase())+" · H"+Number(item.depth||0)+" · "+esc(short(item.address,9))+
+      (item.wallet_role?" · "+esc(String(item.wallet_role).replaceAll("_"," ")):"")+
+      (item.interactions?" · "+Number(item.interactions)+" observed link(s)":"");
+    const badge=sourced
+      ?'<span class="intel-badge clear">SOURCED LABEL · '+esc(item.confidence)+'</span>'
+      :'<span class="intel-badge exchange-score">SCORE '+Number(item.score)+"/100</span>";
+    const detail=sourced
+      ?(item.notes?'<div class="intel-detail">'+esc(item.notes)+'</div>':"")
+      :'<div class="intel-detail">'+evidence+'</div><div class="intel-detail">'+esc(item.limitations)+'</div>';
+    return '<div class="intel-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.name)+'</div><div class="intel-meta">'+meta+'</div></div>'+badge+'</div>'+
+      (sourced?'<div class="label-source">SOURCE: '+source+'</div>':"")+detail+'</div>';
+  }).join("");
+}
+
 function renderExposure(){
   const box=document.getElementById("cryptoExposureSummary");
   if(!box)return;
@@ -746,17 +873,137 @@ function renderLabelList(){
     const source=label.source_url
       ? '<a href="'+esc(label.source_url)+'" target="_blank" rel="noopener noreferrer">'+esc(label.source_title||label.source_url)+'</a>'
       : esc(label.source_title||label.source_type||"Analyst source");
+    const role=label.category==="EXCHANGE"&&label.wallet_role?" · "+label.wallet_role.replaceAll("_"," "):"";
+    const state=label.shared?'<span class="intel-badge clear exchange-source-badge">SHARED · APPROVED</span>':label.builtin?'<span class="intel-badge pattern exchange-source-badge">BUILT-IN</span>':"";
+    const remove=label.shared||label.builtin?"":'<div class="intel-actions"><button type="button" class="crypto-small-button label-delete" data-id="'+esc(label.id)+'">DELETE</button></div>';
     return '<div class="intel-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(label.name||label.category)+'</div>'+
-      '<div class="intel-meta">'+esc(label.category)+' · '+esc(short(label.address,9))+'</div></div>'+
-      '<span class="intel-badge '+String(label.confidence||"low").toLowerCase()+'">'+esc(label.confidence||"LOW")+'</span></div>'+
+      '<div class="intel-meta">'+esc(label.category+role)+' · '+esc(short(label.address,9))+'</div></div>'+
+      '<div>'+state+'<span class="intel-badge '+String(label.confidence||"low").toLowerCase()+'">'+esc(label.confidence||"LOW")+'</span></div></div>'+
       '<div class="label-source">SOURCE: '+source+'</div>'+
       (label.notes?'<div class="intel-detail">'+esc(label.notes)+'</div>':"")+
-      '<div class="intel-actions"><button type="button" class="crypto-small-button label-delete" data-id="'+esc(label.id)+'">DELETE</button></div></div>';
+      remove+'</div>';
   }).join("");
   box.querySelectorAll(".label-delete").forEach(button=>button.addEventListener("click",()=>{
     cryptoWorkspace.labels=(cryptoWorkspace.labels||[]).filter(item=>item.id!==button.dataset.id);
     scheduleWorkspaceSave();renderWorkspaceUi();renderFilteredViews();
   }));
+}
+
+async function exchangeApi(action,extra={}){
+  const response=await fetch(API_BASE+"/crypto-address-labels",{
+    method:"POST",
+    headers:sessionHeaders({"Content-Type":"application/json"}),
+    body:JSON.stringify({user_id:user(),action,...extra})
+  });
+  const payload=await response.json().catch(()=>({}));
+  if(response.status===401){redirectToLogin();throw new Error("Session expired.");}
+  if(!response.ok)throw new Error(payload.error||"Exchange label request failed.");
+  return payload;
+}
+
+function setExchangeAdminStatus(message){
+  const el=document.getElementById("exchangeAdminStatus");
+  if(el)el.textContent=message||"";
+}
+
+function renderExchangeAdminAccess(){
+  const panel=document.getElementById("exchangeAdminPanel");
+  if(!panel)return;
+  const allowed=user()==="admin";
+  panel.hidden=!allowed;
+  if(allowed&&panel.dataset.initialized!=="true"){
+    panel.open=true;
+    panel.dataset.initialized="true";
+    refreshExchangeProposals().catch(error=>setExchangeAdminStatus(error.message));
+  }
+}
+
+async function refreshExchangeProposals(){
+  const box=document.getElementById("exchangeProposalList");
+  if(box)box.innerHTML='<div class="intel-result">Loading pending exchange proposals…</div>';
+  const payload=await exchangeApi("pending");
+  const proposals=Array.isArray(payload.proposals)?payload.proposals:[];
+  if(!box)return;
+  if(!proposals.length){
+    box.innerHTML='<div class="intel-result">No exchange labels are waiting for review.</div>';
+    return;
+  }
+  box.innerHTML=proposals.map(item=>{
+    const source=item.source_url
+      ?'<a href="'+esc(item.source_url)+'" target="_blank" rel="noopener noreferrer">'+esc(item.source_title||item.source_url)+'</a>'
+      :esc(item.source_title||item.source_type||"No source title");
+    return '<div class="intel-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.name)+'</div><div class="intel-meta">'+esc(item.chain)+' · '+esc(item.wallet_role||"UNKNOWN")+' · '+esc(short(item.address,10))+'</div></div><span class="intel-badge '+String(item.confidence||"medium").toLowerCase()+'">'+esc(item.confidence||"MEDIUM")+'</span></div><div class="label-source">SOURCE: '+source+'</div>'+(item.notes?'<div class="intel-detail">'+esc(item.notes)+'</div>':"")+'<div class="intel-meta">Submitted by '+esc(item.created_by||"unknown")+' · '+esc(fmtTime(item.created_at))+'</div><div class="exchange-proposal-actions"><button class="crypto-small-button trace-button" data-exchange-review="approve" data-proposal-id="'+esc(item.id)+'" type="button">APPROVE</button><button class="crypto-small-button" data-exchange-review="reject" data-proposal-id="'+esc(item.id)+'" type="button">REJECT</button></div></div>';
+  }).join("");
+}
+
+function parseCsvRecords(text){
+  text=String(text||"").replace(/^\uFEFF/,"");
+  const rows=[];let row=[],field="",quoted=false;
+  for(let i=0;i<text.length;i++){
+    const char=text[i];
+    if(quoted){
+      if(char==='"'&&text[i+1]==='"'){field+='"';i++;}
+      else if(char==='"')quoted=false;
+      else field+=char;
+    }else if(char==='"')quoted=true;
+    else if(char===","){row.push(field);field="";}
+    else if(char==="\n") {row.push(field);rows.push(row);row=[];field="";}
+    else if(char!=="\r")field+=char;
+  }
+  if(field.length||row.length){row.push(field);rows.push(row);}
+  if(rows.length<2)return [];
+  const headers=rows.shift().map(value=>value.trim().toLowerCase());
+  return rows.filter(values=>values.some(value=>String(value||"").trim())).map(values=>{
+    const item={};headers.forEach((key,index)=>item[key]=String(values[index]||"").trim());return item;
+  });
+}
+
+function parseExchangeImport(text){
+  const trimmed=String(text||"").replace(/^\uFEFF/,"").trim();
+  if(!trimmed)return [];
+  if(trimmed.startsWith("[")||trimmed.startsWith("{")){
+    const parsed=JSON.parse(trimmed);
+    return Array.isArray(parsed)?parsed:Array.isArray(parsed.labels)?parsed.labels:[];
+  }
+  return parseCsvRecords(trimmed);
+}
+
+async function reviewExchangeProposal(button){
+  button.disabled=true;
+  try{
+    const decision=String(button.dataset.exchangeReview||"");
+    const result=await exchangeApi("review",{proposal_id:button.dataset.proposalId,decision});
+    if(decision==="approve"&&result.proposal){
+      const label={...result.proposal,shared:true,status:"APPROVED",id:"shared:"+exchangeLabelKey(result.proposal.address,result.proposal.chain)};
+      sharedExchangeLabels.set(exchangeLabelKey(label.address,label.chain),label);
+      renderWorkspaceUi();renderFilteredViews();
+    }
+    await refreshExchangeProposals();
+    setExchangeAdminStatus(decision==="approve"?"Exchange label approved and now available to every analyst.":"Exchange label rejected.");
+  }catch(error){setExchangeAdminStatus(error.message);}
+  finally{button.disabled=false;}
+}
+
+async function importExchangeLabels(){
+  const text=String(document.getElementById("exchangeImportText")?.value||"");
+  let records;
+  try{records=parseExchangeImport(text);}catch(error){setExchangeAdminStatus("Import parse error: "+error.message);return;}
+  if(!records.length){setExchangeAdminStatus("No import rows found.");return;}
+  let imported=0;
+  try{
+    for(let start=0;start<records.length;start+=100){
+      const payload=await exchangeApi("import",{labels:records.slice(start,start+100)});
+      imported+=Number(payload.imported||0);
+    }
+    setExchangeAdminStatus(imported+" exchange label(s) imported and approved from "+records.length+" row(s).");
+    document.getElementById("exchangeImportText").value="";
+  }catch(error){setExchangeAdminStatus("Import stopped after "+imported+" label(s): "+error.message);}
+}
+
+function downloadExchangeTemplate(){
+  const content="chain,address,name,wallet_role,confidence,source_type,source_title,source_url,notes\n";
+  const url=URL.createObjectURL(new Blob([content],{type:"text/csv;charset=utf-8"}));
+  const link=document.createElement("a");link.href=url;link.download="crypto-exchange-addresses-template.csv";link.click();URL.revokeObjectURL(url);
 }
 
 function openLabelForm(address){
@@ -766,10 +1013,20 @@ function openLabelForm(address){
   const chainSelect=document.getElementById("labelChain");
   if(chainSelect&&lastPayload?.chain)chainSelect.value=lastPayload.chain;
   document.getElementById("labelAddress").value=address||lastPayload?.query||"";
+  syncLabelCategoryFields();
   document.getElementById("labelName").focus();
 }
 
-function saveLabel(){
+function syncLabelCategoryFields(){
+  const isExchange=String(document.getElementById("labelCategory")?.value||"").toUpperCase()==="EXCHANGE";
+  const role=document.getElementById("labelWalletRoleField");
+  const proposal=document.getElementById("exchangeProposalField");
+  if(role)role.hidden=!isExchange;
+  if(proposal)proposal.hidden=!isExchange;
+  if(!isExchange&&document.getElementById("labelProposeExchange"))document.getElementById("labelProposeExchange").checked=false;
+}
+
+async function saveLabel(){
   const address=String(document.getElementById("labelAddress")?.value||"").trim();
   const chain=String(document.getElementById("labelChain")?.value||lastPayload?.chain||"");
   if(!chain||!isSearchableAddress(address,chain)){
@@ -779,20 +1036,25 @@ function saveLabel(){
   const name=String(document.getElementById("labelName")?.value||"").trim();
   const sourceTitle=String(document.getElementById("labelSourceTitle")?.value||"").trim();
   const sourceType=String(document.getElementById("labelSourceType")?.value||"").trim();
-  if(!name||(!sourceTitle&&!sourceType)){
+  const sourceUrl=String(document.getElementById("labelSourceUrl")?.value||"").trim();
+  if(!name||(!sourceTitle&&!sourceType&&!/^https:\/\//i.test(sourceUrl))){
     setStatus("A label/entity name and a source description are required.","warning");
     return;
   }
+  const category=String(document.getElementById("labelCategory")?.value||"OTHER");
+  const walletRole=String(document.getElementById("labelWalletRole")?.value||"UNKNOWN");
+  const proposeExchange=category==="EXCHANGE"&&document.getElementById("labelProposeExchange")?.checked===true;
   const item={
     id:makeId("label"),
     chain,
     address,
     name,
-    category:String(document.getElementById("labelCategory")?.value||"OTHER"),
+    category,
+    wallet_role:walletRole,
     confidence:String(document.getElementById("labelConfidence")?.value||"LOW"),
     source_type:sourceType,
     source_title:sourceTitle,
-    source_url:String(document.getElementById("labelSourceUrl")?.value||"").trim(),
+    source_url:sourceUrl,
     notes:String(document.getElementById("labelNotes")?.value||"").trim(),
     created_at:new Date().toISOString()
   };
@@ -804,7 +1066,12 @@ function saveLabel(){
   document.getElementById("labelForm").hidden=true;
   scheduleWorkspaceSave();
   renderWorkspaceUi();renderFilteredViews();
-  setStatus("Sourced analyst label saved.","success");
+  if(proposeExchange){
+    try{
+      await exchangeApi("propose",{label:item});
+      setStatus("Private analyst label saved; EXCHANGE proposal is waiting for admin validation.","success");
+    }catch(error){setStatus("Private label saved, but the shared EXCHANGE proposal failed: "+error.message,"warning");}
+  }else setStatus("Sourced analyst label saved.","success");
 }
 
 function renderCaseUi(){
@@ -936,6 +1203,7 @@ async function exportCasePdf(){
   if(!window.CTAtlasPdf?.download){setStatus("PDF export library is unavailable.","error");return;}
 
   const patterns=detectPatterns();
+  const exchangeFindings=exchangeIdentificationFindings();
   const exposure=exposureFindings();
   const cross=crossChainFindings();
   const labels=visibleRelevantLabels();
@@ -949,6 +1217,13 @@ async function exportCasePdf(){
     {text:"BEHAVIORAL PATTERNS",type:"heading"},
     ...((patterns.length?patterns:[{name:"No configured pattern threshold crossed",metric:"",detail:""}]).map(p=>({
       text:p.name+(p.metric?" · "+p.metric:"")+(p.detail?"\n"+p.detail:""),type:"body"
+    }))),
+    {text:"EXCHANGE IDENTIFICATION",type:"heading"},
+    ...((exchangeFindings.length?exchangeFindings:[{name:"No sourced exchange match or behavioural candidate at or above 80/100."}]).map(item=>({
+      text:(item.name||"Exchange finding")+(item.score!==undefined?" · heuristic score "+item.score+"/100":" · "+(item.confidence||"SOURCED"))+
+        (item.address?"\n"+item.address:"")+(item.source_title?"\nSource: "+item.source_title:"")+
+        (item.evidence?.length?"\n"+item.evidence.join("; "):"")+
+        (item.limitations?"\n"+item.limitations:""),type:"body"
     }))),
     {text:"EXPOSURE",type:"heading"},
     ...((exposure.length?exposure:[{category:"No labelled H1-H3 exposure observed",hop:"",name:"",address:""}]).map(e=>({
@@ -1061,6 +1336,7 @@ function collectReportModel(){
   const derived=withoutTransactionFilters(()=>({
     rows:allTraceRows(false),
     patterns:detectPatterns(),
+    exchangeFindings:exchangeIdentificationFindings(),
     exposure:exposureFindings().map(item=>({...item,name:item.name||nodeLabel(item.address)})),
     crossChain:crossChainFindings(),
     labels:visibleRelevantLabels(),
@@ -1086,9 +1362,10 @@ function collectReportModel(){
     counts:{
       wallets:tracePayloads.size,maxDepth:displayed.maxVisibleDepth,
       transactions:derived.rows.length,transactionsListed:Math.min(derived.rows.length,window.CTAtlasCryptoReport.LIMITS.transactions),
-      graphNodes:displayed.nodes.length,patterns:derived.patterns.length,exposure:derived.exposure.length
+      graphNodes:displayed.nodes.length,patterns:derived.patterns.length,exchangeFindings:derived.exchangeFindings.length,exposure:derived.exposure.length
     },
     patterns:derived.patterns,
+    exchangeFindings:derived.exchangeFindings,
     exposure:derived.exposure,
     path,
     labels:derived.labels,
@@ -1542,6 +1819,7 @@ function renderSanctions(){
 function renderIntelligencePanels(){
   renderSanctions();
   renderPatterns();
+  renderExchangeIdentification();
   renderExposure();
   renderLabelList();
   renderCaseUi();
@@ -1604,9 +1882,12 @@ function renderTable(payload,rows){
     const cpHtml=cp.length
       ? cp.slice(0,5).map(item=>{
           const searchable=isSearchableAddress(item,payload.chain);
+          const attribution=labelForAddress(item,payload.chain);
+          const display=attribution?esc(attribution.name)+" · "+esc(short(item,6)):esc(short(item,8));
+          const title=attribution?attribution.name+" · "+item:item;
           return searchable
-            ? '<button type="button" class="counterparty-link" data-address="'+esc(item)+'" title="'+esc(item)+'">'+esc(short(item,8))+"</button>"
-            : '<span title="'+esc(item)+'">'+esc(short(item,8))+"</span>";
+            ? '<button type="button" class="counterparty-link" data-address="'+esc(item)+'" title="'+esc(title)+'">'+display+"</button>"
+            : '<span title="'+esc(title)+'">'+display+"</span>";
         }).join(", ")
       :"—";
     const dir=String(row.direction||"").toUpperCase();
@@ -1924,6 +2205,7 @@ async function expandTraceNode(address,options={}){
 
   try{
     const payload=await fetchAddressAnalysis(address,lastPayload.chain,40);
+    absorbExchangeLabels(payload,false);
     tracePayloads.set(key,{key,address,payload,depth:node.depth});
     traceExpanded.add(key);
     populateAssetFilter();
@@ -2058,18 +2340,23 @@ function paintGraphFrame(payload,model){
     const isSeed=node.depth===0;
     if(isSeed){
       const seedLabel=labelForAddress(node.id,payload.chain);
+      const seedBehavior=exchangeBehaviorForAddress(node.id,payload.chain);
+      const seedSub=seedLabel?.category||(seedBehavior?"SCORE "+seedBehavior.score+"/100":short(node.id,6));
       html+='<g class="graph-seed" data-key="'+esc(node.key)+'" transform="translate('+p.x+" "+p.y+')">'+
         '<circle class="graph-node seed" cx="0" cy="0" r="35"></circle>'+
-        '<text class="graph-label" x="0" y="-3" text-anchor="middle">'+esc(seedLabel?.name?short(seedLabel.name,10):"SEED")+'</text>'+
-        '<text class="graph-sub" x="0" y="13" text-anchor="middle">'+esc(seedLabel?.category||short(node.id,6))+"</text>"+
+        '<text class="graph-label" x="0" y="-3" text-anchor="middle">'+esc(seedLabel?.name?short(seedLabel.name,10):seedBehavior?"EXCHANGE-LIKE":"SEED")+'</text>'+
+        '<text class="graph-sub" x="0" y="13" text-anchor="middle">'+esc(seedSub)+"</text>"+
         "</g>";
       continue;
     }
 
     const radius=Math.min(29,14+Math.log2(1+Math.max(1,node.total))*3);
     const assets=node.assets.slice(0,2).join(" · ");
+    const nodeLabel=labelForAddress(node.id,payload.chain);
+    const nodeBehavior=exchangeBehaviorForAddress(node.id,payload.chain);
     const title="H"+node.depth+" · "+node.total+" linked record(s)"+
       (assets?" · "+assets:"")+
+      (nodeBehavior?" · exchange-like heuristic score "+nodeBehavior.score+"/100 (not a calibrated probability)":"")+
       (node.searchable?" · click node: open new tab · +: expand in graph":" · provider address format cannot be expanded");
     const hopClass="h"+Math.min(3,node.depth);
     const expandClass=node.busy?"loading":node.expanded?"expanded":node.depth>=model.settings.maxDepth||!node.searchable?"disabled":"";
@@ -2080,8 +2367,8 @@ function paintGraphFrame(payload,model){
       "<title>"+esc(title)+"</title>"+
       '<circle class="graph-hop-ring '+hopClass+'" cx="0" cy="0" r="'+ringRadius+'"></circle>'+
       '<circle class="graph-node '+node.relation+(node.expanded?" trace-expanded":"")+(node.searchable?"":" unsearchable")+'" cx="0" cy="0" r="'+radius+'"></circle>'+
-      '<text class="graph-label" x="0" y="-2" text-anchor="middle">'+esc(labelForAddress(node.id,payload.chain)?.name?short(labelForAddress(node.id,payload.chain).name,9):short(node.id,5))+"</text>"+
-      '<text class="graph-sub" x="0" y="12" text-anchor="middle">'+esc(labelForAddress(node.id,payload.chain)?.category||(node.total+" tx"+(assets?" · "+short(assets,6):"")))+"</text>"+
+      '<text class="graph-label" x="0" y="-2" text-anchor="middle">'+esc(nodeLabel?.name?short(nodeLabel.name,9):nodeBehavior?"EXCHANGE-LIKE":short(node.id,5))+"</text>"+
+      '<text class="graph-sub" x="0" y="12" text-anchor="middle">'+esc(nodeLabel?.category||(nodeBehavior?"SCORE "+nodeBehavior.score+"/100":(node.total+" tx"+(assets?" · "+short(assets,6):""))))+"</text>"+
       '<g class="graph-hop-badge '+hopClass+'" transform="translate('+(-radius-5)+" "+(-radius-5)+')"><circle class="graph-hop-badge '+hopClass+'" cx="0" cy="0" r="10"></circle><text class="graph-hop-text" x="0" y="2.5" text-anchor="middle">H'+node.depth+"</text></g>"+
       '<g class="graph-expand-control '+expandClass+'" data-key="'+esc(node.key)+'" transform="translate('+(radius+5)+" "+(-radius-5)+')" role="button" aria-label="Expand '+esc(node.id)+' in graph"><circle cx="0" cy="0" r="11"></circle><text x="0" y="5" text-anchor="middle">'+expandText+"</text></g>"+
       "</g>";
@@ -2369,6 +2656,8 @@ function resetTraceState(payload){
 
 function render(payload){
   lastPayload=payload;
+  absorbExchangeLabels(payload,true);
+  renderLabelList();
   const result=document.getElementById("cryptoResult");
   if(result)result.hidden=false;
   document.getElementById("cryptoResultQuery").textContent=payload.query||"";
@@ -2481,6 +2770,40 @@ function bind(){
   document.getElementById("labelSeedButton")?.addEventListener("click",()=>openLabelForm(lastPayload?.query||""));
   document.getElementById("labelSaveButton")?.addEventListener("click",saveLabel);
   document.getElementById("labelCancelButton")?.addEventListener("click",()=>{document.getElementById("labelForm").hidden=true;});
+  document.getElementById("labelCategory")?.addEventListener("change",syncLabelCategoryFields);
+  document.getElementById("exchangeRefreshQueue")?.addEventListener("click",()=>refreshExchangeProposals().catch(error=>setExchangeAdminStatus(error.message)));
+  document.getElementById("exchangeMigrateLabels")?.addEventListener("click",async event=>{
+    const button=event.currentTarget;button.disabled=true;
+    setExchangeAdminStatus("Collecting existing private EXCHANGE labels into the pending review queue…");
+    try{
+      const result=await exchangeApi("migrate");
+      await refreshExchangeProposals();
+      setExchangeAdminStatus((result.proposals_added||0)+" proposal(s) added for review; "+(result.skipped||0)+" skipped because they were invalid or already present.");
+    }catch(error){setExchangeAdminStatus(error.message);}
+    finally{button.disabled=false;}
+  });
+  document.getElementById("exchangeTemplateDownload")?.addEventListener("click",downloadExchangeTemplate);
+  document.getElementById("exchangeSeedOfficial")?.addEventListener("click",async event=>{
+    const button=event.currentTarget;button.disabled=true;
+    setExchangeAdminStatus("Importing historically disclosed Binance, OKX and Crypto.com wallet addresses…");
+    try{
+      const result=await exchangeApi("seed");
+      setExchangeAdminStatus((result.imported||0)+" address(es) imported from "+(result.source_records||0)+" sourced rows ("+(result.skipped||0)+" already present). Lists are historical and partial; verify current control.");
+      await refreshExchangeProposals();
+    }catch(error){setExchangeAdminStatus(error.message);}
+    finally{button.disabled=false;}
+  });
+  document.getElementById("exchangeImportButton")?.addEventListener("click",importExchangeLabels);
+  document.getElementById("exchangeImportFile")?.addEventListener("change",async event=>{
+    const file=event.currentTarget.files?.[0];
+    if(!file)return;
+    try{document.getElementById("exchangeImportText").value=await file.text();setExchangeAdminStatus("Loaded "+file.name+"; review the rows before importing.");}
+    catch(_){setExchangeAdminStatus("Unable to read the selected file.");}
+  });
+  document.getElementById("exchangeProposalList")?.addEventListener("click",event=>{
+    const button=event.target.closest("[data-exchange-review]");
+    if(button)reviewExchangeProposal(button);
+  });
   document.getElementById("caseNewButton")?.addEventListener("click",()=>{
     document.getElementById("caseCreateForm").hidden=false;
     document.getElementById("caseName")?.focus();
@@ -2527,6 +2850,7 @@ async function start(){
   const autoRun=applyUrlQuery();
   const ok=await verifySession();
   if(!ok)return;
+  renderExchangeAdminAccess();
   await providerHealth();
   await loadCryptoWorkspace();
   if(autoRun)run();

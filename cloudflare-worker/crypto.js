@@ -7,8 +7,10 @@ import {
 } from "./shared.js";
 import { tronAddress } from "./address-utils.js";
 import { loadSanctions, screenAnalysis, sanctionsObservation } from "./sanctions.js";
+import { resolveExchangeLabels } from "./exchange-addresses.js";
+import { detectExchangeBehavior, EXCHANGE_BEHAVIOR_VERSION } from "./exchange-behavior.mjs";
 
-const CRYPTO_VERSION = "crypto-intel-v3-sanctions-screening";
+const CRYPTO_VERSION = "crypto-intel-v5-exchange-behavior";
 
 const EVM_CHAINS = {
   ethereum: { chainid: "1", name: "Ethereum", symbol: "ETH", explorer: "https://etherscan.io" },
@@ -814,12 +816,17 @@ async function handleCrypto(request, env) {
 
   try {
     const result = await runAnalysis(target, limit, env);
+    const exchangeLabels = await resolveExchangeLabels(result, env);
+    const exchangeBehavior = detectExchangeBehavior(result, exchangeLabels);
 
     return jsonResponse({
       ok: true,
       version: CRYPTO_VERSION,
+      exchange_behavior_version: EXCHANGE_BEHAVIOR_VERSION,
       generated_at: new Date().toISOString(),
       ...result,
+      exchange_labels: exchangeLabels,
+      exchange_behavior: exchangeBehavior,
       suspicious_patterns: Array.isArray(result?.suspicious_patterns) ? result.suspicious_patterns : [],
       alert_summary: result?.alert_summary || { highest_severity: "LOW", highest_score: 0, total: 0 }
     }, 200, env);

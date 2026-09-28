@@ -33,6 +33,13 @@ function safeChain(value) {
   return ["bitcoin","ethereum","bsc","polygon","arbitrum","base","tron"].includes(chain) ? chain : "";
 }
 
+function safeWalletRole(value) {
+  const role = cleanText(value, 32).toUpperCase();
+  return ["DEPOSIT_ADDRESS", "HOT_WALLET", "COLD_WALLET", "PROOF_OF_RESERVES", "UNKNOWN"].includes(role)
+    ? role
+    : "UNKNOWN";
+}
+
 function safeAddress(value) {
   return cleanText(value, 180);
 }
@@ -44,6 +51,7 @@ function sanitizeLabel(label) {
     address: safeAddress(label?.address),
     name: cleanText(label?.name, 120),
     category: safeCategory(label?.category),
+    wallet_role: safeWalletRole(label?.wallet_role),
     confidence: safeConfidence(label?.confidence),
     source_type: cleanText(label?.source_type, 60),
     source_title: cleanText(label?.source_title, 240),
