@@ -79,12 +79,15 @@ Exchange labels are stored in the existing `REPORT_GATE` Durable Object. Do not 
 a new Durable Object binding or move user workspaces: analyst labels remain private
 until their owner proposes them and an admin approves them.
 
-The Crypto admin panel can import the 10 Crypto.com Bitcoin/Ethereum cold-wallet
-addresses published on 11 Nov 2022. This is a historical, partial-reserves list;
-the UI calls out the date and limitation. The admin-only `action=seed` route writes
-the sourced labels into the shared registry, and the Durable Object skips duplicates.
-Binance and OKX have official downloadable PoR address lists, but their actual data
-files should be verified and imported separately rather than inferred from the page.
+The Crypto admin panel can import 35 historically disclosed addresses: 10 Crypto.com
+cold wallets, 23 Binance BTC/Ethereum/TRON reserve wallets, and 2 OKX verification
+examples (one BTC, one ETH). The Binance and Crypto.com lists date to November 2022
+and are partial; the OKX addresses are examples from its official verification guide,
+not its full current downloadable list. Each label carries its own source and caveat.
+The admin-only `action=seed` route writes sourced labels into the shared registry and
+the Durable Object skips existing addresses. Verify current control before relying on
+any historic disclosure. The full current OKX ZIP could not be fetched from this
+environment; do not present these seed records as a complete current PoR list.
 
 - `/crypto-analyze` looks up approved registry labels for the query and its visible
   transaction counterparties. Labels include the chain, exchange name, wallet role,
