@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CT ATLAS — Crypto Intelligence</title>
 <link rel="icon" href="CT-ATLAS.png">
-<link rel="stylesheet" href="crypto.css?v=6">
+<link rel="stylesheet" href="crypto.css?v=7">
 <link rel="stylesheet" href="tab-health.css?v=1">
   <script src="tab-access.js?v=20260928" defer></script>
 </head>
@@ -101,7 +101,7 @@
         <div class="crypto-card-head">
           <div>
             <div class="crypto-card-title">Labels &amp; Attribution</div>
-            <div class="crypto-card-note">Every sensitive attribution requires source + confidence. Persists across searches; shows labels for the currently visible network once you analyse a wallet.</div>
+            <div class="crypto-card-note">Labels require a source and confidence. Analyst labels stay private unless proposed; approved exchange labels are shared across CT Atlas and shown on the visible network.</div>
           </div>
           <button id="labelSeedButton" class="crypto-small-button" type="button" title="Pre-fills the current seed if a wallet is analysed">LABEL AN ADDRESS</button>
         </div>
@@ -111,14 +111,32 @@
             <label class="crypto-field compact"><span>Address</span><input id="labelAddress" autocomplete="off" spellcheck="false"></label>
             <label class="crypto-field compact"><span>Label / entity</span><input id="labelName" maxlength="120" placeholder="Exchange / alias / service"></label>
             <label class="crypto-field compact"><span>Category</span><select id="labelCategory"><option>CT WATCHLIST</option><option>SANCTIONS</option><option>DARKNET</option><option>MIXER</option><option>EXCHANGE</option><option>BRIDGE</option><option>DEX</option><option>GAMBLING</option><option>SCAM/FRAUD</option><option>SERVICE</option><option>PERSON/ALIAS</option><option>ORGANIZATION</option><option>DONATION CAMPAIGN</option><option>UNKNOWN SERVICE</option><option>OTHER</option></select></label>
+            <label id="labelWalletRoleField" class="crypto-field compact" hidden><span>Wallet role</span><select id="labelWalletRole"><option value="UNKNOWN">Unknown / unconfirmed</option><option value="DEPOSIT_ADDRESS">Deposit address</option><option value="HOT_WALLET">Hot wallet</option><option value="COLD_WALLET">Cold wallet</option><option value="PROOF_OF_RESERVES">Proof of reserves</option></select></label>
             <label class="crypto-field compact"><span>Confidence</span><select id="labelConfidence"><option>HIGH</option><option selected>MEDIUM</option><option>LOW</option></select></label>
             <label class="crypto-field compact"><span>Source type</span><input id="labelSourceType" maxlength="60" placeholder="Official / OSINT / Analyst"></label>
             <label class="crypto-field compact"><span>Source title</span><input id="labelSourceTitle" maxlength="240" placeholder="Document / article / designation"></label>
             <label class="crypto-field compact"><span>Source URL (https)</span><input id="labelSourceUrl" maxlength="1200" placeholder="https://…"></label>
             <label class="crypto-field compact"><span>Notes</span><input id="labelNotes" maxlength="1200" placeholder="Analytical caveat / context"></label>
+            <label id="exchangeProposalField" class="crypto-field compact exchange-proposal-field" hidden><span>Shared exchange registry</span><span class="checkbox-row"><input id="labelProposeExchange" type="checkbox"><span>Propose this EXCHANGE label for admin validation</span></span></label>
             <div class="intel-actions"><button id="labelSaveButton" class="crypto-small-button trace-button" type="button">SAVE LABEL</button><button id="labelCancelButton" class="crypto-small-button" type="button">CANCEL</button></div>
           </div>
           <div id="cryptoLabelList" class="intel-list"></div>
+          <details id="exchangeAdminPanel" class="exchange-admin" hidden>
+            <summary>Shared exchange registry · admin</summary>
+            <div class="exchange-admin-body">
+              <div class="crypto-card-note">Review sourced proposals, collect existing private EXCHANGE labels for review, or import verified official lists. Imports publish immediately; proposals require approval.</div>
+              <div class="intel-actions">
+                <button id="exchangeRefreshQueue" class="crypto-small-button" type="button">REFRESH QUEUE</button>
+                <button id="exchangeMigrateLabels" class="crypto-small-button" type="button">COLLECT PRIVATE EXCHANGE LABELS</button>
+                <button id="exchangeTemplateDownload" class="crypto-small-button" type="button">DOWNLOAD CSV TEMPLATE</button>
+              </div>
+              <div id="exchangeProposalList" class="intel-list"></div>
+              <label class="crypto-field compact"><span>Choose a CSV or JSON file</span><input id="exchangeImportFile" type="file" accept=".csv,.json,text/csv,application/json"></label>
+              <label class="crypto-field compact"><span>Import CSV or JSON</span><textarea id="exchangeImportText" rows="6" placeholder="Paste CSV or JSON records with chain, address, name, source_type, source_title, source_url, confidence, wallet_role, notes"></textarea></label>
+              <div class="intel-actions"><button id="exchangeImportButton" class="crypto-small-button trace-button" type="button">IMPORT APPROVED LABELS</button></div>
+              <div id="exchangeAdminStatus" class="crypto-card-note" aria-live="polite"></div>
+            </div>
+          </details>
         </div>
       </article>
     </section>
@@ -337,8 +355,8 @@
   </main>
 </div>
 <script src="pdf-export.js?v=4"></script>
-<script src="crypto-report.js?v=4"></script>
-<script src="crypto.js?v=6"></script>
+<script src="crypto-report.js?v=5"></script>
+<script src="crypto.js?v=7"></script>
 <script src="tab-health.js?v=1" data-health-scope="crypto"></script>
 </body>
 </html>
