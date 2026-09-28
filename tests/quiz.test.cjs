@@ -52,7 +52,7 @@ test('admin display labels cover configured names and omit unspecified users',as
   'group-s-3':'Andreas','group-s-4':'William Hippert','group-s-5':'Liman','group-s-6':'Juan','group-s-7':'Thierry'
  };
  for(const [username,name] of Object.entries(expected)) assert.equal(rows.get(username).display_name,name);
- assert.equal(rows.get('group-s-2').display_name,'Sebastien EDIS');
+ assert.equal(rows.get('group-s-2').display_name,'Sebastien Breuil');
  for(const username of ['group-s-8','group-s-9','group-s-10']) assert.equal(rows.get(username).display_name,undefined);
 });
 test('different user has independent attempt; 30-day statistics batch storage reads',async()=>{
