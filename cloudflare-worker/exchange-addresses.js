@@ -14,6 +14,31 @@ const EVM_ADDRESS_RE = /^0x[a-f0-9]{40}$/i;
 const TRON_ADDRESS_RE = /^T[1-9A-HJ-NP-Za-km-z]{33}$/;
 const BTC_ADDRESS_RE = /^(?:bc1[ac-hj-np-z02-9]{11,71}|[13][a-km-zA-HJ-NP-Z1-9]{24,33})$/i;
 const MAX_LOOKUP_ADDRESSES = 100;
+const OFFICIAL_SEED_LABELS = Object.freeze([
+  ...[
+    "bc1qpy4jwethqenp4r7hqls660wy8287vw0my32lmy",
+    "3LhhDLBVWBZChNQv8Dn4nDKFnCyojG1FqN",
+    "3QsGsAXQ4rqRNvh5pEW55hf3F9PEyb7rVq",
+    "bc1qr4dl5wa7kl8yu792dceg9z5knl2gkn220lk7a9",
+    "bc1q4c8n5t00jmj8temxdgcc3t32nkg2wjwz24lywv",
+    "14m3sd9HCCFJW4LymahJCKMabAxTK4DAqW"
+  ].map(address => ({ chain: "bitcoin", address })),
+  ...[
+    "0x72A53cDBBcc1b9efa39c834A540550e23463AAcB",
+    "0x7758e507850da48cd47df1fb5f875c23e3340c50",
+    "0xcffad3200574698b78f32232aa9d63eabd290703",
+    "0x6262998Ced04146fA42253a5C0AF90CA02dfd2A3"
+  ].map(address => ({ chain: "ethereum", address }))
+].map(entry => ({
+  ...entry,
+  name: "Crypto.com",
+  wallet_role: "COLD_WALLET",
+  confidence: "MEDIUM",
+  source_type: "Official exchange disclosure",
+  source_title: "Crypto.com cold wallet addresses (11 Nov 2022)",
+  source_url: "https://crypto.com/en/company-news/transparency-first",
+  notes: "Explicitly published by Crypto.com as a cold wallet address. Historical disclosure from 11 Nov 2022; Crypto.com said this list represented only a portion of its reserves. Verify current control before relying on it."
+})));
 
 function normalizeChain(value) {
   const chain = cleanText(value, 24).toLowerCase();
@@ -313,6 +338,13 @@ async function handleExchangeAddressLabels(request, env) {
     if (!labels.length) return jsonResponse({ error: "No valid sourced exchange labels to import." }, 400, env);
     const response = await gateCall(env, "/crypto-exchange-labels-import", { labels, imported_by: username });
     return jsonResponse(await response.json().catch(() => ({})), response.status, env);
+  }
+
+  if (action === "seed") {
+    if (!admin) return jsonResponse({ error: "Admin access required." }, 403, env);
+    const labels = OFFICIAL_SEED_LABELS.map(raw => sanitizeExchangeLabel(raw, { createdBy: username, reviewedBy: username }));
+    const response = await gateCall(env, "/crypto-exchange-labels-import", { labels, imported_by: username });
+    return jsonResponse({ ...(await response.json().catch(() => ({}))), seed: "crypto.com-2022", source_records: labels.length }, response.status, env);
   }
 
   return jsonResponse({ error: "Unsupported exchange label action." }, 400, env);
