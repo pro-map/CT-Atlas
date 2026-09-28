@@ -79,6 +79,13 @@ Exchange labels are stored in the existing `REPORT_GATE` Durable Object. Do not 
 a new Durable Object binding or move user workspaces: analyst labels remain private
 until their owner proposes them and an admin approves them.
 
+The Crypto admin panel can import the 10 Crypto.com Bitcoin/Ethereum cold-wallet
+addresses published on 11 Nov 2022. This is a historical, partial-reserves list;
+the UI calls out the date and limitation. The admin-only `action=seed` route writes
+the sourced labels into the shared registry, and the Durable Object skips duplicates.
+Binance and OKX have official downloadable PoR address lists, but their actual data
+files should be verified and imported separately rather than inferred from the page.
+
 - `/crypto-analyze` looks up approved registry labels for the query and its visible
   transaction counterparties. Labels include the chain, exchange name, wallet role,
   confidence, source and reviewer.
