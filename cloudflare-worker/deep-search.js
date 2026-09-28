@@ -1538,8 +1538,7 @@ export async function handleDeepSearch(request, env, ctx) {
       database_version: databaseVersion,
       language_search_coverage: languagesSearched,
       priority_languages: priorityLanguages,
-      evidence,
-      source_previews: sourcePreviews
+      evidence
     };
 
     const generatedRaw = await callGeminiJson(
@@ -1600,7 +1599,8 @@ export async function handleDeepSearch(request, env, ctx) {
         ...metrics,
         note: "Citation coverage measures visible source citation coverage; it is not a statistical probability of hallucination."
       },
-      evidence
+      evidence,
+      source_previews: sourcePreviews
     };
 
     await gateCall(env, "/cache-put", {
