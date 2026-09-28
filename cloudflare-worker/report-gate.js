@@ -22,7 +22,7 @@ const ADMIN_DISPLAY_NAMES=Object.freeze({
   "group-p-9":"MTS",
   "group-p-10":"Alexandre",
   "group-s-1":"Maddy",
-  "group-s-2":"Sebastien EDIS",
+  "group-s-2":"Sebastien Breuil",
   "group-s-3":"Andreas",
   "group-s-4":"William Hippert",
   "group-s-5":"Liman",

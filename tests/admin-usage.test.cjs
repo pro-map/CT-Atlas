@@ -61,7 +61,7 @@ test("admin usage returns all seven per-user counters for all-time and selected 
 
   const allTime = await gate.usageStats("all");
   const row = allTime.users.find(item => item.username === "group-s-2");
-  assert.equal(row.display_name, "Sebastien EDIS");
+  assert.equal(row.display_name, "Sebastien Breuil");
   for (const [metric, count] of Object.entries(metrics)) assert.equal(row[metric], count, metric);
   for (const [metric, count] of Object.entries(metrics)) assert.equal(allTime.summary[metric], count, metric);
 
