@@ -136,7 +136,7 @@ if (action === "tab_access") {
   const tab = cleanText(usageBody.tab, 16).toLowerCase();
   if (!["map", "crypto", "facial", "social"].includes(tab)) return jsonResponse({ error: "Unsupported workspace tab." }, 400, env);
   usagePayload.tab = tab;
-} else if (!["map_search", "event_list_search"].includes(action)) {
+} else if (!["map_search", "event_list_search", "facial_search"].includes(action)) {
   return jsonResponse({ error: "Unsupported usage action." }, 400, env);
 }
 const recordResponse = await gateCall(env, "/usage-record", usagePayload);
@@ -309,3 +309,4 @@ async scheduled(controller, env, ctx) {
 };
 export { ReportGate } from "./report-gate.js";
 export { FaceShare } from "./face-share.js";
+

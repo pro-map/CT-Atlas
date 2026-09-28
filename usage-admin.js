@@ -182,7 +182,7 @@ function injectAdminUi(){
     button=document.createElement("button");
     button.id="adminUsageButton";
     button.type="button";
-    button.textContent="ADMIN TAB ACCESS";
+    button.textContent="ADMIN USAGE STATS";
     mount.appendChild(button);
   }
 
@@ -196,10 +196,10 @@ function injectAdminUi(){
       '<div id="adminUsageWindow" role="dialog" aria-modal="true" aria-labelledby="adminUsageTitle">'+
         '<div id="adminUsageHeader">'+
           '<div>'+
-            '<div id="adminUsageTitle">ADMIN · TAB ACCESS</div>'+
-            '<div id="adminUsageSubtitle">Workspace opens per user</div>'+
+            '<div id="adminUsageTitle">ADMIN · USAGE STATISTICS</div>'+
+            '<div id="adminUsageSubtitle">Workspace access and feature activity per user</div>'+
           '</div>'+
-          '<button id="adminUsageClose" type="button" aria-label="Close tab access statistics">×</button>'+
+          '<button id="adminUsageClose" type="button" aria-label="Close admin usage statistics">×</button>'+
         '</div>'+
         '<div id="adminUsageBody">'+
           '<div id="adminUsagePeriods">'+
@@ -208,14 +208,22 @@ function injectAdminUi(){
             '<button type="button" class="admin-period" data-period="30">30 DAYS</button>'+
             '<button type="button" class="admin-period" data-period="all">ALL TIME</button>'+
           '</div>'+
-          '<div id="adminUsageStatus">Select a period to load tab access.</div>'+
+          '<div id="adminUsageStatus">Select a period to load usage statistics.</div>'+
+          '<div class="admin-usage-section-title">WORKSPACE ACCESS</div>'+
           '<div class="admin-usage-table-wrap">'+
             '<table id="adminUsageTable">'+
               '<thead><tr><th>USER</th><th>CRYPTO</th><th>FACIAL</th><th>MAP</th><th>SOCIAL</th></tr></thead>'+
               '<tbody id="adminUsageRows"></tbody>'+
             '</table>'+
           '</div>'+
-          '<div id="adminUsageNote">Counts begin with this update. Each opened workspace page adds one. Searches, questions, reports, and their contents are not included in these statistics.</div>'+
+          '<div class="admin-usage-section-title">FEATURE ACTIVITY</div>'+
+          '<div class="admin-usage-table-wrap">'+
+            '<table id="adminFeatureUsageTable">'+
+              '<thead><tr><th>USER</th><th>REPORT GENERATION</th><th>DEEP SEARCH</th><th>ATLAS AI</th><th>BLOCKCHAIN SEARCH</th><th>SOCIAL MEDIA SEARCH</th><th>FACIAL EXTRACTION</th><th>FACIAL SEARCH</th></tr></thead>'+
+              '<tbody id="adminFeatureUsageRows"></tbody>'+
+            '</table>'+
+          '</div>'+
+          '<div id="adminUsageNote">Workspace access counts page openings. Feature counts are per user and selected period; they record usage totals only, not search terms, questions, addresses, images or report contents. Blockchain and Facial counters begin with this update; earlier Report Generator, Deep Search, Atlas AI and Social Media counts retain their existing history.</div>'+
         '</div>'+
       '</div>'+
     '</div>');
@@ -253,27 +261,31 @@ async function loadAdmin(period){
 
   const status=document.getElementById("adminUsageStatus");
   const rows=document.getElementById("adminUsageRows");
+  const featureRows=document.getElementById("adminFeatureUsageRows");
   const currentToken=token();
 
   if(!currentToken){
-    if(status)status.textContent="Admin tab access requires an authenticated Worker session. Sign in again.";
+    if(status)status.textContent="Admin usage statistics require an authenticated Worker session. Sign in again.";
     if(rows)rows.innerHTML="";
+    if(featureRows)featureRows.innerHTML="";
     return;
   }
 
-  if(status)status.textContent="Loading tab access…";
+  if(status)status.textContent="Loading usage statistics…";
+  const headers={"X-Session-Token":currentToken};
+  const query="?period="+encodeURIComponent(period);
 
   try{
-    const response=await nativeFetch(
-      API_BASE+"/tab-access-stats?period="+encodeURIComponent(period),
-      {method:"GET",headers:{"X-Session-Token":currentToken}}
-    );
-    const payload=await response.json();
-
-    if(!response.ok)throw new Error(payload.error||"Unable to load tab access.");
+    const [accessResponse,usageResponse]=await Promise.all([
+      nativeFetch(API_BASE+"/tab-access-stats"+query,{method:"GET",headers}),
+      nativeFetch(API_BASE+"/usage-stats"+query,{method:"GET",headers})
+    ]);
+    const [accessPayload,usagePayload]=await Promise.all([accessResponse.json(),usageResponse.json()]);
+    if(!accessResponse.ok)throw new Error(accessPayload.error||"Unable to load workspace access.");
+    if(!usageResponse.ok)throw new Error(usagePayload.error||"Unable to load feature activity.");
 
     if(rows){
-      const users=Array.isArray(payload.users)?payload.users:[];
+      const users=Array.isArray(accessPayload.users)?accessPayload.users:[];
       rows.innerHTML=users.map(item=>
         "<tr>"+
           "<td>"+escapeCell(adminUserLabel(item))+"</td>"+
@@ -285,15 +297,30 @@ async function loadAdmin(period){
       ).join("")||'<tr><td colspan="5">No users found for this period.</td></tr>';
     }
 
+    if(featureRows){
+      const users=Array.isArray(usagePayload.users)?usagePayload.users:[];
+      featureRows.innerHTML=users.map(item=>
+        "<tr>"+
+          "<td>"+escapeCell(adminUserLabel(item))+"</td>"+
+          "<td>"+Number(item.report_generator_requests||0)+"</td>"+
+          "<td>"+Number(item.deep_search_requests||0)+"</td>"+
+          "<td>"+Number(item.quick_ask_requests||0)+"</td>"+
+          "<td>"+Number(item.blockchain_searches||0)+"</td>"+
+          "<td>"+Number(item.social_intel_requests||0)+"</td>"+
+          "<td>"+Number(item.facial_extractions||0)+"</td>"+
+          "<td>"+Number(item.facial_searches||0)+"</td>"+
+        "</tr>"
+      ).join("")||'<tr><td colspan="8">No users found for this period.</td></tr>';
+    }
+
     if(status){
-      status.textContent="Updated "+new Date().toLocaleTimeString("en-GB",{
-        hour:"2-digit",
-        minute:"2-digit"
-      })+" · "+(payload.period_label||period);
+      status.textContent="Updated "+new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})+
+        " · "+(usagePayload.period_label||accessPayload.period_label||period);
     }
   }catch(error){
-    if(status)status.textContent=error.message||"Unable to load tab access.";
+    if(status)status.textContent=error.message||"Unable to load usage statistics.";
     if(rows)rows.innerHTML="";
+    if(featureRows)featureRows.innerHTML="";
   }
 }
 document.addEventListener("click",event=>{
@@ -325,3 +352,4 @@ document.addEventListener("DOMContentLoaded",()=>{
 });
 
 })();
+

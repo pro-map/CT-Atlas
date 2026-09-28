@@ -50,6 +50,17 @@ export async function handleVisualAnalyze(request, env) {
       body,
     });
 
+    if (response.ok) {
+      try {
+        await gateCall(env, "/usage-increment", {
+          username: session.username,
+          metrics: { facial_extractions: 1 }
+        });
+      } catch (usageError) {
+        console.error("Facial extraction usage record failed", usageError);
+      }
+    }
+
     const headers = new Headers(corsHeaders(env));
     headers.set("Content-Type", response.headers.get("Content-Type") || "application/json; charset=utf-8");
     return new Response(response.body, { status: response.status, headers });
@@ -57,3 +68,4 @@ export async function handleVisualAnalyze(request, env) {
     return jsonResponse({ error: "Facial Intelligence service unavailable.", detail: cleanText(error?.message, 500) }, 502, env);
   }
 }
+

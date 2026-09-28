@@ -613,9 +613,24 @@ function requestSearch(record,engines,returnFocus){
   return running;
 }
 
+function recordFacialSearchUsage(){
+  try{
+    const api=context&&String(context.api||"").replace(/\/$/,"");
+    const token=context&&context.getToken?String(context.getToken()||""):"";
+    const username=String(sessionStorage.getItem("ct_map_username")||"").trim().toLowerCase();
+    if(!api||!token||!username)return;
+    fetch(api+"/usage-record",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","X-Session-Token":token},
+      body:JSON.stringify({username,action:"facial_search"})
+    }).catch(()=>{});
+  }catch(_){}
+}
+
 async function startSearch(record,engines){
   if(record.searching)return;
   record.searching=true;
+  recordFacialSearchUsage();
   try{await runDirectSearch(record,engines);}
   finally{record.searching=false;}
 }
@@ -707,3 +722,4 @@ root.CTAtlasFaceCrops={attach,helpers,
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bindControls);
 else bindControls();
 })(typeof window!=="undefined"?window:globalThis);
+
