@@ -343,7 +343,7 @@ async function handleExchangeAddressLabels(request, env) {
   if (action === "seed") {
     if (!admin) return jsonResponse({ error: "Admin access required." }, 403, env);
     const labels = OFFICIAL_SEED_LABELS.map(raw => sanitizeExchangeLabel(raw, { createdBy: username, reviewedBy: username }));
-    const response = await gateCall(env, "/crypto-exchange-labels-import", { labels, imported_by: username });
+    const response = await gateCall(env, "/crypto-exchange-labels-import", { labels, imported_by: username, skip_existing: true });
     return jsonResponse({ ...(await response.json().catch(() => ({}))), seed: "crypto.com-2022", source_records: labels.length }, response.status, env);
   }
 
