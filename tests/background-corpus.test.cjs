@@ -177,6 +177,12 @@ test('the /report route feeds background context to Gemini and lists it as sourc
   assert.match(route,/previewCandidates = \[\.\.\.eventSources\]/,'image previews stay limited to map events');
 });
 
+test('the Worker binds the D1 corpus and reports the binding in /health',()=>{
+  const toml=fs.readFileSync('cloudflare-worker/wrangler.toml','utf8');
+  assert.match(toml,/\[\[d1_databases\]\]\s*\nbinding = "BACKGROUND_DB"\s*\ndatabase_name = "ct-atlas-background-articles"\s*\ndatabase_id = "7c00bac7-05b6-443c-a305-c2bd9352c857"/);
+  assert.match(fs.readFileSync('cloudflare-worker/index.js','utf8'),/background_corpus: typeof env\.BACKGROUND_DB\?\.prepare === "function"/);
+});
+
 test('the map renders the new sections, C citations and context source labels',()=>{
   const html=fs.readFileSync('index.html','utf8');
   const start=html.indexOf('function reportSectionHtml(');

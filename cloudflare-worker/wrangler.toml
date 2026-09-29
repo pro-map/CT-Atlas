@@ -35,6 +35,14 @@ class_name = "FaceShare"
 type = "durable-object"
 storage = "sqlite"
 
+# Background reporting corpus (not on the map) used as context by the Report
+# Generator and Deep Search; filled by collector.py and
+# tools/sync_background_corpus.py. See background-corpus.js.
+[[d1_databases]]
+binding = "BACKGROUND_DB"
+database_name = "ct-atlas-background-articles"
+database_id = "7c00bac7-05b6-443c-a305-c2bd9352c857"
+
 # AUTH_USERS_JSON is a required Cloudflare secret containing {"username":"sha256(password)"}.
 # The Worker rejects all logins when this secret is missing or invalid; never commit it.
 
