@@ -170,9 +170,10 @@ def main(argv=None):
         print("Dry run: D1 not contacted.")
         return 0
 
+    inserted = 0
     try:
         for index, sql in enumerate(statements, start=1):
-            collector.d1_query(sql)
+            inserted += inserted_row_count(collector.d1_query(sql))
             if index % 10 == 0 or index == len(statements):
                 print(f"  {index}/{len(statements)} statements sent")
 
@@ -186,9 +187,23 @@ def main(argv=None):
         message = " ".join(str(error).split())[:600]
         print(f"::error title=D1 sync failed::{message}")
         return 1
-    for row in (totals.get("result") or [{}])[0].get("results") or []:
-        print(f"D1 now holds {row.get('n')} {row.get('kind')} rows")
+
+    counts = {
+        row.get("kind"): row.get("n")
+        for row in (totals.get("result") or [{}])[0].get("results") or []
+    }
+    summary = ", ".join(f"{kind} {n}" for kind, n in counts.items()) or "empty"
+    print(f"::notice title=D1 background corpus::{inserted} new rows inserted; now {sum(counts.values())} total ({summary})")
     return 0
+
+
+def inserted_row_count(response):
+    """Rows a statement actually wrote; INSERT OR IGNORE reports 0 for duplicates."""
+    return sum(
+        int((statement.get("meta") or {}).get("changes") or 0)
+        for statement in (response or {}).get("result") or []
+        if isinstance(statement, dict)
+    )
 
 
 if __name__ == "__main__":

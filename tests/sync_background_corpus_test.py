@@ -95,5 +95,19 @@ class CollectArticlesTests(unittest.TestCase):
             self.assertTrue(as_dict["url"] and as_dict["title"] and as_dict["kind"] and as_dict["collected_at"])
 
 
+class InsertedRowCountTests(unittest.TestCase):
+    def test_sums_changes_across_statements_in_a_d1_response(self):
+        response = {"success": True, "result": [
+            {"success": True, "meta": {"changes": 37}},
+            {"success": True, "meta": {"changes": 0}},
+        ]}
+        self.assertEqual(sync.inserted_row_count(response), 37)
+
+    def test_tolerates_missing_meta_or_result(self):
+        self.assertEqual(sync.inserted_row_count({"success": True, "result": [{"success": True}]}), 0)
+        self.assertEqual(sync.inserted_row_count({}), 0)
+        self.assertEqual(sync.inserted_row_count(None), 0)
+
+
 if __name__ == "__main__":
     unittest.main()
