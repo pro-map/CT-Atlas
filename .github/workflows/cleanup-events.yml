@@ -1,6 +1,15 @@
 name: Clean up existing events database
 
 on:
+  schedule:
+    # Between the daily collector's two runs (10:17 / 18:17 Europe/Paris) so
+    # this never competes with it for the same day's Gemini quota. Temporary:
+    # remove once the 60-69 backlog is cleared (see the commit that added
+    # this workflow) -- a scheduled run with nothing left to re-check is a
+    # harmless no-op (no Gemini calls, no commit), but it should not run
+    # forever after its one job is done.
+    - cron: "17 14 * * *"
+      timezone: "Europe/Paris"
   workflow_dispatch:
     inputs:
       rescore_min:
@@ -36,6 +45,11 @@ jobs:
   cleanup:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    env:
+      RESCORE_MIN: ${{ github.event_name == 'workflow_dispatch' && inputs.rescore_min || '60' }}
+      RESCORE_MAX: ${{ github.event_name == 'workflow_dispatch' && inputs.rescore_max || '69' }}
+      MAX_BATCHES: ${{ github.event_name == 'workflow_dispatch' && inputs.max_batches || '15' }}
+      SKIP_RESCORE: ${{ github.event_name == 'workflow_dispatch' && inputs.skip_rescore || false }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -59,7 +73,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           set -euo pipefail
-          if [ "${{ inputs.skip_rescore }}" = "true" ]; then
+          if [ "$SKIP_RESCORE" = "true" ]; then
             python -u tools/cleanup_existing_events.py --skip-rescore --show 100
           else
             if [ -z "$GEMINI_API_KEY" ]; then
@@ -67,9 +81,9 @@ jobs:
               exit 1
             fi
             python -u tools/cleanup_existing_events.py \
-              --rescore-min "${{ inputs.rescore_min }}" \
-              --rescore-max "${{ inputs.rescore_max }}" \
-              --max-batches "${{ inputs.max_batches }}" \
+              --rescore-min "$RESCORE_MIN" \
+              --rescore-max "$RESCORE_MAX" \
+              --max-batches "$MAX_BATCHES" \
               --show 100
           fi
 
@@ -83,7 +97,7 @@ jobs:
             echo "Nothing removed; no commit needed."
             exit 0
           fi
-          git commit -m "Retroactive cleanup: remove non-operational events (rescore ${{ inputs.rescore_min }}-${{ inputs.rescore_max }})"
+          git commit -m "Retroactive cleanup: remove non-operational events (rescore $RESCORE_MIN-$RESCORE_MAX)"
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             if ! git rebase origin/main; then
