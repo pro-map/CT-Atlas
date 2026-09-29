@@ -170,14 +170,22 @@ def main(argv=None):
         print("Dry run: D1 not contacted.")
         return 0
 
-    for index, sql in enumerate(statements, start=1):
-        collector.d1_query(sql)
-        if index % 10 == 0 or index == len(statements):
-            print(f"  {index}/{len(statements)} statements sent")
+    try:
+        for index, sql in enumerate(statements, start=1):
+            collector.d1_query(sql)
+            if index % 10 == 0 or index == len(statements):
+                print(f"  {index}/{len(statements)} statements sent")
 
-    totals = collector.d1_query(
-        "SELECT kind, COUNT(*) AS n FROM background_articles GROUP BY kind ORDER BY kind"
-    )
+        totals = collector.d1_query(
+            "SELECT kind, COUNT(*) AS n FROM background_articles GROUP BY kind ORDER BY kind"
+        )
+    except Exception as error:
+        # A workflow annotation is readable without signing in to GitHub, unlike
+        # the step log. d1_query's message carries only the HTTP status and
+        # Cloudflare's error body, never the token.
+        message = " ".join(str(error).split())[:600]
+        print(f"::error title=D1 sync failed::{message}")
+        return 1
     for row in (totals.get("result") or [{}])[0].get("results") or []:
         print(f"D1 now holds {row.get('n')} {row.get('kind')} rows")
     return 0
