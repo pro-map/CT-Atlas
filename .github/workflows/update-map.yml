@@ -92,6 +92,10 @@ jobs:
         id: collect
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # Background-articles corpus goes to Cloudflare D1; without D1 access
+          # collector.py falls back to background-articles.json.
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           AI_SELECTION_MODEL: "gemini-3.5-flash-lite"
           AI_SELECTION_BATCH_SIZE: "25"
           AI_SELECTION_MAX_CALLS_PER_RUN: "30"

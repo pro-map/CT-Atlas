@@ -5182,10 +5182,10 @@ def background_article_from_event(event):
     }
 
 
-def persist_background_articles(rejected_events):
-    if not rejected_events:
-        return
-
+def persist_background_articles_to_local_file(rejected_events):
+    """Fallback used when D1 is unreachable (missing/under-scoped Cloudflare
+    credentials, network error): keeps the corpus growing locally instead of
+    silently losing a day's rejected candidates."""
     existing = load_background_articles()
     by_url = {article.get("url"): article for article in existing if article.get("url")}
 
@@ -5223,8 +5223,104 @@ def persist_background_articles(rejected_events):
 
     print(
         f"Background corpus: +{added} new, {len(kept)} total "
-        f"(kept {BACKGROUND_ARTICLES_RETENTION_DAYS} days) -> {BACKGROUND_ARTICLES_FILE}"
+        f"(kept {BACKGROUND_ARTICLES_RETENTION_DAYS} days) -> {BACKGROUND_ARTICLES_FILE} (local fallback)"
     )
+
+
+CLOUDFLARE_D1_DATABASE_ID = "7c00bac7-05b6-443c-a305-c2bd9352c857"
+CLOUDFLARE_D1_BATCH_SIZE = 50
+
+BACKGROUND_ARTICLES_D1_COLUMNS = (
+    "url", "title", "summary", "source", "published", "category", "categories",
+    "actor_group", "primary_event_type", "original_language",
+    "ai_relevance_score", "ai_relevance_reason", "collected_at",
+)
+
+
+def d1_query(sql, params=None):
+    account_id = os.getenv("CLOUDFLARE_ACCOUNT_ID")
+    api_token = os.getenv("CLOUDFLARE_API_TOKEN")
+    if not account_id or not api_token:
+        raise RuntimeError("CLOUDFLARE_ACCOUNT_ID/CLOUDFLARE_API_TOKEN missing; cannot reach D1.")
+
+    url = (
+        f"https://api.cloudflare.com/client/v4/accounts/{account_id}"
+        f"/d1/database/{CLOUDFLARE_D1_DATABASE_ID}/query"
+    )
+    body = {"sql": sql}
+    if params is not None:
+        body["params"] = params
+
+    response = requests.post(
+        url,
+        headers={
+            "Authorization": f"Bearer {api_token}",
+            "Content-Type": "application/json",
+        },
+        json=body,
+        timeout=30,
+    )
+
+    if response.status_code >= 400:
+        raise RuntimeError(f"D1 query failed {response.status_code}: {response.text[:500]}")
+
+    data = response.json()
+    if not data.get("success", False):
+        raise RuntimeError(f"D1 query reported failure: {data}")
+
+    return data
+
+
+def background_article_row(article):
+    return tuple(
+        json.dumps(article.get(column) or []) if column == "categories" else article.get(column)
+        for column in BACKGROUND_ARTICLES_D1_COLUMNS
+    )
+
+
+def background_article_insert_batches(rows):
+    placeholders_one_row = "(" + ",".join("?" for _ in BACKGROUND_ARTICLES_D1_COLUMNS) + ")"
+    column_list = ",".join(BACKGROUND_ARTICLES_D1_COLUMNS)
+
+    for start in range(0, len(rows), CLOUDFLARE_D1_BATCH_SIZE):
+        chunk = rows[start:start + CLOUDFLARE_D1_BATCH_SIZE]
+        sql = (
+            f"INSERT OR IGNORE INTO background_articles ({column_list}) "
+            f"VALUES {','.join([placeholders_one_row] * len(chunk))}"
+        )
+        flat_params = [value for row in chunk for value in row]
+        yield sql, flat_params
+
+
+def persist_background_articles_to_d1(rejected_events):
+    rows = [
+        background_article_row(background_article_from_event(event))
+        for event in rejected_events
+        if event.get("url")
+    ]
+    if not rows:
+        return
+
+    for sql, params in background_article_insert_batches(rows):
+        d1_query(sql, params)
+
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=BACKGROUND_ARTICLES_RETENTION_DAYS)).isoformat()
+    d1_query(
+        "DELETE FROM background_articles WHERE published IS NOT NULL AND published < ?",
+        [cutoff],
+    )
+
+    print(f"Background corpus: submitted {len(rows)} candidate rows to D1 (dedup/retention handled server-side).")
+
+
+def persist_background_articles(rejected_events):
+    if not rejected_events:
+        return
+    try:
+        persist_background_articles_to_d1(rejected_events)
+    except Exception as error:
+        print(f"Background corpus: D1 write failed ({error}); falling back to the local file.")
+        persist_background_articles_to_local_file(rejected_events)
 
 
 def ai_select_events(
@@ -5559,7 +5655,11 @@ def ai_select_events(
         cache
     )
 
-    persist_background_articles(rejected)
+    # Enrichment only: a failure here must never block the map's own pipeline.
+    try:
+        persist_background_articles(rejected)
+    except Exception as error:
+        print(f"Background corpus: skipped this run ({error}).")
 
     return selected
 
