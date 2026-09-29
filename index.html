@@ -7228,9 +7228,21 @@ function normalizeCategoryName(category) {
 }
 
 
+// Memoized on the event object itself: allEvents is loaded once from JSON and
+// never mutated afterward, so the derived category list never changes for a
+// given event -- but eventCategories() is called 15+ places across a single
+// refreshDashboard() (categoryMatches, updateFacetCounts, updateTrends,
+// chronology, command-center panels...), each redoing the same Set/regex work
+// from scratch without this cache. Callers only ever read the returned array
+// (see the mutation-safety check kept in the map-performance test), never push
+// onto it, so returning the same cached array is safe.
 function eventCategories(
     event
 ) {
+
+    if (event._categoriesCache) {
+        return event._categoriesCache;
+    }
 
     const rawCategories =
         Array.isArray(event.categories)
@@ -7254,17 +7266,25 @@ function eventCategories(
         categories.push("Maritime Security");
     }
 
+    event._categoriesCache = categories;
     return categories;
 }
 
 
 
+// `selected` lets a caller that already fetched selectedCategories() once for a
+// whole batch (filteredAllEvents(), below) pass it in instead of this function
+// re-querying the checked .category-filter checkboxes from the DOM on every
+// single event -- that querySelectorAll was previously running once per event
+// per filter pass, the single largest cost in a filter/search action.
 function categoryMatches(
-    event
+    event,
+    selected
 ) {
 
 
-    const selected =
+    const selectedList =
+        selected ||
         selectedCategories();
 
 
@@ -7277,7 +7297,7 @@ function categoryMatches(
     return categories.some(
 
         category =>
-            selected.includes(
+            selectedList.includes(
                 category
             )
 
@@ -7332,8 +7352,8 @@ function selectedGroups() {
     ).map(checkbox => checkbox.value);
 }
 
-function groupMatches(event) {
-    return selectedGroups().includes(eventActorGroup(event));
+function groupMatches(event, selected) {
+    return (selected || selectedGroups()).includes(eventActorGroup(event));
 }
 
 
@@ -7399,10 +7419,32 @@ function searchMatches(
 
 
 
+// filteredAllEvents()/filteredMappedEvents() are each called 5-6 separate times
+// across a single refreshDashboard() (renderEvents, updateCoverage,
+// updateTopLocations, chronologyBaseEvents...), every time re-scanning the full
+// ~4,700-event array with the same filter state. Cached here and invalidated
+// once at the top of refreshDashboard() (invalidateFilterCache()), so a single
+// filter/search/category/group change re-scans the array once instead of 5-6
+// times. selectedCategories()/selectedGroups() are also read from the DOM only
+// once per scan here instead of once per event (see categoryMatches/groupMatches).
+let _filteredAllEventsCache = null;
+let _filteredMappedEventsCache = null;
+
+function invalidateFilterCache() {
+    _filteredAllEventsCache = null;
+    _filteredMappedEventsCache = null;
+}
+
 function filteredAllEvents() {
 
+    if (_filteredAllEventsCache) {
+        return _filteredAllEventsCache;
+    }
 
-    return allEvents.filter(
+    const selectedCats = selectedCategories();
+    const selectedGrps = selectedGroups();
+
+    _filteredAllEventsCache = allEvents.filter(
 
         event =>
 
@@ -7414,13 +7456,15 @@ function filteredAllEvents() {
             &&
 
             categoryMatches(
-                event
+                event,
+                selectedCats
             )
 
             &&
 
             groupMatches(
-                event
+                event,
+                selectedGrps
             )
 
             &&
@@ -7431,14 +7475,19 @@ function filteredAllEvents() {
 
     );
 
+    return _filteredAllEventsCache;
+
 }
 
 
 
 function filteredMappedEvents() {
 
+    if (_filteredMappedEventsCache) {
+        return _filteredMappedEventsCache;
+    }
 
-    return filteredAllEvents().filter(
+    _filteredMappedEventsCache = filteredAllEvents().filter(
 
         event =>
 
@@ -7457,6 +7506,8 @@ function filteredMappedEvents() {
             event.longitude != null
 
     );
+
+    return _filteredMappedEventsCache;
 
 }
 
@@ -9015,53 +9066,22 @@ function chronologyFilteredEvents() {
             chronologyMatches
         );
 
+    // Decorate-sort-undecorate: parse each event's Date once (O(N)) instead of
+    // re-parsing both operands on every pairwise comparison the sort makes
+    // (O(N log N) Date constructions for the same handful of distinct values).
+    const decorated = events.map(event => ({
+        event,
+        time: new Date(event.published || 0).getTime()
+    }));
 
-    events.sort(
-
-        (a,b) => {
-
-            const aTime =
-                new Date(
-                    a.published
-                    ||
-                    0
-                ).getTime();
-
-
-            const bTime =
-                new Date(
-                    b.published
-                    ||
-                    0
-                ).getTime();
-
-
-            return (
-
-                chronologySort
-                ===
-                "oldest"
-
-                ?
-
-                aTime
-                -
-                bTime
-
-                :
-
-                bTime
-                -
-                aTime
-
-            );
-
-        }
-
+    decorated.sort(
+        (a, b) =>
+            chronologySort === "oldest"
+                ? a.time - b.time
+                : b.time - a.time
     );
 
-
-    return events;
+    return decorated.map(item => item.event);
 
 }
 
@@ -14358,6 +14378,8 @@ function scheduleDashboardRefresh(delay = 0) {
 
 function refreshDashboard() {
 
+
+    invalidateFilterCache();
 
     updateKPIs();
 
