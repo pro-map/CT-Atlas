@@ -1,0 +1,100 @@
+name: Clean up existing events database
+
+on:
+  workflow_dispatch:
+    inputs:
+      rescore_min:
+        description: "Re-check events with this AI relevance score and above"
+        required: true
+        default: "60"
+        type: string
+      rescore_max:
+        description: "...up to this AI relevance score"
+        required: true
+        default: "69"
+        type: string
+      max_batches:
+        description: "Max Gemini batches this run (spread a large re-check across several days)"
+        required: true
+        default: "15"
+        type: string
+      skip_rescore:
+        description: "Only run the free keyword pass (no Gemini calls)"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+# Shares the daily collector's commit lock: both write to events.json and push to main.
+concurrency:
+  group: ct-map-update-main
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run cleanup
+        id: cleanup
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [ "${{ inputs.skip_rescore }}" = "true" ]; then
+            python -u tools/cleanup_existing_events.py --skip-rescore --show 100
+          else
+            if [ -z "$GEMINI_API_KEY" ]; then
+              echo "GEMINI_API_KEY GitHub secret is missing."
+              exit 1
+            fi
+            python -u tools/cleanup_existing_events.py \
+              --rescore-min "${{ inputs.rescore_min }}" \
+              --rescore-max "${{ inputs.rescore_max }}" \
+              --max-batches "${{ inputs.max_batches }}" \
+              --show 100
+          fi
+
+      - name: Commit and push if anything was removed
+        run: |
+          set -euo pipefail
+          git config user.name "CT Intelligence Map Bot"
+          git config user.email "actions@github.com"
+          git add events.json archive/
+          if git diff --cached --quiet; then
+            echo "Nothing removed; no commit needed."
+            exit 0
+          fi
+          git commit -m "Retroactive cleanup: remove non-operational events (rescore ${{ inputs.rescore_min }}-${{ inputs.rescore_max }})"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo "Concurrent modification conflict; re-run this workflow."
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 4))
+          done
+          echo "Push failed after retries."
+          exit 1
