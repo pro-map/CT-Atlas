@@ -105,6 +105,46 @@ test('a D1 failure degrades to no context instead of failing the report',async()
   assert.deepEqual(plain(await corpus.fetchBackgroundContext({BACKGROUND_DB:db},{events,...period})),{available:false,items:[]});
 });
 
+test('Deep Search corpus query requires the anchor and any topic term, and honours exclusions',()=>{
+  const plan={anchors:{en:'djibouti'},gdelt_broad_terms:['djibouti','piracy','vessel'],gdelt_exclude_terms:['football']};
+  assert.equal(corpus.deepSearchCorpusQuery(plan),'"djibouti" AND ("piracy" OR "vessel") NOT ("football")');
+  assert.equal(corpus.deepSearchCorpusQuery({anchors:{en:'sahel'}}),'"sahel"');
+  assert.equal(corpus.deepSearchCorpusQuery({gdelt_broad_terms:['heroin','afghanistan']}),'"heroin" OR "afghanistan"');
+  assert.equal(corpus.deepSearchCorpusQuery({gdelt_broad_terms:['heroin']}),'','one loose term alone is too broad');
+  assert.equal(corpus.deepSearchCorpusQuery({}),'');
+});
+
+test('Deep Search corpus rows look like live search rows and keep only real links',async()=>{
+  assert.deepEqual(plain(await corpus.searchCorpusForDeepSearch({}, {plan:{anchors:{en:'djibouti'}},...period})),{available:false,rows:[]});
+
+  const db=fakeDb(()=>[
+    {url:'https://garowe/1',kind:'related_article',title:'Doorbixi: markab la afduubay',source:'Garowe Online',published:'2026-09-20T08:00:00+00:00',original_language:'so'},
+    {url:'https://x/2',kind:'rejected_candidate',title:'Djibouti hosts naval talks',source:'AFP',published:null,collected_at:'2026-09-21T00:00:00+00:00',original_language:'fr'},
+  ]);
+  const result=plain(await corpus.searchCorpusForDeepSearch({BACKGROUND_DB:db},{
+    plan:{anchors:{en:'djibouti'},gdelt_broad_terms:['piracy']},...period,searchQuery:'Djibouti maritime incidents'
+  }));
+  assert.equal(result.available,true);
+  const [related,rejected]=result.rows;
+  assert.equal(related.search_engine,'ct_atlas_corpus');
+  assert.equal(related.language,'so','related articles keep their outlet language');
+  assert.equal(rejected.language,'en','collector-normalised rows are English');
+  assert.equal(rejected.published,'2026-09-21T00:00:00.000Z','falls back to the collection date');
+  assert.equal(rejected.corpus_kind,'rejected_candidate');
+  assert.equal(rejected.search_query,'Djibouti maritime incidents');
+  assert.match(db.calls[0].sql,/ba\.url LIKE 'http%'/);
+});
+
+test('Deep Search merges the archive before de-duplication and labels it in the UI',()=>{
+  const worker=fs.readFileSync('cloudflare-worker/deep-search.js','utf8');
+  assert.match(worker,/import \{ searchCorpusForDeepSearch \} from "\.\/background-corpus\.js"/);
+  assert.match(worker,/deduplicateRows\(\[\.\.\.retrieval\.rows, \.\.\.corpus\.rows\]\)/);
+  assert.match(worker,/corpus_kind: row\.corpus_kind/);
+  assert.match(worker,/"ct_atlas_corpus" come from CT Atlas's own archive/);
+  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v8-atlas-corpus"/);
+  assert.match(fs.readFileSync('deep-search.js','utf8'),/ct_atlas_corpus:"CT ATLAS ARCHIVE"/);
+});
+
 const shared=load('cloudflare-worker/shared.js',{crypto:globalThis.crypto,TextEncoder,Intl});
 
 test('citation metrics count C context ids and three-digit S ids',()=>{

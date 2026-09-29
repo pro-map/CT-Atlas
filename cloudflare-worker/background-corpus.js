@@ -154,10 +154,87 @@ async function fetchBackgroundContext(env, { events, start, end }) {
   }
 }
 
+// ---- Deep Search ---------------------------------------------------------
+// Deep Search's own planner already names the request's English anchor
+// (usually the geography or actor) and a few broad topic terms; the corpus is
+// searched with the anchor required and any topic term, so a question about
+// Djibouti maritime incidents needs "djibouti" plus e.g. "piracy" or "vessel".
+// Only rows with a real article URL are returned: Deep Search evidence must
+// be openable and verifiable, which rules out synthetic historical reviews.
+const MAX_DEEP_SEARCH_CORPUS_ROWS = 30;
+
+function phrase(term) {
+  return `"${cleanText(term, 80).replace(/"/g, '""')}"`;
+}
+
+function deepSearchCorpusQuery(plan) {
+  const anchor = cleanText(plan?.anchors?.en, 80);
+  const list = value => (Array.isArray(value) ? value : []).map(term => cleanText(term, 80)).filter(Boolean);
+  const broad = list(plan?.gdelt_broad_terms).filter(term => term !== anchor);
+  const exclude = list(plan?.gdelt_exclude_terms);
+
+  let query = "";
+  if (anchor && broad.length) query = `${phrase(anchor)} AND (${broad.map(phrase).join(" OR ")})`;
+  else if (anchor) query = phrase(anchor);
+  else if (broad.length >= 2) query = broad.map(phrase).join(" OR ");
+  if (query && exclude.length) query += ` NOT (${exclude.map(phrase).join(" OR ")})`;
+  return query;
+}
+
+function isoOrEmpty(value) {
+  const date = value ? new Date(value) : null;
+  return date && !Number.isNaN(date.getTime()) ? date.toISOString() : "";
+}
+
+async function searchCorpusForDeepSearch(env, { plan, start, end, searchQuery }) {
+  const db = env?.BACKGROUND_DB;
+  if (!db || typeof db.prepare !== "function") return { available: false, rows: [] };
+  const match = deepSearchCorpusQuery(plan);
+  if (!match) return { available: true, rows: [] };
+
+  try {
+    const sql = `SELECT ${COLUMNS}, ba.original_language
+      FROM background_articles_fts
+      JOIN background_articles AS ba ON ba.rowid = background_articles_fts.rowid
+      WHERE background_articles_fts MATCH ?
+        AND ba.url LIKE 'http%'
+        AND COALESCE(ba.published, ba.collected_at) >= ?
+        AND COALESCE(ba.published, ba.collected_at) <= ?
+      ORDER BY background_articles_fts.rank
+      LIMIT ${MAX_DEEP_SEARCH_CORPUS_ROWS}`;
+    const result = await db.prepare(sql).bind(match, start.toISOString(), end.toISOString()).all();
+    const rows = (result?.results || []).map(row => {
+      const kind = cleanText(row.kind, 40);
+      return {
+        title: cleanText(row.title, 500),
+        summary: cleanText(row.summary, 650),
+        source: cleanText(row.source, 140) || "CT Atlas archive",
+        url: cleanText(row.url, 1200),
+        published: isoOrEmpty(row.published || row.collected_at),
+        // Rejected candidates and removed events were normalised to English by
+        // the collector; related articles keep their outlet's own headline.
+        language: kind === "related_article" ? (cleanText(row.original_language, 8).toLowerCase() || "en") : "en",
+        query_index: -1,
+        query_variant: "ct-atlas-corpus",
+        search_query: cleanText(searchQuery, 280),
+        search_engine: "ct_atlas_corpus",
+        fallback_locale: false,
+        corpus_kind: kind
+      };
+    }).filter(row => row.title && row.url);
+    return { available: true, rows, query: match };
+  } catch (error) {
+    console.error("Background corpus Deep Search query failed", error);
+    return { available: false, rows: [] };
+  }
+}
+
 export {
   fetchBackgroundContext,
   backgroundSearchTerms,
   ftsQuery,
   toContextItems,
-  MAX_CONTEXT_ITEMS
+  MAX_CONTEXT_ITEMS,
+  deepSearchCorpusQuery,
+  searchCorpusForDeepSearch
 };

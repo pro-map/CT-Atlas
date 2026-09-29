@@ -226,7 +226,7 @@ function fmtDate(value){
   return date.toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric"});
 }
 
-const SEARCH_ENGINE_LABELS={gdelt:"GDELT",acled:"ACLED",bing:"BING"};
+const SEARCH_ENGINE_LABELS={gdelt:"GDELT",acled:"ACLED",bing:"BING",ct_atlas_corpus:"CT ATLAS ARCHIVE"};
 function engineLabel(engine){
   return SEARCH_ENGINE_LABELS[engine]||"GOOGLE NEWS";
 }

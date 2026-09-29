@@ -12,6 +12,7 @@ import {
   waitBeforeGeminiRetry
 } from "./shared.js";
 import { createSourcePreviews } from "./source-preview.js";
+import { searchCorpusForDeepSearch } from "./background-corpus.js";
 
 const DEEP_SEARCH_MAX_QUERIES = 24;
 const DEEP_SEARCH_RESULTS_PER_QUERY = 30;
@@ -22,7 +23,7 @@ const DEEP_SEARCH_MODEL = "gemini-3.5-flash-lite";
 // models on retry recovers from a single model being temporarily out of capacity, the same
 // "high demand" condition callGemini() (Report Generator, shared.js) already retries around.
 const DEEP_SEARCH_FALLBACK_MODEL = "gemini-3.6-flash";
-export const DEEP_SEARCH_VERSION = "deep-search-v7-source-previews";
+export const DEEP_SEARCH_VERSION = "deep-search-v8-atlas-corpus";
 
 // There is no period selector any more -- the analyst's own question is the
 // only source of a time window. The planner LLM (see PLAN_SCHEMA's
@@ -678,6 +679,14 @@ EVIDENCE RULES:
   chronology or trends.
 - Search-result snippets can be incomplete; do not infer beyond them.
 - If the evidence is insufficient for a requested point, say so explicitly.
+- Records with search_engine "ct_atlas_corpus" come from CT Atlas's own archive
+  of previously collected reporting; they are real published articles with
+  their original source and URL. Their corpus_kind qualifies them:
+  "removed_event" is commentary or analysis -- attribute it as a view
+  ("analysts argue ... [S07]"), never as established fact;
+  "rejected_candidate" is reporting CT Atlas judged outside its map scope
+  (e.g. interstate diplomacy, state military action) -- valid context, but not
+  proof of a terrorist incident.
 
 FORMAT:
 Use plain report text inside the "analysis" field, with real newline characters.
@@ -1382,7 +1391,8 @@ function buildEvidence(rows, priorityLanguages = []) {
       search_engine: source.search_engine || "google_news"
     })),
     atlas_status: row.atlas_status, atlas_match_id: row.atlas_match_id,
-    atlas_match_title: row.atlas_match_title, atlas_match_score: row.atlas_match_score
+    atlas_match_title: row.atlas_match_title, atlas_match_score: row.atlas_match_score,
+    ...(row.corpus_kind ? { corpus_kind: row.corpus_kind } : {})
   }));
 }
 
@@ -1530,7 +1540,14 @@ export async function handleDeepSearch(request, env, ctx) {
 
     const priorityLanguages = resolvePriorityLanguages(question, plan.priority_languages || []);
     const retrieval = await retrieveNews(plan, window, priorityLanguages);
-    const unique = deduplicateRows(retrieval.rows);
+    // CT Atlas's own archive (D1 background corpus, one binding query): merged
+    // before de-duplication so an archived copy of a live result corroborates
+    // it, and so a question still gets evidence when live providers fail.
+    const corpus = await searchCorpusForDeepSearch(env, {
+      plan, start: window.startDt, end: window.endDt,
+      searchQuery: plan.queries.find(item => item.language === "en" && item.variant === "primary")?.query || question
+    });
+    const unique = deduplicateRows([...retrieval.rows, ...corpus.rows]);
     const languagesSearched = languageDiagnostics(plan, retrieval, priorityLanguages);
 
     if (!unique.length) {
@@ -1626,6 +1643,8 @@ export async function handleDeepSearch(request, env, ctx) {
         gdelt_articles: retrieval.rows.filter(row => row.search_engine === "gdelt").length,
         acled_articles: retrieval.rows.filter(row => row.search_engine === "acled").length,
         bing_articles: retrieval.rows.filter(row => row.search_engine === "bing").length,
+        ct_atlas_corpus_available: corpus.available,
+        ct_atlas_corpus_articles: corpus.rows.length,
         search_subrequests: retrieval.subrequest_budget?.search_requests || retrieval.waves.length
       },
       grounding: {
