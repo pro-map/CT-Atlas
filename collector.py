@@ -119,6 +119,15 @@ AI_SELECTION_ATTEMPTS = 5
 AI_SELECTION_TIMEOUT = 240
 AI_SELECTION_PAUSE_SECONDS = 8.0
 
+# Candidates Gemini reviews but scores below AI_SELECTION_THRESHOLD (or rejects
+# as out of scope) are normally discarded after ai_select_events() prints a
+# few examples. They are saved here instead -- never read by the map, never
+# folded into events.json/events-lite.json -- as a much larger, lower-bar
+# corpus for report generation and Deep Search to draw on later, at no extra
+# collection or Gemini cost since these calls already happened.
+BACKGROUND_ARTICLES_FILE = "background-articles.json"
+BACKGROUND_ARTICLES_RETENTION_DAYS = 180
+
 
 # ============================================================
 # GEMINI 24H SENSITIVE TREND SUMMARY
@@ -5141,6 +5150,83 @@ def apply_ai_selection(
     )
 
 
+def load_background_articles():
+    if not os.path.exists(BACKGROUND_ARTICLES_FILE):
+        return []
+    try:
+        with open(BACKGROUND_ARTICLES_FILE, encoding="utf-8") as handle:
+            data = json.load(handle)
+        if not isinstance(data, dict) or not isinstance(data.get("articles"), list):
+            return []
+        return [article for article in data["articles"] if isinstance(article, dict)]
+    except (OSError, ValueError):
+        return []
+
+
+def background_article_from_event(event):
+    return {
+        "id": event.get("id"),
+        "url": event.get("url"),
+        "title": event.get("title"),
+        "summary": event.get("summary"),
+        "source": event.get("source"),
+        "published": event.get("published"),
+        "category": event.get("category"),
+        "categories": event.get("categories"),
+        "actor_group": event.get("actor_group"),
+        "primary_event_type": event.get("primary_event_type"),
+        "original_language": event.get("original_language"),
+        "ai_relevance_score": event.get("ai_relevance_score"),
+        "ai_relevance_reason": event.get("ai_relevance_reason"),
+        "collected_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+def persist_background_articles(rejected_events):
+    if not rejected_events:
+        return
+
+    existing = load_background_articles()
+    by_url = {article.get("url"): article for article in existing if article.get("url")}
+
+    added = 0
+    for event in rejected_events:
+        url = event.get("url")
+        if not url or url in by_url:
+            continue
+        by_url[url] = background_article_from_event(event)
+        added += 1
+
+    cutoff = datetime.now(timezone.utc) - timedelta(days=BACKGROUND_ARTICLES_RETENTION_DAYS)
+    kept = []
+    for article in by_url.values():
+        dt = event_datetime(article)
+        if dt and dt < cutoff:
+            continue
+        kept.append(article)
+
+    if added == 0 and len(kept) == len(existing):
+        return
+
+    kept.sort(key=lambda article: article.get("published") or "", reverse=True)
+
+    atomic_json_write(
+        BACKGROUND_ARTICLES_FILE,
+        {
+            "format": "background-articles-v1",
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+            "retention_days": BACKGROUND_ARTICLES_RETENTION_DAYS,
+            "article_count": len(kept),
+            "articles": kept,
+        },
+    )
+
+    print(
+        f"Background corpus: +{added} new, {len(kept)} total "
+        f"(kept {BACKGROUND_ARTICLES_RETENTION_DAYS} days) -> {BACKGROUND_ARTICLES_FILE}"
+    )
+
+
 def ai_select_events(
     events
 ):
@@ -5472,6 +5558,8 @@ def ai_select_events(
     save_selection_cache(
         cache
     )
+
+    persist_background_articles(rejected)
 
     return selected
 

@@ -205,7 +205,10 @@ jobs:
                   subprocess.run(["git", "restore", "--staged", "--worktree", "events.json"], check=True)
           # A quiz is independent of collection and can be published when collection
           # or geolocation fails, provided the quiz step produced valid files.
-          for generated in ("daily-quiz.json", "daily-quiz-history.json", "sanctions-crypto.json"):
+          # background-articles.json is likewise independent of whether collection's
+          # events.json write succeeded -- it is written incrementally inside
+          # ai_select_events() itself, not part of the final database swap above.
+          for generated in ("daily-quiz.json", "daily-quiz-history.json", "sanctions-crypto.json", "background-articles.json"):
               if Path(generated).exists():
                   subprocess.run(["git", "add", "--", generated], check=True)
           PY
