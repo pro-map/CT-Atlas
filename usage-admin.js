@@ -208,6 +208,12 @@ function injectAdminUi(){
             '<button type="button" class="admin-period" data-period="30">30 DAYS</button>'+
             '<button type="button" class="admin-period" data-period="all">ALL TIME</button>'+
           '</div>'+
+          '<div id="adminUsageSummary">'+
+            '<div class="admin-usage-metric"><span>ACTIVE USERS</span><strong id="adminActiveUsers">—</strong></div>'+
+            '<div class="admin-usage-metric"><span>SEARCHES</span><strong id="adminSearches">—</strong></div>'+
+            '<div class="admin-usage-metric"><span>REPORT REQUESTS</span><strong id="adminReportRequests">—</strong></div>'+
+            '<div class="admin-usage-metric"><span>AI REPORTS</span><strong id="adminAiReports">—</strong></div>'+
+          '</div>'+
           '<div id="adminUsageStatus">Select a period to load usage statistics.</div>'+
           '<div class="admin-usage-section-title">WORKSPACE ACCESS</div>'+
           '<div class="admin-usage-table-wrap">'+
@@ -297,6 +303,13 @@ async function loadAdmin(period){
       ).join("")||'<tr><td colspan="5">No users found for this period.</td></tr>';
     }
 
+    const summary=usagePayload.summary||{};
+    const setMetric=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=Number(value||0).toLocaleString("en-GB");};
+    setMetric("adminActiveUsers",summary.active_users);
+    setMetric("adminSearches",summary.searches);
+    setMetric("adminReportRequests",summary.report_requests);
+    setMetric("adminAiReports",summary.reports_generated);
+
     if(featureRows){
       const users=Array.isArray(usagePayload.users)?usagePayload.users:[];
       featureRows.innerHTML=users.map(item=>
@@ -321,6 +334,10 @@ async function loadAdmin(period){
     if(status)status.textContent=error.message||"Unable to load usage statistics.";
     if(rows)rows.innerHTML="";
     if(featureRows)featureRows.innerHTML="";
+    ["adminActiveUsers","adminSearches","adminReportRequests","adminAiReports"].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el)el.textContent="—";
+    });
   }
 }
 document.addEventListener("click",event=>{
