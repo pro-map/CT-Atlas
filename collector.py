@@ -5176,6 +5176,8 @@ def background_article_from_event(event):
         "actor_group": event.get("actor_group"),
         "primary_event_type": event.get("primary_event_type"),
         "original_language": event.get("original_language"),
+        "country": event.get("country"),
+        "region": event.get("region"),
         "ai_relevance_score": event.get("ai_relevance_score"),
         "ai_relevance_reason": event.get("ai_relevance_reason"),
         "collected_at": datetime.now(timezone.utc).isoformat(),
@@ -5228,11 +5230,17 @@ def persist_background_articles_to_local_file(rejected_events):
 
 
 CLOUDFLARE_D1_DATABASE_ID = "7c00bac7-05b6-443c-a305-c2bd9352c857"
-CLOUDFLARE_D1_BATCH_SIZE = 50
+# D1 caps a statement at 100,000 bytes and 100 bound parameters, so bulk rows
+# travel as escaped SQL literals packed under a byte budget rather than as
+# bound parameters (18 columns would allow only 5 rows per statement).
+CLOUDFLARE_D1_MAX_STATEMENT_BYTES = 90_000
+# The map keeps 180 days; the background corpus is meant to grow far larger.
+BACKGROUND_ARTICLES_D1_RETENTION_DAYS = 730
 
 BACKGROUND_ARTICLES_D1_COLUMNS = (
-    "url", "title", "summary", "source", "published", "category", "categories",
-    "actor_group", "primary_event_type", "original_language",
+    "url", "kind", "title", "summary", "source", "published", "category", "categories",
+    "actor_group", "primary_event_type", "original_language", "country", "region",
+    "parent_event_id", "parent_incident_id",
     "ai_relevance_score", "ai_relevance_reason", "collected_at",
 )
 
@@ -5271,46 +5279,83 @@ def d1_query(sql, params=None):
     return data
 
 
+def sql_literal(value):
+    """SQLite literal for bulk INSERTs. SQLite string literals have no escape
+    sequence other than a doubled single quote, so this is complete."""
+    if value is None:
+        return "NULL"
+    if isinstance(value, bool):
+        return "1" if value else "0"
+    if isinstance(value, int):
+        return str(value)
+    if isinstance(value, float):
+        return repr(value) if value == value and abs(value) != float("inf") else "NULL"
+    text = str(value).replace("\x00", "")
+    return "'" + text.replace("'", "''") + "'"
+
+
 def background_article_row(article):
-    return tuple(
-        json.dumps(article.get(column) or []) if column == "categories" else article.get(column)
-        for column in BACKGROUND_ARTICLES_D1_COLUMNS
+    values = []
+    for column in BACKGROUND_ARTICLES_D1_COLUMNS:
+        value = article.get(column)
+        if column == "categories":
+            value = json.dumps(value or [], ensure_ascii=False)
+        values.append(value)
+    return tuple(values)
+
+
+def d1_insert_or_ignore_statements(table, columns, rows, max_bytes=CLOUDFLARE_D1_MAX_STATEMENT_BYTES):
+    prefix = f"INSERT OR IGNORE INTO {table} ({','.join(columns)}) VALUES "
+    prefix_bytes = len(prefix.encode("utf-8"))
+    batch = []
+    size = prefix_bytes
+    for row in rows:
+        literal = "(" + ",".join(sql_literal(value) for value in row) + ")"
+        literal_bytes = len(literal.encode("utf-8")) + 1
+        if prefix_bytes + literal_bytes > max_bytes:
+            print(f"Background corpus: skipped one oversized row ({literal_bytes} bytes).")
+            continue
+        if batch and size + literal_bytes > max_bytes:
+            yield prefix + ",".join(batch)
+            batch, size = [], prefix_bytes
+        batch.append(literal)
+        size += literal_bytes
+    if batch:
+        yield prefix + ",".join(batch)
+
+
+def d1_insert_background_rows(rows):
+    statements = 0
+    for sql in d1_insert_or_ignore_statements("background_articles", BACKGROUND_ARTICLES_D1_COLUMNS, rows):
+        d1_query(sql)
+        statements += 1
+    return statements
+
+
+def prune_background_articles_d1():
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=BACKGROUND_ARTICLES_D1_RETENTION_DAYS)).isoformat()
+    d1_query(
+        "DELETE FROM background_articles WHERE COALESCE(published, collected_at) < ?",
+        [cutoff],
     )
-
-
-def background_article_insert_batches(rows):
-    placeholders_one_row = "(" + ",".join("?" for _ in BACKGROUND_ARTICLES_D1_COLUMNS) + ")"
-    column_list = ",".join(BACKGROUND_ARTICLES_D1_COLUMNS)
-
-    for start in range(0, len(rows), CLOUDFLARE_D1_BATCH_SIZE):
-        chunk = rows[start:start + CLOUDFLARE_D1_BATCH_SIZE]
-        sql = (
-            f"INSERT OR IGNORE INTO background_articles ({column_list}) "
-            f"VALUES {','.join([placeholders_one_row] * len(chunk))}"
-        )
-        flat_params = [value for row in chunk for value in row]
-        yield sql, flat_params
 
 
 def persist_background_articles_to_d1(rejected_events):
     rows = [
-        background_article_row(background_article_from_event(event))
+        background_article_row({**background_article_from_event(event), "kind": "rejected_candidate"})
         for event in rejected_events
-        if event.get("url")
+        if event.get("url") and event.get("title")
     ]
     if not rows:
         return
 
-    for sql, params in background_article_insert_batches(rows):
-        d1_query(sql, params)
+    statements = d1_insert_background_rows(rows)
+    prune_background_articles_d1()
 
-    cutoff = (datetime.now(timezone.utc) - timedelta(days=BACKGROUND_ARTICLES_RETENTION_DAYS)).isoformat()
-    d1_query(
-        "DELETE FROM background_articles WHERE published IS NOT NULL AND published < ?",
-        [cutoff],
+    print(
+        f"Background corpus: submitted {len(rows)} candidate rows to D1 in {statements} statement(s) "
+        f"(duplicates ignored by URL, {BACKGROUND_ARTICLES_D1_RETENTION_DAYS}-day retention)."
     )
-
-    print(f"Background corpus: submitted {len(rows)} candidate rows to D1 (dedup/retention handled server-side).")
 
 
 def persist_background_articles(rejected_events):

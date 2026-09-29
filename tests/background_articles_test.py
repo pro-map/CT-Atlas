@@ -10,6 +10,7 @@ tests, and Cloudflare credentials are cleared so nothing can reach the real API.
 import importlib.util
 import json
 import os
+import sqlite3
 import tempfile
 import unittest
 
@@ -66,18 +67,52 @@ class D1StorageTests(_IsolatedTestCase):
         self.assertEqual(as_dict["ai_relevance_score"], 40)
         self.assertEqual(json.loads(as_dict["categories"]), ["Attacks"])
 
-    def test_insert_batches_are_parameterised_and_split_by_batch_size(self):
-        article = collector.background_article_from_event(make_event())
-        rows = [collector.background_article_row({**article, "url": f"https://x/{i}"}) for i in range(120)]
-        batches = list(collector.background_article_insert_batches(rows))
-        width = len(collector.BACKGROUND_ARTICLES_D1_COLUMNS)
-
-        self.assertEqual([len(params) // width for _, params in batches], [50, 50, 20])
-        for sql, params in batches:
+    def test_statements_stay_under_the_d1_byte_budget(self):
+        article = collector.background_article_from_event(make_event(summary="x" * 900))
+        rows = [collector.background_article_row({**article, "url": f"https://x/{i}"}) for i in range(400)]
+        statements = list(collector.d1_insert_or_ignore_statements(
+            "background_articles", collector.BACKGROUND_ARTICLES_D1_COLUMNS, rows
+        ))
+        self.assertGreater(len(statements), 1)
+        for sql in statements:
             self.assertTrue(sql.startswith("INSERT OR IGNORE INTO background_articles"))
-            self.assertEqual(sql.count("?"), len(params))
-            # Values travel as bound parameters, never interpolated into the SQL.
-            self.assertNotIn("https://x/", sql)
+            self.assertLessEqual(len(sql.encode("utf-8")), collector.CLOUDFLARE_D1_MAX_STATEMENT_BYTES)
+
+    def test_literals_round_trip_exactly_through_sqlite(self):
+        # Hostile text: quotes, a statement terminator, SQL comment markers,
+        # non-Latin scripts, emoji, and a NUL byte (stripped by design).
+        tricky = "O'Brien \"said\"; DROP TABLE x; -- /* é ع 中 🙂 */"
+        rows = [
+            collector.background_article_row({
+                **collector.background_article_from_event(make_event(url=f"https://x/{i}", title=tricky + str(i))),
+                "kind": "rejected_candidate",
+                "summary": None if i % 2 else "line1\nline2\x00",
+            })
+            for i in range(30)
+        ]
+        db = sqlite3.connect(":memory:")
+        columns = collector.BACKGROUND_ARTICLES_D1_COLUMNS
+        db.execute(
+            "CREATE TABLE background_articles ("
+            + ",".join(c + (" TEXT PRIMARY KEY" if c == "url" else "") for c in columns) + ")"
+        )
+        for sql in collector.d1_insert_or_ignore_statements("background_articles", columns, rows, max_bytes=2000):
+            db.execute(sql)
+        stored = {r[0]: r for r in db.execute(f"SELECT {','.join(columns)} FROM background_articles")}
+
+        self.assertEqual(len(stored), 30)
+        for row in rows:
+            expected = tuple(v.replace("\x00", "") if isinstance(v, str) else v for v in row)
+            self.assertEqual(stored[row[0]], expected)
+        self.assertEqual(db.execute("SELECT name FROM sqlite_master WHERE name='x'").fetchall(), [])
+
+    def test_oversized_rows_are_skipped_not_sent(self):
+        huge = collector.background_article_row({
+            **collector.background_article_from_event(make_event(summary="y" * 5000)), "kind": "rejected_candidate",
+        })
+        self.assertEqual(list(collector.d1_insert_or_ignore_statements(
+            "background_articles", collector.BACKGROUND_ARTICLES_D1_COLUMNS, [huge], max_bytes=1000
+        )), [])
 
     def test_successful_d1_write_skips_the_local_fallback(self):
         calls = []
