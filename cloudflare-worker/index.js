@@ -39,6 +39,7 @@ import { handleSocialInvestigate, handleSocialWorkspace, SOCIAL_INTEL_VERSION } 
 import { SOCIAL_AGENT_CLIENT_VERSION, isSocialAgentConfigured } from "./social-agent-client.js";
 import { handleVisualAnalyze, isVisualIntelConfigured, VISUAL_INTEL_VERSION } from "./visual-intel.js";
 import { handleFaceShareUpload, handleFaceShareGet, FACE_SHARE_VERSION } from "./face-share.js";
+import { fetchBackgroundContext } from "./background-corpus.js";
 export default {
 async fetch(request, env, ctx) {
 // A fresh per-request copy, never a mutation of the shared env object --
@@ -273,14 +274,20 @@ const withSourceId = event => ({ ...compactEvent(event), source_id: `S${String(+
 const currentSourced = current.slice(0, MAX_EVENTS_CURRENT).map(withSourceId);
 const previousSourced = compare ? previous.slice(0, MAX_EVENTS_PREVIOUS).map(withSourceId) : [];
 const allSourced = [...currentSourced, ...previousSourced];
-const dataset = { selection: { region, topic, period_days: periodDays, compare }, database_version: databaseVersion, current_period: { start: currentStart.toISOString(), end: now.toISOString(), stats: stats(current), priority_events: currentSourced }, comparison_period: compare ? { start: previousStart.toISOString(), end: currentStart.toISOString(), stats: stats(previous), priority_events: previousSourced } : null };
+// Wider reporting from the D1 background corpus (never map events); an
+// empty list when the corpus is unavailable, so reports still work without it.
+const background = await fetchBackgroundContext(env, { events: currentSourced, start: currentStart, end: now });
+const contextItems = background.items;
+const dataset = { selection: { region, topic, period_days: periodDays, compare }, database_version: databaseVersion, current_period: { start: currentStart.toISOString(), end: now.toISOString(), stats: stats(current), priority_events: currentSourced }, comparison_period: compare ? { start: previousStart.toISOString(), end: currentStart.toISOString(), stats: stats(previous), priority_events: previousSourced } : null, background_context: { note: "Reporting that is NOT on the map; see BACKGROUND CONTEXT RULES.", items: contextItems.map(({ url, ...item }) => item) } };
 const generated = await callGemini(env, dataset);
 const meta = `${region === "GLOBAL" ? "Global" : region} · ${topic === "ALL" ? "All CT activity" : topic} · last ${periodDays} days${compare ? " vs previous equivalent period" : ""} · generated ${new Date().toISOString()}`;
 const analysisText = String(generated.analysis || "").trim();
-const grounding = citationMetrics(analysisText, allSourced.map(e => e.source_id));
-const sources = allSourced.map(e => ({ id: e.source_id, title: e.title, source: e.source, url: e.url, date: e.date, country: e.country, source_count: e.source_count, relevance: e.relevance }));
+const grounding = citationMetrics(analysisText, [...allSourced.map(e => e.source_id), ...contextItems.map(item => item.context_id)]);
+const eventSources = allSourced.map(e => ({ id: e.source_id, title: e.title, source: e.source, url: e.url, date: e.date, country: e.country, source_count: e.source_count, relevance: e.relevance }));
+const contextSources = contextItems.map(item => ({ id: item.context_id, title: item.title, source: item.source, url: item.url, date: item.date, country: item.country, kind: "context", context_kind: item.kind }));
+const sources = [...eventSources, ...contextSources];
 const citedSourceIds = new Set(grounding?.cited_source_ids || []);
-const previewCandidates = [...sources].sort((a,b) =>
+const previewCandidates = [...eventSources].sort((a,b) =>
   (citedSourceIds.has(b.id) ? 1 : 0) - (citedSourceIds.has(a.id) ? 1 : 0) ||
   Number(b.relevance || 0) - Number(a.relevance || 0) ||
   Number(b.source_count || 1) - Number(a.source_count || 1)

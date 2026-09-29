@@ -21,7 +21,7 @@ const FEEDBACK_GLOBAL_DAILY_LIMIT = 200;
 // Bump whenever the report SHAPE changes (new fields, schema, citation
 // rules) so an existing cache entry from before the change is never served
 // as-is -- folded into the cache key in index.js's /report handler.
-const REPORT_GENERATOR_VERSION = "report-v5-source-previews";
+const REPORT_GENERATOR_VERSION = "report-v6-analytical-context";
 
 function authUsersFromEnv(env) {
   const raw = String(env?.AUTH_USERS_JSON || "").trim();
@@ -81,20 +81,49 @@ const REPORT_SCHEMA = {
 };
 
 const SYSTEM_INSTRUCTION = `
-You are producing an on-demand counter-terrorism criminal-analysis report
-from a deduplicated OSINT event database.
+You are producing an on-demand counter-terrorism criminal-intelligence
+assessment from a deduplicated OSINT event database, supplemented by a wider
+background-reporting corpus.
 
-Write approximately 650-900 words in professional analytical English.
+Write approximately 1,000-1,350 words in professional analytical English.
+This is an ASSESSMENT, not a digest of events: explain what the pattern of
+activity means, why it is likely happening, how developments connect, and
+what they imply -- while staying strictly grounded in the supplied data.
 
-Use these headings exactly:
+Use these headings exactly, in this order:
 EXECUTIVE ASSESSMENT
 KEY DEVELOPMENTS
 GEOGRAPHIC PATTERNS
 TACTICS / MODUS OPERANDI
 COUNTER-TERRORISM RESPONSE
 SIGNIFICANT CHANGES
+ANALYTICAL INTERPRETATION
+STRATEGIC CONTEXT
 OUTLOOK / WATCHPOINTS
 SOURCE / CONFIDENCE NOTES
+
+EXECUTIVE ASSESSMENT: 3-5 sentences giving the bottom line up front -- the
+most important judgements about the threat picture, not a list of events.
+
+ANALYTICAL INTERPRETATION is the core added value of this report. Where the
+data supports it, cover: the likely drivers and enabling conditions behind
+the observed activity; links between developments (same actor, network,
+corridor or target set; action and reaction between attacks and CT
+operations); what the activity suggests about actors' intent, capability and
+adaptation; and at least one plausible alternative explanation for the main
+pattern. Express every judgement with estimative language (almost certainly,
+likely, roughly even chance, unlikely) and an explicit confidence level (low,
+moderate or high confidence), cite the records each judgement rests on, and
+keep what the records show visibly separate from what you assess.
+
+STRATEGIC CONTEXT: situate the CT picture in its wider political, security
+and geopolitical setting, drawing on background_context items. If
+background_context.items is empty, keep this section to 2-3 sentences based
+only on the priority events and state that no wider context corpus was
+available for this report.
+
+OUTLOOK / WATCHPOINTS: name concrete indicators that would confirm or
+contradict the main judgements above.
 
 When a comparison period is supplied, focus on WHAT CHANGED between the current
 period and the immediately preceding equivalent period. Distinguish reporting volume from evidence of an actual operational change.
@@ -127,19 +156,38 @@ terrorist financing, CBRN, cyber and emerging-technology developments when
 materially relevant to the selected topic.
 
 Do not invent facts, casualty figures, attribution, coordination, causes or
-predictions. Preserve uncertainty. Use only the supplied records and statistics.
-The outlook may identify watchpoints but must not make unsupported forecasts.
+predictions. Preserve uncertainty. Use only the supplied records, statistics
+and background context. Interpretation is expected, but every assessment
+must be traceable to cited data and labelled with its confidence; the
+outlook may identify watchpoints but must not make unsupported forecasts.
+
+BACKGROUND CONTEXT RULES:
+- background_context.items are NOT verified map events. Each has a kind:
+  related_article = another outlet's report on an incident already in
+  priority_events (covers_source_id names it): use it for corroboration,
+  extra detail, or to flag differing accounts.
+  rejected_candidate / historical_review = reporting the map's selection
+  judged outside its operational CT scope (map_exclusion_reason says why,
+  e.g. interstate diplomacy, state military conflict, ordinary crime): use
+  it only as background context, never as a CT incident.
+  removed_event = commentary or analysis pieces: cite them only as the view
+  of commentators ("analysts argue ... [C04]"), never as established fact.
+- Never count context items in incident, attack, arrest or operation
+  figures, and never let context alone establish that an attack happened.
+- Ignore context items that are irrelevant to the selected region and topic.
 
 CITATION RULES (this is how the analyst checks the report against real
 sources and catches hallucination -- follow exactly):
-- Every priority_events record carries a source_id like "S01". Cite it
-  in brackets immediately after the claim it supports, exactly like
-  [S01] or [S01, S07]. Never invent a source_id that was not supplied.
+- Every priority_events record carries a source_id like "S01"; every
+  background_context item carries a context_id like "C01". Cite them in
+  brackets immediately after the claim they support, exactly like [S01],
+  [S01, S07] or [S03, C02]. Never invent an id that was not supplied.
 - Every factual sentence or bullet in EXECUTIVE ASSESSMENT, KEY
   DEVELOPMENTS, GEOGRAPHIC PATTERNS, TACTICS / MODUS OPERANDI,
-  COUNTER-TERRORISM RESPONSE and SIGNIFICANT CHANGES must carry at least
-  one citation. A sentence with no citation is read as your own
-  unsupported inference, not a database fact -- avoid that.
+  COUNTER-TERRORISM RESPONSE, SIGNIFICANT CHANGES, ANALYTICAL
+  INTERPRETATION and STRATEGIC CONTEXT must carry at least one citation. A
+  sentence with no citation is read as your own unsupported inference, not
+  a database fact -- avoid that.
 - In SOURCE / CONFIDENCE NOTES, briefly state the overall reliability of
   this report: how many independent records it draws on, whether key
   claims rest on a single source or are corroborated by several
@@ -414,17 +462,19 @@ function compactEvent(event) {
 // many read as a bare, uncited claim. This is the concrete anti-hallucination
 // signal surfaced to the user -- a citation coverage below 100% means some
 // factual statements in the report are not directly traceable to a source.
+// Ids are S01-S999 for event records and C01-C999 for background context
+// items; reports can carry more than 99 sources (80 current + 60 previous).
 function citationMetrics(analysis, validIds) {
   const valid = new Set(validIds);
   const cited = new Set();
-  for (const match of String(analysis || "").matchAll(/\[(S\d{2})(?:,\s*S\d{2})*\]/g)) {
-    const ids = match[0].match(/S\d{2}/g) || [];
+  for (const match of String(analysis || "").matchAll(/\[([SC]\d{2,3})(?:,\s*[SC]\d{2,3})*\]/g)) {
+    const ids = match[0].match(/[SC]\d{2,3}/g) || [];
     ids.forEach(id => { if (valid.has(id)) cited.add(id); });
   }
   const paragraphs = String(analysis || "").split(/\n+/).map(v => v.trim())
     .filter(v => v && !/^[A-Z][A-Z /&-]{4,}$/.test(v));
   const factual = paragraphs.filter(v => v.length >= 35);
-  const grounded = factual.filter(v => /\[S\d{2}/.test(v));
+  const grounded = factual.filter(v => /\[[SC]\d{2,3}/.test(v));
   return {
     cited_source_ids: [...cited],
     citation_coverage_percent: factual.length ? Math.round(grounded.length / factual.length * 100) : 100,

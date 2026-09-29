@@ -13166,6 +13166,8 @@ function reportSectionHtml(
         "TACTICS / MODUS OPERANDI",
         "COUNTER-TERRORISM RESPONSE",
         "SIGNIFICANT CHANGES",
+        "ANALYTICAL INTERPRETATION",
+        "STRATEGIC CONTEXT",
         "OUTLOOK / WATCHPOINTS",
         "SOURCE / CONFIDENCE NOTES"
     ];
@@ -13209,7 +13211,7 @@ function reportSectionHtml(
 
     function highlightCitations(escaped) {
         return escaped.replace(
-            /\[(S\d{2}(?:,\s*S\d{2})*)\]/g,
+            /\[([SC]\d{2,3}(?:,\s*[SC]\d{2,3})*)\]/g,
             (_, ids) =>
                 '<span class="deep-citation">['
                 +
@@ -13447,7 +13449,18 @@ function reportSourcesHtml(sources, grounding) {
                     :
                     "";
 
+                const contextLabels = {
+                    related_article: "Additional outlet report",
+                    rejected_candidate: "Background · outside map scope",
+                    historical_review: "Background · outside map scope",
+                    removed_event: "Commentary / analysis"
+                };
+
                 const corroborationLabel =
+                    item.kind === "context"
+                    ?
+                    (contextLabels[item.context_kind] || "Background context")
+                    :
                     Number(item.source_count || 1) > 1
                     ?
                     `${Number(item.source_count)} sources`
@@ -13458,7 +13471,7 @@ function reportSourcesHtml(sources, grounding) {
                     <article class="deep-evidence${citedClass}">
                         <div class="deep-evidence-head">
                             <strong>${escapeHtml(item.id)}</strong>
-                            <span class="deep-evidence-source">${escapeHtml(item.source || "CT Atlas database")}</span>
+                            <span class="deep-evidence-source">${escapeHtml(item.source || (item.kind === "context" ? "Source not retained" : "CT Atlas database"))}</span>
                             <span class="report-source-badge">${escapeHtml(corroborationLabel)}${escapeHtml(relevanceLabel)}</span>
                         </div>
                         <div class="deep-evidence-title">${escapeHtml(item.title || "")}</div>
