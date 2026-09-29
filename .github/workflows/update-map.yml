@@ -114,7 +114,7 @@ jobs:
           fi
           case "$COLLECTION_MODE" in
             backfill-new-sources)
-              echo "Targeted incremental backfill: Arabic additions, Africa, Afghanistan and Syria."
+              echo "Targeted incremental backfill: Arabic additions, Africa, Afghanistan, Syria, and Latin America."
               python -u tools/run_collector_quota_safe.py backfill-new-sources
               ;;
             backfill)

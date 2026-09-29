@@ -520,6 +520,9 @@ CATEGORIES = {
         'piracy merchant vessel',
         'piracy tanker',
         'piracy cargo ship',
+        '(piracy OR pirates OR hijacked) (Somalia OR Yemen OR Djibouti OR "Gulf of Aden")',
+        '"Al-Shabaab" (hijack OR pirates OR vessel OR ship OR ransom)',
+        'Houthi (missile OR drone OR strike OR attack) (ship OR vessel OR tanker)',
     ],
 
     "Attacks": [
@@ -712,6 +715,8 @@ CORE_SEARCH_QUERIES = {
         'pirates hijacked vessel',
         'pirates boarded vessel',
         'pirates kidnapped crew',
+        '(piracy OR pirates OR Houthi) (Somalia OR Yemen OR "Gulf of Aden")',
+        'Houthi (missile OR drone OR strike) (ship OR vessel OR tanker)',
     ],
 
     "Attacks": [
@@ -1111,6 +1116,25 @@ MARITIME_SOURCE_SITES = [
     ("Dryad Global / Verihelm", "dryadglobal.com", "commercial_risk_analysis"),
     ("MarineLink", "marinelink.com", "specialist_media"),
 ]
+# Regional boost for the Horn of Africa / Red Sea corridor (Somalia, Djibouti, Yemen,
+# Gulf of Aden): the global maritime trade press above rarely surfaces Somali/Yemeni
+# local reporting on hijackings, ransom negotiations or Houthi attacks on shipping.
+# Reuses outlets already vetted elsewhere in this file (AFRICA_EN_SOURCE_SITES).
+HORN_OF_AFRICA_MARITIME_SOURCE_TERMS = (
+    '(piracy OR pirate OR pirates OR hijacked OR hijacking OR "armed robbery" '
+    'OR "crew kidnapped" OR "crew abducted" OR "vessel boarded" OR "ship boarded" '
+    'OR Houthi OR "Ansar Allah" OR "Al-Shabaab" OR "Al Shabaab" '
+    'OR "missile strike" OR "drone strike" OR ransom) '
+    '(Somalia OR Somali OR Djibouti OR Yemen OR Yemeni OR "Gulf of Aden" '
+    'OR "Bab el-Mandeb" OR "Bab al-Mandeb" OR "Red Sea" OR Puntland)'
+)
+HORN_OF_AFRICA_MARITIME_SOURCE_SITES = [
+    ("Shabelle Media Network", "shabellemedia.com", "regional_media"),
+    ("Hiiraan Online", "hiiraan.com", "regional_media"),
+    ("Garowe Online", "garoweonline.com/en", "regional_media"),
+    ("Goobjoog News", "goobjoog.com", "regional_media"),
+    ("SONNA (Somali National News Agency)", "sonna.so/en", "official_government"),
+]
 CBRN_SOURCE_SITES = [
     ("OPCW", "opcw.org", "intergovernmental_source"),
     ("IAEA public reporting", "iaea.org", "intergovernmental_source"),
@@ -1127,6 +1151,7 @@ CBRN_SOURCE_SITES = [
 ]
 for _category, _terms, _sources in (
     ("Maritime Piracy", MARITIME_SOURCE_TERMS, MARITIME_SOURCE_SITES),
+    ("Maritime Piracy", HORN_OF_AFRICA_MARITIME_SOURCE_TERMS, HORN_OF_AFRICA_MARITIME_SOURCE_SITES),
     ("CBRN", CBRN_SOURCE_TERMS, CBRN_SOURCE_SITES),
 ):
     for _name, _site, _kind in _sources:
@@ -1167,8 +1192,9 @@ TARGETED_MEDIA_CATEGORY_TERMS = {
         'OR social-media)',
 
     "Maritime Piracy":
-        '("maritime piracy" OR piracy OR pirates OR "armed robbery at sea") '
-        '(ship OR vessel OR tanker OR crew OR maritime OR hijacked OR boarded)',
+        '("maritime piracy" OR piracy OR pirates OR "armed robbery at sea" OR Houthi) '
+        '(ship OR vessel OR tanker OR crew OR maritime OR hijacked OR boarded '
+        'OR Somalia OR Yemen OR Djibouti OR "Gulf of Aden")',
 
     "Attacks":
         '(terrorist OR terrorism OR ISIS OR ISIL OR Daesh OR "Islamic State" '
@@ -1360,6 +1386,33 @@ MULTILINGUAL_PROFILES = [
         "site_terms": '(terrorismo OR terrorista OR yihadista OR atentado)',
     },
     {
+        # Latin America is not covered by the Spain-facing "Spanish" profile above
+        # (different Google News edition, different armed-group vocabulary). This
+        # profile targets the US-designated Foreign Terrorist Organizations active
+        # in the region (ELN, Sendero Luminoso, FARC dissident factions, Tren de
+        # Aragua, the Sinaloa Cartel, CJNG, MS-13) rather than general crime.
+        "code": "es", "name": "Spanish / Latin America", "hl": "es-419", "gl": "MX", "ceid": "MX:es-419",
+        "queries": [
+            {"term": '(ELN OR "Ejército de Liberación Nacional") (atentado OR ataque OR secuestro OR extorsión) (Colombia OR Venezuela)', "category": "Attacks"},
+            {"term": '("disidencias de las FARC" OR "Estado Mayor Central" OR "Segunda Marquetalia") (ataque OR atentado OR emboscada OR masacre)', "category": "Attacks"},
+            {"term": '("Sendero Luminoso" OR "Shining Path") (ataque OR atentado OR emboscada) Peru', "category": "Attacks"},
+            {"term": '("Tren de Aragua" OR "Cartel de Sinaloa" OR "Cártel de Sinaloa" OR CJNG OR "Cartel Jalisco Nueva Generacion" OR "Mara Salvatrucha" OR MS-13) (ataque OR masacre OR extorsión OR secuestro OR enfrentamiento)', "category": "Attacks"},
+            {"term": '(terrorismo OR terrorista OR atentado) (Mexico OR Colombia OR Peru OR Venezuela OR Ecuador OR Brasil OR "America Latina")', "category": "Attacks"},
+            {"term": '(financiación del terrorismo OR lavado de dinero OR narcotráfico) (ELN OR "Tren de Aragua" OR cártel OR "disidencias de las FARC")', "category": "Terrorist Financing"},
+        ],
+        "sites": ["infobae.com", "eltiempo.com", "milenio.com", "eluniversal.com.mx", "semana.com"],
+        "site_terms": '(ELN OR "disidencias de las FARC" OR "Sendero Luminoso" OR "Tren de Aragua" OR cártel OR narcoterrorismo OR terrorismo)',
+    },
+    {
+        "code": "pt", "name": "Portuguese / Brazil", "hl": "pt-BR", "gl": "BR", "ceid": "BR:pt-419",
+        "queries": [
+            {"term": '(terrorismo OR terrorista OR jihadista OR atentado OR "Estado Islâmico")', "category": "Attacks"},
+            {"term": '(financiamento do terrorismo OR radicalização OR propaganda jihadista OR recrutamento terrorista)', "category": "Terrorist Financing"},
+        ],
+        "sites": ["g1.globo.com", "folha.uol.com.br"],
+        "site_terms": '(terrorismo OR terrorista OR jihadista OR atentado)',
+    },
+    {
         "code": "it", "name": "Italian", "hl": "it", "gl": "IT", "ceid": "IT:it",
         "queries": [
             {"term": '(terrorismo OR terrorista OR jihadista OR attentato OR Stato Islamico)', "category": "Attacks"},
@@ -1499,10 +1552,12 @@ MULTILINGUAL_PROFILES.extend([
     },
     {
         "code": "en", "name": "English / East Africa", "hl": "en-KE", "gl": "KE", "ceid": "KE:en",
-        "sites": [], "site_terms": AFRICA_EN_CT_TERMS,
+        "sites": ["shabellemedia.com", "hiiraan.com", "garoweonline.com/en", "goobjoog.com", "sonna.so/en"],
+        "site_terms": AFRICA_EN_CT_TERMS,
         "queries": [
             {"term": '("al-Shabaab" OR "Al Shabab" OR "Islamic State Somalia") (attack OR raid OR arrest OR bombing OR financing)', "category": "Attacks"},
             {"term": '(ADF OR "Allied Democratic Forces" OR "Islamic State" OR insurgents) (Uganda OR Congo OR Mozambique OR "Cabo Delgado")', "category": "Attacks"},
+            {"term": '(piracy OR pirates OR hijacked OR "Al-Shabaab" OR Houthi) (Somalia OR Puntland OR Djibouti OR Yemen OR "Gulf of Aden")', "category": "Maritime Piracy"},
         ],
     },
 ])
@@ -1513,7 +1568,7 @@ MULTILINGUAL_PROFILES.extend([
 for _profile in MULTILINGUAL_PROFILES:
     if _profile["name"] == "Arabic":
         _profile["queries"].extend([
-            {"term": '("قرصنة بحرية" OR "قراصنة البحر" OR "اختطاف سفينة" OR "اختطاف ناقلة" OR "سطو مسلح") (سفينة OR سفن OR بحري OR طاقم)', "category": "Maritime Piracy"},
+            {"term": '("قرصنة بحرية" OR "قراصنة البحر" OR "اختطاف سفينة" OR "اختطاف ناقلة" OR "سطو مسلح" OR الحوثيين) (سفينة OR سفن OR بحري OR طاقم OR الصومال OR جيبوتي OR اليمن OR "خليج عدن" OR "حركة الشباب")', "category": "Maritime Piracy"},
             {"term": '("أسلحة كيميائية" OR "أسلحة بيولوجية" OR "مواد مشعة" OR "قنبلة قذرة" OR ريسين OR سارين) (إرهاب OR داعش OR هجوم OR اعتقال OR تهريب OR ضبط)', "category": "CBRN"},
         ])
     elif _profile["name"] == "French":
@@ -1627,6 +1682,7 @@ REGIONAL_BACKFILL_PROFILE_NAMES = {
     "Arabic", "French / Africa", "English / Africa",
     "Dari / Afghanistan", "Pashto / Afghanistan", "English / Afghanistan",
     "Arabic / Syria", "English / Syria",
+    "Spanish / Latin America", "Portuguese / Brazil",
 }
 
 
@@ -1746,10 +1802,11 @@ CT_ANCHORS = {
     "jihadist","jihadists","jihadism",
     "isis","isil","daesh",
     "al-qaeda","al qaeda","alqaeda",
-    "al-shabaab","al shabaab",
+    "al-shabaab","al shabaab","al-shabab","al shabab",
     "boko haram","islamic state",
     "hezbollah","hizballah","hizbollah",
     "hamas","taliban",
+    "houthi","houthis","ansar allah",
 }
 
 
@@ -1783,6 +1840,10 @@ CATEGORY_RELEVANCE = {
         "maritime piracy","piracy","pirate","pirates","armed robbery at sea",
         "ship","ships","vessel","vessels","tanker","crew","seafarer",
         "maritime","hijack","hijacked","boarded",
+        "somalia","somali","djibouti","yemen","yemeni","gulf of aden",
+        "bab el-mandeb","bab al-mandeb","red sea","puntland","gulf of guinea",
+        "houthi","houthis","ansar allah","al-shabaab","al-shabab",
+        "ransom","anchorage","skiff","dhow","mother ship",
     },
 
     "Attacks": {
@@ -1834,6 +1895,16 @@ NON_EVENT_PATTERNS = [
     r"\bbook review\b",
     r"\bopinion\b",
     r"\bcommentary\b",
+    r"\banalysis\b",
+    r"\bop-ed\b",
+    r"\bop ed\b",
+    r"\beditorial\b",
+    r"\bexplainer\b",
+    r"\bexplained\b",
+    r"\bwhat we know\b",
+    r"\bwhat to know\b",
+    r"\bperspective\b",
+    r"\bthink piece\b",
 ]
 
 
@@ -1858,6 +1929,7 @@ ACTION_TERMS = {
     "Maritime Piracy": {
         "attack","attacked","hijack","hijacked","boarded","seized",
         "kidnapped","abducted","robbed","hostage","rescued","intercepted",
+        "ransom","missile strike","drone strike","struck","targeted",
     },
     "Attacks": {
         "attack","attacked","bombing","blast","explosion","shooting","stabbing",
@@ -2038,7 +2110,10 @@ _SCOPE_NONSTATE = re.compile(
     r"suspects?|defendants?|suspected|charged|convicted|sentenced|indicted|"
     r"bomb plots?|bombings?|stabbing|shooting|attacker|sailors held|crew held|"
     r"lone[- ](?:actor|wolf)|pirates?|piracy|hijack\w*|kidnap\w*|"
-    r"terror(?:ist)? attack plots?|terror(?:ist)? attacks?)\b|"
+    r"terror(?:ist)? attack plots?|terror(?:ist)? attacks?|"
+    r"eln|disidencias|farc|frente.{0,20}mordisco|segunda marquetalia|"
+    r"estado mayor central|sendero luminoso|shining path|"
+    r"tren de aragua|cartel\w*|cártel\w*|cjng|ms-?13|mara salvatrucha)\b|"
     r"داعش|القاعدة|بوكو حرام|حزب الله|حماس|الحوثي|خلية إرهابية|قراصنة|قرصنة|"
     r"\b(?:cellule terroriste|groupe armé|milice|piraterie)\b", re.I)
 _SCOPE_STATE = re.compile(
@@ -2141,8 +2216,17 @@ def is_relevant_article(
                 "crew", "seafarer", "maritime", "at sea"
             )
         )
+        # A Houthi/Ansar Allah missile, drone or armed attack on a commercial vessel
+        # (Gulf of Aden / Red Sea corridor) is squarely a non-state-actor attack on
+        # shipping, but never uses the literal word "pirate"/"piracy" -- without this
+        # alternate path such reporting always failed piracy_anchor and was rejected.
+        houthi_anchor = any(
+            contains_term(combined, term)
+            for term in ("houthi", "houthis", "ansar allah")
+        )
         if not (piracy_anchor and maritime_anchor and action_hits):
-            return False
+            if not (houthi_anchor and maritime_anchor and action_hits):
+                return False
         if has_non_event_pattern(combined):
             return False
         return True
@@ -3318,7 +3402,7 @@ def _collect_all_once(days):
             raise RuntimeError("Regional-only collection requires incremental backfill mode.")
         profiles = regional_backfill_profiles()
         print(f"TARGETED REGIONAL BACKFILL: {planned_collection_query_count()} publisher/language queries; {days} days")
-        print("Sources: Arabic additions, Africa, Afghanistan and Syria only.")
+        print("Sources: Arabic additions, Africa, Afghanistan, Syria, and Latin America only.")
         return collect_multilingual(days, profiles=profiles)
     print()
     print("=" * 70)
@@ -3816,6 +3900,22 @@ MANDATORY ACTOR SCOPE (takes precedence over relevance scores):
   it to naval warfare, state tanker seizures, accidents or trade disruption.
 Out-of-scope events MUST have is_current_ct_event=false and relevance_score=0.
 
+OPERATIONAL EVENT REQUIREMENT (takes precedence over relevance scores): to score
+>= 50, the article must itself report at least one concrete, dated operational
+fact -- an attack, attempted attack, raid, arrest, seizure, charge, conviction,
+sentencing, financing action, weapons find, plot disruption, or similar. An
+article that only analyzes, opines on, explains, editorializes about, or
+discusses the broader context/implications/history of terrorism, a security
+policy, or a past event -- without itself reporting a NEW concrete operational
+fact -- must score below 50, no matter how substantive, well-sourced or
+specific the commentary is, and even if it names real groups, places or past
+incidents in detail. A named group or place discussed only in an analytical or
+background capacity does not satisfy this requirement. When in doubt whether a
+piece is reporting versus analyzing, ask: does this article describe something
+that concretely HAPPENED or was newly DISCLOSED, with a specific actor and
+place/date -- or does it mainly explain, assess or comment on something already
+known? Only the former qualifies.
+
 Score relevance from 0 to 100.
 
 KEEPING POLICY:
@@ -3894,6 +3994,19 @@ For every candidate also return:
   - "ISGS" for ISGS, Islamic State Sahel Province, Islamic State in the
     Greater Sahara -- keep separate from plain "ISIS", same reasoning as
     ISIS-K/ISWAP above.
+  - "ELN" for ELN, Ejercito de Liberacion Nacional, National Liberation Army
+    (Colombia).
+  - "FARC dissidents" for FARC dissident factions that rejected the peace
+    process: disidencias de las FARC, Estado Mayor Central, EMC, Segunda
+    Marquetalia, Frente Carlos Patino, Frente 33, "Los Mordisco" -- do not
+    fold these into plain "FARC", since the demobilised original organisation
+    and its armed dissident successors are operationally distinct.
+  - "Sendero Luminoso" for Sendero Luminoso, Shining Path (Peru).
+  - "Tren de Aragua" for Tren de Aragua (Venezuela-origin transnational
+    criminal organisation).
+  - "Sinaloa Cartel" for the Sinaloa Cartel, Cartel de Sinaloa.
+  - "CJNG" for CJNG, Cartel Jalisco Nueva Generacion.
+  - "MS-13" for MS-13, Mara Salvatrucha.
   For any other named group, cell, faction or actor not listed above:
   - decide which single form (the acronym, or the full name) is the one most
     commonly used to refer to this group in English-language open-source
@@ -3924,7 +4037,13 @@ taxonomy. Multiple categories are allowed. Use "Online / Cyber / AI" for online
 radicalization/recruitment/propaganda, cyberterrorism or terrorist cyber activity,
 AI/deepfakes/disinformation, and other relevant emerging digital technologies.
 Use "Maritime Piracy" for actual piracy, pirate attacks, vessel hijacking/boarding,
-crew kidnapping or armed robbery at sea.
+crew kidnapping or armed robbery at sea -- including off Somalia/Puntland, Djibouti,
+Yemen, the Gulf of Aden, Bab-el-Mandeb, the Red Sea or the Gulf of Guinea. A Houthi
+(Ansar Allah) missile, drone or armed attack on a commercial or merchant vessel in
+that corridor is also in scope for Maritime Piracy even when no pirates are
+involved, since it is a non-state-actor attack on shipping. When Al-Shabaab or
+another non-state actor carries out a hijacking, boarding, ransom or hostage-taking
+at sea, tag it Maritime Piracy alongside any other applicable category.
 
 "Attacks" vs "Counter Terrorism Action" vs "Arrests" -- these three are easily
 confused and must be kept separate:
@@ -5457,6 +5576,12 @@ ACTION_FAMILIES = {
         "radioactive", "cbrn", "ricin", "sarin", "chlorine",
         "dirty bomb",
     },
+    "maritime": {
+        "piracy", "pirate", "pirates", "hijack", "hijacked",
+        "hijacking", "boarded", "boarding", "ransom",
+        "vessel seized", "ship seized", "crew kidnapped",
+        "crew abducted", "missile strike", "drone strike",
+    },
 }
 
 
@@ -5468,7 +5593,8 @@ ACTOR_ALIASES = {
         "al-qaeda", "al qaeda", "alqaeda",
     },
     "al_shabaab": {
-        "al-shabaab", "al shabaab",
+        "al-shabaab", "al shabaab", "al-shabab", "al shabab",
+        "shabaab", "shabab",
     },
     "boko_haram": {
         "boko haram",
@@ -5500,6 +5626,30 @@ ACTOR_ALIASES = {
     },
     "jaish_e_mohammed": {
         "jaish-e-mohammed", "jaish e mohammed", "jem",
+    },
+    "eln": {
+        "eln", "ejercito de liberacion nacional", "ejército de liberación nacional",
+        "national liberation army",
+    },
+    "farc_dissidents": {
+        "disidencias de las farc", "estado mayor central", "emc",
+        "segunda marquetalia", "los mordisco", "frente carlos patino",
+        "frente carlos patiño",
+    },
+    "sendero_luminoso": {
+        "sendero luminoso", "shining path",
+    },
+    "tren_de_aragua": {
+        "tren de aragua",
+    },
+    "sinaloa_cartel": {
+        "sinaloa cartel", "cartel de sinaloa", "cártel de sinaloa",
+    },
+    "cjng": {
+        "cjng", "cartel jalisco nueva generacion", "cártel jalisco nueva generación",
+    },
+    "ms_13": {
+        "ms-13", "ms13", "mara salvatrucha",
     },
 }
 
@@ -5549,6 +5699,9 @@ COUNTRY_CANONICAL = {
     },
     "somalia": {
         "somalia", "somali",
+    },
+    "djibouti": {
+        "djibouti",
     },
     "kenya": {
         "kenya", "kenyan",
@@ -5615,6 +5768,24 @@ COUNTRY_CANONICAL = {
     },
     "united arab emirates": {
         "united arab emirates", "uae", "emirati",
+    },
+    "mexico": {
+        "mexico", "méxico", "mexican",
+    },
+    "colombia": {
+        "colombia", "colombian",
+    },
+    "brazil": {
+        "brazil", "brasil", "brazilian",
+    },
+    "peru": {
+        "peru", "perú", "peruvian",
+    },
+    "venezuela": {
+        "venezuela", "venezuelan",
+    },
+    "ecuador": {
+        "ecuador", "ecuadorian", "ecuadorean",
     },
 }
 
