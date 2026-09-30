@@ -120,6 +120,19 @@ def historical_reviews(cache):
         }
 
 
+def existing_urls():
+    """URLs already stored in D1, so a re-run only sends genuinely new rows.
+
+    Without this, every run re-submits the whole corpus as INSERT OR IGNORE;
+    D1 bills those as rows written even when the constraint discards them,
+    so a few runs in one day (e.g. iterating on this script, which triggers
+    the workflow on every push) can burn through the daily write quota.
+    """
+    response = collector.d1_query("SELECT url FROM background_articles")
+    results = (response.get("result") or [{}])[0].get("results") or []
+    return {row.get("url") for row in results if row.get("url")}
+
+
 def collect_articles(root=ROOT):
     now = datetime.now(timezone.utc).isoformat()
     database = _load_json(root / "events.json") or {}
@@ -155,16 +168,10 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     articles, counts = collect_articles()
-    rows = [collector.background_article_row(article) for article in articles]
-    statements = list(
-        collector.d1_insert_or_ignore_statements(
-            "background_articles", collector.BACKGROUND_ARTICLES_D1_COLUMNS, rows
-        )
-    )
 
     for kind, count in counts.items():
         print(f"{kind}: {count}")
-    print(f"Total: {len(rows)} articles in {len(statements)} INSERT statement(s).")
+    print(f"Total: {len(articles)} articles collected from the repository.")
 
     if args.dry_run:
         print("Dry run: D1 not contacted.")
@@ -172,6 +179,18 @@ def main(argv=None):
 
     inserted = 0
     try:
+        known = existing_urls()
+        new_articles = [article for article in articles if article["url"] not in known]
+        print(f"{len(articles) - len(new_articles)} already in D1; {len(new_articles)} new.")
+
+        rows = [collector.background_article_row(article) for article in new_articles]
+        statements = list(
+            collector.d1_insert_or_ignore_statements(
+                "background_articles", collector.BACKGROUND_ARTICLES_D1_COLUMNS, rows
+            )
+        )
+        print(f"Sending {len(rows)} row(s) in {len(statements)} INSERT statement(s).")
+
         for index, sql in enumerate(statements, start=1):
             inserted += inserted_row_count(collector.d1_query(sql))
             if index % 10 == 0 or index == len(statements):
