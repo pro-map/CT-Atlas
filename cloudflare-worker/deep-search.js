@@ -9,7 +9,12 @@ import {
   parseEventDate,
   extractGeminiText,
   sha256,
-  waitBeforeGeminiRetry
+  waitBeforeGeminiRetry,
+  priority,
+  parseDatabaseFilters,
+  hasActiveDatabaseFilters,
+  matchesDatabaseFilters,
+  databaseFiltersLabel
 } from "./shared.js";
 import { createSourcePreviews } from "./source-preview.js";
 import { searchCorpusForDeepSearch } from "./background-corpus.js";
@@ -17,13 +22,16 @@ import { searchCorpusForDeepSearch } from "./background-corpus.js";
 const DEEP_SEARCH_MAX_QUERIES = 24;
 const DEEP_SEARCH_RESULTS_PER_QUERY = 30;
 const DEEP_SEARCH_MAX_EVIDENCE = 48;
+// CT Atlas database events come first and take at most this many of the 48
+// evidence slots; external search fills the rest.
+const DEEP_SEARCH_MAX_DATABASE_EVIDENCE = 16;
 const DEEP_SEARCH_CACHE_TTL_MS = 4 * 60 * 60 * 1000;
 const DEEP_SEARCH_MODEL = "gemini-3.5-flash-lite";
 // Used only when the primary model itself is overloaded/unavailable (429/5xx) -- alternating
 // models on retry recovers from a single model being temporarily out of capacity, the same
 // "high demand" condition callGemini() (Report Generator, shared.js) already retries around.
 const DEEP_SEARCH_FALLBACK_MODEL = "gemini-3.6-flash";
-export const DEEP_SEARCH_VERSION = "deep-search-v8-atlas-corpus";
+export const DEEP_SEARCH_VERSION = "deep-search-v9-database-first";
 
 // There is no period selector any more -- the analyst's own question is the
 // only source of a time window. The planner LLM (see PLAN_SCHEMA's
@@ -679,6 +687,11 @@ EVIDENCE RULES:
   chronology or trends.
 - Search-result snippets can be incomplete; do not infer beyond them.
 - If the evidence is insufficient for a requested point, say so explicitly.
+- Records with search_engine "ct_atlas_database" are verified events from the
+  analyst's own CT Atlas database, selected within their chosen scope
+  (database_scope). They are the PRIMARY evidence: build the assessment on
+  them first, then use external reporting to corroborate, add detail or fill
+  gaps, and say where external sources contradict the database.
 - Records with search_engine "ct_atlas_corpus" come from CT Atlas's own archive
   of previously collected reporting; they are real published articles with
   their original source and URL. Their corpus_kind qualifies them:
@@ -1279,6 +1292,81 @@ function candidateMapEvents(db, window) {
   });
 }
 
+// Database first: CT Atlas's own verified events that fall inside the
+// analyst's Database-panel scope (place, category, group), inside the
+// question's period, and that concern the question -- they must contain the
+// planner's English anchor when there is one, otherwise share at least two
+// meaningful words with the English queries. These lead the evidence; live
+// external search then corroborates them and fills the gaps.
+function databaseEvidenceRows(db, plan, window, filters) {
+  const all = Array.isArray(db) ? db : (Array.isArray(db?.events) ? db.events : []);
+  const englishQueries = plan.queries.filter(item => item.language === "en").map(item => item.query);
+  const searchQuery = englishQueries[0] || plan.interpreted_request || "";
+  const queryText = [...englishQueries, plan.interpreted_request].join(" ");
+  const anchor = cleanText(plan?.anchors?.en, 80).toLowerCase();
+  const start = window.startDt.getTime(), end = window.endDt.getTime();
+
+  const scored = [];
+  for (const event of all) {
+    if (!matchesDatabaseFilters(event, filters, window.endDt, { ignorePeriod: true })) continue;
+    const date = parseEventDate(event);
+    if (!date || date.getTime() < start || date.getTime() > end) continue;
+    const text = [event.title, event.summary, event.country, event.city, event.actor_group].filter(Boolean).join(" ");
+    if (anchor && !text.toLowerCase().includes(anchor)) continue;
+    const sim = tokenSimilarity(text, queryText);
+    if (!anchor && sim.shared < 2) continue;
+    scored.push({ event, date, score: sim.shared + sim.containment * 4 });
+  }
+  scored.sort((a, b) =>
+    b.score - a.score || priority(b.event) - priority(a.event) || b.date - a.date);
+
+  return scored.slice(0, DEEP_SEARCH_MAX_DATABASE_EVIDENCE).map(({ event, date }) => {
+    const id = String(event?.id || event?._mapKey || "");
+    const source = cleanText(event.source, 140) || "CT Atlas database";
+    const url = cleanText(event.url, 1200);
+    return {
+      title: cleanText(event.title, 500),
+      summary: cleanText(event.summary, 650),
+      source, url,
+      published: date.toISOString(),
+      language: "en",
+      query_index: -1,
+      query_variant: "ct-atlas-database",
+      search_query: searchQuery,
+      search_engine: "ct_atlas_database",
+      fallback_locale: false,
+      sources: [{ source, url, language: "en", published: date.toISOString(), search_engine: "ct_atlas_database" }],
+      atlas_status: "already_in_atlas",
+      atlas_match_id: id,
+      atlas_match_title: cleanText(event.title, 500),
+      atlas_match_score: 100,
+      database_event: {
+        id,
+        country: cleanText(event.country, 100),
+        actor_group: cleanText(event.actor_group, 100),
+        primary_event_type: cleanText(event.primary_event_type, 40),
+        source_count: Number(event.source_count || 1)
+      }
+    };
+  });
+}
+
+// An external article that the Atlas comparison matched to one of the
+// database evidence events is not a new finding: fold it into that event as
+// a corroborating source instead of spending a separate evidence slot on it.
+function foldIntoDatabaseEvidence(databaseRows, externalRows) {
+  const byId = new Map(databaseRows.map(row => [row.atlas_match_id, row]));
+  const remaining = [];
+  for (const row of externalRows) {
+    const target = row.atlas_status === "already_in_atlas" ? byId.get(row.atlas_match_id) : null;
+    if (!target) { remaining.push(row); continue; }
+    for (const source of row.sources || [{ source: row.source, url: row.url, language: row.language, published: row.published, search_engine: row.search_engine }]) {
+      if (source.url && !target.sources.some(item => item.url === source.url)) target.sources.push(source);
+    }
+  }
+  return remaining;
+}
+
 function compareWithAtlas(rows, mapEvents) {
   return rows.map(row => {
     let best = null, bestScore = 0;
@@ -1327,10 +1415,11 @@ function evidencePriority(row) {
   return score;
 }
 
-function buildEvidence(rows, priorityLanguages = []) {
+function buildEvidence(rows, priorityLanguages = [], maxEvidence = DEEP_SEARCH_MAX_EVIDENCE) {
   const ranked = [...rows].sort((a, b) => evidencePriority(b) - evidencePriority(a));
   const selected = [];
   const used = new Set();
+  if (maxEvidence <= 0) return [];
 
   // English is a permanent priority language for retrieval, but until now it
   // only ever got the same flat 2-slot floor as any other priority language
@@ -1340,7 +1429,7 @@ function buildEvidence(rows, priorityLanguages = []) {
   // retrieved. Guarantee it at least a third of the eventual evidence count
   // instead, reserved from the top of its own ranking, before any other
   // language-diversity logic runs.
-  const targetEvidenceTotal = Math.min(DEEP_SEARCH_MAX_EVIDENCE, ranked.length);
+  const targetEvidenceTotal = Math.min(maxEvidence, ranked.length);
   const englishFloor = Math.ceil(targetEvidenceTotal / 3);
   let englishCount = 0;
   for (let i = 0; i < ranked.length && englishCount < englishFloor; i++) {
@@ -1352,7 +1441,7 @@ function buildEvidence(rows, priorityLanguages = []) {
 
   // Protect two evidence slots per country-priority language when available.
   for (const language of priorityLanguages) {
-    for (let take = 0; take < 2 && selected.length < DEEP_SEARCH_MAX_EVIDENCE; take++) {
+    for (let take = 0; take < 2 && selected.length < maxEvidence; take++) {
       const index = ranked.findIndex((row, i) => !used.has(i) && row.language === language);
       if (index < 0) break;
       selected.push(ranked[index]);
@@ -1364,18 +1453,22 @@ function buildEvidence(rows, priorityLanguages = []) {
   for (const language of DEEP_SEARCH_LANGUAGE_CODES) {
     if (selected.some(row => row.language === language)) continue;
     const index = ranked.findIndex((row, i) => !used.has(i) && row.language === language);
-    if (index >= 0 && selected.length < DEEP_SEARCH_MAX_EVIDENCE) {
+    if (index >= 0 && selected.length < maxEvidence) {
       selected.push(ranked[index]);
       used.add(index);
     }
   }
   ranked.forEach((row, index) => {
-    if (selected.length >= DEEP_SEARCH_MAX_EVIDENCE || used.has(index)) return;
+    if (selected.length >= maxEvidence || used.has(index)) return;
     selected.push(row);
     used.add(index);
   });
 
-  return selected.map((row, index) => ({
+  return selected.map(evidenceItem);
+}
+
+function evidenceItem(row, index) {
+  return {
     id: `S${String(index + 1).padStart(2, "0")}`,
     title: cleanText(row.title, 420), summary: cleanText(row.summary, 650),
     source: cleanText(row.source, 140), url: cleanText(row.url, 1200),
@@ -1384,7 +1477,7 @@ function buildEvidence(rows, priorityLanguages = []) {
     search_query: cleanText(row.search_query, 280),
     search_engine: row.search_engine || "google_news",
     fallback_locale: Boolean(row.fallback_locale),
-    source_count: row.sources?.length || 1,
+    source_count: Math.max(row.sources?.length || 1, Number(row.database_event?.source_count || 0)),
     additional_sources: (row.sources || []).slice(1, 5).map(source => ({
       source: cleanText(source.source, 140), url: cleanText(source.url, 1200),
       language: source.language, published: source.published,
@@ -1392,8 +1485,9 @@ function buildEvidence(rows, priorityLanguages = []) {
     })),
     atlas_status: row.atlas_status, atlas_match_id: row.atlas_match_id,
     atlas_match_title: row.atlas_match_title, atlas_match_score: row.atlas_match_score,
-    ...(row.corpus_kind ? { corpus_kind: row.corpus_kind } : {})
-  }));
+    ...(row.corpus_kind ? { corpus_kind: row.corpus_kind } : {}),
+    ...(row.database_event ? { database_event: row.database_event } : {})
+  };
 }
 
 function unwrapGeneratedReport(generated) {
@@ -1495,8 +1589,13 @@ export async function handleDeepSearch(request, env, ctx) {
   // is a deterministic function of it, and the short cache TTL below means a
   // "relative" window (e.g. "last 30 days") never drifts meaningfully stale.
   const username = auth.username;
+  // The Database panel's place / category / group scope the CT Atlas events
+  // used as primary evidence; the period still comes from the question, so
+  // external search can reach further back than the database's 180 days.
+  const filters = parseDatabaseFilters({ ...body, period_days: null });
+  const scope = databaseFiltersLabel(filters);
   const cacheKey = await sha256(JSON.stringify({
-    question: question.toLowerCase(), version: DEEP_SEARCH_VERSION
+    question: question.toLowerCase(), scope, version: DEEP_SEARCH_VERSION
   }));
 
   const permitResponse = await gateCall(env, "/acquire", { username, kind: "deep_search" });
@@ -1524,7 +1623,8 @@ export async function handleDeepSearch(request, env, ctx) {
 
     const planRaw = await callGeminiJson(
       env, PLAN_INSTRUCTION,
-      `Analyst question: ${question}\nToday's date: ${isoDateOnly(new Date())}.`,
+      `Analyst question: ${question}\nToday's date: ${isoDateOnly(new Date())}.` +
+        (hasActiveDatabaseFilters(filters) ? `\nAnalyst's database scope (place · category · group): ${scope}.` : ""),
       PLAN_SCHEMA, 6000
     );
     const plan = sanitizePlan(planRaw, question);
@@ -1539,6 +1639,20 @@ export async function handleDeepSearch(request, env, ctx) {
     };
 
     const priorityLanguages = resolvePriorityLanguages(question, plan.priority_languages || []);
+
+    // 1. The CT Atlas database first (same single events fetch as before,
+    //    just moved ahead of the external search -- no extra subrequest).
+    let db = { events: [] }, databaseVersion = "unavailable";
+    try {
+      const eventsDatabase = await fetchEventsDatabase(env);
+      if (eventsDatabase.ok) {
+        db = eventsDatabase.db;
+        databaseVersion = cleanText(db.updated_at || db.generated_at || db.last_updated || "unknown", 100);
+      }
+    } catch (_) {}
+    const databaseRows = databaseEvidenceRows(db, plan, window, filters);
+
+    // 2. Then external search.
     const retrieval = await retrieveNews(plan, window, priorityLanguages);
     // CT Atlas's own archive (D1 background corpus, one binding query): merged
     // before de-duplication so an archived copy of a live result corroborates
@@ -1550,7 +1664,7 @@ export async function handleDeepSearch(request, env, ctx) {
     const unique = deduplicateRows([...retrieval.rows, ...corpus.rows]);
     const languagesSearched = languageDiagnostics(plan, retrieval, priorityLanguages);
 
-    if (!unique.length) {
+    if (!unique.length && !databaseRows.length) {
       // A zero-result report can mean two very different things: genuinely
       // no open-source coverage exists, or every single search request was
       // rejected by a provider (Google News/GDELT rate-limiting or blocking
@@ -1570,21 +1684,18 @@ export async function handleDeepSearch(request, env, ctx) {
       }, 422, env);
     }
 
-    let db = { events: [] }, databaseVersion = "unavailable";
-    try {
-      const eventsDatabase = await fetchEventsDatabase(env);
-      if (eventsDatabase.ok) {
-        db = eventsDatabase.db;
-        databaseVersion = cleanText(db.updated_at || db.generated_at || db.last_updated || "unknown", 100);
-      }
-    } catch (_) {}
-
     const compared = compareWithAtlas(unique, candidateMapEvents(db, window));
-    const evidence = buildEvidence(compared, priorityLanguages);
+    const externalRows = foldIntoDatabaseEvidence(databaseRows, compared);
+    const evidence = [
+      ...databaseRows.map(evidenceItem),
+      ...buildEvidence(externalRows, priorityLanguages, DEEP_SEARCH_MAX_EVIDENCE - databaseRows.length)
+    ].map((item, index) => ({ ...item, id: `S${String(index + 1).padStart(2, "0")}` }));
     const dataset = {
       analyst_question: question,
       interpreted_request: plan.interpreted_request,
       period: detectedPeriod.label,
+      database_scope: scope,
+      database_evidence_count: databaseRows.length,
       database_version: databaseVersion,
       language_search_coverage: languagesSearched,
       priority_languages: priorityLanguages,
@@ -1616,6 +1727,7 @@ export async function handleDeepSearch(request, env, ctx) {
       question,
       interpreted_request: plan.interpreted_request,
       detected_period: detectedPeriod,
+      database_scope: scope,
       generated_at: new Date().toISOString(),
       database_version: databaseVersion,
       model: DEEP_SEARCH_MODEL,
@@ -1645,6 +1757,7 @@ export async function handleDeepSearch(request, env, ctx) {
         bing_articles: retrieval.rows.filter(row => row.search_engine === "bing").length,
         ct_atlas_corpus_available: corpus.available,
         ct_atlas_corpus_articles: corpus.rows.length,
+        ct_atlas_database_events: databaseRows.length,
         search_subrequests: retrieval.subrequest_budget?.search_requests || retrieval.waves.length
       },
       grounding: {

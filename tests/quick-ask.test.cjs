@@ -2,7 +2,7 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
-const source=fs.readFileSync('cloudflare-worker/quick-ask.js','utf8').replace(/^import[\s\S]*?from "\.\/shared.js";\s*/,'').replace(/export /g,'');
+const source=fs.readFileSync('cloudflare-worker/quick-ask.js','utf8').replace(/^import[\s\S]*?from "\.\/[^"]+";\s*/gm,'').replace(/export /g,'');
 
 function parseEventDate(event){
  const raw=event?.date;
@@ -14,7 +14,7 @@ function parseEventDate(event){
 function harness(){
  const c=vm.createContext({parseEventDate});
  vm.runInContext(source,c);
- return vm.runInContext('({localEventMatches,quickAskTokens:typeof quickAskTokens!=="undefined"?quickAskTokens:null,QUICK_ASK_VERSION,sanitizeAnswerText})',c);
+ return vm.runInContext('({localEventMatches,quickAskTokens:typeof quickAskTokens!=="undefined"?quickAskTokens:null,QUICK_ASK_VERSION,QUICK_ASK_MAX_MATCHED_EVENTS,sanitizeAnswerText})',c);
 }
 
 function event(overrides){
@@ -71,7 +71,8 @@ test('caps results at the configured limit even with many equally-good matches',
  const h=harness();
  const events=Array.from({length:25},(_,i)=>event({id:`m${i}`,title:'Afghanistan Taliban attack report',date:`2026-01-${String((i%28)+1).padStart(2,'0')}T00:00:00Z`}));
  const result=h.localEventMatches(events,'Afghanistan Taliban attack');
- assert.ok(result.length<=10,`expected at most 10 matches, got ${result.length}`);
+ assert.equal(result.length,h.QUICK_ASK_MAX_MATCHED_EVENTS);
+ assert.ok(h.QUICK_ASK_MAX_MATCHED_EVENTS<=15,'keep Atlas AI a single fast answer, not a report');
 });
 
 test('QUICK_ASK_VERSION is exported for cache-busting on schema changes',()=>{

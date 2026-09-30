@@ -3,6 +3,7 @@ import importlib.util
 import json
 import tempfile
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
 
 spec = importlib.util.spec_from_file_location('build_events_map', 'tools/build_events_map.py')
@@ -63,6 +64,24 @@ class MapAttackTests(unittest.TestCase):
         self.assertEqual(summary['total_events'], 8)
         self.assertEqual(summary['by_category']['Arrests'], 2)
         self.assertEqual(summary['by_category']['Maritime Piracy'], 1)
+
+    def test_recent_events_keep_other_categories_of_the_last_days_only(self):
+        database = sample_database()
+        database['events'].append(event('old-arrest', primary_event_type='ARREST', published='2026-09-20T08:00:00Z'))
+        now = datetime(2026, 9, 30, 12, tzinfo=timezone.utc)
+        output = m.build_map(database, ['related_articles'], now=now)
+        self.assertEqual(
+            [e['id'] for e in output['recent_events']],
+            ['attack-not-flagged', 'arrest', 'piracy', 'legacy-arrest'],
+        )
+        self.assertEqual(output['map']['recent_events_days'], m.RECENT_DAYS)
+
+    def test_validate_rejects_an_attack_among_recent_events(self):
+        database = sample_database()
+        output = m.build_map(database, [])
+        output['recent_events'].append(event('attack-copy', primary_event_type='ATTACK', is_attack=True))
+        with self.assertRaises(ValueError):
+            m.validate(output, database)
 
     def test_validate_accepts_the_output_and_detects_a_foreign_event(self):
         database = sample_database()

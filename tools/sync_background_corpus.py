@@ -38,6 +38,14 @@ collector = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(collector)
 
 
+CORPUS_STATS_UPSERT = """
+INSERT INTO corpus_stats (id, total, by_kind, updated_at)
+SELECT 1, SUM(n), json_group_object(kind, n), strftime('%Y-%m-%dT%H:%M:%SZ', 'now')
+FROM (SELECT kind, COUNT(*) AS n FROM background_articles GROUP BY kind) WHERE true
+ON CONFLICT(id) DO UPDATE SET total = excluded.total, by_kind = excluded.by_kind, updated_at = excluded.updated_at
+"""
+
+
 def _load_json(path):
     try:
         with open(path, encoding="utf-8") as handle:
@@ -180,6 +188,9 @@ def main(argv=None):
         totals = collector.d1_query(
             "SELECT kind, COUNT(*) AS n FROM background_articles GROUP BY kind ORDER BY kind"
         )
+        # One-row summary the Worker's /database-stats reads, so the map can show
+        # the archive's size without counting ~10k+ rows on every page view.
+        collector.d1_query(CORPUS_STATS_UPSERT)
     except Exception as error:
         # A workflow annotation is readable without signing in to GitHub, unlike
         # the step log. d1_query's message carries only the HTTP status and

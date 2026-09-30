@@ -11,6 +11,11 @@ Legacy records that predate the incident model have no primary_event_type; for
 those the "Attacks" category stands in, since it groups executed, attempted and
 foiled attacks the same way.
 
+recent_events carries the last few days of every OTHER category (never drawn
+on the map): the header's terrorists killed/captured counts come from counter-
+terrorism and arrest reports, and the 24h Key Developments link to events of
+any category -- both keep working without downloading the whole database.
+
 Like events-lite.json it is DERIVED at publication time from the events.json
 being deployed and never committed. The map falls back to events-lite.json
 (filtering it the same way) when this file is missing or unusable.
@@ -26,11 +31,15 @@ import importlib.util
 import json
 import sys
 from collections import Counter
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 FORMAT = "events-map-v1"
 MAP_TYPES = ("ATTACK", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT")
+# The header's casualty window is yesterday's full Paris day; the site is
+# republished at least twice a day, so four days always covers it.
+RECENT_DAYS = 4
 
 _spec = importlib.util.spec_from_file_location("build_events_lite", Path(__file__).resolve().parent / "build_events_lite.py")
 lite = importlib.util.module_from_spec(_spec)
@@ -63,26 +72,43 @@ def database_summary(events: list[dict]) -> dict:
     }
 
 
-def build_map(database: dict, excluded: list[str]) -> dict:
+def published_at(event: dict) -> datetime | None:
+    try:
+        value = datetime.fromisoformat(str(event.get("published") or "").replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+
+
+def build_map(database: dict, excluded: list[str], now: datetime | None = None) -> dict:
     events = database.get("events")
     if not isinstance(events, list) or not events:
         raise ValueError("The source database has no events; refusing to build the map file.")
 
+    recent_cutoff = (now or datetime.now(timezone.utc)) - timedelta(days=RECENT_DAYS)
     drop = set(excluded)
     map_events = []
+    recent_events = []
     for index, event in enumerate(events):
         if not isinstance(event, dict):
             raise ValueError(f"Event #{index} is not an object.")
-        if event.get("excluded_from_map") is True or not is_map_attack(event):
-            continue
-        map_events.append({name: value for name, value in event.items() if name not in drop})
+        lite_event = {name: value for name, value in event.items() if name not in drop}
+        if is_map_attack(event):
+            if event.get("excluded_from_map") is not True:
+                map_events.append(lite_event)
+        else:
+            published = published_at(event)
+            if published and published >= recent_cutoff:
+                recent_events.append(lite_event)
 
     output = {key: value for key, value in database.items() if key != "events"}
     output["events"] = map_events
+    output["recent_events"] = recent_events
     output["database_summary"] = database_summary(events)
     output["map"] = {
         "format": FORMAT,
         "filter": "executed attacks, attempted attacks and disrupted plots",
+        "recent_events_days": RECENT_DAYS,
         "source_event_count": len(events),
         "excluded_fields": excluded,
     }
@@ -96,6 +122,9 @@ def validate(output: dict, database: dict) -> None:
         for name in lite.REQUIRED:
             if name not in event:
                 raise ValueError(f"Map event #{index} lost required field {name}.")
+    for index, event in enumerate(output["recent_events"]):
+        if is_map_attack(event):
+            raise ValueError(f"Recent event #{index} is an attack; attacks belong in events.")
     expected = sum(
         1 for event in database["events"]
         if isinstance(event, dict) and event.get("excluded_from_map") is not True and is_map_attack(event)
@@ -130,8 +159,8 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     print(
-        f"events-map: {len(output['events'])} attacks of {len(database['events'])} events, "
-        f"{len(payload) / 1e6:.2f} MB (source {len(source_bytes) / 1e6:.1f} MB)"
+        f"events-map: {len(output['events'])} attacks + {len(output['recent_events'])} recent other events "
+        f"of {len(database['events'])}, {len(payload) / 1e6:.2f} MB (source {len(source_bytes) / 1e6:.1f} MB)"
     )
     return 0
 
