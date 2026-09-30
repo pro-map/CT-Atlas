@@ -27,6 +27,10 @@ if ! python3 tools/build_events_lite.py --input events.json --output "$STAGING/e
   rm -f "$STAGING/events-lite.json"
   echo "warning: events-lite.json not built; the mirror will serve the full events.json" >&2
 fi
+if ! python3 tools/build_events_map.py --input events.json --output "$STAGING/events-map.json"; then
+  rm -f "$STAGING/events-map.json"
+  echo "warning: events-map.json not built; the mirror map will filter events-lite.json itself" >&2
+fi
 
 # index.html references the logo as "CT-ATLAS.png" (exact case) -- GitHub
 # Pages serves it fine regardless of case, but Cloudflare Workers assets are
