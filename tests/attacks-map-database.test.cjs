@@ -111,11 +111,41 @@ test('with no category or group checkboxes on the page, no map event is filtered
 });
 
 test('the removed map controls are gone and nothing references them any more',()=>{
-  for(const id of ['searchInput','heatToggle','officesToggle','selectAll','clearAll','selectAllGroups','clearAllGroups','groupFilterList']){
+  for(const id of ['searchInput','heatToggle','officesToggle','selectAll','clearAll','selectAllGroups','clearAllGroups','groupFilterList',
+    'keyDevelopmentsButton','trendSummaryPanel','trendSummaryClose','mapScopeNote','mapScopeDatabase']){
     assert.ok(!html.includes(`id="${id}"`),`${id} markup is still there`);
     assert.ok(!new RegExp(`getElementById\\(\\s*"${id}"`).test(html),`${id} is still looked up`);
   }
   assert.ok(!html.includes('class="category-filter"'));
+  for(const name of ['openTrendSummary','closeTrendSummary','renderTrendSummaryPanel','openTrendDevelopmentEvent','renderDatabaseScopeNote']){
+    assert.ok(!new RegExp(`\\b${name}\\b`).test(html),`${name} is still referenced`);
+  }
+  assert.ok(!html.includes('VIEW KEY DEVELOPMENTS'));
+  assert.ok(!html.includes('map-scope-note'));
+});
+
+test('the DATABASE title shows one total: every event plus the archive, once both are known',async()=>{
+  assert.match(html,/Database <span id="databaseTotalCount" class="database-total" hidden><\/span>/);
+  const run=async(fetchResult)=>{
+    const node={textContent:'',hidden:true};
+    const c=vm.createContext({
+      document:{getElementById:id=>id==='databaseTotalCount'?node:null},
+      REPORT_GENERATOR_API_BASE:'https://worker',
+      databaseEventTotal:4388,databaseArchiveTotal:null,databaseArchiveRequested:false,
+      fetch:async()=>{ if(fetchResult instanceof Error) throw fetchResult; return fetchResult; }
+    });
+    vm.runInContext(extract('renderDatabaseTotal'),c);
+    c.renderDatabaseTotal();
+    assert.equal(node.hidden,true,'nothing shown before the archive size is known');
+    await new Promise(resolve=>setTimeout(resolve,10));
+    return node;
+  };
+  const ok=await run({ok:true,json:async()=>({background_corpus:{available:true,total:12423}})});
+  assert.equal(ok.textContent,(4388+12423).toLocaleString('en-GB'));
+  assert.equal(ok.hidden,false);
+  const failed=await run(new Error('offline'));
+  assert.equal(failed.textContent,(4388).toLocaleString('en-GB'),'events alone when the archive size is unavailable');
+  assert.match(html,/databaseEventTotal =\s*Number\(data\.map\?\.source_event_count\)/);
 });
 
 test('one set of Database filters drives the list, both exports, the Report Generator, Deep Search and Atlas AI',()=>{
@@ -218,7 +248,6 @@ test('list and ticker clicks only zoom to events the map shows; the rest open th
   assert.match(extract('openDatabaseEvent'),/if \(isOnMapNow\(event\._mapEventKey\)\)/);
   assert.match(extract('openMapEventOrCard'),/if \(isOnMapNow\(event\._mapKey\)\)[\s\S]*showDatabaseEventCard\(event\)/);
   assert.match(extract('renderAttackTicker'),/openMapEventOrCard\(allEvents\.find\(/);
-  assert.match(extract('openTrendDevelopmentEvent'),/openMapEventOrCard\(\s*event \|\| otherEvent\s*\)/);
   const c=vm.createContext({selectedDays:1});
   vm.runInContext(extract('isMapAttackEvent')+extract('withinDays')+extract('databaseEventCardNote'),c);
   assert.match(c.databaseEventCardNote({primary_event_type:'ARREST'}),/attacks only/);
