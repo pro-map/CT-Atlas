@@ -150,6 +150,18 @@ class ConsolidationTests(unittest.TestCase):
         events, _ = self.run_pass(events, GeminiStub())
         self.assertEqual(len(events), 1)
 
+    def test_merging_large_records_keeps_articles_beyond_the_dedup_variant_cap(self):
+        many = [{"title": f"Report {n}", "url": f"https://x.test/{n}", "published": "2026-09-30T10:00:00+00:00"}
+                for n in range(40)]
+        events = [
+            record("Attack A", "2026-09-30T08:00:00+00:00", "inc-a", related=many[:20]),
+            record("Attack A again", "2026-09-30T09:00:00+00:00", "inc-a", related=many[20:]),
+        ]
+        events, _ = self.run_pass(events, GeminiStub())
+        self.assertEqual(len(events), 1)
+        urls = {a["url"] for a in events[0]["related_articles"]}
+        self.assertTrue({a["url"] for a in many} <= urls)
+
     def test_save_prunes_state_to_live_incidents(self):
         events, _ = self.run_pass(self.flydubai(), GeminiStub(["flydubai"]))
         self.state["aliases"]["inc-old"] = "inc-gone"

@@ -1,0 +1,1027 @@
+{
+ "created_at": "2026-10-01T16:00:00+00:00",
+ "reason": "Related articles dropped by the 24-per-record cap when commit 7734e1f merged duplicate incident records; kept here to be re-attached.",
+ "source_commit": "7734e1f",
+ "articles": [
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Hijacked Plane: An Attack Narrowly Averted",
+    "original_title": "Avion détourné : un attentat évité de justesse",
+    "original_language": "fr",
+    "summary": "French news report covering an averted terrorist attack involving an in-flight hijacking attempt.",
+    "published": "2026-09-30T20:00:21+00:00",
+    "source": "TF1+",
+    "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPTlNIeE00VEotRVhKX1VMMlNGWThIbDhweVB3X3FHZEFkTXAyYkxoRHFuWHFtNnNHUmV2aFZpbXYxQnY3dUJvS3N4M0NkNElHbHZZMmR0WXVJM1ZEZ3FKdDkzdU83dFhjZ2Y3akFlN2xQM1VGbmlVY0dDNTF4empmNWxjYm1OLTdvMFJIdzdtU2VXandlRnFfZnV3VQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Emergency Landing Crisis on Israeli Plane: Pilot Fight or Terrorism?",
+    "original_title": "İsrail Uçağında Acil İniş Krizi: Pilot Kavgası mı Terör mü?",
+    "original_language": "tr",
+    "summary": "Turkish news coverage examining an emergency landing and security incident aboard an Israeli flight involving potential security threats.",
+    "published": "2026-09-30T19:56:54+00:00",
+    "source": "bolgegundemi.com",
+    "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOZ1JWVmZYVGJOMGxHQmFZcGd2ZjFHcWtyaThieUhWam9Sa3RRTUFMejdad1dBSFZkZnRlRXI3LWdzdTN3NHdNNHVYd1d5MDNFM0Rtc2NHai1RTWlrOV8xMDgwOS1qMjlvb05iTDN3TjZyQ3c3eGtpanhja083a3N3UmRGdFF6b2VMYmV6VHdPTkEtRDRWa0gwT1lWZXhqaGtpRnFoQTBqTQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Emergency on Dubai to Tel Aviv flight: Copilot stabs captain. Katz calls it a jihadist attack attempt",
+    "original_title": "Emergenza sul volo da Dubai a Tel Aviv, il copilota accoltella il comandante. Katz: 'Un tentativo di attacco jihadista'",
+    "original_language": "it",
+    "summary": "During a flight from Dubai to Tel Aviv, the copilot stabbed the captain in an emergency described by officials as a jihadist terrorist attack attempt.",
+    "published": "2026-09-30T19:04:06+00:00",
+    "source": "ANSA",
+    "url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxOUTlLdFJnMkplS2JvUVBhQTFYeTk0dHF6bVpUU0JtdUM2SEVmMHM4TkhoRGRmZ00yV29heThkSFl3OXBEMVNiQjBVMWRoRUVSU1A3aHRpV3huUHd4SURnNkFRcjI5R204eVNSaUtQSlR3NXZpVFNMYi1DWkFnSHFBRVUwZ1hyYVpvRFVMaUt1NFk0TGd0dmNxYTRlYjVqSGVPQzl2aE4wUlpnRlpSc2JzVTdobDN1cVhGak1OOHQ4bURCUE40TUtfY1NmbWNqNENpV1BYb1VvWnBiSHlPSHdzTGRkcld4VW1BVUp4R1djbHJiaFJFOURWTHVnMTjSAYICQVVfeXFMTW1odmY0M2VncVpwTnRNNW1MQWpjMUpQcjY3TWp1MGNGLXZrdGRZeTI4NFJWSjlYWFhNaVhlMXVLeVFsM1pjbGZHZU9QaHVRbHBra1RaVTJxbEZnaGJlRmdIZ2FIa2dpOTlJbDV2WUIybWl4RmNuc0ZKSjM1dUszZy04a0R5bkFjeFBrR3NVUWhMVVhVcDZPbGtpQXQ4TEFDSW03NFZEQ1hWc3dWb1pQMFAyd0FLY0o3QkYtOHZxT3pGb3BNaGNPeGlDVXI3cWpVenVJWTViSUNuSHd3M1RmZXBpcy1yaWkxQk1TMEl4VzBmQ2YwRW1fdkdWNGtYQUZUcWl3?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Children's testimonies: 'The plane went wild, they shouted the pilot was stabbed. I started talking to God'",
+    "original_title": "עדויות הילדים: \"המטוס השתולל, צעקו שהטייס נדקר. התחלתי לדבר עם אלוהים\"",
+    "original_language": "he",
+    "summary": "Children aboard the flight describe the chaotic moments when the co-pilot attacked the captain.",
+    "published": "2026-09-30T19:12:03+00:00",
+    "source": "ynet.co.il",
+    "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5xNE5PcG0xLTBSeGtzZVJfbGpWZVZNbUVEY0s1WFVCQ1QzTkhLUnotZHh0LUlWZWg0N2I0TTRyWWJQbU9aeWp1OVhqXzNFOFZGUEx1S2lHc3JCdw?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Bar-Ilan: Passenger heroism averted major terrorist attack",
+    "original_title": "Bar - Ilan : Zahvaljujući herojstvu putnika izbegnut najveći teroristički napad od 11 . 9 .",
+    "original_language": "sr",
+    "summary": "Reports note that passenger heroism averted a major terrorist attack on a flight from Dubai to Tel Aviv.",
+    "published": "2026-09-30T19:15:00+00:00",
+    "source": "tanjug.rs",
+    "url": "https://www.tanjug.rs/srbija/politika/285450/bar-ilan-zahvaljujuci-herojstvu-putnika-izbegnut-najveci-teroristicki-napad-od-119/vest"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Passenger on Dubai-Tel Aviv Flight: I Tied the Terrorist's Hands with Headphones",
+    "original_title": "Un pasajero del vuelo de Dubái a Tel Aviv: “Até las manos al terrorista con unos auriculares”",
+    "original_language": "es",
+    "summary": "A passenger aboard a flight from Dubai to Tel Aviv recounted how they subdued and tied up an individual who attempted an attack mid-flight.",
+    "published": "2026-09-30T20:08:50+00:00",
+    "source": "EL PAÍS",
+    "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNQS1JSDBZdkM5YWF4MmQwcVczb1IzMUxuWi1OY0VVT0R6cXYzY0drREFXMEJrcXRPd0hoRDFrREt3cUYxeGFMbzJPNnBLWGhPcjZRSGp2WWVUTkJlb01lVF9Ub09UY05FOTk3Q250N1czRkIzTTNEak5SMWZ0VGZSY3hHM3FkQklVQzFKZXZnakJSMUM2dWZhTExlbFZWUFZERG4tQ2h5VHUyZ0FUeGtQNTUta2JkeF8zbHR3RENaX1ZrM2dfSnNDQWRaTzJscFhsWHV2WFNR0gHqAUFVX3lxTFAzWFdERG9MdTRQZGd4bmhJOGxVdHNQdWRxbERFTWVNU2FjV3hsVDZZYWkyMUVvWC1zc3gzeWpYMGhYbnRkNTdJUVc3OXVKRlhpTVdGRVpTekhBbVJKVC1yNlNRYzliUFhmWWgwbUlwVnQ5ZFRrdWM5WVV1RTFuUjBmcGN2eUxwaGZNTEtkRzBfLWg2TEt6NnBaQjJvUEN4NUFPbmhnYUZ0ZWlmYW03NHVvdlowS2pfeEJnX2FqalJoMzFkRTR5Ymh4V1NCU3NxSzR4VTZrajIxS0xxZThiRjhFRmJNaVIxU19VZw?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Passengers prevent plane crash after neutralizing attacker",
+    "original_title": "\"On a réussi à neutraliser le terroriste\" : les passagers d'un vol empêchent le crash de leur avion",
+    "original_language": "fr",
+    "summary": "Passengers aboard a flight successfully neutralized an individual attempting an attack, preventing a plane crash.",
+    "published": "2026-09-30T18:56:09+00:00",
+    "source": "franceinfo",
+    "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxQX0tvZGYxdFcxeV8tcDYzNGxhalBOT2xqOVFvb254T1NzVG5fdFJPUnkyVXJrcDhhS1dhb09Wd3RJQzJadGtvMzZSQV9hUklQREh5VER5eE9iOXBwd2xCTzVTckhrd3dJR0x5T09EckdvUTdzY05iYU5xb0Z0bXBsc1p4SXR2Q0hmNlJLOXRGbEx5bEJpVkZiMFM3RXloNXJaN1phd3pRS1lZX1JfcEd5X3lCV1JiTUVxeGRab2RURGxwX1JVel9RYzJ3UGwyTGNaS1JVYU5ORQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Knife attack in cockpit – 'Attempted jihadist attack'",
+    "original_title": "Messerangriff im Cockpit – „Versuch eines dschihadistischen Anschlags“",
+    "original_language": "de",
+    "summary": "Investigators and media report that a knife attack in an aircraft cockpit is being treated as an attempted jihadist attack.",
+    "published": "2026-09-30T16:07:00+00:00",
+    "source": "RP Online",
+    "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNWUE5ZjQ4cnlQTklwYTNNNk54T2Y3ZGlMd2pIXzY0b0lyWmJqWU5yME9SUlZicEUzaW95clk3bVZ4cWNjYUhxeGs1R2ExcFZ6ZlFqOHMyZi1xeG1XalJ4cFd4YmdmVnk1bnhVc0VLME02QXNGRzVoVGJpTVFFYlQyUUVnbXdsXzdEeF94U2RIb21fWGxhX3doM1piRXNuVXZ1SjBnRlNRVmVnbWFTc2paalJQQXY5NVlQemR5MDV0V3l1TzlhMXRaQi04aw?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Suspected attack on aircraft: 'We overpowered the terrorists'",
+    "original_title": "Mutmaßlicher Anschlag auf Flugzeug: \"Wir haben die Terroristen überwältigt\"",
+    "original_language": "de",
+    "summary": "Passengers and crew recount overpowering individuals during a suspected terrorist attack on an aircraft.",
+    "published": "2026-09-30T16:01:00+00:00",
+    "source": "inFranken.de",
+    "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQR09NNVBGZVpxR216U1J5dUFZbUpCdWFOOEhnZ3lYcjY2QWZxd2N6NEJITEFJT0RXM2toRHBDeEtwbEpaMkVIWmRwVUk2VFliUkw4LXR6ZERtLXFTYUY2ZzRhVzFpam9IZFIyTGdIVVZXaE5jRmxaRmkyMVQwWW9USGtBbldlRnlOaUFKaUt2NUo1UlJsakVaUGc5Y3RtTURiSUhQSGdWRXVoTDBDNTFtVHg3MnBPb09qVnpn?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Middle East emergency over in-flight hijacking attempt: 'He wanted to crash the plane and kill the 180 Israelis on board'",
+    "original_title": "Emergencia en Medio Oriente por intento de secuestro en vuelo “Quería estrellar el avión y asesinar a los 180 israelíes a bordo”",
+    "original_language": "es",
+    "summary": "Details emerge on a severe in-flight emergency where a suspect attempted to hijack and crash an aircraft carrying 180 Israeli passengers.",
+    "published": "2026-09-30T15:45:12+00:00",
+    "source": "Revista Semana",
+    "url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxPYUlIRkRyUV9rOEdBMXBFUlpQaWxlR1FNWjUxLXhZQkNaQmdXRmxvcmtJek54b1d5WktKWnlxSTZad2l5MHhmUEU3RXZpSjZFQkYtbDcxcnJ5NTBJbHd3dVphQVJsSGxaQVdkWmFuXzQxbTlSSXhJM1lPelA3YThZYXdBa3Y2bjVmdUs4UG9tR3RSRGpQemw5bElhMWFyWGNsZk02aVNjUlpmTGpVQi1MYnNST29xVFh1M2NoME8zM1JyV0QwNmZ3TThrcDhaWXRUc3lZb3R6NWJydXp6VEpnN2tPNDBLTlBhNGgtdEl5V05UanZmNGJaUmtMd3BSRFpIT0HSAYcCQVVfeXFMT3NlR2tJQkxyX2JkTWNMTWNWQV9SUTN6RXQ1TUpzUVRHdUhjeVBMYzV1NHY2enhPVU1TMl9uWlpsRTc4QU05RGc5M3AzZVNkMjJKc05sWno3M0Q1b0NlZEZEOXN6MFNpR2pjaEJSN2VPa1htdE12NVY4bXJUaS1CTTNNdGw1Sm9wSXgtQ18wd2tKa3dXTktuNmhLZFhXSzhWOGo5cW1FMEI3b2d0Y1l4eGZIZmZIOEVKY3FfcXFOSFl1VEpGT2ZIUWt2Q3NzQWExdG9CcjZ6MWdHMm9ZclFXcEdQNWF0bEdmRUhaMlBpVXRhbGxhMnpCdHoxQk5rdFBwRDBHZWF2Tnc?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Terrorist act hypothesis raised by Israel following aircraft diversion",
+    "original_title": "L’hypothèse d’un « acte terroriste » avancée par Israël après le déroutement d’un avion",
+    "original_language": "fr",
+    "summary": "Israeli authorities are investigating a possible terrorist act after the diversion of a commercial flight, involving security checks and questioning of individuals.",
+    "published": "2026-09-30T15:15:11+00:00",
+    "source": "Le Soir",
+    "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNeGw4VzRVQV9JREtTRzRmYjRjMkJIRmhTTVdMT1hhOVllQzFJOHBBcWo5dUZkMWI5Y1h4M0Jfb1F6VE5xWjVVX2tycmtoSDQ2MDhKMXdDSktJSkZGV3haVXVkV29ia2xpREtEWng0X05zSXViUXRMNE11bFJzUUt6em9hc18wLVFiUE85WGc0WWZBNlM5OTk2NDRlMkVKTVliZzZnQkpPVHJYWDBGbFVVZE8xWjdYLWkxLWlwS21tY2FZdDFHR1Zn?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "TÉMOIGNAGE. « Accusé de terrorisme », ce chirurgien breton refoulé par Israël lors d’une mission humanitaire",
+    "original_title": "TÉMOIGNAGE. « Accusé de terrorisme », ce chirurgien breton refoulé par Israël lors d’une mission humanitaire",
+    "original_language": "fr",
+    "summary": "TÉMOIGNAGE. « Accusé de terrorisme », ce chirurgien breton refoulé par Israël lors d’une mission humanitaire Ouest-France",
+    "published": "2026-09-30T16:14:56+00:00",
+    "source": "Ouest-France",
+    "url": "https://news.google.com/rss/articles/CBMijwJBVV95cUxQb3dmajMtTElYWTMyVVozV3RLV0RPOTZiZEVNcW9HU0NINzZQeDFhT1FEb2pSSVFiN1pZRnFGQkNHWlVSaUd0bmZweGdid1NfM2VXZy1uRjNabUd4R1VhdVctelNZekt3QVp0VEJTaEwwQnp3RTYxcURHbThIVTNiNHpJMDRKNndHZE16My1JaU93bXE4S2dMTWxqcDEydGpiOG05a2U0d3NVTzdEdk4wQUZJUGlMcm83elZpLXZZYW1OLU0wYzdKSVdSaFA2X3B0Ml9yR1JoTDcxZVdhSkpmZDJWbE16QklUeU5jenprVlRjWDItWjh1WXJYZDJteUFhTlNHbEJqZUk4VTlaQ2Vr?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "TÉMOIGNAGE. « Accusé de terrorisme », ce chirurgien breton refoulé par Israël lors d’une mission humanitaire",
+    "original_title": "TÉMOIGNAGE. « Accusé de terrorisme », ce chirurgien breton refoulé par Israël lors d’une mission humanitaire",
+    "original_language": "fr",
+    "summary": "TÉMOIGNAGE. « Accusé de terrorisme », ce chirurgien breton refoulé par Israël lors d’une mission humanitaire Quimper Ma Ville",
+    "published": "2026-09-30T16:41:00+00:00",
+    "source": "Quimper Ma Ville",
+    "url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxQVkg1VTdZaXl1VDdtcU5IOGkySm9hNkE3U1dyd3kzeGwyLTNDZHdQYjhXX2IxY1ZLdG9ma0xhTHM4bFJGOXFPam05MGNqTFB6S042Szk3TUZVOTcyc1N4YVVZX1NtUUVSSk9qUkJtQXJob2ZqRTktelo5Z3NCWVpMLWo1SEpNY1dETUt6UnpseDctVHVsTFBjQVozZjNDSENuMWdMN0hleHZkekx6ZUtUQUdRYVFZbHFzdGxRZmRSYTloSWIySnl6MVA4VkpZSVcxY3owRVVjbElrUXBzUmFUelRfWk9JYThIWk4yQlVSTmZsVWI3Sk5VenM4SW0?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "TÉMOIGNAGE. « Accusé de terrorisme », ce chirurgien breton refoulé par Israël lors d’une mission humanitaire",
+    "original_title": "TÉMOIGNAGE. « Accusé de terrorisme », ce chirurgien breton refoulé par Israël lors d’une mission humanitaire",
+    "original_language": "fr",
+    "summary": "TÉMOIGNAGE. « Accusé de terrorisme », ce chirurgien breton refoulé par Israël lors d’une mission humanitaire MaVille.com",
+    "published": "2026-09-30T16:41:00+00:00",
+    "source": "MaVille.com",
+    "url": "https://news.google.com/rss/articles/CBMi-gFBVV95cUxNUGw5U2tQb0dpbTIwWUpWZ2RwMUptbkJ1VVZON1F6aEI5T0FLNldSSzFYVnpVX00wejN5cFpHc0dEU2Q5aldQRVNKQXZBWUhNWVNGZzFtRzVqTi01a2tUQjRoMjhJTDdFdWVQcE1US3k4V0E0WGVwbG84YkxhdGxURXNMNEk5ZmxfZGhsN1I4Mlk5SGstN05tZjh2SFlqU3I5YWNfZ3FjU3FBS3ZUYXBZSFVyQ0NzcFdoUFJmYUktajhNNTBJVUo1VjFDSjBrSVBJNXVNc0plTHpTdXliYW52TkFsaWVVSXhGUFlJRDdvckFXY3JNVXF2dnZ3?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "TÉMOIGNAGE. « Accusé de terrorisme », ce chirurgien breton refoulé par Israël lors d’une mission humanitaire",
+    "original_title": "TÉMOIGNAGE. « Accusé de terrorisme », ce chirurgien breton refoulé par Israël lors d’une mission humanitaire",
+    "original_language": "fr",
+    "summary": "TÉMOIGNAGE. « Accusé de terrorisme », ce chirurgien breton refoulé par Israël lors d’une mission humanitaire Fougeres ma Ville",
+    "published": "2026-09-30T16:41:00+00:00",
+    "source": "Fougeres ma Ville",
+    "url": "https://news.google.com/rss/articles/CBMi-gFBVV95cUxQTzZxN0I0Y3pYOHd1QkxDNDh2Wl9nNjBOQUNXVTBaYW1WaW9KUUdBYU41NGdQbzZWTk5GeVc4TVlkSHVweWhUTGVBZXJmM2s4c2tORnlrVjVsaHRHU1BnLWRkZktQWTBVN0oyNzY0S3EzanlETHhzekM0MWo2VktsRHNId3ZSSGFaeW15YmYxbXVjclBDREVybEdDS0Q4dkxHSThvMVkySVBWdUVlR19SdlhscjlZX2ZhclVQY3h4YjRHNUkwNy1pSGZUaVdGOXd4Ml9tQTN1a2w0Mll0Z1BvODllVVlQV2ZkWGhMNFdaT3V1UDNpQndPQVBR?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Dubai-Tel Aviv flight diverted, possible terrorist attack attempt investigated",
+    "original_title": "Un vol entre Dubaï et Tel-Aviv dérouté, la piste d'une tentative d'attentat terroriste étudiée",
+    "original_language": "fr",
+    "summary": "A flight between Dubai and Tel Aviv was diverted following a violent incident in the cockpit, with authorities examining a potential terrorist motive.",
+    "published": "2026-09-30T11:44:51+00:00",
+    "source": "L'Express",
+    "url": "https://news.google.com/rss/articles/CBMi_gFBVV95cUxPMk9jRm5RRl91Mm14MDd0UTRlQUQzSXB1WkVyS0J6M0dKZ2FvZVdHWUhXeGlieHY5ZTcyckN3YmpDdV9waC0xSXI0cUNJRnU2YlJSbTVJLU9MTXVJelEyNGZiZ1hfOTRyRWVDODhTNUllWmJvTDhKa09nc084czVvQ1lXdl8xUnhORkZWdDFsYmRkVkZUcUlGU1UwOC1lUlFoT2hScnJZVUYwRlI1bk5YOWVQZEE3SHZrcU5KNUFkNUwyM3ktQUs0UkZ5NmdJV2hTTzlMNFNRTzZoeUtneG41aW5ocXdmV1ZKSjd6RndSaU9UTU96VFVUcExuQzZ0Zw?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Un vol entre Dubaï et Tel-Aviv dérouté, la piste d'une tentative d'attentat terroriste étudiée",
+    "original_title": "Un vol entre Dubaï et Tel-Aviv dérouté, la piste d'une tentative d'attentat terroriste étudiée",
+    "original_language": "fr",
+    "summary": "Un vol entre Dubaï et Tel-Aviv dérouté, la piste d'une tentative d'attentat terroriste étudiée Orange Actualités",
+    "published": "2026-09-30T12:35:00+00:00",
+    "source": "Orange Actualités",
+    "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxOWlZSQVZMX3V5d0Z3c2R5TlU0Y1ZrWF9YVEFxQkhQOTVzSTFrRDhBckdlY1R3ZEl2NVpvMVQ5V1VjSWR1cXU4ZzU5Qi1DYkg3WGVxMTdRbGlqRXYzeGJXbVVXRXBmV0xiUmZwREJFMXNUZkdRU21iNF80RVNVWm85ZUxrUkpRbkduQ1NXWXR3d29oblF3Q3VTSE1pQWRVN25qazBhV1ZQclo2RlktTWpPU3ZzTWNham0tZTZXMUkwYXlHVmJURGFQZXlNWFptZ1ZfaTNQWWhSOE1yVS05UFB4eVhNQlNYdXh6N1pB?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Saudi Arabia announces two injured aboard flight heading to Israel",
+    "original_title": "السعودية تعلن إصابة اثنين على متن طائرة كانت متجهة إلى «إسرائيل»",
+    "original_language": "ar",
+    "summary": "Saudi authorities reported that two people were injured aboard an aircraft heading toward Israel that underwent an emergency diversion.",
+    "published": "2026-09-30T11:09:20+00:00",
+    "source": "بوابة الوسط",
+    "url": "https://news.google.com/rss/articles/CBMiREFVX3lxTE1qbFVHTlRfbUpqVFJCeC1DY1k1cE9fQmZfdEpSdTdkSWxNaFVldENmLURzTVhhQTVES1M3cVl5M2sxOFBr?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Pilot stabbed in mid-flight with terrorism suspicion; aircraft diverts to Saudi Arabia",
+    "original_title": "Suspeita de terrorismo: Piloto é esfaqueado em pleno voo e aeronave desvia para a Arábia Saudita",
+    "original_language": "pt",
+    "summary": "An aircraft was diverted to Saudi Arabia after a pilot was stabbed in mid-flight under suspected terrorist circumstances.",
+    "published": "2026-09-30T14:44:21+00:00",
+    "source": "Testo Notícias",
+    "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFA3X2dkSVY5WmdhX1pYOUpLRE9GOVFyVm5rdEpfRWZaYlZFM2dPZHVCRWxZYll3VjZmVjlQYmtXalc4SGc3cE1QTHduVXhWc29kSEJEWW5RLW8xN2pRaVpCSWJBQ1FCd19YUExYQWgxZ1BxN3l4N2JZ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "\"Fight between pilots\", \"fighter jets scrambled\": FlyDubai flight terror attempt makes international headlines",
+    "original_title": "\"קטטה בין טייסים\", \"הוזנקו מטוסי קרב\": ניסיון הפיגוע בטיסת פליי דובאי בכותרות בעולם",
+    "original_language": "he",
+    "summary": "International media coverage details the FlyDubai flight security scare, including reports of a cockpit struggle and fighter jets being scrambled.",
+    "published": "2026-09-30T10:11:45+00:00",
+    "source": "ynet.co.il",
+    "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE11bWI1QkQxOUI3MjJ1X0p1RVg4LXB6MFZzWmNBY1VKeHFEV3M4V0JndGR0WnFnbnMtVEwzUnFyQ2xSejVGTTUwY0FIVTVOcEZSX1ZzRDV1Ylg4Zw?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Attempted attack apparently triggered emergency signal on Flydubai flight",
+    "original_title": "Versuchter Anschlag löste offenbar Notsignal auf Flydubai-Flug aus",
+    "original_language": "de",
+    "summary": "An attempted attack on board a Flydubai flight reportedly caused the aircraft to emit an emergency squawk before diverting to Saudi Arabia.",
+    "published": "2026-09-30T14:42:58+00:00",
+    "source": "web.de",
+    "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOZnNxeHNXSVNnX3Jac2ZQV2cwajJadXhEb1ZGbEU1bWNtVDhQa1hSSWJfRHJXbTlrNVE0Mnd5MUhVTENrYWtaNWFtbmliazN2c1JITGVJV0hha2x5MDhfRDhDWTFoZnZVdHZkM2JlRk9Obms2U3hDQnpTSlVvMUh3QWt0RVlaX25HMW9uaGJBVDAyV1BpbnJfN0hGQlNyUlJGMGZBd2hCVmQtV0k5SEJGUFpoZWVTd0k?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Middle East: Israel reports attempted attack on Flydubai flight to Tel Aviv",
+    "original_title": "Nahost: Israel: Versuchter Anschlag auf Flydubai-Flug nach Tel Aviv",
+    "original_language": "de",
+    "summary": "German news reports on Israeli statements regarding an attempted attack on a Flydubai passenger flight bound for Tel Aviv.",
+    "published": "2026-09-30T14:43:26+00:00",
+    "source": "Tagesspiegel",
+    "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQb2V4Nk1PZzFrSHEtNFpFX0xMMEtYbVN0QTRadzBHMmZkNUljZ3p4dlZHR0JQa1JhbXBRUFN6bURaUHZ4Rm1rYXYzc3FCai1mSGRCVklKWXIzSGl6LVFQQjNGakJncUZzeW1rUXVSdmxURnRGTG1UanR6Rm9sRjhESWpZZHpNUEhNNWlEcnpjYVBUN2J6NC1UZ1hGNzFhU3hYdDExeDJXUWI2RDRsTFF4TDVQVnVPendsODNnVW9FaTZKNTkydlE?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "The attempted attack on the Flydubai flight",
+    "original_title": "ניסיון הפיגוע בטיסת פליי דובאי",
+    "original_language": "he",
+    "summary": "Hebrew news coverage reporting on the attempted security attack/incident aboard a Flydubai flight.",
+    "published": "2026-09-30T09:46:57+00:00",
+    "source": "ynet.co.il",
+    "url": "https://news.google.com/rss/articles/CBMimgJBVV95cUxQSFZac3lFSFE2SWtKOEUxRmU4MlduNmpDUUtCMXMtbUR1eWZyRW1RSmhGNzlGOGxTQkg2TUs1YktNNDFwV3lPTWNTanBDZ3Vsd0J1TWRORUwtZHltOEhCQkNIdVl4UkdKc0Q4T2o0empMYUhoTkVfdUtiVDhkYWVpbnhSRkxNYnN0VWd1VXNRalRTYnlVYVVWMnd5Z2dZOGY4RG54Q1ZtMVZUUlZHM3FqUnFiRGx0TUlnMmczLXBqTC16MTJIYTFPdUt6SjBrNzJVUzhJZ0dsUWxDazd4bWg5Z0pWZEoyUzdJR0ozMVNxMTI0ZmhJWDZtcFRHdGw5Z0k2OVhhQnNyQTE4ak9rU2p0NE95V1BZY05sTEE?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Dubai-Tel Aviv flight makes emergency landing after cockpit fight",
+    "original_title": "Dubai-Tel Aviv flight makes emergency landing in Saudi Arabia as pilots ‘fight in cockpit’",
+    "original_language": "en",
+    "summary": "A Dubai to Tel Aviv flight made an emergency landing after pilots fought in the cockpit.",
+    "published": "2026-09-30T11:41:00+00:00",
+    "source": "TheCable",
+    "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOM0dKM19mMV9VRG1xQ0E4aF82RkpVd1FDTkpfN2tLdkJHbFVrbERFdDdMSjJPSE95YnhqX2l2OEdiMUNsMWxkOTNvQm1venV6Q0tWcWgwZkw0ZDA3V1ZNdkFYajh3TkhXQ2tzdi1SMnM0dzFvNXUzSTVzcTFHVHZUallJeWhVbW5ZZTltODA2cjRQM1cwU0FCLUtqd28yMnpiMTJITFlOSExkWE1YRTNsZGtsTQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-46fcf68ee0bdbff1",
+   "article": {
+    "title": "Middle East: Attempted attack on Flydubai flight to Tel Aviv",
+    "original_title": "Nahost: Israel: Versuchter Anschlag auf Flydubai-Flug nach Tel Aviv",
+    "original_language": "de",
+    "summary": "German media report on the attempted attack and hijacking threat aboard a Flydubai flight en route to Tel Aviv.",
+    "published": "2026-09-30T14:42:00+00:00",
+    "source": "Saarbrücker Zeitung",
+    "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPa3BhajFGZERYcFluZHVJVHBBQUVrNXI5bVJwN0FkZEN1aG9kVlF2cG5EUE1WX0RrNk01TzZGa0RfWWJUSXN3TWVrbmIzcW9FRXNsZERqTVRZZHk1OW90S3U4T2ZudEZ4eVgxZFk0WGNObVo3R25yLXlMdEhWbUVuNEFBN0JZMDZnT3ZfbDRKMDItNkdqQm5XaGxzODNJVGxscmlzeWN1dmJJN2dmTHF6ckp4S2tHTnVDRE5jbGhvREM5RXllQzhNNHlBQW5KZkpocnc?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-512ab2912012480e",
+   "article": {
+    "title": "Investigative Committee: Yuri Dud placed under in absentia arrest in case over interview with head of banned RDK",
+    "original_title": "СК: Юрия Дудя заочно арестовали по делу об интервью с главой запрещенного РДК",
+    "original_language": "ru",
+    "summary": "Russia's Investigative Committee announces that Yuri Dud has been placed under in absentia arrest for an interview conducted with the leader of the banned Russian Volunteer Corps (RDK).",
+    "published": "2026-09-29T13:35:47+00:00",
+    "source": "BFM.ru",
+    "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFBHWTMwaFkzWEZ2WUhuM093ZXhwQ09qYk1ka1FobGNNei1iWlEtNG0yODJRR2J0aHJyaXZLb1BqRUhVbF9vZjVzOUdn0gFKQVVfeXFMUEdZMzBoWTNYRnZZSG4zT3dleHBDT2piTWRrUWhsY016LWJaUS00bTI4MlFHYnRocnJpdktvUGpFSFVsX29mNXM5R2c?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-512ab2912012480e",
+   "article": {
+    "title": "Dud placed under in absentia arrest",
+    "original_title": "Дудя* заочно арестовали",
+    "original_language": "ru",
+    "summary": "Follow-up reporting confirming the in absentia arrest of Yuri Dud.",
+    "published": "2026-09-29T13:56:09+00:00",
+    "source": "Рамблер",
+    "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBUNUg4TV9KUUliTENDQVdjQ01hZS1TZmZ6NldIdmx0dGFCUU5zMFJJX2owdGJla2N5R3RnSlEzMlozc0xHWGV1UE9ZTWJMdXA4YUIxWkZQcDNCNnhSMTRfUGd4ZEp1X1pGc2UtMXAzdjRSTzI2YjV6QmVkTdIBe0FVX3lxTFBUNUg4TV9KUUliTENDQVdjQ01hZS1TZmZ6NldIdmx0dGFCUU5zMFJJX2owdGJla2N5R3RnSlEzMlozc0xHWGV1UE9ZTWJMdXA4YUIxWkZQcDNCNnhSMTRfUGd4ZEp1X1pGc2UtMXAzdjRSTzI2YjV6QmVkTQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-512ab2912012480e",
+   "article": {
+    "title": "Yuri Dud placed under in absentia arrest in case involving justification of terrorism",
+    "original_title": "Юрия Дудя заочно арестовали по делу об оправдании терроризма",
+    "original_language": "ru",
+    "summary": "Russian journalist Yuri Dud has been ordered arrested in absentia on charges related to the justification of terrorism.",
+    "published": "2026-09-29T14:03:43+00:00",
+    "source": "Forbes.kz",
+    "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNX25mdlFPekV6QlNOalZXMmlNTS1XUm9xZG0xZ05oVXh2RndGNUdUNWdXNW8tdHp2TU00ZWQ2cV9HcGVoZW0yZTFEVTdwdFB0UkVjcElhOGFrM01URlRHNnJhV05pXzdON1ZhYlpDaV9lUWdhUEdNNEtoNzY3Rk1wTlU3Y0RuQWdiWTB1RWNXcXR0M0c4YW1EelRRYU93ck0?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-340cc1de5b3f6df5",
+   "article": {
+    "title": "Local farmer thwarts possible attack against a military base",
+    "original_title": "Faits divers | Une agricultrice fait échouer un possible attentat contre une base militaire",
+    "original_language": "fr",
+    "summary": "A farmer's alert to authorities helped foil a potential attack or suspicious activity targeting a military installation.",
+    "published": "2026-09-28T17:05:47+00:00",
+    "source": "Action agricole Picarde",
+    "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPMklFRDVkZTVUaG1xUXcyc1lxanlFV2ZXREJxMVBFbzVIOFVCLUJHTGJwbm5aMHI4SFkzY3JNeEQ1dmFZbDBENkREZHFud3Z3aUwzVXJUcFRmTThsX3hGel9CMjlJbl9IV2QtRTQtdWs0YllQYzR5OFlHNFdrNW43WllpRWh6Zlczak1mTGgtRTNNN0tQTVZsZ0ZmcDhrcFV2WUp1cWJ3SXBUOVQ4VlhBVkRKa1A5aTA?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-340cc1de5b3f6df5",
+   "article": {
+    "title": "RAF Fairford: Farmer evidently alerted police to suspected terrorists",
+    "original_title": "RAF Fairford: Landwirtin machte Polizei offenbar auf mutmaßliche Terroristen aufmerksam",
+    "original_language": "de",
+    "summary": "Spiegel reports that a farmer alerted police to suspicious individuals near RAF Fairford, leading to arrests.",
+    "published": "2026-09-28T17:02:00+00:00",
+    "source": "Spiegel",
+    "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxQdl9zY1phNXRuTHZfbTdlUWQtWnN5RHRkYllzWWFlOENBV2ZVZlJyRGdOUkhmOXZIMVZCaEFkODlyVXpwcVJkMzB0enRrSDdzTUUtb2h3VTNISDd4ck9KeFZqa2Z0SGpQUXlzXzlBNnpLNHhVa0hvSXdTeXpVLVI5czRwakIxTENiWVEyeTNRUDZWZmFYZDNoQktaZ1pBZ29wQnNLa0laUHFDZUczQV9FQmhoNl9aOFZTMVlYaExDbVlkNFA1WXFxeHY3NHFyMkNncDdzcTJiQVZIS0FmZl8xQlB4d1dXdGgxY3FfWWRn?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-340cc1de5b3f6df5",
+   "article": {
+    "title": "Sen. Coons on thwarting of UK terror attack: 'Reminder of why allies matter'",
+    "original_title": "Sen. Coons on thwarting of UK terror attack: ‘Reminder of why allies matter’",
+    "original_language": "en",
+    "summary": "Sen. Coons commented on the recent disruption of a terrorist plot in the United Kingdom, highlighting the importance of international intelligence alliances.",
+    "published": "2026-09-28T13:17:00+00:00",
+    "source": "CNN",
+    "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOVEZxTDZHLXdWazZUWWwwZVBCQmpmTlo1enF1QnFsVGNWOHlrNVBQUkJxNWZtY1l4RlBVLWlsbjhFa2QzajgtQlZGVHo5enl2M3RaQnZCXzY4N08xSm93NFVfakZHc3hrSVpTdE5fWE50ZTlvRXNMMWF1akVVRmVXQUFaYUlvUFRpNXRPUmhYNW5Wb0laYTdxN3ZTZUV0YUktbGMwZ1hrRDkyR2JaX2w2a1lHRmt5VjQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-340cc1de5b3f6df5",
+   "article": {
+    "title": "5 men arrested for planning terrorist attack outside London",
+    "original_title": "5 men arrested for planning terrorist attack outside London",
+    "original_language": "en",
+    "summary": "Five men have been arrested in connection with planning a terrorist attack outside London.",
+    "published": "2026-09-28T12:17:00+00:00",
+    "source": "WHAS11",
+    "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQVWY1akxpVm1uLVFZMUdkZ1VoMGJhM2VIMXVzelZMa29PZWlNUF93UUhyQUdIdkJ4MTBqZ3dfbEJMdkxWX2c3NzZvN2M3LTF5RE44eHc1MjRNZlltdGRBUGdTRU9aTWlIRzFOcXdnNUo4VlVGWVk5RkgwWUktaXJCZV9QUDlHUklOZDZuSDhJeVBvRzFZbUNNa1hQc1hyVU9aUXlxWFNhRWJXVUs4MEhHX0ZzX1ZYR3RSS01fN0VwT21Ja2ZFZkdJM0tzNHdpWWNoeXJuLW5fUGQtV1h6cjlaUg?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-340cc1de5b3f6df5",
+   "article": {
+    "title": "London police released on bail men planning terrorist attack at air base",
+    "original_title": "Полиция Лондона выпустила под залог мужчин, планировавших теракт на базе ВВС",
+    "original_language": "ru",
+    "summary": "London police released on bail several men who were arrested on suspicion of planning a terrorist attack at an Air Force base.",
+    "published": "2026-09-28T15:48:15+00:00",
+    "source": "Ведомости",
+    "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOSlh6WU9ZYjdnN3E2YlVFanZfWDhxU3Rubnh2cDYzMWxlc2R5MHl6ekNwRTFDZzZianIxQ1FLSUhfQ0ZkVWhCb2NzSHJnaDhESkpidEpmWURzMEFWbTZtVFRaNDA2YXctREZKUnFvUnpvMXh5RlRNcFlFTWg4RlBXM1NrclhQYjU1WklHZ3RR?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-340cc1de5b3f6df5",
+   "article": {
+    "title": "Attack prevented only by coincidence?: Reports contradict Trump's version of UK terror suspicion",
+    "original_title": "Anschlag nur zufällig verhindert?: Berichte widersprechen Trumps Version von UK-Terrorverdacht",
+    "original_language": "de",
+    "summary": "Media reports question and contradict political claims regarding how a terror plot near a British air base was intercepted.",
+    "published": "2026-09-28T10:11:00+00:00",
+    "source": "n-tv.de",
+    "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQWDhZT2Z0TUFqLUduTTJsXzRKcUt2Zk1CNEdmT2VudFdrdkxvUHdYNGlBSUtzTi0tcnJBQUw1VEZyUUkwaUVjSlNFcjQzZUtmY0pMZEI4REZBOC1naWNuUG5QZjhCd1hVX0MyMldMZkRtVXJ2M25wUl82WVBMSWluX3ZNNFdnM3BZMHpZRFN6UHB2M2pTdGFVQmxXTWdPcXpURG1tWi1vM3pjRHcySmVrQXhnMDVzdEZiUnJ0Sjh3?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-340cc1de5b3f6df5",
+   "article": {
+    "title": "Anschlag nur zufällig verhindert?: Berichte widersprechen Trumps Version zu UK-Terrorverdacht",
+    "original_title": "Anschlag nur zufällig verhindert?: Berichte widersprechen Trumps Version zu UK-Terrorverdacht",
+    "original_language": "de",
+    "summary": "Anschlag nur zufällig verhindert?: Berichte widersprechen Trumps Version zu UK-Terrorverdacht n-tv.de",
+    "published": "2026-09-28T10:13:04+00:00",
+    "source": "n-tv.de",
+    "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNcVNLa1dYQmstdWh3Z3BCNmlBMW5LRlJ6blJVQ1oxSGdBaFBkTWZvYmtYNk9IMExvTGRna0Q3Zmo2OW11amFtNElmc3EwVU9FYkFsbWtUaExsTGprcUFmdjd6SHNCZW1rby02RGJEa0I1S2dLTjg5YXdXWi1LTmFuNnp1bkRZTEI3Tjg2ZFVtcENHbUhVa2xwaTVJZmEtc2NTN3hoUnBkVDMzemVPQzRTM3dpU3J0UGRKTjZCTQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-340cc1de5b3f6df5",
+   "article": {
+    "title": "Storm in the kingdom: What is the British government hiding about the terror attack?",
+    "original_title": "סערה בממלכה: מה ממשלת בריטניה מסתירה על פיגוע הטרור?",
+    "original_language": "he",
+    "summary": "Commentary and media discussion questioning official transparency regarding the recent terror plot in the UK.",
+    "published": "2026-09-28T10:01:00+00:00",
+    "source": "מעריב",
+    "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9mMTBpX0ZhOFFScFVyN3ZCLVFNblVFLWE1TW9hd1dqeE90UHJMUkx6UDRDRWpzZG1CbXpEMVlza1lBZlU3bW16dW9EWXRvMFlkNEMyWGNvbnI5cV9wOUVDQw?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-340cc1de5b3f6df5",
+   "article": {
+    "title": "Attempted terrorist action against the RAF Fairford base in Great Britain",
+    "original_title": "Tentative d’action terroriste contre la base RAF de Fairford en Grande-Bretagne",
+    "original_language": "fr",
+    "summary": "Reporting on an attempted terrorist action directed against the RAF Fairford military base in the United Kingdom.",
+    "published": "2026-09-28T09:30:41+00:00",
+    "source": "Magazine Raids",
+    "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPS1E1bGxtbVZJc1NPeEV0elczWk9sNWlTeWNPX3JSZlpudWozX3lZbGVYU2YxQ0NROHh0TUZacHJCOTZ4NUpRV1pIZFp3SXI0OER6RTJXaDRaTlFRZkxleWdpM1JHVll4T0hvOFpMTkhvRU0tRzFVTy1VZFVrNGxFWVVDLWQyb1k5YzVWaGRDT1BBSFplVHpzV3Y1TGFnMEREQjZOdEtaeU9yVFE?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-340cc1de5b3f6df5",
+   "article": {
+    "title": "Allegations of Terrorist Attack on Air Base in England",
+    "original_title": "İngiltere'deki Hava Üssü Üzerine Terör Saldırı İddiası",
+    "original_language": "tr",
+    "summary": "Turkish news reports detail the thwarted terrorist attack allegations concerning a military air base in England.",
+    "published": "2026-09-28T13:13:18+00:00",
+    "source": "Haber Aktüel",
+    "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPYm55ZVNCQlBaaC1aY3BiaEZESG81UnpFMXlrUzBRYS00M3F2dVBycTI3ZmJwb1QySG9KWWRKWWU2NnVtXzhfNXhPT09PVFdEV2x5VG02YVkzTGVOdkpRNldPaGU2SU9VVEpRQ2hscW1RbVhYU0tLZlhNSUNTWkhxRGpLM21BSk1WUlAtVG9EWkxqZ0k?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-340cc1de5b3f6df5",
+   "article": {
+    "title": "Britain: Local farmer who spotted suspicious men alerted police and apparently foiled attack",
+    "original_title": "בריטניה: חקלאית מקומית שהבחינה בגברים החשודים הזעיקה את המשטרה וכנראה סיכלה פיגוע",
+    "original_language": "he",
+    "summary": "Reports indicate that a local farmer in the UK noticed suspicious individuals near the military site and alerted police, helping to thwart the plot.",
+    "published": "2026-09-28T08:33:16+00:00",
+    "source": "זמן ישראל",
+    "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE9GYVJIYjZUQmt0ZEF3dkxLd2d4NUhkSlVxVkdBcTM4dGk5Yzg3TjVXZ1ljY28zZTlJNXU3M0g2ak56YXVTSU01TWU0aw?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-340cc1de5b3f6df5",
+   "article": {
+    "title": "Suspected Attack on US-Used Military Base in the UK",
+    "original_title": "İngiltere’de ABD’nin kullandığı askeri üsse saldırı şüphesi",
+    "original_language": "tr",
+    "summary": "Reports of a suspected explosive or security incident/attack near a military base used by the United States in the United Kingdom.",
+    "published": "2026-09-28T07:48:17+00:00",
+    "source": "İktibas Dergisi",
+    "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQS3hwdjczRlhEanVoU0h0bWtvMWhXNU5UY2hULS15YzJna25xUUlGUWxhQm5IWnNmZzRwelU4UVVWeUI3WWEwRDNnRnc2OUw5WGJhWHlaZ1JyMTVRZzdwV3RJdkltamh2blNyaUx6SWNEY1VvcjV1UkpIQ29hVzNpYXNiVnh3U05UN3gwejRBWW9Lc0h4c3htY0hXUl8?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-340cc1de5b3f6df5",
+   "article": {
+    "title": "Suspected attempted attack: What is known about the operation at a British military base",
+    "original_title": "Mutmaßlicher Anschlagsversuch: Was über den Einsatz an einer britischen Militärbasis bekannt ist",
+    "original_language": "de",
+    "summary": "German media reports on the security incident and attempted attack at a British military base (RAF Fairford), where a civilian intervened.",
+    "published": "2026-09-28T13:50:24+00:00",
+    "source": "DIE ZEIT",
+    "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOYlNnbTY1XzhkYmR1VE5sQzBXR2p0WkVLenloY0Nqd1N1Qkl0X0tIZ3p2QXpxS3dxLWdYQ3E1SW5KMU5KZElUM0VYMjlPOGQ3QkdJXzNOWTA0bGdlQlFtV0RqdHV6U1R4RG1qTEVYVmdyeXJsZ00taHBwNTZzMGthY1pqT0Mwc2d2QUt1b21jTTVMU0trX3BHT1ZtSGU3TTQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-c20e0697f31c899f",
+   "article": {
+    "title": "IDF tracker fires at active terrorist, saving victim's son",
+    "original_title": "IDF tracker fired at terrorist , saving victim son",
+    "original_language": "en",
+    "summary": "An IDF tracker engaged and fired at an active terrorist, successfully preventing harm and saving a victim's son.",
+    "published": "2026-09-21T20:45:00+00:00",
+    "source": "israelnationalnews.com",
+    "url": "https://www.israelnationalnews.com/news/433445"
+   }
+  },
+  {
+   "incident_id": "inc-c20e0697f31c899f",
+   "article": {
+    "title": "Netanel Shukron murdered in terrorist shooting near spring in Binyamin",
+    "original_title": "ערב יום כיפור: נתנאל שוקרון, אב לשישה, נרצח מירי מחבל במעיין בבנימין",
+    "original_language": "he",
+    "summary": "Netanel Shukron, a father of six, was shot and killed by a terrorist near a spring in the Binyamin region ahead of Yom Kippur.",
+    "published": "2026-09-21T17:21:37+00:00",
+    "source": "כאן 11",
+    "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBWZ25ZQzFlbmhveDR1VVU5Z3NwYlZ0VF9uNDZObS14eUExVmRwOFdnNWhUVGJ2bDcxa00zLUtDRjNHbVVkZmpaTjJ4Wl9qcURHQTIzbXZUdlIwTHpQODlvTlEybWVvYmptOFMxMlJ1alBodXNTZ0E?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-c20e0697f31c899f",
+   "article": {
+    "title": "Attacker neutralized by tracker after shooting attack",
+    "original_title": "המחבל עבר במעיין יממה לפני הפיגוע, גשש ירה בו והציל את בנו של הנרצח נתנאל",
+    "original_language": "he",
+    "summary": "A tracker shot and neutralized a militant following a shooting attack, preventing further casualties.",
+    "published": "2026-09-21T16:13:06+00:00",
+    "source": "YNET",
+    "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9PU191NDM4bzdtTGpjbVZaQWM4Z29nVlNUMmdwV1dUVG5pejdGeV9ISUt3eWpET19KRHZIWUJaSzdSTFRRRjVYVGFKTV9nMElwRWtpQkZVUTdvUQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-c20e0697f31c899f",
+   "article": {
+    "title": "Man killed in Samaria terror shooting",
+    "original_title": "Man killed in Samaria terror shooting ahead of Yom Kippur",
+    "original_language": "en",
+    "summary": "A man was killed in a shooting attack in Samaria, West Bank.",
+    "published": "2026-09-20T14:40:16+00:00",
+    "source": "JNS.org",
+    "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOMnBIaUtPUHVvck5DSEZrbzlMS3lYTUJ2TzZBemtoSXZUYlR3U01KTVVfZ09aRHlKQy02NjZiOFZwMmRmTmptSXBoZDJyTWdScnZnWXY3Mk1ua0hONV9odlFCNURnc0NFZnctY3UweENQeFJJd1ZYLXZwTzZzNncxRmdENFRtV1g2TEJlWU15cHVsZDd2?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-c20e0697f31c899f",
+   "article": {
+    "title": "IDF neutralizes car-ramming attacker in Jenin following Samaria shooting",
+    "original_title": "IDF kills car-ramming attacker in Jenin shortly after fatal terror shooting in Samaria",
+    "original_language": "en",
+    "summary": "The IDF neutralized a car-ramming attacker in Jenin shortly after a fatal shooting attack in the Binyamin/Samaria region.",
+    "published": "2026-09-20T12:19:52+00:00",
+    "source": "worldisraelnews.com",
+    "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOeXg4Q2lWNHg4WnRZV09kclc0RlRhM0VCMkttUmZ4aFNKZ0RfdEtUT1B1UFhiclozQjlvbk80aFotRjl3QWJFMWpvODIwNjBfN2J4QXhWcWVPbUdQWFZXWVkxOGpIeUo3ZDlXY3ZCR0phN0sxOWFoQXRHd2E5Z2NvWk8zYnMxbnY1VmNjMXhFVWxoWjVKd1JqTGk2RDFjcnI1aWlUZ1RjLXhrcmdyVUY00gGvAUFVX3lxTE55eDhDaVY0eDhadFlXT2RyVzRGVGEzRUIyS21SZnhoU0pnRF90S1RPUHVQWGJyWjNCOW9uTzRoWi1GOXdBYkUxam84MjA2MF83YnhBeFZxZU9tR1BYVldZWTE4akh5SjdkOVdjdkJHSmE3SzE5YWhBdEd3YTlnY29aTzNiczFudjVWY2MxeEVVbGhaNUp3UmpMaTZEMWNycjVpaVRnVGMteGtyZ3JVRjQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-c20e0697f31c899f",
+   "article": {
+    "title": "Following shooting attack in Binyamin: Two terrorists attempt vehicular ramming against soldiers in northern Samaria",
+    "original_title": "אחרי פיגוע הירי בבנימין: שני מחבלים ניסו לדרוס חיילים בצפון השומרון",
+    "original_language": "he",
+    "summary": "Following a shooting attack in the Binyamin region, two terrorists attempted a vehicular ramming attack against IDF soldiers in northern Samaria.",
+    "published": "2026-09-20T10:07:11+00:00",
+    "source": "ערוץ 7",
+    "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE1XbnNzU1oybEhaMmRWSFpMM3ZBdURxSk1iVFBsTWNIUDI4RFczLWwyQllwdFR0emdqTm0zMnRWZVpnRk9PTHBZOQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-c20e0697f31c899f",
+   "article": {
+    "title": "About an hour after Binyamin attack: Ram-ming attack attempt in Samaria, terrorist eliminated",
+    "original_title": "כשעה לאחר הפיגוע בבנימין: ניסיון פיגוע דריסה בשומרון, מחבל חוסל",
+    "original_language": "he",
+    "summary": "Following a shooting attack in Binyamin, another ramming attack was attempted in Samaria where the terrorist was neutralized.",
+    "published": "2026-09-20T10:15:00+00:00",
+    "source": "בחדרי חרדים",
+    "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1iMHNIdlhfUUlHNFYwUmVycEwwcHU0UEZ0dTZTQVQ1TkNyNTRUdWh1dWFoQkNUMmtWdERfbzBYa2pHQTI0Yk0wXzhFRQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-c20e0697f31c899f",
+   "article": {
+    "title": "Two terrorists attempt vehicular ramming attack against IDF soldiers",
+    "original_title": "Два террориста попытались наехать на бойцов ЦАХАЛ",
+    "original_language": "ru",
+    "summary": "Two attackers attempted a vehicular ramming attack targeting IDF soldiers in the West Bank.",
+    "published": "2026-09-20T11:39:46+00:00",
+    "source": "Новости Израиля | 7 КАНАЛ",
+    "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE45V0ZHTUJhRGMzcEtWTVFXaDdaMjFaYk03VG80MTl0RUcyT2JiMXBkLXBMQ2hKSWI2RHBWRVJ2c1dFTnZzRnBSQ3diNjQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-c20e0697f31c899f",
+   "article": {
+    "title": "Two terrorists attempt to run over soldiers in Samaria after Binyamin shooting",
+    "original_title": "After Binyamin shooting : Two terrorists attempt to run over soldiers in Samaria",
+    "original_language": "en",
+    "summary": "Following a shooting attack in Binyamin, two terrorists attempted to carry out a vehicular ramming attack against soldiers in Samaria.",
+    "published": "2026-09-20T12:00:00+00:00",
+    "source": "israelnationalnews.com",
+    "url": "https://www.israelnationalnews.com/news/433425"
+   }
+  },
+  {
+   "incident_id": "inc-c20e0697f31c899f",
+   "article": {
+    "title": "Terrorist attack: Gunman opens fire on Israelis and flees with weapon",
+    "original_title": "Теракт: террорист открыл огонь по израильтянам и скрылся с оружием",
+    "original_language": "ru",
+    "summary": "A gunman carried out a shooting attack against Israelis in the West Bank and fled the scene with his weapon.",
+    "published": "2026-09-20T09:49:12+00:00",
+    "source": "9 Канал Израиль",
+    "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFBza2Z6SWtYLXRLclF2Uk1IOGdnZlJaN2NoX0NoVFB1R3pucDJOdUt3Vk5fWmttcFo2eFBiU2pmcWszTlpMRWk1eQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-c20e0697f31c899f",
+   "article": {
+    "title": "IDF: Terrorist attempted vehicular ramming attack in Ganim and was eliminated",
+    "original_title": "צה\"ל: מחבל ניסה לבצע פיגוע דריסה בגנים וחוסל",
+    "original_language": "he",
+    "summary": "The IDF confirmed that a terrorist attempt to carry out a vehicular ramming attack in Ganim was successfully thwarted with the elimination of the attacker.",
+    "published": "2026-09-20T09:46:35+00:00",
+    "source": "היום",
+    "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5tSG1vVElLblV0ODVOXzBsLVRHaGlrS1J6d2F5TThxNS1lSlNFcnFaM3NkR2RtNlhpZDNqenR4UTNkQk1OSmRodjdUSW54akZXNnNvZ3FucWVrVDNSQS1IQXBpeUctVUnSAW9BVV95cUxPNWd2OVJKRjZ1VGNaNVNRaTd1ZHhJeVpfTERQSExiX1VYeGNrcmo3MkVaYzdacnlQWk1pUkh3N2tCRFZodWUzSjR6Mm0zdXVpNGxBU2hVeHFEZl9mbTI4RjBxemZyelp0SUUzRDlUem8?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-c20e0697f31c899f",
+   "article": {
+    "title": "IDF forces eliminate terrorist who attempted to run over soldiers",
+    "original_title": "כוחות צה\"ל חיסלו מחבל שניסה לדרוס חיילים",
+    "original_language": "he",
+    "summary": "Israeli military personnel neutralized an assailant who attempted a vehicular ramming attack against troops.",
+    "published": "2026-09-20T09:47:56+00:00",
+    "source": "מעריב",
+    "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE1Wem96Um9scjJZRllkM05xNTk1UXFWSTZqQk5NNHFBRl9zUHRTaTYyRUhMTG03UTkxR0NRekJYckZoOGlvTTd4MzUtYjhtbjRJQl9ZYjBzLXVNcklkSkxsYTcwRFM?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-c20e0697f31c899f",
+   "article": {
+    "title": "IDF strikes Hezbollah sites following terrorist attack",
+    "original_title": "Tsahal a frappé des sites du Hezbollah après une attaque du groupe terroriste",
+    "original_language": "fr",
+    "summary": "The Israel Defense Forces struck Hezbollah sites in response to an attack launched by the terrorist group.",
+    "published": "2026-09-20T11:34:00+00:00",
+    "source": "The Times of Israël",
+    "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPYl91a18yeEtFUUxZbGdndmRxUk9RTkUzXzZ5a2I0WGJDeWVZQmZISXNMY0tiLURKVVJOa2cxaHo0MzFFU2ZVbkJmeGxYbnZmSHYzTmItUTIzU1VVRnVCYXhLTnJsYnJrYU9zOVVfaUstTnBTaXg4Q2E5X0ZyTjBvV3BmdG1aVTZVcGNXOTJvNDZ4Z25PR3lWWEphekc0N2trTmRmS0dNSHY0YXRCSFNWY9IBsAFBVV95cUxPYl91a18yeEtFUUxZbGdndmRxUk9RTkUzXzZ5a2I0WGJDeWVZQmZISXNMY0tiLURKVVJOa2cxaHo0MzFFU2ZVbkJmeGxYbnZmSHYzTmItUTIzU1VVRnVCYXhLTnJsYnJrYU9zOVVfaUstTnBTaXg4Q2E5X0ZyTjBvV3BmdG1aVTZVcGNXOTJvNDZ4Z25PR3lWWEphekc0N2trTmRmS0dNSHY0YXRCSFNWYw?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-c20e0697f31c899f",
+   "article": {
+    "title": "IDF strikes Hezbollah sites following an attack by the terrorist group",
+    "original_title": "Tsahal a frappé des sites du Hezbollah après une attaque du groupe terroriste",
+    "original_language": "fr",
+    "summary": "The Israel Defense Forces conducted airstrikes against Hezbollah sites in response to an attack launched by the terrorist group.",
+    "published": "2026-09-20T11:00:38+00:00",
+    "source": "The Times of Israël",
+    "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPYk51UFdGQngxWXZJUUNZOElTMDVUNXNDMndYdlFiV0hzOTdVcWNqZVZjSnptNWQzcDFkZlc4U0dfd095bkgwZHdJeF80em5vMVNlajBnYTZma0owS0t6dzZKZVF6V012LUtTWkFHTUd5N1ExcVVSc3RVQ0MtWk9NSm5ZNnhHZUNFTDJjVFppUFhaQjVUZGFMRENkOEVoY1MzSl9PR2d3OUkxRkXSAbABQVVfeXFMT2JfdWtfMnhLRVFMWWxnZ3ZkcVJPUU5FM182eWtiNFhiQ3llWUJmSElzTGNLYi1ESlVSTmtnMWh6NDMxRVNmVW5CZnhsWG52Zkh2M05iLVEyM1NVVUZ1QmF4S05ybGJya2FPczlVX2lLLU5wU2l4OENhOV9Gck4wb1dwZnRtWlU2VXBjVzkybzQ2eGduT0d5VlhKYXpHNDdra05kZktHTUh2NGF0QkhTVmM?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-c20e0697f31c899f",
+   "article": {
+    "title": "Simultaneous with shooting in Binyamin: Rock-throwing terror attack in City of David, Jerusalem",
+    "original_title": "במקביל לירי בבנימין: פיגוע אבנים בעיר דוד בירושלים",
+    "original_language": "he",
+    "summary": "A rock-throwing attack targeting vehicles or individuals occurred in the City of David in Jerusalem, taking place concurrently with a shooting attack in Binyamin.",
+    "published": "2026-09-20T09:12:33+00:00",
+    "source": "C14",
+    "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1TNUc2T2ZBc0lTZy1QYjlTdTBsRHA3bWN5TlJlcy1acmRzamxyYWJPeVRpNE5WVjJid2NjVVRqNjEwNHhnSk5ENmpSSmI2dw?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Suspect Linked to Daesh Neutralized in Istanbul Operation",
+    "original_title": "İstanbul'da DEAŞ'la bağlantılı olduğu değerlendirilen zanlı operasyonla etkisiz hale getirildi",
+    "original_language": "tr",
+    "summary": "A suspect evaluated to be linked with Daesh was rendered ineffective during a police operation in Istanbul.",
+    "published": "2026-09-03T21:56:25+00:00",
+    "source": "Anadolu Ajansı",
+    "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQM3ZmNjludnRTdGdTcC1UV3FVeGJCRkZrSWNzWmlzRzV5U011aHpKMVFlWVlLMmhBbjdmSjZ5aGotR1Flb2pMM0FUQTByeTQzYndyU3V5azVJdnZ6eXd2aFVqb3djazFVMHY4emUtdUVTTmFEa081TU1neW1ERXluX1V3YW9JcEpaazB4bVlMdVh6cE1FdTQ2RWE5TWh0cXI2VGJPeTR4YlRmNHQ3Slc4WTUxNk00WnJrbEdkbG9kVnZiX0xZNWs4?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Istanbul police neutralize Daesh-linked suspect accused of planning attack",
+    "original_title": "Istanbul police neutralize Daesh-linked suspect accused of planning attack",
+    "original_language": "en",
+    "summary": "Istanbul police neutralized a suspect linked to Daesh who was accused of planning a terrorist attack.",
+    "published": "2026-09-03T21:15:24+00:00",
+    "source": "Türkiye Today",
+    "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQeG1oWkJyRHJMdnBnTGE0NU1lQXB5b29JS2hQeDFWdjRtWkhqcnRtV1YzWGJxYU9aMS1hTVZ1UjZJLVdvS2RBV2lZNTQ1YWxhSXFfdjJtcDlZYWp4Q0QwdmpsWDZUTXBLVVhkVms3YUgzZklsNGVkR2pqYW51ZUU1bWhwMFpFa2pjSThmSjZsalVvUkpCRV9mRnpEUmhXYVpKNXVDXzBMUEZ4Z1YwdDlqdVFGak0yNjYwY3c?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Turkey announces disruption of ISIS terrorist attack plot",
+    "original_title": "تركيا تعلن إحباط مخطط لتنظيم «داعش» لشن لهجوم إرهابي",
+    "original_language": "ar",
+    "summary": "Turkish authorities announce the frustration and disruption of a planned terrorist attack by the ISIS organization.",
+    "published": "2026-09-04T06:33:00+00:00",
+    "source": "alraimedia.com",
+    "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE9zYU5rWUw5SDRDTlZVRjVLa2ZkdVhFX2hyU0JnLVB4NEx6cEhvdzlwYXZhcUZRWnNBaHlyVnFOVUdrNTRfLUNNOVp6aXhCY3JWbUMtZHVWMW_SAVhBVV95cUxPc2FOa1lMOUg0Q05WVUY1S2tmZHVYRV9oclNCZy1QeDRMenBIb3c5cGF2YXFGUVpzQWh5clZxTlVHazU0Xy1DTTlaeml4QmNyVm1DLWR1VjFv?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Türkiye foils suspected terror attack plot in Istanbul",
+    "original_title": "Türkiye foils suspected terror attack plot in Istanbul",
+    "original_language": "en",
+    "summary": "Turkish authorities have foiled a suspected terrorist attack plot in Istanbul during a security operation.",
+    "published": "2026-09-04T05:51:01+00:00",
+    "source": "Caliber.Az",
+    "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQX0FxREszM2M2RDA1bW53dzB5ZndpaWVjLWd4b1p0eHBYX1h6RWdJdk9sQWJPUWJnd09sLTRORGNrc2VmekpBT183UWRnMlBtWTZlYzR0SmZzRTQxU2xBTHNESnpyLURFUG5ZNWRsRTlEeGV3blNhVFl6eVpCRmU3LUxsbThITjdm?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "9 Daesh suspects captured in Istanbul",
+    "original_title": "İstanbul'da 9 DEAŞ şüphelisi yakalandı",
+    "original_language": "tr",
+    "summary": "Turkish security forces detained nine suspects linked to the DAESH terrorist organization during operations in Istanbul.",
+    "published": "2026-09-08T06:25:00+00:00",
+    "source": "TRT Haber",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNeVlOTHNpaklUUnY1ekJSNzVHTGVFN2FEdjFOcVUzRWR4Yjd0VDM4VHRSRFd1YUFtQloxNWpMVEoxc0dUN0FtSk05bzdQakFVd29VbHVVLUs3d3E2VG52bUZCWXpSQTE3R1JMeHl3YkVZMEdBTUVjcXFkODYyS1FBOFdUSzN3TWE3QTVuYUdaLUNsdw?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Terror Operation in Sultanbeyli: Suspect Killed After Returning Fire",
+    "original_title": "Sultanbeyli'de terör operasyonu: Polislere karşılık veren şahıs öldürüldü",
+    "original_language": "tr",
+    "summary": "During a counter-terrorism operation in Istanbul's Sultanbeyli district, a terror suspect who opened fire at police officers was killed.",
+    "published": "2026-09-03T20:45:00+00:00",
+    "source": "Yeni Şafak",
+    "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOSmR4Y0U0NWFfS2t0ZVdMdWI1dThNcTd4RlBmdE5rdmwwQTY2OFVvRXRLdVZ1R2NzSkVONFg1dkd1a3FvWWJQSzBHRnlscUU1OGU1U2RaWkVuX19BY2RpdnMteFdUOU1yNWw5VjhUdmcwWnA5eGJhTlFYN2s4b3F4S1I0N1FxWFFaYVBaalRRVENkUWFObXFXUHZUY2x0aFhBNUpxNG9jZ0dKa0RXOXQ3R0l30gG8AUFVX3lxTFBvSV9SYkR3RFRVQUctZ2FGYjllVGJfY3ZBWkloRkJXa1ZOb0t5RnhLeWRWcXk2eW9TRGNDOVRzZXlTY0g2UjNTa09WOW11N1VkRnFwYTA1YmowR1k3TDJ3Rk1FN3YxYm0teUJKZ0hUcGtLdHhLamJEZHo1bFhfZWVycjNIcGRvS1AzeXRNYXIzWEF5d1BOZlpYVVFzMjlfQnFTaWwwUGZ6U2p6Ml9vVTlua2Z6aW52TzNlbjUz?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Clash between police and ISIS terrorist in Sultanbeyli",
+    "original_title": "Sultanbeyli'de DEAŞ teröristi ile polis çatıştı",
+    "original_language": "tr",
+    "summary": "An armed clash erupted between police forces and an ISIS terrorist in the Sultanbeyli district.",
+    "published": "2026-09-04T06:18:00+00:00",
+    "source": "saraymedya.com",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPQjFyS2EwZU16STVmS0RjR0FvX2N6cFRkbXdfQTM0NHd1RUFzMUhLMlhsWlFSZzhvZm9NZnY5QWtXd2xrdXR2azBuWVlqTHJuRXRscDVNdWhJc3RXdi1ESXBCTEVWY045SG43c2Y4NFJmcElXSHE0TFlmUE1BM20xdXRjZ0FzRV8xYW1XbEFWX0RqQQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Sultanbeyli'de DEAŞ operasyonunda polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_title": "Sultanbeyli'de DEAŞ operasyonunda polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_language": "tr",
+    "summary": "Sultanbeyli'de DEAŞ operasyonunda polise ateş açan şüpheli etkisiz hale getirildi Son Dakika",
+    "published": "2026-09-03T20:48:52+00:00",
+    "source": "Son Dakika",
+    "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQZklhaE55TUFLQXl0V3djZkZhX0gxOTV5MlRVOTUzM25WUmlySWtXZnJLVURLYXNkcGI5Wk9hcXNLNnJPemxMWUZpV2FPWTBYUkhLNzZMdTV5LUd0VjZ0dnJHSWFJWURJWUpSYVVsRjN1ZWtJQm9uMFdxMVMtR3FUUkx4Z2ZpNGtOclk2UmlLbEZ6bWpjOW55Vk9Od9IBmwFBVV95cUxQZklhaE55TUFLQXl0V3djZkZhX0gxOTV5MlRVOTUzM25WUmlySWtXZnJLVURLYXNkcGI5Wk9hcXNLNnJPemxMWUZpV2FPWTBYUkhLNzZMdTV5LUd0VjZ0dnJHSWFJWURJWUpSYVVsRjN1ZWtJQm9uMFdxMVMtR3FUUkx4Z2ZpNGtOclk2UmlLbEZ6bWpjOW55Vk9Odw?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "İstanbul'da DEAŞ operasyonu : Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_title": "İstanbul'da DEAŞ operasyonu : Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_language": "tr",
+    "summary": "İstanbul'da DEAŞ operasyonu : Polise ateş açan şüpheli etkisiz hale getirildi İşçi Haber",
+    "published": "2026-09-03T20:51:00+00:00",
+    "source": "İşçi Haber",
+    "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOdnlGbjBUVVIxTXpRUWVnSk95dzdkam9oVEY2ZWlBYWJIdHVEcFg5cUpUMTVWQzRlV1B0aktDeEtkVmM2eUZ0SDdKVHdDSmFaWVZpek80bklqR0Q4M2tLWnlvQ1RHZlFva2M2UTU0ZmZla1g3dWhES0w5ODRhUlZDNGZBZjRpTmhnR0JQdFcyczlMLXNhWFNBdHQ1Z0hUNTZGWVllOGtqVkFxd19LdHUxRURiLTJNZXZMa1NyRC1iVQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Sultanbeyli'de DEAŞ operasyonu! Polise ateş açtı",
+    "original_title": "Sultanbeyli'de DEAŞ operasyonu! Polise ateş açtı",
+    "original_language": "tr",
+    "summary": "Sultanbeyli'de DEAŞ operasyonu! Polise ateş açtı Türkinform",
+    "published": "2026-09-03T20:51:00+00:00",
+    "source": "Türkinform",
+    "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE1HWlVVbGNnMFlVQ1hFWnR6MkdjZjRNWWRmSW5Yc0hxOHFjOVdLWEozVmVBTU0wZ1pDR2M5N2pkZmllUS1kOUVlUXhuRTBGOWN1OW1sZy1zVEVQc0tmc2w4WUhacXJyWmd0UHpyNGctemlkWEF3aFpWb0s0cHM?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Sultanbeyli'de DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_title": "Sultanbeyli'de DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_language": "tr",
+    "summary": "Sultanbeyli'de DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi milliyet.com.tr",
+    "published": "2026-09-03T20:52:00+00:00",
+    "source": "milliyet.com.tr",
+    "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQTkdieXNSVlJWenZpLXlfM0dOV1RaaGFEZzk2QlhlQk1GdGE5OWdBUXpjb2xtY29ESzRxcnd3ejVhUEtYV1dCZFN4TUNwTjZTdGlJVUkxekFKU1k3WUIzQ1RGaWlyenNja09abGRBX2J3dnJzQVdTam1iV01JQmNjUi0tNGZ4b29xZlJFamxPN1JJcVNxcGpmc0lENHEtVF9rc1QxRlNXTFk5dDRNems0azBOQ0RTSkRhV3dWYQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Sultanbeyli’de DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_title": "Sultanbeyli’de DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_language": "tr",
+    "summary": "Sultanbeyli’de DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi Bursa Saati",
+    "published": "2026-09-03T20:57:00+00:00",
+    "source": "Bursa Saati",
+    "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPSXVCWE5jVy12U05NMWlyRHpRMms4YjNMUThEUVUzX1BVTlA1R3Y0bmFUUGY0X0VTZkpndFA2ZFZLWUpYQUJTZ1gzZ3pLbGZhQmQycUxWdXFEQV9wVHUyZVRPX0F2SFM4Vm40QTBHejFpa0NpcFpmbW53SU5GWE5sR1NZWC1SMmpsRG1MUFdBdkhHeHVMWVpoeWwtSmw5VTVXOVRyb3huVGZKUHfSAbABQVVfeXFMUEZxOWMyMnRnNUNCTVZfREgwMmpNR0pORXpxX0UxWFNUdkxDM18wbEVtOEF1dGhZVUp6bDRxQUdEUXRBQnRkRmczcENpZ3ZISk1oam9CZXBLeG90UDlYXy1OeGswRmk5aE9CTGZ2NTBLSk1PdEVManR4YmduYW9SNU9RdGl4aFc1UW0yZS10NVVMYWE3bnpnVVZwZjlZbGxKMEhJSjhPdjBVbFJ3SkJjTEs?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "İstanbul'da DEAŞ operasyonu: Polise ateş açtı, etkisiz hale getirildi",
+    "original_title": "İstanbul'da DEAŞ operasyonu: Polise ateş açtı, etkisiz hale getirildi",
+    "original_language": "tr",
+    "summary": "İstanbul'da DEAŞ operasyonu: Polise ateş açtı, etkisiz hale getirildi ankaranethaber.com",
+    "published": "2026-09-03T20:59:00+00:00",
+    "source": "ankaranethaber.com",
+    "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNVm0zT19tOTdfUTlkNUI3RHRSVGE0VEx1ZDFaNEVETTVVOXNNcFNwbHFJLUlXOTVaQlVLNlB5WHJJODhpZWVjQzczM0lZSk5KYk1Nakl3MTFRaTJHcWF2dVpES1pHNEg0ZG9PaHV2cm9vcTZBVmFWMXctTGxDTnRHSUpsZjVILXRMd1A3Q2ZkSU1IemdXVWxDcVc0QzNQUQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "İstanbul’da DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_title": "İstanbul’da DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_language": "tr",
+    "summary": "İstanbul’da DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi 2Eylül Haber",
+    "published": "2026-09-03T21:04:00+00:00",
+    "source": "2Eylül Haber",
+    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNOXYyOVRYNWVvdkdNRVloS1d0NFo3OUxaNlRSaVNITWRHb2Z1aHc4R1Foams5ZDJDRnVDVWV3Y0FIbVMtWFJfRktVNU5YX05fZG1qa1ViMXBQMmFuajRkTllGWlMyV0dsSTI5ekI1ZkNwWkNSd09LQmRMc3haNmJGbW1KTmdWRU1iVTFiLWR0UmhfQkx4S3ItOERqSU1XVnRVV1E?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Sultanbeyli’de Polise Ateş Açan DEAŞ’lı Öldürüldü",
+    "original_title": "Sultanbeyli’de Polise Ateş Açan DEAŞ’lı Öldürüldü",
+    "original_language": "tr",
+    "summary": "Sultanbeyli’de Polise Ateş Açan DEAŞ’lı Öldürüldü Akdeniz Gazetesi",
+    "published": "2026-09-03T21:05:00+00:00",
+    "source": "Akdeniz Gazetesi",
+    "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPWDFOQjRLRExjLW1Ga3pXcER3aGp3SVBGRGJUQ0d4czJwaGdHdWVYaHM4WTQxTW1tMlo4QWk1SVVfejlCSEYzbTIwNWFrc1Q5N2JGcmlqZTVZX0dsXzBWLURWSlBHQ1N5TUlWTEVielpET21ka1dvRVI0ZkhhNWd4ajZFc25MZw?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "İstanbul’da DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_title": "İstanbul’da DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_language": "tr",
+    "summary": "İstanbul’da DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi İnternet Haber",
+    "published": "2026-09-03T21:11:00+00:00",
+    "source": "İnternet Haber",
+    "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbnhWVnVUWDF4SS1GbEhOZUxDLVd3TWo4cEgtVldyOTFPZmhhclY5elhaREI5Q1doU3ZxRGtlN2JGQ3k4YzNER1YwZnNNRmh3MFJyWUxNNnpNckY5UWFjaDJYamtydXI1R2N6cFFQelcxOUFCem5LbHZPcnJSTFFwZ1p5V2dvb2o1ZDBOYlV0Q0JYX0VXTklndUY2azFMdFNubmJrQk9ReVBWNk14ZGdwTFlVMkNmRm9K?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Sultanbeyli’de DEAŞ operasyonunda çatışma: 1 şüpheli etkisiz hale getirildi",
+    "original_title": "Sultanbeyli’de DEAŞ operasyonunda çatışma: 1 şüpheli etkisiz hale getirildi",
+    "original_language": "tr",
+    "summary": "Sultanbeyli’de DEAŞ operasyonunda çatışma: 1 şüpheli etkisiz hale getirildi Kocaeli Gazetesi",
+    "published": "2026-09-03T21:23:00+00:00",
+    "source": "Kocaeli Gazetesi",
+    "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxObXlrbW1KRWdfSXByTi10bTgtbGpPUVVZY3VkSzRfcHVBcDRQRlpvZ1Q1dnpvZkVSYVJUMDctSWhnYzhpU1N6UTRoekdnRnRldnhOWHdUY1JhRGM0Wk5oRm9pRFlNU3oyZWtUbjZ3WHIyeDNsT0M3dXQ3M24zTE15V24xZWhzYkRlVDY2M3BZaXk5elZnQUNvbTZxZEsyci0tay1JdXVsYXQ5N2tLT2NoU2RreDlNM1haNUgxZFdXNnrSAcYBQVVfeXFMUFUxeFJISnR2TFpwTy1wQjFjQmU3aDZrTWF1RExxN2N4SjBIRTVGU3hCZmhIZ3ZvNUlJLThZRzFkdVZrUzgwMVBaa0l6dWZ6V1o2LXYzdzBNMHNSeGlfTUt0V1JUUjlQS0ZUUDlSSl90WkxCUk4yTVdIR1Yta0pUMWw2TDVhc1VmanpMSjFFNjdHRjlsaU9VY2RNNGcxcVY0c19ZandyTlA3VmdKVm9RcTRObnBHc25nOVY0ZTR1ZHRYTDRUbjd3?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Sultanbeyli’de DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_title": "Sultanbeyli’de DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_language": "tr",
+    "summary": "Sultanbeyli’de DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi ankaranethaber.com",
+    "published": "2026-09-03T21:27:00+00:00",
+    "source": "ankaranethaber.com",
+    "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOUDdkWXJaVzZJZS1PMEFpVnFSTWRNT0tiQ25zVEs3VWdSNTVoVjIzajZCODlOQzVOUWFvT1RCZkd1emd5eTVNOEVuVWRjaXQ2ZlVGOGt3NzBENEhZdWgzRkpoTXNtcklnNUxsTGU2RnZobXFTdVRIMHZwaFJ6cGpnckZXem1rNGJ0YlVLRld6YXAzNUtJTFgyaGJVTktLX3Jxc0RZc2lJYWtBZ0ZH?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Sultanbeyli’de DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_title": "Sultanbeyli’de DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_language": "tr",
+    "summary": "Sultanbeyli’de DEAŞ operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi Haber Ege",
+    "published": "2026-09-03T21:33:00+00:00",
+    "source": "Haber Ege",
+    "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxORjFfMVFPUHNIaHlOLXBURHllVmJobXRaTWVzeXUzZ1NWRjY3dzZFZVRyTXZfdFVlcEZHVnViTHA0X1FCZmNuaDQ5RWxNWjBwSGZmNURYdzNUQlljY0VyQ3RVa0g4Y0FSUVpmd25ydUFWb0ItcVhDMFlhV2k0NTJSeGZOTF92V1MxbHBqdE9Zc0psb3FqTHFvZVJlRTNQNkFQZkZOWGFpNnNFblFvWkhncGxiSQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Polise ateş açan DEAŞ şüphelisi etkisiz hale getirildi",
+    "original_title": "Polise ateş açan DEAŞ şüphelisi etkisiz hale getirildi",
+    "original_language": "tr",
+    "summary": "Polise ateş açan DEAŞ şüphelisi etkisiz hale getirildi Referans Gazetesi",
+    "published": "2026-09-03T21:35:00+00:00",
+    "source": "Referans Gazetesi",
+    "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOc3VEckpWNmNsYlFETjAwMExucjlqZkwxTy1ibnBTczd6TGhJTGJYdWxLektYa0J1S0ZCT3UxeW1hZ2Jxak91VzlmRTBqVlZ0ZEVDTlNWWXdheFU2eGZ4MWFWSUkwQ2ZzRU83MnAzZHR4bURtZXFzRUJaTzFDN2UycTRybVdpdExCdE13bDJHUldNeWhM?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Sultanbeyli'de IŞİD operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_title": "Sultanbeyli'de IŞİD operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi",
+    "original_language": "tr",
+    "summary": "Sultanbeyli'de IŞİD operasyonu: Polise ateş açan şüpheli etkisiz hale getirildi 24 Saat Gazetesi Ankara",
+    "published": "2026-09-03T21:40:00+00:00",
+    "source": "24 Saat Gazetesi Ankara",
+    "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQdW4yTTdfV0YxcEJqWHZjY05sN2kyZ1FwczZuYl9ab3lJYXh6UFdSaUdjYjZTN0RESUFMUWFXWG1zLVpDVDlvbm5lUEtwdXNCS21xTHQwdWZnS0VzeFJaZzZXZkNxdnJBbzRvS21ybmVHNUVBVW9PcXVWaWo1dTBDMktZdHk0dE15amktSVM3bi1Ec0gzcHJaOHFqMFBzYTI4TVV1dWx5c1N5NUtT?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Sultanbeyli’de Sıcak Dakikalar: Polise Ateş Açan IŞİD Şüphelisi Etkisiz Hale Getirildi",
+    "original_title": "Sultanbeyli’de Sıcak Dakikalar: Polise Ateş Açan IŞİD Şüphelisi Etkisiz Hale Getirildi",
+    "original_language": "tr",
+    "summary": "Sultanbeyli’de Sıcak Dakikalar: Polise Ateş Açan IŞİD Şüphelisi Etkisiz Hale Getirildi Gerçek Gündem",
+    "published": "2026-09-03T21:41:29+00:00",
+    "source": "Gerçek Gündem",
+    "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQZ3laYTl4TjdRaUNzTFFkeWtQRjhseGtkYlgtc2VtdUkteEN2QmVJNWZxZHQxNGxoSVVtRDBZZXUyQ0NoVUo0T1p0dW4wUUI2V0ZydGFDREpMMGhrTWl5VTlwS0VRTGNoaHg5a0lwMmhWd3R0VjRFYTRQM0Q4VjhGWVpuQTBnMDk0VnJRTTBkaHVkamJiY3BVRzcxSVRhaFpWX0oyZ0ItN25IRTR2QUZkVGxrczJ5VlV3RUd2NWFFdTYzeWc2RWfSAcsBQVVfeXFMT1FuRUpvVUpuaXRPUXVfYVk3a1c5NC1QLUxpaUxkaUxxVVBOS3A2aHZwdG1TVEdQNTF4Rk5BUVI1WmJnVkVlUVVYRkRZNmRSSzA3LVhUX191dnN3cUxCWEZBNm5RTGpYUENMc1hncG9qTmw3SzNWUTJZQi1EbmlsYWItVHZIbDZMWThFc2Z1eUxjOEJWSDBvbnZ1Y0dRa3hKR1ItN1J3R2tCbTRWc3J0Y0otRDhDWElFc1RuYnJUaVNzZnAyeUFlbHJsZXM?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ee1ddb89fc1b9187",
+   "article": {
+    "title": "Sultanbeyli’de DEAŞ Operasyonu: Polise Ateş Açan Şüpheli Etkisiz Hale Getirildi!",
+    "original_title": "Sultanbeyli’de DEAŞ Operasyonu: Polise Ateş Açan Şüpheli Etkisiz Hale Getirildi!",
+    "original_language": "tr",
+    "summary": "Sultanbeyli’de DEAŞ Operasyonu: Polise Ateş Açan Şüpheli Etkisiz Hale Getirildi! ABC Haber",
+    "published": "2026-09-03T21:59:00+00:00",
+    "source": "ABC Haber",
+    "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNVDFDMHh0OW1vTUFpM1VWcU1yaWk5YVZnRW9jdFVuNVNyNXhYTEd5Z1NsamROWTlHSHV3d2dZUVdYRmJ3LUVDM1F6ejV3SjhXc0tZWGhucHpaNnVFV2pFZ3JjbzFUUkdFM3JfYkM0TkpTM3YxUzZHMko0YXItUjI5WlBnSjJJU0dLdzVzX1J5ZkdjS2JoeFc3SWNhdTZVNnZZeXRfZHFnUndkZy1SUjhpM3Uzc3pmNXMyckE?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-89f3d95b733936f3",
+   "article": {
+    "title": "Leipzig attack: Putin denies responsibility and attacks Merz",
+    "original_title": "Anschlag in Leipzig: Putin streitet Schuld ab – und greift Merz an - Politik - SZ.de",
+    "original_language": "de",
+    "summary": "Russian President Vladimir Putin denied responsibility for the Leipzig attack while criticizing German politician Friedrich Merz.",
+    "published": "2026-09-02T12:10:17+00:00",
+    "source": "SZ.de",
+    "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQSjg1LWVIZzl6ZDlOdlA0akRRVHV6MUxsU09LWVdybVhmMWJHRzZXRGl0dVV6OW9mRnlxTFpxXy1Fakp0dDQzbnFyRTlsalZ0MW9LSWNaTWFZS0tUUHNscnlUQ2o5R1hSN2dFVWZQTV8xRWNlYnJNM3B0eVBPLUlzNWh2M1V0eGI1dl9kN0Q4aWRMWFRscEpYR3BiRWQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-89f3d95b733936f3",
+   "article": {
+    "title": "Explosive drone in Leipzig: EU denounces 'state-sponsored terrorism'",
+    "original_title": "Drone chargé d’explosifs à Leipzig : l’UE dénonce un « terrorisme soutenu par un Etat »",
+    "original_language": "fr",
+    "summary": "Following an explosive drone incident at Leipzig airport, the EU has denounced the act as state-sponsored terrorism.",
+    "published": "2026-09-02T07:36:17+00:00",
+    "source": "Le Soir",
+    "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPT0o5TVRWWlcxZGRFR2NvYU4wRXBNT2tYTmhEY3dveVlWZUMwalc0cVI2NzRLWW5ickpqWHZ4bzcyT1d6NF9uU2lnd2dqa1N6dVM1aXJ6WDdSOXpQU0tZc0VhdS10X3pGZWN6R1FMTmxycHdsMU41RkdudUg3aVVEUHR6NzduM3F3cWhTSlU2VS1HMnZyaVVncnZvTlBidFZ5eU8zYjRUaE52ZkFacUtVQ21IcWU0RU0tTFFtMG9MVGRuUW8?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-89f3d95b733936f3",
+   "article": {
+    "title": "Kallas describes the failed attack at Leipzig airport as 'state terrorism'",
+    "original_title": "Kallas califica el ataque fallido en el aeropuerto de Leipzig de “terrorismo de Estado”",
+    "original_language": "es",
+    "summary": "European official Kallas has publicly characterized the failed drone attack at Leipzig airport as an act of state terrorism.",
+    "published": "2026-09-02T09:56:34+00:00",
+    "source": "EL PAÍS",
+    "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxOVDRjMGQtbFUxckYxeGJteWw3ZkxzeG1URFRyd1RibnJYeTFqcUZwYnVmLVdHdGZLQ1ZSSWNrRkJ0RHlsa1dDNDJUVGtPSnhlNTJmNFBGRGdyeHlMbVI0d1VhWXJ2bGhRamVLMzhmNzhRNnpFX29TVHRfcW1vYlhKNnAwbkt3bGs5UE9UMklwNFQ1cXhvVExMcnd1U194SFdEWDlzUUJMbmNEb2k0b1B1aElYbzByVUlSd1RjWVdYVTNEYzlHMXJ1MG5ETmlTT0JlUHJPeUhrYnZEOERY?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-89f3d95b733936f3",
+   "article": {
+    "title": "Bild: Russia responsible for the Leipzig bomb-drone",
+    "original_title": "Bild, Russia responsabile del drone-bomba di Lipsia",
+    "original_language": "it",
+    "summary": "According to media reports citing intelligence findings, Russian state actors are responsible for an explosive drone incident in Leipzig.",
+    "published": "2026-09-01T07:53:00+00:00",
+    "source": "ANSA",
+    "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxQRDFNMWFnNnFwNjN6WXZRV2FSOE5NOEJMZ2R1QTBEWHZoUkstbzBEZGZzSkktRVJmelEyYmNtRzlOaE9JWjM2QzRSajZMSUowZHpiellPRVZQTWM2ZmZwM1F1SnpDemNfQnN5anBvR0VCNHRsRzk2VVVwLXBtLXFGZ1FqcGdrLTR0UE9BYnBtSk9IZHdkVVk4RkhrTzZrYUJZS1VlSE9SVmRUNkx0allHRlB0UW5faWxSOENXOFlxdWNrX1JUcXBfYzBGSzMwTEFYclNJX1dyaTZlMlY0?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-89f3d95b733936f3",
+   "article": {
+    "title": "Drone attack attempt: 'Known pattern of Russian operations'",
+    "original_title": "Anschlagsversuch mit Drohnen: \"Bekanntes Muster russischer Operationen\"",
+    "original_language": "de",
+    "summary": "German news analysis categorizes the explosive drone attack attempt as part of standard Russian covert operations.",
+    "published": "2026-09-01T17:54:00+00:00",
+    "source": "tagesschau.de",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPdnRiampQbG10eGRQQjV2VW10N25iQjVDTDFiTUwyU3U3bmdkWE55T0tyQXh3dVJfUHdSbktzSUlSc0RnejFqblNhMHBtYlFVV2M2MTN4SUZBYk5FNmdrcG9XNUpUbDYzYnpFcS1Oem1XWWtsVVVMdFh4eWh3U2t3RGttZ0tLMTlWQmFQWmx3Yk5zZw?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-89f3d95b733936f3",
+   "article": {
+    "title": "Dobrindt and Wadephul on Leipzig drone incident: Russia must pay this price",
+    "original_title": "Dobrindt und Wadephul zu Drohnenvorfall in Leipzig: Diesen Preis soll Russland bezahlen",
+    "original_language": "de",
+    "summary": "German politicians Dobrindt and Wadephul comment on the drone incident in Leipzig, demanding consequences for Russia.",
+    "published": "2026-09-01T19:02:16+00:00",
+    "source": "FAZ",
+    "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxPRjJoX3gxT3gtQVlyU2IydFBCOFptc1ZZdXoxTFFHdVF1TjBwYWpNbHB6azNfZTVHRHBsbWlqb2dndnBaUnhZWHZwVGRfS0RjNVF0ak03SjN4RDNCdldPZGVkMU52QWJTWUtDWm9QcGdzbTl6RzNDZ2RyZ05TZm5ab3BxX0pZX19lemhPTTR5cFZKMlo3NVZLX29GTTM5NTVac0xja0VNYVNZVHlPbW5KUFRSV0IzUU82STZFZGxBNmtnSm9SSWltWWIwTWlsSnBhbkswQnBadHJGbUJL?oc=5"
+   }
+  }
+ ]
+}
