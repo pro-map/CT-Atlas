@@ -339,11 +339,13 @@ function matchesGroup(event, group) {
   return eventActorGroup(event).toLowerCase() === String(group).trim().toLowerCase();
 }
 
-// Event ids are NOT unique: the collector derives them from a Latin-only
-// normalised title plus the date, so every non-Latin headline of a day shares
-// one id (dozens of events). Anything that joins two copies of the same event
-// (map <-> Database list, external article <-> database evidence) must use
-// this key instead; the map page builds the identical key (eventMatchKey).
+// Event ids are NOT unique: until October 2026 the collector derived them from
+// a Latin-only normalised title plus the date, so every non-Latin headline of a
+// day shared one id (dozens of events). New events get unique ids, but the old
+// ones keep theirs until the 180-day retention drops them (spring 2027).
+// Anything that joins two copies of the same event (map <-> Database list,
+// external article <-> database evidence) must use this key instead; the map
+// page builds the identical key (eventMatchKey).
 function eventUniqueKey(event) {
   const time = Date.parse(String(event?.published || ""));
   return [

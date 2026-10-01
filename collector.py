@@ -2408,19 +2408,79 @@ def parse_date(value):
         return None
 
 
+# normalize_title keeps only a-z/0-9, so a headline written mostly in another
+# script (Arabic, Russian, Hebrew, Chinese...) reduces to an empty or
+# meaningless slug ("", "7", "newsru co il") and every such headline of a day
+# used to share one id. Those titles get a script-neutral key plus the article
+# URL instead. Titles the Latin slug does describe keep the original formula,
+# so re-collecting them yields the ids already stored in events.json.
+EVENT_ID_MIN_LATIN_SHARE = 0.5
+
+
+def latin_letter_share(title):
+    folded = unicodedata.normalize("NFKD", clean_text(title))
+    letters = [ch for ch in folded if ch.isalpha()]
+
+    if not letters:
+        return 0.0
+
+    return sum(ch.isascii() for ch in letters) / len(letters)
+
+
+def script_neutral_title(title):
+    text = unicodedata.normalize("NFKC", clean_text(title)).casefold()
+    kept = "".join(
+        ch if unicodedata.category(ch)[0] in "LMN" else " "
+        for ch in text
+    )
+    return " ".join(kept.split())
+
+
 def create_event_id(
     title,
     published,
+    url=None,
 ):
-    key = (
-        normalize_title(title)
-        + "|"
-        + str(published)[:10]
-    )
+    slug = normalize_title(title)
+    day = str(published)[:10]
+
+    if slug and latin_letter_share(title) >= EVENT_ID_MIN_LATIN_SHARE:
+        key = slug + "|" + day
+    else:
+        key = "|".join((
+            "v2",
+            script_neutral_title(title),
+            day,
+            canonical_url(url or ""),
+        ))
 
     return hashlib.sha256(
         key.encode("utf-8")
     ).hexdigest()[:16]
+
+
+# A new cluster must not take an id another event already has: the Situation
+# brief, the map and the D1 corpus look events up by id, and two articles can
+# still yield one id (an identical Latin headline on the same day that
+# event_match did not merge). The newcomer then gets an id derived from its own
+# URL and time; events already in the database never change id.
+def unused_event_id(event, taken):
+    event_id = str(event.get("id") or "")
+    attempt = 0
+
+    while not event_id or event_id in taken:
+        attempt += 1
+        key = "|".join((
+            str(event.get("id") or ""),
+            canonical_url(event.get("url") or ""),
+            str(event.get("published") or ""),
+            str(attempt),
+        ))
+        event_id = hashlib.sha256(
+            key.encode("utf-8")
+        ).hexdigest()[:16]
+
+    return event_id
 
 
 def source_rank(source):
@@ -2819,6 +2879,7 @@ def entry_to_event(
             create_event_id(
                 title,
                 published,
+                article_url,
             ),
         "category":
             primary_category,
@@ -3168,7 +3229,7 @@ def gdelt_article_to_event(article, categories):
     )
 
     event = {
-        "id": create_event_id(title, published),
+        "id": create_event_id(title, published, url),
         "category": primary_category,
         "categories": categories,
         "title": title,
@@ -8454,6 +8515,28 @@ def deduplicate_incremental(
                 f"{total_full_comparisons}"
             )
 
+    # New clusters follow the existing events in `events`.
+    taken_ids = {
+        str(event.get("id"))
+        for event in events[:len(existing_events)]
+        if event.get("id")
+    }
+    renamed_ids = 0
+
+    for event in events[len(existing_events):]:
+        event_id = unused_event_id(
+            event,
+            taken_ids,
+        )
+
+        if event_id != event.get("id"):
+            event["id"] = event_id
+            renamed_ids += 1
+
+        taken_ids.add(
+            event_id
+        )
+
     print(
         f"   New standalone clusters: "
         f"{len(events) - len(existing_events)}"
@@ -8466,6 +8549,12 @@ def deduplicate_incremental(
         f"   Full expensive comparisons: "
         f"{total_full_comparisons}"
     )
+
+    if renamed_ids:
+        print(
+            f"   New clusters given an unused id: "
+            f"{renamed_ids}"
+        )
 
     if method_counts:
         print(
