@@ -1,7 +1,7 @@
 {
  "created_at": "2026-10-01T16:00:00+00:00",
- "reason": "Related articles dropped by the 24-per-record cap when commit 7734e1f merged duplicate incident records; kept here to be re-attached.",
- "source_commit": "7734e1f",
+ "reason": "Related articles dropped by the 24-per-record cap when duplicate incident records were merged (7734e1f, 9764ce7); kept here to be re-attached.",
+ "source_commit": "7734e1f, 9764ce7",
  "articles": [
   {
    "incident_id": "inc-46fcf68ee0bdbff1",
@@ -1021,6 +1021,318 @@
     "published": "2026-09-01T19:02:16+00:00",
     "source": "FAZ",
     "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxPRjJoX3gxT3gtQVlyU2IydFBCOFptc1ZZdXoxTFFHdVF1TjBwYWpNbHB6azNfZTVHRHBsbWlqb2dndnBaUnhZWHZwVGRfS0RjNVF0ak03SjN4RDNCdldPZGVkMU52QWJTWUtDWm9QcGdzbTl6RzNDZ2RyZ05TZm5ab3BxX0pZX19lemhPTTR5cFZKMlo3NVZLX29GTTM5NTVac0xja0VNYVNZVHlPbW5KUFRSV0IzUU82STZFZGxBNmtnSm9SSWltWWIwTWlsSnBhbkswQnBadHJGbUJL?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-ab9884d02bd6706e",
+   "article": {
+    "title": "Profile of Nael Abu Obaid, Leader of the Rafah Brigade Killed by Israel",
+    "original_title": "من أسر شاليط إلى قيادة لواء رفح.. من نائل أبو عبيد الذي اغتالته إسرائيل؟",
+    "original_language": "ar",
+    "summary": "An investigative profile examining the background of Nael Abu Obaid, a senior militant leader killed by Israeli military action in Rafah.",
+    "published": "2026-09-16T17:02:13+00:00",
+    "source": "الجزيرة نت",
+    "url": "https://news.google.com/rss/articles/CBMi1gJBVV95cUxPd1hrWThRV180SVRYeWwxWHhwN1NCaE1BbjVGZkZmZWtqbHNqb05NNW5MbFJhaElySm1ZeEIxektsQ1E2WE04eC1Yb2lFMkg3STdESUVjQ2Vub0ZvbVdXYjVaRXNBUER3b2ZidVQ0U2RRSTMySzFVQ05LUDJpNkc3dF8wb0ZKRFE5YTZOZ2N0OG1iNmxzMUxfRWJVSEMxTmM4eWV6SkpULW5idWdHa005bzMtakZPMTZGeU1ZbzBWSHdvUmtneW5xMVBkQURSNHlGWllZM3Vpb1M2U3JYcEJfU1l0N0sweDI5NTVBT3U2b29CN3ZJb2dXbS1fRkI1V2owR1F4SGdkQ19mR0NVUkhSR3RwRFAtTXhCcVJGYkZMZWtOM2tRZ0JKV1hfR0IxQWp5dkV0dFpEQTdPYzNHdnk5aXRGNUZ2OWtId1lRVW9Fc002czdFUHfSAdsCQVVfeXFMTnVnVm9LaWdYU013WmdFOTBXUWJnUHY2RlVTWVZHeE81TWM2UmEydUJ1OGRIOTF4cUVNYzRxWmQ3aVNRWlI3RlJaSXhOYV9tYVVyS2Z6bTdDcG5FM2U5ZlBzXy13ckF5UDcxS1Z0Z2RSa0ZlS1BER0swWGFRb0hqSTlyRjRQZ25TcWlPdU1WWGl5MGZCV3hwdUUxTVdIaDFic3g5NDBMZC03bFhZR2I1NjhrOWZQU2d5NU9tM1lmaXJ0YXdFQ2JpLUdhdlV6RnpqTjladGFXWS1OMmN2NDJodUh4WExPTU56dTB1YklBZmU4X1BTWkZtYmlxWTVPdG42Q2NGd0ZhcVFkQnZfNDI2UlEtbW5PY2ZZcFRzLWNuUTF6THV2YjRKVjhkM3RSQ0YwQ2NqX3g5MjlrOTFZbU1rWkNSaGx5NW1GS19ONFJ0SDhiQ2lVZE1lem4tSzQ?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-2ff19ba28694c070",
+   "article": {
+    "title": "USA: 'Russian intelligence services are planning targeted assassinations in America and Europe'",
+    "original_title": "Usa: 'I servizi d'intelligence russi pianificano omicidi mirati in America ed Europa'",
+    "original_language": "it",
+    "summary": "US authorities have revealed that Russian intelligence services are planning targeted assassinations and attacks across America and Europe.",
+    "published": "2026-09-16T03:06:00+00:00",
+    "source": "ansa.it",
+    "url": "https://news.google.com/rss/articles/CBMigwJBVV95cUxPNUdPMlZnNkpMa29ia012TGJNTDhqWlBvR0xtNGdZTlJ3WGhyV2RYVnZsbWNPbGluY3phSFlLQmNSLS03aFRHWC1BeE1lQnVyM2J1WmpKNDJ0bWpsM082VEFZOVJ0MWphTkM3Q3ZiYTJxaGNLbFVCMjlaSkM3elZEYUV2RDZYRy1UM05HNDBFYnlMTjBJNmwtZm1qYTVOT0FlMWRfS2gxX3cxMnNTSmlUYWlQTVNVeVkxSExjSlk1aG5ZRE5rRDV1b2RLTnk3NlJzY3VmMnBYbmRtY3lMQ3luTUE2OEYyS011d0xNNk1OSmF3ZnN5TkJqWXhhdkp1NWtOOXBF0gGIAkFVX3lxTE9QNmp6d05CbHJUNHZtZ2lwYkEtNENndTdOVjNnOXctM1o3YW1ZWDRfT3o2QWFibkhad1Bra3ZFbDJOZWxfWWdsVUdFdHgxbC1vVU0xVVpfaWQ2ZHZ4LTBlZ19GQ3hEWGU0aXZiVUZkbHhNMlJvT0FHSHpGd0N5WFkzTl9BNmd1cUhuY2JWN1NZaVBVMTJVckNfaUxlYlo4WEVhQ0Y2dl9rNmd0b2hMZkk1ekFUTlAzTnp4ZUQwMkNkUmdvNjRDenh3clJrbVQzM2FOOW4xb3VMZWI4V3ZOR2FHU3ZrU3lVbzhxUmRlV29BVFIxWE1ySFBDWkM5Q1pYUXpJdkFldDFSOA?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-2ff19ba28694c070",
+   "article": {
+    "title": "Usa: 'I servizi d'intelligence russi pianificano omicidi mirati in America ed Europa'",
+    "original_title": "Usa: 'I servizi d'intelligence russi pianificano omicidi mirati in America ed Europa'",
+    "original_language": "it",
+    "summary": "Usa: 'I servizi d'intelligence russi pianificano omicidi mirati in America ed Europa' ansa.it",
+    "published": "2026-09-16T03:06:00+00:00",
+    "source": "ansa.it",
+    "url": "https://news.google.com/rss/articles/CBMikwJBVV95cUxQMHJBRk9hTWVUUjlfSUo0bzYtWlN0QlBXbWJ4SVZKclRDUmo2X21ZWGt0RGFJSzBvUFBfWEtmV2JrOWplbWstZGRuQVVDNU1UUkFIV096eFB0dFFZRnRJUWxNYkgyUkdBRk5SUE1WRHBvcklqc0JHY3FJa0NObk9mZkFkSmNmYXVaZHVORnR4Si1LYmEzUEV4dnc3dGJHMmRyMlpFUVJrYVN3RTktN0NIT09vdnJmejB6REJ3a3JDWW5qZ29mZHAzSVhWX2pjWDZ0ZzBRMFpmZXYwZFlqNndOeFRkMTZkZU1abDAySVlIcjRENUJFb2xxVVpndm53MDVybjc4R01lLUxJMjdCeVJkel92SdIBmAJBVV95cUxNYUZNdmJLa18xSHBhRFFZRXplVEVsazFrZFlDRFpwT2pKbXRubWFheHEtYVR3LUdyYUhRSS1sZFVGeFpXX1V2VzRLaXIwamcwU0RZclBETjNYN0h5MjZJWEE5akZReVFaWWpBdUgtekJrZDRmRWRuWDd4Z0piejZYMGRERFhrc1lNY19heF82d2xfMU9pX0xtYWtIVklfVmljbDNrSnhQRzBoRGNzNzFhSTRBNy1Sei1jdUYzaHZuNnU1cVowN0gtNDlkbFQ3ZS1FdVN2Qzl1NkM1djg1Sk9lYVRoWXlIRXNMdGF5MENtcmhxcnM0WjlsT0pTanBiLThpdkNZM0ZuSHpNLXpCb0R6TVdqVy1ELXRw?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-2ff19ba28694c070",
+   "article": {
+    "title": "Usa: 'I servizi d'intelligence russi pianificano omicidi mirati in America ed Europa'",
+    "original_title": "Usa: 'I servizi d'intelligence russi pianificano omicidi mirati in America ed Europa'",
+    "original_language": "it",
+    "summary": "Usa: 'I servizi d'intelligence russi pianificano omicidi mirati in America ed Europa' ansa.it",
+    "published": "2026-09-16T03:18:54+00:00",
+    "source": "ansa.it",
+    "url": "https://news.google.com/rss/articles/CBMikgJBVV95cUxPYXF1TkZhSWVPZTNCb0pqWFlPMXFQR1lfWTZVY3pGZV9yWktkajFhbERUQ2xiOHZSdDM0aVFLQndwaXVmWDYweHV4VWl1OUdhd3hiQXI3NmJ1d1YwdVR0WEF5bFA2T3dUVlRmekZSWlJNbkJKMUFwX3VrNzhrMXowaTlWamw2dzFNYk9ObWxTdlFpdTY3TmRhN21KeEJ1Y2JUQk9OdTVvbkF2NHBkcHZUcjJhWjlDR01wSlJxZTFSZ19HbUhCa1ZMclp2bGpKZ19KUHZkamhCRjZQSGMxSVpGUE9UcVV4STNQTlM2NFhWbV9IZ1lwcWY0S3Rib203Rzd1ZFVVYWFDbktabWtGOXlvMmRn0gGSAkFVX3lxTE9hcXVORmFJZU9lM0JvSmpYWU8xcVBHWV9ZNlVjekZlX3JaS2RqMWFsRFRDbGI4dlJ0MzRpUUtCd3BpdWZYNjB4dXhVaXU5R2F3eGJBcjc2YnV3VjB1VHRYQXlsUDZPd1RWVGZ6RlJaUk1uQkoxQXBfdWs3OGsxejBpOVZqbDZ3MU1iT05tbFN2UWl1NjdOZGE3bUp4QnVjYlRCT051NW9uQXY0cGRwdlRyMmFaOUNHTXBKUnFlMVJnX0dtSEJrVkxyWnZsakpnX0pQdmRqaEJGNlBIYzFJWkZQT1RxVXhJM1BOUzY0WFZtX0hnWXBxZjRLdGJvbTdHN3VkVVVhYUNuS1pta0Y5eW8yZGc?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-2ff19ba28694c070",
+   "article": {
+    "title": "L'accusa dell'Fbi: 'I russi pianificavano omicidi in America e in Europa'",
+    "original_title": "L'accusa dell'Fbi: 'I russi pianificavano omicidi in America e in Europa'",
+    "original_language": "it",
+    "summary": "L'accusa dell'Fbi: 'I russi pianificavano omicidi in America e in Europa' ansa.it",
+    "published": "2026-09-16T03:32:56+00:00",
+    "source": "ansa.it",
+    "url": "https://news.google.com/rss/articles/CBMiiAJBVV95cUxOU3dteHRsdnl3aWV6UEJkQXFZbTgtRFRaSUFLN1ItdktCTVNTVElpd0lFNWpjRndqUFkwVU9wZk5IMEZzMHFzQ2gwejJHQU92QWdabC01RFFUcjRlcUZTQjBuYTJRajZ5RVNoWl9BVlAwRDFVNHptb1p3NGY4dlhOVE14V2s4bmxQU18tSTVlOFVoemtvTjRMSk81VUtuSTdZQUdtQ2F2NTIyVDZSUEFXQnY3bk40ZjV2T3pEVnktTnlkd3p6SnB1YmhWQWItYTMwMUE3T1JCc2pYYUp0Yi1mdl8yS2xheWFMWVR3V0g2aUFUb3pOWFNCWUJja3Atc1kwTDhQZzM2VUTSAYgCQVVfeXFMTlN3bXh0bHZ5d2llelBCZEFxWW04LURUWklBSzdSLXZLQk1TU1RJaXdJRTVqY0Z3alBZMFVPcGZOSDBGczBxc0NoMHoyR0FPdkFnWmwtNURRVHI0ZXFGU0IwbmEyUWo2eUVTaFpfQVZQMEQxVTR6bW9adzRmOHZYTlRNeFdrOG5sUFNfLUk1ZThVaHprb040TEpPNVVLbkk3WUFHbUNhdjUyMlQ2UlBBV0J2N25ONGY1dk96RFZ5LU55ZHd6ekpwdWJoVkFiLWEzMDFBN09SQnNqWGFKdGItZnZfMktsYXlhTFlUd1dINmlBVG96TlhTQllCY2twLXNZMEw4UGczNlVE?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-2ff19ba28694c070",
+   "article": {
+    "title": "Usa: 'Gli 007 russi pianificano omicidi mirati in America ed Europa'. Il Cremlino non commenta",
+    "original_title": "Usa: 'Gli 007 russi pianificano omicidi mirati in America ed Europa'. Il Cremlino non commenta",
+    "original_language": "it",
+    "summary": "Usa: 'Gli 007 russi pianificano omicidi mirati in America ed Europa'. Il Cremlino non commenta ansa.it",
+    "published": "2026-09-16T10:12:27+00:00",
+    "source": "ansa.it",
+    "url": "https://news.google.com/rss/articles/CBMihAJBVV95cUxOaGlleGl5amswNW15NDM2RzFkLW51dW9uLV9wUk5jSVhaclZLdUR4V3FhRGlsSkdlTkhIWFdUOHh0OW5SbVVMY0o0QmZlMUUtNy1ZUUNIc2d0TGpCM3lwY1FBY002clktWlFLSExCWlBXaHZqV2s3Y1YtVjlqMmVTREs0a3k1UjA4Y3ZTUloybk1LcldRWEJGWkZjdk00cWhSNHFKSHdEajR6VmhTakYwZVVfOXNUY3QxUEFfTGVTUlNwdlVyN1VkM0FKdDlxeEdCX1h6a1NoYlZzTEZmQVh4SmR2UGlpZFRhTlRDMXItVG5odzd0bW1XbGo5ZzZNUGx6LUt2T9IBhAJBVV95cUxOaGlleGl5amswNW15NDM2RzFkLW51dW9uLV9wUk5jSVhaclZLdUR4V3FhRGlsSkdlTkhIWFdUOHh0OW5SbVVMY0o0QmZlMUUtNy1ZUUNIc2d0TGpCM3lwY1FBY002clktWlFLSExCWlBXaHZqV2s3Y1YtVjlqMmVTREs0a3k1UjA4Y3ZTUloybk1LcldRWEJGWkZjdk00cWhSNHFKSHdEajR6VmhTakYwZVVfOXNUY3QxUEFfTGVTUlNwdlVyN1VkM0FKdDlxeEdCX1h6a1NoYlZzTEZmQVh4SmR2UGlpZFRhTlRDMXItVG5odzd0bW1XbGo5ZzZNUGx6LUt2Tw?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-2ff19ba28694c070",
+   "article": {
+    "title": "Usa: 'Gli 007 russi pianificano omicidi mirati in America ed Europa'. Il Cremlino non commenta",
+    "original_title": "Usa: 'Gli 007 russi pianificano omicidi mirati in America ed Europa'. Il Cremlino non commenta",
+    "original_language": "it",
+    "summary": "Usa: 'Gli 007 russi pianificano omicidi mirati in America ed Europa'. Il Cremlino non commenta ansa.it",
+    "published": "2026-09-16T14:15:00+00:00",
+    "source": "ansa.it",
+    "url": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxNdmpJRDREVlVPM0w0VWdqcWJRRXBGcHl5R3A1RlpWQjN4cEdSTmFIa3czTGZ5enZnVVJkbV95WW1mU25ZRldMZFczRFFCTm5vRWxqc21ZVkxrQmFvdm5oeW5TOHpxaWlxZWNteEloTHlkRGdqMU80bEtxY0hTalZOeWJVS181RVk0dUNQSzJQcWJfZ3FEaUgza3R0MmdrN1dmTy0zbnFJSGFHQmdTSnk1MU10SG9WVkRhUTB3dVZjdnBSZ2tqYkJwVEw1bXJmVGFmeHU1S1c2c2JGQ0c0dFpKX3JGYmd1QjZnWm9TSEdDRmZ0cmQtSHVJVDNvWkc2Y2vSAYQCQVVfeXFMTmhpZXhpeWprMDVteTQzNkcxZC1udXVvbi1fcFJOY0lYWnJWS3VEeFdxYURpbEpHZU5ISFhXVDh4dDluUm1VTGNKNEJmZTFFLTctWVFDSHNndExqQjN5cGNRQWNNNnJZLVpRS0hMQlpQV2h2aldrN2NWLVY5ajJlU0RLNGt5NVIwOGN2U1JaMm5NS3JXUVhCRlpGY3ZNNHFoUjRxSkh3RGo0elZoU2pGMGVVXzlzVGN0MVBBX0xlU1JTcHZVcjdVZDNBSnQ5cXhHQl9YemtTaGJWc0xGZkFYeEpkdlBpaWRUYU5UQzFyLVRuaHc3dG1tV2xqOWc2TVBsei1Ldk8?oc=5"
+   }
+  },
+  {
+   "incident_id": "inc-2ff19ba28694c070",
+   "article": {
+    "title": "US uncovers Russian network preparing terrorist attacks and contract killings",
+    "original_title": "США раскрыли российскую сеть подготовки терактов и заказных убийств",
+    "original_language": "ru",
+    "summary": "US authorities have exposed a Russian intelligence network allegedly preparing terrorist attacks and targeted assassinations.",
+    "published": "2026-09-16T05:03:58+00:00",
+    "source": "REFORM.news",
+    "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPUFU5RG9hWV9UblplZVhUS0lZTHNhYWNEY1Z4bjhIbE4za205ZWduRHlQeExSaW5pMmdxb1k4a2NtMDJrY0g4N3ZDUXlJdzRiSnFlYTkyMGFvV21LUS0zaFNRSlFuZjd2eTJFanBTb09kTDF4QmdNWWVOckJyZEh4RWNTcm1QSVR3RWd0bjVZMlBsN3PSAZgBQVVfeXFMUGNNVjN5WXNrenFKNGZrck1wbnE2LVFPZklIRkNRNkJ1cWRhbEl5MmduNl9MSTdERGpodFM4SmV4VlRCaWpubTJkNWtKTFBXdmFMUldUX2lMc2RoemloR3FYRWwtSW5zc2I2NTVpU3M0a0pyczMwa2FJWFpRdVhCdV95bl9BaEI2NFQ0b08wTE1MRURGaEMyRjI?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "Germany prepares 10-point plan to combat Islamist extremism",
+    "original_title": "ФРГ подготовила план из 10 пунктов по борьбе с исламизмом",
+    "original_language": "ru",
+    "summary": "Germany has formulated a 10-point action plan focused on countering Islamism and strengthening security measures.",
+    "published": "2026-09-15T07:06:53+00:00",
+    "source": "dw.com",
+    "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQajNjVFVNRksxN2c4NWR1MVdIUFZzcXllTjFUZkpDSmN3Z2pzQjVRUXVGWG8tRkFZVk83bkFhU0xrazlWcXJ2YnRXejlBRlQtZTFNMVFhNklTOHZKTlJvV1lVeVJlUE5YazJ2Tl9CdlRtaVgyemVLdktDbHpmXzhqZ0cwN1Vyc1NkQ3NiSUtxUm9hbTltbUNoYTNEX3dKTXkyanhkTjJpYXFqMGk0a2ZV0gGvAUFVX3lxTE02Wk5zUHAtRHZxQVY0WWZyN3pYbmlpY0h5eHpjZTJ3MWpvbnJ4ckVES0xKal9XQi1lLXpqYm9ucG9ZVmJMa3NOYWQzei0wZDRKOTNJbHpldklLVFhQWEh0aE1hUGlTLTFYa2FhdTI0dk1rZUNwdm96U2ptRkZGVHN5SGhPYi15T0RIcXJfNE8wSjJxWHVlUzYycXgyS05jb3FocUxtZ3BSUGx2U2gxd2c?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "العثور على جثث 10 مدنيين في مالي وسط اتهامات للجيش بإعدامهم",
+    "original_title": "العثور على جثث 10 مدنيين في مالي وسط اتهامات للجيش بإعدامهم",
+    "original_language": "ar",
+    "summary": "العثور على جثث 10 مدنيين في مالي وسط اتهامات للجيش بإعدامهم العربي الجديد",
+    "published": "2026-09-16T06:13:42+00:00",
+    "source": "العربي الجديد",
+    "url": "https://news.google.com/rss/articles/CBMi0wNBVV95cUxQdXphUW1VeWtWTjBzUzh2Vzh6empQWEJUSmd3elhBRFlZakhVSlhfdUNtaXlyVHZ5X2lzVnoyLWVpUzFadXpKdVJqMjd1dWNSYzZ0cG8ycU1oWDk2dnpKUWI4WFRSRnFRb0V6N0t4R0U0VFFLR2hzNldoREpIaUl3RXRYb2tXS2cxQ0tsZWFDR1ROUnp6OTA3MHVnNDY4eUFabHVraFpaeG8yaW9uVV9yNFZ5Wll2WVl2RWtxenZ6VnhTc0phRDdZS1FiZ1dIVnFoeHh1VFI0aDN4S2libDNKdkJ2R2RVOWZYd3ladV9uQ25ETU1TTi0zMUNaQWppWnRwQVhmMDJ1UDVoODBJQm5YLVpnWEJSYi1FUVJfUFdFRlN3MEV3N1JPdGNvdVgxZVlZdDdRdWd1ZHJ1TUpmZ011LW1kaGtsT1lYeHhxQkRPcDIyN1cyOEZXWUtPaEhFdldGZDFZOHNTMGVHcGFTN2pyU2lxVFFoZmtoVmdhTDVoUWFGV1V6a0dqcjRBU05BSVpZYUNUZVpQeGFyWHUtUTNBeGw0c25ocmZkVlFCYzRVY3JZaHVHbUp6MTJPV0lUN0lSSDJmOUdiRDJwYjEwanYtV0pDMNIB2ANBVV95cUxOeHNtUmVhbTdpV2pZMDY5TGRFWFZZV1BHUWNONDl2d0pfTEhnbjRkOXlYLUZZSVB4bTh0VUFTaFhBUW1hX2tUS3F2TWFKQXNCSk1CZGtMSUEtd3VZUEVzZGRJZTJMNnJJLTVfZjMzYk1JYmlTRzRjdFlzdkVXTldxMFBXSmxrd1d4VjVQVmlhNS1zZUsyRU1GSzlEMGpBaXZZa0FmR2xuNWs0enRjelA2WElJeEdITzdGTjVyV0xhWml5dDVBQnpqVmdJanJXR1ZlUXM5MGFVWDRBN1Jla0xDMVUxOFdHUGd3eTFKUkdjV3RTOUNfZTBXck9kbTFtUUUtTi1rak14ZnZpQ3JWd3RhcmxHM2R1MkI3ZXFDd3hYV0JjNy1Ma2RFU29sZGYzT1VYSGplZnJzS0JHR0I2T01EQnM0aDBtZHVoOUJfeV94cFNnUmNjYllsekJyb1NLLTJyX2VXaG5sdml3QWp4bEFOOUpxOU9sUzRIVElxS3UxMzIyckdqb2NNajdNOGFaZ29PY1A0Y0l2WW5CaDFWLWNsTU4tWEFCVkw0RVI3ZjJzNkEzYzlONjdDcmc4OGRvZTVSZUNjdFNqNDJ4c3hqMEg4SmRnbl9vSTZM?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "رفض استئناف داعشي وتأييد المشدد 10 سنوات عليه بتهمة تأسيس وتولي قياده جماعة إرهابية",
+    "original_title": "رفض استئناف داعشي وتأييد المشدد 10 سنوات عليه بتهمة تأسيس وتولي قياده جماعة إرهابية",
+    "original_language": "ar",
+    "summary": "رفض استئناف داعشي وتأييد المشدد 10 سنوات عليه بتهمة تأسيس وتولي قياده جماعة إرهابية mobtada.com",
+    "published": "2026-09-16T11:48:34+00:00",
+    "source": "mobtada.com",
+    "url": "https://news.google.com/rss/articles/CBMigwVBVV95cUxQSHEtcDRYVDg3VEd3bTFBYjRZZ2JLNk5kbF80RkRsX1EtZElWRWpsRzlGNFpXci1BQnZOZTYtQktKRWhfVjFyN3l5SnpGSFZSdjhRN0c1SHJGRGVNM005VDZva2luOU9sMG9VQ2M5QkZ0Si1BaHpTVU5nMGdGM1cwUFVXV01wVjhUZk9oMlJKOW1qcGFJZENyTmp3NElVVWFsR0VMYzNYZGxSYWo4Q0s0WnJPT1FSc1pFLXJ3OHdNeUZiXzBuanQzNHFTd0lrT1Q4Q2hjTTIwSEp4VVRyRFl0V3dkRFBnS09vOERaTU9tdi1XRlBlc3FXLTlSa19mMnVhMTZzVDdjWEZ4bUoxT2V2STBmSGdTbWRuZE01ajRDM2ZtS0QyRGFkeUJ4QnM2dndmdmVIXzFZMlAtTURVbGFHbENwS2VtSlJyamRZQ2pZV3ZzZE12Q3ZxY3A5NEhFR1dHNnpEdTBkM1FWenlSNDNWSlhybTdrSUNoelJCQUpSbXN5ZS0waS1MaFUzSHdFOVphb0NsT3FOaFVzd0xzOXZ2TFlOcXE1WExQRW5yX0I1OHBIUXBtUU5tRVNLb1NUcHc3WVlKcmtJR0Vtb1M0eVM1aERTOV9FbjM1MnBubmY1LWVOYVdNRUM0ZlNjU2trUVVLWk45VFVuNjRNMHBjem1HYi10YWZoMEVCZHFRcEdJRVZSVjNKcnVKM19FcXdxYTF5OHdWWWwtRFg5c0lrOEhNaWpPek83QUtIdFlEYVZXNy1wRVRlTGtGUWh3U3VORXhacGxGYzVSN2E1akpCZGhMNFhRMFg4cFNYeGgyUkVRcXU3bmgtYXUxQWN4RHJ2cUlQZnZZ?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "المتوفر منه يُباع بـ10 آلاف ليرة.. أزمة الخبز متفاقمة في الحسكة وريفها بعد توقف عشرات الأفران احتجاجاً على ارتفاع أسعار المحروقات",
+    "original_title": "المتوفر منه يُباع بـ10 آلاف ليرة.. أزمة الخبز متفاقمة في الحسكة وريفها بعد توقف عشرات الأفران احتجاجاً على ارتفاع أسعار المحروقات",
+    "original_language": "ar",
+    "summary": "المتوفر منه يُباع بـ10 آلاف ليرة.. أزمة الخبز متفاقمة في الحسكة وريفها بعد توقف عشرات الأفران احتجاجاً على ارتفاع أسعار المحروقات المرصد السوري لحقوق الإنسان",
+    "published": "2026-09-15T07:06:53+00:00",
+    "source": "المرصد السوري لحقوق الإنسان",
+    "url": "https://news.google.com/rss/articles/CBMiwgJBVV95cUxNSlRrelU0TzNHSlpsNEVmdVM1TURId2oxRklPRGdJRGtpS0JsV3BEdnVtRGJyT3hocUo0RlJmNDNPYWFwcDBPZXNvUDhkQzgyLWhMTllhaUJjNHdVc2pWRzNYTzVHMjVKUEZTOEFqakxTeEdJSGY3d2ZiLW5yNkRZX2l1WEplMGgtRk1hLUtweHdpZW8ycVlKT1RJSkk3UVlYbkoyLWVDZERPMGJmV2NabWhEazUxekJCTGJxTEdIME1hT1BRc3kwQUtqN2FrRFUyRllkQnZONFpSNEpJT0dsc1NPQ3N4c3pYQ0x5NkpJbmJFdFVfWlRraElwQ3ZiT3R0bDZHWEs1MHIteDBRRWc4QlVHa1NOLU4xUmZ5TkE2QVpER1VvVmJmYmFBR0dCekQyWWVScDEzY0ZNQnBXd1dxZjlB?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "Germany's New Plan Against Jihadist Terrorism",
+    "original_title": "Il nuovo piano della Germania contro il terrorismo jihadista",
+    "original_language": "it",
+    "summary": "German authorities introduce a new strategic plan aimed at countering jihadist terrorism and strengthening security measures.",
+    "published": "2026-09-16T23:53:00+00:00",
+    "source": "AGI",
+    "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQeGVlUlJoNF81SEEzVF9PNnRRV2QxbHk0Q0tzZXJmZUFXWi1rTEZvYXItX21KNDN2bXpMQnFaZWdiT3FzVVpuUDg2YVV4VndrNGEwdzZDLVQ0QkVKMkswRlVMd1JEclc5VC1BVEtncnY1S1ZsR0RSbjVFWU9fTDV1VA?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "Counter-terrorism: Guinea and Côte d'Ivoire commit to intensifying intelligence sharing",
+    "original_title": "Lutte contre le terrorisme : la Guinée et la Côte d'Ivoire s'engagent à intensifier le partage de renseignements",
+    "original_language": "fr",
+    "summary": "Guinea and Côte d'Ivoire have agreed to step up cross-border intelligence sharing to combat regional terrorism.",
+    "published": "2026-09-14T18:39:00+00:00",
+    "source": "pressafrik.com",
+    "url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxQZ0VVSDZvWG51NHlEbWNXU3pkaDVjaDFxSmM4M044WFBTS1BXWVNMc1loREcyNDM3UkVxOXgzeS1nTjZha3RSTFQ1YXlJa0V6NmdSbDV6TnZmVEduNWlKTjVZZ0VObGRrUmZHU3RSZlJZbnY2bnZxWVpBNjF4Sm53VFFNLWQwcHpFUnVISHJwdnkzVjV2Zm1jTTMwUXBNLUVSSmdDdjQ0aExfSUxvX3hqQnhEWlNVSWpWR1lZSnNSVEplb0xEUzZ5WjYzcWxOb0JtVWtCYS0waTlFOFpPbGVzUUJoQkc?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "Army of Russian teenagers recruited by terrorists grew by a quarter over the year",
+    "original_title": "«Армия» российских подростков, завербованных террористами, за год выросла на четверть",
+    "original_language": "ru",
+    "summary": "Reports indicate an increase in Russian teenagers recruited online by terrorist groups over the past year, reflecting ongoing counter-terrorism concerns.",
+    "published": "2026-09-14T07:41:31+00:00",
+    "source": "primpress.ru",
+    "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5leHBjZkNKdFNlSlR5ay12X1pucUw3SUl0Nl9iMkdFXzZDRUxSVW9ub2k2TC1JSktaM29KSmpYaHA4OGM2SlZ3TGRBOA?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "Prime Minister emphasizes government's concern to address the file of abducted Turkmen women",
+    "original_title": "رئيس الوزراء يؤكد اهتمام الحكومة بمعالجة ملف المختطفات من النساء التركمانيات",
+    "original_language": "ar",
+    "summary": "The Iraqi Prime Minister stresses government commitment and efforts to resolve cases involving women abducted by terrorist elements.",
+    "published": "2026-09-12T16:36:31+00:00",
+    "source": "وكالة موازين نيوز",
+    "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE82VE03TnhsWURiVlBGSmxkMzJPbnVnSjBpS1ppbnRGazVpVXJjcEVMSlozemVwbFh4M1diYzNfNnJmU0ZpYllINlFHeTUxSjFqWUdKRW4za3p1cTRGVmxN?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "Prime Minister Ali Faleh Al-Zaid receives a delegation of Turkmen women survivors of ISIS terrorism",
+    "original_title": "بالفيديو / رئيس مجلس الوزراء السيد علي فالح الزيدي يستقبل وفداً من النساء التركمانيات الناجيات من داعش الإرهابي.",
+    "original_language": "ar",
+    "summary": "Iraqi Prime Minister Ali Faleh Al-Zaid meets with female survivors who escaped captivity under the terrorist group ISIS.",
+    "published": "2026-09-12T16:47:29+00:00",
+    "source": "facebook.com",
+    "url": "https://news.google.com/rss/articles/CBMimgVBVV95cUxOOEVRd25jTmx0d0FUV040RmVRUTU2SkZmQ0dXX0xCLUt1Zl9CYjJ6Y3Q4UnZjYnJHSEZpWWJnUzdaZDZ6cWpUVlNSc2VEajhhZXpiR1l4V2JvYmVsVlFZR19QNW10eVNTdll0d1pRdzNKS0pIb040MTdVVk1PU0hRVkhicHZvNWxyU0ZaVTNuTjdfR01yRUJuQ1VkWmtMa0x2VmU1cE5KNm5pZ1Buek9PYmRXLUlJTExlc1ZRZng2c1gwcC1QVS15MWxqcHd6emVMTm5kY1dxQjdzbElKYmo1U2I3OWtCM2RDbmFYZXZqalhpOEZxc3MzZXFQbE05d1p6c0kyOVhWZWU5YjNUblJVV0ExRUpldXNNWmZXUV9jLWhLYlNlemhtWG1zVkdoOUI2SWJ4cFdwSFIydDl3ckZ4dXVIWlVEelF4OV95S0lQUi1wSXVVS2lGYXkzN3JPSDUzcTA4ajNHRDhpTUZ6ejgtczVkMjEyMVNXLTIzdldzU3B2ZGZPRmpmM0NUeXdZd1hvTkYwVnNBeWpYdGlXV0ctQ05kU2JWR2JVN255bXR0Y0YtVG4tb0ZTZnl6c3g4Q2VwejR4bjNXalRkNHJHT0E1Q2VqRHU3R2M0QkY2cDhrTDQ1cG9tMGIyX0o0RVFkeGVlM2dfRG5XNWlVeDh5MGdHM0NMUVBFNFIzWWt6UXhfam01UWlQUjB5TE40UC1EWWR0NVZBUHExQjJzdFF5MW9RZWxacHk3SFcwNWE3elJGMlNjTUpuaXl2Yk9CYnliQ2txcGVnLWJwQUNCZGstdmFsMHZ0UVFkQW5Dd2dQalVXRXUzbE5HZ2VTckxULUpNOGpqXzV2UEU1U01fUUZDQUM1TW40TDZ2anN3cVE?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "Video / Prime Minister Ali Faleh Al-Zaidi receives a delegation of Turkmen women survivors of ISIS terrorism",
+    "original_title": "بالفيديو / رئيس مجلس الوزراء السيد علي فالح الزيدي يستقبل وفداً من النساء التركمانيات الناجيات من داعش الإرهابي.",
+    "original_language": "ar",
+    "summary": "Video footage showing Iraqi Prime Minister Ali Faleh Al-Zaidi meeting with Turkmen women who survived ISIS captivity.",
+    "published": "2026-09-12T16:46:30+00:00",
+    "source": "facebook.com",
+    "url": "https://news.google.com/rss/articles/CBMimwVBVV95cUxOVm5iRXhlZzdRVUE0QmxBWlNIVE5UQVpwT19ERDlFMzlyVV82M3ZpM2NWQlJ5ekpUdFNPV19GZUNFeGVzN0lkbXFMSi04UjI0dWVpekNNdWwzM2dZM2k4VlJ3akdYbnAxTWVGODFlSVlNMnVjLWVOOWlLWS1Db2IwemtjaHhHblV5RWs3U1ZfQmpsc2hyUjE3QTM0ME52S2NBaEdmNjk1Y0NCam13dVBjMzNFODdqelQtZ09iTzU4cF9PNnBKbWtjVDZ0NER5SmtqWHdVUXVrdUQtTkcwTlNtTlZ5OFdZLVk2ekMyQ3dERGl3cFExVWh6ZmNGTnNVbVdTclZON2JYUzI4Q3BDdXJqMUl0aWw5NUNRcjRsY3h1Ul9jdzNMbkt2VTJvRW81b3Q1UWZmVzVJNm10b0hFeGVlT3JlMWFaWkJCR01DazI3a2ljNFhYX2tnWW80MnhLcUYyeGxYUUVhU3hndzF5S2tCVFVJVVJTT00tZnlpTlc0MXJDaldrVlM5M0FuN1NHZVNQdllicW5fX0M5RGlOMWZkSWREWVZydFkta1BsMnNITV92YXVFVFRHY2dhYTlMZmhKeXR3U0JMUHB0cTRpV1Z6VTdqcjVSVi1Pam5sWmxfOG13VGtNR01iWkk1a0tKZi0xM094cEM0QjVxQk00d0tvTmhuVkhwTi05QTVGMXo1aU1LTUFJNmtNcm5WWGg2VDBtb295M3ZuRExNWEFzTGx2Q1U4d0gwSDZvYk9wd1BlZ0l0Y3pyVVlEZmZZSEwwOGJ4ZXlSeGVqOU5URF9LT1g4T3ZxOWt2VVZKM3pDQUloZ2R5VW1zTDhibFVqZS1vcVZnVU5fOFhsUE5ER2xKNExBeEdPSWdBYlBJUWtN?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "Uganda to continue anti-ADF operations despite Ebola outbreak",
+    "original_title": "Uganda to continue anti-ADF operations despite Ebola o",
+    "original_language": "en",
+    "summary": "Ugolan military forces have confirmed they will continue counter-insurgency and military operations against the Allied Democratic Forces (ADF) despite public health challenges posed by an Ebola outbreak.",
+    "published": "2026-09-12T14:00:05+00:00",
+    "source": "NewVision.co.ug",
+    "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNZG81YUtXSHJMNmVqUkpPc0VtUnZkOGlZQi16Z3FwTXVSZkR2MWtMci10VDQtTnUwLWtlRHgwb055SHJmZGxjM1doeURETjlkcFVvc3U4Z3U3cHFSUEhrOWJFOEllZkJnWjdRUXBweU5iQzR4d3NuTmdITWlrc1VJUVdqcEllME1NUWFuZ1JsSjZyR0ZJQ1gzRVNDTUVsclZVX1d2cHF2UQ?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "Afghan official highlights Badakhshan operation at China security forum",
+    "original_title": "Afghan official highlights Badakhshan operation at China security forum",
+    "original_language": "en",
+    "summary": "An Afghan official discussed security operations conducted in Badakhshan province during a security forum in China.",
+    "published": "2026-09-12T09:12:53+00:00",
+    "source": "Ariana News",
+    "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNZlF4ZWRIb3NnRk5tUzhBS0lJNkdEdWthQmxtODVPZ1VZZUU4QTlUbTkzdy12SGZWdWV6UnpmYTJuY2QyN0swa0pvVS1oa3lOYTB1cUZ3ZWc5d1FEejJ6TDhCa18wT1VmbHQ2SzZKSWlYbGtUR2hqNldxcWU3eFV1NGtOM0VtNm82SnpCemxrdy1JOFJBRk5hd3FWcTdGMknSAaQBQVVfeXFMTjF5OUdqLXd0N1RCeFpobGpOQW1veHlSa1p0ZGNSdDQ2WlFvWENXWUpxZG9aQm5IeWp1OWNwakdiVzlVQjhlLVNpVjU5eFlROXFHX1hoX0JUc1Q2b0xNOEd6N0NpUzlsUWRXdFJneERZWXhMQlBOYVRUSlZQYUxXZnQ1dzliRVZTVWF5Q01tWFhVS3dENXZtdmNPMUpVZEc3TnBqODE?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "Afghan official highlights Badakhshan operation at China security forum",
+    "original_title": "Afghan official highlights Badakhshan operation at China security forum",
+    "original_language": "en",
+    "summary": "An Afghan official detailed security and counter-terrorism operations conducted in Badakhshan province during an international security forum hosted in China.",
+    "published": "2026-09-12T09:12:53+00:00",
+    "source": "Ariana News",
+    "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNZlF4ZWRIb3NnRk5tUzhBS0lJNkdEdWthQmxtODVPZ1VZZUU4QTlUbTkzdy12SGZWdWV6UnpmYTJuY2QyN0swa0pvVS1oa3lOYTB1cUZ3ZWc5d1FEejJ6TDhCa18wT1VmbHQ2SzZKSWlYbGtUR2hqNldxcWU3eFV1NGtOM0VtNm82SnpCemxrdy1JOFJBRk5hd3FWcTdGMkk?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "Far North Cameroon: BIR Deployed for a Secure School Return",
+    "original_title": "Extrême-Nord: Le BIR pour une rentrée sans peur",
+    "original_language": "fr",
+    "summary": "Cameroon's Rapid Intervention Battalion (BIR) is deployed in the Far North region to secure the return to school against insurgent threats.",
+    "published": "2026-09-11T16:04:00+00:00",
+    "source": "cameroon-tribune.cm",
+    "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOMDhYbWRvY21OQVVSQWV4ZE1EM202NjdjWWlSUVllNnFZVFNjT0NJTFFJLWlCSnFQME5sZGg1OGJ2VEl5S0JkZWEzTUFWSVJnb2xLVEZEeGRPWFZPVFpia3RGNnhqRkxyZjRIZUVjbW5BcllhbmNaZkRVRk9FQ2JRTEdSdWhTUlpLSVBIQ3N5QmxzNW1QOG1QNEtKVmRjcGhYaG51UkFKSQ?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "Report: Chinese campaign targeted foreign fighters in Syria",
+    "original_title": "تقرير: حملة صينية استهدفت مقاتلين أجانب في سوريا",
+    "original_language": "ar",
+    "summary": "A report details a Chinese security/intelligence campaign targeting foreign fighters operating within Syria.",
+    "published": "2026-09-11T13:39:00+00:00",
+    "source": "عنب بلدي",
+    "url": "https://news.google.com/rss/articles/CBMi2gJBVV95cUxPbkd5S3hJaGRoNEVwWE1VdWRHekNFd19jVms2cm5rRnltUnNieDVQQTFXNHhJX3NOMFlCdFZxejdlTUZHcUVPS2NXd3RXX2hJMEpyQzFidjRYUVRwc1duQnJUcTJjYmFBcVVWVnV0V20zUGw1MG1TaUZadmxVZHA0Qi1MMTZfZ1R2bEpBVUNrM00yRHN2Sll4LUptblctb292ZE1HOXdRUkdtSmxFTERHOXh2N3Zzc3k1NVlzNThteFc0YllmRlh1eFVRT1o2TWZLeTdPemxQSWlSeW1HUEU1ck5teFdURlgzY1JRWlpXU19QN3JqUzBHTk1vdzZQb2U3SklOWWNxc210X2NxWkdZZlRwblM2SC02d04wSWF5UHJJN3UzNUowaGw0LVdIM29xYWJDelpRdVZLUlJEdTJFTkRxdnBuNXVBd19TYjJYT3JuMm50b2hSS3p30gHaAkFVX3lxTE9uR3lLeEloZGg0RXBYTVV1ZEd6Q0V3X2NWazZybmtGeW1Sc2J4NVBBMVc0eElfc04wWUJ0VnF6N2VNRkdxRU9LY1d3dFdfaEkwSnJDMWJ2NFhRVHBzV25CclRxMmNiYUFxVVZWdXRXbTNQbDUwbVNpRlp2bFVkcDRCLUwxNl9nVHZsSkFVQ2szTTJEc3ZKWXgtSm1uVy1vb3ZkTUc5d1FSR21KbEVMREc5eHY3dnNzeTU1WXM1OG14VzRiWWZGWHV4VVFPWjZNZkt5N096bFBJaVJ5bUdQRTVyTm14V1RGWDNjUlFaWldTX1A3cmpTMEdOTW93NlBvZTdKSU5ZY3FzbXRfY3FaR1lmVHBuUzZILTZ3TjBJYXlQckk3dTM1SjBobDQtV0gzb3FhYkN6WlF1VktSUkR1MkVORHF2cG41dUF3X1NiMlhPcm4ybnRvaFJLenc?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "'The Hour of the Ban': Europe expands legal action against the Muslim Brotherhood",
+    "original_title": "\"ساعة الحظر\".. أوروبا توسع التحرك القانوني ضد الإخوان",
+    "original_language": "ar",
+    "summary": "European authorities are expanding legal measures and actions targeting the Muslim Brotherhood network.",
+    "published": "2026-09-11T12:55:11+00:00",
+    "source": "سكاي نيوز عربية",
+    "url": "https://news.google.com/rss/articles/CBMisANBVV95cUxPS21JTWhQaEtjM3NMa3oyTVZxVko3TWlKaGd6Z3laRzBIeHIzQnZCRVpNdXpNbEk4dkphSU8xVUJxQzZVWjE3Q3BUblczOXlUcm5zdTNIMzJxb1A4X1NQNHg3eEJWd2VjZFB0TTRJelYwSEFPbkNlXzNHTFJSN2FwQngzc094dnRyQ1dBSFNyU2dra3JMX25XWUpEU1pBREVseEMySWF6MERGbkxPcmVtMm5kR2dPQk10T2tHREtEZkRrNVV5TktSMjdJNmJhaTM5bUoycmhhakZTZzVsTUtpbFJ3U3BYMXNiWVBnd0h4Yl9iQkItWS0yNHRheUwtV1dadkk5OVJRVHYzZzJsVkdYWWhMakdyaU5Ic1J5T2FLMWc4enY5cDFEaW1OQ0I4a1pfYi1kdGhya1VMN0lrN2Z4VldXRmdWVmN3dmhYODUxTWNpRUcyUUswbUpGbmFkYkRYelNyc0pGa1VmZVV0QkFFUWw4cmhLZ0toT0x2UVoxaGhPSW9vci0tazhiZlJZUHBsRUdOdjZDaTJzZmdRUUo1ajVHbW5CY08wUW04a1NicTTSAbYDQVVfeXFMTzNTQ1h2UEdUbkx1RGpSYWF5ZmRqQVNPWmthTmQtQ0stWjBMRk12MmYzOTlxQWJvT05ZNDNZc1RocGJLY3loMUtOSkNaNmpUeGlJblZsOUxGOFROSmNYMXNKaDRQRVpyQUVqVjhEVDdSVkQ5dkRBQlJydGJBdDNaQ0RqclRBUk9IbzFHS055QUNocnBnS0FYcVpfNTRQdUV6aDBoWTIxSzZERlpvdVhNYWl3N2RCYWNHUHotbzMyT0F1ei1YdkxuUGFJYjVaQ3lOd3VJeW15UEllSzNvelpYSjRBaE9VMzBtT21FLUZyNU1IOEVNekxnQjBQdlhjdHdibmZyREJmUGhlejU5QnlLcFFTaGxPUk13WC1xUTJXMnN0NHZoMkktUzNZTzJmTXdWZEtxNjZRSkhZZVhCcjdQaWY3VlotWWtpamFGSEY1UkFnUWJvRVpHdUJPeVVYZ2o4SXAzT3ItMzI2enBCWjY4am83aWNRQkNUWk9YNVpVRVlLdEl2czNsRElCbHFYblRjRVlQa19haXNyWUsxcmNJMXVEcmtMUmJRMk56TG0xRGVDSXkzd2dR?oc=5"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "Two more teenagers in Moree charged over extremist material",
+    "original_title": "Two More Teens in Moree Charged Over Extremist Material Details – J - Wire",
+    "original_language": "en",
+    "summary": "Australian police have charged two additional teenagers in Moree with offenses related to the possession and distribution of extremist material.",
+    "published": "2026-04-04T12:00:00+00:00",
+    "source": "jwire.com.au",
+    "url": "https://www.jwire.com.au/two-more-teens-in-moree-charged-over-extremist-material/"
+   }
+  },
+  {
+   "incident_id": null,
+   "article": {
+    "title": "Somalia, AU forces capture senior al-Shabaab commander",
+    "original_title": "Somalia, AU forces capture senior al-Shabaab commander",
+    "original_language": "en",
+    "summary": "Somali and African Union forces successfully captured a senior al-Shabaab commander during a joint operation.",
+    "published": "2026-04-04T07:00:00+00:00",
+    "source": "Hiiraan Online",
+    "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPYTU4azM5bmliOWVrWVFuWUdKQ1QwaWtvMXRNTFdfLW1aWHNmY1hob0xJY0ZBUXd2ZmE5TGdKOHozZ0ppQWdqVWFtZmRNM2RGMzZ6SG9taFZyV2g2SVRYQmhSUVdObC1aMklOcHNyRTJWYmJ3bEs4WS1jTmdXUFpmYkdqWjNsNjY2RHhveUMtV2RaTFctTkZqdjhyRW4yTTlzNmdEanBJeEdUbG8?oc=5"
    }
   }
  ]
