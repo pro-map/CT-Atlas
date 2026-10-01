@@ -11,6 +11,7 @@ import {
   compactEvent,
   extractGeminiText,
   priority,
+  eventUniqueKey,
   parseDatabaseFilters,
   hasActiveDatabaseFilters,
   matchesDatabaseFilters,
@@ -257,43 +258,8 @@ async function handleQuickAsk(request, env) {
     return jsonResponse({ error: "Unauthorized session." }, 401, env);
   }
 
-  const eventsDatabase = await fetchEventsDatabase(env);
-  let allEvents = [];
-  if (eventsDatabase.ok) {
-    const db = eventsDatabase.db;
-    allEvents = Array.isArray(db) ? db : (Array.isArray(db.events) ? db.events : []);
-  }
-
-  // Database first: the analyst's Database-panel scope narrows the events,
-  // then the question picks the relevant ones. A scoped question that shares
-  // no keyword with the records ("what happened this week?") still gets the
-  // scope's most significant events -- that is exactly what was asked about.
-  const filters = parseDatabaseFilters(body);
-  const scope = databaseFiltersLabel(filters);
-  const now = new Date();
-  const scoped = allEvents.filter(event => matchesDatabaseFilters(event, filters, now));
-  let matched = localEventMatches(scoped, question);
-  if (!matched.length && hasActiveDatabaseFilters(filters)) {
-    matched = [...scoped].sort((a, b) => priority(b) - priority(a)).slice(0, QUICK_ASK_MAX_MATCHED_EVENTS);
-  }
-  const matchedCompact = matched.map(compactEvent);
-
-  const contextDays = filters.periodDays || QUICK_ASK_DEFAULT_CONTEXT_DAYS;
-  const background = await searchCorpusForQuestion(env, {
-    tokens: quickAskTokens(question),
-    start: new Date(now.getTime() - contextDays * 86400000),
-    end: now
-  });
-  const contextItems = background.items;
-
-  const cacheKey = "quickask:" + await sha256(JSON.stringify({
-    question: question.toLowerCase(),
-    scope,
-    ids: matchedCompact.map(e => e.id).sort(),
-    context: contextItems.map(item => item.url || item.title).sort(),
-    version: QUICK_ASK_VERSION
-  }));
-
+  // Quota first: a refused request must not cost the events fetch and the
+  // archive (D1) query below.
   const acquireResponse = await gateCall(env, "/quick-ask-acquire", { username });
   const acquire = await acquireResponse.json();
   if (!acquireResponse.ok || !acquire?.reservation_id) {
@@ -314,6 +280,48 @@ async function handleQuickAsk(request, env) {
   };
 
   try {
+    const eventsDatabase = await fetchEventsDatabase(env);
+    let allEvents = [];
+    if (eventsDatabase.ok) {
+      const db = eventsDatabase.db;
+      allEvents = Array.isArray(db) ? db : (Array.isArray(db.events) ? db.events : []);
+    }
+
+    // Database first: the analyst's Database-panel scope narrows the events,
+    // then the question picks the relevant ones. A scoped question that shares
+    // no keyword with the records ("what happened this week?") still gets the
+    // scope's most significant events -- that is exactly what was asked about.
+    const filters = parseDatabaseFilters(body);
+    const scope = databaseFiltersLabel(filters);
+    const now = new Date();
+    const scoped = allEvents.filter(event => matchesDatabaseFilters(event, filters, now));
+    let matched = localEventMatches(scoped, question);
+    if (!matched.length && hasActiveDatabaseFilters(filters)) {
+      matched = [...scoped].sort((a, b) => priority(b) - priority(a)).slice(0, QUICK_ASK_MAX_MATCHED_EVENTS);
+    }
+    // Records get their own R01.. ids for the model: event ids are shared by
+    // unrelated events (see eventUniqueKey), so citing one could list several.
+    const matchedCompact = matched.map((event, index) => ({
+      ...compactEvent(event),
+      id: `R${String(index + 1).padStart(2, "0")}`
+    }));
+
+    const contextDays = filters.periodDays || QUICK_ASK_DEFAULT_CONTEXT_DAYS;
+    const background = await searchCorpusForQuestion(env, {
+      tokens: quickAskTokens(question),
+      start: new Date(now.getTime() - contextDays * 86400000),
+      end: now
+    });
+    const contextItems = background.items;
+
+    const cacheKey = "quickask:" + await sha256(JSON.stringify({
+      question: question.toLowerCase(),
+      region: filters.region, topic: filters.topic, actor_group: filters.actorGroup, period_days: filters.periodDays,
+      events: matched.map(eventUniqueKey),
+      context: contextItems.map(item => item.url || item.title).sort(),
+      version: QUICK_ASK_VERSION
+    }));
+
     const cachedResponse = await gateCall(env, "/cache-get", { cacheKey });
     const cached = await cachedResponse.json();
     if (cached?.hit && cached.report) {
@@ -336,8 +344,9 @@ async function handleQuickAsk(request, env) {
     const grounded = Boolean(generated.grounded_in_ct_atlas_data) &&
       (citedEventIds.length > 0 || citedContextIds.length > 0);
     const citedEvents = matchedCompact
+      .map((e, index) => ({ ...e, event_id: String(matched[index].id || "") }))
       .filter(e => citedEventIds.includes(e.id))
-      .map(e => ({ id: e.id, title: e.title, country: e.country, date: e.date, url: e.url, source: e.source }));
+      .map(e => ({ id: e.event_id, title: e.title, country: e.country, date: e.date, url: e.url, source: e.source }));
     const citedContext = contextItems
       .filter(item => citedContextIds.includes(item.context_id))
       .map(item => ({ id: item.context_id, kind: item.kind, title: item.title, source: item.source, date: item.date, url: item.url }));

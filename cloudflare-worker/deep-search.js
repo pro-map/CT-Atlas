@@ -11,6 +11,7 @@ import {
   sha256,
   waitBeforeGeminiRetry,
   priority,
+  eventUniqueKey,
   parseDatabaseFilters,
   hasActiveDatabaseFilters,
   matchesDatabaseFilters,
@@ -1283,6 +1284,7 @@ function candidateMapEvents(db, window) {
     const dt = parseEventDate(event);
     return {
       id: String(event?.id || event?._mapKey || ""),
+      key: eventUniqueKey(event),
       title: cleanText(event?.title, 500),
       original_title: cleanText(event?.original_title, 500),
       url: cleanText(event?.url, 1200),
@@ -1338,6 +1340,7 @@ function databaseEvidenceRows(db, plan, window, filters) {
       sources: [{ source, url, language: "en", published: date.toISOString(), search_engine: "ct_atlas_database" }],
       atlas_status: "already_in_atlas",
       atlas_match_id: id,
+      atlas_match_key: eventUniqueKey(event),
       atlas_match_title: cleanText(event.title, 500),
       atlas_match_score: 100,
       database_event: {
@@ -1355,10 +1358,12 @@ function databaseEvidenceRows(db, plan, window, filters) {
 // database evidence events is not a new finding: fold it into that event as
 // a corroborating source instead of spending a separate evidence slot on it.
 function foldIntoDatabaseEvidence(databaseRows, externalRows) {
-  const byId = new Map(databaseRows.map(row => [row.atlas_match_id, row]));
+  // Joined on the unique event key: ids alone are shared by many unrelated
+  // events (see eventUniqueKey), which would fold an article into the wrong one.
+  const byKey = new Map(databaseRows.map(row => [row.atlas_match_key, row]));
   const remaining = [];
   for (const row of externalRows) {
-    const target = row.atlas_status === "already_in_atlas" ? byId.get(row.atlas_match_id) : null;
+    const target = row.atlas_status === "already_in_atlas" && row.atlas_match_key ? byKey.get(row.atlas_match_key) : null;
     if (!target) { remaining.push(row); continue; }
     for (const source of row.sources || [{ source: row.source, url: row.url, language: row.language, published: row.published, search_engine: row.search_engine }]) {
       if (source.url && !target.sources.some(item => item.url === source.url)) target.sources.push(source);
@@ -1388,6 +1393,7 @@ function compareWithAtlas(rows, mapEvents) {
       ...row,
       atlas_status: matched ? "already_in_atlas" : "potential_gap",
       atlas_match_id: matched ? best.id : "",
+      atlas_match_key: matched ? best.key : "",
       atlas_match_title: matched ? best.title : "",
       atlas_match_score: matched ? Math.round(bestScore * 100) : 0
     };
@@ -1595,7 +1601,10 @@ export async function handleDeepSearch(request, env, ctx) {
   const filters = parseDatabaseFilters({ ...body, period_days: null });
   const scope = databaseFiltersLabel(filters);
   const cacheKey = await sha256(JSON.stringify({
-    question: question.toLowerCase(), scope, version: DEEP_SEARCH_VERSION
+    // Raw filter values, not the display label (which folds REGION:X and X).
+    question: question.toLowerCase(),
+    region: filters.region, topic: filters.topic, actor_group: filters.actorGroup,
+    version: DEEP_SEARCH_VERSION
   }));
 
   const permitResponse = await gateCall(env, "/acquire", { username, kind: "deep_search" });

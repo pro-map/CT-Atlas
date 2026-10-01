@@ -339,6 +339,20 @@ function matchesGroup(event, group) {
   return eventActorGroup(event).toLowerCase() === String(group).trim().toLowerCase();
 }
 
+// Event ids are NOT unique: the collector derives them from a Latin-only
+// normalised title plus the date, so every non-Latin headline of a day shares
+// one id (dozens of events). Anything that joins two copies of the same event
+// (map <-> Database list, external article <-> database evidence) must use
+// this key instead; the map page builds the identical key (eventMatchKey).
+function eventUniqueKey(event) {
+  const time = Date.parse(String(event?.published || ""));
+  return [
+    cleanText(event?.id, 120),
+    Number.isFinite(time) ? time : "",
+    cleanText(event?.title, 120)
+  ].join("|");
+}
+
 // The Database panel's filters as sent by Atlas AI and Deep Search (the
 // Report Generator reads the same fields but validates its own period).
 // An unknown or missing period means "no period filter".
@@ -953,6 +967,7 @@ export {
   matchesTopic,
   matchesGroup,
   eventActorGroup,
+  eventUniqueKey,
   UNSPECIFIED_GROUP_LABEL,
   parseDatabaseFilters,
   hasActiveDatabaseFilters,

@@ -18,7 +18,7 @@ cp index.html main.html crypto.html social.html facial.html privacy.html robots.
    intelligence-map.svg crypto-intelligence.svg social-intelligence.svg facial-intelligence.svg \
    daily-quiz.js daily-quiz.css daily-quiz.json \
    usage-admin.js usage-admin.css usage-auth-fix.js \
-   tab-health.js tab-health.css facial-crops.js \
+   tab-health.js tab-health.css tab-access.js facial-crops.js \
    "$STAGING"/
 
 # Lightweight map data, derived from the events.json copied just above (so it can never be

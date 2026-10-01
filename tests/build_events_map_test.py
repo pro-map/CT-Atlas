@@ -39,8 +39,15 @@ class MapAttackTests(unittest.TestCase):
         output = m.build_map(sample_database(), ['related_articles'])
         self.assertEqual(
             [e['id'] for e in output['events']],
-            ['attack', 'attempt', 'plot', 'legacy-attack'],
+            ['attack', 'attempt', 'plot', 'legacy-attack', 'unlocated-attack'],
         )
+
+    def test_unlocated_attacks_stay_for_the_ticker_and_the_header_counts(self):
+        output = m.build_map(sample_database(), [])
+        unlocated = [e for e in output['events'] if e['id'] == 'unlocated-attack']
+        self.assertEqual(len(unlocated), 1)
+        self.assertIs(unlocated[0]['excluded_from_map'], True)
+        self.assertNotIn('unlocated-attack', [e['id'] for e in output['recent_events']])
 
     def test_attack_type_without_the_is_attack_flag_is_not_shown(self):
         self.assertFalse(m.is_map_attack({'primary_event_type': 'ATTACK', 'is_attack': False}))
@@ -76,6 +83,20 @@ class MapAttackTests(unittest.TestCase):
         )
         self.assertEqual(output['map']['recent_events_days'], m.RECENT_DAYS)
 
+    def test_older_events_cited_by_key_developments_are_kept(self):
+        database = sample_database()
+        database['trend_summary'] = {'developments': [{'event_id': 'old-arrest'}, {'event_id': 'attack'}, {'title': 'no id'}]}
+        database['events'].append(event('old-arrest', primary_event_type='ARREST', published='2026-09-20T08:00:00Z'))
+        database['events'].append(event('old-piracy', primary_event_type='PIRACY', published='2026-09-20T08:00:00Z'))
+        now = datetime(2026, 9, 30, 12, tzinfo=timezone.utc)
+        output = m.build_map(database, [], now=now)
+        recent_ids = [e['id'] for e in output['recent_events']]
+        self.assertIn('old-arrest', recent_ids)
+        self.assertNotIn('old-piracy', recent_ids)
+        # An attack stays in events only, never duplicated into recent_events.
+        self.assertNotIn('attack', recent_ids)
+        m.validate(output, database)
+
     def test_validate_rejects_an_attack_among_recent_events(self):
         database = sample_database()
         output = m.build_map(database, [])
@@ -99,7 +120,7 @@ class MapAttackTests(unittest.TestCase):
             self.assertEqual(m.main(['--input', str(source), '--output', str(target)]), 0)
             written = json.loads(target.read_text(encoding='utf-8'))
             self.assertEqual(written['map']['format'], 'events-map-v1')
-            self.assertEqual(len(written['events']), 4)
+            self.assertEqual(len(written['events']), 5)
 
             source.write_text(json.dumps({'events': []}), encoding='utf-8')
             self.assertEqual(m.main(['--input', str(source), '--output', str(Path(tmp) / 'other.json')]), 1)

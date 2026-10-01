@@ -41,6 +41,7 @@ import { SOCIAL_AGENT_CLIENT_VERSION, isSocialAgentConfigured } from "./social-a
 import { handleVisualAnalyze, isVisualIntelConfigured, VISUAL_INTEL_VERSION } from "./visual-intel.js";
 import { handleFaceShareUpload, handleFaceShareGet, FACE_SHARE_VERSION } from "./face-share.js";
 import { fetchBackgroundContext, corpusStats } from "./background-corpus.js";
+import { handleDatabaseEvents } from "./database-query.js";
 export default {
 async fetch(request, env, ctx) {
 // A fresh per-request copy, never a mutation of the shared env object --
@@ -50,6 +51,9 @@ env = { ...env, __requestOrigin: request.headers.get("Origin") || "" };
 const url = new URL(request.url);
 if (request.method === "OPTIONS") {
 return new Response(null, { status: 204, headers: corsHeaders(env) });
+}
+if (url.pathname === "/database-events" && request.method === "POST") {
+return handleDatabaseEvents(request, env);
 }
 if (url.pathname === "/database-stats" && request.method === "GET") {
 return jsonResponse({ background_corpus: await corpusStats(env) }, 200, env);

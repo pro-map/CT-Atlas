@@ -100,13 +100,34 @@ test('an external article matching a database event corroborates it instead of t
   const c=deepSearchContext();
   const databaseRows=c.databaseEvidenceRows({events:[event('near',{title:'Vessel attacked off Djibouti',country:'Djibouti',url:'https://r/1'})]},plan,window,shared.parseDatabaseFilters({}));
   const external=[
-    {title:'Ship hit near Djibouti',url:'https://ap/2',source:'AP',atlas_status:'already_in_atlas',atlas_match_id:'near',sources:[{source:'AP',url:'https://ap/2'}]},
-    {title:'Unrelated gap',url:'https://x/3',source:'X',atlas_status:'potential_gap',atlas_match_id:'',sources:[{source:'X',url:'https://x/3'}]},
+    {title:'Ship hit near Djibouti',url:'https://ap/2',source:'AP',atlas_status:'already_in_atlas',atlas_match_id:'near',atlas_match_key:databaseRows[0].atlas_match_key,sources:[{source:'AP',url:'https://ap/2'}]},
+    {title:'Unrelated gap',url:'https://x/3',source:'X',atlas_status:'potential_gap',atlas_match_id:'',atlas_match_key:'',sources:[{source:'X',url:'https://x/3'}]},
   ];
   const remaining=plain(c.foldIntoDatabaseEvidence(databaseRows,external));
   assert.deepEqual(remaining.map(r=>r.url),['https://x/3']);
   assert.deepEqual(plain(databaseRows)[0].sources.map(s=>s.url),['https://r/1','https://ap/2']);
   assert.equal(plain(c.evidenceItem(databaseRows[0],0)).source_count,2);
+});
+
+test('events sharing an id stay distinct: an article folds into the event it actually matched',()=>{
+  const c=deepSearchContext();
+  const db={events:[
+    event('dup',{title:'Vessel attacked off Djibouti',country:'Djibouti',url:'https://r/1'}),
+    event('dup',{title:'Djibouti maritime attack on tanker',country:'Djibouti',url:'https://r/2',published:'2026-09-27T10:00:00Z'}),
+  ]};
+  const databaseRows=c.databaseEvidenceRows(db,plan,window,shared.parseDatabaseFilters({}));
+  assert.equal(databaseRows.length,2);
+  assert.notEqual(databaseRows[0].atlas_match_key,databaseRows[1].atlas_match_key);
+  const [matched]=plain(c.compareWithAtlas(
+    [{title:'Djibouti maritime attack on tanker',url:'https://ap/9',published:'2026-09-27T12:00:00Z'}],
+    c.candidateMapEvents(db,window)
+  ));
+  assert.equal(matched.atlas_match_key,shared.eventUniqueKey(db.events[1]));
+  const remaining=c.foldIntoDatabaseEvidence(databaseRows,[{...matched,sources:[{source:'AP',url:'https://ap/9'}]}]);
+  assert.equal(remaining.length,0);
+  const byUrl=Object.fromEntries(plain(databaseRows).map(row=>[row.url,row.sources.map(s=>s.url)]));
+  assert.deepEqual(byUrl['https://r/2'],['https://r/2','https://ap/9']);
+  assert.deepEqual(byUrl['https://r/1'],['https://r/1']);
 });
 
 test('buildEvidence honours a reduced slot count',()=>{

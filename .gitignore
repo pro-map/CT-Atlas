@@ -10,3 +10,6 @@ __pycache__/
 !.env.example
 events-lite.json
 events-map.json
+# Local UI test harness pages (stubbed session, embedded database): never
+# committed or published.
+zz-*.html

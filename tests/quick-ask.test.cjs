@@ -128,3 +128,58 @@ test('matches local events written in Arabic script',()=>{
  assert.equal(result.length,1);
  assert.equal(result[0].id,'arabic-1');
 });
+
+// ---- handleQuickAsk --------------------------------------------------------
+function handlerHarness({quotaOk=true,events=[],answer}={}){
+ const strip=text=>text.replace(/^import[\s\S]*?from "\.\/[^"]+";\s*/gm,'').replace(/export\s*\{[\s\S]*?\};?\s*$/,'');
+ const calls=[];
+ const c=vm.createContext({crypto:globalThis.crypto,TextEncoder,Intl,console,setTimeout});
+ vm.runInContext(strip(fs.readFileSync('cloudflare-worker/shared.js','utf8')),c);
+ Object.assign(c,{
+  isAllowedUser:()=>true,
+  jsonResponse:(body,status)=>({status,body}),
+  gateCall:async(env,path)=>{
+   calls.push(path);
+   if(path==='/session-get')return {ok:true,json:async()=>({username:'analyst'})};
+   if(path==='/quick-ask-acquire')return quotaOk
+    ?{ok:true,status:200,json:async()=>({reservation_id:'r1'})}
+    :{ok:false,status:429,json:async()=>({error:'Quick question limit reached.'})};
+   if(path==='/cache-get')return {ok:true,json:async()=>({hit:false})};
+   return {ok:true,json:async()=>({})};
+  },
+  fetchEventsDatabase:async()=>{calls.push('events');return {ok:true,db:{events}};},
+  searchCorpusForQuestion:async()=>{calls.push('archive');return {items:[]};},
+  extractGeminiText:async payload=>payload.text,
+  fetch:async(url,init)=>{
+   calls.push('gemini');
+   c.lastGeminiInput=JSON.parse(init.body).input;
+   return {ok:true,status:200,json:async()=>({text:JSON.stringify(answer)})};
+  }
+ });
+ vm.runInContext(strip(fs.readFileSync('cloudflare-worker/quick-ask.js','utf8')),c);
+ const request=body=>({json:async()=>body,headers:{get:()=>'token'}});
+ return {c,calls,ask:body=>c.handleQuickAsk(request({user_id:'analyst',...body}),{})};
+}
+
+test('a refused quota costs neither the events fetch nor the archive query',async()=>{
+ const h=handlerHarness({quotaOk:false});
+ const result=await h.ask({question:'Al-Shabaab attacks in Somalia'});
+ assert.equal(result.status,429);
+ assert.deepEqual(h.calls,['/session-get','/quick-ask-acquire']);
+});
+
+test('citations name the exact record even when two events share an id',async()=>{
+ const now=new Date().toISOString();
+ const events=[
+  {id:'shared-id',title:'Mogadishu hotel attack',summary:'Al-Shabaab attack',country:'Somalia',published:now,category:'Attacks'},
+  {id:'shared-id',title:'Kismayo arrests',summary:'Al-Shabaab cell arrested',country:'Somalia',published:now,category:'Arrests'},
+ ];
+ const answer={answer:'Answer.',grounded_in_ct_atlas_data:true,cited_event_ids:['R02'],cited_context_ids:[]};
+ const h=handlerHarness({events,answer});
+ const result=JSON.parse(JSON.stringify(await h.ask({question:'Al-Shabaab Somalia'})));
+ assert.equal(result.status,200);
+ assert.deepEqual(result.body.cited_events.map(e=>[e.id,e.title]),[['shared-id','Kismayo arrests']]);
+ const records=JSON.parse(h.c.lastGeminiInput.slice(h.c.lastGeminiInput.indexOf('{'))).ct_atlas_records;
+ assert.deepEqual(records.map(r=>r.id).sort(),['R01','R02']);
+ assert.ok(h.calls.indexOf('/quick-ask-acquire')<h.calls.indexOf('events'),'quota before the database');
+});

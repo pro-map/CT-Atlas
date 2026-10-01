@@ -80,12 +80,28 @@ def published_at(event: dict) -> datetime | None:
     return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
 
 
+def development_event_ids(database: dict) -> set[str]:
+    """Event ids the Situation brief's key developments link to."""
+    summary = database.get("trend_summary")
+    developments = summary.get("developments") if isinstance(summary, dict) else None
+    if not isinstance(developments, list):
+        return set()
+    return {
+        str(item["event_id"])
+        for item in developments
+        if isinstance(item, dict) and item.get("event_id")
+    }
+
+
 def build_map(database: dict, excluded: list[str], now: datetime | None = None) -> dict:
     events = database.get("events")
     if not isinstance(events, list) or not events:
         raise ValueError("The source database has no events; refusing to build the map file.")
 
     recent_cutoff = (now or datetime.now(timezone.utc)) - timedelta(days=RECENT_DAYS)
+    # A development can cite an event first published before the recent
+    # window (a materially updated incident): keep it so its link still opens.
+    cited_ids = development_event_ids(database)
     drop = set(excluded)
     map_events = []
     recent_events = []
@@ -94,11 +110,13 @@ def build_map(database: dict, excluded: list[str], now: datetime | None = None) 
             raise ValueError(f"Event #{index} is not an object.")
         lite_event = {name: value for name, value in event.items() if name not in drop}
         if is_map_attack(event):
-            if event.get("excluded_from_map") is not True:
-                map_events.append(lite_event)
+            # Unlocated attacks (excluded_from_map) stay too: the map never
+            # draws them, but the ticker, the header's casualty counts and the
+            # Key Development links still need them, as with the full file.
+            map_events.append(lite_event)
         else:
             published = published_at(event)
-            if published and published >= recent_cutoff:
+            if (published and published >= recent_cutoff) or str(event.get("id") or "") in cited_ids:
                 recent_events.append(lite_event)
 
     output = {key: value for key, value in database.items() if key != "events"}
@@ -125,10 +143,7 @@ def validate(output: dict, database: dict) -> None:
     for index, event in enumerate(output["recent_events"]):
         if is_map_attack(event):
             raise ValueError(f"Recent event #{index} is an attack; attacks belong in events.")
-    expected = sum(
-        1 for event in database["events"]
-        if isinstance(event, dict) and event.get("excluded_from_map") is not True and is_map_attack(event)
-    )
+    expected = sum(1 for event in database["events"] if isinstance(event, dict) and is_map_attack(event))
     if len(output["events"]) != expected:
         raise ValueError(f"Map has {len(output['events'])} events but the source has {expected} attacks.")
     for key in database:
