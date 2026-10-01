@@ -5736,6 +5736,8 @@ def ai_select_events(
 
 MAX_DEDUP_WINDOW_DAYS = 7
 MAX_RELATED_ARTICLES = 24
+# Storage cap per record; MAX_RELATED_ARTICLES only bounds dedup comparisons.
+MAX_STORED_RELATED_ARTICLES = 80
 
 
 DEDUP_GENERIC_WORDS = {
@@ -7177,7 +7179,7 @@ def ensure_event_metadata(event):
     event[
         "related_articles"
     ] = related[
-        :MAX_RELATED_ARTICLES
+        :MAX_STORED_RELATED_ARTICLES
     ]
 
     event[
@@ -7357,7 +7359,7 @@ def merge_event(
         ] = existing[
             "related_articles"
         ][
-            :MAX_RELATED_ARTICLES
+            :MAX_STORED_RELATED_ARTICLES
         ]
 
         existing[
@@ -7370,6 +7372,16 @@ def merge_event(
             +
             1
         )
+
+    # The incoming record may itself be a cluster: keep its other articles too.
+    known_article_ids.add(candidate_id)
+    for article in new.get("related_articles") or []:
+        identity = article_identity(article)
+        if identity in known_article_ids or len(existing["related_articles"]) >= MAX_STORED_RELATED_ARTICLES:
+            continue
+        existing["related_articles"].append(article)
+        existing["article_count"] = existing.get("article_count", 1) + 1
+        known_article_ids.add(identity)
 
     for source in new.get(
         "sources",
@@ -10051,6 +10063,9 @@ Be strict:
   clearly describe one coordinated operation.
 - Different arrests or court cases are different unless they are the same
   people / same case.
+- Separate acts in one campaign or on one occasion stay separate (a foiled
+  polling-station bomb plot and a drone strike on an official's car on the
+  same election day = two).
 - When unsure, do not group.
 
 Every id you return must be copied exactly from the input. Keep reasons short.
@@ -10266,16 +10281,6 @@ def review_incident_window(keys, profiles):
 
 def _merge_incident_record(kept, new):
     merge_event(kept, new, 1.0, "same_incident")
-    known = {article_identity({"title": kept.get("title"), "url": kept.get("url"), "published": kept.get("published")})}
-    known.update(article_identity(article) for article in kept.get("related_articles") or [])
-    for article in new.get("related_articles") or []:
-        if len(kept["related_articles"]) >= MAX_RELATED_ARTICLES:
-            break
-        identity = article_identity(article)
-        if identity not in known:
-            kept["related_articles"].append(article)
-            known.add(identity)
-    kept["article_count"] = int(kept.get("article_count") or 1) + max(int(new.get("article_count") or 1) - 1, 0)
     kept["ai_relevance_score"] = max(int(kept.get("ai_relevance_score") or 0), int(new.get("ai_relevance_score") or 0))
     if kept.get("latitude") is None and new.get("latitude") is not None:
         for field in ("latitude", "longitude", "city", "region", "location_precision",

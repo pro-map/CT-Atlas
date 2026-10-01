@@ -150,6 +150,28 @@ class ConsolidationTests(unittest.TestCase):
         events, _ = self.run_pass(events, GeminiStub())
         self.assertEqual(len(events), 1)
 
+    def test_merging_large_records_keeps_articles_beyond_the_dedup_variant_cap(self):
+        many = [{"title": f"Report {n}", "url": f"https://x.test/{n}", "published": "2026-09-30T10:00:00+00:00"}
+                for n in range(40)]
+        events = [
+            record("Attack A", "2026-09-30T08:00:00+00:00", "inc-a", related=many[:20]),
+            record("Attack A again", "2026-09-30T09:00:00+00:00", "inc-a", related=many[20:]),
+        ]
+        events, _ = self.run_pass(events, GeminiStub())
+        self.assertEqual(len(events), 1)
+        urls = {a["url"] for a in events[0]["related_articles"]}
+        self.assertTrue({a["url"] for a in many} <= urls)
+
+    def test_text_dedup_merge_keeps_the_incoming_clusters_related_articles(self):
+        existing = record("Attack A", "2026-09-30T08:00:00+00:00", "inc-a")
+        incoming = record("Attack A follow", "2026-09-30T09:00:00+00:00", "inc-a",
+                          related=[{"title": "Other outlet", "url": "https://y.test/1", "published": "2026-09-30T09:30:00+00:00"}])
+        collector.merge_event(existing, incoming, 0.9, "test")
+        urls = {a["url"] for a in existing["related_articles"]}
+        self.assertIn("https://y.test/1", urls)
+        self.assertIn(incoming["url"], urls | {existing["url"]})
+        self.assertEqual(existing["article_count"], 3)
+
     def test_save_prunes_state_to_live_incidents(self):
         events, _ = self.run_pass(self.flydubai(), GeminiStub(["flydubai"]))
         self.state["aliases"]["inc-old"] = "inc-gone"
