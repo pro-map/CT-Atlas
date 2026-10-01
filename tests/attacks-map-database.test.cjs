@@ -1,0 +1,325 @@
+// The attacks-only map and the Database panel: the map loads events-map.json
+// (falling back to events-lite.json filtered with the same rule), keeps the
+// header and Key Developments working from recent_events, and the Database
+// panel reaches every category through the Worker's /database-events route.
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+
+const html=fs.readFileSync('index.html','utf8');
+const plain=value=>JSON.parse(JSON.stringify(value));
+const strip=source=>source.replace(/^import[\s\S]*?from "\.\/[^"]+";\s*/gm,'').replace(/export\s*\{[\s\S]*?\};?\s*$/,'');
+
+function extract(name){
+  const start=html.indexOf(`function ${name}(`);
+  assert.ok(start>=0,`${name} not found`);
+  let depth=0,i=html.indexOf('{',start);
+  for(;i<html.length;i++){
+    if(html[i]==='{')depth++;
+    else if(html[i]==='}'&&--depth===0)break;
+  }
+  return html.slice(start,i+1);
+}
+
+const attackRule=vm.createContext({});
+vm.runInContext(extract('isMapAttackEvent'),attackRule);
+
+test('the map and tools/build_events_map.py use the same attack rule',()=>{
+  const cases=[
+    [{primary_event_type:'ATTACK',is_attack:true},true],
+    [{primary_event_type:'ATTACK',is_attack:false},false],
+    [{primary_event_type:'attack',is_attack:true},true],
+    [{primary_event_type:'ATTEMPTED_ATTACK'},true],
+    [{primary_event_type:'DISRUPTED_PLOT',category:'Counter Terrorism Action'},true],
+    [{primary_event_type:'ARREST',category:'Attacks'},false],
+    [{primary_event_type:'PIRACY',category:'Maritime Piracy'},false],
+    [{categories:['Attacks','Weapons']},true],
+    [{category:'Arrests'},false],
+  ];
+  for(const [event,expected] of cases){
+    assert.equal(attackRule.isMapAttackEvent(event),expected,JSON.stringify(event));
+  }
+  const python=fs.readFileSync('tools/build_events_map.py','utf8');
+  assert.match(python,/MAP_TYPES = \("ATTACK", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT"\)/);
+  assert.match(python,/return event\.get\("is_attack"\) is True/);
+  assert.match(python,/return "Attacks" in event_categories\(event\)/);
+});
+
+async function runLoader(responses){
+  const c=vm.createContext({
+    window:{},Date,Number,Array,
+    fetch:async url=>{
+      const body=responses[url];
+      if(body===undefined)return {ok:false,status:404,json:async()=>{throw new Error('404');}};
+      return {ok:true,status:200,json:async()=>body};
+    }
+  });
+  vm.runInContext(extract('isMapAttackEvent')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 4;'+extract('loadMapDatabase'),c);
+  const data=await vm.runInContext('loadMapDatabase()',c);
+  return {data:plain(data),source:c.window.eventsDataSource};
+}
+
+test('the map reads events-map.json when it is published',async()=>{
+  const mapFile={events:[{id:'a'}],recent_events:[],database_summary:{total_events:9},trend_summary:{overview:'x'}};
+  const {data,source}=await runLoader({'events-map.json':mapFile});
+  assert.equal(source,'events-map.json');
+  assert.deepEqual(data,mapFile);
+});
+
+test('without events-map.json the map filters events-lite.json with the same rule',async()=>{
+  const now=new Date().toISOString();
+  const lite={
+    trend_summary:{overview:'whole database',developments:[{event_id:'cited-old-operation'}]},
+    events:[
+      {id:'attack',primary_event_type:'ATTACK',is_attack:true,published:now,category:'Attacks'},
+      {id:'unlocated-attack',primary_event_type:'ATTACK',is_attack:true,published:now,excluded_from_map:true},
+      {id:'arrest',primary_event_type:'ARREST',published:now,category:'Arrests'},
+      {id:'old-arrest',primary_event_type:'ARREST',published:'2020-01-01T00:00:00Z',category:'Arrests'},
+      {id:'cited-old-operation',primary_event_type:'CT_OPERATION',published:'2020-01-01T00:00:00Z',category:'Counter Terrorism Action'},
+    ]
+  };
+  const {data,source}=await runLoader({'events-lite.json':lite});
+  assert.equal(source,'events-lite.json');
+  // Unlocated attacks stay (never drawn, but in the ticker and header counts),
+  // like tools/build_events_map.py.
+  assert.deepEqual(data.events.map(e=>e.id),['attack','unlocated-attack']);
+  assert.deepEqual(data.recent_events.map(e=>e.id),['arrest','cited-old-operation']);
+  assert.equal(data.database_summary.total_events,4);
+  assert.equal(data.trend_summary.overview,'whole database');
+});
+
+test('the start-up chain uses the map loader and gives every event a unique key',()=>{
+  assert.match(html,/loadMapDatabase\(\)\s*\.then\(/);
+  assert.equal((html.match(/fetch\("events-map\.json"\)/g)||[]).length,1);
+  assert.match(html,/usedKeys\.has\(base\)\s*\?\s*base \+ "#" \+ index/);
+  assert.match(html,/\[\.\.\.allEvents, \.\.\.recentContextEvents\]\.filter\(\s*isCurrentCasualtyEvent/);
+});
+
+test('with no category or group checkboxes on the page, no map event is filtered out',()=>{
+  const c=vm.createContext({document:{querySelectorAll:()=>[],querySelector:()=>null}});
+  vm.runInContext(
+    html.slice(html.indexOf('const MAP_ALL_CATEGORIES'),html.indexOf('function selectedCategories('))+
+    extract('selectedCategories')+extract('categoryMatches')+
+    'const UNSPECIFIED_GROUP_LABEL = "Unspecified / no named group";'+
+    extract('eventActorGroup')+extract('selectedGroups')+extract('groupMatches')+
+    'function eventCategories(e){ return e.categories || []; }',c);
+  const oddEvent={categories:['Something new'],actor_group:''};
+  assert.equal(vm.runInContext('categoryMatches',c)(oddEvent),true);
+  assert.equal(vm.runInContext('groupMatches',c)(oddEvent),true);
+  assert.equal(vm.runInContext('groupMatches',c)(oddEvent,null),true);
+});
+
+test('the removed map controls are gone and nothing references them any more',()=>{
+  for(const id of ['searchInput','heatToggle','officesToggle','selectAll','clearAll','selectAllGroups','clearAllGroups','groupFilterList']){
+    assert.ok(!html.includes(`id="${id}"`),`${id} markup is still there`);
+    assert.ok(!new RegExp(`getElementById\\(\\s*"${id}"`).test(html),`${id} is still looked up`);
+  }
+  assert.ok(!html.includes('class="category-filter"'));
+});
+
+test('one set of Database filters drives the list, both exports, the Report Generator, Deep Search and Atlas AI',()=>{
+  for(const id of ['reportPeriod','reportRegion','reportTopic','reportGroup']){
+    const markup=html.indexOf(`id="${id}"`);
+    assert.ok(markup>html.indexOf('id="databasePanel"')&&markup<html.indexOf('id="reportGeneratorPanel"'),`${id} must live in the Database panel`);
+  }
+  assert.match(html,/<option value="1">Last 24 hours<\/option>/);
+  assert.match(extract('queryDatabase'),/REPORT_GENERATOR_API_BASE \+ "\/database-events"[\s\S]*\{ \.\.\.filters, user_id: reportGeneratorUserId\(\) \}/);
+  assert.match(extract('chronologyBaseEvents'),/return databaseResultsCurrent\(\) \? databaseResults : \[\];/);
+  assert.match(extract('exportChronologyExcel'),/selectedDatabaseEvents\(\)/);
+  assert.match(html,/exportDatabaseMapJpeg\(\s*selectedDatabaseEvents\(\),/);
+  assert.match(extract('generateCustomReport'),/actor_group:\s*actorGroup/);
+  assert.match(html,/window\.CTAtlasDatabase = \{\s*filters: databaseFilters,/);
+  assert.match(fs.readFileSync('deep-search.js','utf8'),/\.\.\.databaseScope\(\)\.filters,user_id:username,question/);
+  assert.match(fs.readFileSync('quick-ask.js','utf8'),/\.\.\.databaseScope\(\)\.filters,user_id:username,question/);
+  assert.match(fs.readFileSync('quick-ask.js','utf8'),/getElementById\("databaseToolButtons"\)/);
+});
+
+test('the region list is filled once so opening the Report Generator never resets the analyst choice',()=>{
+  assert.match(extract('populateReportRegions'),/if \(!select \|\| select\.dataset\.populated\)/);
+});
+
+test('the page never queries the database on load, only on the first use of the Database panel',()=>{
+  const init=html.slice(html.indexOf('The first touch of the Database panel'),html.indexOf('let dashboardRefreshTimer'));
+  assert.match(init,/addEventListener\("pointerdown", activate\)/);
+  assert.match(extract('onDatabaseFiltersChanged'),/if \(!databaseActivated && !chronologyOpen\) return;/);
+});
+
+test('database rows only link to the map when they are attacks themselves, by the unique key',()=>{
+  const c=vm.createContext({
+    allEvents:[
+      {id:'dup',published:'2026-09-30T08:00:00Z',title:'Attack in Kabul',_mapKey:'dup'},
+      {id:'dup',published:'2026-09-30T08:00:00Z',title:'Other attack',_mapKey:'dup#1'},
+    ],
+    databaseResults:[
+      {id:'dup',published:'2026-09-30T08:00:00Z',title:'Other attack',primary_event_type:'ATTACK',is_attack:true},
+      {id:'dup',published:'2026-09-30T08:00:00Z',title:'Attack in Kabul',primary_event_type:'ARREST'},
+      {id:'dup',published:'2026-09-30T08:00:00Z',title:'Not in the map file',primary_event_type:'ATTACK',is_attack:true},
+    ]
+  });
+  vm.runInContext(extract('isMapAttackEvent')+extract('eventMatchKey')+extract('linkDatabaseRowsToMap'),c);
+  vm.runInContext('linkDatabaseRowsToMap()',c);
+  assert.deepEqual(c.databaseResults.map(r=>r._mapEventKey),['dup#1','','']);
+  assert.match(extract('queryDatabase'),/linkDatabaseRowsToMap\(\);/);
+  assert.ok(!/mapKeyById/.test(html),'ids are shared by unrelated events');
+  // Rows that arrive before the map's file are linked again once it loads.
+  const chain=html.slice(html.indexOf('usedKeys.add(event._mapKey);'),html.indexOf('renderDatabaseScopeNote();',html.indexOf('usedKeys.add(event._mapKey);')));
+  assert.match(chain,/linkDatabaseRowsToMap\(\);/);
+});
+
+test('a late answer never undoes the group the analyst just picked, and a stale error clears',()=>{
+  const query=extract('queryDatabase');
+  assert.match(query,/const liveGroup = document\.getElementById\("reportGroup"\)\?\.value \|\| filters\.actor_group;\s*renderDatabaseGroups\([^;]*liveGroup\);/);
+  assert.match(query,/if \(key === databaseResultsKey && !databaseQueryPromise\) \{[\s\S]*?databaseLastError = "";[\s\S]*?setDatabaseStatus\(databaseLastStatus, "ready"\);[\s\S]*?return Promise\.resolve\(databaseResults\);/);
+});
+
+test('Escape closes the event card alone, not the list underneath',()=>{
+  const init=html.slice(html.indexOf('Capture phase + stop: Escape closes only the card'),html.indexOf('let dashboardRefreshTimer'));
+  assert.match(init,/closeDatabaseEventCard\(\);\s*keyEvent\.stopImmediatePropagation\(\);\s*\}, true\);/);
+});
+
+test('the page and the Worker build the same unique event key',()=>{
+  const page=vm.createContext({});
+  vm.runInContext(extract('eventMatchKey'),page);
+  const worker=vm.createContext({crypto:globalThis.crypto,TextEncoder,Intl,console});
+  vm.runInContext(strip(fs.readFileSync('cloudflare-worker/shared.js','utf8')),worker);
+  const cases=[
+    {id:'2026-09-30-',published:'2026-09-30T08:15:00Z',title:'هجوم  في\nكابول'},
+    {id:'2026-09-30-',published:'2026-09-30T08:15:00+02:00',title:'Another   title'},
+    {id:'x',published:'not a date',title:'  padded  '},
+    {id:null,title:'x'.repeat(300)},
+  ];
+  for(const event of cases){
+    assert.equal(page.eventMatchKey(event),vm.runInContext('eventUniqueKey',worker)(event),JSON.stringify(event));
+  }
+  assert.notEqual(page.eventMatchKey(cases[0]),page.eventMatchKey({...cases[0],title:'Other'}));
+});
+
+test('a list that no longer matches the filters is never shown or exported',()=>{
+  const c=vm.createContext({
+    databaseQueryPromise:null,databaseResultsKey:'',databaseLastError:'',
+    databaseResults:[{_mapKey:'db-0'},{_mapKey:'db-1'}],
+    chronologySelectedKeys:new Set(['db-0','db-1']),
+    currentFilters:{region:'GLOBAL',topic:'ALL',actor_group:'ALL',period_days:7}
+  });
+  vm.runInContext('function databaseFilters(){ return currentFilters; }'+extract('databaseResultsCurrent')+extract('chronologyBaseEvents')+extract('selectedDatabaseEvents')+extract('databaseExportBlockedText'),c);
+  vm.runInContext('databaseResultsKey = JSON.stringify(currentFilters);',c);
+  assert.equal(vm.runInContext('selectedDatabaseEvents().length',c),2);
+  vm.runInContext('currentFilters = {...currentFilters, topic: "Arrests"};',c);
+  assert.equal(vm.runInContext('selectedDatabaseEvents().length',c),0);
+  assert.equal(vm.runInContext('chronologyBaseEvents().length',c),0);
+  assert.match(vm.runInContext('databaseExportBlockedText()',c),/does not match the current filters/);
+  vm.runInContext('databaseQueryPromise = {};',c);
+  assert.match(vm.runInContext('databaseExportBlockedText()',c),/still loading/);
+  assert.match(extract('queryDatabase'),/const seq = \+\+databaseQuerySeq;[\s\S]*?chronologySelectedKeys\.clear\(\);[\s\S]*?const promise = fetch/);
+});
+
+test('list and ticker clicks only zoom to events the map shows; the rest open their card',()=>{
+  assert.match(extract('openDatabaseEvent'),/if \(isOnMapNow\(event\._mapEventKey\)\)/);
+  assert.match(extract('openMapEventOrCard'),/if \(isOnMapNow\(event\._mapKey\)\)[\s\S]*showDatabaseEventCard\(event\)/);
+  assert.match(extract('renderAttackTicker'),/openMapEventOrCard\(allEvents\.find\(/);
+  assert.match(extract('openTrendDevelopmentEvent'),/openMapEventOrCard\(\s*event \|\| otherEvent\s*\)/);
+  const c=vm.createContext({selectedDays:1});
+  vm.runInContext(extract('isMapAttackEvent')+extract('withinDays')+extract('databaseEventCardNote'),c);
+  assert.match(c.databaseEventCardNote({primary_event_type:'ARREST'}),/attacks only/);
+  assert.match(c.databaseEventCardNote({primary_event_type:'ATTACK',is_attack:true,latitude:1,longitude:2,published:'2020-01-01T00:00:00Z'}),/last 24 hours/);
+  assert.match(c.databaseEventCardNote({primary_event_type:'ATTACK',is_attack:true,latitude:1,longitude:2,published:new Date().toISOString()}),/after the map was loaded/);
+  assert.match(c.databaseEventCardNote({primary_event_type:'ATTACK',is_attack:true,location_precision:'unlocated'}),/not precise enough/);
+});
+
+test('chronology and Excel links only accept http(s) URLs',()=>{
+  assert.match(html,/sourceLink\.href =\s*safeHttpUrl\(event\.url\);/);
+  assert.match(extract('exportChronologyExcel'),/Target:\s*safeHttpUrl\(event\.url\),/);
+});
+
+test('the event card only links http(s) URLs and escapes every field',()=>{
+  const card=extract('showDatabaseEventCard');
+  assert.match(card,/const url = safeHttpUrl\(event\.url\);/);
+  assert.ok(!/\$\{event\.(title|summary|source|actor_group)\}/.test(card),'unescaped field in the card');
+  const c=vm.createContext({});
+  vm.runInContext(extract('safeHttpUrl'),c);
+  assert.equal(c.safeHttpUrl('javascript:alert(1)'),'');
+  assert.equal(c.safeHttpUrl('https://example.com/a'),'https://example.com/a');
+});
+
+test('the ticker lists the period attacks, pauses on hover, respects reduced motion and hides on phones',()=>{
+  assert.match(extract('refreshDashboard'),/renderEvents\(\);\s*renderAttackTicker\(\);/);
+  assert.match(html,/@media \(prefers-reduced-motion: reduce\) \{\s*#attackTickerList\.ticker-animated \{ animation: none; \}/);
+  assert.match(html,/#attackTickerViewport:hover #attackTickerList/);
+  assert.match(html,/@media \(max-width: 820px\) \{\s*#attackTicker \{ display: none; \}/);
+  assert.match(extract('renderAttackTicker'),/if \(!reducedMotion && list\.scrollHeight/,'no hidden duplicate list without the animation');
+  assert.match(html,/new ResizeObserver\(/,'re-measured once the page is unlocked');
+});
+
+test('the Database route is protected by the session wrapper and scripts are cache-busted',()=>{
+  const auth=fs.readFileSync('usage-auth-fix.js','utf8');
+  assert.match(auth,/quick-ask\|database-events\|/);
+  assert.match(auth,/deep-search\.js\?v=4/);
+  assert.match(auth,/quick-ask\.js\?v=4/);
+  assert.match(html,/usage-auth-fix\.js\?v=20260930/);
+});
+
+// ---- Worker /database-events --------------------------------------------
+function workerContext(events,sessionUser='analyst'){
+  const shared=vm.createContext({crypto:globalThis.crypto,TextEncoder,Intl,console});
+  vm.runInContext(strip(fs.readFileSync('cloudflare-worker/shared.js','utf8')),shared);
+  const pick=names=>Object.fromEntries(names.map(n=>[n,vm.runInContext(n,shared)]));
+  const c=vm.createContext({
+    ...pick(['cleanText','normalizeUsername','parseEventDate','eventCategories','eventActorGroup','eventUniqueKey','matchesGroup','parseDatabaseFilters','matchesDatabaseFilters','databaseFiltersLabel']),
+    isAllowedUser:()=>true,
+    gateCall:async()=>({ok:true,json:async()=>({username:sessionUser})}),
+    fetchEventsDatabase:async()=>({ok:true,db:{last_updated:'2026-09-30T10:00:00Z',events}}),
+    jsonResponse:(body,status)=>({status,body}),
+    Response,console
+  });
+  vm.runInContext(strip(fs.readFileSync('cloudflare-worker/database-query.js','utf8')),c);
+  return c;
+}
+
+test('/database-events filters every category and lists the groups of the scope',async()=>{
+  const now=new Date().toISOString();
+  const events=[
+    {id:'1',title:'Al-Shabaab attack',country:'Somalia',category:'Attacks',actor_group:'Al-Shabaab',published:now,related_articles:['never sent']},
+    {id:'2',title:'Arrest in Mogadishu',country:'Somalia',category:'Arrests',actor_group:'Al-Shabaab',published:now},
+    {id:'3',title:'Unattributed blast',country:'Somalia',category:'Attacks',published:now},
+    {id:'4',title:'Kenya raid',country:'Kenya',category:'Attacks',actor_group:'Al-Shabaab',published:now},
+  ];
+  const c=workerContext(events);
+  const request=body=>({json:async()=>body,headers:{get:()=>'token'}});
+  const result=plain(await c.handleDatabaseEvents(request({user_id:'analyst',region:'Somalia',topic:'Attacks',actor_group:'Al-Shabaab',period_days:7}),{}));
+  assert.equal(result.status,200);
+  assert.equal(result.body.total,1);
+  assert.deepEqual(result.body.events.map(e=>e.id),['1']);
+  assert.deepEqual(result.body.groups,[{name:'Al-Shabaab',count:1},{name:'Unspecified / no named group',count:1}]);
+  assert.equal(result.body.events[0].key,'db-0');
+  assert.ok(!('related_articles' in result.body.events[0]),'rows carry explicit fields only');
+
+  const unauthenticated=plain(await c.handleDatabaseEvents({json:async()=>({user_id:'analyst'}),headers:{get:()=>''}},{}));
+  assert.equal(unauthenticated.status,401);
+});
+
+test('/database-events with no category filter returns every category, newest first',async()=>{
+  const recent=new Date(Date.now()-3600e3).toISOString();
+  const older=new Date(Date.now()-2*86400e3).toISOString();
+  const events=[
+    {id:'a',title:'Attack',country:'Mali',primary_event_type:'ATTACK',is_attack:true,category:'Attacks',published:older,url:'https://example.com/a'},
+    {id:'b',title:'Arrest',country:'Mali',primary_event_type:'ARREST',category:'Arrests',published:recent,url:'javascript:alert(1)'},
+    {id:'c',title:'Piracy',country:'Mali',primary_event_type:'PIRACY',category:'Maritime Piracy',published:recent},
+  ];
+  const c=workerContext(events);
+  const result=plain(await c.handleDatabaseEvents({json:async()=>({user_id:'analyst',topic:'ALL',period_days:7}),headers:{get:()=>'token'}},{}));
+  assert.equal(result.status,200);
+  assert.equal(result.body.total,3);
+  assert.deepEqual(result.body.events.map(e=>e.id).slice(-1),['a']);
+  assert.deepEqual(new Set(result.body.events.map(e=>e.id)),new Set(['a','b','c']));
+  const byId=Object.fromEntries(result.body.events.map(e=>[e.id,e]));
+  assert.equal(byId.a.url,'https://example.com/a');
+  assert.equal(byId.b.url,'','non-http(s) URLs are dropped');
+  assert.equal(byId.a.match_key,vm.runInContext('eventUniqueKey',c)(events[0]));
+});
+
+test('/database-events refuses a session that belongs to another user',async()=>{
+  const c=workerContext([{id:'a',title:'x',published:new Date().toISOString()}],'someone-else');
+  const result=plain(await c.handleDatabaseEvents({json:async()=>({user_id:'analyst'}),headers:{get:()=>'token'}},{}));
+  assert.equal(result.status,401);
+});
