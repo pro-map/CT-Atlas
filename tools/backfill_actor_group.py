@@ -225,9 +225,12 @@ def main():
         batch_number = start // BATCH_SIZE + 1
         print(f"Batch {batch_number}/{total_batches} -- {len(batch)} events")
 
+        # The wire id is the event's position, never its stored id: until the
+        # old ids age out (spring 2027) one id can cover dozens of unrelated
+        # non-Latin headlines, and an answer keyed by it would apply to them all.
         payload_items = [
             {
-                "event_id": str(event.get("id") or f"idx{index}"),
+                "event_id": f"idx{index}",
                 "title": (event.get("title") or "")[:280],
                 "summary": (event.get("summary") or "")[:560],
             }
@@ -244,10 +247,10 @@ def main():
         groups_by_id = {str(r.get("event_id")): r.get("actor_group") for r in results if isinstance(r, dict)}
 
         for index, event in batch:
-            event_id = str(event.get("id") or f"idx{index}")
-            if event_id not in groups_by_id:
+            wire_id = f"idx{index}"
+            if wire_id not in groups_by_id:
                 continue
-            event["actor_group"] = collector.canonicalize_actor_group(groups_by_id[event_id])
+            event["actor_group"] = collector.canonicalize_actor_group(groups_by_id[wire_id])
             updated_count += 1
 
     print(f"Total events updated: {updated_count}")

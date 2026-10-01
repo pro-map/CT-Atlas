@@ -212,9 +212,12 @@ def main():
         batch_number = start // BATCH_SIZE + 1
         print(f"Batch {batch_number}/{total_batches} -- {len(batch)} events")
 
+        # The wire id is the event's position, never its stored id: until the
+        # old ids age out (spring 2027) one id can cover dozens of unrelated
+        # non-Latin headlines, and an answer keyed by it would retag them all.
         payload_items = [
             {
-                "event_id": str(event.get("id") or f"idx{index}"),
+                "event_id": f"idx{index}",
                 "title": (event.get("title") or "")[:280],
                 "summary": (event.get("summary") or "")[:560],
             }
@@ -231,8 +234,7 @@ def main():
         tags_by_id = {str(r.get("event_id")): r.get("tags") for r in results if isinstance(r, dict)}
 
         for index, event in batch:
-            event_id = str(event.get("id") or f"idx{index}")
-            tags = tags_by_id.get(event_id)
+            tags = tags_by_id.get(f"idx{index}")
             if not tags or not isinstance(tags, list):
                 continue
             tags = [t for t in tags if t in RELEVANT_TAGS]

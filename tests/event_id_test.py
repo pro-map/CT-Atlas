@@ -115,8 +115,9 @@ class NonLatinTitleIdTests(unittest.TestCase):
 
 class LatinTitleIdTests(unittest.TestCase):
     def test_latin_titles_keep_the_ids_already_stored_in_events_json(self):
-        # Pinned from the formula before the fix: these exact ids exist in the
-        # database and must still be produced when the article is re-collected.
+        # Pinned from the formula before the fix (sample titles, not records of
+        # events.json): a Latin headline must get exactly the id the old
+        # formula gave it, so a re-collected article matches its stored event.
         pinned = {
             "Police arrest three suspects over planned attack on Berlin synagogue": "8cbfc4dadd2d09ef",
             "Okul saldırısı: 42 öğrenci kaçırıldı": "eb2965f89a288464",
