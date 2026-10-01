@@ -27,14 +27,38 @@ function ensureCss(){
   const link=document.createElement("link");
   link.id="quickAskCss";
   link.rel="stylesheet";
-  link.href="quick-ask.css?v=1";
+  link.href="quick-ask.css?v=2";
   document.head.appendChild(link);
 }
 
-// Anchors off the small "Download Map" layer button (static markup, always
-// present) so CT Atlas AI sits at that same small size, right beside it.
+// CT Atlas AI lives with the other database tools in the map page's Database
+// panel (#databaseToolButtons); pages without that panel fall back to the
+// "Download Map" layer button.
 function findAnchor(){
-  return document.getElementById("downloadMapButton");
+  return document.getElementById("databaseToolButtons")||document.getElementById("downloadMapButton");
+}
+
+// The Database panel's place, category and group, when the page has one --
+// Atlas AI answers from the database within that scope. The panel's period
+// is left out on purpose: the question itself says which dates it is about,
+// and the panel's 7-day default would otherwise hide older records.
+function databaseScope(){
+  const api=window.CTAtlasDatabase;
+  if(!api||typeof api.filters!=="function")return {filters:{},label:""};
+  try{
+    const {region,topic,actor_group}=api.filters()||{};
+    const label=typeof api.label==="function"?api.label({withPeriod:false}):"";
+    return {filters:{region,topic,actor_group},label:label?label+" · all dates":""};
+  }
+  catch(_){return {filters:{},label:""};}
+}
+
+function renderScope(){
+  const node=document.getElementById("quickAskScope");
+  if(!node)return;
+  const {label}=databaseScope();
+  node.textContent=label?"Database scope: "+label+" (set in the DATABASE panel)":"";
+  node.hidden=!label;
 }
 
 function inject(){
@@ -50,7 +74,8 @@ function inject(){
     button.type="button";
     button.className="layer-button";
     button.textContent="CT ATLAS AI";
-    anchor.insertAdjacentElement("afterend",button);
+    if(anchor.id==="databaseToolButtons")anchor.appendChild(button);
+    else anchor.insertAdjacentElement("afterend",button);
   }
 
   document.body.insertAdjacentHTML("beforeend",`
@@ -59,7 +84,7 @@ function inject(){
         <div id="quickAskHeader">
           <div>
             <div id="quickAskTitle">CT ATLAS AI</div>
-            <div id="quickAskSubtitle">Gemini-based CT Atlas AI for quick counter-terrorism questions -- not for long analyses. Use Deep Search or the Report Generator for in-depth work.</div>
+            <div id="quickAskSubtitle">Answers from the CT Atlas database first -- every category plus the background archive -- then general knowledge. For in-depth work use Deep Search or the Report Generator.</div>
           </div>
           <button id="quickAskClose" type="button" aria-label="Close CT Atlas AI">×</button>
         </div>
@@ -68,6 +93,7 @@ function inject(){
             <span>QUESTION</span>
             <textarea id="quickAskQuestion" rows="3" maxlength="400" placeholder="Example: What is the current threat in Iraq? Quick info on the recent attack in Bamako?"></textarea>
           </label>
+          <div id="quickAskScope" class="qa-scope" hidden></div>
           <button id="quickAskRun" type="button">ASK</button>
           <div id="quickAskStatus"></div>
 
@@ -84,7 +110,7 @@ function inject(){
           </div>
 
           <div id="quickAskDisclaimer">
-            CT Atlas AI is a fast assistant based on Gemini for quick counter-terrorism questions. It is not Deep Search or the Report Generator and is not meant for long analyses. Answers may draw on general knowledge as well as CT Atlas data, are not verified intelligence, and should be independently checked before operational use.
+            CT Atlas AI is a fast assistant based on Gemini. It answers from the CT Atlas database first (within the Database panel's filters) and says when it falls back on general knowledge. It is not Deep Search or the Report Generator and is not meant for long analyses. Answers are not verified intelligence and should be independently checked before operational use.
           </div>
         </div>
       </div>
@@ -121,6 +147,7 @@ async function checkBackend(){
 
 function open(){
   const panel=document.getElementById("quickAskPanel");
+  renderScope();
   panel?.classList.add("open"); panel?.setAttribute("aria-hidden","false");
   setTimeout(()=>document.getElementById("quickAskQuestion")?.focus(),30);
 }
@@ -140,28 +167,35 @@ function render(payload){
   if(block)block.hidden=false;
 
   const citedEvents=Array.isArray(payload.cited_events)?payload.cited_events:[];
-  const grounded=Boolean(payload.grounded_in_ct_atlas_data)&&citedEvents.length>0;
+  const citedContext=Array.isArray(payload.cited_context)?payload.cited_context:[];
+  const grounded=Boolean(payload.grounded_in_ct_atlas_data)&&(citedEvents.length>0||citedContext.length>0);
 
   const badge=document.getElementById("quickAskGroundBadge");
   if(badge){
-    badge.textContent=grounded?"GROUNDED IN CT ATLAS DATA":"GENERAL KNOWLEDGE · NOT FROM CT ATLAS DATABASE";
+    badge.textContent=grounded?"FROM THE CT ATLAS DATABASE":"GENERAL KNOWLEDGE · NOT FROM CT ATLAS DATABASE";
     badge.className="qa-badge "+(grounded?"grounded":"general");
   }
 
   const answerBox=document.getElementById("quickAskAnswerText");
   if(answerBox)answerBox.textContent=String(payload.answer||"");
 
+  const safeUrl=value=>/^https?:\/\//i.test(String(value||""))?String(value):"";
+  const itemHtml=item=>{
+    const url=safeUrl(item.url);
+    return `
+        <div class="qa-cited-item">
+          <span class="qa-cited-title">${esc(item.title||item.id||"Untitled")}</span>
+          <span class="qa-cited-meta">${esc(item.country||"")}${item.date?` · ${esc(fmtDate(item.date))}`:""}${item.source?` · ${esc(item.source)}`:""}</span>
+          ${url?`<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">OPEN</a>`:""}
+        </div>`;
+  };
+  const scope=payload.scope?`<div class="qa-cited-meta">Scope: ${esc(payload.scope)}${Number.isFinite(payload.database_records_considered)?` · ${payload.database_records_considered} database records considered`:""}</div>`:"";
+
   const citedBox=document.getElementById("quickAskCitedEvents");
   if(citedBox){
-    citedBox.innerHTML=citedEvents.length?(
-      `<div class="qa-cited-head">CT ATLAS RECORDS USED</div>`+
-      citedEvents.map(item=>`
-        <div class="qa-cited-item">
-          <span class="qa-cited-title">${esc(item.title||item.id||"Untitled event")}</span>
-          <span class="qa-cited-meta">${esc(item.country||"")}${item.date?` · ${esc(fmtDate(item.date))}`:""}${item.source?` · ${esc(item.source)}`:""}</span>
-          ${item.url?`<a href="${esc(item.url)}" target="_blank" rel="noopener noreferrer">OPEN</a>`:""}
-        </div>`).join("")
-    ):"";
+    citedBox.innerHTML=scope+
+      (citedEvents.length?`<div class="qa-cited-head">CT ATLAS RECORDS USED</div>`+citedEvents.map(itemHtml).join(""):"")+
+      (citedContext.length?`<div class="qa-cited-head">CT ATLAS ARCHIVE · BACKGROUND, NOT VERIFIED EVENTS</div>`+citedContext.map(itemHtml).join(""):"");
   }
 }
 
@@ -169,11 +203,16 @@ async function copyAnswer(){
   if(!lastPayload)return;
   const question=String(document.getElementById("quickAskQuestion")?.value||"").trim();
   const cited=Array.isArray(lastPayload.cited_events)?lastPayload.cited_events:[];
-  const sources=cited.map(item=>{
-    const label=String(item.title||item.id||"Untitled event");
+  const context=Array.isArray(lastPayload.cited_context)?lastPayload.cited_context:[];
+  const list=items=>items.map(item=>{
+    const label=String(item.title||item.id||"Untitled");
     return label+(item.url?"\n"+String(item.url):"");
   }).join("\n\n");
-  const text="CT ATLAS AI\n\nQUESTION\n"+question+"\n\nANSWER\n"+String(lastPayload.answer||"")+(sources?"\n\nCT ATLAS RECORDS USED\n"+sources:"");
+  const text="CT ATLAS AI\n\nQUESTION\n"+question+
+    (lastPayload.scope?"\n\nDATABASE SCOPE\n"+lastPayload.scope:"")+
+    "\n\nANSWER\n"+String(lastPayload.answer||"")+
+    (cited.length?"\n\nCT ATLAS RECORDS USED\n"+list(cited):"")+
+    (context.length?"\n\nCT ATLAS ARCHIVE (BACKGROUND, NOT VERIFIED EVENTS)\n"+list(context):"");
   try{
     await navigator.clipboard.writeText(text);
     setStatus("Question and answer copied to clipboard.","success");
@@ -192,25 +231,29 @@ async function downloadAnswerPdf(){
   try{
     const question=String(document.getElementById("quickAskQuestion")?.value||"").trim();
     const cited=Array.isArray(lastPayload.cited_events)?lastPayload.cited_events:[];
-    const grounded=Boolean(lastPayload.grounded_in_ct_atlas_data)&&cited.length>0;
+    const context=Array.isArray(lastPayload.cited_context)?lastPayload.cited_context:[];
+    const grounded=Boolean(lastPayload.grounded_in_ct_atlas_data)&&(cited.length>0||context.length>0);
     const blocks=[
       {text:"QUESTION",type:"heading"},
       {text:question,type:"question"},
-      {text:grounded?"GROUNDED IN CT ATLAS DATA":"GENERAL KNOWLEDGE · NOT FROM CT ATLAS DATABASE",type:"badge"},
-      {text:"ANSWER",type:"heading"},
-      {text:String(lastPayload.answer||""),type:"body"}
+      {text:grounded?"FROM THE CT ATLAS DATABASE":"GENERAL KNOWLEDGE · NOT FROM CT ATLAS DATABASE",type:"badge"}
     ];
-    if(cited.length){
-      blocks.push({text:"CT ATLAS RECORDS USED",type:"heading"});
-      cited.forEach(item=>{
+    if(lastPayload.scope)blocks.push({text:"Database scope: "+lastPayload.scope,type:"body"});
+    blocks.push({text:"ANSWER",type:"heading"},{text:String(lastPayload.answer||""),type:"body"});
+    const addSources=(heading,items)=>{
+      if(!items.length)return;
+      blocks.push({text:heading,type:"heading"});
+      items.forEach(item=>{
         const lines=[
-          String(item.title||item.id||"Untitled event"),
+          String(item.title||item.id||"Untitled"),
           [item.country||"",item.date?fmtDate(item.date):"",item.source||""].filter(Boolean).join(" · ")
         ];
         if(item.url)lines.push(String(item.url));
         blocks.push({text:lines.filter(Boolean).join("\n"),type:"source"});
       });
-    }
+    };
+    addSources("CT ATLAS RECORDS USED",cited);
+    addSources("CT ATLAS ARCHIVE · BACKGROUND, NOT VERIFIED EVENTS",context);
     const stamp=new Date().toISOString().replace(/[:T]/g,"-").slice(0,16);
     await pdf.download({
       filename:"CT-Atlas-AI-"+stamp+"-"+pdf.safeFilename(question.slice(0,55),"Question"),
@@ -236,6 +279,7 @@ async function run(){
   if(!username||!sessionToken){setStatus("CT Atlas AI requires an authenticated CT Atlas session. Sign in again.","error");return;}
 
   if(button){button.disabled=true;button.textContent="THINKING…";}
+  renderScope();
   const block=document.getElementById("quickAskAnswerBlock");
   if(block)block.hidden=true;
   lastPayload=null;
@@ -245,7 +289,7 @@ async function run(){
     const response=await fetch(API_BASE+"/quick-ask",{
       method:"POST",
       headers:{"Content-Type":"application/json","X-Session-Token":sessionToken},
-      body:JSON.stringify({user_id:username,question})
+      body:JSON.stringify({...databaseScope().filters,user_id:username,question})
     });
     const payload=await response.json().catch(()=>({}));
     if(!response.ok){

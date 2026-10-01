@@ -89,7 +89,7 @@ test('the map does not enumerate or spread whole events (which would expose the 
 // ---------------------------------------------------------------- the Worker gives the same answers
 
 const sharedSource=read('cloudflare-worker/shared.js').replace(/export /g,'');
-const quickSource=read('cloudflare-worker/quick-ask.js').replace(/^import[\s\S]*?from "\.\/shared.js";\s*/,'').replace(/export /g,'');
+const quickSource=read('cloudflare-worker/quick-ask.js').replace(/^import[\s\S]*?from "\.\/[^"]+";\s*/gm,'').replace(/export /g,'');
 const deepSource=read('cloudflare-worker/deep-search.js')
  .replace(/import\s*\{[\s\S]*?\}\s*from\s*["']\.\/[^"']+["'];\s*/g,'')
  .replace(/export /g,'');

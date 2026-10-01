@@ -70,7 +70,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          grep -q 'OUR OFFICES' index.html
+          grep -q 'initialiseInterpolOffices' index.html
+          grep -q 'fetch("events-map.json")' index.html
+          grep -q 'id="databasePanel"' index.html
+          grep -q 'id="attackTickerList"' index.html
           grep -q 'CT Atlas Infrastructure' index.html
           grep -q '<div id="disclaimerSubtitle">CT Atlas</div>' index.html
           grep -q 'independent OSINT prototype created for research and analytical purposes' index.html
@@ -149,7 +152,7 @@ jobs:
           grep -q 'class="time-button active"' index.html
           grep -q 'data-days="7"' index.html
           grep -q 'let selectedDays =' index.html
-          grep -q '    7;' index.html
+          grep -q 'let selectedDays = 1;' index.html
           if grep -q 'loadCryptoLauncher' usage-auth-fix.js; then
             echo "Crypto launcher must not load inside MAP workspace" >&2
             exit 1

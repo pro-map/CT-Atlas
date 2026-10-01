@@ -2180,188 +2180,6 @@ body::before {
 }
 
 /* ============================================================
-   24H SENSITIVE TREND SUMMARY
-   ============================================================ */
-#trendSummaryPanel {
-    position: fixed;
-    inset: 0;
-    z-index: 3120;
-    display: none;
-    pointer-events: none;
-}
-
-#trendSummaryPanel.open {
-    display: block;
-}
-
-#trendSummaryWindow {
-    position: absolute;
-    left: 270px;
-    top: 150px;
-    width: 560px;
-    max-height: calc(100vh - 190px);
-    overflow: hidden;
-    background: rgba(7, 20, 30, .98);
-    border: 1px solid #2a4658;
-    border-radius: 4px;
-    box-shadow: 0 22px 70px rgba(0,0,0,.60);
-    backdrop-filter: blur(10px);
-    pointer-events: auto;
-}
-
-#trendSummaryHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 13px 14px 11px;
-    background: #0a1924;
-    border-bottom: 1px solid #294151;
-}
-
-#trendSummaryTitle {
-    color: #edf4f8;
-    font-size: 11px;
-    font-weight: 750;
-    letter-spacing: .11em;
-}
-
-#trendSummarySubtitle {
-    margin-top: 4px;
-    color: #70899b;
-    font-size: 8px;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-}
-
-#trendSummaryClose {
-    width: 26px;
-    height: 26px;
-    padding: 0;
-    border: 1px solid #294455;
-    border-radius: 3px;
-    background: #0a1721;
-    color: #9bb0be;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-#trendSummaryBody {
-    max-height: calc(100vh - 255px);
-    overflow-y: auto;
-    padding: 13px;
-    scrollbar-width: thin;
-    scrollbar-color: #294659 transparent;
-}
-
-#trendSummaryMeta {
-    margin-bottom: 10px;
-    color: #718a9b;
-    font-size: 8px;
-    letter-spacing: .07em;
-    text-transform: uppercase;
-}
-
-#trendSummaryOverview {
-    margin-bottom: 12px;
-    padding: 11px 12px;
-    background: #081720;
-    border-left: 2px solid #3f7594;
-    color: #c3d2db;
-    font-size: 10px;
-    line-height: 1.62;
-}
-
-.trend-development {
-    margin-bottom: 8px;
-    padding: 10px 11px;
-    background: rgba(8, 23, 33, .72);
-    border: 1px solid rgba(96, 132, 154, .18);
-    border-radius: 3px;
-}
-
-.trend-development-head {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    margin-bottom: 7px;
-}
-
-.trend-severity {
-    display: inline-block;
-    padding: 3px 6px;
-    border-radius: 2px;
-    font-size: 7px;
-    font-weight: 800;
-    letter-spacing: .08em;
-}
-
-.trend-severity.critical {
-    color: #ffd9d6;
-    background: rgba(180, 45, 45, .33);
-    border: 1px solid rgba(238, 85, 74, .45);
-}
-
-.trend-severity.high {
-    color: #ffe1c2;
-    background: rgba(180, 93, 35, .28);
-    border: 1px solid rgba(229, 135, 67, .40);
-}
-
-.trend-severity.significant {
-    color: #d9ecf7;
-    background: rgba(44, 101, 137, .30);
-    border: 1px solid rgba(72, 139, 179, .38);
-}
-
-.trend-category {
-    color: #7894a6;
-    font-size: 8px;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-}
-
-.trend-headline {
-    color: #edf4f7;
-    font-size: 11px;
-    font-weight: 650;
-    line-height: 1.4;
-}
-
-.trend-location {
-    margin-top: 4px;
-    color: #7892a4;
-    font-size: 8px;
-    text-transform: uppercase;
-    letter-spacing: .05em;
-}
-
-.trend-detail {
-    margin-top: 7px;
-    color: #aabcc7;
-    font-size: 9px;
-    line-height: 1.55;
-}
-
-#trendSummaryMethodNote {
-    margin-top: 12px;
-    padding: 9px 10px;
-    color: #617b8c;
-    background: rgba(3, 11, 17, .38);
-    border-left: 2px solid #29485b;
-    font-size: 8px;
-    line-height: 1.55;
-}
-
-@media (max-width: 950px) {
-    #trendSummaryWindow {
-        left: 225px;
-        right: 12px;
-        width: auto;
-    }
-}
-
-
-/* ============================================================
    COMPACT TIME PERIOD SEGMENTED CONTROL
    ============================================================ */
 
@@ -2634,59 +2452,9 @@ body::before {
     overflow: hidden;
 }
 
-#keyDevelopmentsButton {
-    flex: 0 0 auto;
-    padding: 4px 7px;
-    background: #0a1b27;
-    color: #8eb2c7;
-    border: 1px solid #28485b;
-    border-radius: 2px;
-    font-size: 7px;
-    font-weight: 750;
-    letter-spacing: .08em;
-    cursor: pointer;
-}
-
-#keyDevelopmentsButton:hover {
-    color: #e8f4fa;
-    border-color: #47738d;
-    background: #102838;
-}
-
 .coverage-section-hidden,
 #sidebar .coverage-box {
     display: none !important;
-}
-
-/* The modal now carries only the detailed developments; the permanent
-   Situation paragraph already displays the overview. */
-#trendSummaryOverview {
-    display: none !important;
-}
-
-.trend-development-footer {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 8px;
-}
-
-.trend-view-event {
-    padding: 4px 7px;
-    background: #0b1d29;
-    color: #8fb9d0;
-    border: 1px solid #294b5f;
-    border-radius: 2px;
-    font-size: 7px;
-    font-weight: 750;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    cursor: pointer;
-}
-
-.trend-view-event:hover {
-    color: white;
-    background: #123248;
-    border-color: #42738e;
 }
 
 @media (max-width: 1180px) {
@@ -2842,14 +2610,6 @@ body {
     overflow-wrap: break-word !important;
 }
 
-/* Keep Key Developments intentionally small. */
-#keyDevelopmentsButton {
-    flex: 0 0 auto !important;
-    padding: 4px 7px !important;
-    font-size: 7px !important;
-    line-height: 1 !important;
-    white-space: nowrap !important;
-}
 
 /* Compact the analytical-product label on the far right. */
 #commandMeta {
@@ -2971,27 +2731,6 @@ body {
     white-space: nowrap !important;
     font-size: 8.2px !important;
     line-height: 1 !important;
-}
-#keyDevelopmentsButton {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-height: 27px !important;
-    padding: 5px 11px !important;
-    border: 1px solid #5c91ae !important;
-    border-radius: 3px !important;
-    background: linear-gradient(180deg,#1b4157 0%,#102c3c 100%) !important;
-    color: #e5f5fc !important;
-    font-size: 7.6px !important;
-    font-weight: 800 !important;
-    letter-spacing: .07em !important;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.06),0 0 8px rgba(58,126,164,.12) !important;
-    cursor: pointer !important;
-}
-#keyDevelopmentsButton:hover {
-    background: linear-gradient(180deg,#285972 0%,#173b50 100%) !important;
-    border-color: #83b7d1 !important;
-    color: #fff !important;
 }
 #headerSituationText {
     font-size: 11.3px !important;
@@ -3183,12 +2922,6 @@ html, body {
         line-height: 1.32 !important;
     }
 
-    #keyDevelopmentsButton {
-        min-height: 22px !important;
-        padding: 3px 6px !important;
-        font-size: 6.3px !important;
-    }
-
     #main {
         position: relative !important;
         flex: 1 1 auto !important;
@@ -3327,7 +3060,6 @@ html, body {
 
     /* Large panels fit completely inside iPhone screen. */
     #chronologyPanel,
-    #trendSummaryPanel,
     #healthPanel,
     #disclaimerPanel {
         width: calc(100vw - 16px) !important;
@@ -4768,8 +4500,7 @@ html, body {
 #headerSituationActions {
     gap: 4px !important;
 }
-#weeklyAnalysisButton,
-#keyDevelopmentsButton {
+#weeklyAnalysisButton {
     min-height: 22px !important;
     padding: 3px 6px !important;
     font-size: 6.3px !important;
@@ -4839,8 +4570,334 @@ html, body {
 
 <script src="pdf-export.js?v=20260922" defer></script>
 <script src="usage-admin.js?v=usage-summary-20260929" defer></script>
-<script src="usage-auth-fix.js?v=20260928" defer></script>
+<script src="usage-auth-fix.js?v=20260930" defer></script>
 <script src="tab-access.js?v=20260928" defer></script>
+
+<style>
+/* ============================================================
+   V13 — ATTACKS MAP + DATABASE PANEL
+   The map shows attacks only (24h / 7 days, heat always on, offices
+   always shown); the sidebar's Database panel reaches every category.
+   ============================================================ */
+
+#mapScopeBlock .layer-buttons {
+    grid-template-rows: 34px !important;
+}
+
+#mapScopeBlock #markersToggle { grid-column: 1 !important; grid-row: 1 !important; }
+#mapScopeBlock #downloadMapButton { grid-column: 2 !important; grid-row: 1 !important; }
+
+.map-period-buttons {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 5px !important;
+}
+
+#databasePanel {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(74, 166, 223, 0.35);
+}
+
+.database-title { color: #8fd0ff !important; letter-spacing: 0.18em; }
+
+.database-total {
+    margin-left: 6px;
+    padding: 1px 6px;
+    background: rgba(74, 166, 223, 0.16);
+    color: #e3f1f8;
+    font-size: 9px;
+    letter-spacing: 0.04em;
+}
+
+.database-intro {
+    margin: 2px 0 8px;
+    color: #9fb4c0;
+    font-size: 9.5px;
+}
+
+.database-field {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.database-field span {
+    display: block;
+    margin-bottom: 2px;
+    color: #9fb4c0;
+    font-size: 8.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+#databasePanel .database-field select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px 6px;
+    background: #0e1a22;
+    border: 1px solid rgba(74, 166, 223, 0.4);
+    color: #e3f1f8;
+    font-size: 11px;
+}
+
+.database-match-count {
+    min-height: 14px;
+    margin: 4px 0 6px;
+    color: #cfe6f2;
+    font-size: 10px;
+}
+
+.database-match-count[data-state="working"] { color: #8fd0ff; }
+.database-match-count[data-state="error"] { color: #ff8a80; }
+
+#databaseToolButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#databaseToolButtons > button {
+    width: 100% !important;
+    margin: 0 !important;
+    min-height: 32px;
+}
+
+#databaseToolButtons #chronologyToggle {
+    height: auto !important;
+    padding: 8px 6px !important;
+}
+
+.report-scope {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    border: 1px solid rgba(74, 166, 223, 0.35);
+    background: rgba(14, 26, 34, 0.7);
+}
+
+.report-scope span { color: #9fb4c0; font-size: 9px; letter-spacing: 0.12em; }
+.report-scope strong { color: #e3f1f8; font-size: 12px; }
+.report-scope small { color: #7f97a4; font-size: 9.5px; }
+
+#attackTicker {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    bottom: 88px;
+    z-index: 650;
+    width: clamp(210px, 22vw, 270px);
+    display: flex;
+    flex-direction: column;
+    background: rgba(9, 16, 22, 0.86);
+    border: 1px solid rgba(255, 176, 32, 0.35);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45);
+    color: #e3f1f8;
+    pointer-events: auto;
+}
+
+#attackTickerHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 10px;
+    border-bottom: 1px solid rgba(255, 176, 32, 0.3);
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    color: #ffd27a;
+}
+
+#attackTickerCount {
+    min-width: 22px;
+    padding: 1px 6px;
+    background: rgba(255, 176, 32, 0.18);
+    color: #ffe2a8;
+    text-align: center;
+}
+
+#attackTickerViewport {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+}
+
+#attackTickerList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#attackTickerList.ticker-animated {
+    animation: attackTickerScroll var(--ticker-duration, 60s) linear infinite;
+}
+
+#attackTickerViewport:hover #attackTickerList,
+#attackTickerViewport:focus-within #attackTickerList {
+    animation-play-state: paused;
+}
+
+@keyframes attackTickerScroll {
+    from { transform: translateY(0); }
+    to { transform: translateY(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #attackTickerList.ticker-animated { animation: none; }
+    #attackTickerViewport { overflow-y: auto; }
+}
+
+.ticker-item {
+    display: block;
+    width: 100%;
+    padding: 7px 10px;
+    border: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+}
+
+.ticker-item:hover,
+.ticker-item:focus-visible {
+    background: rgba(255, 176, 32, 0.1);
+    outline: none;
+}
+
+.ticker-meta {
+    display: block;
+    margin-bottom: 2px;
+    color: #9fb4c0;
+    font-size: 9px;
+}
+
+.ticker-badge {
+    margin-left: 4px;
+    padding: 0 4px;
+    background: rgba(143, 208, 255, 0.18);
+    color: #8fd0ff;
+    font-style: normal;
+    font-size: 8px;
+    letter-spacing: 0.08em;
+}
+
+.ticker-title {
+    display: block;
+    font-size: 11px;
+    line-height: 1.35;
+}
+
+.ticker-empty {
+    padding: 12px 10px;
+    color: #9fb4c0;
+    font-size: 11px;
+}
+
+#attackTickerFooter {
+    padding: 6px 10px;
+    border-top: 1px solid rgba(255, 176, 32, 0.25);
+    color: #9fb4c0;
+    font-size: 8.5px;
+    line-height: 1.35;
+}
+
+@media (max-width: 820px) {
+    #attackTicker { display: none; }
+}
+
+#databaseEventCard {
+    position: fixed;
+    inset: 0;
+    z-index: 5300;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(3, 8, 12, 0.72);
+}
+
+#databaseEventCard.open { display: flex; }
+
+#databaseEventCardWindow {
+    position: relative;
+    width: min(560px, calc(100vw - 32px));
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
+    padding: 18px 20px;
+    background: #0d1820;
+    border: 1px solid rgba(74, 166, 223, 0.45);
+    color: #e3f1f8;
+}
+
+#databaseEventCardClose {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    border: 0;
+    background: transparent;
+    color: #cfe6f2;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.database-event-title { margin-right: 24px; font-size: 15px; font-weight: 700; line-height: 1.35; }
+.database-event-meta { margin-top: 6px; color: #9fb4c0; font-size: 11px; }
+.database-event-tags { margin-top: 4px; color: #8fd0ff; font-size: 11px; }
+.database-event-summary { margin: 12px 0; font-size: 12.5px; line-height: 1.55; }
+.database-event-source a { color: #8fd0ff; }
+.database-event-note { margin-top: 12px; color: #ffd27a; font-size: 10.5px; }
+
+.database-map-export {
+    position: fixed;
+    left: -12000px;
+    top: 0;
+    width: 1600px;
+    height: 900px;
+    background: #1a1a1a;
+}
+
+.database-map-export-map {
+    position: absolute;
+    inset: 0;
+}
+
+.database-map-export-dot {
+    box-sizing: border-box;
+    border: 1.5px solid #ffffff;
+    border-radius: 50%;
+    background: #ffb020;
+}
+
+.database-map-export-title {
+    position: absolute;
+    z-index: 1000;
+    top: 18px;
+    left: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 16px;
+    background: rgba(9, 16, 22, 0.88);
+    border-left: 3px solid #ffb020;
+    color: #e3f1f8;
+    font: 14px Arial, sans-serif;
+}
+
+.database-map-export-title strong { color: #ffd27a; font-size: 18px; letter-spacing: 0.08em; }
+
+.database-map-export-legend {
+    position: absolute;
+    z-index: 1000;
+    bottom: 18px;
+    left: 18px;
+    padding: 7px 12px;
+    background: rgba(9, 16, 22, 0.85);
+    color: #cfe6f2;
+    font: 12px Arial, sans-serif;
+}
+</style>
 
 </head>
 
@@ -4966,7 +5023,6 @@ html, body {
         <div id="headerSituationTopline">
             <div id="headerSituationActions">
                 <button id="weeklyAnalysisButton" type="button">WEEKLY ANALYSIS</button>
-                <button id="keyDevelopmentsButton" type="button">VIEW KEY DEVELOPMENTS ›</button>
             </div>
             <span id="headerSituationTitle">SITUATION 24H</span>
         </div>
@@ -5067,318 +5123,82 @@ Last 180 days
 
 
 
-<div class="section-title">
-Search
-</div>
-
-
-<input
-    id="searchInput"
-    type="text"
-    placeholder="Search title, city, country, source..."
->
-
-
+<div id="mapScopeBlock">
 
 <div class="section-title">
-Time period
+Map · attacks
 </div>
 
-
-<div class="time-buttons">
-
-
-<button
-    class="time-button"
-    data-days="1"
->
-24H
-</button>
-
-
-<button
-    class="time-button active"
-    data-days="7"
->
-7D
-</button>
-
-
-<button
-    class="time-button"
-    data-days="30"
->
-30D
-</button>
-
-
-<button
-    class="time-button"
-    data-days="90"
->
-90D
-</button>
-
-
-<button
-    class="time-button"
-    data-days="180"
->
-6M
-</button>
-
-
+<div class="time-buttons map-period-buttons">
+<button class="time-button active" data-days="1">24H</button>
+<button class="time-button" data-days="7">7 DAYS</button>
 </div>
-
-
-
-<div class="section-title">
-Map layers
-</div>
-
 
 <div class="layer-buttons">
-
 <button class="layer-button active" id="markersToggle">EVENTS</button>
-<button class="layer-button active" id="heatToggle" title="Heat based only on attacks and armed clashes/combat">HEAT ZONES</button>
-<button class="layer-button" id="chronologyToggle">LIST / EXPORT</button>
-<button class="layer-button active" id="officesToggle">OUR OFFICES</button>
 <button class="layer-button" id="downloadMapButton">DOWNLOAD MAP</button>
-
 </div>
-
-<button
-    id="reportGeneratorButton"
-    type="button"
->
-REPORT GENERATOR
-</button>
-
-
-
-
-<div class="section-title">
-Intelligence categories
-</div>
-
-
-<div class="category-actions">
-
-
-<button
-    class="action-button"
-    id="selectAll"
->
-SELECT ALL
-</button>
-
-
-<button
-    class="action-button"
-    id="clearAll"
->
-CLEAR
-</button>
-
 
 </div>
 
 
+<div id="databasePanel">
 
-<label class="category">
-
-<input
-    type="checkbox"
-    class="category-filter"
-    value="Terrorist Financing"
-    checked
->
-
-<span class="category-icon financing">
-TF
-</span>
-
-Terrorist Financing
-
-</label>
-
-
-
-<label class="category">
-
-<input
-    type="checkbox"
-    class="category-filter"
-    value="Weapons"
-    checked
->
-
-<span class="category-icon weapons">
-W
-</span>
-
-Weapons
-
-</label>
-
-
-<label class="category">
-
-<input
-    type="checkbox"
-    class="category-filter"
-    value="Maritime Security"
-    checked
->
-
-<span class="category-icon piracy">
-MP
-</span>
-
-Maritime Security
-
-</label>
-
-
-
-<label class="category">
-
-<input
-    type="checkbox"
-    class="category-filter"
-    value="CBRN"
-    checked
->
-
-<span class="category-icon cbrn">
-C
-</span>
-
-CBRN
-
-</label>
-
-
-
-<label class="category">
-
-<input
-    type="checkbox"
-    class="category-filter"
-    value="Online / Cyber / AI"
-    checked
->
-
-<span class="category-icon online">
-O/C
-</span>
-
-Online / Cyber / AI
-
-</label>
-
-
-
-<label class="category">
-
-<input
-    type="checkbox"
-    class="category-filter"
-    value="Attacks"
-    checked
->
-
-<span class="category-icon attacks">
-A
-</span>
-
-Attacks
-
-</label>
-
-
-
-<label class="category">
-
-<input
-    type="checkbox"
-    class="category-filter"
-    value="Counter Terrorism Action"
-    checked
->
-
-<span class="category-icon ctaction">
-CTA
-</span>
-
-Counter Terrorism Action
-
-</label>
-
-
-
-<label class="category">
-
-<input
-    type="checkbox"
-    class="category-filter"
-    value="Arrests"
-    checked
->
-
-<span class="category-icon arrests">
-AR
-</span>
-
-Arrests
-
-</label>
-
-
-
-<label class="category">
-
-<input
-    type="checkbox"
-    class="category-filter"
-    value="Legal / Judicial"
-    checked
->
-
-<span class="category-icon legal">
-J
-</span>
-
-Legal / Judicial
-
-</label>
-
-
-
-
-<div class="section-title">
-Actor / group
+<div class="section-title database-title">
+Database <span id="databaseTotalCount" class="database-total" hidden></span>
 </div>
 
-<div class="category-actions">
+<p class="database-intro">All categories · filter, list, export and analyse.</p>
 
-<button
-    class="action-button"
-    id="selectAllGroups"
->
-SELECT ALL
-</button>
+<label class="database-field">
+<span>Period</span>
+<select id="reportPeriod">
+<option value="1">Last 24 hours</option>
+<option value="7" selected>Last 7 days</option>
+<option value="30">Last 30 days</option>
+<option value="90">Last 90 days</option>
+<option value="180">Last 6 months</option>
+</select>
+</label>
 
-<button
-    class="action-button"
-    id="clearAllGroups"
->
-CLEAR
-</button>
+<label class="database-field">
+<span>Region / country</span>
+<select id="reportRegion">
+<option value="GLOBAL">Global</option>
+</select>
+</label>
 
+<label class="database-field">
+<span>Category</span>
+<select id="reportTopic">
+<option value="ALL">All categories</option>
+<option value="Attacks">Attacks</option>
+<option value="Counter Terrorism Action">Counter Terrorism Action</option>
+<option value="Arrests">Arrests</option>
+<option value="Terrorist Financing">Terrorist Financing</option>
+<option value="Weapons">Weapons</option>
+<option value="Maritime Piracy">Maritime Security</option>
+<option value="CBRN">CBRN</option>
+<option value="Online / Cyber / AI">Online / Cyber / AI</option>
+<option value="Legal / Judicial">Legal / Judicial</option>
+</select>
+</label>
+
+<label class="database-field">
+<span>Terrorist group</span>
+<select id="reportGroup">
+<option value="ALL">All groups</option>
+</select>
+</label>
+
+<div id="databaseMatchCount" class="database-match-count" aria-live="polite"></div>
+
+<div id="databaseToolButtons" class="database-tools">
+<button class="layer-button" id="chronologyToggle" type="button">EVENT LIST / EXPORT</button>
+<button id="reportGeneratorButton" type="button">REPORT GENERATOR</button>
 </div>
 
-<div id="groupFilterList" class="group-filter-list"></div>
+</div>
 
 
 
@@ -5531,9 +5351,20 @@ Visible rate
 
     <div id="map"></div>
 
+    <aside id="attackTicker" aria-label="Attacks in the selected period">
+        <div id="attackTickerHeader">
+            <span id="attackTickerTitle">ATTACKS · LAST 24H</span>
+            <strong id="attackTickerCount">—</strong>
+        </div>
+        <div id="attackTickerViewport">
+            <ul id="attackTickerList"></ul>
+        </div>
+        <div id="attackTickerFooter">Map: executed, attempted and foiled attacks only. Full database in the DATABASE panel.</div>
+    </aside>
+
     <div id="timelineDock">
         <div id="timelineHeader">
-            <span>Events over time · 30 days</span>
+            <span>Attacks over time · 30 days</span>
             <strong id="timelineTodayLabel">Today —</strong>
         </div>
         <div id="timelineBars"></div>
@@ -5603,7 +5434,7 @@ Visible rate
       <div class="health-grid">
         <div class="health-metric"><div class="health-label">System status</div><div class="health-value health-ok">Operational</div></div>
         <div class="health-metric"><div class="health-label">Database events</div><div class="health-value" id="healthEventCount">—</div></div>
-        <div class="health-metric"><div class="health-label">Mapped events</div><div class="health-value" id="healthMappedCount">—</div></div>
+        <div class="health-metric"><div class="health-label">Mapped attacks</div><div class="health-value" id="healthMappedCount">—</div></div>
       </div>
 
       <div class="health-section">
@@ -5663,31 +5494,6 @@ Visible rate
 
 
 
-<div id="trendSummaryPanel" aria-hidden="true">
-  <div id="trendSummaryWindow">
-    <div id="trendSummaryHeader">
-      <div>
-        <div id="trendSummaryTitle">KEY DEVELOPMENTS · LAST 24 HOURS</div>
-        <div id="trendSummarySubtitle">Priority developments behind the situation brief</div>
-      </div>
-      <button id="trendSummaryClose" type="button" aria-label="Close">×</button>
-    </div>
-
-    <div id="trendSummaryBody">
-      <div id="trendSummaryMeta">Loading latest trend synthesis…</div>
-      <div id="trendSummaryOverview"></div>
-      <div id="trendSummaryDevelopments"></div>
-      <div id="trendSummaryMethodNote">
-        Based only on deduplicated CT events reported or materially updated during the previous 24 hours. The brief prioritises major attacks, bombings, assassinations, serious clashes, important arrests or plot disruptions, and other operationally significant CT developments. Verify against primary sources before operational use.
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-
 <div id="reportGeneratorPanel" aria-hidden="true">
   <div id="reportGeneratorWindow" role="dialog" aria-modal="true" aria-labelledby="reportGeneratorTitle">
     <div id="reportGeneratorHeader">
@@ -5700,38 +5506,11 @@ Visible rate
 
     <div id="reportGeneratorBody">
       <div id="reportGeneratorControls">
-        <label class="report-field">
-          <span>REGION / COUNTRY</span>
-          <select id="reportRegion">
-            <option value="GLOBAL">Global</option>
-          </select>
-        </label>
-
-        <label class="report-field">
-          <span>TOPIC</span>
-          <select id="reportTopic">
-            <option value="ALL">All CT activity</option>
-            <option value="Attacks">Attacks</option>
-            <option value="Counter Terrorism Action">Counter Terrorism Action</option>
-            <option value="Arrests">Arrests</option>
-            <option value="Terrorist Financing">Terrorist Financing</option>
-            <option value="Weapons">Weapons</option>
-            <option value="Maritime Piracy">Maritime Security</option>
-            <option value="CBRN">CBRN</option>
-            <option value="Online / Cyber / AI">Online / Cyber / AI</option>
-            <option value="Legal / Judicial">Legal / Judicial</option>
-          </select>
-        </label>
-
-        <label class="report-field">
-          <span>PERIOD</span>
-          <select id="reportPeriod">
-            <option value="7">Last 7 days</option>
-            <option value="30" selected>Last 30 days</option>
-            <option value="90">Last 90 days</option>
-            <option value="180">Last 6 months</option>
-          </select>
-        </label>
+        <div class="report-scope">
+          <span>DATABASE FILTERS</span>
+          <strong id="reportScopeSummary">Global · all categories · all groups · last 7 days</strong>
+          <small>Change them in the DATABASE panel on the left.</small>
+        </div>
 
         <label class="report-compare">
           <input id="reportCompare" type="checkbox" checked>
@@ -5762,7 +5541,7 @@ Visible rate
         <div id="reportResultVisuals"></div>
         <div id="reportResultSources"></div>
         <div id="reportGeneratorDisclaimer">
-          AI-assisted analysis based on deduplicated open-source events held in the map database. It does not constitute verified intelligence and must be independently validated before operational or decision-making use.
+          AI-assisted analysis based on deduplicated open-source events held in the CT Atlas database. It does not constitute verified intelligence and must be independently validated before operational or decision-making use.
         </div>
       </div>
     </div>
@@ -5811,11 +5590,11 @@ Visible rate
                     class="chronology-heading"
                     id="chronologyHeading"
                 >
-                    EVENT LIST
+                    DATABASE · EVENT LIST
                 </div>
 
-                <div class="chronology-subtitle">
-                    Chronological intelligence feed · select events and export them to Excel
+                <div class="chronology-subtitle" id="chronologyScope">
+                    Every category, filtered in the DATABASE panel · select events and export them to Excel or to a heat map (JPEG)
                 </div>
 
             </div>
@@ -5886,6 +5665,14 @@ Visible rate
                     EXPORT EXCEL
                 </button>
 
+                <button
+                    class="chronology-action-button"
+                    id="chronologyExportMap"
+                    type="button"
+                >
+                    EXPORT MAP (JPEG)
+                </button>
+
                 <span id="chronologySelectionCount">
                     0 selected
                 </span>
@@ -5910,6 +5697,14 @@ Visible rate
 
     </div>
 
+</div>
+
+
+<div id="databaseEventCard" aria-hidden="true">
+    <div id="databaseEventCardWindow" role="dialog" aria-modal="true" aria-label="Database event">
+        <button id="databaseEventCardClose" type="button" aria-label="Close event details">×</button>
+        <div id="databaseEventCardBody"></div>
+    </div>
 </div>
 
 
@@ -6056,63 +5851,6 @@ Visible rate
 
     restoreSession();
 })()
-
-document.getElementById(
-    "officesToggle"
-).addEventListener(
-
-    "click",
-
-    function() {
-
-        showInterpolOffices =
-            !showInterpolOffices;
-
-
-        this.classList.toggle(
-            "active",
-            showInterpolOffices
-        );
-
-
-        if (
-            showInterpolOffices
-        ) {
-
-            if (
-                !map.hasLayer(
-                    interpolOfficesLayer
-                )
-            ) {
-
-                map.addLayer(
-                    interpolOfficesLayer
-                );
-
-            }
-
-        }
-
-
-        else {
-
-            if (
-                map.hasLayer(
-                    interpolOfficesLayer
-                )
-            ) {
-
-                map.removeLayer(
-                    interpolOfficesLayer
-                );
-
-            }
-
-        }
-
-    }
-
-);
 
 </script>
 
@@ -6742,8 +6480,37 @@ let weeklyAnalysisData =
     null;
 
 
-let selectedDays =
-    7;
+// Other categories of the last few days: never drawn on the map, but the
+// header's casualty counts need them.
+let recentContextEvents =
+    [];
+
+
+// Size of the whole database (all categories) from the map file, for the
+// DATABASE title's total and the health panel.
+let databaseSummary =
+    null;
+
+// Every event the Database panel can list (unlocated ones included).
+let databaseEventTotal =
+    0;
+
+
+// Database panel state: the Worker's answer for the current filters (every
+// category), the event list and both exports work on it.
+let databaseResults = [];
+let databaseResultsKey = "";
+let databaseLastError = "";
+let databaseLastStatus = "";
+let databaseQueryPromise = null;
+let databaseQuerySeq = 0;
+let databaseQueryTimer = null;
+let databaseActivated = false;
+let databaseArchiveTotal = null;
+let databaseArchiveRequested = false;
+
+
+let selectedDays = 1;
 
 
 let showMarkers =
@@ -7010,7 +6777,86 @@ function loadEventsDatabase() {
 }
 
 
-loadEventsDatabase()
+// The map shows only real and foiled attacks: executed attacks (ATTACK with
+// is_attack), attempted attacks and disrupted plots. Legacy records without a
+// primary_event_type fall back to the "Attacks" category. Same rule as
+// tools/build_events_map.py.
+function isMapAttackEvent(event) {
+    const type = String(event.primary_event_type || "").trim().toUpperCase();
+    if (type) {
+        if (type === "ATTACK") return event.is_attack === true;
+        return type === "ATTEMPTED_ATTACK" || type === "DISRUPTED_PLOT";
+    }
+    const categories = Array.isArray(event.categories) && event.categories.length
+        ? event.categories
+        : (event.category ? [event.category] : []);
+    return categories.includes("Attacks");
+}
+
+// Same key as the Worker's eventUniqueKey (its /database-events rows carry it
+// as match_key): event ids alone are shared by unrelated events published the
+// same day, so id + publication time + title identifies one event.
+function eventMatchKey(event) {
+    const clean = value => String(value || "").replace(/\s+/g, " ").trim().slice(0, 120);
+    const time = Date.parse(String(event?.published || ""));
+    return [clean(event?.id), Number.isFinite(time) ? time : "", clean(event?.title)].join("|");
+}
+
+const MAP_RECENT_EVENT_DAYS = 4;
+
+// The map's own file (events-map.json, built at publication time: attacks only,
+// ~1/4 of events-lite.json) or, if it is missing or unusable, the full database
+// reduced to the same shape here.
+function loadMapDatabase() {
+
+    return fetch("events-map.json")
+    .then(response => {
+        if (!response.ok) throw new Error("events-map.json unavailable");
+        return response.json();
+    })
+    .then(data => {
+        if (!data || !Array.isArray(data.events) || !Array.isArray(data.recent_events)) {
+            throw new Error("events-map.json invalid");
+        }
+        window.eventsDataSource = "events-map.json";
+        return data;
+    })
+    .catch(() => loadEventsDatabase().then(data => {
+        const all = Array.isArray(data.events) ? data.events : [];
+        const recentCutoff = Date.now() - MAP_RECENT_EVENT_DAYS * 86400000;
+        // Same rule as tools/build_events_map.py: older events cited by a Key
+        // Development stay reachable.
+        const developments = Array.isArray(data.trend_summary?.developments) ? data.trend_summary.developments : [];
+        const citedIds = new Set(developments.map(item => String(item?.event_id || "")).filter(Boolean));
+        const byCategory = {};
+        all.forEach(event => {
+            if (event.excluded_from_map === true) return;
+            const category = (Array.isArray(event.categories) && event.categories[0]) || event.category;
+            if (category) byCategory[category] = (byCategory[category] || 0) + 1;
+        });
+        return {
+            ...data,
+            // Unlocated attacks stay: never drawn, but in the ticker and the
+            // header counts.
+            events: all.filter(isMapAttackEvent),
+            recent_events: all.filter(event => {
+                if (isMapAttackEvent(event)) return false;
+                if (citedIds.has(String(event.id || ""))) return true;
+                const time = new Date(event.published || 0).getTime();
+                return Number.isFinite(time) && time >= recentCutoff;
+            }),
+            database_summary: {
+                total_events: all.filter(event => event.excluded_from_map !== true).length,
+                by_category: byCategory
+            },
+            map: { source_event_count: all.length }
+        };
+    }));
+
+}
+
+
+loadMapDatabase()
 
 .then(
     data => {
@@ -7025,6 +6871,25 @@ loadEventsDatabase()
             ||
             [];
 
+        recentContextEvents =
+            Array.isArray(data.recent_events)
+            ?
+            data.recent_events
+            :
+            [];
+
+        databaseSummary =
+            data.database_summary
+            ||
+            null;
+
+        databaseEventTotal =
+            Number(data.map?.source_event_count)
+            ||
+            Number(data.database_summary?.total_events)
+            ||
+            0;
+
 
         trendSummaryData =
             data.trend_summary
@@ -7038,25 +6903,42 @@ loadEventsDatabase()
             null;
 
 
-        allEvents.forEach(
+        // Unique per event: the database holds a few duplicate ids, and a
+        // shared key would make one marker, ticker line or list row stand in
+        // for another.
+        const usedKeys = new Set();
+
+        [...allEvents, ...recentContextEvents].forEach(
 
             (event, index) => {
 
-                event._mapKey =
-
+                const base =
                     event.id
-
                     ||
-
                     (
                         "event-"
                         +
                         index
                     );
 
+                event._mapKey =
+                    usedKeys.has(base)
+                    ?
+                    base + "#" + index
+                    :
+                    base;
+
+                usedKeys.add(event._mapKey);
+
             }
 
         );
+
+        // Database rows that arrived before the map's file can now find their
+        // marker (refreshDashboard below redraws an open list).
+        linkDatabaseRowsToMap();
+
+        renderDatabaseTotal();
 
 
         if (
@@ -7084,8 +6966,6 @@ loadEventsDatabase()
 
         }
 
-
-        renderGroupFilters();
 
         refreshDashboard();
 
@@ -7171,8 +7051,25 @@ function withinDays(
 
 
 
+// The map no longer has category checkboxes (it shows attacks only; category
+// filtering lives in the Database panel). With no checkbox on the page this
+// sentinel list means "no category filter" -- categoryMatches() lets every
+// event through on it, whatever its category.
+const MAP_ALL_CATEGORIES = Object.freeze([
+    "Attacks", "Counter Terrorism Action", "Arrests", "Legal / Judicial",
+    "Terrorist Financing", "Weapons", "Maritime Security", "CBRN", "Online / Cyber / AI"
+]);
+
 function selectedCategories() {
 
+    const checkboxes =
+        document.querySelectorAll(
+            ".category-filter"
+        );
+
+    if (!checkboxes.length) {
+        return MAP_ALL_CATEGORIES;
+    }
 
     return Array.from(
 
@@ -7288,6 +7185,11 @@ function categoryMatches(
         selectedCategories();
 
 
+    if (selectedList === MAP_ALL_CATEGORIES) {
+        return true;
+    }
+
+
     const categories =
         eventCategories(
             event
@@ -7314,46 +7216,17 @@ function eventActorGroup(event) {
     return value || UNSPECIFIED_GROUP_LABEL;
 }
 
-function renderGroupFilters() {
-    const container = document.getElementById("groupFilterList");
-    if (!container) return;
-
-    const counts = new Map();
-    allEvents.forEach(event => {
-        const group = eventActorGroup(event);
-        counts.set(group, (counts.get(group) || 0) + 1);
-    });
-
-    const groups = Array.from(counts.entries()).sort(
-        (a, b) => b[1] - a[1] || a[0].localeCompare(b[0])
-    );
-
-    container.innerHTML = groups.map(([group, count]) => `
-        <label class="category">
-            <input type="checkbox" class="group-filter" value="${escapeHtml(group)}" checked>
-            <span class="group-filter-name">${escapeHtml(group)}</span>
-            <span class="group-filter-count">${count}</span>
-        </label>
-    `).join("");
-
-    if (!container.dataset.bound) {
-        container.addEventListener("change", event => {
-            if (event.target.classList.contains("group-filter")) {
-                scheduleDashboardRefresh();
-            }
-        });
-        container.dataset.bound = "1";
-    }
-}
-
+// null = no group filter on the page (group filtering lives in the Database panel).
 function selectedGroups() {
+    if (!document.querySelector(".group-filter")) return null;
     return Array.from(
         document.querySelectorAll(".group-filter:checked")
     ).map(checkbox => checkbox.value);
 }
 
 function groupMatches(event, selected) {
-    return (selected || selectedGroups()).includes(eventActorGroup(event));
+    const list = selected === undefined ? selectedGroups() : selected;
+    return list === null || list.includes(eventActorGroup(event));
 }
 
 
@@ -7976,8 +7849,14 @@ function isHeatEligibleEvent(event) {
        - online/cyber/AI
        - legal/judicial developments
        - other non-violent CT activity
+
+       The map now only holds executed, attempted and foiled attacks
+       (isMapAttackEvent), so every map event feeds the heat -- a foiled plot
+       filed under Counter Terrorism Action included.
     */
     if (
+        isMapAttackEvent(event)
+        ||
         categories.includes(
             "Attacks"
         )
@@ -8891,14 +8770,12 @@ function updateTrends() {
 // EVENT LIST + EXCEL EXPORT
 // ============================================================
 
+// The event list is the Database panel's list: every category matching the
+// panel's filters, queried from the Worker (queryDatabase), not the map's
+// attacks.
 function chronologyBaseEvents() {
 
-    return filteredAllEvents().filter(
-
-        event =>
-            event.excluded_from_map !== true
-
-    );
+    return databaseResultsCurrent() ? databaseResults : [];
 
 }
 
@@ -9451,19 +9328,7 @@ function renderChronology() {
 
         +
 
-        selectedDays
-
-        +
-
-        (
-            selectedDays
-            ===
-            1
-            ?
-            " day"
-            :
-            " days"
-        );
+        databaseFiltersText();
 
 
     list.innerHTML =
@@ -9482,7 +9347,7 @@ function renderChronology() {
         list.innerHTML = `
 
             <div class="chronology-empty">
-                No events match the current filters.
+                ${escapeHtml(databaseListEmptyText())}
             </div>
 
         `;
@@ -9758,7 +9623,8 @@ function renderChronology() {
                     ${escapeHtml(chronologyLocationText(event))}
                     ·
                     ${escapeHtml(categoryText)}
-                    ${mapped ? " · Click row to locate" : " · No mapped coordinates"}
+                    ${event.actor_group ? " · " + escapeHtml(event.actor_group) : ""}
+                    ${isOnMapNow(event._mapEventKey) ? " · On the map: click to locate" : " · Click for details"}
                 </div>
 
             `;
@@ -9775,7 +9641,7 @@ function renderChronology() {
 
 
             if (
-                event.url
+                safeHttpUrl(event.url)
             ) {
 
                 const sourceLink =
@@ -9785,7 +9651,7 @@ function renderChronology() {
 
 
                 sourceLink.href =
-                    event.url;
+                    safeHttpUrl(event.url);
 
 
                 sourceLink.target =
@@ -9875,25 +9741,21 @@ function renderChronology() {
             );
 
 
-            if (
-                mapped
-            ) {
+            // Attacks on the map zoom to their marker; every other database
+            // event opens its details card.
+            item.addEventListener(
 
-                item.addEventListener(
+                "click",
 
-                    "click",
+                function() {
 
-                    function() {
+                    openDatabaseEvent(
+                        event
+                    );
 
-                        focusChronologyEvent(
-                            event._mapKey
-                        );
+                }
 
-                    }
-
-                );
-
-            }
+            );
 
 
             fragment.appendChild(
@@ -10147,6 +10009,17 @@ function excelRowsFromEvents(
                 "English Summary":
                     event.summary
                     ||
+                    "",
+
+                // Appended last so "Source URL" stays column R (hyperlinked below).
+                "Terrorist group":
+                    event.actor_group
+                    ||
+                    "",
+
+                "Event type":
+                    event.primary_event_type
+                    ||
                     ""
 
             };
@@ -10158,23 +10031,29 @@ function excelRowsFromEvents(
 }
 
 
+function selectedDatabaseEvents() {
+
+    // Never export a list that no longer matches the filters on screen.
+    if (!databaseResultsCurrent()) {
+        return [];
+    }
+
+    return databaseResults.filter(
+
+        event =>
+            chronologySelectedKeys.has(
+                event._mapKey
+            )
+
+    );
+
+}
+
+
 function exportChronologyExcel() {
 
     const selectedEvents =
-        allEvents.filter(
-
-            event =>
-                chronologySelectedKeys.has(
-                    event._mapKey
-                )
-
-                &&
-
-                event.excluded_from_map
-                !==
-                true
-
-        );
+        selectedDatabaseEvents();
 
 
     if (
@@ -10184,7 +10063,7 @@ function exportChronologyExcel() {
     ) {
 
         alert(
-            "Select at least one event before exporting."
+            databaseExportBlockedText()
         );
 
 
@@ -10248,7 +10127,7 @@ function exportChronologyExcel() {
         (event, index) => {
 
             if (
-                !event.url
+                !safeHttpUrl(event.url)
             ) {
 
                 return;
@@ -10277,7 +10156,7 @@ function exportChronologyExcel() {
                 ].l = {
 
                     Target:
-                        event.url,
+                        safeHttpUrl(event.url),
 
                     Tooltip:
                         "Open source article"
@@ -10310,7 +10189,9 @@ function exportChronologyExcel() {
         {wch: 16},
         {wch: 28},
         {wch: 55},
-        {wch: 90}
+        {wch: 90},
+        {wch: 34},
+        {wch: 18}
     ];
 
 
@@ -10332,20 +10213,9 @@ function exportChronologyExcel() {
 
         {
             "Field":
-                "Map period",
+                "Database filters",
             "Value":
-                selectedDays
-                +
-                " days"
-        },
-
-        {
-            "Field":
-                "Categories",
-            "Value":
-                selectedCategories().join(
-                    " / "
-                )
+                databaseFiltersText()
         },
 
         {
@@ -11522,8 +11392,11 @@ function shiftCalendarDateStringToDate(
 
 function updateHeaderCasualties24() {
 
+    // Terrorists killed/captured come from counter-terrorism and arrest
+    // reports, which are not on the attacks-only map: recentContextEvents
+    // carries the last few days of those categories.
     const relevantEvents =
-        allEvents.filter(
+        [...allEvents, ...recentContextEvents].filter(
             isCurrentCasualtyEvent
         );
 
@@ -12084,7 +11957,7 @@ function updateCommandCenterPanels() {
                         <div
                             class="timeline-bar${todayClass}"
                             style="height:${height}px"
-                            title="${label}: ${item.count} events"
+                            title="${label}: ${item.count} ${item.count === 1 ? "attack" : "attacks"}"
                         ></div>
                     `;
 
@@ -12192,7 +12065,8 @@ function calculateNextScheduledUpdate(){
 }
 function updateHealthStatusPanel(){
   const mapped=allEvents.filter(e=>e.excluded_from_map!==true&&e.location_precision!=="unlocated"&&e.latitude!=null&&e.longitude!=null).length;
-  const total=allEvents.length;
+  // The whole database (every category), not just the attacks the map loads.
+  const total=Number(databaseSummary?.total_events)||allEvents.length;
   const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
   set("healthEventCount",total.toLocaleString("en-GB"));
   set("healthMappedCount",mapped.toLocaleString("en-GB"));
@@ -12520,219 +12394,6 @@ function renderHeaderSituationBrief() {
 }
 
 
-function openTrendDevelopmentEvent(
-    eventId
-) {
-
-    if (!eventId) {
-        return;
-    }
-
-    const event =
-        allEvents.find(
-            candidate =>
-                String(
-                    candidate.id
-                    ||
-                    candidate._mapKey
-                    ||
-                    ""
-                )
-                ===
-                String(
-                    eventId
-                )
-        );
-
-    if (!event) {
-        return;
-    }
-
-    closeTrendSummary();
-
-    focusChronologyEvent(
-        event._mapKey
-    );
-}
-
-
-function renderTrendSummaryPanel() {
-
-    const meta =
-        document.getElementById(
-            "trendSummaryMeta"
-        );
-
-    const overview =
-        document.getElementById(
-            "trendSummaryOverview"
-        );
-
-    const developments =
-        document.getElementById(
-            "trendSummaryDevelopments"
-        );
-
-    if (
-        !meta
-        ||
-        !overview
-        ||
-        !developments
-    ) {
-        return;
-    }
-
-
-    if (
-        !trendSummaryData
-    ) {
-        meta.textContent =
-            "No trend summary stored in the current database";
-
-        overview.textContent =
-            "The 24-hour trend summary will become available after the next collector update using the new collector version.";
-
-        developments.innerHTML =
-            "";
-
-        return;
-    }
-
-
-    const status =
-        trendSummaryData.status
-        ||
-        "unknown";
-
-    const model =
-        trendSummaryData.model
-        ||
-        "Gemini";
-
-    const candidates =
-        Number(
-            trendSummaryData.candidate_events
-            ||
-            0
-        );
-
-    meta.textContent =
-        "Generated "
-        +
-        formatTrendGeneratedAt(
-            trendSummaryData.generated_at
-        )
-        +
-        " · "
-        +
-        model
-        +
-        " · "
-        +
-        candidates
-        +
-        " recent candidate events"
-        +
-        (
-            status === "fallback"
-            ?
-            " · FALLBACK MODE"
-            :
-            ""
-        );
-
-
-    overview.textContent =
-        trendSummaryData.overview
-        ||
-        "No significant CT trend synthesis was generated for this update.";
-
-
-    const items =
-        Array.isArray(
-            trendSummaryData.developments
-        )
-        ?
-        trendSummaryData.developments
-        :
-        [];
-
-
-    if (
-        items.length === 0
-    ) {
-        developments.innerHTML =
-            '<div class="trend-development"><div class="trend-detail">No development met the threshold for inclusion in the sensitive 24-hour brief.</div></div>';
-        return;
-    }
-
-
-    developments.innerHTML =
-        items.map(
-            item => {
-
-                const severity =
-                    String(
-                        item.severity
-                        ||
-                        "SIGNIFICANT"
-                    ).toUpperCase();
-
-                const severityClass =
-                    severity === "CRITICAL"
-                    ?
-                    "critical"
-                    :
-                    severity === "HIGH"
-                    ?
-                    "high"
-                    :
-                    "significant";
-
-                return `
-                    <div class="trend-development">
-                        <div class="trend-development-head">
-                            <span class="trend-severity ${severityClass}">${escapeHtml(severity)}</span>
-                            <span class="trend-category">${escapeHtml(normalizeCategoryName(item.category) || "CT Development")}</span>
-                        </div>
-                        <div class="trend-headline">${escapeHtml(item.headline || "")}</div>
-                        ${item.location ? `<div class="trend-location">${escapeHtml(item.location)}</div>` : ""}
-                        <div class="trend-detail">${escapeHtml(item.detail || "")}</div>
-                        ${
-                            item.event_id
-                            ?
-                            `<div class="trend-development-footer"><button class="trend-view-event" type="button" data-event-id="${escapeHtml(item.event_id)}">VIEW EVENT</button></div>`
-                            :
-                            ""
-                        }
-                    </div>
-                `;
-
-            }
-        ).join("");
-
-    developments
-        .querySelectorAll(
-            ".trend-view-event"
-        )
-        .forEach(
-            button => {
-                button.addEventListener(
-                    "click",
-                    () =>
-                        openTrendDevelopmentEvent(
-                            button.dataset.eventId
-                        )
-                );
-            }
-        );
-
-}
-
-
-
-
 /* ============================================================
    REPORT GENERATOR CLIENT
    ============================================================ */
@@ -12979,9 +12640,13 @@ function populateReportRegions() {
             "reportRegion"
         );
 
-    if (!select) {
+    // The list lives in the Database panel now and is shared by every tool:
+    // fill it once and never reset the analyst's current choice.
+    if (!select || select.dataset.populated) {
         return;
     }
+
+    select.dataset.populated = "1";
 
     const regionsHtml =
         REPORT_INTERPOL_REGIONS
@@ -13103,6 +12768,7 @@ function openReportGenerator() {
 
     populateReportRegions();
     updateReportComparisonAvailability();
+    updateReportScopeSummary();
 
     const panel =
         document.getElementById(
@@ -13538,6 +13204,13 @@ async function generateCustomReport() {
             ).value
         );
 
+    const actorGroup =
+        document.getElementById(
+            "reportGroup"
+        )?.value
+        ||
+        "ALL";
+
     const compare =
         document.getElementById(
             "reportCompare"
@@ -13572,6 +13245,8 @@ async function generateCustomReport() {
                             {
                                 region,
                                 topic,
+                                actor_group:
+                                    actorGroup,
                                 period_days:
                                     periodDays,
                                 compare,
@@ -14194,52 +13869,6 @@ function closeWeeklyAnalysis() {
 }
 
 
-function openTrendSummary() {
-
-    renderTrendSummaryPanel();
-
-    const panel =
-        document.getElementById(
-            "trendSummaryPanel"
-        );
-
-    if (
-        panel
-    ) {
-        panel.classList.add(
-            "open"
-        );
-        panel.setAttribute(
-            "aria-hidden",
-            "false"
-        );
-    }
-
-}
-
-
-function closeTrendSummary() {
-
-    const panel =
-        document.getElementById(
-            "trendSummaryPanel"
-        );
-
-    if (
-        panel
-    ) {
-        panel.classList.remove(
-            "open"
-        );
-        panel.setAttribute(
-            "aria-hidden",
-            "true"
-        );
-    }
-
-}
-
-
 document.addEventListener(
     "DOMContentLoaded",
     () => {
@@ -14313,13 +13942,6 @@ document.addEventListener(
         );
 
         document.getElementById(
-            "keyDevelopmentsButton"
-        )?.addEventListener(
-            "click",
-            openTrendSummary
-        );
-
-        document.getElementById(
             "weeklyAnalysisClose"
         )?.addEventListener(
             "click",
@@ -14343,33 +13965,12 @@ document.addEventListener(
         );
 
 
-document.getElementById(
-            "trendSummaryClose"
-        )?.addEventListener(
-            "click",
-            closeTrendSummary
-        );
-
-        document.getElementById(
-            "trendSummaryPanel"
-        )?.addEventListener(
-            "click",
-            event => {
-                if (
-                    event.target.id === "trendSummaryPanel"
-                ) {
-                    closeTrendSummary();
-                }
-            }
-        );
-
         document.addEventListener(
             "keydown",
             event => {
                 if (
                     event.key === "Escape"
                 ) {
-                    closeTrendSummary();
                     closeWeeklyAnalysis();
                 }
             }
@@ -14377,6 +13978,576 @@ document.getElementById(
 
     }
 );
+
+
+/* =========================================================
+   DATABASE PANEL
+   The map holds attacks only. The panel on the left reaches the whole
+   database (every category) through the Worker, with ONE set of filters
+   shared by the event list, the Excel and map exports, the Report
+   Generator, Deep Search and Atlas AI (window.CTAtlasDatabase).
+   ========================================================= */
+
+function databaseFilters() {
+    const value = id => document.getElementById(id)?.value || "";
+    return {
+        region: value("reportRegion") || "GLOBAL",
+        topic: value("reportTopic") || "ALL",
+        actor_group: value("reportGroup") || "ALL",
+        period_days: Number(value("reportPeriod")) || 7
+    };
+}
+
+function selectedOptionText(id, fallback) {
+    const select = document.getElementById(id);
+    const option = select && select.selectedIndex >= 0 ? select.options[select.selectedIndex] : null;
+    return option ? option.text.replace(/\s+\([\d,]+\)$/, "") : fallback;
+}
+
+function databaseFiltersText(options) {
+    const filters = databaseFilters();
+    const parts = [
+        filters.region === "GLOBAL" ? "Global" : selectedOptionText("reportRegion", filters.region),
+        filters.topic === "ALL" ? "all categories" : selectedOptionText("reportTopic", filters.topic),
+        filters.actor_group === "ALL" ? "all groups" : filters.actor_group
+    ];
+    if (options?.withPeriod !== false) {
+        parts.push(selectedOptionText("reportPeriod", "last " + filters.period_days + " days").toLowerCase());
+    }
+    return parts.join(" · ");
+}
+
+window.CTAtlasDatabase = {
+    filters: databaseFilters,
+    label: databaseFiltersText
+};
+
+function updateReportScopeSummary() {
+    const node = document.getElementById("reportScopeSummary");
+    if (node) node.textContent = databaseFiltersText();
+}
+
+function setDatabaseStatus(text, state) {
+    const node = document.getElementById("databaseMatchCount");
+    if (!node) return;
+    node.textContent = text;
+    node.dataset.state = state || "";
+}
+
+// The list on screen matches the filters on screen: no query running, and the
+// last answer was for exactly these filters.
+function databaseResultsCurrent() {
+    return !databaseQueryPromise && !!databaseResultsKey && databaseResultsKey === JSON.stringify(databaseFilters());
+}
+
+function databaseListEmptyText() {
+    if (databaseQueryPromise) return "Querying the database…";
+    if (databaseLastError) return databaseLastError + " Change a filter or reopen the list to retry.";
+    if (!databaseResultsCurrent()) {
+        return databaseActivated ? "Updating the list for the new filters…" : "Choose filters in the DATABASE panel.";
+    }
+    return "No events match the Database filters.";
+}
+
+function databaseExportBlockedText() {
+    if (databaseQueryPromise) return "The event list is still loading for the new filters. Wait for it, then select events.";
+    if (!databaseResultsCurrent()) return "The event list does not match the current filters yet. Reopen the list, then select events.";
+    return "Select at least one event before exporting.";
+}
+
+// Groups present in the current place / category / period, with counts. The
+// analyst's current choice stays listed (with 0) even when absent from it.
+function renderDatabaseGroups(groups, selected) {
+    const select = document.getElementById("reportGroup");
+    if (!select) return;
+    const options = ['<option value="ALL">All groups</option>'];
+    let selectedListed = selected === "ALL";
+    groups.forEach(({ name, count }) => {
+        if (name === selected) selectedListed = true;
+        options.push(
+            `<option value="${escapeHtml(name)}">${escapeHtml(name)} (${Number(count || 0).toLocaleString("en-GB")})</option>`
+        );
+    });
+    if (!selectedListed) {
+        options.push(`<option value="${escapeHtml(selected)}">${escapeHtml(selected)} (0)</option>`);
+    }
+    select.innerHTML = options.join("");
+    select.value = selected;
+}
+
+// Database rows that are attacks also in the map's file link to their map
+// event, by the unique key (ids are shared by unrelated events). Run when the
+// rows arrive and again once the map's file has loaded, whichever is last.
+function linkDatabaseRowsToMap() {
+    const mapKeyByMatchKey = new Map();
+    allEvents.forEach(event => {
+        const matchKey = eventMatchKey(event);
+        if (!mapKeyByMatchKey.has(matchKey)) mapKeyByMatchKey.set(matchKey, event._mapKey);
+    });
+    databaseResults.forEach(row => {
+        row._mapEventKey = isMapAttackEvent(row)
+            ? (mapKeyByMatchKey.get(row.match_key || eventMatchKey(row)) || "")
+            : "";
+    });
+}
+
+function queryDatabase() {
+    const filters = databaseFilters();
+    const key = JSON.stringify(filters);
+
+    if (key === databaseResultsKey && !databaseQueryPromise) {
+        // Back on filters whose results are still loaded: drop the error a
+        // failed query for other filters left on screen.
+        if (databaseLastError) {
+            databaseLastError = "";
+            setDatabaseStatus(databaseLastStatus, "ready");
+        }
+        return Promise.resolve(databaseResults);
+    }
+    if (databaseQueryPromise && databaseQueryPromise.key === key) {
+        return databaseQueryPromise;
+    }
+
+    databaseActivated = true;
+    const seq = ++databaseQuerySeq;
+    // A selection made in the previous list must not be exported under the
+    // new filters.
+    chronologySelectedKeys.clear();
+    databaseLastError = "";
+    setDatabaseStatus("Querying the database…", "working");
+
+    const promise = fetch(REPORT_GENERATOR_API_BASE + "/database-events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...filters, user_id: reportGeneratorUserId() })
+    })
+    .then(async response => {
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            throw new Error(payload.error || ("Database query failed (HTTP " + response.status + ")."));
+        }
+        return payload;
+    })
+    .then(payload => {
+        if (seq !== databaseQuerySeq) return databaseResults;
+
+        databaseResults = (Array.isArray(payload.events) ? payload.events : []).map(row => {
+            row._mapKey = row.key;
+            return row;
+        });
+        linkDatabaseRowsToMap();
+        databaseResultsKey = key;
+        databaseLastError = "";
+        // The analyst may have picked another group while this answer was on
+        // its way (the next query waits out the debounce): keep that choice.
+        const liveGroup = document.getElementById("reportGroup")?.value || filters.actor_group;
+        renderDatabaseGroups(Array.isArray(payload.groups) ? payload.groups : [], liveGroup);
+
+        const total = Number(payload.total) || 0;
+        databaseLastStatus =
+            total.toLocaleString("en-GB")
+            + (total === 1 ? " event matches" : " events match")
+            + (payload.truncated ? " · first " + databaseResults.length.toLocaleString("en-GB") + " listed" : "");
+        setDatabaseStatus(databaseLastStatus, "ready");
+        return databaseResults;
+    })
+    .catch(error => {
+        if (seq === databaseQuerySeq) {
+            databaseLastError = error.message || "Database query failed.";
+            setDatabaseStatus(databaseLastError, "error");
+        }
+        throw error;
+    })
+    .finally(() => {
+        if (seq === databaseQuerySeq) {
+            databaseQueryPromise = null;
+            if (chronologyOpen) renderChronology();
+        }
+    });
+
+    promise.key = key;
+    databaseQueryPromise = promise;
+    if (chronologyOpen) renderChronology();
+    return promise;
+}
+
+function onDatabaseFiltersChanged() {
+    updateReportScopeSummary();
+    updateReportComparisonAvailability();
+    // The list on screen belongs to the previous filters: take it (and its
+    // selection) down now rather than when the debounced query starts.
+    chronologySelectedKeys.clear();
+    if (chronologyOpen) renderChronology();
+    clearTimeout(databaseQueryTimer);
+    if (!databaseActivated && !chronologyOpen) return;
+    databaseQueryTimer = setTimeout(() => queryDatabase().catch(() => {}), 250);
+}
+
+// Total next to the DATABASE title: every event plus every article of the
+// background archive -- one database. Shown once the archive size is known
+// (or its request failed), so the number never jumps.
+function renderDatabaseTotal() {
+    const node = document.getElementById("databaseTotalCount");
+
+    if (!databaseArchiveRequested) {
+        databaseArchiveRequested = true;
+        fetch(REPORT_GENERATOR_API_BASE + "/database-stats")
+            .then(response => response.ok ? response.json() : null)
+            .then(payload => {
+                const corpus = payload?.background_corpus;
+                databaseArchiveTotal = corpus?.available ? Number(corpus.total) || 0 : 0;
+            })
+            .catch(() => {
+                databaseArchiveTotal = 0;
+            })
+            .finally(renderDatabaseTotal);
+        return;
+    }
+
+    if (!node || databaseArchiveTotal === null) return;
+    const total = databaseEventTotal + databaseArchiveTotal;
+    node.textContent = total ? total.toLocaleString("en-GB") : "";
+    node.hidden = !total;
+}
+
+// Map keys of the attacks the map shows right now (period + located), rebuilt
+// only when the map's filtered list changes.
+let visibleMapKeysSource = null;
+let visibleMapKeysSet = new Set();
+
+function isOnMapNow(mapKey) {
+    const visible = filteredMappedEvents();
+    if (visible !== visibleMapKeysSource) {
+        visibleMapKeysSource = visible;
+        visibleMapKeysSet = new Set(visible.map(event => event._mapKey));
+    }
+    return !!mapKey && visibleMapKeysSet.has(mapKey);
+}
+
+// Zoom to an event only while its marker is on the map; anything else (another
+// category, an attack outside the map's period or without a location) opens
+// its details card.
+function openMapEventOrCard(event) {
+    if (!event) return;
+    if (isOnMapNow(event._mapKey)) {
+        focusChronologyEvent(event._mapKey);
+        return;
+    }
+    showDatabaseEventCard(event);
+}
+
+function openDatabaseEvent(event) {
+    if (isOnMapNow(event._mapEventKey)) {
+        focusChronologyEvent(event._mapEventKey);
+        return;
+    }
+    showDatabaseEventCard(event);
+}
+
+function databaseEventCardNote(event) {
+    if (!isMapAttackEvent(event)) {
+        return "Not shown on the map: the map displays attacks only. This event comes from the full CT Atlas database.";
+    }
+    const located = event.excluded_from_map !== true
+        && event.location_precision !== "unlocated"
+        && event.latitude != null && event.longitude != null;
+    if (!located) {
+        return "Attack not shown on the map: its location is not precise enough to place it.";
+    }
+    if (withinDays(event.published, selectedDays)) {
+        // In the map's period and located, yet not on the map: the database
+        // gained it after this page loaded the map.
+        return "Attack recorded after the map was loaded: reload the page to see it on the map.";
+    }
+    return "Attack not shown on the map right now: the map covers the last "
+        + (selectedDays === 1 ? "24 hours" : "7 days")
+        + ". This event comes from the full CT Atlas database.";
+}
+
+function safeHttpUrl(value) {
+    const url = String(value || "").trim();
+    return /^https?:\/\//i.test(url) ? url : "";
+}
+
+function showDatabaseEventCard(event) {
+    const panel = document.getElementById("databaseEventCard");
+    const body = document.getElementById("databaseEventCardBody");
+    if (!panel || !body) return;
+
+    const published = event.published ? new Date(event.published) : null;
+    const dateText = published && !isNaN(published.getTime())
+        ? published.toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })
+        : "Unknown date";
+    const url = safeHttpUrl(event.url);
+
+    body.innerHTML = `
+        <div class="database-event-title">${escapeHtml(event.title || "Untitled event")}</div>
+        <div class="database-event-meta">
+            ${escapeHtml(dateText)} · ${escapeHtml(chronologyLocationText(event) || "Location unknown")}
+        </div>
+        <div class="database-event-tags">
+            ${escapeHtml(eventCategories(event).join(" / "))}
+            ${event.actor_group ? " · " + escapeHtml(event.actor_group) : ""}
+            ${event.primary_event_type ? " · " + escapeHtml(event.primary_event_type) : ""}
+        </div>
+        <p class="database-event-summary">${escapeHtml(event.summary || "")}</p>
+        <div class="database-event-source">
+            ${url
+                ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(event.source || "Open source article")}</a>`
+                : escapeHtml(event.source || "Source not available")}
+        </div>
+        <div class="database-event-note">${escapeHtml(databaseEventCardNote(event))}</div>
+    `;
+
+    panel.classList.add("open");
+    panel.setAttribute("aria-hidden", "false");
+}
+
+function closeDatabaseEventCard() {
+    const panel = document.getElementById("databaseEventCard");
+    if (!panel) return;
+    panel.classList.remove("open");
+    panel.setAttribute("aria-hidden", "true");
+}
+
+// Scrolling list of the period's attacks on the right of the map. The list is
+// doubled and moved up by exactly one copy for a seamless loop; it only
+// scrolls when it overflows, pauses on hover, and stays still for readers
+// who asked for reduced motion (CSS).
+function renderAttackTicker() {
+    const list = document.getElementById("attackTickerList");
+    const viewport = document.getElementById("attackTickerViewport");
+    if (!list || !viewport) return;
+
+    const title = document.getElementById("attackTickerTitle");
+    const count = document.getElementById("attackTickerCount");
+    const events = filteredAllEvents()
+        .map(event => ({ event, time: new Date(event.published || 0).getTime() || 0 }))
+        .sort((a, b) => b.time - a.time)
+        .map(item => item.event);
+
+    if (title) title.textContent = selectedDays === 1 ? "ATTACKS · LAST 24H" : "ATTACKS · LAST 7 DAYS";
+    if (count) count.textContent = events.length.toLocaleString("en-GB");
+
+    list.classList.remove("ticker-animated");
+
+    if (!events.length) {
+        list.innerHTML = '<li class="ticker-empty">No attack reported in this period.</li>';
+        return;
+    }
+
+    const itemHtml = (event, copy) => {
+        const date = new Date(event.published || 0);
+        const when = isNaN(date.getTime())
+            ? ""
+            : date.toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+        const place = event.city || event.country || "";
+        const type = String(event.primary_event_type || "").toUpperCase();
+        const badge = type === "DISRUPTED_PLOT" ? "FOILED" : (type === "ATTEMPTED_ATTACK" ? "ATTEMPT" : "");
+        return `<li${copy ? ' aria-hidden="true"' : ""}>
+            <button type="button" class="ticker-item" data-key="${escapeHtml(event._mapKey)}"${copy ? ' tabindex="-1"' : ""}>
+                <span class="ticker-meta">${escapeHtml(when)}${place ? " · " + escapeHtml(place) : ""}${badge ? ' <em class="ticker-badge">' + badge + "</em>" : ""}</span>
+                <span class="ticker-title">${escapeHtml(event.title || "Untitled attack")}</span>
+            </button>
+        </li>`;
+    };
+
+    list.innerHTML = events.map(event => itemHtml(event, false)).join("");
+
+    const reducedMotion = typeof window.matchMedia === "function"
+        && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!reducedMotion && list.scrollHeight > viewport.clientHeight + 4) {
+        list.insertAdjacentHTML("beforeend", events.map(event => itemHtml(event, true)).join(""));
+        list.style.setProperty("--ticker-duration", Math.max(25, Math.round(events.length * 4.5)) + "s");
+        list.classList.add("ticker-animated");
+    }
+
+    if (!list.dataset.bound) {
+        list.dataset.bound = "1";
+        list.addEventListener("click", clickEvent => {
+            const button = clickEvent.target.closest(".ticker-item");
+            if (button) openMapEventOrCard(allEvents.find(event => event._mapKey === button.dataset.key));
+        });
+    }
+}
+
+// Beyond this many DOM dots the capture gets slow; the heat layer still
+// covers every located event.
+const MAX_EXPORT_MAP_DOTS = 3000;
+
+function waitForTiles(layer) {
+    return new Promise(resolve => layer.once("load", resolve));
+}
+
+// JPEG heat map of the selected database events: an off-screen Leaflet map
+// with the same Esri layers as the main map (they send CORS headers, so the
+// capture is not tainted), fitted to the events, captured with html2canvas.
+async function exportDatabaseMapJpeg(events, button) {
+    if (!events.length) {
+        alert(databaseExportBlockedText());
+        return;
+    }
+
+    const located = events.filter(event =>
+        event.location_precision !== "unlocated"
+        && event.latitude != null && event.longitude != null
+        && Number.isFinite(Number(event.latitude)) && Number.isFinite(Number(event.longitude))
+    );
+
+    if (!located.length) {
+        alert("None of the selected events has map coordinates.");
+        return;
+    }
+
+    const label = button ? button.textContent : "";
+    if (button) {
+        button.disabled = true;
+        button.textContent = "RENDERING MAP…";
+    }
+
+    let container = null;
+    let exportMap = null;
+
+    try {
+        await loadHtml2CanvasForMap();
+
+        container = document.createElement("div");
+        container.className = "database-map-export";
+        container.innerHTML = `
+            <div class="database-map-export-map"></div>
+            <div class="database-map-export-title">
+                <strong>CT ATLAS · DATABASE HEAT MAP</strong>
+                <span>${escapeHtml(databaseFiltersText())}</span>
+                <span>${located.length.toLocaleString("en-GB")} located event${located.length === 1 ? "" : "s"}${located.length < events.length ? " of " + events.length.toLocaleString("en-GB") + " selected" : ""} · exported ${escapeHtml(new Date().toLocaleString("en-GB"))}</span>
+            </div>
+            <div class="database-map-export-legend">Heat = concentration of the selected events · dots = individual events${located.length > MAX_EXPORT_MAP_DOTS ? " (the first " + MAX_EXPORT_MAP_DOTS.toLocaleString("en-GB") + " only; the heat covers all)" : ""} · open-source data, unverified</div>
+        `;
+        document.body.appendChild(container);
+
+        exportMap = L.map(container.querySelector(".database-map-export-map"), {
+            zoomControl: false,
+            fadeAnimation: false,
+            zoomAnimation: false,
+            markerZoomAnimation: false,
+            inertia: false,
+            preferCanvas: true
+        });
+
+        const tileOptions = { maxZoom: 16, crossOrigin: "anonymous" };
+        const base = L.tileLayer(
+            "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+            { ...tileOptions, attribution: "Esri" }
+        ).addTo(exportMap);
+        const labels = L.tileLayer(
+            "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
+            { ...tileOptions, pane: "overlayPane" }
+        ).addTo(exportMap);
+        const tilesReady = Promise.all([waitForTiles(base), waitForTiles(labels)]);
+
+        const points = located.map(event => [Number(event.latitude), Number(event.longitude)]);
+        const bounds = L.latLngBounds(points);
+        if (points.length === 1) {
+            exportMap.setView(points[0], 5, { animate: false });
+        } else {
+            exportMap.fitBounds(bounds.pad(0.12), { maxZoom: 7, animate: false });
+        }
+
+        if (typeof L.heatLayer === "function") {
+            L.heatLayer(
+                located.map(event => [
+                    Number(event.latitude),
+                    Number(event.longitude),
+                    event.location_precision === "country" ? 0.4 : 1
+                ]),
+                { radius: 28, blur: 22, maxZoom: 7, minOpacity: 0.35 }
+            ).addTo(exportMap);
+        }
+
+        // Dots as small DOM markers (marker pane, above the heat): html2canvas
+        // captures DOM icons like the main DOWNLOAD MAP does, but skips a
+        // Leaflet canvas-renderer layer.
+        const dotIcon = L.divIcon({ className: "database-map-export-dot", iconSize: [9, 9], iconAnchor: [4.5, 4.5] });
+        points.slice(0, MAX_EXPORT_MAP_DOTS).forEach(point => {
+            L.marker(point, { icon: dotIcon, interactive: false, keyboard: false }).addTo(exportMap);
+        });
+
+        await Promise.race([tilesReady, new Promise(resolve => setTimeout(resolve, 10000))]);
+        await new Promise(resolve => setTimeout(resolve, 400));
+
+        const canvas = await window.html2canvas(container, {
+            useCORS: true,
+            backgroundColor: "#1a1a1a",
+            scale: 1
+        });
+
+        const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+        const link = document.createElement("a");
+        link.download = "CT-Atlas-Database-Map-" + stamp + ".jpg";
+        link.href = canvas.toDataURL("image/jpeg", 0.92);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    } catch (error) {
+        console.error(error);
+        alert("The map export failed: " + (error?.message || error));
+    } finally {
+        if (exportMap) exportMap.remove();
+        if (container) container.remove();
+        if (button) {
+            button.disabled = false;
+            button.textContent = label;
+        }
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    populateReportRegions();
+    updateReportScopeSummary();
+    updateReportComparisonAvailability();
+
+    ["reportPeriod", "reportRegion", "reportTopic", "reportGroup"].forEach(id => {
+        document.getElementById(id)?.addEventListener("change", onDatabaseFiltersChanged);
+    });
+
+    // The first touch of the Database panel loads the group list and the
+    // match count; the page itself never queries the database on load.
+    const panel = document.getElementById("databasePanel");
+    const activate = () => {
+        if (databaseActivated) return;
+        queryDatabase().catch(() => {});
+    };
+    panel?.addEventListener("pointerdown", activate);
+    panel?.addEventListener("focusin", activate);
+
+    // The ticker can be first rendered while the page is still locked behind
+    // the sign-in screen (zero height, so "does it overflow?" is always no):
+    // re-measure whenever its viewport gets a size.
+    const tickerViewport = document.getElementById("attackTickerViewport");
+    if (tickerViewport && typeof ResizeObserver === "function") {
+        let lastHeight = -1;
+        new ResizeObserver(entries => {
+            const height = Math.round(entries[0]?.contentRect?.height || 0);
+            if (height !== lastHeight) {
+                lastHeight = height;
+                if (allEvents.length) renderAttackTicker();
+            }
+        }).observe(tickerViewport);
+    }
+
+    document.getElementById("databaseEventCardClose")?.addEventListener("click", closeDatabaseEventCard);
+    document.getElementById("databaseEventCard")?.addEventListener("click", clickEvent => {
+        if (clickEvent.target.id === "databaseEventCard") closeDatabaseEventCard();
+    });
+    // Capture phase + stop: Escape closes only the card, not the event list
+    // (or any other panel) open underneath it.
+    document.addEventListener("keydown", keyEvent => {
+        if (keyEvent.key !== "Escape") return;
+        if (!document.getElementById("databaseEventCard")?.classList.contains("open")) return;
+        closeDatabaseEventCard();
+        keyEvent.stopImmediatePropagation();
+    }, true);
+});
 
 
 let dashboardRefreshTimer = null;
@@ -14400,6 +14571,8 @@ function refreshDashboard() {
 
     renderEvents();
 
+    renderAttackTicker();
+
     updateCoverage();
 
     updateTopLocations();
@@ -14412,7 +14585,11 @@ function refreshDashboard() {
 
     renderHeaderSituationBrief();
 
-    renderChronology();
+    // The event list shows the Database panel's results, not the map: it only
+    // needs re-rendering when it is open.
+    if (chronologyOpen) {
+        renderChronology();
+    }
 
 }
 
@@ -14467,106 +14644,6 @@ document.querySelectorAll(
 
 
 
-document.querySelectorAll(
-    ".category-filter"
-).forEach(
-
-    checkbox => {
-
-
-        checkbox.addEventListener(
-
-            "change",
-
-            refreshDashboard
-
-        );
-
-    }
-
-);
-
-
-
-document.getElementById(
-    "selectAllGroups"
-).addEventListener(
-
-    "click",
-
-    function() {
-
-
-        document.querySelectorAll(
-            ".group-filter"
-        ).forEach(
-
-            checkbox =>
-                checkbox.checked =
-                    true
-
-        );
-
-
-        scheduleDashboardRefresh();
-
-    }
-
-);
-
-
-
-document.getElementById(
-    "clearAllGroups"
-).addEventListener(
-
-    "click",
-
-    function() {
-
-
-        document.querySelectorAll(
-            ".group-filter"
-        ).forEach(
-
-            checkbox =>
-                checkbox.checked =
-                    false
-
-        );
-
-
-        scheduleDashboardRefresh();
-
-    }
-
-);
-
-
-
-document.getElementById(
-    "searchInput"
-).addEventListener(
-
-    "input",
-
-    function() {
-
-
-        searchText =
-            this.value
-            .trim()
-            .toLowerCase();
-
-
-        scheduleDashboardRefresh(150);
-
-    }
-
-);
-
-
-
 document.getElementById(
     "markersToggle"
 ).addEventListener(
@@ -14594,7 +14671,8 @@ document.getElementById(
 
 
 
-// If the heat plugin did not load, do not show a button that claims heat is on.
+// Heat zones are always on (no toggle). If the heat plugin did not load, the
+// map simply shows the attack markers without heat.
 if (
     typeof L.heatLayer !== "function"
 ) {
@@ -14602,101 +14680,7 @@ if (
     showHeat =
         false;
 
-    const heatButton =
-        document.getElementById(
-            "heatToggle"
-        );
-
-    heatButton.classList.remove(
-        "active"
-    );
-
-    heatButton.title =
-        "Heat zones unavailable: the heat plugin could not be loaded";
-
 }
-
-
-document.getElementById(
-    "heatToggle"
-).addEventListener(
-
-    "click",
-
-    function() {
-
-
-        showHeat =
-            !showHeat;
-
-
-        this.classList.toggle(
-            "active",
-            showHeat
-        );
-
-
-        renderEvents();
-
-    }
-
-);
-
-
-
-document.getElementById(
-    "selectAll"
-).addEventListener(
-
-    "click",
-
-    function() {
-
-
-        document.querySelectorAll(
-            ".category-filter"
-        ).forEach(
-
-            checkbox =>
-                checkbox.checked =
-                    true
-
-        );
-
-
-        scheduleDashboardRefresh();
-
-    }
-
-);
-
-
-
-document.getElementById(
-    "clearAll"
-).addEventListener(
-
-    "click",
-
-    function() {
-
-
-        document.querySelectorAll(
-            ".category-filter"
-        ).forEach(
-
-            checkbox =>
-                checkbox.checked =
-                    false
-
-        );
-
-
-        scheduleDashboardRefresh();
-
-    }
-
-);
 
 
 
@@ -14709,9 +14693,18 @@ document.getElementById(
 
     function() {
 
+        if (chronologyOpen) {
+            setChronologyOpen(false);
+            return;
+        }
+
         setChronologyOpen(
-            !chronologyOpen
+            true
         );
+
+        // The list shows the Database panel's results: fetch them for the
+        // current filters (no-op when they are already current).
+        queryDatabase().catch(() => {});
 
     }
 
@@ -14848,6 +14841,24 @@ document.getElementById(
     "click",
 
     exportChronologyExcel
+
+);
+
+
+document.getElementById(
+    "chronologyExportMap"
+).addEventListener(
+
+    "click",
+
+    function() {
+
+        exportDatabaseMapJpeg(
+            selectedDatabaseEvents(),
+            this
+        );
+
+    }
 
 );
 

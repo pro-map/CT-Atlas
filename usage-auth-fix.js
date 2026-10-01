@@ -5,7 +5,7 @@ const TOKEN_KEY="ct_map_session_token";
 const USER_KEY="ct_map_username";
 const EXPIRY_KEY="ct_map_session_expires";
 const priorFetch=window.fetch.bind(window);
-const protectedPath=/\/((?:session-check|session-revoke|login|report|deep-search|quick-ask|feedback|crypto-analyze|crypto-workspace|usage-record|usage-stats|tab-access-stats|quiz-state|quiz-answer|quiz-history|quiz-answer-record))(?:\?|$)/;
+const protectedPath=/\/((?:session-check|session-revoke|login|report|deep-search|quick-ask|database-events|feedback|crypto-analyze|crypto-workspace|usage-record|usage-stats|tab-access-stats|quiz-state|quiz-answer|quiz-history|quiz-answer-record))(?:\?|$)/;
 
 function sessionToken(){
   return String(sessionStorage.getItem(TOKEN_KEY)||"");
@@ -63,7 +63,7 @@ function loadDeepSearch(){
   if(document.getElementById("deepSearchClientScript"))return;
   const script=document.createElement("script");
   script.id="deepSearchClientScript";
-  script.src="deep-search.js?v=3";
+  script.src="deep-search.js?v=4";
   script.defer=true;
   document.head.appendChild(script);
 }
@@ -72,7 +72,7 @@ function loadQuickAsk(){
   if(document.getElementById("quickAskClientScript"))return;
   const script=document.createElement("script");
   script.id="quickAskClientScript";
-  script.src="quick-ask.js?v=3";
+  script.src="quick-ask.js?v=4";
   script.defer=true;
   document.head.appendChild(script);
 }

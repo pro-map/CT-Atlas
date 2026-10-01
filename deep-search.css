@@ -34,7 +34,7 @@
 #deepSearchActions{display:flex;gap:6px;flex:0 0 auto}
 #deepSearchActions button{padding:7px 9px;border:1px solid rgba(78,143,181,.45);background:#0b1c28;color:#b9d6e5;font:800 7px/1 Arial,sans-serif;letter-spacing:.08em;cursor:pointer}
 #deepSearchActions button:hover{border-color:#5aa9d5;color:#fff}
-#deepSearchMetrics{display:grid;grid-template-columns:repeat(6,minmax(80px,1fr));gap:7px;margin:14px 0 5px}
+#deepSearchMetrics{display:grid;grid-template-columns:repeat(7,minmax(72px,1fr));gap:7px;margin:14px 0 5px}
 .deep-metric{padding:9px 8px;border:1px solid rgba(74,136,172,.18);background:linear-gradient(180deg,rgba(16,46,63,.48),rgba(9,26,37,.56))}
 .deep-metric span{display:block;color:#76909f;font:800 6.5px/1.2 Arial,sans-serif;letter-spacing:.1em}
 .deep-metric strong{display:block;margin-top:4px;color:#d8ecf7;font:900 14px/1 Arial,sans-serif}
@@ -89,3 +89,4 @@
 .deep-source-visual figcaption strong{display:block;margin-bottom:3px;color:#e2d1a4;font-size:9px}
 .deep-visual-empty{padding:9px 10px;border:1px dashed #5b4d31;color:#8f8166;font-size:8px;line-height:1.5}
 @media(max-width:640px){.deep-visual-grid{grid-template-columns:1fr}.deep-source-visual img{height:160px}}
+.deep-scope{margin:0 0 10px;padding:6px 8px;border-left:2px solid rgba(143,208,255,.6);background:rgba(20,40,55,.45);color:#cfe6f2;font:600 8.5px/1.45 Arial,sans-serif}

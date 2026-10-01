@@ -1,5 +1,5 @@
 const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/interactions";
-const ALLOWED_PERIODS = new Set([7, 30, 90, 180]);
+const ALLOWED_PERIODS = new Set([1, 7, 30, 90, 180]);
 const MAX_EVENTS_CURRENT = 80;
 const MAX_EVENTS_PREVIOUS = 60;
 const CACHE_TTL_MS = 8 * 60 * 60 * 1000;
@@ -21,7 +21,7 @@ const FEEDBACK_GLOBAL_DAILY_LIMIT = 200;
 // Bump whenever the report SHAPE changes (new fields, schema, citation
 // rules) so an existing cache entry from before the change is never served
 // as-is -- folded into the cache key in index.js's /report handler.
-const REPORT_GENERATOR_VERSION = "report-v6-analytical-context";
+const REPORT_GENERATOR_VERSION = "report-v7-database-filters";
 
 function authUsersFromEnv(env) {
   const raw = String(env?.AUTH_USERS_JSON || "").trim();
@@ -101,6 +101,10 @@ ANALYTICAL INTERPRETATION
 STRATEGIC CONTEXT
 OUTLOOK / WATCHPOINTS
 SOURCE / CONFIDENCE NOTES
+
+The selection block lists the analyst's filters (region or country, topic,
+actor_group, period). Keep the whole assessment within them; when an
+actor_group is selected, the report is about that group's activity.
 
 EXECUTIVE ASSESSMENT: 3-5 sentences giving the bottom line up front -- the
 most important judgements about the threat picture, not a list of events.
@@ -301,9 +305,90 @@ function eventCategories(event) {
   return Array.isArray(raw) ? raw.map(String) : [String(raw)];
 }
 
+// Same aliases as the map's CATEGORY_ALIASES, from the database's side: the
+// map labels piracy "Maritime Security" and folds the two legacy digital
+// categories into "Online / Cyber / AI", so a topic picked in the Database
+// panel must match those records too.
+const TOPIC_ALIASES = Object.freeze({
+  "maritime security": "maritime piracy",
+  "online radicalization / cyberterrorism": "online / cyber / ai",
+  "disinformation / emerging technologies / ai": "online / cyber / ai"
+});
+
+function canonicalTopic(value) {
+  const key = String(value || "").trim().toLowerCase();
+  return TOPIC_ALIASES[key] || key;
+}
+
 function matchesTopic(event, topic) {
   if (!topic || topic === "ALL") return true;
-  return eventCategories(event).includes(topic);
+  const wanted = canonicalTopic(topic);
+  return eventCategories(event).some(category => canonicalTopic(category) === wanted);
+}
+
+// Mirrors the map's eventActorGroup(): an event with no named group belongs to
+// the "Unspecified / no named group" bucket, which is itself selectable.
+const UNSPECIFIED_GROUP_LABEL = "Unspecified / no named group";
+
+function eventActorGroup(event) {
+  return cleanText(event?.actor_group, 100) || UNSPECIFIED_GROUP_LABEL;
+}
+
+function matchesGroup(event, group) {
+  if (!group || group === "ALL") return true;
+  return eventActorGroup(event).toLowerCase() === String(group).trim().toLowerCase();
+}
+
+// Event ids are NOT unique: the collector derives them from a Latin-only
+// normalised title plus the date, so every non-Latin headline of a day shares
+// one id (dozens of events). Anything that joins two copies of the same event
+// (map <-> Database list, external article <-> database evidence) must use
+// this key instead; the map page builds the identical key (eventMatchKey).
+function eventUniqueKey(event) {
+  const time = Date.parse(String(event?.published || ""));
+  return [
+    cleanText(event?.id, 120),
+    Number.isFinite(time) ? time : "",
+    cleanText(event?.title, 120)
+  ].join("|");
+}
+
+// The Database panel's filters as sent by Atlas AI and Deep Search (the
+// Report Generator reads the same fields but validates its own period).
+// An unknown or missing period means "no period filter".
+function parseDatabaseFilters(body) {
+  const periodDays = Number(body?.period_days);
+  return {
+    region: cleanText(body?.region || "GLOBAL", 100) || "GLOBAL",
+    topic: cleanText(body?.topic || "ALL", 120) || "ALL",
+    actorGroup: cleanText(body?.actor_group || "ALL", 100) || "ALL",
+    periodDays: ALLOWED_PERIODS.has(periodDays) ? periodDays : null
+  };
+}
+
+function hasActiveDatabaseFilters(filters) {
+  return filters.region !== "GLOBAL" || filters.topic !== "ALL" ||
+    filters.actorGroup !== "ALL" || Boolean(filters.periodDays);
+}
+
+function matchesDatabaseFilters(event, filters, now = new Date(), { ignorePeriod = false } = {}) {
+  if (!matchesRegion(event, filters.region) || !matchesTopic(event, filters.topic) ||
+      !matchesGroup(event, filters.actorGroup)) return false;
+  if (ignorePeriod || !filters.periodDays) return true;
+  const date = parseEventDate(event);
+  if (!date) return false;
+  const time = date.getTime();
+  return time <= now.getTime() && time >= now.getTime() - filters.periodDays * 86400000;
+}
+
+function databaseFiltersLabel(filters) {
+  const parts = [
+    filters.region === "GLOBAL" ? "Global" : filters.region.replace(/^REGION:/, "").replace(/_/g, " "),
+    filters.topic === "ALL" ? "all categories" : filters.topic,
+    filters.actorGroup === "ALL" ? "all groups" : filters.actorGroup,
+    filters.periodDays ? (filters.periodDays === 1 ? "last 24 hours" : `last ${filters.periodDays} days`) : "any date"
+  ];
+  return parts.join(" · ");
 }
 
 const REPORT_REGION_COUNTRY_CODES = Object.freeze({
@@ -880,6 +965,14 @@ export {
   parseEventDate,
   eventCategories,
   matchesTopic,
+  matchesGroup,
+  eventActorGroup,
+  eventUniqueKey,
+  UNSPECIFIED_GROUP_LABEL,
+  parseDatabaseFilters,
+  hasActiveDatabaseFilters,
+  matchesDatabaseFilters,
+  databaseFiltersLabel,
   matchesRegion,
   compactEvent,
   citationMetrics,

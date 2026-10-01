@@ -20,7 +20,7 @@ function ensureCss(){
   const link=document.createElement("link");
   link.id="deepSearchCss";
   link.rel="stylesheet";
-  link.href="deep-search.css?v=2";
+  link.href="deep-search.css?v=3";
   document.head.appendChild(link);
 }
 
@@ -43,7 +43,7 @@ function inject(){
         <div id="deepSearchHeader">
           <div>
             <div id="deepSearchTitle">DEEP SEARCH · BETA</div>
-            <div id="deepSearchSubtitle">Multilingual ad hoc OSINT search beyond the current CT Atlas database</div>
+            <div id="deepSearchSubtitle">The CT Atlas database first, then multilingual external OSINT search</div>
           </div>
           <button id="deepSearchClose" type="button" aria-label="Close Deep Search">×</button>
         </div>
@@ -57,8 +57,9 @@ function inject(){
               <textarea id="deepSearchQuestion" rows="5" maxlength="1200" placeholder="Example: ISIS-K facilitation networks in Afghanistan and Pakistan over the last 6 months. Or: Al-Shabaab attacks in Somalia since 2022."></textarea>
             </label>
             <div id="deepSearchMethod">
-              Deep Search runs two native-language Google News searches in each of the 12 supported languages, plus ACLED and GDELT (chunked across longer periods for real historical depth). Languages relevant to the country in the analyst question receive priority rescue searches through Bing News as well when Google coverage comes up sparse, before deduplication, CT Atlas comparison and source-cited analysis.
+              Deep Search first takes the matching events from the CT Atlas database (within the DATABASE panel's place, category and group) as its primary evidence, then runs two native-language Google News searches in each of the 12 supported languages, plus ACLED and GDELT (chunked across longer periods for real historical depth). Languages relevant to the country in the analyst question receive priority rescue searches through Bing News as well when Google coverage comes up sparse, before deduplication, CT Atlas comparison and source-cited analysis.
             </div>
+            <div id="deepSearchScope" class="deep-scope" hidden></div>
             <button id="deepSearchRun" type="button">RUN DEEP SEARCH</button>
             <div id="deepSearchStatus"></div>
           </div>
@@ -126,8 +127,32 @@ async function checkBackend(){
   }
 }
 
+// The Database panel's place / category / group (when the page has one). The
+// period still comes from the question, so external search can reach further
+// back than the database's retention.
+function databaseScope(){
+  const api=window.CTAtlasDatabase;
+  if(!api||typeof api.filters!=="function")return {filters:{},label:""};
+  try{
+    const filters=api.filters()||{};
+    return {
+      filters:{region:filters.region,topic:filters.topic,actor_group:filters.actor_group},
+      label:typeof api.label==="function"?api.label({withPeriod:false}):""
+    };
+  }catch(_){return {filters:{},label:""};}
+}
+
+function renderScope(){
+  const node=document.getElementById("deepSearchScope");
+  if(!node)return;
+  const {label}=databaseScope();
+  node.textContent=label?"Database scope: "+label+" (DATABASE panel) · period: read from your question":"";
+  node.hidden=!label;
+}
+
 function open(){
   const panel=document.getElementById("deepSearchPanel");
+  renderScope();
   panel?.classList.add("open"); panel?.setAttribute("aria-hidden","false");
   setTimeout(()=>document.getElementById("deepSearchQuestion")?.focus(),30);
 }
@@ -226,7 +251,7 @@ function fmtDate(value){
   return date.toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric"});
 }
 
-const SEARCH_ENGINE_LABELS={gdelt:"GDELT",acled:"ACLED",bing:"BING",ct_atlas_corpus:"CT ATLAS ARCHIVE"};
+const SEARCH_ENGINE_LABELS={gdelt:"GDELT",acled:"ACLED",bing:"BING",ct_atlas_corpus:"CT ATLAS ARCHIVE",ct_atlas_database:"CT ATLAS DATABASE"};
 function engineLabel(engine){
   return SEARCH_ENGINE_LABELS[engine]||"GOOGLE NEWS";
 }
@@ -292,8 +317,9 @@ function evidenceHtml(payload){
   return ordered.map(item=>{
     const citedClass=cited.has(item.id)?" cited":"";
     const gap=item.atlas_status==="potential_gap";
-    const gapLabel=gap?"POTENTIAL ATLAS GAP":"MATCHED IN CT ATLAS";
-    const gapClass=gap?" gap":" matched";
+    const fromDatabase=item.search_engine==="ct_atlas_database";
+    const gapLabel=fromDatabase?"CT ATLAS DATABASE":(gap?"POTENTIAL ATLAS GAP":"MATCHED IN CT ATLAS");
+    const gapClass=gap&&!fromDatabase?" gap":" matched";
     const extras=Array.isArray(item.additional_sources)?item.additional_sources:[];
     return `
       <article class="deep-evidence${citedClass}">
@@ -307,7 +333,7 @@ function evidenceHtml(payload){
         ${item.summary?`<div class="deep-evidence-summary">${esc(item.summary)}</div>`:""}
         <div class="deep-evidence-links">
           ${item.url?`<a href="${esc(item.url)}" target="_blank" rel="noopener noreferrer">OPEN ARTICLE</a>`:""}
-          ${item.atlas_match_id?`<span>Atlas match: ${esc(item.atlas_match_title||item.atlas_match_id)} (${Number(item.atlas_match_score||0)}%)</span>`:""}
+          ${item.atlas_match_id&&!fromDatabase?`<span>Atlas match: ${esc(item.atlas_match_title||item.atlas_match_id)} (${Number(item.atlas_match_score||0)}%)</span>`:""}
         </div>
         ${extras.length?`<details><summary>${extras.length} additional merged source${extras.length===1?"":"s"}</summary>${extras.map(source=>`<div class="deep-extra-source">${esc(source.source||"Source")} · ${esc(fmtDate(source.published))}${source.url?` · <a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">open</a>`:""}</div>`).join("")}</details>`:""}
       </article>`;
@@ -326,9 +352,11 @@ function render(rawPayload){
   document.getElementById("deepSearchResultMeta").textContent=
     `Generated ${new Date(payload.generated_at||Date.now()).toLocaleString("en-GB")} · ${payload.model||"Gemini"} · ${languages||"multilingual"}${payload.cached?" · CACHED":""}`;
   document.getElementById("deepSearchDetectedPeriod").textContent=
-    payload.detected_period?.label?`Period detected from your question: ${payload.detected_period.label}`:"";
+    (payload.detected_period?.label?`Period detected from your question: ${payload.detected_period.label}`:"")+
+    (payload.database_scope?` · Database scope: ${payload.database_scope}`:"");
 
   document.getElementById("deepSearchMetrics").innerHTML=`
+    <div class="deep-metric"><span>DATABASE EVENTS</span><strong>${Number(retrieved.ct_atlas_database_events||0)}</strong></div>
     <div class="deep-metric"><span>ARTICLES</span><strong>${Number(retrieved.articles_retrieved||0)}</strong></div>
     <div class="deep-metric"><span>UNIQUE EVENTS</span><strong>${Number(retrieved.unique_event_clusters||0)}</strong></div>
     <div class="deep-metric"><span>EVIDENCE USED</span><strong>${Number(retrieved.evidence_events_used_for_analysis||0)}</strong></div>
@@ -352,13 +380,14 @@ async function run(){
   if(button){button.disabled=true;button.textContent="SEARCHING MULTILINGUAL SOURCES…";}
   const result=document.getElementById("deepSearchResult");
   if(result)result.hidden=true;
-  setStatus("Reading the period from your question, building a multilingual search plan, retrieving fresh reporting and comparing it with CT Atlas…","working");
+  renderScope();
+  setStatus("Reading the period from your question, taking the matching CT Atlas database events first, then retrieving fresh multilingual reporting…","working");
 
   try{
     const response=await fetch(API_BASE+"/deep-search",{
       method:"POST",
       headers:{"Content-Type":"application/json","X-Session-Token":sessionToken},
-      body:JSON.stringify({user_id:username,question})
+      body:JSON.stringify({...databaseScope().filters,user_id:username,question})
     });
     const payload=await response.json().catch(()=>({}));
     const periodNote=payload.detected_period?.label?` Period searched: ${payload.detected_period.label}.`:"";
@@ -377,7 +406,9 @@ async function copyReport(){
   const cited=new Set(lastPayload.grounding?.cited_source_ids||[]);
   const sourceText=(lastPayload.evidence||[]).filter(item=>cited.has(item.id))
     .map(item=>`${item.id} — ${item.source} — ${item.title} — ${item.url}`).join("\n");
-  const text=`${lastPayload.title||"CT Atlas Deep Search"}\n\nQuestion: ${lastPayload.question||""}\n\n${lastPayload.analysis||""}\n\nSOURCES CITED\n${sourceText}`;
+  const scopeText=lastPayload.database_scope?`Database scope: ${lastPayload.database_scope}\n`:"";
+  const databaseCount=Number(lastPayload.retrieval?.ct_atlas_database_events||0);
+  const text=`${lastPayload.title||"CT Atlas Deep Search"}\n\nQuestion: ${lastPayload.question||""}\n${scopeText}CT Atlas database events used: ${databaseCount}\n\n${lastPayload.analysis||""}\n\nSOURCES CITED\n${sourceText}`;
   try{await navigator.clipboard.writeText(text);setStatus("Deep Search report and cited sources copied to clipboard.","success");}
   catch(_){setStatus("Clipboard access was unavailable.","warning");}
 }
@@ -409,8 +440,9 @@ async function downloadPdf(){
       {text:"QUESTION",type:"heading"},
       {text:lastPayload.question||"",type:"question"},
       {text:"Generated: "+stamp.toLocaleString("en-GB")+" · Period: "+(lastPayload.detected_period?.label||"unknown")+" · Model: "+(lastPayload.model||"Gemini"),type:"meta"},
+      ...(lastPayload.database_scope?[{text:"Database scope: "+lastPayload.database_scope,type:"meta"}]:[]),
       {text:"SEARCH SUMMARY",type:"heading"},
-      {text:"Articles: "+Number(retrieved.articles_retrieved||0)+" · Unique events: "+Number(retrieved.unique_event_clusters||0)+" · Evidence used: "+Number(retrieved.evidence_events_used_for_analysis||0)+" · Atlas matches: "+Number(retrieved.matched_to_atlas||0)+" · Potential gaps: "+Number(retrieved.potential_atlas_gaps||0)+" · Citation coverage: "+Number(lastPayload.grounding?.citation_coverage_percent||0)+"%",type:"highlight"}
+      {text:"CT Atlas database events: "+Number(retrieved.ct_atlas_database_events||0)+" · Articles: "+Number(retrieved.articles_retrieved||0)+" · Unique events: "+Number(retrieved.unique_event_clusters||0)+" · Evidence used: "+Number(retrieved.evidence_events_used_for_analysis||0)+" · Atlas matches: "+Number(retrieved.matched_to_atlas||0)+" · Potential gaps: "+Number(retrieved.potential_atlas_gaps||0)+" · Citation coverage: "+Number(lastPayload.grounding?.citation_coverage_percent||0)+"%",type:"highlight"}
     ];
     if(hasFetchIssue(lastPayload))blocks.push({text:"Retrieval warning: "+FETCH_ISSUE_TITLE,type:"meta"});
     if(languages.length){

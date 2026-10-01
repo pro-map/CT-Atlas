@@ -141,7 +141,7 @@ test('Deep Search merges the archive before de-duplication and labels it in the 
   assert.match(worker,/deduplicateRows\(\[\.\.\.retrieval\.rows, \.\.\.corpus\.rows\]\)/);
   assert.match(worker,/corpus_kind: row\.corpus_kind/);
   assert.match(worker,/"ct_atlas_corpus" come from CT Atlas's own archive/);
-  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v8-atlas-corpus"/);
+  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v9-database-first"/);
   assert.match(fs.readFileSync('deep-search.js','utf8'),/ct_atlas_corpus:"CT ATLAS ARCHIVE"/);
 });
 
@@ -166,15 +166,27 @@ test('the report prompt asks for a longer, analytical assessment with context ru
   for(const heading of ['ANALYTICAL INTERPRETATION','STRATEGIC CONTEXT','BACKGROUND CONTEXT RULES']) assert.ok(prompt.includes(heading),heading);
   assert.match(prompt,/Never count context items/);
   assert.match(prompt,/\[S03, C02\]/);
-  assert.equal(shared.constant('REPORT_GENERATOR_VERSION'),'report-v6-analytical-context');
+  assert.equal(shared.constant('REPORT_GENERATOR_VERSION'),'report-v7-database-filters');
 });
 
 test('the /report route feeds background context to Gemini and lists it as sources',()=>{
   const route=fs.readFileSync('cloudflare-worker/index.js','utf8');
-  assert.match(route,/import \{ fetchBackgroundContext \} from "\.\/background-corpus\.js"/);
+  assert.match(route,/import \{ fetchBackgroundContext[^}]*\} from "\.\/background-corpus\.js"/);
   assert.match(route,/background_context: \{/);
   assert.match(route,/contextItems\.map\(item => item\.context_id\)/);
   assert.match(route,/previewCandidates = \[\.\.\.eventSources\]/,'image previews stay limited to map events');
+});
+
+test('archive size is read from the one-row corpus_stats summary, never counted per request',async()=>{
+  const calls=[];
+  const db={prepare(sql){ calls.push(sql); return {async first(){ return {total:11187,by_kind:'{"related_article":4264}',updated_at:'2026-09-30T21:23:26Z'}; }}; }};
+  const stats=plain(await corpus.corpusStats({BACKGROUND_DB:db}));
+  assert.deepEqual(stats,{available:true,total:11187,by_kind:{related_article:4264},updated_at:'2026-09-30T21:23:26Z'});
+  assert.deepEqual(calls,['SELECT total, by_kind, updated_at FROM corpus_stats WHERE id = 1']);
+  assert.deepEqual(plain(await corpus.corpusStats({})),{available:false});
+  assert.deepEqual(plain(await corpus.corpusStats({BACKGROUND_DB:{prepare(){ throw new Error('no such table'); }}})),{available:false});
+  assert.match(fs.readFileSync('cloudflare-worker/index.js','utf8'),/url\.pathname === "\/database-stats"/);
+  assert.match(fs.readFileSync('tools/sync_background_corpus.py','utf8'),/collector\.d1_query\(CORPUS_STATS_UPSERT\)/);
 });
 
 test('the Worker binds the D1 corpus and reports the binding in /health',()=>{

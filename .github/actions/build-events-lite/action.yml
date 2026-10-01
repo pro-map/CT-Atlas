@@ -1,9 +1,10 @@
 name: Build lightweight map data
 description: >
   Derive events-lite.json (events.json without the collector's bookkeeping fields, which
-  neither the map nor the Worker read) from the events.json in the checkout, right before
-  the site is published. Never fails the deployment: if the file
-  cannot be built it is removed, and the map and the Worker fall back to the full events.json.
+  neither the map nor the Worker read) and events-map.json (only the attacks the map shows,
+  plus a whole-database summary) from the events.json in the checkout, right before the site
+  is published. Never fails the deployment: a file that cannot be built is removed, and the
+  map and the Worker fall back to the next larger file.
 runs:
   using: composite
   steps:
@@ -15,4 +16,13 @@ runs:
         else
           rm -f events-lite.json
           echo "::warning::events-lite.json could not be built; the map and the Worker will use the full events.json."
+        fi
+    - name: Build events-map.json
+      shell: bash
+      run: |
+        if python3 tools/build_events_map.py; then
+          echo "events-map.json built."
+        else
+          rm -f events-map.json
+          echo "::warning::events-map.json could not be built; the map will filter events-lite.json itself."
         fi

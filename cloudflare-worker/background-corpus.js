@@ -229,12 +229,71 @@ async function searchCorpusForDeepSearch(env, { plan, start, end, searchQuery })
   }
 }
 
+// ---- Atlas AI (Quick Ask) ----------------------------------------------
+// Question-driven: the question's own significant words (any of them) within
+// the analyst's period, best full-text matches first. Kept small -- Atlas AI
+// is a single fast answer, not a report.
+const MAX_QUESTION_CONTEXT_ITEMS = 8;
+const QUESTION_TERM_MIN_LENGTH = 4;
+const MAX_QUESTION_TERMS = 8;
+
+function questionCorpusQuery(tokens) {
+  const terms = [...new Set((Array.isArray(tokens) ? tokens : [])
+    .map(token => cleanText(token, 40))
+    .filter(token => token.length >= QUESTION_TERM_MIN_LENGTH))]
+    .slice(0, MAX_QUESTION_TERMS);
+  return ftsQuery(terms);
+}
+
+async function searchCorpusForQuestion(env, { tokens, start, end }) {
+  const db = env?.BACKGROUND_DB;
+  if (!db || typeof db.prepare !== "function") return { available: false, items: [] };
+  const match = questionCorpusQuery(tokens);
+  if (!match) return { available: true, items: [] };
+
+  try {
+    const sql = `SELECT ${COLUMNS}
+      FROM background_articles_fts
+      JOIN background_articles AS ba ON ba.rowid = background_articles_fts.rowid
+      WHERE background_articles_fts MATCH ?
+        AND COALESCE(ba.published, ba.collected_at) >= ?
+        AND COALESCE(ba.published, ba.collected_at) <= ?
+      ORDER BY background_articles_fts.rank
+      LIMIT ${MAX_QUESTION_CONTEXT_ITEMS}`;
+    const result = await db.prepare(sql).bind(match, start.toISOString(), end.toISOString()).all();
+    return { available: true, items: toContextItems(result?.results || [], []) };
+  } catch (error) {
+    console.error("Background corpus question query failed", error);
+    return { available: false, items: [] };
+  }
+}
+
+// One-row summary kept by tools/sync_background_corpus.py (corpus_stats), so
+// reading the archive's size costs one row, not a count over the whole table.
+async function corpusStats(env) {
+  const db = env?.BACKGROUND_DB;
+  if (!db || typeof db.prepare !== "function") return { available: false };
+  try {
+    const row = await db.prepare("SELECT total, by_kind, updated_at FROM corpus_stats WHERE id = 1").first();
+    if (!row) return { available: false };
+    let byKind = {};
+    try { byKind = JSON.parse(row.by_kind || "{}"); } catch (_) {}
+    return { available: true, total: Number(row.total) || 0, by_kind: byKind, updated_at: cleanText(row.updated_at, 40) };
+  } catch (error) {
+    console.error("Background corpus stats query failed", error);
+    return { available: false };
+  }
+}
+
 export {
+  corpusStats,
   fetchBackgroundContext,
   backgroundSearchTerms,
   ftsQuery,
   toContextItems,
   MAX_CONTEXT_ITEMS,
   deepSearchCorpusQuery,
-  searchCorpusForDeepSearch
+  searchCorpusForDeepSearch,
+  questionCorpusQuery,
+  searchCorpusForQuestion
 };

@@ -17,6 +17,7 @@ gateCall,
 fetchEventsDatabase,
 matchesRegion,
 matchesTopic,
+matchesGroup,
 parseEventDate,
 priority,
 stats,
@@ -39,7 +40,8 @@ import { handleSocialInvestigate, handleSocialWorkspace, SOCIAL_INTEL_VERSION } 
 import { SOCIAL_AGENT_CLIENT_VERSION, isSocialAgentConfigured } from "./social-agent-client.js";
 import { handleVisualAnalyze, isVisualIntelConfigured, VISUAL_INTEL_VERSION } from "./visual-intel.js";
 import { handleFaceShareUpload, handleFaceShareGet, FACE_SHARE_VERSION } from "./face-share.js";
-import { fetchBackgroundContext } from "./background-corpus.js";
+import { fetchBackgroundContext, corpusStats } from "./background-corpus.js";
+import { handleDatabaseEvents } from "./database-query.js";
 export default {
 async fetch(request, env, ctx) {
 // A fresh per-request copy, never a mutation of the shared env object --
@@ -49,6 +51,12 @@ env = { ...env, __requestOrigin: request.headers.get("Origin") || "" };
 const url = new URL(request.url);
 if (request.method === "OPTIONS") {
 return new Response(null, { status: 204, headers: corsHeaders(env) });
+}
+if (url.pathname === "/database-events" && request.method === "POST") {
+return handleDatabaseEvents(request, env);
+}
+if (url.pathname === "/database-stats" && request.method === "GET") {
+return jsonResponse({ background_corpus: await corpusStats(env) }, 200, env);
 }
 if (url.pathname === "/health" && request.method === "GET") {
 return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.33", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, background_corpus: typeof env.BACKGROUND_DB?.prepare === "function", quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_exchange_address_version: EXCHANGE_ADDRESS_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_auto_monitoring: true, sanctions_version: SANCTIONS_VERSION, sanctions: await sanctionsHealth(env), crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, social_intel_version: SOCIAL_INTEL_VERSION, social_intel: true, social_agent_client_version: SOCIAL_AGENT_CLIENT_VERSION, social_agent_configured: isSocialAgentConfigured(env), social_worker_search_provider: env.BRAVE_SEARCH_API_KEY ? "brave" : "disabled", visual_intel_version: VISUAL_INTEL_VERSION, visual_intel: true, visual_intel_configured: isVisualIntelConfigured(env), face_share_version: FACE_SHARE_VERSION, face_share_configured: Boolean(env.FACE_SHARE),crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, crypto_exchange_label_providers: { etherscan_enabled: env.ETHERSCAN_NAME_TAGS_ENABLED === "true" && Boolean(env.ETHERSCAN_API_KEY), tronscan_enabled: env.TRONSCAN_TAG_LOOKUP_ENABLED === "true" && Boolean(env.TRONSCAN_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
@@ -218,6 +226,7 @@ let body;
 try { body = await request.json(); } catch { return jsonResponse({ error: "Invalid JSON request." }, 400, env); }
 const region = cleanText(body.region || "GLOBAL", 100) || "GLOBAL";
 const topic = cleanText(body.topic || "ALL", 120) || "ALL";
+const actorGroup = cleanText(body.actor_group || "ALL", 100) || "ALL";
 const periodDays = Number(body.period_days || 30);
 const compare = body.compare !== false;
 const username = normalizeUsername(body.user_id);
@@ -234,7 +243,7 @@ if (!eventsDatabase.ok) return jsonResponse({ error: "Unable to read current eve
 const db = eventsDatabase.db;
 const allEvents = Array.isArray(db) ? db : (Array.isArray(db.events) ? db.events : []);
 const databaseVersion = cleanText(db.updated_at || db.generated_at || db.last_updated || "unknown", 100);
-const cacheKey = await sha256(JSON.stringify({ region, topic, periodDays, compare, databaseVersion, version: REPORT_GENERATOR_VERSION }));
+const cacheKey = await sha256(JSON.stringify({ region, topic, actorGroup, periodDays, compare, databaseVersion, version: REPORT_GENERATOR_VERSION }));
 const permitResponse = await gateCall(env, "/acquire", { username, kind: "report_generator" });
 const permit = await permitResponse.json();
 if (!permitResponse.ok || !permit?.permit_id) return jsonResponse({ error: permit?.error || "Report capacity temporarily unavailable.", retry_after_seconds: permit?.retry_after_seconds || 20 }, permitResponse.status || 429, env);
@@ -254,7 +263,7 @@ return jsonResponse({ ...cached.report, cached: true }, 200, env);
 const now = new Date();
 const currentStart = new Date(now.getTime() - periodDays * 86400000);
 const previousStart = new Date(currentStart.getTime() - periodDays * 86400000);
-const matching = allEvents.filter(e => matchesRegion(e, region) && matchesTopic(e, topic));
+const matching = allEvents.filter(e => matchesRegion(e, region) && matchesTopic(e, topic) && matchesGroup(e, actorGroup));
 const current = [], previous = [];
 for (const event of matching) {
 const dt = parseEventDate(event);
@@ -278,9 +287,10 @@ const allSourced = [...currentSourced, ...previousSourced];
 // empty list when the corpus is unavailable, so reports still work without it.
 const background = await fetchBackgroundContext(env, { events: currentSourced, start: currentStart, end: now });
 const contextItems = background.items;
-const dataset = { selection: { region, topic, period_days: periodDays, compare }, database_version: databaseVersion, current_period: { start: currentStart.toISOString(), end: now.toISOString(), stats: stats(current), priority_events: currentSourced }, comparison_period: compare ? { start: previousStart.toISOString(), end: currentStart.toISOString(), stats: stats(previous), priority_events: previousSourced } : null, background_context: { note: "Reporting that is NOT on the map; see BACKGROUND CONTEXT RULES.", items: contextItems.map(({ url, ...item }) => item) } };
+const dataset = { selection: { region, topic, actor_group: actorGroup, period_days: periodDays, compare }, database_version: databaseVersion, current_period: { start: currentStart.toISOString(), end: now.toISOString(), stats: stats(current), priority_events: currentSourced }, comparison_period: compare ? { start: previousStart.toISOString(), end: currentStart.toISOString(), stats: stats(previous), priority_events: previousSourced } : null, background_context: { note: "Reporting that is NOT on the map; see BACKGROUND CONTEXT RULES.", items: contextItems.map(({ url, ...item }) => item) } };
 const generated = await callGemini(env, dataset);
-const meta = `${region === "GLOBAL" ? "Global" : region} · ${topic === "ALL" ? "All CT activity" : topic} · last ${periodDays} days${compare ? " vs previous equivalent period" : ""} · generated ${new Date().toISOString()}`;
+const periodLabel = periodDays === 1 ? "last 24 hours" : `last ${periodDays} days`;
+const meta = `${region === "GLOBAL" ? "Global" : region} · ${topic === "ALL" ? "All CT activity" : topic}${actorGroup === "ALL" ? "" : ` · ${actorGroup}`} · ${periodLabel}${compare ? " vs previous equivalent period" : ""} · generated ${new Date().toISOString()}`;
 const analysisText = String(generated.analysis || "").trim();
 const grounding = citationMetrics(analysisText, [...allSourced.map(e => e.source_id), ...contextItems.map(item => item.context_id)]);
 const eventSources = allSourced.map(e => ({ id: e.source_id, title: e.title, source: e.source, url: e.url, date: e.date, country: e.country, source_count: e.source_count, relevance: e.relevance }));

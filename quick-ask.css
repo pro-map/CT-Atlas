@@ -43,3 +43,4 @@
 .qa-cited-item a:hover{color:#d1aef2}
 #quickAskDisclaimer{margin-top:16px;padding:10px;border:1px solid rgba(152,118,204,.25);background:rgba(90,60,130,.09);color:#b9a0cf;font:500 7.5px/1.5 Arial,sans-serif}
 @media(max-width:560px){#quickAskPanel{padding:4px}#quickAskWindow{width:99vw;max-height:98vh}#quickAskAnswerTopline{display:block}#quickAskActions{margin-top:8px}}
+.qa-scope{margin:8px 0 0;padding:6px 8px;border-left:2px solid rgba(143,208,255,.6);background:rgba(20,40,55,.45);color:#cfe6f2;font:600 8.5px/1.45 Arial,sans-serif}
