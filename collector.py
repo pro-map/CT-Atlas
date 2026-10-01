@@ -5083,7 +5083,8 @@ def apply_ai_selection(
     event["incident_anchor"] = incident_anchor
     event["update_type"] = update_type
 
-    if incident_anchor:
+    # Never replace an id incident consolidation already settled on.
+    if incident_anchor and not event.get("incident_id"):
         normalized_anchor = unicodedata.normalize("NFKD", incident_anchor)
         normalized_anchor = "".join(ch for ch in normalized_anchor if not unicodedata.combining(ch))
         normalized_anchor = re.sub(r"[^a-z0-9]+", " ", normalized_anchor.lower()).strip()
@@ -9973,6 +9974,448 @@ def save_database(events, trend_summary=None, weekly_analysis=None):
     atomic_json_write(OUTPUT_FILE, output)
 
 
+# ============================================================
+# INCIDENT CONSOLIDATION
+# incident_id hashes Gemini's free-text anchor, so one incident reported with
+# different wording gets several ids; Gemini regroups them per region/window.
+# ============================================================
+
+INCIDENT_STATE_FILE = "incident_consolidation_state.json"
+INCIDENT_WINDOW_DAYS = 3.0
+# Windows start at most this far apart, so any two incidents up to
+# INCIDENT_WINDOW_DAYS - INCIDENT_WINDOW_STEP_DAYS days apart share a window.
+INCIDENT_WINDOW_STEP_DAYS = 1.5
+INCIDENT_WINDOW_MAX = 120
+INCIDENT_CONSOLIDATION_MAX_CALLS = int(os.getenv("INCIDENT_CONSOLIDATION_MAX_CALLS", "10"))
+INCIDENT_INITIAL_MERGE_DAYS = 3.0
+INCIDENT_UPDATE_MERGE_DAYS = 1.5
+
+# Same broad regions as the Report Generator (cloudflare-worker/shared.js).
+# Overlaps are deliberate: a country in two regions is compared with both.
+INCIDENT_REGION_COUNTRY_CODES = {
+    "AFRICA": set(
+        "DZ AO BJ BW BF BI CV CM CF TD KM CG CD CI DJ EG GQ ER SZ ET GA GM GH GN GW KE LS LR "
+        "LY MG MW ML MR MU MA MZ NA NE NG RW ST SN SC SL SO ZA SS SD TZ TG TN UG EH ZM ZW".split()
+    ),
+    "MENA": set("DZ BH EG IR IQ IL JO KW LB LY MA OM PS QA SA SY TN TR AE YE".split()),
+    "AMERICAS": set(
+        "AI AG AR AW BS BB BZ BM BO BQ BR CA KY CL CO CR CU CW DM DO EC SV FK GF GL GD GP GT GY "
+        "HT HN JM MQ MX MS NI PA PY PE PR BL KN LC MF PM VC SX SR TT TC US UY VE VG VI".split()
+    ),
+    "ASIA_PACIFIC": set(
+        "AF AU BD BT BN KH CN FJ HK IN ID JP KI KP KR KG KZ LA MO MY MV MH FM MN MM NR NP NZ PK "
+        "PW PG PH SG SB LK TJ TH TL TM TV TW UZ VU VN WS TO".split()
+    ),
+    "EUROPE": set(
+        "AL AD AM AT AZ BY BE BA BG HR CY CZ DK EE FI FR GE DE GR HU IS IE IT XK LV LI LT LU MT "
+        "MD MC ME NL MK NO PL PT RO RU SM RS SK SI ES SE CH TR UA GB VA".split()
+    ),
+}
+
+INCIDENT_CONSOLIDATION_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "groups": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "ids": {"type": "array", "items": {"type": "string"}},
+                    "reason": {"type": "string"},
+                },
+                "required": ["ids", "reason"],
+            },
+        },
+    },
+    "required": ["groups"],
+}
+
+INCIDENT_CONSOLIDATION_INSTRUCTIONS = """
+You deduplicate a counter-terrorism incident database. Each item is one
+INCIDENT as currently stored: an id, its dates, places, event types, actor
+and up to three headlines. Several items are often the SAME real-world
+incident/case written up by different outlets, in different languages, with
+different wording or a different place emphasis (e.g. a flight attacked en
+route to Tel Aviv and diverted to Riyadh is one incident, whether the item
+says Israel or Saudi Arabia).
+
+Return only groups of two or more ids that are the same real-world
+incident/case. A case includes its own follow-ups: the attack, the arrest of
+its perpetrators, the investigation and the trial of that same attack belong
+together.
+
+Be strict:
+- Different attacks are different incidents even when they share a group, a
+  method, a city or a day (two IED blasts in two Borno villages = two).
+- A wave of separate strikes or raids is several incidents unless the items
+  clearly describe one coordinated operation.
+- Different arrests or court cases are different unless they are the same
+  people / same case.
+- When unsure, do not group.
+
+Every id you return must be copied exactly from the input. Keep reasons short.
+"""
+
+
+def _incident_record_hash(event):
+    raw = "|".join(str(event.get(field) or "") for field in ("id", "published", "title"))
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
+
+
+def _incident_key(event):
+    return clean_text(event.get("incident_id") or "") or "rec-" + _incident_record_hash(event)
+
+
+def load_incident_state(path=None):
+    path = path or INCIDENT_STATE_FILE
+    try:
+        with open(path, encoding="utf-8") as handle:
+            state = json.load(handle)
+    except (OSError, ValueError):
+        state = {}
+    if not isinstance(state, dict):
+        state = {}
+    aliases = state.get("aliases") if isinstance(state.get("aliases"), dict) else {}
+    reviewed = state.get("reviewed") if isinstance(state.get("reviewed"), dict) else {}
+    return {"version": 1, "aliases": aliases, "reviewed": reviewed}
+
+
+def save_incident_state(state, events, path=None):
+    """Keep only entries that still describe something in the database."""
+    live_ids = {event.get("incident_id") for event in events if event.get("incident_id")}
+    state["reviewed"] = {key: value for key, value in state["reviewed"].items() if key in live_ids}
+    state["aliases"] = {key: value for key, value in state["aliases"].items() if value in live_ids}
+    atomic_json_write(path or INCIDENT_STATE_FILE, state)
+
+
+def resolve_incident_alias(incident_id, aliases):
+    seen = set()
+    while incident_id in aliases and incident_id not in seen:
+        seen.add(incident_id)
+        incident_id = aliases[incident_id]
+    return incident_id
+
+
+def _event_type_label(event):
+    return clean_text(event.get("primary_event_type") or "") or clean_text(event.get("category") or "") or "UNKNOWN"
+
+
+def build_incident_profiles(events):
+    profiles = {}
+    for index, event in enumerate(events):
+        key = _incident_key(event)
+        profile = profiles.setdefault(key, {
+            "key": key, "indices": [], "first": None, "last": None,
+            "countries": set(), "codes": set(), "cities": set(), "types": set(),
+            "actors": set(), "anchor": "", "titles": [],
+        })
+        profile["indices"].append(index)
+        dt = event_datetime(event)
+        if dt:
+            profile["first"] = dt if profile["first"] is None else min(profile["first"], dt)
+            profile["last"] = dt if profile["last"] is None else max(profile["last"], dt)
+        for field, target in (("country", "countries"), ("city", "cities"), ("actor_group", "actors")):
+            value = clean_text(event.get(field) or "")
+            if value:
+                profile[target].add(value)
+        code = clean_text(event.get("country_code") or "").upper()
+        if code:
+            profile["codes"].add(code)
+        profile["types"].add(_event_type_label(event))
+        if not profile["anchor"]:
+            profile["anchor"] = clean_text(event.get("incident_anchor") or "")
+        title = clean_text(event.get("title") or "")
+        if title and title not in profile["titles"]:
+            # The initial report says most about what the incident is.
+            if (event.get("update_type") or "") == "INITIAL":
+                profile["titles"].insert(0, title)
+            else:
+                profile["titles"].append(title)
+    return profiles
+
+
+def incident_regions(profile):
+    regions = {
+        region for region, codes in INCIDENT_REGION_COUNTRY_CODES.items()
+        if profile["codes"] & codes
+    }
+    if regions:
+        return regions
+    # No usable country code: fall back to the country name so these items
+    # are still compared with each other.
+    return {"COUNTRY:" + country.lower() for country in profile["countries"]} or {"UNKNOWN"}
+
+
+def incident_windows(profiles):
+    """Groups of incident keys close enough in place and time to be compared."""
+    by_region = defaultdict(list)
+    for profile in profiles.values():
+        if profile["first"] is None:
+            continue
+        for region in incident_regions(profile):
+            by_region[region].append(profile)
+
+    windows = []
+    for region in sorted(by_region):
+        items = sorted(by_region[region], key=lambda profile: (profile["first"], profile["key"]))
+        start = 0
+        while start < len(items):
+            start_time = items[start]["first"]
+            end = start
+            while end < len(items) and (items[end]["first"] - start_time).total_seconds() <= INCIDENT_WINDOW_DAYS * 86400:
+                end += 1
+            members = items[start:end]
+            if len(members) > INCIDENT_WINDOW_MAX:
+                # Rare busy spells: overlapping chunks in time order, so
+                # neighbours in time still meet whatever their country.
+                step = INCIDENT_WINDOW_MAX - INCIDENT_WINDOW_MAX // 4
+                for offset in range(0, len(members), step):
+                    windows.append([profile["key"] for profile in members[offset:offset + INCIDENT_WINDOW_MAX]])
+                    if offset + INCIDENT_WINDOW_MAX >= len(members):
+                        break
+            elif len(members) > 1:
+                windows.append([profile["key"] for profile in members])
+            next_start = start + 1
+            while next_start < len(items) and (items[next_start]["first"] - start_time).total_seconds() <= INCIDENT_WINDOW_STEP_DAYS * 86400:
+                next_start += 1
+            start = next_start
+    return windows
+
+
+def _incident_window_payload(keys, profiles):
+    items = []
+    for number, key in enumerate(keys, start=1):
+        profile = profiles[key]
+        items.append({
+            "id": f"I{number}",
+            "first_reported": profile["first"].date().isoformat() if profile["first"] else None,
+            "last_reported": profile["last"].date().isoformat() if profile["last"] else None,
+            "countries": sorted(profile["countries"]),
+            "cities": sorted(profile["cities"])[:4],
+            "event_types": sorted(profile["types"]),
+            "actor_groups": sorted(profile["actors"])[:3],
+            "anchor": profile["anchor"],
+            "headlines": profile["titles"][:3],
+        })
+    return items
+
+
+def call_gemini_json(instructions, text, schema, max_output_tokens=8000):
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY is missing.")
+    body = {
+        "model": AI_SELECTION_MODEL,
+        "input": text,
+        "system_instruction": instructions,
+        "store": False,
+        "response_format": {"type": "text", "mime_type": "application/json", "schema": schema},
+        "generation_config": {"max_output_tokens": max_output_tokens, "thinking_level": "minimal"},
+    }
+    headers = {"x-goog-api-key": api_key, "Content-Type": "application/json"}
+    for attempt in range(1, AI_SELECTION_ATTEMPTS + 1):
+        try:
+            response = requests.post(GEMINI_INTERACTIONS_URL, headers=headers, json=body, timeout=AI_SELECTION_TIMEOUT)
+        except requests.RequestException as error:
+            if attempt >= AI_SELECTION_ATTEMPTS:
+                raise AISelectionTransientError("Gemini network failure.") from error
+            time.sleep(min(90, 10 * attempt))
+            continue
+        if response.status_code == 429:
+            if attempt >= AI_SELECTION_ATTEMPTS:
+                raise AISelectionQuotaError("Gemini quota reached.")
+            time.sleep(min(120, 15 * attempt))
+            continue
+        if response.status_code in {408, 409, 500, 502, 503, 504}:
+            if attempt >= AI_SELECTION_ATTEMPTS:
+                raise AISelectionTransientError(f"Gemini unavailable (HTTP {response.status_code}).")
+            time.sleep(min(90, 12 * attempt))
+            continue
+        if response.status_code >= 400:
+            raise RuntimeError(f"Gemini API error {response.status_code}: {response.text[:600]}")
+        try:
+            parsed = json.loads(extract_interaction_text(response.json()))
+        except (ValueError, TypeError) as error:
+            raise AISelectionIncompleteError("Invalid Gemini JSON.") from error
+        time.sleep(AI_SELECTION_PAUSE_SECONDS)
+        return parsed
+    raise AISelectionTransientError("Gemini request failed.")
+
+
+def review_incident_window(keys, profiles):
+    """Gemini's same-incident groups for one window, as lists of incident keys."""
+    payload = _incident_window_payload(keys, profiles)
+    wire_to_key = {item["id"]: key for item, key in zip(payload, keys)}
+    parsed = call_gemini_json(
+        INCIDENT_CONSOLIDATION_INSTRUCTIONS,
+        "Group the incidents below that are the same real-world incident/case.\n\n"
+        + json.dumps({"incidents": payload}, ensure_ascii=False),
+        INCIDENT_CONSOLIDATION_SCHEMA,
+    )
+    groups = []
+    for group in (parsed or {}).get("groups") or []:
+        members = []
+        for wire_id in (group or {}).get("ids") or []:
+            key = wire_to_key.get(str(wire_id).strip())
+            if key and key not in members:
+                members.append(key)
+        if len(members) > 1:
+            groups.append(members)
+    return groups
+
+
+def _merge_incident_record(kept, new):
+    merge_event(kept, new, 1.0, "same_incident")
+    known = {article_identity({"title": kept.get("title"), "url": kept.get("url"), "published": kept.get("published")})}
+    known.update(article_identity(article) for article in kept.get("related_articles") or [])
+    for article in new.get("related_articles") or []:
+        if len(kept["related_articles"]) >= MAX_RELATED_ARTICLES:
+            break
+        identity = article_identity(article)
+        if identity not in known:
+            kept["related_articles"].append(article)
+            known.add(identity)
+    kept["article_count"] = int(kept.get("article_count") or 1) + max(int(new.get("article_count") or 1) - 1, 0)
+    kept["ai_relevance_score"] = max(int(kept.get("ai_relevance_score") or 0), int(new.get("ai_relevance_score") or 0))
+    if kept.get("latitude") is None and new.get("latitude") is not None:
+        for field in ("latitude", "longitude", "city", "region", "location_precision",
+                      "location_confidence", "location_method", "excluded_from_map"):
+            if field in new:
+                kept[field] = new[field]
+
+
+def merge_incident_records(events):
+    """Fold records that report the same development of the same incident."""
+    groups = defaultdict(list)
+    for index, event in enumerate(events):
+        incident_id = event.get("incident_id")
+        if incident_id:
+            # Gemini labels one development inconsistently (ATTACK vs.
+            # ATTEMPTED_ATTACK), so the stage decides; legacy records with no
+            # stage fall back to their category.
+            update_type = event.get("update_type") or ""
+            stage = update_type or "LEGACY:" + _event_type_label(event)
+            groups[(incident_id, stage, update_type)].append(index)
+
+    absorbed = set()
+    for (_, _, update_type), indices in groups.items():
+        if len(indices) < 2:
+            continue
+        limit_days = INCIDENT_INITIAL_MERGE_DAYS if update_type in ("INITIAL", "") else INCIDENT_UPDATE_MERGE_DAYS
+        floor = datetime.min.replace(tzinfo=timezone.utc)
+        ordered = sorted(indices, key=lambda i: event_datetime(events[i]) or floor)
+        kept_indices = []
+        for index in ordered:
+            event = events[index]
+            event_dt = event_datetime(event)
+            target = None
+            for kept_index in kept_indices:
+                kept = events[kept_index]
+                kept_dt = event_datetime(kept)
+                same_country = not event.get("country") or not kept.get("country") or event.get("country") == kept.get("country")
+                # INITIAL reports of one incident often name different countries
+                # (attack site vs. where a plane landed); updates must agree.
+                if update_type != "INITIAL" and not same_country:
+                    continue
+                if event_dt and kept_dt and abs((event_dt - kept_dt).total_seconds()) > limit_days * 86400:
+                    continue
+                target = kept_index
+                break
+            if target is None:
+                kept_indices.append(index)
+            else:
+                _merge_incident_record(events[target], event)
+                absorbed.add(index)
+    return [event for index, event in enumerate(events) if index not in absorbed]
+
+
+def consolidate_incidents(events, state=None, max_calls=None, now=None, use_gemini=True):
+    """Unify duplicate incident ids, then merge duplicate records.
+    Returns (events, stats). Never raises on Gemini failure: unreviewed
+    windows simply wait for the next run."""
+    state = state if state is not None else load_incident_state()
+    max_calls = INCIDENT_CONSOLIDATION_MAX_CALLS if max_calls is None else max_calls
+    now_iso = (now or datetime.now(timezone.utc)).isoformat()
+    aliases, reviewed = state["aliases"], state["reviewed"]
+    stats = {"aliased_records": 0, "windows_pending": 0, "windows_reviewed": 0,
+             "incidents_merged": 0, "records_merged": 0, "error": None}
+
+    for event in events:
+        incident_id = event.get("incident_id")
+        if incident_id and incident_id in aliases:
+            event["incident_id"] = resolve_incident_alias(incident_id, aliases)
+            stats["aliased_records"] += 1
+
+    profiles = build_incident_profiles(events)
+    pending = [keys for keys in incident_windows(profiles) if any(key not in reviewed for key in keys)]
+    # Newest first: today's duplicates matter most, the backlog drains over runs.
+    pending.sort(key=lambda keys: max(profiles[key]["first"] for key in keys), reverse=True)
+    stats["windows_pending"] = len(pending)
+
+    parent = {}
+
+    def find(key):
+        parent.setdefault(key, key)
+        while parent[key] != key:
+            parent[key] = parent[parent[key]]
+            key = parent[key]
+        return key
+
+    reviewed_keys = set()
+    if use_gemini:
+        for keys in pending[:max(0, max_calls)]:
+            try:
+                groups = review_incident_window(keys, profiles)
+            except Exception as error:  # noqa: BLE001 - keep progress, retry next run
+                stats["error"] = str(error)[:300]
+                print(f"Incident consolidation paused: {stats['error']}")
+                break
+            stats["windows_reviewed"] += 1
+            reviewed_keys.update(keys)
+            for group in groups:
+                root = find(group[0])
+                for key in group[1:]:
+                    other = find(key)
+                    if other != root:
+                        parent[other] = root
+
+    clusters = defaultdict(list)
+    for key in reviewed_keys:
+        clusters[find(key)].append(key)
+
+    floor = datetime.max.replace(tzinfo=timezone.utc)
+    for members in clusters.values():
+        # Earliest real incident id wins so the id stays stable over time.
+        members.sort(key=lambda key: (not key.startswith("inc-"), profiles[key]["first"] or floor, key))
+        canonical = members[0]
+        if not canonical.startswith("inc-"):
+            canonical = "inc-" + canonical[len("rec-"):]
+        anchor = next((profiles[key]["anchor"] for key in members if profiles[key]["anchor"]), "")
+        if len(members) > 1:
+            stats["incidents_merged"] += len(members) - 1
+        for key in members:
+            if key.startswith("inc-") and key != canonical:
+                aliases[key] = canonical
+            for index in profiles[key]["indices"]:
+                events[index]["incident_id"] = canonical
+                if anchor and len(members) > 1:
+                    events[index]["incident_anchor"] = anchor
+            reviewed[key] = now_iso
+        reviewed[canonical] = now_iso
+
+    before = len(events)
+    events = merge_incident_records(events)
+    stats["records_merged"] = before - len(events)
+    print(
+        "Incident consolidation: "
+        f"{stats['windows_reviewed']}/{stats['windows_pending']} pending windows reviewed, "
+        f"{stats['incidents_merged']} duplicate incident ids merged, "
+        f"{stats['records_merged']} duplicate records folded, "
+        f"{stats['aliased_records']} records remapped from earlier decisions."
+    )
+    return events, stats
+
+
 def main():
     global COLLECTION_SCOPE
     is_backfill, COLLECTION_SCOPE = parse_collection_mode()
@@ -10122,6 +10565,10 @@ def main():
     events = prune_old(
         events
     )
+
+    incident_state = load_incident_state()
+    events, _ = consolidate_incidents(events, incident_state)
+    save_incident_state(incident_state, events)
 
     events.sort(
         key=lambda event:

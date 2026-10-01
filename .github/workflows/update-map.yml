@@ -202,6 +202,9 @@ jobs:
               if not isinstance(db, dict) or not isinstance(db.get("events"), list):
                   raise RuntimeError("Invalid database checkpoint; recovery artifact retained")
               subprocess.run(["git", "add", "--", "events.json"], check=True)
+              # Written together with events.json; only meaningful alongside it.
+              if Path("incident_consolidation_state.json").exists():
+                  subprocess.run(["git", "add", "--", "incident_consolidation_state.json"], check=True)
           else:
               # Collector failed: preserve its AI/RSS cache, keep the published DB.
               tracked = subprocess.run(["git", "ls-files", "--error-unmatch", "events.json"], capture_output=True)

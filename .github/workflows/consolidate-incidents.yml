@@ -1,0 +1,92 @@
+name: Consolidate duplicate incidents
+
+# Retroactive pass over the 180-day database (tools/consolidate_incidents.py):
+# Gemini groups incident ids that are the same real-world incident, duplicate
+# records are folded. Progress lives in incident_consolidation_state.json, so
+# each run continues the backlog; once it is drained a scheduled run only
+# reviews the few windows the daily collector has not already handled.
+on:
+  schedule:
+    # Clear of the collector (10:17 / 18:17), the cleanup rescore (14:17) and
+    # the D1 sync (20:47) so they never share a Gemini minute.
+    - cron: "37 7 * * *"
+      timezone: "Europe/Paris"
+    - cron: "37 12 * * *"
+      timezone: "Europe/Paris"
+    - cron: "7 16 * * *"
+      timezone: "Europe/Paris"
+  workflow_dispatch:
+    inputs:
+      max_calls:
+        description: "Max Gemini window reviews this run"
+        required: true
+        default: "60"
+        type: string
+
+permissions:
+  contents: write
+
+# Shares the daily collector's commit lock: both rewrite events.json.
+concurrency:
+  group: ct-map-update-main
+  cancel-in-progress: false
+
+jobs:
+  consolidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      MAX_CALLS: ${{ github.event_name == 'workflow_dispatch' && inputs.max_calls || '60' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Consolidate incidents
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "GEMINI_API_KEY GitHub secret is missing."
+            exit 1
+          fi
+          python -u tools/consolidate_incidents.py --max-calls "$MAX_CALLS"
+
+      - name: Commit and push
+        run: |
+          set -euo pipefail
+          git config user.name "CT Intelligence Map Bot"
+          git config user.email "actions@github.com"
+          git add events.json incident_consolidation_state.json
+          if git diff --cached --quiet; then
+            echo "Nothing consolidated; no commit needed."
+            exit 0
+          fi
+          git commit -m "Consolidate duplicate incidents"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo "Concurrent modification conflict; the next run continues from the saved state."
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 4))
+          done
+          echo "Push failed after retries."
+          exit 1
