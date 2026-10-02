@@ -896,7 +896,8 @@ body.locked #main {
 
 
 /* =========================================================
-   INTERPOL OFFICES LAYER — RED PULSING MARKERS
+   INTERPOL OFFICES LAYER — SMALL STATIC MARKERS
+   (attacks are the markers that pulse: see .ct-marker.attacks)
 ========================================================= */
 
 .interpol-office-marker {
@@ -910,58 +911,36 @@ body.locked #main {
         0 2px 8px rgba(0,0,0,.6);
     font-weight: bold;
     color: #ffffff;
-    animation: interpolOfficePulse 1.25s infinite;
-}
-
-@keyframes interpolOfficePulse {
-    0% {
-        box-shadow:
-            0 0 0 0 rgba(215,25,32,.85),
-            0 2px 8px rgba(0,0,0,.6);
-        filter: brightness(1);
-    }
-
-    50% {
-        box-shadow:
-            0 0 0 10px rgba(215,25,32,0),
-            0 2px 12px rgba(0,0,0,.7);
-        filter: brightness(1.4);
-    }
-
-    100% {
-        box-shadow:
-            0 0 0 0 rgba(215,25,32,0),
-            0 2px 8px rgba(0,0,0,.6);
-        filter: brightness(1);
-    }
+    border-width: 1px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.55);
 }
 
 .interpol-office-hq {
-    width: 34px;
-    height: 34px;
-    border-radius: 7px;
-    font-size: 10px;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    font-size: 7px;
 }
 
 .interpol-office-igci {
-    width: 31px;
-    height: 31px;
-    border-radius: 7px;
-    font-size: 9px;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    font-size: 6px;
 }
 
 .interpol-office-regional {
-    width: 27px;
-    height: 27px;
+    width: 17px;
+    height: 17px;
     border-radius: 50%;
-    font-size: 8px;
+    font-size: 6px;
 }
 
 .interpol-office-representative {
-    width: 27px;
-    height: 27px;
+    width: 15px;
+    height: 15px;
     transform: rotate(45deg);
-    font-size: 8px;
+    font-size: 5.5px;
 }
 
 .interpol-office-representative span {
@@ -969,10 +948,10 @@ body.locked #main {
 }
 
 .interpol-office-liaison {
-    width: 27px;
-    height: 27px;
-    border-radius: 4px;
-    font-size: 8px;
+    width: 17px;
+    height: 17px;
+    border-radius: 3px;
+    font-size: 6px;
 }
 
 .office-popup-title {
@@ -1043,8 +1022,37 @@ body.locked #main {
     border-radius: 2px;
 }
 
+/* Attacks: bright red with a pulsing red ring (a pseudo-element: the
+   marker's own box-shadow is fixed with !important further down). */
+.ct-marker.attacks {
+    position: relative;
+    background: #e3191f !important;
+    animation: attackMarkerGlow 1.3s ease-in-out infinite;
+}
+
+.ct-marker.attacks::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border: 2px solid rgba(255, 45, 45, .9);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: attackMarkerRing 1.3s ease-out infinite;
+}
+
+@keyframes attackMarkerRing {
+    0% { transform: scale(.85); opacity: .95; }
+    100% { transform: scale(2.1); opacity: 0; }
+}
+
+@keyframes attackMarkerGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.35); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .interpol-office-marker {
+    .ct-marker.attacks,
+    .ct-marker.attacks::after {
         animation: none;
     }
 }
@@ -1996,6 +2004,35 @@ body::before {
     color: #dceaf2 !important;
     border: 1px solid #3c6f8c;
     box-shadow: 0 0 16px rgba(46,115,151,.32);
+}
+
+/* Clusters holding an attack: red, with the attack markers' pulsing ring. */
+.marker-cluster.attack-cluster {
+    background: rgba(227,25,31,.32) !important;
+}
+
+.marker-cluster.attack-cluster div {
+    position: relative;
+    background: #c4161c !important;
+    color: #ffffff !important;
+    border-color: #ff6b6b;
+    box-shadow: 0 0 14px rgba(255,45,45,.45);
+}
+
+.marker-cluster.attack-cluster div::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border: 2px solid rgba(255,45,45,.85);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: attackMarkerRing 1.3s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .marker-cluster.attack-cluster div::after {
+        animation: none;
+    }
 }
 
 #chronologyPanel {
@@ -6110,7 +6147,20 @@ L.markerClusterGroup({
         true,
 
     chunkDelay:
-        30
+        30,
+
+    // The default cluster icon, red and pulsing when it holds an attack.
+    iconCreateFunction:
+        cluster => {
+            const count = cluster.getChildCount();
+            const size = count < 10 ? "small" : (count < 100 ? "medium" : "large");
+            const attack = cluster.getAllChildMarkers().some(marker => marker.options.ctAttack);
+            return L.divIcon({
+                html: "<div><span>" + count + "</span></div>",
+                className: "marker-cluster marker-cluster-" + size + (attack ? " attack-cluster" : ""),
+                iconSize: L.point(40, 40)
+            });
+        }
 
 });
 
@@ -6333,16 +6383,16 @@ function createInterpolOfficeMarker(
         ===
         "interpol-office-hq"
         ?
-        [34, 34]
+        [22, 22]
         :
         (
             office.markerClass
             ===
             "interpol-office-igci"
             ?
-            [31, 31]
+            [20, 20]
             :
-            [27, 27]
+            [17, 17]
         );
 
 
@@ -7592,7 +7642,10 @@ function createMarker(
 
             {
                 icon:
-                    icon
+                    icon,
+                // A cluster holding an attack is drawn red and pulsing.
+                ctAttack:
+                    style.className === "attacks"
             }
 
         );
