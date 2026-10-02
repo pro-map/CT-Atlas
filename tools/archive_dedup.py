@@ -308,7 +308,10 @@ class StoryIndex:
 
         normalized = normalize_title(title)
         for index in self._by_title.get(normalized, ()) if normalized else ():
-            if self._within_window(index, time, approximate):
+            # A review's own headline, word for word, is that article however
+            # far its review day lies from the publication (a July article
+            # re-reviewed in September).
+            if approximate or self._stories[index]["approximate"] or self._within_window(index, time):
                 return self._stories[index]["owner"]
 
         tokens = title_tokens(title)

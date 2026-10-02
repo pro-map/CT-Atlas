@@ -142,6 +142,15 @@ class PlanArchiveTests(unittest.TestCase):
         _, delete = dedup.plan_archive(stored, [])
         self.assertEqual(delete, [("gemini-review:late", "duplicate_story", "https://ng/1")])
 
+    def test_a_review_with_the_same_headline_word_for_word_is_its_article_months_later(self):
+        title = "Damascus Bombing: 9 Dead, 20 Injured; Strong Condemnation from Turkey"
+        stored = [
+            row("https://sy/1", "rejected_candidate", title, published="2026-07-04T08:00:00+00:00", score=30),
+            row("gemini-review:twin", "historical_review", title, score=30, collected_at="2026-09-30T08:00:00+00:00"),
+        ]
+        _, delete = dedup.plan_archive(stored, [])
+        self.assertEqual(delete, [("gemini-review:twin", "duplicate_story", "https://sy/1")])
+
     def test_dated_articles_keep_the_five_day_window(self):
         title = "Nigerian Air Force takes delivery of five new helicopters for anti-terror operations"
         stored = [
