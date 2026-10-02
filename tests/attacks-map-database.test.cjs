@@ -55,7 +55,7 @@ async function runLoader(responses){
       return {ok:true,status:200,json:async()=>body};
     }
   });
-  vm.runInContext(extract('isMapAttackEvent')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 4;'+extract('loadMapDatabase'),c);
+  vm.runInContext(extract('isMapAttackEvent')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 8;'+extract('loadMapDatabase'),c);
   const data=await vm.runInContext('loadMapDatabase()',c);
   return {data:plain(data),source:c.window.eventsDataSource};
 }
@@ -351,4 +351,62 @@ test('/database-events refuses a session that belongs to another user',async()=>
   const c=workerContext([{id:'a',title:'x',published:new Date().toISOString()}],'someone-else');
   const result=plain(await c.handleDatabaseEvents({json:async()=>({user_id:'analyst'}),headers:{get:()=>'token'}},{}));
   assert.equal(result.status,401);
+});
+
+// ---- "Show on map": attacks by default, every category or one on demand ----
+function mapScopeHarness(){
+  const day=86400000, now=Date.now();
+  const iso=ms=>new Date(now-ms).toISOString();
+  const c=vm.createContext({document:{getElementById:()=>null},Date,Number,Array,Object,String,Set,Map});
+  vm.runInContext(`
+    const MAP_ALL_CATEGORIES = Object.freeze(["Attacks","Counter Terrorism Action","Arrests","Legal / Judicial",
+      "Terrorist Financing","Weapons","Maritime Security","CBRN","Online / Cyber / AI"]);
+    let selectedDays = 1;
+    let recentContextEvents = [];
+    let attacks = [];
+    function withinDays(published, days){ return Date.now()-Date.parse(published) <= days*86400000; }
+    function filteredAllEvents(){ return attacks.filter(e => withinDays(e.published, selectedDays)); }
+    function categoryMatches(event, list){ return list.includes(event.category); }
+    function groupMatches(){ return true; }
+    function searchMatches(){ return true; }
+  `,c);
+  const src=html.slice(html.indexOf('let _filteredAllEventsCache = null;'),html.indexOf('function filteredAllEvents()'));
+  vm.runInContext(src,c);
+  vm.runInContext(extract('filteredMappedEvents'),c);
+  c.attacksData={
+    attacks:[{id:'a1',category:'Attacks',published:iso(3600e3),latitude:1,longitude:1},
+             {id:'a7',category:'Attacks',published:iso(5*day),latitude:1,longitude:1}],
+    others:[{id:'r1',category:'Arrests',published:iso(7200e3),latitude:2,longitude:2},
+            {id:'l1',category:'Legal / Judicial',published:iso(2*day),latitude:3,longitude:3},
+            {id:'u1',category:'Arrests',published:iso(7200e3),location_precision:'unlocated'}]
+  };
+  vm.runInContext('attacks = attacksData.attacks; recentContextEvents = attacksData.others;',c);
+  return {
+    ids:(scope,days)=>vm.runInContext(`selectedDays=${days}; setMapCategoryScope(${JSON.stringify(scope)}); invalidateFilterCache();
+      ({scope: mapScopeEvents().map(e=>e.id), mapped: filteredMappedEvents().map(e=>e.id), state: mapCategoryScope})`,c),
+  };
+}
+
+test('the map shows attacks only by default, and every category or one of them on demand',()=>{
+  const h=mapScopeHarness();
+  assert.deepEqual(plain(h.ids('ATTACKS',1)).mapped,['a1']);
+  assert.deepEqual(plain(h.ids('ATTACKS',7)).mapped,['a1','a7']);
+  assert.deepEqual(plain(h.ids('ALL',1)).mapped,['a1','r1']);
+  assert.deepEqual(plain(h.ids('ALL',7)).mapped,['a1','a7','r1','l1']);
+  const arrests=plain(h.ids('Arrests',7));
+  assert.deepEqual(arrests.mapped,['r1'],'one category: no attacks');
+  assert.deepEqual(arrests.scope,['r1','u1'],'the counter also counts events without a location');
+  assert.equal(plain(h.ids('anything else',1)).state,'ATTACKS','an unknown value falls back to attacks');
+});
+
+test('the "Show on map" selector defaults to attacks and the map file carries 7 days of other categories',()=>{
+  const select=html.slice(html.indexOf('<select id="mapCategory">'),html.indexOf('</select>',html.indexOf('<select id="mapCategory">')));
+  assert.match(select,/<option value="ATTACKS" selected>Attacks only<\/option>/);
+  assert.match(select,/<option value="ALL">All events<\/option>/);
+  assert.match(html,/let mapCategoryScope = "ATTACKS";/);
+  assert.match(html,/_filteredMappedEventsCache = mapScopeEvents\(\)\.filter\(/);
+  assert.match(html,/const MAP_RECENT_EVENT_DAYS = 8;/);
+  assert.match(fs.readFileSync('tools/build_events_map.py','utf8'),/^RECENT_DAYS = 8$/m);
+  // The ticker, KPIs and trends stay about attacks whatever the map shows.
+  assert.match(html,/const events = filteredAllEvents\(\)\s*\n?\s*\.map/);
 });

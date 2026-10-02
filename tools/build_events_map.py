@@ -11,10 +11,12 @@ Legacy records that predate the incident model have no primary_event_type; for
 those the "Attacks" category stands in, since it groups executed, attempted and
 foiled attacks the same way.
 
-recent_events carries the last few days of every OTHER category (never drawn
-on the map): the header's terrorists killed/captured counts come from counter-
-terrorism and arrest reports, and the 24h Key Developments link to events of
-any category -- both keep working without downloading the whole database.
+recent_events carries the last RECENT_DAYS of every OTHER category: the map
+draws them when "Show on map" asks for all events or one of those categories
+(its periods are 24h and 7 days), the header's terrorists killed/captured
+counts come from counter-terrorism and arrest reports, and the 24h Key
+Developments link to events of any category -- all without downloading the
+whole database.
 
 Like events-lite.json it is DERIVED at publication time from the events.json
 being deployed and never committed. The map falls back to events-lite.json
@@ -37,9 +39,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 FORMAT = "events-map-v1"
 MAP_TYPES = ("ATTACK", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT")
-# The header's casualty window is yesterday's full Paris day; the site is
-# republished at least twice a day, so four days always covers it.
-RECENT_DAYS = 4
+# The map's longest period (7 days) plus a day of slack: the site is
+# republished at least twice a day. Also covers the header's casualty window
+# (yesterday's full Paris day).
+RECENT_DAYS = 8
 
 _spec = importlib.util.spec_from_file_location("build_events_lite", Path(__file__).resolve().parent / "build_events_lite.py")
 lite = importlib.util.module_from_spec(_spec)
