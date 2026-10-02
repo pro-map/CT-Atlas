@@ -58,6 +58,12 @@ async function withGeminiMocks(responses, run) {
   }
 }
 
+const ENV = {
+  GEMINI_MODEL: "gemini-3.5-flash-lite",
+  GEMINI_FALLBACK_MODEL: "gemini-3.6-flash",
+  GEMINI_API_KEY: "test-key"
+};
+
 test("a Gemini 503 on configured 3.6 falls back to 3.5 Flash Lite", async () => {
   const { callGemini } = await loadShared();
   await withGeminiMocks([mockResponse(503), successResponse()], async ({ calls }) => {
@@ -70,23 +76,47 @@ test("a Gemini 503 on configured 3.6 falls back to 3.5 Flash Lite", async () => 
   });
 });
 
-test("transient failures rotate through both models with exponential backoff", async () => {
+test("transient failures rotate through the three models with exponential backoff", async () => {
   const { callGemini } = await loadShared();
   await withGeminiMocks(
     [mockResponse(503), mockResponse(503), mockResponse(503), successResponse()],
     async ({ calls, delays }) => {
-      await callGemini({
-        GEMINI_MODEL: "gemini-3.5-flash-lite",
-        GEMINI_FALLBACK_MODEL: "gemini-3.6-flash",
-        GEMINI_API_KEY: "test-key"
-      }, {});
+      await callGemini(ENV, {});
       assert.deepEqual(calls, [
         "gemini-3.5-flash-lite",
         "gemini-3.6-flash",
-        "gemini-3.5-flash-lite",
-        "gemini-3.6-flash"
+        "gemini-3.1-flash-lite",
+        "gemini-3.5-flash-lite"
       ]);
       assert.deepEqual(delays, [1000, 2000, 4000]);
+    }
+  );
+});
+
+test("a model that answers 429 is skipped while another model remains", async () => {
+  const { callGemini } = await loadShared();
+  await withGeminiMocks(
+    [mockResponse(429), mockResponse(503), mockResponse(503), successResponse()],
+    async ({ calls }) => {
+      await callGemini(ENV, {});
+      assert.deepEqual(calls, [
+        "gemini-3.5-flash-lite",
+        "gemini-3.6-flash",
+        "gemini-3.1-flash-lite",
+        "gemini-3.6-flash"
+      ]);
+    }
+  );
+});
+
+test("with the primary and 3.6 Flash out of quota, 3.1 Flash Lite answers", async () => {
+  const { callGemini } = await loadShared();
+  await withGeminiMocks(
+    [mockResponse(429), mockResponse(429), successResponse()],
+    async ({ calls }) => {
+      const result = await callGemini(ENV, {});
+      assert.deepEqual(calls, ["gemini-3.5-flash-lite", "gemini-3.6-flash", "gemini-3.1-flash-lite"]);
+      assert.equal(result.analysis, "Generated report.");
     }
   );
 });
@@ -96,11 +126,7 @@ test("Retry-After is honored and capped at eight seconds", async () => {
   await withGeminiMocks(
     [mockResponse(503, {}, { "retry-after": "30" }), successResponse()],
     async ({ delays }) => {
-      await callGemini({
-        GEMINI_MODEL: "gemini-3.5-flash-lite",
-        GEMINI_FALLBACK_MODEL: "gemini-3.6-flash",
-        GEMINI_API_KEY: "test-key"
-      }, {});
+      await callGemini(ENV, {});
       assert.deepEqual(delays, [8000]);
     }
   );
@@ -109,19 +135,25 @@ test("Retry-After is honored and capped at eight seconds", async () => {
 test("final failed attempt does not add an unnecessary wait", async () => {
   const { callGemini } = await loadShared();
   await withGeminiMocks([mockResponse(503)], async ({ calls, delays }) => {
-    await assert.rejects(callGemini({
-      GEMINI_MODEL: "gemini-3.5-flash-lite",
-      GEMINI_FALLBACK_MODEL: "gemini-3.6-flash",
-      GEMINI_API_KEY: "test-key"
-    }, {}), /Gemini temporary error 503 on gemini-3\.6-flash/);
-    assert.equal(calls.length, 4);
+    await assert.rejects(callGemini(ENV, {}), /Gemini temporary error 503 on gemini-3\.6-flash/);
     assert.deepEqual(calls, [
       "gemini-3.5-flash-lite",
       "gemini-3.6-flash",
+      "gemini-3.1-flash-lite",
       "gemini-3.5-flash-lite",
       "gemini-3.6-flash"
     ]);
-    assert.equal(delays.length, 3);
+    assert.equal(delays.length, 4);
   });
 });
 
+test("the rotation goes back to every model once all have answered 429", async () => {
+  const { geminiModelRotation } = await loadShared();
+  const rotation = geminiModelRotation(["a", "b", "a", "", "c"]);
+  assert.deepEqual([rotation.next(), rotation.next(), rotation.next()], ["a", "b", "c"]);
+  rotation.spent("a");
+  rotation.spent("c");
+  assert.deepEqual([rotation.next(), rotation.next()], ["b", "b"]);
+  rotation.spent("b");
+  assert.deepEqual([rotation.next(), rotation.next()], ["c", "a"]);
+});

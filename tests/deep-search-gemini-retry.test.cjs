@@ -13,6 +13,9 @@ const vm=require('node:vm');
 const source=fs.readFileSync('cloudflare-worker/deep-search.js','utf8')
   .replace(/import\s*\{[\s\S]*?\}\s*from\s*["']\.\/[^"']+["'];\s*/g,'')
   .replace(/export /g,'');
+// The model rotation is shared.js's own code, not a stub.
+const rotationSource=fs.readFileSync('cloudflare-worker/shared.js','utf8')
+  .match(/function geminiModelRotation\([\s\S]*?\r?\n\}\r?\n/)[0];
 
 function harness(fetchImpl){
   const c=vm.createContext({
@@ -28,8 +31,10 @@ function harness(fetchImpl){
       }
       throw new Error('no readable output');
     },
-    waitBeforeGeminiRetry:async()=>{}
+    waitBeforeGeminiRetry:async()=>{},
+    GEMINI_SECOND_FALLBACK_MODEL:'gemini-3.1-flash-lite'
   });
+  vm.runInContext(rotationSource,c);
   vm.runInContext(source,c);
   return vm.runInContext('({callGeminiJson,DEEP_SEARCH_MODEL,DEEP_SEARCH_FALLBACK_MODEL})',c);
 }
@@ -98,4 +103,16 @@ test('malformed JSON in an otherwise-ok response is retried, not a hard crash',a
   const result=await h.callGeminiJson({GEMINI_API_KEY:'x'},'instr','input',{},100);
   assert.deepEqual(JSON.parse(JSON.stringify(result)),{answer:'valid on retry'});
   assert.equal(calls,2);
+});
+
+test('with the primary and 3.6 Flash out of quota, Deep Search falls back to 3.1 Flash Lite',async()=>{
+  const calls=[];
+  const h=harness(async(url,init)=>{
+    calls.push(JSON.parse(init.body).model);
+    if(calls.length<=2) return new Response('quota',{status:429});
+    return geminiResponse(JSON.stringify({answer:'third model'}));
+  });
+  const result=await h.callGeminiJson({GEMINI_API_KEY:'x'},'instr','input',{},100);
+  assert.deepEqual(JSON.parse(JSON.stringify(result)),{answer:'third model'});
+  assert.deepEqual(calls,[h.DEEP_SEARCH_MODEL,h.DEEP_SEARCH_FALLBACK_MODEL,'gemini-3.1-flash-lite']);
 });

@@ -8,7 +8,7 @@ the map's own Gemini selection, and move them on:
 
 The reviews run on a model whose free quota the daily collection does not
 touch (ARCHIVE_REVIEW_MODEL, Gemini 3.1 Flash Lite by default: its own 500
-requests/day; the collection uses 3.5 Flash Lite), paced under its 15
+requests/day; the collection uses 3.5 Flash Lite), paced to 10 of its 15
 requests/minute. A run stops cleanly on a quota answer (429), a failure or
 its call budget; reviewed events leave the pending file, so the next run
 continues where this one stopped.
@@ -31,8 +31,9 @@ ROOT = Path(__file__).resolve().parent.parent
 REVIEW_MODEL = os.getenv("ARCHIVE_REVIEW_MODEL", "gemini-3.1-flash-lite")
 MAX_CALLS = int(os.getenv("ARCHIVE_REVIEW_MAX_CALLS", "120"))
 BATCH_SIZE = 25
-# 15 requests/minute on the free tier, with a margin.
-SECONDS_BETWEEN_CALLS = float(os.getenv("ARCHIVE_REVIEW_SECONDS_BETWEEN_CALLS", "5"))
+# 15 requests/minute on the free tier; 10 at most here, so the Report Generator,
+# Deep Search and Atlas AI fallback on the same model still gets through.
+SECONDS_BETWEEN_CALLS = float(os.getenv("ARCHIVE_REVIEW_SECONDS_BETWEEN_CALLS", "6"))
 
 
 def load_collector():

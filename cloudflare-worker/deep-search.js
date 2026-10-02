@@ -10,6 +10,8 @@ import {
   extractGeminiText,
   sha256,
   waitBeforeGeminiRetry,
+  geminiModelRotation,
+  GEMINI_SECOND_FALLBACK_MODEL,
   priority,
   eventUniqueKey,
   normalizeTitle,
@@ -35,8 +37,9 @@ const DEEP_SEARCH_MODEL = "gemini-3.5-flash-lite";
 // Used only when the primary model itself is overloaded/unavailable (429/5xx) -- alternating
 // models on retry recovers from a single model being temporarily out of capacity, the same
 // "high demand" condition callGemini() (Report Generator, shared.js) already retries around.
+// Gemini 3.1 Flash Lite (GEMINI_SECOND_FALLBACK_MODEL) is the last resort: its own quota.
 const DEEP_SEARCH_FALLBACK_MODEL = "gemini-3.6-flash";
-export const DEEP_SEARCH_VERSION = "deep-search-v10-same-story";
+export const DEEP_SEARCH_VERSION = "deep-search-v11-quota-fallback";
 
 // There is no period selector any more -- the analyst's own question is the
 // only source of a time window. The planner LLM (see PLAN_SCHEMA's
@@ -816,11 +819,12 @@ function googleNewsUrl(query, locale, window) {
 // without the service itself being down -- retrying the same request against an alternate model,
 // with backoff, recovers from exactly that instead of failing the whole search on one bad call.
 async function callGeminiJson(env, instruction, input, schema, maxOutputTokens) {
-  const models = [DEEP_SEARCH_MODEL, DEEP_SEARCH_FALLBACK_MODEL];
+  const rotation = geminiModelRotation([DEEP_SEARCH_MODEL, DEEP_SEARCH_FALLBACK_MODEL, GEMINI_SECOND_FALLBACK_MODEL]);
+  // Still 4: each attempt is a subrequest, and a search can use 40 of the 50 allowed.
   const maxAttempts = 4;
   let lastError = null;
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    const model = models[attempt % models.length];
+    const model = rotation.next();
     let response;
     try {
       response = await fetch(GEMINI_URL, {
@@ -841,6 +845,7 @@ async function callGeminiJson(env, instruction, input, schema, maxOutputTokens) 
       throw lastError;
     }
     if (response.status === 429 || response.status >= 500) {
+      if (response.status === 429) rotation.spent(model);
       lastError = response.status === 429
         ? Object.assign(new Error("Gemini quota/capacity temporarily unavailable for Deep Search (429). Please retry later."), { code: 429 })
         : new Error(`Gemini temporary error ${response.status} on ${model}`);

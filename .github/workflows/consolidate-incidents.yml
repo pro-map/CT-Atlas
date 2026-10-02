@@ -5,6 +5,11 @@ name: Consolidate duplicate incidents
 # records are folded. Progress lives in incident_consolidation_state.json, so
 # each run continues the backlog; once it is drained a scheduled run only
 # reviews the few windows the daily collector has not already handled.
+#
+# Quota: it runs on Gemini 3.1 Flash Lite (its own 500 requests/day), not the
+# 3.5 Flash Lite the collection and the interactive features use, and stays
+# at 40 calls a run (120/day) so 3.1 Flash Lite keeps room for the archive
+# review, the enrichment and the Report Generator/Deep Search/Atlas AI fallback.
 on:
   schedule:
     # Clear of the collector (10:17 / 18:17), the cleanup rescore (14:17) and
@@ -20,7 +25,7 @@ on:
       max_calls:
         description: "Max Gemini window reviews this run"
         required: true
-        default: "60"
+        default: "40"
         type: string
 
 permissions:
@@ -36,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      MAX_CALLS: ${{ github.event_name == 'workflow_dispatch' && inputs.max_calls || '60' }}
+      MAX_CALLS: ${{ github.event_name == 'workflow_dispatch' && inputs.max_calls || '40' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -57,6 +62,7 @@ jobs:
       - name: Consolidate incidents
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AI_SELECTION_MODEL: "gemini-3.1-flash-lite"
         run: |
           set -euo pipefail
           if [ -z "$GEMINI_API_KEY" ]; then

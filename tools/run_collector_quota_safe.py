@@ -1,5 +1,5 @@
 """CT Atlas phase-test Gemini optimiser. Keeps collector.py as the main engine."""
-import hashlib, json, os, sys
+import hashlib, json, os, sys, time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -12,6 +12,10 @@ BATCH=max(1,min(40,int(os.getenv("AI_SELECTION_BATCH_SIZE","25"))))
 RUN_BUDGET=max(1,int(os.getenv("AI_SELECTION_MAX_CALLS_PER_RUN","30")))
 DAY_BUDGET=max(RUN_BUDGET,int(os.getenv("AI_SELECTION_DAILY_CALL_BUDGET","60")))
 RECENT_DAYS=max(1,int(os.getenv("AI_SELECTION_RECENT_PRIORITY_DAYS","3")))
+# At most 10 Gemini requests a minute from the collection: the free tier allows
+# 15 on 3.5 Flash Lite, and the Report Generator, Deep Search and Atlas AI use
+# the same model while the collection runs.
+MIN_GEMINI_INTERVAL=max(0.0,float(os.getenv("GEMINI_MIN_SECONDS_BETWEEN_CALLS","6")))
 PACIFIC=ZoneInfo("America/Los_Angeles")
 collector.AI_SELECTION_THRESHOLD=THRESHOLD
 collector.AI_SELECTION_BATCH_SIZE=BATCH
@@ -26,7 +30,7 @@ SAVE_CACHE=collector.save_selection_cache
 TREND=collector.generate_24h_trend_summary
 PRUNE=collector.prune_old
 WEEKLY=collector.generate_weekly_analysis
-calls=0; hit429=False; budget_hit=False; auto_count=0; partial=False; recent_count=0; backlog_count=0
+calls=0; hit429=False; budget_hit=False; auto_count=0; partial=False; recent_count=0; backlog_count=0; last_gemini_call=None
 
 def pacific_day(): return datetime.now(PACIFIC).date().isoformat()
 def starting_calls():
@@ -51,15 +55,24 @@ def is_selection(kwargs):
     rf=b.get("response_format",{}); schema=rf.get("schema",{}) if isinstance(rf,dict) else {}
     return isinstance(schema,dict) and "results" in schema.get("properties",{})
 
+def pace():
+    global last_gemini_call
+    if last_gemini_call is not None:
+        wait=last_gemini_call+MIN_GEMINI_INTERVAL-time.monotonic()
+        if wait>0: time.sleep(wait)
+    last_gemini_call=time.monotonic()
+
 def post(url,*args,**kwargs):
     global calls,hit429,budget_hit
-    sel="generativelanguage.googleapis.com" in str(url) and is_selection(kwargs)
+    gemini="generativelanguage.googleapis.com" in str(url)
+    sel=gemini and is_selection(kwargs)
     if sel:
         if calls>=RUN_BUDGET:
             budget_hit=True; raise collector.AISelectionQuotaError(f"CT Atlas self-imposed selection budget reached ({RUN_BUDGET} calls/run).")
         if today_calls()>=DAY_BUDGET:
             budget_hit=True; raise collector.AISelectionQuotaError(f"CT Atlas daily selection budget reached ({DAY_BUDGET} calls/Pacific day).")
         calls+=1
+    if gemini: pace()
     r=POST(url,*args,**kwargs)
     if sel and getattr(r,"status_code",None)==429:
         hit429=True

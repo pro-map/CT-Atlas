@@ -27,16 +27,50 @@ SCRIPT = textwrap.dedent('''
                       "wrapped": collector.prune_old is wrapper.prune}))
 ''')
 
+# Gemini requests from the collection are spaced at least 6 seconds apart
+# (10 a minute); other requests are not slowed down.
+PACING = textwrap.dedent('''
+    import importlib.util, json, sys
+    from types import SimpleNamespace
+    sys.path.insert(0, "tools")
+    spec = importlib.util.spec_from_file_location("quota_safe", "tools/run_collector_quota_safe.py")
+    wrapper = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(wrapper)
+    clock, sleeps = [100.0], []
+    def sleep(seconds):
+        sleeps.append(round(seconds, 3))
+        clock[0] += seconds
+    wrapper.time = SimpleNamespace(monotonic=lambda: clock[0], sleep=sleep)
+    wrapper.POST = lambda url, *args, **kwargs: SimpleNamespace(status_code=200)
+    post = wrapper.collector.requests.post
+    gemini = "https://generativelanguage.googleapis.com/v1beta/interactions"
+    post(gemini, json={})
+    clock[0] += 2
+    post(gemini, json={})
+    post("https://news.example/rss")
+    clock[0] += 10
+    post(gemini, json={})
+    print(json.dumps({"sleeps": sleeps}))
+''')
+
+
+def run(script):
+    import json
+    result = subprocess.run([sys.executable, "-c", script], capture_output=True, text=True, timeout=120)
+    if result.returncode:
+        raise AssertionError(result.stderr[-2000:])
+    return json.loads(result.stdout.strip().splitlines()[-1])
+
 
 class QuotaSafeWrapperTests(unittest.TestCase):
     def test_wrapped_prune_old_keeps_the_aged_out_hand_over(self):
-        result = subprocess.run([sys.executable, "-c", SCRIPT], capture_output=True, text=True, timeout=120)
-        self.assertEqual(result.returncode, 0, result.stderr[-2000:])
-        import json
-        data = json.loads(result.stdout.strip().splitlines()[-1])
+        data = run(SCRIPT)
         self.assertTrue(data["wrapped"])
         self.assertEqual(data["kept"], ["https://a/recent"])          # below-threshold event cleaned up
         self.assertEqual(data["aged_out"], ["https://a/old"])         # aged-out event handed over
+
+    def test_gemini_calls_are_paced_to_ten_a_minute(self):
+        self.assertEqual(run(PACING)["sleeps"], [4.0])
 
 
 if __name__ == "__main__":

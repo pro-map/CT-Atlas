@@ -34,7 +34,8 @@ import requests
 # Environment variables:
 #   GEMINI_API_KEY      required
 #   GEMINI_GEO_MODEL    optional, default: gemini-3.5-flash-lite
-#   GEMINI_RESCUE_MODEL optional, default: gemini-3.6-flash
+#   GEMINI_RESCUE_MODELS optional, comma-separated, tried in turn;
+#                        default: gemini-3.7-flash,gemini-3.8-flash,gemini-3.5-flash
 #   AI_GEO_BATCH_SIZE   optional, default: 20
 #   AI_GEO_FORCE        optional, "1"/"true" to refresh every event
 #   AI_GEO_PRESERVE_IDS_FILE optional JSON list of protected existing event IDs
@@ -53,10 +54,20 @@ GEMINI_MODEL = os.getenv(
     "gemini-3.5-flash-lite",
 )
 
-GEMINI_RESCUE_MODEL = os.getenv(
-    "GEMINI_RESCUE_MODEL",
-    "gemini-3.6-flash",
-)
+# The rescue runs on Flash models no user-facing feature relies on, one after
+# the other: each has its own free quota (20 requests/day, 5/minute). Gemini
+# 3.6 Flash stays reserved as the Report Generator / Deep Search fallback.
+GEMINI_RESCUE_MODELS = [
+    model.strip()
+    for model in os.getenv(
+        "GEMINI_RESCUE_MODELS",
+        "gemini-3.7-flash,gemini-3.8-flash,gemini-3.5-flash",
+    ).split(",")
+    if model.strip()
+]
+
+# The rescue model in use; it moves to the next one when a quota is reached.
+GEMINI_RESCUE_MODEL = GEMINI_RESCUE_MODELS[0]
 
 # New cache version: every event must be geolocated by the current AI engine.
 AI_GEO_VERSION = "gemini-ai-first-v5.2-one-shot-rescue"
@@ -850,7 +861,7 @@ def call_gemini_batch(
     )
 
     # Flash-Lite is an extraction/classification workload. Google recommends
-    # minimal thinking for this use case. Rescue with 3.6 gets low thinking.
+    # minimal thinking for this use case. The rescue models get low thinking.
     thinking_level = (
         "minimal"
         if active_model
@@ -917,6 +928,13 @@ def call_gemini_batch(
             )
 
             if response.status_code == 429:
+                if "PerDay" in (response.text or ""):
+                    # A daily quota: retrying before the reset (midnight
+                    # Pacific) only wastes minutes of the workflow.
+                    raise GeminiQuotaError(
+                        f"Gemini daily quota reached for {active_model}."
+                    )
+
                 retry_after = response.headers.get(
                     "Retry-After"
                 )
@@ -1912,6 +1930,7 @@ def mark_rescue_complete(
     event,
     status,
     reason=None,
+    model=None,
 ):
     """
     Freeze the automatic rescue decision for this event.
@@ -1921,7 +1940,7 @@ def mark_rescue_complete(
     """
     event["ai_geo_rescue_complete"] = True
     event["ai_geo_rescue_status"] = status
-    event["ai_geo_rescue_model"] = GEMINI_RESCUE_MODEL
+    event["ai_geo_rescue_model"] = model or GEMINI_RESCUE_MODEL
     event["ai_geo_rescue_reason"] = (
         str(reason)[:1000]
         if reason
@@ -1950,7 +1969,8 @@ def rescue_unknown_events(
     unresolved
 ):
     """
-    Return (results, completed_attempt_ids).
+    Return (results, completed_attempt_ids), where completed_attempt_ids
+    maps each event id to the rescue model that handled it.
 
     An event is added to completed_attempt_ids only when its rescue batch
     completed without quota/transient failure. Those events may therefore be
@@ -1977,7 +1997,7 @@ def rescue_unknown_events(
         )
 
     results = []
-    completed_attempt_ids = set()
+    completed_attempt_ids = {}
 
     rescue_instructions = (
         SYSTEM_INSTRUCTIONS
@@ -1986,6 +2006,9 @@ def rescue_unknown_events(
         +
         RESCUE_INSTRUCTIONS
     )
+
+    global GEMINI_RESCUE_MODEL
+    models = list(GEMINI_RESCUE_MODELS)
 
     for number, batch in enumerate(
         batches,
@@ -1998,25 +2021,39 @@ def rescue_unknown_events(
         )
 
         try:
-            batch_results = process_batch_resilient(
-                batch,
-                instructions_override=
-                    rescue_instructions,
-                model_override=
-                    GEMINI_RESCUE_MODEL,
-            )
+            while True:
+                GEMINI_RESCUE_MODEL = models[0]
+                try:
+                    batch_results = process_batch_resilient(
+                        batch,
+                        instructions_override=
+                            rescue_instructions,
+                        model_override=
+                            GEMINI_RESCUE_MODEL,
+                    )
+                    break
+                except GeminiQuotaError as error:
+                    # This model's free quota is spent: the next one has its own.
+                    models.pop(0)
+                    if not models:
+                        raise
+                    print(
+                        f"   Rescue quota reached on {GEMINI_RESCUE_MODEL} ({error}); "
+                        f"switching to {models[0]}."
+                    )
 
             results.extend(
                 batch_results
             )
 
             completed_attempt_ids.update(
-                str(
-                    item.get(
-                        "event_id"
-                    )
-                    or
-                    ""
+                (
+                    str(
+                        item.get(
+                            "event_id"
+                        )
+                    ),
+                    GEMINI_RESCUE_MODEL,
                 )
                 for item in batch
                 if item.get(
@@ -2029,7 +2066,7 @@ def rescue_unknown_events(
             GeminiTransientError,
         ) as error:
             print(
-                "   Gemini 3.6 rescue unavailable for the rest "
+                "   Gemini rescue unavailable for the rest "
                 f"of this run: {error}"
             )
             print(
@@ -2069,7 +2106,7 @@ def main():
         f"Primary model: {GEMINI_MODEL}"
     )
     print(
-        f"Rescue model:  {GEMINI_RESCUE_MODEL}"
+        f"Rescue models: {', '.join(GEMINI_RESCUE_MODELS)}"
     )
     print(
         f"Batch size: {BATCH_SIZE}"
@@ -2458,6 +2495,9 @@ def main():
                     result.get(
                         "reason"
                     ),
+                    model=rescue_attempted_ids[
+                        event_id
+                    ],
                 )
 
                 rescue_located += 1
@@ -2488,6 +2528,9 @@ def main():
                 event,
                 "unlocated_final",
                 reason,
+                model=rescue_attempted_ids[
+                    event_id
+                ],
             )
 
             event["location_precision"] = "unlocated"
@@ -2570,6 +2613,9 @@ def main():
 
         "rescue_model":
             GEMINI_RESCUE_MODEL,
+
+        "rescue_models":
+            GEMINI_RESCUE_MODELS,
 
         "rescue_policy":
             "one_automatic_rescue_then_freeze",

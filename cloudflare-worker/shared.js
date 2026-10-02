@@ -21,7 +21,7 @@ const FEEDBACK_GLOBAL_DAILY_LIMIT = 200;
 // Bump whenever the report SHAPE changes (new fields, schema, citation
 // rules) so an existing cache entry from before the change is never served
 // as-is -- folded into the cache key in index.js's /report handler.
-const REPORT_GENERATOR_VERSION = "report-v8-deduplicated-context";
+const REPORT_GENERATOR_VERSION = "report-v9-quota-fallback";
 
 function authUsersFromEnv(env) {
   const raw = String(env?.AUTH_USERS_JSON || "").trim();
@@ -1006,21 +1006,50 @@ async function waitBeforeGeminiRetry(attempt, response, lastAttempt) {
   await new Promise(resolve => setTimeout(resolve, geminiRetryDelayMs(attempt, response)));
 }
 
+// The interactive features' last fallback. Gemini 3.1 Flash Lite has its own free
+// quota (500 requests/day), separate from 3.5 Flash Lite (primary) and 3.6 Flash
+// (first fallback, 20/day); the background jobs that share it stay under 400/day.
+const GEMINI_SECOND_FALLBACK_MODEL = "gemini-3.1-flash-lite";
+
+// Picks the model for each attempt of one Gemini request: the models take turns,
+// and one that answered 429 (its quota is spent) is skipped while another remains.
+function geminiModelRotation(models) {
+  const order = models.filter((model, index) => model && models.indexOf(model) === index);
+  const spent = new Set();
+  let next = 0;
+  return {
+    next() {
+      for (let step = 0; step < order.length; step++) {
+        const index = (next + step) % order.length;
+        if (!spent.has(order[index]) || spent.size >= order.length) {
+          next = index + 1;
+          return order[index];
+        }
+      }
+      return order[0];
+    },
+    spent(model) {
+      spent.add(model);
+    }
+  };
+}
+
 async function callGemini(env, input) {
   const primaryModel = env.GEMINI_MODEL || "gemini-3.5-flash-lite";
   const defaultFallback = primaryModel === "gemini-3.6-flash"
     ? "gemini-3.5-flash-lite"
     : "gemini-3.6-flash";
   const fallbackModel = env.GEMINI_FALLBACK_MODEL || defaultFallback;
-  const models = [];
-  for (const model of [primaryModel, fallbackModel]) {
-    if (model && !models.includes(model)) models.push(model);
-  }
-  const maxAttempts = Math.max(3, models.length * 2);
+  const rotation = geminiModelRotation([
+    primaryModel,
+    fallbackModel,
+    env.GEMINI_SECOND_FALLBACK_MODEL || GEMINI_SECOND_FALLBACK_MODEL
+  ]);
+  const maxAttempts = 5;
   let lastError = null;
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    const model = models[attempt % models.length];
+    const model = rotation.next();
     const body = {
       model,
       input: "Produce the requested analytical report using only this JSON dataset:\n\n" + JSON.stringify(input),
@@ -1048,6 +1077,7 @@ async function callGemini(env, input) {
       });
 
       if (response.status === 429 || response.status >= 500) {
+        if (response.status === 429) rotation.spent(model);
         lastError = new Error(`Gemini temporary error ${response.status} on ${model}`);
         await waitBeforeGeminiRetry(attempt, response, maxAttempts - 1);
         continue;
@@ -1148,6 +1178,8 @@ async function fetchEventsDatabase(env) {
 
 export {
   GEMINI_URL,
+  GEMINI_SECOND_FALLBACK_MODEL,
+  geminiModelRotation,
   fetchEventsDatabase,
   ALLOWED_PERIODS,
   REPORT_GENERATOR_VERSION,

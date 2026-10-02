@@ -10,6 +10,8 @@ import {
   parseEventDate,
   compactEvent,
   extractGeminiText,
+  geminiModelRotation,
+  GEMINI_SECOND_FALLBACK_MODEL,
   priority,
   eventUniqueKey,
   parseDatabaseFilters,
@@ -26,7 +28,7 @@ import { searchCorpusForQuestion } from "./background-corpus.js";
 // never the heavy multi-source retrieval pipeline those two tools run. Bump
 // this whenever the answer SHAPE or grounding rules change, so a stale cache
 // entry is never served.
-const QUICK_ASK_VERSION = "quick-ask-v5-deduplicated-context";
+const QUICK_ASK_VERSION = "quick-ask-v6-quota-fallback";
 
 const QUICK_ASK_CACHE_TTL_MS = 60 * 60 * 1000;
 const QUICK_ASK_MAX_MATCHED_EVENTS = 12;
@@ -177,9 +179,13 @@ function localEventMatches(events, question, limit = QUICK_ASK_MAX_MATCHED_EVENT
 }
 
 async function callQuickAskGemini(env, question, matchedEvents, contextItems = [], scope = "") {
-  const model = env.GEMINI_MODEL || "gemini-3.5-flash-lite";
+  // Gemini 3.6 Flash is left to the Report Generator and Deep Search; Atlas AI falls
+  // back to 3.1 Flash Lite, which has its own quota.
+  const rotation = geminiModelRotation([
+    env.GEMINI_MODEL || "gemini-3.5-flash-lite",
+    env.GEMINI_SECOND_FALLBACK_MODEL || GEMINI_SECOND_FALLBACK_MODEL
+  ]);
   const body = {
-    model,
     input:
       "Answer this counter-terrorism question from the CT Atlas database first, following the rules:\n\n" +
       JSON.stringify({ question, scope, ct_atlas_records: matchedEvents, ct_atlas_background: contextItems }),
@@ -198,7 +204,8 @@ async function callQuickAskGemini(env, question, matchedEvents, contextItems = [
 
   let lastError = null;
 
-  for (let attempt = 0; attempt < 2; attempt++) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const model = rotation.next();
     try {
       const response = await fetch(GEMINI_URL, {
         method: "POST",
@@ -206,11 +213,12 @@ async function callQuickAskGemini(env, question, matchedEvents, contextItems = [
           "x-goog-api-key": env.GEMINI_API_KEY,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify({ model, ...body })
       });
 
       if (response.status === 429 || response.status >= 500) {
-        lastError = new Error(`Gemini temporary error ${response.status}`);
+        if (response.status === 429) rotation.spent(model);
+        lastError = new Error(`Gemini temporary error ${response.status} on ${model}`);
         await new Promise(r => setTimeout(r, 1000));
         continue;
       }
@@ -228,7 +236,7 @@ async function callQuickAskGemini(env, question, matchedEvents, contextItems = [
       return parsed;
     } catch (error) {
       lastError = error;
-      if (attempt === 0) {
+      if (attempt < 2) {
         await new Promise(r => setTimeout(r, 700));
         continue;
       }
