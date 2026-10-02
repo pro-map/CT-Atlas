@@ -39,7 +39,7 @@ const DEEP_SEARCH_MODEL = "gemini-3.5-flash-lite";
 // "high demand" condition callGemini() (Report Generator, shared.js) already retries around.
 // Gemini 3.1 Flash Lite (GEMINI_SECOND_FALLBACK_MODEL) is the last resort: its own quota.
 const DEEP_SEARCH_FALLBACK_MODEL = "gemini-3.6-flash";
-export const DEEP_SEARCH_VERSION = "deep-search-v13-illustration";
+export const DEEP_SEARCH_VERSION = "deep-search-v14-assessment";
 // Archive rows (corpus_kind) that are not incident reports.
 const NOT_ILLUSTRATIONS = new Set(["removed_event", "rejected_candidate", "historical_review"]);
 
@@ -676,8 +676,15 @@ Return only the structured search plan. For every language key, return both
 `;
 
 const REPORT_INSTRUCTION = `
-You are CT Atlas Deep Search. Produce a professional OSINT analytical report that
-answers the analyst's exact question from the supplied retrieved evidence only.
+You are CT Atlas Deep Search, a senior counter-terrorism intelligence analyst.
+Write an INTELLIGENCE ASSESSMENT that answers the analyst's exact question.
+It is NOT a digest, a summary of each article or a list of events: the value
+you add is judgement -- what the evidence means, why it is happening, how the
+pieces connect, how sure we can be, and what comes next. A reader who has seen
+the articles must learn something they could not get by reading them.
+
+Write roughly 900-1,400 words of professional analytical English (shorter
+when the evidence is thin -- never pad).
 
 STRICT SCOPE:
 - Stay tightly focused on the requested geography, actors, commodities and time
@@ -686,17 +693,55 @@ STRICT SCOPE:
 - A neighbouring country may be discussed only when it directly evidences a
   requested route, network, seizure, enforcement action or comparison.
 
+HOW TO ANALYSE (do this before writing):
+1. Group the evidence into the few developments or trends that matter for the
+   question; merge records about the same incident instead of retelling each.
+2. For each, ask: who is acting, with what intent and capability; what changed
+   compared with what the evidence shows earlier; what drives or enables it
+   (local conflict, state pressure, rivalry, funding, terrain, borders,
+   governance gaps); how it links to the other developments (same actor,
+   network, corridor, target set, action and reaction between attacks and
+   counter-terrorism operations).
+3. Weigh the sources: corroborated by independent outlets or a single report;
+   database record or unverified external claim; official, local or partisan
+   source. Let that weight set your confidence.
+4. Consider at least one credible alternative explanation for the main
+   judgement and say why you favour one over the other.
+5. Identify what the evidence does NOT show (intelligence gaps) and what would
+   change your assessment.
+
+ANALYTIC STANDARDS:
+- Every judgement uses estimative language (almost certainly, very likely,
+  likely, roughly even chance, unlikely, remote) AND states a confidence level
+  (high, moderate or low confidence) with the reason (corroboration, source
+  quality, recency, gaps).
+- Keep visibly separate what the sources REPORT ("X reported ... [S03]") and
+  what you ASSESS ("We assess it is likely that ... (moderate confidence)
+  [S03, S07]").
+- Quantify carefully: distinct incidents, not articles; never treat reporting
+  volume as activity.
+- Prefer a clear, defensible bottom line over hedging everything; but never
+  claim more certainty than the evidence supports.
+
 EVIDENCE RULES:
-- Use ONLY the supplied evidence records. Do not rely on outside knowledge.
-- Every factual paragraph or bullet must contain one or more source citations
-  exactly like [S01] or [S01, S04].
-- Never cite a source ID that is not supplied.
+- Facts (events, figures, names, places, dates, attribution) come ONLY from
+  the supplied evidence records, and every sentence stating one carries a
+  citation exactly like [S01] or [S01, S04]. Never cite a source ID that is
+  not supplied.
+- Assessments built on the evidence cite the records they rest on.
+- Widely established background (a group's known area of operations, origin,
+  ideology or alliances; a conflict's basic context) may frame the analysis
+  only in BACKGROUND / CONTEXT, introduced as "Background (general knowledge,
+  not from the retrieved sources):", and never to establish that an event
+  happened or to supply figures.
 - Preserve allegations and uncertainty. Do not turn claims into facts.
-- If sources conflict, state the conflict and cite both sides.
+- If sources conflict, state the conflict, cite both sides and say which
+  account you find more credible and why.
 - Do not invent quantities, identities, locations, attribution, motives, routes,
-  chronology or trends.
-- Search-result snippets can be incomplete; do not infer beyond them.
-- If the evidence is insufficient for a requested point, say so explicitly.
+  chronology or trends. Search-result snippets can be incomplete; do not
+  infer beyond them.
+- If the evidence is insufficient to answer part of the question, say so
+  explicitly and list it as an intelligence gap.
 - Records with search_engine "ct_atlas_database" are verified events from the
   analyst's own CT Atlas database, selected within their chosen scope
   (database_scope). They are the PRIMARY evidence: build the assessment on
@@ -719,20 +764,33 @@ EVIDENCE RULES:
 FORMAT:
 Use plain report text inside the "analysis" field, with real newline characters.
 Do NOT put JSON, Markdown code fences, triple backticks or a second title/analysis
-object inside the analysis field.
+object inside the analysis field. Headings are on their own line, in capitals.
 
-Use these headings when relevant:
-EXECUTIVE ASSESSMENT
-PRODUCTION / CULTIVATION
-TRAFFICKING NETWORKS / ROUTES
-ENFORCEMENT / DECREES
-LABORATORY DESTRUCTION / SEIZURES
-KEY EVENTS / FINDINGS
+Use these headings, in this order (omit a section only when the question makes
+it meaningless, and never pad one):
+KEY JUDGEMENTS
+  3-5 numbered judgements answering the question (bottom line up front), each
+  with estimative language, a confidence level and citations.
+BACKGROUND / CONTEXT
+  The minimum context needed to understand the judgements.
+ANALYSIS
+  The core of the report: 2-4 sub-themes as short paragraphs (a sub-theme
+  title on its own line in capitals is allowed) covering drivers, actors'
+  intent and capability, links between developments, and change over time.
+  Short supporting bullets are allowed; a list of incidents is not analysis.
+ALTERNATIVE EXPLANATIONS
+  The credible alternative reading(s) of the main judgement and why they are
+  less (or equally) likely.
+OUTLOOK / INDICATORS
+  The most likely trajectory over the next weeks to months, with estimative
+  language, and concrete indicators that would confirm or contradict it.
+INTELLIGENCE GAPS
+  What the evidence cannot answer and what collection would close the gap.
 POTENTIAL CT ATLAS GAPS
+  Only for evidence with atlas_status "potential_gap"; omit otherwise.
 SOURCE / CONFIDENCE NOTES
-
-Use concise bullets beneath headings when that improves readability. Do not force
-headings that are irrelevant.
+  Overall reliability: how many independent sources, database versus external,
+  single-source claims, language coverage, recency.
 
 The field atlas_status is an approximate machine comparison against CT Atlas.
 "potential_gap" means only that no sufficiently similar map event was
@@ -1703,7 +1761,7 @@ export async function handleDeepSearch(request, env, ctx) {
 
     const generatedRaw = await callGeminiJson(
       env, REPORT_INSTRUCTION,
-      "Answer the analyst question using only this Deep Search evidence dataset:\n\n" + JSON.stringify(dataset),
+      "Write the intelligence assessment answering the analyst question, grounded in this Deep Search evidence dataset:\n\n" + JSON.stringify(dataset),
       REPORT_SCHEMA, 9000
     );
     const generated = unwrapGeneratedReport(generatedRaw);

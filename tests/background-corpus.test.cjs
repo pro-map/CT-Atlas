@@ -207,7 +207,7 @@ test('Deep Search merges the archive before de-duplication and labels it in the 
   assert.match(worker,/deduplicateRows\(\[\.\.\.retrieval\.rows, \.\.\.corpus\.rows\]\)/);
   assert.match(worker,/corpus_kind: row\.corpus_kind/);
   assert.match(worker,/"ct_atlas_corpus" come from CT Atlas's own archive/);
-  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v13-illustration"/);
+  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v14-assessment"/);
   assert.match(fs.readFileSync('deep-search.js','utf8'),/ct_atlas_corpus:"CT ATLAS ARCHIVE"/);
 });
 
@@ -291,4 +291,20 @@ test('every prompt that reads the archive explains archived incidents',()=>{
   assert.match(shared.constant('SYSTEM_INSTRUCTION'),/corroboration of it, never a second incident/);
   assert.match(fs.readFileSync('cloudflare-worker/deep-search.js','utf8'),/"archived_incident" is an incident report that passed CT Atlas's own map\s+selection/);
   assert.match(fs.readFileSync('cloudflare-worker/quick-ask.js','utf8'),/\(kind "archived_incident"\) an\s+incident report that passed the map's selection/);
+});
+
+test('Deep Search writes an intelligence assessment, not a digest of articles',()=>{
+  const worker=fs.readFileSync('cloudflare-worker/deep-search.js','utf8');
+  const prompt=worker.slice(worker.indexOf('const REPORT_INSTRUCTION = `'),worker.indexOf('`;',worker.indexOf('const REPORT_INSTRUCTION = `')));
+  let at=-1;
+  for(const heading of ['KEY JUDGEMENTS','BACKGROUND / CONTEXT','ANALYSIS','ALTERNATIVE EXPLANATIONS',
+    'OUTLOOK / INDICATORS','INTELLIGENCE GAPS','POTENTIAL CT ATLAS GAPS','SOURCE / CONFIDENCE NOTES']){
+    const next=prompt.indexOf('\n'+heading+'\n',at+1);
+    assert.ok(next>at,heading+' missing or out of order');
+    at=next;
+  }
+  assert.match(prompt,/NOT a digest/);
+  assert.match(prompt,/estimative language[\s\S]{0,120}AND states a confidence level/);
+  assert.match(prompt,/every sentence stating one carries a\s+citation/);
+  assert.ok(!/LABORATORY DESTRUCTION|PRODUCTION \/ CULTIVATION/.test(prompt),'no narcotics-only headings');
 });
