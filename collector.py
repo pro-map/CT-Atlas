@@ -5306,6 +5306,15 @@ BACKGROUND_ARTICLES_D1_COLUMNS = (
     "ai_relevance_score", "ai_relevance_reason", "collected_at",
 )
 
+# One-row summary (corpus_stats) the Worker's /database-stats reads, refreshed
+# by every path that writes the archive.
+BACKGROUND_CORPUS_STATS_UPSERT = """
+INSERT INTO corpus_stats (id, total, by_kind, updated_at)
+SELECT 1, SUM(n), json_group_object(kind, n), strftime('%Y-%m-%dT%H:%M:%SZ', 'now')
+FROM (SELECT kind, COUNT(*) AS n FROM background_articles GROUP BY kind) WHERE true
+ON CONFLICT(id) DO UPDATE SET total = excluded.total, by_kind = excluded.by_kind, updated_at = excluded.updated_at
+"""
+
 
 def d1_query(sql, params=None):
     account_id = os.getenv("CLOUDFLARE_ACCOUNT_ID")
@@ -5412,7 +5421,14 @@ def persist_background_articles_to_d1(rejected_events):
         return
 
     statements = d1_insert_background_rows(rows)
-    prune_background_articles_d1()
+    # The rows are stored: housekeeping failures below must not send them to
+    # the local fallback file as if the write had failed.
+    try:
+        prune_background_articles_d1()
+        # The site's DATABASE total reads this one-row summary.
+        d1_query(BACKGROUND_CORPUS_STATS_UPSERT)
+    except Exception as error:
+        print(f"Background corpus: rows stored; prune/statistics refresh skipped ({error}).")
 
     print(
         f"Background corpus: submitted {len(rows)} candidate rows to D1 in {statements} statement(s) "
@@ -5420,7 +5436,21 @@ def persist_background_articles_to_d1(rejected_events):
     )
 
 
+def is_off_topic_review(event):
+    """Gemini scored it 0: no counter-terrorism content at all. The archive
+    must not hold such noise (tools/archive_dedup.py, is_noise)."""
+    try:
+        return event.get("ai_relevance_score") is not None and int(event["ai_relevance_score"]) == 0
+    except (TypeError, ValueError):
+        return False
+
+
 def persist_background_articles(rejected_events):
+    rejected_events = [
+        event
+        for event in rejected_events or []
+        if not is_off_topic_review(event)
+    ]
     if not rejected_events:
         return
     try:
@@ -5634,11 +5664,11 @@ def ai_select_events(
                 event_id
             ]
 
-            cache[
-                "items"
-            ][
-                fingerprint
-            ] = {
+            reviewed_event = event_by_id[
+                event_id
+            ]
+
+            cache_item = {
                 "version":
                     AI_SELECTION_VERSION,
 
@@ -5650,6 +5680,28 @@ def ai_select_events(
                 "result":
                     result,
             }
+
+            # A candidate kept off the map but not off-topic reaches the
+            # background archive with its own link and date
+            # (tools/sync_background_corpus.py, historical_review); only
+            # those reviews carry it, so the committed cache stays small.
+            try:
+                review_score = int(result.get("relevance_score"))
+            except (TypeError, ValueError):
+                review_score = None
+
+            if review_score is not None and 0 < review_score < AI_SELECTION_THRESHOLD:
+                cache_item["article"] = {
+                    "url": reviewed_event.get("url"),
+                    "source": reviewed_event.get("source"),
+                    "published": reviewed_event.get("published"),
+                }
+
+            cache[
+                "items"
+            ][
+                fingerprint
+            ] = cache_item
 
         save_selection_cache(
             cache
@@ -7160,6 +7212,26 @@ def same_event(
     )[0]
 
 
+GOOGLE_NEWS_ARTICLE_PREFIX = "https://news.google.com/"
+
+
+def article_identities(article):
+    """Every key an article is known by inside one event cluster: its link,
+    and for a Google News redirect (whose token changes from one fetch to the
+    next) also its headline and outlet, with and without the day -- a
+    cluster's headline carries the cluster's first date, not always its own.
+    Two articles are the same when they share any key, so a merge carrying
+    the headline's own link, or the headline under a new token, adds nothing."""
+    keys = {article_identity(article)}
+    url = canonical_url(article.get("url", ""))
+    if url:
+        keys.add("url:" + url)
+    title_key = script_neutral_title(article.get("title") or article.get("original_title") or "")
+    if url.startswith(GOOGLE_NEWS_ARTICLE_PREFIX) and title_key:
+        keys.add("gnews-any-day:" + title_key + "|" + script_neutral_title(article.get("source") or ""))
+    return keys
+
+
 def article_identity(article):
     url = canonical_url(
         article.get(
@@ -7167,6 +7239,23 @@ def article_identity(article):
             "",
         )
     )
+
+    # A Google News link is a redirect whose token changes from one fetch to
+    # the next, so the same article came back as a "new" related article. Its
+    # identity is the headline (any script), the outlet and the day instead.
+    title_key = script_neutral_title(
+        article.get("title") or article.get("original_title") or ""
+    )
+
+    if url and url.startswith(GOOGLE_NEWS_ARTICLE_PREFIX) and title_key:
+        return (
+            "gnews:"
+            + title_key
+            + "|"
+            + script_neutral_title(article.get("source") or "")
+            + "|"
+            + str(article.get("published") or "")[:10]
+        )
 
     if url:
         return (
@@ -7331,35 +7420,36 @@ def merge_event(
     merge_acled_metadata(existing, new)
 
     # Keep a history of genuinely different articles/headlines.
-    known_article_ids = {
-        article_identity(
-            {
-                "title":
-                    existing.get(
-                        "title",
-                        "",
-                    ),
-                "url":
-                    existing.get(
-                        "url",
-                        "",
-                    ),
-                "published":
-                    existing.get(
-                        "published",
-                    ),
-            }
-        )
-    }
+    known_article_ids = article_identities(
+        {
+            "title":
+                existing.get(
+                    "title",
+                    "",
+                ),
+            "source":
+                existing.get(
+                    "source",
+                    "",
+                ),
+            "url":
+                existing.get(
+                    "url",
+                    "",
+                ),
+            "published":
+                existing.get(
+                    "published",
+                ),
+        }
+    )
 
     for article in existing.get(
         "related_articles",
         [],
     ):
-        known_article_ids.add(
-            article_identity(
-                article
-            )
+        known_article_ids |= article_identities(
+            article
         )
 
     candidate_article = {
@@ -7399,13 +7489,14 @@ def merge_event(
             ),
     }
 
-    candidate_id = article_identity(
+    candidate_ids = article_identities(
         candidate_article
     )
 
-    new_unique_article = (
-        candidate_id
-        not in known_article_ids
+    new_unique_article = not (
+        candidate_ids
+        &
+        known_article_ids
     )
 
     if new_unique_article:
@@ -7435,14 +7526,14 @@ def merge_event(
         )
 
     # The incoming record may itself be a cluster: keep its other articles too.
-    known_article_ids.add(candidate_id)
+    known_article_ids |= candidate_ids
     for article in new.get("related_articles") or []:
-        identity = article_identity(article)
-        if identity in known_article_ids or len(existing["related_articles"]) >= MAX_STORED_RELATED_ARTICLES:
+        identities = article_identities(article)
+        if identities & known_article_ids or len(existing["related_articles"]) >= MAX_STORED_RELATED_ARTICLES:
             continue
         existing["related_articles"].append(article)
         existing["article_count"] = existing.get("article_count", 1) + 1
-        known_article_ids.add(identity)
+        known_article_ids |= identities
 
     for source in new.get(
         "sources",
@@ -7524,27 +7615,24 @@ def merge_event(
                 ),
         }
 
-        old_id = article_identity(
+        old_ids = article_identities(
             old_representative
         )
 
-        related_ids = {
-            article_identity(
+        related_ids = set()
+
+        for article in existing.get(
+            "related_articles",
+            [],
+        ):
+            related_ids |= article_identities(
                 article
             )
-            for article in existing.get(
-                "related_articles",
-                [],
-            )
-        }
 
-        if (
-            old_id
-            not in related_ids
-            and
-            old_id
-            !=
-            candidate_id
+        if not (
+            old_ids
+            &
+            (related_ids | candidate_ids)
         ):
             existing[
                 "related_articles"
@@ -7569,6 +7657,19 @@ def merge_event(
         ] = new.get(
             "title"
         )
+
+        # The promoted article is the headline now; it was appended to the
+        # related articles above and must not stay there as a second copy.
+        existing[
+            "related_articles"
+        ] = [
+            article
+            for article in existing.get(
+                "related_articles",
+                [],
+            )
+            if not (article_identities(article) & candidate_ids)
+        ]
 
         existing[
             "summary"

@@ -2,20 +2,32 @@ name: Sync background corpus to D1
 
 # Loads articles already in the repository (map events' related articles,
 # archived removals, the collector's local fallback file, cached Gemini
-# reviews) into the ct-atlas-background-articles D1 database. Idempotent
-# (INSERT OR IGNORE by URL); it only reads the repository and never commits.
+# reviews) into the ct-atlas-background-articles D1 database, one copy per
+# story (tools/archive_dedup.py). It only reads the repository and never
+# commits. Stored rows the dedup rules reject (off-topic reviews, second
+# copies of a story) are only reported unless the run's cleanup mode is
+# "apply".
 on:
   push:
     branches:
       - main
     paths:
       - "tools/sync_background_corpus.py"
+      - "tools/archive_dedup.py"
       - ".github/workflows/sync-background-corpus.yml"
   schedule:
     # After the daily collector's evening run (18:17 Europe/Paris) has had time to finish.
     - cron: "47 20 * * *"
       timezone: "Europe/Paris"
   workflow_dispatch:
+    inputs:
+      cleanup:
+        description: "Stored duplicates and off-topic rows: plan (report only) or apply (delete)"
+        type: choice
+        options:
+          - plan
+          - apply
+        default: plan
 
 permissions:
   contents: read
@@ -31,6 +43,7 @@ jobs:
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      ARCHIVE_CLEANUP: ${{ inputs.cleanup || 'plan' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6

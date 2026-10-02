@@ -46,11 +46,20 @@ class CollectArticlesTests(unittest.TestCase):
                 {"url": "https://other/1", "title": "Duplicate"},
             ],
         })
+        write_json(self.root / "ct-atlas-runtime.json", {"ai_selection_threshold": 60})
         write_json(self.root / "ai_article_selection_cache.json", {"items": {
             "fp-low": {"reviewed_at": "2026-09-25T10:00:00+00:00", "result": {
-                "relevance_score": 0, "english_title": "Niger-Algeria alliance proclaimed at the UN",
+                "relevance_score": 30, "english_title": "Niger-Algeria alliance proclaimed at the UN",
                 "english_summary": "Diplomacy.", "reason": "Interstate diplomacy, out of scope.",
                 "categories": ["Counter Terrorism Action"], "actor_group": None}},
+            "fp-noise": {"reviewed_at": "2026-09-25T10:00:00+00:00", "result": {
+                "relevance_score": 0, "english_title": "Snake bites rise in rural Syria"}},
+            "fp-between": {"reviewed_at": "2026-09-25T10:00:00+00:00", "result": {
+                "relevance_score": 55, "english_title": "Analysis of JNIM pressure on Bamako"}},
+            "fp-linked": {"reviewed_at": "2026-10-02T10:00:00+00:00",
+                          "article": {"url": "https://outlet/analysis", "source": "Outlet",
+                                      "published": "2026-10-01T08:00:00+00:00"},
+                          "result": {"relevance_score": 20, "english_title": "Commentary on Sahel jihadist rivalry"}},
             "fp-kept": {"reviewed_at": "2026-09-25T10:00:00+00:00", "result": {
                 "relevance_score": 85, "english_title": "Selected for the map"}},
             "fp-untitled": {"reviewed_at": "2026-09-25T10:00:00+00:00", "result": {"relevance_score": 10}},
@@ -63,8 +72,26 @@ class CollectArticlesTests(unittest.TestCase):
     def test_counts_per_source_after_dedup(self):
         _, counts = self.articles_by_url()
         self.assertEqual(counts, {
-            "related_article": 1, "removed_event": 1, "rejected_candidate": 0, "historical_review": 1,
+            "related_article": 1, "removed_event": 1, "rejected_candidate": 0, "historical_review": 3,
         })
+
+    def test_off_topic_reviews_never_reach_the_archive(self):
+        by_url, _ = self.articles_by_url()
+        self.assertNotIn("gemini-review:fp-noise", by_url)
+
+    def test_reviews_below_the_maps_real_threshold_are_kept(self):
+        # 55 is above the collector's code default (50) but below the map's
+        # threshold in ct-atlas-runtime.json (60): it belongs in the archive.
+        by_url, _ = self.articles_by_url()
+        self.assertEqual(by_url["gemini-review:fp-between"]["ai_relevance_score"], 55)
+
+    def test_reviews_cached_with_their_article_keep_its_link_and_date(self):
+        by_url, _ = self.articles_by_url()
+        review = by_url["https://outlet/analysis"]
+        self.assertEqual(review["kind"], "historical_review")
+        self.assertEqual(review["source"], "Outlet")
+        self.assertEqual(review["published"], "2026-10-01T08:00:00+00:00")
+        self.assertNotIn("gemini-review:fp-linked", by_url)
 
     def test_related_articles_inherit_the_parent_event_context(self):
         by_url, _ = self.articles_by_url()
@@ -93,6 +120,96 @@ class CollectArticlesTests(unittest.TestCase):
             self.assertEqual(len(row), len(sync.collector.BACKGROUND_ARTICLES_D1_COLUMNS))
             as_dict = dict(zip(sync.collector.BACKGROUND_ARTICLES_D1_COLUMNS, row))
             self.assertTrue(as_dict["url"] and as_dict["title"] and as_dict["kind"] and as_dict["collected_at"])
+
+
+class SyncRunTests(unittest.TestCase):
+    """main() against a fake D1: what is inserted, and what is deleted only in
+    apply mode."""
+
+    def setUp(self):
+        self.root = Path(tempfile.mkdtemp())
+        write_json(self.root / "ct-atlas-runtime.json", {"ai_selection_threshold": 60})
+        write_json(self.root / "events.json", {"events": [{
+            "id": "evt-1", "incident_id": "inc-1", "url": "https://map/event",
+            "title": "Gunmen kill twelve soldiers in attack on army base near Gao",
+            "published": "2026-09-20T08:00:00+00:00",
+            "related_articles": [
+                # Same story as the stored wire copy below, which is more recent: not inserted again.
+                {"url": "https://map/event", "title": "Gunmen kill twelve soldiers in attack on army base near Gao",
+                 "published": "2026-09-20T08:00:00+00:00"},
+                {"url": "https://other/angle", "title": "Mali junta vows retaliation after deadly Gao base assault",
+                 "published": "2026-09-20T12:00:00+00:00"},
+            ],
+        }]})
+        write_json(self.root / "ai_article_selection_cache.json", {"items": {}})
+        self.stored = [
+            {"url": "gemini-review:noise", "kind": "historical_review", "title": "Yacht sale in Monaco",
+             "collected_at": "2026-09-24T10:00:00+00:00", "ai_relevance_score": 0},
+            {"url": "https://wire/copy", "kind": "related_article",
+             "title": "Gunmen kill 12 soldiers in attack on army base near Gao, Mali",
+             "published": "2026-09-20T09:00:00+00:00", "ai_relevance_score": None},
+            {"url": "https://keep/analysis", "kind": "historical_review",
+             "title": "Analysis: why JNIM targets fuel convoys around Bamako",
+             "published": "2026-09-22T09:00:00+00:00", "ai_relevance_score": 35},
+            {"url": "gemini-review:copy", "kind": "historical_review",
+             "title": "Analysis: why JNIM targets fuel convoys around Bamako",
+             "collected_at": "2026-09-22T12:00:00+00:00", "ai_relevance_score": 35},
+        ]
+        self.sql = []
+
+        def fake_query(sql, params=None):
+            self.sql.append(sql)
+            if sql == sync.EXISTING_ROWS_SQL:
+                return {"result": [{"results": self.stored}]}
+            if sql.startswith("SELECT kind"):
+                return {"result": [{"results": [{"kind": "related_article", "n": 2}]}]}
+            return {"success": True, "result": [{"meta": {"changes": 1}}]}
+
+        self.original = (sync.ROOT, sync.collector.d1_query)
+        sync.ROOT, sync.collector.d1_query = self.root, fake_query
+
+    def tearDown(self):
+        sync.ROOT, sync.collector.d1_query = self.original
+
+    def statements(self, prefix):
+        return [sql for sql in self.sql if sql.startswith(prefix)]
+
+    def test_plan_mode_inserts_new_stories_but_deletes_nothing(self):
+        self.assertEqual(sync.main(["--cleanup", "plan"]), 0)
+        inserts = self.statements("INSERT OR IGNORE INTO background_articles")
+        self.assertEqual(len(inserts), 1)
+        self.assertIn("https://other/angle", inserts[0])
+        self.assertNotIn("'https://map/event'", inserts[0])
+        self.assertEqual(self.statements("DELETE FROM background_articles WHERE url IN"), [])
+
+    def test_apply_mode_deletes_noise_and_second_copies_only(self):
+        self.assertEqual(sync.main(["--cleanup", "apply"]), 0)
+        deletes = self.statements("DELETE FROM background_articles WHERE url IN")
+        self.assertEqual(len(deletes), 1)
+        self.assertIn("'gemini-review:noise'", deletes[0])
+        self.assertIn("'gemini-review:copy'", deletes[0])
+        self.assertNotIn("https://keep/analysis", deletes[0])
+        # A copy of a map event is kept: the map forgets events after 180 days.
+        self.assertNotIn("https://wire/copy", deletes[0])
+
+    def test_apply_mode_respects_the_per_run_cap(self):
+        self.assertEqual(sync.main(["--cleanup", "apply", "--max-deletes", "1"]), 0)
+        deletes = self.statements("DELETE FROM background_articles WHERE url IN")
+        self.assertEqual(len(deletes), 1)
+        self.assertEqual(deletes[0].count("'"), 2)
+
+
+class DeleteStatementTests(unittest.TestCase):
+    def test_urls_are_quoted_and_batched_under_the_byte_cap(self):
+        urls = [f"https://x.test/{n}?q='a'" for n in range(50)]
+        statements = list(sync.delete_statements(urls, max_bytes=400))
+        self.assertGreater(len(statements), 1)
+        for sql in statements:
+            self.assertLessEqual(len(sql.encode("utf-8")), 400)
+            self.assertTrue(sql.endswith(")"))
+        joined = " ".join(statements)
+        for url in urls:
+            self.assertIn(url.replace("'", "''"), joined)
 
 
 class InsertedRowCountTests(unittest.TestCase):
