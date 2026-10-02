@@ -65,8 +65,8 @@ test("frontend contains authenticated hub and source visual surfaces",()=>{
   assert.ok(main.includes("Crypto Intelligence"));
   assert.ok(main.includes("Social Intelligence"));
   assert.ok(social.includes("RUN SOCMINT INVESTIGATION"));
-  assert.ok(index.includes('id="reportResultVisuals"'));
-  assert.ok(deep.includes('id="deepSearchVisuals"'));
+  assert.ok(index.includes('id="reportResultIllustration"'));
+  assert.ok(deep.includes('id="deepSearchIllustration"'));
   assert.ok(pdf.includes('block.type==="image"'));
   assert.ok(pdf.includes("loadPdfImage"));
 });

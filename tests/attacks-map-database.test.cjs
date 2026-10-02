@@ -283,9 +283,9 @@ test('the ticker lists the period attacks, pauses on hover, respects reduced mot
 test('the Database route is protected by the session wrapper and scripts are cache-busted',()=>{
   const auth=fs.readFileSync('usage-auth-fix.js','utf8');
   assert.match(auth,/quick-ask\|database-events\|/);
-  assert.match(auth,/deep-search\.js\?v=4/);
+  assert.match(auth,/deep-search\.js\?v=5/);
   assert.match(auth,/quick-ask\.js\?v=4/);
-  assert.match(html,/usage-auth-fix\.js\?v=20260930/);
+  assert.match(html,/usage-auth-fix\.js\?v=20261002/);
 });
 
 // ---- Worker /database-events --------------------------------------------

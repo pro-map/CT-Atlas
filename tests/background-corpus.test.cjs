@@ -207,7 +207,7 @@ test('Deep Search merges the archive before de-duplication and labels it in the 
   assert.match(worker,/deduplicateRows\(\[\.\.\.retrieval\.rows, \.\.\.corpus\.rows\]\)/);
   assert.match(worker,/corpus_kind: row\.corpus_kind/);
   assert.match(worker,/"ct_atlas_corpus" come from CT Atlas's own archive/);
-  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v12-archived-incidents"/);
+  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v13-illustration"/);
   assert.match(fs.readFileSync('deep-search.js','utf8'),/ct_atlas_corpus:"CT ATLAS ARCHIVE"/);
 });
 
@@ -232,7 +232,7 @@ test('the report prompt asks for a longer, analytical assessment with context ru
   for(const heading of ['ANALYTICAL INTERPRETATION','STRATEGIC CONTEXT','BACKGROUND CONTEXT RULES']) assert.ok(prompt.includes(heading),heading);
   assert.match(prompt,/Never count context items/);
   assert.match(prompt,/\[S03, C02\]/);
-  assert.equal(shared.constant('REPORT_GENERATOR_VERSION'),'report-v10-archived-incidents');
+  assert.equal(shared.constant('REPORT_GENERATOR_VERSION'),'report-v11-illustration');
 });
 
 test('the /report route feeds background context to Gemini and lists it as sources',()=>{
@@ -240,7 +240,7 @@ test('the /report route feeds background context to Gemini and lists it as sourc
   assert.match(route,/import \{ fetchBackgroundContext[^}]*\} from "\.\/background-corpus\.js"/);
   assert.match(route,/background_context: \{/);
   assert.match(route,/contextItems\.map\(item => item\.context_id\)/);
-  assert.match(route,/previewCandidates = \[\.\.\.eventSources\]/,'image previews stay limited to map events');
+  assert.match(route,/illustrationCandidates\(eventSources, analysisText\)/,'the report picture stays limited to map events');
 });
 
 test('archive size is read from the one-row corpus_stats summary, never counted per request',async()=>{

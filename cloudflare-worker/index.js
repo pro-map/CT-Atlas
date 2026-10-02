@@ -35,7 +35,8 @@ import { handleHealthStatus } from "./health-status.js";
 import { handleCryptoWorkspace, CRYPTO_WORKSPACE_VERSION } from "./crypto-workspace.js";
 import { handleExchangeAddressLabels, EXCHANGE_ADDRESS_VERSION } from "./exchange-addresses.js";
 import { runCryptoMonitor, CRYPTO_MONITOR_VERSION } from "./crypto-monitor.js";
-import { createSourcePreviews, handleSourceImage, SOURCE_PREVIEW_VERSION } from "./source-preview.js";
+import { handleSourceImage, SOURCE_PREVIEW_VERSION } from "./source-preview.js";
+import { handleReportIllustration, illustrationCandidates, REPORT_ILLUSTRATION_VERSION } from "./report-illustration.js";
 import { handleSocialInvestigate, handleSocialWorkspace, SOCIAL_INTEL_VERSION } from "./social-intel.js";
 import { SOCIAL_AGENT_CLIENT_VERSION, isSocialAgentConfigured } from "./social-agent-client.js";
 import { handleVisualAnalyze, isVisualIntelConfigured, VISUAL_INTEL_VERSION } from "./visual-intel.js";
@@ -59,7 +60,7 @@ if (url.pathname === "/database-stats" && request.method === "GET") {
 return jsonResponse({ background_corpus: await corpusStats(env) }, 200, env);
 }
 if (url.pathname === "/health" && request.method === "GET") {
-return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.33", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, background_corpus: typeof env.BACKGROUND_DB?.prepare === "function", quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_exchange_address_version: EXCHANGE_ADDRESS_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_auto_monitoring: true, sanctions_version: SANCTIONS_VERSION, sanctions: await sanctionsHealth(env), crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, social_intel_version: SOCIAL_INTEL_VERSION, social_intel: true, social_agent_client_version: SOCIAL_AGENT_CLIENT_VERSION, social_agent_configured: isSocialAgentConfigured(env), social_worker_search_provider: env.BRAVE_SEARCH_API_KEY ? "brave" : "disabled", visual_intel_version: VISUAL_INTEL_VERSION, visual_intel: true, visual_intel_configured: isVisualIntelConfigured(env), face_share_version: FACE_SHARE_VERSION, face_share_configured: Boolean(env.FACE_SHARE),crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, crypto_exchange_label_providers: { etherscan_enabled: env.ETHERSCAN_NAME_TAGS_ENABLED === "true" && Boolean(env.ETHERSCAN_API_KEY), tronscan_enabled: env.TRONSCAN_TAG_LOOKUP_ENABLED === "true" && Boolean(env.TRONSCAN_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
+return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.33", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, background_corpus: typeof env.BACKGROUND_DB?.prepare === "function", quick_ask_version: QUICK_ASK_VERSION, feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_exchange_address_version: EXCHANGE_ADDRESS_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_auto_monitoring: true, sanctions_version: SANCTIONS_VERSION, sanctions: await sanctionsHealth(env), crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, report_illustration_version: REPORT_ILLUSTRATION_VERSION, social_intel_version: SOCIAL_INTEL_VERSION, social_intel: true, social_agent_client_version: SOCIAL_AGENT_CLIENT_VERSION, social_agent_configured: isSocialAgentConfigured(env), social_worker_search_provider: env.BRAVE_SEARCH_API_KEY ? "brave" : "disabled", visual_intel_version: VISUAL_INTEL_VERSION, visual_intel: true, visual_intel_configured: isVisualIntelConfigured(env), face_share_version: FACE_SHARE_VERSION, face_share_configured: Boolean(env.FACE_SHARE),crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, crypto_exchange_label_providers: { etherscan_enabled: env.ETHERSCAN_NAME_TAGS_ENABLED === "true" && Boolean(env.ETHERSCAN_API_KEY), tronscan_enabled: env.TRONSCAN_TAG_LOOKUP_ENABLED === "true" && Boolean(env.TRONSCAN_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
 }
 if (url.pathname === "/health/status" && request.method === "GET") {
 return handleHealthStatus(env, {
@@ -212,6 +213,9 @@ return handleSocialWorkspace(request, env);
 if (url.pathname === "/visual-analyze" && request.method === "POST") {
 return handleVisualAnalyze(request, env);
 }
+if (url.pathname === "/report-illustration" && request.method === "POST") {
+return handleReportIllustration(request, env);
+}
 if (url.pathname.startsWith("/source-image/") && request.method === "GET") {
 return handleSourceImage(request, env);
 }
@@ -300,14 +304,10 @@ const grounding = citationMetrics(analysisText, [...allSourced.map(e => e.source
 const eventSources = allSourced.map(e => ({ id: e.source_id, title: e.title, source: e.source, url: e.url, date: e.date, country: e.country, source_count: e.source_count, relevance: e.relevance }));
 const contextSources = contextItems.map(item => ({ id: item.context_id, title: item.title, source: item.source, url: item.url, date: item.date, country: item.country, kind: "context", context_kind: item.kind }));
 const sources = [...eventSources, ...contextSources];
-const citedSourceIds = new Set(grounding?.cited_source_ids || []);
-const previewCandidates = [...eventSources].sort((a,b) =>
-  (citedSourceIds.has(b.id) ? 1 : 0) - (citedSourceIds.has(a.id) ? 1 : 0) ||
-  Number(b.relevance || 0) - Number(a.relevance || 0) ||
-  Number(b.source_count || 1) - Number(a.source_count || 1)
-);
-const sourcePreviews = await createSourcePreviews(env, previewCandidates, { maxImages: 2, maxAttempts: 3 });
-const report = { title: cleanText(generated.title || `CT Analytical Report — ${region}`, 180), analysis: analysisText, meta, database_version: databaseVersion, generated_at: new Date().toISOString(), sources, grounding, source_previews: sourcePreviews };
+// The page fetches the report's picture from these (/report-illustration):
+// the cited map events, most cited first -- never background context, which
+// can be commentary or reporting outside the map's scope.
+const report = { title: cleanText(generated.title || `CT Analytical Report — ${region}`, 180), analysis: analysisText, meta, database_version: databaseVersion, generated_at: new Date().toISOString(), sources, grounding, illustration_candidates: illustrationCandidates(eventSources, analysisText) };
 await gateCall(env, "/cache-put", { cacheKey, report, expires_at: Date.now() + CACHE_TTL_MS });
 const commitResponse = await gateCall(env, "/commit-report", { permitId, username });
 if (!commitResponse.ok) {
