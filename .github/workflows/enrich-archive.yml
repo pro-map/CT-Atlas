@@ -1,0 +1,99 @@
+name: Enrich archive
+
+# Six months of reporting the daily collection never reviewed
+# (tools/enrich_archive.py): week-by-week searches in the languages it does
+# not cover (Hindi, Bengali, Indonesian, Mozambique Portuguese, Somali, Hausa
+# on Google News; Persian, Urdu, Pashto, Hausa, Somali, Swahili through
+# GDELT), then the daily profiles' own queries and English. Candidates are
+# reviewed by the map's Gemini selection on Gemini 3.1 Flash Lite, at most 100
+# requests a Pacific day (quota/gemini-3.1-enrichment.json); reviews scoring
+# above 0 go to archive/enriched-articles-*.json, which the nightly
+# sync-background-corpus run loads into the D1 archive, one copy per story.
+#
+# 02:43 Paris: no other job uses 3.1 Flash Lite then (archive review 05:13,
+# incident consolidation 07:37), and few users ask for reports.
+on:
+  schedule:
+    - cron: "43 2 * * *"
+      timezone: "Europe/Paris"
+  workflow_dispatch:
+    inputs:
+      max_posts:
+        description: "Gemini requests this run (25 articles each; the daily allocation still applies)"
+        required: false
+        default: "100"
+      max_fetches:
+        description: "Searches this run"
+        required: false
+        default: "300"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ct-atlas-archive-enrichment
+  cancel-in-progress: false
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      ENRICH_MAX_POSTS: ${{ inputs.max_posts || '100' }}
+      ENRICH_MAX_FETCHES: ${{ inputs.max_fetches || '300' }}
+      # The script stops itself first; the step and the job are backstops.
+      ENRICH_DEADLINE_MINUTES: "110"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Enrich the archive
+        # Leaves the commit step time to save every batch already reviewed.
+        timeout-minutes: 125
+        run: python -u tools/enrich_archive.py --max-posts "$ENRICH_MAX_POSTS" --max-fetches "$ENRICH_MAX_FETCHES"
+
+      - name: Commit the enrichment
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          # Every checkpoint is written atomically; refuse to commit a broken file anyway.
+          python -c "import glob, json; [json.load(open(p, encoding='utf-8')) for p in glob.glob('archive/*.json') + glob.glob('quota/*.json')]"
+          git config user.name "CT Intelligence Map Bot"
+          git config user.email "actions@github.com"
+          # Whole folders (a glob matching no file would stop the step), and
+          # only those that exist.
+          for path in archive quota; do
+            if [ -e "$path" ]; then git add -A -- "$path"; fi
+          done
+          if git diff --cached --quiet; then
+            echo "Nothing found or reviewed; no commit."
+            exit 0
+          fi
+          git commit -m "Enrich the archive with six months of reporting"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo "Concurrent modification conflict; the next run continues from the last commit."
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 4))
+          done
+          echo "Push failed after retries."
+          exit 1

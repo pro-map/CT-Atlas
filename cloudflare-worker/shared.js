@@ -21,7 +21,7 @@ const FEEDBACK_GLOBAL_DAILY_LIMIT = 200;
 // Bump whenever the report SHAPE changes (new fields, schema, citation
 // rules) so an existing cache entry from before the change is never served
 // as-is -- folded into the cache key in index.js's /report handler.
-const REPORT_GENERATOR_VERSION = "report-v9-quota-fallback";
+const REPORT_GENERATOR_VERSION = "report-v10-archived-incidents";
 
 function authUsersFromEnv(env) {
   const raw = String(env?.AUTH_USERS_JSON || "").trim();
@@ -176,6 +176,12 @@ BACKGROUND CONTEXT RULES:
   it only as background context, never as a CT incident.
   removed_event = commentary or analysis pieces: cite them only as the view
   of commentators ("analysts argue ... [C04]"), never as established fact.
+  archived_incident = a CT incident report that passed the map's own
+  selection but is not one of priority_events (e.g. older than the map's
+  180-day window, or found later by the archive enrichment; incident_note
+  says what it reports): cite it as that outlet's reporting ("X reported
+  ... [C05]"). When covers_source_id names a record, it is one more report
+  of that same incident: corroboration of it, never a second incident.
 - Never count context items in incident, attack, arrest or operation
   figures, and never let context alone establish that an attack happened.
 - Ignore context items that are irrelevant to the selected region and topic.
@@ -367,12 +373,15 @@ function eventUniqueKey(event) {
 const SAME_STORY_WINDOW_DAYS = 5;
 const TITLE_STOPWORDS = new Set(("the a an and or of to in on at for from with after over into as by is are was were be " +
   "says said new latest report reports update updates").split(" "));
-const ACCENTS = /[\u0300-\u036f]/g;
+// Latin accents, and the Arabic short vowels and hamza marks outlets write
+// or leave out (أفغانستان / افغانستان).
+const ACCENTS = /[\u0300-\u036f\u064b-\u065f\u0670]/g;
 
 function normalizeTitle(value) {
   return String(value || "").normalize("NFKD").replace(ACCENTS, "")
     .toLowerCase().replace(/https?:\/\/\S+/g, " ")
-    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    // \p{M} keeps the vowel signs and viramas of Indic scripts inside their words.
+    .replace(/[^\p{L}\p{M}\p{N}\s]/gu, " ")
     .split(/\s+/).filter(token => token && !TITLE_STOPWORDS.has(token)).join(" ");
 }
 

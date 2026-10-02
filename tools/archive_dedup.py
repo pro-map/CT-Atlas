@@ -32,6 +32,7 @@ Standard library only; importable without collector.py.
 """
 from __future__ import annotations
 
+import functools
 import re
 import unicodedata
 from collections import Counter, defaultdict
@@ -51,21 +52,37 @@ TITLE_STOPWORDS = frozenset(
     "says said new latest report reports update updates".split()
 )
 
-NOISE_KINDS = frozenset({"historical_review", "rejected_candidate"})
-# Lower is better when choosing which copy of a story to keep.
-KIND_RANK = {"related_article": 0, "removed_event": 1, "rejected_candidate": 2, "historical_review": 3}
+# Lower is better when choosing which copy of a story to keep: a report tied
+# to a map incident, then an incident report that passed the map's selection
+# but is not on the map (aged out, or found by the enrichment), commentary,
+# then reporting the selection judged outside the map's scope.
+KIND_RANK = {
+    "related_article": 0,
+    "archived_incident": 1,
+    "removed_event": 2,
+    "rejected_candidate": 3,
+    "historical_review": 4,
+}
 
-_ACCENTS_RE = re.compile("[\u0300-\u036f]")
+# shared.js ACCENTS: Latin accents, and the Arabic short vowels and hamza
+# marks outlets write or leave out.
+_ACCENTS_RE = re.compile("[\u0300-\u036f\u064b-\u065f\u0670]")
 _URL_RE = re.compile(r"https?://\S+")
-_NOT_WORD_RE = re.compile(r"[^\w\s]|_")
 
 
+def _word_characters(text):
+    """shared.js /[^\\p{L}\\p{M}\\p{N}\\s]/: letters, combining marks (the vowel
+    signs and viramas of Indic scripts) and digits stay, the rest is a space."""
+    return "".join(ch if ch.isspace() or unicodedata.category(ch)[0] in "LMN" else " " for ch in text)
+
+
+@functools.lru_cache(maxsize=65536)
 def normalize_title(value):
     """shared.js normalizeTitle: accents folded, lower case, links and
     punctuation removed, English filler words dropped, any script kept."""
     text = _ACCENTS_RE.sub("", unicodedata.normalize("NFKD", str(value or ""))).lower()
     text = _URL_RE.sub(" ", text)
-    text = _NOT_WORD_RE.sub(" ", text)
+    text = _word_characters(text)
     return " ".join(token for token in text.split() if token not in TITLE_STOPWORDS)
 
 
@@ -243,8 +260,10 @@ def score_of(row):
 
 
 def is_noise(row):
-    """A candidate Gemini judged entirely off-topic (score 0)."""
-    return row.get("kind") in NOISE_KINDS and score_of(row) == 0
+    """A row Gemini judged entirely off-topic (score 0), whatever its kind.
+    Related articles carry no score of their own, and a map event never
+    scores 0, so only reviews and re-checked former map events can be noise."""
+    return score_of(row) == 0
 
 
 def preference(row):

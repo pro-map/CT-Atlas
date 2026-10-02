@@ -5,16 +5,18 @@ name: Review archive backlog
 # the result: events scoring above 0 go to archive/recovered-events-reviewed-*.json
 # (added to the D1 archive by the nightly sync-background-corpus run), the rest
 # are dropped. It uses a model whose free quota the collection does not touch
-# (Gemini 3.1 Flash Lite, 500 requests/day of its own), and runs before the
-# Pacific-day quota reset (09:00 Paris) so it can never delay the 10:17 collection.
+# (Gemini 3.1 Flash Lite, 500 requests/day of its own), at most 120 requests a
+# Pacific day (quota/gemini-3.1-archive-review.json). It runs after the archive
+# enrichment (02:43) and before the incident consolidation (07:37), so the
+# jobs sharing that model never run at once.
 on:
   schedule:
-    - cron: "5 7 * * *"
+    - cron: "13 5 * * *"
       timezone: "Europe/Paris"
   workflow_dispatch:
     inputs:
       max_calls:
-        description: "Gemini calls this run (25 events each)"
+        description: "Gemini requests this run (25 events each)"
         required: false
         default: "120"
 
@@ -28,7 +30,9 @@ concurrency:
 jobs:
   review:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    # 120 requests of 25 events, 6 s apart plus Gemini's answer time; every
+    # batch is saved at once, so a timeout loses nothing.
+    timeout-minutes: 100
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       ARCHIVE_REVIEW_MAX_CALLS: ${{ inputs.max_calls || '120' }}
@@ -49,14 +53,21 @@ jobs:
           pip install -r requirements.txt
 
       - name: Review pending events
+        # Leaves the commit step time to save the batches already reviewed.
+        timeout-minutes: 85
         run: python -u tools/review_pending_archive.py
 
       - name: Commit the reviewed archive files
+        if: ${{ always() }}
         run: |
           set -euo pipefail
           git config user.name "CT Intelligence Map Bot"
           git config user.email "actions@github.com"
-          git add -A -- 'archive/recovery-pending-review-*.json' 'archive/recovered-events-reviewed-*.json'
+          # Whole folders (a glob matching no file would stop the step), and
+          # only those that exist: quota/ appears with the first request.
+          for path in archive quota; do
+            if [ -e "$path" ]; then git add -A -- "$path"; fi
+          done
           if git diff --cached --quiet; then
             echo "Nothing reviewed; no commit."
             exit 0

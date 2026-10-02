@@ -64,7 +64,8 @@ class ArchiveFileTests(unittest.TestCase):
             self.assertNotIn("source_article_fingerprints", data["events"][0])
 
             rows = list(sync.removed_events([path], "2026-10-02T09:00:00+00:00"))
-            self.assertEqual({row["kind"] for row in rows}, {"removed_event"})
+            # They were incidents on the map: archived incidents, not commentary.
+            self.assertEqual({row["kind"] for row in rows}, {"archived_incident"})
             self.assertEqual(rows[0]["ai_relevance_score"], 85)
             self.assertEqual(rows[0]["parent_incident_id"], old["incident_id"])
 
