@@ -5,7 +5,7 @@
 // context than the curated events alone. Everything here degrades to "no
 // context" rather than failing a report: a missing binding, an empty corpus
 // or a D1 error all return { available: false, items: [] }.
-import { cleanText } from "./shared.js";
+import { cleanText, isSameStory } from "./shared.js";
 
 const MAX_RELATED_ITEMS = 24;
 const MAX_THEMATIC_ITEMS = 24;
@@ -20,6 +20,10 @@ const UNATTRIBUTED_ACTOR = /^(unknown|unidentified|unattributed|unclaimed|none|n
 
 const COLUMNS = `ba.url, ba.kind, ba.title, ba.summary, ba.source, ba.published, ba.collected_at,
   ba.country, ba.actor_group, ba.parent_incident_id, ba.ai_relevance_reason`;
+
+// Reviews Gemini scored 0 have no counter-terrorism content at all; the sync
+// no longer stores them (tools/archive_dedup.py) and never serves the old ones.
+const NOT_NOISE = "COALESCE(ba.ai_relevance_score, 1) <> 0";
 
 function topValues(values, limit) {
   const counts = new Map();
@@ -89,29 +93,42 @@ async function thematicArticles(db, events, start, end) {
       AND COALESCE(ba.published, ba.collected_at) >= ?
       AND COALESCE(ba.published, ba.collected_at) <= ?
       AND ba.kind != 'related_article'
+      AND ${NOT_NOISE}
     ORDER BY background_articles_fts.rank
     LIMIT ${MAX_THEMATIC_ITEMS}`;
   const result = await db.prepare(sql).bind(match, start.toISOString(), end.toISOString()).all();
   return result?.results || [];
 }
 
+// One item per story: a row that tells the same story as an event already in
+// the prompt, or as an item already kept, would read as independent
+// corroboration of it.
 function toContextItems(rows, events) {
+  const list = Array.isArray(events) ? events : [];
   const sourceIdByIncident = new Map();
-  for (const event of events) {
+  for (const event of list) {
     const incident = cleanText(event?.incident_id, 80);
     if (incident && event?.source_id && !sourceIdByIncident.has(incident)) {
       sourceIdByIncident.set(incident, event.source_id);
     }
   }
-  const eventTitles = new Set(events.map(e => cleanText(e?.title, 280).toLowerCase()).filter(Boolean));
+  const stories = [];
+  for (const event of list) {
+    const date = event?.date || event?.published || "";
+    const url = cleanText(event?.url, 1200);
+    for (const title of new Set([event?.title, event?.original_title])) {
+      if (title) stories.push({ title: cleanText(title, 280), url, date });
+    }
+  }
 
-  const seen = new Set();
   const items = [];
   for (const row of rows) {
     const url = cleanText(row?.url, 1200);
     const title = cleanText(row?.title, 240);
-    if (!url || !title || seen.has(url) || eventTitles.has(title.toLowerCase())) continue;
-    seen.add(url);
+    if (!url || !title) continue;
+    const story = { title, url, date: contextDate(row) };
+    if (stories.some(other => isSameStory(story, other))) continue;
+    stories.push(story);
 
     const kind = cleanText(row.kind, 40) || "rejected_candidate";
     const item = {
@@ -200,6 +217,7 @@ async function searchCorpusForDeepSearch(env, { plan, start, end, searchQuery })
         AND ba.url LIKE 'http%'
         AND COALESCE(ba.published, ba.collected_at) >= ?
         AND COALESCE(ba.published, ba.collected_at) <= ?
+        AND ${NOT_NOISE}
       ORDER BY background_articles_fts.rank
       LIMIT ${MAX_DEEP_SEARCH_CORPUS_ROWS}`;
     const result = await db.prepare(sql).bind(match, start.toISOString(), end.toISOString()).all();
@@ -245,7 +263,9 @@ function questionCorpusQuery(tokens) {
   return ftsQuery(terms);
 }
 
-async function searchCorpusForQuestion(env, { tokens, start, end }) {
+// events: the database records already in the answer's prompt, so an archive
+// row repeating one of them is not sent a second time.
+async function searchCorpusForQuestion(env, { tokens, start, end, events = [] }) {
   const db = env?.BACKGROUND_DB;
   if (!db || typeof db.prepare !== "function") return { available: false, items: [] };
   const match = questionCorpusQuery(tokens);
@@ -258,10 +278,11 @@ async function searchCorpusForQuestion(env, { tokens, start, end }) {
       WHERE background_articles_fts MATCH ?
         AND COALESCE(ba.published, ba.collected_at) >= ?
         AND COALESCE(ba.published, ba.collected_at) <= ?
+        AND ${NOT_NOISE}
       ORDER BY background_articles_fts.rank
       LIMIT ${MAX_QUESTION_CONTEXT_ITEMS}`;
     const result = await db.prepare(sql).bind(match, start.toISOString(), end.toISOString()).all();
-    return { available: true, items: toContextItems(result?.results || [], []) };
+    return { available: true, items: toContextItems(result?.results || [], events) };
   } catch (error) {
     console.error("Background corpus question query failed", error);
     return { available: false, items: [] };

@@ -21,7 +21,7 @@ const FEEDBACK_GLOBAL_DAILY_LIMIT = 200;
 // Bump whenever the report SHAPE changes (new fields, schema, citation
 // rules) so an existing cache entry from before the change is never served
 // as-is -- folded into the cache key in index.js's /report handler.
-const REPORT_GENERATOR_VERSION = "report-v7-database-filters";
+const REPORT_GENERATOR_VERSION = "report-v8-deduplicated-context";
 
 function authUsersFromEnv(env) {
   const raw = String(env?.AUTH_USERS_JSON || "").trim();
@@ -353,6 +353,216 @@ function eventUniqueKey(event) {
     Number.isFinite(time) ? time : "",
     cleanText(event?.title, 120)
   ].join("|");
+}
+
+// "Same story" -- one rule for Deep Search's evidence, the archive context of
+// the Report Generator and Atlas AI, and the archive itself
+// (tools/archive_dedup.py, locked to this file by tests/same_story_cases.json):
+// within 5 days, the same link, the same normalised title, or titles sharing
+// 4+ significant words with a Jaccard similarity >= 0.62 or a containment
+// >= 0.78 (Jaccard >= 0.8 when neither headline has letter case) -- unless
+// their counts differ (6 vs 49 killed) or they name different places or people
+// (Tyumen vs Chuvashia resident, Hamburg vs Munich station). When in doubt the
+// rule keeps two stories: a spare copy costs less than a lost incident.
+const SAME_STORY_WINDOW_DAYS = 5;
+const TITLE_STOPWORDS = new Set(("the a an and or of to in on at for from with after over into as by is are was were be " +
+  "says said new latest report reports update updates").split(" "));
+const ACCENTS = /[\u0300-\u036f]/g;
+
+function normalizeTitle(value) {
+  return String(value || "").normalize("NFKD").replace(ACCENTS, "")
+    .toLowerCase().replace(/https?:\/\/\S+/g, " ")
+    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .split(/\s+/).filter(token => token && !TITLE_STOPWORDS.has(token)).join(" ");
+}
+
+// Deep Search compares hundreds of headlines pairwise: each title is
+// normalised once per isolate, not once per comparison. Bounded so a
+// long-lived isolate never accumulates every headline it has seen.
+const STORY_CACHE_LIMIT = 5000;
+const normalizedTitles = new Map();
+const titleTokenSets = new Map();
+
+function remember(cache, key, compute) {
+  let value = cache.get(key);
+  if (value === undefined) {
+    if (cache.size >= STORY_CACHE_LIMIT) cache.clear();
+    value = compute();
+    cache.set(key, value);
+  }
+  return value;
+}
+
+function cachedNormalizedTitle(value) {
+  const key = String(value || "");
+  return remember(normalizedTitles, key, () => normalizeTitle(key));
+}
+
+// Callers only read the returned set. Lengths count characters (code points),
+// as tools/archive_dedup.py does.
+function titleTokens(value) {
+  const key = String(value || "");
+  return remember(titleTokenSets, key,
+    () => new Set(cachedNormalizedTitle(key).split(" ").filter(token => Array.from(token).length >= 3)));
+}
+
+function tokenSimilarity(a, b) {
+  const aa = titleTokens(a), bb = titleTokens(b);
+  if (!aa.size || !bb.size) return { jaccard: 0, containment: 0, shared: 0 };
+  let shared = 0;
+  for (const token of aa) if (bb.has(token)) shared++;
+  const union = aa.size + bb.size - shared;
+  return { jaccard: union ? shared / union : 0, containment: shared / Math.min(aa.size, bb.size), shared };
+}
+
+function dateDistanceDays(a, b) {
+  const ad = a ? new Date(a) : null, bd = b ? new Date(b) : null;
+  if (!ad || !bd || Number.isNaN(ad.getTime()) || Number.isNaN(bd.getTime())) return null;
+  return Math.abs(ad.getTime() - bd.getTime()) / 86400000;
+}
+
+// Opening words that name nothing ("Breaking:", "Eilmeldung:").
+const GENERIC_OPENERS = new Set(("breaking urgent update updated exclusive watch video live latest flash alert analysis opinion " +
+  "editorial explainer photos eilmeldung aktuell urgente ultima dernier derniere alerte info son dakika srochno").split(" "));
+const NUMBER_WORDS = new Map(("one two three four five six seven eight nine ten eleven twelve thirteen fourteen " +
+  "fifteen sixteen seventeen eighteen nineteen twenty").split(" ").map((word, index) => [word, String(index + 1)]));
+// Mostly-capitalised headlines (Title Case, all caps) carry no case signal.
+const TITLE_CASE_SHARE = 0.7;
+// Donetsk / Volzhsky "Resident Detained for Justifying Terrorism" share 4 of
+// 7 words: without a case signal that is not enough.
+const NO_CASE_SIGNAL_MIN_JACCARD = 0.8;
+// Zero code points of the decimal digit blocks headlines use (ASCII,
+// Arabic-Indic, Persian, N'Ko, Indic scripts, Thai, Lao, Tibetan, Myanmar,
+// Khmer, Mongolian, fullwidth); tools/archive_dedup.py maps the same blocks.
+const DIGIT_ZEROS = [0x30, 0x660, 0x6F0, 0x7C0, 0x966, 0x9E6, 0xA66, 0xAE6, 0xB66, 0xBE6, 0xC66, 0xCE6,
+  0xD66, 0xDE6, 0xE50, 0xED0, 0xF20, 0x1040, 0x1090, 0x17E0, 0x1810, 0xFF10];
+
+// Decimal digits of the usual scripts as ASCII (Arabic 3 and Persian 3 are 3).
+function asciiDigits(text) {
+  return Array.from(String(text || ""), ch => {
+    const code = ch.codePointAt(0);
+    const zero = DIGIT_ZEROS.find(start => code >= start && code <= start + 9);
+    return zero === undefined ? ch : String.fromCharCode(0x30 + code - zero);
+  }).join("");
+}
+const IN_WORD_APOSTROPHE = /(?<=[\p{L}\p{N}])['\u2019\u02bc](?=[\p{L}\p{N}])/gu;
+
+const firstChar = word => String.fromCodePoint(word.codePointAt(0));
+const isUpper = ch => /\p{Lu}/u.test(ch);
+const isLower = ch => /\p{Ll}/u.test(ch);
+const charLength = word => Array.from(word).length;
+
+// The headline's words, accents folded, in-word apostrophes removed
+// (Sana'a -> Sanaa), original case kept.
+function headlineWords(value) {
+  return String(value || "").normalize("NFKD").replace(ACCENTS, "")
+    .replace(/https?:\/\/\S+/g, " ").replace(IN_WORD_APOSTROPHE, "")
+    .split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+}
+
+// Capital letters mark names only in a sentence-case headline: not in a
+// Title Case or all-caps one, nor in a script without case.
+function hasCaseSignal(value) {
+  const significant = headlineWords(value)
+    .filter(word => charLength(word) >= 3 && !TITLE_STOPWORDS.has(word.toLowerCase()));
+  const cased = significant.filter(word => isUpper(firstChar(word)) || isLower(firstChar(word)));
+  if (!cased.length) return false;
+  const capitalised = cased.filter(word => isUpper(firstChar(word))).length;
+  return capitalised / cased.length < TITLE_CASE_SHARE;
+}
+
+function isNameWord(word) {
+  const length = charLength(word);
+  if (!isUpper(firstChar(word))) return false;
+  return length >= 3 || (length === 2 && word === word.toUpperCase());
+}
+
+// The places and people a headline names: its capitalised significant words
+// (two-letter acronyms such as KP included, the first word too unless it is a
+// generic opener), lower-cased. None from a headline without a case signal.
+function properNounTokens(value) {
+  if (!hasCaseSignal(value)) return new Set();
+  const names = new Set();
+  headlineWords(value).forEach((word, position) => {
+    const lowered = word.toLowerCase();
+    if (!isNameWord(word) || TITLE_STOPWORDS.has(lowered)) return;
+    if (position === 0 && GENERIC_OPENERS.has(lowered)) return;
+    names.add(lowered);
+  });
+  return names;
+}
+
+function wordSpace(value) {
+  const space = new Set(titleTokens(value));
+  for (const word of headlineWords(value)) if (charLength(word) >= 2) space.add(word.toLowerCase());
+  return space;
+}
+
+// A word of one headline found in the other: equal, or the same first five
+// letters ("Somali" / "Somalia").
+function sharesWord(word, words) {
+  const chars = Array.from(word);
+  for (const other of words) {
+    if (other === word) return true;
+    const otherChars = Array.from(other);
+    if (chars.length >= 5 && otherChars.length >= 5 && otherChars.slice(0, 5).join("") === chars.slice(0, 5).join("")) return true;
+  }
+  return false;
+}
+
+// The headlines name different places or people ("...in Hamburg station" /
+// "...in Munich station"): two stories. Each must name something the other
+// lacks; when one has no case signal (a Title Case "Chuvashia Resident
+// Sentenced..."), a name of the other missing from it is enough ("Tyumen
+// resident sentenced...").
+function namesDiffer(a, b) {
+  const aSpace = wordSpace(a), bSpace = wordSpace(b);
+  const onlyA = [...properNounTokens(a)].filter(word => !sharesWord(word, bSpace));
+  const onlyB = [...properNounTokens(b)].filter(word => !sharesWord(word, aSpace));
+  if (hasCaseSignal(a) && hasCaseSignal(b)) return onlyA.length > 0 && onlyB.length > 0;
+  return onlyA.length > 0 || onlyB.length > 0;
+}
+
+// The counts a headline gives (digits, or English number words up to
+// twenty), leading zeros dropped.
+function titleCounts(value) {
+  const text = String(value || "");
+  const counts = new Set((asciiDigits(text).match(/[0-9]+/g) || []).map(digits => digits.replace(/^0+(?=.)/, "")));
+  for (const word of normalizeTitle(text).split(" ")) if (NUMBER_WORDS.has(word)) counts.add(NUMBER_WORDS.get(word));
+  return counts;
+}
+
+// Both headlines give counts and none is common: "6 terrorists killed" and
+// "49 terrorists killed" are two operations.
+function countsDiffer(a, b) {
+  const aCounts = titleCounts(a), bCounts = titleCounts(b);
+  if (!aCounts.size || !bCounts.size) return false;
+  for (const count of aCounts) if (bCounts.has(count)) return false;
+  return true;
+}
+
+// The shared-words part of the same-story rule. Without a case signal on
+// either side (Title Case, all caps, a script without capitals) the names
+// guard cannot work, so the shared words alone must be overwhelming.
+function similarTitles(a, b) {
+  const sim = tokenSimilarity(a, b);
+  if (sim.shared < 4) return false;
+  if (!hasCaseSignal(a) && !hasCaseSignal(b)) {
+    if (sim.jaccard < NO_CASE_SIGNAL_MIN_JACCARD) return false;
+  } else if (sim.jaccard < 0.62 && sim.containment < 0.78) {
+    return false;
+  }
+  return !countsDiffer(a, b) && !namesDiffer(a, b);
+}
+
+// a, b: { title, url, date }; a missing date never rules a pair out.
+function isSameStory(a, b) {
+  const gap = dateDistanceDays(a?.date, b?.date);
+  if (gap !== null && gap > SAME_STORY_WINDOW_DAYS) return false;
+  if (a?.url && b?.url && a.url === b.url) return true;
+  const normalized = cachedNormalizedTitle(a?.title);
+  if (normalized && normalized === cachedNormalizedTitle(b?.title)) return true;
+  return similarTitles(a?.title, b?.title);
 }
 
 // The Database panel's filters as sent by Atlas AI and Deep Search (the
@@ -970,6 +1180,11 @@ export {
   matchesGroup,
   eventActorGroup,
   eventUniqueKey,
+  normalizeTitle,
+  titleTokens,
+  tokenSimilarity,
+  dateDistanceDays,
+  isSameStory,
   UNSPECIFIED_GROUP_LABEL,
   parseDatabaseFilters,
   hasActiveDatabaseFilters,

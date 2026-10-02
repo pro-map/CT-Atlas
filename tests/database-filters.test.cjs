@@ -154,7 +154,7 @@ test('Atlas AI scopes events with the Database filters before matching the quest
   assert.match(handler,/if \(!matched\.length && hasActiveDatabaseFilters\(filters\)\)/);
   assert.match(handler,/searchCorpusForQuestion\(env,/);
   assert.match(source,/You answer FROM THE CT ATLAS DATABASE FIRST/);
-  assert.match(source,/QUICK_ASK_VERSION = "quick-ask-v4-database-first"/);
+  assert.match(source,/QUICK_ASK_VERSION = "quick-ask-v5-deduplicated-context"/);
 });
 
 test('the report route filters by group and keys its cache on it',()=>{

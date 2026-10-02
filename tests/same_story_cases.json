@@ -1,0 +1,271 @@
+{
+  "note": "Generated from cloudflare-worker/shared.js (normalizeTitle, isSameStory). tools/archive_dedup.py must agree.",
+  "titles": [
+    {
+      "title": "Terrorist attack at Berlin Gay Pride: Suspect killed by police",
+      "normalized": "terrorist attack berlin gay pride suspect killed police"
+    },
+    {
+      "title": "Attentat déjoué à Marseille : deux hommes mis en examen",
+      "normalized": "attentat dejoue marseille deux hommes mis en examen"
+    },
+    {
+      "title": "هجوم لتنظيم الدولة في أفغانستان",
+      "normalized": "هجوم لتنظيم الدولة في ا فغانستان"
+    },
+    {
+      "title": "СБ Пакистана ликвидировали более 20 террористов в Хайбер-Пахтунхве",
+      "normalized": "сб пакистана ликвидировали более 20 террористов в хаибер пахтунхве"
+    },
+    {
+      "title": "BREAKING — ISIS claims Kabul blast https://t.co/abc (video)",
+      "normalized": "breaking isis claims kabul blast video"
+    },
+    {
+      "title": "İstanbul’da DEAŞ operasyonu: 17 şüpheli yakalandı",
+      "normalized": "istanbul da deas operasyonu 17 supheli yakalandı"
+    },
+    {
+      "title": "Aşırı uçlu grup anı paylaştı: atıp kaçtılar",
+      "normalized": "asırı uclu grup anı paylastı atıp kactılar"
+    },
+    {
+      "title": "snake_case headline with under_scores",
+      "normalized": "snake case headline under scores"
+    },
+    {
+      "title": "警方在柏林逮捕三名恐怖嫌疑人",
+      "normalized": "警方在柏林逮捕三名恐怖嫌疑人"
+    },
+    {
+      "title": "The latest update: new report says attack was planned",
+      "normalized": "attack planned"
+    }
+  ],
+  "pairs": [
+    {
+      "a": "Tyumen resident sentenced to 8 years in prison for terrorist financing",
+      "a_date": "",
+      "b": "Chuvashia Resident Sentenced to Prison for Terrorist Financing",
+      "b_date": "",
+      "same": false
+    },
+    {
+      "a": "Belgorod resident sentenced to 19 years in prison for high treason and preparation of a terrorist act",
+      "a_date": "",
+      "b": "Mariupol resident sentenced for high treason and preparation of a terrorist act",
+      "b_date": "",
+      "same": false
+    },
+    {
+      "a": "Ankara'da DEAŞ operasyonu: 12 şüpheli gözaltına alındı",
+      "a_date": "",
+      "b": "İzmir'de DEAŞ operasyonu: 12 şüpheli gözaltına alındı",
+      "b_date": "",
+      "same": false
+    },
+    {
+      "a": "Тюменца осудили на 8 лет за финансирование терроризма",
+      "a_date": "",
+      "b": "Чебоксарца осудили на 8 лет за финансирование терроризма",
+      "b_date": "",
+      "same": false
+    },
+    {
+      "a": "Peshawar blast kills five at police checkpoint",
+      "a_date": "",
+      "b": "Quetta blast kills five at police checkpoint",
+      "b_date": "",
+      "same": false
+    },
+    {
+      "a": "Benue: Gunmen kill 12 villagers in fresh attack",
+      "a_date": "",
+      "b": "Plateau: Gunmen kill 12 villagers in fresh attack",
+      "b_date": "",
+      "same": false
+    },
+    {
+      "a": "Six terrorists killed in Balochistan operations",
+      "a_date": "",
+      "b": "49 terrorists killed in joint operations in KP and Balochistan",
+      "b_date": "",
+      "same": false
+    },
+    {
+      "a": "Security forces kill 4 terrorists in Balochistan operation",
+      "a_date": "",
+      "b": "Security forces kill 6 terrorists in Balochistan operation in Saran Tangi",
+      "b_date": "",
+      "same": false
+    },
+    {
+      "a": "الحرس الثوري الإيراني: مقتل 3 إرهابيين في اشتباك مسلح بمحافظة سيستان وبلوشستان",
+      "a_date": "",
+      "b": "الحرس الثوري الإيراني: مقتل 4 إرهابيين في اشتباك مسلح بمحافظة كردستان",
+      "b_date": "",
+      "same": false
+    },
+    {
+      "a": "Police arrest suspect after stabbing in Hamburg station",
+      "a_date": "2026-09-25T10:00:00Z",
+      "b": "Police arrest suspect after stabbing in Munich station",
+      "b_date": "2026-09-25T11:00:00Z",
+      "same": false
+    },
+    {
+      "a": "Security forces kill five terrorists in North Waziristan operation",
+      "a_date": "2026-09-25T10:00:00Z",
+      "b": "Security forces kill five terrorists in South Waziristan operation",
+      "b_date": "2026-09-25T11:00:00Z",
+      "same": false
+    },
+    {
+      "a": "Car bomb kills five people in Mogadishu market",
+      "a_date": "2026-09-20T10:00:00Z",
+      "b": "Al-Shabaab fighters ambush AMISOM convoy near Mogadishu",
+      "b_date": "2026-09-20T12:00:00Z",
+      "same": false
+    },
+    {
+      "a": "ISIS-K member sentenced to 20 years for Kabul airport bombing death of Marine",
+      "a_date": "2026-09-01T10:00:00Z",
+      "b": "ISIS-K member sentenced to 20 years for Kabul airport bombing death of Marine",
+      "b_date": "2026-09-09T10:00:00Z",
+      "same": false
+    },
+    {
+      "a": "Ansar Allah thwarts terrorist plot involving explosives targeting Sana'a mosques",
+      "a_date": "",
+      "b": "Ansar Allah thwarts terrorist plot involving explosives targeting Sanaa mosques",
+      "b_date": "",
+      "same": true
+    },
+    {
+      "a": "Moscow Court Orders In-Absentia Arrest of Journalist Yury Dud",
+      "a_date": "",
+      "b": "Moscow Court Orders In-Absentia Arrest of Blogger Yury Dud",
+      "b_date": "",
+      "same": false
+    },
+    {
+      "a": "Turkish Navy helps free hijacked vessel in deadly battle with pirates: Somalia",
+      "a_date": "2026-09-20T10:00:00Z",
+      "b": "Turkish Navy Helps Free Hijacked Vessel in Deadly Battle with Somali Pirates",
+      "b_date": "2026-09-21T08:00:00Z",
+      "same": true
+    },
+    {
+      "a": "Festnahme nach Schüssen bei Rave in der Schweiz",
+      "a_date": "2026-09-20T10:00:00Z",
+      "b": "Festnahme nach tödlichen Schüssen bei Rave in der Schweiz",
+      "b_date": "2026-09-20T12:00:00Z",
+      "same": true
+    },
+    {
+      "a": "Saudi and Yemeni forces kill an Islamic State leader in eastern Yemen",
+      "a_date": "",
+      "b": "Saudi and Yemeni forces kill Islamic State leader in eastern Yemen",
+      "b_date": "",
+      "same": true
+    },
+    {
+      "a": "Kanu: Family Challenges Legal Basis Of Conviction, Demands Appeal Hearing",
+      "a_date": "",
+      "b": "Kanu's Family Demands Appeal Hearing, Questions Basis For Conviction",
+      "b_date": "",
+      "same": false
+    },
+    {
+      "a": "Explosionen: Mindestens 16 Tote bei Anschlag mit Autobombe in Pakistan",
+      "a_date": "2026-09-25T10:00:00Z",
+      "b": "Eilmeldung: Mindestens 14 Tote bei Anschlag mit Autobombe in Pakistan",
+      "b_date": "2026-09-25T07:00:00Z",
+      "same": false
+    },
+    {
+      "a": "Gunmen kill twelve soldiers in attack on army base near Gao",
+      "a_date": "2026-09-20T08:00:00Z",
+      "b": "Gunmen kill twelve soldiers in attack on army base near Gao, Mali",
+      "b_date": "2026-09-20T09:00:00Z",
+      "same": true
+    },
+    {
+      "a": "Levent çatışma anı kamerada",
+      "a_date": "",
+      "b": "Levent çatışma anı kamerada görüntülendi",
+      "b_date": "",
+      "same": true
+    },
+    {
+      "a": "Donetsk Resident Detained for Justifying Terrorism",
+      "a_date": "2026-09-16T09:08:00Z",
+      "b": "Volzhsky Resident Detained for Justifying Terrorism Online",
+      "b_date": "2026-09-17T11:05:00Z",
+      "same": false
+    },
+    {
+      "a": "Rostov Resident Detained for Justifying Terrorism Online",
+      "a_date": "2026-09-16T05:01:00Z",
+      "b": "Volzhsky Resident Detained for Justifying Terrorism Online",
+      "b_date": "2026-09-17T11:05:00Z",
+      "same": false
+    },
+    {
+      "a": "Resident of Orsk Detained for Justifying Terrorism",
+      "a_date": "2026-09-16T08:00:00Z",
+      "b": "Rostov Resident Detained for Justifying Terrorism Online",
+      "b_date": "2026-09-16T05:01:00Z",
+      "same": false
+    },
+    {
+      "a": "Smolensk Region Resident Sentenced to Penal Colony for Justifying Terrorism Online",
+      "a_date": "2026-09-21T08:00:00Z",
+      "b": "Chelyabinsk Region Resident Sentenced for Justifying Terrorism",
+      "b_date": "2026-09-24T08:00:00Z",
+      "same": false
+    },
+    {
+      "a": "Terrorism Case Opened After UAV Attack in Kuban",
+      "a_date": "2026-09-09T08:00:00Z",
+      "b": "Criminal Terrorism Case Opened Following UAV Attack on Nizhnekamsk",
+      "b_date": "2026-09-13T08:00:00Z",
+      "same": false
+    },
+    {
+      "a": "Maritime Risk Intelligence Blog: Libya ports update",
+      "a_date": "2026-09-05T11:20:00Z",
+      "b": "Maritime Risk Intelligence Blog | Security (10)",
+      "b_date": "2026-09-01T18:35:00Z",
+      "same": false
+    },
+    {
+      "a": "مقتل 3 إرهابيين من ISIS في اشتباك مسلح بمحافظة سيستان",
+      "a_date": "",
+      "b": "مقتل 3 إرهابيين من ISIS في اشتباك مسلح بمحافظة كردستان",
+      "b_date": "",
+      "same": false
+    },
+    {
+      "a": "مقتل ٣ إرهابيين في اشتباك مسلح بمحافظة سيستان وبلوشستان",
+      "a_date": "",
+      "b": "مقتل ٤ إرهابيين في اشتباك مسلح بمحافظة سيستان وبلوشستان",
+      "b_date": "",
+      "same": false
+    },
+    {
+      "a": "هلاکت ۳ تروریست در درگیری مسلحانه در سیستان و بلوچستان",
+      "a_date": "",
+      "b": "هلاکت ۴ تروریست در درگیری مسلحانه در سیستان و بلوچستان",
+      "b_date": "",
+      "same": false
+    },
+    {
+      "a": "𠀀𠀁 bomb attack hits market",
+      "a_date": "",
+      "b": "𠀀𠀁 bomb attack hits market today",
+      "b_date": "",
+      "same": true
+    }
+  ]
+}

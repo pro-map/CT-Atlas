@@ -12,6 +12,10 @@ import {
   waitBeforeGeminiRetry,
   priority,
   eventUniqueKey,
+  normalizeTitle,
+  tokenSimilarity,
+  dateDistanceDays,
+  isSameStory,
   parseDatabaseFilters,
   hasActiveDatabaseFilters,
   matchesDatabaseFilters,
@@ -32,7 +36,7 @@ const DEEP_SEARCH_MODEL = "gemini-3.5-flash-lite";
 // models on retry recovers from a single model being temporarily out of capacity, the same
 // "high demand" condition callGemini() (Report Generator, shared.js) already retries around.
 const DEEP_SEARCH_FALLBACK_MODEL = "gemini-3.6-flash";
-export const DEEP_SEARCH_VERSION = "deep-search-v9-database-first";
+export const DEEP_SEARCH_VERSION = "deep-search-v10-same-story";
 
 // There is no period selector any more -- the analyst's own question is the
 // only source of a time window. The planner LLM (see PLAN_SCHEMA's
@@ -772,49 +776,23 @@ function parseRss(xml, queryMeta, queryIndex, fallbackLocale = false) {
   return rows;
 }
 
-function normalizeTitle(value) {
-  return String(value || "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase().replace(/https?:\/\/\S+/g, " ")
-    .replace(/[^\p{L}\p{N}\s]/gu, " ")
-    .replace(/\b(the|a|an|and|or|of|to|in|on|at|for|from|with|after|over|into|as|by|is|are|was|were|be|says|said|new|latest|report|reports|update|updates)\b/g, " ")
-    .replace(/\s+/g, " ").trim();
-}
-
-function titleTokens(value) {
-  return new Set(normalizeTitle(value).split(" ").filter(token => token.length >= 3));
-}
-
-function tokenSimilarity(a, b) {
-  const aa = titleTokens(a), bb = titleTokens(b);
-  if (!aa.size || !bb.size) return { jaccard: 0, containment: 0, shared: 0 };
-  let shared = 0;
-  for (const token of aa) if (bb.has(token)) shared++;
-  const union = aa.size + bb.size - shared;
-  return { jaccard: union ? shared / union : 0, containment: shared / Math.min(aa.size, bb.size), shared };
-}
-
-function dateDistanceDays(a, b) {
-  const ad = a ? new Date(a) : null, bd = b ? new Date(b) : null;
-  if (!ad || !bd || Number.isNaN(ad.getTime()) || Number.isNaN(bd.getTime())) return null;
-  return Math.abs(ad.getTime() - bd.getTime()) / 86400000;
-}
-
+// The "same story" rule (isSameStory) and the title helpers live in shared.js:
+// the archive context of the Report Generator and Atlas AI, and the archive
+// itself (tools/archive_dedup.py), apply the same rule as this evidence
+// deduplication.
 function deduplicateRows(rows) {
   const sorted = [...rows].sort((a, b) => new Date(b.published || 0) - new Date(a.published || 0));
   const clusters = [];
   for (const row of sorted) {
-    const normalized = normalizeTitle(row.title);
     let match = null;
     for (const candidate of clusters) {
-      const gap = dateDistanceDays(row.published, candidate.published);
-      if (gap !== null && gap > 5) continue;
-      if (row.url && candidate.url && row.url === candidate.url) { match = candidate; break; }
-      if (normalized && normalized === candidate._normalized) { match = candidate; break; }
-      const sim = tokenSimilarity(row.title, candidate.title);
-      if (sim.shared >= 4 && (sim.jaccard >= 0.62 || sim.containment >= 0.78)) { match = candidate; break; }
+      if (isSameStory(
+        { title: row.title, url: row.url, date: row.published },
+        { title: candidate.title, url: candidate.url, date: candidate.published }
+      )) { match = candidate; break; }
     }
     if (!match) {
-      clusters.push({ ...row, _normalized: normalized, sources: [{ source: row.source, url: row.url, language: row.language, published: row.published, search_engine: row.search_engine || "google_news" }] });
+      clusters.push({ ...row, sources: [{ source: row.source, url: row.url, language: row.language, published: row.published, search_engine: row.search_engine || "google_news" }] });
     } else {
       if (!match.sources.some(item => item.url === row.url)) {
         match.sources.push({ source: row.source, url: row.url, language: row.language, published: row.published, search_engine: row.search_engine || "google_news" });
@@ -822,7 +800,7 @@ function deduplicateRows(rows) {
       if ((row.summary || "").length > (match.summary || "").length) match.summary = row.summary;
     }
   }
-  return clusters.map(({ _normalized, ...row }) => row);
+  return clusters;
 }
 
 function googleNewsUrl(query, locale, window) {

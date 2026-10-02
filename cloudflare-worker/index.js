@@ -285,7 +285,11 @@ const previousSourced = compare ? previous.slice(0, MAX_EVENTS_PREVIOUS).map(wit
 const allSourced = [...currentSourced, ...previousSourced];
 // Wider reporting from the D1 background corpus (never map events); an
 // empty list when the corpus is unavailable, so reports still work without it.
-const background = await fetchBackgroundContext(env, { events: currentSourced, start: currentStart, end: now });
+// The events' original-language headlines travel along for story matching
+// only (an archive row repeating one in its own language is not sent again);
+// the Gemini dataset below keeps the compact records.
+const storyEvents = currentSourced.map((event, index) => ({ ...event, original_title: cleanText(current[index]?.original_title, 280) }));
+const background = await fetchBackgroundContext(env, { events: storyEvents, start: currentStart, end: now });
 const contextItems = background.items;
 const dataset = { selection: { region, topic, actor_group: actorGroup, period_days: periodDays, compare }, database_version: databaseVersion, current_period: { start: currentStart.toISOString(), end: now.toISOString(), stats: stats(current), priority_events: currentSourced }, comparison_period: compare ? { start: previousStart.toISOString(), end: currentStart.toISOString(), stats: stats(previous), priority_events: previousSourced } : null, background_context: { note: "Reporting that is NOT on the map; see BACKGROUND CONTEXT RULES.", items: contextItems.map(({ url, ...item }) => item) } };
 const generated = await callGemini(env, dataset);

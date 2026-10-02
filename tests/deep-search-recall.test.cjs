@@ -5,8 +5,16 @@ const vm=require('node:vm');
 const source=fs.readFileSync('cloudflare-worker/deep-search.js','utf8')
   .replace(/import\s*\{[\s\S]*?\}\s*from\s*["']\.\/[^"']+["'];\s*/g,'')
   .replace(/export /g,'');
+// The real "same story" helpers deep-search.js imports from shared.js.
+const sharedHelpers=(()=>{
+ const c=vm.createContext({crypto:globalThis.crypto,TextEncoder,Intl,console});
+ vm.runInContext(fs.readFileSync('cloudflare-worker/shared.js','utf8')
+  .replace(/import\s*\{[\s\S]*?\}\s*from\s*["']\.\/[^"']+["'];\s*/g,'')
+  .replace(/export\s*\{[\s\S]*?\};?\s*$/,''),c);
+ return Object.fromEntries(['normalizeTitle','titleTokens','tokenSimilarity','dateDistanceDays','isSameStory'].map(name=>[name,vm.runInContext(name,c)]));
+})();
 function harness(fetch){
- const c=vm.createContext({fetch,URL,URLSearchParams,AbortSignal,setTimeout:fn=>fn(),cleanText:(v,n)=>String(v||'').trim().slice(0,n),parseEventDate:(event)=>{for(const key of ['event_date','occurrence_date','occurred_at','incident_date','attack_date','published_at','publication_date','published','pub_date','date','updated_at']){if(!event?.[key])continue;const d=new Date(event[key]);if(!Number.isNaN(d.getTime()))return d;}return null}});
+ const c=vm.createContext({...sharedHelpers,fetch,URL,URLSearchParams,AbortSignal,setTimeout:fn=>fn(),cleanText:(v,n)=>String(v||'').trim().slice(0,n),parseEventDate:(event)=>{for(const key of ['event_date','occurrence_date','occurred_at','incident_date','attack_date','published_at','publication_date','published','pub_date','date','updated_at']){if(!event?.[key])continue;const d=new Date(event[key]);if(!Number.isNaN(d.getTime()))return d;}return null}});
  vm.runInContext(source,c);
  return vm.runInContext('({sanitizePlan,retrieveNews,resolvePriorityLanguages,buildEvidence,fetchNewsWave,fetchGdeltGlobalWave,fetchGdeltChunked,gdeltChunkRanges,splitGdeltRowsByLanguage,broadGdeltQuery,computeLanguageAnchors,filterByAnchor,DEEP_SEARCH_LANGUAGE_CODES,resolveSearchWindow,windowSpanDays,GDELT_ARCHIVE_START,fetchAcledWave,fetchBingWave,parseBingRss,extractBingRealUrl,isLikelyTransientFetchIssue})',c);
 }

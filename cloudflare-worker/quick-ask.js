@@ -26,7 +26,7 @@ import { searchCorpusForQuestion } from "./background-corpus.js";
 // never the heavy multi-source retrieval pipeline those two tools run. Bump
 // this whenever the answer SHAPE or grounding rules change, so a stale cache
 // entry is never served.
-const QUICK_ASK_VERSION = "quick-ask-v4-database-first";
+const QUICK_ASK_VERSION = "quick-ask-v5-deduplicated-context";
 
 const QUICK_ASK_CACHE_TTL_MS = 60 * 60 * 1000;
 const QUICK_ASK_MAX_MATCHED_EVENTS = 12;
@@ -310,7 +310,8 @@ async function handleQuickAsk(request, env) {
     const background = await searchCorpusForQuestion(env, {
       tokens: quickAskTokens(question),
       start: new Date(now.getTime() - contextDays * 86400000),
-      end: now
+      end: now,
+      events: matched
     });
     const contextItems = background.items;
 

@@ -7,6 +7,17 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
 
+// The real "same story" helpers from shared.js (background-corpus.js imports them).
+const sharedHelpers=(()=>{
+  const source=fs.readFileSync('cloudflare-worker/shared.js','utf8')
+    .replace(/import\s*\{[\s\S]*?\}\s*from\s*["']\.\/[^"']+["'];\s*/g,'')
+    .replace(/export\s*\{[\s\S]*?\};?\s*$/,'');
+  const c=vm.createContext({crypto:globalThis.crypto,TextEncoder,Intl,console});
+  vm.runInContext(source,c);
+  return Object.fromEntries(['normalizeTitle','titleTokens','tokenSimilarity','dateDistanceDays','isSameStory']
+    .map(name=>[name,vm.runInContext(name,c)]));
+})();
+
 function load(file, extra={}){
   const source=fs.readFileSync(file,'utf8')
     .replace(/import\s*\{[\s\S]*?\}\s*from\s*["']\.\/[^"']+["'];\s*/g,'')
@@ -15,6 +26,7 @@ function load(file, extra={}){
   const c=vm.createContext({
     console:{error(){},warn(){},log(){}},
     cleanText:(v,n=700)=>String(v||'').replace(/\s+/g,' ').trim().slice(0,n),
+    ...sharedHelpers,
     ...extra
   });
   vm.runInContext(source,c);
@@ -100,6 +112,44 @@ test('context is capped so the prompt cannot balloon',async()=>{
   assert.equal(items.length,40);
 });
 
+test('the shared "same story" rule gives the verdicts the archive dedup is tested against',()=>{
+  const cases=JSON.parse(fs.readFileSync('tests/same_story_cases.json','utf8'));
+  for(const c of cases.titles) assert.equal(sharedHelpers.normalizeTitle(c.title),c.normalized,c.title);
+  for(const p of cases.pairs){
+    assert.equal(sharedHelpers.isSameStory({title:p.a,date:p.a_date},{title:p.b,date:p.b_date}),p.same,`${p.a} / ${p.b}`);
+  }
+});
+
+test('context keeps one item per story and never repeats an event already in the prompt',()=>{
+  const promptEvents=[{source_id:'S01',incident_id:'inc-a',title:'Gunmen kill twelve soldiers in attack on army base near Gao',date:'2026-09-20T08:00:00Z',url:'https://map/lead'}];
+  const rows=[
+    {url:'https://wire/1',kind:'related_article',title:'Gunmen kill 12 soldiers in attack on army base near Gao, Mali',published:'2026-09-20T09:00:00Z',parent_incident_id:'inc-a'},
+    {url:'https://a/hamburg',kind:'rejected_candidate',title:'Police arrest suspect after stabbing in Hamburg station',published:'2026-09-25T10:00:00Z'},
+    {url:'https://b/hamburg',kind:'rejected_candidate',title:'Police arrest suspect after stabbing in Hamburg station, officials say',published:'2026-09-25T12:00:00Z'},
+    {url:'https://a/munich',kind:'rejected_candidate',title:'Police arrest suspect after stabbing in Munich station',published:'2026-09-25T11:00:00Z'},
+  ];
+  const items=plain(corpus.toContextItems(rows,promptEvents));
+  assert.deepEqual(items.map(i=>i.url),['https://a/hamburg','https://a/munich']);
+  assert.deepEqual(items.map(i=>i.context_id),['C01','C02']);
+});
+
+test('an archive row repeating an event in its own language is not sent next to it (Report path included)',()=>{
+  const promptEvents=[{source_id:'S01',incident_id:'inc-r',title:'18-year-old terrorist found in Saratov region',
+    original_title:'В Саратовской области обнаружен 18-летний террорист',date:'2026-09-20T08:00:00Z'}];
+  const rows=[{url:'https://ru/1',kind:'related_article',title:'В Саратовской области обнаружен 18-летний террорист',published:'2026-09-20T09:00:00Z',parent_incident_id:'inc-r'}];
+  assert.deepEqual(plain(corpus.toContextItems(rows,promptEvents)),[]);
+  const route=fs.readFileSync('cloudflare-worker/index.js','utf8');
+  assert.match(route,/original_title: cleanText\(current\[index\]\?\.original_title, 280\)/);
+  assert.match(route,/fetchBackgroundContext\(env, \{ events: storyEvents,/);
+});
+
+test('off-topic reviews (score 0) are never served by any archive search',()=>{
+  const source=fs.readFileSync('cloudflare-worker/background-corpus.js','utf8');
+  assert.match(source,/const NOT_NOISE = "COALESCE\(ba\.ai_relevance_score, 1\) <> 0";/);
+  assert.equal((source.match(/AND \$\{NOT_NOISE\}/g)||[]).length,3,'thematic, Deep Search and Atlas AI queries');
+  assert.match(fs.readFileSync('cloudflare-worker/quick-ask.js','utf8'),/searchCorpusForQuestion\(env, \{[\s\S]*?events: matched\s*\}\)/);
+});
+
 test('a D1 failure degrades to no context instead of failing the report',async()=>{
   const db={prepare(){ throw new Error('D1_ERROR: no such table'); }};
   assert.deepEqual(plain(await corpus.fetchBackgroundContext({BACKGROUND_DB:db},{events,...period})),{available:false,items:[]});
@@ -141,7 +191,7 @@ test('Deep Search merges the archive before de-duplication and labels it in the 
   assert.match(worker,/deduplicateRows\(\[\.\.\.retrieval\.rows, \.\.\.corpus\.rows\]\)/);
   assert.match(worker,/corpus_kind: row\.corpus_kind/);
   assert.match(worker,/"ct_atlas_corpus" come from CT Atlas's own archive/);
-  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v9-database-first"/);
+  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v10-same-story"/);
   assert.match(fs.readFileSync('deep-search.js','utf8'),/ct_atlas_corpus:"CT ATLAS ARCHIVE"/);
 });
 
@@ -166,7 +216,7 @@ test('the report prompt asks for a longer, analytical assessment with context ru
   for(const heading of ['ANALYTICAL INTERPRETATION','STRATEGIC CONTEXT','BACKGROUND CONTEXT RULES']) assert.ok(prompt.includes(heading),heading);
   assert.match(prompt,/Never count context items/);
   assert.match(prompt,/\[S03, C02\]/);
-  assert.equal(shared.constant('REPORT_GENERATOR_VERSION'),'report-v7-database-filters');
+  assert.equal(shared.constant('REPORT_GENERATOR_VERSION'),'report-v8-deduplicated-context');
 });
 
 test('the /report route feeds background context to Gemini and lists it as sources',()=>{
