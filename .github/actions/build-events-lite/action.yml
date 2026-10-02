@@ -4,7 +4,9 @@ description: >
   neither the map nor the Worker read) and events-map.json (only the attacks the map shows,
   plus a whole-database summary) from the events.json in the checkout, right before the site
   is published. Never fails the deployment: a file that cannot be built is removed, and the
-  map and the Worker fall back to the next larger file.
+  map and the Worker fall back to the next larger file. It also leaves the background jobs'
+  data (archive/, quota/) out of the published site: nothing on the site reads it, and it
+  grows every night.
 runs:
   using: composite
   steps:
@@ -26,3 +28,6 @@ runs:
           rm -f events-map.json
           echo "::warning::events-map.json could not be built; the map will filter events-lite.json itself."
         fi
+    - name: Leave the background jobs' data out of the site
+      shell: bash
+      run: rm -rf archive quota

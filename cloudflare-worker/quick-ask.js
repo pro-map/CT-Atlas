@@ -28,7 +28,7 @@ import { searchCorpusForQuestion } from "./background-corpus.js";
 // never the heavy multi-source retrieval pipeline those two tools run. Bump
 // this whenever the answer SHAPE or grounding rules change, so a stale cache
 // entry is never served.
-const QUICK_ASK_VERSION = "quick-ask-v6-quota-fallback";
+const QUICK_ASK_VERSION = "quick-ask-v7-archived-incidents";
 
 const QUICK_ASK_CACHE_TTL_MS = 60 * 60 * 1000;
 const QUICK_ASK_MAX_MATCHED_EVENTS = 12;
@@ -66,9 +66,12 @@ Sources, in strict order of priority:
 2. ct_atlas_background -- other reporting from the CT Atlas archive that is
    NOT a verified database event: another outlet's report on an incident,
    reporting outside the map's operational scope (e.g. interstate diplomacy,
-   state military action), or commentary. Use it only as context, attribute
-   commentary as opinion, never present it as a confirmed incident, and list
-   the ids you relied on in cited_context_ids.
+   state military action), commentary, or (kind "archived_incident") an
+   incident report that passed the map's selection but is not on the map,
+   e.g. older than its 180-day window. Use it only as context, attribute
+   commentary as opinion, cite an archived incident as its outlet's
+   reporting, never present any of it as a confirmed database incident, and
+   list the ids you relied on in cited_context_ids.
 3. Your own general knowledge -- to explain concepts, organisations and
    background, or when the database holds nothing relevant. Say explicitly
    which parts of the answer come from general knowledge rather than CT

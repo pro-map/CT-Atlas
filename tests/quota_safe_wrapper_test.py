@@ -54,9 +54,51 @@ PACING = textwrap.dedent('''
 ''')
 
 
-def run(script):
+# Once 3.5 Flash Lite's selection budget is spent, or it answers 429, the
+# remaining selection requests go to the overflow model within its own budget.
+# Run from an empty directory: no real selection cache, so no usage carried in.
+OVERFLOW = textwrap.dedent('''
+    import importlib.util, json, os, sys
+    from types import SimpleNamespace
+    os.environ.update({"AI_SELECTION_MAX_CALLS_PER_RUN": "1", "AI_SELECTION_DAILY_CALL_BUDGET": "60",
+                       "AI_SELECTION_OVERFLOW_MODEL": "gemini-3.1-flash-lite",
+                       "AI_SELECTION_OVERFLOW_MAX_CALLS_PER_RUN": "2",
+                       "AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET": "50"})
+    if len(sys.argv) > 2 and sys.argv[2] == "off":
+        os.environ["AI_SELECTION_OVERFLOW_MODEL"] = ""
+    root = sys.argv[1]
+    sys.path.insert(0, os.path.join(root, "tools"))
+    spec = importlib.util.spec_from_file_location("quota_safe", os.path.join(root, "tools", "run_collector_quota_safe.py"))
+    wrapper = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(wrapper)
+    wrapper.time = SimpleNamespace(monotonic=lambda: 0.0, sleep=lambda s: None)
+    sent, statuses = [], list(json.loads(sys.argv[3]) if len(sys.argv) > 3 else [])
+    def fake_post(url, *args, **kwargs):
+        sent.append(kwargs["json"]["model"])
+        return SimpleNamespace(status_code=statuses.pop(0) if statuses else 200, json=lambda: {}, text="")
+    wrapper.POST = fake_post
+    body = {"model": "gemini-3.5-flash-lite", "system_instruction": "You are the final editorial relevance filter",
+            "input": "Review every candidate. " + json.dumps({"events": [{"event_id": "evt-9"}]})}
+    gemini = "https://generativelanguage.googleapis.com/v1beta/interactions"
+    errors = []
+    for _ in range(4):
+        try:
+            wrapper.collector.requests.post(gemini, json=body)
+        except wrapper.collector.AISelectionQuotaError as error:
+            errors.append(str(error)[:60])
+    cache = {"items": {"fp-new": {"reviewed_at": "2999-01-01T00:00:00+00:00", "result": {"event_id": "evt-9"}},
+                       "fp-old": {"reviewed_at": "2000-01-01T00:00:00+00:00", "result": {"event_id": "evt-9"}}}}
+    usage = wrapper.inject(cache)["selection_quota_usage"]
+    print(json.dumps({"sent": sent, "errors": errors, "body_model": body["model"], "hit429": wrapper.hit429,
+                      "overflow429": wrapper.overflow429, "budget_hit": wrapper.budget_hit,
+                      "overflow_calls": usage["overflow_calls"], "calls": usage["calls"],
+                      "marked": sorted(k for k, v in cache["items"].items() if v.get("model"))}))
+''')
+
+
+def run(script, *args, cwd=None):
     import json
-    result = subprocess.run([sys.executable, "-c", script], capture_output=True, text=True, timeout=120)
+    result = subprocess.run([sys.executable, "-c", script, *args], capture_output=True, text=True, timeout=120, cwd=cwd)
     if result.returncode:
         raise AssertionError(result.stderr[-2000:])
     return json.loads(result.stdout.strip().splitlines()[-1])
@@ -71,6 +113,43 @@ class QuotaSafeWrapperTests(unittest.TestCase):
 
     def test_gemini_calls_are_paced_to_ten_a_minute(self):
         self.assertEqual(run(PACING)["sleeps"], [4.0])
+
+    def overflow(self, *args):
+        import os
+        import tempfile
+        with tempfile.TemporaryDirectory() as empty:
+            return run(OVERFLOW, os.getcwd(), *args, cwd=empty)
+
+    def test_selection_moves_to_the_overflow_model_within_its_budget(self):
+        data = self.overflow("on")
+        self.assertEqual(data["sent"], ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.1-flash-lite"])
+        self.assertEqual(len(data["errors"]), 1)
+        self.assertIn("budget reached", data["errors"][0])
+        self.assertEqual((data["calls"], data["overflow_calls"]), (1, 2))
+        self.assertEqual(data["body_model"], "gemini-3.5-flash-lite", "the collector's own body is never changed")
+        self.assertFalse(data["hit429"])
+        self.assertEqual(data["marked"], ["fp-new"], "only this run's overflow reviews name the overflow model")
+
+    def test_reviews_on_the_main_model_name_no_other_model(self):
+        self.assertEqual(self.overflow("off")["marked"], [])
+
+    def test_a_429_on_the_main_model_is_resent_on_the_overflow_model(self):
+        data = self.overflow("on", "[429]")
+        self.assertEqual(data["sent"][:2], ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite"])
+        self.assertTrue(data["hit429"], "3.5 Flash Lite is spent: the weekly analysis is skipped as before")
+        self.assertEqual(data["overflow_calls"], 2)
+
+    def test_a_429_on_the_overflow_model_stops_the_selection(self):
+        data = self.overflow("on", "[200, 429]")
+        self.assertEqual(data["sent"], ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite"])
+        self.assertTrue(data["overflow429"] and data["budget_hit"])
+        self.assertFalse(data["hit429"], "3.5 Flash Lite itself is not out of quota")
+        self.assertEqual(len(data["errors"]), 3)
+
+    def test_without_an_overflow_model_the_budget_stops_the_selection(self):
+        data = self.overflow("off")
+        self.assertEqual(data["sent"], ["gemini-3.5-flash-lite"])
+        self.assertEqual((len(data["errors"]), data["overflow_calls"]), (3, 0))
 
 
 if __name__ == "__main__":

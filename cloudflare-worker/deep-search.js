@@ -39,7 +39,7 @@ const DEEP_SEARCH_MODEL = "gemini-3.5-flash-lite";
 // "high demand" condition callGemini() (Report Generator, shared.js) already retries around.
 // Gemini 3.1 Flash Lite (GEMINI_SECOND_FALLBACK_MODEL) is the last resort: its own quota.
 const DEEP_SEARCH_FALLBACK_MODEL = "gemini-3.6-flash";
-export const DEEP_SEARCH_VERSION = "deep-search-v11-quota-fallback";
+export const DEEP_SEARCH_VERSION = "deep-search-v12-archived-incidents";
 
 // There is no period selector any more -- the analyst's own question is the
 // only source of a time window. The planner LLM (see PLAN_SCHEMA's
@@ -707,7 +707,12 @@ EVIDENCE RULES:
   ("analysts argue ... [S07]"), never as established fact;
   "rejected_candidate" is reporting CT Atlas judged outside its map scope
   (e.g. interstate diplomacy, state military action) -- valid context, but not
-  proof of a terrorist incident.
+  proof of a terrorist incident;
+  "archived_incident" is an incident report that passed CT Atlas's own map
+  selection but is not on the live map (older than its 180-day window, or found
+  later by the archive enrichment) -- cite it as that outlet's reporting of the
+  incident, like any external article; when it describes the same incident as
+  a database record, it corroborates that record and is not a second incident.
 
 FORMAT:
 Use plain report text inside the "analysis" field, with real newline characters.

@@ -8,7 +8,8 @@ name: Consolidate duplicate incidents
 #
 # Quota: it runs on Gemini 3.1 Flash Lite (its own 500 requests/day), not the
 # 3.5 Flash Lite the collection and the interactive features use, and stays
-# at 40 calls a run (120/day) so 3.1 Flash Lite keeps room for the archive
+# at 40 requests a run and 120 a Pacific day (tools/archive_review.py's
+# ledger, quota/gemini-3.1-consolidation.json), so 3.1 Flash Lite keeps room for the archive
 # review, the enrichment and the Report Generator/Deep Search/Atlas AI fallback.
 on:
   schedule:
@@ -77,6 +78,8 @@ jobs:
           git config user.name "CT Intelligence Map Bot"
           git config user.email "actions@github.com"
           git add events.json incident_consolidation_state.json
+          # This Pacific day's Gemini requests (the job's daily allocation).
+          if [ -f quota/gemini-3.1-consolidation.json ]; then git add quota/gemini-3.1-consolidation.json; fi
           if git diff --cached --quiet; then
             echo "Nothing consolidated; no commit needed."
             exit 0

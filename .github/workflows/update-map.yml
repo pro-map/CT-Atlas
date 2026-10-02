@@ -89,6 +89,9 @@ jobs:
           PY
 
       - name: Collect multilingual and AI-select CT events
+        # Runs take 30-45 min; the limit leaves the geolocation and the
+        # always() commit steps their time within the job's 330.
+        timeout-minutes: 240
         id: collect
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -100,6 +103,12 @@ jobs:
           AI_SELECTION_BATCH_SIZE: "25"
           AI_SELECTION_MAX_CALLS_PER_RUN: "30"
           AI_SELECTION_DAILY_CALL_BUDGET: "60"
+          # Candidates left when 3.5 Flash Lite's budget is spent go to 3.1 Flash
+          # Lite (its own free quota) instead of falling off the feeds: 25 a run,
+          # 50 a Pacific day, part of the background jobs' share of that model.
+          AI_SELECTION_OVERFLOW_MODEL: "gemini-3.1-flash-lite"
+          AI_SELECTION_OVERFLOW_MAX_CALLS_PER_RUN: "25"
+          AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET: "50"
           AI_SELECTION_RECENT_PRIORITY_DAYS: "3"
         run: |
           set -euo pipefail
