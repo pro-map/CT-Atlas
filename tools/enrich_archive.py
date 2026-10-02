@@ -84,6 +84,11 @@ GDELT_MAX_RECORDS = 250
 # GDELT answers its rate limit in plain text ("Please limit requests to one
 # every 5 seconds ..."); any other plain text is a rejected query.
 GDELT_RATE_LIMIT_TEXT = "limit requests to one every"
+# GDELT also refuses requests from shared addresses (GitHub's runners) with
+# HTTP 429 well under that rate: wait and ask again this many times, longer
+# each time, before the search is left for the next run.
+GDELT_RATE_LIMIT_RETRIES = int(os.getenv("ENRICH_GDELT_RATE_LIMIT_RETRIES", "2"))
+GDELT_RATE_LIMIT_BACKOFF_SECONDS = float(os.getenv("ENRICH_GDELT_RATE_LIMIT_BACKOFF_SECONDS", "30"))
 
 # Languages the daily collection does not search. Somali and Hausa have no
 # Google News edition of their own: their own-language queries run on the
@@ -242,7 +247,13 @@ def gdelt_url(collector, task):
 
 
 class SourceUnavailable(RuntimeError):
-    """The source refused or failed: the task stays open for the next run."""
+    """The source refused or failed: the task stays open for the next run.
+    rate_limited: the source turned every request away, whatever the query,
+    so the task itself is not at fault and is never given up for it."""
+
+    def __init__(self, message, rate_limited=False):
+        super().__init__(message)
+        self.rate_limited = rate_limited
 
 
 class QueryRejected(RuntimeError):
@@ -269,9 +280,9 @@ class Searcher:
                 self.sleep(wait)
         self.last[source] = self.clock()
 
-    def _failed(self, source, message):
+    def _failed(self, source, message, rate_limited=False):
         self.failures[source] += 1
-        raise SourceUnavailable(message)
+        raise SourceUnavailable(message, rate_limited)
 
     def search(self, task):
         """(candidate events, full) for a task; full when the source sent as
@@ -307,7 +318,8 @@ class Searcher:
                 events.append(event)
         return events, full
 
-    def _gdelt(self, task):
+    def _gdelt_answer(self, task):
+        """GDELT's JSON for a task, or None when it is rate limiting."""
         collector = self.collector
         self._space("gdelt", GDELT_SPACING_SECONDS)
         try:
@@ -315,15 +327,28 @@ class Searcher:
                 gdelt_url(collector, task), headers={"User-Agent": "Mozilla/5.0 CT-Atlas-Collector/1.0"}, timeout=30)
         except collector.requests.RequestException as error:
             self._failed("gdelt", f"GDELT request failed: {error}")
+        if response.status_code == 429:
+            return None
         if response.status_code != 200:
             self._failed("gdelt", f"GDELT HTTP {response.status_code}.")
         try:
-            payload = response.json()
+            return response.json()
         except ValueError:
             text = " ".join(str(getattr(response, "text", "") or "").split())
             if GDELT_RATE_LIMIT_TEXT in text.lower():
-                self._failed("gdelt", "GDELT rate limit.")
+                return None
             raise QueryRejected(f"GDELT rejected the query: {text[:160]}")
+
+    def _gdelt(self, task):
+        collector = self.collector
+        for attempt in range(GDELT_RATE_LIMIT_RETRIES + 1):
+            if attempt:
+                self.sleep(GDELT_RATE_LIMIT_BACKOFF_SECONDS * attempt)
+            payload = self._gdelt_answer(task)
+            if payload is not None:
+                break
+        else:
+            self._failed("gdelt", "GDELT rate limit.", rate_limited=True)
         self.failures["gdelt"] = 0
         articles = (payload or {}).get("articles") or []
         full = len(articles) >= GDELT_MAX_RECORDS
@@ -625,8 +650,11 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
                 except SourceUnavailable as error:
                     summary["source_failures"] += 1
                     bump(state, task, "failed_searches")
-                    failures = state["failures"][task["key"]] = state["failures"].get(task["key"], 0) + 1
                     log(f"   {task['source']} {task['name']} {task['week']}: {error}")
+                    if error.rate_limited:
+                        # The source's doing, not the query's: the task waits, however long.
+                        continue
+                    failures = state["failures"][task["key"]] = state["failures"].get(task["key"], 0) + 1
                     if failures >= MAX_TASK_FAILURES:
                         summary["given_up"] += 1
                         bump(state, task, "given_up")

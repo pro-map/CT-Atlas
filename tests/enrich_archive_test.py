@@ -108,12 +108,35 @@ class SearchTests(unittest.TestCase):
 
     def test_gdelts_rate_limit_is_a_failure_to_retry_and_three_stop_it(self):
         busy = self.text_reply("Please limit requests to one every 5 seconds or contact ...")
-        searcher = self.searcher([busy] * 3)
+        tries = enrich_archive.GDELT_RATE_LIMIT_RETRIES + 1
+        searcher = self.searcher([busy] * (3 * tries))
         for _ in range(3):
-            with self.assertRaises(enrich_archive.SourceUnavailable):
+            with self.assertRaises(enrich_archive.SourceUnavailable) as raised:
                 searcher.search(self.gdelt_task)
+            self.assertTrue(raised.exception.rate_limited)
         self.assertFalse(searcher.available("gdelt"))
         self.assertTrue(searcher.available("google"))
+
+    def test_a_rate_limited_gdelt_search_is_asked_again_after_a_wait(self):
+        too_many = SimpleNamespace(status_code=429, text="Please limit requests to one every 5 seconds")
+        ok = SimpleNamespace(status_code=200, json=lambda: {"articles": []})
+        searcher = self.searcher([too_many, too_many, ok])
+        waits, now = [], [0.0]
+
+        def sleep(seconds):
+            waits.append(seconds)
+            now[0] += seconds
+        searcher.sleep, searcher.clock = sleep, lambda: now[0]
+        self.assertEqual(searcher.search(self.gdelt_task), ([], False))
+        backoff = enrich_archive.GDELT_RATE_LIMIT_BACKOFF_SECONDS
+        self.assertEqual(waits, [backoff, 2 * backoff])
+        self.assertTrue(searcher.available("gdelt"))
+
+    def test_another_gdelt_error_is_not_a_rate_limit(self):
+        searcher = self.searcher([SimpleNamespace(status_code=503, text="")])
+        with self.assertRaises(enrich_archive.SourceUnavailable) as raised:
+            searcher.search(self.gdelt_task)
+        self.assertFalse(raised.exception.rate_limited)
 
     def test_any_other_text_from_gdelt_is_a_rejected_query(self):
         searcher = self.searcher([self.text_reply("Your search contained a phrase that is too short.")])
@@ -174,8 +197,9 @@ class FilterTests(unittest.TestCase):
 
 
 class FakeSearcher:
-    def __init__(self, per_task, fail=(), reject=(), full=lambda task: False):
+    def __init__(self, per_task, fail=(), reject=(), full=lambda task: False, rate_limited=()):
         self.per_task, self.fail, self.reject, self.full = per_task, set(fail), set(reject), full
+        self.rate_limited = set(rate_limited)
         self.fetches, self.searched = 0, []
 
     def available(self, source):
@@ -186,6 +210,8 @@ class FakeSearcher:
         self.searched.append(task["key"])
         if task["key"] in self.fail:
             raise enrich_archive.SourceUnavailable("refused")
+        if task["key"] in self.rate_limited:
+            raise enrich_archive.SourceUnavailable("rate limit", rate_limited=True)
         if task["key"] in self.reject:
             raise enrich_archive.QueryRejected("bad query")
         return [dict(event) for event in self.per_task(task)], self.full(task)
@@ -225,7 +251,7 @@ class RunTests(unittest.TestCase):
         self.calls = []
 
     def run_once(self, per_task, budget, max_fetches=50, score=lambda title: 70, fail=(), reject=(), now=NOW,
-                 quota_after=None, deadline=1000, clock=lambda: 0.0, full=lambda task: False):
+                 quota_after=None, deadline=1000, clock=lambda: 0.0, full=lambda task: False, rate_limited=()):
         holder = {}
 
         def gate_factory(posts):
@@ -242,7 +268,7 @@ class RunTests(unittest.TestCase):
             self.calls.append(len(payload))
             return [{"event_id": e["event_id"], "relevance_score": score(e["title"]), "reason": "r",
                      "categories": ["Attacks"], "english_title": "EN " + e["title"]} for e in payload]
-        searcher = FakeSearcher(per_task, fail, reject, full)
+        searcher = FakeSearcher(per_task, fail, reject, full, rate_limited)
         summary, stop = enrich_archive.run(self.root, collector, budget, max_fetches, today=now.date(), now=now,
                                            searcher=searcher, call_batch=call_batch, gate_factory=gate_factory,
                                            log=lambda *a: None, deadline_minutes=deadline, clock=clock)
@@ -350,6 +376,16 @@ class RunTests(unittest.TestCase):
                                              now=datetime(2026, 10, 3 + night, 0, 43, tzinfo=timezone.utc))
         self.assertEqual(summary["given_up"], 1)
         self.assertIn(refused, self.state()["done"])
+
+    def test_a_task_the_source_rate_limits_is_never_given_up(self):
+        limited = self.tasks[0]["key"]
+        for night in range(enrich_archive.MAX_TASK_FAILURES + 2):
+            summary, _, _, _ = self.run_once(lambda task: [], budget=1, max_fetches=1, rate_limited={limited},
+                                             now=datetime(2026, 10, 3 + night, 0, 43, tzinfo=timezone.utc))
+        self.assertEqual(summary["given_up"], 0)
+        state = self.state()
+        self.assertNotIn(limited, state["done"])
+        self.assertNotIn(limited, state["failures"])
 
     def test_the_deadline_stops_the_run_cleanly(self):
         ticks = iter([0.0] + [200 * 60.0] * 100)
