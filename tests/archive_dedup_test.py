@@ -4,7 +4,6 @@ tests/same_story_cases.json is generated from the Worker's shared.js
 (normalizeTitle, isSameStory); the Python rule must agree with it exactly, so
 the archive and the Worker never disagree on what a duplicate is."""
 import importlib.util
-import inspect
 import json
 import unittest
 from pathlib import Path
@@ -159,13 +158,32 @@ class PlanArchiveTests(unittest.TestCase):
         ]
         self.assertEqual(dedup.plan_archive(stored, []), ([], []))
 
-    def test_a_copy_of_a_map_event_is_kept_for_when_the_map_forgets_it(self):
-        # The map keeps 180 days, the archive 730: plan_archive takes no
-        # events, so an article repeating a map event is never removed for it.
-        self.assertEqual(
-            list(inspect.signature(dedup.plan_archive).parameters),
-            ["existing_rows", "new_rows"],
-        )
+    def test_a_row_repeating_a_map_event_is_removed_the_map_holds_the_incident(self):
+        # When the event ages out, the collector archives it as an archived
+        # incident: the story is never lost.
+        event = {"id": "evt", "url": "https://map/lead", "title": "Suicide bomber attacks police station in Quetta",
+                 "published": "2026-09-20T08:00:00+00:00",
+                 "related_articles": [{"url": "https://map/other", "title": "Quetta police station hit by suicide blast"}]}
+        stored = [
+            row("https://a/copy", "archived_incident", "Suicide bomber attacks police station in Quetta, officials say",
+                published="2026-09-20T10:00:00+00:00"),
+            row("https://map/other", "related_article", "Quetta police station hit by suicide blast",
+                published="2026-09-20T11:00:00+00:00"),
+            row("https://b/other-story", "archived_incident", "Gunmen abduct 30 worshippers from church in Kaduna",
+                published="2026-09-20T10:00:00+00:00"),
+        ]
+        _, delete = dedup.plan_archive(stored, [], map_stories=[event])
+        self.assertEqual(sorted((url, reason, kept) for url, reason, kept in delete), [
+            ("https://a/copy", "on_map", "https://map/lead"),
+            ("https://map/other", "on_map", "https://map/lead"),
+        ])
+
+    def test_dropped_kinds_are_never_kept(self):
+        stored = [row("https://wire/1", "related_article", "Gunmen abduct 30 worshippers from church in Kaduna",
+                      published="2026-09-20T10:00:00+00:00")]
+        new = [row("https://wire/2", "related_article", "Kidnappers seize twenty villagers in Zamfara")]
+        insert, delete = dedup.plan_archive(stored, new, drop_kinds={"related_article"})
+        self.assertEqual((insert, delete), ([], [("https://wire/1", "other_outlet_report", "")]))
 
 
 if __name__ == "__main__":
