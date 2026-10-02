@@ -17,6 +17,7 @@ on:
       - "tools/archive_dedup.py"
       - "archive/recovered-events-*.json"
       - "archive/related-overflow-*.json"
+      - "archive/enriched-articles-*.json"
       - ".github/workflows/sync-background-corpus.yml"
   schedule:
     # After the daily collector's evening run (18:17 Europe/Paris) has had time to finish.

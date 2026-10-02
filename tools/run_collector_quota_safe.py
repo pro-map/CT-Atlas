@@ -1,11 +1,13 @@
 """CT Atlas phase-test Gemini optimiser. Keeps collector.py as the main engine."""
-import hashlib, json, os, sys, time
+import hashlib, json, os, re, sys, time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 ROOT=Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path: sys.path.insert(0,str(ROOT))
+sys.path.insert(0,str(Path(__file__).resolve().parent))
 import collector
+import archive_review
 
 THRESHOLD=int(os.getenv("AI_SELECTION_THRESHOLD","60"))
 BATCH=max(1,min(40,int(os.getenv("AI_SELECTION_BATCH_SIZE","25"))))
@@ -16,13 +18,21 @@ RECENT_DAYS=max(1,int(os.getenv("AI_SELECTION_RECENT_PRIORITY_DAYS","3")))
 # 15 on 3.5 Flash Lite, and the Report Generator, Deep Search and Atlas AI use
 # the same model while the collection runs.
 MIN_GEMINI_INTERVAL=max(0.0,float(os.getenv("GEMINI_MIN_SECONDS_BETWEEN_CALLS","6")))
+# Candidates left once 3.5 Flash Lite's budget is spent (or it answers 429) are
+# reviewed on another model with its own free quota, within its own budget,
+# instead of falling off the feeds unreviewed. Off when no model is set.
+OVERFLOW_MODEL=os.getenv("AI_SELECTION_OVERFLOW_MODEL","").strip()
+OVERFLOW_RUN_BUDGET=max(0,int(os.getenv("AI_SELECTION_OVERFLOW_MAX_CALLS_PER_RUN","0") or 0)) if OVERFLOW_MODEL else 0
+OVERFLOW_DAY_BUDGET=max(OVERFLOW_RUN_BUDGET,int(os.getenv("AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET","0") or 0)) if OVERFLOW_MODEL else 0
+# No overflow request this late in a run: the geolocation and the commit
+# steps still need their time.
+OVERFLOW_DEADLINE_MINUTES=float(os.getenv("AI_SELECTION_OVERFLOW_DEADLINE_MINUTES","200") or 200)
+PROCESS_START=time.monotonic()
 PACIFIC=ZoneInfo("America/Los_Angeles")
-collector.AI_SELECTION_THRESHOLD=THRESHOLD
 collector.AI_SELECTION_BATCH_SIZE=BATCH
-collector.AI_SELECTION_INSTRUCTIONS=(collector.AI_SELECTION_INSTRUCTIONS
-    .replace("score >= 50",f"score >= {THRESHOLD}")
-    .replace("at least 50",f"at least {THRESHOLD}")
-    .replace("just above 50",f"just above {THRESHOLD}"))
+# The prompt and the keep bar at the map's threshold, exactly as the archive
+# reviews use them (tools/archive_review.py).
+archive_review.apply_threshold(collector,THRESHOLD)
 
 POST=collector.requests.post
 AI_SELECT=collector.ai_select_events
@@ -31,19 +41,38 @@ TREND=collector.generate_24h_trend_summary
 PRUNE=collector.prune_old
 WEEKLY=collector.generate_weekly_analysis
 calls=0; hit429=False; budget_hit=False; auto_count=0; partial=False; recent_count=0; backlog_count=0; last_gemini_call=None
+overflow_calls=0; overflow429=False; primary_spent=False
+# Candidates the overflow model reviewed this run, so their decisions say so.
+OVERFLOW_IDS=set(); RUN_STARTED=datetime.now(timezone.utc).isoformat()
+EVENT_ID_RE=re.compile(r'"event_id":\s*"((?:[^"\\]|\\.)*)"')
 
 def pacific_day(): return datetime.now(PACIFIC).date().isoformat()
-def starting_calls():
+def starting_calls(key="calls"):
     try:
         u=collector.load_selection_cache().get("selection_quota_usage",{})
-        return int(u.get("calls",0) or 0) if u.get("pacific_day")==pacific_day() else 0
+        return int(u.get(key,0) or 0) if u.get("pacific_day")==pacific_day() else 0
     except Exception: return 0
 START_CALLS=starting_calls()
+START_OVERFLOW=starting_calls("overflow_calls")
 def today_calls(): return START_CALLS+calls
+def today_overflow(): return START_OVERFLOW+overflow_calls
+def overflow_left():
+    if not OVERFLOW_MODEL or overflow429: return False
+    if (time.monotonic()-PROCESS_START)/60>=OVERFLOW_DEADLINE_MINUTES: return False
+    return overflow_calls<OVERFLOW_RUN_BUDGET and today_overflow()<OVERFLOW_DAY_BUDGET
+
+def mark_overflow(cache):
+    """Reviews made this run by the overflow model record it."""
+    if not OVERFLOW_IDS: return
+    for item in (cache.get("items") or {}).values():
+        if isinstance(item,dict) and str((item.get("result") or {}).get("event_id")) in OVERFLOW_IDS \
+                and str(item.get("reviewed_at") or "")>=RUN_STARTED:
+            item["model"]=OVERFLOW_MODEL
 
 def inject(cache):
-    cache["selection_quota_usage"]={"pacific_day":pacific_day(),"calls":today_calls(),"daily_budget":DAY_BUDGET,"last_updated":datetime.now(timezone.utc).isoformat()}
-    cache["selection_runtime_telemetry"]={"last_run_at":datetime.now(timezone.utc).isoformat(),"threshold":THRESHOLD,"batch_size":BATCH,"max_calls_per_run":RUN_BUDGET,"daily_call_budget":DAY_BUDGET,"calls_this_run":calls,"calls_today":today_calls(),"official_auto_accepted":auto_count,"recent_pending":recent_count,"backlog_pending":backlog_count,"budget_reached":budget_hit,"gemini_429":hit429,"partial_recovery":partial}
+    mark_overflow(cache)
+    cache["selection_quota_usage"]={"pacific_day":pacific_day(),"calls":today_calls(),"daily_budget":DAY_BUDGET,"overflow_calls":today_overflow(),"overflow_daily_budget":OVERFLOW_DAY_BUDGET,"last_updated":datetime.now(timezone.utc).isoformat()}
+    cache["selection_runtime_telemetry"]={"last_run_at":datetime.now(timezone.utc).isoformat(),"threshold":THRESHOLD,"batch_size":BATCH,"max_calls_per_run":RUN_BUDGET,"daily_call_budget":DAY_BUDGET,"calls_this_run":calls,"calls_today":today_calls(),"overflow_model":OVERFLOW_MODEL or None,"overflow_calls_this_run":overflow_calls,"overflow_calls_today":today_overflow(),"official_auto_accepted":auto_count,"recent_pending":recent_count,"backlog_pending":backlog_count,"budget_reached":budget_hit,"gemini_429":hit429,"overflow_429":overflow429,"partial_recovery":partial}
     return cache
 def save_cache(cache): return SAVE_CACHE(inject(cache))
 collector.save_selection_cache=save_cache
@@ -62,24 +91,44 @@ def pace():
         if wait>0: time.sleep(wait)
     last_gemini_call=time.monotonic()
 
+def overflow_post(url,args,kwargs):
+    """The same selection request on the overflow model (a copy of the body:
+    the collector reuses its own for retries)."""
+    global overflow_calls,overflow429,budget_hit
+    overflow_calls+=1
+    kwargs=dict(kwargs,json=dict(kwargs["json"],model=OVERFLOW_MODEL))
+    OVERFLOW_IDS.update(EVENT_ID_RE.findall(str(kwargs["json"].get("input") or "")))
+    pace()
+    r=POST(url,*args,**kwargs)
+    if getattr(r,"status_code",None)==429:
+        overflow429=True; budget_hit=True
+        print(f"   Overflow model {OVERFLOW_MODEL} returned 429; stopping the selection.")
+        raise collector.AISelectionQuotaError(f"Gemini overflow model {OVERFLOW_MODEL} returned 429. Cached progress is preserved.")
+    return r
+
 def post(url,*args,**kwargs):
-    global calls,hit429,budget_hit
+    global calls,hit429,budget_hit,primary_spent
     gemini="generativelanguage.googleapis.com" in str(url)
     sel=gemini and is_selection(kwargs)
     if sel:
-        if calls>=RUN_BUDGET:
-            budget_hit=True; raise collector.AISelectionQuotaError(f"CT Atlas self-imposed selection budget reached ({RUN_BUDGET} calls/run).")
-        if today_calls()>=DAY_BUDGET:
-            budget_hit=True; raise collector.AISelectionQuotaError(f"CT Atlas daily selection budget reached ({DAY_BUDGET} calls/Pacific day).")
+        if primary_spent or calls>=RUN_BUDGET or today_calls()>=DAY_BUDGET:
+            if overflow_left(): return overflow_post(url,args,kwargs)
+            budget_hit=True
+            if primary_spent: raise collector.AISelectionQuotaError("Gemini article-selection returned 429 and no overflow budget is left.")
+            if calls>=RUN_BUDGET: raise collector.AISelectionQuotaError(f"CT Atlas self-imposed selection budget reached ({RUN_BUDGET} calls/run).")
+            raise collector.AISelectionQuotaError(f"CT Atlas daily selection budget reached ({DAY_BUDGET} calls/Pacific day).")
         calls+=1
     if gemini: pace()
     r=POST(url,*args,**kwargs)
     if sel and getattr(r,"status_code",None)==429:
-        hit429=True
+        hit429=True; primary_spent=True
         try: detail=" ".join(json.dumps(r.json(),ensure_ascii=False).split())[:1000]
         except Exception: detail=" ".join(str(getattr(r,"text","")).split())[:1000]
-        print("   Gemini article-selection 429 detected; stopping immediately.")
         if detail: print(f"   429 detail: {detail}")
+        if overflow_left():
+            print(f"   Gemini article-selection 429 detected; continuing on {OVERFLOW_MODEL}.")
+            return overflow_post(url,args,kwargs)
+        print("   Gemini article-selection 429 detected; stopping immediately.")
         raise collector.AISelectionQuotaError("Gemini article-selection returned 429. Cached progress is preserved.")
     return r
 collector.requests.post=post
@@ -141,16 +190,19 @@ def optimized_select(events):
     print(f"Threshold: {THRESHOLD}/100 | Batch: {BATCH} | Cache: {hits}/{len(remaining)} | Auto-accept: {auto_count}")
     print(f"Recent priority (<= {RECENT_DAYS}d): {recent_count} | Older backlog: {backlog_count}")
     print(f"Selection budget: {RUN_BUDGET}/run, {DAY_BUDGET}/Pacific day | Used before run: {START_CALLS}")
+    if OVERFLOW_MODEL: print(f"Overflow: {OVERFLOW_MODEL}, {OVERFLOW_RUN_BUDGET}/run, {OVERFLOW_DAY_BUDGET}/Pacific day | Used before run: {START_OVERFLOW}")
     out=AI_SELECT(remaining)
+    for e in out or []:
+        if str(e.get("id")) in OVERFLOW_IDS: e["ai_selection_model"]=OVERFLOW_MODEL
     if out is not None:
-        print(f"Selection telemetry: calls={calls}, partial=no, 429={hit429}."); return auto+out
+        print(f"Selection telemetry: calls={calls}, overflow={overflow_calls}, partial=no, 429={hit429}."); return auto+out
     if budget_hit and not hit429:
         partial=True; out=recover(remaining)
         if collector.BACKFILL_ACTIVE:
             collector.BACKFILL_PENDING_QUERIES.clear()
             collector.BACKFILL_STATS["ai_deferred_backfill"]+=max(0,len(remaining)-sum(1 for e in remaining if cache_hit(collector.load_selection_cache(),e)))
         collector.save_selection_cache(collector.load_selection_cache())
-        print(f"Selection telemetry: calls={calls}, partial=yes, 429=no."); return auto+out
+        print(f"Selection telemetry: calls={calls}, overflow={overflow_calls}, partial=yes, 429=no."); return auto+out
     return None
 collector.ai_select_events=optimized_select
 

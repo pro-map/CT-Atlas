@@ -74,7 +74,8 @@ class CollectArticlesTests(unittest.TestCase):
     def test_counts_per_source_after_dedup(self):
         _, counts = self.articles_by_url()
         self.assertEqual(counts, {
-            "related_article": 1, "removed_event": 1, "recovered": 0, "rejected_candidate": 0, "historical_review": 3,
+            "related_article": 1, "removed_event": 1, "recovered": 0, "enriched": 0, "rejected_candidate": 0,
+            "historical_review": 3,
         })
 
     def test_off_topic_reviews_never_reach_the_archive(self):
@@ -161,10 +162,12 @@ class RecoveredSourceTests(unittest.TestCase):
     def test_recovered_events_their_related_articles_and_cut_off_articles_reach_the_archive(self):
         articles, counts = sync.collect_articles(self.root)
         by_url = {a["url"]: a for a in articles}
-        self.assertEqual(counts["recovered"], 4)
+        # The recovered lead is read with every former map event; its other
+        # reports and the cut-off articles come from the recovered source.
+        self.assertEqual((counts["removed_event"], counts["recovered"]), (1, 3))
         lead = by_url["https://old/lead"]
         self.assertEqual((lead["kind"], lead["ai_relevance_score"], lead["parent_incident_id"]),
-                         ("removed_event", 90, "inc-old"))
+                         ("archived_incident", 90, "inc-old"))
         self.assertEqual(lead["original_title"], "Rotterdam: explosie bij synagoge")
         related = by_url["https://old/related"]
         self.assertEqual((related["kind"], related["parent_event_id"], related["country"]),
@@ -254,7 +257,7 @@ class SyncRunTests(unittest.TestCase):
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
             self.assertEqual(sync.main(["--cleanup", "apply"]), 0)
-        self.assertIn("1 new rows inserted, 2 removed; now 3 total", output.getvalue())
+        self.assertIn("1 new rows inserted, 2 removed, 0 re-filed; now 3 total", output.getvalue())
 
     def test_apply_mode_respects_the_per_run_cap(self):
         self.assertEqual(sync.main(["--cleanup", "apply", "--max-deletes", "1"]), 0)

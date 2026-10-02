@@ -62,10 +62,14 @@ function contextDate(row) {
   return cleanText(row?.published || row?.collected_at || "", 40);
 }
 
-async function relatedArticles(db, events) {
-  const incidentIds = [...new Set(
+function promptIncidentIds(events) {
+  return [...new Set(
     events.map(e => cleanText(e?.incident_id, 80)).filter(Boolean)
   )].slice(0, MAX_INCIDENT_IDS);
+}
+
+async function relatedArticles(db, events) {
+  const incidentIds = promptIncidentIds(events);
   if (!incidentIds.length) return [];
 
   const placeholders = incidentIds.map(() => "?").join(",");
@@ -86,17 +90,25 @@ async function thematicArticles(db, events, start, end) {
   const match = ftsQuery([...countries, ...actors]);
   if (!match) return [];
 
+  // Reports on the prompt's own incidents come from relatedArticles(); reports
+  // on other incidents (aged out of the map, or not in this report) are
+  // thematic context like any archived incident.
+  const incidentIds = promptIncidentIds(events);
+  const otherIncidents = incidentIds.length
+    ? `(ba.kind != 'related_article' OR ba.parent_incident_id IS NULL
+        OR ba.parent_incident_id NOT IN (${incidentIds.map(() => "?").join(",")}))`
+    : "1 = 1";
   const sql = `SELECT ${COLUMNS}
     FROM background_articles_fts
     JOIN background_articles AS ba ON ba.rowid = background_articles_fts.rowid
     WHERE background_articles_fts MATCH ?
       AND COALESCE(ba.published, ba.collected_at) >= ?
       AND COALESCE(ba.published, ba.collected_at) <= ?
-      AND ba.kind != 'related_article'
+      AND ${otherIncidents}
       AND ${NOT_NOISE}
     ORDER BY background_articles_fts.rank
     LIMIT ${MAX_THEMATIC_ITEMS}`;
-  const result = await db.prepare(sql).bind(match, start.toISOString(), end.toISOString()).all();
+  const result = await db.prepare(sql).bind(match, start.toISOString(), end.toISOString(), ...incidentIds).all();
   return result?.results || [];
 }
 
@@ -130,7 +142,12 @@ function toContextItems(rows, events) {
     if (stories.some(other => isSameStory(story, other))) continue;
     stories.push(story);
 
-    const kind = cleanText(row.kind, 40) || "rejected_candidate";
+    const covers = sourceIdByIncident.get(cleanText(row.parent_incident_id, 80)) || "";
+    let kind = cleanText(row.kind, 40) || "rejected_candidate";
+    // Another outlet's report on an incident that is not among the prompt's
+    // events (it aged out of the map, or was not selected for this report):
+    // to the model it is an incident report like an archived one.
+    if (kind === "related_article" && !covers) kind = "archived_incident";
     const item = {
       context_id: `C${String(items.length + 1).padStart(2, "0")}`,
       kind,
@@ -144,7 +161,12 @@ function toContextItems(rows, events) {
       url: /^https?:\/\//i.test(url) ? url : ""
     };
     if (kind === "related_article") {
-      item.covers_source_id = sourceIdByIncident.get(cleanText(row.parent_incident_id, 80)) || "";
+      item.covers_source_id = covers;
+    } else if (kind === "archived_incident") {
+      // Gemini's reason for accepting it, not a reason it was excluded.
+      item.incident_note = cleanText(row.ai_relevance_reason, 180);
+      // The same incident as a record in the prompt: corroboration of it.
+      if (covers) item.covers_source_id = covers;
     } else {
       item.map_exclusion_reason = cleanText(row.ai_relevance_reason, 180);
     }
@@ -229,8 +251,9 @@ async function searchCorpusForDeepSearch(env, { plan, start, end, searchQuery })
         source: cleanText(row.source, 140) || "CT Atlas archive",
         url: cleanText(row.url, 1200),
         published: isoOrEmpty(row.published || row.collected_at),
-        // Rejected candidates and removed events were normalised to English by
-        // the collector; related articles keep their outlet's own headline.
+        // Rejected candidates, removed events and archived incidents were
+        // normalised to English by Gemini; related articles keep their
+        // outlet's own headline.
         language: kind === "related_article" ? (cleanText(row.original_language, 8).toLowerCase() || "en") : "en",
         query_index: -1,
         query_variant: "ct-atlas-corpus",

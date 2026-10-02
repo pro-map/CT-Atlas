@@ -95,7 +95,23 @@ test('related articles and thematic context are queried, mapped and de-duplicate
   const relatedCall=db.calls.find(c=>c.sql.includes("kind = 'related_article'"));
   assert.deepEqual(relatedCall.args,['inc-a','inc-b']);
   const ftsCall=db.calls.find(c=>c.sql.includes('MATCH'));
-  assert.deepEqual(ftsCall.args,['"Somalia" OR "Djibouti" OR "Al-Shabaab" OR "Somali pirates"',period.start.toISOString(),period.end.toISOString()]);
+  // Reports on other incidents than the prompt's come through the thematic search.
+  assert.deepEqual(ftsCall.args,['"Somalia" OR "Djibouti" OR "Al-Shabaab" OR "Somali pirates"',period.start.toISOString(),period.end.toISOString(),'inc-a','inc-b']);
+  assert.match(ftsCall.sql,/ba\.parent_incident_id NOT IN \(\?,\?\)/);
+});
+
+test('a report on an incident outside the prompt is read as an archived incident, one on a prompt incident corroborates it',()=>{
+  const prompt=[{source_id:'S01',incident_id:'inc-a',title:'Pirates hijack dhow off Puntland'}];
+  const rows=[
+    {url:'https://old/1',kind:'related_article',title:'Gunmen kill nine villagers in Borno',published:'2026-04-12T08:00:00Z',parent_incident_id:'inc-aged',ai_relevance_reason:null},
+    {url:'https://arch/1',kind:'archived_incident',title:'Somali pirates release crew of seized dhow',published:'2026-09-21T08:00:00Z',parent_incident_id:'inc-a',ai_relevance_reason:'Piracy follow-up'},
+  ];
+  const [orphan,archived]=plain(corpus.toContextItems(rows,prompt));
+  assert.equal(orphan.kind,'archived_incident');
+  assert.ok(!('covers_source_id' in orphan));
+  assert.equal(archived.kind,'archived_incident');
+  assert.equal(archived.covers_source_id,'S01');
+  assert.equal(archived.incident_note,'Piracy follow-up');
 });
 
 test('bound parameters stay under the D1 limit of 100',async()=>{
@@ -191,7 +207,7 @@ test('Deep Search merges the archive before de-duplication and labels it in the 
   assert.match(worker,/deduplicateRows\(\[\.\.\.retrieval\.rows, \.\.\.corpus\.rows\]\)/);
   assert.match(worker,/corpus_kind: row\.corpus_kind/);
   assert.match(worker,/"ct_atlas_corpus" come from CT Atlas's own archive/);
-  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v11-quota-fallback"/);
+  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v12-archived-incidents"/);
   assert.match(fs.readFileSync('deep-search.js','utf8'),/ct_atlas_corpus:"CT ATLAS ARCHIVE"/);
 });
 
@@ -216,7 +232,7 @@ test('the report prompt asks for a longer, analytical assessment with context ru
   for(const heading of ['ANALYTICAL INTERPRETATION','STRATEGIC CONTEXT','BACKGROUND CONTEXT RULES']) assert.ok(prompt.includes(heading),heading);
   assert.match(prompt,/Never count context items/);
   assert.match(prompt,/\[S03, C02\]/);
-  assert.equal(shared.constant('REPORT_GENERATOR_VERSION'),'report-v9-quota-fallback');
+  assert.equal(shared.constant('REPORT_GENERATOR_VERSION'),'report-v10-archived-incidents');
 });
 
 test('the /report route feeds background context to Gemini and lists it as sources',()=>{
@@ -253,4 +269,26 @@ test('the map renders the new sections, C citations and context source labels',(
   assert.ok(block.indexOf('"STRATEGIC CONTEXT"')<block.indexOf('"OUTLOOK / WATCHPOINTS"'));
   assert.ok(html.includes('/\\[([SC]\\d{2,3}(?:,\\s*[SC]\\d{2,3})*)\\]/g'));
   assert.ok(html.includes('"Background · outside map scope"'));
+  assert.ok(html.includes('archived_incident: "Archived incident report"'));
+});
+
+test('an archived incident is sent as incident reporting, with what Gemini found, not an exclusion reason',()=>{
+  const rows=[
+    {url:'https://a/old',kind:'archived_incident',title:'Militants kill nine villagers in Borno attack',published:'2026-04-12T08:00:00Z',
+     ai_relevance_reason:'Jihadist attack on civilians in Borno',source:'Daily Trust',country:'Nigeria'},
+    {url:'https://a/diplo',kind:'rejected_candidate',title:'Ministers discuss Sahel security cooperation in Rome',published:'2026-04-13T08:00:00Z',
+     ai_relevance_reason:'Interstate diplomacy, out of scope'},
+  ];
+  const [incident,background]=plain(corpus.toContextItems(rows,[]));
+  assert.equal(incident.kind,'archived_incident');
+  assert.equal(incident.incident_note,'Jihadist attack on civilians in Borno');
+  assert.ok(!('map_exclusion_reason' in incident));
+  assert.equal(background.map_exclusion_reason,'Interstate diplomacy, out of scope');
+});
+
+test('every prompt that reads the archive explains archived incidents',()=>{
+  assert.match(shared.constant('SYSTEM_INSTRUCTION'),/archived_incident = a CT incident report that passed the map's own\s+selection but is not one of priority_events/);
+  assert.match(shared.constant('SYSTEM_INSTRUCTION'),/corroboration of it, never a second incident/);
+  assert.match(fs.readFileSync('cloudflare-worker/deep-search.js','utf8'),/"archived_incident" is an incident report that passed CT Atlas's own map\s+selection/);
+  assert.match(fs.readFileSync('cloudflare-worker/quick-ask.js','utf8'),/\(kind "archived_incident"\) an\s+incident report that passed the map's selection/);
 });

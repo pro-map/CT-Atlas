@@ -6,6 +6,11 @@ daily collector runs, with a larger Gemini budget so the 180-day backlog
 drains over a few runs. Progress is kept in incident_consolidation_state.json,
 so re-running continues where the last run stopped.
 
+Its Gemini requests go through tools/archive_review.py's gate: counted one by
+one, 6 s apart, a minute's 429 retried once and a day's 429 ending the run,
+and at most CONSOLIDATION_DAILY_CALLS a Pacific day
+(quota/gemini-3.1-consolidation.json), whatever --max-calls says.
+
 Usage:
     python3 tools/consolidate_incidents.py --dry-run
     GEMINI_API_KEY=... python3 tools/consolidate_incidents.py --max-calls 60
@@ -15,6 +20,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import os
 import sys
 from collections import Counter
 from pathlib import Path
@@ -24,6 +30,11 @@ ROOT = Path(__file__).resolve().parent.parent
 _spec = importlib.util.spec_from_file_location("collector", ROOT / "collector.py")
 collector = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(collector)
+
+sys.path.insert(0, str(ROOT / "tools"))
+import archive_review  # noqa: E402
+
+DAILY_CALLS = int(os.getenv("CONSOLIDATION_DAILY_CALLS", "120"))
 
 
 def main(argv=None):
@@ -35,7 +46,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--input", default=str(ROOT / collector.OUTPUT_FILE))
     parser.add_argument("--state", default=str(ROOT / collector.INCIDENT_STATE_FILE))
-    parser.add_argument("--max-calls", type=int, default=60, help="Gemini window reviews this run.")
+    parser.add_argument("--max-calls", type=int, default=40,
+                        help="Gemini requests this run (one per window reviewed, unless retried).")
     parser.add_argument("--dry-run", action="store_true",
                         help="No Gemini calls and nothing written: report the backlog and the free record merges.")
     args = parser.parse_args(argv)
@@ -50,9 +62,18 @@ def main(argv=None):
     incidents_before = len({collector._incident_key(event) for event in events})
     records_before = len(events)
     state = collector.load_incident_state(args.state)
-    events, stats = collector.consolidate_incidents(
-        events, state, max_calls=args.max_calls, use_gemini=not args.dry_run
-    )
+    if args.dry_run:
+        events, stats = collector.consolidate_incidents(events, state, max_calls=args.max_calls, use_gemini=False)
+    else:
+        ledger = archive_review.DailyLedger(archive_review.ledger_path("consolidation", ROOT), DAILY_CALLS)
+        budget = ledger.budget(args.max_calls)
+        print(f"Gemini budget: {budget} request(s) ({ledger.used}/{ledger.allocation} used this Pacific day).")
+        # The gate does the pacing.
+        collector.AI_SELECTION_PAUSE_SECONDS = 0
+        with archive_review.GeminiGate(collector, budget, archive_review.SECONDS_BETWEEN_POSTS, on_post=ledger.save):
+            events, stats = collector.consolidate_incidents(
+                events, state, max_calls=budget, use_gemini=budget > 0
+            )
     incidents_after = len({collector._incident_key(event) for event in events})
 
     print(f"Records:   {records_before} -> {len(events)}")

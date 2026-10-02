@@ -39,9 +39,11 @@ from __future__ import annotations
 
 import argparse
 import glob
+from collections import Counter
 import importlib.util
 import json
 import os
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -59,6 +61,14 @@ _spec.loader.exec_module(collector)
 # Rows deleted per run at most (each delete costs D1 about 2 rows written; the
 # Free plan allows 100,000 a day, shared with the collector and this sync).
 MAX_DELETES_PER_RUN = 20_000
+# Rows inserted and re-filed per run at most (about 3 rows written each, the
+# full-text index included). What is left waits for the next night.
+MAX_INSERTS_PER_RUN = 6_000
+MAX_UPDATES_PER_RUN = 5_000
+# D1's Free plan caps a database at 500 MB; past this size only incidents and
+# their reports are inserted, not background reporting.
+SIZE_GUARD_BYTES = 400 * 1024 * 1024
+LOW_PRIORITY_KINDS = frozenset({"rejected_candidate", "historical_review"})
 
 
 CORPUS_STATS_UPSERT = collector.BACKGROUND_CORPUS_STATS_UPSERT
@@ -103,27 +113,174 @@ def related_articles(events, now):
             }
 
 
-def removed_events(archive_paths, now):
-    for path in archive_paths:
-        data = _load_json(path) or {}
+CLEANUP_RECHECK_RE = re.compile(r"gemini re-check: score (\d+)")
+
+
+def _int_or_none(value):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _parent_fields(parent):
+    """What a report inherits from the map event it covers."""
+    return {
+        "category": parent.get("category"),
+        "categories": parent.get("categories"),
+        "actor_group": parent.get("actor_group"),
+        "primary_event_type": parent.get("primary_event_type"),
+        "country": parent.get("country"),
+        "region": parent.get("region"),
+        "parent_event_id": parent.get("id"),
+        "parent_incident_id": parent.get("incident_id"),
+    }
+
+
+def live_incidents(events):
+    """incident id -> the map event that leads it."""
+    incidents = {}
+    for event in events:
+        if event.get("incident_id"):
+            incidents.setdefault(event["incident_id"], event)
+    return incidents
+
+
+def review_verdict(item, threshold, incidents=None, aliases=None):
+    """(kind, parent map event or None) for an article Gemini reviewed for the
+    archive (tools/review_pending_archive.py, tools/enrich_archive.py), filed
+    as the map would file it: kept only when the map's selection kept it
+    (apply_ai_selection: the map's threshold, and in scope once translated).
+    A kept article about an incident still on the map is one more outlet's
+    report on it; any other kept article is an archived incident; the rest is
+    reporting outside the map's scope, or noise at score 0."""
+    score = _int_or_none(item.get("ai_relevance_score")) or 0
+    if score <= 0:
+        return "rejected_candidate", None
+    used = _int_or_none(item.get("map_threshold")) or threshold
+    selected = item.get("ai_selected")
+    if selected is None:
+        selected = score >= used
+    if not selected or score < used:
+        return "rejected_candidate", None
+    incident = item.get("incident_id")
+    if incident and incidents:
+        parent = incidents.get(collector.resolve_incident_alias(incident, aliases or {})) or incidents.get(incident)
+        if parent:
+            return "related_article", parent
+    return "archived_incident", None
+
+
+def former_event_verdict(event, threshold, aged_out=False, incidents=None, aliases=None):
+    """(kind, score, reason, parent) the archive should hold for a former map
+    event, decided by what happened to it rather than by today's threshold:
+
+      - commentary caught by the cleanup's opinion/analysis keywords stays
+        commentary (removed_event);
+      - a cleanup re-check carries the event's score today: the map dropped it
+        (below the threshold, or out of scope once translated), so it is
+        reporting outside the map's scope, or noise at score 0;
+      - a fresh archive review (pending_review) is filed by review_verdict;
+      - an event that aged out of the 180-day map, or was recovered from the
+        map's history, was a CT incident on the map: an archived incident;
+      - anything else keeps the old filing (removed_event)."""
+    reason = str(event.get("_cleanup_reason") or "")
+    score = _int_or_none(event.get("ai_relevance_score"))
+    note = event.get("ai_relevance_reason")
+    if reason.startswith("keyword:"):
+        return "removed_event", score, note, None
+    recheck = CLEANUP_RECHECK_RE.search(reason)
+    if recheck:
+        rescored = int(recheck.group(1))
+        return ("rejected_candidate", rescored,
+                f"Removed from the map when re-checked under the current rules (score {rescored}).", None)
+    if reason:
+        return "removed_event", score, note, None
+    recovery = event.get("_recovery_reason")
+    if recovery == "pending_review":
+        kind, parent = review_verdict(event, threshold, incidents, aliases)
+        return kind, score, note, parent
+    if aged_out or recovery in ("retention_prune", "rereviewed"):
+        if score == 0:
+            return "rejected_candidate", 0, note, None
+        return "archived_incident", score, note, None
+    return "removed_event", score, note, None
+
+
+def _file_time(data):
+    return str(data.get("updated_at") or data.get("removed_at") or data.get("created_at") or "")
+
+
+def former_event_files(paths):
+    """[(path, data)] for every file of former map events, the most recent
+    first: a link removed by a cleanup, put back on the map and later aged
+    out is filed by what happened last (the first copy of a link wins)."""
+    files = [(path, _load_json(path) or {}) for path in paths]
+    return sorted(files, key=lambda item: (_file_time(item[1]), item[0]), reverse=True)
+
+
+def removed_events(files, now, threshold=None, incidents=None, aliases=None):
+    """Former map events, from former_event_files (or plain paths)."""
+    threshold = map_threshold() if threshold is None else threshold
+    for entry in files:
+        path, data = entry if isinstance(entry, tuple) else (entry, _load_json(entry) or {})
+        aged_out = "aged-out" in Path(path).name
         for event in data.get("events") or []:
             if not isinstance(event, dict) or not event.get("url") or not event.get("title"):
                 continue
-            yield {
+            kind, score, note, parent = former_event_verdict(event, threshold, aged_out, incidents, aliases)
+            row = {
                 **collector.background_article_from_event(event),
                 "original_title": event.get("original_title"),
-                "kind": "removed_event",
+                "kind": kind,
+                "ai_relevance_score": score,
+                "ai_relevance_reason": note,
                 "parent_incident_id": event.get("incident_id"),
                 "collected_at": data.get("removed_at") or data.get("created_at") or now,
+                # The repository's verdict on this link wins over the one stored.
+                "_authoritative": True,
             }
+            if parent:
+                row.update(_parent_fields(parent))
+            yield row
+
+
+def enriched_articles(paths, threshold=None, incidents=None, aliases=None):
+    """Articles the six-month enrichment found and Gemini reviewed
+    (archive/enriched-articles-*.json, tools/enrich_archive.py): English
+    headline and summary, the original headline kept for twin matching. They
+    are only ever inserted: a link already stored keeps the verdict it has."""
+    threshold = map_threshold() if threshold is None else threshold
+    for path in paths:
+        data = _load_json(path) or {}
+        collected_at = data.get("created_at") or datetime.now(timezone.utc).isoformat()
+        for article in data.get("articles") or []:
+            if not isinstance(article, dict) or not article.get("url") or not article.get("title"):
+                continue
+            score = _int_or_none(article.get("ai_relevance_score"))
+            if score is None:
+                continue
+            kind, parent = review_verdict(article, threshold, incidents, aliases)
+            row = {
+                **{column: article.get(column) for column in collector.BACKGROUND_ARTICLES_D1_COLUMNS},
+                "original_title": article.get("original_title"),
+                "kind": kind,
+                "ai_relevance_score": score,
+                "ai_relevance_reason": article.get("ai_scope_rejection") if kind == "rejected_candidate"
+                and article.get("ai_scope_rejection") else article.get("ai_relevance_reason"),
+                "collected_at": article.get("reviewed_at") or collected_at,
+            }
+            if parent:
+                row.update(_parent_fields(parent))
+            yield row
 
 
 def recovered_articles(recovered_paths, overflow_paths, live_events, now):
-    """Former map events recovered from events.json's history by
-    tools/recover_from_history.py (as removed events, with their related
-    articles), related articles dropped from events still on the map, and the
-    articles the incident merges cut off (archive/related-overflow-*.json)."""
-    yield from removed_events(recovered_paths, now)
+    """The other reports of former map events recovered from events.json's
+    history by tools/recover_from_history.py, related articles dropped from
+    events still on the map, and the articles the incident merges cut off
+    (archive/related-overflow-*.json). The recovered events themselves are
+    former map events (removed_events)."""
     for path in recovered_paths:
         data = _load_json(path) or {}
         collected_at = data.get("created_at") or now
@@ -132,10 +289,7 @@ def recovered_articles(recovered_paths, overflow_paths, live_events, now):
         for item in data.get("related_articles") or []:
             parent = {**(item.get("parent") or {}), "related_articles": [item.get("article") or {}]}
             yield from related_articles([parent], collected_at)
-    by_incident = {}
-    for event in live_events:
-        if event.get("incident_id"):
-            by_incident.setdefault(event["incident_id"], event)
+    by_incident = live_incidents(live_events)
     for path in overflow_paths:
         data = _load_json(path) or {}
         collected_at = data.get("created_at") or now
@@ -210,8 +364,77 @@ def existing_rows():
     the workflow on every push) can burn through the daily write quota.
     """
     response = collector.d1_query(EXISTING_ROWS_SQL)
-    results = (response.get("result") or [{}])[0].get("results") or []
+    first = (response.get("result") or [{}])[0]
+    results = first.get("results") or []
     return [row for row in results if row.get("url")]
+
+
+def database_size(response):
+    """Bytes the D1 database holds (every query's meta.size_after), or None."""
+    try:
+        return int(((response.get("result") or [{}])[0].get("meta") or {}).get("size_after"))
+    except (TypeError, ValueError, AttributeError):
+        return None
+
+
+# What a re-filing changes on a stored row.
+REFILE_COLUMNS = ("kind", "ai_relevance_score", "ai_relevance_reason", "parent_event_id", "parent_incident_id")
+
+
+def reconcile(stored, articles):
+    """Stored rows whose repository source now gives another verdict (kind or
+    score): a former map event re-filed by former_event_verdict, a review
+    redone, or a link that is now another outlet's report on a map incident.
+    The new verdict is overlaid on the stored rows in place, so the dedup plan
+    ranks them as they are now and drops the ones that became noise. Returns
+    the rows changed."""
+    verdicts = {str(a["url"]): a for a in articles if a.get("_authoritative")}
+    changed = []
+    for row in stored:
+        article = verdicts.get(str(row.get("url")))
+        if article is None:
+            continue
+        kind, score = article.get("kind"), archive_dedup.score_of(article)
+        if row.get("kind") == kind and archive_dedup.score_of(row) == score:
+            continue
+        for column in REFILE_COLUMNS:
+            row[column] = article.get(column)
+        row["ai_relevance_score"] = score
+        changed.append(row)
+    return changed
+
+
+def update_statements(rows, max_bytes=collector.CLOUDFLARE_D1_MAX_STATEMENT_BYTES):
+    """UPDATE statements setting each row's REFILE_COLUMNS (CASE on the url,
+    literals, under D1's statement size cap)."""
+    def statement(batch):
+        urls = ",".join(collector.sql_literal(row["url"]) for row in batch)
+        cases = []
+        for column in REFILE_COLUMNS:
+            whens = " ".join(
+                f"WHEN {collector.sql_literal(row['url'])} THEN {collector.sql_literal(row.get(column))}"
+                for row in batch
+            )
+            cases.append(f"{column} = CASE url {whens} END")
+        return f"UPDATE background_articles SET {', '.join(cases)} WHERE url IN ({urls})"
+
+    def row_bytes(row):
+        url = len(collector.sql_literal(row["url"]).encode("utf-8"))
+        values = sum(len(collector.sql_literal(row.get(column)).encode("utf-8")) for column in REFILE_COLUMNS)
+        # The url appears in every CASE and in the IN list.
+        return (len(REFILE_COLUMNS) + 1) * url + values + len(REFILE_COLUMNS) * len(" WHEN  THEN ") + 1
+
+    base = len(statement([]).encode("utf-8"))
+    batch, size = [], base
+    for row in rows:
+        cost = row_bytes(row)
+        if batch and size + cost > max_bytes:
+            yield statement(batch)
+            batch, size = [], base
+        batch.append(row)
+        size += cost
+    if batch:
+        yield statement(batch)
 
 
 def delete_statements(urls, max_bytes=collector.CLOUDFLARE_D1_MAX_STATEMENT_BYTES):
@@ -234,18 +457,31 @@ def delete_statements(urls, max_bytes=collector.CLOUDFLARE_D1_MAX_STATEMENT_BYTE
 def collect_articles(root=ROOT):
     now = datetime.now(timezone.utc).isoformat()
     database = _load_json(root / "events.json") or {}
+    events = database.get("events") or []
+    threshold = map_threshold(root)
+    incidents = live_incidents(events)
+    aliases = collector.load_incident_state(str(root / collector.INCIDENT_STATE_FILE)).get("aliases") or {}
+    recovered_paths = sorted(glob.glob(str(root / "archive" / "recovered-events-*.json")))
+    former = former_event_files(sorted(glob.glob(str(root / "archive" / "removed-events-*.json"))) + recovered_paths)
     sources = {
-        "related_article": related_articles(database.get("events") or [], now),
-        "removed_event": removed_events(sorted(glob.glob(str(root / "archive" / "removed-events-*.json"))), now),
+        "related_article": (
+            {**row, "_authoritative": True} for row in related_articles(events, now)
+        ),
+        # Every former map event (cleanups, aged out, recovered, re-reviewed),
+        # the latest verdict on each link first.
+        "removed_event": removed_events(former, now, threshold, incidents, aliases),
         "recovered": recovered_articles(
-            sorted(glob.glob(str(root / "archive" / "recovered-events-*.json"))),
+            recovered_paths,
             sorted(glob.glob(str(root / "archive" / "related-overflow-*.json"))),
-            database.get("events") or [],
+            events,
             now,
+        ),
+        "enriched": enriched_articles(
+            sorted(glob.glob(str(root / "archive" / "enriched-articles-*.json"))), threshold, incidents, aliases
         ),
         "rejected_candidate": fallback_file_articles(root / collector.BACKGROUND_ARTICLES_FILE),
         "historical_review": historical_reviews(
-            _load_json(root / collector.AI_SELECTION_CACHE_FILE), map_threshold(root)
+            _load_json(root / collector.AI_SELECTION_CACHE_FILE), threshold
         ),
     }
 
@@ -291,6 +527,8 @@ def main(argv=None):
         help="plan: only report the stored rows the dedup rules would remove; apply: delete them.",
     )
     parser.add_argument("--max-deletes", type=int, default=MAX_DELETES_PER_RUN)
+    parser.add_argument("--max-inserts", type=int, default=MAX_INSERTS_PER_RUN)
+    parser.add_argument("--max-updates", type=int, default=MAX_UPDATES_PER_RUN)
     args = parser.parse_args(argv)
 
     articles, counts = collect_articles(ROOT)
@@ -304,14 +542,17 @@ def main(argv=None):
         print(f"Dry run: D1 not contacted; {len(insert)} of them are unique stories.")
         return 0
 
-    inserted = deleted = 0
+    inserted = deleted = updated = 0
     try:
-        stored = existing_rows()
+        response = collector.d1_query(EXISTING_ROWS_SQL)
+        stored = [row for row in ((response.get("result") or [{}])[0].get("results") or []) if row.get("url")]
+        size = database_size(response)
         # D1 keeps no original headline: take it from the repository row
         # with the same link, so stored translations meet their twins too.
         original_by_url = {str(a["url"]): a.get("original_title") for a in articles if a.get("original_title")}
         for row in stored:
             row.setdefault("original_title", original_by_url.get(str(row["url"])))
+        changed = reconcile(stored, articles)
         insert, delete = archive_dedup.plan_archive(stored, articles)
         known = {str(row["url"]) for row in stored}
         print(
@@ -319,11 +560,39 @@ def main(argv=None):
             f"{len(insert)} new unique stories to insert."
         )
 
+        if size is not None and size >= SIZE_GUARD_BYTES:
+            # D1's Free plan stops every write at 500 MB, the collector's too:
+            # past the guard only incidents and their reports are added.
+            held = [row for row in insert if row.get("kind") in LOW_PRIORITY_KINDS]
+            insert = [row for row in insert if row.get("kind") not in LOW_PRIORITY_KINDS]
+            print(f"::warning title=D1 archive near its size limit::{size // (1024 * 1024)} MB stored; "
+                  f"{len(held)} background row(s) not inserted.")
+
+        if len(insert) > args.max_inserts:
+            print(f"Inserting the best {max(args.max_inserts, 0)} now; {len(insert) - max(args.max_inserts, 0)} "
+                  f"wait for the next run.")
+            insert = insert[: max(args.max_inserts, 0)]
+            # A stored row is only removed for a copy that is in D1 tonight.
+            kept_urls = known | {str(row["url"]) for row in insert}
+            delete = [(url, reason, kept) for url, reason, kept in delete if not kept or kept in kept_urls]
+
         reasons = archive_dedup.summarize(delete)
         rows_by_url = {str(row["url"]): row for row in [*articles, *stored]}
         print(f"Stored rows the dedup rules reject: {len(delete)} {reasons or ''}")
         for line in cleanup_examples(delete, rows_by_url):
             print(line)
+
+        # Rows that became noise are deleted below, not re-filed.
+        deleting = {url for url, _, _ in delete}
+        refile = [row for row in changed if str(row["url"]) not in deleting]
+        print(f"Stored rows re-filed by their repository verdict: {len(refile)} "
+              f"{dict(Counter(row['kind'] for row in refile)) or ''}")
+        if args.cleanup == "apply" and refile:
+            batch = refile[: max(args.max_updates, 0)]
+            for sql in update_statements(batch):
+                collector.d1_query(sql)
+            updated = len(batch)
+            print(f"Re-filed {updated} stored row(s) ({len(refile) - updated} left for the next run).")
 
         rows = [collector.background_article_row(article) for article in insert]
         statements = list(
@@ -371,7 +640,7 @@ def main(argv=None):
     summary = ", ".join(f"{kind} {n}" for kind, n in counts.items()) or "empty"
     pending = "" if args.cleanup == "apply" else f"; cleanup plan (not applied): {len(delete)} rows {reasons}"
     print(
-        f"::notice title=D1 background corpus::{inserted} new rows inserted, {deleted} removed; "
+        f"::notice title=D1 background corpus::{inserted} new rows inserted, {deleted} removed, {updated} re-filed; "
         f"now {sum(counts.values())} total ({summary}){pending}"
     )
     return 0
