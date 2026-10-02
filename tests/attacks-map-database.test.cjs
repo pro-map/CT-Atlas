@@ -408,3 +408,16 @@ test('the "Show on map" selector defaults to attacks and the map file carries 7 
   // The ticker, KPIs and trends stay about attacks whatever the map shows.
   assert.match(html,/const events = filteredAllEvents\(\)\s*\n?\s*\.map/);
 });
+
+test('attacks pulse in red on the map, clusters holding one too; the offices are small and static',()=>{
+  const css=html.replace(/\r\n/g,'\n');
+  assert.match(css,/\.ct-marker\.attacks \{\n    position: relative;\n    background: #e3191f !important;\n    animation: attackMarkerGlow/);
+  assert.match(css,/\.ct-marker\.attacks::after \{[\s\S]*?animation: attackMarkerRing/);
+  assert.match(css,/\.marker-cluster\.attack-cluster div::after \{[\s\S]*?animation: attackMarkerRing/);
+  assert.match(css,/className: "marker-cluster marker-cluster-" \+ size \+ \(attack \? " attack-cluster" : ""\)/);
+  assert.match(css,/ctAttack:\s*style\.className === "attacks"/);
+  const office=css.slice(css.indexOf('.interpol-office-marker {'),css.indexOf('.interpol-office-hq {'));
+  assert.ok(!/animation/.test(office),'offices do not pulse');
+  assert.ok(!/interpolOfficePulse/.test(css));
+  assert.match(css,/\.interpol-office-hq \{\n    width: 22px;/);
+});
