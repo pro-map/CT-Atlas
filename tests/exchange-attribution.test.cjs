@@ -74,3 +74,11 @@ test("the automatic trace follows branches to exchanges, then asks for the opera
   assert.match(client,/autoTrace:autoTraceRun\?\{/,"the report model carries the trace reached");
   assert.match(fs.readFileSync("crypto.html","utf8"),/<option value="6">H6<\/option>/);
 });
+
+test("no Etherscan Pro Plus name-tag lookup: TronScan is the only exchange-tag provider",()=>{
+  const worker=fs.readFileSync("cloudflare-worker/exchange-addresses.js","utf8");
+  assert.ok(!/getaddresstag|ETHERSCAN_NAME_TAGS_ENABLED/.test(worker));
+  assert.match(worker,/const providerLabels = await lookupTronScan\(env, missing\);/);
+  assert.ok(!/ETHERSCAN PRO PLUS/.test(fs.readFileSync("crypto.js","utf8")));
+  assert.ok(!/etherscan_enabled/.test(fs.readFileSync("cloudflare-worker/index.js","utf8")));
+});

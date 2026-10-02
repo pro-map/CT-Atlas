@@ -269,60 +269,6 @@ async function lookupShared(env, entries) {
   };
 }
 
-function isExchangeNameTag(row) {
-  const labels = Array.isArray(row?.labels) ? row.labels : [];
-  return labels.some(label => /^(exchange|cex)$/i.test(String(label || "")));
-}
-
-function etherscanLabel(entry, row) {
-  if (!row || !isExchangeNameTag(row)) return null;
-  const name = cleanText(row.nametag, 120);
-  if (!name) return null;
-  return sanitizeExchangeLabel({
-    ...entry,
-    name,
-    confidence: "MEDIUM",
-    source_type: "Block explorer metadata",
-    source_title: "Etherscan public name tag",
-    source_url: `https://${entry.chain === "ethereum" ? "etherscan.io" : entry.chain === "bsc" ? "bscscan.com" : entry.chain === "polygon" ? "polygonscan.com" : entry.chain === "arbitrum" ? "arbiscan.io" : "basescan.org"}/address/${entry.address}`,
-    notes: cleanText(row.shortdescription || row.notes_1 || "Public explorer exchange attribution; verify the source before relying on it.", 1200),
-    provider: "etherscan"
-  }, { provider: "etherscan" });
-}
-
-async function lookupEtherscan(env, entries) {
-  if (env.ETHERSCAN_NAME_TAGS_ENABLED !== "true" || !env.ETHERSCAN_API_KEY) return [];
-  const byChain = new Map();
-  for (const entry of entries) {
-    if (!EVM_CHAINS.has(entry.chain)) continue;
-    const group = byChain.get(entry.chain) || [];
-    group.push(entry);
-    byChain.set(entry.chain, group);
-  }
-  const labels = [];
-  for (const [chain, group] of byChain) {
-    const url = new URL("https://api.etherscan.io/v2/api");
-    url.searchParams.set("chainid", EVM_CHAIN_IDS[chain]);
-    url.searchParams.set("module", "nametag");
-    url.searchParams.set("action", "getaddresstag");
-    url.searchParams.set("address", group.map(entry => entry.address).join(","));
-    url.searchParams.set("apikey", env.ETHERSCAN_API_KEY);
-    try {
-      const response = await fetch(url, { signal: AbortSignal.timeout(7000) });
-      if (!response.ok) continue;
-      const payload = await response.json();
-      const byAddress = new Map((Array.isArray(payload?.result) ? payload.result : []).map(row => [String(row.address || "").toLowerCase(), row]));
-      for (const entry of group) {
-        const label = etherscanLabel(entry, byAddress.get(entry.address));
-        if (label) labels.push(label);
-      }
-    } catch (error) {
-      console.warn("Etherscan name-tag lookup failed", error);
-    }
-  }
-  return labels;
-}
-
 const KNOWN_EXCHANGE_NAME_RE = /\b(binance|coinbase|kraken|okx|bybit|bitfinex|kucoin|htx|huobi|gate\.io|crypto\.com|bitstamp|gemini|bitget|mexc|upbit|bithumb|poloniex|deribit|bitmart|whitebit|phemex|ascendex|lbank|coincheck|bitflyer|paybis|celsius|ftx)\b/i;
 
 async function lookupTronScan(env, entries) {
@@ -374,12 +320,10 @@ async function resolveExchangeLabels(result, env) {
     const clean = sanitizeExchangeLabel(label, { provider: label?.provider });
     if (clean && !found.has(entryKey(clean))) found.set(entryKey(clean), clean);
   }
+  // TronScan account tags are the only provider lookup (the Etherscan name-tag
+  // endpoint needs a paid Pro Plus plan, which CT Atlas does not use).
   const missing = entries.filter(entry => !found.has(entryKey(entry)));
-  const [etherscan, tronscan] = await Promise.all([
-    lookupEtherscan(env, missing),
-    lookupTronScan(env, missing)
-  ]);
-  const providerLabels = [...etherscan, ...tronscan];
+  const providerLabels = await lookupTronScan(env, missing);
   for (const label of providerLabels) found.set(entryKey(label), label);
   if (providerLabels.length) {
     await providerCachePut(env, providerLabels.map(label => ({

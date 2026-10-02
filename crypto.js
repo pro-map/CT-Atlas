@@ -125,7 +125,6 @@ async function providerHealth(){
       ["BITCOIN · BLOCKSTREAM",providers.bitcoin!==false],
       ["EVM · ETHERSCAN",Boolean(providers.evm)],
       ["TRON · TRONGRID",Boolean(providers.tron)],
-      ["EVM EXCHANGE TAGS · ETHERSCAN PRO PLUS",Boolean(labelProviders.etherscan_enabled)],
       ["TRON EXCHANGE TAGS · TRONSCAN KEY",Boolean(labelProviders.tronscan_enabled)]
     ].map(([label,on])=>'<span class="provider-chip '+(on?"on":"off")+'">'+esc(label)+" · "+(on?"READY":"KEY NOT CONFIGURED")+"</span>").join("");
   }catch(_){
