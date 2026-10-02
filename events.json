@@ -443,7 +443,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-10-02T15:16:11.481602+00:00",
-  "number_of_events": 3796,
+  "number_of_events": 3775,
   "events": [
     {
       "id": "58f1b0ab5c108333",
@@ -294145,7 +294145,8 @@
       "ai_geo_reason": "Explicitly stated location in the text.",
       "ai_geo_fingerprint": "aa6988ccd1e58c0ca927f0bdb0d3f5e8224ccba1685ddd024a869b894f7df2d3",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-cacc7b39ca8ea8e8"
     },
     {
       "id": "5e5d409a0768539c",
@@ -294303,7 +294304,8 @@
       "ai_geo_reason": "Nationwide operation conducted across Turkey by Turkish authorities.",
       "ai_geo_fingerprint": "fc08c66139db7db5133862ce53a904a70ae852df60ec4f85aca365d02a01ba30",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-e5500fdc8ec51fa4"
     },
     {
       "id": "effe3df81f579f6d",
@@ -294364,7 +294366,8 @@
       "ai_geo_reason": "Political announcement made by Donald Trump, typically originating from the US.",
       "ai_geo_fingerprint": "7d150c5d9f10c50a87a930f400b4d3231fcc508297964ee21691b5532ab33392",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-92be022ad5c87166"
     },
     {
       "id": "20b1acb7d84a5bcb",
@@ -294637,7 +294640,8 @@
         "b69ff822269ca25564be4add7a534eeca8c6f764f148aec77a4c5d1bc178306e",
         "bdb7402a120e09d121808dea6054cecabad7d4ec8db526211fd27b0c97792d97"
       ],
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-0c487a76cf793887"
     },
     {
       "id": "180ee722c68ab124",
@@ -294657,7 +294661,7 @@
       "collection_locale": "IT:it",
       "published": "2026-07-17T07:00:00+00:00",
       "source": "MilanoToday",
-      "source_count": 1,
+      "source_count": 6,
       "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxNUFlkSkpkVE5HQ2VnY0xPWmFyS1VxWnp2ZnJtQ0hSaWM3TGdFWXkwSUloRTdvNEtFWUVkejhIcDBwSzNrZThOR01xWkswSHQxQkNlYkc5V0Y2RHRFR3FlWWUtTnlJeThDNmt1ak85eUxEVXJSaXM1OHpPQmlHQXJoUWlGZVR6UQ?oc=5",
       "collector": "Google News RSS",
       "country": "Italy",
@@ -294670,73 +294674,23 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "sources": [
-        "MilanoToday"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-17T07:00:00+00:00",
-      "last_reported": "2026-07-17T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "An arrest involving bomb-making instructions and terrorist radicalization is a clear operational CT event.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "arrest of 17-year-old girl with explosive manual and radical chats in Italy",
-      "title_variants": [
-        "arrest of 17-year-old girl with explosive manual and radical chats in Italy"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "17-year-old girl arrested for terrorism (linked to related Pavia arrests reported by MilanoToday/SkyTG24)."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Part of the same multi-article cluster regarding the 17-year-old arrested in Pavia province.",
-      "ai_geo_fingerprint": "7c3262d5e3caab3fe62036669010b33c4817c6ed0e4f975e6c34de11075c850b",
-      "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "5ca5abf9be466654",
-      "category": "Arrests",
-      "categories": [
-        "Arrests"
-      ],
-      "title": "17-year-old arrested in Pavia province for praising martyrdom for Allah",
-      "summary": "A 17-year-old girl in the Pavia area has been investigated and arrested by Digos for international Islamic terrorism after expressing readiness for martyrdom.",
-      "original_title": "Arrestata una 17enne nel Pavese: inneggiava al martirio per Allah",
-      "original_summary": "Arrestata una 17enne nel Pavese: inneggiava al martirio per Allah Sky TG24",
-      "original_language": "it",
-      "collection_language": "it",
-      "collection_language_name": "Italian",
-      "collection_locale": "IT:it",
-      "published": "2026-07-17T07:00:00+00:00",
-      "source": "Sky TG24",
-      "source_count": 4,
-      "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE1VYXgwdVkyTjBqc0RzdTNQZTh6bEFrYVNaMG9wSHZVTEFNb1h3QkMyZldvSnFWaEYtbEU2SlZCamdJZTc5MndPZnA5VEMzVGEzQTNBZzA3aUZJcXE4S0NJRGRuRGlXRXNRbVBUWjU5NG5QVEc3MzJieTVlOWdZZw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Italy",
-      "country_code": "IT",
-      "city": "Pavia",
-      "region": null,
-      "latitude": 45.19205,
-      "longitude": 9.15917,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
+        "MilanoToday",
         "Sky TG24",
         "RaiNews",
         "Il Giorno",
-        "Il Cittadino di Lodi"
+        "Il Cittadino di Lodi",
+        "Corriere Milano"
       ],
       "related_articles": [
+        {
+          "title": "17-year-old arrested in Pavia province for praising martyrdom for Allah",
+          "original_title": "Arrestata una 17enne nel Pavese: inneggiava al martirio per Allah",
+          "original_language": "it",
+          "summary": "A 17-year-old girl in the Pavia area has been investigated and arrested by Digos for international Islamic terrorism after expressing readiness for martyrdom.",
+          "published": "2026-07-17T07:00:00+00:00",
+          "source": "Sky TG24",
+          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE1VYXgwdVkyTjBqc0RzdTNQZTh6bEFrYVNaMG9wSHZVTEFNb1h3QkMyZldvSnFWaEYtbEU2SlZCamdJZTc5MndPZnA5VEMzVGEzQTNBZzA3aUZJcXE4S0NJRGRuRGlXRXNRbVBUWjU5NG5QVEc3MzJieTVlOWdZZw?oc=5"
+        },
         {
           "title": "17enne arrestata nel pavese, \"pronta al martirio in nome di Allah\"",
           "original_title": "17enne arrestata nel pavese, \"pronta al martirio in nome di Allah\"",
@@ -294763,164 +294717,60 @@
           "published": "2026-07-18T07:00:00+00:00",
           "source": "Il Cittadino di Lodi",
           "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxOZ0xsRDAtMTdFN0FXQlhrM2NYdWU4elViV01iRXdxUVJKMHNfVVJZR1VEUmJEeWZWVFh3S20xY1FlLUJqNGNXUGRtemlLb0padDJ1NXNreDBRQkJ1OUdOMHYwVVNiMjRzaVhLN1dGTlZ4U080TjJISEJWSkFnemE5SmxtUi1keUtoY1hMRWdDTG1mUU1GRy1EaFZBMWs3dlJGQ3pMVl8tUXVVTmJITFJ5Y2NXZlRhSGltZVp3RkhrQ2lmMHhMWWN2VUd4MjhNbGR2MDNCTA?oc=5"
+        },
+        {
+          "title": "17-Year-Old Arrested for International Terrorism in Pavia: ISIS Propaganda and Martyrdom Plans",
+          "original_title": "Arrestata 17enne accusata di terrorismo internazionale nel pavese: «Faceva propaganda per l'Isis e voleva il martirio»",
+          "original_language": "it",
+          "summary": "Authorities arrested a 17-year-old girl in Pavia accused of spreading ISIS propaganda and seeking martyrdom.",
+          "published": "2026-07-17T07:00:00+00:00",
+          "source": "Corriere Milano",
+          "url": "https://news.google.com/rss/articles/CBMivwJBVV95cUxQMk1iSHFIM2FLaTJFT2RiQjc5NVZoaF9ob0ZoVjNUWmhGNWxoTkVETktjSWswNGxSU09KRWR6MVVlX2o2QnYzQ29FZFNzY1hHV2lFZ3VsdlloLW1JYVBIdXVramJhcVBSMjdqUnBCbXZQOTh5aHk1UDJNMy1pSnlFT0tDbHpwUkN3MHdYdVdGWGdnRkM0SUVPZTFBai1WcmxVSUhBVXdJdzBrWEpvUlpBeDBrQjBDaDQ5TFptYl9WUjlzaldfOGtETnBULXhEaVpWVW44NEo2bEVVVDJfRVV2dzVrZjJaXy1HWnc0cXVIZWtaNlRicHhQaTZrR0hwSm1za25ESlUzNVU2MnR1X0NHTFVHUUpWYmFka3hqQmZYMGg5U0l4NXkwLWxjRDBoemNJeldmbmg2V2FXaTBkS2lV0gHEAkFVX3lxTE5XU3JvNkg5WFQxOXRIY2t2ZFRZV0tqSnF3UnJqbkpSR1VwQzUxcF9wUExMbEFWd0h4MVJtOWhTQ3hYZmZmMHhGSXNMMGpYc29ZR0RDRHU3LTNXb1RQNy1TRmY2UjhkanZjNWRPeE9wTUlCWUZVMDJubUNQekNkWFd6eEU1MG82RWRvUHpXUUx2akFQM0FUTVNtdDU5SzREMUg4N3kwd3E5OTc1WU01VmFFcGtRdm1SMThqa3hqRE9RSC1lREUzQWcwTEtZVmhSVGVUTGhHTW9hUF95TC1iekVZaDliUUVGcWh4Q3RLT2JDSUppem5oLWdnQk5hWFpRTXRFMWYzZXcxY2JOeVgzY2lETHNjUUk5Vm40Y2NqUmk2ZWJmZGRPa1FrUFJlLUItWFRHOEZNX1dvSG05YXc0SG1rRkZ4cg?oc=5"
+        },
+        {
+          "title": "Fast Online Radicalization of Pavia Student Now in Care",
+          "original_title": "\"La mia battaglia per amore di Allah\". La veloce radicalizzazione via chat della studentessa pavese ora in comunità",
+          "original_language": "it",
+          "summary": "Details emerge on the rapid online radicalization via chat of the female student from Pavia who has been placed in a juvenile care facility.",
+          "published": "2026-07-17T07:00:00+00:00",
+          "source": "Il Giorno",
+          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE8yZnZ2OHJ3ckVBV2pZWk41Q1NsVDFmNTB6UUYxMWRucThCZEl4V3g1WmxwRURjUVU2dmVReER0RzZNU3FsOEsySXRmZmsyQmRZcl8wcm4zLVpXaDhzVFlpRGcxVy14b29VdERHZDctNkMyZDZsUE5sbGthd2E5N2c?oc=5"
         }
       ],
-      "article_count": 4,
+      "article_count": 7,
       "first_reported": "2026-07-17T07:00:00+00:00",
-      "last_reported": "2026-07-18T07:00:00+00:00",
-      "dedup_confidence": 0.75,
+      "last_reported": "2026-07-17T07:00:00+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 90,
+      "ai_relevance_reason": "An arrest involving bomb-making instructions and terrorist radicalization is a clear operational CT event.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "translated_to_english": true,
+      "ai_canonical_event": "arrest of 17-year-old girl with explosive manual and radical chats in Italy",
+      "title_variants": [
+        "arrest of 17-year-old girl with explosive manual and radical chats in Italy"
+      ],
+      "location_confidence_score": 0.95,
+      "location_method": "ai_city_geonames",
+      "location_evidence": [
+        "17-year-old girl arrested for terrorism (linked to related Pavia arrests reported by MilanoToday/SkyTG24)."
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_version": "gemini-ai-first-v5-resilient",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Part of the same multi-article cluster regarding the 17-year-old arrested in Pavia province.",
+      "ai_geo_fingerprint": "7c3262d5e3caab3fe62036669010b33c4817c6ed0e4f975e6c34de11075c850b",
+      "ai_geo_inferred": true,
+      "actor_group": "",
+      "incident_id": "inc-5a60247b442d3d94",
+      "source_article_fingerprints": [],
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "title_plus_anchor"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Direct counter-terrorism arrest of an individual plotting or expressing readiness for Islamist martyrdom.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Arrest of a 17-year-old female in Pavia province for international Islamic terrorism and praising martyrdom",
-      "title_variants": [
-        "Arrest of a 17-year-old female in Pavia province for international Islamic terrorism and praising martyrdom"
-      ],
-      "location_confidence_score": 0.99,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "17-year-old arrested in Pavia province for praising martyrdom for Allah."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly stated in Pavia province, Italy.",
-      "ai_geo_fingerprint": "65bcfb22509d95dc7e787d34f15f510bf14ee2ba030e5c143001751e01fd623e",
-      "ai_geo_inferred": false,
-      "actor_group": ""
-    },
-    {
-      "id": "03554422219bd62f",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Online / Cyber / AI"
-      ],
-      "title": "17-Year-Old Arrested for International Terrorism in Pavia: ISIS Propaganda and Martyrdom Plans",
-      "summary": "Authorities arrested a 17-year-old girl in Pavia accused of spreading ISIS propaganda and seeking martyrdom.",
-      "original_title": "Arrestata 17enne accusata di terrorismo internazionale nel pavese: «Faceva propaganda per l'Isis e voleva il martirio»",
-      "original_summary": "Arrestata 17enne accusata di terrorismo internazionale nel pavese: «Faceva propaganda per l'Isis e voleva il martirio» Corriere Milano",
-      "original_language": "it",
-      "collection_language": "it",
-      "collection_language_name": "Italian",
-      "collection_locale": "IT:it",
-      "published": "2026-07-17T07:00:00+00:00",
-      "source": "Corriere Milano",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMivwJBVV95cUxQMk1iSHFIM2FLaTJFT2RiQjc5NVZoaF9ob0ZoVjNUWmhGNWxoTkVETktjSWswNGxSU09KRWR6MVVlX2o2QnYzQ29FZFNzY1hHV2lFZ3VsdlloLW1JYVBIdXVramJhcVBSMjdqUnBCbXZQOTh5aHk1UDJNMy1pSnlFT0tDbHpwUkN3MHdYdVdGWGdnRkM0SUVPZTFBai1WcmxVSUhBVXdJdzBrWEpvUlpBeDBrQjBDaDQ5TFptYl9WUjlzaldfOGtETnBULXhEaVpWVW44NEo2bEVVVDJfRVV2dzVrZjJaXy1HWnc0cXVIZWtaNlRicHhQaTZrR0hwSm1za25ESlUzNVU2MnR1X0NHTFVHUUpWYmFka3hqQmZYMGg5U0l4NXkwLWxjRDBoemNJeldmbmg2V2FXaTBkS2lV0gHEAkFVX3lxTE5XU3JvNkg5WFQxOXRIY2t2ZFRZV0tqSnF3UnJqbkpSR1VwQzUxcF9wUExMbEFWd0h4MVJtOWhTQ3hYZmZmMHhGSXNMMGpYc29ZR0RDRHU3LTNXb1RQNy1TRmY2UjhkanZjNWRPeE9wTUlCWUZVMDJubUNQekNkWFd6eEU1MG82RWRvUHpXUUx2akFQM0FUTVNtdDU5SzREMUg4N3kwd3E5OTc1WU01VmFFcGtRdm1SMThqa3hqRE9RSC1lREUzQWcwTEtZVmhSVGVUTGhHTW9hUF95TC1iekVZaDliUUVGcWh4Q3RLT2JDSUppem5oLWdnQk5hWFpRTXRFMWYzZXcxY2JOeVgzY2lETHNjUUk5Vm40Y2NqUmk2ZWJmZGRPa1FrUFJlLUItWFRHOEZNX1dvSG05YXc0SG1rRkZ4cg?oc=5",
-      "collector": "Google News RSS",
-      "country": "Italy",
-      "country_code": "IT",
-      "city": "Pavia",
-      "region": null,
-      "latitude": 45.19205,
-      "longitude": 9.15917,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "Corriere Milano"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-17T07:00:00+00:00",
-      "last_reported": "2026-07-17T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "This is a direct arrest of an ISIS-linked terrorism suspect.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "arrest of 17-year-old ISIS propaganda suspect in Pavia, Italy",
-      "title_variants": [
-        "arrest of 17-year-old ISIS propaganda suspect in Pavia, Italy"
-      ],
-      "location_confidence_score": 0.99,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "17-Year-Old Arrested for International Terrorism in Pavia"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly stated location: Pavia, Italy.",
-      "ai_geo_fingerprint": "ebd08a4ad52e6e816e581c07026a6c67981f0ed433635f234a1b024327635f12",
-      "ai_geo_inferred": false,
-      "actor_group": "ISIS"
-    },
-    {
-      "id": "f3c903e0602c0523",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Online / Cyber / AI"
-      ],
-      "title": "Fast Online Radicalization of Pavia Student Now in Care",
-      "summary": "Details emerge on the rapid online radicalization via chat of the female student from Pavia who has been placed in a juvenile care facility.",
-      "original_title": "\"La mia battaglia per amore di Allah\". La veloce radicalizzazione via chat della studentessa pavese ora in comunità",
-      "original_summary": "\"La mia battaglia per amore di Allah\". La veloce radicalizzazione via chat della studentessa pavese ora in comunità Il Giorno",
-      "original_language": "it",
-      "collection_language": "it",
-      "collection_language_name": "Italian",
-      "collection_locale": "IT:it",
-      "published": "2026-07-17T07:00:00+00:00",
-      "source": "Il Giorno",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE8yZnZ2OHJ3ckVBV2pZWk41Q1NsVDFmNTB6UUYxMWRucThCZEl4V3g1WmxwRURjUVU2dmVReER0RzZNU3FsOEsySXRmZmsyQmRZcl8wcm4zLVpXaDhzVFlpRGcxVy14b29VdERHZDctNkMyZDZsUE5sbGthd2E5N2c?oc=5",
-      "collector": "Google News RSS",
-      "country": "Italy",
-      "country_code": "IT",
-      "city": "Pavia",
-      "region": null,
-      "latitude": 45.19205,
-      "longitude": 9.15917,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "Il Giorno"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-17T07:00:00+00:00",
-      "last_reported": "2026-07-17T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Provides operational context on online radicalization processes linked to an active terrorism arrest.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "details on online radicalization and placement of arrested Pavia student",
-      "title_variants": [
-        "details on online radicalization and placement of arrested Pavia student"
-      ],
-      "location_confidence_score": 0.99,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Fast Online Radicalization of Pavia Student Now in Care"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly stated location: Pavia, Italy.",
-      "ai_geo_fingerprint": "d6f0e36cb1d9e5e6bc47478b59fdc068aef548d7eb45787798f177c7f0352a3d",
-      "ai_geo_inferred": false,
-      "actor_group": ""
+        "same_incident"
+      ]
     },
     {
       "id": "0fc50845b127b6ec",
@@ -294981,7 +294831,8 @@
       "ai_geo_reason": "Explicitly stated location: Khan Yunis, Gaza.",
       "ai_geo_fingerprint": "c93bc277c16e27d23009a691a456019fa021f36b5e7784f24a36e5c005443ed5",
       "ai_geo_inferred": false,
-      "actor_group": "Hamas"
+      "actor_group": "Hamas",
+      "incident_id": "inc-4726f3a23be998fd"
     },
     {
       "id": "a4e0ee29ad35c80d",
@@ -295048,7 +294899,8 @@
       "ai_geo_reason": "The geopolitical context ties the maritime threat and escalation to Yemen and the Red Sea region.",
       "ai_geo_fingerprint": "45c7fff2af608fdd8fd0a79ea9fc13ea204c171d10823a776621795d0463eb52",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-cffe59d137744a8a"
     },
     {
       "id": "6c1e715304649039",
@@ -295115,7 +294967,8 @@
       "ai_geo_reason": "Analytical report concerning nationwide counter-terrorism prosecutions in Nigeria.",
       "ai_geo_fingerprint": "32eb84b20e25a725a3a1c3f6b9874523ac0b6e9efafb1348cc2f4dceae5b4406",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-2f3fe9b4fefd290f"
     },
     {
       "id": "d071e012da7118fd",
@@ -295183,76 +295036,8 @@
       "ai_geo_reason": "The arrest by Nigerian military took place in Borno State.",
       "ai_geo_fingerprint": "fc46007eeb247c3260047aec9d7777543419f5b39c75ed45e30fc291f970a46e",
       "ai_geo_inferred": false,
-      "actor_group": "Boko Haram"
-    },
-    {
-      "id": "43be2091f177f5ef",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "CBRN"
-      ],
-      "title": "Arrest of the sarin official: a step in the dismantling of chemical weapons",
-      "summary": "Authorities announced the arrest of an official responsible for sarin, marking a major step in dismantling chemical weapons capabilities.",
-      "original_title": "Arrestation du responsable du sarin : étape dans le démantèlement d’armes chimiques",
-      "original_summary": "Arrestation du responsable du sarin : étape dans le démantèlement d’armes chimiques سانا",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French",
-      "collection_locale": "FR:fr",
-      "published": "2026-07-17T07:00:00+00:00",
-      "source": "سانا",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFBtZGw1ZTdUMk15R3VzY0VsOUFwZTVOYjZVWHhvSW9HTVk2RUptOTZ1YWNjTXFGLS04cWZkVkkzc3dLSHJMWWRRYw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Syria",
-      "country_code": "SY",
-      "city": "Damascus",
-      "region": null,
-      "latitude": 33.5102,
-      "longitude": 36.29128,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "f48c7644c79d1b2e658f3a6fb9470f10e1308eab860b448d16bb3f0f9e0cf22a"
-      ],
-      "sources": [
-        "سانا"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-17T07:00:00+00:00",
-      "last_reported": "2026-07-17T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "High-value counter-terrorism/CBRN arrest and dismantling of a chemical weapons program.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "arrest of sarin chemical weapons official in Syria",
-      "title_variants": [
-        "arrest of sarin chemical weapons official in Syria"
-      ],
-      "location_confidence_score": 0.85,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Authorities announced the arrest of an official responsible for sarin (source: سانا - Syrian Arab News Agency)"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "SANA is the official state news agency of Syria, pointing to Syrian authorities conducting the arrest.",
-      "ai_geo_fingerprint": "051a365dcf8d2ea044202267e1a45e397f77a2a06d4b665ee7cb2053edada233",
-      "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "Boko Haram",
+      "incident_id": "inc-9e5556bf40d796ed"
     },
     {
       "id": "032f47079d108676",
@@ -295374,7 +295159,8 @@
       "ai_geo_reason": "Gujarat ATS operation in Gujarat, India.",
       "ai_geo_fingerprint": "d3520749eaf553c778c5bbb08e9cde21fd26773bd8973a2157e3754490a5833f",
       "ai_geo_inferred": false,
-      "actor_group": "Jaish-e-Mohammed"
+      "actor_group": "Jaish-e-Mohammed",
+      "incident_id": "inc-2f2fe19623561af7"
     },
     {
       "id": "2d1b4073041881a6",
@@ -295438,7 +295224,8 @@
       "ai_geo_reason": "Associated with Somali pirate activity off the coast of Somalia and the Horn of Africa.",
       "ai_geo_fingerprint": "11da58c889090dffb4d805e47cc2af7199cd2e5631ddebfcad9e8041a1dbb335",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-34f51268b8561ffc"
     },
     {
       "id": "64989c88a13f99d7",
@@ -295664,7 +295451,8 @@
       "ai_geo_reason": "Explicitly stated Penza Region, Russia.",
       "ai_geo_fingerprint": "641a91d750114e8e996e877c9e9bf143a0cb7dd2ec6d62b4e33cabf5067512f6",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-6f2a881c6e2c384d"
     },
     {
       "id": "ee16e532799163a5",
@@ -295740,7 +295528,8 @@
       "category": "Arrests",
       "categories": [
         "Arrests",
-        "CBRN"
+        "CBRN",
+        "Legal / Judicial"
       ],
       "title": "Abdulghany Asserts Importance of Arresting Sarin Gas Stockpile Responsible",
       "summary": "Official statements emphasize the significance of arresting the individual responsible for sarin gas stock management.",
@@ -295767,10 +295556,29 @@
       "sources": [
         "سانا"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Abdul Ghani tells SANA: 'Habib's arrest is an important step for justice'",
+          "original_title": "Abdul Ghani à SANA: «L’arrestation de Habib est une étape importante pour la justice»",
+          "original_language": "fr",
+          "summary": "Abdul Ghani stated to SANA that the arrest of Habib marks an important milestone for justice in connection with chemical weapons dismantling.",
+          "published": "2026-07-16T07:00:00+00:00",
+          "source": "سانا",
+          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE1HN0gzSFNWS2t4ek5NS0pxYzRab2M3MDJLMzNSN0UzbXE3NG00Q0ZpTHctdFBtdDRZLWo3NVBKeXI0dEFBdUlWUQ?oc=5"
+        },
+        {
+          "title": "Arrest of the sarin official: a step in the dismantling of chemical weapons",
+          "original_title": "Arrestation du responsable du sarin : étape dans le démantèlement d’armes chimiques",
+          "original_language": "fr",
+          "summary": "Authorities announced the arrest of an official responsible for sarin, marking a major step in dismantling chemical weapons capabilities.",
+          "published": "2026-07-17T07:00:00+00:00",
+          "source": "سانا",
+          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFBtZGw1ZTdUMk15R3VzY0VsOUFwZTVOYjZVWHhvSW9HTVk2RUptOTZ1YWNjTXFGLS04cWZkVkkzc3dLSHJMWWRRYw?oc=5"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-07-16T07:00:00+00:00",
-      "last_reported": "2026-07-16T07:00:00+00:00",
+      "last_reported": "2026-07-17T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v3-specialist",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -295799,88 +295607,15 @@
       "ai_geo_reason": "Reported by SANA (Syrian Arab News Agency) concerning sarin gas stockpile management, implicitly tied to Syria.",
       "ai_geo_fingerprint": "ae6545039f29ac3a65c4772bbaae75ab36f0891419fc0044c7916308d8820035",
       "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "22fef7d71e62cea8",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Legal / Judicial",
-        "CBRN"
+      "actor_group": "",
+      "incident_id": "inc-1bbb19aa9cdeee94",
+      "source_article_fingerprints": [
+        "f48c7644c79d1b2e658f3a6fb9470f10e1308eab860b448d16bb3f0f9e0cf22a"
       ],
-      "title": "Abdul Ghani tells SANA: 'Habib's arrest is an important step for justice'",
-      "summary": "Abdul Ghani stated to SANA that the arrest of Habib marks an important milestone for justice in connection with chemical weapons dismantling.",
-      "original_title": "Abdul Ghani à SANA: «L’arrestation de Habib est une étape importante pour la justice»",
-      "original_summary": "Abdul Ghani à SANA: «L’arrestation de Habib est une étape importante pour la justice» سانا",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French",
-      "collection_locale": "FR:fr",
-      "published": "2026-07-16T07:00:00+00:00",
-      "source": "سانا",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE1HN0gzSFNWS2t4ek5NS0pxYzRab2M3MDJLMzNSN0UzbXE3NG00Q0ZpTHctdFBtdDRZLWo3NVBKeXI0dEFBdUlWUQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Syria",
-      "country_code": "SY",
-      "city": "Damascus",
-      "region": null,
-      "latitude": 33.5102,
-      "longitude": 36.29128,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "سانا"
-      ],
-      "related_articles": [
-        {
-          "title": "Arrest of the sarin official: a step in the dismantling of chemical weapons",
-          "original_title": "Arrestation du responsable du sarin : étape dans le démantèlement d’armes chimiques",
-          "original_language": "fr",
-          "summary": "Authorities announced the arrest of an official responsible for sarin, marking a major step in dismantling chemical weapons capabilities.",
-          "published": "2026-07-17T07:00:00+00:00",
-          "source": "سانا",
-          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFBtZGw1ZTdUMk15R3VzY0VsOUFwZTVOYjZVWHhvSW9HTVk2RUptOTZ1YWNjTXFGLS04cWZkVkkzc3dLSHJMWWRRYw?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-07-16T07:00:00+00:00",
-      "last_reported": "2026-07-17T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Specific high-profile arrest related to chemical weapons dismantling and terrorism investigation.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "arrest of Habib by authorities in Syria",
-      "title_variants": [
-        "arrest of Habib by authorities in Syria"
-      ],
-      "dedup_confidence": 0.673,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "paraphrase_entity_context"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "سانا"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Reported by SANA regarding the arrest of 'Habib' and chemical weapons dismantling in Syria.",
-      "ai_geo_fingerprint": "3f9300c5821ae44b9bf33ea72109eefb0f8513d8ba48011949e53ce9b1aa033b",
-      "ai_geo_inferred": true,
-      "actor_group": ""
+        "same_incident"
+      ]
     },
     {
       "id": "0751a4c2c764b87a",
@@ -295944,7 +295679,9 @@
       "ai_geo_reason": "Explicitly stated location: South London, UK.",
       "ai_geo_fingerprint": "fcbd65a206459db5d790701735ab8711730c8a61646148130fade0725aa5e65e",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-d2995ce7e88e5029",
+      "incident_anchor": "UK mosque terror plot court appearance 2026"
     },
     {
       "id": "beef4c9d6ba1a1cd",
@@ -296006,7 +295743,8 @@
       "ai_geo_reason": "Explicitly stated Altai Krai, Russia.",
       "ai_geo_fingerprint": "843fba8cacc8b7c7a64f1cadd6a4113ca4b412c9a69a38ecd49a75dd516ba3f3",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-0561d75134cb990b"
     },
     {
       "id": "a260a7cf8e496edf",
@@ -296114,7 +295852,8 @@
       "ai_geo_reason": "Occurred during IDF operations in the Gaza Strip.",
       "ai_geo_fingerprint": "f1c10fce262e27ee0f2b222ce5e5bcd4623cae5eed26a1ac7d8d7e6c5d808404",
       "ai_geo_inferred": true,
-      "actor_group": "Hamas"
+      "actor_group": "Hamas",
+      "incident_id": "inc-a5975a577ca00e72"
     },
     {
       "id": "5c74455cb6c784e9",
@@ -296242,74 +295981,8 @@
       "ai_geo_reason": "The suspect attempted to enter Israel; exact border crossing city not specified, so placed at country level of Israel.",
       "ai_geo_fingerprint": "e15774cf67c12ddd53096864cafce85b32e7cdd46195e66ca067d017b489715c",
       "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "fffc47ed458441d1",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "ReCAAP ISC: Two Incidents of Armed Robbery 7-14 July",
-      "summary": "The ReCAAP Information Sharing Centre reported two new incidents of armed robbery against ships between July 7 and 14.",
-      "original_title": "ReCAAP ISC: Two incidents of armed robbery 7-14 July",
-      "original_summary": "ReCAAP ISC: Two incidents of armed robbery 7-14 July safety4sea.com",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-15T07:00:00+00:00",
-      "source": "safety4sea.com",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQb3Y1RjJFdXY0MG9DMzN3RlE2am9xVk1BY1BQc09uc0czZEU4S2dOVjZoQlVlTFhJMHFQdkJqNkhvdEE4MHMyb3BsTUhpVm5JYVVzSnpJNkgySGhYVmV2eEtiQ0JnODRneFVfRTdNZEx5alVua0d3b05IYzdUWGducw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Singapore",
-      "country_code": "SG",
-      "city": "Singapore",
-      "region": null,
-      "latitude": 1.28967,
-      "longitude": 103.85007,
-      "location_precision": "city",
-      "location_confidence": "medium",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "SAFETY4SEA",
-      "targeted_source_kind": "specialist_media",
-      "sources": [
-        "safety4sea.com"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-15T07:00:00+00:00",
-      "last_reported": "2026-07-15T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 70,
-      "ai_relevance_reason": "Official maritime reporting of armed robbery at sea incidents.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "ReCAAP ISC reports two armed robbery incidents against ships",
-      "title_variants": [
-        "ReCAAP ISC reports two armed robbery incidents against ships"
-      ],
-      "location_confidence_score": 0.8,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "ReCAAP ISC: Two Incidents of Armed Robbery 7-14 July"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": true,
-      "ai_geo_rescue_status": "located",
-      "ai_geo_rescue_model": "gemini-3.6-flash",
-      "ai_geo_rescue_reason": "ReCAAP ISC is based in Singapore and primary reporting focuses on Singapore Strait and Asian maritime incidents.",
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "ReCAAP ISC is based in Singapore and primary reporting focuses on Singapore Strait and Asian maritime incidents.",
-      "ai_geo_fingerprint": "336e36c4e4d658c09fa459dc3e9f6d9b10cbbc4989fdacab178c1106a6bedea6",
-      "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-77909024ccaf032c"
     },
     {
       "id": "c0ffb4aff5a778b8",
@@ -296377,7 +296050,8 @@
       "ai_geo_reason": "The judicial proceedings took place at the High Court of Niamey, Niger.",
       "ai_geo_fingerprint": "82d8d68635e9b7d834f7abae355dab330878be8c7fc5adab1e0a83b263d28c6c",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-36230f69dc9a5aba"
     },
     {
       "id": "499c424fcedc1e0c",
@@ -296478,70 +296152,8 @@
         "6fb58425b24ed2b31da780f3f67c73d9a00aaa797e168305d5556c3cf59b66ae",
         "c26b1162d0451c6ad60264b16563019af88794d8020d0a2278f3b872a7b90ef9"
       ],
-      "actor_group": "ISWAP"
-    },
-    {
-      "id": "e621e299c5df83d5",
-      "category": "Arrests",
-      "categories": [
-        "Arrests"
-      ],
-      "title": "Ann Widdecombe suspect re-arrested under terrorism act",
-      "summary": "A suspect linked to the killing/investigation involving Ann Widdecombe has been re-arrested under the Terrorism Act in the UK.",
-      "original_title": "Ann Widdecombe suspect re-arrested under terrorism act",
-      "original_summary": "Ann Widdecombe suspect re-arrested under terrorism act Sky News",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-14T07:00:00+00:00",
-      "source": "Sky News",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOOTFMMUlsNnA1UnpUZDdNZWVCcHNhcUcyZnRlTlJWMDJhWGJyam4xY3VZS2I5NHB3NXJqRUltVHhVVHJIb1phTWdHNDQ2UUUxSEtlQVR5VmxLWVJfR01PczQ3bmdRLUtSRHBjS1lDd2o0cUxFZWpnS3pkMkkxaVhLdHFueFRfZGlVMTM0MFQ3LVljdEhrbTBLWk53?oc=5",
-      "collector": "Google News RSS",
-      "country": "United Kingdom",
-      "country_code": "GB",
-      "city": "London",
-      "region": null,
-      "latitude": 51.50853,
-      "longitude": -0.12574,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "Sky News",
-      "targeted_source_kind": "international_media",
-      "sources": [
-        "Sky News"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-14T07:00:00+00:00",
-      "last_reported": "2026-07-14T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Current counter-terrorism arrest and investigation development.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "re-arrest of suspect under terrorism act in the United Kingdom",
-      "title_variants": [
-        "re-arrest of suspect under terrorism act in the United Kingdom"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "under the Terrorism Act in the UK"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The arrest took place in the UK under UK legislation.",
-      "ai_geo_fingerprint": "710ffec46ace7f5dd82cb5cd12d35be9dfde1ad511171f2605e593a96b2dc265",
-      "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "ISWAP",
+      "incident_id": "inc-9181db54821a12ea"
     },
     {
       "id": "1b32c9fc696d5e89",
@@ -296606,7 +296218,8 @@
       "ai_geo_rescue_status": "unlocated_final",
       "ai_geo_rescue_model": "gemini-3.6-flash",
       "ai_geo_rescue_reason": "UN regional report covering West Africa and the Sahel.",
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-156eb8c2ab2b4414"
     },
     {
       "id": "0e53f85261e15e88",
@@ -296698,7 +296311,8 @@
       "source_article_fingerprints": [
         "90e78c7845650bc0fad2a7213d0b9e1322f9bde66822dc66c06083174d6707e4"
       ],
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-de0ebc04a47059da"
     },
     {
       "id": "62d5fa23a8d27f19",
@@ -296759,7 +296373,8 @@
       "ai_geo_reason": "Explicitly states the man was arrested in Melilla, Spain.",
       "ai_geo_fingerprint": "c798af023f8e4350de8aa0020ed76fb5faf0d73d8629bfeee50dc82f143e6a34",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-316146309c996d25"
     },
     {
       "id": "5e1eaefebd12bc43",
@@ -296845,7 +296460,8 @@
       "ai_geo_reason": "The attack preparation and FSB detention occurred in the Moscow region, Russia.",
       "ai_geo_fingerprint": "b6ccae22fd07df5a8ef0800cf928286aaa28e85523377ae91b39d27f8eb3086c",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-5de39feaeecc5b69"
     },
     {
       "id": "7863a62af85c4e90",
@@ -296912,7 +296528,8 @@
       "ai_geo_reason": "The report analyzes maritime piracy trends across Asia.",
       "ai_geo_fingerprint": "e4322275a00d79c75c02264a9f97aa235c926b3b5040f335fa5a2606e760d0ac",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-5cc96b723ce1fdb4"
     },
     {
       "id": "886e61cfb25e9b8d",
@@ -296930,7 +296547,7 @@
       "collection_locale": null,
       "published": "2026-07-14T07:00:00+00:00",
       "source": "TradeWinds News",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxPX2RUSXBNc3NoSTZ0OHl4WjNuX3RwSENzVDVETklBSHlnOHdkbXJuenZoU0FQNS1HRjVoWWMyQ2R6X0V0VU9xMThqQ1M3VXVGbW1RYWNOYmp6NXcxc0V4QW1YT3JaWWV4SldpaG1vMUhydjNUY3QtYkNBUzMyLXBubWxSNDZJNS00aEhVakFKX3RNZ3VpU0NJQUstY3lVTWlCODF4Y1JCc1kta2dUS3FuaC1NRV9VaGgyVFRpblFtYi1RTU1Rb1V5UVl3?oc=5",
       "collector": "Google News RSS",
       "country": "Singapore",
@@ -296945,16 +296562,27 @@
       "targeted_source": "TradeWinds",
       "targeted_source_kind": "specialist_media",
       "sources": [
-        "TradeWinds News"
+        "TradeWinds News",
+        "safety4sea.com"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "ReCAAP ISC: Two Incidents of Armed Robbery 7-14 July",
+          "original_title": "ReCAAP ISC: Two incidents of armed robbery 7-14 July",
+          "original_language": "en",
+          "summary": "The ReCAAP Information Sharing Centre reported two new incidents of armed robbery against ships between July 7 and 14.",
+          "published": "2026-07-15T07:00:00+00:00",
+          "source": "safety4sea.com",
+          "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQb3Y1RjJFdXY0MG9DMzN3RlE2am9xVk1BY1BQc09uc0czZEU4S2dOVjZoQlVlTFhJMHFQdkJqNkhvdEE4MHMyb3BsTUhpVm5JYVVzSnpJNkgySGhYVmV2eEtiQ0JnODRneFVfRTdNZEx5alVua0d3b05IYzdUWGducw?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-07-14T07:00:00+00:00",
-      "last_reported": "2026-07-14T07:00:00+00:00",
+      "last_reported": "2026-07-15T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v3-specialist",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 60,
+      "ai_relevance_score": 70,
       "ai_relevance_reason": "Maritime security trends regarding armed robbery at sea.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -296979,7 +296607,13 @@
       "ai_geo_reason": "The security improvements and incidents occurred in the Singapore Strait.",
       "ai_geo_fingerprint": "46dc5de594e3b0c30474bc6114a0c4db85b17e066c9ade4278fce333db334bdd",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-8918d4d87ea3905d",
+      "source_article_fingerprints": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "03233f8322546fda",
@@ -297046,7 +296680,8 @@
       "ai_geo_reason": "The Malian army airstrike targeted a hideout located between Bougouni and Kadiana, Mali.",
       "ai_geo_fingerprint": "72763fa641c5c00c802f1816440db402865e1da5b8d08d4f4c62470f58777de9",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-784e0a6c7128e607"
     },
     {
       "id": "2017fff297c00566",
@@ -297113,7 +296748,8 @@
       "ai_geo_reason": "Operations conducted by NISA against Al-Shabaab within Somalia.",
       "ai_geo_fingerprint": "65ba47c8930172f993ed6b63df7a2489fbcacc179992abcc56ae4218bb36b578",
       "ai_geo_inferred": false,
-      "actor_group": "Al-Shabaab"
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-587704781dd890f7"
     },
     {
       "id": "99bc34072b2483ed",
@@ -297182,7 +296818,8 @@
       "ai_geo_reason": "Israeli media and context indicating Israel.",
       "ai_geo_fingerprint": "6bba6b82a69ee580ba64b026a56b3760d4043c02fd2da56ae3c5d2d6c33438fb",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-49684260f25cd2dd"
     },
     {
       "id": "0b64eef5efae9c97",
@@ -297242,7 +296879,8 @@
       "ai_geo_reason": "Explicitly states the suspect was arrested in Rawalpindi.",
       "ai_geo_fingerprint": "f7020ec7994ca903e2960cf1595488089436186b14b77fe2d01a94750ed52b80",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-64ff45ce55ff7c55"
     },
     {
       "id": "9ba625a3879ec12f",
@@ -297302,7 +296940,8 @@
       "ai_geo_reason": "Explicitly states the arrest took place in Katihar, India.",
       "ai_geo_fingerprint": "7f04cd5c81c0bc09482633c388703779c9e0a727f715f157e9cb33700effcbd7",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-1356588ec1cc89c0"
     },
     {
       "id": "f133f21167db97cc",
@@ -297463,7 +297102,8 @@
       "ai_geo_reason": "The arrests were made by UK police.",
       "ai_geo_fingerprint": "c449b74238126e69224b3c60ee348fcbfb0682460336ea6c9a5c82d6133e40a1",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-1f25d45a932a9254"
     },
     {
       "id": "622de354e65ca51e",
@@ -297524,7 +297164,8 @@
       "ai_geo_reason": "The fake video and threatened attack target France.",
       "ai_geo_fingerprint": "24e71ead99d8344beff8c901af8a59ded74bf4faa6105d55ed8fc4f05e548a95",
       "ai_geo_inferred": true,
-      "actor_group": "Hezbollah"
+      "actor_group": "Hezbollah",
+      "incident_id": "inc-1b49851ae0430842"
     },
     {
       "id": "5ece40f9d30340d1",
@@ -297589,7 +297230,8 @@
       "ai_geo_rescue_status": "unlocated_final",
       "ai_geo_rescue_model": "gemini-3.6-flash",
       "ai_geo_rescue_reason": "Abstract analytical article regarding AI terrorism threats.",
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-4b78043da659571b"
     },
     {
       "id": "99bc34072b2483ed",
@@ -297654,7 +297296,8 @@
       "ai_geo_rescue_status": "unlocated_final",
       "ai_geo_rescue_model": "gemini-3.6-flash",
       "ai_geo_rescue_reason": "Theoretical commentary on AI exploitation by global terror networks.",
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-5c74c11f560c0469"
     },
     {
       "id": "99bc34072b2483ed",
@@ -297672,7 +297315,7 @@
       "collection_locale": "SA:ar",
       "published": "2026-07-13T07:00:00+00:00",
       "source": "TRT عربي",
-      "source_count": 2,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE1wNFRPQ3NWeExoVldZdUxBZDVPQ2M0Q0kyMVg1NGRyQ0lWQW5aVzdmY001a1RYWG1oQWstN0djalhLVmRtMjh1M3R6VUVJZEk2bEVOZEUtWmQ?oc=5",
       "collector": "Google News RSS",
       "country": "Syria",
@@ -297686,7 +297329,8 @@
       "acquisition_channel": "multilingual_discovery",
       "sources": [
         "الشرق الأوسط",
-        "TRT عربي"
+        "TRT عربي",
+        "TRT Haber"
       ],
       "related_articles": [
         {
@@ -297706,15 +297350,24 @@
           "published": "2026-07-13T07:00:00+00:00",
           "source": "الشرق الأوسط",
           "url": "https://news.google.com/rss/articles/CBMiqARBVV95cUxQSmNVY1NzdzNVdEVFUEctSWJlWHNHRkR0RXRSZWt5UGtZVTRPR3JSa1hCNlprWEQzXzFsUGd4TUtkVXBzOUpocjVTN2MtamhNT05NQ1RLclhaaHI5M3l0YmpQUFpELW9mLVRka050bFJJYlh3UmRWdkZTU2hkWDRHWHlBVnhpUGhhbDRqR1FHdFp0SHR5b2xOa0t3LUR5QUk5MjFQek8xcnREUld5RmN0RDdoQ2tlSWZnaGJ3M19lYThtOUlDRzNvRnkyc0hhNGlRQ0pxSkxTY2ktaTFhZWVsb0x0aGJSY000SU9YSFo1a0hVLVdkTHBxb19OZnYtQkRsTDFrQjFHdjMzMGM5T185MXp6a2gwY3dORjNuOTNoVlhYU3lZTU5teWIzZkFUdE9kQzdRRmUwSUhDWF9sd1p5ZHJib0IyaXJWbmQ0aHdFQ0dYMTZBMzhxMjY4alhlSHhZUjhmQTZuR1F1N1pQNXVNdEx4YnhXVVFSeUZhTkdGMTQwQllyOVlsMXdBSFN0THBIcm9ETlRCanRXVFJ5VHUtVmlXUDJVb0lSb2xnaGhXbnRmUG1xWXBxLUxRQlRFS182SEVMczNITzI3c2t0dUNVZ0FsMy1xT29hdXNpem9XeGVsSS1EMmVqZmVtbXJCRlZjQzhEc3hZUU81MlZVWlZvQU9LeFd3dWNUUHV6NHpSYUhVaVBsdGZuWFB5dVFVSUViMWg1QjZQclE?oc=5"
+        },
+        {
+          "title": "Cross-border ISIS operation by Turkish MIT",
+          "original_title": "MİT'ten sınır ötesinde DEAŞ operasyonu",
+          "original_language": "tr",
+          "summary": "Turkey's National Intelligence Organization (MIT) has conducted a cross-border counter-terrorism operation targeting ISIS.",
+          "published": "2026-07-13T07:00:00+00:00",
+          "source": "TRT Haber",
+          "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQTXpDX00yTW43Ry1BVUFsRk1JYzJDRWxKUXNJWU9RQzdBLUdjSDE4RHRpZXA4Njd1NkV1S1gzRVVXOHNtMkZ2STJ6S0FfdjhLWTVhUHFDbHMwWG5XbzFwVFVCTFlmUHVvWXV4bjRfR2dNSms1amlSdGxYcDJpUVNndGhNbHp1elFHdTQweExkTWI?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 3,
       "first_reported": "2026-07-13T07:00:00+00:00",
       "last_reported": "2026-07-13T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
+      "ai_relevance_score": 90,
       "ai_relevance_reason": "Direct operational counter-terrorism arrest of a terrorist leader.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -297723,9 +297376,10 @@
       "title_variants": [
         "Arrest of ISIS commander by Turkey in security operation in Syria"
       ],
-      "dedup_confidence": 0.611,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "actor_country_action_signature"
+        "actor_country_action_signature",
+        "same_incident"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_country_capital",
@@ -297739,7 +297393,9 @@
       "ai_geo_reason": "The cross-border operation by Turkish intelligence took place inside Syria.",
       "ai_geo_fingerprint": "e90740484607ec9fe05226b947da8eecf8e99de9ff96aef91058092b01c4a80f",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-08f2246aa81576d4",
+      "source_article_fingerprints": []
     },
     {
       "id": "ba94e0c1f3e195ff",
@@ -297800,70 +297456,8 @@
       "ai_geo_reason": "The trial and conviction took place in a German court.",
       "ai_geo_fingerprint": "763942a7231e5fe0f374d995594507066d2e65bda974769e2414a24c59a3f2ab",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
-    },
-    {
-      "id": "a16692bd318411d5",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Cross-border ISIS operation by Turkish MIT",
-      "summary": "Turkey's National Intelligence Organization (MIT) has conducted a cross-border counter-terrorism operation targeting ISIS.",
-      "original_title": "MİT'ten sınır ötesinde DEAŞ operasyonu",
-      "original_summary": "MİT'ten sınır ötesinde DEAŞ operasyonu TRT Haber",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": "TR:tr",
-      "published": "2026-07-13T07:00:00+00:00",
-      "source": "TRT Haber",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQTXpDX00yTW43Ry1BVUFsRk1JYzJDRWxKUXNJWU9RQzdBLUdjSDE4RHRpZXA4Njd1NkV1S1gzRVVXOHNtMkZ2STJ6S0FfdjhLWTVhUHFDbHMwWG5XbzFwVFVCTFlmUHVvWXV4bjRfR2dNSms1amlSdGxYcDJpUVNndGhNbHp1elFHdTQweExkTWI?oc=5",
-      "collector": "Google News RSS",
-      "country": "Syria",
-      "country_code": "SY",
-      "city": "Damascus",
-      "region": null,
-      "latitude": 33.5102,
-      "longitude": 36.29128,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "trthaber.com",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "TRT Haber"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-13T07:00:00+00:00",
-      "last_reported": "2026-07-13T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Active intelligence-led cross-border operation against a designated terrorist group.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Turkish MIT cross-border counter-terrorism operation against ISIS",
-      "title_variants": [
-        "Turkish MIT cross-border counter-terrorism operation against ISIS"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Cross-border ISIS operation by Turkish MIT"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Turkey's MIT conducted a cross-border counter-terrorism operation targeting ISIS (typically in northern Syria).",
-      "ai_geo_fingerprint": "1cad0ba914803f54b29b976cce0a7b727d6aec7a0ffde08d064a6ae8988d0cbd",
-      "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-67e837110c327ef9"
     },
     {
       "id": "99bc34072b2483ed",
@@ -297925,7 +297519,8 @@
       "ai_geo_reason": "The FSB prevented attacks in the Amur and Chelyabinsk regions of Russia.",
       "ai_geo_fingerprint": "6db50346a15890aa9af654561b6489d8dcf50508b76904da1d8f021942a44c8c",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-536a0a824f7bbfaf"
     },
     {
       "id": "54d516a0b1e114db",
@@ -297992,7 +297587,8 @@
       "ai_geo_reason": "Attacks involving multiple pirate skiffs firing shots at commercial vessels off high seas traditionally occur in the Somali Basin / Gulf of Aden.",
       "ai_geo_fingerprint": "af83c7c4abde551eefbc56328799c3175b2b1f320122c5f52d6cb1042cc1a210",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-8627d7fe210e32a2"
     },
     {
       "id": "a81b454f7eeaaa71",
@@ -298027,14 +297623,24 @@
       "sources": [
         "Sky News"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Ann Widdecombe suspect re-arrested under terrorism act",
+          "original_title": "Ann Widdecombe suspect re-arrested under terrorism act",
+          "original_language": "en",
+          "summary": "A suspect linked to the killing/investigation involving Ann Widdecombe has been re-arrested under the Terrorism Act in the UK.",
+          "published": "2026-07-14T07:00:00+00:00",
+          "source": "Sky News",
+          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOOTFMMUlsNnA1UnpUZDdNZWVCcHNhcUcyZnRlTlJWMDJhWGJyam4xY3VZS2I5NHB3NXJqRUltVHhVVHJIb1phTWdHNDQ2UUUxSEtlQVR5VmxLWVJfR01PczQ3bmdRLUtSRHBjS1lDd2o0cUxFZWpnS3pkMkkxaVhLdHFueFRfZGlVMTM0MFQ3LVljdEhrbTBLWk53?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-07-12T14:46:12+00:00",
-      "last_reported": "2026-07-12T14:46:12+00:00",
+      "last_reported": "2026-07-14T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Direct operational involvement of counter-terrorism police units.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -298055,7 +297661,13 @@
       "ai_geo_reason": "The arrest involving Ann Widdecombe and counter-terrorism officers occurred in the United Kingdom.",
       "ai_geo_fingerprint": "381b40ff08a2455d55e38ab13187bed67262c2e06e6bbb385cec9b7af0ad7424",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-a2b70a5637443fc2",
+      "source_article_fingerprints": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "5708b710ff325796",
@@ -298186,7 +297798,9 @@
       "ai_geo_reason": "Deduplicated event corresponding to the weapons discovery in the Paris suburb of Sarcelles.",
       "ai_geo_fingerprint": "1874cea2470d804207ce91ee7dd29d4abcc4745b671ed2c6db44052561c36936",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-59a1827dc158bb84",
+      "incident_anchor": "Sarcelles synagogue weapons discovery 2026-07-12"
     },
     {
       "id": "c654a7b040cd5086",
@@ -298335,7 +297949,8 @@
       "ai_geo_reason": "Ein Shams is a district of Cairo, Egypt, where the court case is being tried.",
       "ai_geo_fingerprint": "2931958e07f377a64f1870074e870f80c73b906bdeff9e614f96785210149c80",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-69781db835f03c31"
     },
     {
       "id": "61ed818f312b061c",
@@ -298526,7 +298141,8 @@
       "ai_geo_reason": "Nationwide administrative action by Turkish authorities against social media accounts.",
       "ai_geo_fingerprint": "d9ccda3b984a182a1ae7297de34eba1964869e05ce74338d1e920956ebce3747",
       "ai_geo_inferred": true,
-      "actor_group": "FETÖ"
+      "actor_group": "FETÖ",
+      "incident_id": "inc-78d68909207220ef"
     },
     {
       "id": "c893b1ba40a01377",
@@ -298594,74 +298210,6 @@
       "incident_anchor": "Washuk labourers killing 2026-07-12",
       "update_type": "INITIAL",
       "incident_id": "inc-92761ff74a4515af"
-    },
-    {
-      "id": "3605d598884d4ac4",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Weapons"
-      ],
-      "title": "Anéfis: Over 1,000 terrorists neutralized, vehicles and equipment destroyed, says Army Chief of Staff",
-      "summary": "The Malian Army Chief of Staff reported that over 1,000 terrorists were neutralized and numerous armored vehicles and motorcycles were destroyed in Anéfis.",
-      "original_title": "Anéfis : plus de 1 000 terroristes neutralisés, 14 blindés, 24 véhicules armés et 300 motos détruits, selon le Chef d'État-major des Armées.",
-      "original_summary": "Anéfis : plus de 1 000 terroristes neutralisés, 14 blindés, 24 véhicules armés et 300 motos détruits, selon le Chef d'État-major des Armées. malijet.com",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French / Africa",
-      "collection_locale": "FR:fr",
-      "published": "2026-07-12T07:00:00+00:00",
-      "source": "malijet.com",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOOEZRS0pnc0V1WDJ2WlpDVkJwLThRTjUxOWpTamEycXVXaldtYmRjLW1uU1pvbUlxVkVVbWFLRGR0N2ZfWnE3alF3Z0g2Q2JmZHV3VlUxU2JzMTZPaTNoOXhCYUtKMThqN2sxcC1HcFVSNExFdDFaaDFHS0hfQmVHdGRiM1hYbUlaVW5hY3NzMzVtU3hsLVJDQ2NsOHRIb1RpSlVUdFdJRQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Mali",
-      "country_code": "ML",
-      "city": "Anéfis",
-      "region": null,
-      "latitude": 18.0069,
-      "longitude": 0.1706,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "malijet.com",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "malijet.com"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-12T07:00:00+00:00",
-      "last_reported": "2026-07-12T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Significant official military report on a major counter-terrorism operation and equipment seizure/destruction.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "military announcement of over 1,000 terrorists neutralized and equipment destroyed in Anéfis, Mali",
-      "title_variants": [
-        "military announcement of over 1,000 terrorists neutralized and equipment destroyed in Anéfis, Mali"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_coordinates",
-      "location_evidence": [
-        "Anéfis"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The military operation and neutralization of terrorists occurred in Anéfis, Mali.",
-      "ai_geo_fingerprint": "5b3a2d5ace5ea6c01943cc20dd8c9509e8f73acdc7e24dec72fce553cbf9e0b2",
-      "ai_geo_inferred": false,
-      "actor_group": ""
     },
     {
       "id": "c33ab167a08b01b8",
@@ -298942,7 +298490,8 @@
         "b5469ed0d9f870ebefffdaeac6008eb0270658b7e95ff0c59dd0d2f886b9eaf3",
         "d16830aaed38ae2eaf2b9740bc5e6040c2fba001a52df83c02d4b703abf6ca92"
       ],
-      "actor_group": "Al-Shabaab"
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-2e68c0cfe50c0128"
     },
     {
       "id": "86672365ec383b4b",
@@ -299011,7 +298560,8 @@
       "ai_geo_reason": "Manchester, UK local news source covering a local suspect charge.",
       "ai_geo_fingerprint": "7358c41c20446db6ab6fa822556b2254b3f5fcb4e1c40c7ae5e57219f6b70cd7",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-651b7e65e8fc93c6"
     },
     {
       "id": "d1cd54e1aa05bb09",
@@ -299075,7 +298625,8 @@
       "ai_geo_reason": "Designation of a Sudanese militant group by the EU; the entity and conflict belong to Sudan.",
       "ai_geo_fingerprint": "1f1e801ed50de8b0a8379d1e0f72abf3c1d890e495dd5284d24ce955cd0eaa55",
       "ai_geo_inferred": true,
-      "actor_group": "Rapid Support Forces"
+      "actor_group": "Rapid Support Forces",
+      "incident_id": "inc-665e0929f58fc10c"
     },
     {
       "id": "ad5625f13cbb57fb",
@@ -299136,7 +298687,8 @@
       "ai_geo_reason": "Boko Haram primarily operates in Nigeria and the surrounding Lake Chad region.",
       "ai_geo_fingerprint": "a5dddbd424137513d9cf928769eb45b6688bd860920ee063d1ac2c0b8ea7574e",
       "ai_geo_inferred": true,
-      "actor_group": "Boko Haram"
+      "actor_group": "Boko Haram",
+      "incident_id": "inc-298c5bc7f4a2a84c"
     },
     {
       "id": "f9aca6a7a58b5517",
@@ -299201,74 +298753,8 @@
       "ai_geo_rescue_status": "unlocated_final",
       "ai_geo_rescue_model": "gemini-3.6-flash",
       "ai_geo_rescue_reason": "Report on internal propaganda/directives released by Islamic State leadership globally/online.",
-      "actor_group": "ISIS"
-    },
-    {
-      "id": "d82b2197f4c10cae",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Battle of Anéfis: Chief of Staff assures the situation is under control",
-      "summary": "The Malian Chief of Staff has assured the public that the security situation following the battle of Anéfis is under control.",
-      "original_title": "Bataille d'Anéfis : le Chef d'État-major assure que la situation est sous contrôle",
-      "original_summary": "Bataille d'Anéfis : le Chef d'État-major assure que la situation est sous contrôle malijet.com",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French / Africa",
-      "collection_locale": "FR:fr",
-      "published": "2026-07-11T07:00:00+00:00",
-      "source": "malijet.com",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQZWo0bWstZFRlZm1GWWZSWU1va3hfemtYd0pwdmh3QnA5MU91SEplWDdPYTNxTXU3Zzh5SjE5RU5hTWtKeWJRamhIeEVZOFRIYXhCdkFEYXBjbGZPU3dpYXNEU0F6UzhabXFzV1Bva2ZJM3lvOEtvNTNZUnhHMlFZQ3hqYUQ4eUY2Y0x0T0Z1cm81S2NPQmNHSUg4c1h3TEF0WVh3bkQtR0U?oc=5",
-      "collector": "Google News RSS",
-      "country": "Mali",
-      "country_code": "ML",
-      "city": "Anéfis",
-      "region": null,
-      "latitude": 17.7811,
-      "longitude": 0.4633,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "malijet.com",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "malijet.com"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-11T07:00:00+00:00",
-      "last_reported": "2026-07-11T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 65,
-      "ai_relevance_reason": "Official operational update concerning an active counter-terrorism military campaign.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Malian military leadership provides security update following the battle of Anéfis",
-      "title_variants": [
-        "Malian military leadership provides security update following the battle of Anéfis"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_city_coordinates",
-      "location_evidence": [
-        "Battle of Anéfis"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Security situation following the battle of Anéfis in Mali.",
-      "ai_geo_fingerprint": "f01578e198ef2350a0cd96c2e036bbee2040326fd53b254c925785c20b997ee7",
-      "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "ISIS",
+      "incident_id": "inc-3947239c87b06faa"
     },
     {
       "id": "29dd283ded635327",
@@ -299335,7 +298821,8 @@
       "ai_geo_reason": "Hostage rescue operation in Oyo State, Nigeria.",
       "ai_geo_fingerprint": "222d73683b3ec18efd6ad10124719d9c5cd05b1cab679275aaad8d772ebb8700",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-629d6f9135d2d716"
     },
     {
       "id": "375249088682185f",
@@ -299399,7 +298886,8 @@
       "ai_geo_reason": "Greek counter-terrorism police operations indicate Greece as the event country.",
       "ai_geo_fingerprint": "8b026ee26105168fc58b8da884169c86909f56c382d4dfc11dd95ed71af455ec",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-0bd963c35fb3ef45"
     },
     {
       "id": "2e581dda1d7c43c6",
@@ -299509,7 +298997,8 @@
       "source_article_fingerprints": [
         "5c6ee5e179a634746c82fc55ee0eba3f015b9539cf8475c1e5163539fe37edd4"
       ],
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-6b4e5526e33f0184"
     },
     {
       "id": "cb34c56df8ff736e",
@@ -299571,7 +299060,8 @@
       "ai_geo_reason": "Arab citizens of Israel charged with a terrorist plot inside Israel.",
       "ai_geo_fingerprint": "fcf035be7d4cd71c768f62caccae4e6c905d12f651b4f886c88b79b6953a6df1",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-80fd2f96ccc1f5b7"
     },
     {
       "id": "bb8db022ddedfae6",
@@ -299632,7 +299122,8 @@
       "ai_geo_reason": "Tunisian legislative/political dispute involving the Ennahda movement in Tunisia.",
       "ai_geo_fingerprint": "e021a0dc0fd8329ff490d8eefc46d63ec151957a8d74f71d2d8d0e3fb1ab8d3e",
       "ai_geo_inferred": true,
-      "actor_group": "Ennahda"
+      "actor_group": "Ennahda",
+      "incident_id": "inc-a6655dbf878bb78f"
     },
     {
       "id": "d5dc4c0317b2141d",
@@ -299694,147 +299185,8 @@
       "ai_geo_reason": "Arrests carried out by Spanish authorities for online propaganda.",
       "ai_geo_fingerprint": "70ac39c0d3b6a8ec80d99b93584842a6efdecf8268261203419d8f5e92e376e8",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
-    },
-    {
-      "id": "759af7467c64c574",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Arrests"
-      ],
-      "title": "Syria Captures ISIS Cell Linked to Damascus Attacks",
-      "summary": "Syrian authorities have captured an Islamic State cell linked to the recent attacks in Damascus.",
-      "original_title": "Siria captura célula del EI vinculada a atentados en Damasco",
-      "original_summary": "Siria captura célula del EI vinculada a atentados en Damasco dw.com",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish",
-      "collection_locale": "ES:es",
-      "published": "2026-07-10T07:00:00+00:00",
-      "source": "dw.com",
-      "source_count": 7,
-      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNelJ2UHl6cjE5a1M0dHpHMXNfdW1oZWU1SHlSTUNZVUFIMXNQRWVJdWttS2FlcW1xMG1FOHE5alc1VW9pSUxfclRBeEZYQzMtMFNpaDJjM2E1STdmckhqaUFCTHJ4RVdKbXB6RG5USDdDWmp0azN2Q3FzRkg4X1I3ellhZUJPTDROYXdfVmFJM1M3Nm54Q1RqdFBLa0NKR2vSAZ8BQVVfeXFMTzFmRG50OEhMNTEwZG44OWNoQjktUG9Qc0M1aEc1M1FHVU5fMl9NQ25XekJ5NkJ6dHNKRFJOdHNFNDF2QldOSW8tWDJudUF1SXNDdG94by1nWFVEbUs3aVRheTFROWxhaHFYT0pjRDRBOHBHZEFyWllnaVh0S3ZVUzVKemR5NE8yQkRzaFMtZENKdl9lTEFsUTN0ck1kTTZR?oc=5",
-      "collector": "Google News RSS",
-      "country": "Syria",
-      "country_code": "SY",
-      "city": "Damascus",
-      "region": null,
-      "latitude": 33.5102,
-      "longitude": 36.29128,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "Infobae",
-        "dw.com",
-        "Diken",
-        "T24",
-        "sana.sy",
-        "حفريات",
-        "سانا"
-      ],
-      "related_articles": [
-        {
-          "title": "Syria Captures ISIS Cell Linked to Damascus Attacks",
-          "original_title": "Siria captura célula del EI vinculada a atentados en Damasco",
-          "original_language": "es",
-          "summary": "Syrian authorities have captured an Islamic State cell linked to the recent attacks in Damascus.",
-          "published": "2026-07-10T07:00:00+00:00",
-          "source": "dw.com",
-          "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNelJ2UHl6cjE5a1M0dHpHMXNfdW1oZWU1SHlSTUNZVUFIMXNQRWVJdWttS2FlcW1xMG1FOHE5alc1VW9pSUxfclRBeEZYQzMtMFNpaDJjM2E1STdmckhqaUFCTHJ4RVdKbXB6RG5USDdDWmp0azN2Q3FzRkg4X1I3ellhZUJPTDROYXdfVmFJM1M3Nm54Q1RqdFBLa0NKR2vSAZ8BQVVfeXFMTzFmRG50OEhMNTEwZG44OWNoQjktUG9Qc0M1aEc1M1FHVU5fMl9NQ25XekJ5NkJ6dHNKRFJOdHNFNDF2QldOSW8tWDJudUF1SXNDdG94by1nWFVEbUs3aVRheTFROWxhaHFYT0pjRDRBOHBHZEFyWllnaVh0S3ZVUzVKemR5NE8yQkRzaFMtZENKdl9lTEFsUTN0ck1kTTZR?oc=5"
-        },
-        {
-          "title": "Syrian Government Blames ISIS for Damascus Attacks During Macron's Visit",
-          "original_title": "El gobierno de Siria responsabilizó al Estado Islámico por los atentados en Damasco durante la visita de Emmanuel Macron",
-          "original_language": "es",
-          "summary": "The Syrian government has blamed the Islamic State for the terrorist attacks in Damascus that occurred during Emmanuel Macron's visit.",
-          "published": "2026-07-10T07:00:00+00:00",
-          "source": "Infobae",
-          "url": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxQZWRZSGd5M0ttd0RnRjhtMHoxQ0ZrbUk3YTU4TVFrSjdvTklSSjdSOXVtRGMxMUFoZW5Mc3luSUxQYUpSM3ktNVBiU1FMb3NLdFF0Z1FOcFVEckE5Y0h4aWFDWE02TW9ZbGVrbVlNSEo2VnRKaXlCZ0JKZ3pYUTFFZlBvLURLVWozdHJpZWxtTnpCNnZEVWJtRFFYaWREenZKeE9LWGpDb3YwQjJjdnVjNlYwN2FUY1RoWURqU3JhTVI2T2NuZ3lRZkcwNFpYMTlPdkNRX0RjVXJGZWZOSE1OMHdvYXVxQThTQzVBOTNkbjdVbXI2aE1NNDFydm1QMk3SAZoCQVVfeXFMTmNzdjJicmMwaUtwTktMbU5sMlg1c2k4UE9IR2lHcDNQRERXYzZlVUVveWRLYW9wR0RlUm1PV3NVRXo4dnlQTjMxVF9ob0taR1BiM0x6OFA2WEFXaTRuV203SG0xY2ZZZG9Mb1hXUlNCa2J4QlVnWjdJS2YxRnlMZkhOOWZFOUpyanJlbVBqUFZ0M1ZwOXJGSWpQSkx4WXluTkRsMHdPN1dYSFJ4YkxFNXkzeml2QXlfc2ZneE9EQ05IcFBiMGZkejltSEQ5cE5jSWtMNGJnR0F1OE9CVFFzWGx5a2VHMW9yWmJNdktvMWJMUmNKVjY2alhnY1hocGtrcy1SaVhNdDd2ZnZTTWdGLWl3ZWlXV0ZGNHdR?oc=5"
-        },
-        {
-          "title": "ISIS confirmed as perpetrator of attacks during Macron's Syria visit",
-          "original_title": "Macron'un Suriye ziyareti sırasındaki saldırıları IŞİD yapmış",
-          "original_language": "tr",
-          "summary": "Reports indicate that the terrorist organization ISIS was responsible for the attacks during Macron's visit to Syria.",
-          "published": "2026-07-13T07:00:00+00:00",
-          "source": "Diken",
-          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNVzQwdHJuc2NTRC1oeXY0UGxuSjBwN2R5RWZWYjFjN3R6MTVRM0dBdWZ0VTE2S2J0a08zMGlXWV9xVnh3bzBTaWxTTlVhZWhwNE5PYUJyMTN5RnFNcDZJYm9FaUhWNU5LdkhxMzNpWmNhNEtkU3NpZWxuYnhvS2QtVkQ4U0wxZVBaRlE4NHFiUQ?oc=5"
-        },
-        {
-          "title": "Syrian Interior Ministry announces bombers during Macron's visit were ISIS members",
-          "original_title": "Suriye İçişleri, Macron’un ziyareti sırasında bombalı saldırı düzenleyenlerin IŞİD üyesi olduğunu açıkladı",
-          "original_language": "tr",
-          "summary": "The Syrian Interior Ministry stated that the individuals who carried out the bombing during Macron's visit were members of ISIS.",
-          "published": "2026-07-13T07:00:00+00:00",
-          "source": "T24",
-          "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNaTRQSnEyejVFb2ZYREI1bzNRQVNEWWQ5QnBKQllOV291V3hZd3hTTXk3ZzZ6OFBVQ1FwNXdrRXdCWkhIb3R1OE5mUmpKakpzT3JtY0hGZlJVVExVbUVRc0ZpQ2cxTENkcVc2RmJxUVN4RG4tVDVBVnl2WlpTajVVRVhHcmVFYmZPeklpMXMzeUxPZWM5dkh1a3JyUU10NU1EblFHNzJtTVp4MmkwVEVJa0tBSlJPVFJLbWh0eWQ5WmVuY1VUU1FjcEdxbTdmX1o3OVdN?oc=5"
-        },
-        {
-          "title": "ISIS detainees confess to Mar Elias church bombing and other planned attacks",
-          "original_title": "ISIS detainees confess to Mar Elias church bombing and other planned attacks",
-          "original_language": "en",
-          "summary": "Detained ISIS members in Syria have confessed to their involvement in the Mar Elias church bombing and plotting additional attacks.",
-          "published": "2026-07-16T07:00:00+00:00",
-          "source": "sana.sy",
-          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFBPdW5kR2RpNzZMQUlIOWtYeko0RDMzdVJHbFh6NGtwT2JpZVpQeXRJTThWMzktZUNFOXJZZUpyUHJZbUtmbGJVaw?oc=5"
-        },
-        {
-          "title": "Syrian Ministry of Interior discloses ISIS plan for Mar Elias Church attack",
-          "original_title": "Suriye İçişleri Bakanlığı, DEAŞ’ın Mar İlyas Kilisesi Saldırısı Planını Açıkladı",
-          "original_language": "tr",
-          "summary": "The Syrian Interior Ministry released details concerning the ISIS plot behind the Mar Elias Church attack.",
-          "published": "2026-07-16T07:00:00+00:00",
-          "source": "سانا",
-          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFBIZzFvalRxLU1HNTFibTROUTdVZVh0VjFoQ1RhR2ZNWmJDbE9KTGRwYzNjcHc2dFFnVURqaG9razVhUnhldGNDcg?oc=5"
-        },
-        {
-          "title": "Syrian Interior Ministry Confirms Daesh Cell Implication in Damascus Attacks",
-          "original_title": "Interior sirio confirma la implicación de una célula de Daesh en atentados de Damasco",
-          "original_language": "es",
-          "summary": "The Syrian Interior Ministry confirmed the involvement of an ISIS/Daesh terrorist cell in attacks carried out in Damascus.",
-          "published": "2026-07-13T11:15:00+00:00",
-          "source": "sana.sy",
-          "url": "https://sana.sy/es/breaking-news/2321461/"
-        }
-      ],
-      "article_count": 7,
-      "first_reported": "2026-07-10T07:00:00+00:00",
-      "last_reported": "2026-07-16T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Direct reporting on terrorist attacks and official government attribution.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Arrest of ISIS terrorist cell linked to Damascus attacks by Syrian authorities",
-      "title_variants": [
-        "Attribution of Damascus attacks to ISIS by Syrian government"
-      ],
-      "dedup_confidence": 0.801,
-      "dedup_methods": [
-        "title_plus_anchor",
-        "actor_country_action_signature"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Syria Captures ISIS Cell Linked to Damascus Attacks"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly states Syrian authorities captured an ISIS cell linked to attacks in Damascus.",
-      "ai_geo_fingerprint": "979af0c8c4052fd17c5354dc1fbbb49d5573233d9b8ed8b35135af74bd3c0414",
-      "ai_geo_inferred": false,
-      "source_article_fingerprints": [
-        "22f6e749be1f8e1254d72e0ab6e4093f5a7064d06e8838f50404d540c9ee2fce"
-      ],
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-6df93b18beecac9b"
     },
     {
       "id": "842a2cc800978592",
@@ -299895,7 +299247,8 @@
       "ai_geo_reason": "Announcement by Moscow regarding thwarted terrorist attacks planned by Ukraine.",
       "ai_geo_fingerprint": "ccb1c556b310bb7fbf6d5a4392357b0c3d9f76f65c8c629cb0d013ef51713ed3",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-799bd6ad8f9244da"
     },
     {
       "id": "bb8db022ddedfae6",
@@ -300135,7 +299488,9 @@
       "ai_geo_reason": "Four Negev residents were charged with plotting a mass attack in Beersheba, Israel.",
       "ai_geo_fingerprint": "90cbcee146e1e835796d596fe4af8af7f2f4521ac6a52e6b4816a00cf41d9351",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-4bd985a7b096163f",
+      "incident_anchor": "Beersheba attack plot 2026-07-10"
     },
     {
       "id": "bb8db022ddedfae6",
@@ -300355,7 +299710,8 @@
       "id": "de395f6645dd4dfb",
       "category": "Counter Terrorism Action",
       "categories": [
-        "Counter Terrorism Action"
+        "Counter Terrorism Action",
+        "Weapons"
       ],
       "title": "Anéfis, Tabrichat and Koulébala localities: Nearly a hundred terrorists neutralized",
       "summary": "Malian security forces neutralized nearly a hundred terrorists during operations in the localities of Anéfis, Tabrichat, and Koulébala.",
@@ -300367,7 +299723,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-07-10T07:00:00+00:00",
       "source": "Maliweb",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQdXVkSEczU3R5aXZRMktiQjhGT3lBOC1WYjNkTFhwY2JaMGxwTHFFTVlZek9LSHlHQml5bmVkSlNEaHphekY4U194WXlfbGN5OVY2WVVXQzVsb2NucWk3RC1Vc0N6c2JZNEtCS1hXUmtOTjdHT1pqaFJoWndZd25YMW5lNlFyVTVZTFU2MFJpNnBHYldYZXFBZXVuU09jcFJEbTh3UXpUel96Sy1IVjFXWUZZQjU1Mlhoc0kxOHRaeFhpWm5mUmxyVVdzTUZTOE0?oc=5",
       "collector": "Google News RSS",
       "country": "Mali",
@@ -300385,12 +299741,32 @@
         "d5a08df56db675db07ba3de19d94f695624c8174f1f440378a9f1b6cb584d0ba"
       ],
       "sources": [
-        "Maliweb"
+        "Maliweb",
+        "malijet.com"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Battle of Anéfis: Chief of Staff assures the situation is under control",
+          "original_title": "Bataille d'Anéfis : le Chef d'État-major assure que la situation est sous contrôle",
+          "original_language": "fr",
+          "summary": "The Malian Chief of Staff has assured the public that the security situation following the battle of Anéfis is under control.",
+          "published": "2026-07-11T07:00:00+00:00",
+          "source": "malijet.com",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQZWo0bWstZFRlZm1GWWZSWU1va3hfemtYd0pwdmh3QnA5MU91SEplWDdPYTNxTXU3Zzh5SjE5RU5hTWtKeWJRamhIeEVZOFRIYXhCdkFEYXBjbGZPU3dpYXNEU0F6UzhabXFzV1Bva2ZJM3lvOEtvNTNZUnhHMlFZQ3hqYUQ4eUY2Y0x0T0Z1cm81S2NPQmNHSUg4c1h3TEF0WVh3bkQtR0U?oc=5"
+        },
+        {
+          "title": "Anéfis: Over 1,000 terrorists neutralized, vehicles and equipment destroyed, says Army Chief of Staff",
+          "original_title": "Anéfis : plus de 1 000 terroristes neutralisés, 14 blindés, 24 véhicules armés et 300 motos détruits, selon le Chef d'État-major des Armées.",
+          "original_language": "fr",
+          "summary": "The Malian Army Chief of Staff reported that over 1,000 terrorists were neutralized and numerous armored vehicles and motorcycles were destroyed in Anéfis.",
+          "published": "2026-07-12T07:00:00+00:00",
+          "source": "malijet.com",
+          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOOEZRS0pnc0V1WDJ2WlpDVkJwLThRTjUxOWpTamEycXVXaldtYmRjLW1uU1pvbUlxVkVVbWFLRGR0N2ZfWnE3alF3Z0g2Q2JmZHV3VlUxU2JzMTZPaTNoOXhCYUtKMThqN2sxcC1HcFVSNExFdDFaaDFHS0hfQmVHdGRiM1hYbUlaVW5hY3NzMzVtU3hsLVJDQ2NsOHRIb1RpSlVUdFdJRQ?oc=5"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-07-10T07:00:00+00:00",
-      "last_reported": "2026-07-10T07:00:00+00:00",
+      "last_reported": "2026-07-12T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v3-specialist",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -300419,7 +299795,12 @@
       "ai_geo_reason": "Localities such as Anéfis are in Mali where Malian security forces conducted operations.",
       "ai_geo_fingerprint": "ef489a38ee7e2383f86f99d336bafd2b88bc07ceea1d0cb7195472d1254d7952",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-c1618c144c96fb4f",
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "5a7cbac7fe77b211",
@@ -300488,7 +299869,8 @@
       "ai_geo_reason": "Explicitly New South Wales, Australia.",
       "ai_geo_fingerprint": "b180f23dbe3d098b736ab4319c24a0934e4bc6ae36bd5f59b58849515ba5acbb",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-f4ca31f212bf29d7"
     },
     {
       "id": "6d4d5c3e0f44ace3",
@@ -300563,7 +299945,8 @@
       "ai_geo_reason": "Two Californians indicted for planning an attack targeting a UFC event near the White House in Washington, D.C.",
       "ai_geo_fingerprint": "ae375da3f006ce3c2e0cb0b8a1337880b9d2869ae718e8b3ad472a49415acfed",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-fb190ed61e2fd4d1"
     },
     {
       "id": "948e524fc78fcd74",
@@ -300628,7 +300011,8 @@
       "dedup_methods": [
         "same_url"
       ],
-      "actor_group": "Ansaru"
+      "actor_group": "Ansaru",
+      "incident_id": "inc-b67fc0a031da7254"
     },
     {
       "id": "e20874bf86b5b25c",
@@ -300690,7 +300074,9 @@
       "ai_geo_reason": "Syrian authorities announced arrests related to bombings in Damascus.",
       "ai_geo_fingerprint": "7d0962f6a9f11fc1b28ed7e638c06b2e8aeeeaac2f35cb55d55554e8235f9d39",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-e2e78275e7f7b973",
+      "incident_anchor": "Damascus twin bombings 2026-07-07"
     },
     {
       "id": "90901b7c8427cfa8",
@@ -300699,18 +300085,18 @@
         "Counter Terrorism Action",
         "Arrests"
       ],
-      "title": "Syria: ISIS cells dismantled and prominent leaders arrested",
-      "summary": "Security forces in Syria have successfully dismantled ISIS sleeper cells and apprehended several prominent leaders.",
-      "original_title": "سورية: تفكيك خلايا لـ«داعش» والقبض على قيادات بارزة",
-      "original_summary": "سورية: تفكيك خلايا لـ«داعش» والقبض على قيادات بارزة عكاظ",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
+      "title": "Syria Captures ISIS Cell Linked to Damascus Attacks",
+      "summary": "Syrian authorities have captured an Islamic State cell linked to the recent attacks in Damascus.",
+      "original_title": "Siria captura célula del EI vinculada a atentados en Damasco",
+      "original_summary": "Siria captura célula del EI vinculada a atentados en Damasco dw.com",
+      "original_language": "es",
+      "collection_language": "es",
+      "collection_language_name": "Spanish",
+      "collection_locale": "ES:es",
       "published": "2026-07-09T07:00:00+00:00",
-      "source": "عكاظ",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5WYlE4cGJPZ0Z0YmxrUUxJVG1Lejk3Y2FNWVU0dGdJeXB3aUk4LWJXaV9YUG9vZWtWeUxNMkhBR3J2R2pkY2swU3NxUkFzTVR0M2V0aWpn0gFUQVVfeXFMTjliMW9mbXJVV3gyWlEzQ093ZTI4TUxxYlpEdlpIWHZSLVo3OEU0Vm55eVNFTF9SSnc5UHlRSHRNYkJNeGxnbnllRFhqd0QyNmMzWWJz?oc=5",
+      "source": "dw.com",
+      "source_count": 8,
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNelJ2UHl6cjE5a1M0dHpHMXNfdW1oZWU1SHlSTUNZVUFIMXNQRWVJdWttS2FlcW1xMG1FOHE5alc1VW9pSUxfclRBeEZYQzMtMFNpaDJjM2E1STdmckhqaUFCTHJ4RVdKbXB6RG5USDdDWmp0azN2Q3FzRkg4X1I3ellhZUJPTDROYXdfVmFJM1M3Nm54Q1RqdFBLa0NKR2vSAZ8BQVVfeXFMTzFmRG50OEhMNTEwZG44OWNoQjktUG9Qc0M1aEc1M1FHVU5fMl9NQ25XekJ5NkJ6dHNKRFJOdHNFNDF2QldOSW8tWDJudUF1SXNDdG94by1nWFVEbUs3aVRheTFROWxhaHFYT0pjRDRBOHBHZEFyWllnaVh0S3ZVUzVKemR5NE8yQkRzaFMtZENKdl9lTEFsUTN0ck1kTTZR?oc=5",
       "collector": "Google News RSS",
       "country": "Syria",
       "country_code": "SY",
@@ -300722,12 +300108,83 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "sources": [
-        "عكاظ"
+        "عكاظ",
+        "Infobae",
+        "dw.com",
+        "Diken",
+        "T24",
+        "sana.sy",
+        "حفريات",
+        "سانا"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Syrian Government Blames ISIS for Damascus Attacks During Macron's Visit",
+          "original_title": "El gobierno de Siria responsabilizó al Estado Islámico por los atentados en Damasco durante la visita de Emmanuel Macron",
+          "original_language": "es",
+          "summary": "The Syrian government has blamed the Islamic State for the terrorist attacks in Damascus that occurred during Emmanuel Macron's visit.",
+          "published": "2026-07-10T07:00:00+00:00",
+          "source": "Infobae",
+          "url": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxQZWRZSGd5M0ttd0RnRjhtMHoxQ0ZrbUk3YTU4TVFrSjdvTklSSjdSOXVtRGMxMUFoZW5Mc3luSUxQYUpSM3ktNVBiU1FMb3NLdFF0Z1FOcFVEckE5Y0h4aWFDWE02TW9ZbGVrbVlNSEo2VnRKaXlCZ0JKZ3pYUTFFZlBvLURLVWozdHJpZWxtTnpCNnZEVWJtRFFYaWREenZKeE9LWGpDb3YwQjJjdnVjNlYwN2FUY1RoWURqU3JhTVI2T2NuZ3lRZkcwNFpYMTlPdkNRX0RjVXJGZWZOSE1OMHdvYXVxQThTQzVBOTNkbjdVbXI2aE1NNDFydm1QMk3SAZoCQVVfeXFMTmNzdjJicmMwaUtwTktMbU5sMlg1c2k4UE9IR2lHcDNQRERXYzZlVUVveWRLYW9wR0RlUm1PV3NVRXo4dnlQTjMxVF9ob0taR1BiM0x6OFA2WEFXaTRuV203SG0xY2ZZZG9Mb1hXUlNCa2J4QlVnWjdJS2YxRnlMZkhOOWZFOUpyanJlbVBqUFZ0M1ZwOXJGSWpQSkx4WXluTkRsMHdPN1dYSFJ4YkxFNXkzeml2QXlfc2ZneE9EQ05IcFBiMGZkejltSEQ5cE5jSWtMNGJnR0F1OE9CVFFzWGx5a2VHMW9yWmJNdktvMWJMUmNKVjY2alhnY1hocGtrcy1SaVhNdDd2ZnZTTWdGLWl3ZWlXV0ZGNHdR?oc=5"
+        },
+        {
+          "title": "ISIS confirmed as perpetrator of attacks during Macron's Syria visit",
+          "original_title": "Macron'un Suriye ziyareti sırasındaki saldırıları IŞİD yapmış",
+          "original_language": "tr",
+          "summary": "Reports indicate that the terrorist organization ISIS was responsible for the attacks during Macron's visit to Syria.",
+          "published": "2026-07-13T07:00:00+00:00",
+          "source": "Diken",
+          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNVzQwdHJuc2NTRC1oeXY0UGxuSjBwN2R5RWZWYjFjN3R6MTVRM0dBdWZ0VTE2S2J0a08zMGlXWV9xVnh3bzBTaWxTTlVhZWhwNE5PYUJyMTN5RnFNcDZJYm9FaUhWNU5LdkhxMzNpWmNhNEtkU3NpZWxuYnhvS2QtVkQ4U0wxZVBaRlE4NHFiUQ?oc=5"
+        },
+        {
+          "title": "Syrian Interior Ministry announces bombers during Macron's visit were ISIS members",
+          "original_title": "Suriye İçişleri, Macron’un ziyareti sırasında bombalı saldırı düzenleyenlerin IŞİD üyesi olduğunu açıkladı",
+          "original_language": "tr",
+          "summary": "The Syrian Interior Ministry stated that the individuals who carried out the bombing during Macron's visit were members of ISIS.",
+          "published": "2026-07-13T07:00:00+00:00",
+          "source": "T24",
+          "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNaTRQSnEyejVFb2ZYREI1bzNRQVNEWWQ5QnBKQllOV291V3hZd3hTTXk3ZzZ6OFBVQ1FwNXdrRXdCWkhIb3R1OE5mUmpKakpzT3JtY0hGZlJVVExVbUVRc0ZpQ2cxTENkcVc2RmJxUVN4RG4tVDVBVnl2WlpTajVVRVhHcmVFYmZPeklpMXMzeUxPZWM5dkh1a3JyUU10NU1EblFHNzJtTVp4MmkwVEVJa0tBSlJPVFJLbWh0eWQ5WmVuY1VUU1FjcEdxbTdmX1o3OVdN?oc=5"
+        },
+        {
+          "title": "ISIS detainees confess to Mar Elias church bombing and other planned attacks",
+          "original_title": "ISIS detainees confess to Mar Elias church bombing and other planned attacks",
+          "original_language": "en",
+          "summary": "Detained ISIS members in Syria have confessed to their involvement in the Mar Elias church bombing and plotting additional attacks.",
+          "published": "2026-07-16T07:00:00+00:00",
+          "source": "sana.sy",
+          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFBPdW5kR2RpNzZMQUlIOWtYeko0RDMzdVJHbFh6NGtwT2JpZVpQeXRJTThWMzktZUNFOXJZZUpyUHJZbUtmbGJVaw?oc=5"
+        },
+        {
+          "title": "Syrian Ministry of Interior discloses ISIS plan for Mar Elias Church attack",
+          "original_title": "Suriye İçişleri Bakanlığı, DEAŞ’ın Mar İlyas Kilisesi Saldırısı Planını Açıkladı",
+          "original_language": "tr",
+          "summary": "The Syrian Interior Ministry released details concerning the ISIS plot behind the Mar Elias Church attack.",
+          "published": "2026-07-16T07:00:00+00:00",
+          "source": "سانا",
+          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFBIZzFvalRxLU1HNTFibTROUTdVZVh0VjFoQ1RhR2ZNWmJDbE9KTGRwYzNjcHc2dFFnVURqaG9razVhUnhldGNDcg?oc=5"
+        },
+        {
+          "title": "Syrian Interior Ministry Confirms Daesh Cell Implication in Damascus Attacks",
+          "original_title": "Interior sirio confirma la implicación de una célula de Daesh en atentados de Damasco",
+          "original_language": "es",
+          "summary": "The Syrian Interior Ministry confirmed the involvement of an ISIS/Daesh terrorist cell in attacks carried out in Damascus.",
+          "published": "2026-07-13T11:15:00+00:00",
+          "source": "sana.sy",
+          "url": "https://sana.sy/es/breaking-news/2321461/"
+        },
+        {
+          "title": "Syria: ISIS cells dismantled and prominent leaders arrested",
+          "original_title": "سورية: تفكيك خلايا لـ«داعش» والقبض على قيادات بارزة",
+          "original_language": "ar",
+          "summary": "Security forces in Syria have successfully dismantled ISIS sleeper cells and apprehended several prominent leaders.",
+          "published": "2026-07-09T07:00:00+00:00",
+          "source": "عكاظ",
+          "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5WYlE4cGJPZ0Z0YmxrUUxJVG1Lejk3Y2FNWVU0dGdJeXB3aUk4LWJXaV9YUG9vZWtWeUxNMkhBR3J2R2pkY2swU3NxUkFzTVR0M2V0aWpn0gFUQVVfeXFMTjliMW9mbXJVV3gyWlEzQ093ZTI4TUxxYlpEdlpIWHZSLVo3OEU0Vm55eVNFTF9SSnc5UHlRSHRNYkJNeGxnbnllRFhqd0QyNmMzWWJz?oc=5"
+        }
+      ],
+      "article_count": 8,
       "first_reported": "2026-07-09T07:00:00+00:00",
-      "last_reported": "2026-07-09T07:00:00+00:00",
+      "last_reported": "2026-07-10T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -300736,7 +300193,7 @@
       "ai_current_ct_event": true,
       "ai_selected": true,
       "translated_to_english": true,
-      "ai_canonical_event": "dismantling of ISIS cells and arrest of prominent leaders in Syria",
+      "ai_canonical_event": "Arrest of ISIS terrorist cell linked to Damascus attacks by Syrian authorities",
       "title_variants": [
         "dismantling of ISIS cells and arrest of prominent leaders in Syria"
       ],
@@ -300752,7 +300209,16 @@
       "ai_geo_reason": "ISIS cells dismantled and prominent leaders arrested in Syria.",
       "ai_geo_fingerprint": "20ac4afbe74f36050425dfd2057d3bcceb7ccc847dbf15b72aae7dc299d999d4",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-e2e78275e7f7b973",
+      "incident_anchor": "Damascus twin bombings 2026-07-07",
+      "source_article_fingerprints": [
+        "22f6e749be1f8e1254d72e0ab6e4093f5a7064d06e8838f50404d540c9ee2fce"
+      ],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "90901b7c8427cfa8",
@@ -300814,7 +300280,8 @@
       "ai_geo_reason": "Hackers targeting data of Tambov residents financing the Freedom of Russia Legion.",
       "ai_geo_fingerprint": "fc23319c6685f5cbd4f0b6a444f4a3081a1df758077c0c57809086e50f3332ca",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-ae82e64b432e3cca"
     },
     {
       "id": "90901b7c8427cfa8",
@@ -300877,7 +300344,8 @@
       "ai_geo_reason": "Statement by Russian Foreign Minister regarding African nations and mercenaries.",
       "ai_geo_fingerprint": "a9402a85796121a795f5e87f89c90768aaff352074413c1c651146c644f3631c",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-d85d634eb859dc94"
     },
     {
       "id": "90901b7c8427cfa8",
@@ -300940,7 +300408,8 @@
       "ai_geo_reason": "Russia offering assistance to Mozambique to combat northern terrorism.",
       "ai_geo_fingerprint": "40035c23ddbdca87d18a0286e9715184ec16cda420df7220a8efbc7f3c2de070",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-8733e851454aa173"
     },
     {
       "id": "aa598ac2e6241499",
@@ -301026,7 +300495,8 @@
       "source_article_fingerprints": [
         "38a5304ca27fdac5289a2b3de5b46fbb7e5a7ee7fbbc8236a20ca9a008dc199c"
       ],
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-73f19e98f3d88af1"
     },
     {
       "id": "ca9a452dea1926b9",
@@ -301093,7 +300563,8 @@
       "ai_geo_reason": "Global IMO piracy report.",
       "ai_geo_fingerprint": "f140957f07e9997f91f0ea098420f0860a56acafe87851a17709bd689023ae89",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-9324b6b4958bfdfc"
     },
     {
       "id": "f7e6b3e7381c7b24",
@@ -301233,7 +300704,8 @@
       "ai_geo_reason": "ISWAP fighters surrender to troops in Nigeria.",
       "ai_geo_fingerprint": "660a9dc776b05dfa156ecb1c78d80c2728523972400c48aba99338183fe00db4",
       "ai_geo_inferred": true,
-      "actor_group": "ISWAP"
+      "actor_group": "ISWAP",
+      "incident_id": "inc-382bf7831c6effb5"
     },
     {
       "id": "081cf54d7ca1df8c",
@@ -301300,7 +300772,8 @@
       "ai_geo_reason": "Operational order given by Nigerian authorities for domestic security.",
       "ai_geo_fingerprint": "fb6249ee750cf00b0b931b093fbb34eaed482ef8867846c02f0a8d6330708971",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-0e2d00f0465c5fcc"
     },
     {
       "id": "4b55b530873b6750",
@@ -301382,7 +300855,9 @@
       "dedup_methods": [
         "entity_actor_event_signature"
       ],
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-9b325e49b2f38672",
+      "incident_anchor": "Man radicalised online as teen jailed for planning extreme right-wing terrorist firearms attack"
     },
     {
       "id": "a674649f96577017",
@@ -301468,7 +300943,8 @@
       "ai_geo_reason": "A Maryland man sentenced for attempting to provide material support to ISIS.",
       "ai_geo_fingerprint": "ac7ea69df8012bfda816cca1c4bf6954445dc70a73df0d03cb011ccdd7a651df",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-a40f1174aca07dc1"
     },
     {
       "id": "c559657486a7ba5d",
@@ -301759,7 +301235,8 @@
       "source_article_fingerprints": [
         "3e9a616a6214b206bb6012b2146b72d0c85855385b62d82f86247ccd04f13893"
       ],
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-c8e43137069cb749"
     },
     {
       "id": "0a3d84641bac34a9",
@@ -301902,7 +301379,8 @@
       "ai_geo_reason": "Security forces eliminated a Hamas terrorist who infiltrated Nirim on October 7.",
       "ai_geo_fingerprint": "7f9fca65a2e23e6c25f72c60a8a4b4d03ca2cdb0654be5844fa2eca60fda758c",
       "ai_geo_inferred": false,
-      "actor_group": "Hamas"
+      "actor_group": "Hamas",
+      "incident_id": "inc-1bd7f16a5e5bf3db"
     },
     {
       "id": "d99a3d51fa863a74",
@@ -302158,7 +301636,8 @@
         "4a1f9ed9348ff447678a31b8a5d9cfa24d5f42c8b9e8664cb1b881dc37ca4726",
         "b5e33bd9b3e595fa7ce00b0a775e88792947900b222805806e3bf72a02c905c4"
       ],
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-9cb2fac74a088e24"
     },
     {
       "id": "b4188c0e89d7e316",
@@ -302225,7 +301704,8 @@
       "ai_geo_reason": "Algerian army operations and terrorist neutralization.",
       "ai_geo_fingerprint": "1e1e90479a4e61f55e8808ff8fed0b6b08f369410040e5d5b594d07cd531d363",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-265c8a0d829082cb"
     },
     {
       "id": "0b40457dbf2cbeab",
@@ -302287,7 +301767,8 @@
       "ai_geo_reason": "Explicitly names Perm Krai and Perm as the location of the court sentencing.",
       "ai_geo_fingerprint": "ecb9f5b1bc533fb83cb64292c562f6e9bb6aaf8553de001ad5d686a6692990e0",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-c316f9b8a7c1abd7"
     },
     {
       "id": "4dd0bb46cbccbaf6",
@@ -302356,7 +301837,8 @@
       "ai_geo_reason": "Conducted by Israeli security forces.",
       "ai_geo_fingerprint": "ee7084bcd0afe4e99c82956914485a9d0ce710727fe24ed8017936000a69ef68",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-a34d7dc79ea585e4"
     },
     {
       "id": "0d54d81bfc07fd88",
@@ -302418,7 +301900,8 @@
       "ai_geo_reason": "Delhi Police conducting operations indicates Delhi, India.",
       "ai_geo_fingerprint": "43f00f8c7743beb5653d9afd61cfb22bc70bcad48404561ac9bf44dc723bb885",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-68187b7c5d392492"
     },
     {
       "id": "9b6650bacf7356c1",
@@ -302505,7 +301988,8 @@
       "ai_geo_reason": "Involves a French MEP facing trial for 'apologie du terrorisme' (French law context).",
       "ai_geo_fingerprint": "99856e0b2419b0369d9df5e9eccd30f9216e5653c57f3a4584451b003293d756",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-08147e8a40326163"
     },
     {
       "id": "8363475132e69056",
@@ -302900,7 +302384,8 @@
       "ai_geo_reason": "Focuses on Turkey's state actions and reports regarding counter-terrorism.",
       "ai_geo_fingerprint": "af1a781290483532d4e0673e2b47dd0e9134fdae41f3f903942e9db32c52dff5",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-e4afdb117433e545"
     },
     {
       "id": "4dd0bb46cbccbaf6",
@@ -302962,7 +302447,8 @@
       "ai_geo_reason": "Explicitly names Yakutsk as the location of the legal case/fine.",
       "ai_geo_fingerprint": "d993c459186003bc7882e1d0c640f73082df6c8bedcbed035f0ab1cfe6af9620",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-cc4688d5f94b06c1"
     },
     {
       "id": "14df17dab122b650",
@@ -303029,7 +302515,8 @@
       "ai_geo_reason": "JMIC focuses specifically on maritime security risks, Houthi attacks, and regional incidents off Yemen in the Red Sea and Gulf of Aden.",
       "ai_geo_fingerprint": "b5e1bbe1b1ca486a7f55ef1316dfcad6243105489d5898b2b1baee3d7990ceee",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-d14aea5aff9881e6"
     },
     {
       "id": "4dd0bb46cbccbaf6",
@@ -303187,7 +302674,8 @@
       "ai_geo_reason": "The judicial proceedings occurred nationwide/within Burkina Faso.",
       "ai_geo_fingerprint": "405b802baaa1c1ee2367f787c634cb9c6d90a032324a3f2622b56ea3c5fe38b2",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-79b5ce525c183290"
     },
     {
       "id": "878a270ae3641ef5",
@@ -303330,7 +302818,8 @@
       "ai_geo_reason": "Explicitly Delhi Police busting networks in Delhi, India.",
       "ai_geo_fingerprint": "25a8707f76efabbaee7cb7920e1ce1120b93bc73ee216c8e208a3103fffbb259",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-68187b7c5d392492"
     },
     {
       "id": "b69147f39f407ef7",
@@ -303348,7 +302837,7 @@
       "collection_locale": null,
       "published": "2026-07-06T07:00:00+00:00",
       "source": "maritime-executive.com",
-      "source_count": 2,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxORXl5ZE5pOElYSWNaM1EyYkF3Y1pRS0hnSlprVFp5WmMtSzRGTVJLZnZxUEU5cjhYZWUzQkRJN25fSzFyWXpfZnVPNzhvMnFaREw2UzRYM3JVVkZIR1E1dlp5b3AxYXJ6Wk1Kb3hLRTdvWHUySEE3c0EtT2szaGpWXzlyWXd4dzhrdXZVbGVmbVRYLUZIZ3FOdW1zZGc0alI4WWZpMg?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -303361,16 +302850,37 @@
       "location_confidence": "high",
       "sources": [
         "maritime-executive.com",
-        "The Maritime Executive"
+        "The Maritime Executive",
+        "gCaptain",
+        "safety4sea.com"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "IMO Chief Urges Immediate Release of 44 Seafarers Held by Somali Pirates",
+          "original_title": "IMO Chief Urges Immediate Release of 44 Seafarers Held by Somali Pirates",
+          "original_language": "en",
+          "summary": "The head of the IMO has demanded the immediate release of 44 crew members being held by Somali pirates.",
+          "published": "2026-07-06T07:00:00+00:00",
+          "source": "gCaptain",
+          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNNE54YTBHOFZETk1MMEpGYVFFcC0yeWVIbGk2Wmtza2hKemVsZms0eVdhNFpiLU5JcUVqbzFQNjk0Nkl0RVR3cWJ0ZjY3VHFaMWUzVl9xbS1OM3VXLXJDaWp3QmpLQTBCWTNSTHFHNWhRaTZDS2lkdWRHV1BIUzJ2ZTlURGN5QzR4dDNfc1VRWVplcDNCczk2N0VB?oc=5"
+        },
+        {
+          "title": "Operation ATALANTA secures bulk carrier following pirate attack off Somalia",
+          "original_title": "Operation ATALANTA secures bulk carrier following pirate attack off Somalia",
+          "original_language": "en",
+          "summary": "EU Naval Force Operation Atalanta successfully secured a bulk carrier following a pirate attack off the coast of Somalia.",
+          "published": "2026-07-06T07:00:00+00:00",
+          "source": "safety4sea.com",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOWGp4UnEyNXJtRDZ4cGxOX0hEa2lJSzJmQkV1bFZIckplc2ZoZGlWdEpjWTQ1ei0xUWJkTGRGcEVHNXdyOGlzUU1lUXJzUmJ1YWNHQlNNZDZIaG12eFZoMnFuek51eDg2UlpEZzBHbzM1WUlIbDFBREpUZTR2cEpXX0xWSHBSLUdNbklZVVdUMnlHaUkxdVdqV3FJQmtMQk9n?oc=5"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-07-06T07:00:00+00:00",
       "last_reported": "2026-07-06T19:45:07+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Directly relevant maritime piracy event involving vessel hijackings.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -303393,12 +302903,14 @@
       "ai_geo_inferred": true,
       "dedup_confidence": 1.0,
       "dedup_methods": [
-        "same_url"
+        "same_url",
+        "same_incident"
       ],
       "source_article_fingerprints": [
         "ac22a142c78b915ccb0f5ec1f659fb28fa2defa82f5eeb3b90604850f5f538c5"
       ],
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-3a3b80e3bf65a886"
     },
     {
       "id": "9882c0651e3eb6d4",
@@ -303560,7 +303072,9 @@
       "source_article_fingerprints": [
         "06779e44f1c4ebb899e75cd8cccf5bf1a02d31573ab3c27b66fbd0568577f5e4"
       ],
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-85306854adec21ee",
+      "incident_anchor": "Morocco ISIS plot disruption 2026-07-07"
     },
     {
       "id": "d3d828b5a9cf10cb",
@@ -303620,7 +303134,8 @@
       "ai_geo_reason": "Refers to a federal terrorism case (typical US terminology for federal court prosecutions).",
       "ai_geo_fingerprint": "935ab78e7c7641ceaf07a71dcb86654bfcc29e6c2961eae0d9058db29e983c4c",
       "ai_geo_inferred": true,
-      "actor_group": "Antifa"
+      "actor_group": "Antifa",
+      "incident_id": "inc-f003c67659673a53"
     },
     {
       "id": "465c5529b65b681a",
@@ -303683,7 +303198,8 @@
       "ai_geo_reason": "The arrest took place on the Greek island of Crete.",
       "ai_geo_fingerprint": "93f0f8ef83b7463271490e56bc61e822bafcc0fdd86832928c21d96a222ce98c",
       "ai_geo_inferred": false,
-      "actor_group": "Hamas"
+      "actor_group": "Hamas",
+      "incident_id": "inc-6b8f9e8fa7450382"
     },
     {
       "id": "cc3bc9500a9790d1",
@@ -303813,7 +303329,8 @@
       "ai_geo_reason": "Gendarmerie operation took place in Erzincan.",
       "ai_geo_fingerprint": "e8dcd48431196d7124644db36f581acbf20765bea8d469f9229113b3045cefa5",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-0b6e05ec432144fa"
     },
     {
       "id": "d0f4b4b85cf2bbb0",
@@ -303889,7 +303406,8 @@
       "ai_geo_reason": "Security forces apprehended suspects in Mugla.",
       "ai_geo_fingerprint": "53802a4410497d3df16a3851939d9dbf392fb20f750704ef6da5eafdd99e4ef7",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-23db6b7c081f94ae"
     },
     {
       "id": "5be684e278627c06",
@@ -303978,7 +303496,8 @@
       "ai_geo_reason": "FSB operations against planned attacks within Russia.",
       "ai_geo_fingerprint": "f8515c51e06e2e5591a96cef57f7131b6a46f485bb4e63ad3d787316418b8b87",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-4f2b9e311f03b9b3"
     },
     {
       "id": "5be684e278627c06",
@@ -304040,7 +303559,8 @@
       "ai_geo_reason": "Military operations involving terrorist elimination by IDF typically take place in Gaza or Lebanon; JDN context implies regional conflict zones.",
       "ai_geo_fingerprint": "9764f7f8dbceffdc51a7238a27061aba8d42eea60303ede0d1586ee49a985cfd",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-d174ff2b8fc1549e"
     },
     {
       "id": "6843514133840e8d",
@@ -304058,7 +303578,7 @@
       "collection_locale": null,
       "published": "2026-07-06T07:00:00+00:00",
       "source": "International Maritime Organization (IMO)",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNMHdLUFRsRXFCcDBlRmE4NWNnRS1xMXRTZE9HOHBHWDZ0ZnN2MTNyejlhSGFqZlY4SllpT3BWTFdTVEZKamNnNUpjeTlCXzJMM1JjYVRLTWNhakZONG1LV1VzV2FpeWYyczRYLUpYZzdZbklqcllSWFdZUmxuVHU2Q3RFY2xYOWpZdVBYVGRfU1duRW54YXlERFc2SW1kZEVTc005eFhZUDRHSkxSMG51X1hmWGNUQzcwX1NJWVpHMFh6Tl9PUTF5UXp2T182X2stdFBnaUpB?oc=5",
       "collector": "Google News RSS",
       "country": "United Kingdom",
@@ -304073,10 +303593,30 @@
       "targeted_source": "IMO",
       "targeted_source_kind": "intergovernmental_source",
       "sources": [
-        "International Maritime Organization (IMO)"
+        "International Maritime Organization (IMO)",
+        "gCaptain"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "IMO Council Opens With Maritime Security, Hormuz, and Piracy High on Agenda",
+          "original_title": "IMO Council Opens With Maritime Security, Hormuz, and Piracy High on Agenda",
+          "original_language": "en",
+          "summary": "The IMO Council has opened its session with maritime security and piracy concerns featured prominently on the agenda.",
+          "published": "2026-07-06T07:00:00+00:00",
+          "source": "gCaptain",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOR2NDQ3lqaDFSNDNsMWlXMGRFRnpRb1dveXhReG9qaXg5THhZb3F4eEpEbXk4SzgxOEZUYWZwOWNXdnhGYjJzb2tEX2RYU1BzOXlUZ19vS2puTU5YY2o0N0RxZ3Y0MEV4VjkyNVhDQzZBSkh1TGVUV0QtQTdTRldtOVVkWjFmemdIV1FZRi1FeDdpcEplWTRTSG5WNA?oc=5"
+        },
+        {
+          "title": "Council, 137th session - Opening remarks",
+          "original_title": "Council, 137th session - Opening remarks",
+          "original_language": "en",
+          "summary": "Opening remarks at the 137th session of the IMO Council touching on international maritime safety and security issues.",
+          "published": "2026-07-06T11:47:20+00:00",
+          "source": "International Maritime Organization (IMO)",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOdFFGcFZOdlhEdVB5eDdTelR4ZzZtN3hJOFhxOWI0MkFvRENXZ3R1Q3NYMENXWkI3WGE2Vl94LWR0LThHbWZvUHpwZ3dmMjFGdTNHVlpKRXlWSm5IMGlUT2NHbi03a1ZSTkhQOFRDWXBUVzE1UkZPWEItY1Y4WGQyMDYyV0F2aXBFZ3dUeDBmRXR3Q1N3Y3d3aTFiNkwwWUh1SUE?oc=5"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-07-06T07:00:00+00:00",
       "last_reported": "2026-07-06T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -304107,227 +303647,15 @@
       "ai_geo_reason": "IMO headquarters is in London, United Kingdom.",
       "ai_geo_fingerprint": "9339ae8d4747db279a060fe3622e82fc2a8c52186549c0fc8ffe5e82973243cd",
       "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "1ecbb16f582b2792",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "IMO Chief Urges Immediate Release of 44 Seafarers Held by Somali Pirates",
-      "summary": "The head of the IMO has demanded the immediate release of 44 crew members being held by Somali pirates.",
-      "original_title": "IMO Chief Urges Immediate Release of 44 Seafarers Held by Somali Pirates",
-      "original_summary": "IMO Chief Urges Immediate Release of 44 Seafarers Held by Somali Pirates gCaptain",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-06T07:00:00+00:00",
-      "source": "gCaptain",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNNE54YTBHOFZETk1MMEpGYVFFcC0yeWVIbGk2Wmtza2hKemVsZms0eVdhNFpiLU5JcUVqbzFQNjk0Nkl0RVR3cWJ0ZjY3VHFaMWUzVl9xbS1OM3VXLXJDaWp3QmpLQTBCWTNSTHFHNWhRaTZDS2lkdWRHV1BIUzJ2ZTlURGN5QzR4dDNfc1VRWVplcDNCczk2N0VB?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "gCaptain",
-      "targeted_source_kind": "specialist_media",
-      "sources": [
-        "gCaptain"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-06T07:00:00+00:00",
-      "last_reported": "2026-07-06T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Covers ongoing maritime piracy and hostage situations involving Somali pirates.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "IMO Chief urges immediate release of 44 seafarers held by Somali pirates",
-      "title_variants": [
-        "IMO Chief urges immediate release of 44 seafarers held by Somali pirates"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Held by Somali Pirates"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Seafarers held by Somali pirates off the coast of Somalia.",
-      "ai_geo_fingerprint": "3038202c7e40afffe7079a94cbd5566c0ccb193a71fdf8e6df87734394d7b237",
-      "ai_geo_inferred": false,
-      "actor_group": ""
-    },
-    {
-      "id": "c24e04d8b0440af6",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "IMO Council Opens With Maritime Security, Hormuz, and Piracy High on Agenda",
-      "summary": "The IMO Council has opened its session with maritime security and piracy concerns featured prominently on the agenda.",
-      "original_title": "IMO Council Opens With Maritime Security, Hormuz, and Piracy High on Agenda",
-      "original_summary": "IMO Council Opens With Maritime Security, Hormuz, and Piracy High on Agenda gCaptain",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-06T07:00:00+00:00",
-      "source": "gCaptain",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOR2NDQ3lqaDFSNDNsMWlXMGRFRnpRb1dveXhReG9qaXg5THhZb3F4eEpEbXk4SzgxOEZUYWZwOWNXdnhGYjJzb2tEX2RYU1BzOXlUZ19vS2puTU5YY2o0N0RxZ3Y0MEV4VjkyNVhDQzZBSkh1TGVUV0QtQTdTRldtOVVkWjFmemdIV1FZRi1FeDdpcEplWTRTSG5WNA?oc=5",
-      "collector": "Google News RSS",
-      "country": "United Kingdom",
-      "country_code": "GB",
-      "city": "London",
-      "region": null,
-      "latitude": 51.50853,
-      "longitude": -0.12574,
-      "location_precision": "city",
-      "location_confidence": "medium",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "gCaptain",
-      "targeted_source_kind": "specialist_media",
-      "sources": [
-        "gCaptain",
-        "International Maritime Organization (IMO)"
-      ],
-      "related_articles": [
-        {
-          "title": "Council, 137th session - Opening remarks",
-          "original_title": "Council, 137th session - Opening remarks",
-          "original_language": "en",
-          "summary": "Opening remarks at the 137th session of the IMO Council touching on international maritime safety and security issues.",
-          "published": "2026-07-06T11:47:20+00:00",
-          "source": "International Maritime Organization (IMO)",
-          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOdFFGcFZOdlhEdVB5eDdTelR4ZzZtN3hJOFhxOWI0MkFvRENXZ3R1Q3NYMENXWkI3WGE2Vl94LWR0LThHbWZvUHpwZ3dmMjFGdTNHVlpKRXlWSm5IMGlUT2NHbi03a1ZSTkhQOFRDWXBUVzE1UkZPWEItY1Y4WGQyMDYyV0F2aXBFZ3dUeDBmRXR3Q1N3Y3d3aTFiNkwwWUh1SUE?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-07-06T07:00:00+00:00",
-      "last_reported": "2026-07-06T11:47:20+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 60,
-      "ai_relevance_reason": "Discusses high-level international meetings addressing ongoing maritime piracy threats.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "IMO Council opens session focusing on maritime security and piracy",
-      "title_variants": [
-        "IMO Council opens session focusing on maritime security and piracy"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "title_plus_anchor",
-        "same_url"
-      ],
-      "location_confidence_score": 0.8,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "The IMO Council has opened its session"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "IMO Council meetings take place at IMO headquarters in London.",
-      "ai_geo_fingerprint": "d9d71769e041fdb1f7fafc0898f909c40ab5cf44b21c2c321653679c1477febc",
-      "ai_geo_inferred": true,
+      "actor_group": "",
+      "incident_id": "inc-a7fc5f55ea2d826f",
       "source_article_fingerprints": [
         "47151b73ee84524670c957f587856c1c9f00e7c7493a7ab676aaa2c216aaa025"
       ],
-      "actor_group": ""
-    },
-    {
-      "id": "ac066c2d04dc26b2",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Operation ATALANTA secures bulk carrier following pirate attack off Somalia",
-      "summary": "EU Naval Force Operation Atalanta successfully secured a bulk carrier following a pirate attack off the coast of Somalia.",
-      "original_title": "Operation ATALANTA secures bulk carrier following pirate attack off Somalia",
-      "original_summary": "Operation ATALANTA secures bulk carrier following pirate attack off Somalia safety4sea.com",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-06T07:00:00+00:00",
-      "source": "safety4sea.com",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOWGp4UnEyNXJtRDZ4cGxOX0hEa2lJSzJmQkV1bFZIckplc2ZoZGlWdEpjWTQ1ei0xUWJkTGRGcEVHNXdyOGlzUU1lUXJzUmJ1YWNHQlNNZDZIaG12eFZoMnFuek51eDg2UlpEZzBHbzM1WUlIbDFBREpUZTR2cEpXX0xWSHBSLUdNbklZVVdUMnlHaUkxdVdqV3FJQmtMQk9n?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "SAFETY4SEA",
-      "targeted_source_kind": "specialist_media",
-      "sources": [
-        "safety4sea.com"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-06T07:00:00+00:00",
-      "last_reported": "2026-07-06T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports a concrete counter-piracy military response to an active pirate attack.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Operation ATALANTA secures bulk carrier following pirate attack off Somalia",
-      "title_variants": [
-        "Operation ATALANTA secures bulk carrier following pirate attack off Somalia"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Operation ATALANTA secures bulk carrier following pirate attack off Somalia"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The maritime attack and intervention occurred off the coast of Somalia.",
-      "ai_geo_fingerprint": "7c4b86b3abacf7084a902bea76d4194afa330aff0f2ceb63913fb457dc910cdf",
-      "ai_geo_inferred": false,
-      "actor_group": ""
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "26bb6ef707f77454",
@@ -304395,7 +303723,8 @@
       "ai_geo_reason": "Sanctions issued by the UK government from London.",
       "ai_geo_fingerprint": "64a5341ac21cf18e214f8f93535f7058b3f491790252e92e0198a35ff7ff2c1e",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-054244eef4c352fb"
     },
     {
       "id": "f2b38ba05677c59f",
@@ -304462,7 +303791,8 @@
       "ai_geo_reason": "Decided by a Tunisian court in Tunisia.",
       "ai_geo_fingerprint": "f58b530819f844d6a94cf0a58b8d7b03202e14f36e414593853dc3302ff69e71",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-88f776e436a3182f"
     },
     {
       "id": "5be684e278627c06",
@@ -304543,7 +303873,8 @@
       "ai_geo_reason": "Moroccan security services thwarted plots connected to the Sahel region.",
       "ai_geo_fingerprint": "e2cd8a8a2e5e19ba058d7232762deb9e5a6548a080412bdfc97a21d15721dcfc",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-3e513c99aed56126"
     },
     {
       "id": "d56ec48b9643ac12",
@@ -304611,7 +303942,8 @@
       "ai_geo_reason": "Handled by Tunisian judicial authorities in Tunisia.",
       "ai_geo_fingerprint": "124e390bdc046baac23888f52bceedb7fabe785b756eb4c6a6e8830e2c3a15bc",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-88f776e436a3182f"
     },
     {
       "id": "22dfe5634b4f29e2",
@@ -304678,7 +304010,8 @@
       "ai_geo_reason": "The visit and military operation coordination took place in Ceeldheer, Somalia.",
       "ai_geo_fingerprint": "0a5b220a724c26d61aa653b49bb5540467b7e40b259c08aa86cba860ea47f63b",
       "ai_geo_inferred": false,
-      "actor_group": "Al-Shabaab"
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-546d015dfe8b5fe7"
     },
     {
       "id": "78a3a991fbb4d76c",
@@ -304745,7 +304078,8 @@
       "ai_geo_reason": "Somali Ministry of Defence statement concerning national counter-terrorism.",
       "ai_geo_fingerprint": "2d9e6f8fe2d240327e8b6946ce6aa733a08c271b21ce5c55e255b2bbb1e95236",
       "ai_geo_inferred": false,
-      "actor_group": "Al-Shabaab"
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-ab8d4e9aa765dbc7"
     },
     {
       "id": "2d8dd115601afc6d",
@@ -304807,7 +304141,8 @@
       "ai_geo_reason": "The trial is taking place in Bahrain.",
       "ai_geo_fingerprint": "c8a6603057991091f84c132c2cea99fed451bfcb20a8f138611a1335474f024c",
       "ai_geo_inferred": false,
-      "actor_group": "Islamic Revolutionary Guard Corps"
+      "actor_group": "Islamic Revolutionary Guard Corps",
+      "incident_id": "inc-c2c51336159dbf88"
     },
     {
       "id": "e15c297e9acc74b7",
@@ -304908,7 +304243,8 @@
       "ai_geo_reason": "Operation centered in Istanbul.",
       "ai_geo_fingerprint": "e4222d2401fd704b8fdaf6c631053c0b4c422ccc97b66e2cca1b408c54ee8940",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-fbe9a5581160061c"
     },
     {
       "id": "23c98253e0ed2264",
@@ -304972,7 +304308,8 @@
       "ai_geo_reason": "Law enforcement operations and apprehensions occurred in Kocaeli.",
       "ai_geo_fingerprint": "facac266a66fd29fea0cb952a6e5b111b662b83df58aaecd4229725e4a237a9d",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-4bd9358ac6835c81"
     },
     {
       "id": "321ba6cb7f65f48d",
@@ -305034,7 +304371,8 @@
       "ai_geo_reason": "Event occurred in Gaza.",
       "ai_geo_fingerprint": "0043e650a2ce72efba21705248569a24440f04fd00640e362cff7e9e21fb5748",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-0f56a577f2c271c7"
     },
     {
       "id": "be9d0a6b5f131200",
@@ -305103,7 +304441,8 @@
       "ai_geo_reason": "Action taken by the government of India under UAPA.",
       "ai_geo_fingerprint": "df84121811b58655040a2706c12126b2f25b12946c140ac7519dd12c334ee946",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-4c897cb8ab11c122"
     },
     {
       "id": "eab7480305e259ca",
@@ -305186,7 +304525,8 @@
       "ai_geo_reason": "Operation carried out in Middle Shabelle, Somalia.",
       "ai_geo_fingerprint": "659d6117a914beeb2b7970761bb07206c7a4f345c27e534ea46e608fb8a1bb7c",
       "ai_geo_inferred": false,
-      "actor_group": "Al-Shabaab"
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-1043444395109f12"
     },
     {
       "id": "08ecb873a276dacb",
@@ -305541,7 +304881,8 @@
       "ai_geo_reason": "Thwarted attack occurred in Pyatigorsk, Russia.",
       "ai_geo_fingerprint": "843af13b5939163e4288458ffdfb4fe1d2eb0796ac9e6fa7b48732e37477ad84",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-69ba0ab5b84bd1b4"
     },
     {
       "id": "50e71072bc159a96",
@@ -305602,7 +304943,8 @@
       "ai_geo_reason": "IDF operations typically target areas in Gaza or Lebanon, but without explicit location, default to Israel/operations theater.",
       "ai_geo_fingerprint": "4e48cc51fa9d9642d819ee870d638cb13c7dcad31254f430ca6e8165a03c9598",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-107c982378e211d9"
     },
     {
       "id": "3c6d8c27e1b82daf",
@@ -305669,74 +305011,8 @@
       "ai_geo_reason": "Operation Atalanta counters piracy off the coast of Somalia.",
       "ai_geo_fingerprint": "e5b0dcae9cad01c8e4f9d5c7d39cb0181cceab3da3894d2fbdfb4c2c3fab0fe8",
       "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "b86ca3e035a737b8",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Piracy Hostages Face Worsening Conditions Off Somalia",
-      "summary": "Reports indicate that hostages held by pirates off the coast of Somalia are facing increasingly deteriorating conditions.",
-      "original_title": "Piracy hostages face worsening conditions off Somalia",
-      "original_summary": "Piracy hostages face worsening conditions off Somalia Splash247",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-03T07:00:00+00:00",
-      "source": "Splash247",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQLXpVT0MxeWMyLWc4Q2tIV2x4QU03WDEyMXROUVpCS0lQY3VFM0ZsTWIyaTFCUnd4YTNWeFp6d1RReTF0VnE5SW5ZWHoxWU4ySUlwaEg2LWdwVU9Rajd1M1o1Qllybjl5M3ZYRWlYa01zNHBSQVJBX3ZPRUlqQ0pLdkVn?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "Splash 247",
-      "targeted_source_kind": "specialist_media",
-      "sources": [
-        "Splash247"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-03T07:00:00+00:00",
-      "last_reported": "2026-07-03T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Current operational situation regarding hostages held in maritime piracy incidents.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "worsening conditions for hostages held by pirates off Somalia",
-      "title_variants": [
-        "worsening conditions for hostages held by pirates off Somalia"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Somalia"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The article explicitly mentions hostages held by pirates off the coast of Somalia.",
-      "ai_geo_fingerprint": "f774bd8c85214397ace418de6a356c4848235e91db1db8226b8854c5f9c87edb",
-      "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-5a757ba10f9d2682"
     },
     {
       "id": "0ab120fb114ca55c",
@@ -305876,7 +305152,8 @@
       "ai_geo_reason": "United States military personnel withdrawal from Nigeria.",
       "ai_geo_fingerprint": "0829215ca0d2414b3480cf7ce74c1b28bb3a87cccf93b51a8952e3ad2ba27d45",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-ffe09a9ebd942d84"
     },
     {
       "id": "0b5b829015569501",
@@ -306045,7 +305322,8 @@
       "ai_geo_reason": "Explicitly occurred in southern Lebanon.",
       "ai_geo_fingerprint": "8b012427b1e98fa64b2f5288468d330cb03ba4e6d9ce682e63c18d15af98acfa",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-d09bc00dabe68102"
     },
     {
       "id": "7d9b41dfa44d79c2",
@@ -306063,7 +305341,7 @@
       "collection_locale": null,
       "published": "2026-07-02T07:00:00+00:00",
       "source": "The Times of India",
-      "source_count": 4,
+      "source_count": 6,
       "url": "https://news.google.com/rss/articles/CBMihwJBVV95cUxNb0lSa2FUSW5NMWFQczNIbHVGMzljOHFPWUFuLWhYNjJiRDZVZWtBNzZGMVV2WmVPa1RPQmFrODNOY29WVUMzZ0dUMVB5bExfMFo2Mk1JdzZnNU0zZ3BwS29COFo1WDVseEMwaUVnaFZ4Z19nX3VwVXZNWGNLb2lRU01reXBneUgtRkRqeUhnenR2b2xReXgyV2o5WVVoT1c5TVk5SUxWSkVzM2hXbUozMVhxcDNMZlE1cW5PZ3E1VDgtbG8xS3BOSUU4a3NLZGlybXpOb2tzNDlJaHVZQTZYa3Z5eW5EdVVzNVd6cUtNQmlzYkZ1N3ZwMndLb0ZBbHd0dVdUdFF5Y9IBjAJBVV95cUxPNEdfUEZmdGRhd3kwRm1uQWNXUHFRMDF5X3hGVjYyTG5GUVFjVkVrY1JUOG1RMGNGS09sZzhyVjBxM2N6ZHR1dUlEdFRDT3hTQnJNbFZwWEdadUJzdnlkUlctTEhHQl91NktkbVNLQ1BrV1EtcXlIblhaN1o4UWZ6OFcxX0dEdmpYUEttMTFfTnhaaTNxUDVxQ0FmUzRTREZEa1pjYW00V1laRXphYS1TdHJ0RVVPb3RmcFhvenA5S1RicDhjMEJ1azUxcHgtXzFqQ1RvbDk4MkJjblUxc0FnT2xSVXlnajJRaHZ4bXNXTnl0a2dSMnV0NDdiUmtsWE1VMm9lbkJBbzc5ZjlI?oc=5",
       "collector": "Google News RSS",
       "country": "Yemen",
@@ -306078,7 +305356,9 @@
         "The Times of India",
         "Bharat Shakti",
         "India TV News",
-        "Kerala Kaumudi"
+        "Kerala Kaumudi",
+        "Splash247",
+        "TradeWinds News"
       ],
       "related_articles": [
         {
@@ -306107,15 +305387,34 @@
           "published": "2026-07-03T07:00:00+00:00",
           "source": "Kerala Kaumudi",
           "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOZVJnS1VTX1lZVnFqcXBZZFRpV0VPcGZDMlB1THlCTnNHNngzdnhYNlFHUENVTVRLcjdRX25KRXZqamhpS05ON2JXZ1RoSDVfZWJXX2JCNm8zcm5fekpfWVBHcE11QXI4clNiR2pkUmxWWXRqWEJ6Qk1oUzZJZnZ6ZVRmQUhYN1NIeEFScmtIekNSZ2ZYT29XYTJQM1V5cUdiWFNWUG5Jb0hISGJKQ0pYVlNn?oc=5"
+        },
+        {
+          "title": "Pirates board and damage tanker south of Yemen",
+          "original_title": "Pirates board and damage tanker south of Yemen",
+          "original_language": "en",
+          "summary": "Pirates boarded and caused damage to a tanker vessel in waters south of Yemen.",
+          "published": "2026-07-02T07:00:00+00:00",
+          "source": "Splash247",
+          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5FUV9YZDljTDN2OTczR3Rla0JOWmVEcnJjaGx2MUxkM0hlUkxEZXRobi12dk9NaUZLRGxIX1dualBKcGxVajFIWENER3VXeHBGQjNmMzh6eldaWHFtTnRRSlhDbXJlYk5LTlNkb2dOOWtvSzV2S2VXaw?oc=5"
+        },
+        {
+          "title": "Bulker damaged as crew retreat to citadel in boarding",
+          "original_title": "Bulker damaged as crew retreat to citadel in boarding",
+          "original_language": "en",
+          "summary": "A bulk carrier was damaged during a pirate/armed robbery boarding attempt while the crew retreated to the citadel.",
+          "published": "2026-07-02T07:00:00+00:00",
+          "source": "TradeWinds News",
+          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPdXZidGhEYWtJRjNnMFhZZ3JBZ2JzX0RlMm5KdkZFUHI0YVpyVmNWckZhOFpIUVYxR1VHbEVKa1VNbGlMZW5KVTVud3FGY09YRFBMS2hjNnhkMy1EZGJ2ODJITHNlXzdYYVNyOFQzbjRVaWFIbjRRSno4V2MyQndjYTZhTm50SkJ5RWtJQXl0MTk0ZE9VU0JhVWthUEdVZHYtSG1ENlRtQQ?oc=5"
         }
       ],
-      "article_count": 4,
+      "article_count": 6,
       "first_reported": "2026-07-02T07:00:00+00:00",
       "last_reported": "2026-07-03T07:00:00+00:00",
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "title_plus_anchor",
-        "same_url"
+        "same_url",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
@@ -306141,67 +305440,9 @@
       "ai_geo_reason": "The Gulf of Aden is off the coast of Yemen/Somalia; standard geographic centroid applies.",
       "ai_geo_fingerprint": "e9653fed6b39189472a94b0812f7fb6d646258c02e33648f4f75d9c414e0b98a",
       "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "3c7be3e985cb7a8d",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Conditions Deteriorating for Hijacked Seafarers as Somalia Piracy Continues",
-      "summary": "Reports indicate that conditions are worsening for seafarers held hostage following vessel hijackings amid ongoing Somali piracy activity.",
-      "original_title": "Conditions Deteriorating for Hijacked Seafarers as Somalia Piracy Continues",
-      "original_summary": "Conditions Deteriorating for Hijacked Seafarers as Somalia Piracy Continues maritime-executive.com",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-02T07:00:00+00:00",
-      "source": "maritime-executive.com",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPN2xJUnpLejNmejQwanpkVjlJRHk5ZFJBSF9CVll0dURjb0cxYm8xTVh0TVBTZmZubHJ3VFExLVdmN3ZKN3Q0emo3SEZ4Z3RtLUFZTW1QaWJ0UnJ2ZG54dXpQemZPVjEyd1RycG5nWFhrSVN1d2Q5ZXRad3FMamVILTFaMkw3Q29mT0c3RmZLTDF1ekN2eVo5MmgySGVuUHp5RllobW1rcE1GUVZsTWNkc2NvTFM?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "sources": [
-        "maritime-executive.com"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-02T07:00:00+00:00",
-      "last_reported": "2026-07-02T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Ongoing maritime piracy and hostage situation involving commercial vessels.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "deteriorating conditions for hijacked seafarers held by Somali pirates",
-      "title_variants": [
-        "deteriorating conditions for hijacked seafarers held by Somali pirates"
-      ],
-      "location_confidence_score": 0.85,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Somalia Piracy Continues"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Associated with Somali piracy activity.",
-      "ai_geo_fingerprint": "5f0167924df8b902d399db61e09d0754a6e2d4df22bfcadc0cc007446e89a2c7",
-      "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-07fe1fab017750b6",
+      "source_article_fingerprints": []
     },
     {
       "id": "bd7cd3e355e83881",
@@ -306220,7 +305461,7 @@
       "collection_locale": null,
       "published": "2026-07-02T07:00:00+00:00",
       "source": "The Jerusalem Post",
-      "source_count": 2,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE1LcmtkbXowWHg5aG1xVUxnb3RDUGlYUUkzV2IwdnZNRl9qWFRGNzBPTnd3aFlZd0ZzTHhoZGltdFUxT01HTVg2Y2ptdmdvQ0Q2djdwaWsyVkpzRlBjOTR5cUlBb0pxT0ZHYkpvNXIwNzRTdw?oc=5",
       "collector": "Google News RSS",
       "country": "Israel",
@@ -306233,7 +305474,8 @@
       "location_confidence": "high",
       "sources": [
         "The Jerusalem Post",
-        "The Times of Israel"
+        "The Times of Israel",
+        "zman.co.il"
       ],
       "related_articles": [
         {
@@ -306244,14 +305486,24 @@
           "published": "2026-07-02T07:00:00+00:00",
           "source": "The Times of Israel",
           "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQaFM1NjNMWTFrUjlXOFEzd2ZaSUVmZWRVcFVKNEZ3MVA1ZVpfWXJReGJ6eFlleWZMTllOSENmTXdxTFBCWGs5N09xV2hBZjhWdWFYXzhsVmhLWGZHSkxrNVBpNlFiUlNZampXd3ZFbGZDYXk1NnQteElUYTBlZkZUa19HRzZUTk42eGsyY25BYnJienNoV0VIaC1WWExueWFiaTRMaFZtckRvQjRrZzNReFo2OUZIZ9IBuwFBVV95cUxPY1hVZ3JkNWRkQWp3bDZkbm9fRUtrWkEzWnVlU2g3ZzNYd1lzUlhCcWdYc1BMX1gzbmJrTmE3bzBFZHk4dy1YNDFncTc1MDA1bzdPRkJvZDZKSUZTYTB1QnR2MjNFdllNVnJJRjNZdjM1SHlLcTZ1emJ3S00ta3dyZ2k5S1N2RUtndUxVQ01EZGNSS0QtQnBIWjNpMFJVS3c3VmZqa0h0TmZ1TmVfekZMWVRLR21xZUZOQkpB?oc=5"
+        },
+        {
+          "title": "Three Israeli citizens indicted for assisting the terrorist who carried out the Tzur Yitzhak shooting attack",
+          "original_title": "שלושה אזרחים ישראלים מואשמים שסייעו למחבל שביצע את פיגוע הירי בצור יצחק",
+          "original_language": "he",
+          "summary": "Indictments have been filed against three Israeli citizens accused of aiding the perpetrator of the shooting attack in Tzur Yitzhak.",
+          "published": "2026-07-02T07:00:00+00:00",
+          "source": "zman.co.il",
+          "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5NTVRBNlViVTUxTjJfR1BIN0RXSDBodDdRZnN3Z0hjSlZrbkQtR1N4SXVLdy1nMTJZSUlXRkItOEhMZFlFdTFRaXNNTQ?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 3,
       "first_reported": "2026-07-02T07:00:00+00:00",
       "last_reported": "2026-07-02T07:00:00+00:00",
-      "dedup_confidence": 0.621,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "paraphrase_entity_context"
+        "paraphrase_entity_context",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
@@ -306277,7 +305529,9 @@
       "ai_geo_reason": "Event occurred in central Israel.",
       "ai_geo_fingerprint": "b6ff9edd7ee0d1f4637463a85679be96bb030f5604be5c5d10487fb7dbc1ac0f",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-8daf51cc06fa2cd1",
+      "source_article_fingerprints": []
     },
     {
       "id": "aee69f261b0fe4e3",
@@ -306406,7 +305660,8 @@
       "ai_geo_reason": "Prosecuted in France by French authorities.",
       "ai_geo_fingerprint": "4000c58d7422aa3cad31d5ef4dd9e2dd3bf6838d8881ddc15383b7cdef7390e5",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-d18af662ffafe9e0"
     },
     {
       "id": "64b2fd04de487718",
@@ -306537,203 +305792,8 @@
       "ai_geo_reason": "Explicitly occurred in Yekaterinburg, Russia.",
       "ai_geo_fingerprint": "64b3e0a3dc176e3c8d473ffee11e24403a24ad332b843cfed49a65442b54c47e",
       "ai_geo_inferred": false,
-      "actor_group": ""
-    },
-    {
-      "id": "96f2bac2d47fc31f",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Legal / Judicial"
-      ],
-      "title": "Three Israeli citizens indicted for assisting the terrorist who carried out the Tzur Yitzhak shooting attack",
-      "summary": "Indictments have been filed against three Israeli citizens accused of aiding the perpetrator of the shooting attack in Tzur Yitzhak.",
-      "original_title": "שלושה אזרחים ישראלים מואשמים שסייעו למחבל שביצע את פיגוע הירי בצור יצחק",
-      "original_summary": "שלושה אזרחים ישראלים מואשמים שסייעו למחבל שביצע את פיגוע הירי בצור יצחק zman.co.il",
-      "original_language": "he",
-      "collection_language": "he",
-      "collection_language_name": "Hebrew",
-      "collection_locale": "IL:he",
-      "published": "2026-07-02T07:00:00+00:00",
-      "source": "zman.co.il",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5NTVRBNlViVTUxTjJfR1BIN0RXSDBodDdRZnN3Z0hjSlZrbkQtR1N4SXVLdy1nMTJZSUlXRkItOEhMZFlFdTFRaXNNTQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Israel",
-      "country_code": "IL",
-      "city": "Tsur Itshak",
-      "region": null,
-      "latitude": 32.24047,
-      "longitude": 34.99788,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "zman.co.il"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-02T07:00:00+00:00",
-      "last_reported": "2026-07-02T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Legal prosecution and indictments of accomplices in a terrorist shooting attack.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "indictment of three Israeli citizens for assisting the Tzur Yitzhak shooting attacker",
-      "title_variants": [
-        "indictment of three Israeli citizens for assisting the Tzur Yitzhak shooting attacker"
-      ],
-      "location_confidence_score": 0.98,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "shooting attack in Tzur Yitzhak"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly occurred in Tzur Yitzhak, Israel.",
-      "ai_geo_fingerprint": "e3167bbe138fd11a7e90757824326db11941f48ddd1a10fdbaf671217e2a2a97",
-      "ai_geo_inferred": false,
-      "actor_group": ""
-    },
-    {
-      "id": "61914e7942d16410",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Pirates board and damage tanker south of Yemen",
-      "summary": "Pirates boarded and caused damage to a tanker vessel in waters south of Yemen.",
-      "original_title": "Pirates board and damage tanker south of Yemen",
-      "original_summary": "Pirates board and damage tanker south of Yemen Splash247",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-02T07:00:00+00:00",
-      "source": "Splash247",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5FUV9YZDljTDN2OTczR3Rla0JOWmVEcnJjaGx2MUxkM0hlUkxEZXRobi12dk9NaUZLRGxIX1dualBKcGxVajFIWENER3VXeHBGQjNmMzh6eldaWHFtTnRRSlhDbXJlYk5LTlNkb2dOOWtvSzV2S2VXaw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Yemen",
-      "country_code": "YE",
-      "city": null,
-      "region": "Southern Yemen waters",
-      "latitude": 15.5527,
-      "longitude": 48.5164,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "Splash 247",
-      "targeted_source_kind": "specialist_media",
-      "sources": [
-        "Splash247"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-02T07:00:00+00:00",
-      "last_reported": "2026-07-02T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Active maritime piracy attack involving vessel boarding and damage.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Pirate boarding and damaging of a tanker south of Yemen",
-      "title_variants": [
-        "Pirate boarding and damaging of a tanker south of Yemen"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "south of Yemen"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Pirate boarding of tanker vessel in waters south of Yemen.",
-      "ai_geo_fingerprint": "a58182526aa6f14997cce3b0e8f01bbaaa034ae991bb5c209a669889bd1635f5",
-      "ai_geo_inferred": false,
-      "actor_group": ""
-    },
-    {
-      "id": "4637452f135c6e83",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Bulker damaged as crew retreat to citadel in boarding",
-      "summary": "A bulk carrier was damaged during a pirate/armed robbery boarding attempt while the crew retreated to the citadel.",
-      "original_title": "Bulker damaged as crew retreat to citadel in boarding",
-      "original_summary": "Bulker damaged as crew retreat to citadel in boarding TradeWinds News",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-02T07:00:00+00:00",
-      "source": "TradeWinds News",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPdXZidGhEYWtJRjNnMFhZZ3JBZ2JzX0RlMm5KdkZFUHI0YVpyVmNWckZhOFpIUVYxR1VHbEVKa1VNbGlMZW5KVTVud3FGY09YRFBMS2hjNnhkMy1EZGJ2ODJITHNlXzdYYVNyOFQzbjRVaWFIbjRRSno4V2MyQndjYTZhTm50SkJ5RWtJQXl0MTk0ZE9VU0JhVWthUEdVZHYtSG1ENlRtQQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Yemen",
-      "country_code": "YE",
-      "city": null,
-      "region": "Gulf of Aden / Red Sea",
-      "latitude": 15.5527,
-      "longitude": 48.5164,
-      "location_precision": "region",
-      "location_confidence": "medium",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "TradeWinds",
-      "targeted_source_kind": "specialist_media",
-      "sources": [
-        "TradeWinds News"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-02T07:00:00+00:00",
-      "last_reported": "2026-07-02T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Active maritime attack and vessel boarding with crew taking refuge in the citadel.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Bulker damaged and crew retreating to citadel during armed boarding incident",
-      "title_variants": [
-        "Bulker damaged and crew retreating to citadel during armed boarding incident"
-      ],
-      "location_confidence_score": 0.6,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "bulker damaged, crew retreat to citadel"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Context aligns with ongoing Houthi/piracy incidents in the region near Yemen.",
-      "ai_geo_fingerprint": "3603913004b6b293eefca235a121054a58bbb6bb871cc448aaa63ce2249affba",
-      "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-58cce6bcd69654ff"
     },
     {
       "id": "85453921f1322950",
@@ -306800,7 +305860,8 @@
       "ai_geo_reason": "Malian Armed Forces airstrikes in the Gao and Soribougou regions.",
       "ai_geo_fingerprint": "a7cedb911744215c165d6568f41e38be083ca60300c0f42f8dc4d1db2a9f9b39",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-1cab19bc7cf79b6d"
     },
     {
       "id": "ca982c2f5054b659",
@@ -306867,7 +305928,8 @@
       "ai_geo_reason": "Burkina Faso military operation against terrorists.",
       "ai_geo_fingerprint": "2d069139a2143fa8ccc39c26644a8fb00351181bb109ab80f5c1b580431bf577",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-2a5fd206e52bc895"
     },
     {
       "id": "d1a8f48b7ecc348d",
@@ -306934,7 +305996,8 @@
       "ai_geo_reason": "Report issued by Nigerian Defence Headquarters regarding counter-terrorism operations.",
       "ai_geo_fingerprint": "9aac289ba0d232dced0131715037a8901cb561d13a6069823cf52f4169ff9748",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-ee6078b80c5ffb2f"
     },
     {
       "id": "78acdc3dd84ac46e",
@@ -307020,7 +306083,8 @@
       "source_article_fingerprints": [
         "ec11b90e0ad44a3afeb71c41cd2fec71abad547ec9c4f707c6d0f81741db6064"
       ],
-      "actor_group": "Al-Shabaab"
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-4badf7e4dd969c3b"
     },
     {
       "id": "329f504808c12040",
@@ -307080,7 +306144,8 @@
       "ai_geo_reason": "Explicitly takes place in Egypt.",
       "ai_geo_fingerprint": "2da1d5470bb188cb7aa7a3c214345bdff7489de4c3444e04298082e0b4389a69",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-25074dad89dfde5c"
     },
     {
       "id": "0067f601c3c27c29",
@@ -307140,7 +306205,8 @@
       "ai_geo_reason": "Explicitly refers to Pakistan.",
       "ai_geo_fingerprint": "103f5d1fb5c1b5b9e34159ec5fc39f2ec04703086a9e5d3c3711ca57f87eecda",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-5687642d8a39bdb3"
     },
     {
       "id": "af74902fcb9974fb",
@@ -307274,7 +306340,8 @@
       "ai_geo_reason": "German federal prosecutors filed the indictment regarding the Nord Stream pipeline sabotage.",
       "ai_geo_fingerprint": "f681e9a987d0c1642fb8bf5fbc18cbd4c87c7450651d03847ac61268c0468249",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-a44f135a76d42ca3"
     },
     {
       "id": "710409fa0899eded",
@@ -307566,73 +306633,6 @@
       "incident_id": "inc-0f7a8a1a95fb4b1e"
     },
     {
-      "id": "01e4195fd838fd7f",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Egypt intensifies diplomatic efforts to free crew held on hijacked MT Eureka",
-      "summary": "Egypt is stepping up diplomatic interventions to secure the release of the crew aboard the hijacked vessel MT Eureka.",
-      "original_title": "Egypt intensifies diplomatic efforts to free crew held on hijacked MT Eureka",
-      "original_summary": "Egypt intensifies diplomatic efforts to free crew held on hijacked MT Eureka safety4sea.com",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-01T07:00:00+00:00",
-      "source": "safety4sea.com",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNY3ZKN2wyakFVRlVnZzAwR0RvQVNqWGNQa01UVUoxM1hfeFhhRU9la0dpLWNTNGN6bGZ1am9jM0NXN29SbkFoQTM4Y05Ja1k1SUNNdGlKUEtFVkFjTDh6ZnVldkdmaWdheFlWM3NOMzlKX3MydEJXZGJVaEpoMXYwbGJVR1l6M0JnZjVVbVlnYlY2VXJsNTA0TE92MmR3OTJidHc?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Off coast of Somalia",
-      "latitude": 5.1521,
-      "longitude": 46.1996,
-      "location_precision": "region",
-      "location_confidence": "medium",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "SAFETY4SEA",
-      "targeted_source_kind": "specialist_media",
-      "sources": [
-        "safety4sea.com"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-01T07:00:00+00:00",
-      "last_reported": "2026-07-01T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Ongoing maritime hijacking and hostage situation involving commercial crew members.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Egyptian diplomatic efforts to free crew of hijacked vessel MT Eureka",
-      "title_variants": [
-        "Egyptian diplomatic efforts to free crew of hijacked vessel MT Eureka"
-      ],
-      "location_confidence_score": 0.8,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "hijacked MT Eureka"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "MT Eureka was hijacked off the Somali coast/Gulf of Aden.",
-      "ai_geo_fingerprint": "659f7f53f42c2b4301cabff10dd3cfa2cc5bb7dcfd339f64af245859f945cd89",
-      "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
       "id": "bd9b9b5498601e58",
       "category": "Attacks",
       "categories": [
@@ -307721,7 +306721,7 @@
       "collection_locale": null,
       "published": "2026-06-30T07:00:00+00:00",
       "source": "thenationalnews.com",
-      "source_count": 1,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxNek4xSTRRUEJHT1pySkVLeFd2RVpBQVhwdmJfd0RkN3htVExkOTRzcGlYS29BNVdkTzFvTkVXVG96S29jWjk2UjdkZFpaVkRsRWlYOF9oeTdRbWZlb0RpeC00bW45emw3cVlqX2ZmRDUzLTRvZnowdTV0Vk1SUS1jRTUyd2ZCLXZEU0FwTXBCenMwOTVVN2k0SW1RdkFOZUxFeUx6ejkxZjZySTIwWG5VZ1lNU3BJeThKYllfbFMyS3BYM0lmbEpKak5OU0xoNnVyeVNYb042WWpqOWJDblE?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -307733,12 +306733,43 @@
       "location_precision": "country_capital",
       "location_confidence": "high",
       "sources": [
-        "thenationalnews.com"
+        "thenationalnews.com",
+        "safety4sea.com",
+        "maritime-executive.com",
+        "Splash247"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Egypt intensifies diplomatic efforts to free crew held on hijacked MT Eureka",
+          "original_title": "Egypt intensifies diplomatic efforts to free crew held on hijacked MT Eureka",
+          "original_language": "en",
+          "summary": "Egypt is stepping up diplomatic interventions to secure the release of the crew aboard the hijacked vessel MT Eureka.",
+          "published": "2026-07-01T07:00:00+00:00",
+          "source": "safety4sea.com",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNY3ZKN2wyakFVRlVnZzAwR0RvQVNqWGNQa01UVUoxM1hfeFhhRU9la0dpLWNTNGN6bGZ1am9jM0NXN29SbkFoQTM4Y05Ja1k1SUNNdGlKUEtFVkFjTDh6ZnVldkdmaWdheFlWM3NOMzlKX3MydEJXZGJVaEpoMXYwbGJVR1l6M0JnZjVVbVlnYlY2VXJsNTA0TE92MmR3OTJidHc?oc=5"
+        },
+        {
+          "title": "Conditions Deteriorating for Hijacked Seafarers as Somalia Piracy Continues",
+          "original_title": "Conditions Deteriorating for Hijacked Seafarers as Somalia Piracy Continues",
+          "original_language": "en",
+          "summary": "Reports indicate that conditions are worsening for seafarers held hostage following vessel hijackings amid ongoing Somali piracy activity.",
+          "published": "2026-07-02T07:00:00+00:00",
+          "source": "maritime-executive.com",
+          "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPN2xJUnpLejNmejQwanpkVjlJRHk5ZFJBSF9CVll0dURjb0cxYm8xTVh0TVBTZmZubHJ3VFExLVdmN3ZKN3Q0emo3SEZ4Z3RtLUFZTW1QaWJ0UnJ2ZG54dXpQemZPVjEyd1RycG5nWFhrSVN1d2Q5ZXRad3FMamVILTFaMkw3Q29mT0c3RmZLTDF1ekN2eVo5MmgySGVuUHp5RllobW1rcE1GUVZsTWNkc2NvTFM?oc=5"
+        },
+        {
+          "title": "Piracy Hostages Face Worsening Conditions Off Somalia",
+          "original_title": "Piracy hostages face worsening conditions off Somalia",
+          "original_language": "en",
+          "summary": "Reports indicate that hostages held by pirates off the coast of Somalia are facing increasingly deteriorating conditions.",
+          "published": "2026-07-03T07:00:00+00:00",
+          "source": "Splash247",
+          "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQLXpVT0MxeWMyLWc4Q2tIV2x4QU03WDEyMXROUVpCS0lQY3VFM0ZsTWIyaTFCUnd4YTNWeFp6d1RReTF0VnE5SW5ZWHoxWU4ySUlwaEg2LWdwVU9Rajd1M1o1Qllybjl5M3ZYRWlYa01zNHBSQVJBX3ZPRUlqQ0pLdkVn?oc=5"
+        }
+      ],
+      "article_count": 4,
       "first_reported": "2026-06-30T07:00:00+00:00",
-      "last_reported": "2026-06-30T07:00:00+00:00",
+      "last_reported": "2026-07-03T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -307763,7 +306794,13 @@
       "ai_geo_reason": "Ship hijacked by pirates off the coast of Somalia.",
       "ai_geo_fingerprint": "6ec8371ea7df7b3d224d86e28105b1e9c21ea2fa95d2f43eefaad37c86aa0edf",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-300c8b559601653e",
+      "source_article_fingerprints": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "30c8709913215a90",
@@ -307884,7 +306921,8 @@
       "ai_geo_reason": "Legal complaint filed in France against French politician.",
       "ai_geo_fingerprint": "b78483902cf999961ff7b8c1f66e5e51b622cb43fcd08914835135adc5483906",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-3ff0d747e55da112"
     },
     {
       "id": "b107e33654a59b1b",
@@ -307903,7 +306941,7 @@
       "collection_locale": "TR:tr",
       "published": "2026-06-30T07:00:00+00:00",
       "source": "NTV Haber",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQM3F0akRKOFRBUWx3di1ZZ29nWTZycDB5SXdpdnNRWVc5UXdxMEhFeWdVZV9SNDhqOG40MHRPU2dnT19vVGo0OE1PaEJCaFlVSkFoMkYzWDBzNHBKSjl4THpVRERteWg1VWdEaVF2TW1mSm9iMUZfYUFUMmdRQjBuQWtXR0NIX2hNVGJKWjNaYUhQbmE5TGdSbmhia0nSAaIBQVVfeXFMTzZyNDhEWVRtUjJIRjhpcDhESVVKQXlwSGp4bGFhckNZLWZxSWFpWHlRdTlTRTN1cV9LVGIyUzRnOEZFdkRScko2Y2tJTmVkdVFpOVJlM0E0eHZoYy1mNnB1NHRxV2NKakVxRDRYdUhQajZ1Y2VjU0RRRjVsbXNoUTFnbFMwVTlKczdqOWxKZkk3SU12MGpqR2ZIOGc0MHlQemJn?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -307916,16 +306954,36 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "sources": [
-        "NTV Haber"
+        "NTV Haber",
+        "Goobjoog English"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Somalia Says Joint Airstrike With Türkiye Kills 35 Al-Shabaab Fighters in Lower Shabelle",
+          "original_title": "Somalia Says Joint Airstrike With Türkiye Kills 35 Al-Shabaab Fighters in Lower Shabelle",
+          "original_language": "en",
+          "summary": "A joint airstrike conducted by Somalia and Turkey in the Lower Shabelle region has killed 35 Al-Shabaab fighters.",
+          "published": "2026-06-30T07:00:00+00:00",
+          "source": "Goobjoog English",
+          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPMGh6WXBVT19weUctNm9xTWh1SmV5RG5iQXcyUC1ZSVh5OGJPUnFRUVdzYjR1Y0tOa3pzZWRrMFlDUHBOVXRPaW9sLXJiOHV5amxyandpTF9lMTZISjhlTzJOSEFJRURHcHJabTdrVjQ4aXVOcFV5Z0M3dnVCNDd3OS0wOEVXVlpGa1lqcjRIa29EZUd2ME83M0J3TmFHZm1wNTF6cC1NSjRrUDl1M3VITVJwdw?oc=5"
+        },
+        {
+          "title": "Defence Ministry Says 27 Al-Shabaab Fighters Killed In Lower Shabelle",
+          "original_title": "Defence Ministry Says 27 Al-Shabaab Fighters Killed In Lower Shabelle",
+          "original_language": "en",
+          "summary": "The Somali Ministry of Defence announced that 27 Al-Shabaab fighters were killed during operations in the Lower Shabelle region.",
+          "published": "2026-07-02T07:00:00+00:00",
+          "source": "Goobjoog English",
+          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQRkx3THlVM2ltelpTVndCcmIxbWVuWHZscG8zb1BRUEhhVkVFTVpkUVAteEZ4b1FMRjFsLUtRN2JKRVB0NmpVa2lqUV9zVmdYUDJWeE1nNkprYjJQRUtfVWpfOHIwb3l1dGlGcU5VNjFIdDRZNHFVc1RmRWZUUnNuUGdfRHhNRjJYOXhYVmUxN0JfZmphWnhKRnNR?oc=5"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-06-30T07:00:00+00:00",
       "last_reported": "2026-06-30T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
+      "ai_relevance_score": 90,
       "ai_relevance_reason": "Active military counter-terrorism operation against a named terrorist organization (Al-Shabaab).",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -307946,7 +307004,16 @@
       "ai_geo_reason": "Coordinated airstrike against Al-Shabaab by Somali and Turkish forces inside Somalia.",
       "ai_geo_fingerprint": "4626f6d158dc8a44566e36f4ba795239e34461d817af626af366521d68ba8f54",
       "ai_geo_inferred": true,
-      "actor_group": "Al-Shabaab"
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-4e7a3b157ed3bf4e",
+      "source_article_fingerprints": [
+        "51ced4a982da05aab5ba86543998676caa997cc022382b59930243789cb7cb3f",
+        "fbe901789324829f4e68698c6075540d8ed2a9cd8296a2a95843b0974dbe355f"
+      ],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "2fb2d8407b596247",
@@ -308024,7 +307091,8 @@
       "ai_geo_reason": "Turkish authorities detained individuals across 2 provinces for financing ISIS.",
       "ai_geo_fingerprint": "56ac546097fcc723bfda9723aae87879c485a8a901846e6e06c506d8fc7638de",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-88a5708e1caff799"
     },
     {
       "id": "6bf99c744a209912",
@@ -308087,7 +307155,8 @@
       "ai_geo_reason": "A court in Yaroslavl sentenced a resident.",
       "ai_geo_fingerprint": "d5aa3303d483f512d1199d89f219f67fcfb54ff89d2834ebbad25f795c13c555",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-6d958652544c0972"
     },
     {
       "id": "3bf8ff1b25f95a3b",
@@ -308168,7 +307237,8 @@
       "ai_geo_reason": "ReCAAP Information Sharing Centre is headquartered in Singapore and tracks Asian maritime incidents.",
       "ai_geo_fingerprint": "05a1d6f4f57eb08cabb37f4305db9765c0dfb6946cbadbf31d83132c90935f30",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-c567f2f941b4af7c"
     },
     {
       "id": "cea3fb51a0138c3f",
@@ -308235,7 +307305,8 @@
       "ai_geo_reason": "Operation took place in Boulkessi, Douentza region, Mali.",
       "ai_geo_fingerprint": "9e20f0c6e3710744500bff928b83c09e8f6dbdb3d4a3fc4d14e9fff1771a15eb",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-3d63d8759b37e071"
     },
     {
       "id": "506fcc2cbd43fdff",
@@ -308303,94 +307374,8 @@
       "ai_geo_reason": "Sentencing of an Al-Shabaab member by a military court in Somalia.",
       "ai_geo_fingerprint": "2cd861e2754e9f72097f6a9823e22db1f4bb8e33b3f87c8536ee5a1813fae6cb",
       "ai_geo_inferred": false,
-      "actor_group": "Al-Shabaab"
-    },
-    {
-      "id": "40c751b5adcda96d",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Weapons"
-      ],
-      "title": "Somalia Says Joint Airstrike With Türkiye Kills 35 Al-Shabaab Fighters in Lower Shabelle",
-      "summary": "A joint airstrike conducted by Somalia and Turkey in the Lower Shabelle region has killed 35 Al-Shabaab fighters.",
-      "original_title": "Somalia Says Joint Airstrike With Türkiye Kills 35 Al-Shabaab Fighters in Lower Shabelle",
-      "original_summary": "Somalia Says Joint Airstrike With Türkiye Kills 35 Al-Shabaab Fighters in Lower Shabelle Goobjoog English",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-06-30T07:00:00+00:00",
-      "source": "Goobjoog English",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPMGh6WXBVT19weUctNm9xTWh1SmV5RG5iQXcyUC1ZSVh5OGJPUnFRUVdzYjR1Y0tOa3pzZWRrMFlDUHBOVXRPaW9sLXJiOHV5amxyandpTF9lMTZISjhlTzJOSEFJRURHcHJabTdrVjQ4aXVOcFV5Z0M3dnVCNDd3OS0wOEVXVlpGa1lqcjRIa29EZUd2ME83M0J3TmFHZm1wNTF6cC1NSjRrUDl1M3VITVJwdw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Lower Shabelle",
-      "latitude": 1.8833,
-      "longitude": 44.5,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "goobjoog.com",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "Goobjoog English"
-      ],
-      "related_articles": [
-        {
-          "title": "Defence Ministry Says 27 Al-Shabaab Fighters Killed In Lower Shabelle",
-          "original_title": "Defence Ministry Says 27 Al-Shabaab Fighters Killed In Lower Shabelle",
-          "original_language": "en",
-          "summary": "The Somali Ministry of Defence announced that 27 Al-Shabaab fighters were killed during operations in the Lower Shabelle region.",
-          "published": "2026-07-02T07:00:00+00:00",
-          "source": "Goobjoog English",
-          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQRkx3THlVM2ltelpTVndCcmIxbWVuWHZscG8zb1BRUEhhVkVFTVpkUVAteEZ4b1FMRjFsLUtRN2JKRVB0NmpVa2lqUV9zVmdYUDJWeE1nNkprYjJQRUtfVWpfOHIwb3l1dGlGcU5VNjFIdDRZNHFVc1RmRWZUUnNuUGdfRHhNRjJYOXhYVmUxN0JfZmphWnhKRnNR?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-06-30T07:00:00+00:00",
-      "last_reported": "2026-07-02T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Major counter-terrorism kinetic strike against a named terrorist group.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Joint Somali-Turkish airstrike killing 35 Al-Shabaab fighters in Lower Shabelle, Somalia",
-      "title_variants": [
-        "Joint Somali-Turkish airstrike killing 35 Al-Shabaab fighters in Lower Shabelle, Somalia"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "title_plus_anchor",
-        "same_url"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Lower Shabelle, Somalia"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Joint airstrike in Lower Shabelle region, Somalia.",
-      "ai_geo_fingerprint": "82289528d02b5011b6bd4145bc5fb31320aadce389cfb4cef40ddedeb9befbbf",
-      "ai_geo_inferred": false,
-      "source_article_fingerprints": [
-        "51ced4a982da05aab5ba86543998676caa997cc022382b59930243789cb7cb3f",
-        "fbe901789324829f4e68698c6075540d8ed2a9cd8296a2a95843b0974dbe355f"
-      ],
-      "actor_group": "Al-Shabaab"
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-19e9b61c56cfe913"
     },
     {
       "id": "5b87986920d08b93",
@@ -308571,7 +307556,8 @@
       "ai_geo_reason": "Intelligence report focusing on India regarding ISI activities.",
       "ai_geo_fingerprint": "e7c93c9496622fdd2a884f7fee56479ed8e57a5daf71f1f0f2f41984b7d14ec5",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-977a2ad8f6ff9455"
     },
     {
       "id": "eca1bc4320eeb817",
