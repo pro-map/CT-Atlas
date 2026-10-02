@@ -148,7 +148,7 @@ test('the DATABASE title shows one total: every event plus the archive, once bot
   assert.match(html,/databaseEventTotal =\s*Number\(data\.map\?\.source_event_count\)/);
 });
 
-test('one set of Database filters drives the list, both exports, the Report Generator, Deep Search and Atlas AI',()=>{
+test('one set of Database filters drives the list, both exports, the Report Generator and Atlas AI',()=>{
   for(const id of ['reportPeriod','reportRegion','reportTopic','reportGroup']){
     const markup=html.indexOf(`id="${id}"`);
     assert.ok(markup>html.indexOf('id="databasePanel"')&&markup<html.indexOf('id="reportGeneratorPanel"'),`${id} must live in the Database panel`);
@@ -161,8 +161,6 @@ test('one set of Database filters drives the list, both exports, the Report Gene
   assert.match(extract('generateCustomReport'),/actor_group:\s*actorGroup/);
   assert.match(html,/window\.CTAtlasDatabase = \{\s*filters: databaseFilters,/);
   assert.match(fs.readFileSync('deep-search.js','utf8'),/\.\.\.databaseScope\(\)\.filters,user_id:username,question/);
-  assert.match(fs.readFileSync('quick-ask.js','utf8'),/\.\.\.databaseScope\(\)\.filters,user_id:username,question/);
-  assert.match(fs.readFileSync('quick-ask.js','utf8'),/getElementById\("databaseToolButtons"\)/);
 });
 
 test('the region list is filled once so opening the Report Generator never resets the analyst choice',()=>{
@@ -282,10 +280,10 @@ test('the ticker lists the period attacks, pauses on hover, respects reduced mot
 
 test('the Database route is protected by the session wrapper and scripts are cache-busted',()=>{
   const auth=fs.readFileSync('usage-auth-fix.js','utf8');
-  assert.match(auth,/quick-ask\|database-events\|/);
-  assert.match(auth,/deep-search\.js\?v=5/);
-  assert.match(auth,/quick-ask\.js\?v=4/);
-  assert.match(html,/usage-auth-fix\.js\?v=20261002/);
+  assert.match(auth,/deep-search\|database-events\|/);
+  assert.match(auth,/deep-search\.js\?v=7/);
+  assert.ok(!/quick-ask/.test(auth),'the retired quick Q&A is not loaded');
+  assert.match(html,/usage-auth-fix\.js\?v=20261003b/);
 });
 
 // ---- Worker /database-events --------------------------------------------

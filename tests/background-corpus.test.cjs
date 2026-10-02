@@ -162,8 +162,7 @@ test('an archive row repeating an event in its own language is not sent next to 
 test('off-topic reviews (score 0) are never served by any archive search',()=>{
   const source=fs.readFileSync('cloudflare-worker/background-corpus.js','utf8');
   assert.match(source,/const NOT_NOISE = "COALESCE\(ba\.ai_relevance_score, 1\) <> 0";/);
-  assert.equal((source.match(/AND \$\{NOT_NOISE\}/g)||[]).length,3,'thematic, Deep Search and Atlas AI queries');
-  assert.match(fs.readFileSync('cloudflare-worker/quick-ask.js','utf8'),/searchCorpusForQuestion\(env, \{[\s\S]*?events: matched\s*\}\)/);
+  assert.equal((source.match(/AND \$\{NOT_NOISE\}/g)||[]).length,2,'thematic (Report Generator) and Atlas AI queries');
 });
 
 test('a D1 failure degrades to no context instead of failing the report',async()=>{
@@ -207,7 +206,7 @@ test('Deep Search merges the archive before de-duplication and labels it in the 
   assert.match(worker,/deduplicateRows\(\[\.\.\.retrieval\.rows, \.\.\.corpus\.rows\]\)/);
   assert.match(worker,/corpus_kind: row\.corpus_kind/);
   assert.match(worker,/"ct_atlas_corpus" come from CT Atlas's own archive/);
-  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v14-assessment"/);
+  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v15-atlas-ai"/);
   assert.match(fs.readFileSync('deep-search.js','utf8'),/ct_atlas_corpus:"CT ATLAS ARCHIVE"/);
 });
 
@@ -290,10 +289,9 @@ test('every prompt that reads the archive explains archived incidents',()=>{
   assert.match(shared.constant('SYSTEM_INSTRUCTION'),/archived_incident = a CT incident report that passed the map's own\s+selection but is not one of priority_events/);
   assert.match(shared.constant('SYSTEM_INSTRUCTION'),/corroboration of it, never a second incident/);
   assert.match(fs.readFileSync('cloudflare-worker/deep-search.js','utf8'),/"archived_incident" is an incident report that passed CT Atlas's own map\s+selection/);
-  assert.match(fs.readFileSync('cloudflare-worker/quick-ask.js','utf8'),/\(kind "archived_incident"\) an\s+incident report that passed the map's selection/);
 });
 
-test('Deep Search writes an intelligence assessment, not a digest of articles',()=>{
+test('Atlas AI writes an intelligence assessment, not a digest of articles',()=>{
   const worker=fs.readFileSync('cloudflare-worker/deep-search.js','utf8');
   const prompt=worker.slice(worker.indexOf('const REPORT_INSTRUCTION = `'),worker.indexOf('`;',worker.indexOf('const REPORT_INSTRUCTION = `')));
   let at=-1;
@@ -305,6 +303,22 @@ test('Deep Search writes an intelligence assessment, not a digest of articles',(
   }
   assert.match(prompt,/NOT a digest/);
   assert.match(prompt,/estimative language[\s\S]{0,120}AND states a confidence level/);
-  assert.match(prompt,/every sentence stating one carries a\s+citation/);
+  assert.match(prompt,/Recent events, figures,\s+names, places, dates and attribution in the question's period come ONLY\s+from them/);
+  assert.match(prompt,/\[GK\]: your own general knowledge as an analyst/);
+  assert.match(prompt,/\[GK\] never establishes that an event in the question's period happened/);
   assert.ok(!/LABORATORY DESTRUCTION|PRODUCTION \/ CULTIVATION/.test(prompt),'no narcotics-only headings');
+});
+
+test('Atlas AI answers from general knowledge when no reporting is retrieved, and labels it',()=>{
+  const worker=fs.readFileSync('cloudflare-worker/deep-search.js','utf8');
+  assert.ok(!/found no usable open-source reporting for this question and period\.",/.test(worker),'no dead end any more');
+  assert.match(worker,/const noCurrentReporting = !unique\.length && !databaseRows\.length;/);
+  assert.match(worker,/\.\.\.\(retrievalNote \? \{ retrieval_note: retrievalNote \} : \{\}\)/);
+  assert.match(worker,/if \(!likelyTransientFetchIssue\) \{\s*await gateCall\(env, "\/cache-put"/,'a provider failure is never cached');
+  assert.match(worker,/general_knowledge_percent:/);
+  const client=fs.readFileSync('deep-search.js','utf8');
+  assert.ok(client.includes(`safe.replace(/\\[GK\\]/g,'<span class="deep-citation deep-gk"`),'[GK] is shown as its own badge');
+  assert.match(client,/GENERAL KNOWLEDGE \[GK\]/);
+  assert.match(client,/button\.textContent="CUSTOM INTELLIGENCE";/);
+  assert.ok(!/DEEP SEARCH · BETA/.test(client),'renamed, no beta label');
 });

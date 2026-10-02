@@ -225,11 +225,11 @@ function injectAdminUi(){
           '<div class="admin-usage-section-title">FEATURE ACTIVITY</div>'+
           '<div class="admin-usage-table-wrap">'+
             '<table id="adminFeatureUsageTable">'+
-              '<thead><tr><th>USER</th><th>REPORT GENERATION</th><th>DEEP SEARCH</th><th>ATLAS AI</th><th>BLOCKCHAIN SEARCH</th><th>SOCIAL MEDIA SEARCH</th><th>FACIAL EXTRACTION</th><th>FACIAL SEARCH</th></tr></thead>'+
+              '<thead><tr><th>USER</th><th>SITUATION REPORT</th><th>CUSTOM INTELLIGENCE</th><th>QUICK Q&amp;A (RETIRED)</th><th>BLOCKCHAIN SEARCH</th><th>SOCIAL MEDIA SEARCH</th><th>FACIAL EXTRACTION</th><th>FACIAL SEARCH</th></tr></thead>'+
               '<tbody id="adminFeatureUsageRows"></tbody>'+
             '</table>'+
           '</div>'+
-          '<div id="adminUsageNote">Workspace access counts page openings. Feature counts are per user and selected period; they record usage totals only, not search terms, questions, addresses, images or report contents. Blockchain and Facial counters begin with this update; earlier Report Generator, Deep Search, Atlas AI and Social Media counts retain their existing history.</div>'+
+          '<div id="adminUsageNote">Workspace access counts page openings. Feature counts are per user and selected period; they record usage totals only, not search terms, questions, addresses, images or report contents. Blockchain and Facial counters begin with this update; earlier Situation Report (Report Generator), Custom Intelligence (Deep Search), retired quick Q&A and Social Media counts retain their existing history.</div>'+
         '</div>'+
       '</div>'+
     '</div>');

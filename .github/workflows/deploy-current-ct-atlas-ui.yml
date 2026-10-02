@@ -9,8 +9,6 @@ on:
       - "pdf-export.js"
       - "deep-search.js"
       - "deep-search.css"
-      - "quick-ask.js"
-      - "quick-ask.css"
       - "crypto.html"
       - "crypto.js"
       - "crypto-report.js"

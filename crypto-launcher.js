@@ -3,7 +3,7 @@
 
 function inject(){
   if(document.getElementById("cryptoIntelButton")) return;
-  const anchor=document.getElementById("quickAskButton")||document.getElementById("downloadMapButton");
+  const anchor=document.getElementById("downloadMapButton");
   if(!anchor){setTimeout(inject,150);return;}
 
   const button=document.createElement("button");

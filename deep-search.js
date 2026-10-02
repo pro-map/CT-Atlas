@@ -20,7 +20,7 @@ function ensureCss(){
   const link=document.createElement("link");
   link.id="deepSearchCss";
   link.rel="stylesheet";
-  link.href="deep-search.css?v=4";
+  link.href="deep-search.css?v=5";
   document.head.appendChild(link);
 }
 
@@ -33,7 +33,7 @@ function inject(){
     const button=document.createElement("button");
     button.id="deepSearchButton";
     button.type="button";
-    button.textContent="DEEP SEARCH · BETA";
+    button.textContent="CUSTOM INTELLIGENCE";
     reportButton.insertAdjacentElement("afterend",button);
   }
 
@@ -42,32 +42,32 @@ function inject(){
       <div id="deepSearchWindow" role="dialog" aria-modal="true" aria-labelledby="deepSearchTitle">
         <div id="deepSearchHeader">
           <div>
-            <div id="deepSearchTitle">DEEP SEARCH · BETA</div>
-            <div id="deepSearchSubtitle">The CT Atlas database first, then multilingual external OSINT search</div>
+            <div id="deepSearchTitle">CUSTOM INTELLIGENCE</div>
+            <div id="deepSearchSubtitle">An intelligence assessment answering your question: CT Atlas database, multilingual OSINT and analytical knowledge</div>
           </div>
-          <button id="deepSearchClose" type="button" aria-label="Close Deep Search">×</button>
+          <button id="deepSearchClose" type="button" aria-label="Close Custom Intelligence">×</button>
         </div>
         <div id="deepSearchBody">
           <div id="deepSearchControls">
             <div id="deepSearchGuidance">
-              Deep Search generates a full sourced analytical report from your question, so be specific: name the <strong>period</strong> ("last 3 months", "in 2022" -- or leave it out entirely for a full historical search), the <strong>group / actor</strong>, and the <strong>country or region</strong>. There is no separate period field any more -- Deep Search reads the time window directly out of your question.
+              Custom Intelligence writes a full sourced intelligence assessment from your question, so be specific: name the <strong>period</strong> ("last 3 months", "in 2022" -- or leave it out entirely for a full historical search), the <strong>group / actor</strong>, and the <strong>country or region</strong>. There is no separate period field any more -- it reads the time window directly out of your question.
             </div>
             <label class="deep-field deep-question-field">
               <span>ANALYST QUESTION</span>
               <textarea id="deepSearchQuestion" rows="5" maxlength="1200" placeholder="Example: ISIS-K facilitation networks in Afghanistan and Pakistan over the last 6 months. Or: Al-Shabaab attacks in Somalia since 2022."></textarea>
             </label>
             <div id="deepSearchMethod">
-              Deep Search first takes the matching events from the CT Atlas database (within the DATABASE panel's place, category and group) as its primary evidence, then runs two native-language Google News searches in each of the 12 supported languages, plus ACLED and GDELT (chunked across longer periods for real historical depth). Languages relevant to the country in the analyst question receive priority rescue searches through Bing News as well when Google coverage comes up sparse, before deduplication, CT Atlas comparison and source-cited analysis.
+              Custom Intelligence first takes the matching events from the CT Atlas database (within the DATABASE panel's place, category and group) as its primary evidence, then runs two native-language Google News searches in each of the 12 supported languages, plus ACLED and GDELT (chunked across longer periods for real historical depth). Languages relevant to the country in the analyst question receive priority rescue searches through Bing News as well when Google coverage comes up sparse, before deduplication, CT Atlas comparison and source-cited analysis.
             </div>
             <div id="deepSearchScope" class="deep-scope" hidden></div>
-            <button id="deepSearchRun" type="button">RUN DEEP SEARCH</button>
+            <button id="deepSearchRun" type="button">GENERATE ASSESSMENT</button>
             <div id="deepSearchStatus"></div>
           </div>
 
           <div id="deepSearchResult" hidden>
             <div id="deepSearchResultTopline">
               <div>
-                <div id="deepSearchResultTitle">DEEP SEARCH REPORT</div>
+                <div id="deepSearchResultTitle">INTELLIGENCE ASSESSMENT</div>
                 <div id="deepSearchResultMeta"></div>
                 <div id="deepSearchDetectedPeriod"></div>
               </div>
@@ -90,7 +90,7 @@ function inject(){
             <div id="deepSearchEvidence"></div>
 
             <div id="deepSearchDisclaimer">
-              Deep Search uses live open-source search results and AI-assisted analysis. Automatic CT Atlas gap matching is approximate. Citation coverage is not a statistical hallucination probability. Source material and significant claims should be independently validated before operational or decision-making use.
+              Custom Intelligence uses live open-source search results and AI-assisted analysis; passages marked [GK] come from the model's general knowledge, not from a retrieved source. Automatic CT Atlas gap matching is approximate. Citation coverage is not a statistical hallucination probability. Source material and significant claims should be independently validated before operational or decision-making use.
             </div>
           </div>
         </div>
@@ -118,10 +118,10 @@ async function checkBackend(){
     backendReady=Boolean(response.ok&&payload.deep_search===true);
   }catch(_){backendReady=false;}
   if(backendReady){
-    button.disabled=false; button.textContent="DEEP SEARCH · BETA"; button.title="Multilingual ad hoc OSINT search (beta -- under active development)";
+    button.disabled=false; button.textContent="CUSTOM INTELLIGENCE"; button.title="An intelligence assessment answering your question: CT Atlas database, multilingual OSINT search and analysis";
   }else{
-    button.disabled=true; button.textContent="DEEP SEARCH · BETA · DEPLOY PENDING";
-    button.title="Deep Search backend is not currently available.";
+    button.disabled=true; button.textContent="CUSTOM INTELLIGENCE · UNAVAILABLE";
+    button.title="The Custom Intelligence backend is not currently available.";
   }
 }
 
@@ -193,7 +193,7 @@ function normalizePayload(payload){
     .replace(/^\*\*```(?:json)?\*\*/i,"")
     .replace(/\*\*```\*\*$/i,"").trim();
 
-  normalized.title=title||"CT Atlas Deep Search";
+  normalized.title=title||"CT Atlas · Intelligence Assessment";
   normalized.analysis=analysis;
   return normalized;
 }
@@ -205,6 +205,8 @@ function inlineMarkup(value){
     const label=ids.split(",").map(x=>x.trim()).join(", ");
     return `<span class="deep-citation">[${label}]</span>`;
   });
+  // The model's own knowledge, not a retrieved source.
+  safe=safe.replace(/\[GK\]/g,'<span class="deep-citation deep-gk" title="General knowledge: the model\'s own analytical knowledge, not a retrieved source">GK</span>');
   return safe;
 }
 
@@ -329,7 +331,7 @@ function render(rawPayload){
   lastPayload=payload;
   const result=document.getElementById("deepSearchResult");
   if(result)result.hidden=false;
-  document.getElementById("deepSearchResultTitle").innerHTML=esc(payload.title||"DEEP SEARCH REPORT")+(hasFetchIssue(payload)?` <span class="deep-fetch-issue-flag" title="${esc(FETCH_ISSUE_TITLE)}">⚠</span>`:"");
+  document.getElementById("deepSearchResultTitle").innerHTML=esc(payload.title||"INTELLIGENCE ASSESSMENT")+(hasFetchIssue(payload)?` <span class="deep-fetch-issue-flag" title="${esc(FETCH_ISSUE_TITLE)}">⚠</span>`:"");
 
   const languages=(payload.languages_searched||[]).map(item=>item.name||item.code).join(", ");
   const retrieved=payload.retrieval||{};
@@ -346,7 +348,8 @@ function render(rawPayload){
     <div class="deep-metric"><span>EVIDENCE USED</span><strong>${Number(retrieved.evidence_events_used_for_analysis||0)}</strong></div>
     <div class="deep-metric"><span>ATLAS MATCHES</span><strong>${Number(retrieved.matched_to_atlas||0)}</strong></div>
     <div class="deep-metric"><span>POTENTIAL GAPS</span><strong>${Number(retrieved.potential_atlas_gaps||0)}</strong></div>
-    <div class="deep-metric"><span>CITATION COVERAGE</span><strong>${Number(payload.grounding?.citation_coverage_percent||0)}%</strong></div>`;
+    <div class="deep-metric"><span>CITATION COVERAGE</span><strong>${Number(payload.grounding?.citation_coverage_percent||0)}%</strong></div>
+    <div class="deep-metric"><span>GENERAL KNOWLEDGE [GK]</span><strong>${Number(payload.grounding?.general_knowledge_percent||0)}%</strong></div>`;
 
   document.getElementById("deepSearchLanguageCoverage").innerHTML=languageCoverageHtml(payload);
   document.getElementById("deepSearchReport").innerHTML=formatAnalysis(payload.analysis||"");
@@ -356,11 +359,11 @@ function render(rawPayload){
 }
 
 async function run(){
-  if(!backendReady){setStatus("Deep Search backend is not available.","warning");return;}
+  if(!backendReady){setStatus("The Custom Intelligence backend is not available.","warning");return;}
   const question=String(document.getElementById("deepSearchQuestion")?.value||"").trim();
   const username=user(), sessionToken=token(), button=document.getElementById("deepSearchRun");
   if(question.length<8){setStatus("Enter a more specific analyst question.","warning");return;}
-  if(!username||!sessionToken){setStatus("Deep Search requires an authenticated CT Atlas session. Sign in again.","error");return;}
+  if(!username||!sessionToken){setStatus("Custom Intelligence requires an authenticated CT Atlas session. Sign in again.","error");return;}
 
   if(button){button.disabled=true;button.textContent="SEARCHING MULTILINGUAL SOURCES…";}
   const result=document.getElementById("deepSearchResult");
@@ -378,12 +381,16 @@ async function run(){
     const periodNote=payload.detected_period?.label?` Period searched: ${payload.detected_period.label}.`:"";
     if(!response.ok){
       const retry=Number(payload.retry_after_seconds||0);
-      throw new Error((payload.error||"Deep Search failed.")+periodNote+(retry?` Retry in approximately ${Math.ceil(retry/60)} minute(s).`:""));
+      throw new Error((payload.error||"The assessment failed.")+periodNote+(retry?` Retry in approximately ${Math.ceil(retry/60)} minute(s).`:""));
     }
     render(payload);
-    setStatus(`Deep Search complete · ${Number(payload.retrieval?.articles_retrieved||0)} articles · ${Number(payload.retrieval?.unique_event_clusters||0)} unique event clusters · ${Number(payload.retrieval?.potential_atlas_gaps||0)} potential CT Atlas gaps.${periodNote}`,"success");
-  }catch(error){setStatus(error?.message||"Deep Search failed.","error");}
-  finally{if(button){button.disabled=false;button.textContent="RUN DEEP SEARCH";}}
+    if(payload.no_current_reporting){
+      setStatus(payload.likely_transient_fetch_issue
+        ?"Assessment written from general knowledge only [GK]: the search providers were unavailable for every query. Retry in a few minutes for current reporting."
+        :"Assessment written from general knowledge only [GK]: no current reporting was found in the database or the multilingual search.","warning");
+    }else setStatus(`Assessment complete · ${Number(payload.retrieval?.articles_retrieved||0)} articles · ${Number(payload.retrieval?.unique_event_clusters||0)} unique event clusters · ${Number(payload.retrieval?.potential_atlas_gaps||0)} potential CT Atlas gaps.${periodNote}`,"success");
+  }catch(error){setStatus(error?.message||"The assessment failed.","error");}
+  finally{if(button){button.disabled=false;button.textContent="GENERATE ASSESSMENT";}}
 }
 
 async function copyReport(){
@@ -393,13 +400,13 @@ async function copyReport(){
     .map(item=>`${item.id} — ${item.source} — ${item.title} — ${item.url}`).join("\n");
   const scopeText=lastPayload.database_scope?`Database scope: ${lastPayload.database_scope}\n`:"";
   const databaseCount=Number(lastPayload.retrieval?.ct_atlas_database_events||0);
-  const text=`${lastPayload.title||"CT Atlas Deep Search"}\n\nQuestion: ${lastPayload.question||""}\n${scopeText}CT Atlas database events used: ${databaseCount}\n\n${lastPayload.analysis||""}\n\nSOURCES CITED\n${sourceText}`;
-  try{await navigator.clipboard.writeText(text);setStatus("Deep Search report and cited sources copied to clipboard.","success");}
+  const text=`${lastPayload.title||"CT Atlas · Intelligence Assessment"}\n\nQuestion: ${lastPayload.question||""}\n${scopeText}CT Atlas database events used: ${databaseCount}\n\n${lastPayload.analysis||""}\n\nSOURCES CITED\n${sourceText}`;
+  try{await navigator.clipboard.writeText(text);setStatus("Assessment and cited sources copied to clipboard.","success");}
   catch(_){setStatus("Clipboard access was unavailable.","warning");}
 }
 
 function pdfSafeName(value){
-  return String(value||"Deep-Search").replace(/[^a-z0-9_-]+/gi,"-").replace(/^-+|-+$/g,"").slice(0,70)||"Deep-Search";
+  return String(value||"Assessment").replace(/[^a-z0-9_-]+/gi,"-").replace(/^-+|-+$/g,"").slice(0,70)||"Assessment";
 }
 
 function pdfDisplayUrl(url,maxLength=100){
@@ -427,7 +434,7 @@ async function downloadPdf(){
       {text:"Generated: "+stamp.toLocaleString("en-GB")+" · Period: "+(lastPayload.detected_period?.label||"unknown")+" · Model: "+(lastPayload.model||"Gemini"),type:"meta"},
       ...(lastPayload.database_scope?[{text:"Database scope: "+lastPayload.database_scope,type:"meta"}]:[]),
       {text:"SEARCH SUMMARY",type:"heading"},
-      {text:"CT Atlas database events: "+Number(retrieved.ct_atlas_database_events||0)+" · Articles: "+Number(retrieved.articles_retrieved||0)+" · Unique events: "+Number(retrieved.unique_event_clusters||0)+" · Evidence used: "+Number(retrieved.evidence_events_used_for_analysis||0)+" · Atlas matches: "+Number(retrieved.matched_to_atlas||0)+" · Potential gaps: "+Number(retrieved.potential_atlas_gaps||0)+" · Citation coverage: "+Number(lastPayload.grounding?.citation_coverage_percent||0)+"%",type:"highlight"}
+      {text:"CT Atlas database events: "+Number(retrieved.ct_atlas_database_events||0)+" · Articles: "+Number(retrieved.articles_retrieved||0)+" · Unique events: "+Number(retrieved.unique_event_clusters||0)+" · Evidence used: "+Number(retrieved.evidence_events_used_for_analysis||0)+" · Atlas matches: "+Number(retrieved.matched_to_atlas||0)+" · Potential gaps: "+Number(retrieved.potential_atlas_gaps||0)+" · Citation coverage: "+Number(lastPayload.grounding?.citation_coverage_percent||0)+"%"+" · General knowledge [GK]: "+Number(lastPayload.grounding?.general_knowledge_percent||0)+"%",type:"highlight"}
     ];
     if(hasFetchIssue(lastPayload))blocks.push({text:"Retrieval warning: "+FETCH_ISSUE_TITLE,type:"meta"});
     if(languages.length){
@@ -459,9 +466,9 @@ async function downloadPdf(){
       });
     }
     await pdf.download({
-      filename:"CT-Atlas-Deep-Search-"+fileStamp+"-"+pdfSafeName(lastPayload.title),
-      eyebrow:"CT ATLAS · DEEP SEARCH",
-      title:lastPayload.title||"CT Atlas Deep Search",
+      filename:"CT-Atlas-Intelligence-Assessment-"+fileStamp+"-"+pdfSafeName(lastPayload.title),
+      eyebrow:"CT ATLAS · INTELLIGENCE ASSESSMENT",
+      title:lastPayload.title||"CT Atlas · Intelligence Assessment",
       meta:"Evidence-based OSINT research report",
       blocks,
       footer:"This analytical tool is an independent OSINT prototype created for research and analytical purposes. The information displayed is derived from open sources and automated AI-assisted processing. It should not be considered verified intelligence and must be independently validated before any operational or decision-making use."
