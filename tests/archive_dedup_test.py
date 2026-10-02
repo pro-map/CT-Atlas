@@ -133,6 +133,23 @@ class PlanArchiveTests(unittest.TestCase):
         self.assertEqual(len(delete), 1)
         self.assertEqual(delete[0][1], "duplicate_story")
 
+    def test_a_review_dated_only_by_its_review_day_meets_its_twin_weeks_later(self):
+        title = "Nigerian Air Force takes delivery of five new helicopters for anti-terror operations"
+        stored = [
+            row("https://ng/1", "rejected_candidate", title, published="2026-09-15T08:00:00+00:00", score=45),
+            row("gemini-review:late", "historical_review", title, score=45, collected_at="2026-10-01T08:00:00+00:00"),
+        ]
+        _, delete = dedup.plan_archive(stored, [])
+        self.assertEqual(delete, [("gemini-review:late", "duplicate_story", "https://ng/1")])
+
+    def test_dated_articles_keep_the_five_day_window(self):
+        title = "Nigerian Air Force takes delivery of five new helicopters for anti-terror operations"
+        stored = [
+            row("https://ng/1", "related_article", title, published="2026-09-15T08:00:00+00:00"),
+            row("https://ng/2", "related_article", title, published="2026-10-01T08:00:00+00:00"),
+        ]
+        self.assertEqual(dedup.plan_archive(stored, []), ([], []))
+
     def test_a_copy_of_a_map_event_is_kept_for_when_the_map_forgets_it(self):
         # The map keeps 180 days, the archive 730: plan_archive takes no
         # events, so an article repeating a map event is never removed for it.

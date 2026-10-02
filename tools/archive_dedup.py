@@ -38,6 +38,9 @@ from collections import Counter, defaultdict
 from datetime import datetime, timezone
 
 NEAR_DUPLICATE_WINDOW_DAYS = 5
+# A Gemini review without its article's date only carries the review day,
+# which can trail the publication by two weeks or more.
+REVIEW_DATE_WINDOW_DAYS = 30
 MIN_SHARED_TOKENS = 4
 MIN_JACCARD = 0.62
 MIN_CONTAINMENT = 0.78
@@ -271,13 +274,15 @@ class StoryIndex:
     def __len__(self):
         return len(self._stories)
 
-    def add(self, title, url="", time=None, owner=None):
+    def add(self, title, url="", time=None, owner=None, approximate=False):
+        """approximate: the time is a review day, not a publication date."""
         index = len(self._stories)
         normalized = normalize_title(title)
         tokens = title_tokens(title)
-        self._stories.append(
-            {"title": title, "normalized": normalized, "tokens": tokens, "time": time, "owner": owner}
-        )
+        self._stories.append({
+            "title": title, "normalized": normalized, "tokens": tokens,
+            "time": time, "approximate": approximate, "owner": owner,
+        })
         if is_link(url):
             self._by_url.setdefault(str(url), index)
         if normalized:
@@ -286,22 +291,24 @@ class StoryIndex:
             self._by_token[token].append(index)
         return index
 
-    def _within_window(self, index, time):
-        other = self._stories[index]["time"]
+    def _within_window(self, index, time, approximate=False):
+        story = self._stories[index]
+        other = story["time"]
         if time is None or other is None:
             return True
-        return abs((time - other).total_seconds()) <= NEAR_DUPLICATE_WINDOW_DAYS * 86400
+        days = REVIEW_DATE_WINDOW_DAYS if approximate or story["approximate"] else NEAR_DUPLICATE_WINDOW_DAYS
+        return abs((time - other).total_seconds()) <= days * 86400
 
-    def find(self, title, url="", time=None):
+    def find(self, title, url="", time=None, approximate=False):
         """The owner of the story this title repeats, or None."""
         if is_link(url) and str(url) in self._by_url:
             index = self._by_url[str(url)]
-            if self._within_window(index, time):
+            if self._within_window(index, time, approximate):
                 return self._stories[index]["owner"]
 
         normalized = normalize_title(title)
         for index in self._by_title.get(normalized, ()) if normalized else ():
-            if self._within_window(index, time):
+            if self._within_window(index, time, approximate):
                 return self._stories[index]["owner"]
 
         tokens = title_tokens(title)
@@ -313,7 +320,7 @@ class StoryIndex:
         for index, shared in shared_counts.most_common():
             if shared < MIN_SHARED_TOKENS:
                 break
-            if not self._within_window(index, time):
+            if not self._within_window(index, time, approximate):
                 continue
             story = self._stories[index]
             if similar_titles(title, story["title"], shared, len(tokens), len(story["tokens"])):
@@ -346,6 +353,8 @@ def plan_archive(existing_rows, new_rows):
         # one: a translation and its untranslated twin are one story.
         titles = [title for title in dict.fromkeys((row.get("title"), row.get("original_title"))) if title]
         time = row_time(row)
+        # No publication date: the time is the Gemini review day.
+        approximate = not row.get("published")
 
         reason, kept = None, ""
         if is_noise(row):
@@ -354,14 +363,14 @@ def plan_archive(existing_rows, new_rows):
             reason = "duplicate_story"
         else:
             for title in titles or [""]:
-                owner = stories.find(title, url, time)
+                owner = stories.find(title, url, time, approximate)
                 if owner is not None:
                     reason, kept = "duplicate_story", owner
                     break
 
         if reason is None:
             for title in titles or [""]:
-                stories.add(title, url, time, url)
+                stories.add(title, url, time, url, approximate)
             if not stored:
                 insert.append(row)
                 seen_new_urls.add(url)
