@@ -9,7 +9,10 @@ Sources (earlier ones win when two share a URL):
                      them, so the report Worker has never seen them. They
                      inherit the parent event's category, actor, country,
                      region and incident id.
-  removed_event      events archived by tools/cleanup_existing_events.py.
+  removed_event      events archived by tools/cleanup_existing_events.py, and
+                     map events that aged out of the 180-day retention
+                     (archive/removed-events-aged-out-YYYYMM.json, written by
+                     the collector's prune_old step).
   recovered          former map events recovered from events.json's git
                      history by tools/recover_from_history.py (stored as
                      removed_event, with their related articles), related

@@ -205,6 +205,10 @@ jobs:
               # Written together with events.json; only meaningful alongside it.
               if Path("incident_consolidation_state.json").exists():
                   subprocess.run(["git", "add", "--", "incident_consolidation_state.json"], check=True)
+              # Map events that aged out of the retention, kept for the background
+              # archive (read by the nightly sync-background-corpus run).
+              for aged_out in sorted(Path("archive").glob("removed-events-aged-out-*.json")):
+                  subprocess.run(["git", "add", "--", str(aged_out)], check=True)
           else:
               # Collector failed: preserve its AI/RSS cache, keep the published DB.
               tracked = subprocess.run(["git", "ls-files", "--error-unmatch", "events.json"], capture_output=True)

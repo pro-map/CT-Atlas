@@ -47,8 +47,10 @@ test("the CI pins agree with the new default so the deploy and smoke checks do n
 test("the 6-month rolling retention already exists: the collector prunes events older than RETENTION_DAYS at every save",()=>{
   const collector=fs.readFileSync("collector.py","utf8");
   assert.match(collector,/^RETENTION_DAYS = 180$/m);
-  assert.match(collector,/def prune_old\(events\):[\s\S]{0,400}timedelta\(\s*days=RETENTION_DAYS/);
-  assert.match(collector,/events = prune_old\(/);
+  assert.match(collector,/def prune_old\(events, aged_out=None\):[\s\S]{0,700}timedelta\(\s*days=RETENTION_DAYS/);
+  assert.match(collector,/events = prune_old\(\s*events,\s*aged_out,\s*\)/);
+  // Aged-out events leave the map, not CT Atlas: they go to the background archive.
+  assert.match(collector,/archive_aged_out_events\(aged_out\)/);
   const runtime=JSON.parse(fs.readFileSync("ct-atlas-runtime.json","utf8"));
   assert.equal(runtime.retention_days,180);
   // The stored database must actually respect it (a stale file would show accumulation).

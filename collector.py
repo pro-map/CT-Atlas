@@ -8671,7 +8671,10 @@ def deduplicate_incremental(
     return events
 
 
-def prune_old(events):
+def prune_old(events, aged_out=None):
+    """Events still in scope and within the map's retention. Events dropped
+    only for their age are appended to `aged_out` when it is given, so they
+    can reach the background archive instead of vanishing."""
     cutoff = (
         datetime.now(
             timezone.utc
@@ -8701,11 +8704,65 @@ def prune_old(events):
 
             if dt >= cutoff:
                 result.append(event)
+            elif aged_out is not None:
+                aged_out.append(event)
 
         except Exception:
             pass
 
     return result
+
+
+AGED_OUT_ARCHIVE_DIR = "archive"
+# What the background archive needs from an aged-out map event (its related
+# articles already reached the archive while it was on the map).
+AGED_OUT_ARCHIVE_FIELDS = (
+    "id", "incident_id", "url", "title", "summary", "original_title", "original_language",
+    "source", "published", "category", "categories", "actor_group", "primary_event_type",
+    "country", "region", "ai_relevance_score", "ai_relevance_reason",
+)
+
+
+def archive_aged_out_events(events, now=None, directory=None):
+    """Append map events that aged out of the retention to this month's
+    archive/removed-events-aged-out-YYYYMM.json (the removed-events format
+    tools/sync_background_corpus.py reads), one entry per link."""
+    if not events:
+        return None
+
+    now = now or datetime.now(timezone.utc)
+    path = os.path.join(
+        directory or AGED_OUT_ARCHIVE_DIR,
+        f"removed-events-aged-out-{now.strftime('%Y%m')}.json",
+    )
+
+    try:
+        with open(path, encoding="utf-8") as handle:
+            data = json.load(handle)
+        archived = [event for event in data.get("events") or [] if isinstance(event, dict)]
+    except (OSError, ValueError):
+        archived = []
+
+    known = {canonical_url(event.get("url") or "") for event in archived}
+    added = 0
+    for event in events:
+        key = canonical_url(event.get("url") or "")
+        if not key or key in known:
+            continue
+        archived.append({field: event.get(field) for field in AGED_OUT_ARCHIVE_FIELDS if event.get(field) is not None})
+        known.add(key)
+        added += 1
+
+    if added:
+        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+        atomic_json_write(path, {
+            "removed_at": now.isoformat(),
+            "reason": f"Aged out of the map's {RETENTION_DAYS}-day retention; kept for the background archive.",
+            "events": archived,
+        })
+        print(f"Aged-out events: {added} added to {path} ({len(archived)} this month).")
+
+    return path
 
 
 
@@ -10757,9 +10814,17 @@ def main():
     print("Merging new selected events into the existing database, preserving coordinates.")
     events = deduplicate_incremental(existing, selected_fresh)
 
+    aged_out = []
     events = prune_old(
-        events
+        events,
+        aged_out,
     )
+    # An aged-out event leaves the map, not CT Atlas: the background archive
+    # keeps it (730 days) -- failures here must not stop the collection.
+    try:
+        archive_aged_out_events(aged_out)
+    except Exception as error:
+        print(f"Aged-out events: archive file not written ({error}).")
 
     incident_state = load_incident_state()
     events, _ = consolidate_incidents(events, incident_state)
