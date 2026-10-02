@@ -5,8 +5,9 @@ name: Sync background corpus to D1
 # reviews) into the ct-atlas-background-articles D1 database, one copy per
 # story (tools/archive_dedup.py). It only reads the repository and never
 # commits. Stored rows the dedup rules reject (off-topic reviews, second
-# copies of a story) are only reported unless the run's cleanup mode is
-# "apply".
+# copies of a story) are deleted (cleanup "apply", the default since the
+# owner validated the plan on 2026-10-02); a manual run can choose "plan" to
+# only report them.
 on:
   push:
     branches:
@@ -22,12 +23,12 @@ on:
   workflow_dispatch:
     inputs:
       cleanup:
-        description: "Stored duplicates and off-topic rows: plan (report only) or apply (delete)"
+        description: "Stored duplicates and off-topic rows: apply (delete) or plan (report only)"
         type: choice
         options:
-          - plan
           - apply
-        default: plan
+          - plan
+        default: apply
 
 permissions:
   contents: read
@@ -43,7 +44,7 @@ jobs:
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      ARCHIVE_CLEANUP: ${{ inputs.cleanup || 'plan' }}
+      ARCHIVE_CLEANUP: ${{ inputs.cleanup || 'apply' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
