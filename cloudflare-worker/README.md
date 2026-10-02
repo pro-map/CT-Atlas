@@ -107,13 +107,11 @@ this environment; do not present these seed records as complete current PoR list
   A transaction relationship alone is never treated as proof that an address
   belongs to an exchange.
 
-Optional provider lookups are disabled by default and make no extra outbound
-requests unless enabled:
+The optional provider lookup is disabled by default and makes no extra outbound
+requests unless enabled (Etherscan's name-tag endpoint needs a paid Pro Plus plan
+and is not used; EVM exchange identification relies on the reviewed registry and
+the behaviour score):
 
-- Set `ETHERSCAN_NAME_TAGS_ENABLED=true` and provide `ETHERSCAN_API_KEY` to enable
-  Etherscan's address nametag endpoint for supported EVM chains. Etherscan documents
-  this endpoint as Pro Plus only, throttled to 2 calls/second, with up to 100
-  addresses per call: [Get Metadata for an Address](https://docs.etherscan.io/api-reference/endpoint/getaddresstag).
 - Set `TRONSCAN_TAG_LOOKUP_ENABLED=true` and provide `TRONSCAN_API_KEY` to enable
   TronScan account tags. Its tag endpoint requires a TronScan API key:
   [Get Account Tags](https://docs.tronscan.org/en/api/deep-analysis/account-tag).

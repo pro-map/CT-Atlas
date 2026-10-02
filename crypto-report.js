@@ -19,7 +19,8 @@ const LABEL_LIMITATIONS="Labels preserve their source and confidence. An approve
 const LIMITATIONS="CT Atlas Crypto uses bounded public blockchain samples (the most recent records the provider returned for each analysed wallet, not a full archival crawl) and analyst-sourced labels. On-chain transaction linkage does not establish identity, common ownership, criminality, terrorist financing, intent, or custody. Exchange-behaviour scores are rules-based screening scores, not calibrated probabilities; a high-throughput wallet may be another exchange, bridge, payment service, protocol, or other service. Heuristic pattern detection and H1-H3 exposure calculations describe observed transaction behaviour, not criminal intent, and require independent validation before operational or evidentiary use. Absence of a finding is limited to the sample analysed and is not proof of absence.";
 const SANCTIONS_NOTE="A sanctions-list match means this exact address string appears on a published list; it is not a compliance determination and does not by itself show who controls the address. No match does NOT mean an address is safe: coverage is limited to the listed source(s), and only the counterparties visible in the recent transaction sample were screened (direct relationships only, no indirect exposure).";
 const NOT_SCREENED="Sanctions screening was NOT performed for this analysis, so the absence of a match must not be read as a clean result.";
-const HOPS="H0 is the seed wallet, H1 its direct counterparties; H2 and H3 are wallets the analyst expanded (+ or AUTO TRACE). A ring colour encodes a node's minimum hop. Node size and edge width reflect the number of linked records, not ownership probability.";
+const AI_ATTRIBUTION_NOTE="An AI-assessed operator is an investigative lead drawn from the wallet's behaviour, its labelled neighbours and publicly documented patterns. It is not a sourced attribution and does not establish control or ownership; confirm it with the exchange or a sourced label before operational use.";
+const HOPS="H0 is the seed wallet, H1 its direct counterparties; H2 and beyond (up to H6) are wallets the analyst or AUTO TRACE expanded. A ring colour encodes a node's minimum hop. Node size and edge width reflect the number of linked records, not ownership probability.";
 
 function badgeText(badge){return text(badge&&typeof badge==="object"?badge.text:badge,80);}
 function text(value,max=6000){
@@ -87,6 +88,13 @@ function summarySection(model){
       ["Labelled exposure findings",String(c.exposure??"—")]
     );
   }
+  if(s.kind!=="transaction"){
+    const t=model.autoTrace;
+    rows.push(["Automatic trace",t
+      ?"reached H"+(num(t.maxDepthReached)??"—")+" of H"+(num(t.maxDepth)??6)+" · "+plural(num(t.expanded)??0,"wallet","wallets")+" expanded · "+
+        plural(list(t.exchanges).length,"exchange","exchanges")+" reached · stopped: "+text(t.stop||"—")
+      :"not run — the report covers the trace as expanded by hand"]);
+  }
   rows.push(["Sanctions-list screening",badgeText(model.sanctions?.badge)||"—"]);
   if(model.filters?.active?.length){
     rows.push(["Transaction filters active on screen",model.filters.active.join(" · ")+" — every section of this report (including the graph's node and flow tables) uses ALL records regardless of these filters"]);
@@ -97,6 +105,76 @@ function summarySection(model){
     rows.push(["Graph display settings (affect only the graph image and its node/flow tables below)",text(model.graph.statusLine)]);
   }
   return [heading("SUMMARY"),keyValueTable(rows)];
+}
+
+function exchangeTitle(item){
+  const ai=item.ai&&text(item.ai.likely_exchange)&&text(item.ai.likely_exchange).toLowerCase()!=="unknown"?item.ai:null;
+  if(item.basis==="sourced")return (text(item.name)||"Exchange")+" (sourced label)";
+  if(ai)return "Exchange-like wallet, likely "+text(ai.likely_exchange)+" ("+text(ai.confidence)+" confidence, AI-assessed)";
+  if(text(item.name))return "Exchange-like wallet linked to "+text(item.name);
+  return "Exchange-like wallet (operator not assessed)";
+}
+
+// What the automatic trace established, as the report's conclusion: how deep
+// the funds were followed, which exchanges they reached, why the trace
+// stopped. Written from the trace actually reached in the chart.
+function traceConclusionSection(model){
+  if((model.subject||{}).kind==="transaction")return [];
+  const t=model.autoTrace;
+  const c=model.counts||{};
+  const blocks=[heading("TRACE CONCLUSION")];
+  if(!t){
+    blocks.push(body("No automatic trace was run. This report covers the trace as expanded by hand: "+plural(num(c.wallets)??1,"analysed wallet","analysed wallets")+
+      ", visible depth H"+(num(c.maxDepth)??0)+". Run AUTO TRACE to follow the funds until they reach an exchange."));
+    return blocks;
+  }
+  const exchanges=list(t.exchanges);
+  const reached=exchanges.map(item=>exchangeTitle(item)+" at H"+(num(item.depth)??"—"));
+  blocks.push(body(
+    "The automatic trace followed the strongest branches from the seed for "+plural(num(t.expanded)??0,"wallet","wallets")+
+    ", up to H"+(num(t.maxDepthReached)??"—")+" (limit H"+(num(t.maxDepth)??6)+", top "+(num(t.branch)??3)+" branches per hop, "+(num(t.walletBudget)??30)+"-wallet budget). "+
+    (exchanges.length
+      ?"It reached "+plural(exchanges.length,"exchange wallet","exchange wallets")+": "+reached.join("; ")+"."
+      :"It did not reach any wallet identified as an exchange.")+
+    " It stopped because "+(text(t.stop)||"the trace ended")+"."+
+    (num(t.failed)?" "+plural(num(t.failed),"wallet","wallets")+" could not be expanded (provider error) and were skipped.":"")
+  ));
+  if(exchanges.length){
+    const sourced=exchanges.filter(item=>item.basis==="sourced").length;
+    const assessed=exchanges.filter(item=>item.ai&&text(item.ai.likely_exchange).toLowerCase()!=="unknown").length;
+    blocks.push(body("Of these, "+sourced+" "+(sourced===1?"is":"are")+" identified by a sourced exchange label and "+(exchanges.length-sourced)+
+      " by behaviour (exchange score of 80/100 or more)"+(assessed?", "+assessed+" of which "+(assessed===1?"has":"have")+" an AI-assessed operator":"")+
+      ". An exchange is where traceable on-chain flows usually end: the next step is a request to the exchange for the account behind the deposit or withdrawal."));
+  }
+  if(text(t.attribution).startsWith("unavailable"))blocks.push(alert("AI attribution of the exchange-like wallets was "+text(t.attribution)+"."));
+  return blocks;
+}
+
+function autoTraceSection(model){
+  const t=model.autoTrace;
+  const exchanges=list(t?.exchanges);
+  if(!t||!exchanges.length)return [];
+  const blocks=[heading("EXCHANGES REACHED BY THE AUTOMATIC TRACE"),small(EXCHANGE_LIMITATIONS),small(AI_ATTRIBUTION_NOTE)];
+  for(const item of exchanges.slice(0,LIMITS.exchangeFindings)){
+    blocks.push(sub(exchangeTitle(item)+" · H"+(num(item.depth)??"—")+(item.basis==="sourced"?" · SOURCED LABEL":" · SCORE "+String(num(item.score)??"—")+"/100")));
+    blocks.push(mono(text(item.address)));
+    const path=list(item.path);
+    if(path.length>1){
+      blocks.push(small("Path from the seed ("+(path.length-1)+" hop"+(path.length===2?"":"s")+"): "+path.map((step,index)=>
+        (index===0?"seed ":(step.direction==="in"?"← ":"→ "))+text(step.address).slice(0,14)+(text(step.address).length>14?"…":"")).join(" ")+
+        " (→ funds sent onward, ← funds received from)."));
+    }
+    if(item.basis==="sourced"&&text(item.source))blocks.push(small("Source: "+text(item.source)));
+    const ai=item.ai;
+    if(ai){
+      blocks.push(body("AI-assessed operator: "+text(ai.likely_exchange)+" · "+text(ai.confidence)+" confidence"+
+        (text(ai.service_type)?" · "+text(ai.service_type).replaceAll("_"," "):"")+"."));
+      for(const reason of list(ai.basis))blocks.push(bullet(text(reason)));
+      if(list(ai.alternatives).length)blocks.push(small("Alternatives: "+list(ai.alternatives).map(value=>text(value)).join(", ")+"."));
+    }
+    for(const detail of list(item.evidence).slice(0,6))blocks.push(bullet("Behaviour: "+text(detail)));
+  }
+  return blocks;
 }
 
 function sanctionsSection(model){
@@ -165,6 +243,11 @@ function exchangeSection(model){
     if(item.wallet_role)blocks.push(small("Wallet role: "+text(item.wallet_role).replaceAll("_"," ")+(item.depth!==undefined?" · trace H"+(num(item.depth)??0):"")));
     if(item.interactions)blocks.push(small("Observed direct transaction links in this sample: "+String(num(item.interactions)??0)+". This does not establish control by the exchange."));
     if(item.source_title)blocks.push(small("Source: "+text(item.source_title)+(item.source_url?" — "+text(item.source_url):"")));
+    const ai=item.ai_attribution;
+    if(ai&&text(ai.likely_exchange)){
+      blocks.push(small("AI-assessed operator (investigative lead, not a sourced label): "+text(ai.likely_exchange)+" · "+text(ai.confidence)+" confidence"+
+        (list(ai.basis).length?" — "+list(ai.basis).map(value=>text(value)).join("; "):"")));
+    }
     if(list(item.evidence).length)for(const detail of item.evidence)blocks.push(bullet(text(detail)));
   }
   if(all.length>items.length)blocks.push(alert("This section lists the first "+items.length+" of "+all.length+" exchange finding(s)."));
@@ -358,6 +441,7 @@ function build(model){
   const isTransaction=s.kind==="transaction";
   const blocks=[
     ...summarySection(m),
+    ...traceConclusionSection(m),
     ...sanctionsSection(m),
     ...observationsSection(m)
   ];
@@ -365,6 +449,7 @@ function build(model){
     blocks.push(...transactionDetailSection(m));
   }else{
     blocks.push(
+      ...autoTraceSection(m),
       ...patternsSection(m),
       ...exchangeSection(m),
       ...exposureSection(m),

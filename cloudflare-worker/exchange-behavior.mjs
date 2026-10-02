@@ -1,4 +1,4 @@
-const EXCHANGE_BEHAVIOR_VERSION = "exchange-behavior-v1";
+const EXCHANGE_BEHAVIOR_VERSION = "exchange-behavior-v2-velocity";
 const DEFAULT_THRESHOLD = 80;
 const EVM_CHAINS = new Set(["ethereum", "bsc", "polygon", "arbitrum", "base"]);
 
@@ -74,6 +74,8 @@ function detectExchangeBehavior(analysis, rawLabels = [], threshold = DEFAULT_TH
   const assets = new Set();
   const exchangeTouches = new Map();
   const rootKey = normalizeAddress(chain, address);
+  let firstTime = Infinity;
+  let lastTime = -Infinity;
 
   for (const row of rows) {
     const direction = String(row?.direction || "").toUpperCase();
@@ -81,7 +83,11 @@ function detectExchangeBehavior(analysis, rawLabels = [], threshold = DEFAULT_TH
     if (direction === "OUT") metrics.outgoing_records++;
     if (row?.asset) assets.add(String(row.asset).trim().toUpperCase());
     const timestamp = Date.parse(String(row?.time || ""));
-    if (Number.isFinite(timestamp)) activeDays.add(new Date(timestamp).toISOString().slice(0, 10));
+    if (Number.isFinite(timestamp)) {
+      activeDays.add(new Date(timestamp).toISOString().slice(0, 10));
+      firstTime = Math.min(firstTime, timestamp);
+      lastTime = Math.max(lastTime, timestamp);
+    }
 
     const counterparties = [...new Set((Array.isArray(row?.counterparties) ? row.counterparties : [])
       .map(value => String(value || "").trim())
@@ -146,6 +152,22 @@ function detectExchangeBehavior(analysis, rawLabels = [], threshold = DEFAULT_TH
   if (activeDays.size >= 5 && activeDays.size < 10) add(5, true, `activity observed on ${activeDays.size} separate days`);
   add(10, assets.size >= 4, `${assets.size} distinct assets in the sample`);
   if (assets.size >= 2 && assets.size < 4) add(5, true, `${assets.size} distinct assets in the sample`);
+
+  // Velocity: an exchange hot wallet or deposit sweeper meets dozens of
+  // distinct wallets within hours, often in one asset and one direction,
+  // which the day and asset counts above do not see.
+  const spanHours = Number.isFinite(firstTime) && lastTime >= firstTime ? (lastTime - firstTime) / 3600000 : null;
+  metrics.span_hours = spanHours === null ? null : Math.round(spanHours * 10) / 10;
+  if (spanHours !== null) {
+    const window = spanHours < 1 ? "under an hour" : `${Math.round(spanHours)} hour(s)`;
+    if (allCounterparties.size >= 40 && spanHours <= 24) {
+      add(30, true, `${allCounterparties.size} distinct counterparties within ${window} (high-velocity hub)`);
+    } else if (allCounterparties.size >= 25 && spanHours <= 72) {
+      add(20, true, `${allCounterparties.size} distinct counterparties within ${window} (high-velocity hub)`);
+    } else if (allCounterparties.size >= 12 && spanHours <= 24) {
+      add(10, true, `${allCounterparties.size} distinct counterparties within ${window}`);
+    }
+  }
 
   const relatedExchange = related && related.records >= 3 && related.addresses.size >= 2 ? {
     name: related.name,

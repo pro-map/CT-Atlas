@@ -69,7 +69,7 @@ test("an address report has every section, in a readable order, with the right t
   assert.match(report.filename,/^CT-Atlas-Crypto-Report-bitcoin-bc1q5rkr-jeqg0k-20260926-1405$/);
   assert.match(report.meta,/Bitcoin · Blockstream Esplora · generated 2026-09-26 14:05:33 UTC · analyst alice/);
   assert.deepEqual(headings(report.blocks),[
-    "SUMMARY","SANCTIONS-LIST SCREENING","KEY OBSERVATIONS","BEHAVIOURAL PATTERNS","EXCHANGE IDENTIFICATION","LABELLED EXPOSURE (H1–H3)","SOURCED LABELS",
+    "SUMMARY","TRACE CONCLUSION","SANCTIONS-LIST SCREENING","KEY OBSERVATIONS","BEHAVIOURAL PATTERNS","EXCHANGE IDENTIFICATION","LABELLED EXPOSURE (H1–H3)","SOURCED LABELS",
     "SERVICE / BRIDGE / DEX TOUCHPOINTS","WATCHLIST & MONITORING","TRANSACTION FLOW GRAPH","SEED COUNTERPARTIES","ANALYSED WALLETS",
     "TRANSACTION RECORDS","ACTIVE CASE","METHOD & LIMITATIONS"
   ]);
@@ -381,4 +381,35 @@ test("a transaction-lookup report also renders",async()=>{
   const {result}=await h.run(R.build({generatedAt:"2026-09-26T14:05:33.000Z",subject:{kind:"transaction",chain:"bitcoin",chainName:"Bitcoin",query:HASH(4),provider:"Blockstream Esplora"},
     sanctions:{badge:{text:"NO MATCH"},warnings:[],hits:[],noMatchText:"None.",scope:""},transactionFields:[["id",HASH(4)],["fee","0.00001"]],counts:{}}));
   assert.ok(result.pages>=1);
+});
+
+test("the report concludes from the automatic trace actually reached: depth, exchanges, paths, AI-assessed operators",()=>{
+  const model=fixture();
+  model.autoTrace={startedAt:"2026-09-26T14:00:00Z",finishedAt:"2026-09-26T14:04:00Z",maxDepth:6,maxDepthReached:4,branch:3,walletBudget:30,
+    expanded:9,failed:1,stop:"every branch reached an exchange or ended",attribution:"assessed",
+    exchanges:[
+      {address:"TSourcedBinanceHot1",depth:2,basis:"sourced",name:"Binance",source:"Official reserve disclosure",evidence:[],
+       path:[{address:SEED,direction:""},{address:"TMid1",direction:"out"},{address:"TSourcedBinanceHot1",direction:"out"}],ai:null},
+      {address:"TExchangeLike4",depth:4,basis:"behavioral",name:"",score:86,evidence:["63 distinct counterparties within 2 hour(s) (high-velocity hub)"],
+       path:[{address:SEED,direction:""},{address:"TA",direction:"out"},{address:"TB",direction:"out"},{address:"TC",direction:"in"},{address:"TExchangeLike4",direction:"out"}],
+       ai:{likely_exchange:"OKX",confidence:"moderate",service_type:"exchange_hot_wallet",basis:["Two OKX-labelled neighbours"],alternatives:["HTX"]}}
+    ]};
+  const report=R.build(model);
+  const h=headings(report.blocks);
+  assert.deepEqual(h.slice(0,3),["SUMMARY","TRACE CONCLUSION","SANCTIONS-LIST SCREENING"]);
+  assert.ok(h.indexOf("EXCHANGES REACHED BY THE AUTOMATIC TRACE")<h.indexOf("EXCHANGE IDENTIFICATION"));
+  const all=report.blocks.map(block=>block.text||"").join("\n")+JSON.stringify(report.blocks.filter(b=>b.type==="table"));
+  assert.match(all,/followed the strongest branches from the seed for 9 wallets, up to H4 \(limit H6/);
+  assert.match(all,/It reached 2 exchange wallets: Binance \(sourced label\) at H2; Exchange-like wallet, likely OKX \(moderate confidence, AI-assessed\) at H4\./);
+  assert.match(all,/It stopped because every branch reached an exchange or ended\./);
+  assert.match(all,/1 wallet could not be expanded/);
+  assert.match(all,/Path from the seed \(4 hops\): seed .* → TA .* ← TC/);
+  assert.match(all,/AI-assessed operator: OKX · moderate confidence · exchange hot wallet\./);
+  assert.match(all,/not a sourced attribution and does not establish control or ownership/);
+  assert.match(all,/Automatic trace.*reached H4 of H6 · 9 wallets expanded · 2 exchanges reached/);
+});
+
+test("without an automatic trace the conclusion says so and points to AUTO TRACE",()=>{
+  const all=R.build(fixture()).blocks.map(block=>block.text||"").join("\n");
+  assert.match(all,/No automatic trace was run\. This report covers the trace as expanded by hand/);
 });
