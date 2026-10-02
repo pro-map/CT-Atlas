@@ -1,0 +1,144 @@
+{
+  "removed_at": "2026-10-02T15:14:39.307867+00:00",
+  "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
+  "events": [
+    {
+      "id": "87e28c0e2b95520b",
+      "url": "https://www.rediff.com/news/report/online-radicalisation-module-busted-in-joint-operation/20260405.htm",
+      "title": "Terror module busted in Maharashtra with arrests exposing online radicalization network",
+      "summary": "Indian authorities in Maharashtra busted a terror module and made multiple arrests, uncovering an extensive online radicalization and recruitment network.",
+      "original_title": "Terror Module Busted : Maharashtra Arrests Expose Online Radicalisation Network",
+      "original_language": "en",
+      "source": "rediff.com",
+      "published": "2026-04-05T15:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Online / Cyber / AI",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "country": "India",
+      "region": "Maharashtra",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Concrete counter-terrorism operation, module busting, and arrests linked to online radicalization."
+    },
+    {
+      "id": "c8a434045c37def4",
+      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOSFVvcG9fcDlaVmZhVEFnQWJwOU01MVR2UFg1S1FuYjhDMEFGWTVGd3otNjdVYTFjcFpQRks3STJvcVh1LThudEhiZEZFUGt2anZhdW5iUXk0YWxjRmRRc3hTWTlka0tyeW5LVjVwaTUwbFpicHotZXNLTURyeXp4SGFHRW55SjRsV1dKczU0Y9IBlAFBVV95cUxNa0U1bndEMEVoNXAybGlJVzIxd0lMYVBmMFR4VTVEOUJBbUphQVo1N0RxTHU0ZWVzbGYxZ2ZucGNkSVJhaDVWU0d1N1Q5dFpvZWY0dDdwaW8xb25FRXF1RmlRc0ZCX1R2d2pZR2pYZTNoYVlYRVltcHMyV3B3OXh1dGRBTzZNanVPWFB5UVBybWxiYkwt?oc=5",
+      "title": "Operation Safe Corridor curbs terrorist recruitment – DHQ",
+      "summary": "The Nigerian Defence Headquarters reports that Operation Safe Corridor has successfully curtailed terrorist recruitment and facilitated defections.",
+      "original_title": "Operation Safe Corridor curbs terrorist recruitment – DHQ",
+      "original_language": "en",
+      "source": "The Nation Newspaper",
+      "published": "2026-04-05T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Online / Cyber / AI"
+      ],
+      "actor_group": "",
+      "country": "Nigeria",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Official operational update on military/government counter-terrorism efforts against insurgent recruitment."
+    },
+    {
+      "id": "cac58207c3ef19a7",
+      "incident_id": "inc-4ff06e196bfe0d68",
+      "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPcnVOTmk3VEpvUlZGZGRjVnRyVXYyUDRfU1ItN3FtRHJNdVl5dEhnQWFKZ1BkVk9uOHpqUUdDdXEwaHpNMDBhaDI1ZVlxQXVTbGVvc0U5Q3Fqcy1ZNnhWamJxTXN0cVhpdFNvVUFraFpSWHJRaFVPajdfa2pyWTQ0TkREQkhteWc5eUlEVVdFXzZEVlZNTlJTVjdGQ1NkX0FuZDRITFQ3MjIwQlFpZUVPM1ZDVEpLT1ZjUnZBc2UtUnF4M0NqM2ZUSUU1alMtcURWQWZHcmRYTjI0SFhRX1Rzd21B?oc=5",
+      "title": "Boko Haram demands heavy ransoms after kidnapping seven Chadians in Niger",
+      "summary": "The Boko Haram jihadist group has demanded heavy ransoms following the kidnapping of seven Chadian nationals in Niger.",
+      "original_title": "Le groupe jihadiste Boko Haram exige de lourdes rançons après l’enlèvement de sept Tchadiens au Niger",
+      "original_language": "fr",
+      "source": "Jeune Afrique",
+      "published": "2026-04-05T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Terrorist Financing"
+      ],
+      "actor_group": "Boko Haram",
+      "primary_event_type": "ATTACK",
+      "country": "Niger",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a kidnapping attack by Boko Haram and ransom demands in Niger."
+    },
+    {
+      "id": "acb9ee589d5a7848",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPNVpyMlVSYjNfMnBESFhQT25VOG9zYm9NUjZDOGpXSWdlam5SeGVyTV8yNWMwelJQSlNDWkt5SWJvOVYzVWZNcWVTb3JEY0NmRUNtYWtIS0w3Zl9nSGpMQUVuZllBb09WaXB6czNhVFJhbmNidE00VE1tVV8tRUlVcXgyUU9TZXFXdWV5QmRWS2E3TG5uMGpJTzdTMWFTRlVfSHp4a09QdVpjQQ?oc=5",
+      "title": "Chief Al-Shabab bomb-maker killed in Somalia strikes",
+      "summary": "A chief bomb-maker for Al-Shabaab was killed in military air strikes in Somalia.",
+      "original_title": "Chief Al Shabab bomb-maker killed in Somalia strikes",
+      "original_language": "en",
+      "source": "Hiiraan Online",
+      "published": "2026-04-05T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Weapons"
+      ],
+      "actor_group": "Al-Shabaab",
+      "country": "Somalia",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Targeted killing of a high-ranking terrorist bomb-maker."
+    },
+    {
+      "id": "98dc06646c135953",
+      "url": "https://noa.al/lajmi/2026/04/2575497.html",
+      "title": "French MEP Rima Hassan to face trial in July following social media post",
+      "summary": "French-Palestinian Member of the European Parliament Rima Hassan is scheduled to stand trial in July over a controversial social media post.",
+      "original_title": "Eurodeputetja franceze Rima Hassan në gjyq në korrik pas një postimi në rrjetet sociale",
+      "original_language": "sq",
+      "source": "noa.al",
+      "published": "2026-04-05T06:30:00+00:00",
+      "category": "Legal / Judicial",
+      "categories": [
+        "Legal / Judicial",
+        "Online / Cyber / AI"
+      ],
+      "actor_group": "",
+      "country": "France",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Judicial proceedings against a public figure for online statements related to terrorism."
+    },
+    {
+      "id": "56257355929d5da7",
+      "incident_id": "inc-1f7df60d7c4e7e92",
+      "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE84a0JkRk5BOERlQ3NIS2hRV2piOVpHRGZGNGl3d3VDdWhPNnk0WDF4aTdhRlNESXJUck5leERFSE9Pd3U5bG96VThVVmhPWE5MalY5STF5U1NTNkxUdW5yTHdVZTNrNU1vbENBVk12bXdfYTFRcVRPLVJTSWw?oc=5",
+      "title": "#06-10-02: Al Qaeda \"Dirty Bomb\" Plot Disrupted",
+      "summary": "#06-10-02: Al Qaeda \"Dirty Bomb\" Plot Disrupted Department of Justice (.gov)",
+      "original_title": "#06-10-02: Al Qaeda \"Dirty Bomb\" Plot Disrupted",
+      "original_language": "en",
+      "source": "Department of Justice (.gov)",
+      "published": "2002-06-10T07:00:00+00:00",
+      "category": "Weapons",
+      "categories": [
+        "Weapons",
+        "CBRN"
+      ],
+      "actor_group": "",
+      "primary_event_type": "OTHER_CT",
+      "ai_relevance_score": 88,
+      "ai_relevance_reason": "Auto-accepted: authoritative official source with strong CT category/action evidence in the headline."
+    },
+    {
+      "id": "a32d08648deb8358",
+      "incident_id": "inc-183e58f0f0be24dd",
+      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOT0l1ZllRMFRtQ0h4WDdFNF9qejhYWnAwbzRCSXBtZHNYZkZ2b0R5Nm1BWTBqWjQzdTBYMnFGajRiVFVxdUZMSkVyanNlV0l2dU5sYjFWSmJJcDFlTVZBWVpzUC1oWTRYMGpPdDRXZjd0WTliODZGdi1raGJHaEQzcHAzWG56TWFPQWNIeVdJenNISTJkdlJ0UGlUcGdGYTF5dW1nTWRvNA?oc=5",
+      "title": "Office of Public Affairs | Wisconsin Woman Charged With Attempting to Provide Material Support to ISIS",
+      "summary": "Office of Public Affairs | Wisconsin Woman Charged With Attempting to Provide Material Support to ISIS Department of Justice (.gov)",
+      "original_title": "Office of Public Affairs | Wisconsin Woman Charged With Attempting to Provide Material Support to ISIS",
+      "original_language": "en",
+      "source": "Department of Justice (.gov)",
+      "published": "2018-06-13T07:00:00+00:00",
+      "category": "Legal / Judicial",
+      "categories": [
+        "Legal / Judicial"
+      ],
+      "actor_group": "",
+      "primary_event_type": "OTHER_CT",
+      "ai_relevance_score": 88,
+      "ai_relevance_reason": "Auto-accepted: authoritative official source with strong CT category/action evidence in the headline."
+    }
+  ]
+}
