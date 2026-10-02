@@ -4549,9 +4549,20 @@ html, body {
 <style>
 /* ============================================================
    V13 — ATTACKS MAP + DATABASE PANEL
-   The map shows attacks only (24h / 7 days, heat always on, offices
-   always shown); the sidebar's Database panel reaches every category.
+   The map shows attacks by default (24h / 7 days, heat always on,
+   offices always shown); "Show on map" adds every other category or one
+   of them. The sidebar's Database panel reaches the whole database.
    ============================================================ */
+
+#mapScopeBlock .map-category-field select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px 6px;
+    background: #0e1a22;
+    border: 1px solid rgba(74, 166, 223, 0.4);
+    color: #e3f1f8;
+    font-size: 11px;
+}
 
 #mapScopeBlock .layer-buttons {
     grid-template-rows: 34px !important;
@@ -5098,9 +5109,25 @@ Last 180 days
 
 <div id="mapScopeBlock">
 
-<div class="section-title">
+<div class="section-title" id="mapScopeTitle">
 Map · attacks
 </div>
+
+<label class="database-field map-category-field">
+<span>Show on map</span>
+<select id="mapCategory">
+<option value="ATTACKS" selected>Attacks only</option>
+<option value="ALL">All events</option>
+<option value="Counter Terrorism Action">Counter-terrorism actions</option>
+<option value="Arrests">Arrests</option>
+<option value="Legal / Judicial">Legal / judicial</option>
+<option value="Terrorist Financing">Terrorist financing</option>
+<option value="Weapons">Weapons</option>
+<option value="Maritime Security">Maritime security</option>
+<option value="CBRN">CBRN</option>
+<option value="Online / Cyber / AI">Online / cyber / AI</option>
+</select>
+</label>
 
 <div class="time-buttons map-period-buttons">
 <button class="time-button active" data-days="1">24H</button>
@@ -5332,7 +5359,7 @@ Visible rate
         <div id="attackTickerViewport">
             <ul id="attackTickerList"></ul>
         </div>
-        <div id="attackTickerFooter">Map: executed, attempted and foiled attacks only. Full database in the DATABASE panel.</div>
+        <div id="attackTickerFooter">Executed, attempted and foiled attacks. Other categories: SHOW ON MAP; full database in the DATABASE panel.</div>
     </aside>
 
     <div id="timelineDock">
@@ -6775,7 +6802,9 @@ function eventMatchKey(event) {
     return [clean(event?.id), Number.isFinite(time) ? time : "", clean(event?.title)].join("|");
 }
 
-const MAP_RECENT_EVENT_DAYS = 4;
+// Other categories' events of the map's longest period (7 days), plus a
+// day of slack between two publications (tools/build_events_map.py).
+const MAP_RECENT_EVENT_DAYS = 8;
 
 // The map's own file (events-map.json, built at publication time: attacks only,
 // ~1/4 of events-lite.json) or, if it is missing or unusable, the full database
@@ -7275,10 +7304,59 @@ function searchMatches(
 // once per scan here instead of once per event (see categoryMatches/groupMatches).
 let _filteredAllEventsCache = null;
 let _filteredMappedEventsCache = null;
+let _mapScopeEventsCache = null;
 
 function invalidateFilterCache() {
     _filteredAllEventsCache = null;
     _filteredMappedEventsCache = null;
+    _mapScopeEventsCache = null;
+}
+
+// What "Show on map" draws: "ATTACKS" (the default), "ALL", or one other
+// category. filteredAllEvents() stays attacks only: the ticker, the KPIs and
+// the trends are about attacks whatever the map shows.
+let mapCategoryScope = "ATTACKS";
+
+const MAP_SCOPE_TITLES = {
+    ATTACKS: "Map · attacks",
+    ALL: "Map · all events"
+};
+
+// The events of the map's period in the "Show on map" scope, located or not:
+// attacks from the map's file, other categories from its recent_events.
+function mapScopeEvents() {
+    if (_mapScopeEventsCache) {
+        return _mapScopeEventsCache;
+    }
+    const scope = mapCategoryScope;
+    const attacks = scope === "ATTACKS" || scope === "ALL" ? filteredAllEvents() : [];
+    const others = scope === "ATTACKS" ? [] : recentContextEvents.filter(event =>
+        withinDays(event.published, selectedDays)
+        && (scope === "ALL" || categoryMatches(event, [scope]))
+        && groupMatches(event)
+        && searchMatches(event)
+    );
+    _mapScopeEventsCache = others.length ? [...attacks, ...others] : attacks;
+    return _mapScopeEventsCache;
+}
+
+// Every event the "Show on map" scope can draw, any period (the period
+// buttons' counts).
+function mapScopeCandidates() {
+    const scope = mapCategoryScope;
+    const attacks = scope === "ATTACKS" || scope === "ALL" ? allEvents : [];
+    const others = scope === "ATTACKS" ? [] : recentContextEvents.filter(event =>
+        scope === "ALL" || categoryMatches(event, [scope])
+    );
+    return others.length ? [...attacks, ...others] : attacks;
+}
+
+function setMapCategoryScope(value) {
+    mapCategoryScope = value === "ALL" || MAP_ALL_CATEGORIES.includes(value) && value !== "Attacks" ? value : "ATTACKS";
+    const title = document.getElementById("mapScopeTitle");
+    if (title) {
+        title.textContent = MAP_SCOPE_TITLES[mapCategoryScope] || ("Map · " + mapCategoryScope.toLowerCase());
+    }
 }
 
 function filteredAllEvents() {
@@ -7333,7 +7411,7 @@ function filteredMappedEvents() {
         return _filteredMappedEventsCache;
     }
 
-    _filteredMappedEventsCache = filteredAllEvents().filter(
+    _filteredMappedEventsCache = mapScopeEvents().filter(
 
         event =>
 
@@ -7459,7 +7537,11 @@ function createMarker(
     event
 ) {
 
+    // Normalised (Maritime Piracy -> Maritime Security, the legacy digital
+    // categories -> Online / Cyber / AI), as the category styles are keyed.
     const primaryCategory =
+        eventCategories(event)[0]
+        ||
         event.category;
 
 
@@ -8060,7 +8142,7 @@ function renderEvents() {
 
 
     const totalSelected =
-        filteredAllEvents().length;
+        mapScopeEvents().length;
 
 
     document.getElementById(
@@ -12191,7 +12273,7 @@ function updateFacetCounts() {
                 );
 
             const count =
-                allEvents.filter(
+                mapScopeCandidates().filter(
                     event => {
 
                         if (
@@ -14582,6 +14664,26 @@ document.querySelectorAll(
             }
 
         );
+
+    }
+
+);
+
+
+
+document.getElementById(
+    "mapCategory"
+)?.addEventListener(
+
+    "change",
+
+    function() {
+
+        setMapCategoryScope(
+            this.value
+        );
+
+        scheduleDashboardRefresh();
 
     }
 

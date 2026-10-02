@@ -13,10 +13,15 @@ plans its rows through `plan_archive`:
   removed event, a candidate before a review, the higher score, the dated row,
   then the most recent).
 
-A row that repeats an event of the map is NOT a duplicate here: the map forgets
-its events after 180 days while the archive keeps 730, so that row becomes the
-story's only trace. The Worker never sends it next to the event it repeats
-(background-corpus.js, toContextItems).
+The sync also passes the map's events (map_stories) and the kinds it no longer
+keeps (drop_kinds):
+
+- on_map: a row repeating an event of the map is removed -- the event is the
+  story's record. When the event ages out of the map's 180 days, the collector
+  archives it (removed-events-aged-out-*.json) and the sync files it as an
+  archived incident, so the story is never lost;
+- other_outlet_report: other outlets' reports on a map incident
+  (related_article) are not kept: one article per incident.
 
 "Same story" is the rule of cloudflare-worker/shared.js (isSameStory): within
 5 days, the same link, the same normalised title, or titles sharing at least 4
@@ -350,12 +355,18 @@ class StoryIndex:
         return None
 
 
-def plan_archive(existing_rows, new_rows):
+MAP_OWNER_PREFIX = "map:"
+
+
+def plan_archive(existing_rows, new_rows, map_stories=(), drop_kinds=frozenset()):
     """Decide what the archive should hold.
 
     existing_rows: rows already in D1 (dicts with url, kind, title, published,
     collected_at, ai_relevance_score, and optionally original_title).
     new_rows: candidate rows not yet in D1.
+    map_stories: the map's events (url, title, original_title, published, and
+    their related_articles): a row telling one of their stories is not kept.
+    drop_kinds: kinds never kept, whatever their story.
     Returns (insert, delete): the new rows to insert, and a list of
     (url, reason, kept_url) for existing rows to remove. A new row never
     replaces an existing row with the same link (the link is the table key).
@@ -367,6 +378,14 @@ def plan_archive(existing_rows, new_rows):
     candidates.sort(key=lambda item: preference(item[0]))
 
     stories = StoryIndex()
+    for event in map_stories or ():
+        owner = MAP_OWNER_PREFIX + str(event.get("url") or event.get("id") or "")
+        time = row_time(event)
+        reports = [event, *[a for a in event.get("related_articles") or [] if isinstance(a, dict)]]
+        for report in reports:
+            for title in dict.fromkeys((report.get("title"), report.get("original_title"))):
+                if title:
+                    stories.add(title, report.get("url") or "", row_time(report) or time, owner)
     insert, delete = [], []
     seen_new_urls = set()
     for row, stored in candidates:
@@ -379,7 +398,9 @@ def plan_archive(existing_rows, new_rows):
         approximate = not row.get("published")
 
         reason, kept = None, ""
-        if is_noise(row):
+        if row.get("kind") in drop_kinds:
+            reason = "other_outlet_report"
+        elif is_noise(row):
             reason = "noise"
         elif not stored and url in seen_new_urls:
             reason = "duplicate_story"
@@ -387,7 +408,10 @@ def plan_archive(existing_rows, new_rows):
             for title in titles or [""]:
                 owner = stories.find(title, url, time, approximate)
                 if owner is not None:
-                    reason, kept = "duplicate_story", owner
+                    if str(owner).startswith(MAP_OWNER_PREFIX):
+                        reason, kept = "on_map", str(owner)[len(MAP_OWNER_PREFIX):]
+                    else:
+                        reason, kept = "duplicate_story", owner
                     break
 
         if reason is None:

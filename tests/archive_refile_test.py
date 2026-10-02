@@ -232,14 +232,15 @@ class ReconcileRunTests(unittest.TestCase):
         self.assertIn("WHEN 'https://clean/low' THEN 'rejected_candidate'", updates[0])
         self.assertIn("WHEN 'https://clean/low' THEN 30", updates[0])
         self.assertIn("WHEN 'https://aged/1' THEN 'archived_incident'", updates[0])
-        # A link that became another outlet's report on a map incident gets its parent.
-        self.assertIn("WHEN 'https://wire/now-related' THEN 'related_article'", updates[0])
-        self.assertIn("WHEN 'https://wire/now-related' THEN 'inc-1'", updates[0])
+        # A link that became another outlet's report on a map incident is
+        # deleted, not re-filed: the map holds the incident.
+        self.assertNotIn("https://wire/now-related", updates[0])
         self.assertNotIn("https://clean/op", updates[0], "commentary is unchanged")
         self.assertNotIn("https://clean/zero", updates[0], "noise is deleted, not re-filed")
         self.assertEqual(len(deletes), 1)
         self.assertIn("'https://clean/zero'", deletes[0])
-        self.assertIn("3 re-filed", output)
+        self.assertIn("'https://wire/now-related'", deletes[0])
+        self.assertIn("2 re-filed", output)
 
     def test_plan_mode_changes_nothing_stored(self):
         self.run_main("--cleanup", "plan")
@@ -251,7 +252,7 @@ class ReconcileRunTests(unittest.TestCase):
             for row, (kind, score) in zip(self.stored, [("rejected_candidate", 0), ("rejected_candidate", 30),
                                                         ("removed_event", 75), ("archived_incident", 85),
                                                         ("related_article", None)])
-            if row["url"] != "https://clean/zero"
+            if row["url"] not in ("https://clean/zero", "https://wire/now-related")
         ]
         self.run_main("--cleanup", "apply")
         self.assertFalse(self.d1.statements("UPDATE") + self.d1.statements("DELETE"))

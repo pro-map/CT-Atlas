@@ -44,7 +44,7 @@ class CollectArticlesTests(unittest.TestCase):
             "events": [
                 {"url": "https://removed/1", "title": "Opinion piece", "incident_id": "inc-9",
                  "_cleanup_reason": "keyword: opinion/analysis pattern"},
-                # Same URL as a related article: the related article wins.
+                # Same URL as a related article of a map event: the plan drops it.
                 {"url": "https://other/1", "title": "Duplicate"},
             ],
         })
@@ -74,8 +74,7 @@ class CollectArticlesTests(unittest.TestCase):
     def test_counts_per_source_after_dedup(self):
         _, counts = self.articles_by_url()
         self.assertEqual(counts, {
-            "related_article": 1, "removed_event": 1, "recovered": 0, "enriched": 0, "rejected_candidate": 0,
-            "historical_review": 3,
+            "removed_event": 2, "enriched": 0, "rejected_candidate": 0, "historical_review": 3,
         })
 
     def test_off_topic_reviews_never_reach_the_archive(self):
@@ -96,15 +95,16 @@ class CollectArticlesTests(unittest.TestCase):
         self.assertEqual(review["published"], "2026-10-01T08:00:00+00:00")
         self.assertNotIn("gemini-review:fp-linked", by_url)
 
-    def test_related_articles_inherit_the_parent_event_context(self):
+    def test_other_outlets_reports_on_map_events_are_not_collected(self):
         by_url, _ = self.articles_by_url()
-        related = by_url["https://other/1"]
-        self.assertEqual(related["kind"], "related_article")
-        self.assertEqual(related["source"], "Garowe Online")
-        self.assertEqual(related["country"], "Somalia")
-        self.assertEqual(related["actor_group"], "Al-Shabaab")
-        self.assertEqual(related["parent_event_id"], "evt-1")
-        self.assertEqual(related["parent_incident_id"], "inc-1")
+        self.assertNotIn("related_article", {a["kind"] for a in by_url.values()})
+
+    def test_a_row_repeating_a_map_event_is_not_kept(self):
+        articles, _ = sync.collect_articles(self.root)
+        insert, _ = sync.plan([], articles, sync.map_events(self.root))
+        urls = {row["url"] for row in insert}
+        self.assertNotIn("https://other/1", urls, "the map event's own report")
+        self.assertIn("https://removed/1", urls)
 
     def test_historical_reviews_keep_only_rejected_titled_items_with_a_synthetic_key(self):
         by_url, _ = self.articles_by_url()
@@ -126,8 +126,9 @@ class CollectArticlesTests(unittest.TestCase):
 
 
 class RecoveredSourceTests(unittest.TestCase):
-    """Former map events recovered from events.json's history, related articles
-    dropped from live events, and articles cut off by incident merges."""
+    """Former map events recovered from events.json's history reach the archive;
+    their other outlets' reports, related articles dropped from live events and
+    articles cut off by incident merges do not: one article per incident."""
 
     def setUp(self):
         self.root = Path(tempfile.mkdtemp())
@@ -159,24 +160,17 @@ class RecoveredSourceTests(unittest.TestCase):
                 "url": "https://overflow/1", "title": "Overflow report", "published": "2026-09-30T10:00:00+00:00"}}],
         })
 
-    def test_recovered_events_their_related_articles_and_cut_off_articles_reach_the_archive(self):
+    def test_recovered_events_reach_the_archive_without_their_other_reports(self):
         articles, counts = sync.collect_articles(self.root)
         by_url = {a["url"]: a for a in articles}
-        # The recovered lead is read with every former map event; its other
-        # reports and the cut-off articles come from the recovered source.
-        self.assertEqual((counts["removed_event"], counts["recovered"]), (1, 3))
+        self.assertEqual(counts["removed_event"], 1)
+        self.assertNotIn("recovered", counts)
         lead = by_url["https://old/lead"]
         self.assertEqual((lead["kind"], lead["ai_relevance_score"], lead["parent_incident_id"]),
                          ("archived_incident", 90, "inc-old"))
         self.assertEqual(lead["original_title"], "Rotterdam: explosie bij synagoge")
-        related = by_url["https://old/related"]
-        self.assertEqual((related["kind"], related["parent_event_id"], related["country"]),
-                         ("related_article", "old-1", "Netherlands"))
-        dropped = by_url["https://live/dropped"]
-        self.assertEqual((dropped["kind"], dropped["parent_incident_id"], dropped["country"]),
-                         ("related_article", "inc-live", "Mali"))
-        overflow = by_url["https://overflow/1"]
-        self.assertEqual((overflow["parent_event_id"], overflow["parent_incident_id"]), ("live-1", "inc-live"))
+        for url in ("https://old/related", "https://live/dropped", "https://overflow/1"):
+            self.assertNotIn(url, by_url)
 
 
 class SyncRunTests(unittest.TestCase):
@@ -199,6 +193,12 @@ class SyncRunTests(unittest.TestCase):
             ],
         }]})
         write_json(self.root / "ai_article_selection_cache.json", {"items": {}})
+        # An event that aged out of the map: a story the map no longer holds.
+        write_json(self.root / "archive" / "removed-events-aged-out-202609.json", {
+            "created_at": "2026-09-30T10:00:00+00:00",
+            "events": [{"url": "https://aged/out", "title": "Car bomb kills five in Mogadishu market",
+                        "published": "2026-03-20T08:00:00+00:00", "ai_relevance_score": 80}],
+        })
         self.stored = [
             {"url": "gemini-review:noise", "kind": "historical_review", "title": "Yacht sale in Monaco",
              "collected_at": "2026-09-24T10:00:00+00:00", "ai_relevance_score": 0},
@@ -236,28 +236,29 @@ class SyncRunTests(unittest.TestCase):
         self.assertEqual(sync.main(["--cleanup", "plan"]), 0)
         inserts = self.statements("INSERT OR IGNORE INTO background_articles")
         self.assertEqual(len(inserts), 1)
-        self.assertIn("https://other/angle", inserts[0])
+        self.assertIn("https://aged/out", inserts[0])
+        self.assertNotIn("https://other/angle", inserts[0], "another outlet's report on a map event")
         self.assertNotIn("'https://map/event'", inserts[0])
         self.assertEqual(self.statements("DELETE FROM background_articles WHERE url IN"), [])
 
-    def test_apply_mode_deletes_noise_and_second_copies_only(self):
+    def test_apply_mode_deletes_noise_second_copies_and_copies_of_map_events(self):
         self.assertEqual(sync.main(["--cleanup", "apply"]), 0)
         deletes = self.statements("DELETE FROM background_articles WHERE url IN")
         self.assertEqual(len(deletes), 1)
         self.assertIn("'gemini-review:noise'", deletes[0])
         self.assertIn("'gemini-review:copy'", deletes[0])
         self.assertNotIn("https://keep/analysis", deletes[0])
-        # A copy of a map event is kept: the map forgets events after 180 days.
-        self.assertNotIn("https://wire/copy", deletes[0])
+        # Another outlet's copy of a map event: the map holds the incident.
+        self.assertIn("'https://wire/copy'", deletes[0])
 
     def test_the_report_counts_rows_added_not_index_writes(self):
-        # 4 stored, 1 new story inserted, 2 removed: 3 rows remain. D1's
+        # 4 stored, 1 new story inserted, 3 removed: 2 rows remain. D1's
         # meta.changes would also count the full-text index rows.
-        self.total_after = 3
+        self.total_after = 2
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
             self.assertEqual(sync.main(["--cleanup", "apply"]), 0)
-        self.assertIn("1 new rows inserted, 2 removed, 0 re-filed; now 3 total", output.getvalue())
+        self.assertIn("1 new rows inserted, 3 removed, 0 re-filed; now 2 total", output.getvalue())
 
     def test_apply_mode_respects_the_per_run_cap(self):
         self.assertEqual(sync.main(["--cleanup", "apply", "--max-deletes", "1"]), 0)

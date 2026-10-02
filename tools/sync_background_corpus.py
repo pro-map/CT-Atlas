@@ -3,21 +3,23 @@
 corpus (ct-atlas-background-articles), one copy per story. Safe to run on
 every push and on a schedule.
 
+One article per incident: the archive holds stories the map does not. A row
+repeating a map event, and other outlets' reports on an incident
+(related_article: events.json related_articles, the related articles of
+recovered events, related-overflow-*), are not kept, and the ones already in D1
+are deleted (plan_archive's map_stories and drop_kinds). An event that ages
+out of the map is archived then, as an archived incident.
+
 Sources (earlier ones win when two share a URL):
-  related_article    other outlets' reports merged into each map event
-                     (events.json related_articles). events-lite.json strips
-                     them, so the report Worker has never seen them. They
-                     inherit the parent event's category, actor, country,
-                     region and incident id.
-  removed_event      events archived by tools/cleanup_existing_events.py, and
+  removed_event      events archived by tools/cleanup_existing_events.py,
                      map events that aged out of the 180-day retention
                      (archive/removed-events-aged-out-YYYYMM.json, written by
-                     the collector's prune_old step).
-  recovered          former map events recovered from events.json's git
-                     history by tools/recover_from_history.py (stored as
-                     removed_event, with their related articles), related
-                     articles dropped from events still on the map, and the
-                     articles incident merges cut off (related-overflow-*).
+                     the collector's prune_old step), and former map events
+                     recovered from events.json's git history by
+                     tools/recover_from_history.py; each filed by what
+                     happened to it (former_event_verdict).
+  enriched           the six-month enrichment's reviews
+                     (archive/enriched-articles-*.json).
   rejected_candidate background-articles.json, the collector's local fallback
                      for days when D1 was unreachable.
   historical_review  candidates Gemini reviewed and kept off the map that are
@@ -69,6 +71,8 @@ MAX_UPDATES_PER_RUN = 5_000
 # their reports are inserted, not background reporting.
 SIZE_GUARD_BYTES = 400 * 1024 * 1024
 LOW_PRIORITY_KINDS = frozenset({"rejected_candidate", "historical_review"})
+# Other outlets' reports on an incident: one article per incident is enough.
+DROPPED_KINDS = frozenset({"related_article"})
 
 
 CORPUS_STATS_UPSERT = collector.BACKGROUND_CORPUS_STATS_UPSERT
@@ -80,37 +84,6 @@ def _load_json(path):
             return json.load(handle)
     except (OSError, ValueError):
         return None
-
-
-def related_articles(events, now):
-    for event in events:
-        for article in event.get("related_articles") or []:
-            if not isinstance(article, dict):
-                continue
-            title = article.get("title") or article.get("original_title")
-            if not article.get("url") or not title:
-                continue
-            yield {
-                "url": article["url"],
-                "kind": "related_article",
-                "title": title,
-                # Not stored in D1: lets the dedup plan see a translation and
-                # its untranslated twin as one story.
-                "original_title": article.get("original_title"),
-                "summary": article.get("summary"),
-                "source": article.get("source"),
-                "published": article.get("published"),
-                "category": event.get("category"),
-                "categories": event.get("categories"),
-                "actor_group": event.get("actor_group"),
-                "primary_event_type": event.get("primary_event_type"),
-                "original_language": article.get("original_language"),
-                "country": event.get("country"),
-                "region": event.get("region"),
-                "parent_event_id": event.get("id"),
-                "parent_incident_id": event.get("incident_id"),
-                "collected_at": now,
-            }
 
 
 CLEANUP_RECHECK_RE = re.compile(r"gemini re-check: score (\d+)")
@@ -275,31 +248,6 @@ def enriched_articles(paths, threshold=None, incidents=None, aliases=None):
             yield row
 
 
-def recovered_articles(recovered_paths, overflow_paths, live_events, now):
-    """The other reports of former map events recovered from events.json's
-    history by tools/recover_from_history.py, related articles dropped from
-    events still on the map, and the articles the incident merges cut off
-    (archive/related-overflow-*.json). The recovered events themselves are
-    former map events (removed_events)."""
-    for path in recovered_paths:
-        data = _load_json(path) or {}
-        collected_at = data.get("created_at") or now
-        for row in related_articles(data.get("events") or [], collected_at):
-            yield row
-        for item in data.get("related_articles") or []:
-            parent = {**(item.get("parent") or {}), "related_articles": [item.get("article") or {}]}
-            yield from related_articles([parent], collected_at)
-    by_incident = live_incidents(live_events)
-    for path in overflow_paths:
-        data = _load_json(path) or {}
-        collected_at = data.get("created_at") or now
-        for item in data.get("articles") or []:
-            if not isinstance(item, dict):
-                continue
-            parent = by_incident.get(item.get("incident_id")) or {"incident_id": item.get("incident_id")}
-            yield from related_articles([{**parent, "related_articles": [item.get("article") or {}]}], collected_at)
-
-
 def fallback_file_articles(path):
     data = _load_json(path) or {}
     for article in data.get("articles") or []:
@@ -454,6 +402,16 @@ def delete_statements(urls, max_bytes=collector.CLOUDFLARE_D1_MAX_STATEMENT_BYTE
         yield prefix + ",".join(batch) + ")"
 
 
+def map_events(root=ROOT):
+    """The map's events: the stories the archive does not repeat."""
+    return (_load_json(root / "events.json") or {}).get("events") or []
+
+
+def plan(stored, articles, events):
+    """archive_dedup.plan_archive with the map's stories and the dropped kinds."""
+    return archive_dedup.plan_archive(stored, articles, map_stories=events, drop_kinds=DROPPED_KINDS)
+
+
 def collect_articles(root=ROOT):
     now = datetime.now(timezone.utc).isoformat()
     database = _load_json(root / "events.json") or {}
@@ -464,18 +422,9 @@ def collect_articles(root=ROOT):
     recovered_paths = sorted(glob.glob(str(root / "archive" / "recovered-events-*.json")))
     former = former_event_files(sorted(glob.glob(str(root / "archive" / "removed-events-*.json"))) + recovered_paths)
     sources = {
-        "related_article": (
-            {**row, "_authoritative": True} for row in related_articles(events, now)
-        ),
         # Every former map event (cleanups, aged out, recovered, re-reviewed),
         # the latest verdict on each link first.
         "removed_event": removed_events(former, now, threshold, incidents, aliases),
-        "recovered": recovered_articles(
-            recovered_paths,
-            sorted(glob.glob(str(root / "archive" / "related-overflow-*.json"))),
-            events,
-            now,
-        ),
         "enriched": enriched_articles(
             sorted(glob.glob(str(root / "archive" / "enriched-articles-*.json"))), threshold, incidents, aliases
         ),
@@ -538,7 +487,7 @@ def main(argv=None):
     print(f"Total: {len(articles)} articles collected from the repository.")
 
     if args.dry_run:
-        insert, _ = archive_dedup.plan_archive([], articles)
+        insert, _ = plan([], articles, map_events(ROOT))
         print(f"Dry run: D1 not contacted; {len(insert)} of them are unique stories.")
         return 0
 
@@ -553,7 +502,7 @@ def main(argv=None):
         for row in stored:
             row.setdefault("original_title", original_by_url.get(str(row["url"])))
         changed = reconcile(stored, articles)
-        insert, delete = archive_dedup.plan_archive(stored, articles)
+        insert, delete = plan(stored, articles, map_events(ROOT))
         known = {str(row["url"]) for row in stored}
         print(
             f"{sum(1 for a in articles if str(a['url']) in known)} already in D1; "
@@ -572,9 +521,11 @@ def main(argv=None):
             print(f"Inserting the best {max(args.max_inserts, 0)} now; {len(insert) - max(args.max_inserts, 0)} "
                   f"wait for the next run.")
             insert = insert[: max(args.max_inserts, 0)]
-            # A stored row is only removed for a copy that is in D1 tonight.
+            # A stored row is only removed for a copy that is in D1 tonight
+            # (or on the map).
             kept_urls = known | {str(row["url"]) for row in insert}
-            delete = [(url, reason, kept) for url, reason, kept in delete if not kept or kept in kept_urls]
+            delete = [(url, reason, kept) for url, reason, kept in delete
+                      if not kept or reason == "on_map" or kept in kept_urls]
 
         reasons = archive_dedup.summarize(delete)
         rows_by_url = {str(row["url"]): row for row in [*articles, *stored]}
