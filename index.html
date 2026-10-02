@@ -4542,8 +4542,8 @@ html, body {
 
 <script src="pdf-export.js?v=20261002" defer></script>
 <script src="report-illustration.js?v=20261002" defer></script>
-<script src="usage-admin.js?v=usage-summary-20261003" defer></script>
-<script src="usage-auth-fix.js?v=20261003" defer></script>
+<script src="usage-admin.js?v=usage-summary-20261003b" defer></script>
+<script src="usage-auth-fix.js?v=20261003b" defer></script>
 <script src="tab-access.js?v=20260928" defer></script>
 
 <style>
@@ -5195,7 +5195,7 @@ Database <span id="databaseTotalCount" class="database-total" hidden></span>
 
 <div id="databaseToolButtons" class="database-tools">
 <button class="layer-button" id="chronologyToggle" type="button">EVENT LIST / EXPORT</button>
-<button id="reportGeneratorButton" type="button">REPORT GENERATOR</button>
+<button id="reportGeneratorButton" type="button">SITUATION REPORT</button>
 </div>
 
 </div>
@@ -5498,10 +5498,10 @@ Visible rate
   <div id="reportGeneratorWindow" role="dialog" aria-modal="true" aria-labelledby="reportGeneratorTitle">
     <div id="reportGeneratorHeader">
       <div>
-        <div id="reportGeneratorTitle">REPORT GENERATOR</div>
-        <div id="reportGeneratorSubtitle">On-demand comparative CT analysis</div>
+        <div id="reportGeneratorTitle">SITUATION REPORT</div>
+        <div id="reportGeneratorSubtitle">The CT picture of a region, topic or group over a period, from the CT Atlas database</div>
       </div>
-      <button id="reportGeneratorClose" type="button" aria-label="Close report generator">×</button>
+      <button id="reportGeneratorClose" type="button" aria-label="Close situation report">×</button>
     </div>
 
     <div id="reportGeneratorBody">
@@ -5520,7 +5520,7 @@ Visible rate
           Comparison unavailable — the previous equivalent period falls outside the database coverage.
         </div>
 
-        <button id="reportGenerateButton" type="button">GENERATE ANALYTICAL REPORT</button>
+        <button id="reportGenerateButton" type="button">GENERATE SITUATION REPORT</button>
 
         <div id="reportGeneratorStatus"></div>
       </div>
@@ -5528,7 +5528,7 @@ Visible rate
       <div id="reportGeneratorResult" hidden>
         <div id="reportResultTopline">
           <div>
-            <div id="reportResultTitle">ANALYTICAL REPORT</div>
+            <div id="reportResultTitle">SITUATION REPORT</div>
             <div id="reportResultMeta"></div>
             <div id="reportCitationCoverage"></div>
           </div>
@@ -13205,7 +13205,7 @@ async function generateCustomReport() {
         !reportGeneratorConfigured()
     ) {
         status.textContent =
-            "Report Generator backend is not configured yet.";
+            "Situation Report backend is not configured yet.";
 
         status.className =
             "report-status error";
@@ -13303,7 +13303,7 @@ async function generateCustomReport() {
         ).textContent =
             payload.title
             ||
-            "ANALYTICAL REPORT";
+            "SITUATION REPORT";
 
         document.getElementById(
             "reportResultMeta"
@@ -13374,7 +13374,7 @@ async function generateCustomReport() {
             false;
 
         button.textContent =
-            "GENERATE ANALYTICAL REPORT";
+            "GENERATE SITUATION REPORT";
     }
 }
 
@@ -13503,14 +13503,14 @@ async function downloadGeneratedReportPdf() {
 
         await pdf.download({
             filename:
-                "CT-Atlas-Report-"
+                "CT-Atlas-Situation-Report-"
                 +
                 stamp
                 +
                 "-"
                 +
                 pdf.safeFilename(title, "Analytical-Report"),
-            eyebrow: "CT ATLAS · REPORT GENERATOR",
+            eyebrow: "CT ATLAS · SITUATION REPORT",
             title,
             meta,
             blocks,

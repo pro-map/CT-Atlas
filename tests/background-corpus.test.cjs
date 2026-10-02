@@ -319,6 +319,6 @@ test('Atlas AI answers from general knowledge when no reporting is retrieved, an
   const client=fs.readFileSync('deep-search.js','utf8');
   assert.ok(client.includes(`safe.replace(/\\[GK\\]/g,'<span class="deep-citation deep-gk"`),'[GK] is shown as its own badge');
   assert.match(client,/GENERAL KNOWLEDGE \[GK\]/);
-  assert.match(client,/button\.textContent="ATLAS AI";/);
+  assert.match(client,/button\.textContent="CUSTOM INTELLIGENCE";/);
   assert.ok(!/DEEP SEARCH · BETA/.test(client),'renamed, no beta label');
 });

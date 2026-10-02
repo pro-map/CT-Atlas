@@ -63,7 +63,7 @@ function loadDeepSearch(){
   if(document.getElementById("deepSearchClientScript"))return;
   const script=document.createElement("script");
   script.id="deepSearchClientScript";
-  script.src="deep-search.js?v=6";
+  script.src="deep-search.js?v=7";
   script.defer=true;
   document.head.appendChild(script);
 }

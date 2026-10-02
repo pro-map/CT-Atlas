@@ -303,7 +303,7 @@ const sources = [...eventSources, ...contextSources];
 // The page fetches the report's picture from these (/report-illustration):
 // the cited map events, most cited first -- never background context, which
 // can be commentary or reporting outside the map's scope.
-const report = { title: cleanText(generated.title || `CT Analytical Report — ${region}`, 180), analysis: analysisText, meta, database_version: databaseVersion, generated_at: new Date().toISOString(), sources, grounding, illustration_candidates: illustrationCandidates(eventSources, analysisText) };
+const report = { title: cleanText(generated.title || `CT Situation Report — ${region}`, 180), analysis: analysisText, meta, database_version: databaseVersion, generated_at: new Date().toISOString(), sources, grounding, illustration_candidates: illustrationCandidates(eventSources, analysisText) };
 await gateCall(env, "/cache-put", { cacheKey, report, expires_at: Date.now() + CACHE_TTL_MS });
 const commitResponse = await gateCall(env, "/commit-report", { permitId, username });
 if (!commitResponse.ok) {
