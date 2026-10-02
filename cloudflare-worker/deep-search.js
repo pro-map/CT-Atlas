@@ -23,7 +23,7 @@ import {
   matchesDatabaseFilters,
   databaseFiltersLabel
 } from "./shared.js";
-import { createSourcePreviews } from "./source-preview.js";
+import { illustrationCandidates } from "./report-illustration.js";
 import { searchCorpusForDeepSearch } from "./background-corpus.js";
 
 const DEEP_SEARCH_MAX_QUERIES = 24;
@@ -39,7 +39,9 @@ const DEEP_SEARCH_MODEL = "gemini-3.5-flash-lite";
 // "high demand" condition callGemini() (Report Generator, shared.js) already retries around.
 // Gemini 3.1 Flash Lite (GEMINI_SECOND_FALLBACK_MODEL) is the last resort: its own quota.
 const DEEP_SEARCH_FALLBACK_MODEL = "gemini-3.6-flash";
-export const DEEP_SEARCH_VERSION = "deep-search-v12-archived-incidents";
+export const DEEP_SEARCH_VERSION = "deep-search-v13-illustration";
+// Archive rows (corpus_kind) that are not incident reports.
+const NOT_ILLUSTRATIONS = new Set(["removed_event", "rejected_candidate", "historical_review"]);
 
 // There is no period selector any more -- the analyst's own question is the
 // only source of a time window. The planner LLM (see PLAN_SCHEMA's
@@ -1711,12 +1713,6 @@ export async function handleDeepSearch(request, env, ctx) {
     const gaps = evidence.filter(item => item.atlas_status === "potential_gap").length;
     const inAtlas = evidence.length - gaps;
     const successfulQueries = retrieval.waves.filter(item => item.ok).length;
-    const citedSourceIds = new Set(metrics?.cited_source_ids || []);
-    const previewCandidates = [...evidence].sort((a,b) =>
-      (citedSourceIds.has(b.id) ? 1 : 0) - (citedSourceIds.has(a.id) ? 1 : 0) ||
-      Number(b.source_count || 1) - Number(a.source_count || 1)
-    );
-    const sourcePreviews = await createSourcePreviews(env, previewCandidates, { maxImages: 2, maxAttempts: 2 });
 
     const report = {
       title: generated.title || "CT Atlas Deep Search",
@@ -1762,7 +1758,11 @@ export async function handleDeepSearch(request, env, ctx) {
         note: "Citation coverage measures visible source citation coverage; it is not a statistical probability of hallucination."
       },
       evidence,
-      source_previews: sourcePreviews
+      // The page fetches the report's picture from these (/report-illustration),
+      // in a request of its own: this one is close to the subrequest ceiling.
+      // Archive commentary and off-scope reporting never illustrate a report.
+      illustration_candidates: illustrationCandidates(
+        evidence.filter(item => !NOT_ILLUSTRATIONS.has(item.corpus_kind)), generated.analysis)
     };
 
     await gateCall(env, "/cache-put", {

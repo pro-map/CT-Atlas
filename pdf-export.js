@@ -510,7 +510,8 @@ function blocksFromElement(root){
   if(!root)return blocks;
   function visit(element){
     if(!(element instanceof Element))return;
-    if(element.matches("script,style,button"))return;
+    // [data-pdf-skip]: on screen only (e.g. a caption the image block already carries).
+    if(element.matches("script,style,button,[data-pdf-skip]"))return;
     if(element.matches("img[data-pdf-image]")){
       const src=String(element.currentSrc||element.src||"").trim();
       if(src){

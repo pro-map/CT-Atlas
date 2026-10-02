@@ -1,8 +1,12 @@
 import { cleanText, gateCall, corsHeaders } from "./shared.js";
 
-const SOURCE_PREVIEW_VERSION = "source-preview-v1-og-image";
+const SOURCE_PREVIEW_VERSION = "source-preview-v2-article-head";
 const PREVIEW_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
+// An article's preview tags sit in its <head>: reading stops there, or at
+// this many bytes (news pages run to megabytes once the body is included).
 const ARTICLE_HTML_LIMIT = 350000;
+// Outlets turn away unknown agents; this is the form link previewers use.
+const PREVIEW_USER_AGENT = "Mozilla/5.0 (compatible; CT-Atlas-Preview/1.0; +https://pro-map.github.io/CT-Atlas/)";
 const IMAGE_BYTES_LIMIT = 1600000;
 
 function isPrivateIpv4(host) {
@@ -54,32 +58,69 @@ function tagAttributes(tag) {
   return attrs;
 }
 
-function extractPreviewImageUrl(html, baseUrl) {
-  const accepted = new Set([
-    "og:image",
-    "og:image:url",
-    "og:image:secure_url",
-    "twitter:image",
-    "twitter:image:src"
-  ]);
+const IMAGE_META_KEYS = Object.freeze([
+  "og:image:secure_url",
+  "og:image",
+  "og:image:url",
+  "twitter:image",
+  "twitter:image:src"
+]);
+
+// The first value of every <meta property|name|itemprop=...> in the page.
+function metaValues(html) {
+  const values = new Map();
   for (const tag of String(html || "").match(/<meta\b[^>]*>/gi) || []) {
     const attrs = tagAttributes(tag);
-    const key = String(attrs.property || attrs.name || "").toLowerCase();
-    if (!accepted.has(key) || !attrs.content) continue;
-    try {
-      const resolved = new URL(attrs.content, baseUrl).toString();
-      if (isSafePublicUrl(resolved)) return resolved;
-    } catch (_) {}
+    const key = String(attrs.property || attrs.name || attrs.itemprop || "").toLowerCase();
+    if (key && attrs.content && !values.has(key)) values.set(key, attrs.content.trim());
   }
-  for (const tag of String(html || "").match(/<link\b[^>]*>/gi) || []) {
-    const attrs = tagAttributes(tag);
-    if (String(attrs.rel || "").toLowerCase() !== "image_src" || !attrs.href) continue;
-    try {
-      const resolved = new URL(attrs.href, baseUrl).toString();
-      if (isSafePublicUrl(resolved)) return resolved;
-    } catch (_) {}
+  return values;
+}
+
+function resolvedSafeUrl(value, baseUrl) {
+  try {
+    const resolved = new URL(value, baseUrl).toString();
+    return isSafePublicUrl(resolved) ? resolved : "";
+  } catch (_) {
+    return "";
   }
-  return "";
+}
+
+function positiveInt(value) {
+  const number = Number.parseInt(String(value || ""), 10);
+  return Number.isFinite(number) && number > 0 ? number : 0;
+}
+
+// The article's share image and what the page says about it: declared size,
+// the photo's own caption (alt text) and the article's headline and outlet.
+function extractArticleImage(html, baseUrl) {
+  const meta = metaValues(html);
+  let url = "";
+  for (const key of IMAGE_META_KEYS) {
+    url = meta.has(key) ? resolvedSafeUrl(meta.get(key), baseUrl) : "";
+    if (url) break;
+  }
+  if (!url) {
+    for (const tag of String(html || "").match(/<link\b[^>]*>/gi) || []) {
+      const attrs = tagAttributes(tag);
+      if (String(attrs.rel || "").toLowerCase() !== "image_src" || !attrs.href) continue;
+      url = resolvedSafeUrl(attrs.href, baseUrl);
+      if (url) break;
+    }
+  }
+  if (!url) return null;
+  return {
+    url,
+    width: positiveInt(meta.get("og:image:width") || meta.get("twitter:image:width")),
+    height: positiveInt(meta.get("og:image:height") || meta.get("twitter:image:height")),
+    alt: cleanText(meta.get("og:image:alt") || meta.get("twitter:image:alt") || "", 300),
+    title: cleanText(meta.get("og:title") || meta.get("twitter:title") || "", 300),
+    site: cleanText(meta.get("og:site_name") || "", 120)
+  };
+}
+
+function extractPreviewImageUrl(html, baseUrl) {
+  return extractArticleImage(html, baseUrl)?.url || "";
 }
 
 async function fetchSafe(url, init = {}, maxRedirects = 3) {
@@ -127,62 +168,68 @@ async function readLimitedText(response, limit) {
   return new TextDecoder("utf-8", { fatal: false }).decode(bytes);
 }
 
-async function discoverArticleImage(articleUrl) {
-  if (!isSafePublicUrl(articleUrl)) return "";
+// The start of an HTML page: up to its </head> (or `limit` bytes), never an
+// error for a long page -- the rest of it is not needed and not downloaded.
+async function readHtmlHead(response, limit) {
+  if (!response.body) return "";
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder("utf-8", { fatal: false });
+  let text = "";
+  let size = 0;
+  try {
+    while (size < limit) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      size += value.length;
+      text += decoder.decode(value, { stream: true });
+      if (/<\/head\s*>/i.test(text.slice(-(value.length + 16)))) break;
+    }
+  } finally {
+    // The rest of the page is not wanted. Not awaited: a cancel can wait on
+    // other readers of the same body (a tee), and nothing here depends on it.
+    reader.cancel().catch(() => {});
+  }
+  return text;
+}
+
+// The article's share image and its metadata (extractArticleImage), and the
+// address the article finally answered from; null when there is none.
+async function fetchArticleImage(articleUrl) {
+  if (!isSafePublicUrl(articleUrl)) return null;
   try {
     const response = await fetchSafe(articleUrl, {
       headers: {
         "Accept": "text/html,application/xhtml+xml",
-        "User-Agent": "CT-Atlas-Source-Preview/1.0"
+        "User-Agent": PREVIEW_USER_AGENT
       },
       cf: { cacheTtl: 3600, cacheEverything: false }
     });
-    if (!response.ok) return "";
+    if (!response.ok) return null;
     const type = String(response.headers.get("Content-Type") || "").toLowerCase();
-    if (type && !type.includes("text/html") && !type.includes("application/xhtml")) return "";
-    const html = await readLimitedText(response, ARTICLE_HTML_LIMIT);
-    return extractPreviewImageUrl(html, response.url || articleUrl);
+    if (type && !type.includes("text/html") && !type.includes("application/xhtml")) return null;
+    const html = await readHtmlHead(response, ARTICLE_HTML_LIMIT);
+    const image = extractArticleImage(html, response.url || articleUrl);
+    return image ? { ...image, article_url: response.url || articleUrl } : null;
   } catch (error) {
     console.warn("Source preview discovery failed", cleanText(error?.message, 160));
-    return "";
+    return null;
   }
 }
 
-async function createSourcePreviews(env, sources, options = {}) {
-  const maxImages = Math.max(0, Math.min(3, Number(options.maxImages || 2)));
-  const maxAttempts = Math.max(maxImages, Math.min(4, Number(options.maxAttempts || maxImages)));
-  const previews = [];
-  let attempts = 0;
-
-  for (const source of Array.isArray(sources) ? sources : []) {
-    if (previews.length >= maxImages || attempts >= maxAttempts) break;
-    const articleUrl = cleanText(source?.url, 1500);
-    if (!articleUrl || !isSafePublicUrl(articleUrl)) continue;
-    attempts++;
-    const imageUrl = await discoverArticleImage(articleUrl);
-    if (!imageUrl) continue;
-
-    const tokenResponse = await gateCall(env, "/source-image-token-put", {
-      image_url: imageUrl,
-      source_id: cleanText(source?.id, 40),
-      title: cleanText(source?.title, 300),
-      source: cleanText(source?.source, 160),
-      article_url: articleUrl,
-      expires_at: Date.now() + PREVIEW_TOKEN_TTL_MS
-    });
-    const tokenPayload = await tokenResponse.json().catch(() => ({}));
-    if (!tokenResponse.ok || !tokenPayload?.token) continue;
-
-    previews.push({
-      source_id: cleanText(source?.id, 40),
-      title: cleanText(source?.title, 300),
-      source: cleanText(source?.source, 160),
-      article_url: articleUrl,
-      image_path: "/source-image/" + encodeURIComponent(tokenPayload.token)
-    });
-  }
-
-  return previews;
+// A short-lived token the page fetches the image through (/source-image/...),
+// so the browser never loads a third-party address directly.
+async function createImageToken(env, imageUrl, details = {}) {
+  const tokenResponse = await gateCall(env, "/source-image-token-put", {
+    image_url: imageUrl,
+    source_id: cleanText(details.source_id, 40),
+    title: cleanText(details.title, 300),
+    source: cleanText(details.source, 160),
+    article_url: cleanText(details.article_url, 1500),
+    expires_at: Date.now() + PREVIEW_TOKEN_TTL_MS
+  });
+  const tokenPayload = await tokenResponse.json().catch(() => ({}));
+  if (!tokenResponse.ok || !tokenPayload?.token) return "";
+  return "/source-image/" + encodeURIComponent(tokenPayload.token);
 }
 
 async function handleSourceImage(request, env) {
@@ -202,7 +249,7 @@ async function handleSourceImage(request, env) {
     const upstream = await fetchSafe(payload.image_url, {
       headers: {
         "Accept": "image/avif,image/webp,image/png,image/jpeg,image/*;q=0.8",
-        "User-Agent": "CT-Atlas-Source-Preview/1.0"
+        "User-Agent": PREVIEW_USER_AGENT
       },
       cf: { cacheTtl: 86400, cacheEverything: true }
     });
@@ -225,8 +272,14 @@ async function handleSourceImage(request, env) {
 
 export {
   SOURCE_PREVIEW_VERSION,
+  PREVIEW_USER_AGENT,
   isSafePublicUrl,
+  fetchSafe,
+  readLimitedText,
+  readHtmlHead,
+  extractArticleImage,
   extractPreviewImageUrl,
-  createSourcePreviews,
+  fetchArticleImage,
+  createImageToken,
   handleSourceImage
 };

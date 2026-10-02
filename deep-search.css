@@ -81,12 +81,8 @@
 @media(max-width:560px){#deepSearchPanel{padding:4px}#deepSearchWindow{width:99vw;height:98vh}#deepSearchResultTopline{display:block}#deepSearchActions{margin-top:9px}#deepSearchMetrics{grid-template-columns:repeat(2,1fr)}.deep-gap-badge{margin-left:0}.deep-language{min-width:calc(50% - 20px)}}
 
 /* Source article visual previews */
-#deepSearchVisuals{margin:0 0 12px}
-.deep-visual-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.deep-source-visual{margin:0;border:1px solid #604f2e;background:#17150f}
-.deep-source-visual img{display:block;width:100%;height:180px;object-fit:cover;background:#201c12}
-.deep-source-visual figcaption{padding:8px 9px 9px;color:#a99977;font-size:8px;line-height:1.45}
-.deep-source-visual figcaption strong{display:block;margin-bottom:3px;color:#e2d1a4;font-size:9px}
-.deep-visual-empty{padding:9px 10px;border:1px dashed #5b4d31;color:#8f8166;font-size:8px;line-height:1.5}
-@media(max-width:640px){.deep-visual-grid{grid-template-columns:1fr}.deep-source-visual img{height:160px}}
+/* The report's picture (report-illustration.js styles the figure itself). */
+#deepSearchIllustration .ct-report-illustration{border-color:#604f2e;background:#17150f}
+#deepSearchIllustration .ct-report-illustration figcaption{color:#a99977}
+#deepSearchIllustration .ct-report-illustration-title{color:#e2d1a4}
 .deep-scope{margin:0 0 10px;padding:6px 8px;border-left:2px solid rgba(143,208,255,.6);background:rgba(20,40,55,.45);color:#cfe6f2;font:600 8.5px/1.45 Arial,sans-serif}

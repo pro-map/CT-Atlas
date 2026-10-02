@@ -3691,47 +3691,19 @@ html, body {
    loads on every page view regardless of whether Deep Search itself is
    opened -- see usage-auth-fix.js's loadDeepSearch(). Only the badge here
    (corroboration/relevance, not an Atlas gap/match) is Report-Generator-own. */
-#reportResultVisuals {
-    padding: 0 17px 18px;
+/* The report's picture (report-illustration.js styles the figure itself). */
+#reportResultIllustration {
+    padding: 0 17px;
 }
-.report-source-visuals-heading {
-    margin: 4px 0 9px;
-    color: #79c8f1;
-    font: 900 9px/1.25 Arial, sans-serif;
-    letter-spacing: .12em;
-}
-.report-source-visuals-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0,1fr));
-    gap: 10px;
-}
-.report-source-visual {
-    margin: 0;
-    border: 1px solid #2b4452;
+#reportResultIllustration .ct-report-illustration {
+    border-color: #2b4452;
     background: #0b1820;
 }
-.report-source-visual img {
-    display: block;
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    background: #15242d;
-}
-.report-source-visual figcaption {
-    padding: 8px 9px 9px;
+#reportResultIllustration .ct-report-illustration figcaption {
     color: #9fb5c1;
-    font-size: 8px;
-    line-height: 1.45;
 }
-.report-source-visual figcaption strong {
-    display: block;
-    margin-bottom: 3px;
+#reportResultIllustration .ct-report-illustration-title {
     color: #dceaf0;
-    font-size: 9px;
-}
-@media (max-width: 640px) {
-    .report-source-visuals-grid { grid-template-columns: 1fr; }
-    .report-source-visual img { height: 160px; }
 }
 
 #reportResultSources {
@@ -4568,9 +4540,10 @@ html, body {
 
 </style>
 
-<script src="pdf-export.js?v=20260922" defer></script>
+<script src="pdf-export.js?v=20261002" defer></script>
+<script src="report-illustration.js?v=20261002" defer></script>
 <script src="usage-admin.js?v=usage-summary-20260929" defer></script>
-<script src="usage-auth-fix.js?v=20260930" defer></script>
+<script src="usage-auth-fix.js?v=20261002" defer></script>
 <script src="tab-access.js?v=20260928" defer></script>
 
 <style>
@@ -5537,8 +5510,8 @@ Visible rate
             <button id="reportPrintButton" type="button">DOWNLOAD PDF</button>
           </div>
         </div>
+        <div id="reportResultIllustration"></div>
         <div id="reportResultContent"></div>
-        <div id="reportResultVisuals"></div>
         <div id="reportResultSources"></div>
         <div id="reportGeneratorDisclaimer">
           AI-assisted analysis based on deduplicated open-source events held in the CT Atlas database. It does not constitute verified intelligence and must be independently validated before operational or decision-making use.
@@ -13010,36 +12983,6 @@ function reportSectionHtml(
 }
 
 
-function reportSourcePreviewsHtml(previews) {
-    const list = Array.isArray(previews) ? previews : [];
-    if (!list.length) return "";
-
-    const cards = list.map(item => {
-        const src = item.image_path ? REPORT_GENERATOR_API_BASE + item.image_path : "";
-        if (!src) return "";
-        const caption = [item.source_id, item.source, item.title].filter(Boolean).join(" · ");
-        return `
-            <figure class="report-source-visual">
-                <img
-                    src="${escapeHtml(src)}"
-                    alt="${escapeHtml(item.title || "Source article preview")}"
-                    crossorigin="anonymous"
-                    loading="eager"
-                    data-pdf-image
-                    data-pdf-caption="${escapeHtml(caption)}"
-                >
-                <figcaption>
-                    <strong>${escapeHtml(item.source || "Source")}</strong>
-                    ${escapeHtml(item.title || "")}
-                </figcaption>
-            </figure>`;
-    }).filter(Boolean).join("");
-
-    if (!cards) return "";
-    return '<div class="report-source-visuals-heading">KEY SOURCE VISUALS</div><div class="report-source-visuals-grid">' + cards + '</div>';
-}
-
-
 function reportSourcesHtml(sources, grounding) {
 
     const list =
@@ -13304,12 +13247,13 @@ async function generateCustomReport() {
                 payload.analysis
             );
 
-        document.getElementById(
-            "reportResultVisuals"
-        ).innerHTML =
-            reportSourcePreviewsHtml(
-                payload.source_previews
-            );
+        // The best photo among the cited articles, fetched after the report
+        // is on screen (it takes the Worker a few seconds to find).
+        window.CTAtlasIllustration?.load(
+            document.getElementById("reportResultIllustration"),
+            payload.illustration_candidates,
+            REPORT_GENERATOR_API_BASE
+        );
 
         document.getElementById(
             "reportResultSources"
@@ -13452,15 +13396,15 @@ async function downloadGeneratedReportPdf() {
             });
         }
 
+        const illustration = document.getElementById("reportResultIllustration");
+        await window.CTAtlasIllustration?.ready(illustration);
         blocks.push(
-            ...pdf.blocksFromElement(
-                document.getElementById("reportResultContent")
-            )
+            ...pdf.blocksFromElement(illustration)
         );
 
         blocks.push(
             ...pdf.blocksFromElement(
-                document.getElementById("reportResultVisuals")
+                document.getElementById("reportResultContent")
             )
         );
 
