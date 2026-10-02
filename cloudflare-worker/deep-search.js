@@ -39,7 +39,7 @@ const DEEP_SEARCH_MODEL = "gemini-3.5-flash-lite";
 // "high demand" condition callGemini() (Report Generator, shared.js) already retries around.
 // Gemini 3.1 Flash Lite (GEMINI_SECOND_FALLBACK_MODEL) is the last resort: its own quota.
 const DEEP_SEARCH_FALLBACK_MODEL = "gemini-3.6-flash";
-export const DEEP_SEARCH_VERSION = "deep-search-v14-assessment";
+export const DEEP_SEARCH_VERSION = "deep-search-v15-atlas-ai";
 // Archive rows (corpus_kind) that are not incident reports.
 const NOT_ILLUSTRATIONS = new Set(["removed_event", "rejected_candidate", "historical_review"]);
 
@@ -676,8 +676,11 @@ Return only the structured search plan. For every language key, return both
 `;
 
 const REPORT_INSTRUCTION = `
-You are CT Atlas Deep Search, a senior counter-terrorism intelligence analyst.
+You are Atlas AI, CT Atlas's senior counter-terrorism intelligence analyst.
 Write an INTELLIGENCE ASSESSMENT that answers the analyst's exact question.
+You combine three things: the CT Atlas database, the multilingual reporting
+retrieved for this question, and your own expert knowledge as an analyst
+(history, actors, ideology, strategy, regional dynamics, comparable cases).
 It is NOT a digest, a summary of each article or a list of events: the value
 you add is judgement -- what the evidence means, why it is happening, how the
 pieces connect, how sure we can be, and what comes next. A reader who has seen
@@ -723,17 +726,25 @@ ANALYTIC STANDARDS:
 - Prefer a clear, defensible bottom line over hedging everything; but never
   claim more certainty than the evidence supports.
 
-EVIDENCE RULES:
-- Facts (events, figures, names, places, dates, attribution) come ONLY from
-  the supplied evidence records, and every sentence stating one carries a
-  citation exactly like [S01] or [S01, S04]. Never cite a source ID that is
-  not supplied.
-- Assessments built on the evidence cite the records they rest on.
-- Widely established background (a group's known area of operations, origin,
-  ideology or alliances; a conflict's basic context) may frame the analysis
-  only in BACKGROUND / CONTEXT, introduced as "Background (general knowledge,
-  not from the retrieved sources):", and never to establish that an event
-  happened or to supply figures.
+EVIDENCE RULES -- every sentence shows where it comes from:
+- [S01], [S01, S04]: the supplied evidence records. Recent events, figures,
+  names, places, dates and attribution in the question's period come ONLY
+  from them. Never cite a source ID that is not supplied.
+- [GK]: your own general knowledge as an analyst -- a group's history,
+  leadership lineage, ideology, alliances and rivalries, known areas of
+  operation and modus operandi, the conflict's background, the strategic
+  logic of the actors, comparable past cases and what they suggest. Use it
+  wherever it deepens the analysis (BACKGROUND / CONTEXT, ANALYSIS,
+  ALTERNATIVE EXPLANATIONS, OUTLOOK); this is what turns a set of reports
+  into an assessment. Put [GK] at the end of every sentence that rests on it.
+- A sentence may combine both: "...[S03] [GK]".
+- [GK] never establishes that an event in the question's period happened, and
+  never supplies casualty figures, dates or attribution for one: those need
+  an [Sxx]. Keep [GK] to what is well established; when your knowledge may be
+  outdated or contested, say so. When it contradicts the retrieved evidence,
+  say so and favour the more recent, better-sourced account.
+- When no evidence was retrieved (a general question such as "what is ISKP"),
+  answer from [GK] and say plainly that no current reporting was found.
 - Preserve allegations and uncertainty. Do not turn claims into facts.
 - If sources conflict, state the conflict, cite both sides and say which
   account you find more credible and why.
@@ -790,7 +801,8 @@ POTENTIAL CT ATLAS GAPS
   Only for evidence with atlas_status "potential_gap"; omit otherwise.
 SOURCE / CONFIDENCE NOTES
   Overall reliability: how many independent sources, database versus external,
-  single-source claims, language coverage, recency.
+  single-source claims, language coverage, recency, and how much of the
+  assessment rests on general knowledge [GK] rather than current reporting.
 
 The field atlas_status is an approximate machine comparison against CT Atlas.
 "potential_gap" means only that no sufficiently similar map event was
@@ -1576,12 +1588,16 @@ function citationMetrics(analysis, evidence) {
     .filter(v => v && !/^[A-Z][A-Z /&-]{4,}$/.test(v));
   const factual = paragraphs.filter(v => v.length >= 35);
   const grounded = factual.filter(v => /\[S\d{2}/.test(v));
+  // Paragraphs resting (at least partly) on the model's general knowledge.
+  const general = factual.filter(v => /\[GK\]/.test(v));
   return {
     cited_source_ids: [...cited],
     citation_coverage_percent: factual.length ? Math.round(grounded.length / factual.length * 100) : 100,
+    general_knowledge_percent: factual.length ? Math.round(general.length / factual.length * 100) : 0,
     cited_sources: cited.size,
     factual_paragraphs: factual.length,
-    cited_factual_paragraphs: grounded.length
+    cited_factual_paragraphs: grounded.length,
+    general_knowledge_paragraphs: general.length
   };
 }
 
@@ -1721,25 +1737,17 @@ export async function handleDeepSearch(request, env, ctx) {
     const unique = deduplicateRows([...retrieval.rows, ...corpus.rows]);
     const languagesSearched = languageDiagnostics(plan, retrieval, priorityLanguages);
 
-    if (!unique.length && !databaseRows.length) {
-      // A zero-result report can mean two very different things: genuinely
-      // no open-source coverage exists, or every single search request was
-      // rejected by a provider (Google News/GDELT rate-limiting or blocking
-      // Cloudflare's shared egress IPs, a known transient condition -- see
-      // the v5.12/v5.19 incidents). Telling these apart matters: the first
-      // is a real finding, the second is not evidence of anything and
-      // should never be read as "no coverage exists".
-      const likelyTransientFetchIssue = isLikelyTransientFetchIssue(retrieval.waves);
-      return jsonResponse({
-        error: likelyTransientFetchIssue
-          ? "Deep Search's search providers (Google News/GDELT) failed or were rate-limited for every query in this search. This is a temporary infrastructure issue, not evidence that no coverage exists for this question -- please retry in a few minutes."
-          : "Deep Search found no usable open-source reporting for this question and period.",
-        likely_transient_fetch_issue: likelyTransientFetchIssue,
-        detected_period: detectedPeriod,
-        languages_searched: languagesSearched,
-        search_queries: retrieval.waves.map(w => ({ ...w.query, ok: w.ok, status: w.status, result_count: w.rows.length }))
-      }, 422, env);
-    }
+    // No reporting at all can mean two very different things: genuinely no
+    // open-source coverage, or every search request rejected by a provider
+    // (Google News/GDELT rate-limiting Cloudflare's shared egress IPs, a known
+    // transient condition -- see the v5.12/v5.19 incidents). Either way the
+    // assessment is still written, from general knowledge [GK] only, and says
+    // which of the two it is: never read as "no coverage exists".
+    const noCurrentReporting = !unique.length && !databaseRows.length;
+    const likelyTransientFetchIssue = noCurrentReporting && isLikelyTransientFetchIssue(retrieval.waves);
+    const retrievalNote = !noCurrentReporting ? "" : likelyTransientFetchIssue
+      ? "No current reporting could be retrieved: the search providers failed or were rate-limited for every query. Say so at the top of KEY JUDGEMENTS, answer from general knowledge [GK] only, and set every confidence level to low for anything recent."
+      : "No current reporting was found for this question and period in the CT Atlas database or the multilingual search. Say so at the top of KEY JUDGEMENTS and answer from general knowledge [GK] only.";
 
     const compared = compareWithAtlas(unique, candidateMapEvents(db, window));
     const externalRows = foldIntoDatabaseEvidence(databaseRows, compared);
@@ -1756,16 +1764,17 @@ export async function handleDeepSearch(request, env, ctx) {
       database_version: databaseVersion,
       language_search_coverage: languagesSearched,
       priority_languages: priorityLanguages,
+      ...(retrievalNote ? { retrieval_note: retrievalNote } : {}),
       evidence
     };
 
     const generatedRaw = await callGeminiJson(
       env, REPORT_INSTRUCTION,
-      "Write the intelligence assessment answering the analyst question, grounded in this Deep Search evidence dataset:\n\n" + JSON.stringify(dataset),
+      "Write the intelligence assessment answering the analyst question from this evidence dataset and your own analytical knowledge (marked [GK]):\n\n" + JSON.stringify(dataset),
       REPORT_SCHEMA, 9000
     );
     const generated = unwrapGeneratedReport(generatedRaw);
-    if (!generated.analysis) throw new Error("Deep Search generated an empty analytical report.");
+    if (!generated.analysis) throw new Error("Atlas AI generated an empty assessment.");
 
     const metrics = citationMetrics(generated.analysis, evidence);
     const gaps = evidence.filter(item => item.atlas_status === "potential_gap").length;
@@ -1813,9 +1822,11 @@ export async function handleDeepSearch(request, env, ctx) {
       },
       grounding: {
         ...metrics,
-        note: "Citation coverage measures visible source citation coverage; it is not a statistical probability of hallucination."
+        note: "Citation coverage is the share of paragraphs citing a retrieved source [Sxx]; general knowledge is the share resting on the model's own knowledge [GK]. Neither is a statistical probability of hallucination."
       },
       evidence,
+      no_current_reporting: noCurrentReporting,
+      likely_transient_fetch_issue: likelyTransientFetchIssue,
       // The page fetches the report's picture from these (/report-illustration),
       // in a request of its own: this one is close to the subrequest ceiling.
       // Archive commentary and off-scope reporting never illustrate a report.
@@ -1823,10 +1834,14 @@ export async function handleDeepSearch(request, env, ctx) {
         evidence.filter(item => !NOT_ILLUSTRATIONS.has(item.corpus_kind)), generated.analysis)
     };
 
-    await gateCall(env, "/cache-put", {
-      cacheKey: "deep:" + cacheKey, report,
-      expires_at: Date.now() + DEEP_SEARCH_CACHE_TTL_MS
-    });
+    // Not cached when the providers failed: a retry minutes later should
+    // search again, not get the general-knowledge-only answer back.
+    if (!likelyTransientFetchIssue) {
+      await gateCall(env, "/cache-put", {
+        cacheKey: "deep:" + cacheKey, report,
+        expires_at: Date.now() + DEEP_SEARCH_CACHE_TTL_MS
+      });
+    }
 
     const commitResponse = await gateCall(env, "/commit-report", { permitId, username });
     if (!commitResponse.ok) {

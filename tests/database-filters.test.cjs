@@ -141,20 +141,10 @@ test('Deep Search consults the database before external search and numbers evide
   const source=fs.readFileSync('cloudflare-worker/deep-search.js','utf8');
   const handler=source.slice(source.indexOf('export async function handleDeepSearch('));
   assert.ok(handler.indexOf('databaseEvidenceRows(db, plan, window, filters)')<handler.indexOf('await retrieveNews('),'database first');
-  assert.match(handler,/if \(!unique\.length && !databaseRows\.length\)/);
+  assert.match(handler,/const noCurrentReporting = !unique\.length && !databaseRows\.length;/);
   assert.match(handler,/\.\.\.databaseRows\.map\(evidenceItem\),\s*\.\.\.buildEvidence\(externalRows, priorityLanguages, DEEP_SEARCH_MAX_EVIDENCE - databaseRows\.length\)/);
   assert.equal((source.match(/fetchEventsDatabase\(env\)/g)||[]).length,1,'still a single events fetch');
   assert.match(source,/search_engine "ct_atlas_database" are verified events/);
-});
-
-test('Atlas AI scopes events with the Database filters before matching the question, then adds archive context',()=>{
-  const source=fs.readFileSync('cloudflare-worker/quick-ask.js','utf8');
-  const handler=source.slice(source.indexOf('async function handleQuickAsk('));
-  assert.ok(handler.indexOf('matchesDatabaseFilters(event, filters, now)')<handler.indexOf('localEventMatches(scoped, question)'));
-  assert.match(handler,/if \(!matched\.length && hasActiveDatabaseFilters\(filters\)\)/);
-  assert.match(handler,/searchCorpusForQuestion\(env,/);
-  assert.match(source,/You answer FROM THE CT ATLAS DATABASE FIRST/);
-  assert.match(source,/QUICK_ASK_VERSION = "quick-ask-v7-archived-incidents"/);
 });
 
 test('the report route filters by group and keys its cache on it',()=>{

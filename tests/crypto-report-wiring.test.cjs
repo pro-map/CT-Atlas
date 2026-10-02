@@ -109,5 +109,5 @@ test("the exporter keeps its old callers working: same block types, only additio
   const source=read("pdf-export.js");
   for(const type of ["title","heading","body","question","meta","highlight","badge","source","small","footer"])assert.ok(new RegExp("\\b"+type+":\\{size:").test(source),type+" style is still there");
   assert.match(source,/window\.CTAtlasPdf=\{download,blocksFromElement,safeFilename\};/);
-  for(const page of ["index.html","deep-search.js","quick-ask.js","social.js"])assert.ok(read(page).includes("CTAtlasPdf"),page+" still uses it");
+  for(const page of ["index.html","deep-search.js","social.js"])assert.ok(read(page).includes("CTAtlasPdf"),page+" still uses it");
 });

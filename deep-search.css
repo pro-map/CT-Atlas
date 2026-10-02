@@ -58,6 +58,7 @@
 .deep-report-list{margin:7px 0 13px;padding:0 0 0 21px}
 .deep-report-list li{margin:5px 0;padding-left:2px}
 .deep-report-list li::marker{color:#4da7d8}
+.deep-gk{border-color:rgba(120,170,220,.35)!important;background:rgba(90,140,200,.10)!important;color:#9cc4ec!important}
 .deep-citation{display:inline-block;margin:0 1px;padding:1px 3px;border:1px solid rgba(214,174,73,.24);border-radius:2px;background:rgba(181,137,40,.08);color:#e5bd5a;font-weight:900;white-space:nowrap}
 #deepSearchEvidence{display:grid;grid-template-columns:1fr;gap:8px}
 .deep-evidence{padding:11px 12px;border:1px solid rgba(70,119,145,.22);background:rgba(8,25,35,.58)}

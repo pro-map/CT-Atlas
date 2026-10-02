@@ -15,7 +15,6 @@ on:
       - "tab-health.css"
       - "pdf-export.js"
       - "deep-search.js"
-      - "quick-ask.js"
       - "crypto.html"
       - "crypto.js"
       - "crypto-report.js"

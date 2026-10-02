@@ -89,7 +89,6 @@ test('the map does not enumerate or spread whole events (which would expose the 
 // ---------------------------------------------------------------- the Worker gives the same answers
 
 const sharedSource=read('cloudflare-worker/shared.js').replace(/export /g,'');
-const quickSource=read('cloudflare-worker/quick-ask.js').replace(/^import[\s\S]*?from "\.\/[^"]+";\s*/gm,'').replace(/export /g,'');
 const deepSource=read('cloudflare-worker/deep-search.js')
  .replace(/import\s*\{[\s\S]*?\}\s*from\s*["']\.\/[^"']+["'];\s*/g,'')
  .replace(/export /g,'');
@@ -178,10 +177,6 @@ test('the Worker never reads an excluded field, never enumerates a whole event',
  const {regions,topics,periods}=reportInputs(shared);
  reportPipeline(shared,spied,regions,topics,periods);
 
- const quick=moduleContext(shared,quickSource,'cloudflare-worker/quick-ask.js');
- const matcher=vm.runInContext('(function(events,q){return localEventMatches(events,q).map(compactEvent)})',quick);
- for(const question of QUESTIONS)matcher(spied,question);
-
  const deep=moduleContext(shared,deepSource,'cloudflare-worker/deep-search.js');
  vm.runInContext("(function(db){return candidateMapEvents(db,{startDt:new Date('2026-09-01T00:00:00Z')})})",deep)({events:spied});
 
@@ -189,25 +184,6 @@ test('the Worker never reads an excluded field, never enumerates a whole event',
  assert.ok(!accessed.has('<enumerated>'),'a whole event is enumerated (spread / Object.keys / JSON.stringify)');
  const read=[...accessed].filter(name=>excluded.includes(name));
  assert.deepEqual(read,[],'the Worker reads these fields, so they must not be excluded');
-});
-
-const QUESTIONS=[
- 'What happened in Nigeria this week?','attacks in Somalia','ISIS Mozambique','Hamas hostages','al-Shabaab',
- 'financing of terrorism Europe','piracy Gulf of Aden','arrests in France','Taliban Afghanistan',
- 'cyber terrorism','sanctions OFAC','Sahel JNIM attacks','CBRN threat','Pakistan TTP','Syria ISIS detainees'
-];
-
-test('Quick Ask: same grounded records from lite as from full',()=>{
- const shared=sharedContext();
- const quick=moduleContext(shared,quickSource,'cloudflare-worker/quick-ask.js');
- const matcher=vm.runInContext('(function(events,q){return JSON.stringify(localEventMatches(events,q).map(compactEvent))})',quick);
- let matched=0;
- for(const question of QUESTIONS){
-  const fromFull=matcher(full.events,question);
-  assert.equal(matcher(lite.events,question),fromFull,question);
-  if(JSON.parse(fromFull).length)matched++;
- }
- assert.ok(matched>=5,'the comparison must exercise real matches');
 });
 
 test('Deep Search: same Atlas records to compare against from lite as from full',()=>{
@@ -280,8 +256,8 @@ test('fetchEventsDatabase reports failure when the full file is unavailable too'
  assert.deepEqual(result,{ok:false,status:503,db:null,source:'full'});
 });
 
-test('the three Worker consumers go through fetchEventsDatabase, not straight to EVENTS_URL',()=>{
- for(const file of ['index.js','quick-ask.js','deep-search.js']){
+test('the Worker consumers go through fetchEventsDatabase, not straight to EVENTS_URL',()=>{
+ for(const file of ['index.js','deep-search.js']){
   const source=read(`cloudflare-worker/${file}`);
   assert.match(source,/fetchEventsDatabase\(env\)/,file);
   assert.doesNotMatch(source,/fetch\(\s*env\.EVENTS_URL/,file);

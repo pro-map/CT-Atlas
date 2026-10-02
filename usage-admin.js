@@ -225,7 +225,7 @@ function injectAdminUi(){
           '<div class="admin-usage-section-title">FEATURE ACTIVITY</div>'+
           '<div class="admin-usage-table-wrap">'+
             '<table id="adminFeatureUsageTable">'+
-              '<thead><tr><th>USER</th><th>REPORT GENERATION</th><th>DEEP SEARCH</th><th>ATLAS AI</th><th>BLOCKCHAIN SEARCH</th><th>SOCIAL MEDIA SEARCH</th><th>FACIAL EXTRACTION</th><th>FACIAL SEARCH</th></tr></thead>'+
+              '<thead><tr><th>USER</th><th>REPORT GENERATION</th><th>ATLAS AI</th><th>QUICK Q&amp;A (RETIRED)</th><th>BLOCKCHAIN SEARCH</th><th>SOCIAL MEDIA SEARCH</th><th>FACIAL EXTRACTION</th><th>FACIAL SEARCH</th></tr></thead>'+
               '<tbody id="adminFeatureUsageRows"></tbody>'+
             '</table>'+
           '</div>'+
