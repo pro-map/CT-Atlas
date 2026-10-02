@@ -15,6 +15,14 @@ let graphPositions=new Map();
 let tracePayloads=new Map();
 let traceExpanded=new Set();
 let traceBusy=new Set();
+// The last automatic trace (autoTrace): how far it went, why it stopped and the
+// exchanges it reached, for the page and the report. Reset with the trace.
+let autoTraceRun=null;
+// AI-assessed operator of exchange-like wallets (/crypto-exchange-attribution),
+// by trace key. An investigative lead, never a sourced label.
+let exchangeAttributions=new Map();
+// While an automatic trace runs, the graph keeps its whole frontier (no node cap).
+let autoTraceActive=false;
 let currentNetworkModel=null;
 let cryptoWorkspace={version:"crypto-workspace-v1",labels:[],watchlist:[],cases:[],alerts:[]};
 let sharedExchangeLabels=new Map();
@@ -313,9 +321,14 @@ function readFilters(){
   };
 }
 
+// The automatic trace follows branches until they reach an exchange, up to this
+// hop and this many expanded wallets (one provider request each).
+const AUTO_TRACE_MAX_DEPTH=6;
+const AUTO_TRACE_MAX_WALLETS=30;
+
 function traceSettings(){
   return {
-    maxDepth:Math.max(2,Math.min(3,Number(document.getElementById("traceMaxDepth")?.value||3)||3)),
+    maxDepth:Math.max(2,Math.min(AUTO_TRACE_MAX_DEPTH,Number(document.getElementById("traceMaxDepth")?.value||3)||3)),
     branch:Math.max(3,Math.min(8,Number(document.getElementById("traceBranch")?.value||3)||3))
   };
 }
@@ -769,6 +782,7 @@ function exchangeIdentificationFindings(){
       evidence:Array.isArray(behavior.evidence)?behavior.evidence:[],
       metrics:behavior.metrics||{},
       related_exchange:behavior.related_exchange||null,
+      ai_attribution:exchangeAttributions.get(traceKey(entry.address,chain))||null,
       limitations:behavior.limitations||"Rules-based screening score, not a calibrated probability; review the underlying transactions before attribution."
     });
   }
@@ -805,9 +819,15 @@ function renderExchangeIdentification(){
     const badge=sourced
       ?'<span class="intel-badge clear">SOURCED LABEL · '+esc(item.confidence)+'</span>'
       :'<span class="intel-badge exchange-score">SCORE '+Number(item.score)+"/100</span>";
+    const ai=item.ai_attribution;
+    const aiDetail=ai?'<div class="intel-detail"><strong>AI-assessed operator: '+esc(ai.likely_exchange)+' · '+esc(ai.confidence)+' confidence</strong>'+
+      (ai.service_type?' · '+esc(String(ai.service_type).replaceAll("_"," ")):"")+
+      (ai.basis?.length?' — '+ai.basis.map(text=>esc(text)).join(" · "):"")+
+      (ai.alternatives?.length?' · Alternatives: '+ai.alternatives.map(text=>esc(text)).join(", "):"")+
+      ' <em>(investigative lead, not a sourced label)</em></div>':"";
     const detail=sourced
       ?(item.notes?'<div class="intel-detail">'+esc(item.notes)+'</div>':"")
-      :'<div class="intel-detail">'+evidence+'</div><div class="intel-detail">'+esc(item.limitations)+'</div>';
+      :aiDetail+'<div class="intel-detail">'+evidence+'</div><div class="intel-detail">'+esc(item.limitations)+'</div>';
     return '<div class="intel-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.name)+'</div><div class="intel-meta">'+meta+'</div></div>'+badge+'</div>'+
       (sourced?'<div class="label-source">SOURCE: '+source+'</div>':"")+detail+'</div>';
   }).join("");
@@ -1365,6 +1385,15 @@ function collectReportModel(){
       graphNodes:displayed.nodes.length,patterns:derived.patterns.length,exchangeFindings:derived.exchangeFindings.length,exposure:derived.exposure.length
     },
     patterns:derived.patterns,
+    autoTrace:autoTraceRun?{
+      startedAt:autoTraceRun.startedAt,finishedAt:autoTraceRun.finishedAt,maxDepth:autoTraceRun.maxDepth,maxDepthReached:autoTraceRun.maxDepthReached,
+      branch:autoTraceRun.branch,walletBudget:autoTraceRun.walletBudget,expanded:autoTraceRun.expanded,failed:autoTraceRun.failed,
+      stop:autoTraceRun.stop,attribution:autoTraceRun.attribution,
+      exchanges:autoTraceRun.exchanges.map(item=>({
+        address:item.address,depth:item.depth,basis:item.basis,name:item.name,score:item.score,source:item.source,
+        evidence:item.behavior?.evidence||[],path:item.path,ai:exchangeAttributions.get(item.key)||null
+      }))
+    }:null,
     exchangeFindings:derived.exchangeFindings,
     exposure:derived.exposure,
     path,
@@ -2004,14 +2033,16 @@ function buildNetworkModel(payload){
   }
 
   let nodeList=[...nodes.values()];
-  const keepKeys=new Set([rootKey,...traceEntries().map(entry=>entry.key)]);
-  if(nodeList.length>f.graphNodes){
+  // Expanded wallets and the exchanges the automatic trace reached stay visible.
+  const keepKeys=new Set([rootKey,...traceEntries().map(entry=>entry.key),...(autoTraceRun?.exchanges||[]).map(item=>item.key)]);
+  const nodeCap=autoTraceActive?Math.max(f.graphNodes,REPORT_GRAPH_NODE_CAP):f.graphNodes;
+  if(nodeList.length>nodeCap){
     const retained=nodeList
       .sort((a,b)=>{
         const ak=keepKeys.has(a.key)?1:0,bk=keepKeys.has(b.key)?1:0;
         return bk-ak||a.depth-b.depth||b.total-a.total;
       })
-      .slice(0,f.graphNodes);
+      .slice(0,nodeCap);
     const retainedKeys=new Set(retained.map(node=>node.key));
     nodeList=retained;
     for(const [key,edge] of edges){
@@ -2041,14 +2072,18 @@ function buildNetworkModel(payload){
 
 function defaultGraphPosition(node,index,totalAtDepth){
   if(node.depth===0)return {x:500,y:325};
-  const radius=node.depth===1?150:node.depth===2?245:305;
-  const angleOffset=node.depth===1?-Math.PI/2:node.depth===2?-Math.PI/2+0.28:-Math.PI/2+0.52;
+  // H1-H3 on their own rings; deeper hops (automatic trace) on wider ellipses
+  // that stay inside the 1000 x 650 canvas.
+  const radii=[0,150,245,305,350,395,440];
+  const radius=radii[Math.min(node.depth,radii.length-1)];
+  const angleOffset=-Math.PI/2+0.26*(node.depth-1);
   const angle=angleOffset+(Math.PI*2*index/Math.max(totalAtDepth,1));
-  return {x:500+Math.cos(angle)*radius,y:325+Math.sin(angle)*radius};
+  const xScale=node.depth>=4?1.05:1;
+  return {x:500+Math.cos(angle)*radius*xScale,y:325+Math.sin(angle)*Math.min(radius,305)};
 }
 
 function ensureGraphPositions(model){
-  for(const depth of [0,1,2,3]){
+  for(let depth=0;depth<=AUTO_TRACE_MAX_DEPTH;depth++){
     const group=model.nodes.filter(node=>node.depth===depth);
     group.forEach((node,index)=>{
       if(!graphPositions.has(node.key))graphPositions.set(node.key,defaultGraphPosition(node,index,group.length));
@@ -2204,7 +2239,8 @@ async function expandTraceNode(address,options={}){
   if(!options.quiet)setTraceStatus("Expanding "+short(address,9)+" from H"+node.depth+" to H"+(node.depth+1)+"…","working");
 
   try{
-    const payload=await fetchAddressAnalysis(address,lastPayload.chain,40);
+    // The automatic trace reads a larger sample: the exchange score needs it.
+    const payload=await fetchAddressAnalysis(address,lastPayload.chain,options.limit||40);
     absorbExchangeLabels(payload,false);
     tracePayloads.set(key,{key,address,payload,depth:node.depth});
     traceExpanded.add(key);
@@ -2223,50 +2259,206 @@ async function expandTraceNode(address,options={}){
   }
 }
 
+// The exchange status of a wallet in the trace: a sourced exchange label, or a
+// behaviour score at or above 80/100 once the wallet has been expanded.
+function exchangeStatusOf(address,chain=lastPayload?.chain){
+  const label=labelForAddress(address,chain);
+  if(label&&String(label.category||"").toUpperCase()==="EXCHANGE"){
+    return {basis:"sourced",name:label.name||"Exchange",source:label.source_title||label.source_type||""};
+  }
+  const behavior=exchangeBehaviorForAddress(address,chain);
+  if(behavior)return {basis:"behavioral",name:behavior.related_exchange?.name||"",score:Number(behavior.score),behavior};
+  return null;
+}
+
+// The shortest path (any flow direction) from the seed to a node of the graph,
+// as node keys, with the direction of each hop.
+function tracePathTo(model,targetKey){
+  const adjacency=new Map();
+  const link=(a,b,direction)=>{
+    if(!adjacency.has(a))adjacency.set(a,[]);
+    adjacency.get(a).push({key:b,direction});
+  };
+  for(const edge of model.edges){
+    link(edge.fromKey,edge.toKey,"out");
+    link(edge.toKey,edge.fromKey,"in");
+  }
+  const queue=[[model.rootKey,[{key:model.rootKey,direction:""}]]];
+  const visited=new Set([model.rootKey]);
+  while(queue.length){
+    const [key,path]=queue.shift();
+    if(key===targetKey)return path;
+    for(const next of adjacency.get(key)||[]){
+      if(visited.has(next.key))continue;
+      visited.add(next.key);
+      queue.push([next.key,[...path,next]]);
+    }
+  }
+  return null;
+}
+
+// Nodes reached only through exchanges are past the end of their branch:
+// funds that reach an exchange leave the traceable chain there.
+function reachedOnlyThroughExchanges(model,node,exchangeKeys){
+  const parents=new Set();
+  for(const edge of model.edges){
+    if(edge.hop!==node.depth)continue;
+    if(edge.toKey===node.key)parents.add(edge.fromKey);
+    if(edge.fromKey===node.key)parents.add(edge.toKey);
+  }
+  parents.delete(node.key);
+  const upstream=[...parents].filter(key=>(model.nodes.find(item=>item.key===key)?.depth??99)<node.depth);
+  return upstream.length>0&&upstream.every(key=>exchangeKeys.has(key));
+}
+
+async function requestExchangeAttributions(model,exchanges){
+  const chain=lastPayload.chain;
+  const wallets=exchanges.filter(item=>item.basis==="behavioral").slice(0,8).map(item=>{
+    const entry=tracePayloads.get(item.key);
+    const neighbours=[];
+    for(const row of Array.isArray(entry?.payload?.transactions)?entry.payload.transactions:[]){
+      for(const address of Array.isArray(row?.counterparties)?row.counterparties:[]){
+        const label=labelForAddress(address,chain);
+        if(label&&!neighbours.some(n=>n.address===address))neighbours.push({address,name:label.name,category:label.category,source:label.source_title||label.source_type||""});
+      }
+    }
+    const node=model.nodes.find(n=>n.key===item.key);
+    return {address:item.address,hop:item.depth,score:item.score,evidence:item.behavior?.evidence||[],metrics:item.behavior?.metrics||{},
+      assets:node?.assets||[],related_exchange:item.behavior?.related_exchange?.name||"",labelled_neighbours:neighbours.slice(0,12)};
+  });
+  if(!wallets.length)return 0;
+  const response=await fetch(API_BASE+"/crypto-exchange-attribution",{
+    method:"POST",
+    headers:sessionHeaders({"Content-Type":"application/json"}),
+    body:JSON.stringify({user_id:user(),chain,wallets})
+  });
+  const payload=await response.json().catch(()=>({}));
+  if(!response.ok)throw new Error(payload.error||"AI attribution unavailable.");
+  let count=0;
+  for(const item of Array.isArray(payload.attributions)?payload.attributions:[]){
+    exchangeAttributions.set(traceKey(item.address,chain),{...item,model:payload.model||"",note:payload.note||""});
+    count++;
+  }
+  return count;
+}
+
+// The AI-assessed operator of a wallet, when one was named.
+function attributionFor(address,chain=lastPayload?.chain){
+  const item=exchangeAttributions.get(traceKey(address,chain));
+  return item&&item.likely_exchange&&item.likely_exchange.toLowerCase()!=="unknown"?item:null;
+}
+
+// Follows the trace until its branches reach an exchange: breadth-first from
+// the seed, the strongest branches first (BRANCH per hop), expanding each
+// wallet (its own transactions and behaviour score). A branch ends at a
+// wallet with a sourced exchange label or a behaviour score of 80/100+;
+// the trace stops when every branch has ended, at H6, or after 30 wallets.
+// The exchange-like wallets are then sent for an AI-assessed attribution.
 async function autoTrace(){
   if(!lastPayload||lastPayload.kind!=="address")return;
   const button=document.getElementById("cryptoAutoTrace");
+  const depthSelect=document.getElementById("traceMaxDepth");
+  if(depthSelect)depthSelect.value=String(AUTO_TRACE_MAX_DEPTH);
   const settings=traceSettings();
   if(button){button.disabled=true;button.textContent="TRACING…";}
-  setTraceStatus("Automatic trace started. CT Atlas expands only the strongest searchable branches to limit provider load.","working");
+  autoTraceActive=true;
+  setTraceStatus("Automatic trace started: following the strongest branches until they reach an exchange (up to H"+AUTO_TRACE_MAX_DEPTH+", "+AUTO_TRACE_MAX_WALLETS+" wallets).","working");
 
-  let expandedCount=0;
+  const run={startedAt:new Date().toISOString(),maxDepth:AUTO_TRACE_MAX_DEPTH,branch:settings.branch,walletBudget:AUTO_TRACE_MAX_WALLETS,
+    expanded:0,failed:0,stop:"",exchanges:[],attribution:""};
+  const exchangeKeys=new Set();
+  const noteExchanges=model=>{
+    for(const node of model.nodes){
+      if(node.depth===0||exchangeKeys.has(node.key))continue;
+      if(exchangeStatusOf(node.id))exchangeKeys.add(node.key);
+    }
+  };
+
   try{
-    for(let depth=1;depth<settings.maxDepth;depth++){
+    let depth=1;
+    for(;depth<AUTO_TRACE_MAX_DEPTH;depth++){
       currentNetworkModel=buildNetworkModel(lastPayload);
-      const candidates=currentNetworkModel.nodes
-        .filter(node=>node.depth===depth&&node.searchable&&!traceExpanded.has(node.key))
+      noteExchanges(currentNetworkModel);
+      const model=currentNetworkModel;
+      const candidates=model.nodes
+        .filter(node=>node.depth===depth&&node.searchable&&!traceExpanded.has(node.key)&&!exchangeKeys.has(node.key)&&!reachedOnlyThroughExchanges(model,node,exchangeKeys))
         .sort((a,b)=>b.total-a.total)
         .slice(0,settings.branch);
-
-      if(!candidates.length)continue;
-
+      if(!candidates.length){
+        run.stop=exchangeKeys.size?"every branch reached an exchange or ended":"no further searchable branch";
+        break;
+      }
       for(let i=0;i<candidates.length;i++){
+        if(run.expanded>=AUTO_TRACE_MAX_WALLETS){run.stop="wallet budget reached ("+AUTO_TRACE_MAX_WALLETS+")";break;}
         const node=candidates[i];
-        setTraceStatus(
-          "Auto trace H"+depth+" → H"+(depth+1)+" · "+(i+1)+"/"+candidates.length+
-          " · "+short(node.id,8),
-          "working"
-        );
+        setTraceStatus("Auto trace H"+depth+" → H"+(depth+1)+" · "+(i+1)+"/"+candidates.length+" · "+short(node.id,8)+
+          (exchangeKeys.size?" · "+exchangeKeys.size+" exchange(s) reached":""),"working");
         try{
-          const ok=await expandTraceNode(node.id,{quiet:true});
-          if(ok)expandedCount++;
+          const ok=await expandTraceNode(node.id,{quiet:true,limit:100});
+          if(ok){
+            run.expanded++;
+            if(exchangeStatusOf(node.id))exchangeKeys.add(node.key);
+          }
         }catch(error){
+          run.failed++;
           console.warn("Auto-trace node skipped",node.id,error);
         }
         await sleep(400);
       }
+      if(run.stop)break;
     }
+    if(!run.stop)run.stop="maximum depth H"+AUTO_TRACE_MAX_DEPTH+" reached";
+
+    currentNetworkModel=buildNetworkModel(lastPayload);
+    noteExchanges(currentNetworkModel);
+    const model=currentNetworkModel;
+    for(const key of exchangeKeys){
+      const node=model.nodes.find(item=>item.key===key);
+      if(!node)continue;
+      const status=exchangeStatusOf(node.id);
+      const path=tracePathTo(model,key);
+      run.exchanges.push({key,address:node.id,depth:node.depth,basis:status?.basis||"behavioral",name:status?.name||"",
+        score:status?.score??null,source:status?.source||"",behavior:status?.behavior||null,
+        path:path?path.map(step=>({address:displayAddressForKey(step.key),direction:step.direction})):[]});
+    }
+    run.exchanges.sort((a,b)=>a.depth-b.depth||(a.basis===b.basis?0:a.basis==="sourced"?-1:1));
+    // The deepest wallet actually followed (an exchange's own counterparties are drawn, not followed).
+    run.maxDepthReached=Math.max(0,...traceEntries().map(entry=>entry.depth));
+
+    if(run.exchanges.some(item=>item.basis==="behavioral")){
+      setTraceStatus("Exchanges reached. Assessing which exchange operates the exchange-like wallet(s)…","working");
+      try{
+        const count=await requestExchangeAttributions(model,run.exchanges);
+        run.attribution=count?"assessed":"none";
+      }catch(error){
+        run.attribution="unavailable: "+(error?.message||"AI attribution failed");
+      }
+    }
+    run.finishedAt=new Date().toISOString();
+    autoTraceRun=run;
+    // The graph returns to its node cap (keeping the exchanges reached) before
+    // the closing message, which a repaint would otherwise replace.
+    autoTraceActive=false;
     renderFilteredViews();
+
+    const names=run.exchanges.slice(0,4).map(item=>{
+      const ai=attributionFor(item.address);
+      const name=item.basis==="sourced"?item.name:ai?"likely "+ai.likely_exchange+" ("+ai.confidence+")":(item.name?"linked to "+item.name:"exchange-like wallet");
+      return name+" at H"+item.depth;
+    });
     setTraceStatus(
-      expandedCount
-        ? "Automatic trace complete: "+expandedCount+" wallet(s) expanded, visible network depth H"+(currentNetworkModel?.maxVisibleDepth||0)+"."
-        : "Automatic trace found no additional searchable branches to expand under the current filters.",
+      run.exchanges.length
+        ? "Automatic trace complete: "+run.exchanges.length+" exchange(s) reached — "+names.join(" · ")+(run.exchanges.length>4?" …":"")+". "+run.expanded+" wallet(s) expanded, depth H"+run.maxDepthReached+"; stopped: "+run.stop+"."
+        : "Automatic trace complete: no exchange reached. "+run.expanded+" wallet(s) expanded, depth H"+run.maxDepthReached+"; stopped: "+run.stop+".",
       "success"
     );
   }catch(error){
     setTraceStatus(error?.message||"Automatic trace failed.","error");
   }finally{
+    if(autoTraceActive){
+      autoTraceActive=false;
+      renderFilteredViews();
+    }
     if(button){button.disabled=false;button.textContent="AUTO TRACE";}
   }
 }
@@ -2279,6 +2471,8 @@ function clearTrace(){
   traceExpanded=new Set([key]);
   traceBusy=new Set();
   graphPositions=new Map();
+  autoTraceRun=null;
+  exchangeAttributions=new Map();
   populateAssetFilter();
   renderFilteredViews();
   setTraceStatus("Trace cleared. H1 is rebuilt from the seed wallet only.","success");
@@ -2354,9 +2548,11 @@ function paintGraphFrame(payload,model){
     const assets=node.assets.slice(0,2).join(" · ");
     const nodeLabel=labelForAddress(node.id,payload.chain);
     const nodeBehavior=exchangeBehaviorForAddress(node.id,payload.chain);
+    const nodeAttribution=nodeLabel?null:attributionFor(node.id,payload.chain);
     const title="H"+node.depth+" · "+node.total+" linked record(s)"+
       (assets?" · "+assets:"")+
       (nodeBehavior?" · exchange-like heuristic score "+nodeBehavior.score+"/100 (not a calibrated probability)":"")+
+      (nodeAttribution?" · AI-assessed: likely "+nodeAttribution.likely_exchange+" ("+nodeAttribution.confidence+" confidence), not a sourced label":"")+
       (node.searchable?" · click node: open new tab · +: expand in graph":" · provider address format cannot be expanded");
     const hopClass="h"+Math.min(3,node.depth);
     const expandClass=node.busy?"loading":node.expanded?"expanded":node.depth>=model.settings.maxDepth||!node.searchable?"disabled":"";
@@ -2367,8 +2563,8 @@ function paintGraphFrame(payload,model){
       "<title>"+esc(title)+"</title>"+
       '<circle class="graph-hop-ring '+hopClass+'" cx="0" cy="0" r="'+ringRadius+'"></circle>'+
       '<circle class="graph-node '+node.relation+(node.expanded?" trace-expanded":"")+(node.searchable?"":" unsearchable")+'" cx="0" cy="0" r="'+radius+'"></circle>'+
-      '<text class="graph-label" x="0" y="-2" text-anchor="middle">'+esc(nodeLabel?.name?short(nodeLabel.name,9):nodeBehavior?"EXCHANGE-LIKE":short(node.id,5))+"</text>"+
-      '<text class="graph-sub" x="0" y="12" text-anchor="middle">'+esc(nodeLabel?.category||(nodeBehavior?"SCORE "+nodeBehavior.score+"/100":(node.total+" tx"+(assets?" · "+short(assets,6):""))))+"</text>"+
+      '<text class="graph-label" x="0" y="-2" text-anchor="middle">'+esc(nodeLabel?.name?short(nodeLabel.name,9):nodeAttribution?"≈ "+short(nodeAttribution.likely_exchange,8):nodeBehavior?"EXCHANGE-LIKE":short(node.id,5))+"</text>"+
+      '<text class="graph-sub" x="0" y="12" text-anchor="middle">'+esc(nodeLabel?.category||(nodeAttribution?"AI · "+nodeAttribution.confidence.toUpperCase():nodeBehavior?"SCORE "+nodeBehavior.score+"/100":(node.total+" tx"+(assets?" · "+short(assets,6):""))))+"</text>"+
       '<g class="graph-hop-badge '+hopClass+'" transform="translate('+(-radius-5)+" "+(-radius-5)+')"><circle class="graph-hop-badge '+hopClass+'" cx="0" cy="0" r="10"></circle><text class="graph-hop-text" x="0" y="2.5" text-anchor="middle">H'+node.depth+"</text></g>"+
       '<g class="graph-expand-control '+expandClass+'" data-key="'+esc(node.key)+'" transform="translate('+(radius+5)+" "+(-radius-5)+')" role="button" aria-label="Expand '+esc(node.id)+' in graph"><circle cx="0" cy="0" r="11"></circle><text x="0" y="5" text-anchor="middle">'+expandText+"</text></g>"+
       "</g>";
@@ -2646,6 +2842,8 @@ function resetTraceState(payload){
   tracePayloads=new Map();
   traceExpanded=new Set();
   traceBusy=new Set();
+  autoTraceRun=null;
+  exchangeAttributions=new Map();
   graphPositions=new Map();
   currentNetworkModel=null;
   const address=String(payload.query||"");

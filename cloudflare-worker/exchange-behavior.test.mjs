@@ -82,3 +82,38 @@ test("does not score transaction-only lookups as wallet behaviour", () => {
   assert.equal(result.status, "not_assessed");
   assert.equal(result.candidate, false);
 });
+
+test("a hot wallet paying out to dozens of wallets within hours, in one asset, is an exchange candidate", () => {
+  const now = Date.parse("2026-09-28T12:00:00.000Z");
+  const result = detectExchangeBehavior({
+    kind: "address",
+    chain: "tron",
+    query: "THotWallet",
+    transactions: Array.from({ length: 100 }, (_, index) => ({
+      id: "tx-" + index,
+      time: new Date(now - index * 60000).toISOString(),
+      direction: index % 10 === 0 ? "IN" : "OUT",
+      asset: "USDT",
+      amount: 100,
+      counterparties: ["TUser" + index]
+    }))
+  });
+  assert.equal(result.status, "behavioral_candidate");
+  assert.ok(result.score >= 80, String(result.score));
+  assert.ok(result.evidence.some(item => /high-velocity hub/.test(item)));
+  assert.ok(result.metrics.span_hours < 2);
+});
+
+test("velocity alone does not make a small payout batch an exchange", () => {
+  const now = Date.parse("2026-09-28T12:00:00.000Z");
+  const result = detectExchangeBehavior({
+    kind: "address",
+    chain: "tron",
+    query: "TPayroll",
+    transactions: Array.from({ length: 14 }, (_, index) => ({
+      id: "tx-" + index, time: new Date(now - index * 60000).toISOString(),
+      direction: "OUT", asset: "USDT", amount: 100, counterparties: ["TStaff" + index]
+    }))
+  });
+  assert.equal(result.candidate, false);
+});
