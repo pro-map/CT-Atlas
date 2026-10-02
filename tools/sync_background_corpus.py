@@ -10,6 +10,11 @@ Sources (earlier ones win when two share a URL):
                      inherit the parent event's category, actor, country,
                      region and incident id.
   removed_event      events archived by tools/cleanup_existing_events.py.
+  recovered          former map events recovered from events.json's git
+                     history by tools/recover_from_history.py (stored as
+                     removed_event, with their related articles), related
+                     articles dropped from events still on the map, and the
+                     articles incident merges cut off (related-overflow-*).
   rejected_candidate background-articles.json, the collector's local fallback
                      for days when D1 was unreachable.
   historical_review  candidates Gemini reviewed and kept off the map that are
@@ -106,8 +111,36 @@ def removed_events(archive_paths, now):
                 "original_title": event.get("original_title"),
                 "kind": "removed_event",
                 "parent_incident_id": event.get("incident_id"),
-                "collected_at": data.get("removed_at") or now,
+                "collected_at": data.get("removed_at") or data.get("created_at") or now,
             }
+
+
+def recovered_articles(recovered_paths, overflow_paths, live_events, now):
+    """Former map events recovered from events.json's history by
+    tools/recover_from_history.py (as removed events, with their related
+    articles), related articles dropped from events still on the map, and the
+    articles the incident merges cut off (archive/related-overflow-*.json)."""
+    yield from removed_events(recovered_paths, now)
+    for path in recovered_paths:
+        data = _load_json(path) or {}
+        collected_at = data.get("created_at") or now
+        for row in related_articles(data.get("events") or [], collected_at):
+            yield row
+        for item in data.get("related_articles") or []:
+            parent = {**(item.get("parent") or {}), "related_articles": [item.get("article") or {}]}
+            yield from related_articles([parent], collected_at)
+    by_incident = {}
+    for event in live_events:
+        if event.get("incident_id"):
+            by_incident.setdefault(event["incident_id"], event)
+    for path in overflow_paths:
+        data = _load_json(path) or {}
+        collected_at = data.get("created_at") or now
+        for item in data.get("articles") or []:
+            if not isinstance(item, dict):
+                continue
+            parent = by_incident.get(item.get("incident_id")) or {"incident_id": item.get("incident_id")}
+            yield from related_articles([{**parent, "related_articles": [item.get("article") or {}]}], collected_at)
 
 
 def fallback_file_articles(path):
@@ -201,6 +234,12 @@ def collect_articles(root=ROOT):
     sources = {
         "related_article": related_articles(database.get("events") or [], now),
         "removed_event": removed_events(sorted(glob.glob(str(root / "archive" / "removed-events-*.json"))), now),
+        "recovered": recovered_articles(
+            sorted(glob.glob(str(root / "archive" / "recovered-events-*.json"))),
+            sorted(glob.glob(str(root / "archive" / "related-overflow-*.json"))),
+            database.get("events") or [],
+            now,
+        ),
         "rejected_candidate": fallback_file_articles(root / collector.BACKGROUND_ARTICLES_FILE),
         "historical_review": historical_reviews(
             _load_json(root / collector.AI_SELECTION_CACHE_FILE), map_threshold(root)

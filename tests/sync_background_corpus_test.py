@@ -72,7 +72,7 @@ class CollectArticlesTests(unittest.TestCase):
     def test_counts_per_source_after_dedup(self):
         _, counts = self.articles_by_url()
         self.assertEqual(counts, {
-            "related_article": 1, "removed_event": 1, "rejected_candidate": 0, "historical_review": 3,
+            "related_article": 1, "removed_event": 1, "recovered": 0, "rejected_candidate": 0, "historical_review": 3,
         })
 
     def test_off_topic_reviews_never_reach_the_archive(self):
@@ -120,6 +120,58 @@ class CollectArticlesTests(unittest.TestCase):
             self.assertEqual(len(row), len(sync.collector.BACKGROUND_ARTICLES_D1_COLUMNS))
             as_dict = dict(zip(sync.collector.BACKGROUND_ARTICLES_D1_COLUMNS, row))
             self.assertTrue(as_dict["url"] and as_dict["title"] and as_dict["kind"] and as_dict["collected_at"])
+
+
+class RecoveredSourceTests(unittest.TestCase):
+    """Former map events recovered from events.json's history, related articles
+    dropped from live events, and articles cut off by incident merges."""
+
+    def setUp(self):
+        self.root = Path(tempfile.mkdtemp())
+        write_json(self.root / "ct-atlas-runtime.json", {"ai_selection_threshold": 60})
+        write_json(self.root / "ai_article_selection_cache.json", {"items": {}})
+        write_json(self.root / "events.json", {"events": [{
+            "id": "live-1", "incident_id": "inc-live", "url": "https://map/live", "title": "Live event",
+            "category": "Attacks", "categories": ["Attacks"], "country": "Mali", "related_articles": [],
+        }]})
+        write_json(self.root / "archive" / "recovered-events-20261002.json", {
+            "created_at": "2026-10-02T10:00:00+00:00",
+            "events": [{
+                "id": "old-1", "incident_id": "inc-old", "url": "https://old/lead",
+                "title": "Rotterdam: Explosion at synagogue", "original_title": "Rotterdam: explosie bij synagoge",
+                "published": "2026-03-16T08:00:00+00:00", "category": "Attacks", "categories": ["Attacks"],
+                "country": "Netherlands", "ai_relevance_score": 90, "_recovery_reason": "retention_prune",
+                "related_articles": [{"url": "https://old/related", "title": "Synagogue blast in Rotterdam",
+                                      "published": "2026-03-16T10:00:00+00:00"}],
+            }],
+            "related_articles": [{
+                "article": {"url": "https://live/dropped", "title": "Another outlet on the live event",
+                            "published": "2026-09-20T10:00:00+00:00"},
+                "parent": {"id": "live-1", "incident_id": "inc-live", "category": "Attacks", "country": "Mali"},
+            }],
+        })
+        write_json(self.root / "archive" / "related-overflow-20261001.json", {
+            "created_at": "2026-10-01T16:00:00+00:00",
+            "articles": [{"incident_id": "inc-live", "article": {
+                "url": "https://overflow/1", "title": "Overflow report", "published": "2026-09-30T10:00:00+00:00"}}],
+        })
+
+    def test_recovered_events_their_related_articles_and_cut_off_articles_reach_the_archive(self):
+        articles, counts = sync.collect_articles(self.root)
+        by_url = {a["url"]: a for a in articles}
+        self.assertEqual(counts["recovered"], 4)
+        lead = by_url["https://old/lead"]
+        self.assertEqual((lead["kind"], lead["ai_relevance_score"], lead["parent_incident_id"]),
+                         ("removed_event", 90, "inc-old"))
+        self.assertEqual(lead["original_title"], "Rotterdam: explosie bij synagoge")
+        related = by_url["https://old/related"]
+        self.assertEqual((related["kind"], related["parent_event_id"], related["country"]),
+                         ("related_article", "old-1", "Netherlands"))
+        dropped = by_url["https://live/dropped"]
+        self.assertEqual((dropped["kind"], dropped["parent_incident_id"], dropped["country"]),
+                         ("related_article", "inc-live", "Mali"))
+        overflow = by_url["https://overflow/1"]
+        self.assertEqual((overflow["parent_event_id"], overflow["parent_incident_id"]), ("live-1", "inc-live"))
 
 
 class SyncRunTests(unittest.TestCase):
