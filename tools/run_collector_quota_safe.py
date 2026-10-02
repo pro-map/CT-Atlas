@@ -141,8 +141,10 @@ def optimized_select(events):
     return None
 collector.ai_select_events=optimized_select
 
-def prune(events):
-    kept=PRUNE(events); out=[]; removed=0
+def prune(events,aged_out=None):
+    # Same signature as collector.prune_old: aged-out events still reach the
+    # background archive through it.
+    kept=PRUNE(events,aged_out); out=[]; removed=0
     for e in kept:
         if e.get("ai_selection_complete") is True and e.get("ai_relevance_score") is not None:
             try: score=int(e.get("ai_relevance_score",0) or 0)
