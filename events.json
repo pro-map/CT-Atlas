@@ -443,7 +443,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-10-02T15:16:11.481602+00:00",
-  "number_of_events": 3775,
+  "number_of_events": 3627,
   "events": [
     {
       "id": "58f1b0ab5c108333",
@@ -299282,7 +299282,8 @@
       "ai_geo_reason": "Analysis referencing the San Diego mosque attack.",
       "ai_geo_fingerprint": "b8493827b4319dcd59215c8dcd7977b9742695bbb0ce5654ad1d4e50b6e9a8bb",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-221e48fe824f4d31"
     },
     {
       "id": "912bf4aff626e273",
@@ -299909,7 +299910,8 @@
       "ai_geo_reason": "Announced by the Turkish Ministry of Interior in Turkey; country-level jurisdiction applies.",
       "ai_geo_fingerprint": "d8db8f74411f2a182dc5795ed24c9bf54518e84670596a5bb54257b2db3ab0d6",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-2f0dee03ae923c54"
     },
     {
       "id": "eca1bc4320eeb817",
@@ -299971,7 +299973,8 @@
       "ai_geo_reason": "Four men standing trial in La R&eacute;union (an overseas department of France).",
       "ai_geo_fingerprint": "695943721338a16ad946df897155ef0ce1004c2b9562168be13535fcac6d3100",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-978375b0ced431ca"
     },
     {
       "id": "4a39b1fa39db9f0d",
@@ -300034,7 +300037,8 @@
       "ai_geo_reason": "FSB prevented an attack on a synagogue in Yaroslavl.",
       "ai_geo_fingerprint": "ab98954b4c26bebc2e8f47fc025e1130c3d0e2d9577b33527014f7fb0d3a8c5d",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-91530a94697f962c"
     },
     {
       "id": "229f84ce726de7bf",
@@ -300178,7 +300182,8 @@
       "ai_geo_reason": "Event occurred in central Gaza, Palestinian Territory.",
       "ai_geo_fingerprint": "6fe20d103e5e135875524597d471f172d740ca490e43c68b463b1673bb1858cc",
       "ai_geo_inferred": true,
-      "actor_group": "Hamas"
+      "actor_group": "Hamas",
+      "incident_id": "inc-a767376e6a2f92b3"
     },
     {
       "id": "fa7ea82897dae23e",
@@ -300240,7 +300245,8 @@
       "ai_geo_reason": "Counter-terrorism raid carried out in Shechem (Nablus).",
       "ai_geo_fingerprint": "6729dfa8aa192b58c36b05cc78010cf424f227af36ea093dc73c280c4608f9b9",
       "ai_geo_inferred": false,
-      "actor_group": "Hamas"
+      "actor_group": "Hamas",
+      "incident_id": "inc-76426accdc2eb81c"
     },
     {
       "id": "60559f1e004122bb",
@@ -300371,7 +300377,8 @@
       "ai_geo_reason": "Jihadist arrests and counter-terrorism trends across Spain.",
       "ai_geo_fingerprint": "e1987127aa912855b138a86931e3c486c7b45ded0b353fe907c91950f008f165",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-9907b726676c98b7"
     },
     {
       "id": "88d479e207dbdc12",
@@ -300531,7 +300538,8 @@
       "ai_geo_reason": "Security services detained the suspect from Dagestan, Russia.",
       "ai_geo_fingerprint": "9c5c73a8368a2033077cfa9e801e06908a48f416ba34fa52a9a56df3c10a819c",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-41ba3cd027a49b51"
     },
     {
       "id": "f9bdbe5858f47b97",
@@ -300760,7 +300768,8 @@
       "ai_geo_reason": "Incident occurred in the well-known Asian piracy hotspot (Singapore Strait / Malacca Strait region).",
       "ai_geo_fingerprint": "4e94ee38a469a1c84021c9fdfaeedc243af7e99a4f300c6e8a53278acb4a4754",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-a97c65ec22d88e8b"
     },
     {
       "id": "a88d5338f4616789",
@@ -300827,7 +300836,8 @@
       "ai_geo_reason": "Explicitly mentions the city of Berkane in Morocco.",
       "ai_geo_fingerprint": "4d79a2a66f0dd581082640972cc13f52928fd841ee4c5d800e410092257148dc",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-829968f65fa08d7a"
     },
     {
       "id": "4000c5d42e51c11a",
@@ -300912,7 +300922,8 @@
       "ai_geo_reason": "Handled by Vietnam's Ministry of Public Security.",
       "ai_geo_fingerprint": "7ebd9746a1eab61fd8ae94486972a697e4440332564c8ce43af4ca9a1ec0a60e",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-c5e7b9264570fc3c"
     },
     {
       "id": "d94a9efa0876cb96",
@@ -300981,69 +300992,8 @@
       "ai_geo_reason": "Event occurred in Bavaria, Germany.",
       "ai_geo_fingerprint": "37321bf468546e1d6cc4b86ff6f48ad730d6966e2b508a45f4e27c3a590798ef",
       "ai_geo_inferred": false,
-      "actor_group": ""
-    },
-    {
-      "id": "cd95176fae3b5fef",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Online / Cyber / AI"
-      ],
-      "title": "Terror propaganda on live broadcast! Action taken against suspects",
-      "summary": "Authorities have taken action following instances of terrorist propaganda broadcasted live.",
-      "original_title": "Canlı yayında terör propagandası! Alçaklar için harekete geçildi",
-      "original_summary": "Canlı yayında terör propagandası! Alçaklar için harekete geçildi Haber 7",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": "TR:tr",
-      "published": "2026-06-25T07:00:00+00:00",
-      "source": "Haber 7",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPbzhaZXBxUE5MTGg5THVBYVNSMDVRUElhVjZ6dDNCQnIxWkpEWnVrQVczYi01bElwb0J1TzVMU2Rxa3BoRUFwbk0yVVVodTEzOXo1UWhNaVU5TThpNW9Ib1duSVRocEh1Uk9aV0RKMjVJSVJIOEN2b2VWTS1kQThLTUJ1WEp1YUdmWGJLaTNXZ3BDdko4UnJueVdwWDUybTdQNUFWd2hCNnE4RXc?oc=5",
-      "collector": "Google News RSS",
-      "country": "Turkey",
-      "country_code": "TR",
-      "city": "Ankara",
-      "region": null,
-      "latitude": 39.91987,
-      "longitude": 32.85427,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "Haber 7"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-25T07:00:00+00:00",
-      "last_reported": "2026-06-25T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Operational law enforcement action against individuals conducting terrorist propaganda.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "law enforcement action against terrorist propaganda on live broadcast",
-      "title_variants": [
-        "law enforcement action against terrorist propaganda on live broadcast"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Terror propaganda on live broadcast"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Reported by Turkish news source Haber 7 regarding terrorist propaganda cases.",
-      "ai_geo_fingerprint": "b490437d5a801eea2d36c04225c128f138b6670394559ea480a5ec0518ee969e",
-      "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-bc9ed8217dc90897"
     },
     {
       "id": "e49730586ad01ec8",
@@ -301120,76 +301070,8 @@
       "ai_geo_reason": "Security operations across Turkey resulting in arrests.",
       "ai_geo_fingerprint": "8d1645576358cd542d9cf06ff24fadfc78849faede3e4e6c36778c37588a84e6",
       "ai_geo_inferred": false,
-      "actor_group": ""
-    },
-    {
-      "id": "ae626ddf523e65e6",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Online / Cyber / AI"
-      ],
-      "title": "Uttar Pradesh youth arrested in Davangere for alleged online radicalisation links",
-      "summary": "Police arrested a youth from Uttar Pradesh in Davangere over connections to online radicalization networks.",
-      "original_title": "UP youth arrested in Davangere for alleged online radicalisation links",
-      "original_summary": "",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-06-24T14:15:00+00:00",
-      "source": "thehindu.com",
-      "source_count": 1,
-      "url": "https://www.thehindu.com/news/national/karnataka/bengaluru-up-youth-arrested-in-davangere-for-alleged-online-radicalisation-links/article71141367.ece",
-      "collector": "GDELT DOC 2.0",
-      "acquisition_channel": "gdelt_doc_search",
-      "country": "India",
-      "country_code": "IN",
-      "city": "Davangere",
-      "region": null,
-      "latitude": 14.46693,
-      "longitude": 75.92694,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "source_article_fingerprints": [
-        "eda3bdec4c5acc364ac334a7cf6ce862b11a06e7d27ad19b441ace93b17cb1d6"
-      ],
-      "sources": [
-        "thehindu.com"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-24T14:15:00+00:00",
-      "last_reported": "2026-06-24T14:15:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v4-counter-terrorism-action",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Concrete arrest related to online radicalization.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Arrest of UP youth in Davangere over online radicalization links",
-      "title_variants": [
-        "Arrest of UP youth in Davangere over online radicalization links"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Uttar Pradesh youth arrested in Davangere for alleged online radicalisation links"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Arrest took place in Davangere, India.",
-      "ai_geo_fingerprint": "aad12614defe815a4c9cc91dc01e57edf67a2885bdab260384594cde262e71c5",
-      "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-86d568720a7e0f08"
     },
     {
       "id": "c72475fca6de36c7",
@@ -301258,7 +301140,8 @@
       "ai_geo_reason": "Operation and arrests took place in Afyonkarahisar, Turkey.",
       "ai_geo_fingerprint": "7f160e6ab04f3fadc832070cad111807fd2b4b8e338d005a0c6c97a14cde3851",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-23cb2a7dcc0cfae9"
     },
     {
       "id": "f3ef9ab6620d1111",
@@ -301319,7 +301202,8 @@
       "ai_geo_reason": "Police raid and arrest of suspected terrorist in Davanagere, India.",
       "ai_geo_fingerprint": "8af028db9a2790f3a474fe681e5c9e6b1e7bd73a06bddd34bdf0f498945d5739",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-42d89e715d995ccd"
     },
     {
       "id": "94526332c4736c79",
@@ -301397,7 +301281,8 @@
       "ai_geo_reason": "US airstrike killing Islamic State leader in northwest Syria.",
       "ai_geo_fingerprint": "c524df604563b0e783e83917c4283da24017ee4e809b31670ea6799d4bfecca0",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-e8c803ccfad7ab85"
     },
     {
       "id": "591a8090e3a087c8",
@@ -301473,7 +301358,9 @@
       "ai_geo_reason": "Operation by Turkish forces ahead of NATO summit.",
       "ai_geo_fingerprint": "18e7d9a60c92edd41c97e04a02262cebfa818cf196d946ad6745ac45dc8377ca",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-9ceb55d2633f7006",
+      "incident_anchor": "Ankara shootout with police 2026-06"
     },
     {
       "id": "c51105092c09516d",
@@ -301493,7 +301380,7 @@
       "collection_locale": "TR:tr",
       "published": "2026-06-24T07:00:00+00:00",
       "source": "Habertürk",
-      "source_count": 2,
+      "source_count": 8,
       "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQS2FfM2xRV1ZyV21vUEE4LXItMWpFTHF2N0doYnQtZGp5aUlWa0NqQmQtSW5mN2VOWXNEZzg2aVVDd0RFa2VzWXJBc3liWTZCa2VyZHhDVExzZDJIeGkzeURTYjU0Y05NakI5VVIyQXJsZ2d5dHdfaHhLaV9tLUJWdG41WW52NkxBTHNWS0hxanR0SDVIQWNZZVpLYmljb1hmRmtzYktrWm1zTzk4aFZLTExvQ3N1M0Z6bTRzQlhaSzNjbjZFOTN4czNGcEF6V0k?oc=5",
       "collector": "Google News RSS",
       "country": "Turkey",
@@ -301507,7 +301394,13 @@
       "acquisition_channel": "multilingual_discovery",
       "sources": [
         "Habertürk",
-        "haberturk.com"
+        "haberturk.com",
+        "Yeni Şafak",
+        "Akdenizmanset",
+        "MYGAZETE",
+        "Ege'de Sonsöz",
+        "Yeni Alanya",
+        "Haber 7"
       ],
       "related_articles": [
         {
@@ -301527,15 +301420,70 @@
           "published": "2026-06-24T16:45:00+00:00",
           "source": "haberturk.com",
           "url": "https://www.haberturk.com/manavgat-ta-canli-yayinda-teror-propagandasi-yapan-2-supheli-tutuklandi-3893935"
+        },
+        {
+          "title": "Two individuals arrested in Antalya for spreading terrorist propaganda on social media",
+          "original_title": "Antalya'da sosyal medya üzerinden terör propagandası yapan 2 şahıs tutuklandı",
+          "original_language": "tr",
+          "summary": "Turkish authorities arrested two suspects in Antalya who were conducting terrorist propaganda via social media platforms.",
+          "published": "2026-06-24T07:00:00+00:00",
+          "source": "Yeni Şafak",
+          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQU0ZtVVFtRy1qZ3FoOExJekRlSFhVVnlZcEcxUDJWSzhIM3p3WWFYaGFiTGVVSmc3a3NiOGRvanp4czg1b0FMaWlTVnpQLUJkMkgyRFZvZ0NzX25NYURoTHdlaE1UUmxtb2Z4RkhPSlhBT3lNU2ZsZU13aEdUVTdCWWJxcldHS0NISU1nMUxYZ3NkRUVKczloOHltaWVBUFBTSlQ3STZTN0JhQVdSMHluYUJfSnYyaUVz?oc=5"
+        },
+        {
+          "title": "Two detentions in Antalya for terrorist organization propaganda on social media",
+          "original_title": "Sanal medyada terör örgütü propagandasına 2 gözaltı - Antalya Haberleri",
+          "original_language": "tr",
+          "summary": "Two individuals were detained in Antalya over allegations of spreading terrorist organization propaganda on social media platforms.",
+          "published": "2026-06-24T07:00:00+00:00",
+          "source": "Akdenizmanset",
+          "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOZl9hcFZrNDE5T1NCSFZJVE9Bb3VKUnNjdzdKWV9CT2Fla3RpMDlHUy1jbzY3Zk5PenJORHBRRVBMUnhFZUFORVR1RlU2U3N6TGhnaGFzcU9uaHM2cHFlMW5UWWozbmhfNHl2UXRDM1c4c2g3dXg0R01QRlBGMUcyMWEzYXRzMDNtbXFVRw?oc=5"
+        },
+        {
+          "title": "Live stream operation in Antalya using facial recognition",
+          "original_title": "Antalya'da canlı yayın operasyonu! Yüz tanıma sistemiyle bulundular",
+          "original_language": "tr",
+          "summary": "Suspects broadcasting terrorist propaganda on a live stream in Antalya were located and detained using facial recognition systems.",
+          "published": "2026-06-25T07:00:00+00:00",
+          "source": "MYGAZETE",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOdDc5VEVlN2FveGJGVFl2cmdVMVlJQ3BxbVlaNWZkeDFrVk90eS05QURDMS1QeHNMajFLQS1jd0RzZGxPUW5FN2ZIMFl4Q1l5ckxCcUxBdTZQbnVMSXlzUzkxWnBBVm45dHo3SENqa2k0a2tjb0pGUlRvUlY4clFNcml4aHB0RzJhLVVrLTdKZGs0RXZaZU4xNlZqaFpsWFcz?oc=5"
+        },
+        {
+          "title": "Two arrests for terrorist propaganda during live broadcast",
+          "original_title": "Canlı yayında terör propagandasına 2 tutuklama!",
+          "original_language": "tr",
+          "summary": "Two individuals have been remanded in custody following arrests for conducting terrorist propaganda on a live broadcast.",
+          "published": "2026-06-24T07:00:00+00:00",
+          "source": "Ege'de Sonsöz",
+          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5namNYNEVWRXVzM3BtSkNWOVlETEY3MjFPbU1uMjhLN3NMLTBMUExNZ2xTbDlsTzUwU3otQms3U0VXelJxYW9ZN0M0ZXJWY1NrVzlYVHNFalkzdGVQMmdoRVRpck9aUGxXS00zWko2SGw5MndvNEk4bWoycUg2dlk?oc=5"
+        },
+        {
+          "title": "Manavgat terrorist propaganda investigation: 2 detentions",
+          "original_title": "Manavgat'ta t*rör propagandası soruşturması: 2 gözaltı",
+          "original_language": "tr",
+          "summary": "Two individuals were detained in Manavgat as part of an ongoing investigation into terrorist propaganda.",
+          "published": "2026-06-24T07:00:00+00:00",
+          "source": "Yeni Alanya",
+          "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQdWw2WXJsNXY2aTNZa1FRWkpCb2hSSmxfQ0NaWm92NmsxUkN0WDA0RmlINlhEQk1lTThVdEt4SDA1YTFPLTJDOTBZNURiSVdBX25HQVhqRWF4RGZ1SnIybGhVRnI4T2pQeU5kTkE3SWNJaEx1XzYtdkl6cU44WENjc1BURlM?oc=5"
+        },
+        {
+          "title": "Terror propaganda on live broadcast! Action taken against suspects",
+          "original_title": "Canlı yayında terör propagandası! Alçaklar için harekete geçildi",
+          "original_language": "tr",
+          "summary": "Authorities have taken action following instances of terrorist propaganda broadcasted live.",
+          "published": "2026-06-25T07:00:00+00:00",
+          "source": "Haber 7",
+          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPbzhaZXBxUE5MTGg5THVBYVNSMDVRUElhVjZ6dDNCQnIxWkpEWnVrQVczYi01bElwb0J1TzVMU2Rxa3BoRUFwbk0yVVVodTEzOXo1UWhNaVU5TThpNW9Ib1duSVRocEh1Uk9aV0RKMjVJSVJIOEN2b2VWTS1kQThLTUJ1WEp1YUdmWGJLaTNXZ3BDdko4UnJueVdwWDUybTdQNUFWd2hCNnE4RXc?oc=5"
         }
       ],
-      "article_count": 3,
+      "article_count": 9,
       "first_reported": "2026-06-24T07:00:00+00:00",
-      "last_reported": "2026-06-24T16:45:00+00:00",
+      "last_reported": "2026-06-25T07:00:00+00:00",
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_normalized_title",
-        "very_high_title_similarity"
+        "very_high_title_similarity",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
@@ -301564,157 +301512,8 @@
       "source_article_fingerprints": [
         "2d03ca24a12fef12a0ff1f0007229d27f251a8ad839788995c1388ee9fbda110"
       ],
-      "actor_group": ""
-    },
-    {
-      "id": "03778777f443c06a",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Online / Cyber / AI"
-      ],
-      "title": "Two individuals arrested in Antalya for spreading terrorist propaganda on social media",
-      "summary": "Turkish authorities arrested two suspects in Antalya who were conducting terrorist propaganda via social media platforms.",
-      "original_title": "Antalya'da sosyal medya üzerinden terör propagandası yapan 2 şahıs tutuklandı",
-      "original_summary": "Antalya'da sosyal medya üzerinden terör propagandası yapan 2 şahıs tutuklandı Yeni Şafak",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": "TR:tr",
-      "published": "2026-06-24T07:00:00+00:00",
-      "source": "Yeni Şafak",
-      "source_count": 3,
-      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQU0ZtVVFtRy1qZ3FoOExJekRlSFhVVnlZcEcxUDJWSzhIM3p3WWFYaGFiTGVVSmc3a3NiOGRvanp4czg1b0FMaWlTVnpQLUJkMkgyRFZvZ0NzX25NYURoTHdlaE1UUmxtb2Z4RkhPSlhBT3lNU2ZsZU13aEdUVTdCWWJxcldHS0NISU1nMUxYZ3NkRUVKczloOHltaWVBUFBTSlQ3STZTN0JhQVdSMHluYUJfSnYyaUVz?oc=5",
-      "collector": "Google News RSS",
-      "country": "Turkey",
-      "country_code": "TR",
-      "city": "Antalya",
-      "region": null,
-      "latitude": 36.90812,
-      "longitude": 30.69556,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "Yeni Şafak",
-        "Akdenizmanset",
-        "MYGAZETE"
-      ],
-      "related_articles": [
-        {
-          "title": "Two detentions in Antalya for terrorist organization propaganda on social media",
-          "original_title": "Sanal medyada terör örgütü propagandasına 2 gözaltı - Antalya Haberleri",
-          "original_language": "tr",
-          "summary": "Two individuals were detained in Antalya over allegations of spreading terrorist organization propaganda on social media platforms.",
-          "published": "2026-06-24T07:00:00+00:00",
-          "source": "Akdenizmanset",
-          "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOZl9hcFZrNDE5T1NCSFZJVE9Bb3VKUnNjdzdKWV9CT2Fla3RpMDlHUy1jbzY3Zk5PenJORHBRRVBMUnhFZUFORVR1RlU2U3N6TGhnaGFzcU9uaHM2cHFlMW5UWWozbmhfNHl2UXRDM1c4c2g3dXg0R01QRlBGMUcyMWEzYXRzMDNtbXFVRw?oc=5"
-        },
-        {
-          "title": "Live stream operation in Antalya using facial recognition",
-          "original_title": "Antalya'da canlı yayın operasyonu! Yüz tanıma sistemiyle bulundular",
-          "original_language": "tr",
-          "summary": "Suspects broadcasting terrorist propaganda on a live stream in Antalya were located and detained using facial recognition systems.",
-          "published": "2026-06-25T07:00:00+00:00",
-          "source": "MYGAZETE",
-          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOdDc5VEVlN2FveGJGVFl2cmdVMVlJQ3BxbVlaNWZkeDFrVk90eS05QURDMS1QeHNMajFLQS1jd0RzZGxPUW5FN2ZIMFl4Q1l5ckxCcUxBdTZQbnVMSXlzUzkxWnBBVm45dHo3SENqa2k0a2tjb0pGUlRvUlY4clFNcml4aHB0RzJhLVVrLTdKZGs0RXZaZU4xNlZqaFpsWFcz?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-06-24T07:00:00+00:00",
-      "last_reported": "2026-06-25T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Law enforcement arrest of individuals engaged in online terrorist propaganda and radicalization.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Turkish authorities arrest two individuals in Antalya for social media terrorist propaganda",
-      "title_variants": [
-        "Turkish authorities arrest two individuals in Antalya for social media terrorist propaganda"
-      ],
-      "dedup_confidence": 0.833,
-      "dedup_methods": [
-        "title_plus_anchor",
-        "entity_actor_event_signature"
-      ],
-      "location_confidence_score": 0.99,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Antalya"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Arrest of two individuals in Antalya, Turkey.",
-      "ai_geo_fingerprint": "8b2aac2c332ef556ea13e35b9eb44ba66134b30b5ce1f3fe832721e333f9d341",
-      "ai_geo_inferred": false,
-      "actor_group": ""
-    },
-    {
-      "id": "8ae4794ff00d0368",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Online / Cyber / AI"
-      ],
-      "title": "Two arrests for terrorist propaganda during live broadcast",
-      "summary": "Two individuals have been remanded in custody following arrests for conducting terrorist propaganda on a live broadcast.",
-      "original_title": "Canlı yayında terör propagandasına 2 tutuklama!",
-      "original_summary": "Canlı yayında terör propagandasına 2 tutuklama! Ege'de Sonsöz",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": "TR:tr",
-      "published": "2026-06-24T07:00:00+00:00",
-      "source": "Ege'de Sonsöz",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5namNYNEVWRXVzM3BtSkNWOVlETEY3MjFPbU1uMjhLN3NMLTBMUExNZ2xTbDlsTzUwU3otQms3U0VXelJxYW9ZN0M0ZXJWY1NrVzlYVHNFalkzdGVQMmdoRVRpck9aUGxXS00zWko2SGw5MndvNEk4bWoycUg2dlk?oc=5",
-      "collector": "Google News RSS",
-      "country": "Turkey",
-      "country_code": "TR",
-      "city": "Ankara",
-      "region": null,
-      "latitude": 39.91987,
-      "longitude": 32.85427,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "Ege'de Sonsöz"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-24T07:00:00+00:00",
-      "last_reported": "2026-06-24T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Judicial arrest/remand for online terrorist propaganda activities.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Two individuals remanded in custody for terrorist propaganda during live broadcast",
-      "title_variants": [
-        "Two individuals remanded in custody for terrorist propaganda during live broadcast"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Two arrests for terrorist propaganda during live broadcast"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Reported by regional Turkish media (Ege'de Sonsöz) regarding broadcast propaganda arrests.",
-      "ai_geo_fingerprint": "2f1dd417f30eb30b51b71efeede5e572b3c59f59f0ced46f1a7241e6dacbc6a6",
-      "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-24f91ef5f5aedd0a"
     },
     {
       "id": "e304ea5a1815d324",
@@ -301775,69 +301574,8 @@
       "ai_geo_reason": "The Caglayan Courthouse is located in Istanbul, Turkey.",
       "ai_geo_fingerprint": "4c1a47f6c9db1f792f81f027d1a5cb5e91df9f33ceb5a57aa2585a0d504f0d95",
       "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "8db971cf748fc6e9",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Online / Cyber / AI"
-      ],
-      "title": "Manavgat terrorist propaganda investigation: 2 detentions",
-      "summary": "Two individuals were detained in Manavgat as part of an ongoing investigation into terrorist propaganda.",
-      "original_title": "Manavgat'ta t*rör propagandası soruşturması: 2 gözaltı",
-      "original_summary": "Manavgat'ta t*rör propagandası soruşturması: 2 gözaltı Yeni Alanya",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": "TR:tr",
-      "published": "2026-06-24T07:00:00+00:00",
-      "source": "Yeni Alanya",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQdWw2WXJsNXY2aTNZa1FRWkpCb2hSSmxfQ0NaWm92NmsxUkN0WDA0RmlINlhEQk1lTThVdEt4SDA1YTFPLTJDOTBZNURiSVdBX25HQVhqRWF4RGZ1SnIybGhVRnI4T2pQeU5kTkE3SWNJaEx1XzYtdkl6cU44WENjc1BURlM?oc=5",
-      "collector": "Google News RSS",
-      "country": "Turkey",
-      "country_code": "TR",
-      "city": "Manavgat",
-      "region": null,
-      "latitude": 36.78672,
-      "longitude": 31.44086,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "Yeni Alanya"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-24T07:00:00+00:00",
-      "last_reported": "2026-06-24T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Law enforcement detentions related to terrorist propaganda.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Two individuals detained in Manavgat for terrorist propaganda investigation",
-      "title_variants": [
-        "Two individuals detained in Manavgat for terrorist propaganda investigation"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Two individuals were detained in Manavgat"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly mentions detentions in Manavgat.",
-      "ai_geo_fingerprint": "a0439ddd019e3b9f84fd3ab36f735d7f7cf74613bc2bb67394f61c8de654cc39",
-      "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-6b426183f7c48368"
     },
     {
       "id": "2c04372e085e0622",
@@ -302031,7 +301769,8 @@
         "title_plus_anchor",
         "paraphrase_entity_context"
       ],
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-888bb0ace50b558d"
     },
     {
       "id": "c3214843aa56feb8",
@@ -302098,7 +301837,8 @@
       "ai_geo_reason": "Country-level sanctions by Nigeria.",
       "ai_geo_fingerprint": "c3bf63b420314f90ffe04cb04b369a7ec263d7b5cb777060047ca2238380c9d8",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-804634a1efccf152"
     },
     {
       "id": "6594c222efa064cd",
@@ -302165,7 +301905,8 @@
       "ai_geo_reason": "Explicitly mentions Borno State, Nigeria.",
       "ai_geo_fingerprint": "741c2bd6ca96a5244dcb9d57001cde55245f92421cb8bc643adb98f278e36769",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-40a1852cda31fe05"
     },
     {
       "id": "d883bc093a351ee4",
@@ -302234,7 +301975,8 @@
       "ai_geo_reason": "Investigation and arrest centered in Jaipur, Rajasthan, India.",
       "ai_geo_fingerprint": "ff0a559197e7f4969f39d00273e8e40fbe7537a2589ce1df521c2f029a013787",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-e6f3a2309fd81562"
     },
     {
       "id": "827e85fca560efcf",
@@ -302302,323 +302044,15 @@
       "ai_geo_reason": "Arrest occurred in Jaipur, India.",
       "ai_geo_fingerprint": "18fcb0a65a0d715b3bc06b318022b166689c4336af3365848d4aefc98feff0b7",
       "ai_geo_inferred": false,
-      "actor_group": "Jaish-e-Mohammed"
-    },
-    {
-      "id": "8e9c59006a9267c4",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Counter Terrorism Action",
-        "Weapons"
-      ],
-      "title": "Seizures made at homes of 208 terrorists detained ahead of NATO Summit",
-      "summary": "Turkish authorities seized materials during searches at the homes of suspects detained in pre-NATO summit counter-terrorism operations.",
-      "original_title": "NATO Zirvesi öncesi gözaltına alınan 208 teröristin evinden neler çıktı neler",
-      "original_summary": "",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": null,
-      "published": "2026-06-23T14:00:00+00:00",
-      "source": "haberler.com",
-      "source_count": 1,
-      "url": "https://www.haberler.com/guncel/nato-zirvesi-oncesi-gozaltina-alinan-208-19981038-haberi/",
-      "collector": "GDELT DOC 2.0",
-      "acquisition_channel": "gdelt_doc_search",
-      "country": "Turkey",
-      "country_code": "TR",
-      "city": "Ankara",
-      "region": null,
-      "latitude": 39.91987,
-      "longitude": 32.85427,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "source_article_fingerprints": [
-        "50017278efdf2831c12253afdf33510ee0d87fd59f0ce6778f671aa80cf45883"
-      ],
-      "sources": [
-        "haberler.com"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-23T14:00:00+00:00",
-      "last_reported": "2026-06-23T14:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v4-counter-terrorism-action",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Details on material seizures during significant counter-terrorism raids and arrests.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Searches and seizures at homes of 208 detained suspects in Turkey",
-      "title_variants": [
-        "Searches and seizures at homes of 208 detained suspects in Turkey"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Turkish authorities seized materials during searches at homes of suspects detained ahead of NATO Summit"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Part of the Ankara-centered counter-terrorism operations ahead of the NATO Summit.",
-      "ai_geo_fingerprint": "d3e0d16736d0aaf67d47812e567b90f7973208d3ae1a9391d0881fe922f82f4e",
-      "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "72d93eca3869414e",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Counter Terrorism Action",
-        "Online / Cyber / AI"
-      ],
-      "title": "Hundreds detained in counter-terrorism sweep ahead of NATO summit",
-      "summary": "Turkish authorities detained hundreds of suspects in security sweeps ahead of the NATO summit.",
-      "original_title": "NATO zirvesi öncesi düğmeye basıldı ! Yüzlerce kişi gözaltında ...",
-      "original_summary": "",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": null,
-      "published": "2026-06-23T08:15:00+00:00",
-      "source": "bursadabugun.com",
-      "source_count": 2,
-      "url": "https://www.bursadabugun.com/haber/nato-zirvesi-oncesi-dugmeye-basildi-yuzlerce-kisi-gozaltinda-1930520.html",
-      "collector": "GDELT DOC 2.0",
-      "acquisition_channel": "gdelt_doc_search",
-      "country": "Turkey",
-      "country_code": "TR",
-      "city": "Ankara",
-      "region": null,
-      "latitude": 39.91987,
-      "longitude": 32.85427,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "source_article_fingerprints": [
-        "1220b02a9c5eadd938ac4c9333ac8ed925eea53ed97cdddf37bbd3494e142da7",
-        "da38767ff4ceec4483c08e0d0c03b127d658e99b4d795e455b93d0073b7f88e2"
-      ],
-      "sources": [
-        "bursadabugun.com",
-        "haber7.com"
-      ],
-      "related_articles": [
-        {
-          "title": "Terrorist propaganda on live broadcast! Action taken against culprits",
-          "original_title": "Canlı yayında terör propagandası ! Alçaklar için harekete geçildi",
-          "original_language": "tr",
-          "summary": "Turkish authorities initiated legal action and arrests following terrorist propaganda broadcasted live.",
-          "published": "2026-06-24T15:30:00+00:00",
-          "source": "haber7.com",
-          "url": "https://www.haber7.com/guncel/haber/3638207-canli-yayinda-teror-propagandasi-alcaklar-icin-harekete-gecildi"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-06-23T08:15:00+00:00",
-      "last_reported": "2026-06-24T15:30:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v4-counter-terrorism-action",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete counter-terrorism operations and mass detentions.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Counter-terrorism arrests of hundreds of suspects in Turkey ahead of NATO summit",
-      "title_variants": [
-        "Counter-terrorism arrests of hundreds of suspects in Turkey ahead of NATO summit"
-      ],
-      "dedup_confidence": 0.504,
-      "dedup_methods": [
-        "entity_actor_event_signature"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Turkish authorities detained hundreds of suspects in security sweeps ahead of the NATO summit"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Part of the Ankara security operations.",
-      "ai_geo_fingerprint": "b94c1fbe6792aaf55219e1299b6bde7aa19c6d773b3f54bc53c955048aa12558",
-      "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "5ec4b3d8e80fe9b4",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Counter Terrorism Action"
-      ],
-      "title": "Ankara-based counter-terrorism operation results in 209 detentions",
-      "summary": "Turkish security forces detained 209 suspects in an Ankara-centered counter-terrorism operation.",
-      "original_title": "Ankara merkezli terör operasyonunda 209 gözaltı",
-      "original_summary": "",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": null,
-      "published": "2026-06-23T08:00:00+00:00",
-      "source": "trthaber.com",
-      "source_count": 2,
-      "url": "https://www.trthaber.com/haber/turkiye/ankara-merkezli-teror-operasyonunda-209-gozalti-949030.html",
-      "collector": "GDELT DOC 2.0",
-      "acquisition_channel": "gdelt_doc_search",
-      "country": "Turkey",
-      "country_code": "TR",
-      "city": "Ankara",
-      "region": null,
-      "latitude": 39.91987,
-      "longitude": 32.85427,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "source_article_fingerprints": [
-        "d6ee3abe34dfb741a59a4420f5ff124a300fbca865b62d0e05b71bd66dcd4adc",
-        "eec12aba29b356c50571cdd2ea667a83b28ff1a04a8ad86ead15f2aec5182e27"
-      ],
-      "sources": [
-        "trthaber.com",
-        "yeniasir.com.tr"
-      ],
-      "related_articles": [
-        {
-          "title": "Operation against terrorist organizations in the capital: 209 detained",
-          "original_title": "Terör örgütlerine başkentte operasyon : 209 gözaltı",
-          "original_language": "tr",
-          "summary": "Turkish security forces detained 209 individuals in an operation targeting terrorist networks in Ankara.",
-          "published": "2026-06-24T07:30:00+00:00",
-          "source": "yeniasir.com.tr",
-          "url": "https://www.yeniasir.com.tr/politika/2026/06/24/teror-orgutlerine-baskentte-operasyon-209-gozalti"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-06-23T08:00:00+00:00",
-      "last_reported": "2026-06-24T07:30:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v4-counter-terrorism-action",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Large-scale counter-terrorism operation resulting in numerous detentions.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Counter-terrorism operation and detention of 209 suspects in Ankara",
-      "title_variants": [
-        "Counter-terrorism operation and detention of 209 suspects in Ankara"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "very_high_title_similarity"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Ankara-based counter-terrorism operation results in 209 detentions"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Operation centered in Ankara, Turkey.",
-      "ai_geo_fingerprint": "421d531714b8c4f99dfd50309a39fd0963c2d19f3e94dab5f9419d8f0a8a8098",
-      "ai_geo_inferred": false,
-      "actor_group": ""
-    },
-    {
-      "id": "1f6c269702a6ba39",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Counter Terrorism Action"
-      ],
-      "title": "Counter-terrorism operation in Ankara: Many individuals detained",
-      "summary": "A counter-terrorism operation carried out in Ankara resulted in the detention of numerous suspects.",
-      "original_title": "Ankarada Terör Operasyonu ! Çok Sayıda Kişi Gözaltına Alındı",
-      "original_summary": "",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": null,
-      "published": "2026-06-23T07:15:00+00:00",
-      "source": "beyazgazete.com",
-      "source_count": 1,
-      "url": "https://beyazgazete.com/haber/2026/6/23/ankara-da-teror-operasyonu-cok-sayida-kisi-gozaltina-alindi-7174176.html",
-      "collector": "GDELT DOC 2.0",
-      "acquisition_channel": "gdelt_doc_search",
-      "country": "Turkey",
-      "country_code": "TR",
-      "city": "Ankara",
-      "region": null,
-      "latitude": 39.91987,
-      "longitude": 32.85427,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "source_article_fingerprints": [
-        "561bbd1921cca96b975759a2fda7b6a4ada7c930c7226457aedbd9d5d047c8c8"
-      ],
-      "sources": [
-        "beyazgazete.com"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-23T07:15:00+00:00",
-      "last_reported": "2026-06-23T07:15:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v4-counter-terrorism-action",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete counter-terrorism operation and arrests.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "counter-terrorism operation and multiple detentions in Ankara",
-      "title_variants": [
-        "counter-terrorism operation and multiple detentions in Ankara"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Counter-terrorism operation in Ankara"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Operation took place in Ankara, Turkey.",
-      "ai_geo_fingerprint": "3af971729a504203a3e4eeb27f6605405db3628d1b590258f66dd5f405c12735",
-      "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "Jaish-e-Mohammed",
+      "incident_id": "inc-e6f3a2309fd81562"
     },
     {
       "id": "da02493f70a1814e",
       "category": "Arrests",
       "categories": [
-        "Arrests"
+        "Arrests",
+        "Online / Cyber / AI"
       ],
       "title": "Davangere police arrest 20-year-old terror suspect linked to Pakistan",
       "summary": "Police in Davangere arrested a 20-year-old terror suspect with alleged operational links to Pakistan.",
@@ -302630,7 +302064,7 @@
       "collection_locale": null,
       "published": "2026-06-23T07:00:00+00:00",
       "source": "Deccan Herald",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPM3o0bDhMMzZzWUFydGlZelB2Y0llNDZVd3J5XzlCUzZXMXJQZEtuVk1ZazRuVXJ5RUhZSVE3VlQ5ZUpvNHhvcE5HYVlPVTR2aWJkY29SREhtUTFYdU0xdm94UUdyNm5iOXRPeXBlUmYwcWQzRTA4WWZzd1JiS1M4TDZqR2hjM1lkTmlpZUJDbHlXeFc0LXQtWXNTVnpSS0hGWURjajkxQnNlUDRzQUFuLWNxcEF0SEtldjZINUU2RQ?oc=5",
       "collector": "Google News RSS",
       "country": "India",
@@ -302642,12 +302076,23 @@
       "location_precision": "city",
       "location_confidence": "high",
       "sources": [
-        "Deccan Herald"
+        "Deccan Herald",
+        "thehindu.com"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Uttar Pradesh youth arrested in Davangere for alleged online radicalisation links",
+          "original_title": "UP youth arrested in Davangere for alleged online radicalisation links",
+          "original_language": "en",
+          "summary": "Police arrested a youth from Uttar Pradesh in Davangere over connections to online radicalization networks.",
+          "published": "2026-06-24T14:15:00+00:00",
+          "source": "thehindu.com",
+          "url": "https://www.thehindu.com/news/national/karnataka/bengaluru-up-youth-arrested-in-davangere-for-alleged-online-radicalisation-links/article71141367.ece"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-06-23T07:00:00+00:00",
-      "last_reported": "2026-06-23T07:00:00+00:00",
+      "last_reported": "2026-06-24T14:15:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -302672,7 +302117,15 @@
       "ai_geo_reason": "Explicitly mentions Davangere police arresting a terror suspect.",
       "ai_geo_fingerprint": "9a6500d614df5233aa780e52a464bc123fb72e9c03da0d91b17348fe815a80f4",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-42d89e715d995ccd",
+      "source_article_fingerprints": [
+        "eda3bdec4c5acc364ac334a7cf6ce862b11a06e7d27ad19b441ace93b17cb1d6"
+      ],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "ce61f8d9a3f8b0a4",
@@ -302732,7 +302185,8 @@
       "ai_geo_reason": "Context points to domestic terrorism proceedings in the US, but no specific city is given.",
       "ai_geo_fingerprint": "ab240ef82de4b165a0c3b2d0b69137299f9636b90c6d05a3d19cce0b433775a7",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-c1678a712d6664e2"
     },
     {
       "id": "cc58be1dc9639fa6",
@@ -302897,9 +302351,9 @@
       "actor_group": "",
       "primary_event_type": "OTHER_CT",
       "is_attack": false,
-      "incident_anchor": "Leader of Antifa Cell Members in North Texas Sentenced to 100 Years in Prison for Terrorist Attack on ICE Facility",
+      "incident_anchor": "Prairieland ICE facility terrorism case",
       "update_type": "OTHER_UPDATE",
-      "incident_id": "inc-c92716ef266e72c0"
+      "incident_id": "inc-6e51dc3cfc832f6f"
     },
     {
       "id": "f9a21288e73455f0",
@@ -303001,14 +302455,24 @@
       "sources": [
         "Интерфакс"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "FSB reports thwarting two bombings near security agency building in Pyatigorsk",
+          "original_title": "В ФСБ заявили о предотвращении двух подрывов у здания силового ведомства в Пятигорске",
+          "original_language": "ru",
+          "summary": "Russia's FSB security service announced that it successfully prevented two planned bomb attacks near a security agency building in Pyatigorsk.",
+          "published": "2026-06-23T07:00:00+00:00",
+          "source": "Интерфакс",
+          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBHWVNrel9teG5HNTRNZ0MtakxEa1YyeHlXeVZsUHVYM2I4UFpLa2J1V2NzaVFfTkl2cjFyTlV5Szd2LUY4cW5mWFBRRnk5VlXSAUtBVV95cUxPSHdFaTZnSTZVMXdJR3g5WHJPZXRGU2QwR0g1aFVRUjgyaFNpSVQzemFnNi1ibzduUTB5WUI3T3BtVkM4MXRNY1JDT00?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-06-23T07:00:00+00:00",
       "last_reported": "2026-06-23T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
+      "ai_relevance_score": 90,
       "ai_relevance_reason": "Arrest of suspects plotting a terrorist attack.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -303029,162 +302493,22 @@
       "ai_geo_reason": "Explicitly mentions Pyatigorsk, Russia.",
       "ai_geo_fingerprint": "6c97bdab73d6011d22a739ef474ac1fd45c37302b8f33680a0bfe34553b576bb",
       "ai_geo_inferred": false,
-      "actor_group": ""
-    },
-    {
-      "id": "9a2786c82c692309",
-      "category": "Arrests",
-      "categories": [
-        "Arrests"
-      ],
-      "title": "FSB reports thwarting two bombings near security agency building in Pyatigorsk",
-      "summary": "Russia's FSB security service announced that it successfully prevented two planned bomb attacks near a security agency building in Pyatigorsk.",
-      "original_title": "В ФСБ заявили о предотвращении двух подрывов у здания силового ведомства в Пятигорске",
-      "original_summary": "В ФСБ заявили о предотвращении двух подрывов у здания силового ведомства в Пятигорске Интерфакс",
-      "original_language": "ru",
-      "collection_language": "ru",
-      "collection_language_name": "Russian",
-      "collection_locale": "RU:ru",
-      "published": "2026-06-23T07:00:00+00:00",
-      "source": "Интерфакс",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBHWVNrel9teG5HNTRNZ0MtakxEa1YyeHlXeVZsUHVYM2I4UFpLa2J1V2NzaVFfTkl2cjFyTlV5Szd2LUY4cW5mWFBRRnk5VlXSAUtBVV95cUxPSHdFaTZnSTZVMXdJR3g5WHJPZXRGU2QwR0g1aFVRUjgyaFNpSVQzemFnNi1ibzduUTB5WUI3T3BtVkM4MXRNY1JDT00?oc=5",
-      "collector": "Google News RSS",
-      "country": "Russia",
-      "country_code": "RU",
-      "city": "Pyatigorsk",
-      "region": null,
-      "latitude": 44.05,
-      "longitude": 43.05036,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "interfax.ru",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "Интерфакс"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-23T07:00:00+00:00",
-      "last_reported": "2026-06-23T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Direct report of a disrupted terrorist plot and law enforcement action by security services.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "FSB disrupts two planned bomb attacks near security agency building in Pyatigorsk",
-      "title_variants": [
-        "FSB disrupts two planned bomb attacks near security agency building in Pyatigorsk"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "bombings near security agency building in Pyatigorsk"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly mentions Pyatigorsk, Russia.",
-      "ai_geo_fingerprint": "96b7b8c1ba8c1baa3d99a42ed1c979222cf0238b6148e0625bbd9b6c509b4f19",
-      "ai_geo_inferred": false,
-      "actor_group": ""
-    },
-    {
-      "id": "601409bcf2ee37d9",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Counter Terrorism Action"
-      ],
-      "title": "209 people detained ahead of NATO Summit in Ankara",
-      "summary": "Authorities detained 209 individuals in security operations in Ankara ahead of the NATO Summit.",
-      "original_title": "NATO Zirvesi öncesi 209 kişi gözaltına alındı",
-      "original_summary": "",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": null,
-      "published": "2026-06-23T07:00:00+00:00",
-      "source": "odatv.com",
-      "source_count": 2,
-      "url": "https://www.odatv.com/guncel/nato-zirvesi-oncesi-209-kisi-gozaltina-alindi-120151936",
-      "collector": "GDELT DOC 2.0",
-      "acquisition_channel": "gdelt_doc_search",
-      "country": "Turkey",
-      "country_code": "TR",
-      "city": "Ankara",
-      "region": null,
-      "latitude": 39.91987,
-      "longitude": 32.85427,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "source_article_fingerprints": [
-        "60f0ec68d06e640fe5e4fcf1f2fd6f75506455ac419e27c621c1529b83866da1",
-        "bdaf74b81be5561dd15253aa87b28316b11b2b6153c5d5a3331c52370ef3202e"
-      ],
-      "sources": [
-        "odatv.com",
-        "haberler.com"
-      ],
-      "related_articles": [
-        {
-          "title": "Home raids in Ankara ahead of NATO Summit: Detention orders issued for 241 suspects across various organizations",
-          "original_title": "Ankarada NATO Zirvesi Öncesi Ev Baskınları : Çeşitli Örgütlere Mensup 241 Şüpheli Hakkında Gözaltı Kararı Verildi",
-          "original_language": "tr",
-          "summary": "Ahead of the NATO Summit, police conducted home raids in Ankara and issued detention orders for 241 suspects belonging to various organizations.",
-          "published": "2026-06-23T07:00:00+00:00",
-          "source": "haberler.com",
-          "url": "https://www.haberler.com/guncel/ankara-da-nato-zirvesi-oncesi-teror-orgutlerine-buyuk-operasyon-241-gozalti-karari-19978499-haberi/"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-06-23T07:00:00+00:00",
-      "last_reported": "2026-06-23T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v4-counter-terrorism-action",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Pre-summit security operations and detentions.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "detention of 209 individuals in security operations ahead of NATO summit in Ankara",
-      "title_variants": [
-        "detention of 209 individuals in security operations ahead of NATO summit in Ankara"
-      ],
-      "dedup_confidence": 0.589,
+      "actor_group": "",
+      "incident_id": "inc-2266cfcb81f771ae",
+      "source_article_fingerprints": [],
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "paraphrase_entity_context"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "209 people detained ahead of NATO Summit in Ankara"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Operations took place in Ankara, Turkey.",
-      "ai_geo_fingerprint": "68f546e5fa4e9db754069e7134dd04976f2c6fa6b9d2659cb5c3b36e3a1af5ed",
-      "ai_geo_inferred": false,
-      "actor_group": ""
+        "same_incident"
+      ]
     },
     {
-      "id": "08181ecf72d87526",
+      "id": "b817da3f79cabc39",
       "category": "Arrests",
       "categories": [
         "Arrests",
-        "Counter Terrorism Action"
+        "Counter Terrorism Action",
+        "Online / Cyber / AI",
+        "Weapons"
       ],
       "title": "Blow to terrorist organizations: 209 detained in Ankara",
       "summary": "Security operations targeting terrorist organizations in Ankara led to the apprehension of 209 suspects.",
@@ -303194,9 +302518,9 @@
       "collection_language": "tr",
       "collection_language_name": "Turkish",
       "collection_locale": null,
-      "published": "2026-06-23T06:30:00+00:00",
+      "published": "2026-06-23T06:15:00+00:00",
       "source": "haberturk.com",
-      "source_count": 5,
+      "source_count": 12,
       "url": "https://www.haberturk.com/son-dakika-haberi-teror-orgutlerine-darbe-209-gozalti-ankara-haberleri-3893506",
       "collector": "GDELT DOC 2.0",
       "acquisition_channel": "gdelt_doc_search",
@@ -303209,19 +302533,35 @@
       "location_precision": "city",
       "location_confidence": "high",
       "source_article_fingerprints": [
+        "1220b02a9c5eadd938ac4c9333ac8ed925eea53ed97cdddf37bbd3494e142da7",
         "174ed00d7f2c620e30399f503e6a5d6a2e282c574127217bff917b1ad741d5ca",
         "24967991d351c0d6f9fc111e54138b0aac49bac45f3e8f5d94b15628eafdfc69",
+        "50017278efdf2831c12253afdf33510ee0d87fd59f0ce6778f671aa80cf45883",
+        "561bbd1921cca96b975759a2fda7b6a4ada7c930c7226457aedbd9d5d047c8c8",
+        "60f0ec68d06e640fe5e4fcf1f2fd6f75506455ac419e27c621c1529b83866da1",
         "7d3d23da6f7d4b5681b703be90f362852deee1b3953dfc8f1c8bf147cf522995",
+        "8547ae1a1dbdc59e8581a4a395e8ffd04a29082d947313c32cbd1b2a417e971b",
+        "bdaf74b81be5561dd15253aa87b28316b11b2b6153c5d5a3331c52370ef3202e",
+        "d6ee3abe34dfb741a59a4420f5ff124a300fbca865b62d0e05b71bd66dcd4adc",
         "d97bec9666fc2819c275a2c7ed5d08318daf2424dc632fc7e05b1451efff6997",
+        "da38767ff4ceec4483c08e0d0c03b127d658e99b4d795e455b93d0073b7f88e2",
         "e43a4bde0abe012a02f5e4d8d6ca2fc7180c27a6a985ac2a01a5696d5e9cf55b",
+        "eec12aba29b356c50571cdd2ea667a83b28ff1a04a8ad86ead15f2aec5182e27",
         "f0614b50ac66f58d35b1b3405be93c11b1086f67b00fde1b7f820ed2d955fcb9"
       ],
       "sources": [
+        "evrensel.net",
         "sabah.com.tr",
         "ensonhaber.com",
         "haberler.com",
         "bursahakimiyet.com.tr",
-        "haberturk.com"
+        "haberturk.com",
+        "odatv.com",
+        "beyazgazete.com",
+        "trthaber.com",
+        "yeniasir.com.tr",
+        "bursadabugun.com",
+        "haber7.com"
       ],
       "related_articles": [
         {
@@ -303261,15 +302601,6 @@
           "url": "https://www.bursahakimiyet.com.tr/gundem/ankara-da-dev-teror-operasyonu-200-den-fazla-gozalti-1654754"
         },
         {
-          "title": "Blow to terrorist organizations: 209 detained in Ankara",
-          "original_title": "Son dakika haberi : Terör örgütlerine darbe : 209 gözaltı | Ankara haberleri",
-          "original_language": "tr",
-          "summary": "Security operations targeting terrorist organizations in Ankara led to the apprehension of 209 suspects.",
-          "published": "2026-06-23T08:00:00+00:00",
-          "source": "haberturk.com",
-          "url": "https://www.haberturk.com/son-dakika-haberi-teror-orgutlerine-darbe-209-gozalti-ankara-haberleri-3893506"
-        },
-        {
           "title": "Joint gendarmerie and police operation in Ankara: 209 individuals linked to terrorist organizations detained",
           "original_title": "SON DAKİKA ... Ankarada jandarma ve polisten ortak operasyonu ! Terör örgütleriyle bağlantılı 209 kişi gözaltına alındı ...",
           "original_language": "tr",
@@ -303277,95 +302608,101 @@
           "published": "2026-06-23T06:30:00+00:00",
           "source": "sabah.com.tr",
           "url": "https://www.sabah.com.tr/yasam/son-dakika-ankarada-jandarma-ve-polisten-ortak-operasyonu-teror-orgutleriyle-baglantili-209-kisi-gozaltina-alindi-7608593"
+        },
+        {
+          "title": "Home raids and arrests in Ankara against participants of anti-NATO protest",
+          "original_title": "Ankarada NATO karşıtı eyleme katılanlara ev baskını : Kapılar kırılarak gözaltına alındılar",
+          "original_language": "tr",
+          "summary": "Police conducted door-breaking home raids in Ankara and detained individuals who participated in an anti-NATO protest.",
+          "published": "2026-06-23T06:15:00+00:00",
+          "source": "evrensel.net",
+          "url": "https://www.evrensel.net/haber/5989424/ankara-da-nato-karsiti-eyleme-katilanlara-ev-baskini-kapilar-kirilarak-gozaltina-alindilar"
+        },
+        {
+          "title": "209 people detained ahead of NATO Summit in Ankara",
+          "original_title": "NATO Zirvesi öncesi 209 kişi gözaltına alındı",
+          "original_language": "tr",
+          "summary": "Authorities detained 209 individuals in security operations in Ankara ahead of the NATO Summit.",
+          "published": "2026-06-23T07:00:00+00:00",
+          "source": "odatv.com",
+          "url": "https://www.odatv.com/guncel/nato-zirvesi-oncesi-209-kisi-gozaltina-alindi-120151936"
+        },
+        {
+          "title": "Home raids in Ankara ahead of NATO Summit: Detention orders issued for 241 suspects across various organizations",
+          "original_title": "Ankarada NATO Zirvesi Öncesi Ev Baskınları : Çeşitli Örgütlere Mensup 241 Şüpheli Hakkında Gözaltı Kararı Verildi",
+          "original_language": "tr",
+          "summary": "Ahead of the NATO Summit, police conducted home raids in Ankara and issued detention orders for 241 suspects belonging to various organizations.",
+          "published": "2026-06-23T07:00:00+00:00",
+          "source": "haberler.com",
+          "url": "https://www.haberler.com/guncel/ankara-da-nato-zirvesi-oncesi-teror-orgutlerine-buyuk-operasyon-241-gozalti-karari-19978499-haberi/"
+        },
+        {
+          "title": "Counter-terrorism operation in Ankara: Many individuals detained",
+          "original_title": "Ankarada Terör Operasyonu ! Çok Sayıda Kişi Gözaltına Alındı",
+          "original_language": "tr",
+          "summary": "A counter-terrorism operation carried out in Ankara resulted in the detention of numerous suspects.",
+          "published": "2026-06-23T07:15:00+00:00",
+          "source": "beyazgazete.com",
+          "url": "https://beyazgazete.com/haber/2026/6/23/ankara-da-teror-operasyonu-cok-sayida-kisi-gozaltina-alindi-7174176.html"
+        },
+        {
+          "title": "Ankara-based counter-terrorism operation results in 209 detentions",
+          "original_title": "Ankara merkezli terör operasyonunda 209 gözaltı",
+          "original_language": "tr",
+          "summary": "Turkish security forces detained 209 suspects in an Ankara-centered counter-terrorism operation.",
+          "published": "2026-06-23T08:00:00+00:00",
+          "source": "trthaber.com",
+          "url": "https://www.trthaber.com/haber/turkiye/ankara-merkezli-teror-operasyonunda-209-gozalti-949030.html"
+        },
+        {
+          "title": "Operation against terrorist organizations in the capital: 209 detained",
+          "original_title": "Terör örgütlerine başkentte operasyon : 209 gözaltı",
+          "original_language": "tr",
+          "summary": "Turkish security forces detained 209 individuals in an operation targeting terrorist networks in Ankara.",
+          "published": "2026-06-24T07:30:00+00:00",
+          "source": "yeniasir.com.tr",
+          "url": "https://www.yeniasir.com.tr/politika/2026/06/24/teror-orgutlerine-baskentte-operasyon-209-gozalti"
+        },
+        {
+          "title": "Hundreds detained in counter-terrorism sweep ahead of NATO summit",
+          "original_title": "NATO zirvesi öncesi düğmeye basıldı ! Yüzlerce kişi gözaltında ...",
+          "original_language": "tr",
+          "summary": "Turkish authorities detained hundreds of suspects in security sweeps ahead of the NATO summit.",
+          "published": "2026-06-23T08:15:00+00:00",
+          "source": "bursadabugun.com",
+          "url": "https://www.bursadabugun.com/haber/nato-zirvesi-oncesi-dugmeye-basildi-yuzlerce-kisi-gozaltinda-1930520.html"
+        },
+        {
+          "title": "Terrorist propaganda on live broadcast! Action taken against culprits",
+          "original_title": "Canlı yayında terör propagandası ! Alçaklar için harekete geçildi",
+          "original_language": "tr",
+          "summary": "Turkish authorities initiated legal action and arrests following terrorist propaganda broadcasted live.",
+          "published": "2026-06-24T15:30:00+00:00",
+          "source": "haber7.com",
+          "url": "https://www.haber7.com/guncel/haber/3638207-canli-yayinda-teror-propagandasi-alcaklar-icin-harekete-gecildi"
+        },
+        {
+          "title": "Seizures made at homes of 208 terrorists detained ahead of NATO Summit",
+          "original_title": "NATO Zirvesi öncesi gözaltına alınan 208 teröristin evinden neler çıktı neler",
+          "original_language": "tr",
+          "summary": "Turkish authorities seized materials during searches at the homes of suspects detained in pre-NATO summit counter-terrorism operations.",
+          "published": "2026-06-23T14:00:00+00:00",
+          "source": "haberler.com",
+          "url": "https://www.haberler.com/guncel/nato-zirvesi-oncesi-gozaltina-alinan-208-19981038-haberi/"
         }
       ],
-      "article_count": 6,
-      "first_reported": "2026-06-23T06:30:00+00:00",
-      "last_reported": "2026-06-23T08:15:00+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "very_high_title_similarity",
-        "title_plus_anchor",
-        "paraphrase_entity_context"
-      ],
+      "article_count": 15,
+      "first_reported": "2026-06-23T06:15:00+00:00",
+      "last_reported": "2026-06-23T14:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v4-counter-terrorism-action",
       "ai_selection_model": "gemini-3.5-flash-lite",
       "ai_relevance_score": 85,
-      "ai_relevance_reason": "Large-scale counter-terrorism security operation resulting in numerous arrests.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "security operation targeting terrorist organizations leads to 209 arrests in Ankara",
-      "title_variants": [
-        "joint security operation and arrest of 209 terror suspects in Ankara"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Security operations targeting terrorist organizations in Ankara"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Operations took place in Ankara, Turkey.",
-      "ai_geo_fingerprint": "44552ad16e43b538fa4f5aae61510fad72ede1a8dd9baa9d7a7a8d4af536e604",
-      "ai_geo_inferred": false,
-      "actor_group": ""
-    },
-    {
-      "id": "b817da3f79cabc39",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Counter Terrorism Action"
-      ],
-      "title": "Home raids and arrests in Ankara against participants of anti-NATO protest",
-      "summary": "Police conducted door-breaking home raids in Ankara and detained individuals who participated in an anti-NATO protest.",
-      "original_title": "Ankarada NATO karşıtı eyleme katılanlara ev baskını : Kapılar kırılarak gözaltına alındılar",
-      "original_summary": "",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": null,
-      "published": "2026-06-23T06:15:00+00:00",
-      "source": "evrensel.net",
-      "source_count": 1,
-      "url": "https://www.evrensel.net/haber/5989424/ankara-da-nato-karsiti-eyleme-katilanlara-ev-baskini-kapilar-kirilarak-gozaltina-alindilar",
-      "collector": "GDELT DOC 2.0",
-      "acquisition_channel": "gdelt_doc_search",
-      "country": "Turkey",
-      "country_code": "TR",
-      "city": "Ankara",
-      "region": null,
-      "latitude": 39.91987,
-      "longitude": 32.85427,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "source_article_fingerprints": [
-        "8547ae1a1dbdc59e8581a4a395e8ffd04a29082d947313c32cbd1b2a417e971b"
-      ],
-      "sources": [
-        "evrensel.net"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-23T06:15:00+00:00",
-      "last_reported": "2026-06-23T06:15:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v4-counter-terrorism-action",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
       "ai_relevance_reason": "Concrete security raid and arrests conducted by police in Ankara.",
       "ai_current_ct_event": true,
       "ai_selected": true,
       "translated_to_english": true,
-      "ai_canonical_event": "police raids and arrests of anti-NATO protest participants in Ankara",
+      "ai_canonical_event": "security operation targeting terrorist organizations leads to 209 arrests in Ankara",
       "title_variants": [
         "police raids and arrests of anti-NATO protest participants in Ankara"
       ],
@@ -303385,7 +302722,12 @@
       "ai_geo_reason": "Raids and arrests took place in Ankara, Turkey.",
       "ai_geo_fingerprint": "4536401441c3dc51e908fcf883523551dc5d7d13b7a852ea9eb3264c502c5412",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-9968a09c3b7759ae",
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "dbf2acca73e9d432",
@@ -303446,7 +302788,9 @@
       "ai_geo_reason": "Explicitly mentions Kyiv, Ukraine.",
       "ai_geo_fingerprint": "84d8d893dc8b42779398bcd8ca40d9019052ef040a07a5a744de3e123e0f30f3",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-66975d4d31e55767",
+      "incident_anchor": "Kyiv institute terrorist plot 2026-06"
     },
     {
       "id": "d5cce378d97acac2",
@@ -303575,7 +302919,8 @@
       "ai_geo_reason": "Explicitly mentions Durham, North Carolina.",
       "ai_geo_fingerprint": "c116f16a9f0ebfa2a0649e6c5fd0d9c83fb3b63acc663a186b4caa7d7580c138",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-1102a7233b7ee20f"
     },
     {
       "id": "4cf6eb36af2af8f3",
@@ -303638,7 +302983,8 @@
       "ai_geo_reason": "Operations by the Israel Defense Forces against Hamas.",
       "ai_geo_fingerprint": "b86bbf0916bc88426ce729c20ee6b8bcc5f852891d2052484734c01f7bbac4f4",
       "ai_geo_inferred": true,
-      "actor_group": "Hamas"
+      "actor_group": "Hamas",
+      "incident_id": "inc-5df1eed81bdfa067"
     },
     {
       "id": "08446f30c0afda69",
@@ -303775,7 +303121,8 @@
       "ai_geo_reason": "ReCAAP Information Sharing Centre is based in Singapore, reporting on Asian maritime security.",
       "ai_geo_fingerprint": "0835f8faa775602c2ddc4aa6cf637bc6fa6060a96ef22ac4e7da2e1156e18e91",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-4746f262b1d40b7d"
     },
     {
       "id": "720d9ff022ff7197",
@@ -303842,7 +303189,8 @@
       "ai_geo_reason": "Explicitly mentions Menaka, Mali.",
       "ai_geo_fingerprint": "ca48e759b95f6e1a35a25d324375f32ba359a3d2e1167f43f63167a2ce8d80ea",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-cb96a17e1701e09c"
     },
     {
       "id": "946558df085c37c4",
@@ -303903,7 +303251,8 @@
       "ai_geo_reason": "Refers to an American youth arrested in the US for suspected terror plots.",
       "ai_geo_fingerprint": "00f3ed83bedcbc86893b8c68ee7254ab27586814f010ab573648442b29ec3007",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-8c5ffdacc510d368"
     },
     {
       "id": "29c05aee5b22aa8e",
@@ -304044,7 +303393,8 @@
       "ai_geo_reason": "UK resident convicted of terror offenses; location refers to the UK judicial system/jurisdiction.",
       "ai_geo_fingerprint": "ea6bbf06fc8cb6d26006faff36760ffd57d3edf3a740ffebf4678adb63502f76",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-3bc576f9a1eff408"
     },
     {
       "id": "a1c53907549f124e",
@@ -304105,7 +303455,8 @@
       "ai_geo_reason": "Ain Shams is a district of Cairo, Egypt; trial involves the Egyptian court system.",
       "ai_geo_fingerprint": "608065f62e327ee8b6c7d41ff96208296218abb2c651173ae5cb7cfe168ebc0c",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-22370ed03428bed6"
     },
     {
       "id": "db492cd34e6bcb5c",
@@ -304169,7 +303520,8 @@
       "ai_geo_reason": "Roskomnadzor is the federal service for supervision of communications in Russia.",
       "ai_geo_fingerprint": "56b5403c5bb9cc3fc453a5e4e8383d96052b7056125825059f6335d726add9ba",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-4342f5c4967e14b2"
     },
     {
       "id": "532b53f7010f549b",
@@ -304232,7 +303584,8 @@
       "ai_geo_reason": "Explicitly names Leicester as the location connected to the charged individual.",
       "ai_geo_fingerprint": "2c113ec466adf139ca0d0860f73ed709715a3dfd588a14b12064ec3637f5b2a4",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-8d9fa95a7d00c3cc"
     },
     {
       "id": "68ea28ab7d057595",
@@ -304293,69 +303646,8 @@
       "ai_geo_reason": "Turin is explicitly named as the residence and location of expulsion.",
       "ai_geo_fingerprint": "cf305e7f8278ff4b9d91d7a124eac5aeac438e98c4670d120232749ba555d839",
       "ai_geo_inferred": false,
-      "actor_group": ""
-    },
-    {
-      "id": "05f81478b8e8d1a1",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Online / Cyber / AI"
-      ],
-      "title": "Arrested for terrorist propaganda: Social media posts on Jihad, Hamas, and Islamic State",
-      "summary": "Police in Brindisi arrested an individual for terrorist propaganda following online social media posts supporting Jihad, Hamas, and the Islamic State.",
-      "original_title": "Arrestato per propaganda terroristica: i post social su Jihad, Hamas e Stato islamico",
-      "original_summary": "Arrestato per propaganda terroristica: i post social su Jihad, Hamas e Stato islamico BrindisiReport",
-      "original_language": "it",
-      "collection_language": "it",
-      "collection_language_name": "Italian",
-      "collection_locale": "IT:it",
-      "published": "2026-06-19T07:00:00+00:00",
-      "source": "BrindisiReport",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPbjRtb2Jkb2hNSk80Q3NyZ285Y1psQUs2Zjk1VFNxUm1BUTRaWGF0UE1QenlPcl9LQXBBNXNoaE82RTk4T0xJS25WWk1EempkbVNCc0dVNG80T0VydTloTm5KYkJCRVVUckNiaFkwckMzcjhqU293LTFzYmRaSGJNYlFaWmxRRDMyWjI5Tm1xZ0M5ZXJ5R1BMX3FmMjY?oc=5",
-      "collector": "Google News RSS",
-      "country": "Italy",
-      "country_code": "IT",
-      "city": "Brindisi",
-      "region": null,
-      "latitude": 40.63215,
-      "longitude": 17.93607,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "BrindisiReport"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-19T07:00:00+00:00",
-      "last_reported": "2026-06-19T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Operational arrest for online terrorist propaganda and radical content.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Police arrest individual for terrorist propaganda on social media in Brindisi",
-      "title_variants": [
-        "Police arrest individual for terrorist propaganda on social media in Brindisi"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Police in Brindisi arrested an individual"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly names Brindisi as the location of the arrest.",
-      "ai_geo_fingerprint": "77638c5798272e58a31da1927283ba83c566a759c3bab02e543be876a6310297",
-      "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-8531c4fa013f869a"
     },
     {
       "id": "851187fc1c84910a",
@@ -304491,7 +303783,8 @@
       "ai_geo_reason": "Indictment and legal action took place in Portugal.",
       "ai_geo_fingerprint": "f7fcbe1c96155a71ac28f378734f467cda14be7da14d2afc1c76bbc70811dac8",
       "ai_geo_inferred": true,
-      "actor_group": "Movimento Armilar Lusitano"
+      "actor_group": "Movimento Armilar Lusitano",
+      "incident_id": "inc-bd2850547f25069e"
     },
     {
       "id": "b844a670deec03cf",
@@ -304649,18 +303942,18 @@
       "categories": [
         "Attacks"
       ],
-      "title": "Niger Ministry of Defense reveals casualties from terrorist attack at Niamey airport",
-      "summary": "The Niger Ministry of Defense has released death and injury tolls following a terrorist attack that targeted the Diori Hamani International Airport in Niamey.",
-      "original_title": "Niger Ministry of Defense Reveals Death and Injury Toll from Terrorist Attack Targeting Diori Hamani International Airport in Niamey",
-      "original_summary": "Niger Ministry of Defense Reveals Death and Injury Toll from Terrorist Attack Targeting Diori Hamani International Airport in Niamey libyaupdate.com",
+      "title": "Al Qaeda-linked jihadists claim deadly attack on Niger airport",
+      "summary": "Al-Qaeda-linked JNIM militants claimed responsibility for a deadly attack on an airport in Niger that resulted in the deaths of 11 soldiers and numerous others.",
+      "original_title": "Al Qaeda-linked jihadists claim deadly attack on Niger airport",
+      "original_summary": "Al Qaeda-linked jihadists claim deadly attack on Niger airport France 24",
       "original_language": "en",
       "collection_language": "en",
       "collection_language_name": "English",
       "collection_locale": null,
       "published": "2026-06-18T07:00:00+00:00",
-      "source": "libyaupdate.com",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxPZkhBeTlkdVltQmdoZkhXdzM1bENZcUd0T3M5SEd5V01xdkNySnlnZmUwSFVLVE9JTWEzdHY2UlJ4RnVEczFFX3Y2NkkxWHFIOTlGcWhHaGNwS3NvaThzYnRoRG1hVUpMYTMwRmNPQndFT3p1S1hEdWQ3NmpZTkVhdENDZjJlTkZDa0ZNVXpVNU9JTFhSb05tWEdPeEFFei1wQktzUl8wY0lrSE45SWg1LVlBcVVvYnh5WEtIVjJzTEVVNVpjMm1vVmxQVGhlcl9UTGI1REZBamZ2WWZuRDBOOGNjbjhRSklOMEtYSDJR?oc=5",
+      "source": "France 24",
+      "source_count": 7,
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPUjV0Mm5TMi02QnoyNERHaU8tVzAyajVvSVZIenY3MGx4SkVDX0dhX2dHQTE0V2tSMUtVVGVNWU0zaC00SDRJN0ZEYlJkb1QyVDBBZ1dJSnlxSVl3X1RRZjliNnFtX3FZUnFhMjlZX3FmT0FIODltUXozM0EzeDBRQUVtUWxPS0dmX0h1U213NHpWZDFBX1JTZXo5WTFjQ2NZM1NGZTZCR1ZkVzI0Mnc?oc=5",
       "collector": "Google News RSS",
       "country": "Niger",
       "country_code": "NE",
@@ -304672,7 +303965,12 @@
       "location_confidence": "high",
       "sources": [
         "libyaupdate.com",
-        "leFaso.net - L'actualité au Burkina Faso"
+        "leFaso.net - L'actualité au Burkina Faso",
+        "France 24",
+        "RFI",
+        "الجزيرة نت",
+        "Agenzia Nova",
+        "nation.africa"
       ],
       "related_articles": [
         {
@@ -304683,89 +303981,7 @@
           "published": "2026-06-18T07:00:00+00:00",
           "source": "leFaso.net - L'actualité au Burkina Faso",
           "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE41MmVsTTg5cHlpU0kwYkROXzh2N1NjVFplOFpQUGIycUttVFdRal9sQkQ4dFE5alI5U0lnVWwzREd0VmN1M1FDd3F1eUJKZ3MzdDBZ?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-06-18T07:00:00+00:00",
-      "last_reported": "2026-06-20T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Official casualty figures and reporting on a terrorist attack on an international airport.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Terrorist attack and casualties at Diori Hamani International Airport Niamey",
-      "title_variants": [
-        "terrorist attack targeting Diori Hamani International Airport in Niamey resulting in casualties",
-        "Terrorist attack and casualties at Diori Hamani International Airport Niamey"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Diori Hamani International Airport in Niamey"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly mentions Niamey, Niger.",
-      "ai_geo_fingerprint": "b63f72375fa6b8262662eebc1cc022264a2e7f6f87a4339a6966fc902e3833fb",
-      "ai_geo_inferred": false,
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "title_plus_anchor",
-        "same_url"
-      ],
-      "source_article_fingerprints": [
-        "e2eb24d3fd4095dd1876873499465c8eeebf422306e7ebdf809a5fbe28fa14db"
-      ],
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Niamey airport attack Niger 2026-06",
-      "update_type": "INITIAL",
-      "incident_id": "inc-53ba7bd26b3dc277"
-    },
-    {
-      "id": "6966474c341cec79",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Al Qaeda-linked jihadists claim deadly attack on Niger airport",
-      "summary": "Al-Qaeda-linked JNIM militants claimed responsibility for a deadly attack on an airport in Niger that resulted in the deaths of 11 soldiers and numerous others.",
-      "original_title": "Al Qaeda-linked jihadists claim deadly attack on Niger airport",
-      "original_summary": "Al Qaeda-linked jihadists claim deadly attack on Niger airport France 24",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-06-18T07:00:00+00:00",
-      "source": "France 24",
-      "source_count": 5,
-      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPUjV0Mm5TMi02QnoyNERHaU8tVzAyajVvSVZIenY3MGx4SkVDX0dhX2dHQTE0V2tSMUtVVGVNWU0zaC00SDRJN0ZEYlJkb1QyVDBBZ1dJSnlxSVl3X1RRZjliNnFtX3FZUnFhMjlZX3FmT0FIODltUXozM0EzeDBRQUVtUWxPS0dmX0h1U213NHpWZDFBX1JTZXo5WTFjQ2NZM1NGZTZCR1ZkVzI0Mnc?oc=5",
-      "collector": "Google News RSS",
-      "country": "Niger",
-      "country_code": "NE",
-      "city": "Niamey",
-      "region": null,
-      "latitude": 13.51366,
-      "longitude": 2.1098,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "France 24 English",
-      "targeted_source_kind": "international_media",
-      "sources": [
-        "France 24",
-        "RFI",
-        "الجزيرة نت",
-        "Agenzia Nova",
-        "nation.africa"
-      ],
-      "related_articles": [
+        },
         {
           "title": "Al-Qaeda-linked jihadists attack Niger airport, 11 soldiers killed",
           "original_title": "Al-Qaeda-linked jihadists attack Niger airport, 11 soldiers killed",
@@ -304810,128 +304026,80 @@
           "published": "2026-06-19T07:00:00+00:00",
           "source": "nation.africa",
           "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPdVdGZFVqN1dCOEJ0Y0tHaC1WX3ltSDM4aGZYZW83cjgtUjhzcDQzdUwxeXFaM3RYVkpKaUYwMzZfV2gtREV3UE1Ub3VpTW5QXzlueUJEa0RQZ2RjXy1LWFIxYWhQV0E0UFk4OU83QS1rX1QzR0FVSWp2dDFSci1tdUJsNVdpeUI1SXpIMWNMeTllS3RoM3pjM044S3ZmZw?oc=5"
+        },
+        {
+          "title": "Niger Ministry of Defense reveals casualties from terrorist attack at Niamey airport",
+          "original_title": "Niger Ministry of Defense Reveals Death and Injury Toll from Terrorist Attack Targeting Diori Hamani International Airport in Niamey",
+          "original_language": "en",
+          "summary": "The Niger Ministry of Defense has released death and injury tolls following a terrorist attack that targeted the Diori Hamani International Airport in Niamey.",
+          "published": "2026-06-18T07:00:00+00:00",
+          "source": "libyaupdate.com",
+          "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxPZkhBeTlkdVltQmdoZkhXdzM1bENZcUd0T3M5SEd5V01xdkNySnlnZmUwSFVLVE9JTWEzdHY2UlJ4RnVEczFFX3Y2NkkxWHFIOTlGcWhHaGNwS3NvaThzYnRoRG1hVUpMYTMwRmNPQndFT3p1S1hEdWQ3NmpZTkVhdENDZjJlTkZDa0ZNVXpVNU9JTFhSb05tWEdPeEFFei1wQktzUl8wY0lrSE45SWg1LVlBcVVvYnh5WEtIVjJzTEVVNVpjMm1vVmxQVGhlcl9UTGI1REZBamZ2WWZuRDBOOGNjbjhRSklOMEtYSDJR?oc=5"
         }
       ],
-      "article_count": 6,
+      "article_count": 8,
       "first_reported": "2026-06-18T07:00:00+00:00",
-      "last_reported": "2026-06-19T07:00:00+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "actor_country_action_signature",
-        "very_high_title_similarity",
-        "same_url"
-      ],
+      "last_reported": "2026-06-20T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
       "ai_relevance_score": 90,
-      "ai_relevance_reason": "JNIM claimed responsibility for a concrete terrorist attack on an airport in Niger causing multiple casualties among soldiers.",
+      "ai_relevance_reason": "Official casualty figures and reporting on a terrorist attack on an international airport.",
       "ai_current_ct_event": true,
       "ai_selected": true,
       "translated_to_english": false,
       "ai_canonical_event": "JNIM attack on Niamey airport Niger",
       "title_variants": [
-        "Al-Qaeda-linked JNIM militants claim deadly attack on airport in Niger killing multiple soldiers",
-        "JNIM attack on Niamey airport Niger"
+        "terrorist attack targeting Diori Hamani International Airport in Niamey resulting in casualties",
+        "Terrorist attack and casualties at Diori Hamani International Airport Niamey"
       ],
-      "location_confidence_score": 0.9,
+      "location_confidence_score": 0.95,
       "location_method": "ai_city_geonames",
       "location_evidence": [
-        "attack on Niamey airport in Niger"
+        "Diori Hamani International Airport in Niamey"
       ],
       "excluded_from_map": false,
       "ai_geo_complete": true,
       "ai_geo_version": "gemini-ai-first-v5-resilient",
       "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Related articles explicitly confirm the attack took place at Niamey airport in Niger.",
-      "ai_geo_fingerprint": "47b8b5217588601e4b16246d502f936ef713817e3bff17adea819c7513e8d6dd",
-      "ai_geo_inferred": true,
+      "ai_geo_reason": "Explicitly mentions Niamey, Niger.",
+      "ai_geo_fingerprint": "b63f72375fa6b8262662eebc1cc022264a2e7f6f87a4339a6966fc902e3833fb",
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "title_plus_anchor",
+        "same_url",
+        "same_incident"
+      ],
+      "source_article_fingerprints": [
+        "e2eb24d3fd4095dd1876873499465c8eeebf422306e7ebdf809a5fbe28fa14db"
+      ],
       "actor_group": "JNIM",
       "primary_event_type": "ATTACK",
       "is_attack": true,
-      "incident_anchor": "Niamey airport attack Niger 2026-06-18",
+      "incident_anchor": "Niamey airport attack Niger 2026-06",
       "update_type": "INITIAL",
-      "incident_id": "inc-636de96250c991ee"
-    },
-    {
-      "id": "32db566c17ed7680",
-      "category": "Arrests",
-      "categories": [
-        "Arrests"
-      ],
-      "title": "16-year-old ISIS and Nazi sympathizer arrested over plot targeting judges and journalists",
-      "summary": "Italian authorities have arrested a 16-year-old fan of ISIS and neo-Nazism who allegedly planned attacks against judges and journalists.",
-      "original_title": "Arrestato sedicenne fan di Isis e nazisti. \"Voleva colpire giudici e giornalisti\"",
-      "original_summary": "Arrestato sedicenne fan di Isis e nazisti. \"Voleva colpire giudici e giornalisti\" il Giornale",
-      "original_language": "it",
-      "collection_language": "it",
-      "collection_language_name": "Italian",
-      "collection_locale": "IT:it",
-      "published": "2026-06-18T07:00:00+00:00",
-      "source": "il Giornale",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNbnJCc1hRRHh5ckV6SnFXa1NyV3RrSGxfZktDLVdSWVZ1M3hkSi1XUk01TjNsN0czWWx2b2VGR0gwNU1ZQWEtallObGg0VDgyWmpCS3FXbk4zQ2QzN3k1SjNwU2JyRm1rcUtKQTRHRDc2MTNkSGxBaUJTT0xSZUpkRHVaQnc4Nnc5Z3hIZUJZc2ZIY2s1Tm5iYS1McjNaZmg5R2dpYjJ6Yy0wZw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Italy",
-      "country_code": "IT",
-      "city": "Rome",
-      "region": null,
-      "latitude": 41.89193,
-      "longitude": 12.51133,
-      "location_precision": "country_capital",
-      "location_confidence": "medium",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "il Giornale"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-18T07:00:00+00:00",
-      "last_reported": "2026-06-18T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Disrupted terrorist plot and arrest of an individual planning attacks against public figures.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Authorities arrest 16-year-old terrorist sympathizer planning attacks in Italy",
-      "title_variants": [
-        "Authorities arrest 16-year-old terrorist sympathizer planning attacks in Italy"
-      ],
-      "location_confidence_score": 0.8,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Italian authorities have arrested a 16-year-old"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Arrested by Italian authorities; source is il Giornale.",
-      "ai_geo_fingerprint": "79932d556c228c56f06627dde4d58921b277ce73c11bf5288e99dcccd6fd5802",
-      "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "incident_id": "inc-53ba7bd26b3dc277"
     },
     {
       "id": "5b40094102084580",
       "category": "Arrests",
       "categories": [
-        "Arrests"
+        "Arrests",
+        "Online / Cyber / AI"
       ],
-      "title": "Palestinian pizzaiolo arrested for terrorism in Brindisi",
-      "summary": "A 30-year-old Palestinian pizzaiolo born in Ramallah was arrested in Brindisi on terrorism-related charges.",
-      "original_title": "Pizzaiolo, trentenne, nato a Ramallah: chi è il palestinese arrestato per terrorismo a Brindisi",
-      "original_summary": "Pizzaiolo, trentenne, nato a Ramallah: chi è il palestinese arrestato per terrorismo a Brindisi il Giornale",
+      "title": "Arrested for terrorist propaganda: Social media posts on Jihad, Hamas, and Islamic State",
+      "summary": "Police in Brindisi arrested an individual for terrorist propaganda following online social media posts supporting Jihad, Hamas, and the Islamic State.",
+      "original_title": "Arrestato per propaganda terroristica: i post social su Jihad, Hamas e Stato islamico",
+      "original_summary": "Arrestato per propaganda terroristica: i post social su Jihad, Hamas e Stato islamico BrindisiReport",
       "original_language": "it",
       "collection_language": "it",
       "collection_language_name": "Italian",
       "collection_locale": "IT:it",
       "published": "2026-06-18T07:00:00+00:00",
-      "source": "il Giornale",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPdHdCR3B2UHpCOEpZQ3U2eEJfUzJGNllDY1hleFJyVUVORjgzSzZTeEwtb2RQaGtaSzdPUldWNHZxaFMzdFNxNDY2QWl5cVFLVnlDM2k4TkxOYWp6b2dWLVJzYlZOQ2hNSWdSLVVJRVVLQlVFTXFLZUdtWE9iNWhEMlMyaGJ6MnZtS18zMFJRdzQxZncwb3duNkwyaXpVVGV5WHl2Nkt2MG9QVWM1WF81djFn?oc=5",
+      "source": "BrindisiReport",
+      "source_count": 2,
+      "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPbjRtb2Jkb2hNSk80Q3NyZ285Y1psQUs2Zjk1VFNxUm1BUTRaWGF0UE1QenlPcl9LQXBBNXNoaE82RTk4T0xJS25WWk1EempkbVNCc0dVNG80T0VydTloTm5KYkJCRVVUckNiaFkwckMzcjhqU293LTFzYmRaSGJNYlFaWmxRRDMyWjI5Tm1xZ0M5ZXJ5R1BMX3FmMjY?oc=5",
       "collector": "Google News RSS",
       "country": "Italy",
       "country_code": "IT",
@@ -304943,21 +304111,32 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "sources": [
-        "il Giornale"
+        "il Giornale",
+        "BrindisiReport"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Palestinian pizzaiolo arrested for terrorism in Brindisi",
+          "original_title": "Pizzaiolo, trentenne, nato a Ramallah: chi è il palestinese arrestato per terrorismo a Brindisi",
+          "original_language": "it",
+          "summary": "A 30-year-old Palestinian pizzaiolo born in Ramallah was arrested in Brindisi on terrorism-related charges.",
+          "published": "2026-06-18T07:00:00+00:00",
+          "source": "il Giornale",
+          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPdHdCR3B2UHpCOEpZQ3U2eEJfUzJGNllDY1hleFJyVUVORjgzSzZTeEwtb2RQaGtaSzdPUldWNHZxaFMzdFNxNDY2QWl5cVFLVnlDM2k4TkxOYWp6b2dWLVJzYlZOQ2hNSWdSLVVJRVVLQlVFTXFLZUdtWE9iNWhEMlMyaGJ6MnZtS18zMFJRdzQxZncwb3duNkwyaXpVVGV5WHl2Nkt2MG9QVWM1WF81djFn?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-06-18T07:00:00+00:00",
-      "last_reported": "2026-06-18T07:00:00+00:00",
+      "last_reported": "2026-06-19T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Direct counter-terrorism arrest of a suspect.",
       "ai_current_ct_event": true,
       "ai_selected": true,
       "translated_to_english": true,
-      "ai_canonical_event": "arrest of a Palestinian individual for terrorism offences in Brindisi Italy",
+      "ai_canonical_event": "Police arrest individual for terrorist propaganda on social media in Brindisi",
       "title_variants": [
         "arrest of a Palestinian individual for terrorism offences in Brindisi Italy"
       ],
@@ -304973,7 +304152,13 @@
       "ai_geo_reason": "Explicitly names Brindisi as the location of the arrest.",
       "ai_geo_fingerprint": "6987064246dbf4b19e153744a4765c4e0cf2dc4bcdd94a19822284af8d772a89",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-1a5abbd5a24db38a",
+      "source_article_fingerprints": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "94890cccb3803216",
@@ -305076,7 +304261,8 @@
         "aa56c493b37794c7eecf14955a9d8a0feca93b4e6aee914c82a16e294bbc4922",
         "f1a80c659810565372ee8c6776fd1684c3184b86a548b4d9dc2139f9f49282a6"
       ],
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-be88f7bbca22cb63"
     },
     {
       "id": "0a2f197e29b98b2c",
@@ -305207,7 +304393,8 @@
       "ai_geo_reason": "Explicitly names Bat Yam as the site of the historical attack.",
       "ai_geo_fingerprint": "86e18a41699b990c926253823a7a417805f8ca0de3c667bc0e2f90b9b964bb03",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-83fdeec2bf303b19"
     },
     {
       "id": "2d2e026f02e3bab4",
@@ -305276,7 +304463,8 @@
       "ai_geo_reason": "The event involves a California resident charged with terrorism financing in the US.",
       "ai_geo_fingerprint": "fce21ff567b88926250fa8c1ac7a970aa560ba77a364329847f8ea82c61b90dd",
       "ai_geo_inferred": true,
-      "actor_group": "Hamas"
+      "actor_group": "Hamas",
+      "incident_id": "inc-bbaf6b1df514744b"
     },
     {
       "id": "06ca8d1b5023294b",
@@ -305336,7 +304524,8 @@
       "ai_geo_reason": "Explicitly names the Republic of Adygea as the target region.",
       "ai_geo_fingerprint": "f21e49734f8a81cdcb54b8aba06b8235cf9e4f81e0da543ce45abba14153cae0",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-675f97c65f5ea9a8"
     },
     {
       "id": "f6d90c0f1f82d70d",
@@ -305481,133 +304670,8 @@
       "ai_geo_reason": "Explicitly names San Diego, California as the location of the resident charged by the DOJ.",
       "ai_geo_fingerprint": "6bf6e074fdba39066158e9f68cfc29b12cec353a0b24ac106c57a819ac508230",
       "ai_geo_inferred": false,
-      "actor_group": "Hamas"
-    },
-    {
-      "id": "b81ecf6227ad9571",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Attacked thwarted before MMA fight at the White House, according to US authorities",
-      "summary": "U.S. authorities report that a terrorist attack plot was foiled ahead of a mixed martial arts event at the White House.",
-      "original_title": "Un projet d’attentat déjoué avant le combat de MMA à la Maison Blanche, selon les autorités américaines",
-      "original_summary": "Un projet d’attentat déjoué avant le combat de MMA à la Maison Blanche, selon les autorités américaines Le Monde.fr",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French",
-      "collection_locale": "FR:fr",
-      "published": "2026-06-17T07:00:00+00:00",
-      "source": "Le Monde.fr",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMihwJBVV95cUxNVHpWZFhRWXJHVlYxZ3pxUktRMXllQTI0amhXR0xqTUhTc041TUNTamRWMXdhTzBKdXlIT3JZOEo5TC1NSExCTm5GcmhNZ0pBWkFEWmJ6WWJ5bjRGQnQ1QWgxeVZZdFRETXItMzBsUlF1Ry1QSVRqQWxpTXFzN01vVzJQbXVzX0ZPMFVFR0VEWGNHaFdRYUNEVUttTkdrMks3MDd5ZEtjcmRNbFdEVU53YVlqREhCTzhMd1BXaUtKSGlsZkhWaXZKZmZJcVhvUk5Hb20xbU5aRkQ1M0pObktIM0huOVdHRDd6YWtiSFUyMl9MaWxXR3U4SVRyR29yTFpabTh4R3MxMA?oc=5",
-      "collector": "Google News RSS",
-      "country": "United States",
-      "country_code": "US",
-      "city": "Washington",
-      "region": null,
-      "latitude": 38.89511,
-      "longitude": -77.03637,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "Le Monde.fr"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-17T07:00:00+00:00",
-      "last_reported": "2026-06-17T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Disrupted terrorist plot targeting a U.S. government venue (French coverage).",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Thwarted alleged terrorist attack targeting White House MMA event in Washington DC",
-      "title_variants": [
-        "Thwarted alleged terrorist attack targeting White House MMA event in Washington DC"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "MMA fight at the White House, according to US authorities"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The White House is located in Washington, D.C.",
-      "ai_geo_fingerprint": "1f0425005cc6aa01c1eb7a97d4ca0cb9ecaf508b378339ef91f9de43f7841c5e",
-      "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "e8071d56c4693678",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "FBI foils possible attack on Trump's birthday, according to reports",
-      "summary": "According to the FBI and German news sources, a potential attack plot targeting Donald Trump's birthday has been thwarted.",
-      "original_title": "Laut FBI wurde ein möglicher Anschlag auf Trumps Geburtstag vereitelt",
-      "original_summary": "Laut FBI wurde ein möglicher Anschlag auf Trumps Geburtstag vereitelt tagesschau.de",
-      "original_language": "de",
-      "collection_language": "de",
-      "collection_language_name": "German",
-      "collection_locale": "DE:de",
-      "published": "2026-06-17T07:00:00+00:00",
-      "source": "tagesschau.de",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQWlY1amx4QUJsbUp0UVl3LTZLaGRlRHJMRW5JdElYUUduS2FwLTVkSEFtRGJvaVRIXzRzTm1ZWHRMQkdGb3lDZGtUMHFfdFpIY1p0cFBXeUpuY000RVF5X0lCb1ktLWhOQXZWeVdRNVF5X3FWak84M01EMzI5dDBHVA?oc=5",
-      "collector": "Google News RSS",
-      "country": "United States",
-      "country_code": "US",
-      "city": "Washington",
-      "region": null,
-      "latitude": 38.89511,
-      "longitude": -77.03637,
-      "location_precision": "city",
-      "location_confidence": "medium",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "tagesschau.de"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-17T07:00:00+00:00",
-      "last_reported": "2026-06-17T07:00:00+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_url"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Disrupted attack plot and FBI counter-terrorism operation.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "FBI foils potential attack targeting Donald Trump's birthday in the US",
-      "title_variants": [
-        "FBI foils potential attack targeting Donald Trump's birthday in the US"
-      ],
-      "location_confidence_score": 0.8,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "FBI foils possible attack on Trump's birthday"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Plot targeting Donald Trump (associated with the White House/US government) foiled by the FBI.",
-      "ai_geo_fingerprint": "1963bef927f062c6c1f61f6897968ed39d769da95f4151fbea43819e01cd4595",
-      "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "Hamas",
+      "incident_id": "inc-aac481264a9c21c1"
     },
     {
       "id": "902ad10a68040d8b",
@@ -305627,7 +304691,7 @@
       "collection_locale": "IT:it",
       "published": "2026-06-17T07:00:00+00:00",
       "source": "RaiNews",
-      "source_count": 1,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMi-gFBVV95cUxQRGo1X0lTdFlTLVYyc3B6X0ZNT0VqTjR2YVVDLXMxYnMyOGgtSVhrWnJDUFdNX3NMSDBmRWdFaE9UUHVoZ2FZV1FCMWpsWTJZSGM0MnJPcERKV21MTWlGWnR4amlUbmpZYW5WalNvQTd5RGJrYnEyTjlZTVZoTTl5MmtuUlVTSXVqQzc0REtMdW94TEdoUGZyRFd4NnR6ODhRMXAyOFJBVzFGX1Rsb19FY3JnZGN2MWNMOVBkM0FFRHBkQlJ4Y2M1bzBIR2t4Z254SGtmRFI0UXV0TjIzdGRNM0hQU2NZbjE1dTJxOWdDWGtoTlBmUmpnSU930gH_AUFVX3lxTFBMdXZsdUdFSDhIYjRqanhMdENzWTJQYzlnRkt5UUdFRUx4Z29MVFZJdkxTVmhBX2VyaEl1cWlvQ0lPR2tBVWVuQ2xacTFfVk4wX094M2RpZTM3amFmVlU1QkdpZUdKaS1RSUJabllrUG1PV2RwXy1kWXpleVlUWFBJMzNoZmFxTnNiMkEzdXlpTUY0RnVuS3VSeV94UTFOZ3VaZkNoNFZLd2VWbEkxUWU4RjFJTWFyb1pwSlQtY1BrV2NWZF9GS1RkS2F4QjBDdVhDSHc0UFFwbHpTa0N2aXVNYUJTSmI3eE81ZkQ1R0V2Z2FtdmV0Qm5VUVJ5LTV4cw?oc=5",
       "collector": "Google News RSS",
       "country": "Italy",
@@ -305640,16 +304704,37 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "sources": [
-        "RaiNews"
+        "RaiNews",
+        "BolognaToday",
+        "il Giornale"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Minor arrested for terrorism after planning attacks on journalists and magistrates with weapons manuals",
+          "original_title": "Vuole colpire \"giornalisti e magistrati\" e ha manuali per costruire armi: minorenne arrestato per terrorismo",
+          "original_language": "it",
+          "summary": "A minor has been arrested in Italy on terrorism charges after planning attacks against journalists and magistrates using downloaded weapons-making manuals.",
+          "published": "2026-06-17T07:00:00+00:00",
+          "source": "BolognaToday",
+          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPQXZycEZwdnMxZjBXUURkN2gwbnB4dWJIMUJsUkpfQ1hrY0Jpajd2UEt4c25OTFVXbnN4UlN0ZXdqRVg5VTU4eXdlUDN6cEk0OHA1clMxZm5KRzJxVklNc0JYZ3M3RTVPWlc0ZUdpTXF3SWFqbTk1eFdrZnlKZ2d3aklNanpuNjkydTh0VnhFdDVSanQyRVNrYjZvcWE5M3BsYTI1dg?oc=5"
+        },
+        {
+          "title": "16-year-old ISIS and Nazi sympathizer arrested over plot targeting judges and journalists",
+          "original_title": "Arrestato sedicenne fan di Isis e nazisti. \"Voleva colpire giudici e giornalisti\"",
+          "original_language": "it",
+          "summary": "Italian authorities have arrested a 16-year-old fan of ISIS and neo-Nazism who allegedly planned attacks against judges and journalists.",
+          "published": "2026-06-18T07:00:00+00:00",
+          "source": "il Giornale",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNbnJCc1hRRHh5ckV6SnFXa1NyV3RrSGxfZktDLVdSWVZ1M3hkSi1XUk01TjNsN0czWWx2b2VGR0gwNU1ZQWEtallObGg0VDgyWmpCS3FXbk4zQ2QzN3k1SjNwU2JyRm1rcUtKQTRHRDc2MTNkSGxBaUJTT0xSZUpkRHVaQnc4Nnc5Z3hIZUJZc2ZIY2s1Tm5iYS1McjNaZmg5R2dpYjJ6Yy0wZw?oc=5"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-06-17T07:00:00+00:00",
-      "last_reported": "2026-06-17T07:00:00+00:00",
+      "last_reported": "2026-06-18T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
+      "ai_relevance_score": 90,
       "ai_relevance_reason": "Counter-terrorism arrest involving radicalization, online propaganda, and weapons instructions.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -305670,70 +304755,13 @@
       "ai_geo_reason": "Arrest carried out by Italian authorities.",
       "ai_geo_fingerprint": "d16f239ae766f0f211592d2b584f1f5944370475d6185616a8cc78a7f3373ccb",
       "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "1b9780aade569b17",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Online / Cyber / AI",
-        "Weapons"
-      ],
-      "title": "Minor arrested for terrorism after planning attacks on journalists and magistrates with weapons manuals",
-      "summary": "A minor has been arrested in Italy on terrorism charges after planning attacks against journalists and magistrates using downloaded weapons-making manuals.",
-      "original_title": "Vuole colpire \"giornalisti e magistrati\" e ha manuali per costruire armi: minorenne arrestato per terrorismo",
-      "original_summary": "Vuole colpire \"giornalisti e magistrati\" e ha manuali per costruire armi: minorenne arrestato per terrorismo BolognaToday",
-      "original_language": "it",
-      "collection_language": "it",
-      "collection_language_name": "Italian",
-      "collection_locale": "IT:it",
-      "published": "2026-06-17T07:00:00+00:00",
-      "source": "BolognaToday",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPQXZycEZwdnMxZjBXUURkN2gwbnB4dWJIMUJsUkpfQ1hrY0Jpajd2UEt4c25OTFVXbnN4UlN0ZXdqRVg5VTU4eXdlUDN6cEk0OHA1clMxZm5KRzJxVklNc0JYZ3M3RTVPWlc0ZUdpTXF3SWFqbTk1eFdrZnlKZ2d3aklNanpuNjkydTh0VnhFdDVSanQyRVNrYjZvcWE5M3BsYTI1dg?oc=5",
-      "collector": "Google News RSS",
-      "country": "Italy",
-      "country_code": "IT",
-      "city": "Bologna",
-      "region": null,
-      "latitude": 44.49381,
-      "longitude": 11.33875,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "BolognaToday"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-17T07:00:00+00:00",
-      "last_reported": "2026-06-17T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Terrorism arrest of an individual planning attacks against specific targets.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Italian authorities arrest minor for terrorism plotting attacks against journalists and magistrates",
-      "title_variants": [
-        "Italian authorities arrest minor for terrorism plotting attacks against journalists and magistrates"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "A minor has been arrested in Italy"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Reported by BolognaToday about an arrest in Italy for terrorism.",
-      "ai_geo_fingerprint": "b2447e942aea58aafe1b5ca002676eb97c9576e627bba2095e7a181f74c8c26f",
-      "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-3e6d65b141a7ccd8",
+      "source_article_fingerprints": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "e9e0ed505cde8ca3",
@@ -305796,7 +304824,8 @@
       "ai_geo_reason": "Country-wide operation by Turkish authorities.",
       "ai_geo_fingerprint": "0f049de534c99b34d28c77d0870e655f48b69432b8c626ba7f3d42218ba3ac89",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-f456f969d0c97315"
     },
     {
       "id": "ae41407bd71497d0",
@@ -305860,7 +304889,8 @@
       "ai_geo_reason": "Operation conducted by Turkey's MIT.",
       "ai_geo_fingerprint": "1acb01c9b43445609b5a3b4e1c4fdaa51bc63b46679d5bc3c937e3856c589be6",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-8d2ce7185dff8efd"
     },
     {
       "id": "665e5c0dc9dabacc",
@@ -305991,7 +305021,8 @@
       "ai_geo_reason": "Explicitly occurred in Voronezh Oblast, Russia.",
       "ai_geo_fingerprint": "e4a44c3ecc0e9e511888a585e69b28b2dcb2c558634b65740cb78397bb2ff7c3",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-4344d9a42877881d"
     },
     {
       "id": "08ae699c39f09112",
@@ -306058,7 +305089,8 @@
       "ai_geo_reason": "The Gulf of Aden is the primary body of water off the coast of Somalia where maritime piracy attacks typically occur.",
       "ai_geo_fingerprint": "90ae5e257e7bf27e5143cb5b40a85aeca1ed04c1da2c31c20eb517b562f941f0",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-5e1587ea86514386"
     },
     {
       "id": "46346167e9d5f703",
@@ -306125,7 +305157,8 @@
       "ai_geo_reason": "Explicitly refers to Somalia's southern region.",
       "ai_geo_fingerprint": "a9d2550e1dc2c50790009143eeefd5ba299bfb69ad42cca6f81a7ae6808cf866",
       "ai_geo_inferred": false,
-      "actor_group": "Al-Shabaab"
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-b1f6556e86fbe8af"
     },
     {
       "id": "2baad98fda290d64",
@@ -306187,7 +305220,8 @@
       "ai_geo_reason": "Explicitly occurred in the Basque Country, Spain.",
       "ai_geo_fingerprint": "fc43ca79b0f09e0b9d79243935a669660408025664cdacccf8dd18d6d253ffa4",
       "ai_geo_inferred": false,
-      "actor_group": "Hezbollah"
+      "actor_group": "Hezbollah",
+      "incident_id": "inc-7f8f8d6bec8d743d"
     },
     {
       "id": "5ff2d269a2140e75",
@@ -306249,7 +305283,8 @@
       "ai_geo_reason": "Operated from within Spain.",
       "ai_geo_fingerprint": "30b765168cc4abc43036e3638c766085e8c3fe1ca844b57b3800b5cb3303c5de",
       "ai_geo_inferred": true,
-      "actor_group": "Hezbollah"
+      "actor_group": "Hezbollah",
+      "incident_id": "inc-7f8f8d6bec8d743d"
     },
     {
       "id": "f9de5fb541df4e3c",
@@ -306268,7 +305303,7 @@
       "collection_locale": "TR:tr",
       "published": "2026-06-16T07:00:00+00:00",
       "source": "Hürriyet",
-      "source_count": 1,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQSHVjd2s1S2FBM1VsbU5mV2VxLVk3UkhkTUVkVFlvX1JYTTVrR0Z0T2NPZ0hlYWtxR21DRVZCQnFCbkhDcHVobzZ6Mk5FZFRob2o0aVhaRVl2RTlSc2N2SVNNbzZpT1kyVjQ2cEd0RU83V1FPOHgzZUlCZWhlUW5yaFItYmZpbzZXYnRBcjN2bjhuMFRaZ0xzdUp5S1l3b3hIOEo0QjVsUVduLVc0?oc=5",
       "collector": "Google News RSS",
       "country": "United States",
@@ -306281,16 +305316,37 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "sources": [
-        "Hürriyet"
+        "Hürriyet",
+        "Le Monde.fr",
+        "tagesschau.de"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Attacked thwarted before MMA fight at the White House, according to US authorities",
+          "original_title": "Un projet d’attentat déjoué avant le combat de MMA à la Maison Blanche, selon les autorités américaines",
+          "original_language": "fr",
+          "summary": "U.S. authorities report that a terrorist attack plot was foiled ahead of a mixed martial arts event at the White House.",
+          "published": "2026-06-17T07:00:00+00:00",
+          "source": "Le Monde.fr",
+          "url": "https://news.google.com/rss/articles/CBMihwJBVV95cUxNVHpWZFhRWXJHVlYxZ3pxUktRMXllQTI0amhXR0xqTUhTc041TUNTamRWMXdhTzBKdXlIT3JZOEo5TC1NSExCTm5GcmhNZ0pBWkFEWmJ6WWJ5bjRGQnQ1QWgxeVZZdFRETXItMzBsUlF1Ry1QSVRqQWxpTXFzN01vVzJQbXVzX0ZPMFVFR0VEWGNHaFdRYUNEVUttTkdrMks3MDd5ZEtjcmRNbFdEVU53YVlqREhCTzhMd1BXaUtKSGlsZkhWaXZKZmZJcVhvUk5Hb20xbU5aRkQ1M0pObktIM0huOVdHRDd6YWtiSFUyMl9MaWxXR3U4SVRyR29yTFpabTh4R3MxMA?oc=5"
+        },
+        {
+          "title": "FBI foils possible attack on Trump's birthday, according to reports",
+          "original_title": "Laut FBI wurde ein möglicher Anschlag auf Trumps Geburtstag vereitelt",
+          "original_language": "de",
+          "summary": "According to the FBI and German news sources, a potential attack plot targeting Donald Trump's birthday has been thwarted.",
+          "published": "2026-06-17T07:00:00+00:00",
+          "source": "tagesschau.de",
+          "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQWlY1amx4QUJsbUp0UVl3LTZLaGRlRHJMRW5JdElYUUduS2FwLTVkSEFtRGJvaVRIXzRzTm1ZWHRMQkdGb3lDZGtUMHFfdFpIY1p0cFBXeUpuY000RVF5X0lCb1ktLWhOQXZWeVdRNVF5X3FWak84M01EMzI5dDBHVA?oc=5"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-06-16T07:00:00+00:00",
-      "last_reported": "2026-06-16T07:00:00+00:00",
+      "last_reported": "2026-06-17T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
+      "ai_relevance_score": 90,
       "ai_relevance_reason": "Disrupted terrorist plot against a major state target with official investigative response.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -306311,7 +305367,13 @@
       "ai_geo_reason": "Targeted the White House in Washington, DC.",
       "ai_geo_fingerprint": "f57c40a94cc2df8312a3e44f1a09e28e5672b9de06ca8248ee40fec05dcc9c4e",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-cb8e551a3bbe5ed6",
+      "source_article_fingerprints": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "95a580844f5419c8",
@@ -306373,7 +305435,8 @@
       "ai_geo_reason": "Federal agency action based in Moscow, Russia.",
       "ai_geo_fingerprint": "8cd6fe0305dbf6349e2e65cbbec9dcdd8bfc29e4509691584f1e0eee28a2a1df",
       "ai_geo_inferred": true,
-      "actor_group": "Russian Anti-War Committee"
+      "actor_group": "Russian Anti-War Committee",
+      "incident_id": "inc-af25eea769426fae"
     },
     {
       "id": "1c14e8b205e61ee0",
@@ -306440,7 +305503,8 @@
       "ai_geo_reason": "Explicitly mentions the Mopti region in Mali.",
       "ai_geo_fingerprint": "c7653e4ddc4d8812d8f99b7a78d3ed42668382822132376470cb0f85bda4d9e4",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-d4fb935e7b9065a7"
     },
     {
       "id": "accf90d60c8a3520",
@@ -306507,7 +305571,8 @@
       "ai_geo_reason": "Explicitly mentions Borno State, Nigeria.",
       "ai_geo_fingerprint": "db7c5fc8567f4913d0f48aa06e40048fdfb51fdf8cc527a0b7df94cf72f44480",
       "ai_geo_inferred": false,
-      "actor_group": "ISWAP"
+      "actor_group": "ISWAP",
+      "incident_id": "inc-ff964d7aa5fda7a4"
     },
     {
       "id": "60f8fea1b87db285",
@@ -306651,7 +305716,8 @@
       "ai_geo_reason": "Reported by Nigerian media regarding military operations against arms traffickers.",
       "ai_geo_fingerprint": "406575b9cbdec3f2e8582d58d866f961300c6b79dc2866b0b0071a92935bb130",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-a8d7de03498e681d"
     },
     {
       "id": "d1e0a42523a3f9de",
@@ -306726,7 +305792,8 @@
       "ai_geo_reason": "Explicitly occurred in Abuja, Nigeria.",
       "ai_geo_fingerprint": "47c60c4334310f1025aa36cb9b65fe808a1c2687fc631c4696a6d581b27e8d80",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-4ab4a8d92ec09a5b"
     },
     {
       "id": "f6061e6642fef285",
@@ -306804,7 +305871,8 @@
       "ai_geo_reason": "Ruling by the UK Court of Appeal in London.",
       "ai_geo_fingerprint": "c807d32fd1e37bbd839a289b73121b8122292046553497520e3ae7008ad6d03d",
       "ai_geo_inferred": true,
-      "actor_group": "Palestine Action"
+      "actor_group": "Palestine Action",
+      "incident_id": "inc-cde3a2a2934bb777"
     },
     {
       "id": "79f54607c06e2bbb",
@@ -306871,7 +305939,8 @@
       "ai_geo_reason": "Maritime piracy events spanning coastal waters of Yemen and Somalia.",
       "ai_geo_fingerprint": "a5a3b0160afda610e4e22664b84bc407c29809bbd2cf108f1a12c69076518972",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-9e94203bf3153c61"
     },
     {
       "id": "da361ebb157926c1",
@@ -306938,7 +306007,8 @@
       "ai_geo_reason": "National-level financial and security counter-terrorism operations in Iraq.",
       "ai_geo_fingerprint": "33b5284764827dca9c5ea5173d8bb2add83957f7b411f16cc7733fb11b48c285",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-cfe8fdd2dafa3cbf"
     },
     {
       "id": "e485c10106753083",
@@ -307008,7 +306078,8 @@
       "ai_geo_reason": "Conducted by the Nigerian Army within Nigeria.",
       "ai_geo_fingerprint": "f978373d78ffddc65e248a70339b2f72ea04bc958f1a53fe25f48659aaea4ca2",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-2ac58d6d2359c0a7"
     },
     {
       "id": "74365053c869d5fb",
@@ -307141,7 +306212,8 @@
       "ai_geo_reason": "Detained at Heathrow Airport, London, UK.",
       "ai_geo_fingerprint": "f459246f07eb950eaadc77bf94e60bcb3ce5604eb316dfcc51a987eaef6eba18",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-a396d2aa70b89713"
     },
     {
       "id": "ed183c791e2d0d44",
@@ -307202,7 +306274,8 @@
       "ai_geo_reason": "Explicitly occurred in La Rinconada, Spain.",
       "ai_geo_fingerprint": "b49eba1d7422315f054ca856025d23d32a2262b732f4d106983435ed21029643",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-38f052c12bee8f52"
     },
     {
       "id": "7b14e5155ca0869f",
@@ -307290,7 +306363,8 @@
       "source_article_fingerprints": [
         "1a93d04a05a73bec75b892cb2d7833d2f1a81b74ea018c0178f4d766b5bf54c2"
       ],
-      "actor_group": "Al-Shabaab"
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-24a6a51ef95e9890"
     },
     {
       "id": "66e9af1db95c63c5",
@@ -307380,7 +306454,8 @@
       "ai_geo_reason": "The event is a trial in a UK court regarding Palestine Action activists.",
       "ai_geo_fingerprint": "5dd05b3246a48fc7e26223b02d92cffb8f5640171a315dca590862b513159e37",
       "ai_geo_inferred": true,
-      "actor_group": "Palestine Action"
+      "actor_group": "Palestine Action",
+      "incident_id": "inc-f176757e264e808b"
     },
     {
       "id": "4f4e60c4b8bc09dc",
@@ -307441,7 +306516,8 @@
       "ai_geo_reason": "Official figures from Moroccan security agencies covering operations nationwide.",
       "ai_geo_fingerprint": "1a3c2364fa4929b8aad15659585920a14983c55a92d459601a3796e3e34da76d",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-35baadfcf4bb71c5"
     },
     {
       "id": "83ab7a7ded3b155b",
@@ -307504,7 +306580,8 @@
       "ai_geo_reason": "Announcement by the Nigerian President regarding military operations across the country.",
       "ai_geo_fingerprint": "42c011a1584785501a284db47055402ec9ee811aefbd776d5f8cc1b3f57262a4",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-10e5eed84f6b1dcb"
     },
     {
       "id": "b612974eacb77a04",
@@ -307713,7 +306790,8 @@
       "ai_geo_reason": "Al-Karkh is a district/court in Baghdad, Iraq.",
       "ai_geo_fingerprint": "3e06340d019a5f9df9b267866ae61ddfdc0d753659132cb81d51520a467e684a",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-769c2119b6072d9a"
     },
     {
       "id": "9027d42578058f2a",
@@ -307841,7 +306919,8 @@
       "ai_geo_reason": "Explicitly states the expulsion and radicalization context occurred in Turin, Italy.",
       "ai_geo_fingerprint": "67d09135cc1fcdbc8f193188acaa4179045de08d447081c55622d2252570db96",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-9e15db2d96228904"
     },
     {
       "id": "f2e135267c6be43b",
@@ -307990,7 +307069,8 @@
       "ai_geo_reason": "Explicitly stated event location in Borno State, Nigeria.",
       "ai_geo_fingerprint": "2aa8d3324af6d7500917979099e3128383ac5652ca061e333e6b4b7ec237a1c2",
       "ai_geo_inferred": false,
-      "actor_group": "ISWAP"
+      "actor_group": "ISWAP",
+      "incident_id": "inc-e3cb3f852125d56d"
     },
     {
       "id": "e2f7d191d5fb3104",
@@ -308158,7 +307238,8 @@
       "actor_group": "ISIS",
       "source_article_fingerprints": [
         "7ab6be9363bf22c3d8545b453046643fe0682f7e07aa91d6d32e7046fc36c2f4"
-      ]
+      ],
+      "incident_id": "inc-2ef76d7e0953cb2c"
     },
     {
       "id": "0fc6c310dd3bc353",
@@ -308219,7 +307300,8 @@
       "ai_geo_reason": "Involves a former U.S. Navy sailor and federal/military context indicating the United States.",
       "ai_geo_fingerprint": "d8499970c1d9c07c88f1ff451e4bbd3e659579dee1a9e0243f6ebf1177e30fc6",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-d6cccd12d503f245"
     },
     {
       "id": "66cb528197127aef",
@@ -308286,7 +307368,8 @@
       "ai_geo_reason": "The Gulf of Aden is situated between Yemen and Somalia.",
       "ai_geo_fingerprint": "b72d71c38f0630eb064da90f65b6fd347544807c9b9a62e89ba2c624b8b9610f",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-64e1efae9a4dbd70"
     },
     {
       "id": "c2e1d01ca18f4c1f",
@@ -308353,7 +307436,8 @@
       "ai_geo_reason": "Explicitly stated off the coast of Yemen.",
       "ai_geo_fingerprint": "84f6088ac59e382f4ae8bd7dcb4b2ebb5a7d30f811b6dbe9a4c0d375aeb8f367",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-c6515422a1c6c2da"
     },
     {
       "id": "47874386a6b8db24",
@@ -308413,7 +307497,8 @@
       "ai_geo_reason": "Suspect is from New Jersey, investigated by the U.S. Department of Justice.",
       "ai_geo_fingerprint": "4b87dc0eb5b0871d0573a655ab4c76ce45bc5349b5f422475b4f2a2c2fbfc101",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-f016289eef015146"
     },
     {
       "id": "b66edcc5acc8af15",
@@ -308589,7 +307674,8 @@
       "ai_geo_reason": "Counter-terrorism operation centered in Şanlıurfa, Turkey.",
       "ai_geo_fingerprint": "6c2de3d1c6bf2dc318478bfea501a102b81e51cf966841ea5c6c6617aac51e38",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-329002f4509c26c3"
     },
     {
       "id": "98bd4f88816540c3",
@@ -308791,7 +307877,8 @@
       "ai_geo_reason": "ReCAAP Information Sharing Centre is headquartered in Singapore.",
       "ai_geo_fingerprint": "ce11f753ef164953fe25be251a4fd1decfb631664f5467c6b16e5c8b923c3623",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-c2450c1e8dddab13"
     },
     {
       "id": "71165b5e9dbffb79",
@@ -308875,76 +307962,9 @@
       "ai_geo_reason": "The terror plot and subsequent felony charges occurred in Greece.",
       "ai_geo_fingerprint": "28b851fed0b4a8e36cf680c80ed020d77f8edf4a6a6f70d003bfb32bf5a7dd6d",
       "ai_geo_inferred": true,
-      "actor_group": "Hamas"
-    },
-    {
-      "id": "7a1c158560edc1eb",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Counter Terrorism Action"
-      ],
-      "title": "Crete: Terror plot suspected? Police arrest suspect",
-      "summary": "Greek police on Crete arrested a suspect amid suspicions of planning a terrorist act.",
-      "original_title": "Kréta : Chystal se teror ? Policie zatkla podezřelého",
-      "original_summary": "",
-      "original_language": "cs",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-06-08T08:15:00+00:00",
-      "source": "blesk.cz",
-      "source_count": 1,
-      "url": "https://www.blesk.cz/clanek/zpravy-krimi/841179/raj-cechu-v-ohrozeni-teror-na-krete.html",
-      "collector": "GDELT DOC 2.0",
-      "acquisition_channel": "gdelt_doc_search",
-      "country": "Greece",
-      "country_code": "GR",
-      "city": null,
-      "region": "Crete",
-      "latitude": 35.2401,
-      "longitude": 24.8093,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "source_article_fingerprints": [
-        "965557ad4c677361dd2e10309c6227e0ba50b6baf9077b6da69b9120ef877edf"
-      ],
-      "sources": [
-        "blesk.cz"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-08T08:15:00+00:00",
-      "last_reported": "2026-06-08T08:15:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v4-counter-terrorism-action",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Arrest of a suspect on suspicion of preparing a terrorist attack.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "arrest of terrorism suspect by police in Crete, Greece",
-      "title_variants": [
-        "arrest of terrorism suspect by police in Crete, Greece"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Crete: Terror plot suspected? Police arrest suspect"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Greek police arrested the suspect on the island of Crete.",
-      "ai_geo_fingerprint": "cf0c6900040c91aa4a5603f826d3e9824c0e63bccc46da90f4a53aae7b7e3fbc",
-      "ai_geo_inferred": false,
-      "actor_group": "Hamas"
+      "actor_group": "Hamas",
+      "incident_id": "inc-f129b385f65d1438",
+      "incident_anchor": "Greece Hamas operative arrest 2026-06-07"
     },
     {
       "id": "b3aa383bb50e0fd2",
@@ -309004,7 +308024,8 @@
       "ai_geo_reason": "Pakistani government officials discussing the release of Pakistani citizens.",
       "ai_geo_fingerprint": "ce77c7b8b94d7ee20ce38609bb88c977c2f6ef8bb6e0c7e2523bfa052185fe75",
       "ai_geo_inferred": true,
-      "actor_group": "Somali pirates"
+      "actor_group": "Somali pirates",
+      "incident_id": "inc-4b78c851411fe7a9"
     },
     {
       "id": "680f08857963d415",
@@ -309082,7 +308103,8 @@
       "ai_geo_reason": "Charges brought by the DOJ against a resident of Passaic, New Jersey.",
       "ai_geo_fingerprint": "35bd6905fbaa83e4677aded5adfa854db7234d2d74dd9cec1eb06bb771a0e1cb",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-f016289eef015146"
     },
     {
       "id": "dfb5caec20a9786d",
@@ -309242,7 +308264,7 @@
       "collection_locale": null,
       "published": "2026-06-07T07:00:00+00:00",
       "source": "i24NEWS",
-      "source_count": 4,
+      "source_count": 5,
       "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPUTIwS05SQmx6X3BsekM3TExwZkIxMm9XMUhvdFdxQjJqNVhGVURpTDdVV05Ya2dUTi1XQnpIbFh6WVZ4c3lfTlYyQVlWT2d2NWpMS2VWWFR0eE0xemlKVG9WNmtLa3pTbFZIVkRiZTV6MVQwZXhnVXRRRnFNYkZaYk9FeGd4OXhZZHAtVGR2OWlDZDAtXzRhSWtZaVhOSUhzRWpEcTVpVQ?oc=5",
       "collector": "Google News RSS",
       "country": "Israel",
@@ -309257,7 +308279,8 @@
         "The Times of Israel",
         "ynetnews.com",
         "i24NEWS",
-        "JNS.org"
+        "JNS.org",
+        "הארץ"
       ],
       "related_articles": [
         {
@@ -309286,9 +308309,18 @@
           "published": "2026-06-07T07:00:00+00:00",
           "source": "i24NEWS",
           "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPN243LXlMSC16UDlES3ZVM2NPOXdPMlVFODRXaGFKd19Sb21XOUJFVU9MWjV2TWI2QXVZRHBDZVFld1FWQVJ5MTNEMFEyMmNsRTAxWVdWR3pGLUo5amg5TzU1cU5mV1lZaXdKWmp6S1k2NnZOeWRqRTNMMmpCUWZRRF9nWVV5b1ZSX0ZyVG13SzVPakd1MTNlWlBZWkFyM1NiUFFEZlV5ZDl1dGxsM0xjRHJXLWlaWEhQMWxtNXdhNTgyWG0zMHhTX05pRE5SQWs?oc=5"
+        },
+        {
+          "title": "Shooting attack in Kochav Yair area: Reserve soldier killed, five injured",
+          "original_title": "פיגוע ירי באזור כוכב יאיר: לוחם במיל' נהרג, חמישה נפצעו בהם שניים קשה",
+          "original_language": "he",
+          "summary": "A shooting attack near Kochav Yair left a reserve soldier dead and five others injured, two of them seriously.",
+          "published": "2026-06-07T07:00:00+00:00",
+          "source": "הארץ",
+          "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOUWJYMFRkSXNkbWRWZEFFeG91WmVJd1FvTG00eGZuUldTbTdqcldlXzRwMF92SThIY2djQWlGWFprN0xvS3FOOFZJNGRJY0hHXzY3d202REdNSEp0RXI2TjZHR2FYQ2ZEYjQ5al9VdlR4YnhSUjV4amdXVGpOTEhDMElnUXZaRXRFYmk0VVR2YzN2U2pBV3JSd3FmWW1vajQ?oc=5"
         }
       ],
-      "article_count": 3,
+      "article_count": 4,
       "first_reported": "2026-06-07T07:00:00+00:00",
       "last_reported": "2026-06-07T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -309304,9 +308336,10 @@
         "terror shooting spree by Arab Israeli in central Israel resulting in casualties",
         "shooting attack in central Israel kills IDF reservist"
       ],
-      "dedup_confidence": 0.638,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "paraphrase_entity_context"
+        "paraphrase_entity_context",
+        "same_incident"
       ],
       "location_confidence_score": 1.0,
       "location_method": "ai_region_coordinates",
@@ -309323,15 +308356,17 @@
       "actor_group": "",
       "primary_event_type": "ATTACK",
       "is_attack": true,
-      "incident_anchor": "central Israel shooting attack 2026-06-07",
+      "incident_anchor": "Sharon region shooting attack Israel 2026-06",
       "update_type": "INITIAL",
-      "incident_id": "inc-f3b2c09d762cf1d7"
+      "incident_id": "inc-3798835911410621",
+      "source_article_fingerprints": []
     },
     {
       "id": "f20566d7f2644ae5",
       "category": "Arrests",
       "categories": [
-        "Arrests"
+        "Arrests",
+        "Counter Terrorism Action"
       ],
       "title": "Terror suspect arrested in Crete over suspected Hamas ties and cruise ship attack plot",
       "summary": "Philenews reports that a terror suspect has been arrested in Crete in connection with suspected Hamas ties and a plot to attack a cruise ship.",
@@ -309343,7 +308378,7 @@
       "collection_locale": null,
       "published": "2026-06-07T07:00:00+00:00",
       "source": "Philenews",
-      "source_count": 1,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOLWo1UlVRcUdjYmlDUWF5dlFPNDQ0UXR3UjQtVXoyd1pVUlVHUmdieEQzTWNTNm4ySXg0amtjTWJZU3ZDLV9zemlDUnI0R0RsNTdwMjVlaklZeVNNemw0c1JwamZqSGJYUU9DRlQ0QTduVkxEaEp3cHVnRk5sX0xRd21kTkx1X0RBRWRiT2U1dWZyRDA?oc=5",
       "collector": "Google News RSS",
       "country": "Greece",
@@ -309355,12 +308390,33 @@
       "location_precision": "region",
       "location_confidence": "high",
       "sources": [
-        "Philenews"
+        "Philenews",
+        "JNS.org",
+        "blesk.cz"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Greek police arrest Palestinian over alleged Hamas terror plot",
+          "original_title": "Greek police arrest Palestinian over alleged Hamas terror plot",
+          "original_language": "en",
+          "summary": "Greek law enforcement authorities arrested a Palestinian national suspected of involvement in a planned Hamas terror plot.",
+          "published": "2026-06-07T07:00:00+00:00",
+          "source": "JNS.org",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOTE5SemJEaFdaSkIxelB2dFA3aFA0UF8xVGdNVFRZQ1dVNFBta2xwTnZOYjEyZDZmRHRTRHh5VHFUNEZ5emNWQS1rdnR0Ri1HUXliV0haaXhKY3Y1RFhLOTgwblFPSXFBVkxwSC03U3VCSjJwWVpSRWFKQXB5RWdqMzh2cVU2MW8yQzE0YlN3WFhaaHl3Q1Bxag?oc=5"
+        },
+        {
+          "title": "Crete: Terror plot suspected? Police arrest suspect",
+          "original_title": "Kréta : Chystal se teror ? Policie zatkla podezřelého",
+          "original_language": "cs",
+          "summary": "Greek police on Crete arrested a suspect amid suspicions of planning a terrorist act.",
+          "published": "2026-06-08T08:15:00+00:00",
+          "source": "blesk.cz",
+          "url": "https://www.blesk.cz/clanek/zpravy-krimi/841179/raj-cechu-v-ohrozeni-teror-na-krete.html"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-06-07T07:00:00+00:00",
-      "last_reported": "2026-06-07T07:00:00+00:00",
+      "last_reported": "2026-06-08T08:15:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -309385,67 +308441,16 @@
       "ai_geo_reason": "Arrest occurred on the island of Crete, Greece.",
       "ai_geo_fingerprint": "871fc4e4de1bd6301599e9071b7658c755ba79ebafa2e13695d8ffae4209d5d0",
       "ai_geo_inferred": false,
-      "actor_group": "Hamas"
-    },
-    {
-      "id": "c926969ace13dec3",
-      "category": "Arrests",
-      "categories": [
-        "Arrests"
+      "actor_group": "Hamas",
+      "incident_id": "inc-f129b385f65d1438",
+      "incident_anchor": "Greece Hamas operative arrest 2026-06-07",
+      "source_article_fingerprints": [
+        "965557ad4c677361dd2e10309c6227e0ba50b6baf9077b6da69b9120ef877edf"
       ],
-      "title": "Greek police arrest Palestinian over alleged Hamas terror plot",
-      "summary": "Greek law enforcement authorities arrested a Palestinian national suspected of involvement in a planned Hamas terror plot.",
-      "original_title": "Greek police arrest Palestinian over alleged Hamas terror plot",
-      "original_summary": "Greek police arrest Palestinian over alleged Hamas terror plot JNS.org",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-06-07T07:00:00+00:00",
-      "source": "JNS.org",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOTE5SemJEaFdaSkIxelB2dFA3aFA0UF8xVGdNVFRZQ1dVNFBta2xwTnZOYjEyZDZmRHRTRHh5VHFUNEZ5emNWQS1rdnR0Ri1HUXliV0haaXhKY3Y1RFhLOTgwblFPSXFBVkxwSC03U3VCSjJwWVpSRWFKQXB5RWdqMzh2cVU2MW8yQzE0YlN3WFhaaHl3Q1Bxag?oc=5",
-      "collector": "Google News RSS",
-      "country": "Greece",
-      "country_code": "GR",
-      "city": "Athens",
-      "region": null,
-      "latitude": 37.98376,
-      "longitude": 23.72784,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "sources": [
-        "JNS.org"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-07T07:00:00+00:00",
-      "last_reported": "2026-06-07T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Counter-terrorism arrest connected to an international terrorist organization's plot.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Greek police arrest of a Palestinian national over an alleged Hamas terrorist plot",
-      "title_variants": [
-        "Greek police arrest of a Palestinian national over an alleged Hamas terrorist plot"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Greek police arrest Palestinian over alleged Hamas terror plot"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The arrest took place in Greece by Greek police, but no specific city is mentioned, defaulting to the country level.",
-      "ai_geo_fingerprint": "be33eecbdccde761f9034b1f69f3b80117ebac58cad9158286f606690d247c3e",
-      "ai_geo_inferred": true,
-      "actor_group": "Hamas"
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "e9954e088dede8dd",
@@ -309529,75 +308534,6 @@
       "incident_id": "inc-f129b385f65d1438"
     },
     {
-      "id": "e9954e088dede8dd",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Shooting attack in Kochav Yair area: Reserve soldier killed, five injured",
-      "summary": "A shooting attack near Kochav Yair left a reserve soldier dead and five others injured, two of them seriously.",
-      "original_title": "פיגוע ירי באזור כוכב יאיר: לוחם במיל' נהרג, חמישה נפצעו בהם שניים קשה",
-      "original_summary": "פיגוע ירי באזור כוכב יאיר: לוחם במיל' נהרג, חמישה נפצעו בהם שניים קשה הארץ",
-      "original_language": "he",
-      "collection_language": "he",
-      "collection_language_name": "Hebrew",
-      "collection_locale": "IL:he",
-      "published": "2026-06-07T07:00:00+00:00",
-      "source": "הארץ",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOUWJYMFRkSXNkbWRWZEFFeG91WmVJd1FvTG00eGZuUldTbTdqcldlXzRwMF92SThIY2djQWlGWFprN0xvS3FOOFZJNGRJY0hHXzY3d202REdNSEp0RXI2TjZHR2FYQ2ZEYjQ5al9VdlR4YnhSUjV4amdXVGpOTEhDMElnUXZaRXRFYmk0VVR2YzN2U2pBV3JSd3FmWW1vajQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Israel",
-      "country_code": "IL",
-      "city": "Kochav Yair",
-      "region": null,
-      "latitude": 32.235,
-      "longitude": 34.965,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "haaretz.co.il",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "הארץ"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-07T07:00:00+00:00",
-      "last_reported": "2026-06-07T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Terrorist shooting attack resulting in fatalities and injuries in Israel.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "shooting attack near Kochav Yair kills reserve soldier",
-      "title_variants": [
-        "shooting attack in Kochav Yair area resulting in casualties",
-        "shooting attack near Kochav Yair kills reserve soldier"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_coordinates",
-      "location_evidence": [
-        "Shooting attack near Kochav Yair left a reserve soldier dead"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly occurred near Kochav Yair, Israel.",
-      "ai_geo_fingerprint": "6757c1209e9409c944eb5b1bd31a63892f0348cc0bc7b8649fd193554dfda410",
-      "ai_geo_inferred": false,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Kochav Yair shooting attack 2026-06-07",
-      "update_type": "INITIAL",
-      "incident_id": "inc-cb0c8a7a9d35305f"
-    },
-    {
       "id": "6e293ffba9dc23d0",
       "category": "Attacks",
       "categories": [
@@ -309667,140 +308603,6 @@
       "incident_id": "inc-3798835911410621"
     },
     {
-      "id": "ea03aa09813d5070",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Boko Haram releases 416 abducted women and children in Borno",
-      "summary": "Boko Haram released 416 abducted women and children in Borno State, according to a local youth leader.",
-      "original_title": "Boko Haram releases 416 abducted women, children — Borno youth leader",
-      "original_summary": "Boko Haram releases 416 abducted women, children — Borno youth leader Punch Newspapers",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-06-07T07:00:00+00:00",
-      "source": "Punch Newspapers",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQNzFZcFhJSVl0WHU2bnVMUnBMempwRzZFNEJFWWRwN3pYNFhZTzdWOWs3TElWVzlEMkU1T2RyQnh3NzVMbWNfZ2dBeUl2dU1iR0FXdGlMY19xMGU3UzlMZzdkZnJjOFg2LVFLTmF4SDdqWU9Pal9tclY1dFltZEpGV043QklVSmpoa3NDaE90SV9fUi1nbmxETHdVOFFqQ2M?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": null,
-      "region": "Borno State",
-      "latitude": 11.833333,
-      "longitude": 13.15,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "punchng.com",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "Punch Newspapers"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-07T07:00:00+00:00",
-      "last_reported": "2026-06-07T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Direct reporting of a significant counter-terrorism related hostage release involving Boko Haram.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Boko Haram releases 416 abducted captives in Borno",
-      "title_variants": [
-        "Boko Haram releases 416 abducted captives in Borno"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Boko Haram releases 416 abducted women and children in Borno State"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly stated in Borno State, Nigeria.",
-      "ai_geo_fingerprint": "e87ae98da2feca2f648ed3f0624db8433fc5a51848de10136dcc22761be323d7",
-      "ai_geo_inferred": false,
-      "actor_group": "Boko Haram"
-    },
-    {
-      "id": "3c730d7cc1adede6",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Hundreds of captives freed from Boko Haram mountain hideout",
-      "summary": "Hundreds of captives have been freed from a Boko Haram mountain hideout.",
-      "original_title": "Hundreds of captives freed from Boko Haram mountain hideout",
-      "original_summary": "Hundreds of captives freed from Boko Haram mountain hideout the-star.co.ke",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-06-07T07:00:00+00:00",
-      "source": "the-star.co.ke",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPVmtZRTdfeUlURUNqbGZCejA0WHZLVVRvaDZtbGlMR1lvRkE5YkN2S2Ryb2NEcktMSVR5dlhDMThrYnUtWVZiLVEtYUd5OE1aQVJvM1ZsWlgycVUyRE5ZeUc4M0ViQUdqOVBNMVAza2JZOHRDQVpBQk9RV1BwSGlmdTNxWU5paWRCekdfREZjQ0tnaDhOSndsdnltRGFlLWdBZXUxNUZaZDZKTDhR?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": null,
-      "region": "Borno State",
-      "latitude": 11.833333,
-      "longitude": 13.15,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "the-star.co.ke",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "the-star.co.ke"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-07T07:00:00+00:00",
-      "last_reported": "2026-06-07T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Relates to ongoing counter-terrorism operations and hostage rescue involving Boko Haram.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Captives freed from Boko Haram mountain hideout",
-      "title_variants": [
-        "Captives freed from Boko Haram mountain hideout"
-      ],
-      "location_confidence_score": 0.85,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Hundreds of captives freed from Boko Haram mountain hideout"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Contextually links to Boko Haram hideouts in northeast Nigeria (Borno).",
-      "ai_geo_fingerprint": "3a3ef7e4d85c94be38cd8e1cf3cd6bb736d72f62a490f4bcef4a7604ff8ec2d7",
-      "ai_geo_inferred": true,
-      "actor_group": "Boko Haram"
-    },
-    {
       "id": "caaa925606b91e5a",
       "category": "Counter Terrorism Action",
       "categories": [
@@ -309816,7 +308618,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-06-06T07:00:00+00:00",
       "source": "Le Monde.fr",
-      "source_count": 3,
+      "source_count": 5,
       "url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxOWEFJbkZFd2dqNXQtQ3o2WXNaa0lNZ1l4QXYzajZIcW1tVGg3Rlp2M1N5Mm80bWhfRml6NTJIRU9Jb0dIX0Z2d2xZVVdpaThKczhXQ2gwNENCTDJPdzJSSTBNb3hWb1pfYmxmd0lVazFNTWFTT0JsUG9hMkNabkdOZmluMU1WUjY5bmlON3dDcmpYSVA5QjhKR3Rtb2ZSTU5hR0hNQlRxNGlES3Zvb1R3NTJEajB2bDNCV1ZsLWoxdFRnTXRMdl9DMW5VSmdBWUs4RGpVQnZRWnVOSzJaUlBsNEdCUDlvTE40SjhrT3ZkS2xGckk?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
@@ -309833,7 +308635,9 @@
       "sources": [
         "Le Monde.fr",
         "اندبندنت عربية",
-        "Jeune Afrique"
+        "Jeune Afrique",
+        "Punch Newspapers",
+        "the-star.co.ke"
       ],
       "related_articles": [
         {
@@ -309853,9 +308657,27 @@
           "published": "2026-06-07T07:00:00+00:00",
           "source": "Jeune Afrique",
           "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQdkswVXJDcUxNb2c4SkxfVDF6ZXh2dWVFS0tWS2hSRnlHUkszQTlqcmVKWUV6NlhHbHU1NVpLeUhURS03aVJrUHRwbS1hbzF4UzZTeHRJNGVTeV9haGlUNlllRkJadlh5X0ZLUmNOcnRyb3BTSVNaRnByZndxWWMtNWtma0tSSnRiZHltc1FWQW4xT3NRTzZ5ODUtMFotcWhtTElSSmlGZU9nUWFLeUE?oc=5"
+        },
+        {
+          "title": "Boko Haram releases 416 abducted women and children in Borno",
+          "original_title": "Boko Haram releases 416 abducted women, children — Borno youth leader",
+          "original_language": "en",
+          "summary": "Boko Haram released 416 abducted women and children in Borno State, according to a local youth leader.",
+          "published": "2026-06-07T07:00:00+00:00",
+          "source": "Punch Newspapers",
+          "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQNzFZcFhJSVl0WHU2bnVMUnBMempwRzZFNEJFWWRwN3pYNFhZTzdWOWs3TElWVzlEMkU1T2RyQnh3NzVMbWNfZ2dBeUl2dU1iR0FXdGlMY19xMGU3UzlMZzdkZnJjOFg2LVFLTmF4SDdqWU9Pal9tclY1dFltZEpGV043QklVSmpoa3NDaE90SV9fUi1nbmxETHdVOFFqQ2M?oc=5"
+        },
+        {
+          "title": "Hundreds of captives freed from Boko Haram mountain hideout",
+          "original_title": "Hundreds of captives freed from Boko Haram mountain hideout",
+          "original_language": "en",
+          "summary": "Hundreds of captives have been freed from a Boko Haram mountain hideout.",
+          "published": "2026-06-07T07:00:00+00:00",
+          "source": "the-star.co.ke",
+          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPVmtZRTdfeUlURUNqbGZCejA0WHZLVVRvaDZtbGlMR1lvRkE5YkN2S2Ryb2NEcktMSVR5dlhDMThrYnUtWVZiLVEtYUd5OE1aQVJvM1ZsWlgycVUyRE5ZeUc4M0ViQUdqOVBNMVAza2JZOHRDQVpBQk9RV1BwSGlmdTNxWU5paWRCekdfREZjQ0tnaDhOSndsdnltRGFlLWdBZXUxNUZaZDZKTDhR?oc=5"
         }
       ],
-      "article_count": 3,
+      "article_count": 5,
       "first_reported": "2026-06-06T07:00:00+00:00",
       "last_reported": "2026-06-07T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -309886,12 +308708,14 @@
       "dedup_methods": [
         "entity_actor_event_signature",
         "paraphrase_entity_context",
-        "same_url"
+        "same_url",
+        "same_incident"
       ],
       "source_article_fingerprints": [
         "e6987da8ca1129f7d9159204cdfa7f5349211443e54d223f14cfaef34e4bfe47"
       ],
-      "actor_group": "Boko Haram"
+      "actor_group": "Boko Haram",
+      "incident_id": "inc-991596bace9b96d6"
     },
     {
       "id": "a6455441903a8088",
@@ -309951,7 +308775,8 @@
       "ai_geo_reason": "Explicitly took place in M'diq, Morocco, by the BCIJ.",
       "ai_geo_fingerprint": "56e84b6d931a53231190ef5090f9bc1cdf5b8328dfed1751ba933eaf68d4c0a2",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-c8b95c7065339115"
     },
     {
       "id": "3d95df163a4fc51c",
@@ -310237,7 +309062,8 @@
       "ai_geo_reason": "Explicitly stated in Sokoto State, Nigeria.",
       "ai_geo_fingerprint": "3b7c89b086dcab939f15de8bc1358a342d826d6b6ecfb9368f5e0a8da2420c56",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-f549c74bfee92cb7"
     },
     {
       "id": "51f17472f346ac23",
