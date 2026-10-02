@@ -361,6 +361,10 @@ def main(argv=None):
         row.get("kind"): row.get("n")
         for row in (totals.get("result") or [{}])[0].get("results") or []
     }
+    # meta.changes also counts the full-text index rows the insert trigger
+    # writes (three per row), so the rows added come from the totals.
+    if counts:
+        inserted = sum(int(n or 0) for n in counts.values()) - len(stored) + deleted
     summary = ", ".join(f"{kind} {n}" for kind, n in counts.items()) or "empty"
     pending = "" if args.cleanup == "apply" else f"; cleanup plan (not applied): {len(delete)} rows {reasons}"
     print(

@@ -1,6 +1,8 @@
 """Tests for tools/sync_background_corpus.py, which seeds the D1 background
 corpus from data already in the repository. No network access."""
+import contextlib
 import importlib.util
+import io
 import json
 import tempfile
 import unittest
@@ -208,13 +210,14 @@ class SyncRunTests(unittest.TestCase):
              "collected_at": "2026-09-22T12:00:00+00:00", "ai_relevance_score": 35},
         ]
         self.sql = []
+        self.total_after = 2
 
         def fake_query(sql, params=None):
             self.sql.append(sql)
             if sql == sync.EXISTING_ROWS_SQL:
                 return {"result": [{"results": self.stored}]}
             if sql.startswith("SELECT kind"):
-                return {"result": [{"results": [{"kind": "related_article", "n": 2}]}]}
+                return {"result": [{"results": [{"kind": "related_article", "n": self.total_after}]}]}
             return {"success": True, "result": [{"meta": {"changes": 1}}]}
 
         self.original = (sync.ROOT, sync.collector.d1_query)
@@ -243,6 +246,15 @@ class SyncRunTests(unittest.TestCase):
         self.assertNotIn("https://keep/analysis", deletes[0])
         # A copy of a map event is kept: the map forgets events after 180 days.
         self.assertNotIn("https://wire/copy", deletes[0])
+
+    def test_the_report_counts_rows_added_not_index_writes(self):
+        # 4 stored, 1 new story inserted, 2 removed: 3 rows remain. D1's
+        # meta.changes would also count the full-text index rows.
+        self.total_after = 3
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            self.assertEqual(sync.main(["--cleanup", "apply"]), 0)
+        self.assertIn("1 new rows inserted, 2 removed; now 3 total", output.getvalue())
 
     def test_apply_mode_respects_the_per_run_cap(self):
         self.assertEqual(sync.main(["--cleanup", "apply", "--max-deletes", "1"]), 0)
