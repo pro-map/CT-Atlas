@@ -1,6 +1,7 @@
+import { parseTarget, lookupDomain } from "./domain-intelligence.js";
 import { cleanText, corsHeaders, gateCall, isAllowedUser } from "./shared.js";
 
-export const IP_INTELLIGENCE_VERSION = "ip-intelligence-v3-resilient-sources";
+export const IP_INTELLIGENCE_VERSION = "ip-intelligence-v4-domain-input";
 const RIRS = new Set(["rdap.arin.net", "rdap.db.ripe.net", "rdap.apnic.net", "rdap.lacnic.net", "rdap.afrinic.net"]);
 const bootstrapCache = new Map();
 const text = value => cleanText(value, 500);
@@ -184,7 +185,7 @@ function privacyAssessment(info, proxy, ipapi, warnings) {
   if (privacy.vpn === null && !privacy.conflicts.includes("vpn")) warnings.push("VPN detection data is unavailable. The network operator and its published contacts can still be identified.");
   return privacy;
 }
-async function registry(parsed) {
+async function registry(parsed, expand = true) {
   const key = parsed.bits, now = Date.now(); let bootstrap = bootstrapCache.get(key);
   if (!bootstrap || bootstrap.until < now) {
     let result;
@@ -207,7 +208,7 @@ async function registry(parsed) {
   let count = 0;
   for (const entity of list(result.data.entities)) {
     const href = list(entity.links).find(l => l.rel === "self" && trustedRdap(l.href))?.href;
-    if (!entity.vcardArray && href && count++ < 3) {
+    if (expand && !entity.vcardArray && href && count++ < 3) {
       try { const expanded = await getJSON(href,{},true); Object.assign(entity,expanded.data); } catch { /* partial registration remains useful */ }
     }
   }
@@ -337,7 +338,7 @@ function enquiryTarget(operator, privacy, contacts, routes) {
 function coordinates(lat,lon) {
   return typeof lat === "number" && typeof lon === "number" && Number.isFinite(lat) && Number.isFinite(lon) && Math.abs(lat)<=90 && Math.abs(lon)<=180 ? { latitude:lat, longitude:lon } : { latitude:null, longitude:null };
 }
-export async function lookupIP(parsed, env) {
+export async function lookupIP(parsed, env, options = {}) {
   const sources = [], warnings = [];
   const ripe = endpoint => "https://stat.ripe.net/data/"+endpoint+"/data.json?resource="+encodeURIComponent(parsed.ip)+"&sourceapp=ct-atlas";
   async function source(name, task, publicURL) {
@@ -354,7 +355,7 @@ export async function lookupIP(parsed, env) {
     }
   }
   const [rdap, network, abuse, geoData, info, proxy, ipapi] = await Promise.all([
-    source("RIR RDAP",()=>registry(parsed)),
+    source("RIR RDAP",()=>registry(parsed,options.expandRegistry !== false)),
     source("RIPEstat routing",()=>getJSON(ripe("network-info")),ripe("network-info")),
     source("RIPEstat abuse contacts",()=>getJSON(ripe("abuse-contact-finder")),ripe("abuse-contact-finder")),
     source("RIPEstat / MaxMind GeoLite2",()=>getJSON(ripe("maxmind-geo-lite")),ripe("maxmind-geo-lite")),
@@ -431,10 +432,10 @@ export async function handleIPIntelligence(request,env) {
   const session = await sessionResponse.json().catch(()=>({}));
   if (!sessionResponse.ok || !isAllowedUser(session.username,env)) return reply({error:"Session expired."},401,env);
   let body;
-  try { body = await boundedJSON(new Response(request.body),2048); } catch { return reply({error:"Send a JSON object containing one public IP address (maximum 2 KB)."},400,env); }
-  const parsed = publicIP(body?.ip);
-  if (!parsed) return reply({error:"Enter one public IPv4 or IPv6 address, without a URL, port, subnet, brackets or zone. Private and special-use ranges are excluded."},400,env);
+  try { body = await boundedJSON(new Response(request.body),2048); } catch { return reply({error:"Send a JSON object containing one IP, domain or web address (maximum 2 KB)."},400,env); }
+  const target = parseTarget(body?.target ?? body?.ip,publicIP);
+  if (!target) return reply({error:"Enter a public IP, domain or HTTP(S) web address (maximum 1024 characters). Credentials, nonstandard ports, private addresses and special-use names are excluded."},400,env);
   const limit = await gateCall(env,"/ip-intelligence-limit",{username:session.username});
   if (!limit.ok) return reply({error:"Lookup limit reached. Wait one minute and retry."},429,env);
-  return reply(await lookupIP(parsed,env),200,env);
+  return reply(target.kind === "domain" ? await lookupDomain(target,env,{publicIP,lookupIP}) : await lookupIP(target.parsed,env),200,env);
 }

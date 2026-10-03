@@ -1,13 +1,14 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs'),vm=require('node:vm');
-const source=fs.readFileSync('cloudflare-worker/ip-intelligence.js','utf8').replace(/^import[^\n]+\n/,'').replace(/export /g,'');
+const source=fs.readFileSync('cloudflare-worker/ip-intelligence.js','utf8').replace(/^import[^\n]+\n/gm,'').replace(/export /g,'');
 const rdap={name:'TEST-NET',status:['active'],country:'DE',startAddress:'8.8.8.0',endAddress:'8.8.8.255',entities:[{roles:['registrant'],vcardArray:['vcard',[
  ['fn',{},'text','Example Network'],['adr',{label:'Operator HQ, Berlin, Germany'},'text',['','','','','','','']]
 ]],entities:[{roles:['abuse'],vcardArray:['vcard',[['fn',{},'text','Abuse Desk'],['email',{},'text','abuse@example.net']]]}]}]};
 function harness({ipinfo,ipinfoStatus=200,lite,liteStatus=200,proxy={network:{},detections:{}},proxyStatus='ok',proxyHttp=200,proxyIP='8.8.8.8',proxyMessage='',ipapi,ipapiStatus=200,whois,ianaStatus=200,rdapStatus=200,asns=[65001],holder,registryData=rdap,fail=[],redirect,limit=200,geoCountry='US'}={}){
  const calls=[];
  const context=vm.createContext({Response,Request,URL,AbortSignal,TextDecoder,TextEncoder,Uint8Array,console,
+  parseTarget:(v,publicIP)=>{const parsed=publicIP(v);return parsed?{kind:'ip',parsed}:null;},
   cleanText:(v,n=700)=>String(v||'').replace(/\s+/g,' ').trim().slice(0,n),corsHeaders:()=>({'Content-Type':'application/json'}),isAllowedUser:n=>n==='analyst',
   gateCall:async(env,path,body)=>path==='/session-get'?Response.json({username:body.session_token},{status:body.session_token==='analyst'?200:401}):new Response('{}',{status:limit}),
   fetch:async(url,options={})=>{
