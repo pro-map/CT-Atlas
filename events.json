@@ -443,7 +443,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-10-02T21:19:46.327633+00:00",
-  "number_of_events": 3671,
+  "number_of_events": 3664,
   "events": [
     {
       "id": "785d3c1e8f1ca330",
@@ -314764,7 +314764,8 @@
       "ai_geo_reason": "Global maritime report covering incidents across multiple worldwide locations.",
       "ai_geo_fingerprint": "e847df8a825195572ec8e3b28f72f711b899673a2f7c0b090bd4c9c6a09a30a0",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-9367fa4a7dbc704d"
     },
     {
       "id": "f813180fcd7d9b71",
@@ -315147,7 +315148,8 @@
       "ai_geo_reason": "Reported by UK regional press (Coventry Telegraph) regarding a domestic police raid.",
       "ai_geo_fingerprint": "1398436634c142d7921f71860ea1b88ec4d03512d40c636e5b21ad5507ae779d",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-c24287b039f4c889"
     },
     {
       "id": "7c95c35998b9c98c",
@@ -315403,7 +315405,8 @@
       "ai_geo_reason": "The event explicitly occurred in Donetsk.",
       "ai_geo_fingerprint": "8b7fc39f35d5a811460ec57769e31e2e114cf93679f47ca79b34c03daa25f142",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-d224f01fb4e2ef63"
     },
     {
       "id": "4b434a07056f8aa7",
@@ -315470,7 +315473,8 @@
       "ai_geo_reason": "General maritime report without a specific geographic coordinate or country mentioned.",
       "ai_geo_fingerprint": "49f54905c9d3c34808012a945741b0c2832eae50444a609786a35d2673c03d2f",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-35f60bd356bdda5a"
     },
     {
       "id": "ebba99c4568dcda9",
@@ -315630,7 +315634,8 @@
       "ai_geo_reason": "Pre-trial detention ordered in Milan, Italy.",
       "ai_geo_fingerprint": "49ffae4c67bc76c46ed676bbcd43834a98d60d4048726b1e514fb65be1cc5e07",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-1911f180b9818759"
     },
     {
       "id": "d686cdd836c462df",
@@ -315902,7 +315907,8 @@
       "ai_geo_reason": "The terror attack case is tied to Starobilsk.",
       "ai_geo_fingerprint": "3f1ea3f153713dd88d437cec45088641310a81f853b2c9159eae10c521d8067b",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-3a399cbe2ff9bec3"
     },
     {
       "id": "b37ff3be9305b26d",
@@ -316198,7 +316204,8 @@
       "ai_geo_reason": "Airstrikes conducted by the Nigerian military in the Lake Chad Tumbuns region.",
       "ai_geo_fingerprint": "e087a407c01e95ea7efdd746cb34cfccbd21adb571647e3d5cd650e809179ae0",
       "ai_geo_inferred": false,
-      "actor_group": "ISWAP"
+      "actor_group": "ISWAP",
+      "incident_id": "inc-fabb0e5834cd6ba4"
     },
     {
       "id": "191816688a0cf3c5",
@@ -316335,7 +316342,8 @@
       "ai_geo_reason": "The targeted attack location is Tuapse in Krasnodar Krai.",
       "ai_geo_fingerprint": "3619250302588ea26323074a4dd55ab1d1ae3ff82c6fc72af12c10c742a8b0c6",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-ab0fe72c3528cd14"
     },
     {
       "id": "6a80b5538a33c1f2",
@@ -316409,84 +316417,6 @@
       "incident_anchor": "JNIM gold miner extortion Mali",
       "update_type": "INITIAL",
       "incident_id": "inc-f985f66682daae60"
-    },
-    {
-      "id": "3682b0d01f91a84a",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Arrests",
-        "Legal / Judicial"
-      ],
-      "title": "Pre-trial detention ordered for one of 10 arrested in jihadist terrorism operation",
-      "summary": "A Spanish court ordered pre-trial detention for one of the ten suspects arrested in a recent counter-terrorism operation against jihadism.",
-      "original_title": "Prisión para uno de los 10 detenidos en la macrooperación contra el terrorismo yihadista",
-      "original_summary": "Prisión para uno de los 10 detenidos en la macrooperación contra el terrorismo yihadista Onda Regional de Murcia | ORM",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish",
-      "collection_locale": "ES:es",
-      "published": "2026-05-29T07:00:00+00:00",
-      "source": "Onda Regional de Murcia | ORM",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNUjVNOGNhdzllR0cwMWZ5c0RyZDRsTGxpZ0VES2dKbDVZVWEtSWx2S0pIUjQ1aUxhaHVCRnF6TC1KZ3V5cENVc2w5dllXYllteHJQYm1jb1V3SnJwUkE3UkswLW42REJ6VXI2clVlb0FJM1JJRjZDWnNUXzdKY0tuY3lsS3FrNHhYaUo4NThMN0pkVGNTNlV0UjdNeGJObUZiS1RqVEZJaThNN0NoeUF1Wi1YZmMyNnplX0trb2RR?oc=5",
-      "collector": "Google News RSS",
-      "country": "Spain",
-      "country_code": "ES",
-      "city": null,
-      "region": "Murcia",
-      "latitude": 37.9922,
-      "longitude": -1.1307,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "Onda Regional de Murcia | ORM",
-        "20Minutos"
-      ],
-      "related_articles": [
-        {
-          "title": "Prisión para uno de los diez detenidos en una operación contra el terrorismo yihadista en España",
-          "original_title": "Prisión para uno de los diez detenidos en una operación contra el terrorismo yihadista en España",
-          "original_language": "es",
-          "summary": "Prisión para uno de los diez detenidos en una operación contra el terrorismo yihadista en España 20Minutos",
-          "published": "2026-05-29T07:00:00+00:00",
-          "source": "20Minutos",
-          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNVGc5MHlZNUhoRGVGUTdrbzZpaTBFeHhkc3p1THRLRTlvMENuTGtoMmpFUHFmSkZ1dW1NMnRxeU5jdGRxSkNYdjFTb3hLa2JyS3c1eVFob2w5YWhLd09ud3hHOFFNbDlnOTctU3hRdG84RkFWZGpYQWtfaUpOZURVc2JJSXVuZDVCZnlLWjlTWDlHbHFNWGNYQ0RIRWpIdkZaY0h3Y2VxLUZ3SF8wdlM3RHJmbThzdjMxNjEzUUowdzVjWHNZTzNWbVRGdS1yQdIB0wFBVV95cUxPSFdsb05aVXRtZndtVDFNa2Q2NDdsVHBXM04tb1dybW1BdlFsLXItVnc3RnpGRng0RjJpOWpYYVZWbTR6LVl6aUhoMXRsNzdOWGVjQVVtYU1aR1JmaGNEWG9TNGlDUDNlakdyMWF5S0ZHVmFrNExqbTNQQkJSc2lIclpzT2pFekExbURrOGd0bzhkTlZqNXdVQmZCbWJ4V2puYlZSdFZJQVR1NzBGVi1MSXREVjVQTldjOFhncHh4SG5HRVFxNGF6QXZGUlRDMEs0QkYw?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-05-29T07:00:00+00:00",
-      "last_reported": "2026-05-29T07:00:00+00:00",
-      "dedup_confidence": 0.889,
-      "dedup_methods": [
-        "very_high_title_similarity"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Judicial proceedings following a counter-terrorism operation.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "court orders pre-trial detention for terror suspect arrested in Spain",
-      "title_variants": [
-        "court orders pre-trial detention for terror suspect arrested in Spain"
-      ],
-      "location_confidence_score": 0.85,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "A Spanish court ordered pre-trial detention... Onda Regional de Murcia"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Operation and court action in Spain, specifically covered by Murcia regional media.",
-      "ai_geo_fingerprint": "8e1e898ef4272d7eac8e269017e084872e52a3fd9d65d7ea2196bf91336daa42",
-      "ai_geo_inferred": true,
-      "actor_group": ""
     },
     {
       "id": "3948fe844b74d5a8",
@@ -316563,7 +316493,8 @@
       "ai_geo_reason": "Event occurred in Tomsk region, Russia.",
       "ai_geo_fingerprint": "6cb5ee19b70f1043742496606193ec7be8f3f8f4bfcd6614b03fe74ee6061bff",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-ad84688334c33f98"
     },
     {
       "id": "363eb35f1bc1250a",
@@ -316624,7 +316555,8 @@
       "ai_geo_reason": "The suspect is a resident of Kazan.",
       "ai_geo_fingerprint": "149741b87d36b1ab2bb53298b5d85956bd3da61da1086415753baa31c9b00da0",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-6936934abb6b6691"
     },
     {
       "id": "595ca8befc9026d0",
@@ -316692,7 +316624,8 @@
       "ai_geo_reason": "Federal case originating from Jackson Parish, Louisiana, directed at the US federal system.",
       "ai_geo_fingerprint": "7dbcb7ad47f67354bd21edbe80c214e13e1e3e939f71c56c28350f4901607b25",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-4fcf3c8bd36ae362"
     },
     {
       "id": "101709343f17e980",
@@ -316960,7 +316893,8 @@
       "ai_geo_reason": "Indictment announced by the US Department of Justice.",
       "ai_geo_fingerprint": "776f02f8a5b294901065a3d7d741a9a6efd162c1567476b0a8345cc9a9fe7b96",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-e977277a71a60dc8"
     },
     {
       "id": "c6b58471f6f98fa7",
@@ -317023,7 +316957,8 @@
       "ai_geo_reason": "Event took place in Gaza.",
       "ai_geo_fingerprint": "5c978b204174a601c2c8c4bd1d9175ed5f5b677584d3bf92ee4a60042fe120d9",
       "ai_geo_inferred": false,
-      "actor_group": "Hamas"
+      "actor_group": "Hamas",
+      "incident_id": "inc-d3de9b774af46bbb"
     },
     {
       "id": "fe067de51358e67b",
@@ -317227,7 +317162,8 @@
       "category": "Counter Terrorism Action",
       "categories": [
         "Counter Terrorism Action",
-        "Arrests"
+        "Arrests",
+        "Legal / Judicial"
       ],
       "title": "At least 10 arrested in major counter-terrorism operation against jihadism in Spain",
       "summary": "Spanish security forces have arrested at least 10 individuals in a widespread counter-terrorism sweep across multiple provinces.",
@@ -317239,7 +317175,7 @@
       "collection_locale": "ES:es",
       "published": "2026-05-28T07:00:00+00:00",
       "source": "Castilla-La Mancha Media - CMM",
-      "source_count": 1,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQZlRtb0ZuM0xOLWdKZUZfR3lhTGNiS1Q5aDcwTFJSSFNkd0hKNFlscmctd1lxTzFMU1hTYnc0dWNCR0Zia0trMnM5c2xHLVZULV95OFlhUDg2ZHhFeGwteEZ3azQybWJzWEdMUk1ZSlRyc214UVlDWFJXUXJOMVZ3XzlNUXdGTWhHMmtGaUpxSXZOWldLamZOVVZxbmNIbnRaWWFzU9IBqgFBVV95cUxQdGs3dWlJTVVSQzFjS2FLOUNnSTZ5UC1JaVB4WElRM2lMUEtnTGt0Z0c5R3F5ZXpnTFJaOXRIdGdUaVJTVmpQdFdtWERhN0E4OVRNM2FJbzZxQ0ctYTdKNlAwX0NFOU5FQkQ0STdzVUN0Zm1hOWNBa3hyRUhxa0swMzZXeWxpOWVuZ2s5S1lfQWdTeWt4ZUZ1cGx0UHBKMGs2alJmeUR6b0J4QQ?oc=5",
       "collector": "Google News RSS",
       "country": "Spain",
@@ -317252,12 +317188,33 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "sources": [
-        "Castilla-La Mancha Media - CMM"
+        "Castilla-La Mancha Media - CMM",
+        "Onda Regional de Murcia | ORM",
+        "20Minutos"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Pre-trial detention ordered for one of 10 arrested in jihadist terrorism operation",
+          "original_title": "Prisión para uno de los 10 detenidos en la macrooperación contra el terrorismo yihadista",
+          "original_language": "es",
+          "summary": "A Spanish court ordered pre-trial detention for one of the ten suspects arrested in a recent counter-terrorism operation against jihadism.",
+          "published": "2026-05-29T07:00:00+00:00",
+          "source": "Onda Regional de Murcia | ORM",
+          "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNUjVNOGNhdzllR0cwMWZ5c0RyZDRsTGxpZ0VES2dKbDVZVWEtSWx2S0pIUjQ1aUxhaHVCRnF6TC1KZ3V5cENVc2w5dllXYllteHJQYm1jb1V3SnJwUkE3UkswLW42REJ6VXI2clVlb0FJM1JJRjZDWnNUXzdKY0tuY3lsS3FrNHhYaUo4NThMN0pkVGNTNlV0UjdNeGJObUZiS1RqVEZJaThNN0NoeUF1Wi1YZmMyNnplX0trb2RR?oc=5"
+        },
+        {
+          "title": "Prisión para uno de los diez detenidos en una operación contra el terrorismo yihadista en España",
+          "original_title": "Prisión para uno de los diez detenidos en una operación contra el terrorismo yihadista en España",
+          "original_language": "es",
+          "summary": "Prisión para uno de los diez detenidos en una operación contra el terrorismo yihadista en España 20Minutos",
+          "published": "2026-05-29T07:00:00+00:00",
+          "source": "20Minutos",
+          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNVGc5MHlZNUhoRGVGUTdrbzZpaTBFeHhkc3p1THRLRTlvMENuTGtoMmpFUHFmSkZ1dW1NMnRxeU5jdGRxSkNYdjFTb3hLa2JyS3c1eVFob2w5YWhLd09ud3hHOFFNbDlnOTctU3hRdG84RkFWZGpYQWtfaUpOZURVc2JJSXVuZDVCZnlLWjlTWDlHbHFNWGNYQ0RIRWpIdkZaY0h3Y2VxLUZ3SF8wdlM3RHJmbThzdjMxNjEzUUowdzVjWHNZTzNWbVRGdS1yQdIB0wFBVV95cUxPSFdsb05aVXRtZndtVDFNa2Q2NDdsVHBXM04tb1dybW1BdlFsLXItVnc3RnpGRng0RjJpOWpYYVZWbTR6LVl6aUhoMXRsNzdOWGVjQVVtYU1aR1JmaGNEWG9TNGlDUDNlakdyMWF5S0ZHVmFrNExqbTNQQkJSc2lIclpzT2pFekExbURrOGd0bzhkTlZqNXdVQmZCbWJ4V2puYlZSdFZJQVR1NzBGVi1MSXREVjVQTldjOFhncHh4SG5HRVFxNGF6QXZGUlRDMEs0QkYw?oc=5"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-05-28T07:00:00+00:00",
-      "last_reported": "2026-05-28T07:00:00+00:00",
+      "last_reported": "2026-05-29T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -317282,7 +317239,13 @@
       "ai_geo_reason": "Counter-terrorism operation conducted across Spain.",
       "ai_geo_fingerprint": "0ccf12e0a0387024f031441d24ada303937ef664407498617a8e37c9163e2c83",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-5f3b09c6f4befae9",
+      "source_article_fingerprints": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "48038430688cf9c0",
@@ -317343,7 +317306,8 @@
       "ai_geo_reason": "Detained in Yamal region, Russia.",
       "ai_geo_fingerprint": "4655479b6696b6c87a65a5ed41c70ceb863831495d7304cbcb33cb25a52558e8",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-12de1a2966cb0986"
     },
     {
       "id": "7a6d873863db2225",
@@ -317406,7 +317370,8 @@
       "ai_geo_reason": "Event occurred in St. Petersburg.",
       "ai_geo_fingerprint": "b6e04b0edd85cb7133f63ec3ba741c5b2d58880a923c63a198adb423e7e420f3",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-2fa017724cee0faf"
     },
     {
       "id": "a765cf16fc18a7cf",
@@ -317607,7 +317572,8 @@
       "ai_geo_reason": "Trial took place in the Netherlands.",
       "ai_geo_fingerprint": "bb66cb578e719ce19849176599886fe18c8bd1c15d4626999ec22838c79fc966",
       "ai_geo_inferred": false,
-      "actor_group": "Hamas"
+      "actor_group": "Hamas",
+      "incident_id": "inc-d4ad02d15747521a"
     },
     {
       "id": "577286e7fa17b887",
@@ -317667,7 +317633,8 @@
       "ai_geo_reason": "The individual is described as a former German terrorist, but no specific city of trial is provided in the text. Defaulting to country level.",
       "ai_geo_fingerprint": "9a6a470903c2891fe39af475773f7edc36a7edc6f2bb4126ed64c25b1794d5a1",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-442a61429b5ef126"
     },
     {
       "id": "d51826c976a9c593",
@@ -317728,7 +317695,8 @@
       "ai_geo_reason": "Event involves Spain's National Police nationwide coordination.",
       "ai_geo_fingerprint": "c557bdde4ed713f042783ac4ac43cd427101d59aefa5786a68617a44109c2a49",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-578f14922aeda2c2"
     },
     {
       "id": "e4dd3ea1652a62e6",
@@ -317790,7 +317758,8 @@
       "ai_geo_reason": "Italian news source discussing domestic prosecution regarding online recruitment.",
       "ai_geo_fingerprint": "6a3b1ee42e504a4452a18f2ecbbd4a6b7a61e9bc562bd1b49625398ca3224a48",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-86a5ef181abf4073"
     },
     {
       "id": "2188ef8450c1be9c",
@@ -317852,7 +317821,8 @@
       "ai_geo_reason": "Conviction took place in Russia's Tambov Oblast.",
       "ai_geo_fingerprint": "f7c0954beadc6fd26a948273ef786ee60b6c320a58c2dc0e78a4572e48195a19",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-954d207c7c68039a"
     },
     {
       "id": "b42dd48ea652e73c",
@@ -317919,7 +317889,8 @@
       "ai_geo_reason": "Report concerns the return of Somali piracy off the coast of Somalia.",
       "ai_geo_fingerprint": "bc58c0d54a0158928997dbfea5f1962bd05aaa9eae99f77cca82787a6a7645a9",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-3861c2ef4e9698a5"
     },
     {
       "id": "5cd96766bb537b5e",
@@ -317986,7 +317957,8 @@
       "ai_geo_reason": "OPCW team discovered undeclared chemical weapons in the Syrian Arab Republic.",
       "ai_geo_fingerprint": "c05c3b7548da42aed8d79118fb2c50ca309aa1be2fa3d862dcbe6e4c15194b55",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-1449321999aa30dd"
     },
     {
       "id": "95b956f9088592f5",
@@ -318053,7 +318025,8 @@
       "ai_geo_reason": "Nigerian Air Force airstrikes targeted terrorist hideouts in the Sambisa forest.",
       "ai_geo_fingerprint": "3f993e377bb9789bba280852b552f7d52135887f38681c2144133a73436086bc",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-68b2d2ec03f5e4a9"
     },
     {
       "id": "1a3c35788c7d72e7",
@@ -318117,7 +318090,8 @@
       "ai_geo_reason": "Lafarge legal proceedings regarding Syria financing typically take place in French courts.",
       "ai_geo_fingerprint": "787131119b449132b1f3ce34c6565eac03e4a66afc618b706ec0d84034998558",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-bf66253de4425840"
     },
     {
       "id": "9189d4acc1e6da6c",
@@ -318193,7 +318167,8 @@
       "ai_geo_reason": "The arrest occurred in Italy.",
       "ai_geo_fingerprint": "cfc2cb967cfda0ab5620877151f442e97ea2b10b7c0838832cf91dd0b500162d",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-f75eb2ea6eba07d7"
     },
     {
       "id": "4be371e5e2bc9fc4",
@@ -318255,7 +318230,8 @@
       "ai_geo_reason": "Security forces detained a suspect in Tyumen Oblast.",
       "ai_geo_fingerprint": "059cbeca7c2cec56e04e45291011ecbd18ee75158f7d94f859e00007fb1ab8c6",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-ddd69580ba0d1b74"
     },
     {
       "id": "6bf1ce920dac9635",
@@ -318322,7 +318298,8 @@
       "ai_geo_reason": "ReCAAP Information Sharing Centre is headquartered in Singapore, where it publishes its periodic reports.",
       "ai_geo_fingerprint": "9496a09a7442e7982d2496636ab88e985d29cb46f5e04b6619fb6c8686aa7ede",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-30ba2dffa8b24c16"
     },
     {
       "id": "82144d2d6a62b405",
@@ -318390,7 +318367,8 @@
       "ai_geo_reason": "Student union UGEB suspended in Burkina Faso.",
       "ai_geo_fingerprint": "a3cf908d16a694f2efa945c5fc1811bcd0653093f878a8265f9be276930c8fc1",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-d51ad1d073de0daf"
     },
     {
       "id": "4e3c1b58a97b87f6",
@@ -318471,7 +318449,8 @@
       "ai_geo_reason": "Suspected ISWAP fighters arrested in Adamawa State.",
       "ai_geo_fingerprint": "13a998b20ac30496fddec82a2c4b82aca6b2cfb2463acbbd64b22c84e23a2997",
       "ai_geo_inferred": false,
-      "actor_group": "ISWAP"
+      "actor_group": "ISWAP",
+      "incident_id": "inc-891181f8f5a89861"
     },
     {
       "id": "9d2a6dba77a06bb4",
@@ -318531,7 +318510,8 @@
       "ai_geo_reason": "The attack case is linked to İzmir NATO facilities in Turkey.",
       "ai_geo_fingerprint": "9e8a500a5c51b042a30a434a6c6b260a00fd997e55e5e549ad04ba58f730a5b3",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-408ce4e1a5b0ec3c"
     },
     {
       "id": "df9bfc4d606f4291",
@@ -318592,7 +318572,8 @@
       "ai_geo_reason": "Italian State Police arrested an individual in Reggio Emilia.",
       "ai_geo_fingerprint": "93f98ec1d99e05f472dd72c73be3131e1b0b8c2a1f203f82589579f3324a4c32",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-35b972556ad8b6d4"
     },
     {
       "id": "9d006046eb086fd0",
@@ -318784,7 +318765,8 @@
       "ai_geo_reason": "Suspicious approaches reported by merchant vessels in the Gulf of Aden.",
       "ai_geo_fingerprint": "44078bbf6775910151cd0c480113a5182ad71148673cba65a5a767319c8e9093",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-de23e2e40986c91c"
     },
     {
       "id": "0a1fc48eb9d3a7d5",
@@ -318919,7 +318901,8 @@
       "ai_geo_reason": "Conducted by Turkey's intelligence agency (cross-border operation outside unspecified immediate borders, attributed to Turkey).",
       "ai_geo_fingerprint": "b0ef92cb2f834ed09ab47b69c9bfe8e2d38d553f9e0993c0faeb12c85b52ecc0",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-7bd34444a9d5c8ff"
     },
     {
       "id": "1358cb31de562833",
@@ -318980,7 +318963,8 @@
       "ai_geo_reason": "Action taken by Russian authorities.",
       "ai_geo_fingerprint": "732ed397d02698fa0bbbf873fb4f6601bdf6be1e3dd077ee8e7259c665ec82d3",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-42a9a34ed25e5e3d"
     },
     {
       "id": "9bec70fed4666fe8",
@@ -319047,7 +319031,8 @@
       "ai_geo_reason": "Commercial tanker near Somalia fired warning shots.",
       "ai_geo_fingerprint": "25209a1a3841d0d1a2ba11aaa7d4b0e8371602eb714fa8d0932593fc1af99566",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-85f3a8161d6afc98"
     },
     {
       "id": "79f69b7d8b831276",
@@ -319303,7 +319288,8 @@
         "845ceae87b977552a426d9b5d08a9a26035a0020c057144f89694298866ccdda",
         "b439fd7be74ca6e01156cc6e0e455e8611281313e422a3d212f7e17dad2bd3d7"
       ],
-      "actor_group": "Al-Shabaab"
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-3ebc543661b286cc"
     },
     {
       "id": "48fba80e210b738d",
@@ -319564,7 +319550,8 @@
       "ai_geo_reason": "Man from Lévis arrested over terrorism allegations.",
       "ai_geo_fingerprint": "006be3a9c51aa5c12493c752b71b97381ac96db2f5172dca59d2565090f7dff1",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-d233ef29432bf8f5"
     },
     {
       "id": "81a007b78943622c",
@@ -319768,7 +319755,8 @@
       "ai_geo_reason": "Mexican national pleaded guilty in the US for material support to a cartel following a Homeland Security investigation.",
       "ai_geo_fingerprint": "6c24956f484a721ef1b9d09f6a272f8d0b9a6daeb8f05283ac74224943c4d0ae",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-ff884fd63ae7664a"
     },
     {
       "id": "2d249fc97e59b897",
@@ -319835,7 +319823,8 @@
       "ai_geo_reason": "Indonesian government update concerning Indonesian crew held by pirates.",
       "ai_geo_fingerprint": "2702e210ee3e85d2e2fc312b3d8515b24db16f52db3799ddbb4355ca6796f156",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-e6be63b66449c918"
     },
     {
       "id": "522bb5a5ae0f7103",
@@ -319964,7 +319953,8 @@
       "ai_geo_reason": "Turkish authorities blocked access to digital accounts linked to the FETÖ network in Turkey.",
       "ai_geo_fingerprint": "c63b85ebbe0aa90be7ea5c01450216c8cb9936f7d1f2716b0c3c3fd5c24f1ead",
       "ai_geo_inferred": true,
-      "actor_group": "FETÖ"
+      "actor_group": "FETÖ",
+      "incident_id": "inc-2378f6e2ad387e56"
     },
     {
       "id": "1e6a07df02eb55d7",
@@ -320052,7 +320042,8 @@
       "ai_geo_reason": "A university student in Kazan was detained for spreading terrorism propaganda.",
       "ai_geo_fingerprint": "860dbf349c6d19d7ca43c63297a21d96636201b433654833439196cee885d1f6",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-d62aac3943943543"
     },
     {
       "id": "1e6a07df02eb55d7",
@@ -320113,7 +320104,8 @@
       "ai_geo_reason": "Three individuals detained in Georgia's Pankisi Gorge on suspicion of terrorism.",
       "ai_geo_fingerprint": "ce374c70970b11bd815607cbb7829ad2320e9f2b2508a192a297176490a9ac8f",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-cc7dda5afa79896f"
     },
     {
       "id": "f74d65c1063b668b",
@@ -320180,7 +320172,8 @@
       "ai_geo_reason": "Joint security raid clearing hideouts in Edo State forest.",
       "ai_geo_fingerprint": "9e1dbe32b8e688ee2277059d0250c4e146ca20e500f9aa26a0ce01f994aba747",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-c7b75945e498f12e"
     },
     {
       "id": "9315b1cbf099fb4f",
@@ -320241,7 +320234,8 @@
       "ai_geo_reason": "A court in Hong Kong confiscated funds from defendants in a terrorism trial.",
       "ai_geo_fingerprint": "42049b425be8d5cf07daa47d6a7bd4d079afd1ea601f01c65c28d8b8d4a074b1",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-59e2f4ae0baebaff"
     },
     {
       "id": "ea5b2e7720062948",
@@ -320316,7 +320310,8 @@
       "dedup_methods": [
         "same_url"
       ],
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-7956087608525efa"
     },
     {
       "id": "f34a995e0b0b120d",
@@ -320516,7 +320511,8 @@
       "ai_geo_reason": "Local news source indicating a US domestic arrest of a terror suspect.",
       "ai_geo_fingerprint": "fff146955d6085d601187a04730d0e8ab938f90d27e740b6ea607044c2eb7926",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-111d76b757c0af7e"
     },
     {
       "id": "d6ebd83e0b9fd07e",
@@ -320670,7 +320666,8 @@
       "source_article_fingerprints": [
         "d623b306063d2d02bf4ece4d74c92fa6282f1d220fdc5b0d0a2711071d943ded"
       ],
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-d78fec8673c2690f"
     },
     {
       "id": "ab7e1731df39ce9c",
@@ -320748,71 +320745,8 @@
       "ai_geo_reason": "Israeli strike targeting Hamas armed wing chief Izz al-Din al-Haddad.",
       "ai_geo_fingerprint": "04fb482f4e66691d000f1083d7521dc5293996e878681bf2dbef367c6152e38f",
       "ai_geo_inferred": true,
-      "actor_group": "Hamas"
-    },
-    {
-      "id": "8824480615a27570",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Legal / Judicial"
-      ],
-      "title": "Iraqi terrorist with IRGC ties charged in NYC for planning synagogue attack",
-      "summary": "An Iraqi national with alleged ties to the IRGC has been charged in New York City with planning terrorist attacks against targets including synagogues.",
-      "original_title": "NYC: Iraqi terrorist with ties to IRGC charged with planning to attack targets including synagogues",
-      "original_summary": "NYC: Iraqi terrorist with ties to IRGC charged with planning to attack targets including synagogues i24NEWS",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-05-16T07:00:00+00:00",
-      "source": "i24NEWS",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxQLUR2Sm4tcm1OSWQ5TThXeEJjS19UNlk4QmNsbDZ0TGFzNldJbjZLZ2VpYXBIUDNLX3ktcURIVGdNb2pNQnJTcDlGYUdnS1ZBTUF4by0yVGZFX0s1Z2l4VHg5dl9ZNmtYSFZhdzY5QUNFZ3hnMGRRZ1dPdHNmdkhKLU5NNzFIRmc2ZWRzbGl6cGFHUnZJd3RMSm1yb3FrV0RQOVBhZzExMThZUkJucFpHS0p2ODh0SlozTWZ1MjlPVXVyeno4MnZHek1BWU8xaEJ2M19sUWZLdW45Y3h1bXN3M0trUk9Cd1NRWUtORVln?oc=5",
-      "collector": "Google News RSS",
-      "country": "United States",
-      "country_code": "US",
-      "city": "New York City",
-      "region": null,
-      "latitude": 40.71427,
-      "longitude": -74.00597,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "i24NEWS",
-      "targeted_source_kind": "regional_international_media",
-      "sources": [
-        "i24NEWS"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-05-16T07:00:00+00:00",
-      "last_reported": "2026-05-16T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Active terrorism indictment and disruption of a planned attack targeting religious institutions.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Charging of Iraqi terrorist with IRGC ties for planning attacks in New York City",
-      "title_variants": [
-        "Charging of Iraqi terrorist with IRGC ties for planning attacks in New York City"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "charged in NYC"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "An Iraqi national with IRGC ties was charged in New York City for planning a synagogue attack.",
-      "ai_geo_fingerprint": "2f650ab2e241a84f063f2e49b194cef8a63071a15d283a987124725abd710439",
-      "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "Hamas",
+      "incident_id": "inc-f167e4c6dabc980a"
     },
     {
       "id": "b110aaf21db7ceb9",
@@ -320874,7 +320808,8 @@
       "ai_geo_reason": "Commander of an Iran-backed group captured in Turkey, to be prosecuted by the US.",
       "ai_geo_fingerprint": "b6d766dcbc77a38ffaac44597850926ba0df54d5607a7f66bb8e2a891ca51d6c",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-782dd17988d7771f"
     },
     {
       "id": "7f45172575b6ff06",
@@ -320935,7 +320870,8 @@
       "ai_geo_reason": "Detention of Iraqi Hezbollah leader by Washington/forces operating in the region.",
       "ai_geo_fingerprint": "3134311fe9c54b56f0dfdbb60c40cef671a2a9b14b2158a69ee59b400a1a5f5c",
       "ai_geo_inferred": true,
-      "actor_group": "Hezbollah"
+      "actor_group": "Hezbollah",
+      "incident_id": "inc-782dd17988d7771f"
     },
     {
       "id": "c335cd86c999ec2c",
@@ -320998,7 +320934,8 @@
       "ai_geo_reason": "ISIS member arrested in Eskisehir, Turkey.",
       "ai_geo_fingerprint": "dc3934603871d49888c0702c7f153128c92b90997a549c49471e779cda6d19e6",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-8d668d6d78358d45"
     },
     {
       "id": "8095b9bc8e6e8e3d",
@@ -321016,7 +320953,7 @@
       "collection_locale": null,
       "published": "2026-05-15T07:00:00+00:00",
       "source": "Marine Insight",
-      "source_count": 1,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPdDI0Q0VUQkd0bnNtYWM2d05BMnlicWF4Mi1NaWZXb2FJUUZlZGtfZHptZ3dIQklOTlVlcWpJc1R3VGV0bkp1ZUNtbjVTQ0pZcmhyTEtJMnhPczNTTnprR2JyZWwwdFlURTNFY0VCYXFoZU84dXg1WEM0VkZHVFROaGNWekxVc1g1RUdxM2p5dm1VT3BQX0o0cWJnd0NYODltQTJWS21mS1MwVFV0SzY5UGY0Q2JLYkczSEhVZ3lHdUhkQlA1Y0MyYjNmaDJBc1U?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -321028,10 +320965,31 @@
       "location_precision": "country_capital",
       "location_confidence": "high",
       "sources": [
-        "Marine Insight"
+        "Marine Insight",
+        "The Express Tribune",
+        "Pakistan Today"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Hostage crew’s video surfaces after 26 days in Somali pirate captivity",
+          "original_title": "Hostage crew’s video surfaces after 26 days in Somali pirate captivity",
+          "original_language": "en",
+          "summary": "A video featuring the hostage crew has emerged 26 days after their oil tanker was seized by Somali pirates.",
+          "published": "2026-05-15T07:00:00+00:00",
+          "source": "The Express Tribune",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQOWVJN1BxTHoyN2ozOVI1eWxhZkhBVDVxZEtsa3BjamZUenkzeTl5NlQtUDhseFFyaE1sTTU1VTlEWHYxcWgyWHZ4c1dYWEZZUkZTM3Fldk1ZNDJpUkxoS2FBT01nU1dzLWlNVnZDMGoxZS1IdlB4UnN0d2gzdHJtdUkyZng1aFVsazRETUVsNFFDdHdlc1pEaE1GdGpFQ05mWl9XbXA1dWJBZ9IBsgFBVV95cUxOSnpXVXR6aUpzMS1PTWpza1U2TFVMTWVDS21idVlKRXUwTHpLWC1IcklmZWp2cXVrSk1MODRQRE1MU1lWTUNzZUFzSVhSWllOWlJaYko2aVBTNm5PMzdsZjhjQkNfQW9ORmVFV0hrckxMYWlXalBmV25EcjhVSkxMMEZVSDROMHM5TXdLNHFVMGdYTjBNQkQ4V0hIRk4tS1NiU19hQ1RIcHhqY05NN29CWGhn?oc=5"
+        },
+        {
+          "title": "Video of hijacked crew emerges 26 days after Somali pirate seizure",
+          "original_title": "Video of hijacked crew emerges 26 days after Somali pirate seizure",
+          "original_language": "en",
+          "summary": "Video of hijacked crew emerges 26 days after Somali pirate seizure Pakistan Today",
+          "published": "2026-05-16T07:00:00+00:00",
+          "source": "Pakistan Today",
+          "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPaXlqcVBibUhMRWg4bF9tWVp4RElrZFBBcFBMLTRhZHpQWUNDb203YXI5WXBvMEUyeDY0bV9RY3NkN09nZVlqUndldGdCWEpVamw1Vm9sUlhIS1N6QUtKWnFtX1pTbzBYZFd6WkVPSzUwY2prUmxDdC1MNUlINXR0MzZkS2NCV3k3bTdFY0Y1OTdRVk9fRUhkQVhHTnI0MHBoSlNISU5ONUJXaTVncWxn?oc=5"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-05-15T07:00:00+00:00",
       "last_reported": "2026-05-15T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -321058,82 +321016,13 @@
       "ai_geo_reason": "Oil tanker seized by Somali pirates off the coast of Somalia.",
       "ai_geo_fingerprint": "368af2c06e04562d55f0bac45d07b884c1b48e4c7280b3af7218df020a7942c5",
       "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "b0419f30c6d483aa",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Hostage crew’s video surfaces after 26 days in Somali pirate captivity",
-      "summary": "A video featuring the hostage crew has emerged 26 days after their oil tanker was seized by Somali pirates.",
-      "original_title": "Hostage crew’s video surfaces after 26 days in Somali pirate captivity",
-      "original_summary": "Hostage crew’s video surfaces after 26 days in Somali pirate captivity The Express Tribune",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-05-15T07:00:00+00:00",
-      "source": "The Express Tribune",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQOWVJN1BxTHoyN2ozOVI1eWxhZkhBVDVxZEtsa3BjamZUenkzeTl5NlQtUDhseFFyaE1sTTU1VTlEWHYxcWgyWHZ4c1dYWEZZUkZTM3Fldk1ZNDJpUkxoS2FBT01nU1dzLWlNVnZDMGoxZS1IdlB4UnN0d2gzdHJtdUkyZng1aFVsazRETUVsNFFDdHdlc1pEaE1GdGpFQ05mWl9XbXA1dWJBZ9IBsgFBVV95cUxOSnpXVXR6aUpzMS1PTWpza1U2TFVMTWVDS21idVlKRXUwTHpLWC1IcklmZWp2cXVrSk1MODRQRE1MU1lWTUNzZUFzSVhSWllOWlJaYko2aVBTNm5PMzdsZjhjQkNfQW9ORmVFV0hrckxMYWlXalBmV25EcjhVSkxMMEZVSDROMHM5TXdLNHFVMGdYTjBNQkQ4V0hIRk4tS1NiU19hQ1RIcHhqY05NN29CWGhn?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "sources": [
-        "The Express Tribune",
-        "Pakistan Today"
-      ],
-      "related_articles": [
-        {
-          "title": "Video of hijacked crew emerges 26 days after Somali pirate seizure",
-          "original_title": "Video of hijacked crew emerges 26 days after Somali pirate seizure",
-          "original_language": "en",
-          "summary": "Video of hijacked crew emerges 26 days after Somali pirate seizure Pakistan Today",
-          "published": "2026-05-16T07:00:00+00:00",
-          "source": "Pakistan Today",
-          "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPaXlqcVBibUhMRWg4bF9tWVp4RElrZFBBcFBMLTRhZHpQWUNDb203YXI5WXBvMEUyeDY0bV9RY3NkN09nZVlqUndldGdCWEpVamw1Vm9sUlhIS1N6QUtKWnFtX1pTbzBYZFd6WkVPSzUwY2prUmxDdC1MNUlINXR0MzZkS2NCV3k3bTdFY0Y1OTdRVk9fRUhkQVhHTnI0MHBoSlNISU5ONUJXaTVncWxn?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-05-15T07:00:00+00:00",
-      "last_reported": "2026-05-16T07:00:00+00:00",
-      "dedup_confidence": 0.562,
+      "actor_group": "",
+      "incident_id": "inc-653f012858509371",
+      "source_article_fingerprints": [],
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "paraphrase_entity_context"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Direct maritime piracy operational update concerning hijacked vessel and hostages.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "release of hostage crew video after 26 days in Somali pirate captivity",
-      "title_variants": [
-        "release of hostage crew video after 26 days in Somali pirate captivity"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Somali pirate captivity"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Hostage crew held in Somali pirate captivity.",
-      "ai_geo_fingerprint": "745b2b5254a5e6d98974bd0f97a58fb6f0113cacb101b99aba7ee0fd6d8462a7",
-      "ai_geo_inferred": true,
-      "actor_group": ""
+        "same_incident"
+      ]
     },
     {
       "id": "9b77e2d57b5ee482",
@@ -321152,7 +321041,7 @@
       "collection_locale": null,
       "published": "2026-05-15T07:00:00+00:00",
       "source": "Department of Justice (.gov)",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQUDg1b2VmNUxWWGpWQlM0eFdfa2s4OXhrQ2NBODRPTjFDYTJ2YVR0Tld2cldtb0NZZGlBM0l3eng0ODhsSEhMdmY1RFN2QnphLXlhYl81VDdrMklVc2YzX1o0NjNnQXBPNkQ0VHIxdk0zRUF6Yi13SWE1TE9KR0ZjNDIySkkyby1fOHRnNDdMRUZ6MnUyOGdjbVpEVVY0aXpiXzNoT2pwZVdyeUVfb295ZUVCZkNMT2FyZFE?oc=5",
       "collector": "Google News RSS",
       "country": "United States",
@@ -321167,7 +321056,8 @@
       "targeted_source": "U.S. Department of Justice",
       "targeted_source_kind": "official_primary_source",
       "sources": [
-        "Department of Justice (.gov)"
+        "Department of Justice (.gov)",
+        "i24NEWS"
       ],
       "related_articles": [
         {
@@ -321178,14 +321068,24 @@
           "published": "2026-05-15T07:00:00+00:00",
           "source": "Department of Justice (.gov)",
           "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPb2NCWWcxRGxRWGUxcTl0MmNudFpWR2dyZDJpNXhXbmdBdHJvTXA2SnRnRFFjUGFNVTRhUDRzc2VtZG8xa1JDRUZOeTFwb1VnUnoxaFJCaDZmdGJueW5EMmhvVnBGQkhHMFR2TklKX0pFNDktZ3ptdUpSbWxFR0ktOWZieDkxT2k2eXUzb1dkS0ZSYlJ2QmpoSE5IZTQ1S2lvdVVKZzVuRVZZOHUyOG5ZaGFhRkM?oc=5"
+        },
+        {
+          "title": "Iraqi terrorist with IRGC ties charged in NYC for planning synagogue attack",
+          "original_title": "NYC: Iraqi terrorist with ties to IRGC charged with planning to attack targets including synagogues",
+          "original_language": "en",
+          "summary": "An Iraqi national with alleged ties to the IRGC has been charged in New York City with planning terrorist attacks against targets including synagogues.",
+          "published": "2026-05-16T07:00:00+00:00",
+          "source": "i24NEWS",
+          "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxQLUR2Sm4tcm1OSWQ5TThXeEJjS19UNlk4QmNsbDZ0TGFzNldJbjZLZ2VpYXBIUDNLX3ktcURIVGdNb2pNQnJTcDlGYUdnS1ZBTUF4by0yVGZFX0s1Z2l4VHg5dl9ZNmtYSFZhdzY5QUNFZ3hnMGRRZ1dPdHNmdkhKLU5NNzFIRmc2ZWRzbGl6cGFHUnZJd3RMSm1yb3FrV0RQOVBhZzExMThZUkJucFpHS0p2ODh0SlozTWZ1MjlPVXVyeno4MnZHek1BWU8xaEJ2M19sUWZLdW45Y3h1bXN3M0trUk9Cd1NRWUtORVln?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 3,
       "first_reported": "2026-05-15T07:00:00+00:00",
-      "last_reported": "2026-05-15T07:00:00+00:00",
+      "last_reported": "2026-05-16T07:00:00+00:00",
       "dedup_confidence": 1.0,
       "dedup_methods": [
-        "very_high_title_similarity"
+        "very_high_title_similarity",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
@@ -321211,7 +321111,9 @@
       "ai_geo_reason": "The related article indicates the case was handled by the Southern District of New York.",
       "ai_geo_fingerprint": "357b9e0391443d3701d05e992b509e16095d09019ff08f9441cb9dcc417da900",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-b8ff76e218391603",
+      "source_article_fingerprints": []
     },
     {
       "id": "e2b730afc395c76b",
@@ -321272,7 +321174,8 @@
       "ai_geo_reason": "The suspect was arrested in Spain.",
       "ai_geo_fingerprint": "e86a8c44788e21ea10dd34da2afa8af7826db0d82204dc87f4e3bd7843e904a0",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-f4d7fdd23f557077"
     },
     {
       "id": "b614bad7ffb19864",
@@ -321334,7 +321237,8 @@
       "ai_geo_reason": "The conviction took place in Cheboksary, Russia.",
       "ai_geo_fingerprint": "3ce76a7a45686bf01220ff6412b5290412479e128cbb3839955473136948aa0f",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-ff96972244be5496"
     },
     {
       "id": "d01d276bce4b3b3e",
@@ -321398,7 +321302,8 @@
       "ai_geo_reason": "The arrest and planned attack were in Jerusalem.",
       "ai_geo_fingerprint": "e1010d148e3a4930876c2bb714cb3d71170e65c83c770a36a9c0ba587eaaa2be",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-0fb56167529cefb6"
     },
     {
       "id": "ee2f489427058320",
@@ -321465,7 +321370,8 @@
       "ai_geo_reason": "Piracy incident associated with Somali pirates.",
       "ai_geo_fingerprint": "213f2989460f860859be58473ee4a7ef1f1e1c50d2961d8728be74c57a5de377",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-90314a67d77f22a7"
     },
     {
       "id": "334543c91d24ec43",
@@ -321532,7 +321438,8 @@
       "ai_geo_reason": "Maritime piracy incidents originating from Somalia.",
       "ai_geo_fingerprint": "630c7cb93387cf410775d18cee110842730b9f056642da8793bad4718ff29385",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-c3cd2be8e47901d3"
     },
     {
       "id": "07b268c1081bdfbf",
@@ -321600,68 +321507,8 @@
       "ai_geo_reason": "Conviction handed down by a court in Russia.",
       "ai_geo_fingerprint": "2ae290f27cfa949e4dc1d9a244aae5e0eda9483d8b164c55df10066e0bdf963e",
       "ai_geo_inferred": true,
-      "actor_group": "Azov"
-    },
-    {
-      "id": "310ca03eb00f0c60",
-      "category": "Arrests",
-      "categories": [
-        "Arrests"
-      ],
-      "title": "Terror suspect in Hamburg: Tip came from Iraqi intelligence",
-      "summary": "Investigations reveal that the tip leading to the arrest of the terror suspect in Hamburg originated from Iraqi intelligence services.",
-      "original_title": "Terrorverdächtiger in Hamburg: Hinweis kam vom irakischen Geheimdienst",
-      "original_summary": "Terrorverdächtiger in Hamburg: Hinweis kam vom irakischen Geheimdienst NDR.de",
-      "original_language": "de",
-      "collection_language": "de",
-      "collection_language_name": "German",
-      "collection_locale": "DE:de",
-      "published": "2026-05-13T07:00:00+00:00",
-      "source": "NDR.de",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNeGFEbFZveUVpN2t1cFgybFR1Rzc1cUtpU00xQ3JfR0JDdGZwcTJXWkF0UXctX1ZVTHNzczlPdzJ4cG96M0NGZVd4S0h4Ry1fQ09fbmUwQzFmZzFoeTh5Sml1SFRpTHlRRV9nVWVMczRkMmVmX2k5d0JDOGZnTjhHYXJCM0JFV2plX1oxZk1fNHRUT0M3Q2JxajdmY21HSjFPeHQtTDRrcFNDLTc0UDJKR3JGUVlScTUxOGJKTml2SEt2VjQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Germany",
-      "country_code": "DE",
-      "city": "Hamburg",
-      "region": null,
-      "latitude": 53.55073,
-      "longitude": 9.99302,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "NDR.de"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-05-13T07:00:00+00:00",
-      "last_reported": "2026-05-13T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "International intelligence sharing and operational CT arrest updates.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Intelligence cooperation between Iraq and Germany leading to a terror suspect's arrest in Hamburg",
-      "title_variants": [
-        "Intelligence cooperation between Iraq and Germany leading to a terror suspect's arrest in Hamburg"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "arrest of the terror suspect in Hamburg"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The arrest occurred in Hamburg, Germany.",
-      "ai_geo_fingerprint": "ae9fd10e4e2a4b1896e90083b90ead403921592ef0dc54406f19d2dffc456c91",
-      "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "Azov",
+      "incident_id": "inc-469f9fafbc58731c"
     },
     {
       "id": "d1906a54b7f6acac",
@@ -321728,7 +321575,8 @@
       "ai_geo_reason": "Vessel hijacked at anchorage off Fujairah in the UAE.",
       "ai_geo_fingerprint": "03bfcc182f44e1e2a09799e31d45dd53d6bb11899422fae341dc3033b3334aa0",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-70084772fe57b6b4"
     },
     {
       "id": "e8e6e739e913db08",
@@ -321796,7 +321644,8 @@
       "ai_geo_reason": "Sentencing for planning a terrorist attack in New York City.",
       "ai_geo_fingerprint": "bc38954b53391f62881f779572d961b15a1839e2122b697f81e526cf3e958506",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-869e5110d2358869"
     },
     {
       "id": "396ac82d4b0c829b",
@@ -321885,7 +321734,8 @@
         "f504e9cfd5040b3e436673c8c60c07d938974609dea9c2d33c8c96dcd05ee25c",
         "fb3d57971672d9b578f6e45b0d8770d39da9f3ae5c07680492c2e7bd3df4e26c"
       ],
-      "actor_group": "Al-Shabaab"
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-39f9d9852a2c4277"
     },
     {
       "id": "36f753917825d13c",
@@ -322016,7 +321866,8 @@
       "ai_geo_reason": "The UAE government issued the sanctions list.",
       "ai_geo_fingerprint": "17ba3c21fa637cff6c6452daeeac420c618c3f2bab47c38fe19091e40c0101c6",
       "ai_geo_inferred": false,
-      "actor_group": "Hezbollah"
+      "actor_group": "Hezbollah",
+      "incident_id": "inc-2dfa017a956c5263"
     },
     {
       "id": "99983cb592706012",
@@ -322093,7 +321944,8 @@
       "ai_geo_reason": "Nationwide operations across Turkey by Turkish authorities.",
       "ai_geo_fingerprint": "1a0472455e847ed61e48fbe441d2e21f8cdc91359ef933c0f1718367bc507103",
       "ai_geo_inferred": false,
-      "actor_group": "FETÖ"
+      "actor_group": "FETÖ",
+      "incident_id": "inc-7f6d2648866b18b3"
     },
     {
       "id": "6407b4d42eeb1fa1",
@@ -322155,7 +322007,8 @@
       "ai_geo_reason": "The legal proceedings and sentencing occurred in the Republic of Khakassia, Russia.",
       "ai_geo_fingerprint": "4dc90f9b71220a6aae7843bcd7da63d3702c4d9f1d5f9918688f823f4fa2b3cd",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-92c80723c863876d"
     },
     {
       "id": "6b0bfc5254956b7e",
@@ -322223,7 +322076,8 @@
       "ai_geo_reason": "Amit Ben Yigal was an Israeli soldier; trial and conviction took place in Israel.",
       "ai_geo_fingerprint": "52dfe054b07ae802036471219d1f511e1f2f8148535c4fcaab91b822453123b1",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-80b399311ce2b607"
     },
     {
       "id": "9938952acc2af90f",
@@ -322308,7 +322162,8 @@
       "dedup_methods": [
         "title_plus_anchor"
       ],
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-439a1374f79d93cc"
     },
     {
       "id": "bbbda70884868f6e",
@@ -322384,18 +322239,18 @@
         "Arrests",
         "Legal / Judicial"
       ],
-      "title": "Man arrested over planned jihadist attack targeting the Louvre",
-      "summary": "A suspect has been arrested and charged in connection with a planned jihadist attack targeting the Louvre in Paris.",
-      "original_title": "Man arrested over planned jihadist attack targeting the Louvre",
-      "original_summary": "Man arrested over planned jihadist attack targeting the Louvre Le Monde.fr",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
+      "title": "Tunisian man placed under formal investigation and jailed in Paris over suspected terror attack plot",
+      "summary": "A Tunisian national has been remanded in custody in Paris on suspicion of plotting a terrorist attack.",
+      "original_title": "Un Tunisien mis en examen et écroué à Paris, suspecté d'avoir fomenté un projet d'attaque terroriste",
+      "original_summary": "Un Tunisien mis en examen et écroué à Paris, suspecté d'avoir fomenté un projet d'attaque terroriste France 24",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French",
+      "collection_locale": "FR:fr",
       "published": "2026-05-11T07:00:00+00:00",
-      "source": "Le Monde.fr",
-      "source_count": 3,
-      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPTEIzZWlqd1hTNlBlRGpMbXlKYXRWOEdhNC1peVJpOUVlSzktbTZENDBYVk9KOFJBYlBjU2hON2FLX1g0andac2pXUG5pa25ibTEwYnpJYmhxaWFyd3NEU2dKR29hQmxWaENEUVZadk50N1FtZkswVkpNTmxKMXlMZHVGTEM0QzkwVXZwQTREUndOY2tRUU0yLWN5MF9fcU9FZlFXM1JjalRZUmJSNGVTZUFvN1VPQy0yVnVMTkJpVW8tWnJ6Ym5kaQ?oc=5",
+      "source": "France 24",
+      "source_count": 4,
+      "url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxNQkVkRG12aWNQVWxtTzg3R1RGMVA5T28tbV9TMDJ0UENyQ3pyOVM3VlpYZmVIRTFRZHRfVEp4eXlSYi1NYWpzRkQ3ZUE3bkVUWUVzbjZZbmFLcXpZbDN2dG5Cak9YSVpzSEE5UmlHUmNvQXdRUDVNbmtGbzhoOXpCc3c4cGwzd1J3ZXZHOFJla1N0Q1pDOEUxLUFSTTQxVGM1OTJTcHdMVDRSVzFKcUtOMU1xMVpCekg5X2c3VlZOMVNsaHkzNnNrdEI4b1NCVEgzQjk0LXRWZVRIZlNLeWFFN3JPMDhmRm5HT2V5bjQ3VjZtVnh1NVRLc20tR2w?oc=5",
       "collector": "Google News RSS",
       "country": "France",
       "country_code": "FR",
@@ -322408,7 +322263,8 @@
       "sources": [
         "Le Monde.fr",
         "Actu17",
-        "Ouest-France"
+        "Ouest-France",
+        "France 24"
       ],
       "related_articles": [
         {
@@ -322428,9 +322284,18 @@
           "published": "2026-05-11T07:00:00+00:00",
           "source": "Actu17",
           "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxOcEFVM0Nzcm4zcE5vX0QxazdTUXM0azdVbHlsZkU5amU2bFFwYzNjeFRnUVpoeDBobFlYc29YeUpMclFzaE9qLUF3TnBad0NabkNhR1pkdlNQTXdfOUt0RWhISC15RDFCWmsyYVp0TG05b2pnd3lWaTdlTUZDempCRlZMUEdHYnVVMm5CZEt5WlBFMldzQjE4b0tybTJhNXZKdXM3VGlWMm1WaExlSmFCOUZQZHRTODBFb2VnajFGdlFQMk0?oc=5"
+        },
+        {
+          "title": "Man arrested over planned jihadist attack targeting the Louvre",
+          "original_title": "Man arrested over planned jihadist attack targeting the Louvre",
+          "original_language": "en",
+          "summary": "A suspect has been arrested and charged in connection with a planned jihadist attack targeting the Louvre in Paris.",
+          "published": "2026-05-11T07:00:00+00:00",
+          "source": "Le Monde.fr",
+          "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPTEIzZWlqd1hTNlBlRGpMbXlKYXRWOEdhNC1peVJpOUVlSzktbTZENDBYVk9KOFJBYlBjU2hON2FLX1g0andac2pXUG5pa25ibTEwYnpJYmhxaWFyd3NEU2dKR29hQmxWaENEUVZadk50N1FtZkswVkpNTmxKMXlMZHVGTEM0QzkwVXZwQTREUndOY2tRUU0yLWN5MF9fcU9FZlFXM1JjalRZUmJSNGVTZUFvN1VPQy0yVnVMTkJpVW8tWnJ6Ym5kaQ?oc=5"
         }
       ],
-      "article_count": 3,
+      "article_count": 4,
       "first_reported": "2026-05-11T07:00:00+00:00",
       "last_reported": "2026-05-11T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -322440,14 +322305,15 @@
       "ai_relevance_reason": "Direct report of a disrupted terrorist plot and suspect arrest.",
       "ai_current_ct_event": true,
       "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Arrest of a suspect for a planned jihadist attack targeting the Louvre in Paris",
+      "translated_to_english": true,
+      "ai_canonical_event": "Detention of a Tunisian suspect in Paris for suspected terrorist attack plotting",
       "title_variants": [
         "Arrest of a suspect for a planned jihadist attack targeting the Louvre in Paris"
       ],
-      "dedup_confidence": 0.761,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "same_incident"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_city_geonames",
@@ -322461,73 +322327,9 @@
       "ai_geo_reason": "The attack targeted the Louvre in Paris, France.",
       "ai_geo_fingerprint": "0b125ad17003343257f22a6ef7cf3f6c010d6969378f6242c579ff6d0f7ec4cd",
       "ai_geo_inferred": false,
-      "actor_group": ""
-    },
-    {
-      "id": "7ed4f6fa87c2a8c8",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Legal / Judicial"
-      ],
-      "title": "Tunisian man placed under formal investigation and jailed in Paris over suspected terror attack plot",
-      "summary": "A Tunisian national has been remanded in custody in Paris on suspicion of plotting a terrorist attack.",
-      "original_title": "Un Tunisien mis en examen et écroué à Paris, suspecté d'avoir fomenté un projet d'attaque terroriste",
-      "original_summary": "Un Tunisien mis en examen et écroué à Paris, suspecté d'avoir fomenté un projet d'attaque terroriste France 24",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French",
-      "collection_locale": "FR:fr",
-      "published": "2026-05-11T07:00:00+00:00",
-      "source": "France 24",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxNQkVkRG12aWNQVWxtTzg3R1RGMVA5T28tbV9TMDJ0UENyQ3pyOVM3VlpYZmVIRTFRZHRfVEp4eXlSYi1NYWpzRkQ3ZUE3bkVUWUVzbjZZbmFLcXpZbDN2dG5Cak9YSVpzSEE5UmlHUmNvQXdRUDVNbmtGbzhoOXpCc3c4cGwzd1J3ZXZHOFJla1N0Q1pDOEUxLUFSTTQxVGM1OTJTcHdMVDRSVzFKcUtOMU1xMVpCekg5X2c3VlZOMVNsaHkzNnNrdEI4b1NCVEgzQjk0LXRWZVRIZlNLeWFFN3JPMDhmRm5HT2V5bjQ3VjZtVnh1NVRLc20tR2w?oc=5",
-      "collector": "Google News RSS",
-      "country": "France",
-      "country_code": "FR",
-      "city": "Paris",
-      "region": null,
-      "latitude": 48.85341,
-      "longitude": 2.3488,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "France 24"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-05-11T07:00:00+00:00",
-      "last_reported": "2026-05-11T07:00:00+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_url"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Current arrest and detention related to a terrorism plot.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Detention of a Tunisian suspect in Paris for suspected terrorist attack plotting",
-      "title_variants": [
-        "Detention of a Tunisian suspect in Paris for suspected terrorist attack plotting"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "remanded in custody in Paris on suspicion of plotting a terrorist attack"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The suspect was jailed and investigated in Paris, France.",
-      "ai_geo_fingerprint": "f05e2ac31c5727605e5a7c523f61061a9a3d00e09248699485fb60aacf4ebbe2",
-      "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-401cc3b5b3db6e33",
+      "source_article_fingerprints": []
     },
     {
       "id": "c2bac2fd8792024f",
@@ -322546,7 +322348,7 @@
       "collection_locale": "DE:de",
       "published": "2026-05-11T07:00:00+00:00",
       "source": "Spiegel",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxOQS1tLVVLSHc2Y21BRGN1VlB0dXVveVk5Z0NEblJuTW9tRW14OWk4OG4ybVhtbDJvR21WSWVpMV9Ud2pKUzVQeGhGNjhOMkxFLUhBQ3hOakZ3OUg2N2dESlJ5bEgtTmRraXdCRXFybVRsWWtPSXZpdzluQTNSdm1vWUVIVnFoMHhaXy04WUV2bDd1YWh6Z19fYXdlTmpHZjk2d2RKN1h5WFhpZDJCenJIeVdiQnY4ajlTSlE0dURiZFpqX3g1WkdsOWdHRVoteXVzSENhNVRTZFdyUXRDNEJZUHVSUkVMbDdsX3c?oc=5",
       "collector": "Google News RSS",
       "country": "Germany",
@@ -322561,12 +322363,23 @@
       "targeted_source": "spiegel.de",
       "targeted_source_kind": "local_language_media",
       "sources": [
-        "Spiegel"
+        "Spiegel",
+        "NDR.de"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Terror suspect in Hamburg: Tip came from Iraqi intelligence",
+          "original_title": "Terrorverdächtiger in Hamburg: Hinweis kam vom irakischen Geheimdienst",
+          "original_language": "de",
+          "summary": "Investigations reveal that the tip leading to the arrest of the terror suspect in Hamburg originated from Iraqi intelligence services.",
+          "published": "2026-05-13T07:00:00+00:00",
+          "source": "NDR.de",
+          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNeGFEbFZveUVpN2t1cFgybFR1Rzc1cUtpU00xQ3JfR0JDdGZwcTJXWkF0UXctX1ZVTHNzczlPdzJ4cG96M0NGZVd4S0h4Ry1fQ09fbmUwQzFmZzFoeTh5Sml1SFRpTHlRRV9nVWVMczRkMmVmX2k5d0JDOGZnTjhHYXJCM0JFV2plX1oxZk1fNHRUT0M3Q2JxajdmY21HSjFPeHQtTDRrcFNDLTc0UDJKR3JGUVlScTUxOGJKTml2SEt2VjQ?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-05-11T07:00:00+00:00",
-      "last_reported": "2026-05-11T07:00:00+00:00",
+      "last_reported": "2026-05-13T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -322591,7 +322404,13 @@
       "ai_geo_reason": "The arrest took place in Hamburg, Germany.",
       "ai_geo_fingerprint": "5fa34a56069b0a12f76ee2b6d1fb13f48cb6db03ab3ce38f0a51f8253096a039",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-08799437e0a0c297",
+      "source_article_fingerprints": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "b43c7b2c1389d693",
@@ -322660,76 +322479,6 @@
       "incident_anchor": "Israeli Consulate attack Turkey 2024",
       "update_type": "JUDICIAL_UPDATE",
       "incident_id": "inc-81b7a8cce23021c2"
-    },
-    {
-      "id": "cb431a66c4e44013",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Hijacked dhows raise alarm over new piracy threats in Somalia",
-      "summary": "Recent incidents involving hijacked dhows off the coast of Somalia have raised international alarms regarding a resurgence of piracy threats.",
-      "original_title": "Hijacked dhows raise alarm over new piracy threats in Somalia",
-      "original_summary": "Hijacked dhows raise alarm over new piracy threats in Somalia safety4sea.com",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-05-11T07:00:00+00:00",
-      "source": "safety4sea.com",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNU1NOMFN6elJmcnBNUmJoNHVYV2g3ODRuTGZjYVRhY3FlTWZmcV9zdmNERHUwSnZUYkRzelFXQkNnQmM3UHF6ZzAydlltbXNWa0hIbDBKdlZQZ1lPdjduUnVmRXhEZ2FraU1zQkNILUFna25OcmttMGdPSXhXN0pmMUtveWxGTmxjZU9wS2lR?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "SAFETY4SEA",
-      "targeted_source_kind": "specialist_media",
-      "source_article_fingerprints": [
-        "a2d49cbaa813f3da144f1fbf6304df410dae14fab54014685e560a7a4c6691f1"
-      ],
-      "sources": [
-        "safety4sea.com"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-05-11T07:00:00+00:00",
-      "last_reported": "2026-05-11T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Highlights a current wave of maritime piracy incidents and vessel hijackings off Somalia.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "hijacked dhows raise alarm over renewed piracy threats off Somalia",
-      "title_variants": [
-        "hijacked dhows raise alarm over renewed piracy threats off Somalia"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Hijacked dhows raise alarm over new piracy threats in Somalia"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The piracy threat and hijacked dhows are located off the coast of Somalia.",
-      "ai_geo_fingerprint": "06a011c7d8e09633a4f3d75f1827dc98c47647b66a9f295b3f5df777d9afd247",
-      "ai_geo_inferred": false,
-      "actor_group": ""
     },
     {
       "id": "041305b57a33862d",
@@ -322813,7 +322562,8 @@
       "ai_geo_reason": "Trial proceedings handled by an Egyptian court.",
       "ai_geo_fingerprint": "b2e8322f64364438e180ad57ba2945aa5f0580620145e31f3e1f524e263026fe",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-1c56099d6134c0f6"
     },
     {
       "id": "88f62422d565124d",
@@ -322881,7 +322631,8 @@
       "ai_geo_reason": "Counter-terrorism operation in Diyala governorate and Hamrin Mountains, Iraq.",
       "ai_geo_fingerprint": "6a67440cc5b3a560a1a144be672b9104aa8c15afe6db784e55300002a93881d8",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-665707bbc468a5cd"
     },
     {
       "id": "226473ee41944e07",
@@ -322942,7 +322693,8 @@
       "ai_geo_reason": "Operations span Syrian cities across Syria.",
       "ai_geo_fingerprint": "3753415fc6323625484a6c2563333273beb68d73775d9fc060a549aa163e418f",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-5718620ea59e1aee"
     },
     {
       "id": "4dedaa9e3b787e17",
@@ -323071,9 +322823,10 @@
       "title_variants": [
         "Somali pirates seize dhow for use as mothership off Somalia"
       ],
-      "dedup_confidence": 0.503,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "entity_actor_event_signature"
+        "entity_actor_event_signature",
+        "same_incident"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_country_capital",
@@ -323091,7 +322844,11 @@
       "ai_geo_reason": "Somali pirate activity and seizure of dhows.",
       "ai_geo_fingerprint": "bb7c551d5c7cd758a9bf446aff9920a363a28949fbf54de640bf031161831660",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-0597ab18b1d7c802",
+      "source_article_fingerprints": [
+        "a2d49cbaa813f3da144f1fbf6304df410dae14fab54014685e560a7a4c6691f1"
+      ]
     },
     {
       "id": "b6fab142cc04344e",
@@ -323153,7 +322910,8 @@
       "ai_geo_reason": "The alert and security measures are centered in New Delhi, India.",
       "ai_geo_fingerprint": "2559cf5861964f33dcb73d0beae63ac2dc231f621dfee99cde30eb395448881d",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-a60fd7910390c5bf"
     },
     {
       "id": "3a9eabb9570f89c2",
@@ -323213,7 +322971,8 @@
       "ai_geo_reason": "The Department of State Services (DSS) is the security agency of Nigeria.",
       "ai_geo_fingerprint": "e4e22ae461ccc72b4d46b9626d15d40aceb0dc726f3b0d43295530333955535e",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-36d13dea99f58778"
     },
     {
       "id": "5fb07246816c97e3",
@@ -323370,7 +323129,8 @@
       "ai_geo_reason": "Security operation and clashes in Zamfara, Nigeria.",
       "ai_geo_fingerprint": "82487b240b26d8d016382cb664eb3054d8657c44fb1c0c551730e8f419edd97e",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-f67f0ae647935a58"
     },
     {
       "id": "db45e043222f64cb",
@@ -323602,7 +323362,7 @@
       "collection_locale": null,
       "published": "2026-05-07T07:00:00+00:00",
       "source": "Sky News",
-      "source_count": 2,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMigwJBVV95cUxOZ1cwak1IaTdiQTNMNk05SHJkNUJzRnViMTZxTzZDaW9nQzI4Qm5qMjh0QU5Ic0lOZ1RxdUhuZnFvQ1MwZlZVZi1sSEU2RVJkU25vMGIydTdhTVl5eWdndGVGa2tjOXNpOVBMMldLanNBNG1IOWIxTUxScFpVWXIxTVdXRXJGdzZxS3QtbGp6UEhjR2hoamMxOUo3VnJIcU95V1hCYV9FeGdJd24xTTEyRXdZS3EwR0ZoZG4xaDdfYk5LM0wxWUVtUkpMY3VZZEZndUpNaWNFVm5yWGk0cG1CZnNNVkZlOGk0ZHpERVo1TUdCckZYNGhJWktQM2k2ck9ISHNF?oc=5",
       "collector": "Google News RSS",
       "country": "Australia",
@@ -323618,7 +323378,8 @@
       "targeted_source_kind": "international_media",
       "sources": [
         "Sky News",
-        "Euronews"
+        "Euronews",
+        "הארץ"
       ],
       "related_articles": [
         {
@@ -323629,9 +323390,18 @@
           "published": "2026-05-08T07:00:00+00:00",
           "source": "Euronews",
           "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQS0NFRXFrWGRnd2t0cUNLRC14Vm5ySEhjampKSkFMOUhKdTVzbm1ZUEloVkUtMGlhdDRVNW9aeV9NOXBvcDN2ZUlLVW9IbENuTWFCMFlKUUlnbGs2Um9FcU5LZGlwbGZ6NlJ4WjRubTJkQmNRUm9mQUtsRzhBNWlIV3gtNEFtSFY4a0oyWkZHZTlfdGo3YTN4cE9vZ24xQTdhcGpDU2dRSUxjb1NBbVlqb05wMFg3YmxPNlBJUDAzRmRVN3hu?oc=5"
+        },
+        {
+          "title": "Australia arrests 3 women with ISIS ties returning after years in Syria",
+          "original_title": "אוסטרליה עצרה 3 נשים עם קשרים לדאעש ששבו למדינה לאחר שנים רבות בסוריה",
+          "original_language": "he",
+          "summary": "Australian authorities have arrested three women linked to the Islamic State upon their return to the country following years spent in Syria.",
+          "published": "2026-05-07T07:00:00+00:00",
+          "source": "הארץ",
+          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNUU4xbEN3WF84WjJuaEdfZ3JfQTRRaHVSUDBJWWNuOUpBQTRIb1RZeHlDSjRYVTh3RG1hV0x4ajRzLXl2Q3R2bVZNcTB2WS1aWmhWTXpFM3hzc2M3X1l5WElYQ1YtV25sM1BES2ZVRXpkMmhlWkM4TE50d1MyNFhPWHlETHZmMTdmcFRDWUJ0aXVTUjRCUHhrLVZVcDNaQkpwcjg3emsxc0FRSEFLckE?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 3,
       "first_reported": "2026-05-07T07:00:00+00:00",
       "last_reported": "2026-05-08T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -323646,9 +323416,10 @@
       "title_variants": [
         "Pending criminal charges against three women with alleged ISIS links upon arrival in Australia"
       ],
-      "dedup_confidence": 0.517,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "actor_country_action_signature"
+        "actor_country_action_signature",
+        "same_incident"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_country_capital",
@@ -323662,7 +323433,9 @@
       "ai_geo_reason": "The arrival and subsequent criminal charges by authorities happened in Australia.",
       "ai_geo_fingerprint": "4c035673e71a9b2f2d83a1ba9f1b5a64cc0ae94ab63a0ae6cdde367e1b7bc234",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-4b4c57a3f659c791",
+      "source_article_fingerprints": []
     },
     {
       "id": "400ec6f930bdae47",
@@ -323786,71 +323559,8 @@
       "ai_geo_reason": "Explicitly states the operation took place in Istanbul.",
       "ai_geo_fingerprint": "2d2dc1db99fcfc3b78d29ca3ad69478b69fe37cd8e25ae414fa34277d8cb4280",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
-    },
-    {
-      "id": "1c3b7119d0135c63",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Legal / Judicial"
-      ],
-      "title": "Australia arrests 3 women with ISIS ties returning after years in Syria",
-      "summary": "Australian authorities have arrested three women linked to the Islamic State upon their return to the country following years spent in Syria.",
-      "original_title": "אוסטרליה עצרה 3 נשים עם קשרים לדאעש ששבו למדינה לאחר שנים רבות בסוריה",
-      "original_summary": "אוסטרליה עצרה 3 נשים עם קשרים לדאעש ששבו למדינה לאחר שנים רבות בסוריה הארץ",
-      "original_language": "he",
-      "collection_language": "he",
-      "collection_language_name": "Hebrew",
-      "collection_locale": "IL:he",
-      "published": "2026-05-07T07:00:00+00:00",
-      "source": "הארץ",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNUU4xbEN3WF84WjJuaEdfZ3JfQTRRaHVSUDBJWWNuOUpBQTRIb1RZeHlDSjRYVTh3RG1hV0x4ajRzLXl2Q3R2bVZNcTB2WS1aWmhWTXpFM3hzc2M3X1l5WElYQ1YtV25sM1BES2ZVRXpkMmhlWkM4TE50d1MyNFhPWHlETHZmMTdmcFRDWUJ0aXVTUjRCUHhrLVZVcDNaQkpwcjg3emsxc0FRSEFLckE?oc=5",
-      "collector": "Google News RSS",
-      "country": "Australia",
-      "country_code": "AU",
-      "city": "Canberra",
-      "region": null,
-      "latitude": -35.28346,
-      "longitude": 149.12807,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "haaretz.co.il",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "הארץ"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-05-07T07:00:00+00:00",
-      "last_reported": "2026-05-07T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete law enforcement arrests of individuals returning from a conflict zone with terrorist affiliations.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Arrest of three IS-linked women returning to Australia from Syria",
-      "title_variants": [
-        "Arrest of three IS-linked women returning to Australia from Syria"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Australia arrests 3 women with ISIS ties returning after years in Syria."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Arrest upon return occurred in Australia.",
-      "ai_geo_fingerprint": "7d1370b120269f2db627bbdc10e80017b713b60c36df4b1fda94032c71831866",
-      "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-d84d4ea519c62552"
     },
     {
       "id": "bb90f1532784706a",
