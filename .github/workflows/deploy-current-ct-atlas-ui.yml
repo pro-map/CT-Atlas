@@ -25,6 +25,11 @@ on:
       - "tab-access.js"
       - "index.html"
       - "main.html"
+      - "ip.html"
+      - "ip.js"
+      - "ip.css"
+      - "ip-report.js"
+      - "ip-intelligence.svg"
       - "darkweb.html"
       - "darkweb.js"
       - "darkweb.css"
@@ -114,6 +119,11 @@ jobs:
           grep -q 'Behavioral Pattern Detection' crypto.html
           grep -q 'Case Workspace' crypto.html
           grep -q 'Monitoring & Alerts' crypto.html
+          test -s ip.html
+          test -s ip.css
+          test -s ip-intelligence.svg
+          node --check ip.js
+          node --check ip-report.js
           test -s darkweb.html
           test -s darkweb.css
           test -s darkweb-intelligence.svg

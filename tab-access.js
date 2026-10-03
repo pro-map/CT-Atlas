@@ -4,7 +4,7 @@
 const API_BASE="https://ct-report-generator.fairpeace.workers.dev";
 const TOKEN_KEY="ct_map_session_token";
 const USER_KEY="ct_map_username";
-const VALID_TABS=new Set(["map","crypto","facial","social","darkweb"]);
+const VALID_TABS=new Set(["map","crypto","facial","social","darkweb","ip"]);
 const tab=String(document.body&&document.body.dataset.ctTab||"").trim().toLowerCase();
 if(!VALID_TABS.has(tab))return;
 

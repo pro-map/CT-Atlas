@@ -35,9 +35,9 @@ function withAdminDisplayName(row){
   return displayName?{...row,display_name:displayName}:row;
 }
 const SOCIAL_REPORT_RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
-const TAB_ACCESS_FIELDS = Object.freeze({ map: true, crypto: true, facial: true, social: true, darkweb: true });
+const TAB_ACCESS_FIELDS = Object.freeze({ map: true, crypto: true, facial: true, social: true, darkweb: true, ip: true });
 function tabAccessTemplate(username = "") {
-  return { username, map: 0, crypto: 0, facial: 0, social: 0, darkweb: 0 };
+  return { username, map: 0, crypto: 0, facial: 0, social: 0, darkweb: 0, ip: 0 };
 }
 const MIGRATION_PAGE_SIZE = 250;
 const EXCHANGE_CHAINS = new Set(["bitcoin", "ethereum", "bsc", "polygon", "arbitrum", "base", "tron"]);
@@ -512,6 +512,19 @@ export class ReportGate {
     const url = new URL(request.url);
     const body = await request.json().catch(()=>({}));
     const now = Date.now();
+
+    if (url.pathname === "/ip-intelligence-limit") {
+      if (!isAllowedUser(body.username, this.env)) return Response.json({ error: "Unknown user." }, { status: 403 });
+      return this.state.storage.transaction(async tx => {
+        const key = "ip-intelligence:limit:" + body.username;
+        let counter = await tx.get(key);
+        if (!counter || counter.until <= now) counter = { count: 0, until: now + 60000 };
+        if (counter.count >= 6) return Response.json({ error: "Rate limit." }, { status: 429 });
+        counter.count++;
+        await tx.put(key, counter);
+        return Response.json({ ok: true });
+      });
+    }
 
     // One-time, user-requested removal of the pre-selection feed. Keep outlet
     // settings and known-URL history so rescans do not manufacture new alerts.

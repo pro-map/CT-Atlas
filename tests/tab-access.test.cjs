@@ -34,13 +34,14 @@ function harness(){
  return {gate:new ReportGate({storage},{users:['admin','group-i-1','group-p-1']}),storage};
 }
 
-test('tab access stats count only the five workspace opens per user and period',async()=>{
+test('tab access stats count only the six workspace opens per user and period',async()=>{
  const {gate}=harness();
  const now=Date.UTC(2026,8,28,12);
  await gate.recordTabAccess('group-i-1','crypto',now);
  await gate.recordTabAccess('group-i-1','crypto',now);
  await gate.recordTabAccess('group-i-1','map',now);
  await gate.recordTabAccess('group-i-1','darkweb',now);
+ await gate.recordTabAccess('group-i-1','ip',now);
  await gate.recordTabAccess('group-i-1','social',now-86400000);
  await gate.recordTabAccess('group-p-1','facial',now);
 
@@ -53,6 +54,7 @@ test('tab access stats count only the five workspace opens per user and period',
  );
  assert.equal(second.facial,1);
  assert.equal(analyst.darkweb,1);
+ assert.equal(analyst.ip,1);
  assert.equal(today.users.length,3);
  assert.equal(Object.keys(analyst).some(key=>['searches','logins','report_requests'].includes(key)),false);
 
@@ -62,7 +64,7 @@ test('tab access stats count only the five workspace opens per user and period',
  assert.equal(allTime.users.find(row=>row.username==='group-i-1').crypto,2);
 });
 
-test('tab access rejects values outside the five known workspaces',async()=>{
+test('tab access rejects values outside the six known workspaces',async()=>{
  const {gate,storage}=harness();
  const result=await gate.recordTabAccess('group-i-1','other',Date.UTC(2026,8,28,12));
  assert.equal(result,false);

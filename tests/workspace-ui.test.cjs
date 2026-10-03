@@ -41,14 +41,14 @@ test('navigation ignores modified/external clicks and restores after back or tim
  h.listeners.click({target:link,button:0});h.fire(10000);assert.equal(h.classes.has('ct-loading'),false);
 });
 test('every workspace ships the shared loader and hub order retains only Social beta',()=>{
- for(const name of ['main','index','crypto','facial','social','darkweb']){
+ for(const name of ['main','index','crypto','facial','social','darkweb','ip']){
   const html=fs.readFileSync(name+'.html','utf8');
   assert.ok(html.includes('workspace-ui.js'));assert.ok(html.includes('workspace-ui.css'));assert.ok(html.includes('class="ct-page-loading"'));
   assert.ok(html.indexOf('<meta charset="UTF-8">')<1024);
  }
  const main=fs.readFileSync('main.html','utf8');
  const links=[...main.matchAll(/class="hub-card[^\"]*" href="([^\"]+)"/g)].map(x=>x[1]);
- assert.deepEqual(links,['index.html?workspace=map','crypto.html','darkweb.html','facial.html','social.html']);
+ assert.deepEqual(links,['index.html?workspace=map','crypto.html','darkweb.html','facial.html','ip.html','social.html']);
  assert.equal((main.match(/class="hub-beta"/g)||[]).length,1);
- assert.match(main,/grid-template-columns:repeat\(5,minmax\(0,1fr\)\)/);
+ assert.match(main,/grid-template-columns:repeat\(6,minmax\(0,1fr\)\)/);
 });
