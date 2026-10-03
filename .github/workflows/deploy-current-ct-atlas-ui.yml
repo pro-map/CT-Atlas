@@ -23,6 +23,10 @@ on:
       - "tab-access.js"
       - "index.html"
       - "main.html"
+      - "darkweb.html"
+      - "darkweb.js"
+      - "darkweb.css"
+      - "darkweb-intelligence.svg"
       - "intelligence-map.svg"
       - "crypto-intelligence.svg"
       - "social-intelligence.svg"
@@ -108,6 +112,10 @@ jobs:
           grep -q 'Behavioral Pattern Detection' crypto.html
           grep -q 'Case Workspace' crypto.html
           grep -q 'Monitoring & Alerts' crypto.html
+          test -s darkweb.html
+          test -s darkweb.css
+          test -s darkweb-intelligence.svg
+          node --check darkweb.js
           test -s main.html
           test -s social.html
           grep -q 'Intelligence Map' main.html

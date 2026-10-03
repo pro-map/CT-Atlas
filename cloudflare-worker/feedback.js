@@ -16,7 +16,8 @@ const WORKSPACES = Object.freeze({
   map: "Intelligence Map",
   crypto: "Crypto Intelligence",
   facial: "Facial Intelligence",
-  social: "Social Media (Beta)"
+  social: "Social Media (Beta)",
+  darkweb: "Dark Web Intelligence (Beta)"
 });
 const LEGACY_EVALUATION_ITEMS = [
   ["report_generator", "Report Generator"],

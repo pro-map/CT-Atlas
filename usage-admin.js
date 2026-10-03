@@ -218,7 +218,7 @@ function injectAdminUi(){
           '<div class="admin-usage-section-title">WORKSPACE ACCESS</div>'+
           '<div class="admin-usage-table-wrap">'+
             '<table id="adminUsageTable">'+
-              '<thead><tr><th>USER</th><th>CRYPTO</th><th>FACIAL</th><th>MAP</th><th>SOCIAL</th></tr></thead>'+
+              '<thead><tr><th>USER</th><th>CRYPTO</th><th>FACIAL</th><th>MAP</th><th>SOCIAL</th><th>DARK WEB</th></tr></thead>'+
               '<tbody id="adminUsageRows"></tbody>'+
             '</table>'+
           '</div>'+
@@ -299,8 +299,9 @@ async function loadAdmin(period){
           "<td>"+Number(item.facial||0)+"</td>"+
           "<td>"+Number(item.map||0)+"</td>"+
           "<td>"+Number(item.social||0)+"</td>"+
+          "<td>"+Number(item.darkweb||0)+"</td>"+
         "</tr>"
-      ).join("")||'<tr><td colspan="5">No users found for this period.</td></tr>';
+      ).join("")||'<tr><td colspan="6">No users found for this period.</td></tr>';
     }
 
     const summary=usagePayload.summary||{};

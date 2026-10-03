@@ -13,12 +13,13 @@ rm -rf "$STAGING"
 mkdir -p "$STAGING"
 
 cp index.html main.html crypto.html social.html facial.html privacy.html robots.txt events.json ct-atlas-runtime.json \
-   pdf-export.js deep-search.js deep-search.css quick-ask.js quick-ask.css feedback.js feedback.css \
+   pdf-export.js deep-search.js deep-search.css report-illustration.js feedback.js feedback.css \
    crypto.js crypto-report.js crypto.css crypto-launcher.js social.js social.css facial.js facial.css \
    intelligence-map.svg crypto-intelligence.svg social-intelligence.svg facial-intelligence.svg \
    daily-quiz.js daily-quiz.css daily-quiz.json \
    usage-admin.js usage-admin.css usage-auth-fix.js \
    tab-health.js tab-health.css tab-access.js facial-crops.js \
+   darkweb.html darkweb.js darkweb.css darkweb-intelligence.svg \
    "$STAGING"/
 
 # Lightweight map data, derived from the events.json copied just above (so it can never be
