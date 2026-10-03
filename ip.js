@@ -32,7 +32,7 @@ function render(r){
  $("detectionSources").replaceChildren(...assessmentLines(r.privacy).map(s=>node("p",s)));
  if(!r.privacy.assessments?.length)$("detectionSources").append(node("p","No VPN detection source returned usable data."));
  $("warnings").hidden=!r.warnings.length;$("warnings").replaceChildren(...r.warnings.map(w=>node("p",w)));
- fields("network",[["NETWORK OPERATOR",r.operator.name],["ASN / ROUTING PREFIX",[...r.operator.asns,r.operator.prefix].filter(Boolean).join(" · ")],["NETWORK TYPE",r.operator.type],["OPERATOR DOMAIN",r.operator.domain],["REGISTERED NAME",r.registration?.name],["REGISTRANT",r.registration?.registrant],["REGISTRATION COUNTRY",r.registration?.country],["REGISTRY LAST CHANGED",r.registration?.updated_at],["OPERATOR SOURCE",r.operator.source]]);
+ fields("network",[["NETWORK OPERATOR",r.operator.name],["ASN / ROUTING PREFIX",[...r.operator.asns,r.operator.prefix].filter(Boolean).join(" · ")],["NETWORK TYPE",r.operator.type],["OPERATOR DOMAIN",r.operator.domain],["REGISTERED NAME",r.registration?.name],["REGISTRANT",r.registration?.registrant],["REGISTRATION COUNTRY",r.registration?.country],["REGISTRY LAST CHANGED",r.registration?.updated_at],["OPERATOR SOURCE",r.operator.source],["REGISTRATION SOURCE",r.registration?.source],["SERVICE CONTEXT",r.operator.service_context]]);
  const g=r.geolocation;
  fields("geolocation",[["COUNTRY",g?.country],["REGION / CITY",g&&[g.region,g.city].filter(Boolean).join(" / ")],["COORDINATES",g?.latitude!==null&&g?.latitude!==undefined?g.latitude+", "+g.longitude:"Not available"],["ACCURACY RADIUS",g?.radius_km!==null&&g?.radius_km!==undefined?g.radius_km+" km":"Not supplied"],["SOURCE",g?.source],["SOURCE DATA TIME",g?.data_time]]);
  $("mapLink").replaceChildren();
@@ -45,7 +45,7 @@ function render(r){
  for(const c of r.contacts){const card=node("div",undefined,"contact");card.append(node("h4",c.name),node("span",c.roles.join(" / ")||"Registry contact","pill"),node("p","Email: "+show(c.emails.join(", "))),node("p","Phone: "+show(c.phones.join(", "))),node("p","Postal address: "+show(c.address)),node("p","Source: "+(c.source||"RIR RDAP"),"fine"));$("registryContacts").append(card);}
  if(!r.contacts.length)$("registryContacts").append(node("p","No contact published by the consulted sources."));
  $("nextStep").textContent=r.privacy.vpn===true?"A VPN exit is indicated. Follow the identified VPN provider's official procedure. The address behind the VPN is not available through this lookup.":"Establish whether the network serves the subscriber directly or acts as an intermediary before routing an enquiry.";
- $("sources").replaceChildren();for(const s of r.sources){const row=node("div",undefined,"source-row");row.append(safeLink(s.name+" ↗",s.url),node("small",s.status.toUpperCase()+(s.reason?" ("+s.reason+")":"")+" · Retrieved: "+s.retrieved_at));$("sources").append(row);}
+ $("sources").replaceChildren();for(const s of r.sources){const row=node("div",undefined,"source-row");row.append(safeLink(s.name+" ↗",s.url),node("small",s.status.toUpperCase()+(s.reason?" ("+s.reason+")":"")+" · Retrieved: "+s.retrieved_at));if(s.action)row.append(node("p",s.action,"fine"));$("sources").append(row);}
  $("limitations").replaceChildren(...r.limitations.map(l=>node("li",l)));
 }
 $("lookupForm").addEventListener("submit",async event=>{

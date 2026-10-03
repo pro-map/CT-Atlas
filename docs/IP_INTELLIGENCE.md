@@ -8,6 +8,26 @@ Enter one public IPv4 or IPv6 address. The API authenticates the session, valida
 
 Only public unicast literals are accepted. URLs, domains, ports, subnets, local/private, shared carrier-NAT, documentation, multicast, mapped and special-use/tunnel ranges are excluded conservatively. The tool does not connect to the investigated IP, perform traceroute, scan ports, bypass a VPN, identify a subscriber, or send a provider request.
 
+## Source recovery and diagnostics
+
+Worker version **5.37** / `ip-intelligence-v3-resilient-sources` adds an independent **RIPEstat WHOIS** fallback when IANA discovery or RIR RDAP fails. It retrieves allocation names/ranges, available organisation postal addresses and published technical/abuse contacts without a new key. Results retain the original RDAP failure and label the fallback source. Returned resource/range must contain the queried IP; IRR routing objects are not treated as allocation owners. Multiple network records prevent automatic association of unrelated contact cards. Fields absent from the registry remain unknown.
+
+Source errors now include fixed, actionable diagnostics. Proxycheck documents that unauthenticated requests from proxy origins can be denied; a 403 alone cannot establish that this was the cause. Documented account/key/quota messages are classified without returning raw messages, request URLs or secrets. IANA discovery failures and later registry failures are distinguished. No alternative source bypasses authentication or access restrictions, and no denied call is retried through another origin.
+
+## Independent VPN source: ipapi.is
+
+Create a free account at https://ipapi.is/ and add **IPAPI_IS_KEY** as a **Secret** on the **ct-report-generator** Cloudflare Worker, then deploy. Its current documentation offers 1,000 keyed requests/day and permits commercial use on that free tier. There is no purchase or account creation by this integration. Leave the key unset to make no calls to this provider, or set `IPAPI_IS_ENABLED=false` to disable it.
+
+This source supplies separate VPN/proxy/Tor/hosting assessments, a VPN service name where available, ASN/company information, approximate geolocation and WHOIS-derived abuse postal/email/telephone contacts. VPN service names remain distinct from network owners. It uses a fixed HTTPS POST endpoint; only the queried IP and provider key are sent, with the key in the JSON body rather than URL. Case references, timestamps, ports, notes and email headers are not sent. Both top-level IP and any nested VPN IP are checked; abuse contacts are accepted only when the provider's company allocation contains the target. Returned risk/abuser scores are not exposed or interpreted as criminality.
+
+The anonymous/minimal response **does not provide VPN detection**. If such a response arrives despite a configured key, it remains explicitly limited; it is never converted into a negative VPN result. Nonboolean detection values remain unknown. Disagreements across ipapi.is, Proxycheck and IPinfo are preserved and prevent selection of a certain recipient. Health exposes `ip_intelligence_ipapi_is_key_configured` and `ip_intelligence_ipapi_is_enabled`; these reflect configuration, not a successful account check.
+
+## Cisco / IronPort enquiries
+
+AS30238 now has a reviewed Cisco contact route: https://privacyrequest.cisco.com/governmentdatarequest. Cisco's published fallback `governmentdatademands@cisco.com` is for sending the officer's contact details when the portal cannot be used; the tool does not instruct users to email evidence there. The report shows the US entity, flag and company address (170 West Tasman Dr., San Jose, CA 95134), clearly distinguished from an accepted address for legal service. The official guidelines require US-law compliance and may require international assistance for foreign demands.
+
+Cisco IronPort results carry conditional mail-relay guidance: an IP extracted from an email Received header identifies a relay, not the sender's access ISP or home. Suggested enquiry context includes the Message-ID, exact UTC time, customer organisation and available message-trace records. This is an ASN-based orientation, not automatic analysis of email headers. A named VPN or conflicting attribution is not overridden by that guidance.
+
 ## VPN detection and IPinfo Lite
 
 Proxycheck.io v3 is enabled by default as a complementary VPN/proxy attribution source. It supplies detection flags and, when known, the intermediary provider name and website independently of the hosting network. An account is not required for initial tests: its documented unregistered allowance is 100 queries/day per egress IP. Shared Cloudflare egress can exhaust this allowance or require authentication. For dependable account-level access, create a Proxycheck account (the documented free registered allowance is 1,000/day), then add **PROXYCHECK_API_KEY** as a **Secret** on the **ct-report-generator** Worker, save and deploy. No purchase is required by this integration. Quota exhaustion, missing names and source errors remain explicit; coverage is not universal.
@@ -54,6 +74,11 @@ Lookup time is separate from analyst-supplied incident time. Current records can
 - IPinfo Lite: https://ipinfo.io/developers/lite-api
 - Proxycheck API, schema, quotas and log flag: https://proxycheck.io/api/
 - RIPEstat ASN holder: https://stat.ripe.net/docs/data-api/api-endpoints/as-overview
+- RIPEstat WHOIS: https://stat.ripe.net/docs/data-api/api-endpoints/whois
+- ipapi.is schema, keyed access and limits: https://ipapi.is/developers.html
+- Cisco government requests: https://www.cisco.com/c/en/us/about/trust-center/transparency.html
+- Cisco guidelines and fallback email: https://www.cisco.com/c/dam/en_us/about/doing_business/trust-center/docs/law-enforcement-guidelines.pdf
+- Cisco published company address: https://www.cisco.com/c/en/us/about/legal/privacy-full.html
 - IPinfo Plus: https://ipinfo.io/developers/plus-api
 - Proton authorities: https://proton.me/legal/law-enforcement
 - NordVPN policy contact: https://my.nordaccount.com/legal/privacy-policy/

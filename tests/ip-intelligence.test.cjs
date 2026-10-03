@@ -5,7 +5,7 @@ const source=fs.readFileSync('cloudflare-worker/ip-intelligence.js','utf8').repl
 const rdap={name:'TEST-NET',status:['active'],country:'DE',startAddress:'8.8.8.0',endAddress:'8.8.8.255',entities:[{roles:['registrant'],vcardArray:['vcard',[
  ['fn',{},'text','Example Network'],['adr',{label:'Operator HQ, Berlin, Germany'},'text',['','','','','','','']]
 ]],entities:[{roles:['abuse'],vcardArray:['vcard',[['fn',{},'text','Abuse Desk'],['email',{},'text','abuse@example.net']]]}]}]};
-function harness({ipinfo,ipinfoStatus=200,lite,liteStatus=200,proxy={network:{},detections:{}},proxyStatus='ok',proxyHttp=200,proxyIP='8.8.8.8',asns=[65001],holder,registryData=rdap,fail=[],redirect,limit=200,geoCountry='US'}={}){
+function harness({ipinfo,ipinfoStatus=200,lite,liteStatus=200,proxy={network:{},detections:{}},proxyStatus='ok',proxyHttp=200,proxyIP='8.8.8.8',proxyMessage='',ipapi,ipapiStatus=200,whois,ianaStatus=200,rdapStatus=200,asns=[65001],holder,registryData=rdap,fail=[],redirect,limit=200,geoCountry='US'}={}){
  const calls=[];
  const context=vm.createContext({Response,Request,URL,AbortSignal,TextDecoder,TextEncoder,Uint8Array,console,
   cleanText:(v,n=700)=>String(v||'').replace(/\s+/g,' ').trim().slice(0,n),corsHeaders:()=>({'Content-Type':'application/json'}),isAllowedUser:n=>n==='analyst',
@@ -13,17 +13,19 @@ function harness({ipinfo,ipinfoStatus=200,lite,liteStatus=200,proxy={network:{},
   fetch:async(url,options={})=>{
    calls.push({url,options});const u=new URL(url);
    if(fail.some(s=>url.includes(s)))throw new Error('private provider detail must never leak');
-   if(u.hostname==='data.iana.org')return Response.json({services:[[['8.0.0.0/8','2000::/3'],['https://rdap.arin.net/registry/']]]});
-   if(u.hostname==='rdap.arin.net')return redirect?new Response(null,{status:302,headers:{Location:redirect}}):Response.json(registryData);
+   if(u.hostname==='api.ipapi.is')return Response.json(ipapi||{error:'Unavailable'},{status:ipapiStatus});
+   if(u.pathname.includes('/whois/'))return Response.json(whois||{status:'error'});
+   if(u.hostname==='data.iana.org')return Response.json({services:[[['8.0.0.0/8','2000::/3'],['https://rdap.arin.net/registry/']]]},{status:ianaStatus});
+   if(u.hostname==='rdap.arin.net')return redirect?new Response(null,{status:302,headers:{Location:redirect}}):Response.json({startAddress:'8.8.8.0',endAddress:'8.8.8.255',...registryData},{status:rdapStatus});
    if(u.hostname==='api.ipinfo.io')return u.pathname.includes('/lite/')?Response.json({ip:'8.8.8.8',...lite},{status:liteStatus}):Response.json({ip:'8.8.8.8',...ipinfo},{status:ipinfoStatus});
-   if(u.hostname==='proxycheck.io')return Response.json({status:proxyStatus,[proxyIP]:proxy},{status:proxyHttp});
+   if(u.hostname==='proxycheck.io')return Response.json({status:proxyStatus,message:proxyMessage,[proxyIP]:proxy},{status:proxyHttp});
    if(u.pathname.includes('as-overview'))return Response.json({status:'ok',data:{holder}});
    if(u.pathname.includes('network-info'))return Response.json({status:'ok',data:{asns,prefix:'8.8.8.0/24'}});
    if(u.pathname.includes('abuse-contact'))return Response.json({status:'ok',data:{abuse_contacts:['abuse@example.net','network@example.net']}});
    if(u.pathname.includes('maxmind'))return Response.json({status:'ok',data:{result_time:'2026-10-02T12:00:00',located_resources:[{locations:[{country:geoCountry,city:'Example City',latitude:40,longitude:-75}]}]}});
    throw new Error('Unexpected endpoint '+url);
   }});
- vm.runInContext(source+'\nglobalThis.api={parseIP,publicIP,registration,serviceContact,lookupIP,handleIPIntelligence};',context);
+ vm.runInContext(source+'\nglobalThis.api={parseIP,publicIP,registration,whoisRegistration,serviceContact,lookupIP,handleIPIntelligence};',context);
  return {api:context.api,calls,async request(ip='8.8.8.8',token='analyst',env={}){return context.api.handleIPIntelligence(new Request('https://api/ip-intelligence/lookup',{method:'POST',headers:{'X-Session-Token':token},body:JSON.stringify({ip})}),env);}};
 }
 test('IPv4/IPv6 validation rejects URLs, local, mapped, documentation, multicast and ambiguous forms',()=>{
@@ -231,4 +233,90 @@ test('unknown jurisdictions are explicit and multi-entity networks preserve the 
  h=harness({asns:[15169]});data=await(await h.request()).json();
  assert.deepEqual(data.enquiry.jurisdictions.map(j=>j.country_code),['US','IE']);
  assert.match(data.enquiry.jurisdictions[1].scope,/cannot be determined from an IP alone/);
+});
+
+const whoisFixture={status:'ok',data:{resource:'8.8.8.0/24',query_time:'2026-10-03T20:00:00Z',records:[
+ [{key:'NetRange',value:'8.8.8.0 - 8.8.8.255'},{key:'NetName',value:'EXAMPLE'},{key:'Organization',value:'Example ISP'}],
+ [{key:'OrgName',value:'Example ISP'},{key:'Address',value:'1 Example Street'},{key:'City',value:'Test City'},{key:'Country',value:'GB'}],
+ [{key:'OrgAbuseName',value:'Network desk'},{key:'OrgAbuseEmail',value:'abuse@example.net'},{key:'OrgAbusePhone',value:'+44 000'}]
+],irr_records:[[{key:'descr',value:'Unrelated route maintainer'}]]}};
+const ipapiFixture={ip:'8.8.8.8',is_vpn:true,is_proxy:false,is_tor:false,is_datacenter:true,
+ asn:{asn:65001,org:'Example Network',type:'hosting',domain:'example.net',route:'8.8.8.0/24'},
+ company:{name:'Example Network',network:'8.8.8.0 - 8.8.8.255'},
+ abuse:{name:'Network Desk',email:'abuse@example.net',address:'1 Example Street',phone:'+44 000'},
+ location:{country:'United Kingdom',country_code:'GB',city:'London',latitude:51.5,longitude:-0.1},
+ vpn:{ip:'8.8.8.8',service:'ProtonVPN',url:'https://protonvpn.com/',last_seen_str:'2026-10-03T12:00:00Z'}};
+
+test('WHOIS recovers allocation, address and technical contacts after bootstrap or RDAP HTTP 525',async()=>{
+ for(const outage of [{ianaStatus:525},{rdapStatus:525}]){
+  const h=harness({...outage,whois:whoisFixture});const d=await(await h.request()).json();
+  assert.equal(d.registration.source,'RIPEstat WHOIS');assert.equal(d.operator.name,'Example ISP');
+  assert.equal(d.operator.source,'RIPEstat WHOIS');assert.equal(d.registration.country,'GB');
+  assert.ok(d.contacts.some(c=>c.address.includes('1 Example Street')));assert.equal(d.enquiry.email,'abuse@example.net');
+  const failed=d.sources.find(s=>s.name==='RIR RDAP');assert.equal(failed.reason,'http_525');assert.equal(failed.stage,outage.ianaStatus?'bootstrap':'registry');
+  assert.match(failed.action,/WHOIS/);assert.equal(d.status,'partial');
+ }
+});
+test('WHOIS validates resource and allocation and never interprets unrelated IRR routes as ownership',()=>{
+ const {api}=harness();const parsed=api.parseIP('8.8.8.8');
+ assert.throws(()=>api.whoisRegistration({...whoisFixture,data:{...whoisFixture.data,resource:'1.1.1.0/24'}},parsed),/ip_mismatch/);
+ assert.throws(()=>api.whoisRegistration({status:'ok',data:{resource:'8.8.8.8',records:[],irr_records:whoisFixture.data.records}},parsed),/invalid_response/);
+ const d=api.whoisRegistration({status:'ok',data:{resource:'2606:4700::/32',records:[[{key:'inet6num',value:'2606:4700::/32'},{key:'netname',value:'V6-NET'},{key:'country',value:'NL'}]]}},api.parseIP('2606:4700:4700::1111'));
+ assert.equal(d.name,'V6-NET');assert.equal(d.start,'2606:4700::');assert.equal(d.end,'2606:4700:ffff:ffff:ffff:ffff:ffff:ffff');
+ const mixed={...whoisFixture,data:{...whoisFixture.data,records:[...whoisFixture.data.records,[{key:'inetnum',value:'1.1.1.0 - 1.1.1.255'},{key:'netname',value:'OTHER'}]]}};
+ assert.equal(api.whoisRegistration(mixed,parsed).contacts.length,0);
+});
+test('RDAP mismatched allocation is rejected and a separately validated WHOIS fallback is used',async()=>{
+ const h=harness({registryData:{startAddress:'1.1.1.0',endAddress:'1.1.1.255'},whois:whoisFixture});const d=await(await h.request()).json();
+ assert.equal(d.sources.find(s=>s.name==='RIR RDAP').reason,'ip_mismatch');assert.equal(d.registration.source,'RIPEstat WHOIS');
+});
+test('independent ipapi VPN and postal contact survive Proxycheck denial; credentials stay in POST body',async()=>{
+ const h=harness({proxyHttp:403,proxyMessage:'Your access to the API has been blocked due to using a proxy server. private-key',ipapi:ipapiFixture});
+ const d=await(await h.request('8.8.8.8','analyst',{IPAPI_IS_KEY:'private-key'})).json();
+ assert.equal(d.privacy.vpn,true);assert.equal(d.privacy.service,'Proton VPN');assert.equal(d.enquiry.email,'legal@proton.me');
+ assert.equal(d.enrichment.ipapi_is_access,'api_key');assert.ok(d.contacts.some(c=>c.source.startsWith('ipapi.is')&&c.address==='1 Example Street'));
+ const call=h.calls.find(c=>c.url==='https://api.ipapi.is/');assert.equal(call.options.method,'POST');
+ assert.deepEqual(JSON.parse(call.options.body),{q:'8.8.8.8',key:'private-key'});assert.ok(!h.calls.some(c=>c.url.includes('private-key')));
+ assert.ok(!JSON.stringify(d).includes('private-key'));assert.match(d.sources.find(s=>s.name==='Proxycheck.io').action,/PROXYCHECK_API_KEY/);
+});
+test('ipapi is not called without a configured key or when explicitly disabled',async()=>{
+ for(const env of [{},{IPAPI_IS_KEY:'key',IPAPI_IS_ENABLED:'false'}]){
+  const h=harness();const d=await(await h.request('8.8.8.8','analyst',env)).json();assert.ok(!h.calls.some(c=>c.url.includes('api.ipapi.is')));
+  assert.equal(d.enrichment.ipapi_is_access,env.IPAPI_IS_ENABLED?'disabled':'not_configured');
+ }
+});
+test('ipapi limited, mismatched, quota and invalid-key results do not imply no VPN or leak error details',async()=>{
+ const cases=[
+  {ipapi:{ip:'8.8.8.8',company:'Example Network',asn:'AS65001 Example Network',docs:'https://ipapi.is/free-tier.html',is_vpn:false}},
+  {ipapi:{...ipapiFixture,ip:'1.1.1.1'}},
+  {ipapi:{...ipapiFixture,vpn:{...ipapiFixture.vpn,ip:'1.1.1.1'}}},
+  {ipapiStatus:429,ipapi:{error:'private-key',error_code:'ERR_QUOTA_EXCEEDED'}},
+  {ipapiStatus:403,ipapi:{error:'private-key',error_code:'ERR_FORBIDDEN_INVALID_API_KEY'}}
+ ];
+ for(const options of cases){const h=harness(options),d=await(await h.request('8.8.8.8','analyst',{IPAPI_IS_KEY:'private-key'})).json();
+  assert.equal(d.privacy.vpn,null);assert.equal(d.privacy.service,'');assert.ok(!JSON.stringify(d).includes('private-key'));
+  if(options.ipapiStatus===429)assert.match(d.sources.find(s=>s.name==='ipapi.is').action,/quota/);
+  if(options.ipapiStatus===403)assert.match(d.sources.find(s=>s.name==='ipapi.is').action,/rejected or disabled/);
+ }
+});
+test('ipapi negative conflict stays unresolved and nonboolean detections stay unknown',async()=>{
+ let h=harness({ipapi:ipapiFixture,proxy:{network:{},detections:{vpn:false}}});let d=await(await h.request('8.8.8.8','analyst',{IPAPI_IS_KEY:'key'})).json();
+ assert.equal(d.privacy.vpn,null);assert.equal(d.enquiry.ambiguous,true);assert.equal(d.enquiry.email,'');assert.ok(d.privacy.conflicts.includes('vpn'));
+ h=harness({ipapi:{...ipapiFixture,is_vpn:'ambiguous-provider-value'}});d=await(await h.request('8.8.8.8','analyst',{IPAPI_IS_KEY:'key'})).json();assert.equal(d.privacy.vpn,null);assert.equal(d.privacy.service,'');
+});
+test('ipapi supplies fallback ASN/geolocation and rejects contacts from unrelated allocation',async()=>{
+ const h=harness({fail:['rdap.arin.net','network-info','maxmind'],ipapi:{...ipapiFixture,is_vpn:false,vpn:null,company:{network:'1.1.1.0/24'}}});
+ const d=await(await h.request('8.8.8.8','analyst',{IPAPI_IS_KEY:'key'})).json();
+ assert.equal(d.operator.name,'Example Network');assert.equal(d.operator.source,'ipapi.is');assert.deepEqual(d.operator.asns,['AS65001']);
+ assert.equal(d.geolocation.source,'ipapi.is');assert.equal(d.geolocation.city,'London');assert.ok(!d.contacts.some(c=>c.source.startsWith('ipapi.is')));
+});
+test('Cisco has an official police portal, scoped fallback email, US jurisdiction/flag and mail-relay guidance in PDF',async()=>{
+ const h=harness({asns:[30238],ipinfoStatus:403,lite:{asn:'AS30238',as_name:'Cisco Systems Ironport Division',as_domain:'cisco.com',country:'United States'},rdapStatus:525,proxyHttp:403});
+ const d=await(await h.request('8.8.8.8','analyst',{IPINFO_TOKEN:'key'})).json();
+ assert.equal(d.enquiry.url,'https://privacyrequest.cisco.com/governmentdatarequest');assert.equal(d.enquiry.email,'governmentdatademands@cisco.com');assert.equal(d.enquiry.jurisdictions[0].country_code,'US');
+ assert.match(d.enquiry.records_to_request,/Message-ID/);assert.match(d.enquiry.subscriber_scope,/mail relay/);
+ const context={window:{}};vm.runInNewContext(fs.readFileSync('ip-report.js','utf8'),context);
+ const report=context.window.CTAtlasIPReport.build(d,{}),text=report.blocks.map(b=>b.text||b.caption).join('\n');
+ for(const term of ['170 West Tasman','United States','governmentdatademands@cisco.com','Message-ID','PROXYCHECK_API_KEY','IPAPI_IS_KEY','RIPEstat WHOIS'])assert.ok(text.includes(term),term);
+ assert.ok(report.blocks.some(b=>b.inline&&b.caption.includes('United States')));
 });
