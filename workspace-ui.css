@@ -1,0 +1,18 @@
+.ct-page-loading strong{font-size:15px;font-weight:600;letter-spacing:.3em}
+.ct-page-loading>span{color:#9aaebb;font-size:10px}
+.ct-loading-line{display:block;width:96px;height:1px;overflow:hidden;background:#344958}
+.ct-loading-line::after{content:"";display:block;width:36px;height:1px;background:#f1f5f7;animation:ct-loading-scan 1.4s ease-in-out infinite alternate}
+@keyframes ct-loading-scan{to{transform:translateX(60px)}}
+.ct-wait-card{box-sizing:border-box;grid-column:1/-1;flex-basis:100%;width:100%;margin:16px 0;padding:20px 22px;border:1px solid #52616d;border-left:2px solid #dfe7ec;border-radius:5px;background:linear-gradient(135deg,#172630,#101b24);color:#e7eef3;font:13px/1.65 Arial,Helvetica,sans-serif;text-align:left;box-shadow:0 10px 24px #0002}
+.ct-wait-card .ct-wait-heading{font-size:10px;font-weight:700;letter-spacing:.18em;color:#f0f4f7}
+.ct-wait-card .ct-wait-topic{margin-top:12px;color:#91a8b7;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+.ct-wait-card .ct-wait-text{margin:6px 0 15px;font-size:13px;line-height:1.65;color:#e7eef3}
+.ct-wait-card .ct-wait-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.ct-wait-card a{color:#b8cad5;text-decoration:underline;text-underline-offset:3px;font-size:10px}
+.ct-wait-card button{width:auto;min-height:34px;margin:0;padding:7px 11px;border:1px solid #5b7180;border-radius:3px;background:transparent;color:#eef3f6;font:700 9px/1.4 Arial,sans-serif;letter-spacing:.07em;cursor:pointer}
+.ct-wait-card button:hover,.ct-wait-card button:focus-visible{border-color:#fff;background:#263743;outline:2px solid transparent}
+.ct-wait-card a:focus-visible{outline:1px solid #fff;outline-offset:4px}
+.ct-wait-card .ct-wait-note{margin-top:14px;color:#92a6b4;font-size:10px}
+.ct-wait-floating{position:fixed;right:24px;bottom:24px;width:min(420px,calc(100vw - 32px));z-index:2147483640;margin:0}
+@media(max-width:760px){.ct-wait-card{padding:16px}.ct-wait-floating{right:16px;bottom:16px}}
+@media(prefers-reduced-motion:reduce){.ct-loading-line::after{animation:none;width:100%}}

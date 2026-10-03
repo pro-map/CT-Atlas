@@ -71,13 +71,14 @@ $("fiForm").addEventListener("submit",async e=>{
  const total=files.reduce((n,f)=>n+f.size,0);if(total>30*1024*1024){status.className="status error";status.textContent="Combined upload exceeds 30 MB.";return;}
  const token=String(sessionStorage.getItem(TOKEN)||"");const data=new FormData();files.forEach(f=>data.append("files",f,f.name));lastFiles=files;
  $("fiRun").disabled=true;status.className="status";status.textContent="Analyzing visual evidence…";
+ const finishWait = window.CTAtlasUI?.begin(status);
  try{
   const r=await fetch(API+"/visual-analyze",{method:"POST",headers:{"X-Session-Token":token},body:data});
   const p=await r.json().catch(()=>({}));
   if(!r.ok)throw new Error(p.error||p.detail||"Visual analysis failed.");
   render(p);status.textContent="Analysis complete.";
  }catch(err){status.className="status error";status.textContent=err.message||"Visual analysis failed.";}
- finally{$("fiRun").disabled=false;}
+ finally{finishWait?.();$("fiRun").disabled=false;}
 });
 $("fiDownload").addEventListener("click",()=>{
  if(!lastPayload)return;const blob=new Blob([JSON.stringify(lastPayload,null,2)],{type:"application/json"});

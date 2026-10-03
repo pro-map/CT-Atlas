@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<style>html{background:#0d1620}.ct-page-loading{display:none}html.ct-loading .ct-page-loading{position:fixed;inset:0;z-index:2147483646;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#0d1620;color:#edf3f6;font:11px Arial,sans-serif;letter-spacing:.24em}</style>
+<script>document.documentElement.classList.add("ct-loading");window.ctLoadingFallback=setTimeout(function(){document.documentElement.classList.remove("ct-loading");},10000);</script>
+<link rel="stylesheet" href="workspace-ui.css?v=20261003">
+<script src="workspace-ui.js?v=20261003" defer></script><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
 <title>CT ATLAS — Dark Web Intelligence</title>
 <link rel="icon" href="CT-ATLAS.png"><link rel="stylesheet" href="darkweb.css?v=1">
@@ -9,8 +13,9 @@
 <script src="tab-access.js?v=20261003" defer></script>
 </head>
 <body data-ct-tab="darkweb">
+<div class="ct-page-loading" role="status" aria-live="polite"><strong>CT ATLAS</strong><span>LOADING</span><span class="ct-loading-line" aria-hidden="true"></span></div>
 <main class="dw-shell" id="workspace" hidden>
-<header><div class="brand"><img src="darkweb-intelligence.svg" alt=""><div><div class="kicker">CT ATLAS · OUTLET WATCH <span class="badge">BETA</span></div><h1>Dark Web Intelligence</h1></div></div><div class="actions"><span id="user"></span><a class="button" href="main.html">MAIN</a></div></header>
+<header><div class="brand"><img src="darkweb-intelligence.svg" alt=""><div><div class="kicker">CT ATLAS · OUTLET WATCH</div><h1>Dark Web Intelligence</h1></div></div><div class="actions"><span id="user"></span><a class="button" href="main.html">MAIN</a></div></header>
 <section class="intro"><div><h2>Your monitored sources. One intelligence feed.</h2><p>New links and material from registered onion outlets, collected through Tor. Publication dates and source claims require analyst verification.</p></div><button id="refresh" type="button">REFRESH FEED</button></section>
 <div id="message" role="status" aria-live="polite"></div>
 <section class="stats" aria-label="Collection summary"><div><span>MONITORED OUTLETS</span><strong id="outletCount">—</strong></div><div><span>UNREVIEWED ITEMS</span><strong id="newCount">—</strong></div><div><span>KEYWORD ALERTS</span><strong id="alertCount">—</strong></div><div><span>LAST COLLECTOR CHECK</span><strong id="lastCheck" class="date">Not connected</strong></div></section>

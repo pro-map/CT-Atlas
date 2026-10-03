@@ -1459,6 +1459,7 @@ async function exportFullReport(){
   const button=document.getElementById("cryptoReportButton");
   if(button)button.disabled=true;
   setStatus("Building the full report…","");
+  const finishWait = window.CTAtlasUI?.begin(document.getElementById("cryptoStatus"));
   try{
     // Fresh graph paint, then the data model, then the image -- all synchronous up to this point (no
     // intervening await), so the node/edge tables and the graph image describe the same instant. Only
@@ -1472,6 +1473,7 @@ async function exportFullReport(){
   }catch(error){
     setStatus(error?.message||"Report generation failed.","error");
   }finally{
+    finishWait?.();
     if(button)button.disabled=false;
   }
 }

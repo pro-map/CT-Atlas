@@ -583,7 +583,7 @@ async function prepareBlocks(blocks){
   return prepared;
 }
 
-async function download(options={}){
+async function downloadRaw(options={}){
   await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
   if(document.fonts?.ready){try{await document.fonts.ready;}catch(_){}}
   const preparedOptions={...options,blocks:await prepareBlocks(options.blocks||[])};
@@ -600,6 +600,11 @@ async function download(options={}){
   link.remove();
   setTimeout(()=>URL.revokeObjectURL(url),60000);
   return {filename:link.download,pages:images.length,bytes:bytes.length};
+}
+
+async function download(options={}){
+  const finishWait=window.CTAtlasUI?.begin(null);
+  try{return await downloadRaw(options);}finally{finishWait?.();}
 }
 
 window.CTAtlasPdf={download,blocksFromElement,safeFilename};

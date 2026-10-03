@@ -236,6 +236,7 @@ async function runInvestigation(event){
     ?"Searching public sources and building analytical report…"
     :"Retrieving supplied public URLs and building analytical report…");
 
+  const finishWait = window.CTAtlasUI?.begin($("socialStatus"));
   try{
     const response=await fetch(API+"/social-investigate",{
       method:"POST",headers:authHeaders(),body:JSON.stringify(payload)
@@ -266,6 +267,7 @@ async function runInvestigation(event){
       setStatus(error.message||"SOCMINT investigation failed.","error");
     }
   }finally{
+    finishWait?.();
     button.disabled=false;
     button.textContent="RUN SOCMINT INVESTIGATION";
   }
