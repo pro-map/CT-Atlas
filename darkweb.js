@@ -19,7 +19,7 @@ function copy(value,label){const button=node("button",label,"copy");button.type=
 function renderFeed(){
  const outletId=$("outletFilter").value,type=$("typeFilter").value,query=$("search").value.trim().toLowerCase();
  const outlets=new Map(state.outlets.map(o=>[o.id,o]));
- const rows=state.items.filter(i=>(!outletId||i.outlet_id===outletId)&&(!type||i.type===type)&&(!query||[i.title,outlets.get(i.outlet_id)?.name,...(i.keyword_matches||[])].join(" ").toLowerCase().includes(query))&&(view!=="alerts"||unread(i)));
+ const rows=state.items.filter(i=>(!outletId||i.outlet_id===outletId)&&(!type||i.type===type)&&(!query||[i.title,i.excerpt,outlets.get(i.outlet_id)?.name,...(i.keyword_matches||[])].join(" ").toLowerCase().includes(query))&&(view!=="alerts"||unread(i)));
  $("feed").replaceChildren();
  if(!rows.length){$("feed").append(empty(view==="alerts"?"No unreviewed material":"No material to display",state.outlets.length?"Start the Tor collector or adjust your filters. The first complete scan establishes an inventory baseline.":"The administrator can register the three outlets in OUTLETS, then connect the Tor collector."));return;}
  for(const item of rows){
@@ -30,7 +30,10 @@ function renderFeed(){
   if(item.keyword_matches?.length)head.append(node("span","KEYWORDS: "+item.keyword_matches.join(", "),"pill alert"));
   const foot=node("div",undefined,"item-foot");foot.append(node("span","First detected: "+date(item.first_seen)),copy(item.url,"COPY ONION URL"));
   foot.append(node("span",item.acquired?"Acquired on collector · "+(item.bytes===null?"size unavailable":(item.bytes/1048576).toFixed(1)+" MB"):"Link discovered · file not acquired"));
-  article.append(head,node("h3",item.title),foot);
+  article.append(head,node("h3",item.title));
+  if(item.excerpt)article.append(node("p",item.excerpt,"excerpt"));
+  article.append(foot);
+  if(item.source_page)article.append(copy(item.source_page,"COPY SOURCE PAGE"));
   if(item.sha256)article.append(node("p","Content SHA-256: "+item.sha256,"hash"));
   $("feed").append(article);
  }
@@ -49,10 +52,11 @@ function render(){
   const option=node("option",outlet.name);option.value=outlet.id;$("outletFilter").append(option);
   const article=node("article",undefined,"outlet"),top=node("div",undefined,"outlet-top");
   const stale=!outlet.last_scan||Date.now()-Date.parse(outlet.last_scan)>45*60000;
-  const status=!outlet.enabled?"PAUSED":!outlet.last_scan?"AWAITING COLLECTOR":stale?"STALE":outlet.scan_ok?"LAST CHECK SUCCEEDED":"LAST CHECK FAILED";
+  const status=!outlet.enabled?"PAUSED":!outlet.last_scan?"AWAITING COLLECTOR":stale?"STALE":outlet.truncated?"CRAWL LIMIT REACHED":outlet.failed_pages?"PAGES NEED RETRY":outlet.pending_pages?"CRAWL IN PROGRESS":outlet.scan_ok?"LAST CHECK SUCCEEDED":"LAST CHECK FAILED";
   top.append(node("h3",outlet.name),node("span",status,"pill"));
   article.append(top,node("code",outlet.url),node("p","Last attempt: "+date(outlet.last_scan)+" · Last completed scan: "+date(outlet.last_success)),node("p","Alert keywords: "+(outlet.keywords.join(", ")||"None")));
-  if(outlet.truncated)article.append(node("p","Listing exceeded the scan limit. Inventory is incomplete; baseline alerts remain suppressed."));
+  article.append(node("p","Pages scanned: "+Number(outlet.pages_scanned||0)+" · Pending: "+Number(outlet.pending_pages||0)+" · Failed: "+Number(outlet.failed_pages||0)));
+  if(outlet.truncated)article.append(node("p","A crawl limit was reached. Coverage is incomplete; inspect collector limits before treating the inventory as complete."));
   const actions=node("div",undefined,"actions");actions.append(copy(outlet.url,"COPY ONION URL"));
   if(state.admin){const edit=node("button","EDIT OUTLET","copy");edit.onclick=()=>editOutlet(outlet);actions.append(edit);}
   article.append(actions);$("outlets").append(article);

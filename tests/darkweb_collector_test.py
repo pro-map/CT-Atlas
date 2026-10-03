@@ -68,38 +68,133 @@ def test_acquisition_cap_removes_partial_files_and_content_hash_is_exact(tmp_pat
     assert (tmp_path / (meta['sha256'] + '.bin')).read_bytes() == b'12345'
 
 
-def test_baseline_is_not_acquired_new_material_is_acquired_and_upload_failure_is_retried(tmp_path):
-    db = c.open_database(tmp_path / 'state.sqlite')
-    inventory = [{'url': BASE + 'old.pdf', 'title': 'old', 'type': 'pdf'}]
-    sent, acquired = [], []
-    def api(*args, **kwargs):
+class Site:
+    def __init__(self, pages):
+        self.pages, self.calls = pages, []
+    def get(self, url, **kwargs):
+        self.calls.append(url)
+        value = self.pages[url]
+        if isinstance(value, Exception):
+            raise value
+        if isinstance(value, tuple):
+            body, mime = value
+        else:
+            body, mime = value, 'text/html; charset=utf-8'
+        return Response(body.encode(), headers={'Content-Type': mime}, url=url)
+
+
+def run_scan(site, db, tmp_path, budget=100, acquire=False, max_pages=10000):
+    sent = []
+    def ack(*args, **kwargs):
         sent.append(args[-1])
         return {'ok': True}
-    def acquire(*args):
-        acquired.append(args[1]['url'])
-        return {'acquired': True, 'sha256': 'b' * 64, 'bytes': 3}
-    with patch.object(c, 'read_listing', return_value=(inventory, False)), patch.object(c, 'api_call', side_effect=api), patch.object(c, 'acquire', side_effect=acquire):
-        c.scan_outlet(None, '', None, db, OUTLET, tmp_path, True, 10)
-    assert acquired == []
-    inventory += [{'url': BASE + 'new.pdf', 'title': 'new', 'type': 'pdf'}]
-    with patch.object(c, 'read_listing', return_value=(inventory, False)), patch.object(c, 'api_call', side_effect=ValueError('not acknowledged')), patch.object(c, 'acquire', side_effect=acquire):
-        with pytest.raises(ValueError):
-            c.scan_outlet(None, '', None, db, OUTLET, tmp_path, True, 10)
-    assert not db.execute('SELECT 1 FROM items WHERE url=?', (BASE + 'new.pdf',)).fetchone()
-    with patch.object(c, 'read_listing', return_value=(inventory, False)), patch.object(c, 'api_call', side_effect=api), patch.object(c, 'acquire', side_effect=acquire):
-        c.scan_outlet(None, '', None, db, OUTLET, tmp_path, True, 10)
-        c.scan_outlet(None, '', None, db, OUTLET, tmp_path, True, 10)
-    assert acquired == [BASE + 'new.pdf', BASE + 'new.pdf']
-    assert json.loads(db.execute('SELECT metadata FROM items WHERE url=?', (BASE + 'new.pdf',)).fetchone()[0])['acquired']
+    with patch.object(c, 'api_call', side_effect=ack):
+        result = c.scan_outlet(None, '', site, db, OUTLET, tmp_path, acquire, 100, budget, max_pages, 0)
+    return result, sent
+
+
+def test_recursive_pages_pagination_media_comments_and_loop_dedup(tmp_path):
+    site = Site({
+        BASE: '<a href="section">section</a><a href="https://outside.example/x">external</a>',
+        BASE+'section': '<a href="/">home</a><a href="post">post</a><a href="section?page=2">next</a>',
+        BASE+'post': '<title>Publication</title><p>Visible comment text</p><script>secret script text</script><video src="v.mp4"></video><a href="d.pdf">PDF</a>',
+        BASE+'section?page=2': '<a href="/post">same post</a><a href="/attachment?id=1">attachment</a>',
+        BASE+'attachment?id=1': ('pdf bytes', 'application/pdf')
+    })
+    db = c.open_database(tmp_path/'state.sqlite')
+    ok, sent = run_scan(site, db, tmp_path)
+    assert ok and sent[-1]['scan_complete']
+    assert len(site.calls) == 5 and len(set(site.calls)) == 5
+    items = {i['url']: i for batch in sent for i in batch['items']}
+    assert items[BASE+'v.mp4']['type'] == 'video'
+    assert items[BASE+'d.pdf']['source_page'] == BASE+'post'
+    assert items[BASE+'attachment?id=1']['type'] == 'pdf'
+    text = db.execute('SELECT text FROM pages WHERE url=?', (BASE+'post',)).fetchone()[0]
+    assert 'Visible comment text' in text and 'secret script text' not in text
     db.close()
 
 
-def test_failed_listing_reports_failure_with_no_sensitive_exception(tmp_path):
-    db = c.open_database(tmp_path / 'state.sqlite')
-    with patch.object(c, 'read_listing', side_effect=ValueError('sensitive URL')), patch.object(c, 'api_call', return_value={'ok': True}) as api:
-        c.scan_outlet(None, '', None, db, OUTLET, tmp_path, False, 10)
-    payload = api.call_args.args[-1]
-    assert payload['scan_ok'] is False and payload['items'] == []
-    assert 'sensitive' not in json.dumps(payload)
+def test_resume_after_restart_preserves_queue_and_delays_baseline(tmp_path):
+    site = Site({BASE:'<a href="p1">one</a>', BASE+'p1':'<a href="p2">two</a>', BASE+'p2':'<a href="/">home</a>'})
+    path = tmp_path/'state.sqlite'
+    db = c.open_database(path)
+    ok, sent = run_scan(site, db, tmp_path, budget=1)
+    assert ok and not sent[-1]['scan_complete'] and sent[-1]['pending_pages'] == 1
     assert not db.execute('SELECT 1 FROM outlets').fetchone()
+    db.close()
+    db = c.open_database(path)
+    run_scan(site, db, tmp_path, budget=1)
+    ok, sent = run_scan(site, db, tmp_path, budget=1)
+    assert sent[-1]['scan_complete'] and site.calls == [BASE, BASE+'p1', BASE+'p2']
+    assert db.execute('SELECT initialized FROM outlets').fetchone()[0] == 1
+    assert all(row[0] == 1 for row in db.execute('SELECT baseline FROM items'))
+    # A new cycle revisits the whole reachable outlet and detects newly linked material.
+    site.pages[BASE+'p2'] += '<a href="new.pdf">new material</a>'
+    ok, sent = run_scan(site, db, tmp_path)
+    assert sent[-1]['scan_complete']
+    assert db.execute('SELECT baseline FROM items WHERE url=?',(BASE+'new.pdf',)).fetchone()[0] == 0
+    db.close()
+
+
+def test_upload_failure_replays_outbox_without_restarting_crawl(tmp_path):
+    db = c.open_database(tmp_path/'state.sqlite')
+    site = Site({BASE:'<a href="old.pdf">old</a>'})
+    run_scan(site, db, tmp_path)
+    site.pages[BASE] += '<a href="new.pdf">new</a>'
+    acquired = []
+    def acquire(*args):
+        acquired.append(args[1]['url'])
+        return {'acquired': True, 'sha256': 'b'*64, 'bytes': 3}
+    with patch.object(c, 'api_call', side_effect=ValueError('upload failed')), patch.object(c, 'acquire', side_effect=acquire):
+        with pytest.raises(ValueError):
+            c.scan_outlet(None,'',site,db,OUTLET,tmp_path,True,100,100,10000,0)
+    assert db.execute('SELECT 1 FROM outbox').fetchone()
+    calls = len(site.calls)
+    with patch.object(c, 'acquire', side_effect=acquire):
+        ok, sent = run_scan(site, db, tmp_path, acquire=True)
+    assert ok and len(site.calls) == calls
+    assert acquired == [BASE+'new.pdf'], 'Acquired metadata survives a failed upload'
+    assert not db.execute('SELECT 1 FROM outbox').fetchone()
+    db.close()
+
+
+def test_failed_page_prevents_complete_inventory_and_recovers(tmp_path):
+    db = c.open_database(tmp_path/'state.sqlite')
+    site = Site({BASE:'<a href="broken">broken</a>', BASE+'broken':ValueError('sensitive URL')})
+    ok, sent = run_scan(site,db,tmp_path)
+    assert not ok and sent[-1]['failed_pages'] == 1 and not sent[-1]['scan_complete']
+    assert 'sensitive' not in json.dumps(sent)
+    assert not db.execute('SELECT 1 FROM outlets').fetchone()
+    site.pages[BASE+'broken'] = '<p>Recovered page</p>'
+    ok, sent = run_scan(site,db,tmp_path)
+    assert ok and sent[-1]['scan_complete']
+    assert site.calls.count(BASE) == 1
+    db.close()
+
+
+def test_total_page_limit_is_visible_and_resumable_when_increased(tmp_path):
+    db = c.open_database(tmp_path/'state.sqlite')
+    site = Site({BASE:'<a href="second">second</a>', BASE+'second':'<p>done</p>'})
+    ok, sent = run_scan(site,db,tmp_path,max_pages=1)
+    assert not ok and sent[-1]['truncated'] and sent[-1]['pending_pages'] == 1
+    ok, sent = run_scan(site,db,tmp_path,max_pages=10)
+    assert ok and sent[-1]['scan_complete'] and site.calls.count(BASE) == 1
+    db.close()
+
+
+def test_parser_ignores_action_links_and_follows_rel_next():
+    p = c.ListingParser(BASE)
+    p.feed('<a href="/logout">logout</a><a href="/?action=delete">delete</a><form action="/submit"></form><link rel="next" href="?page=2"><source src="/stream?id=4" type="video/mp4">')
+    assert set(p.rows) == {BASE+'?page=2',BASE+'stream?id=4'}
+    assert p.rows[BASE+'stream?id=4']['type'] == 'video'
+
+
+def test_unicode_batches_fit_actual_requests_json_encoding(tmp_path):
+    db = c.open_database(tmp_path/'state.sqlite')
+    html = ''.join('<a href="file%d.pdf">%s</a>' % (i, 'ع'*300) for i in range(100))
+    ok, sent = run_scan(Site({BASE: html}), db, tmp_path)
+    assert ok and len(sent) >= 2
+    assert all(len(json.dumps(payload).encode('utf-8')) < 128000 for payload in sent)
+    assert sum(len(payload['items']) for payload in sent) == 101
+    assert sent[-1]['scan_complete'] and not any(payload['scan_complete'] for payload in sent[:-1])
     db.close()

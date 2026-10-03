@@ -90,3 +90,20 @@ test('mirror stages every local script and stylesheet used by its static pages',
  assert.ok(staged.includes('report-illustration.js'));
  assert.ok(!staged.includes('quick-ask.js'));
 });
+
+test('recursive coverage cannot finalize a baseline with queued or failed pages; excerpts and provenance are bounded',async()=>{
+ const h=harness(),id=await register(h);
+ const submit=body=>h.call('/darkweb/ingest',{outlet_id:id,items:[{url:base+'post',title:'Thread',excerpt:'Niger '+ 'x'.repeat(1000),source_page:base}],scan_ok:true,scan_complete:true,...body},'',true);
+ await submit({pages_scanned:10,pending_pages:20,failed_pages:1});
+ let state=(await h.call('/darkweb/feed')).data;
+ assert.equal(state.outlets[0].initialized_at,undefined);
+ assert.equal(state.outlets[0].crawl_complete,false);
+ assert.equal(state.outlets[0].pending_pages,20);
+ assert.equal(state.items[0].excerpt.length,600);
+ assert.equal(state.items[0].source_page,base);
+ assert.deepEqual(Array.from(state.items[0].keyword_matches),['Niger']);
+ await submit({pages_scanned:30,pending_pages:0,failed_pages:0});
+ state=(await h.call('/darkweb/feed')).data;
+ assert.ok(state.outlets[0].initialized_at);
+ assert.equal(state.outlets[0].crawl_complete,true);
+});

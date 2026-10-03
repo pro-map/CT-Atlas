@@ -1,6 +1,6 @@
 import { cleanText, gateCall, isAllowedUser, sha256 } from "./shared.js";
 
-export const DARKWEB_VERSION = "darkweb-v1-outlet-watch";
+export const DARKWEB_VERSION = "darkweb-v2-recursive-watch";
 const TYPES = new Set(["pdf", "video", "audio", "image", "page"]);
 
 export function onionUrl(value) {
@@ -100,16 +100,20 @@ export async function handleDarkweb(request, env) {
     const url = onionUrl(raw?.url);
     if (!url || new URL(url).hostname !== new URL(outlet.url).hostname) return reply({ error: "Item URL must belong to its registered outlet." }, 400, env);
     const title = cleanText(raw.title, 300) || new URL(url).pathname;
-    items.push({ id: await sha256(outlet.id + "\n" + url), outlet_id: outlet.id, url, title,
+    const excerpt = cleanText(raw.excerpt, 600);
+    const sourcePage = onionUrl(raw.source_page);
+    items.push({ excerpt, source_page: sourcePage && new URL(sourcePage).hostname === new URL(outlet.url).hostname ? sourcePage : "", id: await sha256(outlet.id + "\n" + url), outlet_id: outlet.id, url, title,
       type: TYPES.has(raw.type) ? raw.type : "page", sha256: /^[a-f0-9]{64}$/i.test(raw.sha256 || "") ? raw.sha256.toLowerCase() : "",
       acquired: raw.acquired === true && /^[a-f0-9]{64}$/i.test(raw.sha256 || ""),
       bytes: Number.isSafeInteger(raw.bytes) && raw.bytes >= 0 ? raw.bytes : null,
-      keyword_matches: outlet.keywords.filter(k => title.toLowerCase().includes(k.toLowerCase()))
+      keyword_matches: outlet.keywords.filter(k => (title + " " + excerpt).toLowerCase().includes(k.toLowerCase()))
     });
   }
-  const response = await gateCall(env, "/darkweb-ingest", {
+  const count = value => Number.isSafeInteger(value) && value >= 0 ? Math.min(value, 100000) : 0;
+  const coverage = { pages_scanned: count(body.pages_scanned), pending_pages: count(body.pending_pages), failed_pages: count(body.failed_pages) };
+  const response = await gateCall(env, "/darkweb-ingest", { ...coverage,
     outlet_id: outlet.id, items, scan_ok: body.scan_ok === true,
-    scan_complete: body.scan_complete === true, truncated: body.truncated === true,
+    scan_complete: body.scan_complete === true && coverage.pending_pages === 0 && coverage.failed_pages === 0, truncated: body.truncated === true,
     // Store an error code only: errors may contain URLs, credentials or proxy details.
     error: body.scan_ok === true ? "" : "collection_failed"
   });

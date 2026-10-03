@@ -1,6 +1,6 @@
 # Dark Web Intelligence — connecting the collector
 
-This first version adds an authenticated CT Atlas workspace for known onion outlets:
+The workspace provides an authenticated CT Atlas workspace for known onion outlets:
 Latest, Outlets, Alerts and Tor Connection. Only the admin may register or update
 outlets. All authenticated CT Atlas accounts can read the shared feed. The public
 repository contains no outlet addresses, original evidence or collector credential.
@@ -47,7 +47,7 @@ and requires `socks5h`, with no direct-network fallback for source requests.
    ```
 
 5. Sign in as admin, open Dark Web Intelligence → OUTLETS, and register each known
-   **listing page** URL. Set optional comma-separated alert keywords. Re-enter the
+   **main/start page** URL. Set optional comma-separated alert keywords. Re-enter the
    same URL to update a record, or use EDIT OUTLET. Uncheck monitoring to pause it.
    At most 20 sources can be registered. This version follows links only on the
    same v3 onion host, without a nonstandard port or embedded URL credentials.
@@ -85,9 +85,10 @@ and requires `socks5h`, with no direct-network fallback for source requests.
 python darkweb-collector/collector.py --acquire --max-file-mb 50
 ```
 
-Only new links classified by their path extension as PDF/video/audio/image are
-acquired. The initial local inventory is never bulk-downloaded. Thereafter,
-failed acquisitions are retried if their links remain in the listing. Files stay
+New PDF/video/audio/image links are acquired after the baseline. File type is
+inferred from the path, media tags and Content-Type when visiting extensionless
+download links. The initial local inventory is never bulk-downloaded. Thereafter,
+failed acquisitions are retried when their links are rediscovered during a later crawl. Files stay
 in `private-outlet-watch/evidence`, named by content SHA-256 with a `.bin` suffix.
 The local SQLite manifest maps each source URL and title to its hash and size.
 No files are executed, rendered, served publicly or sent to an AI provider.
@@ -98,7 +99,7 @@ rejected before fetching. An HTML login/error response is not acquired as a file
 There is no overall evidence-directory retention or disk budget in v1; provision
 and manage disk storage before running acquisition continuously.
 
-## What the first version can establish
+## Recursive collection and coverage
 
 - The first complete inventory is labelled BASELINE and produces no new-item
   alerts. Subsequent previously unseen URLs produce unreviewed feed entries.
@@ -107,22 +108,47 @@ and manage disk storage before running acquisition continuously.
 - URL identity deduplicates repeated scans. A content SHA-256 is available only
   after acquisition. Different URLs with the same hash can be recognized as the
   same downloaded bytes, but each source occurrence remains a separate feed row.
-- Keyword alerts are title matches, not AI threat assessments. ALERTS lists all
+- Keyword alerts match titles and the short page excerpts, not AI threat assessments. ALERTS lists all
   unreviewed discoveries; keyword hits are highlighted. Marking a feed reviewed
   updates only that analyst's state up to the snapshot they viewed.
-- Collection does not browse subpages recursively, execute JavaScript, bypass
-  accounts/captchas, download external-host files or search the entire dark web.
-  Outlets with script-generated listings, detail-page download buttons, RSS or
-  custom pagination will need source-specific adapters after their structure is
-  inspected. The generic parser records same-host anchors from a single listing.
-- Listing HTML is limited to 2 MB and 500 unique links per scan. Truncation is
-  displayed and does not finalize the initial baseline. Server ingestion batches
-  contain at most 100 links. The online feed retains the newest 500 discoveries;
-  the local manifest/evidence remain independent. Separate bounded URL-history
-  shards (up to 32,768 fingerprints per outlet) prevent ordinary feed eviction
-  from creating repeat alerts. Once a fingerprint ages out of that history it
-  can be rediscovered; this bounded feed is not a complete archive. Replaced
-  content at an already known URL is not detected by this link-based version.
+- Starting from the registered main page, collection follows internal links,
+  categories, thread/publication pages, query-string pagination, `rel=next`,
+  embedded video/audio sources and same-host frames. The visited queue avoids
+  revisiting an identical URL in a cycle. Account/moderation action links and
+  static scripts/styles/fonts are skipped; no forms are submitted.
+- The SQLite queue persists across passes and restarts. `--pages-per-scan 100`
+  limits each pass. Once all reachable queued pages succeed, the cycle completes;
+  a subsequent cycle starts at the main page to look for new internal links.
+  `--once` means one pass, which may cover only part of a large outlet.
+- The initial baseline is finalized only after every queued page succeeds and
+  all metadata uploads are acknowledged. Pending/failed pages prevent completion.
+  Failed pages are retried up to three times in a pass and then on the next pass.
+  Upload failures retain an outbox so already collected metadata is replayed
+  without losing the discovery or restarting the crawl.
+- `--max-pages 10000` caps successfully visited pages per cycle; it can be raised
+  up to 40,000 without losing the pending queue. The frontier also has a 50,000-URL
+  guard (it may overshoot by one page of links). Reaching it requires reducing
+  crawl scope or a source-specific adapter. Limits are reported, never presented
+  as complete coverage. One page can contribute at most 500 links and 2 MB HTML;
+  a page hitting the link limit is reported as incomplete and needs an adapter.
+- OUTLETS displays cumulative successful pages, pending pages, failed pages and
+  incomplete coverage. A network failure is not evidence of no new material.
+- Extracted HTML text, including forum comments present in the response, is retained locally in
+  the SQLite `pages` table (latest snapshot, up to 100,000 text characters/page).
+  Scripts/styles and HTML comments are excluded. A 600-character page excerpt
+  and source-page URL accompany feed entries. Text outside that excerpt remains
+  local. Existing-page comment edits do not produce separate new-item alerts;
+  per-comment change detection is not implemented.
+- No JavaScript execution, login bypass or cross-host crawling is performed.
+  Material hosted on another onion/clear-web domain, hidden/unlinked pages,
+  script-only pagination, player APIs and session-gated content need explicit
+  source-specific configuration. Reachable static links are the coverage scope;
+  no generic crawler can guarantee discovering every page an outlet contains.
+- Server ingestion batches contain at most 100 links and are byte-bounded. The
+  online feed retains the newest 500 discoveries. Separate bounded URL-history
+  shards prevent ordinary eviction from creating repeat alerts. Local manifests,
+  page text and acquired originals remain independent. Stable-URL content
+  replacements are not new discoveries in this URL-based alert model.
 - A stale check (over 45 minutes) is shown as STALE, rather than LIVE. A successful
   check only establishes success at its recorded time.
 
@@ -132,3 +158,25 @@ Automated tests use synthetic fixtures only. This implementation has not accesse
 any operational outlet. Live validation requires the actual listing URLs, Worker
 secret and a running collector with Tor. No real-time collection is active merely
 because the new workspace has been deployed.
+
+## Windows update from the original single-page collector
+
+Keep the same Worker secret, outlet registrations and `private-outlet-watch`
+folder. Download the updated script from the merged main branch:
+
+```cmd
+cd /d "%USERPROFILE%\CT-Atlas-Collector"
+curl.exe -fL "https://raw.githubusercontent.com/pro-map/CT-Atlas/main/darkweb-collector/collector.py" -o collector.py
+py collector.py --proxy socks5h://127.0.0.1:9150 --once --pages-per-scan 10
+```
+
+Set `DARKWEB_INGEST_TOKEN` in that CMD session before running the collector, as
+before. After the short test, start continuous collection without `--once`:
+
+```cmd
+py collector.py --proxy socks5h://127.0.0.1:9150
+```
+
+The new SQLite tables are added automatically. If an older single-page collector
+already completed its baseline, previously unseen internal URLs will initially
+be reported as new discoveries rather than claimed as new publications.
