@@ -2,7 +2,9 @@
 "use strict";
 const API="https://ct-report-generator.fairpeace.workers.dev";
 const $=id=>document.getElementById(id);
-let state=null,view="latest",busy=false;
+let state=null,view="latest",busy=false,enriching=false;
+const previewCache=new Map();
+let previewObserver;
 const token=()=>sessionStorage.getItem("ct_map_session_token")||"";
 function node(tag,text,className){const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(className)el.className=className;return el;}
 function date(value){return value?new Date(value).toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"}):"Never";}
@@ -19,7 +21,9 @@ function copy(value,label){const button=node("button",label,"copy");button.type=
 function renderFeed(){
  const outletId=$("outletFilter").value,type=$("typeFilter").value,query=$("search").value.trim().toLowerCase();
  const outlets=new Map(state.outlets.map(o=>[o.id,o]));
- const rows=state.items.filter(i=>(!outletId||i.outlet_id===outletId)&&(!type||i.type===type)&&(!query||[i.title,i.excerpt,outlets.get(i.outlet_id)?.name,...(i.keyword_matches||[])].join(" ").toLowerCase().includes(query))&&(view!=="alerts"||unread(i)));
+ const rows=[...state.items].sort((a,b)=>(b.published_at||"").localeCompare(a.published_at||"")).filter(i=>(!outletId||i.outlet_id===outletId)&&(!type||i.type===type)&&(!query||[i.title,i.title_en,i.excerpt,outlets.get(i.outlet_id)?.name,...(i.keyword_matches||[])].join(" ").toLowerCase().includes(query))&&(view!=="alerts"||unread(i)));
+ previewObserver?.disconnect();
+ previewObserver=new IntersectionObserver(entries=>{for(const entry of entries)if(entry.isIntersecting){loadPreview(entry.target);previewObserver.unobserve(entry.target);}});
  $("feed").replaceChildren();
  if(!rows.length){$("feed").append(empty(view==="alerts"?"No unreviewed material":"No material to display",state.outlets.length?"Start the Tor collector or adjust your filters. The first complete scan establishes an inventory baseline.":"The administrator can register the three outlets in OUTLETS, then connect the Tor collector."));return;}
  for(const item of rows){
@@ -30,7 +34,13 @@ function renderFeed(){
   if(item.keyword_matches?.length)head.append(node("span","KEYWORDS: "+item.keyword_matches.join(", "),"pill alert"));
   const foot=node("div",undefined,"item-foot");foot.append(node("span","First detected: "+date(item.first_seen)),copy(item.url,"COPY ONION URL"));
   foot.append(node("span",item.acquired?"Acquired on collector · "+(item.bytes===null?"size unavailable":(item.bytes/1048576).toFixed(1)+" MB"):"Link discovered · file not acquired"));
-  article.append(head,node("h3",item.title));
+  article.id="item-"+item.id;
+  const title=node("h3",item.title_en||"English title pending AI enrichment");title.dir="auto";
+  const original=node("p",readableTitle(item.title),"original-title");original.dir="auto";
+  article.append(head,title,original,node("p","Publication: "+(item.published_at||"Unknown")+" · Date evidence: "+(item.date_basis||"unknown")));
+  if(item.title_en)article.append(node("span","AI ENGLISH TITLE","pill"));
+  if(item.has_preview){const preview=node("img",undefined,"publication-preview");preview.alt=item.preview_status||"Publication preview";preview.dataset.itemId=item.id;preview.loading="lazy";article.append(preview);previewObserver.observe(preview);}
+  else article.append(node("p",item.preview_status||"Preview pending or unavailable within collection limits"));
   if(item.excerpt)article.append(node("p",item.excerpt,"excerpt"));
   article.append(foot);
   if(item.source_page)article.append(copy(item.source_page,"COPY SOURCE PAGE"));
@@ -40,6 +50,16 @@ function renderFeed(){
 }
 function editOutlet(outlet){$("outletName").value=outlet.name;$("outletUrl").value=outlet.url;$("keywords").value=outlet.keywords.join(", ");$("enabled").checked=outlet.enabled;$("outletForm").scrollIntoView({behavior:"smooth"});}
 function render(){
+ $("collectionForm").hidden=!state.admin;$("enrichNow").hidden=!state.admin;
+ if(state.policy&&!$("collectionForm").contains(document.activeElement)){
+  $("collectFrom").value=state.policy.from;$("collectThrough").value=state.policy.through;$("collectPages").value=state.policy.pages_per_scan;$("collectPreviews").checked=state.policy.previews;
+ }
+ $("pauseCollection").textContent=state.policy?.paused?"RESUME":"PAUSE";
+ $("collectionState").textContent=(state.policy?.paused?"PAUSED":"ACTIVE")+" · "+(state.policy?.from||"")+" → "+(state.policy?.through||"")+" · Undated items awaiting local review: "+state.outlets.reduce((n,o)=>n+Number(o.undated_count||0),0);
+ $("aiSummary").textContent=state.summary?.text||"No AI briefing yet. Dated publications are needed first.";
+ $("aiSummary").title=state.summary?"Generated: "+date(state.summary.generated_at)+" · Based on up to 20 latest dated publications":"";
+ $("aiSources").replaceChildren();
+ for(const source of state.summary?.sources||[]){const link=node("a","["+source.number+"] "+readableTitle(source.title)+" · "+source.published_at);link.href="#item-"+source.id;link.dir="auto";$("aiSources").append(link);}
  $("outletCount").textContent=state.outlets.filter(o=>o.enabled).length;
  $("newCount").textContent=state.unread_count;$("alertCount").textContent=state.keyword_alert_count;
  const last=state.outlets.map(o=>o.last_scan).filter(Boolean).sort().pop();$("lastCheck").textContent=last?date(last):"Not connected";
@@ -55,7 +75,7 @@ function render(){
   const status=!outlet.enabled?"PAUSED":!outlet.last_scan?"AWAITING COLLECTOR":stale?"STALE":outlet.truncated?"CRAWL LIMIT REACHED":outlet.failed_pages?"PAGES NEED RETRY":outlet.pending_pages?"CRAWL IN PROGRESS":outlet.scan_ok?"LAST CHECK SUCCEEDED":"LAST CHECK FAILED";
   top.append(node("h3",outlet.name),node("span",status,"pill"));
   article.append(top,node("code",outlet.url),node("p","Last attempt: "+date(outlet.last_scan)+" · Last completed scan: "+date(outlet.last_success)),node("p","Alert keywords: "+(outlet.keywords.join(", ")||"None")));
-  article.append(node("p","Pages scanned: "+Number(outlet.pages_scanned||0)+" · Pending: "+Number(outlet.pending_pages||0)+" · Failed: "+Number(outlet.failed_pages||0)));
+  article.append(node("p","Phase: "+(outlet.collection_phase||"backfill")+" · Pages scanned: "+Number(outlet.pages_scanned||0)+" · Pending: "+Number(outlet.pending_pages||0)+" · Failed: "+Number(outlet.failed_pages||0)));
   if(outlet.truncated)article.append(node("p","A crawl limit was reached. Coverage is incomplete; inspect collector limits before treating the inventory as complete."));
   const actions=node("div",undefined,"actions");actions.append(copy(outlet.url,"COPY ONION URL"));
   if(state.admin){const edit=node("button","EDIT OUTLET","copy");edit.onclick=()=>editOutlet(outlet);actions.append(edit);}
@@ -65,10 +85,21 @@ function render(){
  $("outletFilter").value=selected;
  renderFeed();
 }
-async function refresh(){if(busy)return;busy=true;$("refresh").disabled=true;try{state=await api("/darkweb/feed");render();$("message").textContent="";}catch(error){$("message").textContent=error.message;}finally{busy=false;$("refresh").disabled=false;}}
+async function refresh(skipEnrich=false){if(busy)return;busy=true;$("refresh").disabled=true;try{state=await api("/darkweb/feed");render();$("message").textContent="";if(!skipEnrich&&state.admin)void enrich();}catch(error){$("message").textContent=error.message;}finally{busy=false;$("refresh").disabled=false;}}
+function readableTitle(value){let title=String(value||"");try{title=decodeURIComponent(title);}catch(_){}if(title.startsWith("/"))title=title.split("/").pop();return title.replace(/_/g," ");}
+async function loadPreview(image){try{const id=image.dataset.itemId;let data=previewCache.get(id);if(!data){data=(await api("/darkweb/preview?id="+encodeURIComponent(id))).preview;if(data)previewCache.set(id,data);}if(/^data:image\/jpeg;base64,/.test(data||""))image.src=data;else image.alt="Preview unavailable";}catch(_){image.alt="Preview temporarily unavailable";}}
+async function enrich(){if(enriching||!state?.admin||!state.items.length)return;enriching=true;$("enrichNow").disabled=true;$("aiStatus").textContent="Preparing English titles and a source-based briefing…";try{const result=await api("/darkweb/enrich",{});$("aiStatus").textContent=result.waiting?"AI work is rate-limited; the next refresh will retry.":"AI enrichment updated. Each batch handles up to 20 pending titles.";if(!result.waiting)await refresh(true);}catch(error){$("aiStatus").textContent=error.message;}finally{enriching=false;$("enrichNow").disabled=false;}}
+async function saveCollection(reset=false,pause=state.policy.paused){
+ const body={from:$("collectFrom").value,through:$("collectThrough").value,pages_per_scan:Number($("collectPages").value),previews:$("collectPreviews").checked,paused:pause,reset};
+ try{await api("/darkweb/policy",body);previewCache.clear();await refresh();}catch(error){$("message").textContent=error.message;}
+}
+$("collectionForm").onsubmit=event=>{event.preventDefault();void saveCollection();};
+$("pauseCollection").onclick=()=>saveCollection(false,!state.policy.paused);
+$("resetCollection").onclick=()=>{if(confirm("Delete current feed results and restart collection for the selected period? Outlet settings and local evidence files will be kept."))void saveCollection(true,false);};
+$("enrichNow").onclick=enrich;
 for(const button of document.querySelectorAll("[data-view]"))button.onclick=()=>{view=button.dataset.view;for(const b of document.querySelectorAll("[data-view]")){b.classList.toggle("active",b===button);b.setAttribute("aria-pressed",String(b===button));}$("feedView").hidden=!["latest","alerts"].includes(view);$("outletsView").hidden=view!=="outlets";$("setupView").hidden=view!=="setup";if(state)renderFeed();};
 for(const id of ["search","outletFilter","typeFilter"])$(id).addEventListener("input",()=>{if(state)renderFeed();});
-$("refresh").onclick=refresh;
+$("refresh").onclick=()=>refresh();
 $("markSeen").onclick=async()=>{if(!state||busy)return;try{await api("/darkweb/seen",{through:state.generated_at});await refresh();}catch(error){$("message").textContent=error.message;}};
 $("outletForm").onsubmit=async event=>{event.preventDefault();const button=event.target.querySelector("button[type=submit]");button.disabled=true;try{await api("/darkweb/outlet",{name:$("outletName").value,url:$("outletUrl").value,keywords:$("keywords").value,enabled:$("enabled").checked});event.target.reset();await refresh();}catch(error){$("message").textContent=error.message;}finally{button.disabled=false;}};
 (async()=>{if(!token()){location.replace("index.html");return;}try{const session=await api("/session-check");sessionStorage.setItem("ct_map_username",session.username);$("user").textContent=session.username.toUpperCase();$("workspace").hidden=false;await refresh();setInterval(()=>{if(!document.hidden)refresh();},60000);}catch(error){$("workspace").hidden=false;$("message").textContent=error.message;}})();

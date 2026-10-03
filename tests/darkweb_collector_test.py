@@ -243,3 +243,57 @@ def test_legacy_outbox_noise_is_not_uploaded(tmp_path):
     _, sent = run_scan(Site({BASE:''}), db, tmp_path)
     assert not any(batch['items'] for batch in sent)
     assert not db.execute('SELECT 1 FROM outbox').fetchone()
+
+POLICY = {'epoch':2, 'from':'2025-01-01', 'through':'2026-12-31', 'pages_per_scan':10, 'previews':False}
+
+def test_arabic_filename_decodes_without_altering_fetch_url():
+    path = BASE+'uploads/292/%d9%82%d8%a7%d8%aa%d9%84%d9%88%d9%87%d9%85_%d8%a7%d9%84%d9%84%d9%87.mp3'
+    assert c.display_title(path) == 'قاتلوهم الله.mp3'
+    parser=c.ListingParser(BASE); parser.feed('<a href="'+path+'"></a>')
+    assert parser.rows[path]['url'] == path
+    assert parser.rows[path]['title'] == 'قاتلوهم الله.mp3'
+
+def test_date_scope_excludes_undated_old_and_future_and_preserves_navigation(tmp_path):
+    site=Site({BASE:'<a href="post">Publication</a><a href="2024-01-01.pdf">Old</a><a href="unknown.pdf">Unknown</a>',BASE+'post':'<meta property="article:published_time" content="2025-03-09T10:00:00Z"><a href="report.pdf">Report</a>'})
+    outlet={**OUTLET,'policy':POLICY}
+    db=c.open_database(tmp_path/'state.sqlite');c.apply_epoch(db,POLICY)
+    sent=[]
+    with patch.object(c,'api_call',side_effect=lambda *args:sent.append(args[-1]) or {'ok':True}):
+        c.scan_outlet(None,'',site,db,outlet,tmp_path,False,100,100,10000,0)
+    rows=[r for batch in sent for r in batch['items']]
+    assert [r['url'] for r in rows] == [BASE+'report.pdf']
+    assert rows[0]['published_at']=='2025-03-09' and rows[0]['date_basis']=='source_page'
+    assert db.execute('SELECT COUNT(*) FROM undated').fetchone()[0]==1
+    assert not c.within_period({'published_at':'2099-01-01'},POLICY)
+    assert not c.publication_date('2025-02-30')
+    assert c.publication_date('٢٠٢٥-٠٣-٠٩')=='2025-03-09'
+
+def test_epoch_reset_is_idempotent_and_does_not_delete_evidence(tmp_path):
+    db=c.open_database(tmp_path/'state.sqlite');c.apply_epoch(db,POLICY)
+    evidence=tmp_path/'evidence.bin';evidence.write_bytes(b'preserved')
+    db.execute('INSERT INTO items VALUES (?,?,?,?)',('x',BASE,'{}',1));db.commit()
+    c.apply_epoch(db,POLICY);assert db.execute('SELECT COUNT(*) FROM items').fetchone()[0]==1
+    c.apply_epoch(db,{**POLICY,'epoch':3});assert db.execute('SELECT COUNT(*) FROM items').fetchone()[0]==0
+    assert evidence.read_bytes()==b'preserved'
+
+def test_watch_is_shallow_but_initial_inventory_reaches_deeper_pages(tmp_path):
+    site=Site({BASE:'<a href="a">a</a>',BASE+'a':'<a href="b">b</a>',BASE+'b':'<a href="c">c</a>',BASE+'c':'<a href="2025-04-01.pdf">pdf</a>'})
+    db=c.open_database(tmp_path/'state.sqlite')
+    c.crawl_outlet(site,db,{**OUTLET,'policy':POLICY,'collection_phase':'watch'},100,10000,0)
+    assert site.calls==[BASE,BASE+'a',BASE+'b']
+    c.apply_epoch(db,POLICY);site.calls=[]
+    c.crawl_outlet(site,db,{**OUTLET,'policy':POLICY,'collection_phase':'backfill'},100,10000,0)
+    assert BASE+'c' in site.calls
+
+def test_previews_are_small_jpegs_and_pdf_first_pages_with_no_original_on_disk(tmp_path):
+    Image=pytest.importorskip('PIL.Image');fitz=pytest.importorskip('fitz')
+    output=c.io.BytesIO();Image.new('RGB',(300,200),'navy').save(output,format='PNG')
+    image=c.make_preview(Session([Response(output.getvalue())]),{'url':BASE+'image.png','type':'image'})
+    assert image['preview'].startswith('data:image/jpeg;base64,/9j/') and len(image['preview'])<=16000
+    with fitz.open() as doc:
+        doc.new_page();pdf=doc.tobytes()
+    preview=c.make_preview(Session([Response(pdf)]),{'url':BASE+'file.pdf','type':'pdf'})
+    assert preview['preview_status']=='First page' and len(preview['preview'])<=16000
+    response=Response(headers={'Content-Length':str(9*1048576)})
+    assert 'cap' in c.make_preview(Session([response]),{'url':BASE+'image.png','type':'image'})['preview_status']
+    assert response.closed and not list(tmp_path.iterdir())
