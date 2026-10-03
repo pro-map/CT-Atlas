@@ -584,6 +584,10 @@ export class ReportGate {
         outlet.scan_ok = body.scan_ok === true;
         outlet.error = body.error;
         outlet.truncated = body.truncated === true;
+        outlet.pages_scanned = body.pages_scanned || 0;
+        outlet.pending_pages = body.pending_pages || 0;
+        outlet.failed_pages = body.failed_pages || 0;
+        outlet.crawl_complete = body.scan_complete === true && !body.truncated;
         if (body.scan_ok && body.scan_complete) {
           outlet.last_success = timestamp;
           if (!body.truncated) outlet.initialized_at ||= timestamp;
