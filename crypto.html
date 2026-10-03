@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<style>html{background:#0d1620}.ct-page-loading{display:none}html.ct-loading .ct-page-loading{position:fixed;inset:0;z-index:2147483646;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#0d1620;color:#edf3f6;font:11px Arial,sans-serif;letter-spacing:.24em}</style>
+<script>document.documentElement.classList.add("ct-loading");window.ctLoadingFallback=setTimeout(function(){document.documentElement.classList.remove("ct-loading");},10000);</script>
+<link rel="stylesheet" href="workspace-ui.css?v=20261003">
+<script src="workspace-ui.js?v=20261003" defer></script>
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CT ATLAS — Crypto Intelligence</title>
@@ -11,6 +15,7 @@
   <script src="tab-access.js?v=20260928" defer></script>
 </head>
 <body data-ct-tab="crypto">
+<div class="ct-page-loading" role="status" aria-live="polite"><strong>CT ATLAS</strong><span>LOADING</span><span class="ct-loading-line" aria-hidden="true"></span></div>
 <div class="crypto-shell">
   <header class="crypto-header">
     <div class="crypto-brand">
@@ -355,9 +360,9 @@
     </div>
   </main>
 </div>
-<script src="pdf-export.js?v=4"></script>
+<script src="pdf-export.js?v=20261003"></script>
 <script src="crypto-report.js?v=6"></script>
-<script src="crypto.js?v=12"></script>
+<script src="crypto.js?v=20261003"></script>
 <script src="tab-health.js?v=1" data-health-scope="crypto"></script>
 </body>
 </html>

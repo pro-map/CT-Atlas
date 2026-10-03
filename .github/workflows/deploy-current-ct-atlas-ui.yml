@@ -20,6 +20,8 @@ on:
       - "usage-admin.css"
       - "feedback.js"
       - "feedback.css"
+      - "workspace-ui.js"
+      - "workspace-ui.css"
       - "tab-access.js"
       - "index.html"
       - "main.html"

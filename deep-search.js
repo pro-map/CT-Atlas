@@ -371,6 +371,7 @@ async function run(){
   renderScope();
   setStatus("Reading the period from your question, taking the matching CT Atlas database events first, then retrieving fresh multilingual reporting…","working");
 
+  const finishWait = window.CTAtlasUI?.begin(document.getElementById("deepSearchStatus"));
   try{
     const response=await fetch(API_BASE+"/deep-search",{
       method:"POST",
@@ -390,7 +391,9 @@ async function run(){
         :"Assessment written from general knowledge only [GK]: no current reporting was found in the database or the multilingual search.","warning");
     }else setStatus(`Assessment complete · ${Number(payload.retrieval?.articles_retrieved||0)} articles · ${Number(payload.retrieval?.unique_event_clusters||0)} unique event clusters · ${Number(payload.retrieval?.potential_atlas_gaps||0)} potential CT Atlas gaps.${periodNote}`,"success");
   }catch(error){setStatus(error?.message||"The assessment failed.","error");}
-  finally{if(button){button.disabled=false;button.textContent="GENERATE ASSESSMENT";}}
+  finally{
+    finishWait?.();
+    if(button){button.disabled=false;button.textContent="GENERATE ASSESSMENT";}}
 }
 
 async function copyReport(){
