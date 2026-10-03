@@ -195,6 +195,51 @@ def test_unicode_batches_fit_actual_requests_json_encoding(tmp_path):
     ok, sent = run_scan(Site({BASE: html}), db, tmp_path)
     assert ok and len(sent) >= 2
     assert all(len(json.dumps(payload).encode('utf-8')) < 128000 for payload in sent)
-    assert sum(len(payload['items']) for payload in sent) == 101
+    assert sum(len(payload['items']) for payload in sent) == 100
     assert sent[-1]['scan_complete'] and not any(payload['scan_complete'] for payload in sent[:-1])
     db.close()
+
+
+def test_selection_discards_navigation_but_still_reaches_publications(tmp_path):
+    body = 'This is substantive analytical body text with details. ' * 30
+    site = Site({
+        BASE: '<nav><a href="category">Section title</a></nav><a href="logo.png">Logo</a>',
+        BASE+'category': '<h1>Publications</h1><a href="article">Read article</a><a href="discussion">Discussion</a>',
+        BASE+'article': '<title>Detailed text</title><nav>Navigation noise</nav><article><p>'+body+'</p></article><a href="report.pdf">Report</a>',
+        BASE+'discussion': '<div class="comment-body">'+('An identifiable user comment with enough context. '*3)+'</div>'
+    })
+    db = c.open_database(tmp_path/'state.sqlite')
+    ok, sent = run_scan(site, db, tmp_path)
+    items = {i['url']: i for batch in sent for i in batch['items']}
+    assert ok and sent[-1]['scan_complete']
+    assert set(items) == {BASE+'article', BASE+'discussion', BASE+'report.pdf'}
+    assert 'Navigation noise' not in items[BASE+'article']['excerpt']
+    assert items[BASE+'discussion']['selection_version'] == 1
+    assert set(site.calls) == {BASE, BASE+'category', BASE+'article', BASE+'discussion'}
+
+
+def test_selection_rejects_large_menus_headings_and_html_comments():
+    html = '<nav><div>'+('menu text '*500)+'</div></nav>'
+    html += '<div class="pagination">'+('next page '*500)+'</div>'
+    html += '<div><h2>'+('section title '*200)+'</h2></div>'
+    html += '<!-- '+('comment in source '*100)+' -->'
+    html += '<div>'+(' <a href="/x">link label</a> '*300)+'</div>'
+    parser = c.PublicationParser(); parser.feed(html)
+    assert parser.selected_text() == ''
+
+
+def test_selection_accepts_arabic_body_and_rejects_keyword_only():
+    parser = c.PublicationParser()
+    parser.feed('<article><p>'+('هذا نص طويل يتضمن تفاصيل ومعلومات للتحليل. '*40)+'</p></article>')
+    assert parser.selected_text().startswith('هذا نص')
+    parser = c.PublicationParser(); parser.feed('<h2>إصدار فيديو PDF</h2><p>publication officielle</p>')
+    assert parser.selected_text() == ''
+
+
+def test_legacy_outbox_noise_is_not_uploaded(tmp_path):
+    db = c.open_database(tmp_path/'state.sqlite')
+    row = {'url': BASE+'menu', 'type': 'page', 'title': 'Menu'}
+    db.execute('INSERT INTO outbox VALUES (?,?,?,?)', (OUTLET['id'],row['url'],json.dumps(row),1)); db.commit()
+    _, sent = run_scan(Site({BASE:''}), db, tmp_path)
+    assert not any(batch['items'] for batch in sent)
+    assert not db.execute('SELECT 1 FROM outbox').fetchone()
