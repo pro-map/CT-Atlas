@@ -528,16 +528,77 @@ export class ReportGate {
       });
     }
 
+    if (url.pathname.startsWith("/darkweb-")) {
+      await this.state.storage.transaction(async tx => {
+        if (await tx.get("darkweb:controlled-collection:2")) return;
+        const rows = await tx.list({ prefix: "darkweb:item:", limit: 1000 });
+        for (const [key] of rows) await tx.delete(key);
+        const outlets = await tx.get("darkweb:outlets") || [];
+        for (const outlet of outlets) {
+          delete outlet.initialized_at;
+          outlet.collection_phase = "backfill";
+          outlet.pages_scanned = outlet.pending_pages = outlet.failed_pages = outlet.undated_count = 0;
+          outlet.last_scan = outlet.last_success = ""; outlet.scan_ok = outlet.crawl_complete = outlet.truncated = false;
+        }
+        await tx.put("darkweb:outlets", outlets);
+        await tx.put("darkweb:policy", { epoch: 2, from: "2025-01-01", through: "2026-12-31", pages_per_scan: 10, paused: false, previews: true });
+        await tx.delete("darkweb:summary");
+        await tx.put("darkweb:controlled-collection:2", true);
+      });
+    }
+    if (url.pathname === "/darkweb-policy") {
+      const result = await this.state.storage.transaction(async tx => {
+        const prior = await tx.get("darkweb:policy");
+        const policy = { ...prior, ...body.policy };
+        if (body.reset) {
+          policy.epoch = prior.epoch + 1;
+          const rows = await tx.list({ prefix: "darkweb:item:", limit: 1000 });
+          for (const [key] of rows) await tx.delete(key);
+          const outlets = await tx.get("darkweb:outlets") || [];
+          for (const outlet of outlets) { delete outlet.initialized_at; Object.assign(outlet, { collection_phase: "backfill", pages_scanned: 0, pending_pages: 0, failed_pages: 0, undated_count: 0, last_scan: "", last_success: "", scan_ok: false, crawl_complete: false, truncated: false }); }
+          await tx.put("darkweb:outlets", outlets);
+          await tx.delete("darkweb:summary");
+        }
+        await tx.put("darkweb:policy", policy);
+        return { ok: true, policy };
+      });
+      return Response.json(result);
+    }
+    if (url.pathname === "/darkweb-preview") {
+      const item = await this.state.storage.get("darkweb:item:" + body.id);
+      return Response.json({ preview: item?.preview || "" });
+    }
+    if (url.pathname === "/darkweb-enrich-lock") {
+      return Response.json(await this.state.storage.transaction(async tx => {
+        const until = await tx.get("darkweb:enrich-until") || 0;
+        if (until > now) return { ok: false };
+        await tx.put("darkweb:enrich-until", now + 60000);
+        return { ok: true };
+      }));
+    }
+    if (url.pathname === "/darkweb-enrich-save") {
+      return Response.json(await this.state.storage.transaction(async tx => {
+        const policy = await tx.get("darkweb:policy");
+        if (body.epoch !== policy.epoch) return { ok: false };
+        for (const title of body.titles) {
+          const key = "darkweb:item:" + title.id, item = await tx.get(key);
+          if (item && item.title === title.original && item.excerpt === title.excerpt) await tx.put(key, { ...item, title_en: title.title, title_en_generated_at: new Date(now).toISOString() });
+        }
+        if (body.summary) await tx.put("darkweb:summary", body.summary);
+        return { ok: true };
+      }));
+    }
+
     // Curated outlet watch: private metadata only, bounded to 500 retained items.
     // Serialize read/modify/write with storage transactions so collector retries
     // and parallel outlet saves cannot lose records or duplicate alerts.
     if (url.pathname === "/darkweb-state") {
       const outlets = (await this.state.storage.get("darkweb:outlets")) || [];
       const rows = await this.state.storage.list({ prefix: "darkweb:item:", limit: 500 });
-      const items = [...rows.values()].sort((a, b) => b.first_seen.localeCompare(a.first_seen));
+      const items = [...rows.values()].map(({ preview, ...item }) => ({ ...item, has_preview: !!preview })).sort((a, b) => b.first_seen.localeCompare(a.first_seen));
       const seen = body.username ? await this.state.storage.get("darkweb:seen:" + body.username) : "";
       const unread = items.filter(i => !i.baseline && i.first_seen > (seen || ""));
-      return Response.json({ outlets, items, unread_count: unread.length,
+      return Response.json({ policy: await this.state.storage.get("darkweb:policy"), summary: await this.state.storage.get("darkweb:summary") || null, outlets, items, unread_count: unread.length,
         keyword_alert_count: unread.filter(i => i.keyword_matches?.length).length,
         seen_through: seen || "", generated_at: new Date(now).toISOString(), retention_limit: 500 });
     }
@@ -563,6 +624,8 @@ export class ReportGate {
     }
     if (url.pathname === "/darkweb-ingest") {
       const result = await this.state.storage.transaction(async tx => {
+        const policy = await tx.get("darkweb:policy");
+        if (policy.paused || body.collection_epoch !== policy.epoch) return { error: "Collection policy changed; reload configuration." };
         const outlets = await tx.get("darkweb:outlets") || [];
         const outlet = outlets.find(o => o.id === body.outlet_id && o.enabled);
         if (!outlet) return { error: "Unknown or disabled outlet." };
@@ -581,8 +644,8 @@ export class ReportGate {
           const bucket = knownBuckets.get(bucketKey);
           const prior = await tx.get(key) || bucket[item.id];
           if (!prior) added++;
-          const record = { ...prior, ...item, first_seen: prior?.first_seen || timestamp,
-            last_seen: timestamp, baseline: prior ? prior.baseline : baseline,
+          const record = { ...prior, ...item, title_en: prior?.title === item.title && prior?.excerpt === item.excerpt ? prior?.title_en || "" : "", first_seen: prior?.first_seen || timestamp,
+            preview: item.preview || prior?.preview || "", last_seen: timestamp, baseline: baseline ? true : prior ? prior.baseline : false,
             sha256: item.sha256 || prior?.sha256 || "", acquired: item.acquired || prior?.acquired || false,
             bytes: item.bytes ?? prior?.bytes ?? null };
           await tx.put(key, record);
@@ -595,6 +658,7 @@ export class ReportGate {
           const entries = Object.entries(bucket).sort((a, b) => b[1].first_seen.localeCompare(a[1].first_seen)).slice(0, 128);
           await tx.put(key, Object.fromEntries(entries));
         }
+        outlet.undated_count = body.undated_count || 0;
         outlet.last_scan = timestamp;
         outlet.scan_ok = body.scan_ok === true;
         outlet.error = body.error;
@@ -605,7 +669,7 @@ export class ReportGate {
         outlet.crawl_complete = body.scan_complete === true && !body.truncated;
         if (body.scan_ok && body.scan_complete) {
           outlet.last_success = timestamp;
-          if (!body.truncated) outlet.initialized_at ||= timestamp;
+          if (!body.truncated) { outlet.initialized_at ||= timestamp; outlet.collection_phase = "watch"; }
         }
         outlet.last_added = added;
         await tx.put("darkweb:outlets", outlets);

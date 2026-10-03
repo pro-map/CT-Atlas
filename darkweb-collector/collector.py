@@ -12,8 +12,12 @@ import time
 from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urljoin, urlsplit, urlunsplit, parse_qsl
+from urllib.parse import urljoin, urlsplit, urlunsplit, parse_qsl, unquote
 import re
+import base64
+import io
+import shutil
+import subprocess
 
 import requests
 
@@ -23,6 +27,44 @@ MAX_ITEMS = 500
 TYPES = {".pdf": "pdf", ".mp4": "video", ".webm": "video", ".mkv": "video", ".mov": "video",
          ".mp3": "audio", ".ogg": "audio", ".wav": "audio", ".m4a": "audio",
          ".jpg": "image", ".jpeg": "image", ".png": "image", ".webp": "image"}
+
+
+def display_title(value):
+    value = unquote(str(value or ""))
+    if value.startswith(("/", "http://", "https://")):
+        value = urlsplit(value).path.rsplit("/", 1)[-1]
+    return " ".join(value.replace("_", " ").split())[:300]
+
+
+def publication_date(value):
+    # Require a complete calendar date. Neither crawl time nor HTTP Last-Modified
+    # establishes the publication date. Normalize Arabic-Indic digits first.
+    value = str(value or "").translate(str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789"))
+    match = re.search(r"(?<![0-9])(20[0-9]{2})[-/](0?[1-9]|1[0-2])[-/](0?[1-9]|[12][0-9]|3[01])(?![0-9])", value)
+    if not match:
+        return ""
+    try:
+        return datetime(*map(int, match.groups())).date().isoformat()
+    except ValueError:
+        return ""
+
+
+def within_period(row, policy):
+    if not policy:
+        return True
+    date = publication_date(row.get("published_at"))
+    return bool(date and policy["from"] <= date <= min(policy["through"], datetime.now(timezone.utc).date().isoformat()))
+
+
+def apply_epoch(db, policy):
+    prior = db.execute("SELECT value FROM settings WHERE key='epoch'").fetchone()
+    epoch = str(policy["epoch"])
+    if not prior or prior[0] != epoch:
+        with db:
+            for table in ("outlets", "items", "crawl_runs", "frontier", "pages", "outbox", "undated"):
+                db.execute("DELETE FROM " + table)
+            db.execute("INSERT OR REPLACE INTO settings VALUES ('epoch',?)", (epoch,))
+        LOG.info("Collection reset acknowledged; local evidence files preserved")
 
 
 def onion_url(value):
@@ -114,7 +156,7 @@ class PublicationParser(HTMLParser):
 
 
 def selected_material(row):
-    return row.get("type") in {"pdf", "video", "audio"} or (
+    return row.get("type") in {"pdf", "video", "audio"} or (row.get("type") == "image" and bool(row.get("published_at"))) or (
         row.get("type") == "page" and row.get("selection_version") == 1)
 
 
@@ -133,6 +175,9 @@ class ListingParser(HTMLParser):
         self.rows, self.parts, self.text_parts, self.title_parts = {}, [], [], []
         self.current, self.truncated, self.in_title, self.ignored = None, False, False, 0
         self.text_size = 0
+        self.published_at, self.poster, self.preview_url = "", "", ""
+        self.page_dates = set()
+        self.structured_parts, self.in_structured = [], False
 
     def add_link(self, href, title="", kind=None):
         target = onion_url(urljoin(self.base, href or ""))
@@ -150,16 +195,28 @@ class ListingParser(HTMLParser):
         if len(self.rows) >= MAX_ITEMS and target not in self.rows:
             self.truncated = True
             return None
-        self.rows[target] = {"url": target, "title": " ".join(title.split())[:300] or urlsplit(target).path,
+        self.rows[target] = {"url": target, "title": display_title(title) or display_title(target),
                              "type": kind or material_type(target), "source_page": self.base}
         return target
 
     def handle_starttag(self, tag, attrs):
+        if tag == "script" and dict(attrs).get("type", "").lower() == "application/ld+json":
+            self.in_structured, self.structured_parts = True, []
         if tag in ("script", "style"):
             self.ignored += 1
         if self.ignored:
             return
         values = dict(attrs)
+        if tag == "meta" and values.get("property", values.get("name", "")).lower() in {"article:published_time", "datepublished", "date"}:
+            self.published_at = publication_date(values.get("content")) or self.published_at
+        if tag == "time":
+            date = publication_date(values.get("datetime"))
+            if date:
+                self.page_dates.add(date)
+        if tag == "meta" and values.get("property", "").lower() == "og:image":
+            self.preview_url = onion_url(urljoin(self.base, values.get("content", "")))
+        if tag == "video" and values.get("poster"):
+            self.poster = onion_url(urljoin(self.base, values["poster"]))
         if tag == "title":
             self.in_title = True
         if tag == "a":
@@ -174,6 +231,8 @@ class ListingParser(HTMLParser):
             self.add_link(values.get("href"), "Next page")
 
     def handle_data(self, data):
+        if self.in_structured and sum(map(len, self.structured_parts)) < 100000:
+            self.structured_parts.append(data[:100000])
         if self.ignored:
             return
         if self.current and sum(len(p) for p in self.parts) < 1000:
@@ -186,12 +245,33 @@ class ListingParser(HTMLParser):
             self.text_size += len(part)
 
     def handle_endtag(self, tag):
+        if tag == "script" and self.in_structured:
+            self.in_structured = False
+            try:
+                records = json.loads("".join(self.structured_parts))
+                queue = records if isinstance(records, list) else [records]
+                for entry in queue[:100]:
+                    if not isinstance(entry, dict):
+                        continue
+                    if isinstance(entry.get("@graph"), list):
+                        queue.extend(entry["@graph"][:100])
+                    date = publication_date(entry.get("datePublished"))
+                    if date:
+                        self.page_dates.add(date)
+                # Graph entries are common in publication metadata.
+                for entry in queue[:200]:
+                    if isinstance(entry, dict):
+                        date = publication_date(entry.get("datePublished"))
+                        if date:
+                            self.page_dates.add(date)
+            except (ValueError, TypeError):
+                pass
         if tag in ("script", "style") and self.ignored:
             self.ignored -= 1
         if tag == "title":
             self.in_title = False
         if tag == "a" and self.current:
-            self.rows[self.current]["title"] = " ".join(" ".join(self.parts).split())[:300] or urlsplit(self.current).path
+            self.rows[self.current]["title"] = display_title(" ".join(self.parts)) or display_title(self.current)
             self.current, self.parts = None, []
 
 
@@ -223,8 +303,8 @@ def read_listing(session, outlet):
         mime = response.headers.get("Content-Type", "").lower()
         kind = material_type(response.url, mime)
         if kind != "page":
-            return {"items": [], "page": {"url": outlet["url"], "title": urlsplit(response.url).path,
-                    "type": kind}, "text": "", "truncated": False}
+            return {"items": [], "page": {"url": outlet["url"], "title": display_title(response.url),
+                    "type": kind, "published_at": publication_date(unquote(response.url)), "date_basis": "url"}, "text": "", "truncated": False}
         if mime and "html" not in mime:
             return {"items": [], "page": None, "text": "", "truncated": False}
         chunks, total = [], 0
@@ -245,11 +325,82 @@ def read_listing(session, outlet):
         selector.handle_endtag("html")
         selected = selector.selected_text()
         text = " ".join(" ".join(parser.text_parts).split())
-        title = " ".join(" ".join(parser.title_parts).split())[:300] or urlsplit(response.url).path
+        title = " ".join(" ".join(parser.title_parts).split())[:300] or display_title(response.url)
+        # A unique HTML time on a publication page can date its attachments.
+        # Category pages with multiple dates cannot assign one date to every file.
+        dated = parser.published_at or (next(iter(parser.page_dates)) if len(parser.page_dates) == 1 else "")
+        for row in parser.rows.values():
+            row["title"] = display_title(row["title"])
+            row["published_at"] = publication_date(unquote(row["url"]))
+            row["date_basis"] = "url" if row["published_at"] else ""
+            if row["type"] != "page" and dated and (selected or parser.published_at):
+                row["published_at"] = row["published_at"] or dated
+                row["date_basis"] = row["date_basis"] or "source_page"
+            preview = parser.poster if row["type"] == "video" else parser.preview_url
+            if preview and urlsplit(preview).hostname == urlsplit(outlet["url"]).hostname:
+                row["preview_url"] = preview
         return {"items": list(parser.rows.values()), "page": {"url": outlet["url"], "title": title,
-                "type": "page", "excerpt": selected[:600], "selection_version": 1 if selected else 0}, "text": text, "truncated": parser.truncated}
+                "type": "page", "published_at": dated, "date_basis": "html", "preview_url": parser.preview_url, "excerpt": selected[:600], "selection_version": 1 if selected else 0}, "text": text, "truncated": parser.truncated}
     finally:
         response.close()
+
+
+def make_preview(tor, row):
+    """At most 8 MiB of source bytes; never keep or upload original media."""
+    kind = row.get("type")
+    preview_url = row.get("preview_url", "")
+    target = preview_url or (row["url"] if kind in {"pdf", "image", "video"} else "")
+    if not target:
+        return {"preview_status": "No visual preview supplied"}
+    host = urlsplit(row["url"]).hostname
+    if not onion_url(target) or urlsplit(target).hostname != host:
+        return {"preview_status": "Preview outside registered outlet"}
+    try:
+        from PIL import Image
+        if not preview_url and kind == "pdf":
+            import fitz
+        if not preview_url and kind == "video" and not shutil.which("ffmpeg"):
+            return {"preview_status": "No poster; local FFmpeg required"}
+        response = source_get(tor, target, host)
+        try:
+            length = response.headers.get("Content-Length", "")
+            if length.isdigit() and int(length) > 8 * 1048576:
+                return {"preview_status": "Preview source exceeds 8 MB cap"}
+            chunks, size = [], 0
+            for chunk in response.iter_content(65536):
+                size += len(chunk)
+                if size > 8 * 1048576:
+                    return {"preview_status": "Preview source exceeds 8 MB cap"}
+                chunks.append(chunk)
+            data = b"".join(chunks)
+        finally:
+            response.close()
+        if not preview_url and kind == "pdf":
+            with fitz.open(stream=data, filetype="pdf") as document:
+                page = document[0]
+                scale = min(1, 320 / max(page.rect.width, page.rect.height, 1))
+                pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale), alpha=False)
+                data = pix.tobytes("png")
+        elif not preview_url and kind == "video":
+            # pipe-only protocols prevent playlists from fetching network/local files.
+            result = subprocess.run(["ffmpeg", "-v", "error", "-protocol_whitelist", "pipe", "-i", "pipe:0", "-frames:v", "1", "-vf", "scale=320:320:force_original_aspect_ratio=decrease", "-f", "image2pipe", "-vcodec", "mjpeg", "pipe:1"], input=data, capture_output=True, timeout=20, check=True)
+            data = result.stdout
+        with Image.open(io.BytesIO(data)) as original:
+            if original.width * original.height > 16000000:
+                return {"preview_status": "Preview dimensions exceed cap"}
+            original.thumbnail((240, 240))
+            picture = original.convert("RGB")
+            for quality in (65, 45, 25):
+                output = io.BytesIO()
+                picture.save(output, format="JPEG", quality=quality)
+                encoded = "data:image/jpeg;base64," + base64.b64encode(output.getvalue()).decode("ascii")
+                if len(encoded) <= 16000:
+                    return {"preview": encoded, "preview_status": "Source thumbnail" if preview_url else "First page" if kind == "pdf" else "Video frame" if kind == "video" else "Image preview"}
+        return {"preview_status": "Preview could not fit size cap"}
+    except ImportError:
+        return {"preview_status": "Install Pillow and PyMuPDF on collector"}
+    except Exception:
+        return {"preview_status": "Preview unavailable within collection limits"}
 
 
 def acquire(session, item, evidence, max_bytes):
@@ -319,11 +470,17 @@ def open_database(path):
     db.execute("CREATE TABLE IF NOT EXISTS frontier (outlet_id TEXT, url TEXT, status TEXT DEFAULT 'pending', attempts INTEGER DEFAULT 0, PRIMARY KEY(outlet_id,url))")
     db.execute("CREATE TABLE IF NOT EXISTS pages (outlet_id TEXT, url TEXT, title TEXT, text TEXT, checked_at TEXT, PRIMARY KEY(outlet_id,url))")
     db.execute("CREATE TABLE IF NOT EXISTS outbox (outlet_id TEXT, url TEXT, metadata TEXT, baseline INTEGER, PRIMARY KEY(outlet_id,url))")
+    db.execute("CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)")
+    db.execute("CREATE TABLE IF NOT EXISTS undated (outlet_id TEXT, url TEXT, metadata TEXT, PRIMARY KEY(outlet_id,url))")
+    if "depth" not in [row[1] for row in db.execute("PRAGMA table_info(frontier)")]:
+        db.execute("ALTER TABLE frontier ADD COLUMN depth INTEGER DEFAULT 0")
     return db
 
 
 def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_delay=1.0):
     oid = outlet["id"]
+    policy = outlet.get("policy")
+    watching = outlet.get("collection_phase") == "watch"
     run = db.execute("SELECT finished FROM crawl_runs WHERE outlet_id=?", (oid,)).fetchone()
     if not run or run[0]:
         with db:
@@ -341,7 +498,7 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
         done = db.execute("SELECT COUNT(*) FROM frontier WHERE outlet_id=? AND status='done'", (oid,)).fetchone()[0]
         if done >= max_pages:
             break
-        target = db.execute("SELECT url FROM frontier WHERE outlet_id=? AND status IN ('pending','failed') AND attempts<3 ORDER BY attempts,rowid LIMIT 1", (oid,)).fetchone()
+        target = db.execute("SELECT url,depth FROM frontier WHERE outlet_id=? AND status IN ('pending','failed') AND attempts<3 ORDER BY attempts,rowid LIMIT 1", (oid,)).fetchone()
         if not target:
             break
         url = target[0]
@@ -369,9 +526,14 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
                 target_url = onion_url(row["url"])
                 if not target_url or urlsplit(target_url).hostname != urlsplit(outlet["url"]).hostname:
                     continue
-                if row["type"] == "page" and target_url != url:
-                    db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url) VALUES (?,?)", (oid, target_url))
+                if row["type"] == "page" and target_url != url and (not watching or target[1] < 2):
+                    db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url,depth) VALUES (?,?,?)", (oid, target_url, target[1]+1))
                 if not selected_material(row):
+                    continue
+                if not within_period(row, policy):
+                    if not row.get("published_at"):
+                        db.execute("INSERT OR REPLACE INTO undated VALUES (?,?,?)", (oid, target_url, json.dumps(row)))
+                        db.execute("DELETE FROM undated WHERE rowid NOT IN (SELECT rowid FROM undated ORDER BY rowid DESC LIMIT 500)")
                     continue
                 prior = db.execute("SELECT metadata,baseline FROM items WHERE outlet_id=? AND url=?", (oid, target_url)).fetchone()
                 queued = db.execute("SELECT metadata,baseline FROM outbox WHERE outlet_id=? AND url=?", (oid, target_url)).fetchone()
@@ -402,13 +564,30 @@ def crawl_progress(db, oid, max_pages):
 
 def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_bytes,
                 pages_per_scan=100, max_pages=10000, request_delay=1.0):
+    policy = outlet.get("policy")
+    if policy:
+        pages_per_scan = min(pages_per_scan, policy["pages_per_scan"])
+        max_pages = min(max_pages, 200 if outlet.get("collection_phase") == "watch" else 10000)
     progress = crawl_outlet(tor, db, outlet, pages_per_scan, max_pages, request_delay)
     oid = outlet["id"]
+    if policy and policy.get("previews"):
+        # Fill missing previews gradually even for older backfill pages that the
+        # shallow watch cycle no longer visits. Keep the same per-pass budget.
+        with db:
+            added = 0
+            for old_url, metadata, baseline in db.execute("SELECT url,metadata,baseline FROM items WHERE outlet_id=? ORDER BY rowid", (oid,)).fetchall():
+                item = json.loads(metadata)
+                if within_period(item, policy) and not item.get("preview") and not item.get("preview_status"):
+                    db.execute("INSERT OR IGNORE INTO outbox VALUES (?,?,?,?)", (oid, old_url, metadata, baseline))
+                    added += 1
+                    if added >= 2:
+                        break
     pending = db.execute("SELECT url,metadata,baseline FROM outbox WHERE outlet_id=? ORDER BY rowid", (oid,)).fetchall()
     batch, batch_size = [], 0
+    previews_left = 2
 
     def upload(rows, final):
-        result = api_call(api, endpoint, "/darkweb/ingest", {"selection_version": 1, "outlet_id": oid, "items": [r for r, _ in rows],
+        result = api_call(api, endpoint, "/darkweb/ingest", {"selection_version": 2, "collection_epoch": policy["epoch"] if policy else 0, "undated_count": db.execute("SELECT COUNT(*) FROM undated WHERE outlet_id=?", (oid,)).fetchone()[0], "outlet_id": oid, "items": [r for r, _ in rows],
             "scan_ok": progress["pages_scanned"] > 0, "scan_complete": final and progress["complete"],
             "truncated": progress["truncated"], "pages_scanned": progress["pages_scanned"],
             "pending_pages": progress["pending_pages"], "failed_pages": progress["failed_pages"]})
@@ -422,10 +601,20 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
     for _, payload, baseline in pending:
         row = json.loads(payload)
         # An older collector may have left navigation entries awaiting upload.
-        if not selected_material(row):
+        if not selected_material(row) or not within_period(row, policy):
             with db:
                 db.execute("DELETE FROM outbox WHERE outlet_id=? AND url=?", (oid, row["url"]))
             continue
+        if policy and policy.get("previews"):
+            prior = db.execute("SELECT metadata FROM items WHERE outlet_id=? AND url=?", (oid, row["url"])).fetchone()
+            previous = json.loads(prior[0]) if prior else {}
+            if previous.get("preview") or previous.get("preview_status"):
+                row.update({key: previous[key] for key in ("preview", "preview_status") if key in previous})
+            if not row.get("preview") and not row.get("preview_status") and previews_left:
+                previews_left -= 1
+                row.update(make_preview(tor, row))
+                with db:
+                    db.execute("UPDATE outbox SET metadata=? WHERE outlet_id=? AND url=?", (json.dumps(row), oid, row["url"]))
         if acquire_files and not baseline and row["type"] != "page" and not row.get("acquired"):
             try:
                 row.update(acquire(tor, row, evidence, max_bytes))
@@ -444,6 +633,9 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
     if progress["complete"]:
         with db:
             db.execute("INSERT OR REPLACE INTO outlets VALUES (?,1)", (oid,))
+            db.execute("UPDATE crawl_runs SET finished=1 WHERE outlet_id=?", (oid,))
+    elif policy and outlet.get("collection_phase") == "watch" and progress["pages_scanned"] >= max_pages:
+        with db:
             db.execute("UPDATE crawl_runs SET finished=1 WHERE outlet_id=?", (oid,))
     elif progress["failed_pages"]:
         # Retry failed pages on the next pass, without restarting successful pages.
@@ -464,7 +656,7 @@ def main():
     parser.add_argument("--max-file-mb", type=int, default=50)
     parser.add_argument("--acquire", action="store_true", help="Acquire new material links locally; no historical baseline downloads")
     parser.add_argument("--once", action="store_true", help="Run one resumable pass, not necessarily a complete outlet crawl")
-    parser.add_argument("--pages-per-scan", type=int, default=100)
+    parser.add_argument("--pages-per-scan", type=int, default=50)
     parser.add_argument("--max-pages", type=int, default=10000)
     parser.add_argument("--request-delay", type=float, default=1.0)
     args = parser.parse_args()
@@ -489,10 +681,17 @@ def main():
             failed = False
             try:
                 config = api_call(api, endpoint, "/darkweb/collector-config")
+                policy = config.get("policy")
+                if not policy:
+                    raise ValueError("Deploy the controlled collection Worker before updating this collector")
+                apply_epoch(db, policy)
+                if policy.get("paused"):
+                    LOG.info("Collection paused by administrator")
                 if not config.get("outlets"):
                     LOG.warning("No enabled outlets. Register starting URLs in CT Atlas OUTLETS first.")
                     failed = True
-                for outlet in config.get("outlets", []):
+                for outlet in ([] if policy.get("paused") else config.get("outlets", [])):
+                    outlet = {**outlet, "policy": policy}
                     if not onion_url(outlet.get("url", "")):
                         continue
                     try:

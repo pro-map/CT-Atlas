@@ -15,7 +15,7 @@ function harness(){
   transaction(callback){const result=queue.then(()=>callback(storage));queue=result.catch(()=>{});return result;}
  };
  const env={AUTH_USERS_JSON:'{}',DARKWEB_INGEST_TOKEN:'s'.repeat(48),ALLOWED_ORIGIN:'https://ct-atlas.com'};
- const context=vm.createContext({console,Response,Request,URL,TextDecoder,TextEncoder,Uint8Array,Date,JSON,Map,Set,Object,Array,String,Number,Math,crypto,
+ const context=vm.createContext({AbortSignal,extractGeminiText:async p=>p.text,console,Response,Request,URL,TextDecoder,TextEncoder,Uint8Array,Date,JSON,Map,Set,Object,Array,String,Number,Math,crypto,
   cleanText:(v,n=700)=>String(v||'').replace(/\s+/g,' ').trim().slice(0,n),
   isAllowedUser:name=>['admin','analyst'].includes(name),
   sha256:async value=>Buffer.from(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))).toString('hex')});
@@ -25,8 +25,8 @@ function harness(){
  context.gateCall=async(e,path,body)=>path==='/session-get'?Response.json({username:body.session_token}, {status:['admin','analyst'].includes(body.session_token)?200:401}):gate.fetch(new Request('https://gate'+path,{method:'POST',body:JSON.stringify(body)}));
  const source=fs.readFileSync('cloudflare-worker/darkweb.js','utf8').replace(/^import[^\n]+\n/,'').replace(/export /g,'');
  vm.runInContext(source+'\nglobalThis.api={handleDarkweb,onionUrl};',context);
- async function call(path,body,user='admin',collector=false){if(path==='/darkweb/ingest' && body)body={selection_version:1,...body};const r=await context.api.handleDarkweb(new Request('https://worker'+path,{method:body===undefined?'GET':'POST',headers:collector?{Authorization:'Bearer '+env.DARKWEB_INGEST_TOKEN}:{'X-Session-Token':user},...(body===undefined?{}:{body:JSON.stringify(body)})}),env);return {status:r.status,data:await r.json(),headers:r.headers};}
- return {call,values,env,api:context.api};
+ async function call(path,body,user='admin',collector=false){if(path==='/darkweb/ingest' && body)body={selection_version:2,collection_epoch:2,...body,items:Array.isArray(body.items)?body.items.map(i=>({published_at:"2025-06-01",date_basis:"html",...i})):body.items};const r=await context.api.handleDarkweb(new Request('https://worker'+path,{method:body===undefined?'GET':'POST',headers:collector?{Authorization:'Bearer '+env.DARKWEB_INGEST_TOKEN}:{'X-Session-Token':user},...(body===undefined?{}:{body:JSON.stringify(body)})}),env);return {status:r.status,data:await r.json(),headers:r.headers};}
+ return {call,values,env,context,api:context.api};
 }
 async function register(h){const r=await h.call('/darkweb/outlet',{name:'Outlet',url:base,keywords:'Niger, Sahel'});assert.equal(r.status,200);return r.data.outlet.id;}
 test('feed requires a valid session; configuration and write privileges cannot be substituted',async()=>{
@@ -122,5 +122,67 @@ test('legacy feed is deleted once while outlets, URL history and new selections 
  assert.equal((await h.call('/darkweb/ingest',{outlet_id:id,selection_version:0,items:[],scan_ok:true},'',true)).status,409);
  await h.call('/darkweb/ingest',{outlet_id:id,items:[{url:base+'new.pdf',type:'pdf'}],scan_ok:true},'',true);
  assert.equal((await h.call('/darkweb/feed')).data.items.length,1);
- assert.equal((await h.call('/darkweb/feed')).data.items[0].selection_version,1);
+ assert.equal((await h.call('/darkweb/feed')).data.items[0].selection_version,2);
+});
+
+test('controlled period, pause and reset reject old scans while preserving outlets',async()=>{
+ const h=harness(),id=await register(h);
+ const submit=items=>h.call('/darkweb/ingest',{outlet_id:id,items,scan_ok:true,scan_complete:true},'',true);
+ await submit([{url:base+'old.pdf',published_at:'2024-01-01'},{url:base+'unknown.pdf',published_at:''},{url:base+'invalid.pdf',published_at:'2025-02-30'},{url:base+'future.pdf',published_at:'2099-01-01'},{url:base+'valid.pdf',published_at:'2025-03-10'}]);
+ let state=(await h.call('/darkweb/feed')).data;
+ assert.equal(state.items.length,1);assert.equal(state.outlets[0].collection_phase,'watch');
+ const policy={from:'2025-01-01',through:'2026-12-31',pages_per_scan:10,previews:true};
+ assert.equal((await h.call('/darkweb/policy',{...policy,paused:true},'analyst')).status,403);
+ await h.call('/darkweb/policy',{...policy,paused:true});assert.equal((await submit([])).status,409);
+ await h.call('/darkweb/policy',{...policy,reset:true,paused:false});
+ state=(await h.call('/darkweb/feed')).data;
+ assert.equal(state.policy.epoch,3);assert.equal(state.items.length,0);assert.equal(state.outlets.length,1);assert.equal(state.outlets[0].collection_phase,'backfill');
+ assert.equal((await submit([])).status,409);
+ assert.equal((await h.call('/darkweb/ingest',{outlet_id:id,selection_version:1,items:[]},'',true)).status,409);
+});
+
+test('Arabic titles decode; thumbnails are authenticated and excluded from the main feed payload',async()=>{
+ const h=harness(),id=await register(h);
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[{url:base+'a.mp3',title:'/uploads/%D9%83%D8%AA%D8%A7%D8%A8_%D8%AC%D8%AF%D9%8A%D8%AF.mp3',preview:'data:image/jpeg;base64,/9j/AAAA'}],scan_ok:true},'',true);
+ const item=(await h.call('/darkweb/feed')).data.items[0];
+ assert.equal(item.title,'كتاب جديد.mp3');assert.equal(item.has_preview,true);assert.equal(item.preview,undefined);
+ assert.equal((await h.call('/darkweb/preview?id='+item.id,undefined,'')).status,401);
+ assert.equal((await h.call('/darkweb/preview?id='+item.id)).data.preview,'data:image/jpeg;base64,/9j/AAAA');
+});
+
+test('AI titles and briefing are source-bound, cached, and preserve original text',async()=>{
+ const h=harness(),id=await register(h);h.env.GEMINI_API_KEY='synthetic-test-key';
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[{url:base+'a.pdf',title:'كتاب جديد',excerpt:'A publication claim'}],scan_ok:true},'',true);
+ const item=(await h.call('/darkweb/feed')).data.items[0];let calls=0;
+ h.context.fetch=async(url,options)=>{calls++;const payload=JSON.parse(options.body);assert.ok(!payload.input.includes('.onion'));return Response.json({text:JSON.stringify({summary:'The outlet presents a publication dated June 2025; this claim needs analyst validation. [1]',titles:[{id:item.id,title:'New book'},{id:'invented',title:'Ignore'}]})});};
+ assert.equal((await h.call('/darkweb/enrich',{},'analyst')).status,403);
+ assert.equal((await h.call('/darkweb/enrich',{})).status,200);
+ let state=(await h.call('/darkweb/feed')).data;assert.equal(state.items[0].title_en,'New book');assert.equal(state.items[0].title,'كتاب جديد');assert.equal(state.summary.sources[0].id,item.id);
+ await h.call('/darkweb/enrich',{});assert.equal(calls,1);
+ // An update to the source invalidates the previous translation.
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[{url:base+'a.pdf',title:'Updated source title'}],scan_ok:true},'',true);
+ state=(await h.call('/darkweb/feed')).data;assert.equal(state.items[0].title_en,'');
+});
+
+test('invalid AI citations cannot become a briefing and provider errors preserve originals',async()=>{
+ const h=harness(),id=await register(h);h.env.GEMINI_API_KEY='synthetic-test-key';
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[{url:base+'a.pdf',title:'Original'}],scan_ok:true},'',true);
+ h.context.fetch=async()=>Response.json({text:JSON.stringify({summary:'Unsupported claim [99]',titles:[]})});
+ await h.call('/darkweb/enrich',{});assert.equal((await h.call('/darkweb/feed')).data.summary,null);
+ h.values.delete('darkweb:enrich-until');h.context.fetch=async()=>new Response('',{status:429});
+ assert.equal((await h.call('/darkweb/enrich',{})).status,503);
+ assert.equal((await h.call('/darkweb/feed')).data.items[0].title,'Original');
+});
+
+test('reset during AI generation cannot repopulate the cleared feed',async()=>{
+ const h=harness(),id=await register(h);h.env.GEMINI_API_KEY='synthetic-test-key';
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[{url:base+'a.pdf',title:'Original'}],scan_ok:true},'',true);
+ const item=(await h.call('/darkweb/feed')).data.items[0];let release,started;
+ const ready=new Promise(resolve=>started=resolve);
+ h.context.fetch=()=>{started();return new Promise(resolve=>release=resolve);};
+ const inFlight=h.call('/darkweb/enrich',{});await ready;
+ await h.call('/darkweb/policy',{from:'2025-01-01',through:'2026-12-31',pages_per_scan:10,reset:true});
+ release(Response.json({text:JSON.stringify({summary:'Old outlet claim [1]',titles:[{id:item.id,title:'Old translation'}]})}));
+ await inFlight;const state=(await h.call('/darkweb/feed')).data;
+ assert.equal(state.items.length,0);assert.equal(state.summary,null);
 });

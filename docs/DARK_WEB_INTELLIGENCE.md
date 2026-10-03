@@ -1,218 +1,173 @@
-# Dark Web Intelligence — connecting the collector
+# Dark Web Intelligence — controlled collection
 
-The workspace provides an authenticated CT Atlas workspace for known onion outlets:
-Latest, Outlets, Alerts and Tor Connection. Only the admin may register or update
-outlets. All authenticated CT Atlas accounts can read the shared feed. The public
-repository contains no outlet addresses, original evidence or collector credential.
+## Current version and reset
 
-## Architecture
+The v4 Worker and collector selection protocol 2 add dated collection, readable
+original titles, AI English titles, an AI briefing and bounded visual previews.
+Deploy both sides together. Older collectors receive HTTP 409 and cannot refill
+the feed with pre-filtered data.
 
-The collector runs beside a Tor client on your own machine or a dedicated host.
-It fetches source pages through `socks5h://127.0.0.1:9050`, so onion hostnames are
-passed to Tor. It then sends metadata over HTTPS to the existing CT Atlas Worker.
-The existing authenticated Worker and private ReportGate storage serve the feed.
-There is no inbound collector API, open SOCKS port, public Tor gateway or embedded
-Tor browser. The Worker does not run the Tor process.
+The first authenticated Dark Web request after deployment performs the user's
+requested one-time reset of the online feed. It preserves outlet registrations,
+keywords, URL deduplication history and local evidence files, clears the briefing,
+and starts a new inventory for **2025-01-01 through 2026-12-31**. Future dates are
+excluded. This reset has not occurred merely because a PR has been opened.
 
-A computer is sufficient for testing. Continuous monitoring needs a machine that
-remains powered on, with the collector and Tor supervised by its service manager.
-Tor Browser commonly uses local port 9150; a standalone Tor client commonly uses
-9050. Confirm your actual SOCKS listener before choosing the collector parameter.
-Never expose that port to the Internet. The collector refuses non-local proxies
-and requires `socks5h`, with no direct-network fallback for source requests.
+The new collector observes the collection epoch and clears its metadata inventory,
+frontier, upload queue and undated review queue once for that epoch. It does not
+delete the local evidence directory. Never delete the SQLite database manually to
+restart: use the admin controls, which coordinate both sides.
 
-## Setup
+## Windows update
 
-1. Merge and deploy the UI and report Worker changes. No new database binding is
-   required. The existing ReportGate stores bounded private metadata.
-2. Generate a random token of at least 32 characters, e.g.:
-
-   ```bash
-   python -c 'import secrets; print(secrets.token_urlsafe(48))'
-   ```
-
-3. Set `DARKWEB_INGEST_TOKEN` as a **Cloudflare Worker secret** on
-   `ct-report-generator`, using the Cloudflare dashboard or, from `cloudflare-worker`:
-
-   ```bash
-   npx wrangler secret put DARKWEB_INGEST_TOKEN
-   ```
-
-   Paste the same token into the collector's environment. Do not put it in the
-   frontend, a URL, the public repository or a GitHub issue.
-4. Start Tor locally. Install collector dependencies:
-
-   ```bash
-   python -m pip install -r darkweb-collector/requirements.txt
-   ```
-
-5. Sign in as admin, open Dark Web Intelligence → OUTLETS, and register each known
-   **main/start page** URL. Set optional comma-separated alert keywords. Re-enter the
-   same URL to update a record, or use EDIT OUTLET. Uncheck monitoring to pause it.
-   At most 20 sources can be registered. This version follows links only on the
-   same v3 onion host, without a nonstandard port or embedded URL credentials.
-6. Supply the token to the collector and run one inventory scan:
-
-   Linux/macOS shell (read without echoing the token):
-
-   ```bash
-   read -rs DARKWEB_INGEST_TOKEN
-   export DARKWEB_INGEST_TOKEN
-   python darkweb-collector/collector.py --once
-   ```
-
-   Windows PowerShell (read token interactively):
-
-   ```powershell
-   $collectorSecret = Read-Host 'Collector token' -AsSecureString
-   $env:DARKWEB_INGEST_TOKEN = [System.Net.NetworkCredential]::new('', $collectorSecret).Password
-   python darkweb-collector/collector.py --proxy socks5h://127.0.0.1:9150 --once
-   ```
-
-7. Confirm a recent successful check in CT Atlas. Start continuous monitoring:
-
-   ```bash
-   python darkweb-collector/collector.py
-   ```
-
-   With Tor Browser on port 9150, append `--proxy socks5h://127.0.0.1:9150`.
-   The default polling interval is 15 minutes (`--interval 900`). No email or
-   external messaging is sent; alerts appear in the CT Atlas workspace.
-
-## Optional local acquisition
-
-```bash
-python darkweb-collector/collector.py --acquire --max-file-mb 50
-```
-
-New PDF/video/audio/image links are acquired after the baseline. File type is
-inferred from the path, media tags and Content-Type when visiting extensionless
-download links. The initial local inventory is never bulk-downloaded. Thereafter,
-failed acquisitions are retried when their links are rediscovered during a later crawl. Files stay
-in `private-outlet-watch/evidence`, named by content SHA-256 with a `.bin` suffix.
-The local SQLite manifest maps each source URL and title to its hash and size.
-No files are executed, rendered, served publicly or sent to an AI provider.
-
-Downloads are capped per file (50 MB by default, configurable to 500 MB). Partial
-files are deleted on failure. Redirects outside the registered onion host are
-rejected before fetching. An HTML login/error response is not acquired as a file.
-There is no overall evidence-directory retention or disk budget in v1; provision
-and manage disk storage before running acquisition continuously.
-
-## Recursive collection and coverage
-
-- The first complete inventory is labelled BASELINE and produces no new-item
-  alerts. Subsequent previously unseen URLs produce unreviewed feed entries.
-- Detection time is **not** publication time. A newly discovered URL is not proof
-  of new material, group attribution or a confirmed event.
-- URL identity deduplicates repeated scans. A content SHA-256 is available only
-  after acquisition. Different URLs with the same hash can be recognized as the
-  same downloaded bytes, but each source occurrence remains a separate feed row.
-- Keyword alerts match titles and the short page excerpts, not AI threat assessments. ALERTS lists all
-  unreviewed discoveries; keyword hits are highlighted. Marking a feed reviewed
-  updates only that analyst's state up to the snapshot they viewed.
-- Starting from the registered main page, collection follows internal links,
-  categories, thread/publication pages, query-string pagination, `rel=next`,
-  embedded video/audio sources and same-host frames. The visited queue avoids
-  revisiting an identical URL in a cycle. Account/moderation action links and
-  static scripts/styles/fonts are skipped; no forms are submitted.
-- The SQLite queue persists across passes and restarts. `--pages-per-scan 100`
-  limits each pass. Once all reachable queued pages succeed, the cycle completes;
-  a subsequent cycle starts at the main page to look for new internal links.
-  `--once` means one pass, which may cover only part of a large outlet.
-- The initial baseline is finalized only after every queued page succeeds and
-  all metadata uploads are acknowledged. Pending/failed pages prevent completion.
-  Failed pages are retried up to three times in a pass and then on the next pass.
-  Upload failures retain an outbox so already collected metadata is replayed
-  without losing the discovery or restarting the crawl.
-- `--max-pages 10000` caps successfully visited pages per cycle; it can be raised
-  up to 40,000 without losing the pending queue. The frontier also has a 50,000-URL
-  guard (it may overshoot by one page of links). Reaching it requires reducing
-  crawl scope or a source-specific adapter. Limits are reported, never presented
-  as complete coverage. One page can contribute at most 500 links and 2 MB HTML;
-  a page hitting the link limit is reported as incomplete and needs an adapter.
-- OUTLETS displays cumulative successful pages, pending pages, failed pages and
-  incomplete coverage. A network failure is not evidence of no new material.
-- Extracted HTML text, including forum comments present in the response, is retained locally in
-  the SQLite `pages` table (latest snapshot, up to 100,000 text characters/page).
-  Scripts/styles and HTML comments are excluded. A 600-character page excerpt
-  and source-page URL accompany feed entries. Text outside that excerpt remains
-  local. Existing-page comment edits do not produce separate new-item alerts;
-  per-comment change detection is not implemented.
-- No JavaScript execution, login bypass or cross-host crawling is performed.
-  Material hosted on another onion/clear-web domain, hidden/unlinked pages,
-  script-only pagination, player APIs and session-gated content need explicit
-  source-specific configuration. Reachable static links are the coverage scope;
-  no generic crawler can guarantee discovering every page an outlet contains.
-- Server ingestion batches contain at most 100 links and are byte-bounded. The
-  online feed retains the newest 500 discoveries. Separate bounded URL-history
-  shards prevent ordinary eviction from creating repeat alerts. Local manifests,
-  page text and acquired originals remain independent. Stable-URL content
-  replacements are not new discoveries in this URL-based alert model.
-- A stale check (over 45 minutes) is shown as STALE, rather than LIVE. A successful
-  check only establishes success at its recorded time.
-
-## Validation and current activation status
-
-### Publication selection
-
-Traversal and publication selection are separate: internal category and pagination
-links are still followed, but an unfetched HTML link is never a feed item. PDF,
-video and audio links remain candidates. Standalone images are excluded to avoid
-logos, banners and icons. File types are inferred from links or response MIME;
-this does not prove that a file is an official publication.
-
-HTML results require substantive body text (at least 1,200 characters in eligible
-blocks or accumulated paragraphs), or an explicit comment/reply HTML marker with
-at least 80 characters of body text. Navigation, headings, forms, scripts,
-footers and link-heavy blocks are excluded. Excerpts come from selected body
-text. Comments are currently represented as page results, not individual comment
-events. Changes at an existing URL still do not generate new-item alerts.
-
-These are structural rules, not a trained AI model. Unusual HTML, short official
-statements and unmarked comments can be missed; long category descriptions can
-still pass. Validate examples from each outlet before treating this as a reliable
-publication classifier. A future model would need analyst-labelled positive and
-negative examples and independent evaluation, especially for source attribution.
-
-Admin keywords only annotate matches in titles/excerpts; they do not select or
-exclude publications. Use distinctive topics, organizations or locations you
-actually monitor, with relevant spelling/language variants (up to 10 keywords).
-Generic words such as PDF, video or إصدار will create broad alerts and do not
-establish authenticity. Leaving this field empty does not stop collection.
-
-Updating the local script applies selection to subsequent scans and discards old
-navigation entries still waiting in the local upload queue. The Worker performs a one-time deletion of previously ingested, unfiltered feed
-results on its first Dark Web request after deployment. It preserves outlet
-settings, known-URL history and all local evidence. Old collectors are rejected
-with HTTP 409 so they cannot repopulate the unfiltered feed. Update the local
-script after merging and deploying this change. Preserve the state database and evidence:
-existing baselines and acquisition history are retained. An unfinished traversal
-continues, and previously visited pages are reconsidered in the next full cycle.
-
-Automated tests use synthetic fixtures only. This implementation has not accessed
-any operational outlet. Live validation requires the actual listing URLs, Worker
-secret and a running collector with Tor. No real-time collection is active merely
-because the new workspace has been deployed.
-
-## Windows update from the original single-page collector
-
-Keep the same Worker secret, outlet registrations and `private-outlet-watch`
-folder. Download the updated script from the merged main branch:
+Stop the running collector with Ctrl+C. Leave Tor Browser connected. In the same
+CMD window (retaining the existing DARKWEB_INGEST_TOKEN variable):
 
 ```cmd
 cd /d "%USERPROFILE%\CT-Atlas-Collector"
 curl.exe -fL "https://raw.githubusercontent.com/pro-map/CT-Atlas/main/darkweb-collector/collector.py" -o collector.py
-py collector.py --proxy socks5h://127.0.0.1:9150 --once --pages-per-scan 10
+curl.exe -fL "https://raw.githubusercontent.com/pro-map/CT-Atlas/main/darkweb-collector/requirements.txt" -o requirements.txt
+py -m pip install -r requirements.txt
+py collector.py --proxy socks5h://127.0.0.1:9150 --once
 ```
 
-Set `DARKWEB_INGEST_TOKEN` in that CMD session before running the collector, as
-before. After the short test, start continuous collection without `--once`:
+If this is a new CMD window, set the existing secret before the last command:
+
+```cmd
+set /p "DARKWEB_INGEST_TOKEN=Paste the collector secret and press Enter: "
+```
+
+After the first check, run continuously:
 
 ```cmd
 py collector.py --proxy socks5h://127.0.0.1:9150
 ```
 
-The new SQLite tables are added automatically. If an older single-page collector
-already completed its baseline, previously unseen internal URLs will initially
-be reported as new discoveries rather than claimed as new publications.
+Do not use `--acquire` for normal metadata collection. That opt-in flag separately
+retains new original files locally and is not needed for previews. Tor and CMD
+must stay open and the computer awake. No source page needs to be opened manually
+in Tor Browser. No scheduled ChatGPT task drives this collection.
+
+## Admin collection controls
+
+- **From / Through:** allowed publication-date range. Changing it requires
+  **RESET RESULTS & COLLECT THIS PERIOD**, which deletes the current online feed
+  and starts a fresh local metadata inventory on the collector's next pass.
+- **Pages per pass:** 1–50 per outlet, default 10. The command-line
+  `--pages-per-scan` is an additional ceiling (default 50), not a way to exceed the
+  configured admin limit. Normal passes run every 15 minutes.
+- **Pause / Resume:** collection policy is read before each pass. A pass already
+  running may finish its current source requests; ingest is refused while paused.
+  Pause is not an immediate remote process kill.
+- **Previews:** enable/disable bounded local thumbnail generation. Existing
+  previews remain visible when disabled.
+
+The initial **backfill** traverses internal links, categories and pagination,
+resuming its queue between passes. It is capped at 10,000 pages per outlet.
+Limits, failed pages and incomplete inventory are shown. Complete backfill sets
+an inventory baseline without treating historical entries as newly published.
+
+Once complete, each outlet enters **watch**: start page plus internal links up to
+two levels, with at most 200 fetched pages per round. This lowers ongoing load and
+checks likely recent listings, but can miss new publications deeper in a site.
+A capped watch round restarts from the starting page next time so a large archive
+cannot permanently prevent it seeing new starting-page links. Site-specific
+adapters would be needed to guarantee better coverage; no exhaustive guarantee is
+made for the three actual outlets, whose HTML has not been supplied for validation.
+
+## Selection and dates
+
+Exploration and publication selection are separate. Navigation links are followed
+but are not feed items. Candidate types are PDF, video, audio, dated linked images,
+substantive text and explicit comment/reply blocks. Body rules use 1,200 characters
+for substantive text or 80 characters for identifiable comments. Navigation,
+headings, forms, scripts and link-heavy blocks are excluded.
+
+The collector recognizes full ISO calendar dates in publication metadata,
+HTML `time` attributes, JSON-LD `datePublished`, and file URLs. Arabic-Indic digits
+are normalized. A publication page's explicit date may be associated with its
+attachments and is labelled **source_page**; file URL evidence is labelled **url**.
+These are evidence of dates, not independent verification. Multiple conflicting
+HTML times do not produce a guessed date. Crawl time and HTTP Last-Modified are
+never substituted for publication dates.
+
+Unknown dates stay outside the online feed and are retained in a bounded local
+`undated` SQLite table (latest 500 candidates). The admin sees its count. This is a
+local review queue, not an online review interface. Other date formats, ambiguous
+pages, short official statements and unmarked comments may be missed. A date and
+file extension do not prove official authorship. Provide representative HTML
+examples if an outlet needs a dedicated date/publication parser.
+
+The online feed holds up to 500 discoveries. The local metadata inventory is
+separate; the UI is not a complete online archive. Stable-URL content changes are
+updated when revisited but do not generate a new-discovery event. Keywords only
+annotate title/excerpt matches; they do not set collection eligibility.
+
+## Original and AI English titles
+
+Percent-encoded filenames are decoded for display, underscores become spaces,
+and path-only fallback titles use the filename. Source URLs are left unchanged.
+Original Arabic text is rendered with automatic text direction and textContent.
+
+English titles are generated by the **existing Gemini configuration** on the
+Worker, not by a new ChatGPT connection. Source titles remain visible. Up to 20
+pending titles are handled per request, at most one request per minute globally.
+Enrichment runs when the authenticated admin opens/refreshes the workspace and
+continues with its one-minute refresh while that page remains visible. It is not a
+background AI scheduler. Other users read the saved enrichment. Failures leave
+explicit pending titles and retain originals. Source-title/excerpt changes
+invalidate the old translation. A reset prevents an in-flight old response from
+repopulating the new feed.
+
+## AI briefing
+
+The top paragraph uses titles, excerpts and dates of up to 20 latest dated
+publications currently retained, with links to numbered feed items. It summarizes
+outlet claims rather than certifying events. Backfilled historical material must
+not be described as current events. New data invalidates the saved summary hash;
+unchanged data reuses the cache.
+
+Only titles, short excerpts, dates and internal source numbers are sent to the
+configured model; onion addresses and original media are not sent. Source text is
+treated as untrusted data. Output is rendered as text, never model HTML. Unknown
+citation numbers are rejected. These checks cannot prove semantic accuracy:
+analyst review remains necessary. There is no claim that AI has viewed the media
+or read full PDFs. Provider errors do not erase originals or invent substitutes.
+
+## Visual previews and storage limits
+
+Previews are created on the Tor collector, then uploaded as small JPEG thumbnails.
+The clearnet browser never requests an onion URL. Authenticated thumbnail requests
+are lazy-loaded; base64 image data is omitted from the main feed response.
+
+- Up to **2 preview attempts per outlet per pass**, filling missing previews over
+  later passes. At most **8 MiB of source bytes** per attempt; larger sources are
+  skipped, not fully downloaded. Original bytes are discarded after rendering.
+- Image / outlet poster: Pillow produces a JPEG up to 240×240 pixels and 16,000
+  base64 characters. EXIF metadata is not retained in the newly encoded image.
+- PDF without supplied thumbnail: PyMuPDF renders the first page within the cap.
+- Video: use the supplied poster first. Without one, optional locally installed
+  **FFmpeg** can extract one frame from a video small enough to fit the cap. The
+  process accepts only pipe protocols and has a 20-second timeout. FFmpeg is not
+  installed by requirements.txt. Large videos and non-streamable containers may
+  have no preview; this is shown explicitly.
+- Audio normally has no picture unless the outlet supplies a suitable image.
+- Cross-host previews, invalid media and failed decodes show an unavailable
+  status. No generated illustration is passed off as a real screenshot.
+
+Preview attempts are cached in local metadata; after installing a missing preview
+renderer, use a new controlled inventory if you need failed items retried. Actual
+outlet media and live Gemini responses have not been accessed in synthetic tests.
+
+## Security and operation
+
+The collector uses a local `socks5h` proxy (9150 for Tor Browser, commonly 9050 for a
+standalone Tor service), remote DNS and same-onion-host redirect checks. It does
+not fall back to a direct source connection, submit forms, bypass logins or follow
+another host. API credentials travel only to the configured HTTPS API origin.
+
+The Worker reuses REPORT_GATE storage. Feed/preview access requires an allowed
+session; outlet changes, reset/pause and AI generation require admin. Ingest and
+collector configuration require the separate DARKWEB_INGEST_TOKEN secret. Each
+ingest is checked against the date window, protocol version, current epoch and
+pause state. No public reset endpoint is introduced.
