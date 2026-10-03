@@ -9,6 +9,7 @@ on:
       - "pdf-export.js"
       - "deep-search.js"
       - "deep-search.css"
+      - "report-illustration.js"
       - "crypto.html"
       - "crypto.js"
       - "crypto-report.js"
@@ -141,8 +142,9 @@ jobs:
           grep -q 'DOWNLOAD PDF' social.html
           node --check social.js
           grep -q 'main.html' crypto.html
-          grep -q 'reportResultVisuals' index.html
-          grep -q 'deepSearchVisuals' deep-search.js
+          grep -q 'reportResultIllustration' index.html
+          grep -q 'deepSearchIllustration' deep-search.js
+          grep -q 'CTAtlasIllustration' report-illustration.js
           grep -q 'V12 — COMPACT HEADER' index.html
           grep -q '#sessionActions {' index.html
           grep -q -- '-webkit-line-clamp: 3' index.html
