@@ -2,7 +2,7 @@
 "use strict";
 const API="https://ct-report-generator.fairpeace.workers.dev",$=id=>document.getElementById(id);
 const token=()=>sessionStorage.getItem("ct_map_session_token")||"";
-const {known,show,overview,missingLegalRoute,assessmentLines}=window.CTAtlasIPReport;
+const {known,show,overview,missingLegalRoute,assessmentLines,flagSource}=window.CTAtlasIPReport;
 let result=null,busy=false;
 function node(tag,text,className){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(className)n.className=className;return n;}
 function link(label,url){const a=node("a",label);a.href=url;a.target="_blank";a.rel="noopener noreferrer";a.referrerPolicy="no-referrer";return a;}
@@ -15,11 +15,20 @@ async function request(path,body){
  if(response.status===401){sessionStorage.removeItem("ct_map_session_token");location.replace("index.html");throw new Error("Session expired. Please sign in again.");}
  if(!response.ok)throw new Error(data.error||"The lookup could not be completed. Please retry.");return data;
 }
+function appendJurisdictions(parent,contact){
+ if(!contact.jurisdictions?.length){parent.append(node("p","Jurisdiction: Not verified. Do not infer it from the IP location.","fine"));return;}
+ for(const j of contact.jurisdictions){
+  const row=node("p",undefined,"jurisdiction-row"),src=flagSource(j.country_code);
+  if(src){const flag=node("img");flag.src=src;flag.alt=j.country+" flag";flag.width=24;flag.height=18;flag.className="country-flag";row.append(flag);}
+  row.append(node("strong","Jurisdiction: "+j.country+" ("+j.country_code+") — "+j.entity));parent.append(row,node("p","Published entity/contact address: "+(j.address||"Not verified in the reviewed source")),node("p",j.scope,"fine"));
+  const source=node("p");source.append(safeLink("JURISDICTION / ADDRESS SOURCE ↗",j.source_url));parent.append(source);
+ }
+}
 function render(r){
  $("results").hidden=false;$("resultIP").textContent=r.ip;$("resultTime").textContent=r.family+" · "+r.queried_at+" · "+r.status.toUpperCase();
  const summary=overview(r);$("operatorSummary").textContent=summary.operator;$("contactSummary").textContent=summary.contact;$("vpnSummary").textContent=summary.vpn;
  const e=r.enquiry;$("enquiryContact").replaceChildren();
- if(e){for(const value of [e.basis,e.subscriber_scope,e.records_to_request&&"Information to request: "+e.records_to_request,e.email&&"Email: "+e.email,e.phone&&"Phone: "+e.phone,e.address&&"Published contact address: "+e.address,e.country&&"Provider jurisdiction: "+e.country,e.scope,e.contact_source])if(value)$("enquiryContact").append(node("p",value));if(e.url)$("enquiryContact").append(safeLink("OPEN CONTACT / PROCEDURE ↗",e.url));}
+ if(e){for(const value of [e.basis,e.subscriber_scope,e.records_to_request&&"Information to request: "+e.records_to_request,e.email&&"Email: "+e.email,e.phone&&"Phone: "+e.phone,e.address&&"Published contact address: "+e.address,e.scope,e.contact_source])if(value)$("enquiryContact").append(node("p",value));if(e.url)$("enquiryContact").append(safeLink("OPEN CONTACT / PROCEDURE ↗",e.url));appendJurisdictions($("enquiryContact"),e);}
  $("detectionSources").replaceChildren(...assessmentLines(r.privacy).map(s=>node("p",s)));
  if(!r.privacy.assessments?.length)$("detectionSources").append(node("p","No VPN detection source returned usable data."));
  $("warnings").hidden=!r.warnings.length;$("warnings").replaceChildren(...r.warnings.map(w=>node("p",w)));
@@ -30,7 +39,7 @@ function render(r){
  if(typeof g?.latitude==="number"&&typeof g?.longitude==="number")$("mapLink").append(link("OPEN APPROXIMATE LOCATION ↗","https://www.openstreetmap.org/?mlat="+g.latitude+"&mlon="+g.longitude+"#map=7/"+g.latitude+"/"+g.longitude));
  fields("privacy",[["VPN / INTERMEDIARY PROVIDER",r.privacy.service||summary.vpn],...[['VPN','vpn'],['PROXY','proxy'],['TOR EXIT','tor'],['RELAY','relay'],['HOSTING','hosting'],['ANYCAST','anycast']].map(([l,k])=>[l,r.privacy.conflicts?.includes(k)?"Conflicting assessments":known(r.privacy[k])]),["SOURCE",r.privacy.source]]);
  $("providerContacts").replaceChildren();
- for(const c of r.provider_contacts){const card=node("div",undefined,"contact");card.append(node("h4",c.name),node("span",c.kind+" · "+c.target_type,"pill"));if(c.email)card.append(node("p","Email: "+c.email));if(c.country)card.append(node("p","Provider country: "+c.country));if(c.address)card.append(node("p","Postal address: "+c.address));if(c.url)card.append(safeLink(c.checked_on?"OFFICIAL CONTACT / POLICY ↗":"PROVIDER WEBSITE · VERIFY ↗",c.url));if(c.scope)card.append(node("p",c.scope));if(c.policy_url){const policy=node("p");policy.append(safeLink("PROCEDURE SOURCE ↗",c.policy_url));card.append(policy);}card.append(node("p",(c.checked_on?"Directory checked: "+c.checked_on+" · ":"")+c.basis,"fine"));$("providerContacts").append(card);}
+ for(const c of r.provider_contacts){const card=node("div",undefined,"contact");card.append(node("h4",c.name),node("span",c.kind+" · "+c.target_type,"pill"));if(c.email)card.append(node("p","Email: "+c.email));appendJurisdictions(card,c);if(c.address)card.append(node("p","Postal address: "+c.address));if(c.url)card.append(safeLink(c.checked_on?"OFFICIAL CONTACT / POLICY ↗":"PROVIDER WEBSITE · VERIFY ↗",c.url));if(c.scope)card.append(node("p",c.scope));if(c.policy_url){const policy=node("p");policy.append(safeLink("PROCEDURE SOURCE ↗",c.policy_url));card.append(policy);}card.append(node("p",(c.checked_on?"Directory checked: "+c.checked_on+" · ":"")+c.basis,"fine"));$("providerContacts").append(card);}
  if(!r.provider_contacts.length)$("providerContacts").append(node("p",missingLegalRoute(r)));
  $("registryContacts").replaceChildren();
  for(const c of r.contacts){const card=node("div",undefined,"contact");card.append(node("h4",c.name),node("span",c.roles.join(" / ")||"Registry contact","pill"),node("p","Email: "+show(c.emails.join(", "))),node("p","Phone: "+show(c.phones.join(", "))),node("p","Postal address: "+show(c.address)),node("p","Source: "+(c.source||"RIR RDAP"),"fine"));$("registryContacts").append(card);}

@@ -213,3 +213,22 @@ test('conflicting network ASNs do not silently choose a legal recipient',async()
  assert.equal(data.operator.attribution_conflict,true);assert.equal(data.enquiry.ambiguous,true);assert.equal(data.enquiry.url,'');assert.equal(data.enquiry.email,'');
  assert.ok(data.warnings.some(w=>w.includes('AS15169')&&w.includes('AS13335')));
 });
+test('jurisdiction and postal address come from the named provider, independently of IP/registration country',async()=>{
+ const h=harness({proxy:{network:{},detections:{vpn:true},operator:{name:'ProtonVPN'}}}),data=await(await h.request()).json();
+ assert.equal(data.registration.country,'DE');assert.equal(data.geolocation.country,'US');
+ assert.equal(data.enquiry.jurisdictions[0].country_code,'CH');assert.match(data.enquiry.jurisdictions[0].address,/Route de la Galaise/);
+ const context={window:{}};vm.runInNewContext(fs.readFileSync('ip-report.js','utf8'),context);
+ const report=context.window.CTAtlasIPReport.build(data,{}),flags=report.blocks.filter(b=>b.type==='image');
+ assert.ok(flags.some(b=>b.caption.includes('Switzerland')&&b.inline===true));
+ assert.ok(flags.every(b=>b.src.startsWith('data:image/svg+xml;')));
+ for(const code of ['CH','SE','PA','NL','VG','GI','US','IE'])assert.ok(context.window.CTAtlasIPReport.flagSource(code).startsWith('data:'));
+ assert.equal(context.window.CTAtlasIPReport.flagSource('ZZ'),'');
+});
+test('unknown jurisdictions are explicit and multi-entity networks preserve the alternatives',async()=>{
+ let h=harness(),data=await(await h.request()).json();assert.equal(data.enquiry.jurisdictions.length,0);
+ const context={window:{}};vm.runInNewContext(fs.readFileSync('ip-report.js','utf8'),context);
+ assert.match(context.window.CTAtlasIPReport.enquiryLines(data).join('\n'),/Jurisdiction: Not verified/);
+ h=harness({asns:[15169]});data=await(await h.request()).json();
+ assert.deepEqual(data.enquiry.jurisdictions.map(j=>j.country_code),['US','IE']);
+ assert.match(data.enquiry.jurisdictions[1].scope,/cannot be determined from an IP alone/);
+});
