@@ -50,6 +50,74 @@ SKIP_EXTENSIONS = {".css", ".js", ".ico", ".woff", ".woff2", ".ttf", ".zip", ".e
 MIME_TYPES = {"application/pdf": "pdf", "video/": "video", "audio/": "audio", "image/": "image"}
 
 
+class PublicationParser(HTMLParser):
+    """Select substantive body blocks, never navigation labels or HTML comments.
+
+    This is a structural heuristic, not an authenticity or official-source verdict.
+    Keep traversal in ListingParser independent of these selection decisions.
+    """
+    VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
+    OMIT = {"head", "nav", "header", "footer", "aside", "form", "script", "style", "template", "noscript", "button", "select", "h1", "h2", "h3", "h4", "h5", "h6"}
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.stack, self.blocks = [], []
+
+    def handle_starttag(self, tag, attrs):
+        values = dict(attrs)
+        marker = " ".join(values.get(k, "") for k in ("id", "class", "itemprop"))
+        tokens = set(re.split(r"[^\w]+", marker.lower()))
+        excluded = bool(tokens & {"menu", "navigation", "breadcrumb", "breadcrumbs", "pagination", "sidebar"})
+        omitted = tag in self.OMIT or excluded or values.get("role") == "navigation" or "hidden" in values or values.get("aria-hidden") == "true"
+        comment = bool(tokens & {"comment", "comments", "reply", "replies", "commentbody", "usercomment"})
+        frame = {"tag": tag, "omit": omitted or any(x["omit"] for x in self.stack),
+                 "comment": comment or any(x["comment"] for x in self.stack), "parts": [], "linked": 0}
+        if tag not in self.VOID:
+            self.stack.append(frame)
+
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+        if tag not in self.VOID:
+            self.handle_endtag(tag)
+
+    def handle_data(self, data):
+        if not self.stack or self.stack[-1]["omit"]:
+            return
+        linked = any(x["tag"] == "a" for x in self.stack)
+        for frame in self.stack:
+            if frame["tag"] in {"p", "article", "main", "blockquote", "div", "td", "section"}:
+                frame["parts"].append(data)
+                frame["linked"] += len(data) if linked else 0
+
+    def handle_endtag(self, tag):
+        index = next((i for i in range(len(self.stack)-1, -1, -1) if self.stack[i]["tag"] == tag), None)
+        if index is None:
+            return
+        for frame in self.stack[index:]:
+            raw = " ".join(frame["parts"])
+            text = " ".join(raw.split())
+            if not frame["omit"] and text and frame["linked"] / max(len(raw), 1) < 0.25:
+                self.blocks.append((text, frame["comment"], frame["tag"]))
+        del self.stack[index:]
+
+    def selected_text(self):
+        # A short explicit comment is eligible; a normal text needs real body length.
+        # Prefer paragraphs to avoid concatenating an entire homepage into an article.
+        candidates = [(text, comment) for text, comment, tag in self.blocks
+                      if (comment and len(text) >= 80) or (len(text) >= 1200 and tag in {"p", "article", "blockquote", "div", "td"})]
+        paragraphs = list(dict.fromkeys(text for text, _, tag in self.blocks if tag == "p" and len(text) >= 120))
+        if sum(map(len, paragraphs)) >= 1200:
+            candidates.append(("\n\n".join(paragraphs), False))
+        if not candidates:
+            return ""
+        return max(candidates, key=lambda row: len(row[0]))[0][:100000]
+
+
+def selected_material(row):
+    return row.get("type") in {"pdf", "video", "audio"} or (
+        row.get("type") == "page" and row.get("selection_version") == 1)
+
+
 def material_type(url, mime=""):
     mime = mime.split(";", 1)[0].lower().strip()
     for prefix, kind in MIME_TYPES.items():
@@ -169,12 +237,17 @@ def read_listing(session, outlet):
         encoding = response.encoding or "utf-8"
         if encoding.lower() == "iso-8859-1":
             encoding = "utf-8"
-        parser.feed(b"".join(chunks).decode(encoding, errors="replace"))
+        html = b"".join(chunks).decode(encoding, errors="replace")
+        parser.feed(html)
         parser.close()
+        selector = PublicationParser()
+        selector.feed(html)
+        selector.handle_endtag("html")
+        selected = selector.selected_text()
         text = " ".join(" ".join(parser.text_parts).split())
         title = " ".join(" ".join(parser.title_parts).split())[:300] or urlsplit(response.url).path
         return {"items": list(parser.rows.values()), "page": {"url": outlet["url"], "title": title,
-                "type": "page", "excerpt": text[:600]}, "text": text, "truncated": parser.truncated}
+                "type": "page", "excerpt": selected[:600], "selection_version": 1 if selected else 0}, "text": text, "truncated": parser.truncated}
     finally:
         response.close()
 
@@ -298,6 +371,8 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
                     continue
                 if row["type"] == "page" and target_url != url:
                     db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url) VALUES (?,?)", (oid, target_url))
+                if not selected_material(row):
+                    continue
                 prior = db.execute("SELECT metadata,baseline FROM items WHERE outlet_id=? AND url=?", (oid, target_url)).fetchone()
                 queued = db.execute("SELECT metadata,baseline FROM outbox WHERE outlet_id=? AND url=?", (oid, target_url)).fetchone()
                 previous = json.loads((queued or prior)[0]) if queued or prior else {}
@@ -333,7 +408,7 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
     batch, batch_size = [], 0
 
     def upload(rows, final):
-        result = api_call(api, endpoint, "/darkweb/ingest", {"outlet_id": oid, "items": [r for r, _ in rows],
+        result = api_call(api, endpoint, "/darkweb/ingest", {"selection_version": 1, "outlet_id": oid, "items": [r for r, _ in rows],
             "scan_ok": progress["pages_scanned"] > 0, "scan_complete": final and progress["complete"],
             "truncated": progress["truncated"], "pages_scanned": progress["pages_scanned"],
             "pending_pages": progress["pending_pages"], "failed_pages": progress["failed_pages"]})
@@ -346,6 +421,11 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
 
     for _, payload, baseline in pending:
         row = json.loads(payload)
+        # An older collector may have left navigation entries awaiting upload.
+        if not selected_material(row):
+            with db:
+                db.execute("DELETE FROM outbox WHERE outlet_id=? AND url=?", (oid, row["url"]))
+            continue
         if acquire_files and not baseline and row["type"] != "page" and not row.get("acquired"):
             try:
                 row.update(acquire(tor, row, evidence, max_bytes))

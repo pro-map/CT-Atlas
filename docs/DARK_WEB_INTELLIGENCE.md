@@ -154,6 +154,42 @@ and manage disk storage before running acquisition continuously.
 
 ## Validation and current activation status
 
+### Publication selection
+
+Traversal and publication selection are separate: internal category and pagination
+links are still followed, but an unfetched HTML link is never a feed item. PDF,
+video and audio links remain candidates. Standalone images are excluded to avoid
+logos, banners and icons. File types are inferred from links or response MIME;
+this does not prove that a file is an official publication.
+
+HTML results require substantive body text (at least 1,200 characters in eligible
+blocks or accumulated paragraphs), or an explicit comment/reply HTML marker with
+at least 80 characters of body text. Navigation, headings, forms, scripts,
+footers and link-heavy blocks are excluded. Excerpts come from selected body
+text. Comments are currently represented as page results, not individual comment
+events. Changes at an existing URL still do not generate new-item alerts.
+
+These are structural rules, not a trained AI model. Unusual HTML, short official
+statements and unmarked comments can be missed; long category descriptions can
+still pass. Validate examples from each outlet before treating this as a reliable
+publication classifier. A future model would need analyst-labelled positive and
+negative examples and independent evaluation, especially for source attribution.
+
+Admin keywords only annotate matches in titles/excerpts; they do not select or
+exclude publications. Use distinctive topics, organizations or locations you
+actually monitor, with relevant spelling/language variants (up to 10 keywords).
+Generic words such as PDF, video or إصدار will create broad alerts and do not
+establish authenticity. Leaving this field empty does not stop collection.
+
+Updating the local script applies selection to subsequent scans and discards old
+navigation entries still waiting in the local upload queue. The Worker performs a one-time deletion of previously ingested, unfiltered feed
+results on its first Dark Web request after deployment. It preserves outlet
+settings, known-URL history and all local evidence. Old collectors are rejected
+with HTTP 409 so they cannot repopulate the unfiltered feed. Update the local
+script after merging and deploying this change. Preserve the state database and evidence:
+existing baselines and acquisition history are retained. An unfinished traversal
+continues, and previously visited pages are reconsidered in the next full cycle.
+
 Automated tests use synthetic fixtures only. This implementation has not accessed
 any operational outlet. Live validation requires the actual listing URLs, Worker
 secret and a running collector with Tor. No real-time collection is active merely
