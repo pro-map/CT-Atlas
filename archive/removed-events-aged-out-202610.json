@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-02T15:14:39.307867+00:00",
+  "removed_at": "2026-10-03T14:09:48.472694+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -133,6 +133,82 @@
       "published": "2018-06-13T07:00:00+00:00",
       "category": "Legal / Judicial",
       "categories": [
+        "Legal / Judicial"
+      ],
+      "actor_group": "",
+      "primary_event_type": "OTHER_CT",
+      "ai_relevance_score": 88,
+      "ai_relevance_reason": "Auto-accepted: authoritative official source with strong CT category/action evidence in the headline."
+    },
+    {
+      "id": "ecebb5b7995b50ce",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOYklpdjdXUGRKMWtNdXpyazNqaWN4RjZBSGpmNXBWT2FUOXpRdzRYUXNWaDZVcFVoVjgzNkI1cFA1SUc1Ym1SaDlXaDU1TDBCUE0wT2dFLVdyX3BVRFpHS09yTW8tTkZzS2lzQUhrR2dyMGhJdUJiMXl6TnNfNER0ZmI4TkJ5WGJyRkpFSjF6SF84bHJ2ekZLUm1keWh5RUo4eU54eDNlN3RURnNJdmJDQ3pITjVUSWs?oc=5",
+      "title": "Counter-terrorism operation against ISIS across 8 provinces centered in Şanlıurfa: 36 detained",
+      "summary": "Turkish security forces detained 36 suspects in a coordinated counter-terrorism operation targeting the ISIS terrorist organization across 8 provinces centered in Şanlıurfa.",
+      "original_title": "Şanlıurfa merkezli 8 ilde terör örgütü DEAŞ'a operasyon: 36 gözaltı",
+      "original_language": "tr",
+      "source": "TRT Haber",
+      "published": "2026-04-06T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Arrests"
+      ],
+      "actor_group": "ISIS",
+      "country": "Turkey",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Multi-province counter-terrorism raids and arrests targeting a designated network."
+    },
+    {
+      "id": "f0c63398b6080c19",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBPbVVodjFmSmNOS3dueTM2X0t4ZnFxQ3V4QU9zS0FpQnJTZkpTamlha2NIOUZOSmFYbHpVLTdVc1liTUViNk5zVUp1S0NNUWPSAUtBVV95cUxPMWNWY0JHbS02NmxWaGpSM2QxMnNFWHpVLXdJMVRmMzBzdVI3TTNSTDNZZGVMdDQtMXVLdXg4VUNrV29ZY3hvaWNNU2c?oc=5",
+      "title": "FSB prevents terrorist attack against high-ranking official in Kursk region",
+      "summary": "Russia's Federal Security Service (FSB) stated it prevented a terrorist attack targeting a high-ranking official in the Kursk region.",
+      "original_title": "ФСБ предотвратила теракт против высокопоставленного чиновника в Курской области",
+      "original_language": "ru",
+      "source": "Интерфакс",
+      "published": "2026-04-06T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "country": "Russia",
+      "region": "Kursk Oblast",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Disrupted terrorist plot and operational action by security services."
+    },
+    {
+      "id": "fd43f4632cfa6e9d",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFB3cHVXNzV0Z25BcHFHZTZ4YWhzc2w5UWVRdTIwQXJjZFBsMEhiaWJYTlFPWFNKM1ZfNnJMUmdvdktXQnFzcEhLQWtjbzZvX0nSAUtBVV95cUxNbVQzWFE2S3hyUGlsNFdUNnF2SVZpR2IzRHg0aDd4YXJJR3luS0lFYVJrMkRFNkVFNm9JeEs5R29ucW10NmZqbDZ1MUE?oc=5",
+      "title": "One of those convicted for the Crocus City Hall terrorist attack committed suicide in a pre-trial detention center",
+      "summary": "One of the individuals convicted for the Crocus City Hall terrorist attack has died by suicide while in detention.",
+      "original_title": "Один из осужденных за теракт в Crocus City Hall покончил с собой в СИЗО",
+      "original_language": "ru",
+      "source": "Интерфакс",
+      "published": "2026-04-06T07:00:00+00:00",
+      "category": "Legal / Judicial",
+      "categories": [
+        "Legal / Judicial"
+      ],
+      "actor_group": "",
+      "country": "Russia",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Significant operational update concerning a high-profile convicted terrorist."
+    },
+    {
+      "id": "dd8053807d2ff61c",
+      "incident_id": "inc-4a77752005deec5b",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOcDV6MjRXbWdLT1hCTmdCc3h2dXF4S1QtN2kxM3JrMXI4eXRtZ0xWcnc5UlVSNUo0eThZRjBKR3ZNWXFwaHRlVXVXcFgydThYeldPemM5UjJoc2lxRHZZeFdseWRwbHgtR2Y3LXdNS3R5LWt0eFROREVxUkpQNlkxeXFMVlJTN3FKMF9WX1RVSzg0ZFBDZ1lmclR0R1dFVmdDVTNkMGlR?oc=5",
+      "title": "Western District of New York | Convicted Killer of John Granville Designated a Terrorist; Assets Frozen",
+      "summary": "Western District of New York | Convicted Killer of John Granville Designated a Terrorist; Assets Frozen Department of Justice (.gov)",
+      "original_title": "Western District of New York | Convicted Killer of John Granville Designated a Terrorist; Assets Frozen",
+      "original_language": "en",
+      "source": "Department of Justice (.gov)",
+      "published": "2016-03-06T06:57:00+00:00",
+      "category": "Terrorist Financing",
+      "categories": [
+        "Terrorist Financing",
         "Legal / Judicial"
       ],
       "actor_group": "",
