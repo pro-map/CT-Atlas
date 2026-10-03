@@ -281,9 +281,9 @@ test('the ticker lists the period attacks, pauses on hover, respects reduced mot
 test('the Database route is protected by the session wrapper and scripts are cache-busted',()=>{
   const auth=fs.readFileSync('usage-auth-fix.js','utf8');
   assert.match(auth,/deep-search\|database-events\|/);
-  assert.match(auth,/deep-search\.js\?v=7/);
+  assert.ok(Number(auth.match(/deep-search\.js\?v=(\d+)/)?.[1]) >= 7, "Custom Intelligence keeps a current cache version");
   assert.ok(!/quick-ask/.test(auth),'the retired quick Q&A is not loaded');
-  assert.match(html,/usage-auth-fix\.js\?v=20261003b/);
+  assert.ok(Number(html.match(/usage-auth-fix\.js\?v=(\d+)/)?.[1]) >= 20261003, "session wrapper keeps a current cache version");
 });
 
 // ---- Worker /database-events --------------------------------------------

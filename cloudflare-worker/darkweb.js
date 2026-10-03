@@ -90,7 +90,7 @@ export async function handleDarkweb(request, env) {
     return reply(await response.json(), response.status, env);
   }
 
-  if (body.selection_version !== 1) return reply({ error: "Update the collector: publication selection version 1 is required." }, 409, env);
+  if (body.selection_version !== 1) return reply({ error: "Collector update required. Publication selection version 1 is required." }, 409, env);
   const stateResponse = await gateCall(env, "/darkweb-state", {});
   const state = await stateResponse.json();
   const outlet = state.outlets.find(o => o.id === body.outlet_id && o.enabled);
