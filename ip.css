@@ -3,3 +3,5 @@
 .result-summary{margin-bottom:16px;border-color:#6a899a}.result-summary h3{margin:0 0 10px;font-size:22px}.result-summary p{margin:5px 0}
 
 .jurisdiction-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.country-flag{width:24px;height:18px;object-fit:contain;flex:none;border:1px solid #657887}.jurisdiction-row strong{color:#dfeaf0;font-size:12px}
+
+#domainResults{margin-bottom:24px}#domainIPs button[aria-pressed="true"]{border-color:#fff;background:#294253}#domainIPs button{font-family:monospace;overflow-wrap:anywhere;max-width:100%}#domainSources{margin-top:16px}#selectedIP{font-family:monospace;font-size:14px}#domainFields{display:grid;grid-template-columns:minmax(145px,1fr) 3fr;gap:8px 18px}#domainFields dt,#domainFields dd{margin:0}#domainLinks{margin-top:16px}@media(max-width:600px){#domainFields{grid-template-columns:1fr}#domainFields dt{margin-top:10px}}

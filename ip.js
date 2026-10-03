@@ -3,7 +3,7 @@
 const API="https://ct-report-generator.fairpeace.workers.dev",$=id=>document.getElementById(id);
 const token=()=>sessionStorage.getItem("ct_map_session_token")||"";
 const {known,show,overview,missingLegalRoute,assessmentLines,flagSource}=window.CTAtlasIPReport;
-let result=null,busy=false;
+let result=null,busy=false,selectedIP="";
 function node(tag,text,className){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(className)n.className=className;return n;}
 function link(label,url){const a=node("a",label);a.href=url;a.target="_blank";a.rel="noopener noreferrer";a.referrerPolicy="no-referrer";return a;}
 function safeLink(label,value){try{const u=new URL(value);if(u.protocol==="https:"&&!u.username&&!u.password)return link(label,u.href);}catch(_){}return node("span",label);}
@@ -24,8 +24,7 @@ function appendJurisdictions(parent,contact){
   const source=node("p");source.append(safeLink("JURISDICTION / ADDRESS SOURCE ↗",j.source_url));parent.append(source);
  }
 }
-function render(r){
- $("results").hidden=false;$("resultIP").textContent=r.ip;$("resultTime").textContent=r.family+" · "+r.queried_at+" · "+r.status.toUpperCase();
+function renderIP(r){
  const summary=overview(r);$("operatorSummary").textContent=summary.operator;$("contactSummary").textContent=summary.contact;$("vpnSummary").textContent=summary.vpn;
  const e=r.enquiry;$("enquiryContact").replaceChildren();
  if(e){for(const value of [e.basis,e.subscriber_scope,e.records_to_request&&"Information to request: "+e.records_to_request,e.email&&"Email: "+e.email,e.phone&&"Phone: "+e.phone,e.address&&"Published contact address: "+e.address,e.scope,e.contact_source])if(value)$("enquiryContact").append(node("p",value));if(e.url)$("enquiryContact").append(safeLink("OPEN CONTACT / PROCEDURE ↗",e.url));appendJurisdictions($("enquiryContact"),e);}
@@ -48,13 +47,48 @@ function render(r){
  $("sources").replaceChildren();for(const s of r.sources){const row=node("div",undefined,"source-row");row.append(safeLink(s.name+" ↗",s.url),node("small",s.status.toUpperCase()+(s.reason?" ("+s.reason+")":"")+" · Retrieved: "+s.retrieved_at));if(s.action)row.append(node("p",s.action,"fine"));$("sources").append(row);}
  $("limitations").replaceChildren(...r.limitations.map(l=>node("li",l)));
 }
+function renderSources(id,sources){
+ $(id).replaceChildren();for(const s of sources){const row=node("div",undefined,"source-row");row.append(safeLink(s.name+" ↗",s.url),node("small",s.status.toUpperCase()+(s.reason?" ("+s.reason+")":"")+" · "+s.retrieved_at+(s.data_date?" · Snapshot: "+s.data_date:"")));$(id).append(row);}
+}
+function renderDomain(r){
+ const d=r.registration,reg=d?.registrar;
+ fields("domainFields",[["SUBMITTED HOSTNAME",r.host],["REGISTERED DOMAIN",r.registered_domain],["REGISTRAR",reg?.name],["IANA REGISTRAR ID",reg?.id],["REGISTRATION STATUS",d?.status.join(", ")],...(d?.events||[]).map(e=>[e.action.toUpperCase(),e.date]),["LEGAL JURISDICTION","Not established by domain registration; verify the receiving legal entity."]]);
+ $("domainScope").textContent=d?.scope||"Domain registration unavailable. The DNS and IP findings below can still be used.";
+ $("domainLinks").replaceChildren();for(const [label,url] of [["DOMAIN REGISTRY RECORD ↗",d?.registry_url],["ICANN LOOKUP ↗",d?.lookup_url]])if(url)$("domainLinks").append(safeLink(label,url));
+ $("domainContacts").replaceChildren();for(const c of reg?.contacts||[]){const card=node("div",undefined,"contact");card.append(node("h4",c.name||reg.name),node("span",c.roles.join(" / "),"pill"),node("p","Email: "+show(c.emails.join(", "))),node("p","Phone: "+show(c.phones.join(", "))),node("p","Published contact address: "+show(c.address)),node("p",c.scope,"fine"));if(c.url)card.append(safeLink("PUBLISHED CONTACT WEBSITE ↗",c.url));card.append(node("p","Source: "+c.source,"fine"));$("domainContacts").append(card);}
+ if(!reg?.contacts?.length)$("domainContacts").append(node("p","No registrar contact returned by the consulted sources."));
+ fields("domainDns",[["CNAME ALIASES",r.dns.cnames.join(", ")],["DOMAIN NAMESERVERS",r.dns.nameservers.join(", ")||d?.nameservers.join(", ")],["DOMAIN MAIL EXCHANGERS",r.dns.mail_exchangers.join(", ")]]);
+ $("ipCoverage").textContent=r.networks.length+" / "+r.dns.addresses.length+" displayed IPs analysed. "+r.dns.scope;
+ $("domainIPs").replaceChildren();for(const address of r.dns.addresses){const analysed=r.networks.some(n=>n.ip===address.ip),button=node("button",address.ip+" · "+address.family+(analysed?"":" · ANALYSE"));button.type="button";button.disabled=busy;button.setAttribute("aria-pressed",String(address.ip===selectedIP));button.addEventListener("click",()=>selectDomainIP(address.ip));$("domainIPs").append(button);}
+ const domainWarnings=r.warnings.filter(w=>!w.startsWith("Automatically enriched "));
+ if(r.networks.length<r.dns.addresses.length)domainWarnings.push("Additional DNS addresses have not been analysed; select them above to include them in the report.");
+ $("domainWarnings").hidden=!domainWarnings.length;$("domainWarnings").replaceChildren(...domainWarnings.map(w=>node("p",w)));
+ renderSources("domainSources",r.sources);$("domainLimitations").replaceChildren(...r.limitations.map(l=>node("li",l)));
+}
+function render(r){
+ const domain=r.kind==="domain";$("results").hidden=false;$("domainResults").hidden=!domain;
+ $("resultIP").textContent=domain?r.host:r.ip;$("resultTime").textContent=(domain?"DOMAIN":r.family)+" · "+r.queried_at+" · "+r.status.toUpperCase();
+ if(domain){if(!r.networks.some(n=>n.ip===selectedIP))selectedIP=r.networks[0]?.ip||"";renderDomain(r);}
+ const network=domain?r.networks.find(n=>n.ip===selectedIP):r;
+ $("ipResults").hidden=!network;$("selectedIP").hidden=!domain;$("selectedIP").textContent=domain?"SELECTED IP: "+selectedIP:"";
+ if(network)renderIP(network);
+}
+async function selectDomainIP(ip){
+ if(busy||result?.kind!=="domain")return;
+ if(result.networks.some(n=>n.ip===ip)){selectedIP=ip;render(result);return;}
+ busy=true;$("lookupButton").disabled=true;$("exportPdf").disabled=true;$("exportJson").disabled=true;render(result);
+ $("status").textContent="Analysing "+ip+"…";const finish=window.CTAtlasUI?.begin($("waitAnchor"));
+ try{const network=await request("/ip-intelligence/lookup",{ip});result.networks.push(network);selectedIP=ip;result.status="partial";$("status").textContent="IP added to this domain investigation and its report.";}
+ catch(error){$("status").textContent=error.message;}
+ finally{busy=false;$("lookupButton").disabled=false;$("exportPdf").disabled=false;$("exportJson").disabled=false;finish?.();render(result);}
+}
 $("lookupForm").addEventListener("submit",async event=>{
- event.preventDefault();if(busy)return;busy=true;$("lookupButton").disabled=true;result=null;$("results").hidden=true;
- $("status").className="";$("status").textContent="Consulting network registries and intelligence sources…";
+ event.preventDefault();if(busy)return;busy=true;$("lookupButton").disabled=true;result=null;selectedIP="";$("results").hidden=true;
+ $("status").className="";$("status").textContent="Consulting DNS, registration and network intelligence sources…";
  const finish=window.CTAtlasUI?.begin($("waitAnchor"));
  try{result=await request("/ip-intelligence/lookup",{ip:$("ipAddress").value.trim()});render(result);$("status").textContent=result.status==="unavailable"?"Sources are currently unavailable. Retry shortly.":"Lookup complete. Review source coverage before exporting.";}
  catch(error){$("status").textContent=error.message;$("status").className="error";}
- finally{finish?.();busy=false;$("lookupButton").disabled=false;}
+ finally{finish?.();busy=false;$("lookupButton").disabled=false;if(result)render(result);}
 });
 $("exportPdf").addEventListener("click",async()=>{
  if(!result||!$("lookupForm").reportValidity())return;$("exportPdf").disabled=true;
@@ -64,7 +98,7 @@ $("exportPdf").addEventListener("click",async()=>{
 $("exportJson").addEventListener("click",()=>{
  if(!result||!$("lookupForm").reportValidity())return;
  const blob=new Blob([JSON.stringify({...result,incident:incident()},null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=node("a");
- a.href=url;a.download="CT-Atlas-IP-"+result.ip.replace(/:/g,"-")+".json";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ a.href=url;a.download="CT-Atlas-"+(result.kind==="domain"?"Domain-"+result.host:"IP-"+result.ip.replace(/:/g,"-"))+".json";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 });
 async function init(){
  if(!token()){location.replace("index.html");return;}

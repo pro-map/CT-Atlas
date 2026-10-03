@@ -42,6 +42,7 @@ function reportLine(text){const m=/^Jurisdiction: ([A-Z]{2}) · (.+)$/.exec(text
 function enquiryLines(r){const e=r.enquiry;return e?["Provider to verify / contact: "+e.name+" · "+e.type,e.status,e.basis,...(e.subscriber_scope?[e.subscriber_scope]:[]),...(e.records_to_request?["Information to request: "+e.records_to_request]:[]),...(e.email?["Email: "+e.email]:[]),...(e.phone?["Phone: "+e.phone]:[]),...(e.address?["Published contact address: "+e.address]:[]),...jurisdictionLines(e),...(e.url?["Contact / procedure: "+e.url]:[]),...(e.scope?[e.scope]:[]),...(e.contact_source?["Contact source: "+e.contact_source]:[])]:[];}
 function assessmentLines(p){return (p.assessments||[]).map(a=>a.source+": VPN "+known(a.vpn)+"; proxy "+known(a.proxy)+"; Tor "+known(a.tor)+"; hosting "+known(a.hosting)+". Named services: "+(a.services.map(s=>s.name).join(", ")||"Not supplied")+(a.confidence!==undefined&&a.confidence!==null?". Source confidence in positive detections: "+a.confidence+"/100":"")+(a.last_seen?". Last positive detection: "+a.last_seen:"")+(a.data_time?". Data updated: "+a.data_time:""));}
 function sections(result,incident={}){
+ if(result.kind==="domain")return domainSections(result,incident);
  const r=result,g=r.geolocation,p=r.privacy,o=r.operator,reg=r.registration,summary=overview(r);
  return [
   {title:"INVESTIGATION CONTEXT",lines:[summary.operator+"\n"+summary.contact+"\n"+summary.vpn,"IP: "+r.ip+" ("+r.family+")","Lookup time (UTC): "+r.queried_at,"Coverage: "+r.status,"Case reference: "+show(incident.reference),"Observed time (UTC, analyst supplied): "+show(incident.observed_at),"Source port: "+show(incident.source_port)+" · Protocol: "+show(incident.protocol)]},
@@ -56,6 +57,20 @@ function sections(result,incident={}){
   {title:"SOURCES",lines:r.sources.map(s=>s.name+" · "+s.status+(s.reason?" ("+s.reason+")":"")+" · Retrieved: "+s.retrieved_at+(s.stage?" · Stage: "+s.stage:"")+"\n"+s.url+(s.action?"\n"+s.action:""))}
  ];
 }
-function build(result,incident){return {filename:"CT-Atlas-IP-"+result.ip,eyebrow:"CT ATLAS · IP INTELLIGENCE",title:"IP investigation brief",meta:result.ip+" · "+result.queried_at,footer:"CT Atlas · Investigator orientation · Current public metadata",blocks:sections(result,incident).flatMap(s=>[{type:"heading",text:s.title},...s.lines.map(reportLine)])};}
+function domainSections(r,incident){
+ const d=r.registration,registrar=d?.registrar;
+ const warnings=r.warnings.filter(w=>!w.startsWith("Automatically enriched "));
+ if(r.networks.length<r.dns.addresses.length)warnings.push("Only "+r.networks.length+" of "+r.dns.addresses.length+" displayed IPs were analysed.");
+ return [
+  {title:"DOMAIN INVESTIGATION CONTEXT",lines:["Hostname: "+r.host,"Registered domain: "+r.registered_domain,"Lookup time (UTC): "+r.queried_at,"Coverage: "+r.status,"Case reference: "+show(incident.reference),"Observed time (UTC): "+show(incident.observed_at),"Source port: "+show(incident.source_port)+" · Protocol: "+show(incident.protocol),"Analyst notes: "+show(incident.notes)]},
+  {title:"DOMAIN REGISTRAR / CONTACTS",lines:["Registrar: "+show(registrar?.name)+" · IANA ID: "+show(registrar?.id),"Registered domain status: "+show(d?.status.join(", ")),...(d?.events||[]).map(e=>e.action+": "+e.date),d?.scope||"Registration data unavailable.","Legal jurisdiction is not established by a domain suffix or a registration contact address.",...(registrar?.contacts||[]).flatMap(c=>[c.name+" · "+c.roles.join(", "),"Email: "+show(c.emails.join(", "))+" · Phone: "+show(c.phones.join(", ")),"Published contact address: "+show(c.address),...(c.url?["Published website: "+c.url]:[]),"Source: "+c.source,c.scope]),...(d?["Registry record: "+d.registry_url,"ICANN lookup: "+d.lookup_url]:[])]},
+  {title:"DNS / VISIBLE INFRASTRUCTURE",lines:[r.dns.scope,"CNAME: "+show(r.dns.cnames.join(", ")),"Nameservers: "+show(r.dns.nameservers.join(", ")||d?.nameservers.join(", ")),"Mail exchangers: "+show(r.dns.mail_exchangers.join(", ")),...r.dns.addresses.map(a=>a.ip+" · "+a.family+" · TTL: "+show(a.ttl)+" seconds · "+(r.networks.some(n=>n.ip===a.ip)?"Analysed below":"Not analysed"))]},
+  ...r.networks.flatMap(n=>sections(n,{}).filter(s=>!["INVESTIGATION CONTEXT","INVESTIGATOR HANDOFF","COVERAGE & LIMITATIONS","SOURCES"].includes(s.title)).map(s=>({title:n.ip+" / "+s.title,lines:s.lines}))),
+  {title:"INVESTIGATOR HANDOFF",lines:["Registrar: domain registration/account records. Hosting/network provider: service and hosting-account records. CDN/reverse proxy: visible intermediary that may need to identify its customer or origin provider. These entities are not interchangeable.","The website owner's access ISP cannot be inferred from a website's DNS IP. Confirm the appropriate recipient and legal process before submitting any request.","No provider request has been sent."]},
+  {title:"COVERAGE & LIMITATIONS",lines:[...warnings,...r.limitations,...r.networks.flatMap(n=>n.warnings.map(w=>n.ip+": "+w)),...new Set(r.networks.flatMap(n=>n.limitations))]},
+  {title:"SOURCES",lines:[...r.sources,...r.networks.flatMap(n=>n.sources.map(s=>({...s,name:n.ip+" / "+s.name})))].map(s=>s.name+" · "+s.status+(s.reason?" ("+s.reason+")":"")+" · "+s.retrieved_at+(s.data_date?" · Snapshot: "+s.data_date:"")+"\n"+s.url+(s.action?"\n"+s.action:""))}
+ ];
+}
+function build(result,incident){return {filename:result.kind==="domain"?"CT-Atlas-Domain-"+result.host:"CT-Atlas-IP-"+result.ip,eyebrow:"CT ATLAS · IP INTELLIGENCE",title:result.kind==="domain"?"Domain and IP investigation brief":"IP investigation brief",meta:(result.host||result.ip)+" · "+result.queried_at,footer:"CT Atlas · Investigator orientation · Current public metadata",blocks:sections(result,incident).flatMap(s=>[{type:"heading",text:s.title},...s.lines.map(reportLine)])};}
 window.CTAtlasIPReport={build,sections,known,show,overview,missingLegalRoute,enquiryLines,assessmentLines,jurisdictionLines,flagSource};
 })();

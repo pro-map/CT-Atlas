@@ -4,9 +4,22 @@ IP Intelligence is an investigator-oriented workspace for the existing authentic
 
 ## What works after deployment
 
-Enter one public IPv4 or IPv6 address. The API authenticates the session, validates the address, and consults IANA's RDAP bootstrap, the responsible regional registry, RIPEstat and the configured attribution services. Results include registration, published organisation/contact postal addresses, technical/abuse contacts, routing ASN/prefix, and approximate MaxMind GeoLite2 location through RIPEstat. Source outages are shown explicitly, with partial results retained. No Tor installation or collector is used for this workspace.
+Enter one public IPv4/IPv6 address, domain, or HTTP(S) URL in the same field. The API authenticates the session, validates the target, and consults public metadata sources. IP results include registration, published organisation/contact postal addresses, technical/abuse contacts, routing ASN/prefix, and approximate MaxMind GeoLite2 location through RIPEstat. Source outages are shown explicitly, with partial results retained. No Tor installation or collector is used for this workspace.
 
-Only public unicast literals are accepted. URLs, domains, ports, subnets, local/private, shared carrier-NAT, documentation, multicast, mapped and special-use/tunnel ranges are excluded conservatively. The tool does not connect to the investigated IP, perform traceroute, scan ports, bypass a VPN, identify a subscriber, or send a provider request.
+IP enrichment accepts only public unicast addresses. Subnets, local/private, shared carrier-NAT, documentation, multicast, mapped and special-use/tunnel ranges are excluded conservatively. Domain/URL input rejects credentials, nonstandard ports, local-only names and onion addresses. The tool does not visit the submitted website or connect to the investigated IP, perform traceroute, scan ports, bypass a VPN, identify a subscriber, or send a provider request.
+
+## Domain and URL investigations
+
+Worker **5.38** / `ip-intelligence-v4-domain-input` adds domains and HTTP(S) URLs to the existing field and endpoint. Examples: `example.com`, `www.example.com`, `https://example.com/page?query=value`. The canonical hostname is used; the path, query and fragment are neither included in the result nor forwarded to lookup providers. Preserve the original URL separately in the case file. Unicode domain names are normalized to their ASCII form.
+
+- **DNS:** Google Public DNS over HTTPS, with Cloudflare DNS as a failure fallback. A/AAAA and CNAME describe the submitted hostname; NS/MX describe the registered domain. Public DNS addresses retain TTLs. Irrelevant answer owners and non-public/special-use addresses are excluded. NXDOMAIN is distinguished from a source failure.
+- **Registration:** the ICANN section of the Public Suffix List determines the registered domain, including multi-label suffixes such as `co.uk`. IANA's DNS RDAP bootstrap selects the registry. When an IANA registrar ID is supplied, IANA's registrar directory can select the registrar's own RDAP endpoint for additional contact information. Both responses must match the queried domain and registrar details must match the IANA ID.
+- **Contacts:** registrar name/ID, published email, phone and postal address, plus registration events/status when available. Registrar contacts are separate from the IP operator's contacts. An abuse mailbox, address country or TLD does not establish a legal-request route or jurisdiction. Unknown jurisdiction remains explicit; existing verified network-provider entries retain their flags and sourced jurisdiction details.
+- **IP investigation:** retain up to 16 DNS addresses; automatically analyse at most two, preferring one IPv4 and one IPv6. Other addresses can be selected individually in the same result. Every analysed IP retains the existing network, location, intermediary and contact information. The PDF and JSON include all analysed IPs and identify addresses not yet analysed.
+
+No additional API key is required for DNS or domain RDAP. Existing optional IP enrichment keys continue to apply to each analysed IP. A CDN/reverse proxy may expose only its own IPs; this workflow cannot establish a hidden origin or the website owner's access ISP. Domain registration, DNS, mail hosting, web hosting and access connectivity are separate roles.
+
+Live IANA endpoint directories are cached for 24 hours within the Worker isolate. If unavailable, bundled IANA snapshots dated **2026-10-03** are used with an explicit source warning and a five-minute retry interval. Domain records themselves are still retrieved live and matched to the requested domain. The bundled ICANN PSL rules use the same date and retain MPL 2.0 attribution; private platform suffixes are deliberately excluded because the domain registrar manages the platform's registered domain. Refresh `cloudflare-worker/domain-data.js` when maintaining this feature. Its header identifies all three upstream sources. Domain RDAP redirects stay on the selected endpoint's HTTPS origin and base path; arbitrary entity links are not fetched. Missing top-level RIR contact expansion is disabled for the two automatic IP investigations to bound outbound work; an individual IP lookup retains that expansion.
 
 ## Source recovery and diagnostics
 
@@ -52,20 +65,26 @@ Directory verification dates, attribution sources and procedure links appear on 
 
 ## Reports and incident context
 
-PDF and JSON exports include the lookup time, IP, operator, registration, geolocation and radius when supplied, VPN indicators, provider and registry contacts, source links/status/timestamps, and limitations. An optional case reference, observation time (explicitly UTC), source port, protocol and analyst notes are held in the current page and added locally to the exported report. They are not transmitted to metadata APIs or stored on the Worker. Reloading the page clears the investigation. Exports are local files, not saved case records.
+PDF and JSON exports include the lookup time, IP, operator, registration, geolocation and radius when supplied, VPN indicators, provider and registry contacts, source links/status/timestamps, and limitations. Domain reports additionally include domain registration contacts, DNS findings and each analysed IP. An optional case reference, observation time (explicitly UTC), source port, protocol and analyst notes are held in the current page and added locally to the exported report. They are not transmitted to metadata APIs or stored on the Worker. Reloading the page clears the investigation. Exports are local files, not saved case records.
 
 Lookup time is separate from analyst-supplied incident time. Current records cannot establish who held a historical address. Preserve the original log and exact timestamp/timezone, source port and protocol where available, and route the enquiry through the agency's current procedures. No disclosure or retained-log availability is implied.
 
 ## Operation and bounds
 
-- Authenticated POST `/ip-intelligence/lookup`, JSON `{ "ip": "8.8.8.8" }`; response `Cache-Control: no-store, private`.
+- Authenticated POST `/ip-intelligence/lookup`, JSON `{ "ip": "8.8.8.8" }`, `{ "ip": "https://example.com/page" }` or `{ "target": "example.com" }`; response `Cache-Control: no-store, private`. Domain results have `kind: "domain"`; the existing IP response shape is preserved.
 - Six lookups per user per minute via a transactional Durable Object counter. No target IP or case text is persisted in that counter; tab usage records aggregate openings only.
-- Registry requests and redirects restricted to five official HTTPS RIR hosts. Up to three missing top-level contact cards expanded. Maximum 1 MB per source response, 8-second timeout per outbound request, maximum three redirect follows, 2 KB input cap. Provider responses are data, never executable HTML.
+- IP registry requests and redirects restricted to five official HTTPS RIR hosts. Up to three missing top-level contact cards expanded for individual IP lookups. Domain registry endpoints come from IANA, as described above. Maximum 1 MB per source response, 8-second timeout per outbound request, 2 KB input cap and 1,024 characters per submitted target. Provider responses are data, never executable HTML.
 - IPv4/IPv6 bootstrap cached for 24 hours within the Worker isolate. No cross-user result cache. Query IPs necessarily go to the consulted metadata providers; an optional external map link sends coordinates only after a click.
 - RIPEstat asks regular users above 1,000 daily queries to register their usage. This integration uses `sourceapp=ct-atlas` and at most three concurrent RIPEstat requests per lookup. Review source terms and permitted use if expanding usage or redistribution, including MaxMind GeoLite2 attribution/licensing.
 
 ## Official references
 
+- Google DNS JSON: https://developers.google.com/speed/public-dns/docs/doh/json
+- Cloudflare DNS JSON: https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/dns-json/
+- Public Suffix List: https://publicsuffix.org/list/
+- IANA domain bootstrap: https://data.iana.org/rdap/dns.json
+- IANA registrar directory: https://www.iana.org/assignments/registrar-ids/registrar-ids-1.csv
+- ICANN RDAP: https://www.icann.org/en/contracted-parties/registry-operators/resources/registration-data-access-protocol
 - IANA bootstrap: https://data.iana.org/rdap/ipv4.json and https://data.iana.org/rdap/ipv6.json
 - RIPEstat API/usage: https://stat.ripe.net/docs/data-api/ripestat-data-api
 - Network: https://stat.ripe.net/docs/data-api/api-endpoints/network-info
@@ -93,4 +112,4 @@ Lookup time is separate from analyst-supplied incident time. Current records can
 - Microsoft authorities: https://v2.leportal.microsoft.com/ and https://www.microsoft.com/en-us/corporate-responsibility/reports/government-requests/customer-data
 - Cloudflare authorities: https://www.cloudflare.com/trust-hub/law-enforcement/
 
-All directory entries reviewed 2026-10-03. Automated tests use synthetic/provider-shaped fixtures and verify authentication, IP validation, provider failure, redirect restrictions, contact attribution, export content and hub/deployment wiring. Live registry checks use public resolver addresses, not user investigation targets.
+All directory entries reviewed 2026-10-03. Automated tests use synthetic/provider-shaped fixtures and verify authentication, IP/domain validation, provider failure, redirect restrictions, contact attribution, export content and hub/deployment wiring. Domain tests also cover IDNs, public suffixes, CNAME scope, DNS fallback, NXDOMAIN, excluded DNS IPs, work bounds, mismatched registry/registrar records, dated snapshots and registration-only reports. Live checks use public reference domains and resolver addresses, not user investigation targets.
