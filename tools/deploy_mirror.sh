@@ -20,6 +20,7 @@ cp index.html main.html crypto.html social.html facial.html privacy.html robots.
    usage-admin.js usage-admin.css usage-auth-fix.js \
    workspace-ui.js workspace-ui.css \
    tab-health.js tab-health.css tab-access.js facial-crops.js \
+   ip.html ip.js ip.css ip-report.js ip-intelligence.svg \
    darkweb.html darkweb.js darkweb.css darkweb-intelligence.svg \
    "$STAGING"/
 

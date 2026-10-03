@@ -44,6 +44,7 @@ import { handleFaceShareUpload, handleFaceShareGet, FACE_SHARE_VERSION } from ".
 import { fetchBackgroundContext, corpusStats } from "./background-corpus.js";
 import { handleDatabaseEvents } from "./database-query.js";
 import { handleDarkweb, DARKWEB_VERSION } from "./darkweb.js";
+import { handleIPIntelligence, IP_INTELLIGENCE_VERSION } from "./ip-intelligence.js";
 export default {
 async fetch(request, env, ctx) {
 // A fresh per-request copy, never a mutation of the shared env object --
@@ -54,6 +55,7 @@ const url = new URL(request.url);
 if (request.method === "OPTIONS") {
 return new Response(null, { status: 204, headers: corsHeaders(env) });
 }
+if (url.pathname.startsWith("/ip-intelligence/")) return handleIPIntelligence(request, env);
 if (url.pathname.startsWith("/darkweb/")) return handleDarkweb(request, env);
 if (url.pathname === "/database-events" && request.method === "POST") {
 return handleDatabaseEvents(request, env);
@@ -62,7 +64,7 @@ if (url.pathname === "/database-stats" && request.method === "GET") {
 return jsonResponse({ background_corpus: await corpusStats(env) }, 200, env);
 }
 if (url.pathname === "/health" && request.method === "GET") {
-return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.34", darkweb_version: DARKWEB_VERSION, darkweb_collector_configured: String(env.DARKWEB_INGEST_TOKEN || "").length >= 32, deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, background_corpus: typeof env.BACKGROUND_DB?.prepare === "function", feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_exchange_address_version: EXCHANGE_ADDRESS_VERSION, crypto_exchange_attribution_version: EXCHANGE_ATTRIBUTION_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_auto_monitoring: true, sanctions_version: SANCTIONS_VERSION, sanctions: await sanctionsHealth(env), crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, report_illustration_version: REPORT_ILLUSTRATION_VERSION, social_intel_version: SOCIAL_INTEL_VERSION, social_intel: true, social_agent_client_version: SOCIAL_AGENT_CLIENT_VERSION, social_agent_configured: isSocialAgentConfigured(env), social_worker_search_provider: env.BRAVE_SEARCH_API_KEY ? "brave" : "disabled", visual_intel_version: VISUAL_INTEL_VERSION, visual_intel: true, visual_intel_configured: isVisualIntelConfigured(env), face_share_version: FACE_SHARE_VERSION, face_share_configured: Boolean(env.FACE_SHARE),crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, crypto_exchange_label_providers: { tronscan_enabled: env.TRONSCAN_TAG_LOOKUP_ENABLED === "true" && Boolean(env.TRONSCAN_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
+return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.35", ip_intelligence_version: IP_INTELLIGENCE_VERSION, ip_intelligence_enrichment_configured: Boolean(env.IPINFO_TOKEN), darkweb_version: DARKWEB_VERSION, darkweb_collector_configured: String(env.DARKWEB_INGEST_TOKEN || "").length >= 32, deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, background_corpus: typeof env.BACKGROUND_DB?.prepare === "function", feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_exchange_address_version: EXCHANGE_ADDRESS_VERSION, crypto_exchange_attribution_version: EXCHANGE_ATTRIBUTION_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_auto_monitoring: true, sanctions_version: SANCTIONS_VERSION, sanctions: await sanctionsHealth(env), crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, report_illustration_version: REPORT_ILLUSTRATION_VERSION, social_intel_version: SOCIAL_INTEL_VERSION, social_intel: true, social_agent_client_version: SOCIAL_AGENT_CLIENT_VERSION, social_agent_configured: isSocialAgentConfigured(env), social_worker_search_provider: env.BRAVE_SEARCH_API_KEY ? "brave" : "disabled", visual_intel_version: VISUAL_INTEL_VERSION, visual_intel: true, visual_intel_configured: isVisualIntelConfigured(env), face_share_version: FACE_SHARE_VERSION, face_share_configured: Boolean(env.FACE_SHARE),crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, crypto_exchange_label_providers: { tronscan_enabled: env.TRONSCAN_TAG_LOOKUP_ENABLED === "true" && Boolean(env.TRONSCAN_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
 }
 if (url.pathname === "/health/status" && request.method === "GET") {
 return handleHealthStatus(env, {
@@ -146,7 +148,7 @@ if (!sessionResponse.ok || session?.username !== username) return jsonResponse({
 let usagePayload = { username, action };
 if (action === "tab_access") {
   const tab = cleanText(usageBody.tab, 16).toLowerCase();
-  if (!["map", "crypto", "facial", "social", "darkweb"].includes(tab)) return jsonResponse({ error: "Unsupported workspace tab." }, 400, env);
+  if (!["map", "crypto", "facial", "social", "darkweb", "ip"].includes(tab)) return jsonResponse({ error: "Unsupported workspace tab." }, 400, env);
   usagePayload.tab = tab;
 } else if (!["map_search", "event_list_search", "facial_search"].includes(action)) {
   return jsonResponse({ error: "Unsupported usage action." }, 400, env);

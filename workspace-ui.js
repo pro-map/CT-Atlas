@@ -25,7 +25,7 @@ function isReady(){
   if(label && /VERIFYING SESSION/.test(label.textContent))return false;
  }
  const workspace=document.getElementById("workspace");
- if(document.body.dataset.ctTab==="darkweb" && workspace?.hidden)return false;
+ if(["darkweb","ip"].includes(document.body.dataset.ctTab) && workspace?.hidden)return false;
  if(document.getElementById("access-screen")){
   try{if(sessionStorage.getItem("ct_map_session_token") && document.body.classList.contains("locked"))return false;}catch(_){}
  }
@@ -46,7 +46,7 @@ document.addEventListener("click",event=>{
  const link=target?.closest("a[href]");
  if(!link||link.hasAttribute("download")||(link.target&&link.target!=="_self"))return;
  const url=new URL(link.href,location.href);
- if(url.origin!==location.origin||!/(?:^|\/)(?:main|index|crypto|darkweb|facial|social)\.html$/.test(url.pathname))return;
+ if(url.origin!==location.origin||!/(?:^|\/)(?:main|index|crypto|darkweb|facial|ip|social)\.html$/.test(url.pathname))return;
  if(url.pathname===location.pathname&&url.search===location.search)return;
  showLoading();
 });
