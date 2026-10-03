@@ -443,7 +443,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-10-03T14:11:21.220401+00:00",
-  "number_of_events": 3730,
+  "number_of_events": 3715,
   "events": [
     {
       "id": "5721c2aa17995079",
@@ -333541,7 +333541,7 @@
       "collection_locale": null,
       "published": "2026-05-03T07:00:00+00:00",
       "source": "Arise News",
-      "source_count": 3,
+      "source_count": 5,
       "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE1EdW5lRFlnS2pwdzZiOXAxOGc3eXMyb2l1THhNTHI2bW5PdkJoYnJya05qUDVQZUpmOG1XVmlkcXpOY1YtT0NQa2YweGV2cGptRV9Lb0hUZTk1d3RySHM4c3lNSy1Eb0sxS0VISG9yLUVDLW5FX21pdDJn?oc=5",
       "collector": "Google News RSS",
       "country": "Yemen",
@@ -333555,7 +333555,9 @@
       "sources": [
         "Arise News",
         "gCaptain",
-        "TradeWinds News"
+        "TradeWinds News",
+        "The Maritime Executive",
+        "Seatrade Maritime News"
       ],
       "related_articles": [
         {
@@ -333575,9 +333577,27 @@
           "published": "2026-05-03T07:00:00+00:00",
           "source": "TradeWinds News",
           "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxONl9aRzh6Vm5CdUtseHpzMXNlSmVKZ2FGa3lfSHpXRi1seHk4YnE4NWpfZlZRM0hOSENUaERZcGk0a2hlcGJBdUs5LUY4TEppQnVmbHY0bWt4VDROTjI1eG4wY0c4RWJXbmhEZ0J1WEdJOHR2X2ZWY0ZqMkZwdklZcHJGOXZ4ODQwUzJBWl9ZbXdYMkJudXNjaUs3VUtZYWh5ZU9kRg?oc=5"
+        },
+        {
+          "title": "Product Tanker Hijacked off Yemen, Then Diverted to Somalia",
+          "original_title": "Product Tanker Hijacked off Yemen, Then Diverted to Somalia",
+          "original_language": "en",
+          "summary": "A product tanker was hijacked off the coast of Yemen and subsequently diverted toward Somalia.",
+          "published": "2026-05-03T07:00:00+00:00",
+          "source": "The Maritime Executive",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQRW40WjhYbDJCNnZZb3BJMnc5b19OdWRsZEFPUmRJU0ZnbXlXX3lvWGFRZHR6VUUzaWY0OGtZTjhPcno1QU1hVjJCYTRWX0g0UWpMdVZSUTY3SGotdW1mN2xPR3FmZXp1bGZiaWZZUUFUYUZVLU9jN05ES1pxakVRQ29oQW5abkR2aGo2S2Rzb1dETE9VT1QxTUI0aHEyQQ?oc=5"
+        },
+        {
+          "title": "Tanker hijacked off Yemen",
+          "original_title": "Tanker hijacked off Yemen",
+          "original_language": "en",
+          "summary": "Tanker hijacked off Yemen Seatrade Maritime News",
+          "published": "2026-05-03T07:00:00+00:00",
+          "source": "Seatrade Maritime News",
+          "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5vNjNIQ2l5bHotRTQ1NFdXYmFOX1VMYjFISGJiTUdnOG01Q0JOTlVyTXhmczVXbTBiZUctUElwcExPeG4wYnd3V1Nla3AxdXN1cXhGSUpCblRUYmJrODFaTjJqYXNIU3BvcmNXbTFHVmlvSE5V?oc=5"
         }
       ],
-      "article_count": 3,
+      "article_count": 5,
       "first_reported": "2026-05-03T07:00:00+00:00",
       "last_reported": "2026-05-07T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -333596,7 +333616,8 @@
       "dedup_methods": [
         "title_plus_anchor",
         "paraphrase_entity_context",
-        "same_url"
+        "same_url",
+        "same_incident"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_region_coordinates",
@@ -333613,7 +333634,8 @@
       "source_article_fingerprints": [
         "10a14a3e7e69aa1860f48f131a8aabd89fc99d9f4e381b4718d2b219b13db7d7"
       ],
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-40766e32fbee28a5"
     },
     {
       "id": "f2add5f76d0546dd",
@@ -333689,7 +333711,8 @@
       "ai_geo_reason": "Trials and detentions are taking place in Israel.",
       "ai_geo_fingerprint": "816ae1184e0cb88cb45c5b55a50bc045a07b2b41d338181514e63b4ae649860b",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-5ba1727cc381b555"
     },
     {
       "id": "d2dea473cf6a1d29",
@@ -333750,7 +333773,8 @@
       "ai_geo_reason": "Explicitly mentions Bengaluru, India.",
       "ai_geo_fingerprint": "0958ba15b42a729ce164b5dd4a07b67052ec9275c19d12f1704014adf449ea6c",
       "ai_geo_inferred": false,
-      "actor_group": "Lashkar-e-Taiba"
+      "actor_group": "Lashkar-e-Taiba",
+      "incident_id": "inc-24ee3ea82a141db1"
     },
     {
       "id": "f3ae09e3bafcdb7f",
@@ -333814,7 +333838,8 @@
       "ai_geo_reason": "Indictments of Palestinians regarding terror plots handled by Israeli judicial authorities typically take place within Israel.",
       "ai_geo_fingerprint": "cebb8e7a8762e81b362a6340c7825d53b01a1706713bc020640366319a333541",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-dcd8d385c49c4349"
     },
     {
       "id": "44ad08d9e30e7452",
@@ -333877,88 +333902,6 @@
       "ai_geo_inferred": true,
       "actor_group": "",
       "incident_id": "inc-daf518999c0aba3c"
-    },
-    {
-      "id": "2e95bc68f4a67152",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Product Tanker Hijacked off Yemen, Then Diverted to Somalia",
-      "summary": "A product tanker was hijacked off the coast of Yemen and subsequently diverted toward Somalia.",
-      "original_title": "Product Tanker Hijacked off Yemen, Then Diverted to Somalia",
-      "original_summary": "Product Tanker Hijacked off Yemen, Then Diverted to Somalia The Maritime Executive",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-05-03T07:00:00+00:00",
-      "source": "The Maritime Executive",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQRW40WjhYbDJCNnZZb3BJMnc5b19OdWRsZEFPUmRJU0ZnbXlXX3lvWGFRZHR6VUUzaWY0OGtZTjhPcno1QU1hVjJCYTRWX0g0UWpMdVZSUTY3SGotdW1mN2xPR3FmZXp1bGZiaWZZUUFUYUZVLU9jN05ES1pxakVRQ29oQW5abkR2aGo2S2Rzb1dETE9VT1QxTUI0aHEyQQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Yemen",
-      "country_code": "YE",
-      "city": "Sanaa",
-      "region": null,
-      "latitude": 15.35452,
-      "longitude": 44.20646,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "The Maritime Executive",
-      "targeted_source_kind": "specialist_media",
-      "sources": [
-        "The Maritime Executive",
-        "Seatrade Maritime News"
-      ],
-      "related_articles": [
-        {
-          "title": "Tanker hijacked off Yemen",
-          "original_title": "Tanker hijacked off Yemen",
-          "original_language": "en",
-          "summary": "Tanker hijacked off Yemen Seatrade Maritime News",
-          "published": "2026-05-03T07:00:00+00:00",
-          "source": "Seatrade Maritime News",
-          "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5vNjNIQ2l5bHotRTQ1NFdXYmFOX1VMYjFISGJiTUdnOG01Q0JOTlVyTXhmczVXbTBiZUctUElwcExPeG4wYnd3V1Nla3AxdXN1cXhGSUpCblRUYmJrODFaTjJqYXNIU3BvcmNXbTFHVmlvSE5V?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-05-03T07:00:00+00:00",
-      "last_reported": "2026-05-03T07:00:00+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "very_high_title_similarity"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "High-severity maritime hijacking event involving vessel seizure and diversion.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "hijacking of product tanker off Yemen and diversion to Somalia",
-      "title_variants": [
-        "hijacking of product tanker off Yemen and diversion to Somalia"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "off Yemen, Then Diverted to Somalia"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Tanker hijacked off the coast of Yemen.",
-      "ai_geo_fingerprint": "55ac40c6397d08bd9cdcfc458c463bb7750fd73540441e65a67b17948f0fdb15",
-      "ai_geo_inferred": true,
-      "actor_group": ""
     },
     {
       "id": "52f671ad8c3de88a",
@@ -334025,7 +333968,8 @@
       "ai_geo_reason": "Galaxy Leader partially sunk off the coast of Yemen.",
       "ai_geo_fingerprint": "084eb14e67a9b413c41a995553d666696f6e3f9b1044a4bf6e21179524a1f9e3",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-3e6b688ca337e442"
     },
     {
       "id": "5e7654f56f08103b",
@@ -334376,7 +334320,8 @@
       "ai_geo_reason": "The Embassy of Israel in the UK is located in London, where counter-terrorism trials/convictions regarding it occur.",
       "ai_geo_fingerprint": "c69a45f918ac45a4ac9e19c4746f9aa23b3b56457c4474ba0d4017540472b891",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-adc49e50f7a3da9c"
     },
     {
       "id": "ba8e29205882804b",
@@ -334511,9 +334456,9 @@
       "actor_group": "",
       "primary_event_type": "ATTACK",
       "is_attack": true,
-      "incident_anchor": "Golders Green London attack 2026",
+      "incident_anchor": "London double stabbing terrorist attack 2026",
       "update_type": "INVESTIGATION_UPDATE",
-      "incident_id": "inc-702939e714e1e454"
+      "incident_id": "inc-f5473c0fd95a8ee1"
     },
     {
       "id": "c090220ef262b8d7",
@@ -334727,7 +334672,8 @@
       "ai_geo_reason": "The legal appeal by the mosque shooter took place within New Zealand's court system.",
       "ai_geo_fingerprint": "cb834d776ace3e07d3d0d0a24da71750ef3cadebffb06a9a57d178376144a7df",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-73e3b6eb8dcae1ad"
     },
     {
       "id": "30ceff747bead229",
@@ -334794,7 +334740,8 @@
       "ai_geo_reason": "The arrest is connected to the 2013 chemical attack in Ghouta, Syria.",
       "ai_geo_fingerprint": "97f8752b909950c86e9abf1a9083167376b280d53980abb8fe9602d3a078a421",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-5d346fec8b7c3577"
     },
     {
       "id": "ca6b5a857570fc3f",
@@ -334879,7 +334826,7 @@
       "collection_locale": null,
       "published": "2026-04-29T07:00:00+00:00",
       "source": "Department of Justice (.gov)",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQWEFyd2s4cHNVXzhsMHl4emVxTjhqOXFUT2R4RVNwOTBCWnhzN2VIRW9QTTdTRjMzR0VqTENLcldJbExZdWFNc2wxeVNpdWNXT1BJSG1xZVYwaWZFbThFU2RkXzR5T3FHOTloY2RqSzEwNFJ2UGljYXVDZlJlYTdiZktEOTA5M2txTWNmdGtlWHlnSFh3dkJsSFFrWF9oWVdhbTZHSjBJejViSVhhUWJrOVp3c0wzVzlfS3c?oc=5",
       "collector": "Google News RSS",
       "country": "United States",
@@ -334894,7 +334841,8 @@
       "targeted_source": "U.S. Department of Justice",
       "targeted_source_kind": "official_primary_source",
       "sources": [
-        "Department of Justice (.gov)"
+        "Department of Justice (.gov)",
+        "CNN"
       ],
       "related_articles": [
         {
@@ -334905,14 +334853,24 @@
           "published": "2026-04-29T07:00:00+00:00",
           "source": "Department of Justice (.gov)",
           "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNVUpYTDhBVV9CRUs2Z2gybF9yUndkOElOMHRJV01lSFk2LURpcDc3SFJKdGhZb292dmI1QjNJeWF0T2FwTkJZX041dE5tbnEwNVZobU1hM0JiaXoxb2RiUWJGMVVuMVl0RmZIV19vSEFQNWxhSXFNMkgzbWtvMV92bVZIaXFuMnRQdXV5ckNGT1FJSGFLYzM3ejJNdzFYLTlCSlpGUERuUEJwWWpISkg3WFZsZ0NlVDA?oc=5"
+        },
+        {
+          "title": "Man convicted of aiding Islamic State, jury deadlocks on Kabul airport bombing role",
+          "original_title": "Man convicted of aiding Islamic State group, but jury deadlocks on alleged role in deadly Kabul airport bombing",
+          "original_language": "en",
+          "summary": "A federal jury has convicted a defendant of providing material support to the Islamic State, though it deadlocked on more severe allegations concerning the deadly Kabul airport bombing.",
+          "published": "2026-04-29T07:00:00+00:00",
+          "source": "CNN",
+          "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE05aC1xdjFPNTFacmpqdGNWSUtQUU0xNEZZVDJNeDkwR041NzBZaGNhMTlwSTNlMWZVVk9WaEJNN19UMnN5SjdKRzFfX2FnN3ZwYzNkMVVvenprQ2c0eWlqTGZuQXdnbFFWWVlmNUI1NnhocndQWXRKbEw4bUs?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 3,
       "first_reported": "2026-04-29T07:00:00+00:00",
       "last_reported": "2026-04-29T07:00:00+00:00",
-      "dedup_confidence": 0.99,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "same_normalized_title"
+        "same_normalized_title",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
@@ -334938,71 +334896,9 @@
       "ai_geo_reason": "Trial handled by a U.S. federal jury (Department of Justice).",
       "ai_geo_fingerprint": "6ae7b037a39dda4d0306ef3428393de1e785701b22e80ab5bf2cfb30999a9aea",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS-K"
-    },
-    {
-      "id": "01106e0375351663",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Legal / Judicial"
-      ],
-      "title": "Man convicted of aiding Islamic State, jury deadlocks on Kabul airport bombing role",
-      "summary": "A federal jury has convicted a defendant of providing material support to the Islamic State, though it deadlocked on more severe allegations concerning the deadly Kabul airport bombing.",
-      "original_title": "Man convicted of aiding Islamic State group, but jury deadlocks on alleged role in deadly Kabul airport bombing",
-      "original_summary": "Man convicted of aiding Islamic State group, but jury deadlocks on alleged role in deadly Kabul airport bombing CNN",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-29T07:00:00+00:00",
-      "source": "CNN",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE05aC1xdjFPNTFacmpqdGNWSUtQUU0xNEZZVDJNeDkwR041NzBZaGNhMTlwSTNlMWZVVk9WaEJNN19UMnN5SjdKRzFfX2FnN3ZwYzNkMVVvenprQ2c0eWlqTGZuQXdnbFFWWVlmNUI1NnhocndQWXRKbEw4bUs?oc=5",
-      "collector": "Google News RSS",
-      "country": "United States",
-      "country_code": "US",
-      "city": "Washington",
-      "region": null,
-      "latitude": 38.89511,
-      "longitude": -77.03637,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "CNN",
-      "targeted_source_kind": "international_media",
-      "sources": [
-        "CNN"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-29T07:00:00+00:00",
-      "last_reported": "2026-04-29T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Major terrorism-related trial verdict and jury outcome involving the Islamic State.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "conviction of man for aiding Islamic State with deadlocked jury on Kabul airport bombing role",
-      "title_variants": [
-        "conviction of man for aiding Islamic State with deadlocked jury on Kabul airport bombing role"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "A federal jury has convicted a defendant"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Federal jury trial in the United States.",
-      "ai_geo_fingerprint": "266e589ee88cc79c9945a48267dcd871e9e570057fe13fba44956732afbfa640",
-      "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS-K",
+      "incident_id": "inc-d8d04df610698a97",
+      "source_article_fingerprints": []
     },
     {
       "id": "87ba9a25e287ada7",
@@ -335160,7 +335056,8 @@
       "ai_geo_reason": "Convicted in the UK.",
       "ai_geo_fingerprint": "7b7a3501f3a1384db23ab0f3f327430a94ccbb16d355f296186d2682f610ad5c",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-68d378df3357a4ea"
     },
     {
       "id": "5aabd496b261b7ef",
@@ -335527,74 +335424,6 @@
       "incident_id": "inc-e5fbd45191a276b7"
     },
     {
-      "id": "fe719da69271ec4b",
-      "category": "Legal / Judicial",
-      "categories": [
-        "Legal / Judicial"
-      ],
-      "title": "Nguyen Dinh Thang sentenced to 11 years in prison for terrorism",
-      "summary": "Nguyen Dinh Thang was convicted and sentenced to 11 years imprisonment on terrorism charges.",
-      "original_title": "Tuyên phạt Nguyễn Đình Thắng 11 năm tù về tội Khủng bố",
-      "original_summary": "",
-      "original_language": "vi",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-28T14:15:00+00:00",
-      "source": "baocantho.com.vn",
-      "source_count": 1,
-      "url": "https://baocantho.com.vn/tuyen-phat-nguyen-dinh-thang-11-nam-tu-ve-toi-khung-bo-a203309.html",
-      "collector": "GDELT DOC 2.0",
-      "acquisition_channel": "gdelt_doc_search",
-      "country": "Vietnam",
-      "country_code": "VN",
-      "city": "Hanoi",
-      "region": null,
-      "latitude": 21.0245,
-      "longitude": 105.84117,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "source_article_fingerprints": [
-        "f14664abb7adb33cea7321388d33a5e9e173bad89d62818862fa8adb963d4749"
-      ],
-      "sources": [
-        "baocantho.com.vn"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-28T14:15:00+00:00",
-      "last_reported": "2026-04-28T14:15:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v4-counter-terrorism-action",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Court conviction and sentencing for terrorism.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "sentencing of Nguyen Dinh Thang to 11 years for terrorism in Vietnam",
-      "title_variants": [
-        "sentencing of Nguyen Dinh Thang to 11 years for terrorism in Vietnam"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Nguyen Dinh Thang sentenced to 11 years in prison"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Vietnamese legal context and national media reporting.",
-      "ai_geo_fingerprint": "daa1ae672862e72ccd85ff92fe9c7604fa1fd0c0ac04e9294c14949bad0c7fcb",
-      "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
       "id": "1c1c638abca00429",
       "category": "Legal / Judicial",
       "categories": [
@@ -335610,7 +335439,7 @@
       "collection_locale": null,
       "published": "2026-04-28T08:15:00+00:00",
       "source": "tienphong.vn",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://tienphong.vn/ke-cam-dau-duong-day-khung-bo-bi-tuyen-an-11-nam-tu-post1839232.tpo",
       "collector": "GDELT DOC 2.0",
       "acquisition_channel": "gdelt_doc_search",
@@ -335623,15 +335452,27 @@
       "location_precision": "country_capital",
       "location_confidence": "high",
       "source_article_fingerprints": [
-        "b250e64a97dc50c532ae681767f193c157049152526f449f62e21e94549fe35a"
+        "b250e64a97dc50c532ae681767f193c157049152526f449f62e21e94549fe35a",
+        "f14664abb7adb33cea7321388d33a5e9e173bad89d62818862fa8adb963d4749"
       ],
       "sources": [
-        "tienphong.vn"
+        "tienphong.vn",
+        "baocantho.com.vn"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Nguyen Dinh Thang sentenced to 11 years in prison for terrorism",
+          "original_title": "Tuyên phạt Nguyễn Đình Thắng 11 năm tù về tội Khủng bố",
+          "original_language": "vi",
+          "summary": "Nguyen Dinh Thang was convicted and sentenced to 11 years imprisonment on terrorism charges.",
+          "published": "2026-04-28T14:15:00+00:00",
+          "source": "baocantho.com.vn",
+          "url": "https://baocantho.com.vn/tuyen-phat-nguyen-dinh-thang-11-nam-tu-ve-toi-khung-bo-a203309.html"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-04-28T08:15:00+00:00",
-      "last_reported": "2026-04-28T08:15:00+00:00",
+      "last_reported": "2026-04-28T14:15:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v4-counter-terrorism-action",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -335660,7 +335501,12 @@
       "ai_geo_reason": "Sentencing handed down by a court in Vietnam.",
       "ai_geo_fingerprint": "d98dbab4f516eed6ba454d6154e5fa4436ad831c4c53ed884f30cd2435161cc4",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-bb6c0693f57708a5",
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "eb09d01dcb30916d",
@@ -335728,216 +335574,8 @@
       "ai_geo_reason": "Ongoing legal trials taking place in Austria.",
       "ai_geo_fingerprint": "0a8a4d349ee6988052924ede9ab1ff360e70fce76b3b606d78ff0f2725447ae1",
       "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "8585bd48aeadfff8",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Fears of resurgence in Somali piracy after three vessels hijacked in a week",
-      "summary": "International monitors express concern over a major resurgence in Somali piracy after three commercial vessels were hijacked within a single week.",
-      "original_title": "Fears of resurgence in Somali piracy after three vessels hijacked in a week",
-      "original_summary": "Fears of resurgence in Somali piracy after three vessels hijacked in a week The Guardian",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-28T07:00:00+00:00",
-      "source": "The Guardian",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOendyVkEwTk9USkxMMnNPeDVLRmVzN1BzOUZPbndrc042d0tIWTRzLV96a1k1bzRSRVVKMFJOS3E5Qm9hNlFWWFhNRHNDUnR1czE4NjVnNHZzQWU4ZEl4WnFwc2FLR28wWkxNeWhZYmJfUTdNQ3U3c3UtRThucmVsOTZycENiaXU0c1JqOUlMMzM2djhRZUFmOGtVY0VvMDBfalZNeVJ6Q285TndsSVgw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "sources": [
-        "The Guardian"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-28T07:00:00+00:00",
-      "last_reported": "2026-04-28T07:00:00+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_url"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Multiple vessel hijackings confirming a severe maritime piracy surge.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "hijacking of three vessels within a week sparking fears of Somali piracy resurgence",
-      "title_variants": [
-        "hijacking of three vessels within a week sparking fears of Somali piracy resurgence"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Somali piracy after three vessels hijacked"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Maritime piracy events off the coast of Somalia.",
-      "ai_geo_fingerprint": "40a2b2ceec596f4bad53a0016b5b15baf7b017e9003dc0ed24e0cc391ba90257",
-      "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "5b684cd1e6d082bb",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "First video emerges of hijacked oil tanker crew held by pirates",
-      "summary": "Footage has emerged showing the crew of a hijacked oil tanker being held hostage by pirates.",
-      "original_title": "First video emerges of hijacked oil tanker crew held by pirates",
-      "original_summary": "First video emerges of hijacked oil tanker crew held by pirates dunyanews.tv",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-28T07:00:00+00:00",
-      "source": "dunyanews.tv",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPak1fTE1Fak9rQWxVYks4NmVrZUs2T3AycFB0YU5TeDdfWEhlZEVfNTdfU0h3ZWhmeVRkQXNwMVZPVkNiY3Q3SzNwVXMydzNPckpUSS1NYlRhYy1jZFJJYUhjd2F0cTBsRVBXNF9xRkxrcHBSUVZfUFo4b29lXzhJR3I1amhRckRXT2tfVU9WTkpLWDl1NTVMSGd0SkhiQkNsMTFrWHlR0gFWQVVfeXFMTnFxVkpIRFIwUE1zQ2FaRTFROXlDNXJWYkdUWV9KOGEwdERPVTRnaDZEdFhVVDUtd2Y4X2JvMkRlR1BtU0tCV2o3RnFuUmE4NEpQbHhhX2c?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "medium",
-      "sources": [
-        "dunyanews.tv"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-28T07:00:00+00:00",
-      "last_reported": "2026-04-28T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Maritime piracy involving hijacked vessel and hostages is explicitly in scope.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Hostage video emerges of hijacked oil tanker crew held by pirates",
-      "title_variants": [
-        "Hostage video emerges of hijacked oil tanker crew held by pirates"
-      ],
-      "location_confidence_score": 0.8,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "First video emerges of hijacked oil tanker crew held by pirates"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Relates to the ongoing Somali pirate hijackings.",
-      "ai_geo_fingerprint": "36fd32a16cd79e399556edb80974113daf8cbab25651c174df9efb044e85b2a0",
-      "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "c9b71dbe243d3cb5",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Distress audio of Pakistani hostage surfaces after Somali pirates seize tanker",
-      "summary": "Audio recordings from a Pakistani hostage have emerged following the seizure of an oil tanker by Somali pirates.",
-      "original_title": "Distress audio of Pakistani hostage surfaces after Somali pirates seize tanker",
-      "original_summary": "Distress audio of Pakistani hostage surfaces after Somali pirates seize tanker Hum News English",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-28T07:00:00+00:00",
-      "source": "Hum News English",
-      "source_count": 3,
-      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNYkRqZlBWaGFId3VpWHFqMGM2ZmJZTzNpaGlIMVRRWlQ5VG50V3NFNGdWNDJ0dWFoRnBPVDFlTjlmMU15WHAtUkFrMkJ3NVh5WE96NllwM3RldE1BSGVWYUpUd3Y1ek5ib0JzbHRHLWUtLVVZWk1PZVhreVhyTmxZZ190TVZSRU5IZDJuejU3TUhZSmJWajlqeXVtbWNFbUppRmVTeGp6SC0wVjBVeFE?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "sources": [
-        "Hum News English",
-        "Pakistan Today",
-        "Aaj English TV"
-      ],
-      "related_articles": [
-        {
-          "title": "New video of Pakistani crew held hostage by Somali pirates emerges",
-          "original_title": "New video of Pakistani crew held hostage by Somali pirates emerges",
-          "original_language": "en",
-          "summary": "New video of Pakistani crew held hostage by Somali pirates emerges Pakistan Today",
-          "published": "2026-04-29T07:00:00+00:00",
-          "source": "Pakistan Today",
-          "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPb0wyUnRSWWdBM2szN1J5M1lPNnNBUE1rR1lBbmhXbUV2RWFIRzJYQUw1dFZicW1uMTg5cWtTT1NNS0tqOFNURDVtQnF1M291R2o0OFF1TVZvV2tnR05hOGZyT0dGUFppU0NONkduUEZvdUpLcVdvem03MnZTYTZERDZaczVMTHZucVRfYVN4a3hTaWNlYVViaGhaOEdINkZ6ZTNrcHJMZ3hWWWxGX2E4?oc=5"
-        },
-        {
-          "title": "Families of Pakistani crew kidnapped by Somali pirates seek urgent govt action",
-          "original_title": "Families of Pakistani crew kidnapped by Somali pirates seek urgent govt action",
-          "original_language": "en",
-          "summary": "Families of Pakistani crew kidnapped by Somali pirates seek urgent govt action Aaj English TV",
-          "published": "2026-04-30T07:00:00+00:00",
-          "source": "Aaj English TV",
-          "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNczlwejNiMFRFSC1rakowS1huY2VOeG1najZ4MEJRM1ZmUUFMdlRaRDB5MkVwSC0xNDhfSmRiaU83a19NLXdIbmliQ1dLWGNtSm1zUS1UbVUyQWtwTDdWc1E4UXJiaHkzdThHOHlzaHhpYThhVVFFYjJoTlNZaDNNajJXZy1Sd0Q1c0dWTGJaTmFLSmw2cHJVNDY0LVFsRUN0R2pPdHF2M3JHNlpnS3FtUUMwQUxTMk0?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-04-28T07:00:00+00:00",
-      "last_reported": "2026-04-30T07:00:00+00:00",
-      "dedup_confidence": 0.597,
-      "dedup_methods": [
-        "paraphrase_entity_context"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Maritime piracy and hostage-taking at sea is explicitly in scope.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Distress audio surfaces of Pakistani hostage held by Somali pirates after tanker seizure",
-      "title_variants": [
-        "Distress audio surfaces of Pakistani hostage held by Somali pirates after tanker seizure"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Somali pirates seize tanker"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Tanker seizure by Somali pirates off the Somali coast.",
-      "ai_geo_fingerprint": "3f233e651dc5b868eb99f9733ac1d9f243d25f3d9ef26aa763daf0d6093bb008",
-      "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-fad1094d8b762b1d"
     },
     {
       "id": "b377f4340d751b63",
@@ -336012,7 +335650,8 @@
       "ai_geo_reason": "Trial/sentencing took place in Ivory Coast.",
       "ai_geo_fingerprint": "6759065479b031d653eca7c9db5c5a61b2d021dd37de32a4b130c247c1434693",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-04c23a19d6598d0a"
     },
     {
       "id": "4b393682687d3cf5",
@@ -336111,7 +335750,8 @@
       "ai_geo_reason": "The attack plot targeted Vienna, Austria, where the suspects are on trial.",
       "ai_geo_fingerprint": "6416c9972c039b919bfdf587b097c666b18ba7a66d24915e17da7c151d373bbb",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-32e24a3a4a8de205"
     },
     {
       "id": "ee14af6e94a0379d",
@@ -336267,7 +335907,8 @@
       "ai_geo_reason": "Judicial appeal involving a French company tried under French jurisdiction.",
       "ai_geo_fingerprint": "f3c859fe22eae7d6cbf630e523cfa87fdd7180a85fd6af24b7dd8110bbeafeb1",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-579e66604b9b2858"
     },
     {
       "id": "0bae797c7cf85ee2",
@@ -336330,7 +335971,8 @@
       "ai_geo_reason": "Explicitly states the trial and sentencing occurred in Rostov-on-Don, Russia.",
       "ai_geo_fingerprint": "fd0c59c5036f59cd44626835a8dd644ea4f9fca0f79e5ff6b5ed428ae169d924",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-40ec71eeaf177019"
     },
     {
       "id": "55bc38698aa0ad75",
@@ -336544,91 +336186,8 @@
       "ai_geo_reason": "Arrest and operation took place within Mozambique.",
       "ai_geo_fingerprint": "4a7d4f47c31b246d807532a7407da364e15829cb01437fdd6ce6b6957adaf985",
       "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "7e0e787739a3fe49",
-      "category": "Legal / Judicial",
-      "categories": [
-        "Legal / Judicial"
-      ],
-      "title": "Trial: Man allegedly planned attack on Swift concert",
-      "summary": "Court proceedings are underway for a man accused of plotting a terrorist attack on a Taylor Swift concert in Austria.",
-      "original_title": "Prozess : Mann soll Anschlag auf Swift - Konzert geplant haben",
-      "original_summary": "",
-      "original_language": "de",
-      "collection_language": "de",
-      "collection_language_name": "German",
-      "collection_locale": null,
-      "published": "2026-04-28T06:00:00+00:00",
-      "source": "br.de",
-      "source_count": 2,
-      "url": "https://www.br.de/nachrichten/deutschland-welt/prozess-mann-soll-anschlag-auf-swift-konzert-geplant-haben,VI3R9mu",
-      "collector": "GDELT DOC 2.0",
-      "acquisition_channel": "gdelt_doc_search",
-      "country": "Austria",
-      "country_code": "AT",
-      "city": "Vienna",
-      "region": null,
-      "latitude": 48.20849,
-      "longitude": 16.37208,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "source_article_fingerprints": [
-        "12209e230bc773ed1c1e1695b12d813bc653a00a1259a4b73c482df39f59b684",
-        "a097267b0e4b526d9dca9255595656ab8c9d61456593d8b1a1d26127cd34b2e9"
-      ],
-      "sources": [
-        "br.de",
-        "athensvoice.gr"
-      ],
-      "related_articles": [
-        {
-          "title": "Austria: 21-year-old confesses to planning Taylor Swift concert bloodbath",
-          "original_title": "Αυστρία : Ομολόγησε ο 21χρονος που σχεδίαζε λουτρό αίματος στη συναυλία της Τέιλορ Σουίφτ",
-          "original_language": "el",
-          "summary": "The 21-year-old suspect has confessed in court to planning a terrorist attack on Taylor Swift's concert in Austria.",
-          "published": "2026-04-28T12:00:00+00:00",
-          "source": "athensvoice.gr",
-          "url": "https://www.athensvoice.gr/epikairotita/diethni/960261/austria-omologise-o-21hronos-pou-shediaze-loutro-aimatos-sti-sunaulia-tis-teilor-souift/"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-04-28T06:00:00+00:00",
-      "last_reported": "2026-04-28T12:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v4-counter-terrorism-action",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Judicial proceedings for a terrorist plot.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "trial of man accused of plotting attack on Taylor Swift concert in Austria",
-      "title_variants": [
-        "trial of man accused of plotting attack on Taylor Swift concert in Austria"
-      ],
-      "dedup_confidence": 0.767,
-      "dedup_methods": [
-        "title_plus_anchor"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "planned attack on Swift concert in Austria"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Thwarted concert terror plot trial taking place in Austria.",
-      "ai_geo_fingerprint": "e576b1ce0cb933a150244f8e2dd653035ab1adc901052710ff9979dabb1663f8",
-      "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-64f382da74b248f3"
     },
     {
       "id": "484a257280e1174d",
@@ -336785,7 +336344,7 @@
       "collection_locale": null,
       "published": "2026-04-27T05:15:00+00:00",
       "source": "profil.at",
-      "source_count": 1,
+      "source_count": 3,
       "url": "https://www.profil.at/dasfruehstueck/swift-terror-prozess-so-will-anwaeltin-beran-a-nach-wenigen-jahren-freibekommen/403153702",
       "collector": "GDELT DOC 2.0",
       "acquisition_channel": "gdelt_doc_search",
@@ -336798,15 +336357,38 @@
       "location_precision": "country_capital",
       "location_confidence": "high",
       "source_article_fingerprints": [
+        "12209e230bc773ed1c1e1695b12d813bc653a00a1259a4b73c482df39f59b684",
+        "a097267b0e4b526d9dca9255595656ab8c9d61456593d8b1a1d26127cd34b2e9",
         "df95c796adac51015ed0d99f6ed1ba2fb792655e602ad7fdbb147174a0991889"
       ],
       "sources": [
-        "profil.at"
+        "profil.at",
+        "br.de",
+        "athensvoice.gr"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Trial: Man allegedly planned attack on Swift concert",
+          "original_title": "Prozess : Mann soll Anschlag auf Swift - Konzert geplant haben",
+          "original_language": "de",
+          "summary": "Court proceedings are underway for a man accused of plotting a terrorist attack on a Taylor Swift concert in Austria.",
+          "published": "2026-04-28T06:00:00+00:00",
+          "source": "br.de",
+          "url": "https://www.br.de/nachrichten/deutschland-welt/prozess-mann-soll-anschlag-auf-swift-konzert-geplant-haben,VI3R9mu"
+        },
+        {
+          "title": "Austria: 21-year-old confesses to planning Taylor Swift concert bloodbath",
+          "original_title": "Αυστρία : Ομολόγησε ο 21χρονος που σχεδίαζε λουτρό αίματος στη συναυλία της Τέιλορ Σουίφτ",
+          "original_language": "el",
+          "summary": "The 21-year-old suspect has confessed in court to planning a terrorist attack on Taylor Swift's concert in Austria.",
+          "published": "2026-04-28T12:00:00+00:00",
+          "source": "athensvoice.gr",
+          "url": "https://www.athensvoice.gr/epikairotita/diethni/960261/austria-omologise-o-21hronos-pou-shediaze-loutro-aimatos-sti-sunaulia-tis-teilor-souift/"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-04-27T05:15:00+00:00",
-      "last_reported": "2026-04-27T05:15:00+00:00",
+      "last_reported": "2026-04-28T06:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v4-counter-terrorism-action",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -336835,7 +336417,12 @@
       "ai_geo_reason": "Legal proceedings regarding the Austria terror plot.",
       "ai_geo_fingerprint": "dd70c5e41899679cc0de2b98fa50aaa7870af70cd54ed85445fc922de64db2aa",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-32e24a3a4a8de205",
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "ec2581e71164e351",
@@ -336843,18 +336430,18 @@
       "categories": [
         "Maritime Piracy"
       ],
-      "title": "Somali piracy activity returns: Second ship hijacked in a week in the Indian Ocean",
-      "summary": "A second commercial vessel has been hijacked in the Indian Ocean within a week, marking a resurgence of Somali piracy activity.",
-      "original_title": "Somali piracy activity returns: Second ship hijacked in a week in the Indian Ocean",
-      "original_summary": "Somali piracy activity returns: Second ship hijacked in a week in the Indian Ocean صوت الإمارات",
+      "title": "Fears of resurgence in Somali piracy after three vessels hijacked in a week",
+      "summary": "International monitors express concern over a major resurgence in Somali piracy after three commercial vessels were hijacked within a single week.",
+      "original_title": "Fears of resurgence in Somali piracy after three vessels hijacked in a week",
+      "original_summary": "Fears of resurgence in Somali piracy after three vessels hijacked in a week The Guardian",
       "original_language": "en",
       "collection_language": "en",
       "collection_language_name": "English",
       "collection_locale": null,
       "published": "2026-04-26T07:00:00+00:00",
-      "source": "صوت الإمارات",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOTTB0YzBDRGt6MkZkbk1TZkVIMV9SOFI2ZTFkeWpuWEhkQXpzNjc1T1NQVUdQb1BCMzBQTVRPdTVfQWdZSUY1SmZLbS1kNHpXWDF3aXBIblI3ZnRkTHRaYmVvd2FZVlVWYVF2QUczYWtWRVlYWmtXdUtqZjJaUTF2QWFVZFNFNzgzZE0yVzduWTlPSFBoWnVjdkJmdXhfdWMzWl9YYXJORWV0TmFDWWhHc2JvZEhKOG1aVmg2R0hja3hPUkVkMUt6bDRxSUxRQQ?oc=5",
+      "source": "The Guardian",
+      "source_count": 7,
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOendyVkEwTk9USkxMMnNPeDVLRmVzN1BzOUZPbndrc042d0tIWTRzLV96a1k1bzRSRVVKMFJOS3E5Qm9hNlFWWFhNRHNDUnR1czE4NjVnNHZzQWU4ZEl4WnFwc2FLR28wWkxNeWhZYmJfUTdNQ3U3c3UtRThucmVsOTZycENiaXU0c1JqOUlMMzM2djhRZUFmOGtVY0VvMDBfalZNeVJ6Q285TndsSVgw?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
       "country_code": "SO",
@@ -336866,7 +336453,12 @@
       "location_confidence": "high",
       "sources": [
         "صوت الإمارات",
-        "Seatrade Maritime News"
+        "Seatrade Maritime News",
+        "The Guardian",
+        "dunyanews.tv",
+        "Hum News English",
+        "Pakistan Today",
+        "Aaj English TV"
       ],
       "related_articles": [
         {
@@ -336877,11 +336469,56 @@
           "published": "2026-04-26T07:00:00+00:00",
           "source": "Seatrade Maritime News",
           "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOQ2ZJYkVUaWs0RFYtWnYwQ19aVzBsbDFwSE8zdFNZVjNyUExtOFJuYVVlTWdTTzRnUG0zdHB5NFJ2VXlDdHFUSEZ1VWRqYjFGbUJyaGUtcU9JWVA0NVl3RThBVVBMNERmR1BaWmNVZUZSaW1ZMVgzOURHbFFxV0VmSFA0eXMwbDNsNDIxdGV6TQ?oc=5"
+        },
+        {
+          "title": "Somali piracy activity returns: Second ship hijacked in a week in the Indian Ocean",
+          "original_title": "Somali piracy activity returns: Second ship hijacked in a week in the Indian Ocean",
+          "original_language": "en",
+          "summary": "A second commercial vessel has been hijacked in the Indian Ocean within a week, marking a resurgence of Somali piracy activity.",
+          "published": "2026-04-26T07:00:00+00:00",
+          "source": "صوت الإمارات",
+          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOTTB0YzBDRGt6MkZkbk1TZkVIMV9SOFI2ZTFkeWpuWEhkQXpzNjc1T1NQVUdQb1BCMzBQTVRPdTVfQWdZSUY1SmZLbS1kNHpXWDF3aXBIblI3ZnRkTHRaYmVvd2FZVlVWYVF2QUczYWtWRVlYWmtXdUtqZjJaUTF2QWFVZFNFNzgzZE0yVzduWTlPSFBoWnVjdkJmdXhfdWMzWl9YYXJORWV0TmFDWWhHc2JvZEhKOG1aVmg2R0hja3hPUkVkMUt6bDRxSUxRQQ?oc=5"
+        },
+        {
+          "title": "First video emerges of hijacked oil tanker crew held by pirates",
+          "original_title": "First video emerges of hijacked oil tanker crew held by pirates",
+          "original_language": "en",
+          "summary": "Footage has emerged showing the crew of a hijacked oil tanker being held hostage by pirates.",
+          "published": "2026-04-28T07:00:00+00:00",
+          "source": "dunyanews.tv",
+          "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPak1fTE1Fak9rQWxVYks4NmVrZUs2T3AycFB0YU5TeDdfWEhlZEVfNTdfU0h3ZWhmeVRkQXNwMVZPVkNiY3Q3SzNwVXMydzNPckpUSS1NYlRhYy1jZFJJYUhjd2F0cTBsRVBXNF9xRkxrcHBSUVZfUFo4b29lXzhJR3I1amhRckRXT2tfVU9WTkpLWDl1NTVMSGd0SkhiQkNsMTFrWHlR0gFWQVVfeXFMTnFxVkpIRFIwUE1zQ2FaRTFROXlDNXJWYkdUWV9KOGEwdERPVTRnaDZEdFhVVDUtd2Y4X2JvMkRlR1BtU0tCV2o3RnFuUmE4NEpQbHhhX2c?oc=5"
+        },
+        {
+          "title": "Distress audio of Pakistani hostage surfaces after Somali pirates seize tanker",
+          "original_title": "Distress audio of Pakistani hostage surfaces after Somali pirates seize tanker",
+          "original_language": "en",
+          "summary": "Audio recordings from a Pakistani hostage have emerged following the seizure of an oil tanker by Somali pirates.",
+          "published": "2026-04-28T07:00:00+00:00",
+          "source": "Hum News English",
+          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNYkRqZlBWaGFId3VpWHFqMGM2ZmJZTzNpaGlIMVRRWlQ5VG50V3NFNGdWNDJ0dWFoRnBPVDFlTjlmMU15WHAtUkFrMkJ3NVh5WE96NllwM3RldE1BSGVWYUpUd3Y1ek5ib0JzbHRHLWUtLVVZWk1PZVhreVhyTmxZZ190TVZSRU5IZDJuejU3TUhZSmJWajlqeXVtbWNFbUppRmVTeGp6SC0wVjBVeFE?oc=5"
+        },
+        {
+          "title": "New video of Pakistani crew held hostage by Somali pirates emerges",
+          "original_title": "New video of Pakistani crew held hostage by Somali pirates emerges",
+          "original_language": "en",
+          "summary": "New video of Pakistani crew held hostage by Somali pirates emerges Pakistan Today",
+          "published": "2026-04-29T07:00:00+00:00",
+          "source": "Pakistan Today",
+          "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPb0wyUnRSWWdBM2szN1J5M1lPNnNBUE1rR1lBbmhXbUV2RWFIRzJYQUw1dFZicW1uMTg5cWtTT1NNS0tqOFNURDVtQnF1M291R2o0OFF1TVZvV2tnR05hOGZyT0dGUFppU0NONkduUEZvdUpLcVdvem03MnZTYTZERDZaczVMTHZucVRfYVN4a3hTaWNlYVViaGhaOEdINkZ6ZTNrcHJMZ3hWWWxGX2E4?oc=5"
+        },
+        {
+          "title": "Families of Pakistani crew kidnapped by Somali pirates seek urgent govt action",
+          "original_title": "Families of Pakistani crew kidnapped by Somali pirates seek urgent govt action",
+          "original_language": "en",
+          "summary": "Families of Pakistani crew kidnapped by Somali pirates seek urgent govt action Aaj English TV",
+          "published": "2026-04-30T07:00:00+00:00",
+          "source": "Aaj English TV",
+          "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNczlwejNiMFRFSC1rakowS1huY2VOeG1najZ4MEJRM1ZmUUFMdlRaRDB5MkVwSC0xNDhfSmRiaU83a19NLXdIbmliQ1dLWGNtSm1zUS1UbVUyQWtwTDdWc1E4UXJiaHkzdThHOHlzaHhpYThhVVFFYjJoTlNZaDNNajJXZy1Sd0Q1c0dWTGJaTmFLSmw2cHJVNDY0LVFsRUN0R2pPdHF2M3JHNlpnS3FtUUMwQUxTMk0?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 7,
       "first_reported": "2026-04-26T07:00:00+00:00",
-      "last_reported": "2026-04-27T07:00:00+00:00",
+      "last_reported": "2026-04-28T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -336890,7 +336527,7 @@
       "ai_current_ct_event": true,
       "ai_selected": true,
       "translated_to_english": false,
-      "ai_canonical_event": "hijacking of a second ship in a week by pirates in the Indian Ocean off Somalia",
+      "ai_canonical_event": "hijacking of three vessels within a week sparking fears of Somali piracy resurgence",
       "title_variants": [
         "hijacking of a second ship in a week by pirates in the Indian Ocean off Somalia"
       ],
@@ -336909,12 +336546,14 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "title_plus_anchor",
-        "same_url"
+        "same_url",
+        "same_incident"
       ],
       "source_article_fingerprints": [
         "7d32953c0c45e4ed42bcd439daa3d6eaa26aa0c786ed17a795f46d9c07bc69eb"
       ],
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-47e78ee1c60ed658"
     },
     {
       "id": "bb48f01bc56accbb",
@@ -337060,7 +336699,8 @@
       "dedup_methods": [
         "title_plus_anchor"
       ],
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-27c7591b21449840"
     },
     {
       "id": "048133aae5f1bf48",
@@ -337355,7 +336995,8 @@
       "ai_geo_reason": "Arrest occurred in Borno State, Nigeria.",
       "ai_geo_fingerprint": "ea6926abaa76eb598a215ab08a94500d59607f0e17861b475bf8dbe0379d3929",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-e47ed0b53e4a7300"
     },
     {
       "id": "3efe33f2e1ce18dd",
@@ -337433,97 +337074,6 @@
       "incident_id": "inc-bdaa4c92fad29046"
     },
     {
-      "id": "74b2f38934fab630",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Somalia piracy: Hijackers seize oil tanker and take 17 crew hostage",
-      "summary": "Suspected Somali pirates have hijacked an oil tanker off the coast of Somalia and taken 17 crew members hostage.",
-      "original_title": "Somalia piracy: Hijackers seize oil tanker and take 17 crew hostage",
-      "original_summary": "Somalia piracy: Hijackers seize oil tanker and take 17 crew hostage BBC",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-24T07:00:00+00:00",
-      "source": "BBC",
-      "source_count": 3,
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBNRzdzX3VTaTlLc0t6NFRPblZjeUg5dElzLTh1TnZPUkJOWTVTQzNPTFhPNEpsSUo4a01RUEc4dEc0UktyeTdUOWUxT1VuUk1MZjMxVXdqd1lBZw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Somali Waters",
-      "latitude": 5.1521,
-      "longitude": 46.1996,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "sources": [
-        "BBC",
-        "Daily Times",
-        "Seatrade Maritime News"
-      ],
-      "related_articles": [
-        {
-          "title": "Somalia waters piracy incident leaves Pakistani crew hostage",
-          "original_title": "Somalia waters piracy incident leaves Pakistani crew hostage",
-          "original_language": "en",
-          "summary": "A piracy incident in Somali waters has resulted in a Pakistani crew being held hostage following a vessel seizure.",
-          "published": "2026-04-24T07:00:00+00:00",
-          "source": "Daily Times",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQR1dQeVF1ZktWWkRocWhxb2tpOFVhalR3WFVoOVV3Xy1PLS1KaWcwUFRTTzN6elExa3JLaTJNcmp3aHotSFBTeUR2QWgzaENqSGpObC0zZWlTa09qMVdzeUJMUGVJSWtHYlZBLTBzNkJnV25JUDFFX2VTYTQzYjBGand0YWkybFlERkZqN2FhbVBaNWJCOV9KRjV1UQ?oc=5"
-        },
-        {
-          "title": "Tanker approached by pirates off Somalia",
-          "original_title": "Tanker approached by pirates off Somalia",
-          "original_language": "en",
-          "summary": "A tanker was reported to have been approached by pirates off the coast of Somalia.",
-          "published": "2026-04-28T07:00:00+00:00",
-          "source": "Seatrade Maritime News",
-          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNUmFaMjN6MlI3b1NHT2g1ZWIxREgySEJ3bEdES1V0NXVPV0VDTGdiTldLclhvVUgtM3d3OUpUVEJ2dlIwbDZTdERoRkY0N2k4UzFDWUt5cEJDazRDY21XWnlCdWFWcGo3QzlOWTZXS3VDUFBwQm00eEttOUo2cFlVdEtfYnJhZ0l6?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-04-24T07:00:00+00:00",
-      "last_reported": "2026-04-28T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Direct maritime piracy incident involving a vessel hijacking and crew hostage-taking.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "hijacking of an oil tanker and kidnapping of 17 crew members by pirates off Somalia",
-      "title_variants": [
-        "hijacking of an oil tanker and kidnapping of 17 crew members by pirates off Somalia"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "entity_actor_event_signature",
-        "title_plus_anchor",
-        "same_url"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "off the coast of Somalia"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Piracy incident and hijacking off the coast of Somalia.",
-      "ai_geo_fingerprint": "012d689650af61a5748043e9b442ff6dbee95be3ca64b5b0b757dde3d488a111",
-      "ai_geo_inferred": true,
-      "source_article_fingerprints": [
-        "2aa79f34823eac9fcdafe478c04b97ee1a7dc493f5b83efa35ae738c62b3dfc3",
-        "505eb43dca3941f60442f718ecf4a2f55a1568b0c8db7e83ef4f399c31122f6b"
-      ],
-      "actor_group": ""
-    },
-    {
       "id": "1be92a6dbc3b7946",
       "category": "Legal / Judicial",
       "categories": [
@@ -337584,7 +337134,8 @@
       "ai_geo_reason": "Legal proceedings in a US federal appellate court regarding terrorism prosecutions.",
       "ai_geo_fingerprint": "4a9ba00d618a448ef00cf30a70f8d6672118eb9cd02097bcbd5e9f7b0bd7baff",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-46dda45d58dcc080"
     },
     {
       "id": "140b46c938c25449",
@@ -337807,131 +337358,8 @@
       "ai_geo_reason": "The event took place in the Amur region of Russia.",
       "ai_geo_fingerprint": "25f7142e14723b13f9e759721fc68124639568ef468cecc212918bd62c91adc5",
       "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "b23922ca59177c2a",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Tanker targeted in suspected pirate attack off Somalia",
-      "summary": "An oil tanker has been targeted in a suspected pirate attack off the coast of Somalia.",
-      "original_title": "Tanker targeted in suspected pirate attack off Somalia",
-      "original_summary": "Tanker targeted in suspected pirate attack off Somalia Baird Maritime",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-23T07:00:00+00:00",
-      "source": "Baird Maritime",
-      "source_count": 6,
-      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxONjlmWGkyMWFhMGRINWtpZ3VfTFIyRTVHdkRtdVNtRkRpa3pZRWdRdHFyMVRyam90M2FqOHlaNVlGMUpNUmdmSjZoZ0NYeElkV0FMZUFKRmxNLU9mbGxieG9VWFlneWNoZXBXU003Rkh1cjQyWVkyWG9jN3lVaTU4MFUxWHk5bVBDdlNUYklydk5WRkY0M01WRy01TG5vY1VMREExWm05Ukd4MWlHNUlF0gG8AUFVX3lxTE5GX254WkdqRzFKQXV3WU4xNnZSV3N0NFR4OEVXOXFPdHk5VlB5ZjdTbWRZdnhEMGRVVW16ZG5FLUstanNmbHZPTEV6Mk9OWFlyU3FxRVREZmJSd2RNUktHbGNmRmxVWFVLWXdFYzNXRlhfY295dHE0dk9WRlV6ZF9KbERZeGZTTS1VNXBmbExpTzlXTDhneDVjaG5wOUVzMDlwWEh4OXJhMjNlcElvV2FPcUNVc1pWVFg2OUJB?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Somali Coast",
-      "latitude": 5.1521,
-      "longitude": 46.1996,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "sources": [
-        "Baird Maritime",
-        "citizen.digital",
-        "The Straits Times",
-        "TradeWinds News",
-        "Marine Link",
-        "EUNAVFOR"
-      ],
-      "related_articles": [
-        {
-          "title": "Ships seized as Somali pirate attacks surge: monitors",
-          "original_title": "Ships seized as Somali pirate attacks surge: monitors",
-          "original_language": "en",
-          "summary": "Maritime monitors report a surge in Somali pirate attacks resulting in multiple ship seizures.",
-          "published": "2026-04-27T07:00:00+00:00",
-          "source": "citizen.digital",
-          "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOX0tFTjczb2pjQnV6cWpSVFVxZmlvY3dCNFVPLUZUN2Q4RHd6NHRFOGRidGRCNEpVS1NqR2o0d1hkaDlQcUhCek9CcWtNZi01RVVDMEgwVlkzSmJZWS1JUWRsLVp2cURYcGxSSFRxb25oWHRYalBWYUQ5M0ZZWGlrVHRJUHdYbzRTRVBNaVlzcmJMeGpMS21R?oc=5"
-        },
-        {
-          "title": "Ship hijacked by pirates off coast of Somalia",
-          "original_title": "Ship hijacked by pirates off coast of Somalia",
-          "original_language": "en",
-          "summary": "A cargo or commercial ship has been successfully hijacked by pirates off the coast of Somalia.",
-          "published": "2026-04-27T07:00:00+00:00",
-          "source": "TradeWinds News",
-          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNYXlfMFpYMS1uVGxCZU04STdqZXFuTmJ2SEhiWjdjTlRETHFZMWtPYWFPcXBDZERydzRMM0xsZTE4U0R1NjJ3cUZYb0ljczREZ201Y0pFaXVvZXhYS2lCT3V4ZzU0TzVwT0RRLWpzUUhsYTJZd1lPVU4yVFk5U2hXUDU0bHJkTk91MGJOa0EydmVEX29HWHVTMDFNVWM5T1Yw?oc=5"
-        },
-        {
-          "title": "Security groups claim suspected pirates are steering cargo vessels towards Somalia",
-          "original_title": "Security groups claim that suspected pirates are steering cargo vessels towards Somalia",
-          "original_language": "en",
-          "summary": "Maritime security groups report that suspected pirates are currently steering hijacked cargo vessels toward the Somali coast.",
-          "published": "2026-04-27T07:00:00+00:00",
-          "source": "Marine Link",
-          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPMFRPVGZRX254RHc2enpDSl8tVTVka3hvRWFzcnB4a2J1djBwbnNRaXhETlB5ZzRPQTBJTnV1LXhfSUxMOG9ILTFZdWlsT0FJTkhLVlJiMnUybkd1SDQtVkpwZFZPM0VGT01LMndrVUdKa0JMeHpfTEJTVkcyTHBKTGctcDgyb2tuM2pyaEtzY3JQVVhoamx6TElXTWhPSGNmVmxXVXc0anBBR2Nv?oc=5"
-        },
-        {
-          "title": "Piracy incidents off the northern coast of Somalia",
-          "original_title": "PIRACY INCIDENTS OFF THE NORTHERN COAST OF SOMALIA",
-          "original_language": "en",
-          "summary": "EUNAVFOR reports on recent piracy incidents occurring off the northern coast of Somalia.",
-          "published": "2026-04-28T07:00:00+00:00",
-          "source": "EUNAVFOR",
-          "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9Cd0VYVHhFTV83dTVzZ0tsUEhTOTA4cnFMV3NTcFZqSFdQd3U1TEhYdU5IRUx5T1Jwb2tJd3RtSERnQ0NrYXpmbFdKUGo4R1JCSWw2eGlmckN4T3FHOE90R0Z3d0p6RFo0TTVWWF95dU1KQQ?oc=5"
-        },
-        {
-          "title": "Firefight off Somalia as ship attacked by armed men on fishing boat",
-          "original_title": "Firefight off Somalia as ship attacked by armed men on fishing boat",
-          "original_language": "en",
-          "summary": "A firefight occurred off the coast of Somalia after armed men aboard a fishing boat attacked a ship.",
-          "published": "2026-04-23T07:00:00+00:00",
-          "source": "TradeWinds News",
-          "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNWWlrV3ppMHBEeHZYU2FBV0k2el9IYU1oR3FYSU85Ul9WTVh0RlhVYUtmRGN1TUN4ZGhBMTFzZEhSa2pqZ1NDV3FOQmotbFlwS1hsN1pGS2dCT2tnSGNwLTlhYXVnZC1yY0tjcFZKaDRUMlU0Ym5HdmxRMUREeVJwM3ZhWU5LM2lqZGxyc21ENUNHV2YwVElFSE9HdF9yRGJZRTJnb0xhNXh6VndSYk1pbHhnV2tnYUtDTGJlMi1n?oc=5"
-        }
-      ],
-      "article_count": 6,
-      "first_reported": "2026-04-23T07:00:00+00:00",
-      "last_reported": "2026-04-28T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Maritime piracy incident involving a tanker attack.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "suspected pirate attack targeting a tanker off the coast of Somalia",
-      "title_variants": [
-        "suspected pirate attack targeting a tanker off the coast of Somalia"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "paraphrase_entity_context",
-        "entity_actor_event_signature",
-        "same_url"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "off the coast of Somalia"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Maritime pirate attack targeting a tanker off Somalia.",
-      "ai_geo_fingerprint": "1902b15c745174d32ac5d6ab311259091172761e7330bec4db4eb7651bc450d2",
-      "ai_geo_inferred": true,
-      "source_article_fingerprints": [
-        "44b08c5b86d181b4fc33eaee4bc03e0eced0c1165762c40ce54cbf792ae53483",
-        "55bf123e266283517e6d624d33840c9f8c5543d2f3bb800564679c3029bd469a",
-        "89e86e34530540fa0cb993905ec97d1c096978465bb73009a0996058b7d4c0d3",
-        "cd08f2937c58cda2b8eb36f310ed982a3c8f295386643a22d2d33fbad1364bb9",
-        "f4d33df592bbf413d9a74ed5d796c3ac998279066e63cd76758154fb8fcf8eec"
-      ],
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-ffba12a7bbf73ef9"
     },
     {
       "id": "29963f444a1cd75a",
@@ -337994,7 +337422,8 @@
       "ai_geo_reason": "Sentencing of a Minneapolis resident in a federal court in Minnesota.",
       "ai_geo_fingerprint": "0990b68bc2508bb803cafd957fb1bd96c96c7a3eac396863f65ae3471679ccb0",
       "ai_geo_inferred": false,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-75abfc67872858f2"
     },
     {
       "id": "8d66affde7f713d6",
@@ -338066,101 +337495,6 @@
       "incident_id": "inc-17359f5836d750eb"
     },
     {
-      "id": "7bfd1b49421544d1",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Joint Maritime Information Center Update to Advisory Note",
-      "summary": "The Joint Maritime Information Center released an update regarding regional maritime security and incidents.",
-      "original_title": "Joint Maritime Information Center Update 036 to JMIC Advisory Note: 01 March – 23 April 2026",
-      "original_summary": "Joint Maritime Information Center Update 036 to JMIC Advisory Note: 01 March – 23 April 2026 UKMTO",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-23T07:00:00+00:00",
-      "source": "UKMTO",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPUVZFbU9OUzdkSkRLN2RoYkJwQllFUW9PVm9OREZmaHdmd0VfLVNRelA5WERYNkxySm5TVmhSNnNaVGhveXEwWU42c1dTZG1SRVJ2TnBrdjRjdTh0ZEFSeFZLUVdjOC1TZDVpVGFrYy1LdVVvTHNHUXJfZXlzc1VWMi1mSUpzSWtBdUtfRWp6YlM?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Gulf of Aden / Somali Basin",
-      "latitude": 5.1521,
-      "longitude": 49.1981,
-      "location_precision": "region",
-      "location_confidence": "medium",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "UKMTO",
-      "targeted_source_kind": "official_maritime_source",
-      "sources": [
-        "UKMTO",
-        "EUNAVFOR"
-      ],
-      "related_articles": [
-        {
-          "title": "April 2026",
-          "original_title": "April 2026",
-          "original_language": "en",
-          "summary": "April 2026 EUNAVFOR",
-          "published": "2026-04-28T07:00:00+00:00",
-          "source": "EUNAVFOR",
-          "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE91YnZxWTNHNlN5TGd6c210dHBiLWVsVnNYcU5zcGdlSy1vWFNzVEUxNGN5a1hNQnZkeHJMa0EwbFBMNDZtcnVUZURuZFV2NlJ4UDBqcHJmcndUTFh0cTJHYk1zTQ?oc=5"
-        },
-        {
-          "title": "Joint Maritime Information Center Update to Advisory Note",
-          "original_title": "Joint Maritime Information Center Update 086 to JMIC Advisory Note: 01 March – 18 August 2026",
-          "original_language": "en",
-          "summary": "The Joint Maritime Information Center released an update regarding maritime security incidents in the region.",
-          "published": "2026-08-18T07:00:00+00:00",
-          "source": "UKMTO",
-          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPOUVmTTVRLVVCbmxseFJfanQwWUhUWFZzZXJOYXk5RUdfblZSS1UzWlQtdlE4Z1dsY0l0akI5Vlh2M3kwYXAxQllnMGpMWmtoTXA1bFhxSnQwa29hU2VxVzk2SUM0UTItYWMxQjJnZ0JhNjhsZTJkSVVydS1sRDVnb2M5RS1ueU1fSUdqa2ItbEQ2SUxEY2FBRXNCOF9HX2pWNGFaUmV0bEh4blE0dVE1aV81dzJmSnVEZ2JsTFk3Smc0ekk?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-04-23T07:00:00+00:00",
-      "last_reported": "2026-08-18T07:00:00+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "very_high_title_similarity",
-        "same_normalized_title"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v3-specialist",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 70,
-      "ai_relevance_reason": "Provides official security tracking and operational updates on maritime incidents and piracy.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Joint Maritime Information Center issues advisory update",
-      "title_variants": [
-        "Joint Maritime Information Center issues advisory update"
-      ],
-      "location_confidence_score": 0.7,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Joint Maritime Information Center Update"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Advisory concerns regional maritime security typically tied to the Horn of Africa/Somali basin context.",
-      "ai_geo_fingerprint": "4a15c585856042cf0d1c73f8564e46d271be5b264f30105cbf1ad73f3dbb0279",
-      "ai_geo_inferred": true,
-      "source_article_fingerprints": [
-        "156a1ee717b72c6a68d8f1bd2a843a6b7ac1ad4b6fc4ba4c0f81ebd87159b827"
-      ],
-      "actor_group": ""
-    },
-    {
       "id": "76231a3cdc3b7014",
       "category": "Legal / Judicial",
       "categories": [
@@ -338226,7 +337560,8 @@
       "ai_geo_reason": "Federal case in the United States concerning Hadi Matar.",
       "ai_geo_fingerprint": "4024c63a247e8b11a4d272f63e86b3885d8571ca14b2d9a0459ef2f84aefd96e",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-77b083ae64d89540"
     },
     {
       "id": "41f5dfa4832efe99",
@@ -338295,7 +337630,8 @@
       "ai_geo_reason": "Explicitly mentions Abuja court and Department of State Services (DSS).",
       "ai_geo_fingerprint": "69a9464fa79c4342cd9e9faf56596a3354ed197789a7ec4ab4e68c6a03901f12",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-6460fceef177cb84"
     },
     {
       "id": "332f22da63d5cb4a",
@@ -338356,7 +337692,8 @@
       "ai_geo_reason": "Charges filed against a man in Quebec, Canada, for online terrorist recruitment.",
       "ai_geo_fingerprint": "054d174aab5d5ca61f13903b86c6eb740fdfdb67321277e0f20e6ebb595cfdad",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-802b0f435ce04a16"
     },
     {
       "id": "2b50d0d94f4f2df0",
@@ -338419,7 +337756,8 @@
       "ai_geo_reason": "German law enforcement investigations; default to country/capital level since no specific city is given.",
       "ai_geo_fingerprint": "3f2f69f4a491e0049497978239911ebafb3383d272f7dd45b11ca311b718d8df",
       "ai_geo_inferred": true,
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-1f4b273f1d2a2c55"
     },
     {
       "id": "c8cdb5324049f0be",
@@ -338480,7 +337818,8 @@
       "ai_geo_reason": "Explicitly names Adana as the location of the lawsuit.",
       "ai_geo_fingerprint": "4199d11026f1b4122b301a1406bdf726d55728990c33d05311971726871297fe",
       "ai_geo_inferred": false,
-      "actor_group": "PKK"
+      "actor_group": "PKK",
+      "incident_id": "inc-1c5b7186206b3f08"
     },
     {
       "id": "fa06fd6a9c19c2c2",
@@ -338541,7 +337880,8 @@
       "ai_geo_reason": "Sentencing occurred in the Republic of Buryatia, Russia.",
       "ai_geo_fingerprint": "deee262cd457cfc19e6fb104da906d1800ef8e30fec49ae6b43b66bef62edeed",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-eea003a6ae651195"
     },
     {
       "id": "d278bb06d76129a6",
@@ -338688,18 +338028,18 @@
       "categories": [
         "Maritime Piracy"
       ],
-      "title": "Diaplous: Possible armed boarding off Somalia",
-      "summary": "Diaplous reports a potential armed boarding incident occurring off the coast of Somalia.",
-      "original_title": "Diaplous: Possible armed boarding off Somalia",
-      "original_summary": "Diaplous: Possible armed boarding off Somalia safety4sea.com",
+      "title": "Somalia piracy: Hijackers seize oil tanker and take 17 crew hostage",
+      "summary": "Suspected Somali pirates have hijacked an oil tanker off the coast of Somalia and taken 17 crew members hostage.",
+      "original_title": "Somalia piracy: Hijackers seize oil tanker and take 17 crew hostage",
+      "original_summary": "Somalia piracy: Hijackers seize oil tanker and take 17 crew hostage BBC",
       "original_language": "en",
       "collection_language": "en",
       "collection_language_name": "English",
       "collection_locale": null,
       "published": "2026-04-22T07:00:00+00:00",
-      "source": "safety4sea.com",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9FZllDTW5mT0VaOUowVjB6LThUYV8xclRwaGgzdk5ZZ0J2ZERMUGpUX2Jua1Juc29udVFCT3RlaElDRXV6U1gzQ2RZNlUyd0ZoVzBLSnFyYXBGTDJ3M2I0Xy1EVy0tN0ZVSVFYUXRoTXhieHREb0tj?oc=5",
+      "source": "BBC",
+      "source_count": 11,
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBNRzdzX3VTaTlLc0t6NFRPblZjeUg5dElzLTh1TnZPUkJOWTVTQzNPTFhPNEpsSUo4a01RUEc4dEc0UktyeTdUOWUxT1VuUk1MZjMxVXdqd1lBZw?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
       "country_code": "SO",
@@ -338714,7 +338054,16 @@
       "targeted_source_kind": "specialist_media",
       "sources": [
         "safety4sea.com",
-        "TradeWinds News"
+        "TradeWinds News",
+        "Baird Maritime",
+        "citizen.digital",
+        "The Straits Times",
+        "Marine Link",
+        "EUNAVFOR",
+        "UKMTO",
+        "BBC",
+        "Daily Times",
+        "Seatrade Maritime News"
       ],
       "related_articles": [
         {
@@ -338725,26 +338074,117 @@
           "published": "2026-04-23T07:00:00+00:00",
           "source": "TradeWinds News",
           "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNWWlrV3ppMHBEeHZYU2FBV0k2el9IYU1oR3FYSU85Ul9WTVh0RlhVYUtmRGN1TUN4ZGhBMTFzZEhSa2pqZ1NDV3FOQmotbFlwS1hsN1pGS2dCT2tnSGNwLTlhYXVnZC1yY0tjcFZKaDRUMlU0Ym5HdmxRMUREeVJwM3ZhWU5LM2lqZGxyc21ENUNHV2YwVElFSE9HdF9yRGJZRTJnb0xhNXh6VndSYk1pbHhnV2tnYUtDTGJlMi1n?oc=5"
+        },
+        {
+          "title": "Tanker targeted in suspected pirate attack off Somalia",
+          "original_title": "Tanker targeted in suspected pirate attack off Somalia",
+          "original_language": "en",
+          "summary": "An oil tanker has been targeted in a suspected pirate attack off the coast of Somalia.",
+          "published": "2026-04-23T07:00:00+00:00",
+          "source": "Baird Maritime",
+          "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxONjlmWGkyMWFhMGRINWtpZ3VfTFIyRTVHdkRtdVNtRkRpa3pZRWdRdHFyMVRyam90M2FqOHlaNVlGMUpNUmdmSjZoZ0NYeElkV0FMZUFKRmxNLU9mbGxieG9VWFlneWNoZXBXU003Rkh1cjQyWVkyWG9jN3lVaTU4MFUxWHk5bVBDdlNUYklydk5WRkY0M01WRy01TG5vY1VMREExWm05Ukd4MWlHNUlF0gG8AUFVX3lxTE5GX254WkdqRzFKQXV3WU4xNnZSV3N0NFR4OEVXOXFPdHk5VlB5ZjdTbWRZdnhEMGRVVW16ZG5FLUstanNmbHZPTEV6Mk9OWFlyU3FxRVREZmJSd2RNUktHbGNmRmxVWFVLWXdFYzNXRlhfY295dHE0dk9WRlV6ZF9KbERZeGZTTS1VNXBmbExpTzlXTDhneDVjaG5wOUVzMDlwWEh4OXJhMjNlcElvV2FPcUNVc1pWVFg2OUJB?oc=5"
+        },
+        {
+          "title": "Ships seized as Somali pirate attacks surge: monitors",
+          "original_title": "Ships seized as Somali pirate attacks surge: monitors",
+          "original_language": "en",
+          "summary": "Maritime monitors report a surge in Somali pirate attacks resulting in multiple ship seizures.",
+          "published": "2026-04-27T07:00:00+00:00",
+          "source": "citizen.digital",
+          "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOX0tFTjczb2pjQnV6cWpSVFVxZmlvY3dCNFVPLUZUN2Q4RHd6NHRFOGRidGRCNEpVS1NqR2o0d1hkaDlQcUhCek9CcWtNZi01RVVDMEgwVlkzSmJZWS1JUWRsLVp2cURYcGxSSFRxb25oWHRYalBWYUQ5M0ZZWGlrVHRJUHdYbzRTRVBNaVlzcmJMeGpMS21R?oc=5"
+        },
+        {
+          "title": "Ship hijacked by pirates off coast of Somalia",
+          "original_title": "Ship hijacked by pirates off coast of Somalia",
+          "original_language": "en",
+          "summary": "A cargo or commercial ship has been successfully hijacked by pirates off the coast of Somalia.",
+          "published": "2026-04-27T07:00:00+00:00",
+          "source": "TradeWinds News",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNYXlfMFpYMS1uVGxCZU04STdqZXFuTmJ2SEhiWjdjTlRETHFZMWtPYWFPcXBDZERydzRMM0xsZTE4U0R1NjJ3cUZYb0ljczREZ201Y0pFaXVvZXhYS2lCT3V4ZzU0TzVwT0RRLWpzUUhsYTJZd1lPVU4yVFk5U2hXUDU0bHJkTk91MGJOa0EydmVEX29HWHVTMDFNVWM5T1Yw?oc=5"
+        },
+        {
+          "title": "Security groups claim suspected pirates are steering cargo vessels towards Somalia",
+          "original_title": "Security groups claim that suspected pirates are steering cargo vessels towards Somalia",
+          "original_language": "en",
+          "summary": "Maritime security groups report that suspected pirates are currently steering hijacked cargo vessels toward the Somali coast.",
+          "published": "2026-04-27T07:00:00+00:00",
+          "source": "Marine Link",
+          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPMFRPVGZRX254RHc2enpDSl8tVTVka3hvRWFzcnB4a2J1djBwbnNRaXhETlB5ZzRPQTBJTnV1LXhfSUxMOG9ILTFZdWlsT0FJTkhLVlJiMnUybkd1SDQtVkpwZFZPM0VGT01LMndrVUdKa0JMeHpfTEJTVkcyTHBKTGctcDgyb2tuM2pyaEtzY3JQVVhoamx6TElXTWhPSGNmVmxXVXc0anBBR2Nv?oc=5"
+        },
+        {
+          "title": "Piracy incidents off the northern coast of Somalia",
+          "original_title": "PIRACY INCIDENTS OFF THE NORTHERN COAST OF SOMALIA",
+          "original_language": "en",
+          "summary": "EUNAVFOR reports on recent piracy incidents occurring off the northern coast of Somalia.",
+          "published": "2026-04-28T07:00:00+00:00",
+          "source": "EUNAVFOR",
+          "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9Cd0VYVHhFTV83dTVzZ0tsUEhTOTA4cnFMV3NTcFZqSFdQd3U1TEhYdU5IRUx5T1Jwb2tJd3RtSERnQ0NrYXpmbFdKUGo4R1JCSWw2eGlmckN4T3FHOE90R0Z3d0p6RFo0TTVWWF95dU1KQQ?oc=5"
+        },
+        {
+          "title": "Joint Maritime Information Center Update to Advisory Note",
+          "original_title": "Joint Maritime Information Center Update 036 to JMIC Advisory Note: 01 March – 23 April 2026",
+          "original_language": "en",
+          "summary": "The Joint Maritime Information Center released an update regarding regional maritime security and incidents.",
+          "published": "2026-04-23T07:00:00+00:00",
+          "source": "UKMTO",
+          "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPUVZFbU9OUzdkSkRLN2RoYkJwQllFUW9PVm9OREZmaHdmd0VfLVNRelA5WERYNkxySm5TVmhSNnNaVGhveXEwWU42c1dTZG1SRVJ2TnBrdjRjdTh0ZEFSeFZLUVdjOC1TZDVpVGFrYy1LdVVvTHNHUXJfZXlzc1VWMi1mSUpzSWtBdUtfRWp6YlM?oc=5"
+        },
+        {
+          "title": "April 2026",
+          "original_title": "April 2026",
+          "original_language": "en",
+          "summary": "April 2026 EUNAVFOR",
+          "published": "2026-04-28T07:00:00+00:00",
+          "source": "EUNAVFOR",
+          "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE91YnZxWTNHNlN5TGd6c210dHBiLWVsVnNYcU5zcGdlSy1vWFNzVEUxNGN5a1hNQnZkeHJMa0EwbFBMNDZtcnVUZURuZFV2NlJ4UDBqcHJmcndUTFh0cTJHYk1zTQ?oc=5"
+        },
+        {
+          "title": "Somalia waters piracy incident leaves Pakistani crew hostage",
+          "original_title": "Somalia waters piracy incident leaves Pakistani crew hostage",
+          "original_language": "en",
+          "summary": "A piracy incident in Somali waters has resulted in a Pakistani crew being held hostage following a vessel seizure.",
+          "published": "2026-04-24T07:00:00+00:00",
+          "source": "Daily Times",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQR1dQeVF1ZktWWkRocWhxb2tpOFVhalR3WFVoOVV3Xy1PLS1KaWcwUFRTTzN6elExa3JLaTJNcmp3aHotSFBTeUR2QWgzaENqSGpObC0zZWlTa09qMVdzeUJMUGVJSWtHYlZBLTBzNkJnV25JUDFFX2VTYTQzYjBGand0YWkybFlERkZqN2FhbVBaNWJCOV9KRjV1UQ?oc=5"
+        },
+        {
+          "title": "Tanker approached by pirates off Somalia",
+          "original_title": "Tanker approached by pirates off Somalia",
+          "original_language": "en",
+          "summary": "A tanker was reported to have been approached by pirates off the coast of Somalia.",
+          "published": "2026-04-28T07:00:00+00:00",
+          "source": "Seatrade Maritime News",
+          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNUmFaMjN6MlI3b1NHT2g1ZWIxREgySEJ3bEdES1V0NXVPV0VDTGdiTldLclhvVUgtM3d3OUpUVEJ2dlIwbDZTdERoRkY0N2k4UzFDWUt5cEJDazRDY21XWnlCdWFWcGo3QzlOWTZXS3VDUFBwQm00eEttOUo2cFlVdEtfYnJhZ0l6?oc=5"
+        },
+        {
+          "title": "Diaplous: Possible armed boarding off Somalia",
+          "original_title": "Diaplous: Possible armed boarding off Somalia",
+          "original_language": "en",
+          "summary": "Diaplous reports a potential armed boarding incident occurring off the coast of Somalia.",
+          "published": "2026-04-22T07:00:00+00:00",
+          "source": "safety4sea.com",
+          "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9FZllDTW5mT0VaOUowVjB6LThUYV8xclRwaGgzdk5ZZ0J2ZERMUGpUX2Jua1Juc29udVFCT3RlaElDRXV6U1gzQ2RZNlUyd0ZoVzBLSnFyYXBGTDJ3M2I0Xy1EVy0tN0ZVSVFYUXRoTXhieHREb0tj?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 12,
       "first_reported": "2026-04-22T07:00:00+00:00",
-      "last_reported": "2026-04-23T07:00:00+00:00",
+      "last_reported": "2026-04-24T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v3-specialist",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
+      "ai_relevance_score": 90,
       "ai_relevance_reason": "Specific maritime security alert concerning an armed boarding/piracy incident at sea.",
       "ai_current_ct_event": true,
       "ai_selected": true,
       "translated_to_english": false,
-      "ai_canonical_event": "possible armed boarding of vessel off the coast of Somalia",
+      "ai_canonical_event": "hijacking of an oil tanker and kidnapping of 17 crew members by pirates off Somalia",
       "title_variants": [
         "possible armed boarding of vessel off the coast of Somalia"
       ],
-      "dedup_confidence": 0.596,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "paraphrase_entity_context"
+        "paraphrase_entity_context",
+        "same_incident"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_region_coordinates",
@@ -338762,7 +338202,18 @@
       "ai_geo_reason": "Maritime boarding attack off the coast of Somalia.",
       "ai_geo_fingerprint": "aa12aca8011c1ede9a2848e7ce059d56a308da66194dbdde683b798669eea0e9",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-a6ff29eea79f282f",
+      "source_article_fingerprints": [
+        "156a1ee717b72c6a68d8f1bd2a843a6b7ac1ad4b6fc4ba4c0f81ebd87159b827",
+        "2aa79f34823eac9fcdafe478c04b97ee1a7dc493f5b83efa35ae738c62b3dfc3",
+        "44b08c5b86d181b4fc33eaee4bc03e0eced0c1165762c40ce54cbf792ae53483",
+        "505eb43dca3941f60442f718ecf4a2f55a1568b0c8db7e83ef4f399c31122f6b",
+        "55bf123e266283517e6d624d33840c9f8c5543d2f3bb800564679c3029bd469a",
+        "89e86e34530540fa0cb993905ec97d1c096978465bb73009a0996058b7d4c0d3",
+        "cd08f2937c58cda2b8eb36f310ed982a3c8f295386643a22d2d33fbad1364bb9",
+        "f4d33df592bbf413d9a74ed5d796c3ac998279066e63cd76758154fb8fcf8eec"
+      ]
     },
     {
       "id": "0ffc9c262cd6b958",
@@ -338853,7 +338304,7 @@
       "collection_locale": "NG:en",
       "published": "2026-04-22T07:00:00+00:00",
       "source": "Shabelle Media Network",
-      "source_count": 2,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPSDJEc2s4U3dBTTR3OTNGNjBYZGVOVU4yODJmdlpxeURVN0szNnh1T3VZb3RJYnBfM0JSWm1ON2lNYi1mM2dPVEx3TUdUcWJrY3Z6RGhmaTJzR2FTTDNYMFNNUGl6V044VGZMVnV6aVZabktrZnMxSDR1Ml9tWUxNaERQYzNNYmxIamRabnI0dWZoVzJobVE?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -338869,10 +338320,22 @@
       "targeted_source_kind": "local_language_media",
       "sources": [
         "Shabelle Media Network",
-        "shabellemedia.com"
+        "shabellemedia.com",
+        "Hiiraan Online",
+        "hiiraan.com"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "At least 33 al-Shabab militants killed in Middle Shabelle region",
+          "original_title": "At least 33 al-Shabab militants killed Middle Shabelle region",
+          "original_language": "en",
+          "summary": "At least 33 al-Shabab militants were killed during operations in the Middle Shabelle region of Somalia.",
+          "published": "2026-04-22T07:00:00+00:00",
+          "source": "Hiiraan Online",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOa29TUE9ncUkwa2YwVnFMQ21ZZUx1dnQ4d0JqQ1VZQnVIY2NhZ1Atem01RXo2MlViMnY1SGQxczltNmYwd1BNT0VEd1hmQnlMV1ZsN0JaSGlKR0UxM3M5VEFKdEExamE0emFqM1I1bnNWOHk3cUJoZjJHYlgwbVMzV3N3N3hBU0dHd3hUZjhvSU5laVVvYWtfTDFoUzgyLXdsVjY5LTlhQ1pwRXF2TjJ5RA?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-04-22T07:00:00+00:00",
       "last_reported": "2026-04-22T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -338905,11 +338368,13 @@
       "ai_geo_fingerprint": "10490cee67c3c7de31a4c8c79dc1fb77dd96e3be3702abf7d60ae876a505a881",
       "ai_geo_inferred": true,
       "source_article_fingerprints": [
+        "67c4f54e691e2dd79f56f96dd5708d6c8939792b5c92f74da083f70f0c5d2645",
         "8cdf999953e7cd269a71cb182a2c4ac4ad98d20725da79b3d1b86be9ca6d6878"
       ],
       "dedup_confidence": 1.0,
       "dedup_methods": [
-        "same_url"
+        "same_url",
+        "same_incident"
       ],
       "actor_group": "Al-Shabaab",
       "primary_event_type": "CT_OPERATION",
@@ -338917,87 +338382,6 @@
       "incident_anchor": "Somalia intelligence operation Al-Shabaab 2026-04-22",
       "update_type": "INITIAL",
       "incident_id": "inc-74219a28702c39d9"
-    },
-    {
-      "id": "6494d267bcadabe5",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "At least 33 al-Shabab militants killed in Middle Shabelle region",
-      "summary": "At least 33 al-Shabab militants were killed during operations in the Middle Shabelle region of Somalia.",
-      "original_title": "At least 33 al-Shabab militants killed Middle Shabelle region",
-      "original_summary": "At least 33 al-Shabab militants killed Middle Shabelle region Hiiraan Online",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-04-22T07:00:00+00:00",
-      "source": "Hiiraan Online",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOa29TUE9ncUkwa2YwVnFMQ21ZZUx1dnQ4d0JqQ1VZQnVIY2NhZ1Atem01RXo2MlViMnY1SGQxczltNmYwd1BNT0VEd1hmQnlMV1ZsN0JaSGlKR0UxM3M5VEFKdEExamE0emFqM1I1bnNWOHk3cUJoZjJHYlgwbVMzV3N3N3hBU0dHd3hUZjhvSU5laVVvYWtfTDFoUzgyLXdsVjY5LTlhQ1pwRXF2TjJ5RA?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Middle Shabelle",
-      "latitude": 2.75,
-      "longitude": 45.75,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "hiiraan.com",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "Hiiraan Online",
-        "hiiraan.com"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-22T07:00:00+00:00",
-      "last_reported": "2026-04-22T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports concrete operational casualties inflicted on Al-Shabaab.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "operations kill at least 33 al-Shabab militants in Middle Shabelle region",
-      "title_variants": [
-        "Operations kill at least 33 al-Shabab militants in Middle Shabelle",
-        "operations kill at least 33 al-Shabab militants in Middle Shabelle region"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Middle Shabelle region"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Operations took place in the Middle Shabelle region of Somalia.",
-      "ai_geo_fingerprint": "ca032cf2be56b98382f9d6a922611bcfbaca943281a19b3385bf9fe648720797",
-      "ai_geo_inferred": false,
-      "source_article_fingerprints": [
-        "67c4f54e691e2dd79f56f96dd5708d6c8939792b5c92f74da083f70f0c5d2645"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_url"
-      ],
-      "actor_group": "Al-Shabaab",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Middle Shabelle operations 2026-04-22",
-      "update_type": "INITIAL",
-      "incident_id": "inc-763903fd7cedc3a5"
     },
     {
       "id": "8c22625a3814d8cb",
@@ -339069,9 +338453,9 @@
       "actor_group": "",
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
-      "incident_anchor": "UAE terrorist plot 2026-04-21",
+      "incident_anchor": "UAE Iran-linked cell dismantling 2026-04-20",
       "update_type": "FOLLOW_UP",
-      "incident_id": "inc-bf6df42e0daa2e48"
+      "incident_id": "inc-c490a117ce5db2a5"
     },
     {
       "id": "fecfc770e516d8dc",
@@ -339196,7 +338580,8 @@
       "ai_geo_reason": "UK counter-terrorism police operations.",
       "ai_geo_fingerprint": "e796af7fdf60708bc9d8406ffeb54dc68b2a32a407b47c22c2f58597cc7c911c",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-34a25860e0e30dc8"
     },
     {
       "id": "9f9ce4908fd1ad69",
@@ -339260,7 +338645,8 @@
       "ai_geo_reason": "Explicitly names Berlin.",
       "ai_geo_fingerprint": "38de39448e8110c65fc1bc782811ab2e1a91a68a52aeec03f1c176846ddcfe65",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-7c31729a881317fd"
     },
     {
       "id": "ff5c006c8c620ff0",
@@ -339537,7 +338923,8 @@
       "ai_geo_reason": "The trial and sentencing occurred in Denmark.",
       "ai_geo_fingerprint": "732a69e2d8286a98e49111276ea282d0ebdec8e585d98a722ea3590bca629b2c",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-e3afc597cb73f08f"
     },
     {
       "id": "37775c66a91abc7b",
@@ -339936,7 +339323,8 @@
       "ai_geo_reason": "Explicitly names Pyatigorsk, Russia.",
       "ai_geo_fingerprint": "7f7a4725cf7d035981962595e146b232151012910dac7008a46f3ee8a3ff857b",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-deca165cc8be3c5e"
     },
     {
       "id": "70c5a20acffa2ca6",
@@ -339998,7 +339386,8 @@
       "ai_geo_reason": "Academic/research study from Spanish research network Ruvid.",
       "ai_geo_fingerprint": "f1bc5fb3bba4318d81af367de22b34ebdb57523175ab330bc97e856e80a23b3d",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-9cd9e00309c6bf0f"
     },
     {
       "id": "ca13f4748b426c07",
@@ -340290,7 +339679,8 @@
       "ai_geo_reason": "Explicitly names Chicago as the location of the federal court and sentencing.",
       "ai_geo_fingerprint": "9683f20989df935813a06f38815d9ff5ca74685bdc71b0cdce91d9da93fa97ad",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-41c09be6152f8302"
     },
     {
       "id": "f30fb42fe74a69a5",
@@ -340352,7 +339742,8 @@
       "ai_geo_reason": "Lafarge trial and conviction took place in Paris, France.",
       "ai_geo_fingerprint": "d22a94e8cafc8fb7120ed9961cca92d0f1ee3dbe74779dc8b398f7b02cf9d7f4",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-b98fa770a2701d60"
     },
     {
       "id": "205c54b8e830fa42",
@@ -340479,7 +339870,8 @@
       "ai_geo_reason": "Explicitly names Yekaterinburg as the location of the court sentencing.",
       "ai_geo_fingerprint": "eec8881faf7a79cf6458ba0388f0d9242467e1b28dbef7d232ed871ea41aa3af",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-e1da6305fc63e27b"
     },
     {
       "id": "098ad4a486810251",
@@ -340543,7 +339935,8 @@
       "ai_geo_reason": "The historic Rue des Rosiers attack and subsequent judicial handling occurred in Paris, France.",
       "ai_geo_fingerprint": "936f96c3a0d4e80272620ab02bc1f83b6e49efd843c4e0fafac6c752baa3d828",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-f9f02298154d61bb"
     },
     {
       "id": "8b380d53471eb111",
@@ -340605,7 +339998,8 @@
       "ai_geo_reason": "Involves Russian legal actions and authorities against a Russian show producer.",
       "ai_geo_fingerprint": "d9a1684462013a80069d20cc7cffe654714f06f732aeac957ec8ba5908d34618",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-47e7d55914216855"
     },
     {
       "id": "2278517dbb9aa0f0",
@@ -340673,7 +340067,8 @@
       "ai_geo_reason": "Federal jury trial and conviction took place in Dallas, Texas, USA.",
       "ai_geo_fingerprint": "dd2b737206dd3387adec0a3d517d7c9ecd3fe3503179fd9583e86167148c2c61",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-f70fb348090d506d"
     },
     {
       "id": "1009e23ab2e125fd",
@@ -340804,7 +340199,8 @@
       "ai_geo_reason": "The subject of the extradition event was transferred to Iran.",
       "ai_geo_fingerprint": "481f772795ff7da3f7714bdf2fa4168e4ec361c525a37ed0257ec4824b87e9b4",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-645d3c65dfb543c2"
     },
     {
       "id": "bfa82629828daaf5",
@@ -341034,7 +340430,8 @@
       "dedup_methods": [
         "same_url"
       ],
-      "actor_group": "ISIS"
+      "actor_group": "ISIS",
+      "incident_id": "inc-30ee876f012296bf"
     },
     {
       "id": "73b15d540d8fb84b",
@@ -341178,7 +340575,8 @@
       "ai_geo_reason": "German legal news source reporting on a court verdict (likely in Germany).",
       "ai_geo_fingerprint": "fa4fc8fdc0b15a5017fa69920c33883e9234825bdaf12453dbdac1c6dbcf3cae",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-e9a650c75dfc762c"
     },
     {
       "id": "cbdca8f9bd638d36",
@@ -341245,7 +340643,8 @@
       "ai_geo_reason": "Military operation targeting terrorists in Borno State, Nigeria.",
       "ai_geo_fingerprint": "c5899a5c46631bb1e5a91f0f44d52716930e1f8d73a19dd0403124e44acde5fa",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-0e39b681b894ae61"
     },
     {
       "id": "84280f60bfa0f9fc",
@@ -341312,325 +340711,9 @@
       "ai_geo_reason": "Offensive operations by SNA and Jubbaland forces in the Juba regions.",
       "ai_geo_fingerprint": "cb73aaa438e68866b7a23ba0bc7b57ea57d20bac48d7e6741f82cdb06ef06687",
       "ai_geo_inferred": false,
-      "actor_group": "Al-Shabaab"
-    },
-    {
-      "id": "a13dfea58495a216",
-      "category": "Terrorist Financing",
-      "categories": [
-        "Terrorist Financing",
-        "Legal / Judicial"
-      ],
-      "title": "Lafarge, former executives convicted in France for terror financing",
-      "summary": "Cement manufacturer Lafarge and former executives have been convicted in France for financing terrorism.",
-      "original_title": "Lafarge, former executives convicted in France for terror financing",
-      "original_summary": "Lafarge, former executives convicted in France for terror financing Global Investigations Review",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-13T07:00:00+00:00",
-      "source": "Global Investigations Review",
-      "source_count": 3,
-      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQWjhQNVh5OEVGNWtJb3pfcDRhNC1GWTVkY0dLaDZzeDA2SUxfUDlnd3JJbUpXYmxFQjBYNHlRbGJWaUI5YUJUQmE2WkFzeWsta2p2bnVScVJNbHBkSnQzWWd1UmdQYWVfa0ZGS2FvRE1BS2d6RE5WQ0g4NGFKdDdMZlJRRmRSZS1DVmlmSXYxNVlDblhweHdZaDBZbUNqR3FCNkdkWUJQUW9LRlBpYXFfczRZQ0dDQ2l4VjdzcFpLVTlLdw?oc=5",
-      "collector": "Google News RSS",
-      "country": "France",
-      "country_code": "FR",
-      "city": "Paris",
-      "region": null,
-      "latitude": 48.85341,
-      "longitude": 2.3488,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "sources": [
-        "Global Investigations Review",
-        "Les Echos",
-        "EL PAÍS"
-      ],
-      "related_articles": [
-        {
-          "title": "Lafarge and its former CEO condemned for terrorist financing in a historic decision",
-          "original_title": "Lafarge et son ex-PDG condamnés pour financement du terrorisme : une décision historique",
-          "original_language": "fr",
-          "summary": "A historic legal verdict has condemned Lafarge and its former CEO for financing terrorism.",
-          "published": "2026-04-13T07:00:00+00:00",
-          "source": "Les Echos",
-          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOUmNDZWhXODc2Z25naDc2QmlUOFpNNzk3SFp1cC1yMV9JVDFMYXJNUm5iV3I5aVRWMDVFQ0dsR3Bud0g3emNyMm0xMDI5UnlkOHdYdXJESVRNWE44Nm1FLUJCcHJJcGRwNzEzWUZGRE44alZwMEtjS3NxWXlxT0IyRFNOYzRXWmtTeTVPZm5UUl9FVllBX1NqOGJlNFlhXzBKX1lJY3NCN1A0cGM1ZFJOeG84MUdudVpJdzdwRkhmaUpQQzgzWWstc2R2QnRwdw?oc=5"
-        },
-        {
-          "title": "France convicts cement company Lafarge and its former CEO for financing jihadist groups like ISIS",
-          "original_title": "Francia condena a la cementera Lafarge y a su ex consejero delegado por financiar a grupos yihadistas como el ISIS",
-          "original_language": "es",
-          "summary": "A French court has found cement maker Lafarge and its former CEO guilty of financing jihadist groups including ISIS.",
-          "published": "2026-04-13T07:00:00+00:00",
-          "source": "EL PAÍS",
-          "url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxPeHNkNEVqUmxxSW1sbFZ6di1TdTZnRUNydlJoYkNYWk1xUUVRSG1yV3k5MllUQzd3Q2xvOHFBdXBoT2FYdFdJQ08zSGZ1cjRuOWZxVHhNMjdjUnBQS0h3aFUwZmowS2NkUWpOMGsyREVzaW9LdnFzS0JFZkt5bWdYOVE3U0FWSGtsb3ZydWxjRGpxOEhRVmRuUFhjNVRlaEdQU2F0d2ttRTJrUzRGLXZla1JDZ3pvNVc5cy1LdDNmM3pNQThyOFhabkxvLVhpbllqbHB0bmRVRlg1Zk8tSS12dmJfdHRwNmVRMENGUi1POTd1OVNyT0HSAYoCQVVfeXFMTWFNNGNoVFhDNmtJVGtRclF6WE5OX3lqYXVkUHpXbkpGbl84RVAwRTFKcm4zaGR0bEhBWEZrUThWUVM4VjgySk9YX2F3VVF1M2hpZnI2UE1TYnAxYVFkazNyLVFHNDBWWW1qTmdfVVdBMzRQLVluVlNuTks4a3Z3d1g0eElQRkdOR3ZqNjFvRUJUUXFQenRpQnlzZURuTTFMODhDSUxhTDE4UUJLdmNzaVdRNHJEWWtmakQ4UEFCQ2VTSDJoQk9pam5KM2NBZ0xzbFp3Rk92TVdadHU4VWFsZ1FQUzhaVndzTk9PYm9odWlMc2QzUDlURVJKeE5Pdk9UOU5RQVF3Um55Q2c?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-04-13T07:00:00+00:00",
-      "last_reported": "2026-04-13T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Formal legal conviction for terrorist financing.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "conviction of Lafarge and former executives in France for terrorist financing",
-      "title_variants": [
-        "conviction of Lafarge and former executives in France for terrorist financing"
-      ],
-      "dedup_confidence": 0.808,
-      "dedup_methods": [
-        "title_plus_anchor",
-        "paraphrase_entity_context"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Lafarge, former executives convicted in France for terror financing"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The corporate trial and conviction took place in French courts (Paris Criminal Court).",
-      "ai_geo_fingerprint": "eda79fabe28d6f173b423494a0ac343e628f2cdd13f090ff986b285dc443e5e9",
-      "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "7eff69afcf6a2255",
-      "category": "Terrorist Financing",
-      "categories": [
-        "Terrorist Financing",
-        "Legal / Judicial"
-      ],
-      "title": "Lafarge: Cement giant guilty of financing militant groups including Islamic State",
-      "summary": "A court found cement giant Lafarge guilty of financing militant groups, including the Islamic State, operating in conflict zones.",
-      "original_title": "Lafarge: Cement giant guilty of financing militant groups including Islamic State",
-      "original_summary": "Lafarge: Cement giant guilty of financing militant groups including Islamic State BBC",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-13T07:00:00+00:00",
-      "source": "BBC",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBncTdMRi1Rb3hoMGtkdFFNc1NJNnhzd1JGOUl3ajNZRlNBSENkWnJka1FIYWR1bWltVzdENUhDT3ROWl9uRkxweV96UFJtZWNRWnVRYXc5OXNFZw?oc=5",
-      "collector": "Google News RSS",
-      "country": "France",
-      "country_code": "FR",
-      "city": "Paris",
-      "region": null,
-      "latitude": 48.85341,
-      "longitude": 2.3488,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "BBC News",
-      "targeted_source_kind": "international_media",
-      "sources": [
-        "BBC",
-        "Le Temps"
-      ],
-      "related_articles": [
-        {
-          "title": "True partnership with Islamic State: Holcim subsidiary Lafarge convicted of terrorist financing",
-          "original_title": "«Véritable partenariat avec l’Etat islamique»: Lafarge, filiale de Holcim, condamnée pour financement du terrorisme",
-          "original_language": "fr",
-          "summary": "Swiss cement giant Holcim's subsidiary Lafarge has been convicted in France for maintaining a partnership with and financing the Islamic State.",
-          "published": "2026-04-13T07:00:00+00:00",
-          "source": "Le Temps",
-          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOUnBxN2NfRGhYV0tMMF9uUHpLZlJkZmI3WFZNMWpQTS1BNmYxajhoN1o5eHlQalVzeDl6Z0FMN1dkU1FYd284U2FQOVo3SkJvVDh3c1hnRkVJN3hzZjRLSy03MVhzUjdkc2pJWmxHeU9VUHo3cTU4enZxUUNWRmpmMER0WFZLTTdkN0pKVUg4R0VoR3Y5OFVwZWlkaWp6S0RQM1o1X1NnSVJnZ19XQXZhcUpMeWpRWGxt?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-04-13T07:00:00+00:00",
-      "last_reported": "2026-04-13T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Legal judgment convicting a major corporate entity for terrorist financing.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "guilty verdict against Lafarge for financing Islamic State and other militant groups",
-      "title_variants": [
-        "guilty verdict against Lafarge for financing Islamic State and other militant groups"
-      ],
-      "dedup_confidence": 0.671,
-      "dedup_methods": [
-        "paraphrase_entity_context"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Lafarge: Cement giant guilty of financing militant groups"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Trial and verdict rendered by French courts in Paris.",
-      "ai_geo_fingerprint": "a6fe96bbe1ec71891e7b492e690a04a03aca94bcd7a3152969e56ed0a39e17bb",
-      "ai_geo_inferred": true,
-      "actor_group": "ISIS"
-    },
-    {
-      "id": "f148284970d3d6f5",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Terrorist Financing"
-      ],
-      "title": "Kuwait demonstrates security firmness in pursuing terror cells and their financers",
-      "summary": "Kuwaiti security authorities have shown increased operational firmness in tracking down and pursuing terrorist cells and their financial backers.",
-      "original_title": "الكويت تظهر حزما أمنيا في ملاحقة خلايا الارهاب ومموليها",
-      "original_summary": "الكويت تظهر حزما أمنيا في ملاحقة خلايا الارهاب ومموليها middle-east-online.com",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
-      "published": "2026-04-13T07:00:00+00:00",
-      "source": "middle-east-online.com",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiyANBVV95cUxPTmQ4LTBCMGhhUzZqVHI0SXlGTmtjY25Cd2NKZDZUM2NUWWhxZjNiZ1dyOG80eFJWYVBOejV0MUJIbDQxU2w0NWRhMGRkWW9pUXZfM2xTcG4tc3gxUXFEc2JDWmt1bUJOT3lSemVEaWgzN01ZOVZxZEVTblZMc0xyNTZrcVIzdTdZM3lJcldXbW1nSU1CV09kSlE4dk01aFViTkVjY3hacDBDZG1yamtXMkhrb1pQMDBwQ0U4WVhrbWttSWZHNEJhVTJTRW81QmUyLUFMaGFUN0dkanVkcktQUWtvTncxUTgyS3ZHQk9paUwwT3lHQlNWZDNiMlkwcEVBZWxfYzlaSWN0S2EzUnhJMGtodWkwaVV1dzlZWm1Vc3U4VFE5cWtZR1JzTElMZFd6VzQ0S0dIX3doWEJpZVY2SVd5elUxYzRwRzQzTWpuN0cwREk2WUREYUp3LUpZNlZ4ZFEyQUI0Sm9Lc3ViUHRuR09Nb09QRnJzYk92amJzRkUyeGFIcG5SWlBjWUhjLUc0MkF3OWFkVDVzS1p5OW1QSDdEck1ac1BSa09NQkJmM0lSeUhEUkVTSzk0U0oyMFl2R1pnd1BUajc?oc=5",
-      "collector": "Google News RSS",
-      "country": "Kuwait",
-      "country_code": "KW",
-      "city": "Kuwait City",
-      "region": null,
-      "latitude": 29.367,
-      "longitude": 47.97429,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "middle-east-online.com"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-13T07:00:00+00:00",
-      "last_reported": "2026-04-13T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Operational counter-terrorism activity targeting terrorist cells and financing.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Kuwaiti security operations targeting terrorist cells and financiers",
-      "title_variants": [
-        "Kuwaiti security operations targeting terrorist cells and financiers"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Kuwait demonstrates security firmness in pursuing terror cells"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly references security actions conducted within Kuwait.",
-      "ai_geo_fingerprint": "8a51eec284d49036f3c16c40c007405d536a80820735fef4fd316fccba4b20f5",
-      "ai_geo_inferred": false,
-      "actor_group": ""
-    },
-    {
-      "id": "607837bde8fea930",
-      "category": "Terrorist Financing",
-      "categories": [
-        "Terrorist Financing",
-        "Legal / Judicial"
-      ],
-      "title": "Paris Criminal Court rules Lafarge guilty of financing a terrorist organization",
-      "summary": "The Paris Criminal Court has ruled that cement manufacturer Lafarge is guilty of financing a terrorist organization.",
-      "original_title": "Paris Ceza Mahkemesi Lafarge'ın \"terör örgütünü finanse etmekten\" suçlu olduğuna hükmetti",
-      "original_summary": "Paris Ceza Mahkemesi Lafarge'ın \"terör örgütünü finanse etmekten\" suçlu olduğuna hükmetti TRT Haber",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": "TR:tr",
-      "published": "2026-04-13T07:00:00+00:00",
-      "source": "TRT Haber",
-      "source_count": 6,
-      "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxQUV9jb2ZnLUQxbnUwc3E0YWNWanVYN0szYXZOYi1zZ3RaQUpxOWlLWF9lWWVvOWlBSUVUZTRZZXY1UzhONXFibUY4U1o3RXdrakVhS3hjaTlJMXRMb0VUNFZCUlFNZnl6dGd5QmVhVGE5VXRFYk94Wk1hRkJ0RDBkMGZRT1NHVF96c1huSzgyd2hBUW1wUTRsdUN1ZUhHdlcyT3ZXZ3dueUNXNjZBeHkwU2F4U0p0ZzZ6V1ZQbkwxODRRN1hzWk5pQ21Ed1p0WEFX?oc=5",
-      "collector": "Google News RSS",
-      "country": "France",
-      "country_code": "FR",
-      "city": "Paris",
-      "region": null,
-      "latitude": 48.85341,
-      "longitude": 2.3488,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "trthaber.com",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "TRT Haber",
-        "1prime.ru",
-        "sn.at",
-        "justiceinfo.net",
-        "occrp.org",
-        "capitalfm.co.ke"
-      ],
-      "related_articles": [
-        {
-          "title": "Paris court finds Lafarge guilty of financing terrorism",
-          "original_title": "Парижский суд признал компанию Lafarge виновной в финансировании терроризма",
-          "original_language": "ru",
-          "summary": "A Paris court has convicted French cement company Lafarge of financing terrorism in connection with its operations in Syria.",
-          "published": "2026-04-13T16:15:00+00:00",
-          "source": "1prime.ru",
-          "url": "https://1prime.ru/20260413/sud-869126521.html"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-04-13T07:00:00+00:00",
-      "last_reported": "2026-04-13T16:15:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Terrorist financing conviction.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Paris Criminal Court convicts Lafarge of financing terrorist organization",
-      "title_variants": [
-        "Paris Criminal Court convicts Lafarge of financing terrorist organization"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Paris Criminal Court rules Lafarge guilty..."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly names the Paris Criminal Court as the location of the ruling.",
-      "ai_geo_fingerprint": "0add3c130f08e3c3339f3f44cc70e4282b78f5996133ef480dcd726cf5dbcd60",
-      "ai_geo_inferred": false,
-      "source_article_fingerprints": [
-        "30edd46b3c221a7b757b5232a1a18eb0cc2ddc64ed4e546b8267319c0a7b44c8",
-        "5dae92c61ddf20e6861c17335a29d2ab9591a1b6e1000c0b341a5e2a88087499",
-        "6f4175b20b5bba66d0b0b097528b5846a739e2ab7be556b03cad165b42a36159",
-        "bf240e0d90e13fd405a9c86dc1aaa0d6108e9e4d64c77ca8101ab04869f598ed",
-        "cdd992fea5cefc2c4adabf3052af499864e3bcd582de865f144f554a936b945e"
-      ],
-      "dedup_confidence": 0.833,
-      "dedup_methods": [
-        "title_plus_anchor"
-      ],
-      "actor_group": ""
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-b6311b219f905eee",
+      "incident_anchor": "Somalia multi-region airstrikes 2026-04-15"
     },
     {
       "id": "cad994307dabaf0d",
@@ -341697,7 +340780,8 @@
       "ai_geo_reason": "Reported by Mosaique FM regarding judicial death sentences for terrorists.",
       "ai_geo_fingerprint": "08cd71377a070a447f8992208c2aac8a6e5c95e5b4d85f1b95d72a7ec474a33f",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-60a69e3406b80273"
     },
     {
       "id": "bece9f798cd10822",
@@ -341839,7 +340923,8 @@
       "ai_geo_reason": "Turkish security teams taking action within Turkey.",
       "ai_geo_fingerprint": "e73c3ea2fb68a222b09b152253826a9414641e073e61dedf9cf65ed35dd1d94b",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-e96c80926fb43be6"
     },
     {
       "id": "879f55fa26300b36",
@@ -341848,18 +340933,18 @@
         "Terrorist Financing",
         "Legal / Judicial"
       ],
-      "title": "French cement-maker Lafarge found guilty of financing jihadists in Syria, former CEO jailed",
-      "summary": "French authorities have found cement company Lafarge guilty of financing jihadist groups in Syria, resulting in jail time for the former CEO.",
-      "original_title": "French cement-maker Lafarge found guilty of financing jihadists in Syria, former CEO jailed",
-      "original_summary": "French cement-maker Lafarge found guilty of financing jihadists in Syria, former CEO jailed France 24",
+      "title": "Lafarge: Cement giant guilty of financing militant groups including Islamic State",
+      "summary": "A court found cement giant Lafarge guilty of financing militant groups, including the Islamic State, operating in conflict zones.",
+      "original_title": "Lafarge: Cement giant guilty of financing militant groups including Islamic State",
+      "original_summary": "Lafarge: Cement giant guilty of financing militant groups including Islamic State BBC",
       "original_language": "en",
       "collection_language": "en",
       "collection_language_name": "English",
       "collection_locale": null,
       "published": "2026-04-12T07:00:00+00:00",
-      "source": "France 24",
-      "source_count": 7,
-      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQNzlaNU9sb2lFV1ByekRFNE03Y2xNNEM4OXlOQUVVMnNLLW5hWkpHREttaThqRWItaGRGdzlnOGZZamM3RWwwbkVNLWJSUVZFZ1ZBOHJ3cWZ3Y0tFMHFLMFZzQjJ6aHNNTmo5YnlqTmZVMVFDUGVidjJlNEstRll0WDFoQnd0d0tEUEVlWEJJV2NaYk5uWG9oak5VMVlPbm1DZGlFYWtmZjRMVC1JbnN2VjF4b2dxaWtUSmMtRmVn?oc=5",
+      "source": "BBC",
+      "source_count": 18,
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBncTdMRi1Rb3hoMGtkdFFNc1NJNnhzd1JGOUl3ajNZRlNBSENkWnJka1FIYWR1bWltVzdENUhDT3ROWl9uRkxweV96UFJtZWNRWnVRYXc5OXNFZw?oc=5",
       "collector": "Google News RSS",
       "country": "France",
       "country_code": "FR",
@@ -341877,7 +340962,18 @@
         "Euronews.com",
         "Europe 1",
         "cdt.ch",
-        "اندبندنت عربية"
+        "اندبندنت عربية",
+        "Global Investigations Review",
+        "Les Echos",
+        "EL PAÍS",
+        "BBC",
+        "Le Temps",
+        "TRT Haber",
+        "1prime.ru",
+        "sn.at",
+        "justiceinfo.net",
+        "occrp.org",
+        "capitalfm.co.ke"
       ],
       "related_articles": [
         {
@@ -341924,20 +341020,74 @@
           "published": "2026-04-13T07:00:00+00:00",
           "source": "اندبندنت عربية",
           "url": "https://news.google.com/rss/articles/CBMi_gNBVV95cUxQZEhEWlZLVERyejhHVnV1QW9wQ3p5TFI2ZnRnMVdpMVpZMXBlUHJtZG51eXdQOUQ1LWJLQVhJekt4bVBUek8tcW13RVBBUVlsQ2syOUd1Ql9fRHBjeExCc2pSZ3VnQ0ZmMFo1Qk44MkdQVHhjZjh4Y215dDlhd2xsWGtYNWlabTdoTFp1U0w0S2hQZEc2ZEZDaEJhUGJlYWl3ZEdpLTNwWnk0NmdPMmpGb0hOZzh1N1JKdVdNd0tIcU8yOHlOQnd1YUZTRGZnWnFHZDhxaG9HaUZxcENXVXFVTmlhbUdya1RWUmpCYXBaT1ZNRjUyWnExeVM0LWJvajBLYUFLTDFUREJEeVNCVFE2Uk43YkRKeGNHalhiWFlzc3JzTk5FVzN4WFFINnVIRmFvOGJFTmw0andHc0JxRGgzMnhOMS1sWnlMcnozZjNSeV9NUnpFQTlCNHFhZVlXNzZwWE9RcW51MlFvc3h2MmZncXMxeEI1MUFqNEdkUnI5NzBjNXlUTTh3cDBNdHduSGNnMjJlOUtTQ2FhRDYzamdEOEVBVTZ5OGtnclFTR2ZUMjdGOFFoSUhfSWVYSXlfUkp2a0dJM0IzVk5LR2RxbkhWUDhjd0UtSEZkemFBVmFQTmJQWEpnRTZINUFNYkZfZEYtNVkyRlZlWWNvUHJjZGc?oc=5"
+        },
+        {
+          "title": "Lafarge, former executives convicted in France for terror financing",
+          "original_title": "Lafarge, former executives convicted in France for terror financing",
+          "original_language": "en",
+          "summary": "Cement manufacturer Lafarge and former executives have been convicted in France for financing terrorism.",
+          "published": "2026-04-13T07:00:00+00:00",
+          "source": "Global Investigations Review",
+          "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQWjhQNVh5OEVGNWtJb3pfcDRhNC1GWTVkY0dLaDZzeDA2SUxfUDlnd3JJbUpXYmxFQjBYNHlRbGJWaUI5YUJUQmE2WkFzeWsta2p2bnVScVJNbHBkSnQzWWd1UmdQYWVfa0ZGS2FvRE1BS2d6RE5WQ0g4NGFKdDdMZlJRRmRSZS1DVmlmSXYxNVlDblhweHdZaDBZbUNqR3FCNkdkWUJQUW9LRlBpYXFfczRZQ0dDQ2l4VjdzcFpLVTlLdw?oc=5"
+        },
+        {
+          "title": "Lafarge and its former CEO condemned for terrorist financing in a historic decision",
+          "original_title": "Lafarge et son ex-PDG condamnés pour financement du terrorisme : une décision historique",
+          "original_language": "fr",
+          "summary": "A historic legal verdict has condemned Lafarge and its former CEO for financing terrorism.",
+          "published": "2026-04-13T07:00:00+00:00",
+          "source": "Les Echos",
+          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOUmNDZWhXODc2Z25naDc2QmlUOFpNNzk3SFp1cC1yMV9JVDFMYXJNUm5iV3I5aVRWMDVFQ0dsR3Bud0g3emNyMm0xMDI5UnlkOHdYdXJESVRNWE44Nm1FLUJCcHJJcGRwNzEzWUZGRE44alZwMEtjS3NxWXlxT0IyRFNOYzRXWmtTeTVPZm5UUl9FVllBX1NqOGJlNFlhXzBKX1lJY3NCN1A0cGM1ZFJOeG84MUdudVpJdzdwRkhmaUpQQzgzWWstc2R2QnRwdw?oc=5"
+        },
+        {
+          "title": "France convicts cement company Lafarge and its former CEO for financing jihadist groups like ISIS",
+          "original_title": "Francia condena a la cementera Lafarge y a su ex consejero delegado por financiar a grupos yihadistas como el ISIS",
+          "original_language": "es",
+          "summary": "A French court has found cement maker Lafarge and its former CEO guilty of financing jihadist groups including ISIS.",
+          "published": "2026-04-13T07:00:00+00:00",
+          "source": "EL PAÍS",
+          "url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxPeHNkNEVqUmxxSW1sbFZ6di1TdTZnRUNydlJoYkNYWk1xUUVRSG1yV3k5MllUQzd3Q2xvOHFBdXBoT2FYdFdJQ08zSGZ1cjRuOWZxVHhNMjdjUnBQS0h3aFUwZmowS2NkUWpOMGsyREVzaW9LdnFzS0JFZkt5bWdYOVE3U0FWSGtsb3ZydWxjRGpxOEhRVmRuUFhjNVRlaEdQU2F0d2ttRTJrUzRGLXZla1JDZ3pvNVc5cy1LdDNmM3pNQThyOFhabkxvLVhpbllqbHB0bmRVRlg1Zk8tSS12dmJfdHRwNmVRMENGUi1POTd1OVNyT0HSAYoCQVVfeXFMTWFNNGNoVFhDNmtJVGtRclF6WE5OX3lqYXVkUHpXbkpGbl84RVAwRTFKcm4zaGR0bEhBWEZrUThWUVM4VjgySk9YX2F3VVF1M2hpZnI2UE1TYnAxYVFkazNyLVFHNDBWWW1qTmdfVVdBMzRQLVluVlNuTks4a3Z3d1g0eElQRkdOR3ZqNjFvRUJUUXFQenRpQnlzZURuTTFMODhDSUxhTDE4UUJLdmNzaVdRNHJEWWtmakQ4UEFCQ2VTSDJoQk9pam5KM2NBZ0xzbFp3Rk92TVdadHU4VWFsZ1FQUzhaVndzTk9PYm9odWlMc2QzUDlURVJKeE5Pdk9UOU5RQVF3Um55Q2c?oc=5"
+        },
+        {
+          "title": "True partnership with Islamic State: Holcim subsidiary Lafarge convicted of terrorist financing",
+          "original_title": "«Véritable partenariat avec l’Etat islamique»: Lafarge, filiale de Holcim, condamnée pour financement du terrorisme",
+          "original_language": "fr",
+          "summary": "Swiss cement giant Holcim's subsidiary Lafarge has been convicted in France for maintaining a partnership with and financing the Islamic State.",
+          "published": "2026-04-13T07:00:00+00:00",
+          "source": "Le Temps",
+          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOUnBxN2NfRGhYV0tMMF9uUHpLZlJkZmI3WFZNMWpQTS1BNmYxajhoN1o5eHlQalVzeDl6Z0FMN1dkU1FYd284U2FQOVo3SkJvVDh3c1hnRkVJN3hzZjRLSy03MVhzUjdkc2pJWmxHeU9VUHo3cTU4enZxUUNWRmpmMER0WFZLTTdkN0pKVUg4R0VoR3Y5OFVwZWlkaWp6S0RQM1o1X1NnSVJnZ19XQXZhcUpMeWpRWGxt?oc=5"
+        },
+        {
+          "title": "Paris Criminal Court rules Lafarge guilty of financing a terrorist organization",
+          "original_title": "Paris Ceza Mahkemesi Lafarge'ın \"terör örgütünü finanse etmekten\" suçlu olduğuna hükmetti",
+          "original_language": "tr",
+          "summary": "The Paris Criminal Court has ruled that cement manufacturer Lafarge is guilty of financing a terrorist organization.",
+          "published": "2026-04-13T07:00:00+00:00",
+          "source": "TRT Haber",
+          "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxQUV9jb2ZnLUQxbnUwc3E0YWNWanVYN0szYXZOYi1zZ3RaQUpxOWlLWF9lWWVvOWlBSUVUZTRZZXY1UzhONXFibUY4U1o3RXdrakVhS3hjaTlJMXRMb0VUNFZCUlFNZnl6dGd5QmVhVGE5VXRFYk94Wk1hRkJ0RDBkMGZRT1NHVF96c1huSzgyd2hBUW1wUTRsdUN1ZUhHdlcyT3ZXZ3dueUNXNjZBeHkwU2F4U0p0ZzZ6V1ZQbkwxODRRN1hzWk5pQ21Ed1p0WEFX?oc=5"
+        },
+        {
+          "title": "Paris court finds Lafarge guilty of financing terrorism",
+          "original_title": "Парижский суд признал компанию Lafarge виновной в финансировании терроризма",
+          "original_language": "ru",
+          "summary": "A Paris court has convicted French cement company Lafarge of financing terrorism in connection with its operations in Syria.",
+          "published": "2026-04-13T16:15:00+00:00",
+          "source": "1prime.ru",
+          "url": "https://1prime.ru/20260413/sud-869126521.html"
         }
       ],
-      "article_count": 5,
+      "article_count": 12,
       "first_reported": "2026-04-12T07:00:00+00:00",
       "last_reported": "2026-04-13T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
+      "ai_relevance_score": 90,
       "ai_relevance_reason": "Judicial verdict proceedings on corporate terrorist financing.",
       "ai_current_ct_event": true,
       "ai_selected": true,
       "translated_to_english": false,
-      "ai_canonical_event": "conviction of Lafarge and former CEO for financing jihadists in Syria",
+      "ai_canonical_event": "guilty verdict against Lafarge for financing Islamic State and other militant groups",
       "title_variants": [
         "upcoming verdict for Lafarge regarding terrorist financing in Syria"
       ],
@@ -341945,7 +341095,8 @@
       "dedup_methods": [
         "paraphrase_entity_context",
         "title_plus_anchor",
-        "same_url"
+        "same_url",
+        "same_incident"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_city_geonames",
@@ -341960,9 +341111,15 @@
       "ai_geo_fingerprint": "aafb5ee8fc686a9627bd78c3fc190c5c0ce53bc6aafc858d9b6a64615e05e205",
       "ai_geo_inferred": true,
       "source_article_fingerprints": [
-        "5926b4034ddbbbb510a65aa27a0897b4be8eaa8662fc7b1233cef99013fd22e5"
+        "30edd46b3c221a7b757b5232a1a18eb0cc2ddc64ed4e546b8267319c0a7b44c8",
+        "5926b4034ddbbbb510a65aa27a0897b4be8eaa8662fc7b1233cef99013fd22e5",
+        "5dae92c61ddf20e6861c17335a29d2ab9591a1b6e1000c0b341a5e2a88087499",
+        "6f4175b20b5bba66d0b0b097528b5846a739e2ab7be556b03cad165b42a36159",
+        "bf240e0d90e13fd405a9c86dc1aaa0d6108e9e4d64c77ca8101ab04869f598ed",
+        "cdd992fea5cefc2c4adabf3052af499864e3bcd582de865f144f554a936b945e"
       ],
-      "actor_group": ""
+      "actor_group": "ISIS",
+      "incident_id": "inc-e78a4c10ea6fd61a"
     },
     {
       "id": "79792cc92e18c1ac",
@@ -342029,7 +341186,8 @@
       "ai_geo_reason": "Airstrikes took place in Yobe State, Nigeria.",
       "ai_geo_fingerprint": "c17fd9c67d699d88ef3f56bf03755e7f6cf45ec1c9c993c5d6486330b517cd73",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-f16cac68968bf0ca"
     },
     {
       "id": "e4bd0a3977ce483c",
@@ -342098,7 +341256,8 @@
       "ai_geo_reason": "Philippine news outlet reporting on local legal convictions/appeals.",
       "ai_geo_fingerprint": "0b280fb45f1abc7b33c895d20d7bdb00f9d5c38eb67a02e16855615646b865b3",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-b866e952540c1fce"
     },
     {
       "id": "37b5722ff1eb9ebc",
@@ -342204,7 +341363,8 @@
       "ai_geo_reason": "Explicitly mentions Samsun, Turkey.",
       "ai_geo_fingerprint": "2a78cf42a96ee450ebb726c4a257ea6c14cc289654e46633ee502d8a4a7d5cf1",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-2fabcc5a924f64ac"
     },
     {
       "id": "5f0d68291339a662",
@@ -342224,7 +341384,7 @@
       "collection_locale": "SA:ar",
       "published": "2026-04-11T07:00:00+00:00",
       "source": "عكاظ",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5XOUVwbC1CdjZuNFZsMWVPXzBaNzJJWnpRQnhnXzhVTFcxYTM1OE5vemgzSUY4R0c1WkE4SkRxWUVkVkZKNUxRcm50U1I4WDFvbTQ2SGRR0gFUQVVfeXFMTXpWS19jT0YxMmhFR19DWkdxdDNIeG1ickpQbm94dE90SzM1eXhVaTVnQ0lwOF9WQlF5a0V1RHItV1lOYk5ramZhNlNwMjBJbmJVOUhH?oc=5",
       "collector": "Google News RSS",
       "country": "Kuwait",
@@ -342237,12 +341397,23 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "sources": [
-        "عكاظ"
+        "عكاظ",
+        "middle-east-online.com"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Kuwait demonstrates security firmness in pursuing terror cells and their financers",
+          "original_title": "الكويت تظهر حزما أمنيا في ملاحقة خلايا الارهاب ومموليها",
+          "original_language": "ar",
+          "summary": "Kuwaiti security authorities have shown increased operational firmness in tracking down and pursuing terrorist cells and their financial backers.",
+          "published": "2026-04-13T07:00:00+00:00",
+          "source": "middle-east-online.com",
+          "url": "https://news.google.com/rss/articles/CBMiyANBVV95cUxPTmQ4LTBCMGhhUzZqVHI0SXlGTmtjY25Cd2NKZDZUM2NUWWhxZjNiZ1dyOG80eFJWYVBOejV0MUJIbDQxU2w0NWRhMGRkWW9pUXZfM2xTcG4tc3gxUXFEc2JDWmt1bUJOT3lSemVEaWgzN01ZOVZxZEVTblZMc0xyNTZrcVIzdTdZM3lJcldXbW1nSU1CV09kSlE4dk01aFViTkVjY3hacDBDZG1yamtXMkhrb1pQMDBwQ0U4WVhrbWttSWZHNEJhVTJTRW81QmUyLUFMaGFUN0dkanVkcktQUWtvTncxUTgyS3ZHQk9paUwwT3lHQlNWZDNiMlkwcEVBZWxfYzlaSWN0S2EzUnhJMGtodWkwaVV1dzlZWm1Vc3U4VFE5cWtZR1JzTElMZFd6VzQ0S0dIX3doWEJpZVY2SVd5elUxYzRwRzQzTWpuN0cwREk2WUREYUp3LUpZNlZ4ZFEyQUI0Sm9Lc3ViUHRuR09Nb09QRnJzYk92amJzRkUyeGFIcG5SWlBjWUhjLUc0MkF3OWFkVDVzS1p5OW1QSDdEck1ac1BSa09NQkJmM0lSeUhEUkVTSzk0U0oyMFl2R1pnd1BUajc?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-04-11T07:00:00+00:00",
-      "last_reported": "2026-04-11T07:00:00+00:00",
+      "last_reported": "2026-04-13T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -342267,7 +341438,13 @@
       "ai_geo_reason": "Explicitly names Kuwait as the location of the thwarted plot and arrests.",
       "ai_geo_fingerprint": "257c97920ec5350a9e4c19d68d85072a41adad0ba7e5616de717807cd0d51cea",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-9a30dcb31882eeb3",
+      "source_article_fingerprints": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "48c49afee86319e9",
@@ -342328,7 +341505,8 @@
       "ai_geo_reason": "The plot and counter-terrorism operations occurred in Kuwait.",
       "ai_geo_fingerprint": "1a89e2182bf03182121014f2b2428f1c7721d056e8547a87b9cf98b40c3731dd",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-9a30dcb31882eeb3"
     },
     {
       "id": "fdc9b8c6fa05b2ba",
@@ -342391,7 +341569,8 @@
       "ai_geo_reason": "Beşiktaş is a district of Istanbul, Turkey.",
       "ai_geo_fingerprint": "83c3bf1439fb390b0baffa23fb069b626ab1fc4102d9f2286cd2754ce67fb4dd",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-8fcfa4e30df9552b"
     },
     {
       "id": "590065f4ef8cad34",
@@ -342460,7 +341639,8 @@
       "ai_geo_reason": "Indian news source reporting on a local arms/terrorism investigation.",
       "ai_geo_fingerprint": "45bb6834348ac087fa279db4429f77fe15b343657a276e2d9cc27ef4fafae233",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-c05b6d96d4483f11"
     },
     {
       "id": "df53363fa1ed5df0",
@@ -342557,7 +341737,8 @@
       "ai_geo_reason": "Trial conducted by a Nigerian court.",
       "ai_geo_fingerprint": "cd7fb24df0ade6d988804b3185b4fb878b34755c6a84e8d7e622fd77f7f0d20b",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-544d4a94db5dec37"
     },
     {
       "id": "c4e0aac3c3490d40",
@@ -343126,7 +342307,8 @@
       "ai_geo_reason": "The terrorist group's base and conflict zone is Somalia.",
       "ai_geo_fingerprint": "48d7d380f046cea77e3c2d42261c3eb560f61739bf63f2f5dc7129eb3617889a",
       "ai_geo_inferred": true,
-      "actor_group": "Al-Shabaab"
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-e357d738e12f9d8b"
     },
     {
       "id": "9fc87d9293625269",
@@ -343405,7 +342587,8 @@
       "source_article_fingerprints": [
         "05863b9d9f2355f7f0ead155d6dfec536a291b66053a5d1f1da6554a0c336190"
       ],
-      "actor_group": "Al-Shabaab"
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-f4ebf13b1006cfcb"
     },
     {
       "id": "e77b2495e054feab",
