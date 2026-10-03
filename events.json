@@ -443,7 +443,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-10-03T14:11:21.220401+00:00",
-  "number_of_events": 3715,
+  "number_of_events": 3656,
   "events": [
     {
       "id": "5721c2aa17995079",
@@ -337386,7 +337386,8 @@
       "ai_geo_fingerprint": "83c3bf1439fb390b0baffa23fb069b626ab1fc4102d9f2286cd2754ce67fb4dd",
       "ai_geo_inferred": true,
       "actor_group": "",
-      "incident_id": "inc-8fcfa4e30df9552b"
+      "incident_id": "inc-7cb8d3a73f43ffb0",
+      "incident_anchor": "Israeli consulate Istanbul shootout attack 2026-04-07"
     },
     {
       "id": "590065f4ef8cad34",
@@ -337459,104 +337460,6 @@
       "incident_id": "inc-c05b6d96d4483f11"
     },
     {
-      "id": "df53363fa1ed5df0",
-      "category": "Legal / Judicial",
-      "categories": [
-        "Legal / Judicial"
-      ],
-      "title": "Nigerian court convicts over 300 individuals in mass terrorism trials",
-      "summary": "A Nigerian court has handed down convictions to more than 300 defendants as part of large-scale terrorism trials.",
-      "original_title": "Nigerian court convicts more than 300 in mass terrorism trial",
-      "original_summary": "Nigerian court convicts more than 300 in mass terrorism trial AP News",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-10T07:00:00+00:00",
-      "source": "AP News",
-      "source_count": 4,
-      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPX2ZWWVlybjNVYlN3dkVtZmNDck5MbWRvOFhFcnB5ZEMxRDBBRVVQYXhtTW0yR1BvcndUeGZXMnNxS1VkclQ2Z0djbkZlcm1DR3NMMDl4eEJlUUwtOTNBMW1VUm5nTmF6eG1WdGJaZDBvMkR3VmFfT3lZTk5EQkJDNDRUUTdkV1dNXzUw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": "Abuja",
-      "region": null,
-      "latitude": 9.05785,
-      "longitude": 7.49508,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "sources": [
-        "AP News",
-        "The Independent",
-        "Deccan Herald",
-        "DW.com"
-      ],
-      "related_articles": [
-        {
-          "title": "Nigerian court convicts more than 300 in mass terrorism trial",
-          "original_title": "Nigerian court convicts more than 300 in mass terrorism trial",
-          "original_language": "en",
-          "summary": "Nigerian court convicts more than 300 in mass terrorism trial The Independent",
-          "published": "2026-04-10T07:00:00+00:00",
-          "source": "The Independent",
-          "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOcXVTcmoxU0xpeE0tZWdHbks0dlhuUnBOZzVrcWM4T0gwRWJ2YkdDcDRTVnotLUdmUkYwQ213N2N6a182cU9VdHNhODgxOTRfRjdKUE1jWUUwSkFhM2lWWExZdHB1UXUwU01PdUFsX0o5WDZNZm94UVBCN2FRNk9SdUVrX2ZhYmtkbl9vQWZkWUlrX1U?oc=5"
-        },
-        {
-          "title": "Nigeria court convicts 386 in mass terrorism trial",
-          "original_title": "Nigeria court convicts 386 in mass terrorism trial",
-          "original_language": "en",
-          "summary": "Nigeria court convicts 386 in mass terrorism trial Deccan Herald",
-          "published": "2026-04-11T07:00:00+00:00",
-          "source": "Deccan Herald",
-          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPaFBoVk5naUk0aUpKb2NNbUNGQlRrelhjemNqLWd5TzVvMGFBRlFWZE9lY19RWkhCOWxYbHZnOHNaRTJ5cDNPRFBRWGlaeVcxdWFYNFVSNGZoZWFmQTVYRDc4LWhsMmstRk5TcDlfTmZESWtYc1RfaXdieDlmQTloWnVIOWgwSFRTd3ZiTG1HcXc2WDhyOFRGRldtUkl0Nk1TaDUw?oc=5"
-        },
-        {
-          "title": "Nigeria terror trial: Nearly 400 terror suspects convicted",
-          "original_title": "Nigeria terror trial: Nearly 400 terror suspects convicted",
-          "original_language": "en",
-          "summary": "Nigeria terror trial: Nearly 400 terror suspects convicted DW.com",
-          "published": "2026-04-11T07:00:00+00:00",
-          "source": "DW.com",
-          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPSUNzcFdWb1R2MUNYLXE4QXpfSHFwV3Q1MVpYdEplamQzbTFZbE9mV3B4UUIwX0NyV1ZPa2VmblY3dEhjV0VPOVhka1Z5ODFFcWp6RTdLTE1MOWpIUllfVGdZai1CZ1QzYnBnS0xQZ1RCTUs1Zm1leS01MEVDZE5LR01vQVpMYm16RkxjcFp4Mlk1LWlk0gGUAUFVX3lxTE1tQzc2RUgxNUFIUEVycEx5UmxzTmtWSUFyV203RHlKUy1MVG1KUURMWkRXRkhhU3YxTHhmTERKMGpvVGdxck5wUUhaMzZ6MVJwT1BNeVNzTkxZY3g3MmdNQ2I2ME4wSDdnX0xBUEJxYmZkQVlxSXB0S2FjdTYxcUJ6ZHAwRjFYTTNzTWU4UlU5VXV2VEk?oc=5"
-        }
-      ],
-      "article_count": 4,
-      "first_reported": "2026-04-10T07:00:00+00:00",
-      "last_reported": "2026-04-11T07:00:00+00:00",
-      "dedup_confidence": 0.99,
-      "dedup_methods": [
-        "same_normalized_title",
-        "very_high_title_similarity",
-        "entity_actor_event_signature"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v2-multilingual",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Major judicial sentencing and conviction milestone involving hundreds of terrorism cases.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Nigerian court convicts over 300 defendants in mass terrorism trial",
-      "title_variants": [
-        "Nigerian court convicts over 300 defendants in mass terrorism trial"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Nigerian court convicts over 300 individuals in mass terrorism trials"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Trial conducted by a Nigerian court.",
-      "ai_geo_fingerprint": "cd7fb24df0ade6d988804b3185b4fb878b34755c6a84e8d7e622fd77f7f0d20b",
-      "ai_geo_inferred": true,
-      "actor_group": "",
-      "incident_id": "inc-544d4a94db5dec37"
-    },
-    {
       "id": "c4e0aac3c3490d40",
       "category": "Counter Terrorism Action",
       "categories": [
@@ -337616,77 +337519,8 @@
       "ai_geo_reason": "Operation conducted by Italian law enforcement.",
       "ai_geo_fingerprint": "221062ca0775ed7eb4288952f1c065d05a8d5a402880fe53d78194f950b6eabe",
       "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
-      "id": "de489b9f9ac4662e",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Attacks"
-      ],
-      "title": "Detention toll rises to 16 over terrorist attack targeting police post in Beşiktaş",
-      "summary": "The number of detentions linked to the terrorist attack targeting a police security point in Beşiktaş, Istanbul, has risen to 16.",
-      "original_title": "Beşiktaş'ta polis noktasına yönelik terör saldırısına ilişkin gözaltı 16'ya yükseldi",
-      "original_summary": "Beşiktaş'ta polis noktasına yönelik terör saldırısına ilişkin gözaltı 16'ya yükseldi TRT Haber",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": "TR:tr",
-      "published": "2026-04-10T07:00:00+00:00",
-      "source": "TRT Haber",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOMHZSOGZDN1lFSEJKTmg2X2VuLVBuNXZqNzh6Mjd2RXI0LXJyUVhTek16c3hwVVBEYm00LXdvRTRYRXA4ektWUXhVck8tZ0hSNldPTUdJMk4xbU9CbG03dlpCa1pGNGRtN0d0T1hpaEl3RGZwWDA0NmJXUW8yZWpJOGpsRW9GV1VScVU2MGJXX05mN0czcTgya1QxLWVPdDJDSlNGSFhNV2piNDhQampfbGh4OG95d0dSM0luYzNhVXpRQ3dQODBjWXh3eVJFQQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Turkey",
-      "country_code": "TR",
-      "city": "Istanbul",
-      "region": null,
-      "latitude": 41.01384,
-      "longitude": 28.94966,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "trthaber.com",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "TRT Haber"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-10T07:00:00+00:00",
-      "last_reported": "2026-04-10T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Reports updated arrest numbers following a terrorist attack on a police post.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Detention toll rises to 16 over terrorist attack targeting police post in Besiktas Istanbul",
-      "title_variants": [
-        "detention of 16 suspects in connection with Beşiktaş police post terrorist attack",
-        "Detention toll rises to 16 over terrorist attack targeting police post in Besiktas Istanbul"
-      ],
-      "location_confidence_score": 0.98,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "terrorist attack targeting a police security point in Beşiktaş, Istanbul"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly states Beşiktaş, Istanbul, Turkey.",
-      "ai_geo_fingerprint": "fab700a9c9dfdbb09d455995d10612001c2ff71878ccbcbc4499262ad92df4d0",
-      "ai_geo_inferred": false,
       "actor_group": "",
-      "primary_event_type": "ARREST",
-      "is_attack": false,
-      "incident_anchor": "Besiktas police post attack Istanbul 2026-04-10",
-      "update_type": "ARREST_UPDATE",
-      "incident_id": "inc-822f783b5bc2fa64"
+      "incident_id": "inc-04959ba33ca777e9"
     },
     {
       "id": "dddb7a6ede2ec62b",
@@ -337850,74 +337684,6 @@
       "incident_id": "inc-2cef9710af29f151"
     },
     {
-      "id": "a9b3cad8641c609f",
-      "category": "Terrorist Financing",
-      "categories": [
-        "Terrorist Financing"
-      ],
-      "title": "Primorye resident sponsored enemy militants using cryptocurrency",
-      "summary": "Investigators revealed that the detained Primorye resident funded armed militants using cryptocurrency.",
-      "original_title": "Приморец спонсировал вражеских боевиков через криптовалюту",
-      "original_summary": "",
-      "original_language": "ru",
-      "collection_language": "ru",
-      "collection_language_name": "Russian",
-      "collection_locale": null,
-      "published": "2026-04-09T11:30:00+00:00",
-      "source": "vse42.ru",
-      "source_count": 1,
-      "url": "https://vse42.ru/news/33634782",
-      "collector": "GDELT DOC 2.0",
-      "acquisition_channel": "gdelt_doc_search",
-      "country": "Russia",
-      "country_code": "RU",
-      "city": null,
-      "region": "Primorsky Krai",
-      "latitude": 43.33,
-      "longitude": 132.0,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "source_article_fingerprints": [
-        "592321a6f27dc42be66c6082a95d75bd81aede05a43255902c5ccc19f8f62e69"
-      ],
-      "sources": [
-        "vse42.ru"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-09T11:30:00+00:00",
-      "last_reported": "2026-04-09T11:30:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v4-counter-terrorism-action",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Operational details regarding cryptocurrency financing of militants.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Cryptocurrency terrorist financing investigation in Primorye",
-      "title_variants": [
-        "Cryptocurrency terrorist financing investigation in Primorye"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Primorye resident sponsored enemy militants using cryptocurrency"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The suspect is from Primorye, Russia.",
-      "ai_geo_fingerprint": "00950507a327ad413da7613c7b73e1e7588f73bf7b56432f3adbb4ebafba345e",
-      "ai_geo_inferred": true,
-      "actor_group": ""
-    },
-    {
       "id": "991106c979697c65",
       "category": "Attacks",
       "categories": [
@@ -338045,7 +337811,8 @@
       "ai_geo_reason": "Event location is Gaza.",
       "ai_geo_fingerprint": "6fb7220ff4ff52ff7a0887dfd706f372865759e5bb0ef2c1bf71fc13ee16ab61",
       "ai_geo_inferred": false,
-      "actor_group": "Hamas"
+      "actor_group": "Hamas",
+      "incident_id": "inc-37cb30607635d1aa"
     },
     {
       "id": "b4cdf197355a3706",
@@ -338133,18 +337900,18 @@
         "Arrests",
         "Attacks"
       ],
-      "title": "Nearly 200 arrests following shootout in front of Israeli consulate in Istanbul",
-      "summary": "German media reports nearly 200 arrests following an armed shootout and attack outside the Israeli consulate in Istanbul.",
-      "original_title": "Fast 200 Festnahmen nach Schusswechsel vor israelischem Konsulat in Istanbul",
-      "original_summary": "Fast 200 Festnahmen nach Schusswechsel vor israelischem Konsulat in Istanbul Spiegel",
-      "original_language": "de",
-      "collection_language": "de",
-      "collection_language_name": "German",
-      "collection_locale": "DE:de",
+      "title": "Detention toll rises to 16 over terrorist attack targeting police post in Beşiktaş",
+      "summary": "The number of detentions linked to the terrorist attack targeting a police security point in Beşiktaş, Istanbul, has risen to 16.",
+      "original_title": "Beşiktaş'ta polis noktasına yönelik terör saldırısına ilişkin gözaltı 16'ya yükseldi",
+      "original_summary": "Beşiktaş'ta polis noktasına yönelik terör saldırısına ilişkin gözaltı 16'ya yükseldi TRT Haber",
+      "original_language": "tr",
+      "collection_language": "tr",
+      "collection_language_name": "Turkish",
+      "collection_locale": "TR:tr",
       "published": "2026-04-09T07:00:00+00:00",
-      "source": "Spiegel",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOM3BlY1ZRQW5JaG1aejQwU1NuNmIwWWg0VjVTNDZEcnZtTXdZbnpCMkluUWxiNUpYYXE2UlVNcWNBeVFBX0ZfeWxwWmpKOENRMV9naUd0NHVrZW9ZOE9zSkU3aFVISy1rR0ZxQUVFaU1xTDNFSU5sUGpxNVliRk5sOEFwSEl0aG44VURPZ3M0OTBrTEhROFJ0a0VUS3Y2NktxNndsMDlsRlJGUU9mUlFGVDFpQ1dvQjc3dHNDSFBLcTUzeDBXeUxyYTMzY3BOTFNnTVBuaUR2YW1oeHdUd3ZF?oc=5",
+      "source": "TRT Haber",
+      "source_count": 2,
+      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOMHZSOGZDN1lFSEJKTmg2X2VuLVBuNXZqNzh6Mjd2RXI0LXJyUVhTek16c3hwVVBEYm00LXdvRTRYRXA4ektWUXhVck8tZ0hSNldPTUdJMk4xbU9CbG03dlpCa1pGNGRtN0d0T1hpaEl3RGZwWDA0NmJXUW8yZWpJOGpsRW9GV1VScVU2MGJXX05mN0czcTgya1QxLWVPdDJDSlNGSFhNV2piNDhQampfbGh4OG95d0dSM0luYzNhVXpRQ3dQODBjWXh3eVJFQQ?oc=5",
       "collector": "Google News RSS",
       "country": "Turkey",
       "country_code": "TR",
@@ -338158,12 +337925,23 @@
       "targeted_source": "spiegel.de",
       "targeted_source_kind": "local_language_media",
       "sources": [
-        "Spiegel"
+        "Spiegel",
+        "TRT Haber"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Nearly 200 arrests following shootout in front of Israeli consulate in Istanbul",
+          "original_title": "Fast 200 Festnahmen nach Schusswechsel vor israelischem Konsulat in Istanbul",
+          "original_language": "de",
+          "summary": "German media reports nearly 200 arrests following an armed shootout and attack outside the Israeli consulate in Istanbul.",
+          "published": "2026-04-09T07:00:00+00:00",
+          "source": "Spiegel",
+          "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOM3BlY1ZRQW5JaG1aejQwU1NuNmIwWWg0VjVTNDZEcnZtTXdZbnpCMkluUWxiNUpYYXE2UlVNcWNBeVFBX0ZfeWxwWmpKOENRMV9naUd0NHVrZW9ZOE9zSkU3aFVISy1rR0ZxQUVFaU1xTDNFSU5sUGpxNVliRk5sOEFwSEl0aG44VURPZ3M0OTBrTEhROFJ0a0VUS3Y2NktxNndsMDlsRlJGUU9mUlFGVDFpQ1dvQjc3dHNDSFBLcTUzeDBXeUxyYTMzY3BOTFNnTVBuaUR2YW1oeHdUd3ZF?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-04-09T07:00:00+00:00",
-      "last_reported": "2026-04-09T07:00:00+00:00",
+      "last_reported": "2026-04-10T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -338172,7 +337950,7 @@
       "ai_current_ct_event": true,
       "ai_selected": true,
       "translated_to_english": true,
-      "ai_canonical_event": "Nearly 200 arrests following shootout and attack outside Israeli consulate in Istanbul",
+      "ai_canonical_event": "Detention toll rises to 16 over terrorist attack targeting police post in Besiktas Istanbul",
       "title_variants": [
         "mass arrests following shootout outside Israeli consulate in Istanbul",
         "Nearly 200 arrests following shootout and attack outside Israeli consulate in Istanbul"
@@ -338194,7 +337972,12 @@
       "is_attack": false,
       "incident_anchor": "Israeli consulate Istanbul shootout attack 2026-04-07",
       "update_type": "ARREST_UPDATE",
-      "incident_id": "inc-7cb8d3a73f43ffb0"
+      "incident_id": "inc-7cb8d3a73f43ffb0",
+      "source_article_fingerprints": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "9c4f8c37f922aac6",
@@ -338256,7 +338039,8 @@
       "ai_geo_reason": "Explicitly mentions Palermo, Italy.",
       "ai_geo_fingerprint": "c6fbaa56fcb61f5aa18d590d8c493de8a1faf84eb929fceaf42cacbeb70dd945",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-7464eeba230d0944"
     },
     {
       "id": "184b3d43c34dfe3a",
@@ -338317,7 +338101,8 @@
       "ai_geo_reason": "Explicitly mentions İzmir, Turkey.",
       "ai_geo_fingerprint": "f2c95a5f37f9524e727d89c980fc08a9449b260b04d46bad780a27907e942598",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-f7d9d3a1b0f61018"
     },
     {
       "id": "52b5485ef69c24e5",
@@ -338480,7 +338265,8 @@
       "dedup_methods": [
         "same_url"
       ],
-      "actor_group": "Al-Shabaab"
+      "actor_group": "Al-Shabaab",
+      "incident_id": "inc-3fef6f683d11cef9"
     },
     {
       "id": "dc66fd9cc4cae948",
@@ -338499,7 +338285,7 @@
       "collection_locale": null,
       "published": "2026-04-08T23:30:00+00:00",
       "source": "kommersant.ru",
-      "source_count": 3,
+      "source_count": 4,
       "url": "https://www.kommersant.ru/doc/8572346",
       "collector": "GDELT DOC 2.0",
       "acquisition_channel": "gdelt_doc_search",
@@ -338512,6 +338298,7 @@
       "location_precision": "region",
       "location_confidence": "high",
       "source_article_fingerprints": [
+        "592321a6f27dc42be66c6082a95d75bd81aede05a43255902c5ccc19f8f62e69",
         "5fe52246f94cff29377e9cbcc12cdb009483b5236ead6353652bced5389de0dd",
         "d576ba07163fdf2daaae4b343cfdb47156c28706a3bbf830fba29b0a04a8256a",
         "fc97f4fabb1625724030dd1a5e24e63fb35fcb551da29d1af31e1858c50e0669"
@@ -338519,7 +338306,8 @@
       "sources": [
         "kommersant.ru",
         "trud-ost.ru",
-        "vesti.ru"
+        "vesti.ru",
+        "vse42.ru"
       ],
       "related_articles": [
         {
@@ -338530,11 +338318,20 @@
           "published": "2026-04-09T08:30:00+00:00",
           "source": "trud-ost.ru",
           "url": "http://trud-ost.ru/?p=967564"
+        },
+        {
+          "title": "Primorye resident sponsored enemy militants using cryptocurrency",
+          "original_title": "Приморец спонсировал вражеских боевиков через криптовалюту",
+          "original_language": "ru",
+          "summary": "Investigators revealed that the detained Primorye resident funded armed militants using cryptocurrency.",
+          "published": "2026-04-09T11:30:00+00:00",
+          "source": "vse42.ru",
+          "url": "https://vse42.ru/news/33634782"
         }
       ],
-      "article_count": 2,
+      "article_count": 3,
       "first_reported": "2026-04-08T23:30:00+00:00",
-      "last_reported": "2026-04-09T08:30:00+00:00",
+      "last_reported": "2026-04-09T11:30:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v4-counter-terrorism-action",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -338547,9 +338344,10 @@
       "title_variants": [
         "Detention of a man for high treason and terrorist financing in Primorye"
       ],
-      "dedup_confidence": 0.833,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "same_incident"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_region_coordinates",
@@ -338567,7 +338365,8 @@
       "ai_geo_reason": "Law enforcement operation took place in Primorye, Russia.",
       "ai_geo_fingerprint": "0e05bdaad28a6963ae451fc5be8b86f14462fd871aea626484d363bc4021378a",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-8e11ed3b657a8972"
     },
     {
       "id": "0dcff42ad4d0dd67",
@@ -338627,7 +338426,8 @@
       "ai_geo_reason": "Piracy and naval intervention in West African waters (commonly Gulf of Guinea/Nigeria context, defaulted to regional maritime).",
       "ai_geo_fingerprint": "0a666ab501d4b191cf72df484a4acd2c8e4ec0bf2f762f18e2d80d5c96d5bbca",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-c6609cbce812c75e"
     },
     {
       "id": "ef2d5cd6c076a800",
@@ -338868,7 +338668,8 @@
       "ai_geo_reason": "Explicitly mentions Baku, Azerbaijan.",
       "ai_geo_fingerprint": "a757b0fe02f0acb303ade1e96e752c49522641215bb35b4717ba7219edd2aeb1",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-5e4b12bc4eed067f"
     },
     {
       "id": "a92878d203df95ae",
@@ -338937,7 +338738,8 @@
       "ai_geo_reason": "Explicitly mentions Mumbai, India.",
       "ai_geo_fingerprint": "9817d9abc5d6879fa9217a235510fee84259f81f6856d97d076779146f6a06e8",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-97346b5aad1b41f9"
     },
     {
       "id": "754e44c3fbfee1b4",
@@ -338945,18 +338747,18 @@
       "categories": [
         "Legal / Judicial"
       ],
-      "title": "Nigeria begins mass trials of 500 terrorism suspects",
-      "summary": "Nigerian authorities have commenced mass judicial proceedings and trials for approximately 500 suspects accused of terrorism.",
-      "original_title": "Eye on Africa - Nigeria begins trial of 500 terrorism suspects",
-      "original_summary": "Eye on Africa - Nigeria begins trial of 500 terrorism suspects France 24",
+      "title": "Nigerian court convicts over 300 individuals in mass terrorism trials",
+      "summary": "A Nigerian court has handed down convictions to more than 300 defendants as part of large-scale terrorism trials.",
+      "original_title": "Nigerian court convicts more than 300 in mass terrorism trial",
+      "original_summary": "Nigerian court convicts more than 300 in mass terrorism trial AP News",
       "original_language": "en",
       "collection_language": "en",
       "collection_language_name": "English",
       "collection_locale": null,
       "published": "2026-04-07T07:00:00+00:00",
-      "source": "France 24",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE94WnRmX0NPdjRTWGhnT1NlMFVxbVZHN0tCSTFTRjVUTVhVc2dRa0xPTlJtSjVxT2htQ1ZzdXJsR1VzTGR0amdNV0R5clByWnRMcUUxQTVIVmNBLTRuTHRLSU11eGhjM0dLWnFPNk5jcGd3SkpPWkJSYWhOUnpKTUU?oc=5",
+      "source": "AP News",
+      "source_count": 6,
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPX2ZWWVlybjNVYlN3dkVtZmNDck5MbWRvOFhFcnB5ZEMxRDBBRVVQYXhtTW0yR1BvcndUeGZXMnNxS1VkclQ2Z0djbkZlcm1DR3NMMDl4eEJlUUwtOTNBMW1VUm5nTmF6eG1WdGJaZDBvMkR3VmFfT3lZTk5EQkJDNDRUUTdkV1dNXzUw?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
       "country_code": "NG",
@@ -338968,7 +338770,11 @@
       "location_confidence": "high",
       "sources": [
         "The Nigerian Observer",
-        "France 24"
+        "France 24",
+        "AP News",
+        "The Independent",
+        "Deccan Herald",
+        "DW.com"
       ],
       "related_articles": [
         {
@@ -338988,26 +338794,54 @@
           "published": "2026-04-07T07:00:00+00:00",
           "source": "The Nigerian Observer",
           "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQckdKVmdZRzZsUVhKai0xeU5mRkhmTWRabkxGa2tZNXk2dkEwdTN1MlBxRlRFWTVIbnV0ZUV2SWtwQVByc1BSbGlKd2pSWlB3ajA5U2p0MnBYT05MbDdRTzQ3ZkRoMml5SXExS04xM2VhMW9DOU11NlVld0UxVVY3Z3EzM0JMdU82VmZlaUlzWkhnLUZrVGR3RGhJWTlETlJ5ak40M2RweUJqdw?oc=5"
+        },
+        {
+          "title": "Nigerian court convicts more than 300 in mass terrorism trial",
+          "original_title": "Nigerian court convicts more than 300 in mass terrorism trial",
+          "original_language": "en",
+          "summary": "Nigerian court convicts more than 300 in mass terrorism trial The Independent",
+          "published": "2026-04-10T07:00:00+00:00",
+          "source": "The Independent",
+          "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOcXVTcmoxU0xpeE0tZWdHbks0dlhuUnBOZzVrcWM4T0gwRWJ2YkdDcDRTVnotLUdmUkYwQ213N2N6a182cU9VdHNhODgxOTRfRjdKUE1jWUUwSkFhM2lWWExZdHB1UXUwU01PdUFsX0o5WDZNZm94UVBCN2FRNk9SdUVrX2ZhYmtkbl9vQWZkWUlrX1U?oc=5"
+        },
+        {
+          "title": "Nigeria court convicts 386 in mass terrorism trial",
+          "original_title": "Nigeria court convicts 386 in mass terrorism trial",
+          "original_language": "en",
+          "summary": "Nigeria court convicts 386 in mass terrorism trial Deccan Herald",
+          "published": "2026-04-11T07:00:00+00:00",
+          "source": "Deccan Herald",
+          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPaFBoVk5naUk0aUpKb2NNbUNGQlRrelhjemNqLWd5TzVvMGFBRlFWZE9lY19RWkhCOWxYbHZnOHNaRTJ5cDNPRFBRWGlaeVcxdWFYNFVSNGZoZWFmQTVYRDc4LWhsMmstRk5TcDlfTmZESWtYc1RfaXdieDlmQTloWnVIOWgwSFRTd3ZiTG1HcXc2WDhyOFRGRldtUkl0Nk1TaDUw?oc=5"
+        },
+        {
+          "title": "Nigeria terror trial: Nearly 400 terror suspects convicted",
+          "original_title": "Nigeria terror trial: Nearly 400 terror suspects convicted",
+          "original_language": "en",
+          "summary": "Nigeria terror trial: Nearly 400 terror suspects convicted DW.com",
+          "published": "2026-04-11T07:00:00+00:00",
+          "source": "DW.com",
+          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPSUNzcFdWb1R2MUNYLXE4QXpfSHFwV3Q1MVpYdEplamQzbTFZbE9mV3B4UUIwX0NyV1ZPa2VmblY3dEhjV0VPOVhka1Z5ODFFcWp6RTdLTE1MOWpIUllfVGdZai1CZ1QzYnBnS0xQZ1RCTUs1Zm1leS01MEVDZE5LR01vQVpMYm16RkxjcFp4Mlk1LWlk0gGUAUFVX3lxTE1tQzc2RUgxNUFIUEVycEx5UmxzTmtWSUFyV203RHlKUy1MVG1KUURMWkRXRkhhU3YxTHhmTERKMGpvVGdxck5wUUhaMzZ6MVJwT1BNeVNzTkxZY3g3MmdNQ2I2ME4wSDdnX0xBUEJxYmZkQVlxSXB0S2FjdTYxcUJ6ZHAwRjFYTTNzTWU4UlU5VXV2VEk?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 6,
       "first_reported": "2026-04-07T07:00:00+00:00",
-      "last_reported": "2026-04-09T07:00:00+00:00",
+      "last_reported": "2026-04-10T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v2-multilingual",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Ongoing counter-terrorism judicial proceedings and mass trials of terror suspects.",
       "ai_current_ct_event": true,
       "ai_selected": true,
       "translated_to_english": false,
-      "ai_canonical_event": "commencement of mass trials for 500 terrorism suspects in Nigeria",
+      "ai_canonical_event": "Nigerian court convicts over 300 defendants in mass terrorism trial",
       "title_variants": [
         "prosecution of 500 suspected terrorists by Federal Government in Nigeria"
       ],
-      "dedup_confidence": 0.592,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "paraphrase_entity_context"
+        "paraphrase_entity_context",
+        "same_incident"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_country_capital",
@@ -339021,7 +338855,9 @@
       "ai_geo_reason": "Explicitly mentions Nigeria.",
       "ai_geo_fingerprint": "868fded2a9b3aa7557b133c88a9c6510bab50b1b0ef7a81e215e8495f93f2d2a",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-544d4a94db5dec37",
+      "source_article_fingerprints": []
     },
     {
       "id": "e6159333570203e8",
@@ -339425,7 +339261,8 @@
       "ai_geo_reason": "Trials taking place in Abuja, Nigeria.",
       "ai_geo_fingerprint": "8365dbc265ccdfff4043e228927656060630087bc20a448e296fc15557c892b7",
       "ai_geo_inferred": false,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-544d4a94db5dec37"
     },
     {
       "id": "93120cc2f21f829e",
@@ -339567,7 +339404,8 @@
       "ai_geo_reason": "French politician detained/facing legal action in France.",
       "ai_geo_fingerprint": "ce61862dfc2290d80bf73ef26536f0d9c8b4582144ad0cbcaad3401ec9ba11ea",
       "ai_geo_inferred": true,
-      "actor_group": ""
+      "actor_group": "",
+      "incident_id": "inc-5d732bda768de7fd"
     }
   ],
   "geolocation": {
