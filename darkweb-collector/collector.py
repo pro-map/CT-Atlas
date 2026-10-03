@@ -408,7 +408,7 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
     batch, batch_size = [], 0
 
     def upload(rows, final):
-        result = api_call(api, endpoint, "/darkweb/ingest", {"outlet_id": oid, "items": [r for r, _ in rows],
+        result = api_call(api, endpoint, "/darkweb/ingest", {"selection_version": 1, "outlet_id": oid, "items": [r for r, _ in rows],
             "scan_ok": progress["pages_scanned"] > 0, "scan_complete": final and progress["complete"],
             "truncated": progress["truncated"], "pages_scanned": progress["pages_scanned"],
             "pending_pages": progress["pending_pages"], "failed_pages": progress["failed_pages"]})

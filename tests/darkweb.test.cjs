@@ -25,7 +25,7 @@ function harness(){
  context.gateCall=async(e,path,body)=>path==='/session-get'?Response.json({username:body.session_token}, {status:['admin','analyst'].includes(body.session_token)?200:401}):gate.fetch(new Request('https://gate'+path,{method:'POST',body:JSON.stringify(body)}));
  const source=fs.readFileSync('cloudflare-worker/darkweb.js','utf8').replace(/^import[^\n]+\n/,'').replace(/export /g,'');
  vm.runInContext(source+'\nglobalThis.api={handleDarkweb,onionUrl};',context);
- async function call(path,body,user='admin',collector=false){const r=await context.api.handleDarkweb(new Request('https://worker'+path,{method:body===undefined?'GET':'POST',headers:collector?{Authorization:'Bearer '+env.DARKWEB_INGEST_TOKEN}:{'X-Session-Token':user},...(body===undefined?{}:{body:JSON.stringify(body)})}),env);return {status:r.status,data:await r.json(),headers:r.headers};}
+ async function call(path,body,user='admin',collector=false){if(path==='/darkweb/ingest' && body)body={selection_version:1,...body};const r=await context.api.handleDarkweb(new Request('https://worker'+path,{method:body===undefined?'GET':'POST',headers:collector?{Authorization:'Bearer '+env.DARKWEB_INGEST_TOKEN}:{'X-Session-Token':user},...(body===undefined?{}:{body:JSON.stringify(body)})}),env);return {status:r.status,data:await r.json(),headers:r.headers};}
  return {call,values,env,api:context.api};
 }
 async function register(h){const r=await h.call('/darkweb/outlet',{name:'Outlet',url:base,keywords:'Niger, Sahel'});assert.equal(r.status,200);return r.data.outlet.id;}
@@ -106,4 +106,21 @@ test('recursive coverage cannot finalize a baseline with queued or failed pages;
  state=(await h.call('/darkweb/feed')).data;
  assert.ok(state.outlets[0].initialized_at);
  assert.equal(state.outlets[0].crawl_complete,true);
+});
+
+
+test('legacy feed is deleted once while outlets, URL history and new selections survive',async()=>{
+ const h=harness(), id=await register(h);
+ h.values.delete('darkweb:publication-selection-migration:1');
+ h.values.set('darkweb:item:legacy',{id:'legacy',first_seen:'2020-01-01',type:'page'});
+ h.values.set('darkweb:known:history',{legacy:{first_seen:'2020-01-01'}});
+ h.values.set('unrelated:record',{keep:true});
+ const state=(await h.call('/darkweb/feed')).data;
+ assert.equal(state.items.length,0);assert.equal(state.outlets.length,1);
+ assert.equal(h.values.get('darkweb:publication-selection-migration:1').removed,1);
+ assert.ok(h.values.has('darkweb:known:history'));assert.ok(h.values.has('unrelated:record'));
+ assert.equal((await h.call('/darkweb/ingest',{outlet_id:id,selection_version:0,items:[],scan_ok:true},'',true)).status,409);
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[{url:base+'new.pdf',type:'pdf'}],scan_ok:true},'',true);
+ assert.equal((await h.call('/darkweb/feed')).data.items.length,1);
+ assert.equal((await h.call('/darkweb/feed')).data.items[0].selection_version,1);
 });

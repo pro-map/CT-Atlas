@@ -182,8 +182,11 @@ Generic words such as PDF, video or إصدار will create broad alerts and do n
 establish authenticity. Leaving this field empty does not stop collection.
 
 Updating the local script applies selection to subsequent scans and discards old
-navigation entries still waiting in the local upload queue. It does not delete
-previously ingested server results. Preserve the state database and evidence:
+navigation entries still waiting in the local upload queue. The Worker performs a one-time deletion of previously ingested, unfiltered feed
+results on its first Dark Web request after deployment. It preserves outlet
+settings, known-URL history and all local evidence. Old collectors are rejected
+with HTTP 409 so they cannot repopulate the unfiltered feed. Update the local
+script after merging and deploying this change. Preserve the state database and evidence:
 existing baselines and acquisition history are retained. An unfinished traversal
 continues, and previously visited pages are reconsidered in the next full cycle.
 

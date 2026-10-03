@@ -513,6 +513,21 @@ export class ReportGate {
     const body = await request.json().catch(()=>({}));
     const now = Date.now();
 
+    // One-time, user-requested removal of the pre-selection feed. Keep outlet
+    // settings and known-URL history so rescans do not manufacture new alerts.
+    if (url.pathname.startsWith("/darkweb-")) {
+      await this.state.storage.transaction(async tx => {
+        const marker = "darkweb:publication-selection-migration:1";
+        if (await tx.get(marker)) return;
+        const rows = await tx.list({ prefix: "darkweb:item:", limit: 1000 });
+        let removed = 0;
+        for (const [key, item] of rows) {
+          if (item.selection_version !== 1) { await tx.delete(key); removed++; }
+        }
+        await tx.put(marker, { removed, completed_at: new Date(now).toISOString() });
+      });
+    }
+
     // Curated outlet watch: private metadata only, bounded to 500 retained items.
     // Serialize read/modify/write with storage transactions so collector retries
     // and parallel outlet saves cannot lose records or duplicate alerts.

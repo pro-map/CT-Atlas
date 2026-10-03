@@ -1,6 +1,6 @@
 import { cleanText, gateCall, isAllowedUser, sha256 } from "./shared.js";
 
-export const DARKWEB_VERSION = "darkweb-v2-recursive-watch";
+export const DARKWEB_VERSION = "darkweb-v3-publication-selection";
 const TYPES = new Set(["pdf", "video", "audio", "image", "page"]);
 
 export function onionUrl(value) {
@@ -90,6 +90,7 @@ export async function handleDarkweb(request, env) {
     return reply(await response.json(), response.status, env);
   }
 
+  if (body.selection_version !== 1) return reply({ error: "Update the collector: publication selection version 1 is required." }, 409, env);
   const stateResponse = await gateCall(env, "/darkweb-state", {});
   const state = await stateResponse.json();
   const outlet = state.outlets.find(o => o.id === body.outlet_id && o.enabled);
@@ -102,7 +103,7 @@ export async function handleDarkweb(request, env) {
     const title = cleanText(raw.title, 300) || new URL(url).pathname;
     const excerpt = cleanText(raw.excerpt, 600);
     const sourcePage = onionUrl(raw.source_page);
-    items.push({ excerpt, source_page: sourcePage && new URL(sourcePage).hostname === new URL(outlet.url).hostname ? sourcePage : "", id: await sha256(outlet.id + "\n" + url), outlet_id: outlet.id, url, title,
+    items.push({ selection_version: 1, excerpt, source_page: sourcePage && new URL(sourcePage).hostname === new URL(outlet.url).hostname ? sourcePage : "", id: await sha256(outlet.id + "\n" + url), outlet_id: outlet.id, url, title,
       type: TYPES.has(raw.type) ? raw.type : "page", sha256: /^[a-f0-9]{64}$/i.test(raw.sha256 || "") ? raw.sha256.toLowerCase() : "",
       acquired: raw.acquired === true && /^[a-f0-9]{64}$/i.test(raw.sha256 || ""),
       bytes: Number.isSafeInteger(raw.bytes) && raw.bytes >= 0 ? raw.bytes : null,
