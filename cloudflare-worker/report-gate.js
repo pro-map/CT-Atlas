@@ -35,9 +35,9 @@ function withAdminDisplayName(row){
   return displayName?{...row,display_name:displayName}:row;
 }
 const SOCIAL_REPORT_RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
-const TAB_ACCESS_FIELDS = Object.freeze({ map: true, crypto: true, facial: true, social: true });
+const TAB_ACCESS_FIELDS = Object.freeze({ map: true, crypto: true, facial: true, social: true, darkweb: true });
 function tabAccessTemplate(username = "") {
-  return { username, map: 0, crypto: 0, facial: 0, social: 0 };
+  return { username, map: 0, crypto: 0, facial: 0, social: 0, darkweb: 0 };
 }
 const MIGRATION_PAGE_SIZE = 250;
 const EXCHANGE_CHAINS = new Set(["bitcoin", "ethereum", "bsc", "polygon", "arbitrum", "base", "tron"]);
@@ -512,6 +512,91 @@ export class ReportGate {
     const url = new URL(request.url);
     const body = await request.json().catch(()=>({}));
     const now = Date.now();
+
+    // Curated outlet watch: private metadata only, bounded to 500 retained items.
+    // Serialize read/modify/write with storage transactions so collector retries
+    // and parallel outlet saves cannot lose records or duplicate alerts.
+    if (url.pathname === "/darkweb-state") {
+      const outlets = (await this.state.storage.get("darkweb:outlets")) || [];
+      const rows = await this.state.storage.list({ prefix: "darkweb:item:", limit: 500 });
+      const items = [...rows.values()].sort((a, b) => b.first_seen.localeCompare(a.first_seen));
+      const seen = body.username ? await this.state.storage.get("darkweb:seen:" + body.username) : "";
+      const unread = items.filter(i => !i.baseline && i.first_seen > (seen || ""));
+      return Response.json({ outlets, items, unread_count: unread.length,
+        keyword_alert_count: unread.filter(i => i.keyword_matches?.length).length,
+        seen_through: seen || "", generated_at: new Date(now).toISOString(), retention_limit: 500 });
+    }
+    if (url.pathname === "/darkweb-seen") {
+      await this.state.storage.transaction(async tx => {
+        const key = "darkweb:seen:" + body.username;
+        const previous = await tx.get(key) || "";
+        await tx.put(key, String(body.through) > previous ? body.through : previous);
+      });
+      return Response.json({ ok: true });
+    }
+    if (url.pathname === "/darkweb-outlet-save") {
+      const result = await this.state.storage.transaction(async tx => {
+        const outlets = await tx.get("darkweb:outlets") || [];
+        const prior = outlets.find(o => o.id === body.outlet.id);
+        if (!prior && outlets.length >= 20) return { error: "Outlet limit reached (20)." };
+        const outlet = { ...prior, ...body.outlet, updated_at: new Date(now).toISOString() };
+        const next = outlets.filter(o => o.id !== outlet.id).concat(outlet);
+        await tx.put("darkweb:outlets", next);
+        return { ok: true, outlet };
+      });
+      return Response.json(result, { status: result.error ? 400 : 200 });
+    }
+    if (url.pathname === "/darkweb-ingest") {
+      const result = await this.state.storage.transaction(async tx => {
+        const outlets = await tx.get("darkweb:outlets") || [];
+        const outlet = outlets.find(o => o.id === body.outlet_id && o.enabled);
+        if (!outlet) return { error: "Unknown or disabled outlet." };
+        const timestamp = new Date(now).toISOString();
+        let added = 0;
+        const knownBuckets = new Map();
+        // Only a completed, non-truncated first inventory establishes the baseline.
+        const baseline = !outlet.initialized_at;
+        for (const item of body.scan_ok ? body.items : []) {
+          const key = "darkweb:item:" + item.id;
+          // Keep small URL-history shards independently from the 500-row feed.
+          // Otherwise listing pages larger than the retained feed would create
+          // the same "new" discoveries every time evicted links are scanned.
+          const bucketKey = "darkweb:known:" + outlet.id + ":" + item.id.slice(0, 2);
+          if (!knownBuckets.has(bucketKey)) knownBuckets.set(bucketKey, await tx.get(bucketKey) || {});
+          const bucket = knownBuckets.get(bucketKey);
+          const prior = await tx.get(key) || bucket[item.id];
+          if (!prior) added++;
+          const record = { ...prior, ...item, first_seen: prior?.first_seen || timestamp,
+            last_seen: timestamp, baseline: prior ? prior.baseline : baseline,
+            sha256: item.sha256 || prior?.sha256 || "", acquired: item.acquired || prior?.acquired || false,
+            bytes: item.bytes ?? prior?.bytes ?? null };
+          await tx.put(key, record);
+          bucket[item.id] = { first_seen: record.first_seen, baseline: record.baseline,
+            sha256: record.sha256, acquired: record.acquired, bytes: record.bytes };
+        }
+        // 256 shards × 128 records per outlet; each value stays below the
+        // Durable Object value-size limit. This is still a bounded history.
+        for (const [key, bucket] of knownBuckets) {
+          const entries = Object.entries(bucket).sort((a, b) => b[1].first_seen.localeCompare(a[1].first_seen)).slice(0, 128);
+          await tx.put(key, Object.fromEntries(entries));
+        }
+        outlet.last_scan = timestamp;
+        outlet.scan_ok = body.scan_ok === true;
+        outlet.error = body.error;
+        outlet.truncated = body.truncated === true;
+        if (body.scan_ok && body.scan_complete) {
+          outlet.last_success = timestamp;
+          if (!body.truncated) outlet.initialized_at ||= timestamp;
+        }
+        outlet.last_added = added;
+        await tx.put("darkweb:outlets", outlets);
+        const rows = await tx.list({ prefix: "darkweb:item:", limit: 1000 });
+        const oldest = [...rows.entries()].sort((a, b) => a[1].first_seen.localeCompare(b[1].first_seen));
+        for (const [key] of oldest.slice(0, Math.max(0, oldest.length - 500))) await tx.delete(key);
+        return { ok: true, added, baseline, retained_limit: 500 };
+      });
+      return Response.json(result, { status: result.error ? 400 : 200 });
+    }
 
     if (url.pathname === "/migration-status") {
       return Response.json({
@@ -1584,4 +1669,3 @@ export class ReportGate {
     });
   }
 }
-

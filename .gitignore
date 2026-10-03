@@ -13,3 +13,7 @@ events-map.json
 # Local UI test harness pages (stubbed session, embedded database): never
 # committed or published.
 zz-*.html
+
+# Outlet addresses, collector state and original evidence remain local/private.
+private-outlet-watch/
+*.sqlite

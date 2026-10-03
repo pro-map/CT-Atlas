@@ -49,6 +49,7 @@ function inject(){
               '<option value="crypto">Crypto Intelligence</option>'+
               '<option value="facial">Facial Intelligence</option>'+
               '<option value="social">Social Media (Beta)</option>'+
+              '<option value="darkweb">Dark Web Intelligence (Beta)</option>'+
             '</select>'+
           '</label>'+
           '<label class="fb-toggle"><input id="fbIncludeRating" type="checkbox"><span>Include an overall evaluation</span></label>'+
