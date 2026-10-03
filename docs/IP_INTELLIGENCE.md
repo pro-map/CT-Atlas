@@ -4,23 +4,31 @@ IP Intelligence is an investigator-oriented workspace for the existing authentic
 
 ## What works after deployment
 
-Enter one public IPv4 or IPv6 address. The API authenticates the session, validates the address, and consults IANA's RDAP bootstrap, the responsible regional registry, and RIPEstat. Results include registration, published organisation/contact postal addresses, technical/abuse contacts, routing ASN/prefix, and approximate MaxMind GeoLite2 location through RIPEstat. Source outages are shown explicitly, with partial results retained. No Tor installation or collector is used for this workspace.
+Enter one public IPv4 or IPv6 address. The API authenticates the session, validates the address, and consults IANA's RDAP bootstrap, the responsible regional registry, RIPEstat and the configured attribution services. Results include registration, published organisation/contact postal addresses, technical/abuse contacts, routing ASN/prefix, and approximate MaxMind GeoLite2 location through RIPEstat. Source outages are shown explicitly, with partial results retained. No Tor installation or collector is used for this workspace.
 
 Only public unicast literals are accepted. URLs, domains, ports, subnets, local/private, shared carrier-NAT, documentation, multicast, mapped and special-use/tunnel ranges are excluded conservatively. The tool does not connect to the investigated IP, perform traceroute, scan ports, bypass a VPN, identify a subscriber, or send a provider request.
 
-## Enable VPN detection and enhanced geolocation
+## VPN detection and IPinfo Lite
 
-1. Obtain an IPinfo API token with **Plus or equivalent lookup access** that returns `anonymous.is_vpn` and `anonymous.name`. A Lite token alone is not sufficient for VPN detection. Check the subscription and quota in your IPinfo account; purchasing a plan is an administrator action.
-2. In Cloudflare, open the **ct-report-generator** Worker → Settings → Variables and Secrets. Add **IPINFO_TOKEN** as a **Secret** and save/deploy.
-3. Run a new lookup. The page reports unknown if enrichment is unavailable, the token lacks access, the quota is exhausted, or a field is omitted. It never converts a missing field into “not detected”. The Worker health endpoint reports only whether a token is configured, not whether the subscription works.
+Proxycheck.io v3 is enabled by default as a complementary VPN/proxy attribution source. It supplies detection flags and, when known, the intermediary provider name and website independently of the hosting network. An account is not required for initial tests: its documented unregistered allowance is 100 queries/day per egress IP. Shared Cloudflare egress can exhaust this allowance or require authentication. For dependable account-level access, create a Proxycheck account (the documented free registered allowance is 1,000/day), then add **PROXYCHECK_API_KEY** as a **Secret** on the **ct-report-generator** Worker, save and deploy. No purchase is required by this integration. Quota exhaustion, missing names and source errors remain explicit; coverage is not universal.
 
-The server requests `https://api.ipinfo.io/lookup/{ip}` with a Bearer credential. The secret never reaches the page, exported files, source URLs or application logs. IPinfo's `anonymous.name` identifies the privacy service where available; the ASN organisation can instead be its hosting supplier. “Hosting” does not imply “VPN”, and “not detected” is not proof of absence. There is no promise of comprehensive VPN attribution.
+The Worker calls the fixed HTTPS v3 endpoint with `ver=24-June-2026&tag=0`. The latter disables the provider's optional positive-detection dashboard log; this is not a claim about all provider retention. Only the submitted public IP is sent, never the analyst's case reference, notes or incident details. The optional key stays server-side and is excluded from responses, reports, source links and application logs. It is sent in the API query string as required by the documented API; do not log outbound credential-bearing URLs. Set **PROXYCHECK_ENABLED=false** to disable this source.
+
+**IPINFO_TOKEN** remains an optional Cloudflare Secret. The Worker tries `/lookup/{ip}` with Bearer authorization and falls back to `/lite/{ip}` only on HTTP 401/402/403/404. A valid Lite token enriches the ASN organisation/domain and country; its flatter response is normalized. Lite does not supply VPN detection and never replaces a more detailed RIPEstat location. Plus/equivalent access can supply `anonymous.is_vpn` and `anonymous.name`. Quota, network and mismatched-IP failures are not concealed with retries. Both API integrations verify that the response concerns the requested IP.
+
+Each VPN detection source retains its own assessment in the page and report. Conflicting booleans become unresolved, with a warning; several named services are preserved without selecting a certain recipient. Exact service aliases are deduplicated. Hosting alone does not imply a VPN, a missing assessment is unknown, and a negative assessment does not prove absence. Source confidence concerns positive detection quality, not identity or criminality.
+
+Health fields distinguish IPinfo secret configuration, Proxycheck enablement and Proxycheck key configuration. These configuration flags do not certify credential validity, account entitlement or quota. Run an actual lookup and inspect source statuses for that.
 
 ## Contact routes and interpretation
 
-RIR contact cards supply published organisation names, postal addresses, email addresses and phone numbers. RIPEstat supplies additional abuse emails. These are explicitly labelled registry/technical contacts, not legal-request channels or subscriber addresses. Registration country, estimated server location and corporate legal jurisdiction are kept separate.
+The top **Who to contact** card names the attributed VPN/intermediary first, or the network operator/allocation holder when no service is named. It gives available email, postal address, phone, official policy/portal and the basis for the lead. Unresolved multiple-provider attribution does not choose one mailbox. The same card is included near the beginning of the PDF and in JSON. It identifies a potential records holder and specifies the information an investigator may request: subscriber/account identity, service or installation address, and IP allocation/session records for the incident time and source port. These are request objectives, never public lookup results. A hosting/VPN endpoint does not reveal the access ISP behind it or guarantee that linking records exist.
 
-The initial small contact directory matches exact IPinfo service aliases for Proton VPN, NordVPN, Mullvad and ExpressVPN. Proton's law-enforcement page/email is labelled as such. NordVPN and Mullvad expose general contact routes, and ExpressVPN links to its provider policy: none is presented as a verified law-enforcement inbox. A Cloudflare AS13335 routing match links to its official law-enforcement guidance, subject to confirming the relevant service/entity. Unknown providers have an explicit “no verified route” result; no AI invents contacts, addresses or jurisdictions. The directory's verification date is printed in the screen and report. Recheck official pages before an operational request; extend the directory with reviewed official sources as required.
+Network identity can come from IPinfo, RIR RDAP, Proxycheck's network provider or a RIPEstat ASN-holder fallback. A network owner can be an ISP, host or intermediary; it is not automatically the entity holding subscriber records. RIR contact cards and RIPEstat supply published organisation names, postal addresses, emails and phones worldwide. These are IP allocation contacts, not domain registrars. Registry/abuse contacts are clearly labelled as routing leads, not verified legal-request channels. Server location, registration country and a provider's legal jurisdiction remain separate.
+
+The reviewed contact directory currently covers Proton VPN, NordVPN, Mullvad, ExpressVPN, IVPN and Private Internet Access, plus Surfshark. It differentiates legal-request channels from general support or policy contacts. IVPN's jurisdiction/service restrictions are included. Google AS15169 links to LERS, Cloudflare AS13335 to its law-enforcement procedure, and Microsoft AS8075 to its authorities portal. ASN matches are orientation leads requiring confirmation of the relevant service and entity, not proof of a subscriber relationship. Unknown named intermediaries retain their attributed name and HTTPS website when supplied, with an explicit unverified-channel label; network abuse details are not relabelled as that VPN's legal mailbox. External provider websites are not fetched by the Worker.
+
+Directory verification dates, attribution sources and procedure links appear on screen and in exports. Provider cards now include sourced legal-entity jurisdiction entries, country flags and published entity/contact postal addresses. Google and Microsoft expose possible US/Irish entities with scope notes, rather than deriving a jurisdiction from the IP or silently choosing one. Unknown jurisdiction is explicit. A published company address is distinguished from an accepted method of serving legal process. Country SVGs are bundled from the MIT-licensed flag-icons project inside `ip-report.js`; results and PDF flags require no third-party image request or platform emoji support. No AI invents contacts, postal addresses or jurisdictions. Recheck the official procedure before submitting an operational request. The directory is reviewed coverage, not a complete worldwide legal-contact database.
 
 ## Reports and incident context
 
@@ -43,11 +51,21 @@ Lookup time is separate from analyst-supplied incident time. Current records can
 - Network: https://stat.ripe.net/docs/data-api/api-endpoints/network-info
 - Abuse: https://stat.ripe.net/docs/data-api/api-endpoints/abuse-contact-finder
 - GeoLite2: https://stat.ripe.net/docs/data-api/api-endpoints/maxmind-geo-lite
+- IPinfo Lite: https://ipinfo.io/developers/lite-api
+- Proxycheck API, schema, quotas and log flag: https://proxycheck.io/api/
+- RIPEstat ASN holder: https://stat.ripe.net/docs/data-api/api-endpoints/as-overview
 - IPinfo Plus: https://ipinfo.io/developers/plus-api
 - Proton authorities: https://proton.me/legal/law-enforcement
-- NordVPN contact: https://nordvpn.com/contact-us/
+- NordVPN policy contact: https://my.nordaccount.com/legal/privacy-policy/
+- NordVPN general contact: https://nordvpn.com/contact-us/
 - Mullvad contact/policy: https://mullvad.net/en/help/privacy-policy
 - ExpressVPN policy: https://www.expressvpn.com/trust
+- IVPN authorities: https://www.ivpn.net/en/legal-process-guidelines/
+- PIA authorities: https://www.privateinternetaccess.com/privacy-policy
+- PIA legal email: https://clients.privateinternetaccess.com/contact-us
+- Surfshark general contact: https://surfshark.com/terms-of-service
+- Google authorities: https://support.google.com/legal/answer/13967303?hl=en and https://lers.google.com/
+- Microsoft authorities: https://v2.leportal.microsoft.com/ and https://www.microsoft.com/en-us/corporate-responsibility/reports/government-requests/customer-data
 - Cloudflare authorities: https://www.cloudflare.com/trust-hub/law-enforcement/
 
 All directory entries reviewed 2026-10-03. Automated tests use synthetic/provider-shaped fixtures and verify authentication, IP validation, provider failure, redirect restrictions, contact attribution, export content and hub/deployment wiring. Live registry checks use public resolver addresses, not user investigation targets.

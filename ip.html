@@ -10,18 +10,18 @@
 <style>html{background:#0d1620}.ct-page-loading{display:none}html.ct-loading .ct-page-loading{position:fixed;inset:0;z-index:2147483646;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#0d1620;color:#edf3f6;font:11px Arial,sans-serif;letter-spacing:.24em}</style>
 <script>document.documentElement.classList.add("ct-loading");window.ctLoadingFallback=setTimeout(function(){document.documentElement.classList.remove("ct-loading");},10000);</script>
 <link rel="stylesheet" href="workspace-ui.css?v=20261003ip">
-<link rel="stylesheet" href="ip.css?v=1">
+<link rel="stylesheet" href="ip.css?v=3">
 <script src="workspace-ui.js?v=20261003ip" defer></script>
-<script src="pdf-export.js?v=20261003" defer></script>
-<script src="ip-report.js?v=1" defer></script>
-<script src="ip.js?v=1" defer></script>
+<script src="pdf-export.js?v=20261003ipjur" defer></script>
+<script src="ip-report.js?v=3" defer></script>
+<script src="ip.js?v=3" defer></script>
 <script src="tab-access.js?v=20261003ip" defer></script>
 </head>
 <body data-ct-tab="ip">
 <div class="ct-page-loading" role="status" aria-live="polite"><strong>CT ATLAS</strong><span>LOADING</span><span class="ct-loading-line" aria-hidden="true"></span></div>
 <main id="workspace" hidden>
   <header class="masthead"><div class="brand"><img src="ip-intelligence.svg" alt=""><div><div class="eyebrow">CT ATLAS · INVESTIGATOR WORKSPACE</div><h1>IP Intelligence</h1></div></div><div class="actions"><span id="user"></span><a class="button" href="main.html">MAIN</a></div></header>
-  <section class="intro"><div class="eyebrow">FROM AN IP TO THE NEXT ENQUIRY</div><h2>Identify the network. Find the right contact.</h2><p>Public network registration, approximate location and VPN indicators in one sourced brief.</p></section>
+  <section class="intro"><div class="eyebrow">FROM AN IP TO THE NEXT ENQUIRY</div><h2>Identify the network. Find the right contact.</h2><p>Identify the operator that may hold subscriber records, find its published contact route, and prepare an IP information request.</p></section>
   <form id="lookupForm" autocomplete="off">
     <div class="search-row"><label for="ipAddress">IP ADDRESS<input id="ipAddress" name="ip" type="text" maxlength="45" placeholder="Public IPv4 or IPv6 address" required spellcheck="false" autocapitalize="none"></label><button id="lookupButton" type="submit">INVESTIGATE IP <span aria-hidden="true">→</span></button></div>
     <details><summary>Incident details for the report <span>Optional · kept in this page only</span></summary><div class="incident-grid">
@@ -36,9 +36,11 @@
   <div id="waitAnchor"></div>
   <section id="results" hidden aria-label="IP investigation results">
     <div class="result-heading"><div><div class="eyebrow">INVESTIGATION BRIEF</div><h2 id="resultIP"></h2><p id="resultTime"></p></div><div class="actions"><button id="exportPdf" type="button">DOWNLOAD PDF</button><button id="exportJson" type="button">EXPORT JSON</button></div></div>
+    <article class="result-summary" aria-label="Lookup summary"><div class="eyebrow">WHO TO CONTACT</div><h3 id="contactSummary"></h3><p id="operatorSummary"></p><p id="vpnSummary" class="fine"></p><div id="enquiryContact"></div></article>
     <div id="warnings" class="notice" hidden></div>
     <div class="result-grid"><article><div class="eyebrow">01 / NETWORK</div><h3>Operator &amp; registration</h3><dl id="network"></dl></article><article><div class="eyebrow">02 / LOCATION</div><h3>Approximate IP location</h3><dl id="geolocation"></dl><div id="mapLink"></div><p class="fine">This is an IP location estimate, not a subscriber's address. Anycast and VPN exit locations may be misleading.</p></article><article><div class="eyebrow">03 / CONNECTION</div><h3>VPN &amp; intermediary indicators</h3><dl id="privacy"></dl><p class="fine">“Not detected” is a source assessment, not proof that no VPN is in use. Hosting alone does not identify a VPN.</p></article></div>
-    <article class="contact-section"><div class="eyebrow">04 / ENQUIRY ROUTING</div><h3>Provider contacts</h3><p>Confirm the receiving legal entity and current procedure before sending a request. The tool does not send requests or establish that records exist.</p><div id="providerContacts" class="contact-grid"></div><h4>Registry &amp; technical contacts</h4><p class="fine">Abuse and technical contacts may redirect your enquiry; they are not verified legal-request channels. Postal addresses below belong to registry contacts.</p><div id="registryContacts" class="contact-grid"></div></article>
+    <article class="contact-section"><div class="eyebrow">04 / ENQUIRY ROUTING</div><h3>Provider contacts</h3><p>Confirm the receiving legal entity and current procedure before sending a request. The tool does not send requests or establish that records exist.</p><div id="providerContacts" class="contact-grid"></div><h4>Registry &amp; technical contacts</h4><p class="fine">Abuse and technical contacts may redirect your enquiry; they are not verified legal-request channels. These IP registry contacts concern the network allocation, not a domain registrar or a subscriber's address.</p><div id="registryContacts" class="contact-grid"></div></article>
+    <details class="source-section"><summary>Compare VPN detection sources</summary><div id="detectionSources"></div></details>
     <article><div class="eyebrow">05 / INVESTIGATOR HANDOFF</div><h3>Prepare the provider enquiry</h3><ol><li>Preserve the original log, public IP, exact timestamp and timezone, source port and protocol where available.</li><li>Check whether the observed address is an access network, a hosting service, a VPN exit or another intermediary. Confirm the responsible provider.</li><li>Use the provider's current official procedure through your agency. A network registration or contact result does not establish subscriber identity.</li></ol><p id="nextStep"></p></article>
     <details class="source-section"><summary>Sources, coverage &amp; limitations</summary><div id="sources"></div><ul id="limitations"></ul></details>
   </section>

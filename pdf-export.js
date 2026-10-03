@@ -249,6 +249,18 @@ function renderPages(options){
     const width=Math.max(1,Math.round(naturalWidth*scale));
     const height=Math.max(1,Math.round(naturalHeight*scale));
     const caption=clean(block.caption||block.text||"");
+    // Small local flag plus selectable jurisdiction text; does not depend on emoji fonts.
+    if(block.inline&&caption){
+      setFont(context,14,"600");
+      const lines=wrapText(context,caption,Math.max(80,CONTENT_WIDTH-width-12));
+      const rowHeight=Math.max(height,lines.length*20);
+      ensureSpace(rowHeight+18);y+=8;
+      context.drawImage(image,MARGIN_X,y,width,height);
+      setFont(context,14,"600");context.fillStyle="#243b49";context.direction="ltr";context.textAlign="left";
+      for(let i=0;i<lines.length;i++)put(lines[i],MARGIN_X+width+12,y+15+i*20,14,"600");
+      y+=rowHeight+10;
+      return true;
+    }
     setFont(context,14,"600");
     const captionLines=caption?wrapText(context,caption,CONTENT_WIDTH):[];
     const captionHeight=captionLines.length?captionLines.length*20+8:0;

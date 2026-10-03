@@ -233,3 +233,12 @@ test("PyMuPDF reads the generated file: page count, selectable text and search (
   assert.ok(info.hits>=1,"and found by search");
   assert.equal(info.has_hash_prefix,true);
 });
+
+test('inline jurisdiction flags sit beside selectable country text and remain within the page',async()=>{
+ const h=harness(),caption='Jurisdiction: Switzerland - Proton AG (CH)';
+ const pdf=await h.build({title:'IP brief',blocks:[{type:'image',image:{width:32,height:24},inline:true,maxHeight:20,caption}]});
+ const page=h.pages()[0],flag=page.images[0],label=page.texts.find(t=>t.text===caption);
+ assert.ok(flag&&label);assert.ok(flag.h<=20);assert.ok(label.x>=flag.x+flag.w+10);
+ assert.ok(label.y>=flag.y&&label.y<=flag.y+flag.h+5);
+ assert.ok(layerTexts(pdf).some(t=>t.text===caption));
+});
