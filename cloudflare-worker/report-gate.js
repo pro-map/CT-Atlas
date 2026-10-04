@@ -690,7 +690,7 @@ export class ReportGate {
         let added = 0;
         const knownBuckets = new Map();
         // Only a completed, non-truncated first inventory establishes the baseline.
-        const baseline = !outlet.initialized_at;
+        const baseline = !outlet.initialized_at || body.inventory_phase === "backfill";
         for (const item of body.scan_ok ? body.items : []) {
           const key = "darkweb:item:" + item.id;
           // Keep small URL-history shards independently from the 500-row feed.
@@ -730,6 +730,7 @@ export class ReportGate {
         }
         outlet.undated_count = body.undated_count || 0;
         outlet.last_scan = timestamp;
+        if (body.inventory_phase === "backfill") outlet.collection_phase = "backfill";
         outlet.scan_ok = body.scan_ok === true;
         outlet.error = body.error;
         outlet.truncated = body.truncated === true;

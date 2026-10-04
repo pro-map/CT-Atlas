@@ -786,6 +786,7 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
 
     def upload(rows, final):
         result = api_call(api, endpoint, "/darkweb/ingest", {"selection_version": 2, "collection_epoch": policy["epoch"] if policy else 0, "undated_count": db.execute("SELECT COUNT(*) FROM undated WHERE outlet_id=?", (oid,)).fetchone()[0], "outlet_id": oid, "items": [r for r, _ in rows],
+            "inventory_phase": outlet.get("collection_phase", "backfill"),
             "scan_ok": progress["pages_scanned"] > 0, "scan_complete": final and progress["complete"],
             "truncated": progress["truncated"], "pages_scanned": progress["pages_scanned"],
             "pending_pages": progress["pending_pages"], "failed_pages": progress["failed_pages"]})

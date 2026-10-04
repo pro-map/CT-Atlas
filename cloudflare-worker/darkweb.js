@@ -164,6 +164,7 @@ export async function handleDarkweb(request, env) {
   const count = value => Number.isSafeInteger(value) && value >= 0 ? Math.min(value, 100000) : 0;
   const coverage = { pages_scanned: count(body.pages_scanned), pending_pages: count(body.pending_pages), failed_pages: count(body.failed_pages) };
   const response = await gateCall(env, "/darkweb-ingest", { ...coverage, collection_epoch: body.collection_epoch, undated_count: count(body.undated_count),
+    inventory_phase: body.inventory_phase === "backfill" ? "backfill" : "watch",
     outlet_id: outlet.id, items, scan_ok: body.scan_ok === true,
     scan_complete: body.scan_complete === true && coverage.pending_pages === 0 && coverage.failed_pages === 0, truncated: body.truncated === true,
     // Store an error code only: errors may contain URLs, credentials or proxy details.

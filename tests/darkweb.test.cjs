@@ -188,6 +188,12 @@ test('reset during AI generation cannot repopulate the cleared feed',async()=>{
 });
 
 function publication(n=1,extra={}){return {url:base+'posts/news/'+n+'/',title:'عنوان عربي '+n,original_text:'الفقرة الأولى\n\nالفقرة الثانية',publication_version:1,category:'news',text_status:'complete',source_date:'3 أكتوبر 2026',published_at:'2026-10-03',attachments:[],...extra};}
+test('parser-upgrade backfill remains a baseline even when the legacy inventory was complete',async()=>{
+ const h=harness(),id=await register(h);
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[],scan_ok:true,scan_complete:true},'',true);
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[publication()],scan_ok:true,inventory_phase:'backfill',pending_pages:12},'',true);
+ const state=(await h.call('/darkweb/feed')).data;assert.equal(state.unread_count,0);assert.equal(state.items[0].baseline,true);assert.equal(state.outlets[0].collection_phase,'backfill');
+});
 test('structured records preserve Arabic paragraphs and group validated attachments behind authentication',async()=>{
  const h=harness(),id=await register(h),raw=publication(1,{title:'ع'.repeat(500),attachments:[{url:base+'report.pdf',type:'pdf',title:'تقرير',acquired:true,sha256:'a'.repeat(64),bytes:40}]});
  const submit=items=>h.call('/darkweb/ingest',{outlet_id:id,items,scan_ok:true},'',true);
