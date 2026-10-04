@@ -35,7 +35,7 @@ test("renderGraph builds the model and delegates drawing to a pure paintGraphFra
   assert.ok(/^function renderGraph\(payload\)\{\s*stopPlaybackSilently\(\);/.test(renderGraphBody),
     "renderGraph must cancel any running playback first, so a normal re-render can never race a playback frame");
   assert.ok(renderGraphBody.includes("currentNetworkModel=model"));
-  assert.ok(renderGraphBody.includes("paintGraphFrame(payload,model)"));
+  assert.ok(renderGraphBody.includes("paintGraphFrame(payload,graphDisplayModel)"));
   assert.ok(renderGraphBody.includes("updatePlaybackControls()"));
 
   const paintFrameBody=client.match(/function paintGraphFrame\(payload,model\)\{[\s\S]*?\n\}/)[0];
@@ -55,10 +55,10 @@ test("playback timeline derivation mirrors buildNetworkModel's own IN/OUT edge-d
   assert.ok(timelineBody.includes("allTraceRows(true)"),"must read the same filtered rows every other panel reads, not raw unfiltered transactions");
 });
 
-test("stop restores the exact full graph and updatePlaybackControls disables controls with no active playback",()=>{
+test("stop restores the exact selected graph and updatePlaybackControls disables controls with no active playback",()=>{
   const stopBody=client.match(/function stopPlayback\(\)\{[\s\S]*?\n\}/)[0];
   assert.ok(stopBody.includes("stopPlaybackSilently()"));
-  assert.ok(stopBody.includes("paintGraphFrame(lastPayload,currentNetworkModel)"));
+  assert.ok(stopBody.includes("paintGraphFrame(lastPayload,graphDisplayModel||currentNetworkModel)"));
 
   const controlsBody=client.match(/function updatePlaybackControls\(\)\{[\s\S]*?\n\}/)[0];
   assert.ok(controlsBody.includes('scrubber.max="0"'));
