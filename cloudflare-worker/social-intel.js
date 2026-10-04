@@ -525,11 +525,50 @@ function normalizeAgentSources(raw, query) {
     });
   };
 
+  for (const message of normalizeTelegramEvidence(raw?.telegram_evidence)?.messages || []) {
+    add(message.url, `Telegram @${message.channel} · ${message.date || message.id}`, "telegram_collected_post");
+  }
   for (const item of Array.isArray(raw?.sources) ? raw.sources : []) {
     add(item?.url, item?.title, item?.kind);
   }
   for (const url of query.urls || []) add(url, "", "analyst_supplied");
-  return items.slice(0, 100);
+  return items.slice(0, 200);
+}
+
+function normalizeTelegramEvidence(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const array = value => Array.isArray(value) ? value : [];
+  const text = (value, max=300) => cleanText(value, max);
+  const seen = new Set();
+  const messages = array(raw.messages).slice(0, 120).flatMap(item => {
+    const url = safePublicUrl(item?.url);
+    const match = url?.match(/^https:\/\/t\.me\/([a-zA-Z][\w]{3,31})\/(\d+)$/);
+    if (!match || seen.has(url.toLowerCase())) return [];
+    seen.add(url.toLowerCase());
+    return [{id:Number(match[2]), channel:match[1].toLowerCase(), url,
+      date:text(item.date,40), text:String(item.text || "").slice(0,4000),
+      text_truncated:Boolean(item.text_truncated || String(item.text || "").length>4000),
+      media:array(item.media).slice(0,10).map(x=>text(x,40)),
+      links:array(item.links).slice(0,15).map(safePublicUrl).filter(Boolean),
+      views:Number.isFinite(item.views)?Math.max(0,item.views):null,
+      mentioned_channels:array(item.mentioned_channels).slice(0,15).map(x=>text(x,40))}];
+  });
+  const allowed = new Set(messages.map(item=>item.url));
+  const relationships = array(raw.relationships).slice(0,300).flatMap(item=>{
+    if (!item || !["mention","forward","reply","link","domain"].includes(item.type)) return [];
+    const source_urls = [...new Set(array(item.source_urls).filter(url=>allowed.has(url)))];
+    if (!source_urls.length) return [];
+    return [{channel:text(item.channel,40),type:item.type,target:text(item.target,500),count:source_urls.length,source_urls}];
+  });
+  return {retrieved_at:text(raw.retrieved_at,64),
+    channels:array(raw.channels).slice(0,5).map(item=>({channel:text(item?.channel,40),title:text(item?.title,200),
+      description:text(item?.description,1200),status:text(item?.status,40),pages_read:Math.max(0,Math.min(25,Number(item?.pages_read)||0)),
+      next_before:Number(item?.next_before)||null,stop_reason:text(item?.stop_reason,500)})),
+    messages,relationships,messages_retained:messages.length,
+    messages_observed:Math.max(messages.length,Math.min(10000,Number(raw.messages_observed)||0)),
+    truncated:Boolean(raw.truncated || array(raw.messages).length>120),
+    relationships_truncated:Boolean(raw.relationships_truncated || array(raw.relationships).length>300),
+    scope:"Public preview only. Counts describe retained posts, not the entire channel. Mentions and forwards do not establish identity, affiliation or common control. Media content was not transcribed."};
 }
 
 function needsIndependentDiscoveryFallback(query, sources) {
@@ -558,6 +597,7 @@ function normalizeReport(raw, query, toolSources, model, discoveryMode) {
     model: cleanText(model, 80),
     discovery_mode: discoveryMode,
     query,
+    telegram_evidence: normalizeTelegramEvidence(raw?.telegram_evidence),
     title: cleanText(raw?.title || "CT Atlas SOCMINT Assessment", 220),
     executive_assessment: cleanText(raw?.executive_assessment, 8000),
     source_coverage: cleanText(raw?.source_coverage, 5000),
@@ -751,6 +791,8 @@ function sanitizeSocialReport(report) {
 
   for (const [key, value] of Object.entries(report)) {
     if (key === "user_id" || key === "username") continue;
+    if (key === "telegram_evidence") { safe[key] = normalizeTelegramEvidence(value); continue; }
+    if (key === "sources") { safe[key] = (Array.isArray(value) ? value : []).slice(0,200).map(item=>walk(item)); continue; }
     safe[key] = walk(value, key === "source_url" || key === "url" || key === "source_urls" ? 1500 : 8000);
   }
 
@@ -759,7 +801,7 @@ function sanitizeSocialReport(report) {
   safe.title = cleanText(String(safe.title || "CT Atlas SOCMINT Assessment"), 220);
   safe.version = cleanText(String(safe.version || SOCIAL_INTEL_VERSION), 80);
   safe.query = safe.query && typeof safe.query === "object" ? safe.query : {};
-  safe.sources = Array.isArray(safe.sources) ? safe.sources.slice(0, 100) : [];
+  safe.sources = Array.isArray(safe.sources) ? safe.sources.slice(0, 200) : [];
   safe.key_findings = Array.isArray(safe.key_findings) ? safe.key_findings.slice(0, 12) : [];
   safe.entities = Array.isArray(safe.entities) ? safe.entities.slice(0, 60) : [];
   safe.watchpoints = Array.isArray(safe.watchpoints) ? safe.watchpoints.slice(0, 10) : [];
@@ -797,7 +839,8 @@ async function persistReport(env, username, report) {
   workspace.username = username;
   workspace.reports = reports.map(item => sanitizeSocialReport(item)).filter(Boolean).slice(0, SOCIAL_REPORT_LIMIT);
   workspace.updated_at = new Date().toISOString();
-  await gateCall(env, "/social-workspace-put", { username, workspace });
+  const saved = await gateCall(env, "/social-workspace-put", { username, workspace });
+  if (!saved.ok) throw new Error("The Social report could not be saved. Please retry.");
   await gateCall(env, "/usage-increment", { username, metrics: { social_intel_requests: 1 } });
 }
 

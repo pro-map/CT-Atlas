@@ -44,7 +44,38 @@ function formPayload(){
 }
 
 function sourceLinks(urls){
-  return (urls||[]).map(url=>'<a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(url)+'</a>').join("<br>");
+  return (urls||[]).filter(url=>/^https?:\/\//i.test(String(url))).map(url=>'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+esc(url)+'</a>').join("<br>");
+}
+
+let telegramShown=20;
+function renderTelegramMessages(){
+  const evidence=currentReport?.telegram_evidence;
+  const query=String($("telegramEvidenceSearch").value||"").trim().toLowerCase();
+  const matches=(evidence?.messages||[]).filter(item=>[item.text,item.channel,...(item.links||[]),...(item.mentioned_channels||[])].join(" ").toLowerCase().includes(query));
+  $("reportTelegramCount").textContent=matches.length+" matching posts · showing "+Math.min(telegramShown,matches.length);
+  $("reportTelegramMessages").innerHTML=matches.slice(0,telegramShown).map(item=>'<div class="finding">'+
+    '<div class="finding-title">@'+esc(item.channel)+' · '+esc(item.date||"Date unavailable")+'</div>'+
+    '<div class="finding-basis" style="white-space:pre-wrap;overflow-wrap:anywhere">'+esc(item.text||"No text in public preview.")+(item.text_truncated?'\n[Text truncated]':'')+'</div>'+
+    (item.media?.length?'<div class="finding-basis">Media present: '+esc(item.media.join(", "))+' · content not transcribed</div>':'')+
+    '<div class="finding-basis">'+sourceLinks([item.url])+'</div>'+
+    (item.links?.length?'<details><summary>Links in this post</summary>'+sourceLinks(item.links)+'</details>':'')+'</div>').join("")||'<div class="empty-state">No matching collected posts.</div>';
+  $("telegramShowMore").hidden=matches.length<=telegramShown;
+}
+
+function renderTelegramEvidence(report){
+  const evidence=report.telegram_evidence;
+  $("reportTelegramSection").hidden=!evidence;
+  if(!evidence)return;
+  telegramShown=20;
+  $("telegramEvidenceSearch").value="";
+  $("reportTelegramCoverage").textContent=evidence.messages_retained+" posts retained / "+evidence.messages_observed+" observed · "+(evidence.channels||[]).length+" channels attempted · collected "+evidence.retrieved_at+
+    (evidence.truncated?" · Collection exceeds the report limit of 120 posts.":"")+" "+evidence.scope;
+  $("reportTelegramChannels").innerHTML=(evidence.channels||[]).map(item=>'<div class="finding"><strong>@'+esc(item.channel)+'</strong> · '+esc(item.title)+
+    '<div class="finding-basis">'+esc(item.status)+' · '+esc(item.pages_read)+' pages · '+esc(item.stop_reason)+(item.next_before?' · Older posts remain available':'')+'</div></div>').join("");
+  $("reportTelegramRelations").innerHTML=(evidence.relationships||[]).map(item=>'<div class="finding"><div class="finding-title">@'+esc(item.channel)+' → '+esc(item.target)+'</div>'+
+    '<div class="finding-basis">'+esc(item.type)+' · '+esc(item.count)+' supporting posts</div><details><summary>Message citations</summary>'+sourceLinks(item.source_urls)+'</details></div>').join("")||'<div class="empty-state">No connections extracted from retained posts.</div>';
+  if(evidence.relationships_truncated)$("reportTelegramRelations").insertAdjacentHTML("beforeend",'<p>Showing the 300 most frequent connections.</p>');
+  renderTelegramMessages();
 }
 
 function cryptoUrl(address){
@@ -139,6 +170,7 @@ function renderReport(report){
     : '<tr><td colspan="5">No supported entities extracted.</td></tr>';
 
   renderWallets(report);
+  renderTelegramEvidence(report);
 
   $("reportWatchpoints").innerHTML=(report.watchpoints||[]).length
     ? report.watchpoints.map(item=>`
@@ -318,6 +350,12 @@ function pdfBlocks(report){
   }
   blocks.push({text:"ANALYTICAL GAPS / LIMITATIONS",type:"heading"},{text:report.analytical_gaps||"",type:"body"});
   blocks.push({text:"SOURCES",type:"heading"});
+  const telegram=report.telegram_evidence;
+  if(telegram){
+    blocks.push({text:"TELEGRAM EVIDENCE",type:"heading"},{text:telegram.messages_retained+" retained / "+telegram.messages_observed+" observed posts. Collected "+telegram.retrieved_at+". "+telegram.scope+(telegram.truncated?" Collection truncated to 120 retained posts.":""),type:"body"});
+    for(const edge of telegram.relationships||[])blocks.push({text:"@"+edge.channel+" → "+edge.target+" · "+edge.type+" · "+edge.count+" posts\n"+edge.source_urls.join("\n"),type:"body"});
+    for(const post of telegram.messages||[])blocks.push({text:"@"+post.channel+" · "+post.date+"\n"+post.url+"\n"+post.text+(post.text_truncated?"\n[Text truncated]":""),type:"source"});
+  }
   for(const source of report.sources||[]){
     blocks.push({text:(source.title||source.url)+"\n"+source.url+(source.snippet?"\n"+source.snippet:""),type:"source"});
   }
@@ -372,6 +410,8 @@ document.addEventListener("DOMContentLoaded",async()=>{
   if(!await verifySession())return;
   $("socialForm").addEventListener("submit",runInvestigation);
   $("socialPdfButton").addEventListener("click",downloadPdf);
+  $("telegramEvidenceSearch").addEventListener("input",()=>{telegramShown=20;renderTelegramMessages();});
+  $("telegramShowMore").addEventListener("click",()=>{telegramShown+=20;renderTelegramMessages();});
   // window.open WITHOUT noopener: the new tab must inherit this tab's
   // sessionStorage (same origin) or the Crypto page would ask to log in again.
   $("reportWallets").addEventListener("click",event=>{

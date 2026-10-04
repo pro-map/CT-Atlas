@@ -33,7 +33,7 @@ function harness(fetchImpl){
   vm.runInContext(addressUtilsSource,context);
   vm.runInContext(sanctionsSource,context);
   vm.runInContext(source,context);
-  return vm.runInContext("({sanitizeRequest,extractToolSources,sanitizeSocialReport,attachWalletScreening,needsIndependentDiscoveryFallback,SOCIAL_INTEL_VERSION,socmintModels})",context);
+  return vm.runInContext("({sanitizeRequest,extractToolSources,sanitizeSocialReport,normalizeTelegramEvidence,normalizeAgentSources,normalizeReport,attachWalletScreening,needsIndependentDiscoveryFallback,SOCIAL_INTEL_VERSION,socmintModels})",context);
 }
 
 test("SOCMINT request normalizes search fields and public URLs",()=>{
@@ -57,6 +57,32 @@ test("SOCMINT request normalizes search fields and public URLs",()=>{
   assert.equal(value.urls.length,1);
   assert.equal(value.urls[0],"https://example.org/a");
   assert.equal(value.mode,"urls_only");
+});
+
+test("Telegram evidence and exact message citations survive normalization and saved history",()=>{
+  const h=harness();
+  const messages=Array.from({length:120},(_,i)=>({url:`https://t.me/examplechan/${i+1}`,text:"Line one\nLine two",date:"2026-10-04",username:"private-session"}));
+  const raw={telegram_evidence:{messages,messages_observed:125,truncated:true,relationships:[{channel:"examplechan",type:"mention",target:"@another",source_urls:[messages[0].url,messages[0].url,"https://t.me/unread/9"]}]},key_findings:[{finding:"Citation",source_urls:[messages[119].url]}]};
+  const sources=h.normalizeAgentSources(raw,{urls:[]});
+  const report=h.normalizeReport(raw,{urls:[]},sources,"test","adk_agent");
+  const saved=h.sanitizeSocialReport(report);
+  assert.equal(saved.telegram_evidence.messages.length,120);
+  assert.equal(saved.telegram_evidence.messages[0].text,"Line one\nLine two");
+  assert.equal(saved.telegram_evidence.messages[0].username,undefined);
+  assert.equal(saved.telegram_evidence.relationships[0].count,1);
+  assert.equal(saved.sources.length,120);
+  assert.equal(saved.key_findings[0].source_urls[0],messages[119].url);
+  assert.equal(saved.telegram_evidence.truncated,true);
+});
+
+test("Telegram annex rejects unsafe or fabricated post URLs and bounds content",()=>{
+  const h=harness();
+  const evidence=h.normalizeTelegramEvidence({messages:[{url:"javascript:alert(1)"},{url:"https://t.me.evil.org/test/1"},{url:"https://t.me/examplechan/1",text:"x".repeat(5000),links:["javascript:alert(1)"]}],relationships:[{type:"ownership",source_urls:["https://t.me/examplechan/1"]}]});
+  assert.equal(evidence.messages.length,1);
+  assert.equal(evidence.messages[0].text.length,4000);
+  assert.equal(evidence.messages[0].text_truncated,true);
+  assert.equal(evidence.messages[0].links.length,0);
+  assert.equal(evidence.relationships.length,0);
 });
 
 test("SOCMINT source extraction keeps grounded public result URLs",()=>{

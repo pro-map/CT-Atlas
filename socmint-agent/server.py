@@ -16,6 +16,7 @@ from pydantic import BaseModel, Field
 
 from app.agent import root_agent
 from app.tools import social_capabilities
+from app.telegram_evidence import TelegramEvidence
 
 
 APP_NAME = "app"
@@ -146,6 +147,7 @@ async def investigate(
 
     final_text = ""
     event_count = 0
+    telegram = TelegramEvidence()
     try:
         async for event in runner.run_async(
             user_id=user_id,
@@ -163,6 +165,10 @@ async def investigate(
             ),
         ):
             event_count += 1
+            for part in (getattr(event.content, "parts", None) or []):
+                response = getattr(part, "function_response", None)
+                if response:
+                    telegram.capture(response.name, response.response)
             if event.is_final_response() and event.content:
                 pieces = [
                     part.text
@@ -174,9 +180,25 @@ async def investigate(
     except Exception as exc:
         message = re.sub(r"\s+", " ", str(exc)).strip()[:1000]
         status = 429 if "429" in message or "quota" in message.lower() else 502
-        raise HTTPException(status_code=status, detail=message or "ADK investigation failed.") from exc
+        if not telegram.messages:
+            raise HTTPException(status_code=status, detail=message or "ADK investigation failed.") from exc
 
-    report = _extract_json(final_text)
+    try:
+        report = _extract_json(final_text)
+    except HTTPException:
+        if not telegram.messages:
+            raise
+        report = {
+            "title": "Telegram collected evidence — synthesis incomplete",
+            "executive_assessment": "Public Telegram posts were collected, but automated synthesis did not complete. Review the retained messages and their direct citations below.",
+            "source_coverage": f"{len(telegram.messages)} Telegram posts retained from public previews.",
+            "analytical_gaps": "No completed analytical assessment. Observed connections are references in collected messages, not verified affiliation or ownership.",
+            "sources": [],
+        }
+    # Never accept an evidence annex invented by the language model.
+    report.pop("telegram_evidence", None)
+    if telegram.channels:
+        report["telegram_evidence"] = telegram.build()
     return {
         "ok": True,
         "report": report,

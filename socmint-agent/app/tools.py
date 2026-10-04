@@ -1325,8 +1325,8 @@ _TELEGRAM_SERVICE_PATHS = {
     "joinchat", "addstickers", "addemoji", "addtheme", "proxy", "socks", "share",
     "iv", "c", "login", "setlanguage", "boost", "giftcode", "invoice", "m", "contact",
 }
-_TELEGRAM_MAX_PAGES = 3
-_TELEGRAM_POST_TEXT_MAX = 1500
+_TELEGRAM_MAX_PAGES = 5
+_TELEGRAM_POST_TEXT_MAX = 4000
 _TELEGRAM_MEDIA_CLASSES = (
     ("tgme_widget_message_photo_wrap", "photo"),
     ("tgme_widget_message_video_player", "video"),
@@ -1425,7 +1425,8 @@ def _parse_telegram_message(node: Any, channel: str) -> dict[str, Any] | None:
         text_node = next(
             (item for item in node.select(".tgme_widget_message_text") if outside_reply(item)), None
         )
-    text = _telegram_text(text_node)
+    full_text = _telegram_text(text_node, MAX_FETCH_BYTES)
+    text = full_text[:_TELEGRAM_POST_TEXT_MAX]
 
     link_urls: list[str] = []
     mentioned: list[str] = []
@@ -1438,11 +1439,14 @@ def _parse_telegram_message(node: Any, channel: str) -> dict[str, Any] | None:
         if kind == "invite":
             invites.append(_clean(href, 300))
         elif name:
+            link_urls.append(_clean(href, 500))
             if name.lower() != channel.lower():
                 mentioned.append(name)
         else:
             link_urls.append(_clean(href, 500))
 
+    mentioned.extend(re.findall(r"(?<![\w@])@([A-Za-z][A-Za-z0-9_]{3,31})\b", full_text))
+    mentioned = list(dict.fromkeys(name.lower() for name in mentioned if name.lower() != channel.lower()))
     date_link = node.select_one("a.tgme_widget_message_date")
     time_tag = date_link.find("time") if date_link is not None else None
     forwarded = None
@@ -1480,6 +1484,7 @@ def _parse_telegram_message(node: Any, channel: str) -> dict[str, Any] | None:
         "url": f"https://t.me/{post_channel}/{post_id}",
         "date": _clean(time_tag.get("datetime") if time_tag is not None else "", 40),
         "text": text,
+        "text_truncated": len(full_text) > len(text),
         "views": _telegram_count(views_text),
         "views_displayed": views_text,
         "media": media,
@@ -1559,10 +1564,9 @@ def _telegram_network(messages: list[dict[str, Any]]) -> dict[str, Any]:
                     key, {"channel": source.get("channel", ""), "name": source.get("name", ""), "count": 0}
                 )
                 item["count"] += 1
-        for name in message.get("mentioned_channels", []):
+        for name in set(name.lower() for name in message.get("mentioned_channels", [])):
             mentions[name] = mentions.get(name, 0) + 1
-        for url in message.get("links", []):
-            host = (urlsplit(url).hostname or "").lower().removeprefix("www.")
+        for host in {(urlsplit(url).hostname or "").lower().removeprefix("www.") for url in message.get("links", [])}:
             if host:
                 domains[host] = domains.get(host, 0) + 1
         invites.extend(message.get("invite_links", []))
@@ -1586,7 +1590,7 @@ def _telegram_network(messages: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def read_telegram_channel(channel: str, pages: int = 1, before: int = 0) -> dict[str, Any]:
+def read_telegram_channel(channel: str, pages: int = 3, before: int = 0) -> dict[str, Any]:
     """Read recent posts of a PUBLIC Telegram channel from its public web preview.
 
     Uses https://t.me/s/<channel>: the read-only page Telegram itself serves to
@@ -1599,6 +1603,10 @@ def read_telegram_channel(channel: str, pages: int = 1, before: int = 0) -> dict
     member lists, deleted posts, or any search inside Telegram. Nothing is joined.
     Pass the returned next_before as `before` to read older posts.
     """
+    return _read_telegram_channel(channel, pages, before, time.monotonic() + 50)
+
+
+def _read_telegram_channel(channel: str, pages: int, before: int, deadline: float) -> dict[str, Any]:
     try:
         name = _normalize_telegram_channel(channel)
     except ValueError as exc:
@@ -1610,8 +1618,13 @@ def read_telegram_channel(channel: str, pages: int = 1, before: int = 0) -> dict
     messages: list[dict[str, Any]] = []
     seen_ids: set[int] = set()
     next_before: int | None = None
+    pages_read = 0
+    stop_reason = "page_limit"
     try:
         for index in range(requested_pages):
+            if time.monotonic() >= deadline:
+                stop_reason = "time_limit"
+                break
             if index:
                 time.sleep(1.0)
             url = f"https://t.me/s/{name}" + (f"?before={cursor}" if cursor else "")
@@ -1623,6 +1636,7 @@ def read_telegram_channel(channel: str, pages: int = 1, before: int = 0) -> dict
                 # t.me redirects channels without a web preview to the normal page.
                 break
             page = parse_telegram_preview(body.decode("utf-8", errors="replace"), name)
+            pages_read += 1
             if not info and page["info"].get("title"):
                 info = page["info"]
             for message in page["messages"]:
@@ -1631,6 +1645,10 @@ def read_telegram_channel(channel: str, pages: int = 1, before: int = 0) -> dict
                     messages.append(message)
             next_before = page["next_before"]
             if not next_before or not page["messages"]:
+                stop_reason = "end_of_public_preview"
+                break
+            if next_before == cursor:
+                stop_reason = "repeated_cursor"
                 break
             cursor = next_before
     except Exception as exc:
@@ -1639,6 +1657,8 @@ def read_telegram_channel(channel: str, pages: int = 1, before: int = 0) -> dict
             "platform": "telegram",
             "channel": name,
             "messages": messages,
+            "pages_read": pages_read,
+            "network": _telegram_network(messages),
             "error": _clean(exc, 500),
         }
 
@@ -1663,6 +1683,8 @@ def read_telegram_channel(channel: str, pages: int = 1, before: int = 0) -> dict
         "info": info,
         "messages": messages,
         "messages_returned": len(messages),
+        "pages_read": pages_read,
+        "stop_reason": stop_reason,
         "newest_id": messages[0]["id"],
         "oldest_id": messages[-1]["id"],
         "next_before": next_before,
@@ -1677,6 +1699,35 @@ def read_telegram_channel(channel: str, pages: int = 1, before: int = 0) -> dict
             "at retrieval time and are approximate."
         ),
     }
+
+
+def explore_telegram_network(channel: str, max_channels: int = 3, pages: int = 3) -> dict[str, Any]:
+    """Read a public seed channel deeply, then up to four repeatedly referenced
+    public channels (one hop). Default: three seed pages and two related channels.
+    Each related channel gets one page. Hard bounds: five channels, nine pages,
+    50 seconds plus the final in-flight request. A reference is not affiliation.
+    Does not join channels or follow private invite links.
+    """
+    deadline = time.monotonic() + 50
+    seed = _read_telegram_channel(channel, pages, 0, deadline)
+    results = [seed]
+    scores: dict[str, int] = {}
+    for key in ("forwarded_from", "mentioned_channels"):
+        for item in seed.get("network", {}).get(key, []):
+            name = str(item.get("channel") or "").lower()
+            # Require repeated observations of the same type, not one post
+            # counted once as a forward and again as a mention.
+            if name and item.get("count", 0) >= 2:
+                scores[name] = max(scores.get(name, 0), item["count"])
+    for name in sorted(scores, key=lambda name: (-scores[name], name)):
+        if len(results) >= max(1, min(_as_int(max_channels, 3), 5)) or time.monotonic() >= deadline:
+            break
+        if name == str(seed.get("channel", "")).lower():
+            continue
+        results.append(_read_telegram_channel(name, 1, 0, deadline))
+    return {"platform": "telegram", "channels": results, "hops": 1,
+            "scope": "Public web previews; related channels selected from repeated seed references.",
+            "stop_reason": "time_limit" if time.monotonic() >= deadline else "bounded_expansion"}
 
 
 _WAYBACK_MATCH_TYPES = {"exact", "prefix", "host", "domain"}

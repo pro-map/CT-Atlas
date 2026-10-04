@@ -70,6 +70,35 @@ export class ReportGate {
     }
   }
 
+  async readSocialWorkspace(key, value) {
+    const stored = value === undefined ? await this.state.storage.get(key) : value;
+    if (stored?.format !== "social-chunks-v1") return stored;
+    const chunks = [];
+    for (let i=0; i<stored.chunks; i++) {
+      const chunk = await this.state.storage.get(`social-chunk:${key}:${i}`);
+      if (typeof chunk !== "string") throw new Error("Saved Social report data is incomplete.");
+      chunks.push(chunk);
+    }
+    return JSON.parse(chunks.join(""));
+  }
+
+  async writeSocialWorkspace(key, workspace) {
+    const serialized = JSON.stringify(workspace);
+    const previous = await this.state.storage.get(key);
+    if (serialized.length <= 32000 && previous?.format !== "social-chunks-v1") {
+      await this.state.storage.put(key, workspace);
+      return;
+    }
+    // Evidence-rich histories exceed the per-value storage limit. Atomic chunks
+    // preserve all reports and the existing expiry/delete semantics.
+    await this.state.storage.transaction(async storage => {
+      const count = Math.ceil(serialized.length / 32000);
+      for (let i=0; i<count; i++) await storage.put(`social-chunk:${key}:${i}`, serialized.slice(i*32000,(i+1)*32000));
+      for (let i=count; i<(previous?.chunks||0); i++) await storage.delete(`social-chunk:${key}:${i}`);
+      await storage.put(key, {format:"social-chunks-v1",chunks:count});
+    });
+  }
+
   async pruneSocialWorkspace(workspace, now = Date.now()) {
     if (!workspace || typeof workspace !== "object") return { workspace, changed: false, nextExpiry: null };
     const reports = Array.isArray(workspace.reports) ? workspace.reports : [];
@@ -129,8 +158,8 @@ export class ReportGate {
       const batch = await this.state.storage.list(options);
       if (!batch || !batch.size) break;
       for (const [key, workspace] of batch.entries()) {
-        const pruned = await this.pruneSocialWorkspace(workspace, now);
-        if (pruned.changed) await this.state.storage.put(key, pruned.workspace);
+        const pruned = await this.pruneSocialWorkspace(await this.readSocialWorkspace(key, workspace), now);
+        if (pruned.changed) await this.writeSocialWorkspace(key, pruned.workspace);
         track(pruned.nextExpiry);
       }
       const keys = Array.from(batch.keys());
@@ -1017,7 +1046,7 @@ export class ReportGate {
         return Response.json({ error: "Unknown user." }, { status: 400 });
       }
       const key = `social-workspace:${username}`;
-      let workspace = (await this.state.storage.get(key)) || {
+      let workspace = (await this.readSocialWorkspace(key)) || {
         version: "socmint-v1-public-web-report",
         username,
         reports: [],
@@ -1025,7 +1054,7 @@ export class ReportGate {
       };
       const pruned = await this.pruneSocialWorkspace(workspace, now);
       workspace = pruned.workspace;
-      if (pruned.changed) await this.state.storage.put(key, workspace);
+      if (pruned.changed) await this.writeSocialWorkspace(key, workspace);
       if (pruned.nextExpiry != null) await this.scheduleExpiry(pruned.nextExpiry);
       return Response.json({ ok: true, workspace });
     }
@@ -1047,7 +1076,7 @@ export class ReportGate {
       };
       const pruned = await this.pruneSocialWorkspace(safeWorkspace, now);
       safeWorkspace = pruned.workspace;
-      await this.state.storage.put(`social-workspace:${username}`, safeWorkspace);
+      await this.writeSocialWorkspace(`social-workspace:${username}`, safeWorkspace);
       if (pruned.nextExpiry != null) await this.scheduleExpiry(pruned.nextExpiry);
       return Response.json({ ok: true, workspace: safeWorkspace });
     }
@@ -1059,7 +1088,7 @@ export class ReportGate {
         return Response.json({ error: "Unknown user." }, { status: 400 });
       }
       const key = `social-workspace:${username}`;
-      const workspace = (await this.state.storage.get(key)) || {
+      const workspace = (await this.readSocialWorkspace(key)) || {
         version: "socmint-v1-public-web-report",
         username,
         reports: []
@@ -1068,7 +1097,7 @@ export class ReportGate {
         ? workspace.reports.filter(item => cleanText(item?.id, 80) !== reportId).slice(0, 50)
         : [];
       workspace.updated_at = new Date(now).toISOString();
-      await this.state.storage.put(key, workspace);
+      await this.writeSocialWorkspace(key, workspace);
       return Response.json({ ok: true, workspace });
     }
 
