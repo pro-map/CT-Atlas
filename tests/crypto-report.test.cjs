@@ -397,16 +397,19 @@ test("the report concludes from the automatic trace actually reached: depth, exc
   const report=R.build(model);
   const h=headings(report.blocks);
   assert.deepEqual(h.slice(0,3),["SUMMARY","TRACE CONCLUSION","SANCTIONS-LIST SCREENING"]);
-  assert.ok(h.indexOf("EXCHANGES REACHED BY THE AUTOMATIC TRACE")<h.indexOf("EXCHANGE IDENTIFICATION"));
+  const findingsIndex=h.indexOf("DOCUMENTED EXCHANGES AND BEHAVIOURAL CANDIDATES");
+  assert.ok(findingsIndex>=0&&findingsIndex<h.indexOf("EXCHANGE IDENTIFICATION"));
   const all=report.blocks.map(block=>block.text||"").join("\n")+JSON.stringify(report.blocks.filter(b=>b.type==="table"));
   assert.match(all,/followed the strongest branches from the seed for 9 wallets, up to H4 \(limit H6/);
-  assert.match(all,/It reached 2 exchange wallets: Binance \(sourced label\) at H2; Exchange-like wallet, likely OKX \(moderate confidence, AI-assessed\) at H4\./);
+  assert.match(all,/It reached 2 exchange findings: Binance \(sourced label\) at H2; Exchange-like wallet, likely OKX \(moderate confidence, AI-assessed\) at H4\./);
   assert.match(all,/It stopped because every branch reached an exchange or ended\./);
   assert.match(all,/1 wallet could not be expanded/);
   assert.match(all,/Path from the seed \(4 hops\): seed .* → TA .* ← TC/);
   assert.match(all,/AI-assessed operator: OKX · moderate confidence · exchange hot wallet\./);
   assert.match(all,/not a sourced attribution and does not establish control or ownership/);
-  assert.match(all,/Automatic trace.*reached H4 of H6 · 9 wallets expanded · 2 exchanges reached/);
+  assert.match(all,/Automatic trace.*reached H4 of H6 · 9 wallets expanded · 1 documented exchange reached/);
+  assert.match(all,/Only documented exchange labels terminate a branch/);
+  assert.match(all,/heuristic score, not a probability/);
 });
 
 test("without an automatic trace the conclusion says so and points to AUTO TRACE",()=>{

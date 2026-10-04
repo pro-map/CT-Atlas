@@ -56,7 +56,7 @@ test("the endpoint needs a session, a supported chain, and answers with the asse
   const {api,calls}=load();
   assert.equal((await api.handleExchangeAttribution(request({user_id:"analyst",chain:"tron",wallets:[{address:"TExch"}]},""),{GEMINI_API_KEY:"k"})).status,401);
   assert.equal((await api.handleExchangeAttribution(request({user_id:"analyst",chain:"dogecoin",wallets:[{address:"x"}]}),{GEMINI_API_KEY:"k"})).status,400);
-  const ok=await (await api.handleExchangeAttribution(request({user_id:"analyst",chain:"tron",wallets:[{address:"TExch",score:86}]}),{GEMINI_API_KEY:"k"})).json();
+  const ok=await (await api.handleExchangeAttribution(request({user_id:"analyst",chain:"tron",wallets:[{address:"TExch",score:86,labelled_neighbours:[{address:"TOkx",name:"OKX",category:"EXCHANGE",source:"Published wallet list"}]}]}),{GEMINI_API_KEY:"k"})).json();
   assert.equal(ok.attributions[0].likely_exchange,"OKX");
   assert.equal(ok.attributions[0].confidence,"moderate");
   assert.match(ok.note,/Not a sourced attribution/);
@@ -72,7 +72,21 @@ test("the automatic trace follows branches to exchanges, then asks for the opera
   assert.match(client,/expandTraceNode\(node\.id,\{quiet:true,limit:100\}\)/);
   assert.match(client,/await requestExchangeAttributions\(model,run\.exchanges\)/);
   assert.match(client,/autoTrace:autoTraceRun\?\{/,"the report model carries the trace reached");
-  assert.match(fs.readFileSync("crypto.html","utf8"),/<option value="6">H6<\/option>/);
+  assert.match(fs.readFileSync("crypto.html","utf8"),/<option value="6" selected>H6<\/option>/);
+});
+
+test("operator hypotheses need a matching sourced neighbour and never become high confidence",()=>{
+  const {api}=load();
+  const raw={wallets:[{address:"A",likely_exchange:"Binance",confidence:"high",alternatives:["Invented exchange"]}]};
+  for(const neighbours of [[],[{name:"Binance",category:"EXCHANGE"}],[{name:"OKX",category:"EXCHANGE",source:"Published list"}]]){
+    const out=api.sanitizeAttribution(raw,[{address:"A",labelled_neighbours:neighbours}])[0];
+    assert.equal(out.likely_exchange,"Unknown");
+    assert.equal(out.confidence,"low");
+    assert.equal(out.alternatives.length,0);
+  }
+  const supported=api.sanitizeAttribution(raw,[{address:"A",labelled_neighbours:[{name:"Binance",category:"EXCHANGE",source:"Published list"}]}])[0];
+  assert.equal(supported.likely_exchange,"Binance");
+  assert.equal(supported.confidence,"moderate");
 });
 
 test("no Etherscan Pro Plus name-tag lookup: TronScan is the only exchange-tag provider",()=>{

@@ -316,7 +316,7 @@ function readFilters(){
     to:String(document.getElementById("filterToDate")?.value||""),
     text:String(document.getElementById("filterText")?.value||"").trim().toLowerCase(),
     graphMinLinks:Math.max(1,Math.min(99,Number(document.getElementById("filterGraphMinLinks")?.value||1)||1)),
-    graphNodes:Math.max(20,Math.min(80,Number(document.getElementById("filterGraphNodes")?.value||40)||40))
+    graphNodes:Math.max(20,Math.min(80,Number(document.getElementById("filterGraphNodes")?.value||80)||80))
   };
 }
 
@@ -327,8 +327,8 @@ const AUTO_TRACE_MAX_WALLETS=30;
 
 function traceSettings(){
   return {
-    maxDepth:Math.max(2,Math.min(AUTO_TRACE_MAX_DEPTH,Number(document.getElementById("traceMaxDepth")?.value||3)||3)),
-    branch:Math.max(3,Math.min(8,Number(document.getElementById("traceBranch")?.value||3)||3))
+    maxDepth:Math.max(2,Math.min(AUTO_TRACE_MAX_DEPTH,Number(document.getElementById("traceMaxDepth")?.value||6)||6)),
+    branch:Math.max(3,Math.min(8,Number(document.getElementById("traceBranch")?.value||8)||8))
   };
 }
 
@@ -429,7 +429,7 @@ function resetFilterControls(renderNow=true){
   const defaults={
     filterDirection:"all",filterAsset:"all",filterType:"all",filterStatus:"all",
     filterMinAmount:"",filterMaxAmount:"",filterFromDate:"",filterToDate:"",
-    filterText:"",filterGraphMinLinks:"1",filterGraphNodes:"40"
+    filterText:"",filterGraphMinLinks:"1",filterGraphNodes:"80"
   };
   for(const [id,value] of Object.entries(defaults)){
     const el=document.getElementById(id);
@@ -2271,8 +2271,8 @@ async function expandTraceNode(address,options={}){
 // behaviour score at or above 80/100 once the wallet has been expanded.
 function exchangeStatusOf(address,chain=lastPayload?.chain){
   const label=labelForAddress(address,chain);
-  if(label&&String(label.category||"").toUpperCase()==="EXCHANGE"){
-    return {basis:"sourced",name:label.name||"Exchange",source:label.source_title||label.source_type||""};
+  if(label&&String(label.category||"").toUpperCase()==="EXCHANGE"&&(label.source_url||label.source_title)){
+    return {basis:"sourced",name:label.name||"Exchange",source:label.source_url||label.source_title};
   }
   const behavior=exchangeBehaviorForAddress(address,chain);
   if(behavior)return {basis:"behavioral",name:behavior.related_exchange?.name||"",score:Number(behavior.score),behavior};
@@ -2327,7 +2327,7 @@ async function requestExchangeAttributions(model,exchanges){
     for(const row of Array.isArray(entry?.payload?.transactions)?entry.payload.transactions:[]){
       for(const address of Array.isArray(row?.counterparties)?row.counterparties:[]){
         const label=labelForAddress(address,chain);
-        if(label&&!neighbours.some(n=>n.address===address))neighbours.push({address,name:label.name,category:label.category,source:label.source_title||label.source_type||""});
+        if(label&&!neighbours.some(n=>n.address===address))neighbours.push({address,name:label.name,category:label.category,source:label.source_url||label.source_title||""});
       }
     }
     const node=model.nodes.find(n=>n.key===item.key);
@@ -2359,26 +2359,29 @@ function attributionFor(address,chain=lastPayload?.chain){
 // Follows the trace until its branches reach an exchange: breadth-first from
 // the seed, the strongest branches first (BRANCH per hop), expanding each
 // wallet (its own transactions and behaviour score). A branch ends at a
-// wallet with a sourced exchange label or a behaviour score of 80/100+;
+// wallet with a documented exchange label; behaviour alone never ends a branch;
 // the trace stops when every branch has ended, at H6, or after 30 wallets.
 // The exchange-like wallets are then sent for an AI-assessed attribution.
 async function autoTrace(){
-  if(!lastPayload||lastPayload.kind!=="address")return;
+  if(autoTraceActive||!lastPayload||lastPayload.kind!=="address")return;
   const button=document.getElementById("cryptoAutoTrace");
   const depthSelect=document.getElementById("traceMaxDepth");
   if(depthSelect)depthSelect.value=String(AUTO_TRACE_MAX_DEPTH);
   const settings=traceSettings();
   if(button){button.disabled=true;button.textContent="TRACING…";}
   autoTraceActive=true;
-  setTraceStatus("Automatic trace started: following the strongest branches until they reach an exchange (up to H"+AUTO_TRACE_MAX_DEPTH+", "+AUTO_TRACE_MAX_WALLETS+" wallets).","working");
+  setTraceStatus("Automatic trace started: following the strongest branches until they reach a documented exchange (up to H"+AUTO_TRACE_MAX_DEPTH+", "+AUTO_TRACE_MAX_WALLETS+" wallets).","working");
 
   const run={startedAt:new Date().toISOString(),maxDepth:AUTO_TRACE_MAX_DEPTH,branch:settings.branch,walletBudget:AUTO_TRACE_MAX_WALLETS,
     expanded:0,failed:0,stop:"",exchanges:[],attribution:""};
-  const exchangeKeys=new Set();
+  const exchangeKeys=new Set(); // Only documented labels terminate a branch.
+  const findingKeys=new Set(); // Behavioural candidates remain investigable.
   const noteExchanges=model=>{
     for(const node of model.nodes){
       if(node.depth===0||exchangeKeys.has(node.key))continue;
-      if(exchangeStatusOf(node.id))exchangeKeys.add(node.key);
+      const status=exchangeStatusOf(node.id);
+      if(status)findingKeys.add(node.key);
+      if(status?.basis==="sourced")exchangeKeys.add(node.key);
     }
   };
 
@@ -2393,11 +2396,13 @@ async function autoTrace(){
         .sort((a,b)=>b.total-a.total)
         .slice(0,settings.branch);
       if(!candidates.length){
+        // A previous/manual expansion may already have populated deeper hops.
+        if(model.nodes.some(node=>node.depth>depth&&node.depth<AUTO_TRACE_MAX_DEPTH&&node.searchable&&!traceExpanded.has(node.key)&&!exchangeKeys.has(node.key)&&!reachedOnlyThroughExchanges(model,node,exchangeKeys)))continue;
         run.stop=exchangeKeys.size?"every branch reached an exchange or ended":"no further searchable branch";
         break;
       }
       for(let i=0;i<candidates.length;i++){
-        if(run.expanded>=AUTO_TRACE_MAX_WALLETS){run.stop="wallet budget reached ("+AUTO_TRACE_MAX_WALLETS+")";break;}
+        if(run.expanded+run.failed>=AUTO_TRACE_MAX_WALLETS){run.stop="wallet budget reached ("+AUTO_TRACE_MAX_WALLETS+")";break;}
         const node=candidates[i];
         setTraceStatus("Auto trace H"+depth+" → H"+(depth+1)+" · "+(i+1)+"/"+candidates.length+" · "+short(node.id,8)+
           (exchangeKeys.size?" · "+exchangeKeys.size+" exchange(s) reached":""),"working");
@@ -2405,7 +2410,9 @@ async function autoTrace(){
           const ok=await expandTraceNode(node.id,{quiet:true,limit:100});
           if(ok){
             run.expanded++;
-            if(exchangeStatusOf(node.id))exchangeKeys.add(node.key);
+            const status=exchangeStatusOf(node.id);
+            if(status)findingKeys.add(node.key);
+            if(status?.basis==="sourced")exchangeKeys.add(node.key);
           }
         }catch(error){
           run.failed++;
@@ -2420,7 +2427,7 @@ async function autoTrace(){
     currentNetworkModel=buildNetworkModel(lastPayload);
     noteExchanges(currentNetworkModel);
     const model=currentNetworkModel;
-    for(const key of exchangeKeys){
+    for(const key of findingKeys){
       const node=model.nodes.find(item=>item.key===key);
       if(!node)continue;
       const status=exchangeStatusOf(node.id);
@@ -2434,7 +2441,7 @@ async function autoTrace(){
     run.maxDepthReached=Math.max(0,...traceEntries().map(entry=>entry.depth));
 
     if(run.exchanges.some(item=>item.basis==="behavioral")){
-      setTraceStatus("Exchanges reached. Assessing which exchange operates the exchange-like wallet(s)…","working");
+      setTraceStatus("Assessing exchange-like candidates from their documented neighbours…","working");
       try{
         const count=await requestExchangeAttributions(model,run.exchanges);
         run.attribution=count?"assessed":"none";
@@ -2456,8 +2463,8 @@ async function autoTrace(){
     });
     setTraceStatus(
       run.exchanges.length
-        ? "Automatic trace complete: "+run.exchanges.length+" exchange(s) reached — "+names.join(" · ")+(run.exchanges.length>4?" …":"")+". "+run.expanded+" wallet(s) expanded, depth H"+run.maxDepthReached+"; stopped: "+run.stop+"."
-        : "Automatic trace complete: no exchange reached. "+run.expanded+" wallet(s) expanded, depth H"+run.maxDepthReached+"; stopped: "+run.stop+".",
+        ? "Automatic trace complete: "+run.exchanges.filter(item=>item.basis==="sourced").length+" documented exchange(s), "+run.exchanges.filter(item=>item.basis==="behavioral").length+" behavioural candidate(s) — "+names.join(" · ")+(run.exchanges.length>4?" …":"")+". "+run.expanded+" wallet(s) expanded, depth H"+run.maxDepthReached+"; stopped: "+run.stop+"."
+        :  "Automatic trace complete: no documented exchange or behavioural candidate found. "+run.expanded+" wallet(s) expanded, depth H"+run.maxDepthReached+"; stopped: "+run.stop+".",
       "success"
     );
   }catch(error){
