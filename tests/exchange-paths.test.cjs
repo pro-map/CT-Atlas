@@ -7,7 +7,7 @@ function harness(labels={}){
   const context=vm.createContext({document:{readyState:'loading',addEventListener(){},getElementById:id=>controls[id]},labels});
   const source=fs.readFileSync('crypto.js','utf8').replace(/\}\)\(\);\s*$/,`
     labelForAddress=address=>labels[address]||null;
-    exchangeBehaviorForAddress=()=>({score:99});
+    exchangeBehaviorForAddress=address=>labels[address]?.behavior||null;
     globalThis.api={directedExchangePath,documentedExchangePaths,rowsForExchangePath,exchangeGraphView,buildNetworkModel,
       mode:value=>{exchangeGraphMode=value;}, select:value=>{selectedExchangePath=value;},
       setup:payload=>{lastPayload=payload;resetTraceState(payload);},
@@ -64,4 +64,52 @@ test('complete analyzed graph recovers a low-ranked documented exchange beyond d
  assert.equal(full.nodes.length,21);
  assert.equal(api.exchangeGraphView(full,p).nodes.length,2);
 });
+test('mixed-direction documented Bitcoin connection enables focus and keeps real transfer arrows',()=>{
+ const {api,controls}=harness({exchange:{...label,name:'Binance'}});
+ const mixed={...model,root:'target',edges:[{fromKey:'exchange',toKey:'middle'},{fromKey:'target',toKey:'middle'},{fromKey:'noise',toKey:'target'}]};
+ const view=api.exchangeGraphView(mixed,{...payload,chain:'bitcoin'});
+ assert.equal(controls.exchangePathToggle.disabled,false);
+ assert.equal(controls.exchangePathSelect.disabled,false);
+ assert.equal(api.active().mixed,true);
+ assert.deepEqual(Array.from(api.active().keys),['exchange','middle','target']);
+ assert.deepEqual(Array.from(view.edges,e=>[e.fromKey,e.toKey]),[['exchange','middle'],['target','middle']]);
+ assert.match(controls.exchangePathDetails.textContent,/mixed transfer directions/);
+ assert.doesNotMatch(controls.exchangePathDetails.textContent,/exchange → middle → target/);
+ api.mode('all');assert.equal(api.exchangeGraphView(mixed,payload),mixed);
+ api.mode('auto');assert.equal(api.exchangeGraphView(mixed,payload).edges.length,2);
+});
+test('an exchange discovered on a subsequent trace makes the previously disabled control usable',()=>{
+ const labels={};const {api,controls}=harness(labels);
+ api.exchangeGraphView(model,payload);
+ assert.equal(controls.exchangePathToggle.disabled,true);
+ assert.match(controls.exchangePathDetails.textContent,/AI-assessed name is a lead/);
+ labels.exchange={...label,name:'Binance'};
+ api.exchangeGraphView(model,payload);
+ assert.equal(controls.exchangePathToggle.disabled,false);
+ assert.equal(api.active().name,'Binance');
+});
+test('a disconnected documented exchange cannot produce an invented path and has an explanation',()=>{
+ const {api,controls}=harness({exchange:label});
+ const disconnected={...model,edges:[{fromKey:'noise',toKey:'target'}]};
+ assert.equal(api.exchangeGraphView(disconnected,payload),disconnected);
+ assert.equal(controls.exchangePathToggle.disabled,true);
+ assert.equal(controls.exchangePathDetails.hidden,false);
+ assert.match(controls.exchangePathDetails.textContent,/observed links/);
+});
+test('a Binance behavioral lead is inspectable by explicit choice but never auto-focused or documented',()=>{
+ const {api,controls}=harness({exchange:{behavior:{score:95,related_exchange:{name:'Binance'}}}});
+ assert.equal(api.documentedExchangePaths(model,'bitcoin').length,0);
+ assert.equal(api.exchangeGraphView(model,{...payload,chain:'bitcoin'}),model);
+ assert.equal(api.active(),null);
+ assert.equal(controls.exchangePathToggle.disabled,false);
+ assert.equal(controls.exchangePathToggle.textContent,'SHOW CANDIDATE CONNECTION');
+ assert.match(controls.exchangePathDetails.textContent,/UNVERIFIED LEAD: Binance/);
+ api.mode('focus');
+ assert.equal(api.exchangeGraphView(model,payload).edges.length,2);
+ assert.equal(api.active().basis,'behavioral');
+ assert.match(controls.exchangePathDetails.textContent,/identity is not established/);
+ api.mode('all');assert.equal(api.exchangeGraphView(model,payload),model);
+});
+
+
 

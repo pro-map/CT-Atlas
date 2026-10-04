@@ -742,7 +742,7 @@ function exchangeIdentificationFindings(){
   const findings=new Map();
   const chain=lastPayload.chain;
   const addSourced=(address,label,depth=0,interactions=0)=>{
-    if(!label||String(label.category||"").toUpperCase()!=="EXCHANGE")return;
+    if(!label||String(label.category||"").toUpperCase()!=="EXCHANGE"||!(label.source_url||label.source_title))return;
     const key=exchangeLabelKey(address,chain);
     const previous=findings.get(key);
     findings.set(key,{
@@ -2501,11 +2501,15 @@ function clearTrace(){
 }
 
 // A directed shortest observed path, never an undirected connection presented as funds flow.
-function directedExchangePath(model,start,end){
+function directedExchangePath(model,start,end,allowReverse=false){
   const adjacency=new Map();
   for(const edge of model.edges){
     if(!adjacency.has(edge.fromKey))adjacency.set(edge.fromKey,[]);
     adjacency.get(edge.fromKey).push(edge.toKey);
+    if(allowReverse){
+      if(!adjacency.has(edge.toKey))adjacency.set(edge.toKey,[]);
+      adjacency.get(edge.toKey).push(edge.fromKey);
+    }
   }
   const parent=new Map([[start,null]]),queue=[start];
   for(let i=0;i<queue.length;i++){
@@ -2523,21 +2527,33 @@ function directedExchangePath(model,start,end){
   return null;
 }
 
-function documentedExchangePaths(model,chain){
+function documentedExchangePaths(model,chain,includeCandidates=false){
   const paths=[];
   for(const node of model.nodes){
     if(node.key===model.rootKey)continue;
     const status=exchangeStatusOf(node.id,chain);
-    if(status?.basis!=="sourced")continue;
+    if(!status||(status.basis!=="sourced"&&!includeCandidates))continue;
+    const basis=status.basis;
+    const name=basis==="sourced"?status.name:(attributionFor(node.id,chain)?.likely_exchange||status.name||"Exchange-like wallet");
+    const before=paths.length;
     for(const incoming of [true,false]){
       const keys=directedExchangePath(model,incoming?node.key:model.rootKey,incoming?model.rootKey:node.key);
       if(!keys)continue;
       const pairs=new Set(keys.slice(1).map((key,i)=>keys[i]+"|"+key));
-      paths.push({id:node.key+"|"+(incoming?"in":"out"),name:status.name,source:status.source,
+      paths.push({id:node.key+"|"+(incoming?"in":"out"),name,source:status.source,basis,
         incoming,keys,edges:model.edges.filter(edge=>pairs.has(edge.fromKey+"|"+edge.toKey))});
     }
+    // A documented exchange may be connected through transfers whose directions alternate.
+    // Preserve those arrows and identify this as a connection, never as continuous funds flow.
+    if(paths.length===before){
+      const keys=directedExchangePath(model,node.key,model.rootKey,true);
+      if(!keys)continue;
+      const pairs=new Set(keys.slice(1).flatMap((key,i)=>[keys[i]+"|"+key,key+"|"+keys[i]]));
+      paths.push({id:node.key+"|connection",name,source:status.source,basis,incoming:null,mixed:true,
+        keys,edges:model.edges.filter(edge=>pairs.has(edge.fromKey+"|"+edge.toKey))});
+    }
   }
-  return paths.sort((a,b)=>Number(b.incoming)-Number(a.incoming)||a.keys.length-b.keys.length||a.id.localeCompare(b.id));
+  return paths.sort((a,b)=>(a.basis===b.basis?0:a.basis==="sourced"?-1:1)||Number(Boolean(a.mixed))-Number(Boolean(b.mixed))||Number(b.incoming)-Number(a.incoming)||a.keys.length-b.keys.length||a.id.localeCompare(b.id));
 }
 
 function rowsForExchangePath(rows,path,chain){
@@ -2555,26 +2571,36 @@ function rowsForExchangePath(rows,path,chain){
 }
 
 function exchangeGraphView(model,payload){
-  const paths=documentedExchangePaths(model,payload.chain);
+  const paths=documentedExchangePaths(model,payload.chain,true);
   const controls=document.getElementById("exchangePathControls");
   const select=document.getElementById("exchangePathSelect");
   const toggle=document.getElementById("exchangePathToggle");
   const details=document.getElementById("exchangePathDetails");
-  if(controls)controls.hidden=!paths.length&&exchangeGraphMode!=="all";
+  if(controls)controls.hidden=false;
   if(!paths.some(path=>path.id===selectedExchangePath))selectedExchangePath=paths[0]?.id||"";
-  activeExchangePath=exchangeGraphMode!=="all"?paths.find(path=>path.id===selectedExchangePath)||null:null;
+  const selected=paths.find(path=>path.id===selectedExchangePath);
+  activeExchangePath=exchangeGraphMode!=="all"&&(selected?.basis==="sourced"||exchangeGraphMode==="focus")?selected||null:null;
   if(select){
-    select.innerHTML=paths.map(path=>'<option value="'+esc(path.id)+'">'+esc(path.name+" · "+(path.incoming?"Exchange → target":"Target → exchange")+" · "+(path.keys.length-1)+" hops")+'</option>').join("");
+    select.innerHTML=paths.length?paths.map(path=>'<option value="'+esc(path.id)+'">'+esc(path.name+" · "+(path.basis==="sourced"?"DOCUMENTED":"UNVERIFIED LEAD")+" · "+(path.mixed?"Connection · mixed directions":path.incoming?"Wallet → target":"Target → wallet")+" · "+(path.keys.length-1)+" hops")+'</option>').join(""):'<option value="">No exchange connection available</option>';
     select.value=selectedExchangePath;select.disabled=!paths.length;
   }
-  if(toggle){toggle.textContent=activeExchangePath?"SHOW ALL ANALYZED TRANSACTIONS":"SHOW EXCHANGE PATH";toggle.disabled=!paths.length;toggle.setAttribute("aria-pressed",String(Boolean(activeExchangePath)));}
+  if(toggle){toggle.textContent=activeExchangePath?"SHOW ALL ANALYZED TRANSACTIONS":selected?.basis==="behavioral"?"SHOW CANDIDATE CONNECTION":"SHOW EXCHANGE PATH";toggle.disabled=!paths.length;toggle.setAttribute("aria-pressed",String(Boolean(activeExchangePath)));}
   if(details){
     const path=activeExchangePath;
-    details.hidden=!path;
+    details.hidden=false;
     if(path){
       const nodeByKey=new Map(model.nodes.map(node=>[node.key,node]));
       const addresses=path.keys.map(key=>nodeByKey.get(key)?.id||key);
-      details.textContent="Shortest observed path · "+String(payload.chain_name||payload.chain)+" · "+addresses.join(" → ")+". Source: "+path.source+". Arrows show recorded transfer directions; this does not establish that the same funds passed through every hop. Other analyzed transactions are hidden, not deleted. Date, asset and transaction filters still apply.";
+      details.textContent=(path.basis==="sourced"?"DOCUMENTED EXCHANGE. ":"UNVERIFIED LEAD — the exchange identity is not established. ")+(path.mixed?"Shortest observed connection (mixed transfer directions)":"Shortest observed path")+" · "+String(payload.chain_name||payload.chain)+" · "+addresses.join(path.mixed?" — ":" → ")+(path.source?". Source: "+path.source:"")+". Arrows show recorded transfer directions; this does not establish that the same funds passed through every hop. Other analyzed transactions are hidden, not deleted. Date, asset and transaction filters still apply.";
+    }else if(paths.length){
+      details.textContent=selected?.basis==="behavioral"
+        ?"UNVERIFIED LEAD: "+selected.name+" is a behavioral or AI-assessed candidate, not a documented exchange identity. Select SHOW CANDIDATE CONNECTION to examine its observed links without confirming the attribution."
+        :paths.length+" connection(s) available. Choose an exchange or select SHOW EXCHANGE PATH to focus.";
+    }else{
+      const rootIsExchange=exchangeStatusOf(model.root,payload.chain)?.basis==="sourced";
+      details.textContent=rootIsExchange
+        ?"The target itself is a documented exchange. No path to a different documented exchange is present in the current transactions."
+        :"No connection to a documented exchange is available in the current transactions. An exchange-like score or AI-assessed name is a lead, not a documented label. Clear transaction filters or expand the trace; a path requires both a source-backed exchange address and observed links to the target.";
     }
   }
   if(!activeExchangePath)return model;
@@ -3065,13 +3091,13 @@ function applyUrlQuery(){
 
 function bind(){
   document.getElementById("exchangePathToggle")?.addEventListener("click",()=>{
-    exchangeGraphMode=activeExchangePath?"all":"auto";
+    exchangeGraphMode=activeExchangePath?"all":"focus";
     graphPositions=new Map();
     renderFilteredViews();
   });
   document.getElementById("exchangePathSelect")?.addEventListener("change",event=>{
     selectedExchangePath=event.target.value;
-    exchangeGraphMode="auto";
+    exchangeGraphMode="focus";
     graphPositions=new Map();
     renderFilteredViews();
   });
@@ -3187,5 +3213,7 @@ async function start(){
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);
 else start();
 })();
+
+
 
 
