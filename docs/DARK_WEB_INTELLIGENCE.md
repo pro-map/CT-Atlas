@@ -10,8 +10,11 @@ The supplied saved homepage contains 12 `post-card` blocks and links to page 221
 Its `post-summary` is the Arabic title, `card-footer` contains the Arabic date,
 and the reading link identifies the publication. The supplied short news detail
 uses `read-area`, `title` and `post-content`; its entire news text is in the title,
-with an empty body. No real onion address or supplied propaganda HTML is stored
-in this repository. Tests use neutral, synthetic versions of the observed layout.
+with an empty body. The supplied magazine detail exposes a PDF through the
+viewer's relative, percent-encoded `data-url`. This resolves to one PDF attachment;
+viewer page counters and controls are excluded from publication text. No real
+onion address or supplied propaganda HTML is stored in this repository. Tests use
+neutral, synthetic versions of the observed layout.
 
 The adapter recognizes these structural markers automatically. It collects each
 card separately, follows the list's own pagination, and opens every permalink.
@@ -176,8 +179,11 @@ collector credential. Payload, date, epoch and pause checks apply to every batch
 Source/model text is rendered with textContent, not inserted as HTML. Inert HTML
 exports encode source text and apply a restrictive Content Security Policy.
 
-Validation uses the two supplied saved pages, synthetic pagination/PDF fixtures,
+Validation uses the three supplied saved pages, synthetic pagination/PDF fixtures,
 collector tests and authenticated Worker/storage tests (including >500 archived
-records, reset and stale AI races). A real magazine detail/PDF was not supplied:
-its exact viewer markup and live Tor acquisition remain to be checked. Successful
-saved-page tests do not establish live availability or exhaustive site coverage.
+records, reset and stale AI races). The magazine detail's PDF link and viewer
+markup are validated; a listing's unavailable preview is retried when its detail
+reveals the PDF. The actual PDF bytes were not supplied or fetched over Tor here.
+The saved viewer's page count is not an independently verified PDF page count.
+Successful saved-page tests do not establish live availability or exhaustive site
+coverage.

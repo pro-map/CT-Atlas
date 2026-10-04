@@ -234,7 +234,9 @@ def original_text(node):
             # Physical line wrapping in saved HTML is layout whitespace, not a
             # paragraph break. Only block elements introduce paragraph boundaries.
             parts.append(re.sub(r"\s+", " ", current))
-        elif current["tag"] not in {"script", "style", "svg", "noscript", "template", "button"}:
+        elif current["tag"] not in {"script", "style", "svg", "noscript", "template", "button", "canvas"} and not (
+                set(current["attrs"].get("class", "").split()) & {"pdf-viewer", "paginator", "page-number-indicator", "next-prev-btn", "loading-wrapper"}
+                or current["attrs"].get("role") == "toolbar"):
             block = current["tag"] in {"p", "div", "br", "li", "h1", "h2", "h3", "h4", "h5", "h6", "blockquote"}
             if block:
                 parts.append("\n")
@@ -511,6 +513,19 @@ def read_listing(session, outlet):
         response.close()
 
 
+def preview_source(row):
+    """Identify actual preview bytes so listing-only failures do not block detail previews."""
+    if row.get("publication_version") == 1:
+        attachment = next((a for a in row.get("attachments", []) if a.get("type") == "pdf"), None)
+        if attachment:
+            return ("pdf", attachment["url"])
+    if row.get("preview_url"):
+        return ("image", row["preview_url"])
+    if not row.get("publication_version") and row.get("type") in {"pdf", "image", "video"}:
+        return (row["type"], row["url"])
+    return None
+
+
 def make_preview(tor, row):
     """At most 8 MiB of source bytes; never keep or upload original media."""
     if row.get("publication_version") == 1:
@@ -724,6 +739,9 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
                 if row.get("publication_version") == 1:
                     old_files = {a["url"]: a for a in previous.get("attachments", [])}
                     merged["attachments"] = [{**old_files.get(a["url"], {}), **a} for a in row.get("attachments", [])]
+                if preview_source(previous) != preview_source(merged):
+                    merged.pop("preview", None)
+                    merged.pop("preview_status", None)
                 if previous.get("type", "page") != "page" and row["type"] == "page" and not row.get("excerpt"):
                     merged["type"] = previous["type"]
                 if previous.get("excerpt") and not row.get("excerpt"):
@@ -821,7 +839,7 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
         if policy and policy.get("previews"):
             prior = db.execute("SELECT metadata FROM items WHERE outlet_id=? AND url=?", (oid, row["url"])).fetchone()
             previous = json.loads(prior[0]) if prior else {}
-            if previous.get("preview") or previous.get("preview_status"):
+            if preview_source(previous) == preview_source(row) and (previous.get("preview") or previous.get("preview_status")):
                 row.update({key: previous[key] for key in ("preview", "preview_status") if key in previous})
             if not row.get("preview") and not row.get("preview_status") and previews_left:
                 previews_left -= 1

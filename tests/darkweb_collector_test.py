@@ -253,6 +253,45 @@ def test_pdf_signature_and_extension(tmp_path):
     assert (tmp_path/(meta['sha256']+'.pdf')).read_bytes() == data
 
 
+def magazine_viewer_detail():
+    # Neutral fixture of the supplied viewer: a relative, percent-encoded PDF
+    # lives in data-url; canvas/pagination are UI, never publication text.
+    return structured_detail('مجلة العدد 567', '<p>وصف الوثيقة</p><div class="pdf-viewer" data-url="../../../uploads/12/%D8%AA%D9%82%D8%B1%D9%8A%D8%B1.pdf"><div class="embed-pdf-container"><div class="loading-wrapper">Loading</div><canvas class="pdf-canvas"></canvas></div><div class="paginator"><div class="page-number-indicator"><span class="page-num">1</span><span class="page-count">8</span><button class="download">Download</button></div></div></div>')
+
+
+def test_saved_pdf_viewer_resolves_document_without_collecting_its_controls():
+    row = c.structured_publications(magazine_viewer_detail(), BASE+'posts/naba/12/')['page']
+    assert row['original_text'] == 'مجلة العدد 567\n\nوصف الوثيقة'
+    assert row['attachments'] == [{'url':BASE+'uploads/12/%D8%AA%D9%82%D8%B1%D9%8A%D8%B1.pdf','type':'pdf','title':'تقرير.pdf'}]
+    assert c.preview_source(row) == ('pdf', row['attachments'][0]['url'])
+
+
+def test_listing_preview_failure_is_retried_after_magazine_detail_is_fetched(tmp_path):
+    # First pass discovers a magazine card with no poster/PDF URL. The next pass
+    # must retry its preview using the newly resolved PDF, not cache "unavailable".
+    listing = structured_listing(7,False)
+    site = Site({BASE:listing,**{BASE+'posts/news/'+str(i)+'/':structured_detail('خبر '+str(i)) for i in range(6)},
+                 BASE+'posts/naba/6/':magazine_viewer_detail(),
+                 BASE+'uploads/12/%D8%AA%D9%82%D8%B1%D9%8A%D8%B1.pdf':('%PDF-1.4\nexample','application/pdf')})
+    db = c.open_database(tmp_path/'state.sqlite')
+    # Put the magazine first so it consumes one of the first pass's preview slots.
+    start=listing.index('<div class="post-card"><a class="post-card-link" href="/posts/naba/')
+    site.pages[BASE]=listing[:listing.index('<div id="post-card-holder">')]+'<div id="post-card-holder">'+listing[start:]
+    policy={'epoch':2,'from':'2025-01-01','through':'2026-12-31','pages_per_scan':10,'previews':True}
+    observed=[]
+    def preview(tor,row):
+        observed.append(c.preview_source(row))
+        return {'preview_status':'First page' if c.preview_source(row) else 'No visual preview supplied'}
+    with patch.object(c,'api_call',return_value={'ok':True}), patch.object(c,'make_preview',side_effect=preview):
+        c.scan_outlet(None,'',site,db,{**OUTLET,'policy':policy},tmp_path,False,1000,1,100,0)
+        c.scan_outlet(None,'',site,db,{**OUTLET,'policy':policy},tmp_path,False,1000,1,100,0)
+    stored=json.loads(db.execute('SELECT metadata FROM items WHERE url=?',(BASE+'posts/naba/6/',)).fetchone()[0])
+    assert stored['preview_status']=='First page'
+    assert stored['attachments'][0]['acquired']
+    assert observed == [None,('pdf',BASE+'uploads/12/%D8%AA%D9%82%D8%B1%D9%8A%D8%B1.pdf')]
+    db.close()
+
+
 def test_structured_crawl_resumes_and_downloads_historical_pdf_without_duplicate_records(tmp_path):
     site = Site({BASE:structured_listing(7),BASE+'page/2/':structured_listing(1,False),
                  **{BASE+'posts/news/'+str(i)+'/':structured_detail('خبر '+str(i)) for i in range(6)},
