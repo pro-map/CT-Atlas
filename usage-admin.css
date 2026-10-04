@@ -20,3 +20,7 @@
 #adminFeatureUsageTable td{color:#c5d5de}
 #adminFeatureUsageTable td:first-child{color:#e7f2f7;font-weight:700}
 
+
+#adminUsageTable td.admin-usage-nonzero,
+#adminFeatureUsageTable td.admin-usage-nonzero,
+#adminUsageSummary strong.admin-usage-nonzero{color:#e2c469}

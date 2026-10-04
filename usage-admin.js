@@ -168,6 +168,11 @@ function adminUserLabel(item,fallback=""){
   return displayName?username+" — "+displayName:username;
 }
 
+function adminCountCell(value){
+  const count=Number(value||0);
+  return '<td'+(Number.isFinite(count)&&count!==0?' class="admin-usage-nonzero"':"")+">"+count+"</td>";
+}
+
 function refreshAdminButton(){
   const button=document.getElementById("adminUsageButton");
   if(button)button.hidden=!isAdmin();
@@ -295,18 +300,24 @@ async function loadAdmin(period){
       rows.innerHTML=users.map(item=>
         "<tr>"+
           "<td>"+escapeCell(adminUserLabel(item))+"</td>"+
-          "<td>"+Number(item.crypto||0)+"</td>"+
-          "<td>"+Number(item.facial||0)+"</td>"+
-          "<td>"+Number(item.map||0)+"</td>"+
-          "<td>"+Number(item.social||0)+"</td>"+
-          "<td>"+Number(item.darkweb||0)+"</td>"+
-          "<td>"+Number(item.ip||0)+"</td>"+
+          adminCountCell(item.crypto)+
+          adminCountCell(item.facial)+
+          adminCountCell(item.map)+
+          adminCountCell(item.social)+
+          adminCountCell(item.darkweb)+
+          adminCountCell(item.ip)+
         "</tr>"
       ).join("")||'<tr><td colspan="7">No users found for this period.</td></tr>';
     }
 
     const summary=usagePayload.summary||{};
-    const setMetric=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=Number(value||0).toLocaleString("en-GB");};
+    const setMetric=(id,value)=>{
+      const el=document.getElementById(id);
+      if(!el)return;
+      const count=Number(value||0);
+      el.textContent=count.toLocaleString("en-GB");
+      el.classList.toggle("admin-usage-nonzero",Number.isFinite(count)&&count!==0);
+    };
     setMetric("adminActiveUsers",summary.active_users);
     setMetric("adminSearches",summary.searches);
     setMetric("adminReportRequests",summary.report_requests);
@@ -317,13 +328,13 @@ async function loadAdmin(period){
       featureRows.innerHTML=users.map(item=>
         "<tr>"+
           "<td>"+escapeCell(adminUserLabel(item))+"</td>"+
-          "<td>"+Number(item.report_generator_requests||0)+"</td>"+
-          "<td>"+Number(item.deep_search_requests||0)+"</td>"+
-          "<td>"+Number(item.quick_ask_requests||0)+"</td>"+
-          "<td>"+Number(item.blockchain_searches||0)+"</td>"+
-          "<td>"+Number(item.social_intel_requests||0)+"</td>"+
-          "<td>"+Number(item.facial_extractions||0)+"</td>"+
-          "<td>"+Number(item.facial_searches||0)+"</td>"+
+          adminCountCell(item.report_generator_requests)+
+          adminCountCell(item.deep_search_requests)+
+          adminCountCell(item.quick_ask_requests)+
+          adminCountCell(item.blockchain_searches)+
+          adminCountCell(item.social_intel_requests)+
+          adminCountCell(item.facial_extractions)+
+          adminCountCell(item.facial_searches)+
         "</tr>"
       ).join("")||'<tr><td colspan="8">No users found for this period.</td></tr>';
     }
@@ -338,7 +349,7 @@ async function loadAdmin(period){
     if(featureRows)featureRows.innerHTML="";
     ["adminActiveUsers","adminSearches","adminReportRequests","adminAiReports"].forEach(id=>{
       const el=document.getElementById(id);
-      if(el)el.textContent="—";
+      if(el){el.textContent="—";el.classList.remove("admin-usage-nonzero");}
     });
   }
 }
