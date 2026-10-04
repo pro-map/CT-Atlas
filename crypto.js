@@ -24,6 +24,10 @@ let exchangeAttributions=new Map();
 // While an automatic trace runs, the graph keeps its whole frontier (no node cap).
 let autoTraceActive=false;
 let currentNetworkModel=null;
+let graphDisplayModel=null;
+let exchangeGraphMode="auto";
+let selectedExchangePath="";
+let activeExchangePath=null;
 let cryptoWorkspace={version:"crypto-workspace-v1",labels:[],watchlist:[],cases:[],alerts:[]};
 let sharedExchangeLabels=new Map();
 let activeCaseId="";
@@ -1352,7 +1356,7 @@ function collectReportModel(){
   }
 
   // The graph and its node table are the screen as the analyst arranged it; everything else uses all records.
-  const displayed=currentNetworkModel||buildNetworkModel(payload);
+  const displayed=graphDisplayModel||currentNetworkModel||buildNetworkModel(payload);
   const nodeLabel=address=>labelForAddress(address,payload.chain)?.name||"";
   let path=null;
   if(Array.isArray(lastFoundPath)&&lastFoundPath.length>1){
@@ -1979,7 +1983,7 @@ function neighborStats(payload,rows){
   return [...map.values()].sort((a,b)=>b.total-a.total||b.incoming+b.outgoing-(a.incoming+a.outgoing));
 }
 
-function buildNetworkModel(payload){
+function buildNetworkModel(payload,allAnalyzed=false){
   const root=String(payload.query||"");
   const rootKey=traceKey(root,payload.chain);
   const f=readFilters();
@@ -2016,17 +2020,17 @@ function buildNetworkModel(payload){
 
   ensureNode(root,0);
 
-  const entries=traceEntries().filter(entry=>entry.depth<settings.maxDepth);
+  const entries=traceEntries().filter(entry=>allAnalyzed||entry.depth<settings.maxDepth);
   for(const entry of entries){
     const source=entry.address;
     const sourceNode=ensureNode(source,entry.depth);
     const rows=filterRows(entry.payload);
     const neighbors=neighborStats(entry.payload,rows)
-      .filter(node=>node.total>=f.graphMinLinks)
-      .slice(0,entry.depth===0?Math.min(14,f.graphNodes-1):settings.branch);
+      .filter(node=>allAnalyzed||node.total>=f.graphMinLinks)
+      .slice(0,allAnalyzed?undefined:entry.depth===0?Math.min(14,f.graphNodes-1):settings.branch);
 
     for(const neighbor of neighbors){
-      const childDepth=Math.min(settings.maxDepth,entry.depth+1);
+      const childDepth=allAnalyzed?entry.depth+1:Math.min(settings.maxDepth,entry.depth+1);
       const child=ensureNode(neighbor.id,childDepth);
       child.total+=neighbor.total;
       child.incoming+=neighbor.incoming;
@@ -2044,7 +2048,7 @@ function buildNetworkModel(payload){
   // Expanded wallets and the exchanges the automatic trace reached stay visible.
   const keepKeys=new Set([rootKey,...traceEntries().map(entry=>entry.key),...(autoTraceRun?.exchanges||[]).map(item=>item.key)]);
   const nodeCap=autoTraceActive?Math.max(f.graphNodes,REPORT_GRAPH_NODE_CAP):f.graphNodes;
-  if(nodeList.length>nodeCap){
+  if(!allAnalyzed&&nodeList.length>nodeCap){
     const retained=nodeList
       .sort((a,b)=>{
         const ak=keepKeys.has(a.key)?1:0,bk=keepKeys.has(b.key)?1:0;
@@ -2107,8 +2111,11 @@ function updateGraphEdges(svg){
     if(!a||!b)return;
     const line=group.querySelector("line");
     if(line){
-      line.setAttribute("x1",a.x);line.setAttribute("y1",a.y);
-      line.setAttribute("x2",b.x);line.setAttribute("y2",b.y);
+      const distance=Math.hypot(b.x-a.x,b.y-a.y)||1;
+      const inset=graphDisplayModel?.exchangePath?Math.min(42,distance/3):0;
+      const dx=(b.x-a.x)/distance*inset,dy=(b.y-a.y)/distance*inset;
+      line.setAttribute("x1",a.x+dx);line.setAttribute("y1",a.y+dy);
+      line.setAttribute("x2",b.x-dx);line.setAttribute("y2",b.y-dy);
     }
     const label=group.querySelector("text");
     if(label){
@@ -2493,18 +2500,107 @@ function clearTrace(){
   setTraceStatus("Trace cleared. H1 is rebuilt from the seed wallet only.","success");
 }
 
+// A directed shortest observed path, never an undirected connection presented as funds flow.
+function directedExchangePath(model,start,end){
+  const adjacency=new Map();
+  for(const edge of model.edges){
+    if(!adjacency.has(edge.fromKey))adjacency.set(edge.fromKey,[]);
+    adjacency.get(edge.fromKey).push(edge.toKey);
+  }
+  const parent=new Map([[start,null]]),queue=[start];
+  for(let i=0;i<queue.length;i++){
+    const key=queue[i];
+    if(key===end){
+      const path=[];
+      for(let cursor=end;cursor!==null;cursor=parent.get(cursor))path.push(cursor);
+      return path.reverse();
+    }
+    for(const next of adjacency.get(key)||[]){
+      if(parent.has(next))continue;
+      parent.set(next,key);queue.push(next);
+    }
+  }
+  return null;
+}
+
+function documentedExchangePaths(model,chain){
+  const paths=[];
+  for(const node of model.nodes){
+    if(node.key===model.rootKey)continue;
+    const status=exchangeStatusOf(node.id,chain);
+    if(status?.basis!=="sourced")continue;
+    for(const incoming of [true,false]){
+      const keys=directedExchangePath(model,incoming?node.key:model.rootKey,incoming?model.rootKey:node.key);
+      if(!keys)continue;
+      const pairs=new Set(keys.slice(1).map((key,i)=>keys[i]+"|"+key));
+      paths.push({id:node.key+"|"+(incoming?"in":"out"),name:status.name,source:status.source,
+        incoming,keys,edges:model.edges.filter(edge=>pairs.has(edge.fromKey+"|"+edge.toKey))});
+    }
+  }
+  return paths.sort((a,b)=>Number(b.incoming)-Number(a.incoming)||a.keys.length-b.keys.length||a.id.localeCompare(b.id));
+}
+
+function rowsForExchangePath(rows,path,chain){
+  if(!path)return rows;
+  const pairs=new Set(path.edges.map(edge=>edge.fromKey+"|"+edge.toKey));
+  return rows.filter(row=>{
+    const direction=String(row.direction||"").toUpperCase();
+    if(direction!=="IN"&&direction!=="OUT")return false;
+    const source=traceKey(row._trace_source,chain);
+    return (row.counterparties||[]).some(address=>{
+      const cp=traceKey(address,chain);
+      return pairs.has(direction==="IN"?cp+"|"+source:source+"|"+cp);
+    });
+  });
+}
+
+function exchangeGraphView(model,payload){
+  const paths=documentedExchangePaths(model,payload.chain);
+  const controls=document.getElementById("exchangePathControls");
+  const select=document.getElementById("exchangePathSelect");
+  const toggle=document.getElementById("exchangePathToggle");
+  const details=document.getElementById("exchangePathDetails");
+  if(controls)controls.hidden=!paths.length&&exchangeGraphMode!=="all";
+  if(!paths.some(path=>path.id===selectedExchangePath))selectedExchangePath=paths[0]?.id||"";
+  activeExchangePath=exchangeGraphMode!=="all"?paths.find(path=>path.id===selectedExchangePath)||null:null;
+  if(select){
+    select.innerHTML=paths.map(path=>'<option value="'+esc(path.id)+'">'+esc(path.name+" · "+(path.incoming?"Exchange → target":"Target → exchange")+" · "+(path.keys.length-1)+" hops")+'</option>').join("");
+    select.value=selectedExchangePath;select.disabled=!paths.length;
+  }
+  if(toggle){toggle.textContent=activeExchangePath?"SHOW ALL ANALYZED TRANSACTIONS":"SHOW EXCHANGE PATH";toggle.disabled=!paths.length;toggle.setAttribute("aria-pressed",String(Boolean(activeExchangePath)));}
+  if(details){
+    const path=activeExchangePath;
+    details.hidden=!path;
+    if(path){
+      const nodeByKey=new Map(model.nodes.map(node=>[node.key,node]));
+      const addresses=path.keys.map(key=>nodeByKey.get(key)?.id||key);
+      details.textContent="Shortest observed path · "+String(payload.chain_name||payload.chain)+" · "+addresses.join(" → ")+". Source: "+path.source+". Arrows show recorded transfer directions; this does not establish that the same funds passed through every hop. Other analyzed transactions are hidden, not deleted. Date, asset and transaction filters still apply.";
+    }
+  }
+  if(!activeExchangePath)return model;
+  const path=activeExchangePath,keys=new Set(path.keys);
+  path.keys.forEach((key,index)=>graphPositions.set(key,{x:80+840*index/Math.max(1,path.keys.length-1),y:325}));
+  return {...model,nodes:model.nodes.filter(node=>keys.has(node.key)),edges:path.edges,exchangePath:true,
+    maxVisibleDepth:Math.max(...model.nodes.filter(node=>keys.has(node.key)).map(node=>node.depth))};
+}
+
 function renderGraph(payload){
   stopPlaybackSilently();
   const svg=document.getElementById("flowGraph");
   if(!svg)return;
 
-  const model=buildNetworkModel(payload);
+  let model=buildNetworkModel(payload,true);
+  graphDisplayModel=exchangeGraphView(model,payload);
+  if(!activeExchangePath&&exchangeGraphMode!=="all"){
+    model=buildNetworkModel(payload);
+    graphDisplayModel=model;
+  }
   currentNetworkModel=model;
-  ensureGraphPositions(model);
-  paintGraphFrame(payload,model);
+  ensureGraphPositions(graphDisplayModel);
+  paintGraphFrame(payload,graphDisplayModel);
 
   setTraceStatus(
-    "Network: "+model.nodes.length+" visible node(s) · "+tracePayloads.size+" analyzed wallet(s) · visible depth H"+model.maxVisibleDepth+
+    (activeExchangePath?"Exchange path: ":"Network: ")+graphDisplayModel.nodes.length+" visible node(s) · "+tracePayloads.size+" analyzed wallet(s) · visible depth H"+graphDisplayModel.maxVisibleDepth+
     " · max depth H"+model.settings.maxDepth+" · branch "+model.settings.branch,
     ""
   );
@@ -2585,7 +2681,7 @@ function paintGraphFrame(payload,model){
       "</g>";
   }
 
-  const active=activeCase();
+  const active=model.exchangePath?null:activeCase();
   const visibleKeys=new Set(model.nodes.map(node=>node.key));
   const offchainNodes=(active?.offchain_nodes||[]).filter(item=>{
     const linkedKey=normalizeAddressForChain(item.linked_address,payload.chain);
@@ -2789,13 +2885,14 @@ function startPlayback(){
     return;
   }
   if(playback){togglePlayback();return;}   // already running: the toggle button means pause/resume
-  const timeline=buildPlaybackTimeline(currentNetworkModel,lastPayload);
+  const playbackModel=graphDisplayModel||currentNetworkModel;
+  const timeline=buildPlaybackTimeline(playbackModel,lastPayload);
   if(!timeline.length){
     setTraceStatus("No dated transaction in the current view can be replayed (all pending, or filtered out).","error");
     return;
   }
   const speedMs=Number(document.getElementById("playbackSpeed")?.value)||600;
-  playback={timeline,index:0,playing:true,speedMs,timer:null,model:currentNetworkModel,payload:lastPayload};
+  playback={timeline,index:0,playing:true,speedMs,timer:null,model:playbackModel,payload:lastPayload};
   renderPlaybackFrame();
   schedulePlaybackTick();
 }
@@ -2832,7 +2929,7 @@ function stopPlaybackSilently(){
 function stopPlayback(){
   if(!playback){updatePlaybackControls();return;}
   stopPlaybackSilently();
-  if(lastPayload&&currentNetworkModel)paintGraphFrame(lastPayload,currentNetworkModel);
+  if(lastPayload&&currentNetworkModel)paintGraphFrame(lastPayload,graphDisplayModel||currentNetworkModel);
   updatePlaybackControls();
 }
 
@@ -2849,11 +2946,15 @@ function renderFilteredViews(){
   renderFilterSummary(rows);
   renderGraph(lastPayload);
   renderKpis(lastPayload,rows);
-  renderTable(lastPayload,rows);
+  renderTable(lastPayload,rowsForExchangePath(rows,activeExchangePath,lastPayload.chain));
   renderIntelligencePanels();
 }
 
 function resetTraceState(payload){
+  exchangeGraphMode="auto";
+  selectedExchangePath="";
+  activeExchangePath=null;
+  graphDisplayModel=null;
   tracePayloads=new Map();
   traceExpanded=new Set();
   traceBusy=new Set();
@@ -2963,6 +3064,17 @@ function applyUrlQuery(){
 }
 
 function bind(){
+  document.getElementById("exchangePathToggle")?.addEventListener("click",()=>{
+    exchangeGraphMode=activeExchangePath?"all":"auto";
+    graphPositions=new Map();
+    renderFilteredViews();
+  });
+  document.getElementById("exchangePathSelect")?.addEventListener("change",event=>{
+    selectedExchangePath=event.target.value;
+    exchangeGraphMode="auto";
+    graphPositions=new Map();
+    renderFilteredViews();
+  });
   document.getElementById("cryptoRun")?.addEventListener("click",run);
   document.getElementById("cryptoTestExample")?.addEventListener("click",loadTestExample);
   document.getElementById("cryptoQuery")?.addEventListener("keydown",event=>{if(event.key==="Enter")run();});
@@ -3075,3 +3187,5 @@ async function start(){
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);
 else start();
 })();
+
+

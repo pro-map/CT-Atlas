@@ -291,6 +291,11 @@
               </div>
             </div>
             <div id="cryptoTraceStatus" class="crypto-trace-status">H1 is built from the seed wallet. Expand nodes manually with +, or auto-trace the strongest branches to H2/H3.</div>
+            <div id="exchangePathControls" class="crypto-playback-bar" hidden>
+              <label class="crypto-mini-field"><span>DOCUMENTED EXCHANGE PATH</span><select id="exchangePathSelect" aria-label="Documented exchange path"></select></label>
+              <button id="exchangePathToggle" class="crypto-small-button trace-button" type="button" aria-pressed="false">SHOW ALL ANALYZED TRANSACTIONS</button>
+            </div>
+            <div id="exchangePathDetails" class="crypto-card-note" style="overflow-wrap:anywhere;padding:12px" role="status" hidden></div>
             <div class="crypto-playback-bar">
               <button id="playbackToggle" class="crypto-small-button trace-button" type="button" title="Replay the graph's transactions in chronological order, starting from the seed">▶ PLAYBACK</button>
               <button id="playbackStop" class="crypto-small-button" type="button" disabled>STOP</button>
@@ -363,7 +368,7 @@
 </div>
 <script src="pdf-export.js?v=20261003"></script>
 <script src="crypto-report.js?v=7"></script>
-<script src="crypto.js?v=2026100402"></script>
+<script src="crypto.js?v=20261004-exchange-paths"></script>
 <script src="tab-health.js?v=1" data-health-scope="crypto"></script>
 </body>
 </html>
