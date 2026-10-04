@@ -7,9 +7,11 @@ on:
     paths:
       - "socmint-agent/**"
       - "cloudflare-worker/social-intel.js"
+      - "cloudflare-worker/report-gate.js"
       - "cloudflare-worker/social-agent-client.js"
       - "cloudflare-worker/index.js"
       - "tests/social-intel.test.cjs"
+      - "tests/social-telegram.test.cjs"
       - ".github/workflows/deploy-socmint-agent.yml"
   workflow_dispatch:
 
@@ -36,7 +38,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Run SOCMINT Worker tests
-        run: node --test tests/social-intel.test.cjs
+        run: node --test tests/social-intel.test.cjs tests/social-telegram.test.cjs
 
       - name: Set up Python for SOCMINT agent tests
         uses: actions/setup-python@v5

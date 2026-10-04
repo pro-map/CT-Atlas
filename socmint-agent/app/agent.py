@@ -20,6 +20,7 @@ from .tools import (
     search_odysee,
     search_public_web,
     read_telegram_channel,
+    explore_telegram_network,
     search_reddit,
     search_telegram_public,
     search_tumblr,
@@ -141,11 +142,25 @@ B. COLLECT / EXPAND
 - Use fetch_public_url on relevant public pages.
 - Use extract_public_indicators when page text contains candidate handles,
   links, Telegram references or wallets.
-- Telegram: when a public channel is in scope (analyst-supplied, or found in
-  results/links), call read_telegram_channel. Read at most 5 channels, and
+- Telegram: when only a name/keyword is supplied, use search_telegram_public
+  to discover candidate public channels and corroborate their relevance before
+  reading them. A matching handle alone does not establish identity.
+- When a public channel is in scope, use explore_telegram_network(channel,
+  max_channels=3, pages=3) in discover mode. It reads several pages of the seed
+  and one page of repeatedly referenced channels, one hop only. In urls_only
+  mode use read_telegram_channel(channel, pages=3), without expanding scope.
+  Read at most 5 channels in total, and
   expand to another channel only when the "network" summary shows repeated
   forwards or links (a single mention is weak). Invite links are reported but
   never followed. Quote sparingly and never reproduce propaganda at length.
+- Use exact message URLs and their publication dates in source_urls and sources
+  for every Telegram finding. Separate mentions, forwards, replies and shared
+  links; distinguish observed interactions from hypotheses about ownership.
+  The service retains collected posts in a separate evidence annex: do not
+  reproduce the full corpus in the final JSON. Summarize substantive themes,
+  recurring accounts and links, dated activity, and concrete supporting posts.
+  State collection coverage, unavailable channels and truncation. Never claim
+  complete channel history, account ownership or media transcription from previews.
 - For gone or changed content, try wayback_snapshots once per URL and then read
   the most relevant capture with fetch_public_url. Say clearly that it is an
   archived copy, with its capture date.
@@ -295,6 +310,7 @@ root_agent = Agent(
         search_reddit,
         search_telegram_public,
         read_telegram_channel,
+        explore_telegram_network,
         search_odysee,
         wayback_snapshots,
         search_tumblr,

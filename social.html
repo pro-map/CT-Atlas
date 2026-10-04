@@ -205,6 +205,18 @@
           </div>
         </section>
 
+        <section id="reportTelegramSection" class="report-section" hidden>
+          <h3>TELEGRAM · COLLECTED POSTS &amp; CONNECTIONS</h3>
+          <div id="reportTelegramCoverage" class="finding-basis"></div>
+          <div id="reportTelegramChannels" class="finding-list"></div>
+          <details><summary>Observed connections and supporting posts</summary><div id="reportTelegramRelations" class="finding-list"></div></details>
+          <label for="telegramEvidenceSearch">Search collected posts, accounts and links</label>
+          <input id="telegramEvidenceSearch" type="search" placeholder="Keyword, @account or domain" style="width:100%;margin:10px 0">
+          <div id="reportTelegramCount" class="finding-basis" aria-live="polite"></div>
+          <div id="reportTelegramMessages" class="finding-list"></div>
+          <button id="telegramShowMore" class="secondary-button" type="button" hidden>SHOW MORE POSTS</button>
+        </section>
+
         <section id="reportWalletsSection" class="report-section" hidden>
           <h3>WALLETS &amp; SANCTIONS SCREENING</h3>
           <div id="reportWalletsStatus" class="wallet-status"></div>
@@ -236,7 +248,7 @@
 </div>
 
 <script src="pdf-export.js?v=20261003"></script>
-<script src="social.js?v=20261004"></script>
+<script src="social.js?v=20261004-telegram-evidence"></script>
 <script src="tab-health.js?v=1" data-health-scope="social"></script>
 </body>
 </html>
