@@ -106,7 +106,7 @@ jobs:
           grep -q 'dailyQuizButton' daily-quiz.js
           grep -q 'launcher.appendChild(trigger)' daily-quiz.js
           grep -q 'mainQuizLauncher' main.html
-          grep -q 'daily-quiz.js?v=main-20261004' main.html
+          grep -q 'daily-quiz.js?v=freshness-20261004' main.html
           node --check daily-quiz.js
           grep -q 'margin:4px 0 3px;padding:9px 10px' daily-quiz.css
           grep -q 'id="feedbackButton"' main.html
@@ -199,3 +199,5 @@ jobs:
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+
