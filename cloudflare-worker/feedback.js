@@ -17,7 +17,8 @@ const WORKSPACES = Object.freeze({
   crypto: "Crypto Intelligence",
   facial: "Facial Intelligence",
   social: "Social Media (Beta)",
-  darkweb: "Dark Web Intelligence (Beta)"
+  darkweb: "Dark Web Intelligence (Beta)",
+  ip: "IP Intelligence"
 });
 const LEGACY_EVALUATION_ITEMS = [
   ["report_generator", "Report Generator"],

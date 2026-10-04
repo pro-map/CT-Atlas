@@ -48,6 +48,11 @@ test('invalid, local, special-use, credentialed and ambiguous inputs are rejecte
  const {api}=harness();
  for(const value of ['',null,' example.com','example.com ', 'localhost','host.local','hidden.onion','192.168.1.1','http://127.1/','http://0x08080808/','http://134744072/','https://192.0.2.1/','https://[::1]/','ftp://example.com','https://user:pass@example.com/','https://example.com:8443/','example.com:443','https://example.com\\@attacker.net/','https://exam ple.com','co.uk','a'.repeat(64)+'.com','x'.repeat(1025)])assert.equal(api.parseTarget(value,publicIP),null,String(value));
 });
+test('an IPv4 range or an IPv4 with a path but no scheme is refused, like an IPv6 range',()=>{
+ const {api}=harness();
+ for(const value of ['8.8.8.0/24','185.220.101.0/24','1.1.1.1/garbage','8.8.8.8?q=1','8.8.8.8#x','2001:4860::/32'])assert.equal(api.parseTarget(value,publicIP),null,value);
+ assert.equal(api.parseTarget('https://8.8.8.8/x',publicIP).parsed.ip,'8.8.8.8');assert.equal(api.parseTarget('http://8.8.8.8?q=1',publicIP).parsed.ip,'8.8.8.8');
+});
 test('domain lookup separates registrar and network roles and never visits the submitted website',async()=>{
  const h=harness(),r=await h.lookup();
  assert.equal(r.kind,'domain');assert.equal(r.host,'www.example.com');assert.equal(r.registered_domain,'example.com');
@@ -75,7 +80,8 @@ test('CNAME answers only enrich related public addresses, retain all DNS IPs and
 test('DNS fallback preserves failure diagnostics and validates the returned question',async()=>{
  const h=harness({dns:({host,type,provider})=>provider==='dns.google'?{Status:0,Question:[{name:'different.example.net',type}],Answer:[{name:host,type:1,data:'4.2.2.2'}]}:undefined});
  const r=await h.lookup();assert.equal(r.dns.addresses[0].ip,'8.8.8.8');
- assert.ok(r.sources.some(s=>s.name==='Google Public DNS 1'&&s.reason==='invalid_dns'));
+ assert.ok(r.sources.some(s=>s.name==='Google Public DNS A'&&s.reason==='invalid_dns'));
+ assert.ok(r.sources.every(s=>!/DNS \d+$/.test(s.name)),'failed DNS sources use record-type labels');
  assert.ok(r.sources.some(s=>s.name==='Cloudflare DNS A'&&s.status==='available'));
  assert.ok(!r.dns.addresses.some(a=>a.ip==='4.2.2.2'));
 });
@@ -138,4 +144,33 @@ test('authenticated endpoint accepts the existing ip key for a URL, and validate
  assert.equal((await request('https://example.com/path?secret=one')).status,200);assert.equal(calls.length,1);assert.equal(calls[0].host,'example.com');
  assert.equal((await request('https://127.0.0.1/')).status,400);
  assert.equal((await request('https://example.com/','invalid')).status,401);assert.equal(calls.length,1);
+});
+test('a registry 404 is a dated not-registered answer; with NXDOMAIN the lookup is not_found rather than unavailable',async()=>{
+ const nx=({host,type})=>({Status:3,Question:[{name:host,type}]});
+ let r=await harness({registryStatus:404,registry:{errorCode:404,title:'Not Found'},dns:nx}).lookup('nx-unregistered-zzz.com');
+ assert.equal(r.status,'not_found');assert.equal(r.registration.not_found,true);assert.equal(r.registration.registrar,null);
+ assert.deepEqual([...r.registration.status],['not registered at lookup time']);assert.match(r.registration.scope,/not registered at lookup time \(RDAP 404\)/);
+ const source=r.sources.find(s=>s.name==='Domain registry RDAP');
+ assert.equal(source.status,'available');assert.equal(source.result,'not_found');assert.equal(source.url,'https://rdap.registry.net/domain/nx-unregistered-zzz.com');
+ assert.ok(r.warnings.some(w=>/^The registry reports no registration for nx-unregistered-zzz\.com at \d{4}-.+ \(RDAP 404\)\.$/.test(w)));
+ assert.ok(!r.warnings.some(w=>w.includes('unavailable (http_404)')));
+ const context={window:{}};vm.runInNewContext(fs.readFileSync('ip-report.js','utf8'),context);
+ const body=context.window.CTAtlasIPReport.build(r,{}).blocks.map(b=>b.text||b.caption).join('\n');
+ assert.ok(body.includes('Coverage: not registered according to the registry; no DNS address'));assert.ok(body.includes('Registered domain status: not registered at lookup time'));
+ // DNS answered NXDOMAIN while the registry was down: a DNS fact, not a total outage.
+ r=await harness({registryStatus:503,dns:nx}).lookup('nx-unregistered-zzz.com');assert.equal(r.status,'partial');assert.equal(r.registration,null);
+ r=await harness({registryStatus:503,dns:()=>new Response('',{status:503})}).lookup('nx-unregistered-zzz.com');assert.equal(r.status,'unavailable');
+});
+test('a domain lookup takes one slot plus one per analysed IP; a refused IP slot skips that IP with a warning',async()=>{
+ for(const allowed of [3,2]){
+  const h=harness(),gate=[];
+  const context=vm.createContext({URL,Response,Request,TextDecoder,Uint8Array,AbortSignal,fetch:async()=>new Response('',{status:503}),cleanText:(v,n=700)=>String(v||'').trim().slice(0,n),corsHeaders:()=>({'Content-Type':'application/json'}),isAllowedUser:n=>n==='analyst',parseTarget:h.api.parseTarget,lookupDomain:h.api.lookupDomain,
+   gateCall:async(env,path,body)=>{if(path==='/session-get')return Response.json({username:body.session_token});gate.push(JSON.parse(JSON.stringify(body)));return gate.length<=allowed?Response.json({ok:true}):Response.json({error:'Rate limit.'},{status:429});}});
+  vm.runInContext(strip('cloudflare-worker/ip-intelligence.js')+'\nglobalThis.handler=handleIPIntelligence;',context);
+  const response=await context.handler(new Request('https://atlas.example.net/ip-intelligence/lookup',{method:'POST',headers:{'X-Session-Token':'analyst'},body:JSON.stringify({ip:'www.example.com'})}),{});
+  const r=await response.json();assert.equal(response.status,200);
+  assert.deepEqual(gate,[{username:'analyst'},{username:'analyst',keyed:true},{username:'analyst',keyed:true}]);
+  assert.equal(r.dns.addresses.length,2);assert.equal(r.networks.length,allowed-1);
+  assert.equal(r.warnings.some(w=>w.includes('per-minute lookup limit was reached before 1 DNS address')),allowed===2);
+ }
 });

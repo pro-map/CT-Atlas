@@ -11,7 +11,7 @@ function harness(){
   async get(key){return structuredClone(values.get(key));},
   async put(key,value){if(typeof key==='object'){for(const [k,v]of Object.entries(key))values.set(k,structuredClone(v));}else values.set(key,structuredClone(value));},
   async delete(key){for(const k of Array.isArray(key)?key:[key])values.delete(k);},
-  async list({prefix='',limit=1000,reverse=false,end}={}){let rows=[...values].filter(([k])=>k.startsWith(prefix)&&(!end||k<end)).sort(([a],[b])=>a<b?-1:a>b?1:0);if(reverse)rows.reverse();return new Map(rows.slice(0,limit).map(([k,v])=>[k,structuredClone(v)]));},
+  async list({prefix='',limit=1000,reverse=false,end,startAfter}={}){let rows=[...values].filter(([k])=>k.startsWith(prefix)&&(!end||k<end)&&(!startAfter||k>startAfter)).sort(([a],[b])=>a<b?-1:a>b?1:0);if(reverse)rows.reverse();return new Map(rows.slice(0,limit).map(([k,v])=>[k,structuredClone(v)]));},
   transaction(callback){const result=queue.then(()=>callback(storage));queue=result.catch(()=>{});return result;}
  };
  const env={AUTH_USERS_JSON:'{}',DARKWEB_INGEST_TOKEN:'s'.repeat(48),ALLOWED_ORIGIN:'https://ct-atlas.com'};
@@ -193,7 +193,7 @@ test('invalid AI citations cannot become a briefing and provider errors preserve
  await h.call('/darkweb/ingest',{outlet_id:id,items:[{url:base+'a.pdf',title:'Original'}],scan_ok:true},'',true);
  h.context.fetch=async()=>Response.json({text:JSON.stringify({summary:'Unsupported claim [99]',titles:[]})});
  await h.call('/darkweb/enrich',{});assert.equal((await h.call('/darkweb/feed')).data.summary,null);
- h.values.delete('darkweb:enrich-until');h.context.fetch=async()=>new Response('',{status:429});
+ h.values.delete('darkweb:enrich-until');h.values.delete('darkweb:enrich-backoff');h.context.fetch=async()=>new Response('',{status:429});
  assert.equal((await h.call('/darkweb/enrich',{})).status,503);
  assert.equal((await h.call('/darkweb/feed')).data.items[0].title,'Original');
 });
@@ -346,4 +346,283 @@ test('private PDF handles fragmented signatures and refuses truncated bodies wit
  const duplicate=await pdfFixture(h,f.data.toString(),2);
  assert.equal((await pdfRequest(h,'file-upload',duplicate,{collector:true,body:duplicate.data})).status,200);
  assert.equal((await h.call('/darkweb/feed')).data.files_storage.files,1);
+});
+
+const archiveKeys=/^darkweb:(?:item|publication|publication-index|publication-pending|file|known|seen):|^darkweb:files-usage$/;
+const archiveSnapshot=h=>new Map([...h.values].filter(([k])=>archiveKeys.test(k)).map(([k,v])=>[k,JSON.stringify(v)]));
+test('widening the period keeps the epoch and every stored record; narrowing still requires reset',async()=>{
+ const h=harness();mockPdfStorage(h);const f=await pdfFixture(h);
+ assert.equal((await pdfRequest(h,'file-upload',f,{collector:true,body:f.data})).status,200);
+ await h.call('/darkweb/ingest',{outlet_id:f.outlet,items:[{url:base+'legacy.pdf',title:'Legacy',type:'pdf'}],scan_ok:true},'',true);
+ const before=archiveSnapshot(h),limits={pages_per_scan:10,previews:true};
+ assert.ok(before.size>5);
+ assert.equal((await h.call('/darkweb/policy',{...limits,from:'2025-02-01',through:'2026-12-31'})).status,400);
+ assert.equal((await h.call('/darkweb/policy',{...limits,from:'2025-01-01',through:'2026-06-30'})).status,400);
+ const direct=await h.context.gateCall(h.env,'/darkweb-policy',{reset:false,policy:{from:'2025-03-01',through:'2026-12-31'}});
+ assert.equal(direct.status,400,'The gate refuses narrowing without reset on its own');
+ const widened=await h.call('/darkweb/policy',{...limits,from:'2023-01-01',through:'2027-12-31'});
+ assert.equal(widened.status,200);assert.equal(widened.data.policy.epoch,2);assert.equal(widened.data.recrawl,true);
+ assert.deepEqual(archiveSnapshot(h),before,'Widening neither changes nor removes a stored record');
+ const state=(await h.call('/darkweb/feed')).data;
+ assert.equal(state.policy.epoch,2);assert.equal(state.policy.from,'2023-01-01');assert.equal(state.policy.through,'2027-12-31');assert.equal(state.items.length,2);
+ assert.equal(state.outlets[0].collection_phase,'backfill');assert.equal(state.outlets[0].period_backfill.fresh,false);
+ assert.equal((await pdfRequest(h,'file',f,{user:'analyst'})).status,200);
+ assert.equal((await h.call('/darkweb/ingest',{outlet_id:f.outlet,items:[publication(7,{published_at:'2023-05-01'})],scan_ok:true,inventory_phase:'backfill'},'',true)).status,200);
+ assert.equal((await h.call('/darkweb/archive')).data.items.length,2);
+ // A later Through alone, while the period is still running, needs no re-crawl.
+ const later=await h.call('/darkweb/policy',{...limits,from:'2023-01-01',through:'2028-12-31'});
+ assert.equal(later.data.recrawl,false);assert.equal(later.data.policy.epoch,2);
+});
+test('a widening backfill ends only after a crawl started after it, and keeps stored alerts',async()=>{
+ const h=harness(),id=await register(h);
+ const ingest=body=>h.call('/darkweb/ingest',{outlet_id:id,items:[],scan_ok:true,...body},'',true);
+ const outlet=async()=>(await h.call('/darkweb/feed')).data.outlets[0];
+ await ingest({scan_complete:true,pages_scanned:40,inventory_phase:'watch'});
+ await ingest({items:[{url:base+'alert.pdf',title:'Niger alert',type:'pdf'}],pages_scanned:5,pending_pages:3,inventory_phase:'watch'});
+ assert.equal((await h.call('/darkweb/feed',undefined,'analyst')).data.keyword_alert_count,1);
+ await h.call('/darkweb/policy',{from:'2024-01-01',through:'2026-12-31',pages_per_scan:10,previews:true});
+ assert.equal((await outlet()).collection_phase,'backfill');
+ // A pass that read the old configuration may restart and complete; that crawl used the old period.
+ await ingest({scan_complete:true,pages_scanned:2,inventory_phase:'watch'});
+ let o=await outlet();assert.equal(o.collection_phase,'backfill');assert.equal(o.period_backfill.fresh,true);
+ await ingest({items:[{url:base+'alert.pdf',title:'Niger alert',type:'pdf'},{url:base+'older.pdf',title:'Older',type:'pdf',published_at:'2024-02-01'}],pages_scanned:10,pending_pages:30,inventory_phase:'backfill'});
+ const state=(await h.call('/darkweb/feed',undefined,'analyst')).data;
+ assert.equal(state.keyword_alert_count,1,'A backfill revisit does not clear a stored alert');
+ assert.equal(state.items.find(i=>i.url.endsWith('alert.pdf')).baseline,false);assert.equal(state.items.find(i=>i.url.endsWith('older.pdf')).baseline,true);
+ await ingest({scan_complete:true,pages_scanned:45,inventory_phase:'backfill'});
+ o=await outlet();assert.equal(o.collection_phase,'watch');assert.equal(o.period_backfill,undefined);
+});
+test('a crawl restarted with the widened configuration is recognised; an outlet still in backfill waits one report',async()=>{
+ const h=harness(),id=await register(h);
+ const ingest=body=>h.call('/darkweb/ingest',{outlet_id:id,items:[],scan_ok:true,...body},'',true);
+ const outlet=async()=>(await h.call('/darkweb/feed')).data.outlets[0];
+ const widen=()=>h.call('/darkweb/policy',{from:'2024-01-01',through:'2026-12-31',pages_per_scan:10,previews:true});
+ await ingest({scan_complete:true,pages_scanned:40,inventory_phase:'watch'});
+ await ingest({pages_scanned:20,pending_pages:4,inventory_phase:'watch'});
+ await widen();
+ await ingest({pages_scanned:3,pending_pages:9,inventory_phase:'watch'});
+ assert.equal((await outlet()).period_backfill.fresh,false,'A restart under the old configuration does not count');
+ await ingest({pages_scanned:2,pending_pages:9,inventory_phase:'backfill'});
+ assert.equal((await outlet()).period_backfill.fresh,true);
+ await ingest({scan_complete:true,pages_scanned:40,inventory_phase:'backfill'});
+ assert.equal((await outlet()).collection_phase,'watch');
+ const h2=harness(),id2=await register(h2);
+ const ingest2=body=>h2.call('/darkweb/ingest',{outlet_id:id2,items:[],scan_ok:true,...body},'',true);
+ await ingest2({pages_scanned:30,pending_pages:5,inventory_phase:'backfill'});
+ await h2.call('/darkweb/policy',{from:'2024-01-01',through:'2026-12-31',pages_per_scan:10,previews:true});
+ await ingest2({pages_scanned:2,pending_pages:5,inventory_phase:'backfill'});
+ let o=(await h2.call('/darkweb/feed')).data.outlets[0];assert.equal(o.period_backfill.fresh,false);
+ await ingest2({scan_complete:true,pages_scanned:12,inventory_phase:'backfill'});
+ o=(await h2.call('/darkweb/feed')).data.outlets[0];assert.equal(o.collection_phase,'backfill');assert.ok(o.initialized_at);
+ await ingest2({scan_complete:true,pages_scanned:12,inventory_phase:'backfill'});
+ assert.equal((await h2.call('/darkweb/feed')).data.outlets[0].collection_phase,'watch');
+ // Reset clears a pending widening together with the archive it was extending.
+ await h2.call('/darkweb/policy',{from:'2023-01-01',through:'2026-12-31',pages_per_scan:10,previews:true});
+ await h2.call('/darkweb/policy',{from:'2025-01-01',through:'2026-12-31',pages_per_scan:10,previews:true,reset:true});
+ assert.equal((await h2.call('/darkweb/feed')).data.outlets[0].period_backfill,undefined);
+});
+test('a failed pass still stores received items and PDF hashes without establishing a baseline',async()=>{
+ const h=harness(),id=await register(h);
+ const raw=publication(3,{attachments:[{url:base+'f.pdf',title:'f',type:'pdf',acquired:true,sha256:'c'.repeat(64),bytes:99}]});
+ const r=await h.call('/darkweb/ingest',{outlet_id:id,items:[raw,{url:base+'legacy.pdf',title:'Legacy',type:'pdf',acquired:true,sha256:'d'.repeat(64),bytes:5}],scan_ok:false,scan_complete:true},'',true);
+ assert.equal(r.status,200);assert.equal(r.data.ok,true);assert.equal(r.data.added,2);
+ const state=(await h.call('/darkweb/feed')).data;
+ assert.equal(state.items.length,2);assert.equal(state.outlets[0].scan_ok,false);assert.equal(state.outlets[0].initialized_at,undefined);assert.equal(state.outlets[0].error,'collection_failed');
+ assert.equal(state.items.find(i=>i.url.endsWith('legacy.pdf')).sha256,'d'.repeat(64));
+ const item=(await h.call('/darkweb/archive')).data.items[0];assert.equal(item.attachments[0].sha256,'c'.repeat(64));assert.equal(item.attachments[0].acquired,true);
+ const refused=await h.call('/darkweb/ingest',{outlet_id:id,items:[{url:base+'old.pdf',published_at:'2020-01-01'},{url:base+'ok.pdf'}],scan_ok:true},'',true);
+ assert.equal(refused.data.out_of_period,1);assert.equal((await h.call('/darkweb/feed')).data.outlets[0].last_out_of_period,1);
+});
+test('Dark Web enrichment uses the background model, a Pacific-day cap, backoff and per-record attempts',async()=>{
+ const h=harness(),id=await register(h);h.env.GEMINI_API_KEY='test';h.env.DARKWEB_ENRICH_DAILY='3';h.env.GEMINI_MODEL='gemini-3.5-flash-lite';
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[publication(1),publication(2)],scan_ok:true},'',true);
+ const [first,second]=(await h.call('/darkweb/archive')).data.items.sort((a,b)=>a.url.localeCompare(b.url));
+ const models=[];let answer={summary:'',titles:[]},status=200;
+ h.context.fetch=async(url,options)=>{models.push(JSON.parse(options.body).model);return status===200?Response.json({text:JSON.stringify(answer)}):new Response('',{status});};
+ const unlock=()=>h.values.delete('darkweb:enrich-until');
+ const record=item=>h.values.get('darkweb:publication:2:'+item.id);
+ const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).map(p=>[p.type,p.value]));
+ let t=Date.now(),r=await h.call('/darkweb/enrich',{});
+ assert.equal(r.status,200);assert.equal(r.data.enriched,0);assert.deepEqual(models,['gemini-3.1-flash-lite']);
+ assert.deepEqual({...h.values.get('darkweb:enrich-ledger')},{day:`${parts.year}-${parts.month}-${parts.day}`,count:1});
+ let backoff=h.values.get('darkweb:enrich-backoff');assert.equal(backoff.failures,1);assert.ok(Math.abs(backoff.until-t-900000)<5000);
+ assert.equal(record(first).enrich_attempts,1);assert.ok(h.values.get('darkweb:summary-attempt'));
+ assert.equal((await h.call('/darkweb/enrich',{})).data.reason,'lock');unlock();
+ assert.equal((await h.call('/darkweb/enrich',{})).data.reason,'backoff');assert.equal(models.length,1);
+ // Success resets the backoff; grouped citations are valid.
+ h.values.set('darkweb:enrich-backoff',{failures:1,until:0});unlock();h.values.delete('darkweb:summary-attempt');h.env.DARKWEB_GEMINI_MODEL='gemini-test-model';
+ answer={summary:'Two outlet claims need validation [1, 2].',titles:[{id:first.id,title:'English',overview_en:'Neutral overview.'}]};
+ r=await h.call('/darkweb/enrich',{});assert.equal(r.data.enriched,1);assert.equal(r.data.summary_updated,true);
+ assert.equal(models[1],'gemini-test-model');assert.equal(h.values.has('darkweb:enrich-backoff'),false);
+ assert.match((await h.call('/darkweb/feed')).data.summary.text,/\[1, 2\]/);
+ assert.equal(record(second).enrich_attempts,2);assert.ok(!h.values.has('darkweb:publication-pending:2:'+first.id));
+ // A provider error backs off without charging the record.
+ unlock();status=429;t=Date.now();assert.equal((await h.call('/darkweb/enrich',{})).status,503);
+ assert.equal(record(second).enrich_attempts,2);assert.equal(h.values.get('darkweb:enrich-backoff').failures,1);
+ unlock();h.values.delete('darkweb:enrich-backoff');status=200;
+ r=await h.call('/darkweb/enrich',{});assert.equal(r.data.reason,'daily_limit');assert.equal(r.data.daily_limit,3);assert.equal(models.length,3);
+ // The backoff doubles up to 6 hours.
+ h.values.delete('darkweb:enrich-ledger');h.values.set('darkweb:enrich-backoff',{failures:9,until:0});answer={summary:'',titles:[]};t=Date.now();
+ await h.call('/darkweb/enrich',{});backoff=h.values.get('darkweb:enrich-backoff');assert.equal(backoff.failures,10);assert.ok(Math.abs(backoff.until-t-21600000)<5000);
+ // After three unfinished attempts the record stays stored and queued, but is no longer retried.
+ assert.equal(record(second).enrich_attempts,3);assert.ok(h.values.has('darkweb:publication-pending:2:'+second.id));
+ unlock();h.values.delete('darkweb:enrich-backoff');
+ assert.equal((await h.call('/darkweb/enrich',{})).data.cached,true);assert.equal(models.length,4);
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[publication(2,{original_text:'نص جديد'})],scan_ok:true},'',true);
+ assert.equal(record(second).enrich_attempts,0,'A source change makes the record eligible again');
+ h.env.DARKWEB_ENRICH_DAILY='0';assert.equal((await h.call('/darkweb/enrich',{})).data.reason,'daily_limit');
+});
+test('enrichment candidates skip exhausted records beyond the first storage page',async()=>{
+ const h=harness(),id=await register(h);
+ for(let batch=0;batch<2;batch++)await h.call('/darkweb/ingest',{outlet_id:id,items:Array.from({length:70},(_,i)=>publication(batch*70+i)),scan_ok:true},'',true);
+ const keys=[...h.values.keys()].filter(k=>k.startsWith('darkweb:publication-pending:2:')).sort();
+ assert.equal(keys.length,140);
+ for(const key of keys.slice(0,-1)){const archive='darkweb:publication:2:'+h.values.get(key);h.values.set(archive,{...h.values.get(archive),enrich_attempts:3});}
+ const result=await (await h.context.gateCall(h.env,'/darkweb-enrich-candidates',{})).json();
+ assert.deepEqual(result.items.map(i=>i.id),[h.values.get(keys.at(-1))]);
+ assert.equal([...h.values.keys()].filter(k=>k.startsWith('darkweb:publication-pending:2:')).length,140);
+});
+test('the 500-item feed limit removes archived publication cards before legacy records',async()=>{
+ const h=harness(),id=await register(h);
+ await h.call('/darkweb/ingest',{outlet_id:id,items:Array.from({length:20},(_,i)=>({url:base+'legacy-'+i+'.pdf',type:'pdf'})),scan_ok:true},'',true);
+ for(let batch=0;batch<5;batch++)await h.call('/darkweb/ingest',{outlet_id:id,items:Array.from({length:100},(_,i)=>publication(batch*100+i)),scan_ok:true},'',true);
+ const state=(await h.call('/darkweb/feed')).data;
+ assert.equal(state.items.length,500);assert.equal(state.items.filter(i=>!i.publication_version).length,20);
+ assert.equal([...h.values.keys()].filter(k=>k.startsWith('darkweb:publication:2:')).length,500);
+});
+
+// Minimal DOM for darkweb.js: enough structure for contains, closest and simple selectors.
+function pageHarness(fixture){
+ const doc={hidden:false};
+ class El{
+  constructor(tag){this.tagName=String(tag).toUpperCase();this.children=[];this.parentNode=null;this._text='';this.attributes={};this.dataset={};this.style={};this.hidden=false;this.value='';this.checked=false;this.disabled=false;this.id='';this.className='';this.listeners={};this._open=false;this.scrolled=0;}
+  get textContent(){return this.tagName==='#TEXT'?this._text:this.children.map(c=>c.textContent).join('');}
+  set textContent(v){for(const c of this.children)c.parentNode=null;this.children=[];if(this.tagName==='#TEXT')this._text=String(v);else if(String(v))this.append(String(v));}
+  get childNodes(){return this.children;}get firstChild(){return this.children[0]||null;}
+  append(...nodes){for(let n of nodes){if(typeof n==='string'){const t=new El('#text');t._text=n;n=t;}n.remove();n.parentNode=this;this.children.push(n);}}
+  replaceChildren(...nodes){for(const c of this.children)c.parentNode=null;this.children=[];this.append(...nodes);}
+  remove(){if(this.parentNode){this.parentNode.children=this.parentNode.children.filter(c=>c!==this);this.parentNode=null;}}
+  contains(n){for(;n;n=n.parentNode)if(n===this)return true;return false;}
+  closest(sel){for(let n=this;n;n=n.parentNode)if(n.matches(sel))return n;return null;}
+  matches(sel){return sel.split(',').some(s=>{const m=s.trim().match(/^([a-z0-9]*)(?:\[([\w-]+)(?:=([\w-]+))?\])?$/i);const[,tag,attr,val]=m;if(tag&&this.tagName!==tag.toUpperCase())return false;if(attr){const v=attr.startsWith('data-')?this.dataset[attr.slice(5)]:this[attr]??this.attributes[attr];if(v===undefined)return false;if(val!==undefined&&String(v)!==val)return false;}return true;});}
+  querySelectorAll(sel){const out=[],walk=n=>{for(const c of n.children){if(c.matches(sel))out.push(c);walk(c);}};walk(this);return out;}
+  querySelector(sel){return this.querySelectorAll(sel)[0]||null;}
+  setAttribute(k,v){this.attributes[k]=String(v);if(k.startsWith('data-'))this.dataset[k.slice(5)]=String(v);}
+  getAttribute(k){return this.attributes[k]??null;}
+  addEventListener(type,fn){(this.listeners[type]||=[]).push(fn);}
+  dispatch(type,event={}){for(const fn of this.listeners[type]||[])fn(event);this['on'+type]?.(event);}
+  focus(){doc.activeElement=this;}scrollIntoView(){this.scrolled++;}
+  get classList(){const el=this,list=()=>el.className.split(/\s+/).filter(Boolean);return{add:(...c)=>{el.className=[...new Set([...list(),...c])].join(' ');},remove:(...c)=>{el.className=list().filter(x=>!c.includes(x)).join(' ');},contains:c=>list().includes(c),toggle(c,force){const want=force===undefined?!list().includes(c):!!force;want?this.add(c):this.remove(c);return want;}};}
+  get open(){return this._open;}set open(v){if(!!v===this._open)return;this._open=!!v;queueMicrotask(()=>this.ontoggle?.());}
+ }
+ const root=new El('html');let current=root;
+ const html=fs.readFileSync('darkweb.html','utf8').replace(/<(script|style|noscript)\b[\s\S]*?<\/\1>/gi,'').replace(/<!DOCTYPE[^>]*>/i,'');
+ for(const m of html.matchAll(/<(\/?)([a-zA-Z][\w-]*)([^>]*)>|([^<]+)/g)){
+  if(m[4]!==undefined){if(m[4].trim())current.append(m[4].trim());continue;}
+  if(m[1]){current=current.parentNode||root;continue;}
+  const el=new El(m[2]);
+  for(const [,k,v='']of m[3].matchAll(/([\w-]+)(?:="([^"]*)")?/g)){if(k==='class')el.className=v;else if(k==='hidden')el.hidden=true;else if(k==='checked')el.checked=true;else if(['id','type','value'].includes(k))el[k]=v;el.setAttribute(k,v);}
+  current.append(el);if(!['input','img','meta','link','br'].includes(m[2].toLowerCase()))current=el;
+ }
+ Object.assign(doc,{documentElement:root,body:root.querySelector('body'),createElement:tag=>new El(tag),createElementNS:(ns,tag)=>new El(tag),querySelectorAll:sel=>root.querySelectorAll(sel),
+  getElementById(id){const walk=n=>{for(const c of n.children){if(c.id===id)return c;const found=walk(c);if(found)return found;}return null;};return walk(root);}});
+ doc.activeElement=doc.body;
+ const calls=[],confirms=[];let confirmAnswer=false,interval=null;
+ const respond=(data,status=200)=>({ok:status<400,status,json:async()=>structuredClone(data)});
+ const fetch=async(url,options={})=>{
+  const u=new URL(url),body=options.body?JSON.parse(options.body):undefined;calls.push({path:u.pathname,id:u.searchParams.get('id'),body});
+  if(u.pathname==='/session-check')return respond({username:'admin'});
+  if(u.pathname==='/darkweb/feed')return respond(fixture.feed);
+  if(u.pathname==='/darkweb/archive')return respond(fixture.archive);
+  if(u.pathname==='/darkweb/item'){await fixture.itemGate;const item=fixture.full[u.searchParams.get('id')];return item?respond({item}):respond({error:'Publication unavailable in this collection.'},404);}
+  if(u.pathname==='/darkweb/enrich')return respond({ok:true,cached:true});
+  return respond({ok:true});
+ };
+ const context=vm.createContext({window:{},document:doc,fetch,console,URL,IntersectionObserver:class{observe(){}unobserve(){}disconnect(){}},
+  sessionStorage:{getItem:k=>k==='ct_map_session_token'?'admin':null,setItem(){},removeItem(){}},location:{replace(){}},navigator:{},
+  setInterval:fn=>{interval=fn;return 1;},setTimeout:()=>1,confirm:message=>{confirms.push(message);return confirmAnswer;}});
+ vm.runInContext(fs.readFileSync('darkweb.js','utf8'),context);
+ const flush=async()=>{for(let i=0;i<30;i++)await new Promise(r=>setImmediate(r));};
+ return {doc,$:id=>doc.getElementById(id),calls,confirms,flush,count:path=>calls.filter(c=>c.path===path).length,
+  answer:value=>{confirmAnswer=value;},tick:async()=>{interval();await flush();}};
+}
+function pageFixture(){
+ const id=c=>c.repeat(64);
+ const pub=(c,outlet,extra={})=>({id:id(c),publication_version:1,outlet_id:outlet,url:base+c,title:'عنوان '+c,title_en:'Title '+c,title_en_kind:'translation',overview_en:'Overview '+c,published_at:'2026-10-02',first_seen:'2026-10-03T10:00:00.000Z',baseline:false,keyword_matches:[],type:'page',category:'news',text_status:'complete',attachments:[],content_hash:'hash-'+c,has_preview:false,...extra});
+ const p1=pub('a','o1',{keyword_matches:['Niger'],published_at:'2026-10-03'}),p2=pub('b','o2'),older=pub('d','o2',{published_at:'2025-02-01'});
+ const legacy={id:id('c'),outlet_id:'o1',url:base+'c.pdf',title:'legacy.pdf',title_en:'Legacy file',type:'pdf',published_at:'2025-06-01',first_seen:'2026-10-03T09:00:00.000Z',baseline:false,keyword_matches:[],has_preview:false,acquired:false,bytes:null};
+ const feed={admin:true,policy:{epoch:2,from:'2025-01-01',through:'2026-12-31',pages_per_scan:10,paused:false,previews:true},
+  summary:{text:'Claim [1]. Other [2].',generated_at:'2026-10-03T11:00:00.000Z',sources:[{number:1,id:legacy.id,title:'legacy.pdf',published_at:legacy.published_at},{number:2,id:older.id,title:older.title,published_at:older.published_at}]},
+  outlets:[{id:'o1',name:'Outlet A',url:base,keywords:['Niger'],enabled:true},{id:'o2',name:'Outlet B',url:'http://'+'b'.repeat(56)+'.onion/',keywords:[],enabled:true}],
+  items:[p1,p2,legacy],unread_count:3,keyword_alert_count:1,seen_through:'',generated_at:'2026-10-03T12:00:00.000Z',retention_limit:500,files_storage:null,collector_configured:true};
+ return {feed,archive:{items:[p1,p2],next_cursor:'',epoch:2},full:{[p1.id]:{...p1,original_text:'النص الكامل'},[older.id]:{...older,original_text:'نص أقدم'}},id};
+}
+test('page: the 60 s refresh never enriches and keeps an opened source text, focus and outlet selector',async()=>{
+ const fixture=pageFixture(),page=pageHarness(fixture);await page.flush();
+ assert.equal(page.count('/darkweb/enrich'),1,'First load enriches once');
+ const card=page.$('item-'+fixture.id('a')),details=card.querySelector('details'),option=page.$('outletFilter').children[1];
+ details.open=true;await page.flush();
+ assert.equal(details.querySelector('p').textContent,'النص الكامل');assert.equal(page.count('/darkweb/item'),1);
+ await page.tick();
+ assert.equal(page.count('/darkweb/feed'),2);assert.equal(page.count('/darkweb/enrich'),1,'The interval refresh does not enrich');
+ assert.equal(page.$('item-'+fixture.id('a')).querySelector('details'),details,'Unchanged data keeps the card');assert.equal(details.open,true);
+ assert.equal(page.$('outletFilter').children[1],option,'The outlet selector is not rebuilt');
+ details.querySelector('summary').focus();
+ fixture.feed.items[0].overview_en=fixture.archive.items[0].overview_en='Updated overview';
+ await page.tick();
+ const rebuilt=page.$('item-'+fixture.id('a')).querySelector('details');
+ assert.notEqual(rebuilt,details);assert.equal(rebuilt.open,true);assert.equal(rebuilt.querySelector('p').textContent,'النص الكامل');
+ assert.equal(page.count('/darkweb/item'),1,'Loaded text is reused, not fetched again');
+ assert.equal(page.doc.activeElement,rebuilt.querySelector('summary'),'Focus returns to the same control');
+ page.$('enrichNow').onclick();await page.flush();assert.equal(page.count('/darkweb/enrich'),2);
+});
+test('page: a source text still loading when the feed changes reaches the rebuilt panel with one request',async()=>{
+ const fixture=pageFixture();let release;fixture.itemGate=new Promise(r=>release=r);
+ const page=pageHarness(fixture);await page.flush();
+ page.$('item-'+fixture.id('a')).querySelector('details').open=true;await page.flush();
+ fixture.feed.items[0].overview_en=fixture.archive.items[0].overview_en='Updated overview';await page.tick();
+ const rebuilt=page.$('item-'+fixture.id('a')).querySelector('details');assert.equal(rebuilt.open,true);
+ release();await page.flush();
+ assert.equal(rebuilt.querySelector('p').textContent,'النص الكامل');assert.equal(page.count('/darkweb/item'),1);
+});
+test('page: unsaved period edits survive refresh; widen, narrow, pause and reset state their effect',async()=>{
+ const fixture=pageFixture(),page=pageHarness(fixture);await page.flush();
+ const policyCalls=()=>page.calls.filter(c=>c.path==='/darkweb/policy');
+ page.$('collectFrom').value='2024-03-01';page.$('collectionForm').dispatch('input');page.doc.activeElement=page.$('search');
+ await page.tick();
+ assert.equal(page.$('collectFrom').value,'2024-03-01');assert.equal(page.$('discardCollection').hidden,false);
+ page.answer(false);page.$('resetCollection').onclick();
+ assert.match(page.confirms.at(-1),/DELETES THE ARCHIVE/);assert.ok(page.confirms.at(-1).includes('2024-03-01 → 2026-12-31'));assert.equal(policyCalls().length,0);
+ page.$('pauseCollection').onclick();await page.flush();
+ assert.equal(policyCalls()[0].body.from,'2025-01-01','Pause keeps the stored period');assert.equal(policyCalls()[0].body.paused,true);
+ assert.equal(page.$('collectFrom').value,'2024-03-01','Pause keeps the unsaved edit');
+ page.answer(true);page.$('collectionForm').onsubmit({preventDefault(){}});await page.flush();
+ assert.match(page.confirms.at(-1),/Nothing is deleted/);assert.ok(page.confirms.at(-1).includes('2025-01-01 → 2026-12-31 to 2024-03-01 → 2026-12-31'));
+ assert.deepEqual({...policyCalls()[1].body,paused:undefined},{from:'2024-03-01',through:'2026-12-31',pages_per_scan:10,previews:true,paused:undefined,reset:false});
+ page.$('collectFrom').value='2025-06-01';page.$('collectionForm').dispatch('input');page.$('collectionForm').onsubmit({preventDefault(){}});
+ assert.match(page.$('message').textContent,/requires RESET, which deletes the archive/);assert.equal(policyCalls().length,2);
+ page.$('discardCollection').onclick();assert.equal(page.$('collectFrom').value,'2025-01-01');assert.equal(page.$('discardCollection').hidden,true);
+ fixture.feed.policy.through='2026-10-01';await page.tick();
+ assert.match(page.$('collectionState').textContent,/PERIOD ENDED/);assert.ok(page.$('collectionState').classList.contains('warning'));
+ assert.match(page.$('snapshot').textContent,/Collection period ended on 2026-10-01/);
+});
+test('page: mark-all states its global scope, keyword alerts match their label, briefing sources reveal their card',async()=>{
+ const fixture=pageFixture(),page=pageHarness(fixture);await page.flush();
+ page.answer(false);page.$('markSeen').onclick();
+ assert.match(page.confirms.at(-1),/ALL 3 unreviewed item\(s\) across all outlets/);assert.match(page.confirms.at(-1),/1 keyword alert/);assert.equal(page.count('/darkweb/seen'),0);
+ page.answer(true);page.$('markSeen').onclick();await page.flush();
+ assert.equal(page.calls.find(c=>c.path==='/darkweb/seen').body.through,fixture.feed.generated_at);
+ page.doc.querySelectorAll('[data-view=alerts]')[0].onclick();
+ const alerts=page.$('feed').querySelectorAll('article');
+ assert.deepEqual(alerts.map(a=>a.id),['item-'+fixture.id('a')]);assert.match(page.$('archiveStatus').textContent,/alert keywords/);
+ page.doc.querySelectorAll('[data-view=latest]')[0].onclick();
+ page.$('outletFilter').value='o2';page.$('outletFilter').dispatch('input');
+ const [legacyLink,olderLink]=page.$('aiSources').querySelectorAll('a');
+ legacyLink.onclick({preventDefault(){}});await page.flush();
+ const legacyCard=page.$('item-'+fixture.id('c'));
+ assert.ok(legacyCard,'The legacy source is shown');assert.equal(page.$('outletFilter').value,'');
+ assert.ok(page.doc.querySelectorAll('[data-view=legacy]')[0].classList.contains('active'));assert.equal(legacyCard.scrolled,1);assert.equal(page.doc.activeElement,legacyCard);
+ olderLink.onclick({preventDefault(){}});await page.flush();
+ const olderCard=page.$('item-'+fixture.id('d'));
+ assert.ok(olderCard,'A source beyond the loaded archive pages is fetched and shown');assert.ok(page.doc.querySelectorAll('[data-view=latest]')[0].classList.contains('active'));assert.equal(olderCard.scrolled,1);
 });

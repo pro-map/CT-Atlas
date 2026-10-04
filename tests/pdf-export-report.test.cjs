@@ -164,6 +164,32 @@ test("text that the standard fonts cannot encode gets no layer, and never garbag
   assert.equal((joined.match(/\?/g)||[]).length,0,"no placeholder question marks");
 });
 
+test("the first strong letter of a paragraph sets its direction, and mixed left-to-right lines keep a selectable start",async()=>{
+  const h=harness();
+  // 5+6 character words: the second wrapped line of this Arabic paragraph begins with the Latin word.
+  const arabic=Array.from({length:30},()=>"مرحبا ABCDEF").join(" ");
+  const pdf=await h.build({title:"T",blocks:[
+    {type:"body",text:"Case reference: CASE-ابجد-漢字"},
+    {type:"body",text:"Analyst notes: مراجعة"},
+    {type:"body",text:"123 مرحبا بالعالم"},
+    {type:"body",text:arabic},
+    {type:"body",text:"English paragraph\nمرحبا paragraph two"}
+  ]});
+  const texts=h.pages()[0].texts,find=prefix=>texts.find(t=>t.text.startsWith(prefix));
+  assert.equal(find("Case reference").align,"left");assert.equal(find("Case reference").x,74);
+  assert.equal(find("Analyst notes").align,"left");
+  assert.equal(find("123 ").align,"right");
+  const arabicLines=texts.filter(t=>t.text.includes("ABCDEF"));
+  assert.ok(arabicLines.some(t=>t.text.startsWith("ABCDEF")),"a wrapped line starts with a Latin word");
+  assert.ok(arabicLines.every(t=>t.align==="right"),"the whole Arabic paragraph stays right-to-left");
+  assert.equal(find("English paragraph").align,"left");assert.equal(find("مرحبا paragraph").align,"right");
+  const layer=layerTexts(pdf).map(run=>run.text);
+  assert.ok(layer.includes("Case reference: CASE-"),"the Latin label and reference stay selectable");
+  assert.ok(layer.includes("Analyst notes:"));
+  assert.ok(!layer.some(t=>t.startsWith("123")),"right-to-left lines still have no layer");
+  assert.equal(layer.join("").match(/\?/g),null,"no placeholder question marks");
+});
+
 test("every page has its own layer: the header, the page number and the content",async()=>{
   const h=harness();
   const pdf=await h.build({title:"T",blocks:[{type:"body",text:"first"},{type:"pagebreak"},{type:"body",text:"second"}]});

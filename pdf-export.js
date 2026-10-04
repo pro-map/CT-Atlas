@@ -95,6 +95,16 @@ function wrapLines(context,value,maxWidth){
   return lines.length?lines:[""];
 }
 
+// Letters of the right-to-left scripts, including Hebrew and Arabic presentation forms.
+const RTL_LETTER=/[\p{Script=Hebrew}\p{Script=Arabic}\p{Script=Syriac}\p{Script=Thaana}\p{Script=Nko}\p{Script=Samaritan}\p{Script=Mandaic}]/u;
+function paragraphIsRtl(lines,start){
+  for(let index=start;index<lines.length&&lines[index];index+=1){
+    const strong=/\p{L}/u.exec(lines[index]);
+    if(strong)return RTL_LETTER.test(strong[0]);
+  }
+  return false;
+}
+
 function dataUrlBytes(dataUrl){
   const comma=dataUrl.indexOf(",");
   if(comma<0)throw new Error("PDF page encoding failed.");
@@ -109,7 +119,7 @@ function dataUrlBytes(dataUrl){
 // text is ALSO written into the PDF as invisible text (render mode 3) with the standard Helvetica / Courier fonts,
 // positioned over the drawn line: nothing changes visually, but addresses, hashes and words can be selected,
 // copied and searched. Arial and Courier New are metric-compatible with Helvetica and Courier, so the boxes line up.
-// Text that the standard fonts cannot encode (Arabic, CJK...) simply has no layer.
+// Text that the standard fonts cannot encode (Arabic, CJK...) has no layer; a left-to-right line keeps its encodable start.
 // ---------------------------------------------------------------------------
 const CP1252={0x20AC:0x80,0x201A:0x82,0x0192:0x83,0x201E:0x84,0x2026:0x85,0x2020:0x86,0x2021:0x87,0x02C6:0x88,0x2030:0x89,0x0160:0x8A,0x2039:0x8B,0x0152:0x8C,0x017D:0x8E,0x2018:0x91,0x2019:0x92,0x201C:0x93,0x201D:0x94,0x2022:0x95,0x2013:0x96,0x2014:0x97,0x02DC:0x98,0x2122:0x99,0x0161:0x9A,0x203A:0x9B,0x0153:0x9C,0x017E:0x9E,0x0178:0x9F};
 const ASCII_FALLBACK={0x2192:"->",0x2190:"<-",0x2194:"<->",0x2197:"",0x2265:">=",0x2264:"<=",0x2212:"-",0x2011:"-",0x2009:" ",0x202F:" ",0x2002:" ",0x2003:" ",0x25CF:"o",0x2713:"v"};
@@ -137,11 +147,25 @@ function fontKey(run){
   return Number(run.weight)>=600?"F2":"F1";
 }
 
+// Leading part of a left-to-right line that the standard fonts can encode ("Case reference: CASE-" before Arabic or CJK).
+function encodablePrefix(text){
+  let prefix="";
+  for(const character of text){
+    if(winAnsiHex(character)===null)break;
+    prefix+=character;
+  }
+  return prefix.trimEnd();
+}
+
 function textLayer(runs){
   let out="";
   for(const run of runs){
     if(run.rtl||!run.text)continue;
-    const hex=winAnsiHex(run.text);
+    let hex=winAnsiHex(run.text);
+    if(hex===null&&run.align==="left"){
+      const prefix=encodablePrefix(run.text);
+      hex=prefix?winAnsiHex(prefix):null;
+    }
     if(hex===null||!hex.length)continue;
     const size=Math.max(1,run.size*PDF_SCALE);
     const left=run.align==="right"?run.x-run.width:run.x;
@@ -433,15 +457,19 @@ function renderPages(options){
     }
     setFont(context,style.size,style.weight,Boolean(style.mono));
     context.fillStyle=style.color;
-    for(const line of lines){
+    let rtl=null;
+    for(let index=0;index<lines.length;index+=1){
+      const line=lines[index];
       ensureSpace(style.line);
       setFont(context,style.size,style.weight,Boolean(style.mono));
       context.fillStyle=style.color;
       if(!line){
+        rtl=null;
         y+=Math.round(style.line*0.6);
         continue;
       }
-      const rtl=/[֐-ࣿ]/.test(line);
+      // Like dir="auto": the first strong letter of the paragraph (lines up to the next blank line) sets its direction.
+      if(rtl===null)rtl=paragraphIsRtl(lines,index);
       context.direction=rtl?"rtl":"ltr";
       context.textAlign=rtl?"right":"left";
       put(line,rtl?PAGE_WIDTH-MARGIN_X:MARGIN_X,y+style.size,style.size,style.weight,Boolean(style.mono));

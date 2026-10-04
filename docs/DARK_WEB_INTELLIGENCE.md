@@ -106,8 +106,10 @@ The first run after this parser upgrade revisits the selected outlet's pages
 without deleting existing metadata or evidence. Its queue survives restarts.
 Initial backfill continues in bounded passes, with a minimum 15-second cadence
 (or the duration of the pass if longer), and the existing delay between source
-requests. After backfill, the default watch interval is 15 minutes. Tor and the
-collector window must remain open; Ctrl+C stops the process cleanly.
+requests. After backfill, the default watch interval is 15 minutes, and every
+watch pass fetches the start page first (ahead of older queued pages), so a new
+publication linked from it is found within one interval. Tor and the collector
+window must remain open; Ctrl+C stops the process cleanly.
 
 ### Source connection failures
 
@@ -119,9 +121,18 @@ network inactivity, not the total page download duration. API timeouts are uncha
 
 Page failures report a timeout, connection category, HTTP status, known collection
 limit or exception type, without emitting source URLs, response text or credentials.
-The failed page remains queued. A successful curl response through the same proxy
-establishes reachability at that time, not the cause of a previous Python failure.
-No reset or new collector key is needed to retry with this update.
+A failed page is retried once per pass, for at most three passes. Timeouts,
+connection errors and HTTP 5xx count against a page only when the outlet answered
+in the same pass, so a Tor or onion-service outage uses up no attempt. When nothing
+selectable is left (a page that failed three times, a 'limited' page, the backfill
+page cap or the frontier cap), the run finishes, the leftovers are reported as
+abandoned, and the next run starts again from the start page: one dead link can
+no longer stop an outlet from finding new publications. Links longer than 2,000
+characters once percent-encoded are dropped, and a queued row Atlas would refuse
+moves to the local `rejected` table instead of blocking the outlet's outbox.
+A successful curl response through the same proxy establishes reachability at that
+time, not the cause of a previous Python failure. No reset or new collector key is
+needed to retry with this update.
 
 ## Arabic, English, files and exports
 
@@ -144,7 +155,8 @@ The header must start `%PDF-`; HTML responses and oversized files are rejected,
 partial files removed, and identical bytes share a hash-named file. Metadata
 records the acquisition status, hash and byte count. Up to three failed attempts
 are made automatically. Other original media are not automatically downloaded.
-The legacy `--acquire` option retains its original generic-media behavior.
+The legacy `--acquire` option keeps its generic-media behavior for documents,
+video and audio, but never fetches generic image links.
 
 **PDF access in Atlas:** acquired structured PDF attachments up to **50 MiB**
 are uploaded over authenticated HTTPS to private R2 storage. The collector
@@ -177,27 +189,42 @@ source, collection time and attachment metadata. It contains no scripts, remote
 images or embedded credentials. Exports do not embed the original PDF. JSON
 preserves the publication fields for further analytical work.
 
-**English:** the existing Gemini configuration faithfully translates the entire
-Arabic title into English. It is instructed to preserve names, dates, numbers
-and attributed claims rather than invent or summarize a headline. Original
-Arabic remains visible beside the labelled machine translation. Existing
+**English:** a background Gemini model (`DARKWEB_GEMINI_MODEL`, default
+`gemini-3.1-flash-lite`; never the interactive `GEMINI_MODEL` used by reports and
+Deep Search) faithfully translates the entire Arabic title into English. It is
+instructed to preserve names, dates, numbers and attributed claims rather than
+invent or summarize a headline. Original Arabic remains visible beside the
+labelled machine translation. Existing
 generated English titles are progressively requeued without resetting records.
 A separate one/two-sentence overview is based only on supplied page text. Up to
 8,000 characters of original text are sent per item; a flag tells the model when
 that input is excerpted. Onion links are removed. It does not read PDFs, listen
 to audio or view videos. Model output must attribute claims to the source.
 
-AI enrichment runs when the admin opens/refreshes the tab, in batches of up to
-10 records (with a 6,000-character combined title budget), at most once per minute
-globally. A pending queue also covers older
-archived publications. It is not an unattended AI scheduler. Failures preserve
-original Arabic and show pending status. Source changes invalidate the English
-fields; content fingerprints prevent an old in-flight response from replacing
-newer material. Semantic accuracy still needs analyst review.
+AI enrichment runs when an admin first opens the tab and when **UPDATE
+TRANSLATIONS & OVERVIEWS** is pressed; the 60-second background refresh, REFRESH
+FEED and other actions never call it. Each request covers up to 10 records (with
+a 6,000-character combined title budget), at most once per minute globally and at
+most `DARKWEB_ENRICH_DAILY` requests (default 40) per Pacific day, counted in the
+ReportGate. After a failed request, or one that saves no title and no valid
+briefing, the next attempt waits 15 minutes, doubling up to 6 hours; a useful
+result resets the wait. A record still unfinished after three attempts stays
+stored and queued but is skipped until its source changes. An unusable briefing
+for the same sources is not requested again for 6 hours. Grouped citations such
+as `[1, 2]` are accepted. A pending queue also covers older archived
+publications. It is not an unattended AI scheduler. Failures preserve original
+Arabic and show pending status. Source changes invalidate the English fields;
+content fingerprints prevent an old in-flight response from replacing newer
+material. Semantic accuracy still needs analyst review.
+
+The archive-review workflow (`review-archive-backlog.yml`) shares the 3.1 Flash
+Lite pool; its backlog is done, so it now uses at most 40 requests a day.
 
 The top briefing uses up to 20 latest publication titles/excerpts/dates, including
-archived records, with source links. It describes publications and source claims,
-not verified events or the current situation independently of publication dates.
+archived records, with source links. A source link opens the cited card: it
+switches view, clears filters that hide the card, or loads an archived record that
+is not on a loaded page. It describes publications and source claims, not
+verified events or the current situation independently of publication dates.
 
 ## Archive and collection controls
 
@@ -207,31 +234,60 @@ apply to loaded records, as stated beside the list. Original text is fetched whe
 opening a card or exporting, keeping list responses small.
 
 Structured records are retained independently of the 500-item legacy/hot feed.
-**OTHER MATERIAL** retains access to earlier generic collection results. This
-upgrade does not automatically delete those results, source registrations or
-local evidence. The archive requires storage proportional to the collected
-records; it is not an unlimited-storage guarantee.
+When that feed is full, publication cards (whose archive record remains) leave
+it before generic records, which have no other copy. **OTHER MATERIAL** retains
+access to earlier generic collection results. This upgrade does not
+automatically delete those results, source registrations or local evidence. The
+archive requires storage proportional to the collected records; it is not an
+unlimited-storage guarantee.
+
+The background refresh (every 60 seconds while the tab is visible) leaves
+unchanged cards in place, so an opened **READ ORIGINAL ARABIC TEXT** panel, its
+loaded text, keyboard focus and an open outlet selector are kept. **KEYWORD
+ALERTS** lists unreviewed items that match an outlet's alert keywords. **MARK ALL
+AS REVIEWED** asks for confirmation and states its scope: every unreviewed item
+across all outlets, views and filters, for the current analyst only.
+
+Items received from the collector are stored even when its pass failed; the
+failure only sets the outlet status and prevents a baseline. Items refused
+because their date is outside the period or invalid are counted on the outlet.
 
 Admin controls:
 
 - **From / Through:** collection remains restricted to the selected publication
   period. Traversal can follow all list pages, but out-of-period records are not
-  retained or downloaded. Future dates are excluded.
+  retained or downloaded. Future dates are excluded. **SAVE (KEEPS ARCHIVE)** can
+  widen the period (an earlier From and/or a later Through) without deleting
+  anything; the collection epoch is unchanged. When newly covered dates are in
+  the past, every outlet returns to backfill and re-crawls from its start page.
+  A crawl already under way when the period changed is not counted: the outlet
+  returns to watch only after a complete crawl that began afterwards. Until then
+  newly found publications are stored as baseline, without alerts; records that
+  already carry an alert keep it. Narrowing the period requires RESET. The
+  controls warn when Through is within 30 days or has passed; publications dated
+  after Through are not stored. Unsaved edits are kept during background
+  refreshes until saved or discarded with **DISCARD EDITS**.
 - **Pages per pass:** 1–50, default 10; the CLI limit is an additional ceiling.
 - **Pause / Resume:** read before each pass. A request already in flight can
-  finish; ingest is refused while paused.
+  finish; ingest is refused while paused. It keeps the stored period and limits.
 - **Previews:** optional, up to two attempts/pass and 8 MiB/source, JPEG thumbnails
-  up to 240×240 pixels. PDFs use the first page; images use Pillow; video posters
-  or optional FFmpeg may supply a frame. If a PDF cannot yield a preview, its
-  page's cover image is tried. Older unsuccessful previews are retried once with
-  this update. Cards display compact 72×82px visuals (56×66px on mobile); a neutral
-  file-type icon appears until a source image loads. Audio normally uses that icon.
-- **RESET RESULTS & COLLECT THIS PERIOD:** explicitly deletes both the online feed
-  and structured archive, and resets collector metadata next pass. Original local
-  evidence and outlet registrations are preserved. Date-range changes require
-  this action. Do not delete the local SQLite database manually to restart.
+  up to 240×240 pixels, for structured publication records only: the first page of
+  their PDF, or the cover image the structured parser identified. Generic and forum
+  pages, generic image items and arbitrary page images are never fetched for a
+  preview (a safety rule in the code, whatever this setting says), and video frames
+  are no longer extracted. Timeouts, connection errors and HTTP 5xx are retried for
+  up to three passes, then shown as "Preview source unreachable after 3 attempts".
+  Cards display compact 72×82px visuals (56×66px on mobile); a neutral file-type
+  icon appears otherwise.
+- **RESET: DELETE ARCHIVE & COLLECT THIS PERIOD:** explicitly deletes both the
+  online feed and structured archive (with English translations, overviews and
+  the briefing), and resets collector metadata next pass. Its confirmation names
+  the exact period to collect. Original local evidence and outlet registrations
+  are preserved. Only narrowing the period requires this action; widening does
+  not. Do not delete the local SQLite database manually to restart.
 
-Backfill is capped at 10,000 pages/outlet and a 50,000-entry local frontier.
+Backfill is capped at 10,000 pages/outlet and a 50,000-entry local frontier;
+reaching the cap ends the backfill (the leftovers are reported as abandoned).
 Afterward watch follows the start page and links two levels deep, up to 200 pages
 per round; deeper newly added publications may need another backfill. Failed
 pages are retried and displayed. Limits/failures never imply complete coverage.

@@ -52,3 +52,11 @@ test('every workspace ships the shared loader and hub order retains only Social 
  assert.equal((main.match(/class="hub-beta"/g)||[]).length,1);
  assert.match(main,/grid-template-columns:repeat\(6,minmax\(0,1fr\)\)/);
 });
+test('hub grid steps down 6 -> 3 -> 2 -> 1 columns so titles never overflow tablet-width cards',()=>{
+ const main=fs.readFileSync('main.html','utf8');
+ const three=main.indexOf('@media(max-width:1180px){.hub-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}');
+ const two=main.indexOf('@media(max-width:900px){.hub-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}');
+ const one=main.indexOf('@media(max-width:760px)');
+ assert.ok(three>0&&two>three&&one>two,'later, narrower breakpoints must follow the wider ones');
+ assert.match(main,/\.hub-card-title\{[^}]*overflow-wrap:anywhere/);
+});

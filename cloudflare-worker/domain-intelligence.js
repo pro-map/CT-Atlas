@@ -1,6 +1,6 @@
 import { DOMAIN_DATA_DATE, PSL_ICANN_RULES, DNS_BOOTSTRAP, REGISTRAR_BOOTSTRAP } from './domain-data.js';
 
-export const DOMAIN_INTELLIGENCE_VERSION = 'domain-intelligence-v1';
+export const DOMAIN_INTELLIGENCE_VERSION = 'domain-intelligence-v2-not-registered';
 const rules = new Set(PSL_ICANN_RULES), cache = new Map();
 const list = v => Array.isArray(v) ? v : [];
 const text = v => typeof v === 'string' ? v.replace(/[\u0000-\u001f\u007f]/g,' ').trim().slice(0,600) : '';
@@ -31,7 +31,9 @@ export function parseTarget(value, publicIP) {
     const host=u.hostname.toLowerCase().replace(/\.$/,'');
     const literal=publicIP(host.startsWith('[')?host.slice(1,-1):host);
     if(literal) {
-      const authority=(hasScheme?value.split('://')[1]:value).split(/[/?#]/)[0].toLowerCase();
+      // Without a scheme, 'a.b.c.d/24' or 'a.b.c.d/x' is a range or junk, not one address.
+      if(!hasScheme)return null;
+      const authority=value.split('://')[1].split(/[/?#]/)[0].toLowerCase();
       if(authority!==literal.ip && authority!=='['+literal.ip+']') return null;
       return {kind:'ip',parsed:literal};
     }
@@ -87,6 +89,7 @@ async function rdapAt(base, domain) {
     if(!safeURL(url)||u.origin!==permitted.origin||!u.pathname.startsWith(permitted.pathname))throw new Error('untrusted_redirect');
     const r=await fetch(url,{redirect:'manual',headers:{Accept:'application/rdap+json, application/json'},signal:AbortSignal.timeout(8000)});
     if(r.status>=300&&r.status<400){const location=r.headers.get('Location');await r.body?.cancel();if(!location)throw new Error('untrusted_redirect');url=new URL(location,url).href;continue;}
+    if(r.status===404){await r.body?.cancel();const error=new Error('http_404');error.url=url;throw error;}
     const data=JSON.parse(await readText(r));
     if(text(data.ldhName).toLowerCase().replace(/\.$/,'')!==domain)throw new Error('domain_mismatch');
     return {data,url};
@@ -118,7 +121,18 @@ async function domainRegistration(target,sources,warnings) {
     if(!base)throw new Error('no_rdap_service');
     registryResult=await rdapAt(base,target.registered_domain);
     sources.push({name:'Domain registry RDAP',url:registryResult.url,status:'available',retrieved_at:stamp()});
-  }catch(error){sources.push({name:'Domain registry RDAP',url:'https://www.iana.org/assignments/rdap-dns',status:'unavailable',reason:errorCode(error),retrieved_at:stamp()});warnings.push('Domain registration unavailable ('+errorCode(error)+'). DNS and IP results remain independent.');return null;}
+  }catch(error){
+    // A registry 404 is a dated answer (not registered at lookup time), not an outage.
+    if(errorCode(error)==='http_404'&&error.url){
+      const at=stamp(),domain=target.registered_domain;
+      sources.push({name:'Domain registry RDAP',url:error.url,status:'available',result:'not_found',retrieved_at:at});
+      warnings.push('The registry reports no registration for '+domain+' at '+at+' (RDAP 404).');
+      return {name:domain,not_found:true,registrar:null,registry_url:error.url,status:['not registered at lookup time'],events:[],nameservers:[],dnssec:null,
+        lookup_url:'https://lookup.icann.org/en/lookup?name='+encodeURIComponent(domain),
+        scope:'The domain registry reports this domain as not registered at lookup time (RDAP 404). Check the spelling. An expired or deleted domain may have been registered earlier; historical registration needs a separate source.'};
+    }
+    sources.push({name:'Domain registry RDAP',url:'https://www.iana.org/assignments/rdap-dns',status:'unavailable',reason:errorCode(error),retrieved_at:stamp()});warnings.push('Domain registration unavailable ('+errorCode(error)+'). DNS and IP results remain independent.');return null;
+  }
   let registrar=registrarRecord(registryResult.data,'Domain registry RDAP');
   if(registrar?.id) {
     const endpoints=await metadata('registrar',sources,warnings),entry=endpoints[registrar.id];
@@ -137,6 +151,7 @@ async function domainRegistration(target,sources,warnings) {
 }
 async function dnsQuery(host,type,sources) {
   const providers=[['Google Public DNS','https://dns.google/resolve'],['Cloudflare DNS','https://cloudflare-dns.com/dns-query']];
+  const label={1:'A',28:'AAAA',2:'NS',15:'MX'}[type]||String(type);
   for(const [name,base] of providers) {
     const url=new URL(base);url.searchParams.set('name',host);url.searchParams.set('type',String(type));
     if(base.includes('dns.google'))url.searchParams.set('edns_client_subnet','0.0.0.0/0');
@@ -144,9 +159,9 @@ async function dnsQuery(host,type,sources) {
       const data=await get(url.href,{headers:{Accept:'application/dns-json'}});
       if(![0,3].includes(data.Status))throw new Error('dns_'+Number(data.Status));
       if(!list(data.Question).some(q=>text(q.name).toLowerCase().replace(/\.$/,'')===host&&q.type===type)||data.TC)throw new Error('invalid_dns');
-      sources.push({name:name+' '+({1:'A',28:'AAAA',2:'NS',15:'MX'}[type]),url:url.href,status:'available',dns_status:data.Status,retrieved_at:stamp()});
+      sources.push({name:name+' '+label,url:url.href,status:'available',dns_status:data.Status,retrieved_at:stamp()});
       return data;
-    }catch(error){sources.push({name:name+' '+type,url:url.href,status:'unavailable',reason:errorCode(error),retrieved_at:stamp()});}
+    }catch(error){sources.push({name:name+' '+label,url:url.href,status:'unavailable',reason:errorCode(error),retrieved_at:stamp()});}
   }
   return null;
 }
@@ -171,12 +186,15 @@ export async function lookupDomain(target,env,{publicIP,lookupIP}) {
   const address_count=addresses.length; if(addresses.length>16){addresses.length=16;warnings.push('DNS address display capped at 16 entries.');}
   const chosen=[addresses.find(v=>v.family==='IPv4'),addresses.find(v=>v.family==='IPv6')].filter(Boolean);
   for(const address of addresses)if(chosen.length<MAX_AUTO_IPS&&!chosen.includes(address))chosen.push(address);
-  const networks=await Promise.all(chosen.map(item=>lookupIP(publicIP(item.ip),env,{expandRegistry:false})));
-  if(!addresses.length)warnings.push(a?.Status===3&&aaaa?.Status===3?'The hostname does not exist according to DNS (NXDOMAIN).':'No usable public IP address was returned; domain registration may still be available.');
+  // lookupIP returns null when the caller's lookup limit refuses that IP analysis.
+  const results=await Promise.all(chosen.map(item=>lookupIP(publicIP(item.ip),env,{expandRegistry:false}))),networks=results.filter(Boolean);
+  if(networks.length<results.length)warnings.push('The per-minute lookup limit was reached before '+(results.length-networks.length)+' DNS address(es) could be analysed. Wait one minute, then select them below.');
+  const nxdomain=a?.Status===3&&aaaa?.Status===3;
+  if(!addresses.length)warnings.push(nxdomain?'The hostname does not exist according to DNS (NXDOMAIN).':'No usable public IP address was returned; domain registration may still be available.');
   if(addresses.length>networks.length)warnings.push('Automatically enriched '+networks.length+' of '+addresses.length+' displayed IPs. Select another address to investigate it.');
   const nameservers=dnsRecords(ns,target.registered_domain,[2]).map(r=>r.value),mail_exchangers=dnsRecords(mx,target.registered_domain,[15]).map(r=>r.value);
   return {kind:'domain',version:DOMAIN_INTELLIGENCE_VERSION,host:target.host,registered_domain:target.registered_domain,queried_at:stamp(),registration,
     dns:{addresses,address_count,cnames,nameservers,mail_exchangers,scope:'A/AAAA describe the submitted hostname. NS/MX describe the registered domain and may differ for delegated subdomains.'},networks,sources,warnings:[...new Set(warnings)],
-    status:!registration&&!addresses.length?'unavailable':warnings.length||sources.some(s=>s.status!=='available')||networks.some(n=>n.status!=='complete')?'partial':'complete',
+    status:registration?.not_found&&!addresses.length?'not_found':!registration&&!addresses.length&&!nxdomain?'unavailable':warnings.length||sources.some(s=>s.status!=='available')||networks.some(n=>n.status!=='complete')?'partial':'complete',
     limitations:['An IP returned by DNS can belong to a CDN, reverse proxy or shared host; it does not establish the hidden origin server, website owner or owner\'s access ISP.','DNS hosting, mail hosting, domain registration and web hosting are separate roles. Nameservers do not establish that the same provider serves the website.','Current DNS/registration records are not historical evidence. Preserve the original URL and observation time in the case file; the URL path/query/fragment are not sent to lookup providers.','Registrar registration contacts and country fields do not establish a verified legal-request channel or legal jurisdiction. Confirm the receiving entity and process.','Registrable-domain rules use the ICANN section of the Public Suffix List dated '+DOMAIN_DATA_DATE+'. For hosted subdomains, the registrar may hold records for the platform domain rather than its individual user.']};
 }

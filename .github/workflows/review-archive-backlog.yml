@@ -5,7 +5,7 @@ name: Review archive backlog
 # the result: events scoring above 0 go to archive/recovered-events-reviewed-*.json
 # (added to the D1 archive by the nightly sync-background-corpus run), the rest
 # are dropped. It uses a model whose free quota the collection does not touch
-# (Gemini 3.1 Flash Lite, 500 requests/day of its own), at most 120 requests a
+# (Gemini 3.1 Flash Lite, 500 requests/day of its own), at most 40 requests a
 # Pacific day (quota/gemini-3.1-archive-review.json). It runs after the archive
 # enrichment (02:43) and before the incident consolidation (07:37), so the
 # jobs sharing that model never run at once.
@@ -18,7 +18,7 @@ on:
       max_calls:
         description: "Gemini requests this run (25 events each)"
         required: false
-        default: "120"
+        default: "40"
 
 permissions:
   contents: write
@@ -35,7 +35,9 @@ jobs:
     timeout-minutes: 100
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      ARCHIVE_REVIEW_MAX_CALLS: ${{ inputs.max_calls || '120' }}
+      ARCHIVE_REVIEW_MAX_CALLS: ${{ inputs.max_calls || '40' }}
+      # Backlog done: 40 a day leaves 3.1 Flash Lite room for the Dark Web enrichment.
+      ARCHIVE_REVIEW_DAILY_CALLS: "40"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6

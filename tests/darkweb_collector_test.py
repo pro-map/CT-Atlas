@@ -115,6 +115,12 @@ def test_acquisition_cap_removes_partial_files_and_content_hash_is_exact(tmp_pat
     assert (tmp_path / (meta['sha256'] + '.bin')).read_bytes() == b'12345'
 
 
+class HTTPStatus(Response):
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            raise c.requests.exceptions.HTTPError('private source', response=self)
+
+
 class Site:
     def __init__(self, pages):
         self.pages, self.calls = pages, []
@@ -123,6 +129,8 @@ class Site:
         value = self.pages[url]
         if isinstance(value, Exception):
             raise value
+        if isinstance(value, int):
+            return HTTPStatus(status=value, url=url)
         if isinstance(value, tuple):
             body, mime = value
         else:
@@ -219,13 +227,18 @@ def test_failed_page_prevents_complete_inventory_and_recovers(tmp_path):
     db.close()
 
 
-def test_total_page_limit_is_visible_and_resumable_when_increased(tmp_path):
+def test_page_cap_finishes_the_run_reports_abandoned_pages_and_restarts_at_start_page(tmp_path):
+    # A capped run used to stop making requests for good; it now ends and is reported.
     db = c.open_database(tmp_path/'state.sqlite')
-    site = Site({BASE:'<a href="second">second</a>', BASE+'second':'<p>done</p>'})
+    site = Site({BASE:'<a href="second">second</a><a href="2025-09-01-old.pdf">old</a>', BASE+'second':'<p>done</p>'})
     ok, sent = run_scan(site,db,tmp_path,max_pages=1)
-    assert not ok and sent[-1]['truncated'] and sent[-1]['pending_pages'] == 1
-    ok, sent = run_scan(site,db,tmp_path,max_pages=10)
-    assert ok and sent[-1]['scan_complete'] and site.calls.count(BASE) == 1
+    assert ok and sent[-1]['scan_complete'] and not sent[-1]['truncated']
+    assert sent[-1]['abandoned_pages'] == 1 and sent[-1]['pending_pages'] == 0 and sent[-1]['failed_pages'] == 0
+    site.pages[BASE] += '<a href="2025-10-02-new.pdf">new</a>'
+    run_scan(site,db,tmp_path,max_pages=1)
+    assert site.calls == [BASE, BASE]
+    baseline = dict(db.execute('SELECT url,baseline FROM items'))
+    assert baseline == {BASE+'2025-09-01-old.pdf':1, BASE+'2025-10-02-new.pdf':0}
     db.close()
 
 
@@ -445,16 +458,20 @@ def test_watch_is_shallow_but_initial_inventory_reaches_deeper_pages(tmp_path):
     assert BASE+'c' in site.calls
 
 def test_previews_are_small_jpegs_and_pdf_first_pages_with_no_original_on_disk(tmp_path):
+    # Previews belong to structured records only: their own cover image or their PDF's first page.
     Image=pytest.importorskip('PIL.Image');fitz=pytest.importorskip('fitz')
     output=c.io.BytesIO();Image.new('RGB',(300,200),'navy').save(output,format='PNG')
-    image=c.make_preview(Session([Response(output.getvalue())]),{'url':BASE+'image.png','type':'image'})
+    cover={'publication_version':1,'url':BASE+'posts/news/1/','preview_url':BASE+'image.png','attachments':[]}
+    image=c.make_preview(Session([Response(output.getvalue())]),cover)
     assert image['preview'].startswith('data:image/jpeg;base64,/9j/') and len(image['preview'])<=16000
+    assert image['preview_status']=='Source thumbnail'
     with fitz.open() as doc:
         doc.new_page();pdf=doc.tobytes()
-    preview=c.make_preview(Session([Response(pdf)]),{'url':BASE+'file.pdf','type':'pdf'})
+    magazine={'publication_version':1,'url':BASE+'posts/naba/1/','attachments':[{'type':'pdf','url':BASE+'file.pdf'}]}
+    preview=c.make_preview(Session([Response(pdf)]),magazine)
     assert preview['preview_status']=='First page' and len(preview['preview'])<=16000
     response=Response(headers={'Content-Length':str(9*1048576)})
-    assert 'cap' in c.make_preview(Session([response]),{'url':BASE+'image.png','type':'image'})['preview_status']
+    assert 'cap' in c.make_preview(Session([response]),cover)['preview_status']
     assert response.closed and not list(tmp_path.iterdir())
 
 class UploadReply:
@@ -580,4 +597,434 @@ def test_old_missing_preview_is_retried_once_without_resetting_items(tmp_path):
         c.scan_outlet(None,'',site,db,outlet,tmp_path,False,1000,1,100,0)
         assert make.call_count==1
     assert db.execute('SELECT COUNT(*) FROM items').fetchone()[0]==1
+    db.close()
+
+
+# Regression tests for the audit of 2026-10-04. All source traffic is stubbed.
+LOOP_POLICY = {'epoch':2, 'from':'2025-01-01', 'through':'2026-12-31', 'pages_per_scan':10, 'previews':False}
+
+
+def policy_scan(site, db, tmp_path, outlet, budget=10, acquire=False, max_pages=10000):
+    sent = []
+    with patch.object(c, 'api_call', side_effect=lambda *args, **kwargs: sent.append(args[-1]) or {'ok': True}):
+        ok = c.scan_outlet(None, '', site, db, outlet, tmp_path, acquire, 100, budget, max_pages, 0)
+    return ok, sent
+
+
+def passes(site, db, tmp_path, outlet, count, **kwargs):
+    calls, sent = [], []
+    for _ in range(count):
+        before = len(site.calls)
+        sent.append(policy_scan(site, db, tmp_path, outlet, **kwargs)[1])
+        calls.append(site.calls[before:])
+    return calls, sent
+
+
+def frontier(db):
+    return {url: (status, attempts) for url, status, attempts in db.execute('SELECT url,status,attempts FROM frontier')}
+
+
+def card(i, date='السبت، 3 أكتوبر 2025'):
+    return '<div class="post-card"><a class="post-card-link" href="/posts/news/%s/"><h5 class="post-summary">خبر رقم %s</h5></a><div class="card-footer"><span>%s</span></div></div>' % (i, i, date)
+
+
+def cards(ids, next_page=False):
+    return '<div id="post-card-holder">' + ''.join(card(i) for i in ids) + '</div>' + ('<ul class="pagination"><li><a href="/page/2/">2</a></li></ul>' if next_page else '')
+
+
+def mark_watching(db):
+    db.execute("INSERT OR REPLACE INTO settings VALUES (?, 'complete')", ('publication-inventory-v1:'+OUTLET['id'],))
+    db.execute('INSERT OR REPLACE INTO outlets VALUES (?,1)', (OUTLET['id'],))
+    db.commit()
+
+
+def test_dead_link_is_abandoned_after_three_passes_and_the_start_page_is_fetched_again(tmp_path):
+    site = Site({BASE: '<a href="dead">dead</a><a href="2025-09-01-old.pdf">old</a>', BASE+'dead': 404})
+    db = c.open_database(tmp_path/'state.sqlite')
+    outlet = {**OUTLET, 'policy': LOOP_POLICY, 'collection_phase': 'watch'}
+    calls, sent = passes(site, db, tmp_path, outlet, 3)
+    # One attempt per pass, so a brief source problem cannot use up all three at once.
+    assert calls == [[BASE, BASE+'dead'], [BASE+'dead'], [BASE+'dead']]
+    assert not any(batch['scan_complete'] for batch in sent[0] + sent[1])
+    assert sent[2][-1]['scan_complete'] and sent[2][-1]['abandoned_pages'] == 1
+    assert sent[2][-1]['failed_pages'] == 0 and not sent[2][-1]['truncated']
+    assert db.execute("SELECT value FROM settings WHERE key=?", ('publication-inventory-v1:'+OUTLET['id'],)).fetchone()[0] == 'complete'
+    site.pages[BASE] += '<a href="2025-10-02-new.pdf">new</a>'
+    calls, sent = passes(site, db, tmp_path, outlet, 1)
+    assert calls[0][0] == BASE
+    baseline = dict(db.execute('SELECT url,baseline FROM items'))
+    assert baseline == {BASE+'2025-09-01-old.pdf': 1, BASE+'2025-10-02-new.pdf': 0}
+    db.close()
+
+
+def test_title_less_detail_page_is_abandoned_and_new_cards_are_not_baseline(tmp_path):
+    site = Site({BASE: cards([0, 1]), BASE+'posts/news/0/': structured_detail('<img src="/logo.png">', '', '2025-10-03'),
+                 BASE+'posts/news/1/': structured_detail('خبر', '', '2025-10-03'), BASE+'posts/news/2/': structured_detail('خبر جديد', '', '2025-10-03')})
+    db = c.open_database(tmp_path/'state.sqlite')
+    outlet = {**OUTLET, 'policy': LOOP_POLICY, 'collection_phase': 'watch'}
+    calls, sent = passes(site, db, tmp_path, outlet, 1)
+    assert frontier(db)[BASE+'posts/news/0/'][0] == 'partial'
+    assert sent[0][-1]['scan_complete'] and sent[0][-1]['abandoned_pages'] == 1 and not sent[0][-1]['truncated']
+    site.pages[BASE] = cards([0, 1, 2])
+    calls, sent = passes(site, db, tmp_path, outlet, 1)
+    assert calls[0][0] == BASE
+    baseline = dict(db.execute('SELECT url,baseline FROM items'))
+    assert baseline[BASE+'posts/news/2/'] == 0 and baseline[BASE+'posts/news/1/'] == 1
+    db.close()
+
+
+def test_limited_start_page_closes_the_run_and_still_counts_as_scanned(tmp_path):
+    # Over 500 links truncate the page; its items must still reach Atlas with scan_ok.
+    site = Site({BASE: ''.join('<a href="2025-05-01-file%d.pdf">file</a>' % i for i in range(501))})
+    db = c.open_database(tmp_path/'state.sqlite')
+    calls, sent = passes(site, db, tmp_path, {**OUTLET, 'policy': LOOP_POLICY}, 1)
+    assert calls == [[BASE]]
+    assert all(batch['scan_ok'] and batch['pages_scanned'] == 1 for batch in sent[0])
+    assert sent[0][-1]['scan_complete'] and sent[0][-1]['abandoned_pages'] == 1 and not sent[0][-1]['truncated']
+    assert sum(len(batch['items']) for batch in sent[0]) == c.MAX_ITEMS
+    assert frontier(db)[BASE][0] == 'partial'
+    db.close()
+
+
+def test_start_page_failure_is_retried_and_never_completes_an_empty_inventory(tmp_path):
+    site = Site({BASE: 404})
+    db = c.open_database(tmp_path/'state.sqlite')
+    calls, sent = passes(site, db, tmp_path, {**OUTLET, 'policy': LOOP_POLICY}, 4)
+    assert calls == [[BASE]] * 4
+    assert not any(batch['scan_complete'] for batch_list in sent for batch in batch_list)
+    assert not db.execute('SELECT 1 FROM outlets').fetchone()
+    assert db.execute("SELECT value FROM settings WHERE key=?", ('publication-inventory-v1:'+OUTLET['id'],)).fetchone()[0] == 'running'
+    db.close()
+
+
+def test_tor_outage_does_not_use_up_page_attempts(tmp_path):
+    pages = {BASE: '<a href="a">a</a><a href="b">b</a>', BASE+'a': '<p>a</p>', BASE+'b': '<p>b</p>'}
+    site = Site(dict(pages))
+    db = c.open_database(tmp_path/'state.sqlite')
+    outlet = {**OUTLET, 'policy': LOOP_POLICY}
+    passes(site, db, tmp_path, outlet, 1, budget=1)
+    site.pages = {url: c.requests.exceptions.ConnectTimeout('down') for url in pages}
+    calls, sent = passes(site, db, tmp_path, outlet, 5)
+    # The start page is probed once only failing pages remain; it is down as well.
+    assert calls == [[BASE+'a', BASE+'b', BASE]] * 5
+    assert frontier(db) == {BASE: ('done', 1), BASE+'a': ('failed', 0), BASE+'b': ('failed', 0)}
+    site.pages = dict(pages)
+    calls, sent = passes(site, db, tmp_path, outlet, 1)
+    assert sent[0][-1]['scan_complete'] and sent[0][-1]['abandoned_pages'] == 0
+    db.close()
+
+
+def test_page_that_keeps_timing_out_is_abandoned_once_the_start_page_answers(tmp_path):
+    site = Site({BASE: '<a href="slow">slow</a>', BASE+'slow': c.requests.exceptions.ReadTimeout('slow')})
+    db = c.open_database(tmp_path/'state.sqlite')
+    calls, sent = passes(site, db, tmp_path, {**OUTLET, 'policy': LOOP_POLICY}, 3)
+    assert calls == [[BASE, BASE+'slow'], [BASE+'slow', BASE], [BASE+'slow', BASE]]
+    assert sent[2][-1]['scan_complete'] and sent[2][-1]['abandoned_pages'] == 1
+    db.close()
+
+
+def test_watch_pass_refetches_the_start_page_ahead_of_older_frontier_entries(tmp_path):
+    site = Site({BASE: cards(range(12), True), BASE+'page/2/': cards([20]),
+                 **{BASE+'posts/news/%s/' % i: structured_detail('خبر %s' % i, '', '2025-10-03') for i in list(range(13)) + [20]}})
+    db = c.open_database(tmp_path/'state.sqlite')
+    mark_watching(db)
+    outlet = {**OUTLET, 'policy': {**LOOP_POLICY, 'pages_per_scan': 3}, 'collection_phase': 'watch'}
+    calls, sent = passes(site, db, tmp_path, outlet, 1)
+    site.pages[BASE] = cards(range(13), True)
+    more_calls, more_sent = passes(site, db, tmp_path, outlet, 3)
+    calls += more_calls
+    assert [pass_calls[0] for pass_calls in calls] == [BASE] * 4
+    assert calls[1] == [BASE, BASE+'posts/news/2/', BASE+'posts/news/3/']
+    uploaded = [item['url'] for batch in more_sent[0] for item in batch['items']]
+    assert BASE+'posts/news/12/' in uploaded
+    # Unchanged cards from the re-checked start page are not sent again within the run.
+    assert BASE+'posts/news/11/' not in uploaded
+    assert db.execute('SELECT baseline FROM items WHERE url=?', (BASE+'posts/news/12/',)).fetchone()[0] == 0
+    db.close()
+
+
+def test_generic_pages_never_fetch_preview_or_acquire_images(tmp_path):
+    comment = 'A forum reply with enough words to be selected as a comment. ' * 3
+    site = Site({BASE: '<meta property="article:published_time" content="2025-05-01"><meta property="og:image" content="/hero.jpg"><title>Thread</title>'
+                       '<div class="comment-body">'+comment+'</div><a href="/attach/123.jpg">image</a><video poster="/poster.jpg" src="/clip.mp4"></video>'})
+    db = c.open_database(tmp_path/'state.sqlite')
+    mark_watching(db)
+    acquired = []
+    def acquire(tor, item, *args):
+        acquired.append(item['url'])
+        return {'acquired': True, 'sha256': 'b'*64, 'bytes': 3}
+    with patch.object(c, 'acquire', side_effect=acquire):
+        ok, sent = policy_scan(site, db, tmp_path, {**OUTLET, 'policy': {**LOOP_POLICY, 'previews': True}}, acquire=True)
+    assert site.calls == [BASE]
+    assert BASE+'attach/123.jpg' not in acquired
+    items = {item['url']: item for batch in sent for item in batch['items']}
+    assert items[BASE+'attach/123.jpg']['type'] == 'image'
+    assert not any('preview' in item or 'preview_status' in item for item in items.values())
+    for row in items.values():
+        assert c.preview_source(row) is None
+    session = Session([])
+    assert c.make_preview(session, {'url': BASE+'a.jpg', 'type': 'image', 'preview_url': BASE+'hero.jpg'})['preview_status'] == 'No visual preview supplied'
+    assert c.make_preview(session, {'url': BASE+'a.pdf', 'type': 'pdf'})['preview_status'] == 'No visual preview supplied'
+    assert session.calls == []
+    db.close()
+
+
+LONG_PATH = 'uploads/2025-05-01-' + 'ع' * 330 + '.pdf'
+
+
+def test_url_length_is_measured_after_the_workers_percent_encoding():
+    assert len(BASE + LONG_PATH) < 500 and c.onion_url(BASE + LONG_PATH) == ''
+    short = BASE + 'uploads/2025-05-01-' + 'ع' * 300 + '.pdf'
+    assert c.onion_url(short) == short
+    parser = c.ListingParser(BASE); parser.feed('<a href="/'+LONG_PATH+'">long</a><a href="/ok.pdf">ok</a>')
+    assert list(parser.rows) == [BASE+'ok.pdf']
+    row = c.structured_publications(structured_detail('مجلة', '<a href="/'+LONG_PATH+'">PDF</a><a href="/ok.pdf">PDF</a>'), BASE+'posts/naba/1/')['page']
+    assert [a['url'] for a in row['attachments']] == [BASE+'ok.pdf']
+
+
+def test_url_length_bound_is_never_below_new_url_in_node():
+    import shutil, subprocess
+    if not shutil.which('node'):
+        pytest.skip('node is not installed')
+    urls = [BASE + LONG_PATH, BASE + 'a b/"q"/{x}/<y>/`z`/|^[]~?k=\'v\' "w"&x=ع', BASE + "it's/%41%zz?q=1;2,3"]
+    script = "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>console.log(JSON.stringify(JSON.parse(s).map(u=>new URL(u).href.length))))"
+    result = subprocess.run(['node', '-e', script], input=json.dumps(urls), capture_output=True, text=True, encoding='utf-8', timeout=60)
+    measured = json.loads(result.stdout)
+    assert measured[0] > 2000
+    assert all(len(c.quote(url, safe=c.URL_SAFE)) >= length for url, length in zip(urls, measured))
+
+
+def test_queued_row_with_overlong_url_is_kept_locally_and_does_not_freeze_the_outlet(tmp_path):
+    db = c.open_database(tmp_path/'state.sqlite')
+    rows = [{'url': BASE+LONG_PATH, 'type': 'pdf', 'title': 'long', 'published_at': '2025-05-01'},
+            {'url': BASE+'posts/naba/9/', 'publication_version': 1, 'published_at': '2025-05-03', 'title': 'مجلة', 'original_text': 'مجلة',
+             'text_status': 'complete', 'attachments': [{'url': BASE+LONG_PATH, 'type': 'pdf', 'title': 'long'}]},
+            {'url': BASE+'2025-05-02-ok.pdf', 'type': 'pdf', 'title': 'ok', 'published_at': '2025-05-02'}]
+    for row in rows:
+        db.execute('INSERT INTO outbox VALUES (?,?,?,?)', (OUTLET['id'], row['url'], json.dumps(row), 1))
+    db.commit()
+    site = Site({BASE: '<p>home</p>'})
+    outlet = {**OUTLET, 'policy': LOOP_POLICY}
+    ok, sent = policy_scan(site, db, tmp_path, outlet)
+    assert [item['url'] for batch in sent for item in batch['items']] == [BASE+'2025-05-02-ok.pdf']
+    kept = {url: json.loads(metadata) for url, metadata in db.execute('SELECT url,metadata FROM rejected')}
+    assert kept == {rows[0]['url']: rows[0], rows[1]['url']: rows[1]}
+    assert not db.execute('SELECT 1 FROM outbox').fetchone() and site.calls == []
+    policy_scan(site, db, tmp_path, outlet)
+    assert site.calls == [BASE]
+    db.close()
+
+
+class LegacyPublicationParser(c.HTMLParser):
+    """The selection parser before the linear rewrite, kept to prove identical output."""
+    VOID, OMIT = c.PublicationParser.VOID, c.PublicationParser.OMIT
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.stack, self.blocks = [], []
+    def handle_starttag(self, tag, attrs):
+        values = dict(attrs)
+        marker = " ".join(values.get(k, "") for k in ("id", "class", "itemprop"))
+        tokens = set(c.re.split(r"[^\w]+", marker.lower()))
+        excluded = bool(tokens & {"menu", "navigation", "breadcrumb", "breadcrumbs", "pagination", "sidebar"})
+        omitted = tag in self.OMIT or excluded or values.get("role") == "navigation" or "hidden" in values or values.get("aria-hidden") == "true"
+        comment = bool(tokens & {"comment", "comments", "reply", "replies", "commentbody", "usercomment"})
+        frame = {"tag": tag, "omit": omitted or any(x["omit"] for x in self.stack),
+                 "comment": comment or any(x["comment"] for x in self.stack), "parts": [], "linked": 0}
+        if tag not in self.VOID:
+            self.stack.append(frame)
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+        if tag not in self.VOID:
+            self.handle_endtag(tag)
+    def handle_data(self, data):
+        if not self.stack or self.stack[-1]["omit"]:
+            return
+        linked = any(x["tag"] == "a" for x in self.stack)
+        for frame in self.stack:
+            if frame["tag"] in {"p", "article", "main", "blockquote", "div", "td", "section"}:
+                frame["parts"].append(data)
+                frame["linked"] += len(data) if linked else 0
+    def handle_endtag(self, tag):
+        index = next((i for i in range(len(self.stack)-1, -1, -1) if self.stack[i]["tag"] == tag), None)
+        if index is None:
+            return
+        for frame in self.stack[index:]:
+            raw = " ".join(frame["parts"])
+            text = " ".join(raw.split())
+            if not frame["omit"] and text and frame["linked"] / max(len(raw), 1) < 0.25:
+                self.blocks.append((text, frame["comment"], frame["tag"]))
+        del self.stack[index:]
+    def selected_text(self):
+        candidates = [(text, comment) for text, comment, tag in self.blocks
+                      if (comment and len(text) >= 80) or (len(text) >= 1200 and tag in {"p", "article", "blockquote", "div", "td"})]
+        paragraphs = list(dict.fromkeys(text for text, _, tag in self.blocks if tag == "p" and len(text) >= 120))
+        if sum(map(len, paragraphs)) >= 1200:
+            candidates.append(("\n\n".join(paragraphs), False))
+        if not candidates:
+            return ""
+        return max(candidates, key=lambda row: len(row[0]))[0][:100000]
+
+
+def selection(parser_class, html):
+    parser = parser_class()
+    parser.feed(html)
+    parser.handle_endtag('html')
+    return parser.selected_text()
+
+
+def random_page(rng):
+    tags = ['p', 'div', 'article', 'section', 'main', 'blockquote', 'span', 'a', 'b', 'nav', 'h2', 'ul', 'li', 'table', 'tr', 'td',
+            'aside', 'header', 'footer', 'form', 'script', 'style', 'em', 'br', 'img']
+    attributes = ['', '', '', ' class="comment-body"', ' class="sidebar"', ' aria-hidden="true"', ' id="main"', ' role="navigation"', ' class="post reply"', ' hidden']
+    words = ['تحليل', 'report', 'نص', 'details', 'العدد', 'context', 'statement', 'claims', 'الولاية', 'analysis', '&amp;', 'x']
+    def text():
+        return ' '.join(rng.choice(words) for _ in range(rng.randint(1, 160)))
+    def node(depth, ancestors):
+        if depth > 5 or rng.random() < 0.3:
+            return text()
+        tag = rng.choice(tags)
+        if tag in c.PublicationParser.IMPLIED and tag in ancestors:
+            tag = 'div'
+        if tag in c.PublicationParser.VOID:
+            return '<%s>' % tag
+        if tag in ('script', 'style'):
+            return '<%s>%s</%s>' % (tag, text(), tag)
+        inner = ''.join(node(depth + 1, ancestors | {tag}) for _ in range(rng.randint(1, 4)))
+        return '<%s%s>%s</%s>' % (tag, rng.choice(attributes), inner, tag)
+    return '<html><body>' + ''.join(node(0, frozenset()) for _ in range(rng.randint(1, 6))) + '</body></html>'
+
+
+def test_linear_parser_output_is_identical_for_well_formed_pages():
+    import random
+    rng = random.Random(20261004)
+    fixtures = [structured_detail('عنوان', '<p>'+'فقرة طويلة من النص العربي للتحليل. '*20+'</p>'), magazine_viewer_detail(),
+                '<article><p>'+('هذا نص طويل يتضمن تفاصيل ومعلومات للتحليل. '*40)+'</p></article>',
+                '<div class="comment-body">'+('An identifiable user comment with enough context. '*3)+'</div>',
+                '<nav><div>'+('menu text '*500)+'</div></nav><div>'+(' <a href="/x">link label</a> '*300)+'</div>']
+    pages = fixtures + [random_page(rng) for _ in range(400)]
+    selected = 0
+    for html in pages:
+        expected = selection(LegacyPublicationParser, html)
+        assert selection(c.PublicationParser, html) == expected
+        selected += bool(expected)
+    assert selected > 50, 'the random pages exercise non-empty selections'
+
+
+def test_unclosed_paragraphs_list_items_and_cells_parse_in_linear_time():
+    import time
+    paragraph = 'Paragraph %d carries enough analytical text to count as a body paragraph of the publication. '
+    body = ''.join('<p>' + (paragraph % i) * 2 for i in range(4000))
+    started = time.monotonic()
+    unclosed = selection(c.PublicationParser, '<html><body>' + body + '</body></html>')
+    assert time.monotonic() - started < 5
+    closed = ''.join('<p>' + (paragraph % i) * 2 + '</p>' for i in range(4000))
+    assert unclosed == selection(c.PublicationParser, '<html><body>' + closed + '</body></html>') and unclosed
+    cell = 'Cell text that is long enough to be selected as a table body block. ' * 30
+    assert selection(c.PublicationParser, '<html><table><tr><td>'+cell+'<td>'+cell+'<tr><td>'+cell+'</table></html>') == \
+        selection(c.PublicationParser, '<html><table><tr><td>'+cell+'</td><td>'+cell+'</td></tr><tr><td>'+cell+'</td></tr></table></html>')
+    items = ''.join('<li>' + paragraph % i for i in range(4000))
+    started = time.monotonic()
+    selection(c.PublicationParser, '<html><ul>' + items + '</ul></html>')
+    assert time.monotonic() - started < 5
+
+
+def test_deep_nesting_is_capped_and_deep_navigation_stays_excluded():
+    import time
+    started = time.monotonic()
+    text = 'Deeply nested body text that should still be readable. ' * 40
+    deep = '<html>' + '<div>' * 20000 + text + '<nav>' + 'menu label ' * 300 + '</nav>' + '</div>' * 20000 + '</html>'
+    result = selection(c.PublicationParser, deep)
+    assert time.monotonic() - started < 5
+    assert result.startswith('Deeply nested') and 'menu label' not in result
+    parser = c.PublicationParser(); parser.feed('<div>' * 1000)
+    assert len(parser.stack) == c.PublicationParser.MAX_DEPTH
+
+
+def test_transient_preview_errors_are_classified_and_carry_no_status():
+    pytest.importorskip('PIL.Image')
+    row = {'publication_version': 1, 'url': BASE+'posts/news/1/', 'preview_url': BASE+'cover.jpg', 'attachments': []}
+    class Down:
+        def __init__(self, error):
+            self.error = error
+        def get(self, url, **kwargs):
+            raise self.error
+    for error in (c.requests.exceptions.ReadTimeout('slow'), c.requests.exceptions.ConnectionError('refused')):
+        assert c.make_preview(Down(error), row) == {'transient': True}
+    assert c.make_preview(Site({BASE+'cover.jpg': 503}), row) == {'transient': True}
+    permanent = c.make_preview(Site({BASE+'cover.jpg': 404}), row)
+    assert permanent == {'preview_status': 'Preview unavailable within collection limits', 'preview_version': 2}
+    magazine = {**row, 'attachments': [{'type': 'pdf', 'url': BASE+'large.pdf'}]}
+    with patch.object(c, '_make_preview', side_effect=[{'preview_status': 'Preview source exceeds 8 MB cap'}, {'transient': True}]):
+        assert c.make_preview(None, magazine) == {'transient': True}
+
+
+def preview_site():
+    return Site({BASE: '<meta property="og:image" content="/cover.jpg">' + structured_detail('مقال', '<p>نص المقال</p>', '2025-10-03')})
+
+
+def test_transient_preview_failures_are_retried_for_three_passes_without_reuploading(tmp_path):
+    db = c.open_database(tmp_path/'state.sqlite')
+    site = preview_site()
+    outlet = {**OUTLET, 'policy': {**LOOP_POLICY, 'previews': True}}
+    with patch.object(c, '_make_preview', return_value={'transient': True}) as make:
+        calls, sent = passes(site, db, tmp_path, outlet, 3)
+    assert make.call_count == 3
+    uploads = [[item for batch in batches for item in batch['items']] for batches in sent]
+    assert len(uploads[0]) == 1 and 'preview_status' not in uploads[0][0]
+    assert uploads[1] == [], 'only the local retry counter changed'
+    assert uploads[2][0]['preview_status'] == 'Preview source unreachable after 3 attempts'
+    stored = json.loads(db.execute('SELECT metadata FROM items').fetchone()[0])
+    assert stored['preview_status'] == 'Preview source unreachable after 3 attempts' and stored['preview_version'] == 2
+    assert not db.execute('SELECT 1 FROM preview_retries').fetchone()
+    db.close()
+
+
+def test_preview_succeeds_on_a_later_pass_after_a_timeout(tmp_path):
+    db = c.open_database(tmp_path/'state.sqlite')
+    outlet = {**OUTLET, 'policy': {**LOOP_POLICY, 'previews': True}}
+    picture = {'preview': 'data:image/jpeg;base64,/9j/AAAA', 'preview_status': 'Source thumbnail'}
+    with patch.object(c, '_make_preview', side_effect=[{'transient': True}, picture]):
+        calls, sent = passes(preview_site(), db, tmp_path, outlet, 3)
+    stored = json.loads(db.execute('SELECT metadata FROM items').fetchone()[0])
+    assert stored['preview'] == picture['preview'] and stored['preview_version'] == 2
+    assert not db.execute('SELECT 1 FROM preview_retries').fetchone()
+    db.close()
+
+
+PREVIOUS_SCHEMA = [
+    "CREATE TABLE outlets (id TEXT PRIMARY KEY, initialized INTEGER NOT NULL)",
+    "CREATE TABLE items (outlet_id TEXT, url TEXT, metadata TEXT, baseline INTEGER, PRIMARY KEY(outlet_id,url))",
+    "CREATE TABLE crawl_runs (outlet_id TEXT PRIMARY KEY, finished INTEGER DEFAULT 0)",
+    "CREATE TABLE frontier (outlet_id TEXT, url TEXT, status TEXT DEFAULT 'pending', attempts INTEGER DEFAULT 0, PRIMARY KEY(outlet_id,url))",
+    "CREATE TABLE pages (outlet_id TEXT, url TEXT, title TEXT, text TEXT, checked_at TEXT, PRIMARY KEY(outlet_id,url))",
+    "CREATE TABLE outbox (outlet_id TEXT, url TEXT, metadata TEXT, baseline INTEGER, PRIMARY KEY(outlet_id,url))",
+    "CREATE TABLE settings (key TEXT PRIMARY KEY, value TEXT)",
+    "CREATE TABLE pdf_uploads (outlet_id TEXT, item_url TEXT, sha256 TEXT, epoch INTEGER, status TEXT, attempts INTEGER, next_try REAL, PRIMARY KEY(outlet_id,item_url,sha256,epoch))",
+    "CREATE TABLE undated (outlet_id TEXT, url TEXT, metadata TEXT, PRIMARY KEY(outlet_id,url))",
+    "ALTER TABLE frontier ADD COLUMN depth INTEGER DEFAULT 0"]
+
+
+def test_existing_archive_database_is_preserved_and_its_stuck_run_finishes(tmp_path):
+    import sqlite3
+    path, oid = tmp_path/'state.sqlite', OUTLET['id']
+    old = sqlite3.connect(path)
+    for statement in PREVIOUS_SCHEMA:
+        old.execute(statement)
+    archive = [(oid, BASE+'posts/naba/%d/' % i, json.dumps({'url': BASE+'posts/naba/%d/' % i, 'publication_version': 1, 'published_at': '2025-06-01',
+               'title': 'مجلة', 'text_status': 'complete', 'preview_status': 'First page', 'preview_version': 2,
+               'attachments': [{'url': BASE+'%d.pdf' % i, 'type': 'pdf', 'acquired': True, 'sha256': 'a'*64, 'bytes': 9}]}, ensure_ascii=False), 1) for i in range(3)]
+    old.executemany('INSERT INTO items VALUES (?,?,?,?)', archive)
+    old.execute('INSERT INTO crawl_runs VALUES (?,0)', (oid,))
+    old.executemany('INSERT INTO frontier(outlet_id,url,status,attempts,depth) VALUES (?,?,?,?,?)',
+                    [(oid, BASE, 'done', 1, 0), (oid, BASE+'dead', 'failed', 0, 1), (oid, BASE+'huge', 'limited', 1, 1)])
+    old.execute("INSERT INTO settings VALUES (?, 'running')", ('publication-inventory-v1:'+oid,))
+    old.commit(); old.close()
+    db = c.open_database(path)
+    site = Site({BASE+'dead': 404})
+    calls, sent = passes(site, db, tmp_path, {**OUTLET, 'policy': {**LOOP_POLICY, 'previews': True}}, 3)
+    assert calls == [[BASE+'dead']] * 3
+    assert sent[2][-1]['scan_complete'] and sent[2][-1]['abandoned_pages'] == 2
+    assert not any(batch['items'] for batches in sent for batch in batches), 'nothing already uploaded is sent again'
+    assert db.execute('SELECT * FROM items ORDER BY rowid').fetchall() == archive
+    assert {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")} >= {'rejected', 'preview_retries'}
     db.close()

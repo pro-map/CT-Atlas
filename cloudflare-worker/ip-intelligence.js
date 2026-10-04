@@ -1,7 +1,7 @@
 import { parseTarget, lookupDomain } from "./domain-intelligence.js";
 import { cleanText, corsHeaders, gateCall, isAllowedUser } from "./shared.js";
 
-export const IP_INTELLIGENCE_VERSION = "ip-intelligence-v4-domain-input";
+export const IP_INTELLIGENCE_VERSION = "ip-intelligence-v5-routing-contacts";
 const RIRS = new Set(["rdap.arin.net", "rdap.db.ripe.net", "rdap.apnic.net", "rdap.lacnic.net", "rdap.afrinic.net"]);
 const bootstrapCache = new Map();
 const text = value => cleanText(value, 500);
@@ -216,7 +216,7 @@ async function registry(parsed, expand = true) {
 }
 export function registration(data) {
   const contacts = []; let remaining = 40;
-  function walk(entities, depth=0) {
+  function walk(entities, depth=0, owner="") {
     if (depth > 3) return;
     for (const entity of list(entities)) {
       if (--remaining < 0) return;
@@ -224,15 +224,18 @@ export function registration(data) {
       const field = name => fields.filter(f => f[0] === name);
       const value = name => field(name).map(f => text(Array.isArray(f[3]) ? f[3].flat().filter(Boolean).join(", ") : f[3])).filter(Boolean);
       const address = field("adr").map(f => text(f[1]?.label || list(f[3]).flat().filter(Boolean).join(", "))).filter(Boolean).join("; ");
-      const roles = list(entity.roles).map(text);
-      if (fields.length) contacts.push({ name: value("org")[0] || value("fn")[0] || text(entity.handle), roles, address, source: "RIR RDAP",
+      const roles = list(entity.roles).map(text), name = value("org")[0] || value("fn")[0] || text(entity.handle);
+      // A nested card belongs to its parent organisation; a top-level role card to the range holder.
+      if (fields.length) contacts.push({ name, roles, address, source: "RIR RDAP", entity: owner || (roles.includes("registrant") ? name : ""),
         emails: value("email").filter(v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)).slice(0,4), phones: value("tel").slice(0,3) });
-      walk(entity.entities,depth+1);
+      walk(entity.entities,depth+1,owner || name);
     }
   }
   walk(data.entities);
+  const registrant = contacts.find(c => c.roles.includes("registrant"))?.name || "";
+  for (const c of contacts) if (!c.entity) c.entity = registrant;
   return { source:"RIR RDAP", name: text(data.name), handle: text(data.handle), country: text(data.country), start: text(data.startAddress), end: text(data.endAddress),
-    registrant: contacts.find(c => c.roles.includes("registrant"))?.name || "", contacts,
+    registrant, contacts,
     updated_at: text(list(data.events).find(e => e.eventAction === "last changed")?.eventDate) };
 }
 
@@ -273,17 +276,20 @@ function whoisRegistration(payload, parsed) {
   // Only associate separate contact records when the response has a single allocation.
   const related=networks.length === 1 ? records : [net];
   const organisation=related.find(r=>r.first("orgname","org-name"));
-  const contacts=[];
+  const contacts=[],holder=organisation?.first("orgname","org-name")||net.first("organization")||"";
   for (const r of related) {
+    // Allocation records describe the range; their country code is not a postal address.
+    if (r.range) continue;
     const name=r.first("orgabusename","orgtechname","orgname","org-name","role","person");
     const emails=[...r.values("orgabuseemail"),...r.values("orgtechemail"),...r.values("abuse-mailbox"),...r.values("e-mail")].filter(v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)).slice(0,4);
-    const phones=[...r.values("orgabusephone"),...r.values("orgtechphone"),...r.values("phone")].slice(0,3);
-    const address=[...r.values("address"),r.first("city"),r.first("stateprov"),r.first("postalcode"),r.first("country")].filter(Boolean).join(", ");
+    const phones=[...r.values("orgabusephone"),...r.values("orgtechphone"),...r.values("phone")].filter(Boolean).slice(0,3);
+    const street=r.values("address").filter(Boolean);
+    const address=street.length ? [...street,r.first("city"),r.first("stateprov"),r.first("postalcode"),r.first("country")].filter(Boolean).join(", ") : "";
     const roles=r.first("orgabuseemail","abuse-mailbox") ? ["abuse"] : r.first("orgname","org-name") ? ["registrant"] : ["technical"];
-    if (name || emails.length || address) contacts.push({name:name||"Registry contact",emails,phones,address,roles,source:"RIPEstat WHOIS"});
+    if (emails.length || phones.length || address) contacts.push({name:name||"Registry contact",emails,phones,address,roles,source:"RIPEstat WHOIS",entity:holder});
   }
   return {source:"RIPEstat WHOIS",name:net.first("netname"),handle:net.first("nethandle"),country:net.first("country")||organisation?.first("country")||"",
-    start:net.range.start.ip,end:net.range.end.ip,registrant:organisation?.first("orgname","org-name")||net.first("organization")||"",contacts,
+    start:net.range.start.ip,end:net.range.end.ip,registrant:holder,contacts,
     updated_at:net.first("last-modified","updated"),data_time:text(payload.data.query_time)};
 }
 
@@ -317,17 +323,26 @@ export function serviceContact(name) {
   const { aliases, ...entry } = match;
   return { ...entry, jurisdictions:JURISDICTIONS[entry.name] || [], checked_on: "2026-10-03", basis: "Exact match to a named intermediary service reported by the attribution source; independently verify before contacting." };
 }
+const entityKey = value => String(value || "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu,"");
+const sameEntity = (a,b) => Boolean(entityKey(a)) && entityKey(a) === entityKey(b);
 function enquiryTarget(operator, privacy, contacts, routes) {
-  const names=privacy.services.map(s=>s.name), ambiguous=names.length>1 || privacy.conflicts.length>0 || (!names.length && operator.attribution_conflict);
+  // Only disagreements that can change the recipient block it; hosting and anycast stay warnings.
+  const names=privacy.services.map(s=>s.name), routing=privacy.conflicts.filter(f=>["vpn","proxy","tor","relay"].includes(f));
+  const ambiguous=names.length>1 || (names.length===1 ? routing.includes("vpn") : routing.length>0) || (!names.length && operator.attribution_conflict);
   const primary=ambiguous ? null : names.length===1 ? routes.find(c=>c.target_type==="intermediary") : routes.find(c=>c.target_type==="network");
-  const registryContact=!ambiguous && names.length===0 ? contacts.find(c=>c.roles.includes("abuse")&&c.emails.length) || contacts.find(c=>c.emails.length || c.address) : null;
+  // Registry contacts are only a fallback when no route exists; they never fill a reviewed channel.
+  const usable=contacts.filter(c=>c.emails.length || c.address), pick=items=>items.find(c=>c.roles.includes("abuse")&&c.emails.length) || items[0] || null;
+  const registryContact=!ambiguous && !primary && !names.length ? pick(usable.filter(c=>sameEntity(c.entity,operator.name))) || pick(usable) : null;
+  const otherEntity=Boolean(registryContact?.entity) && !sameEntity(registryContact.entity,operator.name);
   return {
     name:names.length ? names.join(" / ") : operator.name,
     type:names.length ? "VPN / intermediary provider" : "Network operator / allocation holder",
-    status:ambiguous ? "Attribution requires verification" : primary ? primary.kind : registryContact ? "Registry contact — request the legal channel" : "Contact not available",
-    basis:names.length ? "Named by "+[...new Set(privacy.services.flatMap(s=>s.sources))].join(" + ")+". The network owner may only host the service." : "Based on "+operator.source+". Confirm whether this operator serves the subscriber or an intermediary.",
-    email:primary?.email || registryContact?.emails?.[0] || "", phone:registryContact?.phones?.[0] || "", address:primary?.address || registryContact?.address || "",
-    url:primary?.url || "", country:primary?.country || "", scope:primary?.scope || "",
+    status:ambiguous ? "Attribution requires verification" : primary ? primary.kind : otherEntity ? "Registry contact of a different organisation — verify before use" : registryContact ? "Registry contact — request the legal channel" : "Contact not available",
+    basis:names.length ? "Named by "+[...new Set(privacy.services.flatMap(s=>s.sources))].join(" + ")+". The network owner may only host the service." : "Based on "+operator.source+". Confirm whether this operator serves the subscriber or an intermediary."+(otherEntity ? " The published contact is listed for "+registryContact.entity+", whose name differs from this operator. It may be a downstream customer in a reallocated range, possibly the subject: verify the relationship before sharing case details." : ""),
+    contact_entity:primary ? primary.name : registryContact ? registryContact.entity || "Not stated by the source" : "",
+    contact_name:registryContact?.name || "",
+    email:primary ? primary.email || "" : registryContact?.emails?.[0] || "", phone:primary ? "" : registryContact?.phones?.[0] || "", address:primary ? primary.address || "" : registryContact?.address || "",
+    url:primary?.url || "", country:primary?.country || "", scope:primary?.scope || "", checked_on:primary?.checked_on || "",
     jurisdictions:primary?.jurisdictions || [],
     contact_source:primary ? (primary.checked_on ? "Reviewed provider directory · "+primary.checked_on : primary.basis) : registryContact?.source || "",
     records_to_request:operator.service_context && !names.length && privacy.vpn !== true && privacy.proxy !== true && privacy.tor !== true ? "Subject to applicable process and available records: identify the customer organisation using this mail service and request relevant message-trace records using the original Message-ID and exact UTC timestamp. A mail relay IP does not establish the sender's access ISP or home address." : "Subject to the provider's applicable process and available records: subscriber/account holder identity, service or installation postal address, and allocation/session records linking the observed IP, exact time, timezone and source port to that account.",
@@ -354,15 +369,21 @@ export async function lookupIP(parsed, env, options = {}) {
       warnings.push(name+" unavailable ("+reason+"). "+(action || "Its fields are unknown.")); return null;
     }
   }
+  // keyedProviders:false means the shared daily budget for the keyed providers is used up.
+  const keyed = options.keyedProviders !== false, proxyOn = env.PROXYCHECK_ENABLED !== "false", ipapiOn = env.IPAPI_IS_ENABLED !== "false" && Boolean(env.IPAPI_IS_KEY);
   const [rdap, network, abuse, geoData, info, proxy, ipapi] = await Promise.all([
     source("RIR RDAP",()=>registry(parsed,options.expandRegistry !== false)),
     source("RIPEstat routing",()=>getJSON(ripe("network-info")),ripe("network-info")),
     source("RIPEstat abuse contacts",()=>getJSON(ripe("abuse-contact-finder")),ripe("abuse-contact-finder")),
     source("RIPEstat / MaxMind GeoLite2",()=>getJSON(ripe("maxmind-geo-lite")),ripe("maxmind-geo-lite")),
     env.IPINFO_TOKEN ? source("IPinfo",()=>ipinfoLookup(parsed,env),"https://ipinfo.io/"+encodeURIComponent(parsed.ip)) : null,
-    env.PROXYCHECK_ENABLED === "false" ? null : source("Proxycheck.io",()=>proxycheckLookup(parsed,env),"https://proxycheck.io/api/"),
-    env.IPAPI_IS_ENABLED !== "false" && env.IPAPI_IS_KEY ? source("ipapi.is",()=>ipapiLookup(parsed,env),"https://ipapi.is/developers.html") : null
+    proxyOn && keyed ? source("Proxycheck.io",()=>proxycheckLookup(parsed,env),"https://proxycheck.io/api/") : null,
+    ipapiOn && keyed ? source("ipapi.is",()=>ipapiLookup(parsed,env),"https://ipapi.is/developers.html") : null
   ]);
+  if (!keyed && (proxyOn || ipapiOn)) {
+    for (const [name,url,on] of [["Proxycheck.io","https://proxycheck.io/api/",proxyOn],["ipapi.is","https://ipapi.is/developers.html",ipapiOn]]) if (on) sources.push({name,url,status:"budget_reserved",action:"The shared daily budget for this keyed provider is used up. It was not queried, to keep quota for other analysts; retry after the daily reset.",retrieved_at:new Date().toISOString()});
+    warnings.push("Daily budget for the keyed VPN-detection providers is reached; they were not queried. VPN detection relies on the remaining sources.");
+  }
   if (proxy?.api_warning) warnings.push("Proxycheck.io returned data with an account/quota warning. Check the provider dashboard; future queries may be limited.");
   if (!env.IPAPI_IS_KEY && env.IPAPI_IS_ENABLED !== "false") sources.push({name:"ipapi.is",url:"https://ipapi.is/developers.html",status:"not_configured",action:"Optional independent VPN and contact source. Add the free account key as Worker Secret IPAPI_IS_KEY to enable it.",retrieved_at:new Date().toISOString()});
   if (ipapi?.access === "limited") warnings.push("ipapi.is returned only a limited response. VPN flags and detailed contacts are unavailable; verify the IPAPI_IS_KEY account.");
@@ -384,9 +405,10 @@ export async function lookupIP(parsed, env, options = {}) {
   const contacts = reg?.contacts ? [...reg.contacts] : [];
   if (ipapi?.access === "api_key" && ipapi.abuse && containsIP(resourceRange(ipapi.company?.network),parsed)) {
     const a=ipapi.abuse,email=text(a.email);
-    contacts.push({name:text(a.name)||"Network abuse contact",roles:["abuse"],source:"ipapi.is (WHOIS-derived)",address:text(a.address),phones:text(a.phone)?[text(a.phone)]:[],emails:/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)?[email]:[]});
+    contacts.push({name:text(a.name)||"Network abuse contact",roles:["abuse"],source:"ipapi.is (WHOIS-derived)",entity:text(ipapi.company?.name),address:text(a.address),phones:text(a.phone)?[text(a.phone)]:[],emails:/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)?[email]:[]});
   }
-  for (const email of list(abuse?.data?.abuse_contacts).slice(0,8)) if (typeof email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !contacts.some(c => c.emails.includes(email))) contacts.push({ name:"Network abuse contact", roles:["abuse"], source:"RIPEstat abuse contacts", address:"", phones:[], emails:[email] });
+  // The abuse finder does not say which organisation in a reallocation chain owns the mailbox.
+  for (const email of list(abuse?.data?.abuse_contacts).slice(0,8)) if (typeof email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !contacts.some(c => c.emails.includes(email))) contacts.push({ name:"Network abuse contact", roles:["abuse"], source:"RIPEstat abuse contacts", entity:"", address:"", phones:[], emails:[email] });
   const asns = list(network?.data?.asns).map(n => /^\d+$/.test(String(n)) ? "AS"+n : "").filter(Boolean).slice(0,10);
   let asOverview = null;
   const ipapiASN=ipapi?.access === "api_key" && /^\d+$/.test(String(ipapi.asn?.asn)) ? "AS"+ipapi.asn.asn : "";
@@ -419,23 +441,40 @@ export async function lookupIP(parsed, env, options = {}) {
   const enquiry=enquiryTarget(operator,privacy,contacts,legal);
   return { version:IP_INTELLIGENCE_VERSION, ip:parsed.ip, family:parsed.bits === 32 ? "IPv4" : "IPv6", queried_at:new Date().toISOString(),
     status: !sources.some(s => s.status === "available") ? "unavailable" : warnings.length ? "partial" : "complete",
-    enrichment: { ipinfo_access: info?.access || (env.IPINFO_TOKEN ? "unavailable" : "not_configured"), ipapi_is_access:env.IPAPI_IS_ENABLED === "false" ? "disabled" : ipapi?.access || (env.IPAPI_IS_KEY ? "unavailable" : "not_configured"), proxycheck_access:proxy ? env.PROXYCHECK_API_KEY ? "api_key" : "unregistered" : env.PROXYCHECK_ENABLED === "false" ? "disabled" : "unavailable" },
+    enrichment: { ipinfo_access: info?.access || (env.IPINFO_TOKEN ? "unavailable" : "not_configured"), ipapi_is_access:env.IPAPI_IS_ENABLED === "false" ? "disabled" : ipapi?.access || (env.IPAPI_IS_KEY ? keyed ? "unavailable" : "budget_reserved" : "not_configured"), proxycheck_access:proxy ? env.PROXYCHECK_API_KEY ? "api_key" : "unregistered" : env.PROXYCHECK_ENABLED === "false" ? "disabled" : keyed ? "unavailable" : "budget_reserved" },
     operator, enquiry, registration:reg, geolocation:geo, privacy, contacts, provider_contacts:legal, sources, warnings,
     limitations:["Current public metadata, not a reconstruction of the network at the incident time.","IP geolocation is approximate and does not identify a person, household or street address. VPN/proxy results concern the exit server; anycast may have multiple locations.","Registration country, server location and the provider's legal jurisdiction are different. Verify the responsible legal entity before a request.","VPN flags are provider assessments. Not detected is not proof of absence. This lookup cannot trace a subscriber behind a VPN.","Registry postal addresses belong to listed network contacts, not the subscriber. Abuse contacts are not necessarily authorized to receive legal requests."] };
 }
 function reply(body,status,env) { return new Response(JSON.stringify(body),{status,headers:{...corsHeaders(env),"Cache-Control":"no-store, private","X-Content-Type-Options":"nosniff"}}); }
+const CIDR_INPUT = /^(?:(?:\d{1,3}\.){3}\d{1,3}\/\d{1,2}|[0-9a-f.:]*:[0-9a-f.:]*\/\d{1,3})$/i;
 export async function handleIPIntelligence(request,env) {
   if (new URL(request.url).pathname !== "/ip-intelligence/lookup" || request.method !== "POST") return reply({error:"Unsupported IP Intelligence operation."},405,env);
-  const token = cleanText(request.headers.get("X-Session-Token"),160);
-  if (!token) return reply({error:"Authenticated session required."},401,env);
-  const sessionResponse = await gateCall(env,"/session-get",{session_token:token});
-  const session = await sessionResponse.json().catch(()=>({}));
-  if (!sessionResponse.ok || !isAllowedUser(session.username,env)) return reply({error:"Session expired."},401,env);
-  let body;
-  try { body = await boundedJSON(new Response(request.body),2048); } catch { return reply({error:"Send a JSON object containing one IP, domain or web address (maximum 2 KB)."},400,env); }
-  const target = parseTarget(body?.target ?? body?.ip,publicIP);
-  if (!target) return reply({error:"Enter a public IP, domain or HTTP(S) web address (maximum 1024 characters). Credentials, nonstandard ports, private addresses and special-use names are excluded."},400,env);
-  const limit = await gateCall(env,"/ip-intelligence-limit",{username:session.username});
-  if (!limit.ok) return reply({error:"Lookup limit reached. Wait one minute and retry."},429,env);
-  return reply(target.kind === "domain" ? await lookupDomain(target,env,{publicIP,lookupIP}) : await lookupIP(target.parsed,env),200,env);
+  try {
+    const token = cleanText(request.headers.get("X-Session-Token"),160);
+    if (!token) return reply({error:"Authenticated session required."},401,env);
+    const sessionResponse = await gateCall(env,"/session-get",{session_token:token});
+    const session = await sessionResponse.json().catch(()=>({}));
+    if (!sessionResponse.ok || !isAllowedUser(session.username,env)) return reply({error:"Session expired."},401,env);
+    let body;
+    try { body = await boundedJSON(new Response(request.body),2048); } catch { return reply({error:"Send a JSON object containing one IP, domain or web address (maximum 2 KB)."},400,env); }
+    const input = body?.target ?? body?.ip, target = parseTarget(input,publicIP);
+    if (!target) return reply({error:typeof input === "string" && CIDR_INPUT.test(input) ? "IP ranges (CIDR) are not supported. Enter one address." : "Enter a public IP, domain or HTTP(S) web address (maximum 1024 characters). Credentials, nonstandard ports, private addresses and special-use names are excluded."},400,env);
+    // Every IP analysis takes one per-minute slot, including each IP a domain lookup analyses.
+    // keyed:true asks the gate for the shared daily keyed-provider budget; a reply of keyed:false withholds those providers.
+    const keyedConfigured = env.PROXYCHECK_ENABLED !== "false" || (env.IPAPI_IS_ENABLED !== "false" && Boolean(env.IPAPI_IS_KEY));
+    const slot = async keyed => {
+      const response = await gateCall(env,"/ip-intelligence-limit",keyed ? {username:session.username,keyed:true} : {username:session.username});
+      return response.ok ? {keyedProviders:!keyed || (await response.json().catch(()=>({}))).keyed !== false} : null;
+    };
+    const limited = () => reply({error:"Lookup limit reached. Wait one minute and retry."},429,env);
+    if (target.kind !== "domain") {
+      const granted = await slot(keyedConfigured);
+      return granted ? reply(await lookupIP(target.parsed,env,granted),200,env) : limited();
+    }
+    if (!await slot(false)) return limited();
+    const analyse = async (parsed, e, options = {}) => { const granted = await slot(keyedConfigured); return granted ? lookupIP(parsed,e,{...options,...granted}) : null; };
+    return reply(await lookupDomain(target,env,{publicIP,lookupIP:analyse}),200,env);
+  } catch {
+    return reply({error:"IP Intelligence is temporarily unavailable. Retry shortly."},503,env);
+  }
 }

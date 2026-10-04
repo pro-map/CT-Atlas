@@ -551,7 +551,26 @@ export class ReportGate {
         if (counter.count >= 6) return Response.json({ error: "Rate limit." }, { status: 429 });
         counter.count++;
         await tx.put(key, counter);
-        return Response.json({ ok: true });
+        if (body.keyed !== true) return Response.json({ ok: true });
+        // Shared daily budget for the keyed VPN-detection providers (Proxycheck,
+        // ipapi.is: about 1,000 free requests a day each), so one analyst cannot
+        // use up the quota every other analyst relies on.
+        const day = new Date(now).toISOString().slice(0, 10);
+        const dayKey = "ip-intelligence:keyed-day";
+        const previous = await tx.get(dayKey);
+        if (previous !== day) {
+          if (previous) {
+            const stale = await tx.list({ prefix: "ip-intelligence:keyed:" + previous });
+            if (stale.size) await tx.delete([...stale.keys()]);
+          }
+          await tx.put(dayKey, day);
+        }
+        const globalKey = "ip-intelligence:keyed:" + day, userKey = globalKey + ":" + body.username;
+        const used = await tx.get(globalKey) || 0, usedByUser = await tx.get(userKey) || 0;
+        if (used >= 800 || usedByUser >= 300) return Response.json({ ok: true, keyed: false });
+        await tx.put(globalKey, used + 1);
+        await tx.put(userKey, usedByUser + 1);
+        return Response.json({ ok: true, keyed: true });
       });
     }
 
@@ -644,6 +663,7 @@ export class ReportGate {
       const result = await this.state.storage.transaction(async tx => {
         const prior = await tx.get("darkweb:policy");
         const policy = { ...prior, ...body.policy };
+        let recrawl = false;
         if (body.reset) {
           policy.epoch = prior.epoch + 1;
           const rows = await tx.list({ prefix: "darkweb:item:", limit: 1000 });
@@ -657,14 +677,26 @@ export class ReportGate {
             }
           }
           const outlets = await tx.get("darkweb:outlets") || [];
-          for (const outlet of outlets) { delete outlet.initialized_at; Object.assign(outlet, { collection_phase: "backfill", pages_scanned: 0, pending_pages: 0, failed_pages: 0, undated_count: 0, last_scan: "", last_success: "", scan_ok: false, crawl_complete: false, truncated: false }); }
+          for (const outlet of outlets) { delete outlet.initialized_at; delete outlet.period_backfill; Object.assign(outlet, { collection_phase: "backfill", pages_scanned: 0, pending_pages: 0, failed_pages: 0, undated_count: 0, last_scan: "", last_success: "", scan_ok: false, crawl_complete: false, truncated: false }); }
           await tx.put("darkweb:outlets", outlets);
           await tx.delete("darkweb:summary");
+        } else if (policy.from > prior.from || policy.through < prior.through) {
+          return { error: "Narrowing the period requires Reset & collect." };
+        } else if (policy.from < prior.from || (policy.through > prior.through && prior.through < new Date(now).toISOString().slice(0, 10))) {
+          // Widening keeps the epoch and every stored record. Outlets re-crawl in
+          // backfill for the newly covered past dates; /darkweb-ingest ends it.
+          const outlets = await tx.get("darkweb:outlets") || [];
+          for (const outlet of outlets) {
+            outlet.period_backfill = { requested_at: new Date(now).toISOString(), after_watch: outlet.collection_phase === "watch", reports: 0, last_pages: Number(outlet.pages_scanned) || 0, fresh: false };
+            outlet.collection_phase = "backfill";
+          }
+          await tx.put("darkweb:outlets", outlets);
+          recrawl = outlets.length > 0;
         }
         await tx.put("darkweb:policy", policy);
-        return { ok: true, policy };
+        return { ok: true, policy, recrawl };
       });
-      return Response.json(result);
+      return Response.json(result, { status: result.error ? 400 : 200 });
     }
     if (url.pathname === "/darkweb-preview") {
       const policy = await this.state.storage.get("darkweb:policy");
@@ -703,27 +735,45 @@ export class ReportGate {
         }
         await this.state.storage.put(migrationKey, page.size === 100 ? [...page.keys()].at(-1) : "done");
       }
-      const pending = await this.state.storage.list({ prefix: `darkweb:publication-pending:${policy.epoch}:`, limit: 10 });
+      // Records that failed three attempts stay queued but no longer hold the batch.
       const items = [];
-      for (const id of pending.values()) {
-        const record = await this.state.storage.get(`darkweb:publication:${policy.epoch}:${id}`);
-        if (record) items.push(record);
+      let startAfter = "";
+      for (let page = 0; page < 5 && items.length < 10; page++) {
+        const pending = await this.state.storage.list({ prefix: `darkweb:publication-pending:${policy.epoch}:`, limit: 128, ...(startAfter ? { startAfter } : {}) });
+        for (const [key, id] of pending) {
+          startAfter = key;
+          const record = await this.state.storage.get(`darkweb:publication:${policy.epoch}:${id}`);
+          if (record && !(record.enrich_attempts >= 3)) items.push(record);
+          if (items.length >= 10) break;
+        }
+        if (pending.size < 128) break;
       }
-      return Response.json({ items });
+      return Response.json({ items, summary_attempt: await this.state.storage.get("darkweb:summary-attempt") || null });
     }
     if (url.pathname === "/darkweb-enrich-lock") {
       return Response.json(await this.state.storage.transaction(async tx => {
         const until = await tx.get("darkweb:enrich-until") || 0;
-        if (until > now) return { ok: false };
+        if (until > now) return { ok: false, reason: "lock", retry_at: new Date(until).toISOString() };
+        const backoff = await tx.get("darkweb:enrich-backoff");
+        if (backoff?.until > now) return { ok: false, reason: "backoff", retry_at: new Date(backoff.until).toISOString() };
+        // Daily ledger per Pacific day, the reset day of the Gemini free quota.
+        const parts = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date(now)).map(p => [p.type, p.value]));
+        const day = `${parts.year}-${parts.month}-${parts.day}`;
+        const ledger = await tx.get("darkweb:enrich-ledger");
+        const used = ledger?.day === day ? ledger.count : 0;
+        const limit = Number.isSafeInteger(body.daily_limit) && body.daily_limit >= 0 ? body.daily_limit : 40;
+        if (used >= limit) return { ok: false, reason: "daily_limit", used, limit };
+        await tx.put("darkweb:enrich-ledger", { day, count: used + 1 });
         await tx.put("darkweb:enrich-until", now + 60000);
-        return { ok: true };
+        return { ok: true, used: used + 1, limit };
       }));
     }
     if (url.pathname === "/darkweb-enrich-save") {
       return Response.json(await this.state.storage.transaction(async tx => {
         const policy = await tx.get("darkweb:policy");
         if (body.epoch !== policy.epoch) return { ok: false };
-        for (const title of body.titles) {
+        let saved = 0;
+        for (const title of body.titles || []) {
           const key = "darkweb:item:" + title.id, archiveKey = `darkweb:publication:${policy.epoch}:${title.id}`;
           const item = await tx.get(archiveKey) || await tx.get(key);
           if (item && item.title === title.original && item.excerpt === title.excerpt && (!item.publication_version || item.content_hash === title.content_hash)) {
@@ -733,10 +783,28 @@ export class ReportGate {
               if (updated.overview_en) await tx.delete(`darkweb:publication-pending:${policy.epoch}:${title.id}`);
             }
             if (await tx.get(key)) { const { original_text, ...card } = updated; await tx.put(key, card); }
+            saved++;
           }
         }
         if (body.summary) await tx.put("darkweb:summary", body.summary);
-        return { ok: true };
+        // Count unfinished attempts on the record itself; a source change resets it at ingest.
+        for (const entry of (Array.isArray(body.attempted) ? body.attempted : []).slice(0, 10)) {
+          const key = "darkweb:item:" + entry.id, archiveKey = `darkweb:publication:${policy.epoch}:${entry.id}`;
+          const archived = await tx.get(archiveKey), card = await tx.get(key), item = archived || card;
+          if (!item || item.title !== entry.original || item.excerpt !== entry.excerpt || (item.publication_version && item.content_hash !== entry.content_hash)) continue;
+          if (item.title_en_kind === "translation" && (!item.publication_version || item.overview_en)) continue;
+          const enrich_attempts = (item.enrich_attempts || 0) + 1;
+          if (archived) await tx.put(archiveKey, { ...archived, enrich_attempts });
+          if (card) await tx.put(key, { ...card, enrich_attempts });
+        }
+        if (/^[a-f0-9]{64}$/.test(body.summary_fingerprint || "")) await tx.put("darkweb:summary-attempt", { fingerprint: body.summary_fingerprint, at: new Date(now).toISOString() });
+        // After a failed or useless call, back off 15 min doubling up to 6 h; any saved result resets it.
+        if (saved || body.summary) await tx.delete("darkweb:enrich-backoff");
+        else {
+          const failures = Math.min(((await tx.get("darkweb:enrich-backoff"))?.failures || 0) + 1, 16);
+          await tx.put("darkweb:enrich-backoff", { failures, until: now + Math.min(900000 * 2 ** (failures - 1), 21600000) });
+        }
+        return { ok: true, saved };
       }));
     }
 
@@ -785,7 +853,8 @@ export class ReportGate {
         const knownBuckets = new Map();
         // Only a completed, non-truncated first inventory establishes the baseline.
         const baseline = !outlet.initialized_at || body.inventory_phase === "backfill";
-        for (const item of body.scan_ok ? body.items : []) {
+        // Received items are stored even when the pass failed; scan_ok only sets outlet status and the baseline.
+        for (const item of body.items) {
           const key = "darkweb:item:" + item.id;
           // Keep small URL-history shards independently from the 500-row feed.
           // Otherwise listing pages larger than the retained feed would create
@@ -794,13 +863,15 @@ export class ReportGate {
           if (!knownBuckets.has(bucketKey)) knownBuckets.set(bucketKey, await tx.get(bucketKey) || {});
           const bucket = knownBuckets.get(bucketKey);
           const archiveKey = `darkweb:publication:${policy.epoch}:${item.id}`;
-          const prior = await tx.get(archiveKey) || await tx.get(key) || bucket[item.id];
+          const stored = await tx.get(archiveKey) || await tx.get(key);
+          const prior = stored || bucket[item.id];
           // A legacy collector or a revisited listing cannot replace complete source text.
           if (prior?.publication_version && (!item.publication_version || (prior.text_status !== "listing" && item.text_status === "listing"))) continue;
           if (!prior) added++;
           const sameContent = prior?.title === item.title && prior?.excerpt === item.excerpt && prior?.content_hash === item.content_hash;
-          const record = { ...prior, ...item, title_en: sameContent ? prior?.title_en || "" : "", title_en_kind: sameContent ? prior?.title_en_kind || "" : "", overview_en: sameContent ? prior?.overview_en || "" : "", first_seen: prior?.first_seen || timestamp,
-            preview: item.preview || prior?.preview || "", last_seen: timestamp, baseline: baseline ? true : prior ? prior.baseline : false,
+          // A backfill revisit (such as after a period widening) keeps an alert already stored in this collection.
+          const record = { ...prior, ...item, title_en: sameContent ? prior?.title_en || "" : "", title_en_kind: sameContent ? prior?.title_en_kind || "" : "", overview_en: sameContent ? prior?.overview_en || "" : "", ...(sameContent ? {} : { enrich_attempts: 0 }), first_seen: prior?.first_seen || timestamp,
+            preview: item.preview || prior?.preview || "", last_seen: timestamp, baseline: baseline ? stored?.baseline !== false : prior ? prior.baseline : false,
             sha256: item.sha256 || prior?.sha256 || "", acquired: item.acquired || prior?.acquired || false,
             bytes: item.bytes ?? prior?.bytes ?? null };
           if (item.publication_version) {
@@ -822,7 +893,16 @@ export class ReportGate {
           const entries = Object.entries(bucket).sort((a, b) => b[1].first_seen.localeCompare(a[1].first_seen)).slice(0, 128);
           await tx.put(key, Object.fromEntries(entries));
         }
+        const widening = outlet.period_backfill;
+        if (widening) {
+          // A pass that read the configuration before a widening may still report, so
+          // only a crawl restarted afterwards (fewer pages in its run) covers the new dates.
+          const pages = body.pages_scanned || 0;
+          if ((widening.after_watch ? body.inventory_phase === "backfill" : widening.reports > 0) && pages < widening.last_pages) widening.fresh = true;
+          widening.reports++; widening.last_pages = pages;
+        }
         outlet.undated_count = body.undated_count || 0;
+        outlet.last_out_of_period = body.out_of_period || 0;
         outlet.last_scan = timestamp;
         if (body.inventory_phase === "backfill") outlet.collection_phase = "backfill";
         outlet.scan_ok = body.scan_ok === true;
@@ -834,14 +914,20 @@ export class ReportGate {
         outlet.crawl_complete = body.scan_complete === true && !body.truncated;
         if (body.scan_ok && body.scan_complete) {
           outlet.last_success = timestamp;
-          if (!body.truncated) { outlet.initialized_at ||= timestamp; outlet.collection_phase = "watch"; }
+          if (!body.truncated) {
+            outlet.initialized_at ||= timestamp;
+            // A crawl begun before a widening ends; the collector then restarts from the start page.
+            if (!widening || widening.fresh) { delete outlet.period_backfill; outlet.collection_phase = "watch"; }
+            else widening.fresh = true;
+          }
         }
         outlet.last_added = added;
         await tx.put("darkweb:outlets", outlets);
         const rows = await tx.list({ prefix: "darkweb:item:", limit: 1000 });
-        const oldest = [...rows.entries()].sort((a, b) => a[1].first_seen.localeCompare(b[1].first_seen));
+        // Publication cards keep their archive record, so they leave the feed before legacy cards.
+        const oldest = [...rows.entries()].sort((a, b) => (b[1].publication_version ? 1 : 0) - (a[1].publication_version ? 1 : 0) || a[1].first_seen.localeCompare(b[1].first_seen));
         for (const [key] of oldest.slice(0, Math.max(0, oldest.length - 500))) await tx.delete(key);
-        return { ok: true, added, baseline, retained_limit: 500 };
+        return { ok: true, added, baseline, retained_limit: 500, out_of_period: body.out_of_period || 0 };
       });
       return Response.json(result, { status: result.error ? 400 : 200 });
     }

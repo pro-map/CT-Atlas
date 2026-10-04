@@ -12,12 +12,10 @@ import time
 from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urljoin, urlsplit, urlunsplit, parse_qsl, unquote
+from urllib.parse import urljoin, urlsplit, urlunsplit, parse_qsl, unquote, quote
 import re
 import base64
 import io
-import shutil
-import subprocess
 
 import requests
 
@@ -28,6 +26,9 @@ SOURCE_CONNECT_TIMEOUT = 90
 TYPES = {".pdf": "pdf", ".mp4": "video", ".webm": "video", ".mkv": "video", ".mov": "video",
          ".mp3": "audio", ".ogg": "audio", ".wav": "audio", ".m4a": "audio",
          ".jpg": "image", ".jpeg": "image", ".png": "image", ".webp": "image"}
+# Characters new URL() never percent-encodes in a path or query. Encoding all
+# others gives an upper bound on the href length the Worker measures.
+URL_SAFE = "/%:@!$&()*+,;=?"
 
 
 def display_title(value):
@@ -71,7 +72,7 @@ def apply_epoch(db, policy):
     epoch = str(policy["epoch"])
     if not prior or prior[0] != epoch:
         with db:
-            for table in ("outlets", "items", "crawl_runs", "frontier", "pages", "outbox", "undated"):
+            for table in ("outlets", "items", "crawl_runs", "frontier", "pages", "outbox", "undated", "preview_retries"):
                 db.execute("DELETE FROM " + table)
             db.execute("DELETE FROM settings WHERE key LIKE 'publication-inventory-v1:%'")
             db.execute("INSERT OR REPLACE INTO settings VALUES ('epoch',?)", (epoch,))
@@ -85,7 +86,9 @@ def onion_url(value):
             return ""
         if not re.fullmatch(r"[a-z2-7]{56}\.onion", parsed.hostname or "") or len(value) > 2000:
             return ""
-        return urlunsplit((parsed.scheme, parsed.netloc.lower(), parsed.path or "/", parsed.query, ""))
+        url = urlunsplit((parsed.scheme, parsed.netloc.lower(), parsed.path or "/", parsed.query, ""))
+        # The Worker refuses hrefs over 2000 characters after percent-encoding.
+        return url if len(quote(url, safe=URL_SAFE)) <= 2000 else ""
     except (ValueError, TypeError):
         return ""
 
@@ -111,22 +114,44 @@ class PublicationParser(HTMLParser):
     """
     VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
     OMIT = {"head", "nav", "header", "footer", "aside", "form", "script", "style", "template", "noscript", "button", "select", "h1", "h2", "h3", "h4", "h5", "h6"}
+    TEXT = {"p", "article", "main", "blockquote", "div", "td", "section"}
+    # HTML5 implied end tags: a new element closes an open one of the same kind
+    # unless one of these scope boundaries lies between them.
+    IMPLIED = {"p": {"button", "table", "td", "th", "caption", "object", "template"}, "li": {"ul", "ol", "menu", "table", "td", "th"},
+               "td": {"table", "tr"}, "tr": {"table"}, "option": {"select", "datalist", "optgroup"}}
+    MAX_DEPTH = 256
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
-        self.stack, self.blocks = [], []
+        # Each text node is stored once; an open frame covers parts[start:].
+        self.stack, self.parts, self.best, self.paragraphs = [], [], "", {}
+        # Elements nested beyond MAX_DEPTH are flattened into the innermost frame.
+        self.deep, self.deep_omit = {}, {}
 
     def handle_starttag(self, tag, attrs):
+        if tag in self.VOID:
+            return
         values = dict(attrs)
         marker = " ".join(values.get(k, "") for k in ("id", "class", "itemprop"))
         tokens = set(re.split(r"[^\w]+", marker.lower()))
         excluded = bool(tokens & {"menu", "navigation", "breadcrumb", "breadcrumbs", "pagination", "sidebar"})
         omitted = tag in self.OMIT or excluded or values.get("role") == "navigation" or "hidden" in values or values.get("aria-hidden") == "true"
         comment = bool(tokens & {"comment", "comments", "reply", "replies", "commentbody", "usercomment"})
-        frame = {"tag": tag, "omit": omitted or any(x["omit"] for x in self.stack),
-                 "comment": comment or any(x["comment"] for x in self.stack), "parts": [], "linked": 0}
-        if tag not in self.VOID:
-            self.stack.append(frame)
+        if tag in self.IMPLIED:
+            for i in range(len(self.stack)-1, -1, -1):
+                if self.stack[i]["tag"] == tag:
+                    self.close_frames(i)
+                    break
+                if self.stack[i]["tag"] in self.IMPLIED[tag]:
+                    break
+        if len(self.stack) >= self.MAX_DEPTH:
+            self.deep[tag] = self.deep.get(tag, 0) + 1
+            if omitted:
+                self.deep_omit[tag] = self.deep_omit.get(tag, 0) + 1
+            return
+        parent = self.stack[-1] if self.stack else {"omit": False, "comment": False, "link": False}
+        self.stack.append({"tag": tag, "omit": omitted or parent["omit"], "comment": comment or parent["comment"],
+                           "link": tag == "a" or parent["link"], "start": len(self.parts)})
 
     def handle_startendtag(self, tag, attrs):
         self.handle_starttag(tag, attrs)
@@ -134,36 +159,49 @@ class PublicationParser(HTMLParser):
             self.handle_endtag(tag)
 
     def handle_data(self, data):
-        if not self.stack or self.stack[-1]["omit"]:
+        if not self.stack or self.stack[-1]["omit"] or any(self.deep_omit.values()):
             return
-        linked = any(x["tag"] == "a" for x in self.stack)
-        for frame in self.stack:
-            if frame["tag"] in {"p", "article", "main", "blockquote", "div", "td", "section"}:
-                frame["parts"].append(data)
-                frame["linked"] += len(data) if linked else 0
+        self.parts.append((data, self.stack[-1]["link"] or bool(self.deep.get("a"))))
 
     def handle_endtag(self, tag):
-        index = next((i for i in range(len(self.stack)-1, -1, -1) if self.stack[i]["tag"] == tag), None)
-        if index is None:
+        if self.deep.get(tag):
+            self.deep[tag] -= 1
+            if self.deep_omit.get(tag):
+                self.deep_omit[tag] -= 1
             return
+        index = next((i for i in range(len(self.stack)-1, -1, -1) if self.stack[i]["tag"] == tag), None)
+        if index is not None:
+            self.close_frames(index)
+
+    def close_frames(self, index):
         for frame in self.stack[index:]:
-            raw = " ".join(frame["parts"])
-            text = " ".join(raw.split())
-            if not frame["omit"] and text and frame["linked"] / max(len(raw), 1) < 0.25:
-                self.blocks.append((text, frame["comment"], frame["tag"]))
+            if frame["tag"] in self.TEXT and not frame["omit"]:
+                segment = self.parts[frame["start"]:]
+                raw = " ".join(data for data, _ in segment)
+                text = " ".join(raw.split())
+                if text and sum(len(data) for data, linked in segment if linked) / max(len(raw), 1) < 0.25:
+                    self.keep(text, frame["comment"], frame["tag"])
         del self.stack[index:]
+        self.deep, self.deep_omit = {}, {}
+        if not self.stack:
+            self.parts = []
+
+    def keep(self, text, comment, tag):
+        # Retain only what selected_text can return: the first longest candidate and long paragraphs.
+        if ((comment and len(text) >= 80) or (len(text) >= 1200 and tag in {"p", "article", "blockquote", "div", "td"})) and len(text) > len(self.best):
+            self.best = text
+        if tag == "p" and len(text) >= 120:
+            self.paragraphs.setdefault(text, None)
 
     def selected_text(self):
         # A short explicit comment is eligible; a normal text needs real body length.
         # Prefer paragraphs to avoid concatenating an entire homepage into an article.
-        candidates = [(text, comment) for text, comment, tag in self.blocks
-                      if (comment and len(text) >= 80) or (len(text) >= 1200 and tag in {"p", "article", "blockquote", "div", "td"})]
-        paragraphs = list(dict.fromkeys(text for text, _, tag in self.blocks if tag == "p" and len(text) >= 120))
-        if sum(map(len, paragraphs)) >= 1200:
-            candidates.append(("\n\n".join(paragraphs), False))
+        candidates = [self.best] if self.best else []
+        if sum(map(len, self.paragraphs)) >= 1200:
+            candidates.append("\n\n".join(self.paragraphs))
         if not candidates:
             return ""
-        return max(candidates, key=lambda row: len(row[0]))[0][:100000]
+        return max(candidates, key=len)[:100000]
 
 
 def selected_material(row):
@@ -487,6 +525,14 @@ def source_failure_reason(error):
     return type(error).__name__
 
 
+def transient_error(error):
+    """Network or server-side failures that a later pass may not repeat."""
+    if isinstance(error, requests.exceptions.HTTPError):
+        status = getattr(error.response, "status_code", None)
+        return isinstance(status, int) and status >= 500
+    return isinstance(error, (requests.exceptions.Timeout, requests.exceptions.ConnectionError, requests.exceptions.ChunkedEncodingError))
+
+
 def read_listing(session, outlet):
     response = source_get(session, outlet["url"], urlsplit(outlet["url"]).hostname)
     try:
@@ -539,15 +585,19 @@ def read_listing(session, outlet):
 
 
 def preview_source(row):
-    """Identify actual preview bytes so listing-only failures do not block detail previews."""
-    if row.get("publication_version") == 1:
-        attachment = next((a for a in row.get("attachments", []) if a.get("type") == "pdf"), None)
-        if attachment:
-            return ("pdf", attachment["url"])
+    """Identify actual preview bytes so listing-only failures do not block detail previews.
+
+    Only structured publication records are previewed: the first page of their PDF
+    or the cover image the structured parser identified. Generic and forum pages
+    never are, so user-posted images are never fetched.
+    """
+    if row.get("publication_version") != 1:
+        return None
+    attachment = next((a for a in row.get("attachments", []) if a.get("type") == "pdf"), None)
+    if attachment:
+        return ("pdf", attachment["url"])
     if row.get("preview_url"):
         return ("image", row["preview_url"])
-    if not row.get("publication_version") and row.get("type") in {"pdf", "image", "video"}:
-        return (row["type"], row["url"])
     return None
 
 
@@ -556,22 +606,24 @@ def make_preview(tor, row):
     if not result.get("preview") and row.get("publication_version") == 1 and row.get("preview_url") and any(a.get("type") == "pdf" for a in row.get("attachments", [])):
         # Large/unreadable PDFs may still supply a usable cover image in the page.
         cover = _make_preview(tor, {**row, "attachments": []})
-        if cover.get("preview"):
+        if cover.get("preview") or cover.get("transient"):
             result = cover
-    return {**result, "preview_version": 2}
+    # A transient failure carries no status, so a later pass retries it.
+    return result if result.get("transient") else {**result, "preview_version": 2}
 
 
 def _make_preview(tor, row):
     """At most 8 MiB of source bytes; never keep or upload original media."""
-    if row.get("publication_version") == 1:
-        attachment = next((a for a in row.get("attachments", []) if a["type"] == "pdf"), None)
-        if attachment:
-            row = {**attachment, "preview_url": ""}
-        elif not row.get("preview_url"):
-            return {"preview_status": "No visual preview supplied"}
+    if row.get("publication_version") != 1:
+        return {"preview_status": "No visual preview supplied"}
+    attachment = next((a for a in row.get("attachments", []) if a["type"] == "pdf"), None)
+    if attachment:
+        row = {**attachment, "preview_url": ""}
+    elif not row.get("preview_url"):
+        return {"preview_status": "No visual preview supplied"}
     kind = row.get("type")
     preview_url = row.get("preview_url", "")
-    target = preview_url or (row["url"] if kind in {"pdf", "image", "video"} else "")
+    target = preview_url or (row["url"] if kind == "pdf" else "")
     if not target:
         return {"preview_status": "No visual preview supplied"}
     host = urlsplit(row["url"]).hostname
@@ -581,8 +633,6 @@ def _make_preview(tor, row):
         from PIL import Image
         if not preview_url and kind == "pdf":
             import fitz
-        if not preview_url and kind == "video" and not shutil.which("ffmpeg"):
-            return {"preview_status": "No poster; local FFmpeg required"}
         response = source_get(tor, target, host)
         try:
             length = response.headers.get("Content-Length", "")
@@ -603,10 +653,6 @@ def _make_preview(tor, row):
                 scale = min(1, 320 / max(page.rect.width, page.rect.height, 1))
                 pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale), alpha=False)
                 data = pix.tobytes("png")
-        elif not preview_url and kind == "video":
-            # pipe-only protocols prevent playlists from fetching network/local files.
-            result = subprocess.run(["ffmpeg", "-v", "error", "-protocol_whitelist", "pipe", "-i", "pipe:0", "-frames:v", "1", "-vf", "scale=320:320:force_original_aspect_ratio=decrease", "-f", "image2pipe", "-vcodec", "mjpeg", "pipe:1"], input=data, capture_output=True, timeout=20, check=True)
-            data = result.stdout
         with Image.open(io.BytesIO(data)) as original:
             if original.width * original.height > 16000000:
                 return {"preview_status": "Preview dimensions exceed cap"}
@@ -617,11 +663,13 @@ def _make_preview(tor, row):
                 picture.save(output, format="JPEG", quality=quality)
                 encoded = "data:image/jpeg;base64," + base64.b64encode(output.getvalue()).decode("ascii")
                 if len(encoded) <= 16000:
-                    return {"preview": encoded, "preview_status": "Source thumbnail" if preview_url else "First page" if kind == "pdf" else "Video frame" if kind == "video" else "Image preview"}
+                    return {"preview": encoded, "preview_status": "Source thumbnail" if preview_url else "First page"}
         return {"preview_status": "Preview could not fit size cap"}
     except ImportError:
         return {"preview_status": "Install Pillow and PyMuPDF on collector"}
-    except Exception:
+    except Exception as error:
+        if transient_error(error):
+            return {"transient": True}
         return {"preview_status": "Preview unavailable within collection limits"}
 
 
@@ -701,6 +749,9 @@ def open_database(path):
     db.execute("CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)")
     db.execute("CREATE TABLE IF NOT EXISTS pdf_uploads (outlet_id TEXT, item_url TEXT, sha256 TEXT, epoch INTEGER, status TEXT, attempts INTEGER, next_try REAL, PRIMARY KEY(outlet_id,item_url,sha256,epoch))")
     db.execute("CREATE TABLE IF NOT EXISTS undated (outlet_id TEXT, url TEXT, metadata TEXT, PRIMARY KEY(outlet_id,url))")
+    # Queued rows Atlas cannot accept are kept here instead of blocking the outbox.
+    db.execute("CREATE TABLE IF NOT EXISTS rejected (outlet_id TEXT, url TEXT, metadata TEXT, baseline INTEGER, PRIMARY KEY(outlet_id,url))")
+    db.execute("CREATE TABLE IF NOT EXISTS preview_retries (outlet_id TEXT, url TEXT, source TEXT, attempts INTEGER, PRIMARY KEY(outlet_id,url))")
     if "depth" not in [row[1] for row in db.execute("PRAGMA table_info(frontier)")]:
         db.execute("ALTER TABLE frontier ADD COLUMN depth INTEGER DEFAULT 0")
     return db
@@ -784,26 +835,37 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
     policy = outlet.get("policy")
     watching = outlet.get("collection_phase") == "watch"
     run = db.execute("SELECT finished FROM crawl_runs WHERE outlet_id=?", (oid,)).fetchone()
+    requeued = False
     if not run or run[0]:
         with db:
             db.execute("DELETE FROM frontier WHERE outlet_id=?", (oid,))
             db.execute("INSERT OR REPLACE INTO crawl_runs VALUES (?,0)", (oid,))
             db.execute("INSERT INTO frontier(outlet_id,url) VALUES (?,?)", (oid, outlet["url"]))
+    elif watching:
+        # Check the newest listing on every watch pass, ahead of older frontier entries.
+        with db:
+            db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url) VALUES (?,?)", (oid, outlet["url"]))
+            db.execute("UPDATE frontier SET status='pending',attempts=0 WHERE outlet_id=? AND url=?", (oid, outlet["url"]))
+        requeued = True
     # A failed upload is replayed before advancing the crawler.
     if db.execute("SELECT 1 FROM outbox WHERE outlet_id=? LIMIT 1", (oid,)).fetchone():
         return crawl_progress(db, oid, max_pages)
     local_initialized = bool(db.execute("SELECT initialized FROM outlets WHERE id=?", (oid,)).fetchone())
-    visited = 0
+    visited, tried, deferred, answered = 0, set(), [], False
     while visited < pages_per_scan:
         if db.execute("SELECT COUNT(*) FROM frontier WHERE outlet_id=?", (oid,)).fetchone()[0] >= 50000:
             break
         done = db.execute("SELECT COUNT(*) FROM frontier WHERE outlet_id=? AND status='done'", (oid,)).fetchone()[0]
         if done >= max_pages:
             break
-        target = db.execute("SELECT url,depth FROM frontier WHERE outlet_id=? AND status IN ('pending','failed') AND attempts<3 ORDER BY attempts,rowid LIMIT 1", (oid,)).fetchone()
+        # A failed page is retried on a later pass, not repeatedly within one pass.
+        candidates = db.execute("SELECT url,depth FROM frontier WHERE outlet_id=? AND status IN ('pending','failed') AND attempts<3 ORDER BY url=? DESC,attempts,rowid LIMIT ?",
+                                (oid, outlet["url"], len(tried) + 1)).fetchall()
+        target = next((row for row in candidates if row[0] not in tried), None)
         if not target:
             break
         url = target[0]
+        tried.add(url)
         if visited == 0 or visited % 10 == 0:
             LOG.info("Outlet %s: crawling internal pages (%s fetched in this cycle)", oid, done)
         if visited and request_delay:
@@ -812,11 +874,18 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
         try:
             result = read_listing(tor, {**outlet, "url": url})
         except Exception as error:
+            # Network and server errors count once the outlet has answered in this pass,
+            # so a Tor or onion-service outage does not use up page attempts.
+            transient = transient_error(error)
             with db:
-                db.execute("UPDATE frontier SET status='failed',attempts=attempts+1 WHERE outlet_id=? AND url=?", (oid, url))
+                db.execute("UPDATE frontier SET status='failed',attempts=attempts+? WHERE outlet_id=? AND url=?", (0 if transient else 1, oid, url))
+            if transient:
+                deferred.append(url)
+            answered |= isinstance(error, requests.exceptions.HTTPError) and not transient
             LOG.warning("Internal page failed for outlet %s: %s; connect timeout=%ss, read timeout=90s; queue retained",
                         oid, source_failure_reason(error), getattr(tor, "source_connect_timeout", SOURCE_CONNECT_TIMEOUT))
             continue
+        answered = True
         records = result["items"] + ([result["page"]] if result["page"] else [])
         with db:
             # Page truncation is explicit and never treated as a full inventory.
@@ -857,11 +926,52 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
                 if previous.get("excerpt") and not row.get("excerpt"):
                     merged["title"], merged["excerpt"] = previous["title"], previous["excerpt"]
                 baseline = bool((queued or prior)[1]) if queued or prior else not local_initialized
+                if requeued and url == outlet["url"] and prior and not queued and merged == json.loads(prior[0]):
+                    # A start page re-checked within a watch run sends only new or changed rows.
+                    continue
                 db.execute("INSERT OR REPLACE INTO outbox VALUES (?,?,?,?)", (oid, target_url, json.dumps(merged), int(baseline)))
         # Bound the local queue as well as network requests; do not drop any queued URL.
         if db.execute("SELECT COUNT(*) FROM frontier WHERE outlet_id=?", (oid,)).fetchone()[0] >= 50000:
             break
-    return crawl_progress(db, oid, max_pages)
+    if deferred and not answered and outlet["url"] not in tried and not db.execute(
+            "SELECT 1 FROM frontier WHERE outlet_id=? AND status='pending' LIMIT 1", (oid,)).fetchone():
+        # Only failing pages remain: confirm the outlet answers before counting their failures.
+        try:
+            if request_delay:
+                time.sleep(request_delay)
+            source_get(tor, outlet["url"], urlsplit(outlet["url"]).hostname).close()
+            answered = True
+        except Exception as error:
+            answered = isinstance(error, requests.exceptions.HTTPError) and not transient_error(error)
+    if deferred and answered:
+        with db:
+            db.executemany("UPDATE frontier SET attempts=attempts+1 WHERE outlet_id=? AND url=? AND status='failed'", [(oid, u) for u in deferred])
+    return close_exhausted_run(db, oid, max_pages)
+
+
+def close_exhausted_run(db, oid, max_pages):
+    """Finish a run once nothing selectable is left, so the next run restarts at the start page."""
+    progress = crawl_progress(db, oid, max_pages)
+    if progress["complete"]:
+        return progress
+    total = db.execute("SELECT COUNT(*) FROM frontier WHERE outlet_id=?", (oid,)).fetchone()[0]
+    done = db.execute("SELECT COUNT(*) FROM frontier WHERE outlet_id=? AND status='done'", (oid,)).fetchone()[0]
+    if total < 50000 and done < max_pages and db.execute(
+            "SELECT 1 FROM frontier WHERE outlet_id=? AND status IN ('pending','failed') AND attempts<3 LIMIT 1", (oid,)).fetchone():
+        return progress
+    with db:
+        if progress["pages_scanned"]:
+            # Leftovers are reported as abandoned; a limited page was fetched, so it stays counted as scanned.
+            db.execute("UPDATE frontier SET status='partial' WHERE outlet_id=? AND status='limited'", (oid,))
+            db.execute("UPDATE frontier SET status='abandoned' WHERE outlet_id=? AND status IN ('pending','failed')", (oid,))
+        else:
+            # The start page itself has not been fetched in this run; retry it next pass.
+            db.execute("UPDATE frontier SET attempts=0 WHERE outlet_id=? AND status='failed'", (oid,))
+    progress = crawl_progress(db, oid, max_pages)
+    if progress["abandoned_pages"]:
+        LOG.warning("Outlet %s: run finished with %s pages abandoned (repeated failures, page limits or the page cap)",
+                    oid, progress["abandoned_pages"])
+    return progress
 
 
 def crawl_progress(db, oid, max_pages):
@@ -869,9 +979,11 @@ def crawl_progress(db, oid, max_pages):
     done = counts.get("done", 0)
     failed = counts.get("failed", 0)
     pending = counts.get("pending", 0)
-    limited = counts.get("limited", 0) > 0 or (done >= max_pages and pending > 0) or sum(counts.values()) >= 50000
-    return {"pages_scanned": done + counts.get("limited", 0), "pending_pages": pending, "failed_pages": failed,
-            "truncated": limited, "complete": pending == 0 and failed == 0 and not limited}
+    partial = counts.get("partial", 0)
+    abandoned = counts.get("abandoned", 0) + partial
+    limited = counts.get("limited", 0) > 0 or (done >= max_pages and pending > 0) or sum(counts.values()) - abandoned >= 50000
+    return {"pages_scanned": done + counts.get("limited", 0) + partial, "pending_pages": pending, "failed_pages": failed,
+            "abandoned_pages": abandoned, "truncated": limited, "complete": pending == 0 and failed == 0 and not limited}
 
 
 def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_bytes,
@@ -901,8 +1013,8 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
             for old_url, metadata, baseline in db.execute("SELECT url,metadata,baseline FROM items WHERE outlet_id=? ORDER BY rowid", (oid,)).fetchall():
                 item = json.loads(metadata)
                 pdf_pending = any(a.get("type") == "pdf" and not a.get("acquired") and a.get("attempts", 0) < 3 for a in item.get("attachments", []))
-                preview_pending = policy.get("previews") and not item.get("preview") and (not item.get("preview_status") or item.get("preview_version") != 2)
-                if within_period(item, policy) and (pdf_pending or preview_pending):
+                preview_pending = policy.get("previews") and item.get("publication_version") == 1 and not item.get("preview") and (not item.get("preview_status") or item.get("preview_version") != 2)
+                if within_period(item, policy) and onion_url(old_url) and (pdf_pending or preview_pending):
                     db.execute("INSERT OR IGNORE INTO outbox VALUES (?,?,?,?)", (oid, old_url, metadata, baseline))
                     added += 1
                     if added >= 2:
@@ -917,7 +1029,8 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
             "inventory_phase": outlet.get("collection_phase", "backfill"),
             "scan_ok": progress["pages_scanned"] > 0, "scan_complete": final and progress["complete"],
             "truncated": progress["truncated"], "pages_scanned": progress["pages_scanned"],
-            "pending_pages": progress["pending_pages"], "failed_pages": progress["failed_pages"]})
+            "pending_pages": progress["pending_pages"], "failed_pages": progress["failed_pages"],
+            "abandoned_pages": progress["abandoned_pages"]})
         if result.get("ok") is not True:
             raise ValueError("Ingestion did not acknowledge the scan")
         with db:
@@ -931,6 +1044,13 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
         if not selected_material(row) or not within_period(row, policy):
             with db:
                 db.execute("DELETE FROM outbox WHERE outlet_id=? AND url=?", (oid, row["url"]))
+            continue
+        if not onion_url(row["url"]) or any(not onion_url(a.get("url", "")) for a in row.get("attachments", [])):
+            # Atlas refuses such a URL and the whole batch with it; keep the row locally instead.
+            with db:
+                db.execute("INSERT OR REPLACE INTO rejected VALUES (?,?,?,?)", (oid, row["url"], payload, baseline))
+                db.execute("DELETE FROM outbox WHERE outlet_id=? AND url=?", (oid, row["url"]))
+            LOG.warning("Outlet %s: a queued item exceeds the Atlas URL limit; kept in the local rejected table", oid)
             continue
         if row.get("publication_version") == 1:
             for attachment in row.get("attachments", []):
@@ -953,12 +1073,31 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
                 row.update({key: previous[key] for key in ("preview", "preview_status", "preview_version") if key in previous})
             if not row.get("preview") and row.get("preview_version") != 2:
                 row.pop("preview_status", None)
-            if not row.get("preview") and not row.get("preview_status") and previews_left:
+            if row.get("publication_version") == 1 and not row.get("preview") and not row.get("preview_status") and previews_left:
                 previews_left -= 1
-                row.update(make_preview(tor, row))
+                source = json.dumps(preview_source(row))
+                retry = db.execute("SELECT attempts FROM preview_retries WHERE outlet_id=? AND url=? AND source=?", (oid, row["url"], source)).fetchone()
+                result = make_preview(tor, row)
+                attempts = (retry[0] if retry else 0) + 1
+                if result.get("transient") and attempts >= 3:
+                    result = {"preview_status": "Preview source unreachable after 3 attempts", "preview_version": 2}
+                # Atlas already holds this exact row when only the local retry counter changes.
+                unchanged = bool(result.get("transient") and prior and row == previous)
                 with db:
-                    db.execute("UPDATE outbox SET metadata=? WHERE outlet_id=? AND url=?", (json.dumps(row), oid, row["url"]))
-        if acquire_files and not baseline and not row.get("publication_version") and row["type"] != "page" and not row.get("acquired"):
+                    if result.get("transient"):
+                        # Timeouts, connection errors and HTTP 5xx leave no status; a later pass retries.
+                        db.execute("INSERT OR REPLACE INTO preview_retries VALUES (?,?,?,?)", (oid, row["url"], source, attempts))
+                    else:
+                        db.execute("DELETE FROM preview_retries WHERE outlet_id=? AND url=?", (oid, row["url"]))
+                        row.update(result)
+                    if unchanged:
+                        db.execute("DELETE FROM outbox WHERE outlet_id=? AND url=?", (oid, row["url"]))
+                    else:
+                        db.execute("UPDATE outbox SET metadata=? WHERE outlet_id=? AND url=?", (json.dumps(row), oid, row["url"]))
+                if unchanged:
+                    continue
+        # Generic image links are never fetched, even with --acquire.
+        if acquire_files and not baseline and not row.get("publication_version") and row["type"] not in {"page", "image"} and not row.get("acquired"):
             try:
                 row.update(acquire(tor, row, evidence, max_bytes))
                 # Retain the acquired metadata even if the subsequent upload fails.
@@ -978,15 +1117,9 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
             db.execute("INSERT OR REPLACE INTO outlets VALUES (?,1)", (oid,))
             db.execute("UPDATE crawl_runs SET finished=1 WHERE outlet_id=?", (oid,))
             db.execute("INSERT OR REPLACE INTO settings VALUES (?, 'complete')", (inventory_key,))
-    elif policy and outlet.get("collection_phase") == "watch" and progress["pages_scanned"] >= max_pages:
-        with db:
-            db.execute("UPDATE crawl_runs SET finished=1 WHERE outlet_id=?", (oid,))
-    elif progress["failed_pages"]:
-        # Retry failed pages on the next pass, without restarting successful pages.
-        with db:
-            db.execute("UPDATE frontier SET attempts=0 WHERE outlet_id=? AND status='failed'", (oid,))
-    LOG.info("Outlet %s: pages=%s pending=%s failed=%s limited=%s complete=%s", oid,
-             progress["pages_scanned"], progress["pending_pages"], progress["failed_pages"], progress["truncated"], progress["complete"])
+    # Failed pages stay queued for a later pass; close_exhausted_run ends a run that cannot progress.
+    LOG.info("Outlet %s: pages=%s pending=%s failed=%s abandoned=%s limited=%s complete=%s", oid,
+             progress["pages_scanned"], progress["pending_pages"], progress["failed_pages"], progress["abandoned_pages"], progress["truncated"], progress["complete"])
     return not progress["failed_pages"] and not progress["truncated"]
 
 

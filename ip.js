@@ -2,7 +2,8 @@
 "use strict";
 const API="https://ct-report-generator.fairpeace.workers.dev",$=id=>document.getElementById(id);
 const token=()=>sessionStorage.getItem("ct_map_session_token")||"";
-const {known,show,overview,missingLegalRoute,assessmentLines,flagSource}=window.CTAtlasIPReport;
+const {known,show,overview,missingLegalRoute,assessmentLines,flagSource,contactOwner}=window.CTAtlasIPReport;
+const CIDR_INPUT=/^(?:(?:\d{1,3}\.){3}\d{1,3}\/\d{1,2}|[0-9a-f.:]*:[0-9a-f.:]*\/\d{1,3})$/i;
 let result=null,busy=false,selectedIP="";
 function node(tag,text,className){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(className)n.className=className;return n;}
 function link(label,url){const a=node("a",label);a.href=url;a.target="_blank";a.rel="noopener noreferrer";a.referrerPolicy="no-referrer";return a;}
@@ -27,7 +28,7 @@ function appendJurisdictions(parent,contact){
 function renderIP(r){
  const summary=overview(r);$("operatorSummary").textContent=summary.operator;$("contactSummary").textContent=summary.contact;$("vpnSummary").textContent=summary.vpn;
  const e=r.enquiry;$("enquiryContact").replaceChildren();
- if(e){for(const value of [e.basis,e.subscriber_scope,e.records_to_request&&"Information to request: "+e.records_to_request,e.email&&"Email: "+e.email,e.phone&&"Phone: "+e.phone,e.address&&"Published contact address: "+e.address,e.scope,e.contact_source])if(value)$("enquiryContact").append(node("p",value));if(e.url)$("enquiryContact").append(safeLink("OPEN CONTACT / PROCEDURE ↗",e.url));appendJurisdictions($("enquiryContact"),e);}
+ if(e){for(const value of [e.basis,e.subscriber_scope,e.records_to_request&&"Information to request: "+e.records_to_request,contactOwner(e),e.email&&"Email: "+e.email,e.phone&&"Phone: "+e.phone,e.address&&"Published contact address: "+e.address,e.scope,e.contact_source])if(value)$("enquiryContact").append(node("p",value));if(e.url)$("enquiryContact").append(safeLink(e.checked_on?"OPEN CONTACT / PROCEDURE ↗":"PROVIDER WEBSITE · NOT A VERIFIED LEGAL CHANNEL ↗",e.url));appendJurisdictions($("enquiryContact"),e);}
  $("detectionSources").replaceChildren(...assessmentLines(r.privacy).map(s=>node("p",s)));
  if(!r.privacy.assessments?.length)$("detectionSources").append(node("p","No VPN detection source returned usable data."));
  $("warnings").hidden=!r.warnings.length;$("warnings").replaceChildren(...r.warnings.map(w=>node("p",w)));
@@ -53,7 +54,7 @@ function renderSources(id,sources){
 function renderDomain(r){
  const d=r.registration,reg=d?.registrar;
  fields("domainFields",[["SUBMITTED HOSTNAME",r.host],["REGISTERED DOMAIN",r.registered_domain],["REGISTRAR",reg?.name],["IANA REGISTRAR ID",reg?.id],["REGISTRATION STATUS",d?.status.join(", ")],...(d?.events||[]).map(e=>[e.action.toUpperCase(),e.date]),["LEGAL JURISDICTION","Not established by domain registration; verify the receiving legal entity."]]);
- $("domainScope").textContent=d?.scope||"Domain registration unavailable. The DNS and IP findings below can still be used.";
+ $("domainScope").textContent=d?.scope||"Domain registration unavailable."+(r.dns.addresses.length?" The DNS and IP findings below can still be used.":"");
  $("domainLinks").replaceChildren();for(const [label,url] of [["DOMAIN REGISTRY RECORD ↗",d?.registry_url],["ICANN LOOKUP ↗",d?.lookup_url]])if(url)$("domainLinks").append(safeLink(label,url));
  $("domainContacts").replaceChildren();for(const c of reg?.contacts||[]){const card=node("div",undefined,"contact");card.append(node("h4",c.name||reg.name),node("span",c.roles.join(" / "),"pill"),node("p","Email: "+show(c.emails.join(", "))),node("p","Phone: "+show(c.phones.join(", "))),node("p","Published contact address: "+show(c.address)),node("p",c.scope,"fine"));if(c.url)card.append(safeLink("PUBLISHED CONTACT WEBSITE ↗",c.url));card.append(node("p","Source: "+c.source,"fine"));$("domainContacts").append(card);}
  if(!reg?.contacts?.length)$("domainContacts").append(node("p","No registrar contact returned by the consulted sources."));
@@ -67,7 +68,7 @@ function renderDomain(r){
 }
 function render(r){
  const domain=r.kind==="domain";$("results").hidden=false;$("domainResults").hidden=!domain;
- $("resultIP").textContent=domain?r.host:r.ip;$("resultTime").textContent=(domain?"DOMAIN":r.family)+" · "+r.queried_at+" · "+r.status.toUpperCase();
+ $("resultIP").textContent=domain?r.host:r.ip;$("resultTime").textContent=(domain?"DOMAIN":r.family)+" · "+r.queried_at+" · "+r.status.replace(/_/g," ").toUpperCase();
  if(domain){if(!r.networks.some(n=>n.ip===selectedIP))selectedIP=r.networks[0]?.ip||"";renderDomain(r);}
  const network=domain?r.networks.find(n=>n.ip===selectedIP):r;
  $("ipResults").hidden=!network;$("selectedIP").hidden=!domain;$("selectedIP").textContent=domain?"SELECTED IP: "+selectedIP:"";
@@ -83,22 +84,32 @@ async function selectDomainIP(ip){
  catch(error){finishSound?.("error");$("status").textContent=error.message;}
  finally{busy=false;$("lookupButton").disabled=false;$("exportPdf").disabled=false;$("exportJson").disabled=false;finish?.();render(result);}
 }
+const DONE={unavailable:"Sources are currently unavailable. Retry shortly.",not_found:"The registry reports this domain as not registered, and DNS returned no address. Check the spelling."};
 $("lookupForm").addEventListener("submit",async event=>{
- event.preventDefault();if(busy)return;busy=true;$("lookupButton").disabled=true;result=null;selectedIP="";$("results").hidden=true;
+ event.preventDefault();if(busy)return;const target=$("ipAddress").value.trim();
+ if(CIDR_INPUT.test(target)){$("status").className="error";$("status").textContent="IP ranges (CIDR) are not supported. Enter one address.";return;}
+ busy=true;$("lookupButton").disabled=true;result=null;selectedIP="";$("results").hidden=true;
  $("status").className="";$("status").textContent="Consulting DNS, registration and network intelligence sources…";
  const finishSound=window.CTAtlasSound?.begin();
  const finish=window.CTAtlasUI?.begin($("waitAnchor"));
- try{result=await request("/ip-intelligence/lookup",{ip:$("ipAddress").value.trim()});render(result);$("status").textContent=result.status==="unavailable"?"Sources are currently unavailable. Retry shortly.":"Lookup complete. Review source coverage before exporting.";finishSound?.(result.status==="unavailable"?"error":"success");}
+ try{result=await request("/ip-intelligence/lookup",{ip:target});render(result);$("status").textContent=DONE[result.status]||"Lookup complete. Review source coverage before exporting.";finishSound?.(result.status==="unavailable"?"error":"success");}
  catch(error){finishSound?.("error");$("status").textContent=error.message;$("status").className="error";}
  finally{finish?.();busy=false;$("lookupButton").disabled=false;if(result)render(result);}
 });
+// Exports need valid incident fields only; the search box may already hold the next target.
+function incidentValid(){
+ const invalid=["caseReference","observedAt","sourcePort","protocol","notes"].map($).find(el=>!el.checkValidity());
+ if(!invalid)return true;
+ const details=invalid.closest("details");if(details)details.open=true;
+ invalid.reportValidity();$("status").textContent="Correct the incident details before exporting.";return false;
+}
 $("exportPdf").addEventListener("click",async()=>{
- if(!result||!$("lookupForm").reportValidity())return;$("exportPdf").disabled=true;
+ if(!result||!incidentValid())return;$("exportPdf").disabled=true;
  try{await window.CTAtlasPdf.download(window.CTAtlasIPReport.build(result,incident()));$("status").textContent="PDF report downloaded.";}
  catch(_){$("status").textContent="PDF export failed. Please retry or export JSON.";}finally{$("exportPdf").disabled=false;}
 });
 $("exportJson").addEventListener("click",()=>{
- if(!result||!$("lookupForm").reportValidity())return;
+ if(!result||!incidentValid())return;
  const blob=new Blob([JSON.stringify({...result,incident:incident()},null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=node("a");
  a.href=url;a.download="CT-Atlas-"+(result.kind==="domain"?"Domain-"+result.host:"IP-"+result.ip.replace(/:/g,"-"))+".json";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 });

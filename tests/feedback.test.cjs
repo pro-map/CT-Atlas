@@ -89,6 +89,13 @@ test('buildEmail formats a social workspace bug report',()=>{
  assert.match(text,/The social investigation returned no sources\./);
 });
 
+test('IP Intelligence is a selectable and accepted feedback workspace',()=>{
+ const {text,subject}=harness().buildEmail('group-p-2',{kind:'issue',workspace:'ip',feedback_type:'bug',description:'The domain lookup timed out.'});
+ assert.match(subject,/IP Intelligence/);assert.match(text,/Workspace: IP Intelligence/);
+ assert.match(source,/ip: "IP Intelligence"/);
+ assert.match(fs.readFileSync('feedback.js','utf8'),/<option value="ip">IP Intelligence<\/option>/);
+});
+
 test('buildEmail supports a rating and free-text comment in one submission',()=>{
  const {text,subject}=harness().buildEmail('group-i-1',{
   kind:'evaluation',workspace:'facial',rating:5,
