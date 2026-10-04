@@ -70,6 +70,20 @@ Initial backfill continues in bounded passes, with a minimum 15-second cadence
 requests. After backfill, the default watch interval is 15 minutes. Tor and the
 collector window must remain open; Ctrl+C stops the process cleanly.
 
+### Source connection failures
+
+Tor source requests allow 90 seconds to establish a connection, including the
+SOCKS handshake, and a 90-second read timeout. The previous 30-second connection
+budget could expire while establishing a slow onion connection. Set
+`--connect-timeout 120` if needed (10–300 seconds). The read timeout measures
+network inactivity, not the total page download duration. API timeouts are unchanged.
+
+Page failures report a timeout, connection category, HTTP status, known collection
+limit or exception type, without emitting source URLs, response text or credentials.
+The failed page remains queued. A successful curl response through the same proxy
+establishes reachability at that time, not the cause of a previous Python failure.
+No reset or new collector key is needed to retry with this update.
+
 ## Arabic, English, files and exports
 
 Original Arabic text is stored separately from AI fields. The adapter preserves

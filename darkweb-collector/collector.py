@@ -24,6 +24,7 @@ import requests
 LOG = logging.getLogger("outlet-watch")
 MAX_HTML_BYTES = 2 * 1024 * 1024
 MAX_ITEMS = 500
+SOURCE_CONNECT_TIMEOUT = 90
 TYPES = {".pdf": "pdf", ".mp4": "video", ".webm": "video", ".mkv": "video", ".mov": "video",
          ".mp3": "audio", ".ogg": "audio", ".wav": "audio", ".m4a": "audio",
          ".jpg": "image", ".jpeg": "image", ".png": "image", ".webp": "image"}
@@ -445,7 +446,8 @@ def source_get(session, url, host):
     for _ in range(4):
         if not onion_url(url) or urlsplit(url).hostname != host:
             raise ValueError("Source redirect leaves the registered onion host")
-        response = session.get(url, stream=True, allow_redirects=False, timeout=(30, 90))
+        response = session.get(url, stream=True, allow_redirects=False,
+                               timeout=(getattr(session, "source_connect_timeout", SOURCE_CONNECT_TIMEOUT), 90))
         if response.status_code in (301, 302, 303, 307, 308):
             location = response.headers.get("Location")
             response.close()
@@ -460,6 +462,28 @@ def source_get(session, url, host):
             raise
         return response
     raise ValueError("Too many redirects")
+
+
+def source_failure_reason(error):
+    """Explain failures without logging source URLs, response text or credentials."""
+    if isinstance(error, requests.exceptions.HTTPError):
+        status = getattr(error.response, "status_code", None)
+        return "HTTP " + str(status) if isinstance(status, int) else "HTTP error"
+    if isinstance(error, requests.exceptions.Timeout):
+        return type(error).__name__ + " (request timed out)"
+    if isinstance(error, requests.exceptions.ConnectionError):
+        # Requests may wrap a SOCKS handshake timeout as ConnectionError.
+        message = str(error).lower()
+        if "timed out" in message or "timeout" in message:
+            return "Tor/SOCKS connection timed out"
+        if "refused" in message:
+            return "Tor/SOCKS connection refused"
+        return "Tor/SOCKS connection failed"
+    known = {"Listing exceeds HTML size limit", "Source redirect leaves the registered onion host",
+             "Redirect missing Location", "Too many redirects"}
+    if isinstance(error, ValueError) and str(error) in known:
+        return str(error)
+    return type(error).__name__
 
 
 def read_listing(session, outlet):
@@ -702,10 +726,11 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
         visited += 1
         try:
             result = read_listing(tor, {**outlet, "url": url})
-        except Exception:
+        except Exception as error:
             with db:
                 db.execute("UPDATE frontier SET status='failed',attempts=attempts+1 WHERE outlet_id=? AND url=?", (oid, url))
-            LOG.warning("Internal page failed for outlet %s; queue retained", oid)
+            LOG.warning("Internal page failed for outlet %s: %s; connect timeout=%ss, read timeout=90s; queue retained",
+                        oid, source_failure_reason(error), getattr(tor, "source_connect_timeout", SOURCE_CONNECT_TIMEOUT))
             continue
         records = result["items"] + ([result["page"]] if result["page"] else [])
         with db:
@@ -882,6 +907,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--api", default=os.environ.get("CT_ATLAS_API", "https://ct-report-generator.fairpeace.workers.dev"))
     parser.add_argument("--proxy", default=os.environ.get("TOR_SOCKS_PROXY", "socks5h://127.0.0.1:9050"))
+    parser.add_argument("--connect-timeout", type=int, default=SOURCE_CONNECT_TIMEOUT,
+                        help="Tor source connection timeout in seconds (10..300, default: 90)")
     parser.add_argument("--state", type=Path, default=Path("private-outlet-watch/state.sqlite"))
     parser.add_argument("--evidence", type=Path, default=Path("private-outlet-watch/evidence"))
     parser.add_argument("--interval", type=int, default=900)
@@ -894,6 +921,8 @@ def main():
     parser.add_argument("--request-delay", type=float, default=1.0)
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    if not 10 <= args.connect_timeout <= 300:
+        parser.error("Tor connection timeout must be between 10 and 300 seconds")
     if args.interval < 60 or not 1 <= args.max_file_mb <= 500:
         parser.error("Interval must be >=60 seconds and file cap between 1 and 500 MB")
     if not 1 <= args.pages_per_scan <= 1000 or not 1 <= args.max_pages <= 40000 or not 0 <= args.request_delay <= 60:
@@ -905,6 +934,7 @@ def main():
         parser.error(str(exc))
     tor = requests.Session()
     tor.trust_env = False
+    tor.source_connect_timeout = args.connect_timeout
     tor.proxies = {"http": proxy, "https": proxy}
     tor.headers.update({"User-Agent": "CTAtlas-OutletWatch/1", "Accept": "text/html,application/xhtml+xml"})
     db = open_database(args.state)

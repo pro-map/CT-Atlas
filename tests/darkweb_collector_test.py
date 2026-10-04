@@ -58,6 +58,53 @@ def test_source_redirect_is_rejected_before_any_clearnet_request():
     assert session.calls[0][1]['allow_redirects'] is False
 
 
+def test_source_timeout_applies_to_each_same_host_redirect():
+    session = Session([Response(status=302, headers={'Location':'/next'}), Response()])
+    session.source_connect_timeout = 120
+    c.source_get(session, BASE, 'a'*56+'.onion')
+    assert len(session.calls) == 2
+    assert all(call[1]['timeout'] == (120,90) and not call[1]['allow_redirects'] for call in session.calls)
+
+
+def test_slow_tor_connection_keeps_queue_and_recovers_with_longer_budget(tmp_path, caplog):
+    class SlowTor(Site):
+        def get(self, url, **kwargs):
+            if kwargs['timeout'][0] < 60:
+                raise c.requests.exceptions.ConnectTimeout('private source and token should not be logged')
+            return super().get(url, **kwargs)
+    tor = SlowTor({BASE:structured_listing(1, False)})
+    tor.source_connect_timeout = 30
+    db = c.open_database(tmp_path/'state.sqlite')
+    failed = c.crawl_outlet(tor, db, OUTLET, 1, 100, 0)
+    assert failed['failed_pages'] == 1 and not failed['complete']
+    assert 'ConnectTimeout' in caplog.text and 'connect timeout=30s' in caplog.text
+    assert 'private source' not in caplog.text
+    del tor.source_connect_timeout  # Default budget now accepts the simulated slow connection.
+    recovered = c.crawl_outlet(tor, db, OUTLET, 1, 100, 0)
+    assert recovered['failed_pages'] == 0 and recovered['pages_scanned'] == 1
+    assert db.execute('SELECT COUNT(*) FROM outbox').fetchone()[0] == 1
+    db.close()
+
+
+@pytest.mark.parametrize('error,expected', [
+    (c.requests.exceptions.ReadTimeout('sensitive'), 'ReadTimeout (request timed out)'),
+    (c.requests.exceptions.ConnectionError('private source: timed out'), 'Tor/SOCKS connection timed out'),
+    (c.requests.exceptions.ConnectionError('private source: connection refused'), 'Tor/SOCKS connection refused'),
+    (c.requests.exceptions.ConnectionError('private source: unreachable'), 'Tor/SOCKS connection failed'),
+    (ValueError('Listing exceeds HTML size limit'), 'Listing exceeds HTML size limit'),
+    (ValueError('private source\nsecret'), 'ValueError'),
+])
+def test_source_failure_reason_does_not_expose_exception_text(error, expected):
+    assert c.source_failure_reason(error) == expected
+
+
+def test_http_failure_reports_only_status():
+    response = c.requests.Response()
+    response.status_code = 503
+    error = c.requests.exceptions.HTTPError('private source', response=response)
+    assert c.source_failure_reason(error) == 'HTTP 503'
+
+
 def test_acquisition_cap_removes_partial_files_and_content_hash_is_exact(tmp_path):
     response = Response(b'12345')
     with pytest.raises(ValueError):
