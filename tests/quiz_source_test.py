@@ -14,6 +14,9 @@ q = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(q)
 
 class QuizSourceTests(unittest.TestCase):
+    def setUp(self):
+        self.source_patch=patch.object(q,'fetch_source',side_effect=lambda url:(url,'Verified institutional source text. '*30))
+        self.source_patch.start();self.addCleanup(self.source_patch.stop)
     def candidate(self, **changes):
         return dict(dict(category='Financing', question='Which body adopted this instrument?', options=['A','B','C'], correct_index=1, explanation='A short verified explanation.', source_url='https://www.fatf-gafi.org/en/example.html'), **changes)
 
@@ -27,7 +30,8 @@ class QuizSourceTests(unittest.TestCase):
                 q.main()
             self.assertIn('question at most 240',ai.call_args_list[0].args[1])
             retry=ai.call_args_list[1].args[1]
-            self.assertIn(bad['source_url'],retry)
+            self.assertIn('Rejected candidates',retry)
+            self.assertIn('SOURCE TEXT:',retry)
             self.assertIn('question must be a string of at most 240 characters',retry)
             self.assertEqual(json.loads(quiz_path.read_text())['question'],good['question'])
             self.assertEqual(len(json.loads(history_path.read_text())),2)
@@ -41,7 +45,7 @@ class QuizSourceTests(unittest.TestCase):
                 with self.assertRaises(RuntimeError):q.main()
             self.assertEqual(quiz_path.read_text(),before)
             self.assertEqual(history_path.read_text(),'[]')
-            self.assertEqual(verify.call_count,1)
+            self.assertEqual(verify.call_count,4)
 
     def test_same_day_retry_does_not_replace_question_or_call_ai(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -63,6 +67,7 @@ class QuizSourceTests(unittest.TestCase):
         with self.assertRaises(ValueError):q.validate(data)
 
     def test_source_requires_real_supporting_passage(self):
+        self.source_patch.stop()
         text='This is verified supporting evidence. ' * 20
         response=types.SimpleNamespace(status_code=200,url='https://un.org/',headers={'Content-Type':'text/html'},text='<p>'+text+'</p>')
         data={'source_url':'https://un.org/'}
@@ -82,6 +87,7 @@ class QuizSourceTests(unittest.TestCase):
 
 
     def test_challenge_rejected(self):
+        self.source_patch.stop()
         response=types.SimpleNamespace(status_code=202,url='https://un.org/',headers={},text='')
         with patch.object(q.requests,'get',return_value=response,create=True):
             with self.assertRaises(ValueError):q.verify_source('test',{'source_url':'https://un.org/'})
