@@ -35,17 +35,18 @@ async function play(kind="click"){
   if(performance.now()-lastPlayed<120)return;
   stop();lastPlayed=performance.now();
   const now=context.currentTime,duration=kind==="click"?.06:kind==="success"?.10:.085;
-  const gain=context.createGain();gain.connect(master);master.gain.setValueAtTime(.075,now);
+  const gain=context.createGain();gain.connect(master);master.gain.setValueAtTime(.12,now);
   gain.gain.setValueAtTime(0,now);gain.gain.linearRampToValueAtTime(.55,now+.003);
-  gain.gain.exponentialRampToValueAtTime(.0001,now+duration-.005);gain.gain.linearRampToValueAtTime(0,now+duration);
+  gain.gain.exponentialRampToValueAtTime(.025,now+duration-.008);gain.gain.linearRampToValueAtTime(0,now+duration);
   // A low, damped transient: no melodic sequence, radar beep or alarm.
   const body=context.createOscillator();body.type="sine";
-  body.frequency.setValueAtTime(kind==="click"?190:kind==="success"?290:130,now);
-  body.frequency.exponentialRampToValueAtTime(kind==="click"?95:kind==="success"?230:75,now+duration);
+  body.frequency.setValueAtTime(kind==="click"?620:kind==="success"?740:330,now);
+  body.frequency.exponentialRampToValueAtTime(kind==="click"?310:kind==="success"?560:190,now+duration);
   body.connect(gain);
   const current={sources:[body],gain};voice=current;
   body.onended=()=>{body.disconnect();gain.disconnect();if(voice===current)voice=null;};
   body.start(now);body.stop(now+duration);
+  return true;
  }catch(_){stop();} // Unsupported/blocked audio must never affect an action.
 }
 function begin(){
@@ -62,7 +63,17 @@ function boot(){
  if(!host)return;
  button=document.createElement("button");button.id="ctSoundEffects";button.type="button";
  button.className="ct-sound-toggle";button.setAttribute("role","switch");button.setAttribute("aria-label","Sound effects");
- button.addEventListener("click",()=>setEnabled(!enabled));paint();host.append(button);
+ button.addEventListener("click",()=>{setEnabled(!enabled);if(enabled)void play();});paint();host.append(button);
+}
+function navigate(event,url){
+ if(!enabled)return; // Off keeps native navigation immediate.
+ event.preventDefault();event.stopImmediatePropagation();
+ let moved=false;
+ const go=()=>{if(moved)return;moved=true;clearTimeout(fallback);location.assign(url);};
+ // Give the 60 ms transient time to reach the output before pagehide stops it.
+ // A blocked AudioContext must never strand or noticeably delay navigation.
+ const fallback=setTimeout(go,180);
+ void play().then(played=>{if(moved)return;if(played)setTimeout(go,90);else go();},go);
 }
 // Only explicit module links and workspace view selectors; inputs, maps,
 // scrolling, hover, background refreshes and arbitrary buttons stay silent.
@@ -71,11 +82,11 @@ document.addEventListener("click",event=>{
  const target=event.target instanceof Element?event.target:null;
  const control=target?.closest("[data-view], [data-ct-sound='tab']");
  if(control&&!control.disabled&&control.getAttribute("aria-pressed")!=="true"&&control.getAttribute("aria-selected")!=="true"&&!control.classList.contains("active")){void play();return;}
- if(target?.closest("#mainHubButton")){void play();return;}
+ if(target?.closest("#mainHubButton")){navigate(event,new URL("main.html",location.href).href);return;}
  const link=target?.closest("a[href]");
  if(!link||link.hasAttribute("download")||(link.target&&link.target!=="_self"))return;
  const url=new URL(link.href,location.href);
- if(url.origin===location.origin&&/(?:^|\/)(?:main|index|crypto|facial|social|darkweb|ip)\.html$/.test(url.pathname)&&url.href!==location.href)void play();
+ if(url.origin===location.origin&&/(?:^|\/)(?:main|index|crypto|facial|social|darkweb|ip)\.html$/.test(url.pathname)&&url.href!==location.href)navigate(event,url.href);
 },true);
 window.addEventListener("storage",event=>{if(event.key===KEY||event.key===null)setEnabled(event.newValue!=="off",false);});
 window.addEventListener("pagehide",stop);

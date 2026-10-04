@@ -2,13 +2,15 @@
 
 The header's **Sound effects: On/Off** switch is shared by the hub, Intelligence
 Map, Crypto, Facial, Social, Dark Web and IP workspaces. It defaults to On at a
-low fixed gain (0.075). The preference lives in `ct_atlas_sound_effects` in
+low fixed gain (0.12). The preference lives in `ct_atlas_sound_effects` in
 localStorage (`on` / `off`), per browser origin; the main site and its Cloudflare
 mirror therefore have separate preferences.
 
+Enabling sound plays a short preview and unlocks audio from that user gesture. Module navigation allows 90 ms for the click to reach the output, with a 180 ms fallback if audio cannot start; when muted, navigation remains immediate.
+
 No audio files, network audio service, or dependency is required. A lazy Web
 Audio context generates damped sine transients: 60 ms click, 100 ms success,
-85 ms error. Browsers may require a user gesture before audio can run. Failure
+85 ms error. Frequencies remain in the low/mid range audible on laptop speakers, with a gentler decay than the first version. Browsers may require a user gesture before audio can run. Failure
 or absence of Web Audio or browser storage never blocks the interface.
 
 Only module links, Dark Web view changes, explicit analysis submissions and
@@ -28,6 +30,8 @@ interval: very fast completions/rapid repeated actions can intentionally be
 silent instead of producing overlapping sounds.
 
 ## Validation
+
+- `node tests/sound-navigation-smoke.cjs`: enabling preview, click completion before navigation under gesture-required autoplay, and actual OfflineAudioContext waveform amplitude. Uses the same Playwright environment options below.
 
 - `node --test tests/*.test.cjs`: repository tests, including audio lifecycle,
   suspended-context mute, storage restrictions and selective navigation.
