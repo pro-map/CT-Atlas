@@ -164,14 +164,7 @@ jobs:
             AI_GEO_FORCE=0 python -u geolocate.py
           fi
 
-      - name: Generate Quiz of the Day with the first daily update
-        if: ${{ always() && github.event_name == 'schedule' && github.event.schedule == '17 10 * * *' && steps.checkout.outcome == 'success' }}
-        continue-on-error: true
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          DAILY_QUIZ_MODEL: "gemini-3.5-flash-lite"
-        run: python -u tools/generate_daily_quiz.py
-
+      # Quiz generation runs independently in refresh-daily-quiz.yml.
       # Independent of collection: the sanctioned-address list is refreshed once a
       # day (and on manual runs). A failed download keeps the previous file.
       - name: Refresh OFAC sanctioned crypto addresses
@@ -275,3 +268,5 @@ jobs:
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+

@@ -1,0 +1,79 @@
+name: Daily CT Atlas Quiz
+
+on:
+  schedule:
+    - cron: "17 10 * * *"
+      timezone: "Europe/Paris"
+    - cron: "17 18 * * *"
+      timezone: "Europe/Paris"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "tools/generate_daily_quiz.py"
+      - ".github/workflows/refresh-daily-quiz.yml"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: ct-atlas-daily-quiz
+  cancel-in-progress: false
+
+jobs:
+  quiz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - run: pip install requests
+      - name: Generate or retain today's verified quiz
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DAILY_QUIZ_MODEL: "gemini-3.5-flash-lite"
+        run: python -u tools/generate_daily_quiz.py
+      - name: Publish quiz and history without replacing concurrent changes
+        run: |
+          set -euo pipefail
+          git config user.name "CT Atlas Quiz Bot"
+          git config user.email "actions@github.com"
+          git add -- daily-quiz.json daily-quiz-history.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Publish verified daily CT Atlas quiz"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort
+              exit 1
+            fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 4))
+          done
+          exit 1
+
+  deploy:
+    needs: quiz
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/configure-pages@v6
+      - uses: ./.github/actions/build-events-lite
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: "."
+      - id: deployment
+        uses: actions/deploy-pages@v5
+

@@ -2,6 +2,15 @@
 "use strict";
 const API="https://ct-report-generator.fairpeace.workers.dev";
 let session="", panel=null, trigger=null, busy=false, quiz=null, pending=null, answered=false, loadedForSession="";
+let loadedDay="";
+function parisDay(){return new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Paris",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());}
+function showFreshness(){
+  let notice=panel.querySelector(".daily-quiz-freshness");
+  if(!notice){notice=document.createElement("div");notice.className="daily-quiz-freshness";notice.setAttribute("role","status");notice.style.cssText="padding:10px 0;color:#eac47a;font-size:12px";panel.querySelector(".daily-quiz-question").before(notice);}
+  const stale=quiz.date!==parisDay();
+  notice.hidden=!stale;
+  notice.textContent=stale?"Today's quiz is not available yet. Showing the latest verified quiz, published on "+quiz.date+".":"";
+}
 const esc=v=>String(v??"").replace(/[&<>\"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));
 const identity=()=>document.body.classList.contains("locked")?"":sessionStorage.getItem("ct_map_session_token")||"";
 async function api(path,body){
@@ -41,9 +50,10 @@ async function submit(index){
 }
 async function load(){
   if(busy||!panel)return;
-  busy=true;status("Loading your quiz and recorded attempt…");
+  busy=true;quiz=null;answered=false;pending=null;lock(true);status("Loading your quiz and recorded attempt…");
   try{
     const data=await api("/quiz-state");quiz=data.quiz;
+    loadedDay=parisDay();showFreshness();
     panel.querySelector(".daily-quiz-question").textContent=quiz.question;
     panel.querySelector(".daily-quiz-head span:last-child").textContent=quiz.date;
     const options=panel.querySelector(".daily-quiz-options");
@@ -57,14 +67,14 @@ async function load(){
 function openQuiz(){
   if(!panel)return;
   panel.classList.add("open");panel.setAttribute("aria-hidden","false");
-  if(!quiz&&!busy)load();
+  if(!busy)load();
 }
 function closeQuiz(){
   if(!panel)return;
   panel.classList.remove("open");panel.setAttribute("aria-hidden","true");
 }
 function cleanup(){
-  panel?.remove();trigger?.remove();panel=null;trigger=null;quiz=null;pending=null;answered=false;loadedForSession="";
+  panel?.remove();trigger?.remove();panel=null;trigger=null;quiz=null;pending=null;answered=false;loadedForSession="";loadedDay="";
 }
 function ensureUi(){
   const launcher=document.getElementById("mainQuizLauncher");
@@ -92,7 +102,9 @@ function check(){
   if(!token)return;
   if(!ensureUi())return;
   if(loadedForSession!==token&&!busy){loadedForSession=token;load();}
+  else if(quiz&&loadedDay!==parisDay()&&panel.classList.contains("open")&&!busy)load();
 }
 document.addEventListener("keydown",event=>{if(event.key==="Escape")closeQuiz();});
 setInterval(check,1000);check();
 })();
+
