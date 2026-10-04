@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-04T14:44:25.025151+00:00",
+  "removed_at": "2026-10-04T20:16:32.202762+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -378,6 +378,26 @@
       "country": "France",
       "ai_relevance_score": 75,
       "ai_relevance_reason": "Concrete detention and legal proceedings against a public figure for glorifying terrorism."
+    },
+    {
+      "id": "eca29ca0e54634b2",
+      "incident_id": "inc-5e4b12bc4eed067f",
+      "url": "https://1news.az/news/20260407070131564-V-Azerbaidzhane-vynesen-prigovor-obvinyaemomu-v-finansirovanii-terrorizma",
+      "title": "Verdict handed down in Azerbaijan for accused of terrorist financing",
+      "summary": "A court in Azerbaijan has issued a verdict against an individual accused of financing terrorism.",
+      "original_title": "В Азербайджане вынесен приговор обвиняемому в финансировании терроризма",
+      "original_language": "ru",
+      "source": "1news.az",
+      "published": "2026-04-07T15:45:00+00:00",
+      "category": "Terrorist Financing",
+      "categories": [
+        "Terrorist Financing",
+        "Legal / Judicial"
+      ],
+      "actor_group": "",
+      "country": "Azerbaijan",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Judicial prosecution and sentencing for terrorist financing."
     }
   ]
 }
