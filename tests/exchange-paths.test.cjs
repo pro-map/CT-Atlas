@@ -1,0 +1,67 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+function harness(labels={}){
+  const controls=Object.fromEntries(['exchangePathControls','exchangePathSelect','exchangePathToggle','exchangePathDetails'].map(id=>[id,{setAttribute(){}}]));
+  const context=vm.createContext({document:{readyState:'loading',addEventListener(){},getElementById:id=>controls[id]},labels});
+  const source=fs.readFileSync('crypto.js','utf8').replace(/\}\)\(\);\s*$/,`
+    labelForAddress=address=>labels[address]||null;
+    exchangeBehaviorForAddress=()=>({score:99});
+    globalThis.api={directedExchangePath,documentedExchangePaths,rowsForExchangePath,exchangeGraphView,buildNetworkModel,
+      mode:value=>{exchangeGraphMode=value;}, select:value=>{selectedExchangePath=value;},
+      setup:payload=>{lastPayload=payload;resetTraceState(payload);},
+      active:()=>activeExchangePath};
+  })();`);
+  vm.runInContext(source,context);
+  return {api:context.api,controls};
+}
+const label={category:'EXCHANGE',name:'Documented Exchange',source_url:'https://example.org/wallets'};
+const model={rootKey:'target',nodes:['target','middle','exchange','noise','other'].map((key,i)=>({key,id:key,depth:i,assets:[]})),
+ edges:[['exchange','middle'],['middle','target'],['noise','target'],['target','middle'],['other','target']].map(([fromKey,toKey])=>({fromKey,toKey}))};
+const payload={chain:'tron',query:'target'};
+test('documented exchange auto-focuses with intermediate hops and hides unrelated and reverse edges',()=>{
+ const {api,controls}=harness({exchange:label});
+ const view=api.exchangeGraphView(model,payload);
+ assert.deepEqual(Array.from(view.nodes,n=>n.key),['target','middle','exchange']);
+ assert.deepEqual(Array.from(view.edges,e=>[e.fromKey,e.toKey]),[['exchange','middle'],['middle','target']]);
+ assert.equal(api.active().incoming,true);
+ assert.match(controls.exchangePathDetails.textContent,/exchange → middle → target/);
+ assert.equal(model.edges.length,5);
+ api.mode('all');
+ assert.equal(api.exchangeGraphView(model,payload),model);
+ assert.equal(api.active(),null);
+ api.mode('auto');
+ assert.equal(api.exchangeGraphView(model,payload).edges.length,2);
+});
+test('behavioral candidates and labels without documentary sources never trigger focus',()=>{
+ const {api}=harness({exchange:{category:'EXCHANGE',name:'Guess'}});
+ assert.equal(api.documentedExchangePaths(model,'tron').length,0);
+ assert.equal(api.exchangeGraphView(model,payload),model);
+});
+test('reverse-only path is identified as target to exchange; mixed directions and cycles do not fabricate flow',()=>{
+ const {api}=harness({exchange:label});
+ const reverse={...model,edges:[{fromKey:'target',toKey:'middle'},{fromKey:'middle',toKey:'exchange'},{fromKey:'middle',toKey:'target'}]};
+ const paths=api.documentedExchangePaths(reverse,'tron');
+ assert.equal(paths.length,1);assert.equal(paths[0].incoming,false);
+ assert.equal(api.directedExchangePath({...model,edges:[{fromKey:'exchange',toKey:'middle'},{fromKey:'target',toKey:'middle'}]},'exchange','target'),null);
+});
+test('multiple exchanges can be selected independently and transaction restoration is lossless',()=>{
+ const {api}=harness({exchange:label,other:{...label,name:'Second Exchange'}});
+ api.select('other|in');api.exchangeGraphView(model,payload);
+ const rows=[{id:'a',_trace_source:'target',direction:'IN',counterparties:['other']},{id:'b',_trace_source:'target',direction:'IN',counterparties:['noise']},
+ {id:'c',_trace_source:'other',direction:'OUT',counterparties:['target']},{id:'d',_trace_source:'target',direction:'OUT',counterparties:['other']}];
+ assert.deepEqual(Array.from(api.rowsForExchangePath(rows,api.active(),'tron'),r=>r.id),['a','c']);
+ api.mode('all');api.exchangeGraphView(model,payload);
+ assert.equal(api.rowsForExchangePath(rows,api.active(),'tron'),rows);
+});
+test('complete analyzed graph recovers a low-ranked documented exchange beyond display branch limits',()=>{
+ const {api}=harness({exchange:label});
+ const p={...payload,transactions:Array.from({length:20},(_,i)=>({id:'tx'+i,direction:'IN',asset:'TRX',counterparties:[i===19?'exchange':'wallet'+i]}))};
+ api.setup(p);
+ assert.equal(api.buildNetworkModel(p).nodes.some(n=>n.id==='exchange'),false);
+ const full=api.buildNetworkModel(p,true);
+ assert.equal(full.nodes.length,21);
+ assert.equal(api.exchangeGraphView(full,p).nodes.length,2);
+});
+
