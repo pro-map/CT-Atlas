@@ -48,7 +48,7 @@ test('every workspace ships the shared loader and hub order retains only Social 
  }
  const main=fs.readFileSync('main.html','utf8');
  const links=[...main.matchAll(/class="hub-card[^\"]*" href="([^\"]+)"/g)].map(x=>x[1]);
- assert.deepEqual(links,['index.html?workspace=map','crypto.html','darkweb.html','facial.html','ip.html','social.html']);
+ assert.deepEqual(links,['index.html?workspace=map','darkweb.html','facial.html','crypto.html','ip.html','social.html']);
  assert.equal((main.match(/class="hub-beta"/g)||[]).length,1);
  assert.match(main,/grid-template-columns:repeat\(6,minmax\(0,1fr\)\)/);
 });
