@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-03T14:09:48.472694+00:00",
+  "removed_at": "2026-10-04T14:44:25.025151+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -215,6 +215,169 @@
       "primary_event_type": "OTHER_CT",
       "ai_relevance_score": 88,
       "ai_relevance_reason": "Auto-accepted: authoritative official source with strong CT category/action evidence in the headline."
+    },
+    {
+      "id": "a92878d203df95ae",
+      "incident_id": "inc-97346b5aad1b41f9",
+      "url": "https://mumbaimirror.indiatimes.com/mumbai/cover-story/teen-was-influenced-in-gaming-chatroom/articleshow/130068279.html",
+      "title": "Toy-car terror plot: Mumbai teen influenced in gaming chatroom",
+      "summary": "A Mumbai teenager was influenced in an online gaming chatroom regarding a toy-car terror plot.",
+      "original_title": "Toy - car terror plot : Mumbai teen was influenced in gaming chatroom",
+      "original_language": "en",
+      "source": "mumbaimirror.indiatimes.com",
+      "published": "2026-04-07T13:00:00+00:00",
+      "category": "Online / Cyber / AI",
+      "categories": [
+        "Online / Cyber / AI",
+        "Legal / Judicial"
+      ],
+      "actor_group": "",
+      "country": "India",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Concerns an online radicalization and terrorist plot investigation involving a minor."
+    },
+    {
+      "id": "754e44c3fbfee1b4",
+      "incident_id": "inc-544d4a94db5dec37",
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPX2ZWWVlybjNVYlN3dkVtZmNDck5MbWRvOFhFcnB5ZEMxRDBBRVVQYXhtTW0yR1BvcndUeGZXMnNxS1VkclQ2Z0djbkZlcm1DR3NMMDl4eEJlUUwtOTNBMW1VUm5nTmF6eG1WdGJaZDBvMkR3VmFfT3lZTk5EQkJDNDRUUTdkV1dNXzUw?oc=5",
+      "title": "Nigerian court convicts over 300 individuals in mass terrorism trials",
+      "summary": "A Nigerian court has handed down convictions to more than 300 defendants as part of large-scale terrorism trials.",
+      "original_title": "Nigerian court convicts more than 300 in mass terrorism trial",
+      "original_language": "en",
+      "source": "AP News",
+      "published": "2026-04-07T07:00:00+00:00",
+      "category": "Legal / Judicial",
+      "categories": [
+        "Legal / Judicial"
+      ],
+      "actor_group": "",
+      "country": "Nigeria",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Ongoing counter-terrorism judicial proceedings and mass trials of terror suspects."
+    },
+    {
+      "id": "e6159333570203e8",
+      "incident_id": "inc-92fe68b9dd89a2b1",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQcGdvNUhjQ0hFRDYtRmhkaDBlNW9GdllIUEdmMTdieFA2Mk9MbERLRklwdXdTX05zaE9Hd2thMmN0Ym1iSlNjTHlmYzdaTWsxaE5zSWFDNGdqTFFxYTdkd3JEWjNuSE1qMl9ON0JOazktT2lPSEFJTUVxa28zTVJoS05LUExuSk9aTDVmTzltQ1V1cDI4a2ZVdFFhWXNJcm5QNEZRbG5kWWRtUWpOR2t3ZHpYRk5nVHdj?oc=5",
+      "title": "Emir Balat and Ibrahim Kayumi indicted for March 7, 2026 ISIS-inspired attack outside Gracie Mansion",
+      "summary": "Federal prosecutors have indicted Emir Balat and Ibrahim Kayumi for an ISIS-inspired attack carried out on March 7, 2026, outside Gracie Mansion.",
+      "original_title": "Emir Balat And Ibrahim Kayumi Indicted For March 7, 2026, Isis-Inspired Attack Outside Gracie Mansion",
+      "original_language": "en",
+      "source": "Department of Justice (.gov)",
+      "published": "2026-04-07T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Legal / Judicial"
+      ],
+      "actor_group": "",
+      "primary_event_type": "OTHER_CT",
+      "country": "United States",
+      "ai_relevance_score": 88,
+      "ai_relevance_reason": "Auto-accepted: authoritative official source with strong CT category/action evidence in the headline."
+    },
+    {
+      "id": "eca29ca0e54634b2",
+      "incident_id": "inc-7cb8d3a73f43ffb0",
+      "url": "https://news.google.com/rss/articles/CBMi6gNBVV95cUxPUUhjd2x6THhKNS1oRVFwOEhMOThDeVh4b0ZqTFNITVRjMEVjZmdTTEQ3elFfLW9tZ2tYMjNDaFFHY0NJN2tZM3VUWi1DUXkxZ3pjVC1lb1NBb1M0RV9nN1MxX3o2bWUtazNycEJ5azRDZGlpdF9wSmtxc2Nia1RxdXVjWDFnajYzSTBDQnJSLXJBcnhOVk94RG5rVFBDUmpjTzFYYW5hYWVQRG1COHhkQzlyUzlseHNYdnp1OEljYW5LcEtXNDl1RjFUckFkTXlMZVZwZFdJdWtsZ2E4QS10bWNkWldrYV8tNWFWQ1JSbkdIVlc4TDNxY3E2M1VFZkc3cmlxcUFqNFYwTlYxb1VYRWFpMXE5SlBEM19OQjNNeVJPOExzZDBGcS14ZTJQMEt4RmlzYWdqQTNodlJUNEZybloxWS15eWQ1ZzhfUTRvbGVFc3Q2dnVsTFFVRlpleTlFb19nekdCdmlJVXpoOWp4UU1GVFc4U0dheG02NjZfN2FRT0dsVmY1WGZ5RjU2OTl2MnFYX2l4eThyZXhvdndNOFYzRGFlNnRtR2MwVWczYTdGcVBEaUtQMmFpLUNEajdvMzEyckxpc2J4YXA4eFBwSkpnM1IteEpocjFBX2VLVGxWMG1zSHdYdU9B?oc=5",
+      "title": "Turkey: Attacker killed and two police officers injured in shooting outside Israeli Consulate in Istanbul",
+      "summary": "One attacker was killed and two police officers were injured in a shooting incident outside the Israeli consulate in Istanbul, Turkey.",
+      "original_title": "تركيا: مقتل مهاجم وإصابة شرطيَّين في إطلاق نار أمام القنصلية الإسرائيلية بإسطنبول",
+      "original_language": "ar",
+      "source": "France 24",
+      "published": "2026-04-07T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Turkey",
+      "ai_relevance_score": 90,
+      "ai_relevance_reason": "Reports a concrete terrorist/armed attack and neutralizing of an attacker by police outside the Israeli consulate in Istanbul."
+    },
+    {
+      "id": "46767ebf5d58ef9a",
+      "incident_id": "inc-7cb8d3a73f43ffb0",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQNlhGQTYzeUxHY0pIWjVkaDBFNnFmMC1HOTF3cHdsMUFWSEltakN1SDIydDN5SmtYNk1OdXZOSXlBczdRd1J1Q2tsa3Z4d2lRSVhDcS1jdUcxVnRoTHB0Z19CdW1QdlY0NHh6Yk1ZcTcxZUZUY1V3X3hBNmVhSjkwcXVLdEJmYlZzT2VyN3BxMEtvSG5DVml4Ujg3OUt4QTFPcWp2Q2RGSDJxN1RQVVBMaFVZajdDUFd5dHc?oc=5",
+      "title": "Footage captures armed clash in Levent, Istanbul",
+      "summary": "Security cameras captured the moments of the armed clash that took place in the Levent district of Istanbul.",
+      "original_title": "İstanbul Levent’te silahlı çatışma anı kamerada",
+      "original_language": "tr",
+      "source": "Takvim",
+      "published": "2026-04-07T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Turkey",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Visual/operational follow-up reporting on the armed clash in Istanbul connected to the consulate attack."
+    },
+    {
+      "id": "6c62ef9b8fdac401",
+      "incident_id": "inc-544d4a94db5dec37",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOTnJxaGt4cjY1TnJRd1lHaHZiRmhzRWNPTVhQcjZITkYyUVpQY1VzOTVaUGxmSnRVekVzcTZLZC1qRVU3WGZ1RmkwaUxNc1d6S3Bpa1lNNXNFa2lYYXpoRjhpY1BtRnZUd241LXRWazcyY2pwMWV1OG5CekdiclRKcUNpbERnZzN4ZUx6X2FCSHgzTjFuU2JXMVllLWgybVR5YTlBakJqMVFYcHBRcDVJcW5YNUlRVEhYQzcxMnRVRQ?oc=5",
+      "title": "Nigerian government begins mass trial of suspected terrorists in Abuja",
+      "summary": "The Nigerian government has commenced mass trials of individuals suspected of terrorism-related offenses in Abuja.",
+      "original_title": "Nigerian govt begins mass trial of suspected terrorists in Abuja",
+      "original_language": "en",
+      "source": "Premium Times Nigeria",
+      "published": "2026-04-07T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Legal / Judicial"
+      ],
+      "actor_group": "",
+      "country": "Nigeria",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Major judicial development regarding terrorism suspects in Nigeria."
+    },
+    {
+      "id": "93120cc2f21f829e",
+      "incident_id": "inc-c9002328a99896b5",
+      "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQTEdBeEhsLXN3cUVTOWZ3dGlMdzJXUFdtTzZOODBZRE5iRmx2eHJPaFFsZmJwWkJvdUtDbHhYd3FSVXRtanhTNlNub09haDhEQm9CMXFtb3J4ZU9xTlhjcmk5RFFicEtTNFJMSTl3WGx2UTJQZGVjTU4zWnluYWMxUHd5QzQtZkl2X0ZZTG5keW5uT1RWWndKUmpYa2xCaVQxTVVid0JXVzdybnNlWEVCOGFERHdTU0sxV2tXRVR0Z284eGJESHlFb05CZw?oc=5",
+      "title": "JNIM terrorists clash with rival factions in Nigeria's Kebbi state",
+      "summary": "JNIM militants engaged in a rare clash with rival armed factions in Kebbi state, Nigeria.",
+      "original_title": "JNIM terrorists clashes with rival factions in rare encounter in Nigeria’s Kebbi state",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-04-07T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "JNIM",
+      "primary_event_type": "ATTACK",
+      "country": "Nigeria",
+      "region": "Kebbi State",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports a concrete militant clash involving JNIM in Nigeria."
+    },
+    {
+      "id": "2278810753bf63b7",
+      "incident_id": "inc-5d732bda768de7fd",
+      "url": "https://forward.com/fast-forward/817249/palestinian-french-lawmaker-arrested-after-praising-1972-bomber-of-ben-gurion-airport/",
+      "title": "Palestinian-French lawmaker arrested after praising 1972 Ben Gurion Airport bomber",
+      "summary": "Palestinian-French politician Rima Hassan was detained and faces legal action following public statements praising the perpetrator of the 1972 Lod/Ben Gurion Airport attack.",
+      "original_title": "Palestinian - French lawmaker arrested after praising 1972 bomber of Ben Gurion Airport",
+      "original_language": "en",
+      "source": "forward.com",
+      "published": "2026-04-07T01:30:00+00:00",
+      "category": "Legal / Judicial",
+      "categories": [
+        "Legal / Judicial",
+        "Online / Cyber / AI"
+      ],
+      "actor_group": "",
+      "country": "France",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete detention and legal proceedings against a public figure for glorifying terrorism."
     }
   ]
 }
