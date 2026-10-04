@@ -21,6 +21,7 @@ on:
       - "feedback.js"
       - "feedback.css"
       - "sound-effects.js"
+      - "sound-check.html"
       - "workspace-ui.js"
       - "workspace-ui.css"
       - "tab-access.js"
@@ -63,7 +64,9 @@ permissions:
   id-token: write
 
 concurrency:
-  group: ct-map-update-main
+  # UI-only publishing must not wait for the long-running database collector.
+  # Both jobs check out an immutable snapshot of main; this job never writes data.
+  group: ct-atlas-ui-deploy
   cancel-in-progress: false
 
 jobs:

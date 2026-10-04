@@ -10,9 +10,9 @@ function stop(){
 }
 function paint(){
  if(!button)return;
- button.textContent="Sound effects: "+(enabled?"On":"Off");
+ button.innerHTML='<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>'+(enabled?'':'<path d="m3 3 18 18"/>')+'</svg>';
  button.setAttribute("aria-checked",String(enabled));
- button.title=enabled?"Turn off all interface sounds immediately":"Turn on quiet interface sounds";
+ button.title=enabled?"Sound effects: On — click to mute":"Sound effects: Off — click to enable";
 }
 function setEnabled(value,persist=true){
  enabled=Boolean(value);generation++;stop();lastPlayed=-Infinity;
@@ -59,8 +59,7 @@ function begin(){
  };
 }
 function boot(){
- const host=document.querySelector("#sessionActions, .hub-actions, .fi-actions, .social-header-actions, .masthead .actions, header .actions, .crypto-header");
- if(!host)return;
+ const host=document.body;
  button=document.createElement("button");button.id="ctSoundEffects";button.type="button";
  button.className="ct-sound-toggle";button.setAttribute("role","switch");button.setAttribute("aria-label","Sound effects");
  button.addEventListener("click",()=>{setEnabled(!enabled);if(enabled)void play();});paint();host.append(button);

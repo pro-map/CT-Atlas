@@ -18,7 +18,7 @@ cp index.html main.html crypto.html social.html facial.html privacy.html robots.
    intelligence-map.svg crypto-intelligence.svg social-intelligence.svg facial-intelligence.svg \
    daily-quiz.js daily-quiz.css daily-quiz.json \
    usage-admin.js usage-admin.css usage-auth-fix.js \
-   workspace-ui.js workspace-ui.css sound-effects.js \
+   workspace-ui.js workspace-ui.css sound-effects.js sound-check.html \
    tab-health.js tab-health.css tab-access.js facial-crops.js \
    ip.html ip.js ip.css ip-report.js ip-intelligence.svg \
    darkweb.html darkweb.js darkweb.css darkweb-intelligence.svg \

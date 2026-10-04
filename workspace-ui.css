@@ -17,11 +17,8 @@
 @media(max-width:760px){.ct-wait-card{padding:16px}.ct-wait-floating{right:16px;bottom:16px}}
 @media(prefers-reduced-motion:reduce){.ct-loading-line::after{animation:none;width:100%}}
 
-/* A quiet global switch, available beside the workspace navigation. */
-button.ct-sound-toggle{flex-shrink:0;width:auto;min-height:32px;padding:6px 9px;border:1px solid #526572;border-radius:4px;background:#14232e;color:#b9c8d2;font:11px/1.4 Arial,sans-serif;letter-spacing:0;cursor:pointer;white-space:normal}
-button.ct-sound-toggle:focus-visible{outline:2px solid #dce9f2;outline-offset:3px}
-button.ct-sound-toggle[aria-checked="false"]{color:#91a2ae}
-#sessionActions .ct-sound-toggle{font-size:9px;max-width:100%;padding:4px 6px}
-.crypto-header{flex-wrap:wrap}
-.fi-header .fi-actions,.social-header .social-header-actions,.masthead .actions,.dw-shell header .actions{flex-wrap:wrap;gap:8px}
-@media(max-width:760px){.fi-header,.social-header{flex-wrap:wrap;gap:10px;height:auto!important;padding:10px!important}.fi-header .fi-actions,.social-header .social-header-actions{width:100%;justify-content:flex-end}}
+/* The bell stays available outside workspace/login containers on every page. */
+#ctSoundEffects{position:fixed;left:14px;bottom:14px;z-index:2147483647;display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;min-height:32px;margin:0;padding:6px;box-sizing:border-box;border:1px solid #52657266;border-radius:50%;background:#101c26e8;color:#72c99f;box-shadow:0 2px 8px #0003;cursor:pointer;line-height:1}
+#ctSoundEffects[aria-checked="false"]{color:#e58383}
+#ctSoundEffects:focus-visible{outline:2px solid #dce9f2;outline-offset:3px}
+#ctSoundEffects svg{display:block;pointer-events:none}

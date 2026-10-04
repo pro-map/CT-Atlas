@@ -5,7 +5,7 @@ function harness({stored=null,blocked=false,suspended=false,unsupported=false}={
  const listeners={},sources=[],gains=[],contexts=[];let now=1000,resume;
  const on=(type,fn)=>(listeners[type]??=[]).push(fn);
  const host={append:b=>host.button=b};
- const document={hidden:false,readyState:'complete',querySelector:()=>host,addEventListener:on,createElement:()=>({setAttribute(k,v){this[k]=v;},addEventListener(type,fn){this[type]=fn;}})};
+ const document={body:host,hidden:false,readyState:'complete',querySelector:()=>host,addEventListener:on,createElement:()=>({setAttribute(k,v){this[k]=v;},addEventListener(type,fn){this[type]=fn;}})};
  class Param{constructor(){this.value=0;}setValueAtTime(v){this.value=v;}cancelScheduledValues(){}linearRampToValueAtTime(v){this.value=v;}exponentialRampToValueAtTime(v){this.value=v;}}
  class AudioContext{
   constructor(){this.state=suspended?'suspended':'running';this.currentTime=0;this.destination={};contexts.push(this);}
@@ -52,8 +52,8 @@ test('only module navigation is audible; modified/external clicks and arbitrary 
  for(const event of ['mouseover','scroll','input','change'])assert.equal(h.listeners[event],undefined);
 });
 test('all workspaces and both hosting builds include sound assets',()=>{
- for(const name of ['main','index','crypto','facial','social','darkweb','ip']){
-  const html=fs.readFileSync(name+'.html','utf8');assert.match(html,/sound-effects\.js\?v=20261004b/);assert.ok(html.indexOf('sound-effects.js')<html.indexOf('workspace-ui.js'));
+ for(const name of ['main','index','crypto','facial','social','darkweb','ip','privacy','sound-check']){
+  const html=fs.readFileSync(name+'.html','utf8');assert.match(html,/sound-effects\.js\?v=20261004c/);if(html.includes('workspace-ui.js'))assert.ok(html.indexOf('sound-effects.js')<html.indexOf('workspace-ui.js'));
  }
  assert.match(fs.readFileSync('tools/deploy_mirror.sh','utf8'),/sound-effects\.js/);
  assert.match(fs.readFileSync('.github/workflows/deploy-current-ct-atlas-ui.yml','utf8'),/sound-effects\.js/);
