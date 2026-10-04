@@ -64,20 +64,21 @@ function render(payload){
 }
 $("fiFiles").addEventListener("change",listFiles);
 $("fiForm").addEventListener("submit",async e=>{
- e.preventDefault();const files=[...$("fiFiles").files];const status=$("fiStatus");
+ e.preventDefault();if($("fiRun").disabled)return;const files=[...$("fiFiles").files];const status=$("fiStatus");
  if(!files.length){status.className="status error";status.textContent="Select at least one image or video.";return;}
  if(!$("fiConsent").checked){status.className="status error";status.textContent="Confirm you have a lawful basis to process this media before running analysis.";return;}
  if(files.length>10){status.className="status error";status.textContent="Maximum 10 files.";return;}
  const total=files.reduce((n,f)=>n+f.size,0);if(total>30*1024*1024){status.className="status error";status.textContent="Combined upload exceeds 30 MB.";return;}
  const token=String(sessionStorage.getItem(TOKEN)||"");const data=new FormData();files.forEach(f=>data.append("files",f,f.name));lastFiles=files;
  $("fiRun").disabled=true;status.className="status";status.textContent="Analyzing visual evidence…";
+ const finishSound=window.CTAtlasSound?.begin();
  const finishWait = window.CTAtlasUI?.begin(status);
  try{
   const r=await fetch(API+"/visual-analyze",{method:"POST",headers:{"X-Session-Token":token},body:data});
   const p=await r.json().catch(()=>({}));
   if(!r.ok)throw new Error(p.error||p.detail||"Visual analysis failed.");
-  render(p);status.textContent="Analysis complete.";
- }catch(err){status.className="status error";status.textContent=err.message||"Visual analysis failed.";}
+  render(p);finishSound?.((p.errors||[]).length?"error":"success");status.textContent="Analysis complete.";
+ }catch(err){finishSound?.("error");status.className="status error";status.textContent=err.message||"Visual analysis failed.";}
  finally{finishWait?.();$("fiRun").disabled=false;}
 });
 $("fiDownload").addEventListener("click",()=>{

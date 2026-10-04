@@ -20,6 +20,7 @@ on:
       - "usage-admin.css"
       - "feedback.js"
       - "feedback.css"
+      - "sound-effects.js"
       - "workspace-ui.js"
       - "workspace-ui.css"
       - "tab-access.js"

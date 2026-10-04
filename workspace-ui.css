@@ -16,3 +16,12 @@
 .ct-wait-floating{position:fixed;right:24px;bottom:24px;width:min(420px,calc(100vw - 32px));z-index:2147483640;margin:0}
 @media(max-width:760px){.ct-wait-card{padding:16px}.ct-wait-floating{right:16px;bottom:16px}}
 @media(prefers-reduced-motion:reduce){.ct-loading-line::after{animation:none;width:100%}}
+
+/* A quiet global switch, available beside the workspace navigation. */
+button.ct-sound-toggle{flex-shrink:0;width:auto;min-height:32px;padding:6px 9px;border:1px solid #526572;border-radius:4px;background:#14232e;color:#b9c8d2;font:11px/1.4 Arial,sans-serif;letter-spacing:0;cursor:pointer;white-space:normal}
+button.ct-sound-toggle:focus-visible{outline:2px solid #dce9f2;outline-offset:3px}
+button.ct-sound-toggle[aria-checked="false"]{color:#91a2ae}
+#sessionActions .ct-sound-toggle{font-size:9px;max-width:100%;padding:4px 6px}
+.crypto-header{flex-wrap:wrap}
+.fi-header .fi-actions,.social-header .social-header-actions,.masthead .actions,.dw-shell header .actions{flex-wrap:wrap;gap:8px}
+@media(max-width:760px){.fi-header,.social-header{flex-wrap:wrap;gap:10px;height:auto!important;padding:10px!important}.fi-header .fi-actions,.social-header .social-header-actions{width:100%;justify-content:flex-end}}
