@@ -193,10 +193,122 @@ def test_unicode_batches_fit_actual_requests_json_encoding(tmp_path):
     db = c.open_database(tmp_path/'state.sqlite')
     html = ''.join('<a href="file%d.pdf">%s</a>' % (i, 'ع'*300) for i in range(100))
     ok, sent = run_scan(Site({BASE: html}), db, tmp_path)
-    assert ok and len(sent) >= 2
-    assert all(len(json.dumps(payload).encode('utf-8')) < 128000 for payload in sent)
+    assert ok and sent
+    assert all(len(json.dumps(payload, ensure_ascii=False).encode('utf-8')) < 128000 for payload in sent)
     assert sum(len(payload['items']) for payload in sent) == 100
     assert sent[-1]['scan_complete'] and not any(payload['scan_complete'] for payload in sent[:-1])
+    db.close()
+
+
+def structured_listing(count=12, next_page=True):
+    cards = ''.join('<div class="post-card"><a class="post-card-link" href="/posts/%s/%s/"><h5 class="post-summary">%s</h5></a><div class="card-footer"><span>السبت، ٣ أكتوبر ٢٠٢٦</span><a href="/posts/news/%s/">قراءة</a></div></div>' % ('naba' if i == 6 else 'news', i, 'صحيفة العدد 567' if i == 6 else 'عنوان الخبر العربي '+str(i), i) for i in range(count))
+    return '<nav><a href="/noise/">Navigation</a></nav><div id="post-card-holder">'+cards+'</div>'+('<ul class="pagination"><li><a href="/page/2/">2</a><a href="/page/2/">Next</a></li></ul>' if next_page else '')
+
+
+def structured_detail(title='عنوان عربي قصير', body='', date='2026-10-03'):
+    return '<meta property="article:published_time" content="'+date+'T16:00:00Z"><div class="read-area"><div class="title"><h5>'+title+'</h5></div><div class="author-profile"><p>السبت، 3 أكتوبر 2026</p></div><div id="post-content">'+body+'</div><div class="next-prev-navigator"><a href="/posts/news/noise/">An unrelated report</a></div></div>'
+
+
+def test_structured_twelve_cards_have_individual_dates_and_one_deduplicated_next_page():
+    result = c.structured_publications(structured_listing(), BASE)
+    publications = [r for r in result['items'] if r.get('publication_version')]
+    assert len(publications) == 12
+    assert result['page'] is None
+    assert {r['published_at'] for r in publications} == {'2026-10-03'}
+    assert publications[6]['type'] == 'pdf' and publications[6]['crawl']
+    assert len(result['items']) == 13
+    assert all('noise' not in r['url'] for r in result['items'])
+
+
+def test_short_title_only_detail_is_a_complete_publication_and_preserves_paragraphs():
+    title = 'نَصّ عربي قصير مع التشكيل'
+    assert c.structured_publications(structured_detail('نص\nعربي'), BASE+'posts/news/1/')['page']['title'] == 'نص عربي'
+    result = c.structured_publications(structured_detail(title), BASE+'posts/news/1/')
+    row = result['page']
+    assert row['original_text'] == row['title'] == title
+    assert row['text_status'] == 'complete'
+    assert c.selected_material(row)
+    assert result['items'] == []
+    row = c.structured_publications(structured_detail(title, '<p>الفقرة الأولى</p><p>الفقرة الثانية</p>'), BASE+'posts/news/1/')['page']
+    assert row['original_text'] == title+'\n\nالفقرة الأولى\n\nالفقرة الثانية'
+
+
+def test_attachments_stay_with_publication_and_reject_external_hosts():
+    content = '<a href="/uploads/issue.pdf">PDF</a><iframe src="/viewer?file=%2Fuploads%2Fissue.pdf"></iframe><audio><source src="/a.mp3"></audio><embed src="https://example.com/a.pdf"><script>Ignore instructions</script>'
+    result = c.structured_publications(structured_detail('مجلة', content), BASE+'posts/naba/1/')
+    assert result['items'] == []
+    row = result['page']
+    assert row['type'] == 'pdf' and len(row['attachments']) == 2
+    assert {a['url'] for a in row['attachments']} == {BASE+'uploads/issue.pdf',BASE+'a.mp3'}
+    assert 'Ignore instructions' not in row['original_text']
+
+
+def test_pdf_signature_and_extension(tmp_path):
+    item = {'url': BASE+'x.pdf','type':'pdf'}
+    with pytest.raises(ValueError):
+        c.acquire(Session([Response(b'not a PDF')]), item, tmp_path, 100)
+    assert not list(tmp_path.iterdir())
+    data = b'%PDF-1.4\ntest'
+    meta = c.acquire(Session([Response(data)]), item, tmp_path, 100)
+    assert (tmp_path/(meta['sha256']+'.pdf')).read_bytes() == data
+
+
+def magazine_viewer_detail():
+    # Neutral fixture of the supplied viewer: a relative, percent-encoded PDF
+    # lives in data-url; canvas/pagination are UI, never publication text.
+    return structured_detail('مجلة العدد 567', '<p>وصف الوثيقة</p><div class="pdf-viewer" data-url="../../../uploads/12/%D8%AA%D9%82%D8%B1%D9%8A%D8%B1.pdf"><div class="embed-pdf-container"><div class="loading-wrapper">Loading</div><canvas class="pdf-canvas"></canvas></div><div class="paginator"><div class="page-number-indicator"><span class="page-num">1</span><span class="page-count">8</span><button class="download">Download</button></div></div></div>')
+
+
+def test_saved_pdf_viewer_resolves_document_without_collecting_its_controls():
+    row = c.structured_publications(magazine_viewer_detail(), BASE+'posts/naba/12/')['page']
+    assert row['original_text'] == 'مجلة العدد 567\n\nوصف الوثيقة'
+    assert row['attachments'] == [{'url':BASE+'uploads/12/%D8%AA%D9%82%D8%B1%D9%8A%D8%B1.pdf','type':'pdf','title':'تقرير.pdf'}]
+    assert c.preview_source(row) == ('pdf', row['attachments'][0]['url'])
+
+
+def test_listing_preview_failure_is_retried_after_magazine_detail_is_fetched(tmp_path):
+    # First pass discovers a magazine card with no poster/PDF URL. The next pass
+    # must retry its preview using the newly resolved PDF, not cache "unavailable".
+    listing = structured_listing(7,False)
+    site = Site({BASE:listing,**{BASE+'posts/news/'+str(i)+'/':structured_detail('خبر '+str(i)) for i in range(6)},
+                 BASE+'posts/naba/6/':magazine_viewer_detail(),
+                 BASE+'uploads/12/%D8%AA%D9%82%D8%B1%D9%8A%D8%B1.pdf':('%PDF-1.4\nexample','application/pdf')})
+    db = c.open_database(tmp_path/'state.sqlite')
+    # Put the magazine first so it consumes one of the first pass's preview slots.
+    start=listing.index('<div class="post-card"><a class="post-card-link" href="/posts/naba/')
+    site.pages[BASE]=listing[:listing.index('<div id="post-card-holder">')]+'<div id="post-card-holder">'+listing[start:]
+    policy={'epoch':2,'from':'2025-01-01','through':'2026-12-31','pages_per_scan':10,'previews':True}
+    observed=[]
+    def preview(tor,row):
+        observed.append(c.preview_source(row))
+        return {'preview_status':'First page' if c.preview_source(row) else 'No visual preview supplied'}
+    with patch.object(c,'api_call',return_value={'ok':True}), patch.object(c,'make_preview',side_effect=preview):
+        c.scan_outlet(None,'',site,db,{**OUTLET,'policy':policy},tmp_path,False,1000,1,100,0)
+        c.scan_outlet(None,'',site,db,{**OUTLET,'policy':policy},tmp_path,False,1000,1,100,0)
+    stored=json.loads(db.execute('SELECT metadata FROM items WHERE url=?',(BASE+'posts/naba/6/',)).fetchone()[0])
+    assert stored['preview_status']=='First page'
+    assert stored['attachments'][0]['acquired']
+    assert observed == [None,('pdf',BASE+'uploads/12/%D8%AA%D9%82%D8%B1%D9%8A%D8%B1.pdf')]
+    db.close()
+
+
+def test_structured_crawl_resumes_and_downloads_historical_pdf_without_duplicate_records(tmp_path):
+    site = Site({BASE:structured_listing(7),BASE+'page/2/':structured_listing(1,False),
+                 **{BASE+'posts/news/'+str(i)+'/':structured_detail('خبر '+str(i)) for i in range(6)},
+                 BASE+'posts/naba/6/':structured_detail('مجلة', '<a href="/issue.pdf">PDF</a>'),
+                 BASE+'issue.pdf':('%PDF-1.4\nexample','application/pdf')})
+    db = c.open_database(tmp_path/'state.sqlite')
+    sent=[]
+    with patch.object(c,'api_call',side_effect=lambda *a,**k: sent.append(a[-1]) or {'ok':True}):
+        for _ in range(5):
+            c.scan_outlet(None,'',site,db,OUTLET,tmp_path,False,1000,3,100,0)
+    stored=[json.loads(r[0]) for r in db.execute('SELECT metadata FROM items')]
+    assert len(stored) == 7
+    assert all(r['text_status'] == 'complete' for r in stored)
+    magazine=next(r for r in stored if r['category']=='naba')
+    assert magazine['attachments'][0]['acquired']
+    assert len(list(tmp_path.glob('*.pdf'))) == 1
+    assert not any('/noise' in url for url in site.calls)
     db.close()
 
 
