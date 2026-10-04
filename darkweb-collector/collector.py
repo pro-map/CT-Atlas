@@ -42,7 +42,16 @@ def publication_date(value):
     value = str(value or "").translate(str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789"))
     match = re.search(r"(?<![0-9])(20[0-9]{2})[-/](0?[1-9]|1[0-2])[-/](0?[1-9]|[12][0-9]|3[01])(?![0-9])", value)
     if not match:
-        return ""
+        months = {"يناير": 1, "فبراير": 2, "مارس": 3, "أبريل": 4, "ابريل": 4, "مايو": 5,
+                  "يونيو": 6, "يوليو": 7, "أغسطس": 8, "اغسطس": 8, "سبتمبر": 9,
+                  "أكتوبر": 10, "اكتوبر": 10, "نوفمبر": 11, "ديسمبر": 12}
+        arabic = re.search(r"(?<!\d)(\d{1,2})\s+(" + "|".join(months) + r")\s+(20\d{2})(?!\d)", value)
+        if not arabic:
+            return ""
+        try:
+            return datetime(int(arabic[3]), months[arabic[2]], int(arabic[1])).date().isoformat()
+        except ValueError:
+            return ""
     try:
         return datetime(*map(int, match.groups())).date().isoformat()
     except ValueError:
@@ -63,6 +72,7 @@ def apply_epoch(db, policy):
         with db:
             for table in ("outlets", "items", "crawl_runs", "frontier", "pages", "outbox", "undated"):
                 db.execute("DELETE FROM " + table)
+            db.execute("DELETE FROM settings WHERE key LIKE 'publication-inventory-v1:%'")
             db.execute("INSERT OR REPLACE INTO settings VALUES ('epoch',?)", (epoch,))
         LOG.info("Collection reset acknowledged; local evidence files preserved")
 
@@ -156,7 +166,7 @@ class PublicationParser(HTMLParser):
 
 
 def selected_material(row):
-    return row.get("type") in {"pdf", "video", "audio"} or (row.get("type") == "image" and bool(row.get("published_at"))) or (
+    return row.get("publication_version") == 1 or row.get("type") in {"pdf", "video", "audio"} or (row.get("type") == "image" and bool(row.get("published_at"))) or (
         row.get("type") == "page" and row.get("selection_version") == 1)
 
 
@@ -166,6 +176,159 @@ def material_type(url, mime=""):
         if mime == prefix or (prefix.endswith("/") and mime.startswith(prefix)):
             return kind
     return TYPES.get(Path(urlsplit(url).path).suffix.lower(), "page")
+
+
+class PublicationTree(HTMLParser):
+    """Small inert DOM for the observed post-card/read-area template. No JS execution."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.root = {"tag": "root", "attrs": {}, "children": []}
+        self.stack = [self.root]
+
+    def handle_starttag(self, tag, attrs):
+        node = {"tag": tag, "attrs": dict(attrs), "children": []}
+        self.stack[-1]["children"].append(node)
+        if tag not in PublicationParser.VOID:
+            self.stack.append(node)
+
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+        if tag not in PublicationParser.VOID:
+            self.handle_endtag(tag)
+
+    def handle_endtag(self, tag):
+        for i in range(len(self.stack)-1, 0, -1):
+            if self.stack[i]["tag"] == tag:
+                del self.stack[i:]
+                break
+
+    def handle_data(self, value):
+        self.stack[-1]["children"].append(value)
+
+
+def descendants(node):
+    stack = [node]
+    while stack:
+        current = stack.pop()
+        if not isinstance(current, dict):
+            continue
+        yield current
+        if current["tag"] not in {"script", "style", "svg", "noscript", "template"}:
+            stack.extend(reversed(current["children"]))
+
+
+def has_class(node, name):
+    return name in node["attrs"].get("class", "").split()
+
+
+def original_text(node):
+    """Retain Unicode and paragraph boundaries; never include navigation or active HTML."""
+    if node is None:
+        return ""
+    parts, stack = [], [node]
+    while stack:
+        current = stack.pop()
+        if current is None:
+            parts.append("\n")
+        elif isinstance(current, str):
+            # Physical line wrapping in saved HTML is layout whitespace, not a
+            # paragraph break. Only block elements introduce paragraph boundaries.
+            parts.append(re.sub(r"\s+", " ", current))
+        elif current["tag"] not in {"script", "style", "svg", "noscript", "template", "button"}:
+            block = current["tag"] in {"p", "div", "br", "li", "h1", "h2", "h3", "h4", "h5", "h6", "blockquote"}
+            if block:
+                parts.append("\n")
+            stack.extend([None] if block else [])
+            stack.extend(reversed(current["children"]))
+    return "\n\n".join(line for line in (" ".join(p.split()) for p in "".join(parts).splitlines()) if line)
+
+
+def structured_publications(html, base):
+    """One record per card/permalink; attachment links never become separate publications.
+
+    Host addresses and source material are runtime input, not embedded in the code.
+    Return None for other templates so their existing collection rules remain intact.
+    """
+    tree = PublicationTree()
+    tree.feed(html)
+    nodes = list(descendants(tree.root))
+    host = urlsplit(base).hostname
+    def local(value):
+        url = onion_url(urljoin(base, value or ""))
+        return url if value and url and urlsplit(url).hostname == host else ""
+    def first(parent, cls):
+        return next((n for n in descendants(parent) if has_class(n, cls)), None)
+    def record(url, title, text, date_raw, complete=False, attachments=None, preview=""):
+        category = urlsplit(url).path.split("/")[2] if re.match(r"/posts/[^/]+/[^/]+/?$", urlsplit(url).path) else "publication"
+        full = text or title
+        clipped = full.encode("utf-8")[:48000].decode("utf-8", errors="ignore")
+        kind = {"naba": "pdf", "videos": "video", "audios": "audio"}.get(category, "page")
+        return {"url": url, "title": title[:2000], "type": kind, "category": category,
+                "original_text": clipped, "excerpt": full[:600], "source_date": date_raw[:150],
+                "published_at": publication_date(date_raw), "date_basis": "html", "source_page": url,
+                "publication_version": 1, "text_status": "truncated" if clipped != full or len(title) > 2000 else "complete" if complete else "listing",
+                "attachments": attachments or [], "preview_url": preview, "crawl": not complete}
+    holder = next((n for n in nodes if n["attrs"].get("id") == "post-card-holder"), None)
+    if holder is not None:
+        rows = {}
+        for card in (n for n in descendants(holder) if has_class(n, "post-card")):
+            link = next((local(n["attrs"].get("href")) for n in descendants(card)
+                         if n["tag"] == "a" and has_class(n, "post-card-link") and local(n["attrs"].get("href"))), "")
+            if not link or not re.match(r"^/posts/[^/]+/[^/]+/?$", urlsplit(link).path):
+                continue
+            title = original_text(first(card, "post-summary"))
+            footer = first(card, "card-footer")
+            date_node = next((n for n in descendants(footer or tree.root) if n["tag"] in {"span", "time"} and publication_date(original_text(n))), None) if footer else None
+            if title:
+                rows[link] = record(link, title, title, original_text(date_node))
+        # Follow the main list's own pagination, not sidebars, donation links or related posts.
+        for pagination in (n for n in nodes if has_class(n, "pagination")):
+            for link in descendants(pagination):
+                target = local(link["attrs"].get("href")) if link["tag"] == "a" else ""
+                if target and target != base:
+                    rows.setdefault(target, {"url": target, "type": "page", "title": "Listing page", "crawl": True})
+        return {"items": list(rows.values()), "page": None, "text": "", "truncated": False, "structured": True}
+    area = next((n for n in nodes if has_class(n, "read-area")), None)
+    content = next((n for n in descendants(area) if n["attrs"].get("id") == "post-content"), None) if area else None
+    if area is None or content is None:
+        return None
+    title = original_text(first(area, "title"))
+    if not title:
+        return {"items": [], "page": None, "text": "", "truncated": True, "structured": True}
+    date_raw = original_text(first(area, "author-profile"))
+    meta = {n["attrs"].get("property"): n["attrs"].get("content", "") for n in nodes if n["tag"] == "meta"}
+    published = publication_date(meta.get("article:published_time")) or publication_date(date_raw)
+    # The requested permalink is the record identity. Do not trust a conflicting og:url.
+    attachments = {}
+    for n in descendants(content):
+        attrs = n["attrs"]
+        for key in ("href", "src", "data", "data-url", "data-pdf", "data-src"):
+            target = local(attrs.get(key))
+            if not target:
+                continue
+            kind = material_type(target, attrs.get("type", ""))
+            if kind in {"pdf", "video", "audio", "image"}:
+                attachments[target] = {"url": target, "type": kind, "title": original_text(n)[:300] or display_title(target)}
+        # PDF.js viewers commonly carry the original URL in a file= query parameter.
+        for key in ("src", "href"):
+            for param, value in parse_qsl(urlsplit(attrs.get(key, "")).query):
+                target = local(value) if param == "file" else ""
+                if target and material_type(target) == "pdf":
+                    attachments[target] = {"url": target, "type": "pdf", "title": display_title(target)}
+    preview = local(meta.get("og:image"))
+    if preview and material_type(preview) != "image":
+        preview = ""
+    if not preview:
+        hero = first(area, "hero-area")
+        match = re.search(r"url\(['\"]?([^)'\"]+)", hero["attrs"].get("style", "")) if hero else None
+        preview = local(match[1]) if match else ""
+    body = original_text(content)
+    full = title + ("\n\n" + body if body and body != title else "")
+    row = record(base, title, full, date_raw, True, list(attachments.values())[:12], preview)
+    row["published_at"] = published
+    if len(attachments) > 12:
+        row["attachments_truncated"] = True
+    return {"items": [], "page": row, "text": full, "truncated": False, "structured": True}
 
 
 class ListingParser(HTMLParser):
@@ -318,6 +481,9 @@ def read_listing(session, outlet):
         if encoding.lower() == "iso-8859-1":
             encoding = "utf-8"
         html = b"".join(chunks).decode(encoding, errors="replace")
+        structured = structured_publications(html, outlet["url"])
+        if structured is not None:
+            return structured
         parser.feed(html)
         parser.close()
         selector = PublicationParser()
@@ -347,6 +513,12 @@ def read_listing(session, outlet):
 
 def make_preview(tor, row):
     """At most 8 MiB of source bytes; never keep or upload original media."""
+    if row.get("publication_version") == 1:
+        attachment = next((a for a in row.get("attachments", []) if a["type"] == "pdf"), None)
+        if attachment:
+            row = {**attachment, "preview_url": ""}
+        elif not row.get("preview_url"):
+            return {"preview_status": "No visual preview supplied"}
     kind = row.get("type")
     preview_url = row.get("preview_url", "")
     target = preview_url or (row["url"] if kind in {"pdf", "image", "video"} else "")
@@ -424,7 +596,12 @@ def acquire(session, item, evidence, max_bytes):
                 digest.update(chunk)
                 output.write(chunk)
         fingerprint = digest.hexdigest()
-        destination = evidence / (fingerprint + ".bin")
+        if item.get("type") == "pdf":
+            with temporary.open("rb") as downloaded:
+                if downloaded.read(5) != b"%PDF-":
+                    raise ValueError("Material is not a PDF")
+        extension = ".pdf" if item.get("type") == "pdf" else ".bin"
+        destination = evidence / (fingerprint + extension)
         if destination.exists():
             temporary.unlink()
         else:
@@ -451,7 +628,8 @@ def api_session(endpoint, token):
 
 def api_call(session, endpoint, path, payload=None):
     response = session.request("GET" if payload is None else "POST", endpoint + path,
-                               json=payload, timeout=(15, 60), allow_redirects=False)
+                               data=None if payload is None else json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+                               headers={"Content-Type": "application/json"}, timeout=(15, 60), allow_redirects=False)
     try:
         if 300 <= response.status_code < 400:
             raise ValueError("API redirects are not followed with collector credentials")
@@ -526,7 +704,7 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
                 target_url = onion_url(row["url"])
                 if not target_url or urlsplit(target_url).hostname != urlsplit(outlet["url"]).hostname:
                     continue
-                if row["type"] == "page" and target_url != url and (not watching or target[1] < 2):
+                if (row.get("crawl") or row["type"] == "page") and target_url != url and (not watching or target[1] < 2):
                     db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url,depth) VALUES (?,?,?)", (oid, target_url, target[1]+1))
                 if not selected_material(row):
                     continue
@@ -538,8 +716,14 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
                 prior = db.execute("SELECT metadata,baseline FROM items WHERE outlet_id=? AND url=?", (oid, target_url)).fetchone()
                 queued = db.execute("SELECT metadata,baseline FROM outbox WHERE outlet_id=? AND url=?", (oid, target_url)).fetchone()
                 previous = json.loads((queued or prior)[0]) if queued or prior else {}
+                if previous.get("publication_version") == 1 and previous.get("text_status") in {"complete", "truncated"} and row.get("text_status") == "listing":
+                    # Listing excerpts must never downgrade a fetched publication.
+                    continue
                 # Preserve a fetched page's title/excerpt when a later navigation link points to it.
                 merged = {**previous, **row}
+                if row.get("publication_version") == 1:
+                    old_files = {a["url"]: a for a in previous.get("attachments", [])}
+                    merged["attachments"] = [{**old_files.get(a["url"], {}), **a} for a in row.get("attachments", [])]
                 if previous.get("type", "page") != "page" and row["type"] == "page" and not row.get("excerpt"):
                     merged["type"] = previous["type"]
                 if previous.get("excerpt") and not row.get("excerpt"):
@@ -565,19 +749,32 @@ def crawl_progress(db, oid, max_pages):
 def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_bytes,
                 pages_per_scan=100, max_pages=10000, request_delay=1.0):
     policy = outlet.get("policy")
+    # Revisit previously scanned pages once after the parser upgrade without
+    # deleting evidence, metadata or online results. Persist progress across CMD restarts.
+    inventory_key = "publication-inventory-v1:" + outlet["id"]
+    inventory = db.execute("SELECT value FROM settings WHERE key=?", (inventory_key,)).fetchone()
+    if not inventory:
+        with db:
+            db.execute("DELETE FROM frontier WHERE outlet_id=?", (outlet["id"],))
+            db.execute("DELETE FROM crawl_runs WHERE outlet_id=?", (outlet["id"],))
+            db.execute("INSERT OR REPLACE INTO settings VALUES (?, 'running')", (inventory_key,))
+    if not inventory or inventory[0] != "complete":
+        outlet = {**outlet, "collection_phase": "backfill"}
     if policy:
         pages_per_scan = min(pages_per_scan, policy["pages_per_scan"])
         max_pages = min(max_pages, 200 if outlet.get("collection_phase") == "watch" else 10000)
     progress = crawl_outlet(tor, db, outlet, pages_per_scan, max_pages, request_delay)
     oid = outlet["id"]
-    if policy and policy.get("previews"):
+    if policy:
         # Fill missing previews gradually even for older backfill pages that the
         # shallow watch cycle no longer visits. Keep the same per-pass budget.
         with db:
             added = 0
             for old_url, metadata, baseline in db.execute("SELECT url,metadata,baseline FROM items WHERE outlet_id=? ORDER BY rowid", (oid,)).fetchall():
                 item = json.loads(metadata)
-                if within_period(item, policy) and not item.get("preview") and not item.get("preview_status"):
+                pdf_pending = any(a.get("type") == "pdf" and not a.get("acquired") and a.get("attempts", 0) < 3 for a in item.get("attachments", []))
+                preview_pending = policy.get("previews") and not item.get("preview") and not item.get("preview_status")
+                if within_period(item, policy) and (pdf_pending or preview_pending):
                     db.execute("INSERT OR IGNORE INTO outbox VALUES (?,?,?,?)", (oid, old_url, metadata, baseline))
                     added += 1
                     if added >= 2:
@@ -585,6 +782,7 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
     pending = db.execute("SELECT url,metadata,baseline FROM outbox WHERE outlet_id=? ORDER BY rowid", (oid,)).fetchall()
     batch, batch_size = [], 0
     previews_left = 2
+    pdfs_left = 2
 
     def upload(rows, final):
         result = api_call(api, endpoint, "/darkweb/ingest", {"selection_version": 2, "collection_epoch": policy["epoch"] if policy else 0, "undated_count": db.execute("SELECT COUNT(*) FROM undated WHERE outlet_id=?", (oid,)).fetchone()[0], "outlet_id": oid, "items": [r for r, _ in rows],
@@ -605,6 +803,20 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
             with db:
                 db.execute("DELETE FROM outbox WHERE outlet_id=? AND url=?", (oid, row["url"]))
             continue
+        if row.get("publication_version") == 1:
+            for attachment in row.get("attachments", []):
+                if attachment["type"] != "pdf" or attachment.get("acquired") or attachment.get("attempts", 0) >= 3 or not pdfs_left:
+                    continue
+                pdfs_left -= 1
+                attachment["attempts"] = attachment.get("attempts", 0) + 1
+                try:
+                    attachment.update(acquire(tor, attachment, evidence, max_bytes))
+                    attachment["status"] = "downloaded_on_collector"
+                except Exception:
+                    attachment["status"] = "download_failed_or_exceeds_cap"
+                    LOG.warning("PDF acquisition failed or exceeded cap for outlet %s", oid)
+            with db:
+                db.execute("UPDATE outbox SET metadata=? WHERE outlet_id=? AND url=?", (json.dumps(row), oid, row["url"]))
         if policy and policy.get("previews"):
             prior = db.execute("SELECT metadata FROM items WHERE outlet_id=? AND url=?", (oid, row["url"])).fetchone()
             previous = json.loads(prior[0]) if prior else {}
@@ -615,7 +827,7 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
                 row.update(make_preview(tor, row))
                 with db:
                     db.execute("UPDATE outbox SET metadata=? WHERE outlet_id=? AND url=?", (json.dumps(row), oid, row["url"]))
-        if acquire_files and not baseline and row["type"] != "page" and not row.get("acquired"):
+        if acquire_files and not baseline and not row.get("publication_version") and row["type"] != "page" and not row.get("acquired"):
             try:
                 row.update(acquire(tor, row, evidence, max_bytes))
                 # Retain the acquired metadata even if the subsequent upload fails.
@@ -623,7 +835,7 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
                     db.execute("UPDATE outbox SET metadata=? WHERE outlet_id=? AND url=?", (json.dumps(row), oid, row["url"]))
             except Exception:
                 LOG.warning("Acquisition failed or exceeded cap for outlet %s", oid)
-        encoded_size = len(json.dumps(row).encode("utf-8"))
+        encoded_size = len(json.dumps(row, ensure_ascii=False).encode("utf-8"))
         if batch and (len(batch) >= 100 or batch_size + encoded_size > 90000):
             upload(batch, False)
             batch, batch_size = [], 0
@@ -634,6 +846,7 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
         with db:
             db.execute("INSERT OR REPLACE INTO outlets VALUES (?,1)", (oid,))
             db.execute("UPDATE crawl_runs SET finished=1 WHERE outlet_id=?", (oid,))
+            db.execute("INSERT OR REPLACE INTO settings VALUES (?, 'complete')", (inventory_key,))
     elif policy and outlet.get("collection_phase") == "watch" and progress["pages_scanned"] >= max_pages:
         with db:
             db.execute("UPDATE crawl_runs SET finished=1 WHERE outlet_id=?", (oid,))
@@ -656,6 +869,7 @@ def main():
     parser.add_argument("--max-file-mb", type=int, default=50)
     parser.add_argument("--acquire", action="store_true", help="Acquire new material links locally; no historical baseline downloads")
     parser.add_argument("--once", action="store_true", help="Run one resumable pass, not necessarily a complete outlet crawl")
+    parser.add_argument("--only-outlet", default="", help="Collect only this registered outlet ID or starting onion URL")
     parser.add_argument("--pages-per-scan", type=int, default=50)
     parser.add_argument("--max-pages", type=int, default=10000)
     parser.add_argument("--request-delay", type=float, default=1.0)
@@ -679,6 +893,7 @@ def main():
         while True:
             started = time.monotonic()
             failed = False
+            backfill_pending = False
             try:
                 config = api_call(api, endpoint, "/darkweb/collector-config")
                 policy = config.get("policy")
@@ -690,13 +905,20 @@ def main():
                 if not config.get("outlets"):
                     LOG.warning("No enabled outlets. Register starting URLs in CT Atlas OUTLETS first.")
                     failed = True
+                if args.only_outlet and not any(args.only_outlet == o["id"] or onion_url(args.only_outlet) == onion_url(o["url"]) for o in config.get("outlets", [])):
+                    LOG.error("The selected outlet is not registered and enabled in Atlas")
+                    failed = True
                 for outlet in ([] if policy.get("paused") else config.get("outlets", [])):
                     outlet = {**outlet, "policy": policy}
+                    if args.only_outlet and args.only_outlet != outlet["id"] and onion_url(args.only_outlet) != onion_url(outlet["url"]):
+                        continue
                     if not onion_url(outlet.get("url", "")):
                         continue
                     try:
                         if not scan_outlet(api, endpoint, tor, db, outlet, args.evidence, args.acquire, args.max_file_mb * 1048576, args.pages_per_scan, args.max_pages, args.request_delay):
                             failed = True
+                        phase = db.execute("SELECT value FROM settings WHERE key=?", ("publication-inventory-v1:"+outlet["id"],)).fetchone()
+                        backfill_pending |= bool(phase and phase[0] != "complete")
                     except Exception:
                         failed = True
                         LOG.error("Scan not acknowledged for outlet %s; inventory retained for retry", outlet["id"])
@@ -705,7 +927,10 @@ def main():
                 LOG.error("Collector API unavailable or credentials rejected; retrying at next interval")
             if args.once:
                 return 1 if failed else 0
-            time.sleep(max(0, args.interval - (time.monotonic() - started)))
+            # Continue an initial inventory promptly; the configured interval is
+            # the ongoing watch cadence after the archive traversal completes.
+            interval = min(args.interval, 15) if backfill_pending and not failed else args.interval
+            time.sleep(max(1, interval - (time.monotonic() - started)))
     except KeyboardInterrupt:
         return 0
     finally:

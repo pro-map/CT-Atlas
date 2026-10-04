@@ -10,8 +10,8 @@ function harness(){
  const storage={
   async get(key){return structuredClone(values.get(key));},
   async put(key,value){if(typeof key==='object'){for(const [k,v]of Object.entries(key))values.set(k,structuredClone(v));}else values.set(key,structuredClone(value));},
-  async delete(key){values.delete(key);},
-  async list({prefix='',limit=1000}={}){return new Map([...values].filter(([k])=>k.startsWith(prefix)).sort(([a],[b])=>a.localeCompare(b)).slice(0,limit).map(([k,v])=>[k,structuredClone(v)]));},
+  async delete(key){for(const k of Array.isArray(key)?key:[key])values.delete(k);},
+  async list({prefix='',limit=1000,reverse=false,end}={}){let rows=[...values].filter(([k])=>k.startsWith(prefix)&&(!end||k<end)).sort(([a],[b])=>a<b?-1:a>b?1:0);if(reverse)rows.reverse();return new Map(rows.slice(0,limit).map(([k,v])=>[k,structuredClone(v)]));},
   transaction(callback){const result=queue.then(()=>callback(storage));queue=result.catch(()=>{});return result;}
  };
  const env={AUTH_USERS_JSON:'{}',DARKWEB_INGEST_TOKEN:'s'.repeat(48),ALLOWED_ORIGIN:'https://ct-atlas.com'};
@@ -185,4 +185,47 @@ test('reset during AI generation cannot repopulate the cleared feed',async()=>{
  release(Response.json({text:JSON.stringify({summary:'Old outlet claim [1]',titles:[{id:item.id,title:'Old translation'}]})}));
  await inFlight;const state=(await h.call('/darkweb/feed')).data;
  assert.equal(state.items.length,0);assert.equal(state.summary,null);
+});
+
+function publication(n=1,extra={}){return {url:base+'posts/news/'+n+'/',title:'عنوان عربي '+n,original_text:'الفقرة الأولى\n\nالفقرة الثانية',publication_version:1,category:'news',text_status:'complete',source_date:'3 أكتوبر 2026',published_at:'2026-10-03',attachments:[],...extra};}
+test('structured records preserve Arabic paragraphs and group validated attachments behind authentication',async()=>{
+ const h=harness(),id=await register(h),raw=publication(1,{title:'ع'.repeat(500),attachments:[{url:base+'report.pdf',type:'pdf',title:'تقرير',acquired:true,sha256:'a'.repeat(64),bytes:40}]});
+ const submit=items=>h.call('/darkweb/ingest',{outlet_id:id,items,scan_ok:true},'',true);
+ assert.equal((await submit([raw])).status,200);
+ const archive=(await h.call('/darkweb/archive')).data;
+ assert.equal(archive.items.length,1);assert.equal(archive.items[0].title.length,500);assert.equal(archive.items[0].original_text,undefined);
+ const itemId=archive.items[0].id;
+ assert.equal((await h.call('/darkweb/item?id='+itemId,undefined,'')).status,401);
+ const full=(await h.call('/darkweb/item?id='+itemId,undefined,'analyst')).data.item;
+ assert.equal(full.original_text,raw.original_text);assert.equal(full.attachments[0].sha256,'a'.repeat(64));
+ assert.equal((await submit([publication(2,{attachments:[{url:'https://example.com/f.pdf',type:'pdf'}]})])).status,400);
+ assert.equal((await submit([publication(2,{original_text:'ع'.repeat(24001)})])).status,400);
+ // Listing revisits and old collectors cannot overwrite a complete publication.
+ await submit([publication(1,{title:'listing',text_status:'listing'})]);
+ await submit([{url:raw.url,title:'Legacy excerpt',type:'page'}]);
+ assert.equal((await h.call('/darkweb/item?id='+itemId)).data.item.original_text,raw.original_text);
+});
+test('structured archive retains more than 500 records, paginates by date without duplicates and clears on reset',async()=>{
+ const h=harness(),id=await register(h);
+ for(let batch=0;batch<6;batch++)await h.call('/darkweb/ingest',{outlet_id:id,items:Array.from({length:90},(_,i)=>publication(batch*90+i,{published_at:i%2?'2025-01-01':'2025-01-02'})),scan_ok:true},'',true);
+ const ids=new Set();let cursor='',pages=0,lastDate='9999';
+ do{const result=await h.call('/darkweb/archive'+(cursor?'?cursor='+encodeURIComponent(cursor):''));assert.equal(result.status,200);for(const item of result.data.items){assert.ok(item.published_at<=lastDate);lastDate=item.published_at;assert.ok(!ids.has(item.id));ids.add(item.id);}cursor=result.data.next_cursor;pages++;assert.ok(pages<20);}while(cursor);
+ assert.equal(ids.size,540);assert.equal((await h.call('/darkweb/feed')).data.items.length,500);
+ const firstId=[...ids][0];assert.equal((await h.call('/darkweb/item?id='+firstId)).status,200);
+ await h.call('/darkweb/policy',{from:'2025-01-01',through:'2026-12-31',pages_per_scan:10,reset:true});
+ assert.equal((await h.call('/darkweb/archive')).data.items.length,0);assert.equal((await h.call('/darkweb/item?id='+firstId)).status,404);
+ assert.equal([...h.values.keys()].filter(k=>/^darkweb:publication(?:-index|-pending)?:/.test(k)).length,0);
+});
+test('English overviews use source text and cannot overwrite newer source contents',async()=>{
+ const h=harness(),id=await register(h);h.env.GEMINI_API_KEY='test';
+ const submit=raw=>h.call('/darkweb/ingest',{outlet_id:id,items:[raw],scan_ok:true},'',true);
+ await submit(publication());const item=(await h.call('/darkweb/archive')).data.items[0];
+ h.context.fetch=async(url,options)=>{const input=JSON.parse(JSON.parse(options.body).input);assert.equal(input.titles[0].original_text,'الفقرة الأولى الفقرة الثانية');assert.ok(!options.body.includes(host));return Response.json({text:JSON.stringify({summary:'The outlet published this claim. [1]',titles:[{id:item.id,title:'English title',overview_en:'The source reports a claim.'}]})});};
+ await h.call('/darkweb/enrich',{});let full=(await h.call('/darkweb/item?id='+item.id)).data.item;
+ assert.equal(full.overview_en,'The source reports a claim.');assert.equal(full.original_text,publication().original_text);
+ h.values.delete('darkweb:enrich-until');await submit(publication(1,{original_text:'النص الجديد'}));
+ let release,started;const ready=new Promise(r=>started=r);h.context.fetch=()=>{started();return new Promise(r=>release=r);};
+ const inflight=h.call('/darkweb/enrich',{});await ready;await submit(publication(1,{original_text:'النص الأحدث'}));
+ release(Response.json({text:JSON.stringify({summary:'',titles:[{id:item.id,title:'Stale title',overview_en:'Stale overview'}]})}));await inflight;
+ full=(await h.call('/darkweb/item?id='+item.id)).data.item;assert.equal(full.overview_en,'');assert.equal(full.original_text,'النص الأحدث');
 });

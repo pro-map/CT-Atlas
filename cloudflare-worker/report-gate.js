@@ -567,6 +567,14 @@ export class ReportGate {
           policy.epoch = prior.epoch + 1;
           const rows = await tx.list({ prefix: "darkweb:item:", limit: 1000 });
           for (const [key] of rows) await tx.delete(key);
+          // Delete structured archives in bounded batches, independently of feed retention.
+          for (const prefix of ["darkweb:publication:", "darkweb:publication-index:", "darkweb:publication-pending:"]) {
+            while (true) {
+              const archived = await tx.list({ prefix, limit: 128 });
+              if (!archived.size) break;
+              await tx.delete([...archived.keys()]);
+            }
+          }
           const outlets = await tx.get("darkweb:outlets") || [];
           for (const outlet of outlets) { delete outlet.initialized_at; Object.assign(outlet, { collection_phase: "backfill", pages_scanned: 0, pending_pages: 0, failed_pages: 0, undated_count: 0, last_scan: "", last_success: "", scan_ok: false, crawl_complete: false, truncated: false }); }
           await tx.put("darkweb:outlets", outlets);
@@ -578,8 +586,36 @@ export class ReportGate {
       return Response.json(result);
     }
     if (url.pathname === "/darkweb-preview") {
-      const item = await this.state.storage.get("darkweb:item:" + body.id);
+      const policy = await this.state.storage.get("darkweb:policy");
+      const item = await this.state.storage.get(`darkweb:publication:${policy.epoch}:${body.id}`) || await this.state.storage.get("darkweb:item:" + body.id);
       return Response.json({ preview: item?.preview || "" });
+    }
+    if (url.pathname === "/darkweb-item") {
+      const policy = await this.state.storage.get("darkweb:policy");
+      const item = await this.state.storage.get(`darkweb:publication:${policy.epoch}:${body.id}`) || await this.state.storage.get("darkweb:item:" + body.id);
+      if (!item) return Response.json({ error: "Publication unavailable in this collection." }, { status: 404 });
+      const { preview, ...record } = item;
+      return Response.json({ item: { ...record, has_preview: !!preview } });
+    }
+    if (url.pathname === "/darkweb-archive") {
+      const policy = await this.state.storage.get("darkweb:policy"), prefix = `darkweb:publication-index:${policy.epoch}:`;
+      const rows = await this.state.storage.list({ prefix, reverse: true, limit: 51, ...(body.cursor ? { end: prefix + body.cursor } : {}) });
+      const page = [...rows.entries()].slice(0,50), items = [];
+      for (const [, id] of page) {
+        const record = await this.state.storage.get(`darkweb:publication:${policy.epoch}:${id}`);
+        if (record) { const { preview, original_text, ...item } = record; items.push({ ...item, has_preview: !!preview }); }
+      }
+      return Response.json({ items, next_cursor: rows.size > 50 ? page.at(-1)[0].slice(prefix.length) : "", epoch: policy.epoch });
+    }
+    if (url.pathname === "/darkweb-enrich-candidates") {
+      const policy = await this.state.storage.get("darkweb:policy");
+      const pending = await this.state.storage.list({ prefix: `darkweb:publication-pending:${policy.epoch}:`, limit: 10 });
+      const items = [];
+      for (const id of pending.values()) {
+        const record = await this.state.storage.get(`darkweb:publication:${policy.epoch}:${id}`);
+        if (record) items.push(record);
+      }
+      return Response.json({ items });
     }
     if (url.pathname === "/darkweb-enrich-lock") {
       return Response.json(await this.state.storage.transaction(async tx => {
@@ -594,8 +630,16 @@ export class ReportGate {
         const policy = await tx.get("darkweb:policy");
         if (body.epoch !== policy.epoch) return { ok: false };
         for (const title of body.titles) {
-          const key = "darkweb:item:" + title.id, item = await tx.get(key);
-          if (item && item.title === title.original && item.excerpt === title.excerpt) await tx.put(key, { ...item, title_en: title.title, title_en_generated_at: new Date(now).toISOString() });
+          const key = "darkweb:item:" + title.id, archiveKey = `darkweb:publication:${policy.epoch}:${title.id}`;
+          const item = await tx.get(archiveKey) || await tx.get(key);
+          if (item && item.title === title.original && item.excerpt === title.excerpt && (!item.publication_version || item.content_hash === title.content_hash)) {
+            const updated = { ...item, title_en: title.title, overview_en: title.overview_en || "", title_en_generated_at: new Date(now).toISOString() };
+            if (item.publication_version) {
+              await tx.put(archiveKey, updated);
+              if (updated.overview_en) await tx.delete(`darkweb:publication-pending:${policy.epoch}:${title.id}`);
+            }
+            if (await tx.get(key)) { const { original_text, ...card } = updated; await tx.put(key, card); }
+          }
         }
         if (body.summary) await tx.put("darkweb:summary", body.summary);
         return { ok: true };
@@ -655,13 +699,26 @@ export class ReportGate {
           const bucketKey = "darkweb:known:" + outlet.id + ":" + item.id.slice(0, 2);
           if (!knownBuckets.has(bucketKey)) knownBuckets.set(bucketKey, await tx.get(bucketKey) || {});
           const bucket = knownBuckets.get(bucketKey);
-          const prior = await tx.get(key) || bucket[item.id];
+          const archiveKey = `darkweb:publication:${policy.epoch}:${item.id}`;
+          const prior = await tx.get(archiveKey) || await tx.get(key) || bucket[item.id];
+          // A legacy collector or a revisited listing cannot replace complete source text.
+          if (prior?.publication_version && (!item.publication_version || (prior.text_status !== "listing" && item.text_status === "listing"))) continue;
           if (!prior) added++;
-          const record = { ...prior, ...item, title_en: prior?.title === item.title && prior?.excerpt === item.excerpt ? prior?.title_en || "" : "", first_seen: prior?.first_seen || timestamp,
+          const sameContent = prior?.title === item.title && prior?.excerpt === item.excerpt && prior?.content_hash === item.content_hash;
+          const record = { ...prior, ...item, title_en: sameContent ? prior?.title_en || "" : "", overview_en: sameContent ? prior?.overview_en || "" : "", first_seen: prior?.first_seen || timestamp,
             preview: item.preview || prior?.preview || "", last_seen: timestamp, baseline: baseline ? true : prior ? prior.baseline : false,
             sha256: item.sha256 || prior?.sha256 || "", acquired: item.acquired || prior?.acquired || false,
             bytes: item.bytes ?? prior?.bytes ?? null };
-          await tx.put(key, record);
+          if (item.publication_version) {
+            const oldFiles = new Map((prior?.attachments || []).map(a => [a.url,a]));
+            record.attachments = item.attachments.map(a => a.acquired || !oldFiles.get(a.url)?.acquired ? a : { ...a, ...oldFiles.get(a.url) });
+            if (prior?.published_at && prior.published_at !== item.published_at) await tx.delete(`darkweb:publication-index:${policy.epoch}:${prior.published_at}:${item.id}`);
+            await tx.put(archiveKey, record);
+            await tx.put(`darkweb:publication-index:${policy.epoch}:${item.published_at}:${item.id}`, item.id);
+            if (!record.title_en || !record.overview_en) await tx.put(`darkweb:publication-pending:${policy.epoch}:${item.id}`, item.id);
+          }
+          const { original_text, ...card } = record;
+          await tx.put(key, card);
           bucket[item.id] = { first_seen: record.first_seen, baseline: record.baseline,
             sha256: record.sha256, acquired: record.acquired, bytes: record.bytes };
         }
