@@ -26,7 +26,7 @@ const root=path.resolve(__dirname,'..');
   await route.fulfill({json:{ok:true,items:[],reports:[],labels:[],cases:[],monitored:[],outlets:[],policy:{},sources:[],providers:[]}});
  });
  const page=await context.newPage();
- for(const name of ['main','index','crypto','facial','social','darkweb','ip']){
+ for(const name of ['main','index','crypto','facial','social','darkweb','ip','privacy','sound-check']){
   await page.goto('https://sound-test.invalid/'+name+'.html');
   await page.locator('#ctSoundEffects').waitFor({state:'attached'});
   await page.evaluate(()=>document.documentElement.classList.remove('ct-loading'));

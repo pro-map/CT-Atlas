@@ -1,7 +1,7 @@
 # Interface sound effects
 
-The header's **Sound effects: On/Off** switch is shared by the hub, Intelligence
-Map, Crypto, Facial, Social, Dark Web and IP workspaces. It defaults to On at a
+The small **bell** at the lower-left of every page (green On, red/slashed Off) is shared by the hub, Intelligence
+Map, Crypto, Facial, Social, Dark Web and IP workspaces, login, privacy and the sound-check page. It defaults to On at a
 low fixed gain (0.12). The preference lives in `ct_atlas_sound_effects` in
 localStorage (`on` / `off`), per browser origin; the main site and its Cloudflare
 mirror therefore have separate preferences.
@@ -28,6 +28,8 @@ pending context-resume playback. Storage events synchronize open tabs. Hidden
 pages suppress feedback. There is one voice, no queue, and a 120 ms minimum
 interval: very fast completions/rapid repeated actions can intentionally be
 silent instead of producing overlapping sounds.
+
+The standalone `sound-check.html` compares the interface engine with a short, in-memory WAV played by the browser audio element. It reports whether the audio clock advances and whether browser playback was accepted; it does not claim that the user can hear the output. Both tests respect Off.
 
 ## Validation
 
