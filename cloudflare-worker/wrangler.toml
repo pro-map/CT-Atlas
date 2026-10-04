@@ -57,3 +57,9 @@ database_id = "7c00bac7-05b6-443c-a305-c2bd9352c857"
 # 8 monitored wallets per run to protect explorer/API and subrequest quotas.
 [triggers]
 crons = ["17 */6 * * *"]
+
+# Create this private Standard bucket before deploying this binding.
+# Keep public access (r2.dev and custom domains) disabled.
+[[r2_buckets]]
+binding = "DARKWEB_FILES"
+bucket_name = "ct-atlas-darkweb-files"

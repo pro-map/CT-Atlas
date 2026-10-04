@@ -20,8 +20,29 @@ function unread(item){return !item.baseline&&item.first_seen>(state.seen_through
 function empty(title,text){const el=node("div",undefined,"empty");el.append(node("h2",title),node("p",text));return el;}
 function copy(value,label){const button=node("button",label,"copy");button.type="button";button.onclick=async()=>{try{await navigator.clipboard.writeText(value);button.textContent="COPIED";setTimeout(()=>button.textContent=label,1500);}catch(_){$("message").textContent="Clipboard unavailable. Select and copy the URL in the outlet listing.";}};return button;}
 const categoryLabel=value=>({news:"NEWS / COMMUNIQUÉ",naba:"MAGAZINE",videos:"VIDEO PUBLICATION",audios:"AUDIO STATEMENT"}[value]||"PUBLICATION");
+function publicationVisual(item){
+ const frame=node("div",undefined,"publication-visual"),placeholder=node("div",undefined,"preview-placeholder");
+ const label=({pdf:"PDF",video:"VIDEO",audio:"AUDIO",image:"IMAGE",page:"NEWS"}[item.type]||"FILE");
+ placeholder.setAttribute("role","img");placeholder.setAttribute("aria-label",label+" document icon; source preview unavailable");placeholder.title=item.preview_status||"Source preview pending or unavailable";
+ const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.setAttribute("viewBox","0 0 32 32");svg.setAttribute("aria-hidden","true");
+ const path=document.createElementNS("http://www.w3.org/2000/svg","path");path.setAttribute("d",item.type==="video"?"M7 6h18v20H7z M13 11l8 5-8 5z":item.type==="audio"?"M13 23V8l13-3v15 M13 8l13-3 M13 23c0 4-8 4-8 0s8-4 8 0 M26 20c0 4-8 4-8 0s8-4 8 0":"M8 3h11l6 6v20H8z M19 3v7h6 M12 16h9 M12 21h9");svg.append(path);placeholder.append(svg,node("span",label));frame.append(placeholder);
+ if(item.has_preview){const image=node("img",undefined,"publication-preview");image.alt="Source publication preview";image.dataset.itemId=item.id;image.loading="lazy";image.onload=()=>{image.classList.add("loaded");placeholder.hidden=true;};image.onerror=()=>{image.classList.remove("loaded");placeholder.hidden=false;};frame.append(image);previewObserver.observe(image);}
+ return frame;
+}
 async function getPublication(item){return (await api("/darkweb/item?id="+encodeURIComponent(item.id))).item;}
 function downloadFile(content,mime,name){const url=URL.createObjectURL(new Blob([content],{type:mime}));const link=node("a");link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);}
+function pdfButton(item,file,open=false){
+ const button=node("button",open?"OPEN PDF":"DOWNLOAD PDF","copy");button.type="button";
+ button.onclick=async()=>{let tab;button.disabled=true;try{
+  if(open){tab=window.open("about:blank","_blank");if(!tab)throw new Error("Allow a new tab, or use DOWNLOAD PDF.");tab.opener=null;tab.document.title="CT Atlas PDF";tab.document.body.textContent="Loading PDF…";}
+  const response=await fetch(API+"/darkweb/file?id="+encodeURIComponent(item.id)+"&sha256="+encodeURIComponent(file.sha256),{cache:"no-store",headers:{"X-Session-Token":token()}});
+  if(!response.ok){const data=await response.json().catch(()=>({}));throw new Error(data.error||"PDF unavailable. Please sign in again if your session expired.");}
+  const blob=await response.blob();
+  if(open){const url=URL.createObjectURL(blob);tab.location.replace(url);setTimeout(()=>URL.revokeObjectURL(url),300000);}
+  else{let name=String(file.title||item.title||"CT-Atlas-document").replace(/[\\/:*?"<>|\u0000-\u001f]/g,"_").slice(0,180);if(!/\.pdf$/i.test(name))name+=".pdf";downloadFile(blob,"application/pdf",name);}
+ }catch(error){if(tab)tab.close();$("message").textContent=error.message;}finally{button.disabled=false;}};
+ return button;
+}
 function exportDocument(item,outlet){
  const doc=document.implementation.createHTMLDocument("CT Atlas — publication record");
  const meta=doc.createElement("meta");meta.setAttribute("charset","utf-8");doc.head.prepend(meta);
@@ -29,10 +50,10 @@ function exportDocument(item,outlet){
  const style=doc.createElement("style");style.textContent="body{max-width:900px;margin:45px auto;padding:0 24px;color:#18242f;font:16px/1.8 Arial,sans-serif}h1{font-size:23px}h2{font-size:14px;text-transform:uppercase;color:#456}p{white-space:pre-wrap;overflow-wrap:anywhere}.source{font-size:12px}.english{padding:18px;background:#eef3f5;border-left:3px solid #527987}header{border-bottom:2px solid #243d50;margin-bottom:24px}section{margin:28px 0}@media print{body{margin:0}section{break-inside:auto}}";doc.head.append(style);
  const header=node("header");header.append(node("strong","CT ATLAS · SOURCE PUBLICATION"),node("p",(outlet?.name||"Outlet")+" · "+item.published_at));doc.body.append(header);
  const title=node("h1",item.title);title.dir="auto";doc.body.append(title);
- const english=node("section",undefined,"english");english.append(node("h2","English overview · AI-generated"),node("p",item.title_en||"English title pending"),node("p",item.overview_en||"English overview pending AI enrichment."));doc.body.append(english);
+ const english=node("section",undefined,"english");english.append(node("h2","English title · machine translation"),node("p",item.title_en_kind==="translation"?item.title_en:"English translation pending"),node("h2","English overview · AI-generated"),node("p",item.overview_en||"English overview pending AI enrichment."));doc.body.append(english);
  const original=node("section");original.append(node("h2","Original source text · Arabic"));const body=node("p",item.original_text||item.excerpt||item.title);body.dir="auto";body.lang="ar";original.append(body);doc.body.append(original);
  const source=node("section",undefined,"source");source.append(node("h2","Provenance"),node("p","Source: "+item.url),node("p","Publication date: "+item.published_at+" · Source date: "+(item.source_date||"")),node("p","Text status: "+(item.text_status||"excerpt")+" · First collected: "+date(item.first_seen)),node("p","Exported: "+new Date().toISOString()));
- for(const file of item.attachments||[])source.append(node("p",file.type.toUpperCase()+": "+file.title+"\n"+file.url+(file.sha256?"\nSHA-256: "+file.sha256:"")+"\n"+(file.acquired?"Downloaded on the collector computer; original file stored separately.":"Original file not acquired.")));
+ for(const file of item.attachments||[])source.append(node("p",file.type.toUpperCase()+": "+file.title+"\n"+file.url+(file.sha256?"\nSHA-256: "+file.sha256:"")+"\n"+(file.stored_in_atlas?"PDF available in authenticated Atlas storage; original file is not embedded in this export.":file.acquired?"Downloaded on the collector computer; upload to Atlas pending or unavailable.":"Original file not acquired.")));
  source.append(node("p","Source claims are preserved for analysis and are not independently verified. The English overview describes supplied page text; it does not analyse the attached PDF, video or audio."));doc.body.append(source);
  return "<!doctype html>\n"+doc.documentElement.outerHTML;
 }
@@ -59,17 +80,16 @@ function renderFeed(){
   article.id="item-"+item.id;
   const title=node("h3",item.publication_version?item.title:item.title_en||"English title pending AI enrichment");title.dir="auto";
   if(item.publication_version){title.lang="ar";title.className="arabic-title";}
-  const original=node("p",item.publication_version?item.title_en||"English title pending AI enrichment":readableTitle(item.title),"original-title");original.dir="auto";
-  article.append(head,title,original,node("p","Publication: "+(item.published_at||"Unknown")+" · Date evidence: "+(item.date_basis||"unknown")));
+  const original=node("p",item.publication_version?(item.title_en_kind==="translation"?item.title_en:"English translation pending"):readableTitle(item.title),"original-title");original.dir=item.publication_version?"ltr":"auto";if(item.publication_version)original.lang="en";
+  const heading=node("div",undefined,"publication-heading"),titles=node("div",undefined,"publication-titles");titles.append(title);if(item.publication_version)titles.append(node("span","ENGLISH · MACHINE TRANSLATION","translation-label"));titles.append(original);heading.append(publicationVisual(item),titles);
+  article.append(head,heading,node("p","Publication: "+(item.published_at||"Unknown")+" · Date evidence: "+(item.date_basis||"unknown")));
   if(item.publication_version){const overview=node("div",undefined,"english-overview");overview.append(node("strong","ENGLISH OVERVIEW · AI"),node("p",item.overview_en||"Pending AI enrichment. Original source text remains available."));article.append(overview);}
-  if(item.has_preview){const preview=node("img",undefined,"publication-preview");preview.alt=item.preview_status||"Publication preview";preview.dataset.itemId=item.id;preview.loading="lazy";article.append(preview);previewObserver.observe(preview);}
-  else if(item.type!=="page")article.append(node("p",item.preview_status||"Preview pending or unavailable within collection limits"));
   if(item.publication_version){
    const detail=node("details",undefined,"original-publication"),summary=node("summary","READ ORIGINAL ARABIC TEXT"),body=node("p","Open to load source text","source-text");body.dir="auto";body.lang="ar";detail.append(summary,body);let loaded=false;
    detail.ontoggle=async()=>{if(!detail.open||loaded)return;try{const full=await getPublication(item);body.textContent=full.original_text;loaded=true;}catch(error){body.textContent=error.message;}};article.append(detail);
    if(item.text_status!=="complete")article.append(node("p",item.text_status==="truncated"?"Source text exceeds the collection limit; this record is incomplete.":"Listing captured · full publication page pending.","record-status"));
    if(item.attachments_truncated)article.append(node("p","Some attachments exceed the per-publication limit.","record-status"));
-   for(const file of item.attachments||[]){const attachment=node("div",undefined,"attachment");attachment.append(node("strong",file.type.toUpperCase()+" · "+file.title),node("p",file.acquired?"Downloaded on collector · "+(file.bytes/1048576).toFixed(1)+" MB":"File identified · download pending or unavailable"),copy(file.url,"COPY FILE URL"));if(file.sha256)attachment.append(node("code",file.sha256));article.append(attachment);}
+   for(const file of item.attachments||[]){const attachment=node("div",undefined,"attachment");attachment.append(node("strong",file.type.toUpperCase()+" · "+file.title),node("p",file.stored_in_atlas?"Available in Atlas · "+(file.bytes/1048576).toFixed(1)+" MB":file.acquired?"Downloaded on collector · Atlas upload pending or unavailable · "+(file.bytes/1048576).toFixed(1)+" MB":"File identified · download pending or unavailable"),copy(file.url,"COPY FILE URL"));if(file.type==="pdf"&&file.stored_in_atlas)attachment.append(pdfButton(item,file,true),pdfButton(item,file));if(file.sha256)attachment.append(node("code",file.sha256));article.append(attachment);}
    foot.append(exportButton(item,"html",outlets.get(item.outlet_id)),exportButton(item,"json",outlets.get(item.outlet_id)));
   }else if(item.excerpt){const excerpt=node("p",item.excerpt,"excerpt");excerpt.dir="auto";article.append(excerpt);}
   article.append(foot);
@@ -80,6 +100,10 @@ function renderFeed(){
 }
 function editOutlet(outlet){$("outletName").value=outlet.name;$("outletUrl").value=outlet.url;$("keywords").value=outlet.keywords.join(", ");$("enabled").checked=outlet.enabled;$("outletForm").scrollIntoView({behavior:"smooth"});}
 function render(){
+ $("storageForm").hidden=!state.admin;
+ const storage=state.files_storage;
+ if(storage){$("storageStatus").textContent=storage.configured?storage.files+" PDFs in Atlas · "+(storage.stored_bytes/1e9).toFixed(3)+" GB stored · "+(storage.reserved_bytes/1e9).toFixed(3)+" GB reserved for transfers · "+(storage.limit_bytes/1e9).toFixed(2)+" GB limit":"Private PDF storage is not activated yet. Downloaded PDFs remain on the collector computer.";
+ if(!$("storageForm").contains(document.activeElement))$("storageLimit").value=storage.limit_bytes/1e9;}
  $("collectionForm").hidden=!state.admin;$("enrichNow").hidden=!state.admin;
  if(state.policy&&!$("collectionForm").contains(document.activeElement)){
   $("collectFrom").value=state.policy.from;$("collectThrough").value=state.policy.through;$("collectPages").value=state.policy.pages_per_scan;$("collectPreviews").checked=state.policy.previews;
@@ -118,14 +142,15 @@ function render(){
 async function refresh(skipEnrich=false){if(busy)return;busy=true;$("refresh").disabled=true;try{const [feed,archive]=await Promise.all([api("/darkweb/feed"),api("/darkweb/archive")]);state=feed;if(archiveEpoch!==archive.epoch){archiveItems.clear();archiveExpanded=false;archiveEpoch=archive.epoch;}for(const item of archive.items)archiveItems.set(item.id,item);if(!archiveExpanded)archiveCursor=archive.next_cursor;render();$("message").textContent="";if(!skipEnrich&&state.admin)void enrich();}catch(error){$("message").textContent=error.message;}finally{busy=false;$("refresh").disabled=false;}}
 function readableTitle(value){let title=String(value||"");try{title=decodeURIComponent(title);}catch(_){}if(title.startsWith("/"))title=title.split("/").pop();return title.replace(/_/g," ");}
 async function loadPreview(image){try{const id=image.dataset.itemId;let data=previewCache.get(id);if(!data){data=(await api("/darkweb/preview?id="+encodeURIComponent(id))).preview;if(data)previewCache.set(id,data);}if(/^data:image\/jpeg;base64,/.test(data||""))image.src=data;else image.alt="Preview unavailable";}catch(_){image.alt="Preview temporarily unavailable";}}
-async function enrich(){if(enriching||!state?.admin||!state.items.length)return;enriching=true;$("enrichNow").disabled=true;$("aiStatus").textContent="Preparing English overviews and a source-based briefing…";try{const result=await api("/darkweb/enrich",{});$("aiStatus").textContent=result.waiting?"AI work is rate-limited; the next refresh will retry.":"AI enrichment updated. Each batch handles up to 10 pending publications.";if(!result.waiting)await refresh(true);}catch(error){$("aiStatus").textContent=error.message;}finally{enriching=false;$("enrichNow").disabled=false;}}
+async function enrich(){if(enriching||!state?.admin||!state.items.length)return;enriching=true;$("enrichNow").disabled=true;$("aiStatus").textContent="Translating Arabic titles and preparing English overviews…";try{const result=await api("/darkweb/enrich",{});$("aiStatus").textContent=result.waiting?"AI work is rate-limited; the next refresh will retry.":"AI enrichment updated. Each batch handles up to 10 pending publications.";if(!result.waiting)await refresh(true);}catch(error){$("aiStatus").textContent=error.message;}finally{enriching=false;$("enrichNow").disabled=false;}}
 async function saveCollection(reset=false,pause=state.policy.paused){
  const body={from:$("collectFrom").value,through:$("collectThrough").value,pages_per_scan:Number($("collectPages").value),previews:$("collectPreviews").checked,paused:pause,reset};
  try{await api("/darkweb/policy",body);previewCache.clear();await refresh();}catch(error){$("message").textContent=error.message;}
 }
 $("collectionForm").onsubmit=event=>{event.preventDefault();void saveCollection();};
+$("storageForm").onsubmit=async event=>{event.preventDefault();const button=event.target.querySelector("button");button.disabled=true;try{await api("/darkweb/storage-policy",{limit_bytes:Math.round(Number($("storageLimit").value)*1e9)});await refresh(true);}catch(error){$("message").textContent=error.message;}finally{button.disabled=false;}};
 $("pauseCollection").onclick=()=>saveCollection(false,!state.policy.paused);
-$("resetCollection").onclick=()=>{if(confirm("Delete current feed results and restart collection for the selected period? Outlet settings and local evidence files will be kept."))void saveCollection(true,false);};
+$("resetCollection").onclick=()=>{if(confirm("Delete current feed results and restart collection for the selected period? Outlet settings, local evidence files and stored PDFs will be kept. Stored PDFs still count towards the storage limit."))void saveCollection(true,false);};
 $("enrichNow").onclick=enrich;
 for(const button of document.querySelectorAll("[data-view]"))button.onclick=()=>{view=button.dataset.view;for(const b of document.querySelectorAll("[data-view]")){b.classList.toggle("active",b===button);b.setAttribute("aria-pressed",String(b===button));}$("feedView").hidden=!["latest","alerts","legacy"].includes(view);$("outletsView").hidden=view!=="outlets";$("setupView").hidden=view!=="setup";if(state)renderFeed();};
 $("loadMore").onclick=async()=>{const button=$("loadMore");button.disabled=true;try{const result=await api("/darkweb/archive?cursor="+encodeURIComponent(archiveCursor));if(result.epoch!==archiveEpoch){await refresh();return;}for(const item of result.items)archiveItems.set(item.id,item);archiveCursor=result.next_cursor;archiveExpanded=true;renderFeed();}catch(error){$("message").textContent=error.message;}finally{button.disabled=false;}};

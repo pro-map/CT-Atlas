@@ -1,8 +1,47 @@
 # Dark Web Intelligence — structured publications
 
-Version: `darkweb-v5-structured-publications`. Deploy the Worker and UI from the
-same PR, then update the Windows collector. No new API key or storage binding is
-required. Ingest protocol 2 remains compatible with existing generic collectors.
+Version: `darkweb-v6-private-pdfs`. Create the private R2 bucket below before
+deploying the Worker/UI, then update the Windows collector. Existing collection
+state and downloaded files are reused; do not reset results or delete SQLite.
+The existing collector credential is reused. Ingest protocol 2 stays compatible.
+
+## Activate private PDF storage (before merging/deploying)
+
+1. In Cloudflare, open **Storage & databases → R2 → Overview** and activate R2.
+   Activation includes a subscription/checkout flow even when usage stays within
+   the free allowances. This PR does not activate billing or create the bucket.
+2. Create a dedicated bucket named **`ct-atlas-darkweb-files`**, with **Standard**
+   storage. Leave both the public `r2.dev` URL and custom public domains disabled.
+3. Merge/deploy this PR. `cloudflare-worker/wrangler.toml` binds that bucket as
+   **`DARKWEB_FILES`** on `ct-report-generator`. The bucket must exist first;
+   otherwise the Worker deployment fails. No new collector secret is needed.
+4. Check `/health`: `darkweb_pdf_storage_configured` should be `true`. In the
+   Dark Web admin tab, **Private PDF storage** shows the usage and storage limit.
+5. Stop the old collector with Ctrl+C, update `collector.py` as below, and resume
+   the same command. Keep the `private-outlet-watch` directory unchanged.
+
+The default limit is **8 GB decimal**, adjustable between 1 MB and 10 GB in
+Atlas. It includes completed objects and bytes reserved for interrupted uploads.
+New objects are refused at the limit; existing downloads and local evidence are
+preserved. The counter covers only this module's dedicated bucket objects; other
+R2 buckets, manual uploads and other Cloudflare services are outside this limit.
+It is not a guarantee against charges for other account usage or operation quotas.
+
+Existing structured PDFs are synchronized automatically, at most two per
+outlet/pass. For a transfer-only pass (without any source/Tor request), use:
+
+```cmd
+py collector.py --only-outlet "YOUR-REGISTERED-OUTLET-ID" --upload-only --once
+```
+
+Remove `--once` to drain the existing local files in bounded passes; Ctrl+C stops
+the process. A new CMD window still needs `DARKWEB_INGEST_TOKEN`. Upload-only mode
+needs Atlas connectivity, not Tor. Collection must be enabled and not paused.
+Normal mode uploads after each collection pass, using already acquired files.
+
+References: [R2 activation](https://developers.cloudflare.com/r2/get-started/),
+[R2 pricing](https://developers.cloudflare.com/r2/pricing/),
+[Worker binding](https://developers.cloudflare.com/r2/api/workers/workers-api-usage/).
 
 ## Validated structure
 
@@ -107,9 +146,30 @@ records the acquisition status, hash and byte count. Up to three failed attempts
 are made automatically. Other original media are not automatically downloaded.
 The legacy `--acquire` option retains its original generic-media behavior.
 
-**PDFs are not uploaded to Atlas in this version.** Atlas holds their metadata
-and available thumbnails. Copying a file URL still requires Tor to retrieve the
-original. Downloaded PDFs can be opened locally after Tor stops.
+**PDF access in Atlas:** acquired structured PDF attachments up to **50 MiB**
+are uploaded over authenticated HTTPS to private R2 storage. The collector
+checks the local signature, size and SHA-256; the Worker binds the request to a
+current registered attachment, streams bounded bytes and lets R2 verify SHA-256.
+Uploads use the existing ingest credential. Reads require an allowed Atlas
+session, never the ingest credential, a public R2 URL or a token in the URL.
+**OPEN PDF** and **DOWNLOAD PDF** appear only after the server acknowledges storage.
+The browser fetches the authenticated PDF into a temporary blob; it needs neither
+Tor nor the collector to read an uploaded PDF. Downloads retain readable Arabic
+filenames. **COPY FILE URL** still copies the source onion link and requires Tor.
+
+Retries check the server before sending bytes again. A write with a lost
+acknowledgement is found by its hash; it neither duplicates the object nor adds
+its size twice. Missing/corrupt/oversized local files remain pending, with bounded
+retry backoff. Increasing local acquisition beyond 50 MiB does not increase the
+Atlas upload limit. Automatic syncing covers structured publication attachments;
+unassociated legacy binary files are not uploaded blindly.
+
+Interrupted uploads retain their quota reservation until a successful retry;
+this prevents undercounting an R2 write whose acknowledgement was lost. Resetting
+the feed does not delete R2 objects or release that storage budget. Old objects
+cannot be downloaded through Atlas unless a current publication references them.
+Do not manually alter the dedicated bucket or the accounting keys; removing
+orphaned objects and reconciling usage is a separate administrative operation.
 
 **Exports:** each structured card has HTML and JSON exports. The HTML file opens
 independently, with original Arabic, separately labelled English overview, date,
@@ -117,14 +177,19 @@ source, collection time and attachment metadata. It contains no scripts, remote
 images or embedded credentials. Exports do not embed the original PDF. JSON
 preserves the publication fields for further analytical work.
 
-**English:** the existing Gemini configuration generates a concise English title
-and a separate one/two-sentence overview based only on supplied page text. Up to
+**English:** the existing Gemini configuration faithfully translates the entire
+Arabic title into English. It is instructed to preserve names, dates, numbers
+and attributed claims rather than invent or summarize a headline. Original
+Arabic remains visible beside the labelled machine translation. Existing
+generated English titles are progressively requeued without resetting records.
+A separate one/two-sentence overview is based only on supplied page text. Up to
 8,000 characters of original text are sent per item; a flag tells the model when
 that input is excerpted. Onion links are removed. It does not read PDFs, listen
 to audio or view videos. Model output must attribute claims to the source.
 
 AI enrichment runs when the admin opens/refreshes the tab, in batches of up to
-10 records, at most once per minute globally. A pending queue also covers older
+10 records (with a 6,000-character combined title budget), at most once per minute
+globally. A pending queue also covers older
 archived publications. It is not an unattended AI scheduler. Failures preserve
 original Arabic and show pending status. Source changes invalidate the English
 fields; content fingerprints prevent an old in-flight response from replacing
@@ -157,7 +222,10 @@ Admin controls:
   finish; ingest is refused while paused.
 - **Previews:** optional, up to two attempts/pass and 8 MiB/source, JPEG thumbnails
   up to 240×240 pixels. PDFs use the first page; images use Pillow; video posters
-  or optional FFmpeg may supply a frame. Audio normally has no preview.
+  or optional FFmpeg may supply a frame. If a PDF cannot yield a preview, its
+  page's cover image is tried. Older unsuccessful previews are retried once with
+  this update. Cards display compact 72×82px visuals (56×66px on mobile); a neutral
+  file-type icon appears until a source image loads. Audio normally uses that icon.
 - **RESET RESULTS & COLLECT THIS PERIOD:** explicitly deletes both the online feed
   and structured archive, and resets collector metadata next pass. Original local
   evidence and outlet registrations are preserved. Date-range changes require
@@ -187,7 +255,7 @@ redirect validation before every request. There is no direct source fallback,
 form submission or login bypass. Collector credentials travel only to the
 configured HTTPS API origin. The clearnet UI never requests an onion URL.
 
-Feed, archive, detail and thumbnail endpoints require an allowed Atlas session.
+Feed, archive, detail, thumbnail and PDF download endpoints require an allowed Atlas session.
 Admin controls and AI generation require admin; ingest/config use the separate
 collector credential. Payload, date, epoch and pause checks apply to every batch.
 Source/model text is rendered with textContent, not inserted as HTML. Inert HTML
@@ -201,3 +269,11 @@ reveals the PDF. The actual PDF bytes were not supplied or fetched over Tor here
 The saved viewer's page count is not an independently verified PDF page count.
 Successful saved-page tests do not establish live availability or exhaustive site
 coverage.
+
+Private PDF storage is tested with an emulated R2 bucket, including content-hash
+validation, fragmented/truncated uploads, authenticated downloads, concurrent
+quota reservations and recovery after a lost acknowledgement. Chromium checks
+cover the download bytes and Arabic filename, the open action, compact previews,
+placeholder icons, storage-limit editing and mobile layout using mocked API
+responses. Provisioning the actual R2 bucket and the first live upload remain
+deployment checks. The headless test does not validate native PDF viewer rendering.
