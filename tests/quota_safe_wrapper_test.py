@@ -128,6 +128,7 @@ class QuotaSafeWrapperTests(unittest.TestCase):
         self.assertEqual((data["calls"], data["overflow_calls"]), (1, 2))
         self.assertEqual(data["body_model"], "gemini-3.5-flash-lite", "the collector's own body is never changed")
         self.assertFalse(data["hit429"])
+        self.assertTrue(data["budget_hit"], "if the overflow model fails, the run still publishes what was reviewed")
         self.assertEqual(data["marked"], ["fp-new"], "only this run's overflow reviews name the overflow model")
 
     def test_reviews_on_the_main_model_name_no_other_model(self):

@@ -1,15 +1,12 @@
 name: Clean up existing events database
 
+# Manual only. The daily schedule re-checked the map's 60-69 events from
+# 2026-09-29 until the backlog was cleared (2026-10-01). It was removed on
+# 2026-10-04: a kept event stays at 60-69, so every scheduled run re-checked
+# the same events again, and Gemini's run-to-run variation removed some that
+# earlier runs had kept (124 on 2026-10-02, 55 on 2026-10-03), on the
+# 3.5 Flash Lite quota the interactive features need.
 on:
-  schedule:
-    # Between the daily collector's two runs (10:17 / 18:17 Europe/Paris) so
-    # this never competes with it for the same day's Gemini quota. Temporary:
-    # remove once the 60-69 backlog is cleared (see the commit that added
-    # this workflow) -- a scheduled run with nothing left to re-check is a
-    # harmless no-op (no Gemini calls, no commit), but it should not run
-    # forever after its one job is done.
-    - cron: "17 14 * * *"
-      timezone: "Europe/Paris"
   workflow_dispatch:
     inputs:
       rescore_min:

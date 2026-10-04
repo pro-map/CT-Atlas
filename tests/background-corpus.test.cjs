@@ -292,7 +292,8 @@ test('every prompt that reads the archive explains archived incidents',()=>{
 });
 
 test('Atlas AI writes an intelligence assessment, not a digest of articles',()=>{
-  const worker=fs.readFileSync('cloudflare-worker/deep-search.js','utf8');
+  // Line endings normalised: a Windows checkout has CRLF.
+  const worker=fs.readFileSync('cloudflare-worker/deep-search.js','utf8').split('\r\n').join('\n');
   const prompt=worker.slice(worker.indexOf('const REPORT_INSTRUCTION = `'),worker.indexOf('`;',worker.indexOf('const REPORT_INSTRUCTION = `')));
   let at=-1;
   for(const heading of ['KEY JUDGEMENTS','BACKGROUND / CONTEXT','ANALYSIS','ALTERNATIVE EXPLANATIONS',

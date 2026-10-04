@@ -112,7 +112,11 @@ def post(url,*args,**kwargs):
     sel=gemini and is_selection(kwargs)
     if sel:
         if primary_spent or calls>=RUN_BUDGET or today_calls()>=DAY_BUDGET:
-            if overflow_left(): return overflow_post(url,args,kwargs)
+            if overflow_left():
+                # 3.5 Flash Lite's budget is spent: if the overflow model fails
+                # too, the run still publishes what was reviewed (partial recovery).
+                if not primary_spent: budget_hit=True
+                return overflow_post(url,args,kwargs)
             budget_hit=True
             if primary_spent: raise collector.AISelectionQuotaError("Gemini article-selection returned 429 and no overflow budget is left.")
             if calls>=RUN_BUDGET: raise collector.AISelectionQuotaError(f"CT Atlas self-imposed selection budget reached ({RUN_BUDGET} calls/run).")
@@ -158,6 +162,16 @@ def cache_hit(cache,e):
     x=cache.get("items",{}).get(collector.selection_fingerprint(e))
     return isinstance(x,dict) and x.get("version")==collector.AI_SELECTION_VERSION and isinstance(x.get("result"),dict)
 def dtkey(e): return collector.event_datetime(e) or datetime.min.replace(tzinfo=timezone.utc)
+def mark_models(events):
+    """Events selected by the overflow model, in this run or an earlier one
+    (its decisions are cache hits afterwards), name that model."""
+    try: items=collector.load_selection_cache().get("items",{})
+    except Exception: return
+    for e in events:
+        x=items.get(collector.selection_fingerprint(e))
+        if (isinstance(x,dict) and x.get("model")) or str(e.get("id")) in OVERFLOW_IDS:
+            e["ai_selection_model"]=(x or {}).get("model") or OVERFLOW_MODEL
+
 def recover(events):
     cache=collector.load_selection_cache(); selected=[]; reviewed=0
     for e in events:
@@ -192,12 +206,11 @@ def optimized_select(events):
     print(f"Selection budget: {RUN_BUDGET}/run, {DAY_BUDGET}/Pacific day | Used before run: {START_CALLS}")
     if OVERFLOW_MODEL: print(f"Overflow: {OVERFLOW_MODEL}, {OVERFLOW_RUN_BUDGET}/run, {OVERFLOW_DAY_BUDGET}/Pacific day | Used before run: {START_OVERFLOW}")
     out=AI_SELECT(remaining)
-    for e in out or []:
-        if str(e.get("id")) in OVERFLOW_IDS: e["ai_selection_model"]=OVERFLOW_MODEL
     if out is not None:
+        mark_models(out)
         print(f"Selection telemetry: calls={calls}, overflow={overflow_calls}, partial=no, 429={hit429}."); return auto+out
     if budget_hit and not hit429:
-        partial=True; out=recover(remaining)
+        partial=True; out=recover(remaining); mark_models(out)
         if collector.BACKFILL_ACTIVE:
             collector.BACKFILL_PENDING_QUERIES.clear()
             collector.BACKFILL_STATS["ai_deferred_backfill"]+=max(0,len(remaining)-sum(1 for e in remaining if cache_hit(collector.load_selection_cache(),e)))

@@ -47,7 +47,7 @@ import json
 import os
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -434,6 +434,10 @@ def collect_articles(root=ROOT):
         ),
     }
 
+    # The archive keeps two years (the collector prunes older rows): an old
+    # press release Google News dated as new, on the map for one run before
+    # it aged out, is not inserted only to be pruned.
+    oldest = (datetime.now(timezone.utc) - timedelta(days=collector.BACKGROUND_ARTICLES_D1_RETENTION_DAYS)).isoformat()
     seen = set()
     articles = []
     counts = {}
@@ -443,6 +447,8 @@ def collect_articles(root=ROOT):
             if article["url"] in seen:
                 continue
             seen.add(article["url"])
+            if article.get("published") and str(article["published"]) < oldest:
+                continue
             articles.append(article)
             counts[kind] += 1
     return articles, counts
@@ -521,11 +527,11 @@ def main(argv=None):
             print(f"Inserting the best {max(args.max_inserts, 0)} now; {len(insert) - max(args.max_inserts, 0)} "
                   f"wait for the next run.")
             insert = insert[: max(args.max_inserts, 0)]
-            # A stored row is only removed for a copy that is in D1 tonight
-            # (or on the map).
-            kept_urls = known | {str(row["url"]) for row in insert}
-            delete = [(url, reason, kept) for url, reason, kept in delete
-                      if not kept or reason == "on_map" or kept in kept_urls]
+        # A stored row is only removed for a copy that is in D1 tonight (or on
+        # the map): never for one the size guard or the cap held back.
+        kept_urls = known | {str(row["url"]) for row in insert}
+        delete = [(url, reason, kept) for url, reason, kept in delete
+                  if not kept or reason == "on_map" or kept in kept_urls]
 
         reasons = archive_dedup.summarize(delete)
         rows_by_url = {str(row["url"]): row for row in [*articles, *stored]}

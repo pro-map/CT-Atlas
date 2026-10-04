@@ -45,6 +45,7 @@ from __future__ import annotations
 import argparse
 import glob
 import hashlib
+import json
 import os
 import sys
 import time
@@ -334,9 +335,16 @@ class Searcher:
         try:
             return response.json()
         except ValueError:
-            text = " ".join(str(getattr(response, "text", "") or "").split())
+            raw = str(getattr(response, "text", "") or "")
+            text = " ".join(raw.split())
             if GDELT_RATE_LIMIT_TEXT in text.lower():
                 return None
+            if raw.lstrip().startswith(("{", "[")):
+                # GDELT's JSON sometimes carries raw control characters in titles.
+                try:
+                    return json.loads(raw, strict=False)
+                except ValueError:
+                    self._failed("gdelt", "GDELT sent broken JSON.")
             raise QueryRejected(f"GDELT rejected the query: {text[:160]}")
 
     def _gdelt(self, task):
@@ -369,19 +377,33 @@ class Searcher:
 MIN_KEY_CHARACTERS = 12
 
 
-def article_key(title, source):
+def _word_character(ch):
+    """Letters, digits and combining marks: the vowel signs and viramas of
+    Hindi or Bengali tell two headlines apart."""
+    return unicodedata.category(ch)[0] in "LMN"
+
+
+def article_key(title, source, legacy=False):
     """The headline, in any script: Google News links change between fetches
     and GDELT names an outlet by its domain where Google News uses its name,
     so neither identifies an article. A copy of a headline in another outlet
-    is the same story anyway; only short headlines add the outlet."""
+    is the same story anyway; only short headlines add the outlet.
+    legacy: the key runs stored before 2026-10-04, without combining marks."""
+    keep = str.isalnum if legacy else _word_character
     folded = unicodedata.normalize("NFKC", str(title or "")).casefold()
-    text = "".join(ch for ch in folded if ch.isalnum())
+    text = "".join(ch for ch in folded if keep(ch))
     if not text:
         return ""
     if len(text) < MIN_KEY_CHARACTERS:
         outlet = "".join(ch for ch in unicodedata.normalize("NFKC", str(source or "")).casefold() if ch.isalnum())
         text = f"{text}|{outlet}"
     return hashlib.sha1(text.encode("utf-8")).hexdigest()[:16]
+
+
+def article_keys(title, source):
+    """Today's key first, then the legacy one (the seen files hold both)."""
+    keys = [article_key(title, source), article_key(title, source, legacy=True)]
+    return [key for index, key in enumerate(keys) if key and key not in keys[:index]]
 
 
 def link_key(url):
@@ -401,9 +423,7 @@ def known_article_keys(root):
         if not isinstance(item, dict):
             return
         for title in {item.get("original_title"), item.get("title")}:
-            key = article_key(title, item.get("source"))
-            if key:
-                keys.add(key)
+            keys.update(article_keys(title, item.get("source")))
         if link_key(item.get("url")):
             keys.add(link_key(item.get("url")))
 
@@ -420,6 +440,11 @@ def known_article_keys(root):
                 if isinstance(item, dict):
                     for article in item.get("related_articles") or []:
                         add(article)
+        # recovered-events-*.json: the other reports of recovered events.
+        for item in data.get("related_articles") or []:
+            if isinstance(item, dict):
+                add(item.get("article"))
+                add(item.get("parent"))
     return keys
 
 
@@ -630,6 +655,8 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
         collector, posts, archive_review.SECONDS_BETWEEN_POSTS, on_post=ledger.save)))(budget)
     stop = "plan finished"
     pending = list(tasks)
+    failed_searches = []
+    answered_sources = set()
     with gate:
         while True:
             # Search only while the reviews have work to wait for.
@@ -654,11 +681,9 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
                     if error.rate_limited:
                         # The source's doing, not the query's: the task waits, however long.
                         continue
-                    failures = state["failures"][task["key"]] = state["failures"].get(task["key"], 0) + 1
-                    if failures >= MAX_TASK_FAILURES:
-                        summary["given_up"] += 1
-                        bump(state, task, "given_up")
-                        finish(task)
+                    # Counted at the end of the run, and only if the source
+                    # answered other searches: an outage gives no task up.
+                    failed_searches.append(task)
                     continue
                 except QueryRejected as error:
                     # Retrying would fail the same way: finished, and logged.
@@ -669,6 +694,7 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
                     continue
                 events, full = result if isinstance(result, tuple) else (result, False)
                 summary["fetched"] += 1
+                answered_sources.add(task["source"])
                 bump(state, task, "searches")
                 children = split(task) if full else []
                 if children:
@@ -685,9 +711,11 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
                     bump(state, task, "full_single_day")
                 added = 0
                 for event in events:
-                    key = article_key(event.get("original_title") or event.get("title"), event.get("source"))
+                    keys = article_keys(event.get("original_title") or event.get("title"), event.get("source"))
+                    key = keys[0] if keys else ""
                     link = link_key(event.get("url"))
-                    if not key or key in known or key in seen or key in new_seen or (link and link in known) \
+                    if not key or any(k in known or k in seen or k in new_seen for k in keys) \
+                            or (link and link in known) \
                             or not in_window(event, task, collector) or screen(event, collector):
                         summary["skipped"] += 1
                         continue
@@ -717,6 +745,14 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
             stop = f"Gemini budget used ({budget})"
         posts = gate.posts
 
+    for task in failed_searches:
+        if task["source"] not in answered_sources:
+            continue
+        failures = state["failures"][task["key"]] = state["failures"].get(task["key"], 0) + 1
+        if failures >= MAX_TASK_FAILURES:
+            summary["given_up"] += 1
+            bump(state, task, "given_up")
+            finish(task)
     state["runs"] = (state["runs"] + [{"at": now.isoformat(), "posts": posts, **summary, "stop": stop}])[-30:]
     save_state(root, state, plan_keys)
     save_seen(root, now, new_seen)

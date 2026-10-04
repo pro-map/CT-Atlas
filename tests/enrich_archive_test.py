@@ -372,10 +372,38 @@ class RunTests(unittest.TestCase):
     def test_a_task_failing_run_after_run_is_given_up(self):
         refused = self.tasks[0]["key"]
         for night in range(enrich_archive.MAX_TASK_FAILURES):
-            summary, _, _, _ = self.run_once(lambda task: [], budget=1, max_fetches=1, fail={refused},
+            # The source answers the other searches of each run: the task itself fails.
+            summary, _, _, _ = self.run_once(lambda task: [], budget=1, max_fetches=3, fail={refused},
                                              now=datetime(2026, 10, 3 + night, 0, 43, tzinfo=timezone.utc))
         self.assertEqual(summary["given_up"], 1)
         self.assertIn(refused, self.state()["done"])
+
+    def test_a_source_outage_gives_no_task_up(self):
+        first_three = {task["key"] for task in self.tasks[:3]}
+        for night in range(enrich_archive.MAX_TASK_FAILURES + 1):
+            summary, _, _, _ = self.run_once(lambda task: [], budget=1, max_fetches=3, fail=first_three,
+                                             now=datetime(2026, 10, 3 + night, 0, 43, tzinfo=timezone.utc))
+        self.assertEqual(summary["given_up"], 0)
+        self.assertFalse(first_three & set(self.state()["done"]))
+        self.assertEqual(self.state()["failures"], {})
+
+    def test_gdelt_json_with_raw_control_characters_is_read(self):
+        # A raw tab inside a title: strict JSON parsing (requests' json()) refuses it.
+        text = ('{"articles": [{"url": "https://ur.test/1", "title": "Karachi\tattack", '
+                '"seendate": "20260603T101500Z", "domain": "ur.test", "language": "Urdu"}]}')
+        reply = SimpleNamespace(status_code=200, text=text,
+                                json=lambda: (_ for _ in ()).throw(ValueError("Invalid control character")))
+        searcher = SearchTests.searcher(SearchTests(), [reply])
+        events, _ = searcher.search(SearchTests.gdelt_task)
+        self.assertEqual(len(events), 1)
+
+    def test_indic_headlines_differing_by_a_vowel_sign_have_different_keys(self):
+        a = enrich_archive.article_key("आतंकी हमले में दो जवान शहीद", "Jagran")
+        b = enrich_archive.article_key("आतंकी हमला में दो जवान शहीद", "Jagran")
+        self.assertNotEqual(a, b)
+        legacy = enrich_archive.article_key("आतंकी हमले में दो जवान शहीद", "Jagran", legacy=True)
+        self.assertIn(legacy, enrich_archive.article_keys("आतंकी हमले में दो जवान शहीद", "Jagran"),
+                      "keys stored before still match")
 
     def test_a_task_the_source_rate_limits_is_never_given_up(self):
         limited = self.tasks[0]["key"]

@@ -192,6 +192,9 @@ the previous source URL or question, and avoid pages that require JavaScript, a 
             last_error = exc
             print(f"Quiz candidate {attempt}/{QUIZ_GENERATION_ATTEMPTS} rejected: {exc}")
     if quiz is None:
+        # A workflow annotation is readable without signing in to GitHub, unlike
+        # the step log: the reason the quiz was not renewed stays visible.
+        print(f"::warning title=Daily quiz not generated::{' '.join(str(last_error).split())[:400]}")
         raise RuntimeError(
             f"Daily quiz generation failed after {QUIZ_GENERATION_ATTEMPTS} attempts: {last_error}"
         )

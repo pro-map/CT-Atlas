@@ -34,6 +34,8 @@ import archive_review  # noqa: E402
 ROOT = archive_review.ROOT
 REVIEW_MODEL = archive_review.REVIEW_MODEL
 MAX_CALLS = int(os.getenv("ARCHIVE_REVIEW_MAX_CALLS", "120"))
+# Runs an event Gemini leaves unanswered is offered again before it is dropped.
+MAX_ATTEMPTS = 3
 DAILY_CALLS = int(os.getenv("ARCHIVE_REVIEW_DAILY_CALLS", "120"))
 
 
@@ -94,7 +96,7 @@ def main(argv=None):
                   "only those scoring above 0 are kept.",
         "events": [],
     }
-    summary = {"kept": 0, "dropped": 0, "skipped": 0, "reviewed": 0}
+    summary = {"kept": 0, "dropped": 0, "skipped": 0, "reviewed": 0, "given_up": 0}
     stop = "done"
 
     gate = archive_review.GeminiGate(collector, budget, archive_review.SECONDS_BETWEEN_POSTS,
@@ -103,20 +105,32 @@ def main(argv=None):
         for path, data in pending:
             items = data.get("events") or []
             progress = {"done": 0}
+            # Left unanswered this run: offered again at the end of the file.
+            retry = []
 
-            def save_batch(pairs, skipped, path=path, data=data, items=items, progress=progress):
+            def save_batch(pairs, skipped, path=path, data=data, items=items, progress=progress, retry=retry):
                 for item, result in pairs:
                     if archive_review.score_of(result) > 0:
                         out["events"].append(reviewed_event(item, result, collector))
                         summary["kept"] += 1
                     else:
                         summary["dropped"] += 1
+                        if item.get("_requeued"):
+                            # Already in the archive under an older verdict: the 0
+                            # must be written down, or that verdict would stand.
+                            out["events"].append(reviewed_event(item, result, collector))
+                for item in skipped:
+                    attempts = int(item.get("_attempts") or 0) + 1
+                    if attempts < MAX_ATTEMPTS:
+                        retry.append({**item, "_attempts": attempts})
+                    else:
+                        summary["given_up"] += 1
                 summary["reviewed"] += len(pairs)
                 summary["skipped"] += len(skipped)
                 progress["done"] += len(pairs) + len(skipped)
                 out["updated_at"] = datetime.now(timezone.utc).isoformat()
                 write_json(out_path, out)
-                data["events"] = items[progress["done"]:]
+                data["events"] = items[progress["done"]:] + retry
                 if data["events"]:
                     write_json(path, data)
                 elif os.path.exists(path):
@@ -127,9 +141,10 @@ def main(argv=None):
                 break
         calls = gate.posts
 
-    remaining = total - summary["reviewed"] - summary["skipped"]
+    remaining = total - summary["reviewed"] - summary["given_up"]
     print(f"::notice title=Archive review::{summary['reviewed']} reviewed ({summary['kept']} kept, "
-          f"{summary['dropped']} scored 0 and dropped, {summary['skipped']} unanswerable and skipped) "
+          f"{summary['dropped']} scored 0 and dropped, {summary['skipped']} left unanswered, "
+          f"{summary['given_up']} of them given up after {MAX_ATTEMPTS} runs) "
           f"with {calls} Gemini request(s); {remaining} still pending; {stop}.")
     return 0
 
