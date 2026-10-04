@@ -92,7 +92,7 @@ function summarySection(model){
     const t=model.autoTrace;
     rows.push(["Automatic trace",t
       ?"reached H"+(num(t.maxDepthReached)??"—")+" of H"+(num(t.maxDepth)??6)+" · "+plural(num(t.expanded)??0,"wallet","wallets")+" expanded · "+
-        plural(list(t.exchanges).length,"exchange","exchanges")+" reached · stopped: "+text(t.stop||"—")
+        plural(list(t.exchanges).filter(item=>item.basis==="sourced").length,"documented exchange","documented exchanges")+" reached · stopped: "+text(t.stop||"—")
       :"not run — the report covers the trace as expanded by hand"]);
   }
   rows.push(["Sanctions-list screening",badgeText(model.sanctions?.badge)||"—"]);
@@ -132,9 +132,9 @@ function traceConclusionSection(model){
   const reached=exchanges.map(item=>exchangeTitle(item)+" at H"+(num(item.depth)??"—"));
   blocks.push(body(
     "The automatic trace followed the strongest branches from the seed for "+plural(num(t.expanded)??0,"wallet","wallets")+
-    ", up to H"+(num(t.maxDepthReached)??"—")+" (limit H"+(num(t.maxDepth)??6)+", top "+(num(t.branch)??3)+" branches per hop, "+(num(t.walletBudget)??30)+"-wallet budget). "+
+    ", up to H"+(num(t.maxDepthReached)??"—")+" (limit H"+(num(t.maxDepth)??6)+", top "+(num(t.branch)??8)+" branches per hop, "+(num(t.walletBudget)??30)+"-wallet budget). "+
     (exchanges.length
-      ?"It reached "+plural(exchanges.length,"exchange wallet","exchange wallets")+": "+reached.join("; ")+"."
+      ?"It reached "+plural(exchanges.length,"exchange finding","exchange findings")+": "+reached.join("; ")+"."
       :"It did not reach any wallet identified as an exchange.")+
     " It stopped because "+(text(t.stop)||"the trace ended")+"."+
     (num(t.failed)?" "+plural(num(t.failed),"wallet","wallets")+" could not be expanded (provider error) and were skipped.":"")
@@ -143,8 +143,8 @@ function traceConclusionSection(model){
     const sourced=exchanges.filter(item=>item.basis==="sourced").length;
     const assessed=exchanges.filter(item=>item.ai&&text(item.ai.likely_exchange).toLowerCase()!=="unknown").length;
     blocks.push(body("Of these, "+sourced+" "+(sourced===1?"is":"are")+" identified by a sourced exchange label and "+(exchanges.length-sourced)+
-      " by behaviour (exchange score of 80/100 or more)"+(assessed?", "+assessed+" of which "+(assessed===1?"has":"have")+" an AI-assessed operator":"")+
-      ". An exchange is where traceable on-chain flows usually end: the next step is a request to the exchange for the account behind the deposit or withdrawal."));
+      " are behavioural candidates (heuristic score, not a probability)"+(assessed?", "+assessed+" of which "+(assessed===1?"has":"have")+" an AI-assessed operator":"")+
+      ". Only documented exchange labels terminate a branch. Behavioural candidates remain unverified and tracing continues within the budget. A connection to an exchange does not prove wallet ownership or continuity of customer funds through the service."));
   }
   if(text(t.attribution).startsWith("unavailable"))blocks.push(alert("AI attribution of the exchange-like wallets was "+text(t.attribution)+"."));
   return blocks;
@@ -154,7 +154,7 @@ function autoTraceSection(model){
   const t=model.autoTrace;
   const exchanges=list(t?.exchanges);
   if(!t||!exchanges.length)return [];
-  const blocks=[heading("EXCHANGES REACHED BY THE AUTOMATIC TRACE"),small(EXCHANGE_LIMITATIONS),small(AI_ATTRIBUTION_NOTE)];
+  const blocks=[heading("DOCUMENTED EXCHANGES AND BEHAVIOURAL CANDIDATES"),small(EXCHANGE_LIMITATIONS),small(AI_ATTRIBUTION_NOTE)];
   for(const item of exchanges.slice(0,LIMITS.exchangeFindings)){
     blocks.push(sub(exchangeTitle(item)+" · H"+(num(item.depth)??"—")+(item.basis==="sourced"?" · SOURCED LABEL":" · SCORE "+String(num(item.score)??"—")+"/100")));
     blocks.push(mono(text(item.address)));

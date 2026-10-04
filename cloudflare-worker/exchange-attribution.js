@@ -1,5 +1,5 @@
 // Which exchange is an exchange-like wallet likely to belong to? The automatic
-// trace (crypto.js) stops a branch at a wallet whose behaviour scores as an
+// trace (crypto.js) records a candidate whose behaviour scores as an
 // exchange (exchange-behavior.mjs) and sends those wallets here, with what the
 // trace saw around them: their behaviour metrics, their labelled neighbours,
 // the assets they move. Gemini returns its best estimate of the operator,
@@ -18,7 +18,7 @@ import {
   GEMINI_SECOND_FALLBACK_MODEL
 } from "./shared.js";
 
-const EXCHANGE_ATTRIBUTION_VERSION = "exchange-attribution-v1";
+const EXCHANGE_ATTRIBUTION_VERSION = "exchange-attribution-v2";
 const ATTRIBUTION_MODEL = "gemini-3.5-flash-lite";
 const MAX_WALLETS = 8;
 const MAX_NEIGHBOURS = 12;
@@ -28,7 +28,7 @@ const CONFIDENCE = new Set(["low", "moderate", "high"]);
 
 const INSTRUCTION = `
 You are a blockchain-intelligence analyst. For each wallet below, an automatic
-trace stopped because the wallet behaves like an exchange (high throughput,
+trace found that the wallet behaves like an exchange (high throughput,
 many distinct counterparties, bidirectional flows, many assets). Assess:
 
 1. service_type: what the wallet most likely is -- "exchange_hot_wallet",
@@ -37,20 +37,20 @@ many distinct counterparties, bidirectional flows, many assets). Assess:
 2. likely_exchange: the operator you assess as most likely (e.g. "Binance",
    "OKX", "HTX", "Bybit", "Kraken", "Coinbase", "KuCoin", "Gate.io"...), or
    "Unknown" when nothing supports a name.
-3. confidence: "high" only when you recognise the exact address as a publicly
-   documented wallet of that operator or several labelled wallets of the same
-   operator surround it; "moderate" when the labelled neighbours or the
-   operator's well-known patterns on this chain point to it; otherwise "low".
+3. confidence: at most "moderate" for an operator hypothesis supported by
+   documented labelled neighbours; otherwise "low". Transactions with an
+   exchange do not prove ownership by that exchange.
 4. basis: 1-4 short reasons, each naming the evidence it rests on (a
    labelled neighbour, the address itself, the asset mix, the chain,
    the behaviour metrics).
 5. alternatives: up to 3 other plausible operators or service types.
 
-Rules: use the supplied evidence and your knowledge of publicly documented
-exchange wallets and patterns. Never invent a label for a neighbour. If the
-evidence is thin, say "Unknown" with low confidence rather than guessing a
-famous name. This is an investigative lead, not an attribution: it does not
-establish control or ownership.
+Rules: use only the supplied evidence. Never rely on memorised addresses,
+market share, chain or asset mix to invent an operator. Name an operator only
+when that name is present in a supplied EXCHANGE neighbour with a source.
+Otherwise return "Unknown" and low confidence; you may still classify the
+service type. Alternatives must be supported names or service types.
+Neighbour links support an investigative lead, never control or ownership.
 `;
 
 const SCHEMA = {
@@ -118,14 +118,18 @@ function sanitizeAttribution(raw, wallets) {
   return wallets.map(wallet => {
     const item = byAddress.get(wallet.address.toLowerCase()) || {};
     const confidence = cleanText(item.confidence, 12).toLowerCase();
-    const likely = cleanText(item.likely_exchange, 60) || "Unknown";
+    const proposed = cleanText(item.likely_exchange, 60) || "Unknown";
+    const supported = (wallet.labelled_neighbours || []).filter(n =>
+      String(n.category).toUpperCase() === "EXCHANGE" && n.source && n.name);
+    const hasSupport = supported.some(n => n.name.toLowerCase() === proposed.toLowerCase());
+    const likely = hasSupport ? proposed : "Unknown";
     return {
       address: wallet.address,
       service_type: cleanText(item.service_type, 40) || "unknown",
       likely_exchange: likely,
-      confidence: CONFIDENCE.has(confidence) ? confidence : "low",
-      basis: (Array.isArray(item.basis) ? item.basis : []).slice(0, 4).map(text => cleanText(text, 220)).filter(Boolean),
-      alternatives: (Array.isArray(item.alternatives) ? item.alternatives : []).slice(0, 3).map(text => cleanText(text, 60)).filter(Boolean),
+      confidence: hasSupport && CONFIDENCE.has(confidence) ? (confidence === "high" ? "moderate" : confidence) : "low",
+      basis: (!hasSupport ? ["Operator unknown: no matching documented exchange neighbour supports this name."] : Array.isArray(item.basis) ? item.basis : []).slice(0, 4).map(text => cleanText(text, 220)).filter(Boolean),
+      alternatives: (Array.isArray(item.alternatives) ? item.alternatives : []).filter(value => supported.some(n => n.name.toLowerCase() === String(value).toLowerCase())).slice(0, 3).map(text => cleanText(text, 60)).filter(Boolean),
       assessed: true
     };
   });
