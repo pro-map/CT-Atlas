@@ -384,3 +384,6 @@ button,input,select{font:inherit}
 .crypto-playback-bar #playbackScrubber{flex:1 1 160px;min-width:120px;accent-color:#4f9dbf}
 .crypto-playback-status{flex:1 1 220px;color:#86a0af;font-size:8px;line-height:1.4}
 .crypto-small-button:disabled{opacity:.4;cursor:not-allowed}
+.crypto-playback-bar[hidden]{display:none}
+
+
