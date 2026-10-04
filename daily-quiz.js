@@ -67,15 +67,15 @@ function cleanup(){
   panel?.remove();trigger?.remove();panel=null;trigger=null;quiz=null;pending=null;answered=false;loadedForSession="";
 }
 function ensureUi(){
-  const launcher=document.getElementById("healthStatusLauncher");
+  const launcher=document.getElementById("mainQuizLauncher");
   if(!launcher)return false;
   if(!document.getElementById("dailyQuizCss")){
-    const link=document.createElement("link");link.id="dailyQuizCss";link.rel="stylesheet";link.href="daily-quiz.css?v=3";document.head.appendChild(link);
+    const link=document.createElement("link");link.id="dailyQuizCss";link.rel="stylesheet";link.href="daily-quiz.css?v=main-20261004";document.head.appendChild(link);
   }
   trigger=document.getElementById("dailyQuizButton");
   if(!trigger){
     trigger=document.createElement("button");trigger.id="dailyQuizButton";trigger.type="button";trigger.textContent="QUIZ OF THE DAY";trigger.setAttribute("aria-haspopup","dialog");
-    launcher.insertBefore(trigger,launcher.firstChild);trigger.addEventListener("click",openQuiz);
+    launcher.appendChild(trigger);trigger.addEventListener("click",openQuiz);
   }
   panel=document.getElementById("dailyQuizPanel");
   if(!panel){

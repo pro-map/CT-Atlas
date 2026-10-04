@@ -68,20 +68,11 @@ function loadDeepSearch(){
   document.head.appendChild(script);
 }
 
-function loadDailyQuiz(){
-  if(document.getElementById("dailyQuizClientScript"))return;
-  const script=document.createElement("script");
-  script.id="dailyQuizClientScript";
-  script.src="daily-quiz.js?v=4";
-  script.defer=true;
-  document.head.appendChild(script);
-}
 
 document.addEventListener("DOMContentLoaded",()=>{
   enforceSessionExpiry();
   refreshAdminUsageButton();
   loadDeepSearch();
-  loadDailyQuiz();
   setInterval(()=>{ enforceSessionExpiry(); refreshAdminUsageButton(); },30000);
 });
 })();

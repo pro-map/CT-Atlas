@@ -104,7 +104,10 @@ jobs:
           test -s daily-quiz.js
           test -s daily-quiz.css
           grep -q 'dailyQuizButton' daily-quiz.js
-          grep -q 'launcher.insertBefore(trigger,launcher.firstChild)' daily-quiz.js
+          grep -q 'launcher.appendChild(trigger)' daily-quiz.js
+          grep -q 'mainQuizLauncher' main.html
+          grep -q 'daily-quiz.js?v=main-20261004' main.html
+          node --check daily-quiz.js
           grep -q 'margin:4px 0 3px;padding:9px 10px' daily-quiz.css
           grep -q 'id="feedbackButton"' main.html
           grep -q 'SEND FEEDBACK / REPORT BUG' main.html
