@@ -559,6 +559,58 @@ export class ReportGate {
         await tx.put("darkweb:controlled-collection:2", true);
       });
     }
+    if (url.pathname === "/darkweb-files-info") {
+      const files = {};
+      for (const hash of (Array.isArray(body.hashes) ? body.hashes : []).slice(0,600)) {
+        if (/^[a-f0-9]{64}$/.test(hash)) {
+          const file = await this.state.storage.get("darkweb:file:" + hash);
+          if (file) files[hash] = file;
+        }
+      }
+      const usage = await this.state.storage.get("darkweb:files-usage") || { stored_bytes: 0, reserved_bytes: 0, files: 0 };
+      const policy = await this.state.storage.get("darkweb:files-policy") || { limit_bytes: 8000000000 };
+      return Response.json({ files, usage: { ...usage, ...policy } });
+    }
+    if (url.pathname === "/darkweb-files-policy") {
+      if (!Number.isSafeInteger(body.limit_bytes) || body.limit_bytes < 1000000 || body.limit_bytes > 10000000000) return Response.json({ error: "Storage limit must be between 1 MB and 10 GB." }, { status: 400 });
+      await this.state.storage.put("darkweb:files-policy", { limit_bytes: body.limit_bytes });
+      return Response.json({ ok: true });
+    }
+    if (["/darkweb-file-check", "/darkweb-file-commit"].includes(url.pathname)) {
+      return this.state.storage.transaction(async tx => {
+        const reject = (error, status=409) => Response.json({ error }, { status });
+        if (!/^[a-f0-9]{64}$/.test(body.id || "") || !/^[a-f0-9]{64}$/.test(body.sha256 || "")) return reject("Invalid PDF reference.", 400);
+        const policy = await tx.get("darkweb:policy");
+        const item = await tx.get(`darkweb:publication:${policy.epoch}:${body.id}`);
+        const file = item?.attachments?.find(a => a.type === "pdf" && a.acquired && a.sha256 === body.sha256);
+        if (!file || !Number.isSafeInteger(file.bytes) || file.bytes < 5) return reject("PDF attachment is not registered in this collection.", 404);
+        if (body.upload_access) {
+          const outlets = await tx.get("darkweb:outlets") || [];
+          if (policy.paused || body.epoch !== policy.epoch || item.outlet_id !== body.outlet_id || !outlets.some(o => o.id === body.outlet_id && o.enabled)) return reject("Reload collection configuration.");
+        }
+        const key = "darkweb:file:" + body.sha256;
+        let stored = await tx.get(key);
+        if (stored && stored.bytes !== file.bytes) return reject("PDF size conflicts with its recorded hash.");
+        const usage = await tx.get("darkweb:files-usage") || { stored_bytes: 0, reserved_bytes: 0, files: 0 };
+        if (url.pathname === "/darkweb-file-commit") {
+          if (!body.upload_access || !stored || body.bytes !== file.bytes) return reject("No matching PDF reservation.");
+          if (stored.status !== "ready") {
+            stored = { ...stored, status: "ready", stored_at: new Date(now).toISOString() };
+            usage.reserved_bytes -= file.bytes; usage.stored_bytes += file.bytes; usage.files++;
+            await tx.put(key, stored); await tx.put("darkweb:files-usage", usage);
+          }
+          return Response.json({ ok: true, stored: true, stored_at: stored.stored_at });
+        }
+        if (body.reserve && body.upload_access && !stored) {
+          const config = await tx.get("darkweb:files-policy") || { limit_bytes: 8000000000 };
+          if (usage.stored_bytes + usage.reserved_bytes + file.bytes > config.limit_bytes) return reject("Private PDF storage limit reached. Local files are preserved.", 507);
+          stored = { status: "reserved", bytes: file.bytes, reserved_at: new Date(now).toISOString() };
+          usage.reserved_bytes += file.bytes;
+          await tx.put(key, stored); await tx.put("darkweb:files-usage", usage);
+        }
+        return Response.json({ file, stored: stored?.status === "ready" });
+      });
+    }
     if (url.pathname === "/darkweb-policy") {
       const result = await this.state.storage.transaction(async tx => {
         const prior = await tx.get("darkweb:policy");
@@ -609,6 +661,19 @@ export class ReportGate {
     }
     if (url.pathname === "/darkweb-enrich-candidates") {
       const policy = await this.state.storage.get("darkweb:policy");
+      // Requeue already-enriched archive records once for faithful translations.
+      // This migration never resets publication text, files or collection progress.
+      const migrationKey = `darkweb:title-translation-cursor:${policy.epoch}`;
+      const cursor = await this.state.storage.get(migrationKey) || "";
+      if (cursor !== "done") {
+        const prefix = `darkweb:publication-index:${policy.epoch}:`;
+        const page = await this.state.storage.list({ prefix, reverse: true, limit: 100, ...(cursor ? { end: cursor } : {}) });
+        for (const id of page.values()) {
+          const item = await this.state.storage.get(`darkweb:publication:${policy.epoch}:${id}`);
+          if (item && item.title_en_kind !== "translation") await this.state.storage.put(`darkweb:publication-pending:${policy.epoch}:${id}`, id);
+        }
+        await this.state.storage.put(migrationKey, page.size === 100 ? [...page.keys()].at(-1) : "done");
+      }
       const pending = await this.state.storage.list({ prefix: `darkweb:publication-pending:${policy.epoch}:`, limit: 10 });
       const items = [];
       for (const id of pending.values()) {
@@ -633,7 +698,7 @@ export class ReportGate {
           const key = "darkweb:item:" + title.id, archiveKey = `darkweb:publication:${policy.epoch}:${title.id}`;
           const item = await tx.get(archiveKey) || await tx.get(key);
           if (item && item.title === title.original && item.excerpt === title.excerpt && (!item.publication_version || item.content_hash === title.content_hash)) {
-            const updated = { ...item, title_en: title.title, overview_en: title.overview_en || "", title_en_generated_at: new Date(now).toISOString() };
+            const updated = { ...item, title_en: title.title, title_en_kind: title.title_en_kind === "translation" ? "translation" : "generated", overview_en: title.overview_en || "", title_en_generated_at: new Date(now).toISOString() };
             if (item.publication_version) {
               await tx.put(archiveKey, updated);
               if (updated.overview_en) await tx.delete(`darkweb:publication-pending:${policy.epoch}:${title.id}`);
@@ -705,7 +770,7 @@ export class ReportGate {
           if (prior?.publication_version && (!item.publication_version || (prior.text_status !== "listing" && item.text_status === "listing"))) continue;
           if (!prior) added++;
           const sameContent = prior?.title === item.title && prior?.excerpt === item.excerpt && prior?.content_hash === item.content_hash;
-          const record = { ...prior, ...item, title_en: sameContent ? prior?.title_en || "" : "", overview_en: sameContent ? prior?.overview_en || "" : "", first_seen: prior?.first_seen || timestamp,
+          const record = { ...prior, ...item, title_en: sameContent ? prior?.title_en || "" : "", title_en_kind: sameContent ? prior?.title_en_kind || "" : "", overview_en: sameContent ? prior?.overview_en || "" : "", first_seen: prior?.first_seen || timestamp,
             preview: item.preview || prior?.preview || "", last_seen: timestamp, baseline: baseline ? true : prior ? prior.baseline : false,
             sha256: item.sha256 || prior?.sha256 || "", acquired: item.acquired || prior?.acquired || false,
             bytes: item.bytes ?? prior?.bytes ?? null };
@@ -715,7 +780,7 @@ export class ReportGate {
             if (prior?.published_at && prior.published_at !== item.published_at) await tx.delete(`darkweb:publication-index:${policy.epoch}:${prior.published_at}:${item.id}`);
             await tx.put(archiveKey, record);
             await tx.put(`darkweb:publication-index:${policy.epoch}:${item.published_at}:${item.id}`, item.id);
-            if (!record.title_en || !record.overview_en) await tx.put(`darkweb:publication-pending:${policy.epoch}:${item.id}`, item.id);
+            if (!record.title_en || record.title_en_kind !== "translation" || !record.overview_en) await tx.put(`darkweb:publication-pending:${policy.epoch}:${item.id}`, item.id);
           }
           const { original_text, ...card } = record;
           await tx.put(key, card);

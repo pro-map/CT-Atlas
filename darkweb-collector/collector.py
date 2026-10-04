@@ -480,7 +480,8 @@ def source_failure_reason(error):
             return "Tor/SOCKS connection refused"
         return "Tor/SOCKS connection failed"
     known = {"Listing exceeds HTML size limit", "Source redirect leaves the registered onion host",
-             "Redirect missing Location", "Too many redirects"}
+             "Redirect missing Location", "Too many redirects", "Local PDF size mismatch or exceeds Atlas limit",
+             "Local file is not a PDF", "Local PDF hash mismatch", "PDF upload was not acknowledged"}
     if isinstance(error, ValueError) and str(error) in known:
         return str(error)
     return type(error).__name__
@@ -551,6 +552,16 @@ def preview_source(row):
 
 
 def make_preview(tor, row):
+    result = _make_preview(tor, row)
+    if not result.get("preview") and row.get("publication_version") == 1 and row.get("preview_url") and any(a.get("type") == "pdf" for a in row.get("attachments", [])):
+        # Large/unreadable PDFs may still supply a usable cover image in the page.
+        cover = _make_preview(tor, {**row, "attachments": []})
+        if cover.get("preview"):
+            result = cover
+    return {**result, "preview_version": 2}
+
+
+def _make_preview(tor, row):
     """At most 8 MiB of source bytes; never keep or upload original media."""
     if row.get("publication_version") == 1:
         attachment = next((a for a in row.get("attachments", []) if a["type"] == "pdf"), None)
@@ -688,10 +699,84 @@ def open_database(path):
     db.execute("CREATE TABLE IF NOT EXISTS pages (outlet_id TEXT, url TEXT, title TEXT, text TEXT, checked_at TEXT, PRIMARY KEY(outlet_id,url))")
     db.execute("CREATE TABLE IF NOT EXISTS outbox (outlet_id TEXT, url TEXT, metadata TEXT, baseline INTEGER, PRIMARY KEY(outlet_id,url))")
     db.execute("CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)")
+    db.execute("CREATE TABLE IF NOT EXISTS pdf_uploads (outlet_id TEXT, item_url TEXT, sha256 TEXT, epoch INTEGER, status TEXT, attempts INTEGER, next_try REAL, PRIMARY KEY(outlet_id,item_url,sha256,epoch))")
     db.execute("CREATE TABLE IF NOT EXISTS undated (outlet_id TEXT, url TEXT, metadata TEXT, PRIMARY KEY(outlet_id,url))")
     if "depth" not in [row[1] for row in db.execute("PRAGMA table_info(frontier)")]:
         db.execute("ALTER TABLE frontier ADD COLUMN depth INTEGER DEFAULT 0")
     return db
+
+
+def sync_pdf_files(api, endpoint, db, outlet, evidence, storage, max_uploads=2):
+    """Upload acquired PDFs from disk; never reset state or fetch an onion URL."""
+    if not storage or not storage.get("configured"):
+        return False
+    policy = outlet["policy"]
+    if policy.get("paused"):
+        return False
+    epoch, oid, now = policy["epoch"], outlet["id"], time.time()
+    candidates = []
+    for url, raw in db.execute("SELECT url,metadata FROM items WHERE outlet_id=? ORDER BY rowid", (oid,)):
+        row = json.loads(raw)
+        if row.get("publication_version") != 1 or not within_period(row, policy):
+            continue
+        for file in row.get("attachments", []):
+            fingerprint = file.get("sha256", "")
+            if file.get("type") != "pdf" or not file.get("acquired") or not re.fullmatch(r"[a-f0-9]{64}", fingerprint):
+                continue
+            key = (oid, url, fingerprint, epoch)
+            prior = db.execute("SELECT status,attempts,next_try FROM pdf_uploads WHERE outlet_id=? AND item_url=? AND sha256=? AND epoch=?", key).fetchone()
+            if prior and prior[2] > now:
+                continue
+            candidates.append((url, file, key, prior))
+    for url, file, key, prior in candidates[:max_uploads]:
+        fingerprint = file["sha256"]
+        params = {"id": hashlib.sha256((oid + "\n" + url).encode()).hexdigest(), "sha256": fingerprint,
+                  "epoch": epoch, "outlet_id": oid}
+        attempts = (prior[1] if prior else 0) + 1
+        status, next_try = "retry", now + min(900, 60 * 2 ** min(attempts, 4))
+        response = None
+        try:
+            response = api.request("GET", endpoint + "/darkweb/file-status", params=params,
+                                   timeout=(15, 60), allow_redirects=False)
+            response.raise_for_status()
+            remote = response.json()
+            response.close(); response = None
+            if remote.get("stored") is not True:
+                path = evidence / (fingerprint + ".pdf")
+                size = path.stat().st_size
+                if size != file.get("bytes") or not 5 <= size <= storage.get("max_file_bytes", 50 * 1048576):
+                    raise ValueError("Local PDF size mismatch or exceeds Atlas limit")
+                with path.open("rb") as source:
+                    if source.read(5) != b"%PDF-":
+                        raise ValueError("Local file is not a PDF")
+                    source.seek(0)
+                    digest = hashlib.sha256()
+                    for chunk in iter(lambda: source.read(65536), b""):
+                        digest.update(chunk)
+                    if digest.hexdigest() != fingerprint:
+                        raise ValueError("Local PDF hash mismatch")
+                    source.seek(0)
+                    response = api.request("POST", endpoint + "/darkweb/file-upload", params=params, data=source,
+                                           headers={"Content-Type": "application/pdf", "Content-Length": str(size)},
+                                           timeout=(15, 180), allow_redirects=False)
+                    response.raise_for_status()
+                    if response.json().get("stored") is not True:
+                        raise ValueError("PDF upload was not acknowledged")
+            status, attempts, next_try = "stored", 0, now + 86400
+            LOG.info("Outlet %s: PDF available in Atlas (%s bytes)", oid, file.get("bytes"))
+        except Exception as error:
+            code = getattr(response, "status_code", None)
+            if code == 507:
+                status, next_try = "storage_limit", now + 900
+            LOG.warning("Outlet %s: PDF sync pending (%s); local file preserved", oid,
+                        "storage limit reached" if code == 507 else source_failure_reason(error))
+        finally:
+            if response is not None:
+                response.close()
+            with db:
+                db.execute("INSERT OR REPLACE INTO pdf_uploads VALUES (?,?,?,?,?,?,?)", (*key, status, attempts, next_try))
+    # Drain remaining local files promptly, without repeatedly retrying failed files.
+    return len(candidates) > max_uploads
 
 
 def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_delay=1.0):
@@ -816,7 +901,7 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
             for old_url, metadata, baseline in db.execute("SELECT url,metadata,baseline FROM items WHERE outlet_id=? ORDER BY rowid", (oid,)).fetchall():
                 item = json.loads(metadata)
                 pdf_pending = any(a.get("type") == "pdf" and not a.get("acquired") and a.get("attempts", 0) < 3 for a in item.get("attachments", []))
-                preview_pending = policy.get("previews") and not item.get("preview") and not item.get("preview_status")
+                preview_pending = policy.get("previews") and not item.get("preview") and (not item.get("preview_status") or item.get("preview_version") != 2)
                 if within_period(item, policy) and (pdf_pending or preview_pending):
                     db.execute("INSERT OR IGNORE INTO outbox VALUES (?,?,?,?)", (oid, old_url, metadata, baseline))
                     added += 1
@@ -865,7 +950,9 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
             prior = db.execute("SELECT metadata FROM items WHERE outlet_id=? AND url=?", (oid, row["url"])).fetchone()
             previous = json.loads(prior[0]) if prior else {}
             if preview_source(previous) == preview_source(row) and (previous.get("preview") or previous.get("preview_status")):
-                row.update({key: previous[key] for key in ("preview", "preview_status") if key in previous})
+                row.update({key: previous[key] for key in ("preview", "preview_status", "preview_version") if key in previous})
+            if not row.get("preview") and row.get("preview_version") != 2:
+                row.pop("preview_status", None)
             if not row.get("preview") and not row.get("preview_status") and previews_left:
                 previews_left -= 1
                 row.update(make_preview(tor, row))
@@ -915,6 +1002,7 @@ def main():
     parser.add_argument("--max-file-mb", type=int, default=50)
     parser.add_argument("--acquire", action="store_true", help="Acquire new material links locally; no historical baseline downloads")
     parser.add_argument("--once", action="store_true", help="Run one resumable pass, not necessarily a complete outlet crawl")
+    parser.add_argument("--upload-only", action="store_true", help="Synchronize existing local PDFs with Atlas without crawling Tor")
     parser.add_argument("--only-outlet", default="", help="Collect only this registered outlet ID or starting onion URL")
     parser.add_argument("--pages-per-scan", type=int, default=50)
     parser.add_argument("--max-pages", type=int, default=10000)
@@ -964,10 +1052,11 @@ def main():
                     if not onion_url(outlet.get("url", "")):
                         continue
                     try:
-                        if not scan_outlet(api, endpoint, tor, db, outlet, args.evidence, args.acquire, args.max_file_mb * 1048576, args.pages_per_scan, args.max_pages, args.request_delay):
+                        if not args.upload_only and not scan_outlet(api, endpoint, tor, db, outlet, args.evidence, args.acquire, args.max_file_mb * 1048576, args.pages_per_scan, args.max_pages, args.request_delay):
                             failed = True
+                        backfill_pending |= sync_pdf_files(api, endpoint, db, outlet, args.evidence, config.get("files_storage"))
                         phase = db.execute("SELECT value FROM settings WHERE key=?", ("publication-inventory-v1:"+outlet["id"],)).fetchone()
-                        backfill_pending |= bool(phase and phase[0] != "complete")
+                        backfill_pending |= not args.upload_only and bool(phase and phase[0] != "complete")
                     except Exception:
                         failed = True
                         LOG.error("Scan not acknowledged for outlet %s; inventory retained for retry", outlet["id"])

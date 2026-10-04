@@ -15,7 +15,7 @@ function harness(){
   transaction(callback){const result=queue.then(()=>callback(storage));queue=result.catch(()=>{});return result;}
  };
  const env={AUTH_USERS_JSON:'{}',DARKWEB_INGEST_TOKEN:'s'.repeat(48),ALLOWED_ORIGIN:'https://ct-atlas.com'};
- const context=vm.createContext({AbortSignal,extractGeminiText:async p=>p.text,console,Response,Request,URL,TextDecoder,TextEncoder,Uint8Array,Date,JSON,Map,Set,Object,Array,String,Number,Math,crypto,
+ const context=vm.createContext({AbortSignal,extractGeminiText:async p=>p.text,console,Response,Request,Headers,URL,TextDecoder,TextEncoder,Uint8Array,Date,JSON,Map,Set,Object,Array,String,Number,Math,crypto,
   cleanText:(v,n=700)=>String(v||'').replace(/\s+/g,' ').trim().slice(0,n),
   isAllowedUser:name=>['admin','analyst'].includes(name),
   sha256:async value=>Buffer.from(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))).toString('hex')});
@@ -23,10 +23,34 @@ function harness(){
  vm.runInContext(gateSource+'\nglobalThis.Gate=ReportGate;',context);
  const gate=new context.Gate({storage},env);
  context.gateCall=async(e,path,body)=>path==='/session-get'?Response.json({username:body.session_token}, {status:['admin','analyst'].includes(body.session_token)?200:401}):gate.fetch(new Request('https://gate'+path,{method:'POST',body:JSON.stringify(body)}));
- const source=fs.readFileSync('cloudflare-worker/darkweb.js','utf8').replace(/^import[^\n]+\n/,'').replace(/export /g,'');
+ const fileSource=fs.readFileSync('cloudflare-worker/darkweb-files.js','utf8').replace(/^import[^\n]+\n/gm,'').replace(/export /g,'');
+ vm.runInContext(fileSource,context);
+ const source=fs.readFileSync('cloudflare-worker/darkweb.js','utf8').replace(/^import[^\n]+\n/gm,'').replace(/export /g,'');
  vm.runInContext(source+'\nglobalThis.api={handleDarkweb,onionUrl};',context);
  async function call(path,body,user='admin',collector=false){if(path==='/darkweb/ingest' && body)body={selection_version:2,collection_epoch:2,...body,items:Array.isArray(body.items)?body.items.map(i=>({published_at:"2025-06-01",date_basis:"html",...i})):body.items};const r=await context.api.handleDarkweb(new Request('https://worker'+path,{method:body===undefined?'GET':'POST',headers:collector?{Authorization:'Bearer '+env.DARKWEB_INGEST_TOKEN}:{'X-Session-Token':user},...(body===undefined?{}:{body:JSON.stringify(body)})}),env);return {status:r.status,data:await r.json(),headers:r.headers};}
  return {call,values,env,context,api:context.api};
+}
+function mockPdfStorage(h){
+ const objects=new Map();let writes=0;
+ h.context.FixedLengthStream=class{constructor(length){let count=0;return new TransformStream({transform(chunk,controller){count+=chunk.byteLength;if(count>length)throw Error('too long');controller.enqueue(chunk);},flush(){if(count!==length)throw Error('too short');}});}};
+ h.env.DARKWEB_FILES={
+  async head(key){const o=objects.get(key);return o?{size:o.data.length,customMetadata:o.customMetadata}:null;},
+  async get(key){const o=objects.get(key);return o?{size:o.data.length,customMetadata:o.customMetadata,body:new Response(o.data).body}:null;},
+  async put(key,stream,options){const data=Buffer.from(await new Response(stream).arrayBuffer());const sha=Buffer.from(await crypto.subtle.digest('SHA-256',data));assert.equal(sha.toString('hex'),Buffer.from(options.sha256).toString('hex'));objects.set(key,{data,customMetadata:options.customMetadata});writes++;return {size:data.length};}
+ };
+ return {objects,get writes(){return writes;}};
+}
+async function pdfFixture(h,content='%PDF-1.4\nNeutral test document',number=1){
+ const outlets=(await h.call('/darkweb/feed')).data.outlets;
+ const outlet=outlets[0]?.id||await register(h),data=Buffer.from(content),hash=Buffer.from(await crypto.subtle.digest('SHA-256',data)).toString('hex');
+ const raw=publication(number,{attachments:[{url:base+'report-'+number+'.pdf',title:'تقرير.pdf',type:'pdf',acquired:true,sha256:hash,bytes:data.length}]});
+ assert.equal((await h.call('/darkweb/ingest',{outlet_id:outlet,items:[raw],scan_ok:true},'',true)).status,200);
+ const item=(await h.call('/darkweb/archive')).data.items.find(i=>i.url===raw.url);
+ const query='?'+new URLSearchParams({id:item.id,sha256:hash,epoch:'2',outlet_id:outlet});
+ return {outlet,item,raw,hash,data,query};
+}
+async function pdfRequest(h,path,f,{user='',collector=false,body,headers={}}={}){
+ return h.api.handleDarkweb(new Request('https://worker/darkweb/'+path+f.query,{method:body===undefined?'GET':'POST',headers:{...(collector?{Authorization:'Bearer '+h.env.DARKWEB_INGEST_TOKEN}:{'X-Session-Token':user}),...(body===undefined?{}:{'Content-Type':'application/pdf','Content-Length':String(body.length)}),...headers},...(body===undefined?{}:{body})}),h.env);
 }
 async function register(h){const r=await h.call('/darkweb/outlet',{name:'Outlet',url:base,keywords:'Niger, Sahel'});assert.equal(r.status,200);return r.data.outlet.id;}
 test('feed requires a valid session; configuration and write privileges cannot be substituted',async()=>{
@@ -234,4 +258,92 @@ test('English overviews use source text and cannot overwrite newer source conten
  const inflight=h.call('/darkweb/enrich',{});await ready;await submit(publication(1,{original_text:'النص الأحدث'}));
  release(Response.json({text:JSON.stringify({summary:'',titles:[{id:item.id,title:'Stale title',overview_en:'Stale overview'}]})}));await inflight;
  full=(await h.call('/darkweb/item?id='+item.id)).data.item;assert.equal(full.overview_en,'');assert.equal(full.original_text,'النص الأحدث');
+});
+
+test('private PDF upload, authenticated download and duplicate retry use one stored object',async()=>{
+ const h=harness(),r2=mockPdfStorage(h),f=await pdfFixture(h);
+ assert.equal((await pdfRequest(h,'file',f)).status,401);
+ assert.equal((await pdfRequest(h,'file-upload',f,{user:'admin',body:f.data})).status,401);
+ assert.equal((await pdfRequest(h,'file',f,{collector:true})).status,401);
+ assert.equal((await pdfRequest(h,'file',f,{user:'analyst'})).status,404);
+ let response=await pdfRequest(h,'file-upload',f,{collector:true,body:f.data});assert.equal(response.status,200);assert.equal((await response.json()).stored,true);
+ response=await pdfRequest(h,'file',f,{user:'analyst'});assert.equal(response.status,200);assert.equal(response.headers.get('Content-Type'),'application/pdf');assert.equal(response.headers.get('Cache-Control'),'no-store, private');assert.equal(response.headers.get('Content-Security-Policy'),"sandbox; default-src 'none'");assert.deepEqual(Buffer.from(await response.arrayBuffer()),f.data);
+ assert.equal((await (await pdfRequest(h,'file-status',f,{collector:true})).json()).stored,true);
+ await pdfRequest(h,'file-upload',f,{collector:true,body:f.data});assert.equal(r2.writes,1);
+ const feed=(await h.call('/darkweb/feed')).data;assert.equal(feed.files_storage.files,1);assert.equal(feed.files_storage.stored_bytes,f.data.length);assert.equal(feed.files_storage.reserved_bytes,0);assert.equal(feed.items[0].attachments[0].stored_in_atlas,true);
+ await h.call('/darkweb/ingest',{outlet_id:f.outlet,items:[f.raw],scan_ok:true},'',true);
+ assert.equal((await h.call('/darkweb/item?id='+f.item.id)).data.item.attachments[0].stored_in_atlas,true);
+});
+
+test('private PDF rejects spoofed hashes, invalid bodies, size mismatch and off-collection references',async()=>{
+ const h=harness(),r2=mockPdfStorage(h),f=await pdfFixture(h);
+ for(const bad of [Buffer.from('not-a-pdf'),Buffer.alloc(f.data.length,65),Buffer.from('%PDF-'+'.'.repeat(f.data.length-5))])assert.notEqual((await pdfRequest(h,'file-upload',f,{collector:true,body:bad})).status,200);
+ assert.equal(r2.objects.size,0);
+ const forged={...f,query:f.query.replace(f.hash,'b'.repeat(64))};assert.equal((await pdfRequest(h,'file-upload',forged,{collector:true,body:f.data})).status,404);
+ const foreign={...f,query:f.query.replace(f.outlet,'f'.repeat(32))};assert.equal((await pdfRequest(h,'file-upload',foreign,{collector:true,body:f.data})).status,409);
+ const future={...f,query:f.query.replace('epoch=2','epoch=3')};assert.equal((await pdfRequest(h,'file-upload',future,{collector:true,body:f.data})).status,409);
+ assert.equal((await pdfRequest(h,'file-upload',f,{collector:true,body:f.data,headers:{'Content-Type':'text/html'}})).status,400);
+ // A collector-supplied hosted flag is not evidence of a completed server upload.
+ f.raw.attachments[0].stored_in_atlas=true;
+ await h.call('/darkweb/ingest',{outlet_id:f.outlet,items:[f.raw],scan_ok:true},'',true);
+ assert.equal((await h.call('/darkweb/archive')).data.items[0].attachments[0].stored_in_atlas,false);
+});
+
+test('private PDF quota serializes concurrent uploads and retry after lost acknowledgement',async()=>{
+ const h=harness(),r2=mockPdfStorage(h),a=await pdfFixture(h),b=await pdfFixture(h,'%PDF-1.4\nDifferent',2);
+ h.values.set('darkweb:files-policy',{limit_bytes:a.data.length});
+ const responses=await Promise.all([pdfRequest(h,'file-upload',a,{collector:true,body:a.data}),pdfRequest(h,'file-upload',b,{collector:true,body:b.data})]);
+ assert.deepEqual(responses.map(r=>r.status).sort(),[200,507]);assert.equal(r2.objects.size,1);
+ let usage=(await h.call('/darkweb/feed')).data.files_storage;assert.ok(usage.stored_bytes+usage.reserved_bytes<=a.data.length);
+ // Simulate R2 success followed by a missing commit acknowledgement.
+ const c=await pdfFixture(h,'%PDF-1.4\nLost acknowledgement',3);h.values.set('darkweb:files-policy',{limit_bytes:1000000});
+ const real=h.context.gateCall;let fail=true;
+ h.context.gateCall=(e,path,body)=>path==='/darkweb-file-commit'&&fail?(fail=false,Promise.reject(Error('lost ack'))):real(e,path,body);
+ assert.equal((await pdfRequest(h,'file-upload',c,{collector:true,body:c.data})).status,502);
+ const before=r2.writes;assert.equal((await pdfRequest(h,'file-upload',c,{collector:true,body:c.data})).status,200);assert.equal(r2.writes,before);
+ usage=(await h.call('/darkweb/feed')).data.files_storage;assert.equal(usage.reserved_bytes,0);
+});
+
+test('PDF storage permissions, pause, reset and unconfigured storage preserve existing collection',async()=>{
+ const h=harness(),r2=mockPdfStorage(h),f=await pdfFixture(h);
+ assert.equal((await h.call('/darkweb/storage-policy',{limit_bytes:1000000},'analyst')).status,403);
+ assert.equal((await h.call('/darkweb/storage-policy',{limit_bytes:1000000})).status,200);
+ await pdfRequest(h,'file-upload',f,{collector:true,body:f.data});
+ const policy={from:'2025-01-01',through:'2026-12-31',pages_per_scan:10};
+ await h.call('/darkweb/policy',{...policy,paused:true});
+ assert.equal((await pdfRequest(h,'file-upload',f,{collector:true,body:f.data})).status,409);
+ assert.equal((await pdfRequest(h,'file',f,{user:'analyst'})).status,200);
+ await h.call('/darkweb/policy',{...policy,reset:true,paused:false});
+ assert.equal((await pdfRequest(h,'file',f,{user:'analyst'})).status,404);
+ assert.equal(r2.objects.size,1);assert.equal((await h.call('/darkweb/feed')).data.files_storage.stored_bytes,f.data.length);
+ delete h.env.DARKWEB_FILES;
+ assert.equal((await h.call('/darkweb/collector-config',undefined,'',true)).data.files_storage.configured,false);
+ assert.equal((await pdfRequest(h,'file',f,{user:'analyst'})).status,503);
+});
+
+test('existing generated titles are requeued as faithful translations without truncating long titles',async()=>{
+ const h=harness(),id=await register(h);h.env.GEMINI_API_KEY='test';
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[publication()],scan_ok:true},'',true);
+ const item=(await h.call('/darkweb/archive')).data.items[0];
+ const key='darkweb:publication:2:'+item.id;
+ h.values.set(key,{...h.values.get(key),title_en:'Invented old heading',overview_en:'Existing overview'});
+ h.values.delete('darkweb:publication-pending:2:'+item.id);
+ const translated='A faithful translation with details preserved. '.repeat(12);
+ h.context.fetch=async(url,options)=>{const body=JSON.parse(options.body);assert.match(body.system_instruction,/faithful English translation/);assert.match(body.system_instruction,/Do not invent, summarize, shorten/);assert.doesNotMatch(body.system_instruction,/produce a concise English title/);const input=JSON.parse(body.input);assert.equal(input.titles[0].id,item.id);return Response.json({text:JSON.stringify({summary:'',titles:[{id:item.id,title:translated,overview_en:'A neutral overview.'}]})});};
+ assert.equal((await h.call('/darkweb/enrich',{})).status,200);
+ const full=(await h.call('/darkweb/item?id='+item.id)).data.item;
+ assert.equal(full.title_en,translated.trim());assert.equal(full.title_en_kind,'translation');assert.equal(full.title,item.title);assert.equal(full.original_text,publication().original_text);
+ assert.ok(!h.values.has('darkweb:publication-pending:2:'+item.id));
+});
+
+test('private PDF handles fragmented signatures and refuses truncated bodies without committing',async()=>{
+ const h=harness(),r2=mockPdfStorage(h),f=await pdfFixture(h);
+ const requestFor=chunks=>new Request('https://worker/darkweb/file-upload'+f.query,{method:'POST',duplex:'half',headers:{Authorization:'Bearer '+h.env.DARKWEB_INGEST_TOKEN,'Content-Type':'application/pdf','Content-Length':String(f.data.length)},body:new ReadableStream({start(controller){for(const chunk of chunks)controller.enqueue(chunk);controller.close();}})});
+ let response=await h.api.handleDarkweb(requestFor([f.data.subarray(0,3),f.data.subarray(3,4)]),h.env);
+ assert.equal(response.status,502);assert.equal(r2.objects.size,0);
+ response=await h.api.handleDarkweb(requestFor([f.data.subarray(0,2),f.data.subarray(2,4),f.data.subarray(4)]),h.env);
+ assert.equal(response.status,200);assert.equal(r2.objects.size,1);
+ const duplicate=await pdfFixture(h,f.data.toString(),2);
+ assert.equal((await pdfRequest(h,'file-upload',duplicate,{collector:true,body:duplicate.data})).status,200);
+ assert.equal((await h.call('/darkweb/feed')).data.files_storage.files,1);
 });

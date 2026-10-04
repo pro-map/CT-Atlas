@@ -456,3 +456,128 @@ def test_previews_are_small_jpegs_and_pdf_first_pages_with_no_original_on_disk(t
     response=Response(headers={'Content-Length':str(9*1048576)})
     assert 'cap' in c.make_preview(Session([response]),{'url':BASE+'image.png','type':'image'})['preview_status']
     assert response.closed and not list(tmp_path.iterdir())
+
+class UploadReply:
+    def __init__(self, payload, status=200):
+        self.payload, self.status_code, self.closed = payload, status, False
+    def json(self):
+        return self.payload
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            raise c.requests.exceptions.HTTPError('private API details', response=self)
+    def close(self):
+        self.closed = True
+
+class UploadAPI:
+    def __init__(self, fail_upload=False):
+        self.calls, self.files, self.fail_upload = [], {}, fail_upload
+    def request(self, method, url, **kwargs):
+        assert url.startswith('https://atlas.example/darkweb/')
+        assert kwargs['allow_redirects'] is False
+        fingerprint = kwargs['params']['sha256']
+        self.calls.append((method, url, kwargs['params']))
+        if method == 'GET':
+            return UploadReply({'stored':fingerprint in self.files})
+        data = kwargs['data'].read()
+        assert data.startswith(b'%PDF-')
+        assert c.hashlib.sha256(data).hexdigest() == fingerprint
+        assert kwargs['headers']['Content-Length'] == str(len(data))
+        self.files[fingerprint] = data
+        if self.fail_upload:
+            self.fail_upload = False
+            raise c.requests.exceptions.ConnectionError('lost acknowledgement')
+        return UploadReply({'stored':True})
+
+
+def saved_pdf(db, folder, number=1):
+    data = ('%PDF-1.4\nNeutral document '+str(number)).encode()
+    fingerprint = c.hashlib.sha256(data).hexdigest()
+    (folder/(fingerprint+'.pdf')).write_bytes(data)
+    row = {'url':BASE+'posts/naba/'+str(number)+'/', 'publication_version':1, 'published_at':'2025-06-01',
+           'attachments':[{'url':BASE+str(number)+'.pdf','title':'تقرير.pdf','type':'pdf','acquired':True,'sha256':fingerprint,'bytes':len(data)}]}
+    db.execute('INSERT INTO items VALUES (?,?,?,?)',(OUTLET['id'],row['url'],json.dumps(row),1));db.commit()
+    return row, fingerprint, data
+
+
+def test_existing_pdfs_upload_without_recrawling_or_resetting_collection(tmp_path):
+    db=c.open_database(tmp_path/'state.sqlite');row,fingerprint,data=saved_pdf(db,tmp_path)
+    db.execute('INSERT INTO frontier(outlet_id,url) VALUES (?,?)',(OUTLET['id'],BASE+'pending/'));db.commit()
+    before=db.execute('SELECT * FROM items').fetchall()
+    policy={'epoch':2,'from':'2025-01-01','through':'2026-12-31','paused':False}
+    api=UploadAPI();storage={'configured':True,'max_file_bytes':50*1048576}
+    assert not c.sync_pdf_files(api,'https://atlas.example',db,{**OUTLET,'policy':policy},tmp_path,storage)
+    assert api.files[fingerprint]==data and len(api.calls)==2
+    assert api.calls[0][2]['id']==c.hashlib.sha256((OUTLET['id']+'\n'+row['url']).encode()).hexdigest()
+    assert db.execute('SELECT * FROM items').fetchall()==before
+    assert db.execute('SELECT COUNT(*) FROM frontier').fetchone()[0]==1
+    assert (tmp_path/(fingerprint+'.pdf')).read_bytes()==data
+    c.sync_pdf_files(api,'https://atlas.example',db,{**OUTLET,'policy':policy},tmp_path,storage)
+    assert len(api.calls)==2
+    db.close()
+
+
+def test_pdf_upload_lost_ack_retries_status_without_sending_bytes_twice(tmp_path):
+    db=c.open_database(tmp_path/'state.sqlite');row,fingerprint,data=saved_pdf(db,tmp_path)
+    api=UploadAPI(fail_upload=True);outlet={**OUTLET,'policy':{'epoch':2,'from':'2025-01-01','through':'2026-12-31'}}
+    c.sync_pdf_files(api,'https://atlas.example',db,outlet,tmp_path,{'configured':True})
+    assert db.execute('SELECT status FROM pdf_uploads').fetchone()[0]=='retry'
+    db.execute('UPDATE pdf_uploads SET next_try=0');db.commit()
+    c.sync_pdf_files(api,'https://atlas.example',db,outlet,tmp_path,{'configured':True})
+    assert [x[0] for x in api.calls]==['GET','POST','GET']
+    assert db.execute('SELECT status FROM pdf_uploads').fetchone()[0]=='stored'
+    db.close()
+
+
+def test_pdf_upload_budget_and_pause_preserve_remaining_files(tmp_path):
+    db=c.open_database(tmp_path/'state.sqlite')
+    for i in range(3):saved_pdf(db,tmp_path,i)
+    api=UploadAPI();outlet={**OUTLET,'policy':{'epoch':2,'from':'2025-01-01','through':'2026-12-31'}}
+    assert not c.sync_pdf_files(api,'https://atlas.example',db,outlet,tmp_path,{'configured':False})
+    assert not c.sync_pdf_files(api,'https://atlas.example',db,{**outlet,'policy':{**outlet['policy'],'paused':True}},tmp_path,{'configured':True})
+    assert not api.calls
+    assert c.sync_pdf_files(api,'https://atlas.example',db,outlet,tmp_path,{'configured':True})
+    assert len(api.files)==2
+    assert not c.sync_pdf_files(api,'https://atlas.example',db,outlet,tmp_path,{'configured':True})
+    assert len(api.files)==3 and len(list(tmp_path.glob('*.pdf')))==3
+    db.close()
+
+
+def test_corrupt_local_pdf_is_not_uploaded_and_storage_limit_backs_off(tmp_path,caplog):
+    db=c.open_database(tmp_path/'state.sqlite');row,fingerprint,data=saved_pdf(db,tmp_path)
+    path=tmp_path/(fingerprint+'.pdf');path.write_bytes(data[:-1]+b'x')
+    api=UploadAPI();outlet={**OUTLET,'policy':{'epoch':2,'from':'2025-01-01','through':'2026-12-31'}}
+    c.sync_pdf_files(api,'https://atlas.example',db,outlet,tmp_path,{'configured':True})
+    assert not api.files and len(api.calls)==1 and path.exists()
+    path.write_bytes(data);db.execute('UPDATE pdf_uploads SET next_try=0');db.commit()
+    original=api.request
+    api.request=lambda method,url,**kwargs: UploadReply({'error':'storage limit reached'},507) if method=='POST' else original(method,url,**kwargs)
+    c.sync_pdf_files(api,'https://atlas.example',db,outlet,tmp_path,{'configured':True})
+    status,next_try=db.execute('SELECT status,next_try FROM pdf_uploads').fetchone()
+    assert status=='storage_limit' and next_try>c.time.time()+800
+    assert 'storage limit reached' in caplog.text and path.read_bytes()==data
+    db.close()
+
+
+def test_pdf_cover_is_used_when_first_page_preview_is_unavailable():
+    row={'publication_version':1,'url':BASE+'posts/naba/1/','preview_url':BASE+'hero.jpg',
+         'attachments':[{'type':'pdf','url':BASE+'large.pdf'}]}
+    with patch.object(c,'_make_preview',side_effect=[{'preview_status':'Preview source exceeds 8 MB cap'}, {'preview':'data:image/jpeg;base64,test','preview_status':'Source thumbnail'}]) as make:
+        result=c.make_preview(None,row)
+    assert result['preview_version']==2 and result['preview_status']=='Source thumbnail'
+    assert make.call_args_list[1].args[1]['attachments']==[]
+    assert make.call_args_list[1].args[1]['preview_url']==BASE+'hero.jpg'
+
+
+def test_old_missing_preview_is_retried_once_without_resetting_items(tmp_path):
+    db=c.open_database(tmp_path/'state.sqlite')
+    row,fingerprint,data=saved_pdf(db,tmp_path)
+    row.update(type='pdf',title='مجلة',text_status='complete',preview_status='Old failure')
+    db.execute('UPDATE items SET metadata=?',(json.dumps(row),));db.commit()
+    outlet={**OUTLET,'policy':{'epoch':2,'from':'2025-01-01','through':'2026-12-31','pages_per_scan':1,'previews':True}}
+    site=Site({BASE:'<html></html>'})
+    with patch.object(c,'api_call',return_value={'ok':True}),patch.object(c,'make_preview',return_value={'preview_status':'No image available','preview_version':2}) as make:
+        c.scan_outlet(None,'',site,db,outlet,tmp_path,False,1000,1,100,0)
+        c.scan_outlet(None,'',site,db,outlet,tmp_path,False,1000,1,100,0)
+        assert make.call_count==1
+    assert db.execute('SELECT COUNT(*) FROM items').fetchone()[0]==1
+    db.close()
