@@ -222,6 +222,7 @@ async function deleteReport(id){
 async function runInvestigation(event){
   event.preventDefault();
   const button=$("socialRunButton");
+  if(button.disabled)return;
   const payload=formPayload();
   if(!payload.target&&!payload.usernames.length&&!payload.keywords.length&&!payload.urls.length){
     setStatus("Enter a target, username, keyword or public URL.","warning");return;
@@ -236,6 +237,7 @@ async function runInvestigation(event){
     ?"Searching public sources and building analytical report…"
     :"Retrieving supplied public URLs and building analytical report…");
 
+  const finishSound=window.CTAtlasSound?.begin();
   const finishWait = window.CTAtlasUI?.begin($("socialStatus"));
   try{
     const response=await fetch(API+"/social-investigate",{
@@ -251,6 +253,7 @@ async function runInvestigation(event){
     reports=[result.report,...reports.filter(x=>x.id!==result.report.id)].slice(0,50);
     renderHistory();
     renderReport(result.report);
+    finishSound?.(result.fallback==="brave_evidence_only"?"error":"success");
     const sourceCount=Array.isArray(result.report?.sources)?result.report.sources.length:0;
     if(result.fallback==="brave_evidence_only"){
       setStatus("ADK analysis was unavailable; Brave returned "+sourceCount+" public source"+(sourceCount===1?"":"s")+" for analyst review. Report saved.","warning");
@@ -260,6 +263,7 @@ async function runInvestigation(event){
       setStatus("SOCMINT report generated · "+sourceCount+" public source"+(sourceCount===1?"":"s")+" · saved.","success");
     }
   }catch(error){
+    finishSound?.("error");
     if(/QUOTA/.test(error.code||"")){
       const suffix=error.retryAfter?" Retry after approximately "+error.retryAfter+" seconds if the limit is temporary.":"";
       setStatus((error.message||"Gemini quota reached.")+suffix,"warning");

@@ -1083,6 +1083,7 @@ async function saveLabel(){
   );
   cryptoWorkspace.labels.unshift(item);
   document.getElementById("labelForm").hidden=true;
+  window.CTAtlasSound?.play();
   scheduleWorkspaceSave();
   renderWorkspaceUi();renderFilteredViews();
   if(proposeExchange){
@@ -1126,6 +1127,7 @@ function createCase(){
   cryptoWorkspace.cases.unshift(item);
   activeCaseId=item.id;
   document.getElementById("caseCreateForm").hidden=true;
+  window.CTAtlasSound?.play();
   scheduleWorkspaceSave();renderCaseUi();
 }
 
@@ -1140,6 +1142,7 @@ function addSeedToCase(){
   if(!item.seed_addresses.includes(lastPayload.query))item.seed_addresses.push(lastPayload.query);
   item.chain=item.chain||lastPayload.chain;
   item.updated_at=new Date().toISOString();
+  window.CTAtlasSound?.play();
   scheduleWorkspaceSave();renderCaseUi();setStatus("Current seed added to case.","success");
 }
 
@@ -1154,6 +1157,7 @@ function savePathToCase(){
     nodes:lastFoundPath.map(displayAddressForKey),
     created_at:new Date().toISOString()
   });
+  window.CTAtlasSound?.play();
   scheduleWorkspaceSave();renderCaseUi();setStatus("Current path saved to case.","success");
 }
 
@@ -1166,6 +1170,7 @@ function addCaseNote(){
   item.notes=Array.isArray(item.notes)?item.notes:[];
   item.notes.unshift({id:makeId("note"),text,created_at:new Date().toISOString()});
   input.value="";
+  window.CTAtlasSound?.play();
   scheduleWorkspaceSave();renderCaseUi();
 }
 
@@ -1186,6 +1191,7 @@ function saveOffchainNode(){
     created_at:new Date().toISOString()
   });
   document.getElementById("offchainForm").hidden=true;
+  window.CTAtlasSound?.play();
   scheduleWorkspaceSave();renderCaseUi();renderFilteredViews();
   setStatus("Off-chain node saved to the active case.","success");
 }
@@ -1212,6 +1218,7 @@ function saveCrosschainLink(){
     created_at:new Date().toISOString()
   });
   document.getElementById("crosschainForm").hidden=true;
+  window.CTAtlasSound?.play();
   scheduleWorkspaceSave();renderCaseUi();renderFilteredViews();
   setStatus("Sourced cross-chain link saved to the active case.","success");
 }
@@ -2884,13 +2891,15 @@ function render(payload){
   }
 }
 
-async function run(){
+async function run({silent=false}={}){
+  if(document.getElementById("cryptoRun")?.disabled)return;
   const query=String(document.getElementById("cryptoQuery")?.value||"").trim();
   const chain=String(document.getElementById("cryptoChain")?.value||"auto");
   const button=document.getElementById("cryptoRun");
   if(query.length<8){setStatus("Enter a wallet address or transaction hash.","error");return;}
   if(!user()||!token()){redirectToLogin();return;}
 
+  const finishSound=silent?null:window.CTAtlasSound?.begin();
   if(button){button.disabled=true;button.textContent="ANALYSING…";}
   setStatus("Querying on-chain provider and building transaction relationships…","working");
   const result=document.getElementById("cryptoResult");
@@ -2905,9 +2914,10 @@ async function run(){
     const payload=await response.json().catch(()=>({}));
     if(response.status===401){redirectToLogin();return;}
     if(!response.ok)throw new Error(payload.error||"Crypto analysis failed.");
-    render(payload);
+    render(payload);finishSound?.("success");
     setStatus("Analysis completed from public on-chain data.","success");
   }catch(error){
+    finishSound?.("error");
     setStatus(error?.message||"Crypto analysis failed.","error");
   }finally{
     if(button){button.disabled=false;button.textContent="ANALYSE";}
@@ -3052,7 +3062,7 @@ async function start(){
   renderExchangeAdminAccess();
   await providerHealth();
   await loadCryptoWorkspace();
-  if(autoRun)run();
+  if(autoRun)run({silent:true});
 }
 
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);

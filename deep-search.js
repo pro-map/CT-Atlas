@@ -359,6 +359,7 @@ function render(rawPayload){
 }
 
 async function run(){
+  if(document.getElementById("deepSearchRun")?.disabled)return;
   if(!backendReady){setStatus("The Custom Intelligence backend is not available.","warning");return;}
   const question=String(document.getElementById("deepSearchQuestion")?.value||"").trim();
   const username=user(), sessionToken=token(), button=document.getElementById("deepSearchRun");
@@ -371,6 +372,7 @@ async function run(){
   renderScope();
   setStatus("Reading the period from your question, taking the matching CT Atlas database events first, then retrieving fresh multilingual reporting…","working");
 
+  const finishSound=window.CTAtlasSound?.begin();
   const finishWait = window.CTAtlasUI?.begin(document.getElementById("deepSearchStatus"));
   try{
     const response=await fetch(API_BASE+"/deep-search",{
@@ -384,13 +386,13 @@ async function run(){
       const retry=Number(payload.retry_after_seconds||0);
       throw new Error((payload.error||"The assessment failed.")+periodNote+(retry?` Retry in approximately ${Math.ceil(retry/60)} minute(s).`:""));
     }
-    render(payload);
+    render(payload);finishSound?.(payload.no_current_reporting?"error":"success");
     if(payload.no_current_reporting){
       setStatus(payload.likely_transient_fetch_issue
         ?"Assessment written from general knowledge only [GK]: the search providers were unavailable for every query. Retry in a few minutes for current reporting."
         :"Assessment written from general knowledge only [GK]: no current reporting was found in the database or the multilingual search.","warning");
     }else setStatus(`Assessment complete · ${Number(payload.retrieval?.articles_retrieved||0)} articles · ${Number(payload.retrieval?.unique_event_clusters||0)} unique event clusters · ${Number(payload.retrieval?.potential_atlas_gaps||0)} potential CT Atlas gaps.${periodNote}`,"success");
-  }catch(error){setStatus(error?.message||"The assessment failed.","error");}
+  }catch(error){finishSound?.("error");setStatus(error?.message||"The assessment failed.","error");}
   finally{
     finishWait?.();
     if(button){button.disabled=false;button.textContent="GENERATE ASSESSMENT";}}

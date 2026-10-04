@@ -76,18 +76,20 @@ function render(r){
 async function selectDomainIP(ip){
  if(busy||result?.kind!=="domain")return;
  if(result.networks.some(n=>n.ip===ip)){selectedIP=ip;render(result);return;}
+ const finishSound=window.CTAtlasSound?.begin();
  busy=true;$("lookupButton").disabled=true;$("exportPdf").disabled=true;$("exportJson").disabled=true;render(result);
  $("status").textContent="Analysing "+ip+"…";const finish=window.CTAtlasUI?.begin($("waitAnchor"));
- try{const network=await request("/ip-intelligence/lookup",{ip});result.networks.push(network);selectedIP=ip;result.status="partial";$("status").textContent="IP added to this domain investigation and its report.";}
- catch(error){$("status").textContent=error.message;}
+ try{const network=await request("/ip-intelligence/lookup",{ip});result.networks.push(network);selectedIP=ip;result.status="partial";$("status").textContent="IP added to this domain investigation and its report.";finishSound?.(network.status==="unavailable"?"error":"success");}
+ catch(error){finishSound?.("error");$("status").textContent=error.message;}
  finally{busy=false;$("lookupButton").disabled=false;$("exportPdf").disabled=false;$("exportJson").disabled=false;finish?.();render(result);}
 }
 $("lookupForm").addEventListener("submit",async event=>{
  event.preventDefault();if(busy)return;busy=true;$("lookupButton").disabled=true;result=null;selectedIP="";$("results").hidden=true;
  $("status").className="";$("status").textContent="Consulting DNS, registration and network intelligence sources…";
+ const finishSound=window.CTAtlasSound?.begin();
  const finish=window.CTAtlasUI?.begin($("waitAnchor"));
- try{result=await request("/ip-intelligence/lookup",{ip:$("ipAddress").value.trim()});render(result);$("status").textContent=result.status==="unavailable"?"Sources are currently unavailable. Retry shortly.":"Lookup complete. Review source coverage before exporting.";}
- catch(error){$("status").textContent=error.message;$("status").className="error";}
+ try{result=await request("/ip-intelligence/lookup",{ip:$("ipAddress").value.trim()});render(result);$("status").textContent=result.status==="unavailable"?"Sources are currently unavailable. Retry shortly.":"Lookup complete. Review source coverage before exporting.";finishSound?.(result.status==="unavailable"?"error":"success");}
+ catch(error){finishSound?.("error");$("status").textContent=error.message;$("status").className="error";}
  finally{finish?.();busy=false;$("lookupButton").disabled=false;if(result)render(result);}
 });
 $("exportPdf").addEventListener("click",async()=>{

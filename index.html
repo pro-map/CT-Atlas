@@ -8,7 +8,8 @@
 <meta charset="UTF-8">
 <style>html{background:#0d1620}.ct-page-loading{display:none}html.ct-loading .ct-page-loading{position:fixed;inset:0;z-index:2147483646;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#0d1620;color:#edf3f6;font:11px Arial,sans-serif;letter-spacing:.24em}</style>
 <script>document.documentElement.classList.add("ct-loading");window.ctLoadingFallback=setTimeout(function(){document.documentElement.classList.remove("ct-loading");},10000);</script>
-<link rel="stylesheet" href="workspace-ui.css?v=20261003">
+<link rel="stylesheet" href="workspace-ui.css?v=20261004">
+<script src="sound-effects.js?v=20261004" defer></script>
 <script src="workspace-ui.js?v=20261003" defer></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -4584,7 +4585,7 @@ html, body {
 <script src="pdf-export.js?v=20261003" defer></script>
 <script src="report-illustration.js?v=20261002" defer></script>
 <script src="usage-admin.js?v=usage-summary-20261003b" defer></script>
-<script src="usage-auth-fix.js?v=20261003" defer></script>
+<script src="usage-auth-fix.js?v=20261004" defer></script>
 <script src="tab-access.js?v=20260928" defer></script>
 
 <style>
@@ -13312,6 +13313,7 @@ async function generateCustomReport() {
     status.className =
         "report-status working";
 
+    const finishSound=window.CTAtlasSound?.begin();
     const finishWait = window.CTAtlasUI?.begin(status);
     try {
 
@@ -13416,8 +13418,10 @@ async function generateCustomReport() {
 
         status.className =
             "report-status success";
+        finishSound?.("success");
 
     } catch (error) {
+        finishSound?.("error");
 
         status.textContent =
             error.message
