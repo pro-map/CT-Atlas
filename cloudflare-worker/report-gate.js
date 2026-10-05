@@ -15,7 +15,7 @@ const ADMIN_DISPLAY_NAMES=Object.freeze({
   "group-p-2":"Allyson",
   "group-p-3":"Roberto",
   "group-p-4":"Daniele",
-  "group-p-5":"Carlos Lienert",
+  "group-p-5":"Simon",
   "group-p-6":"Zaydoun",
   "group-p-7":"Saleh",
   "group-p-8":"Lasha",
@@ -25,10 +25,12 @@ const ADMIN_DISPLAY_NAMES=Object.freeze({
   "group-s-2":"Sebastien Breuil",
   "group-s-3":"Andreas",
   "group-s-4":"William Hippert",
-  "group-s-5":"Liman",
+  "group-s-5":"Carlos Leniart",
   "group-s-6":"Juan",
   "group-s-7":"Thierry",
-  "group-s-8":"Bigdan"
+  "group-s-8":"Bigdan",
+  "group-s-9":"Nadim",
+  "group-s-10":"Abdelraoouf"
 });
 
 function withAdminDisplayName(row){

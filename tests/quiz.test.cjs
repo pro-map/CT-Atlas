@@ -46,17 +46,18 @@ test('admin display labels cover configured names and omit unspecified users',as
  const access=await h.call('/tab-access-stats',{username:'admin',period:'all'});
  assert.equal(access.users.some(row=>row.username==='group-p-11'),false);
  assert.equal(access.users.find(row=>row.username==='group-s-8').display_name,'Bigdan');
+ assert.equal(access.users.find(row=>row.username==='group-s-9').display_name,'Nadim');
+ assert.equal(access.users.find(row=>row.username==='group-s-10').display_name,'Abdelraoouf');
  const expected={
   'group-i-1':'Ed','group-i-2':'Stephen','group-i-3':'Kayla','group-i-4':'Bridget',
   'group-i-5':'Alexandru','group-i-6':'Oskaras','group-i-7':'Elodie','group-i-8':'Marius',
   'group-i-9':'Kiara','group-i-10':'Sebastien','group-p-1':'Dritan','group-p-2':'Allyson',
-  'group-p-3':'Roberto','group-p-4':'Daniele','group-p-5':'Carlos Lienert','group-p-6':'Zaydoun',
+  'group-p-3':'Roberto','group-p-4':'Daniele','group-p-5':'Simon','group-p-6':'Zaydoun',
   'group-p-7':'Saleh','group-p-8':'Lasha','group-p-9':'MTS','group-p-10':'Alexandre','group-s-1':'Maddy',
-  'group-s-3':'Andreas','group-s-4':'William Hippert','group-s-5':'Liman','group-s-6':'Juan','group-s-7':'Thierry','group-s-8':'Bigdan'
+  'group-s-3':'Andreas','group-s-4':'William Hippert','group-s-5':'Carlos Leniart','group-s-6':'Juan','group-s-7':'Thierry','group-s-8':'Bigdan','group-s-9':'Nadim','group-s-10':'Abdelraoouf'
  };
  for(const [username,name] of Object.entries(expected)) assert.equal(rows.get(username).display_name,name);
  assert.equal(rows.get('group-s-2').display_name,'Sebastien Breuil');
- for(const username of ['group-s-9','group-s-10']) assert.equal(rows.get(username).display_name,undefined);
 });
 test('different user has independent attempt; 30-day statistics batch storage reads',async()=>{
  const h=harness();await h.call('/quiz-answer-record',attempt);
