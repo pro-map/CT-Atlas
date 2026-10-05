@@ -5153,14 +5153,14 @@ Last 180 days
 <div id="mapScopeBlock">
 
 <div class="section-title" id="mapScopeTitle">
-Map · attacks
+Map · all events
 </div>
 
 <label class="database-field map-category-field">
 <span>Show on map</span>
 <select id="mapCategory">
-<option value="ATTACKS" selected>Attacks only</option>
-<option value="ALL">All events</option>
+<option value="ATTACKS">Attacks only</option>
+<option value="ALL" selected>All events</option>
 <option value="Counter Terrorism Action">Counter-terrorism actions</option>
 <option value="Arrests">Arrests</option>
 <option value="Legal / Judicial">Legal / judicial</option>
@@ -5173,8 +5173,8 @@ Map · attacks
 </label>
 
 <div class="time-buttons map-period-buttons">
-<button class="time-button active" data-days="1">24H</button>
-<button class="time-button" data-days="7">7 DAYS</button>
+<button class="time-button" data-days="1">24H</button>
+<button class="time-button active" data-days="7">7 DAYS</button>
 </div>
 
 <div class="layer-buttons">
@@ -6566,7 +6566,7 @@ let databaseArchiveTotal = null;
 let databaseArchiveRequested = false;
 
 
-let selectedDays = 1;
+let selectedDays = 7;
 
 
 let showMarkers =
@@ -7368,10 +7368,10 @@ function invalidateFilterCache() {
     _mapScopeEventsCache = null;
 }
 
-// What "Show on map" draws: "ATTACKS" (the default), "ALL", or one other
+// What "Show on map" draws: "ALL" (the default), "ATTACKS", or one other
 // category. filteredAllEvents() stays attacks only: the ticker, the KPIs and
 // the trends are about attacks whatever the map shows.
-let mapCategoryScope = "ATTACKS";
+let mapCategoryScope = "ALL";
 
 const MAP_SCOPE_TITLES = {
     ATTACKS: "Map · attacks",
