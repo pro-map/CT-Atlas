@@ -8,6 +8,7 @@ import uuid
 from typing import Any
 
 from fastapi import FastAPI, Header, HTTPException
+from json_repair import repair_json
 from google.adk.agents.run_config import RunConfig
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
@@ -65,19 +66,18 @@ def _clean_user_id(value: str) -> str:
 
 def _extract_json(text: str) -> dict[str, Any]:
     value = str(text or "").strip()
-    value = re.sub(r"^\`\`\`(?:json)?\s*", "", value, flags=re.I)
-    value = re.sub(r"\s*\`\`\`$", "", value)
+    value = re.sub(r"^```(?:json)?\s*", "", value, flags=re.I)
+    value = re.sub(r"\s*```$", "", value)
 
     try:
         parsed = json.loads(value)
     except json.JSONDecodeError:
-        start = value.find("{")
-        end = value.rfind("}")
-        if start < 0 or end <= start:
-            raise HTTPException(status_code=502, detail="Agent did not return JSON.")
+        # Model output can contain small syntax defects even when instructed
+        # to return JSON. Repair syntax only, then keep the semantic checks
+        # below so broken or incomplete reports are still rejected.
         try:
-            parsed = json.loads(value[start : end + 1])
-        except json.JSONDecodeError as exc:
+            parsed = repair_json(value, return_objects=True)
+        except Exception as exc:
             raise HTTPException(
                 status_code=502,
                 detail="Agent returned malformed report JSON.",
@@ -88,7 +88,6 @@ def _extract_json(text: str) -> dict[str, Any]:
     if not str(parsed.get("executive_assessment") or "").strip():
         raise HTTPException(status_code=502, detail="Agent report is missing executive assessment.")
     return parsed
-
 
 @api.get("/health")
 async def health() -> dict[str, Any]:

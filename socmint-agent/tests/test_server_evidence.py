@@ -33,3 +33,13 @@ def test_investigation_rejects_model_invented_evidence_annex(monkeypatch):
     response = TestClient(server.api).post("/investigate", headers={"X-CT-Atlas-Agent-Key": "test-secret"}, json={"user_id": "tester", "query": {}})
     assert response.status_code == 200
     assert "telegram_evidence" not in response.json()["report"]
+
+
+def test_extract_json_repairs_common_model_syntax_defect():
+    server = importlib.import_module("server")
+    report = server._extract_json(
+        '{"title":"Smoke report","executive_assessment":"The supplied public page was examined.","sources":[],}'
+    )
+    assert report["title"] == "Smoke report"
+    assert report["executive_assessment"] == "The supplied public page was examined."
+    assert report["sources"] == []
