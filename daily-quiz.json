@@ -1,14 +1,14 @@
 {
   "category": "International CT Instruments and Institutions",
-  "question": "What is the total number of member countries that currently make up INTERPOL?",
+  "question": "Where is the headquarters of the INTERPOL General Secretariat located?",
   "options": [
-    "176",
-    "186",
-    "196"
+    "Vienna, Austria",
+    "Lyon, France",
+    "Brussels, Belgium"
   ],
-  "correct_index": 2,
-  "explanation": "INTERPOL is an inter-governmental organization currently comprising 196 member countries worldwide.",
+  "correct_index": 1,
+  "explanation": "The INTERPOL General Secretariat is staffed by police and civilians and comprises a headquarters located in Lyon, France.",
   "source_url": "https://www.interpol.int/en/Who-we-are/What-is-INTERPOL",
-  "date": "2026-10-05",
-  "source_checked_at": "2026-10-05T17:10:59.014418+00:00"
+  "date": "2026-10-06",
+  "source_checked_at": "2026-10-05T22:38:43.357619+00:00"
 }
