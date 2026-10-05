@@ -1,14 +1,14 @@
 {
   "category": "International CT Instruments and Institutions",
-  "question": "What is the primary function of an INTERPOL National Central Bureau (NCB) within a member country?",
+  "question": "What is the total number of member countries that currently make up INTERPOL?",
   "options": [
-    "It acts as the central point of contact between national law enforcement and the INTERPOL General Secretariat and other NCBs.",
-    "It serves as the regional judicial tribunal for adjudicating cross-border terrorism and organized crime indictments.",
-    "It operates exclusively as an overseas tactical deployment unit for executing high-risk counter-terrorism raids."
+    "176",
+    "186",
+    "196"
   ],
-  "correct_index": 0,
-  "explanation": "Each INTERPOL member country establishes a National Central Bureau run by national police officials to provide a direct communications and operational contact point.",
+  "correct_index": 2,
+  "explanation": "INTERPOL is an inter-governmental organization currently comprising 196 member countries worldwide.",
   "source_url": "https://www.interpol.int/en/Who-we-are/What-is-INTERPOL",
-  "date": "2026-10-04",
-  "source_checked_at": "2026-10-04T19:54:24.328909+00:00"
+  "date": "2026-10-05",
+  "source_checked_at": "2026-10-05T17:10:59.014418+00:00"
 }
