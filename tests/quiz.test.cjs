@@ -26,7 +26,6 @@ function harness(){
  const testHash='a'.repeat(64);
  const testUsers={admin:testHash};
  for(const group of ['i','p','s']) for(let number=1;number<=10;number++) testUsers['group-'+group+'-'+number]=testHash;
-  testUsers['group-p-11']=testHash;
  const testEnv={AUTH_USERS_JSON:JSON.stringify(testUsers)};
  const g=new c.Gate({storage},testEnv);
  return {g,db,fail:()=>{fail=true;},call:async(path,body)=>(await g.fetch(new Request('https://internal'+path,{method:'POST',body:JSON.stringify(body)}))).json()};
@@ -45,14 +44,14 @@ test('admin display labels cover configured names and omit unspecified users',as
  const stats=await h.g.usageStats('all');
  const rows=new Map(stats.users.map(row=>[row.username,row]));
  const access=await h.call('/tab-access-stats',{username:'admin',period:'all'});
- assert.equal(access.users.find(row=>row.username==='group-p-11').display_name,'Carlos Lienert');
+ assert.equal(access.users.some(row=>row.username==='group-p-11'),false);
  assert.equal(access.users.find(row=>row.username==='group-s-8').display_name,'Bigdan');
  const expected={
   'group-i-1':'Ed','group-i-2':'Stephen','group-i-3':'Kayla','group-i-4':'Bridget',
   'group-i-5':'Alexandru','group-i-6':'Oskaras','group-i-7':'Elodie','group-i-8':'Marius',
   'group-i-9':'Kiara','group-i-10':'Sebastien','group-p-1':'Dritan','group-p-2':'Allyson',
-  'group-p-3':'Roberto','group-p-4':'Daniele','group-p-5':'Simon','group-p-6':'Zaydoun',
-  'group-p-7':'Saleh','group-p-8':'Lasha','group-p-9':'MTS','group-p-10':'Alexandre','group-p-11':'Carlos Lienert','group-s-1':'Maddy',
+  'group-p-3':'Roberto','group-p-4':'Daniele','group-p-5':'Carlos Lienert','group-p-6':'Zaydoun',
+  'group-p-7':'Saleh','group-p-8':'Lasha','group-p-9':'MTS','group-p-10':'Alexandre','group-s-1':'Maddy',
   'group-s-3':'Andreas','group-s-4':'William Hippert','group-s-5':'Liman','group-s-6':'Juan','group-s-7':'Thierry','group-s-8':'Bigdan'
  };
  for(const [username,name] of Object.entries(expected)) assert.equal(rows.get(username).display_name,name);
