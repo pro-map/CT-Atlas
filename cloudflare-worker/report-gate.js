@@ -27,7 +27,8 @@ const ADMIN_DISPLAY_NAMES=Object.freeze({
   "group-s-4":"William Hippert",
   "group-s-5":"Liman",
   "group-s-6":"Juan",
-  "group-s-7":"Thierry"
+  "group-s-7":"Thierry",
+  "group-s-8":"Bigdan"
 });
 
 function withAdminDisplayName(row){
