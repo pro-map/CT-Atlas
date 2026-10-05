@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-04T20:16:32.202762+00:00",
+  "removed_at": "2026-10-05T17:48:38.044376+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -398,6 +398,82 @@
       "country": "Azerbaijan",
       "ai_relevance_score": 85,
       "ai_relevance_reason": "Judicial prosecution and sentencing for terrorist financing."
+    },
+    {
+      "id": "0dcff42ad4d0dd67",
+      "incident_id": "inc-c6609cbce812c75e",
+      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQWjUxTEZ6MjhCUWJ6VXZ6enRIeDcwdkNROVRsa3FFWGJObG9haE1ReEcyUUdLczE1QnlMaEd0WFc5RnFreG11cUdJanVxd09XOFBiRTlWVHM1cWlKeTU1aXVjbW9lYVlCcGZlc210WnJ4Tnd5M21nMDhZX2k3VlhiOHVETS1mTy1tRWNwZVA5SUs?oc=5",
+      "title": "Pirates flee as naval forces free hijacked fishing vessel",
+      "summary": "Naval forces successfully intervened and freed a hijacked fishing vessel, causing the pirates to flee.",
+      "original_title": "Pirates Flee as Naval Forces Free Hijacked Fishing Vessel",
+      "original_language": "en",
+      "source": "Ships & Ports",
+      "published": "2026-04-08T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "country": "Nigeria",
+      "region": "Gulf of Guinea",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Maritime piracy incident involving vessel hijacking and naval intervention."
+    },
+    {
+      "id": "ef2d5cd6c076a800",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNRkU4dktad2NwUnZFUmROOVVJdW5xSENxVnF2RFlORnY2S3NucTBKM3lPRG5hOWVzQy1mM1NtMXVua1I1T1VXeFMwaklsQ0JBNlZaZ0lWZ0NybjVKazJMdl9RNWN5Wl9hZlpWRzBweE9hM2czZ3pUdkhiaW1McU05YmdSdkxQRzBUbl9uUEhoOHZaOWhSaVVpR0dIaUdTSDhJbEJvb2ZQcGNDX2NWbFlxRERWeXZuNnV3QmltSUhiYnoxVmFi?oc=5",
+      "title": "Lowest first-quarter maritime piracy figures since 1991 reported by IMB",
+      "summary": "The ICC International Maritime Bureau reported the lowest first-quarter figures for global maritime piracy and armed robbery since 1991.",
+      "original_title": "Lowest first-quarter maritime piracy and armed robbery figures since 1991, but vigilance remains essential",
+      "original_language": "en",
+      "source": "icc-ccs.org",
+      "published": "2026-04-08T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Authoritative maritime security and piracy statistical report."
+    },
+    {
+      "id": "ed25673bd5c03131",
+      "incident_id": "inc-1061fe8662a09ff0",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQWUw2cXR6cXkyXzljdDRHbFF6UkpjeEc0Y0dIWHZzR2UzR0tnc1EyTjNmV2haUlFFRkNOWFlBZEVxeTg2dEdYVjZRY1E2eVJ4R1JkelFXM1VINHVGTmt6VDk0RklMUUhxdVJmeXE0azZxUTRkaVo5U2F6T2Yxek40dWdzRzg1cGlkbGhLUFgxVjNmbHRIR1E?oc=5",
+      "title": "Sokoto: Troops foil terrorist attack in Isa LGA",
+      "summary": "Nigerian security forces successfully foiled a terrorist attack in the Isa Local Government Area of Sokoto State.",
+      "original_title": "Sokoto: troops foil terrorist attack in Isa LGA",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-04-08T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism operation foiling a terrorist attack in Sokoto State."
+    },
+    {
+      "id": "f0c63398b6080c19",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNM0ZDLWxRbnNZMi1qSnp3b0lqV0xCZlNYWDJFNWppd0RfdXpoelRuNnRZYTdxYmRWVWlzNUcwMExDM1BFb1g3aTM2VjljSlhLTkxzVklrVi1RZHZHSExaX1hOQURQOVh1QVlWLXI0Q2Joai1Sd0Jab3NvMm95ZWQxVUhDa01HdDFiTGhmN0NpajFiX0xzTlZHU1BRUTJseW1PdjI1MVBKSXZYSnVueXZB?oc=5",
+      "title": "The next step: Death penalty for first-born sons of suicide bombers",
+      "summary": "A report discussing legislative or political proposals concerning severe penalties related to terrorists.",
+      "original_title": "השלב הבא: עונש מוות לבנים בכורים של מחבלים מתאבדים",
+      "original_language": "he",
+      "source": "הארץ",
+      "published": "2026-04-06T07:00:00+00:00",
+      "category": "Legal / Judicial",
+      "categories": [
+        "Legal / Judicial"
+      ],
+      "actor_group": "",
+      "country": "Israel",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Legislative/policy proposal connected to counter-terrorism measures."
     }
   ]
 }
