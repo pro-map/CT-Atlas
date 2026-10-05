@@ -46,7 +46,6 @@ test('admin display labels cover configured names and omit unspecified users',as
  const rows=new Map(stats.users.map(row=>[row.username,row]));
  const access=await h.call('/tab-access-stats',{username:'admin',period:'all'});
  assert.equal(access.users.find(row=>row.username==='group-p-11').display_name,'Carlos Lienert');
- const access=await h.call('/tab-access-stats',{username:'admin',period:'all'});
  assert.equal(access.users.find(row=>row.username==='group-s-8').display_name,'Bigdan');
  const expected={
   'group-i-1':'Ed','group-i-2':'Stephen','group-i-3':'Kayla','group-i-4':'Bridget',
