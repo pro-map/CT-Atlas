@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-05T17:48:38.044376+00:00",
+  "removed_at": "2026-10-06T15:56:29.092395+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -474,6 +474,194 @@
       "country": "Israel",
       "ai_relevance_score": 60,
       "ai_relevance_reason": "Legislative/policy proposal connected to counter-terrorism measures."
+    },
+    {
+      "id": "991106c979697c65",
+      "incident_id": "inc-caede8e1016c6e6c",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE16MlJpbGpmU1pfTGNYVzlPQ29MSFROcGFqNVlJNnlGMlR3YmZtbHdIeTJWOXRXVUJWd2xpZldaMGtoVlRqVER2MHd3OUktbXJNOEROWDd6dG1mam9QWWVj?oc=5",
+      "title": "Public outcry following terrorist bombing and security forces firing in Tronglaobi",
+      "summary": "Numerous individuals have strongly condemned a terrorist bombing targeting toddlers and subsequent CRPF firing in Tronglaobi.",
+      "original_title": "Many decry terrorist bombing of toddlers, CRPF firing in Tronglaobi : 10th apr26",
+      "original_language": "en",
+      "source": "e-pao.net",
+      "published": "2026-04-09T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "India",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports a terrorist bombing incident and subsequent security force action in Tronglaobi."
+    },
+    {
+      "id": "64284116f9ce31df",
+      "incident_id": "inc-37cb30607635d1aa",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNXzg1MlB5OVNKVU9aRzN5XzRHczl0WjhkTGFUbFRxcmtRajBwVHA2QkpiX0Y3eWk4SndkQ3FtLUxXRklOSnpsb1BzcVkxUjFSbEtXNzhUT1ZGekNveEVPcldkN1FqX1h3QnV3cXl2YjN0RlRSbE4xNHhsWGpsWUN5ek5mTkl0eEQ1Tm1lYXNDSWJ2ZWJzWGhRYjcxMWFyY0Rkd2p5cDh2ZXBaN2NkYzloOTdvRUduN1VEVXNv?oc=5",
+      "title": "Israeli military claims Al Jazeera journalist killed in Gaza was a Hamas militant",
+      "summary": "The Israeli military has stated that an Al Jazeera journalist killed in Gaza was actively operating as a Hamas militant.",
+      "original_title": "Israel military says Al Jazeera journalist killed in Gaza was Hamas militant",
+      "original_language": "en",
+      "source": "RFI",
+      "published": "2026-04-09T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "Hamas",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Palestinian Territory",
+      "region": "Gaza",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports operational attribution regarding a militant killed in Gaza by military forces."
+    },
+    {
+      "id": "b4cdf197355a3706",
+      "incident_id": "inc-e357d738e12f9d8b",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxOOE5hUF9kcUM4V3QtOTl1dFZfZ2dZeXRVVTlVdTdVeVNid3VBS1FjWXFFdDZQMEVqdEV1SERoN0YwU2F6bTA4YUZwNXlDaWg3aEhNSm5mMC1qTkE2THh6eGluN3JzTEdJSmNMelBxZWxOSERTLUlfM2lRMWgycUhKdnlpTERYejN4NHMtZ3FxRmJCQk9EWnZNMU1xcmdub1hCRmhDNzZ4NTl6MmVSRG1jX2ZTbTJKQUJwYU5TWlRoZkFXYTA?oc=5",
+      "title": "British man appears in court for leading fighters in Somalia-based Islamist terror group",
+      "summary": "A British national has appeared in court facing charges related to leading fighters within al-Shabaab.",
+      "original_title": "British man in court for leading fighters in Somalia-based Islamist terror group",
+      "original_language": "en",
+      "source": "Sky News",
+      "published": "2026-04-09T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Legal / Judicial"
+      ],
+      "actor_group": "Al-Shabaab",
+      "primary_event_type": "JUDICIAL",
+      "country": "Somalia",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete court appearance and terrorism charges against a British national linked to al-Shabaab."
+    },
+    {
+      "id": "9fc87d9293625269",
+      "incident_id": "inc-7cb8d3a73f43ffb0",
+      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOMHZSOGZDN1lFSEJKTmg2X2VuLVBuNXZqNzh6Mjd2RXI0LXJyUVhTek16c3hwVVBEYm00LXdvRTRYRXA4ektWUXhVck8tZ0hSNldPTUdJMk4xbU9CbG03dlpCa1pGNGRtN0d0T1hpaEl3RGZwWDA0NmJXUW8yZWpJOGpsRW9GV1VScVU2MGJXX05mN0czcTgya1QxLWVPdDJDSlNGSFhNV2piNDhQampfbGh4OG95d0dSM0luYzNhVXpRQ3dQODBjWXh3eVJFQQ?oc=5",
+      "title": "Detention toll rises to 16 over terrorist attack targeting police post in Beşiktaş",
+      "summary": "The number of detentions linked to the terrorist attack targeting a police security point in Beşiktaş, Istanbul, has risen to 16.",
+      "original_title": "Beşiktaş'ta polis noktasına yönelik terör saldırısına ilişkin gözaltı 16'ya yükseldi",
+      "original_language": "tr",
+      "source": "TRT Haber",
+      "published": "2026-04-09T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Turkey",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports extensive arrests following an armed attack and shootout at the Israeli consulate in Istanbul."
+    },
+    {
+      "id": "9c4f8c37f922aac6",
+      "incident_id": "inc-7464eeba230d0944",
+      "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxOaGhWMFlXUGt3ZExYelhTNWNTNEc5RTA3UE1zcDBmNmJhWkwyNjZhZ1JmSW1Ud3ZreDJDbGJldjZISi1JRTZhMGZqNGhUemg3eGo1Vm5wRk11eUZ0RGtMR3JLUzFpaG9CSGFrSmtZeFZTRWEtN3NmV2stMmRKMEw3RkhwTG9WUU45UFJuaFRCaXB4T0sxVmRBWmJqLXFBUlBXU3RUNTRTaWk3YUNhbU5fQnZVLS0yOWdwNTVBRk90ODc2UUxHUGxRWGhkbHhxb2RoS2R3?oc=5",
+      "title": "Palermo: Jihad and instigation to terrorism, two detained and five minors searched",
+      "summary": "Italian State Police executed two detentions and searched five minors in Palermo in an operation targeting jihadist radicalization and instigation to terrorism.",
+      "original_title": "Palermo: jihad e istigazione al terrorismo, due fermi e cinque minorenni perquisiti",
+      "original_language": "it",
+      "source": "poliziadistato.it",
+      "published": "2026-04-09T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Online / Cyber / AI"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Italy",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism police operation involving detentions and searches for jihadist instigation."
+    },
+    {
+      "id": "184b3d43c34dfe3a",
+      "incident_id": "inc-f7d9d3a1b0f61018",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQRVc3TmZzZHdlYUpUYzBpakVZczZuUUJYY0k2SWdqcWhsVkllSThnQWFjSVdERlFQMjItVkVsRzBBN3JwWlVBbF9rLURJdy1KUk5BOU5Sbk84LVNOSk8wOS12UUZZUTdOdHBDN1hBQTRIem5FTUxnZFJDMEtwbDVQSVJQNU5SWnpFbG5iTEhzaTV0VW9Cd3hXdEtTX3ZtQy1wWjR1ODlBR2h5ZHNWWnpFNDF0RW41Q09SQnJ3ZzBfR0oydXg3?oc=5",
+      "title": "Trial begins regarding the attack in İzmir where 3 police officers were martyred",
+      "summary": "Judicial proceedings are commencing for the defendants involved in the terrorist attack in İzmir that resulted in the deaths of 3 police officers.",
+      "original_title": "İzmir'de 3 polisin şehit olduğu saldırı ile ilgili dava başlıyor",
+      "original_language": "tr",
+      "source": "Habertürk",
+      "published": "2026-04-09T07:00:00+00:00",
+      "category": "Legal / Judicial",
+      "categories": [
+        "Legal / Judicial"
+      ],
+      "actor_group": "",
+      "country": "Turkey",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Terrorism-related judicial trial commencement."
+    },
+    {
+      "id": "52b5485ef69c24e5",
+      "incident_id": "inc-f4ebf13b1006cfcb",
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPZldkYmhpaFE0aG9ER1RVc3dVME1ibC1YQ093Tm9uOFNWb3J5T1d4Q0hncTFYXzloYWRhMlRmSWtEN3lWa25fWDg4Q3NJVDVxbF9GU0w4QkVodFZFMjUtSGtvRE1mUHBiTGhSTWFjYkI2UDJ3c2FkWmN5aUxfZUl2YVlaajdsZXdHREF2cTRxSDUwY3Q0R0ZqTFFuSkQ3YzQ?oc=5",
+      "title": "Somali forces kill scores of al-Shabaab fighters in Mudug airstrikes",
+      "summary": "Somali military forces conducted airstrikes in the Mudug region, resulting in the deaths of numerous al-Shabaab fighters.",
+      "original_title": "Somali Forces Kill Scores of Al-Shabaab Fighters in Airstrikes in Mudug",
+      "original_language": "en",
+      "source": "Shabelle Media Network",
+      "published": "2026-04-09T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "Al-Shabaab",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Somalia",
+      "region": "Mudug",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports military airstrikes conducted by Somali forces resulting in numerous al-Shabaab casualties."
+    },
+    {
+      "id": "e77b2495e054feab",
+      "incident_id": "inc-3fef6f683d11cef9",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQZkJnTWpfQUt0cGpVNkVkSHJsdURHdFF6WjNTT2VBYkpCUE5LMEhPYXZKWkduZGxDVWcwS2Z1LTBUR1E1UEZoWVBlamphTHlZNUJ6M20xc3lqMl83aWthdm5TTXptcmt6MzU2QXNpQjFac1JLaXhFUVdZTlZGcWRqUmt1dnZjNThIbG1rbktLMEFqUEV2T3pYLXN2NFpLVEQ5Z1E?oc=5",
+      "title": "UK man charged over alleged links to al-Shabab",
+      "summary": "A UK national has been formally charged with offenses related to alleged connections with al-Shabab.",
+      "original_title": "UK man charged over alleged links to al-Shabab",
+      "original_language": "en",
+      "source": "Hiiraan Online",
+      "published": "2026-04-09T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Legal / Judicial"
+      ],
+      "actor_group": "Al-Shabaab",
+      "primary_event_type": "JUDICIAL",
+      "country": "United Kingdom",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports concrete terrorism charges filed against a UK national for al-Shabaab links."
+    },
+    {
+      "id": "dc66fd9cc4cae948",
+      "incident_id": "inc-8e11ed3b657a8972",
+      "url": "https://www.kommersant.ru/doc/8572346",
+      "title": "Man detained in Primorye for high treason and terrorist financing",
+      "summary": "Law enforcement in Primorye detained a local resident on charges of high treason and financing terrorism using cryptocurrency.",
+      "original_title": "В Приморье задержали мужчину за госизмену и финансирование терроризма",
+      "original_language": "ru",
+      "source": "kommersant.ru",
+      "published": "2026-04-08T23:30:00+00:00",
+      "category": "Terrorist Financing",
+      "categories": [
+        "Terrorist Financing",
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Russia",
+      "region": "Primorsky Krai",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism arrest for terrorist financing."
     }
   ]
 }
