@@ -9,12 +9,12 @@ function timeButtons(){
     .map(match=>({days:Number(match[2]),active:Boolean(match[1])}));
 }
 
-test("the attacks map offers 24 hours (default) and 7 days, nothing else",()=>{
+test("the map offers 24 hours and 7 days (default), nothing else",()=>{
   const buttons=timeButtons();
   assert.deepEqual(buttons.map(button=>button.days),[1,7],"the map period buttons changed");
   const active=buttons.filter(button=>button.active);
   assert.equal(active.length,1,"exactly one period button must be active");
-  assert.equal(active[0].days,1);
+  assert.equal(active[0].days,7);
 });
 
 test("the initial selectedDays matches the active button, so the first render and the highlighted button agree",()=>{
@@ -22,7 +22,7 @@ test("the initial selectedDays matches the active button, so the first render an
   assert.ok(match,"selectedDays initialisation not found");
   const active=timeButtons().find(button=>button.active);
   assert.equal(Number(match[1]),active.days);
-  assert.equal(Number(match[1]),1);
+  assert.equal(Number(match[1]),7);
 });
 
 test("the fixed 30-day widgets (KPI, timeline, trends) are untouched by the map period; the timeline counts attacks",()=>{
@@ -37,11 +37,12 @@ test("the CI pins agree with the new default so the deploy and smoke checks do n
   const ui=fs.readFileSync(".github/workflows/deploy-current-ct-atlas-ui.yml","utf8");
   const smoke=fs.readFileSync(".github/workflows/live-smoke.yml","utf8");
   assert.ok(ui.includes("grep -q 'data-days=\"7\"' index.html"));
-  assert.ok(ui.includes("grep -q 'let selectedDays = 1;' index.html"));
+  assert.ok(ui.includes("grep -q 'let selectedDays = 7;' index.html"));
+  assert.ok(ui.includes("grep -q '<option value=\"ALL\" selected>All events</option>' index.html"));
   assert.ok(!ui.includes("grep -q '    7;' index.html"));
   assert.ok(!ui.includes("OUR OFFICES"),"the offices button no longer exists");
-  assert.ok(smoke.includes("MAP default is not 24 hours"));
-  assert.ok(html.includes("let selectedDays = 1;"),"the deploy grep needs this exact line");
+  assert.ok(smoke.includes("MAP default is not 7 days"));
+  assert.ok(html.includes("let selectedDays = 7;"),"the deploy grep needs this exact line");
 });
 
 test("the 6-month rolling retention already exists: the collector prunes events older than RETENTION_DAYS at every save",()=>{
@@ -77,6 +78,6 @@ test("the live smoke test waits for GitHub Pages to publish the new map before v
   // below could read the OLD index.html and fail a perfectly good deploy.
   const smoke=fs.readFileSync(".github/workflows/live-smoke.yml","utf8");
   const loop=smoke.slice(smoke.indexOf("for attempt in {1..18}"),smoke.indexOf("Updated PDF assets did not become available"));
-  assert.match(loop,/time-button active.*data-days="1"/,"the retry loop must wait for the 24-hour default");
+  assert.match(loop,/time-button active.*data-days="7"/,"the retry loop must wait for the 7-day default");
   assert.ok(loop.includes('id="attackTickerList"'),"the retry loop must wait for the attacks ticker");
 });

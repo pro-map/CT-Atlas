@@ -397,11 +397,11 @@ test('the map shows attacks only by default, and every category or one of them o
   assert.equal(plain(h.ids('anything else',1)).state,'ATTACKS','an unknown value falls back to attacks');
 });
 
-test('the "Show on map" selector defaults to attacks and the map file carries 7 days of other categories',()=>{
+test('the "Show on map" selector defaults to all events and the map file carries 7 days of other categories',()=>{
   const select=html.slice(html.indexOf('<select id="mapCategory">'),html.indexOf('</select>',html.indexOf('<select id="mapCategory">')));
-  assert.match(select,/<option value="ATTACKS" selected>Attacks only<\/option>/);
-  assert.match(select,/<option value="ALL">All events<\/option>/);
-  assert.match(html,/let mapCategoryScope = "ATTACKS";/);
+  assert.match(select,/<option value="ATTACKS">Attacks only<\/option>/);
+  assert.match(select,/<option value="ALL" selected>All events<\/option>/);
+  assert.match(html,/let mapCategoryScope = "ALL";/);
   assert.match(html,/_filteredMappedEventsCache = mapScopeEvents\(\)\.filter\(/);
   assert.match(html,/const MAP_RECENT_EVENT_DAYS = 8;/);
   assert.match(fs.readFileSync('tools/build_events_map.py','utf8'),/^RECENT_DAYS = 8$/m);
