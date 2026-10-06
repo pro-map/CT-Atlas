@@ -1,7 +1,7 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs'),vm=require('node:vm');
-function harness(){
+function harness(extraEnv={}){
  const shared=fs.readFileSync('cloudflare-worker/shared.js','utf8').replace(/export\s*\{[\s\S]*?\};?\s*$/,'');
  const source=fs.readFileSync('cloudflare-worker/report-gate.js','utf8').replace(/^import[^\n]*\n/,'').replace('export class','class');
  const c=vm.createContext({Response,Request,URL,crypto,TextEncoder});
@@ -26,7 +26,7 @@ function harness(){
  const testHash='a'.repeat(64);
  const testUsers={admin:testHash};
  for(const group of ['i','p','s']) for(let number=1;number<=10;number++) testUsers['group-'+group+'-'+number]=testHash;
- const testEnv={AUTH_USERS_JSON:JSON.stringify(testUsers)};
+ const testEnv={AUTH_USERS_JSON:JSON.stringify(testUsers),...extraEnv};
  const g=new c.Gate({storage},testEnv);
  return {g,db,fail:()=>{fail=true;},call:async(path,body)=>(await g.fetch(new Request('https://internal'+path,{method:'POST',body:JSON.stringify(body)}))).json()};
 }
@@ -58,6 +58,21 @@ test('admin display labels cover configured names and omit unspecified users',as
  };
  for(const [username,name] of Object.entries(expected)) assert.equal(rows.get(username).display_name,name);
  assert.equal(rows.get('group-s-2').display_name,'Sebastien Breuil');
+});
+test('accounts 11-20 from the second roster secret appear in the admin stats with their names',async()=>{
+ const extra={};
+ for(const group of ['i','p','s']) for(let number=11;number<=20;number++) extra['group-'+group+'-'+number]='b'.repeat(64);
+ const h=harness({AUTH_USERS_EXTRA_JSON:JSON.stringify(extra)});
+ const stats=await h.g.usageStats('today');
+ const access=await h.call('/tab-access-stats',{username:'admin',period:'today'});
+ for(const result of [stats,access]){
+  const rows=new Map(result.users.map(row=>[row.username,row]));
+  assert.equal(rows.size,61,'admin + 30 original + 30 new accounts');
+  assert.equal(rows.get('group-i-11').display_name,'Kitty');
+  assert.equal(rows.get('group-s-11').display_name,'Adrien CBRN');
+  assert.equal(rows.get('group-p-20').display_name,undefined);
+  assert.equal(rows.get('group-i-1').display_name,'Ed');
+ }
 });
 test('different user has independent attempt; 30-day statistics batch storage reads',async()=>{
  const h=harness();await h.call('/quiz-answer-record',attempt);

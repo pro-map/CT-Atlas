@@ -24,3 +24,22 @@
 #adminUsageTable td.admin-usage-nonzero,
 #adminFeatureUsageTable td.admin-usage-nonzero,
 #adminUsageSummary strong.admin-usage-nonzero{color:#e2c469}
+/* Connected users: big, unmistakable highlight of who used CT Atlas in the selected period. */
+.admin-connected-panel{margin:4px 0 14px;padding:13px 15px 14px;border:2px solid #39d98a;border-radius:4px;background:linear-gradient(180deg,rgba(57,217,138,.17),rgba(57,217,138,.05));box-shadow:0 0 0 1px rgba(57,217,138,.22),0 0 24px rgba(57,217,138,.16)}
+.admin-connected-panel.is-empty{border-color:#2a4a5c;background:rgba(8,23,32,.7);box-shadow:none}
+.admin-connected-title{margin-bottom:11px;color:#5cf0a4;font-size:14px;font-weight:900;letter-spacing:.09em}
+.admin-connected-panel.is-empty .admin-connected-title{margin-bottom:6px;color:#7c98a8;font-size:10px}
+.admin-connected-list{display:flex;flex-wrap:wrap;gap:9px}
+.admin-connected-chip{display:flex;flex-direction:column;gap:4px;min-width:160px;max-width:100%;padding:10px 13px;background:#0b2a1f;border:1px solid #39d98a;border-left:7px solid #39d98a;border-radius:4px}
+.admin-connected-chip strong{color:#f1fff7;font-size:18px;font-weight:850;line-height:1.15;overflow-wrap:anywhere}
+.admin-connected-chip span{color:#8fe3b8;font-size:11px;font-weight:750;letter-spacing:.03em}
+.admin-connected-chip em{color:#c3e6d3;font-size:10.5px;font-style:normal}
+.admin-connected-empty{color:#8aa3b2;font-size:11px}
+#adminUsageTable tr.admin-row-connected td,#adminFeatureUsageTable tr.admin-row-connected td{background:rgba(57,217,138,.12);border-bottom-color:rgba(57,217,138,.30)}
+#adminUsageTable td.admin-user-connected,#adminFeatureUsageTable td.admin-user-connected{padding-left:11px;border-left:6px solid #39d98a;color:#f1fff7}
+.admin-connected-dot{display:inline-block;width:10px;height:10px;margin-right:8px;border-radius:50%;background:#39d98a;box-shadow:0 0 9px #39d98a;vertical-align:middle}
+.admin-connected-name{margin-right:8px;color:#f1fff7;font-size:14px;font-weight:850;vertical-align:middle}
+.admin-connected-id{margin-right:9px;color:#8fe3b8;font-size:10px;font-weight:700;vertical-align:middle}
+.admin-connected-badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#39d98a;color:#03140b;font-size:9px;font-weight:900;letter-spacing:.09em;vertical-align:middle}
+#adminUsageTable tr.admin-row-idle td,#adminFeatureUsageTable tr.admin-row-idle td{opacity:.48}
+@media(max-width:640px){.admin-connected-chip{min-width:0;flex:1 1 140px}.admin-connected-chip strong{font-size:16px}}

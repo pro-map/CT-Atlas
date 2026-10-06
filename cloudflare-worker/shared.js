@@ -23,6 +23,40 @@ const FEEDBACK_GLOBAL_DAILY_LIMIT = 200;
 // as-is -- folded into the cache key in index.js's /report handler.
 const REPORT_GENERATOR_VERSION = "report-v11-illustration";
 
+// One roster secret, {"username":"sha256(password)"}, validated; throws on any problem.
+function parseAuthRoster(raw, name) {
+  const parsed = JSON.parse(raw);
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    throw new Error(`${name} must be a JSON object.`);
+  }
+
+  const rawEntries = Object.entries(parsed);
+  if (!rawEntries.length) {
+    throw new Error(`${name} contains no users.`);
+  }
+
+  const entries = rawEntries.map(([username, hash]) => [
+    normalizeUsername(username),
+    String(hash || "").trim().toLowerCase()
+  ]);
+  const seen = new Set();
+
+  for (const [username, hash] of entries) {
+    if (
+      !/^[a-z0-9][a-z0-9._-]{0,63}$/.test(username) ||
+      !/^[a-f0-9]{64}$/.test(hash)
+    ) {
+      throw new Error(`${name} contains an invalid username or SHA-256 hash.`);
+    }
+    if (seen.has(username)) {
+      throw new Error(`${name} contains duplicate usernames.`);
+    }
+    seen.add(username);
+  }
+
+  return Object.fromEntries(entries);
+}
+
 function authUsersFromEnv(env) {
   const raw = String(env?.AUTH_USERS_JSON || "").trim();
   if (!raw) {
@@ -30,41 +64,30 @@ function authUsersFromEnv(env) {
     return Object.freeze({});
   }
 
+  let users;
   try {
-    const parsed = JSON.parse(raw);
-    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
-      throw new Error("AUTH_USERS_JSON must be a JSON object.");
-    }
-
-    const rawEntries = Object.entries(parsed);
-    if (!rawEntries.length) {
-      throw new Error("AUTH_USERS_JSON contains no users.");
-    }
-
-    const entries = rawEntries.map(([username, hash]) => [
-      normalizeUsername(username),
-      String(hash || "").trim().toLowerCase()
-    ]);
-    const seen = new Set();
-
-    for (const [username, hash] of entries) {
-      if (
-        !/^[a-z0-9][a-z0-9._-]{0,63}$/.test(username) ||
-        !/^[a-f0-9]{64}$/.test(hash)
-      ) {
-        throw new Error("AUTH_USERS_JSON contains an invalid username or SHA-256 hash.");
-      }
-      if (seen.has(username)) {
-        throw new Error("AUTH_USERS_JSON contains duplicate usernames.");
-      }
-      seen.add(username);
-    }
-
-    return Object.freeze(Object.fromEntries(entries));
+    users = parseAuthRoster(raw, "AUTH_USERS_JSON");
   } catch (error) {
     console.error("Invalid AUTH_USERS_JSON; rejecting all logins.", error);
     return Object.freeze({});
   }
+
+  // Accounts added later live in a second secret: a Cloudflare secret cannot
+  // be read back, so adding users never needs the first one. A username that
+  // AUTH_USERS_JSON already holds keeps the password it has there, and a
+  // broken second secret never locks out the first one's users.
+  const extraRaw = String(env?.AUTH_USERS_EXTRA_JSON || "").trim();
+  if (extraRaw) {
+    try {
+      for (const [username, hash] of Object.entries(parseAuthRoster(extraRaw, "AUTH_USERS_EXTRA_JSON"))) {
+        if (!Object.hasOwn(users, username)) users[username] = hash;
+      }
+    } catch (error) {
+      console.error("Invalid AUTH_USERS_EXTRA_JSON; its users are ignored.", error);
+    }
+  }
+
+  return Object.freeze(users);
 }
 
 function getAllowedUsers(env) {

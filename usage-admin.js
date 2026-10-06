@@ -173,6 +173,88 @@ function adminCountCell(value){
   return '<td'+(Number.isFinite(count)&&count!==0?' class="admin-usage-nonzero"':"")+">"+count+"</td>";
 }
 
+// A user counts as connected in the selected period when they logged in, opened a workspace
+// or used any feature in it -- a session opened the day before still counts once it is used.
+const ADMIN_TAB_FIELDS=["crypto","facial","map","social","darkweb","ip"];
+const ADMIN_ACTIVITY_FIELDS=["logins","searches","map_searches","event_list_searches","report_requests","report_generator_requests","deep_search_requests","reports_generated","cached_reports","quick_ask_requests","social_intel_requests","blockchain_searches","facial_extractions","facial_searches","feedback_submissions","quiz_answers"];
+
+function adminUsername(item){return String(item?.username||"").trim().toLowerCase();}
+
+function adminConnectedUsers(accessUsers,usageUsers){
+  const byUser=new Map();
+  const note=(item,fields)=>{
+    const username=adminUsername(item);
+    if(!username)return;
+    const entry=byUser.get(username)||{username,display_name:"",logins:0,last_activity:"",connected:false};
+    if(item.display_name)entry.display_name=String(item.display_name).trim();
+    entry.logins=Math.max(entry.logins,Number(item.logins||0)||0);
+    const last=String(item.last_activity||"");
+    if(last>entry.last_activity)entry.last_activity=last;
+    entry.connected=entry.connected||fields.some(field=>Number(item[field]||0)>0);
+    byUser.set(username,entry);
+  };
+  (accessUsers||[]).forEach(item=>note(item,ADMIN_TAB_FIELDS));
+  (usageUsers||[]).forEach(item=>note(item,ADMIN_ACTIVITY_FIELDS));
+  return [...byUser.values()].filter(entry=>entry.connected).sort((a,b)=>
+    b.last_activity.localeCompare(a.last_activity)||a.username.localeCompare(b.username,"en",{numeric:true}));
+}
+
+// Connected users first (most recent first), everyone else after in roster order.
+function adminConnectedFirst(users,connected){
+  const rank=new Map(connected.map((entry,index)=>[entry.username,index]));
+  const order=item=>rank.has(adminUsername(item))?rank.get(adminUsername(item)):connected.length;
+  return [...users].map((item,index)=>({item,index})).sort((a,b)=>order(a.item)-order(b.item)||a.index-b.index).map(entry=>entry.item);
+}
+
+function adminUserCell(item,isConnected){
+  if(!isConnected)return "<td>"+escapeCell(adminUserLabel(item))+"</td>";
+  const username=String(item?.username||"");
+  const displayName=String(item?.display_name||"").trim();
+  return '<td class="admin-user-connected"><span class="admin-connected-dot" aria-hidden="true"></span>'+
+    '<strong class="admin-connected-name">'+escapeCell(displayName||username)+'</strong>'+
+    (displayName?'<span class="admin-connected-id">'+escapeCell(username)+'</span>':"")+
+    '<span class="admin-connected-badge">CONNECTED</span></td>';
+}
+
+function adminRowClass(item,connectedNames){
+  return connectedNames.has(adminUsername(item))?' class="admin-row-connected"':' class="admin-row-idle"';
+}
+
+function adminLastSeen(iso){
+  const date=new Date(iso);
+  if(!iso||Number.isNaN(date.getTime()))return "";
+  return "last seen "+date.toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
+}
+
+function adminConnectedChips(connected){
+  if(!connected.length)return '<div class="admin-connected-empty">Nobody has connected in this period.</div>';
+  return connected.map(entry=>{
+    const logins=entry.logins?entry.logins+" login"+(entry.logins===1?"":"s"):"active session";
+    const seen=adminLastSeen(entry.last_activity);
+    return '<div class="admin-connected-chip">'+
+      '<strong>'+escapeCell(entry.display_name||entry.username)+'</strong>'+
+      (entry.display_name?'<span>'+escapeCell(entry.username)+'</span>':"")+
+      '<em>'+escapeCell(logins+(seen?" · "+seen:""))+'</em>'+
+    '</div>';
+  }).join("");
+}
+
+function renderAdminConnected(connected){
+  const panel=document.getElementById("adminConnectedPanel");
+  const title=document.getElementById("adminConnectedTitle");
+  const list=document.getElementById("adminConnectedList");
+  if(!panel||!title||!list)return;
+  if(!connected){
+    panel.classList.add("is-empty");
+    title.textContent="CONNECTED THIS PERIOD";
+    list.innerHTML="";
+    return;
+  }
+  panel.classList.toggle("is-empty",!connected.length);
+  title.textContent="● CONNECTED THIS PERIOD · "+connected.length+" USER"+(connected.length===1?"":"S");
+  list.innerHTML=adminConnectedChips(connected);
+}
+
 function refreshAdminButton(){
   const button=document.getElementById("adminUsageButton");
   if(button)button.hidden=!isAdmin();
@@ -220,6 +302,10 @@ function injectAdminUi(){
             '<div class="admin-usage-metric"><span>AI REPORTS</span><strong id="adminAiReports">—</strong></div>'+
           '</div>'+
           '<div id="adminUsageStatus">Select a period to load usage statistics.</div>'+
+          '<div id="adminConnectedPanel" class="admin-connected-panel is-empty" aria-live="polite">'+
+            '<div id="adminConnectedTitle" class="admin-connected-title">CONNECTED THIS PERIOD</div>'+
+            '<div id="adminConnectedList" class="admin-connected-list"></div>'+
+          '</div>'+
           '<div class="admin-usage-section-title">WORKSPACE ACCESS</div>'+
           '<div class="admin-usage-table-wrap">'+
             '<table id="adminUsageTable">'+
@@ -279,6 +365,7 @@ async function loadAdmin(period){
     if(status)status.textContent="Admin usage statistics require an authenticated Worker session. Sign in again.";
     if(rows)rows.innerHTML="";
     if(featureRows)featureRows.innerHTML="";
+    renderAdminConnected(null);
     return;
   }
 
@@ -295,11 +382,17 @@ async function loadAdmin(period){
     if(!accessResponse.ok)throw new Error(accessPayload.error||"Unable to load workspace access.");
     if(!usageResponse.ok)throw new Error(usagePayload.error||"Unable to load feature activity.");
 
+    const accessUsers=Array.isArray(accessPayload.users)?accessPayload.users:[];
+    const usageUsers=Array.isArray(usagePayload.users)?usagePayload.users:[];
+    const connected=adminConnectedUsers(accessUsers,usageUsers);
+    const connectedNames=new Set(connected.map(entry=>entry.username));
+    renderAdminConnected(connected);
+
     if(rows){
-      const users=Array.isArray(accessPayload.users)?accessPayload.users:[];
+      const users=adminConnectedFirst(accessUsers,connected);
       rows.innerHTML=users.map(item=>
-        "<tr>"+
-          "<td>"+escapeCell(adminUserLabel(item))+"</td>"+
+        "<tr"+adminRowClass(item,connectedNames)+">"+
+          adminUserCell(item,connectedNames.has(adminUsername(item)))+
           adminCountCell(item.crypto)+
           adminCountCell(item.facial)+
           adminCountCell(item.map)+
@@ -324,10 +417,10 @@ async function loadAdmin(period){
     setMetric("adminAiReports",summary.reports_generated);
 
     if(featureRows){
-      const users=Array.isArray(usagePayload.users)?usagePayload.users:[];
+      const users=adminConnectedFirst(usageUsers,connected);
       featureRows.innerHTML=users.map(item=>
-        "<tr>"+
-          "<td>"+escapeCell(adminUserLabel(item))+"</td>"+
+        "<tr"+adminRowClass(item,connectedNames)+">"+
+          adminUserCell(item,connectedNames.has(adminUsername(item)))+
           adminCountCell(item.report_generator_requests)+
           adminCountCell(item.deep_search_requests)+
           adminCountCell(item.quick_ask_requests)+
@@ -347,6 +440,7 @@ async function loadAdmin(period){
     if(status)status.textContent=error.message||"Unable to load usage statistics.";
     if(rows)rows.innerHTML="";
     if(featureRows)featureRows.innerHTML="";
+    renderAdminConnected(null);
     ["adminActiveUsers","adminSearches","adminReportRequests","adminAiReports"].forEach(id=>{
       const el=document.getElementById(id);
       if(el){el.textContent="—";el.classList.remove("admin-usage-nonzero");}

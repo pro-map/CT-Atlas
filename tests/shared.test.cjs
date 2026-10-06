@@ -61,6 +61,22 @@ test('secret-backed auth uses only the configured roster',()=>{
 });
 
 
+test('a second roster secret adds accounts without replacing or endangering the first',()=>{
+ const h=harness();
+ const first='a'.repeat(64),added='b'.repeat(64),other='c'.repeat(64);
+ const env={AUTH_USERS_JSON:JSON.stringify({'group-i-1':first}),
+  AUTH_USERS_EXTRA_JSON:JSON.stringify({'Group-I-11':added,'group-i-1':other})};
+ assert.equal(h.isAllowedUser('group-i-11',env),true);
+ assert.equal(h.passwordHashForUser('group-i-11',env),added);
+ assert.equal(h.passwordHashForUser('group-i-1',env),first,'an existing account keeps its password');
+ assert.deepEqual(Array.from(h.getAllowedUsers(env)).sort(),['group-i-1','group-i-11']);
+ const broken={...env,AUTH_USERS_EXTRA_JSON:'{"group-i-12":"not-a-hash"}'};
+ assert.equal(h.isAllowedUser('group-i-1',broken),true,'a broken second secret never locks out the first one');
+ assert.equal(h.isAllowedUser('group-i-12',broken),false);
+ assert.equal(h.isAllowedUser('group-i-11',{AUTH_USERS_EXTRA_JSON:env.AUTH_USERS_EXTRA_JSON}),false,
+  'without AUTH_USERS_JSON nobody logs in, as before');
+});
+
 test('missing AUTH_USERS_JSON never activates the legacy roster',()=>{
  const h=harness();
  assert.equal(h.isAllowedUser('group-i-1',{}),false);

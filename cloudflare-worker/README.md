@@ -73,6 +73,11 @@ hash. The Worker rejects authentication when the secret is missing, malformed
 or incomplete; there is no hard-coded compatibility roster. Do not commit the
 JSON or password hashes to the repository.
 
+Accounts added later live in the optional secret AUTH_USERS_EXTRA_JSON (same
+format), generated locally with tools/make_auth_users.py. They are added to
+AUTH_USERS_JSON; existing accounts keep their password and a malformed extra
+secret is ignored. See docs/SECURITY_MIGRATION.md.
+
 ## Shared crypto exchange address registry
 
 Exchange labels are stored in the existing `REPORT_GATE` Durable Object. Do not add

@@ -11,6 +11,7 @@ const ADMIN_DISPLAY_NAMES=Object.freeze({
   "group-i-8":"Marius",
   "group-i-9":"Kiara",
   "group-i-10":"Sebastien",
+  "group-i-11":"Kitty",
   "group-p-1":"Dritan",
   "group-p-2":"Allyson",
   "group-p-3":"Roberto",
@@ -30,7 +31,8 @@ const ADMIN_DISPLAY_NAMES=Object.freeze({
   "group-s-7":"Thierry",
   "group-s-8":"Bigdan",
   "group-s-9":"Nadim",
-  "group-s-10":"Abdelraoouf"
+  "group-s-10":"Abdelraoouf",
+  "group-s-11":"Adrien CBRN"
 });
 
 function withAdminDisplayName(row){
