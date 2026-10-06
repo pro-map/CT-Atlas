@@ -825,7 +825,17 @@ async function attachWalletScreening(env, report) {
   }
 }
 
-async function persistReport(env, username, report) {
+// query: the analyst's own sanitized request (report.query can hold discovered URLs instead).
+function socialLogDetails(query, report) {
+  return {
+    mode: query?.mode, target: query?.target, usernames: query?.usernames, platforms: query?.platforms,
+    keywords: query?.keywords, urls: query?.urls, countries_regions: query?.countries_regions,
+    languages: query?.languages, date_from: query?.date_from, date_to: query?.date_to,
+    objective: query?.objective, title: report?.title, discovery_mode: report?.discovery_mode
+  };
+}
+
+async function persistReport(env, username, report, query = null) {
   await attachWalletScreening(env, report);
   const currentResponse = await gateCall(env, "/social-workspace-get", { username });
   const currentPayload = await currentResponse.json().catch(() => ({}));
@@ -841,7 +851,11 @@ async function persistReport(env, username, report) {
   workspace.updated_at = new Date().toISOString();
   const saved = await gateCall(env, "/social-workspace-put", { username, workspace });
   if (!saved.ok) throw new Error("The Social report could not be saved. Please retry.");
-  await gateCall(env, "/usage-increment", { username, metrics: { social_intel_requests: 1 } });
+  await gateCall(env, "/usage-increment", {
+    username,
+    metrics: { social_intel_requests: 1 },
+    ...(query ? { log: { feature: "social", details: socialLogDetails(query, safeReport || report) } } : {})
+  });
 }
 
 async function handleSocialWorkspace(request, env) {
@@ -924,7 +938,7 @@ async function handleSocialInvestigate(request, env) {
         event_count: Number(agentResult.meta?.event_count || 0),
         max_llm_calls: Number(agentResult.meta?.max_llm_calls || 0)
       };
-      await persistReport(env, username, report);
+      await persistReport(env, username, report, query);
       return jsonResponse({ ok: true, report, agent: true }, 200, env);
     } catch (error) {
       const status = Number(error?.status || 0);
@@ -965,7 +979,7 @@ async function handleSocialInvestigate(request, env) {
               directly_observed_sources: evidence.filter(item => item?.fetched).length,
               agent_failure: agentFailure
             };
-            await persistReport(env, username, report);
+            await persistReport(env, username, report, query);
             return jsonResponse({ ok: true, report, agent: false, fallback: "brave_evidence_synthesis" }, 200, env);
           } catch (synthesisError) {
             try {
@@ -992,7 +1006,7 @@ async function handleSocialInvestigate(request, env) {
                 agent_failure: agentFailure,
                 synthesis_failure: cleanText(synthesisError?.message, 700)
               };
-              await persistReport(env, username, report);
+              await persistReport(env, username, report, query);
               return jsonResponse({ ok: true, report, agent: false, fallback: "brave_url_context_secondary" }, 200, env);
             } catch (fallbackError) {
               const report = normalizeReport(
@@ -1012,7 +1026,7 @@ async function handleSocialInvestigate(request, env) {
                 synthesis_failure: cleanText(synthesisError?.message, 700),
                 analysis_failure: cleanText(fallbackError?.message, 700)
               };
-              await persistReport(env, username, report);
+              await persistReport(env, username, report, query);
               return jsonResponse({ ok: true, report, agent: false, fallback: "brave_evidence_only" }, 200, env);
             }
           }
@@ -1115,7 +1129,7 @@ async function handleSocialInvestigate(request, env) {
     if (!sources.some(s => s.url === url)) sources.push({ url, title: "", snippet: "", kind: "analyst_supplied" });
   }
   const report = normalizeReport(result.parsed, query, sources, result.model, discoveryMode);
-  await persistReport(env, username, report);
+  await persistReport(env, username, report, query);
   return jsonResponse({ ok: true, report }, 200, env);
 }
 

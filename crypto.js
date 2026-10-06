@@ -1561,7 +1561,7 @@ async function checkMonitored(){
     for(const watch of watches.slice(0,50)){
       status.textContent="Checking "+(checked+1)+"/"+Math.min(watches.length,50)+" · "+short(watch.address,8);
       try{
-        const fresh=await fetchAddressAnalysis(watch.address,watch.chain,100);
+        const fresh=await fetchAddressAnalysis(watch.address,watch.chain,100,"monitor");
         const previous=watch.last_snapshot||null;
         const snap=snapshotFromPayload(fresh);
         const rows=fresh.transactions||[];
@@ -2216,11 +2216,12 @@ function attachAuxGraphInteraction(svg,group,key,onClick){
   });
 }
 
-async function fetchAddressAnalysis(address,chain,limit=40){
+// origin tells the admin search history a trace expansion or monitor check from a search.
+async function fetchAddressAnalysis(address,chain,limit=40,origin="trace"){
   const response=await fetch(API_BASE+"/crypto-analyze",{
     method:"POST",
     headers:sessionHeaders({"Content-Type":"application/json"}),
-    body:JSON.stringify({user_id:user(),query:address,chain,limit})
+    body:JSON.stringify({user_id:user(),query:address,chain,limit,origin})
   });
   const payload=await response.json().catch(()=>({}));
   if(response.status===401){redirectToLogin();throw new Error("Session expired.");}
@@ -3043,7 +3044,7 @@ async function run({silent=false}={}){
     const response=await fetch(API_BASE+"/crypto-analyze",{
       method:"POST",
       headers:sessionHeaders({"Content-Type":"application/json"}),
-      body:JSON.stringify({user_id:user(),query,chain,limit:100})
+      body:JSON.stringify({user_id:user(),query,chain,limit:100,origin:silent?"url":"search"})
     });
     const payload=await response.json().catch(()=>({}));
     if(response.status===401){redirectToLogin();return;}

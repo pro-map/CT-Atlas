@@ -52,9 +52,13 @@ export async function handleVisualAnalyze(request, env) {
 
     if (response.ok) {
       try {
+        // Counts and size only for the admin history: never images, names or EXIF.
+        const params = new URL(request.url).searchParams;
+        const count = name => Math.min(Math.max(Math.trunc(Number(params.get(name)) || 0), 0), 100);
         await gateCall(env, "/usage-increment", {
           username: session.username,
-          metrics: { facial_extractions: 1 }
+          metrics: { facial_extractions: 1 },
+          log: { feature: "facial_extraction", details: { files: count("files"), videos: count("videos"), bytes: body.byteLength } }
         });
       } catch (usageError) {
         console.error("Facial extraction usage record failed", usageError);

@@ -819,7 +819,17 @@ async function handleCrypto(request, env) {
     const exchangeLabels = await resolveExchangeLabels(result, env);
     const exchangeBehavior = detectExchangeBehavior(result, exchangeLabels);
     try {
-      await gateCall(env, "/usage-increment", { username, metrics: { blockchain_searches: 1 } });
+      // What was looked up, for the admin search history (origin: search, url, trace or monitor).
+      const origin = cleanText(body.origin, 16).toLowerCase();
+      await gateCall(env, "/usage-increment", {
+        username,
+        metrics: { blockchain_searches: 1 },
+        log: { feature: "blockchain", details: {
+          query: target.value, kind: target.kind, chain: target.chain,
+          chain_hint: cleanText(body.chain, 40) || "auto", limit,
+          ...(["search", "url", "trace", "monitor"].includes(origin) ? { origin } : {})
+        } }
+      });
     } catch (usageError) {
       console.error("Blockchain search usage record failed", usageError);
     }

@@ -4,7 +4,7 @@ const API="https://ct-report-generator.fairpeace.workers.dev";
 const $=id=>document.getElementById(id);
 let state=null,view="latest",busy=false,enriching=false;
 let archiveItems=new Map(),archiveCursor="",archiveEpoch=null,archiveExpanded=false;
-let policyDirty=false,storageDirty=false,feedFingerprint="",outletOptions="";
+let policyDirty=false,storageDirty=false,feedFingerprint="",outletOptions="",feedCount=0,searchTimer=null,lastSearchKey="";
 const previewCache=new Map(),openOriginals=new Set(),originalTexts=new Map();
 let previewObserver;
 const token=()=>sessionStorage.getItem("ct_map_session_token")||"";
@@ -70,6 +70,7 @@ function renderFeed(){
  const outlets=new Map(state.outlets.map(o=>[o.id,o]));
  const sourceRows=view==="latest"?[...archiveItems.values()]:view==="legacy"?state.items.filter(i=>!i.publication_version):state.items;
  const rows=[...sourceRows].sort((a,b)=>(b.published_at||"").localeCompare(a.published_at||"")).filter(i=>(!outletId||i.outlet_id===outletId)&&(!type||i.type===type)&&(!query||[i.title,i.title_en,i.overview_en,i.excerpt,outlets.get(i.outlet_id)?.name,...(i.keyword_matches||[])].join(" ").toLowerCase().includes(query))&&(view!=="alerts"||unread(i)&&i.keyword_matches?.length));
+ feedCount=rows.length;
  $("loadMore").hidden=view!=="latest"||!archiveCursor;
  const status=view==="latest"?archiveItems.size+" publications loaded · Filters apply to loaded publications. Load older records to extend the search.":view==="alerts"?"Unreviewed items matching outlet alert keywords, within the latest "+(state.retention_limit||500)+" feed items.":"Earlier generic collection results, within the latest "+(state.retention_limit||500)+" feed items.";
  if($("archiveStatus").textContent!==status)$("archiveStatus").textContent=status;
@@ -178,6 +179,28 @@ function render(){
  if(!state.outlets.length)$("outlets").append(empty("No outlets registered",state.admin?"Add the known listing URLs below. They will be stored behind CT Atlas authentication.":"Ask the administrator to register the monitored outlets."));
  renderFeed();
 }
+// Admin search history: one record per settled search (text, outlet name, material, view and
+// result count). Never the onion address, publication content, previews or files.
+function searchSnapshot(){
+ const text=$("search").value.replace(/\s+/g," ").trim().slice(0,200),outletId=$("outletFilter").value,material=$("typeFilter").value;
+ if(!["latest","legacy","alerts"].includes(view)||(text.length<2&&!outletId&&!material))return null;
+ const outlet=outletId?String((state?.outlets||[]).find(o=>o.id===outletId)?.name||"").slice(0,120):"";
+ let oldest="";
+ if(view==="latest"&&archiveExpanded)for(const item of archiveItems.values()){const day=String(item.published_at||"").slice(0,10);if(day&&(!oldest||day<oldest))oldest=day;}
+ return {text,view,outlet,material,results:feedCount,...(oldest?{loaded_back_to:oldest}:{})};
+}
+function recordSearch(){
+ clearTimeout(searchTimer);searchTimer=null;
+ if(!["latest","legacy","alerts"].includes(view))return;
+ const snapshot=state?searchSnapshot():null;
+ if(!snapshot){lastSearchKey="";return;}
+ const key=JSON.stringify([snapshot.text.toLowerCase(),snapshot.view,snapshot.outlet,snapshot.material]);
+ const username=String(sessionStorage.getItem("ct_map_username")||"").trim().toLowerCase();
+ if(key===lastSearchKey||!username||!token())return;
+ lastSearchKey=key;
+ fetch(API+"/usage-record",{method:"POST",keepalive:true,headers:{"Content-Type":"application/json","X-Session-Token":token()},body:JSON.stringify({username,action:"darkweb_search",details:snapshot})}).catch(()=>{});
+}
+function scheduleSearchRecord(){clearTimeout(searchTimer);searchTimer=setTimeout(recordSearch,1500);}
 function fillPolicy(){if(!state?.policy)return;$("collectFrom").value=state.policy.from;$("collectThrough").value=state.policy.through;$("collectPages").value=state.policy.pages_per_scan;$("collectPreviews").checked=state.policy.previews;}
 function setView(name){
  view=name;for(const b of document.querySelectorAll("[data-view]")){const active=b.dataset.view===name;b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active));}
@@ -220,9 +243,12 @@ $("resetCollection").onclick=()=>{
  if(confirm("RESET DELETES THE ARCHIVE.\n\nEvery feed result, structured publication, English translation and overview, and the briefing collected so far will be deleted. Collection then restarts from scratch for "+from+" → "+through+".\n\nOutlet settings, local evidence files and stored PDFs are kept (stored PDFs still count towards the storage limit). To extend the period without deleting anything, use SAVE (KEEPS ARCHIVE) instead."))void saveCollection(true,false);
 };
 $("enrichNow").onclick=enrich;
-for(const button of document.querySelectorAll("[data-view]"))button.onclick=()=>setView(button.dataset.view);
+for(const button of document.querySelectorAll("[data-view]"))button.onclick=()=>{setView(button.dataset.view);if(["latest","legacy","alerts"].includes(view))scheduleSearchRecord();};
 $("loadMore").onclick=async()=>{const button=$("loadMore");button.disabled=true;try{const result=await api("/darkweb/archive?cursor="+encodeURIComponent(archiveCursor));if(result.epoch!==archiveEpoch){await refresh(true);return;}for(const item of result.items)archiveItems.set(item.id,item);archiveCursor=result.next_cursor;archiveExpanded=true;renderFeed();}catch(error){$("message").textContent=error.message;}finally{button.disabled=false;}};
-for(const id of ["search","outletFilter","typeFilter"])$(id).addEventListener("input",()=>{if(state)renderFeed();});
+for(const id of ["search","outletFilter","typeFilter"])$(id).addEventListener("input",()=>{if(state)renderFeed();scheduleSearchRecord();});
+$("search").addEventListener("keydown",event=>{if(event.key==="Enter")recordSearch();});
+$("search").addEventListener("blur",()=>{if(searchTimer)recordSearch();});
+globalThis.addEventListener?.("pagehide",()=>{if(searchTimer)recordSearch();});
 $("refresh").onclick=()=>refresh(true);
 // Marking reviewed is per analyst but covers every outlet, view and filter; say so first.
 $("markSeen").onclick=async()=>{

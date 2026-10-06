@@ -120,7 +120,7 @@ try{
   };
 }catch(_){}
 
-async function recordUsage(action){
+async function recordUsage(action,details){
   const username=user();
   if(!API_BASE||!username)return;
   const headers={"Content-Type":"application/json"};
@@ -132,24 +132,59 @@ async function recordUsage(action){
       body:JSON.stringify({
         username,
         action,
-        client_time:new Date().toISOString()
-      })
+        client_time:new Date().toISOString(),
+        ...(details?{details}:{})
+      }),
+      keepalive:true
     });
   }catch(error){
     console.warn("Usage analytics unavailable:",error);
   }
 }
 
-function attachSearchTracking(id,action){
-  const input=document.getElementById(id);
+// Event list searches: one count and one admin-history row per settled search (the text and
+// the filters it ran with), recorded after a pause, on Enter, on leaving the box or the page.
+function eventListSnapshot(input){
+  const text=String(input.value||"").replace(/\s+/g," ").trim().slice(0,200);
+  if(text.length<2)return null;
+  const details={text};
+  try{
+    const db=window.CTAtlasDatabase;
+    const filters=db&&typeof db.filters==="function"?db.filters():null;
+    if(filters){
+      for(const name of ["region","topic","actor_group","period_days"])if(filters[name]!==undefined)details[name]=filters[name];
+    }
+    if(db&&typeof db.label==="function")details.scope=String(db.label()||"");
+  }catch(_){}
+  const country=document.getElementById("chronologyCountry")?.value||"";
+  if(country)details.country=country==="__UNLOCATED__"?"Without location":country;
+  const sort=document.getElementById("chronologySort")?.value||"";
+  if(sort)details.sort=sort;
+  try{if(typeof chronologyFilteredEvents==="function")details.results=chronologyFilteredEvents().length;}catch(_){}
+  return details;
+}
+
+function attachEventListTracking(){
+  const input=document.getElementById("chronologySearch");
   if(!input)return;
-  let timer=null;
-  input.addEventListener("input",function(){
-    clearTimeout(timer);
-    const value=String(this.value||"").trim();
-    if(value.length<2)return;
-    timer=setTimeout(()=>recordUsage(action),800);
-  });
+  let timer=null,lastKey="";
+  const commit=()=>{
+    clearTimeout(timer);timer=null;
+    const details=eventListSnapshot(input);
+    if(!details){lastKey="";return;}
+    const key=JSON.stringify([details.text.toLowerCase(),details.region,details.topic,details.actor_group,details.period_days,details.country,details.sort]);
+    if(key===lastKey)return;
+    lastKey=key;
+    recordUsage("event_list_search",details);
+  };
+  const schedule=()=>{clearTimeout(timer);timer=setTimeout(commit,1500);};
+  input.addEventListener("input",schedule);
+  input.addEventListener("keydown",event=>{if(event.key==="Enter")commit();});
+  input.addEventListener("blur",()=>{if(timer)commit();});
+  for(const id of ["chronologyCountry","chronologySort","reportRegion","reportTopic","reportGroup","reportPeriod"]){
+    document.getElementById(id)?.addEventListener("change",()=>{if(String(input.value||"").trim().length>=2)schedule();});
+  }
+  globalThis.addEventListener?.("pagehide",()=>{if(timer)commit();});
 }
 
 function escapeCell(value){
@@ -168,15 +203,95 @@ function adminUserLabel(item,fallback=""){
   return displayName?username+" — "+displayName:username;
 }
 
-function adminCountCell(value){
+function adminCountCell(value,item,metric){
   const count=Number(value||0);
-  return '<td'+(Number.isFinite(count)&&count!==0?' class="admin-usage-nonzero"':"")+">"+count+"</td>";
+  const nonzero=Number.isFinite(count)&&count!==0;
+  const inner=nonzero&&item&&metric
+    ?'<button type="button" class="admin-count-link" data-user="'+escapeCell(adminUsername(item))+'" data-metric="'+escapeCell(metric)+'" data-count="'+count+'" title="Show the details">'+count+'</button>'
+    :String(count);
+  return '<td'+(nonzero?' class="admin-usage-nonzero"':"")+">"+inner+"</td>";
+}
+
+// What each clickable number opens, and how history rows read.
+const ADMIN_HISTORY_TITLES={
+  all:"ALL ACTIVITY",report_requests:"REPORT REQUESTS",report_generator_requests:"SITUATION REPORT",deep_search_requests:"CUSTOM INTELLIGENCE",
+  searches:"SEARCHES",event_list_searches:"EVENT LIST SEARCH",blockchain_searches:"BLOCKCHAIN SEARCH",social_intel_requests:"SOCIAL MEDIA SEARCH",
+  facial_extractions:"FACIAL EXTRACTION",facial_searches:"FACIAL SEARCH",darkweb_searches:"DARK WEB SEARCH",ip_lookups:"IP LOOKUP",
+  quick_ask_requests:"QUICK Q&A (RETIRED)","tab:crypto":"CRYPTO OPENED","tab:facial":"FACIAL OPENED","tab:map":"MAP OPENED",
+  "tab:social":"SOCIAL OPENED","tab:darkweb":"DARK WEB OPENED","tab:ip":"IP INTELLIGENCE OPENED"
+};
+const ADMIN_FEATURE_LABELS={
+  report_generator:"SITUATION REPORT",deep_search:"CUSTOM INTELLIGENCE",event_list:"EVENT LIST",blockchain:"BLOCKCHAIN",
+  social:"SOCIAL MEDIA",facial_extraction:"FACIAL EXTRACTION",facial_search:"FACIAL SEARCH",darkweb_search:"DARK WEB",ip_lookup:"IP LOOKUP",
+  tab_map:"MAP OPENED",tab_crypto:"CRYPTO OPENED",tab_facial:"FACIAL OPENED",tab_social:"SOCIAL OPENED",tab_darkweb:"DARK WEB OPENED",tab_ip:"IP INTELLIGENCE OPENED"
+};
+const ADMIN_HISTORY_FIELDS=[
+  ["region","Region"],["topic","Category"],["actor_group","Group"],["period_days","Period"],["compare","Comparison"],["scope","Database scope"],
+  ["country","Country"],["sort","Sort"],["view","View"],["outlet","Outlet"],["material","Material"],["loaded_back_to","Loaded back to"],
+  ["results","Results shown"],["kind","Type"],["chain","Chain"],["chain_hint","Chain selected"],["origin","Origin"],["limit","Transactions"],
+  ["mode","Mode"],["usernames","Usernames"],["keywords","Keywords"],["platforms","Platforms"],["urls","URLs"],
+  ["countries_regions","Countries / regions"],["languages","Languages"],["date_from","From"],["date_to","To"],["objective","Objective"],
+  ["discovery_mode","Discovery"],["registered_domain","Registered domain"],["parent_domain","From domain"],["files","Files"],
+  ["videos","Videos"],["bytes","Upload size"],["engines","Engines"],["face","Face"],["period","Period found"],["title","Result"],["outcome","Outcome"]
+];
+const ADMIN_OUTCOMES={cached:"Served from cache",generated:"Generated",no_events:"No matching events",failed:"Failed"};
+const ADMIN_MAIN_FIELD={deep_search:"question",event_list:"text",darkweb_search:"text",blockchain:"query",social:"target",ip_lookup:"target"};
+
+function adminHistoryValue(name,value){
+  if(Array.isArray(value))return value.join(", ");
+  if(typeof value==="boolean")return value?"Yes":"No";
+  if(name==="period_days")return Number(value)===1?"24 hours":value+" days";
+  if(name==="bytes")return (Number(value||0)/1048576).toFixed(1)+" MB";
+  if(name==="outcome")return ADMIN_OUTCOMES[value]||String(value);
+  if(value==="GLOBAL")return "Global";
+  if(value==="ALL")return "All";
+  return String(value).replace(/^REGION:/,"Region ");
+}
+
+// One history row: [time, feature label, main line, [label, value] details].
+function adminHistoryEntry(row){
+  const feature=String(row?.feature||"");
+  const skip=new Set(["id","at","feature"]);
+  let main="";
+  const field=ADMIN_MAIN_FIELD[feature];
+  if(field&&row[field]){main=String(row[field]);skip.add(field);}
+  else if(feature==="report_generator"){
+    main=["region","topic","actor_group","period_days"].filter(name=>row[name]!==undefined).map(name=>adminHistoryValue(name,row[name])).join(" · ");
+    ["region","topic","actor_group","period_days"].forEach(name=>skip.add(name));
+  }else if(feature==="social"){
+    main=[row.usernames,row.keywords,row.urls].map(value=>Array.isArray(value)?value.join(", "):"").find(Boolean)||"";
+  }else if(feature==="facial_search"){
+    main="Face "+(row.face||"?")+" · reverse-image search";skip.add("face");
+  }else if(feature==="facial_extraction"){
+    main=(row.files||0)+" file(s) analysed";skip.add("files");
+  }else if(feature.startsWith("tab_")){
+    main="Workspace opened";
+  }else if(feature==="event_list"||feature==="darkweb_search"){
+    main="(filters only)";
+  }
+  const details=ADMIN_HISTORY_FIELDS.filter(([name])=>!skip.has(name)&&row[name]!==undefined&&row[name]!==""&&!(Array.isArray(row[name])&&!row[name].length))
+    .map(([name,label])=>[label,adminHistoryValue(name,row[name])]);
+  let when="";
+  try{when=new Date(row.at).toLocaleString("en-GB",{timeZone:"Europe/Paris",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit",second:"2-digit"});}catch(_){when=String(row?.at||"");}
+  return [when,ADMIN_FEATURE_LABELS[feature]||feature.toUpperCase(),main,details];
+}
+
+function adminHistoryHtml(rows){
+  if(!rows.length)return '<div class="admin-history-empty">No details recorded for this period.</div>';
+  return rows.map(row=>{
+    const [when,label,main,details]=adminHistoryEntry(row);
+    return '<article class="admin-history-row">'+
+      '<div class="admin-history-meta"><time>'+escapeCell(when)+'</time><span class="admin-history-feature">'+escapeCell(label)+'</span></div>'+
+      (main?'<div class="admin-history-main">'+escapeCell(main)+'</div>':"")+
+      (details.length?'<dl class="admin-history-details">'+details.map(([name,value])=>'<div><dt>'+escapeCell(name)+'</dt><dd>'+escapeCell(value)+'</dd></div>').join("")+'</dl>':"")+
+    '</article>';
+  }).join("");
 }
 
 // A user counts as connected in the selected period when they logged in, opened a workspace
 // or used any feature in it -- a session opened the day before still counts once it is used.
 const ADMIN_TAB_FIELDS=["crypto","facial","map","social","darkweb","ip"];
-const ADMIN_ACTIVITY_FIELDS=["logins","searches","map_searches","event_list_searches","report_requests","report_generator_requests","deep_search_requests","reports_generated","cached_reports","quick_ask_requests","social_intel_requests","blockchain_searches","facial_extractions","facial_searches","feedback_submissions","quiz_answers"];
+const ADMIN_ACTIVITY_FIELDS=["logins","searches","map_searches","event_list_searches","report_requests","report_generator_requests","deep_search_requests","reports_generated","cached_reports","quick_ask_requests","social_intel_requests","blockchain_searches","facial_extractions","facial_searches","darkweb_searches","ip_lookups","feedback_submissions","quiz_answers"];
 
 function adminUsername(item){return String(item?.username||"").trim().toLowerCase();}
 
@@ -213,7 +328,8 @@ function adminUserCell(item,isConnected){
   return '<td class="admin-user-connected"><span class="admin-connected-dot" aria-hidden="true"></span>'+
     '<strong class="admin-connected-name">'+escapeCell(displayName||username)+'</strong>'+
     (displayName?'<span class="admin-connected-id">'+escapeCell(username)+'</span>':"")+
-    '<span class="admin-connected-badge">CONNECTED</span></td>';
+    '<span class="admin-connected-badge">CONNECTED</span>'+
+    '<button type="button" class="admin-history-all" data-user="'+escapeCell(adminUsername(item))+'" data-metric="all" title="Everything this user did in the period">ALL ACTIVITY</button></td>';
 }
 
 function adminRowClass(item,connectedNames){
@@ -316,16 +432,37 @@ function injectAdminUi(){
           '<div class="admin-usage-section-title">FEATURE ACTIVITY</div>'+
           '<div class="admin-usage-table-wrap">'+
             '<table id="adminFeatureUsageTable">'+
-              '<thead><tr><th>USER</th><th>SITUATION REPORT</th><th>CUSTOM INTELLIGENCE</th><th>QUICK Q&amp;A (RETIRED)</th><th>BLOCKCHAIN SEARCH</th><th>SOCIAL MEDIA SEARCH</th><th>FACIAL EXTRACTION</th><th>FACIAL SEARCH</th></tr></thead>'+
+              '<thead><tr><th>USER</th><th>SITUATION REPORT</th><th>CUSTOM INTELLIGENCE</th><th>EVENT LIST SEARCH</th><th>BLOCKCHAIN SEARCH</th><th>SOCIAL MEDIA SEARCH</th><th>FACIAL EXTRACTION</th><th>FACIAL SEARCH</th><th>DARK WEB SEARCH</th><th>IP LOOKUP</th><th>QUICK Q&amp;A (RETIRED)</th></tr></thead>'+
               '<tbody id="adminFeatureUsageRows"></tbody>'+
             '</table>'+
           '</div>'+
-          '<div id="adminUsageNote">Workspace access counts page openings. Feature counts are per user and selected period; they record usage totals only, not search terms, questions, addresses, images or report contents. Blockchain and Facial counters begin with this update; earlier Situation Report (Report Generator), Custom Intelligence (Deep Search), retired quick Q&A and Social Media counts retain their existing history.</div>'+
+          '<div id="adminUsageNote">Click a number to see the details behind it: the time, what was searched (text, question, address, IP or domain, filters) and the outcome; ALL ACTIVITY lists everything a connected user did in the period. Details are recorded since 6 October 2026 and kept 90 days, so older counts have no detail; a list shows at most the newest 500 entries. The DARK WEB SEARCH and IP LOOKUP counters also start on 6 October 2026. Facial entries hold counts and face labels only, never images. Workspace access counts page openings. Event list searches are counted once per settled search since 6 October 2026 (previously at every typing pause).</div>'+
+        '</div>'+
+      '</div>'+
+      '<div id="adminHistoryPanel" hidden>'+
+        '<div id="adminHistoryWindow" role="dialog" aria-modal="true" aria-labelledby="adminHistoryTitle">'+
+          '<div id="adminHistoryHeader">'+
+            '<div>'+
+              '<div id="adminHistoryTitle">DETAILS</div>'+
+              '<div id="adminHistorySubtitle"></div>'+
+            '</div>'+
+            '<button id="adminHistoryClose" type="button" aria-label="Close the details">×</button>'+
+          '</div>'+
+          '<div id="adminHistoryStatus" aria-live="polite"></div>'+
+          '<div id="adminHistoryRows"></div>'+
         '</div>'+
       '</div>'+
     '</div>');
 
   button.addEventListener("click",openAdmin);
+  document.getElementById("adminUsageBody")?.addEventListener("click",event=>{
+    const trigger=event.target?.closest?.("[data-metric][data-user]");
+    if(trigger)openUsageHistory(trigger);
+  });
+  document.getElementById("adminHistoryClose")?.addEventListener("click",closeUsageHistory);
+  document.getElementById("adminHistoryPanel")?.addEventListener("click",event=>{
+    if(event.target.id==="adminHistoryPanel")closeUsageHistory();
+  });
   document.getElementById("adminUsageClose")?.addEventListener("click",closeAdmin);
   document.getElementById("adminUsagePanel")?.addEventListener("click",event=>{
     if(event.target.id==="adminUsagePanel")closeAdmin();
@@ -334,6 +471,7 @@ function injectAdminUi(){
     periodButton.addEventListener("click",function(){
       document.querySelectorAll(".admin-period").forEach(item=>item.classList.remove("active"));
       this.classList.add("active");
+      closeUsageHistory(false);
       loadAdmin(this.dataset.period||"today");
     });
   });
@@ -347,7 +485,62 @@ function openAdmin(){
   loadAdmin(document.querySelector(".admin-period.active")?.dataset.period||"today");
 }
 
+// The details behind one clicked number, for the selected period.
+let historyTrigger=null,historyRequest=0,adminRenderedPeriod="today",adminLoadRequest=0;
+function closeUsageHistory(restoreFocus=true){
+  const panel=document.getElementById("adminHistoryPanel");
+  if(!panel||panel.hidden)return;
+  panel.hidden=true;
+  historyRequest++;
+  document.getElementById("adminUsageWindow")?.removeAttribute("inert");
+  const trigger=historyTrigger;historyTrigger=null;
+  if(restoreFocus!==false&&trigger&&document.contains(trigger))trigger.focus();
+}
+
+async function openUsageHistory(trigger){
+  if(!isAdmin())return;
+  const panel=document.getElementById("adminHistoryPanel");
+  const title=document.getElementById("adminHistoryTitle");
+  const subtitle=document.getElementById("adminHistorySubtitle");
+  const status=document.getElementById("adminHistoryStatus");
+  const rowsBox=document.getElementById("adminHistoryRows");
+  if(!panel||!title||!subtitle||!status||!rowsBox)return;
+  const username=String(trigger.dataset.user||"");
+  const metric=String(trigger.dataset.metric||"");
+  const count=Number(trigger.dataset.count||0);
+  const period=adminRenderedPeriod;
+  const request=++historyRequest;
+  historyTrigger=trigger;
+  title.textContent=(ADMIN_HISTORY_TITLES[metric]||metric.toUpperCase())+" · DETAILS";
+  subtitle.textContent=username;
+  status.textContent="Loading details…";
+  rowsBox.innerHTML="";
+  panel.hidden=false;
+  document.getElementById("adminUsageWindow")?.setAttribute("inert","");
+  document.getElementById("adminHistoryClose")?.focus();
+  try{
+    const query="?period="+encodeURIComponent(period)+"&username="+encodeURIComponent(username)+"&metric="+encodeURIComponent(metric);
+    const response=await nativeFetch(API_BASE+"/usage-history"+query,{method:"GET",headers:{"X-Session-Token":token()}});
+    const payload=await response.json().catch(()=>({}));
+    if(request!==historyRequest)return;
+    if(!response.ok)throw new Error(payload.error||"Unable to load the details.");
+    const rows=Array.isArray(payload.rows)?payload.rows:[];
+    subtitle.textContent=adminUserLabel(payload,username);
+    const since=new Date(String(payload.recorded_since||"2026-10-06")+"T12:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+    const parts=[rows.length+" entr"+(rows.length===1?"y":"ies")+(payload.truncated?" (newest shown)":""),payload.period_label||period];
+    if(payload.truncated)parts.push("only the newest "+rows.length+" are listed");
+    else if(count>rows.length)parts.push((count-rows.length)+" counted without details (before "+since+" or older than "+(payload.retention_days||90)+" days)");
+    else parts.push("details kept "+(payload.retention_days||90)+" days");
+    status.textContent=parts.join(" · ");
+    rowsBox.innerHTML=adminHistoryHtml(rows);
+  }catch(error){
+    if(request!==historyRequest)return;
+    status.textContent=error.message||"Unable to load the details.";
+  }
+}
+
 function closeAdmin(){
+  closeUsageHistory();
   const panel=document.getElementById("adminUsagePanel");
   panel?.classList.remove("open");
   panel?.setAttribute("aria-hidden","true");
@@ -370,6 +563,7 @@ async function loadAdmin(period){
   }
 
   if(status)status.textContent="Loading usage statistics…";
+  const request=++adminLoadRequest;
   const headers={"X-Session-Token":currentToken};
   const query="?period="+encodeURIComponent(period);
 
@@ -379,6 +573,7 @@ async function loadAdmin(period){
       nativeFetch(API_BASE+"/usage-stats"+query,{method:"GET",headers})
     ]);
     const [accessPayload,usagePayload]=await Promise.all([accessResponse.json(),usageResponse.json()]);
+    if(request!==adminLoadRequest)return;
     if(!accessResponse.ok)throw new Error(accessPayload.error||"Unable to load workspace access.");
     if(!usageResponse.ok)throw new Error(usagePayload.error||"Unable to load feature activity.");
 
@@ -386,6 +581,7 @@ async function loadAdmin(period){
     const usageUsers=Array.isArray(usagePayload.users)?usagePayload.users:[];
     const connected=adminConnectedUsers(accessUsers,usageUsers);
     const connectedNames=new Set(connected.map(entry=>entry.username));
+    adminRenderedPeriod=period;
     renderAdminConnected(connected);
 
     if(rows){
@@ -393,12 +589,12 @@ async function loadAdmin(period){
       rows.innerHTML=users.map(item=>
         "<tr"+adminRowClass(item,connectedNames)+">"+
           adminUserCell(item,connectedNames.has(adminUsername(item)))+
-          adminCountCell(item.crypto)+
-          adminCountCell(item.facial)+
-          adminCountCell(item.map)+
-          adminCountCell(item.social)+
-          adminCountCell(item.darkweb)+
-          adminCountCell(item.ip)+
+          adminCountCell(item.crypto,item,"tab:crypto")+
+          adminCountCell(item.facial,item,"tab:facial")+
+          adminCountCell(item.map,item,"tab:map")+
+          adminCountCell(item.social,item,"tab:social")+
+          adminCountCell(item.darkweb,item,"tab:darkweb")+
+          adminCountCell(item.ip,item,"tab:ip")+
         "</tr>"
       ).join("")||'<tr><td colspan="7">No users found for this period.</td></tr>';
     }
@@ -421,15 +617,18 @@ async function loadAdmin(period){
       featureRows.innerHTML=users.map(item=>
         "<tr"+adminRowClass(item,connectedNames)+">"+
           adminUserCell(item,connectedNames.has(adminUsername(item)))+
-          adminCountCell(item.report_generator_requests)+
-          adminCountCell(item.deep_search_requests)+
-          adminCountCell(item.quick_ask_requests)+
-          adminCountCell(item.blockchain_searches)+
-          adminCountCell(item.social_intel_requests)+
-          adminCountCell(item.facial_extractions)+
-          adminCountCell(item.facial_searches)+
+          adminCountCell(item.report_generator_requests,item,"report_generator_requests")+
+          adminCountCell(item.deep_search_requests,item,"deep_search_requests")+
+          adminCountCell(item.event_list_searches,item,"event_list_searches")+
+          adminCountCell(item.blockchain_searches,item,"blockchain_searches")+
+          adminCountCell(item.social_intel_requests,item,"social_intel_requests")+
+          adminCountCell(item.facial_extractions,item,"facial_extractions")+
+          adminCountCell(item.facial_searches,item,"facial_searches")+
+          adminCountCell(item.darkweb_searches,item,"darkweb_searches")+
+          adminCountCell(item.ip_lookups,item,"ip_lookups")+
+          adminCountCell(item.quick_ask_requests,item,"quick_ask_requests")+
         "</tr>"
-      ).join("")||'<tr><td colspan="8">No users found for this period.</td></tr>';
+      ).join("")||'<tr><td colspan="11">No users found for this period.</td></tr>';
     }
 
     if(status){
@@ -437,6 +636,7 @@ async function loadAdmin(period){
         " · "+(usagePayload.period_label||accessPayload.period_label||period);
     }
   }catch(error){
+    if(request!==adminLoadRequest)return;
     if(status)status.textContent=error.message||"Unable to load usage statistics.";
     if(rows)rows.innerHTML="";
     if(featureRows)featureRows.innerHTML="";
@@ -464,10 +664,12 @@ document.addEventListener("DOMContentLoaded",()=>{
   ensureRateRule();
   updateRateRule();
   injectAdminUi();
-  attachSearchTracking("searchInput","map_search");
-  attachSearchTracking("chronologySearch","event_list_search");
+  attachEventListTracking();
   document.addEventListener("keydown",event=>{
-    if(event.key==="Escape")closeAdmin();
+    if(event.key!=="Escape")return;
+    const history=document.getElementById("adminHistoryPanel");
+    if(history&&!history.hidden)closeUsageHistory();
+    else closeAdmin();
   });
   setInterval(()=>{
     updateRateRule();

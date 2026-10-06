@@ -146,8 +146,10 @@ test("PRIVACY GUARD: a crop leaves the browser only through an explicit SEARCH c
   assert.equal((src.match(/fetch\(api\+"\/face-share"/g)||[]).length,1);
   assert.equal((src.match(/fetch\(api\+"\/usage-record"/g)||[]).length,1);
   const usage=src.slice(src.indexOf("function recordFacialSearchUsage"),src.indexOf("async function startSearch"));
-  assert.ok(usage.includes('body:JSON.stringify({username,action:"facial_search"})'));
+  assert.ok(usage.includes('body:JSON.stringify({username,action:"facial_search",details})'));
   assert.ok(!usage.includes("record.blob")&&!usage.includes("record.file")&&!usage.includes("record.canvas"));
+  // Only the engines and the face label go to the admin search history: no file name, URL or share link.
+  assert.ok(usage.includes("record.label")&&!usage.includes("record.name")&&!usage.includes("record.url")&&!usage.includes("share"));
   // ...reachable from one place only (runDirectSearch), which is started only through requestSearch, which only a click handler calls.
   assert.equal((src.match(/shareCrop\(record\)/g)||[]).length,2,"definition + the single call in runDirectSearch");
   assert.equal((src.match(/runDirectSearch\(record,engines\)/g)||[]).length,2,"definition + the single call in startSearch");

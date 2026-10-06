@@ -44,6 +44,84 @@ const TAB_ACCESS_FIELDS = Object.freeze({ map: true, crypto: true, facial: true,
 function tabAccessTemplate(username = "") {
   return { username, map: 0, crypto: 0, facial: 0, social: 0, darkweb: 0, ip: 0 };
 }
+
+// Per-user search history behind the admin counters. One small value per search,
+// written in the same storage put as the counter it explains, under
+// usage-log:<Paris day>:<username>:<feature>:<epoch ms>:<random>, so a clicked
+// count lists its own rows and old days are removed with one range delete.
+const USAGE_LOG_PREFIX = "usage-log:";
+const USAGE_LOG_RETENTION_DAYS = 90;
+const USAGE_LOG_STARTED = "2026-10-06";
+const USAGE_HISTORY_LIMIT = 500;
+const USAGE_LOG_MAX_PER_MINUTE = 120;
+const USAGE_LOG_FIELDS = Object.freeze({
+  report_generator: { region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], period_days: ["num"], compare: ["bool"], outcome: ["text", 20], title: ["text", 200] },
+  deep_search: { question: ["text", 1200], region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], scope: ["text", 200], outcome: ["text", 20], title: ["text", 200], period: ["text", 120] },
+  blockchain: { query: ["text", 180], kind: ["text", 20], chain: ["text", 40], chain_hint: ["text", 40], origin: ["text", 16], limit: ["num"] },
+  social: { mode: ["text", 20], target: ["text", 400], usernames: ["list", 40, 160], platforms: ["list", 16, 40], keywords: ["list", 40, 160], urls: ["list", 20, 300], countries_regions: ["list", 20, 120], languages: ["list", 20, 60], date_from: ["text", 10], date_to: ["text", 10], objective: ["text", 1500], title: ["text", 200], discovery_mode: ["text", 40] },
+  facial_extraction: { files: ["num"], videos: ["num"], bytes: ["num"] },
+  facial_search: { engines: ["list", 4, 20], face: ["text", 40] },
+  event_list: { text: ["text", 200], region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], period_days: ["num"], scope: ["text", 200], country: ["text", 120], sort: ["text", 10], results: ["num"] },
+  darkweb_search: { text: ["text", 200], view: ["text", 16], outlet: ["text", 120], material: ["text", 16], results: ["num"], loaded_back_to: ["text", 10] },
+  ip_lookup: { target: ["text", 253], kind: ["text", 10], registered_domain: ["text", 253], parent_domain: ["text", 253] },
+  ...Object.fromEntries(Object.keys(TAB_ACCESS_FIELDS).map(tab => ["tab_" + tab, {}]))
+});
+// Only these fields of a logged request can change afterwards (the report outcome).
+const USAGE_LOG_UPDATES = Object.freeze({
+  report_generator: ["outcome", "title"],
+  deep_search: ["outcome", "title", "period"]
+});
+const USAGE_LOG_OUTCOMES = new Set(["cached", "generated", "no_events", "failed"]);
+// Admin counter (or workspace tab) -> the logged features that explain it.
+const USAGE_HISTORY_METRICS = Object.freeze({
+  report_requests: ["report_generator", "deep_search"],
+  report_generator_requests: ["report_generator"],
+  deep_search_requests: ["deep_search"],
+  searches: ["event_list"],
+  event_list_searches: ["event_list"],
+  map_searches: [],
+  quick_ask_requests: [],
+  blockchain_searches: ["blockchain"],
+  social_intel_requests: ["social"],
+  facial_extractions: ["facial_extraction"],
+  facial_searches: ["facial_search"],
+  darkweb_searches: ["darkweb_search"],
+  ip_lookups: ["ip_lookup"],
+  ...Object.fromEntries(Object.keys(TAB_ACCESS_FIELDS).map(tab => ["tab:" + tab, ["tab_" + tab]])),
+  all: Object.keys(USAGE_LOG_FIELDS)
+});
+
+function sanitizeUsageDetails(feature, details) {
+  const fields = USAGE_LOG_FIELDS[feature];
+  const out = {};
+  if (!fields || !details || typeof details !== "object" || Array.isArray(details)) return out;
+  const text = (value, max) => typeof value === "string" || typeof value === "number" ? cleanText(value, max) : "";
+  for (const [name, [type, first, second]] of Object.entries(fields)) {
+    const value = details[name];
+    if (value === undefined || value === null || value === "") continue;
+    if (type === "text") {
+      const clean = text(value, first);
+      if (clean) out[name] = clean;
+    } else if (type === "num") {
+      const number = Number(value);
+      if (typeof value !== "boolean" && Number.isFinite(number)) out[name] = Math.round(number);
+    } else if (type === "bool") {
+      if (typeof value === "boolean") out[name] = value;
+    } else if (type === "list" && Array.isArray(value)) {
+      const items = value.slice(0, first).map(item => text(item, second)).filter(Boolean);
+      if (items.length) out[name] = items;
+    }
+  }
+  return out;
+}
+
+function usageLogKeyParts(key) {
+  const parts = String(key || "").split(":");
+  if (parts.length !== 6 || parts[0] + ":" !== USAGE_LOG_PREFIX) return null;
+  const [, day, username, feature, at] = parts;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || !/^\d{13}$/.test(at) || !Object.hasOwn(USAGE_LOG_FIELDS, feature)) return null;
+  return { day, username, feature, at: Number(at) };
+}
 const MIGRATION_PAGE_SIZE = 250;
 const EXCHANGE_CHAINS = new Set(["bitcoin", "ethereum", "bsc", "polygon", "arbitrum", "base", "tron"]);
 const EXCHANGE_EVM_CHAINS = new Set(["ethereum", "bsc", "polygon", "arbitrum", "base"]);
@@ -135,6 +213,18 @@ export class ReportGate {
       if (Number.isFinite(when) && when > now && (nextExpiry == null || when < nextExpiry)) nextExpiry = when;
     };
 
+    // Search history: delete whole Paris days past the retention window, and keep the
+    // alarm armed while rows remain (daily, or within a minute when a purge stopped
+    // at its page cap), so rows are removed on time even if nobody logs in.
+    try {
+      const purge = await this.purgeUsageLogs(now);
+      if (purge.more) track(now + 60000);
+      else if ((await this.state.storage.list({ prefix: USAGE_LOG_PREFIX, limit: 1 }))?.size) track(now + 86400000);
+    } catch (error) {
+      console.error("Usage history purge failed.", error);
+      track(now + 3600000);
+    }
+
     for (const prefix of ["cache:", "source-image-token:", "session:", "crypto-provider-label:"]) {
       let startAfter = "";
       for (let page = 0; page < 100; page++) {
@@ -182,7 +272,94 @@ export class ReportGate {
     else await this.state.storage.deleteAlarm();
   }
 
-  async incrementUsage(username, metrics = {}, now = Date.now()) {
+  // A history row for one search; incrementUsage/recordTabAccess store it with the counter.
+  usageLogEntry(username, feature, details, now = Date.now()) {
+    username = normalizeUsername(username);
+    if (!username || !Object.hasOwn(USAGE_LOG_FIELDS, feature)) return null;
+    const minute = Math.floor(now / 60000);
+    this.usageLogBudget ||= new Map();
+    const budget = this.usageLogBudget.get(username);
+    if (!budget || budget.minute !== minute) this.usageLogBudget.set(username, { minute, count: 1 });
+    else if (budget.count >= USAGE_LOG_MAX_PER_MINUTE) return null;
+    else budget.count++;
+    const random = Math.random().toString(36).slice(2, 8).padEnd(6, "0");
+    return {
+      key: `${USAGE_LOG_PREFIX}${parisDayKey(now)}:${username}:${feature}:${String(now).padStart(13, "0")}:${random}`,
+      value: { at: new Date(now).toISOString(), feature, ...sanitizeUsageDetails(feature, details) }
+    };
+  }
+
+  // Adds the outcome of a logged request (e.g. a report served from cache) to its row.
+  async updateUsageLog(username, update) {
+    username = normalizeUsername(username);
+    const id = String(update?.id || "");
+    const parts = usageLogKeyParts(id);
+    const allowed = parts && USAGE_LOG_UPDATES[parts.feature];
+    if (!allowed || parts.username !== username) return false;
+    const patch = sanitizeUsageDetails(parts.feature, update);
+    for (const name of Object.keys(patch)) if (!allowed.includes(name)) delete patch[name];
+    if (patch.outcome && !USAGE_LOG_OUTCOMES.has(patch.outcome)) delete patch.outcome;
+    if (!Object.keys(patch).length) return false;
+    const current = await this.state.storage.get(id);
+    if (!current) return false;
+    await this.state.storage.put(id, { ...current, ...patch });
+    return true;
+  }
+
+  async usageHistory(targetUsername, metric, period, now = Date.now()) {
+    const username = normalizeUsername(targetUsername);
+    const features = USAGE_HISTORY_METRICS[metric];
+    const days = period === "today" ? 1 : period === "all" ? USAGE_LOG_RETENTION_DAYS : Number(period);
+    const dayKeys = [...new Set(Array.from({ length: days }, (_, offset) => parisDayKey(now - offset * 86400000)))];
+    const wanted = new Set(features);
+    const rows = [];
+    // Newest day first; within a day each feature's newest rows, merged by time. Every row of a
+    // day is newer than any row of the previous day, so a full day of rows ends the scan.
+    for (const day of dayKeys) {
+      for (const prefix of features.map(feature => `${USAGE_LOG_PREFIX}${day}:${username}:${feature}:`)) {
+        const batch = await this.state.storage.list({ prefix, reverse: true, limit: USAGE_HISTORY_LIMIT + 1 });
+        for (const [key, value] of batch.entries()) {
+          const parts = usageLogKeyParts(key);
+          if (!parts || parts.username !== username || !wanted.has(parts.feature)) continue;
+          rows.push({ id: key, ...value, feature: parts.feature, at: value?.at || new Date(parts.at).toISOString(), _ms: parts.at });
+        }
+      }
+      if (rows.length > USAGE_HISTORY_LIMIT) break;
+    }
+    rows.sort((a, b) => b._ms - a._ms || (a.id < b.id ? 1 : -1));
+    const periodLabel =
+      period === "today" ? "Today · Europe/Paris" :
+      period === "7" ? "Last 7 days · Europe/Paris" :
+      period === "30" ? "Last 30 days · Europe/Paris" :
+      `Last ${USAGE_LOG_RETENTION_DAYS} days (history retention) · Europe/Paris`;
+    return {
+      ...withAdminDisplayName({ username }),
+      metric,
+      period,
+      period_label: periodLabel,
+      retention_days: USAGE_LOG_RETENTION_DAYS,
+      recorded_since: USAGE_LOG_STARTED,
+      truncated: rows.length > USAGE_HISTORY_LIMIT,
+      rows: rows.slice(0, USAGE_HISTORY_LIMIT).map(({ _ms, ...row }) => row)
+    };
+  }
+
+  // Deletes history rows older than the retention window (whole Paris days).
+  async purgeUsageLogs(now = Date.now()) {
+    const end = USAGE_LOG_PREFIX + parisDayKey(now - (USAGE_LOG_RETENTION_DAYS - 1) * 86400000);
+    let removed = 0;
+    for (let page = 0; page < 200; page++) {
+      const batch = await this.state.storage.list({ prefix: USAGE_LOG_PREFIX, end, limit: 128 });
+      const keys = Array.from(batch?.keys?.() || []).filter(key => key < end);
+      if (!keys.length) return { removed, more: false };
+      await this.state.storage.delete(keys);
+      removed += keys.length;
+      if (keys.length < 128) return { removed, more: false };
+    }
+    return { removed, more: true };
+  }
+
+  async incrementUsage(username, metrics = {}, now = Date.now(), log = null) {
     username = normalizeUsername(username);
     if (!isAllowedUser(username, this.env)) return null;
 
@@ -223,7 +400,8 @@ export class ReportGate {
 
     await this.state.storage.put({
       [totalKey]: total,
-      [dayKey]: day
+      [dayKey]: day,
+      ...(log?.key ? { [log.key]: log.value } : {})
     });
 
     return total;
@@ -245,7 +423,8 @@ export class ReportGate {
       const day = { ...tabAccessTemplate(username), ...(storedDay || {}) };
       total[tab] = Number(total[tab] || 0) + 1;
       day[tab] = Number(day[tab] || 0) + 1;
-      await txn.put({ [totalKey]: total, [dayKey]: day });
+      const log = this.usageLogEntry(username, "tab_" + tab, null, now);
+      await txn.put({ [totalKey]: total, [dayKey]: day, ...(log ? { [log.key]: log.value } : {}) });
     });
     return true;
   }
@@ -368,6 +547,8 @@ export class ReportGate {
           "blockchain_searches",
           "facial_extractions",
           "facial_searches",
+          "darkweb_searches",
+          "ip_lookups",
           "feedback_submissions",
           "quiz_answers",
           "quiz_correct",
@@ -389,7 +570,7 @@ export class ReportGate {
 
     const summary = {
       active_users: rows.filter(row =>
-        ["logins", "searches", "report_requests", "report_generator_requests", "deep_search_requests", "reports_generated", "cached_reports", "quick_ask_requests", "social_intel_requests", "blockchain_searches", "facial_extractions", "facial_searches", "feedback_submissions", "quiz_answers"]
+        ["logins", "searches", "report_requests", "report_generator_requests", "deep_search_requests", "reports_generated", "cached_reports", "quick_ask_requests", "social_intel_requests", "blockchain_searches", "facial_extractions", "facial_searches", "darkweb_searches", "ip_lookups", "feedback_submissions", "quiz_answers"]
           .some(metric => Number(row[metric] || 0) > 0)
       ).length,
       logins: 0,
@@ -407,6 +588,8 @@ export class ReportGate {
       blockchain_searches: 0,
       facial_extractions: 0,
       facial_searches: 0,
+      darkweb_searches: 0,
+      ip_lookups: 0,
       feedback_submissions: 0,
       quiz_answers: 0,
       quiz_correct: 0,
@@ -430,6 +613,8 @@ export class ReportGate {
         "blockchain_searches",
         "facial_extractions",
         "facial_searches",
+        "darkweb_searches",
+        "ip_lookups",
         "feedback_submissions",
         "quiz_answers",
         "quiz_correct",
@@ -549,7 +734,9 @@ export class ReportGate {
 
     if (url.pathname === "/ip-intelligence-limit") {
       if (!isAllowedUser(body.username, this.env)) return Response.json({ error: "Unknown user." }, { status: 403 });
-      return this.state.storage.transaction(async tx => {
+      // The first slot of an analyst's lookup carries the target: once granted, it is
+      // counted and kept in the admin search history (the domain's own IPs are not).
+      const response = await this.state.storage.transaction(async tx => {
         const key = "ip-intelligence:limit:" + body.username;
         let counter = await tx.get(key);
         if (!counter || counter.until <= now) counter = { count: 0, until: now + 60000 };
@@ -577,6 +764,11 @@ export class ReportGate {
         await tx.put(userKey, usedByUser + 1);
         return Response.json({ ok: true, keyed: true });
       });
+      if (body.log && response.ok) {
+        await this.incrementUsage(body.username, { ip_lookups: 1 }, now,
+          this.usageLogEntry(body.username, "ip_lookup", body.log, now));
+      }
+      return response;
     }
 
     // One-time, user-requested removal of the pre-selection feed. Keep outlet
@@ -1618,9 +1810,13 @@ export class ReportGate {
         await this.incrementUsage(username, {
           searches: 1,
           event_list_searches: 1
-        }, now);
+        }, now, body.details ? this.usageLogEntry(username, "event_list", body.details, now) : null);
       } else if (action === "facial_search") {
-        await this.incrementUsage(username, { facial_searches: 1 }, now);
+        await this.incrementUsage(username, { facial_searches: 1 }, now,
+          body.details ? this.usageLogEntry(username, "facial_search", body.details, now) : null);
+      } else if (action === "darkweb_search") {
+        await this.incrementUsage(username, { darkweb_searches: 1 }, now,
+          this.usageLogEntry(username, "darkweb_search", body.details, now));
       } else {
         return Response.json({ error: "Unsupported action." }, { status: 400 });
       }
@@ -1715,8 +1911,40 @@ export class ReportGate {
         return Response.json({ error: "Unknown user." }, { status: 400 });
       }
 
-      await this.incrementUsage(username, body.metrics || {}, now);
+      // Worker modules may attach the request behind the counter (log) and the
+      // outcome of an earlier logged request (log_update).
+      const feature = String(body.log?.feature || "");
+      const log = feature && !feature.startsWith("tab_") ? this.usageLogEntry(username, feature, body.log.details, now) : null;
+      await this.incrementUsage(username, body.metrics || {}, now, log);
+      if (body.log_update) await this.updateUsageLog(username, body.log_update);
       return Response.json({ ok: true });
+    }
+
+    if (url.pathname === "/usage-log-update") {
+      const username = normalizeUsername(body.username);
+      if (!isAllowedUser(username, this.env)) {
+        return Response.json({ error: "Unknown user." }, { status: 400 });
+      }
+      return Response.json({ ok: true, updated: await this.updateUsageLog(username, body.log_update) });
+    }
+
+    if (url.pathname === "/usage-history") {
+      if (normalizeUsername(body.username) !== "admin") {
+        return Response.json({ error: "Admin access required." }, { status: 403 });
+      }
+      const period = String(body.period || "today");
+      if (!["today", "7", "30", "all"].includes(period)) {
+        return Response.json({ error: "Unsupported history period." }, { status: 400 });
+      }
+      const metric = String(body.metric || "");
+      if (!Object.hasOwn(USAGE_HISTORY_METRICS, metric)) {
+        return Response.json({ error: "Unsupported history metric." }, { status: 400 });
+      }
+      const target = normalizeUsername(body.target_username);
+      if (!isAllowedUser(target, this.env)) {
+        return Response.json({ error: "Unknown user." }, { status: 400 });
+      }
+      return Response.json(await this.usageHistory(target, metric, period, now));
     }
 
     if (url.pathname === "/tab-access-stats") {
@@ -1998,13 +2226,15 @@ export class ReportGate {
 
     await this.state.storage.put("active", active);
 
+    const log = this.usageLogEntry(username, requestKind, body.details, now);
     await this.incrementUsage(username, {
       report_requests: 1,
       [requestMetric]: 1
-    }, now);
+    }, now, log);
 
     return Response.json({
-      permit_id: permitId
+      permit_id: permitId,
+      log_id: log?.key || ""
     });
   }
 }

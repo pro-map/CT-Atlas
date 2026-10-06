@@ -404,7 +404,8 @@ test('unverified provider websites are labelled as such in the report; reviewed 
  assert.equal(d.enquiry.checked_on,'2026-10-03');assert.ok(lines.includes('Contact / procedure: https://www.ivpn.net/en/legal-process-guidelines/'));
 });
 test('IP lookups take a per-minute slot; a gate reply withholding the keyed providers skips Proxycheck and ipapi.is',async()=>{
- let h=harness();await h.request();assert.deepEqual(h.gate,[{username:'analyst',keyed:true}]);
+ // The first slot also carries the canonical target for the admin search history.
+ let h=harness();await h.request();assert.deepEqual(h.gate,[{username:'analyst',keyed:true,log:{target:'8.8.8.8',kind:'ip'}}]);
  h=harness({gateReply:{ok:true,keyed:false},ipapi:ipapiFixture});
  const d=await(await h.request('8.8.8.8','analyst',{IPAPI_IS_KEY:'key'})).json();
  assert.ok(!h.calls.some(c=>c.url.includes('proxycheck.io')||c.url.includes('api.ipapi.is')));
@@ -412,7 +413,7 @@ test('IP lookups take a per-minute slot; a gate reply withholding the keyed prov
  assert.equal(d.enrichment.proxycheck_access,'budget_reserved');assert.equal(d.enrichment.ipapi_is_access,'budget_reserved');
  assert.equal(d.privacy.vpn,null);assert.ok(d.warnings.some(w=>w.includes('Daily budget')));assert.equal(d.operator.name,'Example Network');
  // Nothing keyed is configured: no budget is requested.
- h=harness();await h.request('8.8.8.8','analyst',{PROXYCHECK_ENABLED:'false'});assert.deepEqual(h.gate,[{username:'analyst'}]);
+ h=harness();await h.request('8.8.8.8','analyst',{PROXYCHECK_ENABLED:'false'});assert.deepEqual(h.gate,[{username:'analyst',log:{target:'8.8.8.8',kind:'ip'}}]);
 });
 test('a gate or Durable Object failure returns a retryable 503 with CORS and no internal detail',async()=>{
  for(const path of ['/session-get','/ip-intelligence-limit']){

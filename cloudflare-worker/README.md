@@ -20,8 +20,14 @@ This folder contains the upgraded Cloudflare Worker used by CT Atlas.
   - cached reports served
   - blocked report requests
   - last activity
+  - Dark Web searches and IP Intelligence lookups
 - Admin statistics support Today / 7 days / 30 days / All time.
-- Search terms themselves are not stored.
+- Search history (since 2026-10-06): each counted search also stores one row
+  `usage-log:<Paris day>:<user>:<feature>:<ms>:<random>` in the same put as its
+  counter, with whitelisted, capped fields only (text, filters, address, IP or
+  domain, outcome; never images, file names, tokens or passwords). The admin opens
+  it by clicking a count (`GET /usage-history?period=&username=&metric=`, admin
+  session only). Rows older than 90 days are deleted by the Durable Object alarm.
 - Admin statistics require an authenticated admin session.
 
 ## Files

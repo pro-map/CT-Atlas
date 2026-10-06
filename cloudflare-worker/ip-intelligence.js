@@ -462,16 +462,19 @@ export async function handleIPIntelligence(request,env) {
     // Every IP analysis takes one per-minute slot, including each IP a domain lookup analyses.
     // keyed:true asks the gate for the shared daily keyed-provider budget; a reply of keyed:false withholds those providers.
     const keyedConfigured = env.PROXYCHECK_ENABLED !== "false" || (env.IPAPI_IS_ENABLED !== "false" && Boolean(env.IPAPI_IS_KEY));
-    const slot = async keyed => {
-      const response = await gateCall(env,"/ip-intelligence-limit",keyed ? {username:session.username,keyed:true} : {username:session.username});
+    // The first slot also carries what the analyst looked up (canonical IP or host, never the raw
+    // input, which may hold a URL path or query) for the admin search history.
+    const slot = async (keyed, log) => {
+      const response = await gateCall(env,"/ip-intelligence-limit",{username:session.username,...(keyed ? {keyed:true} : {}),...(log ? {log} : {})});
       return response.ok ? {keyedProviders:!keyed || (await response.json().catch(()=>({}))).keyed !== false} : null;
     };
     const limited = () => reply({error:"Lookup limit reached. Wait one minute and retry."},429,env);
     if (target.kind !== "domain") {
-      const granted = await slot(keyedConfigured);
+      const parent = cleanText(body?.parent_domain,253).toLowerCase();
+      const granted = await slot(keyedConfigured,{target:target.parsed.ip,kind:"ip",...(/^[a-z0-9.-]+$/.test(parent) ? {parent_domain:parent} : {})});
       return granted ? reply(await lookupIP(target.parsed,env,granted),200,env) : limited();
     }
-    if (!await slot(false)) return limited();
+    if (!await slot(false,{target:target.host,kind:"domain",registered_domain:target.registered_domain})) return limited();
     const analyse = async (parsed, e, options = {}) => { const granted = await slot(keyedConfigured); return granted ? lookupIP(parsed,e,{...options,...granted}) : null; };
     return reply(await lookupDomain(target,env,{publicIP,lookupIP:analyse}),200,env);
   } catch {

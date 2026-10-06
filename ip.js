@@ -80,7 +80,7 @@ async function selectDomainIP(ip){
  const finishSound=window.CTAtlasSound?.begin();
  busy=true;$("lookupButton").disabled=true;$("exportPdf").disabled=true;$("exportJson").disabled=true;render(result);
  $("status").textContent="Analysing "+ip+"…";const finish=window.CTAtlasUI?.begin($("waitAnchor"));
- try{const network=await request("/ip-intelligence/lookup",{ip});result.networks.push(network);selectedIP=ip;result.status="partial";$("status").textContent="IP added to this domain investigation and its report.";finishSound?.(network.status==="unavailable"?"error":"success");}
+ try{const network=await request("/ip-intelligence/lookup",{ip,parent_domain:result.host});result.networks.push(network);selectedIP=ip;result.status="partial";$("status").textContent="IP added to this domain investigation and its report.";finishSound?.(network.status==="unavailable"?"error":"success");}
  catch(error){finishSound?.("error");$("status").textContent=error.message;}
  finally{busy=false;$("lookupButton").disabled=false;$("exportPdf").disabled=false;$("exportJson").disabled=false;finish?.();render(result);}
 }

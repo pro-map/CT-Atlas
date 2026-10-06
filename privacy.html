@@ -62,7 +62,7 @@
   <div class="subtitle">Global Counter-Terrorism Intelligence</div>
 
   <h1 style="margin-top:0;border-top:none;padding-top:0">Privacy Notice</h1>
-  <p class="updated">Last updated: 28 September 2026</p>
+  <p class="updated">Last updated: 6 October 2026</p>
 
   <p>This notice explains what personal data CT Atlas collects from its
   registered users, why, and how it is protected. CT Atlas is a
@@ -87,9 +87,20 @@
     IP address. We never store your raw IP address. This exists solely for
     security auditing and to detect unauthorised access.</li>
     <li><strong>Usage counters.</strong> We record which CT Atlas features an
-    account uses and how often. For the ordinary map and event-list text filters,
-    the search text itself is not sent to usage analytics; only a feature-use
-    counter is recorded.</li>
+    account uses and how often, and when each workspace is opened.</li>
+    <li><strong>Search history.</strong> Since 6 October 2026, each search or
+    request made with an account is recorded with its time and what was searched,
+    so that the administrator can review how CT Atlas is used: the event-list
+    search text and the filters it ran with; the Report Generator selection; the
+    Deep Search question and scope; the crypto address or transaction looked up
+    (and whether it came from a search, a trace expansion or a monitor check); the
+    SOCMINT investigation inputs; the Dark Web search text, outlet name and material
+    type; the IP address or domain looked up in IP Intelligence; and, for Facial
+    Intelligence, only the number and size of uploaded files and the label of a
+    searched face crop (never images, file names or links). The outcome of a report
+    request (generated, served from cache, no matching events or failed) and the
+    report title may be added. Only the administrator can view this history; it is
+    kept for 90 days and then deleted automatically.</li>
     <li><strong>Report Generator.</strong> The selected region, topic, period and
     relevant public-event dataset are sent to Google's Gemini API to generate
     the analytical report. The generated report is cached in CT Atlas for up to
@@ -98,11 +109,14 @@
     Google Gemini for query planning and report generation and is used to query
     public-source providers. The resulting Deep Search report contains the
     question, search diagnostics and evidence used. It is cached in CT Atlas for
-    up to four hours and is then automatically deleted from active application storage.</li>
+    up to four hours and is then automatically deleted from active application storage.
+    The question and its scope are also kept in the administrator's search history
+    for 90 days.</li>
     <li><strong>Crypto Intelligence.</strong> A one-off wallet or transaction
     lookup is processed through the CT Atlas backend and the relevant public
-    blockchain provider. CT Atlas does not maintain an automatic history of every
-    one-off crypto lookup. Information that the analyst deliberately saves to the
+    blockchain provider. Each lookup is recorded in the administrator's search
+    history for 90 days (see &ldquo;Search history&rdquo;); the results themselves
+    are not kept there. Information that the analyst deliberately saves to the
     Crypto workspace &mdash; such as labels, watchlists, cases, notes, saved paths,
     monitoring snapshots and alerts &mdash; is stored persistently for that account
     until it is deleted or the workspace is removed.</li>
@@ -127,6 +141,12 @@
     retention rules apply to what it downloads, and Cloudflare's provider-level
     recovery records (see &ldquo;Retention&rdquo;) are outside CT Atlas's
     application-level deletion.</li>
+    <li><strong>Dark Web Intelligence and IP Intelligence.</strong> Dark Web
+    searches filter the collected publications in your browser; the search text,
+    the selected outlet's name and the material type are recorded in the search
+    history. An IP Intelligence lookup records the IP address or domain looked up
+    (not the full web address you pasted, nor the optional incident details, which
+    stay in your page).</li>
   </ul>
 
   <h1>What we don't collect</h1>
@@ -147,13 +167,14 @@
   <h1>Why we process this data</h1>
   <p>Processing is necessary to operate a restricted-access professional
   tool: to authenticate registered users, secure accounts against
-  unauthorised access, and allocate limited analytical capacity (AI-assisted
-  search and reporting) fairly across users.</p>
+  unauthorised access, allocate limited analytical capacity (AI-assisted
+  search and reporting) fairly across users, and let the administrator oversee
+  how the tool is used during the pilot (usage counters and search history).</p>
 
   <h1>Who else processes data (service providers and public-source platforms)</h1>
   <ul>
     <li><strong>Cloudflare</strong> &mdash; hosts the CT Atlas backend API,
-    authentication/session state, rate limiting, usage records, report caches,
+    authentication/session state, rate limiting, usage records and search history, report caches,
     Crypto workspaces and SOCMINT workspaces. CT Atlas routes its primary Durable
     Object state through Cloudflare's European Union jurisdiction.</li>
     <li><strong>GitHub Pages / GitHub Actions</strong> &mdash; host and deploy the
@@ -195,6 +216,9 @@
   application database after processing. A face crop hosted for a reverse-image
   search is kept for at most 10 minutes (and for a limited number of downloads),
   then its storage object deletes itself.</p>
+  <p>The search history behind the usage counters is kept for 90 days: entries
+  older than that are deleted automatically, whole days at a time. The counters
+  themselves (numbers only) are kept for the pilot period.</p>
   <p>Login/security records are retained only as long as needed for security
   auditing; the application keeps a bounded recent login log. Account records
   persist for the duration of the testing/pilot period they were created for.</p>
@@ -213,7 +237,9 @@
   organisation's usual internal channels.</p>
 
   <h1>Security and data location</h1>
-  <p>Passwords and IP addresses are never stored in plain text. All
+  <p>Passwords and your own IP address are never stored in plain text (an IP
+  address you look up in IP Intelligence is search content and is kept in the
+  search history, see above). All
   connections to CT Atlas use HTTPS encryption. The primary CT Atlas Durable
   Object used for persistent application state is created through Cloudflare's
   <strong>European Union jurisdiction</strong>, constraining that Durable Object's

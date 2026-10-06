@@ -43,3 +43,29 @@
 .admin-connected-badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#39d98a;color:#03140b;font-size:9px;font-weight:900;letter-spacing:.09em;vertical-align:middle}
 #adminUsageTable tr.admin-row-idle td,#adminFeatureUsageTable tr.admin-row-idle td{opacity:.48}
 @media(max-width:640px){.admin-connected-chip{min-width:0;flex:1 1 140px}.admin-connected-chip strong{font-size:16px}}
+/* Clickable counts and the details window behind them. */
+.admin-count-link{min-width:24px;padding:2px 7px;border:1px solid rgba(226,196,105,.6);border-radius:3px;background:rgba(226,196,105,.12);color:#f3d77a;font:inherit;font-size:10px;font-weight:850;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.admin-count-link:hover,.admin-count-link:focus-visible{background:#e2c469;color:#1a1300;outline:2px solid #f3d77a;outline-offset:1px}
+.admin-history-all{margin-left:9px;padding:3px 8px;border:1px solid #39d98a;border-radius:3px;background:transparent;color:#8fe3b8;font-size:8.5px;font-weight:850;letter-spacing:.07em;cursor:pointer;vertical-align:middle}
+.admin-history-all:hover,.admin-history-all:focus-visible{background:#39d98a;color:#03140b;outline:none}
+#adminFeatureUsageTable{min-width:1420px}
+#adminHistoryPanel{position:fixed;inset:0;z-index:5700;background:rgba(1,7,11,.72)}
+#adminHistoryPanel[hidden]{display:none}
+#adminHistoryWindow{position:absolute;top:6vh;left:50%;transform:translateX(-50%);width:min(860px,calc(100vw - 24px));max-height:88vh;display:flex;flex-direction:column;background:#07131c;border:1px solid #4f86a4;box-shadow:0 24px 80px rgba(0,0,0,.7)}
+#adminHistoryHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:13px 16px 11px;border-bottom:1px solid #233f50;background:#091a25}
+#adminHistoryTitle{color:#f3d77a;font-size:13px;font-weight:900;letter-spacing:.08em}
+#adminHistorySubtitle{margin-top:4px;color:#e8f4f9;font-size:12px;font-weight:750}
+#adminHistoryClose{flex:none;width:28px;height:28px;border:1px solid #34566a;background:#0a1d29;color:#9db7c6;cursor:pointer;font-size:17px}
+#adminHistoryStatus{padding:9px 16px;border-bottom:1px solid rgba(92,130,151,.14);color:#8fa9b8;font-size:10px;line-height:1.45}
+#adminHistoryRows{overflow-y:auto;padding:10px 16px 16px}
+.admin-history-row{margin-bottom:8px;padding:10px 12px;border:1px solid rgba(96,132,154,.25);border-left:4px solid #e2c469;background:#081720}
+.admin-history-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:5px}
+.admin-history-meta time{color:#9db7c6;font-size:10.5px;font-variant-numeric:tabular-nums}
+.admin-history-feature{padding:2px 7px;border-radius:999px;background:#14364a;color:#cfe6f2;font-size:8.5px;font-weight:850;letter-spacing:.07em}
+.admin-history-main{color:#f2f8fb;font-size:13px;font-weight:750;line-height:1.4;white-space:pre-wrap;overflow-wrap:anywhere}
+.admin-history-details{display:flex;flex-wrap:wrap;gap:5px 14px;margin:7px 0 0}
+.admin-history-details div{display:flex;gap:5px;min-width:0}
+.admin-history-details dt{color:#7896a7;font-size:9.5px;font-weight:800;letter-spacing:.04em}
+.admin-history-details dd{margin:0;color:#d5e3ea;font-size:10.5px;overflow-wrap:anywhere}
+.admin-history-empty{padding:18px;color:#8aa3b2;font-size:11px;text-align:center}
+@media(max-width:640px){#adminHistoryWindow{top:12px;max-height:calc(100dvh - 24px)}#adminHistoryRows{padding:8px 10px 12px}}

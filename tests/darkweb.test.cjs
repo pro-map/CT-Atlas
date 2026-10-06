@@ -528,6 +528,7 @@ function pageHarness(fixture){
   getElementById(id){const walk=n=>{for(const c of n.children){if(c.id===id)return c;const found=walk(c);if(found)return found;}return null;};return walk(root);}});
  doc.activeElement=doc.body;
  const calls=[],confirms=[];let confirmAnswer=false,interval=null;
+ const session=new Map([['ct_map_session_token','admin']]);
  const respond=(data,status=200)=>({ok:status<400,status,json:async()=>structuredClone(data)});
  const fetch=async(url,options={})=>{
   const u=new URL(url),body=options.body?JSON.parse(options.body):undefined;calls.push({path:u.pathname,id:u.searchParams.get('id'),body});
@@ -539,8 +540,8 @@ function pageHarness(fixture){
   return respond({ok:true});
  };
  const context=vm.createContext({window:{},document:doc,fetch,console,URL,IntersectionObserver:class{observe(){}unobserve(){}disconnect(){}},
-  sessionStorage:{getItem:k=>k==='ct_map_session_token'?'admin':null,setItem(){},removeItem(){}},location:{replace(){}},navigator:{},
-  setInterval:fn=>{interval=fn;return 1;},setTimeout:()=>1,confirm:message=>{confirms.push(message);return confirmAnswer;}});
+  sessionStorage:{getItem:k=>session.get(k)??null,setItem:(k,v)=>{session.set(k,String(v));},removeItem:k=>{session.delete(k);}},location:{replace(){}},navigator:{},
+  setInterval:fn=>{interval=fn;return 1;},setTimeout:()=>1,clearTimeout(){},confirm:message=>{confirms.push(message);return confirmAnswer;}});
  vm.runInContext(fs.readFileSync('darkweb.js','utf8'),context);
  const flush=async()=>{for(let i=0;i<30;i++)await new Promise(r=>setImmediate(r));};
  return {doc,$:id=>doc.getElementById(id),calls,confirms,flush,count:path=>calls.filter(c=>c.path===path).length,
@@ -625,4 +626,22 @@ test('page: mark-all states its global scope, keyword alerts match their label, 
  olderLink.onclick({preventDefault(){}});await page.flush();
  const olderCard=page.$('item-'+fixture.id('d'));
  assert.ok(olderCard,'A source beyond the loaded archive pages is fetched and shown');assert.ok(page.doc.querySelectorAll('[data-view=latest]')[0].classList.contains('active'));assert.equal(olderCard.scrolled,1);
+});
+
+test('page: a settled search is recorded once for the admin history, with the outlet name and never its onion address',async()=>{
+ const fixture=pageFixture(),page=pageHarness(fixture);await page.flush();
+ const records=()=>page.calls.filter(c=>c.path==='/usage-record').map(c=>c.body);
+ const search=page.$('search'),enter=()=>search.dispatch('keydown',{key:'Enter'});
+ search.value='  Niger ';search.dispatch('input');
+ assert.equal(records().length,0,'Typing alone waits for the pause, Enter or leaving the box');
+ enter();enter();
+ assert.deepEqual(records(),[{username:'admin',action:'darkweb_search',details:{text:'Niger',view:'latest',outlet:'',material:'',results:1}}],'One record, not repeated for the same search');
+ page.$('outletFilter').value='o2';page.$('outletFilter').dispatch('input');enter();
+ assert.equal(records().length,2);
+ assert.equal(records()[1].details.outlet,'Outlet B');
+ page.doc.querySelectorAll('[data-view=outlets]')[0].onclick();page.doc.querySelectorAll('[data-view=latest]')[0].onclick();enter();
+ assert.equal(records().length,2,'Visiting the outlet list and coming back is not a new search');
+ assert.ok(!JSON.stringify(records()).includes('.onion'),'The outlet address never leaves the page');
+ search.value='';page.$('outletFilter').value='';search.dispatch('input');enter();
+ assert.equal(records().length,2,'Clearing the filters is not a search');
 });

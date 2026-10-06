@@ -61,7 +61,7 @@ const root=path.resolve(__dirname,'..');
  await page.locator('#fiFiles').setInputFiles({name:'test.png',mimeType:'image/png',buffer:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9ZQmcAAAAASUVORK5CYII=','base64')});
  await page.locator('#fiConsent').check();await page.locator('#fiRun').click();await page.waitForFunction(()=>soundStarts.length===2);
  console.log('facial: actual analysis start and failure feedback OK');
- await page.route('**/visual-analyze',async route=>{await new Promise(r=>setTimeout(r,200));await route.fulfill({json:{files:[],similarity_pairs:[],errors:[]}});});
+ await page.route('**/visual-analyze*',async route=>{await new Promise(r=>setTimeout(r,200));await route.fulfill({json:{files:[],similarity_pairs:[],errors:[]}});});
  await page.waitForTimeout(150);await page.locator('#fiRun').click();await page.waitForFunction(()=>soundStarts.length===4);
  assert.equal(await page.locator('#fiStatus').textContent(),'Analysis complete.');console.log('facial: actual success feedback OK');
  await page.waitForTimeout(150);await page.locator('#fiRun').click();await page.locator('#ctSoundEffects').click();await page.waitForTimeout(350);

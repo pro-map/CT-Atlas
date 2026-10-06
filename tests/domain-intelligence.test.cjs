@@ -169,7 +169,8 @@ test('a domain lookup takes one slot plus one per analysed IP; a refused IP slot
   vm.runInContext(strip('cloudflare-worker/ip-intelligence.js')+'\nglobalThis.handler=handleIPIntelligence;',context);
   const response=await context.handler(new Request('https://atlas.example.net/ip-intelligence/lookup',{method:'POST',headers:{'X-Session-Token':'analyst'},body:JSON.stringify({ip:'www.example.com'})}),{});
   const r=await response.json();assert.equal(response.status,200);
-  assert.deepEqual(gate,[{username:'analyst'},{username:'analyst',keyed:true},{username:'analyst',keyed:true}]);
+  // Only the domain's own slot carries the target (host, never the raw input) for the admin history.
+  assert.deepEqual(gate,[{username:'analyst',log:{target:'www.example.com',kind:'domain',registered_domain:'example.com'}},{username:'analyst',keyed:true},{username:'analyst',keyed:true}]);
   assert.equal(r.dns.addresses.length,2);assert.equal(r.networks.length,allowed-1);
   assert.equal(r.warnings.some(w=>w.includes('per-minute lookup limit was reached before 1 DNS address')),allowed===2);
  }

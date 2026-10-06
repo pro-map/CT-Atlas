@@ -1671,7 +1671,10 @@ export async function handleDeepSearch(request, env, ctx) {
     version: DEEP_SEARCH_VERSION
   }));
 
-  const permitResponse = await gateCall(env, "/acquire", { username, kind: "deep_search" });
+  const permitResponse = await gateCall(env, "/acquire", {
+    username, kind: "deep_search",
+    details: { question, region: filters.region, topic: filters.topic, actor_group: filters.actorGroup, scope }
+  });
   const permit = await permitResponse.json().catch(() => ({}));
   if (!permitResponse.ok || !permit?.permit_id) {
     return jsonResponse({
@@ -1680,6 +1683,12 @@ export async function handleDeepSearch(request, env, ctx) {
     }, permitResponse.status || 429, env);
   }
   const permitId = permit.permit_id;
+  // Outcome of this question in the admin search history (best effort).
+  const logId = cleanText(permit.log_id, 200);
+  const logOutcome = (outcome, extra = {}) => logId ? { id: logId, outcome, ...extra } : undefined;
+  const recordOutcome = outcome => {
+    if (logId) ctx?.waitUntil?.(gateCall(env, "/usage-log-update", { username, log_update: logOutcome(outcome) }).catch(() => {}));
+  };
 
   try {
     const cachedResponse = await gateCall(env, "/cache-get", { cacheKey: "deep:" + cacheKey });
@@ -1689,7 +1698,8 @@ export async function handleDeepSearch(request, env, ctx) {
       if (!commitResponse.ok) throw new Error("Unable to finalize Deep Search allowance.");
       ctx?.waitUntil?.(gateCall(env, "/usage-increment", {
         username,
-        metrics: { cached_reports: 1 }
+        metrics: { cached_reports: 1 },
+        log_update: logOutcome("cached", { title: cached.report.title, period: cached.report.detected_period?.label })
       }).catch(error => console.error("Deep Search usage record failed", error)));
       return jsonResponse({ ...cached.report, cached: true }, 200, env);
     }
@@ -1701,7 +1711,10 @@ export async function handleDeepSearch(request, env, ctx) {
       PLAN_SCHEMA, 6000
     );
     const plan = sanitizePlan(planRaw, question);
-    if (!plan.queries.length) return jsonResponse({ error: "Deep Search could not create a usable multilingual search plan." }, 422, env);
+    if (!plan.queries.length) {
+      recordOutcome("failed");
+      return jsonResponse({ error: "Deep Search could not create a usable multilingual search plan." }, 422, env);
+    }
 
     const window = resolveSearchWindow(plan);
     const detectedPeriod = {
@@ -1851,11 +1864,13 @@ export async function handleDeepSearch(request, env, ctx) {
 
     ctx?.waitUntil?.(gateCall(env, "/usage-increment", {
       username,
-      metrics: { reports_generated: 1 }
+      metrics: { reports_generated: 1 },
+      log_update: logOutcome("generated", { title: report.title, period: detectedPeriod.label })
     }).catch(error => console.error("Deep Search usage record failed", error)));
     return jsonResponse({ ...report, cached: false }, 200, env);
   } catch (error) {
     console.error("Deep Search failure", error);
+    recordOutcome("failed");
     const status = Number(error?.code) === 429 ? 429 : 503;
     return jsonResponse({
       error: cleanText(error?.message || "Deep Search failed.", 400),

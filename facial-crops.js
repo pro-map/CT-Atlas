@@ -613,8 +613,11 @@ function requestSearch(record,engines,returnFocus){
   return running;
 }
 
-function recordFacialSearchUsage(){
+// Records the search action with the engines and the face label (e.g. "F2 @ 3.5s") for the
+// admin search history; never the crop, its file name or the hosted link.
+function recordFacialSearchUsage(record,engines){
   try{
+    const details={engines:(engines||[]).map(engine=>String(engine&&engine.id||engine||"")).filter(Boolean).slice(0,4),face:String(record&&record.label||"").slice(0,40)};
     const api=context&&String(context.api||"").replace(/\/$/,"");
     const token=context&&context.getToken?String(context.getToken()||""):"";
     const username=String(sessionStorage.getItem("ct_map_username")||"").trim().toLowerCase();
@@ -622,7 +625,7 @@ function recordFacialSearchUsage(){
     fetch(api+"/usage-record",{
       method:"POST",
       headers:{"Content-Type":"application/json","X-Session-Token":token},
-      body:JSON.stringify({username,action:"facial_search"})
+      body:JSON.stringify({username,action:"facial_search",details})
     }).catch(()=>{});
   }catch(_){}
 }
@@ -630,7 +633,7 @@ function recordFacialSearchUsage(){
 async function startSearch(record,engines){
   if(record.searching)return;
   record.searching=true;
-  recordFacialSearchUsage();
+  recordFacialSearchUsage(record,engines);
   try{await runDirectSearch(record,engines);}
   finally{record.searching=false;}
 }

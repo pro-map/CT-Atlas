@@ -136,7 +136,12 @@ return jsonResponse(await statsResponse.json(), statsResponse.status, env);
 }
 if (url.pathname === "/usage-record" && request.method === "POST") {
 let usageBody;
-try { usageBody = await request.json(); } catch { return jsonResponse({ error: "Invalid JSON request." }, 400, env); }
+try {
+  const raw = await request.text();
+  if (raw.length > 8192) return jsonResponse({ error: "Usage record too large." }, 413, env);
+  usageBody = JSON.parse(raw);
+} catch { return jsonResponse({ error: "Invalid JSON request." }, 400, env); }
+if (!usageBody || typeof usageBody !== "object") return jsonResponse({ error: "Invalid JSON request." }, 400, env);
 const username = normalizeUsername(usageBody.username);
 const action = cleanText(usageBody.action, 64);
 const token = cleanText(request.headers.get("X-Session-Token"), 160);
@@ -150,8 +155,11 @@ if (action === "tab_access") {
   const tab = cleanText(usageBody.tab, 16).toLowerCase();
   if (!["map", "crypto", "facial", "social", "darkweb", "ip"].includes(tab)) return jsonResponse({ error: "Unsupported workspace tab." }, 400, env);
   usagePayload.tab = tab;
-} else if (!["map_search", "event_list_search", "facial_search"].includes(action)) {
+} else if (!["map_search", "event_list_search", "facial_search", "darkweb_search"].includes(action)) {
   return jsonResponse({ error: "Unsupported usage action." }, 400, env);
+} else if (usageBody.details && typeof usageBody.details === "object" && !Array.isArray(usageBody.details)) {
+  // What was searched, for the admin search history; the gate keeps only whitelisted, capped fields.
+  usagePayload.details = usageBody.details;
 }
 const recordResponse = await gateCall(env, "/usage-record", usagePayload);
 return jsonResponse(await recordResponse.json(), recordResponse.status, env);
@@ -187,6 +195,21 @@ if (!sessionResponse.ok || session?.username !== "admin") return jsonResponse({ 
 const period = cleanText(url.searchParams.get("period") || "today", 16);
 if (!["today", "7", "30", "all"].includes(period)) return jsonResponse({ error: "Unsupported history period." }, 400, env);
 const historyResponse = await gateCall(env, "/quiz-history", { period, username: "admin" });
+return jsonResponse(await historyResponse.json(), historyResponse.status, env);
+}
+if (url.pathname === "/usage-history" && request.method === "GET") {
+const token = cleanText(request.headers.get("X-Session-Token"), 160);
+if (!token) return jsonResponse({ error: "Admin session required." }, 401, env);
+const sessionResponse = await gateCall(env, "/session-get", { session_token: token });
+const session = await sessionResponse.json();
+if (!sessionResponse.ok || session?.username !== "admin") return jsonResponse({ error: "Admin access required." }, 403, env);
+const period = cleanText(url.searchParams.get("period") || "today", 16);
+if (!["today", "7", "30", "all"].includes(period)) return jsonResponse({ error: "Unsupported history period." }, 400, env);
+const targetUsername = normalizeUsername(url.searchParams.get("username"));
+if (!isAllowedUser(targetUsername, env)) return jsonResponse({ error: "Unknown user." }, 400, env);
+const metric = cleanText(url.searchParams.get("metric"), 40);
+if (!/^[a-z_]+(?::[a-z]+)?$/.test(metric)) return jsonResponse({ error: "Unsupported history metric." }, 400, env);
+const historyResponse = await gateCall(env, "/usage-history", { period, username: "admin", target_username: targetUsername, metric });
 return jsonResponse(await historyResponse.json(), historyResponse.status, env);
 }
 if (["/quiz-answer", "/quiz-state"].includes(url.pathname)) return handleQuiz(request, env);
@@ -252,10 +275,14 @@ const db = eventsDatabase.db;
 const allEvents = Array.isArray(db) ? db : (Array.isArray(db.events) ? db.events : []);
 const databaseVersion = cleanText(db.updated_at || db.generated_at || db.last_updated || "unknown", 100);
 const cacheKey = await sha256(JSON.stringify({ region, topic, actorGroup, periodDays, compare, databaseVersion, version: REPORT_GENERATOR_VERSION }));
-const permitResponse = await gateCall(env, "/acquire", { username, kind: "report_generator" });
+const permitResponse = await gateCall(env, "/acquire", { username, kind: "report_generator", details: { region, topic, actor_group: actorGroup, period_days: periodDays, compare } });
 const permit = await permitResponse.json();
 if (!permitResponse.ok || !permit?.permit_id) return jsonResponse({ error: permit?.error || "Report capacity temporarily unavailable.", retry_after_seconds: permit?.retry_after_seconds || 20 }, permitResponse.status || 429, env);
 const permitId = permit.permit_id;
+const logId = cleanText(permit.log_id, 200);
+// Outcome of this request in the admin search history (best effort, never blocks the report).
+const logOutcome = (outcome, title = "") => logId ? { id: logId, outcome, ...(title ? { title } : {}) } : undefined;
+const recordOutcome = outcome => { if (logId) ctx.waitUntil(gateCall(env, "/usage-log-update", { username, log_update: logOutcome(outcome) }).catch(() => {})); };
 try {
 const cachedResponse = await gateCall(env, "/cache-get", { cacheKey });
 const cached = await cachedResponse.json();
@@ -265,7 +292,7 @@ if (!commitResponse.ok) {
 const commitError = await commitResponse.json().catch(()=>({}));
 throw new Error(commitError?.error || "Unable to finalize report allowance.");
 }
-await gateCall(env, "/usage-increment", { username, metrics: { cached_reports: 1 } });
+await gateCall(env, "/usage-increment", { username, metrics: { cached_reports: 1 }, log_update: logOutcome("cached", cached.report.title) });
 return jsonResponse({ ...cached.report, cached: true }, 200, env);
 }
 const now = new Date();
@@ -279,7 +306,7 @@ if (!dt) continue;
 if (dt >= currentStart && dt <= now) current.push(event);
 else if (compare && dt >= previousStart && dt < currentStart) previous.push(event);
 }
-if (!current.length) return jsonResponse({ error: "No matching events found for the selected current period." }, 422, env);
+if (!current.length) { recordOutcome("no_events"); return jsonResponse({ error: "No matching events found for the selected current period." }, 422, env); }
 current.sort((a,b)=>priority(b)-priority(a)); previous.sort((a,b)=>priority(b)-priority(a));
 // Assign a sequential source_id (S01, S02...) to every event handed to
 // Gemini, in the same [Sxx] convention Deep Search already uses, so the
@@ -318,10 +345,11 @@ if (!commitResponse.ok) {
 const commitError = await commitResponse.json().catch(()=>({}));
 throw new Error(commitError?.error || "Unable to finalize report allowance.");
 }
-await gateCall(env, "/usage-increment", { username, metrics: { reports_generated: 1 } });
+await gateCall(env, "/usage-increment", { username, metrics: { reports_generated: 1 }, log_update: logOutcome("generated", report.title) });
 return jsonResponse({ ...report, cached: false }, 200, env);
 } catch (error) {
 console.error(error);
+recordOutcome("failed");
 const status = Number(error?.code) === 429 ? 429 : 503;
 return jsonResponse({ error: cleanText(error?.message || "Report generation failed.", 300), ...(status === 429 ? { retry_after_seconds: 300 } : {}) }, status, env);
 } finally { ctx.waitUntil(gateCall(env, "/release", { permitId, username })); }

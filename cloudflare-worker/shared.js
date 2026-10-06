@@ -309,6 +309,8 @@ function usageTemplate(username = "") {
     blockchain_searches: 0,
     facial_extractions: 0,
     facial_searches: 0,
+    darkweb_searches: 0,
+    ip_lookups: 0,
     feedback_submissions: 0,
     quiz_answers: 0,
     quiz_correct: 0,

@@ -74,7 +74,9 @@ $("fiForm").addEventListener("submit",async e=>{
  const finishSound=window.CTAtlasSound?.begin();
  const finishWait = window.CTAtlasUI?.begin(status);
  try{
-  const r=await fetch(API+"/visual-analyze",{method:"POST",headers:{"X-Session-Token":token},body:data});
+  // File counts only (never names or content) for the admin usage history.
+  const counts="?files="+files.length+"&videos="+files.filter(f=>/^video\//i.test(f.type||"")).length;
+  const r=await fetch(API+"/visual-analyze"+counts,{method:"POST",headers:{"X-Session-Token":token},body:data});
   const p=await r.json().catch(()=>({}));
   if(!r.ok)throw new Error(p.error||p.detail||"Visual analysis failed.");
   render(p);finishSound?.((p.errors||[]).length?"error":"success");status.textContent="Analysis complete.";
