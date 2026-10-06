@@ -2,7 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<style>html{background:#0d1620}.ct-page-loading{display:none}html.ct-loading .ct-page-loading{position:fixed;inset:0;z-index:2147483646;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#0d1620;color:#edf3f6;font:11px Arial,sans-serif;letter-spacing:.24em}</style>
+<style>
+html{background:#0d1620}
+.ct-page-loading{display:none}
+html.ct-loading .ct-page-loading{position:fixed;inset:0;z-index:2147483646;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#0d1620;color:#edf3f6;font:11px Arial,sans-serif;letter-spacing:.24em}
+.construction-panel{max-width:760px;margin:10vh auto 0;padding:48px 42px;text-align:center;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(10,20,29,.72);box-shadow:0 18px 60px rgba(0,0,0,.28)}
+.construction-kicker{font-size:11px;letter-spacing:.22em;opacity:.65;margin-bottom:14px}
+.construction-panel h1{margin:0 0 18px;font-size:34px;letter-spacing:.04em}
+.construction-panel p{max-width:650px;margin:0 auto 16px;line-height:1.65;opacity:.9}
+.osint-link{display:inline-block;margin-top:10px;padding:12px 18px;border:1px solid rgba(255,255,255,.2);border-radius:8px;text-decoration:none;font-weight:700;letter-spacing:.04em}
+</style>
 <script>document.documentElement.classList.add("ct-loading");window.ctLoadingFallback=setTimeout(function(){document.documentElement.classList.remove("ct-loading");},10000);</script>
 <link rel="stylesheet" href="workspace-ui.css?v=20261004c">
 <script src="sound-effects.js?v=20261004c" defer></script>
@@ -13,244 +22,49 @@
 <link rel="icon" href="CT-ATLAS.png">
 <link rel="stylesheet" href="social.css?v=2">
 <link rel="stylesheet" href="tab-health.css?v=1">
-  <script src="tab-access.js?v=20260928" defer></script>
+<script src="tab-access.js?v=20260928" defer></script>
 </head>
 <body data-ct-tab="social">
 <div class="ct-page-loading" role="status" aria-live="polite"><strong>CT ATLAS</strong><span>LOADING</span><span class="ct-loading-line" aria-hidden="true"></span></div>
 <div class="social-shell">
-  <header class="social-header">
-    <div class="social-brand">
-      <img src="CT-ATLAS.png" alt="CT Atlas">
-      <div>
-        <div class="social-title">SOCIAL INTELLIGENCE</div>
-        <div class="social-sub">CT ATLAS · PUBLIC-SOURCE SOCMINT WORKSPACE</div>
-      </div>
+<header class="social-header">
+  <div class="social-brand">
+    <img src="CT-ATLAS.png" alt="CT Atlas">
+    <div>
+      <div class="social-title">SOCIAL INTELLIGENCE</div>
+      <div class="social-sub">CT ATLAS · PUBLIC-SOURCE SOCMINT WORKSPACE</div>
     </div>
-    <div class="social-header-actions">
-      <span id="socialUser">VERIFYING SESSION…</span>
-      <a class="main-button" href="main.html">MAIN</a>
-    </div>
-  </header>
-
-  <main class="social-main">
-    <section class="social-query-panel">
-      <div class="panel-head">
-        <div>
-          <div class="panel-kicker">INVESTIGATION INPUT</div>
-          <h1>Run SOCMINT Investigation</h1>
-        </div>
-        <span id="socialAgentBadge" class="agent-badge">SOCMINT AGENT</span>
-      </div>
-
-      <div class="social-note">
-        Public OSINT only. Do not enter non-public operational or personal data into a free-tier external AI service.
-      </div>
-
-      <form id="socialForm">
-        <div class="field full">
-          <label for="socialMode">SEARCH MODE</label>
-          <select id="socialMode">
-            <option value="discover">Discover + Analyze public web</option>
-            <option value="urls_only">Analyze known public URLs</option>
-          </select>
-          <div class="field-help">The ADK agent does not use Gemini Google Search grounding. It can use configured public collectors (including Bluesky, Mastodon, Odysee, LinkedIn public-web discovery, public Telegram channel pages, Internet Archive captures and username discovery) and analyze known public URLs. Generic web discovery requires an independent provider such as Brave or SearXNG when configured; Gemini remains only a URL-analysis fallback.</div>
-        </div>
-
-        <div class="field full">
-          <label for="socialTarget">TARGET / SUBJECT</label>
-          <input id="socialTarget" type="text" placeholder="Person, group, channel, campaign, network, event or topic">
-        </div>
-
-        <div class="field">
-          <label for="socialUsernames">USERNAMES / HANDLES</label>
-          <textarea id="socialUsernames" rows="3" placeholder="@handle1&#10;@handle2"></textarea>
-        </div>
-
-        <div class="field">
-          <label for="socialKeywords">ALIASES / KEYWORDS</label>
-          <textarea id="socialKeywords" rows="3" placeholder="Alias, slogan, hashtag, organization name…"></textarea>
-        </div>
-
-        <div class="field full">
-          <label>PLATFORMS</label>
-          <div class="platform-grid">
-            <label><input type="checkbox" name="platform" value="Telegram" checked> Telegram</label>
-            <label><input type="checkbox" name="platform" value="X"> X</label>
-            <label><input type="checkbox" name="platform" value="Facebook"> Facebook</label>
-            <label><input type="checkbox" name="platform" value="Instagram"> Instagram</label>
-            <label><input type="checkbox" name="platform" value="LinkedIn"> LinkedIn</label>
-            <label><input type="checkbox" name="platform" value="TikTok"> TikTok</label>
-            <label><input type="checkbox" name="platform" value="YouTube"> YouTube</label>
-            <label><input type="checkbox" name="platform" value="Reddit"> Reddit</label>
-            <label><input type="checkbox" name="platform" value="VK"> VK</label>
-            <label><input type="checkbox" name="platform" value="Bluesky"> Bluesky</label>
-            <label><input type="checkbox" name="platform" value="Mastodon"> Mastodon</label>
-            <label><input type="checkbox" name="platform" value="4chan"> 4chan</label>
-            <label><input type="checkbox" name="platform" value="Odysee"> Odysee</label>
-          </div>
-          <div class="field-help">Free collectors with no API key: Telegram (public channels only — nothing is joined), Bluesky, Mastodon, 4chan, Odysee and Internet Archive captures. YouTube, Reddit and X need API keys configured on the agent. Facebook, Instagram, TikTok and VK are reached only through public-web search and known URLs.</div>
-        </div>
-
-        <div class="field full">
-          <label for="socialUrls">KNOWN PUBLIC URLS</label>
-          <textarea id="socialUrls" rows="4" placeholder="One public URL per line. Up to 20 URLs."></textarea>
-        </div>
-
-        <div class="field">
-          <label for="socialRegions">COUNTRIES / REGIONS</label>
-          <input id="socialRegions" type="text" placeholder="France, Tunisia, Sahel…">
-        </div>
-
-        <div class="field">
-          <label for="socialLanguages">LANGUAGES</label>
-          <input id="socialLanguages" type="text" placeholder="Arabic, French, English…">
-        </div>
-
-        <div class="field">
-          <label for="socialFrom">FROM</label>
-          <input id="socialFrom" type="date">
-        </div>
-
-        <div class="field">
-          <label for="socialTo">TO</label>
-          <input id="socialTo" type="date">
-        </div>
-
-        <div class="field full">
-          <label for="socialObjective">ANALYTICAL QUESTION / OBJECTIVE</label>
-          <textarea id="socialObjective" rows="4" placeholder="Example: Identify public accounts and aliases linked to this target, assess cross-platform associations, narratives, geographic indicators and any publicly exposed crypto wallets."></textarea>
-        </div>
-
-        <button id="socialRunButton" class="run-button" type="submit">RUN SOCMINT INVESTIGATION</button>
-        <div id="socialStatus" class="social-status" aria-live="polite"></div>
-      </form>
-
-      <section class="history-block">
-        <div class="history-head">RECENT INVESTIGATIONS</div>
-        <div id="socialHistory" class="history-list">
-          <div class="empty-state">No saved SOCMINT reports yet.</div>
-        </div>
-      </section>
-    </section>
-
-    <section class="social-report-panel">
-      <div id="socialEmpty" class="report-empty">
-        <div class="report-empty-icon">SOC</div>
-        <h2>SOCMINT Report</h2>
-        <p>Fill the investigation fields and run the agent. Results will be structured as an analytical report with source coverage, findings, confidence and watchpoints.</p>
-      </div>
-
-      <article id="socialReport" class="social-report" hidden>
-        <div class="report-toolbar">
-          <div>
-            <div class="panel-kicker">SOCMINT ASSESSMENT</div>
-            <h2 id="reportTitle"></h2>
-            <div id="reportMeta" class="report-meta"></div>
-          </div>
-          <button id="socialPdfButton" class="secondary-button" type="button">DOWNLOAD PDF</button>
-        </div>
-
-        <section class="report-section">
-          <h3>EXECUTIVE ASSESSMENT</h3>
-          <div id="reportExecutive" class="report-prose"></div>
-        </section>
-
-        <section class="report-section">
-          <h3>KEY FINDINGS</h3>
-          <div id="reportFindings" class="finding-list"></div>
-        </section>
-
-        <section class="report-grid">
-          <div class="report-section">
-            <h3>SOURCE COVERAGE</h3>
-            <div id="reportCoverage" class="report-prose"></div>
-          </div>
-          <div class="report-section">
-            <h3>IDENTITY & ALIAS FINDINGS</h3>
-            <div id="reportIdentity" class="report-prose"></div>
-          </div>
-          <div class="report-section">
-            <h3>NETWORK & ASSOCIATIONS</h3>
-            <div id="reportNetwork" class="report-prose"></div>
-          </div>
-          <div class="report-section">
-            <h3>CONTENT & NARRATIVE</h3>
-            <div id="reportNarrative" class="report-prose"></div>
-          </div>
-          <div class="report-section">
-            <h3>ACTIVITY & TIMELINE</h3>
-            <div id="reportTimeline" class="report-prose"></div>
-          </div>
-          <div class="report-section">
-            <h3>LOCATIONS & TRAVEL SIGNALS</h3>
-            <div id="reportLocations" class="report-prose"></div>
-          </div>
-          <div class="report-section">
-            <h3>FINANCIAL / CRYPTO INDICATORS</h3>
-            <div id="reportFinancial" class="report-prose"></div>
-          </div>
-          <div class="report-section">
-            <h3>CT RELEVANCE</h3>
-            <div id="reportCt" class="report-prose"></div>
-          </div>
-        </section>
-
-        <section class="report-section">
-          <h3>ENTITIES / IDENTIFIERS</h3>
-          <div class="table-wrap">
-            <table class="social-table">
-              <thead><tr><th>Type</th><th>Value</th><th>Platform</th><th>Confidence</th><th>Basis</th></tr></thead>
-              <tbody id="reportEntities"></tbody>
-            </table>
-          </div>
-        </section>
-
-        <section id="reportTelegramSection" class="report-section" hidden>
-          <h3>TELEGRAM · COLLECTED POSTS &amp; CONNECTIONS</h3>
-          <div id="reportTelegramCoverage" class="finding-basis"></div>
-          <div id="reportTelegramChannels" class="finding-list"></div>
-          <details><summary>Observed connections and supporting posts</summary><div id="reportTelegramRelations" class="finding-list"></div></details>
-          <div class="field" style="margin:10px 0">
-            <label for="telegramEvidenceSearch">Search collected posts, accounts and links</label>
-            <input id="telegramEvidenceSearch" type="search" placeholder="Keyword, @account or domain">
-          </div>
-          <div id="reportTelegramCount" class="finding-basis" aria-live="polite"></div>
-          <div id="reportTelegramMessages" class="finding-list"></div>
-          <button id="telegramShowMore" class="secondary-button" type="button" hidden>SHOW MORE POSTS</button>
-        </section>
-
-        <section id="reportWalletsSection" class="report-section" hidden>
-          <h3>WALLETS &amp; SANCTIONS SCREENING</h3>
-          <div id="reportWalletsStatus" class="wallet-status"></div>
-          <div id="reportWallets" class="finding-list"></div>
-          <div id="reportWalletsScope" class="finding-basis"></div>
-        </section>
-
-        <section class="report-section">
-          <h3>OUTLOOK / WATCHPOINTS</h3>
-          <div id="reportWatchpoints" class="watch-list"></div>
-        </section>
-
-        <section class="report-section">
-          <h3>ANALYTICAL GAPS / LIMITATIONS</h3>
-          <div id="reportGaps" class="report-prose"></div>
-        </section>
-
-        <section class="report-section">
-          <h3>SOURCES</h3>
-          <div id="reportSources" class="source-list"></div>
-        </section>
-
-        <div class="report-disclaimer">
-          Public-source analytical output. Similar usernames, content, imagery, contacts or activity patterns do not by themselves establish identity, control, criminality or terrorist affiliation. Significant findings require independent analyst validation.
-        </div>
-      </article>
-    </section>
-  </main>
+  </div>
+  <div class="social-header-actions">
+    <span id="socialUser">VERIFYING SESSION…</span>
+    <a class="main-button" href="main.html">MAIN</a>
+  </div>
+</header>
+<main class="social-main">
+  <section class="construction-panel">
+    <div class="construction-kicker">SOCIAL INTELLIGENCE</div>
+    <h1>UNDER CONSTRUCTION</h1>
+    <p>This workspace is currently being rebuilt.</p>
+    <p>Meanwhile, law-enforcement personnel — including staff working for international law-enforcement organizations — may be eligible for <strong>30 free OSINT Industries credits per month</strong>. Request access using your official corporate/work email address.</p>
+    <a class="osint-link" href="https://www.osint.industries/industries/law-enforcement" target="_blank" rel="noopener noreferrer">OSINT INDUSTRIES — LAW ENFORCEMENT FREE ACCESS</a>
+  </section>
+</main>
 </div>
-
-<script src="pdf-export.js?v=20261003"></script>
-<script src="social.js?v=20261004-telegram-evidence"></script>
-<script src="tab-health.js?v=1" data-health-scope="social"></script>
+<script>
+(function(){
+  function showUser(){
+    try{
+      const el=document.getElementById("socialUser");
+      const user=localStorage.getItem("ct_username")||sessionStorage.getItem("ct_username");
+      if(el) el.textContent=user?user.toUpperCase():"SESSION ACTIVE";
+    }catch(e){}
+  }
+  document.addEventListener("DOMContentLoaded",function(){
+    showUser();
+    document.documentElement.classList.remove("ct-loading");
+    if(window.ctLoadingFallback) clearTimeout(window.ctLoadingFallback);
+  });
+})();
+</script>
 </body>
 </html>
