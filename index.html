@@ -4584,9 +4584,9 @@ html, body {
 
 <script src="pdf-export.js?v=20261003" defer></script>
 <script src="report-illustration.js?v=20261002" defer></script>
-<script src="usage-admin.js?v=usage-history-20261006" defer></script>
+<script src="usage-admin.js?v=no-social-20261006" defer></script>
 <script src="usage-auth-fix.js?v=20261006" defer></script>
-<script src="tab-access.js?v=20260928" defer></script>
+<script src="tab-access.js?v=no-social-20261006" defer></script>
 
 <style>
 /* ============================================================
@@ -5175,6 +5175,7 @@ Map · all events
 <div class="time-buttons map-period-buttons">
 <button class="time-button" data-days="1">24H</button>
 <button class="time-button active" data-days="7">7 DAYS</button>
+<button class="time-button" data-days="30">30 DAYS</button>
 </div>
 
 <div class="layer-buttons">
@@ -6536,8 +6537,8 @@ let weeklyAnalysisData =
     null;
 
 
-// Other categories of the last few days: never drawn on the map, but the
-// header's casualty counts need them.
+// Other categories covering every map period, also used by the header's
+// casualty counts.
 let recentContextEvents =
     [];
 
@@ -6858,9 +6859,9 @@ function eventMatchKey(event) {
     return [clean(event?.id), Number.isFinite(time) ? time : "", clean(event?.title)].join("|");
 }
 
-// Other categories' events of the map's longest period (7 days), plus a
+// Other categories' events of the map's longest period (30 days), plus a
 // day of slack between two publications (tools/build_events_map.py).
-const MAP_RECENT_EVENT_DAYS = 8;
+const MAP_RECENT_EVENT_DAYS = 31;
 
 // The map's own file (events-map.json, built at publication time: attacks only,
 // ~1/4 of events-lite.json) or, if it is missing or unusable, the full database
@@ -6875,6 +6876,9 @@ function loadMapDatabase() {
     .then(data => {
         if (!data || !Array.isArray(data.events) || !Array.isArray(data.recent_events)) {
             throw new Error("events-map.json invalid");
+        }
+        if (!(Number(data.map?.recent_events_days) >= MAP_RECENT_EVENT_DAYS)) {
+            throw new Error("events-map.json does not cover the 30-day all-events window");
         }
         window.eventsDataSource = "events-map.json";
         return data;
@@ -6907,7 +6911,7 @@ function loadMapDatabase() {
                 total_events: all.filter(event => event.excluded_from_map !== true).length,
                 by_category: byCategory
             },
-            map: { source_event_count: all.length }
+            map: { source_event_count: all.length, recent_events_days: MAP_RECENT_EVENT_DAYS }
         };
     }));
 
@@ -14351,7 +14355,7 @@ function databaseEventCardNote(event) {
         return "Attack recorded after the map was loaded: reload the page to see it on the map.";
     }
     return "Attack not shown on the map right now: the map covers the last "
-        + (selectedDays === 1 ? "24 hours" : "7 days")
+        + (selectedDays === 1 ? "24 hours" : selectedDays + " days")
         + ". This event comes from the full CT Atlas database.";
 }
 
@@ -14417,7 +14421,7 @@ function renderAttackTicker() {
         .sort((a, b) => b.time - a.time)
         .map(item => item.event);
 
-    if (title) title.textContent = selectedDays === 1 ? "ATTACKS · LAST 24H" : "ATTACKS · LAST 7 DAYS";
+    if (title) title.textContent = selectedDays === 1 ? "ATTACKS · LAST 24H" : "ATTACKS · LAST " + selectedDays + " DAYS";
     if (count) count.textContent = events.length.toLocaleString("en-GB");
 
     list.classList.remove("ticker-animated");

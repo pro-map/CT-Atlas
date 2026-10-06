@@ -55,13 +55,13 @@ async function runLoader(responses){
       return {ok:true,status:200,json:async()=>body};
     }
   });
-  vm.runInContext(extract('isMapAttackEvent')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 8;'+extract('loadMapDatabase'),c);
+  vm.runInContext(extract('isMapAttackEvent')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 31;'+extract('loadMapDatabase'),c);
   const data=await vm.runInContext('loadMapDatabase()',c);
   return {data:plain(data),source:c.window.eventsDataSource};
 }
 
 test('the map reads events-map.json when it is published',async()=>{
-  const mapFile={events:[{id:'a'}],recent_events:[],database_summary:{total_events:9},trend_summary:{overview:'x'}};
+  const mapFile={events:[{id:'a'}],recent_events:[],map:{recent_events_days:31},database_summary:{total_events:9},trend_summary:{overview:'x'}};
   const {data,source}=await runLoader({'events-map.json':mapFile});
   assert.equal(source,'events-map.json');
   assert.deepEqual(data,mapFile);
@@ -75,17 +75,18 @@ test('without events-map.json the map filters events-lite.json with the same rul
       {id:'attack',primary_event_type:'ATTACK',is_attack:true,published:now,category:'Attacks'},
       {id:'unlocated-attack',primary_event_type:'ATTACK',is_attack:true,published:now,excluded_from_map:true},
       {id:'arrest',primary_event_type:'ARREST',published:now,category:'Arrests'},
+      {id:'arrest20',primary_event_type:'ARREST',published:new Date(Date.now()-20*86400000).toISOString(),category:'Arrests'},
       {id:'old-arrest',primary_event_type:'ARREST',published:'2020-01-01T00:00:00Z',category:'Arrests'},
       {id:'cited-old-operation',primary_event_type:'CT_OPERATION',published:'2020-01-01T00:00:00Z',category:'Counter Terrorism Action'},
     ]
   };
-  const {data,source}=await runLoader({'events-lite.json':lite});
+  const {data,source}=await runLoader({'events-map.json':{events:[],recent_events:[],map:{recent_events_days:8}},'events-lite.json':lite});
   assert.equal(source,'events-lite.json');
   // Unlocated attacks stay (never drawn, but in the ticker and header counts),
   // like tools/build_events_map.py.
   assert.deepEqual(data.events.map(e=>e.id),['attack','unlocated-attack']);
-  assert.deepEqual(data.recent_events.map(e=>e.id),['arrest','cited-old-operation']);
-  assert.equal(data.database_summary.total_events,4);
+  assert.deepEqual(data.recent_events.map(e=>e.id),['arrest','arrest20','cited-old-operation']);
+  assert.equal(data.database_summary.total_events,5);
   assert.equal(data.trend_summary.overview,'whole database');
 });
 
@@ -376,6 +377,8 @@ function mapScopeHarness(){
              {id:'a7',category:'Attacks',published:iso(5*day),latitude:1,longitude:1}],
     others:[{id:'r1',category:'Arrests',published:iso(7200e3),latitude:2,longitude:2},
             {id:'l1',category:'Legal / Judicial',published:iso(2*day),latitude:3,longitude:3},
+            {id:'r20',category:'Arrests',published:iso(20*day),latitude:4,longitude:4},
+            {id:'r31',category:'Arrests',published:iso(31*day),latitude:5,longitude:5},
             {id:'u1',category:'Arrests',published:iso(7200e3),location_precision:'unlocated'}]
   };
   vm.runInContext('attacks = attacksData.attacks; recentContextEvents = attacksData.others;',c);
@@ -385,26 +388,28 @@ function mapScopeHarness(){
   };
 }
 
-test('the map shows attacks only by default, and every category or one of them on demand',()=>{
+test('the map shows all events by default and filters every category over 1, 7, or 30 days',()=>{
   const h=mapScopeHarness();
   assert.deepEqual(plain(h.ids('ATTACKS',1)).mapped,['a1']);
   assert.deepEqual(plain(h.ids('ATTACKS',7)).mapped,['a1','a7']);
   assert.deepEqual(plain(h.ids('ALL',1)).mapped,['a1','r1']);
   assert.deepEqual(plain(h.ids('ALL',7)).mapped,['a1','a7','r1','l1']);
+  assert.deepEqual(plain(h.ids('ALL',30)).mapped,['a1','a7','r1','l1','r20']);
+  assert.deepEqual(plain(h.ids('Arrests',30)).mapped,['r1','r20']);
   const arrests=plain(h.ids('Arrests',7));
   assert.deepEqual(arrests.mapped,['r1'],'one category: no attacks');
   assert.deepEqual(arrests.scope,['r1','u1'],'the counter also counts events without a location');
   assert.equal(plain(h.ids('anything else',1)).state,'ATTACKS','an unknown value falls back to attacks');
 });
 
-test('the "Show on map" selector defaults to all events and the map file carries 7 days of other categories',()=>{
+test('the "Show on map" selector defaults to all events and the map file covers 30 days of other categories',()=>{
   const select=html.slice(html.indexOf('<select id="mapCategory">'),html.indexOf('</select>',html.indexOf('<select id="mapCategory">')));
   assert.match(select,/<option value="ATTACKS">Attacks only<\/option>/);
   assert.match(select,/<option value="ALL" selected>All events<\/option>/);
   assert.match(html,/let mapCategoryScope = "ALL";/);
   assert.match(html,/_filteredMappedEventsCache = mapScopeEvents\(\)\.filter\(/);
-  assert.match(html,/const MAP_RECENT_EVENT_DAYS = 8;/);
-  assert.match(fs.readFileSync('tools/build_events_map.py','utf8'),/^RECENT_DAYS = 8$/m);
+  assert.match(html,/const MAP_RECENT_EVENT_DAYS = 31;/);
+  assert.match(fs.readFileSync('tools/build_events_map.py','utf8'),/^RECENT_DAYS = 31$/m);
   // The ticker, KPIs and trends stay about attacks whatever the map shows.
   assert.match(html,/const events = filteredAllEvents\(\)\s*\n?\s*\.map/);
 });

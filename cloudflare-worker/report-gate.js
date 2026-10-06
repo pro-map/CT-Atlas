@@ -40,9 +40,9 @@ function withAdminDisplayName(row){
   return displayName?{...row,display_name:displayName}:row;
 }
 const SOCIAL_REPORT_RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
-const TAB_ACCESS_FIELDS = Object.freeze({ map: true, crypto: true, facial: true, social: true, darkweb: true, ip: true });
+const TAB_ACCESS_FIELDS = Object.freeze({ map: true, crypto: true, facial: true, darkweb: true, ip: true });
 function tabAccessTemplate(username = "") {
-  return { username, map: 0, crypto: 0, facial: 0, social: 0, darkweb: 0, ip: 0 };
+  return { username, map: 0, crypto: 0, facial: 0, darkweb: 0, ip: 0 };
 }
 
 // Per-user search history behind the admin counters. One small value per search,
@@ -58,7 +58,6 @@ const USAGE_LOG_FIELDS = Object.freeze({
   report_generator: { region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], period_days: ["num"], compare: ["bool"], outcome: ["text", 20], title: ["text", 200] },
   deep_search: { question: ["text", 1200], region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], scope: ["text", 200], outcome: ["text", 20], title: ["text", 200], period: ["text", 120] },
   blockchain: { query: ["text", 180], kind: ["text", 20], chain: ["text", 40], chain_hint: ["text", 40], origin: ["text", 16], limit: ["num"] },
-  social: { mode: ["text", 20], target: ["text", 400], usernames: ["list", 40, 160], platforms: ["list", 16, 40], keywords: ["list", 40, 160], urls: ["list", 20, 300], countries_regions: ["list", 20, 120], languages: ["list", 20, 60], date_from: ["text", 10], date_to: ["text", 10], objective: ["text", 1500], title: ["text", 200], discovery_mode: ["text", 40] },
   facial_extraction: { files: ["num"], videos: ["num"], bytes: ["num"] },
   facial_search: { engines: ["list", 4, 20], face: ["text", 40] },
   event_list: { text: ["text", 200], region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], period_days: ["num"], scope: ["text", 200], country: ["text", 120], sort: ["text", 10], results: ["num"] },
@@ -82,7 +81,6 @@ const USAGE_HISTORY_METRICS = Object.freeze({
   map_searches: [],
   quick_ask_requests: [],
   blockchain_searches: ["blockchain"],
-  social_intel_requests: ["social"],
   facial_extractions: ["facial_extraction"],
   facial_searches: ["facial_search"],
   darkweb_searches: ["darkweb_search"],
@@ -371,29 +369,33 @@ export class ReportGate {
       this.state.storage.get(dayKey)
     ]);
 
+    const template = usageTemplate(username);
     const total = {
-      ...usageTemplate(username),
+      ...template,
       ...(currentTotal || {})
     };
     const day = {
-      ...usageTemplate(username),
+      ...template,
       ...(currentDay || {})
     };
 
+    let changed = false;
     for (const [metric, raw] of Object.entries(metrics || {})) {
       const value = Number(raw || 0);
       if (
         !Number.isFinite(value) ||
         value === 0 ||
-        !(metric in total) ||
+        !Object.hasOwn(template, metric) ||
         metric === "username" ||
         metric === "last_activity"
       ) continue;
 
       total[metric] = Number(total[metric] || 0) + value;
       day[metric] = Number(day[metric] || 0) + value;
+      changed = true;
     }
 
+    if (!changed && !log?.key) return total;
     const iso = new Date(now).toISOString();
     total.last_activity = iso;
     day.last_activity = iso;
@@ -543,7 +545,6 @@ export class ReportGate {
           "cached_reports",
           "blocked_report_requests",
           "quick_ask_requests",
-          "social_intel_requests",
           "blockchain_searches",
           "facial_extractions",
           "facial_searches",
@@ -567,10 +568,12 @@ export class ReportGate {
     }
 
     const rows = users.map(username => rowsByUser.get(username));
+    // Legacy totals may still contain the retired Social counter.
+    for (const row of rows) delete row.social_intel_requests;
 
     const summary = {
       active_users: rows.filter(row =>
-        ["logins", "searches", "report_requests", "report_generator_requests", "deep_search_requests", "reports_generated", "cached_reports", "quick_ask_requests", "social_intel_requests", "blockchain_searches", "facial_extractions", "facial_searches", "darkweb_searches", "ip_lookups", "feedback_submissions", "quiz_answers"]
+        ["logins", "searches", "report_requests", "report_generator_requests", "deep_search_requests", "reports_generated", "cached_reports", "quick_ask_requests", "blockchain_searches", "facial_extractions", "facial_searches", "darkweb_searches", "ip_lookups", "feedback_submissions", "quiz_answers"]
           .some(metric => Number(row[metric] || 0) > 0)
       ).length,
       logins: 0,
@@ -584,7 +587,6 @@ export class ReportGate {
       cached_reports: 0,
       blocked_report_requests: 0,
       quick_ask_requests: 0,
-      social_intel_requests: 0,
       blockchain_searches: 0,
       facial_extractions: 0,
       facial_searches: 0,
@@ -609,7 +611,6 @@ export class ReportGate {
         "cached_reports",
         "blocked_report_requests",
         "quick_ask_requests",
-        "social_intel_requests",
         "blockchain_searches",
         "facial_extractions",
         "facial_searches",

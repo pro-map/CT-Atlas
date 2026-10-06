@@ -305,7 +305,6 @@ function usageTemplate(username = "") {
     cached_reports: 0,
     blocked_report_requests: 0,
     quick_ask_requests: 0,
-    social_intel_requests: 0,
     blockchain_searches: 0,
     facial_extractions: 0,
     facial_searches: 0,

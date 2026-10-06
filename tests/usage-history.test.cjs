@@ -209,7 +209,7 @@ test("an IP lookup is counted with its canonical target only when its slot is gr
   assert.equal((await h.gate.usageStats("today")).users.find(item => item.username === "group-i-11").ip_lookups, 0);
 });
 
-test("workspace openings list their times, and social requests keep capped lists", async () => {
+test("workspace openings list their times and retired Social requests and history are excluded", async () => {
   const h = await harness();
   assert.equal((await h.call("/usage-record", { username: "group-s-11", action: "tab_access", tab: "crypto" })).status, 200);
   const opened = (await h.history("group-s-11", "tab:crypto")).body;
@@ -225,15 +225,18 @@ test("workspace openings list their times, and social requests keep capped lists
       objective: "o".repeat(2000)
     } }
   });
-  const social = (await h.history("group-s-11", "social_intel_requests")).body.rows[0];
-  assert.equal(social.usernames.length, 40);
-  assert.deepEqual(social.urls.map(url => url.length), [300], "non-text items are dropped and URLs capped");
-  assert.equal(social.objective.length, 1500);
+  assert.equal((await h.history("group-s-11", "social_intel_requests")).status, 400);
+  assert.equal((await h.history("group-s-11", "tab:social")).status, 400);
+  // Historical Social rows must also stay out of ALL ACTIVITY.
+  const stamp = Date.now();
+  const day = h.shared.parisDayKey(stamp);
+  await h.storage.put(`usage-log:${day}:group-s-11:social:${stamp}:legacy`, {at:new Date(stamp).toISOString(),feature:"social",target:"old search"});
+  await h.storage.put(`usage-log:${day}:group-s-11:tab_social:${stamp}:legacy`, {at:new Date(stamp).toISOString(),feature:"tab_social"});
   // A Worker module cannot write a workspace-opening row through /usage-increment.
   await h.call("/usage-increment", { username: "group-s-11", metrics: {}, log: { feature: "tab_ip" } });
   assert.equal((await h.history("group-s-11", "tab:ip")).body.rows.length, 0);
   const all = (await h.history("group-s-11", "all")).body.rows.map(row => row.feature).sort();
-  assert.deepEqual(all, ["social", "tab_crypto"]);
+  assert.deepEqual(all, ["tab_crypto"]);
 });
 
 test("the alarm stays armed while history rows exist, so the 90-day purge happens without logins", async () => {

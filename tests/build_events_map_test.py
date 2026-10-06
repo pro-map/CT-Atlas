@@ -74,20 +74,21 @@ class MapAttackTests(unittest.TestCase):
 
     def test_recent_events_keep_other_categories_of_the_last_days_only(self):
         database = sample_database()
-        database['events'].append(event('old-arrest', primary_event_type='ARREST', published='2026-09-20T08:00:00Z'))
+        database['events'].append(event('old-arrest', primary_event_type='ARREST', published='2026-08-20T08:00:00Z'))
+        database['events'].append(event('arrest20', primary_event_type='ARREST', published='2026-09-10T08:00:00Z'))
         now = datetime(2026, 9, 30, 12, tzinfo=timezone.utc)
         output = m.build_map(database, ['related_articles'], now=now)
         self.assertEqual(
             [e['id'] for e in output['recent_events']],
-            ['attack-not-flagged', 'arrest', 'piracy', 'legacy-arrest'],
+            ['attack-not-flagged', 'arrest', 'piracy', 'legacy-arrest', 'arrest20'],
         )
         self.assertEqual(output['map']['recent_events_days'], m.RECENT_DAYS)
 
     def test_older_events_cited_by_key_developments_are_kept(self):
         database = sample_database()
         database['trend_summary'] = {'developments': [{'event_id': 'old-arrest'}, {'event_id': 'attack'}, {'title': 'no id'}]}
-        database['events'].append(event('old-arrest', primary_event_type='ARREST', published='2026-09-20T08:00:00Z'))
-        database['events'].append(event('old-piracy', primary_event_type='PIRACY', published='2026-09-20T08:00:00Z'))
+        database['events'].append(event('old-arrest', primary_event_type='ARREST', published='2026-08-20T08:00:00Z'))
+        database['events'].append(event('old-piracy', primary_event_type='PIRACY', published='2026-08-20T08:00:00Z'))
         now = datetime(2026, 9, 30, 12, tzinfo=timezone.utc)
         output = m.build_map(database, [], now=now)
         recent_ids = [e['id'] for e in output['recent_events']]

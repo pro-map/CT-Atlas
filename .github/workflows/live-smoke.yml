@@ -52,6 +52,7 @@ jobs:
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/crypto.js >/tmp/crypto.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/crypto-report.js >/tmp/crypto-report.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/main.html >/tmp/main.html \
+              && curl --fail --silent --show-error --max-time 25 'https://ct-atlas.com/usage-admin.js?v=no-social-20261006' >/tmp/usage-admin.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.html >/tmp/social.html \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.js >/tmp/social.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.css >/tmp/social.css \
@@ -62,10 +63,12 @@ jobs:
               && grep -q 'fcBar' /tmp/facial.html \
               && grep -q '/health/status' /tmp/tab-health.js \
               && grep -q 'data-health-scope="crypto"' /tmp/crypto.html \
-              && grep -q 'data-health-scope="social"' /tmp/social.html \
               && grep -q 'data-health-scope="facial"' /tmp/facial.html \
               && grep -q 'pdf-export.js' /tmp/index.html \
               && tr -d '\r' < /tmp/index.html | tr '\n' ' ' | grep -qE 'class="time-button active"[[:space:]]+data-days="7"' \
+              && grep -q 'data-days="30"' /tmp/index.html \
+              && grep -q 'usage-admin.js?v=no-social-20261006' /tmp/main.html \
+              && ! grep -q '<th>SOCIAL</th>\|SOCIAL MEDIA SEARCH' /tmp/usage-admin.js \
               && grep -q 'id="attackTickerList"' /tmp/index.html \
               && grep -q 'id="databasePanel"' /tmp/index.html \
               && grep -q 'window.CTAtlasPdf' /tmp/pdf-export.js \
@@ -80,11 +83,10 @@ jobs:
               && grep -q 'crypto-workspace' /tmp/crypto.js \
               && grep -q 'Intelligence Map' /tmp/main.html \
               && grep -q 'Crypto Intelligence' /tmp/main.html \
-              && grep -q 'RUN SOCMINT INVESTIGATION' /tmp/social.html \
-              && grep -q 'social-investigate' /tmp/social.js \
-              && grep -q 'reportWalletsSection' /tmp/social.html \
-              && grep -q 'renderWallets' /tmp/social.js \
-              && grep -q 'DOWNLOAD PDF' /tmp/social.html; then
+              && grep -q 'UNDER CONSTRUCTION' /tmp/social.html \
+              && grep -q '30 free OSINT Industries credits per month' /tmp/social.html \
+              && grep -q 'international law-enforcement organizations' /tmp/social.html \
+              && grep -q 'osint.industries/industries/law-enforcement' /tmp/social.html; then
               break
             fi
             if [ "$attempt" -eq 18 ]; then
@@ -106,6 +108,9 @@ jobs:
             if (new RegExp('class="time-button active"\\s+data-days="' + days + '"').test(html)) throw new Error(days + "-day period must not be the MAP default");
           }
           if (!/let selectedDays\s*=\s*7;/.test(html)) throw new Error("MAP initial selectedDays is not 7 days");
+          if (!/class="time-button"\s+data-days="30"/.test(html)) throw new Error("MAP 30-day option missing");
+          if (!html.includes('<option value="ALL" selected>All events</option>')) throw new Error("MAP default is not all events");
+          if (!html.includes('const MAP_RECENT_EVENT_DAYS = 31;')) throw new Error("MAP other categories do not cover 30 days");
           if (!html.includes('fetch("events-map.json")')) throw new Error("MAP does not load its attacks-only file");
           if (html.includes('id="heatToggle"') || html.includes('id="officesToggle"')) throw new Error("Removed MAP toggles are back");
           if (!html.includes("V12 — COMPACT HEADER")) throw new Error("Compact header controls missing");

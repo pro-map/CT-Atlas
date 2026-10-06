@@ -13,7 +13,7 @@ foiled attacks the same way.
 
 recent_events carries the last RECENT_DAYS of every OTHER category: the map
 draws them when "Show on map" asks for all events or one of those categories
-(its periods are 24h and 7 days), the header's terrorists killed/captured
+(its periods are 24h, 7 days and 30 days), the header's terrorists killed/captured
 counts come from counter-terrorism and arrest reports, and the 24h Key
 Developments link to events of any category -- all without downloading the
 whole database.
@@ -39,10 +39,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 FORMAT = "events-map-v1"
 MAP_TYPES = ("ATTACK", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT")
-# The map's longest period (7 days) plus a day of slack: the site is
+# The map's longest period (30 days) plus a day of slack: the site is
 # republished at least twice a day. Also covers the header's casualty window
 # (yesterday's full Paris day).
-RECENT_DAYS = 8
+RECENT_DAYS = 31
 
 _spec = importlib.util.spec_from_file_location("build_events_lite", Path(__file__).resolve().parent / "build_events_lite.py")
 lite = importlib.util.module_from_spec(_spec)

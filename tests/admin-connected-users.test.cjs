@@ -26,14 +26,14 @@ function helpers(){
 
 const access=[
   {username:"admin",crypto:0,facial:0,map:0,social:0,darkweb:0,ip:0},
-  {username:"group-i-1",display_name:"Ed",crypto:0,facial:0,map:0,social:0,darkweb:0,ip:0},
+  {username:"group-i-1",display_name:"Ed",crypto:0,facial:0,map:0,social:99,darkweb:0,ip:0},
   {username:"group-i-11",display_name:"Kitty",crypto:0,facial:0,map:3,social:0,darkweb:0,ip:0},
   {username:"group-s-11",display_name:"Adrien CBRN",crypto:0,facial:0,map:0,social:0,darkweb:0,ip:0},
   {username:"group-p-12",crypto:0,facial:0,map:0,social:0,darkweb:0,ip:0}
 ];
 const usage=[
   {username:"admin",logins:0,last_activity:""},
-  {username:"group-i-1",display_name:"Ed",logins:0,last_activity:""},
+  {username:"group-i-1",display_name:"Ed",logins:0,social_intel_requests:99,last_activity:""},
   {username:"group-i-11",display_name:"Kitty",logins:0,last_activity:"2026-10-06T08:00:00.000Z"},
   {username:"group-s-11",display_name:"Adrien CBRN",logins:2,last_activity:"2026-10-06T09:30:00.000Z"},
   {username:"group-p-12",logins:1,last_activity:"2026-10-06T07:00:00.000Z"}
