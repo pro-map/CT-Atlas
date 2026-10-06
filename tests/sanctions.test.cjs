@@ -394,12 +394,12 @@ test("report wallet screening is capped and tolerates malformed reports",async()
   assert.equal(api.screenReportWallets({executive_assessment:many},state).wallets_found,40);
 });
 
-test("Social UI shows wallets with sanctions status, never treats 'not screened' as clean, and opens Crypto in a session-sharing tab",()=>{
+test("the retained SOCMINT client handles wallet screening but is not loaded by the placeholder",()=>{
   const html=fs.readFileSync("social.html","utf8");
   const client=fs.readFileSync("social.js","utf8");
   const css=fs.readFileSync("social.css","utf8");
   for(const id of ["reportWalletsSection","reportWalletsStatus","reportWallets","reportWalletsScope"]){
-    assert.ok(html.includes('id="'+id+'"'),"missing "+id);
+    assert.ok(!html.includes('id="'+id+'"'),"retired Social content must stay removed: "+id);
   }
   assert.ok(client.includes("function renderWallets"));
   assert.ok(client.includes("renderWallets(report);"));
@@ -413,14 +413,12 @@ test("Social UI shows wallets with sanctions status, never treats 'not screened'
   assert.ok(client.includes('url.searchParams.set("autorun","1")'));
   assert.ok(client.includes("WALLETS & SANCTIONS SCREENING"),"the PDF export must include the screening");
   assert.ok(css.includes(".wallet-status.hit")&&css.includes(".wallet-item.listed"));
-  assert.ok(html.includes("social.css?v=2")&&Number(html.match(/social\.js\?v=(\d+)/)?.[1]) >= 3,"asset versions must be bumped so browsers load the new UI");
+  assert.ok(!html.includes('src="social.js'),"the placeholder does not load the retired investigation client");
 });
 
-test("Social platform choices include the free collectors and stay within the Worker's platform cap",()=>{
+test("Social placeholder removes all platform search choices",()=>{
   const html=fs.readFileSync("social.html","utf8");
   const values=[...html.matchAll(/name="platform" value="([^"]+)"/g)].map(match=>match[1]);
-  for(const platform of ["Telegram","Bluesky","Mastodon","4chan","Odysee"])assert.ok(values.includes(platform),platform);
-  const worker=fs.readFileSync("cloudflare-worker/social-intel.js","utf8");
-  const cap=Number(worker.match(/listText\(body\.platforms, (\d+), 40\)/)[1]);
-  assert.ok(values.length<=cap,"more platform checkboxes ("+values.length+") than the Worker keeps ("+cap+")");
+  assert.equal(values.length,0,"the old platform controls have been retired");
+  assert.ok(html.includes("UNDER CONSTRUCTION"));
 });

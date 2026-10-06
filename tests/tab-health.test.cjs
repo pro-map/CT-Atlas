@@ -4,14 +4,17 @@ const fs=require("node:fs");
 
 const read=file=>fs.readFileSync(file,"utf8");
 
-test("Crypto, Social and Facial each load the shared health component with their own scope",()=>{
-  for(const [page,scope] of [["crypto","crypto"],["social","social"],["facial","facial"]]){
+test("Crypto and Facial load their health component; the Social placeholder omits its former health controls",()=>{
+  for(const [page,scope] of [["crypto","crypto"],["facial","facial"]]){
     const html=read(page+".html");
     assert.ok(html.includes('href="tab-health.css'),page+" must load tab-health.css");
     assert.match(html,new RegExp('<script src="tab-health\\.js\\?v=\\d+" data-health-scope="'+scope+'"></script>'),page+" scope");
     // The component must load after the page's own script so it never delays start-up.
     assert.ok(html.indexOf("tab-health.js")>html.indexOf(page+".js"),page+": tab-health.js should come last");
   }
+  const social=read("social.html");
+  assert.ok(!social.includes('data-health-scope="social"'));
+  assert.ok(social.includes("UNDER CONSTRUCTION"));
 });
 
 test("the health component reads the live status endpoint and covers every scope",()=>{
