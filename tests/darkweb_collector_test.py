@@ -740,7 +740,7 @@ def test_watch_pass_refetches_the_start_page_ahead_of_older_frontier_entries(tmp
     more_calls, more_sent = passes(site, db, tmp_path, outlet, 3)
     calls += more_calls
     assert [pass_calls[0] for pass_calls in calls] == [BASE] * 4
-    assert calls[1] == [BASE, BASE+'posts/news/2/', BASE+'posts/news/3/']
+    assert calls[1] == [BASE, BASE+'posts/news/12/', BASE+'page/2/']
     uploaded = [item['url'] for batch in more_sent[0] for item in batch['items']]
     assert BASE+'posts/news/12/' in uploaded
     # Unchanged cards from the re-checked start page are not sent again within the run.
