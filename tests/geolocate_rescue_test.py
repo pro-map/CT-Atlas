@@ -128,6 +128,15 @@ class SourceFaithfulGeolocationTests(unittest.TestCase):
         self.assertIn("is not event-location evidence by itself", text)
         self.assertIn("return unknown", text)
 
+    def test_prompt_handles_multi_location_and_non_physical_events(self):
+        text = geolocate.SYSTEM_INSTRUCTIONS.lower()
+        self.assertIn("multi-location events", text)
+        self.assertIn("digital / non-physical events", text)
+        self.assertIn("national institutions", text)
+        self.assertIn("do not infer a capital city", text)
+        self.assertIn("website shutdown", text)
+        self.assertIn("return the common region or country", text)
+
 
 if __name__ == "__main__":
     unittest.main()
