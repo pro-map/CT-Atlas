@@ -3,7 +3,7 @@
 const API="https://ct-report-generator.fairpeace.workers.dev";
 const $=id=>document.getElementById(id);
 let state=null,view="latest",busy=false,enriching=false;
-let archiveItems=new Map(),archiveCursor="",archiveEpoch=null,archiveExpanded=false,archivePage=1,archivePageCursors=[""];
+let archiveItems=new Map(),archiveEpoch=null;
 let policyDirty=false,storageDirty=false,feedFingerprint="",outletOptions="",feedCount=0,searchTimer=null,lastSearchKey="",enrichTimer=null;
 const previewCache=new Map(),openOriginals=new Set(),originalTexts=new Map();
 let previewObserver;
@@ -84,14 +84,13 @@ function exportButton(item,format,outlet){const button=node("button","EXPORT "+f
 function renderFeed(){
  const outletId=$("outletFilter").value,type=$("typeFilter").value,query=fold($("search").value.trim());
  const outlets=new Map(state.outlets.map(o=>[o.id,o]));
- const sourceRows=view==="latest"?[...archiveItems.values()]:view==="legacy"?state.items.filter(i=>!i.publication_version):state.items;
- const rows=[...sourceRows].sort((a,b)=>(b.published_at||"").localeCompare(a.published_at||"")).filter(i=>(!outletId||i.outlet_id===outletId)&&(!type||i.type===type)&&(!query||fold([i.title,i.title_en,i.overview_en,i.excerpt,outlets.get(i.outlet_id)?.name,...(i.keyword_matches||[])].join(" ")).includes(query))&&(view!=="alerts"||unread(i)&&i.keyword_matches?.length));
+ const allLatest=[...archiveItems.values()].sort((a,b)=>(b.published_at||"").localeCompare(a.published_at||""));
+ const newestDay=allLatest.find(i=>i.published_at)?.published_at||"";
+ const dailyRows=newestDay?allLatest.filter(i=>i.published_at===newestDay):[];
+ const sourceRows=view==="latest"?dailyRows:view==="legacy"?state.items.filter(i=>!i.publication_version):state.items;
+ const rows=[...sourceRows].filter(i=>(!outletId||i.outlet_id===outletId)&&(!type||i.type===type)&&(!query||fold([i.title,i.title_en,i.overview_en,i.excerpt,outlets.get(i.outlet_id)?.name,...(i.keyword_matches||[])].join(" ")).includes(query))&&(view!=="alerts"||unread(i)&&i.keyword_matches?.length));
  feedCount=rows.length;
- $("feedPagination").hidden=view!=="latest";
- $("prevPage").hidden=view!=="latest"||archivePage<=1;
- $("nextPage").hidden=view!=="latest"||!archiveCursor;
- $("pageStatus").textContent="Page "+archivePage;
- const status=view==="latest"?"Page "+archivePage+" · "+rows.length+" publication"+(rows.length===1?"":"s")+" shown · 50 publications maximum per page. Filters apply to this page.":view==="alerts"?"Unreviewed items matching outlet alert keywords, within the latest "+(state.retention_limit||500)+" feed items.":"Earlier generic collection results, within the latest "+(state.retention_limit||500)+" feed items.";
+ const status=view==="latest"?(newestDay?"Daily feed · "+newestDay+" · "+rows.length+" publication"+(rows.length===1?"":"s")+" collected":"No dated publications collected yet."):view==="alerts"?"Unreviewed items matching outlet alert keywords, within the latest "+(state.retention_limit||500)+" feed items.":"Earlier generic collection results, within the latest "+(state.retention_limit||500)+" feed items.";
  if($("archiveStatus").textContent!==status)$("archiveStatus").textContent=status;
  // Unchanged data keeps the existing cards: open source texts, focus and scroll position stay.
  const fingerprint=JSON.stringify([view,state.seen_through,[...outlets.values()].map(o=>[o.id,o.name]),rows]);
@@ -161,7 +160,9 @@ async function revealSource(id){
 function editOutlet(outlet){$("outletName").value=outlet.name;$("outletUrl").value=outlet.url;$("keywords").value=outlet.keywords.join(", ");$("enabled").checked=outlet.enabled;$("outletForm").scrollIntoView({behavior:"smooth"});}
 function renderLatestPublications(){
  const box=$("aiSources");if(!box)return;
- const rows=[...archiveItems.values()].sort((a,b)=>(b.published_at||"").localeCompare(a.published_at||"")).slice(0,10);
+ const all=[...archiveItems.values()].sort((a,b)=>(b.published_at||"").localeCompare(a.published_at||""));
+ const newestDay=all.find(i=>i.published_at)?.published_at||"";
+ const rows=(newestDay?all.filter(i=>i.published_at===newestDay):[]).slice(0,10);
  box.replaceChildren();
  for(const item of rows){
   const translated=item.title_en_kind==="translation"&&item.title_en?item.title_en:
@@ -223,9 +224,7 @@ function searchSnapshot(){
  const text=$("search").value.replace(/\s+/g," ").trim().slice(0,200),outletId=$("outletFilter").value,material=$("typeFilter").value;
  if(!["latest","legacy","alerts"].includes(view)||(text.length<2&&!outletId&&!material))return null;
  const outlet=outletId?String((state?.outlets||[]).find(o=>o.id===outletId)?.name||"").slice(0,120):"";
- let oldest="";
- if(view==="latest"&&archiveExpanded)for(const item of archiveItems.values()){const day=String(item.published_at||"").slice(0,10);if(day&&(!oldest||day<oldest))oldest=day;}
- return {text,view,outlet,material,results:feedCount,...(oldest?{loaded_back_to:oldest}:{})};
+ return {text,view,outlet,material,results:feedCount};
 }
 function recordSearch(){
  clearTimeout(searchTimer);searchTimer=null;
@@ -248,22 +247,12 @@ function setView(name){
 async function refresh(skipEnrich=false){
  if(busy)return;busy=true;$("refresh").disabled=true;
  try{
-  state=await api("/darkweb/feed");
-  const epoch=state.policy?.epoch;
-  if(archiveEpoch!==epoch){archiveItems.clear();archiveCursor="";archiveExpanded=false;archiveEpoch=epoch;archivePage=1;archivePageCursors=[""];}
-  if(archivePage===1||!archiveItems.size){
-   const archive=await api("/darkweb/archive");
-   if(archiveEpoch!==archive.epoch){archiveEpoch=archive.epoch;archivePage=1;archivePageCursors=[""];}
-   archiveItems=new Map(archive.items.map(item=>[item.id,item]));archiveCursor=archive.next_cursor;archiveExpanded=false;archivePage=1;archivePageCursors=[""];
-  }
+  const [feed,archive]=await Promise.all([api("/darkweb/feed"),api("/darkweb/archive")]);
+  state=feed;
+  if(archiveEpoch!==archive.epoch){archiveItems.clear();archiveEpoch=archive.epoch;}
+  archiveItems=new Map(archive.items.map(item=>[item.id,item]));
   render();$("message").textContent="";if(!skipEnrich&&state.admin)void enrich();
  }catch(error){$("message").textContent=error.message;}finally{busy=false;$("refresh").disabled=false;}
-}
-async function loadArchivePage(cursor,pageNumber){
- const result=await api("/darkweb/archive"+(cursor?"?cursor="+encodeURIComponent(cursor):""));
- if(result.epoch!==archiveEpoch){archivePage=1;archivePageCursors=[""];archiveItems.clear();await refresh(true);return;}
- archiveItems=new Map(result.items.map(item=>[item.id,item]));archiveCursor=result.next_cursor;archivePage=pageNumber;archiveExpanded=archivePage>1;feedFingerprint="";renderFeed();
- $("feedView").scrollIntoView?.({behavior:"smooth",block:"start"});
 }
 function readableTitle(value){let title=String(value||"");try{title=decodeURIComponent(title);}catch(_){}if(title.startsWith("/"))title=title.split("/").pop();return title.replace(/_/g," ");}
 async function loadPreview(image){try{const id=image.dataset.itemId;let data=previewCache.get(id);if(!data){data=(await api("/darkweb/preview?id="+encodeURIComponent(id))).preview;if(data)previewCache.set(id,data);}if(/^data:image\/jpeg;base64,/.test(data||""))image.src=data;else image.alt="Preview unavailable";}catch(_){image.alt="Preview temporarily unavailable";}}
@@ -311,8 +300,6 @@ $("resetCollection").onclick=()=>{
  if(confirm("RESET DELETES THE ARCHIVE.\n\nEvery feed result, structured publication, English translation and overview, and the briefing collected so far will be deleted. Collection then restarts from scratch for "+from+" → "+through+".\n\nOutlet settings, local evidence files and stored PDFs are kept (stored PDFs still count towards the storage limit). To extend the period without deleting anything, use SAVE (KEEPS ARCHIVE) instead."))void saveCollection(true,false);
 };
 for(const button of document.querySelectorAll("[data-view]"))button.onclick=()=>{setView(button.dataset.view);if(["latest","legacy","alerts"].includes(view))scheduleSearchRecord();};
-$("nextPage").onclick=async()=>{if(!archiveCursor)return;const button=$("nextPage"),cursor=archiveCursor;button.disabled=true;archivePageCursors[archivePage]=cursor;try{await loadArchivePage(cursor,archivePage+1);}catch(error){$("message").textContent=error.message;}finally{button.disabled=false;}};
-$("prevPage").onclick=async()=>{if(archivePage<=1)return;const button=$("prevPage"),target=archivePage-1,cursor=archivePageCursors[target-1]||"";button.disabled=true;try{await loadArchivePage(cursor,target);}catch(error){$("message").textContent=error.message;}finally{button.disabled=false;}};
 for(const id of ["search","outletFilter","typeFilter"])$(id).addEventListener("input",()=>{if(state)renderFeed();scheduleSearchRecord();});
 $("search").addEventListener("keydown",event=>{if(event.key==="Enter")recordSearch();});
 $("search").addEventListener("blur",()=>{if(searchTimer)recordSearch();});
