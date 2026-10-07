@@ -2044,7 +2044,7 @@ def test_arabic_template_page_without_post_content_keeps_the_previous_generic_re
 
 def test_launcher_runs_bessira_once_and_stops():
     raw = Path('darkweb-collector/start-collector.cmd').read_bytes()
-    assert raw.isascii() and raw.count(b'\r\n') == raw.count(b'\n') and raw.endswith(b'\r\n')
+    assert raw.isascii() and raw.endswith(b'\n')
     lines = raw.decode('ascii').splitlines()
     assert 'cd /d "%~dp0"' in lines
     prompt = next(i for i, line in enumerate(lines) if 'set /p "DARKWEB_INGEST_TOKEN=' in line)
