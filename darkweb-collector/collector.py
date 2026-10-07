@@ -1920,7 +1920,7 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
                         # navigation/pagination (page 2, archives, categories), and
                         # never recurse from a publication detail page.
                         known = db.execute("SELECT 1 FROM items WHERE outlet_id=? AND url=? LIMIT 1", (oid, target_url)).fetchone()
-                        if target[1] == 0 and not known and selected_material(row) and within_period(row, policy):
+                        if target[1] == 0 and not known and selected_material(row):
                             db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url,depth) VALUES (?,?,1)", (oid, target_url))
                     elif row.get("crawl") or row["type"] == "page":
                         db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url,depth) VALUES (?,?,?)", (oid, target_url, target[1]+1))
