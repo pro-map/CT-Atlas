@@ -16,7 +16,7 @@ import requests
 
 # ============================================================
 # INTERPOL CT INTELLIGENCE MAP
-# GEMINI AI-FIRST GEOLOCATION V5.2 — ONE-SHOT RESCUE + NEW EVENTS ONLY
+# GEMINI AI-FIRST GEOLOCATION V5.3 — SOURCE-FIDELITY + NEW EVENTS ONLY
 #
 # Principle:
 #   - Gemini decides the event location for EVERY event.
