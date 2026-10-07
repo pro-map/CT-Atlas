@@ -79,7 +79,13 @@ export async function handleDarkweb(request, env) {
       // accepts publications dated today. Historical records already stored in Atlas
       // are preserved, but no further backfill is requested from the collector.
       const policy = { ...state.policy, from: today, through: today };
-      const outlets = state.outlets.filter(o => o.enabled).map(o => ({ ...o, collection_phase: "watch" }));
+      // The daily collector is intentionally restricted to the Bessira outlet.
+      // Keep common transliteration variants so an admin label change does not
+      // accidentally re-enable unrelated outlets.
+      const bessira = /\b(?:bessira|besira|bassira|basira)\b/i;
+      const outlets = state.outlets
+        .filter(o => o.enabled && bessira.test(String(o.name || "")))
+        .map(o => ({ ...o, collection_phase: "watch" }));
       return reply({ version: DARKWEB_VERSION, policy, files_storage: state.files_storage, outlets }, 200, env);
     }
     return reply({ ...state, version: DARKWEB_VERSION, admin: username === "admin",
