@@ -471,7 +471,7 @@ test('Dark Web enrichment uses the background model, a Pacific-day cap, backoff 
  r=await h.call('/darkweb/enrich',{});assert.equal(r.data.cached,undefined);assert.equal(models.length,8);assert.equal(record(second).enrich_attempts,1);
  await h.call('/darkweb/ingest',{outlet_id:id,items:[publication(2,{original_text:'نص جديد'})],scan_ok:true},'',true);
  assert.equal(record(second).enrich_attempts,0,'A source change makes the record eligible again');
- h.env.DARKWEB_ENRICH_DAILY='0';assert.equal((await h.call('/darkweb/enrich',{})).data.reason,'daily_limit');
+ unlock();h.values.delete('darkweb:enrich-backoff');h.env.DARKWEB_ENRICH_DAILY='0';assert.equal((await h.call('/darkweb/enrich',{})).data.reason,'daily_limit');
 });
 test('newest-day translation candidates outrank historical queue order and exhausted attempts are reset',async()=>{
  const h=harness(),id=await register(h);
