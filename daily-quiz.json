@@ -1,14 +1,14 @@
 {
   "category": "International CT Instruments and Institutions",
-  "question": "Where is the headquarters of the INTERPOL General Secretariat located?",
+  "question": "Which specific INTERPOL notice type is issued specifically for entities and individuals targeted by UN Security Council Sanctions Committees?",
   "options": [
-    "Vienna, Austria",
-    "Lyon, France",
-    "Brussels, Belgium"
+    "INTERPOL–United Nations Security Council Special Notice",
+    "Orange Notice for imminent public safety threats",
+    "Blue Notice for collecting additional identity information"
   ],
-  "correct_index": 1,
-  "explanation": "The INTERPOL General Secretariat is staffed by police and civilians and comprises a headquarters located in Lyon, France.",
-  "source_url": "https://www.interpol.int/en/Who-we-are/What-is-INTERPOL",
-  "date": "2026-10-06",
-  "source_checked_at": "2026-10-05T22:38:43.357619+00:00"
+  "correct_index": 0,
+  "explanation": "INTERPOL-UN Security Council Special Notices are issued for entities and individuals who are targets of UN Security Council Sanctions Committees.",
+  "source_url": "https://www.interpol.int/en/How-we-work/Notices/About-Notices",
+  "date": "2026-10-07",
+  "source_checked_at": "2026-10-07T15:35:24.980329+00:00"
 }
