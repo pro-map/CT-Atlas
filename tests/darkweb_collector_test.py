@@ -454,13 +454,14 @@ def test_epoch_reset_is_idempotent_and_does_not_delete_evidence(tmp_path):
     c.apply_epoch(db,{**POLICY,'epoch':3});assert db.execute('SELECT COUNT(*) FROM items').fetchone()[0]==0
     assert evidence.read_bytes()==b'preserved'
 
-def test_watch_is_shallow_but_initial_inventory_reaches_deeper_pages(tmp_path):
+def test_watch_ignores_generic_internal_navigation_but_backfill_can_still_go_deeper(tmp_path):
     site=Site({BASE:'<a href="a">a</a>',BASE+'a':'<a href="b">b</a>',BASE+'b':'<a href="c">c</a>',BASE+'c':'<a href="2025-04-01.pdf">pdf</a>'})
     db=c.open_database(tmp_path/'state.sqlite')
     c.crawl_outlet(site,db,{**OUTLET,'policy':POLICY,'collection_phase':'watch'},100,10000,0)
-    assert site.calls==[BASE,BASE+'a',BASE+'b']
-    c.apply_epoch(db,POLICY);site.calls=[]
-    c.crawl_outlet(site,db,{**OUTLET,'policy':POLICY,'collection_phase':'backfill'},100,10000,0)
+    assert site.calls==[BASE]
+    next_policy={**POLICY,'epoch':POLICY['epoch']+1}
+    c.apply_epoch(db,next_policy);site.calls=[]
+    c.crawl_outlet(site,db,{**OUTLET,'policy':next_policy,'collection_phase':'backfill'},100,10000,0)
     assert BASE+'c' in site.calls
 
 def test_previews_are_small_jpegs_and_pdf_first_pages_with_no_original_on_disk(tmp_path):
@@ -644,22 +645,25 @@ def mark_watching(db):
     db.commit()
 
 
-def test_dead_link_is_abandoned_after_three_passes_and_the_start_page_is_fetched_again(tmp_path):
-    site = Site({BASE: '<a href="dead">dead</a><a href="2025-09-01-old.pdf">old</a>', BASE+'dead': 404})
+def test_daily_watch_ignores_generic_links_and_reopens_only_new_publications(tmp_path):
+    first = BASE+'posts/news/1/'
+    second = BASE+'posts/news/2/'
+    site = Site({
+        BASE: cards([1]) + '<a href="dead">dead</a>',
+        BASE+'dead': 404,
+        first: structured_detail('خبر 1', '', '2025-10-03'),
+        second: structured_detail('خبر 2', '', '2025-10-03')
+    })
     db = c.open_database(tmp_path/'state.sqlite')
     outlet = {**OUTLET, 'policy': LOOP_POLICY, 'collection_phase': 'watch'}
-    calls, sent = passes(site, db, tmp_path, outlet, 3)
-    # One attempt per pass, so a brief source problem cannot use up all three at once.
-    assert calls == [[BASE, BASE+'dead']] * 3
-    assert not any(batch['scan_complete'] for batch in sent[0] + sent[1])
-    assert sent[2][-1]['scan_complete'] and sent[2][-1]['abandoned_pages'] == 1
-    assert sent[2][-1]['failed_pages'] == 0 and not sent[2][-1]['truncated']
-    assert db.execute("SELECT value FROM settings WHERE key=?", ('publication-inventory-v1:'+OUTLET['id'],)).fetchone()[0] == 'complete'
-    site.pages[BASE] += '<a href="2025-10-02-new.pdf">new</a>'
-    calls, sent = passes(site, db, tmp_path, outlet, 1)
-    assert calls[0][0] == BASE
+    calls, _ = passes(site, db, tmp_path, outlet, 2)
+    assert calls == [[BASE, first], [BASE]]
+    assert BASE+'dead' not in [url for batch in calls for url in batch]
+    site.pages[BASE] = cards([1, 2]) + '<a href="dead">dead</a>'
+    calls, _ = passes(site, db, tmp_path, outlet, 1)
+    assert calls == [[BASE, second]]
     baseline = dict(db.execute('SELECT url,baseline FROM items'))
-    assert baseline == {BASE+'2025-09-01-old.pdf': 1, BASE+'2025-10-02-new.pdf': 0}
+    assert baseline[first] == 1 and baseline[second] == 0
     db.close()
 
 
@@ -2036,30 +2040,19 @@ def test_arabic_template_page_without_post_content_keeps_the_previous_generic_re
     assert structured['structured'] is True and structured['page']['publication_version'] == 1
 
 
-# --- Launcher (Windows): it asks for the secret inside its loop and again after a configuration error.
+# --- Launcher (Windows): Bessira is a one-shot daily update, not a resident loop.
 
-def test_launcher_asks_for_the_secret_in_its_loop_and_again_after_a_configuration_error():
+def test_launcher_runs_bessira_once_and_stops():
     raw = Path('darkweb-collector/start-collector.cmd').read_bytes()
     assert raw.isascii() and raw.count(b'\r\n') == raw.count(b'\n') and raw.endswith(b'\r\n')
     lines = raw.decode('ascii').splitlines()
-    assert 'cd /d "%~dp0"' in lines and lines.index('cd /d "%~dp0"') < lines.index(':run')
-    run = lines.index(':run')
+    assert 'cd /d "%~dp0"' in lines
     prompt = next(i for i, line in enumerate(lines) if 'set /p "DARKWEB_INGEST_TOKEN=' in line)
-    collector = lines.index('py collector.py --proxy socks5h://127.0.0.1:9150 --interval 300 --connect-timeout 120')
-    clear = next(i for i, line in enumerate(lines) if 'set "DARKWEB_INGEST_TOKEN="' in line)
-    assert run < prompt < collector < clear < lines.index('timeout /t 60 /nobreak >nul') < len(lines) - 1
-    assert lines[prompt].startswith('if not defined DARKWEB_INGEST_TOKEN ')
-    assert lines[clear].startswith('if errorlevel 2 if not errorlevel 3 '), 'only exit code 2 (configuration error) clears the secret'
-    assert lines[-1] == 'goto run'
-
-
-def test_short_secret_is_a_configuration_error_with_exit_code_2():
-    import sys
-    with patch.dict(c.os.environ, {'DARKWEB_INGEST_TOKEN': 'too-short'}), \
-            patch.object(sys, 'argv', ['collector.py', '--proxy', 'socks5h://127.0.0.1:9150', '--interval', '300', '--connect-timeout', '120']):
-        with pytest.raises(SystemExit) as stopped:
-            c.main()
-    assert stopped.value.code == 2
+    collector = lines.index('py collector.py --proxy socks5h://127.0.0.1:9150 --once --pages-per-scan 25 --connect-timeout 120')
+    assert prompt < collector
+    assert not any(line.strip().lower() == ':run' or line.strip().lower().startswith('goto ') for line in lines)
+    assert not any('--interval' in line for line in lines)
+    assert any('Bessira daily update completed' in line for line in lines)
 
 
 def test_start_collector_is_one_shot_and_has_no_restart_loop():
