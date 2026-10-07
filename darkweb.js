@@ -3,8 +3,8 @@
 const API="https://ct-report-generator.fairpeace.workers.dev";
 const $=id=>document.getElementById(id);
 let state=null,view="latest",busy=false,enriching=false;
-let archiveItems=new Map(),archiveCursor="",archiveEpoch=null,archiveExpanded=false;
-let policyDirty=false,storageDirty=false,feedFingerprint="",outletOptions="",feedCount=0,searchTimer=null,lastSearchKey="";
+let archiveItems=new Map(),archiveCursor="",archiveEpoch=null,archiveExpanded=false,archivePage=1,archivePageCursors=[""];
+let policyDirty=false,storageDirty=false,feedFingerprint="",outletOptions="",feedCount=0,searchTimer=null,lastSearchKey="",enrichTimer=null;
 const previewCache=new Map(),openOriginals=new Set(),originalTexts=new Map();
 let previewObserver;
 const token=()=>sessionStorage.getItem("ct_map_session_token")||"";
@@ -87,8 +87,11 @@ function renderFeed(){
  const sourceRows=view==="latest"?[...archiveItems.values()]:view==="legacy"?state.items.filter(i=>!i.publication_version):state.items;
  const rows=[...sourceRows].sort((a,b)=>(b.published_at||"").localeCompare(a.published_at||"")).filter(i=>(!outletId||i.outlet_id===outletId)&&(!type||i.type===type)&&(!query||fold([i.title,i.title_en,i.overview_en,i.excerpt,outlets.get(i.outlet_id)?.name,...(i.keyword_matches||[])].join(" ")).includes(query))&&(view!=="alerts"||unread(i)&&i.keyword_matches?.length));
  feedCount=rows.length;
- $("loadMore").hidden=view!=="latest"||!archiveCursor;
- const status=view==="latest"?archiveItems.size+" publications loaded · Filters apply to loaded publications. Load older records to extend the search.":view==="alerts"?"Unreviewed items matching outlet alert keywords, within the latest "+(state.retention_limit||500)+" feed items.":"Earlier generic collection results, within the latest "+(state.retention_limit||500)+" feed items.";
+ $("feedPagination").hidden=view!=="latest";
+ $("prevPage").hidden=view!=="latest"||archivePage<=1;
+ $("nextPage").hidden=view!=="latest"||!archiveCursor;
+ $("pageStatus").textContent="Page "+archivePage;
+ const status=view==="latest"?"Page "+archivePage+" · "+rows.length+" publication"+(rows.length===1?"":"s")+" shown · 50 publications maximum per page. Filters apply to this page.":view==="alerts"?"Unreviewed items matching outlet alert keywords, within the latest "+(state.retention_limit||500)+" feed items.":"Earlier generic collection results, within the latest "+(state.retention_limit||500)+" feed items.";
  if($("archiveStatus").textContent!==status)$("archiveStatus").textContent=status;
  // Unchanged data keeps the existing cards: open source texts, focus and scroll position stay.
  const fingerprint=JSON.stringify([view,state.seen_through,[...outlets.values()].map(o=>[o.id,o.name]),rows]);
@@ -162,6 +165,9 @@ function render(){
  if(storage){$("storageStatus").textContent=storage.configured?storage.files+" PDFs in Atlas · "+(storage.stored_bytes/1e9).toFixed(3)+" GB stored · "+(storage.reserved_bytes/1e9).toFixed(3)+" GB reserved for transfers · "+(storage.limit_bytes/1e9).toFixed(2)+" GB limit":"Private PDF storage is not activated yet. Downloaded PDFs remain on the collector computer.";
  if(!storageDirty&&!$("storageForm").contains(document.activeElement))$("storageLimit").value=storage.limit_bytes/1e9;}
  $("collectionForm").hidden=!state.admin;$("enrichNow").hidden=!state.admin;
+ $("outletFilterWrap").hidden=!state.admin;
+ $("markSeen").hidden=!state.admin;
+ for(const button of document.querySelectorAll("[data-view]"))button.hidden=!state.admin&&button.dataset.view!=="latest";
  // Unsaved admin edits are never replaced by a background refresh.
  if(!policyDirty&&!$("collectionForm").contains(document.activeElement))fillPolicy();
  $("discardCollection").hidden=!policyDirty;
@@ -225,10 +231,30 @@ function recordSearch(){
 function scheduleSearchRecord(){clearTimeout(searchTimer);searchTimer=setTimeout(recordSearch,1500);}
 function fillPolicy(){if(!state?.policy)return;$("collectFrom").value=state.policy.from;$("collectThrough").value=state.policy.through;$("collectPages").value=state.policy.pages_per_scan;$("collectPreviews").checked=state.policy.previews;}
 function setView(name){
+ if(state&&!state.admin&&name!=="latest")name="latest";
  view=name;for(const b of document.querySelectorAll("[data-view]")){const active=b.dataset.view===name;b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active));}
  $("feedView").hidden=!["latest","alerts","legacy"].includes(view);$("outletsView").hidden=view!=="outlets";$("setupView").hidden=view!=="setup";if(state)renderFeed();
 }
-async function refresh(skipEnrich=false){if(busy)return;busy=true;$("refresh").disabled=true;try{const [feed,archive]=await Promise.all([api("/darkweb/feed"),api("/darkweb/archive")]);state=feed;if(archiveEpoch!==archive.epoch){archiveItems.clear();archiveExpanded=false;archiveEpoch=archive.epoch;}for(const item of archive.items)archiveItems.set(item.id,item);if(!archiveExpanded)archiveCursor=archive.next_cursor;render();$("message").textContent="";if(!skipEnrich&&state.admin)void enrich();}catch(error){$("message").textContent=error.message;}finally{busy=false;$("refresh").disabled=false;}}
+async function refresh(skipEnrich=false){
+ if(busy)return;busy=true;$("refresh").disabled=true;
+ try{
+  state=await api("/darkweb/feed");
+  const epoch=state.policy?.epoch;
+  if(archiveEpoch!==epoch){archiveItems.clear();archiveCursor="";archiveExpanded=false;archiveEpoch=epoch;archivePage=1;archivePageCursors=[""];}
+  if(archivePage===1||!archiveItems.size){
+   const archive=await api("/darkweb/archive");
+   if(archiveEpoch!==archive.epoch){archiveEpoch=archive.epoch;archivePage=1;archivePageCursors=[""];}
+   archiveItems=new Map(archive.items.map(item=>[item.id,item]));archiveCursor=archive.next_cursor;archiveExpanded=false;archivePage=1;archivePageCursors=[""];
+  }
+  render();$("message").textContent="";if(!skipEnrich&&state.admin)void enrich();
+ }catch(error){$("message").textContent=error.message;}finally{busy=false;$("refresh").disabled=false;}
+}
+async function loadArchivePage(cursor,pageNumber){
+ const result=await api("/darkweb/archive"+(cursor?"?cursor="+encodeURIComponent(cursor):""));
+ if(result.epoch!==archiveEpoch){archivePage=1;archivePageCursors=[""];archiveItems.clear();await refresh(true);return;}
+ archiveItems=new Map(result.items.map(item=>[item.id,item]));archiveCursor=result.next_cursor;archivePage=pageNumber;archiveExpanded=archivePage>1;feedFingerprint="";renderFeed();
+ $("feedView").scrollIntoView?.({behavior:"smooth",block:"start"});
+}
 function readableTitle(value){let title=String(value||"");try{title=decodeURIComponent(title);}catch(_){}if(title.startsWith("/"))title=title.split("/").pop();return title.replace(/_/g," ");}
 async function loadPreview(image){try{const id=image.dataset.itemId;let data=previewCache.get(id);if(!data){data=(await api("/darkweb/preview?id="+encodeURIComponent(id))).preview;if(data)previewCache.set(id,data);}if(/^data:image\/jpeg;base64,/.test(data||""))image.src=data;else image.alt="Preview unavailable";}catch(_){image.alt="Preview temporarily unavailable";}}
 function enrichStatus(result){
@@ -238,8 +264,18 @@ function enrichStatus(result){
  if(result.enriched||result.summary_updated)return "AI enrichment updated "+result.enriched+" record(s)"+(result.summary_updated?" and the briefing":"")+". Each request handles up to 10 pending publications.";
  return "The AI answer was not usable; the next attempt is delayed. Original texts remain available.";
 }
-// Enrichment runs on the first load and from the button only, never from the background refresh.
-async function enrich(){if(enriching||!state?.admin||(!state.items.length&&!archiveItems.size))return;enriching=true;$("enrichNow").disabled=true;$("aiStatus").textContent="Translating source titles and preparing English overviews…";try{const result=await api("/darkweb/enrich",{});$("aiStatus").textContent=enrichStatus(result);if(result.enriched||result.summary_updated)await refresh(true);}catch(error){$("aiStatus").textContent=error.message;}finally{enriching=false;$("enrichNow").disabled=false;}}
+// Enrichment starts on the first admin load. When stored untranslated records remain,
+ // the admin page continues the bounded backfill one batch at a time without exposing
+ // any collection or translation control to ordinary analysts.
+function scheduleEnrich(result){
+ if(enrichTimer){clearTimeout(enrichTimer);enrichTimer=null;}
+ if(!state?.admin||result?.cached||result?.reason==="daily_limit")return;
+ if(result?.waiting&&result.retry_at){
+  const retry=Date.parse(result.retry_at);if(Number.isFinite(retry))enrichTimer=setTimeout(()=>{if(!document.hidden)void enrich();},Math.max(65000,retry-Date.now()+2000));return;
+ }
+ if((result?.pending||0)>0||(result?.enriched||0)>0)enrichTimer=setTimeout(()=>{if(!document.hidden)void enrich();},65000);
+}
+async function enrich(){if(enriching||!state?.admin||(!state.items.length&&!archiveItems.size))return;enriching=true;$("enrichNow").disabled=true;$("aiStatus").textContent="Translating stored source titles and preparing English overviews…";try{const result=await api("/darkweb/enrich",{});$("aiStatus").textContent=enrichStatus(result);if(result.enriched||result.summary_updated)await refresh(true);scheduleEnrich(result);}catch(error){$("aiStatus").textContent=error.message;}finally{enriching=false;$("enrichNow").disabled=false;}}
 async function saveCollection(reset=false,pause=state.policy.paused,storedPeriod=false){
  const finishSound=window.CTAtlasSound?.begin();
  const source=storedPeriod?state.policy:{from:$("collectFrom").value,through:$("collectThrough").value,pages_per_scan:Number($("collectPages").value),previews:$("collectPreviews").checked};
@@ -266,11 +302,12 @@ $("resetCollection").onclick=()=>{
 };
 $("enrichNow").onclick=enrich;
 for(const button of document.querySelectorAll("[data-view]"))button.onclick=()=>{setView(button.dataset.view);if(["latest","legacy","alerts"].includes(view))scheduleSearchRecord();};
-$("loadMore").onclick=async()=>{const button=$("loadMore");button.disabled=true;try{const result=await api("/darkweb/archive?cursor="+encodeURIComponent(archiveCursor));if(result.epoch!==archiveEpoch){await refresh(true);return;}for(const item of result.items)archiveItems.set(item.id,item);archiveCursor=result.next_cursor;archiveExpanded=true;renderFeed();}catch(error){$("message").textContent=error.message;}finally{button.disabled=false;}};
+$("nextPage").onclick=async()=>{if(!archiveCursor)return;const button=$("nextPage"),cursor=archiveCursor;button.disabled=true;archivePageCursors[archivePage]=cursor;try{await loadArchivePage(cursor,archivePage+1);}catch(error){$("message").textContent=error.message;}finally{button.disabled=false;}};
+$("prevPage").onclick=async()=>{if(archivePage<=1)return;const button=$("prevPage"),target=archivePage-1,cursor=archivePageCursors[target-1]||"";button.disabled=true;try{await loadArchivePage(cursor,target);}catch(error){$("message").textContent=error.message;}finally{button.disabled=false;}};
 for(const id of ["search","outletFilter","typeFilter"])$(id).addEventListener("input",()=>{if(state)renderFeed();scheduleSearchRecord();});
 $("search").addEventListener("keydown",event=>{if(event.key==="Enter")recordSearch();});
 $("search").addEventListener("blur",()=>{if(searchTimer)recordSearch();});
-globalThis.addEventListener?.("pagehide",()=>{if(searchTimer)recordSearch();});
+globalThis.addEventListener?.("pagehide",()=>{if(searchTimer)recordSearch();});\ndocument.addEventListener?.("visibilitychange",()=>{if(!document.hidden&&state?.admin&&!enriching)void enrich();});
 $("refresh").onclick=()=>refresh(true);
 // Marking reviewed is per analyst but covers every outlet, view and filter; say so first.
 $("markSeen").onclick=async()=>{
