@@ -472,15 +472,25 @@ test('Dark Web enrichment uses the background model, a Pacific-day cap, backoff 
  assert.equal(record(second).enrich_attempts,0,'A source change makes the record eligible again');
  h.env.DARKWEB_ENRICH_DAILY='0';assert.equal((await h.call('/darkweb/enrich',{})).data.reason,'daily_limit');
 });
-test('enrichment candidates skip exhausted records beyond the first storage page',async()=>{
+test('enrichment candidates skip exhausted non-Arabic records beyond the first storage page',async()=>{
  const h=harness(),id=await register(h);
- for(let batch=0;batch<2;batch++)await h.call('/darkweb/ingest',{outlet_id:id,items:Array.from({length:70},(_,i)=>publication(batch*70+i)),scan_ok:true},'',true);
+ for(let batch=0;batch<2;batch++)await h.call('/darkweb/ingest',{outlet_id:id,items:Array.from({length:70},(_,i)=>publication(batch*70+i,{title:'Başlık '+(batch*70+i),original_text:'Kaynak metni',source_language:'tr'})),scan_ok:true},'',true);
  const keys=[...h.values.keys()].filter(k=>k.startsWith('darkweb:publication-pending:2:')).sort();
  assert.equal(keys.length,140);
  for(const key of keys.slice(0,-1)){const archive='darkweb:publication:2:'+h.values.get(key);h.values.set(archive,{...h.values.get(archive),enrich_attempts:3});}
  const result=await (await h.context.gateCall(h.env,'/darkweb-enrich-candidates',{})).json();
  assert.deepEqual(result.items.map(i=>i.id),[h.values.get(keys.at(-1))]);
  assert.equal([...h.values.keys()].filter(k=>k.startsWith('darkweb:publication-pending:2:')).length,140);
+});
+test('Arabic archive backfill requeues exhausted untranslated publications once',async()=>{
+ const h=harness(),id=await register(h);
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[publication(777,{source_language:'ar'})],scan_ok:true},'',true);
+ const item=(await h.call('/darkweb/archive')).data.items[0],archive='darkweb:publication:2:'+item.id;
+ h.values.set(archive,{...h.values.get(archive),enrich_attempts:3,title_en:'',title_en_kind:'',overview_en:''});
+ const result=await (await h.context.gateCall(h.env,'/darkweb-enrich-candidates',{})).json();
+ assert.ok(result.items.some(i=>i.id===item.id));
+ assert.equal(h.values.get(archive).enrich_attempts,0);
+ assert.equal(h.values.get('darkweb:publication-pending:2:'+item.id),item.id);
 });
 test('the 500-item feed limit removes archived publication cards before legacy records',async()=>{
  const h=harness(),id=await register(h);
