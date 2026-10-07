@@ -42,6 +42,13 @@ function withAdminDisplayName(row){
   const displayName=ADMIN_DISPLAY_NAMES[normalizeUsername(row?.username)]||"";
   return displayName?{...row,display_name:displayName}:row;
 }
+// Dark Web: English title kinds that need no further title work.
+const DARKWEB_TITLE_DONE = new Set(["translation", "original"]);
+// A record whose collected page declares English, and whose title has no letters in
+// another script, keeps that title as its English title without a model call.
+function darkwebEnglishOriginal(record) {
+  return record?.source_language === "en" && !!record.title && !/[^\P{L}\p{Script=Latin}]/u.test(String(record.title));
+}
 const SOCIAL_REPORT_RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
 const TAB_ACCESS_FIELDS = Object.freeze({ map: true, crypto: true, facial: true, darkweb: true, ip: true });
 function tabAccessTemplate(username = "") {
@@ -957,7 +964,7 @@ export class ReportGate {
         const page = await this.state.storage.list({ prefix, reverse: true, limit: 100, ...(cursor ? { end: cursor } : {}) });
         for (const id of page.values()) {
           const item = await this.state.storage.get(`darkweb:publication:${policy.epoch}:${id}`);
-          if (item && item.title_en_kind !== "translation") await this.state.storage.put(`darkweb:publication-pending:${policy.epoch}:${id}`, id);
+          if (item && !DARKWEB_TITLE_DONE.has(item.title_en_kind)) await this.state.storage.put(`darkweb:publication-pending:${policy.epoch}:${id}`, id);
         }
         await this.state.storage.put(migrationKey, page.size === 100 ? [...page.keys()].at(-1) : "done");
       }
@@ -1003,7 +1010,10 @@ export class ReportGate {
           const key = "darkweb:item:" + title.id, archiveKey = `darkweb:publication:${policy.epoch}:${title.id}`;
           const item = await tx.get(archiveKey) || await tx.get(key);
           if (item && item.title === title.original && item.excerpt === title.excerpt && (!item.publication_version || item.content_hash === title.content_hash)) {
-            const updated = { ...item, title_en: title.title, title_en_kind: title.title_en_kind === "translation" ? "translation" : "generated", overview_en: title.overview_en || "", title_en_generated_at: new Date(now).toISOString() };
+            // "original" is accepted only for a record that still qualifies, and always stores its own title.
+            const original = title.title_en_kind === "original";
+            if (original && !darkwebEnglishOriginal(item)) continue;
+            const updated = { ...item, title_en: original ? item.title : title.title, title_en_kind: original ? "original" : title.title_en_kind === "translation" ? "translation" : "generated", overview_en: title.overview_en || "", title_en_generated_at: new Date(now).toISOString() };
             if (item.publication_version) {
               await tx.put(archiveKey, updated);
               if (updated.overview_en) await tx.delete(`darkweb:publication-pending:${policy.epoch}:${title.id}`);
@@ -1018,7 +1028,7 @@ export class ReportGate {
           const key = "darkweb:item:" + entry.id, archiveKey = `darkweb:publication:${policy.epoch}:${entry.id}`;
           const archived = await tx.get(archiveKey), card = await tx.get(key), item = archived || card;
           if (!item || item.title !== entry.original || item.excerpt !== entry.excerpt || (item.publication_version && item.content_hash !== entry.content_hash)) continue;
-          if (item.title_en_kind === "translation" && (!item.publication_version || item.overview_en)) continue;
+          if (DARKWEB_TITLE_DONE.has(item.title_en_kind) && (!item.publication_version || item.overview_en)) continue;
           const enrich_attempts = (item.enrich_attempts || 0) + 1;
           if (archived) await tx.put(archiveKey, { ...archived, enrich_attempts });
           if (card) await tx.put(key, { ...card, enrich_attempts });
@@ -1100,13 +1110,21 @@ export class ReportGate {
             preview: item.preview || prior?.preview || "", last_seen: timestamp, baseline: baseline ? stored?.baseline !== false : prior ? prior.baseline : false,
             sha256: item.sha256 || prior?.sha256 || "", acquired: item.acquired || prior?.acquired || false,
             bytes: item.bytes ?? prior?.bytes ?? null };
+          // The outlet-translation flag describes the stored text: an unchanged re-send without it
+          // (an older collector) keeps it, new text without it drops it. It never enters content_hash.
+          if (!item.source_translation && !sameContent) delete record.source_translation;
+          // An English original needs no title translation: no model call and no daily ledger unit.
+          if (darkwebEnglishOriginal(record)) Object.assign(record, { title_en: record.title, title_en_kind: "original" });
+          // Relabelled to another language: the title is queued for translation. Attempts spent on
+          // the original's overview must not keep the title out of the queue.
+          else if (record.title_en_kind === "original") Object.assign(record, { title_en: "", title_en_kind: "", enrich_attempts: 0 });
           if (item.publication_version) {
             const oldFiles = new Map((prior?.attachments || []).map(a => [a.url,a]));
             record.attachments = item.attachments.map(a => a.acquired || !oldFiles.get(a.url)?.acquired ? a : { ...a, ...oldFiles.get(a.url) });
             if (prior?.published_at && prior.published_at !== item.published_at) await tx.delete(`darkweb:publication-index:${policy.epoch}:${prior.published_at}:${item.id}`);
             await tx.put(archiveKey, record);
             await tx.put(`darkweb:publication-index:${policy.epoch}:${item.published_at}:${item.id}`, item.id);
-            if (!record.title_en || record.title_en_kind !== "translation" || !record.overview_en) await tx.put(`darkweb:publication-pending:${policy.epoch}:${item.id}`, item.id);
+            if (!record.title_en || !DARKWEB_TITLE_DONE.has(record.title_en_kind) || !record.overview_en) await tx.put(`darkweb:publication-pending:${policy.epoch}:${item.id}`, item.id);
           }
           const { original_text, ...card } = record;
           await tx.put(key, card);

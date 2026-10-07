@@ -329,7 +329,7 @@ test('existing generated titles are requeued as faithful translations without tr
  h.values.set(key,{...h.values.get(key),title_en:'Invented old heading',overview_en:'Existing overview'});
  h.values.delete('darkweb:publication-pending:2:'+item.id);
  const translated='A faithful translation with details preserved. '.repeat(12);
- h.context.fetch=async(url,options)=>{const body=JSON.parse(options.body);assert.match(body.system_instruction,/faithful English translation/);assert.match(body.system_instruction,/Do not invent, summarize, shorten/);assert.doesNotMatch(body.system_instruction,/produce a concise English title/);const input=JSON.parse(body.input);assert.equal(input.titles[0].id,item.id);return Response.json({text:JSON.stringify({summary:'',titles:[{id:item.id,title:translated,overview_en:'A neutral overview.'}]})});};
+ h.context.fetch=async(url,options)=>{const body=JSON.parse(options.body);assert.match(body.system_instruction,/faithful English translation/);assert.match(body.system_instruction,/Do not invent, summarize, shorten/);assert.doesNotMatch(body.system_instruction,/produce a concise English title/);assert.doesNotMatch(body.system_instruction,/Arabic/);const input=JSON.parse(body.input);assert.equal(input.titles[0].id,item.id);return Response.json({text:JSON.stringify({summary:'',titles:[{id:item.id,title:translated,overview_en:'A neutral overview.'}]})});};
  assert.equal((await h.call('/darkweb/enrich',{})).status,200);
  const full=(await h.call('/darkweb/item?id='+item.id)).data.item;
  assert.equal(full.title_en,translated.trim());assert.equal(full.title_en_kind,'translation');assert.equal(full.title,item.title);assert.equal(full.original_text,publication().original_text);
@@ -491,6 +491,159 @@ test('the 500-item feed limit removes archived publication cards before legacy r
  assert.equal([...h.values.keys()].filter(k=>k.startsWith('darkweb:publication:2:')).length,500);
 });
 
+test('source_language is validated, optional and kept on feed, archive and detail records',async()=>{
+ const h=harness(),id=await register(h);
+ const r=await h.call('/darkweb/ingest',{outlet_id:id,items:[
+  {url:base+'a.pdf',title:'Rapor',type:'pdf',source_language:'TR'},
+  {url:base+'b.pdf',title:'Izvještaj',type:'pdf',source_language:'bs-Latn'},
+  {url:base+'c.pdf',title:'Report',type:'pdf',source_language:'english'},
+  {url:base+'d.pdf',title:'Numbers',type:'pdf',source_language:12},
+  {url:base+'e.pdf',title:'Older collector',type:'pdf'},
+  publication(1,{title:'Sınır bölgesinde çatışma',original_text:'Sınır bölgesinde yeni bir çatışma.',source_language:'tr'})],scan_ok:true},'',true);
+ assert.equal(r.status,200);
+ const feed=(await h.call('/darkweb/feed')).data.items,lang=end=>feed.find(i=>i.url.endsWith(end)).source_language;
+ assert.equal(lang('a.pdf'),'tr');
+ for(const end of ['b.pdf','c.pdf','d.pdf','e.pdf'])assert.equal(lang(end),undefined,end+' carries no language');
+ assert.equal(feed.find(i=>i.publication_version).source_language,'tr');
+ const archived=(await h.call('/darkweb/archive')).data.items[0];assert.equal(archived.source_language,'tr');
+ assert.equal((await h.call('/darkweb/item?id='+archived.id,undefined,'analyst')).data.item.source_language,'tr');
+ // A later pass from an older collector keeps the stored hint and the record.
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[publication(1,{title:'Sınır bölgesinde çatışma',original_text:'Sınır bölgesinde yeni bir çatışma.'})],scan_ok:true},'',true);
+ const full=(await h.call('/darkweb/item?id='+archived.id)).data.item;
+ assert.equal(full.source_language,'tr');assert.equal(full.content_hash,archived.content_hash);
+});
+test('a collector that starts sending source_language keeps Arabic translations and content hashes',async()=>{
+ const h=harness(),id=await register(h);h.env.GEMINI_API_KEY='test';
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[publication()],scan_ok:true},'',true);
+ const item=(await h.call('/darkweb/archive')).data.items[0];
+ h.context.fetch=async(url,options)=>{const input=JSON.parse(JSON.parse(options.body).input);assert.equal(input.titles[0].source_language,undefined,'No hint is invented for an older record');return Response.json({text:JSON.stringify({summary:'',titles:[{id:item.id,title:'Arabic title in English',overview_en:'A neutral overview.'}]})});};
+ await h.call('/darkweb/enrich',{});
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[publication(1,{source_language:'ar'})],scan_ok:true},'',true);
+ const full=(await h.call('/darkweb/item?id='+item.id)).data.item;
+ assert.equal(full.content_hash,item.content_hash);assert.equal(full.source_language,'ar');
+ assert.equal(full.title_en,'Arabic title in English');assert.equal(full.title_en_kind,'translation');assert.equal(full.overview_en,'A neutral overview.');
+ assert.ok(!h.values.has('darkweb:publication-pending:2:'+item.id),'Adding the hint does not requeue a translated record');
+});
+test('English originals keep their title without a title translation, a model call or a ledger unit',async()=>{
+ const h=harness(),id=await register(h);h.env.GEMINI_API_KEY='test';
+ const english=publication(1,{title:'Statement on the border clash',original_text:'The outlet claims a clash near the border.',source_language:'en'});
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[{url:base+'report.pdf',title:'Annual report',type:'pdf',source_language:'en'},{url:base+'mislabelled.pdf',title:'تقرير سنوي',type:'pdf',source_language:'en'},english],scan_ok:true},'',true);
+ let feed=(await h.call('/darkweb/feed')).data.items;const card=end=>feed.find(i=>i.url.endsWith(end));
+ assert.equal(card('report.pdf').title_en,'Annual report');assert.equal(card('report.pdf').title_en_kind,'original');
+ assert.equal(card('mislabelled.pdf').title_en,'','A title in another script is still translated, whatever the declared language');
+ const pub=(await h.call('/darkweb/archive')).data.items[0];
+ assert.equal(pub.title_en,english.title);assert.equal(pub.title_en_kind,'original');
+ assert.ok(h.values.has('darkweb:publication-pending:2:'+pub.id),'Only the overview remains pending');
+ const inputs=[];
+ h.context.fetch=async(url,options)=>{const body=JSON.parse(options.body);assert.doesNotMatch(body.system_instruction,/Arabic/);assert.match(body.system_instruction,/already in English, return it unchanged/);inputs.push(JSON.parse(body.input));
+  return Response.json({text:JSON.stringify({summary:'The outlets make claims that need validation. [1]',titles:[{id:pub.id,title:'Rewritten by the model',overview_en:'The outlet claims a clash.'},{id:card('mislabelled.pdf').id,title:'Annual report'}]})});};
+ assert.equal((await h.call('/darkweb/enrich',{})).status,200);
+ const requested=inputs[0].titles.map(t=>t.id);
+ assert.ok(!requested.includes(card('report.pdf').id),'No title translation is requested for an English original');
+ assert.ok(requested.includes(pub.id));assert.equal(inputs[0].titles.find(t=>t.id===pub.id).source_language,'en');
+ const full=(await h.call('/darkweb/item?id='+pub.id)).data.item;
+ assert.equal(full.title_en,english.title,'The model cannot rewrite an English original');assert.equal(full.title_en_kind,'original');assert.equal(full.overview_en,'The outlet claims a clash.');
+ assert.ok(!h.values.has('darkweb:publication-pending:2:'+pub.id));
+ feed=(await h.call('/darkweb/feed')).data.items;
+ assert.equal(card('mislabelled.pdf').title_en,'Annual report');assert.equal(card('mislabelled.pdf').title_en_kind,'translation');
+ assert.equal(card('report.pdf').title_en,'Annual report');assert.equal(card('report.pdf').title_en_kind,'original');
+ // Nothing is left to do: no further model call and no further ledger unit.
+ h.values.delete('darkweb:enrich-until');
+ assert.equal((await h.call('/darkweb/enrich',{})).data.cached,true);assert.equal(inputs.length,1);assert.equal(h.values.get('darkweb:enrich-ledger').count,1);
+ // A record no longer declared English loses the "original" title and is queued for translation.
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[{...english,source_language:'tr'}],scan_ok:true},'',true);
+ const relabelled=(await h.call('/darkweb/item?id='+pub.id)).data.item;
+ assert.equal(relabelled.title_en,'');assert.equal(relabelled.title_en_kind,'');assert.ok(h.values.has('darkweb:publication-pending:2:'+pub.id));
+});
+test('an English original relabelled to another language after three failed overviews really reaches the model',async()=>{
+ const h=harness(),id=await register(h);h.env.GEMINI_API_KEY='test';
+ const english=publication(1,{title:'Statement on the clash',original_text:'Statement on the clash\n\nLe texte reste en français.',source_language:'en'});
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[english],scan_ok:true},'',true);
+ const pub=(await h.call('/darkweb/archive')).data.items[0],record=()=>h.values.get('darkweb:publication:2:'+pub.id);
+ assert.equal(pub.title_en_kind,'original');
+ const inputs=[];let answer=input=>({summary:'',titles:input.titles.map(t=>({id:t.id,title:t.title,overview_en:''}))});
+ h.context.fetch=async(url,options)=>{const input=JSON.parse(JSON.parse(options.body).input);inputs.push(input);return Response.json({text:JSON.stringify(answer(input))});};
+ const unlock=()=>{h.values.delete('darkweb:enrich-until');h.values.delete('darkweb:enrich-backoff');};
+ // The model returns no overview three times: the original's attempts are used up.
+ for(let k=0;k<3;k++){unlock();await h.call('/darkweb/enrich',{});}
+ assert.equal(inputs.length,3);assert.equal(record().enrich_attempts,3);
+ unlock();assert.equal((await h.call('/darkweb/enrich',{})).data.cached,true);assert.equal(inputs.length,3);
+ // A later pass declares French for the same text: the title is cleared and its attempts start again.
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[{...english,source_language:'fr'}],scan_ok:true},'',true);
+ assert.equal(record().title_en,'');assert.equal(record().title_en_kind,'');assert.equal(record().enrich_attempts,0);
+ assert.equal(record().content_hash,pub.content_hash);assert.ok(h.values.has('darkweb:publication-pending:2:'+pub.id));
+ answer=input=>({summary:'',titles:input.titles.map(t=>({id:t.id,title:'Statement on the clash',overview_en:'The outlet makes a claim.'}))});
+ unlock();assert.equal((await h.call('/darkweb/enrich',{})).data.enriched,1);
+ const sent=inputs.at(-1).titles.find(t=>t.id===pub.id);
+ assert.ok(sent,'The relabelled title is sent for translation');assert.equal(sent.title,english.title);assert.equal(sent.source_language,'fr');
+ assert.equal(record().title_en_kind,'translation');assert.equal(record().overview_en,'The outlet makes a claim.');
+ assert.ok(!h.values.has('darkweb:publication-pending:2:'+pub.id));
+});
+test('source_translation is kept only as "outlet", stays out of the content hash and never requeues a translation',async()=>{
+ const h=harness(),id=await register(h);h.env.GEMINI_API_KEY='test';
+ const english=publication(1,{title:'Statement on the border clash',original_text:'The outlet claims a clash near the border.',source_language:'en'});
+ const r=await h.call('/darkweb/ingest',{outlet_id:id,items:[
+  {url:base+'a.pdf',title:'Report',type:'pdf',source_language:'en',source_translation:'outlet'},
+  {url:base+'b.pdf',title:'Report',type:'pdf',source_translation:'Outlet'},
+  {url:base+'c.pdf',title:'Report',type:'pdf',source_translation:'machine'},
+  {url:base+'d.pdf',title:'Report',type:'pdf',source_translation:true},
+  {url:base+'e.pdf',title:'Report',type:'pdf',source_translation:' outlet'},
+  {url:base+'f.pdf',title:'Report',type:'pdf',source_translation:['outlet']},
+  english,publication(2)],scan_ok:true},'',true);
+ assert.equal(r.status,200);
+ let feed=(await h.call('/darkweb/feed')).data.items;const flag=end=>feed.find(i=>i.url.endsWith(end)).source_translation;
+ assert.equal(flag('a.pdf'),'outlet');assert.equal(feed.find(i=>i.url.endsWith('a.pdf')).title_en_kind,'original');
+ for(const end of ['b.pdf','c.pdf','d.pdf','e.pdf','f.pdf'])assert.equal(flag(end),undefined,end+' carries no flag');
+ const pub=feed.find(i=>i.url===english.url),arabic=feed.find(i=>i.url===publication(2).url);
+ assert.equal(pub.source_translation,undefined,'No flag is invented');
+ assert.equal(Object.hasOwn(h.values.get('darkweb:publication:2:'+arabic.id),'source_translation'),false,'Records without the flag are stored as before');
+ let calls=0;
+ h.context.fetch=async(url,options)=>{calls++;const input=JSON.parse(JSON.parse(options.body).input);return Response.json({text:JSON.stringify({summary:'The outlets make claims that need validation. [1]',titles:input.titles.map(t=>({id:t.id,title:t.id===pub.id?t.title:'Arabic title in English',overview_en:'The outlet claims a clash.'}))})});};
+ await h.call('/darkweb/enrich',{});assert.equal(calls,1);
+ const before=(await h.call('/darkweb/item?id='+pub.id)).data.item;
+ assert.equal(before.title_en_kind,'original');assert.equal(before.overview_en,'The outlet claims a clash.');assert.ok(!h.values.has('darkweb:publication-pending:2:'+pub.id));
+ // A collector that starts sending the flag keeps the hash, the English fields and the queue as they were.
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[{...english,source_translation:'outlet'}],scan_ok:true},'',true);
+ const flagged=(await h.call('/darkweb/item?id='+pub.id,undefined,'analyst')).data.item;
+ assert.equal(flagged.source_translation,'outlet');assert.equal(flagged.content_hash,before.content_hash);
+ assert.equal(flagged.title_en,before.title_en);assert.equal(flagged.title_en_kind,'original');assert.equal(flagged.overview_en,before.overview_en);assert.equal(flagged.enrich_attempts,before.enrich_attempts);
+ assert.ok(!h.values.has('darkweb:publication-pending:2:'+pub.id),'Adding the flag does not requeue the record');
+ assert.equal((await h.call('/darkweb/archive')).data.items.find(i=>i.id===pub.id).source_translation,'outlet');
+ assert.equal((await h.call('/darkweb/feed')).data.items.find(i=>i.id===pub.id).source_translation,'outlet');
+ h.values.delete('darkweb:enrich-until');assert.equal((await h.call('/darkweb/enrich',{})).data.cached,true);assert.equal(calls,1);
+ // The hash is the same whether or not the flag is sent.
+ const h2=harness(),id2=await register(h2);
+ await h2.call('/darkweb/ingest',{outlet_id:id2,items:[{...english,source_translation:'outlet'}],scan_ok:true},'',true);
+ assert.equal((await h2.call('/darkweb/archive')).data.items[0].content_hash,before.content_hash);
+ // An unchanged re-send without the flag (an older collector) keeps it; new text without it drops it.
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[english],scan_ok:true},'',true);
+ assert.equal((await h.call('/darkweb/item?id='+pub.id)).data.item.source_translation,'outlet');
+ await h.call('/darkweb/ingest',{outlet_id:id,items:[{...english,original_text:'The outlet claims a second clash.'}],scan_ok:true},'',true);
+ assert.equal((await h.call('/darkweb/item?id='+pub.id)).data.item.source_translation,undefined);
+ feed=(await h.call('/darkweb/feed')).data.items;assert.equal(feed.find(i=>i.id===pub.id).source_translation,undefined);
+});
+test('keyword alerts fold diacritics, Turkish i and Unicode forms on both sides and read the original text',async()=>{
+ const h=harness(),f=h.context.foldText;
+ assert.ok(f('İSTANBUL saldırısı').includes(f('istanbul')));
+ assert.equal(f('IŞİD'),f('ışid'));
+ assert.ok(f('saldırı').includes(f('saldiri')));
+ assert.ok(f('Déclaration').includes(f('declaration')));
+ assert.equal(f('Cafe\u0301'),f('Caf\u00e9'));
+ const outlet=(await h.call('/darkweb/outlet',{name:'Latin outlet',url:base,keywords:'istanbul, ışid, saldiri, declaration, café, Sahel, \u0301'})).data.outlet.id;
+ await h.call('/darkweb/ingest',{outlet_id:outlet,items:[
+  {url:base+'1',title:'İSTANBUL saldırısı'},
+  {url:base+'2',title:'IŞİD açıklaması'},
+  {url:base+'3',title:'Déclaration officielle',excerpt:'Le cafe\u0301 du port'},
+  {url:base+'4',title:'Ankara'},
+  publication(5,{title:'Haber',original_text:'Sahel bölgesinde yeni bir açıklama',source_language:'tr'})],scan_ok:true},'',true);
+ const matches=Object.fromEntries((await h.call('/darkweb/feed')).data.items.map(i=>[i.url.slice(base.length),Array.from(i.keyword_matches)]));
+ assert.deepEqual(matches['1'],['istanbul','saldiri']);
+ assert.deepEqual(matches['2'],['ışid']);
+ assert.deepEqual(matches['3'],['declaration','café']);
+ assert.deepEqual(matches['4'],[],'A keyword made only of combining marks never matches everything');
+ assert.deepEqual(matches['posts/news/5/'],['Sahel'],'A keyword found only in the original text is an alert');
+});
+
 // Minimal DOM for darkweb.js: enough structure for contains, closest and simple selectors.
 function pageHarness(fixture){
  const doc={hidden:false};
@@ -500,6 +653,10 @@ function pageHarness(fixture){
   set textContent(v){for(const c of this.children)c.parentNode=null;this.children=[];if(this.tagName==='#TEXT')this._text=String(v);else if(String(v))this.append(String(v));}
   get childNodes(){return this.children;}get firstChild(){return this.children[0]||null;}
   append(...nodes){for(let n of nodes){if(typeof n==='string'){const t=new El('#text');t._text=n;n=t;}n.remove();n.parentNode=this;this.children.push(n);}}
+  prepend(...nodes){const tail=this.children;this.children=[];this.append(...nodes);this.children.push(...tail);}
+  click(){}
+  // Serializes the properties darkweb.js sets (class, lang, dir) as attributes, for export checks.
+  get outerHTML(){if(this.tagName==='#TEXT')return this._text.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));const tag=this.tagName.toLowerCase(),attrs={...this.attributes};if(this.className)attrs.class=this.className;for(const k of ['lang','dir'])if(this[k])attrs[k]=this[k];return '<'+tag+Object.entries(attrs).map(([k,v])=>' '+k+'="'+String(v).replace(/"/g,'&quot;')+'"').join('')+'>'+this.children.map(c=>c.outerHTML).join('')+'</'+tag+'>';}
   replaceChildren(...nodes){for(const c of this.children)c.parentNode=null;this.children=[];this.append(...nodes);}
   remove(){if(this.parentNode){this.parentNode.children=this.parentNode.children.filter(c=>c!==this);this.parentNode=null;}}
   contains(n){for(;n;n=n.parentNode)if(n===this)return true;return false;}
@@ -525,6 +682,7 @@ function pageHarness(fixture){
   current.append(el);if(!['input','img','meta','link','br'].includes(m[2].toLowerCase()))current=el;
  }
  Object.assign(doc,{documentElement:root,body:root.querySelector('body'),createElement:tag=>new El(tag),createElementNS:(ns,tag)=>new El(tag),querySelectorAll:sel=>root.querySelectorAll(sel),
+  implementation:{createHTMLDocument:()=>{const html=new El('html'),head=new El('head'),body=new El('body');html.append(head,body);return {documentElement:html,head,body,createElement:tag=>new El(tag)};}},
   getElementById(id){const walk=n=>{for(const c of n.children){if(c.id===id)return c;const found=walk(c);if(found)return found;}return null;};return walk(root);}});
  doc.activeElement=doc.body;
  const calls=[],confirms=[];let confirmAnswer=false,interval=null;
@@ -539,12 +697,15 @@ function pageHarness(fixture){
   if(u.pathname==='/darkweb/enrich')return respond({ok:true,cached:true});
   return respond({ok:true});
  };
- const context=vm.createContext({window:{},document:doc,fetch,console,URL,IntersectionObserver:class{observe(){}unobserve(){}disconnect(){}},
+ const downloads=[];
+ class PageURL extends URL{static createObjectURL(blob){downloads.push(blob);return 'blob:test/'+downloads.length;}static revokeObjectURL(){}}
+ class Blob{constructor(parts,options={}){this.text=parts.map(String).join('');this.type=options.type;}}
+ const context=vm.createContext({window:{},document:doc,fetch,console,URL:PageURL,Blob,IntersectionObserver:class{observe(){}unobserve(){}disconnect(){}},
   sessionStorage:{getItem:k=>session.get(k)??null,setItem:(k,v)=>{session.set(k,String(v));},removeItem:k=>{session.delete(k);}},location:{replace(){}},navigator:{},
   setInterval:fn=>{interval=fn;return 1;},setTimeout:()=>1,clearTimeout(){},confirm:message=>{confirms.push(message);return confirmAnswer;}});
  vm.runInContext(fs.readFileSync('darkweb.js','utf8'),context);
  const flush=async()=>{for(let i=0;i<30;i++)await new Promise(r=>setImmediate(r));};
- return {doc,$:id=>doc.getElementById(id),calls,confirms,flush,count:path=>calls.filter(c=>c.path===path).length,
+ return {doc,downloads,$:id=>doc.getElementById(id),calls,confirms,flush,count:path=>calls.filter(c=>c.path===path).length,
   answer:value=>{confirmAnswer=value;},tick:async()=>{interval();await flush();}};
 }
 function pageFixture(){
@@ -644,4 +805,80 @@ test('page: a settled search is recorded once for the admin history, with the ou
  assert.ok(!JSON.stringify(records()).includes('.onion'),'The outlet address never leaves the page');
  search.value='';page.$('outletFilter').value='';search.dispatch('input');enter();
  assert.equal(records().length,2,'Clearing the filters is not a search');
+});
+// The Arabic page fixture plus a Turkish record, an English original and an untagged Latin record.
+function latinFixture(){
+ const fixture=pageFixture(),{id}=fixture,arabic=fixture.archive.items[0];
+ const pub=(c,extra)=>({...arabic,id:id(c),url:base+c,keyword_matches:[],content_hash:'hash-'+c,...extra});
+ const turkish=pub('e',{title:'Sınır bölgesinde çatışma',title_en:'Clash in the border region',source_language:'tr'});
+ const english=pub('f',{title:'Statement on the border clash',title_en:'Statement on the border clash',title_en_kind:'original',source_language:'en',overview_en:'The outlet claims a clash.'});
+ const untagged=pub('g',{title:'Napad na kontrolni punkt',title_en:'Attack on a checkpoint'});
+ fixture.feed.items.push(turkish,english,untagged);fixture.archive.items.push(turkish,english,untagged);
+ Object.assign(fixture.full,{[turkish.id]:{...turkish,original_text:'Sınır bölgesinde yeni bir çatışma bildirildi.'},[english.id]:{...english,original_text:'The outlet claims a clash near the border.'},[untagged.id]:{...untagged,original_text:'Izvor tvrdi da je bio napad.'}});
+ return fixture;
+}
+test('page: Latin-script records get neutral labels, a language chip and no Arabic tag; an English original is shown once',async()=>{
+ const fixture=latinFixture(),page=pageHarness(fixture);await page.flush();
+ const [arabic,turkish,english,untagged]=['a','e','f','g'].map(c=>page.$('item-'+fixture.id(c)));
+ const chips=el=>el.querySelectorAll('span').filter(s=>s.classList.contains('lang')).map(s=>s.textContent);
+ const langs=el=>{const out=[];const walk=n=>{if(n.lang)out.push(n.lang);n.children.forEach(walk);};walk(el);return out;};
+ assert.deepEqual(chips(turkish),['TR']);assert.deepEqual(chips(english),['EN']);assert.deepEqual(chips(untagged),[]);assert.deepEqual(chips(arabic),[]);
+ assert.equal(turkish.querySelectorAll('span').find(s=>s.classList.contains('lang')).title,'Source language: Turkish');
+ for(const card of [arabic,turkish,english,untagged]){
+  assert.equal(card.querySelector('summary').textContent,'READ ORIGINAL TEXT');
+  const title=card.querySelector('h3');assert.equal(title.className,'source-title');assert.equal(title.dir,'auto');
+ }
+ assert.equal(turkish.querySelector('h3').lang,'tr');assert.equal(turkish.querySelector('details').querySelector('p').lang,'tr');assert.ok(!langs(turkish).includes('ar'));
+ assert.equal(untagged.querySelector('h3').lang,undefined,'Latin text without a declared language has no lang');assert.equal(untagged.querySelector('details').querySelector('p').lang,undefined);assert.ok(!langs(untagged).includes('ar'));
+ assert.equal(arabic.querySelector('h3').lang,'ar','Arabic-script text keeps lang="ar"');assert.equal(arabic.querySelector('details').querySelector('p').lang,'ar');
+ assert.match(turkish.textContent,/ENGLISH · MACHINE TRANSLATION/);assert.match(turkish.textContent,/Clash in the border region/);assert.match(arabic.textContent,/ENGLISH · MACHINE TRANSLATION/);
+ assert.equal(english.textContent.split('Statement on the border clash').length-1,1,'An English original is shown once');
+ assert.doesNotMatch(english.textContent,/MACHINE TRANSLATION|English translation pending/);assert.equal(english.querySelector('h3').lang,'en');
+ assert.match(page.doc.body.textContent,/original-language text/);assert.doesNotMatch(page.doc.body.textContent,/Arabic/);
+ assert.doesNotMatch(fs.readFileSync('darkweb.js','utf8'),/ORIGINAL ARABIC|arabic-title|Arabic titles/);assert.doesNotMatch(fs.readFileSync('darkweb.css','utf8'),/arabic-title/);
+ // Search folds diacritics and the Turkish dotless i.
+ page.$('search').value='SINIR';page.$('search').dispatch('input');
+ assert.deepEqual(page.$('feed').querySelectorAll('article').map(a=>a.id),['item-'+fixture.id('e')]);
+ page.$('search').value='';page.$('search').dispatch('input');
+ // Exports name the language only when it is known and never call an English original a translation.
+ const exportHtml=async c=>{page.$('item-'+fixture.id(c)).querySelectorAll('button').find(b=>b.textContent==='EXPORT HTML').onclick();await page.flush();return page.downloads.at(-1).text;};
+ const tr=await exportHtml('e');
+ assert.match(tr,/<h2>Original source text · Turkish<\/h2>/);assert.match(tr,/lang="tr"/);assert.doesNotMatch(tr,/lang="ar"|Arabic/);
+ const en=await exportHtml('f');
+ assert.match(en,/Original source text · English/);assert.doesNotMatch(en,/machine translation|English translation pending/i);
+ const untaggedHtml=await exportHtml('g');
+ assert.match(untaggedHtml,/<h2>Original source text<\/h2>/);assert.doesNotMatch(untaggedHtml,/ lang="/);
+ const ar=await exportHtml('a');
+ assert.match(ar,/<h2>Original source text · Arabic<\/h2>/);assert.match(ar,/lang="ar"/);assert.match(ar,/English title · machine translation/);assert.match(ar,/Title a/);
+});
+test('page: the outlet\'s own English version is labelled as its translation on the card and in both exports',async()=>{
+ const fixture=latinFixture(),{id}=fixture,english=fixture.archive.items.find(i=>i.id===id('f')),turkish=fixture.archive.items.find(i=>i.id===id('e'));
+ const outletItem={...english,id:id('h'),url:base+'h',content_hash:'hash-h',title:'Statement on the clash',title_en:'Statement on the clash',source_translation:'outlet',overview_en:''};
+ // The flag alone never relabels a CT Atlas translation.
+ const translated={...turkish,id:id('i'),url:base+'i',content_hash:'hash-i',source_translation:'outlet'};
+ fixture.feed.items.push(outletItem,translated);fixture.archive.items.push(outletItem,translated);
+ Object.assign(fixture.full,{[outletItem.id]:{...outletItem,original_text:'Statement on the clash\n\nThe outlet reports a clash.'},[translated.id]:{...translated,original_text:'Sınır bölgesinde yeni bir çatışma bildirildi.'}});
+ const page=pageHarness(fixture);await page.flush();
+ const [card,plain,other]=['h','f','i'].map(c=>page.$('item-'+id(c)));
+ const pills=el=>el.querySelectorAll('span').filter(s=>s.classList.contains('pill')).map(s=>s.textContent);
+ const note=/English version published by the outlet \(its own, possibly automatic, translation; not verified by CT Atlas\)/;
+ assert.ok(pills(card).includes('OUTLET TRANSLATION'));assert.ok(pills(card).includes('EN'));
+ assert.equal(card.querySelectorAll('span').find(s=>s.textContent==='OUTLET TRANSLATION').title,'English version published by the outlet (its own, possibly automatic, translation; not verified by CT Atlas)');
+ assert.match(card.textContent,note);assert.equal(card.querySelector('summary').textContent,"READ OUTLET'S ENGLISH TEXT");
+ assert.doesNotMatch(card.textContent,/MACHINE TRANSLATION|English translation pending|READ ORIGINAL TEXT|Original source text/);
+ assert.equal(card.textContent.split('Statement on the clash').length-1,1,'The English text is shown once');
+ for(const el of [plain,other]){assert.ok(!pills(el).includes('OUTLET TRANSLATION'));assert.doesNotMatch(el.textContent,/possibly automatic/);assert.equal(el.querySelector('summary').textContent,'READ ORIGINAL TEXT');}
+ assert.match(other.textContent,/ENGLISH · MACHINE TRANSLATION/);
+ const exportAs=async(c,format)=>{page.$('item-'+id(c)).querySelectorAll('button').find(b=>b.textContent==='EXPORT '+format).onclick();await page.flush();return page.downloads.at(-1).text;};
+ const html=await exportAs('h','HTML');
+ assert.match(html,/<h2>English title · outlet translation<\/h2>/);assert.match(html,note);
+ assert.match(html,/<h2>Source text · English · outlet translation, not the original<\/h2>/);
+ assert.doesNotMatch(html,/is in English and is not translated|Original source text|machine translation/i);
+ const json=JSON.parse(await exportAs('h','JSON'));
+ assert.equal(json.source_translation,'outlet');assert.match(json.source_translation_note,note);assert.match(json.source_translation_note,/not an English original/);
+ // An English original without the flag exports exactly as before.
+ const plainHtml=await exportAs('f','HTML');
+ assert.match(plainHtml,/The original title above is in English and is not translated\./);assert.match(plainHtml,/<h2>Original source text · English<\/h2>/);assert.doesNotMatch(plainHtml,/outlet translation|possibly automatic/i);
+ const plainJson=JSON.parse(await exportAs('f','JSON'));assert.equal(plainJson.source_translation_note,undefined);assert.equal(plainJson.source_translation,undefined);
+ assert.equal(JSON.parse(await exportAs('i','JSON')).source_translation_note,undefined);
 });

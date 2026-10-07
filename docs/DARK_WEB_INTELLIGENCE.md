@@ -60,7 +60,8 @@ card separately, follows the list's own pagination, and opens every permalink.
 It excludes sidebars, navigation, donation prompts, and previous/next story boxes.
 A detail page replaces the listing excerpt without generating another record.
 Revisiting a list or running an older collector cannot replace a complete record
-with its shorter excerpt. Other site templates retain the generic parser.
+with its shorter excerpt. Other site templates use the generic article adapter
+or the generic parser (see the next section).
 
 Supported source categories:
 
@@ -71,6 +72,178 @@ Supported source categories:
 
 These are source categories, not authenticity findings. A magazine title alone
 is not evidence of the document's contents.
+
+## Latin-script and multilingual outlets
+
+The structured adapter above was built for one Arabic outlet. Outlets written in
+Latin-script languages (for example Turkish, Bosnian/Croatian/Serbian Latin,
+Albanian, Kurmanji Kurdish, Indonesian/Malay, French, German or English) use the
+same pipeline with the following additions. Nobody has to describe the outlet's
+markup in advance: common WordPress, Blogger and generic article layouts are
+recognized from their standard markers.
+
+**Collector**
+
+- **Multilingual dates:** besides ISO dates and Arabic day/month/year labels, the
+  date parser reads Latin month names (full and abbreviated) in the languages
+  above and day-first numeric dates such as `12.10.2026`. Month names are
+  compared after removing diacritics and folding the Turkish dotted and dotless
+  `i`, so `12 EKİM 2026` and `12 ekim 2026` give the same date. Relative labels
+  ("2 gün önce", "il y a 2 jours") remain undated: crawl time is never used as
+  a publication date, and undated items stay in local review as before. The
+  Arabic outlet's template keeps its previous date rule (the first ISO date,
+  then an Arabic day-month-year date), so its stored dates, and therefore its
+  translations, do not change.
+- **Generic article adapter:** an article page outside the Arabic template
+  becomes a structured record (`publication_version` 1) with the same fields as
+  the Arabic detail records: URL, cleaned title, original text, category (from
+  the URL), the raw source date label, text status, same-host attachments,
+  publication date and its evidence (`url`, `html` or `source_page`), and a
+  preview URL when applicable. Such records appear under **PUBLICATIONS**, get
+  full-text English overviews, PDF synchronization and HTML/JSON exports. Pages
+  without article markers keep the generic parser and appear under **OTHER
+  MATERIAL**. A page that carries the Arabic template's markers (`read-area` or
+  `post-card-holder`) but is not one of its card lists or permalinks with
+  `post-content` (a video page, for example) is read exactly as before: no
+  article record, the same file dates and the same followed links.
+- **Source language:** each record may carry `source_language`, a lowercase
+  BCP-47 primary language subtag of two or three letters (`tr`, `bs`, `sq`,
+  `ku`, `id`, `fr`, `de`, `en`, `ar`…), taken from `<html lang>`, then
+  `og:locale`, then the `Content-Language` header. It is omitted when unknown.
+- **Character sets:** pages that declare a legacy charset (such as Windows-1254
+  or ISO-8859-9 for Turkish, or Latin-1) are decoded with it instead of being
+  forced to UTF-8, so letters are not replaced by `�`.
+
+**Worker and Atlas**
+
+- **Ingest:** `source_language` is optional. The Worker keeps it only when it is
+  2–3 letters after lowercasing and drops anything else; collectors that do not
+  send it keep working. It is stored on the feed card, the archive record and
+  the detail record. It is not part of the content hash, so a collector that
+  starts sending it does not invalidate existing translations. Categories other
+  than `news`, `naba`, `videos` and `audios` are accepted and shown as
+  `PUBLICATION`.
+- **Outlet translations:** an item may also carry `source_translation`. The only
+  accepted value is `outlet`, which the collector sends for English records that
+  are the outlet's own (possibly automatic) translation of its originals; any
+  other value is dropped. It is stored on the feed card, the archive record and
+  the detail record, and is not part of the content hash, so adding it never
+  requeues a translation. An unchanged re-send without it (an older collector)
+  keeps it; a pass that changes the text without it removes it.
+- **Translation:** the model instruction is language-neutral. Each title is
+  translated faithfully from whatever language it is in; the record's
+  `source_language`, when known, is sent with it as a hint. A record declared
+  English (`en`) whose title contains no letters from another script keeps its
+  title as the English title (`title_en_kind` `original`) when it is ingested:
+  no model call and no daily request is spent on that title. A structured English
+  record still receives its English overview in the normal enrichment batch, so
+  it uses a request only while that overview is pending. If a later pass declares
+  another language, the record returns to the translation queue with its attempt
+  counter reset, so attempts already spent on the overview do not keep the title
+  from being translated.
+- **Keyword alerts:** keywords and text are both folded before comparison
+  (compatibility decomposition, diacritics removed, Turkish `İ`/`ı` read as `i`,
+  lowercase, single spaces), and matched against the title, the excerpt and, for
+  structured records, the original text. `saldiri` therefore matches `saldırı`,
+  `istanbul` matches `İSTANBUL`, and `declaration` matches `Déclaration`. The
+  same folding applies to Arabic: harakat and hamza seats are ignored. The
+  workspace search box uses the same folding.
+- **Display:** cards show a small language chip (`TR`, `BS`, `EN`…) when
+  `source_language` is known. The source title and source text carry `lang` set
+  to the declared language, or `ar` only when the text is in Arabic script, and
+  otherwise no `lang`; direction stays automatic. The disclosure reads **READ
+  ORIGINAL TEXT**. An English original is shown once, without a machine-translation
+  label. Exports head the source text "Original source text", followed by the
+  language name when it is known.
+- **Outlet translations on screen and in exports:** an English record flagged
+  `source_translation` `outlet` is never presented as an English original. Its
+  card shows an **OUTLET TRANSLATION** chip and the note "English version
+  published by the outlet (its own, possibly automatic, translation; not verified
+  by CT Atlas)", and its disclosure reads **READ OUTLET'S ENGLISH TEXT**. The HTML
+  export heads the title section "English title · outlet translation" with that
+  note, heads the text "Source text · English · outlet translation, not the
+  original" and repeats the note under Provenance; the JSON export keeps
+  `source_translation` and adds `source_translation_note`. Records without the
+  flag are shown and exported as before.
+
+## News-portal outlet (second outlet)
+
+The second outlet is a multilingual news portal (Arabic, English, Russian and
+French versions chosen in its own language menu). Its saved home and article
+pages were supplied and checked locally; no onion address or source text is
+stored in this repository, and tests use neutral synthetic markup.
+
+- **News only.** On the home page the collector reads the two news sections
+  (news cards and the priority list with the weekly newspaper and agency items)
+  and follows only the next page of each section: the page's own number in
+  `?news_page=N` or `?priority_news_page=N` (1 when absent) plus one, when the
+  section's pager links to it. Other numbered pages and the last (oldest) page
+  are never requested, and nor are videos, audio, magazines, supporter posts,
+  comments, profiles, login and other menus.
+- **Template recognition.** A page belongs to this template when it has the
+  outlet's language menu (`.language-option` elements with `data-lang`) together
+  with the auto-translate switch (`autoTranslateCheckbox`), an article
+  (`article.blog-post`) or one of the two news sections. Such a page never falls
+  back to the generic reader: an article without its body block becomes a
+  title-only record (with its files), and an article without a heading or any
+  other page of the site (empty news sections, a "not found" page, a profile or
+  video page) gives no record and no link. News cards may link any
+  single-segment `/posts/<slug>` permalink, percent-encoded slugs included.
+  Pages of the site queued by an earlier collector version are read once more in
+  the current run and give nothing.
+- **English version.** When a page of this template is served in another
+  language, the collector opens the outlet's own English menu link once
+  (`/language/change?locale=en&auto_translate=true&force_translate=false`, a
+  plain same-host GET, no form or login) and rereads the page; the session cookie
+  keeps English for the following pages. It retries at most once every ten
+  minutes. If the switch fails (an HTTP error, a redirect off the outlet's host
+  or a timeout), the page already read is kept in the language it was served
+  in, one warning without addresses is logged, and the page is not counted as
+  failed. The English text is the outlet's own, possibly automatic, translation
+  of its Arabic originals: records read in English (cards and articles) carry
+  `source_language` `en` and `source_translation` `outlet`, so their titles need
+  no model translation (English overviews are still generated) and Atlas labels
+  them as the outlet's translation. A record read in another language carries no
+  `source_translation`, and a later reading in that language drops it.
+- **Dates and categories.** Card dates ("06 October 2026") and the article
+  header date next to the calendar icon are used; otherwise the day-month-year
+  date in the permalink when it has that form (`/posts/<category>-06-10-2026`);
+  a permalink without it stays undated. Weekly newspaper issues (`an-naba`
+  permalinks) are typed `naba`/PDF, everything else `news`. The article body
+  keeps its line breaks as paragraphs; related posts, comments and the
+  cover-image download link are excluded; same-host files referenced through
+  `media.php?file=` are attached to the article. The page's PDF viewer names its
+  file only in an inline script (`const pdfUrl = "…"`); when the article has no
+  other PDF, that same-host file is attached as the issue's PDF (and previewed
+  from its first page). An empty `pdfUrl` attaches nothing.
+- **Period.** Cards older than the collection period's **From** date are neither
+  stored nor opened, and a section stops paging at the first page that is
+  entirely older, so the initial backfill reads about one listing page per four
+  news items plus one page per article.
+- **Continuous feed.** Start `start-collector.cmd` (below) and leave it open.
+  Each pass checks the first news pages; new items are added and nothing is
+  deleted. While Tor Browser is closed, passes fail without using up page
+  attempts and resume on their own when Tor is connected again.
+
+### Leaving the collector running
+
+`darkweb-collector/start-collector.cmd` runs the collector for all enabled
+outlets through Tor Browser (port 9150), checks every five minutes and restarts
+it if it stops. Download it next to `collector.py` and double-click it:
+
+```cmd
+curl.exe -fL "https://raw.githubusercontent.com/pro-map/CT-Atlas/main/darkweb-collector/start-collector.cmd" -o start-collector.cmd
+```
+
+Each time it starts the collector it asks for the collector secret if
+`DARKWEB_INGEST_TOKEN` is not set. When the collector stops with a
+configuration error (exit code 2, for example an empty or too short secret), the
+launcher forgets the secret it was given and asks for it again at the next
+restart, 60 seconds later. A secret of the right length that the Worker rejects
+does not stop the collector: it logs "credentials rejected" at each pass, so
+close the window and start the launcher again with the correct secret. To
+start it at Windows sign-in, place a shortcut to it in the folder opened by
+`shell:startup`.
 
 ## Windows update and a single-outlet run
 
@@ -134,9 +307,10 @@ A successful curl response through the same proxy establishes reachability at th
 time, not the cause of a previous Python failure. No reset or new collector key is
 needed to retry with this update.
 
-## Arabic, English, files and exports
+## Original text, English, files and exports
 
-Original Arabic text is stored separately from AI fields. The adapter preserves
+Original source text (Arabic for the structured Arabic outlet, any language for
+other outlets) is stored separately from AI fields. The adapter preserves
 Unicode and paragraph breaks while normalizing HTML layout whitespace. Short
 news text contained entirely in the title is retained. Complete detail records
 are distinguishable from listing-only records and truncated records.
@@ -166,8 +340,9 @@ Uploads use the existing ingest credential. Reads require an allowed Atlas
 session, never the ingest credential, a public R2 URL or a token in the URL.
 **OPEN PDF** and **DOWNLOAD PDF** appear only after the server acknowledges storage.
 The browser fetches the authenticated PDF into a temporary blob; it needs neither
-Tor nor the collector to read an uploaded PDF. Downloads retain readable Arabic
-filenames. **COPY FILE URL** still copies the source onion link and requires Tor.
+Tor nor the collector to read an uploaded PDF. Downloads retain readable
+original-language filenames. **COPY FILE URL** still copies the source onion
+link and requires Tor.
 
 Retries check the server before sending bytes again. A write with a lost
 acknowledgement is found by its hash; it neither duplicates the object nor adds
@@ -184,17 +359,20 @@ Do not manually alter the dedicated bucket or the accounting keys; removing
 orphaned objects and reconciling usage is a separate administrative operation.
 
 **Exports:** each structured card has HTML and JSON exports. The HTML file opens
-independently, with original Arabic, separately labelled English overview, date,
-source, collection time and attachment metadata. It contains no scripts, remote
+independently, with the original-language text (headed with its language when
+known), separately labelled English overview, date, source, collection time and
+attachment metadata. It contains no scripts, remote
 images or embedded credentials. Exports do not embed the original PDF. JSON
 preserves the publication fields for further analytical work.
 
 **English:** a background Gemini model (`DARKWEB_GEMINI_MODEL`, default
 `gemini-3.1-flash-lite`; never the interactive `GEMINI_MODEL` used by reports and
-Deep Search) faithfully translates the entire Arabic title into English. It is
+Deep Search) faithfully translates the entire original title into English,
+whatever its language (Arabic for the structured Arabic outlet). It is
 instructed to preserve names, dates, numbers and attributed claims rather than
-invent or summarize a headline. Original Arabic remains visible beside the
-labelled machine translation. Existing
+invent or summarize a headline. The original title remains visible beside the
+labelled machine translation; a title already in English is kept as it is (see
+"Latin-script and multilingual outlets"). Existing
 generated English titles are progressively requeued without resetting records.
 A separate one/two-sentence overview is based only on supplied page text. Up to
 8,000 characters of original text are sent per item; a flag tells the model when
@@ -212,8 +390,8 @@ result resets the wait. A record still unfinished after three attempts stays
 stored and queued but is skipped until its source changes. An unusable briefing
 for the same sources is not requested again for 6 hours. Grouped citations such
 as `[1, 2]` are accepted. A pending queue also covers older archived
-publications. It is not an unattended AI scheduler. Failures preserve original
-Arabic and show pending status. Source changes invalidate the English fields;
+publications. It is not an unattended AI scheduler. Failures preserve the
+original text and show pending status. Source changes invalidate the English fields;
 content fingerprints prevent an old in-flight response from replacing newer
 material. Semantic accuracy still needs analyst review.
 
@@ -242,7 +420,7 @@ archive requires storage proportional to the collected records; it is not an
 unlimited-storage guarantee.
 
 The background refresh (every 60 seconds while the tab is visible) leaves
-unchanged cards in place, so an opened **READ ORIGINAL ARABIC TEXT** panel, its
+unchanged cards in place, so an opened **READ ORIGINAL TEXT** panel, its
 loaded text, keyboard focus and an open outlet selector are kept. **KEYWORD
 ALERTS** lists unreviewed items that match an outlet's alert keywords. **MARK ALL
 AS REVIEWED** asks for confirmation and states its scope: every unreviewed item
@@ -293,11 +471,14 @@ per round; deeper newly added publications may need another backfill. Failed
 pages are retried and displayed. Limits/failures never imply complete coverage.
 No number of pages is hardcoded from the saved homepage's 221-page snapshot.
 
-Full dates are read from explicit publication metadata or per-card Arabic day,
-month and year labels (including Arabic-Indic digits). Crawl time and HTTP
+Full dates are read from explicit publication metadata, per-card Arabic day,
+month and year labels (including Arabic-Indic digits) or the Latin-script date
+labels described in "Latin-script and multilingual outlets". Crawl time and HTTP
 Last-Modified are never substituted for publication dates. Undated candidates
 stay in the bounded local SQLite review queue (500 latest), with an admin count.
-Keywords annotate title/excerpt matches; they do not determine eligibility.
+Keywords annotate matches in the title, the excerpt and, for structured records,
+the original text, compared after diacritic folding; they do not determine
+eligibility.
 
 Limits per structured record: 48 KB of UTF-8 original text, 2,000 title characters,
 12 attachments. Larger source text/attachment sets are labelled incomplete;
@@ -325,6 +506,14 @@ reveals the PDF. The actual PDF bytes were not supplied or fetched over Tor here
 The saved viewer's page count is not an independently verified PDF page count.
 Successful saved-page tests do not establish live availability or exhaustive site
 coverage.
+
+Multilingual handling is tested with synthetic Turkish, Bosnian, French and
+English records: `source_language` validation and storage, unchanged Arabic
+content hashes and translations, English originals that never reach the model,
+folded keyword alerts (including original text), and the page's language chip,
+`lang` attributes, neutral labels and exports. No Latin-script outlet page was
+available, so markup recognition for a new outlet still needs a first bounded
+collection pass and a review of PUBLICATIONS and OTHER MATERIAL.
 
 Private PDF storage is tested with an emulated R2 bucket, including content-hash
 validation, fragmented/truncated uploads, authenticated downloads, concurrent

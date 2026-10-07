@@ -5,7 +5,11 @@
 .briefing{padding:22px;margin:18px 0;border:1px solid #41596a;border-radius:6px;background:#13212b}.briefing small,.briefing p{line-height:1.6}.briefing details{margin:14px 0}.briefing a{color:#b9d4e3;display:block;margin:6px 0}.item .original-title{font-size:16px;line-height:1.7;color:#afc5d4;unicode-bidi:plaintext}.item h3{unicode-bidi:plaintext}.publication-preview{display:block;max-width:240px;max-height:240px;object-fit:contain;margin:12px 0;border:1px solid #43596a}.briefing input[type=date],.briefing input[type=number]{color-scheme:dark}#aiStatus{color:#94b5c9;font-size:12px}
 
 /* Source text remains the primary record; AI interpretation is visually separate. */
-.arabic-title{font-size:1.2rem;line-height:1.95;text-align:start;font-weight:600;white-space:pre-wrap}
+.source-title{font-size:1.2rem;line-height:1.95;text-align:start;font-weight:600;white-space:pre-wrap}
+.pill.lang{background:#1d3442;color:#bfe1ec;border-color:#4f7889;letter-spacing:.1em;white-space:nowrap;flex-shrink:0}
+/* The outlet's own (possibly automatic) English version: never styled as an original or a CT Atlas translation. */
+.pill.outlet-translation{background:#2e291f;color:#e4cf98;border:1px dashed #8a7444;white-space:nowrap;flex-shrink:0}
+.item .translation-note{margin:4px 0 0;font-size:12px;line-height:1.6;color:#d1bc85;overflow-wrap:anywhere}
 .english-overview{margin:18px 0;padding:15px 18px;border-left:2px solid #8caab8;background:rgba(140,170,184,.07);line-height:1.7}
 .english-overview strong{font-size:.67rem;letter-spacing:.13em;color:#b1c6ce}.english-overview p{margin:8px 0 0}
 .original-publication{padding:14px 0;border-top:1px solid #2c3c49}.original-publication summary{cursor:pointer;font-size:.72rem;letter-spacing:.07em}

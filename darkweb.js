@@ -21,6 +21,16 @@ function unread(item){return !item.baseline&&item.first_seen>(state.seen_through
 function empty(title,text){const el=node("div",undefined,"empty");el.append(node("h2",title),node("p",text));return el;}
 function copy(value,label){const button=node("button",label,"copy");button.type="button";button.onclick=async()=>{try{await navigator.clipboard.writeText(value);button.textContent="COPIED";setTimeout(()=>button.textContent=label,1500);}catch(_){$("message").textContent="Clipboard unavailable. Select and copy the URL in the outlet listing.";}};return button;}
 const categoryLabel=value=>({news:"NEWS / COMMUNIQUÉ",naba:"MAGAZINE",videos:"VIDEO PUBLICATION",audios:"AUDIO STATEMENT"}[value]||"PUBLICATION");
+// Search folding: no diacritics, Turkish dotted/dotless i as i, lowercase, single spaces.
+const fold=value=>String(value||"").toLowerCase().normalize("NFKD").replace(/\p{M}+/gu,"").replace(/ı/g,"i").replace(/\s+/g," ");
+const declaredLanguage=item=>/^[a-z]{2,3}$/.test(item.source_language||"")?item.source_language:"";
+// The collector's declared language; otherwise Arabic only for Arabic-script text; otherwise unknown (no lang).
+function sourceLanguage(item){return declaredLanguage(item)||(/[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff\ufb50-\ufdff\ufe70-\ufeff]/.test([item.title,item.excerpt,item.original_text].join(" "))?"ar":"");}
+function languageName(code){try{const name=new Intl.DisplayNames(["en"],{type:"language"}).of(code);if(name&&name.toLowerCase()!==code)return name;}catch(_){}return code.toUpperCase();}
+const englishOriginal=item=>item.title_en_kind==="original"&&!!item.title_en;
+// English text the outlet translated itself: no CT Atlas title translation, but never presented as an English original.
+const OUTLET_TRANSLATION_NOTE="English version published by the outlet (its own, possibly automatic, translation; not verified by CT Atlas)";
+const outletTranslation=item=>englishOriginal(item)&&item.source_translation==="outlet";
 function publicationVisual(item){
  const frame=node("div",undefined,"publication-visual"),placeholder=node("div",undefined,"preview-placeholder");
  const label=({pdf:"PDF",video:"VIDEO",audio:"AUDIO",image:"IMAGE",page:"NEWS"}[item.type]||"FILE");
@@ -56,20 +66,26 @@ function exportDocument(item,outlet){
  const csp=doc.createElement("meta");csp.httpEquiv="Content-Security-Policy";csp.content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'";doc.head.append(csp);
  const style=doc.createElement("style");style.textContent="body{max-width:900px;margin:45px auto;padding:0 24px;color:#18242f;font:16px/1.8 Arial,sans-serif}h1{font-size:23px}h2{font-size:14px;text-transform:uppercase;color:#456}p{white-space:pre-wrap;overflow-wrap:anywhere}.source{font-size:12px}.english{padding:18px;background:#eef3f5;border-left:3px solid #527987}header{border-bottom:2px solid #243d50;margin-bottom:24px}section{margin:28px 0}@media print{body{margin:0}section{break-inside:auto}}";doc.head.append(style);
  const header=node("header");header.append(node("strong","CT ATLAS · SOURCE PUBLICATION"),node("p",(outlet?.name||"Outlet")+" · "+item.published_at));doc.body.append(header);
- const title=node("h1",item.title);title.dir="auto";doc.body.append(title);
- const english=node("section",undefined,"english");english.append(node("h2","English title · machine translation"),node("p",item.title_en_kind==="translation"?item.title_en:"English translation pending"),node("h2","English overview · AI-generated"),node("p",item.overview_en||"English overview pending AI enrichment."));doc.body.append(english);
- const original=node("section");original.append(node("h2","Original source text · Arabic"));const body=node("p",item.original_text||item.excerpt||item.title);body.dir="auto";body.lang="ar";original.append(body);doc.body.append(original);
- const source=node("section",undefined,"source");source.append(node("h2","Provenance"),node("p","Source: "+item.url),node("p","Publication date: "+item.published_at+" · Source date: "+(item.source_date||"")),node("p","Text status: "+(item.text_status||"excerpt")+" · First collected: "+date(item.first_seen)),node("p","Exported: "+new Date().toISOString()));
+ const lang=sourceLanguage(item);
+ const title=node("h1",item.title);title.dir="auto";if(lang)title.lang=lang;doc.body.append(title);
+ const english=node("section",undefined,"english"),outletText=outletTranslation(item);
+ // The outlet's own English version is labelled as such; an English original is shown once, as the title above.
+ if(outletText)english.append(node("h2","English title · outlet translation"),node("p",OUTLET_TRANSLATION_NOTE+". The title above is that English version, not an English original; CT Atlas did not translate it."));
+ else if(englishOriginal(item))english.append(node("h2","English title"),node("p","The original title above is in English and is not translated."));
+ else english.append(node("h2","English title · machine translation"),node("p",item.title_en_kind==="translation"?item.title_en:"English translation pending"));
+ english.append(node("h2","English overview · AI-generated"),node("p",item.overview_en||"English overview pending AI enrichment."));doc.body.append(english);
+ const original=node("section");original.append(node("h2",(outletText?"Source text":"Original source text")+(lang?" · "+languageName(lang):"")+(outletText?" · outlet translation, not the original":"")));const body=node("p",item.original_text||item.excerpt||item.title);body.dir="auto";if(lang)body.lang=lang;original.append(body);doc.body.append(original);
+ const source=node("section",undefined,"source");source.append(node("h2","Provenance"),...(outletText?[node("p","Text: "+OUTLET_TRANSLATION_NOTE+".")]:[]),node("p","Source: "+item.url),node("p","Publication date: "+item.published_at+" · Source date: "+(item.source_date||"")),node("p","Text status: "+(item.text_status||"excerpt")+" · First collected: "+date(item.first_seen)),node("p","Exported: "+new Date().toISOString()));
  for(const file of item.attachments||[])source.append(node("p",file.type.toUpperCase()+": "+file.title+"\n"+file.url+(file.sha256?"\nSHA-256: "+file.sha256:"")+"\n"+(file.stored_in_atlas?"PDF available in authenticated Atlas storage; original file is not embedded in this export.":file.acquired?"Downloaded on the collector computer; upload to Atlas pending or unavailable.":"Original file not acquired.")));
  source.append(node("p","Source claims are preserved for analysis and are not independently verified. The English overview describes supplied page text; it does not analyse the attached PDF, video or audio."));doc.body.append(source);
  return "<!doctype html>\n"+doc.documentElement.outerHTML;
 }
-function exportButton(item,format,outlet){const button=node("button","EXPORT "+format.toUpperCase(),"copy");button.onclick=async()=>{button.disabled=true;try{const full=await getPublication(item);downloadFile(format==="html"?exportDocument(full,outlet):JSON.stringify({outlet:outlet?.name,exported_at:new Date().toISOString(),...full},null,2),format==="html"?"text/html;charset=utf-8":"application/json;charset=utf-8","CT-Atlas-publication-"+item.published_at+"-"+item.id.slice(0,12)+"."+format);}catch(error){$("message").textContent=error.message;}finally{button.disabled=false;}};return button;}
+function exportButton(item,format,outlet){const button=node("button","EXPORT "+format.toUpperCase(),"copy");button.onclick=async()=>{button.disabled=true;try{const full=await getPublication(item);downloadFile(format==="html"?exportDocument(full,outlet):JSON.stringify({outlet:outlet?.name,exported_at:new Date().toISOString(),...full,...(outletTranslation(full)?{source_translation_note:OUTLET_TRANSLATION_NOTE+". Here title_en_kind \"original\" means only that CT Atlas did not translate the title; the text is not an English original."}:{})},null,2),format==="html"?"text/html;charset=utf-8":"application/json;charset=utf-8","CT-Atlas-publication-"+item.published_at+"-"+item.id.slice(0,12)+"."+format);}catch(error){$("message").textContent=error.message;}finally{button.disabled=false;}};return button;}
 function renderFeed(){
- const outletId=$("outletFilter").value,type=$("typeFilter").value,query=$("search").value.trim().toLowerCase();
+ const outletId=$("outletFilter").value,type=$("typeFilter").value,query=fold($("search").value.trim());
  const outlets=new Map(state.outlets.map(o=>[o.id,o]));
  const sourceRows=view==="latest"?[...archiveItems.values()]:view==="legacy"?state.items.filter(i=>!i.publication_version):state.items;
- const rows=[...sourceRows].sort((a,b)=>(b.published_at||"").localeCompare(a.published_at||"")).filter(i=>(!outletId||i.outlet_id===outletId)&&(!type||i.type===type)&&(!query||[i.title,i.title_en,i.overview_en,i.excerpt,outlets.get(i.outlet_id)?.name,...(i.keyword_matches||[])].join(" ").toLowerCase().includes(query))&&(view!=="alerts"||unread(i)&&i.keyword_matches?.length));
+ const rows=[...sourceRows].sort((a,b)=>(b.published_at||"").localeCompare(a.published_at||"")).filter(i=>(!outletId||i.outlet_id===outletId)&&(!type||i.type===type)&&(!query||fold([i.title,i.title_en,i.overview_en,i.excerpt,outlets.get(i.outlet_id)?.name,...(i.keyword_matches||[])].join(" ")).includes(query))&&(view!=="alerts"||unread(i)&&i.keyword_matches?.length));
  feedCount=rows.length;
  $("loadMore").hidden=view!=="latest"||!archiveCursor;
  const status=view==="latest"?archiveItems.size+" publications loaded · Filters apply to loaded publications. Load older records to extend the search.":view==="alerts"?"Unreviewed items matching outlet alert keywords, within the latest "+(state.retention_limit||500)+" feed items.":"Earlier generic collection results, within the latest "+(state.retention_limit||500)+" feed items.";
@@ -87,6 +103,9 @@ function renderFeed(){
  for(const item of rows){
   const article=node("article",undefined,"item"),head=node("div",undefined,"item-head");
   head.append(node("span",outlets.get(item.outlet_id)?.name||"Outlet"),node("span",item.publication_version?categoryLabel(item.category):item.type,"pill"));
+  const declared=declaredLanguage(item),lang=sourceLanguage(item),english=englishOriginal(item),outletText=outletTranslation(item);
+  if(declared){const chip=node("span",declared.toUpperCase(),"pill lang");chip.title=(outletText?"Collected language: ":"Source language: ")+languageName(declared)+(outletText?" (outlet translation)":"");head.append(chip);}
+  if(outletText){const chip=node("span","OUTLET TRANSLATION","pill outlet-translation");chip.title=OUTLET_TRANSLATION_NOTE;head.append(chip);}
   if(unread(item))head.append(node("span","UNREVIEWED","pill new"));
   if(item.baseline)head.append(node("span","BASELINE","pill"));
   if(item.keyword_matches?.length)head.append(node("span","KEYWORDS: "+item.keyword_matches.join(", "),"pill alert"));
@@ -94,13 +113,16 @@ function renderFeed(){
   if(!item.publication_version)foot.append(node("span",item.acquired?"Acquired on collector · "+(item.bytes===null?"size unavailable":(item.bytes/1048576).toFixed(1)+" MB"):"Link discovered · file not acquired"));
   article.id="item-"+item.id;
   const title=node("h3",item.publication_version?item.title:item.title_en||"English title pending AI enrichment");title.dir="auto";
-  if(item.publication_version){title.lang="ar";title.className="arabic-title";}
-  const original=node("p",item.publication_version?(item.title_en_kind==="translation"?item.title_en:"English translation pending"):readableTitle(item.title),"original-title");original.dir=item.publication_version?"ltr":"auto";if(item.publication_version)original.lang="en";
-  const heading=node("div",undefined,"publication-heading"),titles=node("div",undefined,"publication-titles");titles.append(title);if(item.publication_version)titles.append(node("span","ENGLISH · MACHINE TRANSLATION","translation-label"));titles.append(original);heading.append(publicationVisual(item),titles);
+  if(item.publication_version){if(lang)title.lang=lang;title.className="source-title";}
+  const heading=node("div",undefined,"publication-heading"),titles=node("div",undefined,"publication-titles");titles.append(title);
+  // An English original is its own English title: shown once, never as a translation.
+  if(!english){const original=node("p",item.publication_version?(item.title_en_kind==="translation"?item.title_en:"English translation pending"):readableTitle(item.title),"original-title");original.dir=item.publication_version?"ltr":"auto";if(item.publication_version){original.lang="en";titles.append(node("span","ENGLISH · MACHINE TRANSLATION","translation-label"));}titles.append(original);}
+  else if(outletText)titles.append(node("p",OUTLET_TRANSLATION_NOTE+".","translation-note"));
+  heading.append(publicationVisual(item),titles);
   article.append(head,heading,node("p","Publication: "+(item.published_at||"Unknown")+" · Date evidence: "+(item.date_basis||"unknown")));
-  if(item.publication_version){const overview=node("div",undefined,"english-overview");overview.append(node("strong","ENGLISH OVERVIEW · AI"),node("p",item.overview_en||"Pending AI enrichment. Original source text remains available."));article.append(overview);}
+  if(item.publication_version){const overview=node("div",undefined,"english-overview");overview.append(node("strong","ENGLISH OVERVIEW · AI"),node("p",item.overview_en||(outletText?"Pending AI enrichment. The outlet's English text remains available.":"Pending AI enrichment. Original source text remains available.")));article.append(overview);}
   if(item.publication_version){
-   const detail=node("details",undefined,"original-publication"),summary=node("summary","READ ORIGINAL ARABIC TEXT"),body=node("p","Open to load source text","source-text");body.dir="auto";body.lang="ar";detail.append(summary,body);
+   const detail=node("details",undefined,"original-publication"),summary=node("summary",outletText?"READ OUTLET'S ENGLISH TEXT":"READ ORIGINAL TEXT"),body=node("p","Open to load source text","source-text");body.dir="auto";if(lang)body.lang=lang;detail.append(summary,body);
    const cached=originalTexts.get(item.id),ready=cached?.hash===(item.content_hash||"")&&cached.text!==undefined;if(ready)body.textContent=cached.text;
    const load=async()=>{try{body.textContent=await originalText(item);}catch(error){body.textContent=error.message;}};
    if(openOriginals.has(item.id)){detail.open=true;if(!ready)void load();}
@@ -217,7 +239,7 @@ function enrichStatus(result){
  return "The AI answer was not usable; the next attempt is delayed. Original texts remain available.";
 }
 // Enrichment runs on the first load and from the button only, never from the background refresh.
-async function enrich(){if(enriching||!state?.admin||(!state.items.length&&!archiveItems.size))return;enriching=true;$("enrichNow").disabled=true;$("aiStatus").textContent="Translating Arabic titles and preparing English overviews…";try{const result=await api("/darkweb/enrich",{});$("aiStatus").textContent=enrichStatus(result);if(result.enriched||result.summary_updated)await refresh(true);}catch(error){$("aiStatus").textContent=error.message;}finally{enriching=false;$("enrichNow").disabled=false;}}
+async function enrich(){if(enriching||!state?.admin||(!state.items.length&&!archiveItems.size))return;enriching=true;$("enrichNow").disabled=true;$("aiStatus").textContent="Translating source titles and preparing English overviews…";try{const result=await api("/darkweb/enrich",{});$("aiStatus").textContent=enrichStatus(result);if(result.enriched||result.summary_updated)await refresh(true);}catch(error){$("aiStatus").textContent=error.message;}finally{enriching=false;$("enrichNow").disabled=false;}}
 async function saveCollection(reset=false,pause=state.policy.paused,storedPeriod=false){
  const finishSound=window.CTAtlasSound?.begin();
  const source=storedPeriod?state.policy:{from:$("collectFrom").value,through:$("collectThrough").value,pages_per_scan:Number($("collectPages").value),previews:$("collectPreviews").checked};
