@@ -658,7 +658,11 @@ NEWS_PORTAL_SLUG = re.compile(r"^/posts/([a-z0-9]+(?:-[a-z0-9]+)*?)-([0-3]?[0-9]
 NEWS_PORTAL_POST = re.compile(r"^/posts/[^/]+/?$")
 NEWS_PORTAL_CATEGORIES = {"an-naba": ("naba", "pdf")}
 # The outlet's own language menu link (a plain GET, as a reader choosing English does).
-NEWS_PORTAL_ENGLISH = "/language/change?locale=en&auto_translate=true&force_translate=false"\n# Some deployments expose the English tab but keep article text in the source language\n# unless translation is explicitly forced. Try this only when the normal English switch\n# succeeds but the reread still does not produce English publication records.\nNEWS_PORTAL_ENGLISH_FORCE = "/language/change?locale=en&auto_translate=true&force_translate=true"
+NEWS_PORTAL_ENGLISH = "/language/change?locale=en&auto_translate=true&force_translate=false"
+# Some deployments expose the English tab but keep article text in the source language
+# unless translation is explicitly forced. Try this only when the normal English switch
+# succeeds but the reread still does not produce English publication records.
+NEWS_PORTAL_ENGLISH_FORCE = "/language/change?locale=en&auto_translate=true&force_translate=true"
 NEWS_PORTAL_SKIP = {"related-posts", "comments-section", "thumbnail-wrapper", "breadcrumb"}
 # The pdf.js viewer names its file only in an inline script: const pdfUrl = "...";
 NEWS_PORTAL_PDF_URL = re.compile(r"""\b(?:const|let|var)\s+pdfUrl\s*=\s*(?:"((?:[^"\\\r\n]|\\.)*)"|'((?:[^'\\\r\n]|\\.)*)')""")
