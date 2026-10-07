@@ -85,9 +85,9 @@ jobs:
               && grep -q 'crypto-workspace' /tmp/crypto.js \
               && grep -q 'Intelligence Map' /tmp/main.html \
               && grep -q 'Crypto Intelligence' /tmp/main.html \
-              && grep -q 'id="osintForm"' /tmp/social.html \
-              && grep -q 'POWERED BY OSINT INDUSTRIES' /tmp/social.html \
-              && grep -q '/social-osint/search' /tmp/social.js \
+              && grep -q 'UNDER CONSTRUCTION' /tmp/social.html \
+              && grep -q '30 free OSINT Industries credits per month' /tmp/social.html \
+              && grep -q 'international law-enforcement organizations' /tmp/social.html \
               && grep -q 'osint.industries/industries/law-enforcement' /tmp/social.html; then
               break
             fi

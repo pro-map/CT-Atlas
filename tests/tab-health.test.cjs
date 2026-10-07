@@ -4,7 +4,7 @@ const fs=require("node:fs");
 
 const read=file=>fs.readFileSync(file,"utf8");
 
-test("Crypto and Facial load their health component; Social uses its OSINT provider connection status",()=>{
+test("Crypto and Facial load their health component; the Social placeholder omits its former health controls",()=>{
   for(const [page,scope] of [["crypto","crypto"],["facial","facial"]]){
     const html=read(page+".html");
     assert.ok(html.includes('href="tab-health.css'),page+" must load tab-health.css");
@@ -14,7 +14,7 @@ test("Crypto and Facial load their health component; Social uses its OSINT provi
   }
   const social=read("social.html");
   assert.ok(!social.includes('data-health-scope="social"'));
-  assert.ok(social.includes('id="osintConnection"'));
+  assert.ok(social.includes("UNDER CONSTRUCTION"));
 });
 
 test("the health component reads the live status endpoint and covers every scope",()=>{
