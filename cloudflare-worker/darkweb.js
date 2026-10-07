@@ -72,7 +72,16 @@ export async function handleDarkweb(request, env) {
     const response = await gateCall(env, "/darkweb-state", { username });
     const raw = await response.json();
     const state = await withHostedFiles(collector ? { policy: raw.policy, outlets: raw.outlets } : raw, env);
-    if (collector) return reply({ version: DARKWEB_VERSION, policy: state.policy, files_storage: state.files_storage, outlets: state.outlets.filter(o => o.enabled) }, 200, env);
+    if (collector) {
+      const parts = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date()).map(p => [p.type,p.value]));
+      const today = `${parts.year}-${parts.month}-${parts.day}`;
+      // Daily watch only: the local collector scans the newest outlet surface and
+      // accepts publications dated today. Historical records already stored in Atlas
+      // are preserved, but no further backfill is requested from the collector.
+      const policy = { ...state.policy, from: today, through: today };
+      const outlets = state.outlets.filter(o => o.enabled).map(o => ({ ...o, collection_phase: "watch" }));
+      return reply({ version: DARKWEB_VERSION, policy, files_storage: state.files_storage, outlets }, 200, env);
+    }
     return reply({ ...state, version: DARKWEB_VERSION, admin: username === "admin",
       collector_configured: String(env.DARKWEB_INGEST_TOKEN || "").length >= 32 }, response.status, env);
   }
