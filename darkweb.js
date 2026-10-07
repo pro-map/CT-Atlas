@@ -164,7 +164,7 @@ function render(){
  const storage=state.files_storage;
  if(storage){$("storageStatus").textContent=storage.configured?storage.files+" PDFs in Atlas · "+(storage.stored_bytes/1e9).toFixed(3)+" GB stored · "+(storage.reserved_bytes/1e9).toFixed(3)+" GB reserved for transfers · "+(storage.limit_bytes/1e9).toFixed(2)+" GB limit":"Private PDF storage is not activated yet. Downloaded PDFs remain on the collector computer.";
  if(!storageDirty&&!$("storageForm").contains(document.activeElement))$("storageLimit").value=storage.limit_bytes/1e9;}
- $("collectionForm").hidden=!state.admin;$("enrichNow").hidden=!state.admin;
+ $("collectionForm").hidden=!state.admin;
  $("outletFilterWrap").hidden=!state.admin;
  $("markSeen").hidden=!state.admin;
  for(const button of document.querySelectorAll("[data-view]"))button.hidden=!state.admin&&button.dataset.view!=="latest";
@@ -176,13 +176,6 @@ function render(){
  const periodNote=!through?"":through<today?" · PERIOD ENDED: publications dated after "+through+" are not stored. Extend Through and SAVE; the archive is kept.":Date.parse(through)-Date.parse(today)<=30*86400000?" · The period ends on "+through+". Extend Through and SAVE before then; the archive is kept.":"";
  $("collectionState").textContent=(state.policy?.paused?"PAUSED":"ACTIVE")+" · "+(state.policy?.from||"")+" → "+through+" · Undated items awaiting local review: "+state.outlets.reduce((n,o)=>n+Number(o.undated_count||0),0)+(recrawl?" · Re-crawling "+recrawl+" outlet(s) for the widened period":"")+periodNote;
  $("collectionState").classList.toggle("warning",!!periodNote);
- $("aiSummary").textContent=state.summary?.text||"No AI briefing yet. Dated publications are needed first.";
- $("aiSummary").title=state.summary?"Generated: "+date(state.summary.generated_at)+" · Based on up to 20 latest dated publications":"";
- $("aiSources").replaceChildren();
- for(const source of state.summary?.sources||[]){const link=node("a","["+source.number+"] "+readableTitle(source.title)+" · "+source.published_at);link.href="#item-"+source.id;link.dir="auto";link.onclick=event=>{event.preventDefault();void revealSource(source.id);};$("aiSources").append(link);}
- $("outletCount").textContent=state.outlets.filter(o=>o.enabled).length;
- $("newCount").textContent=state.unread_count;$("alertCount").textContent=state.keyword_alert_count;
- const last=state.outlets.map(o=>o.last_scan).filter(Boolean).sort().pop();$("lastCheck").textContent=last?date(last):"Not connected";
  $("snapshot").textContent="Feed updated: "+date(state.generated_at)+(through&&through<today?" · Collection period ended on "+through+"; newer publications are not collected":"");
  $("outletForm").hidden=!state.admin;
  $("connectionStatus").textContent=state.collector_configured?"Collector credential configured. A collector check is still required to confirm connection.":"Collector credential has not been configured on the Worker yet.";
@@ -275,7 +268,7 @@ function scheduleEnrich(result){
  }
  if((result?.pending||0)>0||(result?.enriched||0)>0)enrichTimer=setTimeout(()=>{if(!document.hidden)void enrich();},65000);
 }
-async function enrich(){if(enriching||!state?.admin||(!state.items.length&&!archiveItems.size))return;enriching=true;$("enrichNow").disabled=true;$("aiStatus").textContent="Translating stored source titles and preparing English overviews…";try{const result=await api("/darkweb/enrich",{});$("aiStatus").textContent=enrichStatus(result);if(result.enriched||result.summary_updated)await refresh(true);scheduleEnrich(result);}catch(error){$("aiStatus").textContent=error.message;}finally{enriching=false;$("enrichNow").disabled=false;}}
+async function enrich(){if(enriching||!state?.admin||(!state.items.length&&!archiveItems.size))return;enriching=true;try{const result=await api("/darkweb/enrich",{});if(result.enriched)await refresh(true);scheduleEnrich(result);}catch(_){}finally{enriching=false;}}
 async function saveCollection(reset=false,pause=state.policy.paused,storedPeriod=false){
  const finishSound=window.CTAtlasSound?.begin();
  const source=storedPeriod?state.policy:{from:$("collectFrom").value,through:$("collectThrough").value,pages_per_scan:Number($("collectPages").value),previews:$("collectPreviews").checked};
@@ -300,7 +293,6 @@ $("resetCollection").onclick=()=>{
  if(!from||!through||from>through){$("message").textContent="Choose a valid From and Through period first.";return;}
  if(confirm("RESET DELETES THE ARCHIVE.\n\nEvery feed result, structured publication, English translation and overview, and the briefing collected so far will be deleted. Collection then restarts from scratch for "+from+" → "+through+".\n\nOutlet settings, local evidence files and stored PDFs are kept (stored PDFs still count towards the storage limit). To extend the period without deleting anything, use SAVE (KEEPS ARCHIVE) instead."))void saveCollection(true,false);
 };
-$("enrichNow").onclick=enrich;
 for(const button of document.querySelectorAll("[data-view]"))button.onclick=()=>{setView(button.dataset.view);if(["latest","legacy","alerts"].includes(view))scheduleSearchRecord();};
 $("nextPage").onclick=async()=>{if(!archiveCursor)return;const button=$("nextPage"),cursor=archiveCursor;button.disabled=true;archivePageCursors[archivePage]=cursor;try{await loadArchivePage(cursor,archivePage+1);}catch(error){$("message").textContent=error.message;}finally{button.disabled=false;}};
 $("prevPage").onclick=async()=>{if(archivePage<=1)return;const button=$("prevPage"),target=archivePage-1,cursor=archivePageCursors[target-1]||"";button.disabled=true;try{await loadArchivePage(cursor,target);}catch(error){$("message").textContent=error.message;}finally{button.disabled=false;}};
