@@ -658,7 +658,7 @@ NEWS_PORTAL_SLUG = re.compile(r"^/posts/([a-z0-9]+(?:-[a-z0-9]+)*?)-([0-3]?[0-9]
 NEWS_PORTAL_POST = re.compile(r"^/posts/[^/]+/?$")
 NEWS_PORTAL_CATEGORIES = {"an-naba": ("naba", "pdf")}
 # The outlet's own language menu link (a plain GET, as a reader choosing English does).
-NEWS_PORTAL_ENGLISH = "/language/change?locale=en&auto_translate=true&force_translate=false"
+NEWS_PORTAL_ENGLISH = "/language/change?locale=en&auto_translate=true&force_translate=false"\n# Some deployments expose the English tab but keep article text in the source language\n# unless translation is explicitly forced. Try this only when the normal English switch\n# succeeds but the reread still does not produce English publication records.\nNEWS_PORTAL_ENGLISH_FORCE = "/language/change?locale=en&auto_translate=true&force_translate=true"
 NEWS_PORTAL_SKIP = {"related-posts", "comments-section", "thumbnail-wrapper", "breadcrumb"}
 # The pdf.js viewer names its file only in an inline script: const pdfUrl = "...";
 NEWS_PORTAL_PDF_URL = re.compile(r"""\b(?:const|let|var)\s+pdfUrl\s*=\s*(?:"((?:[^"\\\r\n]|\\.)*)"|'((?:[^'\\\r\n]|\\.)*)')""")
@@ -1509,20 +1509,32 @@ def read_listing(session, outlet):
         structured = structured_publications(html, outlet["url"], language, tree, since)
         if structured is not None:
             if structured.pop("english_available", False) and english_switch_due(session, outlet["url"]):
-                # A multilingual outlet served another language: choose English in its own
-                # language menu (one same-host GET; the session cookie keeps it), then reread.
+                # A multilingual outlet served another language. Ask its own English menu,
+                # verify the reread, and (only if needed) retry with force_translate=true.
+                # This avoids silently keeping Arabic when the English tab exists but the
+                # site's session requires an explicit translation flag for article bodies.
                 response.close()
                 host = urlsplit(outlet["url"]).hostname
                 root = urlunsplit((urlsplit(outlet["url"]).scheme, urlsplit(outlet["url"]).netloc, "", "", ""))
-                try:
-                    source_get(session, root + NEWS_PORTAL_ENGLISH, host).close()
-                except Exception as error:
-                    # A failed switch (404, 500, off-host redirect, timeout) keeps the page
-                    # already read, in its served language; the next attempt is due in ten minutes.
-                    LOG.warning("Outlet %s: English version not available (%s); page kept in its served language",
-                                outlet.get("id", ""), source_failure_reason(error))
-                    return structured
-                return read_listing(session, outlet)
+                last_error = None
+                fallback = structured
+                for switch_path in (NEWS_PORTAL_ENGLISH, NEWS_PORTAL_ENGLISH_FORCE):
+                    try:
+                        source_get(session, root + switch_path, host).close()
+                        reread = read_listing(session, outlet)
+                        fallback = reread
+                        records = list(reread.get("items") or [])
+                        if reread.get("page"):
+                            records.append(reread["page"])
+                        if any(row.get("source_language") == "en" for row in records):
+                            return reread
+                    except Exception as error:
+                        last_error = error
+                # Keep the already collected source-language page rather than losing data.
+                LOG.warning("Outlet %s: English tab did not yield English publication text%s; page kept in its served language",
+                            outlet.get("id", ""),
+                            " (" + source_failure_reason(last_error) + ")" if last_error else "")
+                return fallback
             return structured
         tree.close()
         if arabic_template_page(tree):
