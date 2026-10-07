@@ -1878,7 +1878,7 @@ def test_failed_english_switch_keeps_the_page_already_read(failure, caplog):
     row = result['items'][0]
     assert (row['title'], row['source_language'], row['published_at']) == ('عنوان', 'ar', '2026-10-06')
     assert [r['url'] for r in result['items'][1:]] == [BASE + '?news_page=2']
-    assert caplog.text.count('English version not available') == 1
+    assert caplog.text.count('English tab did not yield English publication text') == 1
     assert '.onion' not in caplog.text and 'private source' not in caplog.text
 
 
