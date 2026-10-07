@@ -1,18 +1,18 @@
 @echo off
-rem CT Atlas Dark Web collector, left running in this window.
-rem Whenever Tor Browser is connected (port 9150), every enabled outlet is checked
-rem every 5 minutes: new publications are added and nothing is deleted. While Tor is
-rem closed the passes fail quietly and resume by themselves. Close the window to stop.
-rem The collector secret is asked for when it is not set, and asked again after the
-rem collector stops with exit code 2 (a configuration error such as a missing or short secret).
+rem CT Atlas Dark Web collector - Bessira daily one-shot mode.
+rem Run Tor Browser first, then launch this file.
+rem The collector checks Bessira's current listing, opens only genuinely new
+rem publications visible there, sends them to CT Atlas, then exits.
+rem It does not crawl historical pages and does not repeat every few minutes.
 cd /d "%~dp0"
-title CT Atlas collector
-:run
+title CT Atlas - Bessira daily update
 if not defined DARKWEB_INGEST_TOKEN set /p "DARKWEB_INGEST_TOKEN=Paste the collector secret and press Enter: "
-py collector.py --proxy socks5h://127.0.0.1:9150 --interval 300 --connect-timeout 120
-if errorlevel 2 if not errorlevel 3 set "DARKWEB_INGEST_TOKEN="
+py collector.py --proxy socks5h://127.0.0.1:9150 --once --pages-per-scan 25 --connect-timeout 120
+set "CT_ATLAS_EXIT=%ERRORLEVEL%"
 echo.
-if not defined DARKWEB_INGEST_TOKEN echo The collector secret or settings were not accepted; see the message above. The secret is asked for again.
-echo The collector stopped. It restarts in 60 seconds; close this window to stop it.
-timeout /t 60 /nobreak >nul
-goto run
+if "%CT_ATLAS_EXIT%"=="0" (
+  echo Bessira daily update completed. The collector is now stopped.
+) else (
+  echo Bessira daily update ended with an error. Review the messages above.
+)
+exit /b %CT_ATLAS_EXIT%
