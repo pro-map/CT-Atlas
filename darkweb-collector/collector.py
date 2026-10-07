@@ -1857,7 +1857,7 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
         # starting page; links discovered from it may be followed within the normal
         # shallow watch depth during this pass.
         with db:
-            db.execute("DELETE FROM frontier WHERE outlet_id=? AND url<>?", (oid, outlet["url"]))
+            db.execute("DELETE FROM frontier WHERE outlet_id=? AND url<>? AND status NOT IN (\'failed\')", (oid, outlet["url"]))
             db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url) VALUES (?,?)", (oid, outlet["url"]))
             db.execute("UPDATE frontier SET status='pending',attempts=0,depth=0 WHERE outlet_id=? AND url=?", (oid, outlet["url"]))
         requeued = True
@@ -1913,7 +1913,12 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
                 if not target_url or urlsplit(target_url).hostname != urlsplit(outlet["url"]).hostname:
                     continue
                 if (row.get("crawl") or row["type"] == "page") and target_url != url and (not watching or target[1] < 2):
-                    db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url,depth) VALUES (?,?,?)", (oid, target_url, target[1]+1))
+                    # In daily watch mode, previously collected publication URLs do not
+                    # need to be reopened. Only genuinely new links enter the shallow
+                    # frontier; failed links keep their attempts across passes.
+                    known = watching and db.execute("SELECT 1 FROM items WHERE outlet_id=? AND url=? LIMIT 1", (oid, target_url)).fetchone()
+                    if not known:
+                        db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url,depth) VALUES (?,?,?)", (oid, target_url, target[1]+1))
                 if not selected_material(row):
                     continue
                 if not within_period(row, policy):
