@@ -1853,10 +1853,13 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
             db.execute("INSERT OR REPLACE INTO crawl_runs VALUES (?,0)", (oid,))
             db.execute("INSERT INTO frontier(outlet_id,url) VALUES (?,?)", (oid, outlet["url"]))
     elif watching:
-        # Check the newest listing on every watch pass, ahead of older frontier entries.
+        # Daily watch mode never walks the historical frontier. Keep only the current
+        # starting page; links discovered from it may be followed within the normal
+        # shallow watch depth during this pass.
         with db:
+            db.execute("DELETE FROM frontier WHERE outlet_id=? AND url<>?", (oid, outlet["url"]))
             db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url) VALUES (?,?)", (oid, outlet["url"]))
-            db.execute("UPDATE frontier SET status='pending',attempts=0 WHERE outlet_id=? AND url=?", (oid, outlet["url"]))
+            db.execute("UPDATE frontier SET status='pending',attempts=0,depth=0 WHERE outlet_id=? AND url=?", (oid, outlet["url"]))
         requeued = True
     # A failed upload is replayed before advancing the crawler.
     if db.execute("SELECT 1 FROM outbox WHERE outlet_id=? LIMIT 1", (oid,)).fetchone():
@@ -2011,8 +2014,9 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
         with db:
             db.execute("DELETE FROM frontier WHERE outlet_id=?", (outlet["id"],))
             db.execute("DELETE FROM crawl_runs WHERE outlet_id=?", (outlet["id"],))
-            db.execute("INSERT OR REPLACE INTO settings VALUES (?, 'running')", (inventory_key,))
-    if not inventory or inventory[0] != "complete":
+            db.execute("INSERT OR REPLACE INTO settings VALUES (?, ?)", (inventory_key, "complete" if outlet.get("collection_phase") == "watch" else "running"))
+        inventory = ("complete",) if outlet.get("collection_phase") == "watch" else ("running",)
+    if inventory[0] != "complete" and outlet.get("collection_phase") != "watch":
         outlet = {**outlet, "collection_phase": "backfill"}
     if policy:
         pages_per_scan = min(pages_per_scan, policy["pages_per_scan"])
