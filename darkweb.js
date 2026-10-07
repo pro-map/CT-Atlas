@@ -159,6 +159,22 @@ async function revealSource(id){
  }catch(error){$("message").textContent=error.message;}
 }
 function editOutlet(outlet){$("outletName").value=outlet.name;$("outletUrl").value=outlet.url;$("keywords").value=outlet.keywords.join(", ");$("enabled").checked=outlet.enabled;$("outletForm").scrollIntoView({behavior:"smooth"});}
+function renderLatestPublications(){
+ const box=$("aiSources");if(!box)return;
+ const rows=[...archiveItems.values()].sort((a,b)=>(b.published_at||"").localeCompare(a.published_at||"")).slice(0,10);
+ box.replaceChildren();
+ for(const item of rows){
+  const translated=item.title_en_kind==="translation"&&item.title_en?item.title_en:
+   englishOriginal(item)?item.title:
+   (item.source_translation==="outlet"&&item.title_en?item.title_en:"");
+  const link=node("a",translated||"English translation pending","latest-link");
+  link.href="#item-"+item.id;link.onclick=event=>{event.preventDefault();void revealSource(item.id);};
+  const when=node("span",item.published_at||"","latest-date");
+  const row=node("div",undefined,"latest-row");row.append(link,when);box.append(row);
+ }
+ if(!rows.length)box.append(node("p","No collected publications yet.","record-status"));
+}
+
 function render(){
  $("storageForm").hidden=!state.admin;
  const storage=state.files_storage;
@@ -177,6 +193,7 @@ function render(){
  $("collectionState").textContent=(state.policy?.paused?"PAUSED":"ACTIVE")+" · "+(state.policy?.from||"")+" → "+through+" · Undated items awaiting local review: "+state.outlets.reduce((n,o)=>n+Number(o.undated_count||0),0)+(recrawl?" · Re-crawling "+recrawl+" outlet(s) for the widened period":"")+periodNote;
  $("collectionState").classList.toggle("warning",!!periodNote);
  $("snapshot").textContent="Feed updated: "+date(state.generated_at)+(through&&through<today?" · Collection period ended on "+through+"; newer publications are not collected":"");
+ renderLatestPublications();
  $("outletForm").hidden=!state.admin;
  $("connectionStatus").textContent=state.collector_configured?"Collector credential configured. A collector check is still required to confirm connection.":"Collector credential has not been configured on the Worker yet.";
  // Rebuild the outlet filter only when outlets change, so an open selector stays open.
@@ -268,7 +285,7 @@ function scheduleEnrich(result){
  }
  if((result?.pending||0)>0||(result?.enriched||0)>0)enrichTimer=setTimeout(()=>{if(!document.hidden)void enrich();},65000);
 }
-async function enrich(){if(enriching||!state?.admin||(!state.items.length&&!archiveItems.size))return;enriching=true;try{const result=await api("/darkweb/enrich",{});if(result.enriched)await refresh(true);scheduleEnrich(result);}catch(_){}finally{enriching=false;}}
+async function enrich(){if(enriching||!state?.admin||(!state.items.length&&!archiveItems.size))return;enriching=true;try{const result=await api("/darkweb/enrich",{});if(result.enriched)await refresh(true);scheduleEnrich(result);}catch(_){if(state?.admin){if(enrichTimer)clearTimeout(enrichTimer);enrichTimer=setTimeout(()=>{if(!document.hidden)void enrich();},3600000);}}finally{enriching=false;}}
 async function saveCollection(reset=false,pause=state.policy.paused,storedPeriod=false){
  const finishSound=window.CTAtlasSound?.begin();
  const source=storedPeriod?state.policy:{from:$("collectFrom").value,through:$("collectThrough").value,pages_per_scan:Number($("collectPages").value),previews:$("collectPreviews").checked};
