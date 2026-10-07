@@ -1,0 +1,105 @@
+name: Repair source-country geolocation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "tools/repair_source_geolocation.py"
+      - ".github/workflows/repair-source-geolocation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Serialize with the scheduled map collector because both may write events.json.
+concurrency:
+  group: ct-map-update-main
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Apply source-fidelity repair
+        run: python tools/repair_source_geolocation.py
+
+      - name: Verify repaired records
+        run: |
+          python - <<'PY'
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          events = json.loads(Path("events.json").read_text(encoding="utf-8"))["events"]
+
+          def one(**sel):
+              matches = [e for e in events if all(str(e.get(k) or "") == str(v) for k, v in sel.items())]
+              if len(matches) != 1:
+                  raise SystemExit(f"selector {sel!r} matched {len(matches)}")
+              return matches[0]
+
+          checks = [
+              (
+                  one(id="73d72b30b1cad110", source="gmconline.com.br",
+                      published="2026-10-03T14:47:00+00:00"),
+                  ("United States", "Portland"),
+              ),
+              (
+                  one(id="1e29b7b40786022f",
+                      title="Teenager detained in Yakutia for planning school terrorist attack",
+                      source="Report.az", published="2026-09-29T14:41:02+00:00"),
+                  ("Russia", None),
+              ),
+              (
+                  one(id="ff5d5220d4fa5662", source="Рамблер",
+                      published="2026-10-04T14:06:51+00:00"),
+                  ("United Kingdom", "Manchester"),
+              ),
+              (
+                  one(id="16e757fd6b88c699",
+                      title="Synagogue massacre averted at the last moment",
+                      source="המחדש", published="2026-09-22T07:27:00+00:00"),
+                  ("Canada", "Whitby"),
+              ),
+              (
+                  one(id="d6b9b68686e27fe8", source="CNN Brasil",
+                      published="2026-10-02T20:25:00+00:00"),
+                  ("Saudi Arabia", "Tabuk"),
+              ),
+          ]
+
+          for event, expected in checks:
+              actual = (event.get("country"), event.get("city"))
+              if actual != expected:
+                  raise SystemExit(f"{event.get('title')}: expected {expected}, got {actual}")
+              if event.get("ai_geo_model") != "source-fidelity-audit-2026-10-07":
+                  raise SystemExit(f"audit marker missing for {event.get('title')}")
+
+          # Deliberately expose the separate ID-collision issue instead of hiding it.
+          counts = Counter(str(e.get("id")) for e in events if e.get("id"))
+          collisions = sum(1 for n in counts.values() if n > 1)
+          print(f"Verified source-fidelity corrections; duplicate event IDs still to repair: {collisions}")
+          PY
+
+      - name: Commit repaired database
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- events.json; then
+            echo "events.json already contains the source-fidelity repairs."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add events.json
+          git commit -m "Repair historical source-country geolocation errors"
+          git pull --rebase origin main
+          git push origin HEAD:main
