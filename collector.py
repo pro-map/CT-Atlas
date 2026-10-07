@@ -113,7 +113,7 @@ AI_SELECTION_BATCH_SIZE = max(
     ),
 )
 
-AI_SELECTION_VERSION = "gemini-ct-selection-v6-incident-model"
+AI_SELECTION_VERSION = "gemini-ct-selection-v7-source-faithful-geography"
 AI_SELECTION_CACHE_FILE = "ai_article_selection_cache.json"
 
 AI_SELECTION_ATTEMPTS = 5
@@ -3939,6 +3939,13 @@ crew kidnapping or armed robbery at sea.
 
 Specialist-source categories are provisional retrieval hints, not evidence.
 Country-focused searches and publisher locations do not establish event location.
+A publisher's home country, ccTLD/domain, Google News edition, query locale or
+language MUST NEVER be inserted into english_title, english_summary,
+canonical_event or incident_anchor unless the ORIGINAL article text itself
+supports that place. Translate geography; do not enrich it. If the source text
+does not state or semantically establish a place, leave the place unstated
+rather than guessing from the outlet. This rule is especially important for
+local media reporting foreign events.
 Afghan and Syrian sources may report on other countries. Extract only locations
 supported by the article. Preserve claimed versus confirmed responsibility and
 attribute official statements. Do not infer that all Taliban-related governance
@@ -10336,6 +10343,12 @@ Be strict:
   polling-station bomb plot and a drone strike on an official's car on the
   same election day = two).
 - When unsure, do not group.
+- Treat original_headlines as the source-of-record for geography. The English
+  headline/anchor may be AI-normalized and can occasionally contain an inferred
+  place that was not present in the source. Never merge two incidents merely
+  because such a generated place matches. If generated geography conflicts
+  with original_headlines, trust the original text and keep the incidents
+  separate unless another concrete fact proves they are the same case.
 
 Every id you return must be copied exactly from the input. Keep reasons short.
 """
@@ -10391,7 +10404,7 @@ def build_incident_profiles(events):
         profile = profiles.setdefault(key, {
             "key": key, "indices": [], "first": None, "last": None,
             "countries": set(), "codes": set(), "cities": set(), "types": set(),
-            "actors": set(), "anchor": "", "titles": [],
+            "actors": set(), "anchor": "", "titles": [], "original_titles": [],
         })
         profile["indices"].append(index)
         dt = event_datetime(event)
@@ -10415,6 +10428,20 @@ def build_incident_profiles(events):
                 profile["titles"].insert(0, title)
             else:
                 profile["titles"].append(title)
+
+        # Keep source-language headlines beside AI-normalized English text.
+        # They are the authority when a generated translation accidentally
+        # inserts a country/city inferred from the publisher.
+        original_candidates = [event.get("original_title")]
+        original_candidates.extend(
+            article.get("original_title") or article.get("title")
+            for article in (event.get("related_articles") or [])[:4]
+            if isinstance(article, dict)
+        )
+        for original in original_candidates:
+            original = clean_text(original or "")
+            if original and original not in profile["original_titles"]:
+                profile["original_titles"].append(original)
     return profiles
 
 
@@ -10480,6 +10507,7 @@ def _incident_window_payload(keys, profiles):
             "actor_groups": sorted(profile["actors"])[:3],
             "anchor": profile["anchor"],
             "headlines": profile["titles"][:3],
+            "original_headlines": profile["original_titles"][:4],
         })
     return items
 
