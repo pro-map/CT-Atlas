@@ -735,7 +735,7 @@ test('page: non-admin analysts see only the centrally managed publication feed',
  const page=pageHarness(fixture);await page.flush();
  assert.equal(page.$('collectionForm').hidden,true);
  assert.equal(page.$('storageForm').hidden,true);
- assert.equal(page.$('enrichNow').hidden,true);
+ assert.equal(page.$('enrichNow'),null,'Translation runs automatically; there is no manual enrichment control.');
  assert.equal(page.$('outletFilterWrap').hidden,true);
  assert.equal(page.$('markSeen').hidden,true);
  const visibleViews=page.doc.querySelectorAll('[data-view]').filter(b=>!b.hidden).map(b=>b.dataset.view);
@@ -773,7 +773,7 @@ test('page: the 60 s refresh never enriches and keeps an opened source text, foc
  assert.notEqual(rebuilt,details);assert.equal(rebuilt.open,true);assert.equal(rebuilt.querySelector('p').textContent,'النص الكامل');
  assert.equal(page.count('/darkweb/item'),1,'Loaded text is reused, not fetched again');
  assert.equal(page.doc.activeElement,rebuilt.querySelector('summary'),'Focus returns to the same control');
- page.$('enrichNow').onclick();await page.flush();assert.equal(page.count('/darkweb/enrich'),2);
+ assert.equal(page.$('enrichNow'),null);assert.equal(page.count('/darkweb/enrich'),1,'No manual enrichment control is exposed.');
 });
 test('page: a source text still loading when the feed changes reaches the rebuilt panel with one request',async()=>{
  const fixture=pageFixture();let release;fixture.itemGate=new Promise(r=>release=r);
