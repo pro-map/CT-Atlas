@@ -70,7 +70,7 @@ GEMINI_RESCUE_MODELS = [
 GEMINI_RESCUE_MODEL = GEMINI_RESCUE_MODELS[0]
 
 # New cache version: every event must be geolocated by the current AI engine.
-AI_GEO_VERSION = "gemini-ai-first-v5.2-one-shot-rescue"
+AI_GEO_VERSION = "gemini-ai-first-v5.3-source-faithful"
 BATCH_SIZE = max(
     1,
     min(
@@ -420,11 +420,29 @@ def related_article_context(
             120,
         )
 
-        if title:
+        original_title = compact_text(
+            article.get(
+                "original_title"
+            ),
+            300,
+        )
+
+        original_summary = compact_text(
+            article.get(
+                "original_summary"
+            ),
+            500,
+        )
+
+        if title or original_title:
             output.append(
                 {
                     "title":
                         title,
+                    "original_title":
+                        original_title,
+                    "original_summary":
+                        original_summary,
                     "source":
                         source,
                 }
@@ -457,10 +475,26 @@ def event_ai_payload(
                 650,
             ),
 
+        "original_title":
+            compact_text(
+                event.get(
+                    "original_title"
+                ),
+                650,
+            ),
+
         "summary":
             compact_text(
                 event.get(
                     "summary"
+                ),
+                900,
+            ),
+
+        "original_summary":
+            compact_text(
+                event.get(
+                    "original_summary"
                 ),
                 900,
             ),
@@ -503,9 +537,17 @@ def event_fingerprint(
                 payload[
                     "title"
                 ],
+            "original_title":
+                payload[
+                    "original_title"
+                ],
             "summary":
                 payload[
                     "summary"
+                ],
+            "original_summary":
+                payload[
+                    "original_summary"
                 ],
             "source":
                 payload[
@@ -656,17 +698,33 @@ Use all available context intelligently:
 - government bodies;
 - public personalities;
 - landmarks and facilities;
-- local/regional news-source identity;
 - related article titles from the same deduplicated event;
 - geopolitical context and well-known entity-country relationships.
+
+SOURCE-FIDELITY RULES:
+- original_title and original_summary are source-of-record fields. title and
+  summary may be AI-normalized English translations.
+- If an English-normalized title/summary contains a city or country that is
+  absent from, or conflicts with, the original-language source text, do not
+  treat that generated place as evidence unless another independent article or
+  concrete event fact supports it.
+- A publisher's home country, website domain, ccTLD, language, Google News
+  edition or query locale is not event-location evidence by itself.
+- A related article can support geography only when it is clearly about the
+  same real-world event. Do not let an unrelated article drag the event to the
+  publisher's country.
+- When geography remains unsupported after these checks, return unknown rather
+  than pinning the event to a media outlet's country.
 
 IMPORTANT ORDER OF MEANING:
 1. The actual place of the attack/arrest/trial/operation/financing event.
 2. If no city can reasonably be determined, the relevant region.
 3. If no region can reasonably be determined, the relevant country.
-4. Use the publisher's home country only as a weak last-resort clue when the
-   publication is clearly local/regional and the event context supports it.
-5. Never use the headquarters of a global media outlet as the event location.
+4. Never assign the publisher's home country merely because the publication is
+   local/regional. Publisher geography can only corroborate a location already
+   supported by the event text; it cannot create one.
+5. Never use the headquarters, domain country, ccTLD or language of a media
+   outlet as the event location.
 6. A person's nationality or an organisation's home area is evidence, not
    automatically the event location. Use it only when the event semantics
    support that inference.
