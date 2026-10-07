@@ -99,5 +99,35 @@ class DailyQuotaTests(unittest.TestCase):
         self.assertEqual(post.call_count, geolocate.REQUEST_ATTEMPTS)
 
 
+class SourceFaithfulGeolocationTests(unittest.TestCase):
+    def test_payload_keeps_original_language_text_for_geography(self):
+        event = {
+            "id": "e-source",
+            "title": "Youth accused of terrorism after bringing toxic products to school in Brazil",
+            "original_title": "Jovem é acusado de terrorismo ao levar produtos tóxicos para escola",
+            "summary": "Generated English summary.",
+            "original_summary": "Resumo original sem país.",
+            "source": "gmconline.com.br",
+            "related_articles": [{
+                "title": "Generated related title",
+                "original_title": "Título relacionado original",
+                "original_summary": "Resumo relacionado original",
+                "source": "Example",
+            }],
+        }
+        item = geolocate.event_ai_payload(event, 0)
+        self.assertEqual(item["original_title"], event["original_title"])
+        self.assertEqual(item["original_summary"], event["original_summary"])
+        self.assertEqual(item["related_articles"][0]["original_title"], "Título relacionado original")
+        self.assertEqual(item["related_articles"][0]["original_summary"], "Resumo relacionado original")
+
+    def test_prompt_rejects_publisher_country_as_standalone_evidence(self):
+        text = geolocate.SYSTEM_INSTRUCTIONS.lower()
+        self.assertIn("original_title", text)
+        self.assertIn("publisher's home country", text)
+        self.assertIn("is not event-location evidence by itself", text)
+        self.assertIn("return unknown", text)
+
+
 if __name__ == "__main__":
     unittest.main()
