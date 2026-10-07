@@ -710,6 +710,52 @@ def main():
         ),
     )
 
+    # 23. Matsaddash arrests happened in several Egyptian cities, not only Cairo.
+    event = find_one(
+        events,
+        id="1b60b0f2ce49f2bd",
+        source="repubblica.it",
+        published="2026-10-01T15:18:24+00:00",
+    )
+    apply(
+        event,
+        country,
+        name="Egypt",
+        code="EG",
+        capital="Cairo",
+        lat=30.04442,
+        lon=31.23571,
+        evidence=(
+            "The six journalists were arrested in separate operations in "
+            "multiple Egyptian locations, including Gharbiya, Port Said and Cairo."
+        ),
+        reason=(
+            "Historical correction: the event is Egypt-wide/multi-location; "
+            "Cairo is only the country-level marker position."
+        ),
+    )
+
+    # 24. Switch Off is an online-service/sanctions event without one physical site.
+    event = find_one(
+        events,
+        id="a0bbdab6e8d4b761",
+        source="tagesschau.de",
+        published="2026-09-19T15:47:00+00:00",
+    )
+    apply(
+        event,
+        unlocated,
+        evidence=(
+            "The report concerns an online blog platform affected by US sanctions; "
+            "the service, provider and sanctions involve multiple jurisdictions "
+            "and no single physical incident location."
+        ),
+        reason=(
+            "Historical correction: the Berlin-Brandenburg news section and "
+            "German publisher context do not establish a physical event location."
+        ),
+    )
+
     if changed:
         EVENTS_FILE.write_text(
             json.dumps(data, ensure_ascii=False, indent=2) + "\n",
@@ -721,10 +767,11 @@ def main():
         place = item["city"] or item["region"] or item["country"] or "UNLOCATED"
         print(f"- {item['id']} | {place} | {item['title']}")
 
-    # First execution must perform the full historical repair; later executions
-    # may legitimately be idempotent.
-    if changed not in ([],) and len(changed) != 22:
-        raise RuntimeError(f"Expected 22 first-pass changes, got {len(changed)}")
+    # The repair is intentionally idempotent.  Later audit revisions may add
+    # a small number of newly verified corrections, so do not require an exact
+    # first-pass count here; every target is still guarded by find_one().
+    if len(changed) > 24:
+        raise RuntimeError(f"Unexpected source-fidelity change count: {len(changed)}")
 
 
 if __name__ == "__main__":
