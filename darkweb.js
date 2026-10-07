@@ -307,7 +307,8 @@ $("prevPage").onclick=async()=>{if(archivePage<=1)return;const button=$("prevPag
 for(const id of ["search","outletFilter","typeFilter"])$(id).addEventListener("input",()=>{if(state)renderFeed();scheduleSearchRecord();});
 $("search").addEventListener("keydown",event=>{if(event.key==="Enter")recordSearch();});
 $("search").addEventListener("blur",()=>{if(searchTimer)recordSearch();});
-globalThis.addEventListener?.("pagehide",()=>{if(searchTimer)recordSearch();});\ndocument.addEventListener?.("visibilitychange",()=>{if(!document.hidden&&state?.admin&&!enriching)void enrich();});
+globalThis.addEventListener?.("pagehide",()=>{if(searchTimer)recordSearch();});
+document.addEventListener?.("visibilitychange",()=>{if(!document.hidden&&state?.admin&&!enriching)void enrich();});
 $("refresh").onclick=()=>refresh(true);
 // Marking reviewed is per analyst but covers every outlet, view and filter; say so first.
 $("markSeen").onclick=async()=>{
