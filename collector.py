@@ -113,7 +113,7 @@ AI_SELECTION_BATCH_SIZE = max(
     ),
 )
 
-AI_SELECTION_VERSION = "gemini-ct-selection-v7-source-faithful-geography"
+AI_SELECTION_VERSION = "gemini-ct-selection-v6-incident-model"
 AI_SELECTION_CACHE_FILE = "ai_article_selection_cache.json"
 
 AI_SELECTION_ATTEMPTS = 5
