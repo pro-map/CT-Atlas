@@ -3,25 +3,8 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
 
-test('Telegram UI filters retained posts, paginates, escapes content and exports citations',()=>{
-  const elements=new Map();
-  const document={addEventListener(){},getElementById(id){if(!elements.has(id))elements.set(id,{value:'',innerHTML:'',textContent:'',hidden:false});return elements.get(id);}};
-  const context=vm.createContext({document,URL,location:{href:'https://ct-atlas.com/social.html'},window:{}});
-  const source=fs.readFileSync('social.js','utf8').replace('})();','globalThis.testing={renderTelegramEvidence,renderTelegramMessages,pdfBlocks,setReport:r=>currentReport=r,showMore:()=>telegramShown+=20};})();');
-  vm.runInContext(source,context);
-  const h=context.testing;
-  const evidence={messages_retained:25,messages_observed:25,channels:[],relationships:[],scope:'Public preview',messages:Array.from({length:25},(_,i)=>({channel:'examplechan',url:`https://t.me/examplechan/${i+1}`,text:i===24?'Needle <img src=x onerror=alert(1)>':'ordinary',date:'2026-10-04',links:[]}))};
-  const report={telegram_evidence:evidence};h.setReport(report);h.renderTelegramEvidence(report);
-  assert.match(elements.get('reportTelegramCount').textContent,/25 matching posts · showing 20/);
-  assert.equal(elements.get('telegramShowMore').hidden,false);
-  h.showMore();h.renderTelegramMessages();assert.equal(elements.get('telegramShowMore').hidden,true);
-  elements.get('telegramEvidenceSearch').value='needle';h.renderTelegramMessages();
-  assert.match(elements.get('reportTelegramCount').textContent,/1 matching posts/);
-  assert.ok(!elements.get('reportTelegramMessages').innerHTML.includes('<img'));
-  assert.match(elements.get('reportTelegramMessages').innerHTML,/&lt;img/);
-  assert.ok(h.pdfBlocks(report).some(block=>block.text.includes('https://t.me/examplechan/25')));
-  h.renderTelegramEvidence({});assert.equal(elements.get('reportTelegramSection').hidden,true);
-});
+// The Telegram evidence panel left social.js when the Social workspace was rebuilt for
+// OSINT Industries searches (3d1ae9a); its retention and gate behaviour stay tested below.
 
 function gateHarness(){
   const values=new Map();
