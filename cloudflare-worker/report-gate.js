@@ -963,20 +963,44 @@ export class ReportGate {
         }
         await this.state.storage.put(migrationKey, page.size === 100 ? [...page.keys()].at(-1) : "done");
       }
-      // Records that failed three attempts stay queued but no longer hold the batch.
-      const items = [];
+      // Daily-first translation queue: the newest publication day always wins over
+      // historical backlog. A newest-day title that previously exhausted attempts is
+      // reset so an old quota/provider problem cannot leave today's feed untranslated.
+      const items = [], seen = new Set();
+      const indexPrefix = `darkweb:publication-index:${policy.epoch}:`;
+      const newestIndex = await this.state.storage.list({ prefix: indexPrefix, reverse: true, limit: 100 });
+      let newestDay = "";
+      for (const [key, id] of newestIndex) {
+        const suffix = key.slice(indexPrefix.length);
+        const day = suffix.slice(0, 10);
+        if (!newestDay) newestDay = day;
+        if (day !== newestDay) break;
+        const archiveKey = `darkweb:publication:${policy.epoch}:${id}`;
+        let record = await this.state.storage.get(archiveKey);
+        if (!record || DARKWEB_TITLE_DONE.has(record.title_en_kind)) continue;
+        if (record.enrich_attempts >= 3) {
+          record = { ...record, enrich_attempts: 0 };
+          await this.state.storage.put(archiveKey, record);
+        }
+        await this.state.storage.put(`darkweb:publication-pending:${policy.epoch}:${id}`, id);
+        items.push(record); seen.add(id);
+        if (items.length >= 10) break;
+      }
+      // Only if today's/newest-day publications leave spare capacity do we use it for
+      // older pending records. Exhausted historical records remain dormant.
       let startAfter = "";
       for (let page = 0; page < 5 && items.length < 10; page++) {
         const pending = await this.state.storage.list({ prefix: `darkweb:publication-pending:${policy.epoch}:`, limit: 128, ...(startAfter ? { startAfter } : {}) });
         for (const [key, id] of pending) {
           startAfter = key;
+          if (seen.has(id)) continue;
           const record = await this.state.storage.get(`darkweb:publication:${policy.epoch}:${id}`);
-          if (record && !(record.enrich_attempts >= 3)) items.push(record);
+          if (record && !(record.enrich_attempts >= 3)) { items.push(record); seen.add(id); }
           if (items.length >= 10) break;
         }
         if (pending.size < 128) break;
       }
-      return Response.json({ items, summary_attempt: await this.state.storage.get("darkweb:summary-attempt") || null });
+      return Response.json({ items, newest_day: newestDay });
     }
     if (url.pathname === "/darkweb-enrich-lock") {
       return Response.json(await this.state.storage.transaction(async tx => {
