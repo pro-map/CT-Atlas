@@ -710,6 +710,12 @@ SOURCE-FIDELITY RULES:
   concrete event fact supports it.
 - A publisher's home country, website domain, ccTLD, language, Google News
   edition or query locale is not event-location evidence by itself.
+- SOURCE-COUNTRY CONTRADICTION CHECK: if the normalized English title/summary
+  places the event in the publisher's country, but the original-language title
+  and summary do not support that country, treat the normalized location as
+  suspected translation/publisher leakage. Require an explicit event fact or
+  an independent same-incident source before accepting it. This applies even
+  when the publisher country matches the article language or ccTLD.
 - A related article can support geography only when it is clearly about the
   same real-world event. Do not let an unrelated article drag the event to the
   publisher's country.
