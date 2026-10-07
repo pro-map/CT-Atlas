@@ -931,6 +931,25 @@ export class ReportGate {
     }
     if (url.pathname === "/darkweb-enrich-candidates") {
       const policy = await this.state.storage.get("darkweb:policy");
+      // One-time Arabic backfill: records collected before the translation fix may
+      // have exhausted their retry counter without ever receiving English. Requeue
+      // them without touching source text, attachments, dates or collection state.
+      const arabicMigrationKey = `darkweb:arabic-translation-v2-cursor:${policy.epoch}`;
+      const arabicCursor = await this.state.storage.get(arabicMigrationKey) || "";
+      if (arabicCursor !== "done") {
+        const prefix = `darkweb:publication-index:${policy.epoch}:`;
+        const page = await this.state.storage.list({ prefix, reverse: true, limit: 100, ...(arabicCursor ? { end: arabicCursor } : {}) });
+        for (const id of page.values()) {
+          const archiveKey = `darkweb:publication:${policy.epoch}:${id}`;
+          const item = await this.state.storage.get(archiveKey);
+          const arabic = item && (item.source_language === "ar" || /[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]/.test(String(item.title || "")));
+          if (arabic && (!DARKWEB_TITLE_DONE.has(item.title_en_kind) || !item.overview_en)) {
+            await this.state.storage.put(archiveKey, { ...item, enrich_attempts: 0 });
+            await this.state.storage.put(`darkweb:publication-pending:${policy.epoch}:${id}`, id);
+          }
+        }
+        await this.state.storage.put(arabicMigrationKey, page.size === 100 ? [...page.keys()].at(-1) : "done");
+      }
       // Requeue already-enriched archive records once for faithful translations.
       // This migration never resets publication text, files or collection progress.
       const migrationKey = `darkweb:title-translation-cursor:${policy.epoch}`;
