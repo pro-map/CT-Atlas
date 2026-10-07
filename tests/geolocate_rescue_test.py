@@ -128,6 +128,13 @@ class SourceFaithfulGeolocationTests(unittest.TestCase):
         self.assertIn("is not event-location evidence by itself", text)
         self.assertIn("return unknown", text)
 
+    def test_prompt_explicitly_checks_source_country_contradictions(self):
+        text = geolocate.SYSTEM_INSTRUCTIONS.lower()
+        self.assertIn("source-country contradiction check", text)
+        self.assertIn("suspected translation/publisher leakage", text)
+        self.assertIn("independent same-incident source", text)
+        self.assertIn("article language or cctld", text)
+
     def test_prompt_handles_multi_location_and_non_physical_events(self):
         text = geolocate.SYSTEM_INSTRUCTIONS.lower()
         self.assertIn("multi-location events", text)
