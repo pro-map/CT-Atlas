@@ -27,6 +27,7 @@ import copy
 import importlib.util
 import json
 import os
+import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -59,7 +60,10 @@ class BudgetReached(RuntimeError):
 
 
 def load_collector(root=ROOT):
-    spec = importlib.util.spec_from_file_location("collector", Path(root) / "collector.py")
+    root = Path(root).resolve()
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    spec = importlib.util.spec_from_file_location("collector", root / "collector.py")
     collector = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(collector)
     return collector
@@ -322,4 +326,3 @@ def review_batches(items, collector, on_batch, call_batch=None, batch_size=BATCH
         on_batch(pairs, skipped)
         handled += len(batch)
     return handled, "done"
-
