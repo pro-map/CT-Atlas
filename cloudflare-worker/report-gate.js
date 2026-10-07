@@ -736,6 +736,31 @@ export class ReportGate {
     const body = await request.json().catch(()=>({}));
     const now = Date.now();
 
+    if (url.pathname === "/osint-industries-limit") {
+      if (!isAllowedUser(body.username, this.env) || !/^[a-f0-9-]{36}$/i.test(String(body.request_id || ""))) return Response.json({ error: "Invalid search reservation." }, { status: 400 });
+      return this.state.storage.transaction(async tx => {
+        const key = "osint-industries:user:" + body.username;
+        const user = await tx.get(key) || { lease_until: 0, request_id: "", seen: [] };
+        if (body.release === true) {
+          if (user.request_id === body.request_id) { user.lease_until = 0; await tx.put(key, user); }
+          return Response.json({ ok: true });
+        }
+        user.seen = (user.seen || []).filter(item => item.at > now - 10 * 60000);
+        if (user.seen.some(item => item.id === body.request_id)) return Response.json({ error: "This search was already submitted. Its response may still be in progress; it will not be charged twice by a retry.", code: "DUPLICATE_SEARCH" }, { status: 409 });
+        if (user.lease_until > now) return Response.json({ error: "Your previous search is still running. Wait for it to finish.", code: "SEARCH_BUSY" }, { status: 429 });
+        if (user.seen.filter(item => item.at > now - 60000).length >= 2) return Response.json({ error: "Search limit reached. Wait one minute.", code: "SEARCH_RATE_LIMIT" }, { status: 429 });
+        const globalKey = "osint-industries:minute";
+        let global = await tx.get(globalKey);
+        if (!global || global.until <= now) global = { count: 0, until: now + 60000 };
+        if (global.count >= 3) return Response.json({ error: "The shared search connection is busy. Wait one minute.", code: "SEARCH_RATE_LIMIT" }, { status: 429 });
+        global.count++;
+        user.lease_until = now + 90000; user.request_id = body.request_id;
+        user.seen.push({ id: body.request_id, at: now });
+        await tx.put(globalKey, global); await tx.put(key, user);
+        return Response.json({ ok: true });
+      });
+    }
+
     if (url.pathname === "/ip-intelligence-limit") {
       if (!isAllowedUser(body.username, this.env)) return Response.json({ error: "Unknown user." }, { status: 403 });
       // The first slot of an analyst's lookup carries the target: once granted, it is

@@ -161,9 +161,11 @@ jobs:
           grep -q 'cryptoTestExample' crypto.html
           grep -q 'cryptoTestExample' crypto.js
           test -s social.css
-          grep -q 'UNDER CONSTRUCTION' social.html
-          grep -q '30 free OSINT Industries credits per month' social.html
-          grep -q 'international law-enforcement organizations' social.html
+          grep -q 'id="osintForm"' social.html
+          grep -q 'POWERED BY OSINT INDUSTRIES' social.html
+          grep -q 'osint-industries-20261007' social.html
+          grep -q '/social-osint/search' social.js
+          node --check social.js
           grep -q 'osint.industries/industries/law-enforcement' social.html
           grep -q 'main.html' crypto.html
           grep -q 'reportResultIllustration' index.html
