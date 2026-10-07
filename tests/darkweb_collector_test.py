@@ -1554,7 +1554,7 @@ PORTAL_MENU = ('<li><div class="language-option " data-lang="ar">AR</div></li>'
                '<li><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="autoTranslateCheckbox" checked>'
                '<label class="form-check-label" for="autoTranslateCheckbox">Auto</label></div></li>'
                '<script>const url = new URL("/language/change", window.location.origin);</script>')
-PORTAL_SWITCH = BASE + 'language/change?locale=en&auto_translate=true&force_translate=false'
+PORTAL_SWITCH = BASE + 'language/change?locale=en&auto_translate=true&force_translate=false'\nPORTAL_SWITCH_FORCE = BASE + 'language/change?locale=en&auto_translate=true&force_translate=true'
 # The article's pdf.js viewer: a canvas and controls, with the file named only in an inline script.
 PORTAL_VIEWER = ('<div class="pdf-viewer-container mb-5"><div class="pdf-controls d-flex">'
                  '<button id="pdf-prev" class="btn btn-sm">Previous</button><span><span id="pdf-current-page">1</span> / '
@@ -1822,6 +1822,33 @@ def test_news_portal_asks_its_language_menu_for_english_once():
     assert 'source_translation' not in result['items'][0], 'only English records are the outlet translation'
 
 
+class ForceTranslationSite(Site):
+    """The normal English tab changes locale but only force_translate yields English text."""
+    def __init__(self, pages_ar, pages_en):
+        super().__init__(pages_ar)
+        self.pages_ar, self.pages_en, self.force = pages_ar, pages_en, False
+    def get(self, url, **kwargs):
+        if url == PORTAL_SWITCH:
+            self.calls.append(url)
+            return Response(status=302, headers={'Location': '/'}, url=url)
+        if url == PORTAL_SWITCH_FORCE:
+            self.calls.append(url)
+            self.force = True
+            return Response(status=302, headers={'Location': '/'}, url=url)
+        self.pages = self.pages_en if self.force else self.pages_ar
+        return super().get(url, **kwargs)
+
+
+def test_news_portal_forces_translation_when_english_tab_still_serves_arabic():
+    arabic = portal_home([portal_card('region-06-10-2026', 'عنوان', '06 أكتوبر 2026')], pages=(), lang='ar')
+    english = portal_home([portal_card('region-06-10-2026', 'English title', '06 October 2026')], pages=())
+    site = ForceTranslationSite({BASE: arabic}, {BASE: english})
+    result = c.read_listing(site, {**OUTLET, 'policy': {'from': '2025-10-07'}})
+    assert result['items'][0]['title'] == 'English title'
+    assert result['items'][0]['source_language'] == 'en'
+    assert PORTAL_SWITCH in site.calls and PORTAL_SWITCH_FORCE in site.calls
+
+
 class FailingSwitch(Site):
     """The outlet serves Arabic and its English menu link fails."""
     def __init__(self, pages, failure):
@@ -1844,7 +1871,7 @@ def test_failed_english_switch_keeps_the_page_already_read(failure, caplog):
     arabic = portal_home([portal_card('region-06-10-2026', 'عنوان', '06 أكتوبر 2026')], pages=(2,), lang='ar')
     site = FailingSwitch({BASE: arabic}, failure)
     result = c.read_listing(site, {**OUTLET, 'policy': {'from': '2025-10-07'}})
-    assert site.calls == [BASE, PORTAL_SWITCH], 'no reread after a failed switch'
+    assert site.calls == [BASE, PORTAL_SWITCH, PORTAL_SWITCH_FORCE], 'both safe English switch modes are attempted once'
     expected = c.structured_publications(arabic, BASE, since='2025-10-07')
     assert expected.pop('english_available') is True and result == expected, 'the structured result already read'
     row = result['items'][0]
