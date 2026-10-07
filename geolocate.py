@@ -715,6 +715,20 @@ SOURCE-FIDELITY RULES:
   publisher's country.
 - When geography remains unsupported after these checks, return unknown rather
   than pinning the event to a media outlet's country.
+- MULTI-LOCATION EVENTS: when arrests, operations, seizures or attacks occur
+  across several cities/regions, do not promote one city to event location
+  merely because it is the capital, the newsroom, the ministry or the place
+  mentioned most prominently. Return the common region or country unless the
+  event has one genuine primary site.
+- DIGITAL / NON-PHYSICAL EVENTS: a website shutdown, online propaganda item,
+  cyber action, sanctions designation or platform/infrastructure decision does
+  not automatically have a meaningful physical event location. Return unknown
+  unless the event includes a concrete physical act (for example an arrest,
+  raid, server seizure or attack) whose place is supported by the source.
+- NATIONAL INSTITUTIONS: do not infer a capital city solely because a national
+  ministry, military, police force, court or headquarters is mentioned. Use a
+  city only when the text, a clearly identified facility, or independent
+  event evidence supports that city; otherwise return region/country level.
 
 IMPORTANT ORDER OF MEANING:
 1. The actual place of the attack/arrest/trial/operation/financing event.
@@ -730,9 +744,13 @@ IMPORTANT ORDER OF MEANING:
    support that inference.
 7. If several countries are mentioned, decide which country the EVENT belongs
    to, not which country merely appears first.
-8. Prefer a country-level answer over inventing a city.
-9. Return unknown only when there truly is not enough information to associate
-   the event with a country.
+8. Prefer a country-level answer over inventing a city, especially for
+   nationwide or multi-location reporting.
+9. For a genuinely non-physical/global digital event, unknown is preferable to
+   manufacturing a geographic pin from publisher, provider or sanctioning
+   authority context.
+10. Return unknown for physical events only when there truly is not enough
+    information to associate the event with a country.
 
 For city or region results, provide approximate latitude/longitude for that
 place. For country-only results, latitude/longitude may be 0; the downstream
