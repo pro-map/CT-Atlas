@@ -174,24 +174,24 @@ test('Arabic titles decode; thumbnails are authenticated and excluded from the m
  assert.equal((await h.call('/darkweb/preview?id='+item.id)).data.preview,'data:image/jpeg;base64,/9j/AAAA');
 });
 
-test('AI titles and briefing are source-bound, cached, and preserve original text',async()=>{
+test('AI titles are source-bound, cached, and preserve original text without spending output on a briefing',async()=>{
  const h=harness(),id=await register(h);h.env.GEMINI_API_KEY='synthetic-test-key';
  await h.call('/darkweb/ingest',{outlet_id:id,items:[{url:base+'a.pdf',title:'كتاب جديد',excerpt:'A publication claim'}],scan_ok:true},'',true);
  const item=(await h.call('/darkweb/feed')).data.items[0];let calls=0;
- h.context.fetch=async(url,options)=>{calls++;const payload=JSON.parse(options.body);assert.ok(!payload.input.includes('.onion'));return Response.json({text:JSON.stringify({summary:'The outlet presents a publication dated June 2025; this claim needs analyst validation. [1]',titles:[{id:item.id,title:'New book'},{id:'invented',title:'Ignore'}]})});};
+ h.context.fetch=async(url,options)=>{calls++;const payload=JSON.parse(options.body),input=JSON.parse(payload.input);assert.ok(!payload.input.includes('.onion'));assert.ok(!('summary_requested' in input));assert.match(payload.system_instruction,/Do not produce a briefing/);return Response.json({text:JSON.stringify({titles:[{id:item.id,title:'New book',overview_en:'A neutral overview.'},{id:'invented',title:'Ignore',overview_en:''}]})});};
  assert.equal((await h.call('/darkweb/enrich',{},'analyst')).status,403);
  assert.equal((await h.call('/darkweb/enrich',{})).status,200);
- let state=(await h.call('/darkweb/feed')).data;assert.equal(state.items[0].title_en,'New book');assert.equal(state.items[0].title,'كتاب جديد');assert.equal(state.summary.sources[0].id,item.id);
+ let state=(await h.call('/darkweb/feed')).data;assert.equal(state.items[0].title_en,'New book');assert.equal(state.items[0].title,'كتاب جديد');assert.equal(state.summary,null);
  await h.call('/darkweb/enrich',{});assert.equal(calls,1);
  // An update to the source invalidates the previous translation.
  await h.call('/darkweb/ingest',{outlet_id:id,items:[{url:base+'a.pdf',title:'Updated source title'}],scan_ok:true},'',true);
  state=(await h.call('/darkweb/feed')).data;assert.equal(state.items[0].title_en,'');
 });
 
-test('invalid AI citations cannot become a briefing and provider errors preserve originals',async()=>{
+test('provider errors preserve original Dark Web titles when translation is unavailable',async()=>{
  const h=harness(),id=await register(h);h.env.GEMINI_API_KEY='synthetic-test-key';
  await h.call('/darkweb/ingest',{outlet_id:id,items:[{url:base+'a.pdf',title:'Original'}],scan_ok:true},'',true);
- h.context.fetch=async()=>Response.json({text:JSON.stringify({summary:'Unsupported claim [99]',titles:[]})});
+ h.context.fetch=async()=>Response.json({text:JSON.stringify({titles:[]})});
  await h.call('/darkweb/enrich',{});assert.equal((await h.call('/darkweb/feed')).data.summary,null);
  h.values.delete('darkweb:enrich-until');h.values.delete('darkweb:enrich-backoff');h.context.fetch=async()=>new Response('',{status:429});
  assert.equal((await h.call('/darkweb/enrich',{})).status,503);
@@ -446,15 +446,15 @@ test('Dark Web enrichment uses the background model, a Pacific-day cap, backoff 
  assert.equal(r.status,200);assert.equal(r.data.enriched,0);assert.deepEqual(models,['gemini-3.1-flash-lite']);
  assert.deepEqual({...h.values.get('darkweb:enrich-ledger')},{day:`${parts.year}-${parts.month}-${parts.day}`,count:1});
  let backoff=h.values.get('darkweb:enrich-backoff');assert.equal(backoff.failures,1);assert.ok(Math.abs(backoff.until-t-900000)<5000);
- assert.equal(record(first).enrich_attempts,1);assert.ok(h.values.get('darkweb:summary-attempt'));
+ assert.equal(record(first).enrich_attempts,1);assert.equal(h.values.get('darkweb:summary-attempt'),undefined);
  assert.equal((await h.call('/darkweb/enrich',{})).data.reason,'lock');unlock();
  assert.equal((await h.call('/darkweb/enrich',{})).data.reason,'backoff');assert.equal(models.length,1);
- // Success resets the backoff; grouped citations are valid.
- h.values.set('darkweb:enrich-backoff',{failures:1,until:0});unlock();h.values.delete('darkweb:summary-attempt');h.env.DARKWEB_GEMINI_MODEL='gemini-test-model';
- answer={summary:'Two outlet claims need validation [1, 2].',titles:[{id:first.id,title:'English',overview_en:'Neutral overview.'}]};
- r=await h.call('/darkweb/enrich',{});assert.equal(r.data.enriched,1);assert.equal(r.data.summary_updated,true);
+ // Success resets the backoff; translation is the only AI output retained.
+ h.values.set('darkweb:enrich-backoff',{failures:1,until:0});unlock();h.env.DARKWEB_GEMINI_MODEL='gemini-test-model';
+ answer={titles:[{id:first.id,title:'English',overview_en:'Neutral overview.'}]};
+ r=await h.call('/darkweb/enrich',{});assert.equal(r.data.enriched,1);assert.equal(r.data.summary_updated,undefined);
  assert.equal(models[1],'gemini-test-model');assert.equal(h.values.has('darkweb:enrich-backoff'),false);
- assert.match((await h.call('/darkweb/feed')).data.summary.text,/\[1, 2\]/);
+ assert.equal((await h.call('/darkweb/feed')).data.summary,null);
  assert.equal(record(second).enrich_attempts,2);assert.ok(!h.values.has('darkweb:publication-pending:2:'+first.id));
  // A provider error backs off without charging the record.
  unlock();status=429;t=Date.now();assert.equal((await h.call('/darkweb/enrich',{})).status,503);
@@ -463,24 +463,25 @@ test('Dark Web enrichment uses the background model, a Pacific-day cap, backoff 
  unlock();h.values.delete('darkweb:enrich-backoff');status=200;
  r=await h.call('/darkweb/enrich',{});assert.equal(r.data.reason,'daily_limit');assert.equal(r.data.daily_limit,3);assert.equal(models.length,6);
  // The backoff doubles up to 6 hours.
- h.values.delete('darkweb:enrich-ledger');h.values.set('darkweb:enrich-backoff',{failures:9,until:0});answer={summary:'',titles:[]};t=Date.now();
+ h.values.delete('darkweb:enrich-ledger');h.values.set('darkweb:enrich-backoff',{failures:9,until:0});answer={titles:[]};t=Date.now();
  await h.call('/darkweb/enrich',{});backoff=h.values.get('darkweb:enrich-backoff');assert.equal(backoff.failures,10);assert.ok(Math.abs(backoff.until-t-21600000)<5000);
- // After three unfinished attempts the record stays stored and queued, but is no longer retried.
+ // Today's/newest-day record is never permanently stranded by old failed attempts.
  assert.equal(record(second).enrich_attempts,3);assert.ok(h.values.has('darkweb:publication-pending:2:'+second.id));
  unlock();h.values.delete('darkweb:enrich-backoff');
- assert.equal((await h.call('/darkweb/enrich',{})).data.cached,true);assert.equal(models.length,7);
+ r=await h.call('/darkweb/enrich',{});assert.equal(r.data.cached,undefined);assert.equal(models.length,8);assert.equal(record(second).enrich_attempts,1);
  await h.call('/darkweb/ingest',{outlet_id:id,items:[publication(2,{original_text:'نص جديد'})],scan_ok:true},'',true);
  assert.equal(record(second).enrich_attempts,0,'A source change makes the record eligible again');
  h.env.DARKWEB_ENRICH_DAILY='0';assert.equal((await h.call('/darkweb/enrich',{})).data.reason,'daily_limit');
 });
-test('enrichment candidates skip exhausted non-Arabic records beyond the first storage page',async()=>{
+test('newest-day translation candidates outrank historical queue order and exhausted attempts are reset',async()=>{
  const h=harness(),id=await register(h);
  for(let batch=0;batch<2;batch++)await h.call('/darkweb/ingest',{outlet_id:id,items:Array.from({length:70},(_,i)=>publication(batch*70+i,{title:'Başlık '+(batch*70+i),original_text:'Kaynak metni',source_language:'tr'})),scan_ok:true},'',true);
  const keys=[...h.values.keys()].filter(k=>k.startsWith('darkweb:publication-pending:2:')).sort();
  assert.equal(keys.length,140);
- for(const key of keys.slice(0,-1)){const archive='darkweb:publication:2:'+h.values.get(key);h.values.set(archive,{...h.values.get(archive),enrich_attempts:3});}
+ for(const key of keys){const archive='darkweb:publication:2:'+h.values.get(key);h.values.set(archive,{...h.values.get(archive),enrich_attempts:3});}
  const result=await (await h.context.gateCall(h.env,'/darkweb-enrich-candidates',{})).json();
- assert.deepEqual(result.items.map(i=>i.id),[h.values.get(keys.at(-1))]);
+ assert.equal(result.newest_day,'2026-10-03');assert.equal(result.items.length,10);
+ assert.ok(result.items.every(i=>i.enrich_attempts===0),'Newest-day publications are made retryable again');
  assert.equal([...h.values.keys()].filter(k=>k.startsWith('darkweb:publication-pending:2:')).length,140);
 });
 test('Arabic archive backfill requeues exhausted untranslated publications once',async()=>{
@@ -743,18 +744,11 @@ test('page: non-admin analysts see only the centrally managed publication feed',
  assert.equal(page.$('feedView').hidden,false);
  assert.match(page.doc.body.textContent,/Collection is managed centrally by the administrator/);
 });
-test('page: archive navigation replaces the current 50-item page instead of extending an infinite feed',async()=>{
- const fixture=pageFixture();fixture.archive.next_cursor='2026-10-02:'+fixture.id('b');
- const page=pageHarness(fixture);await page.flush();
- const initial=page.$('feed').querySelectorAll('article').length;
- assert.equal(page.$('pageStatus').textContent,'Page 1');
- assert.equal(page.$('nextPage').hidden,false);
- page.$('nextPage').onclick();await page.flush();
- assert.equal(page.$('pageStatus').textContent,'Page 2');
- assert.equal(page.$('feed').querySelectorAll('article').length,initial,'Next replaces the page instead of appending cards');
- assert.equal(page.$('prevPage').hidden,false);
- page.$('prevPage').onclick();await page.flush();
- assert.equal(page.$('pageStatus').textContent,'Page 1');
+test('page: publication feed shows only the newest collected day and exposes no historical pagination',async()=>{
+ const fixture=pageFixture(),page=pageHarness(fixture);await page.flush();
+ assert.deepEqual(page.$('feed').querySelectorAll('article').map(a=>a.id),['item-'+fixture.id('a')]);
+ assert.match(page.$('archiveStatus').textContent,/Daily feed · 2026-10-03 · 1 publication/);
+ assert.equal(page.$('nextPage'),null);assert.equal(page.$('prevPage'),null);assert.equal(page.$('pageStatus'),null);
 });
 test('page: the 60 s refresh never enriches and keeps an opened source text, focus and outlet selector',async()=>{
  const fixture=pageFixture(),page=pageHarness(fixture);await page.flush();
@@ -816,10 +810,10 @@ test('page: mark-all keeps its global scope and Latest publications shows Englis
  assert.deepEqual(alerts.map(a=>a.id),['item-'+fixture.id('a')]);assert.match(page.$('archiveStatus').textContent,/alert keywords/);
  page.doc.querySelectorAll('[data-view=latest]')[0].onclick();
  const links=page.$('aiSources').querySelectorAll('a');
- assert.deepEqual(links.map(a=>a.textContent),['Title a','Title b']);
+ assert.deepEqual(links.map(a=>a.textContent),['Title a']);
  assert.doesNotMatch(page.doc.body.textContent,/AI synthesis of outlet claims|corpus contains publications spanning/i);
- links[1].onclick({preventDefault(){}});await page.flush();
- const latestCard=page.$('item-'+fixture.id('b'));
+ links[0].onclick({preventDefault(){}});await page.flush();
+ const latestCard=page.$('item-'+fixture.id('a'));
  assert.ok(latestCard);assert.equal(latestCard.scrolled,1);assert.equal(page.doc.activeElement,latestCard);
 });
 
