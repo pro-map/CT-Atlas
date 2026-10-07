@@ -101,5 +101,17 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add events.json
           git commit -m "Repair historical source-country geolocation errors"
-          git pull --rebase origin main
-          git push origin HEAD:main
+
+          # A harmless code-only commit can land between fetch and push.
+          # Retry with a fresh rebase instead of reporting a false data failure.
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Push race on attempt ${attempt}; refreshing main and retrying."
+            sleep 2
+          done
+          echo "Unable to publish repaired events.json after 3 attempts." >&2
+          exit 1
