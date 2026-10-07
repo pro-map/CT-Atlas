@@ -2060,3 +2060,11 @@ def test_short_secret_is_a_configuration_error_with_exit_code_2():
         with pytest.raises(SystemExit) as stopped:
             c.main()
     assert stopped.value.code == 2
+
+
+def test_start_collector_is_one_shot_and_has_no_restart_loop():
+    script = Path("darkweb-collector/start-collector.cmd").read_text(encoding="utf-8")
+    assert "--once" in script
+    assert "--interval" not in script
+    assert "goto run" not in script.lower()
+    assert "Bessira daily update completed" in script
