@@ -729,6 +729,32 @@ function pageFixture(){
   items:[p1,p2,legacy],unread_count:3,keyword_alert_count:1,seen_through:'',generated_at:'2026-10-03T12:00:00.000Z',retention_limit:500,files_storage:null,collector_configured:true};
  return {feed,archive:{items:[p1,p2],next_cursor:'',epoch:2},full:{[p1.id]:{...p1,original_text:'النص الكامل'},[older.id]:{...older,original_text:'نص أقدم'}},id};
 }
+test('page: non-admin analysts see only the centrally managed publication feed',async()=>{
+ const fixture=pageFixture();fixture.feed.admin=false;
+ const page=pageHarness(fixture);await page.flush();
+ assert.equal(page.$('collectionForm').hidden,true);
+ assert.equal(page.$('storageForm').hidden,true);
+ assert.equal(page.$('enrichNow').hidden,true);
+ assert.equal(page.$('outletFilterWrap').hidden,true);
+ assert.equal(page.$('markSeen').hidden,true);
+ const visibleViews=page.doc.querySelectorAll('[data-view]').filter(b=>!b.hidden).map(b=>b.dataset.view);
+ assert.deepEqual(visibleViews,['latest']);
+ assert.equal(page.$('feedView').hidden,false);
+ assert.match(page.doc.body.textContent,/Collection is managed centrally by the administrator/);
+});
+test('page: archive navigation replaces the current 50-item page instead of extending an infinite feed',async()=>{
+ const fixture=pageFixture();fixture.archive.next_cursor='2026-10-02:'+fixture.id('b');
+ const page=pageHarness(fixture);await page.flush();
+ const initial=page.$('feed').querySelectorAll('article').length;
+ assert.equal(page.$('pageStatus').textContent,'Page 1');
+ assert.equal(page.$('nextPage').hidden,false);
+ page.$('nextPage').onclick();await page.flush();
+ assert.equal(page.$('pageStatus').textContent,'Page 2');
+ assert.equal(page.$('feed').querySelectorAll('article').length,initial,'Next replaces the page instead of appending cards');
+ assert.equal(page.$('prevPage').hidden,false);
+ page.$('prevPage').onclick();await page.flush();
+ assert.equal(page.$('pageStatus').textContent,'Page 1');
+});
 test('page: the 60 s refresh never enriches and keeps an opened source text, focus and outlet selector',async()=>{
  const fixture=pageFixture(),page=pageHarness(fixture);await page.flush();
  assert.equal(page.count('/darkweb/enrich'),1,'First load enriches once');
@@ -844,7 +870,7 @@ test('page: Latin-script records get neutral labels, a language chip and no Arab
  assert.match(turkish.textContent,/ENGLISH · MACHINE TRANSLATION/);assert.match(turkish.textContent,/Clash in the border region/);assert.match(arabic.textContent,/ENGLISH · MACHINE TRANSLATION/);
  assert.equal(english.textContent.split('Statement on the border clash').length-1,1,'An English original is shown once');
  assert.doesNotMatch(english.textContent,/MACHINE TRANSLATION|English translation pending/);assert.equal(english.querySelector('h3').lang,'en');
- assert.match(page.doc.body.textContent,/original-language text/);assert.doesNotMatch(page.doc.body.textContent,/Arabic/);
+ assert.match(page.doc.body.textContent,/original-language text/i);assert.doesNotMatch(page.doc.body.textContent,/Arabic/);
  assert.doesNotMatch(fs.readFileSync('darkweb.js','utf8'),/ORIGINAL ARABIC|arabic-title|Arabic titles/);assert.doesNotMatch(fs.readFileSync('darkweb.css','utf8'),/arabic-title/);
  // Search folds diacritics and the Turkish dotless i.
  page.$('search').value='SINIR';page.$('search').dispatch('input');
