@@ -1554,7 +1554,8 @@ PORTAL_MENU = ('<li><div class="language-option " data-lang="ar">AR</div></li>'
                '<li><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="autoTranslateCheckbox" checked>'
                '<label class="form-check-label" for="autoTranslateCheckbox">Auto</label></div></li>'
                '<script>const url = new URL("/language/change", window.location.origin);</script>')
-PORTAL_SWITCH = BASE + 'language/change?locale=en&auto_translate=true&force_translate=false'\nPORTAL_SWITCH_FORCE = BASE + 'language/change?locale=en&auto_translate=true&force_translate=true'
+PORTAL_SWITCH = BASE + 'language/change?locale=en&auto_translate=true&force_translate=false'
+PORTAL_SWITCH_FORCE = BASE + 'language/change?locale=en&auto_translate=true&force_translate=true'
 # The article's pdf.js viewer: a canvas and controls, with the file named only in an inline script.
 PORTAL_VIEWER = ('<div class="pdf-viewer-container mb-5"><div class="pdf-controls d-flex">'
                  '<button id="pdf-prev" class="btn btn-sm">Previous</button><span><span id="pdf-current-page">1</span> / '
