@@ -459,15 +459,16 @@ test('Dark Web enrichment uses the background model, a Pacific-day cap, backoff 
  // A provider error backs off without charging the record.
  unlock();status=429;t=Date.now();assert.equal((await h.call('/darkweb/enrich',{})).status,503);
  assert.equal(record(second).enrich_attempts,2);assert.equal(h.values.get('darkweb:enrich-backoff').failures,1);
+ assert.deepEqual(models.slice(-4),['gemini-test-model','gemini-3.7-flash','gemini-3.8-flash','gemini-3.5-flash']);
  unlock();h.values.delete('darkweb:enrich-backoff');status=200;
- r=await h.call('/darkweb/enrich',{});assert.equal(r.data.reason,'daily_limit');assert.equal(r.data.daily_limit,3);assert.equal(models.length,3);
+ r=await h.call('/darkweb/enrich',{});assert.equal(r.data.reason,'daily_limit');assert.equal(r.data.daily_limit,3);assert.equal(models.length,6);
  // The backoff doubles up to 6 hours.
  h.values.delete('darkweb:enrich-ledger');h.values.set('darkweb:enrich-backoff',{failures:9,until:0});answer={summary:'',titles:[]};t=Date.now();
  await h.call('/darkweb/enrich',{});backoff=h.values.get('darkweb:enrich-backoff');assert.equal(backoff.failures,10);assert.ok(Math.abs(backoff.until-t-21600000)<5000);
  // After three unfinished attempts the record stays stored and queued, but is no longer retried.
  assert.equal(record(second).enrich_attempts,3);assert.ok(h.values.has('darkweb:publication-pending:2:'+second.id));
  unlock();h.values.delete('darkweb:enrich-backoff');
- assert.equal((await h.call('/darkweb/enrich',{})).data.cached,true);assert.equal(models.length,4);
+ assert.equal((await h.call('/darkweb/enrich',{})).data.cached,true);assert.equal(models.length,7);
  await h.call('/darkweb/ingest',{outlet_id:id,items:[publication(2,{original_text:'نص جديد'})],scan_ok:true},'',true);
  assert.equal(record(second).enrich_attempts,0,'A source change makes the record eligible again');
  h.env.DARKWEB_ENRICH_DAILY='0';assert.equal((await h.call('/darkweb/enrich',{})).data.reason,'daily_limit');
@@ -804,7 +805,7 @@ test('page: unsaved period edits survive refresh; widen, narrow, pause and reset
  assert.match(page.$('collectionState').textContent,/PERIOD ENDED/);assert.ok(page.$('collectionState').classList.contains('warning'));
  assert.match(page.$('snapshot').textContent,/Collection period ended on 2026-10-01/);
 });
-test('page: mark-all states its global scope, keyword alerts match their label, briefing sources reveal their card',async()=>{
+test('page: mark-all keeps its global scope and Latest publications shows English titles from the newest archive records',async()=>{
  const fixture=pageFixture(),page=pageHarness(fixture);await page.flush();
  page.answer(false);page.$('markSeen').onclick();
  assert.match(page.confirms.at(-1),/ALL 3 unreviewed item\(s\) across all outlets/);assert.match(page.confirms.at(-1),/1 keyword alert/);assert.equal(page.count('/darkweb/seen'),0);
@@ -814,15 +815,12 @@ test('page: mark-all states its global scope, keyword alerts match their label, 
  const alerts=page.$('feed').querySelectorAll('article');
  assert.deepEqual(alerts.map(a=>a.id),['item-'+fixture.id('a')]);assert.match(page.$('archiveStatus').textContent,/alert keywords/);
  page.doc.querySelectorAll('[data-view=latest]')[0].onclick();
- page.$('outletFilter').value='o2';page.$('outletFilter').dispatch('input');
- const [legacyLink,olderLink]=page.$('aiSources').querySelectorAll('a');
- legacyLink.onclick({preventDefault(){}});await page.flush();
- const legacyCard=page.$('item-'+fixture.id('c'));
- assert.ok(legacyCard,'The legacy source is shown');assert.equal(page.$('outletFilter').value,'');
- assert.ok(page.doc.querySelectorAll('[data-view=legacy]')[0].classList.contains('active'));assert.equal(legacyCard.scrolled,1);assert.equal(page.doc.activeElement,legacyCard);
- olderLink.onclick({preventDefault(){}});await page.flush();
- const olderCard=page.$('item-'+fixture.id('d'));
- assert.ok(olderCard,'A source beyond the loaded archive pages is fetched and shown');assert.ok(page.doc.querySelectorAll('[data-view=latest]')[0].classList.contains('active'));assert.equal(olderCard.scrolled,1);
+ const links=page.$('aiSources').querySelectorAll('a');
+ assert.deepEqual(links.map(a=>a.textContent),['Title a','Title b']);
+ assert.doesNotMatch(page.doc.body.textContent,/AI synthesis of outlet claims|corpus contains publications spanning/i);
+ links[1].onclick({preventDefault(){}});await page.flush();
+ const latestCard=page.$('item-'+fixture.id('b'));
+ assert.ok(latestCard);assert.equal(latestCard.scrolled,1);assert.equal(page.doc.activeElement,latestCard);
 });
 
 test('page: a settled search is recorded once for the admin history, with the outlet name and never its onion address',async()=>{
