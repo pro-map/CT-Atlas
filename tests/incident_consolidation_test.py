@@ -15,7 +15,8 @@ spec.loader.exec_module(collector)
 def record(title, published, incident_id=None, country="Israel", code="IL", primary="ATTACK",
            update="INITIAL", source="Outlet", url=None, related=None):
     event = {
-        "id": title[:20], "title": title, "summary": title, "published": published,
+        "id": title[:20], "title": title, "original_title": title,
+        "summary": title, "original_summary": title, "published": published,
         "country": country, "country_code": code, "primary_event_type": primary,
         "update_type": update, "source": source, "sources": [source],
         "url": url or "https://example.test/" + title.replace(" ", "-"),
@@ -171,6 +172,29 @@ class ConsolidationTests(unittest.TestCase):
         self.assertIn("https://y.test/1", urls)
         self.assertIn(incoming["url"], urls | {existing["url"]})
         self.assertEqual(existing["article_count"], 3)
+
+    def test_incident_payload_carries_original_headlines_for_geo_conflict_checks(self):
+        event = record(
+            "Youth accused of terrorism after bringing toxic products to school in Brazil",
+            "2026-10-03T12:00:00+00:00",
+            "inc-a",
+            "Brazil",
+            "BR",
+        )
+        event["original_title"] = "Jovem é acusado de terrorismo ao levar produtos tóxicos para escola"
+        event["related_articles"] = [{
+            "title": "Economic motivation does not rule out terrorism conviction",
+            "original_title": "Motivação econômica não afasta condenação por atos preparatórios de terrorismo",
+            "url": "https://example.test/unrelated",
+            "published": "2026-10-04T12:00:00+00:00",
+        }]
+        profiles = collector.build_incident_profiles([event])
+        key = next(iter(profiles))
+        payload = collector._incident_window_payload([key], profiles)[0]
+        self.assertIn(event["original_title"], payload["original_headlines"])
+        self.assertIn(event["related_articles"][0]["original_title"], payload["original_headlines"])
+        self.assertIn("original_headlines", collector.INCIDENT_CONSOLIDATION_INSTRUCTIONS)
+        self.assertIn("generated place", collector.INCIDENT_CONSOLIDATION_INSTRUCTIONS)
 
     def test_save_prunes_state_to_live_incidents(self):
         events, _ = self.run_pass(self.flydubai(), GeminiStub(["flydubai"]))
