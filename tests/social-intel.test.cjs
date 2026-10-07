@@ -100,14 +100,14 @@ test("SOCMINT source extraction keeps grounded public result URLs",()=>{
   assert.ok(sources.some(x=>x.kind==="citation"));
 });
 
-test("Social UI is under construction and links to law-enforcement free access",()=>{
+test("Social UI uses OSINT Industries and retains its law-enforcement access link",()=>{
   const html=fs.readFileSync("social.html","utf8");
-  assert.ok(html.includes("UNDER CONSTRUCTION"));
-  assert.ok(html.includes("30 free OSINT Industries credits per month"));
-  assert.ok(html.includes("international law-enforcement organizations"));
+  assert.ok(html.includes("POWERED BY OSINT INDUSTRIES"));
+  assert.ok(html.includes('id="osintForm"'));
+  assert.ok(html.includes('id="osintCredits"'));
   assert.ok(html.includes("https://www.osint.industries/industries/law-enforcement"));
   assert.ok(!html.includes("RUN SOCMINT INVESTIGATION"));
-  assert.ok(!html.includes('src="social.js')&&!html.includes('src="tab-access.js'));
+  assert.ok(html.includes('src="social.js')&&!html.includes('src="tab-access.js'));
 });
 
 test("SOCMINT free-tier search prefers Gemini 2.5 Flash-Lite",()=>{
@@ -119,12 +119,13 @@ test("SOCMINT free-tier search prefers Gemini 2.5 Flash-Lite",()=>{
   assert.ok(direct.includes("gemini-3.5-flash-lite"));
 });
 
-test("the retained SOCMINT client contains friendly quota handling",()=>{
+test("the Social client shows provider failures and never automatically retries credit-consuming searches",()=>{
   const js=fs.readFileSync("social.js","utf8");
   const html=fs.readFileSync("social.html","utf8");
-  assert.ok(js.includes('/QUOTA/.test(error.code||"")'));
-  assert.ok(js.includes("retryAfter"));
-  assert.ok(!html.includes('src="social.js'),"the retired search client is not loaded by the placeholder page");
+  assert.ok(js.includes("data.error"));
+  assert.ok(js.includes("not retried automatically"));
+  assert.ok(html.includes('src="social.js'));
+  assert.ok(!js.includes("/social-investigate"));
 });
 
 test("SOCMINT version is explicit",()=>{

@@ -1,423 +1,99 @@
 (function(){
 "use strict";
-
 const API="https://ct-report-generator.fairpeace.workers.dev";
-const TOKEN_KEY="ct_map_session_token";
-const USER_KEY="ct_map_username";
-let currentReport=null;
-let reports=[];
-
 const $=id=>document.getElementById(id);
-const token=()=>String(sessionStorage.getItem(TOKEN_KEY)||"");
-const user=()=>String(sessionStorage.getItem(USER_KEY)||"").trim().toLowerCase();
-const esc=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
-
-function authHeaders(extra={}){
-  return {"Content-Type":"application/json","X-Session-Token":token(),...extra};
-}
-
-function setStatus(message,type=""){
-  const el=$("socialStatus");
-  el.textContent=message||"";
-  el.className="social-status"+(type?" "+type:"");
-}
-
-function listValue(id){
-  return String($(id)?.value||"").split(/[\n,;]+/).map(x=>x.trim()).filter(Boolean);
-}
-
-function formPayload(){
-  return {
-    user_id:user(),
-    mode:$("socialMode").value,
-    target:$("socialTarget").value.trim(),
-    usernames:listValue("socialUsernames"),
-    keywords:listValue("socialKeywords"),
-    platforms:Array.from(document.querySelectorAll('input[name="platform"]:checked')).map(x=>x.value),
-    urls:String($("socialUrls").value||"").split(/\n+/).map(x=>x.trim()).filter(Boolean),
-    countries_regions:listValue("socialRegions"),
-    languages:listValue("socialLanguages"),
-    date_from:$("socialFrom").value,
-    date_to:$("socialTo").value,
-    objective:$("socialObjective").value.trim()
-  };
-}
-
-function sourceLinks(urls){
-  return (urls||[]).filter(url=>/^https?:\/\//i.test(String(url))).map(url=>'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+esc(url)+'</a>').join("<br>");
-}
-
-let telegramShown=20;
-function renderTelegramMessages(){
-  const evidence=currentReport?.telegram_evidence;
-  const query=String($("telegramEvidenceSearch").value||"").trim().toLowerCase();
-  const matches=(evidence?.messages||[]).filter(item=>[item.text,item.channel,...(item.links||[]),...(item.mentioned_channels||[])].join(" ").toLowerCase().includes(query));
-  $("reportTelegramCount").textContent=matches.length+" matching posts · showing "+Math.min(telegramShown,matches.length);
-  $("reportTelegramMessages").innerHTML=matches.slice(0,telegramShown).map(item=>'<div class="finding">'+
-    '<div class="finding-title">@'+esc(item.channel)+' · '+esc(item.date||"Date unavailable")+'</div>'+
-    '<div class="finding-basis" style="white-space:pre-wrap;overflow-wrap:anywhere">'+esc(item.text||"No text in public preview.")+(item.text_truncated?'\n[Text truncated]':'')+'</div>'+
-    (item.media?.length?'<div class="finding-basis">Media present: '+esc(item.media.join(", "))+' · content not transcribed</div>':'')+
-    '<div class="finding-basis">'+sourceLinks([item.url])+'</div>'+
-    (item.links?.length?'<details><summary>Links in this post</summary>'+sourceLinks(item.links)+'</details>':'')+'</div>').join("")||'<div class="empty-state">No matching collected posts.</div>';
-  $("telegramShowMore").hidden=matches.length<=telegramShown;
-}
-
-function renderTelegramEvidence(report){
-  const evidence=report.telegram_evidence;
-  $("reportTelegramSection").hidden=!evidence;
-  if(!evidence)return;
-  telegramShown=20;
-  $("telegramEvidenceSearch").value="";
-  $("reportTelegramCoverage").textContent=evidence.messages_retained+" posts retained / "+evidence.messages_observed+" observed · "+(evidence.channels||[]).length+" channels attempted · collected "+evidence.retrieved_at+
-    (evidence.truncated?" · Collection exceeds the report limit of 120 posts.":"")+" "+evidence.scope;
-  $("reportTelegramChannels").innerHTML=(evidence.channels||[]).map(item=>'<div class="finding"><strong>@'+esc(item.channel)+'</strong> · '+esc(item.title)+
-    '<div class="finding-basis">'+esc(item.status)+' · '+esc(item.pages_read)+' pages · '+esc(item.stop_reason)+(item.next_before?' · Older posts remain available':'')+'</div></div>').join("");
-  $("reportTelegramRelations").innerHTML=(evidence.relationships||[]).map(item=>'<div class="finding"><div class="finding-title">@'+esc(item.channel)+' → '+esc(item.target)+'</div>'+
-    '<div class="finding-basis">'+esc(item.type)+' · '+esc(item.count)+' supporting posts</div><details><summary>Message citations</summary>'+sourceLinks(item.source_urls)+'</details></div>').join("")||'<div class="empty-state">No connections extracted from retained posts.</div>';
-  if(evidence.relationships_truncated)$("reportTelegramRelations").insertAdjacentHTML("beforeend",'<p>Showing the 300 most frequent connections.</p>');
-  renderTelegramMessages();
-}
-
-function cryptoUrl(address){
-  const url=new URL("crypto.html",location.href);
-  url.searchParams.set("q",address);
-  url.searchParams.set("autorun","1");
-  return url.toString();
-}
-
-function renderWallets(report){
-  const section=$("reportWalletsSection");
-  const screening=report.wallet_screening;
-  const wallets=Array.isArray(screening?.wallets)?screening.wallets:[];
-  // Older reports have no screening block; reports without wallet strings have nothing to show.
-  if(!screening||!wallets.length){section.hidden=true;return;}
-  section.hidden=false;
-
-  const unscreened=screening.status==="unavailable";
-  const source=screening.list?.sources?.[0];
-  const notes=[];
-  if(unscreened){
-    notes.push("Sanctions screening was NOT performed"+(screening.reason?" ("+screening.reason+")":"")+". \"Not screened\" below is not a clean result.");
-  }else{
-    notes.push("Screened against "+(source?.name||"the sanctions list")+(source?.published?" · published "+source.published:"")+".");
-    if(screening.status==="stale")notes.push("The list is older than 7 days or could not be refreshed; recent designations may be missing.");
-  }
-  $("reportWalletsStatus").className="wallet-status"+(screening.hit?" hit":unscreened?" warn":"");
-  $("reportWalletsStatus").textContent=(screening.hit?"SANCTIONS MATCH · ":"")+notes.join(" ");
-
-  $("reportWallets").innerHTML=wallets.map(wallet=>{
-    const terrorism=Boolean(wallet.entities?.some(entity=>entity.terrorism));
-    const badge=wallet.listed
-      ? '<span class="confidence '+(terrorism?"LOW":"MEDIUM")+'">'+(terrorism?"TERRORISM PROGRAM":"SANCTIONS LIST")+'</span>'
-      : '<span class="confidence '+(wallet.screened?"HIGH":"MEDIUM")+'">'+(wallet.screened?"NO LIST MATCH":"NOT SCREENED")+'</span>';
-    return '<div class="finding wallet-item'+(wallet.listed?" listed":"")+'">'+
-      '<div class="finding-top"><div class="finding-title">'+esc(String(wallet.family||"").toUpperCase())+
-      (wallet.currency?' · '+esc(wallet.currency):'')+'</div>'+badge+'</div>'+
-      '<code class="wallet-address">'+esc(wallet.address)+'</code>'+
-      (wallet.listed&&wallet.summary?'<div class="finding-basis">Listed: '+esc(wallet.summary)+'</div>':'')+
-      '<div class="wallet-actions"><button type="button" class="secondary-button" data-crypto-address="'+esc(wallet.address)+'">ANALYSE IN CRYPTO ↗</button></div>'+
-      '</div>';
-  }).join("");
-  $("reportWalletsScope").textContent=screening.scope_note||"";
-}
-
-function renderReport(report){
-  currentReport=report;
-  $("socialEmpty").hidden=true;
-  $("socialReport").hidden=false;
-  $("reportTitle").textContent=report.title||"SOCMINT Assessment";
-  $("reportMeta").textContent=[
-    new Date(report.generated_at||Date.now()).toLocaleString(),
-    report.model||"",
-    report.discovery_mode||""
-  ].filter(Boolean).join(" · ");
-
-  const prose={
-    reportExecutive:"executive_assessment",
-    reportCoverage:"source_coverage",
-    reportIdentity:"identity_alias_findings",
-    reportNetwork:"network_associations",
-    reportNarrative:"content_narrative",
-    reportTimeline:"activity_timeline",
-    reportLocations:"locations_travel_signals",
-    reportFinancial:"financial_crypto_indicators",
-    reportCt:"ct_relevance",
-    reportGaps:"analytical_gaps"
-  };
-  for(const [id,key] of Object.entries(prose)) $(id).textContent=report[key]||"No supported finding.";
-
-  $("reportFindings").innerHTML=(report.key_findings||[]).length
-    ? (report.key_findings||[]).map(item=>`
-      <div class="finding">
-        <div class="finding-top">
-          <div class="finding-title">${esc(item.finding)}</div>
-          <span class="confidence ${esc(item.confidence)}">${esc(item.confidence)}</span>
-        </div>
-        <div class="finding-basis">${esc(item.basis)}</div>
-        ${(item.source_urls||[]).length?'<div class="finding-basis">'+sourceLinks(item.source_urls)+'</div>':""}
-      </div>`).join("")
-    : '<div class="empty-state">No supported key findings.</div>';
-
-  $("reportEntities").innerHTML=(report.entities||[]).length
-    ? (report.entities||[]).map(item=>`
-      <tr>
-        <td>${esc(item.type)}</td>
-        <td>${esc(item.value)}${(item.source_urls||[]).length?'<div class="finding-basis">'+sourceLinks(item.source_urls)+'</div>':""}</td>
-        <td>${esc(item.platform||"—")}</td>
-        <td><span class="confidence ${esc(item.confidence)}">${esc(item.confidence)}</span></td>
-        <td>${esc(item.basis)}</td>
-      </tr>`).join("")
-    : '<tr><td colspan="5">No supported entities extracted.</td></tr>';
-
-  renderWallets(report);
-  renderTelegramEvidence(report);
-
-  $("reportWatchpoints").innerHTML=(report.watchpoints||[]).length
-    ? report.watchpoints.map(item=>`
-      <div class="watch">
-        <div class="watch-title">${esc(item.issue)}</div>
-        <div class="watch-indicator"><strong>INDICATOR:</strong> ${esc(item.indicator)}</div>
-      </div>`).join("")
-    : '<div class="empty-state">No watchpoints generated.</div>';
-
-  $("reportSources").innerHTML=(report.sources||[]).length
-    ? report.sources.map(source=>`
-      <div class="source-item">
-        <a href="${esc(source.url)}" target="_blank" rel="noopener">${esc(source.title||source.url)}</a>
-        <div class="source-kind">${esc(source.kind||"public source")}</div>
-        ${source.snippet?'<div class="source-snippet">'+esc(source.snippet)+'</div>':""}
-      </div>`).join("")
-    : '<div class="empty-state">No retrievable public source URLs were returned.</div>';
-
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-
-function renderHistory(){
-  const box=$("socialHistory");
-  if(!reports.length){
-    box.innerHTML='<div class="empty-state">No saved SOCMINT reports yet.</div>';
-    return;
-  }
-  box.innerHTML=reports.map(report=>`
-    <div class="history-item" data-report-id="${esc(report.id)}">
-      <div>
-        <div class="history-item-title">${esc(report.title||report.query?.target||"SOCMINT Assessment")}</div>
-        <div class="history-item-meta">${esc(new Date(report.generated_at||Date.now()).toLocaleString())} · ${esc(report.query?.target||"")}</div>
-      </div>
-      <button class="history-delete" data-delete-id="${esc(report.id)}" type="button" title="Delete">×</button>
-    </div>`).join("");
-
-  box.querySelectorAll(".history-item").forEach(row=>{
-    row.addEventListener("click",event=>{
-      if(event.target.closest("[data-delete-id]")) return;
-      const report=reports.find(x=>x.id===row.dataset.reportId);
-      if(report) renderReport(report);
-    });
-  });
-  box.querySelectorAll("[data-delete-id]").forEach(button=>{
-    button.addEventListener("click",async event=>{
-      event.stopPropagation();
-      await deleteReport(button.dataset.deleteId);
-    });
-  });
-}
-
-async function loadWorkspace(){
-  const response=await fetch(API+"/social-workspace?user_id="+encodeURIComponent(user()),{
-    headers:{"X-Session-Token":token()},
-    cache:"no-store"
-  });
-  if(!response.ok) return;
-  const payload=await response.json().catch(()=>({}));
-  reports=Array.isArray(payload?.workspace?.reports)?payload.workspace.reports:[];
-  renderHistory();
-}
-
-async function deleteReport(id){
+const STATUS={found:"FOUND",not_found:"NOT FOUND",unavailable:"UNAVAILABLE",unknown:"OTHER RESULT"};
+let results=null,configured=false,busy=false,verified=false;
+const inputs={
+  email:{label:"EMAIL ADDRESS",placeholder:"name@example.com",hint:"Enter one email address.",type:"email",mode:"email"},
+  phone:{label:"PHONE NUMBER",placeholder:"+33123456789",hint:"Include the international +country code.",type:"tel",mode:"tel"},
+  username:{label:"USERNAME",placeholder:"username",hint:"Enter a handle, without a profile URL.",type:"text",mode:"text"},
+  name:{label:"FULL NAME",placeholder:"First name Last name",hint:"Exact name matching is enabled to reduce unrelated results.",type:"text",mode:"text"},
+  wallet:{label:"CRYPTO WALLET",placeholder:"Wallet address",hint:"Enter one cryptocurrency wallet address.",type:"text",mode:"text"}
+};
+function node(tag,text,className){const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(className)el.className=className;return el;}
+function status(message,type=""){ $("socialStatus").textContent=message;$("socialStatus").className="social-status"+(type?" "+type:""); }
+function token(){return sessionStorage.getItem("ct_map_session_token")||"";}
+function headers(){return {"Content-Type":"application/json","X-Session-Token":token()};}
+function safeUrl(value){try{const url=new URL(String(value||""));return ["https:","http:"].includes(url.protocol)&&!url.username&&!url.password?url.href:"";}catch{return "";}}
+function valueText(value){return typeof value==="boolean"?(value?"Yes":"No"):typeof value==="object"?JSON.stringify(value,null,2):String(value??"");}
+function clearSession(){for(const key of ["ct_map_session_token","ct_map_username","ct_map_session_expires","ct_map_authorized"])sessionStorage.removeItem(key);location.replace("index.html");}
+function buttons(){ $("osintSearch").disabled=!verified||!configured||busy;$("osintSearch").textContent=busy?"SEARCHING…":"SEARCH";for(const id of ["osintType","osintQuery"])$(id).disabled=busy;for(const id of ["osintClear","osintJson","osintPdf"])$(id).disabled=!results||busy; }
+function updateType(){const config=inputs[$("osintType").value];$("osintQueryLabel").textContent=config.label;$("osintQuery").type=config.type;$("osintQuery").inputMode=config.mode;$("osintQuery").placeholder=config.placeholder;$("osintInputHint").textContent=config.hint;$("osintQuery").value="";}
+async function connection(){
   try{
-    const response=await fetch(API+"/social-workspace",{
-      method:"POST",headers:authHeaders(),
-      body:JSON.stringify({user_id:user(),report_id:id})
-    });
-    const payload=await response.json().catch(()=>({}));
-    if(!response.ok) throw new Error(payload.error||"Unable to delete report.");
-    reports=Array.isArray(payload?.workspace?.reports)?payload.workspace.reports:reports.filter(x=>x.id!==id);
-    if(currentReport?.id===id){
-      currentReport=null;
-      $("socialReport").hidden=true;
-      $("socialEmpty").hidden=false;
-    }
-    renderHistory();
-  }catch(error){setStatus(error.message,"error");}
+    const response=await fetch(API+"/social-osint/status",{headers:headers(),cache:"no-store",signal:AbortSignal.timeout(15000)});
+    const data=await response.json();
+    if(response.status===401){clearSession();return;}
+    if(!response.ok)throw new Error(data.error||"Connection status unavailable.");
+    configured=data.configured===true && data.connection!=="rejected";
+    const badge=$("osintConnection");badge.className=configured?"connected":"pending";
+    badge.textContent=!data.configured?"Awaiting API key":data.connection==="rejected"?"API access rejected":data.connection==="verified"?"API connected":"API configured · status unavailable";
+    $("osintCredits").textContent="Credits: "+(Number.isFinite(data.credits)?data.credits:"not available");
+    if(!results)status(!data.configured?"The interface is ready. An administrator must connect the OSINT Industries API key before searching.":data.connection==="rejected"?"The provider rejected the API credentials. Ask the administrator to check the connection.":"Ready to search. Standard searches use your shared OSINT Industries account credits.",configured?"":"warning");
+  }catch(error){configured=false;$("osintConnection").textContent="Connection unavailable";$("osintConnection").className="pending";if(!results)status(error.message,"error");}
+  buttons();
 }
-
-async function runInvestigation(event){
-  event.preventDefault();
-  const button=$("socialRunButton");
-  if(button.disabled)return;
-  const payload=formPayload();
-  if(!payload.target&&!payload.usernames.length&&!payload.keywords.length&&!payload.urls.length){
-    setStatus("Enter a target, username, keyword or public URL.","warning");return;
-  }
-  if(payload.mode==="urls_only"&&!payload.urls.length){
-    setStatus("Analyze known public URLs requires at least one URL.","warning");return;
-  }
-
-  button.disabled=true;
-  button.textContent="SOCMINT AGENT RUNNING…";
-  setStatus(payload.mode==="discover"
-    ?"Searching public sources and building analytical report…"
-    :"Retrieving supplied public URLs and building analytical report…");
-
-  const finishSound=window.CTAtlasSound?.begin();
-  const finishWait = window.CTAtlasUI?.begin($("socialStatus"));
+function field(label,value){const row=node("div",undefined,"card-field");row.append(node("dt",label));const dd=node("dd");const text=valueText(value),url=safeUrl(text);if(url){const a=node("a",text);a.href=url;a.target="_blank";a.rel="noopener noreferrer";dd.append(a);}else dd.textContent=text;row.append(dd);return row;}
+function renderCard(card){
+  const article=node("article",undefined,"result-card"),heading=node("div",undefined,"card-heading");
+  heading.append(node("span",card.module.slice(0,1).toUpperCase(),"platform-icon"),node("h3",card.module),node("span",STATUS[card.status]||"OTHER RESULT","result-badge "+card.status));article.append(heading);
+  const picture=safeUrl(card.picture_url);if(picture){const image=node("img");image.src=picture;image.alt="Profile picture returned by "+card.module;image.className="profile-picture";image.loading="lazy";image.referrerPolicy="no-referrer";image.addEventListener("error",()=>image.remove());article.append(image);}
+  const details=node("dl",undefined,"card-fields");for(const item of card.fields||[])details.append(field(item.label,item.value));article.append(details);
+  if(card.profile_url){const link=node("a","OPEN SOURCE PROFILE ↗","profile-link");const url=safeUrl(card.profile_url);if(url){link.href=url;link.target="_blank";link.rel="noopener noreferrer";article.append(link);}}
+  if(card.reliable_source!==null)article.append(node("p",card.reliable_source?"Provider marks this source as reliable.":"Provider does not mark this source as reliable.","card-note"));
+  if(card.origin)article.append(node("p","Search basis: "+card.origin,"card-note"));
+  const raw=node("details"),summary=node("summary","FULL SOURCE RESPONSE"),pre=node("pre",JSON.stringify(card.evidence,null,2));raw.append(summary,pre);article.append(raw);return article;
+}
+function render(){
+  $("osintResults").replaceChildren();if(!results)return;
+  const filter=$("osintFilter").value,text=$("osintResultSearch").value.trim().toLowerCase();
+  const cards=results.cards.filter(card=>(filter==="all"||card.status===filter)&&(!text||JSON.stringify(card).toLowerCase().includes(text)));
+  $("osintEmpty").hidden=cards.length>0;
+  if(!cards.length){$("osintEmpty").replaceChildren(node("h3",results.cards.length?"No results match this filter":"No module results were returned"),node("p",results.cards.length?"Change the filter to see the other results. This does not run another search.":"No returned results does not establish that an account is absent. Some modules may be unavailable or exceed the search window."));}
+  for(const card of cards)$("osintResults").append(renderCard(card));
+  $("osintToolbar").hidden=false;$("osintCounts").replaceChildren();
+  for(const [label,value] of [["matches",results.matches],["modules",results.modules_returned],["unavailable",results.unavailable],["shown",cards.length]]){const item=node("span",undefined,"count");item.append(node("strong",value),document.createTextNode(" "+label));$("osintCounts").append(item);}
+}
+async function search(event){
+  event.preventDefault();if(busy||!configured||!verified)return;
+  busy=true;buttons();status("Searching OSINT Industries… modules can take around 60 seconds. Keep this page open.");
+  const query=$("osintQuery").value.trim(),type=$("osintType").value;
   try{
-    const response=await fetch(API+"/social-investigate",{
-      method:"POST",headers:authHeaders(),body:JSON.stringify(payload)
-    });
-    const result=await response.json().catch(()=>({}));
-    if(!response.ok){
-      const error=new Error(result.error||"SOCMINT investigation failed.");
-      error.code=result.code||"";
-      error.retryAfter=result.retry_after_seconds||null;
-      throw error;
-    }
-    reports=[result.report,...reports.filter(x=>x.id!==result.report.id)].slice(0,50);
-    renderHistory();
-    renderReport(result.report);
-    finishSound?.(result.fallback==="brave_evidence_only"?"error":"success");
-    const sourceCount=Array.isArray(result.report?.sources)?result.report.sources.length:0;
-    if(result.fallback==="brave_evidence_only"){
-      setStatus("ADK analysis was unavailable; Brave returned "+sourceCount+" public source"+(sourceCount===1?"":"s")+" for analyst review. Report saved.","warning");
-    }else if(result.fallback){
-      setStatus("SOCMINT report generated through Brave fallback · "+sourceCount+" public source"+(sourceCount===1?"":"s")+" · saved.","success");
-    }else{
-      setStatus("SOCMINT report generated · "+sourceCount+" public source"+(sourceCount===1?"":"s")+" · saved.","success");
-    }
-  }catch(error){
-    finishSound?.("error");
-    if(/QUOTA/.test(error.code||"")){
-      const suffix=error.retryAfter?" Retry after approximately "+error.retryAfter+" seconds if the limit is temporary.":"";
-      setStatus((error.message||"Gemini quota reached.")+suffix,"warning");
-    }else{
-      setStatus(error.message||"SOCMINT investigation failed.","error");
-    }
-  }finally{
-    finishWait?.();
-    button.disabled=false;
-    button.textContent="RUN SOCMINT INVESTIGATION";
-  }
+    const response=await fetch(API+"/social-osint/search",{method:"POST",headers:headers(),cache:"no-store",body:JSON.stringify({type,query,request_id:crypto.randomUUID()}),signal:AbortSignal.timeout(90000)});
+    const data=await response.json();
+    if(response.status===401){clearSession();return;}
+    if(!response.ok)throw new Error(data.error||"The search could not be completed.");
+    if(!Array.isArray(data.cards))throw new Error("The server returned an unreadable result.");
+    results=data;$("osintFilter").value="all";$("osintResultSearch").value="";
+    $("osintResultMeta").textContent=inputs[data.type].label+": "+data.query+" · "+new Date(data.searched_at).toLocaleString("en-GB",{timeZone:"Europe/Paris"})+" Paris time";
+    render();status("Search completed. "+data.matches+" match(es) across "+data.modules_returned+" returned modules.","success");
+    await connection();
+  }catch(error){status(error.name==="TimeoutError"?"The response timed out. A submitted search may have used a credit; it was not retried automatically.":error.message,"error");}
+  finally{busy=false;buttons();}
 }
-
-function pdfBlocks(report){
-  const blocks=[
-    {text:"EXECUTIVE ASSESSMENT",type:"heading"},
-    {text:report.executive_assessment||"",type:"body"},
-    {text:"KEY FINDINGS",type:"heading"}
-  ];
-  for(const item of report.key_findings||[]){
-    blocks.push({text:(item.confidence||"LOW")+" · "+(item.finding||"")+"\nBasis: "+(item.basis||"")+(item.source_urls?.length?"\nSources: "+item.source_urls.join(" · "):""),type:"body"});
-  }
-  const sections=[
-    ["SOURCE COVERAGE","source_coverage"],
-    ["IDENTITY & ALIAS FINDINGS","identity_alias_findings"],
-    ["NETWORK & ASSOCIATIONS","network_associations"],
-    ["CONTENT & NARRATIVE","content_narrative"],
-    ["ACTIVITY & TIMELINE","activity_timeline"],
-    ["LOCATIONS & TRAVEL SIGNALS","locations_travel_signals"],
-    ["FINANCIAL / CRYPTO INDICATORS","financial_crypto_indicators"],
-    ["CT RELEVANCE","ct_relevance"]
-  ];
-  for(const [title,key] of sections){
-    blocks.push({text:title,type:"heading"},{text:report[key]||"No supported finding.",type:"body"});
-  }
-  blocks.push({text:"ENTITIES / IDENTIFIERS",type:"heading"});
-  for(const entity of report.entities||[]){
-    blocks.push({text:[entity.type,entity.value,entity.platform,entity.confidence].filter(Boolean).join(" · ")+"\n"+(entity.basis||"")+(entity.source_urls?.length?"\nSources: "+entity.source_urls.join(" · "):""),type:"body"});
-  }
-  const screening=report.wallet_screening;
-  if(screening?.wallets?.length){
-    blocks.push({text:"WALLETS & SANCTIONS SCREENING",type:"heading"});
-    for(const wallet of screening.wallets){
-      const state=wallet.listed?"SANCTIONS LIST MATCH: "+(wallet.summary||""):(wallet.screened?"No list match":"NOT SCREENED");
-      blocks.push({text:[wallet.family,wallet.currency].filter(Boolean).join(" · ").toUpperCase()+"\n"+wallet.address+"\n"+state,type:"body"});
-    }
-    blocks.push({text:screening.scope_note||"",type:"body"});
-  }
-  blocks.push({text:"OUTLOOK / WATCHPOINTS",type:"heading"});
-  for(const item of report.watchpoints||[]){
-    blocks.push({text:(item.issue||"")+"\nIndicator: "+(item.indicator||""),type:"body"});
-  }
-  blocks.push({text:"ANALYTICAL GAPS / LIMITATIONS",type:"heading"},{text:report.analytical_gaps||"",type:"body"});
-  blocks.push({text:"SOURCES",type:"heading"});
-  const telegram=report.telegram_evidence;
-  if(telegram){
-    blocks.push({text:"TELEGRAM EVIDENCE",type:"heading"},{text:telegram.messages_retained+" retained / "+telegram.messages_observed+" observed posts. Collected "+telegram.retrieved_at+". "+telegram.scope+(telegram.truncated?" Collection truncated to 120 retained posts.":""),type:"body"});
-    for(const edge of telegram.relationships||[])blocks.push({text:"@"+edge.channel+" → "+edge.target+" · "+edge.type+" · "+edge.count+" posts\n"+edge.source_urls.join("\n"),type:"body"});
-    for(const post of telegram.messages||[])blocks.push({text:"@"+post.channel+" · "+post.date+"\n"+post.url+"\n"+post.text+(post.text_truncated?"\n[Text truncated]":""),type:"source"});
-  }
-  for(const source of report.sources||[]){
-    blocks.push({text:(source.title||source.url)+"\n"+source.url+(source.snippet?"\n"+source.snippet:""),type:"source"});
-  }
-  blocks.push({text:"ANALYTICAL LIMITATION",type:"heading"},{text:"Public-source analytical output. Similar usernames, content, imagery, contacts or activity patterns do not by themselves establish identity, control, criminality or terrorist affiliation. Significant findings require independent analyst validation.",type:"footer"});
-  return blocks;
-}
-
-async function downloadPdf(){
-  if(!currentReport||!window.CTAtlasPdf?.download){setStatus("PDF export is unavailable.","error");return;}
-  await window.CTAtlasPdf.download({
-    filename:"CT-Atlas-SOCMINT-"+(currentReport.query?.target||"Assessment"),
-    eyebrow:"CT ATLAS · SOCIAL MEDIA ANALYSIS",
-    title:currentReport.title||"SOCMINT Assessment",
-    meta:"Generated "+(currentReport.generated_at||new Date().toISOString())+" · user "+user(),
-    blocks:pdfBlocks(currentReport),
-    footer:"CT Atlas SOCMINT · public-source analytical report"
-  });
-}
-
-async function refreshAgentStatus(){
-  const badge=$("socialAgentBadge");
-  if(!badge)return;
+function filename(extension){return "CT-Atlas-Social-"+results.type+"-"+results.searched_at.slice(0,10)+"."+extension;}
+function downloadJSON(){if(!results)return;const blob=new Blob([JSON.stringify(results,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=node("a");a.href=url;a.download=filename("json");document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+async function downloadPDF(){
+  if(!results)return;const button=$("osintPdf");button.disabled=true;
   try{
-    const response=await fetch(API+"/health",{cache:"no-store"});
-    const health=await response.json().catch(()=>({}));
-    if(response.ok&&health.social_agent_configured===true){
-      badge.textContent="ADK AGENT";
-      badge.title="CT Atlas SOCMINT is routed through the ADK investigation agent.";
-    }else{
-      badge.textContent="GEMINI FALLBACK";
-      badge.title="ADK agent is not configured yet; CT Atlas is using the existing Gemini SOCMINT workflow.";
-    }
-  }catch(_){
-    badge.textContent="SOCMINT AGENT";
-  }
+    if(!window.CTAtlasPdf?.download)throw new Error("PDF export is unavailable. Download JSON instead.");
+    const blocks=[{type:"body",text:"Provider: OSINT Industries\nQuery type: "+results.type+"\nQuery: "+results.query+"\nSearch time: "+results.searched_at+"\nReturned modules: "+results.modules_returned+"\nMatches: "+results.matches}];
+    for(const card of results.cards){blocks.push({type:"heading",text:card.module+" — "+(STATUS[card.status]||"OTHER RESULT")});for(const item of card.fields)blocks.push({type:"body",text:item.label+": "+valueText(item.value)});if(card.profile_url)blocks.push({type:"source",text:card.profile_url});if(card.origin)blocks.push({type:"body",text:"Search basis: "+card.origin});}
+    blocks.push({type:"body",text:$("osintResults").parentElement.querySelector(".results-note").textContent+" Full source responses are available in the JSON export."});
+    await window.CTAtlasPdf.download({title:"Social Intelligence — OSINT Industries",eyebrow:"CT ATLAS",meta:"Downloaded from the Social workspace",blocks,filename:filename("pdf")});
+  }catch(error){status(error.message,"error");}finally{buttons();}
 }
-
-async function verifySession(){
-  const t=token();
-  if(!t){location.replace("index.html");return false;}
+function clear(){results=null;$("osintResults").replaceChildren();$("osintToolbar").hidden=true;$("osintEmpty").hidden=false;$("osintEmpty").replaceChildren(node("h3","Ready for a new search"),node("p","Your previous results have been cleared from this page."));$("osintResultMeta").textContent="Results will appear here after a search.";status("Results cleared.");buttons();}
+async function boot(){
+  $("osintForm").addEventListener("submit",search);$("osintType").addEventListener("change",updateType);$("osintFilter").addEventListener("change",render);$("osintResultSearch").addEventListener("input",render);$("osintClear").addEventListener("click",clear);$("osintJson").addEventListener("click",downloadJSON);$("osintPdf").addEventListener("click",downloadPDF);
   try{
-    const response=await fetch(API+"/session-check",{headers:{"X-Session-Token":t},cache:"no-store"});
-    const payload=await response.json().catch(()=>({}));
-    if(!response.ok||!payload.ok||!payload.username)throw new Error();
-    sessionStorage.setItem(USER_KEY,String(payload.username).toLowerCase());
-    $("socialUser").textContent=String(payload.username).toUpperCase();
-    return true;
-  }catch(_){location.replace("index.html");return false;}
+    if(!token()){location.replace("index.html");return;}
+    const response=await fetch(API+"/session-check",{headers:headers(),cache:"no-store",signal:AbortSignal.timeout(10000)}),data=await response.json();
+    if(!response.ok||!data.ok||!data.username){clearSession();return;}
+    $("socialUser").textContent=String(data.username).toUpperCase();verified=true;await connection();
+  }catch{status("Unable to verify your session. Return to MAIN and sign in again.","error");}
+  finally{document.documentElement.classList.remove("ct-loading");clearTimeout(window.ctLoadingFallback);window.CTAtlasUI?.ready();buttons();}
 }
-
-document.addEventListener("DOMContentLoaded",async()=>{
-  if(!await verifySession())return;
-  $("socialForm").addEventListener("submit",runInvestigation);
-  $("socialPdfButton").addEventListener("click",downloadPdf);
-  $("telegramEvidenceSearch").addEventListener("input",()=>{telegramShown=20;renderTelegramMessages();});
-  $("telegramShowMore").addEventListener("click",()=>{telegramShown+=20;renderTelegramMessages();});
-  // window.open WITHOUT noopener: the new tab must inherit this tab's
-  // sessionStorage (same origin) or the Crypto page would ask to log in again.
-  $("reportWallets").addEventListener("click",event=>{
-    const button=event.target.closest("[data-crypto-address]");
-    if(button)window.open(cryptoUrl(button.dataset.cryptoAddress),"_blank");
-  });
-  await Promise.all([loadWorkspace(),refreshAgentStatus()]);
-});
+boot();
 })();

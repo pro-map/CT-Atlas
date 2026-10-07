@@ -394,31 +394,21 @@ test("report wallet screening is capped and tolerates malformed reports",async()
   assert.equal(api.screenReportWallets({executive_assessment:many},state).wallets_found,40);
 });
 
-test("the retained SOCMINT client handles wallet screening but is not loaded by the placeholder",()=>{
+test("Social uses provider wallet lookups without claiming the former Gemini sanctions report",()=>{
   const html=fs.readFileSync("social.html","utf8");
   const client=fs.readFileSync("social.js","utf8");
-  const css=fs.readFileSync("social.css","utf8");
   for(const id of ["reportWalletsSection","reportWalletsStatus","reportWallets","reportWalletsScope"]){
     assert.ok(!html.includes('id="'+id+'"'),"retired Social content must stay removed: "+id);
   }
-  assert.ok(client.includes("function renderWallets"));
-  assert.ok(client.includes("renderWallets(report);"));
-  assert.ok(client.includes("NOT SCREENED"));
-  assert.ok(client.includes("was NOT performed"));
-  // Older reports (no wallet_screening) and reports without wallets must hide the section.
-  assert.match(client,/if\(!screening\|\|!wallets\.length\)\{section\.hidden=true;return;\}/);
-  // window.open without noopener so the Crypto tab inherits sessionStorage (same origin).
-  assert.ok(client.includes('window.open(cryptoUrl(button.dataset.cryptoAddress),"_blank")'));
-  assert.ok(!client.includes("noopener,noreferrer\"),\"_blank\")"));
-  assert.ok(client.includes('url.searchParams.set("autorun","1")'));
-  assert.ok(client.includes("WALLETS & SANCTIONS SCREENING"),"the PDF export must include the screening");
-  assert.ok(css.includes(".wallet-status.hit")&&css.includes(".wallet-item.listed"));
-  assert.ok(!html.includes('src="social.js'),"the placeholder does not load the retired investigation client");
+  assert.ok(html.includes('value="wallet"'));
+  assert.ok(client.includes("/social-osint/search"));
+  assert.ok(!client.includes("WALLETS & SANCTIONS SCREENING"));
+  assert.ok(html.includes('src="social.js'));
 });
 
-test("Social placeholder removes all platform search choices",()=>{
+test("Social retains one identifier search instead of the former platform search controls",()=>{
   const html=fs.readFileSync("social.html","utf8");
   const values=[...html.matchAll(/name="platform" value="([^"]+)"/g)].map(match=>match[1]);
   assert.equal(values.length,0,"the old platform controls have been retired");
-  assert.ok(html.includes("UNDER CONSTRUCTION"));
+  assert.ok(html.includes('id="osintType"'));
 });
