@@ -20,7 +20,7 @@ import {
   databaseFiltersLabel
 } from "./shared.js";
 
-const DATABASE_QUERY_VERSION = "database-query-v1";
+const DATABASE_QUERY_VERSION = "database-query-v2-subgroups";
 // Everything the database holds today fits (180 days, ~4-5k events); the cap
 // only guards against a runaway response if the database grows a lot.
 const MAX_DATABASE_RESULTS = 8000;
@@ -54,6 +54,8 @@ function databaseEventRow(event, index) {
     location_method: cleanText(event.location_method, 60),
     category: cleanText(event.category, 80),
     categories: eventCategories(event),
+    cbrn_subgroups: Array.isArray(event.cbrn_subgroups) ? event.cbrn_subgroups.filter(value => value === "RADNUC") : [],
+    actor_scope: cleanText(event.actor_scope, 20),
     actor_group: cleanText(event.actor_group, 100),
     primary_event_type: cleanText(event.primary_event_type, 40),
     is_attack: event.is_attack === true,
@@ -85,7 +87,7 @@ async function handleDatabaseEvents(request, env) {
   const authError = await authenticate(request, body, env);
   if (authError) return authError;
 
-  const eventsDatabase = await fetchEventsDatabase(env);
+  const eventsDatabase = await fetchEventsDatabase(env, { minVersion: cleanText(body.min_database_version, 100) });
   if (!eventsDatabase.ok) return jsonResponse({ error: "Unable to read the events database." }, 503, env);
   const db = eventsDatabase.db;
   const all = Array.isArray(db) ? db : (Array.isArray(db?.events) ? db.events : []);
@@ -123,3 +125,4 @@ async function handleDatabaseEvents(request, env) {
 }
 
 export { handleDatabaseEvents, databaseEventRow, DATABASE_QUERY_VERSION, MAX_DATABASE_RESULTS };
+

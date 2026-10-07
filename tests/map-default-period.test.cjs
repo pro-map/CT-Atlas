@@ -9,9 +9,9 @@ function timeButtons(){
     .map(match=>({days:Number(match[2]),active:Boolean(match[1])}));
 }
 
-test("the map offers 24 hours, 7 days (default), and 30 days",()=>{
+test("the map offers 24 hours, 7 days (default), 30 days, and 3 months",()=>{
   const buttons=timeButtons();
-  assert.deepEqual(buttons.map(button=>button.days),[1,7,30],"the map period buttons changed");
+  assert.deepEqual(buttons.map(button=>button.days),[1,7,30,90],"the map period buttons changed");
   const active=buttons.filter(button=>button.active);
   assert.equal(active.length,1,"exactly one period button must be active");
   assert.equal(active[0].days,7);

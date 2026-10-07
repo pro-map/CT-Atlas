@@ -353,6 +353,11 @@ function canonicalTopic(value) {
 function matchesTopic(event, topic) {
   if (!topic || topic === "ALL") return true;
   const wanted = canonicalTopic(topic);
+  if (wanted === "radnuc") {
+    return eventCategories(event).some(category => canonicalTopic(category) === "cbrn")
+      && Array.isArray(event.cbrn_subgroups) && event.cbrn_subgroups.includes("RADNUC")
+      && event.actor_scope !== "STATE_ONLY";
+  }
   return eventCategories(event).some(category => canonicalTopic(category) === wanted);
 }
 
@@ -1187,26 +1192,43 @@ async function callGemini(env, input) {
 // publication time from the very events.json being deployed, so it is never older than
 // it) and falls back to the full events.json when the lite file is not configured,
 // missing, unreachable or unusable. Result: { ok, status, db, source }.
-async function fetchEventsDatabase(env) {
-  const options = { cf: { cacheTtl: 60, cacheEverything: true } };
+async function fetchEventsDatabase(env, { minVersion = "" } = {}) {
+  const required = Date.parse(minVersion);
+  const currentEnough = db => !Number.isFinite(required)
+    || Date.parse(db?.last_updated || db?.updated_at || "") >= required;
+  const normalOptions = { cf: { cacheTtl: 60, cacheEverything: true } };
+  const freshOptions = { cache: "no-store", cf: { cacheTtl: 0, cacheEverything: true } };
+
+  async function read(url, options) {
+    const response = await fetch(url, options);
+    if (!response.ok) return { ok: false, status: response.status, db: null };
+    const db = await response.json();
+    const events = Array.isArray(db) ? db : db?.events;
+    return { ok: Array.isArray(events) && events.length > 0, status: response.status, db };
+  }
+  async function load(url) {
+    const result = await read(url, normalOptions);
+    if (!result.ok || currentEnough(result.db)) return result;
+    // The map has a newer published snapshot. A versioned URL bypasses both
+    // the Worker cache and an upstream cache of the unversioned static file.
+    const freshUrl = new URL(url);
+    freshUrl.searchParams.set("ct_atlas_version", String(required));
+    const fresh = await read(freshUrl.toString(), freshOptions);
+    return currentEnough(fresh.db) ? fresh : { ok: false, status: 503, db: null };
+  }
 
   if (env.EVENTS_LITE_URL) {
     try {
-      const liteResponse = await fetch(env.EVENTS_LITE_URL, options);
-      if (liteResponse.ok) {
-        const lite = await liteResponse.json();
-        if (lite && Array.isArray(lite.events) && lite.events.length) {
-          return { ok: true, status: liteResponse.status, db: lite, source: "lite" };
-        }
-      }
-    } catch (_) {
-      // Fall through to the full database.
-    }
+      const lite = await load(env.EVENTS_LITE_URL);
+      if (lite.ok) return { ...lite, source: "lite" };
+    } catch (_) { /* Fall through to the full database. */ }
   }
-
-  const response = await fetch(env.EVENTS_URL, options);
-  if (!response.ok) return { ok: false, status: response.status, db: null, source: "full" };
-  return { ok: true, status: response.status, db: await response.json(), source: "full" };
+  try {
+    const full = await load(env.EVENTS_URL);
+    return { ...full, source: "full" };
+  } catch (_) {
+    return { ok: false, status: 503, db: null, source: "full" };
+  }
 }
 
 export {
@@ -1266,4 +1288,5 @@ export {
   callGemini,
   waitBeforeGeminiRetry
 };
+
 

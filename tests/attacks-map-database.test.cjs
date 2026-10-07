@@ -55,13 +55,13 @@ async function runLoader(responses){
       return {ok:true,status:200,json:async()=>body};
     }
   });
-  vm.runInContext(extract('isMapAttackEvent')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 31;'+extract('loadMapDatabase'),c);
+  vm.runInContext(extract('isMapAttackEvent')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 91;'+extract('loadMapDatabase'),c);
   const data=await vm.runInContext('loadMapDatabase()',c);
   return {data:plain(data),source:c.window.eventsDataSource};
 }
 
 test('the map reads events-map.json when it is published',async()=>{
-  const mapFile={events:[{id:'a'}],recent_events:[],map:{recent_events_days:31},database_summary:{total_events:9},trend_summary:{overview:'x'}};
+  const mapFile={events:[{id:'a'}],recent_events:[],map:{recent_events_days:91},database_summary:{total_events:9},trend_summary:{overview:'x'}};
   const {data,source}=await runLoader({'events-map.json':mapFile});
   assert.equal(source,'events-map.json');
   assert.deepEqual(data,mapFile);
@@ -92,7 +92,7 @@ test('without events-map.json the map filters events-lite.json with the same rul
 
 test('the start-up chain uses the map loader and gives every event a unique key',()=>{
   assert.match(html,/loadMapDatabase\(\)\s*\.then\(/);
-  assert.equal((html.match(/fetch\("events-map\.json"\)/g)||[]).length,1);
+  assert.equal((html.match(/fetch\("events-map\.json",/g)||[]).length,1);
   assert.match(html,/usedKeys\.has\(base\)\s*\?\s*base \+ "#" \+ index/);
   assert.match(html,/\[\.\.\.allEvents, \.\.\.recentContextEvents\]\.filter\(\s*isCurrentCasualtyEvent/);
 });
@@ -155,7 +155,7 @@ test('one set of Database filters drives the list, both exports, the Report Gene
     assert.ok(markup>html.indexOf('id="databasePanel"')&&markup<html.indexOf('id="reportGeneratorPanel"'),`${id} must live in the Database panel`);
   }
   assert.match(html,/<option value="1">Last 24 hours<\/option>/);
-  assert.match(extract('queryDatabase'),/REPORT_GENERATOR_API_BASE \+ "\/database-events"[\s\S]*\{ \.\.\.filters, user_id: reportGeneratorUserId\(\) \}/);
+  assert.match(extract('queryDatabase'),/REPORT_GENERATOR_API_BASE \+ "\/database-events"[\s\S]*\{ \.\.\.filters, user_id: reportGeneratorUserId\(\), min_database_version: mapDatabaseVersion \}/);
   assert.match(extract('chronologyBaseEvents'),/return databaseResultsCurrent\(\) \? databaseResults : \[\];/);
   assert.match(extract('exportChronologyExcel'),/selectedDatabaseEvents\(\)/);
   assert.match(html,/exportDatabaseMapJpeg\(\s*selectedDatabaseEvents\(\),/);
@@ -177,9 +177,10 @@ test('the page never queries the database on load, only on the first use of the 
 test('database rows only link to the map when they are attacks themselves, by the unique key',()=>{
   const c=vm.createContext({
     allEvents:[
-      {id:'dup',published:'2026-09-30T08:00:00Z',title:'Attack in Kabul',_mapKey:'dup'},
-      {id:'dup',published:'2026-09-30T08:00:00Z',title:'Other attack',_mapKey:'dup#1'},
+      {id:'dup',published:'2026-09-30T08:00:00Z',title:'Attack in Kabul',category:'Attacks',_mapKey:'dup'},
+      {id:'dup',published:'2026-09-30T08:00:00Z',title:'Other attack',category:'Attacks',_mapKey:'dup#1'},
     ],
+    recentContextEvents:[],
     databaseResults:[
       {id:'dup',published:'2026-09-30T08:00:00Z',title:'Other attack',primary_event_type:'ATTACK',is_attack:true},
       {id:'dup',published:'2026-09-30T08:00:00Z',title:'Attack in Kabul',primary_event_type:'ARREST'},
@@ -199,7 +200,7 @@ test('database rows only link to the map when they are attacks themselves, by th
 test('a late answer never undoes the group the analyst just picked, and a stale error clears',()=>{
   const query=extract('queryDatabase');
   assert.match(query,/const liveGroup = document\.getElementById\("reportGroup"\)\?\.value \|\| filters\.actor_group;\s*renderDatabaseGroups\([^;]*liveGroup\);/);
-  assert.match(query,/if \(key === databaseResultsKey && !databaseQueryPromise\) \{[\s\S]*?databaseLastError = "";[\s\S]*?setDatabaseStatus\(databaseLastStatus, "ready"\);[\s\S]*?return Promise\.resolve\(databaseResults\);/);
+  assert.match(query,/if \(databaseCacheReusable\(key, force\)\) \{[\s\S]*?databaseLastError = "";[\s\S]*?setDatabaseStatus\(databaseLastStatus, "ready"\);[\s\S]*?return Promise\.resolve\(databaseResults\);/);
 });
 
 test('Escape closes the event card alone, not the list underneath',()=>{
@@ -229,9 +230,10 @@ test('a list that no longer matches the filters is never shown or exported',()=>
     databaseQueryPromise:null,databaseResultsKey:'',databaseLastError:'',
     databaseResults:[{_mapKey:'db-0'},{_mapKey:'db-1'}],
     chronologySelectedKeys:new Set(['db-0','db-1']),
+    mapDatabaseVersion:'',databaseSourceVersion:'',
     currentFilters:{region:'GLOBAL',topic:'ALL',actor_group:'ALL',period_days:7}
   });
-  vm.runInContext('function databaseFilters(){ return currentFilters; }'+extract('databaseResultsCurrent')+extract('chronologyBaseEvents')+extract('selectedDatabaseEvents')+extract('databaseExportBlockedText'),c);
+  vm.runInContext('function databaseFilters(){ return currentFilters; }'+extract('databaseSnapshotCompatible')+extract('databaseResultsCurrent')+extract('chronologyBaseEvents')+extract('selectedDatabaseEvents')+extract('databaseExportBlockedText'),c);
   vm.runInContext('databaseResultsKey = JSON.stringify(currentFilters);',c);
   assert.equal(vm.runInContext('selectedDatabaseEvents().length',c),2);
   vm.runInContext('currentFilters = {...currentFilters, topic: "Arrests"};',c);
@@ -247,7 +249,7 @@ test('list and ticker clicks only zoom to events the map shows; the rest open th
   assert.match(extract('openDatabaseEvent'),/if \(isOnMapNow\(event\._mapEventKey\)\)/);
   assert.match(extract('openMapEventOrCard'),/if \(isOnMapNow\(event\._mapKey\)\)[\s\S]*showDatabaseEventCard\(event\)/);
   assert.match(extract('renderAttackTicker'),/openMapEventOrCard\(allEvents\.find\(/);
-  const c=vm.createContext({selectedDays:1});
+  const c=vm.createContext({selectedDays:1,mapCategoryScope:'ATTACKS'});
   vm.runInContext(extract('isMapAttackEvent')+extract('withinDays')+extract('databaseEventCardNote'),c);
   assert.match(c.databaseEventCardNote({primary_event_type:'ARREST'}),/attacks only/);
   assert.match(c.databaseEventCardNote({primary_event_type:'ATTACK',is_attack:true,latitude:1,longitude:2,published:'2020-01-01T00:00:00Z'}),/last 24 hours/);
@@ -391,7 +393,7 @@ function mapScopeHarness(){
   };
 }
 
-test('the map shows all events by default and filters every category over 1, 7, or 30 days',()=>{
+test('the map shows all events by default and filters every category over 1, 7, 30 or 90 days',()=>{
   const h=mapScopeHarness();
   assert.deepEqual(plain(h.ids('ATTACKS',1)).mapped,['a1']);
   assert.deepEqual(plain(h.ids('ATTACKS',7)).mapped,['a1','a7']);
@@ -399,20 +401,21 @@ test('the map shows all events by default and filters every category over 1, 7, 
   assert.deepEqual(plain(h.ids('ALL',7)).mapped,['a1','a7','r1','l1']);
   assert.deepEqual(plain(h.ids('ALL',30)).mapped,['a1','a7','r1','l1','r20']);
   assert.deepEqual(plain(h.ids('Arrests',30)).mapped,['r1','r20']);
+  assert.deepEqual(plain(h.ids('Arrests',90)).mapped,['r1','r20','r31']);
   const arrests=plain(h.ids('Arrests',7));
   assert.deepEqual(arrests.mapped,['r1'],'one category: no attacks');
   assert.deepEqual(arrests.scope,['r1','u1'],'the counter also counts events without a location');
   assert.equal(plain(h.ids('anything else',1)).state,'ATTACKS','an unknown value falls back to attacks');
 });
 
-test('the "Show on map" selector defaults to all events and the map file covers 30 days of other categories',()=>{
+test('the "Show on map" selector defaults to all events and the map file covers 90 days of other categories',()=>{
   const select=html.slice(html.indexOf('<select id="mapCategory">'),html.indexOf('</select>',html.indexOf('<select id="mapCategory">')));
   assert.match(select,/<option value="ATTACKS">Attacks only<\/option>/);
   assert.match(select,/<option value="ALL" selected>All events<\/option>/);
   assert.match(html,/let mapCategoryScope = "ALL";/);
   assert.match(html,/_filteredMappedEventsCache = mapScopeEvents\(\)\.filter\(/);
-  assert.match(html,/const MAP_RECENT_EVENT_DAYS = 31;/);
-  assert.match(fs.readFileSync('tools/build_events_map.py','utf8'),/^RECENT_DAYS = 31$/m);
+  assert.match(html,/const MAP_RECENT_EVENT_DAYS = 91;/);
+  assert.match(fs.readFileSync('tools/build_events_map.py','utf8'),/^RECENT_DAYS = 91$/m);
   // The ticker, KPIs and trends stay about attacks whatever the map shows.
   assert.match(html,/const events = filteredAllEvents\(\)\s*\n?\s*\.map/);
 });
@@ -448,6 +451,48 @@ test('RADNUC subgroup includes attacks and contextual CBRN events, excludes othe
   `,h.context);
   assert.deepEqual(plain(h.ids('RADNUC',7)).mapped,['rad-attack','rad-arrest']);
   assert.equal(plain(h.ids('RADNUC',7)).state,'RADNUC');
-  assert.deepEqual(plain(vm.runInContext("mapScopeCandidates().map(e=>e.id)",h.context)),['rad-attack','rad-arrest']);
+  assert.deepEqual(plain(vm.runInContext("mapScopeCandidates().map(e=>e.id)",h.context)),['rad-attack','rad-arrest','unlocated-rad']);
   assert.ok(plain(h.ids('CBRN',7)).mapped.includes('rad-attack'),'CBRN parent includes its RADNUC attack');
+});
+
+
+
+test('RADNUC Database queries preserve subgroup metadata and return the same events as the map',async()=>{
+  const now=new Date().toISOString();
+  const hit={id:'rad',title:'Dirty bomb plot foiled',published:now,category:'CBRN',categories:['CBRN','Arrests'],
+    cbrn_subgroups:['RADNUC'],actor_scope:'NON_STATE',primary_event_type:'ARREST',latitude:1,longitude:2};
+  const c=workerContext([hit,{...hit,id:'chemical',cbrn_subgroups:[]},{...hit,id:'state',actor_scope:'STATE_ONLY'}]);
+  const result=plain(await c.handleDatabaseEvents({json:async()=>({user_id:'analyst',topic:'RADNUC',period_days:90}),headers:{get:()=>'token'}},{}));
+  assert.equal(result.status,200);
+  assert.deepEqual(result.body.events.map(e=>e.id),['rad']);
+  assert.deepEqual(result.body.events[0].cbrn_subgroups,['RADNUC']);
+  assert.equal(result.body.events[0].actor_scope,'NON_STATE');
+  const h=mapScopeHarness();
+  h.context.radHit=hit;
+  vm.runInContext('attacks=[]; allEvents=[]; recentContextEvents=[radHit];',h.context);
+  assert.deepEqual(plain(h.ids('RADNUC',90)).mapped,result.body.events.map(e=>e.id));
+});
+
+test('Database results cannot be reused after the map publishes a newer snapshot or the cache expires',()=>{
+  const c=vm.createContext({Date,Number,databaseResultsKey:'same',databaseQueryPromise:null,
+    databaseSourceVersion:'2026-10-07T10:00:00Z',mapDatabaseVersion:'2026-10-07T10:00:00Z',
+    databaseResultsLoadedAt:Date.now(),DATABASE_RESULTS_CACHE_MS:60000});
+  vm.runInContext(extract('databaseSnapshotCompatible')+extract('databaseCacheReusable'),c);
+  assert.equal(c.databaseCacheReusable('same'),true);
+  assert.equal(c.databaseCacheReusable('same',true),false,'opening the list can force a new query');
+  c.mapDatabaseVersion='2026-10-07T11:00:00Z';
+  assert.equal(c.databaseCacheReusable('same'),false,'new map events invalidate an older database list');
+  c.databaseSourceVersion=c.mapDatabaseVersion;
+  c.databaseResultsLoadedAt=Date.now()-61000;
+  assert.equal(c.databaseCacheReusable('same'),false,'unchanged filters do not cache the list forever');
+  assert.match(extract('queryDatabase'),/min_database_version: mapDatabaseVersion/);
+});
+
+test('CBRN contextual Database rows link to their actual map markers',()=>{
+  const event={id:'new-cbrn',title:'Radioactive trafficking investigation',published:'2026-10-07T10:00:00Z',
+    primary_event_type:'CBRN',categories:['CBRN'],_mapKey:'new-cbrn'};
+  const c=vm.createContext({allEvents:[],recentContextEvents:[event],databaseResults:[{...event,_mapKey:'db-0'}]});
+  vm.runInContext(extract('isMapAttackEvent')+extract('eventMatchKey')+extract('linkDatabaseRowsToMap'),c);
+  c.linkDatabaseRowsToMap();
+  assert.equal(c.databaseResults[0]._mapEventKey,'new-cbrn');
 });

@@ -67,6 +67,8 @@ jobs:
               && grep -q 'pdf-export.js' /tmp/index.html \
               && tr -d '\r' < /tmp/index.html | tr '\n' ' ' | grep -qE 'class="time-button active"[[:space:]]+data-days="7"' \
               && grep -q 'data-days="30"' /tmp/index.html \
+              && grep -q 'data-days="90"' /tmp/index.html \
+              && grep -q 'const MAP_RECENT_EVENT_DAYS = 91;' /tmp/index.html \
               && grep -q 'usage-admin.js?v=no-social-20261006' /tmp/main.html \
               && ! grep -q '<th>SOCIAL</th>\|SOCIAL MEDIA SEARCH' /tmp/usage-admin.js \
               && grep -q 'id="attackTickerList"' /tmp/index.html \
@@ -109,9 +111,10 @@ jobs:
           }
           if (!/let selectedDays\s*=\s*7;/.test(html)) throw new Error("MAP initial selectedDays is not 7 days");
           if (!/class="time-button"\s+data-days="30"/.test(html)) throw new Error("MAP 30-day option missing");
+          if (!/class="time-button"\s+data-days="90"/.test(html)) throw new Error("MAP 90-day option missing");
           if (!html.includes('<option value="ALL" selected>All events</option>')) throw new Error("MAP default is not all events");
-          if (!html.includes('const MAP_RECENT_EVENT_DAYS = 31;')) throw new Error("MAP other categories do not cover 30 days");
-          if (!html.includes('fetch("events-map.json")')) throw new Error("MAP does not load its attacks-only file");
+          if (!html.includes('const MAP_RECENT_EVENT_DAYS = 91;')) throw new Error("MAP other categories do not cover 90 days");
+          if (!html.includes('fetch("events-map.json",')) throw new Error("MAP does not load its attacks-only file");
           if (html.includes('id="heatToggle"') || html.includes('id="officesToggle"')) throw new Error("Removed MAP toggles are back");
           if (!html.includes("V12 — COMPACT HEADER")) throw new Error("Compact header controls missing");
           if (!html.includes("-webkit-line-clamp: 3")) throw new Error("Situation 24H clamp missing");
@@ -277,3 +280,4 @@ jobs:
             curl --fail --silent --show-error --max-time 25               -D /tmp/cors.headers               -o /dev/null               -X OPTIONS               -H "Origin: $origin"               -H "Access-Control-Request-Method: POST"               https://ct-report-generator.fairpeace.workers.dev/health
             grep -Fi "Access-Control-Allow-Origin: $origin" /tmp/cors.headers
           done
+

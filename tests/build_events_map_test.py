@@ -74,7 +74,7 @@ class MapAttackTests(unittest.TestCase):
 
     def test_recent_events_keep_other_categories_of_the_last_days_only(self):
         database = sample_database()
-        database['events'].append(event('old-arrest', primary_event_type='ARREST', published='2026-08-20T08:00:00Z'))
+        database['events'].append(event('old-arrest', primary_event_type='ARREST', published='2026-05-20T08:00:00Z'))
         database['events'].append(event('arrest20', primary_event_type='ARREST', published='2026-09-10T08:00:00Z'))
         now = datetime(2026, 9, 30, 12, tzinfo=timezone.utc)
         output = m.build_map(database, ['related_articles'], now=now)
@@ -84,11 +84,28 @@ class MapAttackTests(unittest.TestCase):
         )
         self.assertEqual(output['map']['recent_events_days'], m.RECENT_DAYS)
 
+    def test_ninety_day_context_keeps_every_category_and_radnuc_metadata(self):
+        database = sample_database()
+        for ident, kind, category, published in (
+            ('radnuc60', 'CBRN', 'CBRN', '2026-08-01T08:00:00Z'),
+            ('arrest89', 'ARREST', 'Arrests', '2026-07-03T08:00:00Z'),
+            ('too-old', 'CBRN', 'CBRN', '2026-06-01T08:00:00Z'),
+        ):
+            database['events'].append(event(ident, primary_event_type=kind, category=category,
+                published=published, cbrn_subgroups=['RADNUC']))
+        output = m.build_map(database, [], now=datetime(2026, 9, 30, 12, tzinfo=timezone.utc))
+        ids = [e['id'] for e in output['recent_events']]
+        self.assertIn('radnuc60', ids)
+        self.assertIn('arrest89', ids)
+        self.assertNotIn('too-old', ids)
+        self.assertEqual(next(e for e in output['recent_events'] if e['id'] == 'radnuc60')['cbrn_subgroups'], ['RADNUC'])
+        m.validate(output, database)
+
     def test_older_events_cited_by_key_developments_are_kept(self):
         database = sample_database()
         database['trend_summary'] = {'developments': [{'event_id': 'old-arrest'}, {'event_id': 'attack'}, {'title': 'no id'}]}
-        database['events'].append(event('old-arrest', primary_event_type='ARREST', published='2026-08-20T08:00:00Z'))
-        database['events'].append(event('old-piracy', primary_event_type='PIRACY', published='2026-08-20T08:00:00Z'))
+        database['events'].append(event('old-arrest', primary_event_type='ARREST', published='2026-05-20T08:00:00Z'))
+        database['events'].append(event('old-piracy', primary_event_type='PIRACY', published='2026-05-20T08:00:00Z'))
         now = datetime(2026, 9, 30, 12, tzinfo=timezone.utc)
         output = m.build_map(database, [], now=now)
         recent_ids = [e['id'] for e in output['recent_events']]
@@ -129,3 +146,4 @@ class MapAttackTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+

@@ -86,7 +86,7 @@ jobs:
         run: |
           set -euo pipefail
           grep -q 'initialiseInterpolOffices' index.html
-          grep -q 'fetch("events-map.json")' index.html
+          grep -q 'fetch("events-map.json",' index.html
           grep -q 'id="databasePanel"' index.html
           grep -q 'id="attackTickerList"' index.html
           grep -q 'CT Atlas Infrastructure' index.html
@@ -176,8 +176,9 @@ jobs:
           grep -q 'class="time-button active" data-days="7"' index.html
           grep -q 'data-days="7"' index.html
           grep -q 'data-days="30"' index.html
-          grep -q 'const MAP_RECENT_EVENT_DAYS = 31;' index.html
-          grep -q '^RECENT_DAYS = 31$' tools/build_events_map.py
+          grep -q 'data-days="90"' index.html
+          grep -q 'const MAP_RECENT_EVENT_DAYS = 91;' index.html
+          grep -q '^RECENT_DAYS = 91$' tools/build_events_map.py
           grep -q 'let selectedDays =' index.html
           grep -q 'let selectedDays = 7;' index.html
           grep -q '<option value="ALL" selected>All events</option>' index.html
@@ -204,5 +205,6 @@ jobs:
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
 
 

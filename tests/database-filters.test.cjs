@@ -153,3 +153,14 @@ test('the report route filters by group and keys its cache on it',()=>{
   assert.match(route,/JSON\.stringify\(\{ region, topic, actorGroup, periodDays, compare, databaseVersion, version: REPORT_GENERATOR_VERSION \}\)/);
   assert.ok(vm.runInContext('ALLOWED_PERIODS.has(1)',shared));
 });
+
+
+
+test('RADNUC is a selectable CBRN subgroup for database, reports and Deep Search',()=>{
+  const rad={category:'CBRN',categories:['CBRN','Arrests'],cbrn_subgroups:['RADNUC'],actor_scope:'NON_STATE'};
+  assert.equal(shared.matchesTopic(rad,'RADNUC'),true);
+  assert.equal(shared.matchesTopic(rad,'CBRN'),true);
+  assert.equal(shared.matchesTopic({...rad,cbrn_subgroups:[]},'RADNUC'),false);
+  assert.equal(shared.matchesTopic({...rad,actor_scope:'STATE_ONLY'},'RADNUC'),false);
+  assert.equal(shared.matchesTopic({...rad,categories:['Weapons']},'RADNUC'),false);
+});

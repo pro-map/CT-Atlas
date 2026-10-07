@@ -199,7 +199,7 @@ test('Deep Search: same Atlas records to compare against from lite as from full'
 
 function fetchHarness(routes){
  const calls=[];
- const c=vm.createContext({crypto,TextEncoder,console,
+ const c=vm.createContext({crypto,TextEncoder,console,URL,
   fetch:async(url,options)=>{
    calls.push({url,options:JSON.parse(JSON.stringify(options||null))});
    const route=routes[url];
@@ -209,7 +209,7 @@ function fetchHarness(routes){
   }});
  vm.runInContext(sharedSource,c);
  // Results are built inside the vm realm: normalise them so deepEqual compares plain data.
- return {call:async env=>JSON.parse(JSON.stringify(await vm.runInContext('fetchEventsDatabase',c)(env))),calls};
+ return {call:async (env,options)=>JSON.parse(JSON.stringify(await vm.runInContext('fetchEventsDatabase',c)(env,options))),calls};
 }
 const jsonResponse=(body,ok=true,status=200)=>({ok,status,json:async()=>body});
 const brokenJson={ok:true,status:200,json:async()=>{throw new SyntaxError('Unexpected token');}};
@@ -324,7 +324,7 @@ test('the map still reports an error when neither file can be loaded',async()=>{
 test('events.json is fetched in exactly one place in the map, and the startup chain uses the loader',()=>{
  const html=read('index.html');
  assert.equal((html.match(/fetch\(\s*"events\.json"\s*\)/g)||[]).length,1);
- assert.equal((html.match(/fetch\(\s*"events-lite\.json"\s*\)/g)||[]).length,1);
+ assert.equal((html.match(/fetch\(\s*"events-lite\.json"\s*,/g)||[]).length,1);
  assert.match(html,/loadEventsDatabase\(\)\s*\.then\(/);
 });
 
@@ -373,4 +373,27 @@ test('the live smoke test rejects a lite file that disagrees with events.json bu
 
 test('the Worker deployment workflow runs the lite builder tests',()=>{
  assert.match(read('.github/workflows/deploy-report-worker.yml'),/python3 tests\/build_events_lite_test\.py/);
+});
+
+
+
+test('a database list cannot silently read a lite snapshot older than its map',async()=>{
+  const minVersion='2026-10-07T11:00:00Z';
+  const freshURL=ENV.EVENTS_LITE_URL+'?ct_atlas_version='+Date.parse(minVersion);
+  const stale={...LITE,last_updated:'2026-10-07T10:00:00Z'};
+  const latest={...LITE,last_updated:minVersion};
+  const h=fetchHarness({[ENV.EVENTS_LITE_URL]:jsonResponse(stale),[freshURL]:jsonResponse(latest)});
+  assert.equal((await h.call(ENV,{minVersion})).db.last_updated,minVersion);
+  assert.deepEqual(h.calls.map(c=>c.url),[ENV.EVENTS_LITE_URL,freshURL]);
+  assert.equal(h.calls[1].options.cache,'no-store');
+});
+
+test('an older lite snapshot falls back to a current full database when refreshing lite fails',async()=>{
+  const minVersion='2026-10-07T11:00:00Z';
+  const h=fetchHarness({[ENV.EVENTS_LITE_URL]:jsonResponse({...LITE,last_updated:'2026-10-06T10:00:00Z'}),
+    [ENV.EVENTS_URL]:jsonResponse({...FULL,last_updated:minVersion})});
+  const result=await h.call(ENV,{minVersion});
+  assert.equal(result.ok,true);
+  assert.equal(result.source,'full');
+  assert.equal(result.db.last_updated,minVersion);
 });

@@ -5177,6 +5177,7 @@ Map · all events
 <button class="time-button" data-days="1">24H</button>
 <button class="time-button active" data-days="7">7 DAYS</button>
 <button class="time-button" data-days="30">30 DAYS</button>
+<button class="time-button" data-days="90">3 MONTHS</button>
 </div>
 
 <div class="layer-buttons">
@@ -5223,7 +5224,8 @@ Database <span id="databaseTotalCount" class="database-total" hidden></span>
 <option value="Terrorist Financing">Terrorist Financing</option>
 <option value="Weapons">Weapons</option>
 <option value="Maritime Piracy">Maritime Security</option>
-<option value="CBRN">CBRN</option>
+<option value="CBRN">CBRN · all</option>
+<option value="RADNUC">↳ RADNUC</option>
 <option value="Online / Cyber / AI">Online / Cyber / AI</option>
 <option value="Legal / Judicial">Legal / Judicial</option>
 </select>
@@ -6558,6 +6560,10 @@ let databaseEventTotal =
 // category), the event list and both exports work on it.
 let databaseResults = [];
 let databaseResultsKey = "";
+let databaseResultsLoadedAt = 0;
+let databaseSourceVersion = "";
+let mapDatabaseVersion = "";
+const DATABASE_RESULTS_CACHE_MS = 60 * 1000;
 let databaseLastError = "";
 let databaseLastStatus = "";
 let databaseQueryPromise = null;
@@ -6761,7 +6767,7 @@ function escapeHtml(
 function loadEventsDatabase() {
 
     return fetch(
-        "events-lite.json"
+        "events-lite.json", { cache: "no-store" }
     )
     .then(
         response => {
@@ -6862,14 +6868,14 @@ function eventMatchKey(event) {
 
 // Other categories' events of the map's longest period (30 days), plus a
 // day of slack between two publications (tools/build_events_map.py).
-const MAP_RECENT_EVENT_DAYS = 31;
+const MAP_RECENT_EVENT_DAYS = 91;
 
 // The map's own file (events-map.json, built at publication time: attacks only,
 // ~1/4 of events-lite.json) or, if it is missing or unusable, the full database
 // reduced to the same shape here.
 function loadMapDatabase() {
 
-    return fetch("events-map.json")
+    return fetch("events-map.json", { cache: "no-store" })
     .then(response => {
         if (!response.ok) throw new Error("events-map.json unavailable");
         return response.json();
@@ -6965,6 +6971,11 @@ loadMapDatabase()
             ||
             null;
 
+
+        mapDatabaseVersion = String(data.last_updated || data.updated_at || "");
+        if (databaseActivated && !databaseSnapshotCompatible()) {
+            queryDatabase(true).catch(() => {});
+        }
 
         // Unique per event: the database holds a few duplicate ids, and a
         // shared key would make one marker, ticker line or list row stand in
@@ -7391,7 +7402,7 @@ function mapScopeMatches(event, scope) {
     if (scope === "RADNUC") {
         return eventCategories(event).includes("CBRN")
             && Array.isArray(event.cbrn_subgroups) && event.cbrn_subgroups.includes("RADNUC")
-            && event.actor_scope !== "STATE_ONLY" && event.excluded_from_map !== true;
+            && event.actor_scope !== "STATE_ONLY";
     }
     return categoryMatches(event, [scope]);
 }
@@ -14145,8 +14156,21 @@ function setDatabaseStatus(text, state) {
 
 // The list on screen matches the filters on screen: no query running, and the
 // last answer was for exactly these filters.
+function databaseSnapshotCompatible() {
+    const mapVersion = Date.parse(mapDatabaseVersion);
+    const listVersion = Date.parse(databaseSourceVersion);
+    return !Number.isFinite(mapVersion) || Number.isFinite(listVersion) && listVersion >= mapVersion;
+}
+
+function databaseCacheReusable(key, force = false) {
+    return !force && key === databaseResultsKey && !databaseQueryPromise
+        && databaseSnapshotCompatible()
+        && Date.now() - databaseResultsLoadedAt < DATABASE_RESULTS_CACHE_MS;
+}
+
 function databaseResultsCurrent() {
-    return !databaseQueryPromise && !!databaseResultsKey && databaseResultsKey === JSON.stringify(databaseFilters());
+    return !databaseQueryPromise && !!databaseResultsKey && databaseSnapshotCompatible()
+        && databaseResultsKey === JSON.stringify(databaseFilters());
 }
 
 function databaseListEmptyText() {
@@ -14184,27 +14208,27 @@ function renderDatabaseGroups(groups, selected) {
     select.value = selected;
 }
 
-// Database rows that are attacks also in the map's file link to their map
-// event, by the unique key (ids are shared by unrelated events). Run when the
+// Database rows of every category link to their map event by the unique key
+// (ids are shared by unrelated events). Run when the
 // rows arrive and again once the map's file has loaded, whichever is last.
 function linkDatabaseRowsToMap() {
     const mapKeyByMatchKey = new Map();
-    allEvents.forEach(event => {
+    [...allEvents, ...recentContextEvents].forEach(event => {
         const matchKey = eventMatchKey(event);
-        if (!mapKeyByMatchKey.has(matchKey)) mapKeyByMatchKey.set(matchKey, event._mapKey);
+        if (!mapKeyByMatchKey.has(matchKey)) mapKeyByMatchKey.set(matchKey, event);
     });
     databaseResults.forEach(row => {
-        row._mapEventKey = isMapAttackEvent(row)
-            ? (mapKeyByMatchKey.get(row.match_key || eventMatchKey(row)) || "")
-            : "";
+        const mapped = mapKeyByMatchKey.get(row.match_key || eventMatchKey(row));
+        row._mapEventKey = mapped && isMapAttackEvent(row) === isMapAttackEvent(mapped)
+            ? mapped._mapKey || "" : "";
     });
 }
 
-function queryDatabase() {
+function queryDatabase(force = false) {
     const filters = databaseFilters();
     const key = JSON.stringify(filters);
 
-    if (key === databaseResultsKey && !databaseQueryPromise) {
+    if (databaseCacheReusable(key, force)) {
         // Back on filters whose results are still loaded: drop the error a
         // failed query for other filters left on screen.
         if (databaseLastError) {
@@ -14213,7 +14237,7 @@ function queryDatabase() {
         }
         return Promise.resolve(databaseResults);
     }
-    if (databaseQueryPromise && databaseQueryPromise.key === key) {
+    if (!force && databaseQueryPromise && databaseQueryPromise.key === key) {
         return databaseQueryPromise;
     }
 
@@ -14228,7 +14252,7 @@ function queryDatabase() {
     const promise = fetch(REPORT_GENERATOR_API_BASE + "/database-events", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...filters, user_id: reportGeneratorUserId() })
+        body: JSON.stringify({ ...filters, user_id: reportGeneratorUserId(), min_database_version: mapDatabaseVersion })
     })
     .then(async response => {
         const payload = await response.json().catch(() => ({}));
@@ -14246,6 +14270,8 @@ function queryDatabase() {
         });
         linkDatabaseRowsToMap();
         databaseResultsKey = key;
+        databaseSourceVersion = String(payload.database_version || "");
+        databaseResultsLoadedAt = Date.now();
         databaseLastError = "";
         // The analyst may have picked another group while this answer was on
         // its way (the next query waits out the debounce): keep that choice.
@@ -14354,23 +14380,26 @@ function openDatabaseEvent(event) {
 }
 
 function databaseEventCardNote(event) {
-    if (!isMapAttackEvent(event)) {
-        return "Not shown on the map: the map displays attacks only. This event comes from the full CT Atlas database.";
+    const attack = isMapAttackEvent(event);
+    const label = attack ? "Attack" : "Event";
+    if (mapCategoryScope === "ATTACKS" && !attack) {
+        return "Not shown on the map: its current selection displays attacks only. This event is in the CT Atlas database.";
     }
     const located = event.excluded_from_map !== true
         && event.location_precision !== "unlocated"
         && event.latitude != null && event.longitude != null;
     if (!located) {
-        return "Attack not shown on the map: its location is not precise enough to place it.";
+        return label + " not shown on the map: its location is not precise enough to place it.";
     }
-    if (withinDays(event.published, selectedDays)) {
-        // In the map's period and located, yet not on the map: the database
-        // gained it after this page loaded the map.
-        return "Attack recorded after the map was loaded: reload the page to see it on the map.";
+    if (!withinDays(event.published, selectedDays)) {
+        return label + " not shown on the map right now: the map covers the last "
+            + (selectedDays === 1 ? "24 hours" : selectedDays + " days")
+            + ". This event is in the CT Atlas database.";
     }
-    return "Attack not shown on the map right now: the map covers the last "
-        + (selectedDays === 1 ? "24 hours" : selectedDays + " days")
-        + ". This event comes from the full CT Atlas database.";
+    if (mapCategoryScope !== "ATTACKS" && !mapScopeMatches(event, mapCategoryScope)) {
+        return "Not shown on the map: this event does not match the selected map category.";
+    }
+    return label + " recorded after the map was loaded or outside its current filters: reload the page to update the map.";
 }
 
 function safeHttpUrl(value) {
@@ -14831,9 +14860,9 @@ document.getElementById(
             true
         );
 
-        // The list shows the Database panel's results: fetch them for the
-        // current filters (no-op when they are already current).
-        queryDatabase().catch(() => {});
+        // Reopening the list requests the latest database snapshot, including
+        // reports published since the previous list was opened.
+        queryDatabase(true).catch(() => {});
 
     }
 
@@ -15025,3 +15054,4 @@ document.addEventListener(
 </body>
 
 </html>
+
