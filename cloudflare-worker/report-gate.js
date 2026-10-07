@@ -13,6 +13,7 @@ const ADMIN_DISPLAY_NAMES=Object.freeze({
   "group-i-10":"Sebastien",
   "group-i-11":"Kitty",
   "group-i-12":"Camilla Bio",
+  "group-i-13":"Tarun",
   "group-p-1":"Dritan",
   "group-p-2":"Allyson",
   "group-p-3":"Roberto",
