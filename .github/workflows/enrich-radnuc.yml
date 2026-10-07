@@ -1,0 +1,137 @@
+name: Enrich RADNUC — six months, all collection languages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - radnuc.py
+      - tools/enrich_radnuc.py
+      - .github/workflows/enrich-radnuc.yml
+  schedule:
+    - cron: "43 6 * * *"
+      timezone: Europe/Paris
+  workflow_dispatch:
+    inputs:
+      max_posts:
+        description: Gemini requests (shared enrichment daily allocation applies)
+        default: "100"
+      max_fetches:
+        description: Searches; saturated windows split automatically; reruns resume
+        default: "2500"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# The same write lock as the daily collector protects events.json and publication.
+concurrency:
+  group: ct-map-update-main
+  cancel-in-progress: false
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    timeout-minutes: 270
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      ENRICH_MAX_POSTS: ${{ inputs.max_posts || '100' }}
+      ENRICH_MAX_FETCHES: ${{ inputs.max_fetches || '2500' }}
+      ENRICH_DEADLINE_MINUTES: "190"
+    steps:
+      - name: Checkout repository
+        id: checkout
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Validate RADNUC filters and resumable integration
+        run: python -m unittest discover -s tests -p 'radnuc_test.py'
+      - name: Protect existing location decisions
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          db = json.loads(Path('events.json').read_text(encoding='utf-8'))
+          ids = [str(e['id']) for e in db['events'] if e.get('id') is not None]
+          Path(os.environ['RUNNER_TEMP'], 'radnuc-preserve-geo.json').write_text(json.dumps(ids))
+          PY
+      - name: Enrich and integrate RADNUC reporting
+        id: enrich
+        timeout-minutes: 205
+        run: python -u tools/enrich_radnuc.py --max-posts "$ENRICH_MAX_POSTS" --max-fetches "$ENRICH_MAX_FETCHES"
+      - name: Locate newly integrated events
+        if: ${{ always() && steps.enrich.outcome == 'success' }}
+        timeout-minutes: 40
+        env:
+          AI_GEO_FORCE: "0"
+          AI_GEO_PRESERVE_IDS_FILE: ${{ runner.temp }}/radnuc-preserve-geo.json
+        run: python -u geolocate.py
+      - name: Preserve enrichment recovery artifact
+        if: ${{ always() && steps.checkout.outcome == 'success' }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: radnuc-enrichment-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            events.json
+            archive/radnuc-*.json
+            archive/enriched-articles-*.json
+            archive/enrichment-seen-*.txt
+            quota/gemini-3.1-enrichment.json
+          retention-days: 7
+          if-no-files-found: ignore
+      - name: Commit validated database and resumable checkpoints
+        if: ${{ always() && steps.checkout.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          db = json.loads(Path('events.json').read_text(encoding='utf-8'))
+          if not isinstance(db.get('events'), list) or not db['events']:
+              raise RuntimeError('Invalid RADNUC database checkpoint')
+          for folder in ('archive', 'quota'):
+              for path in Path(folder).glob('*.json'):
+                  json.loads(path.read_text(encoding='utf-8'))
+          PY
+          git config user.name "CT Intelligence Map Bot"
+          git config user.email "actions@github.com"
+          git add -- events.json archive quota
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Integrate multilingual RADNUC enrichment and preserve progress"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo "Concurrent write conflict; recovery artifact retained."
+              exit 1
+            fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 4))
+          done
+          exit 1
+  deploy:
+    needs: enrich
+    if: ${{ always() && needs.enrich.result == 'success' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/configure-pages@v6
+      - name: Build map and full database payloads
+        uses: ./.github/actions/build-events-lite
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: .
+      - uses: actions/deploy-pages@v5
+        id: deployment

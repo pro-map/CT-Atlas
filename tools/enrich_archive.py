@@ -198,9 +198,11 @@ def plan_tasks(today, collector):
         replayed(google_tasks([ENGLISH_PROFILE], "english")),
     ]
     tasks = [task for group in groups for task in group]
+    unique = {}
     for task in tasks:
         task["key"] = task_key(task)
-    return tasks
+        unique.setdefault(task["key"], task)
+    return list(unique.values())
 
 
 def window(task):
@@ -490,8 +492,8 @@ def screen(event, collector):
 
 # ---------------------------------------------------------------- state
 
-def load_state(root):
-    state = archive_review.read_json(Path(root) / STATE_FILE) or {}
+def load_state(root, state_file=STATE_FILE):
+    state = archive_review.read_json(Path(root) / state_file) or {}
     if state.get("version") != STATE_VERSION:
         state = {}
     return {
@@ -505,14 +507,14 @@ def load_state(root):
     }
 
 
-def save_state(root, state, plan_keys=None):
+def save_state(root, state, plan_keys=None, state_file=STATE_FILE):
     """plan_keys: the current plan's tasks; finished tasks the plan no longer
     has (an edited query) are dropped, so the file never grows with them."""
     if plan_keys is not None:
         keep = set(plan_keys) | set(state["children"])
         state["done"] = {key: value for key, value in state["done"].items() if key in keep}
         state["failures"] = {key: value for key, value in state["failures"].items() if key in keep}
-    archive_review.write_json(Path(root) / STATE_FILE,
+    archive_review.write_json(Path(root) / state_file,
                               {**state, "updated_at": datetime.now(timezone.utc).isoformat()}, indent=None)
 
 
@@ -544,12 +546,12 @@ def bump(state, task, field, amount=1):
 
 # ---------------------------------------------------------------- output
 
-def archive_row(item, result, collector, now):
+def archive_row(item, result, collector, now, include_event=False):
     """Filed as the map's selection files a candidate (the sync turns it into
     an archived incident, or another outlet's report on a map incident, only
     when that selection kept it)."""
     return {
-        **archive_review.review_record(item, result, collector),
+        **archive_review.review_record(item, result, collector, include_event=include_event),
         "reviewed_at": now.isoformat(),
         "enrichment": {"source": item["_task"]["source"], "language": item["_task"]["code"],
                        "week": item["_task"]["week"]},
@@ -580,24 +582,26 @@ class Output:
 # ---------------------------------------------------------------- the run
 
 def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=None, call_batch=None,
-        gate_factory=None, log=print, deadline_minutes=DEADLINE_MINUTES, clock=time.monotonic):
+        gate_factory=None, log=print, deadline_minutes=DEADLINE_MINUTES, clock=time.monotonic,
+        plan_factory=plan_tasks, state_file=STATE_FILE, output_factory=Output, ledger_job="enrichment",
+        event_screen=screen, retry_failed_tasks=False):
     now = now or datetime.now(timezone.utc)
     today = today or now.date()
     started = clock()
-    state = load_state(root)
-    ledger = archive_review.DailyLedger(archive_review.ledger_path("enrichment", root), DAILY_POSTS, now=now)
+    state = load_state(root, state_file)
+    ledger = archive_review.DailyLedger(archive_review.ledger_path(ledger_job, root), DAILY_POSTS, now=now)
     budget = ledger.budget(max_posts)
     known = known_article_keys(root)
     cached = reviewed_fingerprints(root, collector)
     seen = load_seen(root)
     new_seen = set()
-    plan = plan_tasks(today, collector)
+    plan = plan_factory(today, collector)
     plan_keys = [task["key"] for task in plan]
     # Shorter searches left open by an earlier run come first.
     tasks = [task for task in state["children"].values() if task["key"] not in state["done"]]
     tasks += [task for task in plan if task["key"] not in state["done"]]
     searcher = searcher or Searcher(collector)
-    output = Output(root, now)
+    output = output_factory(root, now)
     summary = {"tasks_done": 0, "fetched": 0, "candidates": 0, "skipped": 0, "skipped_cached": 0, "reviewed": 0,
                "kept": 0, "archived_incident": 0, "unanswerable": 0, "source_failures": 0, "query_errors": 0,
                "split": 0, "given_up": 0}
@@ -629,7 +633,7 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
             score = archive_review.score_of(result)
             bump(state, item["_task"], "reviewed")
             if score > 0:
-                rows.append(archive_row(item, result, collector, now))
+                rows.append(archive_row(item, result, collector, now, include_event=getattr(output, "include_event", False)))
                 bump(state, item["_task"], "kept")
                 summary["kept"] += 1
                 if score >= threshold:
@@ -646,7 +650,7 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
         output.save()
         save_seen(root, now, new_seen)
         close_finished()
-        save_state(root, state, plan_keys)
+        save_state(root, state, plan_keys, state_file)
 
     def out_of_time():
         return (clock() - started) / 60 >= deadline_minutes
@@ -716,7 +720,7 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
                     link = link_key(event.get("url"))
                     if not key or any(k in known or k in seen or k in new_seen for k in keys) \
                             or (link and link in known) \
-                            or not in_window(event, task, collector) or screen(event, collector):
+                            or not in_window(event, task, collector) or event_screen(event, collector):
                         summary["skipped"] += 1
                         continue
                     if set(event.get("source_article_fingerprints") or ()) & cached:
@@ -749,12 +753,12 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
         if task["source"] not in answered_sources:
             continue
         failures = state["failures"][task["key"]] = state["failures"].get(task["key"], 0) + 1
-        if failures >= MAX_TASK_FAILURES:
+        if failures >= MAX_TASK_FAILURES and not retry_failed_tasks:
             summary["given_up"] += 1
             bump(state, task, "given_up")
             finish(task)
     state["runs"] = (state["runs"] + [{"at": now.isoformat(), "posts": posts, **summary, "stop": stop}])[-30:]
-    save_state(root, state, plan_keys)
+    save_state(root, state, plan_keys, state_file)
     save_seen(root, now, new_seen)
     output.save()
     return summary, stop
@@ -795,3 +799,4 @@ def main(argv=None):
 
 if __name__ == "__main__":
     sys.exit(main())
+

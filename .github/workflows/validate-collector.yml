@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - "collector.py"
+      - "radnuc.py"
+      - "tools/enrich_radnuc.py"
       - ".github/workflows/validate-collector.yml"
   workflow_dispatch:
 
@@ -25,7 +27,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Compile collector
-        run: python -m py_compile collector.py
+        run: python -m py_compile collector.py radnuc.py tools/enrich_radnuc.py
       - name: Validate weekly analytical generator
         run: |
           python - <<'PY'
@@ -68,3 +70,4 @@ jobs:
               raise SystemExit("Weekly quality gate missing")
           print("Collector weekly analytical validation OK")
           PY
+

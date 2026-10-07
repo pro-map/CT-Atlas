@@ -8,6 +8,7 @@ on:
   push:
     paths:
       - "collector.py"
+      - "radnuc.py"
       - "geolocate.py"
       - "tools/**"
       - "darkweb-collector/**"
@@ -17,6 +18,7 @@ on:
   pull_request:
     paths:
       - "collector.py"
+      - "radnuc.py"
       - "geolocate.py"
       - "tools/**"
       - "darkweb-collector/**"
@@ -55,3 +57,4 @@ jobs:
         # The face detector's test needs OpenCV and the visual-intel service:
         # deploy-visual-intel.yml runs it inside that service's container.
         run: python -m pytest tests/ -q --ignore=tests/visual_intel_detector_test.py
+

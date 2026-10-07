@@ -5167,7 +5167,8 @@ Map · all events
 <option value="Terrorist Financing">Terrorist financing</option>
 <option value="Weapons">Weapons</option>
 <option value="Maritime Security">Maritime security</option>
-<option value="CBRN">CBRN</option>
+<option value="CBRN">CBRN · all</option>
+<option value="RADNUC">↳ RADNUC</option>
 <option value="Online / Cyber / AI">Online / cyber / AI</option>
 </select>
 </label>
@@ -7379,20 +7380,32 @@ let mapCategoryScope = "ALL";
 
 const MAP_SCOPE_TITLES = {
     ATTACKS: "Map · attacks",
-    ALL: "Map · all events"
+    ALL: "Map · all events",
+    RADNUC: "Map · CBRN / RADNUC"
 };
 
 // The events of the map's period in the "Show on map" scope, located or not:
 // attacks from the map's file, other categories from its recent_events.
+function mapScopeMatches(event, scope) {
+    if (scope === "ALL") return true;
+    if (scope === "RADNUC") {
+        return eventCategories(event).includes("CBRN")
+            && Array.isArray(event.cbrn_subgroups) && event.cbrn_subgroups.includes("RADNUC")
+            && event.actor_scope !== "STATE_ONLY" && event.excluded_from_map !== true;
+    }
+    return categoryMatches(event, [scope]);
+}
+
 function mapScopeEvents() {
     if (_mapScopeEventsCache) {
         return _mapScopeEventsCache;
     }
     const scope = mapCategoryScope;
-    const attacks = scope === "ATTACKS" || scope === "ALL" ? filteredAllEvents() : [];
+    const attacks = scope === "ATTACKS" || scope === "ALL" ? filteredAllEvents()
+        : scope === "RADNUC" || scope === "CBRN" ? filteredAllEvents().filter(event => mapScopeMatches(event, scope)) : [];
     const others = scope === "ATTACKS" ? [] : recentContextEvents.filter(event =>
         withinDays(event.published, selectedDays)
-        && (scope === "ALL" || categoryMatches(event, [scope]))
+        && mapScopeMatches(event, scope)
         && groupMatches(event)
         && searchMatches(event)
     );
@@ -7404,15 +7417,16 @@ function mapScopeEvents() {
 // buttons' counts).
 function mapScopeCandidates() {
     const scope = mapCategoryScope;
-    const attacks = scope === "ATTACKS" || scope === "ALL" ? allEvents : [];
+    const attacks = scope === "ATTACKS" || scope === "ALL" ? allEvents
+        : scope === "RADNUC" || scope === "CBRN" ? allEvents.filter(event => mapScopeMatches(event, scope)) : [];
     const others = scope === "ATTACKS" ? [] : recentContextEvents.filter(event =>
-        scope === "ALL" || categoryMatches(event, [scope])
+        mapScopeMatches(event, scope)
     );
     return others.length ? [...attacks, ...others] : attacks;
 }
 
 function setMapCategoryScope(value) {
-    mapCategoryScope = value === "ALL" || MAP_ALL_CATEGORIES.includes(value) && value !== "Attacks" ? value : "ATTACKS";
+    mapCategoryScope = value === "ALL" || value === "RADNUC" || MAP_ALL_CATEGORIES.includes(value) && value !== "Attacks" ? value : "ATTACKS";
     const title = document.getElementById("mapScopeTitle");
     if (title) {
         title.textContent = MAP_SCOPE_TITLES[mapCategoryScope] || ("Map · " + mapCategoryScope.toLowerCase());

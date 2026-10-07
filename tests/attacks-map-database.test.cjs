@@ -363,9 +363,11 @@ function mapScopeHarness(){
     let selectedDays = 1;
     let recentContextEvents = [];
     let attacks = [];
+    let allEvents = [];
     function withinDays(published, days){ return Date.now()-Date.parse(published) <= days*86400000; }
     function filteredAllEvents(){ return attacks.filter(e => withinDays(e.published, selectedDays)); }
-    function categoryMatches(event, list){ return list.includes(event.category); }
+    function eventCategories(event){ return event.categories || [event.category]; }
+    function categoryMatches(event, list){ return eventCategories(event).some(category => list.includes(category)); }
     function groupMatches(){ return true; }
     function searchMatches(){ return true; }
   `,c);
@@ -381,8 +383,9 @@ function mapScopeHarness(){
             {id:'r31',category:'Arrests',published:iso(31*day),latitude:5,longitude:5},
             {id:'u1',category:'Arrests',published:iso(7200e3),location_precision:'unlocated'}]
   };
-  vm.runInContext('attacks = attacksData.attacks; recentContextEvents = attacksData.others;',c);
+  vm.runInContext('attacks = attacksData.attacks; allEvents=attacks; recentContextEvents = attacksData.others;',c);
   return {
+    context:c,
     ids:(scope,days)=>vm.runInContext(`selectedDays=${days}; setMapCategoryScope(${JSON.stringify(scope)}); invalidateFilterCache();
       ({scope: mapScopeEvents().map(e=>e.id), mapped: filteredMappedEvents().map(e=>e.id), state: mapCategoryScope})`,c),
   };
@@ -425,4 +428,26 @@ test('attacks pulse in red on the map, clusters holding one too; the offices are
   assert.ok(!/animation/.test(office),'offices do not pulse');
   assert.ok(!/interpolOfficePulse/.test(css));
   assert.match(css,/\.interpol-office-hq \{\n    width: 22px;/);
+});
+
+
+
+test('RADNUC subgroup includes attacks and contextual CBRN events, excludes other CBRN and state actors',()=>{
+  const h=mapScopeHarness();
+  vm.runInContext(`
+    const now=new Date().toISOString();
+    attacks=[{id:'rad-attack',category:'Attacks',categories:['Attacks','CBRN'],cbrn_subgroups:['RADNUC'],
+      published:now,latitude:1,longitude:2}];
+    allEvents=attacks;
+    recentContextEvents=[
+      {id:'rad-arrest',category:'CBRN',cbrn_subgroups:['RADNUC'],published:now,latitude:1,longitude:2},
+      {id:'chemical',category:'CBRN',cbrn_subgroups:[],published:now,latitude:1,longitude:2},
+      {id:'state-strike',category:'CBRN',cbrn_subgroups:['RADNUC'],actor_scope:'STATE_ONLY',published:now,latitude:1,longitude:2},
+      {id:'unlocated-rad',category:'CBRN',cbrn_subgroups:['RADNUC'],published:now,excluded_from_map:true}
+    ];
+  `,h.context);
+  assert.deepEqual(plain(h.ids('RADNUC',7)).mapped,['rad-attack','rad-arrest']);
+  assert.equal(plain(h.ids('RADNUC',7)).state,'RADNUC');
+  assert.deepEqual(plain(vm.runInContext("mapScopeCandidates().map(e=>e.id)",h.context)),['rad-attack','rad-arrest']);
+  assert.ok(plain(h.ids('CBRN',7)).mapped.includes('rad-attack'),'CBRN parent includes its RADNUC attack');
 });

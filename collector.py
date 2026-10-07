@@ -1,4 +1,5 @@
 import argparse
+import radnuc
 import feedparser
 import hashlib
 import html
@@ -1682,6 +1683,12 @@ MULTILINGUAL_PROFILES.extend([
 
 
 
+# RADNUC uses specific security queries in every existing daily edition.
+CORE_SEARCH_QUERIES["CBRN"].extend(radnuc.ENGLISH_QUERIES)
+for _profile in MULTILINGUAL_PROFILES:
+    for _term in radnuc.queries(_profile["code"]):
+        _profile["queries"].append({"term": _term, "category": "CBRN"})
+
 # Run only the publisher additions from this expansion:
 # python collector.py backfill-new-sources
 # Equivalent: python collector.py backfill --scope regional-additions
@@ -2993,11 +3000,10 @@ def collect_query(
             )
         )
 
-        if not is_relevant_article(
-            category,
-            title,
-            summary,
-        ):
+        radnuc_hint = category == "CBRN" and term in radnuc.ENGLISH_QUERIES and AI_SELECTION_ENABLED
+        if (out_of_scope_reason({"title": title, "summary": summary})
+                or radnuc.state_operation_reason({"title": title, "summary": summary})) or (
+                not radnuc_hint and not is_relevant_article(category, title, summary)):
             rejected += 1
             continue
 
@@ -3840,6 +3846,12 @@ AI_SELECTION_SCHEMA = {
                             ],
                         },
                     },
+                    "cbrn_subgroups": {
+                        "type": "array", "items": {"type": "string", "enum": ["RADNUC"]}
+                    },
+                    "actor_scope": {
+                        "type": "string", "enum": ["NON_STATE", "STATE_ONLY", "UNKNOWN"]
+                    },
                     "original_language": {
                         "type": "string"
                     },
@@ -3891,6 +3903,8 @@ AI_SELECTION_SCHEMA = {
                     "relevance_score",
                     "is_current_ct_event",
                     "categories",
+                    "cbrn_subgroups",
+                    "actor_scope",
                     "original_language",
                     "english_title",
                     "english_summary",
@@ -4933,6 +4947,9 @@ def process_ai_selection_batch(
         )
 
 
+AI_SELECTION_INSTRUCTIONS += radnuc.SELECTION_NOTE
+
+
 def apply_ai_selection(
     event,
     result,
@@ -5198,7 +5215,9 @@ def apply_ai_selection(
             "title_variants"
         ] = variants
 
-    scope_reason = out_of_scope_reason(event)
+    radnuc.annotate(event, result)
+    scope_reason = radnuc.state_operation_reason(event, result.get("actor_scope")) if "CBRN" in event.get("categories", []) or "RADNUC" in event.get("cbrn_subgroups", []) else ""
+    scope_reason = scope_reason or out_of_scope_reason(event)
     if scope_reason:
         event["ai_selected"] = False
         event["ai_current_ct_event"] = False
@@ -7286,6 +7305,7 @@ def article_identity(article):
 
 
 def ensure_event_metadata(event):
+    radnuc.annotate(event)
     sources = event.get(
         "sources"
     )
@@ -7412,6 +7432,8 @@ def merge_event(
     existing[
         "categories"
     ] = existing_categories
+
+    existing["cbrn_subgroups"] = sorted(set(existing.get("cbrn_subgroups", []) + new.get("cbrn_subgroups", [])))
 
     existing["source_article_fingerprints"] = sorted(set(
         existing.get("source_article_fingerprints", [])

@@ -233,7 +233,7 @@ def score_of(result):
         return 0
 
 
-def review_record(item, result, collector):
+def review_record(item, result, collector, include_event=False):
     """An archive row for a reviewed item, filed exactly as the map's
     selection files a candidate: collector.apply_ai_selection on a copy (the
     English headline and summary, categories, actor, event type, incident id,
@@ -242,6 +242,9 @@ def review_record(item, result, collector):
     event = copy.deepcopy({key: value for key, value in item.items() if not str(key).startswith("_")})
     selected = bool(collector.apply_ai_selection(event, result))
     return {
+        **({"selected_event": event} if include_event else {}),
+        "cbrn_subgroups": event.get("cbrn_subgroups") or [],
+        "actor_scope": event.get("actor_scope"),
         "url": item.get("url"),
         "title": event.get("title") or item.get("title"),
         "summary": event.get("summary") or "",
@@ -319,3 +322,4 @@ def review_batches(items, collector, on_batch, call_batch=None, batch_size=BATCH
         on_batch(pairs, skipped)
         handled += len(batch)
     return handled, "done"
+
