@@ -650,7 +650,7 @@ def test_dead_link_is_abandoned_after_three_passes_and_the_start_page_is_fetched
     outlet = {**OUTLET, 'policy': LOOP_POLICY, 'collection_phase': 'watch'}
     calls, sent = passes(site, db, tmp_path, outlet, 3)
     # One attempt per pass, so a brief source problem cannot use up all three at once.
-    assert calls == [[BASE, BASE+'dead'], [BASE+'dead'], [BASE+'dead']]
+    assert calls == [[BASE, BASE+'dead']] * 3
     assert not any(batch['scan_complete'] for batch in sent[0] + sent[1])
     assert sent[2][-1]['scan_complete'] and sent[2][-1]['abandoned_pages'] == 1
     assert sent[2][-1]['failed_pages'] == 0 and not sent[2][-1]['truncated']
