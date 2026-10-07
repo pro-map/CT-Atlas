@@ -729,7 +729,7 @@ def test_page_that_keeps_timing_out_is_abandoned_once_the_start_page_answers(tmp
     db.close()
 
 
-def test_watch_pass_refetches_the_start_page_ahead_of_older_frontier_entries(tmp_path):
+def test_watch_pass_reads_only_current_listing_and_new_publications(tmp_path):
     site = Site({BASE: cards(range(12), True), BASE+'page/2/': cards([20]),
                  **{BASE+'posts/news/%s/' % i: structured_detail('خبر %s' % i, '', '2025-10-03') for i in list(range(13)) + [20]}})
     db = c.open_database(tmp_path/'state.sqlite')
@@ -740,10 +740,11 @@ def test_watch_pass_refetches_the_start_page_ahead_of_older_frontier_entries(tmp
     more_calls, more_sent = passes(site, db, tmp_path, outlet, 3)
     calls += more_calls
     assert [pass_calls[0] for pass_calls in calls] == [BASE] * 4
-    assert calls[1] == [BASE, BASE+'posts/news/12/', BASE+'page/2/']
+    assert calls[1] == [BASE, BASE+'posts/news/12/']
+    assert all(BASE+'page/2/' not in pass_calls for pass_calls in calls)
     uploaded = [item['url'] for batch in more_sent[0] for item in batch['items']]
     assert BASE+'posts/news/12/' in uploaded
-    # Unchanged cards from the re-checked start page are not sent again within the run.
+    # Unchanged cards are not reopened, and historical pagination is never followed.
     assert BASE+'posts/news/11/' not in uploaded
     assert db.execute('SELECT baseline FROM items WHERE url=?', (BASE+'posts/news/12/',)).fetchone()[0] == 0
     db.close()
