@@ -1912,12 +1912,17 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
                 target_url = onion_url(row["url"])
                 if not target_url or urlsplit(target_url).hostname != urlsplit(outlet["url"]).hostname:
                     continue
-                if (row.get("crawl") or row["type"] == "page") and target_url != url and (not watching or target[1] < 2):
-                    # In daily watch mode, previously collected publication URLs do not
-                    # need to be reopened. Only genuinely new links enter the shallow
-                    # frontier; failed links keep their attempts across passes.
-                    known = watching and db.execute("SELECT 1 FROM items WHERE outlet_id=? AND url=? LIMIT 1", (oid, target_url)).fetchone()
-                    if not known:
+                if target_url != url:
+                    if watching:
+                        # Daily Bessira mode is deliberately one-hop only. From the
+                        # starting page, follow only genuinely new publication links
+                        # that fall inside today's policy window. Never follow generic
+                        # navigation/pagination (page 2, archives, categories), and
+                        # never recurse from a publication detail page.
+                        known = db.execute("SELECT 1 FROM items WHERE outlet_id=? AND url=? LIMIT 1", (oid, target_url)).fetchone()
+                        if target[1] == 0 and not known and selected_material(row) and within_period(row, policy):
+                            db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url,depth) VALUES (?,?,1)", (oid, target_url))
+                    elif row.get("crawl") or row["type"] == "page":
                         db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url,depth) VALUES (?,?,?)", (oid, target_url, target[1]+1))
                 if not selected_material(row):
                     continue
