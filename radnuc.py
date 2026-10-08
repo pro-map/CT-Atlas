@@ -71,23 +71,13 @@ def state_operation_reason(event, actor_scope=None):
 
 
 def annotate(event, result=None):
-    categories = event.get('categories') or [event.get('category')]
-    explicit = (result or {}).get('cbrn_subgroups')
-    if explicit is not None:
-        event['cbrn_subgroups'] = ['RADNUC'] if 'RADNUC' in explicit else []
-        if 'RADNUC' in explicit and 'CBRN' not in categories:
-            categories = [c for c in categories if c] + ['CBRN']
-            event['categories'] = categories
-    elif 'CBRN' in categories and 'cbrn_subgroups' not in event and has_material(event):
-        # Compatibility for retained, English-normalized legacy records only.
-        event['cbrn_subgroups'] = ['RADNUC']
-    if (result or {}).get('actor_scope'):
-        event['actor_scope'] = result['actor_scope']
-    return event
+    # The old entry point stays readable by saved jobs and recovery artifacts.
+    from threat_categories import annotate as normalize_threat_categories
+    return normalize_threat_categories(event, result)
 
 
 SELECTION_NOTE = '''
-RADNUC (subgroup of CBRN): identify concrete non-state radiological/nuclear
+Radiological/Nuclear (standalone category; legacy key RADNUC): identify concrete non-state radiological/nuclear
 terrorism attacks, attempted attacks, plots, material trafficking/theft/seizures
 with a credible reported terrorism nexus, investigations and judicial updates.
 Return cbrn_subgroups=["RADNUC"] only when radiological/nuclear facts are central;

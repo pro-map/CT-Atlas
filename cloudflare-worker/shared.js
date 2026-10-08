@@ -332,7 +332,14 @@ function parseEventDate(event) {
 
 function eventCategories(event) {
   const raw = event?.categories ?? (event?.category ? [event.category] : []);
-  return Array.isArray(raw) ? raw.map(String) : [String(raw)];
+  const values = Array.isArray(raw) ? raw.map(String) : [String(raw)];
+  if (values.some(c => c === "CBRN" || c === "CBRNE")) {
+    values.push(...(Array.isArray(event.threat_categories) ? event.threat_categories : []));
+    if (Array.isArray(event.cbrn_subgroups) && event.cbrn_subgroups.includes("RADNUC")
+        && event.actor_scope !== "STATE_ONLY") values.push("Radiological/Nuclear");
+  }
+  return [...new Set(values.map(c => c === "RADNUC" ? "Radiological/Nuclear" : c)
+    .filter(c => c && c !== "CBRN" && c !== "CBRNE"))];
 }
 
 // Same aliases as the map's CATEGORY_ALIASES, from the database's side: the
@@ -340,6 +347,7 @@ function eventCategories(event) {
 // categories into "Online / Cyber / AI", so a topic picked in the Database
 // panel must match those records too.
 const TOPIC_ALIASES = Object.freeze({
+  "radnuc": "radiological/nuclear",
   "maritime security": "maritime piracy",
   "online radicalization / cyberterrorism": "online / cyber / ai",
   "disinformation / emerging technologies / ai": "online / cyber / ai"
@@ -353,11 +361,7 @@ function canonicalTopic(value) {
 function matchesTopic(event, topic) {
   if (!topic || topic === "ALL") return true;
   const wanted = canonicalTopic(topic);
-  if (wanted === "radnuc") {
-    return eventCategories(event).some(category => canonicalTopic(category) === "cbrn")
-      && Array.isArray(event.cbrn_subgroups) && event.cbrn_subgroups.includes("RADNUC")
-      && event.actor_scope !== "STATE_ONLY";
-  }
+  if (["radiological/nuclear", "chemicals and explosives", "biological terrorism"].includes(wanted) && event.actor_scope === "STATE_ONLY") return false;
   return eventCategories(event).some(category => canonicalTopic(category) === wanted);
 }
 

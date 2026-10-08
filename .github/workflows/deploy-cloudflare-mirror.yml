@@ -6,7 +6,7 @@ on:
       - main
   workflow_dispatch:
   workflow_run:
-    workflows: ["Daily CT Intelligence Map Update", "Daily CT Atlas Quiz", "Apply CT Atlas usage upgrade", "Deploy current CT Atlas UI", "Enrich RADNUC — six months, all collection languages"]
+    workflows: ["Daily CT Intelligence Map Update", "Daily CT Atlas Quiz", "Apply CT Atlas usage upgrade", "Deploy current CT Atlas UI", "Enrich RADNUC — six months, all collection languages", "Enrich specialist categories"]
     types: [completed]
     branches: [main]
 

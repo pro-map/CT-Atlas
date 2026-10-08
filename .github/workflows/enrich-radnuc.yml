@@ -1,10 +1,14 @@
-name: Enrich RADNUC — six months, all collection languages
+name: Enrich specialist categories
 
 on:
   push:
     branches: [main]
     paths:
       - radnuc.py
+      - threat_categories.py
+      - threat-category-keywords.json
+      - tools/enrich_threat_categories.py
+      - tools/migrate_threat_categories.py
       - tools/enrich_radnuc.py
       - .github/workflows/enrich-radnuc.yml
   schedule:
@@ -14,10 +18,10 @@ on:
     inputs:
       max_posts:
         description: Gemini requests (shared enrichment daily allocation applies)
-        default: "100"
+        default: "60"
       max_fetches:
         description: Searches; saturated windows split automatically; reruns resume
-        default: "2500"
+        default: "600"
 
 permissions:
   contents: write
@@ -32,12 +36,13 @@ concurrency:
 jobs:
   enrich:
     runs-on: ubuntu-latest
-    timeout-minutes: 270
+    timeout-minutes: 110
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      ENRICH_MAX_POSTS: ${{ inputs.max_posts || '100' }}
-      ENRICH_MAX_FETCHES: ${{ inputs.max_fetches || '2500' }}
-      ENRICH_DEADLINE_MINUTES: "190"
+      ENRICH_MAX_POSTS: ${{ inputs.max_posts || '60' }}
+      ENRICH_MAX_FETCHES: ${{ inputs.max_fetches || '600' }}
+      # A bounded first batch on code publication; scheduled reruns resume.
+      ENRICH_DEADLINE_MINUTES: ${{ github.event_name == 'push' && '6' || '45' }}
     steps:
       - name: Checkout repository
         id: checkout
@@ -51,8 +56,10 @@ jobs:
           python-version: "3.11"
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Validate RADNUC filters and resumable integration
-        run: python -m unittest discover -s tests -p 'radnuc_test.py'
+      - name: Validate topic rules, daily vocabulary and resumable integration
+        run: |
+          python -m unittest discover -s tests -p 'radnuc_test.py'
+          python -m unittest discover -s tests -p 'threat_categories_test.py'
       - name: Protect existing location decisions
         run: |
           python - <<'PY'
@@ -60,27 +67,35 @@ jobs:
           from pathlib import Path
           db = json.loads(Path('events.json').read_text(encoding='utf-8'))
           ids = [str(e['id']) for e in db['events'] if e.get('id') is not None]
-          Path(os.environ['RUNNER_TEMP'], 'radnuc-preserve-geo.json').write_text(json.dumps(ids))
+          Path(os.environ['RUNNER_TEMP'], 'specialist-preserve-geo.json').write_text(json.dumps(ids))
           PY
-      - name: Enrich and integrate RADNUC reporting
+      - name: Migrate retained classifications without changing evidence
+        run: python tools/migrate_threat_categories.py --write
+      - name: Backfill and integrate all three specialist categories
         id: enrich
-        timeout-minutes: 205
-        run: python -u tools/enrich_radnuc.py --max-posts "$ENRICH_MAX_POSTS" --max-fetches "$ENRICH_MAX_FETCHES"
+        timeout-minutes: 60
+        run: python -u tools/enrich_threat_categories.py --max-posts "$ENRICH_MAX_POSTS" --max-fetches "$ENRICH_MAX_FETCHES" --deadline-minutes "$ENRICH_DEADLINE_MINUTES"
       - name: Locate newly integrated events
         if: ${{ always() && steps.enrich.outcome == 'success' }}
         timeout-minutes: 40
         env:
           AI_GEO_FORCE: "0"
-          AI_GEO_PRESERVE_IDS_FILE: ${{ runner.temp }}/radnuc-preserve-geo.json
+          AI_GEO_PRESERVE_IDS_FILE: ${{ runner.temp }}/specialist-preserve-geo.json
         run: python -u geolocate.py
       - name: Preserve enrichment recovery artifact
         if: ${{ always() && steps.checkout.outcome == 'success' }}
         uses: actions/upload-artifact@v6
         with:
-          name: radnuc-enrichment-${{ github.run_id }}-${{ github.run_attempt }}
+          name: specialist-enrichment-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             events.json
+            archive/threat-*.json
             archive/radnuc-*.json
+            archive/biological-*.json
+            archive/chemical-explosives-*.json
+            archive/radnuc-v1-seen-*.txt
+            archive/biological-v1-seen-*.txt
+            archive/chemical-explosives-v1-seen-*.txt
             archive/enriched-articles-*.json
             archive/enrichment-seen-*.txt
             quota/gemini-3.1-enrichment.json
@@ -95,7 +110,7 @@ jobs:
           from pathlib import Path
           db = json.loads(Path('events.json').read_text(encoding='utf-8'))
           if not isinstance(db.get('events'), list) or not db['events']:
-              raise RuntimeError('Invalid RADNUC database checkpoint')
+              raise RuntimeError('Invalid specialist database checkpoint')
           for folder in ('archive', 'quota'):
               for path in Path(folder).glob('*.json'):
                   json.loads(path.read_text(encoding='utf-8'))
@@ -104,7 +119,7 @@ jobs:
           git config user.email "actions@github.com"
           git add -- events.json archive quota
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "Integrate multilingual RADNUC enrichment and preserve progress"
+          git commit -m "Integrate specialist category backfill and preserve checkpoints"
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             if ! git rebase origin/main; then

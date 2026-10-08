@@ -253,7 +253,7 @@ test("PyMuPDF reads the generated file: page count, selectable text and search (
   const run=spawnSync("python3",["-c",script,file,ADDRESS,HASH.slice(0,30)],{encoding:"utf8"});
   fs.rmSync(file,{force:true});
   assert.equal(run.status,0,run.stderr);
-  const info=JSON.parse(run.stdout);
+  const info=JSON.parse(run.stdout.trim().split(/\r?\n/).at(-1)); // Parser diagnostics may precede the final JSON line.
   assert.equal(info.pages,pdf.result.pages);
   assert.equal(info.has_address,true,"the address can be extracted from the PDF text");
   assert.ok(info.hits>=1,"and found by search");

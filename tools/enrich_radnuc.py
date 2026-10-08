@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / 'tools'))
 import radnuc
+import threat_categories
 import archive_review
 import enrich_archive
 
@@ -51,7 +52,7 @@ def plan_tasks(today, collector):
         for query in radnuc.ENGLISH_QUERIES:
             tasks.append({'group': 'radnuc_gdelt', 'source': 'gdelt', 'locale': 'all',
                           'code': 'mul', 'name': 'All GDELT source languages', 'query': query,
-                          'category': 'CBRN', 'week': week.isoformat(),
+                          'category': threat_categories.RN, 'week': week.isoformat(),
                           'start': low.isoformat(), 'end': high.isoformat()})
         for profile in profiles(collector):
             for query in radnuc.queries(profile['code']):
@@ -59,7 +60,7 @@ def plan_tasks(today, collector):
                               'locale': f"{profile['hl']}|{profile['gl']}|{profile['ceid']}",
                               'code': profile['code'], 'name': profile['name'],
                               'hl': profile['hl'], 'gl': profile['gl'], 'ceid': profile['ceid'],
-                              'category': 'CBRN', 'query': query, 'week': week.isoformat(),
+                              'category': threat_categories.RN, 'query': query, 'week': week.isoformat(),
                               'start': low.isoformat(), 'end': high.isoformat()})
     unique = {}
     for task in tasks:
@@ -75,7 +76,9 @@ def screen(event, collector):
 class IntegratedOutput(enrich_archive.Output):
     include_event = True
 
-    def __init__(self, root, now, collector):
+    def __init__(self, root, now, collector, category=threat_categories.RN, prefix='radnuc'):
+        self.category = category
+        self.prefix = prefix
         super().__init__(root, now)
         self.root = Path(root)
         self.collector = collector
@@ -85,18 +88,19 @@ class IntegratedOutput(enrich_archive.Output):
         self.changed = False
         self.integrated = 0
         for event in self.database['events']:
-            before = copy.deepcopy(event.get('cbrn_subgroups'))
+            before = copy.deepcopy(event)
             radnuc.annotate(event)
-            self.changed |= before != event.get('cbrn_subgroups')
+            self.changed |= before != event
         # Selected reports saved before a killed run's checkpoint can be
         # re-integrated safely. The real incremental deduplicator merges them.
         self.recover()
 
     def integrate(self, events):
-        eligible = [event for event in events if 'RADNUC' in event.get('cbrn_subgroups', [])
+        events = [threat_categories.annotate(event) for event in events]
+        eligible = [event for event in events if self.category in event.get('categories', [])
                     and event.get('ai_selected') is True
                     and event.get('ai_current_ct_event') is not False
-                    and not radnuc.state_operation_reason(event)
+                    and not threat_categories.scope_reason(event)
                     and not self.collector.out_of_scope_reason(event)]
         if not eligible:
             return
@@ -111,7 +115,7 @@ class IntegratedOutput(enrich_archive.Output):
 
     def recover(self):
         events = []
-        for path in self.root.glob('archive/radnuc-selected-*.json'):
+        for path in self.root.glob(f'archive/{self.prefix}-selected-*.json'):
             payload = archive_review.read_json(path) or {}
             events.extend(payload.get('events') or [])
         self.integrate(events)
@@ -124,7 +128,7 @@ class IntegratedOutput(enrich_archive.Output):
                 events.append(event)
         # Save selected normalized events for replay before the live database is
         # replaced; even a process kill between writes cannot lose the batch.
-        selected_path = self.root / 'archive' / f'radnuc-selected-{datetime.now(timezone.utc):%Y%m%d}.json'
+        selected_path = self.root / 'archive' / f'{self.prefix}-selected-{datetime.now(timezone.utc):%Y%m%d}.json'
         payload = archive_review.read_json(selected_path) or {'events': []}
         payload['events'].extend(event for event in events if event.get('ai_selected') is True)
         archive_review.write_json(selected_path, payload, indent=None)
@@ -135,8 +139,8 @@ class IntegratedOutput(enrich_archive.Output):
         super().save()
         if self.changed:
             self.database['last_updated'] = datetime.now(timezone.utc).isoformat()
-            self.database['radnuc_enrichment'] = {'window_days': WINDOW_DAYS,
-                'languages': sorted(radnuc.LEXICONS), 'state_actor_operations': 'excluded',
+            self.database.setdefault('specialist_enrichment', {})[self.category] = {'window_days': WINDOW_DAYS,
+                'languages': sorted(radnuc.LEXICONS) if self.category == threat_categories.RN else sorted(threat_categories.vocabulary()['biological' if self.category == threat_categories.BIO else 'chemical_explosives']['terms']), 'state_actor_operations': 'excluded',
                 'pipeline': 'existing Gemini selection, English translation and incremental event deduplication'}
             archive_review.write_json(self.root / 'events.json', self.database, indent=2)
             self.changed = False

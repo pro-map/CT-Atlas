@@ -20,7 +20,7 @@ import {
   databaseFiltersLabel
 } from "./shared.js";
 
-const DATABASE_QUERY_VERSION = "database-query-v2-subgroups";
+const DATABASE_QUERY_VERSION = "database-query-v3-standalone-threat-topics";
 // Everything the database holds today fits (180 days, ~4-5k events); the cap
 // only guards against a runaway response if the database grows a lot.
 const MAX_DATABASE_RESULTS = 8000;
@@ -52,8 +52,10 @@ function databaseEventRow(event, index) {
     location_precision: cleanText(event.location_precision, 20),
     location_confidence: cleanText(event.location_confidence, 20),
     location_method: cleanText(event.location_method, 60),
-    category: cleanText(event.category, 80),
+    category: eventCategories(event)[0] || "",
     categories: eventCategories(event),
+    reported_status: cleanText(event.reported_status, 20),
+    category_review_required: event.category_review_required === true,
     cbrn_subgroups: Array.isArray(event.cbrn_subgroups) ? event.cbrn_subgroups.filter(value => value === "RADNUC") : [],
     actor_scope: cleanText(event.actor_scope, 20),
     actor_group: cleanText(event.actor_group, 100),

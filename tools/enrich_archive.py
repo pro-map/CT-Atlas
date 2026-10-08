@@ -518,19 +518,19 @@ def save_state(root, state, plan_keys=None, state_file=STATE_FILE):
                               {**state, "updated_at": datetime.now(timezone.utc).isoformat()}, indent=None)
 
 
-def load_seen(root):
+def load_seen(root, prefix="enrichment"):
     seen = set()
-    for path in glob.glob(str(Path(root) / "archive" / "enrichment-seen-*.txt")):
+    for path in glob.glob(str(Path(root) / "archive" / f"{prefix}-seen-*.txt")):
         with open(path, encoding="utf-8") as handle:
             seen.update(line.strip() for line in handle if line.strip())
     return seen
 
 
-def save_seen(root, now, keys):
+def save_seen(root, now, keys, prefix="enrichment"):
     """Today's off-topic keys, one small file a day (cheap to commit)."""
     if not keys:
         return
-    path = Path(root) / "archive" / f"enrichment-seen-{now.strftime('%Y%m%d')}.txt"
+    path = Path(root) / "archive" / f"{prefix}-seen-{now.strftime('%Y%m%d')}.txt"
     existing = set()
     if path.exists():
         existing = {line.strip() for line in path.read_text(encoding="utf-8").splitlines() if line.strip()}
@@ -584,16 +584,17 @@ class Output:
 def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=None, call_batch=None,
         gate_factory=None, log=print, deadline_minutes=DEADLINE_MINUTES, clock=time.monotonic,
         plan_factory=plan_tasks, state_file=STATE_FILE, output_factory=Output, ledger_job="enrichment",
-        event_screen=screen, retry_failed_tasks=False):
+        event_screen=screen, retry_failed_tasks=False,
+        known_keys_factory=known_article_keys, reuse_previous_reviews=True, seen_prefix="enrichment"):
     now = now or datetime.now(timezone.utc)
     today = today or now.date()
     started = clock()
     state = load_state(root, state_file)
     ledger = archive_review.DailyLedger(archive_review.ledger_path(ledger_job, root), DAILY_POSTS, now=now)
     budget = ledger.budget(max_posts)
-    known = known_article_keys(root)
-    cached = reviewed_fingerprints(root, collector)
-    seen = load_seen(root)
+    known = known_keys_factory(root)
+    cached = reviewed_fingerprints(root, collector) if reuse_previous_reviews else set()
+    seen = load_seen(root, seen_prefix)
     new_seen = set()
     plan = plan_factory(today, collector)
     plan_keys = [task["key"] for task in plan]
@@ -648,7 +649,7 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
         summary["reviewed"] += len(pairs)
         output.add(rows)
         output.save()
-        save_seen(root, now, new_seen)
+        save_seen(root, now, new_seen, seen_prefix)
         close_finished()
         save_state(root, state, plan_keys, state_file)
 
@@ -759,7 +760,7 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
             finish(task)
     state["runs"] = (state["runs"] + [{"at": now.isoformat(), "posts": posts, **summary, "stop": stop}])[-30:]
     save_state(root, state, plan_keys, state_file)
-    save_seen(root, now, new_seen)
+    save_seen(root, now, new_seen, seen_prefix)
     output.save()
     return summary, stop
 
