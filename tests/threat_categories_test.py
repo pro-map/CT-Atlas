@@ -1,5 +1,6 @@
 """Offline specialist taxonomy, daily queries, fixed backfill and evidence safety."""
 import copy
+import hashlib
 import json
 import sys
 import tempfile
@@ -44,7 +45,39 @@ class TaxonomyTests(unittest.TestCase):
             queries=t.queries(t.BIO,code);joined=' '.join(queries)
             for term in terms:self.assertIn('"'+term+'"',joined)
             for query in queries:self.assertIn(') (',query);self.assertLess(len(query),700)
-        self.assertIn('not yet supplied',t.vocabulary()['chemical_explosives']['status'])
+
+    def test_reviewed_chemical_terms_match_the_supplied_list_exactly(self):
+        item=t.vocabulary()['chemical_explosives']
+        terms=item['terms']['en']
+        self.assertEqual(len(terms),95)
+        self.assertEqual(len(set(terms)),95)
+        # Independent fingerprint of the reviewed list supplied on 2026-10-08.
+        self.assertEqual(hashlib.sha256('\n'.join(terms).encode('utf-8')).hexdigest(),
+                         '581ffe4ef31139281b82c926237dec24cf09975bb68494aeb56de3eaefd97ddd')
+        self.assertEqual(item['review']['supplied_count'],100)
+        self.assertEqual(item['review']['excluded_source_numbers'],[77,78,79,80,81])
+        self.assertNotIn('not yet supplied',item['status'])
+        self.assertEqual(item['vocabulary_version'],'chemical-explosives-user-v2-20261008')
+
+    def test_every_chemical_term_is_context_qualified_and_registered_for_daily_search(self):
+        for code,terms in t.vocabulary()['chemical_explosives']['terms'].items():
+            queries=t.queries(t.CE,code)
+            joined=' '.join(queries)
+            for term in terms:self.assertIn('"'+term+'"',joined)
+            for query in queries:
+                self.assertIn(') (',query)
+                self.assertLess(len(query),700)
+        self.assertEqual(collector.CORE_SEARCH_QUERIES[t.CE],t.queries(t.CE))
+        self.assertEqual(collector.OFFICIAL_SOURCE_QUERIES[t.CE],t.queries(t.CE))
+
+    def test_configuration_rules_reach_the_shared_editorial_filter(self):
+        rules=t.vocabulary()['chemical_explosives']['rules']
+        self.assertTrue(rules)
+        for rule in rules:
+            self.assertIn(rule,t.SELECTION_NOTE)
+            self.assertIn(rule,collector.AI_SELECTION_INSTRUCTIONS)
+        self.assertIn('Reject manuals',collector.AI_SELECTION_INSTRUCTIONS)
+        self.assertIn('non-state terrorism nexus',collector.AI_SELECTION_INSTRUCTIONS)
 
     def test_modern_decisions_are_authoritative_not_incidental_material_words(self):
         x={'title':'Terror suspect arrested','summary':'A nearby nuclear plant, anthrax research and explosives safety were mentioned in background.'}
@@ -102,6 +135,21 @@ class BackfillTests(unittest.TestCase):
             self.assertTrue(all(x[1]==y[0] for x,y in zip(windows,windows[1:])))
             self.assertEqual(len(plan),len({q['key'] for q in plan}))
             self.assertEqual({q['category'] for q in plan},{label})
+
+    def test_all_reviewed_chemical_queries_cover_each_historical_window(self):
+        plan=b.plan_tasks(t.CE,date(2026,10,8),collector)
+        expected=set(t.queries(t.CE,'en'))
+        self.assertEqual(len(expected),16)
+        windows={e.window(task) for task in plan}
+        for window in windows:
+            rows=[task for task in plan if e.window(task)==window]
+            self.assertEqual({task['query'] for task in rows if task['source']=='google' and task['code']=='en'},expected)
+            self.assertEqual({task['query'] for task in rows if task['source']=='gdelt'},expected)
+        # Search identities include the query: an old completed query cannot
+        # incorrectly mark an expanded vocabulary's different query complete.
+        task=next(task for task in plan if task['source']=='google' and task['code']=='en')
+        old_key=e.task_key({**task,'query':'"previous provisional search"'})
+        self.assertNotEqual(task['key'],old_key)
 
     def test_fixed_anchor_never_rolls_forward_on_a_daily_rerun(self):
         with tempfile.TemporaryDirectory() as tmp:
