@@ -1,16 +1,16 @@
 # Specialist six-month backfill
 
-Last checkpoint (UTC): 2026-10-08T12:35:09.839812+00:00
+Last checkpoint (UTC): 2026-10-08T13:29:56.534722+00:00
 
 **A successful batch is not completion of the whole backfill.**
 
 | Category | Main searches processed | Pending searches | Candidates awaiting review | Complete |
 |---|---:|---:|---:|---|
-| Radiological/Nuclear | 617 / 2133 | 1516 | 30 | No |
-| Chemicals and Explosives | 346 / 1836 | 1490 | 2 | No |
-| Biological Terrorism | 224 / 1944 | 1723 | 17 | No |
+| Radiological/Nuclear | 628 / 2133 | 1508 | 16 | No |
+| Chemicals and Explosives | 437 / 1836 | 1402 | 9 | No |
+| Biological Terrorism | 263 / 1944 | 1689 | 24 | No |
 
-Catch-up rounds started: 4. Acceleration ends at 2026-10-08T22:00:00+00:00.
+Catch-up rounds started: 5. Acceleration ends at 2026-10-08T22:00:00+00:00.
 
 ## Latest batch / source limitations
 
@@ -18,11 +18,11 @@ Catch-up rounds started: 4. Acceleration ends at 2026-10-08T22:00:00+00:00.
 ```json
 {
   "stop": "deadline reached (15 min); review queue saved",
-  "reviewed_this_batch": 525,
+  "reviewed_this_batch": 100,
   "coverage_issues": {
     "query_errors": 0,
     "full_single_day": 1,
-    "failed_searches": 19
+    "failed_searches": 23
   }
 }
 ```
@@ -33,9 +33,9 @@ Catch-up rounds started: 4. Acceleration ends at 2026-10-08T22:00:00+00:00.
   "stop": "deadline reached (15 min); review queue saved",
   "reviewed_this_batch": 50,
   "coverage_issues": {
-    "query_errors": 7,
-    "full_single_day": 135,
-    "failed_searches": 12
+    "query_errors": 8,
+    "full_single_day": 170,
+    "failed_searches": 15
   }
 }
 ```
@@ -46,9 +46,9 @@ Catch-up rounds started: 4. Acceleration ends at 2026-10-08T22:00:00+00:00.
   "stop": "deadline reached (15 min); review queue saved",
   "reviewed_this_batch": 0,
   "coverage_issues": {
-    "query_errors": 2,
-    "full_single_day": 309,
-    "failed_searches": 12
+    "query_errors": 4,
+    "full_single_day": 367,
+    "failed_searches": 15
   }
 }
 ```
