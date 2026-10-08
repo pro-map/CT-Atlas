@@ -177,8 +177,9 @@ jobs:
           grep -q 'data-days="7"' index.html
           grep -q 'data-days="30"' index.html
           grep -q 'data-days="90"' index.html
-          grep -q 'const MAP_RECENT_EVENT_DAYS = 91;' index.html
-          grep -q '^RECENT_DAYS = 91$' tools/build_events_map.py
+          grep -q 'data-days="180"' index.html
+          grep -q 'const MAP_RECENT_EVENT_DAYS = 181;' index.html
+          grep -q '^RECENT_DAYS = 181$' tools/build_events_map.py
           grep -q 'let selectedDays =' index.html
           grep -q 'let selectedDays = 7;' index.html
           grep -q '<option value="ALL" selected>All events</option>' index.html

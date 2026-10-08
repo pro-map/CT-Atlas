@@ -3,7 +3,7 @@ import importlib.util
 import json
 import tempfile
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 spec = importlib.util.spec_from_file_location('build_events_map', 'tools/build_events_map.py')
@@ -74,7 +74,7 @@ class MapAttackTests(unittest.TestCase):
 
     def test_recent_events_keep_other_categories_of_the_last_days_only(self):
         database = sample_database()
-        database['events'].append(event('old-arrest', primary_event_type='ARREST', published='2026-05-20T08:00:00Z'))
+        database['events'].append(event('old-arrest', primary_event_type='ARREST', published='2026-03-20T08:00:00Z'))
         database['events'].append(event('arrest20', primary_event_type='ARREST', published='2026-09-10T08:00:00Z'))
         now = datetime(2026, 9, 30, 12, tzinfo=timezone.utc)
         output = m.build_map(database, ['related_articles'], now=now)
@@ -84,12 +84,12 @@ class MapAttackTests(unittest.TestCase):
         )
         self.assertEqual(output['map']['recent_events_days'], m.RECENT_DAYS)
 
-    def test_ninety_day_context_keeps_every_category_and_radnuc_metadata(self):
+    def test_six_month_context_keeps_every_category_and_radnuc_metadata(self):
         database = sample_database()
         for ident, kind, category, published in (
             ('radnuc60', 'CBRN', 'CBRN', '2026-08-01T08:00:00Z'),
             ('arrest89', 'ARREST', 'Arrests', '2026-07-03T08:00:00Z'),
-            ('too-old', 'CBRN', 'CBRN', '2026-06-01T08:00:00Z'),
+            ('too-old', 'CBRN', 'CBRN', '2026-03-01T08:00:00Z'),
         ):
             database['events'].append(event(ident, primary_event_type=kind, category=category,
                 published=published, cbrn_subgroups=['RADNUC']))
@@ -104,8 +104,8 @@ class MapAttackTests(unittest.TestCase):
     def test_older_events_cited_by_key_developments_are_kept(self):
         database = sample_database()
         database['trend_summary'] = {'developments': [{'event_id': 'old-arrest'}, {'event_id': 'attack'}, {'title': 'no id'}]}
-        database['events'].append(event('old-arrest', primary_event_type='ARREST', published='2026-05-20T08:00:00Z'))
-        database['events'].append(event('old-piracy', primary_event_type='PIRACY', published='2026-05-20T08:00:00Z'))
+        database['events'].append(event('old-arrest', primary_event_type='ARREST', published='2026-03-20T08:00:00Z'))
+        database['events'].append(event('old-piracy', primary_event_type='PIRACY', published='2026-03-20T08:00:00Z'))
         now = datetime(2026, 9, 30, 12, tzinfo=timezone.utc)
         output = m.build_map(database, [], now=now)
         recent_ids = [e['id'] for e in output['recent_events']]
@@ -114,6 +114,35 @@ class MapAttackTests(unittest.TestCase):
         # An attack stays in events only, never duplicated into recent_events.
         self.assertNotIn('attack', recent_ids)
         m.validate(output, database)
+
+    def test_six_month_payload_includes_all_categories_and_event_types(self):
+        now = datetime(2026, 10, 8, 12, tzinfo=timezone.utc)
+        topics = [
+            ('ATTACK', 'Attacks'), ('ATTEMPTED_ATTACK', 'Attacks'),
+            ('DISRUPTED_PLOT', 'Counter Terrorism Action'),
+            ('CT_OPERATION', 'Counter Terrorism Action'), ('ARREST', 'Arrests'),
+            ('JUDICIAL', 'Legal / Judicial'), ('FINANCING', 'Terrorist Financing'),
+            ('WEAPONS', 'Weapons'), ('PIRACY', 'Maritime Piracy'),
+            ('ONLINE_CYBER_AI', 'Online / Cyber / AI'), ('CBRN', 'CBRN'),
+            ('OTHER_CT', 'Radiological/Nuclear'),
+            ('OTHER_CT', 'Chemicals and Explosives'),
+            ('OTHER_CT', 'Biological Terrorism'),
+        ]
+        records = [event(str(i), primary_event_type=kind, category=category,
+                         is_attack=kind == 'ATTACK',
+                         published=(now - timedelta(days=179)).isoformat())
+                   for i, (kind, category) in enumerate(topics)]
+        records += [event('boundary', primary_event_type='ARREST', category='Arrests',
+                          published=(now - timedelta(days=180)).isoformat()),
+                    event('expired', primary_event_type='ARREST', category='Arrests',
+                          published=(now - timedelta(days=182)).isoformat())]
+        db = {'events': records}
+        output = m.build_map(db, [], now=now)
+        ids = [e['id'] for e in output['events'] + output['recent_events']]
+        self.assertEqual(set(ids), {str(i) for i in range(len(topics))} | {'boundary'})
+        self.assertEqual(len(ids), len(set(ids)), 'No attack duplicated as context')
+        self.assertEqual(output['map']['recent_events_days'], 181)
+        m.validate(output, db)
 
     def test_validate_rejects_an_attack_among_recent_events(self):
         database = sample_database()

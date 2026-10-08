@@ -55,13 +55,13 @@ async function runLoader(responses){
       return {ok:true,status:200,json:async()=>body};
     }
   });
-  vm.runInContext(extract('isMapAttackEvent')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 91;'+extract('loadMapDatabase'),c);
+  vm.runInContext(extract('isMapAttackEvent')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 181;'+extract('loadMapDatabase'),c);
   const data=await vm.runInContext('loadMapDatabase()',c);
   return {data:plain(data),source:c.window.eventsDataSource};
 }
 
 test('the map reads events-map.json when it is published',async()=>{
-  const mapFile={events:[{id:'a'}],recent_events:[],map:{recent_events_days:91},database_summary:{total_events:9},trend_summary:{overview:'x'}};
+  const mapFile={events:[{id:'a'}],recent_events:[],map:{recent_events_days:181},database_summary:{total_events:9},trend_summary:{overview:'x'}};
   const {data,source}=await runLoader({'events-map.json':mapFile});
   assert.equal(source,'events-map.json');
   assert.deepEqual(data,mapFile);
@@ -393,7 +393,7 @@ function mapScopeHarness(){
   };
 }
 
-test('the map shows all events by default and filters every category over 1, 7, 30 or 90 days',()=>{
+test('the map shows all events by default and filters every category over 1, 7, 30, 90 or 180 days',()=>{
   const h=mapScopeHarness();
   assert.deepEqual(plain(h.ids('ATTACKS',1)).mapped,['a1']);
   assert.deepEqual(plain(h.ids('ATTACKS',7)).mapped,['a1','a7']);
@@ -408,14 +408,14 @@ test('the map shows all events by default and filters every category over 1, 7, 
   assert.equal(plain(h.ids('anything else',1)).state,'ATTACKS','an unknown value falls back to attacks');
 });
 
-test('the "Show on map" selector defaults to all events and the map file covers 90 days of other categories',()=>{
+test('the "Show on map" selector defaults to all events and the map file covers 180 days of other categories',()=>{
   const select=html.slice(html.indexOf('<select id="mapCategory">'),html.indexOf('</select>',html.indexOf('<select id="mapCategory">')));
   assert.match(select,/<option value="ATTACKS">Attacks only<\/option>/);
   assert.match(select,/<option value="ALL" selected>All events<\/option>/);
   assert.match(html,/let mapCategoryScope = "ALL";/);
   assert.match(html,/_filteredMappedEventsCache = mapScopeEvents\(\)\.filter\(/);
-  assert.match(html,/const MAP_RECENT_EVENT_DAYS = 91;/);
-  assert.match(fs.readFileSync('tools/build_events_map.py','utf8'),/^RECENT_DAYS = 91$/m);
+  assert.match(html,/const MAP_RECENT_EVENT_DAYS = 181;/);
+  assert.match(fs.readFileSync('tools/build_events_map.py','utf8'),/^RECENT_DAYS = 181$/m);
   // The ticker, KPIs and trends stay about attacks whatever the map shows.
   assert.match(html,/const events = filteredAllEvents\(\)\s*\n?\s*\.map/);
 });
@@ -495,4 +495,40 @@ test('CBRN contextual Database rows link to their actual map markers',()=>{
   vm.runInContext(extract('isMapAttackEvent')+extract('eventMatchKey')+extract('linkDatabaseRowsToMap'),c);
   c.linkDatabaseRowsToMap();
   assert.equal(c.databaseResults[0]._mapEventKey,'new-cbrn');
+});
+
+
+test('six-month map filtering includes every category and excludes events older than 180 days',()=>{
+  const h=mapScopeHarness();
+  const day=86400000;
+  const categories=['Counter Terrorism Action','Arrests','Legal / Judicial','Terrorist Financing',
+    'Weapons','Maritime Security','CBRN','Online / Cyber / AI'];
+  h.context.sixMonthOthers=categories.map((category,i)=>({id:'six-'+i,category,
+    published:new Date(Date.now()-179*day).toISOString(),latitude:1,longitude:1}));
+  h.context.sixMonthOthers.push({id:'expired',category:'Arrests',
+    published:new Date(Date.now()-181*day).toISOString(),latitude:1,longitude:1});
+  h.context.sixMonthAttack={id:'six-attack',category:'Attacks',categories:['Attacks','Weapons'],
+    published:new Date(Date.now()-179*day).toISOString(),latitude:1,longitude:1};
+  vm.runInContext('recentContextEvents.push(...sixMonthOthers); attacks.push(sixMonthAttack);',h.context);
+  const all=plain(h.ids('ALL',180)).mapped;
+  assert.ok(all.includes('six-attack'));
+  assert.ok(!all.includes('expired'));
+  for(const [i,category] of categories.entries()){
+    assert.ok(all.includes('six-'+i),category+' missing from all events');
+    assert.ok(plain(h.ids(category,180)).mapped.includes('six-'+i),category+' filter lost historical event');
+    assert.ok(!plain(h.ids(category,90)).mapped.includes('six-'+i),category+' ignored the 90-day cutoff');
+  }
+  assert.ok(plain(h.ids('Weapons',180)).mapped.includes('six-attack'),
+    'A multi-category attack must remain visible in its relevant thematic filter');
+  assert.equal(all.length,new Set(all).size,'No duplicate records in the all-events map');
+});
+
+test('the browser rejects an outdated 91-day payload and loads the full six-month data',async()=>{
+  const old={id:'older-arrest',title:'Historical arrest',category:'Arrests',primary_event_type:'ARREST',
+    published:new Date(Date.now()-150*86400000).toISOString()};
+  const stale={events:[],recent_events:[],map:{recent_events_days:91}};
+  const {data:loaded,source}=await runLoader({'events-map.json':stale,'events-lite.json':{events:[old]}});
+  assert.equal(source,'events-lite.json');
+  assert.ok(loaded.recent_events.some(e=>e.id==='older-arrest'));
+  assert.equal(loaded.map.recent_events_days,181);
 });
