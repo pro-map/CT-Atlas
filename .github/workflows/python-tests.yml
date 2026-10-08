@@ -9,6 +9,8 @@ on:
     paths:
       - "collector.py"
       - "radnuc.py"
+      - "threat_categories.py"
+      - "threat-category-keywords.json"
       - "geolocate.py"
       - "tools/**"
       - "darkweb-collector/**"
@@ -19,6 +21,8 @@ on:
     paths:
       - "collector.py"
       - "radnuc.py"
+      - "threat_categories.py"
+      - "threat-category-keywords.json"
       - "geolocate.py"
       - "tools/**"
       - "darkweb-collector/**"

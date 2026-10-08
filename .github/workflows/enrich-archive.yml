@@ -6,7 +6,8 @@ name: Enrich archive
 # on Google News; Persian, Urdu, Pashto, Hausa, Somali, Swahili through
 # GDELT), then the daily profiles' own queries and English. Candidates are
 # reviewed by the map's Gemini selection on Gemini 3.1 Flash Lite, at most 100
-# requests a Pacific day (quota/gemini-3.1-enrichment.json); reviews scoring
+# requests a Pacific day shared with specialist backfill (40 archive + 60 specialist).
+# The daily cap remains 100 in quota/gemini-3.1-enrichment.json; reviews scoring
 # above 0 go to archive/enriched-articles-*.json, which the nightly
 # sync-background-corpus run loads into the D1 archive, one copy per story.
 #
@@ -21,7 +22,7 @@ on:
       max_posts:
         description: "Gemini requests this run (25 articles each; the daily allocation still applies)"
         required: false
-        default: "100"
+        default: "40"
       max_fetches:
         description: "Searches this run"
         required: false
@@ -31,7 +32,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: ct-atlas-archive-enrichment
+  group: ct-map-update-main
   cancel-in-progress: false
 
 jobs:
@@ -40,7 +41,7 @@ jobs:
     timeout-minutes: 150
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      ENRICH_MAX_POSTS: ${{ inputs.max_posts || '100' }}
+      ENRICH_MAX_POSTS: ${{ inputs.max_posts || '40' }}
       ENRICH_MAX_FETCHES: ${{ inputs.max_fetches || '300' }}
       # The script stops itself first; the step and the job are backstops.
       ENRICH_DEADLINE_MINUTES: "110"
@@ -63,7 +64,11 @@ jobs:
       - name: Enrich the archive
         # Leaves the commit step time to save every batch already reviewed.
         timeout-minutes: 125
-        run: python -u tools/enrich_archive.py --max-posts "$ENRICH_MAX_POSTS" --max-fetches "$ENRICH_MAX_FETCHES"
+        run: |
+          set -euo pipefail
+          # Reserve the remainder of the existing 100-request daily allocation.
+          MAX_POSTS=$(python -c 'import os; print(max(0, min(40, int(os.environ["ENRICH_MAX_POSTS"]))))')
+          python -u tools/enrich_archive.py --max-posts "$MAX_POSTS" --max-fetches "$ENRICH_MAX_FETCHES"
 
       - name: Commit the enrichment
         if: ${{ always() }}
