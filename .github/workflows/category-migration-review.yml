@@ -1,0 +1,19 @@
+name: Category migration review
+on:
+  push:
+    branches: [ct-categories-six-months-20261008]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Package tracked source for migration tests
+        run: git archive --format=tar.gz -o "$RUNNER_TEMP/category-source.tar.gz" HEAD
+      - uses: actions/upload-artifact@v6
+        with:
+          name: category-source
+          path: ${{ runner.temp }}/category-source.tar.gz
+          retention-days: 1
