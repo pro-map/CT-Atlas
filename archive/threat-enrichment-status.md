@@ -1,16 +1,16 @@
 # Specialist six-month backfill
 
-Last checkpoint (UTC): 2026-10-08T11:01:55.135719+00:00
+Last checkpoint (UTC): 2026-10-08T11:48:36.979974+00:00
 
 **A successful batch is not completion of the whole backfill.**
 
 | Category | Main searches processed | Pending searches | Candidates awaiting review | Complete |
 |---|---:|---:|---:|---|
-| Radiological/Nuclear | 462 / 2133 | 1672 | 13 | No |
-| Chemicals and Explosives | 183 / 1836 | 1654 | 14 | No |
-| Biological Terrorism | 136 / 1944 | 1819 | 18 | No |
+| Radiological/Nuclear | 534 / 2133 | 1600 | 6 | No |
+| Chemicals and Explosives | 249 / 1836 | 1587 | 0 | No |
+| Biological Terrorism | 177 / 1944 | 1770 | 4 | No |
 
-Catch-up rounds started: 2. Acceleration ends at 2026-10-08T22:00:00+00:00.
+Catch-up rounds started: 3. Acceleration ends at 2026-10-08T22:00:00+00:00.
 
 ## Latest batch / source limitations
 
@@ -18,11 +18,11 @@ Catch-up rounds started: 2. Acceleration ends at 2026-10-08T22:00:00+00:00.
 ```json
 {
   "stop": "deadline reached (15 min); review queue saved",
-  "reviewed_this_batch": 450,
+  "reviewed_this_batch": 350,
   "coverage_issues": {
     "query_errors": 0,
     "full_single_day": 1,
-    "failed_searches": 13
+    "failed_searches": 16
   }
 }
 ```
@@ -31,11 +31,11 @@ Catch-up rounds started: 2. Acceleration ends at 2026-10-08T22:00:00+00:00.
 ```json
 {
   "stop": "deadline reached (15 min); review queue saved",
-  "reviewed_this_batch": 75,
+  "reviewed_this_batch": 25,
   "coverage_issues": {
-    "query_errors": 3,
-    "full_single_day": 71,
-    "failed_searches": 6
+    "query_errors": 7,
+    "full_single_day": 93,
+    "failed_searches": 9
   }
 }
 ```
@@ -44,11 +44,11 @@ Catch-up rounds started: 2. Acceleration ends at 2026-10-08T22:00:00+00:00.
 ```json
 {
   "stop": "deadline reached (15 min); review queue saved",
-  "reviewed_this_batch": 0,
+  "reviewed_this_batch": 25,
   "coverage_issues": {
     "query_errors": 2,
-    "full_single_day": 171,
-    "failed_searches": 6
+    "full_single_day": 239,
+    "failed_searches": 9
   }
 }
 ```
