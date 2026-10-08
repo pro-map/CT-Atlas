@@ -361,18 +361,20 @@ function mapScopeHarness(){
   const c=vm.createContext({document:{getElementById:()=>null},Date,Number,Array,Object,String,Set,Map});
   vm.runInContext(`
     const MAP_ALL_CATEGORIES = Object.freeze(["Attacks","Counter Terrorism Action","Arrests","Legal / Judicial",
-      "Terrorist Financing","Weapons","Maritime Security","CBRN","Online / Cyber / AI"]);
+      "Terrorist Financing","Weapons","Maritime Security","Radiological/Nuclear","Chemicals and Explosives","Biological Terrorism","Online / Cyber / AI"]);
     let selectedDays = 1;
     let recentContextEvents = [];
     let attacks = [];
     let allEvents = [];
     function withinDays(published, days){ return Date.now()-Date.parse(published) <= days*86400000; }
     function filteredAllEvents(){ return attacks.filter(e => withinDays(e.published, selectedDays)); }
-    function eventCategories(event){ return event.categories || [event.category]; }
+    function normalizeCategoryName(c){ return c === "RADNUC" ? "Radiological/Nuclear" : c; }
+    function eventLooksLikeMaritimePiracy(){ return false; }
     function categoryMatches(event, list){ return eventCategories(event).some(category => list.includes(category)); }
     function groupMatches(){ return true; }
     function searchMatches(){ return true; }
   `,c);
+  vm.runInContext(extract('eventCategories'),c);
   const src=html.slice(html.indexOf('let _filteredAllEventsCache = null;'),html.indexOf('function filteredAllEvents()'));
   vm.runInContext(src,c);
   vm.runInContext(extract('filteredMappedEvents'),c);
@@ -452,7 +454,8 @@ test('RADNUC subgroup includes attacks and contextual CBRN events, excludes othe
   assert.deepEqual(plain(h.ids('RADNUC',7)).mapped,['rad-attack','rad-arrest']);
   assert.equal(plain(h.ids('RADNUC',7)).state,'RADNUC');
   assert.deepEqual(plain(vm.runInContext("mapScopeCandidates().map(e=>e.id)",h.context)),['rad-attack','rad-arrest','unlocated-rad']);
-  assert.ok(plain(h.ids('CBRN',7)).mapped.includes('rad-attack'),'CBRN parent includes its RADNUC attack');
+  assert.ok(plain(h.ids('Radiological/Nuclear',7)).mapped.includes('rad-attack'),'standalone category includes its radiological attack');
+  assert.equal(plain(h.ids('CBRN',7)).state,'ATTACKS','removed parent is not a selectable scope');
 });
 
 
@@ -502,7 +505,7 @@ test('six-month map filtering includes every category and excludes events older 
   const h=mapScopeHarness();
   const day=86400000;
   const categories=['Counter Terrorism Action','Arrests','Legal / Judicial','Terrorist Financing',
-    'Weapons','Maritime Security','CBRN','Online / Cyber / AI'];
+    'Weapons','Maritime Security','Radiological/Nuclear','Chemicals and Explosives','Biological Terrorism','Online / Cyber / AI'];
   h.context.sixMonthOthers=categories.map((category,i)=>({id:'six-'+i,category,
     published:new Date(Date.now()-179*day).toISOString(),latitude:1,longitude:1}));
   h.context.sixMonthOthers.push({id:'expired',category:'Arrests',

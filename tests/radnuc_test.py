@@ -55,10 +55,11 @@ class RadnucScopeTests(unittest.TestCase):
         collector.ensure_event_metadata(event)
         self.assertEqual(event['cbrn_subgroups'], [])
 
-    def test_radnuc_attack_also_keeps_cbrn_parent_category(self):
+    def test_radnuc_attack_also_keeps_standalone_radiological_category(self):
         event = {'title': 'ISIS dirty bomb plot foiled'}
         self.assertTrue(collector.apply_ai_selection(event, self.decision(event['title'], categories=['Attacks'])))
-        self.assertIn('CBRN', event['categories'])
+        self.assertIn('Radiological/Nuclear', event['categories'])
+        self.assertNotIn('CBRN', event['categories'])
 
     def test_material_words_alone_do_not_assign_a_non_cbrn_event(self):
         event = {'title': 'Nuclear medicine expands radiopharmaceutical supply', 'categories': ['Weapons']}
@@ -95,7 +96,7 @@ class RadnucPlanTests(unittest.TestCase):
     def test_native_searches_reach_every_daily_profile(self):
         for profile in collector.MULTILINGUAL_PROFILES:
             self.assertTrue(set(radnuc.queries(profile['code'])) <= {
-                q['term'] for q in profile['queries'] if q.get('category') == 'CBRN'})
+                q['term'] for q in profile['queries'] if q.get('category') == 'Radiological/Nuclear'})
 
 
 class RadnucIntegrationTests(unittest.TestCase):

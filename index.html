@@ -5167,8 +5167,9 @@ Map · all events
 <option value="Terrorist Financing">Terrorist financing</option>
 <option value="Weapons">Weapons</option>
 <option value="Maritime Security">Maritime security</option>
-<option value="CBRN">CBRN · all</option>
-<option value="RADNUC">↳ RADNUC</option>
+<option value="Radiological/Nuclear">Radiological/Nuclear</option>
+<option value="Chemicals and Explosives">Chemicals and Explosives</option>
+<option value="Biological Terrorism">Biological Terrorism</option>
 <option value="Online / Cyber / AI">Online / cyber / AI</option>
 </select>
 </label>
@@ -5225,8 +5226,9 @@ Database <span id="databaseTotalCount" class="database-total" hidden></span>
 <option value="Terrorist Financing">Terrorist Financing</option>
 <option value="Weapons">Weapons</option>
 <option value="Maritime Piracy">Maritime Security</option>
-<option value="CBRN">CBRN · all</option>
-<option value="RADNUC">↳ RADNUC</option>
+<option value="Radiological/Nuclear">Radiological/Nuclear</option>
+<option value="Chemicals and Explosives">Chemicals and Explosives</option>
+<option value="Biological Terrorism">Biological Terrorism</option>
 <option value="Online / Cyber / AI">Online / Cyber / AI</option>
 <option value="Legal / Judicial">Legal / Judicial</option>
 </select>
@@ -6651,15 +6653,9 @@ const categoryStyle = {
 },
 
 
-"CBRN": {
-
-    code:
-        "C",
-
-    className:
-        "cbrn"
-
-},
+"Radiological/Nuclear": { code: "RN", className: "cbrn" },
+"Chemicals and Explosives": { code: "CE", className: "cbrn" },
+"Biological Terrorism": { code: "BIO", className: "cbrn" },
 
 
 "Online / Cyber / AI": {
@@ -7132,7 +7128,7 @@ function withinDays(
 // event through on it, whatever its category.
 const MAP_ALL_CATEGORIES = Object.freeze([
     "Attacks", "Counter Terrorism Action", "Arrests", "Legal / Judicial",
-    "Terrorist Financing", "Weapons", "Maritime Security", "CBRN", "Online / Cyber / AI"
+    "Terrorist Financing", "Weapons", "Maritime Security", "Radiological/Nuclear", "Chemicals and Explosives", "Biological Terrorism", "Online / Cyber / AI"
 ]);
 
 function selectedCategories() {
@@ -7188,6 +7184,7 @@ function eventLooksLikeMaritimePiracy(event) {
 
 
 const CATEGORY_ALIASES = new Map([
+    ["RADNUC", "Radiological/Nuclear"],
     ["Maritime Piracy", "Maritime Security"],
     ["Online Radicalization / Cyberterrorism", "Online / Cyber / AI"],
     ["Disinformation / Emerging Technologies / AI", "Online / Cyber / AI"],
@@ -7223,11 +7220,16 @@ function eventCategories(
         :
         [event.category].filter(Boolean);
 
+    if (rawCategories.some(c => c === "CBRN" || c === "CBRNE")) {
+        rawCategories.push(...(Array.isArray(event.threat_categories) ? event.threat_categories : []));
+        if (Array.isArray(event.cbrn_subgroups) && event.cbrn_subgroups.includes("RADNUC")
+                && event.actor_scope !== "STATE_ONLY") rawCategories.push("Radiological/Nuclear");
+    }
     const categories =
         [...new Set(
             rawCategories
                 .map(normalizeCategoryName)
-                .filter(Boolean)
+                .filter(c => c && c !== "CBRN" && c !== "CBRNE")
         )];
 
     if (
@@ -7393,19 +7395,16 @@ let mapCategoryScope = "ALL";
 const MAP_SCOPE_TITLES = {
     ATTACKS: "Map · attacks",
     ALL: "Map · all events",
-    RADNUC: "Map · CBRN / RADNUC"
+    RADNUC: "Map · Radiological/Nuclear"
 };
 
 // The events of the map's period in the "Show on map" scope, located or not:
 // attacks from the map's file, other categories from its recent_events.
 function mapScopeMatches(event, scope) {
     if (scope === "ALL") return true;
-    if (scope === "RADNUC") {
-        return eventCategories(event).includes("CBRN")
-            && Array.isArray(event.cbrn_subgroups) && event.cbrn_subgroups.includes("RADNUC")
-            && event.actor_scope !== "STATE_ONLY";
-    }
-    return categoryMatches(event, [scope]);
+    const label = scope === "RADNUC" ? "Radiological/Nuclear" : scope;
+    if (["Radiological/Nuclear", "Chemicals and Explosives", "Biological Terrorism"].includes(label) && event.actor_scope === "STATE_ONLY") return false;
+    return categoryMatches(event, [label]);
 }
 
 function mapScopeEvents() {
@@ -8850,8 +8849,9 @@ function updateTrends() {
                 "Maritime Security":
                     "Maritime Security",
 
-                "CBRN":
-                    "CBRN",
+                "Radiological/Nuclear": "Radiological/Nuclear",
+                "Chemicals and Explosives": "Chemicals and Explosives",
+                "Biological Terrorism": "Biological Terrorism",
 
                 "Online / Cyber / AI":
                     "Online / Cyber / AI",
@@ -11893,7 +11893,9 @@ function updateCommandCenterPanels() {
             ["Weapons", "WEAPONS"],
             ["Maritime Security", "MARITIME"],
             ["Online / Cyber / AI", "ONLINE / CYBER / AI"],
-            ["CBRN", "CBRN"]
+            ["Radiological/Nuclear", "RAD/NUC"],
+            ["Chemicals and Explosives", "CHEM/EXP"],
+            ["Biological Terrorism", "BIO"]
         ];
 
         const maxValue =

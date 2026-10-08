@@ -1,5 +1,6 @@
 import argparse
 import radnuc
+import threat_categories
 import feedparser
 import hashlib
 import html
@@ -113,7 +114,7 @@ AI_SELECTION_BATCH_SIZE = max(
     ),
 )
 
-AI_SELECTION_VERSION = "gemini-ct-selection-v6-incident-model"
+AI_SELECTION_VERSION = "gemini-ct-selection-v7-standalone-threat-topics"
 AI_SELECTION_CACHE_FILE = "ai_article_selection_cache.json"
 
 AI_SELECTION_ATTEMPTS = 5
@@ -1683,11 +1684,7 @@ MULTILINGUAL_PROFILES.extend([
 
 
 
-# RADNUC uses specific security queries in every existing daily edition.
-CORE_SEARCH_QUERIES["CBRN"].extend(radnuc.ENGLISH_QUERIES)
-for _profile in MULTILINGUAL_PROFILES:
-    for _term in radnuc.queries(_profile["code"]):
-        _profile["queries"].append({"term": _term, "category": "CBRN"})
+# Specialist queries are installed below, after all taxonomy maps exist.
 
 # Run only the publisher additions from this expansion:
 # python collector.py backfill-new-sources
@@ -2028,6 +2025,8 @@ for _taxonomy_mapping in (
 ):
     _merge_digital_taxonomy(_taxonomy_mapping)
 
+threat_categories.install_collection(globals())
+
 
 def normalize_category_name(category):
     value = clean_text(category)
@@ -2035,7 +2034,7 @@ def normalize_category_name(category):
     if value in LEGACY_DIGITAL_CATEGORIES:
         return DIGITAL_CATEGORY
 
-    return value
+    return threat_categories.canonical(value)
 
 
 def normalize_categories(categories):
@@ -3000,7 +2999,7 @@ def collect_query(
             )
         )
 
-        radnuc_hint = category == "CBRN" and term in radnuc.ENGLISH_QUERIES and AI_SELECTION_ENABLED
+        radnuc_hint = category in threat_categories.LABELS and AI_SELECTION_ENABLED
         if (out_of_scope_reason({"title": title, "summary": summary})
                 or radnuc.state_operation_reason({"title": title, "summary": summary})) or (
                 not radnuc_hint and not is_relevant_article(category, title, summary)):
@@ -3091,7 +3090,7 @@ def collect_broad_query(
         # These tightly scoped specialist searches must reach semantic review
         # even when source terminology fails the general English keyword gate.
         # With AI disabled, keep the original deterministic filtering behavior.
-        if AI_SELECTION_ENABLED and category_hint in {"Maritime Piracy", "CBRN"}:
+        if AI_SELECTION_ENABLED and category_hint in {"Maritime Piracy", "CBRN", *threat_categories.LABELS}:
             if category_hint not in categories:
                 categories.append(category_hint)
 
@@ -3837,7 +3836,9 @@ AI_SELECTION_SCHEMA = {
                                 "Terrorist Financing",
                                 "Weapons",
                                 "Maritime Piracy",
-                                "CBRN",
+                                "Radiological/Nuclear",
+                                "Chemicals and Explosives",
+                                "Biological Terrorism",
                                 "Online / Cyber / AI",
                                 "Attacks",
                                 "Counter Terrorism Action",
@@ -3848,6 +3849,9 @@ AI_SELECTION_SCHEMA = {
                     },
                     "cbrn_subgroups": {
                         "type": "array", "items": {"type": "string", "enum": ["RADNUC"]}
+                    },
+                    "reported_status": {
+                        "type": "string", "enum": ["CONFIRMED", "SUSPECTED", "ALLEGED", "THREAT", "HOAX", "UNKNOWN"]
                     },
                     "actor_scope": {
                         "type": "string", "enum": ["NON_STATE", "STATE_ONLY", "UNKNOWN"]
@@ -4954,7 +4958,7 @@ def process_ai_selection_batch(
         )
 
 
-AI_SELECTION_INSTRUCTIONS += radnuc.SELECTION_NOTE
+AI_SELECTION_INSTRUCTIONS += radnuc.SELECTION_NOTE + threat_categories.SELECTION_NOTE
 
 
 def apply_ai_selection(
@@ -5223,7 +5227,7 @@ def apply_ai_selection(
         ] = variants
 
     radnuc.annotate(event, result)
-    scope_reason = radnuc.state_operation_reason(event, result.get("actor_scope")) if "CBRN" in event.get("categories", []) or "RADNUC" in event.get("cbrn_subgroups", []) else ""
+    scope_reason = threat_categories.scope_reason(event, result)
     scope_reason = scope_reason or out_of_scope_reason(event)
     if scope_reason:
         event["ai_selected"] = False
@@ -8860,7 +8864,7 @@ def _trend_priority(event):
         score += 15
     if "Weapons" in categories:
         score += 7
-    if "CBRN" in categories:
+    if categories.intersection(threat_categories.LABELS):
         score += 10
     if "Arrests" in categories:
         score += 5
@@ -10103,6 +10107,8 @@ def generate_weekly_analysis(events, existing_weekly=None):
 
 
 def save_database(events, trend_summary=None, weekly_analysis=None):
+    for event in events:
+        threat_categories.annotate(event)
     output = {
         "project":
             "INTERPOL CT Intelligence Map",

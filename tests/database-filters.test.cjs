@@ -156,11 +156,30 @@ test('the report route filters by group and keys its cache on it',()=>{
 
 
 
-test('RADNUC is a selectable CBRN subgroup for database, reports and Deep Search',()=>{
+test('Radiological/Nuclear is standalone and the old RADNUC alias still reads retained data',()=>{
   const rad={category:'CBRN',categories:['CBRN','Arrests'],cbrn_subgroups:['RADNUC'],actor_scope:'NON_STATE'};
   assert.equal(shared.matchesTopic(rad,'RADNUC'),true);
-  assert.equal(shared.matchesTopic(rad,'CBRN'),true);
+  assert.equal(shared.matchesTopic(rad,'CBRN'),false);
+  assert.equal(shared.matchesTopic(rad,'Radiological/Nuclear'),true);
   assert.equal(shared.matchesTopic({...rad,cbrn_subgroups:[]},'RADNUC'),false);
   assert.equal(shared.matchesTopic({...rad,actor_scope:'STATE_ONLY'},'RADNUC'),false);
   assert.equal(shared.matchesTopic({...rad,categories:['Weapons']},'RADNUC'),false);
+});
+
+
+test('all three specialist filters select the same modern categories without a parent',()=>{
+  for(const category of ['Radiological/Nuclear','Chemicals and Explosives','Biological Terrorism']){
+    const record={id:'one',categories:[category,'Arrests'],actor_scope:'NON_STATE'};
+    assert.equal(shared.matchesTopic(record,category),true);
+    assert.equal(shared.matchesTopic(record,'Arrests'),true);
+    assert.equal(shared.matchesTopic(record,'CBRN'),false);
+    assert.equal(shared.matchesTopic({...record,actor_scope:'STATE_ONLY'},category),false);
+  }
+  const html=fs.readFileSync('index.html','utf8');
+  for(const category of ['Radiological/Nuclear','Chemicals and Explosives','Biological Terrorism']){
+    assert.equal(html.split('<option value="'+category+'">').length-1,2,
+      'both map and database selectors expose '+category);
+  }
+  assert.ok(!html.includes('<option value="CBRN">'));
+  assert.ok(!html.includes('↳ RADNUC'));
 });

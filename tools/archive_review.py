@@ -249,6 +249,8 @@ def review_record(item, result, collector, include_event=False):
         **({"selected_event": event} if include_event else {}),
         "cbrn_subgroups": event.get("cbrn_subgroups") or [],
         "actor_scope": event.get("actor_scope"),
+        "reported_status": event.get("reported_status"),
+        "ai_current_ct_event": event.get("ai_current_ct_event"),
         "url": item.get("url"),
         "title": event.get("title") or item.get("title"),
         "summary": event.get("summary") or "",
