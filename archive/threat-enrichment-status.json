@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-08T15:56:22.780134+00:00",
+ "updated_at": "2026-10-08T17:12:02.927462+00:00",
  "version": 1,
  "anchor": "2026-10-08",
  "from": "2026-04-11",
@@ -11,31 +11,31 @@
  "categories": {
   "Chemicals and Explosives": {
    "planned_searches": 1836,
-   "pending_searches": 1246,
-   "queued_candidates": 2,
-   "completed_searches": 592,
+   "pending_searches": 1187,
+   "queued_candidates": 22,
+   "completed_searches": 652,
    "processing_complete": false,
    "complete": false,
    "coverage_issues": {
-    "query_errors": 15,
-    "full_single_day": 230,
-    "failed_searches": 24
+    "query_errors": 20,
+    "full_single_day": 254,
+    "failed_searches": 27
    },
    "last_run": {
-    "tasks_done": 85,
-    "fetched": 104,
-    "candidates": 25,
-    "skipped": 4485,
+    "tasks_done": 79,
+    "fetched": 100,
+    "candidates": 20,
+    "skipped": 4301,
     "skipped_cached": 0,
-    "reviewed": 25,
-    "kept": 24,
-    "archived_incident": 24,
+    "reviewed": 0,
+    "kept": 0,
+    "archived_incident": 0,
     "unanswerable": 0,
     "source_failures": 3,
-    "query_errors": 2,
-    "split": 22,
+    "query_errors": 5,
+    "split": 20,
     "given_up": 0,
-    "queued_candidates": 2,
+    "queued_candidates": 22,
     "stop": "deadline reached (15 min); review queue saved",
     "integrated_reports": 173
    },
@@ -45,101 +45,6 @@
     "fr"
    ],
    "gdelt_scope": "all source languages indexed by the provider; not exhaustive web coverage"
-  },
-  "Biological Terrorism": {
-   "planned_searches": 1944,
-   "pending_searches": 1572,
-   "queued_candidates": 8,
-   "completed_searches": 377,
-   "processing_complete": false,
-   "complete": false,
-   "coverage_issues": {
-    "query_errors": 11,
-    "full_single_day": 533,
-    "failed_searches": 24
-   },
-   "last_run": {
-    "tasks_done": 82,
-    "fetched": 134,
-    "candidates": 6,
-    "skipped": 6618,
-    "skipped_cached": 0,
-    "reviewed": 0,
-    "kept": 0,
-    "archived_incident": 0,
-    "unanswerable": 0,
-    "source_failures": 3,
-    "query_errors": 2,
-    "split": 48,
-    "given_up": 0,
-    "queued_candidates": 8,
-    "stop": "deadline reached (15 min); review queue saved",
-    "integrated_reports": 26
-   },
-   "native_query_languages": [
-    "ar",
-    "en",
-    "fr"
-   ],
-   "gdelt_scope": "all source languages indexed by the provider; not exhaustive web coverage"
-  },
-  "Radiological/Nuclear": {
-   "planned_searches": 2133,
-   "pending_searches": 1442,
-   "queued_candidates": 3,
-   "completed_searches": 695,
-   "processing_complete": false,
-   "complete": false,
-   "coverage_issues": {
-    "query_errors": 0,
-    "full_single_day": 2,
-    "failed_searches": 34
-   },
-   "last_run": {
-    "tasks_done": 3,
-    "fetched": 5,
-    "candidates": 193,
-    "skipped": 93,
-    "skipped_cached": 0,
-    "reviewed": 200,
-    "kept": 4,
-    "archived_incident": 3,
-    "unanswerable": 0,
-    "source_failures": 3,
-    "query_errors": 0,
-    "split": 3,
-    "given_up": 0,
-    "queued_candidates": 3,
-    "stop": "deadline reached (15 min); review queue saved",
-    "integrated_reports": 60
-   },
-   "native_query_languages": [
-    "ar",
-    "bn",
-    "de",
-    "en",
-    "es",
-    "fa",
-    "fr",
-    "ha",
-    "he",
-    "hi",
-    "id",
-    "it",
-    "ps",
-    "pt",
-    "ru",
-    "so",
-    "sw",
-    "tr",
-    "ur"
-   ],
-   "gdelt_scope": "all source languages indexed by the provider; not exhaustive web coverage"
   }
- },
- "complete": false,
- "processing_complete": false,
- "requests_this_run": 10,
- "searches_this_run": 256,
- "completion_meaning": "Configured searches processed, not a guarantee that all real-world cases were found."
+ }
 }
