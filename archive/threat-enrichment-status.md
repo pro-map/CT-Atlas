@@ -1,16 +1,16 @@
 # Specialist six-month backfill
 
-Last checkpoint (UTC): 2026-10-08T15:08:43.505364+00:00
+Last checkpoint (UTC): 2026-10-08T15:56:22.780134+00:00
 
 **A successful batch is not completion of the whole backfill.**
 
 | Category | Main searches processed | Pending searches | Candidates awaiting review | Complete |
 |---|---:|---:|---:|---|
-| Radiological/Nuclear | 693 / 2133 | 1442 | 10 | No |
-| Chemicals and Explosives | 527 / 1836 | 1309 | 2 | No |
-| Biological Terrorism | 339 / 1944 | 1606 | 2 | No |
+| Radiological/Nuclear | 695 / 2133 | 1442 | 3 | No |
+| Chemicals and Explosives | 592 / 1836 | 1246 | 2 | No |
+| Biological Terrorism | 377 / 1944 | 1572 | 8 | No |
 
-Catch-up rounds started: 7. Acceleration ends at 2026-10-08T22:00:00+00:00.
+Catch-up rounds started: 8. Acceleration ends at 2026-10-08T22:00:00+00:00.
 
 ## Latest batch / source limitations
 
@@ -18,11 +18,11 @@ Catch-up rounds started: 7. Acceleration ends at 2026-10-08T22:00:00+00:00.
 ```json
 {
   "stop": "deadline reached (15 min); review queue saved",
-  "reviewed_this_batch": 175,
+  "reviewed_this_batch": 200,
   "coverage_issues": {
     "query_errors": 0,
-    "full_single_day": 1,
-    "failed_searches": 31
+    "full_single_day": 2,
+    "failed_searches": 34
   }
 }
 ```
@@ -31,11 +31,11 @@ Catch-up rounds started: 7. Acceleration ends at 2026-10-08T22:00:00+00:00.
 ```json
 {
   "stop": "deadline reached (15 min); review queue saved",
-  "reviewed_this_batch": 50,
+  "reviewed_this_batch": 25,
   "coverage_issues": {
-    "query_errors": 13,
-    "full_single_day": 205,
-    "failed_searches": 21
+    "query_errors": 15,
+    "full_single_day": 230,
+    "failed_searches": 24
   }
 }
 ```
@@ -46,9 +46,9 @@ Catch-up rounds started: 7. Acceleration ends at 2026-10-08T22:00:00+00:00.
   "stop": "deadline reached (15 min); review queue saved",
   "reviewed_this_batch": 0,
   "coverage_issues": {
-    "query_errors": 9,
-    "full_single_day": 477,
-    "failed_searches": 21
+    "query_errors": 11,
+    "full_single_day": 533,
+    "failed_searches": 24
   }
 }
 ```
