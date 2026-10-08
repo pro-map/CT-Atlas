@@ -20,140 +20,50 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
-      - name: Apply reviewed six-month changes
-        shell: bash
+      - name: Apply the previously reviewed migration
         run: |
           python - <<'PY'
-          from pathlib import Path
-          def edit(path, changes):
-              p=Path(path)
-              raw=p.read_bytes(); nl='\r\n' if b'\r\n' in raw else '\n'
-              s=raw.decode().replace('\r\n','\n')
-              for old,new in changes:
-                  if old not in s: raise RuntimeError(f'Missing expected anchor in {path}: {old!r}')
-                  s=s.replace(old,new)
-              p.write_bytes(s.replace('\n',nl).encode())
-          edit('index.html',[
-              ('<button class="time-button" data-days="90">3 MONTHS</button>', '<button class="time-button" data-days="90">3 MONTHS</button>\n<button class="time-button" data-days="180">6 MONTHS</button>'),
-              ('const MAP_RECENT_EVENT_DAYS = 91;', 'const MAP_RECENT_EVENT_DAYS = 181;'),
-              (': scope === "RADNUC" || scope === "CBRN" ? filteredAllEvents().filter(event => mapScopeMatches(event, scope)) : [];', ': filteredAllEvents().filter(event => mapScopeMatches(event, scope));'),
-              (': scope === "RADNUC" || scope === "CBRN" ? allEvents.filter(event => mapScopeMatches(event, scope)) : [];', ': allEvents.filter(event => mapScopeMatches(event, scope));'),
-          ])
-          edit('tools/build_events_map.py',[
-              ('(its periods are 24h, 7 days, 30 days and 90 days)', '(its periods are 24h, 7 days, 30 days, 90 days and 180 days)'),
-              ("# The map's longest period (90 days) plus a day of slack:", "# The map's longest period (180 days) plus a day of slack:"),
-              ('RECENT_DAYS = 91','RECENT_DAYS = 181'),
-          ])
-          edit('.github/workflows/deploy-current-ct-atlas-ui.yml',[
-              ("          grep -q 'data-days=\"90\"' index.html", "          grep -q 'data-days=\"90\"' index.html\n          grep -q 'data-days=\"180\"' index.html"),
-              ('MAP_RECENT_EVENT_DAYS = 91;', 'MAP_RECENT_EVENT_DAYS = 181;'),
-              ('^RECENT_DAYS = 91$', '^RECENT_DAYS = 181$'),
-          ])
-          edit('.github/workflows/live-smoke.yml',[
-              ("              && grep -q 'data-days=\"90\"' /tmp/index.html \\", "              && grep -q 'data-days=\"90\"' /tmp/index.html \\\n              && grep -q 'data-days=\"180\"' /tmp/index.html \\") ,
-              ('MAP_RECENT_EVENT_DAYS = 91;', 'MAP_RECENT_EVENT_DAYS = 181;'),
-              ('MAP other categories do not cover 90 days', 'MAP other categories do not cover 180 days'),
-              ('          if (!/class="time-button"\\s+data-days="90"/.test(html)) throw new Error("MAP 90-day option missing");', '          if (!/class="time-button"\\s+data-days="90"/.test(html)) throw new Error("MAP 90-day option missing");\n          if (!/class="time-button"\\s+data-days="180"/.test(html)) throw new Error("MAP 180-day option missing");'),
-          ])
-          edit('tests/map-default-period.test.cjs',[
-              ('30 days, and 3 months', '30 days, 3 months and 6 months'),
-              ('[1,7,30,90]', '[1,7,30,90,180]'),
-          ])
-          edit('tests/attacks-map-database.test.cjs',[
-              ('MAP_RECENT_EVENT_DAYS = 91;', 'MAP_RECENT_EVENT_DAYS = 181;'),
-              ('recent_events_days:91', 'recent_events_days:181'),
-              ('over 1, 7, 30 or 90 days', 'over 1, 7, 30, 90 or 180 days'),
-              ('covers 90 days of other categories', 'covers 180 days of other categories'),
-              ('^RECENT_DAYS = 91$', '^RECENT_DAYS = 181$'),
-          ])
-          edit('tests/build_events_map_test.py',[
-              ('from datetime import datetime, timezone','from datetime import datetime, timedelta, timezone'),
-              ("published='2026-05-20T08:00:00Z'", "published='2026-03-20T08:00:00Z'"),
-              ('test_ninety_day_context_keeps_every_category_and_radnuc_metadata', 'test_six_month_context_keeps_every_category_and_radnuc_metadata'),
-              ("('too-old', 'CBRN', 'CBRN', '2026-06-01T08:00:00Z')", "('too-old', 'CBRN', 'CBRN', '2026-03-01T08:00:00Z')"),
-          ])
-          p=Path('tests/build_events_map_test.py');s=p.read_text()
-          new='''    def test_six_month_payload_includes_all_categories_and_event_types(self):
-                  now = datetime(2026, 10, 8, 12, tzinfo=timezone.utc)
-                  topics = [
-                      ('ATTACK', 'Attacks'), ('ATTEMPTED_ATTACK', 'Attacks'),
-                      ('DISRUPTED_PLOT', 'Counter Terrorism Action'),
-                      ('CT_OPERATION', 'Counter Terrorism Action'), ('ARREST', 'Arrests'),
-                      ('JUDICIAL', 'Legal / Judicial'), ('FINANCING', 'Terrorist Financing'),
-                      ('WEAPONS', 'Weapons'), ('PIRACY', 'Maritime Piracy'),
-                      ('ONLINE_CYBER_AI', 'Online / Cyber / AI'), ('CBRN', 'CBRN'),
-                      ('OTHER_CT', 'Radiological/Nuclear'),
-                      ('OTHER_CT', 'Chemicals and Explosives'),
-                      ('OTHER_CT', 'Biological Terrorism'),
-                  ]
-                  records = [event(str(i), primary_event_type=kind, category=category,
-                                   is_attack=kind == 'ATTACK',
-                                   published=(now - timedelta(days=179)).isoformat())
-                             for i, (kind, category) in enumerate(topics)]
-                  records += [event('boundary', primary_event_type='ARREST', category='Arrests',
-                                    published=(now - timedelta(days=180)).isoformat()),
-                              event('expired', primary_event_type='ARREST', category='Arrests',
-                                    published=(now - timedelta(days=182)).isoformat())]
-                  db = {'events': records}
-                  output = m.build_map(db, [], now=now)
-                  ids = [e['id'] for e in output['events'] + output['recent_events']]
-                  self.assertEqual(set(ids), {str(i) for i in range(len(topics))} | {'boundary'})
-                  self.assertEqual(len(ids), len(set(ids)), 'No attack duplicated as context')
-                  self.assertEqual(output['map']['recent_events_days'], 181)
-                  m.validate(output, db)
-
-          '''
-          s=s.replace('    def test_validate_rejects_an_attack_among_recent_events(self):',new+'    def test_validate_rejects_an_attack_among_recent_events(self):');p.write_text(s)
-          p=Path('tests/attacks-map-database.test.cjs');s=p.read_text();s+='''
-
-          test('six-month map filtering includes every category and excludes events older than 180 days',()=>{
-            const h=mapScopeHarness();
-            const day=86400000;
-            const categories=['Counter Terrorism Action','Arrests','Legal / Judicial','Terrorist Financing',
-              'Weapons','Maritime Security','CBRN','Online / Cyber / AI'];
-            h.context.sixMonthOthers=categories.map((category,i)=>({id:'six-'+i,category,
-              published:new Date(Date.now()-179*day).toISOString(),latitude:1,longitude:1}));
-            h.context.sixMonthOthers.push({id:'expired',category:'Arrests',
-              published:new Date(Date.now()-181*day).toISOString(),latitude:1,longitude:1});
-            h.context.sixMonthAttack={id:'six-attack',category:'Attacks',categories:['Attacks','Weapons'],
-              published:new Date(Date.now()-179*day).toISOString(),latitude:1,longitude:1};
-            vm.runInContext('recentContextEvents.push(...sixMonthOthers); attacks.push(sixMonthAttack);',h.context);
-            const all=plain(h.ids('ALL',180)).mapped;
-            assert.ok(all.includes('six-attack'));
-            assert.ok(!all.includes('expired'));
-            for(const [i,category] of categories.entries()){
-              assert.ok(all.includes('six-'+i),category+' missing from all events');
-              assert.ok(plain(h.ids(category,180)).mapped.includes('six-'+i),category+' filter lost historical event');
-              assert.ok(!plain(h.ids(category,90)).mapped.includes('six-'+i),category+' ignored the 90-day cutoff');
-            }
-            assert.ok(plain(h.ids('Weapons',180)).mapped.includes('six-attack'),
-              'A multi-category attack must remain visible in its relevant thematic filter');
-            assert.equal(all.length,new Set(all).size,'No duplicate records in the all-events map');
-          });
-
-          test('the browser rejects an outdated 91-day payload and loads the full six-month data',async()=>{
-            const old={id:'older-arrest',title:'Historical arrest',category:'Arrests',primary_event_type:'ARREST',
-              published:new Date(Date.now()-150*86400000).toISOString()};
-            const stale={events:[],recent_events:[],map:{recent_events_days:91}};
-            const {data:loaded,source}=await runLoader({'events-map.json':stale,'events-lite.json':{events:[old]}});
-            assert.equal(source,'events-lite.json');
-            assert.ok(loaded.recent_events.some(e=>e.id==='older-arrest'));
-            assert.equal(loaded.map.recent_events_days,181);
-          });
-          ''';p.write_text(s)
+          import subprocess
+          source=subprocess.check_output(['git','show','64936ebc4b562fd3aee17c58557b1dff06238d45:.github/workflows/category-migration-review.yml'],text=True).splitlines()
+          start=source.index("          python - <<'PY'")+1
+          end=source.index('          PY',start)
+          code='\n'.join(line[10:] if line.startswith('          ') else line for line in source[start:end])
+          exec(compile(code,'reviewed-map-migration','exec'))
           PY
       - name: Validate map payload tests
         run: python -m unittest discover -s tests -p 'build_events_map_test.py'
-      - name: Run all JavaScript regression tests
+      - name: Run JavaScript regression tests
         run: node --test tests/*.test.cjs
-      - name: Validate generated six-month database
+      - name: Validate six-month database
         run: python tools/build_events_map.py --output "$RUNNER_TEMP/events-map.json"
-      - name: Commit tested changes to review branch only
+      - name: Prepare tested Git objects without updating a branch
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          git config user.name "CT Atlas Map Migration"
-          git config user.email "actions@github.com"
-          git -c core.whitespace=cr-at-eol diff --check
-          git add index.html tools/build_events_map.py tests/attacks-map-database.test.cjs tests/build_events_map_test.py tests/map-default-period.test.cjs .github/workflows/deploy-current-ct-atlas-ui.yml .github/workflows/live-smoke.yml
-          git rm .github/workflows/category-migration-review.yml
-          git commit -m "Extend map to 180 days for every category and event type"
-          git push origin HEAD:ct-categories-six-months-20261008
+          python - <<'PY'
+          import base64,json,os,subprocess,urllib.request
+          from pathlib import Path
+          repo=os.environ['GITHUB_REPOSITORY']
+          def post(route,payload):
+              req=urllib.request.Request('https://api.github.com/repos/'+repo+'/git/'+route,
+                  data=json.dumps(payload).encode(),method='POST',headers={
+                  'Authorization':'Bearer '+os.environ['GH_TOKEN'],
+                  'Accept':'application/vnd.github+json','Content-Type':'application/json',
+                  'User-Agent':'CT-Atlas-map-migration'})
+              with urllib.request.urlopen(req,timeout=60) as r:return json.load(r)
+          paths=['index.html','tools/build_events_map.py','tests/attacks-map-database.test.cjs',
+                 'tests/build_events_map_test.py','tests/map-default-period.test.cjs',
+                 '.github/workflows/deploy-current-ct-atlas-ui.yml','.github/workflows/live-smoke.yml']
+          entries=[]
+          for path in paths:
+              blob=post('blobs',{'content':base64.b64encode(Path(path).read_bytes()).decode(),'encoding':'base64'})
+              entries.append({'path':path,'mode':'100644','type':'blob','sha':blob['sha']})
+          entries.append({'path':'.github/workflows/category-migration-review.yml','mode':'100644','type':'blob','sha':None})
+          base=subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip()
+          parent=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+          tree=post('trees',{'base_tree':base,'tree':entries})
+          commit=post('commits',{'message':'Extend map to 180 days for every category and event type','tree':tree['sha'],'parents':[parent]})
+          print('REVIEWED_COMMIT='+commit['sha'])
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('Validated 180-day all-category map. No branch was changed.\n\nReviewed commit: `'+commit['sha']+'`\n')
+          PY
