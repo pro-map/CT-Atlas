@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-08T08:31:39.870023+00:00",
+ "updated_at": "2026-10-08T10:15:14.188454+00:00",
  "version": 1,
  "anchor": "2026-10-08",
  "from": "2026-04-11",
@@ -11,30 +11,33 @@
  "categories": {
   "Chemicals and Explosives": {
    "planned_searches": 1836,
-   "pending_searches": 1808,
-   "completed_searches": 28,
+   "pending_searches": 1730,
+   "queued_candidates": 16,
+   "completed_searches": 109,
+   "processing_complete": false,
    "complete": false,
    "coverage_issues": {
-    "query_errors": 0,
-    "full_single_day": 12,
-    "failed_searches": 0
+    "query_errors": 1,
+    "full_single_day": 42,
+    "failed_searches": 3
    },
    "last_run": {
-    "tasks_done": 31,
-    "fetched": 40,
-    "candidates": 17,
-    "skipped": 1724,
+    "tasks_done": 105,
+    "fetched": 133,
+    "candidates": 116,
+    "skipped": 5587,
     "skipped_cached": 0,
-    "reviewed": 0,
-    "kept": 0,
-    "archived_incident": 0,
+    "reviewed": 100,
+    "kept": 78,
+    "archived_incident": 70,
     "unanswerable": 0,
-    "source_failures": 0,
-    "query_errors": 0,
-    "split": 6,
+    "source_failures": 3,
+    "query_errors": 1,
+    "split": 27,
     "given_up": 0,
-    "stop": "deadline reached (2 min)",
-    "integrated_reports": 8
+    "queued_candidates": 16,
+    "stop": "deadline reached (15 min); review queue saved",
+    "integrated_reports": 58
    },
    "native_query_languages": [
     "ar",
@@ -45,29 +48,32 @@
   },
   "Biological Terrorism": {
    "planned_searches": 1944,
-   "pending_searches": 1919,
-   "completed_searches": 28,
+   "pending_searches": 1867,
+   "queued_candidates": 14,
+   "completed_searches": 85,
+   "processing_complete": false,
    "complete": false,
    "coverage_issues": {
-    "query_errors": 0,
-    "full_single_day": 30,
-    "failed_searches": 0
+    "query_errors": 2,
+    "full_single_day": 99,
+    "failed_searches": 3
    },
    "last_run": {
-    "tasks_done": 26,
-    "fetched": 35,
-    "candidates": 28,
-    "skipped": 1909,
+    "tasks_done": 107,
+    "fetched": 169,
+    "candidates": 14,
+    "skipped": 8461,
     "skipped_cached": 0,
-    "reviewed": 25,
-    "kept": 3,
-    "archived_incident": 3,
+    "reviewed": 0,
+    "kept": 0,
+    "archived_incident": 0,
     "unanswerable": 0,
-    "source_failures": 0,
-    "query_errors": 0,
-    "split": 6,
+    "source_failures": 3,
+    "query_errors": 2,
+    "split": 55,
     "given_up": 0,
-    "stop": "deadline reached (2 min)",
+    "queued_candidates": 14,
+    "stop": "deadline reached (15 min); review queue saved",
     "integrated_reports": 2
    },
    "native_query_languages": [
@@ -79,29 +85,32 @@
   },
   "Radiological/Nuclear": {
    "planned_searches": 2133,
-   "pending_searches": 1744,
+   "pending_searches": 1743,
+   "queued_candidates": 7,
    "completed_searches": 392,
+   "processing_complete": false,
    "complete": false,
    "coverage_issues": {
     "query_errors": 0,
-    "full_single_day": 0,
-    "failed_searches": 7
+    "full_single_day": 1,
+    "failed_searches": 10
    },
    "last_run": {
-    "tasks_done": 0,
-    "fetched": 1,
-    "candidates": 43,
-    "skipped": 29,
+    "tasks_done": 3,
+    "fetched": 6,
+    "candidates": 482,
+    "skipped": 269,
     "skipped_cached": 0,
-    "reviewed": 0,
-    "kept": 0,
-    "archived_incident": 0,
+    "reviewed": 475,
+    "kept": 20,
+    "archived_incident": 19,
     "unanswerable": 0,
-    "source_failures": 0,
+    "source_failures": 3,
     "query_errors": 0,
-    "split": 0,
+    "split": 2,
     "given_up": 0,
-    "stop": "plan finished",
+    "queued_candidates": 7,
+    "stop": "deadline reached (15 min); review queue saved",
     "integrated_reports": 37
    },
    "native_query_languages": [
@@ -129,7 +138,8 @@
   }
  },
  "complete": false,
- "requests_this_run": 1,
- "searches_this_run": 76,
+ "processing_complete": false,
+ "requests_this_run": 24,
+ "searches_this_run": 320,
  "completion_meaning": "Configured searches processed, not a guarantee that all real-world cases were found."
 }

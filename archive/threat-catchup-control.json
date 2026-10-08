@@ -1,0 +1,15 @@
+{
+  "end_at": "2026-10-08T22:00:00+00:00",
+  "runs": [
+    "37757024407"
+  ],
+  "last_started_at": "2026-10-08T09:29:52.585861+00:00",
+  "last_run_id": "37757024407",
+  "mode": "same-day catch-up",
+  "settings": {
+    "minutes": 45,
+    "searches": 2400,
+    "requests": 120,
+    "daily": 600
+  }
+}
