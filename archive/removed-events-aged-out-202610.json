@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-07T16:23:06.825274+00:00",
+  "removed_at": "2026-10-08T22:04:28.419314+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -683,6 +683,46 @@
       "country": "India",
       "ai_relevance_score": 85,
       "ai_relevance_reason": "Reports concrete arrests of arms dealers supplying weapons to a terror associate."
+    },
+    {
+      "id": "e4bd0a3977ce483c",
+      "incident_id": "inc-b866e952540c1fce",
+      "url": "https://www.philstar.com/nation/2026/04/12/2520300/community-workers-appeal-conviction-terror-financing",
+      "title": "Community workers appeal conviction for terror financing",
+      "summary": "Community workers have filed an appeal against their conviction for terror financing charges.",
+      "original_title": "Community workers appeal conviction for terror financing",
+      "original_language": "en",
+      "source": "philstar.com",
+      "published": "2026-04-11T18:30:00+00:00",
+      "category": "Terrorist Financing",
+      "categories": [
+        "Terrorist Financing",
+        "Legal / Judicial"
+      ],
+      "actor_group": "",
+      "primary_event_type": "JUDICIAL",
+      "country": "Philippines",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports a concrete legal appeal filed against terror financing convictions."
+    },
+    {
+      "id": "7b1b3e9f401acd1a",
+      "incident_id": "inc-9cf6e2ab66a10314",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNdXFmc2tGOE1BVi1ETmZGbEpoaXpfc19Gdkx2RGR6OXJPcTFzOU8zRXNhbVNLQ2gxeGpCaG1hdUdCalJaUTZiOHpGVGhVNE56bldlMldiWW54MGNBbGltUThNZndkVWtER0RpdFFKdEdGT2RsS0t2YUZiOXFPVmJQbXJqbmU2cFZrNmc0N2J4QlR0U0REZWdUb1lWYmg1MzJOa19LTUttYVl2dEVkS096RXpyaUZMbEx1?oc=5",
+      "title": "Jose Padilla Re-Sentenced To 21 Years In Prison For Conspiracy To Murder Individuals Overseas, Providing Material Support To Terrorists",
+      "summary": "Jose Padilla Re-Sentenced To 21 Years In Prison For Conspiracy To Murder Individuals Overseas, Providing Material Support To Terrorists Department of Justice (.gov)",
+      "original_title": "Jose Padilla Re-Sentenced To 21 Years In Prison For Conspiracy To Murder Individuals Overseas, Providing Material Support To Terrorists",
+      "original_language": "en",
+      "source": "Department of Justice (.gov)",
+      "published": "2016-03-04T19:27:35+00:00",
+      "category": "Legal / Judicial",
+      "categories": [
+        "Legal / Judicial"
+      ],
+      "actor_group": "",
+      "primary_event_type": "OTHER_CT",
+      "ai_relevance_score": 88,
+      "ai_relevance_reason": "Auto-accepted: authoritative official source with strong CT category/action evidence in the headline."
     }
   ]
 }
