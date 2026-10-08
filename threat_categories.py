@@ -165,3 +165,9 @@ Do not infer any of these three categories from isolated incidental keywords.
 Set cbrn_subgroups=["RADNUC"] for Radiological/Nuclear only, otherwise []: this
 is legacy machine compatibility, NOT a CBRN parent or a user-facing subgroup.
 '''
+
+# Both the daily collector and the historical reviewer use this same editorial
+# prompt. Configuration rules must reach it, not merely sit in a JSON comment.
+SELECTION_NOTE += '\nCHEMICAL/EXPLOSIVES INCIDENT-REPORTING RULES:\n' + '\n'.join(
+    vocabulary()['chemical_explosives'].get('rules', [])
+) + '\n'
