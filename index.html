@@ -5178,6 +5178,7 @@ Map · all events
 <button class="time-button active" data-days="7">7 DAYS</button>
 <button class="time-button" data-days="30">30 DAYS</button>
 <button class="time-button" data-days="90">3 MONTHS</button>
+<button class="time-button" data-days="180">6 MONTHS</button>
 </div>
 
 <div class="layer-buttons">
@@ -6868,7 +6869,7 @@ function eventMatchKey(event) {
 
 // Other categories' events of the map's longest period (30 days), plus a
 // day of slack between two publications (tools/build_events_map.py).
-const MAP_RECENT_EVENT_DAYS = 91;
+const MAP_RECENT_EVENT_DAYS = 181;
 
 // The map's own file (events-map.json, built at publication time: attacks only,
 // ~1/4 of events-lite.json) or, if it is missing or unusable, the full database
@@ -7413,7 +7414,7 @@ function mapScopeEvents() {
     }
     const scope = mapCategoryScope;
     const attacks = scope === "ATTACKS" || scope === "ALL" ? filteredAllEvents()
-        : scope === "RADNUC" || scope === "CBRN" ? filteredAllEvents().filter(event => mapScopeMatches(event, scope)) : [];
+        : filteredAllEvents().filter(event => mapScopeMatches(event, scope));
     const others = scope === "ATTACKS" ? [] : recentContextEvents.filter(event =>
         withinDays(event.published, selectedDays)
         && mapScopeMatches(event, scope)
@@ -7429,7 +7430,7 @@ function mapScopeEvents() {
 function mapScopeCandidates() {
     const scope = mapCategoryScope;
     const attacks = scope === "ATTACKS" || scope === "ALL" ? allEvents
-        : scope === "RADNUC" || scope === "CBRN" ? allEvents.filter(event => mapScopeMatches(event, scope)) : [];
+        : allEvents.filter(event => mapScopeMatches(event, scope));
     const others = scope === "ATTACKS" ? [] : recentContextEvents.filter(event =>
         mapScopeMatches(event, scope)
     );
