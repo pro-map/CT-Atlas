@@ -1,0 +1,12 @@
+{
+  "enabled": true,
+  "purpose": "User-requested same-day specialist backfill; no billing, model or credential changes",
+  "start_at": "2026-10-08T09:00:00+00:00",
+  "end_at": "2026-10-08T22:00:00+00:00",
+  "max_rounds": 18,
+  "minutes_per_round": 45,
+  "searches_per_round": 2400,
+  "ai_requests_per_round": 120,
+  "enrichment_daily_allocation": 600,
+  "normal_enrichment_daily_allocation": 100
+}

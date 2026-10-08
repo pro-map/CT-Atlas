@@ -2,18 +2,44 @@ name: Review same-day backfill
 on:
   push:
     branches: [fix/same-day-backfill-20261008]
-    paths: [.github/workflows/backfill-catchup-review.yml]
+    paths:
+      - .github/workflows/backfill-catchup-review.yml
+      - tools/catchup-core.patch
 permissions:
-  contents: read
+  contents: write
 jobs:
-  snapshot:
+  review:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
-      - name: Package tracked source for offline regression testing
-        run: git archive --format=tar.gz -o "$RUNNER_TEMP/catchup-source.tar.gz" HEAD
-      - uses: actions/upload-artifact@v6
         with:
-          name: catchup-source
-          path: ${{ runner.temp }}/catchup-source.tar.gz
-          retention-days: 1
+          ref: fix/same-day-backfill-20261008
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Apply reviewed queue and quota patch on the isolated branch
+        run: |
+          set -euo pipefail
+          if grep -q '^+++ b/.github/' tools/catchup-core.patch; then exit 1; fi
+          git apply --check tools/catchup-core.patch
+          git apply --index tools/catchup-core.patch
+      - name: Install test dependencies
+        run: pip install -r requirements.txt -r darkweb-collector/requirements.txt pytest
+      - name: Full Python regression suite
+        run: python -m pytest tests/ -q --ignore=tests/visual_intel_detector_test.py
+      - name: Full JavaScript regression suite
+        run: node --test tests/*.test.cjs
+      - name: Save only the tested source changes to the review branch
+        run: |
+          set -euo pipefail
+          git rm tools/catchup-core.patch
+          if git diff --cached --name-only | grep -q '^.github/'; then exit 1; fi
+          git -c core.whitespace=cr-at-eol diff --cached --check
+          git config user.name 'CT Atlas Catch-up Review'
+          git config user.email 'actions@github.com'
+          git commit -m 'Preserve unreviewed backfill candidates and honor bounded same-day budgets'
+          git push origin HEAD:fix/same-day-backfill-20261008
