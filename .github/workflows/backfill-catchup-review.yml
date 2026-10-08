@@ -1,0 +1,19 @@
+name: Review same-day backfill
+on:
+  push:
+    branches: [fix/same-day-backfill-20261008]
+    paths: [.github/workflows/backfill-catchup-review.yml]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Package tracked source for offline regression testing
+        run: git archive --format=tar.gz -o "$RUNNER_TEMP/catchup-source.tar.gz" HEAD
+      - uses: actions/upload-artifact@v6
+        with:
+          name: catchup-source
+          path: ${{ runner.temp }}/catchup-source.tar.gz
+          retention-days: 1
