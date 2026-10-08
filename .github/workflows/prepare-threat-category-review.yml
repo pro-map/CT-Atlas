@@ -1,0 +1,22 @@
+name: Prepare threat category review
+on:
+  push:
+    branches: [ct-standalone-threat-categories-20261008]
+    paths: [.github/workflows/prepare-threat-category-review.yml]
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Snapshot source and test dependencies
+        run: |
+          mkdir -p "$RUNNER_TEMP/review/wheels"
+          git archive --format=tar.gz -o "$RUNNER_TEMP/review/source.tar.gz" HEAD
+          pip download --dest "$RUNNER_TEMP/review/wheels" feedparser geonamescache
+      - uses: actions/upload-artifact@v6
+        with:
+          name: threat-category-review-inputs
+          path: ${{ runner.temp }}/review/
+          retention-days: 1
