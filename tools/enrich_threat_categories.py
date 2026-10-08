@@ -93,11 +93,16 @@ def progress(root, category, plan, summary=None):
     state = enrich_archive.load_state(root,f'archive/{PREFIXES[category]}-enrichment-state.json')
     pending = [t for t in plan if t['key'] not in state['done']]
     children = [t for t in state['children'].values() if t['key'] not in state['done']]
+    pending_keys = {t['key'] for t in pending + children}
+    queued = state.get('pending_reviews') or []
+    pending_keys.update(item['_task']['key'] for item in queued)
     issues = {k:sum(int(s.get(k,0)) for s in state['stats'].values())
               for k in ('query_errors','full_single_day','failed_searches')}
-    return {'planned_searches':len(plan),'pending_searches':len(pending)+len(children),
+    return {'planned_searches':len(plan),'pending_searches':len(pending_keys),
+            'queued_candidates':len(queued),
             'completed_searches':len(plan)-len(pending),
-            'complete':not pending and not children and not issues['query_errors'] and not issues['full_single_day'],
+            'processing_complete':not pending_keys,
+            'complete':not pending_keys and not issues['query_errors'] and not issues['full_single_day'],
             'coverage_issues':issues,'last_run':summary or {},
             'native_query_languages':sorted({t['code'] for t in plan if t['source']=='google'}),
             'gdelt_scope':'all source languages indexed by the provider; not exhaustive web coverage'}
@@ -121,7 +126,7 @@ def run(root=ROOT, max_posts=60, max_fetches=600, today=None, deadline_minutes=7
               'daily_collection':'collector.py; shared keyword vocabulary; regular daily schedule',
               'chemical_keywords':topics.vocabulary()['chemical_explosives']['status'],
               'categories':{}}
-    start_ledger = archive_review.DailyLedger(archive_review.ledger_path('enrichment',root),100,now=now)
+    start_ledger = archive_review.DailyLedger(archive_review.ledger_path('enrichment',root),enrich_archive.DAILY_POSTS,now=now)
     spent, fetched = 0, 0
     for index, category in enumerate(chosen):
         prefix = PREFIXES[category]
@@ -150,13 +155,20 @@ def run(root=ROOT, max_posts=60, max_fetches=600, today=None, deadline_minutes=7
             known_keys_factory=known_map_keys,reuse_previous_reviews=False,
             seen_prefix=f'{prefix}-v1',searcher=searcher,gate_factory=gate_factory,
             call_batch=call_batch,deadline_minutes=minutes / remaining_categories,log=log)
-        ledger = archive_review.DailyLedger(archive_review.ledger_path('enrichment',root),100,now=now)
+        ledger = archive_review.DailyLedger(archive_review.ledger_path('enrichment',root),enrich_archive.DAILY_POSTS,now=now)
         spent = max(0,ledger.used-start_ledger.used)
         fetched += searcher.fetches
         report['categories'][category] = progress(root,category,plan,
             {**summary,'stop':stop,'integrated_reports':output.integrated})
         archive_review.write_json(root/STATUS,report)
-    report['complete'] = all(c['complete'] for c in report['categories'].values())
+        if 'AISelectionQuotaError' in stop or 'daily allocation already used' in stop:
+            for deferred in chosen[index+1:]:
+                report['categories'][deferred] = progress(root,deferred,plan_tasks(deferred,anchor,collector),
+                    {'stop':stop,'reviewed':0,'tasks_done':0})
+            break
+    report['updated_at'] = datetime.now(timezone.utc).isoformat()
+    report['complete'] = len(report['categories']) == len(topics.LABELS) and all(c['complete'] for c in report['categories'].values())
+    report['processing_complete'] = len(report['categories']) == len(topics.LABELS) and all(c['processing_complete'] for c in report['categories'].values())
     report['requests_this_run'] = spent
     report['searches_this_run'] = fetched
     report['completion_meaning'] = 'Configured searches processed, not a guarantee that all real-world cases were found.'
@@ -180,6 +192,6 @@ def main():
     else:
         if args.max_posts < 0 or args.max_fetches < 0 or args.deadline_minutes <= 0:
             p.error('Budgets must be nonnegative; deadline must be positive')
-        run(max_posts=min(args.max_posts,60),max_fetches=args.max_fetches,deadline_minutes=args.deadline_minutes)
+        run(max_posts=min(args.max_posts,enrich_archive.DAILY_POSTS),max_fetches=args.max_fetches,deadline_minutes=args.deadline_minutes)
 
 if __name__ == '__main__': main()

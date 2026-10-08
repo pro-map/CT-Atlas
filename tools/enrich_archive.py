@@ -504,6 +504,7 @@ def load_state(root, state_file=STATE_FILE):
         "failures": dict(state.get("failures") or {}),
         "stats": dict(state.get("stats") or {}),
         "runs": list(state.get("runs") or [])[-30:],
+        "pending_reviews": list(state.get("pending_reviews") or []),
     }
 
 
@@ -601,6 +602,11 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
     # Shorter searches left open by an earlier run come first.
     tasks = [task for task in state["children"].values() if task["key"] not in state["done"]]
     tasks += [task for task in plan if task["key"] not in state["done"]]
+    # A successful RSS response survives a time/quota stop. Resume its review
+    # instead of repeatedly downloading the same (possibly changed) feed.
+    replay = list(state["pending_reviews"])
+    replay_tasks = {item["_task"]["key"]: item["_task"] for item in replay}
+    tasks = [task for task in tasks if task["key"] not in replay_tasks]
     searcher = searcher or Searcher(collector)
     output = output_factory(root, now)
     summary = {"tasks_done": 0, "fetched": 0, "candidates": 0, "skipped": 0, "skipped_cached": 0, "reviewed": 0,
@@ -613,7 +619,19 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
 
     queue = []            # candidates waiting for review, in task order
     open_count = {}       # task key -> candidates not yet reviewed
-    finished = []         # tasks searched successfully, waiting for their queue
+    finished = list(replay_tasks.values())
+    for item in replay:
+        # A prior saved output may already contain the reviewed event after a
+        # process interruption. Never review or count it twice.
+        key = item["_key"]
+        if key in known or key in seen:
+            continue
+        queue.append(item)
+        known.add(key)
+        if link_key(item.get("url")):
+            known.add(link_key(item["url"]))
+        task_key_ = item["_task"]["key"]
+        open_count[task_key_] = open_count.get(task_key_, 0) + 1
     threshold = collector.AI_SELECTION_THRESHOLD
 
     def finish(task):
@@ -651,6 +669,8 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
         output.save()
         save_seen(root, now, new_seen, seen_prefix)
         close_finished()
+        answered = {item["_key"] for item, _ in pairs} | {item["_key"] for item in skipped}
+        state["pending_reviews"] = [item for item in queue if item["_key"] not in answered]
         save_state(root, state, plan_keys, state_file)
 
     def out_of_time():
@@ -659,6 +679,7 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
     gate = (gate_factory or (lambda posts: archive_review.GeminiGate(
         collector, posts, archive_review.SECONDS_BETWEEN_POSTS, on_post=ledger.save)))(budget)
     stop = "plan finished"
+    close_finished()
     pending = list(tasks)
     failed_searches = []
     answered_sources = set()
@@ -736,9 +757,14 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
                 summary["candidates"] += added
                 open_count[task["key"]] = open_count.get(task["key"], 0) + added
                 finished.append(task)
+                state["pending_reviews"] = list(queue)
                 close_finished()
+                save_state(root, state, plan_keys, state_file)
 
-            if not queue or gate.remaining <= 0 or out_of_time():
+            if out_of_time():
+                stop = f"deadline reached ({deadline_minutes:.0f} min); review queue saved"
+                break
+            if not queue or gate.remaining <= 0:
                 break
             batch = queue[:archive_review.BATCH_SIZE]
             handled, stop_reason = archive_review.review_batches(batch, collector, save_batch, call_batch)
@@ -758,6 +784,10 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
             summary["given_up"] += 1
             bump(state, task, "given_up")
             finish(task)
+    state["pending_reviews"] = list(queue)
+    summary["queued_candidates"] = len(queue)
+    if stop == "plan finished" and (queue or any(t["key"] not in state["done"] for t in tasks)):
+        stop = "source work deferred; checkpoints and review queue preserved"
     state["runs"] = (state["runs"] + [{"at": now.isoformat(), "posts": posts, **summary, "stop": stop}])[-30:]
     save_state(root, state, plan_keys, state_file)
     save_seen(root, now, new_seen, seen_prefix)
