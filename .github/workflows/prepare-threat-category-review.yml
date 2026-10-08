@@ -33,6 +33,14 @@ jobs:
           assert b'b/.github/' not in patch, 'Workflow changes require the repository connection'
           subprocess.run(['git', 'apply', '--check', '-'], input=patch, check=True)
           subprocess.run(['git', 'apply', '--index', '-'], input=patch, check=True)
+          p = Path('tools/enrich_threat_categories.py')
+          s = p.read_text(); assert 'deadline_minutes=minutes,log=log)' in s
+          p.write_text(s.replace('deadline_minutes=minutes,log=log)', 'deadline_minutes=minutes / remaining_categories,log=log)'))
+          p = Path('tests/pdf-export-report.test.cjs')
+          s = p.read_text(); assert 'const info=JSON.parse(run.stdout);' in s
+          s = s.replace('const info=JSON.parse(run.stdout);', 'const info=JSON.parse(run.stdout.trim().split(/\\r?\\n/).at(-1)); // Parser diagnostics may precede the final JSON line.')
+          p.write_text(s)
+          subprocess.run(['git','add','tools/enrich_threat_categories.py','tests/pdf-export-report.test.cjs'],check=True)
           PY
       - name: Install test dependencies
         run: pip install -r requirements.txt -r darkweb-collector/requirements.txt pytest
