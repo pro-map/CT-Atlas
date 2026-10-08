@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Package tracked source for migration tests
-        run: git archive --format=tar.gz -o "$RUNNER_TEMP/category-source.tar.gz" HEAD
+      - name: Package offline test dependencies
+        run: pip download --dest "$RUNNER_TEMP/wheels" feedparser geonamescache
       - uses: actions/upload-artifact@v6
         with:
-          name: category-source
-          path: ${{ runner.temp }}/category-source.tar.gz
+          name: category-test-dependencies
+          path: ${{ runner.temp }}/wheels/
           retention-days: 1
