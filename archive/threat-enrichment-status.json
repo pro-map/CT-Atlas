@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-08T13:29:56.534722+00:00",
+ "updated_at": "2026-10-08T14:19:23.250640+00:00",
  "version": 1,
  "anchor": "2026-10-08",
  "from": "2026-04-11",
@@ -11,33 +11,33 @@
  "categories": {
   "Chemicals and Explosives": {
    "planned_searches": 1836,
-   "pending_searches": 1402,
-   "queued_candidates": 9,
-   "completed_searches": 437,
+   "pending_searches": 1357,
+   "queued_candidates": 0,
+   "completed_searches": 479,
    "processing_complete": false,
    "complete": false,
    "coverage_issues": {
-    "query_errors": 8,
-    "full_single_day": 170,
-    "failed_searches": 15
+    "query_errors": 10,
+    "full_single_day": 184,
+    "failed_searches": 18
    },
    "last_run": {
-    "tasks_done": 118,
-    "fetched": 150,
-    "candidates": 57,
-    "skipped": 6401,
+    "tasks_done": 57,
+    "fetched": 63,
+    "candidates": 41,
+    "skipped": 2679,
     "skipped_cached": 0,
     "reviewed": 50,
-    "kept": 45,
-    "archived_incident": 45,
+    "kept": 37,
+    "archived_incident": 37,
     "unanswerable": 0,
     "source_failures": 3,
-    "query_errors": 1,
-    "split": 30,
+    "query_errors": 2,
+    "split": 12,
     "given_up": 0,
-    "queued_candidates": 9,
+    "queued_candidates": 0,
     "stop": "deadline reached (15 min); review queue saved",
-    "integrated_reports": 136
+    "integrated_reports": 138
    },
    "native_query_languages": [
     "ar",
@@ -48,33 +48,33 @@
   },
   "Biological Terrorism": {
    "planned_searches": 1944,
-   "pending_searches": 1689,
-   "queued_candidates": 24,
-   "completed_searches": 263,
+   "pending_searches": 1641,
+   "queued_candidates": 1,
+   "completed_searches": 303,
    "processing_complete": false,
    "complete": false,
    "coverage_issues": {
-    "query_errors": 4,
-    "full_single_day": 367,
-    "failed_searches": 15
+    "query_errors": 7,
+    "full_single_day": 421,
+    "failed_searches": 18
    },
    "last_run": {
-    "tasks_done": 86,
-    "fetched": 140,
-    "candidates": 7,
-    "skipped": 6819,
+    "tasks_done": 92,
+    "fetched": 123,
+    "candidates": 2,
+    "skipped": 6155,
     "skipped_cached": 0,
-    "reviewed": 0,
-    "kept": 0,
-    "archived_incident": 0,
+    "reviewed": 25,
+    "kept": 16,
+    "archived_incident": 16,
     "unanswerable": 0,
     "source_failures": 3,
-    "query_errors": 2,
-    "split": 52,
+    "query_errors": 3,
+    "split": 44,
     "given_up": 0,
-    "queued_candidates": 24,
+    "queued_candidates": 1,
     "stop": "deadline reached (15 min); review queue saved",
-    "integrated_reports": 10
+    "integrated_reports": 26
    },
    "native_query_languages": [
     "ar",
@@ -85,33 +85,33 @@
   },
   "Radiological/Nuclear": {
    "planned_searches": 2133,
-   "pending_searches": 1508,
-   "queued_candidates": 16,
-   "completed_searches": 628,
+   "pending_searches": 1504,
+   "queued_candidates": 0,
+   "completed_searches": 631,
    "processing_complete": false,
    "complete": false,
    "coverage_issues": {
     "query_errors": 0,
     "full_single_day": 1,
-    "failed_searches": 23
+    "failed_searches": 28
    },
    "last_run": {
-    "tasks_done": 10,
-    "fetched": 9,
-    "candidates": 86,
-    "skipped": 38,
+    "tasks_done": 4,
+    "fetched": 3,
+    "candidates": 109,
+    "skipped": 94,
     "skipped_cached": 0,
-    "reviewed": 100,
-    "kept": 5,
-    "archived_incident": 5,
+    "reviewed": 125,
+    "kept": 2,
+    "archived_incident": 2,
     "unanswerable": 0,
-    "source_failures": 4,
+    "source_failures": 5,
     "query_errors": 0,
-    "split": 2,
+    "split": 0,
     "given_up": 0,
-    "queued_candidates": 16,
-    "stop": "deadline reached (15 min); review queue saved",
-    "integrated_reports": 59
+    "queued_candidates": 0,
+    "stop": "deadline reached (14 min); review queue saved",
+    "integrated_reports": 60
    },
    "native_query_languages": [
     "ar",
@@ -139,7 +139,7 @@
  },
  "complete": false,
  "processing_complete": false,
- "requests_this_run": 6,
- "searches_this_run": 312,
+ "requests_this_run": 16,
+ "searches_this_run": 205,
  "completion_meaning": "Configured searches processed, not a guarantee that all real-world cases were found."
 }
