@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-08T07:34:02.094440+00:00",
+ "updated_at": "2026-10-08T08:31:39.870023+00:00",
  "version": 1,
  "anchor": "2026-10-08",
  "from": "2026-04-11",
@@ -7,31 +7,31 @@
  "window_days": 180,
  "taxonomy_version": "threat-topics-v1-20261008",
  "daily_collection": "collector.py; shared keyword vocabulary; regular daily schedule",
- "chemical_keywords": "Provisional seed from existing CT Atlas terminology; user keyword list not yet supplied",
+ "chemical_keywords": "User-supplied vocabulary reviewed on 2026-10-08: 95 specific terms retained; 5 ambiguous contamination terms excluded",
  "categories": {
   "Chemicals and Explosives": {
-   "planned_searches": 540,
-   "pending_searches": 533,
-   "completed_searches": 7,
+   "planned_searches": 1836,
+   "pending_searches": 1808,
+   "completed_searches": 28,
    "complete": false,
    "coverage_issues": {
     "query_errors": 0,
-    "full_single_day": 4,
+    "full_single_day": 12,
     "failed_searches": 0
    },
    "last_run": {
-    "tasks_done": 10,
-    "fetched": 14,
-    "candidates": 64,
-    "skipped": 718,
+    "tasks_done": 31,
+    "fetched": 40,
+    "candidates": 17,
+    "skipped": 1724,
     "skipped_cached": 0,
-    "reviewed": 50,
-    "kept": 20,
-    "archived_incident": 20,
+    "reviewed": 0,
+    "kept": 0,
+    "archived_incident": 0,
     "unanswerable": 0,
     "source_failures": 0,
     "query_errors": 0,
-    "split": 3,
+    "split": 6,
     "given_up": 0,
     "stop": "deadline reached (2 min)",
     "integrated_reports": 8
@@ -45,30 +45,30 @@
   },
   "Biological Terrorism": {
    "planned_searches": 1944,
-   "pending_searches": 1939,
-   "completed_searches": 12,
+   "pending_searches": 1919,
+   "completed_searches": 28,
    "complete": false,
    "coverage_issues": {
     "query_errors": 0,
-    "full_single_day": 16,
+    "full_single_day": 30,
     "failed_searches": 0
    },
    "last_run": {
-    "tasks_done": 17,
-    "fetched": 36,
-    "candidates": 45,
-    "skipped": 1953,
+    "tasks_done": 26,
+    "fetched": 35,
+    "candidates": 28,
+    "skipped": 1909,
     "skipped_cached": 0,
     "reviewed": 25,
-    "kept": 0,
-    "archived_incident": 0,
+    "kept": 3,
+    "archived_incident": 3,
     "unanswerable": 0,
     "source_failures": 0,
     "query_errors": 0,
-    "split": 12,
+    "split": 6,
     "given_up": 0,
     "stop": "deadline reached (2 min)",
-    "integrated_reports": 0
+    "integrated_reports": 2
    },
    "native_query_languages": [
     "ar",
@@ -89,19 +89,19 @@
    },
    "last_run": {
     "tasks_done": 0,
-    "fetched": 0,
-    "candidates": 0,
-    "skipped": 0,
+    "fetched": 1,
+    "candidates": 43,
+    "skipped": 29,
     "skipped_cached": 0,
     "reviewed": 0,
     "kept": 0,
     "archived_incident": 0,
     "unanswerable": 0,
-    "source_failures": 1,
+    "source_failures": 0,
     "query_errors": 0,
     "split": 0,
     "given_up": 0,
-    "stop": "deadline reached (2 min)",
+    "stop": "plan finished",
     "integrated_reports": 37
    },
    "native_query_languages": [
@@ -129,7 +129,7 @@
   }
  },
  "complete": false,
- "requests_this_run": 3,
- "searches_this_run": 51,
+ "requests_this_run": 1,
+ "searches_this_run": 76,
  "completion_meaning": "Configured searches processed, not a guarantee that all real-world cases were found."
 }
