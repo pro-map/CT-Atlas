@@ -1,14 +1,14 @@
 {
   "category": "International CT Instruments and Institutions",
-  "question": "Which specific INTERPOL notice type is issued specifically for entities and individuals targeted by UN Security Council Sanctions Committees?",
+  "question": "Where is the global complex for innovation maintained by INTERPOL primarily located?",
   "options": [
-    "INTERPOL–United Nations Security Council Special Notice",
-    "Orange Notice for imminent public safety threats",
-    "Blue Notice for collecting additional identity information"
+    "Lyon, France",
+    "Singapore",
+    "Vienna, Austria"
   ],
-  "correct_index": 0,
-  "explanation": "INTERPOL-UN Security Council Special Notices are issued for entities and individuals who are targets of UN Security Council Sanctions Committees.",
-  "source_url": "https://www.interpol.int/en/How-we-work/Notices/About-Notices",
-  "date": "2026-10-07",
-  "source_checked_at": "2026-10-07T15:35:24.980329+00:00"
+  "correct_index": 1,
+  "explanation": "INTERPOL's General Secretariat includes a headquarters in Lyon and a global complex for innovation located in Singapore.",
+  "source_url": "https://www.interpol.int/en/Who-we-are/What-is-INTERPOL",
+  "date": "2026-10-08",
+  "source_checked_at": "2026-10-08T15:42:12.295586+00:00"
 }
