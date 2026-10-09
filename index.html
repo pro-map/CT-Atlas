@@ -4606,12 +4606,31 @@ html, body {
     font-size: 11px;
 }
 
-#mapScopeBlock .layer-buttons {
-    grid-template-rows: 34px !important;
+/* Place the map export action in the last cell, beside 6 MONTHS. */
+#mapScopeBlock .map-period-buttons #downloadMapButton {
+    min-width: 0;
+    min-height: 40px;
+    padding: 5px 3px;
+    border: 1px solid #2d6280;
+    border-radius: 3px;
+    background: rgba(24, 73, 103, .4);
+    color: #a8d9f2;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: .035em;
+    line-height: 1.15;
+    white-space: normal;
+    cursor: pointer;
 }
-
-#mapScopeBlock #markersToggle { grid-column: 1 !important; grid-row: 1 !important; }
-#mapScopeBlock #downloadMapButton { grid-column: 2 !important; grid-row: 1 !important; }
+#mapScopeBlock .map-period-buttons #downloadMapButton:hover:not(:disabled) {
+    border-color: #579bb9;
+    background: rgba(32, 91, 123, .6);
+    color: #e7f6ff;
+}
+#mapScopeBlock .map-period-buttons #downloadMapButton:disabled {
+    opacity: .65;
+    cursor: wait;
+}
 
 .map-period-buttons {
     display: grid !important;
@@ -5180,11 +5199,7 @@ Map · all events
 <button class="time-button" data-days="30">30 DAYS</button>
 <button class="time-button" data-days="90">3 MONTHS</button>
 <button class="time-button" data-days="180">6 MONTHS</button>
-</div>
-
-<div class="layer-buttons">
-<button class="layer-button active" id="markersToggle">EVENTS</button>
-<button class="layer-button" id="downloadMapButton">DOWNLOAD MAP</button>
+<button class="layer-button" id="downloadMapButton" type="button">DOWNLOAD MAP</button>
 </div>
 
 </div>
@@ -6580,8 +6595,8 @@ let databaseArchiveRequested = false;
 let selectedDays = 7;
 
 
-let showMarkers =
-    true;
+// Incident markers remain enabled; the redundant EVENTS control was removed.
+const showMarkers = true;
 
 
 let showHeat =
@@ -9330,26 +9345,6 @@ function focusChronologyEvent(
     ) {
 
         return;
-
-    }
-
-
-    if (
-        !showMarkers
-    ) {
-
-        showMarkers =
-            true;
-
-
-        document.getElementById(
-            "markersToggle"
-        ).classList.add(
-            "active"
-        );
-
-
-        renderEvents();
 
     }
 
@@ -14798,33 +14793,6 @@ document.getElementById(
         );
 
         scheduleDashboardRefresh();
-
-    }
-
-);
-
-
-
-document.getElementById(
-    "markersToggle"
-).addEventListener(
-
-    "click",
-
-    function() {
-
-
-        showMarkers =
-            !showMarkers;
-
-
-        this.classList.toggle(
-            "active",
-            showMarkers
-        );
-
-
-        renderEvents();
 
     }
 
