@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-08T22:04:28.419314+00:00",
+  "removed_at": "2026-10-09T16:11:27.562549+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -723,6 +723,27 @@
       "primary_event_type": "OTHER_CT",
       "ai_relevance_score": 88,
       "ai_relevance_reason": "Auto-accepted: authoritative official source with strong CT category/action evidence in the headline."
+    },
+    {
+      "id": "665762b880cba66d",
+      "incident_id": "inc-e96c80926fb43be6",
+      "url": "https://www.turkiyegazetesi.com.tr/3-sayfa/tiktokta-teror-propagandasi-iddiasi-ekipler-harekete-gecti-1783529",
+      "title": "Allegation of terrorist propaganda on TikTok! Teams took action",
+      "summary": "Turkish security teams took action following allegations of terrorist propaganda broadcast on TikTok live streams.",
+      "original_title": "TikTokta terör propagandası iddiası ! Ekipler harekete geçti",
+      "original_language": "tr",
+      "source": "turkiyegazetesi.com.tr",
+      "published": "2026-04-12T15:30:00+00:00",
+      "category": "Online / Cyber / AI",
+      "categories": [
+        "Online / Cyber / AI",
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Turkey",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports concrete law enforcement action against online terrorist propaganda."
     }
   ]
 }
