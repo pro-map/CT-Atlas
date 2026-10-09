@@ -70,7 +70,7 @@ def configure(root, now, run_id, event='workflow_dispatch', continuation=False):
     values = dict(NORMAL)
     if live:
         values = {
-            'minutes': min(int(config['minutes_per_round']), max(0, int((stamp(config['end_at'])-now).total_seconds()/60)-2)),
+            'minutes': min(int(config.get('first_round_minutes',config['minutes_per_round']) if not runs else config['minutes_per_round']), max(0, int((stamp(config['end_at'])-now).total_seconds()/60)-2)),
             'searches': min(int(config['searches_per_round']), 2400),
             'requests': min(int(config['ai_requests_per_round']), 120),
             'daily': min(int(config['enrichment_daily_allocation']), 600),
@@ -100,10 +100,12 @@ def continuation_decision(root, now):
     if count == 0:
         return False, ('Backfill complete.' if report.get('complete') else
                        'Configured search work processed, but source coverage limitations remain; not marked complete.')
+    if report.get('batch_status') in ('running','interrupted','failed','blocked'):
+        return False, 'Batch did not finish productively; inspect the saved checkpoint before resuming.'
     stops = [str(row.get('last_run', {}).get('stop', '')) for row in report['categories'].values()]
     if any('AISelectionQuotaError' in stop or 'daily allocation already used' in stop for stop in stops):
         return False, 'Provider or daily request allowance reached; not bypassed and not marked complete.'
-    work = sum(sum(int(row.get('last_run', {}).get(k, 0)) for k in ('tasks_done', 'reviewed', 'split'))
+    work = sum(sum(int(row.get('last_run', {}).get(k, 0)) for k in ('fetched', 'reviewed', 'tasks_done'))
                for row in report['categories'].values())
     if not work:
         return False, 'No processing progress in the last batch; inspect source/AI errors rather than loop.'
@@ -112,38 +114,70 @@ def continuation_decision(root, now):
 
 def summary(root):
     report = read(root, STATUS)
+    outcome = os.getenv('BACKFILL_STEP_OUTCOME', '')
+    # Recover real counters from durable state; never invent 0/0 for a category
+    # that was not reached before an interruption. This performs no searches.
+    if (set(report.get('categories') or {}) != set(LABELS)
+            or outcome in ('cancelled','failure')):
+        from enrich_threat_categories import refresh_status
+        report = refresh_status(root, 'interrupted' if outcome == 'cancelled' else
+                                'failed' if outcome == 'failure' else report.get('batch_status','interrupted'))
     control = read(root, STATE)
-    lines = ['# Specialist six-month backfill', '', f"Last checkpoint (UTC): {report.get('updated_at', 'Not available')}",
-             '', '**A successful batch is not completion of the whole backfill.**', '',
-             '| Category | Main searches processed | Pending searches | Candidates awaiting review | Complete |',
-             '|---|---:|---:|---:|---|']
+    state = report.get('batch_status','unknown')
+    lines = ['# Specialist six-month backfill', '',
+             f"Last checkpoint (UTC): {report.get('updated_at', 'Not available')}",
+             '', f"**Batch result: {state}. Whole backfill complete: {'YES' if report.get('complete') else 'NO'}.**", '',
+             '| Category | Root queries processed / planned | Rejected queries | Pending work | Awaiting AI review | New event records this batch |',
+             '|---|---:|---:|---:|---:|---:|']
     for name in LABELS:
-        row = (report.get('categories') or {}).get(name, {})
-        lines.append(f"| {name} | {row.get('completed_searches', 0)} / {row.get('planned_searches', 0)} | "
-                     f"{row.get('pending_searches', '?')} | {row.get('queued_candidates', 0)} | "
-                     f"{'Yes' if row.get('complete') else 'No'} |")
-    lines += ['', f"Catch-up rounds started: {len(control.get('runs') or [])}. Acceleration ends at {control.get('end_at', 'not configured')}.",
+        row = (report.get('categories') or {}).get(name)
+        if row is None:
+            lines.append(f'| {name} | Not available | ? | ? | ? | ? |')
+            continue
+        lines.append(f"| {name} | {row.get('completed_searches','?')} / {row.get('planned_searches','?')} | "
+                     f"{row.get('rejected_queries','?')} | {row.get('pending_searches','?')} | "
+                     f"{row.get('queued_candidates','?')} | {row.get('last_run',{}).get('new_event_records',0)} |")
+    lines += ['', 'Processed roots include windows replaced by narrower queries. Rejected queries are NOT successful retrievals. '
+              'Pending work includes these replacement queries and tasks awaiting review.',
+              '', f"Catch-up rounds started: {len(control.get('runs') or [])}. Acceleration ends at {control.get('end_at','not configured')}.",
               '', '## Latest batch / source limitations']
     for name in LABELS:
         row = (report.get('categories') or {}).get(name, {})
         last = row.get('last_run', {})
-        # Render as JSON code, not unescaped externally sourced Markdown.
-        lines += ['', f'### {name}', '```json', json.dumps({'stop': last.get('stop'),
-                  'reviewed_this_batch': last.get('reviewed', 0), 'coverage_issues': row.get('coverage_issues', {})}, indent=2), '```']
-    lines += ['', 'Keyword matching does not establish terrorism. Existing source validation, English translation, incident deduplication and reported-status safeguards remain enabled.', '']
+        lines += ['', f'### {name}', '```json', json.dumps({'stop':last.get('stop','Not reached'),
+                  'reviewed_this_batch':last.get('reviewed',0),
+                  'successful_fetches_this_batch':last.get('fetched',0),
+                  'rejected_queries':row.get('rejected_queries'),
+                  'unresolved_saturated_queries':row.get('saturated_queries'),
+                  'historical_coverage_issues':row.get('coverage_issues',{})},indent=2), '```']
+    lines += ['', 'Keyword matching does not establish terrorism. Source validation, English translation, '
+              'incident deduplication and reported-status safeguards remain enabled.', '']
     text = '\n'.join(lines)
-    path = Path(root) / 'archive/threat-enrichment-status.md'
-    path.write_text(text, encoding='utf-8')
+    path = Path(root)/'archive/threat-enrichment-status.md'
+    path.parent.mkdir(parents=True,exist_ok=True)
+    path.write_text(text,encoding='utf-8')
     target = os.getenv('GITHUB_STEP_SUMMARY')
     if target:
-        with open(target, 'a', encoding='utf-8') as handle:
-            handle.write(text)
+        with open(target,'a',encoding='utf-8') as handle: handle.write(text)
     return text
 
 
+def health(root):
+    report = read(root, STATUS)
+    state = report.get('batch_status','unknown')
+    if set(report.get('categories') or {}) != set(LABELS):
+        print('::error title=Incomplete backfill report::Missing category counters; checkpoint needs repair.')
+        return 1
+    if state in ('running','failed','interrupted','blocked','unknown'):
+        print(f'::error title=Backfill not productive::Batch state {state}; checkpoint preserved, not a completed backfill.')
+        return 1
+    if not report.get('complete'):
+        print('::warning title=Backfill incomplete::Batch processed work but historical searches or source coverage limitations remain. See Summary.')
+    return 0
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['configure', 'next', 'summary'])
+    parser.add_argument('command', choices=['configure', 'next', 'summary', 'health'])
     args = parser.parse_args()
     now = datetime.now(timezone.utc)
     if args.command == 'configure':
@@ -165,6 +199,8 @@ def main():
         if os.getenv('GITHUB_OUTPUT'):
             with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as out:
                 out.write(f"continue={str(yes).lower()}\n")
+    elif args.command == 'health':
+        raise SystemExit(health(ROOT))
     else:
         print(summary(ROOT))
 

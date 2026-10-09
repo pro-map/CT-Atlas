@@ -17,6 +17,7 @@ import archive_review as a
 import enrich_archive as e
 import enrich_radnuc as r
 import enrich_threat_categories as b
+import backfill_query as q
 import migrate_threat_categories as m
 
 class TaxonomyTests(unittest.TestCase):
@@ -144,7 +145,8 @@ class BackfillTests(unittest.TestCase):
         for window in windows:
             rows=[task for task in plan if e.window(task)==window]
             self.assertEqual({task['query'] for task in rows if task['source']=='google' and task['code']=='en'},expected)
-            self.assertEqual({task['query'] for task in rows if task['source']=='gdelt'},expected)
+            self.assertEqual({task['query'] for task in rows if task['source']=='gdelt'},
+                             {query for raw in expected for query in q.gdelt_queries(raw)})
         # Search identities include the query: an old completed query cannot
         # incorrectly mark an expanded vocabulary's different query complete.
         task=next(task for task in plan if task['source']=='google' and task['code']=='en')
@@ -160,7 +162,8 @@ class BackfillTests(unittest.TestCase):
 
     def test_radnuc_existing_search_keys_are_preserved(self):
         anchor=date(2026,10,7)
-        self.assertEqual(b.plan_tasks(t.RN,anchor,collector),r.plan_tasks(anchor,collector))
+        self.assertEqual([task for task in b.plan_tasks(t.RN,anchor,collector) if task['source']=='google'],
+                         [task for task in r.plan_tasks(anchor,collector) if task['source']=='google'])
         for task in b.plan_tasks(t.RN,anchor,collector):
             self.assertEqual(task['key'],e.task_key({**task,'category':'CBRN'}))
 
