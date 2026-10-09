@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / 'tools'))
 import radnuc
+import radnuc_vocabulary
 import threat_categories
 import archive_review
 import enrich_archive
@@ -62,6 +63,8 @@ def plan_tasks(today, collector):
                               'hl': profile['hl'], 'gl': profile['gl'], 'ceid': profile['ceid'],
                               'category': threat_categories.RN, 'query': query, 'week': week.isoformat(),
                               'start': low.isoformat(), 'end': high.isoformat()})
+    # Supplement has its own fixed six-month window; old search keys stay intact.
+    tasks.extend(radnuc_vocabulary.backfill_tasks(enrich_archive.task_key))
     unique = {}
     for task in tasks:
         task['key'] = enrich_archive.task_key(task)

@@ -24,6 +24,7 @@ import archive_review
 import enrich_archive
 import enrich_radnuc
 import backfill_query
+import radnuc_vocabulary
 
 MANIFEST = 'archive/threat-enrichment-plan.json'
 STATUS = 'archive/threat-enrichment-status.json'
@@ -151,6 +152,7 @@ def progress(root, category, plan, summary=None):
             'successful_main_queries':processed-len(planned & set(rejected)),
             'rejected_queries':len(active_rejected),
             'saturated_queries':len(saturated),
+            **({'supplemental_vocabulary':radnuc_vocabulary.progress(plan,state)} if category==topics.RN else {}),
             'processing_complete':not pending_keys, 'complete':complete,
             'coverage_issues':history,
             'coverage_note':'Historical source errors are retained; processed is not an exhaustive-coverage claim.',
