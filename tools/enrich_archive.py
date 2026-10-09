@@ -56,6 +56,7 @@ from urllib.parse import quote_plus, urlencode
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import archive_review  # noqa: E402
+import backfill_query
 
 ROOT = archive_review.ROOT
 STATE_FILE = "archive/enrichment-state.json"
@@ -351,7 +352,7 @@ class Searcher:
 
     def _gdelt(self, task):
         collector = self.collector
-        for attempt in range(GDELT_RATE_LIMIT_RETRIES + 1):
+        for attempt in range(getattr(self, "gdelt_rate_limit_retries", GDELT_RATE_LIMIT_RETRIES) + 1):
             if attempt:
                 self.sleep(GDELT_RATE_LIMIT_BACKOFF_SECONDS * attempt)
             payload = self._gdelt_answer(task)
@@ -505,6 +506,8 @@ def load_state(root, state_file=STATE_FILE):
         "stats": dict(state.get("stats") or {}),
         "runs": list(state.get("runs") or [])[-30:],
         "pending_reviews": list(state.get("pending_reviews") or []),
+        "rejected_queries": dict(state.get("rejected_queries") or {}),
+        "saturated_queries": dict(state.get("saturated_queries") or {}),
     }
 
 
@@ -586,7 +589,8 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
         gate_factory=None, log=print, deadline_minutes=DEADLINE_MINUTES, clock=time.monotonic,
         plan_factory=plan_tasks, state_file=STATE_FILE, output_factory=Output, ledger_job="enrichment",
         event_screen=screen, retry_failed_tasks=False,
-        known_keys_factory=known_article_keys, reuse_previous_reviews=True, seen_prefix="enrichment"):
+        known_keys_factory=known_article_keys, reuse_previous_reviews=True, seen_prefix="enrichment",
+        review_first=False, prioritize_native=False, refine_saturated=False, on_checkpoint=None):
     now = now or datetime.now(timezone.utc)
     today = today or now.date()
     started = clock()
@@ -602,6 +606,11 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
     # Shorter searches left open by an earlier run come first.
     tasks = [task for task in state["children"].values() if task["key"] not in state["done"]]
     tasks += [task for task in plan if task["key"] not in state["done"]]
+    tasks = list({task['key']: task for task in tasks}.values())
+    if prioritize_native:
+        # Complete native-language historical searches before a refusing optional
+        # provider can consume every category's time slice.
+        tasks.sort(key=lambda task: task['source'] == 'gdelt')
     # A successful RSS response survives a time/quota stop. Resume its review
     # instead of repeatedly downloading the same (possibly changed) feed.
     replay = list(state["pending_reviews"])
@@ -633,6 +642,9 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
         task_key_ = item["_task"]["key"]
         open_count[task_key_] = open_count.get(task_key_, 0) + 1
     threshold = collector.AI_SELECTION_THRESHOLD
+    replay_left = len(queue)
+    queue_started = clock() if queue else None
+    fetches_at_start = searcher.fetches
 
     def finish(task):
         state["done"][task["key"]] = now.isoformat()
@@ -672,6 +684,10 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
         answered = {item["_key"] for item, _ in pairs} | {item["_key"] for item in skipped}
         state["pending_reviews"] = [item for item in queue if item["_key"] not in answered]
         save_state(root, state, plan_keys, state_file)
+        log(f"Review checkpoint: {summary['reviewed']} reviewed; "
+            f"{len(state['pending_reviews'])} candidates saved; {summary['kept']} retained reports.")
+        if on_checkpoint:
+            on_checkpoint(summary)
 
     def out_of_time():
         return (clock() - started) / 60 >= deadline_minutes
@@ -687,10 +703,19 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
         while True:
             # Search only while the reviews have work to wait for.
             while len(queue) < archive_review.BATCH_SIZE and gate.remaining > 0:
+                elapsed = clock() - started
+                # Drain saved work FIRST, even if it is smaller than a full AI
+                # batch. Fresh candidates wait at most 20 seconds for more work.
+                # Reserve time for reviewing, saving and publishing the queue.
+                reserve = min(90.0, deadline_minutes * 60 / 3)
+                if review_first and queue and (replay_left > 0
+                        or (queue_started is not None and clock() - queue_started >= 20)
+                        or elapsed >= deadline_minutes * 60 - reserve):
+                    break
                 if out_of_time():
                     stop = f"deadline reached ({deadline_minutes:.0f} min)"
                     break
-                if searcher.fetches >= max_fetches:
+                if searcher.fetches - fetches_at_start >= max_fetches:
                     stop = f"search budget reached ({max_fetches})"
                     break
                 if not pending:
@@ -712,17 +737,25 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
                     failed_searches.append(task)
                     continue
                 except QueryRejected as error:
-                    # Retrying would fail the same way: finished, and logged.
+                    # Terminal for this unchanged expression, NOT a successful
+                    # retrieval. Retain the task/error separately for repair.
                     summary["query_errors"] += 1
                     bump(state, task, "query_errors")
+                    state['rejected_queries'][task['key']] = {
+                        'task': task, 'error': str(error)[:240], 'at': now.isoformat()}
                     finish(task)
+                    save_state(root, state, plan_keys, state_file)
                     log(f"   {task['source']} {task['name']} {task['week']}: {error}")
                     continue
                 events, full = result if isinstance(result, tuple) else (result, False)
                 summary["fetched"] += 1
                 answered_sources.add(task["source"])
                 bump(state, task, "searches")
+                state['rejected_queries'].pop(task['key'], None)
+                state['saturated_queries'].pop(task['key'], None)
                 children = split(task) if full else []
+                if full and not children and refine_saturated:
+                    children = backfill_query.split_saturated(task, task_key)
                 if children:
                     # The source cut this window short: search it in two halves now.
                     summary["split"] += 1
@@ -735,7 +768,10 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
                     continue
                 if full:
                     bump(state, task, "full_single_day")
+                    state['saturated_queries'][task['key']] = {'task': task, 'at': now.isoformat()}
                 added = 0
+                if not queue:
+                    queue_started = clock()
                 for event in events:
                     keys = article_keys(event.get("original_title") or event.get("title"), event.get("source"))
                     key = keys[0] if keys else ""
@@ -769,6 +805,8 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
             batch = queue[:archive_review.BATCH_SIZE]
             handled, stop_reason = archive_review.review_batches(batch, collector, save_batch, call_batch)
             del queue[:handled]
+            replay_left = max(0, replay_left - handled)
+            queue_started = clock() if queue else None
             if stop_reason != "done":
                 stop = stop_reason
                 break

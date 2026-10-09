@@ -32,6 +32,7 @@ permissions:
 concurrency:
   group: ct-map-update-main
   cancel-in-progress: false
+  queue: max
 
 jobs:
   update:

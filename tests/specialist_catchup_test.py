@@ -23,7 +23,10 @@ class Controls(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
-        c.write(self.root, c.CONFIG, json.loads((ROOT/c.CONFIG).read_text()))
+        config=json.loads((ROOT/c.CONFIG).read_text())
+        config.update(start_at='2026-10-08T09:00:00+00:00',end_at='2026-10-08T22:00:00+00:00')
+        config.pop('first_round_minutes',None)
+        c.write(self.root,c.CONFIG,config)
         self.report = {'categories': {name: {'pending_searches': 10, 'queued_candidates': 0,
             'last_run': {'tasks_done': 2}, 'complete': False} for name in c.LABELS}, 'complete': False}
         c.write(self.root, c.STATUS, self.report)
