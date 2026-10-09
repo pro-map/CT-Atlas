@@ -1,14 +1,14 @@
 {
   "category": "International CT Instruments and Institutions",
-  "question": "Where is the global complex for innovation maintained by INTERPOL primarily located?",
+  "question": "Which specific body acts as the central point of contact for the INTERPOL General Secretariat and other member countries within each individual member state?",
   "options": [
-    "Lyon, France",
-    "Singapore",
-    "Vienna, Austria"
+    "National Central Bureau (NCB)",
+    "Global Complex for Innovation",
+    "Executive Committee Secretariat"
   ],
-  "correct_index": 1,
-  "explanation": "INTERPOL's General Secretariat includes a headquarters in Lyon and a global complex for innovation located in Singapore.",
+  "correct_index": 0,
+  "explanation": "In each INTERPOL member country, a National Central Bureau (NCB) run by national police officials provides the central point of contact for international police cooperation.",
   "source_url": "https://www.interpol.int/en/Who-we-are/What-is-INTERPOL",
-  "date": "2026-10-08",
-  "source_checked_at": "2026-10-08T15:42:12.295586+00:00"
+  "date": "2026-10-09",
+  "source_checked_at": "2026-10-09T15:20:21.966245+00:00"
 }
