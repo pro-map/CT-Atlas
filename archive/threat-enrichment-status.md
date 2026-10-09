@@ -1,18 +1,18 @@
 # Specialist six-month backfill
 
-Last checkpoint (UTC): 2026-10-09T09:29:59.482310+00:00
+Last checkpoint (UTC): 2026-10-09T10:16:42.930951+00:00
 
 **Batch result: partial. Whole backfill complete: NO.**
 
 | Category | Root queries processed / planned | Rejected queries | Pending work | Awaiting AI review | New event records this batch |
 |---|---:|---:|---:|---:|---:|
-| Radiological/Nuclear | 996 / 7236 | 0 | 6243 | 0 | 1 |
-| Chemicals and Explosives | 837 / 2241 | 0 | 1406 | 0 | 13 |
-| Biological Terrorism | 414 / 2754 | 0 | 2343 | 0 | 1 |
+| Radiological/Nuclear | 1192 / 7236 | 0 | 6047 | 0 | 6 |
+| Chemicals and Explosives | 941 / 2241 | 0 | 1301 | 0 | 6 |
+| Biological Terrorism | 435 / 2754 | 0 | 2321 | 0 | 0 |
 
 Processed roots include windows replaced by narrower queries. Rejected queries are NOT successful retrievals. Pending work includes these replacement queries and tasks awaiting review.
 
-Catch-up rounds started: 3. Acceleration ends at 2026-10-09T22:00:00+00:00.
+Catch-up rounds started: 4. Acceleration ends at 2026-10-09T22:00:00+00:00.
 
 ## Latest batch / source limitations
 
@@ -35,8 +35,8 @@ Catch-up rounds started: 3. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ```json
 {
   "stop": "deadline reached (15 min); review queue saved",
-  "reviewed_this_batch": 656,
-  "successful_fetches_this_batch": 145,
+  "reviewed_this_batch": 655,
+  "successful_fetches_this_batch": 196,
   "rejected_queries": 0,
   "unresolved_saturated_queries": 0,
   "historical_coverage_issues": {
@@ -51,8 +51,8 @@ Catch-up rounds started: 3. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ```json
 {
   "stop": "deadline reached (15 min); review queue saved",
-  "reviewed_this_batch": 99,
-  "successful_fetches_this_batch": 267,
+  "reviewed_this_batch": 52,
+  "successful_fetches_this_batch": 271,
   "rejected_queries": 0,
   "unresolved_saturated_queries": 0,
   "historical_coverage_issues": {
@@ -67,8 +67,8 @@ Catch-up rounds started: 3. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ```json
 {
   "stop": "deadline reached (15 min); review queue saved",
-  "reviewed_this_batch": 60,
-  "successful_fetches_this_batch": 256,
+  "reviewed_this_batch": 11,
+  "successful_fetches_this_batch": 294,
   "rejected_queries": 0,
   "unresolved_saturated_queries": 0,
   "historical_coverage_issues": {
