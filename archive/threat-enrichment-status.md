@@ -1,27 +1,42 @@
 # Specialist six-month backfill
 
-Last checkpoint (UTC): 2026-10-09T08:43:13.792000+00:00
+Last checkpoint (UTC): 2026-10-09T09:29:59.482310+00:00
 
 **Batch result: partial. Whole backfill complete: NO.**
 
 | Category | Root queries processed / planned | Rejected queries | Pending work | Awaiting AI review | New event records this batch |
 |---|---:|---:|---:|---:|---:|
-| Radiological/Nuclear | 851 / 2160 | 0 | 1312 | 0 | 2 |
-| Chemicals and Explosives | 733 / 2241 | 0 | 1511 | 0 | 8 |
-| Biological Terrorism | 393 / 2754 | 0 | 2365 | 0 | 0 |
+| Radiological/Nuclear | 996 / 7236 | 0 | 6243 | 0 | 1 |
+| Chemicals and Explosives | 837 / 2241 | 0 | 1406 | 0 | 13 |
+| Biological Terrorism | 414 / 2754 | 0 | 2343 | 0 | 1 |
 
 Processed roots include windows replaced by narrower queries. Rejected queries are NOT successful retrievals. Pending work includes these replacement queries and tasks awaiting review.
 
-Catch-up rounds started: 2. Acceleration ends at 2026-10-09T22:00:00+00:00.
+Catch-up rounds started: 3. Acceleration ends at 2026-10-09T22:00:00+00:00.
 
 ## Latest batch / source limitations
+
+### Additional Radiological/Nuclear keyword backfill
+```json
+{
+  "version": "radiological-nuclear-keywords-v1-20261009",
+  "supplied_keywords": 181,
+  "from": "2026-04-12",
+  "through": "2026-10-09",
+  "planned_searches": 5076,
+  "completed_searches": 0,
+  "pending_searches": 5076,
+  "queued_candidates": 0,
+  "processing_complete": false
+}
+```
 
 ### Radiological/Nuclear
 ```json
 {
   "stop": "deadline reached (15 min); review queue saved",
-  "reviewed_this_batch": 457,
-  "successful_fetches_this_batch": 141,
+  "reviewed_this_batch": 656,
+  "successful_fetches_this_batch": 145,
   "rejected_queries": 0,
   "unresolved_saturated_queries": 0,
   "historical_coverage_issues": {
@@ -35,9 +50,9 @@ Catch-up rounds started: 2. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ### Chemicals and Explosives
 ```json
 {
-  "stop": "deadline reached (14 min); review queue saved",
-  "reviewed_this_batch": 86,
-  "successful_fetches_this_batch": 210,
+  "stop": "deadline reached (15 min); review queue saved",
+  "reviewed_this_batch": 99,
+  "successful_fetches_this_batch": 267,
   "rejected_queries": 0,
   "unresolved_saturated_queries": 0,
   "historical_coverage_issues": {
@@ -52,7 +67,7 @@ Catch-up rounds started: 2. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ```json
 {
   "stop": "deadline reached (15 min); review queue saved",
-  "reviewed_this_batch": 183,
+  "reviewed_this_batch": 60,
   "successful_fetches_this_batch": 256,
   "rejected_queries": 0,
   "unresolved_saturated_queries": 0,
