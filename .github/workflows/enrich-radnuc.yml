@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - radnuc.py
+      - radnuc_vocabulary.py
+      - radnuc-keywords.json
       - threat_categories.py
       - threat-category-keywords.json
       - tools/enrich_threat_categories.py
@@ -75,6 +77,7 @@ jobs:
         run: |
           python -m unittest discover -s tests -p 'radnuc_test.py'
           python -m unittest discover -s tests -p 'threat_categories_test.py'
+          python -m unittest discover -s tests -p 'radnuc_vocabulary_test.py'
       - name: Protect existing location decisions
         if: steps.configure.outputs.enabled == 'true'
         run: |
