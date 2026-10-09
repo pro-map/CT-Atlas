@@ -141,6 +141,9 @@ def summary(root):
               'Pending work includes these replacement queries and tasks awaiting review.',
               '', f"Catch-up rounds started: {len(control.get('runs') or [])}. Acceleration ends at {control.get('end_at','not configured')}.",
               '', '## Latest batch / source limitations']
+    supplement = (report.get('categories') or {}).get('Radiological/Nuclear',{}).get('supplemental_vocabulary')
+    if supplement:
+        lines += ['', '### Additional Radiological/Nuclear keyword backfill', '```json', json.dumps(supplement,indent=2), '```']
     for name in LABELS:
         row = (report.get('categories') or {}).get(name, {})
         last = row.get('last_run', {})

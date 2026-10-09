@@ -80,7 +80,7 @@ class RadnucPlanTests(unittest.TestCase):
         self.assertTrue(all(t['locale'] == 'all' for t in self.plan if t['source'] == 'gdelt'))
 
     def test_windows_cover_180_days_without_a_gap_and_include_recent_reporting(self):
-        windows = sorted({enrich_archive.window(t) for t in self.plan})
+        windows = sorted({enrich_archive.window(t) for t in self.plan if not t.get('supplemental_vocabulary')})
         self.assertEqual(windows[0][0], self.today - timedelta(days=180))
         self.assertEqual(windows[-1][1], self.today + timedelta(days=1))
         self.assertTrue(all(left[1] == right[0] for left, right in zip(windows, windows[1:])))

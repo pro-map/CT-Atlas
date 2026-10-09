@@ -130,7 +130,7 @@ class BackfillTests(unittest.TestCase):
         today=date(2026,10,8)
         for label in t.LABELS:
             plan=b.plan_tasks(label,today,collector)
-            windows=sorted({e.window(q) for q in plan})
+            windows=sorted({e.window(q) for q in plan if not q.get('supplemental_vocabulary')})
             self.assertEqual(windows[0][0],today-timedelta(days=180))
             self.assertEqual(windows[-1][1],today+timedelta(days=1))
             self.assertTrue(all(x[1]==y[0] for x,y in zip(windows,windows[1:])))

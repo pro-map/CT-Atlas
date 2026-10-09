@@ -107,7 +107,9 @@ def queries(category, code='en'):
     """Material phrases AND context anchors; no isolated generic search terms."""
     if category == RN:
         import radnuc
-        return radnuc.queries(code) if code in radnuc.LEXICONS else []
+        import radnuc_vocabulary
+        existing = radnuc.queries(code) if code in radnuc.LEXICONS else []
+        return list(dict.fromkeys(existing + radnuc_vocabulary.queries(code)))
     key = {BIO:'biological',CE:'chemical_explosives'}[category]
     item = vocabulary()[key]
     terms = item['terms'].get(code, [])
