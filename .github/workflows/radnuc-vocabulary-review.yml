@@ -1,0 +1,65 @@
+name: Radiological nuclear vocabulary review
+on:
+  push:
+    branches: [feat/radnuc-keywords-20261009]
+    paths:
+      - .github/workflows/radnuc-vocabulary-review.yml
+permissions:
+  contents: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: feat/radnuc-keywords-20261009
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Apply reviewed integration edits on isolated branch
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          def replace(path, old, new):
+              p=Path(path); s=p.read_text(encoding='utf-8')
+              assert s.count(old)==1,(path,s.count(old))
+              p.write_text(s.replace(old,new),encoding='utf-8')
+          replace('threat_categories.py',
+              "        return radnuc.queries(code) if code in radnuc.LEXICONS else []",
+              "        import radnuc_vocabulary\n        existing = radnuc.queries(code) if code in radnuc.LEXICONS else []\n        return list(dict.fromkeys(existing + radnuc_vocabulary.queries(code)))")
+          replace('tools/enrich_radnuc.py','import radnuc\n','import radnuc\nimport radnuc_vocabulary\n')
+          replace('tools/enrich_radnuc.py','    unique = {}\n    for task in tasks:',
+              '    # Supplement has its own fixed six-month window; old search keys stay intact.\n    tasks.extend(radnuc_vocabulary.backfill_tasks(enrich_archive.task_key))\n    unique = {}\n    for task in tasks:')
+          replace('tools/enrich_threat_categories.py','import backfill_query\n','import backfill_query\nimport radnuc_vocabulary\n')
+          replace('tools/enrich_threat_categories.py',"            'saturated_queries':len(saturated),",
+              "            'saturated_queries':len(saturated),\n            **({'supplemental_vocabulary':radnuc_vocabulary.progress(plan,state)} if category==topics.RN else {}),")
+          replace('tools/specialist_catchup.py',"              '', '## Latest batch / source limitations']",
+              "              '', '## Latest batch / source limitations']\n    supplement = (report.get('categories') or {}).get('Radiological/Nuclear',{}).get('supplemental_vocabulary')\n    if supplement:\n        lines += ['', '### Additional Radiological/Nuclear keyword backfill', '```json', json.dumps(supplement,indent=2), '```']")
+          replace('tests/radnuc_test.py',
+              "windows = sorted({enrich_archive.window(t) for t in self.plan})",
+              "windows = sorted({enrich_archive.window(t) for t in self.plan if not t.get('supplemental_vocabulary')})")
+          replace('tests/threat_categories_test.py',
+              "windows=sorted({e.window(q) for q in plan})",
+              "windows=sorted({e.window(q) for q in plan if not q.get('supplemental_vocabulary')})")
+          Path('tests/radnuc_vocabulary_test.py').write_text(Path('tools/radnuc-vocabulary-test-review.txt').read_text(encoding='utf-8'),encoding='utf-8')
+          PY
+      - name: Install core test dependencies
+        run: pip install -r requirements.txt pytest
+      - name: Python core regression suite including RN keyword integration
+        run: python -m pytest -q tests --ignore=tests/visual_intel_detector_test.py
+      - name: JavaScript regression suite
+        run: node --test tests/*.test.cjs
+      - name: Commit only tested source and regression tests
+        run: |
+          set -euo pipefail
+          git config user.name 'CT Atlas Vocabulary Review'
+          git config user.email 'actions@github.com'
+          git add -- threat_categories.py tools/enrich_radnuc.py tools/enrich_threat_categories.py tools/specialist_catchup.py tests/radnuc_test.py tests/threat_categories_test.py tests/radnuc_vocabulary_test.py
+          git rm -- tools/radnuc-vocabulary-test-review.txt
+          git commit -m 'Integrate all supplied RN keywords with daily intake and separately tracked six-month searches'
+          git push origin HEAD:feat/radnuc-keywords-20261009
