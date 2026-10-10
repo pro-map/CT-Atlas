@@ -308,7 +308,7 @@ def _extract_structured_content(body, provider):
     # Some JSON-capable models still wrap their response in a markdown fence.
     # Accept only a WHOLE fenced JSON block (never scrape/guess a JSON
     # substring from free-form text or chain-of-thought).
-    match = re.fullmatch(r"```(?:json)?\\s*([\\s\\S]*?)\\s*```", answer, flags=re.I)
+    match = re.fullmatch(r"```(?:json)?\s*([\s\S]*?)\s*```", answer, flags=re.I)
     if match:
         answer = match.group(1).strip()
     try:
