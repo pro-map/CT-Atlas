@@ -16,9 +16,12 @@ import hashlib
 import json
 import os
 import re
+from collections import Counter
 from pathlib import Path
 
 import requests
+
+from external_llm_metrics import classification_metrics, translation_metrics
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "experiments" / "fixtures" / "external_llm_public_synthetic.json"
@@ -113,16 +116,30 @@ def load_fixtures():
             raise PilotSafetyError("Fixture size invalid")
         if ".onion" in text.lower() or "interpol" in text.lower() or "@" in text:
             raise PilotSafetyError("Possible non-public content or personal data; abort")
+        if not isinstance(item.get("title"), str) or not isinstance(item.get("summary"), str):
+            raise PilotSafetyError("Unexpected fixture text type")
+        if not re.fullmatch(r"[a-z]{2,3}(?:-[A-Za-z]{2,4})?", str(item.get("language", ""))):
+            raise PilotSafetyError("Invalid public-fixture language")
+        if not re.fullmatch(r"20[0-9]{2}-[0-9]{2}-[0-9]{2}", str(item.get("published", ""))):
+            raise PilotSafetyError("Invalid public-fixture date")
         if item["task"] == "classification":
-            if not isinstance(item.get("expected_labels"), list):
+            labels = item.get("expected_labels")
+            if not isinstance(labels, list) or any(not isinstance(s, str) for s in labels):
                 raise PilotSafetyError("Missing independent synthetic test target")
-            if not set(item["expected_labels"]) <= set(CATEGORIES):
-                raise PilotSafetyError("Unknown synthetic reference category")
+            if len(set(labels)) != len(labels) or not set(labels) <= set(CATEGORIES):
+                raise PilotSafetyError("Unknown/duplicate synthetic reference category")
+            if item.get("expected_status") not in STATUSES:
+                raise PilotSafetyError("Missing independent reported-status control")
+            if not isinstance(item.get("expected_country"), str) or len(item["expected_country"]) > 80:
+                raise PilotSafetyError("Invalid reference event-country control")
         else:
-            if not isinstance(item.get("expected_title_en"), str):
+            if not isinstance(item.get("expected_title_en"), str) or not item["expected_title_en"].strip():
                 raise PilotSafetyError("Missing synthetic English reference")
-            if not isinstance(item.get("required_numbers"), list):
-                raise PilotSafetyError("Missing immutable-number references")
+            if len(item["expected_title_en"]) > MAX_INPUT_CHARACTERS:
+                raise PilotSafetyError("Oversized reference English translation")
+            markers = item.get("required_numbers")
+            if not isinstance(markers, list) or any(not isinstance(n, str) or not n.isdecimal() for n in markers):
+                raise PilotSafetyError("Missing/invalid immutable-number references")
     return items
 
 
@@ -280,6 +297,8 @@ def call_json(provider, payload, env=os.environ, post=requests.post):
     except (ValueError, KeyError, IndexError, TypeError):
         raise PilotSafetyError("Provider returned unusable JSON; no retry") from None
     usage = body.get("usage") or {}
+    if not isinstance(usage, dict):
+        raise PilotSafetyError("Invalid provider usage counters")
     # Parse only provider aggregate counters, never model text into logs.
     token_usage = {
         k: int(usage[k]) for k in ("prompt_tokens", "completion_tokens", "total_tokens")
@@ -299,7 +318,7 @@ def plan(provider, fixtures, count):
 
 def main(argv=None, env=os.environ):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--mode", choices=("plan", "live"), default="plan")
+    parser.add_argument("--mode", choices=("plan", "coverage", "live"), default="plan")
     parser.add_argument("--provider", choices=("groq", "cloudflare", "both"), default="both")
     parser.add_argument("--max-per-provider", type=int, default=2)
     args = parser.parse_args(argv)
@@ -307,13 +326,29 @@ def main(argv=None, env=os.environ):
     fixtures = load_fixtures()
     providers = ["groq", "cloudflare"] if args.provider == "both" else [args.provider]
     batches = {p: plan(p, fixtures, args.max_per_provider) for p in providers}
-    if args.mode == "plan":
-        print(json.dumps({
-            "mode": "OFFLINE_PLAN_ONLY", "providers": providers,
+    if args.mode in ("plan", "coverage"):
+        report = {
+            "mode": "OFFLINE_PLAN_ONLY" if args.mode == "plan" else "OFFLINE_FIXTURE_COVERAGE",
+            "providers": providers,
             "synthetic_examples": {p: len(batches[p]) for p in providers},
             "production_modified": False, "external_requests": 0,
             "reference_truth": "synthetic examples only; not real-world accuracy",
-        }))
+        }
+        if args.mode == "coverage":
+            report.update({
+                "total_available_cases": len(fixtures),
+                "task_coverage": dict(Counter(i["task"] for i in fixtures)),
+                "language_coverage": dict(sorted(Counter(i["language"] for i in fixtures).items())),
+                "eleven_category_occurrences": {
+                    label: sum(label in i.get("expected_labels", ()) for i in fixtures)
+                    for label in CATEGORIES
+                },
+                "negative_controls": sum(
+                    not i["expected_labels"] for i in fixtures if i["task"] == "classification"
+                ),
+                "production_validated": False,
+            })
+        print(json.dumps(report))
         return 0
 
     # Validate ALL provider approvals/credentials BEFORE sending even one request.
@@ -322,6 +357,7 @@ def main(argv=None, env=os.environ):
     metrics = {}
     for provider in providers:
         valid, matches, statuses, locations, qualifying, total_usage = 0, 0, 0, 0, 0, {}
+        checked_pairs = []
         for case in batches[provider]:
             payload = prepare_groq(case) if provider == "groq" else prepare_cloudflare(case)
             answer, usage = call_json(provider, payload, env=env)
@@ -336,7 +372,14 @@ def main(argv=None, env=os.environ):
                 qualifying += int(answer["qualifying_event"] == bool(case["expected_labels"]))
             else:
                 answer = validate_translation(case, answer)
+            # Keep the provider response transient in memory only for
+            # aggregate scoring, never in repository/files/CI output.
+            checked_pairs.append((case, answer))
             valid += 1
+        detailed = (
+            classification_metrics(checked_pairs, CATEGORIES)
+            if provider == "groq" else translation_metrics(checked_pairs)
+        )
         metrics[provider] = {
             "tested_synthetic_cases": valid,
             "synthetic_category_matches": matches if provider == "groq" else None,
@@ -344,6 +387,7 @@ def main(argv=None, env=os.environ):
             "synthetic_country_matches": locations if provider == "groq" else None,
             "synthetic_qualifying_event_matches": qualifying if provider == "groq" else None,
             "schema_valid": valid,
+            "synthetic_quality_metrics": detailed,
             "provider_token_usage": total_usage,
             "human_review_required": True,
             "production_events_published": 0,
