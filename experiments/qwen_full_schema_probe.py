@@ -28,7 +28,8 @@ def main():
     start=time.monotonic()
     with backend.gate_factory(len(selected)) as gate:
         for i,row in enumerate(selected,1):
-            source={"id":"p0","title":row["text"],"summary":row["text"],
+            original_title, _, original_summary = row["text"].partition("\n")
+            source={"id":"p0","title":original_title,"summary":original_summary,
                     "original_language":row["language"],"published":"2026-06-01",
                     "source":"Previously reviewed public news","categories":[]}
             result=backend.call_batch([collector.selection_payload(source,0)])[0]
