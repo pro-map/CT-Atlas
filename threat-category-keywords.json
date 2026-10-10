@@ -140,6 +140,36 @@
         "تلوث بيولوجي متعمد",
         "رسائل الجمرة الخبيثة",
         "الإرهاب الزراعي"
+      ],
+      "zh": [
+        "生物恐怖主义",
+        "生物恐怖袭击",
+        "生物武器",
+        "生物袭击",
+        "生物威胁",
+        "炭疽威胁",
+        "炭疽恐吓信",
+        "蓖麻毒素威胁",
+        "肉毒毒素威胁",
+        "农业恐怖主义",
+        "病原体盗窃",
+        "病原体非法贩运",
+        "蓄意生物污染"
+      ],
+      "zh-Hant": [
+        "生物恐怖主義",
+        "生物恐怖攻擊",
+        "生物武器",
+        "生物攻擊",
+        "生物威脅",
+        "炭疽威脅",
+        "炭疽恐嚇信",
+        "蓖麻毒素威脅",
+        "肉毒桿菌毒素威脅",
+        "農業恐怖主義",
+        "病原體竊取",
+        "病原體非法販運",
+        "蓄意生物污染"
       ]
     },
     "context": {
@@ -177,6 +207,30 @@
         "ضبط",
         "تحقيق",
         "محاكمة"
+      ],
+      "zh": [
+        "恐怖主义",
+        "恐怖分子",
+        "极端分子",
+        "恐怖袭击",
+        "阴谋",
+        "威胁",
+        "逮捕",
+        "查获",
+        "起诉",
+        "调查"
+      ],
+      "zh-Hant": [
+        "恐怖主義",
+        "恐怖份子",
+        "極端分子",
+        "恐怖襲擊",
+        "陰謀",
+        "威脅",
+        "逮捕",
+        "查獲",
+        "起訴",
+        "調查"
       ]
     },
     "rules": [
@@ -189,7 +243,7 @@
       "Theft or trafficking without a reported terrorism nexus may be reviewed as a candidate but must not be published as biological terrorism automatically.",
       "Some toxins overlap chemical and biological classifications. Use one canonical incident identifier; relevant filters may share that record without inflating overall incident counts.",
       "Apply word boundaries, punctuation and case normalization, and appropriate language-specific normalization. Short acronyms and ambiguous words must not trigger on substrings.",
-      "English, French and Arabic seed phrases are included. Additional languages and aliases require colleague validation; this is not a claim of exhaustive global coverage."
+      "English, French, Arabic, Simplified Chinese and Traditional Chinese curated seed phrases are included. Language-specific seeds need colleague validation and do not establish exhaustive coverage or automatic terrorist attribution."
     ],
     "sources": [
       {
@@ -221,10 +275,16 @@
     "review": {
       "supplied_count": 100,
       "retained_user_terms": 95,
-      "excluded_source_numbers": [77, 78, 79, 80, 81],
+      "excluded_source_numbers": [
+        77,
+        78,
+        79,
+        80,
+        81
+      ],
       "exclusion_reason": "Contamination of food, water, ventilation, parcels or letters does not identify a chemical agent or explosive device. Such incidents require evidence-based classification rather than an automatic chemical label.",
       "opening_phrase_corrected": "improvised explosive device",
-      "other_languages": "Existing French and Arabic seeds preserved; the 95 supplied terms are English, not 95 translated terms in each language."
+      "other_languages": "Existing French and Arabic seeds are preserved. Simplified and Traditional Chinese incident-reporting seeds are newly added for specialist historical searches. The user's 95 English terms remain unchanged; these are not 95 translated terms in each language."
     },
     "terms": {
       "en": [
@@ -348,6 +408,42 @@
         "عبوات ناسفة",
         "سيارة مفخخة",
         "صناعة المتفجرات"
+      ],
+      "zh": [
+        "简易爆炸装置",
+        "爆炸装置",
+        "汽车炸弹",
+        "自杀式炸弹",
+        "爆炸物走私",
+        "炸药查获",
+        "爆炸物查获",
+        "爆炸物盗窃",
+        "化学武器",
+        "化学袭击",
+        "沙林",
+        "芥子气",
+        "神经毒剂",
+        "有毒化学品",
+        "毒剂袭击",
+        "化学恐怖袭击"
+      ],
+      "zh-Hant": [
+        "簡易爆炸裝置",
+        "爆炸裝置",
+        "汽車炸彈",
+        "自殺炸彈",
+        "爆炸物走私",
+        "炸藥查獲",
+        "爆裂物查獲",
+        "爆炸物竊盜",
+        "化學武器",
+        "化學襲擊",
+        "沙林",
+        "芥子氣",
+        "神經毒劑",
+        "有毒化學物質",
+        "毒劑襲擊",
+        "化學恐怖襲擊"
       ]
     },
     "context": {
@@ -378,6 +474,30 @@
         "اعتقال",
         "ضبط",
         "محاكمة"
+      ],
+      "zh": [
+        "恐怖主义",
+        "恐怖分子",
+        "极端组织",
+        "恐怖袭击",
+        "爆炸袭击",
+        "阴谋",
+        "逮捕",
+        "查获",
+        "起诉",
+        "调查"
+      ],
+      "zh-Hant": [
+        "恐怖主義",
+        "恐怖份子",
+        "極端組織",
+        "恐怖襲擊",
+        "爆炸襲擊",
+        "陰謀",
+        "逮捕",
+        "查獲",
+        "起訴",
+        "調查"
       ]
     },
     "excluded_standalone_terms": [
