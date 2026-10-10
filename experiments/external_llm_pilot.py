@@ -398,7 +398,18 @@ def main(argv=None, env=os.environ):
 
     fixtures = load_fixtures()
     providers = ["groq", "cloudflare"] if args.provider == "both" else [args.provider]
-    batches = {p: plan(p, fixtures, args.max_per_provider, args.start_at) for p in providers}
+    # Offline coverage describes the entire finite fixture library, not a
+    # promise that each provider has the same number of example types.
+    # Live calls still use the exact requested count and <=2 safety gate.
+    batches = {}
+    for p in providers:
+        available = sum(
+            x["task"] == ("classification" if p == "groq" else "translation")
+            for x in fixtures
+        )
+        count = (min(args.max_per_provider, available - args.start_at)
+                 if args.mode == "coverage" else args.max_per_provider)
+        batches[p] = plan(p, fixtures, count, args.start_at)
     if args.mode in ("plan", "coverage"):
         report = {
             "mode": "OFFLINE_PLAN_ONLY" if args.mode == "plan" else "OFFLINE_FIXTURE_COVERAGE",
