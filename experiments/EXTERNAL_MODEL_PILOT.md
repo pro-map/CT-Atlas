@@ -37,6 +37,34 @@ category, exact-label agreement and evidence-status/country disagreements.
 The translation audit counts reference-title exact matches and invented digits,
 but requires an independent bilingual review to establish fidelity.
 
+## Correction du test Cloudflare GLM — 10 octobre 2026
+
+Si la console locale affichait **"Provider returned unusable JSON; no retry"**
+alors que le serveur a répondu HTTP 200, le problème était dans le
+traitement du format de réponse. Le modèle GLM-4.7-Flash peut consacrer
+son petit budget de tokens au **raisonnement** et retourner
+`choices[0].message.content = null` avec `finish_reason = "length"`,
+sans aucune traduction finale. L'ancien pilote demandait seulement 500
+tokens et refusait cet objet sans expliquer pourquoi.
+
+Correction sur cette branche : passage de
+`chat_template_kwargs: {"enable_thinking": false}` dans la requête
+Cloudflare, budget de sortie limité à **900 tokens** pour le test
+synthétique, et diagnostic non sensible indiquant le motif
+`finish_reason` autorisé (sans afficher la réponse brute, le
+raisonnement, les identifiants ni les clés). Une réponse JSON encadrée
+entièrement par une seule barrière Markdown est décodée, mais aucun texte
+libre n'est accepté. **Aucune relance automatique et aucun second appel
+en cas d'erreur**.
+
+L'API OpenAI-compatible Cloudflare et le modèle
+`@cf/zai-org/glm-4.7-flash` restent inchangés. Cette correction ne
+prouve pas que le modèle traduira fidèlement; seule l'évaluation
+ultérieure pourra l'établir.
+
+Sources : https://developers.cloudflare.com/workers-ai/models/glm-4.7-flash/
+et https://github.com/cloudflare/ai/blob/main/packages/tanstack-ai/README.md
+
 ## Optional small live test (only after manual account verification)
 
 The script supports **at most two synthetic items per provider per execution**
