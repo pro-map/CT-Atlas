@@ -194,8 +194,13 @@ def prepare_cloudflare(case):
             }, ensure_ascii=False)},
         ],
         "response_format": {"type": "json_object"},
+        # GLM-4.7-Flash is a reasoning model. Without this option it can spend
+        # the entire 500-token response budget on hidden reasoning and return
+        # HTTP 200 with message.content=null / finish_reason=length.
+        # Cloudflare Workers AI accepts the following model input directly.
+        "chat_template_kwargs": {"enable_thinking": False},
         "temperature": 0,
-        "max_completion_tokens": 500,
+        "max_completion_tokens": 900,
         "stream": False,
     }
 
@@ -263,8 +268,63 @@ def preflight(provider, case_count, env=os.environ):
         raise PilotSafetyError("Unknown provider")
 
 
+def _safe_finish_reason(raw):
+    # Never print arbitrary provider-supplied text: it can echo source
+    # material or credential fields. Only known enum values are reportable.
+    return raw if raw in ("stop", "length", "tool_calls", "content_filter") else "unknown"
+
+
+def _extract_structured_content(body, provider):
+    """Read OpenAI-compatible content, without logging any model completion."""
+    if not isinstance(body, dict):
+        raise PilotSafetyError("Provider returned an invalid response envelope")
+    choices = body.get("choices")
+    if not isinstance(choices, list) or not choices or not isinstance(choices[0], dict):
+        raise PilotSafetyError("Provider returned no valid chat choices")
+    choice = choices[0]
+    message = choice.get("message")
+    if not isinstance(message, dict):
+        raise PilotSafetyError("Provider returned no valid assistant message")
+    finish_reason = _safe_finish_reason(choice.get("finish_reason"))
+    answer = message.get("content")
+    if isinstance(answer, list):
+        answer = "".join(
+            segment.get("text", "") for segment in answer
+            if isinstance(segment, dict) and segment.get("type", "text") == "text"
+            and isinstance(segment.get("text"), str)
+        )
+    if not isinstance(answer, str) or not answer.strip():
+        if provider == "cloudflare" and message.get("reasoning_content"):
+            raise PilotSafetyError(
+                "Cloudflare HTTP 200 sans reponse finale "
+                "(mode raisonnement; finish_reason=" + finish_reason +
+                "). Correction: desactivation du thinking. Aucun retry."
+            )
+        raise PilotSafetyError(
+            "Provider HTTP 200 sans texte final "
+            "(finish_reason=" + finish_reason + "). Aucun retry."
+        )
+    answer = answer.strip()
+    # Some JSON-capable models still wrap their response in a markdown fence.
+    # Accept only a WHOLE fenced JSON block (never scrape/guess a JSON
+    # substring from free-form text or chain-of-thought).
+    match = re.fullmatch(r"```(?:json)?\\s*([\\s\\S]*?)\\s*```", answer, flags=re.I)
+    if match:
+        answer = match.group(1).strip()
+    try:
+        decoded = json.loads(answer)
+    except json.JSONDecodeError:
+        raise PilotSafetyError(
+            "Provider HTTP 200 : JSON du modele incomplet ou invalide "
+            "(finish_reason=" + finish_reason + "). Aucun retry."
+        ) from None
+    if not isinstance(decoded, dict):
+        raise PilotSafetyError("Provider HTTP 200 : JSON non-objet. Aucun retry.")
+    return decoded
+
+
 def call_json(provider, payload, env=os.environ, post=requests.post):
-    """Do not follow redirects with credentials, or log request/response content."""
+    """One provider request, no redirect/retry, never log source or credential."""
     if provider == "groq":
         url = GROQ_URL
         key = env["GROQ_API_KEY"]
@@ -282,24 +342,18 @@ def call_json(provider, payload, env=os.environ, post=requests.post):
     except requests.RequestException:
         raise PilotSafetyError("Provider network unavailable; no automatic retry") from None
     if response.status_code != 200:
-        # Never print remote body (it can echo a title, key, or account ID).
+        # Never print remote body (could echo title, prompt, token, account ID).
         raise PilotSafetyError(f"Provider HTTP {response.status_code}; no retry")
     try:
         body = response.json()
-        choices = body["choices"]
-        message = choices[0]["message"]
-        answer = message["content"]
-        if isinstance(answer, list):
-            answer = "".join(x.get("text", "") for x in answer if isinstance(x, dict))
-        if not isinstance(answer, str):
-            raise ValueError("Non-text model answer")
-        parsed = json.loads(answer)
-    except (ValueError, KeyError, IndexError, TypeError):
-        raise PilotSafetyError("Provider returned unusable JSON; no retry") from None
+    except ValueError:
+        raise PilotSafetyError(
+            "Provider HTTP 200 : enveloppe HTTP non-JSON. Aucun retry."
+        ) from None
+    parsed = _extract_structured_content(body, provider)
     usage = body.get("usage") or {}
     if not isinstance(usage, dict):
         raise PilotSafetyError("Invalid provider usage counters")
-    # Parse only provider aggregate counters, never model text into logs.
     token_usage = {
         k: int(usage[k]) for k in ("prompt_tokens", "completion_tokens", "total_tokens")
         if isinstance(usage.get(k), int) and not isinstance(usage[k], bool)
