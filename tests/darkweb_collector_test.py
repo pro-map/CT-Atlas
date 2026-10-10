@@ -1725,6 +1725,30 @@ def test_october_eighth_naba_magazine_is_followed_and_pdf_record_emitted(tmp_pat
     db.close()
 
 
+def test_daily_watch_repairs_al_naba_listing_that_was_previously_uploaded(tmp_path):
+    """A link saved as a shallow card must not permanently suppress its PDF detail."""
+    url = BASE + 'posts/an-naba-08-10-2026'
+    site = Site({BASE: naba_magazine_listing(),
+                 url: portal_article('صحيفة النبأ', '08 أكتوبر 2026', lang='ar'),
+                 PORTAL_SWITCH: 404, PORTAL_SWITCH_FORCE: 404})
+    db = c.open_database(tmp_path/'state.sqlite')
+    mark_watching(db)
+    policy = {'epoch': 2, 'from': '2026-10-08', 'through': '2026-10-10',
+              'pages_per_scan': 25, 'previews': False}
+    outlet = {**OUTLET, 'policy': policy, 'collection_phase': 'watch'}
+    calls, _ = passes(site, db, tmp_path, outlet, 1, budget=1)
+    assert calls[0][0] == BASE and url not in calls[0]
+    stored = json.loads(db.execute('SELECT metadata FROM items WHERE url=?', (url,)).fetchone()[0])
+    assert stored['text_status'] == 'listing'
+    calls, sent = passes(site, db, tmp_path, outlet, 1, budget=25)
+    assert url in calls[0], 'incomplete issue must be opened even though its card was already stored'
+    repaired = json.loads(db.execute('SELECT metadata FROM items WHERE url=?', (url,)).fetchone()[0])
+    assert repaired['text_status'] == 'complete'
+    assert any(item['url'] == url and item['text_status'] == 'complete'
+               for batch in sent[0] for item in batch['items'])
+    db.close()
+
+
 def test_english_switch_to_empty_news_page_does_not_erase_arabic_magazine():
     # The English tab can return an incomplete or empty page. The original
     # Arabic publication must never be silently discarded.
