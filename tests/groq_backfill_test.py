@@ -87,8 +87,12 @@ class GroqPublicNewsTests(unittest.TestCase):
             self.assertEqual(again.tokens, 3500)
             self.assertFalse((root / "quota/gemini-3.1-enrichment.json").exists())
             self.assertTrue((root / groq_backfill.QUOTA_FILE).exists())
+            with self.assertRaises(ValueError):
+                again.reserve(groq_backfill.REQUEST_TPM_BUDGET + 1)
+            again.tokens = groq_backfill.MAX_RESERVED_TOKENS_PER_UTC_DAY - 1_000
+            again.persist()
             with self.assertRaises(archive_review.BudgetReached):
-                again.reserve(groq_backfill.MAX_RESERVED_TOKENS_PER_UTC_DAY)
+                again.reserve(3_500)
             self.assertEqual(groq_backfill.GroqDailyQuota(root).used, 1)
 
     def test_http200_one_source_batch_sends_no_source_url_or_secret_to_logs(self):
