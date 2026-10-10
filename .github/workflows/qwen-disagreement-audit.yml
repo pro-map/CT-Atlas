@@ -1,0 +1,23 @@
+name: Qwen benchmark disagreement audit (read-only)
+
+on:
+  push:
+    branches:
+      - experiment/qwen-backfill-only-20261010
+    paths:
+      - experiments/qwen_disagreement_audit.py
+
+permissions:
+  contents: read
+
+jobs:
+  list-public-reference-articles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: List seven publicly archived news titles for manual review
+        run: python experiments/qwen_disagreement_audit.py
