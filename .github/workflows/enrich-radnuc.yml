@@ -18,7 +18,9 @@ on:
       - tools/enrich_radnuc.py
       - .github/workflows/enrich-radnuc.yml
   schedule:
-    - cron: "43 6 * * *"
+    # After the Pacific-day Gemini quota rollover and the 10:17 Paris daily map.
+    # Runs after the bounded 11:20 Chinese history slice; still at most 60 posts.
+    - cron: "15 12 * * *"
       timezone: Europe/Paris
   workflow_dispatch:
     inputs:
