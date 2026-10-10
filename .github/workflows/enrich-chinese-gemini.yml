@@ -1,0 +1,232 @@
+name: Gemini Chinese eight-category historical backfill
+
+# Only Gemini's EXISTING enrichment daily allocation is used. No added quota,
+# paid model, Qwen runner, or changes to the live daily collection.
+on:
+  schedule:
+    - cron: "07 10 * * *"
+      timezone: Europe/Paris
+  workflow_dispatch:
+    inputs:
+      max_posts:
+        description: "Gemini enrichment calls (existing shared Pacific-day ledger; max 20)"
+        default: "12"
+      max_fetches:
+        description: "Historical source searches (max 150)"
+        default: "90"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: ct-map-update-main
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - name: Checkout current production checkpoint
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Install current dependencies
+        run: pip install -r requirements.txt
+      - name: Validate offline scope, budgets, frozen plan and no-duplicate integration
+        run: |
+          python -m unittest discover -s tests -p 'gemini_chinese_map_test.py'
+          python -m unittest discover -s tests -p 'gemini_history_scheduling_test.py'
+          python tools/enrich_chinese_map.py --dry-run
+      - name: Preserve all original event IDs and their location decisions
+        env:
+          BEFORE: ${{ runner.temp }}/gemini-chinese-before.json
+          GEO_IDS: ${{ runner.temp }}/gemini-chinese-geo-protected.json
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          from math import isfinite
+          data=json.loads(Path("events.json").read_text(encoding="utf-8"))
+          if not isinstance(data.get("events"),list) or not data["events"]:
+              raise SystemExit("Invalid current events.json: refuse to change it")
+          ids=[str(e["id"]) for e in data["events"] if e.get("id") is not None]
+          def valid(e):
+              try:
+                  a,b=float(e.get("latitude")),float(e.get("longitude"))
+                  return isfinite(a) and isfinite(b) and -90<=a<=90 and -180<=b<=180
+              except (TypeError,ValueError):
+                  return False
+          located=[str(e["id"]) for e in data["events"] if e.get("id") is not None and
+                   (e.get("ai_geo_complete") is True or valid(e))]
+          Path(os.environ["BEFORE"]).write_text(json.dumps(ids),encoding="utf-8")
+          Path(os.environ["GEO_IDS"]).write_text(json.dumps(located),encoding="utf-8")
+          print(f"Existing event IDs {len(ids)}; protected geolocations {len(located)}")
+          PY
+      - name: Execute a bounded six-month GEMINI historical batch (shared quota only)
+        id: backfill
+        timeout-minutes: 55
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MAX_POSTS: ${{ inputs.max_posts || '12' }}
+          MAX_FETCHES: ${{ inputs.max_fetches || '90' }}
+        run: |
+          set -euo pipefail
+          test -n "$GEMINI_API_KEY" || { echo "Missing Gemini secret"; exit 1; }
+          python -u tools/enrich_chinese_map.py --max-posts "$MAX_POSTS" --max-fetches "$MAX_FETCHES" --deadline-minutes 35
+      - name: Check whether geolocation has any new event records to process
+        if: steps.backfill.outcome == 'success'
+        id: new_events
+        env:
+          BEFORE: ${{ runner.temp }}/gemini-chinese-before.json
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          old=set(json.loads(Path(os.environ["BEFORE"]).read_text(encoding="utf-8")))
+          now=json.loads(Path("events.json").read_text(encoding="utf-8"))
+          new=[e for e in now["events"] if str(e.get("id")) not in old]
+          with open(os.environ["GITHUB_OUTPUT"],"a",encoding="utf-8") as out:
+              out.write(f"new_count={len(new)}\n")
+          print(f"New event records needing geolocation check: {len(new)}")
+          PY
+      - name: Geolocate only evidence-supported new incidents and preserve old decisions
+        if: steps.backfill.outcome == 'success' && steps.new_events.outputs.new_count != '0'
+        timeout-minutes: 25
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AI_GEO_FORCE: "0"
+          AI_GEO_PRESERVE_IDS_FILE: ${{ runner.temp }}/gemini-chinese-geo-protected.json
+        run: python -u geolocate.py
+      - name: Quarantine any newly added event lacking validated coordinates
+        if: always() && steps.backfill.outcome != 'skipped'
+        env:
+          BEFORE: ${{ runner.temp }}/gemini-chinese-before.json
+        run: |
+          python - <<'PY'
+          import json, math, os
+          from pathlib import Path
+          from datetime import datetime, timezone
+          events=Path("events.json")
+          before=Path(os.environ["BEFORE"])
+          if not before.exists():
+              raise SystemExit("Missing pre-run event IDs: cannot safely publish")
+          old=set(json.loads(before.read_text(encoding="utf-8")))
+          doc=json.loads(events.read_text(encoding="utf-8"))
+          if not isinstance(doc.get("events"),list):
+              raise SystemExit("Invalid events array; cannot safely publish")
+          def valid(e):
+              try:
+                  a,b=float(e.get("latitude")),float(e.get("longitude"))
+                  return (math.isfinite(a) and math.isfinite(b)
+                          and -90<=a<=90 and -180<=b<=180)
+              except (TypeError,ValueError):
+                  return False
+          withheld=[e for e in doc["events"] if str(e.get("id")) not in old and not valid(e)]
+          if withheld:
+              archive=Path("archive/gemini-chinese-map-unlocated.json")
+              prior=json.loads(archive.read_text(encoding="utf-8")) if archive.exists() else {"events":[]}
+              seen={str(e.get("id")) for e in prior["events"]}
+              prior["events"].extend(e for e in withheld if str(e.get("id")) not in seen)
+              archive.write_text(json.dumps(prior,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+              excluded={str(e.get("id")) for e in withheld}
+              doc["events"]=[e for e in doc["events"] if str(e.get("id")) not in excluded]
+              events.write_text(json.dumps(doc,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+          status=Path("archive/gemini-chinese-map-status.json")
+          if status.exists():
+              report=json.loads(status.read_text(encoding="utf-8"))
+              report["withheld_unlocated_new_records"]=len(withheld)
+              report["new_located_event_records_in_working_copy"]=sum(
+                  str(e.get("id")) not in old for e in doc["events"])
+              report["publication_confirmed"]=False
+              report["publication_state"]="AWAITING_PAGES_DEPLOY_VERIFICATION"
+              report["geolocation_checked_at"]=datetime.now(timezone.utc).isoformat()
+              status.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+          print(f"Withheld unlocated events: {len(withheld)}; new located events: "
+                f"{sum(str(e.get('id')) not in old for e in doc['events'])}. "
+                "Review/page deployment remains separate from query completion.")
+          PY
+      - name: Save recovery evidence for an interrupted batch
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: gemini-chinese-history-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            archive/gemini-chinese-map-*.json
+            archive/gemini-chinese-map-v1-seen-*.txt
+            quota/gemini-3.1-enrichment.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Commit validated state, selected reports and safe new records
+        if: always()
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          database=json.loads(Path("events.json").read_text(encoding="utf-8"))
+          if not isinstance(database.get("events"),list) or not database["events"]:
+              raise SystemExit("Invalid main event database")
+          for folder in ("archive","quota"):
+              for path in Path(folder).glob("*.json"):
+                  json.loads(path.read_text(encoding="utf-8"))
+          PY
+          git config user.name "CT Intelligence Map Bot"
+          git config user.email "actions@github.com"
+          git add -- events.json archive quota
+          if git diff --cached --quiet; then
+            echo "No new source progress, event, or ledger changes."
+            exit 0
+          fi
+          git commit -m "Checkpoint bounded Gemini Chinese eight-category history"
+          for attempt in 1 2 3 4; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo "Concurrent changes: saved artifact retained; refuse unsafe push"
+              exit 1
+            fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((4*attempt))
+          done
+          exit 1
+      - name: Summarize without confusing searches, selections or publication
+        if: always()
+        run: |
+          if [ -f archive/gemini-chinese-map-status.json ]; then
+            python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads(Path("archive/gemini-chinese-map-status.json").read_text(encoding="utf-8"))
+          print("Gemini Chinese history: "+str(d.get("confirmed_successful_source_fetches_including_split_children"))+
+                " successful source fetches, "+str(d.get("pending_units_including_split_children"))+
+                " pending work units. Actual publication requires deploy job success.")
+          PY
+          fi
+
+  deploy:
+    needs: enrich
+    if: ${{ needs.enrich.result == 'success' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/configure-pages@v6
+      - name: Build map payload with standard existing filters
+        uses: ./.github/actions/build-events-lite
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: .
+      - uses: actions/deploy-pages@v5
+        id: deployment
