@@ -1,0 +1,109 @@
+{
+  "version": "qwen-chinese-whole-map-history-v1-20261010",
+  "scope": "Eight non-specialist CT ATLAS categories; specialist Chinese history remains in the separate Radiological/Nuclear, Chemicals and Explosives and Biological Terrorism backfill",
+  "anchor": "2026-10-10",
+  "window_days": 180,
+  "sources": [
+    "Google News Chinese Simplified CN:zh-Hans",
+    "Google News Chinese Traditional TW:zh-Hant"
+  ],
+  "note": "Search expressions discover reports and do not prove terrorism, actor attribution, location, or incident uniqueness. Maritime Piracy is a separate authorized non-terrorist exception.",
+  "queries": {
+    "Terrorist Financing": {
+      "zh": [
+        "(恐怖融资 OR 恐怖主义融资 OR 恐怖组织资金) (逮捕 OR 起诉 OR 调查 OR 查获 OR 冻结)",
+        "(恐怖组织 OR 极端组织 OR 伊斯兰国 OR 基地组织) (筹款 OR 资金转移 OR 洗钱 OR 加密货币 OR 冻结资产)",
+        "(恐怖分子 OR 恐怖组织) (地下钱庄 OR 非法汇款 OR 资助 OR 制裁)"
+      ],
+      "zh-Hant": [
+        "(恐怖融資 OR 恐怖主義融資 OR 恐怖組織資金) (逮捕 OR 起訴 OR 調查 OR 查獲 OR 凍結)",
+        "(恐怖組織 OR 極端組織 OR 伊斯蘭國 OR 基地組織) (募款 OR 資金轉移 OR 洗錢 OR 加密貨幣 OR 凍結資產)",
+        "(恐怖份子 OR 恐怖組織) (地下匯款 OR 非法匯款 OR 資助 OR 制裁)"
+      ]
+    },
+    "Weapons": {
+      "zh": [
+        "(恐怖分子 OR 恐怖组织 OR 极端组织) (枪支 OR 武器 OR 弹药 OR 无人机) (查获 OR 走私 OR 缴获 OR 逮捕)",
+        "(恐怖组织 OR 伊斯兰国 OR 基地组织) (武器库 OR 武器运输 OR 非法军火 OR 无人机武器) (调查 OR 查获 OR 攻击)",
+        "(恐怖主义 OR 极端分子) (武器走私 OR 军火贩运 OR 武器缴获 OR 武器采购) (拘捕 OR 起诉 OR 调查)"
+      ],
+      "zh-Hant": [
+        "(恐怖份子 OR 恐怖組織 OR 極端組織) (槍枝 OR 武器 OR 彈藥 OR 無人機) (查獲 OR 走私 OR 扣押 OR 逮捕)",
+        "(恐怖組織 OR 伊斯蘭國 OR 基地組織) (武器庫 OR 武器運輸 OR 非法軍火 OR 武裝無人機) (調查 OR 查獲 OR 襲擊)",
+        "(恐怖主義 OR 極端份子) (武器走私 OR 軍火販運 OR 武器扣押 OR 武器採購) (拘捕 OR 起訴 OR 調查)"
+      ]
+    },
+    "Maritime Piracy": {
+      "zh": [
+        "(海盗 OR 海盗袭击 OR 海上抢劫) (船舶 OR 商船 OR 油轮 OR 船员) (劫持 OR 袭击 OR 抢劫 OR 绑架)",
+        "(海盗 OR 武装海盗) (劫持船只 OR 登船 OR 绑架船员 OR 海上武装抢劫) (船舶 OR 货船 OR 海域)",
+        "(索马里海盗 OR 几内亚湾海盗 OR 海上盗匪) (船只 OR 船员 OR 劫持 OR 袭击 OR 营救)"
+      ],
+      "zh-Hant": [
+        "(海盜 OR 海盜襲擊 OR 海上搶劫) (船舶 OR 商船 OR 油輪 OR 船員) (劫持 OR 襲擊 OR 搶劫 OR 綁架)",
+        "(海盜 OR 武裝海盜) (劫持船隻 OR 登船 OR 綁架船員 OR 海上武裝搶劫) (船舶 OR 貨船 OR 海域)",
+        "(索馬利亞海盜 OR 幾內亞灣海盜 OR 海上盜匪) (船隻 OR 船員 OR 劫持 OR 襲擊 OR 營救)"
+      ]
+    },
+    "Online / Cyber / AI": {
+      "zh": [
+        "(恐怖组织 OR 极端组织 OR 伊斯兰国 OR 基地组织) (网络招募 OR 社交媒体招募 OR 宣传视频 OR 煽动暴力) (逮捕 OR 调查 OR 起诉)",
+        "(恐怖主义 OR 恐怖组织 OR 极端分子) (网络攻击 OR 黑客攻击 OR 人工智能 OR 深度伪造) (行动 OR 调查 OR 袭击 OR 逮捕)",
+        "(极端组织 OR 恐怖组织) (线上激进化 OR 网络宣传 OR 在线招募 OR 加密通信) (关闭 OR 破获 OR 查获 OR 起诉)"
+      ],
+      "zh-Hant": [
+        "(恐怖組織 OR 極端組織 OR 伊斯蘭國 OR 基地組織) (網路招募 OR 社群媒體招募 OR 宣傳影片 OR 煽動暴力) (逮捕 OR 調查 OR 起訴)",
+        "(恐怖主義 OR 恐怖組織 OR 極端份子) (網路攻擊 OR 駭客攻擊 OR 人工智慧 OR 深度偽造) (行動 OR 調查 OR 襲擊 OR 逮捕)",
+        "(極端組織 OR 恐怖組織) (線上激進化 OR 網路宣傳 OR 網路招募 OR 加密通訊) (關閉 OR 破獲 OR 查獲 OR 起訴)"
+      ]
+    },
+    "Attacks": {
+      "zh": [
+        "(恐怖袭击 OR 恐怖爆炸 OR 自杀式袭击 OR 袭击事件) (恐怖分子 OR 极端组织 OR 伊斯兰国 OR 基地组织)",
+        "(极端分子 OR 恐怖组织 OR 武装分子) (发动袭击 OR 炸弹袭击 OR 伏击 OR 绑架人质 OR 遇袭)",
+        "(伊斯兰国 OR 基地组织 OR 博科圣地 OR 青年党) (袭击 OR 爆炸 OR 杀害 OR 伏击 OR 劫持)"
+      ],
+      "zh-Hant": [
+        "(恐怖襲擊 OR 恐怖爆炸 OR 自殺式攻擊 OR 襲擊事件) (恐怖份子 OR 極端組織 OR 伊斯蘭國 OR 基地組織)",
+        "(極端份子 OR 恐怖組織 OR 武裝份子) (發動襲擊 OR 炸彈襲擊 OR 伏擊 OR 綁架人質 OR 遇襲)",
+        "(伊斯蘭國 OR 基地組織 OR 博科聖地 OR 青年黨) (襲擊 OR 爆炸 OR 殺害 OR 伏擊 OR 劫持)"
+      ]
+    },
+    "Counter Terrorism Action": {
+      "zh": [
+        "(反恐行动 OR 反恐突袭 OR 反恐搜捕) (捣毁 OR 击毙 OR 逮捕 OR 缴获 OR 解救)",
+        "(安全部队 OR 反恐部队 OR 警方) (打击恐怖分子 OR 清剿极端组织 OR 摧毁恐怖据点)",
+        "(伊斯兰国 OR 基地组织 OR 极端组织) (反恐突袭 OR 警方行动 OR 军警联合行动 OR 破获)"
+      ],
+      "zh-Hant": [
+        "(反恐行動 OR 反恐突襲 OR 反恐搜捕) (搗毀 OR 擊斃 OR 逮捕 OR 扣押 OR 解救)",
+        "(安全部隊 OR 反恐部隊 OR 警方) (打擊恐怖份子 OR 清剿極端組織 OR 摧毀恐怖據點)",
+        "(伊斯蘭國 OR 基地組織 OR 極端組織) (反恐突襲 OR 警方行動 OR 軍警聯合行動 OR 破獲)"
+      ]
+    },
+    "Arrests": {
+      "zh": [
+        "(恐怖嫌疑人 OR 恐怖分子 OR 涉恐人员) (逮捕 OR 拘留 OR 抓获 OR 被捕)",
+        "(恐怖组织 OR 伊斯兰国 OR 基地组织 OR 极端组织) (嫌疑人被捕 OR 逮捕成员 OR 捣毁团伙)",
+        "(恐怖主义 OR 恐怖袭击阴谋) (警方逮捕 OR 安全部队拘捕 OR 多人被捕 OR 调查)"
+      ],
+      "zh-Hant": [
+        "(恐怖嫌疑人 OR 恐怖份子 OR 涉恐人員) (逮捕 OR 拘留 OR 抓獲 OR 被捕)",
+        "(恐怖組織 OR 伊斯蘭國 OR 基地組織 OR 極端組織) (嫌疑人被捕 OR 逮捕成員 OR 搗毀團夥)",
+        "(恐怖主義 OR 恐怖襲擊陰謀) (警方逮捕 OR 安全部隊拘捕 OR 多人被捕 OR 調查)"
+      ]
+    },
+    "Legal / Judicial": {
+      "zh": [
+        "(恐怖主义 OR 恐怖袭击 OR 恐怖组织) (法院 OR 审判 OR 判刑 OR 定罪 OR 起诉)",
+        "(恐怖嫌疑人 OR 恐怖组织成员 OR 极端分子) (法院裁决 OR 起诉 OR 判处 OR 上诉)",
+        "(恐怖融资 OR 恐怖袭击阴谋 OR 加入恐怖组织) (审判 OR 判决 OR 指控 OR 引渡)"
+      ],
+      "zh-Hant": [
+        "(恐怖主義 OR 恐怖襲擊 OR 恐怖組織) (法院 OR 審判 OR 判刑 OR 定罪 OR 起訴)",
+        "(恐怖嫌疑人 OR 恐怖組織成員 OR 極端份子) (法院裁決 OR 起訴 OR 判處 OR 上訴)",
+        "(恐怖融資 OR 恐怖襲擊陰謀 OR 加入恐怖組織) (審判 OR 判決 OR 指控 OR 引渡)"
+      ]
+    }
+  }
+}
