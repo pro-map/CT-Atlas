@@ -94,7 +94,7 @@ jobs:
           now=json.loads(Path("events.json").read_text(encoding="utf-8"))
           new=[e for e in now["events"] if str(e.get("id")) not in old]
           with open(os.environ["GITHUB_OUTPUT"],"a",encoding="utf-8") as out:
-              out.write(f"new_count={len(new)}\\n")
+              out.write(f"new_count={len(new)}\n")
           print(f"New event records needing geolocation check: {len(new)}")
           PY
       - name: Geolocate only evidence-supported new incidents and preserve old decisions
