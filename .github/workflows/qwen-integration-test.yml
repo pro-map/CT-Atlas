@@ -1,0 +1,58 @@
+name: Qwen historical backfill integration — test only
+
+# Explicitly branch-scoped development/test job, never production.
+# The repository's normal Gemini daily update and backfill remain unchanged.
+on:
+  push:
+    branches:
+      - experiment/qwen-backfill-only-20261010
+    paths:
+      - .github/workflows/qwen-integration-test.yml
+      - tools/qwen_backfill_adapter.py
+      - tools/enrich_archive.py
+      - tools/enrich_threat_categories.py
+      - tools/enrich_radnuc.py
+      - experiments/qwen_full_schema_probe.py
+      - experiments/qwen_sandbox_backfill.py
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qwen-historical-integration-development
+  cancel-in-progress: true
+
+jobs:
+  test-full-selection-and-sandbox:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Install test dependencies
+        run: pip install -r requirements.txt
+      - name: Run unit tests for backfill-only Qwen adapter
+        run: |
+          python -m unittest discover -s tests -p 'qwen_backfill_test.py'
+          python -m py_compile tools/qwen_backfill_adapter.py tools/enrich_archive.py tools/enrich_threat_categories.py tools/enrich_radnuc.py
+      - name: Install Ollama locally
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location https://ollama.com/install.sh -o /tmp/install-ollama.sh
+          sh /tmp/install-ollama.sh
+      - name: Start Ollama and download free Qwen 3.5 4B model
+        run: |
+          set -euo pipefail
+          nohup ollama serve > /tmp/ct-qwen-ollama-test.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            curl --fail --silent http://127.0.0.1:11434/api/tags > /dev/null && break
+            sleep 2
+          done
+          curl --fail --silent http://127.0.0.1:11434/api/tags > /dev/null
+          ollama pull qwen3.5:4b
+      - name: Validate Qwen full selection schema on real reference excerpts (read-only)
+        run: python experiments/qwen_full_schema_probe.py
+      - name: Test checkpointed backfill in disposable sandbox (NO production writes)
+        run: python experiments/qwen_sandbox_backfill.py
