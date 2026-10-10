@@ -75,14 +75,9 @@ export async function handleDarkweb(request, env) {
     if (collector) {
       const parts = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date()).map(p => [p.type,p.value]));
       const today = `${parts.year}-${parts.month}-${parts.day}`;
-      // Daily watch with a three-calendar-day Paris lookback: an outlet may
-      // publish a post yesterday or a day late, even though we detect it today.
-      // Existing URL de-duplication keeps the watch incremental: no archive crawl.
-      // Respect the administrator's collection period, without ever resetting it.
-      const lookback = new Date(Date.UTC(Number(parts.year), Number(parts.month) - 1, Number(parts.day) - 2)).toISOString().slice(0,10);
-      const from = state.policy.from > lookback ? state.policy.from : lookback;
-      const through = state.policy.through < today ? state.policy.through : today;
-      const policy = { ...state.policy, from, through };
+      // Daily Bessira watch is strictly today-only in Paris time.
+      // Existing URL de-duplication keeps the watch incremental; there is no archive crawl.
+      const policy = { ...state.policy, from: today, through: today };
       // The daily collector is intentionally restricted to the Bessira outlet.
       // Keep common transliteration variants so an admin label change does not
       // accidentally re-enable unrelated outlets.
