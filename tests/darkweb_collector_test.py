@@ -48,6 +48,19 @@ def test_proxy_has_remote_dns_and_loopback_only():
             c.safe_proxy(proxy)
 
 
+def test_hardened_source_proxy_uses_per_run_tor_isolation_and_no_ctatlas_user_agent():
+    first = c.isolated_socks_proxy('socks5h://127.0.0.1:9150', 'a1')
+    second = c.isolated_socks_proxy('socks5h://127.0.0.1:9150', 'b2')
+    assert first != second
+    for value in (first, second):
+        parsed = c.urlsplit(value)
+        assert parsed.scheme == 'socks5h' and parsed.hostname == '127.0.0.1' and parsed.port == 9150
+        assert parsed.username == '<torS0X>0'
+        assert parsed.password in {'a1', 'b2'}
+    assert 'CTAtlas' not in c.SOURCE_USER_AGENT
+    assert 'Firefox/140.0' in c.SOURCE_USER_AGENT
+
+
 def test_source_redirect_is_rejected_before_any_clearnet_request():
     response = Response(status=302, headers={'Location': 'https://example.com/file.pdf'})
     session = Session([response])
@@ -477,6 +490,8 @@ def test_previews_are_small_jpegs_and_pdf_first_pages_with_no_original_on_disk(t
     magazine={'publication_version':1,'url':BASE+'posts/naba/1/','attachments':[{'type':'pdf','url':BASE+'file.pdf'}]}
     preview=c.make_preview(Session([Response(pdf)]),magazine)
     assert preview['preview_status']=='First page' and len(preview['preview'])<=16000
+    hardened=c.make_preview(Session([]),magazine,allow_pdf=False)
+    assert hardened['preview_status']=='No visual preview supplied'
     response=Response(headers={'Content-Length':str(9*1048576)})
     assert 'cap' in c.make_preview(Session([response]),cover)['preview_status']
     assert response.closed and not list(tmp_path.iterdir())
@@ -1940,6 +1955,15 @@ class ForceTranslationSite(Site):
             return Response(status=302, headers={'Location': '/'}, url=url)
         self.pages = self.pages_en if self.force else self.pages_ar
         return super().get(url, **kwargs)
+
+
+def test_hardened_bessira_mode_never_requests_the_outlet_english_switch():
+    arabic = portal_home([portal_card('region-06-10-2026', 'عنوان', '06 أكتوبر 2026')], pages=(), lang='ar')
+    site = Site({BASE: arabic})
+    result = c.read_listing(site, {**OUTLET, 'policy': {'from': '2025-10-07'}, 'disable_english_switch': True})
+    assert result['items'][0]['source_language'] == 'ar'
+    assert site.calls == [BASE]
+    assert PORTAL_SWITCH not in site.calls and PORTAL_SWITCH_FORCE not in site.calls
 
 
 def test_news_portal_forces_translation_when_english_tab_still_serves_arabic():
