@@ -72,6 +72,8 @@ test('collector config exposes only Bessira and resumes from its last successful
  let config=(await h.call('/darkweb/collector-config',undefined,'',true)).data;
  assert.deepEqual(config.outlets.map(o=>o.name),['Bessira']);
  assert.equal(config.outlets[0].collection_phase,'watch');
+ assert.equal(config.outlets[0].disable_english_switch,true);
+ assert.equal(config.outlets[0].disable_pdf_preview,true);
  assert.equal(config.policy.from,'2025-01-01','Before the first successful pass the retained collection start is used');
  assert.equal(config.policy.through,today);
 
