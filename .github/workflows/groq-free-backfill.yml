@@ -1,0 +1,280 @@
+name: Groq Free - six-month CBRNE and Chinese historical backfill
+
+# Reuse the EXISTING three CBRNE and eight Chinese history checkpoints.
+# Only PUBLIC Google News and GDELT titles/excerpts are sent to Groq.
+# No Dark Web material, internal INTERPOL records or SOCMINT workspaces.
+# Existing daily Gemini collection, archives and quotas remain independent.
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/groq-free-backfill.yml
+  schedule:
+    # Three staggered checkpointed runs. Own UTC-day free-tier budget stops
+    # further calls automatically even after manual dispatches / reruns.
+    - cron: "45 11,17,23 * * *"
+      timezone: Europe/Paris
+  workflow_dispatch:
+    inputs:
+      specialist_posts:
+        description: "Groq API calls for all three specialist CBRNE categories (max 5)"
+        required: false
+        default: "5"
+      chinese_posts:
+        description: "Groq API calls for eight-category Chinese history (max 4)"
+        required: false
+        default: "4"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Coordinate with the daily collection, background jobs and the manual
+# Gemini fallback using their existing global write lock.
+concurrency:
+  group: ct-map-update-main
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 105
+    env:
+      CT_ATLAS_BACKFILL_PROVIDER: groq
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      SPECIALIST_POSTS_INPUT: ${{ inputs.specialist_posts || '5' }}
+      CHINESE_POSTS_INPUT: ${{ inputs.chinese_posts || '4' }}
+    steps:
+      - name: Checkout current production and durable checkpoints
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Install existing public-news search dependencies
+        run: pip install -r requirements.txt
+      - name: Check key, budget and schema without calling AI
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$GROQ_API_KEY" || { echo "::error::GROQ_API_KEY Actions secret missing"; exit 1; }
+          python -m unittest discover -s tests -p 'groq_backfill_test.py' -v
+          python -m unittest discover -s tests -p 'threat_categories_test.py'
+          python -m unittest discover -s tests -p 'gemini_chinese_map_test.py'
+          python -m unittest discover -s tests -p 'radnuc_vocabulary_test.py'
+          # The variables are reduced, never expanded, by each caller.
+          python - <<'PY'
+          import os
+          for name,limit in (("SPECIALIST_POSTS_INPUT",5),("CHINESE_POSTS_INPUT",4)):
+              value=int(os.environ[name])
+              if value < 0 or value > limit:
+                  raise SystemExit(f"{name}: refusing value outside 0..{limit}")
+          PY
+      - name: Snapshot old incident IDs and protected location decisions
+        env:
+          BEFORE: ${{ runner.temp }}/groq-backfill-before.json
+          GEO_IDS: ${{ runner.temp }}/groq-geo-protected.json
+        run: |
+          python - <<'PY'
+          import json, os, math
+          from pathlib import Path
+          db = json.loads(Path("events.json").read_text(encoding="utf-8"))
+          if not isinstance(db.get("events"),list) or not db["events"]:
+              raise SystemExit("Invalid pre-run Map database: refuse operation")
+          ids=[str(e["id"]) for e in db["events"] if e.get("id") is not None]
+          def located(e):
+              try:
+                  lat,lon=float(e.get("latitude")),float(e.get("longitude"))
+                  return math.isfinite(lat) and math.isfinite(lon) and -90<=lat<=90 and -180<=lon<=180
+              except (ValueError,TypeError):
+                  return False
+          geo=[str(e["id"]) for e in db["events"]
+               if e.get("id") is not None and (e.get("ai_geo_complete") is True or located(e))]
+          Path(os.environ["BEFORE"]).write_text(json.dumps(ids),encoding="utf-8")
+          Path(os.environ["GEO_IDS"]).write_text(json.dumps(geo),encoding="utf-8")
+          print(f"Protected {len(ids)} prior incident IDs and {len(geo)} location decisions")
+          PY
+      - name: Resume RN, Chemicals & Explosives, Biological - ALL configured languages incl Chinese
+        id: specialists
+        timeout-minutes: 37
+        if: env.SPECIALIST_POSTS_INPUT != '0'
+        env:
+          POSTS: ${{ env.SPECIALIST_POSTS_INPUT }}
+        run: |
+          set -euo pipefail
+          python -u tools/enrich_threat_categories.py \
+            --max-posts "$POSTS" --max-fetches 270 --deadline-minutes 31
+      - name: Resume eight other Map topics in Simplified and Traditional Chinese
+        id: chinese
+        timeout-minutes: 40
+        if: env.CHINESE_POSTS_INPUT != '0'
+        env:
+          POSTS: ${{ env.CHINESE_POSTS_INPUT }}
+        run: |
+          set -euo pipefail
+          python -u tools/enrich_chinese_map.py \
+            --max-posts "$POSTS" --max-fetches 140 --deadline-minutes 35
+      - name: Check whether new records need evidence-grounded geolocation
+        if: success()
+        id: new_events
+        env:
+          BEFORE: ${{ runner.temp }}/groq-backfill-before.json
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          seen=set(json.loads(Path(os.environ["BEFORE"]).read_text(encoding="utf-8")))
+          db=json.loads(Path("events.json").read_text(encoding="utf-8"))
+          count=sum(str(e.get("id")) not in seen for e in db["events"])
+          with open(os.environ["GITHUB_OUTPUT"],"a",encoding="utf-8") as out:
+              out.write(f"new_count={count}\n")
+          print(f"New candidate records requiring geo check: {count}")
+          PY
+      - name: Validate only newly integrated records' event locations
+        if: steps.new_events.outputs.new_count != '0' && env.GEMINI_API_KEY != ''
+        timeout-minutes: 22
+        env:
+          AI_GEO_FORCE: "0"
+          AI_GEO_PRESERVE_IDS_FILE: ${{ runner.temp }}/groq-geo-protected.json
+        run: python -u geolocate.py
+      - name: Quarantine newly integrated events still lacking coordinates
+        if: always() && steps.new_events.outcome == 'success'
+        env:
+          BEFORE: ${{ runner.temp }}/groq-backfill-before.json
+        run: |
+          python - <<'PY'
+          import json,math,os
+          from datetime import datetime, timezone
+          from pathlib import Path
+          before=set(json.loads(Path(os.environ["BEFORE"]).read_text(encoding="utf-8")))
+          p=Path("events.json")
+          data=json.loads(p.read_text(encoding="utf-8"))
+          if not isinstance(data.get("events"),list) or not data["events"]:
+              raise SystemExit("Malformed main Map database")
+          def located(e):
+              try:
+                  lat,lon=float(e.get("latitude")),float(e.get("longitude"))
+                  return (math.isfinite(lat) and math.isfinite(lon)
+                          and -90<=lat<=90 and -180<=lon<=180)
+              except (ValueError,TypeError):
+                  return False
+          unlocated=[e for e in data["events"]
+                     if str(e.get("id")) not in before and not located(e)]
+          if unlocated:
+              path=Path("archive/groq-backfill-unlocated.json")
+              saved=json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"events":[]}
+              indexed={str(e.get("id")) for e in saved.get("events",[])}
+              saved["events"].extend(e for e in unlocated if str(e.get("id")) not in indexed)
+              path.write_text(json.dumps(saved,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+              blocked={str(e.get("id")) for e in unlocated}
+              data["events"]=[e for e in data["events"] if str(e.get("id")) not in blocked]
+              p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+          print(f"New unlocated events safely withheld: {len(unlocated)}")
+          PY
+      - name: Save last full checkpoint as recovery artifact even on upstream failure
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: groq-free-backfill-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            events.json
+            archive/threat-enrichment-status.json
+            archive/radnuc-*.json
+            archive/biological-*.json
+            archive/chemical-explosives-*.json
+            archive/gemini-chinese-map-*.json
+            archive/groq-backfill-unlocated.json
+            archive/radnuc-v1-seen-*.txt
+            archive/biological-v1-seen-*.txt
+            archive/chemical-explosives-v1-seen-*.txt
+            archive/gemini-chinese-map-v1-seen-*.txt
+            quota/groq-oss120b-public-backfill.json
+          retention-days: 7
+          if-no-files-found: ignore
+      - name: Commit both resumable history lanes and dedicated Groq quota
+        if: always()
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          db=json.loads(Path("events.json").read_text(encoding="utf-8"))
+          if not isinstance(db.get("events"),list) or not db["events"]:
+              raise RuntimeError("Refusing to commit corrupt Map database")
+          for folder in ("archive","quota"):
+              for path in Path(folder).glob("*.json"):
+                  json.loads(path.read_text(encoding="utf-8"))
+          PY
+          git config user.name "CT Intelligence Map Bot"
+          git config user.email "actions@github.com"
+          git add -- events.json archive quota
+          if git diff --cached --quiet; then
+            echo "Nothing to commit (quota exhausted or no new source results)."
+            exit 0
+          fi
+          git commit -m "Checkpoint free Groq historical backfills and preserve source dedup"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo "::error::Concurrent data conflict. Recovery artifact retained."
+              exit 1
+            fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 4))
+          done
+          exit 1
+      - name: Publish factual coverage not model-marketing claims
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          paths=[
+              "archive/threat-enrichment-status.json",
+              "archive/gemini-chinese-map-status.json",
+              "quota/groq-oss120b-public-backfill.json",
+          ]
+          with open(__import__("os").environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf-8") as out:
+              out.write("## Groq Free public-news historical backfill\n\n")
+              for name in paths:
+                  f=Path(name)
+                  if not f.exists(): continue
+                  obj=json.loads(f.read_text(encoding="utf-8"))
+                  if name.startswith("quota/"):
+                      out.write(f"- Groq UTC-day attempts: {obj.get('requests',0)}/24; "
+                                f"reserved tokens: {obj.get('reserved_tokens',0)}/120000\n")
+                  elif "threat" in name:
+                      counts={k:v.get("pending_searches") for k,v in obj.get("categories",{}).items()}
+                      out.write(f"- CBRNE pending search units: {counts}\n")
+                  else:
+                      out.write(f"- Eight-category Chinese pending search units: "
+                                f"{obj.get('pending_units_including_split_children','unknown')}\n")
+              out.write("\nOnly completed search tasks, actual reviews and accepted "
+                        "geo-checked events count; no claim of exhaustive coverage.\n")
+          PY
+
+  deploy:
+    needs: backfill
+    if: needs.backfill.result == 'success'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/configure-pages@v6
+      - name: Build map payload with existing filters
+        uses: ./.github/actions/build-events-lite
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: .
+      - uses: actions/deploy-pages@v5
+        id: deployment

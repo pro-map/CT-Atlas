@@ -23,6 +23,7 @@ import threat_categories as topics
 import archive_review
 import enrich_archive
 import enrich_radnuc
+import groq_backfill
 import backfill_query
 import radnuc_vocabulary
 
@@ -189,12 +190,17 @@ def refresh_status(root=ROOT, phase=None):
 def run(root=ROOT, max_posts=60, max_fetches=600, today=None, deadline_minutes=75,
         categories=None, searcher_factory=None, gate_factory=None, call_batch=None, log=print):
     root = Path(root)
+    using_groq = groq_backfill.enabled()
+    if using_groq and not os.getenv('GROQ_API_KEY'):
+        raise RuntimeError('Missing GROQ_API_KEY; no specialist checkpoint modified')
     now = datetime.now(timezone.utc)
     today = today or now.date()
     frozen = manifest(root,today)
     anchor = date.fromisoformat(frozen['anchor'])
     collector = archive_review.prepare_collector(archive_review.load_collector(root),
                                                  threshold=archive_review.map_threshold(root))
+    if using_groq:
+        collector.AI_SELECTION_MODEL = groq_backfill.MODEL
     chosen = list(categories or topics.LABELS)
     if any(c not in topics.LABELS for c in chosen): raise ValueError('Unknown specialist category')
     rotation = today.toordinal() % len(chosen)
@@ -204,6 +210,7 @@ def run(root=ROOT, max_posts=60, max_fetches=600, today=None, deadline_minutes=7
         repair_children(root,category,plans[category])
     report = {'updated_at':now.isoformat(),**frozen,'taxonomy_version':topics.VERSION,
               'batch_started_at':now.isoformat(), 'batch_status':'running',
+              'model_backend':'groq-free-public-news' if using_groq else 'gemini',
               'run_id':os.getenv('GITHUB_RUN_ID','local'),
               'daily_collection':'collector.py; shared keyword vocabulary; regular daily schedule',
               'chemical_keywords':topics.vocabulary()['chemical_explosives']['status'],
@@ -212,7 +219,8 @@ def run(root=ROOT, max_posts=60, max_fetches=600, today=None, deadline_minutes=7
               'complete':False,'processing_complete':False,'requests_this_run':0,'searches_this_run':0}
     archive_review.write_json(root/STATUS,report)
     started = time.monotonic()
-    start_ledger = archive_review.DailyLedger(archive_review.ledger_path('enrichment',root),enrich_archive.DAILY_POSTS,now=now)
+    start_ledger = (groq_backfill.GroqDailyQuota(root) if using_groq else
+                    archive_review.DailyLedger(archive_review.ledger_path('enrichment',root),enrich_archive.DAILY_POSTS,now=now))
     spent, fetched = 0, 0
     shared_searcher = None if searcher_factory else SpecialistSearcher(collector)
     try:
@@ -244,16 +252,22 @@ def run(root=ROOT, max_posts=60, max_fetches=600, today=None, deadline_minutes=7
                      'new_event_records':len({str(e.get('id')) for e in output.database['events']}-initial_ids)})
                 report['updated_at'] = datetime.now(timezone.utc).isoformat()
                 archive_review.write_json(root/STATUS,report)
+            extra = groq_backfill.hooks(root,collector) if using_groq else {}
+            if using_groq:
+                extra.update({'gate_factory': gate_factory or extra['gate_factory'],
+                              'call_batch': call_batch or extra['call_batch']})
             summary, stop = enrich_archive.run(root,collector,requests,searches,today=today,now=now,
                 plan_factory=lambda _today,_collector:plan,
                 state_file=f'archive/{prefix}-enrichment-state.json',output_factory=lambda *_:output,
                 event_screen=enrich_radnuc.screen,ledger_job='enrichment',retry_failed_tasks=True,
                 known_keys_factory=known_map_keys,reuse_previous_reviews=False,
-                seen_prefix=f'{prefix}-v1',searcher=searcher,gate_factory=gate_factory,
-                call_batch=call_batch,deadline_minutes=minutes / remaining_categories,log=log,
+                seen_prefix=f'{prefix}-v1',searcher=searcher,
+                **extra, **({} if using_groq else {'gate_factory':gate_factory,'call_batch':call_batch}),
+                deadline_minutes=minutes / remaining_categories,log=log,
                 review_first=True,prioritize_native=True,refine_saturated=True,on_checkpoint=checkpoint,
                 interleave_supplement=(category==topics.RN))
-            ledger = archive_review.DailyLedger(archive_review.ledger_path('enrichment',root),enrich_archive.DAILY_POSTS,now=now)
+            ledger = (groq_backfill.GroqDailyQuota(root) if using_groq else
+                      archive_review.DailyLedger(archive_review.ledger_path('enrichment',root),enrich_archive.DAILY_POSTS,now=now))
             spent = max(0,ledger.used-start_ledger.used)
             fetched += searcher.fetches-fetched_before
             report['categories'][category] = progress(root,category,plan,

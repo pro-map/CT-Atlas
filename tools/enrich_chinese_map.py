@@ -23,6 +23,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 import archive_review
 import enrich_archive
 import enrich_radnuc
+import groq_backfill
 import threat_categories
 
 CONFIG = "chinese-gemini-backfill-queries.json"
@@ -128,7 +129,7 @@ class ChineseMapOutput(enrich_archive.Output):
         self.path = self.root / "archive" / f"gemini-chinese-map-reviews-{now:%Y%m%d}.json"
         self.data = archive_review.read_json(self.path) or {
             "created_at": now.isoformat(),
-            "source": "Gemini historical Chinese news; search edition != event location",
+            "source": "Historical Chinese news (Groq/Gemini); search edition != event location",
             "articles": [],
         }
         self.database = archive_review.read_json(self.root / "events.json")
@@ -227,7 +228,8 @@ def progress(root, config, plan, batch=None, stop="Not yet run", added=0):
     report = {
         "updated_at": datetime.now(timezone.utc).isoformat(),
         "vocabulary_version": config["version"], "anchor": config["anchor"],
-        "window_days": 180, "model_backend": "gemini_existing_enrichment_ledger",
+        "window_days": 180, "model_backend": ("groq_free_public_news" if groq_backfill.enabled()
+                                                  else "gemini_existing_enrichment_ledger"),
         "planned_root_queries": len(plan),
         "processed_root_queries_including_replaced": len(roots & done),
         "rejected_root_queries_not_successes": len(rejected),
@@ -260,19 +262,30 @@ def run(root=ROOT, max_posts=12, max_fetches=90, deadline_minutes=35,
             or not 1 <= deadline_minutes <= 50):
         raise ValueError("Refusing unbounded requests or CPU/source use")
     root = Path(root)
+    using_groq = groq_backfill.enabled()
+    if using_groq and not __import__("os").getenv("GROQ_API_KEY"):
+        raise RuntimeError("Missing GROQ_API_KEY; no Chinese history checkpoint modified")
     now = datetime.now(timezone.utc)
     collector = archive_review.prepare_collector(
         archive_review.load_collector(root),
         threshold=archive_review.map_threshold(root))
+    if using_groq:
+        collector.AI_SELECTION_MODEL = groq_backfill.MODEL
     config = configuration(root, collector)
     frozen_manifest(root, config)
     plan = plan_tasks(config, collector)
     output = ChineseMapOutput(root, now, collector)
     original_ids = {str(x.get("id")) for x in output.database["events"]}
     output.save()  # recovered events are durable before any new source search
+    extra = groq_backfill.hooks(root,collector) if using_groq else {}
+    if using_groq:
+        extra.update({'gate_factory':gate_factory or extra['gate_factory'],
+                      'call_batch':call_batch or extra['call_batch']})
+    else:
+        extra.update({'gate_factory':gate_factory,'call_batch':call_batch})
     summary, stop = enrich_archive.run(
         root, collector, max_posts, max_fetches, today=now.date(), now=now,
-        searcher=searcher, gate_factory=gate_factory, call_batch=call_batch,
+        searcher=searcher, **extra,
         plan_factory=lambda _day, _collector: plan, state_file=STATE,
         output_factory=lambda _root, _now: output,
         ledger_job="enrichment", seen_prefix=SEEN_PREFIX,
@@ -284,7 +297,7 @@ def run(root=ROOT, max_posts=12, max_fetches=90, deadline_minutes=35,
     integrated_new = len({str(x.get("id")) for x in output.database["events"]} - original_ids)
     report = progress(root, config, plan, summary, stop, added=integrated_new)
     print(json.dumps({
-        "model": "Gemini", "successful_fetches": report[
+        "model": groq_backfill.MODEL if using_groq else "Gemini", "successful_fetches": report[
             "confirmed_successful_source_fetches_including_split_children"],
         "pending": report["pending_units_including_split_children"],
         "reviewed_this_batch": summary.get("reviewed", 0),

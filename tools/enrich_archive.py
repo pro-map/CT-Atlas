@@ -622,12 +622,15 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
         event_screen=screen, retry_failed_tasks=False,
         known_keys_factory=known_article_keys, reuse_previous_reviews=True, seen_prefix="enrichment",
         review_first=False, prioritize_native=False, refine_saturated=False, on_checkpoint=None,
-        interleave_supplement=False):
+        interleave_supplement=False, ledger_factory=None, review_batch_size=None,
+        review_provider="Gemini"):
     now = now or datetime.now(timezone.utc)
     today = today or now.date()
     started = clock()
     state = load_state(root, state_file)
-    ledger = archive_review.DailyLedger(archive_review.ledger_path(ledger_job, root), DAILY_POSTS, now=now)
+    ledger = (ledger_factory(root, ledger_job, now) if ledger_factory else
+              archive_review.DailyLedger(
+                  archive_review.ledger_path(ledger_job, root), DAILY_POSTS, now=now))
     budget = ledger.budget(max_posts)
     known = known_keys_factory(root)
     cached = reviewed_fingerprints(root, collector) if reuse_previous_reviews else set()
@@ -652,7 +655,7 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
     summary = {"tasks_done": 0, "fetched": 0, "candidates": 0, "skipped": 0, "skipped_cached": 0, "reviewed": 0,
                "kept": 0, "archived_incident": 0, "unanswerable": 0, "source_failures": 0, "query_errors": 0,
                "split": 0, "given_up": 0}
-    log(f"Enrichment: {len(tasks)} open task(s); Gemini budget {budget} request(s) "
+    log(f"Enrichment: {len(tasks)} open task(s); {review_provider} budget {budget} request(s) "
         f"({ledger.used} already used this Pacific day); up to {max_fetches} searches.")
     if budget <= 0:
         return summary, "daily allocation already used"
@@ -833,8 +836,10 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
                 break
             if not queue or gate.remaining <= 0:
                 break
-            batch = queue[:archive_review.BATCH_SIZE]
-            handled, stop_reason = archive_review.review_batches(batch, collector, save_batch, call_batch)
+            size = review_batch_size or archive_review.BATCH_SIZE
+            batch = queue[:size]
+            handled, stop_reason = archive_review.review_batches(
+                batch, collector, save_batch, call_batch, batch_size=size)
             del queue[:handled]
             replay_left = max(0, replay_left - handled)
             queue_started = clock() if queue else None
@@ -842,7 +847,7 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
                 stop = stop_reason
                 break
         if gate.remaining <= 0 and stop == "plan finished":
-            stop = f"Gemini budget used ({budget})"
+            stop = f"{review_provider} budget used ({budget})"
         posts = gate.posts
 
     for task in failed_searches:
