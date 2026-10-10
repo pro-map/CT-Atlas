@@ -1,13 +1,13 @@
 # Specialist six-month backfill
 
-Last checkpoint (UTC): 2026-10-10T11:32:21.818304+00:00
+Last checkpoint (UTC): 2026-10-10T13:13:24.670335+00:00
 
-**Batch result: partial. Whole backfill complete: NO.**
+**Batch result: blocked. Whole backfill complete: NO.**
 
 | Category | Root queries processed / planned | Rejected queries | Pending work | Awaiting AI review | New event records this batch |
 |---|---:|---:|---:|---:|---:|
-| Radiological/Nuclear | 2104 / 7560 | 0 | 5459 | 15 | 2 |
-| Chemicals and Explosives | 1479 / 2403 | 0 | 924 | 0 | 9 |
+| Radiological/Nuclear | 2104 / 7560 | 0 | 5459 | 15 | 0 |
+| Chemicals and Explosives | 1479 / 2403 | 0 | 924 | 0 | 0 |
 | Biological Terrorism | 624 / 2916 | 0 | 2295 | 0 | 0 |
 
 Processed roots include windows replaced by narrower queries. Rejected queries are NOT successful retrievals. Pending work includes these replacement queries and tasks awaiting review.
@@ -34,9 +34,9 @@ Catch-up rounds started: 9. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ### Radiological/Nuclear
 ```json
 {
-  "stop": "Gemini budget used (20)",
-  "reviewed_this_batch": 260,
-  "successful_fetches_this_batch": 36,
+  "stop": "daily allocation already used",
+  "reviewed_this_batch": 0,
+  "successful_fetches_this_batch": 0,
   "rejected_queries": 0,
   "unresolved_saturated_queries": 0,
   "historical_coverage_issues": {
@@ -50,9 +50,9 @@ Catch-up rounds started: 9. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ### Chemicals and Explosives
 ```json
 {
-  "stop": "Gemini budget used (13)",
-  "reviewed_this_batch": 41,
-  "successful_fetches_this_batch": 170,
+  "stop": "daily allocation already used",
+  "reviewed_this_batch": 0,
+  "successful_fetches_this_batch": 0,
   "rejected_queries": 0,
   "unresolved_saturated_queries": 0,
   "historical_coverage_issues": {
