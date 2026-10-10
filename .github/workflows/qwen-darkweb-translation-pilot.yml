@@ -1,0 +1,51 @@
+name: Qwen Dark Web translation proof of concept (read-only)
+
+on:
+  push:
+    branches:
+      - experiment/qwen-darkweb-translation-20261010
+    paths:
+      - experiments/qwen_darkweb_translation_probe.py
+      - experiments/qwen_darkweb_translation_smoke.py
+      - tests/qwen_darkweb_translation_test.py
+      - .github/workflows/qwen-darkweb-translation-pilot.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qwen-darkweb-translation-synthetic-test
+  cancel-in-progress: true
+
+jobs:
+  synthetic-title-and-overview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Verify no remote API, source hash safety, output shape
+        run: |
+          python -m unittest discover -s tests -p qwen_darkweb_translation_test.py
+          python -m py_compile experiments/qwen_darkweb_translation_probe.py
+      - name: Install local Ollama (no credentials or GPU)
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location https://ollama.com/install.sh -o /tmp/install-ollama.sh
+          sh /tmp/install-ollama.sh
+      - name: Run Ollama and download Qwen 3.5 4B on standard CPU
+        run: |
+          set -euo pipefail
+          nohup ollama serve > /tmp/qwen-darkweb-ollama.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            curl --fail --silent http://127.0.0.1:11434/api/tags > /dev/null && break
+            sleep 2
+          done
+          curl --fail --silent http://127.0.0.1:11434/api/tags > /dev/null
+          ollama pull qwen3.5:4b
+      - name: Translate THREE invented public safety summaries, no real outlet content
+        env:
+          QWEN_DARKWEB_URL: http://127.0.0.1:11434/api/chat
+        run: python experiments/qwen_darkweb_translation_smoke.py
