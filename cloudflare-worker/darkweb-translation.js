@@ -16,10 +16,17 @@ export async function translateDarkwebTitlesWithCloudflare(env, items, sourceTex
     throw new Error("Workers AI title batch exceeded strict limit");
   }
   if (typeof sourceText !== "function") throw new Error("Missing source sanitizer");
+  // Defense in depth: drop URLs, onion addresses and contact emails even
+  // if the caller's normal source sanitizer is relaxed later.
+  const sanitize = (raw, max) => String(sourceText(raw, max) || "")
+    .replace(/https?:\/\/[^\s]+/gi, "[source link omitted]")
+    .replace(/[a-z2-7]{56}\.onion/gi, "[source host omitted]")
+    .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, "[contact omitted]")
+    .slice(0, max);
   const titles = items.map(item => ({
     id: String(item.id),
-    title: sourceText(item.title, 2000),
-    excerpt: sourceText(item.excerpt, 600),
+    title: sanitize(item.title, 2000),
+    excerpt: sanitize(item.excerpt, 600),
     source_language: typeof item.source_language === "string"
       ? item.source_language.slice(0, 8) : "",
   }));
