@@ -24,10 +24,18 @@ published in the repository; private, operational or Tor-sourced cases MUST NOT.
 ## Run the safe offline checks
 
     python -m unittest discover -s tests -p 'external_llm_pilot_test.py' -v
+    python -m unittest discover -s tests -p 'external_llm_metrics_test.py' -v
     python experiments/external_llm_pilot.py --mode plan
+    python experiments/external_llm_pilot.py --mode coverage --max-per-provider 26
 
 No API key is needed. The experiment branch's own GitHub Actions workflow runs
 exactly these checks **without secrets** and with read-only repository access.
+The coverage command reports language balance, all eleven category counts and
+negative controls; it does NOT query any provider. New offline metrics separate
+true positives, false positives, false negatives, precision/recall/F1 by Map
+category, exact-label agreement and evidence-status/country disagreements.
+The translation audit counts reference-title exact matches and invented digits,
+but requires an independent bilingual review to establish fidelity.
 
 ## Optional small live test (only after manual account verification)
 
@@ -64,7 +72,9 @@ string YES:
 
 The scoped Workers AI token is not the CT ATLAS production D1 token.
 
-The command (with credentials supplied securely through the local environment):
+The command (with credentials supplied securely through the local environment,
+and ONLY after checking the account-specific free plan, regulatory obligations
+and privacy authorizations):
 
     python experiments/external_llm_pilot.py --mode live --provider groq --max-per-provider 2
     python experiments/external_llm_pilot.py --mode live --provider cloudflare --max-per-provider 2
@@ -74,6 +84,11 @@ have been checked. A failed preflight aborts before any request from either
 provider. Only aggregate synthetic outcomes and token counts are printed.
 Neither source text nor model completions nor secrets are logged or committed.
 No session, credential, usage quota or billing setting is changed.
+Never enable live inference by setting flags merely to pass a technical test.
+The Cloudflare account's Workers subscription may have changed since a past
+invoice/alert: only the current Dashboard can establish its present status.
+Likewise Groq API-key existence says nothing about the organization billing
+tier. The controlled trial remains blocked until those facts are verified.
 
 ## Provider implementation details
 
