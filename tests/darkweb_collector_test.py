@@ -55,8 +55,8 @@ def test_hardened_source_proxy_uses_per_run_tor_isolation_and_no_ctatlas_user_ag
     for value in (first, second):
         parsed = c.urlsplit(value)
         assert parsed.scheme == 'socks5h' and parsed.hostname == '127.0.0.1' and parsed.port == 9150
-        assert parsed.username == '<torS0X>0'
-        assert parsed.password in {'a1', 'b2'}
+        assert c.unquote(parsed.username) == '<torS0X>0'
+        assert c.unquote(parsed.password) in {'a1', 'b2'}
     assert 'CTAtlas' not in c.SOURCE_USER_AGENT
     assert 'Firefox/140.0' in c.SOURCE_USER_AGENT
 
