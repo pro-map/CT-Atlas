@@ -17,7 +17,7 @@ class LocalRunnerTests(unittest.TestCase):
                 self.assertEqual(runner.main(), 0)
 
     def test_groq_free_plan_must_be_confirmed(self):
-        with mock.patch("builtins.input", side_effect=["1", "oui", "non"]):
+        with mock.patch("builtins.input", side_effect=["1", "oui", "", "non"]):
             with mock.patch.object(runner.pilot, "main",
                                    side_effect=AssertionError("Unexpected API")):
                 self.assertEqual(runner.main(), 0)
@@ -29,12 +29,13 @@ class LocalRunnerTests(unittest.TestCase):
             seen["env"] = env
             seen["key_while_running"] = env["GROQ_API_KEY"]
             return 0
-        with mock.patch("builtins.input", side_effect=["1", "oui", "oui"]):
+        with mock.patch("builtins.input", side_effect=["1", "oui", "", "oui"]):
             with mock.patch.object(runner.getpass, "getpass", return_value="FAKE_ONLY"):
                 with mock.patch.object(runner.pilot, "main", side_effect=fake):
                     self.assertEqual(runner.main(), 0)
         self.assertEqual(seen["args"],
-                         ["--mode", "live", "--provider", "groq", "--max-per-provider", "1"])
+                         ["--mode", "live", "--provider", "groq", "--max-per-provider", "1",
+                          "--start-at", "0", "--show-synthetic-comparisons"])
         self.assertEqual(seen["key_while_running"], "FAKE_ONLY")
         self.assertEqual(seen["env"], {}, "Credentials cleared on completion")
 
@@ -45,7 +46,7 @@ class LocalRunnerTests(unittest.TestCase):
             seen["key_while_running"] = env["CLOUDFLARE_AI_API_TOKEN"]
             seen["reference"] = env
         with mock.patch("builtins.input", side_effect=[
-                "2", "oui", "oui", "c" * 32]):
+                "2", "oui", "", "oui", "c" * 32]):
             with mock.patch.object(runner.getpass, "getpass", return_value="MOCK_TOKEN"):
                 with mock.patch.object(runner.pilot, "main", side_effect=fake):
                     self.assertEqual(runner.main(), 0)
@@ -53,9 +54,32 @@ class LocalRunnerTests(unittest.TestCase):
         self.assertEqual(seen["key_while_running"], "MOCK_TOKEN")
         self.assertEqual(seen["reference"], {})
 
+    def test_second_fictional_translation_can_be_selected(self):
+        seen = {}
+        def fake(argv, env):
+            seen["args"] = argv
+            return 0
+        with mock.patch("builtins.input", side_effect=[
+                "2", "oui", "2", "oui", "c" * 32]):
+            with mock.patch.object(runner.getpass, "getpass", return_value="FAKE_ONLY"):
+                with mock.patch.object(runner.pilot, "main", side_effect=fake):
+                    self.assertEqual(runner.main(), 0)
+        self.assertEqual(seen["args"],
+                         ["--mode", "live", "--provider", "cloudflare",
+                          "--max-per-provider", "1", "--start-at", "1",
+                          "--show-synthetic-comparisons"])
+
+    def test_invalid_case_number_aborts_without_credentials_or_network(self):
+        with mock.patch("builtins.input", side_effect=["2", "oui", "9"]):
+            with mock.patch.object(runner.getpass, "getpass",
+                                   side_effect=AssertionError("Key requested")):
+                with mock.patch.object(runner.pilot, "main",
+                                       side_effect=AssertionError("Unexpected API call")):
+                    self.assertEqual(runner.main(), 1)
+
     def test_provider_refusal_does_not_echo_key(self):
         fake_error = runner.pilot.PilotSafetyError("Provider HTTP 403; no retry")
-        with mock.patch("builtins.input", side_effect=["1", "oui", "oui"]):
+        with mock.patch("builtins.input", side_effect=["1", "oui", "", "oui"]):
             with mock.patch.object(runner.getpass, "getpass", return_value="NEVER_PRINT_TOKEN"):
                 with mock.patch.object(runner.pilot, "main", side_effect=fake_error):
                     with mock.patch("builtins.print") as show:
