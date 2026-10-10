@@ -745,7 +745,7 @@ def test_watch_follows_pagination_only_while_new_publications_are_present(tmp_pa
     # Simulate returning after several days: six unseen publications now span
     # two listing pages; page 3 contains only the already-known boundary item.
     site.pages[BASE] = cards([6, 5, 4], True)
-    site.pages[BASE+'page/2/'] = cards([3, 2, 1]) + '<a href="/page/3/">Next page</a>'
+    site.pages[BASE+'page/2/'] = cards([3, 2, 1]) + '<ul class="pagination"><li><a href="/page/3/">3</a></li></ul>'
     site.pages[BASE+'page/3/'] = cards([0])
     before = len(site.calls)
     _, sent = policy_scan(site, db, tmp_path, outlet, budget=20)
