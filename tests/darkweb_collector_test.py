@@ -2145,7 +2145,7 @@ def test_launcher_runs_bessira_once_and_stops():
     lines = raw.decode('ascii').splitlines()
     assert 'cd /d "%~dp0"' in lines
     prompt = next(i for i, line in enumerate(lines) if 'set /p "DARKWEB_INGEST_TOKEN=' in line)
-    collector = lines.index('py collector.py --proxy socks5h://127.0.0.1:9150 --once --pages-per-scan 25 --connect-timeout 120')
+    collector = lines.index('py collector.py --proxy socks5h://127.0.0.1:9150 --once --pages-per-scan 100 --connect-timeout 120')
     assert prompt < collector
     assert not any(line.strip().lower() == ':run' or line.strip().lower().startswith('goto ') for line in lines)
     assert not any('--interval' in line for line in lines)
