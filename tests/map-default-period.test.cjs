@@ -69,8 +69,10 @@ test("heat zones and the offices layer are always on (no toggles), and a missing
   // Both the render guard and the start-up fallback must tolerate the CDN plugin not loading.
   assert.match(html,/showHeat\s*&&\s*typeof L\.heatLayer === "function"/);
   assert.match(html,/typeof L\.heatLayer !== "function"[\s\S]{0,200}showHeat\s*=\s*false;/);
-  const activeLayers=[...html.matchAll(/<button class="layer-button( active)?" id="(\w+)"/g)].filter(match=>match[1]).map(match=>match[2]);
-  assert.ok(activeLayers.includes("markersToggle"));
+  // The redundant EVENTS/markersToggle button was intentionally removed.
+  // Marker rendering is still enabled with no user-facing switch.
+  assert.ok(!html.includes('id="markersToggle"'));
+  assert.match(html,/const showMarkers\s*=\s*true;/);
 });
 
 test("the live smoke test waits for GitHub Pages to publish the new map before validating it",()=>{
