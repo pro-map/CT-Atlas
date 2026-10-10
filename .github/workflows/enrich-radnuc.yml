@@ -1,27 +1,9 @@
-name: Enrich specialist categories
+name: Specialist CBRNE Gemini backup (manual only)
 
+# Historical Gemini fallback is manual-only while Groq uses the same
+# durable checkpoint and the shared ct-map-update-main lock. Daily Gemini
+# collection and the separate background archive are NOT affected.
 on:
-  push:
-    branches: [main]
-    paths:
-      - radnuc.py
-      - radnuc_vocabulary.py
-      - radnuc-keywords.json
-      - threat_categories.py
-      - threat-category-keywords.json
-      - tools/enrich_threat_categories.py
-      - tools/enrich_archive.py
-      - tools/backfill_query.py
-      - tools/specialist_catchup.py
-      - specialist-catchup.json
-      - tools/migrate_threat_categories.py
-      - tools/enrich_radnuc.py
-      - .github/workflows/enrich-radnuc.yml
-  schedule:
-    # After the Pacific-day Gemini quota rollover and the 10:17 Paris daily map.
-    # Runs after the bounded 11:20 Chinese history slice; still at most 60 posts.
-    - cron: "15 12 * * *"
-      timezone: Europe/Paris
   workflow_dispatch:
     inputs:
       continuation:
