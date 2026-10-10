@@ -2219,7 +2219,7 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
                 previews_left -= 1
                 source = json.dumps(preview_source(row))
                 retry = db.execute("SELECT attempts FROM preview_retries WHERE outlet_id=? AND url=? AND source=?", (oid, row["url"], source)).fetchone()
-                result = make_preview(tor, row, allow_pdf=not outlet.get("disable_pdf_preview"))
+                result = make_preview(tor, row, allow_pdf=False) if outlet.get("disable_pdf_preview") else make_preview(tor, row)
                 attempts = (retry[0] if retry else 0) + 1
                 if result.get("transient") and attempts >= 3:
                     result = {"preview_status": "Preview source unreachable after 3 attempts", "preview_version": 2}
