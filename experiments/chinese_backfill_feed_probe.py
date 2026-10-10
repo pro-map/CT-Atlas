@@ -39,7 +39,7 @@ def request(session, profile, q):
     count=len(parsed.entries)
     print(f"CHINESE_RSS code={profile['code']} "
           f"edition={profile['ceid']} entries={count} "
-          f"cjk_titles={sum(any('\\u4e00'<=char<='\\u9fff' for char in str(entry.get('title',''))) for entry in parsed.entries)}",flush=True)
+          f"cjk_titles={sum(any(0x4E00<=ord(char)<=0x9FFF for char in str(entry.get('title',''))) for entry in parsed.entries)}",flush=True)
     return count
 
 def main():
