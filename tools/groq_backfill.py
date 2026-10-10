@@ -173,6 +173,9 @@ class GroqDailyQuota:
         self.path = Path(root) / QUOTA_FILE
         self.day = datetime.now(timezone.utc).date().isoformat()
         prior = archive_review.read_json(self.path) or {}
+        # Cross-run pacing must survive the split between specialist and
+        # Chinese scripts, and even a UTC midnight/day reset.
+        self.last_call_epoch = max(0.0, float(prior.get("last_call_epoch") or 0.0))
         if prior.get("utc_day") == self.day:
             self.used = max(0, int(prior.get("requests", 0)))
             self.tokens = max(0, int(prior.get("reserved_tokens", 0)))
@@ -194,6 +197,7 @@ class GroqDailyQuota:
         # Reserve BEFORE HTTP, including attempts that fail; never double-spend.
         self.used += 1
         self.tokens += tokens
+        self.last_call_epoch = time.time()
         self.persist()
 
     def persist(self):
@@ -202,6 +206,7 @@ class GroqDailyQuota:
             "reserved_tokens": self.tokens,
             "request_cap": MAX_POSTS_PER_UTC_DAY,
             "token_cap": MAX_RESERVED_TOKENS_PER_UTC_DAY,
+            "last_call_epoch": self.last_call_epoch,
             "model": MODEL,
             "updated_at": datetime.now(timezone.utc).isoformat(),
         })
@@ -270,10 +275,12 @@ class GroqGate:
                 "Groq: request exceeds conservative 7k TPM ceiling; split batch")
         if self.posts >= self.max_posts:
             raise archive_review.BudgetReached("Groq per-run request cap reached")
-        if self._last is not None:
-            delay = MIN_INTERVAL_SECONDS - (self.clock() - self._last)
-            if delay > 0:
-                self.sleep(delay)
+        within_run = (MIN_INTERVAL_SECONDS - (self.clock() - self._last)
+                      if self._last is not None else 0)
+        across_runs = MIN_INTERVAL_SECONDS - (time.time() - self.quota.last_call_epoch)
+        delay = max(0.0, within_run, across_runs)
+        if delay > 0:
+            self.sleep(delay)
         self.quota.reserve(reservation)
         self.posts += 1
         self._last = self.clock()
