@@ -50,6 +50,7 @@ import os
 import sys
 import time
 import unicodedata
+from itertools import zip_longest
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import quote_plus, urlencode
@@ -585,6 +586,30 @@ class Output:
 
 # ---------------------------------------------------------------- the run
 
+def order_historical_tasks(tasks, *, ai_backend="gemini", prioritize_native=False):
+    """Fair local-Qwen scheduling without changing any Gemini search ordering.
+
+    The user-supplied 181-term Radiological/Nuclear supplement is part of
+    the frozen plan, but was appended behind thousands of existing searches.
+    Under Qwen ONLY, alternate supplemental and ordinary searches so its
+    measured progress begins promptly instead of waiting for every older
+    regular query. Never mark a request done, clear state, or drop a task here.
+    """
+    if ai_backend not in ("gemini", "qwen"):
+        raise ValueError("Unknown historical model backend")
+    ordered = list(tasks)
+    if prioritize_native:
+        ordered.sort(key=lambda task: task["source"] == "gdelt")
+    if ai_backend != "qwen":
+        return ordered
+    supplemental = [task for task in ordered if task.get("supplemental_vocabulary")]
+    if not supplemental:
+        return ordered
+    ordinary = [task for task in ordered if not task.get("supplemental_vocabulary")]
+    return [task for pair in zip_longest(supplemental, ordinary)
+            for task in pair if task is not None]
+
+
 def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=None, call_batch=None,
         gate_factory=None, log=print, deadline_minutes=DEADLINE_MINUTES, clock=time.monotonic,
         plan_factory=plan_tasks, state_file=STATE_FILE, output_factory=Output, ledger_job="enrichment",
@@ -614,10 +639,10 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
     tasks = [task for task in state["children"].values() if task["key"] not in state["done"]]
     tasks += [task for task in plan if task["key"] not in state["done"]]
     tasks = list({task['key']: task for task in tasks}.values())
-    if prioritize_native:
-        # Complete native-language historical searches before a refusing optional
-        # provider can consume every category's time slice.
-        tasks.sort(key=lambda task: task['source'] == 'gdelt')
+    # Native-first within each group, and only for local Qwen interleave
+    # the separate 181-keyword Radiological/Nuclear supplemental plan.
+    tasks = order_historical_tasks(tasks, ai_backend=ai_backend,
+                                   prioritize_native=prioritize_native)
     # A successful RSS response survives a time/quota stop. Resume its review
     # instead of repeatedly downloading the same (possibly changed) feed.
     replay = list(state["pending_reviews"])
