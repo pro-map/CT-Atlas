@@ -51,6 +51,7 @@ import sys
 import time
 import unicodedata
 from datetime import date, datetime, timedelta, timezone
+from itertools import zip_longest
 from pathlib import Path
 from urllib.parse import quote_plus, urlencode
 
@@ -585,12 +586,35 @@ class Output:
 
 # ---------------------------------------------------------------- the run
 
+def order_history_tasks(tasks, *, prioritize_native=False, interleave_supplement=False):
+    """Choose search order ONLY; never rewrite task IDs, checkpoints or quotas.
+
+    The 181-keyword radiological supplement was appended behind several
+    thousand legacy tasks. Alternate supplement and ordinary searches when
+    explicitly requested by the specialist runner, while still preferring
+    accessible Google News over a rate-limited GDELT source. Other historical
+    runs retain their previous ordering.
+    """
+    ordered = list(tasks)
+    if prioritize_native:
+        ordered.sort(key=lambda task: task["source"] == "gdelt")
+    if not interleave_supplement:
+        return ordered
+    extra = [t for t in ordered if t.get("supplemental_vocabulary")]
+    ordinary = [t for t in ordered if not t.get("supplemental_vocabulary")]
+    if not extra:
+        return ordered
+    return [task for pair in zip_longest(extra, ordinary)
+            for task in pair if task is not None]
+
+
 def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=None, call_batch=None,
         gate_factory=None, log=print, deadline_minutes=DEADLINE_MINUTES, clock=time.monotonic,
         plan_factory=plan_tasks, state_file=STATE_FILE, output_factory=Output, ledger_job="enrichment",
         event_screen=screen, retry_failed_tasks=False,
         known_keys_factory=known_article_keys, reuse_previous_reviews=True, seen_prefix="enrichment",
-        review_first=False, prioritize_native=False, refine_saturated=False, on_checkpoint=None):
+        review_first=False, prioritize_native=False, refine_saturated=False, on_checkpoint=None,
+        interleave_supplement=False):
     now = now or datetime.now(timezone.utc)
     today = today or now.date()
     started = clock()
@@ -607,10 +631,9 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
     tasks = [task for task in state["children"].values() if task["key"] not in state["done"]]
     tasks += [task for task in plan if task["key"] not in state["done"]]
     tasks = list({task['key']: task for task in tasks}.values())
-    if prioritize_native:
-        # Complete native-language historical searches before a refusing optional
-        # provider can consume every category's time slice.
-        tasks.sort(key=lambda task: task['source'] == 'gdelt')
+    # Schedule work without touching the durable state or completed search IDs.
+    tasks = order_history_tasks(tasks, prioritize_native=prioritize_native,
+                                interleave_supplement=interleave_supplement)
     # A successful RSS response survives a time/quota stop. Resume its review
     # instead of repeatedly downloading the same (possibly changed) feed.
     replay = list(state["pending_reviews"])
