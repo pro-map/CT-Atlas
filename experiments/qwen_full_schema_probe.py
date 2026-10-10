@@ -26,20 +26,29 @@ def main():
     backend=LocalQwenBackend(collector)
     collector.AI_SELECTION_MODEL=backend.model
     start=time.monotonic()
+    mismatches=[]
     with backend.gate_factory(len(selected)) as gate:
         for i,row in enumerate(selected,1):
             original_title, _, original_summary = row["text"].partition("\n")
             source={"id":"p0","title":original_title,"summary":original_summary,
-                    "original_language":row["language"],"published":"2026-06-01",
+                    "original_language":row["language"],"published":row["published"],
                     "source":"Previously reviewed public news","categories":[]}
             result=backend.call_batch([collector.selection_payload(source,0)])[0]
             labels=set(result["categories"])
             agree=row["target"] in labels
+            if not agree:
+                mismatches.append(row["id"])
             print(f"FULL_SCHEMA {i}/{len(selected)} target={row['target']} "
-                  f"language={row['language']} previous_Gemini_positive=True "
+                  f"language={row['language']} ref={row['id']} publication={row['published']} previous_Gemini_positive=True "
                   f"Qwen_has_target={agree} score={result['relevance_score']} "
                   f"status={result['reported_status']} valid_schema=True",flush=True)
         print(f"FULL_SCHEMA complete: {gate.posts} local inferences in "
-              f"{time.monotonic()-start:.1f}s; data unchanged.",flush=True)
+              f"{time.monotonic()-start:.1f}s; data unchanged. "
+              f"Disagreements vs earlier Gemini: {len(mismatches)}/{len(selected)}; "
+              "human source-evidence adjudication required before production.",flush=True)
+        if mismatches:
+            raise SystemExit("QWEN QUALITY GATE NOT SATISFIED: Gemini-positive references "
+                             "missed by Qwen: " + ", ".join(mismatches) +
+                             ". Human review must decide which model is correct.")
 if __name__=="__main__":
     main()
