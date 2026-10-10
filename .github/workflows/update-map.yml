@@ -146,8 +146,12 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_GEO_MODEL: "gemini-3.5-flash-lite"
-          # 3.6 Flash stays free for the Report Generator / Deep Search fallback.
-          GEMINI_RESCUE_MODELS: "gemini-3.7-flash,gemini-3.8-flash,gemini-3.5-flash"
+          # Deprecated 3.7 redirects to 3.8; deprecated 3.5 Flash redirects
+          # to 3.6 (reserved for interactive reports/Deep Search).
+          # The optional 3.8 rescue is disabled until account-specific billing
+          # tier and rate limits have been checked in Google AI Studio.
+          GEMINI_RESCUE_MODELS: "gemini-3.8-flash"
+          GEMINI_RESCUE_BILLING_VERIFIED: "false"
           AI_GEO_BATCH_SIZE: "20"
           PRESERVE_FILE: ${{ runner.temp }}/ct-preserve-geo-ids.json
         run: |
