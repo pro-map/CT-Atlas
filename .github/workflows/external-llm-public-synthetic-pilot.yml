@@ -8,8 +8,10 @@ on:
     paths:
       - .github/workflows/external-llm-public-synthetic-pilot.yml
       - experiments/external_llm_pilot.py
+      - experiments/external_llm_metrics.py
       - experiments/fixtures/external_llm_public_synthetic.json
       - tests/external_llm_pilot_test.py
+      - tests/external_llm_metrics_test.py
 
 permissions:
   contents: read
@@ -31,8 +33,12 @@ jobs:
         run: pip install -r requirements.txt
       - name: Validate fixed public-synthetic fixtures and fail-closed provider adapters
         run: python -m unittest discover -s tests -p 'external_llm_pilot_test.py' -v
+      - name: Validate synthetic evaluation metrics (including false positives and geography)
+        run: python -m unittest discover -s tests -p 'external_llm_metrics_test.py' -v
       - name: Exercise both model request plans WITHOUT credentials, egress or billing
-        run: python experiments/external_llm_pilot.py --mode plan --provider both --max-per-provider 2
+        run: |
+          python experiments/external_llm_pilot.py --mode plan --provider both --max-per-provider 2
+          python experiments/external_llm_pilot.py --mode coverage --provider both --max-per-provider 26
       - name: Explain limits
         run: |
           echo 'This workflow contains NO live model calls and NO empirical quality benchmark.' >> "$GITHUB_STEP_SUMMARY"
