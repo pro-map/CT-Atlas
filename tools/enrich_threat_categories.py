@@ -251,7 +251,8 @@ def run(root=ROOT, max_posts=60, max_fetches=600, today=None, deadline_minutes=7
                 known_keys_factory=known_map_keys,reuse_previous_reviews=False,
                 seen_prefix=f'{prefix}-v1',searcher=searcher,gate_factory=gate_factory,
                 call_batch=call_batch,deadline_minutes=minutes / remaining_categories,log=log,
-                review_first=True,prioritize_native=True,refine_saturated=True,on_checkpoint=checkpoint)
+                review_first=True,prioritize_native=True,refine_saturated=True,on_checkpoint=checkpoint,
+                interleave_supplement=(category==topics.RN))
             ledger = archive_review.DailyLedger(archive_review.ledger_path('enrichment',root),enrich_archive.DAILY_POSTS,now=now)
             spent = max(0,ledger.used-start_ledger.used)
             fetched += searcher.fetches-fetched_before
