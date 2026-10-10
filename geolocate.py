@@ -2204,7 +2204,12 @@ def main():
         f"Primary model: {GEMINI_MODEL}"
     )
     print(
-        f"Rescue models: {', '.join(GEMINI_RESCUE_MODELS)}"
+        f"Rescue models (configured only): {', '.join(GEMINI_RESCUE_MODELS)}"
+    )
+    print(
+        "Rescue API access: "
+        + ("allowed after project billing verification" if GEMINI_RESCUE_BILLING_VERIFIED
+           else "PAUSED pending project-specific billing/rate-limit verification")
     )
     print(
         f"Batch size: {BATCH_SIZE}"
@@ -2648,7 +2653,7 @@ def main():
 
         save_checkpoint(
             data,
-            "Gemini 3.6 one-shot rescue pass",
+            "optional Gemini rescue pass (if billing verified)",
         )
 
     # --------------------------------------------------------
@@ -2714,6 +2719,9 @@ def main():
 
         "rescue_models":
             GEMINI_RESCUE_MODELS,
+
+        "rescue_enabled":
+            GEMINI_RESCUE_BILLING_VERIFIED and bool(GEMINI_RESCUE_MODELS),
 
         "rescue_policy":
             "one_automatic_rescue_then_freeze_if_billing_verified",
