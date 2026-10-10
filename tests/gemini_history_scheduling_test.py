@@ -29,7 +29,7 @@ class HistoricalOrderingTests(unittest.TestCase):
             self.tasks, prioritize_native=True, interleave_supplement=True)
         self.assertEqual([x["key"] for x in result],
                          ["supp-g1", "normal-g1", "supp-g2", "normal-g2",
-                          "supp-d", "normal-g3", "normal-d"])
+                          "normal-g3", "supp-d", "normal-d"])
         self.assertEqual({x["key"] for x in result},
                          {x["key"] for x in original})
         self.assertEqual(self.tasks, original)
