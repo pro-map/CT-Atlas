@@ -226,7 +226,7 @@ class SafetyAndValidationTests(unittest.TestCase):
             status_code = 200
             def json(self):
                 return {"choices": [{"finish_reason": "stop", "message": {
-                    "content": "```json\\n" + json.dumps(response_json) + "\\n```"
+                    "content": "```json\n" + json.dumps(response_json) + "\n```"
                 }}], "usage": {"prompt_tokens": 120, "completion_tokens": 70}}
         calls = []
         def fake(*args, **kwargs):
