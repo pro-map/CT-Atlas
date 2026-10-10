@@ -1,0 +1,52 @@
+name: Qwen backfill-only CPU feasibility (isolated)
+
+# Runs only on the designated experiment branch, not on main or on a schedule.
+on:
+  push:
+    branches:
+      - experiment/qwen-backfill-only-20261010
+    paths:
+      - .github/workflows/qwen-backfill-pilot.yml
+      - experiments/qwen_backfill_probe.py
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qwen-backfill-cpu-pilot
+  cancel-in-progress: true
+
+jobs:
+  classify-synthetic-news:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout experiment branch
+        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Install local Ollama (no API account or secrets)
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location \
+            https://ollama.com/install.sh --output /tmp/install-ollama.sh
+          sh /tmp/install-ollama.sh
+      - name: Start local Qwen 3.5 4B on standard CPU runner
+        run: |
+          set -euo pipefail
+          nohup ollama serve > /tmp/ct-qwen-ollama.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:11434/api/tags > /dev/null; then
+              break
+            fi
+            sleep 2
+          done
+          curl --fail --silent http://127.0.0.1:11434/api/tags > /dev/null
+          ollama pull qwen3.5:4b
+          ollama list
+      - name: Test isolated classification (no changes to CT ATLAS)
+        env:
+          OLLAMA_URL: http://127.0.0.1:11434
+        run: python experiments/qwen_backfill_probe.py
