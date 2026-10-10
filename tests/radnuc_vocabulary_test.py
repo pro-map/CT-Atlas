@@ -79,16 +79,41 @@ class SupplementPlan(unittest.TestCase):
     def test_every_new_query_in_every_window_for_each_provider(self):
         windows={e.window(task) for task in self.plan}
         for window in windows:
-            for source in ['google','gdelt']:
-                with self.subTest(window=window,source=source):
-                    self.assertEqual({x['query'] for x in self.plan if e.window(x)==window and x['source']==source},set(v.queries()))
+            self.assertEqual(
+                {x['query'] for x in self.plan
+                 if e.window(x)==window and x['source']=='gdelt'},
+                set(v.queries()))
+            self.assertEqual(
+                {x['query'] for x in self.plan
+                 if e.window(x)==window and x['source']=='google' and x['code']=='en'},
+                set(v.queries()))
+            for code,profile in v.CHINESE_SUPPLEMENT_QUERIES.items():
+                with self.subTest(window=window,code=code):
+                    chinese=[x for x in self.plan if e.window(x)==window
+                             and x['source']=='google' and x['code']==code]
+                    self.assertEqual({x['query'] for x in chinese},set(profile['queries']))
+                    self.assertTrue(all(x['locale']==f"{profile['hl']}|{profile['gl']}|{profile['ceid']}"
+                                        for x in chinese))
+
+    def test_chinese_supplement_preserves_exactly_181_user_keywords(self):
+        self.assertEqual(len(v.all_terms()),181)
+        self.assertEqual({x['code'] for x in self.plan
+                          if x['source']=='google' and x['code'].startswith('zh')},
+                         {'zh','zh-Hant'})
+        self.assertTrue(all(x['supplemental_vocabulary']==v.vocabulary()['version']
+                            for x in self.plan))
+        self.assertTrue(set(v.queries()) <= {x['query'] for x in self.plan})
 
     def test_original_checkpoint_identities_are_not_reset(self):
         with patch.object(v,'backfill_tasks',return_value=[]):
             before=b.plan_tasks(t.RN,date(2026,10,8),collector)
         after=b.plan_tasks(t.RN,date(2026,10,8),collector)
         self.assertTrue({x['key'] for x in before}<={x['key'] for x in after})
-        self.assertEqual(len(before),2160)
+        # The existing English/other native queries retain every old key.
+        # The new Chinese-only keys are strictly additive.
+        old=[task for task in before if task['code'] not in ('zh','zh-Hant')]
+        self.assertEqual(len(old),2160)
+        self.assertGreater(len(before),len(old))
 
     def test_supplement_stays_frozen_when_base_plan_date_advances(self):
         one=r.plan_tasks(date(2026,10,8),collector)
