@@ -81,6 +81,16 @@ def main() -> int:
     had_failure = False
     for provider in selected:
         print(f"\n>>> Fournisseur : {provider.upper()}")
+        type_name = "classification" if provider == "groq" else "translation"
+        available = len([x for x in cases if x["task"] == type_name])
+        raw = input(
+            f"Numero de l'exemple FICTIF a evaluer pour {provider} (1-{available}) [1] : "
+        ).strip()
+        if raw and (not raw.isdecimal() or not 1 <= int(raw) <= available):
+            had_failure = True
+            print("Numero invalide. Aucun appel a cette IA.")
+            continue
+        start_at = (int(raw) if raw else 1) - 1
         env = make_env(provider)
         if env is None:
             continue
@@ -88,7 +98,8 @@ def main() -> int:
             # Pilot enforces: separate free-tier approval, <=2 synthetic items
             # per provider, known HTTPS origin, NO redirects and NO retries.
             pilot.main(
-                ["--mode", "live", "--provider", provider, "--max-per-provider", "1"],
+                ["--mode", "live", "--provider", provider, "--max-per-provider", "1",
+                 "--start-at", str(start_at), "--show-synthetic-comparisons"],
                 env=env,
             )
         except pilot.PilotSafetyError as exc:
@@ -101,8 +112,10 @@ def main() -> int:
         finally:
             # No secret was written to an OS environment variable or disk.
             env.clear()
-    print("\nTERMINE. Tu peux copier ici UNIQUEMENT les metriques et codes")
-    print("d'erreur generiques affiches, jamais les cles API ou Account ID.")
+    print("\nTERMINE. Tu peux copier ici les metriques ET les traductions fictives")
+    print("affichees, car seules des donnees inventees sont traitees.")
+    print("N'envoie JAMAIS les cles API, Account ID, captures des entrees masquees,")
+    print("ni des donnees CT ATLAS/INTERPOL/Dark Web.")
     return 1 if had_failure else 0
 
 
