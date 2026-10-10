@@ -1,13 +1,13 @@
 # Specialist six-month backfill
 
-Last checkpoint (UTC): 2026-10-10T10:55:05.524753+00:00
+Last checkpoint (UTC): 2026-10-10T11:32:21.818304+00:00
 
-**Batch result: interrupted. Whole backfill complete: NO.**
+**Batch result: partial. Whole backfill complete: NO.**
 
 | Category | Root queries processed / planned | Rejected queries | Pending work | Awaiting AI review | New event records this batch |
 |---|---:|---:|---:|---:|---:|
-| Radiological/Nuclear | 2065 / 7560 | 0 | 5498 | 12 | 0 |
-| Chemicals and Explosives | 1413 / 2403 | 0 | 990 | 0 | 0 |
+| Radiological/Nuclear | 2104 / 7560 | 0 | 5459 | 15 | 2 |
+| Chemicals and Explosives | 1479 / 2403 | 0 | 924 | 0 | 9 |
 | Biological Terrorism | 624 / 2916 | 0 | 2295 | 0 | 0 |
 
 Processed roots include windows replaced by narrower queries. Rejected queries are NOT successful retrievals. Pending work includes these replacement queries and tasks awaiting review.
@@ -34,9 +34,9 @@ Catch-up rounds started: 9. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ### Radiological/Nuclear
 ```json
 {
-  "stop": "Running; reviewed candidates checkpointed",
-  "reviewed_this_batch": 73,
-  "successful_fetches_this_batch": 12,
+  "stop": "Gemini budget used (20)",
+  "reviewed_this_batch": 260,
+  "successful_fetches_this_batch": 36,
   "rejected_queries": 0,
   "unresolved_saturated_queries": 0,
   "historical_coverage_issues": {
@@ -50,9 +50,9 @@ Catch-up rounds started: 9. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ### Chemicals and Explosives
 ```json
 {
-  "stop": "Not processed in this batch; previous progress preserved",
-  "reviewed_this_batch": 0,
-  "successful_fetches_this_batch": 0,
+  "stop": "Gemini budget used (13)",
+  "reviewed_this_batch": 41,
+  "successful_fetches_this_batch": 170,
   "rejected_queries": 0,
   "unresolved_saturated_queries": 0,
   "historical_coverage_issues": {
@@ -66,7 +66,7 @@ Catch-up rounds started: 9. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ### Biological Terrorism
 ```json
 {
-  "stop": "Not processed in this batch; previous progress preserved",
+  "stop": "daily allocation already used",
   "reviewed_this_batch": 0,
   "successful_fetches_this_batch": 0,
   "rejected_queries": 0,
