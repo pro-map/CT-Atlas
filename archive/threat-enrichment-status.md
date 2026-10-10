@@ -1,14 +1,14 @@
 # Specialist six-month backfill
 
-Last checkpoint (UTC): 2026-10-10T10:46:26.070880+00:00
+Last checkpoint (UTC): 2026-10-10T10:55:05.524753+00:00
 
-**Batch result: partial. Whole backfill complete: NO.**
+**Batch result: interrupted. Whole backfill complete: NO.**
 
 | Category | Root queries processed / planned | Rejected queries | Pending work | Awaiting AI review | New event records this batch |
 |---|---:|---:|---:|---:|---:|
-| Radiological/Nuclear | 2053 / 7560 | 0 | 5510 | 23 | 2 |
-| Chemicals and Explosives | 1413 / 2403 | 0 | 990 | 0 | 16 |
-| Biological Terrorism | 624 / 2916 | 0 | 2295 | 0 | 3 |
+| Radiological/Nuclear | 2065 / 7560 | 0 | 5498 | 12 | 0 |
+| Chemicals and Explosives | 1413 / 2403 | 0 | 990 | 0 | 0 |
+| Biological Terrorism | 624 / 2916 | 0 | 2295 | 0 | 0 |
 
 Processed roots include windows replaced by narrower queries. Rejected queries are NOT successful retrievals. Pending work includes these replacement queries and tasks awaiting review.
 
@@ -34,9 +34,9 @@ Catch-up rounds started: 9. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ### Radiological/Nuclear
 ```json
 {
-  "stop": "Gemini budget used (20)",
-  "reviewed_this_batch": 500,
-  "successful_fetches_this_batch": 54,
+  "stop": "Running; reviewed candidates checkpointed",
+  "reviewed_this_batch": 73,
+  "successful_fetches_this_batch": 12,
   "rejected_queries": 0,
   "unresolved_saturated_queries": 0,
   "historical_coverage_issues": {
@@ -50,9 +50,9 @@ Catch-up rounds started: 9. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ### Chemicals and Explosives
 ```json
 {
-  "stop": "Gemini budget used (20)",
-  "reviewed_this_batch": 325,
-  "successful_fetches_this_batch": 166,
+  "stop": "Not processed in this batch; previous progress preserved",
+  "reviewed_this_batch": 0,
+  "successful_fetches_this_batch": 0,
   "rejected_queries": 0,
   "unresolved_saturated_queries": 0,
   "historical_coverage_issues": {
@@ -66,9 +66,9 @@ Catch-up rounds started: 9. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ### Biological Terrorism
 ```json
 {
-  "stop": "Gemini budget used (20)",
-  "reviewed_this_batch": 191,
-  "successful_fetches_this_batch": 282,
+  "stop": "Not processed in this batch; previous progress preserved",
+  "reviewed_this_batch": 0,
+  "successful_fetches_this_batch": 0,
   "rejected_queries": 0,
   "unresolved_saturated_queries": 0,
   "historical_coverage_issues": {
