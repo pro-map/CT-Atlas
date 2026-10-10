@@ -368,8 +368,8 @@ def safe_synthetic_preview(value, max_chars=400):
     invented by the model. Never display provider headers or API credentials.
     """
     text = str(value)[:max_chars * 3]
-    text = re.sub(r"[\\x00-\\x1f\\x7f-\\x9f]", " ", text)
-    text = re.sub(r"https?://\\S+|[a-z2-7]{56}\\.onion", "[URL masquee]", text, flags=re.I)
+    text = re.sub(r"[\x00-\x1f\x7f-\x9f]", " ", text)
+    text = re.sub(r"https?://\S+|[a-z2-7]{56}\.onion", "[URL masquee]", text, flags=re.I)
     return " ".join(text.split())[:max_chars]
 
 
