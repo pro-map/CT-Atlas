@@ -1,14 +1,14 @@
 {
- "updated_at": "2026-10-10T13:13:24.670335+00:00",
+ "updated_at": "2026-10-10T13:16:59.379974+00:00",
  "version": 1,
  "anchor": "2026-10-08",
  "from": "2026-04-11",
  "through": "2026-10-08",
  "window_days": 180,
  "taxonomy_version": "threat-topics-v1-20261008",
- "batch_started_at": "2026-10-10T13:13:03.717966+00:00",
+ "batch_started_at": "2026-10-10T13:16:40.552297+00:00",
  "batch_status": "blocked",
- "run_id": "38054847337",
+ "run_id": "38055080508",
  "daily_collection": "collector.py; shared keyword vocabulary; regular daily schedule",
  "chemical_keywords": "User-supplied vocabulary reviewed on 2026-10-08: 95 specific terms retained; 5 ambiguous contamination terms excluded",
  "categories": {

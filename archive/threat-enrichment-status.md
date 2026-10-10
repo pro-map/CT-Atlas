@@ -1,6 +1,6 @@
 # Specialist six-month backfill
 
-Last checkpoint (UTC): 2026-10-10T13:13:24.670335+00:00
+Last checkpoint (UTC): 2026-10-10T13:16:59.379974+00:00
 
 **Batch result: blocked. Whole backfill complete: NO.**
 
