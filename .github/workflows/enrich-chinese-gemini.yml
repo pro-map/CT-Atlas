@@ -81,8 +81,24 @@ jobs:
           set -euo pipefail
           test -n "$GEMINI_API_KEY" || { echo "Missing Gemini secret"; exit 1; }
           python -u tools/enrich_chinese_map.py --max-posts "$MAX_POSTS" --max-fetches "$MAX_FETCHES" --deadline-minutes 35
-      - name: Geolocate only evidence-supported new incidents and preserve old decisions
+      - name: Check whether geolocation has any new event records to process
         if: steps.backfill.outcome == 'success'
+        id: new_events
+        env:
+          BEFORE: ${{ runner.temp }}/gemini-chinese-before.json
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          old=set(json.loads(Path(os.environ["BEFORE"]).read_text(encoding="utf-8")))
+          now=json.loads(Path("events.json").read_text(encoding="utf-8"))
+          new=[e for e in now["events"] if str(e.get("id")) not in old]
+          with open(os.environ["GITHUB_OUTPUT"],"a",encoding="utf-8") as out:
+              out.write(f"new_count={len(new)}\\n")
+          print(f"New event records needing geolocation check: {len(new)}")
+          PY
+      - name: Geolocate only evidence-supported new incidents and preserve old decisions
+        if: steps.backfill.outcome == 'success' && steps.new_events.outputs.new_count != '0'
         timeout-minutes: 25
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
