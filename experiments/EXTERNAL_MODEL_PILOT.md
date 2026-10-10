@@ -65,6 +65,29 @@ ultérieure pourra l'établir.
 Sources : https://developers.cloudflare.com/workers-ai/models/glm-4.7-flash/
 et https://github.com/cloudflare/ai/blob/main/packages/tanstack-ai/README.md
 
+## Contrôle de traduction réellement effectué sur Cloudflare
+
+Un utilisateur a exécuté le premier exemple fictif en arabe avec GLM-4.7-Flash.
+La requête a bien réussi : **1 résultat sur 1 a respecté le schéma JSON**,
+avec **220 tokens entrants, 107 tokens sortants (327 au total)**, et
+aucun chiffre inventé. Le titre rendu était **différent de la formulation
+anglaise de référence** (`exact_reference_title_matches=0/1`), ce qui
+ne permet **ni de dire que le modèle a tort ni qu'il est fiable**.
+La traduction finale n'était pas enregistrée ; il est impossible de
+l'évaluer rétrospectivement à partir des compteurs.
+
+Le programme local amélioré accepte désormais le choix d'un numéro
+d'exemple fictif et affiche **l'original, la référence humaine, la traduction
+du modèle et son résumé anglais** pour un contrôle bilingue. Ces textes
+sont affichés dans la console locale uniquement, jamais publiés ni
+envoyés à GitHub. Une nouvelle exécution envoie **une seule requête**
+pour l'exemple choisi (elle utilise quelques tokens gratuits supplémentaires
+et doit respecter le consentement et le quota du compte).
+
+Critères de revue humaine : fidélité du sens, éléments de lieu, noms,
+dates, chiffres, incertitude et absence de faits ajoutés. Une correspondance
+exacte de caractères n'est pas une métrique suffisante pour traduire.
+
 ## Optional small live test (only after manual account verification)
 
 The script supports **at most two synthetic items per provider per execution**
