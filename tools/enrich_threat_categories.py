@@ -25,6 +25,7 @@ import enrich_archive
 import enrich_radnuc
 import backfill_query
 import radnuc_vocabulary
+import qwen_backfill_adapter
 
 MANIFEST = 'archive/threat-enrichment-plan.json'
 STATUS = 'archive/threat-enrichment-status.json'
@@ -187,7 +188,8 @@ def refresh_status(root=ROOT, phase=None):
 
 
 def run(root=ROOT, max_posts=60, max_fetches=600, today=None, deadline_minutes=75,
-        categories=None, searcher_factory=None, gate_factory=None, call_batch=None, log=print):
+        categories=None, searcher_factory=None, gate_factory=None, call_batch=None, log=print,
+        ai_backend="gemini"):
     root = Path(root)
     now = datetime.now(timezone.utc)
     today = today or now.date()
@@ -195,6 +197,13 @@ def run(root=ROOT, max_posts=60, max_fetches=600, today=None, deadline_minutes=7
     anchor = date.fromisoformat(frozen['anchor'])
     collector = archive_review.prepare_collector(archive_review.load_collector(root),
                                                  threshold=archive_review.map_threshold(root))
+    if ai_backend not in ("gemini", "qwen"):
+        raise ValueError("Unknown specialist AI backend")
+    qwen = qwen_backfill_adapter.LocalQwenBackend(collector) if ai_backend == "qwen" else None
+    if qwen:
+        collector.AI_SELECTION_MODEL = qwen.model
+        gate_factory = qwen.gate_factory
+        call_batch = qwen.call_batch
     chosen = list(categories or topics.LABELS)
     if any(c not in topics.LABELS for c in chosen): raise ValueError('Unknown specialist category')
     rotation = today.toordinal() % len(chosen)
@@ -204,6 +213,7 @@ def run(root=ROOT, max_posts=60, max_fetches=600, today=None, deadline_minutes=7
         repair_children(root,category,plans[category])
     report = {'updated_at':now.isoformat(),**frozen,'taxonomy_version':topics.VERSION,
               'batch_started_at':now.isoformat(), 'batch_status':'running',
+              'ai_backend':ai_backend,
               'run_id':os.getenv('GITHUB_RUN_ID','local'),
               'daily_collection':'collector.py; shared keyword vocabulary; regular daily schedule',
               'chemical_keywords':topics.vocabulary()['chemical_explosives']['status'],
@@ -212,7 +222,8 @@ def run(root=ROOT, max_posts=60, max_fetches=600, today=None, deadline_minutes=7
               'complete':False,'processing_complete':False,'requests_this_run':0,'searches_this_run':0}
     archive_review.write_json(root/STATUS,report)
     started = time.monotonic()
-    start_ledger = archive_review.DailyLedger(archive_review.ledger_path('enrichment',root),enrich_archive.DAILY_POSTS,now=now)
+    start_ledger = (archive_review.DailyLedger(archive_review.ledger_path('enrichment',root),
+                    enrich_archive.DAILY_POSTS,now=now) if not qwen else None)
     spent, fetched = 0, 0
     shared_searcher = None if searcher_factory else SpecialistSearcher(collector)
     try:
@@ -251,9 +262,14 @@ def run(root=ROOT, max_posts=60, max_fetches=600, today=None, deadline_minutes=7
                 known_keys_factory=known_map_keys,reuse_previous_reviews=False,
                 seen_prefix=f'{prefix}-v1',searcher=searcher,gate_factory=gate_factory,
                 call_batch=call_batch,deadline_minutes=minutes / remaining_categories,log=log,
-                review_first=True,prioritize_native=True,refine_saturated=True,on_checkpoint=checkpoint)
-            ledger = archive_review.DailyLedger(archive_review.ledger_path('enrichment',root),enrich_archive.DAILY_POSTS,now=now)
-            spent = max(0,ledger.used-start_ledger.used)
+                review_first=True,prioritize_native=True,refine_saturated=True,on_checkpoint=checkpoint,
+                ai_backend=ai_backend)
+            if qwen:
+                spent += int(summary.get('ai_requests',0))
+            else:
+                ledger = archive_review.DailyLedger(archive_review.ledger_path('enrichment',root),
+                                                    enrich_archive.DAILY_POSTS,now=now)
+                spent = max(0,ledger.used-start_ledger.used)
             fetched += searcher.fetches-fetched_before
             report['categories'][category] = progress(root,category,plan,
                 {**summary,'stop':stop,'integrated_reports':output.integrated,
@@ -298,6 +314,8 @@ def main():
     p.add_argument('--max-fetches',type=int,default=600)
     p.add_argument('--deadline-minutes',type=float,default=75)
     p.add_argument('--dry-run',action='store_true')
+    p.add_argument('--backend',choices=['gemini','qwen'],default='gemini',
+                   help='Historical backfill only; daily CT ATLAS collector is untouched')
     args = p.parse_args()
     if args.dry_run:
         collector = archive_review.load_collector(ROOT)
@@ -308,7 +326,9 @@ def main():
     else:
         if args.max_posts < 0 or args.max_fetches < 0 or args.deadline_minutes <= 0:
             p.error('Budgets must be nonnegative; deadline must be positive')
-        run(max_posts=min(args.max_posts,enrich_archive.DAILY_POSTS),max_fetches=args.max_fetches,deadline_minutes=args.deadline_minutes)
+        limit = min(args.max_posts,enrich_archive.DAILY_POSTS) if args.backend == 'gemini' else args.max_posts
+        run(max_posts=limit,max_fetches=args.max_fetches,deadline_minutes=args.deadline_minutes,
+            ai_backend=args.backend)
 
 if __name__ == '__main__':
     # GitHub sends SIGINT/SIGTERM on cancellation; finally preserves all rows.
