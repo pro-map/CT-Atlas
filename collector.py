@@ -20,6 +20,7 @@ from difflib import SequenceMatcher
 from functools import lru_cache
 from email.utils import parsedate_to_datetime
 from urllib.parse import quote_plus, urlsplit, urlunsplit, parse_qsl, urlencode
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 
@@ -1683,6 +1684,41 @@ MULTILINGUAL_PROFILES.extend([
 ])
 
 
+
+# Chinese Simplified/Traditional for the NORMAL Gemini daily intake.
+# The same historical Chinese search vocabulary is shared with the separate
+# six-month Qwen experiment, but the daily path deliberately runs ONLY ONE
+# source-context query per non-specialist map category and source edition.
+# Existing specialist category queries are appended below by
+# threat_categories.install_collection(globals()). No changes to Gemini quota.
+CHINESE_MAP_QUERY_CONFIG = json.loads(
+    Path(__file__).with_name("chinese-map-backfill-queries.json").read_text(encoding="utf-8")
+)
+CHINESE_DAILY_PROFILES = (
+    {"code": "zh", "name": "Chinese (Simplified)", "hl": "zh-CN",
+     "gl": "CN", "ceid": "CN:zh-Hans"},
+    {"code": "zh-Hant", "name": "Chinese (Traditional)", "hl": "zh-TW",
+     "gl": "TW", "ceid": "TW:zh-Hant"},
+)
+if (len(CHINESE_MAP_QUERY_CONFIG.get("queries", {})) != 8
+        or any(set(groups) != {"zh", "zh-Hant"} or
+               any(len(value) < 1 for value in groups.values())
+               for groups in CHINESE_MAP_QUERY_CONFIG["queries"].values())):
+    raise ValueError("Incomplete Chinese daily map-category vocabulary")
+for _edition in CHINESE_DAILY_PROFILES:
+    MULTILINGUAL_PROFILES.append({
+        **_edition,
+        "sites": [],
+        "queries": [
+            {"term": phrases[_edition["code"]][0], "category": label}
+            for label, phrases in CHINESE_MAP_QUERY_CONFIG["queries"].items()
+        ],
+    })
+# This adds 8 concise category-scoped searches per Chinese edition. The three
+# existing specialist families are subsequently appended from shared curated
+# lexicons, so Chinese reaches ALL 11 map categories in daily collection.
+# The RSS candidate may cover an incident in any country; the publisher's
+# Chinese locale NEVER establishes the event's real geographical location.
 
 # Specialist queries are installed below, after all taxonomy maps exist.
 

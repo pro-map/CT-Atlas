@@ -75,8 +75,9 @@ class TaxonomyTests(unittest.TestCase):
         expected={'zh','zh-Hant'}
         self.assertTrue(expected <= set(b.enrich_radnuc.profiles(collector)[i]['code']
                                            for i in range(len(b.enrich_radnuc.profiles(collector)))))
-        self.assertFalse(any(p['code'] in expected for p in collector.MULTILINGUAL_PROFILES),
-                         'Daily Gemini profiles must remain unchanged')
+        self.assertEqual({p['code'] for p in collector.MULTILINGUAL_PROFILES
+                          if p['code'] in expected}, expected,
+                         'User now requested both Chinese editions in daily Gemini updates')
         for label,vocab_name in ((t.CE,'chemical_explosives'),(t.BIO,'biological')):
             for code in expected:
                 self.assertTrue(t.vocabulary()[vocab_name]['terms'][code])

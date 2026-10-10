@@ -171,6 +171,7 @@ class RadnucIntegrationTests(unittest.TestCase):
     def test_enrichment_run_wires_translation_integration_and_separate_resume_state(self):
         import shutil
         shutil.copy('collector.py', self.root / 'collector.py')
+        shutil.copy('chinese-map-backfill-queries.json', self.root / 'chinese-map-backfill-queries.json')
         shutil.copy('radnuc.py', self.root / 'radnuc.py')
         archive_review.write_json(self.root / 'ct-atlas-runtime.json', {'ai_selection_threshold': 60})
         original_state = {'version': 2, 'done': {'ordinary-archive-task': 'kept'}}
