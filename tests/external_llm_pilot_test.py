@@ -187,6 +187,74 @@ class SafetyAndValidationTests(unittest.TestCase):
         self.assertFalse(seen[0][1]["allow_redirects"])
         self.assertEqual(seen[0][1]["headers"]["Authorization"], "Bearer mock-only")
 
+    def test_cloudflare_disables_thinking_and_allows_short_final_json(self):
+        request = pilot.prepare_cloudflare(self.translation)
+        self.assertEqual(request["model"], "@cf/zai-org/glm-4.7-flash")
+        self.assertEqual(request["chat_template_kwargs"], {"enable_thinking": False})
+        self.assertGreaterEqual(request["max_completion_tokens"], 800)
+        self.assertFalse(request["stream"])
+        self.assertEqual(request["response_format"], {"type": "json_object"})
+
+    def test_cloudflare_empty_content_with_reasoning_has_safe_diagnostic(self):
+        # A common GLM response if the small output budget went to reasoning:
+        # HTTP 200, finish_reason=length, content=null and reasoning_content
+        # non-empty. Never expose reasoning text, secrets or raw response.
+        class Response:
+            status_code = 200
+
+            def json(self):
+                return {"choices": [{"finish_reason": "length", "message": {
+                    "content": None, "reasoning_content": "PRIVATE_REASONING_NEVER_LOGGED"
+                }}], "usage": {"prompt_tokens": 100, "completion_tokens": 500}}
+        with self.assertRaises(pilot.PilotSafetyError) as caught:
+            pilot.call_json("cloudflare", pilot.prepare_cloudflare(self.translation),
+                            env={"CLOUDFLARE_AI_API_TOKEN": "FAKE_SECRET",
+                                 "CLOUDFLARE_AI_ACCOUNT_ID": "a" * 32},
+                            post=lambda *args, **kwargs: Response())
+        text = str(caught.exception)
+        self.assertIn("raisonnement", text)
+        self.assertIn("length", text)
+        self.assertNotIn("PRIVATE_REASONING_NEVER_LOGGED", text)
+        self.assertNotIn("FAKE_SECRET", text)
+
+    def test_cloudflare_fenced_valid_json_accepted_without_extra_requests(self):
+        case = self.translation
+        response_json = {"id": case["id"], "content_hash": pilot.content_hash(case),
+                         "title_en": case["expected_title_en"],
+                         "overview_en": "A neutral overview of the synthetic source."}
+        class Response:
+            status_code = 200
+            def json(self):
+                return {"choices": [{"finish_reason": "stop", "message": {
+                    "content": "```json\\n" + json.dumps(response_json) + "\\n```"
+                }}], "usage": {"prompt_tokens": 120, "completion_tokens": 70}}
+        calls = []
+        def fake(*args, **kwargs):
+            calls.append(1)
+            return Response()
+        result, usage = pilot.call_json(
+            "cloudflare", pilot.prepare_cloudflare(case),
+            env={"CLOUDFLARE_AI_API_TOKEN": "FAKE_KEY",
+                 "CLOUDFLARE_AI_ACCOUNT_ID": "a" * 32}, post=fake)
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(pilot.validate_translation(case, result), response_json)
+        self.assertEqual(usage["completion_tokens"], 70)
+
+    def test_provider_malformed_json_refuses_without_leaking_response(self):
+        class Response:
+            status_code = 200
+            def json(self):
+                return {"choices": [{"finish_reason": "stop", "message": {
+                    "content": "{secret_response_data_should_not_be_printed"
+                }}]}
+        with self.assertRaises(pilot.PilotSafetyError) as caught:
+            pilot.call_json("cloudflare", pilot.prepare_cloudflare(self.translation),
+                            env={"CLOUDFLARE_AI_API_TOKEN": "FAKE_KEY",
+                                 "CLOUDFLARE_AI_ACCOUNT_ID": "a" * 32},
+                            post=lambda *args, **kwargs: Response())
+        self.assertIn("JSON", str(caught.exception))
+        self.assertNotIn("secret_response_data_should_not_be_printed", str(caught.exception))
+
     def test_provider_error_never_logs_response_body_or_retries(self):
         calls = []
         class Fail:
