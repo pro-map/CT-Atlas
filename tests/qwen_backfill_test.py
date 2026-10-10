@@ -136,6 +136,39 @@ class QwenBackfillOnlyTests(unittest.TestCase):
             self.assertEqual(summary["ai_requests"], 0)
             self.assertFalse(list((root / "quota").glob("*")))
 
+    def test_qwen_round_robin_supplement_starts_before_base_exhausts(self):
+        tasks = [
+            {"key": "base-google-1", "source": "google"},
+            {"key": "base-google-2", "source": "google"},
+            {"key": "base-gdelt", "source": "gdelt"},
+            {"key": "supp-google-1", "source": "google",
+             "supplemental_vocabulary": "user-radnuc-181"},
+            {"key": "supp-google-2", "source": "google",
+             "supplemental_vocabulary": "user-radnuc-181"},
+            {"key": "supp-gdelt", "source": "gdelt",
+             "supplemental_vocabulary": "user-radnuc-181"},
+        ]
+        original = [t["key"] for t in tasks]
+        ordered = enrich_archive.order_historical_tasks(
+            tasks, ai_backend="qwen", prioritize_native=True)
+        self.assertEqual([t["key"] for t in ordered][:4],
+                         ["supp-google-1", "base-google-1",
+                          "supp-google-2", "base-google-2"])
+        self.assertEqual({t["key"] for t in ordered}, set(original))
+        self.assertEqual([t["key"] for t in tasks], original)
+        gemini = enrich_archive.order_historical_tasks(
+            tasks, ai_backend="gemini", prioritize_native=True)
+        self.assertEqual([t["key"] for t in gemini],
+                         ["base-google-1", "base-google-2",
+                          "supp-google-1", "supp-google-2",
+                          "base-gdelt", "supp-gdelt"])
+
+    def test_qwen_round_robin_without_supplement_preserves_base_order(self):
+        plain = [{"key": "a", "source": "google"}, {"key": "b", "source": "gdelt"}]
+        ordered = enrich_archive.order_historical_tasks(
+            plain, ai_backend="qwen", prioritize_native=True)
+        self.assertEqual([t["key"] for t in ordered], ["a", "b"])
+
     def test_default_gemini_backend_still_requires_its_ledger(self):
         self.assertEqual(enrich_archive.run.__defaults__[-1], "gemini")
 
