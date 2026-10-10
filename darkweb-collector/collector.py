@@ -8,6 +8,7 @@ import hashlib
 import json
 import logging
 import os
+import secrets
 import sqlite3
 import tempfile
 import time
@@ -25,6 +26,7 @@ import requests
 LOG = logging.getLogger("outlet-watch")
 MAX_HTML_BYTES = 2 * 1024 * 1024
 MAX_ITEMS = 500
+SOURCE_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0"
 SOURCE_CONNECT_TIMEOUT = 90
 TYPES = {".pdf": "pdf", ".mp4": "video", ".webm": "video", ".mkv": "video", ".mov": "video",
          ".mp3": "audio", ".ogg": "audio", ".wav": "audio", ".m4a": "audio",
@@ -329,6 +331,15 @@ def safe_proxy(value):
     if parsed.username or parsed.password or parsed.path or parsed.query or parsed.fragment:
         raise ValueError("Unsupported Tor proxy URL")
     return value
+
+def isolated_socks_proxy(value, isolation_token):
+    """Attach a per-run Tor stream-isolation token without logging it."""
+    parsed = urlsplit(safe_proxy(value))
+    username = quote("<torS0X>0", safe="")
+    password = quote(str(isolation_token), safe="")
+    host = "[" + parsed.hostname + "]" if ":" in parsed.hostname else parsed.hostname
+    return f"{parsed.scheme}://{username}:{password}@{host}:{parsed.port}"
+
 
 
 SKIP_EXTENSIONS = {".css", ".js", ".ico", ".woff", ".woff2", ".ttf", ".zip", ".exe", ".dmg"}
@@ -1581,7 +1592,7 @@ def read_listing(session, outlet):
         since = str((outlet.get("policy") or {}).get("from") or "")
         structured = structured_publications(html, outlet["url"], language, tree, since)
         if structured is not None:
-            if structured.pop("english_available", False) and english_switch_due(session, outlet["url"]):
+            if structured.pop("english_available", False) and not outlet.get("disable_english_switch") and english_switch_due(session, outlet["url"]):
                 # A multilingual outlet served another language. Ask its own English menu,
                 # verify the reread, and (only if needed) retry with force_translate=true.
                 # This avoids silently keeping Arabic when the English tab exists but the
@@ -1686,9 +1697,14 @@ def preview_source(row):
     return None
 
 
-def make_preview(tor, row):
-    result = _make_preview(tor, row)
-    if not result.get("preview") and row.get("publication_version") == 1 and row.get("preview_url") and any(a.get("type") == "pdf" for a in row.get("attachments", [])):
+def make_preview(tor, row, allow_pdf=True):
+    candidate = row
+    if not allow_pdf and any(a.get("type") == "pdf" for a in row.get("attachments", [])):
+        # Security-hardened mode never parses a downloaded/source PDF for thumbnails.
+        # A same-host cover image may still be used; otherwise Atlas shows its placeholder.
+        candidate = {**row, "attachments": [a for a in row.get("attachments", []) if a.get("type") != "pdf"]}
+    result = _make_preview(tor, candidate)
+    if allow_pdf and not result.get("preview") and row.get("publication_version") == 1 and row.get("preview_url") and any(a.get("type") == "pdf" for a in row.get("attachments", [])):
         # Large/unreadable PDFs may still supply a usable cover image in the page.
         cover = _make_preview(tor, {**row, "attachments": []})
         if cover.get("preview") or cover.get("transient"):
@@ -1805,7 +1821,7 @@ def api_session(endpoint, token):
         raise ValueError("DARKWEB_INGEST_TOKEN must contain at least 32 characters")
     session = requests.Session()
     session.trust_env = False
-    session.headers.update({"Authorization": "Bearer " + token, "User-Agent": "CTAtlas-OutletWatch/1"})
+    session.headers.update({"Authorization": "Bearer " + token, "User-Agent": SOURCE_USER_AGENT})
     return session, endpoint.rstrip("/")
 
 
@@ -2203,7 +2219,7 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
                 previews_left -= 1
                 source = json.dumps(preview_source(row))
                 retry = db.execute("SELECT attempts FROM preview_retries WHERE outlet_id=? AND url=? AND source=?", (oid, row["url"], source)).fetchone()
-                result = make_preview(tor, row)
+                result = make_preview(tor, row, allow_pdf=not outlet.get("disable_pdf_preview"))
                 attempts = (retry[0] if retry else 0) + 1
                 if result.get("transient") and attempts >= 3:
                     result = {"preview_status": "Preview source unreachable after 3 attempts", "preview_version": 2}
@@ -2282,8 +2298,9 @@ def main():
     tor = requests.Session()
     tor.trust_env = False
     tor.source_connect_timeout = args.connect_timeout
-    tor.proxies = {"http": proxy, "https": proxy}
-    tor.headers.update({"User-Agent": "CTAtlas-OutletWatch/1", "Accept": "text/html,application/xhtml+xml"})
+    source_proxy = isolated_socks_proxy(proxy, secrets.token_hex(16))
+    tor.proxies = {"http": source_proxy, "https": source_proxy}
+    tor.headers.update({"User-Agent": SOURCE_USER_AGENT, "Accept": "text/html,application/xhtml+xml"})
     db = open_database(args.state)
     try:
         while True:
