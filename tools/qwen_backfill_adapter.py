@@ -44,7 +44,7 @@ class QwenGate:
 
 
 class LocalQwenBackend:
-    def __init__(self, collector, model=None, url=None, timeout=210):
+    def __init__(self, collector, model=None, url=None, timeout=210, scope="specialist"):
         self.collector = collector
         self.model = model or MODEL
         self.url = url or os.getenv("QWEN_BACKFILL_URL", DEFAULT_URL)
@@ -100,6 +100,49 @@ class LocalQwenBackend:
             + threat_categories.SELECTION_NOTE
             + radnuc.SELECTION_NOTE
         )
+
+        if scope == "map_chinese":
+            # Full-map history is separate from specialist-only interpretation.
+            # Maritime Piracy is the existing explicitly authorised exception
+            # for actual piracy WITHOUT a terrorism nexus.
+            self.instructions = (
+                "You classify historical Chinese-language public news reporting "
+                "for all categories of an operational counterterrorism map. "
+                "Use ONLY explicit source evidence; do not invent people, "
+                "countries, casualty counts, targets, perpetrators or motive. "
+                "Report actual new events as of each article's publication date, "
+                "including arrests, operations, investigations, charges and trials; "
+                "reject opinion pieces, old retrospectives and historical essays. "
+                "For terrorism-linked categories require a concrete reported "
+                "non-state actor nexus; state-on-state military or intelligence "
+                "operations, general foreign policy and routine crime are excluded. "
+                "EXCEPTION: genuine Maritime Piracy includes ship hijacking, "
+                "armed robbery at sea, maritime piracy investigation/rescue and "
+                "crew kidnapping even if NO terrorism link is reported; "
+                "interstate naval warfare or a missile strike alone is NOT piracy. "
+                "Terrorist Financing: actual finance or sanctions actions. "
+                "Weapons: terrorist arms discovery, seizure, smuggling, trafficking. "
+                "Attacks: actual attacks or attempts, not mere discussions. "
+                "Arrests: fresh detainees or police investigations. "
+                "Counter Terrorism Action: a real security operation against "
+                "a non-state actor. Legal / Judicial: trial, charges, sentencing. "
+                "Online / Cyber / AI: concrete extremist online use or police action. "
+                "For the three specialist CBRNE topics apply factual material "
+                "scope and preserve THREAT, SUSPECTED, ALLEGED or HOAX as stated. "
+                "A retrieved keyword or a category hint does NOT establish relevance. "
+                "A publisher's Chinese writing system, origin or news edition "
+                "does NOT locate the event in China or Taiwan. "
+                "Give the faithful English headline and summary, original_language, "
+                "correct reported_status, actor_group when named, concise canonical_event "
+                "and stable incident_anchor for same-event deduplication. "
+                "Give relevance_score=0, categories=[] and "
+                "is_current_ct_event=false for events outside the scope. "
+                "Otherwise return all REQUIRED output fields in the schema and "
+                "exactly ONE result for the supplied event_id. "
+                + archive_review.ARCHIVE_NOTE
+            )
+        elif scope != "specialist":
+            raise ValueError("Unsupported Qwen historical inference scope")
 
     def gate_factory(self, max_posts):
         return QwenGate(self, max_posts)
