@@ -256,8 +256,8 @@ class SafetyAndValidationTests(unittest.TestCase):
         self.assertNotIn("secret_response_data_should_not_be_printed", str(caught.exception))
 
     def test_fictional_preview_sanitizes_control_codes_and_urls(self):
-        preview = pilot.safe_synthetic_preview("Line\\x1b[31m new https://private.test/file xyz")
-        self.assertNotIn("\\x1b", preview)
+        preview = pilot.safe_synthetic_preview("Line\x1b[31m new https://private.test/file xyz")
+        self.assertNotIn("\x1b", preview)
         self.assertNotIn("private.test", preview)
         self.assertIn("[URL masquee]", preview)
 
