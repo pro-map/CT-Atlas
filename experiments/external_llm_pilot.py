@@ -321,7 +321,7 @@ def main(argv=None, env=os.environ):
         preflight(provider, len(batches[provider]), env=env)
     metrics = {}
     for provider in providers:
-        valid, matches, total_usage = 0, 0, {}
+        valid, matches, statuses, locations, qualifying, total_usage = 0, 0, 0, 0, 0, {}
         for case in batches[provider]:
             payload = prepare_groq(case) if provider == "groq" else prepare_cloudflare(case)
             answer, usage = call_json(provider, payload, env=env)
@@ -330,12 +330,19 @@ def main(argv=None, env=os.environ):
             if provider == "groq":
                 answer = validate_classification(answer)
                 matches += int(set(answer["category_labels"]) == set(case["expected_labels"]))
+                statuses += int(answer["reported_status"] == case["expected_status"])
+                locations += int(answer["event_country"].strip().casefold()
+                                 == case["expected_country"].strip().casefold())
+                qualifying += int(answer["qualifying_event"] == bool(case["expected_labels"]))
             else:
                 answer = validate_translation(case, answer)
             valid += 1
         metrics[provider] = {
             "tested_synthetic_cases": valid,
             "synthetic_category_matches": matches if provider == "groq" else None,
+            "synthetic_status_matches": statuses if provider == "groq" else None,
+            "synthetic_country_matches": locations if provider == "groq" else None,
+            "synthetic_qualifying_event_matches": qualifying if provider == "groq" else None,
             "schema_valid": valid,
             "provider_token_usage": total_usage,
             "human_review_required": True,
