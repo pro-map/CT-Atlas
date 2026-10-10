@@ -41,6 +41,23 @@ LEXICONS = {
     "so": ('nukliyeer OR shucaac OR yuraaniyam OR "bam wasakh"', 'argagixiso OR argagixisada OR Shabaab', 'tahriib OR xatooyo OR qabtay OR xabsi OR baaritaan', '"warshad nukliyeer" OR "xarun nukliyeer"', 'qarxin OR weerar OR diyaarado OR qorshe'),
     "ha": ('nukiliya OR rediyoaktif OR uranium OR "bam mai datti"', 'ta’addanci OR ta’adda OR "Boko Haram"', 'fasa-kwauri OR sata OR kama OR bincike', '"tashar nukiliya" OR "wurin nukiliya"', 'zagon-kasa OR hari OR jirage OR makirci'),
     "sw": ('nyuklia OR mionzi OR urani OR "bomu chafu"', 'ugaidi OR magaidi OR Shabaab', 'magendo OR wizi OR kukamatwa OR uchunguzi', '"mtambo wa nyuklia" OR "usafirishaji wa nyuklia"', 'hujuma OR "shambulio la mtandao" OR droni OR njama'),
+
+    # Chinese: native terms complement translated GDELT news; retrieval alone
+    # never establishes a terrorism nexus, material identity or attribution.
+    "zh": (
+        '核材料 OR 放射性 OR 放射源 OR 辐射源 OR 铀 OR 钚 OR 铯 OR 钴-60 OR "脏弹"',
+        '恐怖主义 OR 恐怖分子 OR 恐怖袭击 OR 极端组织',
+        '走私 OR 非法贩运 OR 盗窃 OR 被盗 OR 查获 OR 缴获 OR 逮捕 OR 调查',
+        '"核电站" OR "核设施" OR "放射性运输"',
+        '破坏 OR 袭击 OR "网络攻击" OR 无人机 OR 阴谋',
+    ),
+    "zh-Hant": (
+        '核材料 OR 放射性 OR 放射源 OR 輻射源 OR 鈾 OR 鈽 OR 銫 OR 鈷-60 OR "髒彈"',
+        '恐怖主義 OR 恐怖份子 OR 恐怖襲擊 OR 極端組織',
+        '走私 OR 非法販運 OR 竊盜 OR 遭竊 OR 查獲 OR 扣押 OR 逮捕 OR 調查',
+        '"核電廠" OR "核設施" OR "放射性運輸"',
+        '破壞 OR 襲擊 OR "網路攻擊" OR 無人機 OR 陰謀',
+    ),
 }
 
 
