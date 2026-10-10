@@ -4,7 +4,9 @@ name: Gemini Chinese eight-category historical backfill
 # paid model, Qwen runner, or changes to the live daily collection.
 on:
   schedule:
-    - cron: "07 10 * * *"
+    # Pacific quota has reset and the normal 10:17 Paris daily map runs first.
+    # Consume at most 12 of the SAME existing 100-post enrichment allocation.
+    - cron: "20 11 * * *"
       timezone: Europe/Paris
   workflow_dispatch:
     inputs:
