@@ -1,0 +1,26 @@
+name: Chinese specialist historical RSS validation (read only)
+
+on:
+  push:
+    branches:
+      - feature/chinese-specialist-backfill-20261010
+    paths:
+      - .github/workflows/chinese-backfill-feed-smoke.yml
+      - experiments/chinese_backfill_feed_probe.py
+
+permissions:
+  contents: read
+
+jobs:
+  verify-chinese-news-editions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Install existing dependencies
+        run: pip install -r requirements.txt
+      - name: Probe Simplified and Traditional Chinese RSS without adding map events
+        run: python experiments/chinese_backfill_feed_probe.py
