@@ -144,7 +144,8 @@ class IntegratedOutput(enrich_archive.Output):
             self.database['last_updated'] = datetime.now(timezone.utc).isoformat()
             self.database.setdefault('specialist_enrichment', {})[self.category] = {'window_days': WINDOW_DAYS,
                 'languages': sorted(radnuc.LEXICONS) if self.category == threat_categories.RN else sorted(threat_categories.vocabulary()['biological' if self.category == threat_categories.BIO else 'chemical_explosives']['terms']), 'state_actor_operations': 'excluded',
-                'pipeline': 'existing Gemini selection, English translation and incremental event deduplication'}
+                'pipeline': (f"{self.collector.AI_SELECTION_MODEL} specialist selection, "
+                             "English translation and incremental event deduplication")}
             archive_review.write_json(self.root / 'events.json', self.database, indent=2)
             self.changed = False
 
