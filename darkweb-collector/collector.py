@@ -656,7 +656,17 @@ NEWS_PORTAL_SECTIONS = (("news-content", "news-pagination", "news_page"),
 NEWS_PORTAL_SLUG = re.compile(r"^/posts/([a-z0-9]+(?:-[a-z0-9]+)*?)-([0-3]?[0-9])-([01]?[0-9])-(20[0-9]{2})(?:-[0-9]+)?/?$")
 # Any single-segment permalink, percent-encoded slugs included (recognised template only).
 NEWS_PORTAL_POST = re.compile(r"^/posts/[^/]+/?$")
-NEWS_PORTAL_CATEGORIES = {"an-naba": ("naba", "pdf")}
+NEWS_PORTAL_CATEGORIES = {name: ("naba", "pdf") for name in ("an-naba", "al-naba", "an-nabaa", "al-nabaa", "annaba", "alnaba", "naba")}
+
+
+def news_portal_is_naba(url, title=""):
+    """Only the named Al-Naba magazine, not arbitrary magazine, video or navigation links.
+
+    NFKD folding removes the hamza in Arabic النبأ. Accept the dated permalink
+    as well as a positively labelled card in the site's dedicated magazine section.
+    """
+    label = fold_text(unquote(urlsplit(url).path) + " " + str(title or ""))
+    return bool("النبا" in label or re.search(r"(?<![a-z])(?:al[-_ ]?|an[-_ ]?)?naba(?:a)?(?![a-z])", label))
 # The outlet's own language menu link (a plain GET, as a reader choosing English does).
 NEWS_PORTAL_ENGLISH = "/language/change?locale=en&auto_translate=true&force_translate=false"
 # Some deployments expose the English tab but keep article text in the source language
@@ -741,6 +751,8 @@ def news_portal_publications(nodes, base, language, since=""):
         # The slug's category and date are used only when the permalink has the dated form.
         category, slug_date = news_portal_slug(url)
         category, kind = NEWS_PORTAL_CATEGORIES.get(category, ("news", "page"))
+        if news_portal_is_naba(url, title):
+            category, kind = "naba", "pdf"
         row = publication_record(url, title, text, label, complete, attachments, preview, category=category, kind=kind, language=language)
         if not row["published_at"] and slug_date:
             row["published_at"], row["date_basis"] = slug_date, "url"
@@ -843,6 +855,47 @@ def news_portal_publications(nodes, base, language, since=""):
                 page_url = root + "?" + key + "=" + str(following)
                 rows.setdefault(page_url, {"url": page_url, "type": "page", "title": "Listing page", "crawl": True})
                 break
+    # Al-Naba is also published in the separate MAGAZINES area. It is not
+    # necessarily in the NEWS or PRIORITY NEWS lists; previously this section
+    # was excluded completely and the daily scan could report a false "complete".
+    # Only follow positively identified Al-Naba publication permalinks, never
+    # unrelated magazines, menu links, media files, or pagination.
+    magazine = next((n for n in nodes if n["attrs"].get("id") == "magazines-content"), None)
+    if template and magazine is not None:
+        parents, stack = {}, [magazine]
+        while stack:
+            parent = stack.pop()
+            for child in parent["children"]:
+                if isinstance(child, dict):
+                    parents[id(child)] = parent
+                    stack.append(child)
+        for link in descendants(magazine):
+            if link["tag"] != "a":
+                continue
+            url = post_link(link["attrs"].get("href"))
+            if not url or url in rows:
+                continue
+            container = parents.get(id(link), magazine)
+            if container is magazine:
+                container = link
+            title = original_text(link) or link["attrs"].get("title", "") or link["attrs"].get("aria-label", "")
+            if not title:
+                title = next((n["attrs"].get("alt", "") for n in descendants(link) if n["tag"] == "img" and n["attrs"].get("alt")), "")
+            context = original_text(container)
+            if not news_portal_is_naba(url, title + " " + context):
+                continue
+            if not title:
+                title = next((original_text(n) for n in descendants(container) if n["tag"] in HEADINGS and original_text(n)), "")
+            title = title or display_title(url) or "Al-Naba magazine"
+            label = next((original_text(n) for n in descendants(container) if n["tag"] in {"time", "small", "span"}
+                          and publication_date(original_text(n), language)), "")
+            if not label and publication_date(context, language):
+                label = publication_date(context, language)
+            row = news_row(url, title, title, label, False)
+            if since and row["published_at"] and row["published_at"] < since:
+                continue
+            rows[url] = row
+            found = True
     if not found:
         return nothing if template else None
     return {"items": list(rows.values()), "page": None, "text": "", "truncated": False, "structured": True, "english_available": english}
@@ -1521,16 +1574,21 @@ def read_listing(session, outlet):
                 host = urlsplit(outlet["url"]).hostname
                 root = urlunsplit((urlsplit(outlet["url"]).scheme, urlsplit(outlet["url"]).netloc, "", "", ""))
                 last_error = None
-                fallback = structured
                 for switch_path in (NEWS_PORTAL_ENGLISH, NEWS_PORTAL_ENGLISH_FORCE):
                     try:
                         source_get(session, root + switch_path, host).close()
                         reread = read_listing(session, outlet)
-                        fallback = reread
                         records = list(reread.get("items") or [])
                         if reread.get("page"):
                             records.append(reread["page"])
                         if any(row.get("source_language") == "en" for row in records):
+                            # An English switch may only render part of the original
+                            # listing. Preserve the other Arabic items by permalink.
+                            if structured.get("page") is None and reread.get("page") is None:
+                                combined = {r["url"]: r for r in structured.get("items", [])}
+                                combined.update({r["url"]: r for r in reread.get("items", []) if r.get("source_language") == "en" or r["url"] not in combined})
+                                return {**reread, "items": list(combined.values()),
+                                        "truncated": reread.get("truncated", False) or structured.get("truncated", False)}
                             return reread
                     except Exception as error:
                         last_error = error
@@ -1538,7 +1596,7 @@ def read_listing(session, outlet):
                 LOG.warning("Outlet %s: English tab did not yield English publication text%s; page kept in its served language",
                             outlet.get("id", ""),
                             " (" + source_failure_reason(last_error) + ")" if last_error else "")
-                return fallback
+                return structured
             return structured
         tree.close()
         if arabic_template_page(tree):
@@ -1901,6 +1959,12 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
             continue
         answered = True
         records = result["items"] + ([result["page"]] if result["page"] else [])
+        if watching and target[1] == 0:
+            publications = [row for row in records if row.get("publication_version") == 1]
+            eligible = sum(1 for row in publications if within_period(row, policy))
+            undated = sum(1 for row in publications if not row.get("published_at"))
+            LOG.info("Outlet %s: first page recognized %s publication(s); %s within %s to %s, %s undated",
+                     oid, len(publications), eligible, policy.get("from", "?"), policy.get("through", "?"), undated)
         with db:
             # Page truncation is explicit and never treated as a full inventory.
             db.execute("UPDATE frontier SET status=?,attempts=attempts+1 WHERE outlet_id=? AND url=?",
@@ -1919,8 +1983,15 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
                         # that fall inside today's policy window. Never follow generic
                         # navigation/pagination (page 2, archives, categories), and
                         # never recurse from a publication detail page.
-                        known = db.execute("SELECT 1 FROM items WHERE outlet_id=? AND url=? LIMIT 1", (oid, target_url)).fetchone()
-                        if target[1] == 0 and not known and selected_material(row):
+                        known = db.execute("SELECT metadata FROM items WHERE outlet_id=? AND url=? LIMIT 1", (oid, target_url)).fetchone()
+                        previous = json.loads(known[0]) if known else {}
+                        # A listing card is not proof its detail or PDF was fetched.
+                        # Retry an incomplete Al-Naba card without reopening
+                        # already-complete publications every day.
+                        naba_incomplete = bool(known and previous.get("text_status") == "listing"
+                                               and news_portal_is_naba(target_url, row.get("title", "")))
+                        recent_or_undated = not row.get("published_at") or within_period(row, policy)
+                        if target[1] == 0 and selected_material(row) and recent_or_undated and (not known or naba_incomplete):
                             db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url,depth) VALUES (?,?,1)", (oid, target_url))
                     elif row.get("crawl") or row["type"] == "page":
                         db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url,depth) VALUES (?,?,?)", (oid, target_url, target[1]+1))
@@ -2061,6 +2132,8 @@ def scan_outlet(api, endpoint, tor, db, outlet, evidence, acquire_files, max_byt
             "abandoned_pages": progress["abandoned_pages"]})
         if result.get("ok") is not True:
             raise ValueError("Ingestion did not acknowledge the scan")
+        LOG.info("Outlet %s: Atlas ingestion acknowledged %s record(s), %s new; %s rejected as out of period",
+                 oid, len(rows), result.get("added", "?"), result.get("out_of_period", 0))
         with db:
             for row, baseline in rows:
                 db.execute("INSERT OR REPLACE INTO items VALUES (?,?,?,?)", (oid, row["url"], json.dumps(row), int(baseline)))
@@ -2197,6 +2270,8 @@ def main():
                 policy = config.get("policy")
                 if not policy:
                     raise ValueError("Deploy the controlled collection Worker before updating this collector")
+                LOG.info("CT Atlas daily collection window: %s to %s; enabled sources: %s",
+                         policy.get("from", "?"), policy.get("through", "?"), len(config.get("outlets") or []))
                 apply_epoch(db, policy)
                 if policy.get("paused"):
                     LOG.info("Collection paused by administrator")

@@ -3,10 +3,12 @@ name: Dark Web Worker regression tests
 on:
   pull_request:
     paths:
+      - "darkweb.js"
       - "cloudflare-worker/darkweb.js"
       - "cloudflare-worker/report-gate.js"
       - "cloudflare-worker/darkweb-files.js"
       - "tests/darkweb.test.cjs"
+      - "tests/darkweb-ui.test.cjs"
       - ".github/workflows/darkweb-worker-tests.yml"
   workflow_dispatch:
 
@@ -26,7 +28,8 @@ jobs:
         uses: actions/checkout@v6
       - name: Validate Worker module syntax
         run: |
+          node --check darkweb.js
           node --input-type=module --check < cloudflare-worker/darkweb.js
           node --input-type=module --check < cloudflare-worker/report-gate.js
       - name: Run Dark Web API regression tests
-        run: node --test tests/darkweb.test.cjs
+        run: node --test tests/darkweb.test.cjs tests/darkweb-ui.test.cjs

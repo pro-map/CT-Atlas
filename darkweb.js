@@ -84,13 +84,12 @@ function exportButton(item,format,outlet){const button=node("button","EXPORT "+f
 function renderFeed(){
  const outletId=$("outletFilter").value,type=$("typeFilter").value,query=fold($("search").value.trim());
  const outlets=new Map(state.outlets.map(o=>[o.id,o]));
- const allLatest=[...archiveItems.values()].sort((a,b)=>(b.published_at||"").localeCompare(a.published_at||""));
- const newestDay=allLatest.find(i=>i.published_at)?.published_at||"";
- const dailyRows=newestDay?allLatest.filter(i=>i.published_at===newestDay):[];
+ const dailyRows=latestCollectedPublications();
+ const newestDay=dailyRows[0]?.published_at||"";
  const sourceRows=view==="latest"?dailyRows:view==="legacy"?state.items.filter(i=>!i.publication_version):state.items;
  const rows=[...sourceRows].filter(i=>(!outletId||i.outlet_id===outletId)&&(!type||i.type===type)&&(!query||fold([i.title,i.title_en,i.overview_en,i.excerpt,outlets.get(i.outlet_id)?.name,...(i.keyword_matches||[])].join(" ")).includes(query))&&(view!=="alerts"||unread(i)&&i.keyword_matches?.length));
  feedCount=rows.length;
- const status=view==="latest"?(newestDay?"Daily feed · "+newestDay+" · "+rows.length+" publication"+(rows.length===1?"":"s")+" collected":"No dated publications collected yet."):view==="alerts"?"Unreviewed items matching outlet alert keywords, within the latest "+(state.retention_limit||500)+" feed items.":"Earlier generic collection results, within the latest "+(state.retention_limit||500)+" feed items.";
+ const status=view==="latest"?(newestDay?"Last "+rows.length+" detected publication"+(rows.length===1?"":"s")+" · latest publication date "+newestDay:"No dated publications collected yet."):view==="alerts"?"Unreviewed items matching outlet alert keywords, within the latest "+(state.retention_limit||500)+" feed items.":"Earlier generic collection results, within the latest "+(state.retention_limit||500)+" feed items.";
  if($("archiveStatus").textContent!==status)$("archiveStatus").textContent=status;
  // Unchanged data keeps the existing cards: open source texts, focus and scroll position stay.
  const fingerprint=JSON.stringify([view,state.seen_through,[...outlets.values()].map(o=>[o.id,o.name]),rows]);
@@ -158,11 +157,17 @@ async function revealSource(id){
  }catch(error){$("message").textContent=error.message;}
 }
 function editOutlet(outlet){$("outletName").value=outlet.name;$("outletUrl").value=outlet.url;$("keywords").value=outlet.keywords.join(", ");$("enabled").checked=outlet.enabled;$("outletForm").scrollIntoView({behavior:"smooth"});}
+// Show the ten most recently *detected* publications, even when one was
+// published on a preceding day. Filtering by the newest publication date hid
+// late-arriving Al-Naba issues from the daily view.
+function latestCollectedPublications(){
+ return [...archiveItems.values()].filter(item=>item.publication_version&&item.published_at)
+  .sort((a,b)=>(b.first_seen||"").localeCompare(a.first_seen||"")||
+               (b.published_at||"").localeCompare(a.published_at||"")).slice(0,10);
+}
 function renderLatestPublications(){
  const box=$("aiSources");if(!box)return;
- const all=[...archiveItems.values()].sort((a,b)=>(b.published_at||"").localeCompare(a.published_at||""));
- const newestDay=all.find(i=>i.published_at)?.published_at||"";
- const rows=(newestDay?all.filter(i=>i.published_at===newestDay):[]).slice(0,10);
+ const rows=latestCollectedPublications();
  box.replaceChildren();
  for(const item of rows){
   const translated=item.title_en_kind==="translation"&&item.title_en?item.title_en:

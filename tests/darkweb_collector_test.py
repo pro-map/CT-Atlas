@@ -1672,6 +1672,96 @@ def test_news_portal_stops_at_the_period_start_and_never_opens_older_items():
     assert set(rows) == {'/posts/region-08-10-2025', '/?news_page=41'}
 
 
+def naba_magazine_listing():
+    """A weekly Al-Naba PDF card in MAGAZINES, absent from both news feeds."""
+    html = portal_home([], [], pages=(), priority_pages=(), lang='ar')
+    old = f'<div id="magazines-content"><a href="{BASE}posts/magazine-one">magazine</a></div>'
+    assert old in html
+    magazine = (f'<div id="magazines-content"><div class="magazine-card">'
+                f'<a href="{BASE}posts/an-naba-08-10-2026"><img alt="صحيفة النبأ"></a>'
+                '<h5>صحيفة النبأ - العدد الجديد</h5><small>٨ أكتوبر ٢٠٢٦</small></div>'
+                f'<a href="{BASE}posts/other-magazine-07-10-2026">Other weekly magazine</a></div>')
+    return html.replace(old, magazine)
+
+
+def test_news_portal_recognizes_october_eighth_naba_pdf_in_magazine_section():
+    result = c.structured_publications(naba_magazine_listing(), BASE, since='2026-10-08')
+    rows = [item for item in result['items'] if item.get('publication_version') == 1]
+    assert len(rows) == 1
+    row = rows[0]
+    assert (row['url'], row['category'], row['type'], row['published_at']) == (
+        BASE + 'posts/an-naba-08-10-2026', 'naba', 'pdf', '2026-10-08')
+    assert row['source_language'] == 'ar' and row['text_status'] == 'listing'
+    assert all('other-magazine' not in item['url'] for item in result['items'])
+    # The Al-Naba source should also be recognized with the alternate spelling.
+    assert c.news_portal_is_naba(BASE+'posts/al-naba-08-10-2026', '')
+    assert c.news_portal_is_naba(BASE+'posts/issue-518', 'صحيفة النبأ')
+    assert not c.news_portal_is_naba(BASE+'posts/other-magazine', 'Other weekly magazine')
+
+
+def test_october_eighth_naba_magazine_is_followed_and_pdf_record_emitted(tmp_path):
+    url = BASE + 'posts/an-naba-08-10-2026'
+    article = portal_article('صحيفة النبأ - العدد الجديد', '08 أكتوبر 2026', lang='ar',
+                             files=PORTAL_VIEWER, script=portal_pdf_script('/media.php?file=posts/files/naba-518.pdf'))
+    site = Site({BASE: naba_magazine_listing(), url: article,
+                 PORTAL_SWITCH: 404, PORTAL_SWITCH_FORCE: 404})
+    db = c.open_database(tmp_path/'state.sqlite')
+    mark_watching(db)
+    policy = {'epoch': 2, 'from': '2026-10-08', 'through': '2026-10-10',
+              'pages_per_scan': 25, 'previews': False}
+    outlet = {**OUTLET, 'policy': policy, 'collection_phase': 'watch'}
+    with patch.object(c, 'acquire', return_value={'acquired': True, 'sha256': 'a'*64, 'bytes': 1234}):
+        calls, sent = passes(site, db, tmp_path, outlet, 1, budget=25)
+    assert BASE in calls[0] and url in calls[0]
+    assert all('other-magazine' not in page for page in calls[0])
+    records = [item for batch in sent[0] for item in batch['items'] if item['url'] == url]
+    assert records
+    record = records[-1]
+    assert (record['published_at'], record['category'], record['type'], record['text_status']) == (
+        '2026-10-08', 'naba', 'pdf', 'complete')
+    assert len(record['attachments']) == 1 and record['attachments'][0]['type'] == 'pdf'
+    assert record['attachments'][0]['acquired'] is True
+    assert sent[0][-1]['scan_complete'] is True
+    db.close()
+
+
+def test_daily_watch_repairs_al_naba_listing_that_was_previously_uploaded(tmp_path):
+    """A link saved as a shallow card must not permanently suppress its PDF detail."""
+    url = BASE + 'posts/an-naba-08-10-2026'
+    site = Site({BASE: naba_magazine_listing(),
+                 url: portal_article('صحيفة النبأ', '08 أكتوبر 2026', lang='ar'),
+                 PORTAL_SWITCH: 404, PORTAL_SWITCH_FORCE: 404})
+    db = c.open_database(tmp_path/'state.sqlite')
+    mark_watching(db)
+    policy = {'epoch': 2, 'from': '2026-10-08', 'through': '2026-10-10',
+              'pages_per_scan': 25, 'previews': False}
+    outlet = {**OUTLET, 'policy': policy, 'collection_phase': 'watch'}
+    calls, _ = passes(site, db, tmp_path, outlet, 1, budget=1)
+    assert calls[0][0] == BASE and url not in calls[0]
+    stored = json.loads(db.execute('SELECT metadata FROM items WHERE url=?', (url,)).fetchone()[0])
+    assert stored['text_status'] == 'listing'
+    calls, sent = passes(site, db, tmp_path, outlet, 1, budget=25)
+    assert url in calls[0], 'incomplete issue must be opened even though its card was already stored'
+    repaired = json.loads(db.execute('SELECT metadata FROM items WHERE url=?', (url,)).fetchone()[0])
+    assert repaired['text_status'] == 'complete'
+    assert any(item['url'] == url and item['text_status'] == 'complete'
+               for batch in sent[0] for item in batch['items'])
+    db.close()
+
+
+def test_english_switch_to_empty_news_page_does_not_erase_arabic_magazine():
+    # The English tab can return an incomplete or empty page. The original
+    # Arabic publication must never be silently discarded.
+    arabic = naba_magazine_listing()
+    empty_english = portal_home([], [], pages=(), priority_pages=(), lang='en')
+    site = LanguageSite({BASE: arabic}, {BASE: empty_english})
+    result = c.read_listing(site, {**OUTLET, 'policy': {'from': '2026-10-08'}})
+    found = [item for item in result['items'] if item.get('publication_version') == 1]
+    assert len(found) == 1
+    assert found[0]['published_at'] == '2026-10-08'
+    assert found[0]['source_language'] == 'ar'
+
+
 def test_news_portal_article_keeps_date_paragraphs_and_files_but_no_comments_or_links():
     # The observed pdf.js viewer: #pdf-viewer and its controls carry no URL; the inline
     # script's pdfUrl constant names the file.
