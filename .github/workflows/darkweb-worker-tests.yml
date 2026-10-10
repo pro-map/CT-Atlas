@@ -1,0 +1,32 @@
+name: Dark Web Worker regression tests
+
+on:
+  pull_request:
+    paths:
+      - "cloudflare-worker/darkweb.js"
+      - "cloudflare-worker/report-gate.js"
+      - "cloudflare-worker/darkweb-files.js"
+      - "tests/darkweb.test.cjs"
+      - ".github/workflows/darkweb-worker-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: darkweb-worker-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Validate Worker module syntax
+        run: |
+          node --input-type=module --check < cloudflare-worker/darkweb.js
+          node --input-type=module --check < cloudflare-worker/report-gate.js
+      - name: Run Dark Web API regression tests
+        run: node --test tests/darkweb.test.cjs
