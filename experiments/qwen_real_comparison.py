@@ -49,7 +49,8 @@ def examples():
                     continue
                 title = str(event.get("original_title") or event.get("title") or "").strip()
                 summary = str(event.get("original_summary") or event.get("summary") or "").strip()
-                if len(title) < 12 or not summary or not event.get("ai_selection_complete"):
+                published = str(event.get("published") or "").strip()
+                if len(title) < 12 or not summary or not published or not event.get("ai_selection_complete"):
                     continue
                 identity = str(event.get("url") or event.get("id") or title)
                 if identity in seen:
@@ -60,6 +61,7 @@ def examples():
                     "id": hashlib.sha256(identity.encode("utf-8")).hexdigest()[:12],
                     "text": title + "\n" + summary,
                     "language": event.get("original_language") or "",
+                    "published": published,
                     "gemini_labels": [x for x in event.get("categories") or [] if x in CATEGORIES],
                     "gemini_selected": event.get("ai_selected") is True,
                     "gemini_status": event.get("reported_status") or "UNKNOWN",
@@ -81,7 +83,8 @@ def ask_qwen(row):
         "messages": [
             {"role": "system", "content": SYSTEM},
             {"role": "user", "content": "Review this historical news excerpt. "
-             "Use the content only: neither the original query nor label is proof.\n" + row["text"]},
+             "Judge as of the article's actual publication timestamp (" + row["published"] + "). "
+             "Use source content only: neither the retrieval query nor an earlier model label proves the classification.\n" + row["text"]},
         ],
         "format": {
             "type": "object",
