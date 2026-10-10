@@ -1,0 +1,120 @@
+name: Qwen specialist historical backfill (manual, no paid API)
+
+# Not scheduled. Requires successful review of Qwen quality and CPU tests.
+# Never replaces Gemini daily updates.
+on:
+  workflow_dispatch:
+    inputs:
+      max_posts:
+        description: Maximum LOCAL Qwen calls for this historical batch
+        required: true
+        default: "30"
+      max_fetches:
+        description: Maximum historical public-source searches
+        required: true
+        default: "180"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ct-map-update-main
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  run-historical-qwen:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    env:
+      MAX_POSTS: ${{ inputs.max_posts }}
+      MAX_FETCHES: ${{ inputs.max_fetches }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Validate bounded resource settings (never use paid larger runners)
+        run: |
+          python - <<'PY'
+          import os
+          posts, fetches = int(os.environ["MAX_POSTS"]), int(os.environ["MAX_FETCHES"])
+          if not (1 <= posts <= 90 and 1 <= fetches <= 600):
+              raise SystemExit("Refusing unbounded CPU or source requests")
+          print(f"Bounded historical-only Qwen batch: {posts} local calls / {fetches} source searches")
+          PY
+      - name: Install Python dependencies and local Ollama
+        run: |
+          set -euo pipefail
+          pip install -r requirements.txt
+          curl --fail --silent --show-error --location https://ollama.com/install.sh -o /tmp/ct-ollama.sh
+          sh /tmp/ct-ollama.sh
+      - name: Start local Qwen 3.5 4B (no remote LLM API)
+        run: |
+          set -euo pipefail
+          nohup ollama serve > /tmp/ct-ollama.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            curl --fail --silent http://127.0.0.1:11434/api/tags > /dev/null && break
+            sleep 2
+          done
+          curl --fail --silent http://127.0.0.1:11434/api/tags > /dev/null
+          ollama pull qwen3.5:4b
+      - name: Test selection adapter in isolation
+        run: python -m unittest discover -s tests -p 'qwen_backfill_test.py'
+      - name: Execute a checkpointed Qwen HISTORICAL specialist batch only
+        id: qwen
+        timeout-minutes: 75
+        env:
+          QWEN_BACKFILL_URL: http://127.0.0.1:11434/api/chat
+        run: |
+          python -u tools/enrich_threat_categories.py \
+            --backend qwen \
+            --max-posts "$MAX_POSTS" \
+            --max-fetches "$MAX_FETCHES" \
+            --deadline-minutes 67
+      - name: Validate and save durable checkpoints; never deploy an unlocated event
+        if: always()
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          db=json.loads(Path("events.json").read_text(encoding="utf-8"))
+          if not isinstance(db.get("events"),list) or not db["events"]:
+              raise SystemExit("Invalid existing map events: refusing push")
+          st=json.loads(Path("archive/threat-enrichment-status.json").read_text(encoding="utf-8"))
+          if st.get("ai_backend") != "qwen" or st.get("batch_status") in ("running","failed","interrupted"):
+              raise SystemExit("No validated Qwen checkpoint: refusing push")
+          for folder in ("archive","quota"):
+              for f in Path(folder).glob("*.json"):
+                  json.loads(f.read_text(encoding="utf-8"))
+          print("Qwen source coverage/completion semantics retained in status.json")
+          PY
+          git config user.name "CT Intelligence Map Bot"
+          git config user.email "actions@github.com"
+          git add -- events.json archive
+          if git diff --cached --quiet; then
+            echo "No backfill progress or event change to push."
+            exit 0
+          fi
+          git commit -m "Checkpoint bounded Qwen historical specialist backfill"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo "Merge conflict; refusing checkpoint push"
+              exit 1
+            fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 5))
+          done
+          exit 1
+      - name: Summarize Qwen batch without treating partial as complete
+        if: always()
+        run: |
+          python tools/specialist_catchup.py summary || true
+          echo 'New events are NOT deployed by this workflow: the normal Gemini daily update will geolocate and publish them.' >> "$GITHUB_STEP_SUMMARY"
