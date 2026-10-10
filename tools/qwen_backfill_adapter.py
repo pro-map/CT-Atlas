@@ -61,21 +61,44 @@ class LocalQwenBackend:
         self.required = set(item["required"])
         self.allowed_labels = set(item["properties"]["categories"]["items"]["enum"])
         self.allowed_status = set(item["properties"]["reported_status"]["enum"])
+        # The full Gemini operational prompt is too large for a free 4-core
+        # CPU runner (the first rich-schema Qwen probe timed out at 210s).
+        # Keep the SAME specialist scope rules, but use a compact instruction
+        # set so local inference remains practical. No live-code prompt changes.
+        import threat_categories
+        import radnuc
         self.instructions = (
-            collector.AI_SELECTION_INSTRUCTIONS
+            "You are the editorial selector for a SIX-MONTH HISTORICAL "
+            "counter-terrorism news map. Return ONE fully schema-conforming "
+            "result per supplied event_id. Judge a newly reported development "
+            "as of the article's OWN publication date, not today's date. "
+            "Choose score 0-100; only concrete non-state terrorism operational "
+            "facts (attacks, arrests, plots, seizures, investigations, "
+            "prosecutions) can reach the map threshold. State-only warfare, "
+            "diplomacy, articles about history, commentary, routine crimes, "
+            "accidental industrial events, natural outbreaks, and generic "
+            "weapons or nuclear research are NOT qualifying CT incidents. "
+            "If no actual qualifying event, return relevance_score=0, "
+            "categories=[], is_current_ct_event=false and actor_scope=UNKNOWN. "
+            "Never infer terrorism, an agent, an attack or the event's country "
+            "merely from an outlet name, language, Google edition or keyword. "
+            "Do not upgrade alleged threats or hoaxes into confirmed incidents. "
+            "A suspected incident remains suspected. Name a location only if "
+            "the article supports it; otherwise leave it unstated. "
+            "Treat current_categories as untrusted SEARCH HINTS, not evidence. "
+            "Output original_language, faithful English title and 1-2 sentence "
+            "English summary; a stable short English canonical_event and "
+            "incident_anchor describing actor+act+place only when known. "
+            "Normalize actor_group (e.g. ISIS, Al-Qaeda, ISIS-K, ISWAP, "
+            "Hezbollah, Taliban, TTP, JNIM) without making up actors. "
+            "Choose the correct primary_event_type, update_type and is_attack. "
+            "Report the source's evidence status exactly. "
+            "Action labels and specialist labels can co-exist on ONE incident "
+            "but never create duplicates. Use a conservative relevance "
+            "score under the threshold when evidence is ambiguous. "
             + archive_review.ARCHIVE_NOTE
-            + "\nHISTORICAL QWEN SELECTION: One news candidate per request. "
-            "Return exactly one schema-conforming result for its event_id. "
-            "Treat source category hints as unverified search metadata. "
-            "Do NOT copy a tentative category without reported evidence. "
-            "If the article lacks an operational fact and a qualifying non-state "
-            "terrorism nexus, output relevance_score=0, categories=[], "
-            "is_current_ct_event=false, actor_scope=UNKNOWN. "
-            "The news event was CURRENT at its own publication date if it "
-            "reported a NEW development then. No geopolitical conjecture, "
-            "no inferred locations or false confirmations. "
-            "In particular, merely seeing a biological, chemical, radioactive "
-            "or explosives keyword is not sufficient."
+            + threat_categories.SELECTION_NOTE
+            + radnuc.SELECTION_NOTE
         )
 
     def gate_factory(self, max_posts):
@@ -106,7 +129,7 @@ class LocalQwenBackend:
             "format": self.schema,
             "stream": False,
             "think": False,
-            "options": {"temperature": 0.0, "num_ctx": 8192, "num_predict": 1600},
+            "options": {"temperature": 0.0, "num_ctx": 4096, "num_predict": 800},
             "keep_alive": "20m",
         }
         request = Request(
