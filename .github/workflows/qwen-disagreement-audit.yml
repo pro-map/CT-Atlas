@@ -6,6 +6,7 @@ on:
       - experiment/qwen-backfill-only-20261010
     paths:
       - experiments/qwen_disagreement_audit.py
+      - .github/workflows/qwen-disagreement-audit.yml
 
 permissions:
   contents: read
