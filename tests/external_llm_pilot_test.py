@@ -255,6 +255,59 @@ class SafetyAndValidationTests(unittest.TestCase):
         self.assertIn("JSON", str(caught.exception))
         self.assertNotIn("secret_response_data_should_not_be_printed", str(caught.exception))
 
+    def test_fictional_preview_sanitizes_control_codes_and_urls(self):
+        preview = pilot.safe_synthetic_preview("Line\\x1b[31m new https://private.test/file xyz")
+        self.assertNotIn("\\x1b", preview)
+        self.assertNotIn("private.test", preview)
+        self.assertIn("[URL masquee]", preview)
+
+    def test_fictional_source_and_real_translation_can_be_viewed_locally(self):
+        fixture = [x for x in pilot.load_fixtures() if x["task"] == "translation"][0]
+        result = {
+            "id": fixture["id"],
+            "content_hash": pilot.content_hash(fixture),
+            # A semantically plausible alternative to the exact string reference
+            # must be shown for human review, not incorrectly called an error.
+            "title_en": "A fresh edition of the bulletin appeared on 10 October 2026",
+            "overview_en": "The imaginary bulletin was issued on the stated date.",
+        }
+        env = {
+            "EXTERNAL_LLM_PILOT_EXPLICIT_OPT_IN": "YES",
+            "CLOUDFLARE_WORKERS_AI_FREE_PLAN_VERIFIED": "YES",
+            "CLOUDFLARE_AI_API_TOKEN": "ONLY_FAKE_TOKEN",
+            "CLOUDFLARE_AI_ACCOUNT_ID": "c" * 32,
+        }
+        with mock.patch.object(pilot, "call_json", return_value=(
+                result, {"prompt_tokens": 220, "completion_tokens": 107, "total_tokens": 327})):
+            with mock.patch("builtins.print") as output:
+                code = pilot.main([
+                    "--mode", "live", "--provider", "cloudflare",
+                    "--max-per-provider", "1",
+                    "--show-synthetic-comparisons"], env=env)
+        self.assertEqual(code, 0)
+        printed = "\\n".join(str(arg) for call in output.call_args_list for arg in call.args)
+        self.assertIn(fixture["title"], printed)
+        self.assertIn(fixture["expected_title_en"], printed)
+        self.assertIn(result["title_en"], printed)
+        self.assertIn("Correspondance exacte", printed)
+        self.assertNotIn("ONLY_FAKE_TOKEN", printed)
+        self.assertNotIn("c" * 32, printed)
+
+    def test_can_choose_second_public_fixture_without_changing_original(self):
+        cases = pilot.load_fixtures()
+        first = pilot.plan("cloudflare", cases, 1, 0)[0]
+        second = pilot.plan("cloudflare", cases, 1, 1)[0]
+        self.assertNotEqual(first["id"], second["id"])
+        self.assertEqual(second["id"], [x for x in cases
+                         if x["task"] == "translation"][1]["id"])
+        self.assertEqual(pilot.plan("cloudflare", cases, 2, 0), [first, second])
+        with self.assertRaises(pilot.PilotSafetyError):
+            pilot.plan("cloudflare", cases, 1, 8)
+        with self.assertRaises(pilot.PilotSafetyError):
+            pilot.plan("cloudflare", cases, -1, 0)
+        with self.assertRaises(pilot.PilotSafetyError):
+            pilot.plan("cloudflare", cases, 1, -1)
+
     def test_provider_error_never_logs_response_body_or_retries(self):
         calls = []
         class Fail:
