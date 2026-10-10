@@ -81,7 +81,7 @@ export async function handleDarkweb(request, env) {
       const bessira = /\b(?:bessira|besira|bassira|basira)\b/i;
       const outlets = state.outlets
         .filter(o => o.enabled && bessira.test(String(o.name || "")))
-        .map(o => ({ ...o, collection_phase: "watch" }));
+        .map(o => ({ ...o, collection_phase: "watch", disable_english_switch: true, disable_pdf_preview: true }));
       // Incremental catch-up: start on the calendar day of Bessira's last
       // successful collector pass, whatever the gap since that pass. URL
       // de-duplication handles publications already seen on that same day.
