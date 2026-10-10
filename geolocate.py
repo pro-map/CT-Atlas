@@ -35,7 +35,10 @@ import requests
 #   GEMINI_API_KEY      required
 #   GEMINI_GEO_MODEL    optional, default: gemini-3.5-flash-lite
 #   GEMINI_RESCUE_MODELS optional, comma-separated, tried in turn;
-#                        default: gemini-3.7-flash,gemini-3.8-flash,gemini-3.5-flash
+#                        default: gemini-3.8-flash
+#   GEMINI_RESCUE_BILLING_VERIFIED optional; default false (rescue is paused
+#                                  until Google AI Studio tier/rate limits and
+#                                  the project's billing state are checked)
 #   AI_GEO_BATCH_SIZE   optional, default: 20
 #   AI_GEO_FORCE        optional, "1"/"true" to refresh every event
 #   AI_GEO_PRESERVE_IDS_FILE optional JSON list of protected existing event IDs
@@ -54,20 +57,26 @@ GEMINI_MODEL = os.getenv(
     "gemini-3.5-flash-lite",
 )
 
-# The rescue runs on Flash models no user-facing feature relies on, one after
-# the other: each has its own free quota (20 requests/day, 5/minute). Gemini
-# 3.6 Flash stays reserved as the Report Generator / Deep Search fallback.
+# Gemini 3.7 Flash is deprecated (redirects to 3.8). Gemini 3.5 Flash is
+# also deprecated (redirects to 3.6, reserved for interactive features).
+# Use only 3.8 as a potential rescue model. Google's free-tier availability
+# does not prove THIS project's billing status or per-project rate limits.
+# Fail closed until the operator has verified those settings in AI Studio.
 GEMINI_RESCUE_MODELS = [
     model.strip()
     for model in os.getenv(
         "GEMINI_RESCUE_MODELS",
-        "gemini-3.7-flash,gemini-3.8-flash,gemini-3.5-flash",
+        "gemini-3.8-flash",
     ).split(",")
     if model.strip()
 ]
 
-# The rescue model in use; it moves to the next one when a quota is reached.
-GEMINI_RESCUE_MODEL = GEMINI_RESCUE_MODELS[0]
+# No optional/billable model request until the specific Google AI Studio
+# project has been verified. Primary Flash-Lite geolocation remains unchanged.
+GEMINI_RESCUE_BILLING_VERIFIED = os.getenv(
+    "GEMINI_RESCUE_BILLING_VERIFIED", "false"
+).strip().lower() in {"true", "1", "yes"}
+GEMINI_RESCUE_MODEL = GEMINI_RESCUE_MODELS[0] if GEMINI_RESCUE_MODELS else None
 
 # New cache version: every event must be geolocated by the current AI engine.
 AI_GEO_VERSION = "gemini-ai-first-v5.3-source-faithful"
@@ -2060,7 +2069,14 @@ def rescue_unknown_events(
     affected batch is NOT frozen and may be retried on a later run.
     """
     if not unresolved:
-        return [], set()
+        return [], {}
+    if not GEMINI_RESCUE_BILLING_VERIFIED or not GEMINI_RESCUE_MODELS:
+        print(
+            "   Optional Gemini rescue paused: verify this project's billing "
+            "tier and 3.8 Flash limits in Google AI Studio before enabling. "
+            "No rescue API request; candidates remain retryable."
+        )
+        return [], {}
 
     batches = []
 
@@ -2188,7 +2204,12 @@ def main():
         f"Primary model: {GEMINI_MODEL}"
     )
     print(
-        f"Rescue models: {', '.join(GEMINI_RESCUE_MODELS)}"
+        f"Rescue models (configured only): {', '.join(GEMINI_RESCUE_MODELS)}"
+    )
+    print(
+        "Rescue API access: "
+        + ("allowed after project billing verification" if GEMINI_RESCUE_BILLING_VERIFIED
+           else "PAUSED pending project-specific billing/rate-limit verification")
     )
     print(
         f"Batch size: {BATCH_SIZE}"
@@ -2632,7 +2653,7 @@ def main():
 
         save_checkpoint(
             data,
-            "Gemini 3.6 one-shot rescue pass",
+            "optional Gemini rescue pass (if billing verified)",
         )
 
     # --------------------------------------------------------
@@ -2699,8 +2720,11 @@ def main():
         "rescue_models":
             GEMINI_RESCUE_MODELS,
 
+        "rescue_enabled":
+            GEMINI_RESCUE_BILLING_VERIFIED and bool(GEMINI_RESCUE_MODELS),
+
         "rescue_policy":
-            "one_automatic_rescue_then_freeze",
+            "one_automatic_rescue_then_freeze_if_billing_verified",
 
         "rescue_unlocated_final":
             rescue_status_counts.get(

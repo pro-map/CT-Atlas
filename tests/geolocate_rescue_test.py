@@ -1,7 +1,9 @@
-"""geolocate.py's rescue pass: it moves along a chain of Flash models when one
-runs out of free quota, never uses Gemini 3.6 Flash (kept for the Report
-Generator and Deep Search fallback), records the model that handled each
-event, and gives up at once on a daily quota answer."""
+"""Geolocation rescue uses only non-deprecated 3.8 Flash after billing verification.
+
+The default configuration sends no rescue API calls. Once explicitly enabled
+and verified for the project, the rescue never uses Gemini 3.6 Flash (reserved
+for reports), records the model used, and stops on provider daily quota.
+"""
 import importlib.util
 import os
 import unittest
@@ -18,12 +20,15 @@ def payload(n):
 
 class RescueChainTests(unittest.TestCase):
     def setUp(self):
-        self.original = (geolocate.GEMINI_RESCUE_MODELS, geolocate.GEMINI_RESCUE_MODEL, geolocate.BATCH_SIZE)
+        self.original = (geolocate.GEMINI_RESCUE_MODELS, geolocate.GEMINI_RESCUE_MODEL,
+                         geolocate.BATCH_SIZE, geolocate.GEMINI_RESCUE_BILLING_VERIFIED)
         geolocate.GEMINI_RESCUE_MODELS = ["model-a", "model-b", "model-c"]
         geolocate.BATCH_SIZE = 2
+        geolocate.GEMINI_RESCUE_BILLING_VERIFIED = True
 
     def tearDown(self):
-        geolocate.GEMINI_RESCUE_MODELS, geolocate.GEMINI_RESCUE_MODEL, geolocate.BATCH_SIZE = self.original
+        (geolocate.GEMINI_RESCUE_MODELS, geolocate.GEMINI_RESCUE_MODEL,
+         geolocate.BATCH_SIZE, geolocate.GEMINI_RESCUE_BILLING_VERIFIED) = self.original
 
     def run_rescue(self, exhausted, items):
         calls = []
@@ -38,9 +43,19 @@ class RescueChainTests(unittest.TestCase):
             results, done = geolocate.rescue_unknown_events(items)
         return results, done, calls
 
-    def test_the_default_chain_leaves_3_6_flash_to_the_interactive_features(self):
+    def test_only_current_38_is_configured_and_project_verification_defaults_off(self):
+        self.assertEqual(self.original[0], ["gemini-3.8-flash"])
+        self.assertFalse(self.original[3])
+        self.assertNotIn("gemini-3.7-flash", self.original[0])
+        self.assertNotIn("gemini-3.5-flash", self.original[0])
         self.assertNotIn("gemini-3.6-flash", self.original[0])
-        self.assertEqual(self.original[0], ["gemini-3.7-flash", "gemini-3.8-flash", "gemini-3.5-flash"])
+
+    def test_unverified_billing_blocks_all_rescue_requests_and_preserves_retry(self):
+        geolocate.GEMINI_RESCUE_BILLING_VERIFIED = False
+        with mock.patch.object(geolocate, "process_batch_resilient") as stub:
+            results, done = geolocate.rescue_unknown_events([payload(1), payload(2)])
+        self.assertEqual((results, done), ([], {}))
+        stub.assert_not_called()
 
     def test_a_spent_model_hands_the_same_batch_to_the_next(self):
         results, done, calls = self.run_rescue({"model-a"}, [payload(n) for n in range(4)])
