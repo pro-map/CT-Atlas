@@ -71,6 +71,27 @@ class TaxonomyTests(unittest.TestCase):
         self.assertEqual(collector.CORE_SEARCH_QUERIES[t.CE],t.queries(t.CE))
         self.assertEqual(collector.OFFICIAL_SOURCE_QUERIES[t.CE],t.queries(t.CE))
 
+    def test_chinese_biological_and_chemical_terms_have_context_in_historical_searches(self):
+        expected={'zh','zh-Hant'}
+        self.assertTrue(expected <= set(b.enrich_radnuc.profiles(collector)[i]['code']
+                                           for i in range(len(b.enrich_radnuc.profiles(collector)))))
+        self.assertFalse(any(p['code'] in expected for p in collector.MULTILINGUAL_PROFILES),
+                         'Daily Gemini profiles must remain unchanged')
+        for label,vocab_name in ((t.CE,'chemical_explosives'),(t.BIO,'biological')):
+            for code in expected:
+                self.assertTrue(t.vocabulary()[vocab_name]['terms'][code])
+                self.assertTrue(t.vocabulary()[vocab_name]['context'][code])
+                queries=t.queries(label,code)
+                self.assertTrue(queries)
+                self.assertTrue(all(') (' in q for q in queries))
+                self.assertTrue(all(len(q)<700 for q in queries))
+                for term in t.vocabulary()[vocab_name]['terms'][code]:
+                    self.assertIn('"'+term+'"',' '.join(queries))
+                plan=b.plan_tasks(label,date(2026,10,8),collector)
+                native=[x for x in plan if x['source']=='google' and x['code']==code]
+                self.assertTrue(native)
+                self.assertEqual({x['query'] for x in native},set(queries))
+
     def test_configuration_rules_reach_the_shared_editorial_filter(self):
         rules=t.vocabulary()['chemical_explosives']['rules']
         self.assertTrue(rules)
