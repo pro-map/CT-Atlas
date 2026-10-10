@@ -67,6 +67,34 @@ def queries(code='en'):
     return list(_queries(code))
 
 
+# Complementary Chinese-language Google News searches for the SAME user-supplied
+# 181-term RN collection. These are curated native equivalents of select material
+# classes, NOT a claim that all 181 English names have been individually translated.
+# The unchanged full 181-entry vocabulary continues through English Google News
+# and GDELT's multilingual index, including Chinese-indexed reporting.
+# Only the fixed six-month supplemental backfill uses these extra native queries.
+CHINESE_SUPPLEMENT_QUERIES = {
+    "zh": {
+        "name": "Chinese (Simplified) RN supplement",
+        "hl": "zh-CN", "gl": "CN", "ceid": "CN:zh-Hans",
+        "queries": [
+            '(高浓缩铀 OR 低浓缩铀 OR 铀-235 OR 钚-239 OR 铯-137) (恐怖主义 OR 恐怖分子 OR 走私 OR 查获 OR 逮捕 OR 调查)',
+            '(放射性同位素 OR 放射性核素 OR 钴-60 OR 镭-226 OR "脏弹") (恐怖袭击 OR 极端组织 OR 非法贩运 OR 被盗 OR 查获 OR 调查)',
+            '(核燃料 OR 乏核燃料 OR 黄饼 OR 放射性废物) (恐怖主义 OR 极端组织 OR 走私 OR 盗窃 OR 查获)',
+        ],
+    },
+    "zh-Hant": {
+        "name": "Chinese (Traditional) RN supplement",
+        "hl": "zh-TW", "gl": "TW", "ceid": "TW:zh-Hant",
+        "queries": [
+            '(高濃縮鈾 OR 低濃縮鈾 OR 鈾-235 OR 鈽-239 OR 銫-137) (恐怖主義 OR 恐怖份子 OR 走私 OR 查獲 OR 逮捕 OR 調查)',
+            '(放射性同位素 OR 放射性核種 OR 鈷-60 OR 鐳-226 OR "髒彈") (恐怖襲擊 OR 極端組織 OR 非法販運 OR 遭竊 OR 查獲 OR 調查)',
+            '(核燃料 OR 用過核燃料 OR 黃餅 OR 放射性廢物) (恐怖主義 OR 極端組織 OR 走私 OR 竊盜 OR 查獲)',
+        ],
+    },
+}
+
+
 def backfill_tasks(key_function):
     config = vocabulary()
     anchor = date.fromisoformat(config['backfill']['anchor'])
@@ -89,6 +117,20 @@ def backfill_tasks(key_function):
                                 hl='en-US',gl='US',ceid='US:en')
                 else:
                     task.update(locale='all',code='mul',name='All indexed GDELT source languages')
+                task['key'] = key_function(task)
+                tasks.append(task)
+        # Separate Chinese script editions are searchable without creating
+        # new keywords or resetting any prior English/GDELT task identity.
+        for code, profile in CHINESE_SUPPLEMENT_QUERIES.items():
+            for query in profile['queries']:
+                task = {'group':'radnuc_supplement_google_chinese',
+                        'source':'google','query':query,
+                        'category':'Radiological/Nuclear','week':week.isoformat(),
+                        'start':low.isoformat(),'end':high.isoformat(),
+                        'supplemental_vocabulary':config['version'],
+                        'locale':f"{profile['hl']}|{profile['gl']}|{profile['ceid']}",
+                        'code':code,'name':profile['name'],
+                        'hl':profile['hl'],'gl':profile['gl'],'ceid':profile['ceid']}
                 task['key'] = key_function(task)
                 tasks.append(task)
     return list({task['key']:task for task in tasks}.values())

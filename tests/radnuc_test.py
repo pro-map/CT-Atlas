@@ -79,6 +79,20 @@ class RadnucPlanTests(unittest.TestCase):
         self.assertEqual(codes, set(radnuc.LEXICONS))
         self.assertTrue(all(t['locale'] == 'all' for t in self.plan if t['source'] == 'gdelt'))
 
+    def test_chinese_editions_are_in_the_historical_plan_with_separate_locale_keys(self):
+        editions = enrich_radnuc.CHINESE_BACKFILL_PROFILES
+        self.assertEqual({p["code"] for p in editions}, {"zh", "zh-Hant"})
+        for profile in editions:
+            rows = [task for task in self.plan
+                    if task['source'] == 'google' and task['code'] == profile['code']
+                    and not task.get('supplemental_vocabulary')]
+            self.assertTrue(rows)
+            self.assertEqual({task['locale'] for task in rows},
+                             {f"{profile['hl']}|{profile['gl']}|{profile['ceid']}"})
+            self.assertEqual({task['query'] for task in rows},
+                             set(radnuc.queries(profile['code'])))
+        self.assertEqual(len({task['key'] for task in self.plan}), len(self.plan))
+
     def test_windows_cover_180_days_without_a_gap_and_include_recent_reporting(self):
         windows = sorted({enrich_archive.window(t) for t in self.plan if not t.get('supplemental_vocabulary')})
         self.assertEqual(windows[0][0], self.today - timedelta(days=180))
