@@ -600,12 +600,20 @@ def order_history_tasks(tasks, *, prioritize_native=False, interleave_supplement
         ordered.sort(key=lambda task: task["source"] == "gdelt")
     if not interleave_supplement:
         return ordered
-    extra = [t for t in ordered if t.get("supplemental_vocabulary")]
-    ordinary = [t for t in ordered if not t.get("supplemental_vocabulary")]
-    if not extra:
+    if not any(t.get("supplemental_vocabulary") for t in ordered):
         return ordered
-    return [task for pair in zip_longest(extra, ordinary)
-            for task in pair if task is not None]
+
+    def alternate(group):
+        extra = [t for t in group if t.get("supplemental_vocabulary")]
+        ordinary = [t for t in group if not t.get("supplemental_vocabulary")]
+        return [task for pair in zip_longest(extra, ordinary)
+                for task in pair if task is not None]
+
+    if prioritize_native:
+        # Never let an optional GDELT source refusal block native Google News.
+        return alternate([t for t in ordered if t["source"] != "gdelt"]) + (
+            alternate([t for t in ordered if t["source"] == "gdelt"]))
+    return alternate(ordered)
 
 
 def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=None, call_batch=None,
