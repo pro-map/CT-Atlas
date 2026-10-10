@@ -1,14 +1,14 @@
 {
   "category": "International CT Instruments and Institutions",
-  "question": "Which specific body acts as the central point of contact for the INTERPOL General Secretariat and other member countries within each individual member state?",
+  "question": "What is the primary global secure communications system used by INTERPOL to connect member countries and share real-time data?",
   "options": [
-    "National Central Bureau (NCB)",
-    "Global Complex for Innovation",
-    "Executive Committee Secretariat"
+    "I-24/7",
+    "SITCEN",
+    "SIENA"
   ],
   "correct_index": 0,
-  "explanation": "In each INTERPOL member country, a National Central Bureau (NCB) run by national police officials provides the central point of contact for international police cooperation.",
+  "explanation": "INTERPOL connects its member countries via a secure communications network called I-24/7, allowing real-time access to databases and services.",
   "source_url": "https://www.interpol.int/en/Who-we-are/What-is-INTERPOL",
-  "date": "2026-10-09",
-  "source_checked_at": "2026-10-09T15:20:21.966245+00:00"
+  "date": "2026-10-10",
+  "source_checked_at": "2026-10-10T14:29:52.426087+00:00"
 }
