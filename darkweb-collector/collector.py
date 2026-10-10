@@ -1468,6 +1468,22 @@ def legacy_listing(page_url, url, html, language=""):
     return {"items": list(parser.rows.values()), "page": page, "text": text, "truncated": parser.truncated}
 
 
+def watch_pagination_link(row):
+    """True only for ordinary pagination links on the monitored Bessira listing."""
+    target = onion_url(row.get("url", ""))
+    if not target or row.get("type") != "page":
+        return False
+    parsed = urlsplit(target)
+    path = parsed.path.rstrip("/")
+    title = fold_text(row.get("title", ""))
+    if re.search(r"/page/\d+$", path):
+        return True
+    query = dict(parse_qsl(parsed.query))
+    if any(key.lower() in {"page", "paged", "p"} and str(value).isdigit() for key, value in query.items()):
+        return True
+    return title in {"next page", "next", "older posts", "older", "التالي", "الصفحة التالية"}
+
+
 def source_get(session, url, host):
     """Validate every redirect *before* making another source request."""
     for _ in range(4):
@@ -1959,12 +1975,27 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
             continue
         answered = True
         records = result["items"] + ([result["page"]] if result["page"] else [])
-        if watching and target[1] == 0:
-            publications = [row for row in records if row.get("publication_version") == 1]
-            eligible = sum(1 for row in publications if within_period(row, policy))
-            undated = sum(1 for row in publications if not row.get("published_at"))
-            LOG.info("Outlet %s: first page recognized %s publication(s); %s within %s to %s, %s undated",
-                     oid, len(publications), eligible, policy.get("from", "?"), policy.get("through", "?"), undated)
+        watch_unknown = set()
+        watch_listing = watching and target[1] == 0
+        if watch_listing:
+            publications = []
+            for row in records:
+                target_url = onion_url(row.get("url", ""))
+                if not target_url or target_url == url or not selected_material(row):
+                    continue
+                publications.append(row)
+                known = db.execute("SELECT metadata FROM items WHERE outlet_id=? AND url=? LIMIT 1", (oid, target_url)).fetchone()
+                previous = json.loads(known[0]) if known else {}
+                naba_incomplete = bool(known and previous.get("text_status") == "listing"
+                                       and news_portal_is_naba(target_url, row.get("title", "")))
+                dated_before_window = bool(row.get("published_at") and not within_period(row, policy))
+                if (not known or naba_incomplete) and not dated_before_window:
+                    watch_unknown.add(target_url)
+            if url == outlet["url"]:
+                eligible = sum(1 for row in publications if not row.get("published_at") or within_period(row, policy))
+                undated = sum(1 for row in publications if not row.get("published_at"))
+                LOG.info("Outlet %s: first page recognized %s publication(s); %s within %s to %s, %s undated",
+                         oid, len(publications), eligible, policy.get("from", "?"), policy.get("through", "?"), undated)
         with db:
             # Page truncation is explicit and never treated as a full inventory.
             db.execute("UPDATE frontier SET status=?,attempts=attempts+1 WHERE outlet_id=? AND url=?",
@@ -1978,21 +2009,15 @@ def crawl_outlet(tor, db, outlet, pages_per_scan=100, max_pages=10000, request_d
                     continue
                 if target_url != url:
                     if watching:
-                        # Daily Bessira mode is deliberately one-hop only. From the
-                        # starting page, follow only genuinely new publication links
-                        # that fall inside today's policy window. Never follow generic
-                        # navigation/pagination (page 2, archives, categories), and
-                        # never recurse from a publication detail page.
-                        known = db.execute("SELECT metadata FROM items WHERE outlet_id=? AND url=? LIMIT 1", (oid, target_url)).fetchone()
-                        previous = json.loads(known[0]) if known else {}
-                        # A listing card is not proof its detail or PDF was fetched.
-                        # Retry an incomplete Al-Naba card without reopening
-                        # already-complete publications every day.
-                        naba_incomplete = bool(known and previous.get("text_status") == "listing"
-                                               and news_portal_is_naba(target_url, row.get("title", "")))
-                        recent_or_undated = not row.get("published_at") or within_period(row, policy)
-                        if target[1] == 0 and selected_material(row) and recent_or_undated and (not known or naba_incomplete):
+                        if watch_listing and target_url in watch_unknown:
+                            # Publication details are depth 1 and never recurse.
                             db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url,depth) VALUES (?,?,1)", (oid, target_url))
+                        elif watch_listing and watch_unknown and watch_pagination_link(row):
+                            # Pagination stays at depth 0 so the next listing page can
+                            # decide whether another page is still needed. The moment
+                            # a listing page contains no unknown publication, no further
+                            # pagination link is queued and catch-up stops.
+                            db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url,depth) VALUES (?,?,0)", (oid, target_url))
                     elif row.get("crawl") or row["type"] == "page":
                         db.execute("INSERT OR IGNORE INTO frontier(outlet_id,url,depth) VALUES (?,?,?)", (oid, target_url, target[1]+1))
                 if not selected_material(row):
