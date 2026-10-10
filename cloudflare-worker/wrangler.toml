@@ -17,6 +17,15 @@ ALLOWED_ORIGIN = "https://ct-atlas.com"
 # the main domain). See corsHeaders() in shared.js.
 EXTRA_ALLOWED_ORIGINS = "https://ct-atlas-mirror.fairpeace.workers.dev,https://pro-map.github.io"
 
+# Optional Workers AI binding for title/excerpt translation. Merely adding this
+# binding does NOT turn on external Dark Web transmission. Both separate Worker
+# environment variables must be set manually after institutional approval:
+#   DARKWEB_TRANSLATION_PROVIDER=cloudflare
+#   DARKWEB_EXTERNAL_AI_APPROVED=true
+# No secrets are recorded in this file. Gemini remains the default.
+[ai]
+binding = "AI"
+
 [[durable_objects.bindings]]
 name = "REPORT_GATE"
 class_name = "ReportGate"
