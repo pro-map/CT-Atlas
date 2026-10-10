@@ -59,6 +59,24 @@ test('authorized small batch sends only title and excerpt, never source files, U
     assert.equal(raw.includes(secret),false,'must never pass full source evidence');
 });
 
+test('clearweb URLs, onion hosts and contact emails are stripped even with an identity sanitizer',async()=>{
+  const calls=[];
+  const env={DARKWEB_TRANSLATION_PROVIDER:'cloudflare',
+    DARKWEB_EXTERNAL_AI_APPROVED:'true',
+    AI:{run:async (model,body)=>{
+      calls.push(JSON.stringify(body));
+      return {response:JSON.stringify({titles:[
+        {id:'id-1',title:'A fictional bulletin was announced',overview_en:'A fictional notice.'}
+      ]})};
+    }}};
+  const item=fakeItem();
+  item.title='A fictional bulletin https://sensitive.test/contact privacy@private.test';
+  item.excerpt='See '+('a'.repeat(56))+'.onion before reading';
+  await translate(env,[item],s=>String(s));
+  assert.equal(calls.length,1);
+  assert.doesNotMatch(calls[0],/sensitive\.test|privacy@private\.test|\.onion/);
+});
+
 test('limit 3 prevents unbounded or accidental bulk Dark Web transmission',async()=>{
   let calls=0;
   const env={DARKWEB_TRANSLATION_PROVIDER:'cloudflare',
