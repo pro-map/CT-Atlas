@@ -733,24 +733,31 @@ def test_page_that_keeps_timing_out_is_abandoned_once_the_start_page_answers(tmp
     db.close()
 
 
-def test_watch_pass_reads_only_current_listing_and_new_publications(tmp_path):
-    site = Site({BASE: cards(range(12), True), BASE+'page/2/': cards([20]),
-                 **{BASE+'posts/news/%s/' % i: structured_detail('خبر %s' % i, '', '2025-10-03') for i in list(range(13)) + [20]}})
+def test_watch_follows_pagination_only_while_new_publications_are_present(tmp_path):
+    details = {BASE+'posts/news/%s/' % i: structured_detail('خبر %s' % i, '', '2025-10-03') for i in range(7)}
+    site = Site({BASE: cards([0]), **details})
     db = c.open_database(tmp_path/'state.sqlite')
     mark_watching(db)
-    outlet = {**OUTLET, 'policy': {**LOOP_POLICY, 'pages_per_scan': 3}, 'collection_phase': 'watch'}
-    calls, sent = passes(site, db, tmp_path, outlet, 1)
-    site.pages[BASE] = cards(range(13), True)
-    more_calls, more_sent = passes(site, db, tmp_path, outlet, 3)
-    calls += more_calls
-    assert [pass_calls[0] for pass_calls in calls] == [BASE] * 4
-    assert calls[1] == [BASE, BASE+'posts/news/12/']
-    assert all(BASE+'page/2/' not in pass_calls for pass_calls in calls)
-    uploaded = [item['url'] for batch in more_sent[0] for item in batch['items']]
-    assert BASE+'posts/news/12/' in uploaded
-    # Unchanged cards are not reopened, and historical pagination is never followed.
-    assert BASE+'posts/news/11/' not in uploaded
-    assert db.execute('SELECT baseline FROM items WHERE url=?', (BASE+'posts/news/12/',)).fetchone()[0] == 0
+    outlet = {**OUTLET, 'policy': {**LOOP_POLICY, 'pages_per_scan': 20}, 'collection_phase': 'watch'}
+    calls, _ = passes(site, db, tmp_path, outlet, 1)
+    assert calls == [[BASE, BASE+'posts/news/0/']]
+
+    # Simulate returning after several days: six unseen publications now span
+    # two listing pages; page 3 contains only the already-known boundary item.
+    site.pages[BASE] = cards([6, 5, 4], True)
+    site.pages[BASE+'page/2/'] = cards([3, 2, 1]) + '<a href="/page/3/">Next page</a>'
+    site.pages[BASE+'page/3/'] = cards([0])
+    before = len(site.calls)
+    _, sent = policy_scan(site, db, tmp_path, outlet, budget=20)
+    catchup_calls = site.calls[before:]
+    assert catchup_calls[0] == BASE
+    assert BASE+'page/2/' in catchup_calls and BASE+'page/3/' in catchup_calls
+    assert all(BASE+'posts/news/%s/' % i in catchup_calls for i in range(1, 7))
+    assert catchup_calls.count(BASE+'posts/news/0/') == 0
+    uploaded = {item['url'] for batch in sent for item in batch['items']}
+    assert all(BASE+'posts/news/%s/' % i in uploaded for i in range(1, 7))
+    # Page 3 is the known boundary: no page 4/history is followed.
+    assert not any('/page/4/' in url for url in catchup_calls)
     db.close()
 
 
