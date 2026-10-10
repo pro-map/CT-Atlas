@@ -764,10 +764,10 @@ test('page: non-admin analysts see only the centrally managed publication feed',
  assert.equal(page.$('feedView').hidden,false);
  assert.match(page.doc.body.textContent,/Collection is managed centrally by the administrator/);
 });
-test('page: publication feed shows only the newest collected day and exposes no historical pagination',async()=>{
+test('page: publication feed includes late-arriving items from earlier dates and exposes no historical pagination',async()=>{
  const fixture=pageFixture(),page=pageHarness(fixture);await page.flush();
- assert.deepEqual(page.$('feed').querySelectorAll('article').map(a=>a.id),['item-'+fixture.id('a')]);
- assert.match(page.$('archiveStatus').textContent,/Daily feed · 2026-10-03 · 1 publication/);
+ assert.deepEqual(page.$('feed').querySelectorAll('article').map(a=>a.id),['item-'+fixture.id('a'),'item-'+fixture.id('b')]);
+ assert.match(page.$('archiveStatus').textContent,/Last 2 detected publications/);
  assert.equal(page.$('nextPage'),null);assert.equal(page.$('prevPage'),null);assert.equal(page.$('pageStatus'),null);
 });
 test('page: the 60 s refresh never enriches and keeps an opened source text, focus and outlet selector',async()=>{
@@ -819,7 +819,7 @@ test('page: unsaved period edits survive refresh; widen, narrow, pause and reset
  assert.match(page.$('collectionState').textContent,/PERIOD ENDED/);assert.ok(page.$('collectionState').classList.contains('warning'));
  assert.match(page.$('snapshot').textContent,/Collection period ended on 2026-10-01/);
 });
-test('page: mark-all keeps its global scope and Latest publications shows English titles from the newest archive records',async()=>{
+test('page: mark-all stays global and Latest publications includes earlier source dates',async()=>{
  const fixture=pageFixture(),page=pageHarness(fixture);await page.flush();
  page.answer(false);page.$('markSeen').onclick();
  assert.match(page.confirms.at(-1),/ALL 3 unreviewed item\(s\) across all outlets/);assert.match(page.confirms.at(-1),/1 keyword alert/);assert.equal(page.count('/darkweb/seen'),0);
@@ -830,7 +830,7 @@ test('page: mark-all keeps its global scope and Latest publications shows Englis
  assert.deepEqual(alerts.map(a=>a.id),['item-'+fixture.id('a')]);assert.match(page.$('archiveStatus').textContent,/alert keywords/);
  page.doc.querySelectorAll('[data-view=latest]')[0].onclick();
  const links=page.$('aiSources').querySelectorAll('a');
- assert.deepEqual(links.map(a=>a.textContent),['Title a']);
+ assert.deepEqual(links.map(a=>a.textContent),['Title a','Title b']);
  assert.doesNotMatch(page.doc.body.textContent,/AI synthesis of outlet claims|corpus contains publications spanning/i);
  links[0].onclick({preventDefault(){}});await page.flush();
  const latestCard=page.$('item-'+fixture.id('a'));
