@@ -25,8 +25,19 @@ STATUS_FILE = 'archive/radnuc-enrichment-status.json'
 WINDOW_DAYS = 180
 
 
+# These are HISTORICAL specialist-backfill editions only: no change to the
+# Gemini daily collector, its language mix or its request allocations.
+# Two Chinese writing systems are indexed separately, but they are ONE language.
+CHINESE_BACKFILL_PROFILES = (
+    {"code": "zh", "name": "Chinese (Simplified)", "hl": "zh-CN",
+     "gl": "CN", "ceid": "CN:zh-Hans"},
+    {"code": "zh-Hant", "name": "Chinese (Traditional)", "hl": "zh-TW",
+     "gl": "TW", "ceid": "TW:zh-Hant"},
+)
+
+
 def profiles(collector):
-    result = [enrich_archive.ENGLISH_PROFILE, *collector.MULTILINGUAL_PROFILES,
+    result = [*CHINESE_BACKFILL_PROFILES, enrich_archive.ENGLISH_PROFILE, *collector.MULTILINGUAL_PROFILES,
               *enrich_archive.NEW_LANGUAGE_PROFILES,
               {'code': 'sw', 'name': 'Swahili', 'hl': 'en-US', 'gl': 'US', 'ceid': 'US:en'}]
     unique = {}
