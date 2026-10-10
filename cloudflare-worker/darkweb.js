@@ -1,5 +1,6 @@
 import { cleanText, gateCall, isAllowedUser, sha256, extractGeminiText } from "./shared.js";
 import { withHostedFiles, handlePdfFile } from "./darkweb-files.js";
+import { darkwebWorkersAiPermitted, translateDarkwebTitlesWithCloudflare } from "./darkweb-translation.js";
 
 export const DARKWEB_VERSION = "darkweb-v6-private-pdfs";
 const TYPES = new Set(["pdf", "video", "audio", "image", "page"]);
@@ -235,10 +236,11 @@ async function enrichDarkweb(env) {
   // Records that failed three attempts stay stored and wait for a source change.
   // An English original ("original", set by the gate at ingest) needs no title translation.
   const pending = [...new Map([...queued.items, ...state.items.filter(item => !item.publication_version && (!item.title_en || !TITLE_DONE.has(item.title_en_kind)) && !(item.enrich_attempts >= 3))].map(i => [i.id,i])).values()].slice(0,10);
+  const useGLM = typeof darkwebWorkersAiPermitted === "function" && darkwebWorkersAiPermitted(env);
   let titleBudget = 0;
-  const translationBatch = pending.filter(i => { const size = String(i.title || "").length; if (titleBudget && titleBudget + size > 6000) return false; titleBudget += size; return true; });
+  const translationBatch = pending.filter(i => { const size = String(i.title || "").length; if (titleBudget && titleBudget + size > 6000) return false; titleBudget += size; return true; }).slice(0,useGLM ? 3 : 10);
   if (!pending.length) return reply({ ok: true, cached: true, newest_day: queued.newest_day || "" }, 200, env);
-  if (!env.GEMINI_API_KEY) return reply({ error: "AI enrichment unavailable: model credential missing." }, 503, env);
+  if (!env.GEMINI_API_KEY && !useGLM) return reply({ error: "AI enrichment unavailable: model credential missing." }, 503, env);
   const daily = Number.parseInt(env.DARKWEB_ENRICH_DAILY ?? "40", 10);
   const lock = await (await gateCall(env, "/darkweb-enrich-lock", { daily_limit: Number.isSafeInteger(daily) && daily >= 0 ? daily : 40 })).json();
   if (!lock.ok) return reply({ ok: true, pending: pending.length, waiting: true, reason: lock.reason || "lock", retry_at: lock.retry_at || "", daily_limit: lock.limit ?? null }, 200, env);
@@ -246,6 +248,12 @@ async function enrichDarkweb(env) {
   const attempted = translationBatch.map(i => ({ id: i.id, original: i.title, excerpt: i.excerpt, content_hash: i.content_hash }));
   let answered = false, outcome = null;
   try {
+    let parsed;
+    if (useGLM) {
+      // External-provider processing requires a separate institutional/data
+      // authorization flag. Send title+excerpt only, never a file/body.
+      parsed = await translateDarkwebTitlesWithCloudflare(env, translationBatch, modelText);
+    } else {
     // Translation is the priority. If the primary background model is quota-limited
     // or temporarily unavailable, try the same rescue models already used elsewhere
     // in CT Atlas. The chain is bounded and stops on the first successful response.
@@ -271,9 +279,10 @@ async function enrichDarkweb(env) {
       if (![429,500,502,503,504].includes(candidate.status)) { response = candidate; break; }
     }
     if (!response?.ok) throw new Error("AI unavailable");
-    answered = true;
     const text = await extractGeminiText(await response.json());
-    const parsed = JSON.parse(text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, ""));
+    parsed = JSON.parse(text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, ""));
+    }
+    answered = true;
     const allowed = new Set(translationBatch.map(i => i.id));
     // An English original keeps its own title; only its overview is taken from the answer.
     const keepsOriginal = id => pending.find(i => i.id === id).title_en_kind === "original";
