@@ -7,7 +7,7 @@ rem It does not crawl historical pages and does not repeat every few minutes.
 cd /d "%~dp0"
 title CT Atlas - Bessira daily update
 if not defined DARKWEB_INGEST_TOKEN set /p "DARKWEB_INGEST_TOKEN=Paste the collector secret and press Enter: "
-py collector.py --proxy socks5h://127.0.0.1:9150 --once --pages-per-scan 25 --connect-timeout 120
+py collector.py --proxy socks5h://127.0.0.1:9150 --once --pages-per-scan 100 --connect-timeout 120
 set "CT_ATLAS_EXIT=%ERRORLEVEL%"
 echo.
 if "%CT_ATLAS_EXIT%"=="0" (
