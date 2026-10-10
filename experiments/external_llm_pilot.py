@@ -361,12 +361,27 @@ def call_json(provider, payload, env=os.environ, post=requests.post):
     return parsed, token_usage
 
 
-def plan(provider, fixtures, count):
-    subset = [c for c in fixtures if c["task"] == (
+def safe_synthetic_preview(value, max_chars=400):
+    """Local-console-only rendering of fixed fictional example text.
+
+    Escape terminal control codes and do not echo URL-like strings possibly
+    invented by the model. Never display provider headers or API credentials.
+    """
+    text = str(value)[:max_chars * 3]
+    text = re.sub(r"[\\x00-\\x1f\\x7f-\\x9f]", " ", text)
+    text = re.sub(r"https?://\\S+|[a-z2-7]{56}\\.onion", "[URL masquee]", text, flags=re.I)
+    return " ".join(text.split())[:max_chars]
+
+
+def plan(provider, fixtures, count, start_at=0):
+    if not isinstance(start_at, int) or start_at < 0 or not isinstance(count, int) or count < 1:
+        raise PilotSafetyError("Expected a positive number of public synthetic examples")
+    candidates = [c for c in fixtures if c["task"] == (
         "classification" if provider == "groq" else "translation"
-    )][:count]
-    if not subset:
-        raise PilotSafetyError("No synthetic examples for provider")
+    )]
+    subset = candidates[start_at:start_at + count]
+    if len(subset) != count:
+        raise PilotSafetyError("Synthetic example number outside approved fixture list")
     return subset
 
 
@@ -375,11 +390,15 @@ def main(argv=None, env=os.environ):
     parser.add_argument("--mode", choices=("plan", "coverage", "live"), default="plan")
     parser.add_argument("--provider", choices=("groq", "cloudflare", "both"), default="both")
     parser.add_argument("--max-per-provider", type=int, default=2)
+    parser.add_argument("--start-at", type=int, default=0,
+                        help="Zero-based index into the public fictional cases")
+    parser.add_argument("--show-synthetic-comparisons", action="store_true",
+                        help="Display synthetic original/reference/model text in local console only")
     args = parser.parse_args(argv)
 
     fixtures = load_fixtures()
     providers = ["groq", "cloudflare"] if args.provider == "both" else [args.provider]
-    batches = {p: plan(p, fixtures, args.max_per_provider) for p in providers}
+    batches = {p: plan(p, fixtures, args.max_per_provider, args.start_at) for p in providers}
     if args.mode in ("plan", "coverage"):
         report = {
             "mode": "OFFLINE_PLAN_ONLY" if args.mode == "plan" else "OFFLINE_FIXTURE_COVERAGE",
@@ -409,6 +428,7 @@ def main(argv=None, env=os.environ):
     for provider in providers:
         preflight(provider, len(batches[provider]), env=env)
     metrics = {}
+    comparisons = []
     for provider in providers:
         valid, matches, statuses, locations, qualifying, total_usage = 0, 0, 0, 0, 0, {}
         checked_pairs = []
@@ -429,6 +449,31 @@ def main(argv=None, env=os.environ):
             # Keep the provider response transient in memory only for
             # aggregate scoring, never in repository/files/CI output.
             checked_pairs.append((case, answer))
+            if args.show_synthetic_comparisons:
+                if provider == "cloudflare":
+                    comparisons.append({
+                        "provider": provider,
+                        "language": case["language"],
+                        "original_title": safe_synthetic_preview(case["title"]),
+                        "reference_title": safe_synthetic_preview(case["expected_title_en"]),
+                        "model_title": safe_synthetic_preview(answer["title_en"]),
+                        "model_overview": safe_synthetic_preview(answer["overview_en"]),
+                        "exact_match": (
+                            case["expected_title_en"].casefold().strip()
+                            == answer["title_en"].casefold().strip()
+                        ),
+                    })
+                else:
+                    comparisons.append({
+                        "provider": provider,
+                        "language": case["language"],
+                        "reference_labels": sorted(case["expected_labels"]),
+                        "model_labels": sorted(answer["category_labels"]),
+                        "reference_status": case["expected_status"],
+                        "model_status": answer["reported_status"],
+                        "reference_country": safe_synthetic_preview(case["expected_country"]),
+                        "model_country": safe_synthetic_preview(answer["event_country"]),
+                    })
             valid += 1
         detailed = (
             classification_metrics(checked_pairs, CATEGORIES)
@@ -449,6 +494,26 @@ def main(argv=None, env=os.environ):
     print(json.dumps({"mode": "LIVE_SYNTHETIC_ONLY", "metrics": metrics,
                       "production_modified": False,
                       "real_articles_validated": 0, "billing_modified": False}))
+    if args.show_synthetic_comparisons:
+        print("\n" + "=" * 62)
+        print("VERIFICATION HUMAINE - EXEMPLES UNIQUEMENT FICTIFS")
+        print("Une difference de formulation n'est PAS automatiquement une erreur.")
+        for item in comparisons:
+            if item["provider"] == "cloudflare":
+                print("\nCloudflare GLM / langue :", item["language"])
+                print("Original fictif : ", item["original_title"])
+                print("Traduction de reference : ", item["reference_title"])
+                print("Traduction produite par GLM : ", item["model_title"])
+                print("Resume anglais GLM : ", item["model_overview"])
+                print("Correspondance exacte : ", "oui" if item["exact_match"] else "non")
+                print("Verifier le sens, les dates, les noms et les nuances, pas seulement la forme.")
+            else:
+                print("\nGroq GPT-OSS / langue :", item["language"])
+                print("Categories attendues :", item["reference_labels"])
+                print("Categories Groq :", item["model_labels"])
+                print("Statut attendu/model :", item["reference_status"], "/", item["model_status"])
+                print("Pays attendu/model :", item["reference_country"], "/", item["model_country"])
+        print("=" * 62)
     return 0
 
 
