@@ -60,7 +60,7 @@ test('feed requires a valid session; configuration and write privileges cannot b
  assert.equal((await h.call('/darkweb/collector-config',undefined,'admin')).status,401);
  h.env.DARKWEB_INGEST_TOKEN='short';assert.equal((await h.call('/darkweb/collector-config',undefined,'',true)).status,401);
 });
-test('collector config exposes only Bessira in one-day watch mode',async()=>{
+test('collector config exposes only Bessira in three-day Paris watch window',async()=>{
  const h=harness();
  const b=await h.call('/darkweb/outlet',{name:'Bessira',url:base,keywords:''});
  assert.equal(b.status,200);
@@ -69,9 +69,16 @@ test('collector config exposes only Bessira in one-day watch mode',async()=>{
  const config=(await h.call('/darkweb/collector-config',undefined,'',true)).data;
  assert.deepEqual(config.outlets.map(o=>o.name),['Bessira']);
  assert.equal(config.outlets[0].collection_phase,'watch');
- assert.equal(config.policy.from,config.policy.through);
  const parts=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).map(p=>[p.type,p.value]));
- assert.equal(config.policy.from,`${parts.year}-${parts.month}-${parts.day}`);
+ const today=`${parts.year}-${parts.month}-${parts.day}`;
+ const lookback=new Date(Date.UTC(Number(parts.year),Number(parts.month)-1,Number(parts.day)-2)).toISOString().slice(0,10);
+ assert.equal(config.policy.through,today);
+ assert.equal(config.policy.from,lookback);
+ // The short watch window must not expand the administrator's allowed dates.
+ h.values.set('darkweb:policy',{...h.values.get('darkweb:policy'),from:today});
+ const limited=(await h.call('/darkweb/collector-config',undefined,'',true)).data;
+ assert.equal(limited.policy.from,today);
+ assert.equal(limited.policy.through,today);
 });
 test('URLs reject public sites, embedded credentials, ports and another outlet host',async()=>{
  const h=harness();for(const url of ['https://example.com','http://admin:pass@'+host,'http://'+host+':8080','file://'+host,'http://short.onion'])assert.equal(h.api.onionUrl(url),'');
