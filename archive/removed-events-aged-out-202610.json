@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-09T16:11:27.562549+00:00",
+  "removed_at": "2026-10-10T15:24:44.920475+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -744,6 +744,25 @@
       "country": "Turkey",
       "ai_relevance_score": 75,
       "ai_relevance_reason": "Reports concrete law enforcement action against online terrorist propaganda."
+    },
+    {
+      "id": "b55a2a54fbd961cd",
+      "incident_id": "inc-71c55549761ec5b0",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOaVBqQW05cW83dUw3RkRMYVFuV1NVV1Rpb3U2OWFTN1d0R1I3MkZUVy1TdzJGbmJZXy1qWHY2VnVlMG9vd3pRT09hRVV5WWFXTk1VbjlTR1QwY1BnTWRTeXFIbnV0ZzRraTJSeGxwdzZqNVY1OGN5U2NQa1Ayd1pEazFscVoyMWdnMnRFTkJwUzc5SmJpZ3RRUTEtVVE3bWZKTXQ3alRWWkwxODB4LVBXMmdiR0hTS3BTS1JJWA?oc=5",
+      "title": "San Joaquin County Man Arrested At Canadian Border On Charges Of Attempting To Provide Material Support To Foreign Terrorist Organization",
+      "summary": "San Joaquin County Man Arrested At Canadian Border On Charges Of Attempting To Provide Material Support To Foreign Terrorist Organization Department of Justice (.gov)",
+      "original_title": "San Joaquin County Man Arrested At Canadian Border On Charges Of Attempting To Provide Material Support To Foreign Terrorist Organization",
+      "original_language": "en",
+      "source": "Department of Justice (.gov)",
+      "published": "2016-03-28T16:17:56+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "OTHER_CT",
+      "ai_relevance_score": 88,
+      "ai_relevance_reason": "Auto-accepted: authoritative official source with strong CT category/action evidence in the headline."
     }
   ]
 }
