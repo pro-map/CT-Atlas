@@ -446,7 +446,7 @@
     "UK Government / Counter-Terrorism",
     "INTERPOL English News"
   ],
-  "last_updated": "2026-10-10T21:30:26.314996+00:00",
+  "last_updated": "2026-10-11T00:40:19.745197+00:00",
   "number_of_events": 4230,
   "events": [
     {
@@ -3443,7 +3443,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The event occurred in Pakistan as reported by Pakistani security forces.",
       "ai_geo_fingerprint": "6b614bc88f7546f3aea7d8f5d6b65594c650c59b79da3df81965d2dcc03bfa6b",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url"
+      ]
     },
     {
       "id": "7d9cb1ef937c20a0",
@@ -5203,7 +5207,7 @@
       "collection_locale": "CN:zh-Hans",
       "published": "2026-10-09T22:44:09+00:00",
       "source": "京报网",
-      "source_count": 1,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFA5WTNKbkxDSWNGNWNZWXFuUkVRX1JiVHc0SUZ5bk1PZkFUNXpRd2Eyd1E1dlVZOXJERkdSY3pvUjl2aS1venBpNENJOUFaUEZBLU1BU2tZZDVJclhYd0E?oc=5",
       "collector": "Google News RSS",
       "country": "United Arab Emirates",
@@ -5216,7 +5220,9 @@
       "location_confidence": "high",
       "acquisition_channel": "archive_enrichment",
       "source_article_fingerprints": [
-        "7bcd8768c7115b98a19c0799611461be3c67ad2160a28512e4a12ffe38948c4a"
+        "4e63bd58c35d016ffd7894da05e3416f6ac114e6c105c0af6468aa4eee92b757",
+        "7bcd8768c7115b98a19c0799611461be3c67ad2160a28512e4a12ffe38948c4a",
+        "c4ea5f6bf8959f9c4c1e74488ceaa89af8480178ddd82239794590f0516bb8ae"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
@@ -5241,12 +5247,33 @@
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "reported_status": "CONFIRMED",
       "sources": [
-        "京报网"
+        "京报网",
+        "新浪财经",
+        "yeeyi"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "UAE Prosecutors Report Dubai Airline Passenger Plane Terror Plot: 29-Year-Old Co-Pilot Planned Suicide Attack",
+          "original_title": "阿联酋检方通报迪拜航空客机恐袭图谋：一29岁副驾驶策划自杀式袭击",
+          "original_language": "zh",
+          "summary": "UAE prosecutors disclosed that a 29‑year‑old co‑pilot of a Dubai airline passenger aircraft had planned a suicide attack. The report indicates a terrorist plot was uncovered before execution.",
+          "published": "2026-10-09T23:39:00+00:00",
+          "source": "新浪财经",
+          "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBxMzdFZWduei1aWnFDTnhyWDZyMFdVMjJkVjdub2ZyaDdmLWphUllwOHI0VmRrdlBTWFlhYVQycTd0WWZQeVpkR1IzT0lrbXZVeXhNWGNlc2thT1Y3QVY1OXhoTU4yeDBVYXVncHJnXzFpWU1wZWc?oc=5"
+        },
+        {
+          "title": "UAE Prosecutors: Dubai Airline Hijacking Inspired by 9/11, Suspect Claims Independent Action",
+          "original_title": "阿联酋检方：迪拜航空劫机事件受“9·11”恐袭启发，嫌疑人供述为独立作案；其早已出现走向极端主义和恐怖主义的迹象，但通过了招聘-yeeyi",
+          "original_language": "zh",
+          "summary": "UAE prosecutors say the Dubai airline hijacking was inspired by the September 11 attacks and the suspect acted alone, showing prior signs of extremism. The case is being prosecuted following the incident.",
+          "published": "2026-10-10T03:48:52+00:00",
+          "source": "yeeyi",
+          "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFA1M1hnb1VZQTVRSnI3Q2lLa0ZtLVpEWFVnQmlJZEdPZ3lTSEp2akVXNGxSYy1LWUdqVGItbkhHemdVdHpZRGVwalJpdnk0TkI3XzhKMHd3?oc=5"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-10-09T22:44:09+00:00",
-      "last_reported": "2026-10-09T22:44:09+00:00",
+      "last_reported": "2026-10-10T03:48:52+00:00",
       "location_confidence_score": 0.9,
       "location_method": "ai_city_geonames",
       "location_evidence": [
@@ -5262,7 +5289,13 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The plot involved a Dubai airline passenger aircraft investigated by UAE prosecutors.",
       "ai_geo_fingerprint": "a9b87bf46c81f60f1c5057d98ebf859cac481c0db77911ddbd58a66a36d78a68",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url",
+        "very_high_title_similarity",
+        "paraphrase_entity_context"
+      ]
     },
     {
       "id": "5ffdf75bf8251fb2",
@@ -25390,7 +25423,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Reported by the Algeria Press Service regarding arrests and surrenders within the country.",
       "ai_geo_fingerprint": "928a671cfc55bf2dd79570c218e6566bad1b92b43652cdbcafffd058f94dcff3",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url"
+      ]
     },
     {
       "id": "4dffdc21164e2050",
@@ -42292,7 +42329,8 @@
       "dedup_methods": [
         "same_normalized_title",
         "very_high_title_similarity",
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "same_url"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_country_capital",
@@ -53613,7 +53651,7 @@
       "collection_locale": "BR:pt-419",
       "published": "2026-10-06T12:34:42+00:00",
       "source": "CNN Portugal",
-      "source_count": 23,
+      "source_count": 24,
       "url": "https://news.google.com/rss/articles/CBMilwJBVV95cUxOMmloWFY5TGV3RlVieFZsQlNNYzFvRlUxaUFGVDJUaThIRGhQVWlIcUprOEJtQVVERFZEaHYwYmJYaHB0RUtFeHB5UXVKX1FfeVVJaUUzX29BU1JCVzdCRmhnR1VwbnZ2T3FFODNyOWdJS2VKcF8wVVN2dW9wSFFkT0hJdDZIcG41TFF5dGtqOWMzbTlqS3NQOXp3STVLOEhhNG42RjBlYVFHR0NXdzFPSW1DQVVja3V6UmN5ZWtENlZhXzNfSjR3Q1V1ZHJRdFdkVUx2bHFNUkNrRGZ2aXprd2F3YlRyUGxLR3NZMFdFeDdhcFBnS2VNUWgtaEVUX3BwUjhKWjNLdlltWDUtQ1ZFWk85UVk0N1E?oc=5",
       "collector": "Google News RSS",
       "country": "United Kingdom",
@@ -53643,6 +53681,7 @@
         "871b7a5f5d747e959ee53a7030ed5f97ad42e317eaa17c559950971136068ac5",
         "8bfb978ab5a8bdef0785865f3b0cff0df187e3cab7ffae76ac18dc8e0ba447de",
         "8f35623fa677a9c95bd4a08b477545c691b67ddda601a551f306569ddc7ab57e",
+        "9a4cdcb65b5bc0eb3d5f752c0c06c63ef0f4a63d56e0af7e04664747c6287683",
         "b15dcbe1305a389655c72fe03f273e54de6d81c4f4ae19e9ba19ebecb630a607",
         "c516e3212d872eebe227824322a270ff7ed0f7866cee735ad9ea2d1c7455388f",
         "cd7c31a7e9b2573a4aa84169a74121db7df5a1a04b743b1c6c79ef8acb568702",
@@ -53676,7 +53715,8 @@
         "القدس العربي",
         "Haberler",
         "El Nacional",
-        "Le Monde.fr"
+        "Le Monde.fr",
+        "Now 新聞"
       ],
       "related_articles": [
         {
@@ -53885,9 +53925,18 @@
           "published": "2026-10-08T16:37:49+00:00",
           "source": "Le Monde.fr",
           "url": "https://news.google.com/rss/articles/CBMitAJBVV95cUxQMVlMZjFwWUpOOFpRb0k5YnQzdGJTZG1qbThyQ0o2TDBGNDJULWJDanl3ekd0c3hkc0xzVGhEbU1sc0NGaDF0WUZ1R05MYjJXX3I5VS1DS1M1Zl9mamtxNU1TN0Qxal93TXdNVHViWkRReGI0NzVHOEtZMHRRdm9lX1dhcFFNNFo2MVl3bmRGbHBmX1hjWVhzeTdrR0VFVllHdy00RFZlWWxjb2JJdHI0NEs4VXFzNUFrZjdjSWJpMTBRVi01Y05LZHMyc1V0ZXpMcWdiRXRHMHNqUVltV3BtUndWLXQ3di02LXJxbXhhODNycVNxRWUzdVhVb21xU2t2QUpSbGFxTV82M1kzWTNMQ0lBU3VMd3ZCXzFVWG9KaGdrQ0NMa1pnYXY2OVFJSnhQX1piVA?oc=5"
+        },
+        {
+          "title": "UK base suspected terror plot – police detain another man",
+          "original_title": "英國基地懷疑恐襲案 警方再拘一名男子",
+          "original_language": "zh-hant",
+          "summary": "Police at a UK military base, investigating a suspected terrorist plot, have taken a second male suspect into custody. The investigation remains ongoing.",
+          "published": "2026-10-07T00:22:23+00:00",
+          "source": "Now 新聞",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE40VUdHZF9PZjRVMEdWMFAteGstaWQ1OURCQVB2V3Z4TmdsUnFNVWVtaDR6dUhOZGExbURIbGIxSFJBZlFRa2dlWWEwS3hneEE4ZmZzUkVHcWVLQ3RSNU9jRkJCSFlYbGhFeFE4Sw?oc=5"
         }
       ],
-      "article_count": 24,
+      "article_count": 25,
       "first_reported": "2026-10-06T12:34:42+00:00",
       "last_reported": "2026-10-08T16:37:49+00:00",
       "ai_selection_complete": true,
@@ -56043,7 +56092,8 @@
         "entity_actor_event_signature",
         "very_high_title_similarity",
         "title_plus_anchor",
-        "summary_fact_overlap"
+        "summary_fact_overlap",
+        "same_url"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_region_coordinates",
@@ -62985,111 +63035,6 @@
       "dedup_methods": [
         "same_normalized_title"
       ]
-    },
-    {
-      "id": "d8efbef8ad322dfc",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Attacks"
-      ],
-      "title": "Pakistani Forces Eliminate Six Terrorists in Balochistan",
-      "summary": "Security forces in Pakistan conducted an operation eliminating six terrorists in Balochistan province.",
-      "original_title": "القوات الباكستانية تقضي على ستة إرهابيين بإقليم بلوشستان",
-      "original_summary": "القوات الباكستانية تقضي على ستة إرهابيين بإقليم بلوشستان جريدة الرياض",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
-      "published": "2026-10-05T21:35:08+00:00",
-      "source": "جريدة الرياض",
-      "source_count": 4,
-      "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE5kc204UklCMWFLTkZoWU9hejFwdWpBc3liSXBkOWdTbWpFVnJiQm5zMzBVV0hjVTdwMW9WZ1lZaVhmN1BtMkg4?oc=5",
-      "collector": "Google News RSS",
-      "country": "Pakistan",
-      "country_code": "PK",
-      "city": null,
-      "region": "Balochistan",
-      "latitude": 28.4921,
-      "longitude": 65.0958,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "1adf2de3e0ddce4d7216de37e2ad453abda1b2a7abf82d4ef5a1bffb2f06b4d3",
-        "2b288b0e085c8880750209cb0dd66b8bec19f767d456be7a2a0ef474e592b235",
-        "597831575441f5922b74d34989bd58e00dcff1c425799b1685e7c885e1b05466",
-        "f9635b75b7d35fd13690eab6b117e9a637164118dfffa67331d60ea120178c48"
-      ],
-      "sources": [
-        "جريدة الرياض",
-        "alriyadh.com",
-        "twaslnews1.twaslnews.com",
-        "صحيفة سويفت نيوز"
-      ],
-      "related_articles": [
-        {
-          "title": "Pakistani forces eliminate five terrorists",
-          "original_title": "القوات الباكستانية تقضي على خمسة إرهابيين",
-          "original_language": "ar",
-          "summary": "Security forces in Pakistan conducted an operation resulting in the killing of five terrorists.",
-          "published": "2026-10-06T12:03:58+00:00",
-          "source": "twaslnews1.twaslnews.com",
-          "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE8ybWVqLWVCWmlYaFhhN3V2OFV2eTRWVGRvUGtXdlBPNEdPQWVCWHNwbDJXd1M2YzlqTDBGMllvdk1uSU90TDFJbXlfdmlZc1R0TGZR?oc=5"
-        },
-        {
-          "title": "Pakistani forces eliminate nine terrorists during security operation",
-          "original_title": "القوات الباكستانية تقضي على تسعة إرهابيين خلال عملية أمنية",
-          "original_language": "ar",
-          "summary": "Pakistani security forces killed nine militants during an ongoing counter-terrorism operation.",
-          "published": "2026-10-08T15:44:30+00:00",
-          "source": "صحيفة سويفت نيوز",
-          "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBXcHJJOXlzZGVlOW03cmUtcnRSV0hpOVJCVU93WXk3TGpodTJlYzhPWmZ2WHpoaXdiM3VQZDF0MTZCME9Oei1Cbjl0UHFBQQ?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-10-05T21:35:08+00:00",
-      "last_reported": "2026-10-08T15:44:30+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Reports a successful offensive counter-terrorism operation resulting in the death of militants.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Pakistani forces CT operation Balochistan 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-c0b6a2256a928fd5",
-      "translated_to_english": true,
-      "ai_canonical_event": "Pakistani forces kill six terrorists in Balochistan",
-      "title_variants": [
-        "Pakistani forces kill six terrorists in Balochistan"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Security forces in Pakistan conducted an operation eliminating six terrorists in Balochistan province."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Balochistan province, Pakistan.",
-      "ai_geo_fingerprint": "b9f075407ac655b740feaddbef170a5037063460a3ccd1c6e273c4ce4c4868c8",
-      "ai_geo_inferred": false,
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_url",
-        "paraphrase_entity_context"
-      ],
-      "cbrn_subgroups": []
     },
     {
       "id": "bbaf250394f07f13",
@@ -75232,6 +75177,123 @@
       "cbrn_subgroups": []
     },
     {
+      "id": "d8efbef8ad322dfc",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Attacks"
+      ],
+      "title": "Pakistani Forces Eliminate Six Terrorists in Balochistan",
+      "summary": "Security forces in Pakistan conducted an operation eliminating six terrorists in Balochistan province.",
+      "original_title": "القوات الباكستانية تقضي على ستة إرهابيين بإقليم بلوشستان",
+      "original_summary": "القوات الباكستانية تقضي على ستة إرهابيين بإقليم بلوشستان جريدة الرياض",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-05T07:12:27+00:00",
+      "source": "جريدة الرياض",
+      "source_count": 5,
+      "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE5kc204UklCMWFLTkZoWU9hejFwdWpBc3liSXBkOWdTbWpFVnJiQm5zMzBVV0hjVTdwMW9WZ1lZaVhmN1BtMkg4?oc=5",
+      "collector": "Google News RSS",
+      "country": "Pakistan",
+      "country_code": "PK",
+      "city": null,
+      "region": "Balochistan",
+      "latitude": 28.4921,
+      "longitude": 65.0958,
+      "location_precision": "region",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_discovery",
+      "source_article_fingerprints": [
+        "1adf2de3e0ddce4d7216de37e2ad453abda1b2a7abf82d4ef5a1bffb2f06b4d3",
+        "2b288b0e085c8880750209cb0dd66b8bec19f767d456be7a2a0ef474e592b235",
+        "37a80b13a3acad316a82e1473c44387da54033418872e7dddb46ab3437319e2c",
+        "597831575441f5922b74d34989bd58e00dcff1c425799b1685e7c885e1b05466",
+        "f9635b75b7d35fd13690eab6b117e9a637164118dfffa67331d60ea120178c48"
+      ],
+      "sources": [
+        "جريدة الرياض",
+        "alriyadh.com",
+        "twaslnews1.twaslnews.com",
+        "صحيفة سويفت نيوز",
+        "香港文匯報"
+      ],
+      "related_articles": [
+        {
+          "title": "Pakistani forces eliminate five terrorists",
+          "original_title": "القوات الباكستانية تقضي على خمسة إرهابيين",
+          "original_language": "ar",
+          "summary": "Security forces in Pakistan conducted an operation resulting in the killing of five terrorists.",
+          "published": "2026-10-06T12:03:58+00:00",
+          "source": "twaslnews1.twaslnews.com",
+          "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE8ybWVqLWVCWmlYaFhhN3V2OFV2eTRWVGRvUGtXdlBPNEdPQWVCWHNwbDJXd1M2YzlqTDBGMllvdk1uSU90TDFJbXlfdmlZc1R0TGZR?oc=5"
+        },
+        {
+          "title": "Pakistani forces eliminate nine terrorists during security operation",
+          "original_title": "القوات الباكستانية تقضي على تسعة إرهابيين خلال عملية أمنية",
+          "original_language": "ar",
+          "summary": "Pakistani security forces killed nine militants during an ongoing counter-terrorism operation.",
+          "published": "2026-10-08T15:44:30+00:00",
+          "source": "صحيفة سويفت نيوز",
+          "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBXcHJJOXlzZGVlOW03cmUtcnRSV0hpOVJCVU93WXk3TGpodTJlYzhPWmZ2WHpoaXdiM3VQZDF0MTZCME9Oei1Cbjl0UHFBQQ?oc=5"
+        },
+        {
+          "title": "Pakistani Security Forces Kill 11 Terrorists",
+          "original_title": "巴基斯坦安全部隊擊斃11名恐怖分子- 國際",
+          "original_language": "zh-hant",
+          "summary": "Pakistani security forces engaged militants and killed eleven suspected terrorists in an operation reported by international media.",
+          "published": "2026-10-05T07:12:27+00:00",
+          "source": "香港文匯報",
+          "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE91RHdwc3RwU0J6U0FLeWZwZlZaaExyOGxYaGpydzRpdllGTDBvak42dzNMeVdMT0lCYTdyX245c2NTN0ROLVd6dDJhY0EzSGxJVkoxTV9yb3dWRHUwc2phbUpVMHRzWEstcnc3S3BZTFYwX3lWZEY4?oc=5"
+        }
+      ],
+      "article_count": 4,
+      "first_reported": "2026-10-05T07:12:27+00:00",
+      "last_reported": "2026-10-08T15:44:30+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports a successful offensive counter-terrorism operation resulting in the death of militants.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "is_attack": false,
+      "incident_anchor": "Pakistani forces CT operation Balochistan 2026",
+      "update_type": "INITIAL",
+      "incident_id": "inc-c0b6a2256a928fd5",
+      "translated_to_english": true,
+      "ai_canonical_event": "Pakistani forces kill six terrorists in Balochistan",
+      "title_variants": [
+        "Pakistani forces kill six terrorists in Balochistan"
+      ],
+      "location_confidence_score": 1.0,
+      "location_method": "ai_region_coordinates",
+      "location_evidence": [
+        "Security forces in Pakistan conducted an operation eliminating six terrorists in Balochistan province."
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Balochistan province, Pakistan.",
+      "ai_geo_fingerprint": "b9f075407ac655b740feaddbef170a5037063460a3ccd1c6e273c4ce4c4868c8",
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url",
+        "paraphrase_entity_context",
+        "very_high_title_similarity"
+      ],
+      "cbrn_subgroups": []
+    },
+    {
       "id": "281a1fbf9963c16b",
       "category": "Arrests",
       "categories": [
@@ -85743,7 +85805,7 @@
       "collection_locale": "SA:ar",
       "published": "2026-10-04T08:48:45+00:00",
       "source": "ANF | Articles",
-      "source_count": 24,
+      "source_count": 25,
       "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQemtweUY0eUgyNHFqQjBTQWdDSGdfSGVkcW5JVzR6MGxjazZCTmJJZ1JnWnpVOTFDN2dldkJGaC1SMjZpaDlUVUpQdkVZUThjTnlkWE9CUUhqTDQ0XzNPM3g4N1h5Ulk4WmcxN2Zzb3VybE5MSl9lSnJoTS0wd2NMVUFzMzVDd1VpUnRBbXlMWWJaaXd5a29TSVFrTHgwTEw4blQyUXkzUzlfX3ZET3ZUdEtESlpXVDBGLUYwenBHNXNYRWNxV3c?oc=5",
       "collector": "Google News RSS",
       "country": "Iraq",
@@ -85765,6 +85827,7 @@
         "21970431009818490f00fd15aca86e4637a76f3a619efe29f1744b9c002234ee",
         "33e6e9dae4c55a992726e80d568ef82bdb50df950b713cbe3255e41f797a2632",
         "38d7d2bd53ae4025f99f86f525ee76f3463226c9ca4bd67a9fb2d83d8327ae23",
+        "3f3d651aa735e2cb9b276973f462229fb1a06da51bdf38cc8d8462301a334929",
         "3f70bb64f64a57d4c150588c29afcfc641754d78ead1140932d89c43a1677e16",
         "499df2ede2a15da2ae4603c3e6d0778d9faced2ea9dff82b88edbb6f8d4de396",
         "584557b6cc7b9c61dd3a70b50e27185b93983e13f672d59943eaa0e4d1328d06",
@@ -85818,7 +85881,8 @@
         "ANF English",
         "قناة الرشيد الفضائية",
         "الوقائع الإخبارية",
-        "الاتحاد للأخبار"
+        "الاتحاد للأخبار",
+        "LINE TODAY"
       ],
       "related_articles": [
         {
@@ -86099,9 +86163,18 @@
           "published": "2026-10-07T18:50:51+00:00",
           "source": "الاتحاد للأخبار",
           "url": "https://news.google.com/rss/articles/CBMiswNBVV95cUxPZW53X3F6OGFhcDZFMFNaajVGN0pPbFZNZmE3VThwZmZnZHJuUC1vc2phaWNQWnJjelJWcWFidGlDSkUycHJQUl9oNXNvMEpLRG5IMm1GLWZoQTlmOUhQU1VQSTliNXd0cFBmc0M2cFRmNDk2ME9WMEFDTjBJQUJrbXJrVGVoYkdmbl9EU0NmSVViOVdJUFctU01rUWR4SEpBUXJYU3lkbXItMGc5MXVMa1Rfc3RiSTd2TDhPREMxa3VEQXhjTGZaU0hZV3E2T19ZQ2NuTkxuMTdCc2JNZEJwbngzamJXY0syYUJsbkJkRExWSmdDT3FhbE5IcExOamdtSVNuNjcwdkJmRHg5aEpPY3AyOG9jX2ZrdGdvQ3gtcW5oTDZaYXZyS2xPemhLbVNKYjlXTmc2S3k4R0pZbmV2RDZYOVlkN1ctT2ZkcDhYdG1ZQkFPSFFxTzlCcl9WZU1Kbkx1S09DVzJ5S3UzendSUXpnbi1kdWxpUFYtRENacklTbGhuVkpmdnhOZGdhZy1UOTM2a01NLVZxckM3TlBTb1VCZ0Vzamx6dnN4TUR3cDJIVWs?oc=5"
+        },
+        {
+          "title": "First Post‑US Withdrawal Attack in Iraq: ISIS Claims Attack on Kirkuk Police Causing Deaths and Injuries",
+          "original_title": "美軍撤出伊拉克後首例！伊斯蘭國坦承襲擊基爾庫克警察釀死傷 | 民視新聞網",
+          "original_language": "zh-hant",
+          "summary": "ISIS publicly admitted carrying out an attack on Kirkuk police that resulted in casualties, marking the first such incident after the U.S. military left Iraq. The claim was reported by local news.",
+          "published": "2026-10-06T20:43:42+00:00",
+          "source": "LINE TODAY",
+          "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1sNTl5MV9FX1o3TGVNbEV2NGtwNEhXVmtpalRGWmUzeS1xbFM4WVNwN3BiZFZWQWpDWGVvTnAwbHNsb2luNzU5cXZFWS1lUzVoc1JGOEl3?oc=5"
         }
       ],
-      "article_count": 32,
+      "article_count": 33,
       "first_reported": "2026-10-04T08:48:45+00:00",
       "last_reported": "2026-10-08T01:05:53+00:00",
       "ai_selection_complete": true,
@@ -114723,7 +114796,7 @@
           "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1RbWY0dURoOFBoY3FsMFZCTXBodkxCMVpORjdRYTBwY3F1aUZpR1hvOW1RSE5GRFZ2LTdDY2Nnd2JFS1NVdjBLMUozYw?oc=5"
         }
       ],
-      "article_count": 107,
+      "article_count": 108,
       "first_reported": "2026-10-02T07:00:00+00:00",
       "last_reported": "2026-10-05T14:43:55+00:00",
       "dedup_confidence": 1.0,
@@ -167132,7 +167205,8 @@
         "paraphrase_entity_context",
         "title_plus_anchor",
         "entity_actor_event_signature",
-        "very_high_title_similarity"
+        "very_high_title_similarity",
+        "same_url"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_country_capital",
@@ -221948,9 +222022,10 @@
       "article_count": 2,
       "first_reported": "2026-09-19T07:00:00+00:00",
       "last_reported": "2026-09-19T07:00:00+00:00",
-      "dedup_confidence": 0.99,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "same_normalized_title"
+        "same_normalized_title",
+        "same_url"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_city_geonames",
@@ -354696,7 +354771,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_incident",
-        "very_high_title_similarity"
+        "very_high_title_similarity",
+        "same_url"
       ]
     },
     {
@@ -379824,7 +379900,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The seizure occurred in the Indian state of Gujarat.",
       "ai_geo_fingerprint": "91fa06c595b26e4ec18401bccf85b302e2d9bd0e4ad5f667f7d64d0f1189350e",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url"
+      ]
     },
     {
       "id": "75c3f40abd6302cf",
@@ -382470,7 +382550,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The incident occurred at an airport in Germany.",
       "ai_geo_fingerprint": "ae24a4fbb2eec779141fa12ede3b09d7b6f8f6d08dc746f0a750a06cf6685159",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url"
+      ]
     },
     {
       "id": "ee7de62926d3bd17",
@@ -384064,10 +384148,11 @@
       "article_count": 3,
       "first_reported": "2026-08-03T07:00:00+00:00",
       "last_reported": "2026-08-05T07:00:00+00:00",
-      "dedup_confidence": 0.99,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_normalized_title",
-        "paraphrase_entity_context"
+        "paraphrase_entity_context",
+        "same_url"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_city_geonames",
@@ -402401,7 +402486,8 @@
         "paraphrase_entity_context",
         "title_plus_anchor",
         "same_normalized_title",
-        "very_high_title_similarity"
+        "very_high_title_similarity",
+        "same_url"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_city_geonames",
@@ -406322,9 +406408,10 @@
       "article_count": 3,
       "first_reported": "2026-07-06T07:00:00+00:00",
       "last_reported": "2026-07-06T07:00:00+00:00",
-      "dedup_confidence": 0.732,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "actor_country_action_signature"
+        "actor_country_action_signature",
+        "same_url"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_country_capital",
@@ -440369,7 +440456,8 @@
       "last_reported": "2026-04-24T07:00:00+00:00",
       "dedup_confidence": 1.0,
       "dedup_methods": [
-        "very_high_title_similarity"
+        "very_high_title_similarity",
+        "same_url"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_country_capital",
