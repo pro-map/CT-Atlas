@@ -49,8 +49,10 @@ jobs:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       # Code-maintenance pushes repair and deploy without consuming AI quota.
       # Scheduled/manual backfills retain their existing bounded allocations.
-      SPECIALIST_POSTS_INPUT: ${{ github.event_name == 'push' && '0' || inputs.specialist_posts || '5' }}
-      CHINESE_POSTS_INPUT: ${{ github.event_name == 'push' && '0' || inputs.chinese_posts || '4' }}
+      # An operator-approved main commit starting [resume-groq-history] opts
+      # into ONE normal bounded batch; it never resets or raises daily caps.
+      SPECIALIST_POSTS_INPUT: ${{ github.event_name == 'push' && !startsWith(github.event.head_commit.message, '[resume-groq-history]') && '0' || inputs.specialist_posts || '5' }}
+      CHINESE_POSTS_INPUT: ${{ github.event_name == 'push' && !startsWith(github.event.head_commit.message, '[resume-groq-history]') && '0' || inputs.chinese_posts || '4' }}
     steps:
       - name: Checkout current production and durable checkpoints
         uses: actions/checkout@v6
