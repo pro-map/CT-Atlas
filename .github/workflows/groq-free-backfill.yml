@@ -41,6 +41,8 @@ jobs:
   backfill:
     runs-on: ubuntu-latest
     timeout-minutes: 105
+    outputs:
+      publication_ready: ${{ steps.checkpoint.outputs.publication_ready }}
     env:
       CT_ATLAS_BACKFILL_PROVIDER: groq
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
@@ -68,6 +70,7 @@ jobs:
           python -m unittest discover -s tests -p 'groq_backfill_test.py' -v
           python -m unittest discover -s tests -p 'repair_weak_incident_ids_test.py' -v
           python -m unittest discover -s tests -p 'backfill_record_integrity_test.py' -v
+          python -m unittest discover -s tests -p 'backfill_publication_guard_test.py' -v
           python -m unittest discover -s tests -p 'threat_categories_test.py'
           python -m unittest discover -s tests -p 'gemini_chinese_map_test.py'
           python -m unittest discover -s tests -p 'radnuc_vocabulary_test.py'
@@ -85,7 +88,9 @@ jobs:
       - name: Repair raw weak incident IDs before history replay
         run: python tools/repair_weak_incident_ids.py events.json
       - name: Snapshot old incident IDs and protected location decisions
+        id: baseline
         env:
+          MAP_BASELINE: ${{ runner.temp }}/groq-backfill-baseline.json
           BEFORE: ${{ runner.temp }}/groq-backfill-before.json
           GEO_IDS: ${{ runner.temp }}/groq-geo-protected.json
         run: |
@@ -108,6 +113,7 @@ jobs:
           Path(os.environ["GEO_IDS"]).write_text(json.dumps(geo),encoding="utf-8")
           print(f"Protected {len(ids)} prior incident IDs and {len(geo)} location decisions")
           PY
+          python tools/backfill_publication_guard.py snapshot
       - name: Resume RN, Chemicals & Explosives, Biological - ALL configured languages incl Chinese
         id: specialists
         timeout-minutes: 37
@@ -151,6 +157,7 @@ jobs:
           print(f"New candidate records requiring geo check: {count}")
           PY
       - name: Validate only newly integrated records' event locations
+        id: geo
         if: steps.new_events.outputs.new_count != '0' && env.GEMINI_API_KEY != ''
         timeout-minutes: 22
         env:
@@ -158,6 +165,7 @@ jobs:
           AI_GEO_PRESERVE_IDS_FILE: ${{ runner.temp }}/groq-geo-protected.json
         run: python -u geolocate.py
       - name: Quarantine newly integrated events still lacking coordinates
+        id: quarantine
         if: always() && steps.new_events.outcome == 'success'
         env:
           BEFORE: ${{ runner.temp }}/groq-backfill-before.json
@@ -213,9 +221,23 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
       - name: Commit both resumable history lanes and dedicated Groq quota
+        id: checkpoint
         if: always()
+        env:
+          MAP_BASELINE: ${{ runner.temp }}/groq-backfill-baseline.json
+          MAP_UNVALIDATED: ${{ runner.temp }}/groq-backfill-unvalidated.json
+          GUARD_BASELINE: ${{ steps.baseline.outcome }}
+          GUARD_SPECIALISTS: ${{ steps.specialists.outcome }}
+          GUARD_CHINESE: ${{ steps.chinese.outcome }}
+          GUARD_NEW_EVENTS: ${{ steps.new_events.outcome }}
+          GUARD_GEO: ${{ steps.geo.outcome }}
+          GUARD_QUARANTINE: ${{ steps.quarantine.outcome }}
+          GUARD_NEW_COUNT: ${{ steps.new_events.outputs.new_count }}
         run: |
           set -euo pipefail
+          # Preserve upstream checkpoints/quota, but never commit an unchecked Map.
+          # An incomplete path saves recovery bytes and restores the pre-run Map.
+          python tools/backfill_publication_guard.py finalize
           # Mandatory even after an upstream failure: raw replayed anchors
           # must never reach main through the always() checkpoint commit.
           python tools/backfill_record_integrity.py events.json --check
@@ -230,6 +252,7 @@ jobs:
               for path in Path(folder).glob("*.json"):
                   json.loads(path.read_text(encoding="utf-8"))
           PY
+          python tools/backfill_publication_guard.py verify
           git config user.name "CT Intelligence Map Bot"
           git config user.email "actions@github.com"
           git add -- events.json archive quota
@@ -249,6 +272,16 @@ jobs:
             sleep $((attempt * 4))
           done
           exit 1
+      - name: Preserve publication receipt and withheld working copy
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: groq-publication-guard-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            archive/groq-publication-guard-status.json
+            ${{ runner.temp }}/groq-backfill-unvalidated.json
+          retention-days: 7
+          if-no-files-found: ignore
       - name: Publish factual coverage not model-marketing claims
         if: always()
         run: |
@@ -279,9 +312,15 @@ jobs:
                         "geo-checked events count; no claim of exhaustive coverage.\n")
           PY
 
+      - name: Refuse deployment when validation was incomplete
+        if: always() && steps.checkpoint.outputs.publication_ready != 'true'
+        run: |
+          echo "::error::Map publication withheld; inspect guard receipt and recovery artifacts."
+          exit 1
+
   deploy:
     needs: backfill
-    if: needs.backfill.result == 'success'
+    if: needs.backfill.result == 'success' && needs.backfill.outputs.publication_ready == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
