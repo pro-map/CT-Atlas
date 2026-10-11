@@ -446,7 +446,7 @@
     "UK Government / Counter-Terrorism",
     "INTERPOL English News"
   ],
-  "last_updated": "2026-10-11T15:55:56.560871+00:00",
+  "last_updated": "2026-10-11T16:04:02.741118+00:00",
   "number_of_events": 4241,
   "events": [
     {
@@ -30176,6 +30176,83 @@
       "ai_geo_inferred": false
     },
     {
+      "id": "0b4ca7b7fdf48a64",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "title": "Two Terrorists Surrender, Eight Terrorist Supporters Arrested Within a Week",
+      "summary": "Two individuals identified as terrorists surrendered, and within the same week authorities arrested eight additional supporters of the terrorist organization.",
+      "original_title": "两名恐怖分子投降，一周内逮捕8名恐怖组织支持人员| 阿尔及利亚新闻社",
+      "original_summary": "两名恐怖分子投降，一周内逮捕8名恐怖组织支持人员| 阿尔及利亚新闻社 وكالة الأنباء الجزائرية",
+      "original_language": "zh",
+      "collection_language": "zh",
+      "collection_language_name": "Chinese (Simplified)",
+      "collection_locale": "CN:zh-Hans",
+      "published": "2026-10-08T11:45:00+00:00",
+      "source": "وكالة الأنباء الجزائرية",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi9gJBVV95cUxNVXR4NlhZa0dRZmdfNk9DMnZkcDU1em00eVEtbDVTUTBZeTZhZjNxTWR6TTBPc0xaRlRzSXk2YlZZdnhWQ1hIZ2xQS0RTRGxlRmY2MmEzRjZpTWc4em92NWhZZ3c4THZKZHNSak1Fc2tBZmdaUjVFaUl2MFdrU2t5RWxacnF6bkMwcjdHR2ZCZDZ0Q3E2bkxrd01qZjZMQm9IZnVBTU1ONFlqSEdtb25lNXFxOE90cEJ1TWMtbHNHOTZnMTAzQ2piN0FkV0E2QjlwR3RhOWxIUGE3dWlhUUhVT2xabFFZZGpGTkpZeHVvd3h2RUhILXhSMEUwNDdWb2dnZWI4alRiR2tSZml6amJydDJVaE8xaTNtQkJpdFVVQmNuYTVjZEtBc0hsRjJzdzVBYmRXbWRVMG5iNWdEdEdXQ0dYOWI0Tm1hcGhab1RQZkZ5eVZiZFNrUHAyc1I2UHVJMm5oLWk4UUowbmpwRHhlY0g5OVRTZw?oc=5",
+      "collector": "Google News RSS",
+      "country": "Algeria",
+      "country_code": "DZ",
+      "city": "Algiers",
+      "region": null,
+      "latitude": 36.73225,
+      "longitude": 3.08746,
+      "location_precision": "country_capital",
+      "location_confidence": "high",
+      "acquisition_channel": "archive_enrichment",
+      "source_article_fingerprints": [
+        "7282a50b87df43f2f7238e65f54a18042f8f4afb3a09ad0f88303d26721390ac"
+      ],
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "openai/gpt-oss-120b",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "The article reports a concrete, recent counter‑terrorism operation resulting in the surrender of two terrorists and the arrest of eight supporters, qualifying as a current CT event.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "is_attack": false,
+      "incident_anchor": "p2",
+      "update_type": "INITIAL",
+      "incident_id": "inc-0cf9df10b35f2f34",
+      "translated_to_english": true,
+      "ai_canonical_event": "surrender + arrests + terrorist supporters + Algeria",
+      "title_variants": [
+        "surrender + arrests + terrorist supporters + Algeria"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "reported_status": "CONFIRMED",
+      "sources": [
+        "وكالة الأنباء الجزائرية"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-08T11:45:00+00:00",
+      "last_reported": "2026-10-08T11:45:00+00:00",
+      "location_confidence_score": 0.9,
+      "location_method": "ai_country_capital",
+      "location_evidence": [
+        "Algeria news agency reporting arrests and surrenders of terrorists."
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The event is reported by the official Algeria Press Service without a specific city mentioned.",
+      "ai_geo_fingerprint": "928a671cfc55bf2dd79570c218e6566bad1b92b43652cdbcafffd058f94dcff3",
+      "ai_geo_inferred": false
+    },
+    {
       "id": "4dffdc21164e2050",
       "category": "Legal / Judicial",
       "categories": [
@@ -41119,7 +41196,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The text explicitly states the ambush of soldiers occurred in Basilan, Philippines.",
       "ai_geo_fingerprint": "a62db6467c5e1bd9d8b3d3241da1be112e84c21cad56e1bd7262ef97fc03bd53",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url"
+      ]
     },
     {
       "id": "0b6186cd6af9287b",
@@ -41850,7 +41931,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Detained by Romania's Directorate for Investigating Organized Crime and Terrorism (DIICOT), indicating the event took place in Romania.",
       "ai_geo_fingerprint": "dbf3341158f613e633401b6bb9d205efe50889186411eb0aa88341aae299c42a",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url"
+      ]
     },
     {
       "id": "44d43eadcdc0b817",
@@ -46134,6 +46219,150 @@
       "ai_geo_inferred": true
     },
     {
+      "id": "b818f863776a9b2d",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Radiological/Nuclear"
+      ],
+      "title": "Two arrested in Georgia for attempting to sell Uranium-238",
+      "summary": "Georgian authorities arrested two individuals attempting to sell Uranium-238 to a foreign national for $700,000.",
+      "original_title": "欲售外國人70萬美元鈾-238 喬治亞逮捕2人",
+      "original_summary": "欲售外國人70萬美元鈾-238 喬治亞逮捕2人 Rti 中央廣播電臺",
+      "original_language": "zh",
+      "collection_language": "zh-Hant",
+      "collection_language_name": "Chinese (Traditional)",
+      "collection_locale": "TW:zh-Hant",
+      "published": "2026-10-07T09:25:00+00:00",
+      "source": "Rti 中央廣播電臺",
+      "source_count": 6,
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE53WkNqcG4zZzFDRmpiNFBnZ1F2U2sxM3dYdlRvN0JLRktFSExpNHNTX1dyRG1jVlJhSFJJckdsNk9Gdm9iVGw3M19sRWEtUHB1UVI5TnZZdw?oc=5",
+      "collector": "Google News RSS",
+      "country": "Georgia",
+      "country_code": "GE",
+      "city": "Tbilisi",
+      "region": null,
+      "latitude": 41.69143,
+      "longitude": 44.83412,
+      "location_precision": "country_capital",
+      "location_confidence": "high",
+      "acquisition_channel": "archive_enrichment",
+      "source_article_fingerprints": [
+        "13615181990dfdd76fb42c23eb8bf556a3a80ea3014c1dd30ebb0f16eed9750a",
+        "3a8f78caed699870c3f890d4eab03e267a3d3ea378813bef22505632bbf4c71f",
+        "6900f58d3d2e7c17f9608454c9855cb73f8298ab5fbf9cec948a8a867dc018c1",
+        "92110ce62714cf80aca9617bd4e3f1c9dce372b3fa258077d01d83faa25fd573",
+        "a34750b2bc319c0e2a9d9996bb79eba4fe8c4c9ceb34889fc5b5b4b14c5933ee",
+        "b0fbb0da1bc9c7c4af35fc186f08d82382814ac5bf6592de5cf30b0d11369e26"
+      ],
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.1-flash-lite",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Concrete arrest involving nuclear material trafficking.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "is_attack": false,
+      "incident_anchor": "Georgia uranium trafficking arrest 2026-10-07",
+      "update_type": "INITIAL",
+      "incident_id": "inc-8406092ab8b5e72c",
+      "translated_to_english": true,
+      "ai_canonical_event": "Arrest of individuals for attempting to sell nuclear material in Georgia",
+      "title_variants": [
+        "Arrest for attempted sale of uranium in Georgia"
+      ],
+      "actor_scope": "NON_STATE",
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "threat_categories": [
+        "Radiological/Nuclear"
+      ],
+      "cbrn_subgroups": [
+        "RADNUC"
+      ],
+      "sources": [
+        "UA.NEWS",
+        "Notizie Geopolitiche",
+        "Rti 中央廣播電臺",
+        "aktien.news",
+        "LINE TODAY",
+        "www.marsad.news"
+      ],
+      "related_articles": [
+        {
+          "title": "Man arrested in Georgia for attempting to sell uranium-238",
+          "original_title": "Georgia, arrestato un uomo che offriva uranio-238 a uno straniero per 700.000 dollari",
+          "original_language": "it",
+          "summary": "A suspect has been arrested in Georgia for attempting to sell uranium-238 to a foreign national for $700,000.",
+          "published": "2026-10-07T09:59:00+00:00",
+          "source": "Notizie Geopolitiche",
+          "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOSkp4S1JnNGpkSHRoTF9zclFWTnlRdEJHOTlKWnU0bFVrZkx2MnV6UzBHRXltTWp1UlQ1RWFwbzZzN3hQOFBvMFFTYVBCSnJpem5xVk5vZUMtU1NRazRXLVNSdTg0cEhvNmxKVHRHY1Q0M3p3dlhiNGJZOXZ1WXppZ2FJSVkxaUdZR3c1ckRucGF2RGVFa1czMDJ1NFFQYnF0ZDNuNnZwZFBNUkxCajVVdkNrWEtTT3ZTdldxMGtB?oc=5"
+        },
+        {
+          "title": "Man arrested in Georgia for attempting to sell Uranium-238",
+          "original_title": "格鲁吉亚一男子涉嫌以70万美元出售铀-238被捕——《耶路撒冷邮报》",
+          "original_language": "zh",
+          "summary": "A man was arrested in Georgia for allegedly attempting to sell Uranium-238 for $700,000.",
+          "published": "2026-10-07T09:25:00+00:00",
+          "source": "UA.NEWS",
+          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxObHdoNmxyb1JUS1gzQ0FEOFVyc2lqR2Y4Njd6NVltdk1jNEJzeHJXMEtDTTIwcks4dl9QbGlQR0tUMzhlTTZlZktaREdSV1VXZDRzQ3dUcHVzanVqOG9FMlVEYS1YX0xXMGVSVDl5bnNwQTl4ZElrSm4xN0ZhUU5DTEdGWnUtWkY0NUoydnl3cFBXdzhmaUtmZXlfNVJfUWRuQnVyVWp6bnpSTEc1SThncWtRaFlHTHZhMTlxeVdUdmJVVkk?oc=5"
+        },
+        {
+          "title": "Georgia arrests man for attempted uranium sale",
+          "original_title": "Georgien nimmt Mann fest wegen versuchten Uranverkaufs für 700.000 Dollar",
+          "original_language": "de",
+          "summary": "Georgian authorities arrested a man attempting to sell uranium for $700,000.",
+          "published": "2026-10-07T15:02:19+00:00",
+          "source": "aktien.news",
+          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNOTVDeWE1R1JzZnFGblZaZENST2JvZlR4Q05ZTE5GMjlYS2ZSM2RHekRac21NYVZpRnhmcTNzbDhMUDlNQ1BYaXlheE4tSXdsV3J5V2ViRHRNNDl5NVVmZDNRMFlJd3J4QjRQbkFrcHRWSmtuTnZtQ0ZXUHA2UWJVMmstVWpaWm9HZjl5eHprNTF4NDd0Q1otUWdJWnM?oc=5"
+        },
+        {
+          "title": "Follow-up: Two arrested in Georgia for attempting to sell Uranium-238",
+          "original_title": "討論牆 | 欲售外國人70萬美元鈾-238 喬治亞逮捕2人",
+          "original_language": "zh",
+          "summary": "Follow-up reporting on the arrest of two individuals in Georgia attempting to sell nuclear material.",
+          "published": "2026-10-08T06:58:20+00:00",
+          "source": "LINE TODAY",
+          "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5EcEMzYWh3OEFaNXhpUmJVMTZLZkFwbUI5TTlkZjQtTFhsUUh4aGljTWZWTzZsNjhHVy1rQ2ZULUctRTB2TGZpeVR0djY4TEVPeWljNlNmTGlmbnNfdWc4MFowZlI?oc=5"
+        },
+        {
+          "title": "Individual arrested in the US for attempting to sell uranium",
+          "original_title": "منوعات - اعتقال شخص بحوزته يورانيوم كان يحاول بيعه في أمريكا",
+          "original_language": "ar",
+          "summary": "US authorities arrested an individual attempting to sell uranium.",
+          "published": "2026-10-08T07:38:38+00:00",
+          "source": "www.marsad.news",
+          "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1MdDc3c28xc1NfeXozOFNuWFlpQnRmbkowdkxYdTYyeDQ5UE9DV3A1Z05YM3BUdGxiQ3VYRGNVUzFSRnM0eWk3M1RFSQ?oc=5"
+        }
+      ],
+      "article_count": 6,
+      "first_reported": "2026-10-07T09:25:00+00:00",
+      "last_reported": "2026-10-08T07:38:38+00:00",
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_normalized_title",
+        "very_high_title_similarity",
+        "title_plus_anchor"
+      ],
+      "location_confidence_score": 0.9,
+      "location_method": "ai_country_capital",
+      "location_evidence": [
+        "Georgian authorities arrested two individuals attempting to sell Uranium-238."
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The incident occurred in Georgia; no specific city is provided in the summaries.",
+      "ai_geo_fingerprint": "7b12aa3939c2b47251ad1598a19fe9cd2018086013a822350fe6f931c1e81353",
+      "ai_geo_inferred": false
+    },
+    {
       "id": "e99761f90aa2423e",
       "category": "Counter Terrorism Action",
       "categories": [
@@ -46639,7 +46868,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The arrest/capture of the two terror suspects explicitly took place in Vietnam.",
       "ai_geo_fingerprint": "6ac49ec63c54e744b01b8019fb43b82bb8534b4d10e43d9cca57a56af0b9b43e",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url"
+      ]
     },
     {
       "id": "8ed5470ec0847a0b",
@@ -92901,6 +93134,7 @@
         "17de10ec26a6aaf5e9c666d61c3a879183d8482e457a9b2493fc1be58eb3bc89",
         "3869ae9751b055acd4cebd23e9315840435f1667e213648cb097c5145e846c5d",
         "39fcb766150dfd431afd67837890bb2c4e4ff2d0af22c59bd4c6d46f7bb4dd79",
+        "3f3d651aa735e2cb9b276973f462229fb1a06da51bdf38cc8d8462301a334929",
         "4435126403af1a951e6fa5ebd9481e6bf596d8a152a7c257efe8f41deac1fd61",
         "4b744b5d5c9cd1a6323c0c514995e6ab10abc0acaf533b591438b9abebd57b2d",
         "51c68c2defe1fa391e025f6e2acc18e0581738bb2540454b7dd19da1e23381e5",
@@ -93432,9 +93666,18 @@
           "published": "2026-10-10T23:33:38+00:00",
           "source": "ANF | Articles",
           "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQYWIxUUNhQTZfSVczbzZLcmFWbnNnQVFJZlZzVTRybjJFZEtLTHBZMlFxM3lwQzNyYzlpd2FGYWRIYUZkblFoSU1oVWxXMVc5b3VNczN4UHY2b1dxWURGaTkwc0tRWUFLckZLaUhBRDBSLWlIcDUyRUwwUmg1c29aRnp3?oc=5"
+        },
+        {
+          "title": "First Post‑US Withdrawal Attack in Iraq: ISIS Claims Attack on Kirkuk Police Causing Deaths and Injuries",
+          "original_title": "美軍撤出伊拉克後首例！伊斯蘭國坦承襲擊基爾庫克警察釀死傷 | 民視新聞網",
+          "original_language": "zh-hant",
+          "summary": "ISIS publicly admitted carrying out an attack on Kirkuk police that resulted in casualties, marking the first such incident after the U.S. military left Iraq. The claim was reported by local news.",
+          "published": "2026-10-06T20:43:42+00:00",
+          "source": "LINE TODAY",
+          "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1sNTl5MV9FX1o3TGVNbEV2NGtwNEhXVmtpalRGWmUzeS1xbFM4WVNwN3BiZFZWQWpDWGVvTnAwbHNsb2luNzU5cXZFWS1lUzVoc1JGOEl3?oc=5"
         }
       ],
-      "article_count": 50,
+      "article_count": 51,
       "first_reported": "2026-10-03T21:46:32+00:00",
       "last_reported": "2026-10-10T23:33:38+00:00",
       "ai_selection_complete": true,
@@ -119090,7 +119333,7 @@
           "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1RbWY0dURoOFBoY3FsMFZCTXBodkxCMVpORjdRYTBwY3F1aUZpR1hvOW1RSE5GRFZ2LTdDY2Nnd2JFS1NVdjBLMUozYw?oc=5"
         }
       ],
-      "article_count": 109,
+      "article_count": 110,
       "first_reported": "2026-10-02T07:00:00+00:00",
       "last_reported": "2026-10-05T14:43:55+00:00",
       "dedup_confidence": 1.0,
@@ -127280,7 +127523,8 @@
       "last_reported": "2026-10-06T21:52:00+00:00",
       "dedup_confidence": 1.0,
       "dedup_methods": [
-        "very_high_title_similarity"
+        "very_high_title_similarity",
+        "same_url"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
@@ -169987,6 +170231,423 @@
       "dedup_methods": [
         "same_url"
       ]
+    },
+    {
+      "id": "c8cea6eb5a9aa459",
+      "category": "Chemicals and Explosives",
+      "categories": [
+        "Chemicals and Explosives",
+        "Arrests",
+        "Legal / Judicial"
+      ],
+      "title": "Counter-terror investigation into potential Iranian links to RAF plot",
+      "summary": "Counter-terrorism police are investigating possible links to Iran regarding a suspected bomb plot at a UK military base.",
+      "original_title": "Counter-terror police investigate Iran link over suspected bomb plot at RAF base used by US",
+      "original_summary": "Counter-terror police investigate Iran link over suspected bomb plot at RAF base used by US The Guardian",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English",
+      "collection_locale": "US:en",
+      "published": "2026-09-27T07:00:00+00:00",
+      "source": "The Guardian",
+      "source_count": 29,
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOZ2tnSEpJcTZvcmhJdnF5OE1MekM1MGxIWFlwLV9PWGVveHFreHk1WkpOT2ZmVDIzRDYzRWdHQTA2NnJqR0ViYTA1ckRhdmdvYnJxb3pyTV9aM0JoN21RVW1lODF4S05PWS02bzhBUWpjTlFuQzNnc0w0bU9zZ001Q2ZPcGhGYVE0Q0MxSnJJN25pUG1Cekg4YzNjSXNvVVRXd0oyam1sU0ticndTLXgtM0xHSS1VaGNy?oc=5",
+      "collector": "Google News RSS",
+      "country": "United Kingdom",
+      "country_code": "GB",
+      "city": "London",
+      "region": null,
+      "latitude": 51.50853,
+      "longitude": -0.12574,
+      "location_precision": "country_capital",
+      "location_confidence": "high",
+      "acquisition_channel": "archive_enrichment",
+      "source_article_fingerprints": [
+        "01522d22189890b99e6bf4257723538ad618ca3588ad29d8a31df1518b3418c2",
+        "024b32fe402b1e8f0443fb0198b7e6a13bb52d0e8c0199cf81229fc2594728a9",
+        "0b65bafc684f7431208df2b2ab5aaab48501c788ee5bae294698b7a80e1525eb",
+        "0cae338df3b78f791f39807ce5f1607c4fc444a43c36d62fdba9c718d261ecfa",
+        "18a9b3af2ff008eaf2f66a599fa8c2d0dc50cfd8d112c4c4c712e610c49e82d2",
+        "3a97aec60e2e6bd36b66f71a3844c288b31195db874f186ac2502306d78ba434",
+        "52a8ab048fb9a4deb2a5aeb8559f16a1f2c979273ee4c725abb6ba85f97fa483",
+        "576f3d2935277d9740bd872c545176f6ed4c9e13de675e7dd6387218081c6212",
+        "58bf8260218b2e31eb8fe34e6dfa0608638d5844118b05f55179f819c36e20db",
+        "5e49632403ecb780f7be30733009a150aeda7961a86913f2acbdd99911d4d62f",
+        "5e5a39834650d15bf15fd82516c8ca8b0c32c37b7ff7f972e2d85b6d367ebace",
+        "613c8a27e4e4948f018de7f7eee45ba2250fee7ede33cb7834dcdc7b6f18f63f",
+        "641fcaab83de7c9a617cc1dda4a5ae488c22951b575019309f1209a2f5eb0d95",
+        "711419f37a4fc98804e5f5675234f844963e5309bc6a4583005f203a850c9aa9",
+        "76f82f21f710bd99a210101b4e627bdd00514bcc868457c0a76b47b4f2cd2884",
+        "772667b1a9e2828b33b3f4abb5721394aae9ca3cd9edfa6c54759e6b2375d4ac",
+        "84cbb9296005250a2eb89019acac833055c568912fb757b17f2796e33ac9b599",
+        "873372fd984164fa40d6f56053eeb732ed5f723450e2a6db981ab844da99e307",
+        "88a78dd2f68c1bcdd481bdbeeeb45ab225de637668990234c7ed32b6f2360730",
+        "96d2bc7f3583c41223d051327bce0125fa00c905928c7779302dbbc58b2e059e",
+        "978aaadd384b41cfe5462701a5e0def8f374d70c9ff653947e94fbb2aecae950",
+        "98a64901bc435f2b2a35c41b11757448d40d56ccff370408c248e26135a905d1",
+        "a44886278bf398d0442eb4e3dd93018417d633ff25cc1f20ec2180c0154f5fc8",
+        "b8b6fbfceb3b53d50474777c95d96c9c5199b8f1756e120d666e7af0525eb314",
+        "bf1822aa5ea376ac2ae12e13488c27414054f4b900fa1d15ac40366b6ac6b9ea",
+        "c82fbbced807ccd5ebc6e4ca881c004df3a67f4af25149ea730a567b5c471948",
+        "cb69d52d11619d0b2ae6f3a9cceb6ea82f8db15479622478829a2b70172f90a8",
+        "cbe114f7f0e50f31fc94cf5ae879f7c3d00ec3515afad21c4a87697db0b03238",
+        "d69916f8059d4c371b1eb2d1b20463933fb63364a6475b25ff51a883d9721bf3",
+        "db89aa6bdcfe8077d09b96966323928dc873314c7340a62918e5c6d56d167d31",
+        "f923cc91e3bbafb448c5d01294838fa11dc51754893e047b7bc57ef306e062d3"
+      ],
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.1-flash-lite",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Describes an active counter-terrorism investigation into a suspected plot.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "OTHER_CT",
+      "is_attack": false,
+      "incident_anchor": "RAF Fairford plot UK 2026-09-27",
+      "update_type": "INVESTIGATION_UPDATE",
+      "incident_id": "inc-ef36f1dd0307fbf3",
+      "translated_to_english": false,
+      "ai_canonical_event": "Investigation into potential Iranian links to RAF Fairford bomb plot",
+      "title_variants": [
+        "Investigation into potential Iranian links to RAF Fairford bomb plot"
+      ],
+      "actor_scope": "UNKNOWN",
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
+      "cbrn_subgroups": [],
+      "sources": [
+        "The Guardian",
+        "7NEWS",
+        "RTL",
+        "Marianne",
+        "الجزيرة نت",
+        "اندبندنت عربية",
+        "صدى البلد",
+        "صحيفة الخليج",
+        "بوابة الشروق",
+        "Washington Times",
+        "Gloucestershire Live",
+        "بوابة الوسط",
+        "VDL NEWS",
+        "بوابة الزهراء",
+        "ارض اشور",
+        "شاشة نيوز",
+        "البيان",
+        "شفق نيوز",
+        "كريتر نت",
+        "تلفزيون نابلس",
+        "الأيام البحرينية",
+        "GB News",
+        "اليوم السابع",
+        "نيو ترك بوست",
+        "صحيفة سبق الإلكترونية",
+        "TVB",
+        "The Times",
+        "民視新聞網",
+        "i-CABLE"
+      ],
+      "related_articles": [
+        {
+          "title": "Five in custody for alleged car bomb plot at UK air base",
+          "original_title": "Five men in custody suspected of orchestrating car bomb terror plot against UK air base",
+          "original_language": "en",
+          "summary": "Five individuals are in police custody suspected of planning a car bomb attack against a UK military base.",
+          "published": "2026-09-27T07:00:00+00:00",
+          "source": "7NEWS",
+          "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPZGpsT0JYWGg3VXQ5VEZCTzkzUXNERk40cldUcmJYc2R3Y3Y3akNLTnJpMzZ5X2MzR3c1dXcxTzNkZ0VHV1JJeC1lcFY1a19Kdl9pdGMyUHRPcmNuUmNiXzBWMXVCamR6cDFlaEd6UW0zby1QaW1qNC1BMjM1b09DZGVRUldQZlhqcXI1MWd3Vlc4N1FHN1dOdl9zR1hyNGhuUFZOcEpyZWZIU09WLV9pemZMS0x1WGJodWZOanRKZk1rQ3daSExNWTVBSVFWS21taGc?oc=5"
+        },
+        {
+          "title": "Investigation into arrested individuals suspected of terrorism in the UK",
+          "original_title": "\"Incident majeur\", explosifs, Trump : ce que l'on sait sur l'arrestation de 5 hommes au Royaume-Uni soupçonnés de préparer un \"acte terroriste\"",
+          "original_language": "fr",
+          "summary": "Authorities are investigating five individuals arrested in the UK on suspicion of preparing terrorist acts involving explosives.",
+          "published": "2026-09-27T07:00:00+00:00",
+          "source": "RTL",
+          "url": "https://news.google.com/rss/articles/CBMimAJBVV95cUxNaHNvOW1IWXhNSk1ZcWxIZ0xjQUl1UWFUXzV5QzYtNjd2aF9NdDc4bmQ2RHJVQm1lbTk3MzhueXB2SUtHN3VyeXYzdW5BSHJsYll1emlWSGVTRmJjTFpRZFZjZ3lBbS12WUg5cm5OSEhidnpyVVBlc042bm9RVmNZZW1fLVo1Ni1xbnA5T3Q0anlld1ZXOTdtbDUtb1hJZWZ3T2tiajdHWDVGRGhBbTQtNS1RUUtRdXdVSkN4M0lQdjNHVC1CeFo5YVo0blF2N0twYXNhMXhCQ2hTVWU5OE1UUGJYcHB4X2EyMTduQ0J1a2dRaURmNUtpYklSTjg3dENpdGp2eHIzcVhRZ2FkOFBvVS05WGhfSldE?oc=5"
+        },
+        {
+          "title": "UK military base threatened by explosives incident",
+          "original_title": "Royaume-Uni : une base militaire de l'US Air Force menacée par des explosifs, la ministre de l'Intérieur accuse la Russie ou l'Iran",
+          "original_language": "fr",
+          "summary": "A military base was subject to a security threat involving suspected explosives, with officials discussing potential foreign state links.",
+          "published": "2026-09-27T07:00:00+00:00",
+          "source": "Marianne",
+          "url": "https://news.google.com/rss/articles/CBMi_gFBVV95cUxORUw5dDhMV2k1YURHRkxldXZxeHlVbGZZRkhvZmVDaHp2RnFmMGxGTmh5Vnk1bW02dU5nbWJxTWIxNGdzNDFySDVaeURhMGxkS1hMR3oybXRCNTRBVms5a0FydTZ1N2RCWDZWX2pJbXdzNUJTUzEwN0VXVFpZUzMwWjduQkFUREcxblBNWC1fY1VXcl9lNy0zSWlFb2FjeUI1elZTWjV0ak5oRmJJbUlGanMxMFdobmt6WFpIR01MSlN2QWs4VzlvcDdzQ09Pb04xZ2szMGFwV3lQMTd4MW1GYmd4WnVtYzRJbWd3NlVjbXFTVUI4SU1UaXFFR1hrQQ?oc=5"
+        },
+        {
+          "title": "Ongoing security investigation near RAF Fairford",
+          "original_title": "بين بلاغ سيدة ورواية ترمب.. ماذا تخفي الاعتقالات قرب قاعدة \"فيرفورد\"؟",
+          "original_language": "ar",
+          "summary": "Media reporting continues on the security incident and arrests near the RAF Fairford base.",
+          "published": "2026-09-27T07:00:00+00:00",
+          "source": "الجزيرة نت",
+          "url": "https://news.google.com/rss/articles/CBMi1AJBVV95cUxPd0s5RHF6UjNaV0tUUDQwLVZwMlFsMU5wM28tQXJfV1ZQMkl1X2JUc3g5cnRCOERGMjJnM0NMZXV0ekVyeTVueE5jSkFZbFZsZkhLb096MWlBUjYzOEZ3NE9UODVKR09sTndQRmctLUxQNnN5Z2l3LVBxZEJlTzNwQzJfMmVYdmdERnZmVlBzUWR6SjBTVzJPcFlmWnZ5UVlkUDQzNGo2Zmw4VDFUTEhFc0JseTNxQWJJVThQMWRIV2RDelN0dU1vMEthTWYyNHdsODBNYmVMdE5hNVp5aG1XZ21sUHNJQXRHYWFxSF96VDdvWXZPaEhvSXUtVHZ6REplSGxpS3c5VkFWaXlvMUF0SGJqX29jZmwzZ0pxc3Qxd0c4ZGdQdHpTX284VnJWOFctRzJCS3VRUnRuMWdZU3BSMmpGYS1uVFZCRDIxdUhERWxmWFpa0gHaAkFVX3lxTE1UdjRwVmJtRXZWdURVZTRjVEN6SjJZUUloNVZmQlpyeVhnNFJmUWtXS1NFb19CaF9kaVpYd2pNbGpqNEQ4UlNTdWVVczJPREJRdnJXb09aZDAzbXRuQTM0Tnk5Y3ozbE13cFpJVFhXSURKN1F2aXpKeUFoR2dTbWMzUG9BTEZ3aFo5em9tNjVtTkhMY05vSmx3Wng5N0liUk5tQ3Z5b3FRZUN4NnRZa3Z5b2lmVWtVME1mRDNpR2M1ZjlPUWxEUWZZWHBBZWFHbGdpX2M3cnU5NG9ha0xmaElIaUFUMzR1YWU1Yzhqa3FtTVFDOUtkeURsR0lMWnU2ekNOWW1TdFMwQk9NeWRmQUFMTk1zc2YwTjFlUkp5VEUwVUw1ekNWVFVESW1qbnE3ZHpzeFdlOUN5U2JYekhyMldmUWd4SmNTaTJGWFZVWG56RXRVcEEwa05WMUE?oc=5"
+        },
+        {
+          "title": "Reported disruption of plot in UK",
+          "original_title": "إحباط مخطط إرهابي في بريطانيا... وترمب يمتدح: عمل مذهل",
+          "original_language": "ar",
+          "summary": "Authorities in the UK disrupted a plot near a US-operated airbase, leading to arrests.",
+          "published": "2026-09-27T07:00:00+00:00",
+          "source": "اندبندنت عربية",
+          "url": "https://news.google.com/rss/articles/CBMinwRBVV95cUxOUnU0SGZNdjV5MFdOTnRMY2F3TmxoVHdZYkYydEU2a2RPQlI3RDZ4d0RuZXBWWHJuNVliZ0UzTU8yUVV1c1dMdlZpdDZ6blVGNWs3SjBrTFZUbzljVWl6YzUtNW81Vll4QkFCc0trLTdBYmE5V0FQSEZYekhrTFFERHZXNGVGQjBnelRHMHNvZUhmNlNqNW5KQWU1aVFZNndFWWVMZUpKVWFGSGlTdURkMDJYQVdFYmtXSkNvOEw0T1ZtRVFRaVBCTVlSR25mb0E0dTFfQkx3LV85Mi1EaXhDWnpydEdFUm5ES2FDQWxCQlQ5aFVzM05RUlAzMVRsTzc3aHBVZ2dEMm14c2Q5Y3hvUTVycTZETDRPMGFhSFJpcmh3WEcxUW1OdnEtUUg2VlNNcHRJTi1fYW54cThQVDZVZU1rX0lZUnlDZ1NEd3B5elVNTzVyR01jZkM5VHBSUEdMTnQ5aFNETl9zbFF5UzBRT3ctbEpnRE1kYkNSUk5WckI1RFhlM3J6c0ptaFJreVRVZGs3MDZnbUFCMlFMU0FlWERGbmFjMmV3Ym1LWWlYb0lUOG1DTmttOVhDSXR6TmIyLTBzNEI2Tk9LZEZ5dDF0VVU5cC1BOEhnNmFSWllheXhsSWc4bTZUT2VidkRFMnN0Mk5TcWd3ZEhYXzR2VGRhai1KeWx6LUk1OGxkUzVTeXl3Q3RKU0ZkVTJPNHFTNm8?oc=5"
+        },
+        {
+          "title": "Five individuals arrested on terrorism and explosives charges near RAF Fairford",
+          "original_title": "اعتقال 5 أشخاص قرب قاعدة فيرفورد الجوية البريطانية بشبهة الإرهاب والمتفجرات",
+          "original_language": "ar",
+          "summary": "Five people were arrested near the UK's RAF Fairford airbase on suspicion of terrorism and explosive-related offenses.",
+          "published": "2026-09-27T07:00:00+00:00",
+          "source": "صدى البلد",
+          "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1hY3RNeWY0QWR5S3RKdFd3MDNMVkpjSkd3Q3dvaVUtOHZpSm5JdUFFODV2QnhOT0Vaa3dveGdVZjZlV0hrUGl3?oc=5"
+        },
+        {
+          "title": "Five arrested in 'major incident' near UK airbase",
+          "original_title": "اعتقال 5 في «واقعة كبرى» قرب قاعدة بريطانية تُستخدم لضرب أهداف إيرانية",
+          "original_language": "ar",
+          "summary": "Five suspects were arrested following a major security event at a British airbase used for operations against Iranian interests.",
+          "published": "2026-09-27T07:00:00+00:00",
+          "source": "صحيفة الخليج",
+          "url": "https://news.google.com/rss/articles/CBMiiAVBVV95cUxOSlRsN1FMd1ZyTVlwS3NiTGdqZ2ZoeGdlV09uMldHd3lBampCMTNHNW5wZC1URk5XOVN5cHN5N2dFdVFKTTlpcmFGc3h4WFJOR0lUa252bEF6X1E1UnI0VW9BRWVuTDFDVG53dDNCUTZKZUVBZVFFeFFhUl9HZ1pfa3UzREowOGF6Yms5VEUyZXVUcWktZjd3VTRfTWtiUVFwel9USnVLQVJnekxCZHN1QWtpcmhYOUMyWng2cmFLRHhKVDZPRS1hc2VndVJLdW9iSzNkcElBbllSeFppRjVFQzhUUkxRbHBNM1h5YnhWWGpoRHdPd2JRNUFNUGljTVZuTUw3b3hvWFlsMHR6VlJSZjZEMzRVMmU3SW9rQnE4Y2xYOXFvMGJoNUQ4OGZ2MC1sMGNLejVRSDdTZGtPdjZhdDgzVjhHakNBSnBEbFNaT1l1Smp0eU94QmVPRWdUdnlaYUlfNnYxRkU2N21RRnM1MGFULXZOZ2ozbEJidUtTbmRnZVU5d0FkenpEZ0h5Y2xKdlhGSEY2b3FDbG5OOE9rbmJfV1IweHJjUDRXaU5WZ3FjUEl5bFpCNUFsbDAwRVE1MHlTVWhrakE4d0R6MnA0bW1ycjIxc3lJa3NZNkhfQ1M5a1lnY0RwSjJIUVl0SHB6aGFVU2tHdjhoR2F2YjIyWW9paWVmTUdtWmZqTWpNbjhveml6WmhqaGlXd3dqUV8tNFo1c0o1TnRNbjFrN0dmRVk3WGlQQ1VQN3B4c1NDNzVqVjhUcDZzZTFTTE1NS25vUnZyQ0MtZnV6UHBQbzVtWE01Tjh0QTZlZFp5Q2xWUjJ3UEJnWmRwcDN1WnltZW1TWExDNHFiUk4?oc=5"
+        },
+        {
+          "title": "The Telegraph reports suspected Iranian connection to plot near RAF Fairford",
+          "original_title": "تلجراف: شبهات حول صلة إيرانية بمخطط لتفجير قاعدة بريطانية تستخدمها القوات الأمريكية",
+          "original_language": "ar",
+          "summary": "The Telegraph reports on potential Iranian links to the security plot involving explosives near the RAF Fairford airbase.",
+          "published": "2026-09-27T07:00:00+00:00",
+          "source": "بوابة الشروق",
+          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQTXNjTEptTVJiVXdxakJ3ZVctZGtiY1M4YjlIbWhnN2MtVVZjVzRBZjhoSjlMOUNhZmN3ejV5b0FVS2steGpPbVA1aEFyTWFVRU9UVGNIRERDeHRsMS1nY1kxX2E0NUJTQm54WFRwZGZMS0ZnU2pMcnJHbHlIcDVWSkF3V0haUEdhNEx3MVptbUdMd3BiUkR5aThuUHBBYjFLMjdVU0xnaw?oc=5"
+        },
+        {
+          "title": "British police arrest five men in suspected terrorist bomb plot near US military base",
+          "original_title": "British police arrest five men in suspected terrorist bomb plot near military base used by U.S.",
+          "original_language": "en",
+          "summary": "UK police arrested five men on suspicion of plotting an attack involving explosives at a military base used by the United States.",
+          "published": "2026-09-27T07:00:00+00:00",
+          "source": "Washington Times",
+          "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxORUVDczJEY1QwcUYzX2NLUnpMdXhhV25xVFdiX1JZVmduMDltVnc3VDlCTnhXcy1JT2Z6MFBFbmtmRmh4VGxjbU9yaC1rU2l2VWYwOFZnT0k5UEFxOFZERTBrVVcyMHFPaHlGNWM2dkJ2VnI3U1pRZ2ZKRWdyeEZDdGVLaHU3Rkl4S2Ytb2pnRUN4d0tDY2Q5QVFYNXhoQVViZ2ZBdjZBYmlVcUhVRGU1Vl9tanY?oc=5"
+        },
+        {
+          "title": "Five arrested on suspicion of terrorism in RAF Fairford bomb plot",
+          "original_title": "Five arrested on suspicion of terrorism in RAF Fairford 'bomb plot' drama",
+          "original_language": "en",
+          "summary": "Five individuals have been arrested in connection with a suspected terrorist bomb plot targeting RAF Fairford.",
+          "published": "2026-09-27T07:00:00+00:00",
+          "source": "Gloucestershire Live",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQRWUtMzZlUUhXWkhuZE1zTkMzOWZGMUdYWExsdmZqQldodDRFNkEzcjVBcm5rTmNzUDJfdVc1RFdxQllLX1A2VTZMd1FGak9mLUtvLTVMUHNMeFVJT29OUEZpSWpLUk96Z1RRcVY1LVJ5ME01QVVkYmZtWk50bzNSMlhvRVlEWFhKc0pZTlloRUphcWNNTVBUV25FNjREQ3NCX3BXWXpIRmvSAa4BQVVfeXFMT3d4YnM2cnZkbUd1elVmdFhxNFVwQ0ZVdGtlaGtDeXNyeGJ2Wi14VGFrWThUOGgtTmVDUU9PQmVjTTl4Rmotc1JTNXBqd3hTNWk2bi16S2ZNNkhJOHQwWnU3b2JkZU9kZ1JJVDc4STVmeFZ1czVYVURZamN4R3F4Q2Z2enB5V1JTSndQT1RPYW5Dc2JQS1p4Z2ptdHhZYVJFbmQ3bXhKTTV0ODJKdFJ3?oc=5"
+        },
+        {
+          "title": "Explosives discovered near US airbase in UK",
+          "original_title": "متفجرات قرب قاعدة جوية أميركية في بريطانيا وإجلاء سكان واعتقال مشتبه بهم",
+          "original_language": "ar",
+          "summary": "Police confirmed arrests and resident evacuations in response to explosives-related concerns near a UK airbase used by US forces.",
+          "published": "2026-09-27T09:28:17+00:00",
+          "source": "بوابة الوسط",
+          "url": "https://news.google.com/rss/articles/CBMiREFVX3lxTE1ZV3RPOFZfYWNsaU0xYklCUW1VWGhLcDl3WU15Z0dwemRvOHhVYjBHX3Y3QXo4OU1WOGxBTnNqNExmaFRS?oc=5"
+        },
+        {
+          "title": "UK police report arrests under Explosives Act near Welford/Fairford",
+          "original_title": "الشرطة البريطانية: اعتقال أشخاص للاشتباه بارتكابهم مخالفات بموجب قانون المتفجرات في ويلفورد",
+          "original_language": "ar",
+          "summary": "British authorities arrested several people on suspicion of violating the Explosives Act near an airbase.",
+          "published": "2026-09-27T09:34:36+00:00",
+          "source": "VDL NEWS",
+          "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1sdlVucU1lX3p1T1ZIVVB1ZWJ5Q0tuVm5VSUd5TElNQUNJYk1mcDlyeG5xTW1HcmtNdFhCTE9LVnN2NndfY2Mzdmh3WQ?oc=5"
+        },
+        {
+          "title": "Police continue investigation near US base in England",
+          "original_title": "إخلاء واعتقالات.. شرطة بريطانيا تتابع حادث بالقرب من قاعدة أمريكية فى إنجلترا",
+          "original_language": "ar",
+          "summary": "Police are maintaining security measures and investigations following arrests near a US-used airbase in England.",
+          "published": "2026-09-27T10:58:46+00:00",
+          "source": "بوابة الزهراء",
+          "url": "https://news.google.com/rss/articles/CBMiPEFVX3lxTE9FSlRnZ2VzaEhvQlVSM2FCU0s0bkJvQUFPWFA0X3FlWm1zakN4N09WZkM2c3FWSVhqTThTNw?oc=5"
+        },
+        {
+          "title": "Evacuations and arrests linked to explosives in UK",
+          "original_title": "بريطانيا.. إجلاء سكان واعتقالات مرتبطة بمتفجرات قرب قاعدة جوية أمريكية",
+          "original_language": "ar",
+          "summary": "Police evacuated local residents and arrested individuals following reports of explosives near a US-operated airbase in England.",
+          "published": "2026-09-27T11:09:59+00:00",
+          "source": "ارض اشور",
+          "url": "https://news.google.com/rss/articles/CBMi0AJBVV95cUxOOTVHRE95TzRXQ055UmhQbWpsRVZhMU82aDF3QTUtWnFtUGVlSXdtamZxREdRZkVPWGRhZFFycGYwV1h2dXppOWdtMjlIRGx5NzdyTDUxbUtJMVVBck93czJXb1puc05mc0s1Z0MwS3p6b1V3cFdVeFdfcnh2dklLdTRyOWFoY25Td0tBa0phSHdUdVpKUGNsZG5ZOWRrX2d2eEhKT3VFTVc2S2VtREgtN2dqU2xiTE9VTFVETVNHX0swanlFUFQ3RmRVTVBCQTc1LTA2T1FaTDh1S0czMktmbUdJZGRXZDdaRkFmZEQ4NldtamNNQXdXVVV4Yk8zak9yN1BvSUlGd0Z4a3VLQW52eXYyQnp6ZjBRbm80U0ZwdEF0elJPOTJJQi1nSXE0UzljZUt3ZGpYTXE4QXNlajQzaHV2aGJjQ0xGNUJuYUcxMHA?oc=5"
+        },
+        {
+          "title": "Police report on Fairford base security incident",
+          "original_title": "الشرطة البريطانية: حادث كبير قرب قاعدة فيرفورد الجوية.. واعتقالات بتهمة انتهاك قانون المتفجرات",
+          "original_language": "ar",
+          "summary": "British police are investigating a major incident at RAF Fairford, resulting in arrests related to explosive laws.",
+          "published": "2026-09-27T14:02:33+00:00",
+          "source": "شاشة نيوز",
+          "url": "https://news.google.com/rss/articles/CBMimAJBVV95cUxPbldtYm5HTEtZVzQ0Q29MeDNQQXdLMzNheC1uUEZqU2NYd1FyN2xtVVNnVnI1M3RFOUhyWU9ZRERXZTRTUVBVZFJIQXhhOEVTQzJIWnZUcy1tMlI5OXJpMlFuTHl2NTR1dzVpWE1PWmhmcUFNdENyREMyc21RTVBwdXMwZGlQYVhJYmJvVXI0d21xOFY5TVVvTWVFOG14YXpxQ0VQb0JMZzRpN0lwV3oxVDBISVJpSUVyOXpsM21IMWplLXVicDZjTjdweklKRWNJQlc2YWFUNnhWRVpMQzRxdldlSndKSEo4eUdCWkw2YTZMZVdZVDU0UnVzM1VPWndkeUJoMEp5dVJaSUNPTkFkZGhfS1laUlk3?oc=5"
+        },
+        {
+          "title": "Three trucks seized suspected of containing explosives near RAF Fairford",
+          "original_title": "‏تلغراف: ضبط 3 شاحنات يشتبه في احتوائها متفجرات حاول المشتبه بهم استخدامها في حادث قرب \"فيرفورد\"",
+          "original_language": "ar",
+          "summary": "According to the Telegraph, police seized three trucks suspected of containing explosives linked to a planned attack near RAF Fairford.",
+          "published": "2026-09-27T14:57:06+00:00",
+          "source": "VDL NEWS",
+          "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1nV1F0ZWZOWTJQdzNJMTBUXzFJVTBGQ0x2YkhkUndOVVJFOXkxTWNvR09ZQWpXS1Z6b1pqbXZybUN4ckFkYmFPcUR5RQ?oc=5"
+        },
+        {
+          "title": "Security incident and arrests near US military base in Fairford, UK",
+          "original_title": "\"حادثة كبرى\" في بريطانيا.. اعتقالات وشاحنات ومتفجرات قرب قاعدة تستخدمها أمريكا",
+          "original_language": "ar",
+          "summary": "British police arrested several individuals and evacuated residents following a security incident involving explosives near the RAF Fairford airbase.",
+          "published": "2026-09-27T15:03:00+00:00",
+          "source": "البيان",
+          "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE0xWTR1QklPZEFDX2laTFBSczI2Y2NCMjh1TnJiWVU5eGJSb1hYVldZUEVlUnM5VFN1RDFoNHlSbnVlRlZRaTJGWVVlWWNpekt1aXBWVU9kVdIBXEFVX3lxTE9WQWI5cE5KdWtZTFhBalhyU0ktSDFpT3JSNVZfLWRRWmQ3a2xSTHhlelVBdjY2QmlsNWpVVXZTeXl2M1Q5WEJaY2l0MnJfR3RfS0tfMnlfMERpbGxm?oc=5"
+        },
+        {
+          "title": "Security alerts and arrests near Fairford airbase",
+          "original_title": "بريطانيا.. اعتقالات وإجلاء سكان لشبهة متفجرات قرب قاعدة فيرفورد الجوية",
+          "original_language": "ar",
+          "summary": "UK police evacuated residents and detained several suspects for violations of the Explosives Act near RAF Fairford.",
+          "published": "2026-09-27T15:18:55+00:00",
+          "source": "شفق نيوز",
+          "url": "https://news.google.com/rss/articles/CBMiggVBVV95cUxQY1AyU3RZcFRpRUpTLTBoZjdjVjFQY3dsMUVYNnFSSWhTUGdIbWlROE9TV2ZxTlpocmI2RE5HM2JlWGdCV0JRR1dhTi1BeV9ORUVZb0w2SU9uOXVTNnV1LWhncXJmWk1MQWFzSVctSklUVDFzNndSYW9ablNPWjNISUVoMG41dUFMcjhQbFdCTUZ2NGVGUlNiVk9nbFA3SFlpeWl2aGpHSEhLRVlSSktCcGlKLWFYRkNoUlEyNG42RUsxbC1SS3dDUjQzTlljU01jMl9ocmVubVZTWHA2ZXlKM3JvalBxSkw0ZElMekdjY29jVDRHY1ZOZFZWQTEzdFNZclpnYkpKRWw5WkpsckthRGg4ZHNDM3c3dmhhUTYwbGRtMjk2RUs5M0J5dmRHZWVHY2hMNllRdlhQa2hnMktUSWNhbEVKWXBqWURINzhyOFJCZmE3el9DcUdoaHJkSVEzQS1rVkwtaWxEanM3b05GTk1JT1RGSmtBVVdFMUpkSVhhZzZoX2Jzek1hU0xMUVltWXYzLUdCR0xwV3RZZWZPTUNiSEFhRnBCbEE4RkdNZElDWS1MOWp4Ymt0b2NFOU1lUzg2QUdjQ1JkbWZhZTFsOGgtY1JwcERydnBPYUp2RlRhSXdHSVlmSTc5eVVpNDZCdXl0aGhhUFJuVHducVB5SExncmNpUm1tLURydnpQWXFFMjBPODlDaGo1ODU0WWtxLUdCcW5GYldMTG9hTFNLMjdWdFhFejV0Undoc00tVm5SLS1MSFk0WlNrbGc0VGIzc19WVlJ0TzAwQkptTmdjSGhyelp1aERHZk4yNDJlTlVsaTE5S1dKSkdFMHpRU2tuYVE?oc=5"
+        },
+        {
+          "title": "Arrests and explosives seizure near US airbase in UK",
+          "original_title": "اعتقالات ومتفجرات قرب قاعدة أميركية في بريطانيا",
+          "original_language": "ar",
+          "summary": "Authorities reported arrests related to an incident involving explosives near a US-operated airbase in the UK.",
+          "published": "2026-09-27T15:25:29+00:00",
+          "source": "كريتر نت",
+          "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFBuRTdCQzhkcWxuQU14VE4yMXBzVzJvWFR0YUNiZGt6cXN2dlgzRVpNemFQTEVrUS1hSUozTWNCR3hzTlV3ckZxZzR3?oc=5"
+        },
+        {
+          "title": "Security alert in UK near US airbase",
+          "original_title": "استنفار في بريطانيا.. متفجرات قرب قاعدة أميركية واعتقالات وإخلاء منازل",
+          "original_language": "ar",
+          "summary": "Heightened security in the UK following the discovery of explosives near a US base, leading to evacuations and arrests.",
+          "published": "2026-09-27T18:33:00+00:00",
+          "source": "تلفزيون نابلس",
+          "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBKNkF2SkROV1BoMGswLXY5SENsRTRGeFhRVDE3Z1VpRU00VDFxaEZ4RzdCVGpkb3RnUVFNUDVhOEtabEtqR1g0TE9NMmhEM25VXzBqSWRqWkx6T1lOeFh6Tl91b296blFUOEdpRjVPYnFWZ2JEekNkTnJzdw?oc=5"
+        },
+        {
+          "title": "Five arrested in UK for plotting terrorist act near airbase",
+          "original_title": "بريطانيا توقف خمسة أشخاص بشبهة التخطيط لـ«عمل إرهابي» قرب قاعدة جوية",
+          "original_language": "ar",
+          "summary": "British police arrested five individuals on suspicion of planning a terrorist act near a military airbase.",
+          "published": "2026-09-27T23:14:07+00:00",
+          "source": "الأيام البحرينية",
+          "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTFBPRExTSm1wVkNzX3BUZGJUam9oT2xlNFZ6YzJjel9uY3JwSEQyMmdKczlES0ZWQ09YdEVPOEFJR3N3dVhWa1hlZ2stMmRfR3R1RnM0Qk52c3JRZERWaFBOd2NPc9IBakFVX3lxTE1OTkNmNm1CTjlJRXhqMHNUYTJ3SHN4VHNkT0oyTXlvQWFtX2wtMXlDcXVLemd3S1JTZVdXUjJfSXplTHhRanNBOVFCZGFqZjFobEp0b3RIQUY4dWtDd1M3RzV3amxKUXdVNlE?oc=5"
+        },
+        {
+          "title": "Police confirm identity of men arrested in RAF bomb plot",
+          "original_title": "Five men arrested over foiled RAF bomb plot are all British nationals, counter-terror police say",
+          "original_language": "en",
+          "summary": "Counter-terrorism police confirmed that five individuals arrested for the suspected RAF Fairford bomb plot are British nationals.",
+          "published": "2026-09-28T07:00:00+00:00",
+          "source": "GB News",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1tc0l3YVkwWGpKeko1ZjNPZFRvNnNEUG14TTNfdllXbVNrM1htT1BRQ0FIcHRkeGxFLWtTejYxaHlOcHFZS3Q3b3MtTGotZjFDanNMTENaSWVKN24zcURJZ01hNjFZN0EzWEdvUA?oc=5"
+        },
+        {
+          "title": "UK investigation into plot targeting US-used airbase",
+          "original_title": "لندن تحقق في صلة إيران بمخطط تفجير استهدف قاعدة جوية تستخدمها أمريكا",
+          "original_language": "ar",
+          "summary": "London is investigating potential foreign involvement in a disrupted plot targeting an airbase used by US forces.",
+          "published": "2026-09-28T07:00:00+00:00",
+          "source": "اليوم السابع",
+          "url": "https://news.google.com/rss/articles/CBMiQ0FVX3lxTE9xMEpIenAwN0FGOThMRTdrRzJNYndIaVBMRjlNQWMzVzg2dVBnbWJHbXpla011SWt1cE5qMXVLMjRKcTjSAbgDQVVfeXFMUDdtWHpHSU14NHY5SGVFYjlfa3FXdmhERlhrcTY1b1F2ZmVwVzdBSUZkaWlWZldSZXJoRloyal9nVmhadFd5bGdoQ3RMWEhYeUpCSTNuci0tZ285akhTdS12bVc1R0kxT0ZQSHE0MlZTQndKd1RnYkNkNGVyUHF5R1V6UkRGVmRnY2lJUkdWdl9ZaU1FT3pycjlIQmRPSmRJRVl6d3JsS1VIY0ZxMEZpUldiUThaYkl2eUFsVDQ1aWNLT2VZVWxoSmE4MFpmX1hTb0NZeld3TFAwb3NKdTdzZlFDM0tOUkdTbzEwZWFvN1JoR3dSVkZCY0Y2RUxpUnVmSVFwMHZtSGRfM3UzZ2E0RjFuZ2RaZ01NYnVoTlE1U1lZNU41QnVad2FNcFk0ZVp0RENPb3JYSnBrVGVUWW5ocjNZNktyNlIxdlEtcnpNMFNVa29LTnJ4YmRVZ3BPQ2JoakNmVGtWdmxHLU5LYjJTeTZkMjZoNXpBd09RSWZMLUpmU3FCQXE0MHA5QUVKWWpzSDZkQTkweXk5VEhFeDZhZXV0NG1TaEVIX09DN0QzYlpVMEU4dXFuZGk?oc=5"
+        },
+        {
+          "title": "Explosives alert and arrests at Fairford US airbase",
+          "original_title": "إنذار متفجرات بقاعدة فايرفورد الأمريكية في بريطانيا واعتقال",
+          "original_language": "ar",
+          "summary": "Security alert involving explosives and subsequent arrests at the US-operated Fairford airbase in the UK.",
+          "published": "2026-09-28T07:00:00+00:00",
+          "source": "نيو ترك بوست",
+          "url": "https://news.google.com/rss/articles/CBMi6wJBVV95cUxQUnJiYzdaaVVXb0wyN2xvX1pHanVpazFEMjNkMm5ENzhLUFR6cjRNcWUzbnJVR3Fwb1hkbHNfZDNJZzlZVEplbzBMaDd6Q3o2TzU0SkxPcml3TzJ3M2pMNmh1UlMzWENmYUwwR3did29YX215T0dLM09iSERtYlpqRm5OMHFSZGpLeHBmN2YxbjRXOGdIclIxd01mWG04YUExUlkxM0xrZWh6U1NMMHN2cHM1YVBBLVZWUF9YRlQ5bUdPbjVLOC1RbHh6TlQzd3VsZTRleV9ZektuZm96RGh3RkZtTFNaNmJvWm52WkZlWEVWQy1VaHpya0o2dXFpNk16TmxjeHJKSlE5eExvdTRRVEp0bHd3YTRjcU1CdXhSM21mdDJRdDBfRzU1b3Znay1YbGhuVWdKd0JCbnlhVlhyWHgybkRiZU0xYkN3YWJvcXhKVThGeHFSRHBjOHFObWdyNHg3Qk1adi12dnM?oc=5"
+        },
+        {
+          "title": "Investigation into suspected plot targeting RAF Fairford",
+          "original_title": "Tuesday briefing: Inside the suspected bomb plot at RAF Fairford",
+          "original_language": "en",
+          "summary": "Authorities are investigating a suspected bomb plot involving an RAF base in Fairford, UK.",
+          "published": "2026-09-29T07:00:00+00:00",
+          "source": "The Guardian",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPbkgteEduVTlnMWhoRlFGcDcxcGJBaXE2d01lUlhGWVY2RmkwRC1wZS13QUVsMWVLel90Vl9ycmcyRGdWWUI5dW94UUtqWWh0MzFDQ0JjZ1F5VkVrNldMUk9CTHZubEpROE1HVzdDU0t3cEY1TWRGcTQ2Q3NRWTNwb004NTdTblVKM2VncjVOS0NtRUZ6VFJudFpfMm9tLUc1?oc=5"
+        },
+        {
+          "title": "Police clarify status of Fairford incident investigation",
+          "original_title": "لا متفجرات في \"فيرفورد\".. الشرطة البريطانية تضبط بنزينًا وتواصل التحقيق مع 5 مشتبهين",
+          "original_language": "ar",
+          "summary": "British police continue to investigate the five suspects, clarifying that petrol was found rather than explosive devices.",
+          "published": "2026-09-30T07:00:00+00:00",
+          "source": "صحيفة سبق الإلكترونية",
+          "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1nbUMzaU1lRUZtc1NUOFFZMXk4UllfUXRMcGQ3LW9XR0ZxZGF1Um1HOWpLaHF5bWlWSTlHdTlBZTA1dWxvQThv?oc=5"
+        },
+        {
+          "title": "Officials investigate possible Iranian connection to UK base plot",
+          "original_title": "英國五名男子圖襲空軍基地 貝安德質疑與伊朗有關",
+          "original_language": "zh",
+          "summary": "Officials are investigating potential Iranian links to the five individuals arrested for the plot against the airbase.",
+          "published": "2026-10-01T07:00:00+00:00",
+          "source": "TVB",
+          "url": "https://news.google.com/rss/articles/CBMizwJBVV95cUxPNXplUlgxU1NWMEgxUndqdW9vbDhuUVlhSXFHU3UxVzVKRGZyTzdvZl9XYlJOSWE0bVFxRjcxRzJGaHVLcG04bTFwazBqd3MwY1FqbC1McHExXzBBQnhETlRmcU5tYl8xQzJYb19SdW8xSlNreU90aUt0cW9oSGlWM193ZThYb0E4M05CVS05U2U2RGhJNTNvUjdwTC1PYlhjWWpIVUhPeVhCVzFiUXJtN21aRzl0OXdwSFhyZUpRU29zbE9BQ2tTcnJ3T2NuczRSdWlsLTM4RndkdGw3Z1JiUHd6bXdrOENMV2hWZHNfSkJ6TUoxUGpkYWJ6eXhRVDlpZTBadVY5RzZlUGNCMHJCUUFhVFByeTl4NDI3ajVHNVpVXy1KOUxtTy10UmFsWVZDSzNIMGN3VUlnNWlfbmNIODJuN2xIejZGNFlQNG1OWQ?oc=5"
+        },
+        {
+          "title": "Suspect in RAF Fairford case released on bail",
+          "original_title": "British-Iranian suspect in RAF Fairford ‘terror’ case released on bail",
+          "original_language": "en",
+          "summary": "One of the individuals arrested in connection with the RAF Fairford security incident has been released on bail.",
+          "published": "2026-10-03T10:28:53+00:00",
+          "source": "The Times",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPT2NWbU1Wajc1Q1pTeWpQbzI0Q3NNbHFyRllIRXNoNWtzMjRJQXREMUpVYkpGRzZ5NC1JeDczX2NoTG92ZkRwUVNvVWdNQ25GYkpkeW9rVmpjb25sVXJpQUlPRVNnQU91VUlkWUhIVHV1enFPSUU0bV9sd0hRZ2dlM3U0UGQtMUhKNHA4UVhtY3ktYlVxWEtqN1RjVGpzaHFuaXc?oc=5"
+        },
+        {
+          "title": "Police confirm no explosive device found in RAF base incident",
+          "original_title": "英國空軍基地疑遭鎖定調查 警方證實未查獲爆炸裝置",
+          "original_language": "zh",
+          "summary": "UK police have confirmed that no explosive devices were found following investigations into security concerns at an RAF base.",
+          "published": "2026-09-30T07:00:00+00:00",
+          "source": "民視新聞網",
+          "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFAxODd0TXBlZU9EZHpXaFM2bE1SYy1neEZFdHlfMktsS2J5eERGV1BsV0J0eXc4Vk5TaGlWRmV2NzhWNGJhNlBOcFh3d3V3M1lmTDQ4dDBXNU8zMU1qdnNDcA?oc=5"
+        },
+        {
+          "title": "Police state no explosives found at UK airbase",
+          "original_title": "英空軍基地恐襲威脅案 警稱未發現爆炸裝置",
+          "original_language": "zh",
+          "summary": "Police confirm that despite terrorism threats, no explosive devices were located at the airbase.",
+          "published": "2026-09-30T07:00:00+00:00",
+          "source": "i-CABLE",
+          "url": "https://news.google.com/rss/articles/CBMi3AJBVV95cUxOM2JEWkwyWWtLd2t3TXZhbjBsOTBhY1BnNjA3TUhXVVY4allMLU51MnFMYng4ZDlLbEIwb1R2MGpMZ0YtLU5nN2hvQURnbExxMmpkS2IxMXRoRVMzZWp5eWJZV0htc2VFZWRjc0RGbWEtaDhabWNQQUxJSVNUQm9uVS1ZSjg1S1BqdnREazNhR2c4TFQxMGNOSGV5Z3d6T3RCUnE4bzlXNG5BNFNDeFNVRV9NdkF5Zl84U1hGS0hrcS1tdUdEX0NVdDlVV0FHN1hZZWczY3dmNEItMXNvLVBXYnczQzdXeUkwbUZRZ2R0dUJyZHhyRW5ES3A5Y1NFWjdfR1RNNnVkTGFIdm1PenFjZG1FX1FXTzE4V3E5dnRMQlpaX3FyMzVhXzh5Y01YOWRpVUJxVDZNeFpLMWhWMTVzazhGRVZfeEdYTzNBQnhQYTlTRm9VODA5OTNvZ04?oc=5"
+        }
+      ],
+      "article_count": 31,
+      "first_reported": "2026-09-27T07:00:00+00:00",
+      "last_reported": "2026-10-03T10:28:53+00:00",
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "paraphrase_entity_context",
+        "title_plus_anchor",
+        "entity_actor_event_signature",
+        "very_high_title_similarity"
+      ],
+      "location_confidence_score": 0.9,
+      "location_method": "ai_country_capital",
+      "location_evidence": [
+        "Suspected bomb plot at RAF base used by US in the UK."
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The plot targets an RAF base in the UK, but no specific city is stated across the source set.",
+      "ai_geo_fingerprint": "57f1f00766fc181daa44b6d7aae8a9de3c4ee51eebcffa6c758e08d6f3e321e5",
+      "ai_geo_inferred": false
     },
     {
       "id": "eb9dec9ad107018b",
@@ -224726,6 +225387,102 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Security forces in Aden thwarted an attack plot and seized explosives.",
+      "ai_geo_fingerprint": "ebcf58722d7fbc04de4e6e85224c2b48a2c694c510014361c4f7a955b896e8fc",
+      "ai_geo_inferred": false
+    },
+    {
+      "id": "eb4b26a02d8364b3",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Chemicals and Explosives"
+      ],
+      "title": "Aden security thwarts plot to target military and security forces, seizing explosives",
+      "summary": "Security forces in Aden disrupted an attack plot against military targets and seized explosive materials.",
+      "original_title": "اخبار وتقارير - قبل التنفيذ.. أمن عدن يُفشل مخطط استهداف قوات عسكرية وأمنية ويضبط متفجرات",
+      "original_summary": "اخبار وتقارير - قبل التنفيذ.. أمن عدن يُفشل مخطط استهداف قوات عسكرية وأمنية ويضبط متفجرات عدن تايم",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-09-19T07:00:00+00:00",
+      "source": "عدن تايم",
+      "source_count": 2,
+      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBqZExURWh5NDJOVldhWTE4UXBwWGdmTHc2bXBQNlNVWW9NVlI2M0ktb2g4X213cFBlelJuUm1nY0xhZUlsNWpob1JVVQ?oc=5",
+      "collector": "Google News RSS",
+      "country": "Yemen",
+      "country_code": "YE",
+      "city": "Aden",
+      "region": null,
+      "latitude": 12.77957,
+      "longitude": 45.03852,
+      "location_precision": "city",
+      "location_confidence": "high",
+      "acquisition_channel": "archive_enrichment",
+      "source_article_fingerprints": [
+        "421f9fd6eb8674d541c1e0b7af67574ab77a06e5273d4095bb90e67bc8e80c99",
+        "6dd9641c802835edc7b127d3432752f7b226711651c8286d4e54f2e11ceea647"
+      ],
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.1-flash-lite",
+      "ai_relevance_score": 90,
+      "ai_relevance_reason": "Concrete report of a disrupted terrorist plot and seizure of explosives.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "DISRUPTED_PLOT",
+      "is_attack": false,
+      "incident_anchor": "Aden plot disruption 2026-09-19",
+      "update_type": "INITIAL",
+      "incident_id": "inc-cd6bd1c8a9b2b7b9",
+      "translated_to_english": true,
+      "ai_canonical_event": "Disruption of terrorist plot in Aden",
+      "title_variants": [
+        "Disruption of terrorist plot in Aden"
+      ],
+      "actor_scope": "NON_STATE",
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
+      "cbrn_subgroups": [],
+      "sources": [
+        "عدن تايم",
+        "برس بي"
+      ],
+      "related_articles": [
+        {
+          "title": "Aden security thwarts plot against military forces",
+          "original_title": "قبل التنفيذ.. أمن عدن يُفشل مخطط استهداف قوات عسكرية وأمنية ويضبط متفجرات",
+          "original_language": "ar",
+          "summary": "Follow-up regarding Aden security forces successfully preventing a plot to target military and security personnel, which involved the seizure of explosives.",
+          "published": "2026-09-19T07:00:00+00:00",
+          "source": "برس بي",
+          "url": "https://news.google.com/rss/articles/CBMimgRBVV95cUxNYkhuQlF1dkQ4RXkxZkg5VFFuZUVnT2VqZnlFQmZqQzA5TnlpMndnMThjZzVFTkM1T3FWU3lhMFUtUmJKaGdORXZKZU1PN3A4X1BYSnZPdFpzRDlWbTVobXU5NFVjc0VKZEF2WFd6S0FXOXdILTUzU0lZaHM5dDNSLV95RmIzZGtnR3JBTXFiSHJGUS12a2FxTXNoVWlBaW5tRVRyMFZuamJDeFVlNm5OTG9DM2JrWkc1bUY3S3ZJbUdpdmNySW9Ra3lVY1RRdDZYVlg1ZEFtVWNOQ3pyS1hoaUdfZjlKSGJpMDd0Qmp5ZllPSE5TWnFMaXRIa1A4b3Y3a0tKbktPYXc4Z1pmOVJ3Tnk2ZDBRZXdnZjI3U2oySnlHU0pvME44LWpOLTU3MERDXzlkU0dlT2dkbFJ4ZEd1azVFTU80SUxidk1PVklrTG1tdmRVdTR6ZTNrV0dDZ1kwWjlmWkxqaDloN2M0cnFBN3Q0dmRfM0daS0ZtVy1vWlhSVzU3VmxYZGs3MXFfRWNWaHg1dGY2aHlhY2Y2ZTVBRWFIdEFGS0IxS0NRZk5aMUZtbldHYnNRTE5JeXpSNmdQbzdDbFJFMDBKM21FZ3dSdWlqMjR6cnhpdl9fMFF3U0haZXdQUWs4dTNpaEpYQjhzNThRWE9wajk1Zmsxa3l6bzY1eG5iNGE4Z2lJbWlRMkN5cmpLOTZ6NnRB0gFeQVVfeXFMUC1Ha3hJWlBHUi1BYVBUak80RjF5M3Bic0g5X0NHa0JELTcyVXdZRnZnUUtPQkVpdjVMaXNoZVNJaV9UMVNGcFFKVnRMVHQ4MlVDM1lMNTVadjJ5czBVZw?oc=5"
+        }
+      ],
+      "article_count": 2,
+      "first_reported": "2026-09-19T07:00:00+00:00",
+      "last_reported": "2026-09-19T07:00:00+00:00",
+      "dedup_confidence": 0.99,
+      "dedup_methods": [
+        "same_normalized_title"
+      ],
+      "location_confidence_score": 1.0,
+      "location_method": "ai_city_geonames",
+      "location_evidence": [
+        "Security forces in Aden disrupted an attack plot against military targets and seized explosive materials."
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Explicitly stated to have occurred in Aden, Yemen.",
       "ai_geo_fingerprint": "ebcf58722d7fbc04de4e6e85224c2b48a2c694c510014361c4f7a955b896e8fc",
       "ai_geo_inferred": false
     },
@@ -382145,6 +382902,86 @@
       ]
     },
     {
+      "id": "035260c3ed5d09d3",
+      "category": "Weapons",
+      "categories": [
+        "Weapons",
+        "Chemicals and Explosives"
+      ],
+      "title": "Large explosives seizure in Gujarat ahead of Independence Day",
+      "summary": "Authorities seized 1,500 kg of gelatin sticks and 4,000 detonators in Gujarat as a preventive security measure before Independence Day.",
+      "original_title": "1,500 kg gelatin sticks, 4,000 detonators seized in Gujarat ahead of Independence Day",
+      "original_summary": "1,500 kg gelatin sticks, 4,000 detonators seized in Gujarat ahead of Independence Day India Today",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English",
+      "collection_locale": "US:en",
+      "published": "2026-08-10T07:00:00+00:00",
+      "source": "India Today",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQYmNoc3M3REdockpRdDlVUUpweU1qVmFwcmJiMzNLa1pDS1BEVGNiM1NUT0VkcmdSSGlHU2tiNDAxY2FRTHRmbGo3X3JFWXVSd0R1WFdTZi1oeUE3cVJuSl8wZko3SXVuc1RiUXE1c091anIxRDNrVXBVaUJZRnl2dEI3MXRKLW9Gd0s3dzZHY2NkNDdnSDBZX3RHLWRaLWl6aGxvZlZ3a0dDbEY4aVdFN3Nsc2xTNVZHbFQxNE8tTdIBxAFBVV95cUxPQUU1LTV0Tk84ZWMzc3NUMVJ4alJLQnNnR29jaHhRQlZscUFMcmM1b1drRkxjbHBFX0NRR0xFTjIwSjRaZ3VNWXpxUTJ3TmFaSVlWSkxCUGdOQnFWLVBlbFk5VVhKTVFUazlieXFieFRkQzVmRndNM2lmZ1lOWFJkTllmcnRHaGlmM0VvRldaMDZGUVpEVWhnS3NuRklVd2swT2ktQm9RaUJHMW5oVWdVWG9YLThPMzR5VmxLZFFMNHpvY2hT?oc=5",
+      "collector": "Google News RSS",
+      "country": "India",
+      "country_code": "IN",
+      "city": null,
+      "region": "Gujarat",
+      "latitude": 22.2587,
+      "longitude": 71.1924,
+      "location_precision": "region",
+      "location_confidence": "high",
+      "acquisition_channel": "archive_enrichment",
+      "source_article_fingerprints": [
+        "c34db1bf454dd983aaad380a837b357a7afa057ae6520d5514382b44ddf1819a"
+      ],
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.1-flash-lite",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Reports the significant seizure of explosive materials, posing a clear security risk.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "WEAPONS",
+      "is_attack": false,
+      "incident_anchor": "Gujarat explosives seizure India 2026-08-10",
+      "update_type": "INITIAL",
+      "incident_id": "inc-677e58ba73f3aeab",
+      "translated_to_english": false,
+      "ai_canonical_event": "Seizure of explosives in Gujarat, India",
+      "title_variants": [
+        "Seizure of explosives in Gujarat, India"
+      ],
+      "actor_scope": "UNKNOWN",
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
+      "cbrn_subgroups": [],
+      "sources": [
+        "India Today"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-08-10T07:00:00+00:00",
+      "last_reported": "2026-08-10T07:00:00+00:00",
+      "location_confidence_score": 1.0,
+      "location_method": "ai_region_coordinates",
+      "location_evidence": [
+        "Authorities seized 1,500 kg of gelatin sticks and 4,000 detonators in Gujarat."
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The seizure took place in the state of Gujarat, India.",
+      "ai_geo_fingerprint": "91fa06c595b26e4ec18401bccf85b302e2d9bd0e4ad5f667f7d64d0f1189350e",
+      "ai_geo_inferred": false
+    },
+    {
       "id": "75c3f40abd6302cf",
       "category": "Attacks",
       "categories": [
@@ -386298,6 +387135,114 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The text explicitly mentions the search and alleged explosives lab incident occurred in Al-Abr, Hadramout.",
       "ai_geo_fingerprint": "6f9194ca96e6c46592875ffae1b9e7f0b6ce99c33815e157b7cfca2a5d7b40fb",
+      "ai_geo_inferred": false
+    },
+    {
+      "id": "a1544e41da0dae33",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "title": "Terrorist bombing at Russian restaurant",
+      "summary": "A restaurant in Russia was hit by a terrorist bombing.",
+      "original_title": "俄罗斯一家餐厅发生恐袭爆炸，莫斯科市长谴责",
+      "original_summary": "俄罗斯一家餐厅发生恐袭爆炸，莫斯科市长谴责 凤凰网",
+      "original_language": "zh",
+      "collection_language": "zh",
+      "collection_language_name": "Chinese (Simplified)",
+      "collection_locale": "CN:zh-Hans",
+      "published": "2026-08-03T07:00:00+00:00",
+      "source": "凤凰网",
+      "source_count": 3,
+      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE9EWUZqY3M3ZkRGWDlIY1IzaXFqTGhGeVJlZjlVZTZmY3FmNkxac1p1aFRjWkl5SDJzTW51eXZUSkJLQTN6SEpXVHJJRlA?oc=5",
+      "collector": "Google News RSS",
+      "country": "Russia",
+      "country_code": "RU",
+      "city": "Moscow",
+      "region": null,
+      "latitude": 55.75204,
+      "longitude": 37.61781,
+      "location_precision": "city",
+      "location_confidence": "high",
+      "acquisition_channel": "archive_enrichment",
+      "source_article_fingerprints": [
+        "16664b727748ab7118b57cd46d83a68c5487476c3d6055a56df5402dc20cec70",
+        "3392112938263e27fac38582c77df634a9ddc57f416736b7010e4223ea042337",
+        "8d4e5e0391faad32f79651a761148be316bc813c644fcaa52dfad9e0463d0625"
+      ],
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.1-flash-lite",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reported terrorist bombing.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "is_attack": true,
+      "incident_anchor": "Russia restaurant bombing 2026-08-03",
+      "update_type": "INITIAL",
+      "incident_id": "inc-6e4d9e5ed6d250f0",
+      "translated_to_english": true,
+      "ai_canonical_event": "Bombing of restaurant in Russia",
+      "title_variants": [
+        "Bombing of restaurant in Russia"
+      ],
+      "actor_scope": "NON_STATE",
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
+      "cbrn_subgroups": [],
+      "sources": [
+        "凤凰网",
+        "TVB",
+        "手机新浪网"
+      ],
+      "related_articles": [
+        {
+          "title": "Follow-up: Moscow cafe bombing casualties",
+          "original_title": "莫斯科市中心咖啡厅爆炸案 最新消息指增至5死21伤｜外媒焦点·俄罗斯",
+          "original_language": "zh",
+          "summary": "The death toll from the cafe bombing in Moscow has risen to 5, with 21 injured.",
+          "published": "2026-08-03T07:00:00+00:00",
+          "source": "TVB",
+          "url": "https://news.google.com/rss/articles/CBMimwNBVV95cUxNSTNuMFR3VmdiU0xsbmpfTDJoQmZPY05idkRoemxzOHpJUzVxV0tiR1E5ZW1jb3JTR3QxNGVOYjBqTUtmb1lTT3lYNl9qemtHT2hwcTIzLTJZTUdscTdObTZvSjhJa0p4dEV0SEQ1VUpodWRxX0lqekJaY1FHR2VSY3E1S2hBLVZrTU9uWWZJb3JhOWp0N0RBb0EyYldSRzcydzM3RHhjeUZRSGFBbUk0dHgtbDFCVlVwWU0zVXdER203cE9iUTBBUF9zM3RtVzY0QTZ2V2laWml1aTlBRWpmX01tejdyZ3pOV3hfMlVFVWZiRnpWXzAxYW9YY1hsMXJaWG1oclFPWjYxbE5TeC04YjBwZWE4c2tsQnNyR29wSi0wOGFVU2VaSVAtNHJZXzN5QmNYYkZpSklTMVl5MHBZS1E0d3ZlZFZvX3kyNVpiZ243ZWdWekYydVkyV2RvZHVDWjJEaHlJQktiSHR5QlA2UWFZRndraHB6TEMzNDJ5U3I4WVowUFlQY1NXVGE3ZVhOd295TG1rNUFKcGc?oc=5"
+        },
+        {
+          "title": "Car bomb attack on Russian drone developer",
+          "original_title": "俄无人机研发者遭汽车炸弹袭击致1死1伤",
+          "original_language": "zh",
+          "summary": "A Russian drone developer was killed and another person injured in a car bomb attack.",
+          "published": "2026-08-05T07:00:00+00:00",
+          "source": "手机新浪网",
+          "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5fSnA3TW5kMVJCbE15UzNkd19JWkpGNzFfYThENnZyN1FzSzNZd3p1bzFINld4TU5GZWFMRURDcjZZTHNMVTM2TE9saEVoZ1lPRWdBOGlVdlIzMTNzZWJoWTFR?oc=5"
+        }
+      ],
+      "article_count": 3,
+      "first_reported": "2026-08-03T07:00:00+00:00",
+      "last_reported": "2026-08-05T07:00:00+00:00",
+      "dedup_confidence": 0.99,
+      "dedup_methods": [
+        "same_normalized_title",
+        "paraphrase_entity_context"
+      ],
+      "location_confidence_score": 0.95,
+      "location_method": "ai_city_geonames",
+      "location_evidence": [
+        "Moscow mayor condemns restaurant bombing; cafe bombing in central Moscow."
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Related articles and context specify Moscow, Russia as the location of the restaurant/cafe bombing.",
+      "ai_geo_fingerprint": "59371fd1c59ede5091a0abf2e3105efe897a3c240acee949288ad539650ac285",
       "ai_geo_inferred": false
     },
     {
@@ -404448,6 +405393,193 @@
       ]
     },
     {
+      "id": "fc437d1de7152af3",
+      "category": "Chemicals and Explosives",
+      "categories": [
+        "Chemicals and Explosives",
+        "Counter Terrorism Action"
+      ],
+      "title": "Syrian Interior Ministry uncovers explosives cache linked to Damascus bombing cell",
+      "summary": "Syrian security forces have uncovered a cache of explosives linked to the cell responsible for the July 7 bombing in Damascus.",
+      "original_title": "Interior Ministry: Explosives cache linked to July 7 Damascus bombing cell uncovered",
+      "original_summary": "Interior Ministry: Explosives cache linked to July 7 Damascus bombing cell uncovered وكالة الأنباء السورية – سانا",
+      "original_language": "ar",
+      "collection_language": "en",
+      "collection_language_name": "English",
+      "collection_locale": "US:en",
+      "published": "2026-07-10T07:00:00+00:00",
+      "source": "وكالة الأنباء السورية – سانا",
+      "source_count": 9,
+      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE1felNWM2VBaWtaeXlZUW9hUi03VzFNTEJnTmpQOEJkdWROVjEtNUdFR0pxekNXQWV6MTNaNjhzMERQT1dZRUxRQQ?oc=5",
+      "collector": "Google News RSS",
+      "country": "Syria",
+      "country_code": "SY",
+      "city": "Damascus",
+      "region": null,
+      "latitude": 33.5102,
+      "longitude": 36.29128,
+      "location_precision": "city",
+      "location_confidence": "high",
+      "acquisition_channel": "archive_enrichment",
+      "source_article_fingerprints": [
+        "23d408516356f90c9465f85bec63228e10b36efbe567dbdda755810b792df5e2",
+        "814cb91b414f7392e89336926eac32dc7f967beb9231fed58f4764151c074af6",
+        "9c187c3f215eea1a7ff405e5080be72b2594ca87718726ef6d9ca309310aceef",
+        "a3f182add5e8f12c0a0c03a07bab4c647a3ed3cbceef1ef5af4191f5262c7b11",
+        "aea7c4681a8a611e6e71795ad0422364d756fa3c436621579ff6a7c4174fa395",
+        "c82203d61804a968a404d0186cea704cd03dd5171b30de076ae4e717ba7a53b3",
+        "dbcfd671498fca851e0ab2a8183ccdff8322c0da86ae8045cfdda5dffa4c82be",
+        "dfcbec8ef595495fc9e22bdcb5975f517319b8d3351d12704261183255532e16",
+        "e36bbf7492d500c8473052627c527a46158d2a339bbd03b78b0195bebde51c28",
+        "f4e8878d518cbb6629c3c69da83e853dd769983ac39a6a67d601ebc10ed02254"
+      ],
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.1-flash-lite",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism investigation and weapons seizure related to a specific attack.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "is_attack": false,
+      "incident_anchor": "Damascus bombing Syria 2026-07-07",
+      "update_type": "INVESTIGATION_UPDATE",
+      "incident_id": "inc-b394ac7bde0ffa11",
+      "translated_to_english": true,
+      "ai_canonical_event": "Explosives seizure by security forces linked to Damascus bombing cell, Syria",
+      "title_variants": [
+        "Explosives seizure by security forces linked to Damascus bombing cell, Syria"
+      ],
+      "actor_scope": "UNKNOWN",
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
+      "cbrn_subgroups": [],
+      "reported_status": "CONFIRMED",
+      "sources": [
+        "وكالة الأنباء السورية – سانا",
+        "العربية",
+        "الشرق الأوسط",
+        "التلفزيون العربي",
+        "جريدة الجريدة الكويتية",
+        "Masrawy",
+        "Anadolu Ajansı",
+        "جريدة الرياض",
+        "Vietnam.vn"
+      ],
+      "related_articles": [
+        {
+          "title": "Syrian security forces uncover ISIS explosives cache",
+          "original_title": "الأمن السوري يعلن كشف مخبأ متفجرات لخلية مرتبطة بتنظيم داعش",
+          "original_language": "ar",
+          "summary": "Syrian security forces discovered an explosives cache belonging to a cell linked to ISIS in Damascus.",
+          "published": "2026-07-10T07:00:00+00:00",
+          "source": "العربية",
+          "url": "https://news.google.com/rss/articles/CBMisARBVV95cUxPMnlmV2FsRFhTTWhLUC16TC1EOGtFYU9fNVRUbk51eVVyVFlNRHJnWElDaW1JMGlQUXZkdjdHSW5EeGxFREdYa2xyTlpLX2lpZUJHSzhKSzJVNjZjYVNHN1BLYnp2WGVRaEJZd1FIOURDclBtUjNNd0E4VnBsbFFHRTJTTUV3LXZ0d05EOERjYmdoTm42eEozUHd3RVdsbUdXcFFuLVJtckpybXN5eXNFQjlkcVd2N0xQNFhBSmRQTkVzejN4a2t6emVoMTM1RUtkQnF1a3AzQjVKQ0dtSkd2N3Y5TFF5M0dLTXJZdFhjNFpVd3JNSG9jbXZOQlRHblRDU1dSeUpsODZtUm85eWRnVTJyT1lFS2FhVm11YmtkNUp6UURIQm9WNTN0dkZZZzQ4RDNEbGE5cjB6VFlxdGc0N0VoUkNnU3NUYlBuRy1fWWlnWUdEcUdqR2xkYUJ3YkUxX2QwRGVqdzIybzdJbUVSUjdCNnhnVFRZQ0gwT2VRUXF2V0RiM0NzVG9jQWJlc1ByMDRfYWdfSFRlaEVMYlJrV2twU1JHRU5BR0dsYUl4OGNDYjdkbzRNQXllZUwxZ1p1Vk9QeXRiUTNSUG5DWW9wWUdzWGhSM0t3UWp1SVNObGpwYk5zbFR6Q05oUUZxdC1xMWlnX2NpU0NZRHJoZGJ2ZEd6cE5meFRUY3BGSmJXOUpoa1VaQk14WXFBcGNuNDJqYjRsajVURlZZSm12dGFaWNIBtgRBVV95cUxNN2ppSENmVldzSXVvdk90RldlVHdEdUpLR3RycFZhSmRGWHBlcGdOY2pSc2oteUcwUElOT1FKME5SY01LWFdUN24zLTJ3V3RlN1VSbWpYYkZNQmMyckFEeFdQaFpLaXpVRHB0UmJZeWxXMWxSWGdERVJwdHhMT010QkFLVEFqQnlWRjNpZ2VuOU82M0l4QktuQ1F1UlNEdHhEcU9uUHlIWEdvdEhfdUxyRXAzSXNDajNjR3RpR0s4Z2lxMENHX2dxZlMtYWIxaWRSMGtRYkxmNE9uMlVKS05LU0d0R2FZNzhPODl6MmFydFA4NUUtOXFKS3FJcDFtMHB3NFJsMHZGU2VtVXNXR2dVaFF4NWxtUVRDTEZwZzd1STZqVGh6T3BlTlhtb3pVeHVmb0tIcWlXUlB6bF9sX3Y1bDJ3eHE1N2JsalJ6bHZQd2dLZnJxXzE3NFl5SjZXSEFrTnpJRWZVS244Y3kxWjRhUkl2THlkQWZBZHRvdjcwU3UxNHZkTlB5ZlBCaXhFUFJjMHdKak5HZzhBTnh3Wk9FVEQwNEl5dThiSTRpR1JROFV6Z2pySmtCTWFCQTltZnZKQy14Z292LW5JdWRKbUhjcTRHeE9wZFNxYTVJUTdsRTNTY1A2TXVDdnlEUUxST3kwaDRhZlN5SEg1Mkt1U19waXA5Z2V6SzJDSWlpc2JQaURyZmJ4WXp4cWxON0VWRzRWazFCSHA0eWROaE1lRWZSRVdFbnlBZw?oc=5"
+        },
+        {
+          "title": "Syrian authorities uncover explosives cache linked to ISIS",
+          "original_title": "السلطات السورية تعلن كشف مخبأ للمتفجرات لخلية مرتبطة بتنظيم «داعش»",
+          "original_language": "ar",
+          "summary": "Syrian authorities announced the discovery of a secret cache of explosives used by an ISIS-linked cell in Damascus.",
+          "published": "2026-07-10T07:00:00+00:00",
+          "source": "الشرق الأوسط",
+          "url": "https://news.google.com/rss/articles/CBMiqAVBVV95cUxQdTJIVE1JMzREdWZhdG8yNi1FUXhzN1N1MVpNTTREQUticm1ELW5TSnV5dTRwcWVMeDRMdjBhQzF6TW5fbXVpYTdpYnlBbEEzNkJsLTRfbmlJelNrMlE2ZzE2VDRYazVkSWRYRjV1a1FNNTNHSncxbkNUYmpDTlFVcUlfWkxxMzE1N2s0cTRoSEk0ektTZHNacWlic3JJbWdoZDY4dElvSGlvM01TRF9TTEh6QUsxR09za1ZQaWNpcmo4ZXFhNVVkVlFiQTduU3A2XzJIdHd4RlROa1hxVHRBYkpMajNJY3ZPajh4amNpSjcwVVBLeE1NSEp5SlhMdUY1V05JYmNKZGV5RHZTdEtJWWdhcVE2OEdRRDU3cGZtc19OSno2N2F2U01oZnFjVVFYTUVhcm9MVFRzejlIbEk4RVJUVnI4Mk5RUXhCc3JxRXZ3OVVnbE1Gdk9uZUhScnd1NGFIUGFWZ2c4UHpOS2JnVG9UbjR4ZHI1clIyMENaamxfUE9WZWw1UlZTbHd0NE52a3dWbzZmcVRVVHduc2FNcUpucV9PY0R3cFVFRnN3c1ZLNG5QVlg3ZVB5cHRienNpeDN1U282MW5CSzM1RE5FMVRBWWRySFdLcFNvWVVGZGdmNS16cWVjd0s3MFBSNFRfZ1F6QmlQYnR3Qjd4M3pmLXcxTWs1MDAtZU9GTVRRVV9PTDNZWW5JNktJUzJYQU1lZjlfRFJOZlVXbldId1BINHdiNVNBUGt4R2RNUVBEUXJKM21jNWtfS3gwRzh4MXVOWjNvUzlCeWxHaGpWeE43NGpMNTJXMzhVYWo4dWJBRzRBVEJxSnZ1cVpTZFRuSVNYQ0tVUWNuVVM0MGdqQVlhSWJUTDRpWHNCT3NFVVFLZDgxTVRGcU1sOQ?oc=5"
+        },
+        {
+          "title": "Syrian Interior Ministry seizes secret explosives cache",
+          "original_title": "يتبع خلية لتنظيم الدولة.. الداخلية السورية تضبط مخبأ سريًا للمتفجرات | التلفزيون العربي",
+          "original_language": "ar",
+          "summary": "The Syrian Interior Ministry announced the discovery of a secret explosives store belonging to an ISIS cell.",
+          "published": "2026-07-10T07:00:00+00:00",
+          "source": "التلفزيون العربي",
+          "url": "https://news.google.com/rss/articles/CBMilwRBVV95cUxQOE8wa2NmdzgzbjlSWnJ2Ykh3SmFNNDVsYVMyNlQzZlVqMlNXQU1VZFNKSDZnZEpnWi1hXzRNRDBZdjNMX3RJbkpTMm9ZVlpvSG9BMWlSbFlwMnI5TjJyNGxHaFpvemN4UkN3YVkwakhOUTk1R0NSamtCa1NEZWNGb2g2MTRqRnd6c0F1OHdEVlNxNS00MGU5cTJsc2FaOFBaelAzejBGTlExZWdSUy1rcG9UeFVOZG9ldDBVam5RSkJTQy1qMzdqbVJKeHg2VnVjV3RIMVRWODZnWFlld3V2Z3h6TWptX3h3Zi1aX1FzT25ScnQyNUZTcnhzRk1aaERhRmFGRGlHdVpmcW94THgtSXpOOG1sT2tuaDdGYzBrUjhxeUU4SVY5LVVnOFd4SXJLOTk2SmVWZGpaM3c4UHMxUzIxbEN3U0ZIQzdZVVdGY3hxOHcxZHkxWFdjeXIxcEh3OHdZZzc1S1FUV01kNzFsbHdUcHJRb3h5NmR3SU9VZlpFQ1BadERXLVRTVUFVUjF2aHhZOEFnZEJxNkNiUks2cDdmME1jSlFFT1NnUlVMZHh1dFVyMmVWX1R1ak5uSm42N2pudm5VM3VwcG9DVm1QdHppWkZQSVBuanRfTk9yY2ItUjIweDU3WjNiWWNkb3pZekZaNFcyTVV4ZHMteXg2ZHhtd3R6WU9nQjJmOWNwVXRmcTlURndn0gGcBEFVX3lxTE5kemJZSnFSVm1VNGhjRk5tNEtXclg0R2hjNDR1S0wwa2JkcS1keXo0eXlDLWFkelZweWdnX2xMUThzankyQ29zN051MWlHVnVGcEFHaHZDcEZSbklBUXl1dTc4ZFZ3VHBjSHZaT2tldTZXc2JUeXZ3end6NFRFbElXZ1VCVXhkckFVOHAyUExPZWhrVFpadVVVZkZaNkVmSlJ5cEFESmtDRWFXTDNRSUZRQ0x1dG42MDU3ekxvM0JfNnpEUGpYb181bmwwbE5sTXRONE9mLXU5OTUtMG9ZZ0JaZlZXajN4VndzNmF0NFZjMUNVdElUdnNIVWQzYmgxZ3pvX3NPTmx3VW9RLWs3OEhVMWNPczAtSkVGdUpIcGxhRG1EUTZpTjk5UjFRT0x4c1pCMXpsa1lzb2dCampQYUFNQmtIcW5JMmhWVVJaLXhHX05iNDg2ZVdXN0hoRGhMSVNTUUVoVHdTbjlsZmxDRTlCS293UmJRLXVJVVotcmdEbWdLLVlzaWZtX3ljSHpENmVlc2VSV00zYnUzRFphMWNwNW9ZT3E3OWo4dy1ZWldqZ0RxLUJNWFdEdl9xZFBET3luLVF2QU9LTGkwclYtLVdUaVRDanE1N2VBYXotQ2Z6dXZ4V2dMRWxMNjNJYTZvdWgydlB6TE9JcmMxdG9aNV9jYkoyN1NxRFgzRVZjVHFCam1UdXg2c0hGNXhySQ?oc=5"
+        },
+        {
+          "title": "Syrian authorities uncover explosives cache linked to ISIS",
+          "original_title": "السلطات السورية تكشف مخبأ للمتفجرات لخلية مرتبطة بـ«داعش»",
+          "original_language": "ar",
+          "summary": "Syrian authorities discovered a cache of explosives used by an ISIS-linked cell.",
+          "published": "2026-07-10T07:00:00+00:00",
+          "source": "جريدة الجريدة الكويتية",
+          "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1zazBuQmwtbE1LRXFVZWpZVDltUlNuNGMwVVFZdGtvOThSUTl1TlB4NlB1Y2RGSGFYTnlMTmI5QnltaDhPTGhtUm1Yb0M5N2dQ0gFWQVVfeXFMTWJzX2NCM2FTMGlWM18xcnJDM3JfT1JCUkZ6UXBUQjdxM3MxTnlZQkdlTkF4dFBwVUl3dGZ2LUtTeVdaa2ZZYW1NNXVSUEpoOGRsZG9YeEE?oc=5"
+        },
+        {
+          "title": "Ministry of Interior: Seizure of explosives cache linked to Damascus bombings",
+          "original_title": "الداخلية: ضبط مخبأ متفجرات لخلية تفجيرات دمشق الإرهابية",
+          "original_language": "ar",
+          "summary": "The Syrian Interior Ministry announced the seizure of an explosives cache linked to a Damascus-based terror cell.",
+          "published": "2026-07-10T07:00:00+00:00",
+          "source": "وكالة الأنباء السورية – سانا",
+          "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTFBpQjFLNDF5VzcxMlY0WU5DSWphX1I0SHZWWktxNDV4OTZ6eGlHRGc4Z1M2aFRfX09NYUx3ay1MRC05dFBKYVE?oc=5"
+        },
+        {
+          "title": "Syrian Interior Ministry seizes explosives cache from Damascus cell",
+          "original_title": "الداخلية السورية تضبط مخبأ متفجرات لخلية تفجيرات دمشق",
+          "original_language": "ar",
+          "summary": "The Syrian Interior Ministry seized explosives from a cell responsible for Damascus bombings.",
+          "published": "2026-07-10T07:00:00+00:00",
+          "source": "Masrawy",
+          "url": "https://news.google.com/rss/articles/CBMi-gNBVV95cUxOT2M4Y3VrWkxNMU02M19zMklfUnFSaUFuMnBmTFlqa0hxaTIwaU1MakFCUEtNNkpiWVJZQTBPenZ5bENyaVFEYU1rQkFWVTJHNFdqZjAzMXNRd2dpdFJVTXNhc1pXcGdiYjFIbUJVWDV5N2ljcC1DYjNPOVFrVDktcGZmelM1LXNWdEVzaHBHMUpLSm9YSjJELVlGZm5vMUh4aUVqOGJXb1RFY0JObEgxc1U4aTR0Wm1POWFoRl8zUy1tRmJrakJJOW8wQ1ZTRmE5LTBDZ3NoeUphSUlnbFFYcFZtaVAwVWRGcEVsX2g2U0c3QVd0RTJLand5Q3c5cjBuUTlkM2lEVVMzT1g2YnJ5cFJBNEhNcnVoR1ZDT0FQR2ZNbDc5Zi05VjMtWGRRSUhDLUJOdE9PUWRSYVlXQ3dtVURPb1lhNTV0WUR5RmtRX2JnM0Nybm03QS13clJMMnFkdjg3aVpJcjVwSnJTU1VNcmNyb0ZDei12aUZhaUVfNHEyejZpMW95dGMxZWw1WTN6WWp2RFRob3FkQjlfNmV2S015bjFXZHNhNTNNbGF6Xy1sUm1xUzlORF85bHBzd1Fma1YzVEZQbXVmdy1vdkp5S21Jald4T25Dd2NhYzM2dXd6NFRwMlhiemczNEVBRVhKZ2lrLW9KekdpZ9IB_wNBVV95cUxNNUhJZUVfV2lvZDIxcVYxNzZka2RrcWJLVzFXLUd3aXpjRlNXUGdONnY3dHFBdzVXYnBENlhFUk8xQzdmMEtjeTNEQzEwMnczWDlIb0pqbUE3dGUxVUdRS1NzZG5IV2NYM1VOdGZCQWoxLUJzLTJMZDVMUzlYTTg2V1oxaVk5elFfSVBVQ3Rnd0wyN2VVQ2wxTmFWcWlUNEZVbGZQUlc5VGtScGVhZnJjWjAtN3RZTWhfYVJ1WmNodHNlbGFpZG9oTVB0djVWYTl1U1YxdURvNzNacnFmVE5Nbkt2UlhvOXNrYk1IVjFnbTVhQXhxVUZsalE2akU0dTN5Z3V5ZDZOOWxnMmdBZjl4V0pfMndldlRsVWp3VG9ZUktRSnlHdE1fYlFDckctNUZJQlVnSTBQS1dveUF2WHBET1FaeWZlbVY5RmFmN2dfanVWVFB1MmlXTGJFRlRGaFphTkN5U0l5TjFlZzRGSUJnb2ZvWjB1TDQyaFp6VXNwc0RxTC1UM1o0Y3pGTHFZQVVOVXJwZ2NndDZHMVlvRjNNMGlId0lDV09lc3ExMThBWXN4ZWhyZUgxelEwVHphY19uV1BRbmxqSGZacDNwdEhkWi1oVUhBdFRvQ29OVHJRRjVtN0w4bkV4c0RRY19lYlk2SWxCeDJ6WW5pcWRPTF93?oc=5"
+        },
+        {
+          "title": "Syria seizes and dismantles IEDs in Damascus cell warehouse",
+          "original_title": "سوريا.. ضبط وتفكيك عبوات ناسفة في مخبأ خلية تفجيرات دمشق",
+          "original_language": "ar",
+          "summary": "Syrian security dismantled IEDs found in an explosives cache linked to the cell behind Damascus bombings.",
+          "published": "2026-07-10T07:00:00+00:00",
+          "source": "Anadolu Ajansı",
+          "url": "https://news.google.com/rss/articles/CBMi5gNBVV95cUxOY2s1bm1Bak9qUG5GbF9GcXRMS0pYdnRaN2s4WjBneS04NVBUakx6QnZ2S3BJLUhna2JGbGVRdDZsVDJWaXI2TVhVQWMtLU5QRFRydURrbzJFcWRwT0I3TWhMN1RIdVltR2RCZy1iX29zYW1oRTNfQjNVVzFRNFliQVI5bWlpZGxqeXNzY3Z0ejI1ME1KSmxadlpyX2ZMWHdGV1ZrTnJtenVyM0Z2Zks0T2NHanRrYk1lTmR4R0dtQ1pCSVBVSjE4SkkyeTN3OVpIV29lRDNacThZNm1STWpyaXZub0RMNm83cC1nRHhoTWdxaGhjcm9fVlVfekZGRWZxNVozN3k1Vlc3UGdVeFRFakdzVkZ2UTJJOHg0VW5WU2MzU2VVWnVwdGExdU1TNkxGdUNwS3NkbDdXMUoyUlFFM2hLRmdMcVRXMTRQWDBzaFQ5NFVNaHJDUDlVZ1V1WllIMnJ5eENZek1qNmZXbTlPQ2JiR3VjdG5fb0dMc2NmdzNySFJtR0oyVG1rMDE1eTAxZi1xT0tfYU1EcWdCeGJ0LTFYYnVxWlFXdjRsZTE3V1pNT09OMU9GV0pWNURlQUxhREhwQTV4RVBlWllwZi0zVDYwdEhjeXZFVVFyQnZFQWZmckJqZHc?oc=5"
+        },
+        {
+          "title": "Syria seizes explosives from cell involved in Damascus bombings",
+          "original_title": "سوريا: ضبط مستودع متفجرات للخلية المتورطة بتفجيرات 7 يوليو في دمشق",
+          "original_language": "ar",
+          "summary": "Syrian authorities seized an explosives warehouse belonging to the cell responsible for the July 7 Damascus bombings.",
+          "published": "2026-07-11T07:00:00+00:00",
+          "source": "جريدة الرياض",
+          "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1xZ1BSUUNQNmtTRUI5YXRxQjZ5cGJRWk1xSUZrN1VXRXpmV3dPTjdUSGYzRVM1TFQ1Vl9SNTZ0WTBSRFdMYlk4?oc=5"
+        },
+        {
+          "title": "Syria discovers explosives cache linked to terror plots",
+          "original_title": "سوريا تكتشف مخبأ سري للمتفجرات مرتبط بخطط هجوم إرهابي.",
+          "original_language": "ar",
+          "summary": "Syrian forces discovered a secret explosives cache linked to planned terrorist attacks.",
+          "published": "2026-07-11T07:00:00+00:00",
+          "source": "Vietnam.vn",
+          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPcXFOclBmNnNTenB3N3VvaEgzb1piN25zemE1V0Njd2dmSVUzaTZDVmt6RWlNd3h5VEFvQ05lSTIwR2Z0eXhGOUhmS2VWRHpaT1NpS0xfc2x5M3l2RVZoRmc5N3BCdEJVakhaVVAzNUktSjRkeFJtLUwzZ21BbFBqN2xVT2tsUHJqUGE0b3laZWppTlo4eTB2NUJORUJuZmljRWZORQ?oc=5"
+        }
+      ],
+      "article_count": 10,
+      "first_reported": "2026-07-10T07:00:00+00:00",
+      "last_reported": "2026-07-11T07:00:00+00:00",
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "paraphrase_entity_context",
+        "title_plus_anchor",
+        "same_normalized_title",
+        "very_high_title_similarity"
+      ],
+      "location_confidence_score": 1.0,
+      "location_method": "ai_city_geonames",
+      "location_evidence": [
+        "Explosives cache linked to July 7 Damascus bombing cell uncovered by Syrian Interior Ministry."
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The cache and cell are directly tied to Damascus, Syria.",
+      "ai_geo_fingerprint": "163dbdea9594023967986c1222e7d97bbc229e756c209f61a44003bd3e07b217",
+      "ai_geo_inferred": false
+    },
+    {
       "id": "5a7cbac7fe77b211",
       "category": "Legal / Judicial",
       "categories": [
@@ -408260,6 +409392,114 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Moroccan security forces dismantled an ISIS-linked cell in seven cities.",
       "ai_geo_fingerprint": "e7ec864d89f06f8bc1c50b527d494e7319fc89e1d059b5a6988fb0b6ab87460d",
+      "ai_geo_inferred": false
+    },
+    {
+      "id": "41274bb32e1eec6d",
+      "category": "Chemicals and Explosives",
+      "categories": [
+        "Chemicals and Explosives",
+        "Arrests"
+      ],
+      "title": "ISIS plotters arrested in Morocco for car-bomb attack plot",
+      "summary": "Moroccan authorities have arrested individuals affiliated with ISIS who were reportedly preparing a car-bomb attack.",
+      "original_title": "'ISIS plotters preparing car-bomb attack' arrested in Morocco",
+      "original_summary": "'ISIS plotters preparing car-bomb attack' arrested in Morocco The National",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English",
+      "collection_locale": "US:en",
+      "published": "2026-07-06T07:00:00+00:00",
+      "source": "The National",
+      "source_count": 3,
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOYWNNQl85YlBKaWE4V1NnaFBkSGtjOW5RZk16UmNtOVZyQmw0V0JlWm1ubVdGZWJ6cmRHeERJSWo5Qm1qMWJVYUZzS2xTbXVkNENmZ1FZMUZxUDFxenJpTzVhU0tmd0pBSGJzLXFEZ2lnSEVRbmxlOVBFTTl3T3llN2ZLejBCamdXY3JsRzU3WVNHY2xuYm03QmxWWF9IRmFsQzNFRkRUUHlSWlZfaW9xSDFHVQ?oc=5",
+      "collector": "Google News RSS",
+      "country": "Morocco",
+      "country_code": "MA",
+      "city": "Rabat",
+      "region": null,
+      "latitude": 34.01325,
+      "longitude": -6.83255,
+      "location_precision": "country_capital",
+      "location_confidence": "high",
+      "acquisition_channel": "archive_enrichment",
+      "source_article_fingerprints": [
+        "0b704c3f16c9979c69ac90fdfd9c5d121644e103988b040f22a33d6fee5fddf5",
+        "110e27d7a733a97f8c0bc003a3ba42fbc9d656f9cd30ddc25c2ca15997906200",
+        "556a9dd110242f72b2fb4f737a942b04ab900f6b3a12af37765a3d732dce1f5f"
+      ],
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.1-flash-lite",
+      "ai_relevance_score": 90,
+      "ai_relevance_reason": "Reports the arrest of a militant cell preparing an attack, satisfying the operational requirement.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "ISIS",
+      "primary_event_type": "ARREST",
+      "is_attack": false,
+      "incident_anchor": "ISIS car-bomb plot Morocco 2026-07-06",
+      "update_type": "INITIAL",
+      "incident_id": "inc-b5061544d18fc7cd",
+      "translated_to_english": false,
+      "ai_canonical_event": "Arrest of ISIS cell members plotting car-bomb attack, Morocco",
+      "title_variants": [
+        "Arrest of ISIS cell members plotting car-bomb attack, Morocco"
+      ],
+      "actor_scope": "NON_STATE",
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
+      "cbrn_subgroups": [],
+      "reported_status": "CONFIRMED",
+      "sources": [
+        "The National",
+        "La Vie éco",
+        "وكالة الأنباء السورية – سانا"
+      ],
+      "related_articles": [
+        {
+          "title": "Moroccan authorities arrest 10 individuals and seize weapons and explosives",
+          "original_title": "Terrorisme : 10 arrestations et saisie d’armes et d’engins explosifs au Maroc",
+          "original_language": "fr",
+          "summary": "Moroccan security services arrested 10 individuals linked to ISIS and seized weapons and explosive devices.",
+          "published": "2026-07-06T07:00:00+00:00",
+          "source": "La Vie éco",
+          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQTkVlV043XzRIMEF1ZlZvZ1lSZ25TbkduYXg5VmpKZWcxT2tOX21kSFFGV1o4X3VINGczeEY0QXV6bXg3N0Q3ZzVmRXQ3VU9QYld0Z25Pb3NnZGxNZG1Jdkl6ckRIQ0FHMENOUko3NXJhNDFBQVJMNkpaTVBzWnN4YUM3Y19hdWhldERFUVpOZWVjLUktSU1NNmV3MnRtR1JaWjZYSHg3Y2NzdHIwUGFXd21HWE50US1o?oc=5"
+        },
+        {
+          "title": "Morocco announces frustration of terrorist plots and arrest of 10 ISIS members",
+          "original_title": "المغرب يعلن إحباط مخططات إرهابية وتوقيف 10 من عناصر تنظيم \"داعش\"",
+          "original_language": "ar",
+          "summary": "Moroccan security forces thwarted terrorist plots and arrested 10 elements linked to ISIS.",
+          "published": "2026-07-06T07:00:00+00:00",
+          "source": "وكالة الأنباء السورية – سانا",
+          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9DcjI0ZVNaWGI0NExucVV0UXlzb1FXQ19wYWFmRTh1dEllV1N1M3BvUmhpZmFvZ0czcUtORkxRUzVlT1ZDZXdlSmVQRFpwU1U?oc=5"
+        }
+      ],
+      "article_count": 3,
+      "first_reported": "2026-07-06T07:00:00+00:00",
+      "last_reported": "2026-07-06T07:00:00+00:00",
+      "dedup_confidence": 0.732,
+      "dedup_methods": [
+        "actor_country_action_signature"
+      ],
+      "location_confidence_score": 0.9,
+      "location_method": "ai_country_capital",
+      "location_evidence": [
+        "Moroccan authorities have arrested individuals affiliated with ISIS in Morocco."
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The arrests and counter-terrorism operations took place across Morocco without a specific city named.",
+      "ai_geo_fingerprint": "6f2f22eeb8fd7107cf178ccff24d9e97dce69ef975ef3e57dad5eb075dbfca44",
       "ai_geo_inferred": false
     },
     {
@@ -435909,18 +437149,18 @@
         "Legal / Judicial",
         "Chemicals and Explosives"
       ],
-      "title": "Man arrested in Lurgan PSNI station attack charged with attempted murder",
-      "summary": "A suspect arrested in relation to the attempted bombing of a PSNI station in Lurgan has been charged with attempted murder.",
-      "original_title": "Man arrested in Lurgan PSNI station attack charged with attempted murder",
-      "original_summary": "Man arrested in Lurgan PSNI station attack charged with attempted murder Belfast Live",
+      "title": "Man charged with attempted murder over Lurgan police station car bomb",
+      "summary": "A man has been charged with attempted murder and other offences related to the car bomb attack on a police station in Lurgan.",
+      "original_title": "Man charged with attempted murder over police station car bomb",
+      "original_summary": "Man charged with attempted murder over police station car bomb Sky News",
       "original_language": "en",
       "collection_language": "en",
       "collection_language_name": "English",
       "collection_locale": "US:en",
       "published": "2026-05-07T07:00:00+00:00",
-      "source": "Belfast Live",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNb3YyZUptYUlOSDdNQUdHS3RXM1dLbklTRmVXWENMWmpZdU5DcGVNSVhPcURIMXM3MUhxM3pmMy1iaHNfNlVodWdEYVEtOWppbUY4OHNEb08xNHUwRmRLTXpNQmtsclYyWWtJSUc5OFhrNkxUb3RJOFJWTU5aNUhCYkhYODc3ZWIwUTBtd2lUMmFGM2wxMHBuTdIBngFBVV95cUxOTGFJTHotMjY2T2lpbFphNjBVT1ZPeW1YdzRUbDVXcHFJTFRYeE45Q0Y0Rm9ub0lJem8xX0duN2FuTFlWU2g3YzlObHEwX1JocEtYakhZVmZrNEZZUjRtaTNwUXhfXzZkcDdKa0RzZDcwUmt6MlNHMnF2Nnd4MVR2amZNUDBmM25BWXZEOVhGdlVHdDhwT1daa2pudTJ1UQ?oc=5",
+      "source": "Sky News",
+      "source_count": 6,
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPekN3X2JBN1RXelNUdVIxd25ybEZJa2RieGM3dWNMa01KWDB2UHNFYlN5UUYyRlc4Y1d2S2lEMkR5SFNZM1JNd1BHMEhULUdLdUc5NFd6dHFCLWlPVjcta1owcDAtX2JPXzZzTXllTE1ldFAwNC1zTlZJR1FYVGpuSkZyQ2YzS0dyOWlfaHRRTlkzYUlDbkd1R2dDVVkyOFk?oc=5",
       "collector": "Google News RSS",
       "country": "United Kingdom",
       "country_code": "GB",
@@ -435932,7 +437172,12 @@
       "location_confidence": "high",
       "acquisition_channel": "archive_enrichment",
       "source_article_fingerprints": [
+        "5af1683eb848b2431d34aee7fcad0be9ecca755cc70de37de626ffe72d02729d",
+        "6ac661ddabf4c637aef1614134bfe6390a529e85982d7be75ce653502f0bbce8",
+        "732384e0a5f949f0328c2457d2f6bea8185c6ac2616cea7e876c6bdd4c30bf6d",
         "8f619c259768be7a1c01425be9500b7d940156e5316cc83a9b8c3cbd57cf4751",
+        "9eb61e4a055be25204a26f5db5176a0b3529380e71530de2efb86aa8b6e193f3",
+        "c0c9ffe330f0a06749acbfb13e9d5df43500f5e3100771ba2110346b0e2b36b8",
         "c46514a4db0013fdfab0c1303db7cd5c9a8d81f5ee2fc4240299d10f3ae289bf"
       ],
       "ai_selection_complete": true,
@@ -435949,7 +437194,7 @@
       "update_type": "JUDICIAL_UPDATE",
       "incident_id": "inc-d140c90b84a7c8d2",
       "translated_to_english": false,
-      "ai_canonical_event": "Charging of suspect for attempted murder regarding Lurgan police station bombing attempt",
+      "ai_canonical_event": "Man charged with attempted murder in Lurgan police station car bomb attack",
       "title_variants": [
         "Charging of suspect for attempted murder regarding Lurgan police station bombing attempt"
       ],
@@ -435962,7 +437207,11 @@
       "reported_status": "CONFIRMED",
       "sources": [
         "Belfast Live",
-        "The Irish Sun"
+        "The Irish Sun",
+        "Sky News",
+        "The Irish Times",
+        "Belfast Telegraph",
+        "The Journal"
       ],
       "related_articles": [
         {
@@ -435973,14 +437222,60 @@
           "published": "2026-05-08T07:00:00+00:00",
           "source": "The Irish Sun",
           "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNeHg0OVpTdkd4LXJRSXRpejQ5RTdhVUxlLTdmb0N1ZTVlb2NTb1lKUFUwNU5YLUQtY1FrSGRtdnVSaGVseThGeWEwaUUyeWd2TkRPUmhnTmxXdzZPX1JYNWtXRjVEaHJkR1RleG1iTWJVQUdJS0p5ZWw1a2w0MUIxQnljV0tnTTJO?oc=5"
+        },
+        {
+          "title": "Man charged in Lurgan police station car bomb investigation",
+          "original_title": "Man charged with attempted murder in connection with Lurgan police station car bomb attack",
+          "original_language": "en",
+          "summary": "A man has been formally charged with attempted murder following the car bomb attack at the police station in Lurgan.",
+          "published": "2026-05-07T07:00:00+00:00",
+          "source": "The Irish Times",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQUTN2dTlHZUNLMlR4cUFVZUExakVoVV9tcld4YzF2RkVGSDB3WnlQV0o3YTV3aUtWUm9ha1c3SWVuTzE3XzBzZTNXQjZ5ZkpCMG9UaThYeG4xWERMMUY1emY0aFpoT0tjS3drYnBvc1M2WlBEOHRtSHJNd0E5aEl5akVWUWx1aHBUUDdfRWN3WmlVeWdicEJzSThNcTFjbFcyVEJ2V0pCNmk3bkhTNU55RDRGUkpRaXhtUFk0VVZJV3dVb0czSFpCaV9McHp5Z1dEVGpmbXdB?oc=5"
+        },
+        {
+          "title": "Man charged with attempted murder after Lurgan bomb attack",
+          "original_title": "Man charged with attempted murder over Lurgan police station car bomb",
+          "original_language": "en",
+          "summary": "Authorities have charged a man with attempted murder in connection with the recent car bomb incident at a police station in Lurgan.",
+          "published": "2026-05-07T07:00:00+00:00",
+          "source": "Belfast Telegraph",
+          "url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxQTjltMm4talZhWFMxRFN6UDVpTUdQbmVmYmJ3dnZUNEcwMU5ZQ1NseFU1dEVONXZqdXM2TE8tT2tadGpHaGU3RV9UZ3B4LUJnbllpQmF2cWFqNVpoU25tRy1aRlU3allwaVN4b2pvOWl6ZWlZeDlmY3JuMEYxMWoxMFJpWUJpeldJQVhwZW9jcTlIczR4Smt6RHl2MzRFQng1MFVEVUUyMUFFMFZUUkxNUjVpOHdseW1ibC1sTHJDdGo2SXVHM2V5UndTRUNtTnBwcnJJWFZCNkRzUjA?oc=5"
+        },
+        {
+          "title": "Man (47) appears in court over attempted car bomb attack on Lurgan police station",
+          "original_title": "Man (47) appears in court over attempted car bomb attack on Lurgan police station",
+          "original_language": "en",
+          "summary": "A 47-year-old man appeared in court charged in connection with an attempted car bomb attack on a police station in Lurgan, Northern Ireland.",
+          "published": "2026-05-08T07:00:00+00:00",
+          "source": "The Journal",
+          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPdHg5MTVDNm5pVjJLSkZkcmNPMWV2dWMzYnNwMHE1WVNzeWNEcWppWG16NTZ0S3VSOVo1LW9oWVhwMUpKV0FjYTlJT3lEZDZKb0syUThheFhrT2gwY0hrbVAxSGgwdFJBU0pQTmt1Yzc0VkM4YkpBeE01T0dlYjVZQmM3bEgwT0tOSWJOUFFwWXo2d3AtRi1EeXNDM0VzSkJMMG5J?oc=5"
+        },
+        {
+          "title": "‘Committed, violent terrorist’ in court over attempted PSNI station bombing",
+          "original_title": "‘Committed, violent terrorist’ in court over attempted PSNI station bombing",
+          "original_language": "en",
+          "summary": "A suspect described in court as a 'committed, violent terrorist' appeared regarding an attempted bombing of a PSNI station in Lurgan.",
+          "published": "2026-05-08T07:00:00+00:00",
+          "source": "Belfast Telegraph",
+          "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxON3pwYUJBS2gwUzZmNG9MajNJb1NuZU1UWUhvdHFQclRGMENOUHJ2QWI0MGFjMnRWNDJhX3hJZ3dCLWtDYU5mWmJQb3BFUjY3NEViRE9sd25ib3o0OVM4a05PVHpYb2hqOVhtNE1MZUxkZDQ1QTBBSnFSa3V6VG1sSWp1RDNkN2thQ2w5T05JSVoxR2M3WGstc1ZzS2tSd19xZkxBdS1uNFJNaW5kT3NmTUJaVl9qWnRfblV2d1RaaUlEX3VjbExjdFlrQXRhQ211V1lDUXp2WVVROG1XYkl3?oc=5"
+        },
+        {
+          "title": "Man arrested in Lurgan PSNI station attack charged with attempted murder",
+          "original_title": "Man arrested in Lurgan PSNI station attack charged with attempted murder",
+          "original_language": "en",
+          "summary": "A suspect arrested in relation to the attempted bombing of a PSNI station in Lurgan has been charged with attempted murder.",
+          "published": "2026-05-07T07:00:00+00:00",
+          "source": "Belfast Live",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNb3YyZUptYUlOSDdNQUdHS3RXM1dLbklTRmVXWENMWmpZdU5DcGVNSVhPcURIMXM3MUhxM3pmMy1iaHNfNlVodWdEYVEtOWppbUY4OHNEb08xNHUwRmRLTXpNQmtsclYyWWtJSUc5OFhrNkxUb3RJOFJWTU5aNUhCYkhYODc3ZWIwUTBtd2lUMmFGM2wxMHBuTdIBngFBVV95cUxOTGFJTHotMjY2T2lpbFphNjBVT1ZPeW1YdzRUbDVXcHFJTFRYeE45Q0Y0Rm9ub0lJem8xX0duN2FuTFlWU2g3YzlObHEwX1JocEtYakhZVmZrNEZZUjRtaTNwUXhfXzZkcDdKa0RzZDcwUmt6MlNHMnF2Nnd4MVR2amZNUDBmM25BWXZEOVhGdlVHdDhwT1daa2pudTJ1UQ?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 7,
       "first_reported": "2026-05-07T07:00:00+00:00",
       "last_reported": "2026-05-08T07:00:00+00:00",
-      "dedup_confidence": 0.77,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "same_url"
       ],
       "location_confidence_score": 1.0,
       "location_method": "ai_city_coordinates",
@@ -442211,6 +443506,103 @@
       ]
     },
     {
+      "id": "250c3306acdaac4d",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Chemicals and Explosives"
+      ],
+      "title": "Russia foils plot targeting telecommunications officials",
+      "summary": "Russian authorities have disrupted a plot aimed at targeting officials in the telecommunications sector.",
+      "original_title": "روسيا تحبط مخطّطا يستهدف مسؤولين في قطاع الاتصالات",
+      "original_summary": "روسيا تحبط مخطّطا يستهدف مسؤولين في قطاع الاتصالات سكاي نيوز عربية",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-04-24T07:00:00+00:00",
+      "source": "سكاي نيوز عربية",
+      "source_count": 2,
+      "url": "https://news.google.com/rss/articles/CBMinwNBVV95cUxOSllWMWxwd1pQTG5vM3FFWFRXblJOSUdITGlvUS1JYklVZDI5RjM0a3RxSnF1UFJLZW9sMzFXOHFxTGdNdFROQndmRkpBQW8yVFJBQ2VsYktiS0dfMVdMVkVpZE9GaTVuUkVET2FnY19oTEVGWHpMbEhzcTdaNGN0STNqMUNKQVIzNmRJalIwbkxZT001a1pkMVk3U0NPMmlUMU9hbm8taUM5cHJ2dTFTaFhWWGlqSXhHUl9QdjJuNTZqRXRLMGJOYXB6MEpudnk1NEdsdXZSa212NXBFVGtsN0dETTlLRGZjOTFzNDRQR085dF9tUXBRbU5EZHgwTGVLLXpuSEFIMHl4Rm91TEhzekVxbkpid2NLeHl1ZDVwRVBwcDltRU1RTTB1emRUdDRYSXRwb3lILTltRXBKeTE2eHdLSzVVLWE2cEZLc3g0LWZPRV9RUzJIcHlBMVlMcHJyWGRTWmtsZXl6MmpUd1FBbjN1c1haVVdjajRwQ3RIZU5mQ0tYekZVMFVxLVFOS25peGNqTE12M212NEYwblRJ0gGkA0FVX3lxTE12UVZrWnFNYzBmY2ZOOXhnT0JOTWU0UGZJY1RjOW16Y0RHTTE2OFRxVXlqbDdObkc4YVl0c1ltTkthWXgwLW9MeGo3cXdxVUpnNUNGZ3pIWjR0Nm1RR3JNVDdEYThKaEpZMTVWcjVPNy13ZWtlOHdrNC1iN01ZZWpfVnVJcmt4dnNxbnBJNmRFTHk3SWZ5V0pYcy12WDdqVm1qZElIWWQ5ZWRfMzBtZjV5YlFKVEw2Q3AxcG9sZFZ1Sjl6enJlQ2YzUFQ2MUNjU3hvZkVEMnhjcWppTEN0UDBtQ1E1RmQxUzB0eUJWdHk0R1FNUVo3RW5FbmttcDM2aXlaMzZzN3lSTy1qV1hnclBtZGN0cFEyZVRhY1lseUtHRUU1cnRLdjBTTHFCT3FYN29taFpUYk1XQ21YcEdMLWJqUzJoVE82bHBLMlVZYUQxTWxXSjQ0MERidEJaRHBNY25oWU9UNUx1T0o3ZlZUcndnOERqSDUzeFFRMDFLam5yZVBGd2ZPZ2NmbjdtcFlWNDJ1ejRmNjlPMEZaUG0wWGlsUTJ4Sg?oc=5",
+      "collector": "Google News RSS",
+      "country": "Russia",
+      "country_code": "RU",
+      "city": "Moscow",
+      "region": null,
+      "latitude": 55.75204,
+      "longitude": 37.61781,
+      "location_precision": "country_capital",
+      "location_confidence": "high",
+      "acquisition_channel": "archive_enrichment",
+      "source_article_fingerprints": [
+        "18caab2c5d717a7131bf6551de4562d95ee27ac5240a80b69b3c33cf88908a9e",
+        "4305b9608bd17641e81e39c6c21f195b1932bbfca7cf38273ef5f0faea74db30"
+      ],
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.1-flash-lite",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism operation to disrupt a plot.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "DISRUPTED_PLOT",
+      "is_attack": false,
+      "incident_anchor": "Disruption of plot in Russia 2026-04-24",
+      "update_type": "INITIAL",
+      "incident_id": "inc-3c3fd3f46251c137",
+      "translated_to_english": true,
+      "ai_canonical_event": "Disruption of terrorist plot in Russia",
+      "title_variants": [
+        "Disruption of terrorist plot in Russia"
+      ],
+      "actor_scope": "UNKNOWN",
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
+      "cbrn_subgroups": [],
+      "reported_status": "CONFIRMED",
+      "sources": [
+        "سكاي نيوز عربية",
+        "صحيفة الخليج"
+      ],
+      "related_articles": [
+        {
+          "title": "Russia announces disruption of Roskomnadzor bombing plot",
+          "original_title": "روسيا تعلن إحباط مخطّط تفجير قيادة «روسكومنادزور»",
+          "original_language": "ar",
+          "summary": "Russian authorities announced they have thwarted a planned bombing of the Roskomnadzor headquarters.",
+          "published": "2026-04-24T07:00:00+00:00",
+          "source": "صحيفة الخليج",
+          "url": "https://news.google.com/rss/articles/CBMiiARBVV95cUxPbnF5WVVGa0RyV2xiaFBreURXR3B4UGVPckU5c3NzNVNlMHpqSTFTVWxqWExCUkxxY0ZiODh1NTVZd2hweFp2bjc4QllWSTRHTlRaQ3UxNENuOFhuZksyTGhGalpzRWlaY0dNYTJlYi1CSkw1MlZjclloQWpkTlA2bnBsUnZyWTZ5amlIWEVqRm9MN1NKTHhXVkpGY1BLdFNUdlQ5NVRJMmZaZnpraXRnYXdIY3lUVjJWWlU0aVRNTWhfUXc5eHJsdFJVcjQycllseWhRenFZWHU4NHU4dHp0Qmx1TjBwa2N3QnRubFN4QV9yNlAyRWRadlRpOEZ3S0Q0WFZwbTU3aGR3dUJmeFBadUJ6T1NGc0FwMHRua2prZ3RpbmctYUxaOExRbmpEUGdXNVRpeVhmcU9NOE9QWDRKU1ByNDFnN2ZKTzJmdUs1WnhQZHYyLWJKVVFqWXZlWUlmenpRb3A5LXNZLWlKVElva09vSThiSHVyMEVKbDZkSldITGxKX3BZdDVPUlYtNTlsamVpbTlqLXEyQTlXTkVMTy1rakY0N2VRLUEtLUplcTR2dWpzQmpEcmlfNlNEYWFVRTJGRkZaLTVaMzl1VHM1bUxWOVduYThTaEtpUkhsZUlhTWVkTkNGX3QtbjVnSU1QdHRzSk1kT2t4QXJDNlVIbnR1Yjc2Nm80?oc=5"
+        }
+      ],
+      "article_count": 2,
+      "first_reported": "2026-04-24T07:00:00+00:00",
+      "last_reported": "2026-04-24T07:00:00+00:00",
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "very_high_title_similarity"
+      ],
+      "location_confidence_score": 0.9,
+      "location_method": "ai_country_capital",
+      "location_evidence": [
+        "Russian authorities have disrupted a plot aimed at targeting officials in the telecommunications sector."
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The event is nationwide Russian security counter-terrorism activity.",
+      "ai_geo_fingerprint": "aa1883df06d617f4b1d9d25666b23a341688341773ff957d761c92e55bc8867e",
+      "ai_geo_inferred": false
+    },
+    {
       "id": "33327e236ae43496",
       "category": "Legal / Judicial",
       "categories": [
@@ -446139,21 +447531,21 @@
     "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
     "rescue_unlocated_final": 21,
     "ai_for_every_event": true,
-    "cached_events": 4173,
-    "ai_processed_this_run": 68,
-    "ai_pending_at_start": 68,
-    "city": 1651,
-    "region": 1236,
-    "country_capital": 1330,
+    "cached_events": 4241,
+    "ai_processed_this_run": 9,
+    "ai_pending_at_start": 9,
+    "city": 1654,
+    "region": 1237,
+    "country_capital": 1335,
     "unlocated": 24,
-    "mapped_total": 4217,
-    "high_confidence": 3922,
+    "mapped_total": 4226,
+    "high_confidence": 3931,
     "medium_confidence": 302,
     "low_confidence": 17,
     "methods": {
-      "ai_city_geonames": 1539,
-      "ai_region_coordinates": 1232,
-      "ai_country_capital": 1329,
+      "ai_city_geonames": 1542,
+      "ai_region_coordinates": 1233,
+      "ai_country_capital": 1334,
       "ai_unlocated": 2,
       "ai_unlocated_final": 21,
       "ai_city_coordinates": 103,
@@ -446162,5 +447554,68 @@
       "source_verified_country": 1,
       "source_verified_unlocated": 1
     }
+  },
+  "specialist_enrichment": {
+    "Chemicals and Explosives": {
+      "window_days": 180,
+      "languages": [
+        "ar",
+        "en",
+        "fr",
+        "zh",
+        "zh-Hant"
+      ],
+      "state_actor_operations": "excluded",
+      "pipeline": "existing Gemini selection, English translation and incremental event deduplication"
+    },
+    "Biological Terrorism": {
+      "window_days": 180,
+      "languages": [
+        "ar",
+        "en",
+        "fr",
+        "zh",
+        "zh-Hant"
+      ],
+      "state_actor_operations": "excluded",
+      "pipeline": "existing Gemini selection, English translation and incremental event deduplication"
+    },
+    "Radiological/Nuclear": {
+      "window_days": 180,
+      "languages": [
+        "ar",
+        "bn",
+        "de",
+        "en",
+        "es",
+        "fa",
+        "fr",
+        "ha",
+        "he",
+        "hi",
+        "id",
+        "it",
+        "ps",
+        "pt",
+        "ru",
+        "so",
+        "sw",
+        "tr",
+        "ur",
+        "zh",
+        "zh-Hant"
+      ],
+      "state_actor_operations": "excluded",
+      "pipeline": "existing Gemini selection, English translation and incremental event deduplication"
+    }
+  },
+  "gemini_chinese_history": {
+    "window_days": 180,
+    "editions": [
+      "CN:zh-Hans",
+      "TW:zh-Hant"
+    ],
+    "publication": "Not confirmed until geolocation and deployment",
+    "scope": "Eight non-specialist CT Atlas categories"
   }
 }
