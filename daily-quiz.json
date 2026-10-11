@@ -1,14 +1,14 @@
 {
   "category": "International CT Instruments and Institutions",
-  "question": "What is the primary global secure communications system used by INTERPOL to connect member countries and share real-time data?",
+  "question": "Which specific INTERPOL Notice type is utilised to warn of an event, person, object, or process representing a serious and imminent threat to public safety?",
   "options": [
-    "I-24/7",
-    "SITCEN",
-    "SIENA"
+    "Orange Notice",
+    "Green Notice",
+    "Purple Notice"
   ],
   "correct_index": 0,
-  "explanation": "INTERPOL connects its member countries via a secure communications network called I-24/7, allowing real-time access to databases and services.",
-  "source_url": "https://www.interpol.int/en/Who-we-are/What-is-INTERPOL",
-  "date": "2026-10-10",
-  "source_checked_at": "2026-10-10T14:29:52.426087+00:00"
+  "explanation": "An Orange Notice is issued by INTERPOL to warn of an event, person, object, or process that represents a serious and imminent threat to public safety.",
+  "source_url": "https://www.interpol.int/en/How-we-work/Notices/About-Notices",
+  "date": "2026-10-11",
+  "source_checked_at": "2026-10-11T14:56:37.501897+00:00"
 }

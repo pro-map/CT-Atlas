@@ -48,5 +48,10 @@
     "date": "2026-10-10",
     "question": "What is the primary global secure communications system used by INTERPOL to connect member countries and share real-time data?",
     "category": "International CT Instruments and Institutions"
+  },
+  {
+    "date": "2026-10-11",
+    "question": "Which specific INTERPOL Notice type is utilised to warn of an event, person, object, or process representing a serious and imminent threat to public safety?",
+    "category": "International CT Instruments and Institutions"
   }
 ]
