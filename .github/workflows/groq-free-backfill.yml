@@ -64,6 +64,7 @@ jobs:
           set -euo pipefail
           test -n "$GROQ_API_KEY" || { echo "::error::GROQ_API_KEY Actions secret missing"; exit 1; }
           python -m unittest discover -s tests -p 'groq_backfill_test.py' -v
+          python -m unittest discover -s tests -p 'repair_weak_incident_ids_test.py' -v
           python -m unittest discover -s tests -p 'threat_categories_test.py'
           python -m unittest discover -s tests -p 'gemini_chinese_map_test.py'
           python -m unittest discover -s tests -p 'radnuc_vocabulary_test.py'
@@ -119,6 +120,9 @@ jobs:
           set -euo pipefail
           python -u tools/enrich_chinese_map.py \
             --max-posts "$POSTS" --max-fetches 140 --deadline-minutes 35
+      - name: Split ambiguous short incident anchors before publication
+        if: success()
+        run: python tools/repair_weak_incident_ids.py events.json
       - name: Check whether new records need evidence-grounded geolocation
         if: success()
         id: new_events
