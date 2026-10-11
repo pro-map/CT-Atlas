@@ -447,7 +447,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-10-11T16:04:02.741118+00:00",
-  "number_of_events": 4241,
+  "number_of_events": 4231,
   "events": [
     {
       "id": "1c00b0eb90d610fa",
@@ -30176,83 +30176,6 @@
       "ai_geo_inferred": false
     },
     {
-      "id": "0b4ca7b7fdf48a64",
-      "category": "Arrests",
-      "categories": [
-        "Arrests"
-      ],
-      "title": "Two Terrorists Surrender, Eight Terrorist Supporters Arrested Within a Week",
-      "summary": "Two individuals identified as terrorists surrendered, and within the same week authorities arrested eight additional supporters of the terrorist organization.",
-      "original_title": "两名恐怖分子投降，一周内逮捕8名恐怖组织支持人员| 阿尔及利亚新闻社",
-      "original_summary": "两名恐怖分子投降，一周内逮捕8名恐怖组织支持人员| 阿尔及利亚新闻社 وكالة الأنباء الجزائرية",
-      "original_language": "zh",
-      "collection_language": "zh",
-      "collection_language_name": "Chinese (Simplified)",
-      "collection_locale": "CN:zh-Hans",
-      "published": "2026-10-08T11:45:00+00:00",
-      "source": "وكالة الأنباء الجزائرية",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMi9gJBVV95cUxNVXR4NlhZa0dRZmdfNk9DMnZkcDU1em00eVEtbDVTUTBZeTZhZjNxTWR6TTBPc0xaRlRzSXk2YlZZdnhWQ1hIZ2xQS0RTRGxlRmY2MmEzRjZpTWc4em92NWhZZ3c4THZKZHNSak1Fc2tBZmdaUjVFaUl2MFdrU2t5RWxacnF6bkMwcjdHR2ZCZDZ0Q3E2bkxrd01qZjZMQm9IZnVBTU1ONFlqSEdtb25lNXFxOE90cEJ1TWMtbHNHOTZnMTAzQ2piN0FkV0E2QjlwR3RhOWxIUGE3dWlhUUhVT2xabFFZZGpGTkpZeHVvd3h2RUhILXhSMEUwNDdWb2dnZWI4alRiR2tSZml6amJydDJVaE8xaTNtQkJpdFVVQmNuYTVjZEtBc0hsRjJzdzVBYmRXbWRVMG5iNWdEdEdXQ0dYOWI0Tm1hcGhab1RQZkZ5eVZiZFNrUHAyc1I2UHVJMm5oLWk4UUowbmpwRHhlY0g5OVRTZw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Algeria",
-      "country_code": "DZ",
-      "city": "Algiers",
-      "region": null,
-      "latitude": 36.73225,
-      "longitude": 3.08746,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "7282a50b87df43f2f7238e65f54a18042f8f4afb3a09ad0f88303d26721390ac"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "openai/gpt-oss-120b",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "The article reports a concrete, recent counter‑terrorism operation resulting in the surrender of two terrorists and the arrest of eight supporters, qualifying as a current CT event.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ARREST",
-      "is_attack": false,
-      "incident_anchor": "p2",
-      "update_type": "INITIAL",
-      "incident_id": "inc-0cf9df10b35f2f34",
-      "translated_to_english": true,
-      "ai_canonical_event": "surrender + arrests + terrorist supporters + Algeria",
-      "title_variants": [
-        "surrender + arrests + terrorist supporters + Algeria"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "reported_status": "CONFIRMED",
-      "sources": [
-        "وكالة الأنباء الجزائرية"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-08T11:45:00+00:00",
-      "last_reported": "2026-10-08T11:45:00+00:00",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Algeria news agency reporting arrests and surrenders of terrorists."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The event is reported by the official Algeria Press Service without a specific city mentioned.",
-      "ai_geo_fingerprint": "928a671cfc55bf2dd79570c218e6566bad1b92b43652cdbcafffd058f94dcff3",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "4dffdc21164e2050",
       "category": "Legal / Judicial",
       "categories": [
@@ -46217,150 +46140,6 @@
       "ai_geo_reason": "Statement by SCO Deputy Secretary General reported in Belarus; non-physical diplomatic/commentary event.",
       "ai_geo_fingerprint": "ec54676500391f9e23d116aecd9710b6e1a33d37da44604b4db99ad89bd64dd4",
       "ai_geo_inferred": true
-    },
-    {
-      "id": "b818f863776a9b2d",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Radiological/Nuclear"
-      ],
-      "title": "Two arrested in Georgia for attempting to sell Uranium-238",
-      "summary": "Georgian authorities arrested two individuals attempting to sell Uranium-238 to a foreign national for $700,000.",
-      "original_title": "欲售外國人70萬美元鈾-238 喬治亞逮捕2人",
-      "original_summary": "欲售外國人70萬美元鈾-238 喬治亞逮捕2人 Rti 中央廣播電臺",
-      "original_language": "zh",
-      "collection_language": "zh-Hant",
-      "collection_language_name": "Chinese (Traditional)",
-      "collection_locale": "TW:zh-Hant",
-      "published": "2026-10-07T09:25:00+00:00",
-      "source": "Rti 中央廣播電臺",
-      "source_count": 6,
-      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE53WkNqcG4zZzFDRmpiNFBnZ1F2U2sxM3dYdlRvN0JLRktFSExpNHNTX1dyRG1jVlJhSFJJckdsNk9Gdm9iVGw3M19sRWEtUHB1UVI5TnZZdw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Georgia",
-      "country_code": "GE",
-      "city": "Tbilisi",
-      "region": null,
-      "latitude": 41.69143,
-      "longitude": 44.83412,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "13615181990dfdd76fb42c23eb8bf556a3a80ea3014c1dd30ebb0f16eed9750a",
-        "3a8f78caed699870c3f890d4eab03e267a3d3ea378813bef22505632bbf4c71f",
-        "6900f58d3d2e7c17f9608454c9855cb73f8298ab5fbf9cec948a8a867dc018c1",
-        "92110ce62714cf80aca9617bd4e3f1c9dce372b3fa258077d01d83faa25fd573",
-        "a34750b2bc319c0e2a9d9996bb79eba4fe8c4c9ceb34889fc5b5b4b14c5933ee",
-        "b0fbb0da1bc9c7c4af35fc186f08d82382814ac5bf6592de5cf30b0d11369e26"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Concrete arrest involving nuclear material trafficking.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ARREST",
-      "is_attack": false,
-      "incident_anchor": "Georgia uranium trafficking arrest 2026-10-07",
-      "update_type": "INITIAL",
-      "incident_id": "inc-8406092ab8b5e72c",
-      "translated_to_english": true,
-      "ai_canonical_event": "Arrest of individuals for attempting to sell nuclear material in Georgia",
-      "title_variants": [
-        "Arrest for attempted sale of uranium in Georgia"
-      ],
-      "actor_scope": "NON_STATE",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Radiological/Nuclear"
-      ],
-      "cbrn_subgroups": [
-        "RADNUC"
-      ],
-      "sources": [
-        "UA.NEWS",
-        "Notizie Geopolitiche",
-        "Rti 中央廣播電臺",
-        "aktien.news",
-        "LINE TODAY",
-        "www.marsad.news"
-      ],
-      "related_articles": [
-        {
-          "title": "Man arrested in Georgia for attempting to sell uranium-238",
-          "original_title": "Georgia, arrestato un uomo che offriva uranio-238 a uno straniero per 700.000 dollari",
-          "original_language": "it",
-          "summary": "A suspect has been arrested in Georgia for attempting to sell uranium-238 to a foreign national for $700,000.",
-          "published": "2026-10-07T09:59:00+00:00",
-          "source": "Notizie Geopolitiche",
-          "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOSkp4S1JnNGpkSHRoTF9zclFWTnlRdEJHOTlKWnU0bFVrZkx2MnV6UzBHRXltTWp1UlQ1RWFwbzZzN3hQOFBvMFFTYVBCSnJpem5xVk5vZUMtU1NRazRXLVNSdTg0cEhvNmxKVHRHY1Q0M3p3dlhiNGJZOXZ1WXppZ2FJSVkxaUdZR3c1ckRucGF2RGVFa1czMDJ1NFFQYnF0ZDNuNnZwZFBNUkxCajVVdkNrWEtTT3ZTdldxMGtB?oc=5"
-        },
-        {
-          "title": "Man arrested in Georgia for attempting to sell Uranium-238",
-          "original_title": "格鲁吉亚一男子涉嫌以70万美元出售铀-238被捕——《耶路撒冷邮报》",
-          "original_language": "zh",
-          "summary": "A man was arrested in Georgia for allegedly attempting to sell Uranium-238 for $700,000.",
-          "published": "2026-10-07T09:25:00+00:00",
-          "source": "UA.NEWS",
-          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxObHdoNmxyb1JUS1gzQ0FEOFVyc2lqR2Y4Njd6NVltdk1jNEJzeHJXMEtDTTIwcks4dl9QbGlQR0tUMzhlTTZlZktaREdSV1VXZDRzQ3dUcHVzanVqOG9FMlVEYS1YX0xXMGVSVDl5bnNwQTl4ZElrSm4xN0ZhUU5DTEdGWnUtWkY0NUoydnl3cFBXdzhmaUtmZXlfNVJfUWRuQnVyVWp6bnpSTEc1SThncWtRaFlHTHZhMTlxeVdUdmJVVkk?oc=5"
-        },
-        {
-          "title": "Georgia arrests man for attempted uranium sale",
-          "original_title": "Georgien nimmt Mann fest wegen versuchten Uranverkaufs für 700.000 Dollar",
-          "original_language": "de",
-          "summary": "Georgian authorities arrested a man attempting to sell uranium for $700,000.",
-          "published": "2026-10-07T15:02:19+00:00",
-          "source": "aktien.news",
-          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNOTVDeWE1R1JzZnFGblZaZENST2JvZlR4Q05ZTE5GMjlYS2ZSM2RHekRac21NYVZpRnhmcTNzbDhMUDlNQ1BYaXlheE4tSXdsV3J5V2ViRHRNNDl5NVVmZDNRMFlJd3J4QjRQbkFrcHRWSmtuTnZtQ0ZXUHA2UWJVMmstVWpaWm9HZjl5eHprNTF4NDd0Q1otUWdJWnM?oc=5"
-        },
-        {
-          "title": "Follow-up: Two arrested in Georgia for attempting to sell Uranium-238",
-          "original_title": "討論牆 | 欲售外國人70萬美元鈾-238 喬治亞逮捕2人",
-          "original_language": "zh",
-          "summary": "Follow-up reporting on the arrest of two individuals in Georgia attempting to sell nuclear material.",
-          "published": "2026-10-08T06:58:20+00:00",
-          "source": "LINE TODAY",
-          "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5EcEMzYWh3OEFaNXhpUmJVMTZLZkFwbUI5TTlkZjQtTFhsUUh4aGljTWZWTzZsNjhHVy1rQ2ZULUctRTB2TGZpeVR0djY4TEVPeWljNlNmTGlmbnNfdWc4MFowZlI?oc=5"
-        },
-        {
-          "title": "Individual arrested in the US for attempting to sell uranium",
-          "original_title": "منوعات - اعتقال شخص بحوزته يورانيوم كان يحاول بيعه في أمريكا",
-          "original_language": "ar",
-          "summary": "US authorities arrested an individual attempting to sell uranium.",
-          "published": "2026-10-08T07:38:38+00:00",
-          "source": "www.marsad.news",
-          "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1MdDc3c28xc1NfeXozOFNuWFlpQnRmbkowdkxYdTYyeDQ5UE9DV3A1Z05YM3BUdGxiQ3VYRGNVUzFSRnM0eWk3M1RFSQ?oc=5"
-        }
-      ],
-      "article_count": 6,
-      "first_reported": "2026-10-07T09:25:00+00:00",
-      "last_reported": "2026-10-08T07:38:38+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_normalized_title",
-        "very_high_title_similarity",
-        "title_plus_anchor"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Georgian authorities arrested two individuals attempting to sell Uranium-238."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The incident occurred in Georgia; no specific city is provided in the summaries.",
-      "ai_geo_fingerprint": "7b12aa3939c2b47251ad1598a19fe9cd2018086013a822350fe6f931c1e81353",
-      "ai_geo_inferred": false
     },
     {
       "id": "e99761f90aa2423e",
@@ -170233,423 +170012,6 @@
       ]
     },
     {
-      "id": "c8cea6eb5a9aa459",
-      "category": "Chemicals and Explosives",
-      "categories": [
-        "Chemicals and Explosives",
-        "Arrests",
-        "Legal / Judicial"
-      ],
-      "title": "Counter-terror investigation into potential Iranian links to RAF plot",
-      "summary": "Counter-terrorism police are investigating possible links to Iran regarding a suspected bomb plot at a UK military base.",
-      "original_title": "Counter-terror police investigate Iran link over suspected bomb plot at RAF base used by US",
-      "original_summary": "Counter-terror police investigate Iran link over suspected bomb plot at RAF base used by US The Guardian",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": "US:en",
-      "published": "2026-09-27T07:00:00+00:00",
-      "source": "The Guardian",
-      "source_count": 29,
-      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOZ2tnSEpJcTZvcmhJdnF5OE1MekM1MGxIWFlwLV9PWGVveHFreHk1WkpOT2ZmVDIzRDYzRWdHQTA2NnJqR0ViYTA1ckRhdmdvYnJxb3pyTV9aM0JoN21RVW1lODF4S05PWS02bzhBUWpjTlFuQzNnc0w0bU9zZ001Q2ZPcGhGYVE0Q0MxSnJJN25pUG1Cekg4YzNjSXNvVVRXd0oyam1sU0ticndTLXgtM0xHSS1VaGNy?oc=5",
-      "collector": "Google News RSS",
-      "country": "United Kingdom",
-      "country_code": "GB",
-      "city": "London",
-      "region": null,
-      "latitude": 51.50853,
-      "longitude": -0.12574,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "01522d22189890b99e6bf4257723538ad618ca3588ad29d8a31df1518b3418c2",
-        "024b32fe402b1e8f0443fb0198b7e6a13bb52d0e8c0199cf81229fc2594728a9",
-        "0b65bafc684f7431208df2b2ab5aaab48501c788ee5bae294698b7a80e1525eb",
-        "0cae338df3b78f791f39807ce5f1607c4fc444a43c36d62fdba9c718d261ecfa",
-        "18a9b3af2ff008eaf2f66a599fa8c2d0dc50cfd8d112c4c4c712e610c49e82d2",
-        "3a97aec60e2e6bd36b66f71a3844c288b31195db874f186ac2502306d78ba434",
-        "52a8ab048fb9a4deb2a5aeb8559f16a1f2c979273ee4c725abb6ba85f97fa483",
-        "576f3d2935277d9740bd872c545176f6ed4c9e13de675e7dd6387218081c6212",
-        "58bf8260218b2e31eb8fe34e6dfa0608638d5844118b05f55179f819c36e20db",
-        "5e49632403ecb780f7be30733009a150aeda7961a86913f2acbdd99911d4d62f",
-        "5e5a39834650d15bf15fd82516c8ca8b0c32c37b7ff7f972e2d85b6d367ebace",
-        "613c8a27e4e4948f018de7f7eee45ba2250fee7ede33cb7834dcdc7b6f18f63f",
-        "641fcaab83de7c9a617cc1dda4a5ae488c22951b575019309f1209a2f5eb0d95",
-        "711419f37a4fc98804e5f5675234f844963e5309bc6a4583005f203a850c9aa9",
-        "76f82f21f710bd99a210101b4e627bdd00514bcc868457c0a76b47b4f2cd2884",
-        "772667b1a9e2828b33b3f4abb5721394aae9ca3cd9edfa6c54759e6b2375d4ac",
-        "84cbb9296005250a2eb89019acac833055c568912fb757b17f2796e33ac9b599",
-        "873372fd984164fa40d6f56053eeb732ed5f723450e2a6db981ab844da99e307",
-        "88a78dd2f68c1bcdd481bdbeeeb45ab225de637668990234c7ed32b6f2360730",
-        "96d2bc7f3583c41223d051327bce0125fa00c905928c7779302dbbc58b2e059e",
-        "978aaadd384b41cfe5462701a5e0def8f374d70c9ff653947e94fbb2aecae950",
-        "98a64901bc435f2b2a35c41b11757448d40d56ccff370408c248e26135a905d1",
-        "a44886278bf398d0442eb4e3dd93018417d633ff25cc1f20ec2180c0154f5fc8",
-        "b8b6fbfceb3b53d50474777c95d96c9c5199b8f1756e120d666e7af0525eb314",
-        "bf1822aa5ea376ac2ae12e13488c27414054f4b900fa1d15ac40366b6ac6b9ea",
-        "c82fbbced807ccd5ebc6e4ca881c004df3a67f4af25149ea730a567b5c471948",
-        "cb69d52d11619d0b2ae6f3a9cceb6ea82f8db15479622478829a2b70172f90a8",
-        "cbe114f7f0e50f31fc94cf5ae879f7c3d00ec3515afad21c4a87697db0b03238",
-        "d69916f8059d4c371b1eb2d1b20463933fb63364a6475b25ff51a883d9721bf3",
-        "db89aa6bdcfe8077d09b96966323928dc873314c7340a62918e5c6d56d167d31",
-        "f923cc91e3bbafb448c5d01294838fa11dc51754893e047b7bc57ef306e062d3"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 60,
-      "ai_relevance_reason": "Describes an active counter-terrorism investigation into a suspected plot.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "OTHER_CT",
-      "is_attack": false,
-      "incident_anchor": "RAF Fairford plot UK 2026-09-27",
-      "update_type": "INVESTIGATION_UPDATE",
-      "incident_id": "inc-ef36f1dd0307fbf3",
-      "translated_to_english": false,
-      "ai_canonical_event": "Investigation into potential Iranian links to RAF Fairford bomb plot",
-      "title_variants": [
-        "Investigation into potential Iranian links to RAF Fairford bomb plot"
-      ],
-      "actor_scope": "UNKNOWN",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": [],
-      "sources": [
-        "The Guardian",
-        "7NEWS",
-        "RTL",
-        "Marianne",
-        "الجزيرة نت",
-        "اندبندنت عربية",
-        "صدى البلد",
-        "صحيفة الخليج",
-        "بوابة الشروق",
-        "Washington Times",
-        "Gloucestershire Live",
-        "بوابة الوسط",
-        "VDL NEWS",
-        "بوابة الزهراء",
-        "ارض اشور",
-        "شاشة نيوز",
-        "البيان",
-        "شفق نيوز",
-        "كريتر نت",
-        "تلفزيون نابلس",
-        "الأيام البحرينية",
-        "GB News",
-        "اليوم السابع",
-        "نيو ترك بوست",
-        "صحيفة سبق الإلكترونية",
-        "TVB",
-        "The Times",
-        "民視新聞網",
-        "i-CABLE"
-      ],
-      "related_articles": [
-        {
-          "title": "Five in custody for alleged car bomb plot at UK air base",
-          "original_title": "Five men in custody suspected of orchestrating car bomb terror plot against UK air base",
-          "original_language": "en",
-          "summary": "Five individuals are in police custody suspected of planning a car bomb attack against a UK military base.",
-          "published": "2026-09-27T07:00:00+00:00",
-          "source": "7NEWS",
-          "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPZGpsT0JYWGg3VXQ5VEZCTzkzUXNERk40cldUcmJYc2R3Y3Y3akNLTnJpMzZ5X2MzR3c1dXcxTzNkZ0VHV1JJeC1lcFY1a19Kdl9pdGMyUHRPcmNuUmNiXzBWMXVCamR6cDFlaEd6UW0zby1QaW1qNC1BMjM1b09DZGVRUldQZlhqcXI1MWd3Vlc4N1FHN1dOdl9zR1hyNGhuUFZOcEpyZWZIU09WLV9pemZMS0x1WGJodWZOanRKZk1rQ3daSExNWTVBSVFWS21taGc?oc=5"
-        },
-        {
-          "title": "Investigation into arrested individuals suspected of terrorism in the UK",
-          "original_title": "\"Incident majeur\", explosifs, Trump : ce que l'on sait sur l'arrestation de 5 hommes au Royaume-Uni soupçonnés de préparer un \"acte terroriste\"",
-          "original_language": "fr",
-          "summary": "Authorities are investigating five individuals arrested in the UK on suspicion of preparing terrorist acts involving explosives.",
-          "published": "2026-09-27T07:00:00+00:00",
-          "source": "RTL",
-          "url": "https://news.google.com/rss/articles/CBMimAJBVV95cUxNaHNvOW1IWXhNSk1ZcWxIZ0xjQUl1UWFUXzV5QzYtNjd2aF9NdDc4bmQ2RHJVQm1lbTk3MzhueXB2SUtHN3VyeXYzdW5BSHJsYll1emlWSGVTRmJjTFpRZFZjZ3lBbS12WUg5cm5OSEhidnpyVVBlc042bm9RVmNZZW1fLVo1Ni1xbnA5T3Q0anlld1ZXOTdtbDUtb1hJZWZ3T2tiajdHWDVGRGhBbTQtNS1RUUtRdXdVSkN4M0lQdjNHVC1CeFo5YVo0blF2N0twYXNhMXhCQ2hTVWU5OE1UUGJYcHB4X2EyMTduQ0J1a2dRaURmNUtpYklSTjg3dENpdGp2eHIzcVhRZ2FkOFBvVS05WGhfSldE?oc=5"
-        },
-        {
-          "title": "UK military base threatened by explosives incident",
-          "original_title": "Royaume-Uni : une base militaire de l'US Air Force menacée par des explosifs, la ministre de l'Intérieur accuse la Russie ou l'Iran",
-          "original_language": "fr",
-          "summary": "A military base was subject to a security threat involving suspected explosives, with officials discussing potential foreign state links.",
-          "published": "2026-09-27T07:00:00+00:00",
-          "source": "Marianne",
-          "url": "https://news.google.com/rss/articles/CBMi_gFBVV95cUxORUw5dDhMV2k1YURHRkxldXZxeHlVbGZZRkhvZmVDaHp2RnFmMGxGTmh5Vnk1bW02dU5nbWJxTWIxNGdzNDFySDVaeURhMGxkS1hMR3oybXRCNTRBVms5a0FydTZ1N2RCWDZWX2pJbXdzNUJTUzEwN0VXVFpZUzMwWjduQkFUREcxblBNWC1fY1VXcl9lNy0zSWlFb2FjeUI1elZTWjV0ak5oRmJJbUlGanMxMFdobmt6WFpIR01MSlN2QWs4VzlvcDdzQ09Pb04xZ2szMGFwV3lQMTd4MW1GYmd4WnVtYzRJbWd3NlVjbXFTVUI4SU1UaXFFR1hrQQ?oc=5"
-        },
-        {
-          "title": "Ongoing security investigation near RAF Fairford",
-          "original_title": "بين بلاغ سيدة ورواية ترمب.. ماذا تخفي الاعتقالات قرب قاعدة \"فيرفورد\"؟",
-          "original_language": "ar",
-          "summary": "Media reporting continues on the security incident and arrests near the RAF Fairford base.",
-          "published": "2026-09-27T07:00:00+00:00",
-          "source": "الجزيرة نت",
-          "url": "https://news.google.com/rss/articles/CBMi1AJBVV95cUxPd0s5RHF6UjNaV0tUUDQwLVZwMlFsMU5wM28tQXJfV1ZQMkl1X2JUc3g5cnRCOERGMjJnM0NMZXV0ekVyeTVueE5jSkFZbFZsZkhLb096MWlBUjYzOEZ3NE9UODVKR09sTndQRmctLUxQNnN5Z2l3LVBxZEJlTzNwQzJfMmVYdmdERnZmVlBzUWR6SjBTVzJPcFlmWnZ5UVlkUDQzNGo2Zmw4VDFUTEhFc0JseTNxQWJJVThQMWRIV2RDelN0dU1vMEthTWYyNHdsODBNYmVMdE5hNVp5aG1XZ21sUHNJQXRHYWFxSF96VDdvWXZPaEhvSXUtVHZ6REplSGxpS3c5VkFWaXlvMUF0SGJqX29jZmwzZ0pxc3Qxd0c4ZGdQdHpTX284VnJWOFctRzJCS3VRUnRuMWdZU3BSMmpGYS1uVFZCRDIxdUhERWxmWFpa0gHaAkFVX3lxTE1UdjRwVmJtRXZWdURVZTRjVEN6SjJZUUloNVZmQlpyeVhnNFJmUWtXS1NFb19CaF9kaVpYd2pNbGpqNEQ4UlNTdWVVczJPREJRdnJXb09aZDAzbXRuQTM0Tnk5Y3ozbE13cFpJVFhXSURKN1F2aXpKeUFoR2dTbWMzUG9BTEZ3aFo5em9tNjVtTkhMY05vSmx3Wng5N0liUk5tQ3Z5b3FRZUN4NnRZa3Z5b2lmVWtVME1mRDNpR2M1ZjlPUWxEUWZZWHBBZWFHbGdpX2M3cnU5NG9ha0xmaElIaUFUMzR1YWU1Yzhqa3FtTVFDOUtkeURsR0lMWnU2ekNOWW1TdFMwQk9NeWRmQUFMTk1zc2YwTjFlUkp5VEUwVUw1ekNWVFVESW1qbnE3ZHpzeFdlOUN5U2JYekhyMldmUWd4SmNTaTJGWFZVWG56RXRVcEEwa05WMUE?oc=5"
-        },
-        {
-          "title": "Reported disruption of plot in UK",
-          "original_title": "إحباط مخطط إرهابي في بريطانيا... وترمب يمتدح: عمل مذهل",
-          "original_language": "ar",
-          "summary": "Authorities in the UK disrupted a plot near a US-operated airbase, leading to arrests.",
-          "published": "2026-09-27T07:00:00+00:00",
-          "source": "اندبندنت عربية",
-          "url": "https://news.google.com/rss/articles/CBMinwRBVV95cUxOUnU0SGZNdjV5MFdOTnRMY2F3TmxoVHdZYkYydEU2a2RPQlI3RDZ4d0RuZXBWWHJuNVliZ0UzTU8yUVV1c1dMdlZpdDZ6blVGNWs3SjBrTFZUbzljVWl6YzUtNW81Vll4QkFCc0trLTdBYmE5V0FQSEZYekhrTFFERHZXNGVGQjBnelRHMHNvZUhmNlNqNW5KQWU1aVFZNndFWWVMZUpKVWFGSGlTdURkMDJYQVdFYmtXSkNvOEw0T1ZtRVFRaVBCTVlSR25mb0E0dTFfQkx3LV85Mi1EaXhDWnpydEdFUm5ES2FDQWxCQlQ5aFVzM05RUlAzMVRsTzc3aHBVZ2dEMm14c2Q5Y3hvUTVycTZETDRPMGFhSFJpcmh3WEcxUW1OdnEtUUg2VlNNcHRJTi1fYW54cThQVDZVZU1rX0lZUnlDZ1NEd3B5elVNTzVyR01jZkM5VHBSUEdMTnQ5aFNETl9zbFF5UzBRT3ctbEpnRE1kYkNSUk5WckI1RFhlM3J6c0ptaFJreVRVZGs3MDZnbUFCMlFMU0FlWERGbmFjMmV3Ym1LWWlYb0lUOG1DTmttOVhDSXR6TmIyLTBzNEI2Tk9LZEZ5dDF0VVU5cC1BOEhnNmFSWllheXhsSWc4bTZUT2VidkRFMnN0Mk5TcWd3ZEhYXzR2VGRhai1KeWx6LUk1OGxkUzVTeXl3Q3RKU0ZkVTJPNHFTNm8?oc=5"
-        },
-        {
-          "title": "Five individuals arrested on terrorism and explosives charges near RAF Fairford",
-          "original_title": "اعتقال 5 أشخاص قرب قاعدة فيرفورد الجوية البريطانية بشبهة الإرهاب والمتفجرات",
-          "original_language": "ar",
-          "summary": "Five people were arrested near the UK's RAF Fairford airbase on suspicion of terrorism and explosive-related offenses.",
-          "published": "2026-09-27T07:00:00+00:00",
-          "source": "صدى البلد",
-          "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1hY3RNeWY0QWR5S3RKdFd3MDNMVkpjSkd3Q3dvaVUtOHZpSm5JdUFFODV2QnhOT0Vaa3dveGdVZjZlV0hrUGl3?oc=5"
-        },
-        {
-          "title": "Five arrested in 'major incident' near UK airbase",
-          "original_title": "اعتقال 5 في «واقعة كبرى» قرب قاعدة بريطانية تُستخدم لضرب أهداف إيرانية",
-          "original_language": "ar",
-          "summary": "Five suspects were arrested following a major security event at a British airbase used for operations against Iranian interests.",
-          "published": "2026-09-27T07:00:00+00:00",
-          "source": "صحيفة الخليج",
-          "url": "https://news.google.com/rss/articles/CBMiiAVBVV95cUxOSlRsN1FMd1ZyTVlwS3NiTGdqZ2ZoeGdlV09uMldHd3lBampCMTNHNW5wZC1URk5XOVN5cHN5N2dFdVFKTTlpcmFGc3h4WFJOR0lUa252bEF6X1E1UnI0VW9BRWVuTDFDVG53dDNCUTZKZUVBZVFFeFFhUl9HZ1pfa3UzREowOGF6Yms5VEUyZXVUcWktZjd3VTRfTWtiUVFwel9USnVLQVJnekxCZHN1QWtpcmhYOUMyWng2cmFLRHhKVDZPRS1hc2VndVJLdW9iSzNkcElBbllSeFppRjVFQzhUUkxRbHBNM1h5YnhWWGpoRHdPd2JRNUFNUGljTVZuTUw3b3hvWFlsMHR6VlJSZjZEMzRVMmU3SW9rQnE4Y2xYOXFvMGJoNUQ4OGZ2MC1sMGNLejVRSDdTZGtPdjZhdDgzVjhHakNBSnBEbFNaT1l1Smp0eU94QmVPRWdUdnlaYUlfNnYxRkU2N21RRnM1MGFULXZOZ2ozbEJidUtTbmRnZVU5d0FkenpEZ0h5Y2xKdlhGSEY2b3FDbG5OOE9rbmJfV1IweHJjUDRXaU5WZ3FjUEl5bFpCNUFsbDAwRVE1MHlTVWhrakE4d0R6MnA0bW1ycjIxc3lJa3NZNkhfQ1M5a1lnY0RwSjJIUVl0SHB6aGFVU2tHdjhoR2F2YjIyWW9paWVmTUdtWmZqTWpNbjhveml6WmhqaGlXd3dqUV8tNFo1c0o1TnRNbjFrN0dmRVk3WGlQQ1VQN3B4c1NDNzVqVjhUcDZzZTFTTE1NS25vUnZyQ0MtZnV6UHBQbzVtWE01Tjh0QTZlZFp5Q2xWUjJ3UEJnWmRwcDN1WnltZW1TWExDNHFiUk4?oc=5"
-        },
-        {
-          "title": "The Telegraph reports suspected Iranian connection to plot near RAF Fairford",
-          "original_title": "تلجراف: شبهات حول صلة إيرانية بمخطط لتفجير قاعدة بريطانية تستخدمها القوات الأمريكية",
-          "original_language": "ar",
-          "summary": "The Telegraph reports on potential Iranian links to the security plot involving explosives near the RAF Fairford airbase.",
-          "published": "2026-09-27T07:00:00+00:00",
-          "source": "بوابة الشروق",
-          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQTXNjTEptTVJiVXdxakJ3ZVctZGtiY1M4YjlIbWhnN2MtVVZjVzRBZjhoSjlMOUNhZmN3ejV5b0FVS2steGpPbVA1aEFyTWFVRU9UVGNIRERDeHRsMS1nY1kxX2E0NUJTQm54WFRwZGZMS0ZnU2pMcnJHbHlIcDVWSkF3V0haUEdhNEx3MVptbUdMd3BiUkR5aThuUHBBYjFLMjdVU0xnaw?oc=5"
-        },
-        {
-          "title": "British police arrest five men in suspected terrorist bomb plot near US military base",
-          "original_title": "British police arrest five men in suspected terrorist bomb plot near military base used by U.S.",
-          "original_language": "en",
-          "summary": "UK police arrested five men on suspicion of plotting an attack involving explosives at a military base used by the United States.",
-          "published": "2026-09-27T07:00:00+00:00",
-          "source": "Washington Times",
-          "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxORUVDczJEY1QwcUYzX2NLUnpMdXhhV25xVFdiX1JZVmduMDltVnc3VDlCTnhXcy1JT2Z6MFBFbmtmRmh4VGxjbU9yaC1rU2l2VWYwOFZnT0k5UEFxOFZERTBrVVcyMHFPaHlGNWM2dkJ2VnI3U1pRZ2ZKRWdyeEZDdGVLaHU3Rkl4S2Ytb2pnRUN4d0tDY2Q5QVFYNXhoQVViZ2ZBdjZBYmlVcUhVRGU1Vl9tanY?oc=5"
-        },
-        {
-          "title": "Five arrested on suspicion of terrorism in RAF Fairford bomb plot",
-          "original_title": "Five arrested on suspicion of terrorism in RAF Fairford 'bomb plot' drama",
-          "original_language": "en",
-          "summary": "Five individuals have been arrested in connection with a suspected terrorist bomb plot targeting RAF Fairford.",
-          "published": "2026-09-27T07:00:00+00:00",
-          "source": "Gloucestershire Live",
-          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQRWUtMzZlUUhXWkhuZE1zTkMzOWZGMUdYWExsdmZqQldodDRFNkEzcjVBcm5rTmNzUDJfdVc1RFdxQllLX1A2VTZMd1FGak9mLUtvLTVMUHNMeFVJT29OUEZpSWpLUk96Z1RRcVY1LVJ5ME01QVVkYmZtWk50bzNSMlhvRVlEWFhKc0pZTlloRUphcWNNTVBUV25FNjREQ3NCX3BXWXpIRmvSAa4BQVVfeXFMT3d4YnM2cnZkbUd1elVmdFhxNFVwQ0ZVdGtlaGtDeXNyeGJ2Wi14VGFrWThUOGgtTmVDUU9PQmVjTTl4Rmotc1JTNXBqd3hTNWk2bi16S2ZNNkhJOHQwWnU3b2JkZU9kZ1JJVDc4STVmeFZ1czVYVURZamN4R3F4Q2Z2enB5V1JTSndQT1RPYW5Dc2JQS1p4Z2ptdHhZYVJFbmQ3bXhKTTV0ODJKdFJ3?oc=5"
-        },
-        {
-          "title": "Explosives discovered near US airbase in UK",
-          "original_title": "متفجرات قرب قاعدة جوية أميركية في بريطانيا وإجلاء سكان واعتقال مشتبه بهم",
-          "original_language": "ar",
-          "summary": "Police confirmed arrests and resident evacuations in response to explosives-related concerns near a UK airbase used by US forces.",
-          "published": "2026-09-27T09:28:17+00:00",
-          "source": "بوابة الوسط",
-          "url": "https://news.google.com/rss/articles/CBMiREFVX3lxTE1ZV3RPOFZfYWNsaU0xYklCUW1VWGhLcDl3WU15Z0dwemRvOHhVYjBHX3Y3QXo4OU1WOGxBTnNqNExmaFRS?oc=5"
-        },
-        {
-          "title": "UK police report arrests under Explosives Act near Welford/Fairford",
-          "original_title": "الشرطة البريطانية: اعتقال أشخاص للاشتباه بارتكابهم مخالفات بموجب قانون المتفجرات في ويلفورد",
-          "original_language": "ar",
-          "summary": "British authorities arrested several people on suspicion of violating the Explosives Act near an airbase.",
-          "published": "2026-09-27T09:34:36+00:00",
-          "source": "VDL NEWS",
-          "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1sdlVucU1lX3p1T1ZIVVB1ZWJ5Q0tuVm5VSUd5TElNQUNJYk1mcDlyeG5xTW1HcmtNdFhCTE9LVnN2NndfY2Mzdmh3WQ?oc=5"
-        },
-        {
-          "title": "Police continue investigation near US base in England",
-          "original_title": "إخلاء واعتقالات.. شرطة بريطانيا تتابع حادث بالقرب من قاعدة أمريكية فى إنجلترا",
-          "original_language": "ar",
-          "summary": "Police are maintaining security measures and investigations following arrests near a US-used airbase in England.",
-          "published": "2026-09-27T10:58:46+00:00",
-          "source": "بوابة الزهراء",
-          "url": "https://news.google.com/rss/articles/CBMiPEFVX3lxTE9FSlRnZ2VzaEhvQlVSM2FCU0s0bkJvQUFPWFA0X3FlWm1zakN4N09WZkM2c3FWSVhqTThTNw?oc=5"
-        },
-        {
-          "title": "Evacuations and arrests linked to explosives in UK",
-          "original_title": "بريطانيا.. إجلاء سكان واعتقالات مرتبطة بمتفجرات قرب قاعدة جوية أمريكية",
-          "original_language": "ar",
-          "summary": "Police evacuated local residents and arrested individuals following reports of explosives near a US-operated airbase in England.",
-          "published": "2026-09-27T11:09:59+00:00",
-          "source": "ارض اشور",
-          "url": "https://news.google.com/rss/articles/CBMi0AJBVV95cUxOOTVHRE95TzRXQ055UmhQbWpsRVZhMU82aDF3QTUtWnFtUGVlSXdtamZxREdRZkVPWGRhZFFycGYwV1h2dXppOWdtMjlIRGx5NzdyTDUxbUtJMVVBck93czJXb1puc05mc0s1Z0MwS3p6b1V3cFdVeFdfcnh2dklLdTRyOWFoY25Td0tBa0phSHdUdVpKUGNsZG5ZOWRrX2d2eEhKT3VFTVc2S2VtREgtN2dqU2xiTE9VTFVETVNHX0swanlFUFQ3RmRVTVBCQTc1LTA2T1FaTDh1S0czMktmbUdJZGRXZDdaRkFmZEQ4NldtamNNQXdXVVV4Yk8zak9yN1BvSUlGd0Z4a3VLQW52eXYyQnp6ZjBRbm80U0ZwdEF0elJPOTJJQi1nSXE0UzljZUt3ZGpYTXE4QXNlajQzaHV2aGJjQ0xGNUJuYUcxMHA?oc=5"
-        },
-        {
-          "title": "Police report on Fairford base security incident",
-          "original_title": "الشرطة البريطانية: حادث كبير قرب قاعدة فيرفورد الجوية.. واعتقالات بتهمة انتهاك قانون المتفجرات",
-          "original_language": "ar",
-          "summary": "British police are investigating a major incident at RAF Fairford, resulting in arrests related to explosive laws.",
-          "published": "2026-09-27T14:02:33+00:00",
-          "source": "شاشة نيوز",
-          "url": "https://news.google.com/rss/articles/CBMimAJBVV95cUxPbldtYm5HTEtZVzQ0Q29MeDNQQXdLMzNheC1uUEZqU2NYd1FyN2xtVVNnVnI1M3RFOUhyWU9ZRERXZTRTUVBVZFJIQXhhOEVTQzJIWnZUcy1tMlI5OXJpMlFuTHl2NTR1dzVpWE1PWmhmcUFNdENyREMyc21RTVBwdXMwZGlQYVhJYmJvVXI0d21xOFY5TVVvTWVFOG14YXpxQ0VQb0JMZzRpN0lwV3oxVDBISVJpSUVyOXpsM21IMWplLXVicDZjTjdweklKRWNJQlc2YWFUNnhWRVpMQzRxdldlSndKSEo4eUdCWkw2YTZMZVdZVDU0UnVzM1VPWndkeUJoMEp5dVJaSUNPTkFkZGhfS1laUlk3?oc=5"
-        },
-        {
-          "title": "Three trucks seized suspected of containing explosives near RAF Fairford",
-          "original_title": "‏تلغراف: ضبط 3 شاحنات يشتبه في احتوائها متفجرات حاول المشتبه بهم استخدامها في حادث قرب \"فيرفورد\"",
-          "original_language": "ar",
-          "summary": "According to the Telegraph, police seized three trucks suspected of containing explosives linked to a planned attack near RAF Fairford.",
-          "published": "2026-09-27T14:57:06+00:00",
-          "source": "VDL NEWS",
-          "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1nV1F0ZWZOWTJQdzNJMTBUXzFJVTBGQ0x2YkhkUndOVVJFOXkxTWNvR09ZQWpXS1Z6b1pqbXZybUN4ckFkYmFPcUR5RQ?oc=5"
-        },
-        {
-          "title": "Security incident and arrests near US military base in Fairford, UK",
-          "original_title": "\"حادثة كبرى\" في بريطانيا.. اعتقالات وشاحنات ومتفجرات قرب قاعدة تستخدمها أمريكا",
-          "original_language": "ar",
-          "summary": "British police arrested several individuals and evacuated residents following a security incident involving explosives near the RAF Fairford airbase.",
-          "published": "2026-09-27T15:03:00+00:00",
-          "source": "البيان",
-          "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE0xWTR1QklPZEFDX2laTFBSczI2Y2NCMjh1TnJiWVU5eGJSb1hYVldZUEVlUnM5VFN1RDFoNHlSbnVlRlZRaTJGWVVlWWNpekt1aXBWVU9kVdIBXEFVX3lxTE9WQWI5cE5KdWtZTFhBalhyU0ktSDFpT3JSNVZfLWRRWmQ3a2xSTHhlelVBdjY2QmlsNWpVVXZTeXl2M1Q5WEJaY2l0MnJfR3RfS0tfMnlfMERpbGxm?oc=5"
-        },
-        {
-          "title": "Security alerts and arrests near Fairford airbase",
-          "original_title": "بريطانيا.. اعتقالات وإجلاء سكان لشبهة متفجرات قرب قاعدة فيرفورد الجوية",
-          "original_language": "ar",
-          "summary": "UK police evacuated residents and detained several suspects for violations of the Explosives Act near RAF Fairford.",
-          "published": "2026-09-27T15:18:55+00:00",
-          "source": "شفق نيوز",
-          "url": "https://news.google.com/rss/articles/CBMiggVBVV95cUxQY1AyU3RZcFRpRUpTLTBoZjdjVjFQY3dsMUVYNnFSSWhTUGdIbWlROE9TV2ZxTlpocmI2RE5HM2JlWGdCV0JRR1dhTi1BeV9ORUVZb0w2SU9uOXVTNnV1LWhncXJmWk1MQWFzSVctSklUVDFzNndSYW9ablNPWjNISUVoMG41dUFMcjhQbFdCTUZ2NGVGUlNiVk9nbFA3SFlpeWl2aGpHSEhLRVlSSktCcGlKLWFYRkNoUlEyNG42RUsxbC1SS3dDUjQzTlljU01jMl9ocmVubVZTWHA2ZXlKM3JvalBxSkw0ZElMekdjY29jVDRHY1ZOZFZWQTEzdFNZclpnYkpKRWw5WkpsckthRGg4ZHNDM3c3dmhhUTYwbGRtMjk2RUs5M0J5dmRHZWVHY2hMNllRdlhQa2hnMktUSWNhbEVKWXBqWURINzhyOFJCZmE3el9DcUdoaHJkSVEzQS1rVkwtaWxEanM3b05GTk1JT1RGSmtBVVdFMUpkSVhhZzZoX2Jzek1hU0xMUVltWXYzLUdCR0xwV3RZZWZPTUNiSEFhRnBCbEE4RkdNZElDWS1MOWp4Ymt0b2NFOU1lUzg2QUdjQ1JkbWZhZTFsOGgtY1JwcERydnBPYUp2RlRhSXdHSVlmSTc5eVVpNDZCdXl0aGhhUFJuVHducVB5SExncmNpUm1tLURydnpQWXFFMjBPODlDaGo1ODU0WWtxLUdCcW5GYldMTG9hTFNLMjdWdFhFejV0Undoc00tVm5SLS1MSFk0WlNrbGc0VGIzc19WVlJ0TzAwQkptTmdjSGhyelp1aERHZk4yNDJlTlVsaTE5S1dKSkdFMHpRU2tuYVE?oc=5"
-        },
-        {
-          "title": "Arrests and explosives seizure near US airbase in UK",
-          "original_title": "اعتقالات ومتفجرات قرب قاعدة أميركية في بريطانيا",
-          "original_language": "ar",
-          "summary": "Authorities reported arrests related to an incident involving explosives near a US-operated airbase in the UK.",
-          "published": "2026-09-27T15:25:29+00:00",
-          "source": "كريتر نت",
-          "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFBuRTdCQzhkcWxuQU14VE4yMXBzVzJvWFR0YUNiZGt6cXN2dlgzRVpNemFQTEVrUS1hSUozTWNCR3hzTlV3ckZxZzR3?oc=5"
-        },
-        {
-          "title": "Security alert in UK near US airbase",
-          "original_title": "استنفار في بريطانيا.. متفجرات قرب قاعدة أميركية واعتقالات وإخلاء منازل",
-          "original_language": "ar",
-          "summary": "Heightened security in the UK following the discovery of explosives near a US base, leading to evacuations and arrests.",
-          "published": "2026-09-27T18:33:00+00:00",
-          "source": "تلفزيون نابلس",
-          "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBKNkF2SkROV1BoMGswLXY5SENsRTRGeFhRVDE3Z1VpRU00VDFxaEZ4RzdCVGpkb3RnUVFNUDVhOEtabEtqR1g0TE9NMmhEM25VXzBqSWRqWkx6T1lOeFh6Tl91b296blFUOEdpRjVPYnFWZ2JEekNkTnJzdw?oc=5"
-        },
-        {
-          "title": "Five arrested in UK for plotting terrorist act near airbase",
-          "original_title": "بريطانيا توقف خمسة أشخاص بشبهة التخطيط لـ«عمل إرهابي» قرب قاعدة جوية",
-          "original_language": "ar",
-          "summary": "British police arrested five individuals on suspicion of planning a terrorist act near a military airbase.",
-          "published": "2026-09-27T23:14:07+00:00",
-          "source": "الأيام البحرينية",
-          "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTFBPRExTSm1wVkNzX3BUZGJUam9oT2xlNFZ6YzJjel9uY3JwSEQyMmdKczlES0ZWQ09YdEVPOEFJR3N3dVhWa1hlZ2stMmRfR3R1RnM0Qk52c3JRZERWaFBOd2NPc9IBakFVX3lxTE1OTkNmNm1CTjlJRXhqMHNUYTJ3SHN4VHNkT0oyTXlvQWFtX2wtMXlDcXVLemd3S1JTZVdXUjJfSXplTHhRanNBOVFCZGFqZjFobEp0b3RIQUY4dWtDd1M3RzV3amxKUXdVNlE?oc=5"
-        },
-        {
-          "title": "Police confirm identity of men arrested in RAF bomb plot",
-          "original_title": "Five men arrested over foiled RAF bomb plot are all British nationals, counter-terror police say",
-          "original_language": "en",
-          "summary": "Counter-terrorism police confirmed that five individuals arrested for the suspected RAF Fairford bomb plot are British nationals.",
-          "published": "2026-09-28T07:00:00+00:00",
-          "source": "GB News",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1tc0l3YVkwWGpKeko1ZjNPZFRvNnNEUG14TTNfdllXbVNrM1htT1BRQ0FIcHRkeGxFLWtTejYxaHlOcHFZS3Q3b3MtTGotZjFDanNMTENaSWVKN24zcURJZ01hNjFZN0EzWEdvUA?oc=5"
-        },
-        {
-          "title": "UK investigation into plot targeting US-used airbase",
-          "original_title": "لندن تحقق في صلة إيران بمخطط تفجير استهدف قاعدة جوية تستخدمها أمريكا",
-          "original_language": "ar",
-          "summary": "London is investigating potential foreign involvement in a disrupted plot targeting an airbase used by US forces.",
-          "published": "2026-09-28T07:00:00+00:00",
-          "source": "اليوم السابع",
-          "url": "https://news.google.com/rss/articles/CBMiQ0FVX3lxTE9xMEpIenAwN0FGOThMRTdrRzJNYndIaVBMRjlNQWMzVzg2dVBnbWJHbXpla011SWt1cE5qMXVLMjRKcTjSAbgDQVVfeXFMUDdtWHpHSU14NHY5SGVFYjlfa3FXdmhERlhrcTY1b1F2ZmVwVzdBSUZkaWlWZldSZXJoRloyal9nVmhadFd5bGdoQ3RMWEhYeUpCSTNuci0tZ285akhTdS12bVc1R0kxT0ZQSHE0MlZTQndKd1RnYkNkNGVyUHF5R1V6UkRGVmRnY2lJUkdWdl9ZaU1FT3pycjlIQmRPSmRJRVl6d3JsS1VIY0ZxMEZpUldiUThaYkl2eUFsVDQ1aWNLT2VZVWxoSmE4MFpmX1hTb0NZeld3TFAwb3NKdTdzZlFDM0tOUkdTbzEwZWFvN1JoR3dSVkZCY0Y2RUxpUnVmSVFwMHZtSGRfM3UzZ2E0RjFuZ2RaZ01NYnVoTlE1U1lZNU41QnVad2FNcFk0ZVp0RENPb3JYSnBrVGVUWW5ocjNZNktyNlIxdlEtcnpNMFNVa29LTnJ4YmRVZ3BPQ2JoakNmVGtWdmxHLU5LYjJTeTZkMjZoNXpBd09RSWZMLUpmU3FCQXE0MHA5QUVKWWpzSDZkQTkweXk5VEhFeDZhZXV0NG1TaEVIX09DN0QzYlpVMEU4dXFuZGk?oc=5"
-        },
-        {
-          "title": "Explosives alert and arrests at Fairford US airbase",
-          "original_title": "إنذار متفجرات بقاعدة فايرفورد الأمريكية في بريطانيا واعتقال",
-          "original_language": "ar",
-          "summary": "Security alert involving explosives and subsequent arrests at the US-operated Fairford airbase in the UK.",
-          "published": "2026-09-28T07:00:00+00:00",
-          "source": "نيو ترك بوست",
-          "url": "https://news.google.com/rss/articles/CBMi6wJBVV95cUxQUnJiYzdaaVVXb0wyN2xvX1pHanVpazFEMjNkMm5ENzhLUFR6cjRNcWUzbnJVR3Fwb1hkbHNfZDNJZzlZVEplbzBMaDd6Q3o2TzU0SkxPcml3TzJ3M2pMNmh1UlMzWENmYUwwR3did29YX215T0dLM09iSERtYlpqRm5OMHFSZGpLeHBmN2YxbjRXOGdIclIxd01mWG04YUExUlkxM0xrZWh6U1NMMHN2cHM1YVBBLVZWUF9YRlQ5bUdPbjVLOC1RbHh6TlQzd3VsZTRleV9ZektuZm96RGh3RkZtTFNaNmJvWm52WkZlWEVWQy1VaHpya0o2dXFpNk16TmxjeHJKSlE5eExvdTRRVEp0bHd3YTRjcU1CdXhSM21mdDJRdDBfRzU1b3Znay1YbGhuVWdKd0JCbnlhVlhyWHgybkRiZU0xYkN3YWJvcXhKVThGeHFSRHBjOHFObWdyNHg3Qk1adi12dnM?oc=5"
-        },
-        {
-          "title": "Investigation into suspected plot targeting RAF Fairford",
-          "original_title": "Tuesday briefing: Inside the suspected bomb plot at RAF Fairford",
-          "original_language": "en",
-          "summary": "Authorities are investigating a suspected bomb plot involving an RAF base in Fairford, UK.",
-          "published": "2026-09-29T07:00:00+00:00",
-          "source": "The Guardian",
-          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPbkgteEduVTlnMWhoRlFGcDcxcGJBaXE2d01lUlhGWVY2RmkwRC1wZS13QUVsMWVLel90Vl9ycmcyRGdWWUI5dW94UUtqWWh0MzFDQ0JjZ1F5VkVrNldMUk9CTHZubEpROE1HVzdDU0t3cEY1TWRGcTQ2Q3NRWTNwb004NTdTblVKM2VncjVOS0NtRUZ6VFJudFpfMm9tLUc1?oc=5"
-        },
-        {
-          "title": "Police clarify status of Fairford incident investigation",
-          "original_title": "لا متفجرات في \"فيرفورد\".. الشرطة البريطانية تضبط بنزينًا وتواصل التحقيق مع 5 مشتبهين",
-          "original_language": "ar",
-          "summary": "British police continue to investigate the five suspects, clarifying that petrol was found rather than explosive devices.",
-          "published": "2026-09-30T07:00:00+00:00",
-          "source": "صحيفة سبق الإلكترونية",
-          "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1nbUMzaU1lRUZtc1NUOFFZMXk4UllfUXRMcGQ3LW9XR0ZxZGF1Um1HOWpLaHF5bWlWSTlHdTlBZTA1dWxvQThv?oc=5"
-        },
-        {
-          "title": "Officials investigate possible Iranian connection to UK base plot",
-          "original_title": "英國五名男子圖襲空軍基地 貝安德質疑與伊朗有關",
-          "original_language": "zh",
-          "summary": "Officials are investigating potential Iranian links to the five individuals arrested for the plot against the airbase.",
-          "published": "2026-10-01T07:00:00+00:00",
-          "source": "TVB",
-          "url": "https://news.google.com/rss/articles/CBMizwJBVV95cUxPNXplUlgxU1NWMEgxUndqdW9vbDhuUVlhSXFHU3UxVzVKRGZyTzdvZl9XYlJOSWE0bVFxRjcxRzJGaHVLcG04bTFwazBqd3MwY1FqbC1McHExXzBBQnhETlRmcU5tYl8xQzJYb19SdW8xSlNreU90aUt0cW9oSGlWM193ZThYb0E4M05CVS05U2U2RGhJNTNvUjdwTC1PYlhjWWpIVUhPeVhCVzFiUXJtN21aRzl0OXdwSFhyZUpRU29zbE9BQ2tTcnJ3T2NuczRSdWlsLTM4RndkdGw3Z1JiUHd6bXdrOENMV2hWZHNfSkJ6TUoxUGpkYWJ6eXhRVDlpZTBadVY5RzZlUGNCMHJCUUFhVFByeTl4NDI3ajVHNVpVXy1KOUxtTy10UmFsWVZDSzNIMGN3VUlnNWlfbmNIODJuN2xIejZGNFlQNG1OWQ?oc=5"
-        },
-        {
-          "title": "Suspect in RAF Fairford case released on bail",
-          "original_title": "British-Iranian suspect in RAF Fairford ‘terror’ case released on bail",
-          "original_language": "en",
-          "summary": "One of the individuals arrested in connection with the RAF Fairford security incident has been released on bail.",
-          "published": "2026-10-03T10:28:53+00:00",
-          "source": "The Times",
-          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPT2NWbU1Wajc1Q1pTeWpQbzI0Q3NNbHFyRllIRXNoNWtzMjRJQXREMUpVYkpGRzZ5NC1JeDczX2NoTG92ZkRwUVNvVWdNQ25GYkpkeW9rVmpjb25sVXJpQUlPRVNnQU91VUlkWUhIVHV1enFPSUU0bV9sd0hRZ2dlM3U0UGQtMUhKNHA4UVhtY3ktYlVxWEtqN1RjVGpzaHFuaXc?oc=5"
-        },
-        {
-          "title": "Police confirm no explosive device found in RAF base incident",
-          "original_title": "英國空軍基地疑遭鎖定調查 警方證實未查獲爆炸裝置",
-          "original_language": "zh",
-          "summary": "UK police have confirmed that no explosive devices were found following investigations into security concerns at an RAF base.",
-          "published": "2026-09-30T07:00:00+00:00",
-          "source": "民視新聞網",
-          "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFAxODd0TXBlZU9EZHpXaFM2bE1SYy1neEZFdHlfMktsS2J5eERGV1BsV0J0eXc4Vk5TaGlWRmV2NzhWNGJhNlBOcFh3d3V3M1lmTDQ4dDBXNU8zMU1qdnNDcA?oc=5"
-        },
-        {
-          "title": "Police state no explosives found at UK airbase",
-          "original_title": "英空軍基地恐襲威脅案 警稱未發現爆炸裝置",
-          "original_language": "zh",
-          "summary": "Police confirm that despite terrorism threats, no explosive devices were located at the airbase.",
-          "published": "2026-09-30T07:00:00+00:00",
-          "source": "i-CABLE",
-          "url": "https://news.google.com/rss/articles/CBMi3AJBVV95cUxOM2JEWkwyWWtLd2t3TXZhbjBsOTBhY1BnNjA3TUhXVVY4allMLU51MnFMYng4ZDlLbEIwb1R2MGpMZ0YtLU5nN2hvQURnbExxMmpkS2IxMXRoRVMzZWp5eWJZV0htc2VFZWRjc0RGbWEtaDhabWNQQUxJSVNUQm9uVS1ZSjg1S1BqdnREazNhR2c4TFQxMGNOSGV5Z3d6T3RCUnE4bzlXNG5BNFNDeFNVRV9NdkF5Zl84U1hGS0hrcS1tdUdEX0NVdDlVV0FHN1hZZWczY3dmNEItMXNvLVBXYnczQzdXeUkwbUZRZ2R0dUJyZHhyRW5ES3A5Y1NFWjdfR1RNNnVkTGFIdm1PenFjZG1FX1FXTzE4V3E5dnRMQlpaX3FyMzVhXzh5Y01YOWRpVUJxVDZNeFpLMWhWMTVzazhGRVZfeEdYTzNBQnhQYTlTRm9VODA5OTNvZ04?oc=5"
-        }
-      ],
-      "article_count": 31,
-      "first_reported": "2026-09-27T07:00:00+00:00",
-      "last_reported": "2026-10-03T10:28:53+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "paraphrase_entity_context",
-        "title_plus_anchor",
-        "entity_actor_event_signature",
-        "very_high_title_similarity"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Suspected bomb plot at RAF base used by US in the UK."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The plot targets an RAF base in the UK, but no specific city is stated across the source set.",
-      "ai_geo_fingerprint": "57f1f00766fc181daa44b6d7aae8a9de3c4ee51eebcffa6c758e08d6f3e321e5",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "eb9dec9ad107018b",
       "category": "Attacks",
       "categories": [
@@ -225387,102 +224749,6 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Security forces in Aden thwarted an attack plot and seized explosives.",
-      "ai_geo_fingerprint": "ebcf58722d7fbc04de4e6e85224c2b48a2c694c510014361c4f7a955b896e8fc",
-      "ai_geo_inferred": false
-    },
-    {
-      "id": "eb4b26a02d8364b3",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Chemicals and Explosives"
-      ],
-      "title": "Aden security thwarts plot to target military and security forces, seizing explosives",
-      "summary": "Security forces in Aden disrupted an attack plot against military targets and seized explosive materials.",
-      "original_title": "اخبار وتقارير - قبل التنفيذ.. أمن عدن يُفشل مخطط استهداف قوات عسكرية وأمنية ويضبط متفجرات",
-      "original_summary": "اخبار وتقارير - قبل التنفيذ.. أمن عدن يُفشل مخطط استهداف قوات عسكرية وأمنية ويضبط متفجرات عدن تايم",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
-      "published": "2026-09-19T07:00:00+00:00",
-      "source": "عدن تايم",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBqZExURWh5NDJOVldhWTE4UXBwWGdmTHc2bXBQNlNVWW9NVlI2M0ktb2g4X213cFBlelJuUm1nY0xhZUlsNWpob1JVVQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Yemen",
-      "country_code": "YE",
-      "city": "Aden",
-      "region": null,
-      "latitude": 12.77957,
-      "longitude": 45.03852,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "421f9fd6eb8674d541c1e0b7af67574ab77a06e5273d4095bb90e67bc8e80c99",
-        "6dd9641c802835edc7b127d3432752f7b226711651c8286d4e54f2e11ceea647"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Concrete report of a disrupted terrorist plot and seizure of explosives.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "DISRUPTED_PLOT",
-      "is_attack": false,
-      "incident_anchor": "Aden plot disruption 2026-09-19",
-      "update_type": "INITIAL",
-      "incident_id": "inc-cd6bd1c8a9b2b7b9",
-      "translated_to_english": true,
-      "ai_canonical_event": "Disruption of terrorist plot in Aden",
-      "title_variants": [
-        "Disruption of terrorist plot in Aden"
-      ],
-      "actor_scope": "NON_STATE",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": [],
-      "sources": [
-        "عدن تايم",
-        "برس بي"
-      ],
-      "related_articles": [
-        {
-          "title": "Aden security thwarts plot against military forces",
-          "original_title": "قبل التنفيذ.. أمن عدن يُفشل مخطط استهداف قوات عسكرية وأمنية ويضبط متفجرات",
-          "original_language": "ar",
-          "summary": "Follow-up regarding Aden security forces successfully preventing a plot to target military and security personnel, which involved the seizure of explosives.",
-          "published": "2026-09-19T07:00:00+00:00",
-          "source": "برس بي",
-          "url": "https://news.google.com/rss/articles/CBMimgRBVV95cUxNYkhuQlF1dkQ4RXkxZkg5VFFuZUVnT2VqZnlFQmZqQzA5TnlpMndnMThjZzVFTkM1T3FWU3lhMFUtUmJKaGdORXZKZU1PN3A4X1BYSnZPdFpzRDlWbTVobXU5NFVjc0VKZEF2WFd6S0FXOXdILTUzU0lZaHM5dDNSLV95RmIzZGtnR3JBTXFiSHJGUS12a2FxTXNoVWlBaW5tRVRyMFZuamJDeFVlNm5OTG9DM2JrWkc1bUY3S3ZJbUdpdmNySW9Ra3lVY1RRdDZYVlg1ZEFtVWNOQ3pyS1hoaUdfZjlKSGJpMDd0Qmp5ZllPSE5TWnFMaXRIa1A4b3Y3a0tKbktPYXc4Z1pmOVJ3Tnk2ZDBRZXdnZjI3U2oySnlHU0pvME44LWpOLTU3MERDXzlkU0dlT2dkbFJ4ZEd1azVFTU80SUxidk1PVklrTG1tdmRVdTR6ZTNrV0dDZ1kwWjlmWkxqaDloN2M0cnFBN3Q0dmRfM0daS0ZtVy1vWlhSVzU3VmxYZGs3MXFfRWNWaHg1dGY2aHlhY2Y2ZTVBRWFIdEFGS0IxS0NRZk5aMUZtbldHYnNRTE5JeXpSNmdQbzdDbFJFMDBKM21FZ3dSdWlqMjR6cnhpdl9fMFF3U0haZXdQUWs4dTNpaEpYQjhzNThRWE9wajk1Zmsxa3l6bzY1eG5iNGE4Z2lJbWlRMkN5cmpLOTZ6NnRB0gFeQVVfeXFMUC1Ha3hJWlBHUi1BYVBUak80RjF5M3Bic0g5X0NHa0JELTcyVXdZRnZnUUtPQkVpdjVMaXNoZVNJaV9UMVNGcFFKVnRMVHQ4MlVDM1lMNTVadjJ5czBVZw?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-09-19T07:00:00+00:00",
-      "last_reported": "2026-09-19T07:00:00+00:00",
-      "dedup_confidence": 0.99,
-      "dedup_methods": [
-        "same_normalized_title"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Security forces in Aden disrupted an attack plot against military targets and seized explosive materials."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly stated to have occurred in Aden, Yemen.",
       "ai_geo_fingerprint": "ebcf58722d7fbc04de4e6e85224c2b48a2c694c510014361c4f7a955b896e8fc",
       "ai_geo_inferred": false
     },
@@ -339512,118 +338778,6 @@
       "update_type": "INITIAL"
     },
     {
-      "id": "9594819945259460",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Weapons"
-      ],
-      "title": "Nigerian Troops Recover Items Following Foiled Attack in Kukawa",
-      "summary": "Nigerian military troops recovered a motorcycle, clothing, and terrorist bodies following a foiled attack by Boko Haram or ISWAP in Kukawa.",
-      "original_title": "Troops recover motorcycle, blood-stained clothing after failed terrorist attack in Kukawa",
-      "original_summary": "Troops recover motorcycle, blood-stained clothing after failed terrorist attack in Kukawa zagazola.org",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-09-02T18:32:32+00:00",
-      "source": "zagazola.org",
-      "source_count": 8,
-      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPVHdjMmtuMTI0SHpoa2diUkM0WGRQc3E3TU45VXBVWHNRNGJBVDU3WXZJTlFiRlRVRnlaanpnR2MtVHI4eGF4R3BiR1Q1cDN1MlhxZUMtMVVIZ200c1hGaklCd1hWQzdOWGcwOXpKSFF2OWdRZm82REpiN3VVWWJPYUVhN3p0Vk9vOTFkM1dWUE03NXFnWHZsTkdxVEtzWTRIeDRwRnFrcEhtTnlNSUhldFhXSXM3TGdoc0VMcGZzU1o1QTBSbG1oLTA3TFVMQQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": "Kukawa",
-      "region": null,
-      "latitude": 12.92475,
-      "longitude": 13.56617,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "sources": [
-        "zagazola.org",
-        "thisdaylive.com",
-        "TVC News",
-        "THISDAYLIVE",
-        "TheCable",
-        "Arise News",
-        "PRNigeria News",
-        "The Trumpet Newspaper Nigeria"
-      ],
-      "related_articles": [
-        {
-          "title": "Troops Recover Items and Bodies After Failed Boko Haram/ISWAP Attack in Borno",
-          "original_title": "Troops Recover More Boko Haram/ISWAP Items after Failed Attack in Borno",
-          "original_language": "en",
-          "summary": "Nigerian troops recovered items and bodies belonging to Boko Haram and ISWAP fighters following a failed attack in Borno state.",
-          "published": "2026-09-04T12:00:09+00:00",
-          "source": "thisdaylive.com",
-          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPajdmV25sQzZldmNNYTA5WnZZTS1ycmowTTlQVUdESXdGU2lrdGNFUHBHYTFLYnRvdktCYWVHbk9Dc3pQcmp0QzZFcUdSTjFMaVlEODFuYlZiN043ODZUZy1uejBwNmd2S2t4cmd2a0V5Y01BMW12S3oyOHJsQUJRY1ZPTkplX0xMVnRnNlFRblVaWm9SdHVOQUVLbU53aGJJdUh5eWNvQzV1cjVRV3pwQQ?oc=5"
-        },
-        {
-          "title": "Hadin Kai: Troops Recover Nine Terrorist Bodies After Failed Kukawa Attack",
-          "original_title": "Hadin Kai: Troops Recover Nine Terrorist Bodies After Failed Kukawa Attack",
-          "original_language": "en",
-          "summary": "Nigerian military troops operating under Operation Hadin Kai recovered the bodies of nine terrorists following a failed attack in Kukawa.",
-          "published": "2026-09-03T20:13:25+00:00",
-          "source": "PRNigeria News",
-          "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE5vS1o5UDRBS0dwRDBURlRpNl9GSW9wbU1PN19DRXlTVzJ6d05TcHBrdldLUU1XLWRlTm5GSGlfR285YklHR2V1eDV1dmtuVnljNkcxSkpWUlRvWlJ4MnNjUEkwdEdCWjYzdzJqZDdFVmlXZw?oc=5"
-        },
-        {
-          "title": "Troops Recover Bodies of 5 Boko Haram/ISWAP Terrorists and Rifle in Borno",
-          "original_title": "Troops Recover Bodies Of 5 Boko Haram/ISWAP Terrorists, Riffle In Borno",
-          "original_language": "en",
-          "summary": "Nigerian troops recovered the bodies of five Boko Haram/ISWAP terrorists and a rifle during an operation in Borno State.",
-          "published": "2026-09-07T18:41:13+00:00",
-          "source": "The Trumpet Newspaper Nigeria",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNZExpQ1o1dTR0NzJ2OXlvSG9fR1BQQ2Nnd1lrNWw4SXVfSnctalJFa3JkODY3SnBnUTVSYWJra01sWERMWURCQlM5VkdWQ3VWRndyNG5xbGhqQmJmV1hSVlFtZGpoNFNHSFBmWDR6VDBrcjg4SHUwbENmN05jalZWYVRUdTJaTDZ3MlF6ZFp5dVBMS0RwYTdZXw?oc=5"
-        }
-      ],
-      "article_count": 4,
-      "first_reported": "2026-09-02T18:32:32+00:00",
-      "last_reported": "2026-09-07T18:41:13+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Military counter-terrorism operation repelling a militant attack and recovering bodies.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Nigerian troops foil attack and recover bodies and items in Kukawa",
-      "title_variants": [
-        "troops recover items after failed terrorist attack in Kukawa",
-        "Nigerian troops foil attack and recover bodies and items in Kukawa"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Failed Terrorist Attack in Kukawa"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The foiled terrorist attack occurred in Kukawa, Nigeria.",
-      "ai_geo_fingerprint": "b42b533946b3737caaa6e6765368f81b95d82e99df2ad7211119a9e572cb785f",
-      "ai_geo_inferred": false,
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_url",
-        "title_plus_anchor",
-        "very_high_title_similarity"
-      ],
-      "source_article_fingerprints": [
-        "0074f45256ee0d4de97f141796f637bd6fc4af089154c1621a745363d02b12a0",
-        "b08261c8960b9a71beca83b72c7aa2ef9b2770b19edb27882feca95875a1b341"
-      ],
-      "actor_group": "Boko Haram",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Kukawa foiled attack Nigeria 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-3477408a48a9f1db"
-    },
-    {
       "id": "3821853d485ebc0b",
       "category": "Legal / Judicial",
       "categories": [
@@ -339697,78 +338851,6 @@
       "ai_geo_rescue_status": "source_verified",
       "ai_geo_rescue_model": "source-fidelity-audit-2026-10-07",
       "ai_geo_rescue_reason": "Historical correction: Jerusalem was a country-capital fallback; the source supports Galilee."
-    },
-    {
-      "id": "2c0d87e299035eb4",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Weapons"
-      ],
-      "title": "US military strike kills key arms broker between Houthis and al-Shabaab",
-      "summary": "A United States military strike has killed a key broker facilitating an arms alliance between the Houthis and al-Shabaab.",
-      "original_title": "US strike kills key broker in Houthi-al-Shabaab arms alliance",
-      "original_summary": "US strike kills key broker in Houthi-al-Shabaab arms alliance samaa tv",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / East Africa",
-      "collection_locale": "KE:en",
-      "published": "2026-09-02T18:02:27+00:00",
-      "source": "samaa tv",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNaml2ek02M3RlakZIeGRFckk0N0d2ckZ4MjM3ZlRTNmEtdGw3NHRtdUJ4d25YSlNmZmY2WEY0am9vQWs1d2VkN2xqcGNKSkpLYVBlM1NWeW1RSGRxaUhJRm12M2owdTA3dTJSeTl2bnBORTYwLTlNZERIR1VyZGpuaDBQZEdfQTlnSmY0MVdBSWNsYTNOQ254RQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "medium",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "samaa tv"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-09-02T18:02:27+00:00",
-      "last_reported": "2026-09-02T18:02:27+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports a concrete targeted strike against a militant arms broker connecting terrorist groups.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "US strike kills arms broker between Houthis and al-Shabaab",
-      "title_variants": [
-        "US military strike kills key arms broker for Houthis and al-Shabaab",
-        "US strike kills arms broker between Houthis and al-Shabaab"
-      ],
-      "location_confidence_score": 0.8,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Houthi-al-Shabaab arms alliance"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Al-Shabaab operates primarily in Somalia, and the strike targets an alliance involving them.",
-      "ai_geo_fingerprint": "5aa67ff57b865d991cd0267e4b93c925fe0dfbeda1301b8583e92ba6f05527e8",
-      "ai_geo_inferred": true,
-      "actor_group": "Houthis",
-      "incident_id": "inc-05d211dd9bda29e0",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "US strike kills arms broker Houthis al-Shabaab 2026-09-02",
-      "update_type": "INITIAL"
     },
     {
       "id": "00564b8c2efbcfc3",
@@ -342017,7 +341099,7 @@
       "collection_locale": "NG:en",
       "published": "2026-09-02T10:57:09+00:00",
       "source": "Sahara Reporters",
-      "source_count": 23,
+      "source_count": 29,
       "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNTnVGcWJUT2REYXBTRGlJQ0hhajlLNHdDR20yRVRBM0hhc1VQWGUwdXI4WUdUSFdoTFQtSGFnT2RkR1ExTi1VOWx2VkRzUFJvZG4tdkgzUks3YU81WlVjRDVLSEw5el85cHIwNzRWYml0NGZteTBZZ3dyRGpIMDR6aUp3LXZ1Q2Nja1JOU1k1Und5ZnJqOXp2QnU4ZkctYUdBUG9hZ0U5NWdkZUtfdzdqVnlieEdodUQyY0pv?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
@@ -342052,7 +341134,13 @@
         "ng.headtopics.com",
         "OsunDefender",
         "thenationonlineng.net",
-        "THISAGE"
+        "THISAGE",
+        "zagazola.org",
+        "thisdaylive.com",
+        "TVC News",
+        "THISDAYLIVE",
+        "PRNigeria News",
+        "The Trumpet Newspaper Nigeria"
       ],
       "related_articles": [
         {
@@ -342126,9 +341214,45 @@
           "published": "2026-09-04T09:48:16+00:00",
           "source": "THISAGE",
           "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE1RYlpCbXNGLTlYZWxXbVpUTmFJS05EQjNNcXhYelBkWERWNlpEek1ESzRrNjNHLWt5aGQxUjk4aTJNVXRyY2hPemNWVXRDS1RsaDE2b2JSX0swRkRVR2FmVTZObktualJXY29GX0Ffa1daQ0cxcjRzMGtIMVRNZw?oc=5"
+        },
+        {
+          "title": "Nigerian Troops Recover Items Following Foiled Attack in Kukawa",
+          "original_title": "Troops recover motorcycle, blood-stained clothing after failed terrorist attack in Kukawa",
+          "original_language": "en",
+          "summary": "Nigerian military troops recovered a motorcycle, clothing, and terrorist bodies following a foiled attack by Boko Haram or ISWAP in Kukawa.",
+          "published": "2026-09-02T18:32:32+00:00",
+          "source": "zagazola.org",
+          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPVHdjMmtuMTI0SHpoa2diUkM0WGRQc3E3TU45VXBVWHNRNGJBVDU3WXZJTlFiRlRVRnlaanpnR2MtVHI4eGF4R3BiR1Q1cDN1MlhxZUMtMVVIZ200c1hGaklCd1hWQzdOWGcwOXpKSFF2OWdRZm82REpiN3VVWWJPYUVhN3p0Vk9vOTFkM1dWUE03NXFnWHZsTkdxVEtzWTRIeDRwRnFrcEhtTnlNSUhldFhXSXM3TGdoc0VMcGZzU1o1QTBSbG1oLTA3TFVMQQ?oc=5"
+        },
+        {
+          "title": "Troops Recover Items and Bodies After Failed Boko Haram/ISWAP Attack in Borno",
+          "original_title": "Troops Recover More Boko Haram/ISWAP Items after Failed Attack in Borno",
+          "original_language": "en",
+          "summary": "Nigerian troops recovered items and bodies belonging to Boko Haram and ISWAP fighters following a failed attack in Borno state.",
+          "published": "2026-09-04T12:00:09+00:00",
+          "source": "thisdaylive.com",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPajdmV25sQzZldmNNYTA5WnZZTS1ycmowTTlQVUdESXdGU2lrdGNFUHBHYTFLYnRvdktCYWVHbk9Dc3pQcmp0QzZFcUdSTjFMaVlEODFuYlZiN043ODZUZy1uejBwNmd2S2t4cmd2a0V5Y01BMW12S3oyOHJsQUJRY1ZPTkplX0xMVnRnNlFRblVaWm9SdHVOQUVLbU53aGJJdUh5eWNvQzV1cjVRV3pwQQ?oc=5"
+        },
+        {
+          "title": "Hadin Kai: Troops Recover Nine Terrorist Bodies After Failed Kukawa Attack",
+          "original_title": "Hadin Kai: Troops Recover Nine Terrorist Bodies After Failed Kukawa Attack",
+          "original_language": "en",
+          "summary": "Nigerian military troops operating under Operation Hadin Kai recovered the bodies of nine terrorists following a failed attack in Kukawa.",
+          "published": "2026-09-03T20:13:25+00:00",
+          "source": "PRNigeria News",
+          "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE5vS1o5UDRBS0dwRDBURlRpNl9GSW9wbU1PN19DRXlTVzJ6d05TcHBrdldLUU1XLWRlTm5GSGlfR285YklHR2V1eDV1dmtuVnljNkcxSkpWUlRvWlJ4MnNjUEkwdEdCWjYzdzJqZDdFVmlXZw?oc=5"
+        },
+        {
+          "title": "Troops Recover Bodies of 5 Boko Haram/ISWAP Terrorists and Rifle in Borno",
+          "original_title": "Troops Recover Bodies Of 5 Boko Haram/ISWAP Terrorists, Riffle In Borno",
+          "original_language": "en",
+          "summary": "Nigerian troops recovered the bodies of five Boko Haram/ISWAP terrorists and a rifle during an operation in Borno State.",
+          "published": "2026-09-07T18:41:13+00:00",
+          "source": "The Trumpet Newspaper Nigeria",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNZExpQ1o1dTR0NzJ2OXlvSG9fR1BQQ2Nnd1lrNWw4SXVfSnctalJFa3JkODY3SnBnUTVSYWJra01sWERMWURCQlM5VkdWQ3VWRndyNG5xbGhqQmJmV1hSVlFtZGpoNFNHSFBmWDR6VDBrcjg4SHUwbENmN05jalZWYVRUdTJaTDZ3MlF6ZFp5dVBMS0RwYTdZXw?oc=5"
         }
       ],
-      "article_count": 8,
+      "article_count": 12,
       "first_reported": "2026-09-02T10:57:09+00:00",
       "last_reported": "2026-09-04T09:48:16+00:00",
       "ai_selection_complete": true,
@@ -342169,6 +341293,7 @@
       "ai_geo_fingerprint": "f84cc8d9dfc294e124aeb9b283a61a02169afeb13a8e4ff07ea47f255e9459d1",
       "ai_geo_inferred": false,
       "source_article_fingerprints": [
+        "0074f45256ee0d4de97f141796f637bd6fc4af089154c1621a745363d02b12a0",
         "20c92f645025b620aa3e9b7384a8c5a18bf910cea15bc8200f9a97ef6f1180a3",
         "276a211fdb4c74a1514ab38f6a6d4eeaa20c922ae8f5837bd6a84eafaf87f93d",
         "2accfe2e1d5f4060cb3589bfc615d0ab21d1cdc63931e3ef92e5b21c1c19dec4",
@@ -342177,6 +341302,7 @@
         "67b41ac2df06d356b6725559f20b31ced5f0d62e5ed83904fa6c1156bf768ab9",
         "8c60b717756512fc50f49d9d97cf06e4c330db3ba854307c9650381815094335",
         "95e2fce23ff14a5577401cf8eb9104e8e5c13a67b7db03ad261b338290155b18",
+        "b08261c8960b9a71beca83b72c7aa2ef9b2770b19edb27882feca95875a1b341",
         "d6005b2b61a156cecb1778bbcac5add37fd139d61edf51ea445f18bb4082e8ab",
         "ea83ed633048f09e0d3a5bd5c9a253bebfe5c48992b76104c38fde0eb20243d1"
       ],
@@ -342185,7 +341311,8 @@
       "is_attack": false,
       "incident_anchor": "Borno Boko Haram convoy attack Nigeria 2026-09-02",
       "update_type": "INITIAL",
-      "incident_id": "inc-92e9f6e5b41edc24"
+      "incident_id": "inc-92e9f6e5b41edc24",
+      "cbrn_subgroups": []
     },
     {
       "id": "473773e7eab7839a",
@@ -347122,87 +346249,6 @@
       "incident_id": "inc-9a5b30cf3dec1ea3"
     },
     {
-      "id": "6f964585c650761e",
-      "category": "Attacks",
-      "categories": [
-        "Attacks",
-        "Weapons",
-        "Chemicals and Explosives"
-      ],
-      "title": "Car bomb explosion on Colombia-Venezuela border leaves at least one dead",
-      "summary": "A car bomb explosion on the border between Colombia and Venezuela left at least one person dead and multiple injured.",
-      "original_title": "Al menos un muerto por un carrobomba en la frontera de Colombia con Venezuela",
-      "original_summary": "Al menos un muerto por un carrobomba en la frontera de Colombia con Venezuela EL PAÍS",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish",
-      "collection_locale": "ES:es",
-      "published": "2026-09-01T16:46:04+00:00",
-      "source": "EL PAÍS",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQTmVnTW1MNklTTThrM2dPWktkbmowQnJzdEdzaTR3LTBoWF9faFdKZll0REpFUE80aVY0bDluakJHQ0s5X2s1SlZaRnZkZ002aG5XeFBBTWRwZmZPalV5aXo5RVJQZzkwYUZ6QjZIWktfNHg5aHY3MzdyNk5FQ2NnRDl1Ty14Ny15WjRzTGs0SU81Nk9PV3EzV3lBbXNXN1VpbFFSZ2FpLXdHNnYtMzJqY1llS1RaamQtME5Rc280dTI2NzhsSU9FZ9IB3AFBVV95cUxQVDFlcDNJb1UweXVYSUZlN2RneW5JWWNxYU1WdmNETGZEekg3VlRFTDVnRHB5eXhBYktmSjk5TDlhRUZkY2lEMkdJekVpeEcwN3lXQ2RJNVJmNDg5VnVxaVNMWjk3LTZJQzN6SEQ5bUpidUZLXzdHb2xWT3dyaU10WWtRX0ptWmxoeVloRllFVkhKSFNYYW5CamFWZHotd1NMZGRfOHNJNFdiYVBBaldXVU5ObGhqeVh6c1pMbC1fc2d2cXk4ODdaVVNxQUVkUDFCV25OWHJodktQcG8x?oc=5",
-      "collector": "Google News RSS",
-      "country": "Colombia",
-      "country_code": "CO",
-      "city": null,
-      "region": "Colombia-Venezuela border",
-      "latitude": 7.8228,
-      "longitude": -72.4754,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "elpais.com",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "EL PAÍS",
-        "elpais.com"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-09-01T16:46:04+00:00",
-      "last_reported": "2026-09-01T16:46:04+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Concrete terrorist-style bombing attack involving explosive device and casualties on the border.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Car bomb explosion on Colombia-Venezuela border",
-      "title_variants": [
-        "Car bomb attack resulting in fatalities on Colombia-Venezuela border",
-        "Car bomb explosion on Colombia-Venezuela border"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "car bomb attack on the Colombia-Venezuela border"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Car bomb attack located on the border between Colombia and Venezuela.",
-      "ai_geo_fingerprint": "5669f52e999c9d82241db4ac4ef383c02f2b8ea6917bc9fea76f556694f14f06",
-      "ai_geo_inferred": false,
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_url"
-      ],
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Colombia Venezuela border car bomb attack 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-09bda3befd197260",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": []
-    },
-    {
       "id": "00c19c2cd716ca49",
       "category": "Arrests",
       "categories": [
@@ -347453,7 +346499,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-09-01T14:28:06+00:00",
       "source": "France 24",
-      "source_count": 5,
+      "source_count": 7,
       "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPZnptZHhYcTJTaThmT1BFcXVxaEtSeUFzaVF4MnlBYXFIZTRqeThKXzRKeGk1N2ZvU2JxNVZQXzdtMzhyUE02Y29RaGpSWklZQkZHTGVMaXJiVnE5c1ZOOWRMM181QTRGSjZGYWNTdE92dkQ4UWYtMklJa0YyTGdxbXl5MS12TzF0UlRCNGlyNkJKSFVFSHlteFRwT1VId1N2YWNoeWFkZVRnNVpNS0FiVVF0WjhIc2N6YUJGdWVmRDJubjR5N2xsTFB5UW9tbUg5QUE?oc=5",
       "collector": "Google News RSS",
       "country": "Colombia",
@@ -347472,10 +346518,22 @@
         "El Mundo",
         "Haberler",
         "haberler.com",
-        "france24.com"
+        "france24.com",
+        "EL PAÍS",
+        "elpais.com"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Car bomb explosion on Colombia-Venezuela border leaves at least one dead",
+          "original_title": "Al menos un muerto por un carrobomba en la frontera de Colombia con Venezuela",
+          "original_language": "es",
+          "summary": "A car bomb explosion on the border between Colombia and Venezuela left at least one person dead and multiple injured.",
+          "published": "2026-09-01T16:46:04+00:00",
+          "source": "EL PAÍS",
+          "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQTmVnTW1MNklTTThrM2dPWktkbmowQnJzdEdzaTR3LTBoWF9faFdKZll0REpFUE80aVY0bDluakJHQ0s5X2s1SlZaRnZkZ002aG5XeFBBTWRwZmZPalV5aXo5RVJQZzkwYUZ6QjZIWktfNHg5aHY3MzdyNk5FQ2NnRDl1Ty14Ny15WjRzTGs0SU81Nk9PV3EzV3lBbXNXN1VpbFFSZ2FpLXdHNnYtMzJqY1llS1RaamQtME5Rc280dTI2NzhsSU9FZ9IB3AFBVV95cUxQVDFlcDNJb1UweXVYSUZlN2RneW5JWWNxYU1WdmNETGZEekg3VlRFTDVnRHB5eXhBYktmSjk5TDlhRUZkY2lEMkdJekVpeEcwN3lXQ2RJNVJmNDg5VnVxaVNMWjk3LTZJQzN6SEQ5bUpidUZLXzdHb2xWT3dyaU10WWtRX0ptWmxoeVloRllFVkhKSFNYYW5CamFWZHotd1NMZGRfOHNJNFdiYVBBaldXVU5ObGhqeVh6c1pMbC1fc2d2cXk4ODdaVVNxQUVkUDFCV25OWHJodktQcG8x?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-09-01T14:28:06+00:00",
       "last_reported": "2026-09-01T17:33:10+00:00",
       "ai_selection_complete": true,
@@ -347505,7 +346563,8 @@
       "ai_geo_inferred": false,
       "dedup_confidence": 1.0,
       "dedup_methods": [
-        "same_url"
+        "same_url",
+        "same_incident"
       ],
       "actor_group": "",
       "primary_event_type": "ATTACK",
@@ -347517,7 +346576,8 @@
       "threat_categories": [
         "Chemicals and Explosives"
       ],
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "source_article_fingerprints": []
     },
     {
       "id": "8e48447501fe3cec",
@@ -352448,90 +351508,6 @@
       "incident_id": "inc-fb845ef522651979"
     },
     {
-      "id": "2fcdf2c657615bca",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Counter-terrorism operation in Nigeria: 610 hostages rescued",
-      "summary": "Security forces in Nigeria successfully rescued 610 hostages during a counter-terrorism operation.",
-      "original_title": "Nijerya'da terör operasyonu: 610 rehine kurtarıldı",
-      "original_summary": "Nijerya'da terör operasyonu: 610 rehine kurtarıldı Bursada Bugün",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": "TR:tr",
-      "published": "2026-08-31T22:08:00+00:00",
-      "source": "Bursada Bugün",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNa3NOUEtkWjNxeTI5dXF1SXAwbjBNR1BQMWdNMy1fS1ZkM3RjckxnUm9uVUxhNl9yenlCVENDOG1oU3dkbXIzVDJYcW5xNDZ2S1BzX2U4M3U0REZTUXlNZjlHMmFvYlhJOTJsVFRGY0RNNDdaOEQwOTBXd0NJTjBnalNaeVBidGdqNld4aElzX1FMZml1eUIyaVRmQlRwNVFY0gGgAUFVX3lxTE1rc05QS2RaM3F5Mjl1cXVJcDBuME1HUFAxZ00zLV9LVmQzdGNyTGdSb25VTGE2X3J6eUJUQ0M4bWhTd2RtcjNUMlhxbnE0NnZLUHNfZTgzdTRERlNReU1mOUcyYW9iWEk5MmxUVEZjRE00N1o4RDA5MFd3Q0lOMGdqU1p5UGJ0Z2o2V3hoSXNfUUxmaXV5QjJpVGZCVHA1UVg?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": "Abuja",
-      "region": null,
-      "latitude": 9.05785,
-      "longitude": 7.49508,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "Bursada Bugün",
-        "bursadabugun.com"
-      ],
-      "related_articles": [
-        {
-          "title": "Counter-terrorism operation in Nigeria: 610 hostages rescued",
-          "original_title": "Nijerya'da terör operasyonu: 610 rehine kurtarıldı",
-          "original_language": "tr",
-          "summary": "Nigerian forces conducted a counter-terrorism operation resulting in the rescue of 610 hostages.",
-          "published": "2026-08-31T22:08:00+00:00",
-          "source": "Bursada Bugün",
-          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNbW0wWk9FU3dmR1c1UWVaTFdsNDhTSVNGSmRaMjNfeGkyWk9IU1dKZUxEcE4xZXRJOW02ODdHV1B3QklIVTAwTndVazVvVGJINlhRdy1mYjJWdGtSd3huYUI0N1ZqVEh6UHBYNXliTXgwZmhaOGZtVGx0N2thV25taU96ZHdGcFNReThzYlJqYjg0c1RrQ0h5T0paUDg3Z9IBoAFBVV95cUxNa3NOUEtkWjNxeTI5dXF1SXAwbjBNR1BQMWdNMy1fS1ZkM3RjckxnUm9uVUxhNl9yenlCVENDOG1oU3dkbXIzVDJYcW5xNDZ2S1BzX2U4M3U0REZTUXlNZjlHMmFvYlhJOTJsVFRGY0RNNDdaOEQwOTBXd0NJTjBnalNaeVBidGdqNld4aElzX1FMZml1eUIyaVRmQlRwNVFY?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-08-31T22:08:00+00:00",
-      "last_reported": "2026-08-31T22:08:12+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Reports a concrete counter-terrorism operation resulting in mass hostage rescue.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Security forces rescue of 610 hostages in counter-terrorism operation Nigeria",
-      "title_variants": [
-        "Rescue of 610 hostages during a counter-terrorism operation in Nigeria by security forces",
-        "Security forces rescue of 610 hostages in counter-terrorism operation Nigeria"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Nigeria"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Counter-terrorism operation by security forces in Nigeria.",
-      "ai_geo_fingerprint": "990e29d8e16d0f309928c8d2cf77c6550829af4a20c7bf95c2b5f114fb236aef",
-      "ai_geo_inferred": true,
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_url",
-        "same_normalized_title",
-        "very_high_title_similarity"
-      ],
-      "actor_group": "",
-      "incident_id": "inc-23f1f6da7aa14308",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Hostage rescue counter-terrorism operation Nigeria 2026-08-31",
-      "update_type": "INITIAL"
-    },
-    {
       "id": "8bbfd2a077d3f0aa",
       "category": "Attacks",
       "categories": [
@@ -352800,7 +351776,7 @@
       "collection_locale": "NG:en",
       "published": "2026-08-31T19:36:30+00:00",
       "source": "Vanguard News",
-      "source_count": 3,
+      "source_count": 5,
       "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQa29Gd1hLSWRfaDhLeGhCbWJ6Tmh4ZzRyMlZNRVhjaHdPWmI1bWVZS0t1Sm1YSUxldGItbHpmNkNVTDVxQTNoRWlKZm1uajM3VzZGTUVWZkljOHhHVjdTMGNGUmVCejNFRGxqNjNSci1iTGlPZ1NfMWRGMGJCZnpBYmtTNGVtTVZ1b01URmhXY2xQV1U0RmtHcjF1U3UzVWNBeWdha0NHLVJ0c0hKeEZLVUNNN250cm_SAbwBQVVfeXFMTl9tYVFwODNLVGFoaTZBTV85cjdCUVhuX3B1SncxeXRHelAyZGFreUdITUpLRml4eXB0Q2l4T21uVnd0Y1JfSEdCWnk1RmQxWUJxbnVNTlFLMldZb3NDQ3hMRmQ3Y2hUa3ZDVnVncC1QRS1ia3FYaTB5V0RmdzhpWEF2eGRRNF8xeldocDNKdTlmWi15R2lmS1daOExEcFlYVjE3MEtkUHJOMzFPVXAyVGVGZU5FVWNyeEJ3cms?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
@@ -352817,7 +351793,9 @@
       "sources": [
         "Vanguard News",
         "LEADERSHIP Newspapers",
-        "Premium Times Nigeria"
+        "Premium Times Nigeria",
+        "Bursada Bugün",
+        "bursadabugun.com"
       ],
       "related_articles": [
         {
@@ -352837,15 +351815,25 @@
           "published": "2026-09-01T10:33:13+00:00",
           "source": "Premium Times Nigeria",
           "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNZVBRTW9IZTR5d0xLVlBCTTI0TDJDRGJ0akgwdVVHU3E5NnloazRyYVZLTnIxTTVRbG1QV19KaWkxLTZWZVpqTlBNdmVJTUQtQWdyb2IyblhnT1ZhdjlZbE5Ma1JmUWp5SW5DTE1DNTI2S3RuTW1DeGl3ZnMtWWhOV1owQVZQcVVWZEQ3Z1lkVFZhaEFmTm1xcFlzUWFGeTVxRHJfc0JDclR6cjAtMWM1VjV3?oc=5"
+        },
+        {
+          "title": "Counter-terrorism operation in Nigeria: 610 hostages rescued",
+          "original_title": "Nijerya'da terör operasyonu: 610 rehine kurtarıldı",
+          "original_language": "tr",
+          "summary": "Security forces in Nigeria successfully rescued 610 hostages during a counter-terrorism operation.",
+          "published": "2026-08-31T22:08:00+00:00",
+          "source": "Bursada Bugün",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNa3NOUEtkWjNxeTI5dXF1SXAwbjBNR1BQMWdNMy1fS1ZkM3RjckxnUm9uVUxhNl9yenlCVENDOG1oU3dkbXIzVDJYcW5xNDZ2S1BzX2U4M3U0REZTUXlNZjlHMmFvYlhJOTJsVFRGY0RNNDdaOEQwOTBXd0NJTjBnalNaeVBidGdqNld4aElzX1FMZml1eUIyaVRmQlRwNVFY0gGgAUFVX3lxTE1rc05QS2RaM3F5Mjl1cXVJcDBuME1HUFAxZ00zLV9LVmQzdGNyTGdSb25VTGE2X3J6eUJUQ0M4bWhTd2RtcjNUMlhxbnE0NnZLUHNfZTgzdTRERlNReU1mOUcyYW9iWEk5MmxUVEZjRE00N1o4RDA5MFd3Q0lOMGdqU1p5UGJ0Z2o2V3hoSXNfUUxmaXV5QjJpVGZCVHA1UVg?oc=5"
         }
       ],
-      "article_count": 3,
+      "article_count": 4,
       "first_reported": "2026-08-31T19:36:30+00:00",
       "last_reported": "2026-09-01T10:33:13+00:00",
-      "dedup_confidence": 0.786,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
         "title_plus_anchor",
-        "entity_actor_event_signature"
+        "entity_actor_event_signature",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
@@ -352877,11 +351865,13 @@
       "ai_geo_fingerprint": "c8935b49b80d7013efefeff020bb72bd16d056d34c73a957dd426084a1004393",
       "ai_geo_inferred": true,
       "actor_group": "",
-      "incident_id": "inc-64d07fa4cf1c2b3d",
+      "incident_id": "inc-bf05617f774a5da5",
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
-      "incident_anchor": "Nigerian military monthly CT operations August 2026",
-      "update_type": "INITIAL"
+      "incident_anchor": "Nigerian military August operational update 2026-08-31",
+      "update_type": "INITIAL",
+      "cbrn_subgroups": [],
+      "source_article_fingerprints": []
     },
     {
       "id": "8b5b2bd584279c97",
@@ -353714,79 +352704,6 @@
       "incident_anchor": "Hamburg Central Station knife attack 2026",
       "update_type": "ARREST_UPDATE",
       "incident_id": "inc-0f63f2e8df73976a"
-    },
-    {
-      "id": "2acc3661290b85ca",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Terrorism Impact: 57 Primary Schools Shut, 80 Students in Captivity in Borno LGA",
-      "summary": "An official reports that terrorism has forced the closure of 57 primary schools and left 80 students in captivity in a Borno local government area.",
-      "original_title": "Terrorism: 57 primary schools shut, 80 students in captivity in Borno LGA – Official",
-      "original_summary": "Terrorism: 57 primary schools shut, 80 students in captivity in Borno LGA – Official Premium Times Nigeria",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-08-31T18:47:07+00:00",
-      "source": "Premium Times Nigeria",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNcXhIVm1QM0pMUDJoTHFOTDUzb25wdS1LQUIyV2k4bUVPTm5QdjdHODlpcU9xVEVUWVZ2X3JLeVlsZDBxWnNIZ1RHcXhhRkVETGpyTFJMZngxTHpUWU9CVkVVNlhyekQ0M0UtUmZSLWVlakZDUU1ackp4Nm95SnJZNldKcUE1a0VmWkIwLXExTUxrTXhyZ3pqamxGM3dkNmFTVEJSRGZVQ1hXUU9KNkVnd2w3b1ZmcWc5VG0zU25SS3E5SnRvb2w0THRHcGdwLVhCSTlj?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": null,
-      "region": "Borno",
-      "latitude": 11.83333,
-      "longitude": 13.15,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "premiumtimesng.com",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "Premium Times Nigeria"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-08-31T18:47:07+00:00",
-      "last_reported": "2026-08-31T18:47:07+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Operational report detailing ongoing militant violence, school closures, and hostage-taking in Borno.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Terrorism impact closes schools and leaves students captive in Borno LGA Nigeria",
-      "title_variants": [
-        "closure of primary schools and student abductions due to terrorism in Borno LGA",
-        "Terrorism impact closes schools and leaves students captive in Borno LGA Nigeria"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Terrorism Impact: 57 Primary Schools Shut... in Borno LGA"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Event occurred in Borno State local government area, Nigeria.",
-      "ai_geo_fingerprint": "5d03bd4203f5782d4f564a3e418ce271cbd494c32289c9f479d44be9485f3351",
-      "ai_geo_inferred": true,
-      "actor_group": "Boko Haram",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Borno LGA school closures and captivity 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-9f2fb896f222612e"
     },
     {
       "id": "f1a000eca7397f20",
@@ -357481,7 +356398,8 @@
       "id": "e40ab9ceb8f9d2d9",
       "category": "Counter Terrorism Action",
       "categories": [
-        "Counter Terrorism Action"
+        "Counter Terrorism Action",
+        "Weapons"
       ],
       "title": "Somalia’s Armed Forces Launch Major Operation Against Al-Shabaab Militants Near Basra",
       "summary": "Somali national armed forces have initiated a large-scale military operation targeting Al-Shabaab militants near Basra.",
@@ -357493,7 +356411,7 @@
       "collection_locale": "NG:en",
       "published": "2026-08-31T07:36:54+00:00",
       "source": "Somali National News Agency",
-      "source_count": 2,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNanV4cXZMN3ZkSmNPdlktTDdwQWI0YXFwUVowdVc0MzFVWW0yNkV0aTI4b2FXZ1JoMFBrYjVjVndKSGg4WlQ3cXJMcE50SDlHczlCbVM2MDVmNllVdm8zSU0tRkp3b0RxM3dCZG1TS2xRb3R2SXppWlAtblFKYVlDMElxcG9OT19Dck9QRGNQVlFFVnhqNXdSNmtFbGs1MlRlb3JtMFJVY2dYdVB4Zk1wR3doWTJITGtYMDRVZFpB?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -357509,7 +356427,8 @@
       "targeted_source_kind": "local_language_media",
       "sources": [
         "Somali National News Agency",
-        "Goobjoog English"
+        "Goobjoog English",
+        "samaa tv"
       ],
       "related_articles": [
         {
@@ -357520,11 +356439,20 @@
           "published": "2026-08-31T07:36:54+00:00",
           "source": "Goobjoog English",
           "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPVXdJaHVxWmtvNk4zVThZSFhtTTRQQ2JEUmhoVk1YX0loUy1aSmdmUXJFdmZWSDNWeGFreDlyTGJmeHZEc1RJcHIxVkd5eEU5eWFnMzF1U093X2RfRmNmang5ZzBMXzBCNXhUeDhSR0tSMkRLR295MFFfX1FoOXlBbnk5OFFzV2drZUpvbk02b3Fld1p2MjNBWkhWMmVxdElobkRQdzBzTnVfVlVjbzNJ?oc=5"
+        },
+        {
+          "title": "US military strike kills key arms broker between Houthis and al-Shabaab",
+          "original_title": "US strike kills key broker in Houthi-al-Shabaab arms alliance",
+          "original_language": "en",
+          "summary": "A United States military strike has killed a key broker facilitating an arms alliance between the Houthis and al-Shabaab.",
+          "published": "2026-09-02T18:02:27+00:00",
+          "source": "samaa tv",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNaml2ek02M3RlakZIeGRFckk0N0d2ckZ4MjM3ZlRTNmEtdGw3NHRtdUJ4d25YSlNmZmY2WEY0am9vQWs1d2VkN2xqcGNKSkpLYVBlM1NWeW1RSGRxaUhJRm12M2owdTA3dTJSeTl2bnBORTYwLTlNZERIR1VyZGpuaDBQZEdfQTlnSmY0MVdBSWNsYTNOQ254RQ?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 3,
       "first_reported": "2026-08-31T07:36:54+00:00",
-      "last_reported": "2026-08-31T07:52:39+00:00",
+      "last_reported": "2026-09-02T18:02:27+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -357564,9 +356492,10 @@
       "source_article_fingerprints": [
         "7e09447cb612b2f022dc046e5647ea67e77d83b866a2d60a3600a6eb1bd98176"
       ],
-      "dedup_confidence": 0.714,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "same_incident"
       ]
     },
     {
@@ -362728,7 +361657,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-08-29T17:26:03+00:00",
       "source": "France 24",
-      "source_count": 32,
+      "source_count": 33,
       "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxOT1pZUnJQT0Y2eWp0Q2F1NF9JaS1mQWQ3NnZfa25zak1WNG1VTTNwZ29fZG9fa2xrNk1wd1hKVHk5ajlXUmF1NzY2ZHRacFQtemRRV3ZvS1dDTmF2d3RpZmMyVVNIeWliZEE2WTlNRWItOXdQb1M3b2pVd1l5SWg5R1JTQ3dwLXg1QlN5a19jV2RXdXdUSzg3bGpqakp6OWE5WS1INklJR1U1R1Y2RGFZaFcxVll6dWZna3FGV1JnMzhJUUExbFlmU3RYTVh3TEszdDlQQWhOYw?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
@@ -362772,7 +361701,8 @@
         "tgnews.com.ng",
         "New Telegraph",
         "camerounactuel.com",
-        "الجمهور الإخباري"
+        "الجمهور الإخباري",
+        "Premium Times Nigeria"
       ],
       "related_articles": [
         {
@@ -362801,9 +361731,18 @@
           "published": "2026-09-01T14:36:23+00:00",
           "source": "Son Dakika",
           "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPT0Zld0daNVM4cFJPRTJzTndFTzVSaERVVi1nQ3d5cXdRV09YNzEwWkZ0RWVoQTZJSFA2VXZzWUdxa0pob0tOVG5OalF1TFBGYlJwZThfTVlaYUItX3JwTFlqTjdPZ1dlWE95OWF6eU9QRXBBOUVKSXpBbzFjTDZrdTdEOFUtdS1RLWlvLTgxV09UMkdDZkR0S25OdzZWeUp10gGcAUFVX3lxTE1HSUJlQndmZUxSanp3OGVVaGE0eW1RX3M0d1hZcnlqQTZZUEtjbC03WjJzZnlrV2dad2ZwWnJGMzB2RXdGLVhsa1NmWjdoZ0VtVkhuN3lLN0dWVW1lcUg1Qm1HUm1paUJwcVpXaTVBc1hKRGZkWUp3YnAydFhWTS03ZVA2UTJLMmVaMlNTVDdhZmxEZ0VDWGtBSmhvUA?oc=5"
+        },
+        {
+          "title": "Terrorism Impact: 57 Primary Schools Shut, 80 Students in Captivity in Borno LGA",
+          "original_title": "Terrorism: 57 primary schools shut, 80 students in captivity in Borno LGA – Official",
+          "original_language": "en",
+          "summary": "An official reports that terrorism has forced the closure of 57 primary schools and left 80 students in captivity in a Borno local government area.",
+          "published": "2026-08-31T18:47:07+00:00",
+          "source": "Premium Times Nigeria",
+          "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNcXhIVm1QM0pMUDJoTHFOTDUzb25wdS1LQUIyV2k4bUVPTm5QdjdHODlpcU9xVEVUWVZ2X3JLeVlsZDBxWnNIZ1RHcXhhRkVETGpyTFJMZngxTHpUWU9CVkVVNlhyekQ0M0UtUmZSLWVlakZDUU1ackp4Nm95SnJZNldKcUE1a0VmWkIwLXExTUxrTXhyZ3pqamxGM3dkNmFTVEJSRGZVQ1hXUU9KNkVnd2w3b1ZmcWc5VG0zU25SS3E5SnRvb2w0THRHcGdwLVhCSTlj?oc=5"
         }
       ],
-      "article_count": 3,
+      "article_count": 4,
       "first_reported": "2026-08-29T17:26:03+00:00",
       "last_reported": "2026-09-01T14:36:23+00:00",
       "ai_selection_complete": true,
@@ -362834,14 +361773,17 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "very_high_title_similarity",
-        "entity_actor_event_signature"
+        "entity_actor_event_signature",
+        "same_incident"
       ],
       "actor_group": "Boko Haram",
       "primary_event_type": "ATTACK",
       "is_attack": true,
       "incident_anchor": "Boko Haram attacks and displacement Chad 2026-08-29",
       "update_type": "INITIAL",
-      "incident_id": "inc-4082f812b0da1055"
+      "incident_id": "inc-4082f812b0da1055",
+      "cbrn_subgroups": [],
+      "source_article_fingerprints": []
     },
     {
       "id": "adfd5272f07f758a",
@@ -364882,100 +363824,6 @@
       "reported_status": "CONFIRMED"
     },
     {
-      "id": "35fb1e662e3d2422",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Nigeria announces the neutralization of over 20 alleged Boko Haram and Islamic State members",
-      "summary": "Nigerian authorities announced the neutralization of more than 20 suspected fighters belonging to Boko Haram and the Islamic State during military operations.",
-      "original_title": "Nigeria anuncia la \"neutralización\" de más de 20 supuestos miembros de Boko Haram y Estado Islámico",
-      "original_summary": "Nigeria anuncia la \"neutralización\" de más de 20 supuestos miembros de Boko Haram y Estado Islámico Europa Press",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish",
-      "collection_locale": "ES:es",
-      "published": "2026-08-27T15:46:27+00:00",
-      "source": "Europa Press",
-      "source_count": 4,
-      "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQzh5VGdxZGVPVFhLZ2pfWFpXcjJON2ZWN0NiemZ2T291ZXdYMmoxbmlINW1HYVlNczc3SmpCZUNLMzc4dEhCVk9McXowdXdoNmNyRWZvT2NPaWlXU2JPMk90SzVUUzlfTDJWWEplZHpjamtHajVBNGJDOXJUcTRjaU9FbkVmSFJiMDJDQURydW9TY2U2emhSRlctenZGNm11ZS1UdmRLRUhYRVRuU1NXekZDMXpuQUZjdmJ0Q2JhOHVLYkdhbDRBbGt5RTlmeWV0UTZoSTlsQ1BDWm1xdzE1aXVJWkl6c0E?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": "Abuja",
-      "region": null,
-      "latitude": 9.05785,
-      "longitude": 7.49508,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "Europa Press",
-        "Demócrata",
-        "Premium Times Nigeria",
-        "Premium Times Hausa"
-      ],
-      "related_articles": [
-        {
-          "title": "Nigeria afirma haber neutralizado a más de 20 presuntos combatientes de Boko Haram y Estado Islámico",
-          "original_title": "Nigeria afirma haber neutralizado a más de 20 presuntos combatientes de Boko Haram y Estado Islámico",
-          "original_language": "es",
-          "summary": "Nigeria afirma haber neutralizado a más de 20 presuntos combatientes de Boko Haram y Estado Islámico Demócrata",
-          "published": "2026-08-28T13:50:36+00:00",
-          "source": "Demócrata",
-          "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxNaUtXSHVYcGJnbUxZREVCVzRSZUhkRkJ6S0k2TU01aUs2QlF4RE10Vi04RzM5dnlqQnRGOHJSVHJyMGk5X05YaGh1WDFnUl91cjZremlLMXF3ckYwaWJCT1ctWW5yUEx3ZS1XM0NyXzdVVXd0TmV1Mm5JeWFyT0R0N0M4U3RGTU10bHhqM2RrZ21hR01abllublFUekdLdWF0WWRZbG9Ia1BMeDY1eTFlazhucFlrdnlPeWIxUnJ0SEFjMlR0alhzMjVuNTM3OTMxSk9fb05Pa9IB3AFBVV95cUxNRzVxZ0FXR201X01Nall6ZmdESU1GTGQ0WlJ3LUFHdkRuay12ZV85dEJZZi1qNU8xT3hKU0k2Ti1Ca1JJV21YR2pfd3ZfMXBlRy1HcnRNZTVPSnk4OTFmUTRxZkhseTVOQnhlaXRaVVExWnFrMTVVWlZJZHJlQlpHV2YyUjVqMHhQZHpheHJpLS1qMlZDODlYSlpzaWVWQjJsQlFPTUhRY3BDTW5NVWVJR0lvRkdzd2M0M3U3Y3VTeWhHejZpUWhWLWVaU2M2MHNkS0lEUVdqSmRYcHcw?oc=5"
-        },
-        {
-          "title": "Over 7,000 People Kidnapped Across Nigeria, Boko Haram Got 90% of Ransom — Report",
-          "original_title": "Over 7,000 people kidnapped across Nigeria, Boko Haram got 90% of ransom — Report",
-          "original_language": "en",
-          "summary": "A new report reveals that over 7,000 individuals were kidnapped across Nigeria, with Boko Haram accounting for the vast majority of ransom proceeds.",
-          "published": "2026-08-27T15:46:27+00:00",
-          "source": "Premium Times Nigeria",
-          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOdDV6NDdBY3pyR1FhY0lHaGlDbjBXZzB6Z2dpN1FwYWZENEN3OTVoZF9XZTNaRDZxR2VyZUF5bGdHZG9CWUpTb1ZSRUR6eGg0OG5nX0RzMHlTcklydHU5eG9CZFpRNUdMc3VFYjJZcWN0WWRlaURVYzluNnRiVnBycGJXaEpzOUMzV3NwX3RIZDMtRFdLSThOcjBKUTBHTURLZXNUSEdLaV9zcmdmVFJ3RllnRi0zVjRMY1p6MU1zeDZHM1pSZ2RrbWhSaDFqdw?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-08-27T15:46:27+00:00",
-      "last_reported": "2026-08-28T13:50:36+00:00",
-      "dedup_confidence": 0.813,
-      "dedup_methods": [
-        "title_plus_anchor",
-        "paraphrase_entity_context"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete counter-terrorism operations resulting in numerous militant casualties.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Nigerian military neutralizes over 20 Boko Haram and Islamic State fighters",
-      "title_variants": [
-        "Nigerian military neutralizes over 20 Boko Haram and Islamic State militants in Nigeria",
-        "Nigerian military neutralizes over 20 Boko Haram and Islamic State fighters"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Nigeria announces the 'neutralization'"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly stated country.",
-      "ai_geo_fingerprint": "5d85c16ddf0cfc707c9b6ffe02c6f11e8b97a951ab882f7f91db8f93dd494682",
-      "ai_geo_inferred": false,
-      "actor_group": "Boko Haram",
-      "incident_id": "inc-f2cc7de2b22417e2",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Nigerian military neutralizes Boko Haram and IS fighters 2026-08-27",
-      "update_type": "INITIAL"
-    },
-    {
       "id": "16f06268c479d124",
       "category": "Legal / Judicial",
       "categories": [
@@ -365995,7 +364843,7 @@
       "collection_locale": "NG:en",
       "published": "2026-08-27T07:00:00+00:00",
       "source": "Vanguard News",
-      "source_count": 3,
+      "source_count": 7,
       "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPSEwxLXhObDFmelcxVHJOckdFdU1WUnBtaElvdjVlcjlDTXhENWNyakZZUTcwRGRNMVNUbDFWSVd1ckp2WTBaRExxX1ZqRXdmRjRrcmxxYXdHUElyT0pHcFA5RjlDd1NVTUJnS1pNMmw3ZU85UVUtcFo5eFpXUFZFbVpiUjdlTTJqeFBEUG14TllwVXBCVmRWYUpOdVlQekFwcmJRMTJwenowWGfSAbABQVVfeXFMUDN0RXZKUUNCTTd0NXpudVB4czdqLV9FSE1BWEJZR3puZGdQQWthUXVyMXl6eTBtRTZXRkVvc1JXTjcyRDhDcXRRX2lKRUJhcWVnbHY1SU5CMlVuMjdqSGJvTlg0SVFXSUhIWTVMYUpuZmdlTG1pUEtxSWFocmxpem9HdHRpMGgwV3h0QzV2cUVxQ0w0WnZmY095T1RBdnJISGJIT3ZDNzNkdVEtM25McDM?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
@@ -366012,7 +364860,11 @@
       "sources": [
         "Vanguard News",
         "Channels Television",
-        "ZAgazola"
+        "ZAgazola",
+        "Europa Press",
+        "Demócrata",
+        "Premium Times Nigeria",
+        "Premium Times Hausa"
       ],
       "related_articles": [
         {
@@ -366032,9 +364884,36 @@
           "published": "2026-08-27T07:00:00+00:00",
           "source": "ZAgazola",
           "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQR2ZfZG5sVS15YUxwZWVDSEZVLUZVY0VBYWNYVGVBTGJwOXVjUzk2QWFtb3NTbGZWbTBkMkExS2Z2Z2ZoNG5xQUZfSHdGbTl3LVhwQkszTUhabkVydW5fU29LV3RiYVdWSElvTUNmVzl3d0J1SFdVWGlOY3FnRV9oLUpmb1FtcU01WDc0MFdsMXdjS0RQVzJyWkdzNEhhaFVfTGs5ZlVjVU4?oc=5"
+        },
+        {
+          "title": "Nigeria announces the neutralization of over 20 alleged Boko Haram and Islamic State members",
+          "original_title": "Nigeria anuncia la \"neutralización\" de más de 20 supuestos miembros de Boko Haram y Estado Islámico",
+          "original_language": "es",
+          "summary": "Nigerian authorities announced the neutralization of more than 20 suspected fighters belonging to Boko Haram and the Islamic State during military operations.",
+          "published": "2026-08-27T15:46:27+00:00",
+          "source": "Europa Press",
+          "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxOQzh5VGdxZGVPVFhLZ2pfWFpXcjJON2ZWN0NiemZ2T291ZXdYMmoxbmlINW1HYVlNczc3SmpCZUNLMzc4dEhCVk9McXowdXdoNmNyRWZvT2NPaWlXU2JPMk90SzVUUzlfTDJWWEplZHpjamtHajVBNGJDOXJUcTRjaU9FbkVmSFJiMDJDQURydW9TY2U2emhSRlctenZGNm11ZS1UdmRLRUhYRVRuU1NXekZDMXpuQUZjdmJ0Q2JhOHVLYkdhbDRBbGt5RTlmeWV0UTZoSTlsQ1BDWm1xdzE1aXVJWkl6c0E?oc=5"
+        },
+        {
+          "title": "Nigeria afirma haber neutralizado a más de 20 presuntos combatientes de Boko Haram y Estado Islámico",
+          "original_title": "Nigeria afirma haber neutralizado a más de 20 presuntos combatientes de Boko Haram y Estado Islámico",
+          "original_language": "es",
+          "summary": "Nigeria afirma haber neutralizado a más de 20 presuntos combatientes de Boko Haram y Estado Islámico Demócrata",
+          "published": "2026-08-28T13:50:36+00:00",
+          "source": "Demócrata",
+          "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxNaUtXSHVYcGJnbUxZREVCVzRSZUhkRkJ6S0k2TU01aUs2QlF4RE10Vi04RzM5dnlqQnRGOHJSVHJyMGk5X05YaGh1WDFnUl91cjZremlLMXF3ckYwaWJCT1ctWW5yUEx3ZS1XM0NyXzdVVXd0TmV1Mm5JeWFyT0R0N0M4U3RGTU10bHhqM2RrZ21hR01abllublFUekdLdWF0WWRZbG9Ia1BMeDY1eTFlazhucFlrdnlPeWIxUnJ0SEFjMlR0alhzMjVuNTM3OTMxSk9fb05Pa9IB3AFBVV95cUxNRzVxZ0FXR201X01Nall6ZmdESU1GTGQ0WlJ3LUFHdkRuay12ZV85dEJZZi1qNU8xT3hKU0k2Ti1Ca1JJV21YR2pfd3ZfMXBlRy1HcnRNZTVPSnk4OTFmUTRxZkhseTVOQnhlaXRaVVExWnFrMTVVWlZJZHJlQlpHV2YyUjVqMHhQZHpheHJpLS1qMlZDODlYSlpzaWVWQjJsQlFPTUhRY3BDTW5NVWVJR0lvRkdzd2M0M3U3Y3VTeWhHejZpUWhWLWVaU2M2MHNkS0lEUVdqSmRYcHcw?oc=5"
+        },
+        {
+          "title": "Over 7,000 People Kidnapped Across Nigeria, Boko Haram Got 90% of Ransom — Report",
+          "original_title": "Over 7,000 people kidnapped across Nigeria, Boko Haram got 90% of ransom — Report",
+          "original_language": "en",
+          "summary": "A new report reveals that over 7,000 individuals were kidnapped across Nigeria, with Boko Haram accounting for the vast majority of ransom proceeds.",
+          "published": "2026-08-27T15:46:27+00:00",
+          "source": "Premium Times Nigeria",
+          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOdDV6NDdBY3pyR1FhY0lHaGlDbjBXZzB6Z2dpN1FwYWZENEN3OTVoZF9XZTNaRDZxR2VyZUF5bGdHZG9CWUpTb1ZSRUR6eGg0OG5nX0RzMHlTcklydHU5eG9CZFpRNUdMc3VFYjJZcWN0WWRlaURVYzluNnRiVnBycGJXaEpzOUMzV3NwX3RIZDMtRFdLSThOcjBKUTBHTURLZXNUSEdLaV9zcmdmVFJ3RllnRi0zVjRMY1p6MU1zeDZHM1pSZ2RrbWhSaDFqdw?oc=5"
         }
       ],
-      "article_count": 3,
+      "article_count": 6,
       "first_reported": "2026-08-27T07:00:00+00:00",
       "last_reported": "2026-08-28T07:21:03+00:00",
       "ai_selection_complete": true,
@@ -366077,9 +364956,10 @@
         "20ccaf46e5d076fd0956cf812f8db3f1e07992c06df35076f6d422b5f22693a7",
         "2e7595b31be1984e31c9babb662fc134d2b49bef65b154969fd350547727154a"
       ],
-      "dedup_confidence": 0.583,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "paraphrase_entity_context"
+        "paraphrase_entity_context",
+        "same_incident"
       ]
     },
     {
@@ -367776,7 +366656,8 @@
       "id": "40fd2f63b7df69c1",
       "category": "Arrests",
       "categories": [
-        "Arrests"
+        "Arrests",
+        "Counter Terrorism Action"
       ],
       "title": "Troops arrest suspected ISWAP member in Borno",
       "summary": "Nigerian troops arrested a suspected ISWAP member and recovered visual evidence of armed groups in Borno state.",
@@ -367788,7 +366669,7 @@
       "collection_locale": "NG:en",
       "published": "2026-08-26T07:00:00+00:00",
       "source": "ZAgazola",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQNmV1TDh2V21qMHJYc2M1WW1maGpzejc4QnZNOUt2VjJ6VVoxbHIzYmZOWGpuN2ladF9Rdm5lb2JXc1FyT0FTT1Z2VXU4QkpIYWJva2Q2dk1wS2pUTG42ZmI3YlpXdHBaN0NmUEo2bENWM2tNRzBmSEZfcEFxMldsY2VENnhrM0NFZE9vaFRDMFVwZzJrTEdfRnd6a1NJYjhUaGtmTFlINDdVc0JnNXd3RjhyV21FRlZj?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
@@ -367803,11 +366684,13 @@
       "targeted_source": "zagazola.org",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
+        "890aa8335a83fc007a5dbbc913b2ea2969d5ddfeba433dba4d09e7bb25a4ecf6",
         "c0821791151968ea79b56df670bec3b7bcf8df4a398ae05b67ff15de78e18046",
         "fb41f7016c84b7f23bc44110496a4074b6fa5a3b662723c2db597f523834a6c7"
       ],
       "sources": [
-        "ZAgazola"
+        "ZAgazola",
+        "zagazola.org"
       ],
       "related_articles": [
         {
@@ -367818,20 +366701,30 @@
           "published": "2026-08-27T07:00:00+00:00",
           "source": "ZAgazola",
           "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQWnJBcVlHZ2NRdC1LUmZQb29HMDA1T2JBbGZMMkJVWWNCTWxNSFp0bTh1OGFzanlfS1VjSUM3OEJCMWJXRTNEUV9jUVpDcWoyblRYMjhET3o5QzRiM19hTnRqOFhhS1FiOWVwRjFrRjkwaUt4SWc1OElQUnpvbWZaTjktVXBFUHo0aVJHYkd4OXpfblpoelItVVBmNFF3dWdaTG12eUxyNVBFVnRvTkxlb2hraw?oc=5"
+        },
+        {
+          "title": "Airstrikes neutralise four ISWAP terrorists in Borno",
+          "original_title": "Operation Hadin Kai airstrikes neutralise four ISWAP terrorists, destroy 12 boats in Borno",
+          "original_language": "en",
+          "summary": "Operation Hadin Kai conducted airstrikes that neutralised four ISWAP terrorists and destroyed 12 boats in Borno.",
+          "published": "2026-08-26T07:00:00+00:00",
+          "source": "zagazola.org",
+          "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxOSXFKcTMxRGJBSDVTcW1xdmdnXy1Hd3pDSDZBclUyclF4ZWpCWXAxZTl4RVRKWi1vNU5HLWNRcndyRVdhc3dIOHl4a1NVdjhXbG9SMHRQSkp1M1ZKS3BlSXpCUVJBQ21uVXVvYURYQW0zdGpxZFpSbi1vQ1V1WHdEVkUzeWt0eFVuVzIzeDgzeUNuM0hCMzdoNnZMc19mMHZuRm95dnE1R0hjdlY3X2N3ZnJkc1FxZ2FhM1RIQWh1SEdsQjc1c3NoRmJjWENPMUU?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 3,
       "first_reported": "2026-08-26T07:00:00+00:00",
       "last_reported": "2026-08-27T07:00:00+00:00",
       "cbrn_subgroups": [],
-      "dedup_confidence": 0.53,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "entity_actor_event_signature"
+        "entity_actor_event_signature",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 80,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Reports a concrete arrest of a suspected militant.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -367863,84 +366756,6 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The arrest took place in Borno state, Nigeria.",
       "ai_geo_fingerprint": "b75a2dcd747a375f3aeb37c0f793d9be9363070bd278c3390412cb00fa2185fc",
-      "ai_geo_inferred": false
-    },
-    {
-      "id": "7661a599df3979fa",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Airstrikes neutralise four ISWAP terrorists in Borno",
-      "summary": "Operation Hadin Kai conducted airstrikes that neutralised four ISWAP terrorists and destroyed 12 boats in Borno.",
-      "original_title": "Operation Hadin Kai airstrikes neutralise four ISWAP terrorists, destroy 12 boats in Borno",
-      "original_summary": "Operation Hadin Kai airstrikes neutralise four ISWAP terrorists, destroy 12 boats in Borno zagazola.org",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-08-26T07:00:00+00:00",
-      "source": "zagazola.org",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxOSXFKcTMxRGJBSDVTcW1xdmdnXy1Hd3pDSDZBclUyclF4ZWpCWXAxZTl4RVRKWi1vNU5HLWNRcndyRVdhc3dIOHl4a1NVdjhXbG9SMHRQSkp1M1ZKS3BlSXpCUVJBQ21uVXVvYURYQW0zdGpxZFpSbi1vQ1V1WHdEVkUzeWt0eFVuVzIzeDgzeUNuM0hCMzdoNnZMc19mMHZuRm95dnE1R0hjdlY3X2N3ZnJkc1FxZ2FhM1RIQWh1SEdsQjc1c3NoRmJjWENPMUU?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": null,
-      "region": "Borno",
-      "latitude": 11.8311,
-      "longitude": 13.151,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "zagazola.org",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "890aa8335a83fc007a5dbbc913b2ea2969d5ddfeba433dba4d09e7bb25a4ecf6"
-      ],
-      "sources": [
-        "zagazola.org"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-08-26T07:00:00+00:00",
-      "last_reported": "2026-08-26T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports a concrete, dated military counter-terrorism operation.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "ISWAP",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "ISWAP airstrike Borno 2026-08-26",
-      "update_type": "INITIAL",
-      "incident_id": "inc-fe92481d9212904f",
-      "translated_to_english": false,
-      "ai_canonical_event": "Airstrike against ISWAP in Borno",
-      "title_variants": [
-        "Airstrike against ISWAP in Borno"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Borno"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The military operation took place in Borno state, Nigeria.",
-      "ai_geo_fingerprint": "f4bc8644eb8c303d267b99e7dcbd715972f2492a5cfb826479c80d476eb41be3",
       "ai_geo_inferred": false
     },
     {
@@ -369190,9 +368005,9 @@
       "actor_group": "Tren de Aragua",
       "primary_event_type": "JUDICIAL",
       "is_attack": false,
-      "incident_anchor": "Tren de Aragua judicial case Doral 2026-08-25",
+      "incident_anchor": "Tren de Aragua arrests Norte de Santander 2026-08-23",
       "update_type": "JUDICIAL_UPDATE",
-      "incident_id": "inc-690dc6edab212676",
+      "incident_id": "inc-c995369c0611c575",
       "translated_to_english": true,
       "ai_canonical_event": "Guilty plea of Tren de Aragua member in Doral",
       "title_variants": [
@@ -370518,109 +369333,6 @@
       "update_type": "INITIAL"
     },
     {
-      "id": "b73797dbb850eb47",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Arrests"
-      ],
-      "title": "SNA Conducts Planned Operation in Bay Region Targeting Al-Shabaab Hideouts",
-      "summary": "The Somali National Army executed a planned military operation in the Bay region targeting Al-Shabaab hideouts.",
-      "original_title": "SNA Conducts Planned Operation in Bay Region Targeting Al-Shabaab Hideouts",
-      "original_summary": "SNA Conducts Planned Operation in Bay Region Targeting Al-Shabaab Hideouts Somali National News Agency",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-08-23T07:46:55+00:00",
-      "source": "Somali National News Agency",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNVUtTNENhODFUdDh3OGZQU1lsTFB5QTNXRkRfWkJpTzdlampDZEt6d0pPeU5lOHpmb1NQUWFtSmtjT1RGbW05bGs0akZZOGt6WnpvWkd0NkktTkh1STJ2bVlZZFhfM1NvOVh6cXJ1Ul9NcnBWVXZIUUUwVi1xSjVkTUZlZ2NiMmhQQnJjLWE4YUU0X2NtY3ZwRWtsWjNCVGpQS3dBNw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Bay Region",
-      "latitude": 3.0,
-      "longitude": 43.0,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "sonna.so/en",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "Somali National News Agency",
-        "Goobjoog English"
-      ],
-      "related_articles": [
-        {
-          "title": "Al-Shabaab fighter surrenders to Somali forces",
-          "original_title": "Al-Shabaab Fighter Surrenders to Somali Forces in Bay Region Operation",
-          "original_language": "en",
-          "summary": "A long-standing Al-Shabaab member surrendered to Somali security forces during an operation in the Bay region.",
-          "published": "2026-08-23T07:46:55+00:00",
-          "source": "Goobjoog English",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPZ3dPWmFNVDVkcUZGQmgzaFNGcHBNTDNNaW5LaUVUQmNmNmZCaXc5YWtkUG83VkNxeGlMN0c4Z3RkdS0wa1hqT0ZEX1lMRElMcDVVNFpHQ3ZKWUh2Sk5TaVhFMWJxYjhpUDVlSmlwbEZyeERNUXNaZzlUVi1OemVlRUxLM0ZYWk9pR3FOem51MWI0XzZLaDE2STRKTQ?oc=5"
-        },
-        {
-          "title": "Al-Shabaab Fighter Surrenders to Somali Forces After 11 Years",
-          "original_title": "Al-Shabaab Fighter Surrenders to Somali Forces After 11 Years",
-          "original_language": "en",
-          "summary": "Al-Shabaab Fighter Surrenders to Somali Forces After 11 Years Goobjoog English",
-          "published": "2026-08-29T09:04:56+00:00",
-          "source": "Goobjoog English",
-          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQSmJadUl5N0RzeXRzMVdueG43N1RLQkZfdFVJSTg1djl0eDVwUVdfQ1p6SmRrUXhaaUdUX3NhOXhLaE1BQWVnYlQtZWc2UUx6UHBqanFxVzZRT0tSTTl2cGgzTlpRZG95c2VKVnVFR3dNcGJRRmQyU3hxRlJZMDJBMG5Yc2NLcDBrVnVEWmJlcw?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-08-23T07:46:55+00:00",
-      "last_reported": "2026-08-23T08:14:35+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "The Somali National Army conducted a planned counter-terrorism operation targeting Al-Shabaab hideouts.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Somali National Army operation targeting Al-Shabaab hideouts in Bay region Somalia",
-      "title_variants": [
-        "Somali National Army conducts operation targeting Al-Shabaab hideouts in Bay region",
-        "Somali National Army operation targeting Al-Shabaab hideouts in Bay region Somalia"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "SNA Conducts Planned Operation in Bay Region Targeting Al-Shabaab Hideouts"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly located in the Bay region of Somalia by the Somali National Army.",
-      "ai_geo_fingerprint": "7d9b1adcc34370d0202c07a82dc431eb6137beac4cc5a15002793790574283c0",
-      "ai_geo_inferred": false,
-      "actor_group": "Al-Shabaab",
-      "incident_id": "inc-7ccf15f1e483e821",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "SNA Bay region operation Somalia 2026-08-23",
-      "update_type": "INITIAL",
-      "cbrn_subgroups": [],
-      "source_article_fingerprints": [
-        "607db5a4df5908ef46e45ad271e772616c448496f9c21f060cf3e1e57da220e8",
-        "f4dfe29c1adb56a78b9ebacbc327a37f1dd194eef11f5253c76eb166b82f7bed"
-      ],
-      "dedup_confidence": 0.597,
-      "dedup_methods": [
-        "paraphrase_entity_context"
-      ]
-    },
-    {
       "id": "2c923151384eedc3",
       "category": "Attacks",
       "categories": [
@@ -371476,7 +370188,8 @@
       "id": "1b262880a00f292f",
       "category": "Counter Terrorism Action",
       "categories": [
-        "Counter Terrorism Action"
+        "Counter Terrorism Action",
+        "Arrests"
       ],
       "title": "Local Defence Forces Neutralise Two Senior Al-Shabaab Commanders in Middle Shabelle",
       "summary": "Local defense forces neutralized two senior Al-Shabaab commanders during an operation in the Middle Shabelle region.",
@@ -371515,11 +370228,38 @@
           "published": "2026-08-22T07:00:00+00:00",
           "source": "Goobjoog English",
           "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPTWRLTm81Uzkzc3J0N1NuWWd6Tjk0c3Zsdy05OFYtUld6akRrc1lreTczOHpGUUs3SUZsQUFwdVRTOHN0cXVlMjJxT0Q1UUNKOW5MaVowLVlsRkp3S0JGVHFXLTRTdGkxWVRlNFgzZGxNeks5WmxCd3lvUEJzQ1piZlVEMGw2V3NhV2lHaGpXdDg?oc=5"
+        },
+        {
+          "title": "SNA Conducts Planned Operation in Bay Region Targeting Al-Shabaab Hideouts",
+          "original_title": "SNA Conducts Planned Operation in Bay Region Targeting Al-Shabaab Hideouts",
+          "original_language": "en",
+          "summary": "The Somali National Army executed a planned military operation in the Bay region targeting Al-Shabaab hideouts.",
+          "published": "2026-08-23T07:46:55+00:00",
+          "source": "Somali National News Agency",
+          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNVUtTNENhODFUdDh3OGZQU1lsTFB5QTNXRkRfWkJpTzdlampDZEt6d0pPeU5lOHpmb1NQUWFtSmtjT1RGbW05bGs0akZZOGt6WnpvWkd0NkktTkh1STJ2bVlZZFhfM1NvOVh6cXJ1Ul9NcnBWVXZIUUUwVi1xSjVkTUZlZ2NiMmhQQnJjLWE4YUU0X2NtY3ZwRWtsWjNCVGpQS3dBNw?oc=5"
+        },
+        {
+          "title": "Al-Shabaab fighter surrenders to Somali forces",
+          "original_title": "Al-Shabaab Fighter Surrenders to Somali Forces in Bay Region Operation",
+          "original_language": "en",
+          "summary": "A long-standing Al-Shabaab member surrendered to Somali security forces during an operation in the Bay region.",
+          "published": "2026-08-23T07:46:55+00:00",
+          "source": "Goobjoog English",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPZ3dPWmFNVDVkcUZGQmgzaFNGcHBNTDNNaW5LaUVUQmNmNmZCaXc5YWtkUG83VkNxeGlMN0c4Z3RkdS0wa1hqT0ZEX1lMRElMcDVVNFpHQ3ZKWUh2Sk5TaVhFMWJxYjhpUDVlSmlwbEZyeERNUXNaZzlUVi1OemVlRUxLM0ZYWk9pR3FOem51MWI0XzZLaDE2STRKTQ?oc=5"
+        },
+        {
+          "title": "Al-Shabaab Fighter Surrenders to Somali Forces After 11 Years",
+          "original_title": "Al-Shabaab Fighter Surrenders to Somali Forces After 11 Years",
+          "original_language": "en",
+          "summary": "Al-Shabaab Fighter Surrenders to Somali Forces After 11 Years Goobjoog English",
+          "published": "2026-08-29T09:04:56+00:00",
+          "source": "Goobjoog English",
+          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQSmJadUl5N0RzeXRzMVdueG43N1RLQkZfdFVJSTg1djl0eDVwUVdfQ1p6SmRrUXhaaUdUX3NhOXhLaE1BQWVnYlQtZWc2UUx6UHBqanFxVzZRT0tSTTl2cGgzTlpRZG95c2VKVnVFR3dNcGJRRmQyU3hxRlJZMDJBMG5Yc2NLcDBrVnVEWmJlcw?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 5,
       "first_reported": "2026-08-22T07:00:00+00:00",
-      "last_reported": "2026-08-22T08:52:58+00:00",
+      "last_reported": "2026-08-23T07:46:55+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -371557,11 +370297,14 @@
       "update_type": "INITIAL",
       "cbrn_subgroups": [],
       "source_article_fingerprints": [
-        "0e49780baec3ef32cc5076fb85716f6f3a1f09bd141c1b9db4cd339a981b12b8"
+        "0e49780baec3ef32cc5076fb85716f6f3a1f09bd141c1b9db4cd339a981b12b8",
+        "607db5a4df5908ef46e45ad271e772616c448496f9c21f060cf3e1e57da220e8",
+        "f4dfe29c1adb56a78b9ebacbc327a37f1dd194eef11f5253c76eb166b82f7bed"
       ],
-      "dedup_confidence": 0.875,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "very_high_title_similarity"
+        "very_high_title_similarity",
+        "same_incident"
       ]
     },
     {
@@ -374588,7 +373331,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-08-20T07:00:00+00:00",
       "source": "malijet.com",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOc0wyOV8wVWo0UFJwdkh0VGVxajFGaS1aOThwYWFuNGhqcmlPdDFVa2prYUhNYmZ6bDdNVC1oWTlneDJQNnVjcU1YVlNXR2R5bkhLWGwtaHpvM3RIY2Iwb2lKY29iVFBCSjJJdzl3V3ZyRUN2X1NBRDNRbGlZd3ZmaGxLN2hlVENwMnhidnZtYjdnQmdrdW80dUpVdFNyUWhqUThuVE96NlFZRTNsWVgtSXJoSzVabmJWbnYya21ZU2JaQQ?oc=5",
       "collector": "Google News RSS",
       "country": "Mali",
@@ -374603,7 +373346,8 @@
       "targeted_source": "malijet.com",
       "targeted_source_kind": "local_language_media",
       "sources": [
-        "malijet.com"
+        "malijet.com",
+        "Maliweb"
       ],
       "related_articles": [
         {
@@ -374614,15 +373358,24 @@
           "published": "2026-08-21T07:00:00+00:00",
           "source": "malijet.com",
           "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQVVJpSV9JQWw1ZVd4UWEzeUhjOHg3UHdqdUc5MDVEQ0hzNEJXZDB1aFVmdkIyQVlCQ0MwYXVnMUxtU1E1d3JnZUhnMEZUU1BnWWtieUlvN0ljdE53QzNmcWpIcGRqdkw0WTUzUmI0eHpEdVJZdW1WZzZhX1Q4ZHIyQTJqdWRyQk9jcm1RTWhlVHg3XzNfNXlPSnJ5a25jMzdscHcyNUhXNEZZdXZienFKeVI1Q0l4Wk1Nd09BbnozNXc?oc=5"
+        },
+        {
+          "title": "Mali military neutralizes terrorists in Operation Dougoukoloko",
+          "original_title": "Opération Dougoukoloko : les FAMa neutralisent une vingtaine de terroristes et détruisent plusieurs équipements",
+          "original_language": "fr",
+          "summary": "Malian forces (FAMa) have neutralized approximately twenty terrorists and destroyed several pieces of equipment during Operation Dougoukoloko.",
+          "published": "2026-08-20T07:00:00+00:00",
+          "source": "Maliweb",
+          "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxNWHBNUGM0bjVMUWVDMzFLZ25wVkJHb2NndkdONUVTM0dNbGpVMlJNT2RCRWVsMVlZYTlBNzBQT3JsRExYTjhOek8teGYwWDlGSk9mVXJ0OG5jcklxbV9lSjk2eFYtMndpeUpWcXIxQzI5N2hnVGRldnZhM2I1UFNjUUR0WnlvUEtvU3A1ekxEbl9kaXA2LVZWLXhSTDNINlJ3OVhaNUtUdG5qbWpicFljQTlzWnFkajhwbmQ3VW1idmFXcXhDSW42Y29fRzRUSWpRM0lxYU9Uam9CbnR6SFNpVGZ0QXN5QnBMR0F4b0FB?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 3,
       "first_reported": "2026-08-20T07:00:00+00:00",
       "last_reported": "2026-08-21T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
+      "ai_relevance_score": 90,
       "ai_relevance_reason": "The Malian Armed Forces neutralized about twenty terrorists in a military operation.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -374650,7 +373403,9 @@
       "ai_geo_inferred": true,
       "actor_group": "",
       "incident_id": "inc-5bbde2e6f45d3897",
-      "source_article_fingerprints": [],
+      "source_article_fingerprints": [
+        "794bb7cd803abf0bedce97e7ff2f44c4a49914b170de02fd5643cdefb2d15384"
+      ],
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_incident"
@@ -374658,7 +373413,8 @@
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
       "incident_anchor": "Operation Dougoukoloko Mali 2026-08-20",
-      "update_type": "INITIAL"
+      "update_type": "INITIAL",
+      "cbrn_subgroups": []
     },
     {
       "id": "45a29c05ac926303",
@@ -374938,178 +373694,6 @@
       "ai_geo_inferred": false
     },
     {
-      "id": "68faba3de5d7a2b7",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Piracy alarm raised in Gulf of Aden",
-      "summary": "A new piracy alarm has been issued in the Gulf of Aden following the hijacking of a tanker.",
-      "original_title": "Fresh piracy alarm in Gulf of Aden after tanker hijacking",
-      "original_summary": "Fresh piracy alarm in Gulf of Aden after tanker hijacking safety4sea",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-08-20T07:00:00+00:00",
-      "source": "safety4sea",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQS21JbFEyREFYT2pxQXlwaGFvcjdFT1ppUFVuRlJYdWtOUE40LUNqQmNpckFROVhJWDFDSmxkQ2M2MVlVNUk4LWFWaEFiUFBIR0FUaDBsZUJvWEltUXRGQ0poMzNyV3daYjZzeGlYTGxOMUZsOWtHcFZlREM5Si1TM21NOEd5b2dK?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Gulf of Aden",
-      "latitude": 12.4277,
-      "longitude": 48.0163,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "SAFETY4SEA",
-      "targeted_source_kind": "specialist_media",
-      "source_article_fingerprints": [
-        "c28e2e7ce2082eab1354e813773ee0dff7dd705809dead9062492538a1a3c39a",
-        "d0d99b04556e826aba7803f2b5067ff8231cbc81983f5268f0518e63e5f199f8"
-      ],
-      "sources": [
-        "safety4sea",
-        "Goobjoog English"
-      ],
-      "related_articles": [
-        {
-          "title": "Tanker hijacked in Gulf of Aden",
-          "original_title": "Armed Men Hijack Tanker in Gulf of Aden and Divert It Toward Somalia",
-          "original_language": "en",
-          "summary": "Armed men have hijacked a tanker in the Gulf of Aden and are diverting it toward the coast of Somalia.",
-          "published": "2026-08-21T06:54:27+00:00",
-          "source": "Goobjoog English",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQSklDTUhoTnpQQWhTMWlWbGFEUzh1a0ZnQ1VOekJta09nZGFMa1pzUFBUMndvNjNlUXdnOWRHc0ZNWVF4cHdZU01JVWlwUmFWSndNd0x5MllDVy12U3czVG14OVlBTmY1ZjMwblR3Yjd3dDFzeHlOSG1PUGxkQldxcVpzMWdGYlJobDMtTE1hTnotUktzeHpyaw?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-08-20T07:00:00+00:00",
-      "last_reported": "2026-08-21T06:54:27+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Follow-up to the Gulf of Aden hijacking.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "PIRACY",
-      "is_attack": false,
-      "incident_anchor": "Gulf of Aden tanker hijack 2026-08-20",
-      "update_type": "FOLLOW_UP",
-      "incident_id": "inc-a35fd1c0577161c0",
-      "translated_to_english": false,
-      "ai_canonical_event": "Tanker hijacking Gulf of Aden",
-      "title_variants": [
-        "Tanker hijacking Gulf of Aden"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "dedup_confidence": 0.933,
-      "dedup_methods": [
-        "very_high_title_similarity"
-      ],
-      "location_confidence_score": 0.85,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Gulf of Aden"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The hijacking occurred in the Gulf of Aden near Somalia.",
-      "ai_geo_fingerprint": "56e12dd80a0c52b75029c63f97ec522737a9d3e69511f15b517ce376d9f76498",
-      "ai_geo_inferred": true
-    },
-    {
-      "id": "8f421e6e8b4a58fd",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Mali military neutralizes terrorists in Operation Dougoukoloko",
-      "summary": "Malian forces (FAMa) have neutralized approximately twenty terrorists and destroyed several pieces of equipment during Operation Dougoukoloko.",
-      "original_title": "Opération Dougoukoloko : les FAMa neutralisent une vingtaine de terroristes et détruisent plusieurs équipements",
-      "original_summary": "Opération Dougoukoloko : les FAMa neutralisent une vingtaine de terroristes et détruisent plusieurs équipements Maliweb",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French / Africa",
-      "collection_locale": "FR:fr",
-      "published": "2026-08-20T07:00:00+00:00",
-      "source": "Maliweb",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxNWHBNUGM0bjVMUWVDMzFLZ25wVkJHb2NndkdONUVTM0dNbGpVMlJNT2RCRWVsMVlZYTlBNzBQT3JsRExYTjhOek8teGYwWDlGSk9mVXJ0OG5jcklxbV9lSjk2eFYtMndpeUpWcXIxQzI5N2hnVGRldnZhM2I1UFNjUUR0WnlvUEtvU3A1ekxEbl9kaXA2LVZWLXhSTDNINlJ3OVhaNUtUdG5qbWpicFljQTlzWnFkajhwbmQ3VW1idmFXcXhDSW42Y29fRzRUSWpRM0lxYU9Uam9CbnR6SFNpVGZ0QXN5QnBMR0F4b0FB?oc=5",
-      "collector": "Google News RSS",
-      "country": "Mali",
-      "country_code": "ML",
-      "city": "Bamako",
-      "region": null,
-      "latitude": 12.60915,
-      "longitude": -7.97522,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "maliweb.net",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "794bb7cd803abf0bedce97e7ff2f44c4a49914b170de02fd5643cdefb2d15384"
-      ],
-      "sources": [
-        "Maliweb"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-08-20T07:00:00+00:00",
-      "last_reported": "2026-08-20T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Reports a concrete, successful combat counter-terrorism operation.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Operation Dougoukoloko 2026-08-20",
-      "update_type": "INITIAL",
-      "incident_id": "inc-c0805b263e8d1d58",
-      "translated_to_english": true,
-      "ai_canonical_event": "Mali military operation against terrorists",
-      "title_variants": [
-        "Mali military operation against terrorists"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Mali"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The military operation was conducted by Malian forces (FAMa).",
-      "ai_geo_fingerprint": "64930a93e1265e99c6fdf528c65904cebff12670e781073c1123fd92ed2ec42c",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "56ef9e58220764dd",
       "category": "Counter Terrorism Action",
       "categories": [
@@ -375200,7 +373784,7 @@
       "collection_locale": null,
       "published": "2026-08-20T00:10:40+00:00",
       "source": "Marine Link",
-      "source_count": 1,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOWmNUZGV2TFFOZkNYRzV2dW1jM3pGUDZtSFpOZ20zSmpKbzhxZkxXVHhDSldZQ3N2QlNpZXQta1NoSWV6QjZ6QXFXOEoyUDhqM29ITzlORExBTm1zeTU3Z1BwcDVWYjYtbHRyVk1ITzdidW93akJMME93S010RWFPZWdn?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -375215,7 +373799,9 @@
       "targeted_source": "MarineLink",
       "targeted_source_kind": "specialist_media",
       "sources": [
-        "Marine Link"
+        "Marine Link",
+        "safety4sea",
+        "Goobjoog English"
       ],
       "related_articles": [
         {
@@ -375235,15 +373821,33 @@
           "published": "2026-08-21T18:24:38+00:00",
           "source": "Marine Link",
           "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPNVlaZTBBYWhQQTVPcTdpZFZCYm5TWG45NURHa3NrM2ZMTUxIdElSWUc0NHNtTWY4NDlmb0ktQ3ZuNlhKckJSeDZ1dWpCaDV0RDhYbF9LRTdTMjRSZ2FVamFLLUR6anlxVTJPcHBRQm1zZDRkWTQ1dldXQmVHMXE4WXo1ZnBNR0VmdjFYT0JFaUF5U2l1WVE?oc=5"
+        },
+        {
+          "title": "Piracy alarm raised in Gulf of Aden",
+          "original_title": "Fresh piracy alarm in Gulf of Aden after tanker hijacking",
+          "original_language": "en",
+          "summary": "A new piracy alarm has been issued in the Gulf of Aden following the hijacking of a tanker.",
+          "published": "2026-08-20T07:00:00+00:00",
+          "source": "safety4sea",
+          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQS21JbFEyREFYT2pxQXlwaGFvcjdFT1ppUFVuRlJYdWtOUE40LUNqQmNpckFROVhJWDFDSmxkQ2M2MVlVNUk4LWFWaEFiUFBIR0FUaDBsZUJvWEltUXRGQ0poMzNyV3daYjZzeGlYTGxOMUZsOWtHcFZlREM5Si1TM21NOEd5b2dK?oc=5"
+        },
+        {
+          "title": "Tanker hijacked in Gulf of Aden",
+          "original_title": "Armed Men Hijack Tanker in Gulf of Aden and Divert It Toward Somalia",
+          "original_language": "en",
+          "summary": "Armed men have hijacked a tanker in the Gulf of Aden and are diverting it toward the coast of Somalia.",
+          "published": "2026-08-21T06:54:27+00:00",
+          "source": "Goobjoog English",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQSklDTUhoTnpQQWhTMWlWbGFEUzh1a0ZnQ1VOekJta09nZGFMa1pzUFBUMndvNjNlUXdnOWRHc0ZNWVF4cHdZU01JVWlwUmFWSndNd0x5MllDVy12U3czVG14OVlBTmY1ZjMwblR3Yjd3dDFzeHlOSG1PUGxkQldxcVpzMWdGYlJobDMtTE1hTnotUktzeHpyaw?oc=5"
         }
       ],
-      "article_count": 3,
+      "article_count": 5,
       "first_reported": "2026-08-20T00:10:40+00:00",
       "last_reported": "2026-08-21T18:24:38+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 70,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Statistical and operational summary reporting a surge in actual piracy attacks.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -375253,9 +373857,10 @@
         "surge in Somali piracy activity to a 10-year high",
         "Somali piracy activity reaches ten-year high"
       ],
-      "dedup_confidence": 0.532,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "entity_actor_event_signature"
+        "entity_actor_event_signature",
+        "same_incident"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_country_capital",
@@ -375282,7 +373887,11 @@
       "actor_scope": "NON_STATE",
       "cbrn_subgroups": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "reported_status": "CONFIRMED"
+      "reported_status": "CONFIRMED",
+      "source_article_fingerprints": [
+        "c28e2e7ce2082eab1354e813773ee0dff7dd705809dead9062492538a1a3c39a",
+        "d0d99b04556e826aba7803f2b5067ff8231cbc81983f5268f0518e63e5f199f8"
+      ]
     },
     {
       "id": "a8bcce53805d830a",
@@ -382902,86 +381511,6 @@
       ]
     },
     {
-      "id": "035260c3ed5d09d3",
-      "category": "Weapons",
-      "categories": [
-        "Weapons",
-        "Chemicals and Explosives"
-      ],
-      "title": "Large explosives seizure in Gujarat ahead of Independence Day",
-      "summary": "Authorities seized 1,500 kg of gelatin sticks and 4,000 detonators in Gujarat as a preventive security measure before Independence Day.",
-      "original_title": "1,500 kg gelatin sticks, 4,000 detonators seized in Gujarat ahead of Independence Day",
-      "original_summary": "1,500 kg gelatin sticks, 4,000 detonators seized in Gujarat ahead of Independence Day India Today",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": "US:en",
-      "published": "2026-08-10T07:00:00+00:00",
-      "source": "India Today",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQYmNoc3M3REdockpRdDlVUUpweU1qVmFwcmJiMzNLa1pDS1BEVGNiM1NUT0VkcmdSSGlHU2tiNDAxY2FRTHRmbGo3X3JFWXVSd0R1WFdTZi1oeUE3cVJuSl8wZko3SXVuc1RiUXE1c091anIxRDNrVXBVaUJZRnl2dEI3MXRKLW9Gd0s3dzZHY2NkNDdnSDBZX3RHLWRaLWl6aGxvZlZ3a0dDbEY4aVdFN3Nsc2xTNVZHbFQxNE8tTdIBxAFBVV95cUxPQUU1LTV0Tk84ZWMzc3NUMVJ4alJLQnNnR29jaHhRQlZscUFMcmM1b1drRkxjbHBFX0NRR0xFTjIwSjRaZ3VNWXpxUTJ3TmFaSVlWSkxCUGdOQnFWLVBlbFk5VVhKTVFUazlieXFieFRkQzVmRndNM2lmZ1lOWFJkTllmcnRHaGlmM0VvRldaMDZGUVpEVWhnS3NuRklVd2swT2ktQm9RaUJHMW5oVWdVWG9YLThPMzR5VmxLZFFMNHpvY2hT?oc=5",
-      "collector": "Google News RSS",
-      "country": "India",
-      "country_code": "IN",
-      "city": null,
-      "region": "Gujarat",
-      "latitude": 22.2587,
-      "longitude": 71.1924,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "c34db1bf454dd983aaad380a837b357a7afa057ae6520d5514382b44ddf1819a"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 70,
-      "ai_relevance_reason": "Reports the significant seizure of explosive materials, posing a clear security risk.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "WEAPONS",
-      "is_attack": false,
-      "incident_anchor": "Gujarat explosives seizure India 2026-08-10",
-      "update_type": "INITIAL",
-      "incident_id": "inc-677e58ba73f3aeab",
-      "translated_to_english": false,
-      "ai_canonical_event": "Seizure of explosives in Gujarat, India",
-      "title_variants": [
-        "Seizure of explosives in Gujarat, India"
-      ],
-      "actor_scope": "UNKNOWN",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": [],
-      "sources": [
-        "India Today"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-08-10T07:00:00+00:00",
-      "last_reported": "2026-08-10T07:00:00+00:00",
-      "location_confidence_score": 1.0,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Authorities seized 1,500 kg of gelatin sticks and 4,000 detonators in Gujarat."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The seizure took place in the state of Gujarat, India.",
-      "ai_geo_fingerprint": "91fa06c595b26e4ec18401bccf85b302e2d9bd0e4ad5f667f7d64d0f1189350e",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "75c3f40abd6302cf",
       "category": "Attacks",
       "categories": [
@@ -387135,114 +385664,6 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The text explicitly mentions the search and alleged explosives lab incident occurred in Al-Abr, Hadramout.",
       "ai_geo_fingerprint": "6f9194ca96e6c46592875ffae1b9e7f0b6ce99c33815e157b7cfca2a5d7b40fb",
-      "ai_geo_inferred": false
-    },
-    {
-      "id": "a1544e41da0dae33",
-      "category": "Attacks",
-      "categories": [
-        "Attacks",
-        "Chemicals and Explosives"
-      ],
-      "title": "Terrorist bombing at Russian restaurant",
-      "summary": "A restaurant in Russia was hit by a terrorist bombing.",
-      "original_title": "俄罗斯一家餐厅发生恐袭爆炸，莫斯科市长谴责",
-      "original_summary": "俄罗斯一家餐厅发生恐袭爆炸，莫斯科市长谴责 凤凰网",
-      "original_language": "zh",
-      "collection_language": "zh",
-      "collection_language_name": "Chinese (Simplified)",
-      "collection_locale": "CN:zh-Hans",
-      "published": "2026-08-03T07:00:00+00:00",
-      "source": "凤凰网",
-      "source_count": 3,
-      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE9EWUZqY3M3ZkRGWDlIY1IzaXFqTGhGeVJlZjlVZTZmY3FmNkxac1p1aFRjWkl5SDJzTW51eXZUSkJLQTN6SEpXVHJJRlA?oc=5",
-      "collector": "Google News RSS",
-      "country": "Russia",
-      "country_code": "RU",
-      "city": "Moscow",
-      "region": null,
-      "latitude": 55.75204,
-      "longitude": 37.61781,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "16664b727748ab7118b57cd46d83a68c5487476c3d6055a56df5402dc20cec70",
-        "3392112938263e27fac38582c77df634a9ddc57f416736b7010e4223ea042337",
-        "8d4e5e0391faad32f79651a761148be316bc813c644fcaa52dfad9e0463d0625"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Reported terrorist bombing.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Russia restaurant bombing 2026-08-03",
-      "update_type": "INITIAL",
-      "incident_id": "inc-6e4d9e5ed6d250f0",
-      "translated_to_english": true,
-      "ai_canonical_event": "Bombing of restaurant in Russia",
-      "title_variants": [
-        "Bombing of restaurant in Russia"
-      ],
-      "actor_scope": "NON_STATE",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": [],
-      "sources": [
-        "凤凰网",
-        "TVB",
-        "手机新浪网"
-      ],
-      "related_articles": [
-        {
-          "title": "Follow-up: Moscow cafe bombing casualties",
-          "original_title": "莫斯科市中心咖啡厅爆炸案 最新消息指增至5死21伤｜外媒焦点·俄罗斯",
-          "original_language": "zh",
-          "summary": "The death toll from the cafe bombing in Moscow has risen to 5, with 21 injured.",
-          "published": "2026-08-03T07:00:00+00:00",
-          "source": "TVB",
-          "url": "https://news.google.com/rss/articles/CBMimwNBVV95cUxNSTNuMFR3VmdiU0xsbmpfTDJoQmZPY05idkRoemxzOHpJUzVxV0tiR1E5ZW1jb3JTR3QxNGVOYjBqTUtmb1lTT3lYNl9qemtHT2hwcTIzLTJZTUdscTdObTZvSjhJa0p4dEV0SEQ1VUpodWRxX0lqekJaY1FHR2VSY3E1S2hBLVZrTU9uWWZJb3JhOWp0N0RBb0EyYldSRzcydzM3RHhjeUZRSGFBbUk0dHgtbDFCVlVwWU0zVXdER203cE9iUTBBUF9zM3RtVzY0QTZ2V2laWml1aTlBRWpmX01tejdyZ3pOV3hfMlVFVWZiRnpWXzAxYW9YY1hsMXJaWG1oclFPWjYxbE5TeC04YjBwZWE4c2tsQnNyR29wSi0wOGFVU2VaSVAtNHJZXzN5QmNYYkZpSklTMVl5MHBZS1E0d3ZlZFZvX3kyNVpiZ243ZWdWekYydVkyV2RvZHVDWjJEaHlJQktiSHR5QlA2UWFZRndraHB6TEMzNDJ5U3I4WVowUFlQY1NXVGE3ZVhOd295TG1rNUFKcGc?oc=5"
-        },
-        {
-          "title": "Car bomb attack on Russian drone developer",
-          "original_title": "俄无人机研发者遭汽车炸弹袭击致1死1伤",
-          "original_language": "zh",
-          "summary": "A Russian drone developer was killed and another person injured in a car bomb attack.",
-          "published": "2026-08-05T07:00:00+00:00",
-          "source": "手机新浪网",
-          "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5fSnA3TW5kMVJCbE15UzNkd19JWkpGNzFfYThENnZyN1FzSzNZd3p1bzFINld4TU5GZWFMRURDcjZZTHNMVTM2TE9saEVoZ1lPRWdBOGlVdlIzMTNzZWJoWTFR?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-08-03T07:00:00+00:00",
-      "last_reported": "2026-08-05T07:00:00+00:00",
-      "dedup_confidence": 0.99,
-      "dedup_methods": [
-        "same_normalized_title",
-        "paraphrase_entity_context"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Moscow mayor condemns restaurant bombing; cafe bombing in central Moscow."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Related articles and context specify Moscow, Russia as the location of the restaurant/cafe bombing.",
-      "ai_geo_fingerprint": "59371fd1c59ede5091a0abf2e3105efe897a3c240acee949288ad539650ac285",
       "ai_geo_inferred": false
     },
     {
@@ -405393,193 +403814,6 @@
       ]
     },
     {
-      "id": "fc437d1de7152af3",
-      "category": "Chemicals and Explosives",
-      "categories": [
-        "Chemicals and Explosives",
-        "Counter Terrorism Action"
-      ],
-      "title": "Syrian Interior Ministry uncovers explosives cache linked to Damascus bombing cell",
-      "summary": "Syrian security forces have uncovered a cache of explosives linked to the cell responsible for the July 7 bombing in Damascus.",
-      "original_title": "Interior Ministry: Explosives cache linked to July 7 Damascus bombing cell uncovered",
-      "original_summary": "Interior Ministry: Explosives cache linked to July 7 Damascus bombing cell uncovered وكالة الأنباء السورية – سانا",
-      "original_language": "ar",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": "US:en",
-      "published": "2026-07-10T07:00:00+00:00",
-      "source": "وكالة الأنباء السورية – سانا",
-      "source_count": 9,
-      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE1felNWM2VBaWtaeXlZUW9hUi03VzFNTEJnTmpQOEJkdWROVjEtNUdFR0pxekNXQWV6MTNaNjhzMERQT1dZRUxRQQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Syria",
-      "country_code": "SY",
-      "city": "Damascus",
-      "region": null,
-      "latitude": 33.5102,
-      "longitude": 36.29128,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "23d408516356f90c9465f85bec63228e10b36efbe567dbdda755810b792df5e2",
-        "814cb91b414f7392e89336926eac32dc7f967beb9231fed58f4764151c074af6",
-        "9c187c3f215eea1a7ff405e5080be72b2594ca87718726ef6d9ca309310aceef",
-        "a3f182add5e8f12c0a0c03a07bab4c647a3ed3cbceef1ef5af4191f5262c7b11",
-        "aea7c4681a8a611e6e71795ad0422364d756fa3c436621579ff6a7c4174fa395",
-        "c82203d61804a968a404d0186cea704cd03dd5171b30de076ae4e717ba7a53b3",
-        "dbcfd671498fca851e0ab2a8183ccdff8322c0da86ae8045cfdda5dffa4c82be",
-        "dfcbec8ef595495fc9e22bdcb5975f517319b8d3351d12704261183255532e16",
-        "e36bbf7492d500c8473052627c527a46158d2a339bbd03b78b0195bebde51c28",
-        "f4e8878d518cbb6629c3c69da83e853dd769983ac39a6a67d601ebc10ed02254"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports a concrete counter-terrorism investigation and weapons seizure related to a specific attack.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Damascus bombing Syria 2026-07-07",
-      "update_type": "INVESTIGATION_UPDATE",
-      "incident_id": "inc-b394ac7bde0ffa11",
-      "translated_to_english": true,
-      "ai_canonical_event": "Explosives seizure by security forces linked to Damascus bombing cell, Syria",
-      "title_variants": [
-        "Explosives seizure by security forces linked to Damascus bombing cell, Syria"
-      ],
-      "actor_scope": "UNKNOWN",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": [],
-      "reported_status": "CONFIRMED",
-      "sources": [
-        "وكالة الأنباء السورية – سانا",
-        "العربية",
-        "الشرق الأوسط",
-        "التلفزيون العربي",
-        "جريدة الجريدة الكويتية",
-        "Masrawy",
-        "Anadolu Ajansı",
-        "جريدة الرياض",
-        "Vietnam.vn"
-      ],
-      "related_articles": [
-        {
-          "title": "Syrian security forces uncover ISIS explosives cache",
-          "original_title": "الأمن السوري يعلن كشف مخبأ متفجرات لخلية مرتبطة بتنظيم داعش",
-          "original_language": "ar",
-          "summary": "Syrian security forces discovered an explosives cache belonging to a cell linked to ISIS in Damascus.",
-          "published": "2026-07-10T07:00:00+00:00",
-          "source": "العربية",
-          "url": "https://news.google.com/rss/articles/CBMisARBVV95cUxPMnlmV2FsRFhTTWhLUC16TC1EOGtFYU9fNVRUbk51eVVyVFlNRHJnWElDaW1JMGlQUXZkdjdHSW5EeGxFREdYa2xyTlpLX2lpZUJHSzhKSzJVNjZjYVNHN1BLYnp2WGVRaEJZd1FIOURDclBtUjNNd0E4VnBsbFFHRTJTTUV3LXZ0d05EOERjYmdoTm42eEozUHd3RVdsbUdXcFFuLVJtckpybXN5eXNFQjlkcVd2N0xQNFhBSmRQTkVzejN4a2t6emVoMTM1RUtkQnF1a3AzQjVKQ0dtSkd2N3Y5TFF5M0dLTXJZdFhjNFpVd3JNSG9jbXZOQlRHblRDU1dSeUpsODZtUm85eWRnVTJyT1lFS2FhVm11YmtkNUp6UURIQm9WNTN0dkZZZzQ4RDNEbGE5cjB6VFlxdGc0N0VoUkNnU3NUYlBuRy1fWWlnWUdEcUdqR2xkYUJ3YkUxX2QwRGVqdzIybzdJbUVSUjdCNnhnVFRZQ0gwT2VRUXF2V0RiM0NzVG9jQWJlc1ByMDRfYWdfSFRlaEVMYlJrV2twU1JHRU5BR0dsYUl4OGNDYjdkbzRNQXllZUwxZ1p1Vk9QeXRiUTNSUG5DWW9wWUdzWGhSM0t3UWp1SVNObGpwYk5zbFR6Q05oUUZxdC1xMWlnX2NpU0NZRHJoZGJ2ZEd6cE5meFRUY3BGSmJXOUpoa1VaQk14WXFBcGNuNDJqYjRsajVURlZZSm12dGFaWNIBtgRBVV95cUxNN2ppSENmVldzSXVvdk90RldlVHdEdUpLR3RycFZhSmRGWHBlcGdOY2pSc2oteUcwUElOT1FKME5SY01LWFdUN24zLTJ3V3RlN1VSbWpYYkZNQmMyckFEeFdQaFpLaXpVRHB0UmJZeWxXMWxSWGdERVJwdHhMT010QkFLVEFqQnlWRjNpZ2VuOU82M0l4QktuQ1F1UlNEdHhEcU9uUHlIWEdvdEhfdUxyRXAzSXNDajNjR3RpR0s4Z2lxMENHX2dxZlMtYWIxaWRSMGtRYkxmNE9uMlVKS05LU0d0R2FZNzhPODl6MmFydFA4NUUtOXFKS3FJcDFtMHB3NFJsMHZGU2VtVXNXR2dVaFF4NWxtUVRDTEZwZzd1STZqVGh6T3BlTlhtb3pVeHVmb0tIcWlXUlB6bF9sX3Y1bDJ3eHE1N2JsalJ6bHZQd2dLZnJxXzE3NFl5SjZXSEFrTnpJRWZVS244Y3kxWjRhUkl2THlkQWZBZHRvdjcwU3UxNHZkTlB5ZlBCaXhFUFJjMHdKak5HZzhBTnh3Wk9FVEQwNEl5dThiSTRpR1JROFV6Z2pySmtCTWFCQTltZnZKQy14Z292LW5JdWRKbUhjcTRHeE9wZFNxYTVJUTdsRTNTY1A2TXVDdnlEUUxST3kwaDRhZlN5SEg1Mkt1U19waXA5Z2V6SzJDSWlpc2JQaURyZmJ4WXp4cWxON0VWRzRWazFCSHA0eWROaE1lRWZSRVdFbnlBZw?oc=5"
-        },
-        {
-          "title": "Syrian authorities uncover explosives cache linked to ISIS",
-          "original_title": "السلطات السورية تعلن كشف مخبأ للمتفجرات لخلية مرتبطة بتنظيم «داعش»",
-          "original_language": "ar",
-          "summary": "Syrian authorities announced the discovery of a secret cache of explosives used by an ISIS-linked cell in Damascus.",
-          "published": "2026-07-10T07:00:00+00:00",
-          "source": "الشرق الأوسط",
-          "url": "https://news.google.com/rss/articles/CBMiqAVBVV95cUxQdTJIVE1JMzREdWZhdG8yNi1FUXhzN1N1MVpNTTREQUticm1ELW5TSnV5dTRwcWVMeDRMdjBhQzF6TW5fbXVpYTdpYnlBbEEzNkJsLTRfbmlJelNrMlE2ZzE2VDRYazVkSWRYRjV1a1FNNTNHSncxbkNUYmpDTlFVcUlfWkxxMzE1N2s0cTRoSEk0ektTZHNacWlic3JJbWdoZDY4dElvSGlvM01TRF9TTEh6QUsxR09za1ZQaWNpcmo4ZXFhNVVkVlFiQTduU3A2XzJIdHd4RlROa1hxVHRBYkpMajNJY3ZPajh4amNpSjcwVVBLeE1NSEp5SlhMdUY1V05JYmNKZGV5RHZTdEtJWWdhcVE2OEdRRDU3cGZtc19OSno2N2F2U01oZnFjVVFYTUVhcm9MVFRzejlIbEk4RVJUVnI4Mk5RUXhCc3JxRXZ3OVVnbE1Gdk9uZUhScnd1NGFIUGFWZ2c4UHpOS2JnVG9UbjR4ZHI1clIyMENaamxfUE9WZWw1UlZTbHd0NE52a3dWbzZmcVRVVHduc2FNcUpucV9PY0R3cFVFRnN3c1ZLNG5QVlg3ZVB5cHRienNpeDN1U282MW5CSzM1RE5FMVRBWWRySFdLcFNvWVVGZGdmNS16cWVjd0s3MFBSNFRfZ1F6QmlQYnR3Qjd4M3pmLXcxTWs1MDAtZU9GTVRRVV9PTDNZWW5JNktJUzJYQU1lZjlfRFJOZlVXbldId1BINHdiNVNBUGt4R2RNUVBEUXJKM21jNWtfS3gwRzh4MXVOWjNvUzlCeWxHaGpWeE43NGpMNTJXMzhVYWo4dWJBRzRBVEJxSnZ1cVpTZFRuSVNYQ0tVUWNuVVM0MGdqQVlhSWJUTDRpWHNCT3NFVVFLZDgxTVRGcU1sOQ?oc=5"
-        },
-        {
-          "title": "Syrian Interior Ministry seizes secret explosives cache",
-          "original_title": "يتبع خلية لتنظيم الدولة.. الداخلية السورية تضبط مخبأ سريًا للمتفجرات | التلفزيون العربي",
-          "original_language": "ar",
-          "summary": "The Syrian Interior Ministry announced the discovery of a secret explosives store belonging to an ISIS cell.",
-          "published": "2026-07-10T07:00:00+00:00",
-          "source": "التلفزيون العربي",
-          "url": "https://news.google.com/rss/articles/CBMilwRBVV95cUxQOE8wa2NmdzgzbjlSWnJ2Ykh3SmFNNDVsYVMyNlQzZlVqMlNXQU1VZFNKSDZnZEpnWi1hXzRNRDBZdjNMX3RJbkpTMm9ZVlpvSG9BMWlSbFlwMnI5TjJyNGxHaFpvemN4UkN3YVkwakhOUTk1R0NSamtCa1NEZWNGb2g2MTRqRnd6c0F1OHdEVlNxNS00MGU5cTJsc2FaOFBaelAzejBGTlExZWdSUy1rcG9UeFVOZG9ldDBVam5RSkJTQy1qMzdqbVJKeHg2VnVjV3RIMVRWODZnWFlld3V2Z3h6TWptX3h3Zi1aX1FzT25ScnQyNUZTcnhzRk1aaERhRmFGRGlHdVpmcW94THgtSXpOOG1sT2tuaDdGYzBrUjhxeUU4SVY5LVVnOFd4SXJLOTk2SmVWZGpaM3c4UHMxUzIxbEN3U0ZIQzdZVVdGY3hxOHcxZHkxWFdjeXIxcEh3OHdZZzc1S1FUV01kNzFsbHdUcHJRb3h5NmR3SU9VZlpFQ1BadERXLVRTVUFVUjF2aHhZOEFnZEJxNkNiUks2cDdmME1jSlFFT1NnUlVMZHh1dFVyMmVWX1R1ak5uSm42N2pudm5VM3VwcG9DVm1QdHppWkZQSVBuanRfTk9yY2ItUjIweDU3WjNiWWNkb3pZekZaNFcyTVV4ZHMteXg2ZHhtd3R6WU9nQjJmOWNwVXRmcTlURndn0gGcBEFVX3lxTE5kemJZSnFSVm1VNGhjRk5tNEtXclg0R2hjNDR1S0wwa2JkcS1keXo0eXlDLWFkelZweWdnX2xMUThzankyQ29zN051MWlHVnVGcEFHaHZDcEZSbklBUXl1dTc4ZFZ3VHBjSHZaT2tldTZXc2JUeXZ3end6NFRFbElXZ1VCVXhkckFVOHAyUExPZWhrVFpadVVVZkZaNkVmSlJ5cEFESmtDRWFXTDNRSUZRQ0x1dG42MDU3ekxvM0JfNnpEUGpYb181bmwwbE5sTXRONE9mLXU5OTUtMG9ZZ0JaZlZXajN4VndzNmF0NFZjMUNVdElUdnNIVWQzYmgxZ3pvX3NPTmx3VW9RLWs3OEhVMWNPczAtSkVGdUpIcGxhRG1EUTZpTjk5UjFRT0x4c1pCMXpsa1lzb2dCampQYUFNQmtIcW5JMmhWVVJaLXhHX05iNDg2ZVdXN0hoRGhMSVNTUUVoVHdTbjlsZmxDRTlCS293UmJRLXVJVVotcmdEbWdLLVlzaWZtX3ljSHpENmVlc2VSV00zYnUzRFphMWNwNW9ZT3E3OWo4dy1ZWldqZ0RxLUJNWFdEdl9xZFBET3luLVF2QU9LTGkwclYtLVdUaVRDanE1N2VBYXotQ2Z6dXZ4V2dMRWxMNjNJYTZvdWgydlB6TE9JcmMxdG9aNV9jYkoyN1NxRFgzRVZjVHFCam1UdXg2c0hGNXhySQ?oc=5"
-        },
-        {
-          "title": "Syrian authorities uncover explosives cache linked to ISIS",
-          "original_title": "السلطات السورية تكشف مخبأ للمتفجرات لخلية مرتبطة بـ«داعش»",
-          "original_language": "ar",
-          "summary": "Syrian authorities discovered a cache of explosives used by an ISIS-linked cell.",
-          "published": "2026-07-10T07:00:00+00:00",
-          "source": "جريدة الجريدة الكويتية",
-          "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1zazBuQmwtbE1LRXFVZWpZVDltUlNuNGMwVVFZdGtvOThSUTl1TlB4NlB1Y2RGSGFYTnlMTmI5QnltaDhPTGhtUm1Yb0M5N2dQ0gFWQVVfeXFMTWJzX2NCM2FTMGlWM18xcnJDM3JfT1JCUkZ6UXBUQjdxM3MxTnlZQkdlTkF4dFBwVUl3dGZ2LUtTeVdaa2ZZYW1NNXVSUEpoOGRsZG9YeEE?oc=5"
-        },
-        {
-          "title": "Ministry of Interior: Seizure of explosives cache linked to Damascus bombings",
-          "original_title": "الداخلية: ضبط مخبأ متفجرات لخلية تفجيرات دمشق الإرهابية",
-          "original_language": "ar",
-          "summary": "The Syrian Interior Ministry announced the seizure of an explosives cache linked to a Damascus-based terror cell.",
-          "published": "2026-07-10T07:00:00+00:00",
-          "source": "وكالة الأنباء السورية – سانا",
-          "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTFBpQjFLNDF5VzcxMlY0WU5DSWphX1I0SHZWWktxNDV4OTZ6eGlHRGc4Z1M2aFRfX09NYUx3ay1MRC05dFBKYVE?oc=5"
-        },
-        {
-          "title": "Syrian Interior Ministry seizes explosives cache from Damascus cell",
-          "original_title": "الداخلية السورية تضبط مخبأ متفجرات لخلية تفجيرات دمشق",
-          "original_language": "ar",
-          "summary": "The Syrian Interior Ministry seized explosives from a cell responsible for Damascus bombings.",
-          "published": "2026-07-10T07:00:00+00:00",
-          "source": "Masrawy",
-          "url": "https://news.google.com/rss/articles/CBMi-gNBVV95cUxOT2M4Y3VrWkxNMU02M19zMklfUnFSaUFuMnBmTFlqa0hxaTIwaU1MakFCUEtNNkpiWVJZQTBPenZ5bENyaVFEYU1rQkFWVTJHNFdqZjAzMXNRd2dpdFJVTXNhc1pXcGdiYjFIbUJVWDV5N2ljcC1DYjNPOVFrVDktcGZmelM1LXNWdEVzaHBHMUpLSm9YSjJELVlGZm5vMUh4aUVqOGJXb1RFY0JObEgxc1U4aTR0Wm1POWFoRl8zUy1tRmJrakJJOW8wQ1ZTRmE5LTBDZ3NoeUphSUlnbFFYcFZtaVAwVWRGcEVsX2g2U0c3QVd0RTJLand5Q3c5cjBuUTlkM2lEVVMzT1g2YnJ5cFJBNEhNcnVoR1ZDT0FQR2ZNbDc5Zi05VjMtWGRRSUhDLUJOdE9PUWRSYVlXQ3dtVURPb1lhNTV0WUR5RmtRX2JnM0Nybm03QS13clJMMnFkdjg3aVpJcjVwSnJTU1VNcmNyb0ZDei12aUZhaUVfNHEyejZpMW95dGMxZWw1WTN6WWp2RFRob3FkQjlfNmV2S015bjFXZHNhNTNNbGF6Xy1sUm1xUzlORF85bHBzd1Fma1YzVEZQbXVmdy1vdkp5S21Jald4T25Dd2NhYzM2dXd6NFRwMlhiemczNEVBRVhKZ2lrLW9KekdpZ9IB_wNBVV95cUxNNUhJZUVfV2lvZDIxcVYxNzZka2RrcWJLVzFXLUd3aXpjRlNXUGdONnY3dHFBdzVXYnBENlhFUk8xQzdmMEtjeTNEQzEwMnczWDlIb0pqbUE3dGUxVUdRS1NzZG5IV2NYM1VOdGZCQWoxLUJzLTJMZDVMUzlYTTg2V1oxaVk5elFfSVBVQ3Rnd0wyN2VVQ2wxTmFWcWlUNEZVbGZQUlc5VGtScGVhZnJjWjAtN3RZTWhfYVJ1WmNodHNlbGFpZG9oTVB0djVWYTl1U1YxdURvNzNacnFmVE5Nbkt2UlhvOXNrYk1IVjFnbTVhQXhxVUZsalE2akU0dTN5Z3V5ZDZOOWxnMmdBZjl4V0pfMndldlRsVWp3VG9ZUktRSnlHdE1fYlFDckctNUZJQlVnSTBQS1dveUF2WHBET1FaeWZlbVY5RmFmN2dfanVWVFB1MmlXTGJFRlRGaFphTkN5U0l5TjFlZzRGSUJnb2ZvWjB1TDQyaFp6VXNwc0RxTC1UM1o0Y3pGTHFZQVVOVXJwZ2NndDZHMVlvRjNNMGlId0lDV09lc3ExMThBWXN4ZWhyZUgxelEwVHphY19uV1BRbmxqSGZacDNwdEhkWi1oVUhBdFRvQ29OVHJRRjVtN0w4bkV4c0RRY19lYlk2SWxCeDJ6WW5pcWRPTF93?oc=5"
-        },
-        {
-          "title": "Syria seizes and dismantles IEDs in Damascus cell warehouse",
-          "original_title": "سوريا.. ضبط وتفكيك عبوات ناسفة في مخبأ خلية تفجيرات دمشق",
-          "original_language": "ar",
-          "summary": "Syrian security dismantled IEDs found in an explosives cache linked to the cell behind Damascus bombings.",
-          "published": "2026-07-10T07:00:00+00:00",
-          "source": "Anadolu Ajansı",
-          "url": "https://news.google.com/rss/articles/CBMi5gNBVV95cUxOY2s1bm1Bak9qUG5GbF9GcXRMS0pYdnRaN2s4WjBneS04NVBUakx6QnZ2S3BJLUhna2JGbGVRdDZsVDJWaXI2TVhVQWMtLU5QRFRydURrbzJFcWRwT0I3TWhMN1RIdVltR2RCZy1iX29zYW1oRTNfQjNVVzFRNFliQVI5bWlpZGxqeXNzY3Z0ejI1ME1KSmxadlpyX2ZMWHdGV1ZrTnJtenVyM0Z2Zks0T2NHanRrYk1lTmR4R0dtQ1pCSVBVSjE4SkkyeTN3OVpIV29lRDNacThZNm1STWpyaXZub0RMNm83cC1nRHhoTWdxaGhjcm9fVlVfekZGRWZxNVozN3k1Vlc3UGdVeFRFakdzVkZ2UTJJOHg0VW5WU2MzU2VVWnVwdGExdU1TNkxGdUNwS3NkbDdXMUoyUlFFM2hLRmdMcVRXMTRQWDBzaFQ5NFVNaHJDUDlVZ1V1WllIMnJ5eENZek1qNmZXbTlPQ2JiR3VjdG5fb0dMc2NmdzNySFJtR0oyVG1rMDE1eTAxZi1xT0tfYU1EcWdCeGJ0LTFYYnVxWlFXdjRsZTE3V1pNT09OMU9GV0pWNURlQUxhREhwQTV4RVBlWllwZi0zVDYwdEhjeXZFVVFyQnZFQWZmckJqZHc?oc=5"
-        },
-        {
-          "title": "Syria seizes explosives from cell involved in Damascus bombings",
-          "original_title": "سوريا: ضبط مستودع متفجرات للخلية المتورطة بتفجيرات 7 يوليو في دمشق",
-          "original_language": "ar",
-          "summary": "Syrian authorities seized an explosives warehouse belonging to the cell responsible for the July 7 Damascus bombings.",
-          "published": "2026-07-11T07:00:00+00:00",
-          "source": "جريدة الرياض",
-          "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1xZ1BSUUNQNmtTRUI5YXRxQjZ5cGJRWk1xSUZrN1VXRXpmV3dPTjdUSGYzRVM1TFQ1Vl9SNTZ0WTBSRFdMYlk4?oc=5"
-        },
-        {
-          "title": "Syria discovers explosives cache linked to terror plots",
-          "original_title": "سوريا تكتشف مخبأ سري للمتفجرات مرتبط بخطط هجوم إرهابي.",
-          "original_language": "ar",
-          "summary": "Syrian forces discovered a secret explosives cache linked to planned terrorist attacks.",
-          "published": "2026-07-11T07:00:00+00:00",
-          "source": "Vietnam.vn",
-          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPcXFOclBmNnNTenB3N3VvaEgzb1piN25zemE1V0Njd2dmSVUzaTZDVmt6RWlNd3h5VEFvQ05lSTIwR2Z0eXhGOUhmS2VWRHpaT1NpS0xfc2x5M3l2RVZoRmc5N3BCdEJVakhaVVAzNUktSjRkeFJtLUwzZ21BbFBqN2xVT2tsUHJqUGE0b3laZWppTlo4eTB2NUJORUJuZmljRWZORQ?oc=5"
-        }
-      ],
-      "article_count": 10,
-      "first_reported": "2026-07-10T07:00:00+00:00",
-      "last_reported": "2026-07-11T07:00:00+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "paraphrase_entity_context",
-        "title_plus_anchor",
-        "same_normalized_title",
-        "very_high_title_similarity"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Explosives cache linked to July 7 Damascus bombing cell uncovered by Syrian Interior Ministry."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The cache and cell are directly tied to Damascus, Syria.",
-      "ai_geo_fingerprint": "163dbdea9594023967986c1222e7d97bbc229e756c209f61a44003bd3e07b217",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "5a7cbac7fe77b211",
       "category": "Legal / Judicial",
       "categories": [
@@ -409392,114 +407626,6 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Moroccan security forces dismantled an ISIS-linked cell in seven cities.",
       "ai_geo_fingerprint": "e7ec864d89f06f8bc1c50b527d494e7319fc89e1d059b5a6988fb0b6ab87460d",
-      "ai_geo_inferred": false
-    },
-    {
-      "id": "41274bb32e1eec6d",
-      "category": "Chemicals and Explosives",
-      "categories": [
-        "Chemicals and Explosives",
-        "Arrests"
-      ],
-      "title": "ISIS plotters arrested in Morocco for car-bomb attack plot",
-      "summary": "Moroccan authorities have arrested individuals affiliated with ISIS who were reportedly preparing a car-bomb attack.",
-      "original_title": "'ISIS plotters preparing car-bomb attack' arrested in Morocco",
-      "original_summary": "'ISIS plotters preparing car-bomb attack' arrested in Morocco The National",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": "US:en",
-      "published": "2026-07-06T07:00:00+00:00",
-      "source": "The National",
-      "source_count": 3,
-      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOYWNNQl85YlBKaWE4V1NnaFBkSGtjOW5RZk16UmNtOVZyQmw0V0JlWm1ubVdGZWJ6cmRHeERJSWo5Qm1qMWJVYUZzS2xTbXVkNENmZ1FZMUZxUDFxenJpTzVhU0tmd0pBSGJzLXFEZ2lnSEVRbmxlOVBFTTl3T3llN2ZLejBCamdXY3JsRzU3WVNHY2xuYm03QmxWWF9IRmFsQzNFRkRUUHlSWlZfaW9xSDFHVQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Morocco",
-      "country_code": "MA",
-      "city": "Rabat",
-      "region": null,
-      "latitude": 34.01325,
-      "longitude": -6.83255,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "0b704c3f16c9979c69ac90fdfd9c5d121644e103988b040f22a33d6fee5fddf5",
-        "110e27d7a733a97f8c0bc003a3ba42fbc9d656f9cd30ddc25c2ca15997906200",
-        "556a9dd110242f72b2fb4f737a942b04ab900f6b3a12af37765a3d732dce1f5f"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Reports the arrest of a militant cell preparing an attack, satisfying the operational requirement.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "ISIS",
-      "primary_event_type": "ARREST",
-      "is_attack": false,
-      "incident_anchor": "ISIS car-bomb plot Morocco 2026-07-06",
-      "update_type": "INITIAL",
-      "incident_id": "inc-b5061544d18fc7cd",
-      "translated_to_english": false,
-      "ai_canonical_event": "Arrest of ISIS cell members plotting car-bomb attack, Morocco",
-      "title_variants": [
-        "Arrest of ISIS cell members plotting car-bomb attack, Morocco"
-      ],
-      "actor_scope": "NON_STATE",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": [],
-      "reported_status": "CONFIRMED",
-      "sources": [
-        "The National",
-        "La Vie éco",
-        "وكالة الأنباء السورية – سانا"
-      ],
-      "related_articles": [
-        {
-          "title": "Moroccan authorities arrest 10 individuals and seize weapons and explosives",
-          "original_title": "Terrorisme : 10 arrestations et saisie d’armes et d’engins explosifs au Maroc",
-          "original_language": "fr",
-          "summary": "Moroccan security services arrested 10 individuals linked to ISIS and seized weapons and explosive devices.",
-          "published": "2026-07-06T07:00:00+00:00",
-          "source": "La Vie éco",
-          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQTkVlV043XzRIMEF1ZlZvZ1lSZ25TbkduYXg5VmpKZWcxT2tOX21kSFFGV1o4X3VINGczeEY0QXV6bXg3N0Q3ZzVmRXQ3VU9QYld0Z25Pb3NnZGxNZG1Jdkl6ckRIQ0FHMENOUko3NXJhNDFBQVJMNkpaTVBzWnN4YUM3Y19hdWhldERFUVpOZWVjLUktSU1NNmV3MnRtR1JaWjZYSHg3Y2NzdHIwUGFXd21HWE50US1o?oc=5"
-        },
-        {
-          "title": "Morocco announces frustration of terrorist plots and arrest of 10 ISIS members",
-          "original_title": "المغرب يعلن إحباط مخططات إرهابية وتوقيف 10 من عناصر تنظيم \"داعش\"",
-          "original_language": "ar",
-          "summary": "Moroccan security forces thwarted terrorist plots and arrested 10 elements linked to ISIS.",
-          "published": "2026-07-06T07:00:00+00:00",
-          "source": "وكالة الأنباء السورية – سانا",
-          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9DcjI0ZVNaWGI0NExucVV0UXlzb1FXQ19wYWFmRTh1dEllV1N1M3BvUmhpZmFvZ0czcUtORkxRUzVlT1ZDZXdlSmVQRFpwU1U?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-07-06T07:00:00+00:00",
-      "last_reported": "2026-07-06T07:00:00+00:00",
-      "dedup_confidence": 0.732,
-      "dedup_methods": [
-        "actor_country_action_signature"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Moroccan authorities have arrested individuals affiliated with ISIS in Morocco."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The arrests and counter-terrorism operations took place across Morocco without a specific city named.",
-      "ai_geo_fingerprint": "6f2f22eeb8fd7107cf178ccff24d9e97dce69ef975ef3e57dad5eb075dbfca44",
       "ai_geo_inferred": false
     },
     {
@@ -443504,103 +441630,6 @@
       "dedup_methods": [
         "same_url"
       ]
-    },
-    {
-      "id": "250c3306acdaac4d",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Chemicals and Explosives"
-      ],
-      "title": "Russia foils plot targeting telecommunications officials",
-      "summary": "Russian authorities have disrupted a plot aimed at targeting officials in the telecommunications sector.",
-      "original_title": "روسيا تحبط مخطّطا يستهدف مسؤولين في قطاع الاتصالات",
-      "original_summary": "روسيا تحبط مخطّطا يستهدف مسؤولين في قطاع الاتصالات سكاي نيوز عربية",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
-      "published": "2026-04-24T07:00:00+00:00",
-      "source": "سكاي نيوز عربية",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMinwNBVV95cUxOSllWMWxwd1pQTG5vM3FFWFRXblJOSUdITGlvUS1JYklVZDI5RjM0a3RxSnF1UFJLZW9sMzFXOHFxTGdNdFROQndmRkpBQW8yVFJBQ2VsYktiS0dfMVdMVkVpZE9GaTVuUkVET2FnY19oTEVGWHpMbEhzcTdaNGN0STNqMUNKQVIzNmRJalIwbkxZT001a1pkMVk3U0NPMmlUMU9hbm8taUM5cHJ2dTFTaFhWWGlqSXhHUl9QdjJuNTZqRXRLMGJOYXB6MEpudnk1NEdsdXZSa212NXBFVGtsN0dETTlLRGZjOTFzNDRQR085dF9tUXBRbU5EZHgwTGVLLXpuSEFIMHl4Rm91TEhzekVxbkpid2NLeHl1ZDVwRVBwcDltRU1RTTB1emRUdDRYSXRwb3lILTltRXBKeTE2eHdLSzVVLWE2cEZLc3g0LWZPRV9RUzJIcHlBMVlMcHJyWGRTWmtsZXl6MmpUd1FBbjN1c1haVVdjajRwQ3RIZU5mQ0tYekZVMFVxLVFOS25peGNqTE12M212NEYwblRJ0gGkA0FVX3lxTE12UVZrWnFNYzBmY2ZOOXhnT0JOTWU0UGZJY1RjOW16Y0RHTTE2OFRxVXlqbDdObkc4YVl0c1ltTkthWXgwLW9MeGo3cXdxVUpnNUNGZ3pIWjR0Nm1RR3JNVDdEYThKaEpZMTVWcjVPNy13ZWtlOHdrNC1iN01ZZWpfVnVJcmt4dnNxbnBJNmRFTHk3SWZ5V0pYcy12WDdqVm1qZElIWWQ5ZWRfMzBtZjV5YlFKVEw2Q3AxcG9sZFZ1Sjl6enJlQ2YzUFQ2MUNjU3hvZkVEMnhjcWppTEN0UDBtQ1E1RmQxUzB0eUJWdHk0R1FNUVo3RW5FbmttcDM2aXlaMzZzN3lSTy1qV1hnclBtZGN0cFEyZVRhY1lseUtHRUU1cnRLdjBTTHFCT3FYN29taFpUYk1XQ21YcEdMLWJqUzJoVE82bHBLMlVZYUQxTWxXSjQ0MERidEJaRHBNY25oWU9UNUx1T0o3ZlZUcndnOERqSDUzeFFRMDFLam5yZVBGd2ZPZ2NmbjdtcFlWNDJ1ejRmNjlPMEZaUG0wWGlsUTJ4Sg?oc=5",
-      "collector": "Google News RSS",
-      "country": "Russia",
-      "country_code": "RU",
-      "city": "Moscow",
-      "region": null,
-      "latitude": 55.75204,
-      "longitude": 37.61781,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "18caab2c5d717a7131bf6551de4562d95ee27ac5240a80b69b3c33cf88908a9e",
-        "4305b9608bd17641e81e39c6c21f195b1932bbfca7cf38273ef5f0faea74db30"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Reports a concrete counter-terrorism operation to disrupt a plot.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "DISRUPTED_PLOT",
-      "is_attack": false,
-      "incident_anchor": "Disruption of plot in Russia 2026-04-24",
-      "update_type": "INITIAL",
-      "incident_id": "inc-3c3fd3f46251c137",
-      "translated_to_english": true,
-      "ai_canonical_event": "Disruption of terrorist plot in Russia",
-      "title_variants": [
-        "Disruption of terrorist plot in Russia"
-      ],
-      "actor_scope": "UNKNOWN",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": [],
-      "reported_status": "CONFIRMED",
-      "sources": [
-        "سكاي نيوز عربية",
-        "صحيفة الخليج"
-      ],
-      "related_articles": [
-        {
-          "title": "Russia announces disruption of Roskomnadzor bombing plot",
-          "original_title": "روسيا تعلن إحباط مخطّط تفجير قيادة «روسكومنادزور»",
-          "original_language": "ar",
-          "summary": "Russian authorities announced they have thwarted a planned bombing of the Roskomnadzor headquarters.",
-          "published": "2026-04-24T07:00:00+00:00",
-          "source": "صحيفة الخليج",
-          "url": "https://news.google.com/rss/articles/CBMiiARBVV95cUxPbnF5WVVGa0RyV2xiaFBreURXR3B4UGVPckU5c3NzNVNlMHpqSTFTVWxqWExCUkxxY0ZiODh1NTVZd2hweFp2bjc4QllWSTRHTlRaQ3UxNENuOFhuZksyTGhGalpzRWlaY0dNYTJlYi1CSkw1MlZjclloQWpkTlA2bnBsUnZyWTZ5amlIWEVqRm9MN1NKTHhXVkpGY1BLdFNUdlQ5NVRJMmZaZnpraXRnYXdIY3lUVjJWWlU0aVRNTWhfUXc5eHJsdFJVcjQycllseWhRenFZWHU4NHU4dHp0Qmx1TjBwa2N3QnRubFN4QV9yNlAyRWRadlRpOEZ3S0Q0WFZwbTU3aGR3dUJmeFBadUJ6T1NGc0FwMHRua2prZ3RpbmctYUxaOExRbmpEUGdXNVRpeVhmcU9NOE9QWDRKU1ByNDFnN2ZKTzJmdUs1WnhQZHYyLWJKVVFqWXZlWUlmenpRb3A5LXNZLWlKVElva09vSThiSHVyMEVKbDZkSldITGxKX3BZdDVPUlYtNTlsamVpbTlqLXEyQTlXTkVMTy1rakY0N2VRLUEtLUplcTR2dWpzQmpEcmlfNlNEYWFVRTJGRkZaLTVaMzl1VHM1bUxWOVduYThTaEtpUkhsZUlhTWVkTkNGX3QtbjVnSU1QdHRzSk1kT2t4QXJDNlVIbnR1Yjc2Nm80?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-04-24T07:00:00+00:00",
-      "last_reported": "2026-04-24T07:00:00+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "very_high_title_similarity"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Russian authorities have disrupted a plot aimed at targeting officials in the telecommunications sector."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The event is nationwide Russian security counter-terrorism activity.",
-      "ai_geo_fingerprint": "aa1883df06d617f4b1d9d25666b23a341688341773ff957d761c92e55bc8867e",
-      "ai_geo_inferred": false
     },
     {
       "id": "33327e236ae43496",
