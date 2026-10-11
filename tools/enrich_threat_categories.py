@@ -26,6 +26,7 @@ import enrich_radnuc
 import groq_backfill
 import backfill_query
 import radnuc_vocabulary
+import historical_specialist_queries
 
 MANIFEST = 'archive/threat-enrichment-plan.json'
 STATUS = 'archive/threat-enrichment-status.json'
@@ -60,7 +61,11 @@ def raw_plan_tasks(category, anchor, collector):
     for week, low, high in reversed(weeks):
         # Native searches first; a refused GDELT call cannot hold up all languages.
         for profile in profiles:
-            for query in topics.queries(category,profile['code']):
+            # Historical-only discovery for languages absent from the shared
+            # five-language CE/BIO vocabulary. Existing queries/keys win intact.
+            native = (topics.queries(category,profile['code']) or
+                      historical_specialist_queries.queries(category,profile['code']))
+            for query in native:
                 tasks.append({'group':prefix+'_google','source':'google',
                     'locale':f"{profile['hl']}|{profile['gl']}|{profile['ceid']}",
                     'code':profile['code'],'name':profile['name'],
