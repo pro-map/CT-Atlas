@@ -73,6 +73,7 @@ jobs:
           python -m unittest discover -s tests -p 'repair_weak_incident_ids_test.py' -v
           python -m unittest discover -s tests -p 'backfill_record_integrity_test.py' -v
           python -m unittest discover -s tests -p 'backfill_publication_guard_test.py' -v
+          python -m unittest discover -s tests -p 'source_faithfulness_test.py' -v
           python -m unittest discover -s tests -p 'threat_categories_test.py'
           python -m unittest discover -s tests -p 'gemini_chinese_map_test.py'
           python -m unittest discover -s tests -p 'radnuc_vocabulary_test.py'
@@ -89,6 +90,8 @@ jobs:
         run: python tools/backfill_record_integrity.py events.json --apply
       - name: Repair raw weak incident IDs before history replay
         run: python tools/repair_weak_incident_ids.py events.json
+      - name: Apply documented source-faithfulness correction before snapshots
+        run: python tools/apply_source_faithfulness.py --apply
       - name: Snapshot old incident IDs and protected location decisions
         id: baseline
         env:
@@ -237,6 +240,7 @@ jobs:
           GUARD_NEW_COUNT: ${{ steps.new_events.outputs.new_count }}
         run: |
           set -euo pipefail
+          python tools/apply_source_faithfulness.py --apply --defer-invalid-map
           # Preserve upstream checkpoints/quota, but never commit an unchecked Map.
           # An incomplete path saves recovery bytes and restores the pre-run Map.
           python tools/backfill_publication_guard.py finalize
