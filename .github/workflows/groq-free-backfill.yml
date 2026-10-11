@@ -45,8 +45,10 @@ jobs:
       CT_ATLAS_BACKFILL_PROVIDER: groq
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      SPECIALIST_POSTS_INPUT: ${{ inputs.specialist_posts || '5' }}
-      CHINESE_POSTS_INPUT: ${{ inputs.chinese_posts || '4' }}
+      # Code-maintenance pushes repair and deploy without consuming AI quota.
+      # Scheduled/manual backfills retain their existing bounded allocations.
+      SPECIALIST_POSTS_INPUT: ${{ github.event_name == 'push' && '0' || inputs.specialist_posts || '5' }}
+      CHINESE_POSTS_INPUT: ${{ github.event_name == 'push' && '0' || inputs.chinese_posts || '4' }}
     steps:
       - name: Checkout current production and durable checkpoints
         uses: actions/checkout@v6
