@@ -6,6 +6,7 @@ on:
       - tools/backfill_record_integrity.py
       - tests/backfill_record_integrity_test.py
       - .github/workflows/backfill-record-integrity.yml
+      - .github/workflows/groq-free-backfill.yml
   workflow_dispatch:
 permissions:
   contents: read
@@ -18,5 +19,9 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
-      - name: Read-only audit of complete Map database
+      - name: Regression tests without network or AI calls
+        run: python -m unittest discover -s tests -p 'backfill_record_integrity_test.py' -v
+      - name: Validate all records and every non-ID field on the complete Map snapshot
         run: python tools/audit_backfill_records.py
+      - name: Confirm the audit changed no tracked files
+        run: git diff --exit-code
