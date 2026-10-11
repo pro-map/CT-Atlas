@@ -24,6 +24,10 @@ cp index.html main.html crypto.html social.html facial.html privacy.html robots.
    darkweb.html darkweb.js darkweb.css darkweb-intelligence.svg \
    "$STAGING"/
 
+# Keep the complete fallback, but remove formatting only from its mirror copy.
+# Source files and all event fields remain unchanged. Workers assets cap: 25 MiB.
+python3 tools/compact_mirror_json.py --input events.json --output "$STAGING/events.json"
+
 # Lightweight map data, derived from the events.json copied just above (so it can never be
 # older than it). If it cannot be built the mirror simply serves the full events.json.
 if ! python3 tools/build_events_lite.py --input events.json --output "$STAGING/events-lite.json"; then
@@ -61,5 +65,8 @@ cat > "$STAGING/.assetsignore" <<'EOF'
 wrangler.toml
 .assetsignore
 EOF
+
+# Fail before upload if any future asset exceeds the platform file-size limit.
+python3 tools/compact_mirror_json.py --check-directory "$STAGING"
 
 (cd "$STAGING" && npx wrangler@latest deploy)
