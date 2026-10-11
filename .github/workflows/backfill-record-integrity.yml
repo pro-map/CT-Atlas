@@ -1,0 +1,22 @@
+name: Backfill record integrity
+on:
+  pull_request:
+    paths:
+      - tools/audit_backfill_records.py
+      - tools/backfill_record_integrity.py
+      - tests/backfill_record_integrity_test.py
+      - .github/workflows/backfill-record-integrity.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Read-only audit of complete Map database
+        run: python tools/audit_backfill_records.py
