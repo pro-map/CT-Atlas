@@ -446,7 +446,7 @@
     "UK Government / Counter-Terrorism",
     "INTERPOL English News"
   ],
-  "last_updated": "2026-10-11T00:40:19.745197+00:00",
+  "last_updated": "2026-10-11T10:38:02.925808+00:00",
   "number_of_events": 4230,
   "events": [
     {
@@ -37076,6 +37076,83 @@
       "ai_geo_inferred": false
     },
     {
+      "id": "368efec8cff2082a",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "13 Soldiers Ambushed, 7 Gunmen Escape Unharmed: The Gunfire in Basilan, Philippines, What Was Shattered?",
+      "summary": "Thirteen Philippine soldiers were ambushed in Basilan, resulting in casualties, while seven gunmen withdrew without injury. The report does not identify the attackers but describes a violent incident.",
+      "original_title": "13名士兵遭伏击，7名枪手全身而退：菲律宾巴西兰的枪声，打碎了什么？",
+      "original_summary": "13名士兵遭伏击，7名枪手全身而退：菲律宾巴西兰的枪声，打碎了什么？ 搜狐网",
+      "original_language": "zh",
+      "collection_language": "zh",
+      "collection_language_name": "Chinese (Simplified)",
+      "collection_locale": "CN:zh-Hans",
+      "published": "2026-10-07T15:55:08+00:00",
+      "source": "搜狐网",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNOVdaOHRmN3dValJUWDBKSndWMUpLeTd6b3VwSS12N2FXdkFqUm5JYU9iS1VJRFpveURaSnQxaWtpNVN5bzY3Y3lVZURYbHF0VFVCLUFGVEtkY1dyby1BSGZJRnNDSGcxeXBEdEFnZmhqTVcwS2otWXIwYWFyV0dmWUlRUGViY2p1c3Y4WQ?oc=5",
+      "collector": "Google News RSS",
+      "country": "Philippines",
+      "country_code": "PH",
+      "city": null,
+      "region": "Basilan",
+      "latitude": 6.5833,
+      "longitude": 122.05,
+      "location_precision": "region",
+      "location_confidence": "high",
+      "acquisition_channel": "archive_enrichment",
+      "source_article_fingerprints": [
+        "1a156df397cab6fa21a677bd72c9ffe30ae044393bc08f175c14eff8164a9758"
+      ],
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "openai/gpt-oss-120b",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "The article reports a concrete violent ambush against security forces, constituting a new non‑state attack relevant to counter‑terrorism monitoring.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "is_attack": true,
+      "incident_anchor": "p1",
+      "update_type": "INITIAL",
+      "incident_id": "inc-7ffa74915c7dcf7d",
+      "translated_to_english": true,
+      "ai_canonical_event": "ambush + soldiers + Basilan",
+      "title_variants": [
+        "ambush + soldiers + Basilan"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "reported_status": "UNKNOWN",
+      "sources": [
+        "搜狐网"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-07T15:55:08+00:00",
+      "last_reported": "2026-10-07T15:55:08+00:00",
+      "location_confidence_score": 0.9,
+      "location_method": "ai_region_coordinates",
+      "location_evidence": [
+        "Thirteen Philippine soldiers were ambushed in Basilan"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The text explicitly states the ambush of soldiers occurred in Basilan, Philippines.",
+      "ai_geo_fingerprint": "a62db6467c5e1bd9d8b3d3241da1be112e84c21cad56e1bd7262ef97fc03bd53",
+      "ai_geo_inferred": false
+    },
+    {
       "id": "0b6186cd6af9287b",
       "category": "Attacks",
       "categories": [
@@ -37727,6 +37804,83 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "German police operations and surveillance.",
       "ai_geo_fingerprint": "e9dc71cf8a736570bc38994504381cae31ab6214c2677cb52b31951a232d65a5",
+      "ai_geo_inferred": false
+    },
+    {
+      "id": "2ed6f7d7715d32ad",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "title": "Young Man Who Assaulted a Bangladeshi Delivery Person in 2025 Detained for Terror‑Motivated Threats by DIICOT",
+      "summary": "A young man who assaulted a Bangladeshi delivery worker in 2025 was detained by Romania's DIICOT for making threats with a terrorist motive.",
+      "original_title": "2025年殴打一名孟加拉国送货员的年轻人因以恐怖主义为目的进行威胁，被DIICOT拘留",
+      "original_summary": "2025年殴打一名孟加拉国送货员的年轻人因以恐怖主义为目的进行威胁，被DIICOT拘留 Informat.ro",
+      "original_language": "zh",
+      "collection_language": "zh",
+      "collection_language_name": "Chinese (Simplified)",
+      "collection_locale": "CN:zh-Hans",
+      "published": "2026-10-07T14:54:49+00:00",
+      "source": "Informat.ro",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNd0lSY3p5aU1haHREbDJKaFJpdWUyaUM2MlMxd2l3cFRFUWJkMGtFZnlsTmhkb0R1NDZhVVNXVnoyUHNUYXlTTDdUZXlIOUJjUlRka3BUZENsSDZyVkVsRnF2ZmNMY213cEZOaUNfNm5JclIzWmxwS1RvcW1nLUttZ01KRldUdWVrSUtGWjZLUjItQ3NkWUh1N2J6bDJfaGVPNklOSE9hQm4?oc=5",
+      "collector": "Google News RSS",
+      "country": "Romania",
+      "country_code": "RO",
+      "city": "Bucharest",
+      "region": null,
+      "latitude": 44.43225,
+      "longitude": 26.10626,
+      "location_precision": "country_capital",
+      "location_confidence": "high",
+      "acquisition_channel": "archive_enrichment",
+      "source_article_fingerprints": [
+        "0ddfefbdac94f4da934c97fd852a3b1d0265e47f11b939a78fcc543c3659a6fa"
+      ],
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "openai/gpt-oss-120b",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "The snippet details a confirmed arrest of an individual for terrorism‑related threats, representing a new counter‑terrorism action.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "is_attack": false,
+      "incident_anchor": "p2",
+      "update_type": "INITIAL",
+      "incident_id": "inc-50650eb12f9bdc27",
+      "translated_to_english": true,
+      "ai_canonical_event": "detention + terror‑motivated threat + Bangladesh delivery worker",
+      "title_variants": [
+        "detention + terror‑motivated threat + Bangladesh delivery worker"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "reported_status": "CONFIRMED",
+      "sources": [
+        "Informat.ro"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-07T14:54:49+00:00",
+      "last_reported": "2026-10-07T14:54:49+00:00",
+      "location_confidence_score": 0.85,
+      "location_method": "ai_country_capital",
+      "location_evidence": [
+        "detained by Romania's DIICOT for making threats"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Detained by Romania's Directorate for Investigating Organized Crime and Terrorism (DIICOT), indicating the event took place in Romania.",
+      "ai_geo_fingerprint": "dbf3341158f613e633401b6bb9d205efe50889186411eb0aa88341aae299c42a",
       "ai_geo_inferred": false
     },
     {
@@ -42779,6 +42933,83 @@
       "ai_geo_reason": "IDF home demolition operation targeting a Palestinian assailant, typically in the West Bank.",
       "ai_geo_fingerprint": "41c9f5f944f79d65f371026972d33220a833de2acd0e7634b3b0d74f56116c3a",
       "ai_geo_inferred": true
+    },
+    {
+      "id": "a72079093e0b7289",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "title": "Two foreign terror‑related suspects captured in Vietnam; Cambodia clarifies it did not take part in the handover",
+      "summary": "Vietnam arrested two foreign individuals suspected of terrorism, while Cambodia stated it was not involved in their capture or transfer.",
+      "original_title": "两外籍涉恐人员越南落网 柬埔寨澄清未参与逮捕移交",
+      "original_summary": "两外籍涉恐人员越南落网 柬埔寨澄清未参与逮捕移交 柬华日报",
+      "original_language": "zh",
+      "collection_language": "zh",
+      "collection_language_name": "Chinese (Simplified)",
+      "collection_locale": "CN:zh-Hans",
+      "published": "2026-10-07T08:58:18+00:00",
+      "source": "柬华日报",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBmZWhLSWhIdDl0VUtrNmcta0RGYU9ROWJwbkNOYWxVd0xqZzgxeFZueUVoWmpTZjRtZ1lCbjV4MzBtX293dXZ6Q2VNekZ0Q1paeUpHSEd3NA?oc=5",
+      "collector": "Google News RSS",
+      "country": "Vietnam",
+      "country_code": "VN",
+      "city": "Hanoi",
+      "region": null,
+      "latitude": 21.0245,
+      "longitude": 105.84117,
+      "location_precision": "country_capital",
+      "location_confidence": "high",
+      "acquisition_channel": "archive_enrichment",
+      "source_article_fingerprints": [
+        "1090788ba08f097e43b08a7ec4bce924dc74ec6660f67e1f76a9c8477caad492"
+      ],
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "openai/gpt-oss-120b",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "The article reports a new arrest of individuals suspected of terrorism, constituting a concrete counter‑terrorism development.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "is_attack": false,
+      "incident_anchor": "p1",
+      "update_type": "INITIAL",
+      "incident_id": "inc-2b07e294fab7c201",
+      "translated_to_english": true,
+      "ai_canonical_event": "Arrest of two foreign terror suspects in Vietnam",
+      "title_variants": [
+        "Arrest of two foreign terror suspects in Vietnam"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "reported_status": "SUSPECTED",
+      "sources": [
+        "柬华日报"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-07T08:58:18+00:00",
+      "last_reported": "2026-10-07T08:58:18+00:00",
+      "location_confidence_score": 0.9,
+      "location_method": "ai_country_capital",
+      "location_evidence": [
+        "Two foreign terror‑related suspects captured in Vietnam"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The arrest/capture of the two terror suspects explicitly took place in Vietnam.",
+      "ai_geo_fingerprint": "6ac49ec63c54e744b01b8019fb43b82bb8534b4d10e43d9cca57a56af0b9b43e",
+      "ai_geo_inferred": false
     },
     {
       "id": "8ed5470ec0847a0b",
@@ -114796,7 +115027,7 @@
           "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1RbWY0dURoOFBoY3FsMFZCTXBodkxCMVpORjdRYTBwY3F1aUZpR1hvOW1RSE5GRFZ2LTdDY2Nnd2JFS1NVdjBLMUozYw?oc=5"
         }
       ],
-      "article_count": 108,
+      "article_count": 109,
       "first_reported": "2026-10-02T07:00:00+00:00",
       "last_reported": "2026-10-05T14:43:55+00:00",
       "dedup_confidence": 1.0,
@@ -122928,7 +123159,7 @@
       "collection_locale": "DE:de",
       "published": "2026-10-01T18:30:00+00:00",
       "source": "Der Standard",
-      "source_count": 2,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPNzR4dDVQM1pRVVViQTFSSDJicWdmNGJhLXJWWnBEdTJmUFBhRVJfYUIzQ2NGTkhaRHNSQ3RyaW1TbWRSSnE2V0MtN24wVkNUa0JFcHVMdklRUE1EbndYRkRXWWpmMUZqanVwbVJMZjNpRW1ab2NYVWJMRVgxZnNqZXhUTElhWDFCT3FfZDVWN00weWVFTzRIRnF1WF9xTXRuNEtv?oc=5",
       "collector": "Google News RSS",
       "country": "United Kingdom",
@@ -122942,11 +123173,13 @@
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "9cc442d8bd2d752edaf3a76419e99cefaddbd32ee055385d167f29f3905635e3",
+        "b438d820a28e39ed908104a0d013eefa7f273ef0903901d2c7a0f27f7a32fe50",
         "d6f528797b5149b8acbc42b8b45bf55921766d2d2d5c3a5535ab1a8e3e3c842c"
       ],
       "sources": [
         "Der Standard",
-        "Tachles"
+        "Tachles",
+        "香港01"
       ],
       "related_articles": [
         {
@@ -122957,11 +123190,20 @@
           "published": "2026-10-03T09:03:57+00:00",
           "source": "Tachles",
           "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5RVG50X2pvSEZ0Um45SXRsUndBbnZEb0RCZkctZW1HV1RhTmp3dEtiOWMycXdtaG0xa0l2cUdkVDFXTG1ZQzBVbnNDNFZoaGFfaTM4?oc=5"
+        },
+        {
+          "title": "UK Base Terror Attack Foiled Case: 22-Year-Old Man Arrested in London, Suspects Rise to Seven",
+          "original_title": "英国基地恐袭未遂案 22岁男子伦敦被捕 疑犯增至7名",
+          "original_language": "zh",
+          "summary": "A 22-year-old man was arrested in London as part of a suspected terrorist plot targeting a UK base, bringing the total number of suspects to seven.",
+          "published": "2026-10-06T21:52:00+00:00",
+          "source": "香港01",
+          "url": "https://news.google.com/rss/articles/CBMi_AJBVV95cUxNejNSa0RFbjhWX1hzaVgyX29KWmlVSV83VzZSd0k2eVU0T3pXcEdSMzB6RkgwdkVIMGo5RG52X2c3RnViV1UtenpDN3NuU241eGhkSG1vdmx0UkpNa3FQN01Vek44Yzl6TW5xY0F5QzFtTUhjUVVWZzBZcHZJWmt6cFUtM0gzVW91YmFqTjR6d3F5aFVZaFRfaDlnUHZxZlBNNVU4cFJLdG14ekNKNUJxT0JZNTZHQUxpQzFEWHlxeWRKNWFpQk82NGxCekRNSVI1bjdZczlfaXdhVUpoRktrOW1EU0pjRnZKM216Y3c3VmV1NUxwY29DVHdCSmV3Q0syY3g3OXVsVklBQ2JZYnFwYnBoeVRBbVpORlo2eUtUdlEwS05MRmZGbXU1R1RldFZiX3RkdXVONTZ1WTF6cE1yZkc0bUxmaGdpRHJFVWoyRWtzVFo5NlNQa0d4UmtMdUw2NEhkRHVWQTJEWXJ2aTFtNW4wZmtYc0Zzc3F3Ng?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 3,
       "first_reported": "2026-10-01T18:30:00+00:00",
-      "last_reported": "2026-10-03T09:03:57+00:00",
+      "last_reported": "2026-10-06T21:52:00+00:00",
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "very_high_title_similarity"
@@ -122999,7 +123241,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Arrest occurred in London following a military base incident.",
       "ai_geo_fingerprint": "0bf0bf4a9da2f5650075fa8b65ad536af677a53b34fcd5f26a4ba8cc59a7ee73",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "cbrn_subgroups": []
     },
     {
       "id": "e01f3a880ec6fdbb",
@@ -444391,172 +444634,6 @@
       "incident_anchor": "Tomsk Oblast attempted terrorist attack sentencing 2026-04-15",
       "update_type": "JUDICIAL_UPDATE",
       "incident_id": "inc-5504458bc64c9707"
-    },
-    {
-      "id": "cbdca8f9bd638d36",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Attacks"
-      ],
-      "title": "Troops neutralise several terrorists in ambush operation in Borno",
-      "summary": "Military troops successfully neutralized several terrorists during an ambush operation in Borno State.",
-      "original_title": "Troops neutralise several terrorists in ambush operation in Borno",
-      "original_summary": "Troops neutralise several terrorists in ambush operation in Borno zagazola.org",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-04-14T07:00:00+00:00",
-      "source": "zagazola.org",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPQ19sV3dRR2VPd3o4NDFsamFfWVdxV3EwRVZSTkRYSXc0NGRqSUJSWjU0UFB2Nmtob2RNWnQ5UkJEazQzTl9fQWRIcHBqN1lXNEpIOUtIZk9CSlFlMU5qUW1EYUdSU2lvd0djdmlYR2VoblEtZDByMFpzWTl2WmZVclRqdTEyMEc3OUJMdTJRV3FzWU9EV1VQeklTcDRLSFFIbXMzazRBMXlfdi1KSnZR?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": null,
-      "region": "Borno State",
-      "latitude": 11.8333,
-      "longitude": 13.15,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "zagazola.org",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "zagazola.org"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-14T07:00:00+00:00",
-      "last_reported": "2026-04-14T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports a counter-terrorism ambush operation resulting in the neutralization of several terrorists in Borno State.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Military troops neutralize terrorists in ambush operation in Borno State Nigeria",
-      "title_variants": [
-        "military ambush and neutralization of terrorists in Borno State Nigeria",
-        "Military troops neutralize terrorists in ambush operation in Borno State Nigeria"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "ambush operation in Borno"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Military operation targeting terrorists in Borno State, Nigeria.",
-      "ai_geo_fingerprint": "c5899a5c46631bb1e5a91f0f44d52716930e1f8d73a19dd0403124e44acde5fa",
-      "ai_geo_inferred": false,
-      "actor_group": "Boko Haram",
-      "incident_id": "inc-0e39b681b894ae61",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Borno military ambush neutralize terrorists 2026-04-14",
-      "update_type": "INITIAL"
-    },
-    {
-      "id": "84280f60bfa0f9fc",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "SNA and Jubbaland Forces Inflict Heavy Losses on Al-Shabaab in Juba Regions Offensive",
-      "summary": "Somali National Army and Jubbaland forces conducted an offensive inflicting heavy losses on Al-Shabaab in the Juba regions.",
-      "original_title": "SNA and Jubbaland Forces Inflict Heavy Losses on Al-Shabaab in Juba Regions Offensive",
-      "original_summary": "SNA and Jubbaland Forces Inflict Heavy Losses on Al-Shabaab in Juba Regions Offensive Somali National News Agency",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-04-14T07:00:00+00:00",
-      "source": "Somali National News Agency",
-      "source_count": 3,
-      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQeTZNSXJ3cjBCUWJNcXc5bnUySWhIUDY0SV81NGROSDJQNmE0RGU3RnhidU5LZU5JR3VNaDc0cF9VNHJ0eFZlYmhES3JJck9aZGpXbnNCb1QwbExZUy01dkVSaTVtTEhiUFNGRTE1UFY2X1AwOElQZUpTYkZyYUR2Q2hscWx1aEtpTGM5X1ZvcEs1X1U5N1pkR0pwQ1Nkc2RzUmR6YnZNM0cxWEtTLVpiYV9HWQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Juba regions",
-      "latitude": 0.3667,
-      "longitude": 42.55,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "sonna.so/en",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "Somali National News Agency",
-        "Shabelle Media Network",
-        "shabellemedia.com"
-      ],
-      "related_articles": [
-        {
-          "title": "Somali army, allies conduct airstrikes against al-Shabab in several regions",
-          "original_title": "Somali army, allies conduct airstrikes against al-Shabab in several regions",
-          "original_language": "en",
-          "summary": "The Somali army and allied forces carried out targeted airstrikes against Al-Shabab positions across multiple regions.",
-          "published": "2026-04-15T07:00:00+00:00",
-          "source": "Shabelle Media Network",
-          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPWENkSVRyWFhLUjA2TnVSdzBzSXRBUGxsdUFuQVEzSmxTZHB6RnlrSm5MMEpTUXVfZWRTYTA2blNFd0FsN1luUy1TemcwaGRuR0VXLVprN0EySWJ6bzl5Um84R0JaVC10VmdCdERaMTkwdXZodDQtanhaekxTa0hZdXBYWTRRRjdiMGlnVUVTbE5mNEtPdWZqN0NIbjlIaUpjcVBZ?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-04-14T07:00:00+00:00",
-      "last_reported": "2026-04-15T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports a joint military offensive by Somali and regional forces against Al-Shabaab.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Somali National Army and Jubbaland forces offensive against Al-Shabaab in Juba regions",
-      "title_variants": [
-        "military offensive against Al-Shabaab in Juba regions Somalia",
-        "Somali National Army and Jubbaland forces offensive against Al-Shabaab in Juba regions"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "offensive in the Juba regions"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Offensive operations by SNA and Jubbaland forces in the Juba regions.",
-      "ai_geo_fingerprint": "cb73aaa438e68866b7a23ba0bc7b57ea57d20bac48d7e6741f82cdb06ef06687",
-      "ai_geo_inferred": false,
-      "actor_group": "Al-Shabaab",
-      "incident_id": "inc-b6311b219f905eee",
-      "incident_anchor": "SNA Jubbaland offensive against Al-Shabaab Juba 2026-04-14",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "update_type": "INITIAL",
-      "source_article_fingerprints": [
-        "c01a22b700348a9bf5d149b45581845fe5073dee1f38067498537228e1b925d9"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_incident"
-      ]
     }
   ],
   "geolocation": {
@@ -444571,21 +444648,21 @@
     "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
     "rescue_unlocated_final": 21,
     "ai_for_every_event": true,
-    "cached_events": 4230,
-    "ai_processed_this_run": 12,
-    "ai_pending_at_start": 12,
+    "cached_events": 4240,
+    "ai_processed_this_run": 3,
+    "ai_pending_at_start": 3,
     "city": 1656,
-    "region": 1232,
-    "country_capital": 1331,
+    "region": 1231,
+    "country_capital": 1333,
     "unlocated": 23,
-    "mapped_total": 4219,
-    "high_confidence": 3922,
+    "mapped_total": 4220,
+    "high_confidence": 3923,
     "medium_confidence": 303,
     "low_confidence": 17,
     "methods": {
       "ai_city_geonames": 1540,
-      "ai_country_capital": 1330,
-      "ai_region_coordinates": 1228,
+      "ai_country_capital": 1332,
+      "ai_region_coordinates": 1227,
       "ai_city_coordinates": 107,
       "ai_unlocated_final": 21,
       "source_verified_region": 4,

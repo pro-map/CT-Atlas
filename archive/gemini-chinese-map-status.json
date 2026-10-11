@@ -1,16 +1,16 @@
 {
- "updated_at": "2026-10-11T00:41:31.120438+00:00",
+ "updated_at": "2026-10-11T10:39:12.599295+00:00",
  "vocabulary_version": "gemini-chinese-eight-map-history-v1-20261010",
  "anchor": "2026-10-10",
  "window_days": 180,
  "model_backend": "groq_free_public_news",
  "planned_root_queries": 1248,
- "processed_root_queries_including_replaced": 12,
+ "processed_root_queries_including_replaced": 13,
  "rejected_root_queries_not_successes": 0,
  "confirmed_successful_source_fetches_including_split_children": 13,
- "pending_units_including_split_children": 1236,
- "queued_candidates_waiting_for_Gemini": 10,
- "new_unique_event_records_this_batch": 0,
+ "pending_units_including_split_children": 1235,
+ "queued_candidates_waiting_for_Gemini": 0,
+ "new_unique_event_records_this_batch": 3,
  "publication_confirmed": false,
  "publication_state": "INTEGRATED_WORKING_COPY_AWAIT_GEO_AND_DEPLOY",
  "category_progress": {
@@ -58,10 +58,10 @@
   },
   "Arrests": {
    "planned_root_queries": 156,
-   "processed_root_queries_including_replaced": 0,
+   "processed_root_queries_including_replaced": 1,
    "rejected_root_queries_not_successes": 0,
-   "pending_root_queries": 156,
-   "queued_for_Gemini": 10
+   "pending_root_queries": 155,
+   "queued_for_Gemini": 0
   },
   "Legal / Judicial": {
    "planned_root_queries": 156,
@@ -81,20 +81,20 @@
  "processing_complete": false,
  "complete_source_coverage": false,
  "latest_batch": {
-  "tasks_done": 2,
+  "tasks_done": 1,
   "fetched": 0,
   "candidates": 0,
   "skipped": 0,
   "skipped_cached": 0,
-  "reviewed": 12,
-  "kept": 6,
-  "archived_incident": 5,
+  "reviewed": 10,
+  "kept": 4,
+  "archived_incident": 4,
   "unanswerable": 0,
   "source_failures": 0,
   "query_errors": 0,
   "split": 0,
   "given_up": 0,
-  "queued_candidates": 10
+  "queued_candidates": 0
  },
  "stop": "Groq GPT-OSS-120B budget used (4)",
  "note": "A retrieved article, rejected query, repeated source report or draft checkpoint is NEVER by itself a new published event. Local map record counts can change again after clustering and deployment."
