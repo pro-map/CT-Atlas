@@ -1,0 +1,27 @@
+name: Backfill record integrity
+on:
+  pull_request:
+    paths:
+      - tools/audit_backfill_records.py
+      - tools/backfill_record_integrity.py
+      - tests/backfill_record_integrity_test.py
+      - .github/workflows/backfill-record-integrity.yml
+      - .github/workflows/groq-free-backfill.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Regression tests without network or AI calls
+        run: python -m unittest discover -s tests -p 'backfill_record_integrity_test.py' -v
+      - name: Validate all records and every non-ID field on the complete Map snapshot
+        run: python tools/audit_backfill_records.py
+      - name: Confirm the audit changed no tracked files
+        run: git diff --exit-code

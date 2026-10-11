@@ -67,6 +67,7 @@ jobs:
           test -n "$GROQ_API_KEY" || { echo "::error::GROQ_API_KEY Actions secret missing"; exit 1; }
           python -m unittest discover -s tests -p 'groq_backfill_test.py' -v
           python -m unittest discover -s tests -p 'repair_weak_incident_ids_test.py' -v
+          python -m unittest discover -s tests -p 'backfill_record_integrity_test.py' -v
           python -m unittest discover -s tests -p 'threat_categories_test.py'
           python -m unittest discover -s tests -p 'gemini_chinese_map_test.py'
           python -m unittest discover -s tests -p 'radnuc_vocabulary_test.py'
@@ -78,6 +79,9 @@ jobs:
               if value < 0 or value > limit:
                   raise SystemExit(f"{name}: refusing value outside 0..{limit}")
           PY
+      - name: Repair legacy record keys before old-record and geolocation snapshots
+        # Renaming an existing record is not new coverage and must not trigger AI.
+        run: python tools/backfill_record_integrity.py events.json --apply
       - name: Repair raw weak incident IDs before history replay
         run: python tools/repair_weak_incident_ids.py events.json
       - name: Snapshot old incident IDs and protected location decisions
@@ -124,6 +128,9 @@ jobs:
           set -euo pipefail
           python -u tools/enrich_chinese_map.py \
             --max-posts "$POSTS" --max-fetches 140 --deadline-minutes 35
+      - name: Refuse record-key collisions or retired IDs after replay
+        if: success()
+        run: python tools/backfill_record_integrity.py events.json --check
       - name: Split ambiguous short incident anchors before publication
         if: success()
         run: python tools/repair_weak_incident_ids.py events.json
@@ -191,6 +198,7 @@ jobs:
           name: groq-free-backfill-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             events.json
+            archive/map-record-id-migration-v1.json
             archive/threat-enrichment-status.json
             archive/radnuc-*.json
             archive/biological-*.json
@@ -210,6 +218,7 @@ jobs:
           set -euo pipefail
           # Mandatory even after an upstream failure: raw replayed anchors
           # must never reach main through the always() checkpoint commit.
+          python tools/backfill_record_integrity.py events.json --check
           python tools/repair_weak_incident_ids.py events.json
           python - <<'PY'
           import json
