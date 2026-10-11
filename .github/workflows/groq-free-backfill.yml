@@ -76,6 +76,8 @@ jobs:
               if value < 0 or value > limit:
                   raise SystemExit(f"{name}: refusing value outside 0..{limit}")
           PY
+      - name: Repair raw weak incident IDs before history replay
+        run: python tools/repair_weak_incident_ids.py events.json
       - name: Snapshot old incident IDs and protected location decisions
         env:
           BEFORE: ${{ runner.temp }}/groq-backfill-before.json
@@ -204,6 +206,9 @@ jobs:
         if: always()
         run: |
           set -euo pipefail
+          # Mandatory even after an upstream failure: raw replayed anchors
+          # must never reach main through the always() checkpoint commit.
+          python tools/repair_weak_incident_ids.py events.json
           python - <<'PY'
           import json
           from pathlib import Path
