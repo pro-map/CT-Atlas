@@ -3411,7 +3411,7 @@
       "is_attack": false,
       "incident_anchor": "p1",
       "update_type": "INITIAL",
-      "incident_id": "inc-f64551fcd6f07823",
+      "incident_id": "inc-b8cfa5f7d0190ac7",
       "translated_to_english": true,
       "ai_canonical_event": "counter‑terrorism operation killing militants in Pakistan",
       "title_variants": [
@@ -5236,7 +5236,7 @@
       "is_attack": false,
       "incident_anchor": "p2",
       "update_type": "INITIAL",
-      "incident_id": "inc-3946ca64ff78d93c",
+      "incident_id": "inc-95ecff9c35f181c8",
       "translated_to_english": true,
       "ai_canonical_event": "disrupted Dubai airline passenger plane terror plot",
       "title_variants": [
@@ -25391,7 +25391,7 @@
       "is_attack": false,
       "incident_anchor": "p2",
       "update_type": "INITIAL",
-      "incident_id": "inc-3946ca64ff78d93c",
+      "incident_id": "inc-0cf9df10b35f2f34",
       "translated_to_english": true,
       "ai_canonical_event": "surrender + arrests + terrorist supporters + Algeria",
       "title_variants": [
