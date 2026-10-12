@@ -73,7 +73,7 @@ function exportDocument(item,outlet){
  if(outletText)english.append(node("h2","English title · outlet translation"),node("p",OUTLET_TRANSLATION_NOTE+". The title above is that English version, not an English original; CT Atlas did not translate it."));
  else if(englishOriginal(item))english.append(node("h2","English title"),node("p","The original title above is in English and is not translated."));
  else english.append(node("h2","English title · machine translation"),node("p",item.title_en_kind==="translation"?item.title_en:"English translation pending"));
- english.append(node("h2","English overview · AI-generated"),node("p",item.overview_en||"English overview pending AI enrichment."));doc.body.append(english);
+ if(item.overview_en)english.append(node("h2","English overview · previously generated"),node("p",item.overview_en));doc.body.append(english);
  const original=node("section");original.append(node("h2",(outletText?"Source text":"Original source text")+(lang?" · "+languageName(lang):"")+(outletText?" · outlet translation, not the original":"")));const body=node("p",item.original_text||item.excerpt||item.title);body.dir="auto";if(lang)body.lang=lang;original.append(body);doc.body.append(original);
  const source=node("section",undefined,"source");source.append(node("h2","Provenance"),...(outletText?[node("p","Text: "+OUTLET_TRANSLATION_NOTE+".")]:[]),node("p","Source: "+item.url),node("p","Publication date: "+item.published_at+" · Source date: "+(item.source_date||"")),node("p","Text status: "+(item.text_status||"excerpt")+" · First collected: "+date(item.first_seen)),node("p","Exported: "+new Date().toISOString()));
  for(const file of item.attachments||[])source.append(node("p",file.type.toUpperCase()+": "+file.title+"\n"+file.url+(file.sha256?"\nSHA-256: "+file.sha256:"")+"\n"+(file.stored_in_atlas?"PDF available in authenticated Atlas storage; original file is not embedded in this export.":file.acquired?"Downloaded on the collector computer; upload to Atlas pending or unavailable.":"Original file not acquired.")));
@@ -121,7 +121,7 @@ function renderFeed(){
   else if(outletText)titles.append(node("p",OUTLET_TRANSLATION_NOTE+".","translation-note"));
   heading.append(publicationVisual(item),titles);
   article.append(head,heading,node("p","Publication: "+(item.published_at||"Unknown")+" · Date evidence: "+(item.date_basis||"unknown")));
-  if(item.publication_version){const overview=node("div",undefined,"english-overview");overview.append(node("strong","ENGLISH OVERVIEW · AI"),node("p",item.overview_en||(outletText?"Pending AI enrichment. The outlet's English text remains available.":"Pending AI enrichment. Original source text remains available.")));article.append(overview);}
+  if(item.publication_version&&item.overview_en){const overview=node("div",undefined,"english-overview");overview.append(node("strong","ENGLISH OVERVIEW · AI"),node("p",item.overview_en||(outletText?"Pending AI enrichment. The outlet's English text remains available.":"Pending AI enrichment. Original source text remains available.")));article.append(overview);}
   if(item.publication_version){
    const detail=node("details",undefined,"original-publication"),summary=node("summary",outletText?"READ OUTLET'S ENGLISH TEXT":"READ ORIGINAL TEXT"),body=node("p","Open to load source text","source-text");body.dir="auto";if(lang)body.lang=lang;detail.append(summary,body);
    const cached=originalTexts.get(item.id),ready=cached?.hash===(item.content_hash||"")&&cached.text!==undefined;if(ready)body.textContent=cached.text;

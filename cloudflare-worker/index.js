@@ -56,7 +56,7 @@ if (request.method === "OPTIONS") {
 return new Response(null, { status: 204, headers: corsHeaders(env) });
 }
 if (url.pathname.startsWith("/ip-intelligence/")) return handleIPIntelligence(request, env);
-if (url.pathname.startsWith("/darkweb/")) return handleDarkweb(request, env);
+if (url.pathname.startsWith("/darkweb/")) return handleDarkweb(request, env, ctx);
 if (url.pathname === "/database-events" && request.method === "POST") {
 return handleDatabaseEvents(request, env);
 }

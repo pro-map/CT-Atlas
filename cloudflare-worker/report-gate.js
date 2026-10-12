@@ -945,7 +945,7 @@ export class ReportGate {
           const archiveKey = `darkweb:publication:${policy.epoch}:${id}`;
           const item = await this.state.storage.get(archiveKey);
           const arabic = item && (item.source_language === "ar" || /[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]/.test(String(item.title || "")));
-          if (arabic && (!DARKWEB_TITLE_DONE.has(item.title_en_kind) || !item.overview_en)) {
+          if (arabic && !DARKWEB_TITLE_DONE.has(item.title_en_kind)) {
             await this.state.storage.put(archiveKey, { ...item, enrich_attempts: 0 });
             await this.state.storage.put(`darkweb:publication-pending:${policy.epoch}:${id}`, id);
           }
@@ -997,7 +997,11 @@ export class ReportGate {
           startAfter = key;
           if (seen.has(id)) continue;
           const record = await this.state.storage.get(`darkweb:publication:${policy.epoch}:${id}`);
-          if (record && !(record.enrich_attempts >= 3)) { items.push(record); seen.add(id); }
+          if (!record || DARKWEB_TITLE_DONE.has(record.title_en_kind)) {
+            await this.state.storage.delete(key);
+            continue;
+          }
+          if (!(record.enrich_attempts >= 3)) { items.push(record); seen.add(id); }
           if (items.length >= 10) break;
         }
         if (pending.size < 128) break;
@@ -1034,10 +1038,10 @@ export class ReportGate {
             // "original" is accepted only for a record that still qualifies, and always stores its own title.
             const original = title.title_en_kind === "original";
             if (original && !darkwebEnglishOriginal(item)) continue;
-            const updated = { ...item, title_en: original ? item.title : title.title, title_en_kind: original ? "original" : title.title_en_kind === "translation" ? "translation" : "generated", overview_en: title.overview_en || "", title_en_generated_at: new Date(now).toISOString() };
+            const updated = { ...item, title_en: original ? item.title : title.title, title_en_kind: original ? "original" : title.title_en_kind === "translation" ? "translation" : "generated", title_en_generated_at: new Date(now).toISOString() };
             if (item.publication_version) {
               await tx.put(archiveKey, updated);
-              if (updated.overview_en) await tx.delete(`darkweb:publication-pending:${policy.epoch}:${title.id}`);
+              if (DARKWEB_TITLE_DONE.has(updated.title_en_kind)) await tx.delete(`darkweb:publication-pending:${policy.epoch}:${title.id}`);
             }
             if (await tx.get(key)) { const { original_text, ...card } = updated; await tx.put(key, card); }
             saved++;
@@ -1049,7 +1053,7 @@ export class ReportGate {
           const key = "darkweb:item:" + entry.id, archiveKey = `darkweb:publication:${policy.epoch}:${entry.id}`;
           const archived = await tx.get(archiveKey), card = await tx.get(key), item = archived || card;
           if (!item || item.title !== entry.original || item.excerpt !== entry.excerpt || (item.publication_version && item.content_hash !== entry.content_hash)) continue;
-          if (DARKWEB_TITLE_DONE.has(item.title_en_kind) && (!item.publication_version || item.overview_en)) continue;
+          if (DARKWEB_TITLE_DONE.has(item.title_en_kind)) continue;
           const enrich_attempts = (item.enrich_attempts || 0) + 1;
           if (archived) await tx.put(archiveKey, { ...archived, enrich_attempts });
           if (card) await tx.put(key, { ...card, enrich_attempts });
@@ -1145,7 +1149,8 @@ export class ReportGate {
             if (prior?.published_at && prior.published_at !== item.published_at) await tx.delete(`darkweb:publication-index:${policy.epoch}:${prior.published_at}:${item.id}`);
             await tx.put(archiveKey, record);
             await tx.put(`darkweb:publication-index:${policy.epoch}:${item.published_at}:${item.id}`, item.id);
-            if (!record.title_en || !DARKWEB_TITLE_DONE.has(record.title_en_kind) || !record.overview_en) await tx.put(`darkweb:publication-pending:${policy.epoch}:${item.id}`, item.id);
+            if (!record.title_en || !DARKWEB_TITLE_DONE.has(record.title_en_kind)) await tx.put(`darkweb:publication-pending:${policy.epoch}:${item.id}`, item.id);
+            else await tx.delete(`darkweb:publication-pending:${policy.epoch}:${item.id}`);
           }
           const { original_text, ...card } = record;
           await tx.put(key, card);
