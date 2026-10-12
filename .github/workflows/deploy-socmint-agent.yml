@@ -7,9 +7,7 @@ on:
     paths:
       - "socmint-agent/**"
       - "cloudflare-worker/social-intel.js"
-      - "cloudflare-worker/report-gate.js"
       - "cloudflare-worker/social-agent-client.js"
-      - "cloudflare-worker/index.js"
       - "tests/social-intel.test.cjs"
       - "tests/social-telegram.test.cjs"
       - ".github/workflows/deploy-socmint-agent.yml"
@@ -20,11 +18,15 @@ permissions:
 
 concurrency:
   group: ct-atlas-socmint-agent
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ct-atlas-shared-worker-deployment
+      queue: max
+      cancel-in-progress: false
     env:
       GCP_PROJECT_ID: ct-atlas
       GCP_REGION: ${{ vars.GCP_REGION || 'europe-west1' }}
@@ -205,10 +207,10 @@ jobs:
           BRAVE_SEARCH_API_KEY: ${{ secrets.BRAVE_SEARCH_API_KEY }}
         run: |
           set -euo pipefail
-          printf '%s' "$SOCMINT_AGENT_URL" | npx wrangler@latest secret put SOCMINT_AGENT_URL --config cloudflare-worker/wrangler.toml
-          printf '%s' "$AGENT_SHARED_SECRET" | npx wrangler@latest secret put SOCMINT_AGENT_SHARED_SECRET --config cloudflare-worker/wrangler.toml
+          printf '%s' "$SOCMINT_AGENT_URL" | python3 tools/wrangler_retry.py secret put SOCMINT_AGENT_URL --config cloudflare-worker/wrangler.toml
+          printf '%s' "$AGENT_SHARED_SECRET" | python3 tools/wrangler_retry.py secret put SOCMINT_AGENT_SHARED_SECRET --config cloudflare-worker/wrangler.toml
           if [ -n "${BRAVE_SEARCH_API_KEY:-}" ]; then
-            printf '%s' "$BRAVE_SEARCH_API_KEY" | npx wrangler@latest secret put BRAVE_SEARCH_API_KEY --config cloudflare-worker/wrangler.toml
+            printf '%s' "$BRAVE_SEARCH_API_KEY" | python3 tools/wrangler_retry.py secret put BRAVE_SEARCH_API_KEY --config cloudflare-worker/wrangler.toml
           fi
 
       - name: Verify agent investigation
@@ -249,7 +251,7 @@ jobs:
           PY
 
       - name: Deploy CT Atlas Worker with ADK bridge
-        run: npx wrangler@latest deploy --keep-vars --config cloudflare-worker/wrangler.toml
+        run: python3 tools/wrangler_retry.py deploy --keep-vars --config cloudflare-worker/wrangler.toml
 
       - name: Verify Worker reports ADK agent configured
         shell: bash

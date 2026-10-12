@@ -42,6 +42,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
+      - name: Checkout canonical runtime configuration
+        uses: actions/checkout@v6
+        with:
+          ref: main
       - name: Check public assets
         run: |
           set -euo pipefail
@@ -103,6 +107,7 @@ jobs:
           node - <<'NODE'
           const fs = require("fs");
           const runtime = JSON.parse(fs.readFileSync("/tmp/runtime.json", "utf8"));
+          const expectedRuntime = JSON.parse(fs.readFileSync("ct-atlas-runtime.json", "utf8"));
           const html = fs.readFileSync("/tmp/index.html", "utf8");
           const pdfExporter = fs.readFileSync("/tmp/pdf-export.js", "utf8");
           if (!html.includes("pdf-export.js") || !html.includes("DOWNLOAD PDF")) throw new Error("PDF download UI missing");
@@ -124,8 +129,8 @@ jobs:
           if (html.includes("window.onload=()=>window.print()")) throw new Error("Legacy print dialog still deployed");
           if (!pdfExporter.includes("window.CTAtlasPdf")) throw new Error("PDF exporter missing");
           const quiz = JSON.parse(fs.readFileSync("/tmp/quiz.json", "utf8"));
-          if (runtime.ai_selection_threshold !== 60) throw new Error("Runtime threshold drift");
-          if (!Array.isArray(runtime.language_codes) || runtime.language_codes.length !== 12) throw new Error("Runtime language drift");
+          if (runtime.ai_selection_threshold !== expectedRuntime.ai_selection_threshold) throw new Error("Runtime threshold drift");
+          if (!Array.isArray(runtime.language_codes) || JSON.stringify(runtime.language_codes) !== JSON.stringify(expectedRuntime.language_codes)) throw new Error("Runtime language drift");
           if (!Array.isArray(quiz.options) || quiz.options.length !== 3) throw new Error("Quiz shape invalid");
           if (!Number.isInteger(quiz.correct_index) || quiz.correct_index < 0 || quiz.correct_index > 2) throw new Error("Quiz answer invalid");
           console.log("Public assets valid.");

@@ -4,6 +4,19 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "*.html"
+      - "*.js"
+      - "*.css"
+      - "*.svg"
+      - "*.png"
+      - "*.json"
+      - "tools/deploy_mirror.sh"
+      - "tools/compact_mirror_json.py"
+      - "tools/build_events_lite.py"
+      - "tools/build_events_map.py"
+      - "tools/wrangler_retry.py"
+      - ".github/workflows/deploy-cloudflare-mirror.yml"
   workflow_dispatch:
   workflow_run:
     # Groq commits use GITHUB_TOKEN and do not trigger ordinary push workflows.
@@ -17,7 +30,7 @@ permissions:
 
 concurrency:
   group: ct-atlas-cloudflare-mirror
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy-mirror:

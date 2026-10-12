@@ -109,8 +109,10 @@ class CompactMirrorJsonTests(unittest.TestCase):
         size_check = 'tools/compact_mirror_json.py --check-directory "$STAGING"'
         self.assertIn(compact, script)
         self.assertIn(size_check, script)
-        self.assertLess(script.index(compact), script.index('npx wrangler'))
-        self.assertLess(script.index(size_check), script.index('npx wrangler'))
+        deploy = '(cd "$STAGING" && python3 ../tools/wrangler_retry.py deploy)'
+        self.assertIn(deploy, script)
+        self.assertLess(script.index(compact), script.index(deploy))
+        self.assertLess(script.index(size_check), script.index(deploy))
 
     def test_full_repository_snapshot_preserved_when_present(self):
         source = ROOT / "events.json"
