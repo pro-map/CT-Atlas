@@ -446,7 +446,7 @@
     "UK Government / Counter-Terrorism",
     "INTERPOL English News"
   ],
-  "last_updated": "2026-10-12T00:50:50.629309+00:00",
+  "last_updated": "2026-10-12T09:38:53.933763+00:00",
   "number_of_events": 4277,
   "events": [
     {
@@ -35075,7 +35075,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The report originates from the Algeria Press Service detailing arrests and surrenders of terrorists within the country.",
       "ai_geo_fingerprint": "928a671cfc55bf2dd79570c218e6566bad1b92b43652cdbcafffd058f94dcff3",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url"
+      ]
     },
     {
       "id": "4dffdc21164e2050",
@@ -51203,7 +51207,8 @@
       "dedup_methods": [
         "same_normalized_title",
         "very_high_title_similarity",
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "same_url"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_country_capital",
@@ -54106,7 +54111,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The event involves a former military doctor who shot US soldiers and is facing execution in the United States.",
       "ai_geo_fingerprint": "3272df0f8de5453c5d6b407d3dd6961642be64aea6e3db8083db5cff70aca9f0",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url"
+      ]
     },
     {
       "id": "d1f269022459b2fa",
@@ -65942,7 +65951,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Execution of the Fort Hood shooting perpetrator by the United States.",
       "ai_geo_fingerprint": "672dc673b35ecb5226dfe543ef378ad521d63dfa961d3ee44646e40b845ad3cb",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url"
+      ]
     },
     {
       "id": "d1a02fa33ee57ecb",
@@ -77343,7 +77356,7 @@
       "collection_locale": null,
       "published": "2026-10-05T13:46:00+00:00",
       "source": "Reuters",
-      "source_count": 6,
+      "source_count": 7,
       "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPTnhhc0Nza2FxTG5BTlJHZE1FVkpTUTJ3bXpZTE5lZ0lvS1Zjd1phaDJ4SnpUbTFfQ1MyQmhDSDVZejBjX2JsM21ZelNQU01EWkdybDY5NVA1YWl2M085cll2Rlp2S3ZmdHdlZjc5UWp5V3lPRHN3NkJiN080a2hLTUw0UkMyMVdGLXlLeFJVUmlxazF4bF80amtCOW5wV1BfMnhv?oc=5",
       "collector": "Google News RSS",
       "country": "The Netherlands",
@@ -77363,6 +77376,7 @@
         "19ee56bb5798e26d2da1b864edda6777c4564ea5400c1a4eb35ee288a189aad5",
         "4aec08eeaac56332b8b97df522ce1e9badd2e813bb6ec2e56dc6790aef50914c",
         "57d4e8fd58eebf69cd2b4dd963c962ae6225a746fe398960f63b123f01d5b547",
+        "5994c69248d5bf90390343d4be87b363f84dba3a23136386474e84f5270348e9",
         "5b1ed0372b93d37b06082bce822781ba53b167d4bec632055838d39d5f620c45",
         "6172a7e9be4a04a70a279b35cfe74601f8e80390701cb223abd326e952b580a4",
         "6221f24f184186e8626c5307256a2d298ea2310e1e8c885cd75524be1ae96e64",
@@ -77378,7 +77392,8 @@
         "Afghanistan International",
         "Reuters",
         "8AM Media",
-        "Punch Newspapers"
+        "Punch Newspapers",
+        "mezha.net"
       ],
       "related_articles": [
         {
@@ -77461,9 +77476,18 @@
           "published": "2026-10-07T16:32:07+00:00",
           "source": "8AM Media",
           "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNOXktdDFBaXdrZzJERmpDUVhKd0tCbUJCMEpYNkxsWVp3ZHd2d20xWDQ1UlBPbkVCT0s5eHItdkZxQnBRcUV0a2ZlMXVRa3ZQTFFuUkYtWG9tUHBhbXFsLTYxV0VPR210Wl9TcnQ4a3BzaUs4ekp1NnVIU2VTYXBWbVZJM1E5d2RM?oc=5"
+        },
+        {
+          "title": "International Criminal Court Publishes Four Arrest Warrants for Afghanistan, Taliban Senior Officials Involved in Gender Persecution",
+          "original_title": "国际刑事法院公开四份阿富汗逮捕令，塔利班高层涉性别迫害| Mezha",
+          "original_language": "zh",
+          "summary": "The ICC released four arrest warrants targeting senior Taliban officials accused of gender-based persecution in Afghanistan.",
+          "published": "2026-10-07T07:59:00+00:00",
+          "source": "mezha.net",
+          "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE1rVE1LUXlURFNTdWhLRTktNWVCdHVseGZ0TExJWnVTeno4bUwyYkY2Y2puMmZ5TktmNmEta19RZVFNOGl1cHZuMmY4SFhuZjg1blpvd1JoVDVLaXNwTEZtRkdn?oc=5"
         }
       ],
-      "article_count": 10,
+      "article_count": 11,
       "first_reported": "2026-10-05T13:46:00+00:00",
       "last_reported": "2026-10-07T16:32:07+00:00",
       "dedup_confidence": 1.0,
@@ -124725,7 +124749,7 @@
           "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1RbWY0dURoOFBoY3FsMFZCTXBodkxCMVpORjdRYTBwY3F1aUZpR1hvOW1RSE5GRFZ2LTdDY2Nnd2JFS1NVdjBLMUozYw?oc=5"
         }
       ],
-      "article_count": 111,
+      "article_count": 112,
       "first_reported": "2026-10-02T07:00:00+00:00",
       "last_reported": "2026-10-05T14:43:55+00:00",
       "dedup_confidence": 1.0,
@@ -155056,9 +155080,10 @@
       "article_count": 2,
       "first_reported": "2026-09-30T07:00:00+00:00",
       "last_reported": "2026-09-30T07:00:00+00:00",
-      "dedup_confidence": 0.99,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "same_normalized_title"
+        "same_normalized_title",
+        "same_url"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_country_capital",
@@ -231073,9 +231098,10 @@
       "article_count": 2,
       "first_reported": "2026-09-19T07:00:00+00:00",
       "last_reported": "2026-09-19T07:00:00+00:00",
-      "dedup_confidence": 0.99,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "same_normalized_title"
+        "same_normalized_title",
+        "same_url"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_city_geonames",
@@ -387930,7 +387956,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Large explosives seizure occurred in Gujarat, India.",
       "ai_geo_fingerprint": "91fa06c595b26e4ec18401bccf85b302e2d9bd0e4ad5f667f7d64d0f1189350e",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url"
+      ]
     },
     {
       "id": "75c3f40abd6302cf",
@@ -392174,10 +392204,11 @@
       "article_count": 3,
       "first_reported": "2026-08-03T07:00:00+00:00",
       "last_reported": "2026-08-05T07:00:00+00:00",
-      "dedup_confidence": 0.99,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_normalized_title",
-        "paraphrase_entity_context"
+        "paraphrase_entity_context",
+        "same_url"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_city_geonames",
@@ -410511,7 +410542,8 @@
         "paraphrase_entity_context",
         "title_plus_anchor",
         "same_normalized_title",
-        "very_high_title_similarity"
+        "very_high_title_similarity",
+        "same_url"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_city_geonames",
@@ -414432,9 +414464,10 @@
       "article_count": 3,
       "first_reported": "2026-07-06T07:00:00+00:00",
       "last_reported": "2026-07-06T07:00:00+00:00",
-      "dedup_confidence": 0.732,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "actor_country_action_signature"
+        "actor_country_action_signature",
+        "same_url"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_country_capital",
@@ -448534,7 +448567,8 @@
       "last_reported": "2026-04-24T07:00:00+00:00",
       "dedup_confidence": 1.0,
       "dedup_methods": [
-        "very_high_title_similarity"
+        "very_high_title_similarity",
+        "same_url"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_country_capital",
@@ -452101,373 +452135,6 @@
       "dedup_methods": [
         "same_url"
       ]
-    },
-    {
-      "id": "1009e23ab2e125fd",
-      "category": "Legal / Judicial",
-      "categories": [
-        "Legal / Judicial"
-      ],
-      "title": "Two Men Plead Not Guilty in Alleged ISIS-Inspired Bomb Plot in New York",
-      "summary": "Two men have pleaded not guilty to charges related to an alleged Islamic State-inspired bomb attempt outside the New York mayor's home.",
-      "original_title": "2 men plead not guilty in alleged Islamic State-inspired bomb attempt outside New York mayor’s home",
-      "original_summary": "2 men plead not guilty in alleged Islamic State-inspired bomb attempt outside New York mayor’s home CNN",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-15T07:00:00+00:00",
-      "source": "CNN",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9lbndYVFlsRkVjNnA5Rko0MWkxWEc0RFFLWlRtZmZtazlnUWJHcF9jSHl5cVBFZk5YNlJCZFYycHB6OXhTM1RtRVJaR2l3V1AyX05fbHJyLTZLbHpnRjRNTjljZWRUNXdIXzFnaTBjR043OWhrVFlMdg?oc=5",
-      "collector": "Google News RSS",
-      "country": "United States",
-      "country_code": "US",
-      "city": "New York City",
-      "region": null,
-      "latitude": 40.71427,
-      "longitude": -74.00597,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "CNN",
-      "targeted_source_kind": "international_media",
-      "sources": [
-        "CNN"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-15T07:00:00+00:00",
-      "last_reported": "2026-04-15T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports a concrete judicial proceeding (not guilty plea) for an ISIS-inspired terror plot.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Two men plead not guilty in ISIS-inspired bomb plot in New York",
-      "title_variants": [
-        "Two men plead not guilty in alleged IS-inspired bomb attempt outside New York mayor's home",
-        "Two men plead not guilty in ISIS-inspired bomb plot in New York"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Alleged ISIS-Inspired Bomb Plot in New York"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly names New York as the location of the bomb plot.",
-      "ai_geo_fingerprint": "6f772abb226f8deba8635cf9bd5894ba6a256bab801d08d990d3127aa3963418",
-      "ai_geo_inferred": false,
-      "actor_group": "ISIS",
-      "primary_event_type": "JUDICIAL",
-      "is_attack": false,
-      "incident_anchor": "New York ISIS bomb plot 2026-04-15",
-      "update_type": "JUDICIAL_UPDATE",
-      "incident_id": "inc-e93500b0bf78b733"
-    },
-    {
-      "id": "66547660831d549d",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Legal / Judicial"
-      ],
-      "title": "Woman Convicted of Terrorism Charges in France Extradited to Iran",
-      "summary": "A woman convicted in France on terrorism-related charges has been extradited to Iran.",
-      "original_title": "Fransa’da ‘terör’ suçlamasıyla hüküm giyen kadın İran’a iade edildi",
-      "original_summary": "Fransa’da ‘terör’ suçlamasıyla hüküm giyen kadın İran’a iade edildi Rudaw",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": "TR:tr",
-      "published": "2026-04-15T07:00:00+00:00",
-      "source": "Rudaw",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE1jNnU5c1JDSl9taGQzMzdDRUI5emNLUmo0Tk9pVlF3LVZ1NjZNTzJYbHlIdHljdnhDZzZ1UFFLUF9meWpVZFpSZUs3VktoRkl2QUdzY3pIOU1xbXRmZ2c3aENR?oc=5",
-      "collector": "Google News RSS",
-      "country": "Iran",
-      "country_code": "IR",
-      "city": "Tehran",
-      "region": null,
-      "latitude": 35.69439,
-      "longitude": 51.42151,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "Rudaw"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-15T07:00:00+00:00",
-      "last_reported": "2026-04-15T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Reports a concrete international extradition of an individual convicted of terrorism offenses.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Woman convicted of terrorism in France extradited to Iran",
-      "title_variants": [
-        "Woman convicted of terrorism charges in France extradited to Iran",
-        "Woman convicted of terrorism in France extradited to Iran"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Woman Convicted of Terrorism Charges in France Extradited to Iran"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The subject of the extradition event was transferred to Iran.",
-      "ai_geo_fingerprint": "481f772795ff7da3f7714bdf2fa4168e4ec361c525a37ed0257ec4824b87e9b4",
-      "ai_geo_inferred": true,
-      "actor_group": "",
-      "incident_id": "inc-645d3c65dfb543c2",
-      "primary_event_type": "JUDICIAL",
-      "is_attack": false,
-      "incident_anchor": "Terrorism conviction extradition France to Iran 2026-04-15",
-      "update_type": "JUDICIAL_UPDATE"
-    },
-    {
-      "id": "bfa82629828daaf5",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Attacks"
-      ],
-      "title": "Troops repel another ISWAP attack on Banishaik in Borno",
-      "summary": "Military forces successfully repelled an ISWAP terrorist attack on Banishaik, Borno State.",
-      "original_title": "Troops repel another ISWAP attack on Banishaik in Borno",
-      "original_summary": "Troops repel another ISWAP attack on Banishaik in Borno zagazola.org",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-04-15T07:00:00+00:00",
-      "source": "zagazola.org",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNSXE3cFhsS0VBanlrVzlUQ3czbDZuUGlUNzN4ZVQyZnNyTFBGajBiNGR4UzNOOEFXV0RxM2p5Rkh6ZVJEZDdadlBTT3l2Mzk4LXlZRGFlTHhhcmczV1ZkWWZQNDdGbXkzU3BWVkpEN2x4bFl5S2tKNks3VEJndmpWd3Z6QmY4MUZZU3VQbzBmYmc5aE8ycGFMUzNlTGduREE5UXc?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": "Banishaik",
-      "region": null,
-      "latitude": 11.9667,
-      "longitude": 12.3333,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "zagazola.org",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "zagazola.org"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-15T07:00:00+00:00",
-      "last_reported": "2026-04-15T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports an operational counter-terrorism action where troops repelled an ISWAP attack.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Military forces repelled ISWAP attack on Banishaik, Borno State",
-      "title_variants": [
-        "repelled ISWAP attack in Banishaik Borno State Nigeria",
-        "Military forces repelled ISWAP attack on Banishaik, Borno State"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_city_coordinates",
-      "location_evidence": [
-        "Banishaik in Borno"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Military repelled attack on Banishaik, Borno State, Nigeria.",
-      "ai_geo_fingerprint": "fe1ffd3cb823278bc75ca92deadc73dd5e3a2a6be475463484052a837a55cf6e",
-      "ai_geo_inferred": false,
-      "actor_group": "ISWAP",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Banishaik ISWAP attack Borno 2026-04-15",
-      "update_type": "INITIAL",
-      "incident_id": "inc-6eb222843e8c85d8"
-    },
-    {
-      "id": "2004e8150df374a6",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Puntland launches operations against Islamic State fighters in Somalia’s Bari region",
-      "summary": "Security forces in Puntland have initiated military operations targeting Islamic State fighters in Somalia's Bari region.",
-      "original_title": "Puntland launches operations against Islamic State fighters in Somalia’s Bari region",
-      "original_summary": "Puntland launches operations against Islamic State fighters in Somalia’s Bari region Shabelle Media Network",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-04-15T07:00:00+00:00",
-      "source": "Shabelle Media Network",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPdS1CNDBjNDY3RW5XMUlONmdXcW5Rb25udE5lelBBUkJtWjRsU3c5T09MUC1Ec19ubFBLYklhQUladU1sNDR1VVJaWVdXNzlFbXRfWHo1RzNLMGstRnlpVUJBb05kVjhNMWpyZUpyUVEyTW5RbmlTek1wRXNIQnBsVzF4YXhRaUMyTDM1OGgySUF2QlNubFU0LVZwLUtPb3VCZExVRDV5RUEwWTB1dk13?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Bari",
-      "latitude": 10.3807,
-      "longitude": 50.1878,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "shabellemedia.com",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "Shabelle Media Network",
-        "shabellemedia.com"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-15T07:00:00+00:00",
-      "last_reported": "2026-04-15T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Reports a concrete counter-terrorism military operation launched against ISIS in Somalia.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Puntland security forces military operation against Islamic State in Bari region Somalia",
-      "title_variants": [
-        "Puntland security operations against Islamic State in Bari region Somalia",
-        "Puntland security forces military operation against Islamic State in Bari region Somalia"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Puntland launches operations against Islamic State fighters in Somalia’s Bari region"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly stated in the Bari region of Puntland, Somalia.",
-      "ai_geo_fingerprint": "1ad2f96c075c22cd2b3ae12e1b4095a1a8c52cc2fa61224cb54dc8bbf8e3b7f2",
-      "ai_geo_inferred": false,
-      "source_article_fingerprints": [
-        "c31c1d60e963612b91d64f6192659e95fd8a1ca2f898b1a1cc6e3470263fd676"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_url"
-      ],
-      "actor_group": "ISIS",
-      "incident_id": "inc-30ee876f012296bf",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Puntland CT operation against ISIS Bari 2026-04-15",
-      "update_type": "INITIAL"
-    },
-    {
-      "id": "73b15d540d8fb84b",
-      "category": "Legal / Judicial",
-      "categories": [
-        "Legal / Judicial",
-        "Attacks"
-      ],
-      "title": "Teenager from Tomsk Oblast sentenced to 6.5 years for attempted terrorist attack",
-      "summary": "A Russian court sentenced a teenager from Tomsk Oblast to 6.5 years in prison for preparing an attempted terrorist attack.",
-      "original_title": "Подростка из Томской области приговорили к 6 , 5 годам за попытку теракта",
-      "original_summary": "A Russian court sentenced a teenager from Tomsk Oblast to 6.5 years in prison for preparing an attempted terrorist attack.",
-      "original_language": "ru",
-      "collection_language": "ru",
-      "collection_language_name": "Russian",
-      "collection_locale": null,
-      "published": "2026-04-15T06:45:00+00:00",
-      "source": "vedomosti.ru",
-      "source_count": 1,
-      "url": "https://www.vedomosti.ru/strana/siberian/news/2026/04/15/1190391-podrostka-iz-tomskoi",
-      "collector": "GDELT DOC 2.0",
-      "acquisition_channel": "gdelt_doc_search",
-      "country": "Russia",
-      "country_code": "RU",
-      "city": null,
-      "region": "Tomsk Oblast",
-      "latitude": 56.4977,
-      "longitude": 84.9744,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "source_article_fingerprints": [
-        "1bbfe33c931fdfef8be3209c38b580f21e5c504271a5594a558117c39b482387"
-      ],
-      "sources": [
-        "vedomosti.ru"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-15T06:45:00+00:00",
-      "last_reported": "2026-04-15T06:45:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Reports a court sentencing for an attempted terrorist attack.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Teenager sentenced to 6.5 years in prison for attempted terrorist attack in Tomsk Oblast",
-      "title_variants": [
-        "Sentencing of a teenager to 6.5 years for attempted terrorist attack in Tomsk Oblast, Russia",
-        "Teenager sentenced to 6.5 years in prison for attempted terrorist attack in Tomsk Oblast"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Teenager from Tomsk Oblast sentenced to 6.5 years for attempted terrorist attack"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The defendant is from Tomsk Oblast, and a Russian court issued the sentence.",
-      "ai_geo_fingerprint": "4bd2beed0f9b9e2834858d18bfa47e4ccd5ac95ed519ef7a42b42fb0b4d748bc",
-      "ai_geo_inferred": true,
-      "actor_group": "",
-      "primary_event_type": "JUDICIAL",
-      "is_attack": false,
-      "incident_anchor": "Tomsk Oblast attempted terrorist attack sentencing 2026-04-15",
-      "update_type": "JUDICIAL_UPDATE",
-      "incident_id": "inc-5504458bc64c9707"
     }
   ],
   "geolocation": {
