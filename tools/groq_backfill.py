@@ -8,6 +8,8 @@ screened by the existing archive pipeline, without source URLs.
 Shared specialist + general Chinese backfill quotas are independent of Gemini.
 Quota attempts and conservatively reserved tokens are durable BEFORE each HTTP
 call; no retry on 429/5xx, no credentials, response bodies or articles in logs.
+Malformed structured batches may be split within those SAME budgets; validated
+sub-batches are durably reusable, never counted as new HTTP calls/publication.
 """
 from __future__ import annotations
 
@@ -21,14 +23,16 @@ from pathlib import Path
 import requests
 
 import archive_review
+import groq_backfill_runtime as history_runtime
 
 MODEL = "openai/gpt-oss-120b"
 URL = "https://api.groq.com/openai/v1/chat/completions"
 QUOTA_FILE = "quota/groq-oss120b-public-backfill.json"
 # Groq publishes 1,000 RPD, 200k TPD and 8k TPM for this model on Free.
-# These caps intentionally reserve most of the account for SOCMINT and others.
-MAX_POSTS_PER_UTC_DAY = 24
-MAX_RESERVED_TOKENS_PER_UTC_DAY = 120_000
+# Internal allocation increased by operator request on 2026-10-12.
+# This does not alter the provider plan, billing or exact organization limits.
+MAX_POSTS_PER_UTC_DAY = history_runtime.REQUEST_CAP
+MAX_RESERVED_TOKENS_PER_UTC_DAY = history_runtime.RESERVED_TOKEN_CAP
 REQUEST_TPM_BUDGET = 7_000
 BATCH_SIZE = 3
 MAX_COMPLETION_TOKENS = 2300
@@ -213,7 +217,7 @@ class GroqDailyQuota:
 
 
 class GroqGate:
-    """One bounded external API call per batch, with no retries or redirects."""
+    """Bounded public-news calls; malformed batches split, no 429/5xx retry."""
 
     def __init__(self, collector, quota, max_posts, *, post=requests.post,
                  sleep=time.sleep, clock=time.monotonic):
@@ -238,6 +242,10 @@ class GroqGate:
                           (MAX_RESERVED_TOKENS_PER_UTC_DAY - self.quota.tokens) // 5500))
 
     def call_batch(self, inputs):
+        import sys
+        return history_runtime.call_with_recovery(sys.modules[__name__], self, inputs)
+
+    def _call_once(self, inputs):
         if not inputs or len(inputs) > BATCH_SIZE:
             raise self.collector.AISelectionIncompleteError("Groq: batch too large")
         api_key = os.getenv("GROQ_API_KEY", "")
@@ -290,8 +298,10 @@ class GroqGate:
                 "Content-Type": "application/json",
             }, json=body, allow_redirects=False, timeout=45)
         except requests.RequestException:
+            history_runtime.record_attempt(self, inputs, reservation, transport_error=True)
             raise self.collector.AISelectionTransientError(
                 "Groq transport failure; quota attempt reserved") from None
+        history_runtime.record_attempt(self, inputs, reservation, reply)
         if reply.status_code == 429:
             raise archive_review.BudgetReached(
                 "Groq rate limit hit (HTTP 429); stop until provider quota allows")
@@ -308,7 +318,9 @@ class GroqGate:
         except (ValueError, IndexError, KeyError, TypeError):
             raise self.collector.AISelectionIncompleteError(
                 "Groq: invalid/empty JSON completion; no response body logged") from None
-        return validated_results(decoded, inputs, self.collector)
+        results = validated_results(decoded, inputs, self.collector)
+        history_runtime.mark_validated(self, len(results))
+        return results
 
 
 def hooks(root, collector):
