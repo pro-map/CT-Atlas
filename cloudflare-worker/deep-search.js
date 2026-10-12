@@ -26,7 +26,7 @@ import {
 import { illustrationCandidates } from "./report-illustration.js";
 import { searchCorpusForDeepSearch } from "./background-corpus.js";
 
-const DEEP_SEARCH_MAX_QUERIES = 24;
+const DEEP_SEARCH_MAX_QUERIES = 28;
 const DEEP_SEARCH_RESULTS_PER_QUERY = 30;
 const DEEP_SEARCH_MAX_EVIDENCE = 48;
 // CT Atlas database events come first and take at most this many of the 48
@@ -39,7 +39,7 @@ const DEEP_SEARCH_MODEL = "gemini-3.5-flash-lite";
 // "high demand" condition callGemini() (Report Generator, shared.js) already retries around.
 // Gemini 3.1 Flash Lite (GEMINI_SECOND_FALLBACK_MODEL) is the last resort: its own quota.
 const DEEP_SEARCH_FALLBACK_MODEL = "gemini-3.6-flash";
-export const DEEP_SEARCH_VERSION = "deep-search-v15-atlas-ai";
+export const DEEP_SEARCH_VERSION = "deep-search-v16-chinese-scripts";
 // Archive rows (corpus_kind) that are not incident reports.
 const NOT_ILLUSTRATIONS = new Set(["removed_event", "rejected_candidate", "historical_review"]);
 
@@ -158,7 +158,8 @@ const GDELT_CHUNK_SPACING_MS = 6000;
 const GDELT_LANGUAGE_FILTERS = Object.freeze({
   en: "english", fr: "french", ar: "arabic", de: "german",
   es: "spanish", it: "italian", tr: "turkish", ru: "russian",
-  fa: "persian", ur: "urdu", he: "hebrew", ps: "pashto"
+  fa: "persian", ur: "urdu", he: "hebrew", ps: "pashto",
+  zh: "chinese", "zh-Hant": "chinese (traditional)"
 });
 const GDELT_LANGUAGE_NAME_TO_CODE = Object.freeze(
   Object.fromEntries(Object.entries(GDELT_LANGUAGE_FILTERS).map(([code, name]) => [name, code]))
@@ -222,7 +223,8 @@ async function fetchAcledWave(query, window) {
 const BING_NEWS_SEARCH_URL = "https://www.bing.com/news/search";
 const BING_MARKET_BY_LANGUAGE = Object.freeze({
   en: "en-US", fr: "fr-FR", ar: "ar-SA", de: "de-DE", es: "es-ES", it: "it-IT",
-  tr: "tr-TR", ru: "ru-RU", fa: "fa-IR", ur: "ur-PK", he: "he-IL", ps: "ps-AF"
+  tr: "tr-TR", ru: "ru-RU", fa: "fa-IR", ur: "ur-PK", he: "he-IL", ps: "ps-AF",
+  zh: "zh-CN", "zh-Hant": "zh-TW"
 });
 const BING_RESCUE_SPACING_MS = 400;
 
@@ -298,13 +300,17 @@ const LANGUAGE_LOCALES = Object.freeze({
   fa: { label: "Dari / Persian", hl: "fa", gl: "AF", ceid: "AF:fa" },
   ur: { label: "Urdu", hl: "ur", gl: "PK", ceid: "PK:ur" },
   he: { label: "Hebrew", hl: "he", gl: "IL", ceid: "IL:he" },
-  ps: { label: "Pashto", hl: "ps", gl: "AF", ceid: "AF:ps" }
+  ps: { label: "Pashto", hl: "ps", gl: "AF", ceid: "AF:ps" },
+  zh: { label: "Chinese (Simplified)", hl: "zh-CN", gl: "CN", ceid: "CN:zh-Hans" },
+  "zh-Hant": { label: "Chinese (Traditional)", hl: "zh-TW", gl: "TW", ceid: "TW:zh-Hant" }
 });
 
 const DEEP_SEARCH_LANGUAGE_CODES = Object.freeze(Object.keys(LANGUAGE_LOCALES));
 
 
 const COUNTRY_LANGUAGE_PRIORITY = Object.freeze([
+  { pattern: /\b(?:china|chinese|beijing|shanghai|xinjiang)\b|中国|中國|北京|上海|新疆/i, languages: ["zh", "zh-Hant"] },
+  { pattern: /\b(?:taiwan|taiwanese|hong kong|macau|macao)\b|台湾|台灣|臺灣|香港|澳门|澳門/i, languages: ["zh-Hant", "zh"] },
   { pattern: /\b(?:afghanistan|afghan)\b/i, languages: ["fa", "ps", "ur"] },
   { pattern: /\b(?:pakistan|pakistani)\b/i, languages: ["ur"] },
   { pattern: /\b(?:iran|iranian)\b/i, languages: ["fa"] },
@@ -327,12 +333,11 @@ const PRIORITY_LANGUAGE_CAP = 5;
 // GDELT is now a small number of global fetches (see GDELT_MAX_CHUNKS above),
 // so this only caps how many languages the shared result gets attributed
 // across for diagnostics -- it no longer multiplies the real request count.
-const GDELT_LANGUAGE_CAP = 5;
-// 24 base Google + up to 5 native-locale Google rescues + up to
-// GDELT_MAX_CHUNKS GDELT date-range queries + 1 ACLED query + up to
-// PRIORITY_LANGUAGE_CAP Bing rescues (only fired when Google came up sparse
-// for that language, same trigger as the Google rescue above).
-const MAX_SEARCH_SUBREQUESTS = DEEP_SEARCH_MAX_QUERIES + PRIORITY_LANGUAGE_CAP + GDELT_MAX_CHUNKS + 1 + PRIORITY_LANGUAGE_CAP;
+const GDELT_LANGUAGE_CAP = DEEP_SEARCH_LANGUAGE_CODES.length;
+// Keep the existing 40-request SEARCH ceiling after adding four Chinese queries.
+// Reserve GDELT date chunks and ACLED before allocating optional Bing rescues.
+// Virtual GDELT language attribution never adds provider requests.
+const MAX_SEARCH_SUBREQUESTS = 40;
 
 function detectCountryLanguages(question) {
   const text = String(question || "");
@@ -547,10 +552,11 @@ history", "January to December 2019") -- this is shown directly to the
 analyst, so it must be accurate and specific.
 
 Interpret the analyst's exact free-text request and create EXACTLY TWO concise
-Google News search queries in EACH of the 12 CT Atlas search languages (24 planned
-queries total). Every Deep Search must search ALL 12 languages.
+Google News search queries in EACH of the ${DEEP_SEARCH_LANGUAGE_CODES.length} CT Atlas
+language/script options (${DEEP_SEARCH_MAX_QUERIES} planned queries total).
+Every Deep Search must search ALL required language/script options.
 
-MANDATORY 12-LANGUAGE COVERAGE:
+MANDATORY LANGUAGE/SCRIPT COVERAGE:
 - en: English
 - fr: French
 - ar: Arabic
@@ -563,6 +569,13 @@ MANDATORY 12-LANGUAGE COVERAGE:
 - ur: Urdu
 - he: Hebrew
 - ps: Pashto
+- zh: Chinese (Simplified; use Simplified Chinese queries and anchors)
+- zh-Hant: Chinese (Traditional; use Traditional Chinese queries and anchors)
+
+Chinese is one language with two separately searched writing systems. Search
+Chinese sources regardless of the incident country. Never infer event location
+from the language, search edition or publisher. Keep the final assessment in
+English, preserving Chinese source names, titles and citations as evidence.
 
 QUESTION ANALYSIS (do this before writing any query):
 - Identify the core geography, actors and the underlying category of activity
@@ -615,7 +628,7 @@ QUERY DESIGN RULES — RECALL IS THE PRIORITY, NOT COMPLETENESS:
   present even if your secondary query for that language does not happen to
   repeat it (secondary is allowed to focus on a facet without repeating the
   geography by name; anchor is not optional and stands in for it).
-- Keep the same information need in all 12 languages using natural local terms,
+- Keep the same information need in all required languages and scripts using natural local terms,
   respecting the same strict term limit in every language.
 - Preserve precise geography and named actors. Do not drift into unrelated places.
 - Adjacent countries are acceptable only for directly relevant routes, networks,
@@ -641,13 +654,14 @@ Set priority_languages to up to five supported languages: always include "en"
 and "fr", plus up to three languages used locally in the requested countries
 OR REGION. Recognise country names in any language, and also reason about
 REGIONS the same way — a request does not have to name a single country for
-you to know which of the 12 languages are locally relevant. For example:
+you to know which of the supported languages are locally relevant. For example:
 Afghanistan -> fa, ps, ur; Egypt or another Arabic-speaking country -> ar;
 Iran -> fa; Pakistan -> ur; Israel/Palestine -> he, ar; the Sahel or Francophone
 West Africa (Mali, Niger, Burkina Faso, Chad, Mauritania) -> fr, ar; the
 Maghreb -> ar, fr; the Horn of Africa -> ar; the Levant -> ar; the Balkans ->
-tr; the Caucasus or Central Asia -> ru. Arabic and every other required
-language remain part of the full 12-language search regardless of
+tr; the Caucasus or Central Asia -> ru; China -> zh, zh-Hant;
+Taiwan, Hong Kong or Macau -> zh-Hant, zh. Arabic and every other required
+language remain part of the full multilingual search regardless of
 priority_languages.
 
 Set gdelt_broad_terms to 3-5 English keywords for a SEPARATE, wider fallback
@@ -963,7 +977,9 @@ function sanitizePlan(plan, fallbackQuestion) {
     queries.push({ language, query: primary, variant: "primary" });
     queries.push({ language, query: secondary, variant: "secondary" });
     const anchor = cleanText(item?.anchor, 80).toLowerCase();
-    if (anchor.length >= 3) anchors[language] = anchor;
+    // Common Chinese names such as 中国 / 中國 and 伊朗 have two characters.
+    const minimumAnchorLength = language === "zh" || language === "zh-Hant" ? 2 : 3;
+    if (anchor.length >= minimumAnchorLength) anchors[language] = anchor;
   }
 
   if (missing.length) {
@@ -1111,14 +1127,15 @@ function parseGdeltDate(value) {
 // GDELT's own article.language field is a full name ("English", "Arabic"...),
 // not one of our 2-letter codes -- map it back so each row can be attributed
 // to the right language without ever having asked GDELT to filter by one.
-// An article in a language outside our 12 is dropped, matching how an
+// An article in an unsupported language is dropped, matching how an
 // unrecognized code is already filtered out everywhere else in this file.
 function parseGdeltArticles(payload, query) {
   const articles = Array.isArray(payload?.articles) ? payload.articles : [];
   return articles.slice(0, GDELT_GLOBAL_RESULTS_CAP).map(article => {
     const title = cleanText(article?.title, 500);
     const url = cleanText(article?.url || article?.url_mobile, 1200);
-    const language = GDELT_LANGUAGE_NAME_TO_CODE[cleanText(article?.language, 40).toLowerCase()];
+    const providerLanguage = cleanText(article?.language, 40).toLowerCase();
+    const language = GDELT_LANGUAGE_NAME_TO_CODE[providerLanguage];
     if (!title || !url || !language) return null;
     return {
       title,
@@ -1127,6 +1144,8 @@ function parseGdeltArticles(payload, query) {
       url,
       published: parseGdeltDate(article?.seendate),
       language,
+      // GDELT's generic Chinese tag does NOT prove Simplified writing.
+      ...(providerLanguage === "chinese" ? { language_script: "unspecified" } : {}),
       query_index: -1,
       query_variant: "gdelt-rescue",
       search_query: query,
@@ -1209,11 +1228,10 @@ async function retrieveNews(plan, window, priorityLanguages = []) {
   // (session-get, acquire, cache-get, plan Gemini call, events.json fetch,
   // report Gemini call, cache-put, commit-report, release), so the search
   // phase must never approach 50 on its own:
-  // 24 Google News + max 5 priority Google rescues + up to GDELT_MAX_CHUNKS(5)
-  // GDELT calls (see fetchGdeltChunked) + 1 ACLED call (see fetchAcledWave) +
-  // max 5 Bing rescues (see fetchBingWave) = max 38 total, kept under ~40 so
-  // the whole invocation (search + the ~9 calls above) stays safely under
-  // 50. Do NOT add per-wave retries here: retrying every failed wave once
+  // 28 Google News + up to 5 priority Google rescues + up to 5 GDELT
+  // date chunks + 1 ACLED call, then only the Bing rescues that fit in 40.
+  // The four new Chinese queries must not raise the existing search ceiling.
+  // This leaves the same nominal headroom for the non-search calls above. Do NOT add per-wave retries here: retrying every failed wave once
   // can double the search subrequest count on exactly the runs where most
   // waves are failing, and has previously blown through Cloudflare's
   // subrequest ceiling and hard-crashed the whole invocation.
@@ -1264,12 +1282,17 @@ async function retrieveNews(plan, window, priorityLanguages = []) {
   // See the comment above BING_NEWS_SEARCH_URL for why this exists and its
   // terms-of-use caveat. Sequential with a light stagger since Bing's rate
   // limit (if any) is undocumented -- better to be a cautious citizen.
+  const reservedGdeltCalls = broadGdeltQuery(plan)
+    ? gdeltChunkRanges(window.startDt, window.endDt).length : 0;
+  const reservedAcledCalls = plan.queries.some(item => item.language === "en") ? 1 : 0;
+  const bingBudget = Math.max(0, Math.min(PRIORITY_LANGUAGE_CAP,
+    MAX_SEARCH_SUBREQUESTS - googleAll.length - reservedGdeltCalls - reservedAcledCalls));
   const bingRescueItems = [];
   for (const language of priorityLanguages.slice(0, PRIORITY_LANGUAGE_CAP)) {
     if ((afterGoogle[language]?.size || 0) >= 3) continue;
     const candidate = plan.queries.find(item => item.language === language && item.variant === "primary")
       || plan.queries.find(item => item.language === language);
-    if (candidate) bingRescueItems.push(candidate);
+    if (candidate && bingRescueItems.length < bingBudget) bingRescueItems.push(candidate);
   }
   const bingWaves = [];
   for (let i = 0; i < bingRescueItems.length; i++) {
@@ -1539,6 +1562,7 @@ function evidenceItem(row, index) {
     title: cleanText(row.title, 420), summary: cleanText(row.summary, 650),
     source: cleanText(row.source, 140), url: cleanText(row.url, 1200),
     published: row.published, language: row.language,
+    ...(row.language_script ? { language_script: row.language_script } : {}),
     query_variant: row.query_variant || "primary",
     search_query: cleanText(row.search_query, 280),
     search_engine: row.search_engine || "google_news",

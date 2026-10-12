@@ -36,10 +36,10 @@ test('English and French are always prioritised even without a detected country'
 test('Egypt questions prioritise Arabic alongside English and French',()=>{
  const h=harness();assert.deepEqual(Array.from(h.resolvePriorityLanguages('Recent extremist activity in Egypt',[])),['en','fr','ar']);
 });
-test('sparse local feeds get native queries through fallback edition within 33 search calls (24 google + 3 google rescue + 3 bing rescue + 2 chunked GDELT calls [180d > 90d threshold] + 1 ACLED call)',async()=>{
+test('sparse local feeds get native queries through fallback edition within 37 search calls (28 google + 3 google rescue + 3 bing rescue + 2 chunked GDELT calls [180d > 90d threshold] + 1 ACLED call)',async()=>{
  const calls=[];const h=harness(async url=>{calls.push(new URL(url));return new Response(url.includes('gdelt')?'{}':'<rss><channel></channel></rss>');});
  const result=await h.retrieveNews(plan(h),windowFor(180),['fa','ps','ur']);
- assert.equal(calls.length,33);assert.equal(result.subrequest_budget.search_requests,33);
+ assert.equal(calls.length,37);assert.equal(result.subrequest_budget.search_requests,37);
  assert.equal(calls.filter(u=>u.href.includes('gdelt')).length,2,'a 180-day period is over the 90-day chunk threshold, so GDELT should be queried twice (date-range chunks), never per-language');
  assert.equal(calls.filter(u=>(u.searchParams.get('q')||'').includes('site:acleddata.com')).length,1,'ACLED must be queried exactly once');
  assert.equal(calls.filter(u=>u.href.includes('bing.com')).length,3,'all 3 sparse priority languages should get a Bing rescue');
@@ -148,10 +148,10 @@ test('English priority rescue uses a genuinely different locale than its own pri
  assert.ok(locales.size>1,'English rescue must use a different hl than en-US, otherwise it just resends the identical request: '+[...locales]);
  assert.ok(englishCalls.some(u=>u.searchParams.get('hl')==='en-GB'&&u.searchParams.get('gl')==='GB'));
 });
-test('five priority languages still stay within the 36-call search budget, well under the 50 subrequest ceiling once the ~9 non-search calls are counted',async()=>{
+test('five priority languages still stay within the 40-call search budget, well under the 50 subrequest ceiling once the ~9 non-search calls are counted',async()=>{
  const calls=[];const h=harness(async url=>{calls.push(new URL(url));return new Response(url.includes('gdelt')?'{}':'<rss><channel></channel></rss>');});
  const result=await h.retrieveNews(plan(h),windowFor(30),h.resolvePriorityLanguages('Afghanistan drug trafficking',[]));
- assert.equal(calls.length,36);assert.equal(result.subrequest_budget.search_requests,36);
+ assert.equal(calls.length,40);assert.equal(result.subrequest_budget.search_requests,40);
  assert.ok(result.subrequest_budget.search_requests+9<50);
  const rescue=result.waves.filter(w=>w.query.variant==='priority-locale-rescue');
  assert.equal(rescue.length,5);
