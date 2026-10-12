@@ -8,6 +8,12 @@ on:
   push:
     paths:
       - "collector.py"
+      - "collection_config.py"
+      - "ct-atlas-runtime.json"
+      - "radnuc-keywords.json"
+      - "radnuc_vocabulary.py"
+      - "chinese-map-backfill-queries.json"
+      - "chinese-gemini-backfill-queries.json"
       - "radnuc.py"
       - "threat_categories.py"
       - "threat-category-keywords.json"
@@ -20,6 +26,12 @@ on:
   pull_request:
     paths:
       - "collector.py"
+      - "collection_config.py"
+      - "ct-atlas-runtime.json"
+      - "radnuc-keywords.json"
+      - "radnuc_vocabulary.py"
+      - "chinese-map-backfill-queries.json"
+      - "chinese-gemini-backfill-queries.json"
       - "radnuc.py"
       - "threat_categories.py"
       - "threat-category-keywords.json"
@@ -61,4 +73,3 @@ jobs:
         # The face detector's test needs OpenCV and the visual-intel service:
         # deploy-visual-intel.yml runs it inside that service's container.
         run: python -m pytest tests/ -q --ignore=tests/visual_intel_detector_test.py
-
