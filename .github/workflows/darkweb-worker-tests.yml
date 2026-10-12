@@ -5,10 +5,13 @@ on:
     paths:
       - "darkweb.js"
       - "cloudflare-worker/darkweb.js"
+      - "cloudflare-worker/darkweb-translation.js"
+      - "cloudflare-worker/index.js"
       - "cloudflare-worker/report-gate.js"
       - "cloudflare-worker/darkweb-files.js"
       - "tests/darkweb.test.cjs"
       - "tests/darkweb-ui.test.cjs"
+      - "tests/darkweb-cloudflare-translation.test.cjs"
       - ".github/workflows/darkweb-worker-tests.yml"
   workflow_dispatch:
 
@@ -31,5 +34,7 @@ jobs:
           node --check darkweb.js
           node --input-type=module --check < cloudflare-worker/darkweb.js
           node --input-type=module --check < cloudflare-worker/report-gate.js
+          node --input-type=module --check < cloudflare-worker/darkweb-translation.js
+          node --input-type=module --check < cloudflare-worker/index.js
       - name: Run Dark Web API regression tests
-        run: node --test tests/darkweb.test.cjs tests/darkweb-ui.test.cjs
+        run: node --test tests/darkweb.test.cjs tests/darkweb-ui.test.cjs tests/darkweb-cloudflare-translation.test.cjs

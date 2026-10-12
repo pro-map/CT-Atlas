@@ -27,7 +27,7 @@ function harness(){
  vm.runInContext(fileSource,context);
  const source=fs.readFileSync('cloudflare-worker/darkweb.js','utf8').replace(/^import[^\n]+\n/gm,'').replace(/export /g,'');
  vm.runInContext(source+'\nglobalThis.api={handleDarkweb,onionUrl};',context);
- async function call(path,body,user='admin',collector=false){if(path==='/darkweb/ingest' && body)body={selection_version:2,collection_epoch:2,...body,items:Array.isArray(body.items)?body.items.map(i=>({published_at:"2025-06-01",date_basis:"html",...i})):body.items};const r=await context.api.handleDarkweb(new Request('https://worker'+path,{method:body===undefined?'GET':'POST',headers:collector?{Authorization:'Bearer '+env.DARKWEB_INGEST_TOKEN}:{'X-Session-Token':user},...(body===undefined?{}:{body:JSON.stringify(body)})}),env);return {status:r.status,data:await r.json(),headers:r.headers};}
+ async function call(path,body,user='admin',collector=false,ctx){if(path==='/darkweb/ingest' && body)body={selection_version:2,collection_epoch:2,...body,items:Array.isArray(body.items)?body.items.map(i=>({published_at:"2025-06-01",date_basis:"html",...i})):body.items};const r=await context.api.handleDarkweb(new Request('https://worker'+path,{method:body===undefined?'GET':'POST',headers:collector?{Authorization:'Bearer '+env.DARKWEB_INGEST_TOKEN}:{'X-Session-Token':user},...(body===undefined?{}:{body:JSON.stringify(body)})}),env,ctx);return {status:r.status,data:await r.json(),headers:r.headers};}
  return {call,values,env,context,api:context.api};
 }
 function mockPdfStorage(h){
@@ -72,7 +72,7 @@ test('collector config exposes only Bessira and resumes from its last successful
  let config=(await h.call('/darkweb/collector-config',undefined,'',true)).data;
  assert.deepEqual(config.outlets.map(o=>o.name),['Bessira']);
  assert.equal(config.outlets[0].collection_phase,'watch');
- assert.equal(config.outlets[0].disable_english_switch,true);
+ assert.equal(config.outlets[0].disable_english_switch,false);
  assert.equal(config.outlets[0].disable_pdf_preview,true);
  assert.equal(config.policy.from,'2025-01-01','Before the first successful pass the retained collection start is used');
  assert.equal(config.policy.through,today);
@@ -268,13 +268,13 @@ test('structured archive retains more than 500 records, paginates by date withou
  assert.equal((await h.call('/darkweb/archive')).data.items.length,0);assert.equal((await h.call('/darkweb/item?id='+firstId)).status,404);
  assert.equal([...h.values.keys()].filter(k=>/^darkweb:publication(?:-index|-pending)?:/.test(k)).length,0);
 });
-test('English overviews use source text and cannot overwrite newer source contents',async()=>{
+test('title-only translation excludes source text and cannot overwrite newer source contents',async()=>{
  const h=harness(),id=await register(h);h.env.GEMINI_API_KEY='test';
  const submit=raw=>h.call('/darkweb/ingest',{outlet_id:id,items:[raw],scan_ok:true},'',true);
  await submit(publication());const item=(await h.call('/darkweb/archive')).data.items[0];
- h.context.fetch=async(url,options)=>{const input=JSON.parse(JSON.parse(options.body).input);assert.equal(input.titles[0].original_text,'الفقرة الأولى الفقرة الثانية');assert.ok(!options.body.includes(host));return Response.json({text:JSON.stringify({summary:'The outlet published this claim. [1]',titles:[{id:item.id,title:'English title',overview_en:'The source reports a claim.'}]})});};
+ h.context.fetch=async(url,options)=>{const input=JSON.parse(JSON.parse(options.body).input);assert.equal(input.titles[0].original_text,undefined);assert.equal(input.titles[0].excerpt,undefined);assert.deepEqual(Object.keys(input.titles[0]).sort(),['id','title']);assert.ok(!options.body.includes(host));return Response.json({text:JSON.stringify({summary:'The outlet published this claim. [1]',titles:[{id:item.id,title:'English title',overview_en:'The source reports a claim.'}]})});};
  await h.call('/darkweb/enrich',{});let full=(await h.call('/darkweb/item?id='+item.id)).data.item;
- assert.equal(full.overview_en,'The source reports a claim.');assert.equal(full.original_text,publication().original_text);
+ assert.equal(full.overview_en,'');assert.equal(full.title_en,'English title');assert.equal(full.original_text,publication().original_text);
  h.values.delete('darkweb:enrich-until');await submit(publication(1,{original_text:'النص الجديد'}));
  let release,started;const ready=new Promise(r=>started=r);h.context.fetch=()=>{started();return new Promise(r=>release=r);};
  const inflight=h.call('/darkweb/enrich',{});await ready;await submit(publication(1,{original_text:'النص الأحدث'}));
@@ -555,7 +555,7 @@ test('a collector that starts sending source_language keeps Arabic translations 
  await h.call('/darkweb/ingest',{outlet_id:id,items:[publication(1,{source_language:'ar'})],scan_ok:true},'',true);
  const full=(await h.call('/darkweb/item?id='+item.id)).data.item;
  assert.equal(full.content_hash,item.content_hash);assert.equal(full.source_language,'ar');
- assert.equal(full.title_en,'Arabic title in English');assert.equal(full.title_en_kind,'translation');assert.equal(full.overview_en,'A neutral overview.');
+ assert.equal(full.title_en,'Arabic title in English');assert.equal(full.title_en_kind,'translation');assert.equal(full.overview_en,'');
  assert.ok(!h.values.has('darkweb:publication-pending:2:'+item.id),'Adding the hint does not requeue a translated record');
 });
 test('English originals keep their title without a title translation, a model call or a ledger unit',async()=>{
@@ -567,16 +567,16 @@ test('English originals keep their title without a title translation, a model ca
  assert.equal(card('mislabelled.pdf').title_en,'','A title in another script is still translated, whatever the declared language');
  const pub=(await h.call('/darkweb/archive')).data.items[0];
  assert.equal(pub.title_en,english.title);assert.equal(pub.title_en_kind,'original');
- assert.ok(h.values.has('darkweb:publication-pending:2:'+pub.id),'Only the overview remains pending');
+ assert.ok(!h.values.has('darkweb:publication-pending:2:'+pub.id),'An English title needs no model work');
  const inputs=[];
  h.context.fetch=async(url,options)=>{const body=JSON.parse(options.body);assert.doesNotMatch(body.system_instruction,/Arabic/);assert.match(body.system_instruction,/already in English, return it unchanged/);inputs.push(JSON.parse(body.input));
   return Response.json({text:JSON.stringify({summary:'The outlets make claims that need validation. [1]',titles:[{id:pub.id,title:'Rewritten by the model',overview_en:'The outlet claims a clash.'},{id:card('mislabelled.pdf').id,title:'Annual report'}]})});};
  assert.equal((await h.call('/darkweb/enrich',{})).status,200);
  const requested=inputs[0].titles.map(t=>t.id);
  assert.ok(!requested.includes(card('report.pdf').id),'No title translation is requested for an English original');
- assert.ok(requested.includes(pub.id));assert.equal(inputs[0].titles.find(t=>t.id===pub.id).source_language,'en');
+ assert.ok(!requested.includes(pub.id),'An English publication never reaches the model');
  const full=(await h.call('/darkweb/item?id='+pub.id)).data.item;
- assert.equal(full.title_en,english.title,'The model cannot rewrite an English original');assert.equal(full.title_en_kind,'original');assert.equal(full.overview_en,'The outlet claims a clash.');
+ assert.equal(full.title_en,english.title,'The model cannot rewrite an English original');assert.equal(full.title_en_kind,'original');assert.equal(full.overview_en,'');
  assert.ok(!h.values.has('darkweb:publication-pending:2:'+pub.id));
  feed=(await h.call('/darkweb/feed')).data.items;
  assert.equal(card('mislabelled.pdf').title_en,'Annual report');assert.equal(card('mislabelled.pdf').title_en_kind,'translation');
@@ -589,7 +589,7 @@ test('English originals keep their title without a title translation, a model ca
  const relabelled=(await h.call('/darkweb/item?id='+pub.id)).data.item;
  assert.equal(relabelled.title_en,'');assert.equal(relabelled.title_en_kind,'');assert.ok(h.values.has('darkweb:publication-pending:2:'+pub.id));
 });
-test('an English original relabelled to another language after three failed overviews really reaches the model',async()=>{
+test('an English original relabelled to another language clears old attempts and reaches the title model',async()=>{
  const h=harness(),id=await register(h);h.env.GEMINI_API_KEY='test';
  const english=publication(1,{title:'Statement on the clash',original_text:'Statement on the clash\n\nLe texte reste en français.',source_language:'en'});
  await h.call('/darkweb/ingest',{outlet_id:id,items:[english],scan_ok:true},'',true);
@@ -598,10 +598,9 @@ test('an English original relabelled to another language after three failed over
  const inputs=[];let answer=input=>({summary:'',titles:input.titles.map(t=>({id:t.id,title:t.title,overview_en:''}))});
  h.context.fetch=async(url,options)=>{const input=JSON.parse(JSON.parse(options.body).input);inputs.push(input);return Response.json({text:JSON.stringify(answer(input))});};
  const unlock=()=>{h.values.delete('darkweb:enrich-until');h.values.delete('darkweb:enrich-backoff');};
- // The model returns no overview three times: the original's attempts are used up.
- for(let k=0;k<3;k++){unlock();await h.call('/darkweb/enrich',{});}
- assert.equal(inputs.length,3);assert.equal(record().enrich_attempts,3);
- unlock();assert.equal((await h.call('/darkweb/enrich',{})).data.cached,true);assert.equal(inputs.length,3);
+ // Old deployments may have exhausted overview attempts; titles must still requeue.
+ h.values.set('darkweb:publication:2:'+pub.id,{...record(),enrich_attempts:3});
+ unlock();assert.equal((await h.call('/darkweb/enrich',{})).data.cached,true);assert.equal(inputs.length,0);
  // A later pass declares French for the same text: the title is cleared and its attempts start again.
  await h.call('/darkweb/ingest',{outlet_id:id,items:[{...english,source_language:'fr'}],scan_ok:true},'',true);
  assert.equal(record().title_en,'');assert.equal(record().title_en_kind,'');assert.equal(record().enrich_attempts,0);
@@ -610,7 +609,7 @@ test('an English original relabelled to another language after three failed over
  unlock();assert.equal((await h.call('/darkweb/enrich',{})).data.enriched,1);
  const sent=inputs.at(-1).titles.find(t=>t.id===pub.id);
  assert.ok(sent,'The relabelled title is sent for translation');assert.equal(sent.title,english.title);assert.equal(sent.source_language,'fr');
- assert.equal(record().title_en_kind,'translation');assert.equal(record().overview_en,'The outlet makes a claim.');
+ assert.equal(record().title_en_kind,'translation');assert.equal(record().overview_en,'');
  assert.ok(!h.values.has('darkweb:publication-pending:2:'+pub.id));
 });
 test('source_translation is kept only as "outlet", stays out of the content hash and never requeues a translation',async()=>{
@@ -635,7 +634,7 @@ test('source_translation is kept only as "outlet", stays out of the content hash
  h.context.fetch=async(url,options)=>{calls++;const input=JSON.parse(JSON.parse(options.body).input);return Response.json({text:JSON.stringify({summary:'The outlets make claims that need validation. [1]',titles:input.titles.map(t=>({id:t.id,title:t.id===pub.id?t.title:'Arabic title in English',overview_en:'The outlet claims a clash.'}))})});};
  await h.call('/darkweb/enrich',{});assert.equal(calls,1);
  const before=(await h.call('/darkweb/item?id='+pub.id)).data.item;
- assert.equal(before.title_en_kind,'original');assert.equal(before.overview_en,'The outlet claims a clash.');assert.ok(!h.values.has('darkweb:publication-pending:2:'+pub.id));
+ assert.equal(before.title_en_kind,'original');assert.equal(before.overview_en,'');assert.ok(!h.values.has('darkweb:publication-pending:2:'+pub.id));
  // A collector that starts sending the flag keeps the hash, the English fields and the queue as they were.
  await h.call('/darkweb/ingest',{outlet_id:id,items:[{...english,source_translation:'outlet'}],scan_ok:true},'',true);
  const flagged=(await h.call('/darkweb/item?id='+pub.id,undefined,'analyst')).data.item;
@@ -655,6 +654,43 @@ test('source_translation is kept only as "outlet", stays out of the content hash
  await h.call('/darkweb/ingest',{outlet_id:id,items:[{...english,original_text:'The outlet claims a second clash.'}],scan_ok:true},'',true);
  assert.equal((await h.call('/darkweb/item?id='+pub.id)).data.item.source_translation,undefined);
  feed=(await h.call('/darkweb/feed')).data.items;assert.equal(feed.find(i=>i.id===pub.id).source_translation,undefined);
+});
+test('collector pass translates only an Arabic title in the background without an admin page',async()=>{
+ const h=harness(),id=await register(h),jobs=[];h.env.GEMINI_API_KEY='test';
+ let calls=0;
+ h.context.fetch=async(url,options)=>{
+  calls++;const body=JSON.parse(options.body),input=JSON.parse(body.input);
+  assert.deepEqual(Object.keys(input.titles[0]).sort(),['id','source_language','title']);
+  assert.equal(input.titles[0].source_language,'ar');
+  assert.ok(!options.body.includes('SOURCE_BODY_MUST_STAY_LOCAL'));
+  assert.match(body.system_instruction,/Translate only the supplied title/);
+  assert.deepEqual(body.response_format.schema.properties.titles.items.required,['id','title']);
+  return Response.json({text:JSON.stringify({titles:[{id:input.titles[0].id,title:'English title'}]})});
+ };
+ const collected=await h.call('/darkweb/ingest',{outlet_id:id,items:[publication(1,{source_language:'ar',original_text:'SOURCE_BODY_MUST_STAY_LOCAL'})],scan_ok:true},'',true,{waitUntil:job=>jobs.push(job)});
+ assert.equal(collected.status,200);assert.equal(jobs.length,1);await Promise.all(jobs);
+ const item=(await h.call('/darkweb/archive')).data.items[0];
+ assert.equal(calls,1);assert.equal(item.title_en,'English title');assert.equal(item.title_en_kind,'translation');
+ assert.equal(item.overview_en,'');assert.equal((await h.call('/darkweb/item?id='+item.id)).data.item.original_text,'SOURCE_BODY_MUST_STAY_LOCAL');
+ assert.ok(!h.values.has('darkweb:publication-pending:2:'+item.id));
+ h.values.delete('darkweb:enrich-until');assert.equal((await h.call('/darkweb/enrich',{})).data.cached,true);assert.equal(calls,1);
+});
+test('English outlet collection needs no translation or AI quota even on a background collector pass',async()=>{
+ const h=harness(),id=await register(h),jobs=[];h.env.GEMINI_API_KEY='test';
+ h.context.fetch=async()=>{throw Error('An English title must never reach the model');};
+ const result=await h.call('/darkweb/ingest',{outlet_id:id,items:[publication(1,{source_language:'en',source_translation:'outlet',title:'English source title'})],scan_ok:true},'',true,{waitUntil:job=>jobs.push(job)});
+ assert.equal(result.status,200);await Promise.all(jobs);
+ const item=(await h.call('/darkweb/archive')).data.items[0];
+ assert.equal(item.title_en,'English source title');assert.equal(item.source_translation,'outlet');
+ assert.ok(!h.values.has('darkweb:enrich-ledger'));assert.ok(!h.values.has('darkweb:publication-pending:2:'+item.id));
+});
+test('failed background translation preserves the acknowledged collection for a later retry',async()=>{
+ const h=harness(),id=await register(h),jobs=[];h.env.GEMINI_API_KEY='test';
+ h.context.fetch=async()=>Response.json({error:'provider unavailable'},{status:503});
+ const result=await h.call('/darkweb/ingest',{outlet_id:id,items:[publication()],scan_ok:true},'',true,{waitUntil:job=>jobs.push(job)});
+ assert.equal(result.status,200);assert.equal(result.data.added,1);await Promise.all(jobs);
+ const item=(await h.call('/darkweb/archive')).data.items[0];
+ assert.equal(item.title,publication().title);assert.equal(item.title_en,'');assert.ok(h.values.has('darkweb:publication-pending:2:'+item.id));
 });
 test('keyword alerts fold diacritics, Turkish i and Unicode forms on both sides and read the original text',async()=>{
  const h=harness(),f=h.context.foldText;

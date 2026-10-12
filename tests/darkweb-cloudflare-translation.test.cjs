@@ -34,7 +34,7 @@ test('both external approval flags and AI binding are necessary',()=>{
   assert.equal(allowed({...flags,AI:{run(){}}}),true);
 });
 
-test('authorized small batch sends only title and excerpt, never source files, URLs or internal notes',async()=>{
+test('authorized small batch sends only titles, never excerpts, files, URLs or internal notes',async()=>{
   const calls=[];
   const env={
     DARKWEB_TRANSLATION_PROVIDER:'cloudflare',
@@ -54,6 +54,8 @@ test('authorized small batch sends only title and excerpt, never source files, U
   assert.equal(calls[0].body.response_format.type,'json_object');
   const raw=JSON.stringify(calls[0].body);
   assert.ok(raw.includes('Comunicado'));
+  assert.equal(raw.includes('La publicación indica'),false);
+  assert.deepEqual(Object.keys(JSON.parse(calls[0].body.messages[1].content).titles[0]).sort(),['id','source_language','title']);
   for(const secret of ['SENSITIVE_FULL_ARTICLE','SENSITIVE_PDF',
                        'INTERPOL_PRIVATE','onion/secret'])
     assert.equal(raw.includes(secret),false,'must never pass full source evidence');

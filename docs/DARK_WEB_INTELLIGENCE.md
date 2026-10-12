@@ -135,9 +135,8 @@ recognized from their standard markers.
   `source_language`, when known, is sent with it as a hint. A record declared
   English (`en`) whose title contains no letters from another script keeps its
   title as the English title (`title_en_kind` `original`) when it is ingested:
-  no model call and no daily request is spent on that title. A structured English
-  record still receives its English overview in the normal enrichment batch, so
-  it uses a request only while that overview is pending. If a later pass declares
+  no model call and no daily request is spent on that title. An English
+  record needs no AI request: collection and enrichment preserve its source title. If a later pass declares
   another language, the record returns to the translation queue with its attempt
   counter reset, so attempts already spent on the overview do not keep the title
   from being translated.
@@ -202,7 +201,7 @@ stored in this repository, and tests use neutral synthetic markup.
   failed. The English text is the outlet's own, possibly automatic, translation
   of its Arabic originals: records read in English (cards and articles) carry
   `source_language` `en` and `source_translation` `outlet`, so their titles need
-  no model translation (English overviews are still generated) and Atlas labels
+  no model translation and Atlas labels
   them as the outlet's translation. A record read in another language carries no
   `source_translation`, and a later reading in that language drops it.
 - **Dates and categories.** Card dates ("06 October 2026") and the article
@@ -365,44 +364,34 @@ attachment metadata. It contains no scripts, remote
 images or embedded credentials. Exports do not embed the original PDF. JSON
 preserves the publication fields for further analytical work.
 
-**English:** a background Gemini model (`DARKWEB_GEMINI_MODEL`, default
-`gemini-3.1-flash-lite`; never the interactive `GEMINI_MODEL` used by reports and
-Deep Search) faithfully translates the entire original title into English,
-whatever its language (Arabic for the structured Arabic outlet). It is
-instructed to preserve names, dates, numbers and attributed claims rather than
-invent or summarize a headline. The original title remains visible beside the
-labelled machine translation; a title already in English is kept as it is (see
-"Latin-script and multilingual outlets"). Existing
-generated English titles are progressively requeued without resetting records.
-A separate one/two-sentence overview is based only on supplied page text. Up to
-8,000 characters of original text are sent per item; a flag tells the model when
-that input is excerpted. Onion links are removed. It does not read PDFs, listen
-to audio or view videos. Model output must attribute claims to the source.
+**English-first collection, title-only translation:** Bessira's collector configuration
+allows its own English menu switch, including the bounded forced-translation retry
+when the normal English switch still serves Arabic. If no English publication text
+is obtained, the collector retains the Arabic record instead of losing it. English
+records are labelled as the outlet's English translation and use no title-model
+request.
 
-AI enrichment runs when an admin first opens the tab and when **UPDATE
-TRANSLATIONS & OVERVIEWS** is pressed; the 60-second background refresh, REFRESH
-FEED and other actions never call it. Each request covers up to 10 records (with
-a 6,000-character combined title budget), at most once per minute globally and at
-most `DARKWEB_ENRICH_DAILY` requests (default 40) per Pacific day, counted in the
-ReportGate. After a failed request, or one that saves no title and no valid
-briefing, the next attempt waits 15 minutes, doubling up to 6 hours; a useful
-result resets the wait. A record still unfinished after three attempts stays
-stored and queued but is skipped until its source changes. An unusable briefing
-for the same sources is not requested again for 6 hours. Grouped citations such
-as `[1, 2]` are accepted. A pending queue also covers older archived
-publications. It is not an unattended AI scheduler. Failures preserve the
-original text and show pending status. Source changes invalidate the English fields;
-content fingerprints prevent an old in-flight response from replacing newer
-material. Semantic accuracy still needs analyst review.
+For a non-English record, Atlas translates only the title into English. The model
+receives an ID, source-language hint and title; no excerpt, full page text or file.
+It produces no overview or full-document translation. Existing stored overviews
+are preserved and remain readable, but missing overviews no longer keep an item
+in the translation queue or appear as pending on a card.
 
-The archive-review workflow (`review-archive-backlog.yml`) shares the 3.1 Flash
-Lite pool; its backlog is done, so it now uses at most 40 requests a day.
+A successful collector ingestion schedules one bounded translation batch in the
+Worker background, even when the admin page is closed. Each later successful pass
+can advance the remaining queue. The admin page also continues bounded batches.
+Gemini remains the default provider; Cloudflare Workers AI is used only when both
+`DARKWEB_TRANSLATION_PROVIDER=cloudflare` and
+`DARKWEB_EXTERNAL_AI_APPROVED=true` are configured with the AI binding. Either
+provider receives only titles. The shared Gemini request budget is 25 seconds.
 
-The top briefing uses up to 20 latest publication titles/excerpts/dates, including
-archived records, with source links. A source link opens the cited card: it
-switches view, clears filters that hide the card, or loads an archived record that
-is not on a loaded page. It describes publications and source claims, not
-verified events or the current situation independently of publication dates.
+Each batch covers up to 10 titles (3 with Cloudflare), with a 6,000-character
+combined title budget, at most once per minute globally and at most
+`DARKWEB_ENRICH_DAILY` requests (default 40) per Pacific day. Existing backoff and
+retry controls still apply; provider failures preserve collection acknowledgements
+and the source text for later retry. Newest-day titles take priority. Source changes
+invalidate English fields, and content fingerprints prevent an in-flight answer
+from overwriting a newer record. Semantic accuracy still needs analyst review.
 
 ## Archive and collection controls
 
