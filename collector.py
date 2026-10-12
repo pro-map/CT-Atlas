@@ -1,6 +1,7 @@
 import argparse
 import radnuc
 import threat_categories
+import collection_config
 import feedparser
 import hashlib
 import html
@@ -44,6 +45,17 @@ except Exception:
 # ============================================================
 # INTERPOL CT INTELLIGENCE MAP
 # OSINT COLLECTOR V13 — INCREMENTAL BACKFILL + RESUMABLE COLLECTION
+#
+# EFFECTIVE CONFIGURATION (not the historical defaults in this file):
+# - threat_categories.install_collection loads the three specialist categories
+#   from threat-category-keywords.json, radnuc.py and radnuc-keywords.json.
+# - collection_config aligns daily specialist searches with all 21 codes.
+# - tools/run_collector_quota_safe.py supplies the DAILY model/budget/threshold.
+# - tools/enrich_threat_categories.py and tools/enrich_chinese_map.py have
+#   separate historical checkpoints and choose their backend in the workflow.
+# Inspect without collecting: python tools/describe_collection.py --check
+# See docs/COLLECTION_CONFIGURATION.md. CBRN source hints/legacy fields are
+# deliberate compatibility, not a user-facing parent category.
 #
 # Expanded coverage + stricter event relevance.
 #
@@ -466,31 +478,7 @@ CATEGORIES = {
         '"terrorist 3D-printed weapon"',
     ],
 
-    "CBRN": [
-        '"chemical terrorism"',
-        '"biological terrorism"',
-        '"radiological terrorism"',
-        '"nuclear terrorism"',
-        '"CBRN terrorism"',
-        '"CBRN terrorist"',
-        '"chemical terrorist attack"',
-        '"biological terrorist attack"',
-        '"radiological terrorist attack"',
-        '"nuclear terrorist attack"',
-        '"terrorist chemical weapon"',
-        '"terrorist biological weapon"',
-        '"terrorist radiological weapon"',
-        '"terrorist nuclear material"',
-        '"terrorist radioactive material"',
-        '"terrorist poison"',
-        '"terrorist toxic chemical"',
-        '"terrorist ricin"',
-        '"terrorist sarin"',
-        '"terrorist chlorine attack"',
-        '"terrorist dirty bomb"',
-        '"extremist chemical weapon"',
-        '"extremist biological weapon"',
-    ],
+    # Specialist categories are installed from threat_categories.py below.
 
     "Online Radicalization / Cyberterrorism": [
         '"online radicalization" terrorism',
@@ -702,14 +690,7 @@ CORE_SEARCH_QUERIES = {
         '"terrorist weapons cache"',
     ],
 
-    "CBRN": [
-        '"chemical terrorism"',
-        '"biological terrorism"',
-        '"radiological terrorism"',
-        '"nuclear terrorism"',
-        '"dirty bomb" terrorism',
-        '"CBRN" terrorism',
-    ],
+    # Specialist categories are installed from threat_categories.py below.
 
     "Online Radicalization / Cyberterrorism": [
         '"online radicalization" terrorism',
@@ -834,21 +815,7 @@ OFFICIAL_SOURCE_QUERIES = {
     ],
 
 
-    "CBRN": [
-
-        'site:gov.uk/government/news '
-        '(terrorism OR terrorist OR extremism) '
-        '(chemical OR biological OR radiological OR nuclear OR CBRN)',
-
-        'site:counterterrorism.police.uk/news '
-        '(terrorism OR terrorist OR extremist) '
-        '(chemical OR biological OR radiological OR nuclear OR CBRN)',
-
-        'site:justice.gov '
-        '(terrorism OR terrorist OR extremist) '
-        '(chemical OR biological OR radiological OR nuclear OR CBRN)',
-
-    ],
+    # Specialist categories are installed from threat_categories.py below.
 
 
     "Online Radicalization / Cyberterrorism": [
@@ -1191,10 +1158,7 @@ TARGETED_MEDIA_CATEGORY_TERMS = {
         '(weapons OR firearms OR explosives OR bomb OR IED OR drone '
         'OR arms-trafficking OR weapons-cache)',
 
-    "CBRN":
-        '(terrorist OR terrorism OR extremist OR ISIS OR ISIL) '
-        '(CBRN OR chemical OR biological OR radiological OR nuclear '
-        'OR radioactive OR ricin OR sarin OR chlorine OR "dirty bomb")',
+    # Specialist categories are installed from threat_categories.py below.
 
     "Online Radicalization / Cyberterrorism":
         '(terrorist OR terrorism OR extremist OR extremism OR ISIS OR ISIL '
@@ -1686,8 +1650,8 @@ MULTILINGUAL_PROFILES.extend([
 
 
 # Chinese Simplified/Traditional for the NORMAL Gemini daily intake.
-# The same historical Chinese search vocabulary is shared with the separate
-# six-month Qwen experiment, but the daily path deliberately runs ONLY ONE
+# Daily and historical Chinese searches use separate bounded query plans.
+# The daily path deliberately runs ONLY ONE
 # source-context query per non-specialist map category and source edition.
 # Existing specialist category queries are appended below by
 # threat_categories.install_collection(globals()). No changes to Gemini quota.
@@ -10159,10 +10123,8 @@ def save_database(events, trend_summary=None, weekly_analysis=None):
         "language":
             "English display; multilingual source collection",
         "source_languages":
-            [
-                "en", "fr", "ar", "de", "es", "it",
-                "tr", "ru", "ur", "fa", "he", "ps"
-            ],
+            collection_config.language_metadata(MULTILINGUAL_PROFILES)['language_codes'],
+        "collection_configuration": collection_config.effective(globals()),
         "collector":
             "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
         "relevance_filter":
@@ -10763,6 +10725,8 @@ def consolidate_incidents(events, state=None, max_calls=None, now=None, use_gemi
 def main():
     global COLLECTION_SCOPE
     is_backfill, COLLECTION_SCOPE = parse_collection_mode()
+    effective_config = collection_config.validate_runtime(globals())
+    print('Effective configured collection: ' + json.dumps(effective_config, ensure_ascii=False))
     existing_weekly_analysis = load_existing_weekly_analysis()
 
     initialize_incremental_state(is_backfill)

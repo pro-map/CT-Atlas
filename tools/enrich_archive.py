@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Enrich the background archive with the last six months of reporting the
-daily collection never reviewed: languages it does not search (Hindi, Bengali,
-Indonesian, Mozambique Portuguese, Somali, Hausa), GDELT's Persian, Urdu,
-Pashto, Hausa, Somali and Swahili sources, and week-by-week searches of the
-languages it does.
+daily collection never reviewed: the original extra-language discovery plan,
+GDELT's Persian, Urdu, Pashto, Hausa, Somali and Swahili sources, and fixed
+replay searches of the pre-alignment daily profiles. Daily now also uses
+specialist queries in those extra languages; that expansion does not reset or
+expand this older archive plan.
 
 Each run works through a fixed plan of tasks (one search over one week),
 most valuable first: the new languages, then GDELT, then the daily profiles'
@@ -93,7 +94,8 @@ GDELT_RATE_LIMIT_TEXT = "limit requests to one every"
 GDELT_RATE_LIMIT_RETRIES = int(os.getenv("ENRICH_GDELT_RATE_LIMIT_RETRIES", "2"))
 GDELT_RATE_LIMIT_BACKOFF_SECONDS = float(os.getenv("ENRICH_GDELT_RATE_LIMIT_BACKOFF_SECONDS", "30"))
 
-# Languages the daily collection does not search. Somali and Hausa have no
+# Legacy general-archive language profiles (identities retained). Daily now
+# also searches specialist topics in these languages. Somali and Hausa have no
 # Google News edition of their own: their own-language queries run on the
 # English edition Google redirects to, like the collector's Dari/Pashto ones.
 NEW_LANGUAGE_PROFILES = [
@@ -196,7 +198,7 @@ def plan_tasks(today, collector):
           "query": f"{GDELT_TERMS} sourcelang:{language['sourcelang']}", "category": "Attacks",
           "code": language["code"], "name": language["name"]}
          for week in weeks for language in GDELT_LANGUAGES],
-        replayed(google_tasks(collector.MULTILINGUAL_PROFILES, "daily_profile")),
+        replayed(google_tasks(getattr(collector, "HISTORICAL_REPLAY_PROFILES", collector.MULTILINGUAL_PROFILES), "daily_profile")),
         replayed(google_tasks([ENGLISH_PROFILE], "english")),
     ]
     tasks = [task for group in groups for task in group]

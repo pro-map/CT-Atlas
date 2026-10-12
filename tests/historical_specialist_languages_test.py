@@ -1,4 +1,4 @@
-"""Offline regression tests for additive, historical-only language coverage."""
+"""Offline regression tests for retained historical language coverage and keys."""
 import copy
 import json
 import sys
@@ -26,7 +26,7 @@ EXPECTED = {"ar", "bn", "de", "en", "es", "fa", "fr", "ha", "he", "hi",
 
 class HistoricalSpecialistLanguagesTest(unittest.TestCase):
     def legacy_plan(self, category):
-        with patch.object(native, "queries", return_value=[]):
+        with patch.object(topics, "collection_queries", side_effect=topics.queries):
             return runner.plan_tasks(category, ANCHOR, collector)
 
     def test_every_configured_native_code_has_discovery_queries(self):

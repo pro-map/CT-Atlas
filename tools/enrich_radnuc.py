@@ -25,8 +25,8 @@ STATUS_FILE = 'archive/radnuc-enrichment-status.json'
 WINDOW_DAYS = 180
 
 
-# These are HISTORICAL specialist-backfill editions only: no change to the
-# Gemini daily collector, its language mix or its request allocations.
+# Fixed historical edition identities, also present in daily collection.
+# They are not a model, quota or scheduling configuration.
 # Two Chinese writing systems are indexed separately, but they are ONE language.
 CHINESE_BACKFILL_PROFILES = (
     {"code": "zh", "name": "Chinese (Simplified)", "hl": "zh-CN",
@@ -154,8 +154,9 @@ class IntegratedOutput(enrich_archive.Output):
         if self.changed:
             self.database['last_updated'] = datetime.now(timezone.utc).isoformat()
             self.database.setdefault('specialist_enrichment', {})[self.category] = {'window_days': WINDOW_DAYS,
-                'languages': sorted(radnuc.LEXICONS) if self.category == threat_categories.RN else sorted(threat_categories.vocabulary()['biological' if self.category == threat_categories.BIO else 'chemical_explosives']['terms']), 'state_actor_operations': 'excluded',
-                'pipeline': 'existing Gemini selection, English translation and incremental event deduplication'}
+                'languages': sorted({p['code'] for p in profiles(self.collector) if threat_categories.collection_queries(self.category, p['code'])}), 'state_actor_operations': 'excluded',
+                'pipeline': 'Shared selection schema, English translation and incremental event deduplication',
+                'model': self.collector.AI_SELECTION_MODEL}
             archive_review.write_json(self.root / 'events.json', self.database, indent=2)
             self.changed = False
 

@@ -104,7 +104,7 @@ def scope_reason(event, result=None):
     return ''
 
 def queries(category, code='en'):
-    """Material phrases AND context anchors; no isolated generic search terms."""
+    """Curated query groups; collection_queries also includes shared native seeds."""
     if category == RN:
         import radnuc
         import radnuc_vocabulary
@@ -121,6 +121,35 @@ def queries(category, code='en'):
     return ['(' + ' OR '.join(quote(t) for t in terms[i:i+6]) + ') (' + context + ')'
             for i in range(0,len(terms),6)]
 
+def query_group(terms):
+    if not terms or any(not isinstance(t, str) or not t.strip()
+                        or any(ch in t for ch in ('"', '\n', '\r')) for t in terms):
+        raise ValueError('Invalid native discovery term')
+    if len(set(terms)) != len(terms):
+        raise ValueError('Repeated native discovery term')
+    return '(' + ' OR '.join('"' + term + '"' for term in terms) + ')'
+
+
+def seed_queries(category, code):
+    """Shared native seeds; the old historical query strings remain identical."""
+    key = {CE: 'chemical_explosives', BIO: 'biological'}.get(category)
+    if key is None:
+        return []
+    item = vocabulary()[key]
+    groups = item.get('native_query_groups', {}).get(code, [])
+    context = item.get('native_query_context', {}).get(code, [])
+    if not groups and not context:
+        return []
+    if not groups or not context:
+        raise ValueError(f'Incomplete specialist seed vocabulary: {category}/{code}')
+    return [query_group(group) + ' ' + query_group(context) for group in groups]
+
+
+def collection_queries(category, code='en'):
+    """Authoritative complete query API shared by daily and historical intake."""
+    return queries(category, code) or seed_queries(category, code)
+
+
 def install_collection(namespace):
     """One vocabulary powers ordinary daily collection and specialist backfill."""
     for name in ('CATEGORIES','CORE_SEARCH_QUERIES','OFFICIAL_SOURCE_QUERIES','TARGETED_MEDIA_CATEGORY_TERMS'):
@@ -134,6 +163,18 @@ def install_collection(namespace):
             for query in queries(label,profile['code']):
                 item = {'term':query,'category':label}
                 if item not in profile['queries']: profile['queries'].append(item)
+    # Freeze the PRE-ALIGNMENT daily replay surface for the older general
+    # archive planner. Expanding daily intake must not recreate historical work.
+    import copy
+    import collection_config
+    namespace.setdefault('HISTORICAL_REPLAY_PROFILES', copy.deepcopy(namespace['MULTILINGUAL_PROFILES']))
+    collection_config.extend_specialist_profiles(namespace['MULTILINGUAL_PROFILES'])
+    for profile in namespace['MULTILINGUAL_PROFILES']:
+        for label in LABELS:
+            for query in collection_queries(label, profile['code']):
+                item = {'term': query, 'category': label}
+                if item not in profile['queries']:
+                    profile['queries'].append(item)
     for label, terms in ((RN,['radiological','radioactive','nuclear','uranium','dirty bomb']),
                          (CE,['chemical weapon','sarin','nerve agent','explosives','explosive device','ied']),
                          (BIO,['bioterrorism','biological weapon','anthrax','ricin','botulinum','agroterrorism'])):
