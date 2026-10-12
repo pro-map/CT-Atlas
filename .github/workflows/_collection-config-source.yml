@@ -1,0 +1,31 @@
+name: Collection configuration source snapshot
+
+# Temporary branch-only audit helper; removed before merge. No API/AI secrets.
+on:
+  push:
+    branches: [fix/shared-collection-config-20261012]
+    paths: [.github/workflows/_collection-config-source.yml]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Export tracked source snapshot
+        run: |
+          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
+          git ls-tree -r HEAD > "$RUNNER_TEMP/source-tree.txt"
+          git archive --format=tar.gz HEAD > "$RUNNER_TEMP/collection-source.tar.gz"
+      - uses: actions/upload-artifact@v6
+        with:
+          name: collection-config-source
+          path: |
+            ${{ runner.temp }}/collection-source.tar.gz
+            ${{ runner.temp }}/source-commit.txt
+            ${{ runner.temp }}/source-tree.txt
+          retention-days: 1
