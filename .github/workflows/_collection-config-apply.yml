@@ -1,0 +1,39 @@
+name: Prepare shared collection configuration
+
+# Temporary branch-only editor; removes itself before the change is reviewed.
+on:
+  push:
+    branches: [fix/shared-collection-config-20261012]
+    paths: [.github/workflows/_collection-config-apply.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/fix/shared-collection-config-20261012'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install existing offline test dependencies
+        run: python -m pip install -r requirements.txt pytest
+      - name: Apply exact hash-checked source changes
+        run: python _collection_alignment.py
+      - name: Validate configuration and historical continuity without collecting
+        run: |
+          python tools/describe_collection.py --check
+          python -m pytest tests/threat_categories_test.py tests/historical_specialist_languages_test.py tests/radnuc_vocabulary_test.py tests/radnuc_test.py tests/gemini_chinese_map_test.py tests/enrich_archive_test.py -q
+          node --test tests/runtime-config.test.cjs
+      - name: Commit source changes only and remove temporary helpers
+        run: |
+          set -euo pipefail
+          git add -- collector.py collection_config.py ct-atlas-runtime.json index.html threat_categories.py threat-category-keywords.json tools/describe_collection.py tools/enrich_archive.py tools/enrich_chinese_map.py tools/enrich_radnuc.py tools/enrich_threat_categories.py tools/historical_specialist_queries.py tests/enrich_archive_test.py tests/historical_specialist_languages_test.py tests/runtime-config.test.cjs .github/workflows/python-tests.yml
+          git rm -- _collection_alignment.py .github/workflows/_collection-config-source.yml .github/workflows/_collection-config-apply.yml
+          git config user.name 'CT Intelligence Map Bot'
+          git config user.email 'actions@github.com'
+          git commit -m 'Align daily specialist discovery and runtime metadata without resetting history'
+          git push origin HEAD:refs/heads/fix/shared-collection-config-20261012
