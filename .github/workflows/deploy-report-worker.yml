@@ -7,6 +7,7 @@ on:
     paths:
       - "cloudflare-worker/**"
       - ".github/workflows/deploy-report-worker.yml"
+      - "tools/wrangler_retry.py"
       - "tests/**"
       - "ct-atlas-runtime.json"
   workflow_dispatch:
@@ -16,11 +17,15 @@ permissions:
 
 concurrency:
   group: ct-atlas-report-worker
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy-worker:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ct-atlas-shared-worker-deployment
+      queue: max
+      cancel-in-progress: false
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -48,7 +53,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          secret_list="$(npx wrangler@latest secret list --config cloudflare-worker/wrangler.toml)"
+          secret_list="$(python3 tools/wrangler_retry.py secret list --config cloudflare-worker/wrangler.toml)"
           if ! printf '%s' "$secret_list" | grep -q 'AUTH_USERS_JSON'; then
             echo "::error::Cloudflare secret AUTH_USERS_JSON is missing. Refusing to deploy the Worker."
             exit 1
@@ -56,4 +61,4 @@ jobs:
           echo "AUTH_USERS_JSON is provisioned in Cloudflare."
 
       - name: Deploy Worker
-        run: npx wrangler@latest deploy --keep-vars --config cloudflare-worker/wrangler.toml
+        run: python3 tools/wrangler_retry.py deploy --keep-vars --config cloudflare-worker/wrangler.toml

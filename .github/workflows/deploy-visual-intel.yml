@@ -9,7 +9,6 @@ on:
       - "tests/visual_intel_detector_test.py"
       - "tests/fixtures/**"
       - "cloudflare-worker/visual-intel.js"
-      - "cloudflare-worker/index.js"
       - ".github/workflows/deploy-visual-intel.yml"
   workflow_dispatch:
 
@@ -18,11 +17,15 @@ permissions:
 
 concurrency:
   group: ct-atlas-visual-intel
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ct-atlas-shared-worker-deployment
+      queue: max
+      cancel-in-progress: false
     env:
       GCP_PROJECT_ID: ct-atlas
       GCP_REGION: ${{ vars.GCP_REGION || 'europe-west1' }}
@@ -104,8 +107,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          printf '%s' "$VISUAL_INTEL_URL" | npx wrangler@latest secret put VISUAL_INTEL_URL --config cloudflare-worker/wrangler.toml
-          printf '%s' "$VISUAL_SHARED_SECRET" | npx wrangler@latest secret put VISUAL_INTEL_SHARED_SECRET --config cloudflare-worker/wrangler.toml
+          printf '%s' "$VISUAL_INTEL_URL" | python3 tools/wrangler_retry.py secret put VISUAL_INTEL_URL --config cloudflare-worker/wrangler.toml
+          printf '%s' "$VISUAL_SHARED_SECRET" | python3 tools/wrangler_retry.py secret put VISUAL_INTEL_SHARED_SECRET --config cloudflare-worker/wrangler.toml
 
       - name: Smoke test image analysis
         shell: bash
@@ -149,7 +152,7 @@ jobs:
           PY
 
       - name: Deploy CT Atlas Worker bridge
-        run: npx wrangler@latest deploy --keep-vars --config cloudflare-worker/wrangler.toml
+        run: python3 tools/wrangler_retry.py deploy --keep-vars --config cloudflare-worker/wrangler.toml
 
       - name: Verify Worker bridge
         shell: bash

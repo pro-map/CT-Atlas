@@ -69,4 +69,4 @@ EOF
 # Fail before upload if any future asset exceeds the platform file-size limit.
 python3 tools/compact_mirror_json.py --check-directory "$STAGING"
 
-(cd "$STAGING" && npx wrangler@latest deploy)
+(cd "$STAGING" && python3 ../tools/wrangler_retry.py deploy)
