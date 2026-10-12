@@ -16,16 +16,13 @@ jobs:
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-      - name: Export tracked source snapshot
-        run: |
-          git rev-parse HEAD > "$RUNNER_TEMP/source-commit.txt"
-          git ls-tree -r HEAD > "$RUNNER_TEMP/source-tree.txt"
-          git archive --format=tar.gz HEAD > "$RUNNER_TEMP/collection-source.tar.gz"
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Package the existing test dependencies without calling collection
+        run: python -m pip wheel -r requirements.txt -r darkweb-collector/requirements.txt --wheel-dir "$RUNNER_TEMP/wheels"
       - uses: actions/upload-artifact@v6
         with:
-          name: collection-config-source
-          path: |
-            ${{ runner.temp }}/collection-source.tar.gz
-            ${{ runner.temp }}/source-commit.txt
-            ${{ runner.temp }}/source-tree.txt
+          name: collection-config-test-wheels
+          path: ${{ runner.temp }}/wheels/
           retention-days: 1
