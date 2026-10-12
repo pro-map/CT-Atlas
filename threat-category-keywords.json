@@ -266,7 +266,222 @@
         "title": "OPCW — What is a Chemical Weapon? (toxins)",
         "url": "https://www.opcw.org/our-work/what-chemical-weapon"
       }
-    ]
+    ],
+    "native_query_groups": {
+      "bn": [
+        [
+          "জৈব সন্ত্রাসবাদ",
+          "জৈব অস্ত্র",
+          "অ্যানথ্রাক্স",
+          "রিসিন"
+        ]
+      ],
+      "de": [
+        [
+          "Bioterrorismus",
+          "biologische Waffen",
+          "Milzbrand",
+          "Rizin"
+        ]
+      ],
+      "es": [
+        [
+          "bioterrorismo",
+          "armas biológicas",
+          "ántrax",
+          "ricina"
+        ]
+      ],
+      "fa": [
+        [
+          "بیوتروریسم",
+          "سلاح بیولوژیک",
+          "سیاه زخم",
+          "ریسین"
+        ]
+      ],
+      "ha": [
+        [
+          "makaman halittu",
+          "makaman kwayoyin cuta",
+          "anthrax",
+          "ricin"
+        ]
+      ],
+      "he": [
+        [
+          "טרור ביולוגי",
+          "נשק ביולוגי",
+          "אנתרקס",
+          "ריצין"
+        ]
+      ],
+      "hi": [
+        [
+          "जैव आतंकवाद",
+          "जैविक हथियार",
+          "एंथ्रेक्स",
+          "रिसिन"
+        ]
+      ],
+      "id": [
+        [
+          "bioterorisme",
+          "senjata biologis",
+          "antraks",
+          "risin"
+        ]
+      ],
+      "it": [
+        [
+          "bioterrorismo",
+          "armi biologiche",
+          "antrace",
+          "ricina"
+        ]
+      ],
+      "ps": [
+        [
+          "بیولوژیکي وسلې",
+          "بیولوژیکي برید",
+          "انتراکس",
+          "ریسین"
+        ]
+      ],
+      "pt": [
+        [
+          "bioterrorismo",
+          "armas biológicas",
+          "antraz",
+          "ricina"
+        ]
+      ],
+      "ru": [
+        [
+          "биотерроризм",
+          "биологическое оружие",
+          "сибирская язва",
+          "рицин"
+        ]
+      ],
+      "so": [
+        [
+          "hubka noolaha",
+          "hubka jeermiska",
+          "anthrax",
+          "ricin"
+        ]
+      ],
+      "sw": [
+        [
+          "silaha za kibaolojia",
+          "shambulio la kibaolojia",
+          "kimeta",
+          "risini"
+        ]
+      ],
+      "tr": [
+        [
+          "biyoterörizm",
+          "biyolojik silah",
+          "şarbon",
+          "risin"
+        ]
+      ],
+      "ur": [
+        [
+          "حیاتیاتی دہشت گردی",
+          "حیاتیاتی ہتھیار",
+          "اینتھراکس",
+          "رائسن"
+        ]
+      ]
+    },
+    "native_query_context": {
+      "bn": [
+        "সন্ত্রাসবাদ",
+        "সন্ত্রাসী",
+        "জঙ্গি"
+      ],
+      "de": [
+        "Terrorismus",
+        "Terroristen",
+        "Terroranschlag"
+      ],
+      "es": [
+        "terrorismo",
+        "terroristas",
+        "atentado terrorista"
+      ],
+      "fa": [
+        "تروریسم",
+        "تروریست",
+        "حمله تروریستی"
+      ],
+      "ha": [
+        "ta'addanci",
+        "'yan ta'adda",
+        "Boko Haram",
+        "ISWAP"
+      ],
+      "he": [
+        "טרור",
+        "מחבלים",
+        "פיגוע"
+      ],
+      "hi": [
+        "आतंकवाद",
+        "आतंकवादी",
+        "आतंकी"
+      ],
+      "id": [
+        "terorisme",
+        "teroris",
+        "serangan teror"
+      ],
+      "it": [
+        "terrorismo",
+        "terroristi",
+        "attentato terroristico"
+      ],
+      "ps": [
+        "ترهګري",
+        "ترهګر",
+        "ترهګریز برید"
+      ],
+      "pt": [
+        "terrorismo",
+        "terroristas",
+        "atentado terrorista"
+      ],
+      "ru": [
+        "терроризм",
+        "террорист",
+        "теракт"
+      ],
+      "so": [
+        "argagixiso",
+        "argagixisada",
+        "Al-Shabaab",
+        "Daacish"
+      ],
+      "sw": [
+        "ugaidi",
+        "magaidi",
+        "shambulio la kigaidi"
+      ],
+      "tr": [
+        "terör",
+        "terörist",
+        "terör saldırısı"
+      ],
+      "ur": [
+        "دہشت گردی",
+        "دہشت گرد",
+        "دہشتگرد"
+      ]
+    },
+    "native_query_note": "Shared daily and historical discovery seeds for 16 additional codes. Existing query text is preserved; not a full translation of every English keyword or proof of successful source coverage."
   },
   "chemical_explosives": {
     "status": "User-supplied vocabulary reviewed on 2026-10-08: 95 specific terms retained; 5 ambiguous contamination terms excluded",
@@ -517,6 +732,317 @@
       "Terms describing instructions, manufacturing, procurement, components or dispersal may only identify news or official reports of a concrete investigation, seizure, prosecution, plot or terrorist incident. Reject manuals, recipes, technical procedures, vendor listings and instructional source documents; do not reproduce their contents or link to them.",
       "Names of substances, precursors, schedules or circuits are not sufficient for classification. Require the material to be central to the reported incident and preserve alleged, suspected, threat and hoax status.",
       "For mixed incidents use one canonical event record. Apply a biological or radiological label only when separately supported by the reporting. A CBRN-enhanced explosive reference does not create a CBRN parent category."
-    ]
+    ],
+    "native_query_groups": {
+      "bn": [
+        [
+          "রাসায়নিক অস্ত্র",
+          "রাসায়নিক হামলা",
+          "বিষাক্ত গ্যাস",
+          "সারিন"
+        ],
+        [
+          "বিস্ফোরক",
+          "বোমা",
+          "বোমা তৈরির সরঞ্জাম",
+          "আইইডি"
+        ]
+      ],
+      "de": [
+        [
+          "Chemiewaffen",
+          "Chemiewaffenanschlag",
+          "Giftgas",
+          "Sarin"
+        ],
+        [
+          "Sprengstoff",
+          "Rohrbombe",
+          "Autobombe",
+          "Sprengsatz"
+        ]
+      ],
+      "es": [
+        [
+          "armas químicas",
+          "ataque químico",
+          "gas tóxico",
+          "sarín"
+        ],
+        [
+          "explosivos",
+          "bomba casera",
+          "coche bomba",
+          "artefacto explosivo"
+        ]
+      ],
+      "fa": [
+        [
+          "سلاح شیمیایی",
+          "حمله شیمیایی",
+          "گاز سمی",
+          "سارین"
+        ],
+        [
+          "مواد منفجره",
+          "بمب دست ساز",
+          "خودروی بمب گذاری شده",
+          "بمب"
+        ]
+      ],
+      "ha": [
+        [
+          "makaman sinadarai",
+          "makamai masu guba",
+          "gas mai guba",
+          "sarin"
+        ],
+        [
+          "bama-bamai",
+          "bam",
+          "abubuwan fashewa",
+          "IED"
+        ]
+      ],
+      "he": [
+        [
+          "נשק כימי",
+          "מתקפה כימית",
+          "גז רעיל",
+          "סארין"
+        ],
+        [
+          "חומרי נפץ",
+          "מטען חבלה",
+          "מכונית תופת",
+          "פצצת צינור"
+        ]
+      ],
+      "hi": [
+        [
+          "रासायनिक हथियार",
+          "रासायनिक हमला",
+          "जहरीली गैस",
+          "सरीन"
+        ],
+        [
+          "विस्फोटक",
+          "पाइप बम",
+          "कार बम",
+          "आईईडी"
+        ]
+      ],
+      "id": [
+        [
+          "senjata kimia",
+          "serangan kimia",
+          "gas beracun",
+          "sarin"
+        ],
+        [
+          "bahan peledak",
+          "bom rakitan",
+          "bom mobil",
+          "bom pipa"
+        ]
+      ],
+      "it": [
+        [
+          "armi chimiche",
+          "attacco chimico",
+          "gas tossico",
+          "sarin"
+        ],
+        [
+          "esplosivi",
+          "ordigno artigianale",
+          "autobomba",
+          "bomba a tubo"
+        ]
+      ],
+      "ps": [
+        [
+          "کیمیاوي وسلې",
+          "کیمیاوي برید",
+          "زهرجن ګاز",
+          "سارین"
+        ],
+        [
+          "چاودېدونکي توکي",
+          "لاس جوړ بم",
+          "موټر بم",
+          "ماین"
+        ]
+      ],
+      "pt": [
+        [
+          "armas químicas",
+          "ataque químico",
+          "gás tóxico",
+          "sarin"
+        ],
+        [
+          "explosivos",
+          "bomba caseira",
+          "carro-bomba",
+          "engenho explosivo"
+        ]
+      ],
+      "ru": [
+        [
+          "химическое оружие",
+          "химическая атака",
+          "отравляющий газ",
+          "зарин"
+        ],
+        [
+          "взрывчатка",
+          "самодельное взрывное устройство",
+          "заминированный автомобиль",
+          "бомба"
+        ]
+      ],
+      "so": [
+        [
+          "hubka kiimikada",
+          "weerar kiimiko",
+          "gaas sun ah",
+          "sarin"
+        ],
+        [
+          "walxaha qarxa",
+          "bambo",
+          "gaari qarax",
+          "miino"
+        ]
+      ],
+      "sw": [
+        [
+          "silaha za kemikali",
+          "shambulio la kemikali",
+          "gesi yenye sumu",
+          "sarin"
+        ],
+        [
+          "vilipuzi",
+          "bomu la kutengenezwa",
+          "gari la bomu",
+          "bomu"
+        ]
+      ],
+      "tr": [
+        [
+          "kimyasal silah",
+          "kimyasal saldırı",
+          "zehirli gaz",
+          "sarin"
+        ],
+        [
+          "patlayıcı",
+          "el yapımı patlayıcı",
+          "bombalı araç",
+          "boru bomba"
+        ]
+      ],
+      "ur": [
+        [
+          "کیمیائی ہتھیار",
+          "کیمیائی حملہ",
+          "زہریلی گیس",
+          "سارین"
+        ],
+        [
+          "دھماکہ خیز مواد",
+          "دیسی ساختہ بم",
+          "کار بم",
+          "پائپ بم"
+        ]
+      ]
+    },
+    "native_query_context": {
+      "bn": [
+        "সন্ত্রাসবাদ",
+        "সন্ত্রাসী",
+        "জঙ্গি"
+      ],
+      "de": [
+        "Terrorismus",
+        "Terroristen",
+        "Terroranschlag"
+      ],
+      "es": [
+        "terrorismo",
+        "terroristas",
+        "atentado terrorista"
+      ],
+      "fa": [
+        "تروریسم",
+        "تروریست",
+        "حمله تروریستی"
+      ],
+      "ha": [
+        "ta'addanci",
+        "'yan ta'adda",
+        "Boko Haram",
+        "ISWAP"
+      ],
+      "he": [
+        "טרור",
+        "מחבלים",
+        "פיגוע"
+      ],
+      "hi": [
+        "आतंकवाद",
+        "आतंकवादी",
+        "आतंकी"
+      ],
+      "id": [
+        "terorisme",
+        "teroris",
+        "serangan teror"
+      ],
+      "it": [
+        "terrorismo",
+        "terroristi",
+        "attentato terroristico"
+      ],
+      "ps": [
+        "ترهګري",
+        "ترهګر",
+        "ترهګریز برید"
+      ],
+      "pt": [
+        "terrorismo",
+        "terroristas",
+        "atentado terrorista"
+      ],
+      "ru": [
+        "терроризм",
+        "террорист",
+        "теракт"
+      ],
+      "so": [
+        "argagixiso",
+        "argagixisada",
+        "Al-Shabaab",
+        "Daacish"
+      ],
+      "sw": [
+        "ugaidi",
+        "magaidi",
+        "shambulio la kigaidi"
+      ],
+      "tr": [
+        "terör",
+        "terörist",
+        "terör saldırısı"
+      ],
+      "ur": [
+        "دہشت گردی",
+        "دہشت گرد",
+        "دہشتگرد"
+      ]
+    },
+    "native_query_note": "Shared daily and historical discovery seeds for 16 additional codes. Existing query text is preserved; not a full translation of every English keyword or proof of successful source coverage."
   }
 }

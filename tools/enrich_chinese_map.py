@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Gemini-only, resumable six-month history for eight Map topics in two Chinese scripts.
+"""Resumable six-month history for eight Map topics in two Chinese scripts.
 
-Search editions are discovery hints, NEVER event locations or proof of relevance.
-Runs off the ordinary GEMINI enrichment ledger (no extra daily allowance), in
-bounded batches. Checkpoints and publication metadata are separate from CBRNE.
-No Qwen / Ollama dependency, no automatic background bulk processing.
+The active workflow selects Groq with CT_ATLAS_BACKFILL_PROVIDER=groq;
+manual Gemini fallback uses its existing separate ledger. Historical Gemini
+filenames are retained so that source/review checkpoints do not restart.
+Search editions are hints, NEVER event locations or proof of relevance.
+No Qwen/Ollama dependency. This runner is not the ordinary daily collector.
 """
 from __future__ import annotations
 

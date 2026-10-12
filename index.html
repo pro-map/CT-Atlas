@@ -5455,9 +5455,9 @@ Visible rate
                 <div class="value" id="railCountries">—</div>
                 <div class="label">Countries</div>
             </div>
-            <div class="mini-metric" title="11 non-English source languages translated into English; 12 collection languages in total including English.">
-                <div class="value">10</div>
-                <div class="label">Translated languages</div>
+            <div class="mini-metric" title="Configured source coverage: 20 languages / 21 codes, including two Chinese writing systems. Some editions search specialist topics only. This is not a completed-translation count.">
+                <div class="value" id="railTranslationLanguages">19</div>
+                <div class="label">Translation languages</div>
             </div>
             <div class="mini-metric">
                 <div class="value" id="collectionQueryCount">—</div>
@@ -5520,8 +5520,8 @@ Visible rate
 
       <div class="health-section">
         <div class="health-section-title">COLLECTION</div>
-        <div class="health-row"><span>Collection languages</span><strong id="healthCollectionLanguages">12 total</strong></div>
-        <div class="health-row"><span>Translated languages</span><strong id="healthTranslatedLanguages">11 → English</strong></div>
+        <div class="health-row"><span>Configured source coverage</span><strong id="healthCollectionLanguages">20 languages / 21 codes</strong></div>
+        <div class="health-row"><span>Translation configured</span><strong id="healthTranslatedLanguages">19 languages → English</strong></div>
         <div class="health-row"><span>Search queries</span><strong id="healthQueryCount">—</strong></div>
         <div class="health-row"><span>Retention window</span><strong id="healthRetention">180 days</strong></div>
       </div>
@@ -12155,8 +12155,10 @@ let ctAtlasRuntimeConfig = {
   update_times: ["10:17", "18:17"],
   timezone: "Europe/Paris",
   ai_selection_threshold: 60,
-  collection_languages: 12,
-  translated_languages: 11,
+  collection_languages: 20,
+  translated_languages: 19,
+  language_variants: 21,
+  translated_language_variants: 20,
   retention_days: 180
 };
 
@@ -12172,12 +12174,13 @@ function applyCtAtlasRuntimeConfig(config) {
     : "";
   if (times) set("healthSchedule", times);
   set("healthThreshold", "≥ " + Number(ctAtlasRuntimeConfig.ai_selection_threshold || 60) + " / 100");
-  set("healthCollectionLanguages", Number(ctAtlasRuntimeConfig.collection_languages || 12) + " total");
-  set("healthTranslatedLanguages", Number(ctAtlasRuntimeConfig.translated_languages || 11) + " → English");
+  set("healthCollectionLanguages", Number(ctAtlasRuntimeConfig.collection_languages || 20) + " languages / " + Number(ctAtlasRuntimeConfig.language_variants || 21) + " codes");
+  set("healthTranslatedLanguages", Number(ctAtlasRuntimeConfig.translated_languages || 19) + " languages → English");
+  set("railTranslationLanguages", Number(ctAtlasRuntimeConfig.translated_languages || 19));
   set("healthRetention", Number(ctAtlasRuntimeConfig.retention_days || 180) + " days");
   const note = document.getElementById("healthStatusNote");
   if (note && ctAtlasRuntimeConfig.timezone) {
-    note.textContent = "Status reflects the current application configuration and the database loaded by this page. Schedule timezone: " + ctAtlasRuntimeConfig.timezone + ". External services such as Gemini and GitHub may experience delays, quota changes or service changes.";
+    note.textContent = "Language counts describe configured searches, not completed coverage; some editions search specialist topics only. Status also reflects the database loaded by this page. Schedule timezone: " + ctAtlasRuntimeConfig.timezone + ". External services such as Gemini and GitHub may experience delays, quota changes or service changes.";
   }
 }
 

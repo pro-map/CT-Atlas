@@ -64,9 +64,11 @@ class PlanTests(unittest.TestCase):
         day = {**task, "start": "2026-09-21", "end": "2026-09-22"}
         self.assertEqual(enrich_archive.split(day), [])
 
-    def test_the_daily_collection_profiles_are_not_changed(self):
-        codes = {profile["code"] for profile in collector.MULTILINGUAL_PROFILES}
+    def test_general_archive_replay_stays_frozen_after_daily_specialist_expansion(self):
+        codes = {profile["code"] for profile in collector.HISTORICAL_REPLAY_PROFILES}
         self.assertFalse({"hi", "bn", "id", "so", "ha"} & codes)
+        daily = {profile["code"] for profile in collector.MULTILINGUAL_PROFILES}
+        self.assertTrue({"hi", "bn", "id", "so", "ha", "sw"} <= daily)
 
 
 class UrlTests(unittest.TestCase):
