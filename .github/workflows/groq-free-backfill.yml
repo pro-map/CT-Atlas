@@ -10,9 +10,10 @@ on:
     paths:
       - .github/workflows/groq-free-backfill.yml
   schedule:
-    # Three staggered checkpointed runs. Own UTC-day free-tier budget stops
+    # Two-hour checkpointed runs. Read-only preflight skips exhausted budgets.
+    # Own UTC-day internal budget stops
     # further calls automatically even after manual dispatches / reruns.
-    - cron: "45 11,17,23 * * *"
+    - cron: "45 */2 * * *"
       timezone: Europe/Paris
   workflow_dispatch:
     inputs:
@@ -38,7 +39,26 @@ concurrency:
   queue: max
 
 jobs:
+  budget:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      run_needed: ${{ steps.check.outputs.run_needed }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Read remaining historical allocation without calling AI
+        id: check
+        env:
+          GROQ_MAINTENANCE_ONLY: ${{ (github.event_name == 'push' && !startsWith(github.event.head_commit.message, '[resume-groq-history]')) || (inputs.specialist_posts == '0' && inputs.chinese_posts == '0') }}
+        run: python3 tools/groq_backfill_runtime.py preflight
+
   backfill:
+    needs: budget
+    if: needs.budget.outputs.run_needed == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 105
     outputs:
@@ -70,6 +90,7 @@ jobs:
           set -euo pipefail
           test -n "$GROQ_API_KEY" || { echo "::error::GROQ_API_KEY Actions secret missing"; exit 1; }
           python -m unittest discover -s tests -p 'groq_backfill_test.py' -v
+          python -m unittest discover -s tests -p 'groq_backfill_runtime_test.py' -v
           python -m unittest discover -s tests -p 'repair_weak_incident_ids_test.py' -v
           python -m unittest discover -s tests -p 'backfill_record_integrity_test.py' -v
           python -m unittest discover -s tests -p 'backfill_publication_guard_test.py' -v
@@ -128,7 +149,7 @@ jobs:
         run: |
           set -euo pipefail
           python -u tools/enrich_threat_categories.py \
-            --max-posts "$POSTS" --max-fetches 270 --deadline-minutes 31
+            --max-posts "$POSTS" --max-fetches 270 --deadline-minutes 12
       - name: Resume eight other Map topics in Simplified and Traditional Chinese
         id: chinese
         timeout-minutes: 40
@@ -138,7 +159,7 @@ jobs:
         run: |
           set -euo pipefail
           python -u tools/enrich_chinese_map.py \
-            --max-posts "$POSTS" --max-fetches 140 --deadline-minutes 35
+            --max-posts "$POSTS" --max-fetches 140 --deadline-minutes 12
       - name: Refuse record-key collisions or retired IDs after replay
         if: success()
         run: python tools/backfill_record_integrity.py events.json --check
@@ -223,6 +244,8 @@ jobs:
             archive/chemical-explosives-v1-seen-*.txt
             archive/gemini-chinese-map-v1-seen-*.txt
             quota/groq-oss120b-public-backfill.json
+            quota/groq-history-telemetry/
+            archive/groq-history-review-cache-v1.json
           retention-days: 7
           if-no-files-found: ignore
       - name: Commit both resumable history lanes and dedicated Groq quota
@@ -306,8 +329,8 @@ jobs:
                   if not f.exists(): continue
                   obj=json.loads(f.read_text(encoding="utf-8"))
                   if name.startswith("quota/"):
-                      out.write(f"- Groq UTC-day attempts: {obj.get('requests',0)}/24; "
-                                f"reserved tokens: {obj.get('reserved_tokens',0)}/120000\n")
+                      out.write(f"- Groq UTC-day attempts: {obj.get('requests',0)}/{obj.get('request_cap',32)}; "
+                                f"reserved tokens: {obj.get('reserved_tokens',0)}/{obj.get('token_cap',160000)}\n")
                   elif "threat" in name:
                       counts={k:v.get("pending_searches") for k,v in obj.get("categories",{}).items()}
                       out.write(f"- CBRNE pending search units: {counts}\n")
