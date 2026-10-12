@@ -38,7 +38,8 @@ const ADMIN_DISPLAY_NAMES=Object.freeze({
   "group-s-8":"Bigdan",
   "group-s-9":"Nadim",
   "group-s-10":"Abdelraoouf",
-  "group-s-11":"Adrien CBRN"
+  "group-s-11":"Adrien CBRN",
+  "group-s-12":"Vincent Danjean"
 });
 
 function withAdminDisplayName(row){
