@@ -1,0 +1,53 @@
+name: Prepare Custom Intelligence Chinese change
+
+# Branch-only source preparation. Remove this helper through the connector before PR.
+on:
+  push:
+    branches: [feat/custom-intelligence-chinese-20261012]
+    paths:
+      - tools/_apply_custom_chinese_once.py
+      - .github/workflows/_apply-custom-chinese-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    if: github.repository == 'pro-map/CT-Atlas'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: feat/custom-intelligence-chinese-20261012
+      - name: Apply only the hash-checked source edits
+        run: python3 tools/_apply_custom_chinese_once.py
+      - name: Check syntax, coverage and exact tested output
+        run: |
+          node --input-type=module --check < cloudflare-worker/deep-search.js
+          node --check deep-search.js
+          node --test tests/custom-intelligence-chinese.test.cjs tests/deep-search-recall.test.cjs tests/deep-search-gemini-retry.test.cjs
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          expected = {
+              'cloudflare-worker/deep-search.js': '2b341b577e740ddf31f6e06953d77ec6c14d9ccf',
+              'deep-search.js': '05f1bcd0ffd9f67e60efe12f8d38cc72235ce339',
+              'tests/deep-search-recall.test.cjs': '7373f2717673c724fd8730efb5bbd1d548cfe7aa',
+              'tests/custom-intelligence-chinese.test.cjs': '3944e989a16d6233a42f0cf71bd8fca5589576da',
+          }
+          for path, sha in expected.items():
+              raw = Path(path).read_bytes()
+              actual = hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest()
+              if actual != sha:
+                  raise SystemExit('Unexpected prepared file: ' + path)
+          PY
+      - name: Commit the four intended files and remove the one-time editor
+        run: |
+          set -euo pipefail
+          git config user.name 'CT Intelligence Map Bot'
+          git config user.email 'actions@github.com'
+          git add -- cloudflare-worker/deep-search.js deep-search.js tests/deep-search-recall.test.cjs tests/custom-intelligence-chinese.test.cjs
+          git rm -- tools/_apply_custom_chinese_once.py
+          git commit -m 'Add Simplified and Traditional Chinese to Custom Intelligence'
+          git push origin HEAD:refs/heads/feat/custom-intelligence-chinese-20261012
