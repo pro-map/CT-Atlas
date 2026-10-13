@@ -1,15 +1,15 @@
 {
- "updated_at": "2026-10-13T02:19:19.213947+00:00",
+ "updated_at": "2026-10-13T09:48:26.361955+00:00",
  "version": 1,
  "anchor": "2026-10-08",
  "from": "2026-04-11",
  "through": "2026-10-08",
  "window_days": 180,
  "taxonomy_version": "threat-topics-v1-20261008",
- "batch_started_at": "2026-10-13T02:15:29.516875+00:00",
+ "batch_started_at": "2026-10-13T09:45:38.609321+00:00",
  "batch_status": "partial",
  "model_backend": "groq-free-public-news",
- "run_id": "38335969803",
+ "run_id": "38378523820",
  "daily_collection": "collector.py; shared keyword vocabulary; regular daily schedule",
  "chemical_keywords": "User-supplied vocabulary reviewed on 2026-10-08: 95 specific terms retained; 5 ambiguous contamination terms excluded",
  "categories": {
@@ -34,6 +34,7 @@
    },
    "processing_complete": false,
    "complete": false,
+   "backfill_status": "cancelled",
    "coverage_issues": {
     "query_errors": 0,
     "full_single_day": 2,
@@ -41,23 +42,7 @@
    },
    "coverage_note": "Historical source errors are retained; processed is not an exhaustive-coverage claim.",
    "last_run": {
-    "tasks_done": 0,
-    "fetched": 0,
-    "candidates": 0,
-    "skipped": 0,
-    "skipped_cached": 0,
-    "reviewed": 3,
-    "kept": 0,
-    "archived_incident": 0,
-    "unanswerable": 0,
-    "source_failures": 0,
-    "query_errors": 0,
-    "split": 0,
-    "given_up": 0,
-    "queued_candidates": 17,
-    "stop": "Groq GPT-OSS-120B budget used (1)",
-    "integrated_reports": 171,
-    "new_event_records": 0
+    "stop": "Cancelled by user; saved progress preserved"
    },
    "state_updated_at": "2026-10-13T02:15:43.429687+00:00",
    "native_query_languages": [
@@ -88,7 +73,7 @@
   "Chemicals and Explosives": {
    "planned_searches": 3429,
    "pending_searches": 1923,
-   "queued_candidates": 31,
+   "queued_candidates": 25,
    "completed_searches": 1506,
    "successful_main_queries": 1506,
    "rejected_queries": 0,
@@ -107,20 +92,20 @@
     "candidates": 0,
     "skipped": 0,
     "skipped_cached": 0,
-    "reviewed": 0,
-    "kept": 0,
-    "archived_incident": 0,
+    "reviewed": 6,
+    "kept": 5,
+    "archived_incident": 5,
     "unanswerable": 0,
     "source_failures": 0,
     "query_errors": 0,
     "split": 0,
     "given_up": 0,
-    "queued_candidates": 31,
-    "stop": "Groq per-run request cap reached",
-    "integrated_reports": 430,
-    "new_event_records": 0
+    "queued_candidates": 25,
+    "stop": "Groq GPT-OSS-120B budget used (2)",
+    "integrated_reports": 433,
+    "new_event_records": 2
    },
-   "state_updated_at": "2026-10-13T02:18:07.078392+00:00",
+   "state_updated_at": "2026-10-13T09:47:15.434036+00:00",
    "native_query_languages": [
     "ar",
     "bn",
@@ -181,7 +166,7 @@
     "integrated_reports": 41,
     "new_event_records": 0
    },
-   "state_updated_at": "2026-10-13T02:19:19.208548+00:00",
+   "state_updated_at": "2026-10-13T09:48:26.354975+00:00",
    "native_query_languages": [
     "ar",
     "bn",
@@ -210,8 +195,8 @@
  },
  "complete": false,
  "processing_complete": false,
- "requests_this_run": 4,
+ "requests_this_run": 3,
  "searches_this_run": 0,
  "current_category": null,
- "completion_meaning": "Configured queries processed, not a guarantee that all real-world cases were found."
+ "completion_meaning": "Enabled categories only; cancelled backfills are not completed. Processed queries do not guarantee all real-world cases were found."
 }

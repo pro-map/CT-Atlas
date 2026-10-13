@@ -589,7 +589,7 @@
     "UK Government / Counter-Terrorism",
     "INTERPOL English News"
   ],
-  "last_updated": "2026-10-13T02:21:44.968952+00:00",
+  "last_updated": "2026-10-13T09:50:52.592250+00:00",
   "number_of_events": 4406,
   "events": [
     {
@@ -41371,6 +41371,86 @@
       "ai_geo_inferred": false
     },
     {
+      "id": "32cac00d9ca44763",
+      "category": "Chemicals and Explosives",
+      "categories": [
+        "Chemicals and Explosives"
+      ],
+      "title": "Foiled terrorist attack in Pasto after seizure of 83 kilograms of explosives",
+      "summary": "Authorities seized 83 kg of explosives in Pasto, preventing a planned terrorist attack. No group was identified in the report.",
+      "original_title": "Frustran atentado terrorista en Pasto tras incautación de 83 kilos de explosivos",
+      "original_summary": "Frustran atentado terrorista en Pasto tras incautación de 83 kilos de explosivos Blu Radio",
+      "original_language": "es",
+      "collection_language": "es",
+      "collection_language_name": "Spanish",
+      "collection_locale": "ES:es",
+      "published": "2026-10-09T00:37:21+00:00",
+      "source": "Blu Radio",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNN21TY05kY3ozQTJ5SC1XU0Jkc2dwUGppOFVrRWFvYUxKQTdFeUhMTU9qNW54Nl9NSVpVdU5ZUlNHSFI0cFdsakI5SGljdHVpRHo5WU95aVFhVEhjRHY0N2R1aVNNRjVhd1JCclA2eXlrc0RzMmpUOHdhRGgtVERTTHl5X3hnVEl4SmR6c2NxMlItVnlrd01EZVRxdVBIaUhrYTBKcldPVUdwVVBodGhtNVRvMURCT3RB0gHGAUFVX3lxTE52NDBrblVuTENKSks2c0c1Umc2M0ZWOEF4VllFZzRIWUxyQU55MHVldFJlbFVRZDFFcHRoTUZIcFBXZUZpYW9BbFZUZmRmRUZITHVkTW5fd1lfRHd4WVVNc2hsbGNKZEgxaGRib2FWWV9FWkd1ZjFVTnRTaHQtenFlTEdtbE9aa3ZhcGN3dDdnQmNCcXpjRDZHS2I5dm1ZODdnbTdKb21HdVEzTDBTZkJ6SC1DUV9SbzdfM2lXalZMWWFXNE0wZw?oc=5",
+      "collector": "Google News RSS",
+      "country": "Colombia",
+      "country_code": "CO",
+      "city": "Pasto",
+      "region": null,
+      "latitude": 1.21456,
+      "longitude": -77.27846,
+      "location_precision": "city",
+      "location_confidence": "high",
+      "acquisition_channel": "archive_enrichment",
+      "source_article_fingerprints": [
+        "c9b96081ba37c4d7195a7419267b92454c160ab84b84c1a5886404fc7ceb55b7"
+      ],
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "openai/gpt-oss-120b",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "The article reports a concrete, newly disclosed disruption of a terrorist plot involving a large explosives seizure, qualifying as a current CT event.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "DISRUPTED_PLOT",
+      "is_attack": false,
+      "incident_anchor": "p0",
+      "update_type": "INITIAL",
+      "incident_id": "inc-4301d6efb8f93f1c",
+      "translated_to_english": true,
+      "ai_canonical_event": "foiled attack explosives Pasto",
+      "title_variants": [
+        "foiled attack explosives Pasto"
+      ],
+      "actor_scope": "NON_STATE",
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
+      "cbrn_subgroups": [],
+      "reported_status": "CONFIRMED",
+      "sources": [
+        "Blu Radio"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-09T00:37:21+00:00",
+      "last_reported": "2026-10-09T00:37:21+00:00",
+      "location_confidence_score": 1.0,
+      "location_method": "ai_city_geonames",
+      "location_evidence": [
+        "Authorities seized 83 kg of explosives in Pasto, preventing a planned terrorist attack."
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The text explicitly specifies that the thwarted terrorist attack and explosive seizure occurred in Pasto, Colombia.",
+      "ai_geo_fingerprint": "19129ce82189b0751f12d243b50b557ce48b51eceba54e24e51f48dab090b86c",
+      "ai_geo_inferred": false
+    },
+    {
       "id": "4d812c6c92877b33",
       "category": "Attacks",
       "categories": [
@@ -42100,6 +42180,86 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Context establishes the country as Mexico.",
       "ai_geo_fingerprint": "364ccf62d0e4e8a64fb27a710b3bdc5db26c6fafb30d02d156e4635dc4e57097",
+      "ai_geo_inferred": false
+    },
+    {
+      "id": "0061c1d62007bc41",
+      "category": "Chemicals and Explosives",
+      "categories": [
+        "Chemicals and Explosives"
+      ],
+      "title": "Pharmacy student in Jerusalem accused of planning murder of Jews with explosives and poison",
+      "summary": "Authorities allege that a pharmacy student in Jerusalem was planning to kill Jews using explosives and toxic chemicals.",
+      "original_title": "Acusan a estudiante de Farmacia de Jerusalén de planear asesinato de judíos con explosivos y veneno",
+      "original_summary": "Acusan a estudiante de Farmacia de Jerusalén de planear asesinato de judíos con explosivos y veneno JNS.org",
+      "original_language": "es",
+      "collection_language": "es",
+      "collection_language_name": "Spanish",
+      "collection_locale": "ES:es",
+      "published": "2026-10-08T21:50:09+00:00",
+      "source": "JNS.org",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxNdy1PVzI1NXpxR2x1R0xxZThrSzZZNGlvUWlnS29rbjBtU2xXR0wyYV9HdzhvRjhSVjdYRlBiT3ZsOUdXOW9wTHNzaXpzSXlSLWlGOGdyZldaOG9yUUJLcEg1Wmh1ZkRpeUJxVnN2R2VfeV9Ra0xmNEU4ejJSY3R4RGZ4MjZ4cWdqTmVBN1RsTHgybXdMSDJFUWpKQ2o1aFAtUTdiLVl5SnlUMFh1Z3BDSXRhMk15MkdkNHgxaWIyNmVxVWNKcDNsd3VBVDJmeEZzNXFINkxXbnB1WXlndmFJ?oc=5",
+      "collector": "Google News RSS",
+      "country": "Israel",
+      "country_code": "IL",
+      "city": "Jerusalem",
+      "region": null,
+      "latitude": 31.76904,
+      "longitude": 35.21633,
+      "location_precision": "city",
+      "location_confidence": "high",
+      "acquisition_channel": "archive_enrichment",
+      "source_article_fingerprints": [
+        "d59d447ca62424999ecace9913a064a2e76615f5dd23671815180059b83ed9d5"
+      ],
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "openai/gpt-oss-120b",
+      "ai_relevance_score": 65,
+      "ai_relevance_reason": "The piece describes an alleged plan to carry out an attack using explosives and poison, representing a potential terrorist attack under investigation.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ATTEMPTED_ATTACK",
+      "is_attack": false,
+      "incident_anchor": "p2",
+      "update_type": "INITIAL",
+      "incident_id": "inc-fa47321abf5a099a",
+      "translated_to_english": true,
+      "ai_canonical_event": "Alleged plot by Jerusalem pharmacy student to use explosives and poison",
+      "title_variants": [
+        "Alleged plot by Jerusalem pharmacy student to use explosives and poison"
+      ],
+      "actor_scope": "UNKNOWN",
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
+      "cbrn_subgroups": [],
+      "reported_status": "ALLEGED",
+      "sources": [
+        "JNS.org"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-08T21:50:09+00:00",
+      "last_reported": "2026-10-08T21:50:09+00:00",
+      "location_confidence_score": 1.0,
+      "location_method": "ai_city_geonames",
+      "location_evidence": [
+        "Pharmacy student in Jerusalem accused of planning murder of Jews with explosives and poison"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The suspect is a pharmacy student in Jerusalem accused of planning attacks there.",
+      "ai_geo_fingerprint": "c562dc6ae8a6febe6c6e8202931277164d03e23511ab0632d5fc2cfb63977b6e",
       "ai_geo_inferred": false
     },
     {
@@ -50853,7 +51013,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Reported by the Algeria Press Service (APS) regarding counter-terrorism operations within Algeria.",
       "ai_geo_fingerprint": "928a671cfc55bf2dd79570c218e6566bad1b92b43652cdbcafffd058f94dcff3",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url"
+      ]
     },
     {
       "id": "4dffdc21164e2050",
@@ -66073,9 +66237,10 @@
       "ai_geo_reason": "Six Egyptian journalists facing terrorism charges in Egypt.",
       "ai_geo_fingerprint": "55082648099af8ccc177d97eba0c62d7ba702224986f09640286d3fd7bc95dd7",
       "ai_geo_inferred": false,
-      "dedup_confidence": 0.678,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "paraphrase_entity_context"
+        "paraphrase_entity_context",
+        "same_url"
       ]
     },
     {
@@ -69729,7 +69894,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Refers to US soldiers and an execution approved by US authorities.",
       "ai_geo_fingerprint": "3272df0f8de5453c5d6b407d3dd6961642be64aea6e3db8083db5cff70aca9f0",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url"
+      ]
     },
     {
       "id": "d1f269022459b2fa",
@@ -70213,6 +70382,83 @@
       "ai_geo_reason": "Event is located in the Strait of Hormuz.",
       "ai_geo_fingerprint": "6a8ee4ed66e66768a1e6befa90061807b2c75a8f0dd02102688b1056e9d96815",
       "ai_geo_inferred": false
+    },
+    {
+      "id": "4425908dd1a5bbdf",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "title": "Northwest operation kills 5 terrorists, prime minister reiterates resolve to eradicate terrorism",
+      "summary": "Security forces carried out an operation in the northwest that resulted in the death of five suspected terrorists.",
+      "original_title": "西北部行动击毙5名恐怖分子总理重申铲除恐怖主义决心",
+      "original_summary": "西北部行动击毙5名恐怖分子总理重申铲除恐怖主义决心 | Associated Press Of Pakistan",
+      "original_language": "zh",
+      "collection_language": "zh",
+      "collection_language_name": "Chinese (Simplified)",
+      "collection_locale": "CN:zh-Hans",
+      "published": "2026-10-07T01:24:15+00:00",
+      "source": "| Associated Press Of Pakistan",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE9Fa2ZHR3Nha25PT1RqbGhtTkJJTTRwR1dSVGlSSnRXSFc4blpVMEtlUzVrazFHVHdjOGphTjBWRzNtZ29WVVdEb09DblgwU3NIR2prV0xSOA?oc=5",
+      "collector": "Google News RSS",
+      "country": "Pakistan",
+      "country_code": "PK",
+      "city": null,
+      "region": "Northwest Pakistan",
+      "latitude": 33.6844,
+      "longitude": 73.0479,
+      "location_precision": "region",
+      "location_confidence": "medium",
+      "acquisition_channel": "archive_enrichment",
+      "source_article_fingerprints": [
+        "8812649933fa639dbfb9225c4ad121cd11ced97d127b3086b9b891235bb39b22"
+      ],
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "openai/gpt-oss-120b",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Concrete report of a counter‑terrorism raid resulting in fatalities, representing a new operational development.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "is_attack": false,
+      "incident_anchor": "p1",
+      "update_type": "INITIAL",
+      "incident_id": "inc-a9495ea748a50f99",
+      "translated_to_english": true,
+      "ai_canonical_event": "security operation kills five terrorists in northwest",
+      "title_variants": [
+        "security operation kills five terrorists in northwest"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "reported_status": "CONFIRMED",
+      "sources": [
+        "| Associated Press Of Pakistan"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-07T01:24:15+00:00",
+      "last_reported": "2026-10-07T01:24:15+00:00",
+      "location_confidence_score": 0.8,
+      "location_method": "ai_region_coordinates",
+      "location_evidence": [
+        "Associated Press Of Pakistan article about a northwest operation killing 5 terrorists and the prime minister reiterating resolve."
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The source is the Associated Press of Pakistan, and the operation took place in the northwest region of the country.",
+      "ai_geo_fingerprint": "df441fae2fe5e7341851ec49f3b48f4b2e890c1bdc1327e830f2d04247eca537",
+      "ai_geo_inferred": true
     },
     {
       "id": "96a91c881a49f85a",
@@ -82193,7 +82439,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Refers to the perpetrator of the Fort Hood (Hoodoo) shooting in Texas, USA.",
       "ai_geo_fingerprint": "672dc673b35ecb5226dfe543ef378ad521d63dfa961d3ee44646e40b845ad3cb",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url"
+      ]
     },
     {
       "id": "d1a02fa33ee57ecb",
@@ -129241,7 +129491,7 @@
       "collection_locale": "MX:es-419",
       "published": "2026-10-02T20:40:40+00:00",
       "source": ":.Periodicovirtual.com.:",
-      "source_count": 12,
+      "source_count": 13,
       "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOUmNGYmhIWTZVSHE5amhYQ0VtY29ZSThpeV9wdm1SMWxuNkFvMVIzd200VXhybGk5MVlsNzBVMmJkak9kWVlib3hnTjktTE5mOUR6RUtobnlNLUtoWWxkZkJOYXJMYVpwZEZONEdoQmJKMHdiR250czhzWDRBcXFra0FRLXhNUTJubU9NWFNPTWNna1VselFGNmw1TmNuZ1d5TlhkOG9nMzViSmxtay1XYjdvbw?oc=5",
       "collector": "Google News RSS",
       "country": "Colombia",
@@ -129273,6 +129523,7 @@
         "c4ed74453de929ddee11f48be9cc1910a9f8d0fc7e76346f142b6270779544aa",
         "cde0ce07aadbba12f07b8d43cb14f39a5a5532a48f5326b091278c474085cf27",
         "d96ceca7a2af105e02e15b5279d64fe3919e1614102276b01982c6e157b78992",
+        "f24956f351276857517261c590dc29ab42fea744a60d3cd2790b3521815eb354",
         "fc913d8064fb03f54d84a36b7a085aba0e992e1ab1648a2173c5447a0627f27c"
       ],
       "sources": [
@@ -129287,7 +129538,8 @@
         "Estrella Digital Colombia",
         "El Tiempo",
         "Pulzo",
-        "Revista Semana"
+        "Revista Semana",
+        "NTN24"
       ],
       "related_articles": [
         {
@@ -129433,9 +129685,18 @@
           "published": "2026-10-09T13:00:51+00:00",
           "source": "Pulzo",
           "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNaWZBSlhKc1hTWEZxTHFnWW9yOUdrOXJUeVdoNzlnY1h5UGZsYnlZNV9lVkpPMFQ1NFZxTVhSZGN5ajk5VFQ4TGVVMURNN2hYd0VqckpfSjUtLXdqVHMyVDI2NW1YMmJXd1hnWU5MZURfTDJlZ3hfZEhFb19tZ3NGU1B0c21pa01LWjc2NEk3NnlEYTlieFZPOTBrS25VMjhhOXoyMXpzMVN5bDBjaEdQcXhIRU01ZDdtNUJ4U2lsb9IBxAFBVV95cUxNM3FCVlZOQ2dxc2hhR25iZDRFYTJHb2lFQlJTdW1pR1FEQ1VBTXd1QmJmLURma0hpZzFBVDh1RFM0LTVraTU2a0VmalVjYUhoa1VMaWx1M3FpSEZkbHFhZUJpZUpZaEloc2I5eGF3Qlo5M2JaTzZ0TmFQVDlNaFRCcnB4VVFqNHpNWlR0Ml9MLVljWEwyTnYxcXFKWEcydjRUN216YUMtdUVXRTE1U1FCUjd2d2taUW1OWEFUdms0TVVpdy05?oc=5"
+        },
+        {
+          "title": "Colombian Army destroys high-powered improvised explosives installed in a rural school attended by 25 children",
+          "original_title": "Ejército de Colombia destruyó explosivos improvisados de alto poder instalados en una institución educativa rural frecuentada por 25 menores",
+          "original_language": "es",
+          "summary": "The Colombian Army safely detonated and destroyed improvised high-powered explosives that had been placed in a rural educational institution frequented by 25 minors.",
+          "published": "2026-10-05T22:39:52+00:00",
+          "source": "NTN24",
+          "url": "https://news.google.com/rss/articles/CBMimAJBVV95cUxOZTY4VGc4bmxhUU5IRVE4aGkzUVp1eUI4d2Y1SHZpT1lIaDZfeWtOM0YyTGVFTWNIS1BNaDFlR1NGMkhiRndmNmpvVGVLWHNTbklqNXplcUVobWZtRlI4VG9xRjRlWVh2MElBR3FZVTJMaGNSWHVaa01Lbm1qRDNvelZNT3IySm12Q3FrV2hWOVFZOXpPNm1wYlpLY3owRWJKT3loYkpPV0FLTjlpWVUyMjExZEVqZzZkLUozV0xDUng0UVBFdEQ2bGhfUW10SDg5VjV4bzgtYlBNbW55NjIwYWV2aVlNbXpRS0FMbF93dERrcXZkOWhxNjFSeWtGbDVrbGt2TUI5UElJSVNhVmJZUWFxNzZWVmNP0gGYAkFVX3lxTE1RSkpHTzMwRlVGemZickI1Q3V0c29YOEtxM0p0ZEIyNC1LOFBMTlRJOUlhYUpibFBmeG5HZXlsZVNrTXp2X21OOHRnamJRUDRNTzFMSEUtdDRYNksyZkRYWDRoc1J4X1N3dnN6OUkzZjc5ZTItSFE5NHNhbUswY053eUotcl9xZWFjS2ZkUDh5elZGME9VY1R5RXRxLURPYXZVTVBueE5jZ3V3LWZ6d0NtUHdzNkJsOGZBeXJ5VTdYUm5uOWtYY0EyNmtEVU4xMTFjMFlDV1JCdEZCZzRhMWI2WWZ3TW9CZ282NHRSSDZ5dWRUa0FsT2NJU2xfQ2tQWFF0a0R5Q2pCOGp5dkYzT19zNkNrT1ZSb1Q?oc=5"
         }
       ],
-      "article_count": 17,
+      "article_count": 18,
       "first_reported": "2026-10-02T20:40:40+00:00",
       "last_reported": "2026-10-09T11:55:21+00:00",
       "ai_selection_complete": true,
@@ -141901,7 +142162,7 @@
           "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1RbWY0dURoOFBoY3FsMFZCTXBodkxCMVpORjdRYTBwY3F1aUZpR1hvOW1RSE5GRFZ2LTdDY2Nnd2JFS1NVdjBLMUozYw?oc=5"
         }
       ],
-      "article_count": 114,
+      "article_count": 115,
       "first_reported": "2026-10-02T07:00:00+00:00",
       "last_reported": "2026-10-05T14:43:55+00:00",
       "dedup_confidence": 1.0,
@@ -172232,9 +172493,10 @@
       "article_count": 2,
       "first_reported": "2026-09-30T07:00:00+00:00",
       "last_reported": "2026-09-30T07:00:00+00:00",
-      "dedup_confidence": 0.99,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "same_normalized_title"
+        "same_normalized_title",
+        "same_url"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_country_capital",
@@ -248273,9 +248535,10 @@
       "article_count": 2,
       "first_reported": "2026-09-19T07:00:00+00:00",
       "last_reported": "2026-09-19T07:00:00+00:00",
-      "dedup_confidence": 0.99,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "same_normalized_title"
+        "same_normalized_title",
+        "same_url"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_city_geonames",
@@ -405130,7 +405393,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Explicitly specifies Gujarat, India.",
       "ai_geo_fingerprint": "91fa06c595b26e4ec18401bccf85b302e2d9bd0e4ad5f667f7d64d0f1189350e",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url"
+      ]
     },
     {
       "id": "75c3f40abd6302cf",
@@ -409374,10 +409641,11 @@
       "article_count": 3,
       "first_reported": "2026-08-03T07:00:00+00:00",
       "last_reported": "2026-08-05T07:00:00+00:00",
-      "dedup_confidence": 0.99,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_normalized_title",
-        "paraphrase_entity_context"
+        "paraphrase_entity_context",
+        "same_url"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_city_geonames",
@@ -427711,7 +427979,8 @@
         "paraphrase_entity_context",
         "title_plus_anchor",
         "same_normalized_title",
-        "very_high_title_similarity"
+        "very_high_title_similarity",
+        "same_url"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_city_geonames",
@@ -431632,9 +431901,10 @@
       "article_count": 3,
       "first_reported": "2026-07-06T07:00:00+00:00",
       "last_reported": "2026-07-06T07:00:00+00:00",
-      "dedup_confidence": 0.732,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "actor_country_action_signature"
+        "actor_country_action_signature",
+        "same_url"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_country_capital",
@@ -465734,7 +466004,8 @@
       "last_reported": "2026-04-24T07:00:00+00:00",
       "dedup_confidence": 1.0,
       "dedup_methods": [
-        "very_high_title_similarity"
+        "very_high_title_similarity",
+        "same_url"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_country_capital",
@@ -468909,398 +469180,6 @@
       "dedup_methods": [
         "same_url"
       ]
-    },
-    {
-      "id": "098ad4a486810251",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Legal / Judicial"
-      ],
-      "title": "Rue des Rosiers Attack: Suspect Extradited to French Justice",
-      "summary": "Hicham Harb, a suspect in the 1982 Rue des Rosiers attack, was extradited by the Palestinian Authority and handed over to French judicial authorities.",
-      "original_title": "Attentat de la rue des Rosiers : le suspect Hicham Harb, extradé par l’Autorité palestinienne, a été remis à la justice française",
-      "original_summary": "Attentat de la rue des Rosiers : le suspect Hicham Harb, extradé par l’Autorité palestinienne, a été remis à la justice française Le Monde.fr",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French",
-      "collection_locale": "FR:fr",
-      "published": "2026-04-16T07:00:00+00:00",
-      "source": "Le Monde.fr",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMipAJBVV95cUxQOFVCaGhZdVRLZHJjS3Ita2dubDdhcjJheG1GVllGNWVHSkdVaXBGaUhhampOZzdqVFlMb2xJNjRRS1lkS0hyV2pydk1RZXFpbF82YjZGZmtGeUhFamtQZnJXRHJBWVZvMTNidUNxVG5JSUJHSXZmbXFfTTM2ODdSSTNwVk05cXBUb2pzaXJFRHcxNUpINUR4U21WZXU2aU9nRDFHY3ZFdUtHemhxeUJmbUN3WFNzQXJhQkxScnhtYUMyeDQtNERCUUhKUU1iV3c2WFRZT2hDMTZTTnJOOUk0WHA1VGt2QVEzTnpyekRHZThqQlhudkxYWVVkSERLbXdxaEhFSDhGNTF4anRjanNfdkdSbXd0cUdxUDIxRFoyLU1PVmR2?oc=5",
-      "collector": "Google News RSS",
-      "country": "France",
-      "country_code": "FR",
-      "city": "Paris",
-      "region": null,
-      "latitude": 48.85341,
-      "longitude": 2.3488,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "lemonde.fr",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "Le Monde.fr"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-16T07:00:00+00:00",
-      "last_reported": "2026-04-16T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports a concrete operational and judicial development involving the extradition of a historical terror attack suspect.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Hicham Harb extradited to France regarding the 1982 Rue des Rosiers attack",
-      "title_variants": [
-        "Suspect Hicham Harb extradited by Palestinian Authority and handed over to French justice for Rue des Rosiers attack",
-        "Hicham Harb extradited to France regarding the 1982 Rue des Rosiers attack"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Rue des Rosiers Attack: Suspect Extradited to French Justice"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The historic Rue des Rosiers attack and subsequent judicial handling occurred in Paris, France.",
-      "ai_geo_fingerprint": "936f96c3a0d4e80272620ab02bc1f83b6e49efd843c4e0fafac6c752baa3d828",
-      "ai_geo_inferred": true,
-      "actor_group": "",
-      "incident_id": "inc-f9f02298154d61bb",
-      "primary_event_type": "JUDICIAL",
-      "is_attack": false,
-      "incident_anchor": "Rue des Rosiers attack extradition 2026-04-16",
-      "update_type": "JUDICIAL_UPDATE"
-    },
-    {
-      "id": "8b380d53471eb111",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Legal / Judicial"
-      ],
-      "title": "Russian Show Producer Arrested for 'Calls to Terrorism'",
-      "summary": "A Russian show producer has been arrested on charges of making public calls to terrorism.",
-      "original_title": "Продюсерку российских шоу арестовали за \"призывы к терроризму\". Ранее в Украине погиб ее гражданский муж, служащий в ВСУ",
-      "original_summary": "Продюсерку российских шоу арестовали за \"призывы к терроризму\". Ранее в Украине погиб ее гражданский муж, служащий в ВСУ Настоящее Время",
-      "original_language": "ru",
-      "collection_language": "ru",
-      "collection_language_name": "Russian",
-      "collection_locale": "RU:ru",
-      "published": "2026-04-16T07:00:00+00:00",
-      "source": "Настоящее Время",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOUExCRjV3OWhvVkNJLXo4akVsWXNRUmdoMzh5OUFFUkFQdVdQLV9BQUYwOXJQQzJzU0d2S3U2QlFkSFBHRERpQlp3ZTctMmxCMlJMMTJ6UUNDdVBySDhqMkRhWENjSUNSVE5IMnRvbTZuSmFremNqbVpuU1hEcWoxYm1fME92akpEYTZHcS04YnR3QkRYWDNpMFA0UdIBngFBVV95cUxPMHJUVXdFdjBUdlpDT29mSVpoSXhxdHNXRXBoZV9zMDBuenRoeno4QzVNZllVcDVRaUlfZW9TRnhnbkNkb2JmQkZyQlBOMTI5dGtVMDN5YjJ2NkVGNVdfQlJTOHM0elIwN0J0QWxLaVIwNk1vSDhLNWVqUktCVkIzOGpJcXo5NXNjcjBkWGN1ak5JM1B0NEowOFViRHVCUQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Russia",
-      "country_code": "RU",
-      "city": "Moscow",
-      "region": null,
-      "latitude": 55.75204,
-      "longitude": 37.61781,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "Настоящее Время"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-16T07:00:00+00:00",
-      "last_reported": "2026-04-16T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Reports a concrete arrest on charges of public calls to terrorism.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Russian show producer arrested for calls to terrorism in Russia",
-      "title_variants": [
-        "Russian show producer arrested for calls to terrorism in Russia"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Russian Show Producer Arrested for 'Calls to Terrorism'"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Involves Russian legal actions and authorities against a Russian show producer.",
-      "ai_geo_fingerprint": "d9a1684462013a80069d20cc7cffe654714f06f732aeac957ec8ba5908d34618",
-      "ai_geo_inferred": true,
-      "actor_group": "",
-      "incident_id": "inc-47e7d55914216855",
-      "primary_event_type": "ARREST",
-      "is_attack": false,
-      "incident_anchor": "Russian show producer arrest for calls to terrorism 2026-04-16",
-      "update_type": "INITIAL"
-    },
-    {
-      "id": "2278517dbb9aa0f0",
-      "category": "Legal / Judicial",
-      "categories": [
-        "Legal / Judicial",
-        "Biological Terrorism",
-        "Chemicals and Explosives"
-      ],
-      "title": "Federal Jury Convicts Dallas Man for Mailing Threats to Federal Judges and Hoax Biological Weapons",
-      "summary": "A federal jury in Texas convicted a Dallas man for mailing threats to federal judges and hoax biological weapons to a federal courthouse.",
-      "original_title": "Northern District of Texas | Federal Jury Convicts Dallas Man for Mailing Threats to Federal Judges and Hoax Biological Weapons to Fort Worth Federal Courthouse",
-      "original_summary": "Northern District of Texas | Federal Jury Convicts Dallas Man for Mailing Threats to Federal Judges and Hoax Biological Weapons to Fort Worth Federal Courthouse Department of Justice (.gov)",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-16T07:00:00+00:00",
-      "source": "Department of Justice (.gov)",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPckt5TU9KSTJ5TEt1cWkwc292X3BUODNsd1RGak01eG5kclR5UHpjQkNtb2w4NHc2S2lLODJCQ3IyV3l3VkVSVEpkTlRYZ2NXM0pFRVBGZnZEdFZMaHBwQ2NSUnVkQV9mZVZKUWtSZTV5S3E0TUtHRU43NldsQ2RURFRNbl9reEtkaWRkY1pYc2RTWm9HMkJ3cXBoSVoxNGVwd0VlbktLb1ZMem5tQllTeTRwNVhheHREZ1oydw?oc=5",
-      "collector": "Google News RSS",
-      "country": "United States",
-      "country_code": "US",
-      "city": "Dallas",
-      "region": null,
-      "latitude": 32.78306,
-      "longitude": -96.80667,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "DOJ CBRN reporting",
-      "targeted_source_kind": "official_law_enforcement",
-      "sources": [
-        "Department of Justice (.gov)"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-16T07:00:00+00:00",
-      "last_reported": "2026-04-16T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports a concrete federal jury conviction for threats and hoax biological/chemical-related terror tactics.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "federal jury conviction of Dallas man for mailing threats and hoax biological weapons",
-      "title_variants": [
-        "federal jury conviction of Dallas man for threats and hoax biological weapons in Texas",
-        "federal jury conviction of Dallas man for mailing threats and hoax biological weapons"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Dallas Man... Federal Jury Convicts"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Federal jury trial and conviction took place in Dallas, Texas, USA.",
-      "ai_geo_fingerprint": "dd2b737206dd3387adec0a3d517d7c9ecd3fe3503179fd9583e86167148c2c61",
-      "ai_geo_inferred": false,
-      "actor_group": "",
-      "incident_id": "inc-f70fb348090d506d",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Biological Terrorism",
-        "Chemicals and Explosives"
-      ],
-      "legacy_category": "CBRN",
-      "cbrn_subgroups": [],
-      "primary_event_type": "JUDICIAL",
-      "is_attack": false,
-      "incident_anchor": "Dallas man hoax biological weapons conviction 2026",
-      "update_type": "INITIAL",
-      "actor_scope": "NON_STATE"
-    },
-    {
-      "id": "c3245e3f71f2c6c5",
-      "category": "Radiological/Nuclear",
-      "categories": [
-        "Radiological/Nuclear"
-      ],
-      "title": "Neighbor raises alert regarding suspected radiation in Monterrey",
-      "summary": "Authorities were alerted by a resident regarding suspected radiation in the Desarrollo Urbano Reforma neighborhood of Monterrey.",
-      "original_title": "Alerta vecino por presunta radiación en Desarrollo Urbano Reforma en Monterrey",
-      "original_summary": "Alerta vecino por presunta radiación en Desarrollo Urbano Reforma en Monterrey MILENIO",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish",
-      "collection_locale": "ES:es",
-      "published": "2026-04-16T07:00:00+00:00",
-      "source": "MILENIO",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPTzJ0UGR2UU5yVzdUbXJRc2lkWHFxMkxIVE9ZZm13bzVjUm9XSUtoS21BS3c1N3V4ZFg5allSUXNNYWtscnhYNzdRb0lDVWplYzlKWXlubmlfUjkyV2dESG1yeDROX0E2TUVpVEVYNHpqUUFVdTFqSVZWTEdDQlVrNjZtRGUzTHpiell0TUlNQWpoZFB5cWlZ0gGXAUFVX3lxTE81SHJEYXhFNW9nMWFBaW04WkFlREdXWTI5TTlFLXkxbkI4Tl9TUU9sempxM2MyNzZHUW0ycUhfYnFYNWdORzExdHdUSWVGbTNjT2x4ZHVhU3AwVVpYT0VxT1Fhb2paYzYxN1Bwb1FpTVhlNTUyQ1FZM2RNenVZVU1xYTBLeVZDR1RseW51clpPNTNwbktTQzA?oc=5",
-      "collector": "Google News RSS",
-      "country": "Mexico",
-      "country_code": "MX",
-      "city": "Monterrey",
-      "region": null,
-      "latitude": 25.68435,
-      "longitude": -100.31721,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "038135289232a041f0314297df7720a2d7a4dcb30c2849e6aac858faf8202192"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 60,
-      "ai_relevance_reason": "A report of a potential radiological hazard involving public authorities requires monitoring under the radiological category.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CBRN",
-      "is_attack": false,
-      "incident_anchor": "Suspected radiation Monterrey 2026-04-16",
-      "update_type": "INITIAL",
-      "incident_id": "inc-3dfe0f7673d193ac",
-      "translated_to_english": true,
-      "ai_canonical_event": "Suspected radiation incident in Monterrey",
-      "title_variants": [
-        "Suspected radiation incident in Monterrey"
-      ],
-      "actor_scope": "UNKNOWN",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Radiological/Nuclear"
-      ],
-      "cbrn_subgroups": [
-        "RADNUC"
-      ],
-      "reported_status": "SUSPECTED",
-      "sources": [
-        "MILENIO"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-16T07:00:00+00:00",
-      "last_reported": "2026-04-16T07:00:00+00:00",
-      "location_confidence_score": 1.0,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Alerta vecino por presunta radiación en Desarrollo Urbano Reforma en Monterrey"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The event explicitly occurred in the Desarrollo Urbano Reforma neighborhood in Monterrey, Mexico.",
-      "ai_geo_fingerprint": "f14653d5d16e415c1b6921ee9631878bf122c78b8e85228d8ab9f04668b967c6",
-      "ai_geo_inferred": false,
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_url"
-      ]
-    },
-    {
-      "id": "65b193e211b7248b",
-      "category": "Radiological/Nuclear",
-      "categories": [
-        "Radiological/Nuclear",
-        "Attacks"
-      ],
-      "title": "Suspicious drone incident at Israeli Embassy in the UK",
-      "summary": "Security authorities are investigating reports of drones carrying hazardous substances sent toward the Israeli Embassy in the United Kingdom.",
-      "original_title": "חשד: רחפנים עם חומרים מסוכנים שוגרו לשגרירות ישראל בבריטניה",
-      "original_summary": "חשד: רחפנים עם חומרים מסוכנים שוגרו לשגרירות ישראל בבריטניה כאן 11",
-      "original_language": "he",
-      "collection_language": "he",
-      "collection_language_name": "Hebrew",
-      "collection_locale": "IL:he",
-      "published": "2026-04-16T07:00:00+00:00",
-      "source": "כאן 11",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1VU05sN0hYUWFsWHNQTElZbktLNTlDSC1OVURyVS1xemFKeGhGZGZFcE41UXk5T3ZOZXRuOFBmVHVkNENVMG5Jdnh6dHk4eERzckI2ZzF2TkZndXhHYTlNRzQwTEgxZw?oc=5",
-      "collector": "Google News RSS",
-      "country": "United Kingdom",
-      "country_code": "GB",
-      "city": "London",
-      "region": null,
-      "latitude": 51.50853,
-      "longitude": -0.12574,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "370404753c768c350991a6296e6a10e3f99e55c24a81f4e36a7eeb378bc13986"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "This reports a potential CBRN-related attack (drones with hazardous materials) against a diplomatic mission, which is a significant CT concern.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CBRN",
-      "is_attack": false,
-      "incident_anchor": "Israeli Embassy UK drone incident 2026-04-16",
-      "update_type": "INITIAL",
-      "incident_id": "inc-15bd697ee4f91a2f",
-      "translated_to_english": true,
-      "ai_canonical_event": "Suspicious drone incident at Israeli Embassy",
-      "title_variants": [
-        "Suspicious drone incident at Israeli Embassy"
-      ],
-      "actor_scope": "UNKNOWN",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Radiological/Nuclear"
-      ],
-      "cbrn_subgroups": [
-        "RADNUC"
-      ],
-      "sources": [
-        "כאן 11"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-16T07:00:00+00:00",
-      "last_reported": "2026-04-16T07:00:00+00:00",
-      "location_confidence_score": 0.85,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "שגרירות ישראל בבריטניה (Israeli Embassy in the UK)"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The incident involves drones directed at the Israeli Embassy in the United Kingdom.",
-      "ai_geo_fingerprint": "b03b55823eaf6b5e5fdf6e0163bee2bc52d1db8db2802a4616ee04487ecf7e60",
-      "ai_geo_inferred": true,
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_url"
-      ]
     }
   ],
   "geolocation": {
@@ -469315,21 +469194,21 @@
     "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
     "rescue_unlocated_final": 21,
     "ai_for_every_event": true,
-    "cached_events": 4406,
-    "ai_processed_this_run": 11,
-    "ai_pending_at_start": 11,
-    "city": 1714,
-    "region": 1288,
-    "country_capital": 1390,
+    "cached_events": 4412,
+    "ai_processed_this_run": 3,
+    "ai_pending_at_start": 3,
+    "city": 1713,
+    "region": 1289,
+    "country_capital": 1388,
     "unlocated": 25,
-    "mapped_total": 4392,
-    "high_confidence": 4082,
-    "medium_confidence": 317,
+    "mapped_total": 4390,
+    "high_confidence": 4079,
+    "medium_confidence": 318,
     "low_confidence": 18,
     "methods": {
-      "ai_region_coordinates": 1284,
-      "ai_country_capital": 1389,
-      "ai_city_geonames": 1595,
+      "ai_region_coordinates": 1285,
+      "ai_country_capital": 1387,
+      "ai_city_geonames": 1594,
       "ai_city_coordinates": 110,
       "ai_unlocated": 3,
       "ai_unlocated_final": 21,
