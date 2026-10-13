@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-13T10:33:58.731444+00:00",
+ "updated_at": "2026-10-13T21:23:52.428628+00:00",
  "archive_only": true,
  "category": "Radiological/Nuclear",
  "topic_ids": [
@@ -40,20 +40,20 @@
  "lookback_days": 3,
  "backfill": false,
  "counts": {
-  "searched": 50,
+  "searched": 39,
   "source_errors": 0,
-  "reviewed": 17,
-  "accepted": 17,
+  "reviewed": 9,
+  "accepted": 9,
   "rejected": 0,
   "requests": 4
  },
- "pending_reviews": 361,
+ "pending_reviews": 491,
  "stop": "Review deferred: RuntimeError",
  "failed": false,
  "shared_daily_review_allocation": 40,
  "review_attempts": 4,
  "review_validation_errors": {
-  "Background review is incomplete": 58
+  "Background review is incomplete": 66
  },
  "map_events_written": 0,
  "destination": "background archive; D1 sync is separate"

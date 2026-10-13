@@ -3,7 +3,7 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-13T10:33:58.731444+00:00",
+ "updated_at": "2026-10-13T21:23:52.428628+00:00",
  "articles": [
   {
    "id": "radnuc-background-cdfddd3bcb111ee5",
@@ -35,6 +35,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Relates to civilian nuclear energy facility design and development."
+  },
+  {
+   "id": "radnuc-background-a1ed71931cfa701e",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9JRGdvMUhzUUFsNVJfYzRIN3VhWUtOM0lQR2t5cW9vZ2diS1hWSVEzSnFIcDBzbW5NYmYxWGdoWWtZalJidi04X21KeEdjZVFrNHd3?oc=5",
+   "title": "Can dismantling old clocks and smoke detectors create radiation sources? Keep this danger list.",
+   "summary": "An industry report warns the public against the improper disassembly of consumer devices like vintage clocks and smoke detectors, which may contain radioactive materials. The article provides safety guidance on managing such items to prevent environmental contamination or accidental exposure.",
+   "original_title": "乱拆老钟、烟雾探测器可能成为辐射源？这张危险清单请收好",
+   "original_language": "zh",
+   "source": "EDN China",
+   "published": "2026-10-13T09:18:53+00:00",
+   "collected_at": "2026-10-13T21:23:52.428628+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Provides public health and safety awareness regarding radioactive materials found in consumer goods."
+  },
+  {
+   "id": "radnuc-background-bd4e0f7dae8d9655",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBaOXlEbjRMRW9pOXBzd3NpYV9RdkFYM21icTFzbk1rUmtXaFlIRzZueUJUV08xTURySWZuSUdZNi1DLTlTUGtaTGpRZHBBT0tEc0VYQVlKZFpxUlFuMHlmVVVqZ1M?oc=5",
+   "title": "[2026 National Assembly Audit] Safety violations persist after radiation exposure accidents; nuclear plant Accident Management Plans stalled for seven years (comprehensive)",
+   "summary": "A South Korean National Assembly audit has revealed ongoing safety violations following previous radiation exposure incidents at nuclear facilities. Furthermore, the implementation of updated Accident Management Plans for nuclear power plants has reportedly been delayed for seven years.",
+   "original_title": "[2026 National Assembly Audit] Safety violations persist after radiation exposure accidents; nuclear plant Accident Management Plans stalled for seven years (comprehensive)",
+   "original_language": "en",
+   "source": "아시아경제",
+   "published": "2026-10-13T09:17:59+00:00",
+   "collected_at": "2026-10-13T21:23:52.428628+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report concerns regulatory oversight and safety management within the civilian nuclear industry."
   },
   {
    "id": "radnuc-background-611860206986c71e",
@@ -97,6 +159,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Highlights industry digital/AI applications for nuclear energy systems."
+  },
+  {
+   "id": "radnuc-background-546abd86a84c2b7b",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPa2p3aUdkV0x2ZVNQdWYteWM2NnBIbTFJcldWRGRjQjdXbGNMeHloS1RBeXl6RWF3dkpnOGZKV0JyWGF2S3BtbTB6SmhaUmdmZE95Nnd3ZGVNcVl4SmFBZlhYVk1lWWtRNlVmbl85SzZ4MGxYbTJFRDdUbUswX1VjYWNRWEZ2VFZ0andvLW0zYkhQeDB6cm9wMXIzNEtJLU50ZGhBWV9uRTVTQ244UWhIcGdIN01BMlU?oc=5",
+   "title": "NATO’s Annual Nuclear Exercise Begins in Italy with 17 Participating Nations",
+   "summary": "NATO has launched its annual nuclear exercise in Italy, involving 17 member nations. The exercise is designed to maintain and evaluate collective preparedness and deterrence capabilities.",
+   "original_title": "NATO’s Annual Nuclear Exercise Begins in Italy with 17 Participating Nations",
+   "original_language": "en",
+   "source": "خبرگزاری صدای افغان(آوا)",
+   "published": "2026-10-13T08:46:38+00:00",
+   "collected_at": "2026-10-13T21:23:52.428628+00:00",
+   "background_topics": [
+    "emergency_exercises"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Describes a scheduled multinational nuclear emergency preparedness and training exercise."
+  },
+  {
+   "id": "radnuc-background-d4a142352dee203e",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOX3NYZnlzWWZMZHQwUjg2eG8zSXpwZkJRUDFzV3NPcEQ2SGo1QlBHZ2RuREc0SVdReDdqTzdRdElpYnlmX0hHZGdwRmRSRE5kVVBOMTVETmJvREVNd0QwTzQwQmJmNTdubFMwSG1oOXZDSXBHQ0ItM1dtQW85ZktwamxCTHh4SmdYMjFpeFFrY2t1Qmh2LTRzMld6TkZZME40dG53?oc=5",
+   "title": "The Ongoing Evolution of NATO’s Nuclear Deterrence Exercising",
+   "summary": "An analysis piece discusses the structural and tactical evolution of NATO's nuclear deterrence exercises. The focus remains on the developmental aspects of alliance-level emergency and security preparedness.",
+   "original_title": "The Ongoing Evolution of NATO’s Nuclear Deterrence Exercising",
+   "original_language": "en",
+   "source": "GLOBSEC",
+   "published": "2026-10-13T08:17:56+00:00",
+   "collected_at": "2026-10-13T21:23:52.428628+00:00",
+   "background_topics": [
+    "emergency_exercises"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Discusses the evolution of multinational nuclear emergency/security training frameworks."
   },
   {
    "id": "radnuc-background-0e56f5572bf32bad",
@@ -378,6 +502,68 @@
    "ai_relevance_reason": "RadNuc background only: Regulatory oversight of nuclear industry funds and safety management."
   },
   {
+   "id": "radnuc-background-dad710949f5f6041",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQd0RyVWFpQWtCQ1lpLWdocEVRcFpzbUxQblVoZnV4elVJNnFzZ3FaRlI0NEU2cEVoQkZqODIwcjhCbVB3UFlxY0RzTy1jX3Bfdl9kZkRWTDlyRDIta0JEb3ZoRGlkRUZNNkJQT01XZE1pRjBfeEJ5X28xcUg1VHBldVIzbDFSb1MxLWJqcUloVHlaclZa0gGUAUFVX3lxTFB3RHJVYWlBa0JDWWktZ2hwRVFwWnNtTFBuVWhmdXh6VUk2cXNncVpGUjQ0RTZwRWhCRmo4MjByOEJtUHdQWXFjRHNPLWNfcF92X2RmRFZMOXJEMi1rQkRvdmhEaWRFRk02QlBPTVdkTWlGMF94QnlfbzFxSDVUcGV1UjNsMVJvUzEtYmpxSWhUeVpyVlo?oc=5",
+   "title": "South Korea rushes SMR push as regulator warns of staffing shortfall",
+   "summary": "South Korea is accelerating its Small Modular Reactor (SMR) development initiatives. However, the national nuclear regulator has issued a formal warning regarding critical staffing shortages that may impact oversight and safety licensing processes.",
+   "original_title": "South Korea rushes SMR push as regulator warns of staffing shortfall - CHOSUNBIZ",
+   "original_language": "en",
+   "source": "Chosunbiz",
+   "published": "2026-10-13T05:18:00+00:00",
+   "collected_at": "2026-10-13T21:23:52.428628+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Focuses on regulatory capacity and civilian nuclear development policy."
+  },
+  {
+   "id": "radnuc-background-1e51d0d951f1263e",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPS2ZjdVhWS0d6dWphb2c5NkJtVm5SR19ROGk3dW1oaGlZVEk4MTRCeTFOeTd0bjRic0puSkdmOS1zc1BPWmR2UWZkOUFCUWtheUJFV3BTd01GVUdJT2JGWFROUS1IOU1fdXJqQ2RiVW9fTHRCUENxN3ZmQVhxNUlvWDVpM3FUT3U0cFo2UExGQQ?oc=5",
+   "title": "Shenwan Hongyuan Liu Jian: Leverage the hub role of the capital market to cultivate new quality productive forces in the nuclear energy sector",
+   "summary": "A representative from Shenwan Hongyuan securities highlighted the importance of capital markets in fostering industrial advancement within China's nuclear energy sector. The comments focus on economic and industry development strategies for nuclear power.",
+   "original_title": "申万宏源刘健：发挥资本市场枢纽作用 培育核能领域新质生产力",
+   "original_language": "zh",
+   "source": "搜狐网",
+   "published": "2026-10-13T04:03:03+00:00",
+   "collected_at": "2026-10-13T21:23:52.428628+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to the industrial development and capital investment in the civilian nuclear sector."
+  },
+  {
    "id": "radnuc-background-5aeeabe4c8707547",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -469,6 +655,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Regulatory policy discussion regarding private investment in civilian nuclear power."
+  },
+  {
+   "id": "radnuc-background-68232e0c641918a6",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE40Q3N4Z2lCTHp0d3BoaXZiSnlIUmtwQlB4UU5jUmZPb3FjX2VJQUU3VHhZY1NTcDFfeWVOVzZGOFJ3TXdaZ1BadmpPRG8xbzDSAU5BVV95cUxNd2xKTkJhTWNxME9PNTBBU3JpUm9uLWpCTEFiVzZ0amlKVmtPZ2diZ3hhR0VoUVJwaGJQUXdMU05PLTRualcyYUpmVlJPU0E?oc=5",
+   "title": "The United States approves the construction of a power plant while Taiwan is busy building steps",
+   "summary": "This report contrasts recent US regulatory approvals for new power plant construction with policy discussions in Taiwan. It highlights evolving regulatory landscapes regarding nuclear and energy infrastructure.",
+   "original_title": "美國核准蓋電廠 台灣忙著蓋台階",
+   "original_language": "zh-Hant",
+   "source": "ETtoday新聞雲",
+   "published": "2026-10-12T22:00:00+00:00",
+   "collected_at": "2026-10-13T21:23:52.428628+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Covers civilian nuclear facility regulatory approval processes."
+  },
+  {
+   "id": "radnuc-background-6f055e38163429a3",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNSE5INE1oeFI2bUhBd3N4aWYwdjlWVV9IeWlsZFE3dDNDV1UwaHRuV1pKWEtnMldXNTVPb19hOVUtSURkLTZpcTVzY3FMSzhmSF9SaXRzUjFTRGtuRmozaHhEWlM5RzVQaUpTNXIzR21HV0FUY0lNckEyT0lOWWJmSVJIbTc3RDgz?oc=5",
+   "title": "Industry Expo Observation: Maglev, humanoid robots, and nuclear power systems compete to 'land'",
+   "summary": "At the 2026 Industry Expo, advancements in nuclear power systems were showcased alongside other emerging technologies. These developments focus on the practical deployment of civilian nuclear engineering solutions.",
+   "original_title": "工博会观察：磁悬浮、人形机器人、核电系统竞相“落地”",
+   "original_language": "zh",
+   "source": "搜狐",
+   "published": "2026-10-12T16:37:00+00:00",
+   "collected_at": "2026-10-13T21:23:52.428628+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Describes technical progress and industry-level demonstrations of nuclear systems."
   },
   {
    "id": "radnuc-background-1f2deca2e933a6f1",
