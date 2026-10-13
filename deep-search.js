@@ -304,8 +304,9 @@ function evidenceHtml(payload){
     const citedClass=cited.has(item.id)?" cited":"";
     const gap=item.atlas_status==="potential_gap";
     const fromDatabase=item.search_engine==="ct_atlas_database";
-    const gapLabel=fromDatabase?"CT ATLAS DATABASE":(gap?"POTENTIAL ATLAS GAP":"MATCHED IN CT ATLAS");
-    const gapClass=gap&&!fromDatabase?" gap":" matched";
+    const backgroundOnly=item.atlas_status==="background_only"||item.corpus_kind==="radnuc_background";
+    const gapLabel=backgroundOnly?"BACKGROUND · ARCHIVE ONLY":(fromDatabase?"CT ATLAS DATABASE":(gap?"POTENTIAL ATLAS GAP":"MATCHED IN CT ATLAS"));
+    const gapClass=backgroundOnly?"":(gap&&!fromDatabase?" gap":" matched");
     const extras=Array.isArray(item.additional_sources)?item.additional_sources:[];
     return `
       <article class="deep-evidence${citedClass}">

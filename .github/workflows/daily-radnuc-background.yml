@@ -1,0 +1,184 @@
+name: Daily RadNuc background archive
+
+# Current background reporting only. The runner never updates events.json or
+# builds/deploys the map. Source articles are retained for 730 days. Six calls
+# per batch share the existing archive-review ledger (40 calls/Pacific day),
+# with the same free Gemini model; there is no separate quota allocation.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "radnuc_background.py"
+      - "radnuc_background_topics.py"
+      - "radnuc-background-keywords.json"
+      - "tools/enrich_radnuc_background.py"
+      - ".github/workflows/daily-radnuc-background.yml"
+  schedule:
+    - cron: "27 10,18 * * *"
+      timezone: "Europe/Paris"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Serialize the shared model ledger with review-archive-backlog.yml.
+concurrency:
+  group: ct-atlas-archive-review
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      ARCHIVE_REVIEW_MODEL: gemini-3.1-flash-lite
+      ARCHIVE_REVIEW_DAILY_CALLS: "40"
+    steps:
+      - name: Checkout repository
+        id: checkout
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Validate archive-only RadNuc rules without network calls
+        run: |
+          test -s tests/radnuc_background_test.py
+          python -m unittest discover -s tests -p 'radnuc_background_test.py'
+
+      - name: Record map data boundary before collection
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          paths = ('events.json', 'events-lite.json', 'events-map.json')
+          digests = {name: hashlib.sha256(Path(name).read_bytes()).hexdigest()
+                     if Path(name).exists() else None for name in paths}
+          Path(os.environ['RUNNER_TEMP'], 'radnuc-background-map-boundary.json').write_text(
+              json.dumps(digests), encoding='utf-8')
+          PY
+
+      - name: Collect and review current RadNuc background articles
+        id: collect
+        timeout-minutes: 14
+        run: python -u tools/enrich_radnuc_background.py --max-posts 6 --max-fetches 50 --deadline-minutes 12
+
+      - name: Preserve candidate checkpoints and quota on failure
+        if: ${{ always() && steps.checkout.outcome == 'success' && steps.collect.outcome != 'skipped' }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: radnuc-background-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            archive/radnuc-background-articles.json
+            archive/radnuc-background-state.json
+            archive/radnuc-background-status.json
+            quota/gemini-3.1-archive-review.json
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Commit validated archive-only checkpoints
+        id: commit
+        # Save retry candidates even if the collector reports an error. A
+        # cancelled workflow may keep its recovery artifact but cannot sync D1.
+        if: ${{ always() && !cancelled() && steps.checkout.outcome == 'success' && steps.collect.outcome != 'skipped' }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          from radnuc_background import valid_article
+          boundary = json.loads(Path(os.environ['RUNNER_TEMP'], 'radnuc-background-map-boundary.json').read_text(encoding='utf-8'))
+          for name, expected in boundary.items():
+              path = Path(name)
+              actual = hashlib.sha256(path.read_bytes()).hexdigest() if path.exists() else None
+              if actual != expected:
+                  raise RuntimeError(f'Archive-only collection modified map data: {name}')
+          paths = (
+              Path('archive/radnuc-background-articles.json'),
+              Path('archive/radnuc-background-state.json'),
+              Path('archive/radnuc-background-status.json'),
+              Path('quota/gemini-3.1-archive-review.json'),
+          )
+          for path in paths:
+              if path.exists():
+                  data = json.loads(path.read_text(encoding='utf-8'))
+                  if not isinstance(data, dict):
+                      raise RuntimeError(f'Invalid checkpoint: {path}')
+                  if path.name == 'radnuc-background-articles.json':
+                      rows = data.get('articles')
+                      if not isinstance(rows, list):
+                          raise RuntimeError(f'Invalid article list: {path}')
+                      for index, row in enumerate(rows):
+                          if not isinstance(row, dict) or not valid_article(row):
+                              raise RuntimeError(f'Invalid archive-only RadNuc article at index {index}')
+          PY
+          if ! git diff --quiet -- events.json events-lite.json events-map.json; then
+            echo "Archive-only collection unexpectedly modified map data; refusing to commit."
+            exit 1
+          fi
+          git config user.name "CT Intelligence Map Bot"
+          git config user.email "actions@github.com"
+          for path in archive/radnuc-background-articles.json archive/radnuc-background-state.json archive/radnuc-background-status.json quota/gemini-3.1-archive-review.json; do
+            if [ -e "$path" ]; then git add -- "$path"; fi
+          done
+          if git diff --cached --quiet; then
+            echo "Archive checkpoints are already saved."
+            exit 0
+          fi
+          git commit -m "Update daily RadNuc background archive and checkpoints"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo "Concurrent checkpoint conflict; recovery artifact retained."
+              exit 1
+            fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 4))
+          done
+          echo "Archive checkpoint push failed; recovery artifact retained."
+          exit 1
+
+  sync:
+    needs: collect
+    # Failed/cancelled collection or an unsuccessful checkpoint commit cannot
+    # expose incomplete source data. Read only the durable committed main.
+    if: ${{ !cancelled() && needs.collect.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: ct-atlas-background-corpus
+      cancel-in-progress: false
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Checkout committed archive
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Sync committed background corpus using existing D1 rules
+        run: python -u tools/sync_background_corpus.py --cleanup apply

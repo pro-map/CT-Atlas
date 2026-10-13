@@ -4965,6 +4965,11 @@ def apply_ai_selection(
     event,
     result,
 ):
+    if event.get('archive_only') is True or event.get('kind') == 'radnuc_background':
+        event['ai_selected'] = False
+        event['ai_current_ct_event'] = False
+        event['ai_scope_rejection'] = 'Archive-only RadNuc background is never a map incident'
+        return False
     try:
         score = int(
             result.get(

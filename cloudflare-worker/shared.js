@@ -21,7 +21,7 @@ const FEEDBACK_GLOBAL_DAILY_LIMIT = 200;
 // Bump whenever the report SHAPE changes (new fields, schema, citation
 // rules) so an existing cache entry from before the change is never served
 // as-is -- folded into the cache key in index.js's /report handler.
-const REPORT_GENERATOR_VERSION = "report-v11-illustration";
+const REPORT_GENERATOR_VERSION = "report-v12-radnuc-background";
 
 // One roster secret, {"username":"sha256(password)"}, validated; throws on any problem.
 function parseAuthRoster(raw, name) {
@@ -199,6 +199,11 @@ BACKGROUND CONTEXT RULES:
   it only as background context, never as a CT incident.
   removed_event = commentary or analysis pieces: cite them only as the view
   of commentators ("analysts argue ... [C04]"), never as established fact.
+  radnuc_background = deliberately archive-only Radiological/Nuclear
+  reporting on regulation, training, meetings, supply chains, civil protests,
+  IAEA guidance, cybersecurity, AI safeguards and industry research: use only
+  as attributed background. It is not a terrorist or criminal incident and
+  never establishes a map gap or enters incident counts.
   archived_incident = a CT incident report that passed the map's own
   selection but is not one of priority_events (e.g. older than the map's
   180-day window, or found later by the archive enrichment; incident_note

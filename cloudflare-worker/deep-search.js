@@ -39,9 +39,9 @@ const DEEP_SEARCH_MODEL = "gemini-3.5-flash-lite";
 // "high demand" condition callGemini() (Report Generator, shared.js) already retries around.
 // Gemini 3.1 Flash Lite (GEMINI_SECOND_FALLBACK_MODEL) is the last resort: its own quota.
 const DEEP_SEARCH_FALLBACK_MODEL = "gemini-3.6-flash";
-export const DEEP_SEARCH_VERSION = "deep-search-v16-chinese-scripts";
+export const DEEP_SEARCH_VERSION = "deep-search-v17-radnuc-background";
 // Archive rows (corpus_kind) that are not incident reports.
-const NOT_ILLUSTRATIONS = new Set(["removed_event", "rejected_candidate", "historical_review"]);
+const NOT_ILLUSTRATIONS = new Set(["removed_event", "rejected_candidate", "historical_review", "radnuc_background"]);
 
 // There is no period selector any more -- the analyst's own question is the
 // only source of a time window. The planner LLM (see PLAN_SCHEMA's
@@ -785,6 +785,12 @@ EVIDENCE RULES -- every sentence shows where it comes from:
   later by the archive enrichment) -- cite it as that outlet's reporting of the
   incident, like any external article; when it describes the same incident as
   a database record, it corroborates that record and is not a second incident.
+- Records with corpus_kind "radnuc_background", including those merged with
+  live search results, are deliberately archive-only Radiological/Nuclear
+  background: regulation, training, meetings, supply chains, civil protests,
+  IAEA guidance, cybersecurity, AI safeguards and industry research. Use them
+  as attributed background only. They are not terrorist or criminal incidents,
+  must not enter incident counts, and are never potential CT Atlas gaps.
 
 FORMAT:
 Use plain report text inside the "analysis" field, with real newline characters.
@@ -892,6 +898,12 @@ function deduplicateRows(rows) {
         match.sources.push({ source: row.source, url: row.url, language: row.language, published: row.published, search_engine: row.search_engine || "google_news" });
       }
       if ((row.summary || "").length > (match.summary || "").length) match.summary = row.summary;
+      // A live search copy may lead this cluster. Preserve the archive's
+      // deliberate background-only filing so that it cannot become a map gap
+      // merely because another provider returned the same story first.
+      if (row.corpus_kind === "radnuc_background" && !match.corpus_kind) {
+        match.corpus_kind = "radnuc_background";
+      }
     }
   }
   return clusters;
@@ -1457,6 +1469,13 @@ function foldIntoDatabaseEvidence(databaseRows, externalRows) {
 
 function compareWithAtlas(rows, mapEvents) {
   return rows.map(row => {
+    if (row.corpus_kind === "radnuc_background") {
+      return {
+        ...row,
+        atlas_status: "background_only",
+        atlas_match_id: "", atlas_match_key: "", atlas_match_title: "", atlas_match_score: 0
+      };
+    }
     let best = null, bestScore = 0;
     for (const event of mapEvents) {
       const gap = dateDistanceDays(row.published, event.published);
@@ -1815,7 +1834,7 @@ export async function handleDeepSearch(request, env, ctx) {
 
     const metrics = citationMetrics(generated.analysis, evidence);
     const gaps = evidence.filter(item => item.atlas_status === "potential_gap").length;
-    const inAtlas = evidence.length - gaps;
+    const inAtlas = evidence.filter(item => item.atlas_status === "already_in_atlas").length;
     const successfulQueries = retrieval.waves.filter(item => item.ok).length;
 
     const report = {
@@ -1844,7 +1863,7 @@ export async function handleDeepSearch(request, env, ctx) {
         queries_attempted: retrieval.waves.length,
         queries_successful: successfulQueries,
         articles_retrieved: retrieval.rows.length,
-        unique_event_clusters: unique.length,
+        unique_event_clusters: unique.filter(row => row.corpus_kind !== "radnuc_background").length,
         evidence_events_used_for_analysis: evidence.length,
         matched_to_atlas: inAtlas,
         potential_atlas_gaps: gaps,

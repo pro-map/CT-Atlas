@@ -65,6 +65,7 @@ KIND_RANK = {
     "related_article": 0,
     "archived_incident": 1,
     "removed_event": 2,
+    "radnuc_background": 2,
     "rejected_candidate": 3,
     "historical_review": 4,
 }

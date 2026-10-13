@@ -15,12 +15,16 @@ on:
     paths:
       - "tools/sync_background_corpus.py"
       - "tools/archive_dedup.py"
+      - "radnuc_background.py"
+      - "radnuc_background_topics.py"
+      - "radnuc-background-keywords.json"
+      - "archive/radnuc-background-articles.json"
       - "archive/recovered-events-*.json"
       - "archive/related-overflow-*.json"
       - "archive/enriched-articles-*.json"
       - ".github/workflows/sync-background-corpus.yml"
   schedule:
-    # After the daily collector's evening run (18:17 Europe/Paris) has had time to finish.
+    # After the map and archive-only RadNuc evening batches have had time to finish.
     - cron: "47 20 * * *"
       timezone: "Europe/Paris"
   workflow_dispatch:
