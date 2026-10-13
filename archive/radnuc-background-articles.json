@@ -3,6 +3,534 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-13T10:22:35.776145+00:00",
- "articles": []
+ "updated_at": "2026-10-13T10:33:58.731444+00:00",
+ "articles": [
+  {
+   "id": "radnuc-background-cdfddd3bcb111ee5",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNZExkd1pvd0tPQjA1S215ZjZaRVVxbndwQW5vOHZJbFRtZjBUdWtjeEtzOGc4c0xOcXNSc0xSa0VZdlh0QkpqOWlibGsxdWRWOUc1amRQUlJiRE1IV2pLTldWQ3g3c3F4ZFZYV2VIeWJ3ekNCa2FKZXc2bFdPdXdTeHhKU2VKNFBo?oc=5",
+   "title": "Bluecore takes nuclear barge plan beyond the drawing board",
+   "summary": "Bluecore is advancing its plans for a nuclear-powered barge project beyond the initial conceptual design phase. This development highlights ongoing efforts in floating nuclear power facility innovation.",
+   "original_title": "Bluecore takes nuclear barge plan beyond the drawing board",
+   "original_language": "en",
+   "source": "Splash247",
+   "published": "2026-10-13T10:07:45+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to civilian nuclear energy facility design and development."
+  },
+  {
+   "id": "radnuc-background-611860206986c71e",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE14bU82Q1pDZFAyWmRzOWhoQ29hczA4NmNKdFhhenI2Q0dwdUpiTDlHNGxOTzZBdnMwYkJlMVZhVFBmZHhVZkRSd0hJWm5LUjVvMExvMmNHbUdQV1dGNE5kbFhsUGJlS0dYWHlWWg?oc=5",
+   "title": "[2026 Government Audit] Security violations persist following radiation exposure incidents... Nuclear power plant accident management plans remain pending for 7 years",
+   "summary": "South Korean parliamentary auditors highlighted continued safety regulatory failures in the wake of previous radiation incidents. The reports specifically criticize the seven-year delay in finalizing comprehensive accident management plans for nuclear power plants.",
+   "original_title": "[2026国政审计]辐射照射事故后仍有安全违规……核电站事故管理计划书7年来悬而未决（综合）",
+   "original_language": "zh",
+   "source": "아시아경제",
+   "published": "2026-10-13T09:17:59+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Regulatory audit reporting on nuclear safety management and policy compliance."
+  },
+  {
+   "id": "radnuc-background-247586ecb0803b17",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQR2J3bGhXWWhPRVNxS3pHQWx4UTA0ZF9qblJuQjZJZHRMaVoyZXNFNDdGeXF1S2FuRHFoLUUyV0Z1ZVlGTm1BcmczTzVOQ0RIbm5pcWVWdzUzZ2hkbUJfbkhvX1RuMkxZMGl1aTFPdm56YVNTazRtWHJyMXBVQzc4N3A4YTFMLWpLUmtHeg?oc=5",
+   "title": "Zizhu High-tech Zone Enterprise | CGN Digital Technology Unveils New Digital Achievements at CIIF",
+   "summary": "CGN Digital Technology showcased new digital and technological advancements for the nuclear industry at the China International Industry Fair (CIIF). These tools are designed to support the digitalization and operational monitoring of nuclear power systems.",
+   "original_title": "紫竹高新区企业| 中广核数科携全新数字化成果亮相工博会",
+   "original_language": "zh",
+   "source": "搜狐",
+   "published": "2026-10-13T08:54:09+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "industry_ai_applications"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Highlights industry digital/AI applications for nuclear energy systems."
+  },
+  {
+   "id": "radnuc-background-0e56f5572bf32bad",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1FV0taVjFITXVDaGp3LUNMMUIwVTctdHh6Um5tbmU0T1JDNnhSSTBSVFpNU1pKMVRkMU4wdFc4ZWdNR3h5MjRsa3VnX1RETEFDQ29NYlZyZWgydmI0VDdYRktCMjU0UmpDSThNeA?oc=5",
+   "title": "[2026 Parliamentary Audit] Seo Cheonho: \"Urgent Need for SMR Manufacturing License Standards\"... Nuclear Safety and Security Commission: \"Reviewing Adoption\"",
+   "summary": "During a parliamentary audit, calls were made for the establishment of formal manufacturing license standards for Small Modular Reactors (SMRs). South Korea's Nuclear Safety and Security Commission indicated it is currently reviewing the adoption of such regulatory frameworks.",
+   "original_title": "[2026 Parliamentary Audit] Seo Cheonho: \"Urgent Need for SMR Manufacturing License Standards\"... Nuclear Safety and Security Commission: \"Reviewing Adoption\"",
+   "original_language": "en",
+   "source": "아시아경제",
+   "published": "2026-10-13T07:58:01+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Directly pertains to civilian nuclear regulatory and licensing developments."
+  },
+  {
+   "id": "radnuc-background-133e8418bf5e61d1",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5CS202ZXBnbDZUYXJzaVZxdEdrNlNTVzNiVE5SUVpaVUpPRG9DN1FHR0JlLTRiZjNNeTVwNnczalRTZzZlN0s0S1dyVGgydjd2eF9ESlN2NGpsTnBRdUZGMHowa21POWxoanR4UA?oc=5",
+   "title": "[2026 Parliamentary Audit] Seo Cheonho: 'Urgent need to establish manufacturing licensing standards for Small Modular Reactors'... Nuclear Safety and Security Commission: 'Under review'",
+   "summary": "During a national assembly audit, legislators called for the immediate creation of regulatory frameworks and manufacturing standards for Small Modular Reactors (SMRs). The Nuclear Safety and Security Commission confirmed that the development of these licensing procedures is currently underway.",
+   "original_title": "[2026年国会年度审计] Seo Cheonho：“亟须制定小型模块化反应堆制造许可标准”……原子能安全委员会：“正在研究引入”",
+   "original_language": "zh",
+   "source": "아시아경제",
+   "published": "2026-10-13T07:58:01+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Policy and regulatory development regarding the licensing of new nuclear reactor technology."
+  },
+  {
+   "id": "radnuc-background-c7e9817722eb5fa5",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPRUh3VUNOQnltc3ozcFR6NXlvMTdudFlTeWFCampPNEwta3cyZjEyX0dBTWNDbk1JdjlCaDhVbjFFVTV3UVpIcEtFTjNROUV2REdVeGl5TjlNUnJQNGN4YWtZN2ZwYzRZaV85cDEwNWM0STVxV3NTT3VvSHZyTi1sN19seDl2Q1RSTC1xVExtZFpUUUdkbFhZblB1bEZDc25adFhrY1U1bS1BVmZDQVBFZ1NhTG1vcG5LY1c4?oc=5",
+   "title": "Namibia appoints first nuclear commissioner to lead long-term atomic energy programme",
+   "summary": "Namibia has appointed its inaugural nuclear commissioner to oversee the development of its long-term atomic energy program. This appointment marks a institutional milestone in the country's national nuclear policy.",
+   "original_title": "Namibia appoints first nuclear commissioner to lead long-term atomic energy programme",
+   "original_language": "en",
+   "source": "https://streamlinefeed.co.ke/",
+   "published": "2026-10-13T07:49:01+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to the establishment of civilian nuclear governance and policy."
+  },
+  {
+   "id": "radnuc-background-d3ddfa2a861bcf17",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBNWDVfNGh4WTJhZjlPYkhuVm1DaW1Ma2dna05sLXpsa3dZSXlJd0Q3MEJMMnF5Vkd2Ml9WUjk3LU9iMGFqUk1KU1ZMVzBCc0hnZlhOMEQ1NER4ZHlLOWpWcw?oc=5",
+   "title": "2026 Nine-in-One Election Tied with Nuclear Power Referendum | Overview of Voting Day, Election Projects, and 81 Registered Candidates for 22 County and City Mayors",
+   "summary": "A public referendum regarding nuclear power policy is scheduled to be held concurrently with the 2026 local elections. The event includes a review of registered candidates and the procedural framework for the upcoming vote.",
+   "original_title": "2026 九合一選舉綁核電公投｜投票日、選舉項目、22 縣市長 81 人登記名單總整理",
+   "original_language": "zh-Hant",
+   "source": "經理人",
+   "published": "2026-10-13T07:19:02+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Covers a public regulatory and policy process concerning nuclear power siting and operation."
+  },
+  {
+   "id": "radnuc-background-ecb1d68f18453089",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9XTGZVbjBsSDZjbXphWkhFdUYyYVo0MkRqSUdUWWo4VzRzLVNjcUhmYkl0STZtb3I3UXpONjVBVEJTMmpyNFFtN0JhRUxhdDFpTFA3NQ?oc=5",
+   "title": "Nuclear Safety and Security Commission to Relocate to Sejong in Early 2027 After 15 Years in Seoul",
+   "summary": "South Korea's Nuclear Safety and Security Commission is scheduled to relocate its headquarters to Sejong in early 2027. This administrative shift concludes a 15-year period of operations in Seoul.",
+   "original_title": "Nuclear Safety and Security Commission to Relocate to Sejong in Early 2027 After 15 Years in Seoul",
+   "original_language": "en",
+   "source": "DongA Science",
+   "published": "2026-10-13T07:16:00+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Administrative development concerning the national nuclear regulatory authority."
+  },
+  {
+   "id": "radnuc-background-59fa3f93de561011",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5WclZmZTlkZDZTTUpSZnRsVEpHYzU0TWRxNFcwdlJqclBlTE1TRWhMTlpTelNkVDNIUGQtdVI5dlAzUUg4VTRvYkM2cDNDRW5wUXlIVzNacEticVUweTBCYk9DZHdWU2hPRFE?oc=5",
+   "title": "70th IAEA General Conference",
+   "summary": "The 70th General Conference of the International Atomic Energy Agency (IAEA) is being held to address global nuclear and radiological standards. The conference serves as a primary international forum for coordinating civilian nuclear safety and security policies.",
+   "original_title": "70th IAEA General Conference",
+   "original_language": "en",
+   "source": "Ministry of Foreign Affairs of Japan",
+   "published": "2026-10-13T07:09:15+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "safety_security_meetings"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Major international forum for nuclear safety and policy discussion."
+  },
+  {
+   "id": "radnuc-background-209831dbdf838ede",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5VVUpuZkE5cmV4Y2huZW9MeFl4U1kyc2RHUnVzTFdYQnlwam5nMFVqbFNkOTM4Ul9LUzUtYXIxbUhlM2dyN0dWNXh2eGM0XzUwTWJBZnl3Zm0?oc=5",
+   "title": "Urenco uranium enrichment expansion project in the US is 75% complete, adding 700,000 SWU of capacity",
+   "summary": "Urenco's expansion project at its U.S. uranium enrichment facility has reached 75% completion. The project aims to add 700,000 separative work units (SWU) to increase domestic enrichment capacity.",
+   "original_title": "美国Urenco铀浓缩扩建项目完成75% 新增70万SWU产能",
+   "original_language": "zh",
+   "source": "维度网",
+   "published": "2026-10-13T07:05:00+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Civilian nuclear fuel cycle infrastructure development."
+  },
+  {
+   "id": "radnuc-background-f6ae6287f235cf29",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1PZmJ2N3pwbUNFTklaUUxSZlRObHNqUWl4NFdGNFBrdVhaUU16cllYcEdYZnFjYkE0OV9DOVpwazZsTkMtcEZ5ZzlHQmVoblhiSWdTeHpyT2Z0cDVnV1F6a0RxVnR5LXVRUllGQXRhSnBBdnAtLTdzRUM1T3Zzdm8?oc=5",
+   "title": "US Nuclear Reactors Begin Integrating AI",
+   "summary": "United States nuclear reactor operators have initiated the integration of artificial intelligence systems into their facilities. This development reflects broader industry efforts to incorporate AI for operational efficiency and monitoring.",
+   "original_title": "美国核反应堆开始陆续接入AI",
+   "original_language": "zh",
+   "source": "新浪网",
+   "published": "2026-10-13T07:00:00+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "industry_ai_applications"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Reports on the deployment of AI in civilian nuclear facility operations."
+  },
+  {
+   "id": "radnuc-background-bd1d1eae82213b36",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5TNlhOdFlNTUxkMjVEM2c4LXZEMjRQR0FVWHFlVXFQUXlHV1diaFYxRkpfZVZCZnIybmpkZTkzUnhSN1FBaHZlYkhjV1Z6STU2Q3lFMWtkYWg4TXltdTc2cjVUS29mVDRkZWZINw?oc=5",
+   "title": "[2026 Government Inspection] '425.3 billion won nuclear fund has lacked approval documents for 7 years'... Concerns raised over nuclear power plant safety management",
+   "summary": "Government inspectors in South Korea have questioned the management of a 425.3 billion won nuclear fund, citing a seven-year lack of official approval documentation. The finding has prompted broader parliamentary scrutiny regarding the oversight of nuclear safety management funds.",
+   "original_title": "[2026年国政监察]“4253亿韩元核能基金，7年来没有审批文件”……核电站安全管理也遭质疑- 阿视亚经济",
+   "original_language": "zh",
+   "source": "아시아경제",
+   "published": "2026-10-13T06:52:15+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Regulatory oversight of nuclear industry funds and safety management."
+  },
+  {
+   "id": "radnuc-background-5aeeabe4c8707547",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBubTl2RHhnYk9FR0tseDd0MkQtQm1BQ1FueVBnRnczQzdWZHV4QzlNc2k4X2I1RlhxaUlQYWVzckIxczRvNnQ3YjNaWHEzczBGMVNZTkVqLU5UOVpYMF9xenZLQjZCR0o2aks4?oc=5",
+   "title": "Daily News (Kyodo News) - Japan establishes new organization dedicated to nuclear human resources development",
+   "summary": "Japan has launched a new organization focused on the training and development of nuclear power industry professionals. The initiative aims to address the long-term human resource needs of the nation's nuclear sector.",
+   "original_title": "每日消息（共同社） - 日本成立新組織致力於核能人才培養",
+   "original_language": "zh-Hant",
+   "source": "客观日本",
+   "published": "2026-10-13T01:06:18+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "safety_security_meetings"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Organizational development for nuclear industry workforce capacity."
+  },
+  {
+   "id": "radnuc-background-f507f99b2b3a76a2",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5KUnA3Yld3Y0lQOU04T1JoNnFKYUVTN25Nd1Zub1lxWVZaanV6QktpTUNael8wNUpGbFJjaUJ3dVFBLWNod2pCZTdoei1MZkNXeXhNQ0ZoaEllLXBlc0YzWW1DVWhIdw?oc=5",
+   "title": "Major Corporations Consider Direct Investment in Nuclear Power Generation... Regulatory Bottlenecks Should Be Accelerated for Removal",
+   "summary": "Large enterprises are evaluating direct investment in nuclear energy projects. Industry stakeholders are calling for regulatory reforms to remove barriers and facilitate such private-sector participation in nuclear power generation.",
+   "original_title": "大企業開始考慮直接投資核電發電……應加快消除“監管瓶頸”",
+   "original_language": "zh-Hant",
+   "source": "동아일보",
+   "published": "2026-10-12T23:48:48+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Discusses regulatory policy and licensing hurdles for civilian nuclear industry investment."
+  },
+  {
+   "id": "radnuc-background-9b9a542f5d78103b",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1pcUQxN2hDb2trMExyZ0JrbjZKdXVHZ2pyY2Z4VWM0LW1GUk0zTUxjOEFkYU1xMVBWdUFlNGUtd1dNOVkyWVgtN2JGeWZ4N3c1QWx5X1B4REhndlBZblBVaW9MeW9wdw?oc=5",
+   "title": "Large enterprises begin considering direct investment in nuclear power generation... 'Regulatory bottlenecks' should be eliminated",
+   "summary": "Major corporations are exploring direct investment into nuclear power generation capacity. Industry advocates are calling on regulators to remove existing administrative bottlenecks to facilitate this private sector involvement.",
+   "original_title": "大企业开始考虑直接投资核电发电……应加快消除“监管瓶颈”",
+   "original_language": "zh",
+   "source": "동아일보",
+   "published": "2026-10-12T23:46:57+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Regulatory policy discussion regarding private investment in civilian nuclear power."
+  },
+  {
+   "id": "radnuc-background-1f2deca2e933a6f1",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5NRnAwRU5iTXVjdGl6RlJJVV8za0RMRS1QY1hYblNxVm1JRlItNFhPQW1XUUNYbmdvWnByYTRpNkNuMjNaWHc0ZzZrVndEV29qcjlpc0ZVUEFJMjdJaS1FRg?oc=5",
+   "title": "U.S. nuclear industry accelerates adoption of AI assistants: Covering 94 reactors to help engineers address staffing shortages and maintenance challenges",
+   "summary": "The U.S. nuclear sector is deploying AI-driven assistant tools across 94 reactors to support maintenance activities and mitigate engineering staff shortages. These tools are intended to improve operational efficiency and facility management.",
+   "original_title": "美国核电行业加速引入AI助手：覆盖94座反应堆帮助工程师应对人员短缺与维护难题- AI 人工智能",
+   "original_language": "zh",
+   "source": "cnBeta.COM",
+   "published": "2026-10-12T16:31:00+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "industry_ai_applications"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Deployment of AI in civilian nuclear facility operation and maintenance."
+  },
+  {
+   "id": "radnuc-background-871ebb04b8efc5fb",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE05ZG04MFFybXVRTlVrUnRFLU1ZTlNxYTJrR2ttMlc4dXFGSmxFaXNkSEFVSkxQVjlmZmd4ZUxic1JXQm80dDdFLXk5Unpvdw?oc=5",
+   "title": "The First Nuclear Fusion Company in History to Go Public! What Made General Fusion Take the IPO Lead?",
+   "summary": "General Fusion has become the first nuclear fusion technology company to conduct an initial public offering (IPO). This marks a significant development in the commercialization and funding of fusion research and technology.",
+   "original_title": "史上首家核融合公司上市！General Fusion 憑什麼搶下IPO頭香？",
+   "original_language": "zh-Hant",
+   "source": "ESG遠見",
+   "published": "2026-10-12T13:09:20+00:00",
+   "collected_at": "2026-10-13T10:33:58.731444+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Reports on technological advancement and commercialization within the fusion energy sector."
+  }
+ ]
 }
