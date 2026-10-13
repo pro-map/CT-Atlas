@@ -6589,7 +6589,10 @@ let databaseQuerySeq = 0;
 let databaseQueryTimer = null;
 let databaseActivated = false;
 let databaseArchiveTotal = null;
-let databaseArchiveRequested = false;
+let databaseArchiveByKind = {};
+let databaseArchiveLoadedAt = 0;
+let databaseArchivePromise = null;
+const DATABASE_ARCHIVE_REFRESH_MS = 60 * 1000;
 
 
 let selectedDays = 7;
@@ -14319,30 +14322,51 @@ function onDatabaseFiltersChanged() {
     databaseQueryTimer = setTimeout(() => queryDatabase().catch(() => {}), 250);
 }
 
-// Total next to the DATABASE title: every event plus every article of the
-// background archive -- one database. Shown once the archive size is known
-// (or its request failed), so the number never jumps.
+// Refresh the archive independently of map data: daily background collection
+// changes this count without publishing a new events-map.json.
+function refreshDatabaseArchiveTotal(force = false) {
+    if (databaseArchivePromise) return databaseArchivePromise;
+    if (!force && databaseArchiveLoadedAt
+        && Date.now() - databaseArchiveLoadedAt < DATABASE_ARCHIVE_REFRESH_MS) {
+        return Promise.resolve();
+    }
+    databaseArchivePromise = fetch(REPORT_GENERATOR_API_BASE + "/database-stats", { cache: "no-store" })
+        .then(response => response.ok ? response.json() : null)
+        .then(payload => {
+            const corpus = payload?.background_corpus;
+            const total = Number(corpus?.total);
+            if (corpus?.available && Number.isFinite(total) && total >= 0) {
+                databaseArchiveTotal = total;
+                databaseArchiveByKind = corpus.by_kind || {};
+            }
+        })
+        .catch(() => {})
+        .finally(() => {
+            // An outage must not erase the last good archive count. The first
+            // failed request falls back to events alone and retries next minute.
+            if (databaseArchiveTotal === null) databaseArchiveTotal = 0;
+            databaseArchiveLoadedAt = Date.now();
+            databaseArchivePromise = null;
+            renderDatabaseTotal();
+        });
+    return databaseArchivePromise;
+}
+
+// Total next to the DATABASE title: every event plus every archived article.
 function renderDatabaseTotal() {
     const node = document.getElementById("databaseTotalCount");
-
-    if (!databaseArchiveRequested) {
-        databaseArchiveRequested = true;
-        fetch(REPORT_GENERATOR_API_BASE + "/database-stats")
-            .then(response => response.ok ? response.json() : null)
-            .then(payload => {
-                const corpus = payload?.background_corpus;
-                databaseArchiveTotal = corpus?.available ? Number(corpus.total) || 0 : 0;
-            })
-            .catch(() => {
-                databaseArchiveTotal = 0;
-            })
-            .finally(renderDatabaseTotal);
+    if (databaseArchiveTotal === null) {
+        refreshDatabaseArchiveTotal();
         return;
     }
-
-    if (!node || databaseArchiveTotal === null) return;
+    if (!node) return;
     const total = databaseEventTotal + databaseArchiveTotal;
     node.textContent = total ? total.toLocaleString("en-GB") : "";
+    const radnuc = Number(databaseArchiveByKind.radnuc_background) || 0;
+    node.title = databaseEventTotal.toLocaleString("en-GB") + " events + "
+        + databaseArchiveTotal.toLocaleString("en-GB") + " archived articles"
+        + (radnuc ? "; including " + radnuc.toLocaleString("en-GB") + " RadNuc background articles" : "")
+        + ". Background articles are excluded from map incident counts.";
     node.hidden = !total;
 }
 
@@ -14653,11 +14677,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // match count; the page itself never queries the database on load.
     const panel = document.getElementById("databasePanel");
     const activate = () => {
+        refreshDatabaseArchiveTotal();
         if (databaseActivated) return;
         queryDatabase().catch(() => {});
     };
     panel?.addEventListener("pointerdown", activate);
     panel?.addEventListener("focusin", activate);
+
+    const refreshVisibleArchive = () => {
+        if (document.visibilityState !== "hidden") refreshDatabaseArchiveTotal();
+    };
+    document.addEventListener("visibilitychange", refreshVisibleArchive);
+    window.addEventListener("focus", refreshVisibleArchive);
+    setInterval(refreshVisibleArchive, DATABASE_ARCHIVE_REFRESH_MS);
 
     // The ticker can be first rendered while the page is still locked behind
     // the sign-in screen (zero height, so "does it overflow?" is always no):
