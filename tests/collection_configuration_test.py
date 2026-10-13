@@ -18,6 +18,7 @@ import enrich_threat_categories as specialist
 import enrich_chinese_map as chinese
 import enrich_archive
 import radnuc_vocabulary
+import enrich_radnuc
 
 CODES = {'ar','bn','de','en','es','fa','fr','ha','he','hi','id','it','ps','pt','ru','so','sw','tr','ur','zh','zh-Hant'}
 # SHA-256 of full plans (including task contents and ordering) at main 0fc51e4.
@@ -57,7 +58,15 @@ class CollectionConfigurationTests(unittest.TestCase):
             plan = specialist.plan_tasks(category,date(2026,10,8),collector)
             for code in CODES:
                 historical = {task['query'] for task in plan if task['source']=='google' and task['code']==code}
-                self.assertTrue(set(topics.collection_queries(category,code)) <= historical)
+                self.assertEqual(set(topics.collection_queries(category,code)), historical)
+
+    def test_history_uses_daily_language_and_edition_inventory(self):
+        identity = lambda p: tuple(p[k] for k in ('code','hl','gl','ceid'))
+        self.assertEqual({identity(p) for p in enrich_radnuc.profiles(collector)},
+                         {identity(p) for p in collector.MULTILINGUAL_PROFILES})
+        profiles = config.specialist_profiles(collector.MULTILINGUAL_PROFILES)
+        profiles[-1]['code'] = 'changed'
+        self.assertNotIn('changed', {p['code'] for p in collector.MULTILINGUAL_PROFILES})
 
     def test_historical_full_plans_are_unchanged_not_just_counts(self):
         plans = {category:specialist.plan_tasks(category,date(2026,10,8),collector) for category in topics.LABELS}

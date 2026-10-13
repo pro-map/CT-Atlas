@@ -9,7 +9,7 @@ import copy
 import json
 from pathlib import Path
 
-VERSION = "shared-collection-v1-20261012"
+VERSION = "shared-collection-v2-20261013"
 ROOT = Path(__file__).resolve().parent
 # Same identities and ordering as the existing historical profiles. Locales
 # select search editions, NOT incident locations. No invented local editions.
@@ -22,6 +22,30 @@ SPECIALIST_PROFILE_EXTENSIONS = (
     {"code":"ha","name":"Hausa","hl":"en-NG","gl":"NG","ceid":"NG:en"},
     {"code":"sw","name":"Swahili","hl":"en-US","gl":"US","ceid":"US:en"},
 )
+
+# Stable leading editions preserve historical ordering and task identities.
+CHINESE_SPECIALIST_PROFILES = (
+    {"code": "zh", "name": "Chinese (Simplified)", "hl": "zh-CN",
+     "gl": "CN", "ceid": "CN:zh-Hans"},
+    {"code": "zh-Hant", "name": "Chinese (Traditional)", "hl": "zh-TW",
+     "gl": "TW", "ceid": "TW:zh-Hant"},
+)
+ENGLISH_SPECIALIST_PROFILE = {
+    "code": "en", "name": "English", "hl": "en-US", "gl": "US", "ceid": "US:en",
+}
+
+
+def specialist_profiles(daily_profiles):
+    """Use the daily language/edition inventory for all specialist history."""
+    unique = {}
+    for profile in (*CHINESE_SPECIALIST_PROFILES, ENGLISH_SPECIALIST_PROFILE,
+                    *daily_profiles):
+        identity = tuple(profile[k] for k in ('code', 'hl', 'gl', 'ceid'))
+        unique.setdefault(identity, copy.deepcopy(profile))
+    codes = {profile['code'] for profile in unique.values()}
+    if codes != set(language_metadata(daily_profiles)['language_codes']):
+        raise ValueError('Daily and historical specialist languages disagree')
+    return list(unique.values())
 
 
 def extend_specialist_profiles(profiles):

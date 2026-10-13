@@ -160,7 +160,14 @@ def install_collection(namespace):
             mapping[label] = q[0] if name == 'TARGETED_MEDIA_CATEGORY_TERMS' else list(q)
     for profile in namespace['MULTILINGUAL_PROFILES']:
         for label in LABELS:
-            for query in queries(label,profile['code']):
+            # Retain the legacy general-archive replay surface; the Chinese
+            # supplement already has its own historical checkpoint cohort.
+            if label == RN and profile['code'] in ('zh', 'zh-Hant'):
+                import radnuc
+                replay_queries = radnuc.queries(profile['code'])
+            else:
+                replay_queries = queries(label, profile['code'])
+            for query in replay_queries:
                 item = {'term':query,'category':label}
                 if item not in profile['queries']: profile['queries'].append(item)
     # Freeze the PRE-ALIGNMENT daily replay surface for the older general

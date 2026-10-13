@@ -55,8 +55,20 @@ class Vocabulary(unittest.TestCase):
 
     def test_native_existing_searches_unchanged_and_no_new_map_subcategory(self):
         for code in radnuc.LEXICONS:
-            if code!='en':self.assertEqual(t.queries(t.RN,code),radnuc.queries(code))
+            if code!='en':
+                self.assertEqual(t.queries(t.RN,code),radnuc.queries(code)+v.queries(code))
         self.assertEqual(t.LABELS,('Radiological/Nuclear','Chemicals and Explosives','Biological Terrorism'))
+
+    def test_chinese_supplement_runs_daily_in_both_writing_systems(self):
+        for code, config in v.CHINESE_SUPPLEMENT_QUERIES.items():
+            profiles = [p for p in collector.MULTILINGUAL_PROFILES if p['code']==code]
+            self.assertTrue(profiles)
+            for profile in profiles:
+                actual = {q['term'] for q in profile['queries'] if q['category']==t.RN}
+                self.assertEqual(actual, set(radnuc.queries(code)+config['queries']))
+            result = v.queries(code)
+            result.clear()
+            self.assertEqual(v.queries(code), config['queries'])
 
     def test_material_names_do_not_automatically_assign_terrorism(self):
         event={'title':'Hospital expands its Lutetium-177 treatment programme','categories':['Other']}

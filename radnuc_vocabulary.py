@@ -64,6 +64,8 @@ def _queries(code='en'):
 
 
 def queries(code='en'):
+    if code in CHINESE_SUPPLEMENT_QUERIES:
+        return list(CHINESE_SUPPLEMENT_QUERIES[code]['queries'])
     return list(_queries(code))
 
 
@@ -72,7 +74,7 @@ def queries(code='en'):
 # classes, NOT a claim that all 181 English names have been individually translated.
 # The unchanged full 181-entry vocabulary continues through English Google News
 # and GDELT's multilingual index, including Chinese-indexed reporting.
-# Only the fixed six-month supplemental backfill uses these extra native queries.
+# Shared by daily retrieval and the fixed six-month supplemental backfill.
 CHINESE_SUPPLEMENT_QUERIES = {
     "zh": {
         "name": "Chinese (Simplified) RN supplement",
