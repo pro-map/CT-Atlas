@@ -125,28 +125,94 @@ test('the removed map controls are gone and nothing references them any more',()
   assert.ok(!html.includes('map-scope-note'));
 });
 
-test('the DATABASE title shows one total: every event plus the archive, once both are known',async()=>{
+function archiveCounter(fetch){
+  const node={textContent:'',hidden:true};
+  let now=100000;
+  const c=vm.createContext({
+    document:{getElementById:id=>id==='databaseTotalCount'?node:null},
+    Date:{now:()=>now},
+    REPORT_GENERATOR_API_BASE:'https://worker',
+    databaseEventTotal:4388,databaseArchiveTotal:null,databaseArchiveByKind:{},
+    databaseArchiveLoadedAt:0,databaseArchivePromise:null,DATABASE_ARCHIVE_REFRESH_MS:60000,
+    fetch
+  });
+  vm.runInContext(extract('refreshDatabaseArchiveTotal')+extract('renderDatabaseTotal'),c);
+  return {c,node,advance:ms=>{now+=ms;}};
+}
+
+const archiveResponse=(total,radnuc=0)=>({ok:true,json:async()=>({background_corpus:{available:true,total,by_kind:{radnuc_background:radnuc}}})});
+
+test('the DATABASE total includes the archive and explains RadNuc background without adding incidents',async()=>{
   assert.match(html,/Database <span id="databaseTotalCount" class="database-total" hidden><\/span>/);
-  const run=async(fetchResult)=>{
-    const node={textContent:'',hidden:true};
-    const c=vm.createContext({
-      document:{getElementById:id=>id==='databaseTotalCount'?node:null},
-      REPORT_GENERATOR_API_BASE:'https://worker',
-      databaseEventTotal:4388,databaseArchiveTotal:null,databaseArchiveRequested:false,
-      fetch:async()=>{ if(fetchResult instanceof Error) throw fetchResult; return fetchResult; }
-    });
-    vm.runInContext(extract('renderDatabaseTotal'),c);
-    c.renderDatabaseTotal();
-    assert.equal(node.hidden,true,'nothing shown before the archive size is known');
-    await new Promise(resolve=>setTimeout(resolve,10));
-    return node;
-  };
-  const ok=await run({ok:true,json:async()=>({background_corpus:{available:true,total:12423}})});
-  assert.equal(ok.textContent,(4388+12423).toLocaleString('en-GB'));
-  assert.equal(ok.hidden,false);
-  const failed=await run(new Error('offline'));
-  assert.equal(failed.textContent,(4388).toLocaleString('en-GB'),'events alone when the archive size is unavailable');
+  const {c,node}=archiveCounter(async()=>archiveResponse(8958,17));
+  c.renderDatabaseTotal();
+  assert.equal(node.hidden,true,'nothing shown before the archive size is known');
+  await c.databaseArchivePromise;
+  assert.equal(node.textContent,(4388+8958).toLocaleString('en-GB'));
+  assert.equal(node.hidden,false);
+  assert.match(node.title,/including 17 RadNuc background articles/);
+  assert.match(node.title,/excluded from map incident counts/);
+  assert.equal(c.databaseEventTotal,4388);
   assert.match(html,/databaseEventTotal =\s*Number\(data\.map\?\.source_event_count\)/);
+});
+
+test('an open page refreshes an independent archive addition after the freshness interval',async()=>{
+  let total=8941,calls=0;
+  const {c,node,advance}=archiveCounter(async(url,options)=>{
+    calls++;
+    assert.equal(url,'https://worker/database-stats');
+    assert.equal(options.cache,'no-store');
+    return archiveResponse(total,total===8958?17:0);
+  });
+  await c.refreshDatabaseArchiveTotal();
+  const before=node.textContent;
+  total+=17;
+  advance(59999);
+  await c.refreshDatabaseArchiveTotal();
+  assert.equal(node.textContent,before);
+  assert.equal(calls,1,'recent stats reused');
+  advance(1);
+  await c.refreshDatabaseArchiveTotal();
+  assert.equal(calls,2);
+  assert.equal(node.textContent,(4388+8958).toLocaleString('en-GB'));
+  assert.equal(c.databaseEventTotal,4388,'archive update leaves incident count unchanged');
+});
+
+test('initial stats failure is throttled and recovers, while later failure keeps the last good count',async()=>{
+  let mode='network-error',calls=0;
+  const {c,node,advance}=archiveCounter(async()=>{
+    calls++;
+    if(mode==='network-error')throw new Error('offline');
+    if(mode==='unavailable')return {ok:true,json:async()=>({background_corpus:{available:false}})};
+    if(mode==='http-error')return {ok:false};
+    return archiveResponse(8958,17);
+  });
+  await c.refreshDatabaseArchiveTotal();
+  assert.equal(node.textContent,(4388).toLocaleString('en-GB'));
+  await c.refreshDatabaseArchiveTotal();
+  assert.equal(calls,1,'failed initial request does not loop');
+  mode='ok';advance(60000);
+  await c.refreshDatabaseArchiveTotal();
+  const lastGood=node.textContent;
+  for(const failure of ['network-error','http-error','unavailable']){
+    mode=failure;advance(60000);
+    await c.refreshDatabaseArchiveTotal();
+    assert.equal(node.textContent,lastGood);
+    assert.match(node.title,/including 17 RadNuc/);
+  }
+});
+
+test('simultaneous archive refreshes share one request',async()=>{
+  let resolve,calls=0;
+  const {c,node}=archiveCounter(()=>{calls++;return new Promise(done=>{resolve=done;});});
+  const first=c.refreshDatabaseArchiveTotal();
+  assert.equal(c.refreshDatabaseArchiveTotal(true),first);
+  c.renderDatabaseTotal();
+  assert.equal(calls,1);
+  resolve(archiveResponse(8958,17));
+  await first;
+  assert.equal(node.textContent,(4388+8958).toLocaleString('en-GB'));
+  assert.equal(c.databaseArchivePromise,null);
 });
 
 test('one set of Database filters drives the list, both exports, the Report Generator and Atlas AI',()=>{
