@@ -1,6 +1,6 @@
-name: Groq Free - six-month CBRNE and Chinese historical backfill
+name: Groq Free - six-month Biological historical backfill
 
-# Reuse the EXISTING three CBRNE and eight Chinese history checkpoints.
+# Biological history only; RadNuc, ChemEx and separate Chinese map history are cancelled.
 # Only PUBLIC Google News and GDELT titles/excerpts are sent to Groq.
 # No Dark Web material, internal INTERPOL records or SOCMINT workspaces.
 # Existing daily Gemini collection, archives and quotas remain independent.
@@ -18,13 +18,9 @@ on:
   workflow_dispatch:
     inputs:
       specialist_posts:
-        description: "Groq API calls for enabled specialist categories (RadNuc cancelled; max 5)"
+        description: "Groq API calls for Biological history only (max 5)"
         required: false
         default: "5"
-      chinese_posts:
-        description: "Chinese map history cancelled; retained input cannot override cancellation (max 4)"
-        required: false
-        default: "0"
 
 permissions:
   contents: write
@@ -53,7 +49,7 @@ jobs:
       - name: Read remaining historical allocation without calling AI
         id: check
         env:
-          GROQ_MAINTENANCE_ONLY: ${{ (github.event_name == 'push' && !startsWith(github.event.head_commit.message, '[resume-groq-history]')) || (inputs.specialist_posts == '0' && inputs.chinese_posts == '0') }}
+          GROQ_MAINTENANCE_ONLY: ${{ (github.event_name == 'push' && !startsWith(github.event.head_commit.message, '[resume-groq-history]')) || inputs.specialist_posts == '0' }}
         run: python3 tools/groq_backfill_runtime.py preflight
 
   backfill:
@@ -72,7 +68,6 @@ jobs:
       # An operator-approved main commit starting [resume-groq-history] opts
       # into ONE normal bounded batch; it never resets or raises daily caps.
       SPECIALIST_POSTS_INPUT: ${{ github.event_name == 'push' && !startsWith(github.event.head_commit.message, '[resume-groq-history]') && '0' || inputs.specialist_posts || '5' }}
-      CHINESE_POSTS_INPUT: ${{ github.event_name == 'push' && !startsWith(github.event.head_commit.message, '[resume-groq-history]') && '0' || inputs.chinese_posts || '0' }}
     steps:
       - name: Checkout current production and durable checkpoints
         uses: actions/checkout@v6
@@ -101,7 +96,7 @@ jobs:
           # The variables are reduced, never expanded, by each caller.
           python - <<'PY'
           import os
-          for name,limit in (("SPECIALIST_POSTS_INPUT",5),("CHINESE_POSTS_INPUT",4)):
+          for name,limit in (("SPECIALIST_POSTS_INPUT",5),):
               value=int(os.environ[name])
               if value < 0 or value > limit:
                   raise SystemExit(f"{name}: refusing value outside 0..{limit}")
@@ -140,7 +135,7 @@ jobs:
           print(f"Protected {len(ids)} prior incident IDs and {len(geo)} location decisions")
           PY
           python tools/backfill_publication_guard.py snapshot
-      - name: Resume enabled specialist backfills (RadNuc cancelled) - all configured languages incl Chinese
+      - name: Resume Biological historical backfill - all configured languages
         id: specialists
         timeout-minutes: 37
         if: env.SPECIALIST_POSTS_INPUT != '0'
@@ -150,16 +145,6 @@ jobs:
           set -euo pipefail
           python -u tools/enrich_threat_categories.py \
             --max-posts "$POSTS" --max-fetches 270 --deadline-minutes 12
-      - name: Chinese map history cancelled (runner also blocks manual overrides)
-        id: chinese
-        timeout-minutes: 40
-        if: env.CHINESE_POSTS_INPUT != '0'
-        env:
-          POSTS: ${{ env.CHINESE_POSTS_INPUT }}
-        run: |
-          set -euo pipefail
-          python -u tools/enrich_chinese_map.py \
-            --max-posts "$POSTS" --max-fetches 140 --deadline-minutes 12
       - name: Refuse record-key collisions or retired IDs after replay
         if: success()
         run: python tools/backfill_record_integrity.py events.json --check
@@ -248,7 +233,7 @@ jobs:
             archive/groq-history-review-cache-v1.json
           retention-days: 7
           if-no-files-found: ignore
-      - name: Commit both resumable history lanes and dedicated Groq quota
+      - name: Commit Biological checkpoints and dedicated Groq quota
         id: checkpoint
         if: always()
         env:
@@ -256,7 +241,7 @@ jobs:
           MAP_UNVALIDATED: ${{ runner.temp }}/groq-backfill-unvalidated.json
           GUARD_BASELINE: ${{ steps.baseline.outcome }}
           GUARD_SPECIALISTS: ${{ steps.specialists.outcome }}
-          GUARD_CHINESE: ${{ steps.chinese.outcome }}
+          GUARD_CHINESE: "skipped"
           GUARD_NEW_EVENTS: ${{ steps.new_events.outcome }}
           GUARD_GEO: ${{ steps.geo.outcome }}
           GUARD_QUARANTINE: ${{ steps.quarantine.outcome }}
@@ -333,7 +318,7 @@ jobs:
                                 f"reserved tokens: {obj.get('reserved_tokens',0)}/{obj.get('token_cap',160000)}\n")
                   elif "threat" in name:
                       counts={k:v.get("pending_searches") for k,v in obj.get("categories",{}).items()}
-                      out.write(f"- CBRNE pending search units: {counts}\n")
+                      out.write(f"- Specialist history pending search units: {counts}\n")
                   else:
                       import backfill_control
                       if not backfill_control.lane_enabled(Path('.'), 'chinese_map'):

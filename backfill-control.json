@@ -1,5 +1,10 @@
 {
-  "disabled_categories": ["Radiological/Nuclear"],
-  "disabled_lanes": ["chinese_map"],
-  "reason": "RadNuc and separate Chinese map historical backfills cancelled by user on 2026-10-13; daily collection remains enabled."
+  "disabled_categories": [
+    "Radiological/Nuclear",
+    "Chemicals and Explosives"
+  ],
+  "disabled_lanes": [
+    "chinese_map"
+  ],
+  "reason": "RadNuc, ChemEx and separate Chinese map historical backfills cancelled by user on 2026-10-13; daily collection remains enabled."
 }

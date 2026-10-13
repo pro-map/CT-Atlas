@@ -36,6 +36,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 import collector  # noqa: E402  (reuses the real collection/dedup/AI-selection pipeline)
+import backfill_control  # noqa: E402
 
 WINDOW_DAYS = int(os.getenv("BACKFILL_WINDOW_DAYS", "180"))
 CHUNK_DAYS = int(os.getenv("BACKFILL_CHUNK_DAYS", "30"))
@@ -149,6 +150,8 @@ collector.requests.post = _guarded_post
 
 
 def main():
+    # Historical cancellations apply to this manual discovery path as well.
+    backfill_control.apply_to_collector(vars(collector), ROOT)
     db = collector.load_database_strict()
     existing_events = db["events"]
     print(f"Existing events in database: {len(existing_events)}")
