@@ -645,16 +645,18 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
     tasks += [task for task in plan if task["key"] not in state["done"]]
     import backfill_control
     disabled = backfill_control.disabled_categories(root)
+    lanes = backfill_control.disabled_lanes(root)
+    blocked = lambda task: backfill_control.task_disabled(task, disabled, lanes)
     tasks = list({task['key']: task for task in tasks
-                  if task.get('category') not in disabled}.values())
+                  if not blocked(task)}.values())
     # Schedule work without touching the durable state or completed search IDs.
     tasks = order_history_tasks(tasks, prioritize_native=prioritize_native,
                                 interleave_supplement=interleave_supplement)
     # A successful RSS response survives a time/quota stop. Resume its review
     # instead of repeatedly downloading the same (possibly changed) feed.
     suspended_reviews = [item for item in state['pending_reviews']
-                         if item['_task'].get('category') in disabled]
-    replay = [item for item in state['pending_reviews'] if item not in suspended_reviews]
+                         if blocked(item['_task'])]
+    replay = [item for item in state['pending_reviews'] if not blocked(item['_task'])]
     replay_tasks = {item["_task"]["key"]: item["_task"] for item in replay}
     tasks = [task for task in tasks if task["key"] not in replay_tasks]
     searcher = searcher or Searcher(collector)

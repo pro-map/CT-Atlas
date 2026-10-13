@@ -22,9 +22,9 @@ on:
         required: false
         default: "5"
       chinese_posts:
-        description: "Groq API calls for eight-category Chinese history (max 4)"
+        description: "Chinese map history cancelled; retained input cannot override cancellation (max 4)"
         required: false
-        default: "4"
+        default: "0"
 
 permissions:
   contents: write
@@ -72,7 +72,7 @@ jobs:
       # An operator-approved main commit starting [resume-groq-history] opts
       # into ONE normal bounded batch; it never resets or raises daily caps.
       SPECIALIST_POSTS_INPUT: ${{ github.event_name == 'push' && !startsWith(github.event.head_commit.message, '[resume-groq-history]') && '0' || inputs.specialist_posts || '5' }}
-      CHINESE_POSTS_INPUT: ${{ github.event_name == 'push' && !startsWith(github.event.head_commit.message, '[resume-groq-history]') && '0' || inputs.chinese_posts || '4' }}
+      CHINESE_POSTS_INPUT: ${{ github.event_name == 'push' && !startsWith(github.event.head_commit.message, '[resume-groq-history]') && '0' || inputs.chinese_posts || '0' }}
     steps:
       - name: Checkout current production and durable checkpoints
         uses: actions/checkout@v6
@@ -150,7 +150,7 @@ jobs:
           set -euo pipefail
           python -u tools/enrich_threat_categories.py \
             --max-posts "$POSTS" --max-fetches 270 --deadline-minutes 12
-      - name: Resume eight other Map topics in Simplified and Traditional Chinese
+      - name: Chinese map history cancelled (runner also blocks manual overrides)
         id: chinese
         timeout-minutes: 40
         if: env.CHINESE_POSTS_INPUT != '0'
@@ -335,8 +335,12 @@ jobs:
                       counts={k:v.get("pending_searches") for k,v in obj.get("categories",{}).items()}
                       out.write(f"- CBRNE pending search units: {counts}\n")
                   else:
-                      out.write(f"- Eight-category Chinese pending search units: "
-                                f"{obj.get('pending_units_including_split_children','unknown')}\n")
+                      import backfill_control
+                      if not backfill_control.lane_enabled(Path('.'), 'chinese_map'):
+                          out.write("- Chinese map history cancelled; saved progress preserved.\n")
+                      else:
+                          out.write(f"- Eight-category Chinese pending search units: "
+                                    f"{obj.get('pending_units_including_split_children','unknown')}\n")
               out.write("\nOnly completed search tasks, actual reviews and accepted "
                         "geo-checked events count; no claim of exhaustive coverage.\n")
           PY

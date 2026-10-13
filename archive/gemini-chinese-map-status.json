@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-13T09:53:14.679488+00:00",
+ "updated_at": "2026-10-13T09:57:51.627119+00:00",
  "vocabulary_version": "gemini-chinese-eight-map-history-v1-20261010",
  "anchor": "2026-10-10",
  "window_days": 180,
@@ -10,9 +10,9 @@
  "confirmed_successful_source_fetches_including_split_children": 23,
  "pending_units_including_split_children": 1225,
  "queued_candidates_waiting_for_Gemini": 0,
- "new_unique_event_records_this_batch": 1,
+ "new_unique_event_records_this_batch": 0,
  "publication_confirmed": false,
- "publication_state": "INTEGRATED_WORKING_COPY_AWAIT_GEO_AND_DEPLOY",
+ "publication_state": "CANCELLED_BACKFILL",
  "category_progress": {
   "Terrorist Financing": {
    "planned_root_queries": 156,
@@ -81,21 +81,11 @@
  "processing_complete": false,
  "complete_source_coverage": false,
  "latest_batch": {
-  "tasks_done": 1,
+  "tasks_done": 0,
   "fetched": 0,
-  "candidates": 0,
-  "skipped": 0,
-  "skipped_cached": 0,
-  "reviewed": 11,
-  "kept": 3,
-  "archived_incident": 1,
-  "unanswerable": 0,
-  "source_failures": 0,
-  "query_errors": 0,
-  "split": 0,
-  "given_up": 0,
-  "queued_candidates": 0
+  "reviewed": 0
  },
- "stop": "Groq GPT-OSS-120B budget used (4)",
- "note": "A retrieved article, rejected query, repeated source report or draft checkpoint is NEVER by itself a new published event. Local map record counts can change again after clustering and deployment."
+ "stop": "Cancelled by user; Chinese daily collection and saved progress preserved",
+ "note": "A retrieved article, rejected query, repeated source report or draft checkpoint is NEVER by itself a new published event. Local map record counts can change again after clustering and deployment.",
+ "backfill_status": "cancelled"
 }

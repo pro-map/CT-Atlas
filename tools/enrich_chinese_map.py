@@ -26,6 +26,7 @@ import enrich_archive
 import enrich_radnuc
 import groq_backfill
 import threat_categories
+import backfill_control
 
 CONFIG = "chinese-gemini-backfill-queries.json"
 MANIFEST = "archive/gemini-chinese-map-plan.json"
@@ -263,6 +264,17 @@ def run(root=ROOT, max_posts=12, max_fetches=90, deadline_minutes=35,
             or not 1 <= deadline_minutes <= 50):
         raise ValueError("Refusing unbounded requests or CPU/source use")
     root = Path(root)
+    if not backfill_control.lane_enabled(root, 'chinese_map'):
+        report = archive_review.read_json(root / STATUS) or {}
+        report.update(backfill_status='cancelled', processing_complete=False,
+                      complete_source_coverage=False,
+                      publication_state='CANCELLED_BACKFILL', new_unique_event_records_this_batch=0,
+                      stop='Cancelled by user; Chinese daily collection and saved progress preserved',
+                      latest_batch={'tasks_done':0, 'fetched':0, 'reviewed':0},
+                      updated_at=datetime.now(timezone.utc).isoformat())
+        archive_review.write_json(root / STATUS, report)
+        print(json.dumps({'backfill_status':'cancelled', 'stop':report['stop']}), flush=True)
+        return report
     using_groq = groq_backfill.enabled()
     if using_groq and not __import__("os").getenv("GROQ_API_KEY"):
         raise RuntimeError("Missing GROQ_API_KEY; no Chinese history checkpoint modified")
