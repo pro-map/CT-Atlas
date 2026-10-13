@@ -19,6 +19,7 @@ import radnuc_vocabulary
 import threat_categories
 import archive_review
 import enrich_archive
+import collection_config
 
 STATE_FILE = 'archive/radnuc-enrichment-state.json'
 STATUS_FILE = 'archive/radnuc-enrichment-status.json'
@@ -28,23 +29,11 @@ WINDOW_DAYS = 180
 # Fixed historical edition identities, also present in daily collection.
 # They are not a model, quota or scheduling configuration.
 # Two Chinese writing systems are indexed separately, but they are ONE language.
-CHINESE_BACKFILL_PROFILES = (
-    {"code": "zh", "name": "Chinese (Simplified)", "hl": "zh-CN",
-     "gl": "CN", "ceid": "CN:zh-Hans"},
-    {"code": "zh-Hant", "name": "Chinese (Traditional)", "hl": "zh-TW",
-     "gl": "TW", "ceid": "TW:zh-Hant"},
-)
+CHINESE_BACKFILL_PROFILES = collection_config.CHINESE_SPECIALIST_PROFILES
 
 
 def profiles(collector):
-    result = [*CHINESE_BACKFILL_PROFILES, enrich_archive.ENGLISH_PROFILE, *collector.MULTILINGUAL_PROFILES,
-              *enrich_archive.NEW_LANGUAGE_PROFILES,
-              {'code': 'sw', 'name': 'Swahili', 'hl': 'en-US', 'gl': 'US', 'ceid': 'US:en'}]
-    unique = {}
-    for profile in result:
-        identity = (profile['code'], profile['hl'], profile['gl'], profile['ceid'])
-        unique.setdefault(identity, profile)
-    return list(unique.values())
+    return collection_config.specialist_profiles(collector.MULTILINGUAL_PROFILES)
 
 
 def plan_tasks(today, collector):
