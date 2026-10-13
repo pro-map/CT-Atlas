@@ -1,0 +1,4 @@
+{
+  "disabled_categories": ["Radiological/Nuclear"],
+  "reason": "RadNuc historical backfill cancelled by user on 2026-10-13; daily collection remains enabled."
+}

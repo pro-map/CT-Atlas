@@ -75,7 +75,7 @@ jobs:
       - name: Migrate retained classifications without changing evidence
         if: steps.configure.outputs.enabled == 'true'
         run: python tools/migrate_threat_categories.py --write
-      - name: Backfill and integrate all three specialist categories
+      - name: Backfill and integrate enabled specialist categories (RadNuc cancelled)
         if: steps.configure.outputs.enabled == 'true'
         id: enrich
         timeout-minutes: 60

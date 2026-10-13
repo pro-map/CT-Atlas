@@ -9,6 +9,8 @@ on:
     paths:
       - "collector.py"
       - "collection_config.py"
+      - "backfill_control.py"
+      - "backfill-control.json"
       - "ct-atlas-runtime.json"
       - "radnuc-keywords.json"
       - "radnuc_vocabulary.py"
@@ -27,6 +29,8 @@ on:
     paths:
       - "collector.py"
       - "collection_config.py"
+      - "backfill_control.py"
+      - "backfill-control.json"
       - "ct-atlas-runtime.json"
       - "radnuc-keywords.json"
       - "radnuc_vocabulary.py"

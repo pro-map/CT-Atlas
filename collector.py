@@ -10727,6 +10727,9 @@ def main():
     is_backfill, COLLECTION_SCOPE = parse_collection_mode()
     effective_config = collection_config.validate_runtime(globals())
     print('Effective configured collection: ' + json.dumps(effective_config, ensure_ascii=False))
+    if is_backfill:
+        import backfill_control
+        backfill_control.apply_to_collector(globals(), Path(__file__).resolve().parent)
     existing_weekly_analysis = load_existing_weekly_analysis()
 
     initialize_incremental_state(is_backfill)

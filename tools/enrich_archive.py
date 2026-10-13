@@ -643,13 +643,18 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
     # Shorter searches left open by an earlier run come first.
     tasks = [task for task in state["children"].values() if task["key"] not in state["done"]]
     tasks += [task for task in plan if task["key"] not in state["done"]]
-    tasks = list({task['key']: task for task in tasks}.values())
+    import backfill_control
+    disabled = backfill_control.disabled_categories(root)
+    tasks = list({task['key']: task for task in tasks
+                  if task.get('category') not in disabled}.values())
     # Schedule work without touching the durable state or completed search IDs.
     tasks = order_history_tasks(tasks, prioritize_native=prioritize_native,
                                 interleave_supplement=interleave_supplement)
     # A successful RSS response survives a time/quota stop. Resume its review
     # instead of repeatedly downloading the same (possibly changed) feed.
-    replay = list(state["pending_reviews"])
+    suspended_reviews = [item for item in state['pending_reviews']
+                         if item['_task'].get('category') in disabled]
+    replay = [item for item in state['pending_reviews'] if item not in suspended_reviews]
     replay_tasks = {item["_task"]["key"]: item["_task"] for item in replay}
     tasks = [task for task in tasks if task["key"] not in replay_tasks]
     searcher = searcher or Searcher(collector)
@@ -718,7 +723,7 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
         save_seen(root, now, new_seen, seen_prefix)
         close_finished()
         answered = {item["_key"] for item, _ in pairs} | {item["_key"] for item in skipped}
-        state["pending_reviews"] = [item for item in queue if item["_key"] not in answered]
+        state["pending_reviews"] = suspended_reviews + [item for item in queue if item["_key"] not in answered]
         save_state(root, state, plan_keys, state_file)
         log(f"Review checkpoint: {summary['reviewed']} reviewed; "
             f"{len(state['pending_reviews'])} candidates saved; {summary['kept']} retained reports.")
@@ -829,7 +834,7 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
                 summary["candidates"] += added
                 open_count[task["key"]] = open_count.get(task["key"], 0) + added
                 finished.append(task)
-                state["pending_reviews"] = list(queue)
+                state["pending_reviews"] = suspended_reviews + list(queue)
                 close_finished()
                 save_state(root, state, plan_keys, state_file)
 
@@ -860,7 +865,7 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
             summary["given_up"] += 1
             bump(state, task, "given_up")
             finish(task)
-    state["pending_reviews"] = list(queue)
+    state["pending_reviews"] = suspended_reviews + list(queue)
     summary["queued_candidates"] = len(queue)
     if stop == "plan finished" and (queue or any(t["key"] not in state["done"] for t in tasks)):
         stop = "source work deferred; checkpoints and review queue preserved"
