@@ -26,6 +26,7 @@ import enrich_radnuc
 import groq_backfill
 import backfill_query
 import radnuc_vocabulary
+import backfill_control
 
 MANIFEST = 'archive/threat-enrichment-plan.json'
 STATUS = 'archive/threat-enrichment-status.json'
@@ -150,16 +151,18 @@ def progress(root, category, plan, summary=None):
     # not retain exact rejected/saturated identities, so never certify complete
     # source coverage merely because the remaining work queue reaches zero.
     complete = not pending_keys and not active_rejected and not saturated and not any(history.values())
+    cancelled = not backfill_control.enabled(root, category)
     return {'planned_searches':len(plan),'pending_searches':len(pending_keys),
             'queued_candidates':len(queued), 'completed_searches':processed,
             'successful_main_queries':processed-len(planned & set(rejected)),
             'rejected_queries':len(active_rejected),
             'saturated_queries':len(saturated),
             **({'supplemental_vocabulary':radnuc_vocabulary.progress(plan,state)} if category==topics.RN else {}),
-            'processing_complete':not pending_keys, 'complete':complete,
+            'processing_complete':not pending_keys and not cancelled, 'complete':complete and not cancelled,
+            **({'backfill_status':'cancelled'} if cancelled else {}),
             'coverage_issues':history,
             'coverage_note':'Historical source errors are retained; processed is not an exhaustive-coverage claim.',
-            'last_run':summary or {}, 'state_updated_at':(archive_review.read_json(Path(root)/f'archive/{PREFIXES[category]}-enrichment-state.json') or {}).get('updated_at'),
+            'last_run':{'stop':'Cancelled by user; saved progress preserved'} if cancelled else summary or {}, 'state_updated_at':(archive_review.read_json(Path(root)/f'archive/{PREFIXES[category]}-enrichment-state.json') or {}).get('updated_at'),
             'native_query_languages':sorted({t['code'] for t in plan if t['source']=='google'}),
             'gdelt_scope':'all source languages indexed by the provider; not exhaustive web coverage'}
 
@@ -179,8 +182,8 @@ def refresh_status(root=ROOT, phase=None):
         for category in topics.LABELS}
     report.update(frozen)
     report['updated_at'] = datetime.now(timezone.utc).isoformat()
-    report['complete'] = all(row['complete'] for row in report['categories'].values())
-    report['processing_complete'] = all(row['processing_complete'] for row in report['categories'].values())
+    report['complete'] = all(row['complete'] for row in backfill_control.active_rows(report))
+    report['processing_complete'] = all(row['processing_complete'] for row in backfill_control.active_rows(report))
     if phase:
         report['batch_status'] = phase
     if report.get('batch_status') in ('interrupted','failed'):
@@ -192,6 +195,12 @@ def refresh_status(root=ROOT, phase=None):
 def run(root=ROOT, max_posts=60, max_fetches=600, today=None, deadline_minutes=75,
         categories=None, searcher_factory=None, gate_factory=None, call_batch=None, log=print):
     root = Path(root)
+    requested = list(topics.LABELS if categories is None else categories)
+    if any(c not in topics.LABELS for c in requested): raise ValueError('Unknown specialist category')
+    chosen = [c for c in requested if backfill_control.enabled(root, c)]
+    if not chosen:
+        return {'backfill_status':'cancelled', 'requests_this_run':0, 'searches_this_run':0,
+                'cancelled_categories':requested}
     using_groq = groq_backfill.enabled()
     if using_groq and not os.getenv('GROQ_API_KEY'):
         raise RuntimeError('Missing GROQ_API_KEY; no specialist checkpoint modified')
@@ -203,13 +212,12 @@ def run(root=ROOT, max_posts=60, max_fetches=600, today=None, deadline_minutes=7
                                                  threshold=archive_review.map_threshold(root))
     if using_groq:
         collector.AI_SELECTION_MODEL = groq_backfill.MODEL
-    chosen = list(categories or topics.LABELS)
-    if any(c not in topics.LABELS for c in chosen): raise ValueError('Unknown specialist category')
     rotation = today.toordinal() % len(chosen)
     chosen = chosen[rotation:]+chosen[:rotation]
     plans = {category:plan_tasks(category,anchor,collector) for category in topics.LABELS}
     for category in topics.LABELS:
-        repair_children(root,category,plans[category])
+        if backfill_control.enabled(root, category):
+            repair_children(root,category,plans[category])
     report = {'updated_at':now.isoformat(),**frozen,'taxonomy_version':topics.VERSION,
               'batch_started_at':now.isoformat(), 'batch_status':'running',
               'model_backend':'groq-free-public-news' if using_groq else 'gemini',
@@ -283,13 +291,13 @@ def run(root=ROOT, max_posts=60, max_fetches=600, today=None, deadline_minutes=7
                 for deferred in chosen[index+1:]:
                     report['categories'][deferred]['last_run'] = {'stop':stop,'reviewed':0,'tasks_done':0}
                 break
-        report['complete'] = all(row['complete'] for row in report['categories'].values())
-        report['processing_complete'] = all(row['processing_complete'] for row in report['categories'].values())
+        report['complete'] = all(row['complete'] for row in backfill_control.active_rows(report))
+        report['processing_complete'] = all(row['processing_complete'] for row in backfill_control.active_rows(report))
         work = sum(sum(row.get('last_run',{}).get(k,0) for k in ('reviewed','fetched'))
                    for row in report['categories'].values())
         report['batch_status'] = 'complete' if report['complete'] else (
             'processed_with_coverage_limits' if report['processing_complete'] else 'partial' if work else 'blocked')
-        report['completion_meaning'] = 'Configured queries processed, not a guarantee that all real-world cases were found.'
+        report['completion_meaning'] = 'Enabled categories only; cancelled backfills are not completed. Processed queries do not guarantee all real-world cases were found.'
     except BaseException as error:
         report['batch_status'] = 'interrupted' if isinstance(error,(KeyboardInterrupt,SystemExit)) else 'failed'
         report['error_type'] = type(error).__name__

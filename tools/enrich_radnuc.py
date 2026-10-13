@@ -20,6 +20,7 @@ import threat_categories
 import archive_review
 import enrich_archive
 import collection_config
+import backfill_control
 
 STATE_FILE = 'archive/radnuc-enrichment-state.json'
 STATUS_FILE = 'archive/radnuc-enrichment-status.json'
@@ -151,6 +152,9 @@ class IntegratedOutput(enrich_archive.Output):
 
 
 def run(root=ROOT, max_posts=100, max_fetches=300, today=None, **kwargs):
+    if not backfill_control.enabled(root, threat_categories.RN):
+        return {'backfill_status':'cancelled', 'category':threat_categories.RN,
+                'reason':'Cancelled by user; daily collection and saved progress preserved'}
     now = datetime.now(timezone.utc)
     today = today or now.date()
     collector = archive_review.prepare_collector(archive_review.load_collector(root),

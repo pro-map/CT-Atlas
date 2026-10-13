@@ -10,10 +10,13 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+import backfill_control
 CONFIG = 'specialist-catchup.json'
 STATE = 'archive/threat-catchup-control.json'
 STATUS = 'archive/threat-enrichment-status.json'
@@ -50,7 +53,7 @@ def remaining(report):
     if set(categories) != set(LABELS):
         return None
     return sum(int(row.get('pending_searches', 0)) + int(row.get('queued_candidates', 0))
-               for row in categories.values())
+               for row in backfill_control.active_rows(report))
 
 
 def configure(root, now, run_id, event='workflow_dispatch', continuation=False):
@@ -98,7 +101,7 @@ def continuation_decision(root, now):
     if count is None:
         return False, 'Incomplete status snapshot; do not dispatch from an unverified checkpoint.'
     if count == 0:
-        return False, ('Backfill complete.' if report.get('complete') else
+        return False, ('Active backfills complete.' if report.get('complete') else
                        'Configured search work processed, but source coverage limitations remain; not marked complete.')
     if report.get('batch_status') in ('running','interrupted','failed','blocked'):
         return False, 'Batch did not finish productively; inspect the saved checkpoint before resuming.'
@@ -126,13 +129,16 @@ def summary(root):
     state = report.get('batch_status','unknown')
     lines = ['# Specialist six-month backfill', '',
              f"Last checkpoint (UTC): {report.get('updated_at', 'Not available')}",
-             '', f"**Batch result: {state}. Whole backfill complete: {'YES' if report.get('complete') else 'NO'}.**", '',
+             '', f"**Batch result: {state}. Active backfills complete: {'YES' if report.get('complete') else 'NO'}.**", '',
              '| Category | Root queries processed / planned | Rejected queries | Pending work | Awaiting AI review | New event records this batch |',
              '|---|---:|---:|---:|---:|---:|']
     for name in LABELS:
         row = (report.get('categories') or {}).get(name)
         if row is None:
             lines.append(f'| {name} | Not available | ? | ? | ? | ? |')
+            continue
+        if row.get('backfill_status') == 'cancelled':
+            lines.append(f'| {name} (cancelled by user) | Progress preserved | — | Not scheduled | Not scheduled | 0 |')
             continue
         lines.append(f"| {name} | {row.get('completed_searches','?')} / {row.get('planned_searches','?')} | "
                      f"{row.get('rejected_queries','?')} | {row.get('pending_searches','?')} | "

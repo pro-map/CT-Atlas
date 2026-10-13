@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
     inputs:
       specialist_posts:
-        description: "Groq API calls for all three specialist CBRNE categories (max 5)"
+        description: "Groq API calls for enabled specialist categories (RadNuc cancelled; max 5)"
         required: false
         default: "5"
       chinese_posts:
@@ -140,7 +140,7 @@ jobs:
           print(f"Protected {len(ids)} prior incident IDs and {len(geo)} location decisions")
           PY
           python tools/backfill_publication_guard.py snapshot
-      - name: Resume RN, Chemicals & Explosives, Biological - ALL configured languages incl Chinese
+      - name: Resume enabled specialist backfills (RadNuc cancelled) - all configured languages incl Chinese
         id: specialists
         timeout-minutes: 37
         if: env.SPECIALIST_POSTS_INPUT != '0'
