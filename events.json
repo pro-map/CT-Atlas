@@ -589,7 +589,7 @@
     "UK Government / Counter-Terrorism",
     "INTERPOL English News"
   ],
-  "last_updated": "2026-10-13T22:14:20.709693+00:00",
+  "last_updated": "2026-10-13T23:08:29.088861+00:00",
   "number_of_events": 4530,
   "events": [
     {
@@ -484075,6 +484075,37 @@
       "source_verified_city": 9,
       "source_verified_country": 1,
       "source_verified_unlocated": 1
+    }
+  },
+  "specialist_enrichment": {
+    "Biological Terrorism": {
+      "window_days": 180,
+      "languages": [
+        "ar",
+        "bn",
+        "de",
+        "en",
+        "es",
+        "fa",
+        "fr",
+        "ha",
+        "he",
+        "hi",
+        "id",
+        "it",
+        "ps",
+        "pt",
+        "ru",
+        "so",
+        "sw",
+        "tr",
+        "ur",
+        "zh",
+        "zh-Hant"
+      ],
+      "state_actor_operations": "excluded",
+      "pipeline": "Shared selection schema, English translation and incremental event deduplication",
+      "model": "openai/gpt-oss-120b"
     }
   }
 }

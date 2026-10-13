@@ -1,16 +1,16 @@
 {
   "version": 1,
-  "updated_at": "2026-10-13T19:20:04.409938+00:00",
-  "run_id": "38453911120",
+  "updated_at": "2026-10-13T23:13:23.959897+00:00",
+  "run_id": "38482301467",
   "publication_ready": true,
   "publication_confirmed": false,
   "reason": "validated_working_copy",
   "baseline_snapshot_used": true,
-  "baseline_sha256": "666be95b0701c43792893c650a68754936a31c33fe8ae37ebd63e5c1ed6518a0",
-  "final_map_sha256": "666be95b0701c43792893c650a68754936a31c33fe8ae37ebd63e5c1ed6518a0",
-  "working_copy_sha256": "666be95b0701c43792893c650a68754936a31c33fe8ae37ebd63e5c1ed6518a0",
+  "baseline_sha256": "f533273b73de7e70a38427d770d5e442623b11fe50393feae0f038b76f2839cc",
+  "final_map_sha256": "2ac1dbdb444f4414f18c05acdb4e304b9ef77c0d88900137ce3d5b45bf294c8a",
+  "working_copy_sha256": "2ac1dbdb444f4414f18c05acdb4e304b9ef77c0d88900137ce3d5b45bf294c8a",
   "recovery_copy_saved": false,
-  "records": 4463,
+  "records": 4530,
   "new_validated_records": 0,
   "note": "Validation and record IDs are not proof of deployed unique real-world incidents."
 }
