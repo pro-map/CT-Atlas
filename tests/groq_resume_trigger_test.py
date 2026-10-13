@@ -13,7 +13,7 @@ class GroqResumeTriggerTest(unittest.TestCase):
     def test_only_explicit_main_push_enables_normal_history_budgets(self):
         text = (ROOT / ".github/workflows/groq-free-backfill.yml").read_text()
         for name, argument, limit in (("SPECIALIST_POSTS_INPUT", "specialist_posts", 5),
-                                      ("CHINESE_POSTS_INPUT", "chinese_posts", 4)):
+                                      ("CHINESE_POSTS_INPUT", "chinese_posts", 0)):
             expected = (name + ": ${{ github.event_name == 'push' && "
                         "!startsWith(github.event.head_commit.message, '[resume-groq-history]') "
                         "&& '0' || inputs." + argument + " || '" + str(limit) + "' }}")

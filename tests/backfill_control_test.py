@@ -16,6 +16,7 @@ import enrich_radnuc as rn
 import enrich_threat_categories as specialist
 import enrich_archive as archive
 import specialist_catchup as catchup
+import enrich_chinese_map as chinese
 
 
 class BackfillCancellation(unittest.TestCase):
@@ -110,6 +111,33 @@ class BackfillCancellation(unittest.TestCase):
         self.assertEqual(catchup.remaining(report),0)
         self.assertTrue(all(row['complete'] for row in control.active_rows(report)))
         self.assertFalse(report['categories'][topics.RN]['complete'])
+
+    def test_chinese_cancellation_precedes_api_quota_recovery_and_preserves_checkpoints(self):
+        (self.root/control.CONFIG).write_text(json.dumps({
+            'disabled_categories':[topics.RN], 'disabled_lanes':['chinese_map']}))
+        paths = [self.root/chinese.STATE, self.root/'events.json', self.root/'quota/groq-oss120b-public-backfill.json']
+        for path in paths:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text('{"saved":"unchanged"}')
+        before = {path:path.read_bytes() for path in paths}
+        with patch.object(chinese.archive_review, 'load_collector', side_effect=AssertionError('Must not start')), \
+             patch.object(chinese, 'ChineseMapOutput', side_effect=AssertionError('Must not recover')), \
+             patch('requests.sessions.Session.request', side_effect=AssertionError('Must not call API')):
+            report = chinese.run(self.root)
+        self.assertEqual(report['backfill_status'], 'cancelled')
+        self.assertFalse(report['processing_complete'])
+        self.assertEqual(before, {path:path.read_bytes() for path in paths})
+
+    def test_chinese_stop_preserves_specialist_backfill_languages_and_daily_all_categories(self):
+        lanes = {'chinese_map'}
+        for code in ('zh','zh-Hant'):
+            self.assertTrue(control.task_disabled({'category':'Attacks','code':code}, set(), lanes))
+            for category in (topics.CE,topics.BIO):
+                self.assertFalse(control.task_disabled({'category':category,'code':code}, set(), lanes))
+            profile = next(p for p in collector.MULTILINGUAL_PROFILES if p['code']==code)
+            self.assertEqual({q['category'] for q in profile['queries']},set(collector.CATEGORIES))
+        self.assertTrue(control.task_disabled({'category':'Attacks','group':'gemini_chinese_map'},set(),lanes))
+        self.assertFalse(control.task_disabled({'category':'Attacks','code':'fr'},set(),lanes))
 
 
 if __name__=='__main__': unittest.main()
