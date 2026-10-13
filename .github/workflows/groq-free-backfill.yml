@@ -116,20 +116,15 @@ jobs:
           GEO_IDS: ${{ runner.temp }}/groq-geo-protected.json
         run: |
           python - <<'PY'
-          import json, os, math
+          import json, os
           from pathlib import Path
           db = json.loads(Path("events.json").read_text(encoding="utf-8"))
           if not isinstance(db.get("events"),list) or not db["events"]:
               raise SystemExit("Invalid pre-run Map database: refuse operation")
           ids=[str(e["id"]) for e in db["events"] if e.get("id") is not None]
-          def located(e):
-              try:
-                  lat,lon=float(e.get("latitude")),float(e.get("longitude"))
-                  return math.isfinite(lat) and math.isfinite(lon) and -90<=lat<=90 and -180<=lon<=180
-              except (ValueError,TypeError):
-                  return False
-          geo=[str(e["id"]) for e in db["events"]
-               if e.get("id") is not None and (e.get("ai_geo_complete") is True or located(e))]
+          # The publication guard freezes geography for every prior record,
+          # including old records whose coordinates are still missing.
+          geo = ids
           Path(os.environ["BEFORE"]).write_text(json.dumps(ids),encoding="utf-8")
           Path(os.environ["GEO_IDS"]).write_text(json.dumps(geo),encoding="utf-8")
           print(f"Protected {len(ids)} prior incident IDs and {len(geo)} location decisions")

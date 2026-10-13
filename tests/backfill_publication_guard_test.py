@@ -191,13 +191,16 @@ class PublicationGuardTest(unittest.TestCase):
 
     def test_workflow_always_commit_cannot_skip_final_guard(self):
         text = (ROOT / ".github/workflows/groq-free-backfill.yml").read_text()
-        block = text.split("- name: Commit both resumable history lanes", 1)[1].split("- name: Preserve publication receipt", 1)[0]
+        block = text.split("id: checkpoint", 1)[1].split("- name: Preserve publication receipt", 1)[0]
         self.assertIn("if: always()", block)
         self.assertLess(block.index("backfill_publication_guard.py finalize"), block.index("git add -- events.json"))
         self.assertLess(block.index("backfill_publication_guard.py verify"), block.index("git add -- events.json"))
         self.assertIn("needs.backfill.outputs.publication_ready == 'true'", text)
         self.assertIn("steps.checkpoint.outputs.publication_ready != 'true'", text)
-        for name in GOOD:
+        self.assertIn('GUARD_CHINESE: "skipped"', block)
+        self.assertNotIn("id: chinese", text)
+        self.assertNotIn("tools/enrich_chinese_map.py", text)
+        for name in GOOD.keys() - {"chinese"}:
             self.assertIn("GUARD_" + name.upper() + ": ${{ steps." + name + ".outcome }}", text)
 
 
