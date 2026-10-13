@@ -20,10 +20,119 @@ import {
   databaseFiltersLabel
 } from "./shared.js";
 
-const DATABASE_QUERY_VERSION = "database-query-v3-standalone-threat-topics";
+const DATABASE_QUERY_VERSION = "database-query-v4-radnuc-background";
 // Everything the database holds today fits (180 days, ~4-5k events); the cap
 // only guards against a runaway response if the database grows a lot.
 const MAX_DATABASE_RESULTS = 8000;
+const MAX_BACKGROUND_RESULTS = 200;
+const RADNUC_CATEGORY = "Radiological/Nuclear";
+const BACKGROUND_SCOPE_SQL = `kind = 'radnuc_background'
+  AND category = 'Radiological/Nuclear' AND primary_event_type = 'BACKGROUND_INFO'`;
+// SQLite understands both ISO Z and +00:00 timestamps. Empty or invalid
+// publication dates use the collection date, without a publisher location.
+const BACKGROUND_DATE_SQL = "COALESCE(julianday(NULLIF(TRIM(published), '')), julianday(collected_at))";
+
+function parisDayBounds(now) {
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23"
+  });
+  const parts = date => Object.fromEntries(formatter.formatToParts(date)
+    .filter(part => part.type !== "literal").map(part => [part.type, Number(part.value)]));
+  const today = parts(now);
+  const date = `${today.year}-${String(today.month).padStart(2, "0")}-${String(today.day).padStart(2, "0")}`;
+  // Resolve each calendar midnight independently: Paris has 23- and 25-hour
+  // days when daylight saving changes, so tomorrow is not always +24 hours.
+  const midnight = wallTime => {
+    let utcTime = wallTime;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const local = parts(new Date(utcTime));
+      const represented = Date.UTC(local.year, local.month - 1, local.day, local.hour, local.minute, local.second);
+      const adjustment = represented - wallTime;
+      if (!adjustment) break;
+      utcTime -= adjustment;
+    }
+    return new Date(utcTime).toISOString();
+  };
+  return {
+    date,
+    start: midnight(Date.UTC(today.year, today.month - 1, today.day)),
+    end: midnight(Date.UTC(today.year, today.month - 1, today.day + 1))
+  };
+}
+
+function backgroundArticleRow(row) {
+  const url = cleanText(row.url, 1200);
+  return {
+    title: cleanText(row.title, 400),
+    summary: cleanText(row.summary, 900),
+    source: cleanText(row.source, 140),
+    url: /^https?:\/\//i.test(url) ? url : "",
+    published: cleanText(row.published, 40),
+    collected_at: cleanText(row.collected_at, 40),
+    original_language: cleanText(row.original_language, 12),
+    kind: "radnuc_background",
+    category: RADNUC_CATEGORY,
+    categories: [RADNUC_CATEGORY],
+    archive_only: true,
+    primary_event_type: "BACKGROUND_INFO",
+    latitude: null,
+    longitude: null
+  };
+}
+
+async function fetchRadnucBackground(env, filters, now) {
+  const day = parisDayBounds(now);
+  const empty = {
+    available: false, included: false, total: 0, truncated: false,
+    added_today_count: 0, today_date: day.date, items: []
+  };
+  // These records have no incident actor or event location. Showing them as
+  // matching a country/group would invent evidence. Only the RadNuc global
+  // section requests them, and the other event scopes do not touch D1.
+  if (filters.topic !== RADNUC_CATEGORY) return { ...empty, reason: "category_filter" };
+  if (filters.region !== "GLOBAL" || filters.actorGroup !== "ALL") return { ...empty, reason: "scope_filter" };
+  const unavailable = { ...empty, included: true, reason: "unavailable" };
+  const db = env.BACKGROUND_DB;
+  if (!db?.prepare) return unavailable;
+
+  const periodSql = filters.periodDays ? `${BACKGROUND_DATE_SQL} >= julianday(?) AND ${BACKGROUND_DATE_SQL} <= julianday(?)` : "1 = 1";
+  const periodArgs = filters.periodDays
+    ? [new Date(now.getTime() - filters.periodDays * 86400000).toISOString(), now.toISOString()]
+    : [];
+  // The collection-day count is independent of the publication filter: an
+  // article saved today can have been published yesterday. Both date labels
+  // are exposed so the UI can distinguish them.
+  const countSql = `SELECT
+    (SELECT COUNT(*) FROM background_articles WHERE ${BACKGROUND_SCOPE_SQL}
+      AND ${periodSql}) AS total,
+    (SELECT COUNT(*) FROM background_articles WHERE ${BACKGROUND_SCOPE_SQL}
+      AND julianday(collected_at) >= julianday(?)
+      AND julianday(collected_at) < julianday(?)) AS added_today_count`;
+  const itemsSql = `SELECT title, summary, source, url, published, collected_at, original_language
+    FROM background_articles WHERE ${BACKGROUND_SCOPE_SQL} AND ${periodSql}
+    ORDER BY ${BACKGROUND_DATE_SQL} DESC, collected_at DESC, url
+    LIMIT ${MAX_BACKGROUND_RESULTS}`;
+  try {
+    const [counts, rows] = await Promise.all([
+      db.prepare(countSql).bind(...periodArgs, day.start, day.end).first(),
+      db.prepare(itemsSql).bind(...periodArgs).all()
+    ]);
+    if (!counts || !Array.isArray(rows?.results) || rows.success === false) return unavailable;
+    const total = Math.max(0, Number(counts.total) || 0);
+    return {
+      available: true, included: true, total,
+      truncated: total > MAX_BACKGROUND_RESULTS,
+      added_today_count: Math.max(0, Number(counts.added_today_count) || 0),
+      today_date: day.date,
+      items: rows.results.slice(0, MAX_BACKGROUND_RESULTS).map(backgroundArticleRow)
+    };
+  } catch (_) {
+    // A temporary archive failure must not erase the event results or appear
+    // to mean zero background articles exist.
+    return unavailable;
+  }
+}
 
 // Explicit fields -- the ones the list, the Excel export and the map export
 // read -- never a copy of the whole event.
@@ -113,6 +222,7 @@ async function handleDatabaseEvents(request, env) {
     .filter(event => matchesGroup(event, filters.actorGroup))
     .map(event => ({ event, time: parseEventDate(event)?.getTime() || 0 }))
     .sort((a, b) => b.time - a.time);
+  const backgroundArticles = await fetchRadnucBackground(env, filters, now);
 
   return jsonResponse({
     version: DATABASE_QUERY_VERSION,
@@ -122,9 +232,11 @@ async function handleDatabaseEvents(request, env) {
     total: matched.length,
     truncated: matched.length > MAX_DATABASE_RESULTS,
     groups,
-    events: matched.slice(0, MAX_DATABASE_RESULTS).map((item, index) => databaseEventRow(item.event, index))
+    events: matched.slice(0, MAX_DATABASE_RESULTS).map((item, index) => databaseEventRow(item.event, index)),
+    background_articles: backgroundArticles
   }, 200, env);
 }
 
-export { handleDatabaseEvents, databaseEventRow, DATABASE_QUERY_VERSION, MAX_DATABASE_RESULTS };
+export { handleDatabaseEvents, databaseEventRow, backgroundArticleRow, fetchRadnucBackground, parisDayBounds,
+  DATABASE_QUERY_VERSION, MAX_DATABASE_RESULTS, MAX_BACKGROUND_RESULTS };
 
