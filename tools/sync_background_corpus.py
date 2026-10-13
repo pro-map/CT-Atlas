@@ -80,6 +80,25 @@ DROPPED_KINDS = frozenset({"related_article"})
 
 CORPUS_STATS_UPSERT = collector.BACKGROUND_CORPUS_STATS_UPSERT
 
+# These small partial indexes cover only the archive-only RadNuc articles.
+# Their expressions match the DATABASE reader, including missing/invalid
+# publication dates, so opening the daily view need not scan the whole corpus.
+RADNUC_BACKGROUND_INDEXES = (
+    """CREATE INDEX IF NOT EXISTS idx_radnuc_background_published
+    ON background_articles (
+      COALESCE(julianday(NULLIF(TRIM(published), '')), julianday(collected_at)) DESC
+    ) WHERE kind = 'radnuc_background'""",
+    """CREATE INDEX IF NOT EXISTS idx_radnuc_background_collected
+    ON background_articles (julianday(collected_at) DESC)
+    WHERE kind = 'radnuc_background'""",
+)
+
+
+def ensure_radnuc_background_indexes():
+    for sql in RADNUC_BACKGROUND_INDEXES:
+        collector.d1_query(sql)
+    print("RadNuc background publication and collection date indexes are available.")
+
 
 def _load_json(path):
     try:
@@ -516,6 +535,7 @@ def main(argv=None):
 
     inserted = deleted = updated = 0
     try:
+        ensure_radnuc_background_indexes()
         response = collector.d1_query(EXISTING_ROWS_SQL)
         stored = [row for row in ((response.get("result") or [{}])[0].get("results") or []) if row.get("url")]
         size = database_size(response)

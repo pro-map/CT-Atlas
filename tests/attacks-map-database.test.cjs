@@ -601,3 +601,134 @@ test('the browser rejects an outdated 91-day payload and loads the full six-mont
   assert.ok(loaded.recent_events.some(e=>e.id==='older-arrest'));
   assert.equal(loaded.map.recent_events_days,181);
 });
+
+function backgroundPanelHarness(){
+  const nodes=Object.fromEntries(['databaseBackgroundSection','databaseBackgroundCounts','databaseBackgroundStatus','databaseBackgroundList'].map(id=>[id,{hidden:true,textContent:'',innerHTML:'',title:''}]));
+  const c=vm.createContext({
+    document:{getElementById:id=>nodes[id]||null}, Date,Number,Array,JSON,
+    currentFilters:{region:'GLOBAL',topic:'Radiological/Nuclear',actor_group:'ALL',period_days:1},
+    databaseQueryPromise:null,databaseLastError:'',databaseBackgroundKey:'',databaseBackgroundArticles:null,
+  });
+  vm.runInContext('function databaseFilters(){ return currentFilters; }'+extract('escapeHtml')+extract('safeHttpUrl')+extract('databaseRadnucBackgroundScope')+extract('backgroundPublicationDate')+extract('renderDatabaseBackground'),c);
+  return {c,nodes};
+}
+
+function backgroundPayload(){
+  return {available:true,included:true,total:17,added_today_count:17,today_date:'2026-10-13',items:[
+    {title:'English regulation update',source:'IAEA',published:'2026-10-12T20:00:00Z',summary:'Technical background only',url:'https://example.test/update',kind:'radnuc_background',archive_only:true,category:'Radiological/Nuclear',primary_event_type:'BACKGROUND_INFO'},
+    {title:'<script>alert(1)</script>',source:'<img src=x>',published:'2026-10-13T00:00:00Z',summary:'<svg onload=alert(1)>',url:'javascript:alert(1)',kind:'radnuc_background',archive_only:true,category:'Radiological/Nuclear',primary_event_type:'BACKGROUND_INFO'},
+    {title:'An operational event does not belong here',url:'https://example.test/event',kind:'archived_incident',archive_only:false,category:'Radiological/Nuclear',primary_event_type:'CBRN'},
+  ]};
+}
+
+test('RadNuc background has separate period and Paris collection counts, safe source links and no event selection',()=>{
+  const {c,nodes}=backgroundPanelHarness();
+  c.databaseBackgroundArticles=backgroundPayload();
+  c.databaseBackgroundKey=JSON.stringify(c.currentFilters);
+  c.renderDatabaseBackground();
+  assert.equal(nodes.databaseBackgroundSection.hidden,false);
+  assert.equal(nodes.databaseBackgroundCounts.textContent,'Published in selected period: 17 · Added today (Paris): 17');
+  assert.match(nodes.databaseBackgroundCounts.title,/publication dates.*date saved.*Paris time.*2026-10-13/);
+  assert.match(nodes.databaseBackgroundList.innerHTML,/English regulation update/);
+  assert.match(nodes.databaseBackgroundList.innerHTML,/Published 12 Oct 2026, 22:00 Paris/);
+  assert.match(nodes.databaseBackgroundList.innerHTML,/href="https:\/\/example.test\/update"/);
+  assert.ok(!nodes.databaseBackgroundList.innerHTML.includes('javascript:'));
+  assert.ok(!nodes.databaseBackgroundList.innerHTML.includes('<script>'));
+  assert.match(nodes.databaseBackgroundList.innerHTML,/&lt;script&gt;/);
+  assert.ok(!nodes.databaseBackgroundList.innerHTML.includes('An operational event'));
+  assert.ok(!/databaseResults|_mapEventKey|chronologySelectedKeys/.test(extract('renderDatabaseBackground')));
+  assert.match(html,/Background only · excluded from incidents and the map\./);
+});
+
+test('background rows disappear immediately for different filters, loading, errors or unavailable archive',()=>{
+  const {c,nodes}=backgroundPanelHarness();
+  c.databaseBackgroundArticles=backgroundPayload();
+  c.databaseBackgroundKey=JSON.stringify(c.currentFilters);
+  c.renderDatabaseBackground();
+  c.currentFilters={...c.currentFilters,topic:'Biological Terrorism'};
+  c.renderDatabaseBackground();
+  assert.equal(nodes.databaseBackgroundSection.hidden,true);
+  assert.equal(nodes.databaseBackgroundList.innerHTML,'');
+  assert.equal(nodes.databaseBackgroundCounts.textContent,'');
+  c.currentFilters={...c.currentFilters,topic:'Radiological/Nuclear',period_days:7};
+  c.renderDatabaseBackground();
+  assert.equal(nodes.databaseBackgroundList.innerHTML,'','old period is never shown');
+  assert.match(nodes.databaseBackgroundStatus.textContent,/Loading/);
+  c.currentFilters={...c.currentFilters,period_days:1};
+  c.databaseQueryPromise={}; c.renderDatabaseBackground();
+  assert.equal(nodes.databaseBackgroundList.innerHTML,'');
+  c.databaseQueryPromise=null; c.databaseLastError='network failure'; c.renderDatabaseBackground();
+  assert.match(nodes.databaseBackgroundStatus.textContent,/unavailable/);
+  assert.equal(nodes.databaseBackgroundCounts.textContent,'','failure is not a zero count');
+  c.databaseLastError=''; c.databaseBackgroundArticles={available:false,included:true};c.renderDatabaseBackground();
+  assert.match(nodes.databaseBackgroundStatus.textContent,/temporarily unavailable/);
+  c.currentFilters={...c.currentFilters,region:'France'};c.renderDatabaseBackground();
+  assert.match(nodes.databaseBackgroundStatus.textContent,/Choose Global and All groups/);
+  assert.equal(nodes.databaseBackgroundList.innerHTML,'');
+});
+
+test('a response arriving during the filter debounce cannot populate the RadNuc background section',async()=>{
+  const {c,nodes}=backgroundPanelHarness();
+  let finish;
+  Object.assign(c,{
+    REPORT_GENERATOR_API_BASE:'https://worker',databaseResults:[],databaseResultsKey:'',
+    databaseResultsLoadedAt:0,databaseSourceVersion:'',mapDatabaseVersion:'',databaseQuerySeq:0,
+    databaseActivated:false,chronologySelectedKeys:new Set(),chronologyOpen:false,
+    databaseLastStatus:'',fetch:()=>new Promise(resolve=>{finish=resolve;}),
+    databaseCacheReusable:()=>false,reportGeneratorUserId:()=> 'analyst',
+    setDatabaseStatus:()=>{},linkDatabaseRowsToMap:()=>{},renderDatabaseGroups:()=>{},
+  });
+  vm.runInContext(extract('queryDatabase'),c);
+  const pending=c.queryDatabase();
+  c.currentFilters={...c.currentFilters,topic:'Arrests'};
+  c.renderDatabaseBackground();
+  finish({ok:true,json:async()=>({events:[{key:'db-0',title:'Incident'}],total:1,background_articles:backgroundPayload()})});
+  await pending;
+  assert.equal(c.databaseBackgroundArticles,null,'the late response is discarded even before the next query starts');
+  assert.equal(c.databaseResults.length,0);
+  assert.equal(nodes.databaseBackgroundSection.hidden,true);
+  assert.equal(nodes.databaseBackgroundList.innerHTML,'');
+});
+
+test('background refresh requires prior authenticated panel use, an idle query and no export selection',()=>{
+  let now=100000,calls=0;
+  const c=vm.createContext({Date:{now:()=>now},databaseActivated:false,databaseQueryPromise:null,
+    chronologySelectedKeys:new Set(),databaseResultsLoadedAt:0,DATABASE_RESULTS_CACHE_MS:60000,
+    currentFilters:{region:'GLOBAL',topic:'Radiological/Nuclear',actor_group:'ALL'},
+    queryDatabase:()=>{calls++;return Promise.resolve();}});
+  vm.runInContext('function databaseFilters(){ return currentFilters; }'+extract('databaseRadnucBackgroundScope')+extract('refreshVisibleDatabaseBackground'),c);
+  c.refreshVisibleDatabaseBackground();assert.equal(calls,0);
+  c.databaseActivated=true;c.databaseResultsLoadedAt=now;c.refreshVisibleDatabaseBackground();assert.equal(calls,0);
+  now+=61000;c.chronologySelectedKeys.add('db-0');c.refreshVisibleDatabaseBackground();assert.equal(calls,0);
+  c.chronologySelectedKeys.clear();c.databaseQueryPromise={};c.refreshVisibleDatabaseBackground();assert.equal(calls,0);
+  c.databaseQueryPromise=null;c.refreshVisibleDatabaseBackground();assert.equal(calls,1);
+  c.currentFilters={...c.currentFilters,topic:'ALL'};c.refreshVisibleDatabaseBackground();assert.equal(calls,1);
+});
+
+test('an open map ages a RadNuc item out of the 24h badge and marker cache without needless redraws',()=>{
+  const h=mapScopeHarness(),c=h.context;
+  let now=Date.now(),draws=0,facets=0;
+  class Clock extends Date { static now(){return now;} }
+  c.Date=Clock;
+  c.clockEvents=[
+    {id:'expires',_mapKey:'expires',category:'Radiological/Nuclear',published:new Date(now-86400000+30000).toISOString(),latitude:1,longitude:1},
+    {id:'stays',_mapKey:'stays',category:'Radiological/Nuclear',published:new Date(now-3600000).toISOString(),latitude:2,longitude:2},
+  ];
+  Object.assign(c,{
+    updateKPIs:()=>{}, updateFacetCounts:()=>{facets=vm.runInContext('mapScopeCandidates().filter(e=>withinDays(e.published,1)).length',c);},
+    renderEvents:()=>{draws++;},updateCoverage:()=>{},updateTopLocations:()=>{},renderAttackTicker:()=>{},
+    updateTrends:()=>{},updateCommandCenterPanels:()=>{},updateHealthStatusPanel:()=>{},renderHeaderSituationBrief:()=>{},
+  });
+  vm.runInContext('let dashboardClockMinute = -1; attacks=[];allEvents=[];recentContextEvents=clockEvents;selectedDays=1;setMapCategoryScope("Radiological/Nuclear");invalidateFilterCache();'+extract('refreshTimeSensitiveDashboard'),c);
+  assert.equal(vm.runInContext('filteredMappedEvents().length',c),2);
+  c.refreshTimeSensitiveDashboard(); assert.equal(facets,2);assert.equal(draws,0);
+  now+=61000;
+  assert.equal(vm.runInContext('filteredMappedEvents().length',c),2,'the old memo stays stale until the clock refresh');
+  c.refreshTimeSensitiveDashboard();
+  assert.equal(facets,1);
+  assert.deepEqual(plain(vm.runInContext('filteredMappedEvents().map(e=>e.id)',c)),['stays']);
+  assert.equal(draws,1);
+  c.refreshTimeSensitiveDashboard();assert.equal(draws,1,'same minute does not redraw markers');
+  now+=61000;c.refreshTimeSensitiveDashboard();assert.equal(draws,1,'unchanged membership preserves marker state');
+  assert.match(html,/refreshDatabaseArchiveTotal\(\);\s*refreshVisibleDatabaseBackground\(\);\s*refreshTimeSensitiveDashboard\(\);/);
+});
