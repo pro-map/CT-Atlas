@@ -206,7 +206,7 @@ test('Deep Search merges the archive before de-duplication and labels it in the 
   assert.match(worker,/deduplicateRows\(\[\.\.\.retrieval\.rows, \.\.\.corpus\.rows\]\)/);
   assert.match(worker,/corpus_kind: row\.corpus_kind/);
   assert.match(worker,/"ct_atlas_corpus" come from CT Atlas's own archive/);
-  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v16-chinese-scripts"/);
+  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v17-radnuc-background"/);
   assert.match(fs.readFileSync('deep-search.js','utf8'),/ct_atlas_corpus:"CT ATLAS ARCHIVE"/);
 });
 
@@ -231,7 +231,7 @@ test('the report prompt asks for a longer, analytical assessment with context ru
   for(const heading of ['ANALYTICAL INTERPRETATION','STRATEGIC CONTEXT','BACKGROUND CONTEXT RULES']) assert.ok(prompt.includes(heading),heading);
   assert.match(prompt,/Never count context items/);
   assert.match(prompt,/\[S03, C02\]/);
-  assert.equal(shared.constant('REPORT_GENERATOR_VERSION'),'report-v11-illustration');
+  assert.equal(shared.constant('REPORT_GENERATOR_VERSION'),'report-v12-radnuc-background');
 });
 
 test('the /report route feeds background context to Gemini and lists it as sources',()=>{
@@ -289,6 +289,28 @@ test('every prompt that reads the archive explains archived incidents',()=>{
   assert.match(shared.constant('SYSTEM_INSTRUCTION'),/archived_incident = a CT incident report that passed the map's own\s+selection but is not one of priority_events/);
   assert.match(shared.constant('SYSTEM_INSTRUCTION'),/corroboration of it, never a second incident/);
   assert.match(fs.readFileSync('cloudflare-worker/deep-search.js','utf8'),/"archived_incident" is an incident report that passed CT Atlas's own map\s+selection/);
+});
+
+test('RadNuc background with no CT score remains archive context and is retrievable',async()=>{
+  const row={url:'https://iaea.org/new-guidance',kind:'radnuc_background',
+    title:'IAEA publishes updated nuclear safety guidance',summary:'New guidance for regulators.',
+    source:'IAEA',published:'2026-09-20T08:00:00Z',ai_relevance_score:null,
+    ai_relevance_reason:'Dedicated RadNuc background reporting; archive only.'};
+  const [item]=plain(corpus.toContextItems([row],[]));
+  assert.equal(item.kind,'radnuc_background');
+  assert.equal(item.map_exclusion_reason,row.ai_relevance_reason);
+  assert.ok(!('incident_note' in item));
+  assert.ok(!('covers_source_id' in item));
+
+  const db=fakeDb(()=>[row]);
+  const retrieved=plain(await corpus.searchCorpusForDeepSearch({BACKGROUND_DB:db},{
+    plan:{anchors:{en:'nuclear'},gdelt_broad_terms:['safety']},...period,searchQuery:'nuclear safety guidance'
+  }));
+  assert.equal(retrieved.rows[0].corpus_kind,'radnuc_background');
+  assert.equal(retrieved.rows[0].language,'en');
+  assert.match(db.calls[0].sql,/COALESCE\(ba\.ai_relevance_score, 1\) <> 0/,
+    'NULL is allowed while actual CT reviews with score zero stay excluded');
+  assert.match(shared.constant('SYSTEM_INSTRUCTION'),/radnuc_background = deliberately archive-only Radiological\/Nuclear/);
 });
 
 test('Atlas AI writes an intelligence assessment, not a digest of articles',()=>{

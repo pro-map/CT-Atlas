@@ -1,0 +1,177 @@
+{
+  "version": "radnuc-background-v1-20261013",
+  "category": "Radiological/Nuclear",
+  "record_type": "background",
+  "archive_only": true,
+  "collection": "daily_only",
+  "screening_basis": "title_and_excerpt",
+  "discovery_note": "Queries discover public-news candidates. Topic terms alone do not establish eligibility. These queries are separate from the CT incident vocabulary and never feed Map or historical backfill.",
+  "include_rules": [
+    "Accept a dated public-news update whose main subject matches at least one configured background topic. Evaluate only the supplied title and source excerpt; do not invent facts missing from them.",
+    "National governments, regulators, international organisations, industry, researchers and civilian protesters are eligible background subjects. A terrorism or criminal nexus is neither required nor desired for these records.",
+    "For cybersecurity, accept sector risk trends, aggregated incident trends, defensive developments and mitigation or detection updates. A report of a particular attack or criminal incident is an incident candidate, not a background record.",
+    "For AI guardrails, accept published changes, evaluations or ongoing testing explicitly linked to CBRN misuse safeguards, including nuclear or radiological safeguards. Retain only a high-level account of the evaluation and safeguards.",
+    "Assign only configured topic IDs and category Radiological/Nuclear. Preserve source attribution and uncertainty. These background records are archive-only and must not acquire incident coordinates or Map eligibility."
+  ],
+  "exclude_rules": [
+    "Exclude reports whose main subject is a concrete terrorist attack, attack plot, criminal act, theft, smuggling, trafficking, seizure or terrorism/criminal investigation. Leave incident processing to the existing daily CT pipeline.",
+    "Exclude war, state military operations, nuclear weapons programmes, disarmament campaigns and anti-war or anti-weapons protests. Country names and civilian state authorities are not exclusions by themselves.",
+    "Exclude generic energy, AI or cybersecurity news without a clear nuclear/radiological link, except frontier-model CBRN safeguard evaluations explicitly requested as a background topic.",
+    "Exclude evergreen explainers, unsupported speculation and generic opinion pieces with no dated development. Do not infer eligibility from a nuclear term appearing incidentally.",
+    "Exclude operational instructions, unsafe prompt examples, exploit details or CBRN misuse methods. Background summaries describe the policy, safety measure or development at a high level."
+  ],
+  "topics": [
+    {
+      "id": "regulation_and_licensing",
+      "label": "Regulation, national policy and licensing",
+      "include": "New or amended civilian nuclear/radiological laws, national policies, regulatory processes, licensing, approvals and requirements from facility construction through operation and decommissioning.",
+      "exclude": "Weapons policy, military programmes and generic political statements with no civilian industry regulatory development.",
+      "query": "(nuclear OR radiological OR radioactive) (regulation OR legislation OR \"national policy\" OR licensing OR \"construction permit\" OR \"operating licence\" OR \"operating license\")"
+    },
+    {
+      "id": "emergency_exercises",
+      "label": "Emergency response training, drills and exercises",
+      "include": "National, multinational or international nuclear/radiological emergency-response training, drills or exercises, including NATO and CSTO activities when the activity is preparedness rather than warfare.",
+      "exclude": "Actual attacks or criminal events; military nuclear-weapon deployment exercises and anti-war reporting.",
+      "query": "(nuclear OR radiological OR \"radiation emergency\") (\"emergency exercise\" OR drill OR \"response training\" OR \"emergency preparedness\" OR NATO OR CSTO)"
+    },
+    {
+      "id": "safety_security_meetings",
+      "label": "Safety, security, cybersecurity and AI meetings",
+      "include": "Dated national or international meetings, conferences, workshops or consultations addressing nuclear/radiological safety, physical security, cybersecurity or industry AI applications.",
+      "exclude": "Meetings concerning warfare, weapons deployment or disarmament without a distinct civilian safety or security subject.",
+      "query": "(nuclear OR radiological) (safety OR security OR cybersecurity OR \"artificial intelligence\") (meeting OR conference OR workshop OR summit OR consultation)"
+    },
+    {
+      "id": "industry_supply_chain",
+      "label": "Industry supply chain and lifecycle",
+      "include": "Civilian cradle-to-grave supply-chain developments: uranium/thorium mining, transport, enrichment, fuel fabrication, nuclear facility siting/construction, operation, decommissioning, waste storage and spent-fuel or waste repatriation/return.",
+      "exclude": "Material theft, trafficking, smuggling or weapons supply chains; routine commodity prices with no reported industry lifecycle development.",
+      "query": "(nuclear OR uranium OR thorium OR radioactive) (\"supply chain\" OR mining OR transport OR enrichment OR siting OR decommissioning OR \"waste storage\" OR \"spent fuel return\" OR repatriation)"
+    },
+    {
+      "id": "civilian_facility_protests",
+      "label": "Civilian anti-nuclear facility protests",
+      "include": "Environmental or local-resident opposition, demonstrations, sit-ins or blockades concerning construction or operation of a civilian nuclear/radiological facility or waste site.",
+      "exclude": "Anti-war, anti-weapons and disarmament protests; attacks, sabotage or criminal incidents whose main subject requires incident processing.",
+      "query": "(\"nuclear plant\" OR \"nuclear facility\" OR \"radioactive waste\" OR \"radiological facility\") (protest OR opposition OR blockade OR \"sit-in\") (environmental OR residents OR construction OR siting)"
+    },
+    {
+      "id": "iaea_guidance",
+      "label": "New or updated IAEA guidance",
+      "include": "New or revised IAEA guidelines, standard operating procedures, safety/security standards, technical guides or related official publications with a reported release or update.",
+      "exclude": "Generic IAEA mentions, reprints of old guidance without an update and weapons/war reports unrelated to a civilian guidance release.",
+      "query": "(IAEA OR \"International Atomic Energy Agency\") (\"new guide\" OR guidelines OR \"technical guide\" OR \"safety standards\" OR \"operating procedures\") (released OR published OR updated OR revised)"
+    },
+    {
+      "id": "facility_cybersecurity",
+      "label": "Facility cybersecurity defence, detection and trends",
+      "include": "Nuclear/radiological facility cybersecurity improvements, defence, monitoring, detection, audits, sector threat assessments and aggregated increases or changes in incident trends.",
+      "exclude": "A report centred on an individual cyberattack, criminal intrusion or sabotage; exploit instructions and generic cyber news with no nuclear/radiological facility link.",
+      "query": "(\"nuclear facility\" OR \"nuclear plant\" OR \"radiological facility\" OR \"nuclear industry\") (cybersecurity OR \"cyber security\") (defence OR defense OR detection OR assessment OR resilience OR \"incident trends\")"
+    },
+    {
+      "id": "industry_ai_applications",
+      "label": "AI applications in the nuclear/radiological industry",
+      "include": "Reported use, trials or deployment of AI in civilian nuclear/radiological design, construction, operation, maintenance, monitoring, inspection, safety, physical security, supply chains or waste management.",
+      "exclude": "Generic AI stories, weapons applications and detailed methods for harmful CBRN use.",
+      "query": "(nuclear OR radiological OR \"radiation safety\") (\"artificial intelligence\" OR \"machine learning\") (application OR deployment OR monitoring OR inspection OR maintenance OR design OR safety)"
+    },
+    {
+      "id": "frontier_ai_cbrn_guardrails",
+      "label": "Frontier AI CBRN safeguard evaluations and changes",
+      "include": "Published frontier-AI guardrail changes, safety evaluations, red-team findings or ongoing testing addressing CBRN-related prompts or misuse risks, including nuclear/radiological safeguards. Summarise only evaluation scope and safeguards.",
+      "exclude": "Unrelated AI safety debates, unsafe prompt examples, jailbreak instructions and CBRN misuse guidance.",
+      "query": "(\"frontier AI\" OR \"AI model\" OR \"language model\") (CBRN OR nuclear OR radiological) (guardrail OR safeguards OR evaluation OR \"red teaming\" OR \"safety testing\")"
+    },
+    {
+      "id": "science_and_technology",
+      "label": "Nuclear/radiological scientific and technological advances",
+      "include": "Dated scientific or technological advances such as nuclear-waste reuse/recycling, fusion developments, additive/3D manufacturing of nuclear components, or robotics for site inspection and physical security.",
+      "exclude": "Generic science without a nuclear/radiological industry link, routine clinical stories and operational weapons or misuse instructions.",
+      "query": "(nuclear OR radiological OR fusion OR \"radioactive waste\") (innovation OR breakthrough OR recycling OR \"waste reuse\" OR \"3D printing\" OR \"additive manufacturing\" OR robotics)"
+    }
+  ],
+  "native_queries": {
+    "fr": [
+      "(nucléaire OR radiologique OR radioactif) (réglementation OR législation OR autorisation OR exercice OR formation OR conférence OR \"chaîne d'approvisionnement\" OR déchets OR manifestation OR \"guide AIEA\")",
+      "(nucléaire OR radiologique OR CBRN) (cybersécurité OR \"intelligence artificielle\" OR \"garde-fous\" OR \"évaluation de sécurité\" OR fusion OR recyclage OR \"impression 3D\" OR robotique)"
+    ],
+    "ar": [
+      "(نووي OR نووية OR إشعاعي OR إشعاعية) (تشريعات OR ترخيص OR لوائح OR تدريب OR تمرين OR مؤتمر OR \"سلسلة الإمداد\" OR نفايات OR احتجاج OR \"إرشادات الوكالة الدولية للطاقة الذرية\")",
+      "(نووي OR نووية OR إشعاعي OR CBRN) (\"الأمن السيبراني\" OR \"الذكاء الاصطناعي\" OR \"ضوابط السلامة\" OR \"اختبارات السلامة\" OR اندماج OR تدوير OR \"الطباعة ثلاثية الأبعاد\" OR روبوتات)"
+    ],
+    "de": [
+      "(nuklear OR radioaktiv OR radiologisch OR Atomkraft) (Regulierung OR Gesetzgebung OR Genehmigung OR Notfallübung OR Schulung OR Konferenz OR Lieferkette OR Atommüll OR Protest OR \"IAEA Leitfaden\")",
+      "(nuklear OR radiologisch OR CBRN OR Atomkraft) (Cybersicherheit OR \"künstliche Intelligenz\" OR Sicherheitsmaßnahmen OR Sicherheitstests OR Kernfusion OR Recycling OR \"3D Druck\" OR Robotik)"
+    ],
+    "es": [
+      "(nuclear OR radiológico OR radiactivo) (regulación OR legislación OR licencia OR simulacro OR capacitación OR conferencia OR \"cadena de suministro\" OR residuos OR protesta OR \"guía OIEA\")",
+      "(nuclear OR radiológico OR CBRN) (ciberseguridad OR \"inteligencia artificial\" OR salvaguardas OR \"evaluación de seguridad\" OR fusión OR reciclaje OR \"impresión 3D\" OR robótica)"
+    ],
+    "it": [
+      "(nucleare OR radiologico OR radioattivo) (normativa OR legislazione OR autorizzazione OR esercitazione OR formazione OR conferenza OR \"catena di approvvigionamento\" OR rifiuti OR protesta OR \"guida AIEA\")",
+      "(nucleare OR radiologico OR CBRN) (cybersicurezza OR \"intelligenza artificiale\" OR salvaguardie OR \"valutazione della sicurezza\" OR fusione OR riciclo OR \"stampa 3D\" OR robotica)"
+    ],
+    "tr": [
+      "(nükleer OR radyolojik OR radyoaktif) (mevzuat OR düzenleme OR lisans OR tatbikat OR eğitim OR konferans OR \"tedarik zinciri\" OR atık OR protesto OR \"UAEA kılavuzu\")",
+      "(nükleer OR radyolojik OR KBRN) (\"siber güvenlik\" OR \"yapay zeka\" OR \"güvenlik önlemleri\" OR \"güvenlik testi\" OR füzyon OR \"geri dönüşüm\" OR \"3D baskı\" OR robotik)"
+    ],
+    "ru": [
+      "(ядерный OR ядерная OR радиационный OR АЭС) (регулирование OR законодательство OR лицензирование OR учения OR обучение OR конференция OR \"цепочка поставок\" OR отходы OR протест OR \"руководство МАГАТЭ\")",
+      "(ядерный OR ядерная OR радиационный OR CBRN OR АЭС) (кибербезопасность OR \"искусственный интеллект\" OR \"защитные меры\" OR \"тестирование безопасности\" OR \"термоядерный синтез\" OR переработка OR \"3D печать\" OR робототехника)"
+    ],
+    "ur": [
+      "(جوہری OR تابکار OR تابکاری) (قانون سازی OR ضوابط OR لائسنس OR مشق OR تربیت OR کانفرنس OR \"سپلائی چین\" OR فضلہ OR احتجاج OR \"آئی اے ای اے رہنما اصول\")",
+      "(جوہری OR تابکاری OR CBRN) (\"سائبر سکیورٹی\" OR \"مصنوعی ذہانت\" OR \"حفاظتی اقدامات\" OR \"حفاظتی جانچ\" OR \"جوہری فیوژن\" OR ری سائیکلنگ OR \"تھری ڈی پرنٹنگ\" OR روبوٹکس)"
+    ],
+    "fa": [
+      "(هسته‌ای OR پرتوزا OR رادیولوژیک) (مقررات OR قانونگذاری OR مجوز OR رزمایش OR آموزش OR همایش OR \"زنجیره تأمین\" OR پسماند OR اعتراض OR \"راهنمای آژانس بین‌المللی انرژی اتمی\")",
+      "(هسته‌ای OR پرتوزا OR CBRN) (\"امنیت سایبری\" OR \"هوش مصنوعی\" OR \"تدابیر ایمنی\" OR \"آزمایش ایمنی\" OR گداخت OR بازیافت OR \"چاپ سه‌بعدی\" OR رباتیک)"
+    ],
+    "ps": [
+      "(اټومي OR راډیواکټیف OR وړانګې) (مقررات OR قانون OR جواز OR تمرین OR روزنه OR کنفرانس OR \"اکمالاتي ځنځیر\" OR کثافات OR احتجاج OR \"د اټومي انرژۍ نړیواله اداره\")",
+      "(اټومي OR راډیواکټیف OR CBRN) (\"سایبري امنیت\" OR \"مصنوعي ځیرکتیا\" OR \"خوندیتوب تدابیر\" OR \"خوندیتوب ازموینې\" OR فیوژن OR \"بیا کارونه\" OR \"درې بعدي چاپ\" OR روبوټونه)"
+    ],
+    "he": [
+      "(גרעיני OR גרעינית OR רדיולוגי OR רדיואקטיבי) (רגולציה OR חקיקה OR רישוי OR תרגיל OR הכשרה OR כנס OR \"שרשרת אספקה\" OR פסולת OR מחאה OR \"הנחיות סבא״א\")",
+      "(גרעיני OR גרעינית OR רדיולוגי OR CBRN) (\"אבטחת סייבר\" OR \"בינה מלאכותית\" OR \"אמצעי הגנה\" OR \"בדיקות בטיחות\" OR \"היתוך גרעיני\" OR מיחזור OR \"הדפסת תלת ממד\" OR רובוטיקה)"
+    ],
+    "pt": [
+      "(nuclear OR radiológico OR radioativo) (regulamentação OR legislação OR licença OR simulado OR treinamento OR conferência OR \"cadeia de suprimentos\" OR resíduos OR protesto OR \"guia AIEA\")",
+      "(nuclear OR radiológico OR CBRN) (cibersegurança OR \"inteligência artificial\" OR salvaguardas OR \"avaliação de segurança\" OR fusão OR reciclagem OR \"impressão 3D\" OR robótica)"
+    ],
+    "hi": [
+      "(परमाणु OR रेडियोधर्मी OR विकिरण) (विनियमन OR कानून OR लाइसेंस OR अभ्यास OR प्रशिक्षण OR सम्मेलन OR \"आपूर्ति श्रृंखला\" OR अपशिष्ट OR विरोध OR \"आईएईए दिशानिर्देश\")",
+      "(परमाणु OR विकिरण OR CBRN) (\"साइबर सुरक्षा\" OR \"कृत्रिम बुद्धिमत्ता\" OR \"सुरक्षा उपाय\" OR \"सुरक्षा परीक्षण\" OR संलयन OR पुनर्चक्रण OR \"3डी प्रिंटिंग\" OR रोबोटिक्स)"
+    ],
+    "bn": [
+      "(পারমাণবিক OR তেজস্ক্রিয় OR বিকিরণ) (বিধিমালা OR আইন OR লাইসেন্স OR মহড়া OR প্রশিক্ষণ OR সম্মেলন OR \"সরবরাহ শৃঙ্খল\" OR বর্জ্য OR প্রতিবাদ OR \"আইএইএ নির্দেশিকা\")",
+      "(পারমাণবিক OR বিকিরণ OR CBRN) (\"সাইবার নিরাপত্তা\" OR \"কৃত্রিম বুদ্ধিমত্তা\" OR \"সুরক্ষা ব্যবস্থা\" OR \"নিরাপত্তা পরীক্ষা\" OR ফিউশন OR পুনর্ব্যবহার OR \"থ্রিডি প্রিন্টিং\" OR রোবোটিক্স)"
+    ],
+    "id": [
+      "(nuklir OR radiologi OR radioaktif) (regulasi OR legislasi OR perizinan OR simulasi OR latihan OR konferensi OR \"rantai pasok\" OR limbah OR protes OR \"pedoman IAEA\")",
+      "(nuklir OR radiologi OR CBRN) (\"keamanan siber\" OR \"kecerdasan buatan\" OR \"langkah pengamanan\" OR \"pengujian keselamatan\" OR fusi OR \"daur ulang\" OR \"pencetakan 3D\" OR robotika)"
+    ],
+    "so": [
+      "(nukliyeer OR shucaac) (sharci OR xeerar OR ruqsad OR tababar OR layli OR shir OR \"silsiladda sahayda\" OR qashin OR mudaharaad OR \"hagaha IAEA\")",
+      "(nukliyeer OR shucaac OR CBRN) (\"amniga internetka\" OR \"sirdoonka macmalka ah\" OR \"tallaabooyinka badbaadada\" OR \"tijaabada badbaadada\" OR isku-darka OR dib-u-warshadayn OR \"daabacaadda 3D\" OR robot)"
+    ],
+    "ha": [
+      "(nukiliya OR rediyoaktif OR radiation) (doka OR dokoki OR lasisi OR atisaye OR horo OR taro OR \"sarkar samarwa\" OR sharar OR zanga-zanga OR \"jagorar IAEA\")",
+      "(nukiliya OR rediyoaktif OR CBRN) (\"tsaron yanar gizo\" OR \"basirar wucin gadi\" OR \"matakan kariya\" OR \"gwajin tsaro\" OR fusion OR sake-amfani OR \"bugun 3D\" OR robot)"
+    ],
+    "sw": [
+      "(nyuklia OR mionzi) (kanuni OR sheria OR leseni OR zoezi OR mafunzo OR mkutano OR \"mnyororo wa ugavi\" OR taka OR maandamano OR \"mwongozo wa IAEA\")",
+      "(nyuklia OR mionzi OR CBRN) (\"usalama wa mtandao\" OR \"akili bandia\" OR \"hatua za usalama\" OR \"majaribio ya usalama\" OR muungano OR urejelezaji OR \"uchapishaji wa 3D\" OR roboti)"
+    ],
+    "zh": [
+      "(核能 OR 核电 OR 核设施 OR 放射性 OR 辐射) (法规 OR 立法 OR 许可 OR 演练 OR 培训 OR 会议 OR 供应链 OR 废物 OR 抗议 OR \"国际原子能机构指南\")",
+      "(核能 OR 核电 OR 核设施 OR 辐射 OR CBRN) (网络安全 OR 人工智能 OR 安全护栏 OR 安全评估 OR 核聚变 OR 回收利用 OR \"3D打印\" OR 机器人)"
+    ],
+    "zh-Hant": [
+      "(核能 OR 核電 OR 核設施 OR 放射性 OR 輻射) (法規 OR 立法 OR 許可 OR 演練 OR 培訓 OR 會議 OR 供應鏈 OR 廢物 OR 抗議 OR \"國際原子能總署指南\")",
+      "(核能 OR 核電 OR 核設施 OR 輻射 OR CBRN) (網路安全 OR 人工智慧 OR 安全防護 OR 安全評估 OR 核融合 OR 回收利用 OR \"3D列印\" OR 機器人)"
+    ]
+  }
+}

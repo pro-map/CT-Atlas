@@ -57,6 +57,7 @@ if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import archive_dedup  # noqa: E402
+import radnuc_background  # noqa: E402
 
 _spec = importlib.util.spec_from_file_location("collector", ROOT / "collector.py")
 collector = importlib.util.module_from_spec(_spec)
@@ -72,7 +73,7 @@ MAX_UPDATES_PER_RUN = 5_000
 # D1's Free plan caps a database at 500 MB; past this size only incidents and
 # their reports are inserted, not background reporting.
 SIZE_GUARD_BYTES = 400 * 1024 * 1024
-LOW_PRIORITY_KINDS = frozenset({"rejected_candidate", "historical_review"})
+LOW_PRIORITY_KINDS = frozenset({"rejected_candidate", "historical_review", "radnuc_background"})
 # Other outlets' reports on an incident: one article per incident is enough.
 DROPPED_KINDS = frozenset({"related_article"})
 
@@ -257,6 +258,12 @@ def fallback_file_articles(path):
             yield {**article, "kind": "rejected_candidate"}
 
 
+def radnuc_background_articles(path):
+    for article in (_load_json(path) or {}).get('articles') or []:
+        if radnuc_background.valid_article(article):
+            yield {**article, '_authoritative':True}
+
+
 def map_threshold(root=ROOT):
     """The score a review needs to reach the map: ct-atlas-runtime.json, the
     value the collector workflow exports. Reviews below it belong here, so the
@@ -300,7 +307,7 @@ def historical_reviews(cache, threshold=None):
 
 
 EXISTING_ROWS_SQL = (
-    "SELECT url, kind, title, published, collected_at, ai_relevance_score FROM background_articles"
+    "SELECT " + ", ".join(collector.BACKGROUND_ARTICLES_D1_COLUMNS) + " FROM background_articles"
 )
 
 
@@ -328,7 +335,9 @@ def database_size(response):
 
 
 # What a re-filing changes on a stored row.
-REFILE_COLUMNS = ("kind", "ai_relevance_score", "ai_relevance_reason", "parent_event_id", "parent_incident_id")
+REFILE_COLUMNS = ("kind", "ai_relevance_score", "ai_relevance_reason", "parent_event_id", "parent_incident_id",
+                  "category", "categories", "primary_event_type", "title", "summary", "source", "published",
+                  "original_language", "country", "region", "collected_at")
 
 
 def reconcile(stored, articles):
@@ -345,10 +354,14 @@ def reconcile(stored, articles):
         if article is None:
             continue
         kind, score = article.get("kind"), archive_dedup.score_of(article)
-        if row.get("kind") == kind and archive_dedup.score_of(row) == score:
+        if row.get("kind") == kind and archive_dedup.score_of(row) == score and (
+                kind!='radnuc_background' or all(
+                    row.get(column)==(json.dumps(article.get(column),ensure_ascii=False) if column=='categories' else article.get(column))
+                    for column in REFILE_COLUMNS)):
             continue
         for column in REFILE_COLUMNS:
-            row[column] = article.get(column)
+            if column in REFILE_COLUMNS[:5] or column in article:
+                row[column] = json.dumps(article.get(column),ensure_ascii=False) if column=='categories' else article.get(column)
         row["ai_relevance_score"] = score
         changed.append(row)
     return changed
@@ -435,6 +448,8 @@ def collect_articles(root=ROOT):
             _load_json(root / collector.AI_SELECTION_CACHE_FILE), threshold
         ),
     }
+    if (root/radnuc_background.ARTICLES_FILE).exists():
+        sources = {'radnuc_background':radnuc_background_articles(root/radnuc_background.ARTICLES_FILE), **sources}
 
     # The archive keeps two years (the collector prunes older rows): an old
     # press release Google News dated as new, on the map for one run before
