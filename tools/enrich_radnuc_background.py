@@ -7,6 +7,7 @@ import os
 import signal
 import sys
 import time
+from collections import Counter
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -29,11 +30,11 @@ PER_QUERY_CANDIDATES = 8
 
 def schema():
     fields = {
-        'event_id':{'type':'string'}, 'keep_background':{'type':'boolean'},
+        'event_id':{'type':'string','description':'Copy the exact event_id supplied in the input.'}, 'keep_background':{'type':'boolean'},
         'is_operational_event':{'type':'boolean'}, 'is_anti_war':{'type':'boolean'},
         'topic_ids':{'type':'array','items':{'type':'string','enum':list(topics.topic_ids())}},
         'english_title':{'type':'string'}, 'english_summary':{'type':'string'},
-        'original_language':{'type':'string'}, 'reason':{'type':'string'},
+        'original_language':{'type':'string','description':'ISO language code, e.g. en, ar, zh, zh-Hant.'}, 'reason':{'type':'string'},
     }
     return {'type':'object','properties':{'results':{'type':'array','items':{
         'type':'object','properties':fields,'required':list(fields)}}},'required':['results']}
@@ -58,13 +59,42 @@ def validate_results(payload, items):
             raise ValueError('Unknown background topic')
         for field,limit in (('english_title',500),('english_summary',1800),('original_language',20),('reason',700)):
             if not isinstance(row[field],str) or len(row[field])>limit:
-                raise ValueError('Invalid background text')
+                raise ValueError('Invalid background text: '+field)
         if row['keep_background'] and (not ids or row['is_operational_event'] or row['is_anti_war']
                 or not row['english_title'].strip() or not row['english_summary'].strip()
                 or not row['original_language'].strip()):
             raise ValueError('Contradictory archive-only background decision')
         by_id[identifier] = row
     return [by_id[item['event_id']] for item in items]
+
+
+def partition_results(answers, items):
+    """Keep individually validated decisions; every undecided input stays queued."""
+    if not isinstance(answers,list): raise ValueError('Background review is incomplete')
+    expected = {item['event_id']:i for i,item in enumerate(items)}
+    normalised = []
+    for row in answers:
+        if isinstance(row,dict) and type(row.get('event_id')) is int:
+            row = {**row,'event_id':str(row['event_id'])}
+        normalised.append(row)
+    ids = Counter(row.get('event_id') for row in normalised
+                  if isinstance(row,dict) and isinstance(row.get('event_id'),str))
+    accepted, issues = [], Counter()
+    fields = schema()['properties']['results']['items']['required']
+    for row in normalised:
+        identifier = row.get('event_id') if isinstance(row,dict) else None
+        if not isinstance(identifier,str) or identifier not in expected or ids[identifier]!=1:
+            issues['Invalid background review identifier'] += 1; continue
+        # Only schema fields are consumed; extra model commentary is inert.
+        canonical = {field:row[field] for field in fields if field in row}
+        try:
+            validated = validate_results({'results':[canonical]},[{'event_id':identifier}])[0]
+        except ValueError as error:
+            issues[str(error)] += 1; continue
+        accepted.append((expected[identifier],validated))
+    missing = len(items)-len(accepted)
+    if missing and not issues: issues['Background review is incomplete'] += missing
+    return sorted(accepted),dict(issues)
 
 
 def call_review(collector, items):
@@ -95,7 +125,8 @@ and is_anti_war=false. No CT relevance scores, no map classifications.\n'''+topi
         headers={'x-goog-api-key':key,'Content-Type':'application/json'},json=body,timeout=120)
     if response.status_code!=200:
         raise RuntimeError('Background review HTTP '+str(response.status_code))
-    return validate_results(json.loads(collector.extract_interaction_text(response.json())),items)
+    payload = json.loads(collector.extract_interaction_text(response.json()))
+    return payload.get('results') if isinstance(payload,dict) else None
 
 
 def plan_queries(collector, now):
@@ -174,33 +205,51 @@ def run(root=ROOT, max_posts=6, max_fetches=50, deadline_minutes=12, *, now=None
         checkpoint()
     gate = (gate_factory or (lambda posts:archive_review.GeminiGate(collector,posts,on_post=ledger.save)))(budget)
     stop = 'daily batch complete'; failed = False
+    review_errors = Counter(); batch_size = BATCH_SIZE; attempts = 0
     try:
         with gate:
-            while pending and gate.remaining>0 and clock()-started<deadline_minutes*60:
-                batch = pending[:BATCH_SIZE]
+            while pending and gate.remaining>0 and attempts<budget and clock()-started<deadline_minutes*60:
+                batch = pending[:batch_size]
                 payload = [{'event_id':str(i),'title':row.get('original_title') or row.get('title'),
                             'excerpt':collector.selection_compact_text(row.get('summary'),1600),
                             'published':row.get('published'),'language_hint':row.get('original_language')}
                            for i,row in enumerate(batch)]
-                results = (review or (lambda rows:call_review(collector,rows)))(payload)
-                results = validate_results({'results':results},payload)
-                for item,result in zip(batch,results):
+                attempts += 1
+                try:
+                    results = (review or (lambda rows:call_review(collector,rows)))(payload)
+                    valid, issues = partition_results(results,payload)
+                    review_errors.update(issues)
+                except ValueError:
+                    valid = []
+                    review_errors['Background review is incomplete'] += 1
+                if not valid:
+                    checkpoint()
+                    if len(batch)>1:
+                        batch_size = max(1,len(batch)//2)
+                        continue
+                    raise ValueError('No valid background decision; candidate preserved')
+                handled = set()
+                for index,result in valid:
+                    item = batch[index]
                     row = background.article(item,result,now)
                     if row: articles.append(row); counts['accepted']+=1
                     else: counts['rejected']+=1
                     seen[candidate_key(item)] = now.isoformat()
-                del pending[:len(batch)]
-                counts['reviewed']+=len(batch); checkpoint()
+                    handled.add(index)
+                pending[:] = [item for i,item in enumerate(pending) if i not in handled]
+                counts['reviewed']+=len(valid); batch_size = BATCH_SIZE; checkpoint()
     except (ValueError,RuntimeError,collector.AISelectionQuotaError,collector.requests.RequestException) as error:
-        stop = 'Review deferred: '+type(error).__name__; failed = True
+        stop = 'Review deferred: '+type(error).__name__; failed = counts['reviewed']==0
     finally:
         counts['requests'] = gate.posts
         checkpoint()
-    if pending and not failed: stop = 'Review budget/deadline reached; candidates preserved'
+    if pending and not failed and stop=='daily batch complete':
+        stop = 'Review budget/deadline reached; candidates preserved'
     report = {'updated_at':now.isoformat(),'archive_only':True,'category':background.CATEGORY,
               'topic_ids':list(topics.topic_ids()),'language_codes':sorted({q['code'] for q in tasks}),
               'lookback_days':LOOKBACK_DAYS,'backfill':False,'counts':counts,'pending_reviews':len(pending),
               'stop':stop,'failed':failed,'shared_daily_review_allocation':DAILY_ALLOCATION,
+              'review_attempts':attempts, 'review_validation_errors':dict(review_errors),
               'map_events_written':0,'destination':'background archive; D1 sync is separate'}
     archive_review.write_json(root/background.STATUS_FILE,report)
     print(json.dumps(report,ensure_ascii=False),flush=True)

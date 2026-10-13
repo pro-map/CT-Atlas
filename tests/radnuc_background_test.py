@@ -107,11 +107,35 @@ class BackgroundTests(unittest.TestCase):
             root=Path(tmp)
             class Searcher:
                 def search(self,task):return [candidate(1),candidate(2)],False
-            report=daily.run(root,collector=collector,searcher=Searcher(),review=lambda _:[decision()],
+            report=daily.run(root,collector=collector,searcher=Searcher(),review=lambda _:[],
                 gate_factory=lambda *_:Gate(),max_fetches=1,now=NOW)
             self.assertTrue(report['failed'])
             self.assertEqual(len(archive_review.read_json(root/bg.STATE_FILE)['pending']),2)
             self.assertEqual(archive_review.read_json(root/bg.ARTICLES_FILE)['articles'],[])
+
+    def test_partial_siblings_are_matched_by_id_and_unresolved_rows_stay_pending(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            class Searcher:
+                def search(self,task):return [candidate(1),candidate(2)],False
+            calls=[]
+            def review(payload):
+                calls.append(payload)
+                return [decision('1'),decision('0',is_operational_event=True)] if len(calls)==1 else []
+            report=daily.run(tmp,collector=collector,searcher=Searcher(),review=review,
+                gate_factory=lambda *_:Gate(),max_fetches=1,now=NOW)
+            saved=archive_review.read_json(Path(tmp)/bg.ARTICLES_FILE)['articles']
+            self.assertEqual([row['url'] for row in saved],[candidate(2)['url']])
+            pending=archive_review.read_json(Path(tmp)/bg.STATE_FILE)['pending']
+            self.assertEqual([row['url'] for row in pending],[candidate(1)['url']])
+            self.assertEqual(report['counts']['accepted'],1)
+            self.assertLessEqual(len(calls),6)
+            self.assertFalse(report['failed'])
+
+    def test_duplicate_decisions_are_all_withheld_and_numeric_wire_ids_are_unambiguous(self):
+        payload=[{'event_id':'0'},{'event_id':'1'}]
+        valid,issues=daily.partition_results([decision('0'),decision('0'),decision(1)],payload)
+        self.assertEqual([i for i,_ in valid],[1])
+        self.assertEqual(issues['Invalid background review identifier'],2)
 
     def test_three_day_window_excludes_old_undated_and_future_candidates(self):
         with tempfile.TemporaryDirectory() as tmp:
