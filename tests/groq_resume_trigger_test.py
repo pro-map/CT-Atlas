@@ -12,12 +12,14 @@ ROOT = Path(__file__).resolve().parents[1]
 class GroqResumeTriggerTest(unittest.TestCase):
     def test_only_explicit_main_push_enables_normal_history_budgets(self):
         text = (ROOT / ".github/workflows/groq-free-backfill.yml").read_text()
-        for name, argument, limit in (("SPECIALIST_POSTS_INPUT", "specialist_posts", 5),
-                                      ("CHINESE_POSTS_INPUT", "chinese_posts", 0)):
+        for name, argument, limit in (("SPECIALIST_POSTS_INPUT", "specialist_posts", 5),):
             expected = (name + ": ${{ github.event_name == 'push' && "
                         "!startsWith(github.event.head_commit.message, '[resume-groq-history]') "
                         "&& '0' || inputs." + argument + " || '" + str(limit) + "' }}")
             self.assertIn(expected, text)
+        self.assertNotIn("CHINESE_POSTS_INPUT", text)
+        self.assertNotIn("inputs.chinese_posts", text)
+        self.assertNotIn("id: chinese", text)
         push = text.split("  push:", 1)[1].split("  schedule:", 1)[0]
         self.assertIn("branches: [main]", push)
         self.assertIn("paths:\n      - .github/workflows/groq-free-backfill.yml", push)
@@ -27,7 +29,7 @@ class GroqResumeTriggerTest(unittest.TestCase):
         text = (ROOT / ".github/workflows/groq-free-backfill.yml").read_text()
         for required in ('cron: "45 */2 * * *"', "timezone: Europe/Paris",
                          "group: ct-map-update-main", "cancel-in-progress: false",
-                         '(("SPECIALIST_POSTS_INPUT",5),("CHINESE_POSTS_INPUT",4))',
+                         '(("SPECIALIST_POSTS_INPUT",5),)',
                          "backfill_publication_guard.py finalize",
                          "backfill_publication_guard.py verify",
                          "needs.backfill.outputs.publication_ready == 'true'",
