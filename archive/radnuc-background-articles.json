@@ -3,7 +3,7 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-13T21:23:52.428628+00:00",
+ "updated_at": "2026-10-14T06:12:23.022593+00:00",
  "articles": [
   {
    "id": "radnuc-background-cdfddd3bcb111ee5",
@@ -97,37 +97,6 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This report concerns regulatory oversight and safety management within the civilian nuclear industry."
-  },
-  {
-   "id": "radnuc-background-611860206986c71e",
-   "kind": "radnuc_background",
-   "archive_only": true,
-   "background_reviewed": true,
-   "ai_selected": false,
-   "ai_current_ct_event": false,
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "primary_event_type": "BACKGROUND_INFO",
-   "actor_group": null,
-   "parent_event_id": null,
-   "parent_incident_id": null,
-   "country": null,
-   "region": null,
-   "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE14bU82Q1pDZFAyWmRzOWhoQ29hczA4NmNKdFhhenI2Q0dwdUpiTDlHNGxOTzZBdnMwYkJlMVZhVFBmZHhVZkRSd0hJWm5LUjVvMExvMmNHbUdQV1dGNE5kbFhsUGJlS0dYWHlWWg?oc=5",
-   "title": "[2026 Government Audit] Security violations persist following radiation exposure incidents... Nuclear power plant accident management plans remain pending for 7 years",
-   "summary": "South Korean parliamentary auditors highlighted continued safety regulatory failures in the wake of previous radiation incidents. The reports specifically criticize the seven-year delay in finalizing comprehensive accident management plans for nuclear power plants.",
-   "original_title": "[2026国政审计]辐射照射事故后仍有安全违规……核电站事故管理计划书7年来悬而未决（综合）",
-   "original_language": "zh",
-   "source": "아시아경제",
-   "published": "2026-10-13T09:17:59+00:00",
-   "collected_at": "2026-10-13T10:33:58.731444+00:00",
-   "background_topics": [
-    "regulation_and_licensing"
-   ],
-   "ai_relevance_score": null,
-   "ai_relevance_reason": "RadNuc background only: Regulatory audit reporting on nuclear safety management and policy compliance."
   },
   {
    "id": "radnuc-background-247586ecb0803b17",
@@ -533,6 +502,37 @@
    "ai_relevance_reason": "RadNuc background only: Focuses on regulatory capacity and civilian nuclear development policy."
   },
   {
+   "id": "radnuc-background-6b195099aff62f3c",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQeS15Q094MERlcVhtYzdYRHd4ZGgwV2dEX0FjMFB6RVVROWE0ZmJ0WTE3dHFXN1Z3TDhlSUExaUQtYmVhenp4aXREalFQZUdvcFluQUxJV2k5RWUtN3VrQW9vNFQ5U1hOY3Qyb2Jlb1NZWGlRcWFjVXBRY3FUV2Z4Qkh4ZHZDeTlkc1lzdlc5UURPV1NFWXI3VjdFWmdNSFo3NnBkbHMxZk5ZS19NYWRkUGRyWm9yR0ZUbzVRMWRpQld1Zw?oc=5",
+   "title": "PH, Japan deepen nuclear energy cooperation as Marcos eyes power for AI, data centers",
+   "summary": "The Philippines and Japan have initiated cooperation on nuclear energy development to support future power demands for AI and data infrastructure. This partnership focuses on civil nuclear power deployment and energy capacity planning.",
+   "original_title": "PH, Japan deepen nuclear energy cooperation as Marcos eyes power for AI, data centers",
+   "original_language": "en",
+   "source": "Philippine Canadian Inquirer",
+   "published": "2026-10-13T04:19:03+00:00",
+   "collected_at": "2026-10-14T06:12:23.022593+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Covers bilateral civilian nuclear industry and energy policy."
+  },
+  {
    "id": "radnuc-background-1e51d0d951f1263e",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -657,6 +657,37 @@
    "ai_relevance_reason": "RadNuc background only: Regulatory policy discussion regarding private investment in civilian nuclear power."
   },
   {
+   "id": "radnuc-background-26674a9b6b2c0dee",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQTktzNEI5NjE5Y0ZqOWlkQUlub2llWDdGN1ZfTDNRRXlqNkdIekZVWG12TUVrbDFjZThZUzJPX1FQak5PX1IycmpFZG1sd2hRbS1WdEJ1Z1JhdXJrQ290SmtUOExSVkhxbUtidVhwUEVxd1I1UnVHVTFENktaMFZsNndoaVZpbFl1?oc=5",
+   "title": "Dar to host Russia–Africa Women’s Forum on nuclear energy",
+   "summary": "Dar es Salaam is scheduled to host a Russia-Africa Women’s Forum focused on nuclear energy cooperation. The event aims to foster dialogue regarding nuclear development in the region.",
+   "original_title": "Dar to host Russia–Africa Women’s Forum on nuclear energy",
+   "original_language": "en",
+   "source": "Daily News",
+   "published": "2026-10-12T23:16:59+00:00",
+   "collected_at": "2026-10-14T06:12:23.022593+00:00",
+   "background_topics": [
+    "safety_security_meetings"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Background update on a safety/security/industry meeting."
+  },
+  {
    "id": "radnuc-background-68232e0c641918a6",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -750,6 +781,68 @@
    "ai_relevance_reason": "RadNuc background only: Deployment of AI in civilian nuclear facility operation and maintenance."
   },
   {
+   "id": "radnuc-background-541dafabdd30b9b8",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMisAJBVV95cUxQV3VHZEpGS3h6cEI4ME9ELTNCaV9XeTVCSUpfc0dOazlUSENZRlROQ2phQklqbVdDQjZDS3lCUjdONElhcEhZMmNKaVRPSFRpWkhfVHZJNDhEcFExVWRHODg0dk9NRVZMcVFnSkFxdWFqZFI4UF9lVnZIMFJNV0hIYnFQRGtjbzZXZWtHWUtNV055SEh3dHRvSVVlS3FJXzdjb3d1TkUtNVR2dW1PMGJKQXJodllCTmdoVjNzZFFZdFlVbUZPY0dfRExhZDR5TXVoR042UlpfaFc0RTdrb29qUmdrVkZ5VXZILUhQNWNLLUJqZUF2eDFwLW9NNEtGWEw0TTR2bTh2RWE2REtnekswZ3ZJTDNoS1BNVXFHbnBOdUtzbzFCYnhwSF94VURIU3Rk0gG2AkFVX3lxTE13UGpvVXBtUmhsOUdJRTMwLWZWTWpKZWwzZnRFRTlEbzJUbTZjSk1jaWdEYk10SnNlMmRILWRQSTNZQnhRRnlkZ1hDUE9send6eEJ3Vm9QRzdmZ2l0M1BGZkpQeEdzM0Mta1NoYnRLaEtvMDhRcVZ4VW1hWDFjOEhLVzlES2ljRlJ5MDczeDZhTy1TeGowSWtSSGpVeXAtNHZ4TXJMcjFpYmp1X2x1X2NSdnk1aDk1cmxHMTZyZGtxN01OZ2FaT01xVE9wZFU3Wk9CbThSbUJBa00xc09SYlBwTUNTMm5VUExOTC1PZTZaYmtBaFpKbWM2MUxBWVloUmlMM1hfbGZ4RmZlU2hXYWxIak9SQ196YlZhcDRwRkZDMkthU050VTNreEszd2UtbmVnYUlqOUE?oc=5",
+   "title": "In 2023, Joe Biden faced tribal warnings over Grand Canyon-area mining; he created a national monument",
+   "summary": "The U.S. government established a national monument in the Grand Canyon region in 2023, following tribal concerns regarding uranium mining operations in the area. This decision effectively impacts the local mining industry supply chain.",
+   "original_title": "In 2023, Joe Biden faced tribal warnings over Grand Canyon-area mining; he created a national monument; 9",
+   "original_language": "en",
+   "source": "The Times of India",
+   "published": "2026-10-12T15:40:00+00:00",
+   "collected_at": "2026-10-14T06:12:23.022593+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Background update on supply chain siting and industry regulation."
+  },
+  {
+   "id": "radnuc-background-b71fcd46851d0dfb",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNSVdSMDFuNy1lck4xX0dkemhCZjZHRE80cmVxelJGbG5FSkwxbnhhZWZRTXBfc3N0Y1k5YmhHYmF6SElCY2JDZC1CTHJER2pqZmsydXRpUU1kZHdjTWZxUlowekpMOWdpd3ZpTzJBZ3Q4RXl0S3ZwRUo3TGFySkxFeGtjSVpSNDM3dWMxTU1ncDNkLTJDamtOOVI3VnBUZ2g3RWdGaWtEQ09jTjdzeUZndS1ERzA0QldTQ1kzdndR?oc=5",
+   "title": "Six Out Of Eight Cascades Installed At National Enrichment Facility, Says Urenco USA",
+   "summary": "Urenco USA announced the installation of six out of eight planned centrifuge cascades at its national enrichment facility. This progress represents a continued expansion of civilian fuel-cycle infrastructure.",
+   "original_title": "Six Out Of Eight Cascades Installed At National Enrichment Facility, Says Urenco USA",
+   "original_language": "en",
+   "source": "NucNet",
+   "published": "2026-10-12T13:49:34+00:00",
+   "collected_at": "2026-10-14T06:12:23.022593+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Update on nuclear facility construction and supply chain capacity."
+  },
+  {
    "id": "radnuc-background-871ebb04b8efc5fb",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -779,6 +872,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Reports on technological advancement and commercialization within the fusion energy sector."
+  },
+  {
+   "id": "radnuc-background-aa5b7e7dd986f450",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPdlcwdzc2S1RMTW5UUTllUUZLS1JfSGg1ZDVxRXBDYXQ2S2lFWTN3bEhIYXpFRlhFNXJhWURBRTFORGFYcVBOM2JhRmFKWlRWS2VCM1pZOWxOSmVmbFllSHFRUUhlby0xanYtUVY5bzVjSHFUVzVUZmdfSjZwaXBJVEs4cmlVRGtaRUJBUDNrajF3aGszUzh0bldKV0tWMnJ3aHVMVF9HRjJkQXFxRHljS0ZWMjBzODZNNXpJWDdGWFJXbG9LcXBwZ3EyZEQ?oc=5",
+   "title": "IAEA and OECD/NEA Release New Guide for Rating and Communicating Nuclear and Radiological Events",
+   "summary": "The IAEA and the OECD Nuclear Energy Agency have jointly released updated guidance for rating and communicating nuclear and radiological incidents. The new publication aims to standardize international reporting procedures.",
+   "original_title": "IAEA and OECD/NEA Release New Guide for Rating and Communicating Nuclear and Radiological Events",
+   "original_language": "en",
+   "source": "International Atomic Energy Agency",
+   "published": "2026-10-12T03:14:00+00:00",
+   "collected_at": "2026-10-14T06:12:23.022593+00:00",
+   "background_topics": [
+    "iaea_guidance"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Release of new international technical guidance by the IAEA."
+  },
+  {
+   "id": "radnuc-background-0d76322c04fb7bc4",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPSnJtb3ozSkEzU3hKdlpzMG1ObXFLQWNQOTFyR2VfaXFqbkZBZUZIajBwcEtmWS10WXUzTm8tTWZIVXRkci1ta3FvYW42VW52RmJHMDBqSlc0QkN6V2JUb0ZtX2FGcnZTeFNIUWg2Y3hrUV9ySzYzZG44LTQzQS1PcDQ5UVpxMnhD?oc=5",
+   "title": "Tanzania and Rosatom Expand Nuclear Cooperation",
+   "summary": "Tanzania and the Russian state nuclear corporation, Rosatom, have moved to expand their cooperation in the nuclear sector. The agreement signifies a deepening of partnership regarding energy infrastructure.",
+   "original_title": "Tanzania and Rosatom Expand Nuclear Cooperation",
+   "original_language": "en",
+   "source": "Uchumi360",
+   "published": "2026-10-11T17:14:39+00:00",
+   "collected_at": "2026-10-14T06:12:23.022593+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Development in nuclear energy industry cooperation and supply chain infrastructure."
   }
  ]
 }
