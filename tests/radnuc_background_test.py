@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -44,6 +45,82 @@ class Gate:
 
 
 class BackgroundTests(unittest.TestCase):
+    def test_transient_http_retries_are_counted_and_cannot_exceed_the_existing_gate(self):
+        responses=[SimpleNamespace(status_code=503),SimpleNamespace(status_code=200,json=lambda:{})]
+        with patch.dict('os.environ',{'GEMINI_API_KEY':'synthetic-test-key'}), \
+             patch.object(collector.requests,'post',side_effect=responses) as post, \
+             patch.object(collector,'extract_interaction_text',return_value=json.dumps({'results':[decision()]})):
+            with archive_review.GeminiGate(collector,2,min_interval=0) as gate:
+                result=daily.call_review(collector,[{'event_id':'0'}])
+            self.assertEqual(len(result),1)
+            self.assertEqual(gate.posts,2)
+            self.assertEqual(post.call_count,2)
+        with patch.dict('os.environ',{'GEMINI_API_KEY':'synthetic-test-key'}), \
+             patch.object(collector.requests,'post',return_value=SimpleNamespace(status_code=503)) as post:
+            with archive_review.GeminiGate(collector,1,min_interval=0) as gate:
+                with self.assertRaises(archive_review.BudgetReached):
+                    daily.call_review(collector,[{'event_id':'0'}])
+            self.assertEqual(gate.posts,1)
+            self.assertEqual(post.call_count,1)
+
+    def test_nonretryable_http_error_preserves_a_specific_safe_status(self):
+        with patch.dict('os.environ',{'GEMINI_API_KEY':'synthetic-test-key'}), \
+             patch.object(collector.requests,'post',return_value=SimpleNamespace(status_code=403)) as post:
+            with self.assertRaises(daily.BackgroundHTTPError) as error:
+                daily.call_review(collector,[{'event_id':'0'}])
+            self.assertEqual(error.exception.status,403)
+            self.assertEqual(post.call_count,1)
+
+    def test_one_unanswerable_candidate_does_not_block_a_valid_sibling(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            class Searcher:
+                def search(self,task):return [candidate(1),candidate(2)],False
+            def review(payload):
+                return [decision(row['event_id']) for row in payload if row['title'].endswith('2')]
+            report=daily.run(tmp,collector=collector,searcher=Searcher(),review=review,
+                gate_factory=lambda *_:Gate(),max_fetches=1,now=NOW)
+            self.assertEqual(report['counts']['accepted'],1)
+            self.assertEqual(report['batch_status'],'partial')
+            self.assertFalse(report['complete'])
+            self.assertFalse(report['failed'])
+            saved=archive_review.read_json(Path(tmp)/bg.ARTICLES_FILE)['articles']
+            self.assertEqual([row['url'] for row in saved],[candidate(2)['url']])
+            pending=archive_review.read_json(Path(tmp)/bg.STATE_FILE)['pending']
+            self.assertEqual([row['url'] for row in pending],[candidate(1)['url']])
+
+    def test_model_output_cutoff_splits_the_batch_instead_of_stopping_the_whole_update(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            class Searcher:
+                def search(self,task):return [candidate(1),candidate(2)],False
+            calls=[]
+            def review(payload):
+                calls.append(len(payload))
+                if len(payload)>1:
+                    raise collector.AISelectionIncompleteError('Gemini interaction status=incomplete')
+                return [decision(payload[0]['event_id'],english_title=payload[0]['title'])]
+            report=daily.run(tmp,collector=collector,searcher=Searcher(),review=review,
+                gate_factory=lambda *_:Gate(),max_fetches=1,now=NOW)
+            self.assertEqual(calls,[2,1,1])
+            self.assertTrue(report['complete'])
+            self.assertEqual(report['counts']['reviewed'],2)
+            self.assertEqual(report['review_validation_errors']['interaction_incomplete'],1)
+
+    def test_partial_response_shrinks_the_next_batch_without_discarding_unresolved_inputs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            class Searcher:
+                def search(self,task):return [candidate(i) for i in range(8)],False
+            calls=[]
+            def review(payload):
+                calls.append(len(payload))
+                chosen=payload[:1] if len(calls)==1 else payload
+                return [decision(row['event_id'],english_title=row['title']) for row in chosen]
+            report=daily.run(tmp,collector=collector,searcher=Searcher(),review=review,
+                gate_factory=lambda *_:Gate(),max_fetches=1,now=NOW)
+            self.assertEqual(calls[:2],[8,4])
+            self.assertEqual(report['counts']['reviewed'],8)
+            self.assertEqual(report['pending_reviews'],0)
+            self.assertTrue(report['complete'])
+
     def test_ten_user_topics_and_all_shared_languages_are_daily_archive_only(self):
         self.assertEqual(len(topics.topic_ids()),10)
         self.assertEqual(topics.vocabulary()['category'],bg.CATEGORY)
@@ -171,3 +248,4 @@ class BackgroundTests(unittest.TestCase):
 
 
 if __name__=='__main__':unittest.main()
+

@@ -5282,13 +5282,6 @@ Database <span id="databaseTotalCount" class="database-total" hidden></span>
 <button id="reportGeneratorButton" type="button">SITUATION REPORT</button>
 </div>
 
-<section id="databaseBackgroundSection" class="database-background" aria-labelledby="databaseBackgroundTitle" hidden>
-<h3 id="databaseBackgroundTitle">RadNuc background archive</h3>
-<p>Background only · excluded from incidents and the map.</p>
-<p id="databaseBackgroundCounts" class="background-counts" aria-live="polite"></p>
-<p id="databaseBackgroundStatus" aria-live="polite"></p>
-<ul id="databaseBackgroundList" class="database-background-list"></ul>
-</section>
 
 </div>
 
@@ -5686,7 +5679,7 @@ Visible rate
                 </div>
 
                 <div class="chronology-subtitle" id="chronologyScope">
-                    Every category, filtered in the DATABASE panel · select events and export them to Excel or to a heat map (JPEG)
+                    Every category, filtered in the DATABASE panel · select records and export them to Excel or located records to a heat map (JPEG)
                 </div>
 
             </div>
@@ -6606,8 +6599,6 @@ let databaseEventTotal =
 let databaseResults = [];
 let databaseResultsKey = "";
 // Background context is a separate list, never event selections or map data.
-let databaseBackgroundArticles = null;
-let databaseBackgroundKey = "";
 let databaseResultsLoadedAt = 0;
 let databaseSourceVersion = "";
 let mapDatabaseVersion = "";
@@ -9489,9 +9480,9 @@ function renderChronology() {
             ===
             1
             ?
-            " event shown"
+            " record shown"
             :
-            " events shown"
+            " records shown"
         )
 
         +
@@ -10110,7 +10101,7 @@ function excelRowsFromEvents(
                     ),
 
                 "AI relevance score":
-                    Number(
+                    event.archive_only === true ? "" : Number(
                         event.ai_relevance_score
                         ||
                         0
@@ -14252,6 +14243,10 @@ function linkDatabaseRowsToMap() {
         if (!mapKeyByMatchKey.has(matchKey)) mapKeyByMatchKey.set(matchKey, event);
     });
     databaseResults.forEach(row => {
+        if (row.archive_only === true || row.kind === "radnuc_background") {
+            row._mapEventKey = "";
+            return;
+        }
         const mapped = mapKeyByMatchKey.get(row.match_key || eventMatchKey(row));
         row._mapEventKey = mapped && isMapAttackEvent(row) === isMapAttackEvent(mapped)
             ? mapped._mapKey || "" : "";
@@ -14259,73 +14254,8 @@ function linkDatabaseRowsToMap() {
 }
 
 function databaseRadnucBackgroundScope(filters) {
-    return filters.topic === "Radiological/Nuclear"
+    return (filters.topic === "ALL" || filters.topic === "Radiological/Nuclear")
         && filters.region === "GLOBAL" && filters.actor_group === "ALL";
-}
-
-function backgroundPublicationDate(value) {
-    const date = new Date(value || "");
-    return Number.isFinite(date.getTime())
-        ? date.toLocaleString("en-GB", { timeZone: "Europe/Paris", day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }) + " Paris"
-        : "Unknown publication date";
-}
-
-function renderDatabaseBackground() {
-    const section = document.getElementById("databaseBackgroundSection");
-    const counts = document.getElementById("databaseBackgroundCounts");
-    const status = document.getElementById("databaseBackgroundStatus");
-    const list = document.getElementById("databaseBackgroundList");
-    if (!section || !counts || !status || !list) return;
-    const filters = databaseFilters();
-    section.hidden = filters.topic !== "Radiological/Nuclear";
-    counts.textContent = "";
-    counts.title = "";
-    status.textContent = "";
-    list.innerHTML = "";
-    if (section.hidden) return;
-    if (!databaseRadnucBackgroundScope(filters)) {
-        status.textContent = "Choose Global and All groups to view background articles; they have no incident location or terrorist group.";
-        return;
-    }
-    if (databaseQueryPromise) {
-        status.textContent = "Loading background archive…";
-        return;
-    }
-    if (databaseLastError) {
-        status.textContent = "Background archive unavailable. Change a filter or reopen the event list to retry.";
-        return;
-    }
-    const payload = databaseBackgroundKey === JSON.stringify(filters) ? databaseBackgroundArticles : null;
-    if (!payload) {
-        status.textContent = "Loading background archive…";
-        return;
-    }
-    if (!payload.available || !payload.included) {
-        status.textContent = "Background archive temporarily unavailable. Incident results remain separate.";
-        return;
-    }
-    const total = Math.max(0, Number(payload.total) || 0);
-    const addedToday = Math.max(0, Number(payload.added_today_count) || 0);
-    counts.textContent = "Published in selected period: " + total.toLocaleString("en-GB")
-        + " · Added today (Paris): " + addedToday.toLocaleString("en-GB");
-    counts.title = "Period count uses publication dates. Added today uses the date saved to the archive in Paris time"
-        + (payload.today_date ? " (" + payload.today_date + ")" : "") + ".";
-    const items = (Array.isArray(payload.items) ? payload.items : []).filter(row =>
-        row.kind === "radnuc_background" && row.archive_only === true
-        && row.category === "Radiological/Nuclear" && row.primary_event_type === "BACKGROUND_INFO"
-    );
-    if (!total) {
-        status.textContent = "No background articles were published in this period.";
-    } else if (payload.truncated) {
-        status.textContent = "Showing " + items.length.toLocaleString("en-GB") + " of " + total.toLocaleString("en-GB") + " background articles.";
-    }
-    list.innerHTML = items.map(row => {
-        const title = escapeHtml(row.title || "Untitled background article");
-        const url = safeHttpUrl(row.url);
-        return `<li>${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${title}</a>` : `<strong>${title}</strong>`}
-            <span class="background-meta">${escapeHtml(row.source || "Unknown source")} · Published ${escapeHtml(backgroundPublicationDate(row.published))}</span>
-            ${row.summary ? `<details><summary>Summary</summary><p>${escapeHtml(row.summary)}</p></details>` : ""}</li>`;
-    }).join("");
 }
 
 function refreshVisibleDatabaseBackground() {
@@ -14346,9 +14276,7 @@ function queryDatabase(force = false) {
         if (databaseLastError) {
             databaseLastError = "";
             setDatabaseStatus(databaseLastStatus, "ready");
-        }
-        renderDatabaseBackground();
-        return Promise.resolve(databaseResults);
+        }        return Promise.resolve(databaseResults);
     }
     if (!force && databaseQueryPromise && databaseQueryPromise.key === key) {
         return databaseQueryPromise;
@@ -14377,8 +14305,6 @@ function queryDatabase(force = false) {
     .then(payload => {
         if (seq !== databaseQuerySeq || key !== JSON.stringify(databaseFilters())) return databaseResults;
 
-        databaseBackgroundArticles = payload.background_articles || null;
-        databaseBackgroundKey = key;
         databaseResults = (Array.isArray(payload.events) ? payload.events : []).map(row => {
             row._mapKey = row.key;
             return row;
@@ -14396,8 +14322,9 @@ function queryDatabase(force = false) {
         const total = Number(payload.total) || 0;
         databaseLastStatus =
             total.toLocaleString("en-GB")
-            + (total === 1 ? " event matches" : " events match")
-            + (payload.truncated ? " · first " + databaseResults.length.toLocaleString("en-GB") + " listed" : "");
+            + (total === 1 ? " record matches" : " records match")
+            + (payload.truncated ? " · first " + databaseResults.length.toLocaleString("en-GB") + " listed" : "")
+            + (payload.incomplete ? " · background unavailable; results incomplete" : "");
         setDatabaseStatus(databaseLastStatus, "ready");
         return databaseResults;
     })
@@ -14411,21 +14338,15 @@ function queryDatabase(force = false) {
     .finally(() => {
         if (seq === databaseQuerySeq) {
             databaseQueryPromise = null;
-            if (chronologyOpen) renderChronology();
-            renderDatabaseBackground();
-        }
+            if (chronologyOpen) renderChronology();        }
     });
 
     promise.key = key;
-    databaseQueryPromise = promise;
-    renderDatabaseBackground();
-    if (chronologyOpen) renderChronology();
+    databaseQueryPromise = promise;    if (chronologyOpen) renderChronology();
     return promise;
 }
 
-function onDatabaseFiltersChanged() {
-    renderDatabaseBackground();
-    updateReportScopeSummary();
+function onDatabaseFiltersChanged() {    updateReportScopeSummary();
     updateReportComparisonAvailability();
     // The list on screen belongs to the previous filters: take it (and its
     // selection) down now rather than when the debounced query starts.
@@ -14519,6 +14440,9 @@ function openDatabaseEvent(event) {
 }
 
 function databaseEventCardNote(event) {
+    if (event.archive_only === true || event.kind === "radnuc_background") {
+        return "Background information: included in the database and Excel export, not an operational incident and not shown on the map.";
+    }
     const attack = isMapAttackEvent(event);
     const label = attack ? "Attack" : "Event";
     if (mapCategoryScope === "ATTACKS" && !attack) {

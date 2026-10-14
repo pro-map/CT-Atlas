@@ -55,9 +55,9 @@ test('background remains behind the existing session and account authorization',
   }
 });
 
-test('only explicit global RadNuc without an actor filter reads the background archive',async()=>{
+test('other categories and country/group filters do not invent background locations or actors',async()=>{
   const {context}=reader();
-  for(const overrides of [{topic:'ALL'},{topic:'Biological'},{region:'France'},{region:'REGION:EUROPE'},{actorGroup:'ISIS'}]){
+  for(const overrides of [{topic:'Biological'},{region:'France'},{region:'REGION:EUROPE'},{actorGroup:'ISIS'}]){
     const db=fakeDb();
     const result=plain(await context.fetchRadnucBackground({BACKGROUND_DB:db},{...filters,...overrides},new Date(NOW)));
     assert.equal(result.included,false);
@@ -128,14 +128,14 @@ test('background rows whitelist text, safe URLs and explicit non-map markers, ne
   assert.equal(result.collected_at,article.collected_at);
 });
 
-test('background results are capped at 200 and report truncation independently of event results',async()=>{
+test('background uses the normal database export cap and reports truncation',async()=>{
   const {context}=reader();
-  const db=fakeDb({total:201,added:201,rows:Array.from({length:205},(_,index)=>({...article,title:`Guide ${index}`}))});
+  const db=fakeDb({total:8001,added:8001,rows:Array.from({length:8005},(_,index)=>({...article,title:`Guide ${index}`}))});
   const result=plain(await context.fetchRadnucBackground({BACKGROUND_DB:db},filters,new Date(NOW)));
-  assert.equal(result.items.length,200);
-  assert.equal(result.total,201);
+  assert.equal(result.items.length,8000);
+  assert.equal(result.total,8001);
   assert.equal(result.truncated,true);
-  assert.match(db.calls.find(call=>call.method==='all').sql,/LIMIT 200/);
+  assert.match(db.calls.find(call=>call.method==='all').sql,/LIMIT 8000/);
 });
 
 test('missing or failing D1 is unavailable instead of an apparently empty archive',async()=>{
@@ -149,7 +149,7 @@ test('missing or failing D1 is unavailable instead of an apparently empty archiv
   }
 });
 
-test('the authenticated response keeps background separate from event totals, groups and rows',async()=>{
+test('the authenticated response merges background into the same count and selectable rows',async()=>{
   const events=[{id:'event-1',title:'RadNuc suspect arrested',category:'Radiological/Nuclear',actor_group:'Unknown',published:'2026-10-13T09:00:00Z',url:'https://example.test/event'}];
   const {context}=reader({events});
   const db=fakeDb({total:17,added:17,rows:[article]});
@@ -157,12 +157,28 @@ test('the authenticated response keeps background separate from event totals, gr
   const result=await response.json();
   assert.equal(response.status,200);
   assert.equal(result.database_total,1);
-  assert.equal(result.total,1);
-  assert.equal(result.events.length,1);
+  assert.equal(result.total,18);
+  assert.equal(result.operational_total,1);
+  assert.equal(result.events.length,2);
   assert.equal(result.events[0].title,events[0].title);
   assert.equal(result.groups.reduce((sum,group)=>sum+group.count,0),1);
   assert.equal(result.background_articles.total,17);
   assert.equal(result.background_articles.items[0].title,article.title);
+  assert.equal(result.events[1].archive_only,true);
+  assert.equal(result.events[1].excluded_from_map,true);
+  assert.notEqual(result.events[0].key,result.events[1].key);
+  assert.equal(result.incomplete,false);
+});
+
+test('All categories includes RadNuc background sorted together by publication date',async()=>{
+  const events=[{id:'event-1',title:'Operational event',category:'Arrests',published:'2026-10-13T07:00:00Z'}];
+  const {context}=reader({events});
+  const response=await context.handleDatabaseEvents(request({topic:'ALL',period_days:1}),{BACKGROUND_DB:fakeDb({rows:[article]})});
+  const result=await response.json();
+  assert.equal(result.total,2);
+  assert.deepEqual(result.events.map(row=>row.title),[article.title,events[0].title]);
+  assert.equal(result.events[0].latitude,null);
+  assert.equal(result.events[0].actor_group,undefined);
 });
 
 test('D1 failure does not fail the event database response',async()=>{
@@ -173,4 +189,6 @@ test('D1 failure does not fail the event database response',async()=>{
   assert.equal(result.total,0);
   assert.equal(result.background_articles.available,false);
   assert.equal(result.background_articles.reason,'unavailable');
+  assert.equal(result.incomplete,true);
 });
+

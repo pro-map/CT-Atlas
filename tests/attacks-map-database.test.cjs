@@ -602,95 +602,74 @@ test('the browser rejects an outdated 91-day payload and loads the full six-mont
   assert.equal(loaded.map.recent_events_days,181);
 });
 
-function backgroundPanelHarness(){
-  const nodes=Object.fromEntries(['databaseBackgroundSection','databaseBackgroundCounts','databaseBackgroundStatus','databaseBackgroundList'].map(id=>[id,{hidden:true,textContent:'',innerHTML:'',title:''}]));
-  const c=vm.createContext({
-    document:{getElementById:id=>nodes[id]||null}, Date,Number,Array,JSON,
-    currentFilters:{region:'GLOBAL',topic:'Radiological/Nuclear',actor_group:'ALL',period_days:1},
-    databaseQueryPromise:null,databaseLastError:'',databaseBackgroundKey:'',databaseBackgroundArticles:null,
+test('RadNuc context is selectable and exported on the same Excel sheet as operational records',()=>{
+  const records=[
+    {_mapKey:'db-0',title:'Suspect arrested',categories:['Arrests'],published:'2026-10-13T09:00:00Z',url:'https://example.test/incident'},
+    {_mapKey:'bg-0',title:'Nuclear regulation update',categories:['Radiological/Nuclear'],published:'2026-10-13T08:00:00Z',url:'https://example.test/update',archive_only:true,excluded_from_map:true,primary_event_type:'BACKGROUND_INFO',ai_relevance_score:null,latitude:null,longitude:null},
+  ];
+  let exported;
+  const c=vm.createContext({Date,Number,Array,JSON,databaseResults:records,
+    chronologySelectedKeys:new Set(['db-0','bg-0']),databaseResultsCurrent:()=>true,
+    eventCategories:row=>row.categories||[],databaseFiltersText:()=> 'Global · all categories · 7 days',
+    chronologyCountry:'',chronologySearchText:'',alert:message=>{throw new Error(message);},
+    XLSX:{utils:{
+      json_to_sheet:rows=>({rows,...Object.fromEntries(rows.map((row,i)=>['R'+(i+2),{v:row['Source URL']}]))}),
+      book_new:()=>({sheets:[]}),book_append_sheet:(book,sheet,name)=>book.sheets.push({name,sheet}),
+    },writeFile:book=>{exported=book;}}
   });
-  vm.runInContext('function databaseFilters(){ return currentFilters; }'+extract('escapeHtml')+extract('safeHttpUrl')+extract('databaseRadnucBackgroundScope')+extract('backgroundPublicationDate')+extract('renderDatabaseBackground'),c);
-  return {c,nodes};
-}
-
-function backgroundPayload(){
-  return {available:true,included:true,total:17,added_today_count:17,today_date:'2026-10-13',items:[
-    {title:'English regulation update',source:'IAEA',published:'2026-10-12T20:00:00Z',summary:'Technical background only',url:'https://example.test/update',kind:'radnuc_background',archive_only:true,category:'Radiological/Nuclear',primary_event_type:'BACKGROUND_INFO'},
-    {title:'<script>alert(1)</script>',source:'<img src=x>',published:'2026-10-13T00:00:00Z',summary:'<svg onload=alert(1)>',url:'javascript:alert(1)',kind:'radnuc_background',archive_only:true,category:'Radiological/Nuclear',primary_event_type:'BACKGROUND_INFO'},
-    {title:'An operational event does not belong here',url:'https://example.test/event',kind:'archived_incident',archive_only:false,category:'Radiological/Nuclear',primary_event_type:'CBRN'},
-  ]};
-}
-
-test('RadNuc background has separate period and Paris collection counts, safe source links and no event selection',()=>{
-  const {c,nodes}=backgroundPanelHarness();
-  c.databaseBackgroundArticles=backgroundPayload();
-  c.databaseBackgroundKey=JSON.stringify(c.currentFilters);
-  c.renderDatabaseBackground();
-  assert.equal(nodes.databaseBackgroundSection.hidden,false);
-  assert.equal(nodes.databaseBackgroundCounts.textContent,'Published in selected period: 17 · Added today (Paris): 17');
-  assert.match(nodes.databaseBackgroundCounts.title,/publication dates.*date saved.*Paris time.*2026-10-13/);
-  assert.match(nodes.databaseBackgroundList.innerHTML,/English regulation update/);
-  assert.match(nodes.databaseBackgroundList.innerHTML,/Published 12 Oct 2026, 22:00 Paris/);
-  assert.match(nodes.databaseBackgroundList.innerHTML,/href="https:\/\/example.test\/update"/);
-  assert.ok(!nodes.databaseBackgroundList.innerHTML.includes('javascript:'));
-  assert.ok(!nodes.databaseBackgroundList.innerHTML.includes('<script>'));
-  assert.match(nodes.databaseBackgroundList.innerHTML,/&lt;script&gt;/);
-  assert.ok(!nodes.databaseBackgroundList.innerHTML.includes('An operational event'));
-  assert.ok(!/databaseResults|_mapEventKey|chronologySelectedKeys/.test(extract('renderDatabaseBackground')));
-  assert.match(html,/Background only · excluded from incidents and the map\./);
+  vm.runInContext(extract('selectedDatabaseEvents')+extract('excelRowsFromEvents')+extract('safeHttpUrl')+extract('exportChronologyExcel'),c);
+  c.exportChronologyExcel();
+  const sheet=exported.sheets.find(s=>s.name==='Events').sheet;
+  assert.equal(sheet.rows.length,2);
+  assert.equal(sheet.rows[1]['English Title'],'Nuclear regulation update');
+  assert.equal(sheet.rows[1]['Event type'],'BACKGROUND_INFO');
+  assert.equal(sheet.rows[1]['AI relevance score'],'','no invented CT score');
+  assert.equal(sheet.rows[1]['Country'],'','no invented incident location');
+  assert.equal(sheet.R3.l.Target,'https://example.test/update');
+  assert.doesNotMatch(html,/id="databaseBackgroundSection"/);
+  assert.match(extract('linkDatabaseRowsToMap'),/row\.archive_only === true/);
 });
 
-test('background rows disappear immediately for different filters, loading, errors or unavailable archive',()=>{
-  const {c,nodes}=backgroundPanelHarness();
-  c.databaseBackgroundArticles=backgroundPayload();
-  c.databaseBackgroundKey=JSON.stringify(c.currentFilters);
-  c.renderDatabaseBackground();
-  c.currentFilters={...c.currentFilters,topic:'Biological Terrorism'};
-  c.renderDatabaseBackground();
-  assert.equal(nodes.databaseBackgroundSection.hidden,true);
-  assert.equal(nodes.databaseBackgroundList.innerHTML,'');
-  assert.equal(nodes.databaseBackgroundCounts.textContent,'');
-  c.currentFilters={...c.currentFilters,topic:'Radiological/Nuclear',period_days:7};
-  c.renderDatabaseBackground();
-  assert.equal(nodes.databaseBackgroundList.innerHTML,'','old period is never shown');
-  assert.match(nodes.databaseBackgroundStatus.textContent,/Loading/);
-  c.currentFilters={...c.currentFilters,period_days:1};
-  c.databaseQueryPromise={}; c.renderDatabaseBackground();
-  assert.equal(nodes.databaseBackgroundList.innerHTML,'');
-  c.databaseQueryPromise=null; c.databaseLastError='network failure'; c.renderDatabaseBackground();
-  assert.match(nodes.databaseBackgroundStatus.textContent,/unavailable/);
-  assert.equal(nodes.databaseBackgroundCounts.textContent,'','failure is not a zero count');
-  c.databaseLastError=''; c.databaseBackgroundArticles={available:false,included:true};c.renderDatabaseBackground();
-  assert.match(nodes.databaseBackgroundStatus.textContent,/temporarily unavailable/);
-  c.currentFilters={...c.currentFilters,region:'France'};c.renderDatabaseBackground();
-  assert.match(nodes.databaseBackgroundStatus.textContent,/Choose Global and All groups/);
-  assert.equal(nodes.databaseBackgroundList.innerHTML,'');
-});
-
-test('a response arriving during the filter debounce cannot populate the RadNuc background section',async()=>{
-  const {c,nodes}=backgroundPanelHarness();
-  let finish;
-  Object.assign(c,{
+function unifiedQueryHarness(){
+  const c=vm.createContext({Date,Number,Array,JSON,
+    document:{getElementById:()=>null},
+    currentFilters:{region:'GLOBAL',topic:'ALL',actor_group:'ALL',period_days:7},
     REPORT_GENERATOR_API_BASE:'https://worker',databaseResults:[],databaseResultsKey:'',
     databaseResultsLoadedAt:0,databaseSourceVersion:'',mapDatabaseVersion:'',databaseQuerySeq:0,
     databaseActivated:false,chronologySelectedKeys:new Set(),chronologyOpen:false,
-    databaseLastStatus:'',fetch:()=>new Promise(resolve=>{finish=resolve;}),
+    databaseQueryPromise:null,databaseLastError:'',databaseLastStatus:'',
     databaseCacheReusable:()=>false,reportGeneratorUserId:()=> 'analyst',
     setDatabaseStatus:()=>{},linkDatabaseRowsToMap:()=>{},renderDatabaseGroups:()=>{},
   });
-  vm.runInContext(extract('queryDatabase'),c);
+  vm.runInContext('function databaseFilters(){ return currentFilters; }'+extract('queryDatabase'),c);
+  return c;
+}
+
+test('a late mixed response cannot populate the list after the filters change',async()=>{
+  const c=unifiedQueryHarness();
+  let finish;
+  c.fetch=()=>new Promise(resolve=>{finish=resolve;});
   const pending=c.queryDatabase();
   c.currentFilters={...c.currentFilters,topic:'Arrests'};
-  c.renderDatabaseBackground();
-  finish({ok:true,json:async()=>({events:[{key:'db-0',title:'Incident'}],total:1,background_articles:backgroundPayload()})});
+  finish({ok:true,json:async()=>({events:[{key:'db-0',title:'Incident'},{key:'bg-0',title:'Nuclear policy',archive_only:true}],total:2})});
   await pending;
-  assert.equal(c.databaseBackgroundArticles,null,'the late response is discarded even before the next query starts');
   assert.equal(c.databaseResults.length,0);
-  assert.equal(nodes.databaseBackgroundSection.hidden,true);
-  assert.equal(nodes.databaseBackgroundList.innerHTML,'');
 });
 
-test('background refresh requires prior authenticated panel use, an idle query and no export selection',()=>{
+test('the normal match counter includes context and reports incomplete archive access explicitly',async()=>{
+  const c=unifiedQueryHarness();
+  let status;
+  c.setDatabaseStatus=text=>{status=text;};
+  c.fetch=async()=>({ok:true,json:async()=>({events:[{key:'db-0'},{key:'bg-0',archive_only:true}],total:2,incomplete:false})});
+  await c.queryDatabase();
+  assert.equal(c.databaseResults.length,2);
+  assert.equal(status,'2 records match');
+  c.fetch=async()=>({ok:true,json:async()=>({events:[{key:'db-0'}],total:1,incomplete:true})});
+  await c.queryDatabase(true);
+  assert.match(status,/results incomplete/);
+});
+
+test('mixed-list refresh requires prior authenticated panel use, an idle query and no export selection',()=>{
   let now=100000,calls=0;
   const c=vm.createContext({Date:{now:()=>now},databaseActivated:false,databaseQueryPromise:null,
     chronologySelectedKeys:new Set(),databaseResultsLoadedAt:0,DATABASE_RESULTS_CACHE_MS:60000,
@@ -702,7 +681,7 @@ test('background refresh requires prior authenticated panel use, an idle query a
   now+=61000;c.chronologySelectedKeys.add('db-0');c.refreshVisibleDatabaseBackground();assert.equal(calls,0);
   c.chronologySelectedKeys.clear();c.databaseQueryPromise={};c.refreshVisibleDatabaseBackground();assert.equal(calls,0);
   c.databaseQueryPromise=null;c.refreshVisibleDatabaseBackground();assert.equal(calls,1);
-  c.currentFilters={...c.currentFilters,topic:'ALL'};c.refreshVisibleDatabaseBackground();assert.equal(calls,1);
+  c.currentFilters={...c.currentFilters,topic:'ALL'};c.refreshVisibleDatabaseBackground();assert.equal(calls,2);
 });
 
 test('an open map ages a RadNuc item out of the 24h badge and marker cache without needless redraws',()=>{
@@ -732,3 +711,4 @@ test('an open map ages a RadNuc item out of the 24h badge and marker cache witho
   now+=61000;c.refreshTimeSensitiveDashboard();assert.equal(draws,1,'unchanged membership preserves marker state');
   assert.match(html,/refreshDatabaseArchiveTotal\(\);\s*refreshVisibleDatabaseBackground\(\);\s*refreshTimeSensitiveDashboard\(\);/);
 });
+

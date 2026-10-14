@@ -23,9 +23,21 @@ import radnuc_background_topics as topics
 LOOKBACK_DAYS = 3
 RETENTION_DAYS = 730
 DAILY_ALLOCATION = 40  # SAME existing archive-review allocation/ledger.
-BATCH_SIZE = 25
+BATCH_SIZE = 8
 MAX_PENDING = 500
 PER_QUERY_CANDIDATES = 8
+
+
+class BackgroundHTTPError(RuntimeError):
+    def __init__(self, status):
+        self.status = int(status)
+        super().__init__('Background review HTTP '+str(self.status))
+
+
+class BackgroundInteractionError(RuntimeError):
+    def __init__(self, status):
+        self.status = status
+        super().__init__('Background interaction '+status)
 
 
 def schema():
@@ -121,11 +133,28 @@ and is_anti_war=false. No CT relevance scores, no map classifications.\n'''+topi
             'system_instruction':instruction,'store':False,
             'response_format':{'type':'text','mime_type':'application/json','schema':schema()},
             'generation_config':{'max_output_tokens':12000,'thinking_level':'minimal'}}
-    response = collector.requests.post(collector.GEMINI_INTERACTIONS_URL,
-        headers={'x-goog-api-key':key,'Content-Type':'application/json'},json=body,timeout=120)
-    if response.status_code!=200:
-        raise RuntimeError('Background review HTTP '+str(response.status_code))
-    payload = json.loads(collector.extract_interaction_text(response.json()))
+    # The installed GeminiGate counts/paces EVERY attempt, including retries,
+    # and refuses calls after the existing run/day allocation is spent.
+    for attempt in range(2):
+        try:
+            response = collector.requests.post(collector.GEMINI_INTERACTIONS_URL,
+                headers={'x-goog-api-key':key,'Content-Type':'application/json'},json=body,timeout=120)
+        except collector.requests.RequestException:
+            if attempt == 0:
+                print('RADNUC_REVIEW_RETRY network_error',flush=True)
+                continue
+            raise
+        if response.status_code == 200:
+            break
+        if attempt == 0 and response.status_code in (408,409,500,502,503,504):
+            print('RADNUC_REVIEW_RETRY HTTP_'+str(response.status_code),flush=True)
+            continue
+        raise BackgroundHTTPError(response.status_code)
+    wire = response.json()
+    status = str(wire.get('status') or '').lower() if isinstance(wire,dict) else ''
+    if status in ('failed','cancelled'):
+        raise BackgroundInteractionError(status)
+    payload = json.loads(collector.extract_interaction_text(wire))
     return payload.get('results') if isinstance(payload,dict) else None
 
 
@@ -206,10 +235,15 @@ def run(root=ROOT, max_posts=6, max_fetches=50, deadline_minutes=12, *, now=None
     gate = (gate_factory or (lambda posts:archive_review.GeminiGate(collector,posts,on_post=ledger.save)))(budget)
     stop = 'daily batch complete'; failed = False
     review_errors = Counter(); batch_size = BATCH_SIZE; attempts = 0
+    stop_code = ''; deferred_keys = set()
     try:
         with gate:
             while pending and gate.remaining>0 and attempts<budget and clock()-started<deadline_minutes*60:
-                batch = pending[:batch_size]
+                batch = [row for row in pending if candidate_key(row) not in deferred_keys][:batch_size]
+                if not batch:
+                    stop = 'Unresolved candidates preserved for the next batch'
+                    stop_code = 'unresolved_candidates'
+                    break
                 payload = [{'event_id':str(i),'title':row.get('original_title') or row.get('title'),
                             'excerpt':collector.selection_compact_text(row.get('summary'),1600),
                             'published':row.get('published'),'language_hint':row.get('original_language')}
@@ -219,15 +253,21 @@ def run(root=ROOT, max_posts=6, max_fetches=50, deadline_minutes=12, *, now=None
                     results = (review or (lambda rows:call_review(collector,rows)))(payload)
                     valid, issues = partition_results(results,payload)
                     review_errors.update(issues)
-                except ValueError:
+                except (ValueError,collector.AISelectionIncompleteError) as error:
                     valid = []
-                    review_errors['Background review is incomplete'] += 1
+                    code = 'interaction_incomplete' if isinstance(error,collector.AISelectionIncompleteError) else 'Background review is incomplete'
+                    review_errors[code] += 1
                 if not valid:
                     checkpoint()
                     if len(batch)>1:
                         batch_size = max(1,len(batch)//2)
                         continue
-                    raise ValueError('No valid background decision; candidate preserved')
+                    # A single malformed decision must not block unrelated news.
+                    # Do not accept it or mark it reviewed; retain it for later.
+                    deferred_keys.add(candidate_key(batch[0]))
+                    pending.remove(batch[0]); pending.append(batch[0])
+                    checkpoint(); batch_size = BATCH_SIZE
+                    continue
                 handled = set()
                 for index,result in valid:
                     item = batch[index]
@@ -236,19 +276,35 @@ def run(root=ROOT, max_posts=6, max_fetches=50, deadline_minutes=12, *, now=None
                     else: counts['rejected']+=1
                     seen[candidate_key(item)] = now.isoformat()
                     handled.add(index)
-                pending[:] = [item for i,item in enumerate(pending) if i not in handled]
-                counts['reviewed']+=len(valid); batch_size = BATCH_SIZE; checkpoint()
+                resolved_keys = {candidate_key(batch[index]) for index in handled}
+                pending[:] = [item for item in pending if candidate_key(item) not in resolved_keys]
+                counts['reviewed']+=len(valid)
+                batch_size = max(1,len(batch)//2) if len(valid)<len(batch) else BATCH_SIZE
+                checkpoint()
+    except archive_review.BudgetReached:
+        stop = 'Review budget reached; candidates preserved'; stop_code = 'budget_reached'
     except (ValueError,RuntimeError,collector.AISelectionQuotaError,collector.requests.RequestException) as error:
-        stop = 'Review deferred: '+type(error).__name__; failed = counts['reviewed']==0
+        if isinstance(error,BackgroundHTTPError): stop_code = 'http_'+str(error.status)
+        elif isinstance(error,BackgroundInteractionError): stop_code = 'interaction_'+error.status
+        elif isinstance(error,collector.AISelectionQuotaError): stop_code = 'quota_reached'
+        elif isinstance(error,collector.requests.RequestException): stop_code = 'network_error'
+        elif isinstance(error,ValueError): stop_code = 'invalid_response'
+        else: stop_code = 'runtime_error'
+        stop = 'Review deferred: '+stop_code; failed = counts['reviewed']==0
     finally:
         counts['requests'] = gate.posts
         checkpoint()
     if pending and not failed and stop=='daily batch complete':
         stop = 'Review budget/deadline reached; candidates preserved'
+        stop_code = 'budget_or_deadline_reached'
+    if pending and counts['reviewed']==0 and review_errors and stop_code not in ('budget_reached','quota_reached'):
+        failed = True
     report = {'updated_at':now.isoformat(),'archive_only':True,'category':background.CATEGORY,
               'topic_ids':list(topics.topic_ids()),'language_codes':sorted({q['code'] for q in tasks}),
               'lookback_days':LOOKBACK_DAYS,'backfill':False,'counts':counts,'pending_reviews':len(pending),
               'stop':stop,'failed':failed,'shared_daily_review_allocation':DAILY_ALLOCATION,
+              'batch_status':'partial' if pending else 'complete','complete':not pending,
+              'stop_code':stop_code,'review_batch_size':BATCH_SIZE,
               'review_attempts':attempts, 'review_validation_errors':dict(review_errors),
               'map_events_written':0,'destination':'background archive; D1 sync is separate'}
     archive_review.write_json(root/background.STATUS_FILE,report)
@@ -269,3 +325,4 @@ def main():
 if __name__=='__main__':
     signal.signal(signal.SIGTERM,lambda *_:sys.exit(143))
     main()
+

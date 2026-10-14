@@ -20,11 +20,11 @@ import {
   databaseFiltersLabel
 } from "./shared.js";
 
-const DATABASE_QUERY_VERSION = "database-query-v4-radnuc-background";
+const DATABASE_QUERY_VERSION = "database-query-v5-unified-background";
 // Everything the database holds today fits (180 days, ~4-5k events); the cap
 // only guards against a runaway response if the database grows a lot.
 const MAX_DATABASE_RESULTS = 8000;
-const MAX_BACKGROUND_RESULTS = 200;
+const MAX_BACKGROUND_RESULTS = 8000; // Same export ceiling as operational rows.
 const RADNUC_CATEGORY = "Radiological/Nuclear";
 const BACKGROUND_SCOPE_SQL = `kind = 'radnuc_background'
   AND category = 'Radiological/Nuclear' AND primary_event_type = 'BACKGROUND_INFO'`;
@@ -61,9 +61,12 @@ function parisDayBounds(now) {
   };
 }
 
-function backgroundArticleRow(row) {
+function backgroundArticleRow(row, index = 0) {
   const url = cleanText(row.url, 1200);
   return {
+    key: `bg-${index}`,
+    match_key: `background:${url || index}`,
+    id: `radnuc-background-${index}`,
     title: cleanText(row.title, 400),
     summary: cleanText(row.summary, 900),
     source: cleanText(row.source, 140),
@@ -75,7 +78,12 @@ function backgroundArticleRow(row) {
     category: RADNUC_CATEGORY,
     categories: [RADNUC_CATEGORY],
     archive_only: true,
+    excluded_from_map: true,
     primary_event_type: "BACKGROUND_INFO",
+    location_precision: "unlocated",
+    ai_relevance_score: null,
+    source_count: 1,
+    article_count: 1,
     latitude: null,
     longitude: null
   };
@@ -88,9 +96,9 @@ async function fetchRadnucBackground(env, filters, now) {
     added_today_count: 0, today_date: day.date, items: []
   };
   // These records have no incident actor or event location. Showing them as
-  // matching a country/group would invent evidence. Only the RadNuc global
-  // section requests them, and the other event scopes do not touch D1.
-  if (filters.topic !== RADNUC_CATEGORY) return { ...empty, reason: "category_filter" };
+  // matching a country/group would invent evidence. Global All categories
+  // and RadNuc lists include these records alongside operational records.
+  if (filters.topic !== "ALL" && filters.topic !== RADNUC_CATEGORY) return { ...empty, reason: "category_filter" };
   if (filters.region !== "GLOBAL" || filters.actorGroup !== "ALL") return { ...empty, reason: "scope_filter" };
   const unavailable = { ...empty, included: true, reason: "unavailable" };
   const db = env.BACKGROUND_DB;
@@ -223,20 +231,27 @@ async function handleDatabaseEvents(request, env) {
     .map(event => ({ event, time: parseEventDate(event)?.getTime() || 0 }))
     .sort((a, b) => b.time - a.time);
   const backgroundArticles = await fetchRadnucBackground(env, filters, now);
+  const operationalRows = matched.map((item, index) => databaseEventRow(item.event, index));
+  const rows = [...operationalRows, ...backgroundArticles.items]
+    .sort((a, b) => (Date.parse(b.published || b.collected_at) || 0) - (Date.parse(a.published || a.collected_at) || 0));
+  const total = matched.length + backgroundArticles.total;
 
   return jsonResponse({
     version: DATABASE_QUERY_VERSION,
     scope: databaseFiltersLabel(filters),
     database_version: cleanText(db?.last_updated || db?.updated_at || "unknown", 100),
     database_total: all.length,
-    total: matched.length,
-    truncated: matched.length > MAX_DATABASE_RESULTS,
+    total,
+    operational_total: matched.length,
+    incomplete: backgroundArticles.included && !backgroundArticles.available,
+    truncated: total > MAX_DATABASE_RESULTS,
     groups,
-    events: matched.slice(0, MAX_DATABASE_RESULTS).map((item, index) => databaseEventRow(item.event, index)),
+    events: rows.slice(0, MAX_DATABASE_RESULTS),
     background_articles: backgroundArticles
   }, 200, env);
 }
 
 export { handleDatabaseEvents, databaseEventRow, backgroundArticleRow, fetchRadnucBackground, parisDayBounds,
   DATABASE_QUERY_VERSION, MAX_DATABASE_RESULTS, MAX_BACKGROUND_RESULTS };
+
 
