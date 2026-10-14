@@ -218,357 +218,138 @@
   "2e943e2c5a64743a": "2026-10-14T13:54:22.422808+00:00",
   "2c31efd595700458": "2026-10-14T13:54:22.422808+00:00",
   "3f8babb0f30900cb": "2026-10-14T13:54:22.422808+00:00",
-  "8f764b81d89e89dc": "2026-10-14T13:54:22.422808+00:00"
+  "8f764b81d89e89dc": "2026-10-14T13:54:22.422808+00:00",
+  "dd8e45e991a8e4a2": "2026-10-14T20:16:14.489161+00:00",
+  "97fa65a213651cef": "2026-10-14T20:16:14.489161+00:00",
+  "7284dd73db564acf": "2026-10-14T20:16:14.489161+00:00",
+  "062ef3f76a1f7ddc": "2026-10-14T20:16:14.489161+00:00",
+  "a211ab34f494a3cb": "2026-10-14T20:16:14.489161+00:00",
+  "350780e3931f2612": "2026-10-14T20:16:14.489161+00:00",
+  "965d11db34518ac1": "2026-10-14T20:16:14.489161+00:00",
+  "505900866ab57cb7": "2026-10-14T20:16:14.489161+00:00",
+  "833b99d0acc57c3d": "2026-10-14T20:16:14.489161+00:00",
+  "4e4ff1e1353b0900": "2026-10-14T20:16:14.489161+00:00",
+  "eddb5f50074030a8": "2026-10-14T20:16:14.489161+00:00",
+  "ea53b07f77063fc6": "2026-10-14T20:16:14.489161+00:00",
+  "cfb3ff6946378a7d": "2026-10-14T20:16:14.489161+00:00",
+  "38e9398ee75e190a": "2026-10-14T20:16:14.489161+00:00",
+  "e00caa2165bd4bfd": "2026-10-14T20:16:14.489161+00:00",
+  "213a8fe0d0df8699": "2026-10-14T20:16:14.489161+00:00",
+  "392ea46d87d0c506": "2026-10-14T20:16:14.489161+00:00",
+  "844cedfa4a2fb3e7": "2026-10-14T20:16:14.489161+00:00",
+  "241113f3f9be373f": "2026-10-14T20:16:14.489161+00:00",
+  "7662b7496fed2c88": "2026-10-14T20:16:14.489161+00:00",
+  "99fcb9065d5ae3f8": "2026-10-14T20:16:14.489161+00:00",
+  "bdbabc20dbebb16b": "2026-10-14T20:16:14.489161+00:00",
+  "a5988be96cb86f80": "2026-10-14T20:16:14.489161+00:00",
+  "97487055c99a15f8": "2026-10-14T20:16:14.489161+00:00",
+  "bd66dc969c14f467": "2026-10-14T20:16:14.489161+00:00",
+  "d43c0fd1f2156b30": "2026-10-14T20:16:14.489161+00:00",
+  "a26d32555f8dca2a": "2026-10-14T20:16:14.489161+00:00",
+  "ae62607ea0f57229": "2026-10-14T20:16:14.489161+00:00",
+  "ab5dd0e61a650864": "2026-10-14T20:16:14.489161+00:00",
+  "916ffd3d4eb07545": "2026-10-14T20:16:14.489161+00:00",
+  "28eed4371fc3e5c9": "2026-10-14T20:16:14.489161+00:00",
+  "6c9d108ed8d7bb8a": "2026-10-14T20:16:14.489161+00:00",
+  "3e39ae5ea22c57ff": "2026-10-14T20:16:14.489161+00:00",
+  "5f113e5924666e12": "2026-10-14T20:16:14.489161+00:00",
+  "3f81a4af66b2d93c": "2026-10-14T20:16:14.489161+00:00",
+  "460d764c5d272440": "2026-10-14T20:16:14.489161+00:00",
+  "26f758f95725a606": "2026-10-14T20:16:14.489161+00:00",
+  "bba06707649de6ef": "2026-10-14T20:16:14.489161+00:00",
+  "af8d5b021ffaebc6": "2026-10-14T20:16:14.489161+00:00",
+  "0fe61185f8ca21f3": "2026-10-14T20:16:14.489161+00:00",
+  "d745155b0197e1ed": "2026-10-14T20:16:14.489161+00:00",
+  "655ddaec72a42c4b": "2026-10-14T20:16:14.489161+00:00",
+  "6916ff89ea00c8b6": "2026-10-14T20:16:14.489161+00:00",
+  "dcbdc1bc8319d70f": "2026-10-14T20:16:14.489161+00:00",
+  "5d6339638fe99fec": "2026-10-14T20:16:14.489161+00:00",
+  "1fa644f303fe4c48": "2026-10-14T20:16:14.489161+00:00",
+  "72a851620bac6336": "2026-10-14T20:16:14.489161+00:00",
+  "8136d3c1d2fa5fba": "2026-10-14T20:16:14.489161+00:00",
+  "30ab9b81839f1593": "2026-10-14T20:16:14.489161+00:00",
+  "a73b375af3323e39": "2026-10-14T20:16:14.489161+00:00",
+  "3af5536b63eae3d6": "2026-10-14T20:16:14.489161+00:00",
+  "e51ecd4e6b244fe3": "2026-10-14T20:16:14.489161+00:00",
+  "566c5074c7eb011d": "2026-10-14T20:16:14.489161+00:00",
+  "9071d940653c15ac": "2026-10-14T20:16:14.489161+00:00",
+  "6bd9456cc7f1dd9f": "2026-10-14T20:16:14.489161+00:00",
+  "28b47dac89fb317b": "2026-10-14T20:16:14.489161+00:00",
+  "a63c33bc5a6f79f0": "2026-10-14T20:16:14.489161+00:00",
+  "82ffef32f499dc0e": "2026-10-14T20:16:14.489161+00:00",
+  "ef06f2a30d8689ae": "2026-10-14T20:16:14.489161+00:00",
+  "27dafad6c5516a66": "2026-10-14T20:16:14.489161+00:00",
+  "ef9ef5764e7daa11": "2026-10-14T20:16:14.489161+00:00",
+  "cbf5217b76f1ef3f": "2026-10-14T20:16:14.489161+00:00",
+  "80ef10662a0ace61": "2026-10-14T20:16:14.489161+00:00",
+  "5702fa9c3372cb1a": "2026-10-14T20:16:14.489161+00:00",
+  "d4f6daca86028bc8": "2026-10-14T20:16:14.489161+00:00",
+  "db831a2d24ce8099": "2026-10-14T20:16:14.489161+00:00",
+  "ca3c352ed01c4d3b": "2026-10-14T20:16:14.489161+00:00",
+  "5c4013b16f897049": "2026-10-14T20:16:14.489161+00:00",
+  "dff7e4feaa46cfb7": "2026-10-14T20:16:14.489161+00:00",
+  "8a6bd7ebd095e306": "2026-10-14T20:16:14.489161+00:00",
+  "10f2778f85364b62": "2026-10-14T20:16:14.489161+00:00",
+  "28ae0e12c1120d29": "2026-10-14T20:16:14.489161+00:00",
+  "a0681fbdd1a79e68": "2026-10-14T20:16:14.489161+00:00",
+  "19329d17e1e72d52": "2026-10-14T20:16:14.489161+00:00",
+  "6df2f69c782c6d49": "2026-10-14T20:16:14.489161+00:00",
+  "5a1b0d8173fa454d": "2026-10-14T20:16:14.489161+00:00",
+  "39686cb0cb57c9eb": "2026-10-14T20:16:14.489161+00:00",
+  "2c94ec110294db7e": "2026-10-14T20:16:14.489161+00:00",
+  "bdbf05d83244f9b2": "2026-10-14T20:16:14.489161+00:00",
+  "29c9bca8dbb541f4": "2026-10-14T20:16:14.489161+00:00",
+  "c97707e536f06975": "2026-10-14T20:16:14.489161+00:00",
+  "ae1b232f0819bbe4": "2026-10-14T20:16:14.489161+00:00",
+  "aaf026d4ecc3e525": "2026-10-14T20:16:14.489161+00:00",
+  "b924e5cb28daa3bf": "2026-10-14T20:16:14.489161+00:00",
+  "7f87091da5b1a180": "2026-10-14T20:16:14.489161+00:00",
+  "14541f14bba09638": "2026-10-14T20:16:14.489161+00:00",
+  "31d764c09a5585b1": "2026-10-14T20:16:14.489161+00:00",
+  "b437825f4490f4be": "2026-10-14T20:16:14.489161+00:00",
+  "eafe5b41863ad013": "2026-10-14T20:16:14.489161+00:00",
+  "3c1447f0e6ba8372": "2026-10-14T20:16:14.489161+00:00",
+  "a285bb5014091932": "2026-10-14T20:16:14.489161+00:00",
+  "a2f19e2d11ba7704": "2026-10-14T20:16:14.489161+00:00",
+  "0cd2e9812812e5e0": "2026-10-14T20:16:14.489161+00:00",
+  "55b9432ea9f2a5d4": "2026-10-14T20:16:14.489161+00:00",
+  "b354221b8da503e5": "2026-10-14T20:16:14.489161+00:00",
+  "8cc63e1d32fd49b0": "2026-10-14T20:16:14.489161+00:00",
+  "40d4e04ed5708124": "2026-10-14T20:16:14.489161+00:00",
+  "81a446261df06e5a": "2026-10-14T20:16:14.489161+00:00",
+  "7d03d130233ef7ad": "2026-10-14T20:16:14.489161+00:00",
+  "432889b6285c0789": "2026-10-14T20:16:14.489161+00:00",
+  "0be97ef004faa520": "2026-10-14T20:16:14.489161+00:00",
+  "68423d9e3d55207e": "2026-10-14T20:16:14.489161+00:00",
+  "6be948419c9d73d8": "2026-10-14T20:16:14.489161+00:00",
+  "59fc6f6dbaf063d9": "2026-10-14T20:16:14.489161+00:00",
+  "9824767e3b63f220": "2026-10-14T20:16:14.489161+00:00",
+  "3f031fe35d7e1b05": "2026-10-14T20:16:14.489161+00:00",
+  "546138c47f3ec72d": "2026-10-14T20:16:14.489161+00:00",
+  "30e677f41db7e023": "2026-10-14T20:16:14.489161+00:00",
+  "78dd6f882869dc0b": "2026-10-14T20:16:14.489161+00:00",
+  "2551eb01bb401bbc": "2026-10-14T20:16:14.489161+00:00",
+  "6ded1c4af3023423": "2026-10-14T20:16:14.489161+00:00"
  },
  "pending": [
   {
-   "id": "6d6f50015ddf0215",
+   "id": "643aee49440b59ec",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "申万宏源核能产业投融资大会成功举办",
-   "summary": "申万宏源核能产业投融资大会成功举办 搜狐",
-   "original_title": "申万宏源核能产业投融资大会成功举办",
-   "original_summary": "申万宏源核能产业投融资大会成功举办 搜狐",
-   "original_language": "zh",
-   "collection_language": "zh",
-   "collection_language_name": "Chinese (Simplified)",
-   "collection_locale": "CN:zh-Hans",
-   "published": "2026-10-14T12:05:53+00:00",
-   "source": "搜狐",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOUTFNWFNPNzNsaFBobnpRSFVpMlVLUkpCQjBLVTFwcFFjRU9iV1lkNE5RVnZzdjFxU2g5SDR3WGxncXUwbmF3WEJhTFJKS1NuR2tOeUJQNjJHdl9QU3pNWnl0UFA5Wk9BMGJNMjN2dEJoUkVGVUhPZEZDWjlSMVJZVlFCMXNsY2E1SGdpeA?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "2b8d341022f022e6cf14f0426ebd2073043bc5a17382b3b5914c3e43c3c8ea5e"
-   ],
-   "background_query_language": "zh"
-  },
-  {
-   "id": "d795c2d8c0438718",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "SK集团考虑对美国核电企业投资，投资规模预计达千亿级别",
-   "summary": "SK集团考虑对美国核电企业投资，投资规模预计达千亿级别 亚洲日报",
-   "original_title": "SK集团考虑对美国核电企业投资，投资规模预计达千亿级别",
-   "original_summary": "SK集团考虑对美国核电企业投资，投资规模预计达千亿级别 亚洲日报",
-   "original_language": "zh",
-   "collection_language": "zh",
-   "collection_language_name": "Chinese (Simplified)",
-   "collection_locale": "CN:zh-Hans",
-   "published": "2026-10-14T11:28:00+00:00",
-   "source": "亚洲日报",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9pdlZEaDRhR3hfVlE1MldVTmJnZTZHYXNDb2R5SWtVVHZqTkxmZ2RzRmx5Ylh2WWM5aGdRbnc4dWZ0bnJJVWZFQjRBS2VzamZRcWVCM09peFlHdkE?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "6af42e29ebed9f0f17b372d5aa0ffad31285f0cfe055327ecebd853deab76a2e"
-   ],
-   "background_query_language": "zh"
-  },
-  {
-   "id": "018518d268a60bab",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "[ETF出口时代] 韩华资产运用将向欧洲和中东出口防务和制造业ETF",
-   "summary": "[ETF出口时代] 韩华资产运用将向欧洲和中东出口防务和制造业ETF 亚洲日报",
-   "original_title": "[ETF出口时代] 韩华资产运用将向欧洲和中东出口防务和制造业ETF",
-   "original_summary": "[ETF出口时代] 韩华资产运用将向欧洲和中东出口防务和制造业ETF 亚洲日报",
-   "original_language": "zh",
-   "collection_language": "zh",
-   "collection_language_name": "Chinese (Simplified)",
-   "collection_locale": "CN:zh-Hans",
-   "published": "2026-10-14T09:04:20+00:00",
-   "source": "亚洲日报",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBQZmxhZUwwSWVUSEdxMmt0RUNoVGtXSW8tYVhYTU9DdHhVOUZCRXRreWpQeUEzX3FvdVk3cTdWVnBrY2NqTzJpcERsS3o0OWgwQnZLeUFDZDFWSjg?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "cd92ecf189749f0cd562a3e5c9ad76ec7ffa60b5bad56baf12243fbfb01008fb"
-   ],
-   "background_query_language": "zh"
-  },
-  {
-   "id": "a92e81321096c989",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "配套峰会展望核能新质生产力 2026上海核能新质生产力发展大会同步启幕",
-   "summary": "配套峰会展望核能新质生产力 2026上海核能新质生产力发展大会同步启幕 上海市人民政府新闻办公室",
-   "original_title": "配套峰会展望核能新质生产力 2026上海核能新质生产力发展大会同步启幕",
-   "original_summary": "配套峰会展望核能新质生产力 2026上海核能新质生产力发展大会同步启幕 上海市人民政府新闻办公室",
-   "original_language": "zh",
-   "collection_language": "zh",
-   "collection_language_name": "Chinese (Simplified)",
-   "collection_locale": "CN:zh-Hans",
-   "published": "2026-10-14T04:24:52+00:00",
-   "source": "上海市人民政府新闻办公室",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNWGxROHBjM01hNERTN2VPc3h3a2RPMDJkc3laOWhnUkc2Q2tXT1RkbW1GaW9XQkZ0dXV1S2RjWDVqclU3aC1XOVZTMUgzVG9QLVY3NDVQS1hQN0c4YXFMTFFHTi14SFBtdTFFYjZKaDU5X1lJalpvSlRjaVduX213aGZjYVpXRU94Z01oWGJpR2xZMEtXQzVON2NR?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "f639e7b937d95c897879755fc1fd3e9ed10dac128c3099f3e99b132b17749b37"
-   ],
-   "background_query_language": "zh"
-  },
-  {
-   "id": "e510666289f52782",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "【起步奋进“十五五”】四川：培育新质生产力 推动高质量发展",
-   "summary": "【起步奋进“十五五”】四川：培育新质生产力 推动高质量发展 搜狐",
-   "original_title": "【起步奋进“十五五”】四川：培育新质生产力 推动高质量发展",
-   "original_summary": "【起步奋进“十五五”】四川：培育新质生产力 推动高质量发展 搜狐",
-   "original_language": "zh",
-   "collection_language": "zh",
-   "collection_language_name": "Chinese (Simplified)",
-   "collection_locale": "CN:zh-Hans",
-   "published": "2026-10-14T04:18:00+00:00",
-   "source": "搜狐",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQT2p1VndtMFBleTNxTUVoSVRYcWFERVpTVHlTOThWVEh0WVFSZXRXbXN2ZXFpb29TLUtPbjFJZ0d2b1hNM25jbndiYkZwVjBzS1lWMjV3SWRhbkY4UkYwdGkyU1k0ZnBLekViN1dSRHNaYndQNzZwREJ5eHZRR1QyenA5MEEydzdf?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "3adffd996bc23d8ab10fc5306ddef59aaf41e520d2735a2e89a4f56bd8fe7677"
-   ],
-   "background_query_language": "zh"
-  },
-  {
-   "id": "f4af0753b55b7bfe",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "韩国原子力环境公团新任理事长Lee Jinho就职：“确保高放射性废物处置场选址工作顺利推进”",
-   "summary": "韩国原子力环境公团新任理事长Lee Jinho就职：“确保高放射性废物处置场选址工作顺利推进” 아시아경제",
-   "original_title": "韩国原子力环境公团新任理事长Lee Jinho就职：“确保高放射性废物处置场选址工作顺利推进”",
-   "original_summary": "韩国原子力环境公团新任理事长Lee Jinho就职：“确保高放射性废物处置场选址工作顺利推进” 아시아경제",
-   "original_language": "zh",
-   "collection_language": "zh",
-   "collection_language_name": "Chinese (Simplified)",
-   "collection_locale": "CN:zh-Hans",
-   "published": "2026-10-14T03:15:53+00:00",
-   "source": "아시아경제",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9Mc2hzZ0FHS3kwR3MzWXY1RzUxRUpvV2JUdnloc1VURzN3WFpNRnVJX01RRVZjVUhGZENpV00zM0ZNcUd6Y0NHMmdWbXlYSVRNa29YY1dYS3JsR28yS29CMDRFMS0?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "aac0320941b94c9c2b8ee75d665f9af2478228d97050581181444afdbd594ceb"
-   ],
-   "background_query_language": "zh"
-  },
-  {
-   "id": "4ae2646bdcd7d14f",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "放射技师在医学影像辐射风险沟通中的策略与障碍：一项范围综述",
-   "summary": "放射技师在医学影像辐射风险沟通中的策略与障碍：一项范围综述 生物通",
-   "original_title": "放射技师在医学影像辐射风险沟通中的策略与障碍：一项范围综述",
-   "original_summary": "放射技师在医学影像辐射风险沟通中的策略与障碍：一项范围综述 生物通",
-   "original_language": "zh",
-   "collection_language": "zh",
-   "collection_language_name": "Chinese (Simplified)",
-   "collection_locale": "CN:zh-Hans",
-   "published": "2026-10-14T00:00:40+00:00",
-   "source": "生物通",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE12RGd1dGNmdDdjUnhoekxNbDhIYmc2LXZZTTZSX3FROTVnX2pLMUNvOWtaNzg5UEZmeWhZVUtsLUFXYzZxZU5IbDlmUzJYSktSdkZsSXBMUjhSSlc4aThrWWRyUE1pU1g4d0RYVWV3?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "d01f2404c8bf3186365bdfa8ce7b1d268edaf7cab84d7f259d128b35f2c54a8a"
-   ],
-   "background_query_language": "zh"
-  },
-  {
-   "id": "a7d61b0cf88366fe",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "هل تكبح السياسة الأميركية-الصينية الذكاء الاصطناعي؟",
-   "summary": "هل تكبح السياسة الأميركية-الصينية الذكاء الاصطناعي؟ مجلة المجلة",
-   "original_title": "هل تكبح السياسة الأميركية-الصينية الذكاء الاصطناعي؟",
-   "original_summary": "هل تكبح السياسة الأميركية-الصينية الذكاء الاصطناعي؟ مجلة المجلة",
-   "original_language": "ar",
-   "collection_language": "ar",
-   "collection_language_name": "Arabic",
-   "collection_locale": "SA:ar",
-   "published": "2026-10-13T17:09:25+00:00",
-   "source": "مجلة المجلة",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMi5gNBVV95cUxOU2lUem9pcUZ5am1sRHhhM24tNkdEUWc5NHc3QTRobHplR2VMMmsybGxQcV96enNKMTBBRVAwS3J6aWZpY2VsQlp6S2t1bzNSVS11MEpXZ3N5U2dsSGpSaklZamJuOWpIZFhLX1JnUUMzVDE1OXhjNGdDcEIyNndONHJyTTNfRF96WTB1RWdGNzJpNGg5M3Y4bzUwcWxRdnJBQTZENHhMNVJjTzR2d3ZJd2NYS0hkRms2dGhFYzk0akNiUVlGbXAxc2VwaGR0X19qRVJCU3cwVlJ6LW55dmVDaWN0NE1kc1RzcHpwZ05ZN0NuYVlBTVVZWGE4X2UyTlc1YWQ3MVZYVXJ3OUdBUkVla3FBMXhOa0FSZ1BaSDZUMjQwM0d5eG9NbTVvTXpMeE9BV01LZ1JuLWVibjZFMm9ST2NFZW9BaGVSSWJmaWozWGlEM1YyNnZBRndiTVh3YzBCdEUtZDMzUGxKM1N1VG5sX2xlUkZlY1FfOVU3YlpuUFV5RWZLdkRfdjFPUVNpSkctWUI0XzZScFUyT0lSSm5LMENnVV9FdFRLeDBSQmwwV2hpbWEzd2F4NjVqRVEtRnNEQnU0ZThNWWN4VHpHa1lUNVBpTzZYdElsWVJLQnVMRGVCa2llX2c?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "df0c0d5edf8fc3f0d8f0e90794e07cb22fe3b846d412bc20ddf87edcfa96e2b5"
-   ],
-   "background_query_language": "ar"
-  },
-  {
-   "id": "d23caaf6c387907e",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Lobectomie pulmonaire au Policlinico Gemelli : le parcours de Papa Léon XIV",
-   "summary": "Lobectomie pulmonaire au Policlinico Gemelli : le parcours de Papa Léon XIV Il Mattino",
-   "original_title": "Lobectomie pulmonaire au Policlinico Gemelli : le parcours de Papa Léon XIV",
-   "original_summary": "Lobectomie pulmonaire au Policlinico Gemelli : le parcours de Papa Léon XIV Il Mattino",
-   "original_language": "fr",
-   "collection_language": "fr",
-   "collection_language_name": "French",
-   "collection_locale": "FR:fr",
-   "published": "2026-10-13T17:04:10+00:00",
-   "source": "Il Mattino",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNSmJvRjRrUTF0azhnX3gxUHQ5eFBob21SUzg5NmZ5TjlNSXRGSnp6S3JlcDJWTUdyXzQ0STk2LWVZQm1wcy1xdE5yM1IwSkRLX0dCVjQ0M0psdG4wWUNmRmVmdjhJbEYzUFBTNmFsS3BUaHF0VTRDcVdaWU9faHR6cjdWVkUyeVBJdG5aOHlsejF2RWRNdVNNa2Y3UlVUM2tkVUxQdzZzRHQyVHVLN0tPUU9OZjXSAboBQVVfeXFMTW1xUURlYmt3RGk5UEM1MlpPRGlqSTRFaFBsdFdrNW5zYUtieG5ISkNDUm9ObGwxa3hqeXdpLTlpQm5NM25PTTdQZXhLUm9YYjloeEpZYkdrVVNabEF4UUd3VjdlczRBalpibkFsdy1Pc1djMUhPV2dzVkdCSEs1VVRzQjNXQy0zdlFPbi0xV25iYy1fY3NUUHVGSUpEZjAweTJRd19Hb01rSHhaTXUtbHVKeDRucFZQNVl3?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "eb9bdd33a4a511448dc2188453f2efe89298fe0946b6a329b66abf06dab808ea"
-   ],
-   "background_query_language": "fr"
-  },
-  {
-   "id": "914d39e1efab5803",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "На АЭС «Аккую» прошли полномасштабные противоаварийные и пожарно-тактические учения",
-   "summary": "На АЭС «Аккую» прошли полномасштабные противоаварийные и пожарно-тактические учения Атомная энергия 2.0",
-   "original_title": "На АЭС «Аккую» прошли полномасштабные противоаварийные и пожарно-тактические учения",
-   "original_summary": "На АЭС «Аккую» прошли полномасштабные противоаварийные и пожарно-тактические учения Атомная энергия 2.0",
-   "original_language": "ru",
-   "collection_language": "ru",
-   "collection_language_name": "Russian",
-   "collection_locale": "RU:ru",
-   "published": "2026-10-13T17:01:08+00:00",
-   "source": "Атомная энергия 2.0",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE16RngzbnV6VG9RWmx0VnVjajNWZ043MUdLSHU3TnJzaDdId2I5R3VkY09GQk9VOGhocTEwUG1wbDltVkxuSURwTWYzOVFZMUk1S3c3UVJTR1k5M0w0TkhjMQ?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "06a0d71bfb9035783d35ff77fb4193dd730c536dda585cb8deef0d36072848ea"
-   ],
-   "background_query_language": "ru"
-  },
-  {
-   "id": "6391da13de4d2cc2",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "38 yıl önce Kocaeli’ye gelen gemiden radyoaktif atık çıktı! İşte TBMM kayıtlarındaki gerçek",
-   "summary": "38 yıl önce Kocaeli’ye gelen gemiden radyoaktif atık çıktı! İşte TBMM kayıtlarındaki gerçek Nokta Gazetesi",
-   "original_title": "38 yıl önce Kocaeli’ye gelen gemiden radyoaktif atık çıktı! İşte TBMM kayıtlarındaki gerçek",
-   "original_summary": "38 yıl önce Kocaeli’ye gelen gemiden radyoaktif atık çıktı! İşte TBMM kayıtlarındaki gerçek Nokta Gazetesi",
+   "title": "Küresel risk değerlendirmesi: Yapay zekânın kötüye kullanılması ve nükleer çatışmalar 2100'e kadar insanlığın sonunu getirebilir!",
+   "summary": "Küresel risk değerlendirmesi: Yapay zekânın kötüye kullanılması ve nükleer çatışmalar 2100'e kadar insanlığın sonunu getirebilir! T24",
+   "original_title": "Küresel risk değerlendirmesi: Yapay zekânın kötüye kullanılması ve nükleer çatışmalar 2100'e kadar insanlığın sonunu getirebilir!",
+   "original_summary": "Küresel risk değerlendirmesi: Yapay zekânın kötüye kullanılması ve nükleer çatışmalar 2100'e kadar insanlığın sonunu getirebilir! T24",
    "original_language": "tr",
    "collection_language": "tr",
    "collection_language_name": "Turkish",
    "collection_locale": "TR:tr",
-   "published": "2026-10-13T17:00:00+00:00",
-   "source": "Nokta Gazetesi",
+   "published": "2026-10-14T13:38:00+00:00",
+   "source": "T24",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQX2dpQThxejVaYmJCZ0FSYUdPd1B2ZWw5Z0RneU5aMnZBNTVrY013VVZBZUxRdTlzeFVZc28wdXBXRThYQ0NneWVOR1JJOHlHTVlIcFJId3dUYUhWb2dYcEpjZUZjQmtIeGU5THl5UVJBOHdwdWNOWVJuaGtTczdQT3NHV2lpbXk1c3FxMFBKNFgzZkZFTm9GVkIyNXVNLVA0WkxmYk1uZWJhSGl1Q0ItNnVzMFFYTGd1WmFSaHB1bVJPX1pTSk9SazNXZ0xmTFRKaGdEX0taS2tKSXQtNG1PT0pwX1pCMjZYTGZTN0pKY9IB7wFBVV95cUxQX2dpQThxejVaYmJCZ0FSYUdPd1B2ZWw5Z0RneU5aMnZBNTVrY013VVZBZUxRdTlzeFVZc28wdXBXRThYQ0NneWVOR1JJOHlHTVlIcFJId3dUYUhWb2dYcEpjZUZjQmtIeGU5THl5UVJBOHdwdWNOWVJuaGtTczdQT3NHV2lpbXk1c3FxMFBKNFgzZkZFTm9GVkIyNXVNLVA0WkxmYk1uZWJhSGl1Q0ItNnVzMFFYTGd1WmFSaHB1bVJPX1pTSk9SazNXZ0xmTFRKaGdEX0taS2tKSXQtNG1PT0pwX1pCMjZYTGZTN0pKYw?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQRWF6cDRHNzk3b1o1UUx0NE5faFprc2lwR1NSc2otOFlQbEcxc0dicVVkTElRQUtCNnd3WjVPUkUySWs5VUtYa19JSDJoU2JLb0tfaHpFZDN6RHdWckJ6VndmRzgxQVhqR09VRTQzYTI4SVdGMDhveWV2MHJ0eVktUGh4QmRWOWdPeTZYSFJkLW1MeGVnMjY3SDNCZkFRQ2VWOXI4WmR4aXhNdGxOaGQybU9PRE8wVzdHVXZsekVqRnV4eWo4TzEtam1sa0gyR09xVVZrNy1ERy0tNVA4R3lSMVBqcDhqVzhvUENac3pnQQ?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -580,28 +361,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "53c82c43a33857bbcae35d4844d1bdca45fed16f14a25f5a7fc2eecb77a7f409"
+    "9bcd5b41ab70d024e0cf76d35ec413eb7669a097a54da0af3c5b420182b1ad91"
    ],
    "background_query_language": "tr"
   },
   {
-   "id": "0fb8fb143f141615",
+   "id": "ea2d7d741b9722ff",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "NRC Issues First US Construction Permit for BWRX-300 to GE Vernova",
-   "summary": "NRC Issues First US Construction Permit for BWRX-300 to GE Vernova the Electrical Distributor magazine",
-   "original_title": "NRC Issues First US Construction Permit for BWRX-300 to GE Vernova",
-   "original_summary": "NRC Issues First US Construction Permit for BWRX-300 to GE Vernova the Electrical Distributor magazine",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-10-13T16:57:45+00:00",
-   "source": "the Electrical Distributor magazine",
+   "title": "Giresun Üniversitesi’nden Geleceğin Enerji Teknolojilerine Küresel Katkı: Prof. Dr. Ayhan Kara Ve Ekibinden Uluslararası Nükleer Çalışma!",
+   "summary": "Giresun Üniversitesi’nden Geleceğin Enerji Teknolojilerine Küresel Katkı: Prof. Dr. Ayhan Kara Ve Ekibinden Uluslararası Nükleer Çalışma! Yeni Giresun Gazetesi",
+   "original_title": "Giresun Üniversitesi’nden Geleceğin Enerji Teknolojilerine Küresel Katkı: Prof. Dr. Ayhan Kara Ve Ekibinden Uluslararası Nükleer Çalışma!",
+   "original_summary": "Giresun Üniversitesi’nden Geleceğin Enerji Teknolojilerine Küresel Katkı: Prof. Dr. Ayhan Kara Ve Ekibinden Uluslararası Nükleer Çalışma! Yeni Giresun Gazetesi",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-14T12:43:00+00:00",
+   "source": "Yeni Giresun Gazetesi",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPVnkzV3hxZC05RTVlOVNLSEZwMGJFVWoxTkNEX2syWDhPS1loTURaNkItVGZOVEhvVEdRMVB2VnFxOTNWaWNBX0toaGVsQlNHZ3E3Q1diYU83WUhKR296RW9ZYU1sOURlNlJnUXM4ZDZnNUR5bmZ2OVpaRTMtRHlwYVFxWWFyb29vendYdEJOZw?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMihgJBVV95cUxObnFaYTc5ZGZldFI1Qm1RbzVla3dtbGxUaWpYTXgtLUY0XzNmVk0wb0tvTDBJNDdLZWZuSTRhMnR5d1hSUVVvbVNlRVBWczdmMENDTEdfNjB6SWNiX2FKTFkzb1BWNE9OSE1XNnFrZ0NZZWpJTHB4QU5saUpJN3UyOWJMLS14a21xQ1pnOV9nV1d1anB6YXk1S1Z3UEZpZUFzSkMtajRRc3BxWG1rVnF0X2wya3dObkltNnEzUnBOM0YwaXBsbjdUZkhVaWVnWTk5STczX1dmWUIxVm1FUGEzNXlRUFVrMWlvaGtscU9EckVzUDZlWHpDRUJ6SHdieUNNUjFZMUFn0gGLAkFVX3lxTE1kcGM5S1U2ZWtQUXZRaGt6ZWE4bDFFd0lzd3FYZXRzdzRNWXNlWHFHbzAzcUtnQ3JqTjNtZDVBcDdpNVM5YkRJd1ljWXc3Nlo1YUcwQ05HNzdUUDRFUU0tU1ZlamNRdDdKTzUxdE9tN0w0TFM2ZXRQWHdIOElHQ1VyRTdXdTBpbmg1T0ZDRmNyNDBDM3FjYlBiMWtOTC01TUNnN25EWkw3VG1leEYxRWNIM0hLd0REel9BUHdiOEJUdGM2anc2UjlsZERWNy1oSjNXMFNTVXBMbUlhdlZWOFdnV1J5aU1UbTFWU1YzZmpnVTg3T3BKdVVGbG0wWHl4c3pIaExqZkZYNUR6WQ?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -613,28 +394,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "fe37afa9df7b052a2601bb33aebd38ffe916c886f6556c11ac975db96785e8d8"
+    "1125fbc785614b2d319156f07d288f76fabd5bc4dfaff1a4b5712708dbff2bfe"
    ],
-   "background_query_language": "en"
+   "background_query_language": "tr"
   },
   {
-   "id": "aeadfd0802fd20e2",
+   "id": "763a4f68725021a2",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Google lanza Gemini 4 Argon, su nueva IA para tareas complejas en empresas e investigación que supera a Claude y ChatGPT",
-   "summary": "Google lanza Gemini 4 Argon, su nueva IA para tareas complejas en empresas e investigación que supera a Claude y ChatGPT El Español",
-   "original_title": "Google lanza Gemini 4 Argon, su nueva IA para tareas complejas en empresas e investigación que supera a Claude y ChatGPT",
-   "original_summary": "Google lanza Gemini 4 Argon, su nueva IA para tareas complejas en empresas e investigación que supera a Claude y ChatGPT El Español",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-10-13T16:56:48+00:00",
-   "source": "El Español",
+   "title": "HAVELSAN Sistemleri Ateş Serbest-2026 Tatbikatında Sergilendi",
+   "summary": "HAVELSAN Sistemleri Ateş Serbest-2026 Tatbikatında Sergilendi Sabah",
+   "original_title": "HAVELSAN Sistemleri Ateş Serbest-2026 Tatbikatında Sergilendi",
+   "original_summary": "HAVELSAN Sistemleri Ateş Serbest-2026 Tatbikatında Sergilendi Sabah",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-14T12:22:25+00:00",
+   "source": "Sabah",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMihwJBVV95cUxPLUZDbG96dkxqWEVSeG9lWEJyd05XZzlSVlk4Z1JKTC1rd016NG9WT3JieWF3Zm5FUW9LeWZKSVE4WVRIdkk0VG5SNG9xZzNBMGtUNE5XWWxjOW1kTU5UaFA4TENCV0VtRjBEdFYybTFwRjI4NjZCdWxYeWFoWnpLVl9xTVkydldtbnd3NnJLUVBBc1g2NzBXNkowQXQwMU9XQmdvWkdfenV0aFZUcU1XNXppelNabVItRGx0R3ZvZEFBOFQ4OFpwTDJoTmFJMmh5QjctWXY0bTlKaGtzSVNzenJTUVFzX0FRV0FnblE4V2VSVzJIY2FIcnB4bjlYSDM3emJRRHNnWdIBhwJBVV95cUxPLUZDbG96dkxqWEVSeG9lWEJyd05XZzlSVlk4Z1JKTC1rd016NG9WT3JieWF3Zm5FUW9LeWZKSVE4WVRIdkk0VG5SNG9xZzNBMGtUNE5XWWxjOW1kTU5UaFA4TENCV0VtRjBEdFYybTFwRjI4NjZCdWxYeWFoWnpLVl9xTVkydldtbnd3NnJLUVBBc1g2NzBXNkowQXQwMU9XQmdvWkdfenV0aFZUcU1XNXppelNabVItRGx0R3ZvZEFBOFQ4OFpwTDJoTmFJMmh5QjctWXY0bTlKaGtzSVNzenJTUVFzX0FRV0FnblE4V2VSVzJIY2FIcnB4bjlYSDM3emJRRHNnWQ?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNQ19ZTGVkeFFrU0lXSTJQVnhPVWZnc1dialJTeXlVeHlWSzM5QjdZNjBCZ0VqaVVQWXpVdG9IV2k0RXVkNnFxX3VkemY1TlotZU91VzlUdmNjc2w3THBiYzZiWi1GRjYtMU9rNnFHNHhPakUzWmdPMlJPcmVSLUF4MFRkbHd6ak95ZWRUTFJpVnJjZndZYk5SVDRFekZsZGd2S0HSAaQBQVVfeXFMTmJ2RE9CX3hmSDd4bUkzVldycnJMT0JMMERxN2h2U05mNEtWdEhBc1BGYldTX01Ic2FaUW9Pc3pleWl3RzNmMlQ2WjB2UWtNbUpXekhHdVN2V2xkc3pZTTg5SXZwaGhtWnI2R3JRcEtldk1NZXlIbFd0bm1OcUI1dWVCT3JUT3p6TlVGQklVbE5Ob21nSzBla05ZTWNfVWJXcnBWMkw?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -646,28 +427,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "97042ef9814320e0853626339e218c3754ba69adef2956165c6074c2a328cdcb"
+    "4c6556d2ff623c0f293085bee7af9a2b26a9110ad38aeb2e0156da76867873c7"
    ],
-   "background_query_language": "es"
+   "background_query_language": "tr"
   },
   {
-   "id": "e441052fd1169e68",
+   "id": "30f2062c80674032",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "रीवा के सरई कला-रोझौही में टाटा न्यूक्लियर प्लांट का विरोध: ग्रामीणों के साथ बैठक रही बेनतीजा , सरपंच के ना...",
-   "summary": "रीवा के सरई कला-रोझौही में टाटा न्यूक्लियर प्लांट का विरोध: ग्रामीणों के साथ बैठक रही बेनतीजा , सरपंच के ना... Dainik Bhaskar",
-   "original_title": "रीवा के सरई कला-रोझौही में टाटा न्यूक्लियर प्लांट का विरोध: ग्रामीणों के साथ बैठक रही बेनतीजा , सरपंच के ना...",
-   "original_summary": "रीवा के सरई कला-रोझौही में टाटा न्यूक्लियर प्लांट का विरोध: ग्रामीणों के साथ बैठक रही बेनतीजा , सरपंच के ना... Dainik Bhaskar",
-   "original_language": "hi",
-   "collection_language": "hi",
-   "collection_language_name": "Hindi",
-   "collection_locale": "IN:hi",
-   "published": "2026-10-13T16:55:31+00:00",
-   "source": "Dainik Bhaskar",
+   "title": "Rusya'nın devasa teknoloji üssü vuruldu. 900'den fazla hava aracı uçtu",
+   "summary": "Rusya'nın devasa teknoloji üssü vuruldu. 900'den fazla hava aracı uçtu NTV Haber",
+   "original_title": "Rusya'nın devasa teknoloji üssü vuruldu. 900'den fazla hava aracı uçtu",
+   "original_summary": "Rusya'nın devasa teknoloji üssü vuruldu. 900'den fazla hava aracı uçtu NTV Haber",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-14T11:32:31+00:00",
+   "source": "NTV Haber",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNWEFFVXdibTRKUXpCUllTVERScktLYnRRWjNXVzE5ZHZObXNnNWg2WDRmY1ZPZDNLVFlKb1RSV2RmYlhJVk9hWkFkY3hxUGNndi1kUHlhZHpyQmdsbTVBSk0wTVJBVktRaUQxSFBLN0w3TXZRTG9HU2xmeXN3VngyYkNXNHBTaUpkbFRVMGFEdVNaRnJYOEJiLTBXTTBMMVFXZFhIbzFRUElqSDFBUFNmWk9OTzRoLVNkQ2NF0gHAAUFVX3lxTE1ZeTNYMU5qN2FwTTFoU3BCZEkyYVlrODR1MEZORWVSdGhPTEFrRkVQSjVjcnZkM2pEMEIzMEVQc3hDT2VEZDlfVDJDOU14cW1SencxYUJaR0ZQdXBVUUdBOVlmQW44VFNaclN4TmlOTTRXUHI3NzE0eUpudEtrUi1WN1BETjNEZVFsMjZfazlGZzRBVnhKaklrSWoxM0N5UENHczJOc2QyclRwQnhkcXFONE1yU25LSEVQZHo1dlRHZA?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNbmVjVFFIT1NxTklaclp4WklLOUx2TDNKc1FMRkNGdEFmQ3RhNFhCbHFlTG1qN1F3TlVOQ3M2ejlrUEVpeEJOWVFzVE9URDR6a1RleVZBVXh1SlhaYmszX25GMlVXVTVPZ3c0QzlEczduU3hQV2NBcHZzV2g0SHdoVi14Zk01M1hnb3RaeVBkZXlmZkJUUnM2WE9JcmVxbnJycmswWmZFNnZVVjA2b1g3UdIBtgFBVV95cUxObWtPRmo5RV8tZ3JCVWxNNHBIWVc5Y0FVTlFIRllVUnBQMTJidU92ajUwSTEteXBPLUJrdUJYX2lTb2swYl9ienN3bmtfZ0trQ0RRRjJzZTVHN0s5VGRIbURTLWZPdEsyc3JRV3hFREN6SFRCVktyTWNVaHhxRVNxOEllUmJGTmw2UGdVaUpjRTdNcjJtT2hzOFh4enctLTFXUjltc3k0NGN2UnFMNmNpV3ZIdW85QQ?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -679,28 +460,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "d26db4a612ae56bba4e02551bcc5b479b39eb8a372666edfbf5d1d1779a206db"
+    "51956ee4c4894ab71d970cfdfd99f48c5694bd3e34120f65ea4b25ccd66968d5"
    ],
-   "background_query_language": "hi"
+   "background_query_language": "tr"
   },
   {
-   "id": "57adcc2c548b085f",
+   "id": "7a75fd594acdd288",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Urenco and Thorizon Target Next-Gen Nuclear Fuel Markets as Uranium Demand Grows",
-   "summary": "Urenco and Thorizon Target Next-Gen Nuclear Fuel Markets as Uranium Demand Grows CarbonCredits.com",
-   "original_title": "Urenco and Thorizon Target Next-Gen Nuclear Fuel Markets as Uranium Demand Grows",
-   "original_summary": "Urenco and Thorizon Target Next-Gen Nuclear Fuel Markets as Uranium Demand Grows CarbonCredits.com",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-10-13T16:52:18+00:00",
-   "source": "CarbonCredits.com",
+   "title": "Google en güçlü yapay zekâsı Gemini 4 Argon’ı genel kullanıma açtı",
+   "summary": "Google en güçlü yapay zekâsı Gemini 4 Argon’ı genel kullanıma açtı HaberX",
+   "original_title": "Google en güçlü yapay zekâsı Gemini 4 Argon’ı genel kullanıma açtı",
+   "original_summary": "Google en güçlü yapay zekâsı Gemini 4 Argon’ı genel kullanıma açtı HaberX",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-14T11:08:40+00:00",
+   "source": "HaberX",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOYUtGcjV6MVRFNHEzX2d0SFV6TXVXOXlwUS1yd3RVb3VUb3huSUxiQy1vLVNnMUp5S21CaV9MWS1xbkNJRFBPWjcxZmloREJCY1B4VDBjMmxITFRYemtZOTRGbUVFZmtlT0xWQ2hlVmwzaGwxMFg1NUpweUNEYW5EWFV0ZWN5WHV5MUVSbDBiX0UyTnlYVU9FcUVjNjBkZFFidnlPX2Z4V3RzOWc?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOSHJBeTNHZkpKaENEM1hpTUtiZzdYTjRQbU5VNVdVMU9SM2hrcmFTcy1FdWxFODJTcFpVSFlpTGVzbnZPWDAwdHFyRUxMTXVOQmg2UkI1WWdiaElPUEtFQklsX1hnNU5oYWl0TUNnVnVhXzYxeHBwcy1UZmJ5QVVHcHJlblFWOWY1RXV5ODNNcE92QU0?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -712,28 +493,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "80f6c8673d0e504431952385535d3ae6804e7095e5766a4a9ccf6dfcd4586e28"
+    "7f2b6af2784c552af0fe529db3951e9cfbc8a374ccfaabe66e63618a26cf6c35"
    ],
-   "background_query_language": "en"
+   "background_query_language": "tr"
   },
   {
-   "id": "875ec6481b31efb0",
+   "id": "5c6867ab37cbac30",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Lancet, le 17 minacce globali alla salute fino al 2100: cosa dice la Commissione",
-   "summary": "Lancet, le 17 minacce globali alla salute fino al 2100: cosa dice la Commissione Dossier Salute",
-   "original_title": "Lancet, le 17 minacce globali alla salute fino al 2100: cosa dice la Commissione",
-   "original_summary": "Lancet, le 17 minacce globali alla salute fino al 2100: cosa dice la Commissione Dossier Salute",
-   "original_language": "it",
-   "collection_language": "it",
-   "collection_language_name": "Italian",
-   "collection_locale": "IT:it",
-   "published": "2026-10-13T16:52:04+00:00",
-   "source": "Dossier Salute",
+   "title": "'Kıyamet günü' açıklandı: İnsanlığın sonu o tarihte mi gelecek?",
+   "summary": "'Kıyamet günü' açıklandı: İnsanlığın sonu o tarihte mi gelecek? Haber Sunum",
+   "original_title": "'Kıyamet günü' açıklandı: İnsanlığın sonu o tarihte mi gelecek?",
+   "original_summary": "'Kıyamet günü' açıklandı: İnsanlığın sonu o tarihte mi gelecek? Haber Sunum",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-14T10:30:07+00:00",
+   "source": "Haber Sunum",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxORllOTTBsc1BTdnU0c2loSVlRV3I1UTNDZUhKTTFCQkcwODczcHhsS0ZvNEx6ZFdfU0dsTi00dEViMTcyYmE1OG1Ib1FNRmJZX0ZfRlY0U1BZZndCam10MDQtRE1LRXJhZWQ3ZUNVYnA4LW9IQXZKdEY1dGJXZ3VnZmwzSFEzU3M?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNai1RcHNvWDJhVDg0cUZZa2lLM1pzUVVHZy1QUE1MSWNyWTZXc1U5RG5XUW5FWlpGQUNHaVdnRTVHUVRBdmNLdWdzaU83NWg5bzltZ00tR1hjYk1TWlVJc3Q1bEYzSm1MVGhVOEJOejNRN24tdjF4RTJzTTUxbkdpaXpfSmN2VEVXVmpwR25qQUphdlVXUXJyMQ?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -745,28 +526,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "f9de29082d3b66af7acef214208572bae25a38879ed5b1f60c1b43c07010f283"
+    "1ba6b79f5fbd09bf8d4c8ca57f46ba925ffe1b196e8b57db0a9534bedd1646f6"
    ],
-   "background_query_language": "it"
+   "background_query_language": "tr"
   },
   {
-   "id": "fab756855d84750c",
+   "id": "ecacb2a6830f34c0",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Type One Energy levanta US$200M para fusión nuclear",
-   "summary": "Type One Energy levanta US$200M para fusión nuclear El Ecosistema Startup",
-   "original_title": "Type One Energy levanta US$200M para fusión nuclear",
-   "original_summary": "Type One Energy levanta US$200M para fusión nuclear El Ecosistema Startup",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-10-13T16:52:01+00:00",
-   "source": "El Ecosistema Startup",
+   "title": "Kahramanmaraş’ta AFAD KBRN Ekipleri Devrede! İnşaat Mühürlendi",
+   "summary": "Kahramanmaraş’ta AFAD KBRN Ekipleri Devrede! İnşaat Mühürlendi Maraş Gündem",
+   "original_title": "Kahramanmaraş’ta AFAD KBRN Ekipleri Devrede! İnşaat Mühürlendi",
+   "original_summary": "Kahramanmaraş’ta AFAD KBRN Ekipleri Devrede! İnşaat Mühürlendi Maraş Gündem",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-14T09:50:00+00:00",
+   "source": "Maraş Gündem",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQcG1CbUI0Yzk4OVc4cUZYMHFCcmNvaGlmMHdLWDBJSGR2a0owbDF5bjAzeUJmYWxhc2tib2sxWll5bXAwNUJiMFlvYlc1Vk1haTJoTUN1X3VhMXRtNkEyTG1WNUVSeHUyOTZCSFNsYllkbXlIaE1jdThPSENFTlhycDRLaXliWV9y?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPbjBuMGJqZFUyMzZCLTFlcGlEc2NkZmhTbHNPMmNzcm9pS3NKMkF6WldYOVJ2Y2dnVk5EVEtJbktYVExJNUJ1Yzlob2NmU09kMzRGTERtbDdnREl4WDRQN3ZlYkdyR0NfU2tNcTRGcWhJYUd4VUtwZEo2T1lQZjJ0anpLMmxMb0FzWVBSdDhnSzktLURZcy1LbVJNdXpMdTMyX1pmdXV5bWgwU0Y5TjFkVUtB0gHCAUFVX3lxTE9jXzlhRzBiQlRVWHIyUlRQVzIxbTJNVXptSG1GMmc0ZlQ2Z1oxU25wdThJa001Wk1CSllRLTFUR3BlV0tiQkJlZ1c1WVBIaXhYMEFxWGEwaHZVWmYyWFdqVUxkR0NJYndScjlPRVQxSUhfLTNZU18wZGlFNkVmYTRteXFjNlhDbXF4Tmk1Q0RpeUl1RnppdXlZVUh3OUdZcEN4ZGxaTFF0bEdXd2FybEdDclNmaDVkQUpSX25RZC1zVVBR?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -778,28 +559,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "a8de6da5e2641b201cbe0c791fdf7c311e41d2b97538b3a1174dab1cf0cdb604"
+    "966af5c6caece186a9bd033e17b4a8a77bf80b2df3fa55843fb4125f60da3a49"
    ],
-   "background_query_language": "es"
+   "background_query_language": "tr"
   },
   {
-   "id": "723dd335c9d61e40",
+   "id": "19c4779407987e59",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Sybiha after meeting with Grossi: IAEA to send missions to 19 electrical substations",
-   "summary": "Sybiha after meeting with Grossi: IAEA to send missions to 19 electrical substations Interfax-Ukraine",
-   "original_title": "Sybiha after meeting with Grossi: IAEA to send missions to 19 electrical substations",
-   "original_summary": "Sybiha after meeting with Grossi: IAEA to send missions to 19 electrical substations Interfax-Ukraine",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-10-13T16:48:24+00:00",
-   "source": "Interfax-Ukraine",
+   "title": "35 uzmandan “kıyamet” raporu: İnsanlığı tehdit eden 17 küresel risk",
+   "summary": "35 uzmandan “kıyamet” raporu: İnsanlığı tehdit eden 17 küresel risk Manşet Haber",
+   "original_title": "35 uzmandan “kıyamet” raporu: İnsanlığı tehdit eden 17 küresel risk",
+   "original_summary": "35 uzmandan “kıyamet” raporu: İnsanlığı tehdit eden 17 küresel risk Manşet Haber",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-14T08:29:00+00:00",
+   "source": "Manşet Haber",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE1vdUVZeGpUOURETUpsanlMTXZBWnlyc3FnbzR0YXZxc1ZVZGoxNVFNQTZUZ2p0cnRYTGNpUHZkTjBpaE1vREJLS2tUUkRZS1hvYnZhQ0FPbzB0bTRqQlllMzhR0gFnQVVfeXFMUG1tZzJfOGotMnlPR284dllzQUJNYkRQYUZfOGJTM05LUWJnUzhSX2V1NTM4dThPSTZLU3BlYzdrUDMtRnpWeFBTSk9JUmVxV1FjaF9qYWNVUEFRaWdzRmgtanNrbkVZQQ?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOWC1DSzlvMU1ERGZyUHE1d1N6bFpRZHlKbXBVNk9YalBia0xMNHJhcThBLXZveVhVZXB2eWdfMEsyVTVUNWtYQXhEZEJCQTR4bGh6Sl9LS1luRG81aTJYZzF4YjdUREkza1VTM21FbVlxcDB3ZnVyMl9vNVlqQV9TUFUxbTFySjlQZVZOMUlaZ2l0WFRmZzY0QV9xMWhrRkxjRGdwcmlGaw?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -811,28 +592,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "411c49530bebc34b34ad5c797245b7963ec033a13db659720906b12b7d40889e"
+    "95e1a207d5e71893e1759d4a6bafd024fdb6cfc9e81155eac3282c46e8a8fdd5"
    ],
-   "background_query_language": "en"
+   "background_query_language": "tr"
   },
   {
-   "id": "67403e1187022f93",
+   "id": "1330b6ca7e8c7335",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Nuclear regulator says sector safe and secure but calls for stronger leadership",
-   "summary": "Nuclear regulator says sector safe and secure but calls for stronger leadership New Civil Engineer",
-   "original_title": "Nuclear regulator says sector safe and secure but calls for stronger leadership",
-   "original_summary": "Nuclear regulator says sector safe and secure but calls for stronger leadership New Civil Engineer",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-10-13T16:47:03+00:00",
-   "source": "New Civil Engineer",
+   "title": "Doğan Akdeniz: NATO’DAN NÜKLEER MESAJ",
+   "summary": "Doğan Akdeniz: NATO’DAN NÜKLEER MESAJ Lider Haber",
+   "original_title": "Doğan Akdeniz: NATO’DAN NÜKLEER MESAJ",
+   "original_summary": "Doğan Akdeniz: NATO’DAN NÜKLEER MESAJ Lider Haber",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-14T06:05:00+00:00",
+   "source": "Lider Haber",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPaWN2SnBacHlaY19xNXV4cnlWdzdTUTBhOHZPQ0dmVXJJWGctNWZJZExjRGpLeWhjaDF3NHVIaXVDT3RwRDRSeFB0bTlQc1R6LUs2S2dEcm1GUDV3eDV1ejY4YklWUkZpOXVZQ1EwaUpOdmJlM0NJaWliREc5Z2R6QUd3WHpoaVFJZ3pHU29kYjMzSnF3ek5tNjJfZTJGdXdJTm1jLUltSWRqWk4xUWRmWVdJQnBaOHNQVDhnY0NVODNQYUstamMxMkx2bw?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5QS202ZHRHM1ljQXZzeHlsTTJxZmVqdjMtcXhWelEwSFEwTHlQQnZNUmVzX2ZnVHFPblN0UHZJUmlsU3hDaTdQazVSWXdWVkxibXRZaENGQnh1VXR6d1Rsbg?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -844,372 +625,9 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "282ac06a6c2333019dd20df2f693bfdc71f0f81c28e7b89b5ec3ef1b562b78a6"
+    "9308a95174fe2e0cf10a46f910b90d12e653855fc98ab99ef09794126affce88"
    ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "fc006438195e6e2b",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "टीटीसी एनर्जी के अध्यक्ष, डांग हुइन्ह अन्ह तुआन: हरित ऊर्जा यात्रा में एक नेता की पहचान।",
-   "summary": "टीटीसी एनर्जी के अध्यक्ष, डांग हुइन्ह अन्ह तुआन: हरित ऊर्जा यात्रा में एक नेता की पहचान। Vietnam.vn",
-   "original_title": "टीटीसी एनर्जी के अध्यक्ष, डांग हुइन्ह अन्ह तुआन: हरित ऊर्जा यात्रा में एक नेता की पहचान।",
-   "original_summary": "टीटीसी एनर्जी के अध्यक्ष, डांग हुइन्ह अन्ह तुआन: हरित ऊर्जा यात्रा में एक नेता की पहचान। Vietnam.vn",
-   "original_language": "hi",
-   "collection_language": "hi",
-   "collection_language_name": "Hindi",
-   "collection_locale": "IN:hi",
-   "published": "2026-10-13T16:44:50+00:00",
-   "source": "Vietnam.vn",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNb2RLYzh0cGtfdjVIVHlqUWpiaFlfRmRaNXJNQlM3R2xXR20wTHJXWnRpTGYtQkQ1ZDRlMUxoTWZ0T2t4RkNrUFpfdTMxaC10Z2F5MldydUtNY2xhTS1Pb1RubjFRbUFhcXpjbnJ4cXhzWkk5Vk5OdGFLY2FfUnBEam9vR2FqMFNhQVptVEtuRldqcXVhOE9DYkUwUmJvaURPLWd3SWZpc0UyZGJySEQxT202a2lBNVEz?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "341b6cf424a956e49325697d8b20aefda856038bab42bc6b65b1e1b228db009c"
-   ],
-   "background_query_language": "hi"
-  },
-  {
-   "id": "1fdbe9bcc9116954",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "IAEA to launch its largest mission yet to protect Ukraine's nuclear power plants",
-   "summary": "IAEA to launch its largest mission yet to protect Ukraine's nuclear power plants RBC-Ukraine",
-   "original_title": "IAEA to launch its largest mission yet to protect Ukraine's nuclear power plants",
-   "original_summary": "IAEA to launch its largest mission yet to protect Ukraine's nuclear power plants RBC-Ukraine",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-10-13T16:35:00+00:00",
-   "source": "RBC-Ukraine",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNS1ZBQU9ua25EOEd5Y05mc0Z5SlNiR2tINFpzbmhyRGZ0MlJTRHF0UmFIZ2t6V3Q0VjZKcExObDR3VW05UkFmLXhsc3lDdno5LWV0cUxtTEJfYWpTSVBrT00zNmx6RzBObjZkTVNETDdLSXZuY3hTUzAzbWpxWFhvVHEwNHZPR05GZGZ2d0tHUWJ2V1E?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "aaa675cfbdddbae537b7f3ebe9257f59491c349f5da83cf035d5b9b212e8a937"
-   ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "1518bc92c0381183",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Fracaso en la eliminación segura y responsable de los residuos nucleares",
-   "summary": "Fracaso en la eliminación segura y responsable de los residuos nucleares El Chubut",
-   "original_title": "Fracaso en la eliminación segura y responsable de los residuos nucleares",
-   "original_summary": "Fracaso en la eliminación segura y responsable de los residuos nucleares El Chubut",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-10-13T16:31:15+00:00",
-   "source": "El Chubut",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPOXlEVjUwcEwzRlA1UmswZEZCZHRNdnRlUlpTWUo1MHlqaU1pckJwOC1RX01WRFFLaGFEN1ROOG5MZkhqLW1OVW5YNzRYNDFkbWxYNkhTVWJpckw5LTZKS2dMaVJtcW5QaTdfYUU5X1ZHUlJTRzBkdDI2WEVkeGdxMzdTTkhnZzFxM3FCRmJYaDZIMXB3UW83Y2ZabFllRFpFYmZKYlFjWjlwTzFpa0lVQmFvaV9mcGVXa2lGTXlZVGg0LThqcHdHRUVLNUwwX3FOaXc?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "52d41cfa6135177b3c8ab430a4ab1502d90da83ec2d84cadc8a736d7dc36d03c"
-   ],
-   "background_query_language": "es"
-  },
-  {
-   "id": "30ae6933ba306513",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Questa astronave potrebbe trasportare addirittura 2.400 persone in un viaggio di sola andata verso Alpha Centauri",
-   "summary": "Questa astronave potrebbe trasportare addirittura 2.400 persone in un viaggio di sola andata verso Alpha Centauri Passione Astronomia",
-   "original_title": "Questa astronave potrebbe trasportare addirittura 2.400 persone in un viaggio di sola andata verso Alpha Centauri",
-   "original_summary": "Questa astronave potrebbe trasportare addirittura 2.400 persone in un viaggio di sola andata verso Alpha Centauri Passione Astronomia",
-   "original_language": "it",
-   "collection_language": "it",
-   "collection_language_name": "Italian",
-   "collection_locale": "IT:it",
-   "published": "2026-10-13T16:30:00+00:00",
-   "source": "Passione Astronomia",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPYzBLYmx6NTU4bk1SZXlOd0NoTXh2b1VxUFBrTi1VeEhJX1NWYnI3ZU9odzZNWHdXa0lhNGpYR3hQZkpmc1ZpSmM5bFZBWER4b3d4TnpmOUtWVk5DNVlab2MyTjdnSFFRNlJUY2x1MHZRZ0JjU09jZUVOZElkQ2FLR3VKMUpVLTdVUy1FY0tGN1V6allGemd4UEpHZEdabDQxeDI2aU1pam1tZ21VU01tVVRPc3RCZXlqWF8xZU1ibGh2TW5qdk9BQWlfWVdDcWMySHg3VkU2X3ktak5nT0JhV3hR?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "5b3efa8f23066636ebc3c975fa5acb7b8ad91cd72b93751e0eeb4402dc8129ef"
-   ],
-   "background_query_language": "it"
-  },
-  {
-   "id": "e13dcc5f69b47e6b",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Svolta nella fusione nucleare, il cambio di paradigma che permetterebbe di risparmiare un'enorme quantità di energia",
-   "summary": "Svolta nella fusione nucleare, il cambio di paradigma che permetterebbe di risparmiare un'enorme quantità di energia greenMe",
-   "original_title": "Svolta nella fusione nucleare, il cambio di paradigma che permetterebbe di risparmiare un'enorme quantità di energia",
-   "original_summary": "Svolta nella fusione nucleare, il cambio di paradigma che permetterebbe di risparmiare un'enorme quantità di energia greenMe",
-   "original_language": "it",
-   "collection_language": "it",
-   "collection_language_name": "Italian",
-   "collection_locale": "IT:it",
-   "published": "2026-10-13T16:29:08+00:00",
-   "source": "greenMe",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxNSWVfYjBMOUY2YXczOWhVaTBTbVdhVHlWWnp1RmRhNjFXWHFSSzdlZ0RWNFRGblpmRWk2SlNMdHlNa1N5alJWV184QnFlTHdWSllUTWFxZ1pKSFdZREVKZlZZazlvXy1ZU3AtWmNac1BGN2F2QzNJRWZub3BMNTExTEJUTTV2N2ppN0Z0VkJaa3dreG96emlla2dsRE9vS0h2UWpaUU5WaUd4VVp2M2lOcmxtZ3JKMVdXYy1WM3M3cDJ6UlRBUkpUcVRHV2dyN0pJZnhsMi1EUXBFTUxLdHp3?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "92a9afed22ac82d96c4be8fbda3eb07726abcebfcda0beb1047b689bbcce9aac"
-   ],
-   "background_query_language": "it"
-  },
-  {
-   "id": "63a3ab8f8178f010",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Nucléaire : plusieurs entreprises perquisitionnées pour des soupçons de corruption et d’entente au détriment d’EDF",
-   "summary": "Nucléaire : plusieurs entreprises perquisitionnées pour des soupçons de corruption et d’entente au détriment d’EDF Sud Ouest",
-   "original_title": "Nucléaire : plusieurs entreprises perquisitionnées pour des soupçons de corruption et d’entente au détriment d’EDF",
-   "original_summary": "Nucléaire : plusieurs entreprises perquisitionnées pour des soupçons de corruption et d’entente au détriment d’EDF Sud Ouest",
-   "original_language": "fr",
-   "collection_language": "fr",
-   "collection_language_name": "French",
-   "collection_locale": "FR:fr",
-   "published": "2026-10-13T16:26:33+00:00",
-   "source": "Sud Ouest",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMigwJBVV95cUxOQVc2TUdpb2NRV2VXZzk0RHNqNldaU1JRS1padC1heGU1RXZqa3hMRkpBRkVrS2hZNkdmNzllZlVFaDVKeVQ5WW1WdmdTU3ljbFBSdVBuMXFrcW5sUkxkYkRVT19mYy1HaHR2VTlOYlBxM29KMmc2d2RjTnZyNEVLQlNhSEJMcm5xX1VreVEtOGRqeWZYN2oxWGlSaFlMSE9zbVMtMldQVmJ2emh1Y1hBZGZDd201dmpJNkVINmIySl84S3NRYlA0ZFg1dzl3d09Wemg1QS05WVB6RzNBanlHSEtHMnJMN01IZHJ1cUs2bTVMZUpaQV9qOGw2UHh5NlhYbm84?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "57e4695fa47970c36c9c6547cb0b92949c8add98836b0c2bb1c17868a6d85a2a"
-   ],
-   "background_query_language": "fr"
-  },
-  {
-   "id": "5041d54fc5f719e8",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "3 Stocks to Buy If You Think the Nuclear Fuel Shortage Is the Real Story, Not the Reactors",
-   "summary": "3 Stocks to Buy If You Think the Nuclear Fuel Shortage Is the Real Story, Not the Reactors The Motley Fool",
-   "original_title": "3 Stocks to Buy If You Think the Nuclear Fuel Shortage Is the Real Story, Not the Reactors",
-   "original_summary": "3 Stocks to Buy If You Think the Nuclear Fuel Shortage Is the Real Story, Not the Reactors The Motley Fool",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-10-13T16:12:46+00:00",
-   "source": "The Motley Fool",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNUEhDTGtiWkNwNlNtR2V2c2dtdlpNOWFBUVZHY0drY2RGcGRmQTRqMUZNXzJ0aXhEZG5OLUIzYldqZGMzVjh1cGhlVGlnZHF2ZmhqQTNnaXcxZndVMUptU0E4bzllT0NqOHBxM0g3ZUJYUGhsRjVHZk9pSlNybkR0TlZ0TERvQ0dyWktpUWMwR0pDVWNOZDMxcw?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "bb94603edcdf031bb8cf6220dc603bde808f00743fc3a9a61a288a2291e68eb0"
-   ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "5aa5525b070a5732",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Fusione nucleare: svelato il nuovo progetto del reattore STEP",
-   "summary": "Fusione nucleare: svelato il nuovo progetto del reattore STEP HDblog.it",
-   "original_title": "Fusione nucleare: svelato il nuovo progetto del reattore STEP",
-   "original_summary": "Fusione nucleare: svelato il nuovo progetto del reattore STEP HDblog.it",
-   "original_language": "it",
-   "collection_language": "it",
-   "collection_language_name": "Italian",
-   "collection_locale": "IT:it",
-   "published": "2026-10-13T16:10:29+00:00",
-   "source": "HDblog.it",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOcjlGbnMyTTNId3UxQkkxUEhpOUIwYkhpNWdkTkJYaDhreWx2TG9oZ3BQSTZRVkxZQ1JVTm1NN0RMNGVnQk9yR1l3bFFveEV2ZFdEU1pSemVJTWdHZUF1MmdVTlJ0cHJPR0JLN09fUGJSY1JTOGNZSVlKX2xSLXhCTUs1X0NLZFlLY1pHWkYydEd1NHYtRjgtVw?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "9fcb5cb504236a9dac40aaa7f5b26527648473abe249783d57291ac328ca9b58"
-   ],
-   "background_query_language": "it"
-  },
-  {
-   "id": "6e3e7153048075e7",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "IAEA to deploy largest-scale mission to Ukraine's electrical substations – Foreign Ministry",
-   "summary": "IAEA to deploy largest-scale mission to Ukraine's electrical substations – Foreign Ministry LIGA.net",
-   "original_title": "IAEA to deploy largest-scale mission to Ukraine's electrical substations – Foreign Ministry",
-   "original_summary": "IAEA to deploy largest-scale mission to Ukraine's electrical substations – Foreign Ministry LIGA.net",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-10-13T15:48:00+00:00",
-   "source": "LIGA.net",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQZ0U4N0ZMcXdRajV2OW9aLTFCbW5tblNBVzh4aEx0UFdZcVhWbFJycFRxalhRM29CMEU2M2dvOUtVLUJLSGNQM0dzeU5JUzZiRGFCUW5sMU9WRHVBdU9nNXViRVJLZjJsUmlIdVh6Y2dhTzdidS15OTRkd25LbUxjVnBGRXRYVUFNc04wTDhpM1FLWWhMc1RRSlNOSXF0dkROV3FkV1hUb3VhaTF0UkhwcHVIcnZXdk1IOEJtbGdzY9IBxAFBVV95cUxPXzVXc1VtZlRtbVJTZXA2TXpfU0NkcTFIRHgtbjZWYjZYVGh0RlE1aUl2MFlCQUU1QlV1TTZlTmNSYnd0V1VUNF9YcmJIZWZlZmhYd25HaGJoYVQzSlVoUUJsbEV3QmlZcVhCdlNGM0FFRGhOMnBMSmYzSWtORmtuVTJ5cTAtaElfNDUzZ1FjY19lb0lTVFlZbDZRQS1TYXNXejdMbzFaYUdHUkRBb2I3QUdCQjZDeXc1VXBMM3VPek9Sdzcx?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "e0709efafe74a456951d5ec443eebbc5344e358320fbf293416edfa75bbaab1f"
-   ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "847f5a3fad84f27c",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Soviet Nuclear Submarine K-278 Komsomolets Had an Escape Capsule That Separated as She Sank. Only 1 Man Inside Survived the Ascent, and 42 Sailors Died in the Norwegian Sea in 1989",
-   "summary": "Soviet Nuclear Submarine K-278 Komsomolets Had an Escape Capsule That Separated as She Sank. Only 1 Man Inside Survived the Ascent, and 42 Sailors Died in the Norwegian Sea in 1989 19FortyFive",
-   "original_title": "Soviet Nuclear Submarine K-278 Komsomolets Had an Escape Capsule That Separated as She Sank. Only 1 Man Inside Survived the Ascent, and 42 Sailors Died in the Norwegian Sea in 1989",
-   "original_summary": "Soviet Nuclear Submarine K-278 Komsomolets Had an Escape Capsule That Separated as She Sank. Only 1 Man Inside Survived the Ascent, and 42 Sailors Died in the Norwegian Sea in 1989 19FortyFive",
-   "original_language": "en",
-   "collection_language": "en",
-   "collection_language_name": "English",
-   "collection_locale": "US:en",
-   "published": "2026-10-13T15:43:52+00:00",
-   "source": "19FortyFive",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiuwJBVV95cUxQMGhWcW1remVqOGFxaGZCVWdrNHZfZDFiN2U0U1ZRTmVZMGg0VHJyU2gtaU9pb3c2d2lVaVVvUEVxNlFTYU8xR3I2d05lSVlpXzhSY0dSOWdUcHk0Vkc2Z0t0UEVNS0tlcFk5NHZVMHQzN3l2Y3M5R0xmSU11aklEUmZYMVo3QWdTZlpmNFpEb0w4MVEycm0yNEZiZkZYelZSZERualZDQVRhOWYySzdoQzFZc3gwWXZ0c1hhUTNzMlJTMUJYVXJOSTVKR1R1elQ4TUFKamZfR0ZjT1lHakVINGhIVnpkcklXVm5WTHBaYVMyTnFIVzhtNzNFZnAxendsWGMxWEJEUWVGUjE5cVNRdmNVelZidG1nUnlSbm4temtlbTdabHRsQlN2TzN6UGVydmFwd09aQWo1N00?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "059629e97fd4102d8ce234120d6092197c45f24fe73b1cfeea3c191cb3a0179d"
-   ],
-   "background_query_language": "en"
-  },
-  {
-   "id": "95cb280d9d59c167",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "IA, guerre nucléaire, obésité… Ces menaces qui pourraient faire basculer l'humanité d'ici 2100",
-   "summary": "IA, guerre nucléaire, obésité… Ces menaces qui pourraient faire basculer l'humanité d'ici 2100 L'Express",
-   "original_title": "IA, guerre nucléaire, obésité… Ces menaces qui pourraient faire basculer l'humanité d'ici 2100",
-   "original_summary": "IA, guerre nucléaire, obésité… Ces menaces qui pourraient faire basculer l'humanité d'ici 2100 L'Express",
-   "original_language": "fr",
-   "collection_language": "fr",
-   "collection_language_name": "French",
-   "collection_locale": "FR:fr",
-   "published": "2026-10-13T15:29:44+00:00",
-   "source": "L'Express",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxNbU1LMjZTVk9SS0xCVkxUa3JfU3AtNUhVYldiRHR1SXJvc2k5SzRWdGxHRzNQWU82TUxOTGF0MFZkZFhQN1Z6bzRIenkxdjJEb3lCVnl5N0duLUI3SzdlNUVWcnNUTjVOYzhLTHVLelJQZEVsclhWTEZPbWplNWxUU3ZUNWxfU0lESUtsODNRaklkeWtmTDdYNVVlcEhfcUJZNkpRMHN3ZE1wc2lZVjVXWkJQZ0I3YnhYNTEtd3NWMjFyM0NZZlYwMXFqYUVhOElhZm5lSlQxTnJHMWZnSVhWTA?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "bc00e4cffb49fd882e5a26e3756c61b09020f831914d4c3330337a797196ff6a"
-   ],
-   "background_query_language": "fr"
+   "background_query_language": "tr"
   },
   {
    "id": "035c35f1d891c76b",
@@ -2101,6 +1519,39 @@
     "bbafe6655cc875b97bfeae78cd55e5bdbc2e7a93bf7e7ece31dbe9fa8e4d3b55"
    ],
    "background_query_language": "hi"
+  },
+  {
+   "id": "aefa2d297f10d111",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "\"الناتو\" يطلق تدريب \"الظهير الصامد\" للردع النووي في إيطاليا بمشاركة 17 دولة",
+   "summary": "\"الناتو\" يطلق تدريب \"الظهير الصامد\" للردع النووي في إيطاليا بمشاركة 17 دولة بوابة الأهرام",
+   "original_title": "\"الناتو\" يطلق تدريب \"الظهير الصامد\" للردع النووي في إيطاليا بمشاركة 17 دولة",
+   "original_summary": "\"الناتو\" يطلق تدريب \"الظهير الصامد\" للردع النووي في إيطاليا بمشاركة 17 دولة بوابة الأهرام",
+   "original_language": "ar",
+   "collection_language": "ar",
+   "collection_language_name": "Arabic",
+   "collection_locale": "SA:ar",
+   "published": "2026-10-13T13:14:00+00:00",
+   "source": "بوابة الأهرام",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBVRzVuYmo1aFJpSkZleVVoczlReGVHRzNzSFFYTXJocEFkVHVGaGxzSThuRXBrZV9iQXg5V2l1RUg5aDlwNUxkb0JLeXl1V2dsYkZwVFBR?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "e040f7a74e9c34039fff993996b29e7aad23b84d6518922d140ef1be3cb28d89"
+   ],
+   "background_query_language": "ar"
   },
   {
    "id": "4c8c211f5d9c41fe",
@@ -3060,6 +2511,39 @@
    "background_query_language": "tr"
   },
   {
+   "id": "0b1a736a3e087857",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Planeta nascido dos restos de uma estrela morta? Hubble acha nióbio em anã branca e reacende a hipótese",
+   "summary": "Planeta nascido dos restos de uma estrela morta? Hubble acha nióbio em anã branca e reacende a hipótese SoCientífica",
+   "original_title": "Planeta nascido dos restos de uma estrela morta? Hubble acha nióbio em anã branca e reacende a hipótese",
+   "original_summary": "Planeta nascido dos restos de uma estrela morta? Hubble acha nióbio em anã branca e reacende a hipótese SoCientífica",
+   "original_language": "pt",
+   "collection_language": "pt",
+   "collection_language_name": "Portuguese / Brazil",
+   "collection_locale": "BR:pt-419",
+   "published": "2026-10-13T11:00:00+00:00",
+   "source": "SoCientífica",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPVmRWNWVlMnlxX1dDcmZtcElpNGV1SkNlc1pIVnJxMWkwMjFmMXc0QmluNVVPTlRnQmw2VEptNGlxTUtIdHQ0eDVFVXJ5Q3kzajdObTVhaVVCMjdUM1A2OWZFTC1GTzJiWjJrX01xRW9fb3BJYWFzcm51NEp6QURwa2dHTDdDdENsMC11aU4zNGp3Um1odE9XWEZmcVpnNUQ2N3BSWlFRR0dMRHVzVnpUeTRMUWJiU0dpQ25Xcm10LURmR0YtUFFxbWg5NA?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "fc8630362363fd00618461ca3821dd7590ebccc3092a7c19a3b4ba8f3983a5ee"
+   ],
+   "background_query_language": "pt"
+  },
+  {
    "id": "03383ead69ed82d5",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -3289,6 +2773,39 @@
     "acae6dab1db91c5c3b8b2026940ba3d35078764d8a2668b9286ad64edf2e6a39"
    ],
    "background_query_language": "es"
+  },
+  {
+   "id": "13f5e646a9c88065",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "AMD confirma falhas de segurança nas RX 7000 mas oculta detalhes técnicos",
+   "summary": "AMD confirma falhas de segurança nas RX 7000 mas oculta detalhes técnicos TugaTech",
+   "original_title": "AMD confirma falhas de segurança nas RX 7000 mas oculta detalhes técnicos",
+   "original_summary": "AMD confirma falhas de segurança nas RX 7000 mas oculta detalhes técnicos TugaTech",
+   "original_language": "pt",
+   "collection_language": "pt",
+   "collection_language_name": "Portuguese / Brazil",
+   "collection_locale": "BR:pt-419",
+   "published": "2026-10-13T10:42:22+00:00",
+   "source": "TugaTech",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPLXd4UGpoaHZFeEpFOUwtMDVaWnRXSmJPYW9VZmZwUE9tajlsTnR4MDgwQWsyT053LUUtVjFTSnhaMTNWTlNLSkRscmJIZGg4d3RJdHNSbzFIYWRnSGRrOXpZZnFCSlMwU1dMOGNpbFNwcE1MYVdEaWRuOUNQTFFUQk9sU1h3VzFROUVtZC16N3NsaExHWVpHVzV2NUdVUlJ2RVNESzJxdw?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "0a1b17a6d3664066e46e6e244ba767a0bfdb6cd551489a9c31978fc7d34f66f7"
+   ],
+   "background_query_language": "pt"
   },
   {
    "id": "b3e846de072578bb",
@@ -4347,6 +3864,39 @@
    "background_query_language": "hi"
   },
   {
+   "id": "685f82303be25762",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "NATO begins nuclear wargame as Putin draws a red line around Kaliningrad",
+   "summary": "NATO begins nuclear wargame as Putin draws a red line around Kaliningrad TFIGlobal",
+   "original_title": "NATO begins nuclear wargame as Putin draws a red line around Kaliningrad",
+   "original_summary": "NATO begins nuclear wargame as Putin draws a red line around Kaliningrad TFIGlobal",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-10-13T08:03:05+00:00",
+   "source": "TFIGlobal",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNeFQ3bFlWZmFYOG9fQmtaMkdXVzV2U25rcldxSXJ4VVRmSXBCcDE1aTFiQ2xMT0ktMTdTOXloMGV1TERXc0piUENpamtvTlhCYzJpU0dyOHI2OWRuUEJiM2hoTmpoMHhnYVZmal9ZamFVR0FuWElVLXh2aldMMTQ3MjJGenZsX0Q3czFpUlNwTXE2UDdJZFBfcEtwbVBGNDlZcG5pMmJGTnYwc3o2ZThJ0gG0AUFVX3lxTE1CSDJXU21teVFDeEFiNWhSdjJjOVdjYW5KTTNHWjd2cEktbDJSc3djcWs5WGM0bnI1Y2RSOWxpUl8wRmwwR3Z5TTdsS3A1LU9Pa2p4MGhvQTUtMkNqc3M4OEZzM1h4TWMtdkFvM05ZbGNoY0ZNeUdMa2ZiaTlRbk5YZE9UeFpXN21sZXZISEUzNHBKRTc1dVNoRVpXQVlEZ0F1eXhCS250dGxadEdRRm9wZUR1UA?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "072adeaba99ebb1c9f6ffa47a8d7e12e2203bcd25c2367e0b50c29ac57c739aa"
+   ],
+   "background_query_language": "en"
+  },
+  {
    "id": "bab9eb993f24e667",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -4675,6 +4225,39 @@
     "675fe8d89cf516ca0d7a4911b8090226d3c2ffecfb1fe56dbb8dbeb660726bfc"
    ],
    "background_query_language": "en"
+  },
+  {
+   "id": "bad910de926178ba",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "九合一選舉懶人包｜2026投票日期、選什麼、幾張票、要帶什麼一次看",
+   "summary": "九合一選舉懶人包｜2026投票日期、選什麼、幾張票、要帶什麼一次看 數位時代",
+   "original_title": "九合一選舉懶人包｜2026投票日期、選什麼、幾張票、要帶什麼一次看",
+   "original_summary": "九合一選舉懶人包｜2026投票日期、選什麼、幾張票、要帶什麼一次看 數位時代",
+   "original_language": "zh-Hant",
+   "collection_language": "zh-Hant",
+   "collection_language_name": "Chinese (Traditional)",
+   "collection_locale": "TW:zh-Hant",
+   "published": "2026-10-13T07:26:00+00:00",
+   "source": "數位時代",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQcW9qdWpibTZsRWo5eDN4YnBuQXBpUWhWS2F1QkhTZEIxNVFCYzNJUzdZNXEwdFFqN0lqdjFlQ3psU0QtVlV3U21hbHc0blBqRjV5M1hKZ0J1Njl3VGdJY1Q0Rm5Vc3JzbXVkM1VDYmJjX2tmU2I3bXRDZEZrZ09OdlpuQkM?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "79fb2a365f882d117158797baaea4d87074ac2ff3a3d8f36a30f31c8b50c4b77"
+   ],
+   "background_query_language": "zh-Hant"
   },
   {
    "id": "cd584c21d69f7e95",
@@ -5236,6 +4819,39 @@
     "b875e646c2a55f0ad33f6b5168ea7d2d1ca3ee6fa63b2c299e706f54bd58cdf8"
    ],
    "background_query_language": "tr"
+  },
+  {
+   "id": "ce0bf3396479e7d6",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "NATO Begins Major Nuclear Exercises in Italy: How Did Russia Respond?",
+   "summary": "NATO Begins Major Nuclear Exercises in Italy: How Did Russia Respond? Zamin.uz",
+   "original_title": "NATO Begins Major Nuclear Exercises in Italy: How Did Russia Respond?",
+   "original_summary": "NATO Begins Major Nuclear Exercises in Italy: How Did Russia Respond? Zamin.uz",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-10-13T06:29:00+00:00",
+   "source": "Zamin.uz",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQNmxLZk1TM3k0MzVXd3JkWDB4TzVnQmxoTTk2MEprelpDVGd5TzJxcEdsNTg5NXVsYldrM2pBanE4NW9rM3FrUjlGTlRhR1huTE5oOHUxNlVPN0lScGVUOFU0SXd5TjliMUVLWDlJcHZ2T1dCRE1XR1VMODd5cTFLcUdjOV9UZWlMTnE5bU5jYTc0S0JvLXBvaUlKRXJvdmFRY1FMQjVWZkw?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "92d504b29c4a3856a9ec6a9814446c72b94bfce97bb4f28343b1bdedbc370bb5"
+   ],
+   "background_query_language": "en"
   },
   {
    "id": "fc7e86b9f9a9b3c6",
@@ -6096,6 +5712,39 @@
    "background_query_language": "en"
   },
   {
+   "id": "8d0b6de397465220",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "營建與造船現場，客製化機器人搶先人形機器人投入實戰",
+   "summary": "營建與造船現場，客製化機器人搶先人形機器人投入實戰 BigGo 財經",
+   "original_title": "營建與造船現場，客製化機器人搶先人形機器人投入實戰",
+   "original_summary": "營建與造船現場，客製化機器人搶先人形機器人投入實戰 BigGo 財經",
+   "original_language": "zh-Hant",
+   "collection_language": "zh-Hant",
+   "collection_language_name": "Chinese (Traditional)",
+   "collection_locale": "TW:zh-Hant",
+   "published": "2026-10-13T03:06:00+00:00",
+   "source": "BigGo 財經",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFBKajJuVVE3SmJOaWFpc3FCRXVRMGF4U1VWc3BneWNBbjF4c3dFVWp0OU9DS0N5cDVvaEtUSWlnS0QwUFlCeWp2dDYzWlBLRlk0WWhudWYxTjBjUlNGdUJLX3F3S3VZMF84Y2lNOGpRa0ZyRlF4QjlfMUFR?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "8574791e662c7529f7fb69995f1d2765b5858a4fcedd8e8c3eb7bf629e5caef0"
+   ],
+   "background_query_language": "zh-Hant"
+  },
+  {
    "id": "355dd0b6bf434b85",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -6226,6 +5875,39 @@
     "78fbcd9d4a01fc8d7eb5add29b02dfa697ab59fdcee59b9685f35075b839b688"
    ],
    "background_query_language": "he"
+  },
+  {
+   "id": "2feb5895f07e9534",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Europe tests ability to counter Russia's nuclear threats | DW News",
+   "summary": "Europe tests ability to counter Russia's nuclear threats | DW News Modern Ghana",
+   "original_title": "Europe tests ability to counter Russia's nuclear threats | DW News",
+   "original_summary": "Europe tests ability to counter Russia's nuclear threats | DW News Modern Ghana",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-10-13T02:40:00+00:00",
+   "source": "Modern Ghana",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE52X0xwQ1Y3QVpQNlM5U25USXAzVlkyRzNrVUZMT0k3UE9zaFozNUIyLWlaSm9zQ0M0enFKcVF3Wk5zNkVOSnF1ZjdFejZGQi1JYkhBSy1xd3dlQ0xFQVHSAVxBVV95cUxQbkMzUFd5MlcwT1FESFd2ZXdFcnpKWkE0aGszdWJjaGNsYnhFYi1XZjBmT3AtY3BHRTNidy1VLW5NZl80M2JKTFI0RkZqeG05Q09sdVp4SXcxZVVyZg?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "348b4219f83eea58943d690ac7f2d58de6c103a1804e4376c3729b072146c394"
+   ],
+   "background_query_language": "en"
   },
   {
    "id": "cb3a8d9a563b2f94",
@@ -7381,6 +7063,39 @@
     "23ddb1b607e3a391ee882818710f9cba835fca1236abea4f31ea3390c688e058"
    ],
    "background_query_language": "en"
+  },
+  {
+   "id": "5fdd7dfa93dcfdda",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "ANSN promove jornada sobre cooperação ibero-americana em segurança nuclear e radiológica",
+   "summary": "ANSN promove jornada sobre cooperação ibero-americana em segurança nuclear e radiológica www.gov.br",
+   "original_title": "ANSN promove jornada sobre cooperação ibero-americana em segurança nuclear e radiológica",
+   "original_summary": "ANSN promove jornada sobre cooperação ibero-americana em segurança nuclear e radiológica www.gov.br",
+   "original_language": "pt",
+   "collection_language": "pt",
+   "collection_language_name": "Portuguese / Brazil",
+   "collection_locale": "BR:pt-419",
+   "published": "2026-10-12T21:30:00+00:00",
+   "source": "www.gov.br",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPUXZ6UkNhZjlsWjhvdE5nQ1Z0S25tTWltZWJGaXZfMUh2VWt3SVNzdlQ1SFpGRkZmaGtFUVhZTldxLWRDY1BtZXUzRDRFUThpOWdMMXdwTldheHFyVFgxZk0xWXhxQVBOMEY3VnFRaGF1RE5OOUVuUTR3NnhDZzhadF9fY0lRZFkxSGlMNlhXb2s4eDFXeUVHWGRNSTl3Y1ZzZU5nOFF0cnVKN1hpN0lTZThKRDR5YlE4SVFpZ1pOaENENVRfYzFKWlN3NzdrSW1TclpGZThtN0g?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "c0b76605f692369c2b138b864b65e7316bb22d749bc39925da23989939499151"
+   ],
+   "background_query_language": "pt"
   },
   {
    "id": "b4ab64c27bfc159f",
@@ -10551,6 +10266,39 @@
    "background_query_language": "fr"
   },
   {
+   "id": "a5d25445d5be55a0",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "NATO general sets out tough military response to any 'foolish' Russian attack",
+   "summary": "NATO general sets out tough military response to any 'foolish' Russian attack AOL.co.uk",
+   "original_title": "NATO general sets out tough military response to any 'foolish' Russian attack",
+   "original_summary": "NATO general sets out tough military response to any 'foolish' Russian attack AOL.co.uk",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-10-12T14:06:09+00:00",
+   "source": "AOL.co.uk",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPWnZxTXlaMVdJbnRYT1UtZG1zZ3BfeW9RSVBwT0VDRlBUdkFYZDFOS0luVEVJeUhveFc0WkhoMEFlZ3J6UVJLREdlVjItLW9XVlJQRm9jMmdncWNOTURNZFpkY0xRdm9RR1JDcWJpSV9VVTI1NEFTa195TG5nQWszWmE5VUw?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "1ac85ea1d3b84b419d03e94b0206d5555c67e3940755c9d956ff57b3b1685094"
+   ],
+   "background_query_language": "en"
+  },
+  {
    "id": "0bcdb9949e068377",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -10615,6 +10363,39 @@
     "23ae2a78af8af6744a58025213bc5698869f07db955ec727e969c39531085e91"
    ],
    "background_query_language": "hi"
+  },
+  {
+   "id": "05aad87fc629901a",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Presidente da Microsoft diz que a IA está menos regulamentada do que um pacote de leite",
+   "summary": "Presidente da Microsoft diz que a IA está menos regulamentada do que um pacote de leite Pplware",
+   "original_title": "Presidente da Microsoft diz que a IA está menos regulamentada do que um pacote de leite",
+   "original_summary": "Presidente da Microsoft diz que a IA está menos regulamentada do que um pacote de leite Pplware",
+   "original_language": "pt",
+   "collection_language": "pt",
+   "collection_language_name": "Portuguese / Brazil",
+   "collection_locale": "BR:pt-419",
+   "published": "2026-10-12T13:30:00+00:00",
+   "source": "Pplware",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxQMXRXbEQxOVc5NFpKWmdVYjZ0U21iV1VBbWJoSHRWYngyRmYwZFdHVlYxdExFOTFLMUhSRlFra0o3dVZmcFpnUVFBRmVIcm9IdnRtdXVxcmxDOEQ1aTFyVTM4VmJYM0dIYmJxZ3pBSVJZNnZuRFNjVWtGdktHX0xrNTBTcThONGtFeVhFS1lfeG5fU1VCRk1tWUtBdnhVaktwOC1Qd1FJc0xnQ000M2hxaXNiUTg5QndGUVIwWXlnQTAxSnZLRVpnYU9Dejdnc1h0Rm1mRXNTUdIB1wFBVV95cUxQMXRXbEQxOVc5NFpKWmdVYjZ0U21iV1VBbWJoSHRWYngyRmYwZFdHVlYxdExFOTFLMUhSRlFra0o3dVZmcFpnUVFBRmVIcm9IdnRtdXVxcmxDOEQ1aTFyVTM4VmJYM0dIYmJxZ3pBSVJZNnZuRFNjVWtGdktHX0xrNTBTcThONGtFeVhFS1lfeG5fU1VCRk1tWUtBdnhVaktwOC1Qd1FJc0xnQ000M2hxaXNiUTg5QndGUVIwWXlnQTAxSnZLRVpnYU9Dejdnc1h0Rm1mRXNTUQ?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "f05c9c264281604e70bb990fd77367c1eb8cb79bbdb6f1ce08fbabbfd7d5999b"
+   ],
+   "background_query_language": "pt"
   },
   {
    "id": "dc663f1d9d2ba6ea",
@@ -10846,6 +10627,39 @@
     "f72f42697308c18ec27f1aff18a33dc3185e643ab6e728a042518b0784f96d9b"
    ],
    "background_query_language": "hi"
+  },
+  {
+   "id": "e55e40c6ad89293b",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Seventeen nations join NATO nuclear exercise in Italy",
+   "summary": "Seventeen nations join NATO nuclear exercise in Italy UK Defence Journal",
+   "original_title": "Seventeen nations join NATO nuclear exercise in Italy",
+   "original_summary": "Seventeen nations join NATO nuclear exercise in Italy UK Defence Journal",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-10-12T13:00:52+00:00",
+   "source": "UK Defence Journal",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQU1BUdkxpNG5vUmVtZS1iNjFtUXduaEY2RHBXLXpZb3RqeW5GbmN2TzRkY05ldm85d1EzSXNaRXhBVEwwdTdPTGVBeS1hVXpNSnR2M2lFTm1UQ1ZLeEVUZUkxRXhwZkdTY00yUzVOV0VSa0h6eGZsbmQ3YkNjb0pycUNYeHp0cThMYlZhdUt2MA?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "d65c62d29cbbb2d9941ec65ece2b8e9b65cf210188cf76ae96666d5900252704"
+   ],
+   "background_query_language": "en"
   },
   {
    "id": "a0999023d584b6a6",
@@ -11242,6 +11056,39 @@
     "b6e599a9549919d24b4608a9c957e4bf7c8bd85296b95737d521a1e7037954d3"
    ],
    "background_query_language": "ar"
+  },
+  {
+   "id": "75bc504454c88d9d",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "NATO commander Grynkewich warns Russia attack would be 'utterly futile'",
+   "summary": "NATO commander Grynkewich warns Russia attack would be 'utterly futile' Reuters",
+   "original_title": "NATO commander Grynkewich warns Russia attack would be 'utterly futile'",
+   "original_summary": "NATO commander Grynkewich warns Russia attack would be 'utterly futile' Reuters",
+   "original_language": "en",
+   "collection_language": "en",
+   "collection_language_name": "English",
+   "collection_locale": "US:en",
+   "published": "2026-10-12T11:40:04+00:00",
+   "source": "Reuters",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNRXQyeFBaci1YTDB5ekFuaFRwTGtDcVZPTms2RmJwZDU5Q0ZFcmFJazF2d0t3U1I3cGp3ZlloMTEtMF9SbFBvYm9jcWlzc1RpNTRvcU5WXzFtVmhTTnlkX05NaThKcHczcDNRM2hqMDcwYXkzQ29CcUl0QjBsS0plZ2JiYjNTTDlNNHNZekRvN0ZRU1I2MFNHcGlTRWVWbG5yd0VGMmF0eWJzc2V6VmlEbQ?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "8d466a1e6428b9f4dc68b7e4f757032152bd26295af0e3ed5a6b0ef435100f0a"
+   ],
+   "background_query_language": "en"
   },
   {
    "id": "3e7d6ed74cdfdee3",
@@ -14874,6 +14721,72 @@
    "background_query_language": "pt"
   },
   {
+   "id": "88492503901a75e0",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "«الطاقة الذرية» تطلق دورة تدريبية عربية بالقاهرة لاستخدام وصيانة أجهزة القياس النووية",
+   "summary": "«الطاقة الذرية» تطلق دورة تدريبية عربية بالقاهرة لاستخدام وصيانة أجهزة القياس النووية بوابة أخبار اليوم الإلكترونية",
+   "original_title": "«الطاقة الذرية» تطلق دورة تدريبية عربية بالقاهرة لاستخدام وصيانة أجهزة القياس النووية",
+   "original_summary": "«الطاقة الذرية» تطلق دورة تدريبية عربية بالقاهرة لاستخدام وصيانة أجهزة القياس النووية بوابة أخبار اليوم الإلكترونية",
+   "original_language": "ar",
+   "collection_language": "ar",
+   "collection_language_name": "Arabic",
+   "collection_locale": "SA:ar",
+   "published": "2026-10-11T23:05:16+00:00",
+   "source": "بوابة أخبار اليوم الإلكترونية",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMi8AJBVV95cUxPRFZrcm5UOF9LOVFBMlVUVG02OE96eHRpTE9DdVQwSkdjZHFTUW9uWFFHYTVJSUMwd1ZCeWdMUmFMVzZMVjZuXzVtTnBoYU5NTFQ0dFBXSm8wajB5WlVHbVA5MnZ2TGc3aG42Z1Nfa1FhMks5MVl1dTVHYVhld2tiQ1N5dnZnbjQyZ2J4bXh1U3l6clRtRUV6bUhFbkM4TWd6VTNweF95enZUa1FURnNmQ1FnT09WQk9NVnZrX0ZUQ19yUFJvSlNLUVZDYUJqdUhCOHpvSHB4ZkFZbUZGSnI2c2VIX0ZGY1J0MTZQMURSZkpYVkZReGxIdkFkYWxSQlhENjlQVmwtSk96YWF4SHo4VXI1WXJ6N0hYUFN0WDVuMTlnU3poYThjWXJySG1jZFVNQ1dZenNPdkh6VXNmYk9MQnlkNUpTZDJXTlphNzhCc0h6ZFNTaGdEVzFLOGJUS2E0VS1WU2RXb3YwZXZfT01TXw?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "8b3d1ade3bdf616b4d880e0ac02884f41467a10ff89d84a99b15bf08917ef0cc"
+   ],
+   "background_query_language": "ar"
+  },
+  {
+   "id": "37a340faff65e056",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "17 شبحا يهدد العالم.. هل ينقرض البشر قبل عام 2100؟",
+   "summary": "17 شبحا يهدد العالم.. هل ينقرض البشر قبل عام 2100؟ قناة الغد",
+   "original_title": "17 شبحا يهدد العالم.. هل ينقرض البشر قبل عام 2100؟",
+   "original_summary": "17 شبحا يهدد العالم.. هل ينقرض البشر قبل عام 2100؟ قناة الغد",
+   "original_language": "ar",
+   "collection_language": "ar",
+   "collection_language_name": "Arabic",
+   "collection_locale": "SA:ar",
+   "published": "2026-10-11T22:22:25+00:00",
+   "source": "قناة الغد",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMinwNBVV95cUxNR18zWjlpVG1xdFNkRzc1V2dhdTFkdXlHSHNFT0ZfNmFPNjVKS3dCejNlcEtQamNUQllLNXV2Q1pYYnREaXNYSGFVS3JWSzVkdThpV0N5LW45S1V2dDhJMUFiQ2ZWWV9aaFdtb2FSZW9vNndxa0JGU19nYWNnaWxFd2diVG5RWjluaS1sTFo5Y21YU1JMOEJ4M0laVk5NU0UwRW1sSm9HTk9TZ2Y1SWNSOVRJZ1hMWGNqUDl0X0dPSTBGV3JmaExYckJWcWRzRFJBV2o0TkVhUGlLWVQ5cEUzdUJjeGR3TzRKX1NpTkgzNzBQbkNSNnc1bVRrOTgwRnNmS1BKcFc1V2w4QldHcTZoVHF0ekNMV3dQSV9mSkozbm1TWmRzMDlZWWhvMWYteDNlNnNYTzNGcjN2aExDczgzQlFJVURSNE1Pb3hFODlZVWctX1BkaTRkTllDNlNwdHhJVjk5VktxRnNkSExVOXdHcHc4NTBSM0N2ZlR3aDg3dTZUSVlaLUJnNy1fVDZDeThWbS1BbEpNM3U5Z3VJTk1j?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "482fe1e6f6fbaa92111f9ecfdbd689c001ab4057983ed6202f6df8b114dae0d4"
+   ],
+   "background_query_language": "ar"
+  },
+  {
    "id": "433f8317edcf207e",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -16722,6 +16635,6 @@
    "background_query_language": "it"
   }
  ],
- "cursor": 2,
- "updated_at": "2026-10-14T13:54:22.422808+00:00"
+ "cursor": 28,
+ "updated_at": "2026-10-14T20:16:14.489161+00:00"
 }
