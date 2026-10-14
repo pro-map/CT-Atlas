@@ -379089,5 +379089,65 @@
     "retired": 1053,
     "cleaned": 455,
     "active": 3477
+  },
+  "collection_status": {
+    "recent": {
+      "candidates": 3262,
+      "reviewed": null,
+      "pending": null,
+      "status": "unknown"
+    },
+    "backlog": {
+      "candidates": 8116,
+      "reviewed": null,
+      "pending": null,
+      "status": "unknown"
+    },
+    "maintenance": {
+      "candidates": null,
+      "reviewed": null,
+      "pending": null,
+      "status": "unknown"
+    },
+    "budgets": {
+      "primary": {
+        "per_run": 30,
+        "per_day": 60,
+        "used_this_run": 30,
+        "used_today": 60
+      }
+    },
+    "source": {
+      "status": "unknown"
+    },
+    "geolocation": {
+      "status": "unknown",
+      "pending": 0,
+      "located": 3454,
+      "unlocated": 23,
+      "completed_unlocated": 23,
+      "outcome": "unknown",
+      "processed_this_run": null
+    },
+    "categories": [
+      {
+        "category": "Radiological/Nuclear",
+        "last_attempt_at": "2026-10-14T06:12:23.022593+00:00",
+        "status": "partial",
+        "reviewed": 41,
+        "pending": 459,
+        "candidates": 500,
+        "stop_code": "budget_or_deadline_reached"
+      }
+    ],
+    "schema_version": 2,
+    "last_attempt_at": "2026-10-13T22:12:44.167569+00:00",
+    "published_at": "2026-10-14T08:58:48.718391+00:00",
+    "finalized_at": "2026-10-14T09:32:43.879453+00:00",
+    "status": "partial",
+    "reasons": [
+      "selection_budget",
+      "category_pending"
+    ]
   }
 }
