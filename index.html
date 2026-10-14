@@ -14276,7 +14276,8 @@ function queryDatabase(force = false) {
         if (databaseLastError) {
             databaseLastError = "";
             setDatabaseStatus(databaseLastStatus, "ready");
-        }        return Promise.resolve(databaseResults);
+        }
+        return Promise.resolve(databaseResults);
     }
     if (!force && databaseQueryPromise && databaseQueryPromise.key === key) {
         return databaseQueryPromise;
@@ -14338,15 +14339,18 @@ function queryDatabase(force = false) {
     .finally(() => {
         if (seq === databaseQuerySeq) {
             databaseQueryPromise = null;
-            if (chronologyOpen) renderChronology();        }
+            if (chronologyOpen) renderChronology();
+        }
     });
 
     promise.key = key;
-    databaseQueryPromise = promise;    if (chronologyOpen) renderChronology();
+    databaseQueryPromise = promise;
+    if (chronologyOpen) renderChronology();
     return promise;
 }
 
-function onDatabaseFiltersChanged() {    updateReportScopeSummary();
+function onDatabaseFiltersChanged() {
+    updateReportScopeSummary();
     updateReportComparisonAvailability();
     // The list on screen belongs to the previous filters: take it (and its
     // selection) down now rather than when the debounced query starts.
