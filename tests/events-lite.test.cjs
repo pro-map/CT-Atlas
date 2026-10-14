@@ -6,10 +6,11 @@ const path=require('node:path');
 const vm=require('node:vm');
 const {spawnSync}=require('node:child_process');
 
-// events-lite.json is events.json minus the collector's bookkeeping fields
+// events-lite.json is the active events.json scope minus the collector's bookkeeping fields
 // (tools/events-lite-excluded-fields.json). These tests prove that removing them changes
 // nothing the map, the report generator, Quick Ask or Deep Search produce, and that every
-// consumer falls back to the full file when the lite one is unavailable.
+// consumer falls back to the full file when the lite one is unavailable. Judicial
+// retirement is the shared event policy, applied independently by all consumers.
 
 const read=file=>fs.readFileSync(file,'utf8');
 const excluded=JSON.parse(read('tools/events-lite-excluded-fields.json'));
@@ -19,6 +20,7 @@ const full=JSON.parse(fullText);
 let liteDir;
 let lite;
 let liteBytes;
+let activeEvents;
 
 function findPython(){
  for(const name of ['python3','python','py']){
@@ -37,6 +39,14 @@ before(()=>{
  assert.equal(run.status,0,run.stderr||run.stdout);
  liteBytes=fs.statSync(output).size;
  lite=JSON.parse(read(output));
+ const activePath=path.join(liteDir,'active-source.json');
+ const activeRun=spawnSync(python,['-c',
+  'import json,sys; from retired_categories import active_event,is_retired_judicial_event; '+
+  'data=json.load(open("events.json",encoding="utf-8")); '+
+  'json.dump([active_event(e) for e in data["events"] if not is_retired_judicial_event(e)],'+
+  'open(sys.argv[1],"w",encoding="utf-8"),ensure_ascii=False)',activePath],{encoding:'utf8'});
+ assert.equal(activeRun.status,0,activeRun.stderr||activeRun.stdout);
+ activeEvents=JSON.parse(read(activePath));
 });
 
 // ---------------------------------------------------------------- the file itself
@@ -45,16 +55,21 @@ test('the lite file is materially smaller than the full database',()=>{
  assert.ok(liteBytes<Buffer.byteLength(fullText)*0.6,`lite ${liteBytes} vs full ${Buffer.byteLength(fullText)}`);
 });
 
-test('the lite file has every event, in order, and every top-level key',()=>{
- assert.equal(lite.events.length,full.events.length);
- assert.deepEqual(lite.events.map(e=>e.id),full.events.map(e=>e.id));
- for(const key of Object.keys(full))if(key!=='events')assert.deepEqual(lite[key],full[key],key);
+test('the lite file preserves every active event in order and every top-level key',()=>{
+ assert.equal(lite.events.length,activeEvents.length);
+ assert.deepEqual(lite.events.map(e=>e.id),activeEvents.map(e=>e.id));
+ for(const key of Object.keys(full)){
+  if(key==='events')continue;
+  assert.deepEqual(lite[key],key==='number_of_events'?activeEvents.length:full[key],key);
+ }
+ assert.equal(lite.lite.source_event_count,full.events.length);
+ assert.equal(lite.lite.retired_judicial_count,full.events.length-activeEvents.length);
  assert.equal(lite.last_updated,full.last_updated,'the report cache key reads last_updated');
 });
 
-test('events lose exactly the excluded fields and nothing else',()=>{
+test('active events lose exactly the excluded fields and nothing else',()=>{
  const drop=new Set(excluded);
- full.events.forEach((event,i)=>{
+ activeEvents.forEach((event,i)=>{
   const expected=Object.fromEntries(Object.entries(event).filter(([k])=>!drop.has(k)));
   assert.deepEqual(lite.events[i],expected,`event #${i}`);
  });
@@ -80,8 +95,14 @@ test('no code of the map, the pages or the Worker reads an excluded field',()=>{
  assert.deepEqual(offenders,[],'these fields are read by code but excluded from events-lite.json');
 });
 
-test('the map does not enumerate or spread whole events (which would expose the difference)',()=>{
- const source=read('index.html');
+test('map consumers do not enumerate or spread whole events beyond transparent scope normalization',()=>{
+ const html=read('index.html').replace(/\r\n/g,'\n');
+ // The ingress normalization copies a record to strip a retired secondary
+ // label without changing or consuming its other evidence. Downstream UI
+ // consumers still must not enumerate records or depend on bookkeeping fields.
+ const normalization=extractBrowserFunction(html,'normalizeActiveEvent');
+ assert.match(normalization,/const result = \{ \.\.\.event \};/);
+ const source=html.replace(normalization,'');
  assert.doesNotMatch(source,/Object\.(keys|entries|values)\(\s*(event|e|item)\s*\)/);
  assert.doesNotMatch(source,/\.\.\.\s*(event|e)\s*[,})]/);
 });
@@ -276,11 +297,9 @@ test('wrangler.toml points EVENTS_LITE_URL next to EVENTS_URL',()=>{
 
 function loaderHarness(routes){
  const html=read('index.html').replace(/\r\n/g,'\n');
- const match=html.match(/function loadEventsDatabase\(\)\s*\{[\s\S]*?\n\}\n/);
- assert.ok(match,'loadEventsDatabase() not found in index.html');
  const calls=[];
  const window={};
- const c=vm.createContext({window,
+ const c=vm.createContext({window,CATEGORY_ALIASES:new Map(),eventLooksLikeMaritimePiracy:()=>false,
   fetch:async url=>{
    calls.push(url);
    const route=routes[url];
@@ -288,8 +307,19 @@ function loaderHarness(routes){
    if(route instanceof Error)throw route;
    return route;
   }});
- vm.runInContext(match[0],c);
+ for(const name of ['isJudicialCategory','isRetiredJudicialEvent','normalizeCategoryName','eventCategories',
+                    'normalizeActiveEvent','eventMatchKey','removeRetiredJudicialData','loadEventsDatabase']){
+  vm.runInContext(extractBrowserFunction(html,name),c);
+ }
  return {load:async()=>JSON.parse(JSON.stringify(await vm.runInContext('loadEventsDatabase',c)())),calls,window};
+}
+
+function extractBrowserFunction(html,name){
+ const start=html.indexOf(`function ${name}(`);
+ assert.ok(start>=0,`${name}() not found in index.html`);
+ const finish=html.indexOf('\n}',start);
+ assert.ok(finish>start,`${name}() has no closing brace`);
+ return html.slice(start,finish+2);
 }
 
 test('the map loads events-lite.json first and records which file it used',async()=>{
@@ -319,6 +349,24 @@ test('the map falls back to events.json when the lite file is missing or unusabl
 test('the map still reports an error when neither file can be loaded',async()=>{
  const h=loaderHarness({'events-lite.json':jsonResponse({},false,404),'events.json':jsonResponse({},false,500)});
  await assert.rejects(h.load(),/Unable to load events\.json/);
+});
+
+test('the map fallback removes Judicial records across topics and retains real incidents',async()=>{
+ const oldSnapshot={events:[
+  {id:'court',title:'Biological court update',primary_event_type:'JUDICIAL',category:'Biological Terrorism'},
+  {id:'legacy',title:'Old judicial record',category:'Legal / Judicial'},
+  {id:'arrest',title:'Actual arrest',primary_event_type:'ARREST',category:'Legal / Judicial'},
+  {id:'attack',title:'Actual attack',primary_event_type:'ATTACK',categories:['Attacks','Legal / Judicial']}
+ ],last_updated:'old'};
+ for(const fallback of [false,true]){
+  const h=loaderHarness({'events-lite.json':fallback?jsonResponse({},false,404):jsonResponse(oldSnapshot),
+    'events.json':jsonResponse(oldSnapshot)});
+  const result=await h.load();
+  assert.deepEqual(result.events.map(event=>event.id),['arrest','attack']);
+  assert.equal(result.events[0].category,'Arrests');
+  assert.deepEqual(result.events[1].categories,['Attacks']);
+  assert.equal(h.window.eventsDataSource,fallback?'events.json':'events-lite.json');
+ }
 });
 
 test('events.json is fetched in exactly one place in the map, and the startup chain uses the loader',()=>{

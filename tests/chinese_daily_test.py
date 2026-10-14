@@ -26,10 +26,10 @@ class ChineseDailyTests(unittest.TestCase):
         self.assertTrue(all(not p["sites"] for p in profiles))
         self.assertEqual({p["code"] for p in profiles}, {"zh", "zh-Hant"})
 
-    def test_all_11_map_labels_receive_contextual_native_queries(self):
+    def test_all_active_map_labels_receive_contextual_native_queries(self):
         reference = set(collector.AI_SELECTION_SCHEMA["properties"]["results"]["items"]
                         ["properties"]["categories"]["items"]["enum"])
-        self.assertEqual(len(reference), 11)
+        self.assertEqual(len(reference), 10)
         self.assertEqual(set(collector.CATEGORIES), reference)
         for profile in self.profiles():
             per_category = {}

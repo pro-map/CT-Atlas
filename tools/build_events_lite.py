@@ -2,6 +2,10 @@
 """Build events-lite.json: the events database without the collector's own bookkeeping fields
 (tools/events-lite-excluded-fields.json), written compactly.
 
+Retired Judicial records are omitted independently of the one-off source
+migration, and their secondary category labels are stripped from real
+operational records. Every other active event and field is preserved.
+
 Why: events.json is ~20 MB (5 MB gzipped) because each event also carries ~31 collector
 bookkeeping fields (related_articles alone is 27% of the bytes) that neither the map nor
 the Worker (reports, deep search, quick ask) ever reads. The lite file is ~7-8 MB (~2.5 MB
@@ -30,6 +34,9 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from retired_categories import active_event, is_retired_judicial_event  # noqa: E402
 EXCLUDED_FILE = Path(__file__).resolve().parent / "events-lite-excluded-fields.json"
 FORMAT = "events-lite-v2"
 # Fields without which an event is meaningless to every consumer: never excludable.
@@ -58,18 +65,26 @@ def build_lite(database: dict, excluded: list[str]) -> dict:
     for index, event in enumerate(events):
         if not isinstance(event, dict):
             raise ValueError(f"Event #{index} is not an object.")
+        if is_retired_judicial_event(event):
+            continue
+        event = active_event(event)
         lite_events.append({name: value for name, value in event.items() if name not in drop})
+    if not lite_events:
+        raise ValueError("The source database has no active events; refusing to build an empty lite file.")
 
     # Every non-event key (trend_summary, weekly_analysis, last_updated, ...) is kept as is:
     # together they are ~17 KB and the map and the report cache key read some of them.
     lite = {key: value for key, value in database.items() if key != "events"}
     lite["events"] = lite_events
-    lite["lite"] = {"format": FORMAT, "source_event_count": len(events), "excluded_fields": excluded}
+    if "number_of_events" in lite:
+        lite["number_of_events"] = len(lite_events)
+    lite["lite"] = {"format": FORMAT, "source_event_count": len(events), "excluded_fields": excluded,
+                    "retired_judicial_count": len(events) - len(lite_events)}
     return lite
 
 
 def validate(lite: dict, database: dict) -> None:
-    source = database["events"]
+    source = [active_event(event) for event in database["events"] if not is_retired_judicial_event(event)]
     events = lite["events"]
     if len(events) != len(source):
         raise ValueError(f"Lite has {len(events)} events but the source has {len(source)}.")
@@ -80,7 +95,8 @@ def validate(lite: dict, database: dict) -> None:
                 raise ValueError(f"Event #{index} lost required field {name}.")
         if kept.get("id") != original.get("id") or kept.get("published") != original.get("published"):
             raise ValueError(f"Event #{index} does not match its source event.")
-        # Exactly the excluded fields are gone: nothing else was lost or altered.
+        # Beyond the shared category-retirement policy, only excluded fields
+        # are gone: every active operational record is still conserved.
         expected = {name: value for name, value in original.items() if name not in excluded}
         if kept != expected:
             raise ValueError(f"Event #{index} differs from its source beyond the excluded fields.")

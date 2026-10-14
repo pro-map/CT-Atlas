@@ -1,10 +1,11 @@
 {
   "disabled_categories": [
     "Radiological/Nuclear",
-    "Chemicals and Explosives"
+    "Chemicals and Explosives",
+    "Legal / Judicial"
   ],
   "disabled_lanes": [
     "chinese_map"
   ],
-  "reason": "RadNuc, ChemEx and separate Chinese map historical backfills cancelled by user on 2026-10-13; daily collection remains enabled."
+  "reason": "RadNuc, ChemEx and separate Chinese map historical backfills cancelled by user on 2026-10-13; daily collection remains enabled. Legal / Judicial retired from both daily and historical collection by user on 2026-10-14."
 }

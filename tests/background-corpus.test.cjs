@@ -6,6 +6,7 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
+const {execFileSync}=require('node:child_process');
 
 // The real "same story" helpers from shared.js (background-corpus.js imports them).
 const sharedHelpers=(()=>{
@@ -14,7 +15,7 @@ const sharedHelpers=(()=>{
     .replace(/export\s*\{[\s\S]*?\};?\s*$/,'');
   const c=vm.createContext({crypto:globalThis.crypto,TextEncoder,Intl,console});
   vm.runInContext(source,c);
-  return Object.fromEntries(['normalizeTitle','titleTokens','tokenSimilarity','dateDistanceDays','isSameStory']
+  return Object.fromEntries(['normalizeTitle','titleTokens','tokenSimilarity','dateDistanceDays','isSameStory','isRetiredJudicialEvent']
     .map(name=>[name,vm.runInContext(name,c)]));
 })();
 
@@ -56,6 +57,46 @@ const period={start:new Date('2026-09-01T00:00:00Z'),end:new Date('2026-09-30T00
 
 test('no D1 binding means no context, never an error',async()=>{
   assert.deepEqual(plain(await corpus.fetchBackgroundContext({}, {events,...period})),{available:false,items:[]});
+});
+
+test('corpus SQL excludes retired judicial rows before evidence limits and preserves operational/background scope',()=>{
+  const rows=[
+    ['typed','Weapons','["Weapons","Legal / Judicial"]','JUDICIAL'],
+    ['legacy','Legal / Judicial','["Legal / Judicial"]',null],
+    ['legacy-empty','Legal / Judicial','[]','OTHER_CT'],
+    ['legacy-invalid','Legal / Judicial','not-json',null],
+    ['arrest','Legal / Judicial','["Legal / Judicial"]','ARREST'],
+    ['mixed','Weapons','["Weapons","Legal / Judicial"]','OTHER_CT'],
+    ['regulatory','Radiological/Nuclear','["Radiological/Nuclear"]','BACKGROUND_INFO'],
+  ];
+  const script=`import json, sqlite3, sys
+data=json.load(sys.stdin)
+db=sqlite3.connect(':memory:')
+db.execute('CREATE TABLE background_articles (id TEXT, category TEXT, categories TEXT, primary_event_type TEXT)')
+db.executemany('INSERT INTO background_articles VALUES (?,?,?,?)',data['rows'])
+print(json.dumps([row[0] for row in db.execute('SELECT id FROM background_articles AS ba WHERE '+data['predicate']+' ORDER BY id')]))`;
+  const kept=JSON.parse(execFileSync('python3',['-c',script],{
+    input:JSON.stringify({rows,predicate:corpus.constant('NOT_RETIRED_JUDICIAL')}),encoding:'utf8'
+  }));
+  assert.deepEqual(kept,['arrest','mixed','regulatory']);
+});
+
+test('report context and Deep Search also screen stored retired rows before stripping metadata',async()=>{
+  const rows=[
+    {url:'https://court/1',title:'Trial judgement',kind:'archived_incident',primary_event_type:'JUDICIAL',categories:'["Weapons"]'},
+    {url:'https://court/legacy',title:'Appeal judgement',kind:'historical_review',category:'Legal / Judicial',categories:'["Legal / Judicial"]'},
+    {url:'https://arrest/1',title:'Police detained a suspect',kind:'archived_incident',primary_event_type:'ARREST',categories:'["Legal / Judicial"]'},
+    {url:'https://nuclear/1',title:'New nuclear regulatory rules',kind:'radnuc_background',primary_event_type:'BACKGROUND_INFO',categories:'["Radiological/Nuclear"]'},
+  ];
+  const db=fakeDb(()=>rows);
+  const context=plain(await corpus.fetchBackgroundContext({BACKGROUND_DB:db},{events,...period}));
+  assert.deepEqual(context.items.map(row=>row.url),['https://arrest/1','https://nuclear/1']);
+  const deep=plain(await corpus.searchCorpusForDeepSearch({BACKGROUND_DB:db},{plan:{anchors:{en:'terrorism'}},...period}));
+  assert.deepEqual(deep.rows.map(row=>row.url),['https://arrest/1','https://nuclear/1']);
+  for(const call of db.calls){
+    assert.ok(call.sql.includes(corpus.constant('NOT_RETIRED_JUDICIAL')));
+    assert.match(call.sql,/ba\.categories, ba\.primary_event_type/);
+  }
 });
 
 test('search terms rank countries and actors by frequency and drop unattributed actors',()=>{
@@ -206,7 +247,7 @@ test('Deep Search merges the archive before de-duplication and labels it in the 
   assert.match(worker,/deduplicateRows\(\[\.\.\.retrieval\.rows, \.\.\.corpus\.rows\]\)/);
   assert.match(worker,/corpus_kind: row\.corpus_kind/);
   assert.match(worker,/"ct_atlas_corpus" come from CT Atlas's own archive/);
-  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v17-radnuc-background"/);
+  assert.match(worker,/DEEP_SEARCH_VERSION = "deep-search-v18-no-judicial"/);
   assert.match(fs.readFileSync('deep-search.js','utf8'),/ct_atlas_corpus:"CT ATLAS ARCHIVE"/);
 });
 
@@ -231,7 +272,7 @@ test('the report prompt asks for a longer, analytical assessment with context ru
   for(const heading of ['ANALYTICAL INTERPRETATION','STRATEGIC CONTEXT','BACKGROUND CONTEXT RULES']) assert.ok(prompt.includes(heading),heading);
   assert.match(prompt,/Never count context items/);
   assert.match(prompt,/\[S03, C02\]/);
-  assert.equal(shared.constant('REPORT_GENERATOR_VERSION'),'report-v12-radnuc-background');
+  assert.equal(shared.constant('REPORT_GENERATOR_VERSION'),'report-v13-no-judicial');
 });
 
 test('the /report route feeds background context to Gemini and lists it as sources',()=>{

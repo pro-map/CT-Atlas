@@ -186,13 +186,13 @@ def install_collection(namespace):
                          (CE,['chemical weapon','sarin','nerve agent','explosives','explosive device','ied']),
                          (BIO,['bioterrorism','biological weapon','anthrax','ricin','botulinum','agroterrorism'])):
         namespace['CATEGORY_RELEVANCE'][label] = set(terms)
-        namespace['ACTION_TERMS'][label] = {'attack','plot','threat','hoax','arrested','seized','charged','convicted','investigation'}
+        namespace['ACTION_TERMS'][label] = {'attack','plot','threat','hoax','arrested','seized','investigation'}
 
 SELECTION_NOTE = '''
 STANDALONE SPECIALIST CATEGORIES (no CBRN/CBRNE parent and no subcategories):
 Return Radiological/Nuclear, Chemicals and Explosives, Biological Terrorism in
 categories when the relevant facts are CENTRAL to the concrete reported incident.
-The existing action categories (Attacks, Arrests, Legal / Judicial etc.) may also
+The existing action categories (Attacks, Arrests etc.) may also
 apply to the SAME incident; do not duplicate the incident across topic filters.
 Radiological/Nuclear retains the existing non-state scope and material rules.
 Chemicals and Explosives concerns chemical weapons/toxic agents deliberately
@@ -200,7 +200,8 @@ used or planned for harm and terrorist explosive devices, seizures and plots.
 Firearms alone, generic weapons, drones alone and general terrorism do NOT qualify.
 Biological Terrorism covers deliberate biological/toxin attacks, attempted plots,
 reported threats and hoaxes, terrorism-linked possession/theft/trafficking,
-investigations and judicial developments, including biological agroterrorism.
+investigations, including biological agroterrorism.
+Standalone judicial developments are excluded from every specialist category.
 Agent/disease names alone do NOT qualify. Require related incident context and a
 reported terrorism nexus. Exclude natural outbreaks, accidental contamination,
 lab accidents, medicine, research, exercises, policy and ordinary crime.

@@ -22,8 +22,15 @@ function extract(name){
   return html.slice(start,i+1);
 }
 
+const retirementRuleSource=extract('isJudicialCategory')+extract('isRetiredJudicialEvent');
+const categoryRuleSource=retirementRuleSource+
+  html.slice(html.indexOf('const CATEGORY_ALIASES'),html.indexOf('function normalizeCategoryName('))+
+  extract('normalizeCategoryName')+extract('eventLooksLikeMaritimePiracy')+extract('eventCategories');
+const retirementDataSource=categoryRuleSource+extract('normalizeActiveEvent')+
+  extract('eventMatchKey')+extract('removeRetiredJudicialData');
+
 const attackRule=vm.createContext({});
-vm.runInContext(extract('isMapAttackEvent'),attackRule);
+vm.runInContext(retirementRuleSource+extract('isMapAttackEvent'),attackRule);
 
 test('the map and tools/build_events_map.py use the same attack rule',()=>{
   const cases=[
@@ -55,7 +62,7 @@ async function runLoader(responses){
       return {ok:true,status:200,json:async()=>body};
     }
   });
-  vm.runInContext(extract('isMapAttackEvent')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 181;'+extract('loadMapDatabase'),c);
+  vm.runInContext(retirementDataSource+extract('isMapAttackEvent')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 181;'+extract('loadMapDatabase'),c);
   const data=await vm.runInContext('loadMapDatabase()',c);
   return {data:plain(data),source:c.window.eventsDataSource};
 }
@@ -101,7 +108,7 @@ test('with no category or group checkboxes on the page, no map event is filtered
   const c=vm.createContext({document:{querySelectorAll:()=>[],querySelector:()=>null}});
   vm.runInContext(
     html.slice(html.indexOf('const MAP_ALL_CATEGORIES'),html.indexOf('function selectedCategories('))+
-    extract('selectedCategories')+extract('categoryMatches')+
+    retirementRuleSource+extract('selectedCategories')+extract('categoryMatches')+
     'const UNSPECIFIED_GROUP_LABEL = "Unspecified / no named group";'+
     extract('eventActorGroup')+extract('selectedGroups')+extract('groupMatches')+
     'function eventCategories(e){ return e.categories || []; }',c);
@@ -253,7 +260,7 @@ test('database rows only link to the map when they are attacks themselves, by th
       {id:'dup',published:'2026-09-30T08:00:00Z',title:'Not in the map file',primary_event_type:'ATTACK',is_attack:true},
     ]
   });
-  vm.runInContext(extract('isMapAttackEvent')+extract('eventMatchKey')+extract('linkDatabaseRowsToMap'),c);
+  vm.runInContext(retirementRuleSource+extract('isMapAttackEvent')+extract('eventMatchKey')+extract('linkDatabaseRowsToMap'),c);
   vm.runInContext('linkDatabaseRowsToMap()',c);
   assert.deepEqual(c.databaseResults.map(r=>r._mapEventKey),['dup#1','','']);
   assert.match(extract('queryDatabase'),/linkDatabaseRowsToMap\(\);/);
@@ -299,7 +306,7 @@ test('a list that no longer matches the filters is never shown or exported',()=>
     mapDatabaseVersion:'',databaseSourceVersion:'',
     currentFilters:{region:'GLOBAL',topic:'ALL',actor_group:'ALL',period_days:7}
   });
-  vm.runInContext('function databaseFilters(){ return currentFilters; }'+extract('databaseSnapshotCompatible')+extract('databaseResultsCurrent')+extract('chronologyBaseEvents')+extract('selectedDatabaseEvents')+extract('databaseExportBlockedText'),c);
+  vm.runInContext(categoryRuleSource+extract('normalizeActiveEvent')+'function databaseFilters(){ return currentFilters; }'+extract('databaseSnapshotCompatible')+extract('databaseResultsCurrent')+extract('chronologyBaseEvents')+extract('selectedDatabaseEvents')+extract('databaseExportBlockedText'),c);
   vm.runInContext('databaseResultsKey = JSON.stringify(currentFilters);',c);
   assert.equal(vm.runInContext('selectedDatabaseEvents().length',c),2);
   vm.runInContext('currentFilters = {...currentFilters, topic: "Arrests"};',c);
@@ -316,7 +323,7 @@ test('list and ticker clicks only zoom to events the map shows; the rest open th
   assert.match(extract('openMapEventOrCard'),/if \(isOnMapNow\(event\._mapKey\)\)[\s\S]*showDatabaseEventCard\(event\)/);
   assert.match(extract('renderAttackTicker'),/openMapEventOrCard\(allEvents\.find\(/);
   const c=vm.createContext({selectedDays:1,mapCategoryScope:'ATTACKS'});
-  vm.runInContext(extract('isMapAttackEvent')+extract('withinDays')+extract('databaseEventCardNote'),c);
+  vm.runInContext(retirementRuleSource+extract('isMapAttackEvent')+extract('withinDays')+extract('databaseEventCardNote'),c);
   assert.match(c.databaseEventCardNote({primary_event_type:'ARREST'}),/attacks only/);
   assert.match(c.databaseEventCardNote({primary_event_type:'ATTACK',is_attack:true,latitude:1,longitude:2,published:'2020-01-01T00:00:00Z'}),/last 24 hours/);
   assert.match(c.databaseEventCardNote({primary_event_type:'ATTACK',is_attack:true,latitude:1,longitude:2,published:new Date().toISOString()}),/after the map was loaded/);
@@ -426,7 +433,7 @@ function mapScopeHarness(){
   const iso=ms=>new Date(now-ms).toISOString();
   const c=vm.createContext({document:{getElementById:()=>null},Date,Number,Array,Object,String,Set,Map});
   vm.runInContext(`
-    const MAP_ALL_CATEGORIES = Object.freeze(["Attacks","Counter Terrorism Action","Arrests","Legal / Judicial",
+    const MAP_ALL_CATEGORIES = Object.freeze(["Attacks","Counter Terrorism Action","Arrests",
       "Terrorist Financing","Weapons","Maritime Security","Radiological/Nuclear","Chemicals and Explosives","Biological Terrorism","Online / Cyber / AI"]);
     let selectedDays = 1;
     let recentContextEvents = [];
@@ -440,7 +447,7 @@ function mapScopeHarness(){
     function groupMatches(){ return true; }
     function searchMatches(){ return true; }
   `,c);
-  vm.runInContext(extract('eventCategories'),c);
+  vm.runInContext(retirementRuleSource+extract('eventCategories'),c);
   const src=html.slice(html.indexOf('let _filteredAllEventsCache = null;'),html.indexOf('function filteredAllEvents()'));
   vm.runInContext(src,c);
   vm.runInContext(extract('filteredMappedEvents'),c);
@@ -466,8 +473,8 @@ test('the map shows all events by default and filters every category over 1, 7, 
   assert.deepEqual(plain(h.ids('ATTACKS',1)).mapped,['a1']);
   assert.deepEqual(plain(h.ids('ATTACKS',7)).mapped,['a1','a7']);
   assert.deepEqual(plain(h.ids('ALL',1)).mapped,['a1','r1']);
-  assert.deepEqual(plain(h.ids('ALL',7)).mapped,['a1','a7','r1','l1']);
-  assert.deepEqual(plain(h.ids('ALL',30)).mapped,['a1','a7','r1','l1','r20']);
+  assert.deepEqual(plain(h.ids('ALL',7)).mapped,['a1','a7','r1']);
+  assert.deepEqual(plain(h.ids('ALL',30)).mapped,['a1','a7','r1','r20']);
   assert.deepEqual(plain(h.ids('Arrests',30)).mapped,['r1','r20']);
   assert.deepEqual(plain(h.ids('Arrests',90)).mapped,['r1','r20','r31']);
   const arrests=plain(h.ids('Arrests',7));
@@ -561,7 +568,7 @@ test('CBRN contextual Database rows link to their actual map markers',()=>{
   const event={id:'new-cbrn',title:'Radioactive trafficking investigation',published:'2026-10-07T10:00:00Z',
     primary_event_type:'CBRN',categories:['CBRN'],_mapKey:'new-cbrn'};
   const c=vm.createContext({allEvents:[],recentContextEvents:[event],databaseResults:[{...event,_mapKey:'db-0'}]});
-  vm.runInContext(extract('isMapAttackEvent')+extract('eventMatchKey')+extract('linkDatabaseRowsToMap'),c);
+  vm.runInContext(retirementRuleSource+extract('isMapAttackEvent')+extract('eventMatchKey')+extract('linkDatabaseRowsToMap'),c);
   c.linkDatabaseRowsToMap();
   assert.equal(c.databaseResults[0]._mapEventKey,'new-cbrn');
 });
@@ -570,7 +577,7 @@ test('CBRN contextual Database rows link to their actual map markers',()=>{
 test('six-month map filtering includes every category and excludes events older than 180 days',()=>{
   const h=mapScopeHarness();
   const day=86400000;
-  const categories=['Counter Terrorism Action','Arrests','Legal / Judicial','Terrorist Financing',
+  const categories=['Counter Terrorism Action','Arrests','Terrorist Financing',
     'Weapons','Maritime Security','Radiological/Nuclear','Chemicals and Explosives','Biological Terrorism','Online / Cyber / AI'];
   h.context.sixMonthOthers=categories.map((category,i)=>({id:'six-'+i,category,
     published:new Date(Date.now()-179*day).toISOString(),latitude:1,longitude:1}));
@@ -617,7 +624,7 @@ test('RadNuc context is selectable and exported on the same Excel sheet as opera
       book_new:()=>({sheets:[]}),book_append_sheet:(book,sheet,name)=>book.sheets.push({name,sheet}),
     },writeFile:book=>{exported=book;}}
   });
-  vm.runInContext(extract('selectedDatabaseEvents')+extract('excelRowsFromEvents')+extract('safeHttpUrl')+extract('exportChronologyExcel'),c);
+  vm.runInContext(categoryRuleSource+extract('normalizeActiveEvent')+extract('selectedDatabaseEvents')+extract('excelRowsFromEvents')+extract('safeHttpUrl')+extract('exportChronologyExcel'),c);
   c.exportChronologyExcel();
   const sheet=exported.sheets.find(s=>s.name==='Events').sheet;
   assert.equal(sheet.rows.length,2);
@@ -641,7 +648,7 @@ function unifiedQueryHarness(){
     databaseCacheReusable:()=>false,reportGeneratorUserId:()=> 'analyst',
     setDatabaseStatus:()=>{},linkDatabaseRowsToMap:()=>{},renderDatabaseGroups:()=>{},
   });
-  vm.runInContext('function databaseFilters(){ return currentFilters; }'+extract('queryDatabase'),c);
+  vm.runInContext(categoryRuleSource+extract('normalizeActiveEvent')+'function databaseFilters(){ return currentFilters; }'+extract('queryDatabase'),c);
   return c;
 }
 
@@ -712,3 +719,105 @@ test('an open map ages a RadNuc item out of the 24h badge and marker cache witho
   assert.match(html,/refreshDatabaseArchiveTotal\(\);\s*refreshVisibleDatabaseBackground\(\);\s*refreshTimeSensitiveDashboard\(\);/);
 });
 
+
+
+test('retired Judicial reporting is absent from every selector and category display',()=>{
+  for(const id of ['mapCategory','reportTopic']){
+    const start=html.indexOf(`<select id="${id}">`);
+    const select=html.slice(start,html.indexOf('</select>',start));
+    assert.doesNotMatch(select,/Legal \/ Judicial|JUDICIAL/);
+  }
+  assert.doesNotMatch(html,/"Legal \/ Judicial"|summaryJudicial|className:\s*"legal"|\.chronology-item\.legal/);
+});
+
+test('the browser retires court records and preserves real operations, including judicial update phases',()=>{
+  const c=vm.createContext({});
+  vm.runInContext(categoryRuleSource+extract('normalizeActiveEvent'),c);
+  const cases=[
+    [{primary_event_type:'JUDICIAL',categories:['Weapons']},true,[]],
+    [{primary_event_type:'JUDICIAL'},true,[]],
+    [{primary_event_type:'OTHER_CT',categories:['Legal / Judicial']},true,[]],
+    [{category:'Legal / Judicial'},true,[]],
+    [{primary_event_type:'ARREST',categories:['Legal / Judicial'],event_update_phase:'JUDICIAL_UPDATE'},false,['Arrests']],
+    [{primary_event_type:'FINANCING',categories:['Legal / Judicial']},false,['Terrorist Financing']],
+    [{primary_event_type:'ATTACK',categories:['Legal / Judicial','Attacks'],is_attack:true},false,['Attacks']],
+    [{primary_event_type:'OTHER_CT',categories:['Legal / Judicial','Weapons']},false,['Weapons']],
+    [{primary_event_type:'CBRN',categories:['Legal / Judicial'],cbrn_subgroups:['RADNUC'],actor_scope:'NON_STATE'},false,['Radiological/Nuclear']],
+  ];
+  for(const [event,retired,categories] of cases){
+    assert.equal(c.isRetiredJudicialEvent(event),retired,JSON.stringify(event));
+    assert.deepEqual(plain(c.eventCategories(event)),categories);
+    if(!retired) assert.deepEqual(plain(c.normalizeActiveEvent(event).categories),categories);
+  }
+});
+
+test('old map files discard retired Judicial rows and remove their counts and development links',async()=>{
+  const now=new Date().toISOString();
+  const mapFile={
+    events:[{id:'attack',title:'Attack',primary_event_type:'ATTACK',is_attack:true,category:'Attacks',published:now}],
+    recent_events:[
+      {id:'court',title:'Verdict',primary_event_type:'JUDICIAL',categories:['Weapons'],published:now},
+      {id:'legacy',title:'Trial',category:'Legal / Judicial',published:now},
+      {id:'arrest',title:'Arrest',primary_event_type:'ARREST',categories:['Legal / Judicial'],published:now},
+    ],
+    map:{source_event_count:4,recent_events_days:181},
+    database_summary:{total_events:4,by_category:{Attacks:1,Weapons:1,'Legal / Judicial':2}},
+    trend_summary:{developments:[{event_id:'court'},{event_id:'attack'}]},
+  };
+  const {data,source}=await runLoader({'events-map.json':mapFile});
+  assert.equal(source,'events-map.json');
+  assert.deepEqual(data.events.map(e=>e.id),['attack']);
+  assert.deepEqual(data.recent_events.map(e=>e.id),['arrest']);
+  assert.deepEqual(data.recent_events[0].categories,['Arrests']);
+  assert.equal(data.map.source_event_count,2);
+  assert.equal(data.database_summary.total_events,2);
+  assert.ok(!('Legal / Judicial' in data.database_summary.by_category));
+  assert.equal(data.database_summary.by_category.Weapons,0);
+  assert.deepEqual(data.trend_summary.developments,[{event_id:'attack'}]);
+});
+
+test('both lite and full fallbacks reject retired Judicial events and keep operational category matches',async()=>{
+  const now=new Date().toISOString();
+  const database={events:[
+    {id:'court',title:'Verdict',primary_event_type:'JUDICIAL',categories:['Weapons'],published:now},
+    {id:'only-court',title:'Sentence',primary_event_type:'OTHER_CT',category:'Legal / Judicial',published:now},
+    {id:'arrest',title:'Fresh arrest',primary_event_type:'ARREST',category:'Legal / Judicial',published:now},
+    {id:'weapons',title:'Seizure',primary_event_type:'OTHER_CT',categories:['Legal / Judicial','Weapons'],published:now},
+  ]};
+  for(const file of ['events-lite.json','events.json']){
+    const {data,source}=await runLoader({[file]:database});
+    assert.equal(source,file);
+    assert.deepEqual(data.recent_events.map(e=>e.id),['arrest','weapons']);
+    assert.deepEqual(data.recent_events.map(e=>e.categories),[['Arrests'],['Weapons']]);
+    assert.equal(data.database_summary.total_events,2);
+    assert.deepEqual(data.database_summary.by_category,{Arrests:1,Weapons:1});
+  }
+});
+
+test('the old all-events map scope cannot show or count judicial records',()=>{
+  const h=mapScopeHarness();
+  assert.ok(!plain(h.ids('ALL',180)).scope.includes('l1'));
+  assert.ok(!plain(vm.runInContext('mapScopeCandidates().map(e=>e.id)',h.context)).includes('l1'));
+  assert.equal(plain(h.ids('Legal / Judicial',7)).state,'ATTACKS');
+});
+
+test('a stale Worker answer excludes court rows from the list, match counter and export selection',async()=>{
+  const c=unifiedQueryHarness();
+  let status;
+  c.setDatabaseStatus=text=>{status=text;};
+  c.fetch=async()=>({ok:true,json:async()=>({events:[
+    {key:'db-court',title:'Verdict',primary_event_type:'JUDICIAL',categories:['Weapons']},
+    {key:'db-arrest',title:'Arrest',primary_event_type:'ARREST',categories:['Legal / Judicial']},
+    {key:'bg-rad',title:'Nuclear regulation',categories:['Radiological/Nuclear'],archive_only:true},
+  ],total:3})});
+  await c.queryDatabase();
+  assert.deepEqual(plain(c.databaseResults.map(e=>e._mapKey)),['db-arrest','bg-rad']);
+  assert.deepEqual(plain(c.databaseResults[0].categories),['Arrests']);
+  assert.equal(status,'2 records match');
+  c.databaseResultsCurrent=()=>true;
+  c.chronologySelectedKeys=new Set(['db-court','db-arrest','bg-rad']);
+  // Guard a selection made before the Worker update as well.
+  c.databaseResults.push({_mapKey:'db-court',primary_event_type:'JUDICIAL'});
+  vm.runInContext(extract('selectedDatabaseEvents'),c);
+  assert.deepEqual(plain(c.selectedDatabaseEvents().map(e=>e._mapKey)),['db-arrest','bg-rad']);
+});

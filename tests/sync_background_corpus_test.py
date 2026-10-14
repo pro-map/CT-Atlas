@@ -71,6 +71,42 @@ class CollectArticlesTests(unittest.TestCase):
         articles, counts = sync.collect_articles(self.root)
         return {a["url"]: a for a in articles}, counts
 
+    def test_judicial_sources_are_excluded_before_legacy_metadata_is_normalized(self):
+        write_json(self.root / "archive" / "removed-events-aged-out-202610.json", {
+            "created_at": "2026-10-14T08:00:00Z",
+            "events": [
+                {"url": "https://judicial/legacy", "title": "Court judgement", "category": "Legal / Judicial"},
+                {"url": "https://operational/arrest", "title": "Suspect detained", "category": "Arrests",
+                 "categories": ["Arrests", "Legal / Judicial"], "primary_event_type": "ARREST", "event_phase": "JUDICIAL_UPDATE"},
+            ],
+        })
+        write_json(self.root / "archive" / "removed-events-judicial-retired-20261014.json", {
+            "reason": "retired Judicial collection; preserved evidence outside the active map/database",
+            "removed_at": "2026-10-14T09:00:00Z",
+            # No record in an offline retirement archive may be revived,
+            # even if its old metadata is incomplete.
+            "events": [{"url": "https://judicial/offline", "title": "Preserved evidence"}],
+        })
+        write_json(self.root / "archive" / "enriched-articles-20261014.json", {
+            "created_at": "2026-10-14T09:00:00Z",
+            "articles": [{"url": "https://judicial/enriched", "title": "Terrorist convicted", "ai_relevance_score": 90,
+                          "primary_event_type": "JUDICIAL", "categories": ["Weapons"]}],
+        })
+        write_json(self.root / sync.collector.BACKGROUND_ARTICLES_FILE, {
+            "articles": [{"url": "https://judicial/fallback", "title": "Appeal judgement", "primary_event_type": "JUDICIAL"}],
+        })
+        write_json(self.root / sync.collector.AI_SELECTION_CACHE_FILE, {"items": {
+            "judicial-legacy": {"result": {"english_title": "Court case", "relevance_score": 30,
+                                            "categories": ["Legal / Judicial"]}},
+            "operational-arrest": {"result": {"english_title": "New suspects arrested", "relevance_score": 30,
+                                                "primary_event_type": "ARREST", "categories": ["Arrests", "Legal / Judicial"]}},
+        }})
+        by_url, _ = self.articles_by_url()
+        self.assertFalse(any(url.startswith("https://judicial/") for url in by_url))
+        self.assertNotIn("gemini-review:judicial-legacy", by_url)
+        self.assertIn("https://operational/arrest", by_url)
+        self.assertIn("gemini-review:operational-arrest", by_url)
+
     def test_counts_per_source_after_dedup(self):
         _, counts = self.articles_by_url()
         self.assertEqual(counts, {
@@ -265,6 +301,21 @@ class SyncRunTests(unittest.TestCase):
         deletes = self.statements("DELETE FROM background_articles WHERE url IN")
         self.assertEqual(len(deletes), 1)
         self.assertEqual(deletes[0].count("'"), 2)
+
+    def test_apply_mode_cleans_retired_judicial_rows_without_removing_real_arrests(self):
+        self.stored.extend([
+            {"url": "https://judicial/stored", "kind": "archived_incident", "title": "Court conviction",
+             "primary_event_type": "JUDICIAL", "categories": '["Weapons"]'},
+            {"url": "https://judicial/legacy", "kind": "historical_review", "title": "Court appeal",
+             "category": "Legal / Judicial", "categories": '["Legal / Judicial"]'},
+            {"url": "https://operational/stored", "kind": "archived_incident", "title": "Terrorist detained",
+             "primary_event_type": "ARREST", "categories": '["Arrests", "Legal / Judicial"]'},
+        ])
+        self.assertEqual(sync.main(["--cleanup", "apply"]), 0)
+        deletes = "\n".join(self.statements("DELETE FROM background_articles WHERE url IN"))
+        self.assertIn("'https://judicial/stored'", deletes)
+        self.assertIn("'https://judicial/legacy'", deletes)
+        self.assertNotIn("'https://operational/stored'", deletes)
 
 
 class DeleteStatementTests(unittest.TestCase):

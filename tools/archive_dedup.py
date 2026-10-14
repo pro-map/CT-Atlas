@@ -38,10 +38,18 @@ Standard library only; importable without collector.py.
 from __future__ import annotations
 
 import functools
+import json
 import re
+import sys
 import unicodedata
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from retired_categories import is_retired_judicial_event  # noqa: E402
 
 NEAR_DUPLICATE_WINDOW_DAYS = 5
 # A Gemini review without its article's date only carries the review day,
@@ -272,6 +280,18 @@ def is_noise(row):
     return score_of(row) == 0
 
 
+def is_retired_corpus_row(row):
+    """Apply the shared scope policy to repository rows and D1 JSON columns."""
+    event = dict(row)
+    if isinstance(event.get("categories"), str):
+        try:
+            categories = json.loads(event["categories"])
+        except (TypeError, ValueError):
+            categories = None
+        event["categories"] = categories if isinstance(categories, list) else []
+    return is_retired_judicial_event(event)
+
+
 def preference(row):
     """Sort key, best copy first; among equals the most recent, which carries
     the latest figures (a toll rising from 14 to 16 dead)."""
@@ -380,6 +400,8 @@ def plan_archive(existing_rows, new_rows, map_stories=(), drop_kinds=frozenset()
 
     stories = StoryIndex()
     for event in map_stories or ():
+        if is_retired_corpus_row(event):
+            continue
         owner = MAP_OWNER_PREFIX + str(event.get("url") or event.get("id") or "")
         time = row_time(event)
         reports = [event, *[a for a in event.get("related_articles") or [] if isinstance(a, dict)]]
@@ -399,7 +421,9 @@ def plan_archive(existing_rows, new_rows, map_stories=(), drop_kinds=frozenset()
         approximate = not row.get("published")
 
         reason, kept = None, ""
-        if row.get("kind") in drop_kinds:
+        if is_retired_corpus_row(row):
+            reason = "retired_judicial"
+        elif row.get("kind") in drop_kinds:
             reason = "other_outlet_report"
         elif is_noise(row):
             reason = "noise"

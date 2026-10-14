@@ -210,18 +210,40 @@ def former_event_files(paths):
     """[(path, data)] for every file of former map events, the most recent
     first: a link removed by a cleanup, put back on the map and later aged
     out is filed by what happened last (the first copy of a link wins)."""
-    files = [(path, _load_json(path) or {}) for path in paths]
+    files = []
+    for path in paths:
+        if offline_retirement_archive(path, {}):
+            continue
+        data = _load_json(path) or {}
+        if not offline_retirement_archive(path, data):
+            files.append((path, data))
     return sorted(files, key=lambda item: (_file_time(item[1]), item[0]), reverse=True)
+
+
+def offline_retirement_archive(path, data):
+    """Preserved retired evidence is not a source for active search or AI."""
+    return (
+        Path(path).name.startswith("removed-events-judicial-retired-")
+        or str(data.get("reason") or "").casefold().startswith("retired judicial")
+    )
 
 
 def removed_events(files, now, threshold=None, incidents=None, aliases=None):
     """Former map events, from former_event_files (or plain paths)."""
     threshold = map_threshold() if threshold is None else threshold
     for entry in files:
+        if not isinstance(entry, tuple) and offline_retirement_archive(entry, {}):
+            continue
         path, data = entry if isinstance(entry, tuple) else (entry, _load_json(entry) or {})
+        if offline_retirement_archive(path, data):
+            continue
         aged_out = "aged-out" in Path(path).name
         for event in data.get("events") or []:
             if not isinstance(event, dict) or not event.get("url") or not event.get("title"):
+                continue
+            # Read the original labels before background_article_from_event
+            # normalizes them and could erase a legacy Judicial-only verdict.
+            if archive_dedup.is_retired_corpus_row(event):
                 continue
             kind, score, note, parent = former_event_verdict(event, threshold, aged_out, incidents, aliases)
             row = {
@@ -252,6 +274,8 @@ def enriched_articles(paths, threshold=None, incidents=None, aliases=None):
         for article in data.get("articles") or []:
             if not isinstance(article, dict) or not article.get("url") or not article.get("title"):
                 continue
+            if archive_dedup.is_retired_corpus_row(article):
+                continue
             score = _int_or_none(article.get("ai_relevance_score"))
             if score is None:
                 continue
@@ -273,7 +297,8 @@ def enriched_articles(paths, threshold=None, incidents=None, aliases=None):
 def fallback_file_articles(path):
     data = _load_json(path) or {}
     for article in data.get("articles") or []:
-        if isinstance(article, dict) and article.get("url") and article.get("title"):
+        if (isinstance(article, dict) and article.get("url") and article.get("title")
+                and not archive_dedup.is_retired_corpus_row(article)):
             yield {**article, "kind": "rejected_candidate"}
 
 
@@ -305,6 +330,8 @@ def historical_reviews(cache, threshold=None):
         if not isinstance(score, (int, float)) or score <= 0 or score >= threshold or not title:
             continue
         article = (item or {}).get("article") or {}
+        if archive_dedup.is_retired_corpus_row({**article, **result}):
+            continue
         url = article.get("url") if archive_dedup.is_link(article.get("url")) else None
         categories = collector.normalize_categories(result.get("categories") or [])
         yield {
@@ -480,6 +507,8 @@ def collect_articles(root=ROOT):
     for kind, iterator in sources.items():
         counts[kind] = 0
         for article in iterator:
+            if archive_dedup.is_retired_corpus_row(article):
+                continue
             if article["url"] in seen:
                 continue
             seen.add(article["url"])

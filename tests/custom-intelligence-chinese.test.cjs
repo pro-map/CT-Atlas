@@ -122,7 +122,7 @@ test('a sparse long-period search retains all 28 base queries and five GDELT chu
 });
 test('the cache version changes and the interface names both scripts with English report output',()=>{
   const h=harness(),front=fs.readFileSync('deep-search.js','utf8');
-  assert.equal(h.DEEP_SEARCH_VERSION,'deep-search-v17-radnuc-background');
+  assert.equal(h.DEEP_SEARCH_VERSION,'deep-search-v18-no-judicial');
   assert.match(h.PLAN_INSTRUCTION,/28 planned queries/);
   assert.match(front,/14 supported language\/script options/);
   assert.match(front,/Chinese \(Simplified\)/);assert.match(front,/Chinese \(Traditional\)/);

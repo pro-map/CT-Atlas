@@ -50,6 +50,28 @@ class SameRuleAsTheWorkerTests(unittest.TestCase):
 
 
 class PlanArchiveTests(unittest.TestCase):
+    def test_retired_judicial_rows_are_never_inserted_and_stored_rows_are_deleted(self):
+        stored = [
+            {**row("https://judicial/typed", "archived_incident", "Terrorism trial opens", score=90),
+             "primary_event_type": "JUDICIAL", "categories": '["Legal / Judicial", "Weapons"]'},
+            {**row("https://judicial/legacy", "removed_event", "Terrorism conviction", score=90),
+             "category": "Legal / Judicial", "categories": '["Legal / Judicial"]'},
+            {**row("https://operational/arrest", "archived_incident", "Police arrest suspect", score=90),
+             "primary_event_type": "ARREST", "event_phase": "JUDICIAL_UPDATE", "categories": '["Legal / Judicial"]'},
+        ]
+        new = [
+            {**row("https://judicial/new", "rejected_candidate", "Terrorist sentenced", score=30),
+             "primary_event_type": "JUDICIAL", "categories": ["Chemicals and Explosives"]},
+            {**row("https://radnuc/regulation", "radnuc_background", "New nuclear reactor licensing rules"),
+             "primary_event_type": "BACKGROUND_INFO", "categories": ["Radiological/Nuclear"]},
+        ]
+        insert, delete = dedup.plan_archive(stored, new)
+        self.assertEqual([item["url"] for item in insert], ["https://radnuc/regulation"])
+        self.assertEqual(sorted((url, reason) for url, reason, _ in delete), [
+            ("https://judicial/legacy", "retired_judicial"),
+            ("https://judicial/typed", "retired_judicial"),
+        ])
+
     def test_off_topic_reviews_are_removed(self):
         stored = [row("gemini-review:1", "historical_review", "Yacht sale in Monaco", score=0),
                   row("gemini-review:2", "historical_review", "Analysis of JNIM strategy in Mali", score=35)]

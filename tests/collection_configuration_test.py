@@ -21,14 +21,15 @@ import radnuc_vocabulary
 import enrich_radnuc
 
 CODES = {'ar','bn','de','en','es','fa','fr','ha','he','hi','id','it','ps','pt','ru','so','sw','tr','ur','zh','zh-Hant'}
-# SHA-256 of full plans (including task contents and ordering) at main 0fc51e4.
+# SHA-256 of full plans after the user retired Judicial on 2026-10-14.
+# Existing task keys remain readable; removed court keywords no longer retrieve.
 # A renamed query with a reset checkpoint must not pass as unchanged work.
 BASELINE = {
     topics.RN: (7560, '0cccef797a34f8be9f866a343201927898334e4079ef135ca77eade454e1cd29'),
-    topics.CE: (3429, '43ee73d79da641a8cce49b11ada04ac882db17e224a7f40d023c669f3494db0e'),
-    topics.BIO: (3429, 'e60ddf4ea452ff5ec7c09ee4b9a4c88d659c1e1a290284787915f57e3ecc34de'),
-    'chinese': (1248, '8079759a363c9a1235f110f60259d6d312e449aae29e4dd6b986f14a51cebcc5'),
-    'general_archive': (12310, 'efd10ab767719f21c2e13e75a1fe0e31574c9ddec6e80f7fd07b3b3d8e46a0bc'),
+    topics.CE: (3321, '2c2bf60aa5164e7aa1171480398851ffe5cc5d7eb6cc7568476e5681295daed6'),
+    topics.BIO: (3105, 'c023473386141c9ea49bafafb050d93746eded2abee552848fd0278baf9beb5c'),
+    'chinese': (1092, 'dc231adbbcede0323e0ac9180e3499101288c4843d5702ba7fda46f6924fb677'),
+    'general_archive': (12266, '8f9d8d5e2e049ea3977f0e885c29dfcf198be7a45d2e9d7c08a901bfc193f869'),
 }
 
 
@@ -68,7 +69,7 @@ class CollectionConfigurationTests(unittest.TestCase):
         profiles[-1]['code'] = 'changed'
         self.assertNotIn('changed', {p['code'] for p in collector.MULTILINGUAL_PROFILES})
 
-    def test_historical_full_plans_are_unchanged_not_just_counts(self):
+    def test_active_historical_full_plans_have_stable_tasks_and_order(self):
         plans = {category:specialist.plan_tasks(category,date(2026,10,8),collector) for category in topics.LABELS}
         plans['chinese'] = chinese.plan_tasks(chinese.configuration(ROOT,collector),collector)
         plans['general_archive'] = enrich_archive.plan_tasks(date(2026,10,12),collector)

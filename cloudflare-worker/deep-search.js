@@ -7,6 +7,7 @@ import {
   gateCall,
   fetchEventsDatabase,
   parseEventDate,
+  isRetiredJudicialEvent,
   extractGeminiText,
   sha256,
   waitBeforeGeminiRetry,
@@ -39,7 +40,7 @@ const DEEP_SEARCH_MODEL = "gemini-3.5-flash-lite";
 // "high demand" condition callGemini() (Report Generator, shared.js) already retries around.
 // Gemini 3.1 Flash Lite (GEMINI_SECOND_FALLBACK_MODEL) is the last resort: its own quota.
 const DEEP_SEARCH_FALLBACK_MODEL = "gemini-3.6-flash";
-export const DEEP_SEARCH_VERSION = "deep-search-v17-radnuc-background";
+export const DEEP_SEARCH_VERSION = "deep-search-v18-no-judicial";
 // Archive rows (corpus_kind) that are not incident reports.
 const NOT_ILLUSTRATIONS = new Set(["removed_event", "rejected_candidate", "historical_review", "radnuc_background"]);
 
@@ -1373,6 +1374,7 @@ function candidateMapEvents(db, window) {
   const all = Array.isArray(db) ? db : (Array.isArray(db?.events) ? db.events : []);
   const cutoff = window.startDt.getTime() - (14 * 86400000);
   return all.filter(event => {
+    if (isRetiredJudicialEvent(event)) return false;
     const dt = parseEventDate(event);
     return !dt || dt.getTime() >= cutoff;
   }).map(event => {

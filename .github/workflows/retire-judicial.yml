@@ -1,0 +1,116 @@
+name: Retire Judicial collection
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "retired_categories.py"
+      - "tools/retire_judicial.py"
+      - ".github/workflows/retire-judicial.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# The migration and daily/backfill writers must never change events.json together.
+concurrency:
+  group: ct-map-update-main
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  retire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Verify retirement policy and evidence preservation
+        run: python -m unittest discover -s tests -p 'retire_judicial_test.py'
+      - name: Archive retired records and clean active category labels
+        run: python tools/retire_judicial.py
+      - name: Validate active publication
+        run: |
+          python tools/build_events_lite.py --output "${RUNNER_TEMP}/retired-events-lite.json"
+          python tools/build_events_map.py --output "${RUNNER_TEMP}/retired-events-map.json"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from retired_categories import is_judicial_category, is_retired_judicial_event
+
+          database = json.loads(Path("events.json").read_text(encoding="utf-8"))
+          events = database["events"]
+          if database["number_of_events"] != len(events):
+              raise SystemExit("Active database count does not match its events.")
+          for event in events:
+              if is_retired_judicial_event(event) or is_judicial_category(event.get("category")):
+                  raise SystemExit("A Judicial record remains in the active database.")
+              if any(is_judicial_category(value) for value in event.get("categories") or []):
+                  raise SystemExit("A retired secondary Judicial label remains active.")
+          print(f"Verified {len(events)} active records; no AI calls were made.")
+          PY
+      - name: Preserve migration recovery artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: judicial-retirement-${{ github.run_id }}
+          path: |
+            events.json
+            archive/removed-events-judicial-retired-20261014.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Commit preserved evidence and active database
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -- events.json
+          if [ -f archive/removed-events-judicial-retired-20261014.json ]; then
+            git add -- archive/removed-events-judicial-retired-20261014.json
+          fi
+          if git diff --cached --quiet; then
+            echo "Judicial retirement already applied."
+            exit 0
+          fi
+          git config user.name "CT Intelligence Map Bot"
+          git config user.email "actions@github.com"
+          git commit -m "Retire Judicial records from active CT collection; preserve evidence"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo "Concurrent database change; preserved recovery artifact instead of overwriting." >&2
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+          done
+          echo "Migration could not be committed; recovery artifact preserved." >&2
+          exit 1
+
+  deploy:
+    needs: retire
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout updated main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
+      - name: Build active map and Database data
+        uses: ./.github/actions/build-events-lite
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: "."
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

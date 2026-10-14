@@ -531,7 +531,7 @@ body {
 }
 
 
-.legal {
+.neutral {
     background: #687482;
 }
 
@@ -1282,8 +1282,8 @@ body.locked #chronologyPanel {
 .chronology-item.cbrn::before { background: #658f53; }
 .chronology-item.online::before { background: #397e87; }
 .chronology-item.attacks::before { background: #b44e4e; }
+.chronology-item.neutral::before { background: #687482; }
 .chronology-item.arrests::before { background: #b17b38; }
-.chronology-item.legal::before { background: #687482; }
 .chronology-item.ai::before { background: #944c85; }
 .chronology-item.piracy::before { background: #39758f; }
 
@@ -5201,7 +5201,6 @@ Map · all events
 <option value="ALL" selected>All events</option>
 <option value="Counter Terrorism Action">Counter-terrorism actions</option>
 <option value="Arrests">Arrests</option>
-<option value="Legal / Judicial">Legal / judicial</option>
 <option value="Terrorist Financing">Terrorist financing</option>
 <option value="Weapons">Weapons</option>
 <option value="Maritime Security">Maritime security</option>
@@ -5264,7 +5263,6 @@ Database <span id="databaseTotalCount" class="database-total" hidden></span>
 <option value="Chemicals and Explosives">Chemicals and Explosives</option>
 <option value="Biological Terrorism">Biological Terrorism</option>
 <option value="Online / Cyber / AI">Online / Cyber / AI</option>
-<option value="Legal / Judicial">Legal / Judicial</option>
 </select>
 </label>
 
@@ -6741,15 +6739,7 @@ const categoryStyle = {
 },
 
 
-"Legal / Judicial": {
 
-    code:
-        "J",
-
-    className:
-        "legal"
-
-},
 
 
 
@@ -6796,6 +6786,68 @@ function escapeHtml(
 }
 
 
+
+// Retired court developments must stay out of older publication files as well
+// as new responses. Operational events retain their real categories.
+function isJudicialCategory(value) {
+    const label = String(value || "").trim().toLowerCase().replace(/\s*\/\s*/g, "/");
+    return label === "legal/judicial" || label === "judicial";
+}
+
+function isRetiredJudicialEvent(event) {
+    const primary = String(event?.primary_event_type || "").trim().toUpperCase();
+    if (primary === "JUDICIAL") return true;
+    if (primary && primary !== "OTHER_CT") return false;
+    const raw = event?.categories ?? (event?.category ? [event.category] : []);
+    const values = Array.isArray(raw) ? raw : [raw];
+    const labels = values.filter(value => String(value || "").trim());
+    if (!labels.length && event?.category) labels.push(event.category);
+    return labels.some(isJudicialCategory) && labels.every(isJudicialCategory);
+}
+
+function normalizeActiveEvent(event) {
+    const values = Array.isArray(event.categories) && event.categories.length
+        ? event.categories : [event.category].filter(Boolean);
+    if (!values.some(isJudicialCategory) && !isJudicialCategory(event.category)) return event;
+    const result = { ...event };
+    delete result._categoriesCache;
+    result.categories = eventCategories(result);
+    result.category = result.categories[0] || "";
+    return result;
+}
+
+function removeRetiredJudicialData(data) {
+    const sourceEvents = Array.isArray(data.events) ? data.events : [];
+    const sourceRecent = Array.isArray(data.recent_events) ? data.recent_events : [];
+    const retired = [...sourceEvents, ...sourceRecent].filter(isRetiredJudicialEvent);
+    const changedLabels = [...sourceEvents, ...sourceRecent].some(event =>
+        isJudicialCategory(event.category) || (Array.isArray(event.categories) && event.categories.some(isJudicialCategory)));
+    if (!retired.length && !changedLabels) return data;
+    const clean = rows => rows.filter(event => !isRetiredJudicialEvent(event)).map(normalizeActiveEvent);
+    const result = { ...data, events: clean(sourceEvents) };
+    if (Array.isArray(data.recent_events)) result.recent_events = clean(sourceRecent);
+    const removedCount = new Set(retired.map(eventMatchKey)).size;
+    if (data.map) result.map = { ...data.map, source_event_count: Math.max(0, Number(data.map.source_event_count || 0) - removedCount) };
+    if (data.database_summary) {
+        const byCategory = { ...data.database_summary.by_category };
+        for (const category of Object.keys(byCategory)) {
+            if (isJudicialCategory(category)) delete byCategory[category];
+        }
+        for (const event of retired) {
+            const first = (Array.isArray(event.categories) && event.categories[0]) || event.category;
+            if (first && !isJudicialCategory(first) && byCategory[first]) byCategory[first] = Math.max(0, byCategory[first] - 1);
+        }
+        result.database_summary = { ...data.database_summary,
+            total_events: Math.max(0, Number(data.database_summary.total_events || 0) - retired.filter(event => event.excluded_from_map !== true).length),
+            by_category: byCategory };
+    }
+    if (Array.isArray(data.trend_summary?.developments)) {
+        const retiredIds = new Set(retired.map(event => String(event.id || "")).filter(Boolean));
+        result.trend_summary = { ...data.trend_summary,
+            developments: data.trend_summary.developments.filter(item => !retiredIds.has(String(item?.event_id || ""))) };
+    }
+    return result;
+}
 
 // The map reads events-lite.json: only the fields it uses (~64% smaller than events.json).
 // It is derived at publication time from the events.json being deployed, so it is never older
@@ -6872,7 +6924,7 @@ function loadEventsDatabase() {
 
             }
         )
-    );
+    ).then(removeRetiredJudicialData);
 
 }
 
@@ -6882,6 +6934,7 @@ function loadEventsDatabase() {
 // primary_event_type fall back to the "Attacks" category. Same rule as
 // tools/build_events_map.py.
 function isMapAttackEvent(event) {
+    if (isRetiredJudicialEvent(event)) return false;
     const type = String(event.primary_event_type || "").trim().toUpperCase();
     if (type) {
         if (type === "ATTACK") return event.is_attack === true;
@@ -6924,7 +6977,7 @@ function loadMapDatabase() {
             throw new Error("events-map.json does not cover the 30-day all-events window");
         }
         window.eventsDataSource = "events-map.json";
-        return data;
+        return removeRetiredJudicialData(data);
     })
     .catch(() => loadEventsDatabase().then(data => {
         const all = Array.isArray(data.events) ? data.events : [];
@@ -7166,7 +7219,7 @@ function withinDays(
 // sentinel list means "no category filter" -- categoryMatches() lets every
 // event through on it, whatever its category.
 const MAP_ALL_CATEGORIES = Object.freeze([
-    "Attacks", "Counter Terrorism Action", "Arrests", "Legal / Judicial",
+    "Attacks", "Counter Terrorism Action", "Arrests",
     "Terrorist Financing", "Weapons", "Maritime Security", "Radiological/Nuclear", "Chemicals and Explosives", "Biological Terrorism", "Online / Cyber / AI"
 ]);
 
@@ -7248,18 +7301,21 @@ function eventCategories(
     event
 ) {
 
+    if (isRetiredJudicialEvent(event)) return [];
     if (event._categoriesCache) {
         return event._categoriesCache;
     }
 
     const rawCategories =
-        Array.isArray(event.categories)
+        Array.isArray(event.categories) && event.categories.length
         ?
         [...event.categories]
         :
         [event.category].filter(Boolean);
 
-    if (rawCategories.some(c => c === "CBRN" || c === "CBRNE")) {
+    const primary = String(event.primary_event_type || "").trim().toUpperCase();
+    if (rawCategories.some(c => c === "CBRN" || c === "CBRNE")
+        || (primary === "CBRN" && rawCategories.some(isJudicialCategory))) {
         rawCategories.push(...(Array.isArray(event.threat_categories) ? event.threat_categories : []));
         if (Array.isArray(event.cbrn_subgroups) && event.cbrn_subgroups.includes("RADNUC")
                 && event.actor_scope !== "STATE_ONLY") rawCategories.push("Radiological/Nuclear");
@@ -7268,8 +7324,16 @@ function eventCategories(
         [...new Set(
             rawCategories
                 .map(normalizeCategoryName)
-                .filter(c => c && c !== "CBRN" && c !== "CBRNE")
+                .filter(c => c && c !== "CBRN" && c !== "CBRNE" && !isJudicialCategory(c))
         )];
+
+    if (!categories.length && rawCategories.some(isJudicialCategory)) {
+        const fallback = { ATTACK: "Attacks", ATTEMPTED_ATTACK: "Attacks",
+            DISRUPTED_PLOT: "Counter Terrorism Action", CT_OPERATION: "Counter Terrorism Action",
+            ARREST: "Arrests", FINANCING: "Terrorist Financing", WEAPONS: "Weapons",
+            ONLINE_CYBER_AI: "Online / Cyber / AI", PIRACY: "Maritime Security" }[primary];
+        if (fallback) categories.push(fallback);
+    }
 
     if (
         eventLooksLikeMaritimePiracy(event)
@@ -7294,6 +7358,8 @@ function categoryMatches(
     event,
     selected
 ) {
+
+    if (isRetiredJudicialEvent(event)) return false;
 
 
     const selectedList =
@@ -7440,6 +7506,7 @@ const MAP_SCOPE_TITLES = {
 // The events of the map's period in the "Show on map" scope, located or not:
 // attacks from the map's file, other categories from its recent_events.
 function mapScopeMatches(event, scope) {
+    if (isRetiredJudicialEvent(event)) return false;
     if (scope === "ALL") return true;
     const label = scope === "RADNUC" ? "Radiological/Nuclear" : scope;
     if (["Radiological/Nuclear", "Chemicals and Explosives", "Biological Terrorism"].includes(label) && event.actor_scope === "STATE_ONLY") return false;
@@ -7467,7 +7534,7 @@ function mapScopeEvents() {
 // buttons' counts).
 function mapScopeCandidates() {
     const scope = mapCategoryScope;
-    const attacks = scope === "ATTACKS" || scope === "ALL" ? allEvents
+    const attacks = scope === "ATTACKS" || scope === "ALL" ? allEvents.filter(event => !isRetiredJudicialEvent(event))
         : allEvents.filter(event => mapScopeMatches(event, scope));
     const others = scope === "ATTACKS" ? [] : recentContextEvents.filter(event =>
         mapScopeMatches(event, scope)
@@ -7681,7 +7748,7 @@ function createMarker(
             code:
                 "?",
             className:
-                "legal"
+                "neutral"
         };
 
 
@@ -8029,7 +8096,6 @@ function isHeatEligibleEvent(event) {
        - weapons-only developments
        - CBRN-only developments
        - online/cyber/AI
-       - legal/judicial developments
        - other non-violent CT activity
 
        The map now only holds executed, attempted and foiled attacks
@@ -8902,10 +8968,7 @@ function updateTrends() {
                     "Counter Terrorism Action",
 
                 "Arrests":
-                    "Arrests",
-
-                "Legal / Judicial":
-                    "Legal / Judicial"
+                    "Arrests"
 
             };
 
@@ -9545,7 +9608,7 @@ function renderChronology() {
                     code:
                         "?",
                     className:
-                        "legal"
+                        "neutral"
                 };
 
 
@@ -10204,11 +10267,13 @@ function selectedDatabaseEvents() {
     return databaseResults.filter(
 
         event =>
+            !isRetiredJudicialEvent(event)
+            &&
             chronologySelectedKeys.has(
                 event._mapKey
             )
 
-    );
+    ).map(normalizeActiveEvent);
 
 }
 
@@ -11838,15 +11903,6 @@ function updateCommandCenterPanels() {
     );
 
     setText(
-        "summaryJudicial",
-        categoryCounts[
-            "Legal / Judicial"
-        ]
-        ||
-        0
-    );
-
-    setText(
         "summaryFinancing",
         categoryCounts[
             "Terrorist Financing"
@@ -11907,7 +11963,6 @@ function updateCommandCenterPanels() {
             ["Attacks", "ATTACK"],
             ["Counter Terrorism Action", "CT ACTION"],
             ["Arrests", "ARREST"],
-            ["Legal / Judicial", "JUDICIAL"],
             ["Terrorist Financing", "FINANCING"],
             ["Weapons", "WEAPONS"],
             ["Maritime Security", "MARITIME"],
@@ -14306,7 +14361,9 @@ function queryDatabase(force = false) {
     .then(payload => {
         if (seq !== databaseQuerySeq || key !== JSON.stringify(databaseFilters())) return databaseResults;
 
-        databaseResults = (Array.isArray(payload.events) ? payload.events : []).map(row => {
+        const receivedRows = Array.isArray(payload.events) ? payload.events : [];
+        const activeRows = receivedRows.filter(row => !isRetiredJudicialEvent(row)).map(normalizeActiveEvent);
+        databaseResults = activeRows.map(row => {
             row._mapKey = row.key;
             return row;
         });
@@ -14320,7 +14377,7 @@ function queryDatabase(force = false) {
         const liveGroup = document.getElementById("reportGroup")?.value || filters.actor_group;
         renderDatabaseGroups(Array.isArray(payload.groups) ? payload.groups : [], liveGroup);
 
-        const total = Number(payload.total) || 0;
+        const total = Math.max(0, (Number(payload.total) || 0) - (receivedRows.length - activeRows.length));
         databaseLastStatus =
             total.toLocaleString("en-GB")
             + (total === 1 ? " record matches" : " records match")

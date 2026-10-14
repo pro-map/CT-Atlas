@@ -1,4 +1,4 @@
-"""Zero-network regression tests for eight-category Gemini Chinese history."""
+"""Zero-network regression tests for seven-category Gemini Chinese history."""
 import json
 import sys
 import tempfile
@@ -22,8 +22,8 @@ class ChineseGeminiHistoryTests(unittest.TestCase):
         cls.config = m.configuration(ROOT, collector)
         cls.plan = m.plan_tasks(cls.config, collector)
 
-    def test_eight_categories_both_chinese_editions_no_specialist_redefinition(self):
-        self.assertEqual(len(m.CATEGORIES), 8)
+    def test_seven_categories_both_chinese_editions_no_specialist_redefinition(self):
+        self.assertEqual(len(m.CATEGORIES), 7)
         self.assertFalse(set(m.CATEGORIES) & set(threat_categories.LABELS))
         self.assertEqual(set(m.CATEGORIES), {task["category"] for task in self.plan})
         self.assertEqual({task["code"] for task in self.plan}, {"zh", "zh-Hant"})
@@ -39,7 +39,7 @@ class ChineseGeminiHistoryTests(unittest.TestCase):
         self.assertEqual(windows[0][0], first)
         self.assertEqual(windows[-1][1], date(2026, 10, 11))
         self.assertTrue(all(a[1] == b[0] for a, b in zip(windows, windows[1:])))
-        self.assertEqual(len(self.plan), 1248)
+        self.assertEqual(len(self.plan), 1092)
         self.assertEqual(len({task["key"] for task in self.plan}), len(self.plan))
         from collections import Counter
         self.assertEqual(set(Counter(t["category"] for t in self.plan).values()), {156})
@@ -53,9 +53,9 @@ class ChineseGeminiHistoryTests(unittest.TestCase):
             first = m.frozen_manifest(root, self.config)
             self.assertEqual(first, m.frozen_manifest(root, self.config))
             progress = m.progress(root, self.config, self.plan)
-            self.assertEqual(progress["planned_root_queries"], 1248)
+            self.assertEqual(progress["planned_root_queries"], 1092)
             self.assertEqual(progress["confirmed_successful_source_fetches_including_split_children"], 0)
-            self.assertEqual(progress["pending_units_including_split_children"], 1248)
+            self.assertEqual(progress["pending_units_including_split_children"], 1092)
             self.assertFalse(progress["publication_confirmed"])
             s = enrich_archive.load_state(root, m.STATE)
             task = self.plan[0]

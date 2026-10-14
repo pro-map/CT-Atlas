@@ -121,7 +121,7 @@ class MapAttackTests(unittest.TestCase):
             ('ATTACK', 'Attacks'), ('ATTEMPTED_ATTACK', 'Attacks'),
             ('DISRUPTED_PLOT', 'Counter Terrorism Action'),
             ('CT_OPERATION', 'Counter Terrorism Action'), ('ARREST', 'Arrests'),
-            ('JUDICIAL', 'Legal / Judicial'), ('FINANCING', 'Terrorist Financing'),
+            ('FINANCING', 'Terrorist Financing'),
             ('WEAPONS', 'Weapons'), ('PIRACY', 'Maritime Piracy'),
             ('ONLINE_CYBER_AI', 'Online / Cyber / AI'), ('CBRN', 'CBRN'),
             ('OTHER_CT', 'Radiological/Nuclear'),
@@ -143,6 +143,32 @@ class MapAttackTests(unittest.TestCase):
         self.assertEqual(len(ids), len(set(ids)), 'No attack duplicated as context')
         self.assertEqual(output['map']['recent_events_days'], 181)
         m.validate(output, db)
+
+    def test_retired_judicial_records_are_filtered_under_all_topics(self):
+        database = sample_database()
+        database['events'] += [
+            event('court-radnuc', primary_event_type='JUDICIAL', category='Radiological/Nuclear'),
+            event('court-bio', primary_event_type='JUDICIAL', category='Biological Terrorism'),
+            event('legacy-court', primary_event_type='OTHER_CT', category='Legal / Judicial'),
+            event('actual-arrest', primary_event_type='ARREST', categories=['Arrests', 'Legal / Judicial']),
+        ]
+        output = m.build_map(database, [], now=datetime(2026, 9, 30, 12, tzinfo=timezone.utc))
+        all_records = output['events'] + output['recent_events']
+        ids = {record['id'] for record in all_records}
+        self.assertFalse(ids & {'court-radnuc', 'court-bio', 'legacy-court'})
+        self.assertIn('actual-arrest', ids)
+        self.assertEqual(next(record for record in all_records if record['id'] == 'actual-arrest')['categories'], ['Arrests'])
+        self.assertEqual(output['map']['retired_judicial_count'], 3)
+        self.assertNotIn('Legal / Judicial', output['database_summary']['by_category'])
+        self.assertEqual(output['database_summary']['total_events'], 9)
+        m.validate(output, database)
+
+    def test_validator_rejects_judicial_context_injected_after_build(self):
+        database = sample_database()
+        output = m.build_map(database, [])
+        output['recent_events'].append(event('court', primary_event_type='JUDICIAL', category='Radiological/Nuclear'))
+        with self.assertRaises(ValueError):
+            m.validate(output, database)
 
     def test_validate_rejects_an_attack_among_recent_events(self):
         database = sample_database()

@@ -38,7 +38,7 @@ SCRIPTS = ("zh", "zh-Hant")
 CONFIG_VERSION = "gemini-chinese-eight-map-history-v1-20261010"
 CATEGORIES = (
     "Terrorist Financing", "Weapons", "Maritime Piracy", "Online / Cyber / AI",
-    "Attacks", "Counter Terrorism Action", "Arrests", "Legal / Judicial",
+    "Attacks", "Counter Terrorism Action", "Arrests",
 )
 
 

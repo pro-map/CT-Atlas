@@ -21,7 +21,7 @@ const FEEDBACK_GLOBAL_DAILY_LIMIT = 200;
 // Bump whenever the report SHAPE changes (new fields, schema, citation
 // rules) so an existing cache entry from before the change is never served
 // as-is -- folded into the cache key in index.js's /report handler.
-const REPORT_GENERATOR_VERSION = "report-v12-radnuc-background";
+const REPORT_GENERATOR_VERSION = "report-v13-no-judicial";
 
 // One roster secret, {"username":"sha256(password)"}, validated; throws on any problem.
 function parseAuthRoster(raw, name) {
@@ -169,7 +169,7 @@ activity on the ground. A location only qualifies as a hub/hotspot when
 top_countries_by_incident_activity shows genuinely high DISTINCT operational
 incident counts. unique_attacks counts only incident IDs whose current record
 was explicitly classified primary_event_type=ATTACK and is_attack=true.
-Attempted attacks, disrupted plots, CT operations, arrests and judicial cases
+Attempted attacks, disrupted plots, CT operations and arrests
 are separate measures. reporting_records is collection/reporting volume only
 and MUST NEVER be treated as attack frequency or threat intensity. When you cite a country as significant, name
 whether that significance comes from attacks it suffered, combat CT
@@ -335,16 +335,55 @@ function parseEventDate(event) {
   return null;
 }
 
+function isJudicialCategory(value) {
+  const label = String(value || "").trim().toLowerCase().replace(/\s*\/\s*/g, "/");
+  return label === "legal/judicial" || label === "judicial";
+}
+
+// Explicit operational types take precedence over old labels and update
+// phases. An arrest remains an arrest even when tagged JUDICIAL_UPDATE.
+function isRetiredJudicialEvent(event) {
+  const primary = String(event?.primary_event_type || "").trim().toUpperCase();
+  if (primary === "JUDICIAL") return true;
+  if (primary && primary !== "OTHER_CT") return false;
+  const raw = event?.categories ?? (event?.category ? [event.category] : []);
+  const values = Array.isArray(raw) ? raw : [raw];
+  const labels = values.filter(value => String(value || "").trim());
+  if (!labels.length && event?.category) labels.push(event.category);
+  return labels.some(isJudicialCategory) && labels.every(isJudicialCategory);
+}
+
+const PRIMARY_EVENT_CATEGORIES = Object.freeze({
+  ATTACK: "Attacks",
+  ATTEMPTED_ATTACK: "Attacks",
+  DISRUPTED_PLOT: "Counter Terrorism Action",
+  CT_OPERATION: "Counter Terrorism Action",
+  ARREST: "Arrests",
+  FINANCING: "Terrorist Financing",
+  WEAPONS: "Weapons",
+  ONLINE_CYBER_AI: "Online / Cyber / AI",
+  PIRACY: "Maritime Security"
+});
+
 function eventCategories(event) {
+  if (isRetiredJudicialEvent(event)) return [];
   const raw = event?.categories ?? (event?.category ? [event.category] : []);
   const values = Array.isArray(raw) ? raw.map(String) : [String(raw)];
-  if (values.some(c => c === "CBRN" || c === "CBRNE")) {
+  if (!values.some(c => c.trim()) && event?.category) values.push(String(event.category));
+  const primary = String(event?.primary_event_type || "").trim().toUpperCase();
+  if (values.some(c => c === "CBRN" || c === "CBRNE")
+      || (primary === "CBRN" && values.some(isJudicialCategory))) {
     values.push(...(Array.isArray(event.threat_categories) ? event.threat_categories : []));
     if (Array.isArray(event.cbrn_subgroups) && event.cbrn_subgroups.includes("RADNUC")
         && event.actor_scope !== "STATE_ONLY") values.push("Radiological/Nuclear");
   }
-  return [...new Set(values.map(c => c === "RADNUC" ? "Radiological/Nuclear" : c)
-    .filter(c => c && c !== "CBRN" && c !== "CBRNE"))];
+  const categories = [...new Set(values.map(c => c === "RADNUC" ? "Radiological/Nuclear" : c)
+    .filter(c => c && c !== "CBRN" && c !== "CBRNE" && !isJudicialCategory(c)))];
+  if (!categories.length && values.some(isJudicialCategory)) {
+    const fallback = PRIMARY_EVENT_CATEGORIES[primary];
+    if (fallback) categories.push(fallback);
+  }
+  return categories;
 }
 
 // Same aliases as the map's CATEGORY_ALIASES, from the database's side: the
@@ -364,6 +403,7 @@ function canonicalTopic(value) {
 }
 
 function matchesTopic(event, topic) {
+  if (isRetiredJudicialEvent(event)) return false;
   if (!topic || topic === "ALL") return true;
   const wanted = canonicalTopic(topic);
   if (["radiological/nuclear", "chemicals and explosives", "biological terrorism"].includes(wanted) && event.actor_scope === "STATE_ONLY") return false;
@@ -829,6 +869,7 @@ function citationMetrics(analysis, validIds) {
 }
 
 function stats(events) {
+  const activeEvents = events.filter(event => !isRetiredJudicialEvent(event));
   const category = {};
   const reportingRecords = {};
   const incidentSets = {};
@@ -839,7 +880,7 @@ function stats(events) {
     return incidentSets[country][type];
   };
 
-  for (const e of events) {
+  for (const e of activeEvents) {
     for (const c of eventCategories(e)) category[c] = (category[c] || 0) + 1;
     const country = cleanText(e.country, 80);
     if (!country) continue;
@@ -872,14 +913,13 @@ function stats(events) {
       disrupted_plots: count(name, "DISRUPTED_PLOT"),
       unique_ct_operations: count(name, "CT_OPERATION"),
       arrest_cases: count(name, "ARREST"),
-      judicial_cases: count(name, "JUDICIAL"),
       financing_cases: count(name, "FINANCING"),
       weapons_cases: count(name, "WEAPONS"),
       reporting_records: reportingRecords[name]
     }));
 
   return {
-    record_count: events.length,
+    record_count: activeEvents.length,
     categories: category,
     top_countries_by_incident_activity: countries
   };
@@ -1271,6 +1311,7 @@ export {
   parisDayKey,
   usageTemplate,
   parseEventDate,
+  isRetiredJudicialEvent,
   eventCategories,
   matchesTopic,
   matchesGroup,

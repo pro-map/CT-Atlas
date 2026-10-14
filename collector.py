@@ -2,6 +2,7 @@ import argparse
 import radnuc
 import threat_categories
 import collection_config
+import retired_categories
 import feedparser
 import hashlib
 import html
@@ -603,32 +604,6 @@ CATEGORIES = {
         '"terrorist hideout stormed"',
     ],
 
-    "Legal / Judicial": [
-        '"terrorism trial"',
-        '"terrorist trial"',
-        '"terrorist sentenced"',
-        '"terrorist sentencing"',
-        '"terrorist convicted"',
-        '"terrorism conviction"',
-        '"terrorism convictions"',
-        '"terror suspect charged"',
-        '"terrorism suspect charged"',
-        '"terrorism charges"',
-        '"terrorist charged"',
-        '"terrorism prosecution"',
-        '"terrorist prosecution"',
-        '"terrorism court"',
-        '"terrorist court case"',
-        '"terrorism guilty"',
-        '"terrorist guilty"',
-        '"terrorism prison sentence"',
-        '"terrorist prison sentence"',
-        '"terrorism appeal"',
-        '"terrorist appeal"',
-        '"terrorism indictment"',
-        '"terrorist indictment"',
-        '"jihadist sentenced"',
-    ],
 
     "Disinformation / Emerging Technologies / AI": [
         '"terrorist artificial intelligence"',
@@ -739,14 +714,6 @@ CORE_SEARCH_QUERIES = {
         '"terrorist hideout stormed"',
     ],
 
-    "Legal / Judicial": [
-        '"terrorism trial"',
-        '"terrorist sentenced"',
-        '"terrorist convicted"',
-        '"terror suspect charged"',
-        '"terrorism indictment"',
-        '"terrorism prosecution"',
-    ],
 
     "Disinformation / Emerging Technologies / AI": [
         '"terrorist artificial intelligence"',
@@ -872,11 +839,11 @@ OFFICIAL_SOURCE_QUERIES = {
 
         'site:gov.uk/government/news '
         '(terrorism OR terrorist) '
-        '(arrested OR arrest OR detained OR charged)',
+        '(arrested OR arrest OR detained)',
 
         'site:counterterrorism.police.uk/news '
         '(terrorism OR terrorist OR extremist) '
-        '(arrested OR arrest OR detained OR charged)',
+        '(arrested OR arrest OR detained)',
 
         'site:interpol.int/en/News-and-Events/News '
         '(terrorism OR terrorist) '
@@ -906,25 +873,6 @@ OFFICIAL_SOURCE_QUERIES = {
     ],
 
 
-    "Legal / Judicial": [
-
-        'site:justice.gov '
-        '(terrorist OR terrorism OR ISIS OR ISIL OR Hamas OR al-Qaeda) '
-        '(charged OR convicted OR sentenced OR indicted OR indictment OR trial)',
-
-        'site:europol.europa.eu/media-press/newsroom '
-        '(terrorism OR terrorist OR extremist) '
-        '(convicted OR sentenced OR court OR prosecution OR trial)',
-
-        'site:gov.uk/government/news '
-        '(terrorism OR terrorist) '
-        '(charged OR convicted OR sentenced OR prosecution OR trial)',
-
-        'site:counterterrorism.police.uk/news '
-        '(terrorism OR terrorist OR extremist) '
-        '(charged OR convicted OR sentenced OR jailed OR trial)',
-
-    ],
 
 
     "Disinformation / Emerging Technologies / AI": [
@@ -1076,7 +1024,7 @@ CBRN_SOURCE_TERMS = (
     'OR "dirty bomb" OR "radiological terrorism" OR "nuclear terrorism" '
     'OR "radioactive material" OR "nuclear material" OR "anthrax attack") '
     '(attack OR plot OR threat OR arrest OR seized OR seizure OR trafficking '
-    'OR smuggling OR stolen OR investigation OR prosecution OR convicted)'
+    'OR smuggling OR stolen OR investigation)'
 )
 
 MARITIME_SOURCE_SITES = [
@@ -1191,11 +1139,6 @@ TARGETED_MEDIA_CATEGORY_TERMS = {
         '(raid OR operation OR neutralized OR neutralised OR eliminated '
         'OR gunfight OR shootout OR "special forces")',
 
-    "Legal / Judicial":
-        '(terrorist OR terrorism OR ISIS OR ISIL OR Daesh OR "Islamic State" '
-        'OR jihadist OR extremist OR "al-Qaeda") '
-        '(charged OR convicted OR sentenced OR trial OR court OR indicted '
-        'OR indictment OR prosecution OR jailed)',
 
     "Disinformation / Emerging Technologies / AI":
         '(terrorist OR terrorism OR extremist OR extremism OR ISIS OR ISIL '
@@ -1664,7 +1607,7 @@ CHINESE_DAILY_PROFILES = (
     {"code": "zh-Hant", "name": "Chinese (Traditional)", "hl": "zh-TW",
      "gl": "TW", "ceid": "TW:zh-Hant"},
 )
-if (len(CHINESE_MAP_QUERY_CONFIG.get("queries", {})) != 8
+if (len(CHINESE_MAP_QUERY_CONFIG.get("queries", {})) != 7
         or any(set(groups) != {"zh", "zh-Hant"} or
                any(len(value) < 1 for value in groups.values())
                for groups in CHINESE_MAP_QUERY_CONFIG["queries"].values())):
@@ -1678,9 +1621,9 @@ for _edition in CHINESE_DAILY_PROFILES:
             for label, phrases in CHINESE_MAP_QUERY_CONFIG["queries"].items()
         ],
     })
-# This adds 8 concise category-scoped searches per Chinese edition. The three
+# This adds 7 concise category-scoped searches per Chinese edition. The three
 # existing specialist families are subsequently appended from shared curated
-# lexicons, so Chinese reaches ALL 11 map categories in daily collection.
+# lexicons, so Chinese reaches ALL 10 active map categories in daily collection.
 # The RSS candidate may cover an incident in any country; the publisher's
 # Chinese locale NEVER establishes the event's real geographical location.
 
@@ -1877,11 +1820,6 @@ CATEGORY_RELEVANCE = {
         "commando","special forces","killed","wounded","captured",
     },
 
-    "Legal / Judicial": {
-        "trial","court","charged","charges","convicted","conviction","sentenced",
-        "sentence","prosecution","prosecutor","indicted","indictment","guilty",
-        "prison","appeal",
-    },
 
     "Disinformation / Emerging Technologies / AI": {
         "artificial intelligence","generative ai","deepfake","deepfakes",
@@ -1923,20 +1861,20 @@ NON_EVENT_PATTERNS = [
 
 ACTION_TERMS = {
     "Terrorist Financing": {
-        "arrested","charged","convicted","sentenced","sanctioned","frozen",
+        "arrested","sanctioned","frozen",
         "seized","blocked","funded","financed","raised","transferred",
-        "laundered","investigation","prosecution",
+        "laundered","investigation",
     },
     "Weapons": {
         "seized","found","recovered","smuggled","trafficked","arrested",
-        "charged","used","attack","plot","cache",
+        "used","attack","plot","cache",
     },
     "CBRN": {
-        "seized","found","plot","attack","arrested","charged","used",
+        "seized","found","plot","attack","arrested","used",
         "attempted","threatened","investigation",
     },
     "Online Radicalization / Cyberterrorism": {
-        "arrested","charged","convicted","recruited","radicalized","radicalised",
+        "arrested","recruited","radicalized","radicalised",
         "propaganda","attack","campaign","network","disrupted","removed",
     },
     "Maritime Piracy": {
@@ -1954,10 +1892,6 @@ ACTION_TERMS = {
     "Counter Terrorism Action": {
         "raided","killed","eliminated","neutralized","neutralised","captured",
         "stormed","clashed","operation",
-    },
-    "Legal / Judicial": {
-        "trial","charged","convicted","sentenced","indicted","guilty",
-        "prosecution","appeal","court",
     },
     "Disinformation / Emerging Technologies / AI": {
         "used","using","generated","created","deployed","propaganda",
@@ -2045,6 +1979,8 @@ def normalize_categories(categories):
 
         if (
             category
+            and
+            not retired_categories.is_judicial_category(category)
             and
             category not in normalized
         ):
@@ -2154,6 +2090,14 @@ _SCOPE_DIPLOMACY = re.compile(
     r"دبلوماس|قمة|مفاوضات|إدانة|تنديد", re.I)
 
 def out_of_scope_reason(event):
+    if retired_categories.is_retired_judicial_event(event):
+        return "judicial-only development; Judicial collection is retired"
+    # Structured operational records are authoritative; only fresh, untyped
+    # candidates use the conservative headline screen before spending AI quota.
+    if not event.get("primary_event_type"):
+        retired_reason = retired_categories.judicial_headline_reason(event)
+        if retired_reason:
+            return retired_reason
     title = clean_text(event.get("title") or "")
     summary = clean_text(event.get("summary") or "")
     text = title + " " + summary
@@ -3843,7 +3787,6 @@ AI_SELECTION_SCHEMA = {
                                 "Attacks",
                                 "Counter Terrorism Action",
                                 "Arrests",
-                                "Legal / Judicial",
                             ],
                         },
                     },
@@ -3879,7 +3822,6 @@ AI_SELECTION_SCHEMA = {
                             "DISRUPTED_PLOT",
                             "CT_OPERATION",
                             "ARREST",
-                            "JUDICIAL",
                             "FINANCING",
                             "WEAPONS",
                             "ONLINE_CYBER_AI",
@@ -3896,7 +3838,7 @@ AI_SELECTION_SCHEMA = {
                     },
                     "update_type": {
                         "type": "string",
-                        "enum": ["INITIAL", "FOLLOW_UP", "ARREST_UPDATE", "INVESTIGATION_UPDATE", "JUDICIAL_UPDATE", "OTHER_UPDATE"]
+                        "enum": ["INITIAL", "FOLLOW_UP", "ARREST_UPDATE", "INVESTIGATION_UPDATE", "OTHER_UPDATE"]
                     },
                     "reason": {
                         "type": "string"
@@ -3954,8 +3896,8 @@ Afghan and Syrian sources may report on other countries. Extract only locations
 supported by the article. Preserve claimed versus confirmed responsibility and
 attribute official statements. Do not infer that all Taliban-related governance
 news, Syrian armed clashes, assassinations or arrests are terrorist events.
-For CBRN, retain concrete CT-relevant attacks, plots, seizures, investigations
-and judicial developments. Preserve uncertainty about intent, attribution and
+For CBRN, retain concrete CT-relevant attacks, plots, seizures and investigations.
+Preserve uncertainty about intent, attribution and
 whether the substance or threat has been confirmed. Never infer terrorism just
 from a source name, a CBRN keyword or radioactive material being reported stolen.
 Exclude routine industrial accidents, natural outbreaks, exercises, conferences,
@@ -3972,7 +3914,7 @@ MANDATORY ACTOR SCOPE (takes precedence over relevance scores):
 - Keep concrete security/CT events involving non-state actors: terrorist or
   extremist groups, cells, lone actors, insurgents, armed militias, or pirates.
   State operations AGAINST such actors, their financing, recruitment, weapons,
-  investigations and court cases remain eligible. State backing does not by
+  investigations remain eligible. State backing does not by
   itself turn a non-state group into a regular state force.
 - Reject wars, strikes, retaliation, naval seizures and cyber operations solely
   between sovereign states or their regular armed forces/security services,
@@ -3991,14 +3933,22 @@ MANDATORY ACTOR SCOPE (takes precedence over relevance scores):
   interstate nuclear programmes and state-to-state cyberwar are out of scope.
 - Maritime Security is the DISPLAY name for the Maritime Piracy category.
   Its scope remains actual piracy/armed robbery at sea, vessel hijacking and
-  related crew abduction, rescue, investigation or prosecution. Do not broaden
+  related crew abduction, rescue or investigation. Do not broaden
   it to naval warfare, state tanker seizures, accidents or trade disruption.
 Out-of-scope events MUST have is_current_ct_event=false and relevance_score=0.
 
+RETIRED JUDICIAL COLLECTION (takes precedence over topical relevance):
+Standalone charges, prosecutions, trials, convictions, sentencing, appeals,
+court rulings and extraditions are excluded, even for terrorism, financing,
+weapons, CBRN or piracy cases. They are not new arrests or operational incidents.
+Keep a genuinely new arrest, attack, raid, seizure or financing action when
+court history is only background. Reject court-only records with score=0 and
+is_current_ct_event=false; never relabel them to an active category.
+
 OPERATIONAL EVENT REQUIREMENT (takes precedence over relevance scores): to score
 >= 50, the article must itself report at least one concrete, dated operational
-fact -- an attack, attempted attack, raid, arrest, seizure, charge, conviction,
-sentencing, financing action, weapons find, plot disruption, or similar. An
+fact -- an attack, attempted attack, raid, arrest, seizure, financing action,
+weapons find, plot disruption, or similar. An
 article that only analyzes, opines on, explains, editorializes about, or
 discusses the broader context/implications/history of terrorism, a security
 policy, or a past event -- without itself reporting a NEW concrete operational
@@ -4022,7 +3972,6 @@ KEEPING POLICY:
 HIGH-SCORING EXAMPLES:
 - terrorist attack, attempted attack, disrupted plot;
 - arrest, raid, wanted terrorist, terrorist cell;
-- prosecution, charge, conviction, sentencing or extradition for terrorism;
 - terrorist financing, sanctions, asset seizure, crypto/hawala financing;
 - weapons, explosives, drones or CBRN connected to terrorists;
 - terrorist propaganda, recruitment, radicalization, cyberterrorism;
@@ -4153,7 +4102,7 @@ confused and must be kept separate:
   ends in a capture still belongs here, not in "Arrests" -- what matters is
   the offensive/combat nature of the operation, not whether the outcome was a
   kill or a capture.
-- "Arrests" is for the plain apprehension, detention, indictment or custody of
+- "Arrests" is for the plain apprehension, detention or custody of
   a suspect with NO described raid, assault, clash or combat -- e.g. a suspect
   arrested at a checkpoint, at home, or during a routine investigation. If a
   raid or firefight is described, use "Counter Terrorism Action" instead of
@@ -4173,8 +4122,7 @@ INCIDENT / CASE MODEL (mandatory):
   successfully occur; DISRUPTED_PLOT means authorities disrupted a plot before
   an attack attempt.
 - CT_OPERATION means an offensive/combat counter-terrorism operation by
-  authorities. ARREST is non-combat custody. JUDICIAL is charges, trial,
-  conviction, sentencing, appeal or extradition.
+  authorities. ARREST is non-combat custody.
 - incident_anchor must identify the UNDERLYING real-world incident/case in a
   short stable English form, including the best-supported place and date when
   available. Follow-up reporting about the same case MUST reuse the same
@@ -4182,7 +4130,7 @@ INCIDENT / CASE MODEL (mandatory):
   "Solingen attack Germany 2024-08-23". If the record is an unrelated new
   arrest/case, give it its own anchor.
 - update_type=INITIAL for the underlying incident itself; otherwise use the
-  appropriate FOLLOW_UP/ARREST_UPDATE/INVESTIGATION_UPDATE/JUDICIAL_UPDATE.
+  appropriate FOLLOW_UP/ARREST_UPDATE/INVESTIGATION_UPDATE/OTHER_UPDATE.
 These fields are used to count DISTINCT incidents in country analysis. Never
 turn multiple articles or follow-up developments about one case into multiple
 attacks.
@@ -4965,6 +4913,19 @@ def apply_ai_selection(
     event,
     result,
 ):
+    # Fresh foreign-language candidates get the same inexpensive court screen
+    # after faithful translation; a court verdict cannot become an arrest merely
+    # because the active schema no longer contains JUDICIAL.
+    translated_court = (not event.get("primary_event_type")
+        and retired_categories.judicial_headline_reason({
+            "title": result.get("english_title") or event.get("title")}))
+    # Retired stored verdicts must not be relabelled into another active topic.
+    if (translated_court or retired_categories.is_retired_judicial_event(event)
+            or retired_categories.is_retired_judicial_event(result)):
+        event['ai_selected'] = False
+        event['ai_current_ct_event'] = False
+        event['ai_scope_rejection'] = 'Judicial collection is retired'
+        return False
     if event.get('archive_only') is True or event.get('kind') == 'radnuc_background':
         event['ai_selected'] = False
         event['ai_current_ct_event'] = False
@@ -5156,7 +5117,7 @@ def apply_ai_selection(
     primary_event_type = clean_text(result.get("primary_event_type") or "OTHER_CT").upper()
     allowed_primary_types = {
         "ATTACK", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT", "CT_OPERATION",
-        "ARREST", "JUDICIAL", "FINANCING", "WEAPONS", "ONLINE_CYBER_AI",
+        "ARREST", "FINANCING", "WEAPONS", "ONLINE_CYBER_AI",
         "CBRN", "PIRACY", "OTHER_CT",
     }
     if primary_event_type not in allowed_primary_types:
@@ -5167,7 +5128,7 @@ def apply_ai_selection(
     update_type = clean_text(result.get("update_type") or "OTHER_UPDATE").upper()
     allowed_update_types = {
         "INITIAL", "FOLLOW_UP", "ARREST_UPDATE", "INVESTIGATION_UPDATE",
-        "JUDICIAL_UPDATE", "OTHER_UPDATE",
+        "OTHER_UPDATE",
     }
     if update_type not in allowed_update_types:
         update_type = "OTHER_UPDATE"
@@ -5485,6 +5446,8 @@ def persist_background_articles(rejected_events):
         event
         for event in rejected_events or []
         if not is_off_topic_review(event)
+        and not retired_categories.is_retired_judicial_event(event)
+        and "judicial" not in str(event.get("ai_scope_rejection") or "").lower()
     ]
     if not rejected_events:
         return
@@ -5498,6 +5461,12 @@ def persist_background_articles(rejected_events):
 def ai_select_events(
     events
 ):
+    # Replayed queues and direct specialist runners can bypass discovery filters.
+    # Retire court-only candidates before cache lookup or any paid AI request.
+    events = [event for event in events
+              if not retired_categories.is_retired_judicial_event(event)
+              and not (not event.get("primary_event_type")
+                       and retired_categories.judicial_headline_reason(event))]
     if not AI_SELECTION_ENABLED:
         return events
 
@@ -7970,10 +7939,11 @@ def deduplicate_events(records):
 
 
 def load_existing():
-    events = load_database_strict()["events"]
+    events = [retired_categories.active_event(event)
+              for event in load_database_strict()["events"]
+              if not retired_categories.is_retired_judicial_event(event)]
     for event in events:
-        categories = normalize_categories(event.get("categories") or
-            ([event["category"]] if event.get("category") else []))
+        categories = normalize_categories(retired_categories.active_categories(event))
         if categories:
             event["categories"] = categories
             event["category"] = categories[0]
@@ -9342,6 +9312,8 @@ def _weekly_geo_breakdown(events, field_name, limit=8):
     incident_sets = defaultdict(lambda: defaultdict(set))
 
     for event in events:
+        if retired_categories.is_retired_judicial_event(event):
+            continue
         location = clean_text(event.get(field_name, ""))
         if not location:
             continue
@@ -9356,7 +9328,7 @@ def _weekly_geo_breakdown(events, field_name, limit=8):
             incident_sets[location]["ATTACK"].add(incident_id)
         elif primary in {
             "CT_OPERATION", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT", "ARREST",
-            "JUDICIAL", "FINANCING", "WEAPONS", "ONLINE_CYBER_AI", "CBRN",
+            "FINANCING", "WEAPONS", "ONLINE_CYBER_AI", "CBRN",
             "PIRACY", "OTHER_CT",
         }:
             incident_sets[location][primary].add(incident_id)
@@ -9382,7 +9354,6 @@ def _weekly_geo_breakdown(events, field_name, limit=8):
             "disrupted_plots": count(location, "DISRUPTED_PLOT"),
             "unique_ct_operations": count(location, "CT_OPERATION"),
             "arrest_cases": count(location, "ARREST"),
-            "judicial_cases": count(location, "JUDICIAL"),
             "financing_cases": count(location, "FINANCING"),
             "weapons_cases": count(location, "WEAPONS"),
             "reporting_records": records[location],
@@ -10778,8 +10749,6 @@ def main():
             tier = 1
         elif "Arrests" in categories:
             tier = 2
-        elif "Legal / Judicial" in categories:
-            tier = 3
         else:
             tier = 4
         dt = event_datetime(event) or datetime.min.replace(tzinfo=timezone.utc)

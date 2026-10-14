@@ -110,8 +110,7 @@
         "stolen biological agents",
         "illicit possession of biological agents",
         "biological weapons investigation",
-        "biological weapons charges",
-        "biological weapons conviction"
+        "biological weapons charges"
       ],
       "fr": [
         "bioterrorisme",
@@ -181,8 +180,6 @@
         "threat",
         "hoax",
         "arrested",
-        "charged",
-        "convicted",
         "seized",
         "investigation"
       ],
@@ -235,10 +232,10 @@
     },
     "rules": [
       "All term groups belong to one standalone category, Biological Terrorism. They are retrieval roles, not map subcategories.",
-      "Core phrases retrieve candidates, not automatic map events. Exclude generic policy, exercises, research, commentary and historical retrospectives unless they report a new in-scope incident or judicial development.",
+      "Core phrases retrieve candidates, not automatic map events. Exclude generic policy, exercises, research, commentary and historical retrospectives unless they report a new in-scope incident.",
       "Agent and disease names require related incident context in the title or the same relevant passage. An unrelated terrorism paragraph elsewhere in an article is insufficient.",
       "Food or water contamination, agricultural sabotage and suspicious powders are not automatically biological. Establish reported biological involvement or an explicitly biological threat before assignment.",
-      "Retain suspected plots, threats, hoaxes, investigations and judicial updates when within scope, but preserve the reported status. Never label a suspicious powder as a confirmed biological agent without supporting evidence.",
+      "Retain suspected plots, threats, hoaxes, investigations when within scope, but preserve the reported status. Never label a suspicious powder as a confirmed biological agent without supporting evidence.",
       "A terrorism nexus must be reported or supported by credible evidence. Ordinary crime, natural outbreaks, accidental contamination and laboratory accidents do not become terrorism because a pathogen is mentioned.",
       "Theft or trafficking without a reported terrorism nexus may be reviewed as a candidate but must not be published as biological terrorism automatically.",
       "Some toxins overlap chemical and biological classifications. Use one canonical incident identifier; relevant filters may share that record without inflating overall incident counts.",
@@ -668,8 +665,6 @@
         "extremist",
         "plot",
         "arrested",
-        "charged",
-        "convicted",
         "seized"
       ],
       "fr": [
@@ -729,7 +724,7 @@
       "Retrieve incident reporting only; do not retrieve production instructions.",
       "Require a reported non-state terrorism nexus; exclude accidents, routine industry, exercises and ordinary crime.",
       "Keep firearms and generic weapons reporting in its existing category.",
-      "Terms describing instructions, manufacturing, procurement, components or dispersal may only identify news or official reports of a concrete investigation, seizure, prosecution, plot or terrorist incident. Reject manuals, recipes, technical procedures, vendor listings and instructional source documents; do not reproduce their contents or link to them.",
+      "Terms describing instructions, manufacturing, procurement, components or dispersal may only identify news or official reports of a concrete investigation, seizure, plot or terrorist incident. Reject manuals, recipes, technical procedures, vendor listings and instructional source documents; do not reproduce their contents or link to them.",
       "Names of substances, precursors, schedules or circuits are not sufficient for classification. Require the material to be central to the reported incident and preserve alleged, suspected, threat and hoax status.",
       "For mixed incidents use one canonical event record. Apply a biological or radiological label only when separately supported by the reporting. A CBRN-enhanced explosive reference does not create a CBRN parent category."
     ],

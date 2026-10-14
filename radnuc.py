@@ -96,7 +96,8 @@ def annotate(event, result=None):
 SELECTION_NOTE = '''
 Radiological/Nuclear (standalone category; legacy key RADNUC): identify concrete non-state radiological/nuclear
 terrorism attacks, attempted attacks, plots, material trafficking/theft/seizures
-with a credible reported terrorism nexus, investigations and judicial updates.
+with a credible reported terrorism nexus and investigations.
+Standalone judicial developments are excluded.
 Return cbrn_subgroups=["RADNUC"] only when radiological/nuclear facts are central;
 otherwise []. Return actor_scope=NON_STATE, STATE_ONLY or UNKNOWN according to
 who carried out the reported act, not the publisher, victim or investigating agency.

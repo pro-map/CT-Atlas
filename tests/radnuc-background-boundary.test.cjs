@@ -14,7 +14,7 @@ function source(file){
 const shared=vm.createContext({crypto:globalThis.crypto,TextEncoder,Intl,console});
 vm.runInContext(source('cloudflare-worker/shared.js'),shared);
 const helpers=Object.fromEntries(['normalizeTitle','tokenSimilarity','dateDistanceDays','isSameStory',
-  'parseEventDate','eventUniqueKey','cleanText'].map(name=>[name,vm.runInContext(name,shared)]));
+  'parseEventDate','eventUniqueKey','cleanText','isRetiredJudicialEvent'].map(name=>[name,vm.runInContext(name,shared)]));
 const plain=value=>JSON.parse(JSON.stringify(value));
 
 function harness(extra={}){

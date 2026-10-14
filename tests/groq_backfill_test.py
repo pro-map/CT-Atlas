@@ -55,7 +55,7 @@ class GroqPublicNewsTests(unittest.TestCase):
         self.assertFalse(row["additionalProperties"])
         self.assertEqual(set(row["required"]), set(row["properties"]))
         self.assertIn("reported_status", row["required"])
-        self.assertEqual(len(row["properties"]["categories"]["items"]["enum"]), 11)
+        self.assertEqual(len(row["properties"]["categories"]["items"]["enum"]), 10)
 
     def test_strict_results_are_complete_and_fail_on_wrong_country_or_actor_schema(self):
         event = source()

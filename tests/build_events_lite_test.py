@@ -56,6 +56,26 @@ class BuildLiteTest(unittest.TestCase):
         b.build_lite(database, ['related_articles'])
         self.assertIn('related_articles', database['events'][0])
 
+    def test_retired_events_are_filtered_and_actual_incidents_keep_active_labels(self):
+        database = sample_database()
+        database['number_of_events'] = 5
+        database['events'] += [
+            {'id': 'court', 'title': 'Court decision', 'published': '2026-09-25T08:00:00Z',
+             'primary_event_type': 'JUDICIAL', 'category': 'Radiological/Nuclear'},
+            {'id': 'legacy', 'title': 'Court decision', 'published': '2026-09-25T08:00:00Z',
+             'category': 'Legal / Judicial'},
+            {'id': 'arrest', 'title': 'Arrest', 'published': '2026-09-25T08:00:00Z',
+             'primary_event_type': 'ARREST', 'category': 'Legal / Judicial'},
+        ]
+        lite = b.build_lite(database, ['related_articles'])
+        self.assertEqual([item['id'] for item in lite['events']], ['a1', 'a2', 'arrest'])
+        self.assertEqual(lite['events'][-1]['categories'], ['Arrests'])
+        self.assertEqual(lite['events'][-1]['category'], 'Arrests')
+        self.assertEqual(lite['number_of_events'], 3)
+        self.assertEqual(lite['lite']['retired_judicial_count'], 2)
+        self.assertEqual(database['number_of_events'], 5, 'Raw source evidence remains unchanged.')
+        b.validate(lite, database)
+
     def test_refuses_an_empty_or_malformed_source(self):
         with self.assertRaises(ValueError):
             b.build_lite({'events': []}, ['x'])

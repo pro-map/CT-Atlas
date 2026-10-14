@@ -35,6 +35,59 @@ test('topics match the map aliases: Maritime Security is piracy, legacy digital 
   assert.equal(shared.matchesTopic(event('c',{category:'Arrests'}),'ALL'),true);
 });
 
+test('retired judicial developments cannot enter ALL or a thematic database scope',()=>{
+  for (const record of [
+    event('judicial',{primary_event_type:'JUDICIAL',categories:['Legal / Judicial','Weapons']}),
+    event('legacy',{category:'Legal / Judicial'}),
+    event('legacy-other',{primary_event_type:'OTHER_CT',categories:['Legal / Judicial']}),
+    event('legacy-empty-list',{categories:[],category:'Legal / Judicial'}),
+  ]) {
+    assert.equal(shared.isRetiredJudicialEvent(record),true);
+    assert.equal(shared.matchesTopic(record,'ALL'),false);
+    assert.equal(shared.matchesTopic(record,'Weapons'),false);
+    assert.deepEqual(plain(shared.eventCategories(record)),[]);
+    assert.equal(shared.matchesDatabaseFilters(record,shared.parseDatabaseFilters({})),false);
+  }
+  assert.equal(shared.isRetiredJudicialEvent({category:'Radiological/Nuclear',primary_event_type:'BACKGROUND_INFO'}),false,
+    'the requested regulatory background remains available');
+});
+
+test('operational types retain their category after an incidental Judicial tag is removed',()=>{
+  for (const [primary,category] of [
+    ['ATTACK','Attacks'],['ATTEMPTED_ATTACK','Attacks'],['DISRUPTED_PLOT','Counter Terrorism Action'],
+    ['CT_OPERATION','Counter Terrorism Action'],['ARREST','Arrests'],['FINANCING','Terrorist Financing'],
+    ['WEAPONS','Weapons'],['ONLINE_CYBER_AI','Online / Cyber / AI'],['PIRACY','Maritime Security'],
+  ]) {
+    const record=event(primary,{primary_event_type:primary,event_phase:'JUDICIAL_UPDATE',categories:['Legal / Judicial']});
+    assert.equal(shared.isRetiredJudicialEvent(record),false);
+    assert.deepEqual(plain(shared.eventCategories(record)),[category]);
+    assert.equal(shared.matchesTopic(record,'ALL'),true);
+    assert.equal(shared.matchesTopic(record,category),true);
+    assert.equal(shared.matchesTopic(record,'Legal / Judicial'),false);
+  }
+  assert.deepEqual(plain(shared.eventCategories({primary_event_type:'ARREST',categories:['Legal / Judicial','Radiological/Nuclear','Arrests']})),
+    ['Radiological/Nuclear','Arrests']);
+  assert.deepEqual(plain(shared.eventCategories({primary_event_type:'OTHER_CT',categories:['Legal / Judicial','Weapons']})),['Weapons']);
+  assert.deepEqual(plain(shared.eventCategories({primary_event_type:'ARREST',categories:[],category:'Legal / Judicial'})),['Arrests']);
+  assert.deepEqual(plain(shared.eventCategories({primary_event_type:'CBRN',categories:['Legal / Judicial'],cbrn_subgroups:['RADNUC'],actor_scope:'NON_STATE'})),
+    ['Radiological/Nuclear']);
+});
+
+test('report statistics exclude retired developments and preserve operational incident measures',()=>{
+  const result=plain(shared.stats([
+    event('court',{country:'France',primary_event_type:'JUDICIAL',categories:['Weapons','Legal / Judicial']}),
+    event('legacy-court',{country:'France',category:'Legal / Judicial'}),
+    event('arrest',{country:'France',primary_event_type:'ARREST',event_phase:'JUDICIAL_UPDATE',categories:['Legal / Judicial']}),
+    event('attack',{country:'France',primary_event_type:'ATTACK',is_attack:true,categories:['Attacks','Legal / Judicial']}),
+  ]));
+  assert.equal(result.record_count,2);
+  assert.deepEqual(result.categories,{Arrests:1,Attacks:1});
+  assert.equal(result.top_countries_by_incident_activity[0].arrest_cases,1);
+  assert.equal(result.top_countries_by_incident_activity[0].unique_attacks,1);
+  assert.equal(result.top_countries_by_incident_activity[0].reporting_records,2);
+  assert.ok(!Object.hasOwn(result.top_countries_by_incident_activity[0],'judicial_cases'));
+});
+
 test('groups match case-insensitively and events without a group form their own bucket',()=>{
   assert.equal(shared.matchesGroup(event('a',{actor_group:'Al-Shabaab'}),'al-shabaab'),true);
   assert.equal(shared.matchesGroup(event('a',{actor_group:'Al-Shabaab'}),'ISIS'),false);
@@ -68,6 +121,17 @@ const plan={
   anchors:{en:'djibouti'},
   queries:[{language:'en',variant:'primary',query:'Djibouti maritime attack'},{language:'en',variant:'secondary',query:'Gulf of Aden vessel Djibouti'}]
 };
+
+test('Deep Search excludes retired developments from database evidence and map comparison',()=>{
+  const c=deepSearchContext();
+  const db={events:[
+    event('court',{title:'Djibouti maritime attack trial',primary_event_type:'JUDICIAL',categories:['Legal / Judicial','Maritime Security']}),
+    event('legacy-court',{title:'Djibouti maritime attack sentencing',category:'Legal / Judicial'}),
+    event('arrest',{title:'Djibouti maritime attack suspect arrested',primary_event_type:'ARREST',event_phase:'JUDICIAL_UPDATE',categories:['Legal / Judicial']}),
+  ]};
+  assert.deepEqual(plain(c.candidateMapEvents(db,window)).map(row=>row.id),['arrest']);
+  assert.deepEqual(plain(c.databaseEvidenceRows(db,plan,window,shared.parseDatabaseFilters({}))).map(row=>row.atlas_match_id),['arrest']);
+});
 
 test('Deep Search picks in-scope database events that concern the question as primary evidence',()=>{
   const c=deepSearchContext();

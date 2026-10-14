@@ -18,6 +18,9 @@ counts come from counter-terrorism and arrest reports, and the 24h Key
 Developments link to events of any category -- all without downloading the
 whole database.
 
+The retired Judicial collection never enters either event array or the
+database summary, even when publishing a pre-migration source snapshot.
+
 Like events-lite.json it is DERIVED at publication time from the events.json
 being deployed and never committed. The map falls back to events-lite.json
 (filtering it the same way) when this file is missing or unusable.
@@ -37,6 +40,9 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from retired_categories import active_event, is_retired_judicial_event  # noqa: E402
 FORMAT = "events-map-v1"
 MAP_TYPES = ("ATTACK", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT")
 # The map's longest period (180 days) plus a day of slack: the site is
@@ -67,7 +73,8 @@ def is_map_attack(event: dict) -> bool:
 
 
 def database_summary(events: list[dict]) -> dict:
-    visible = [event for event in events if event.get("excluded_from_map") is not True]
+    visible = [active_event(event) for event in events if event.get("excluded_from_map") is not True
+               and not is_retired_judicial_event(event)]
     by_category = Counter(event_categories(event)[0] for event in visible if event_categories(event))
     return {
         "total_events": len(visible),
@@ -111,6 +118,9 @@ def build_map(database: dict, excluded: list[str], now: datetime | None = None) 
     for index, event in enumerate(events):
         if not isinstance(event, dict):
             raise ValueError(f"Event #{index} is not an object.")
+        if is_retired_judicial_event(event):
+            continue
+        event = active_event(event)
         lite_event = {name: value for name, value in event.items() if name not in drop}
         if is_map_attack(event):
             # Unlocated attacks (excluded_from_map) stay too: the map never
@@ -126,11 +136,14 @@ def build_map(database: dict, excluded: list[str], now: datetime | None = None) 
     output["events"] = map_events
     output["recent_events"] = recent_events
     output["database_summary"] = database_summary(events)
+    if "number_of_events" in output:
+        output["number_of_events"] = sum(not is_retired_judicial_event(event) for event in events)
     output["map"] = {
         "format": FORMAT,
         "filter": "executed attacks, attempted attacks and disrupted plots",
         "recent_events_days": RECENT_DAYS,
         "source_event_count": len(events),
+        "retired_judicial_count": sum(is_retired_judicial_event(event) for event in events),
         "excluded_fields": excluded,
     }
     return output
@@ -138,15 +151,20 @@ def build_map(database: dict, excluded: list[str], now: datetime | None = None) 
 
 def validate(output: dict, database: dict) -> None:
     for index, event in enumerate(output["events"]):
+        if is_retired_judicial_event(event):
+            raise ValueError(f"Map event #{index} belongs to the retired Judicial collection.")
         if not is_map_attack(event):
             raise ValueError(f"Map event #{index} is not an attack.")
         for name in lite.REQUIRED:
             if name not in event:
                 raise ValueError(f"Map event #{index} lost required field {name}.")
     for index, event in enumerate(output["recent_events"]):
+        if is_retired_judicial_event(event):
+            raise ValueError(f"Recent event #{index} belongs to the retired Judicial collection.")
         if is_map_attack(event):
             raise ValueError(f"Recent event #{index} is an attack; attacks belong in events.")
-    expected = sum(1 for event in database["events"] if isinstance(event, dict) and is_map_attack(event))
+    expected = sum(1 for event in database["events"] if isinstance(event, dict)
+                   and not is_retired_judicial_event(event) and is_map_attack(event))
     if len(output["events"]) != expected:
         raise ValueError(f"Map has {len(output['events'])} events but the source has {expected} attacks.")
     for key in database:

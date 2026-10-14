@@ -5,7 +5,7 @@
 // context than the curated events alone. Everything here degrades to "no
 // context" rather than failing a report: a missing binding, an empty corpus
 // or a D1 error all return { available: false, items: [] }.
-import { cleanText, isSameStory } from "./shared.js";
+import { cleanText, isSameStory, isRetiredJudicialEvent } from "./shared.js";
 
 const MAX_RELATED_ITEMS = 24;
 const MAX_THEMATIC_ITEMS = 24;
@@ -19,11 +19,40 @@ const MAX_SEARCH_ACTORS = 6;
 const UNATTRIBUTED_ACTOR = /^(unknown|unidentified|unattributed|unclaimed|none|n\/a|other|various|multiple)\b/i;
 
 const COLUMNS = `ba.url, ba.kind, ba.title, ba.summary, ba.source, ba.published, ba.collected_at,
-  ba.country, ba.actor_group, ba.parent_incident_id, ba.ai_relevance_reason`;
+  ba.country, ba.actor_group, ba.parent_incident_id, ba.ai_relevance_reason,
+  ba.category, ba.categories, ba.primary_event_type`;
 
 // Reviews Gemini scored 0 have no counter-terrorism content at all; the sync
 // no longer stores them (tools/archive_dedup.py) and never serves the old ones.
 const NOT_NOISE = "COALESCE(ba.ai_relevance_score, 1) <> 0";
+
+// Apply the retired scope before LIMIT so old rows awaiting the offline
+// cleanup cannot consume report evidence slots. Explicit operational types
+// remain authoritative, including arrests with old Judicial metadata.
+const NOT_RETIRED_JUDICIAL = `UPPER(TRIM(COALESCE(ba.primary_event_type, ''))) <> 'JUDICIAL'
+  AND NOT (
+    UPPER(TRIM(COALESCE(ba.primary_event_type, ''))) IN ('', 'OTHER_CT')
+    AND CASE WHEN json_valid(ba.categories) THEN
+      CASE WHEN json_type(ba.categories) = 'array' AND json_array_length(ba.categories) > 0 THEN
+        EXISTS (
+          SELECT 1 FROM json_each(ba.categories) AS topic
+          WHERE LOWER(REPLACE(TRIM(COALESCE(topic.value, '')), ' ', '')) IN ('legal/judicial', 'judicial')
+        ) AND NOT EXISTS (
+          SELECT 1 FROM json_each(ba.categories) AS topic
+          WHERE TRIM(COALESCE(topic.value, '')) <> ''
+            AND LOWER(REPLACE(TRIM(topic.value), ' ', '')) NOT IN ('legal/judicial', 'judicial')
+        )
+      ELSE LOWER(REPLACE(TRIM(COALESCE(ba.category, '')), ' ', '')) IN ('legal/judicial', 'judicial') END
+    ELSE LOWER(REPLACE(TRIM(COALESCE(ba.category, '')), ' ', '')) IN ('legal/judicial', 'judicial') END
+  )`;
+
+function isRetiredCorpusRow(row) {
+  let categories = row?.categories;
+  if (typeof categories === "string") {
+    try { categories = JSON.parse(categories); } catch (_) { categories = []; }
+  }
+  return isRetiredJudicialEvent({ ...row, categories });
+}
 
 function topValues(values, limit) {
   const counts = new Map();
@@ -78,6 +107,7 @@ async function relatedArticles(db, events) {
         ROW_NUMBER() OVER (PARTITION BY ba.parent_incident_id ORDER BY ba.published DESC) AS rn
       FROM background_articles AS ba
       WHERE ba.kind = 'related_article' AND ba.parent_incident_id IN (${placeholders})
+        AND ${NOT_RETIRED_JUDICIAL}
     ) WHERE rn <= ${RELATED_PER_INCIDENT}
     ORDER BY published DESC
     LIMIT ${MAX_RELATED_ITEMS}`;
@@ -106,6 +136,7 @@ async function thematicArticles(db, events, start, end) {
       AND COALESCE(ba.published, ba.collected_at) <= ?
       AND ${otherIncidents}
       AND ${NOT_NOISE}
+      AND ${NOT_RETIRED_JUDICIAL}
     ORDER BY background_articles_fts.rank
     LIMIT ${MAX_THEMATIC_ITEMS}`;
   const result = await db.prepare(sql).bind(match, start.toISOString(), end.toISOString(), ...incidentIds).all();
@@ -135,6 +166,7 @@ function toContextItems(rows, events) {
 
   const items = [];
   for (const row of rows) {
+    if (isRetiredCorpusRow(row)) continue;
     const url = cleanText(row?.url, 1200);
     const title = cleanText(row?.title, 240);
     if (!url || !title) continue;
@@ -240,10 +272,11 @@ async function searchCorpusForDeepSearch(env, { plan, start, end, searchQuery })
         AND COALESCE(ba.published, ba.collected_at) >= ?
         AND COALESCE(ba.published, ba.collected_at) <= ?
         AND ${NOT_NOISE}
+        AND ${NOT_RETIRED_JUDICIAL}
       ORDER BY background_articles_fts.rank
       LIMIT ${MAX_DEEP_SEARCH_CORPUS_ROWS}`;
     const result = await db.prepare(sql).bind(match, start.toISOString(), end.toISOString()).all();
-    const rows = (result?.results || []).map(row => {
+    const rows = (result?.results || []).filter(row => !isRetiredCorpusRow(row)).map(row => {
       const kind = cleanText(row.kind, 40);
       return {
         title: cleanText(row.title, 500),

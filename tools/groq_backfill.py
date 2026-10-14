@@ -51,8 +51,10 @@ that event_id verbatim. The current_categories are search hints, NOT proof.
 Assess whether the article ITSELF reports a concrete NEW operational event:
 attack, attempted attack, disrupted plot, combat CT raid, non-combat arrest,
 seizure, terrorism financing action, weapons/CBRN incident, cyber/AI-enabled
-terrorism, investigation or judicial development. New developments in an older
-case are updates, not fresh attacks. Reject generic opinion, analyses,
+terrorism or investigation. New developments in an older
+case are updates, not fresh attacks. Reject standalone charges, trials, convictions, sentencing, appeals, court
+rulings and extraditions; keep genuine new arrests or operations when court
+history is only background. Reject generic opinion, analyses,
 anniversaries, diplomacy, ordinary non-terrorism crime, natural outbreaks,
 industrial accidents, nuclear energy policy, arms control and interstate-only
 military/cyber operations. Concrete Taliban security operations WITHIN
@@ -77,7 +79,7 @@ operation by security forces. 'Arrests' means non-combat custody. 'Maritime
 Piracy' requires actual piracy, hijacking, armed robbery at sea or crew
 abduction; mere Houthi missiles against shipping count as Attacks, not piracy.
 Radiological/Nuclear, Chemicals and Explosives, Biological Terrorism require
-a concrete CT nexus, including plots, seizures and judicial proceedings.
+a concrete CT nexus, including plots and seizures.
 
 Return faithful English translations of each original headline and at most
 two factual English summary sentences. Preserve the original title's factual
@@ -89,11 +91,11 @@ unknown. Use ISIS, ISIS-K, ISWAP, Al-Qaeda, AQIM, AQAP, JNIM, TTP, Taliban,
 Al-Shabaab etc. consistently, without merging distinct branches.
 primary_event_type reflects the new action in THIS news record:
 ATTACK / ATTEMPTED_ATTACK / DISRUPTED_PLOT / CT_OPERATION / ARREST /
-JUDICIAL / FINANCING / WEAPONS / ONLINE_CYBER_AI / CBRN / PIRACY /
+FINANCING / WEAPONS / ONLINE_CYBER_AI / CBRN / PIRACY /
 OTHER_CT. is_attack true ONLY for ACTUAL completed non-state violent attack.
 incident_anchor identifies the real underlying incident/case across updates.
 update_type = INITIAL / FOLLOW_UP / ARREST_UPDATE / INVESTIGATION_UPDATE /
-JUDICIAL_UPDATE / OTHER_UPDATE. Return cbrn_subgroups=['RADNUC'] only for
+OTHER_UPDATE. Return cbrn_subgroups=['RADNUC'] only for
 genuine CT-relevant radiological/nuclear matters, [] otherwise.
 Reason: one short factual English explanation, no operational speculation.
 Never manufacture missing evidence or add unsupported country names.
