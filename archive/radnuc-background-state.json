@@ -210,9 +210,248 @@
   "dd4b8bb9b9a54526": "2026-10-14T09:32:30.278636+00:00",
   "69b251969eb3c5ba": "2026-10-14T09:32:30.278636+00:00",
   "0c0982d3da7ef4f2": "2026-10-14T09:32:30.278636+00:00",
-  "22fa6e029a612992": "2026-10-14T09:32:30.278636+00:00"
+  "22fa6e029a612992": "2026-10-14T09:32:30.278636+00:00",
+  "bdbe94c5f6b2bd84": "2026-10-14T13:54:22.422808+00:00",
+  "a87b2346b46ad5af": "2026-10-14T13:54:22.422808+00:00",
+  "29110f9eb89f3080": "2026-10-14T13:54:22.422808+00:00",
+  "59813401b20f8174": "2026-10-14T13:54:22.422808+00:00",
+  "2e943e2c5a64743a": "2026-10-14T13:54:22.422808+00:00",
+  "2c31efd595700458": "2026-10-14T13:54:22.422808+00:00",
+  "3f8babb0f30900cb": "2026-10-14T13:54:22.422808+00:00",
+  "8f764b81d89e89dc": "2026-10-14T13:54:22.422808+00:00"
  },
  "pending": [
+  {
+   "id": "6d6f50015ddf0215",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "申万宏源核能产业投融资大会成功举办",
+   "summary": "申万宏源核能产业投融资大会成功举办 搜狐",
+   "original_title": "申万宏源核能产业投融资大会成功举办",
+   "original_summary": "申万宏源核能产业投融资大会成功举办 搜狐",
+   "original_language": "zh",
+   "collection_language": "zh",
+   "collection_language_name": "Chinese (Simplified)",
+   "collection_locale": "CN:zh-Hans",
+   "published": "2026-10-14T12:05:53+00:00",
+   "source": "搜狐",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOUTFNWFNPNzNsaFBobnpRSFVpMlVLUkpCQjBLVTFwcFFjRU9iV1lkNE5RVnZzdjFxU2g5SDR3WGxncXUwbmF3WEJhTFJKS1NuR2tOeUJQNjJHdl9QU3pNWnl0UFA5Wk9BMGJNMjN2dEJoUkVGVUhPZEZDWjlSMVJZVlFCMXNsY2E1SGdpeA?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "2b8d341022f022e6cf14f0426ebd2073043bc5a17382b3b5914c3e43c3c8ea5e"
+   ],
+   "background_query_language": "zh"
+  },
+  {
+   "id": "d795c2d8c0438718",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "SK集团考虑对美国核电企业投资，投资规模预计达千亿级别",
+   "summary": "SK集团考虑对美国核电企业投资，投资规模预计达千亿级别 亚洲日报",
+   "original_title": "SK集团考虑对美国核电企业投资，投资规模预计达千亿级别",
+   "original_summary": "SK集团考虑对美国核电企业投资，投资规模预计达千亿级别 亚洲日报",
+   "original_language": "zh",
+   "collection_language": "zh",
+   "collection_language_name": "Chinese (Simplified)",
+   "collection_locale": "CN:zh-Hans",
+   "published": "2026-10-14T11:28:00+00:00",
+   "source": "亚洲日报",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9pdlZEaDRhR3hfVlE1MldVTmJnZTZHYXNDb2R5SWtVVHZqTkxmZ2RzRmx5Ylh2WWM5aGdRbnc4dWZ0bnJJVWZFQjRBS2VzamZRcWVCM09peFlHdkE?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "6af42e29ebed9f0f17b372d5aa0ffad31285f0cfe055327ecebd853deab76a2e"
+   ],
+   "background_query_language": "zh"
+  },
+  {
+   "id": "018518d268a60bab",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "[ETF出口时代] 韩华资产运用将向欧洲和中东出口防务和制造业ETF",
+   "summary": "[ETF出口时代] 韩华资产运用将向欧洲和中东出口防务和制造业ETF 亚洲日报",
+   "original_title": "[ETF出口时代] 韩华资产运用将向欧洲和中东出口防务和制造业ETF",
+   "original_summary": "[ETF出口时代] 韩华资产运用将向欧洲和中东出口防务和制造业ETF 亚洲日报",
+   "original_language": "zh",
+   "collection_language": "zh",
+   "collection_language_name": "Chinese (Simplified)",
+   "collection_locale": "CN:zh-Hans",
+   "published": "2026-10-14T09:04:20+00:00",
+   "source": "亚洲日报",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBQZmxhZUwwSWVUSEdxMmt0RUNoVGtXSW8tYVhYTU9DdHhVOUZCRXRreWpQeUEzX3FvdVk3cTdWVnBrY2NqTzJpcERsS3o0OWgwQnZLeUFDZDFWSjg?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "cd92ecf189749f0cd562a3e5c9ad76ec7ffa60b5bad56baf12243fbfb01008fb"
+   ],
+   "background_query_language": "zh"
+  },
+  {
+   "id": "a92e81321096c989",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "配套峰会展望核能新质生产力 2026上海核能新质生产力发展大会同步启幕",
+   "summary": "配套峰会展望核能新质生产力 2026上海核能新质生产力发展大会同步启幕 上海市人民政府新闻办公室",
+   "original_title": "配套峰会展望核能新质生产力 2026上海核能新质生产力发展大会同步启幕",
+   "original_summary": "配套峰会展望核能新质生产力 2026上海核能新质生产力发展大会同步启幕 上海市人民政府新闻办公室",
+   "original_language": "zh",
+   "collection_language": "zh",
+   "collection_language_name": "Chinese (Simplified)",
+   "collection_locale": "CN:zh-Hans",
+   "published": "2026-10-14T04:24:52+00:00",
+   "source": "上海市人民政府新闻办公室",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNWGxROHBjM01hNERTN2VPc3h3a2RPMDJkc3laOWhnUkc2Q2tXT1RkbW1GaW9XQkZ0dXV1S2RjWDVqclU3aC1XOVZTMUgzVG9QLVY3NDVQS1hQN0c4YXFMTFFHTi14SFBtdTFFYjZKaDU5X1lJalpvSlRjaVduX213aGZjYVpXRU94Z01oWGJpR2xZMEtXQzVON2NR?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "f639e7b937d95c897879755fc1fd3e9ed10dac128c3099f3e99b132b17749b37"
+   ],
+   "background_query_language": "zh"
+  },
+  {
+   "id": "e510666289f52782",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "【起步奋进“十五五”】四川：培育新质生产力 推动高质量发展",
+   "summary": "【起步奋进“十五五”】四川：培育新质生产力 推动高质量发展 搜狐",
+   "original_title": "【起步奋进“十五五”】四川：培育新质生产力 推动高质量发展",
+   "original_summary": "【起步奋进“十五五”】四川：培育新质生产力 推动高质量发展 搜狐",
+   "original_language": "zh",
+   "collection_language": "zh",
+   "collection_language_name": "Chinese (Simplified)",
+   "collection_locale": "CN:zh-Hans",
+   "published": "2026-10-14T04:18:00+00:00",
+   "source": "搜狐",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQT2p1VndtMFBleTNxTUVoSVRYcWFERVpTVHlTOThWVEh0WVFSZXRXbXN2ZXFpb29TLUtPbjFJZ0d2b1hNM25jbndiYkZwVjBzS1lWMjV3SWRhbkY4UkYwdGkyU1k0ZnBLekViN1dSRHNaYndQNzZwREJ5eHZRR1QyenA5MEEydzdf?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "3adffd996bc23d8ab10fc5306ddef59aaf41e520d2735a2e89a4f56bd8fe7677"
+   ],
+   "background_query_language": "zh"
+  },
+  {
+   "id": "f4af0753b55b7bfe",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "韩国原子力环境公团新任理事长Lee Jinho就职：“确保高放射性废物处置场选址工作顺利推进”",
+   "summary": "韩国原子力环境公团新任理事长Lee Jinho就职：“确保高放射性废物处置场选址工作顺利推进” 아시아경제",
+   "original_title": "韩国原子力环境公团新任理事长Lee Jinho就职：“确保高放射性废物处置场选址工作顺利推进”",
+   "original_summary": "韩国原子力环境公团新任理事长Lee Jinho就职：“确保高放射性废物处置场选址工作顺利推进” 아시아경제",
+   "original_language": "zh",
+   "collection_language": "zh",
+   "collection_language_name": "Chinese (Simplified)",
+   "collection_locale": "CN:zh-Hans",
+   "published": "2026-10-14T03:15:53+00:00",
+   "source": "아시아경제",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9Mc2hzZ0FHS3kwR3MzWXY1RzUxRUpvV2JUdnloc1VURzN3WFpNRnVJX01RRVZjVUhGZENpV00zM0ZNcUd6Y0NHMmdWbXlYSVRNa29YY1dYS3JsR28yS29CMDRFMS0?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "aac0320941b94c9c2b8ee75d665f9af2478228d97050581181444afdbd594ceb"
+   ],
+   "background_query_language": "zh"
+  },
+  {
+   "id": "4ae2646bdcd7d14f",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "放射技师在医学影像辐射风险沟通中的策略与障碍：一项范围综述",
+   "summary": "放射技师在医学影像辐射风险沟通中的策略与障碍：一项范围综述 生物通",
+   "original_title": "放射技师在医学影像辐射风险沟通中的策略与障碍：一项范围综述",
+   "original_summary": "放射技师在医学影像辐射风险沟通中的策略与障碍：一项范围综述 生物通",
+   "original_language": "zh",
+   "collection_language": "zh",
+   "collection_language_name": "Chinese (Simplified)",
+   "collection_locale": "CN:zh-Hans",
+   "published": "2026-10-14T00:00:40+00:00",
+   "source": "生物通",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE12RGd1dGNmdDdjUnhoekxNbDhIYmc2LXZZTTZSX3FROTVnX2pLMUNvOWtaNzg5UEZmeWhZVUtsLUFXYzZxZU5IbDlmUzJYSktSdkZsSXBMUjhSSlc4aThrWWRyUE1pU1g4d0RYVWV3?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "d01f2404c8bf3186365bdfa8ce7b1d268edaf7cab84d7f259d128b35f2c54a8a"
+   ],
+   "background_query_language": "zh"
+  },
   {
    "id": "a7d61b0cf88366fe",
    "category": "Radiological/Nuclear",
@@ -2854,6 +3093,39 @@
    "background_query_language": "bn"
   },
   {
+   "id": "7a643f53d14cecad",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "越南 AcceleraRtes 核电推力作为不断增长的电力需求再塑造能源战略 - 由球面透视的专家观点",
+   "summary": "越南 AcceleraRtes 核电推力作为不断增长的电力需求再塑造能源战略 - 由球面透视的专家观点 Spherical Insights",
+   "original_title": "越南 AcceleraRtes 核电推力作为不断增长的电力需求再塑造能源战略 - 由球面透视的专家观点",
+   "original_summary": "越南 AcceleraRtes 核电推力作为不断增长的电力需求再塑造能源战略 - 由球面透视的专家观点 Spherical Insights",
+   "original_language": "zh",
+   "collection_language": "zh",
+   "collection_language_name": "Chinese (Simplified)",
+   "collection_locale": "CN:zh-Hans",
+   "published": "2026-10-13T10:55:13+00:00",
+   "source": "Spherical Insights",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNNDg4MUMyc1NuM0x0WFhldVdMZzZKNzNNMHVQemlLTENCQVExVTJVNEU2UW9kbFhnTzR6TDFpeTBsdU1lcjZ3bE0wcXdubFVtdlprQnAzNkpwMjJNWXJOWUdmcVBTb0QwRlp2bmV6T0pXVkZXWU80ekhMSU1SQVAxeEhpbEcyT29STjFVTk5KdkRRTm5wY0toUkxweTBXdHFuSVdwelE2S3REWE1DUngxTktvT1MzVWdIN05TWFhwNG04Z3BNeTRBVkppWFNGOGI0NFE?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "94ab1a317805040f25ae6068d81f33efcebc444911317a4c78d50e6899244d3e"
+   ],
+   "background_query_language": "zh"
+  },
+  {
    "id": "2da6680743cdb6d6",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -4568,6 +4840,39 @@
     "8d7634d8f54695c4cf2c4b5b98453699b20d8633debf42bf1f47d0061980bfb5"
    ],
    "background_query_language": "ar"
+  },
+  {
+   "id": "9c94685043087e6a",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "2026深圳核博会丨苏州八匹马超导：攻坚超导核心装备，助力核能创新突破",
+   "summary": "2026深圳核博会丨苏州八匹马超导：攻坚超导核心装备，助力核能创新突破 深圳核博会",
+   "original_title": "2026深圳核博会丨苏州八匹马超导：攻坚超导核心装备，助力核能创新突破",
+   "original_summary": "2026深圳核博会丨苏州八匹马超导：攻坚超导核心装备，助力核能创新突破 深圳核博会",
+   "original_language": "zh",
+   "collection_language": "zh",
+   "collection_language_name": "Chinese (Simplified)",
+   "collection_locale": "CN:zh-Hans",
+   "published": "2026-10-13T07:15:15+00:00",
+   "source": "深圳核博会",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5JOUtPMG94ZkhsSUM0Wmw2SUtFc2MyTTFyamFWRmVLZDhQWmE2R2tpRnVkRVlSdjFJT1dVWGdCSk9ZR1BJWUY5TldTZVNzT3IwUWhlMg?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "5a9d78b23c7784f9c476f71b6214f3b5eecc51755c4cc5690df600f28fa99097"
+   ],
+   "background_query_language": "zh"
   },
   {
    "id": "0e82444f80601759",
@@ -8035,6 +8340,39 @@
    "background_query_language": "pt"
   },
   {
+   "id": "c3127f1e016f7e3d",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "美总统称可能很快会打击伊朗“镐山”核设施",
+   "summary": "美总统称可能很快会打击伊朗“镐山”核设施 新浪新闻_手机新浪网",
+   "original_title": "美总统称可能很快会打击伊朗“镐山”核设施",
+   "original_summary": "美总统称可能很快会打击伊朗“镐山”核设施 新浪新闻_手机新浪网",
+   "original_language": "zh",
+   "collection_language": "zh",
+   "collection_language_name": "Chinese (Simplified)",
+   "collection_locale": "CN:zh-Hans",
+   "published": "2026-10-12T18:23:00+00:00",
+   "source": "新浪新闻_手机新浪网",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMizgNBVV95cUxPU1R6WDRwV192MkE4TXU3S3JfbDd6MTBWNHRucUdSWFZTWUo4QkRnY29LSmNlaUt2ZGRWRTkzVURCY25RdXp1cG8tTkNDNGEyNUlUZ3B5eHNZUXlKbzUtU0JMTUIxWVFHTkhaTDUtYkZjUnpBUFpBeXhoZzMzMmlKZG9UNGtwaEc4TjVnd1Fhb3FWNUlMN2VvM3Q5X3g2SFd3UUY1ZVpWRmY4em1EVklRRWNRQkdZRmdsbXF6NzRiN195eHpGYmFmc1dDeEJLZ0VvMURpSkx6ZkIwS0wwM3pPc0ZZbXV3RTNSTkdaS1hZdzhsUVdUWUpaTEN2cGlDVFk1ZUVOZmpFYmNlQ1ByYTlXTzR0bmNTZVVUeEV6cWFNYVU2NExYbHF3YXd3WkQ3U2ZhUU5vOTVnRHRqOTk3T01lOE9ManV4SHFkXzlpUEN1c1hqX0M1LUNKaXI3djlSdUl0aTZzMEVCV2g5RkptT0tMRkhocU5wZHJhUldiRnhrNHRIaXBQYjFSMlF0YXJkaW5mWHVSdkV5ZHFLZkkyM3kwcjJCS3JNZ01yMk1QNHBhMm1nTktlaUVKTV9SWXQtZWNZd3NhVHJLbjMzTURXWmc?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "5c396da6d3034ee9c0fd6a87d9b81656c76f83ddeb1209808b056fe644fdfa92"
+   ],
+   "background_query_language": "zh"
+  },
+  {
    "id": "88aa26976e7a028c",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -8528,6 +8866,39 @@
     "2f4e9eaa10ddcfd2ccd94051b5bd69e740226eef33e75e8ae0f31f5b429bf114"
    ],
    "background_query_language": "fr"
+  },
+  {
+   "id": "259a0cf7d309380f",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "华尔街投行测算：到2030年，美国还需要多少电力？",
+   "summary": "华尔街投行测算：到2030年，美国还需要多少电力？ 新浪财经",
+   "original_title": "华尔街投行测算：到2030年，美国还需要多少电力？",
+   "original_summary": "华尔街投行测算：到2030年，美国还需要多少电力？ 新浪财经",
+   "original_language": "zh",
+   "collection_language": "zh",
+   "collection_language_name": "Chinese (Simplified)",
+   "collection_locale": "CN:zh-Hans",
+   "published": "2026-10-12T16:31:36+00:00",
+   "source": "新浪财经",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNcVIyN2plY2FpRkVScFJiU1F4NXBaMmhGNnVsWTZqY0s5ZjhzZjNrOWN0X1M4a3V2bWJoMS01S3lxVTJVZVVvTnVzMTR3M3JUSndReEN3M29ibzYxT3hSVUZybk5ZUVJlTlBfRnEweXVqczdxQi1FRnpqMERDckRadFZZcXBad0s1MlE?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "6409a0589de8e493d26d31638fb343e2a746b97db2685653b5a6faac706ced87"
+   ],
+   "background_query_language": "zh"
   },
   {
    "id": "76ac073c94dd0c5e",
@@ -10510,6 +10881,39 @@
    "background_query_language": "en"
   },
   {
+   "id": "abffb0f2f07c4493",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Anggota DEN nilai Indonesia punya modal awal untuk kembangkan energi nuklir",
+   "summary": "Anggota DEN nilai Indonesia punya modal awal untuk kembangkan energi nuklir ANTARA News Megapolitan",
+   "original_title": "Anggota DEN nilai Indonesia punya modal awal untuk kembangkan energi nuklir",
+   "original_summary": "Anggota DEN nilai Indonesia punya modal awal untuk kembangkan energi nuklir ANTARA News Megapolitan",
+   "original_language": "id",
+   "collection_language": "id",
+   "collection_language_name": "Indonesian",
+   "collection_locale": "ID:id",
+   "published": "2026-10-12T12:45:02+00:00",
+   "source": "ANTARA News Megapolitan",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPRTFUWGdfSFJXRzRaUTl6SVVhNGtSbXBfOXBqc040Z3dndEdTVE1MTGszLWJKN0FYVUJIOXFkNEVwZ2VwcU50TzBMZ2dCZ3RmVVJ0MFdnMVpkN29ySEhtcGREOXdmYUpHcXhMVVhabGpMSG8zUUJYSV9jQi1oVDFYd0Y0dzd2VzdGWjIxSzJDUlpMZnpmNk1oNHlNVnJxek1ZVVdQcTVEbk8xREYyTDJOZHVFMHFkemRGblFJcmZia056UUJuYlNB?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "0729d95bc3725d472cb03a3024ae8819e2d825693ed375b64e0fed67ca0a2f5c"
+   ],
+   "background_query_language": "id"
+  },
+  {
    "id": "f243cd83df11c8f7",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -10772,6 +11176,39 @@
     "1208e4595fd088a7fef2dc082cef13a73056233ad60b91822ece353fa57321f0"
    ],
    "background_query_language": "ar"
+  },
+  {
+   "id": "ac16be5d35820aee",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "年轻劳动力：解决越南核电问题的“关键”。",
+   "summary": "年轻劳动力：解决越南核电问题的“关键”。 Vietnam.vn",
+   "original_title": "年轻劳动力：解决越南核电问题的“关键”。",
+   "original_summary": "年轻劳动力：解决越南核电问题的“关键”。 Vietnam.vn",
+   "original_language": "zh",
+   "collection_language": "zh",
+   "collection_language_name": "Chinese (Simplified)",
+   "collection_locale": "CN:zh-Hans",
+   "published": "2026-10-12T11:45:40+00:00",
+   "source": "Vietnam.vn",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxOc0hvSUlqNVRKcmJ4Q1dmcm5iTWRGYkFnSVRPUE1Nb0RVaFo4aUdzTUpuQUhhVWRSSUNLVExzbDZ4c0pnV3ZpUDlKNzh1MHhZYVRCT3M4SjhuWndXU1JOc2Q4TzQydThOdlpSRjBFVnczMnViZ0tqU3RNTVpXRUh6VmJ6bWxjR2s4aktkVE0tcEo?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "9f88739272400fad485a57c4e7f2acdb3f4cf05451ded6514a52b037b4996a10"
+   ],
+   "background_query_language": "zh"
   },
   {
    "id": "c01d5e41732066c7",
@@ -12292,6 +12729,39 @@
    "background_query_language": "bn"
   },
   {
+   "id": "ee98fa0fb1053304",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "韩国Gaon Cable拟在美国增设核电专用电缆生产线",
+   "summary": "韩国Gaon Cable拟在美国增设核电专用电缆生产线 维度网",
+   "original_title": "韩国Gaon Cable拟在美国增设核电专用电缆生产线",
+   "original_summary": "韩国Gaon Cable拟在美国增设核电专用电缆生产线 维度网",
+   "original_language": "zh",
+   "collection_language": "zh",
+   "collection_language_name": "Chinese (Simplified)",
+   "collection_locale": "CN:zh-Hans",
+   "published": "2026-10-12T07:33:00+00:00",
+   "source": "维度网",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5uQThnUUJLb0thN2RLSGxuUnUxemIwTThnakcwTGdQdk5Nd0hzZXBPYzNvOURZbWQyVkJNb1BvNzF1Q2xRNEZGRlRrUnFic21aa0FaZnZ4Sk0?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "f8495f36e0044e8e4501a84c3be86dfaa6ed7c1f3df8b82d499232b284c92980"
+   ],
+   "background_query_language": "zh"
+  },
+  {
    "id": "4b85f25100ec3187",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -12554,6 +13024,39 @@
     "58ac60689a181c6fc7bb8250ddfec2c6d924377f2c357f425341f205794abc9e"
    ],
    "background_query_language": "ar"
+  },
+  {
+   "id": "94366194f9081082",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Iran tegaskan tak akan tanggalkan nuklir atas desakan penindas",
+   "summary": "Iran tegaskan tak akan tanggalkan nuklir atas desakan penindas ANTARA News",
+   "original_title": "Iran tegaskan tak akan tanggalkan nuklir atas desakan penindas",
+   "original_summary": "Iran tegaskan tak akan tanggalkan nuklir atas desakan penindas ANTARA News",
+   "original_language": "id",
+   "collection_language": "id",
+   "collection_language_name": "Indonesian",
+   "collection_locale": "ID:id",
+   "published": "2026-10-12T06:56:33+00:00",
+   "source": "ANTARA News",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNeUhWYVg0Nk41bzR1TVlubjlpQnBSN2RTQl96OW5kVkgyRzRUUU9PWXh5aXI3aC0zYVN4S3MxVGM3a19TWUFubXQ1aXgtYWp2N0N6ZkwybjBPNXRvZkZmczl4U2pjLXhzNzdyWUZtS3Q1UHZlUzFPNFlnUk14aW5RNDU5LWI0cW1LNFZEakU1SjVHa003dkEyRlZFcFNpUGhnMGk1NWtkONIBqgFBVV95cUxPWDJtaXdnUnk2UHpPaEYxT1lQUGdmcVR2aklfa0RJaDFURVlWd0d1Rm1mbFoyQzJ2SUU1T0hYTWZ1QUtsNjVLOHZXcTEyai1yYjVacm50RWNtckhiTWZtN2pOVVpSVHBYUjV3X2RUZXZQR0lPZ2tUR1RkSVhPZzVvdm1fWFZKOFhyenNnRWgwRl9XMWZSOUNLZHFLdkUtWV91QjVCTmV6LS14dw?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "81bb6ce53fdab584d8fd3489017058e64ac9c84a96782d938c93f8df66aa3c2d"
+   ],
+   "background_query_language": "id"
   },
   {
    "id": "d1d1667f557b29da",
@@ -12851,6 +13354,39 @@
     "c806323e4ac451813cb278da0de496ace0cf424e9d509ac8307f9b554d528b09"
    ],
    "background_query_language": "ar"
+  },
+  {
+   "id": "be96cb2cf9c3bebe",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Deep Fission kembangkan reaktor nuklir bawah ta...",
+   "summary": "Deep Fission kembangkan reaktor nuklir bawah ta... Pluang",
+   "original_title": "Deep Fission kembangkan reaktor nuklir bawah ta...",
+   "original_summary": "Deep Fission kembangkan reaktor nuklir bawah ta... Pluang",
+   "original_language": "id",
+   "collection_language": "id",
+   "collection_language_name": "Indonesian",
+   "collection_locale": "ID:id",
+   "published": "2026-10-12T05:27:18+00:00",
+   "source": "Pluang",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNYUxHdTBMR2VWUkI4Y19VRmphUVg5QWp3ZWYyMW16U01MX296djFPQ1hYSnpfdVpnMU8zdEk0cUNOcHRZRktfUDhPNzN6c3Z4TkR1R0tJQTlCVkZmVFM0M09tMXVGLWJubHVaQUdGMHJPdVB1eW91b1JKNzB0N2xseWwyR1VSd3hqS1FOV0MxYjRpSTJIYjNMMm1wOWc?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "14a52f0df316573d558785d27cb7cbaccc85f117ca2fe7ba3ab9ea59bec372ec"
+   ],
+   "background_query_language": "id"
   },
   {
    "id": "90dd80945f6518e0",
@@ -13216,6 +13752,39 @@
    "background_query_language": "hi"
   },
   {
+   "id": "bef00633290b39b0",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Mengelola Listrik dari Energi Nuklir Secara Aman demi Ketahanan Nasional",
+   "summary": "Mengelola Listrik dari Energi Nuklir Secara Aman demi Ketahanan Nasional Minews ID",
+   "original_title": "Mengelola Listrik dari Energi Nuklir Secara Aman demi Ketahanan Nasional",
+   "original_summary": "Mengelola Listrik dari Energi Nuklir Secara Aman demi Ketahanan Nasional Minews ID",
+   "original_language": "id",
+   "collection_language": "id",
+   "collection_language_name": "Indonesian",
+   "collection_locale": "ID:id",
+   "published": "2026-10-12T04:13:06+00:00",
+   "source": "Minews ID",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOSkNacTFoOUR5MU84Q3VYSVZyZFBFcFVfT19SbGx5djljem9vbjdPbWhnMWRPRkFHZl9PT1Vfc2hmTUx6NmVPRHN3SlUyZzVvNU54ZUl1VEppUkFnbFZlMVFIZ0N6OWJNLVlMR0RGcHBKdEpWaDNkdlpRSVFEUHZiQTBJLWQ5dHYwRUthODh0eENVWGF6OF81R21RLTdPVUNjU0E?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "c9fe64881c43ebffe0a5c8f411ec3b40176fe1ad3710cb9aa7af04834081977c"
+   ],
+   "background_query_language": "id"
+  },
+  {
    "id": "49089237127a9814",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -13247,6 +13816,39 @@
     "404c22f715fb27ac9d158a017bbc1db53d8fcd243b38a11a059105031a014142"
    ],
    "background_query_language": "es"
+  },
+  {
+   "id": "c1c12409c96f553d",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Pemerintah Siapkan Pembangkit Listrik Tenaga Nuklir Berkapasitas 7 GW",
+   "summary": "Pemerintah Siapkan Pembangkit Listrik Tenaga Nuklir Berkapasitas 7 GW Minews ID",
+   "original_title": "Pemerintah Siapkan Pembangkit Listrik Tenaga Nuklir Berkapasitas 7 GW",
+   "original_summary": "Pemerintah Siapkan Pembangkit Listrik Tenaga Nuklir Berkapasitas 7 GW Minews ID",
+   "original_language": "id",
+   "collection_language": "id",
+   "collection_language_name": "Indonesian",
+   "collection_locale": "ID:id",
+   "published": "2026-10-12T04:03:46+00:00",
+   "source": "Minews ID",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQZWdoRXJuRnNaRGstcGF3bDlvSld1bXF2S0VTX3M1V2ZoOF92SmQxOHI2OWNFQzVXcTZvNXZOdnBETHpieWxEdkFqNlVsWHRzUlhBSTdSZlBhYkpYd0g0dmhUQmNGM2F0UlhpUFRYQVAtVDdEclFLRml5Nm9ZTmRsLUNZdWR4YnRmbnpmVXBRcngycnAwbEdR?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "f47811e39c22065745d03da5ca12cabaaa8580bf82b5a563009c6a260c7a8990"
+   ],
+   "background_query_language": "id"
   },
   {
    "id": "6abf3dd0256eaab3",
@@ -14800,6 +15402,39 @@
    "background_query_language": "zh-Hant"
   },
   {
+   "id": "4c44804b9d06158d",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "দেশের প্রথম পারমাণবিক বিদ্যুৎকেন্দ্র রূপপুরে সফলভাবে পরমাণু বিক্রিয়া সম্পন্ন",
+   "summary": "দেশের প্রথম পারমাণবিক বিদ্যুৎকেন্দ্র রূপপুরে সফলভাবে পরমাণু বিক্রিয়া সম্পন্ন parbattanews",
+   "original_title": "দেশের প্রথম পারমাণবিক বিদ্যুৎকেন্দ্র রূপপুরে সফলভাবে পরমাণু বিক্রিয়া সম্পন্ন",
+   "original_summary": "দেশের প্রথম পারমাণবিক বিদ্যুৎকেন্দ্র রূপপুরে সফলভাবে পরমাণু বিক্রিয়া সম্পন্ন parbattanews",
+   "original_language": "bn",
+   "collection_language": "bn",
+   "collection_language_name": "Bengali",
+   "collection_locale": "BD:bn",
+   "published": "2026-10-11T16:19:24+00:00",
+   "source": "parbattanews",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMixAJBVV95cUxQV1piR2Fwc1YyaUplUTBsdzBaM1o1eENpLURtdWVqTXpod2NtY0t4NTlvRTdSSG43eWxtMTFTckVXUDNFMnpNQ3VWNkVQbFk3N0NTMWI2RW5vZlRnMEZBeUpCS2pWdHF2bTBBQnNxSmdLbnoxMTVhVW15Y1pHbWF3bG5mLUlMRk1KQU9NVHhVSTRkbGFnOVNJMXlwbFJPTFpDNGQ2Zk1GZFVTU1FJY2hDbGotN0J6dkk5Z0dFLWRrc3ZKY1R4UFhnaEJXdXNIaWlYWjB4aW0zVFBtQ24wcFFfS0dDb3M0X1I0NjNLeXVDZUFySm1SNzlENnFMNW0zVlRSTnlaZ0dXTDhMUkhYaFB1Z25oM1FKd3diWjZzOG8yTkQyZDZ6WmRzOV9lazlzQzhMYV9FZThhM3pFbVo3Y2p5MkZtcVLSAcoCQVVfeXFMTkJxeFNPRVhqdnBwNUphakFVUk1ZZm50NnZrWVRNbk95YlJrMWxWWjUxc243aDgxeGVnNEVqUExwVFM0TkF4SVlBclZWcWRuSzZLa1Z6RDNFc19LVGxJdTlKa0MwOUY5djNiSWk2SlFqc2h2LXFnWjlWd25ObzhPdXl3R19ydU5RZS1HcWNBMVhNTVBRLWFScnQxTEdKTGc5WldCTGdhVEo1MDFoUm5VaDdrZVF1WXoxUERtN3F0RlN1end3WEVHaWcwMlgzQlBTYnJjeUZUeEZ0Q0s1dFRDQlZJVEFXM010eklZTDAtVVJsdmI3aWtnZEN4ZXJ6Nk14bVBqZEFoWThTbDROYkVIaFFsa2RWMVRaUUtzc092a3RCY2pmZjFzM3BrclJvbExZR1UzZkdZVlRBeWFQT0M2eUtzT0JIWXdLbk9B?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "78fb65ad76d10a5f1edcfb7c153d942f734aee834cb12515915bad819579bba0"
+   ],
+   "background_query_language": "bn"
+  },
+  {
    "id": "44a4dccb376a1aa9",
    "category": "Radiological/Nuclear",
    "categories": [
@@ -16087,6 +16722,6 @@
    "background_query_language": "it"
   }
  ],
- "cursor": 41,
- "updated_at": "2026-10-14T09:32:30.278636+00:00"
+ "cursor": 2,
+ "updated_at": "2026-10-14T13:54:22.422808+00:00"
 }

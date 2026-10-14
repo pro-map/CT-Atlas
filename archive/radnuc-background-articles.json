@@ -3,8 +3,101 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-14T09:32:30.278636+00:00",
+ "updated_at": "2026-10-14T13:54:22.422808+00:00",
  "articles": [
+  {
+   "id": "radnuc-background-02deb275a360db34",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNTlhDblo3R0M4YUdjTWFWM3VxZG1GVVNRUEJ0aXV6TWFYdi1CaEdPZXlfcGVtX3hfVFNSSWd4UUdPdEtUNjRQTWFXSlJkQ1E5a21aM1ZVVEdaS2k1TWFFRklST0J6eDFiMTVOd3RZWjU0WGZmank1eUFXNW1ZaVJaTl92RXV1aS00NkE5eENhTlNITDNGdHRoaE1icmo3b1QwblJHWEpIYU11M1BudjUwOXVyOUxrQWZ2NGY2U2tYNXp1UQ?oc=5",
+   "title": "Before Building a Nuclear Power Plant, the Government is Urged to Ensure Public Safety and Protection",
+   "summary": "Advocacy groups have called on the government to prioritize safety and residential protection measures during the development of nuclear power plant projects. The request highlights the need for stringent regulatory oversight before facility construction begins.",
+   "original_title": "Sebelum Bangun PLTN, Pemerintah Diminta Pastikan Keselamatan dan Perlindungan Warga",
+   "original_language": "id",
+   "source": "Tribunnews.com",
+   "published": "2026-10-14T13:48:00+00:00",
+   "collected_at": "2026-10-14T13:54:22.422808+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to national regulatory processes and safety requirements for civilian nuclear facility development."
+  },
+  {
+   "id": "radnuc-background-3c16d6a488376641",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQR000cHdKcWxnaEZnX3VQaTBybnRGZ1BHUjlIUlgyZXcwTlBObndtbXQwUHhVR3ZOV2NNRWtxUkR6Rl80cTVDVFhiQ1ozMTRwUWN6M0xyVDdUYk5XQkd5NzR3QVprWjJqTDR1dkFPdG5LblNobW5SVHVDbmp0WDRhZHM1M0lmN3FiaTZ2M2N3SW5QME4zaXAyNXIxSnI3cW9GSmtSVnZ0Yw?oc=5",
+   "title": "Nuclear Power Plant Development Must Account for Ring of Fire Disaster Risks",
+   "summary": "Discussions on the development of nuclear energy in Indonesia emphasize the requirement to incorporate seismic and geological disaster risks into planning. Safety standards must address the regional vulnerabilities associated with the Ring of Fire.",
+   "original_title": "Pengembangan PLTN Harus Perhitungkan Risiko Bencana Cincin Api",
+   "original_language": "id",
+   "source": "Media Indonesia",
+   "published": "2026-10-14T12:37:16+00:00",
+   "collected_at": "2026-10-14T13:54:22.422808+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Concerns safety regulations and site-specific risk assessments for nuclear power plant construction."
+  },
+  {
+   "id": "radnuc-background-c8bc06bca3b42793",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQM0pnRGdHNHdGWnQzcHg1VGJaanhjX0NHakhtNzFyNy1IWHBYMGt3dHphWmVZdUNFZ1l6Wjg0ZE5TMFZGamNUREhncGEzTlM0czNRNmNWSEswWi1EOVkxeGlKUFJrb1dXcGljNXprclNGMFFmQmg5N2Z4MDdJcUhIc2NjcnliSzVjSWhDQnZ6NjA0Z1ZiVHJSMVQtUDYyZ3R0ZmpDQndFQ2NYZE5JRkJJ?oc=5",
+   "title": "Nuclear Power as an Energy Transition Opportunity, with Notes on Safety and Social Justice",
+   "summary": "The transition to nuclear energy is being evaluated for its potential role in the national energy mix, contingent upon adherence to strict safety standards. The discourse highlights the importance of social equity and public safety in regulatory planning.",
+   "original_title": "PLTN Peluang Transisi Energi dengan Catatan Keselamatan dan Keadilan bagi Masyarakat",
+   "original_language": "id",
+   "source": "Kabarindoraya.com",
+   "published": "2026-10-14T11:55:00+00:00",
+   "collected_at": "2026-10-14T13:54:22.422808+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to policy discourse regarding nuclear energy transition, safety, and social oversight."
+  },
   {
    "id": "radnuc-background-ae18f5aee08ffaa6",
    "kind": "radnuc_background",
@@ -129,6 +222,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This report pertains to civilian nuclear industry supply chain and business expansion."
+  },
+  {
+   "id": "radnuc-background-a6a89ad1c586984a",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1Yc012cXpSVy1HT2dqcGlYeUZVZnFUako2UTdSODEyNXNfQTZOUl9yNWhWREU4M1EzU2VvVVdYaWprUy0xMlBJd1ZuLUtlWUFIQkdaQ3h2TDRtOXVxRmhwNW9FRGd4bGFs?oc=5",
+   "title": "Heavy '15th Five-Year Plan' Nuclear Safety Tasks: China's Ministry of Ecology and Environment Establishes New Department for Nuclear Power Construction Safety Supervision",
+   "summary": "The Chinese Ministry of Ecology and Environment has established a new department specifically tasked with overseeing the safety of nuclear power plant construction. This administrative change is intended to address the safety demands outlined in the 15th Five-Year Plan.",
+   "original_title": "“十五五”核安全任务繁重 中国生态环境部新设核电建造安全监管司",
+   "original_language": "zh",
+   "source": "早晨报",
+   "published": "2026-10-14T08:35:00+00:00",
+   "collected_at": "2026-10-14T13:54:22.422808+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Reports a direct update to national regulatory oversight and safety supervision for civilian nuclear construction."
   },
   {
    "id": "radnuc-background-05556a5875152c90",
