@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-14T06:12:23.022593+00:00",
+ "updated_at": "2026-10-14T09:32:30.278636+00:00",
  "archive_only": true,
  "category": "Radiological/Nuclear",
  "topic_ids": [
@@ -40,24 +40,43 @@
  "lookback_days": 3,
  "backfill": false,
  "counts": {
-  "searched": 2,
+  "searched": 50,
   "source_errors": 0,
-  "reviewed": 41,
-  "accepted": 6,
-  "rejected": 35,
-  "requests": 6
+  "reviewed": 143,
+  "accepted": 38,
+  "rejected": 105,
+  "requests": 20,
+  "recent_reviewed": 143,
+  "backlog_reviewed": 0,
+  "undated_reviewed": 0,
+  "source_capped_queries": 4
  },
- "pending_reviews": 459,
+ "pending_reviews": 481,
+ "recent_pending": 465,
+ "backlog_pending": 16,
+ "undated_pending": 0,
+ "source_discovery": {
+  "planned_queries": 50,
+  "attempted_queries": 50,
+  "searched_queries": 50,
+  "failed_queries": 0,
+  "pending_queries": 0,
+  "complete": true,
+  "stop_code": ""
+ },
  "stop": "Review budget/deadline reached; candidates preserved",
  "failed": false,
  "shared_daily_review_allocation": 40,
+ "max_requests_per_run": 20,
+ "requests_available_at_start": 20,
  "batch_status": "partial",
  "complete": false,
- "stop_code": "budget_or_deadline_reached",
+ "review_complete": false,
+ "stop_code": "budget_reached",
  "review_batch_size": 8,
- "review_attempts": 6,
+ "review_attempts": 20,
  "review_validation_errors": {
-  "Background review is incomplete": 3
+  "Background review is incomplete": 9
  },
  "map_events_written": 0,
  "destination": "background archive; D1 sync is separate"
