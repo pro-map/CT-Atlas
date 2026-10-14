@@ -96,6 +96,130 @@ OVERFLOW = textwrap.dedent('''
 ''')
 
 
+QUOTA_RESTORE=textwrap.dedent('''
+    import importlib.util, json, os, sys
+    from datetime import datetime
+    from pathlib import Path
+    from zoneinfo import ZoneInfo
+    root=sys.argv[1]
+    Path("ai_article_selection_cache.json").write_text(json.dumps({
+        "version":"obsolete-editorial-version","items":{},
+        "selection_quota_usage":{"pacific_day":datetime.now(ZoneInfo("America/Los_Angeles")).date().isoformat(),
+                                 "calls":17,"overflow_calls":9}}))
+    sys.path.insert(0,os.path.join(root,"tools"))
+    spec=importlib.util.spec_from_file_location("quota_safe",os.path.join(root,"tools","run_collector_quota_safe.py"))
+    wrapper=importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(wrapper)
+    print(json.dumps({"primary":wrapper.today_calls(),"overflow":wrapper.today_overflow()}))
+''')
+
+
+# Real collector selection, fake deterministic batches and an in-memory cache:
+# these cases exercise safe publication and persistent identities without an AI
+# request or any durable repository data changes.
+LANE_SELECTION = textwrap.dedent('''
+    import importlib.util, json, os, sys
+    from datetime import datetime, timedelta, timezone
+    from types import SimpleNamespace
+    root, mode = sys.argv[1:3]
+    os.environ.update({"AI_SELECTION_BATCH_SIZE": "1", "AI_SELECTION_MAX_CALLS_PER_RUN": "10",
+                       "AI_SELECTION_DAILY_CALL_BUDGET": "60", "AI_SELECTION_OVERFLOW_MODEL": "",
+                       "AI_SELECTION_HISTORICAL_MAX_CALLS_PER_RUN": "3",
+                       "AI_SELECTION_MAINTENANCE_MAX_CALLS_PER_RUN": "1"})
+    if mode == "budget":
+        os.environ["AI_SELECTION_MAX_CALLS_PER_RUN"] = "1"
+    elif mode == "daily_budget":
+        os.environ["AI_SELECTION_DAILY_CALL_BUDGET"] = "1"
+    sys.path.insert(0, os.path.join(root, "tools"))
+    spec = importlib.util.spec_from_file_location("quota_safe", os.path.join(root, "tools", "run_collector_quota_safe.py"))
+    wrapper = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(wrapper)
+    collector = wrapper.collector
+    collector.AI_SELECTION_ENABLED = True
+    collector.BACKFILL_ACTIVE = False
+    wrapper.official_result = lambda event: None
+    wrapper.time = SimpleNamespace(monotonic=lambda: 0.0, sleep=lambda seconds: None)
+    cache = {"version": collector.AI_SELECTION_VERSION, "items": {}}
+    collector.load_selection_cache = lambda: cache
+    wrapper.SAVE_CACHE = lambda current: cache.update(current)
+    background = []
+    collector.persist_background_articles = lambda events: background.extend(event["id"] for event in events)
+    now = datetime.now(timezone.utc)
+    def event(key, age=0):
+        return {"id": key, "url": "https://example.test/" + key,
+                "title": "ISIS attack kills one in Nigeria " + key, "summary": "",
+                "categories": ["Attacks"], "published": (now - timedelta(days=age)).isoformat()}
+    def decision(key, score=85):
+        return {"event_id": key, "relevance_score": score, "is_current_ct_event": True,
+                "categories": ["Attacks"], "original_language": "en",
+                "english_title": "ISIS attacked a patrol in Nigeria " + key,
+                "english_summary": "An attack occurred in Nigeria.",
+                "canonical_event": "ISIS patrol attack " + key, "reason": "Confirmed incident.",
+                "primary_event_type": "ATTACK", "incident_anchor": "ISIS patrol attack " + key,
+                "update_type": "INITIAL"}
+    sent, batches = [], []
+    def fake_post(url, *args, **kwargs):
+        sent.append(wrapper.ACTIVE_LANE)
+        status = 429 if mode == "quota" and len(sent) == 2 else 200
+        return SimpleNamespace(status_code=status, json=lambda: {}, text="")
+    wrapper.POST = fake_post
+    def process(batch):
+        batches.append([candidate["event_id"] for candidate in batch])
+        fail = len(batches) == 2 or mode == "cached"
+        if fail and mode in ("transient", "cached"):
+            raise collector.AISelectionTransientError("Temporary provider failure")
+        if fail and mode == "incomplete":
+            raise collector.AISelectionIncompleteError("Missing result in response")
+        collector.requests.post("https://generativelanguage.googleapis.com/v1beta/interactions",
+                                json={"model": "gemini-test", "system_instruction": "final editorial relevance filter"})
+        return [decision(candidate["event_id"], 40 if candidate["event_id"].endswith("reject") else 85)
+                for candidate in batch]
+    wrapper.PROCESS_BATCH = process
+    events = [event("r1"), event("r2"), event("r3")]
+    result = []
+    if mode == "mixed":
+        events = [event("b1", 20), event("r1"), event("b2", 12), event("r2")]
+        result = collector.ai_select_events(events)
+    elif mode == "reservation":
+        result.extend(collector.ai_select_events([event("m1", 45), event("m2", 44)], lane="maintenance"))
+        result.extend(collector.ai_select_events([event("b1", 20), event("b2", 19), event("b3", 18)], lane="backlog"))
+        result.extend(collector.ai_select_events([event("r1"), event("r2")], lane="recent"))
+    elif mode == "cached":
+        events = [event("r1"), event("r-reject"), event("r3")]
+        for item in events[:2]:
+            cache["items"][collector.selection_fingerprint(item)] = {
+                "version": collector.AI_SELECTION_VERSION,
+                "result": decision(item["id"], 40 if item["id"].endswith("reject") else 85)}
+        result = collector.ai_select_events(events, lane="recent")
+    elif mode == "maintenance_cache":
+        events = [event("m1", 20), event("m2", 19)]
+        for item in events:
+            verdict=decision(item["id"])
+            if item["id"]=="m1":
+                verdict.pop("incident_anchor")
+            cache["items"][collector.selection_fingerprint(item)]={
+                "version":collector.AI_SELECTION_VERSION,"result":verdict}
+        result=collector.ai_select_events(events,lane="maintenance")
+    elif mode == "manual_backfill":
+        collector.BACKFILL_ACTIVE=True
+        events=[event("b"+str(index),20+index) for index in range(5)]
+        result=collector.ai_select_events(events,lane="backlog")
+    elif mode == "repeat":
+        events = events[:1]
+        result = collector.ai_select_events(events, lane="recent")
+        collector.ai_select_events(events, lane="recent")
+        collector.ai_select_events([], lane="backlog")
+    else:
+        result = collector.ai_select_events(events, lane="recent")
+    print(json.dumps({"retained": [item["id"] for item in result], "sent": sent, "batches": batches,
+                      "telemetry": collector.selection_runtime_status(), "background": background,
+                      "complete": [collector.selection_review_complete(item) for item in events],
+                      "mutated_pending": [item["id"] for item in events if not collector.selection_review_complete(item)
+                                           and item.get("ai_selection_complete")],
+                      "cached_telemetry": cache["selection_runtime_telemetry"]}))
+''')
+
+
 def run(script, *args, cwd=None):
     import json
     result = subprocess.run([sys.executable, "-c", script, *args], capture_output=True, text=True, timeout=120, cwd=cwd)
@@ -151,6 +275,103 @@ class QuotaSafeWrapperTests(unittest.TestCase):
         data = self.overflow("off")
         self.assertEqual(data["sent"], ["gemini-3.5-flash-lite"])
         self.assertEqual((len(data["errors"]), data["overflow_calls"]), (3, 0))
+
+    def lanes(self, mode):
+        import os
+        import tempfile
+        with tempfile.TemporaryDirectory() as empty:
+            return run(LANE_SELECTION, os.getcwd(), mode, cwd=empty)
+
+    def test_editorial_cache_version_change_does_not_reset_real_daily_usage(self):
+        import os
+        import tempfile
+        with tempfile.TemporaryDirectory() as empty:
+            data=run(QUOTA_RESTORE,os.getcwd(),cwd=empty)
+        self.assertEqual(data,{"primary":17,"overflow":9})
+
+    def test_recent_and_backlog_use_separate_newest_first_batches(self):
+        data = self.lanes("mixed")
+        self.assertEqual(data["batches"], [["r1"], ["r2"], ["b2"], ["b1"]])
+        self.assertEqual(data["sent"], ["recent", "recent", "backlog", "backlog"])
+        lanes = data["telemetry"]["lanes"]
+        self.assertEqual((lanes["recent"]["candidates"], lanes["backlog"]["candidates"]), (2, 2))
+        self.assertFalse(data["telemetry"]["partial"])
+
+    def test_historical_caps_reserve_calls_even_if_maintenance_is_called_first(self):
+        data = self.lanes("reservation")
+        self.assertEqual(data["sent"], ["maintenance", "backlog", "backlog", "recent", "recent"])
+        lanes = data["telemetry"]["lanes"]
+        self.assertEqual(lanes["maintenance"]["pending"], 1)
+        self.assertEqual(lanes["maintenance"]["reasons"], ["maintenance_budget"])
+        self.assertEqual(lanes["backlog"]["pending"], 1)
+        self.assertEqual(lanes["backlog"]["reasons"], ["historical_budget"])
+        self.assertEqual(lanes["recent"]["status"], "complete")
+        self.assertEqual(data["telemetry"]["budgets"]["historical_calls_used"], 3)
+
+    def test_self_budget_returns_completed_reviews_and_preserves_pending(self):
+        data = self.lanes("budget")
+        self.assertEqual(data["retained"], ["r1"])
+        self.assertEqual(data["complete"], [True, False, False])
+        self.assertEqual(data["mutated_pending"], [])
+        recent = data["telemetry"]["lanes"]["recent"]
+        self.assertEqual((recent["reviewed"], recent["pending"], recent["new_reviews"]), (1, 2, 1))
+        self.assertEqual(recent["reasons"], ["run_budget"])
+        self.assertEqual(data["cached_telemetry"]["lanes"], data["telemetry"]["lanes"])
+
+    def test_daily_envelope_is_independent_of_the_larger_run_envelope(self):
+        data = self.lanes("daily_budget")
+        self.assertEqual(data["retained"], ["r1"])
+        self.assertEqual(data["sent"], ["recent"])
+        self.assertEqual(data["telemetry"]["daily_call_budget"], 1)
+        self.assertEqual(data["telemetry"]["lanes"]["recent"]["reasons"], ["daily_budget"])
+
+    def test_a_provider_429_still_publishes_completed_decisions(self):
+        data = self.lanes("quota")
+        self.assertEqual(data["retained"], ["r1"])
+        self.assertTrue(data["telemetry"]["partial"])
+        self.assertTrue(data["telemetry"]["gemini_429"])
+        self.assertEqual(data["telemetry"]["lanes"]["recent"]["reasons"], ["primary_quota_429"])
+        self.assertEqual(data["mutated_pending"], [])
+
+    def test_transient_and_incomplete_failures_are_partial_with_separate_reasons(self):
+        for mode, reason in (("transient", "transient_error"), ("incomplete", "incomplete_response")):
+            with self.subTest(mode=mode):
+                data = self.lanes(mode)
+                self.assertEqual(data["retained"], ["r1"])
+                self.assertTrue(data["telemetry"]["partial"])
+                self.assertEqual(data["telemetry"]["lanes"]["recent"]["reasons"], [reason])
+                self.assertFalse(data["telemetry"]["budget_reached"])
+                self.assertEqual(data["complete"], [True, False, False])
+
+    def test_cached_retained_and_rejected_decisions_do_not_count_as_new_ai_reviews(self):
+        data = self.lanes("cached")
+        recent = data["telemetry"]["lanes"]["recent"]
+        self.assertEqual((recent["candidates"], recent["reviewed"], recent["cached"], recent["new_reviews"]), (3, 2, 2, 0))
+        self.assertEqual((recent["retained"], recent["rejected"], recent["pending"]), (1, 1, 1))
+        self.assertEqual(data["background"], ["r-reject"])
+        self.assertEqual(data["sent"], [])
+
+    def test_maintenance_refreshes_only_unstructured_cached_verdicts(self):
+        data=self.lanes("maintenance_cache")
+        self.assertEqual(data["batches"], [["m1"]])
+        self.assertEqual(data["sent"], ["maintenance"])
+        lane=data["telemetry"]["lanes"]["maintenance"]
+        self.assertEqual((lane["cached"],lane["new_reviews"],lane["pending"]), (1,1,0))
+
+    def test_explicit_manual_backfill_keeps_its_global_envelope(self):
+        data=self.lanes("manual_backfill")
+        self.assertEqual(len(data["sent"]),5)
+        self.assertEqual(data["telemetry"]["lanes"]["backlog"]["pending"],0)
+
+    def test_translated_fingerprints_remain_reviewed_and_do_not_recount_or_spend_again(self):
+        data = self.lanes("repeat")
+        self.assertEqual(data["complete"], [True])
+        self.assertEqual(data["sent"], ["recent"])
+        recent = data["telemetry"]["lanes"]["recent"]
+        self.assertEqual((recent["candidates"], recent["reviewed"], recent["new_reviews"]), (1, 1, 1))
+        self.assertEqual(data["telemetry"]["lanes"]["backlog"]["candidates"], 0)
+        self.assertEqual(data["telemetry"]["lanes"]["backlog"]["status"], "complete")
+
 
 
 if __name__ == "__main__":

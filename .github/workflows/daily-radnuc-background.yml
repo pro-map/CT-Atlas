@@ -1,8 +1,8 @@
 name: Daily RadNuc background archive
 
 # Current background reporting only. The runner never updates events.json or
-# builds/deploys the map. Source articles are retained for 730 days. Six calls
-# per batch share the existing archive-review ledger (40 calls/Pacific day),
+# builds/deploys the map. Source articles are retained for 730 days. Twenty requests
+# per run share the existing archive-review ledger (40 calls/Pacific day),
 # with the same free Gemini model; there is no separate quota allocation.
 on:
   push:
@@ -30,7 +30,7 @@ concurrency:
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       ARCHIVE_REVIEW_MODEL: gemini-3.1-flash-lite
@@ -72,8 +72,8 @@ jobs:
 
       - name: Collect and review current RadNuc background articles
         id: collect
-        timeout-minutes: 14
-        run: python -u tools/enrich_radnuc_background.py --max-posts 6 --max-fetches 50 --deadline-minutes 12
+        timeout-minutes: 22
+        run: python -u tools/enrich_radnuc_background.py --max-posts 20 --max-fetches 50 --deadline-minutes 20
 
       - name: Preserve candidate checkpoints and quota on failure
         if: ${{ always() && steps.checkout.outcome == 'success' && steps.collect.outcome != 'skipped' }}

@@ -30,4 +30,6 @@ runs:
         fi
     - name: Leave the background jobs' data out of the site
       shell: bash
-      run: rm -rf archive quota
+      run: |
+        rm -f daily_candidate_queue.json daily-collection-status.json
+        rm -rf archive quota

@@ -1757,6 +1757,22 @@ body::before {
     text-transform: uppercase;
 }
 
+
+#collectionStatus { border-left: 2px solid #617b8d; }
+#collectionStatus[data-state="partial"] { border-left-color: #d8b164; }
+#collectionStatus[data-state="failed"] { border-left-color: #d1847b; }
+#collectionStatus[data-state="complete"] { border-left-color: #67b69a; }
+#collectionStatus .collection-status-title { color: #a9bdca; font-size: 10px; font-weight: 700; line-height: 1.4; }
+#collectionStatus summary { cursor: pointer; margin-top: 8px; color: #7f9aaa; font-size: 9px; }
+#collectionStatus[data-state="partial"] .collection-status-title { color: #e1bf7b; }
+#collectionStatus[data-state="failed"] .collection-status-title { color: #e29a91; }
+#collectionStatus[data-state="complete"] .collection-status-title { color: #8bcbb2; }
+.collection-status-counts { margin: 7px 0 0; color: #a4b7c4; font-size: 9px; line-height: 1.55; white-space: pre-line; }
+.collection-status-details { margin-top: 9px; border-top: 1px solid var(--cc-border-soft); padding-top: 7px; color: #8da3b2; font-size: 9px; line-height: 1.55; }
+.collection-status-details p { margin: 4px 0; }
+.collection-status-categories { margin: 7px 0 0; padding-left: 15px; }
+#healthUpdateReasons { max-width: 65%; }
+
 #analyticsRail .section-title {
     margin: 0 0 8px;
     padding-bottom: 7px;
@@ -5484,6 +5500,23 @@ Visible rate
         </div>
     </div>
 
+    <div class="analytics-card" id="collectionStatus" data-state="unknown" aria-live="polite">
+        <div class="collection-status-title" id="collectionStatusTitle">Loading update status…</div>
+        <div class="collection-status-counts" id="collectionStatusCounts"></div>
+        <details>
+            <summary>Update details</summary>
+            <div class="collection-status-details">
+                <p id="collectionStatusAttempt"></p>
+                <p id="collectionStatusPublished"></p>
+                <p id="collectionStatusWindow"></p>
+                <p id="collectionStatusMaintenance"></p>
+                <p id="collectionStatusReasons"></p>
+                <p id="collectionStatusLocations"></p>
+                <ul class="collection-status-categories" id="collectionStatusCategories" hidden></ul>
+            </div>
+        </details>
+    </div>
+
     <div class="analytics-card">
         <div class="analytics-card-title">Events by category · 24h</div>
         <div id="categoryMiniBars"></div>
@@ -5515,7 +5548,7 @@ Visible rate
     </div>
     <div id="healthStatusBody">
       <div class="health-grid">
-        <div class="health-metric"><div class="health-label">System status</div><div class="health-value health-ok">Operational</div></div>
+        <div class="health-metric"><div class="health-label">Site status</div><div class="health-value health-ok">Operational</div></div>
         <div class="health-metric"><div class="health-label">Database events</div><div class="health-value" id="healthEventCount">—</div></div>
         <div class="health-metric"><div class="health-label">Mapped attacks</div><div class="health-value" id="healthMappedCount">—</div></div>
       </div>
@@ -5525,6 +5558,20 @@ Visible rate
         <div class="health-row"><span>Automated updates</span><strong id="healthSchedule">10:17 · 18:17</strong></div>
         <div class="health-row"><span>Timezone</span><strong>Europe/Paris</strong></div>
         <div class="health-row"><span>Next scheduled update</span><strong id="healthNextUpdate">—</strong></div>
+      </div>
+
+      <div class="health-section">
+        <div class="health-section-title">LATEST COLLECTION</div>
+        <div class="health-row"><span>Update completeness</span><strong id="healthUpdateStatus">Not reported</strong></div>
+        <div class="health-row"><span>Recent candidates reviewed</span><strong id="healthRecentReviewed">Not reported</strong></div>
+        <div class="health-row"><span>Recent candidates pending</span><strong id="healthRecentPending">Not reported</strong></div>
+        <div class="health-row"><span>Earlier backlog pending</span><strong id="healthBacklogPending">Not reported</strong></div>
+        <div class="health-row"><span>Earlier records awaiting re-review</span><strong id="healthMaintenancePending">Not reported</strong></div>
+        <div class="health-row"><span>Location reviews pending</span><strong id="healthLocationPending">Not reported</strong></div>
+        <div class="health-row"><span>Reviewed without a location</span><strong id="healthLocationUnlocated">Not reported</strong></div>
+        <div class="health-row"><span>Last collection attempt</span><strong id="healthUpdateAttempt">Not reported</strong></div>
+        <div class="health-row"><span>Last published data</span><strong id="healthUpdatePublished">Not reported</strong></div>
+        <div class="health-row"><span>Update notes</span><strong id="healthUpdateReasons">Not reported</strong></div>
       </div>
 
       <div class="health-section">
@@ -7014,10 +7061,174 @@ function loadMapDatabase() {
 }
 
 
+// Update completeness is collection metadata, not the number of published
+// events. Older snapshots must never imply that all candidates were reviewed.
+function collectionStatusCount(value) {
+    return typeof value === "number" && Number.isSafeInteger(value) && value >= 0 ? value : null;
+}
+
+function collectionStatusDate(value) {
+    if (!value) return "Not reported";
+    const date = new Date(value);
+    if (!Number.isFinite(date.getTime())) return "Not reported";
+    return date.toLocaleString("en-GB", {
+        timeZone: "Europe/Paris", day: "2-digit", month: "short", year: "numeric",
+        hour: "2-digit", minute: "2-digit"
+    }) + " Paris";
+}
+
+function collectionStatusView(data) {
+    const status = data?.collection_status;
+    const published = collectionStatusDate(status?.published_at || data?.last_updated);
+    const unknown = {
+        state: "unknown", title: "Update completeness not reported", counts: "",
+        attempt: "Not reported", published, window: "", reasons: "Not reported",
+        reviewed: "Not reported", recentPending: "Not reported", backlogPending: "Not reported",
+        locationPending: "Not reported", locationUnlocated: "Not reported", locations: "",
+        maintenancePending: "Not reported", maintenance: "",
+        categories: []
+    };
+    if (!status || typeof status !== "object") return unknown;
+    const candidates = collectionStatusCount(status.recent?.candidates);
+    const reviewed = collectionStatusCount(status.recent?.reviewed);
+    const pending = collectionStatusCount(status.recent?.pending);
+    const backlog = collectionStatusCount(status.backlog?.pending);
+    const maintenancePending = collectionStatusCount(status.maintenance?.pending);
+    const validRecent = candidates !== null && reviewed !== null && pending !== null
+        && reviewed <= candidates && pending <= candidates && reviewed + pending === candidates;
+    const categories = Array.isArray(status.categories) ? status.categories.filter(item =>
+        item && typeof item.category === "string" && item.category.trim()).map(item => ({
+            category: item.category,
+            candidates: collectionStatusCount(item.candidates),
+            reviewed: collectionStatusCount(item.reviewed),
+            pending: collectionStatusCount(item.pending),
+            recentPending: collectionStatusCount(item.recent_pending),
+            backlogPending: collectionStatusCount(item.backlog_pending),
+            attempt: collectionStatusDate(item.last_attempt_at),
+            stopCode: String(item.stop_code || ""),
+            status: String(item.status || "unknown")
+        })) : [];
+    const reportedReasons = Array.isArray(status.reasons) ? status.reasons : [];
+    const sourceErrors = Array.isArray(status.source?.errors) ? status.source.errors : [];
+    const reasons = [...new Set(reportedReasons.map(String))];
+    const sourceIncomplete = sourceErrors.length || status.source?.status === "partial" || status.source?.status === "failed"
+        || (collectionStatusCount(status.source?.failed_requests) || 0) > 0;
+    if (sourceIncomplete && !reasons.includes("source_errors")) reasons.push("source_errors");
+    const reasonLabels = {
+        selection_budget: "Review allowance reached",
+        historical_budget: "Earlier backlog review allowance reached",
+        maintenance_budget: "Earlier record review allowance reached",
+        run_budget: "Update review allowance reached",
+        daily_budget: "Daily review allowance reached",
+        provider_rate_limit: "AI service rate limit",
+        primary_quota_429: "AI service rate limit",
+        overflow_quota_429: "AI service rate limit",
+        quota_429: "AI service rate limit",
+        transient_error: "AI service temporarily unavailable",
+        incomplete_response: "Some AI decisions were incomplete",
+        selection_incomplete: "Some candidates still await review",
+        selection_deadline: "Review time limit reached",
+        source_errors: "Some news searches were incomplete",
+        recent_pending: "Recent candidates await review",
+        backlog_pending: "Earlier candidates await review",
+        maintenance_pending: "Earlier records await re-review",
+        geolocation_failed: "Location review could not finish",
+        geolocation_pending: "Some location reviews remain pending",
+        radnuc_background_partial: "RadNuc background collection is incomplete",
+        category_pending: "Some category updates are incomplete",
+        collection_failed: "News collection could not finish",
+        collection_not_run: "News collection did not run"
+    };
+    let state = ["complete", "partial", "failed"].includes(status.status) ? status.status : "unknown";
+    const locationPending = collectionStatusCount(status.geolocation?.pending);
+    const completedUnlocated = collectionStatusCount(status.geolocation?.completed_unlocated);
+    const locationUnlocated = completedUnlocated !== null ? completedUnlocated
+        : status.geolocation?.status === "complete" && locationPending === 0 ? collectionStatusCount(status.geolocation?.unlocated) : null;
+    const geolocationIncomplete = status.geolocation?.status === "partial" || status.geolocation?.status === "failed"
+        || (locationPending !== null && locationPending > 0);
+    const categoryIncomplete = categories.some(item => item.status === "partial" || item.status === "failed"
+        || (item.pending !== null && item.pending > 0));
+    if (state === "complete" && (!validRecent || backlog === null)) state = "unknown";
+    if (state === "complete" && (pending > 0 || backlog > 0 || maintenancePending > 0 || categoryIncomplete || geolocationIncomplete || reasons.length)) state = "partial";
+    const title = {
+        complete: "Latest update complete", partial: "Latest update partial",
+        failed: "Latest update failed", unknown: "Update completeness not reported"
+    }[state];
+    const format = value => value === null ? "Not reported" : value.toLocaleString("en-GB");
+    const counts = [];
+    if (validRecent) {
+        counts.push("Recent candidates: " + format(reviewed) + " / " + format(candidates) + " reviewed");
+        counts.push(format(pending) + " recent pending");
+    } else counts.push("Recent review totals not reported");
+    if (backlog !== null) counts.push("Earlier backlog: " + format(backlog) + " pending");
+    else counts.push("Earlier backlog not reported");
+    const start = collectionStatusDate(status.recent?.window_start);
+    const end = collectionStatusDate(status.recent?.window_end);
+    const window = start !== "Not reported" && end !== "Not reported" ? "Recent window: " + start + " – " + end : "";
+    const reasonText = [...new Set(reasons.map(reason => reasonLabels[reason] || "Other collection issue"))].join(" · ");
+    const locations = locationPending !== null || locationUnlocated !== null
+        ? "Location reviews pending: " + format(locationPending) + " · Reviewed without a location: " + format(locationUnlocated) : "";
+    for (const item of categories) item.note = reasonLabels[item.stopCode] || "";
+    return {
+        state, title, counts: counts.join("\n"),
+        attempt: collectionStatusDate(status.last_attempt_at), published, window,
+        reasons: reasonText || (state === "complete" ? "No outstanding collection work reported" : "No further detail reported"),
+        reviewed: validRecent ? format(reviewed) + " / " + format(candidates) : "Not reported",
+        recentPending: validRecent ? format(pending) : "Not reported", backlogPending: format(backlog),
+        locationPending: format(locationPending), locationUnlocated: format(locationUnlocated), locations,
+        maintenancePending: format(maintenancePending),
+        maintenance: maintenancePending !== null ? "Earlier records awaiting re-review: " + format(maintenancePending) : "", categories
+    };
+}
+
+function renderCollectionStatus(data) {
+    const view = collectionStatusView(data);
+    const set = (id, text) => { const element = document.getElementById(id); if (element) element.textContent = text; };
+    const card = document.getElementById("collectionStatus");
+    if (card) card.dataset.state = view.state;
+    set("collectionStatusTitle", view.title);
+    set("collectionStatusCounts", view.counts);
+    set("collectionStatusAttempt", "Last attempt: " + view.attempt);
+    set("collectionStatusPublished", "Published data: " + view.published);
+    set("collectionStatusWindow", view.window);
+    set("collectionStatusMaintenance", view.maintenance);
+    set("collectionStatusReasons", view.reasons);
+    set("collectionStatusLocations", view.locations);
+    set("healthUpdateStatus", view.title.replace("Latest update ", ""));
+    set("healthRecentReviewed", view.reviewed);
+    set("healthRecentPending", view.recentPending);
+    set("healthBacklogPending", view.backlogPending);
+    set("healthMaintenancePending", view.maintenancePending);
+    set("healthLocationPending", view.locationPending);
+    set("healthLocationUnlocated", view.locationUnlocated);
+    set("healthUpdateAttempt", view.attempt);
+    set("healthUpdatePublished", view.published);
+    set("healthUpdateReasons", view.reasons);
+    const list = document.getElementById("collectionStatusCategories");
+    if (list) {
+        list.replaceChildren();
+        list.hidden = !view.categories.length;
+        for (const item of view.categories) {
+            const row = document.createElement("li");
+            const count = value => value === null ? "not reported" : value.toLocaleString("en-GB");
+            const state = { complete: "Complete", partial: "Partial", failed: "Failed", unknown: "Not reported" }[item.status] || "Not reported";
+            const splitPending = item.recentPending !== null && item.backlogPending !== null
+                ? count(item.recentPending) + " recent pending · " + count(item.backlogPending) + " earlier pending"
+                : count(item.pending) + " pending";
+            row.textContent = item.category + ": " + state + " · " + count(item.reviewed) + " / " + count(item.candidates)
+                + " reviewed · " + splitPending
+                + (item.attempt !== "Not reported" ? " · Last attempt: " + item.attempt : "")
+                + (item.note ? " · " + item.note : "");
+            list.appendChild(row);
+        }
+    }
+}
+
 loadMapDatabase()
 
 .then(
     data => {
+        renderCollectionStatus(data);
         for (const id of ['collectionQueryCount', 'healthQueryCount']) {
             const element = document.getElementById(id);
             if (element) element.textContent = Number.isFinite(data.search_query_count) ? data.search_query_count : '—';
@@ -7119,7 +7330,7 @@ loadMapDatabase()
                 "lastUpdated"
             ).innerText =
 
-                "Updated "
+                "Published "
 
                 +
 
@@ -7143,6 +7354,10 @@ loadMapDatabase()
             error
         );
 
+
+        renderCollectionStatus(null);
+        const statusTitle = document.getElementById("collectionStatusTitle");
+        if (statusTitle) statusTitle.textContent = "Update status unavailable";
 
         document.getElementById(
             "counter"

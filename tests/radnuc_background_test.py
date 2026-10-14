@@ -101,7 +101,8 @@ class BackgroundTests(unittest.TestCase):
             report=daily.run(tmp,collector=collector,searcher=Searcher(),review=review,
                 gate_factory=lambda *_:Gate(),max_fetches=1,now=NOW)
             self.assertEqual(calls,[2,1,1])
-            self.assertTrue(report['complete'])
+            self.assertTrue(report['review_complete'])
+            self.assertFalse(report['complete'])
             self.assertEqual(report['counts']['reviewed'],2)
             self.assertEqual(report['review_validation_errors']['interaction_incomplete'],1)
 
@@ -119,7 +120,120 @@ class BackgroundTests(unittest.TestCase):
             self.assertEqual(calls[:2],[8,4])
             self.assertEqual(report['counts']['reviewed'],8)
             self.assertEqual(report['pending_reviews'],0)
-            self.assertTrue(report['complete'])
+            self.assertTrue(report['review_complete'])
+            self.assertFalse(report['complete'])
+
+    def test_twenty_request_envelope_counts_http_retries_and_preserves_the_remaining_queue(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            archive_review.write_json(root/bg.STATE_FILE,{'version':1,'seen':{},'cursor':0,
+                'pending':[candidate(i) for i in range(200)]})
+            class Searcher:
+                def search(self,task):return [],False
+            attempts=[]
+            def post(url,**kwargs):
+                attempts.append(url)
+                return SimpleNamespace(status_code=200)
+            def review(payload):
+                # Two actual HTTP attempts per batch; the request gate, not
+                # the number of successful batches, controls the envelope.
+                for _ in range(2):collector.requests.post(collector.GEMINI_INTERACTIONS_URL)
+                return [decision(row['event_id'],english_title=row['title']) for row in payload]
+            with patch.object(collector.requests,'post',side_effect=post):
+                report=daily.run(root,max_posts=20,max_fetches=1,collector=collector,
+                    searcher=Searcher(),review=review,now=NOW,
+                    gate_factory=lambda budget:archive_review.GeminiGate(collector,budget,min_interval=0))
+            self.assertEqual(report['counts']['requests'],20)
+            self.assertEqual(len(attempts),20)
+            self.assertEqual(report['counts']['reviewed'],80)
+            self.assertEqual(report['recent_pending'],120)
+            self.assertEqual(len(archive_review.read_json(root/bg.STATE_FILE)['pending']),120)
+            self.assertEqual(report['shared_daily_review_allocation'],40)
+            self.assertEqual(report['batch_status'],'partial')
+
+    def test_full_queue_is_reviewed_before_discovery_and_recent_new_input_precedes_old_queue(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            old=candidate(0,published=(NOW-timedelta(days=4)).isoformat())
+            carried=[candidate(i,published=(NOW-timedelta(days=1)).isoformat()) for i in range(1,500)]
+            archive_review.write_json(root/bg.STATE_FILE,{'version':1,'seen':{},'cursor':0,'pending':[old,*carried]})
+            order=[];batches=[]
+            class Searcher:
+                def search(self,task):
+                    order.append('search')
+                    self_outer.assertLess(len(archive_review.read_json(root/bg.STATE_FILE)['pending']),daily.MAX_PENDING)
+                    return [candidate(500)],False
+            self_outer=self
+            def review(payload):
+                order.append('review');batches.append([row['title'] for row in payload])
+                collector.requests.post(collector.GEMINI_INTERACTIONS_URL)
+                return [decision(row['event_id'],english_title=row['title']) for row in payload]
+            with patch.object(collector.requests,'post',return_value=SimpleNamespace(status_code=200)):
+                report=daily.run(root,max_posts=2,max_fetches=1,collector=collector,
+                    searcher=Searcher(),review=review,now=NOW,
+                    gate_factory=lambda budget:archive_review.GeminiGate(collector,budget,min_interval=0))
+            self.assertEqual(order,['review','search','review'])
+            self.assertEqual(batches[1][0],candidate(500)['title'])
+            self.assertNotIn(old['title'],[title for batch in batches for title in batch])
+            self.assertEqual(report['counts']['recent_reviewed'],16)
+            self.assertEqual(report['counts']['backlog_reviewed'],0)
+            self.assertEqual(report['backlog_pending'],1)
+            self.assertEqual(report['recent_pending'],484)
+            self.assertEqual(report['pending_reviews'],485)
+            self.assertEqual(report['source_discovery']['searched_queries'],1)
+            self.assertEqual(report['source_discovery']['pending_queries'],49)
+
+    def test_existing_backlog_is_reviewed_only_after_recent_without_historical_searches(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            archive_review.write_json(root/bg.STATE_FILE,{'version':1,'seen':{},'cursor':0,
+                'pending':[candidate(0,published=(NOW-timedelta(days=5)).isoformat()),candidate(1),
+                    candidate(2,published='')]})
+            batches=[]
+            def review(payload):
+                batches.append([row['title'] for row in payload])
+                return [decision(row['event_id'],english_title=row['title']) for row in payload]
+            report=daily.run(root,max_fetches=0,collector=collector,review=review,
+                gate_factory=lambda *_:Gate(),now=NOW)
+            self.assertEqual(batches,[[candidate(1)['title']],[candidate(0)['title']],[candidate(2)['title']]])
+            self.assertEqual(report['counts']['recent_reviewed'],1)
+            self.assertEqual(report['counts']['backlog_reviewed'],1)
+            self.assertEqual(report['counts']['undated_reviewed'],1)
+            self.assertFalse(report['backfill'])
+            self.assertTrue(report['review_complete'])
+            self.assertFalse(report['complete'])
+
+    def test_empty_review_queue_does_not_claim_unsearched_sources_are_complete(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            class Searcher:
+                def search(self,task):return [],False
+            report=daily.run(tmp,max_fetches=1,collector=collector,searcher=Searcher(),
+                review=lambda _:[],gate_factory=lambda *_:Gate(),now=NOW)
+            self.assertEqual(report['pending_reviews'],0)
+            self.assertTrue(report['review_complete'])
+            self.assertFalse(report['complete'])
+            self.assertEqual(report['batch_status'],'partial')
+            self.assertEqual(report['source_discovery']['planned_queries'],50)
+            self.assertEqual(report['source_discovery']['pending_queries'],49)
+            self.assertEqual(report['source_discovery']['stop_code'],'fetch_limit_reached')
+
+    def test_unchanged_shared_daily_ledger_limits_the_larger_run_envelope(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            archive_review.write_json(root/bg.STATE_FILE,{'version':1,'seen':{},'cursor':0,
+                'pending':[candidate(i) for i in range(40)]})
+            ledger_path=archive_review.ledger_path('archive-review',root)
+            archive_review.write_json(ledger_path,{'pacific_day':archive_review.pacific_day(NOW),'posts':39,'allocation':40})
+            def review(payload):
+                collector.requests.post(collector.GEMINI_INTERACTIONS_URL)
+                return [decision(row['event_id'],english_title=row['title']) for row in payload]
+            with patch.object(collector.requests,'post',return_value=SimpleNamespace(status_code=200)):
+                report=daily.run(root,max_fetches=0,collector=collector,review=review,now=NOW,
+                    gate_factory=lambda budget:archive_review.GeminiGate(collector,budget,min_interval=0))
+            self.assertEqual(report['requests_available_at_start'],1)
+            self.assertEqual(report['counts']['requests'],1)
+            self.assertEqual(report['counts']['reviewed'],8)
+            self.assertEqual(report['recent_pending'],32)
 
     def test_ten_user_topics_and_all_shared_languages_are_daily_archive_only(self):
         self.assertEqual(len(topics.topic_ids()),10)

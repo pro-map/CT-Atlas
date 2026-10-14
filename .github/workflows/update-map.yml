@@ -38,6 +38,8 @@ jobs:
   update:
     runs-on: ubuntu-latest
     timeout-minutes: 330
+    outputs:
+      checkpoint_outcome: ${{ steps.commit.outcome }}
     env:
       COLLECTION_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'daily' }}
       FORCE_GEO_REQUESTED: ${{ github.event_name == 'workflow_dispatch' && inputs.force_ai || false }}
@@ -60,11 +62,13 @@ jobs:
           pip install -r requirements.txt
 
       - name: Record already processed locations before collection
+        id: prepare
         env:
           PRESERVE_FILE: ${{ runner.temp }}/ct-preserve-geo-ids.json
         run: |
           python - <<'PY'
           import json, math, os
+          from datetime import datetime, timezone
           from pathlib import Path
           path = Path("events.json")
           data = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"events": []}
@@ -86,6 +90,8 @@ jobs:
               if event.get("id") is not None and (event.get("ai_geo_complete") is True or located(event)):
                   preserve.append(str(event["id"]))
           Path(os.environ["PRESERVE_FILE"]).write_text(json.dumps(preserve), encoding="utf-8")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write("started_at=" + datetime.now(timezone.utc).isoformat() + "\n")
           print(f"Existing locations/AI decisions protected: {len(preserve)}")
           PY
 
@@ -101,7 +107,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           AI_SELECTION_MODEL: "gemini-3.5-flash-lite"
-          AI_SELECTION_BATCH_SIZE: "25"
+          AI_SELECTION_BATCH_SIZE: "32"
           AI_SELECTION_MAX_CALLS_PER_RUN: "30"
           AI_SELECTION_DAILY_CALL_BUDGET: "60"
           # Candidates left when 3.5 Flash Lite's budget is spent go to 3.1 Flash
@@ -111,6 +117,10 @@ jobs:
           AI_SELECTION_OVERFLOW_MAX_CALLS_PER_RUN: "25"
           AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET: "50"
           AI_SELECTION_RECENT_PRIORITY_DAYS: "3"
+          # These are sub-envelopes, sharing the unchanged request caps above.
+          # Recent candidates always run before older recovery or maintenance.
+          AI_SELECTION_HISTORICAL_MAX_CALLS_PER_RUN: "10"
+          AI_SELECTION_MAINTENANCE_MAX_CALLS_PER_RUN: "2"
         run: |
           set -euo pipefail
           AI_SELECTION_THRESHOLD="$(python - <<'PY'
@@ -169,6 +179,18 @@ jobs:
             AI_GEO_FORCE=0 python -u geolocate.py
           fi
 
+      - name: Finalize visible daily progress
+        id: finalize_status
+        if: ${{ always() && steps.checkout.outcome == 'success' }}
+        env:
+          COLLECT_OUTCOME: ${{ steps.collect.outcome || 'skipped' }}
+          GEOLOCATE_OUTCOME: ${{ steps.geolocate.outcome || 'skipped' }}
+          CT_ATLAS_RUN_STARTED_AT: ${{ steps.prepare.outputs.started_at }}
+        run: |
+          python -u tools/finalize_daily_status.py \
+            --collect-outcome "$COLLECT_OUTCOME" \
+            --geolocate-outcome "$GEOLOCATE_OUTCOME"
+
       # Quiz generation runs independently in refresh-daily-quiz.yml.
       # Independent of collection: the sanctioned-address list is refreshed once a
       # day (and on manual runs). A failed download keeps the previous file.
@@ -184,14 +206,18 @@ jobs:
           name: ct-recovery-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             ai_article_selection_cache.json
+            daily_candidate_queue.json
+            daily-collection-status.json
             events.json
           if-no-files-found: ignore
           retention-days: 7
 
       - name: Commit database and checkpoints safely
+        id: commit
         if: ${{ always() && steps.checkout.outcome == 'success' }}
         env:
           COLLECT_OUTCOME: ${{ steps.collect.outcome }}
+          STATUS_OUTCOME: ${{ steps.finalize_status.outcome }}
         run: |
           set -euo pipefail
           git config user.name "CT Intelligence Map Bot"
@@ -205,11 +231,23 @@ jobs:
               if not isinstance(obj, dict) or not isinstance(obj.get("items"), dict):
                   raise RuntimeError("Invalid AI checkpoint file; recovery artifact retained")
               subprocess.run(["git", "add", "--", str(cache)], check=True)
+          queue = Path("daily_candidate_queue.json")
+          if queue.exists():
+              obj = json.loads(queue.read_text(encoding="utf-8"))
+              if not isinstance(obj, dict) or obj.get("version") != 1 or not isinstance(obj.get("events"), list) or not all(isinstance(event, dict) for event in obj["events"]):
+                  raise RuntimeError("Invalid daily candidate queue; recovery artifact retained")
+              subprocess.run(["git", "add", "--", str(queue)], check=True)
+          if os.environ["STATUS_OUTCOME"] != "success":
+              raise RuntimeError("Progress finalization failed; refusing to publish an unverified checkpoint")
+          # Finalization has restored the Git database when collection failed.
+          # Its status-only update still needs publication so failures are visible.
+          db = json.loads(Path("events.json").read_text(encoding="utf-8"))
+          if not isinstance(db, dict) or not isinstance(db.get("events"), list) or not isinstance(db.get("collection_status"), dict):
+              raise RuntimeError("Invalid database/status checkpoint; recovery artifact retained")
+          subprocess.run(["git", "add", "--", "events.json"], check=True)
+          if Path("daily-collection-status.json").exists():
+              subprocess.run(["git", "add", "--", "daily-collection-status.json"], check=True)
           if os.environ["COLLECT_OUTCOME"] == "success":
-              db = json.loads(Path("events.json").read_text(encoding="utf-8"))
-              if not isinstance(db, dict) or not isinstance(db.get("events"), list):
-                  raise RuntimeError("Invalid database checkpoint; recovery artifact retained")
-              subprocess.run(["git", "add", "--", "events.json"], check=True)
               # Written together with events.json; only meaningful alongside it.
               if Path("incident_consolidation_state.json").exists():
                   subprocess.run(["git", "add", "--", "incident_consolidation_state.json"], check=True)
@@ -217,11 +255,6 @@ jobs:
               # archive (read by the nightly sync-background-corpus run).
               for aged_out in sorted(Path("archive").glob("removed-events-aged-out-*.json")):
                   subprocess.run(["git", "add", "--", str(aged_out)], check=True)
-          else:
-              # Collector failed: preserve its AI/RSS cache, keep the published DB.
-              tracked = subprocess.run(["git", "ls-files", "--error-unmatch", "events.json"], capture_output=True)
-              if tracked.returncode == 0:
-                  subprocess.run(["git", "restore", "--staged", "--worktree", "events.json"], check=True)
           # A quiz is independent of collection and can be published when collection
           # or geolocation fails, provided the quiz step produced valid files.
           # background-articles.json is likewise independent of whether collection's
@@ -253,6 +286,8 @@ jobs:
 
   deploy:
     needs: update
+    # A failed collector can safely publish its restored data plus honest status.
+    if: ${{ always() && needs.update.outputs.checkpoint_outcome == 'success' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages

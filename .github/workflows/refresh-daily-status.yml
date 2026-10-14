@@ -1,0 +1,70 @@
+name: Refresh daily collection status
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "daily_pipeline.py"
+      - "tools/finalize_daily_status.py"
+      - ".github/workflows/refresh-daily-status.yml"
+  workflow_run:
+    workflows: ["Daily CT Intelligence Map Update", "Daily RadNuc background archive"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: ct-map-update-main
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  refresh:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.head_repository.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Validate progress publication
+        run: python -m unittest discover -s tests -p 'finalize_daily_status_test.py'
+      - name: Refresh independent collection progress without AI calls
+        run: python tools/finalize_daily_status.py --refresh-existing
+      - name: Commit verified progress
+        run: |
+          set -euo pipefail
+          git add -- events.json daily-collection-status.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git config user.name "CT Intelligence Map Bot"
+          git config user.email "actions@github.com"
+          git commit -m "Refresh visible daily and RadNuc processing status"
+          git fetch origin main
+          if ! git rebase origin/main; then
+            git rebase --abort || true
+            exit 1
+          fi
+          git push origin HEAD:main
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
+      - name: Build active map and Database data
+        uses: ./.github/actions/build-events-lite
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: "."
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}

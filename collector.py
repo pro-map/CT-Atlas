@@ -3,6 +3,7 @@ import radnuc
 import threat_categories
 import collection_config
 import retired_categories
+import daily_pipeline
 import feedparser
 import hashlib
 import html
@@ -84,6 +85,9 @@ SERVER_ERROR_COOLDOWN_SECONDS = 45
 SERVER_ERROR_STREAK_LIMIT = 4
 
 QUERY_STATS = Counter()
+GDELT_STATS = Counter()
+COLLECTION_STATUS = {}
+AI_SELECTION_PARTIAL_CHECKPOINT = None
 SERVER_ERROR_STREAK = 0
 
 
@@ -3133,6 +3137,7 @@ def gdelt_doc_url(query, days=None, start_dt=None, end_dt=None):
 
 def fetch_gdelt_doc_articles(query, days=None, start_dt=None, end_dt=None, label="gdelt"):
     url = gdelt_doc_url(query, days=days, start_dt=start_dt, end_dt=end_dt)
+    GDELT_STATS["attempted"] += 1
     try:
         response = requests.get(
             url,
@@ -3140,18 +3145,30 @@ def fetch_gdelt_doc_articles(query, days=None, start_dt=None, end_dt=None, label
             timeout=20,
         )
     except requests.RequestException as exc:
+        GDELT_STATS["failed"] += 1
+        GDELT_STATS["request_errors"] += 1
         print(f"   GDELT DOC request failed for {label}: {exc}")
         return []
     if response.status_code != 200:
+        GDELT_STATS["failed"] += 1
+        if response.status_code == 429:
+            GDELT_STATS["rate_limited"] += 1
         print(f"   GDELT DOC HTTP {response.status_code} for {label}")
         return []
     try:
         payload = response.json()
     except ValueError:
+        GDELT_STATS["failed"] += 1
+        GDELT_STATS["invalid_response"] += 1
         print(f"   GDELT DOC returned non-JSON for {label}")
         return []
-    articles = payload.get("articles")
-    return articles if isinstance(articles, list) else []
+    articles = payload.get("articles") if isinstance(payload, dict) else None
+    if not isinstance(articles, list):
+        GDELT_STATS["failed"] += 1
+        GDELT_STATS["invalid_response"] += 1
+        return []
+    GDELT_STATS["successful"] += 1
+    return articles
 
 
 def parse_gdelt_seendate(value):
@@ -4228,6 +4245,9 @@ def collect_all(*args, **kwargs):
     last_error = None
 
     for attempt in range(1, attempts + 1):
+        QUERY_STATS.clear()
+        GDELT_STATS.clear()
+        QUERY_STATS["retry_waves"] = attempt - 1
         try:
             if attempt > 1:
                 print(
@@ -4864,6 +4884,8 @@ def process_ai_selection_batch(
                 "Gemini omitted one or more candidate events."
             )
 
+        if callable(AI_SELECTION_PARTIAL_CHECKPOINT):
+            AI_SELECTION_PARTIAL_CHECKPOINT(results)
         return results
 
     except AISelectionIncompleteError:
@@ -5459,8 +5481,10 @@ def persist_background_articles(rejected_events):
 
 
 def ai_select_events(
-    events
+    events,
+    lane=None,
 ):
+    global AI_SELECTION_PARTIAL_CHECKPOINT
     # Replayed queues and direct specialist runners can bypass discovery filters.
     # Retire court-only candidates before cache lookup or any paid AI request.
     events = [event for event in events
@@ -5617,6 +5641,25 @@ def ai_select_events(
             f"— {len(batch)} events"
         )
 
+        def checkpoint_validated_results(validated):
+            for answer in validated:
+                identifier = str(answer.get("event_id") or "")
+                if identifier not in fingerprint_by_id:
+                    continue
+                row = {"version": AI_SELECTION_VERSION,
+                       "reviewed_at": datetime.now(timezone.utc).isoformat(), "result": answer}
+                try:
+                    answer_score = int(answer.get("relevance_score"))
+                except (TypeError, ValueError):
+                    answer_score = None
+                if answer_score is not None and 0 < answer_score < AI_SELECTION_THRESHOLD:
+                    original = event_by_id[identifier]
+                    row["article"] = {key: original.get(key) for key in ("url", "source", "published")}
+                cache["items"][fingerprint_by_id[identifier]] = row
+            save_selection_cache(cache)
+
+        previous_checkpoint = AI_SELECTION_PARTIAL_CHECKPOINT
+        AI_SELECTION_PARTIAL_CHECKPOINT = checkpoint_validated_results
         try:
             results = process_ai_selection_batch(
                 batch
@@ -5647,6 +5690,8 @@ def ai_select_events(
             )
 
             return None
+        finally:
+            AI_SELECTION_PARTIAL_CHECKPOINT = previous_checkpoint
 
         for result in results:
             event_id = str(
@@ -10101,6 +10146,7 @@ def save_database(events, trend_summary=None, weekly_analysis=None):
         "source_languages":
             collection_config.language_metadata(MULTILINGUAL_PROFILES)['language_codes'],
         "collection_configuration": collection_config.effective(globals()),
+        "collection_status": COLLECTION_STATUS or load_database_strict().get("collection_status", {}),
         "collector":
             "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
         "relevance_filter":
@@ -10699,7 +10745,7 @@ def consolidate_incidents(events, state=None, max_calls=None, now=None, use_gemi
 
 
 def main():
-    global COLLECTION_SCOPE
+    global COLLECTION_SCOPE, COLLECTION_STATUS
     is_backfill, COLLECTION_SCOPE = parse_collection_mode()
     effective_config = collection_config.validate_runtime(globals())
     print('Effective configured collection: ' + json.dumps(effective_config, ensure_ascii=False))
@@ -10729,6 +10775,86 @@ def main():
         print(
             f"Existing database loaded: "
             f"{len(existing)} events"
+        )
+
+    run_now = datetime.now(timezone.utc)
+    from types import SimpleNamespace
+    daily_engine = SimpleNamespace(**globals())
+    if not is_backfill:
+        COLLECTION_STATUS = daily_pipeline.begin_status(run_now, load_database_strict().get("last_updated"))
+        atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
+    try:
+        fresh = exclude_reviewed_articles(collect_all(days), existing)
+    except Exception:
+        if not is_backfill:
+            COLLECTION_STATUS = daily_pipeline.finish_status(COLLECTION_STATUS, {}, QUERY_STATS, GDELT_STATS, run_now)
+            COLLECTION_STATUS["status"] = "failed"
+            COLLECTION_STATUS["reasons"] = ["source_errors"]
+            atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
+        raise
+
+    print()
+    print(
+        f"Collection returned "
+        f"{len(fresh)} deterministic candidate records."
+    )
+
+    # --------------------------------------------------------
+    # Deduplicate BEFORE AI review.
+    #
+    # This prevents Gemini from reviewing 30-50 copies of the same
+    # underlying story found through different Google News searches.
+    # --------------------------------------------------------
+
+    print()
+    print(
+        "Clustering fresh candidate records before AI selection..."
+    )
+
+    if is_backfill:
+        fresh_clusters = deduplicate_events(fresh)
+        selected_fresh = ai_select_events(fresh_clusters)
+        originals = []
+    else:
+        import backfill_control
+        recent, backlog, dropped = daily_pipeline.prepare(
+            fresh, daily_pipeline.load_queue(), existing, daily_engine, run_now,
+            backfill_control.disabled_categories(Path(__file__).resolve().parent))
+        fresh_clusters = recent + backlog
+        # Save ORIGINAL candidate clusters before translation or any AI call.
+        # Completed decisions remain queued until the database is published.
+        from copy import deepcopy
+        originals = deepcopy(fresh_clusters)
+        daily_pipeline.save_queue(originals, atomic_json_write, now=run_now)
+        COLLECTION_STATUS.update(queue_filter=dropped,
+            recent={"candidates": len(recent), "reviewed": 0, "pending": len(recent)},
+            backlog={"candidates": len(backlog), "reviewed": 0, "pending": len(backlog)})
+        COLLECTION_STATUS["source"] = {"google": dict(QUERY_STATS), "gdelt": dict(GDELT_STATS),
+            "errors": QUERY_STATS["failed"] + GDELT_STATS["failed"]}
+        atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
+        print(f"Separate daily queues: {len(recent)} recent; {len(backlog)} older. Recent review runs first.")
+        selected_recent = ai_select_events(recent, lane="recent")
+        selected_backlog = ai_select_events(backlog, lane="backlog") if selected_recent is not None else None
+        selected_fresh = (selected_recent + selected_backlog
+            if selected_recent is not None and selected_backlog is not None else None)
+
+    if selected_fresh is None:
+        print()
+        print("=" * 70)
+        print("COLLECTION PAUSED — AI SELECTION INCOMPLETE")
+        print("=" * 70)
+        print(
+            "events.json has not been replaced."
+        )
+        print(
+            f"Progress is preserved in "
+            f"{AI_SELECTION_CACHE_FILE}."
+        )
+
+        # Non-zero exit lets the workflow stop before geolocation.
+        # A dedicated `if: always()` workflow step commits the cache.
+        raise SystemExit(
+            75
         )
 
     # Progressive migration of the retained six-month database to the
@@ -10761,63 +10887,11 @@ def main():
             f"Incident-model migration: reclassifying {len(incident_backfill_batch)} "
             f"of {len(legacy_incident_records)} legacy records (attack-related first)."
         )
-        migrated = ai_select_events(incident_backfill_batch)
+        migrated = ai_select_events(incident_backfill_batch, lane="maintenance")
         if migrated is None:
             print("Incident-model migration incomplete this run; preserving existing records and retrying later.")
         else:
             print("Incident-model migration batch completed.")
-
-    fresh = exclude_reviewed_articles(collect_all(days), existing)
-
-    print()
-    print(
-        f"Collection returned "
-        f"{len(fresh)} deterministic candidate records."
-    )
-
-    # --------------------------------------------------------
-    # Deduplicate BEFORE AI review.
-    #
-    # This prevents Gemini from reviewing 30-50 copies of the same
-    # underlying story found through different Google News searches.
-    # --------------------------------------------------------
-
-    print()
-    print(
-        "Clustering fresh candidate records before AI selection..."
-    )
-
-    fresh_clusters = deduplicate_events(
-        fresh
-    )
-
-    print(
-        f"Fresh candidate event clusters: "
-        f"{len(fresh_clusters)}"
-    )
-
-    selected_fresh = ai_select_events(
-        fresh_clusters
-    )
-
-    if selected_fresh is None:
-        print()
-        print("=" * 70)
-        print("COLLECTION PAUSED — AI SELECTION INCOMPLETE")
-        print("=" * 70)
-        print(
-            "events.json has not been replaced."
-        )
-        print(
-            f"Progress is preserved in "
-            f"{AI_SELECTION_CACHE_FILE}."
-        )
-
-        # Non-zero exit lets the workflow stop before geolocation.
-        # A dedicated `if: always()` workflow step commits the cache.
-        raise SystemExit(
-            75
-        )
 
     print()
     print(
@@ -10881,14 +10955,32 @@ def main():
         existing_weekly=existing_weekly_analysis,
     )
 
+    if not is_backfill:
+        telemetry = globals().get("selection_runtime_status", lambda: {})()
+        COLLECTION_STATUS = daily_pipeline.finish_status(COLLECTION_STATUS, telemetry,
+            QUERY_STATS, GDELT_STATS, run_now, DAILY_LOOKBACK_DAYS)
+        remaining_maintenance = sum(not event.get("primary_event_type") or not event.get("incident_id")
+                                    for event in existing)
+        maintenance = COLLECTION_STATUS.setdefault("maintenance", {})
+        maintenance.update(candidates=len(legacy_incident_records),
+            reviewed=max(0, len(legacy_incident_records) - remaining_maintenance),
+            pending=remaining_maintenance, status="partial" if remaining_maintenance else "complete")
+        if remaining_maintenance:
+            COLLECTION_STATUS["status"] = "partial"
+            COLLECTION_STATUS["reasons"] = list(dict.fromkeys(COLLECTION_STATUS["reasons"] + ["maintenance_pending"]))
+        COLLECTION_STATUS["published_at"] = datetime.now(timezone.utc).isoformat()
+        atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
     save_database(
         events,
         trend_summary=trend_summary,
         weekly_analysis=weekly_analysis,
     )
+    if not is_backfill:
+        pending = daily_pipeline.unresolved(originals, load_selection_cache(), daily_engine)
+        daily_pipeline.save_queue(pending, atomic_json_write)
     print()
     print("=" * 70)
-    print("COLLECTION COMPLETE")
+    print("COLLECTION PUBLISHED — PARTIAL" if COLLECTION_STATUS.get("status") == "partial" else "COLLECTION COMPLETE")
     print("=" * 70)
     print(
         f"Database events: "

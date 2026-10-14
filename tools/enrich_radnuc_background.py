@@ -188,9 +188,9 @@ def save_articles(root, articles, now):
         'updated_at':now.isoformat(),'articles':kept})
 
 
-def run(root=ROOT, max_posts=6, max_fetches=50, deadline_minutes=12, *, now=None,
+def run(root=ROOT, max_posts=20, max_fetches=50, deadline_minutes=20, *, now=None,
         collector=None, searcher=None, review=None, gate_factory=None, clock=time.monotonic):
-    if not 0<=max_posts<=6 or not 0<=max_fetches<=50 or not 1<=deadline_minutes<=20:
+    if not 0<=max_posts<=20 or not 0<=max_fetches<=50 or not 1<=deadline_minutes<=20:
         raise ValueError('Invalid daily background limits')
     root = Path(root); now = now or datetime.now(timezone.utc); started = clock()
     collector = collector or archive_review.load_collector(root)
@@ -202,85 +202,131 @@ def run(root=ROOT, max_posts=6, max_fetches=50, deadline_minutes=12, *, now=None
     keys = set(seen)|{candidate_key(row) for row in pending}|{candidate_key(row) for row in articles}
     ledger = archive_review.DailyLedger(archive_review.ledger_path('archive-review',root),DAILY_ALLOCATION,now=now)
     budget = ledger.budget(max_posts)
-    counts = {'searched':0,'source_errors':0,'reviewed':0,'accepted':0,'rejected':0,'requests':0}
+    counts = {'searched':0,'source_errors':0,'reviewed':0,'accepted':0,'rejected':0,'requests':0,
+              'recent_reviewed':0,'backlog_reviewed':0,'undated_reviewed':0,'source_capped_queries':0}
+    cutoff = now-timedelta(days=LOOKBACK_DAYS)
+
+    def lane(item):
+        date = collector.event_datetime(item)
+        return 'undated' if date is None else 'recent' if date>=cutoff else 'backlog'
+
+    def priority(item):
+        date = collector.event_datetime(item)
+        return ({'recent':0,'backlog':1,'undated':2}[lane(item)], -date.timestamp() if date else 0)
+
     def checkpoint():
+        pending.sort(key=priority)
         state.update(seen=seen,pending=pending,updated_at=now.isoformat())
         archive_review.write_json(root/background.STATE_FILE,state)
         save_articles(root,articles,now)
+
+    def within_deadline():
+        return clock()-started<deadline_minutes*60
+
     checkpoint()
     tasks = plan_queries(collector,now)
-    cursor = int(state.get('cursor',0))%len(tasks)
+    cursor = int(state.get('cursor',0))%len(tasks) if tasks else 0
     ordered = tasks[cursor:]+tasks[:cursor]
     searcher = searcher or enrich_archive.Searcher(collector)
-    for task in ordered[:max_fetches]:
-        if clock()-started>=deadline_minutes*60 or len(pending)>=MAX_PENDING: break
-        state['cursor'] = (state.get('cursor',0)+1)%len(tasks)
-        try:
-            found,_ = searcher.search(task)
-            counts['searched'] += 1
-        except (enrich_archive.SourceUnavailable,enrich_archive.QueryRejected):
-            counts['source_errors'] += 1; checkpoint(); continue
-        fresh = sorted(found,key=lambda row:row.get('published') or '',reverse=True)
-        taken = 0
-        for item in fresh:
-            date = collector.event_datetime(item)
-            key = candidate_key(item)
-            if (not key or key in keys or not item.get('url') or not date
-                    or date<now-timedelta(days=LOOKBACK_DAYS) or date>now+timedelta(hours=1)):
-                continue
-            if len(pending)>=MAX_PENDING or taken>=PER_QUERY_CANDIDATES: break
-            pending.append({**item,'background_query_language':task['code']})
-            keys.add(key); taken+=1
-        checkpoint()
     gate = (gate_factory or (lambda posts:archive_review.GeminiGate(collector,posts,on_post=ledger.save)))(budget)
     stop = 'daily batch complete'; failed = False
     review_errors = Counter(); batch_size = BATCH_SIZE; attempts = 0
-    stop_code = ''; deferred_keys = set()
+    stop_code = ''; deferred_keys = set(); discovery_attempts = 0; discovery_stop_code = ''
+
+    def can_review():
+        return bool(pending and gate.remaining>0 and attempts<budget and within_deadline())
+
+    def review_batch():
+        nonlocal stop, stop_code, attempts, batch_size
+        # Recent publication dates always precede the carried queue. No new
+        # historical search is introduced: older inputs were already pending.
+        eligible = [row for row in sorted(pending,key=priority) if candidate_key(row) not in deferred_keys]
+        batch = eligible[:batch_size]
+        if not batch:
+            stop = 'Unresolved candidates preserved for the next batch'
+            stop_code = 'unresolved_candidates'
+            return False
+        # Keep actual lane outcomes separate, including when a model only
+        # answers some siblings. Do not count cached/requeued rows as reviewed.
+        batch_lane = lane(batch[0])
+        batch = [row for row in batch if lane(row)==batch_lane]
+        payload = [{'event_id':str(i),'title':row.get('original_title') or row.get('title'),
+                    'excerpt':collector.selection_compact_text(row.get('summary'),1600),
+                    'published':row.get('published'),'language_hint':row.get('original_language')}
+                   for i,row in enumerate(batch)]
+        attempts += 1
+        try:
+            results = (review or (lambda rows:call_review(collector,rows)))(payload)
+            valid, issues = partition_results(results,payload)
+            review_errors.update(issues)
+        except (ValueError,collector.AISelectionIncompleteError) as error:
+            valid = []
+            code = 'interaction_incomplete' if isinstance(error,collector.AISelectionIncompleteError) else 'Background review is incomplete'
+            review_errors[code] += 1
+        if not valid:
+            checkpoint()
+            if len(batch)>1:
+                batch_size = max(1,len(batch)//2)
+                return True
+            # An unanswerable input stays pending without blocking its siblings.
+            deferred_keys.add(candidate_key(batch[0]))
+            batch_size = BATCH_SIZE
+            return True
+        resolved_keys = set()
+        for index,result in valid:
+            item = batch[index]
+            row = background.article(item,result,now)
+            if row: articles.append(row); counts['accepted']+=1
+            else: counts['rejected']+=1
+            key = candidate_key(item)
+            seen[key] = now.isoformat()
+            resolved_keys.add(key)
+            counts[lane(item)+'_reviewed'] += 1
+        pending[:] = [item for item in pending if candidate_key(item) not in resolved_keys]
+        counts['reviewed']+=len(valid)
+        batch_size = max(1,len(batch)//2) if len(valid)<len(batch) else BATCH_SIZE
+        checkpoint()
+        return True
+
     try:
         with gate:
-            while pending and gate.remaining>0 and attempts<budget and clock()-started<deadline_minutes*60:
-                batch = [row for row in pending if candidate_key(row) not in deferred_keys][:batch_size]
-                if not batch:
-                    stop = 'Unresolved candidates preserved for the next batch'
-                    stop_code = 'unresolved_candidates'
+            for task in ordered[:max_fetches]:
+                if not within_deadline():
+                    discovery_stop_code = 'deadline_reached'
                     break
-                payload = [{'event_id':str(i),'title':row.get('original_title') or row.get('title'),
-                            'excerpt':collector.selection_compact_text(row.get('summary'),1600),
-                            'published':row.get('published'),'language_hint':row.get('original_language')}
-                           for i,row in enumerate(batch)]
-                attempts += 1
+                # A full checkpoint previously prevented all discovery until
+                # the next run. Make bounded room before fetching, using the
+                # same request ledger rather than dropping pending evidence.
+                while len(pending)>MAX_PENDING-PER_QUERY_CANDIDATES and can_review():
+                    if not review_batch(): break
+                if len(pending)>MAX_PENDING-PER_QUERY_CANDIDATES:
+                    discovery_stop_code = 'queue_capacity_reached'
+                    break
+                if not within_deadline():
+                    discovery_stop_code = 'deadline_reached'
+                    break
+                state['cursor'] = (state.get('cursor',0)+1)%len(tasks)
+                discovery_attempts += 1
                 try:
-                    results = (review or (lambda rows:call_review(collector,rows)))(payload)
-                    valid, issues = partition_results(results,payload)
-                    review_errors.update(issues)
-                except (ValueError,collector.AISelectionIncompleteError) as error:
-                    valid = []
-                    code = 'interaction_incomplete' if isinstance(error,collector.AISelectionIncompleteError) else 'Background review is incomplete'
-                    review_errors[code] += 1
-                if not valid:
-                    checkpoint()
-                    if len(batch)>1:
-                        batch_size = max(1,len(batch)//2)
+                    found,full = searcher.search(task)
+                    counts['searched'] += 1
+                    if full: counts['source_capped_queries'] += 1
+                except (enrich_archive.SourceUnavailable,enrich_archive.QueryRejected):
+                    counts['source_errors'] += 1; checkpoint(); continue
+                fresh = sorted(found,key=lambda row:row.get('published') or '',reverse=True)
+                taken = 0
+                for item in fresh:
+                    date = collector.event_datetime(item)
+                    key = candidate_key(item)
+                    if (not key or key in keys or not item.get('url') or not date
+                            or date<cutoff or date>now+timedelta(hours=1)):
                         continue
-                    # A single malformed decision must not block unrelated news.
-                    # Do not accept it or mark it reviewed; retain it for later.
-                    deferred_keys.add(candidate_key(batch[0]))
-                    pending.remove(batch[0]); pending.append(batch[0])
-                    checkpoint(); batch_size = BATCH_SIZE
-                    continue
-                handled = set()
-                for index,result in valid:
-                    item = batch[index]
-                    row = background.article(item,result,now)
-                    if row: articles.append(row); counts['accepted']+=1
-                    else: counts['rejected']+=1
-                    seen[candidate_key(item)] = now.isoformat()
-                    handled.add(index)
-                resolved_keys = {candidate_key(batch[index]) for index in handled}
-                pending[:] = [item for item in pending if candidate_key(item) not in resolved_keys]
-                counts['reviewed']+=len(valid)
-                batch_size = max(1,len(batch)//2) if len(valid)<len(batch) else BATCH_SIZE
+                    if taken>=PER_QUERY_CANDIDATES: break
+                    pending.append({**item,'background_query_language':task['code']})
+                    keys.add(key); taken+=1
                 checkpoint()
+            while can_review():
+                if not review_batch(): break
     except archive_review.BudgetReached:
         stop = 'Review budget reached; candidates preserved'; stop_code = 'budget_reached'
     except (ValueError,RuntimeError,collector.AISelectionQuotaError,collector.requests.RequestException) as error:
@@ -295,16 +341,30 @@ def run(root=ROOT, max_posts=6, max_fetches=50, deadline_minutes=12, *, now=None
         counts['requests'] = gate.posts
         checkpoint()
     if pending and not failed and stop=='daily batch complete':
+        stop_code = 'deadline_reached' if not within_deadline() else 'budget_reached'
         stop = 'Review budget/deadline reached; candidates preserved'
-        stop_code = 'budget_or_deadline_reached'
     if pending and counts['reviewed']==0 and review_errors and stop_code not in ('budget_reached','quota_reached'):
         failed = True
+    source_complete = counts['searched']==len(tasks) and counts['source_errors']==0
+    if not source_complete and not discovery_stop_code:
+        discovery_stop_code = 'source_errors' if counts['source_errors'] else 'fetch_limit_reached' if discovery_attempts>=max_fetches else stop_code or 'review_stopped'
+    complete = not pending and source_complete
+    if not complete and not pending and stop=='daily batch complete':
+        stop = 'Source discovery incomplete; unsearched or failed queries remain'
+        stop_code = discovery_stop_code
+    lanes = Counter(lane(row) for row in pending)
     report = {'updated_at':now.isoformat(),'archive_only':True,'category':background.CATEGORY,
               'topic_ids':list(topics.topic_ids()),'language_codes':sorted({q['code'] for q in tasks}),
               'lookback_days':LOOKBACK_DAYS,'backfill':False,'counts':counts,'pending_reviews':len(pending),
+              'recent_pending':lanes['recent'],'backlog_pending':lanes['backlog'],'undated_pending':lanes['undated'],
+              'source_discovery':{'planned_queries':len(tasks),'attempted_queries':discovery_attempts,
+                  'searched_queries':counts['searched'],'failed_queries':counts['source_errors'],
+                  'pending_queries':len(tasks)-counts['searched'],'complete':source_complete,
+                  'stop_code':discovery_stop_code},
               'stop':stop,'failed':failed,'shared_daily_review_allocation':DAILY_ALLOCATION,
-              'batch_status':'partial' if pending else 'complete','complete':not pending,
-              'stop_code':stop_code,'review_batch_size':BATCH_SIZE,
+              'max_requests_per_run':max_posts,'requests_available_at_start':budget,
+              'batch_status':'complete' if complete else 'partial','complete':complete,
+              'review_complete':not pending,'stop_code':stop_code,'review_batch_size':BATCH_SIZE,
               'review_attempts':attempts, 'review_validation_errors':dict(review_errors),
               'map_events_written':0,'destination':'background archive; D1 sync is separate'}
     archive_review.write_json(root/background.STATUS_FILE,report)
@@ -314,9 +374,9 @@ def run(root=ROOT, max_posts=6, max_fetches=50, deadline_minutes=12, *, now=None
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--max-posts',type=int,default=6)
+    parser.add_argument('--max-posts',type=int,default=20)
     parser.add_argument('--max-fetches',type=int,default=50)
-    parser.add_argument('--deadline-minutes',type=int,default=12)
+    parser.add_argument('--deadline-minutes',type=int,default=20)
     args = parser.parse_args()
     report = run(max_posts=args.max_posts,max_fetches=args.max_fetches,deadline_minutes=args.deadline_minutes)
     if report['failed']: raise SystemExit(1)

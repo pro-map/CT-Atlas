@@ -12,9 +12,9 @@ invokes `tools/enrich_threat_categories.py`. It imports collector functions for
 schema, selection and deduplication, but runs fixed historical source tasks and
 separate checkpoints. `CT_ATLAS_BACKFILL_PROVIDER=groq` selects the Groq backend.
 
-**Other eight topics in Chinese:** the same workflow invokes
+**Other active topics in Chinese:** the same workflow invokes
 `tools/enrich_chinese_map.py`. Its `gemini-chinese-map-*` checkpoint filenames are
-historical compatibility names; the active workflow chooses Groq.
+historical compatibility names; its separate historical lane is disabled.
 
 **Custom Intelligence:** `cloudflare-worker/deep-search.js` and `deep-search.js`
 are a separate interactive search system. Its 14 language/script codes are not
@@ -66,20 +66,51 @@ AI reviews, source collection, database edits or quota writes. The daily collect
 also checks metadata consistency before it starts. CI checks every authoritative
 configuration file and tests against the loaded settings, not just JSON literals.
 
-## Historical continuity and operational limits
+## Daily priority and progress
 
-This alignment adds 78 daily source searches (1,056 to 1,134 on the reviewed
-snapshot). It changes neither AI quotas nor schedules. More candidates can exceed
-a run's existing AI review allowance; existing budget/recovery behavior still
-applies. More configured queries do not imply more events or a completed backfill.
+Daily collection separates candidates published within the recent three-day
+window from older candidates. Fresh reporting is reviewed first; old queue
+recovery follows, and existing-record maintenance runs last. A missing or invalid
+publication date cannot enter the recent lane. Completed AI decisions remain
+cached without resetting the cache version or quota ledger.
 
-Full historical plan objects and ordering are unchanged at this migration:
-7,560 RN roots (including 5,238 supplement roots), 3,429 CE, 3,429 BIO and 1,248
-Chinese roots. These are planned totals, not remaining counts. State, queues,
-reviews, event IDs and quota ledgers are not reset. The old general archive's
-replay surface is retained as `HISTORICAL_REPLAY_PROFILES`, so daily expansion
-cannot silently create a second historical catch-up project.
+`daily_candidate_queue.json` stores raw candidates before AI selection. Only
+completed candidates whose database write succeeded leave that queue. It is
+committed and retained in recovery artifacts even after failures, so articles
+do not disappear merely because a later feed no longer includes them. It is
+excluded from the published site.
 
-Backend and publication evidence must still be verified from actual run records
-and deployed data. This configuration change does not certify any new event or
-the completion of either historical project.
+Scheduled selection uses 32 candidates per batch. Request ceilings stay at
+30/run and 60/Pacific day for the primary model, with 25/run and 50/day for
+overflow. Historical recovery and maintenance together may use at most ten
+requests per run, including a maintenance cap of two. These are sub-envelopes
+inside the existing caps; they do not create additional provider quota.
+
+The map exposes `events.json.collection_status` independently of GitHub's job
+conclusion. It reports recent reviewed/pending candidates, the earlier backlog,
+source errors, geolocation pending, and separate attempt/publication timestamps.
+The Radiological/Nuclear background daily publishes its own status and attempt
+timestamp in the same view. Completed but unlocated events are counted separately
+from events still awaiting an AI location decision.
+
+`tools/finalize_daily_status.py` runs after geolocation even when a preceding
+step fails. For a failed collector it restores the Git database first, preserving
+all events and the previous publication timestamp, then adds current progress
+metadata. Only telemetry from the current attempt supplies new run counters.
+Recovery artifacts contain the queue, selection cache, database and
+`daily-collection-status.json`; the sidecar is also excluded from the site.
+
+`--refresh-existing` updates progress display without collection or AI calls.
+Legacy counters formerly named `recent_pending`/`backlog_pending` were input
+totals including cache hits; they appear as candidate totals with unknown
+reviewed/pending counts. Missing evidence never becomes a complete status.
+
+## Historical continuity
+
+Judicial collection and its keywords are retired. RadNuc and ChemEx historical
+backfills and the separate Chinese historical lane remain disabled by
+`backfill-control.json`; daily collection continues according to its active
+configuration. Changing daily priority or batch size does not restart those
+backfills. Existing checkpoints and the historical replay profile remain intact.
+Configured searches describe discovery capability, not exhaustive coverage or
+proof of a completed update.
