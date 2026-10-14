@@ -40,18 +40,30 @@
   "categories": [
     {
       "category": "Radiological/Nuclear",
-      "last_attempt_at": "2026-10-14T06:12:23.022593+00:00",
+      "last_attempt_at": "2026-10-14T09:32:30.278636+00:00",
       "status": "partial",
-      "reviewed": 41,
-      "pending": 459,
-      "candidates": 500,
-      "stop_code": "budget_or_deadline_reached"
+      "reviewed": 143,
+      "pending": 481,
+      "candidates": 624,
+      "recent_pending": 465,
+      "backlog_pending": 16,
+      "undated_pending": 0,
+      "source_discovery": {
+        "planned_queries": 50,
+        "attempted_queries": 50,
+        "searched_queries": 50,
+        "failed_queries": 0,
+        "pending_queries": 0,
+        "complete": true,
+        "stop_code": ""
+      },
+      "stop_code": "budget_reached"
     }
   ],
   "schema_version": 2,
   "last_attempt_at": "2026-10-13T22:12:44.167569+00:00",
   "published_at": "2026-10-14T08:58:48.718391+00:00",
-  "finalized_at": "2026-10-14T09:32:43.879453+00:00",
+  "finalized_at": "2026-10-14T09:37:22.888639+00:00",
   "status": "partial",
   "reasons": [
     "selection_budget",
