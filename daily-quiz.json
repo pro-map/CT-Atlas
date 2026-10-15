@@ -1,14 +1,14 @@
 {
   "category": "International CT Instruments and Institutions",
-  "question": "Which specific INTERPOL Notice type is utilised to provide a warning about a person's criminal activities because they are considered a possible threat to public safety?",
+  "question": "Which INTERPOL Notice type is specifically used to seek information on unidentified bodies?",
   "options": [
-    "Green Notice",
-    "Orange Notice",
-    "Blue Notice"
+    "Yellow Notice",
+    "Black Notice",
+    "Orange Notice"
   ],
-  "correct_index": 0,
-  "explanation": "A Green Notice is issued to provide warning about a person's criminal activities where that individual is considered a possible threat to public safety.",
+  "correct_index": 1,
+  "explanation": "Black Notices are utilized specifically by member countries to seek information on unidentified bodies.",
   "source_url": "https://www.interpol.int/en/How-we-work/Notices/About-Notices",
-  "date": "2026-10-14",
-  "source_checked_at": "2026-10-14T20:13:02.956808+00:00"
+  "date": "2026-10-15",
+  "source_checked_at": "2026-10-15T13:28:38.489562+00:00"
 }

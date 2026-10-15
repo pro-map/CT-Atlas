@@ -68,5 +68,10 @@
     "date": "2026-10-14",
     "question": "Which specific INTERPOL Notice type is utilised to provide a warning about a person's criminal activities because they are considered a possible threat to public safety?",
     "category": "International CT Instruments and Institutions"
+  },
+  {
+    "date": "2026-10-15",
+    "question": "Which INTERPOL Notice type is specifically used to seek information on unidentified bodies?",
+    "category": "International CT Instruments and Institutions"
   }
 ]
