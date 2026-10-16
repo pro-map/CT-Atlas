@@ -151,39 +151,41 @@
   "collection_status": {
     "schema_version": 2,
     "status": "partial",
-    "run_started_at": "2026-10-15T19:53:02.861469+00:00",
-    "last_attempt_at": "2026-10-15T19:53:02.861469+00:00",
-    "published_at": "2026-10-15T20:51:41.648631+00:00",
+    "run_started_at": "2026-10-16T13:16:38.797886+00:00",
+    "last_attempt_at": "2026-10-16T13:16:38.797886+00:00",
+    "published_at": "2026-10-16T14:13:41.463134+00:00",
     "recent": {
-      "candidates": 3614,
-      "reviewed": 3614,
-      "cached": 2553,
-      "new_reviews": 1061,
+      "candidates": 3669,
+      "reviewed": 2294,
+      "cached": 2166,
+      "new_reviews": 128,
       "official_auto_accepted": 0,
-      "retained": 189,
-      "rejected": 3425,
-      "pending": 0,
-      "status": "complete",
-      "calls": 34,
-      "primary_calls": 30,
-      "overflow_calls": 4,
-      "reasons": [],
-      "window_start": "2026-10-12T19:53:02.861469+00:00",
-      "window_end": "2026-10-15T19:53:02.861469+00:00"
+      "retained": 16,
+      "rejected": 2278,
+      "pending": 1375,
+      "status": "partial",
+      "calls": 17,
+      "primary_calls": 17,
+      "overflow_calls": 0,
+      "reasons": [
+        "transient_error"
+      ],
+      "window_start": "2026-10-13T13:16:38.797886+00:00",
+      "window_end": "2026-10-16T13:16:38.797886+00:00"
     },
     "backlog": {
-      "candidates": 1328,
-      "reviewed": 582,
-      "cached": 374,
-      "new_reviews": 208,
+      "candidates": 1252,
+      "reviewed": 527,
+      "cached": 399,
+      "new_reviews": 128,
       "official_auto_accepted": 0,
-      "retained": 22,
-      "rejected": 560,
-      "pending": 746,
+      "retained": 29,
+      "rejected": 498,
+      "pending": 725,
       "status": "partial",
       "calls": 10,
-      "primary_calls": 0,
-      "overflow_calls": 10,
+      "primary_calls": 10,
+      "overflow_calls": 0,
       "reasons": [
         "historical_budget"
       ]
@@ -210,39 +212,40 @@
       },
       "gdelt": {
         "attempted": 10,
-        "failed": 9,
-        "rate_limited": 7,
-        "successful": 1,
-        "invalid_response": 2
+        "failed": 8,
+        "rate_limited": 8,
+        "successful": 2
       },
-      "errors": 9,
+      "errors": 8,
       "status": "partial"
     },
     "reasons": [
+      "transient_error",
       "historical_budget",
+      "recent_pending",
       "backlog_pending",
       "source_errors",
       "category_pending"
     ],
     "queue_filter": {
-      "expired": 6654,
-      "retired": 465,
-      "cancelled_history": 148,
+      "expired": 6699,
+      "retired": 454,
+      "cancelled_history": 120,
       "duplicates": 0
     },
     "budgets": {
       "primary": {
         "per_run": 30,
         "per_day": 60,
-        "used_this_run": 30,
-        "used_today": 60
+        "used_this_run": 27,
+        "used_today": 27
       },
       "overflow": {
         "model": "gemini-3.1-flash-lite",
         "per_run": 25,
         "per_day": 50,
-        "used_this_run": 14,
-        "used_today": 39
+        "used_this_run": 0,
+        "used_today": 0
       },
       "historical_calls_per_run": 10,
       "historical_calls_used": 10,
@@ -251,11 +254,11 @@
     "geolocation": {
       "status": "complete",
       "pending": 0,
-      "located": 3710,
+      "located": 3721,
       "unlocated": 30,
       "completed_unlocated": 30,
       "outcome": "success",
-      "processed_this_run": 64
+      "processed_this_run": 18
     },
     "categories": [
       {
@@ -280,70 +283,70 @@
         "stop_code": "budget_reached"
       }
     ],
-    "finalized_at": "2026-10-15T20:54:54.143017+00:00",
+    "finalized_at": "2026-10-16T14:14:13.507022+00:00",
     "collect_outcome": "success",
     "geolocate_outcome": "success"
   },
   "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
   "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
   "trend_summary": {
-    "overview": "Recent counter-terrorism developments include major airstrikes against ISWAP in Borno, Nigeria, a drone-bomb attack on a military base in San José del Palmar, Colombia, and the arrest of a suspect planning a mass shooting at a Hindu temple in Illinois, United States.",
+    "overview": "Recent intelligence highlights significant counter-terrorism actions and attacks across multiple regions, including deadly strikes in Aden, Yemen, military operations against militant camps in Sokoto, Nigeria, and the disruption of a school attack plot in Alsace, France. These developments underscore persistent security challenges ranging from Houthi escalations and dissident faction violence to domestic extremist plots.",
     "developments": [
       {
-        "event_id": "ffb23bdfe5ea0179",
+        "event_id": "62d10b0533ab83fc",
         "severity": "CRITICAL",
         "category": "Attacks",
-        "headline": "Nigerian Air Force Airstrike Kills 40 ISWAP Fighters and Commander in Borno",
-        "detail": "Nigerian Air Force airstrikes under Operation Hadin Kai killed over 40 ISWAP fighters, including a commander, and destroyed vehicles and motorcycles in Borno State.",
-        "location": "Nigeria, Borno"
+        "headline": "Houthi Attack on Al-Maasheeq Palace",
+        "detail": "At least four people were killed in a Houthi attack targeting the Al-Maasheeq Palace in Aden, Yemen.",
+        "location": "Yemen, Lahj"
       },
       {
-        "event_id": "88c4f0082bd21b49",
-        "severity": "CRITICAL",
-        "category": "Attacks",
-        "headline": "ELN drone-bomb attack on military base in San José del Palmar leaves 9 soldiers injured",
-        "detail": "An explosive-laden drone attack carried out by the ELN against a military base in San José del Palmar, Chocó, left at least nine soldiers injured.",
-        "location": "Colombia, San José del Palmar"
-      },
-      {
-        "event_id": "ad8c96ab1d9d8c40",
+        "event_id": "0a196546b1e7fcc8",
         "severity": "HIGH",
-        "category": "Attacks",
-        "headline": "US: Young suspect arrested for planning mass shooting at Hindu temple",
-        "detail": "US authorities arrested a young man who was planning a mass shooting attack at a Hindu temple.",
-        "location": "United States, Illinois"
+        "category": "Counter Terrorism Action",
+        "headline": "Nigerian Military Destroys Lakurawa Camps",
+        "detail": "The Nigerian military successfully destroyed Lakurawa militant camps in Sokoto State and eliminated multiple terrorists during the operation.",
+        "location": "Nigeria, Sokoto"
       },
       {
-        "event_id": "62bf6ce51e823a82",
+        "event_id": "4c436f5b2308b579",
         "severity": "HIGH",
         "category": "Arrests",
-        "headline": "Swedish suspect apprehended near Pskov for plotting terrorist attacks on military sites",
-        "detail": "Russian authorities apprehended a Swedish citizen near Pskov who was reportedly planning terrorist attacks against military facilities.",
-        "location": "Russia, Pskov"
+        "headline": "FARC Dissident Leaders Captured in Ecuador",
+        "detail": "Four leaders of FARC dissident factions were captured in Quito, Ecuador, over their alleged involvement in the killing of 14 service members.",
+        "location": "Ecuador, Quito"
       },
       {
-        "event_id": "3e4dc7426f47bb1f",
+        "event_id": "84c21fdafdfa68f6",
         "severity": "HIGH",
-        "category": "Arrests",
-        "headline": "SANA: Reyhanlı attack suspect terrorist Mihraç Ural captured",
-        "detail": "Syrian state news agency SANA reported that Mihraç Ural, a suspect in the Reyhanlı terrorist attack, was captured in Syria while attempting to flee.",
-        "location": "Syria, Damascus"
+        "category": "Counter Terrorism Action",
+        "headline": "School Attack Plot Foiled in Alsace",
+        "detail": "French authorities disclosed that a planned attack against a school establishment in Alsace, linked to the 'True Crime Community', was successfully foiled in June.",
+        "location": "France, Alsace"
       },
       {
-        "event_id": "99454c143f9b81fa",
+        "event_id": "2d4ba8c34f6b220d",
         "severity": "SIGNIFICANT",
-        "category": "Attacks",
-        "headline": "Improvised explosive device explosion in Kirkuk kills officer and soldier, injures others",
-        "detail": "An IED explosion in Kirkuk resulted in the deaths of an officer and a soldier, and left several others injured.",
-        "location": "Iraq, Kirkuk"
+        "category": "Arrests",
+        "headline": "Weapons Supplier Arrested in Jenin Operation",
+        "detail": "In a special operation directed by Shin Bet, Duvdevan unit fighters arrested a terrorist from the Jenin terror network who was supplying weapons.",
+        "location": "Palestinian Territory, Janīn"
+      },
+      {
+        "event_id": "f7179e27aa2af35d",
+        "severity": "SIGNIFICANT",
+        "category": "Arrests",
+        "headline": "Terrorist Financing Suspect Detained in Russia",
+        "detail": "Russian security forces, supported by National Guard special forces, detained a suspect accused of financing terrorists in the Southern Urals region.",
+        "location": "Russia, Southern Urals"
       }
     ],
     "status": "ok",
     "model": "gemini-3.5-flash-lite",
     "window_hours": 24,
-    "generated_at": "2026-10-15T20:51:38.490150+00:00",
-    "candidate_events": 80,
-    "top_hash": "00b1e071bdec77235ef1324b4a840ce619b4a5361436ab01c468daefa0ce18cc",
+    "generated_at": "2026-10-16T14:13:30.623308+00:00",
+    "candidate_events": 51,
+    "top_hash": "2d1e2b1e814c949e2e6a6324788bd4d963c58c4886b8a278fcacd17633c2f658",
     "top_event_count": 10,
     "reused": false
   },
@@ -639,8 +642,8 @@
   },
   "backfill_completed_queries": {},
   "incremental_collection_stats": {
-    "already_reviewed_articles": 1735,
-    "duplicate_input_articles": 8351
+    "already_reviewed_articles": 1630,
+    "duplicate_input_articles": 8219
   },
   "last_collection_scope": "all",
   "last_planned_query_count": 1132,
@@ -725,9 +728,895 @@
     "UK Government / Counter-Terrorism",
     "INTERPOL English News"
   ],
-  "last_updated": "2026-10-16T07:33:02.740529+00:00",
-  "number_of_events": 3733,
+  "last_updated": "2026-10-16T14:13:41.463134+00:00",
+  "number_of_events": 3751,
   "events": [
+    {
+      "id": "ffa0d4f91e9cf95d",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Artyom Zhoga calls attack on Ugra infrastructure a terrorist act",
+      "summary": "Artyom Zhoga described an attack on critical infrastructure in Ugra as bearing the hallmarks of terrorists.",
+      "original_title": "Артём Жога назвал атаку на инфраструктуру Югры почерком террористов",
+      "original_summary": "Артём Жога назвал атаку на инфраструктуру Югры почерком террористов Ugra-news.ru",
+      "original_language": "ru",
+      "collection_language": "ru",
+      "collection_language_name": "Russian",
+      "collection_locale": "RU:ru",
+      "published": "2026-10-16T12:52:10+00:00",
+      "source": "Ugra-news.ru",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPMVJNOV9iMkxBUDZISkl3RFhubEVPRmExTHp4LXFUdFQ0MXduWDMwOXNMT1ZkQ0ljY3F0eGxJQzFVcDQxXy1aTkZUWWREMGk0RGtlVEdfSGlXal9scWxXVTNzeVVCM0ZIR2cwbzVEeTd1enRnZFFwc3JnSGl1VWswQzFwcDFkeXdSQk8ySldoTVZTUlkyMEhncFhfaExaWVpwT09j?oc=5",
+      "collector": "Google News RSS",
+      "country": "Russia",
+      "country_code": "RU",
+      "city": null,
+      "region": "Khanty-Mansi Autonomous Okrug-Yugra",
+      "latitude": 61.0,
+      "longitude": 69.0,
+      "location_precision": "region",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_discovery",
+      "source_article_fingerprints": [
+        "d289a5b09e133d4ee52b6d40e814e74487177e3084e97418bf03690ca5a8895f"
+      ],
+      "sources": [
+        "Ugra-news.ru"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-16T12:52:10+00:00",
+      "last_reported": "2026-10-16T12:52:10+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports a concrete attack on regional infrastructure deemed a terrorist act by authorities.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "is_attack": true,
+      "incident_anchor": "Ugra infrastructure attack 2026",
+      "update_type": "INITIAL",
+      "incident_id": "inc-ee40c91296e94421",
+      "translated_to_english": true,
+      "ai_canonical_event": "Attack on Ugra infrastructure characterized as terrorist act",
+      "title_variants": [
+        "Attack on Ugra infrastructure characterized as terrorist act"
+      ],
+      "actor_scope": "UNKNOWN",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "reported_status": "CONFIRMED",
+      "location_confidence_score": 0.9,
+      "location_method": "ai_region_coordinates",
+      "location_evidence": [
+        "infrastructure in Ugra"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The event refers to an infrastructure attack in Ugra (Khanty-Mansi Autonomous Okrug) in Russia.",
+      "ai_geo_fingerprint": "2a0c81fd21b9e877f168cbdc49adf5c3108dc9004415b799f7a0b8491b46c4a8",
+      "ai_geo_inferred": true
+    },
+    {
+      "id": "c228d37f100837b7",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "title": "Celebrations in Al-Bayda and Baniyas following the arrest of Mihraç Ural",
+      "summary": "Residents in Al-Bayda and Baniyas held celebrations following the reported arrest of militia leader Mihraç Ural.",
+      "original_title": "احتفالات في البيضا وبانياس عقب اعتقال معراج أورال | تلفزيون سوريا",
+      "original_summary": "احتفالات في البيضا وبانياس عقب اعتقال معراج أورال | تلفزيون سوريا تلفزيون سوريا",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-16T12:44:09+00:00",
+      "source": "تلفزيون سوريا",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMilwNBVV95cUxQZGRHMFdPdTdVdEt4QmgtM29hQ01aMmVaY0R3SlM1MWNlbF9ZNVppVHBQM1RONldxU1NETkhjdk10Nm8tN3ZWT2FncVFyREFURUFPSWszNC0tZFNKSWNKTm1uSldhbTRpTkxsZnlWX1VqVlM5TFpoanJ1MjlDU0dCREJQU3BwSEFXa1hRMDhwSEVITWI1SjlHZkkxMFJOdHR5Qk40UVZuMGlJWldRQTJhUGdfOV9rRk9MdjgwNkxGcGEwMjlRMUZlbUZMZnJfOWhpWVVjb1k4Nk1ES2NqeTZlXzBqNG5NQjlNNktWcEJMVlFLUGdqbmlfbGVVeENkNVM1bGNVb1Y5R0tHWmhoV3ZBbXJmZ3l4MVZTZThlYU9uZzI1eThpZmd1LWl5emd2SVg4S2Y2ODZ2U0RDcnlRUXdnYzBqbVVlcnI4dWdwQ3dJMVhEbHpFZkRCckV5Ri1kbkhaVzM1d2JxMlZlNDExZHg5bjhUWmxlem50Qm9DdmJyblVWN3VTeTIwdnVlMnExc1hmeG5jYVJlWdIBlwNBVV95cUxQZGRHMFdPdTdVdEt4QmgtM29hQ01aMmVaY0R3SlM1MWNlbF9ZNVppVHBQM1RONldxU1NETkhjdk10Nm8tN3ZWT2FncVFyREFURUFPSWszNC0tZFNKSWNKTm1uSldhbTRpTkxsZnlWX1VqVlM5TFpoanJ1MjlDU0dCREJQU3BwSEFXa1hRMDhwSEVITWI1SjlHZkkxMFJOdHR5Qk40UVZuMGlJWldRQTJhUGdfOV9rRk9MdjgwNkxGcGEwMjlRMUZlbUZMZnJfOWhpWVVjb1k4Nk1ES2NqeTZlXzBqNG5NQjlNNktWcEJMVlFLUGdqbmlfbGVVeENkNVM1bGNVb1Y5R0tHWmhoV3ZBbXJmZ3l4MVZTZThlYU9uZzI1eThpZmd1LWl5emd2SVg4S2Y2ODZ2U0RDcnlRUXdnYzBqbVVlcnI4dWdwQ3dJMVhEbHpFZkRCckV5Ri1kbkhaVzM1d2JxMlZlNDExZHg5bjhUWmxlem50Qm9DdmJyblVWN3VTeTIwdnVlMnExc1hmeG5jYVJlWQ?oc=5",
+      "collector": "Google News RSS",
+      "country": "Syria",
+      "country_code": "SY",
+      "city": "Al Bayḑā’",
+      "region": null,
+      "latitude": 32.76272,
+      "longitude": 21.75506,
+      "location_precision": "city",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "syria.tv",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "4e232b01731c57c45e4c6567edc0d053f08ecaeda5bd95d9366938053e95e4de"
+      ],
+      "sources": [
+        "تلفزيون سوريا"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-16T12:44:09+00:00",
+      "last_reported": "2026-10-16T12:44:09+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports the apprehension/arrest of a notable militant figure, prompting public celebrations.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "is_attack": false,
+      "incident_anchor": "Mihraç Ural arrest Syria 2026",
+      "update_type": "INITIAL",
+      "incident_id": "inc-4541d520921318de",
+      "translated_to_english": true,
+      "ai_canonical_event": "Celebrations in Al-Bayda and Baniyas after arrest of Mihraç Ural",
+      "title_variants": [
+        "Celebrations in Al-Bayda and Baniyas after arrest of Mihraç Ural"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "reported_status": "CONFIRMED",
+      "location_confidence_score": 0.85,
+      "location_method": "ai_city_geonames",
+      "location_evidence": [
+        "البيضا وبانياس"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Celebrations occurred in Al-Bayda and Baniyas following the arrest of Mihraç Ural.",
+      "ai_geo_fingerprint": "1fcabde2096b54111ccfbb49297adb0c4330820bbc129d589928b9b40fd92f70",
+      "ai_geo_inferred": false
+    },
+    {
+      "id": "b515374d5c4ebb2e",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Abducted Kurdish girl rescued and returned to family in Damascus",
+      "summary": "Following a robbery of gold and money, an abducted Kurdish girl was freed in Damascus and returned to her family.",
+      "original_title": "بعد سرقة الذهب والمال .. تحرير الفتاة الكردية المــخــتــطــفة في دمشق وإعادتها إلى عائلتها",
+      "original_summary": "بعد سرقة الذهب والمال .. تحرير الفتاة الكردية المــخــتــطــفة في دمشق وإعادتها إلى عائلتها المرصد السوري لحقوق الإنسان",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic / Syria",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-16T11:59:23+00:00",
+      "source": "المرصد السوري لحقوق الإنسان",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMivgJBVV95cUxOVVBsbFNfTG9wenRsQS1WYnhQbEJIMGMtZGlNNHFjcmlzX29UUmR5dW4zWFFqV3U3RGNSWE9VZnVxMjJpTV9HNmdjdVU3LUJibUpEcG53NEFpLTVmMDdFMFFlQXNZM1QzSjJxWGMzYU1CU091bk54RjViMjdpRzdTd0JWV1hWazF2bTBOVWhJVGJGVF9qRHVGTXRSN3VqTXV5d3Z6QkFqMnRYQlc2Qkt3cGhUTFl4Sl94dm9VRGpDWGo0bm1JeW85QjJKMjRnSGhEOGZnZ0F2ZUt3Nm95WTRSemQ5Q20zSGYwbkRudTdkM0ktRFRjVExUVnNyZk1ZbTAtUUV3YTg3dUx1OEhaY2RSSjJ4OVRrckJONnR0bDFXbnRQbFpLUVBaUWZndl83TEhaeGxiSTEtYzd4T3hYRGc?oc=5",
+      "collector": "Google News RSS",
+      "country": "Syria",
+      "country_code": "SY",
+      "city": "Damascus",
+      "region": null,
+      "latitude": 33.5102,
+      "longitude": 36.29128,
+      "location_precision": "city",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "syriahr.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "8e3d64b208eff7401e7abd72fd13d140a4b85ef8f663a6f85ca1b7f3fe54d90d"
+      ],
+      "sources": [
+        "المرصد السوري لحقوق الإنسان"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-16T11:59:23+00:00",
+      "last_reported": "2026-10-16T11:59:23+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Reports a concrete kidnapping and rescue/criminal operation involving non-state actors in Damascus.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "is_attack": false,
+      "incident_anchor": "Damascus kidnapping rescue 2026-10-16",
+      "update_type": "INITIAL",
+      "incident_id": "inc-6d3483dbfa6a405c",
+      "translated_to_english": true,
+      "ai_canonical_event": "Abducted girl rescued and returned to family in Damascus",
+      "title_variants": [
+        "Abducted girl rescued and returned to family in Damascus"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "location_confidence_score": 0.95,
+      "location_method": "ai_city_geonames",
+      "location_evidence": [
+        "دمشق"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The abducted Kurdish girl was freed and returned to her family in Damascus.",
+      "ai_geo_fingerprint": "535aff6d85fc3af1cd1ac1f12c7dfaea87c08aa3acebf3c2f68d618912df13ed",
+      "ai_geo_inferred": false
+    },
+    {
+      "id": "a10edb9330eb15a5",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "title": "Suspect arrested for attack against police in Cali",
+      "summary": "Authorities captured a suspect allegedly involved in a bomb attack targeting police officers in Cali, Colombia.",
+      "original_title": "¡CAYÓ SOSPECHOSO DE ATENTADO CONTRA POLICÍAS EN CALI!",
+      "original_summary": "¡CAYÓ SOSPECHOSO DE ATENTADO CONTRA POLICÍAS EN CALI! HSB Noticias",
+      "original_language": "es",
+      "collection_language": "es",
+      "collection_language_name": "Spanish / Latin America",
+      "collection_locale": "MX:es-419",
+      "published": "2026-10-16T11:55:04+00:00",
+      "source": "HSB Noticias",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQNjMxNWxOa2kyNnJCU2QtQmtqV2ZKUVpxTXRiaEQtQmVrSWE2LVhuenpxLWVyNHFXNmE1anFWWTZhRVgwNnJfWVc1REctMU1qN1hRRWRDNnJIbzJWc2JFUlhTcnJneGMzQzRLUG5NNXFnTi1SbEhIV2JKTUlhazNZbEhYY0RZSTJUa0NOSA?oc=5",
+      "collector": "Google News RSS",
+      "country": "Colombia",
+      "country_code": "CO",
+      "city": "Cali",
+      "region": null,
+      "latitude": 3.43054,
+      "longitude": -76.5199,
+      "location_precision": "city",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_discovery",
+      "source_article_fingerprints": [
+        "a5ef68fe50f1fa685a1478a7da7837f6914852aa4ed16c037b02836b7488e0c9"
+      ],
+      "sources": [
+        "HSB Noticias"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-16T11:55:04+00:00",
+      "last_reported": "2026-10-16T11:55:04+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports a new arrest of a suspect linked to an attack on police.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "is_attack": false,
+      "incident_anchor": "Cali police bombing 2026-10-16",
+      "update_type": "ARREST_UPDATE",
+      "incident_id": "inc-4d92cd30c503c944",
+      "translated_to_english": true,
+      "ai_canonical_event": "Suspect arrested for attack against police in Cali",
+      "title_variants": [
+        "Suspect arrested for attack against police in Cali"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "location_confidence_score": 0.95,
+      "location_method": "ai_city_geonames",
+      "location_evidence": [
+        "Cali"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "A suspect was arrested for an attack against police in Cali, Colombia.",
+      "ai_geo_fingerprint": "68f5a0a66003af72891e63f2eae885d1e07b5a6c706a98b42f6f8df20eaa222a",
+      "ai_geo_inferred": false
+    },
+    {
+      "id": "3d1f446f88c54937",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "title": "Explosion targeting police in Cali leaves several injured",
+      "summary": "An explosive device detonated targeting police officers in Cali, Colombia, resulting in multiple injuries.",
+      "original_title": "Atentado en Cali: explosión contra la Policía deja varios heridos",
+      "original_summary": "Atentado en Cali: explosión contra la Policía deja varios heridos HSB Noticias",
+      "original_language": "es",
+      "collection_language": "es",
+      "collection_language_name": "Spanish / Latin America",
+      "collection_locale": "MX:es-419",
+      "published": "2026-10-16T11:54:49+00:00",
+      "source": "HSB Noticias",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNTms5cnJqaC1qZjZreE9SRVd3VGxfelZicDZpT2JLOGlDNTM1bVFFZzhoSk1BOTFtWm1kaGtxcnRyMGtZc0ZnNW04dXZPcnhPTlJ6U0ZKWTJOU0VNRlJvSEpnenIyNkFPRkhVTko3bFlvNWwwUllIdUhLSDczUWlvcTlIallPbldCMkJHVnBheml6NG83U1BZdnNKYW9xdw?oc=5",
+      "collector": "Google News RSS",
+      "country": "Colombia",
+      "country_code": "CO",
+      "city": "Cali",
+      "region": null,
+      "latitude": 3.43054,
+      "longitude": -76.5199,
+      "location_precision": "city",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_discovery",
+      "source_article_fingerprints": [
+        "80184ba44b04f38d31d4f0b9b13e9e92317cd8161f1c351f3c2e9a87fa10217d"
+      ],
+      "sources": [
+        "HSB Noticias"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-16T11:54:49+00:00",
+      "last_reported": "2026-10-16T11:54:49+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete terrorist/militant explosive attack against police with injuries.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "is_attack": true,
+      "incident_anchor": "Cali police bombing 2026-10-16",
+      "update_type": "INITIAL",
+      "incident_id": "inc-4d92cd30c503c944",
+      "translated_to_english": true,
+      "ai_canonical_event": "Bomb explosion targets police in Cali Colombia 2026-10-16",
+      "title_variants": [
+        "Bomb explosion targets police in Cali Colombia 2026-10-16"
+      ],
+      "actor_scope": "NON_STATE",
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
+      "cbrn_subgroups": [],
+      "location_confidence_score": 0.95,
+      "location_method": "ai_city_geonames",
+      "location_evidence": [
+        "Cali"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "An explosion targeting police occurred in Cali, Colombia.",
+      "ai_geo_fingerprint": "db358c3e11c2b75b291ef71a7dd2dea13f867d0f49d612cdd4fba92571c26747",
+      "ai_geo_inferred": false
+    },
+    {
+      "id": "6a2880b247ba6b64",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy",
+        "Online / Cyber / AI"
+      ],
+      "title": "Report examines the evolution of Houthi military arsenal involving AI",
+      "summary": "An article discusses the development of the Houthi military arsenal, highlighting artificial intelligence and external expertise.",
+      "original_title": "تطور ترسانة الحوثيين العسكرية: الذكاء الاصطناعي والخبرة الإي",
+      "original_summary": "تطور ترسانة الحوثيين العسكرية: الذكاء الاصطناعي والخبرة الإي جريدة القدس",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-16T11:52:47+00:00",
+      "source": "جريدة القدس",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxOdl9RVmpUQXFNLXdnd1R5b01KUTVncnFrUEJKU2YwREVwME95dWdwQndRa01RM25JdE1YNTNpZ3JneG9XUUllSlNLVWZ2LWdFT1NsZFlQMDZiaVBZUjFYYTJ5RkJJTUNGcnIxaHF5eVpNQmZBcmI2elFBY0ppeXBqRWVoUjY?oc=5",
+      "collector": "Google News RSS",
+      "country": "Yemen",
+      "country_code": "YE",
+      "city": "Sanaa",
+      "region": null,
+      "latitude": 15.35452,
+      "longitude": 44.20646,
+      "location_precision": "country_capital",
+      "location_confidence": "medium",
+      "acquisition_channel": "multilingual_discovery",
+      "source_article_fingerprints": [
+        "12e61fff64205ea3b11a245b74ace9c4b9a2764f243202e0b51e494646a39ba5"
+      ],
+      "sources": [
+        "جريدة القدس"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-16T11:52:47+00:00",
+      "last_reported": "2026-10-16T11:52:47+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 65,
+      "ai_relevance_reason": "Reports on emerging technology and AI use by a militant group in maritime attacks.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "Houthis",
+      "primary_event_type": "ONLINE_CYBER_AI",
+      "is_attack": false,
+      "incident_anchor": "Houthi military AI development report 2026-10-16",
+      "update_type": "INITIAL",
+      "incident_id": "inc-c652f0f713864e55",
+      "translated_to_english": true,
+      "ai_canonical_event": "Report on Houthi military arsenal development and AI integration",
+      "title_variants": [
+        "Report on Houthi military arsenal development and AI integration"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "location_confidence_score": 0.8,
+      "location_method": "ai_country_capital",
+      "location_evidence": [
+        "Houthi military arsenal"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The report examines the military arsenal of the Houthis, who operate primarily in Yemen.",
+      "ai_geo_fingerprint": "fd7ac539d34c3952f40fbb22b72851ecf3d7ee750304b4d078ee2ab29362f274",
+      "ai_geo_inferred": true
+    },
+    {
+      "id": "74da3c755e4f62b5",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Olive trees burned in West Bank incident",
+      "summary": "Reports describe olive trees being burned in the West Bank amidst ongoing settler violence.",
+      "original_title": "زيتون محروق",
+      "original_summary": "زيتون محروق العربي الجديد",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-16T11:52:45+00:00",
+      "source": "العربي الجديد",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQckVpMEtzYlZkMzdDWnFrTWU5S0tDV1hWcDFVWmQySjNqSjdvbU5ua1ZvQUV2WmgwTXhTd1lkbUo4ZkdOajB1ZkZPbGF3T3plLU1qbEFNVTJYemRiemxGbXFqc1FzRWU2cFQtX3JFVXVGMFByNDFnZzc1dlN5M2VRWHNzaXhqZ1FkeGdxU2I4YnNCTXo0ZnpvcnNlTkxBQ2s?oc=5",
+      "collector": "Google News RSS",
+      "country": "Palestinian Territory",
+      "country_code": "PS",
+      "city": null,
+      "region": "West Bank",
+      "latitude": 31.9522,
+      "longitude": 35.2332,
+      "location_precision": "region",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "alaraby.co.uk",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "6fd26f8796cd092f5582388d805eb3b5ec8609e6dd4a525caad4ccbbb0ed4b85"
+      ],
+      "sources": [
+        "العربي الجديد"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-16T11:52:45+00:00",
+      "last_reported": "2026-10-16T11:52:45+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Reports a concrete act of extremist violence/vandalism (arson of olive trees).",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "is_attack": true,
+      "incident_anchor": "West Bank olive tree arson 2026-10-16",
+      "update_type": "INITIAL",
+      "incident_id": "inc-c78c868b018c7620",
+      "translated_to_english": true,
+      "ai_canonical_event": "Olive trees burned in West Bank",
+      "title_variants": [
+        "Olive trees burned in West Bank"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "location_confidence_score": 0.9,
+      "location_method": "ai_region_coordinates",
+      "location_evidence": [
+        "West Bank"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Olive trees were burned in the West Bank.",
+      "ai_geo_fingerprint": "652a1332b752dad2a336607086567cb733f9d0ca15b6f0744d943267452f95ad",
+      "ai_geo_inferred": false
+    },
+    {
+      "id": "d9865e2a68294555",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Simultaneous ground and aerial movements reported in southern Syria",
+      "summary": "Simultaneous ground and air movements and security activities were reported across Quneitra countryside and the Yarmouk Basin in southern Syria.",
+      "original_title": "تحركات برية وجوية متزامنة في جنوب سوريا تشمل ريف القنيطرة ومناطق حوض اليرموك",
+      "original_summary": "تحركات برية وجوية متزامنة في جنوب سوريا تشمل ريف القنيطرة ومناطق حوض اليرموك المرصد السوري لحقوق الإنسان",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic / Syria",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-16T11:41:53+00:00",
+      "source": "المرصد السوري لحقوق الإنسان",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMixgJBVV95cUxNdmJVc0djbTg3SXFtemkzNHY2bHlGNUJxN2pEQmxDOThXb05rY1RRd0cxQ0NUT1g5QjBsOXIxOEt4NjVUb3M4Z1FjYjNRNEZpMS1OZlF6RjYtNG1oQTRGb0hualZ5ZGxVanNORC1WaEJwbmJkeHViY0h6NnQ3dVExTWhfVXN6RmhXbFFEbk1UR1NZZFFrc3d2N00xbm1rM0QyZzZJNjc1SDFjWWsyay03RVNpcG83cDVjbEpteS0zM0tUTUlMTnhHNFZ0enhwZkpGR2N5M21MaWVUUWpBdEp3ODBFX0sxMFlKcFlabWxTMEx2MEZpTHQwQ2VPeEN3bE0wRS00UW5zOU5vRVlzLVdPTDQtYm15RVVrenVYSFRDWk5DRkxDWEY3elNCSHBqWFlWOGlFNFhnN1Y1Vm16Z09RalV3bEdWZw?oc=5",
+      "collector": "Google News RSS",
+      "country": "Syria",
+      "country_code": "SY",
+      "city": null,
+      "region": "Quneitra / Yarmouk Basin",
+      "latitude": 33.129,
+      "longitude": 35.827,
+      "location_precision": "region",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "syriahr.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "b935b11ac5a2a9677ac0ad6fcdb93be6a163932484d1be010c97949e15942c8f"
+      ],
+      "sources": [
+        "المرصد السوري لحقوق الإنسان"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-16T11:41:53+00:00",
+      "last_reported": "2026-10-16T11:41:53+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Reports armed clashes and military security movements in southern Syria.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "is_attack": true,
+      "incident_anchor": "Southern Syria military movements 2026-10-16",
+      "update_type": "INITIAL",
+      "incident_id": "inc-c63b09dd2dfa657f",
+      "translated_to_english": true,
+      "ai_canonical_event": "Military movements and security incidents in southern Syria",
+      "title_variants": [
+        "Military movements and security incidents in southern Syria"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "location_confidence_score": 0.9,
+      "location_method": "ai_region_coordinates",
+      "location_evidence": [
+        "ريف القنيطرة ومناطق حوض اليرموك في جنوب سوريا"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Simultaneous ground and air movements were reported across the Quneitra countryside and Yarmouk Basin in southern Syria.",
+      "ai_geo_fingerprint": "fbf60fabdafcc1a3a073eaaf662ddf3b5ecc9bbe2fa2a3a47edb7d290a42e5e6",
+      "ai_geo_inferred": false
+    },
+    {
+      "id": "26b551831cefe93d",
+      "category": "Chemicals and Explosives",
+      "categories": [
+        "Chemicals and Explosives"
+      ],
+      "title": "United States demands Lebanon retain explosives confiscated from Hezbollah",
+      "summary": "The United States has urged Lebanese authorities to retain explosives confiscated from the terrorist group Hezbollah.",
+      "original_title": "Estados Unidos exige al Líbano retener los explosivos confiscados al grupo terrorista Hezbollah",
+      "original_summary": "Estados Unidos exige al Líbano retener los explosivos confiscados al grupo terrorista Hezbollah Infobae",
+      "original_language": "es",
+      "collection_language": "es",
+      "collection_language_name": "Spanish",
+      "collection_locale": "ES:es",
+      "published": "2026-10-16T11:41:49+00:00",
+      "source": "Infobae",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxPd2tXQmtoc3FzSnQyWE5FQmV2ZnBuUm9zYmE5VUNYMzV6cmxRSFZUZkxzZEdyRGgtME0zR1FtQkZVN2g0dWhrbEVDVDdCX2todS02emlkVHlteW1RUkNJb2JxY05QSHFVX3NGREJIWjJOV2xObTQ3TTZYMEdDRWVsZDZxcEVTSEE3QUNfYW9hUE5QSmZEdEpaTEtJZkxTQ19QMWVVU29ERXFUajVxUERfMERuckdoaWJaTTVIYUxNSTQ5SVI2ZVhOYUtyY2s4ZFd2WHhGSjRYbV9Uei1aNXfSAfgBQVVfeXFMTU50M2I1UG9HRnhuUHR6Rzd0NWEzd0VBMC1ETnBsUWpsdFBIY1IxNUU1MXFEWEZZa3hWU2wzRl9LNWZDcFhUUUlmMV9LemFjTDJNV1NwYnJIT1hlLW5jVmk2S3NZbzlfd2N3OEo5N2ZVREpEc2tFc3lzUEdGdmNyTXRfZDEtYlFYQmpSeXlLN0dIMHNKbnVvUTR1VERLTVhmRUswajJQZGk5aGhLUjBUVVdoVmd2LXgtT0JEVE5tUFRNc1U5UXkxanc2aExoVEY2dHN0VjVEMms1YndwS0dzMnhsRlVEdlRxczhwU3pNeDNyVzRkVWgwMUY?oc=5",
+      "collector": "Google News RSS",
+      "country": "Lebanon",
+      "country_code": "LB",
+      "city": "Beirut",
+      "region": null,
+      "latitude": 33.89332,
+      "longitude": 35.50157,
+      "location_precision": "country_capital",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_discovery",
+      "source_article_fingerprints": [
+        "cec7f633634fb03ee98286069c639c2465f304a1bce9896436bf977929a65da8"
+      ],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
+      "cbrn_subgroups": [],
+      "sources": [
+        "Infobae"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-16T11:41:49+00:00",
+      "last_reported": "2026-10-16T11:41:49+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports on the seizure and retention of explosives linked to a designated terrorist organization.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "Hezbollah",
+      "primary_event_type": "WEAPONS",
+      "is_attack": false,
+      "incident_anchor": "Hezbollah explosives seizure Lebanon 2026-10-16",
+      "update_type": "INVESTIGATION_UPDATE",
+      "incident_id": "inc-fb8c0a41168c36ef",
+      "translated_to_english": true,
+      "ai_canonical_event": "US demands Lebanon retain explosives confiscated from Hezbollah",
+      "title_variants": [
+        "US demands Lebanon retain explosives confiscated from Hezbollah"
+      ],
+      "actor_scope": "NON_STATE",
+      "location_confidence_score": 0.9,
+      "location_method": "ai_country_capital",
+      "location_evidence": [
+        "al Líbano"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The United States demanded that Lebanon retain explosives confiscated from Hezbollah.",
+      "ai_geo_fingerprint": "712b6e177840dbab3588e3d8b742503313fe2e0adf2aed8f306694a32dd50d01",
+      "ai_geo_inferred": false
+    },
+    {
+      "id": "3155ab678f416f22",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Two DPOs suspended in Rivers State over renovation of police outpost by suspected cultists",
+      "summary": "Two Divisional Police Officers have been suspended in Rivers State following the unauthorized renovation of a police outpost allegedly facilitated by suspected cultists.",
+      "original_title": "EXTRA: Two DPOs suspended in Rivers over renovation of police outpost by suspected cultists",
+      "original_summary": "EXTRA: Two DPOs suspended in Rivers over renovation of police outpost by suspected cultists TheCable",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-10-16T11:40:39+00:00",
+      "source": "TheCable",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOZ2xITk8wdFJhTHRTYVgzNVpkNVBqTG1GZlRSTi1yZ3E3X3VhdG4xNEJJMk5vT1VFME50TWtBWlBFSFhmRnV5OGJwMnM2Z3J0NTlfSHdzUTNxME5OUjRSdmY0Y1hrajh6VndHQXlXOW4zM0hkY1lmRmRFRGlIQXJ6N08yY0tFRWFkVHRVSTNqa2JReUNsNWNabTdQVG14S0NFV0pMZDNVTllGRDRhLUpGTWRUZWlOdw?oc=5",
+      "collector": "Google News RSS",
+      "country": "Nigeria",
+      "country_code": "NG",
+      "city": null,
+      "region": "Rivers State",
+      "latitude": 4.8156,
+      "longitude": 7.0498,
+      "location_precision": "region",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "thecable.ng",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "114611b1ddadd42937215122f6ca4d028c71eb3ad9ee2c18b0175db89931317f"
+      ],
+      "sources": [
+        "TheCable"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-16T11:40:39+00:00",
+      "last_reported": "2026-10-16T11:40:39+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Involves security operations and disciplinary action regarding non-state cult groups.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "is_attack": false,
+      "incident_anchor": "Rivers State DPO suspension cultists 2026-10-16",
+      "update_type": "INITIAL",
+      "incident_id": "inc-b413294af5b6ce38",
+      "translated_to_english": false,
+      "ai_canonical_event": "Two DPOs suspended in Rivers State over cultist outpost involvement",
+      "title_variants": [
+        "Two DPOs suspended in Rivers State over cultist outpost involvement"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "location_confidence_score": 0.95,
+      "location_method": "ai_region_coordinates",
+      "location_evidence": [
+        "Rivers State"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Two DPOs were suspended in Rivers State over a police outpost incident.",
+      "ai_geo_fingerprint": "0b6d491cb96eec2492810f875ee578771990fc0734622f08a802286f36837652",
+      "ai_geo_inferred": false
+    },
+    {
+      "id": "6e04d11565fe8692",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Israeli settlers attack Palestinian village, burn olive trees, and injure journalist and civilian",
+      "summary": "Israeli settlers carry out an attack on a Palestinian village, setting fire to olive trees and injuring a journalist and a civilian.",
+      "original_title": "مستوطنون إسرائيليون يهاجمون قرية فلسطينية ويحرقون أشجار الزيتون ويصيبون صحفية ومدني",
+      "original_summary": "مستوطنون إسرائيليون يهاجمون قرية فلسطينية ويحرقون أشجار الزيتون ويصيبون صحفية ومدني شفق نيوز",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-16T11:17:32+00:00",
+      "source": "شفق نيوز",
+      "source_count": 3,
+      "url": "https://news.google.com/rss/articles/CBMi6wVBVV95cUxOdVpQTDdieV9tWjdhSmpEdEZJNTRjMUVCLUFuYnFQSnVqNklyLVFlbnB4VmgwVGl4ZHVtMnRSN29IUFlDX2s2akFzY1ZoSFFpY0FkRW1tQTVnNjFPSzdOVTZYaHVVYlpUWXExVkZKZGhwRUVCRThDaE9aNUlSUC1MSHlHUVlnMkFHLU1fekVMUGdCZnFUYkZuME9ibEhyRjRfaTRnSDFrOE1Td2xGTk9PRk1PZ2ctYTdfem5VNEJUaW8zUFpESDAwUGwwWmJoVUVhTnBfX2s3bnNwZ1BhcmF6TWUyZFk3Q1JKYnRHU2E5eml2U3kwZnhicV8tbTlPaVctSHduZmZoUDU5cXUwUEc5VzYtT2pWWEtEZ0VwbnZra0tONlpvQnNXWmdCRHRRcFJoS1h4NmZ0cXdRTzBrbUxHdFR2THhUYzY0VnZRZUZ1M0JKdVlrMUFzamNVSkt3TXJ6RXFGOXRveExVNE1HVW1uazJyMm1sQnV2aGp1SnlGaVFOeXpYUFJKQ0FLOEZ1YTBWdjB6RzNRNnlHaGc5bDlwRVBLVVpHdTVTSlVJY1JMU2p4ZTZFbW5tODFjcDlGOGdQQTZ2VFRsN0Z1SmZSSEdsQmlSRGJrNzk2MC1UaUxOdEFIbHEycE1FMXMxN3VkMmc0UnpoSHhTazJwN1JXWjkxNFdReVExenY2Q2I5QjhSMmR2eW56OWlHLWhLQ1FJNFNGSEZvX09Wa0stNWJWeDl1SGRFTmFsVnFNcVJFSEV5S1FCdnFQS0lWeF9kbVpMaFdjRVBTVWZZVF9wSXd5bFJMQkR0bkdQUDFrQkdvTnlzWDFkMmVyUkpRT3NpeTdQVmlNX3VGeWE4YzNNYnZYazk2SGJPRDBBcXphSjdZemMtNEpwR1c2Sk9Hbzd5RE9rWVBpRWR6YWkzWk5hMnQ3LV9WTFhWUmJBRWZ5azBlMEhfSUtDYkFJMU16TDROMkZzLVV4S1owdml5SktXSlE?oc=5",
+      "collector": "Google News RSS",
+      "country": "Palestinian Territory",
+      "country_code": "PS",
+      "city": null,
+      "region": "West Bank",
+      "latitude": 31.9522,
+      "longitude": 35.2332,
+      "location_precision": "region",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "shafaq.com/ar",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "0a9f7309a426881d3f3aa7b729c3f71a284531b9f48c95f386901cc4b04012a2",
+        "792a3ddc6522c2a699bae98df01cfcc2b8ce9a12a79a4aa82af0b40fd46cfebc",
+        "99e4fec2792c009dfaf8404d56103448a527cf161949d818c1399f9119a72da3"
+      ],
+      "sources": [
+        "شفق نيوز",
+        "Anadolu Ajansı",
+        "القدس العربي"
+      ],
+      "related_articles": [
+        {
+          "title": "Settler violence in the West Bank leaves 14 injured and vehicles burned",
+          "original_title": "الضفة.. إرهاب المستوطنين يخلف 14 مصابا و4 مركبات محترقة",
+          "original_language": "ar",
+          "summary": "Settler attacks in the West Bank resulted in 14 injuries—including two foreign journalists—and four burned vehicles.",
+          "published": "2026-10-16T11:42:18+00:00",
+          "source": "Anadolu Ajansı",
+          "url": "https://news.google.com/rss/articles/CBMihgRBVV95cUxPMGJLSmNub0V2R3FKc1B5Ql9sVkpReU40eDlObDZhS09saTlLSW9zNDJLSlhjNzNkR2NZdFVCbU9NZTEwNE9fS2hiTlVDZENFMkZkUmFDV0VzcmR5aGZDOGJqcWIxcUNGUmw4OEM3cTEwYmJnLU1hMmYtUzZUa2Qyd0ZfUVhJMUE5a0YxOERUem9IUHg1OVFPaVZfSEMxWDNBU3FSWW90NTR4Y1lMclhHdHpEUVJWVE5aX3BjRW9UOEQ0cjRDMGxEVzE1cFM3X3Z4d2xRQXVtaFZ4WnRNbWMxSlJZTWxTLUllSldzeU1DU3dySmpxQWZsdUdaVnNJR2VWRU0xeWViWUZlZjg1UE0zSHZUWFhrclhVQWV0WFp6SGVqenZSVUYtdEc1NHhkTWF0emtZZ3dlblVHS0w0b2tmR3p1bjY5OExBUlRTbEVRTmVLaTVYTEFKa2NPZUVtZUJQY0RmcTdpZ1ppSG1lMnZ3U1l6XzNQQ2xULUUwbEduMzJlTThQeW9DcnVxTTFKaGY1Ni1uWlhzZnFXak93NHVHMEFLeFRRRzNvTHp2elNwdERtZ0hfZ1VWdU9TdExiT3VOYlp1ZC1NWXFYN1MtN3UxTzJzQ1RyRV9tZV9GTndVcFBhUXFyRzJNR05zc0NzTnVEbW5xZUJBZUVDbjRka1ZZU1UzMF9BUQ?oc=5"
+        },
+        {
+          "title": "إرهاب المستوطنين يخلف 14 مصابا بينهم صحافيان أجنبيان و4 مركبات محترقة",
+          "original_title": "إرهاب المستوطنين يخلف 14 مصابا بينهم صحافيان أجنبيان و4 مركبات محترقة",
+          "original_language": "ar",
+          "summary": "إرهاب المستوطنين يخلف 14 مصابا بينهم صحافيان أجنبيان و4 مركبات محترقة القدس العربي",
+          "published": "2026-10-16T11:49:14+00:00",
+          "source": "القدس العربي",
+          "url": "https://news.google.com/rss/articles/CBMiygJBVV95cUxPUUI5alJCRzg1Yzg4X3hZdjFFOE9YQmlLUVJZakw3U29SM1d0TWRxcWo0RUt2SjFzdUs1MU1hVmhkNVBNczhOQ0RTZWtuNVJtMHBteDVXX2lhbmhTcEUxY1M2WW9vX2J1QTBvNzhYMnl1bW9PeExGOFNqaTd2VHc0bkNYLXhOWURCUF84UEptaS16UHBacnBhNGgtbHlLWDRkVlBxREtqQzVZampQbXRadWlmZFZVaE4yUVRVX1d0VEF1RnhkNVhiZm1kM1FkVHJjVlh6T0txZm5hdnBLU3JsOFFzenh2bFZCRjdnRjZFUjFMRWdyd3N3dlRTMlM2SmpwaDNydU1uOGJ3TUFDNUJFQUlzUzlGbDVUWHlFdE5PbHpTcFQ0Y1BRRkJnMnJRQ19aN3BTUHFiVUZqZnAyaGZOWnlfU051NmtqYkE?oc=5"
+        }
+      ],
+      "article_count": 3,
+      "first_reported": "2026-10-16T11:17:32+00:00",
+      "last_reported": "2026-10-16T11:42:18+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete violent attack by extremist non-state actors (settlers) against civilians, property, and journalists.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "is_attack": true,
+      "incident_anchor": "West Bank village settler attack 2026-10-16",
+      "update_type": "INITIAL",
+      "incident_id": "inc-ac6cbf02a4e122e4",
+      "translated_to_english": true,
+      "ai_canonical_event": "Israeli settler attack on Palestinian village with injuries and arson",
+      "title_variants": [
+        "Israeli settler attack on Palestinian village with injuries and arson"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "reported_status": "CONFIRMED",
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ],
+      "location_confidence_score": 0.85,
+      "location_method": "ai_region_coordinates",
+      "location_evidence": [
+        "مستوطنون إسرائيليون يهاجمون قرية فلسطينية"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Israeli settlers attacked a Palestinian village in the West Bank.",
+      "ai_geo_fingerprint": "65b102c765f0c05e73c61904de3e505f21c554ed4e6b74dd687b969daae338a9",
+      "ai_geo_inferred": true
+    },
     {
       "id": "78d82934e36b51f0",
       "category": "Counter Terrorism Action",
@@ -4196,7 +5085,8 @@
       "category": "Attacks",
       "categories": [
         "Attacks",
-        "Counter Terrorism Action"
+        "Counter Terrorism Action",
+        "Arrests"
       ],
       "title": "School attack plot in Alsace linked to 'True Crime Community' foiled in June",
       "summary": "RTL reports that a planned attack against a school establishment in Alsace, linked to the 'True Crime Community', was foiled in June.",
@@ -4208,7 +5098,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-10-15T12:18:46+00:00",
       "source": "RTL",
-      "source_count": 4,
+      "source_count": 5,
       "url": "https://news.google.com/rss/articles/CBMi_gFBVV95cUxPd1RyZG5yOURLRWt5ZTAybUE5RUUwQXEwbFJzSVlYQjAtd2dPLTNDcDdQNjl6eU1rYUdNTndhc0dVSm5ZVG5lYU9MQXhxUTVUZmZGQm1TTUtmalI5YkloN2w1cnk2X0RUX3NNNVItelJLQWd3ZkZIOGtYb3djck80QnhDTWYxdGgzZEVWSUlLY3BFZTRmY2RGTHpxNW55MmlQN0lySzBROUVYWDJBTFRnNk03elFUTGVSdENKZFZDd3R3c3RPS2pUd2NIMk96aEhvREt0OWEyUjdfSEwzZXc3eFFGUVdGemNyQzh5R2dWeTMwMUQtRXVlMm9qN05jdw?oc=5",
       "collector": "Google News RSS",
       "country": "France",
@@ -4222,6 +5112,7 @@
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "3d628efb4394bca963c50f0fc2ff2ea803e0818282b260bf5ee259b5199604f7",
+        "59afa37aefacb698c3b914cf89c58df27582bf4c58c3856b15c0b0de8deed7a7",
         "6872cdadd1ffcd7fee02f3564154022fa83c51c2d3e759bafa006f701968744f",
         "87b6554b019aceb4cc4e0acc6a6e2a8764046bc92c3ccd045f3b80807f27bfd0",
         "bd19c2c3560514dfefa24600c63f15cd802f4788b8b2f1b1995a672a865847fe"
@@ -4230,7 +5121,8 @@
         "RTL",
         "franceinfo",
         "ici.fr",
-        "Actu17"
+        "Actu17",
+        "Le Figaro"
       ],
       "related_articles": [
         {
@@ -4259,11 +5151,20 @@
           "published": "2026-10-15T17:16:00+00:00",
           "source": "Actu17",
           "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQbHVsMFRZWE5RME1RcnRlc21OR1ZENkRsOVRvdVIycjNpZHRVejFHYjBWWURPdUc2dG00bUFmQ3E3TklvZ05GbDBteW9PeEZ4bFFfZ1NnNVZBVmxpLXZpTTVGOXF1aGhxSWVRYTlUSm90bzg5UWcxTGV2YkluQldiQWpUbnlRUFR2Q05RVWhkdVhJSEVnNExEMGRYSUN5ZGQxWnZFY1JtZUozZWxIWXljNGRSVHNDUmQ0T2ZFZkFicGJneVdISTN3UmpRdw?oc=5"
+        },
+        {
+          "title": "Teenager arrested in Alsace over school attack plot",
+          "original_title": "Alsace : un adolescent fasciné par les tueries de masse écroué après un projet d’attentat contre un établissement scolaire",
+          "original_language": "fr",
+          "summary": "An adolescent in Alsace, fascinated by mass killings, has been jailed following a foiled terrorist attack plot against a school.",
+          "published": "2026-10-16T11:31:13+00:00",
+          "source": "Le Figaro",
+          "url": "https://news.google.com/rss/articles/CBMi-gFBVV95cUxONWREdnAydF9VNmxZa0hHdE5OSkZXbjlLZ1lUa0o3RWN2QUJyQ040b2VBUk1hX2VIMGtYdXpHQ1RpV3RXbG10YkttQUhrZDB2blJBLW5GS2dWWlBHb05QaVlUeEw5UWpmZERmTExLZ28yTUVxLWkxUHNYd1JXckhkM012bGx1alhxNENhNE9WRTNPMVRUaHVNSmlma2FDTmhvZGxfcnBYNzE5Wi1NY3RmQnRwNk5iam1HRkdyRDA2RlN0d0xPMm1GVnp1TnNPcnBLNXVONzhvY0FjekhXSW1hU3FJa1BrVGxoQmVUdFprOURfX0RoWlhSMGZ3?oc=5"
         }
       ],
-      "article_count": 4,
+      "article_count": 5,
       "first_reported": "2026-10-15T12:18:46+00:00",
-      "last_reported": "2026-10-15T13:40:29+00:00",
+      "last_reported": "2026-10-16T11:31:13+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -26430,15 +27331,26 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
+        "410593a1d74c5702f8084b29998d119ccab8da0951a0b8d2a0c6a47861e9c6e7",
         "5c9749c2bfbfa149679dae13d3b8a17ef2ccec9688545f5fb0ee5d505f0936a7"
       ],
       "sources": [
         "RFI"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Cameroon: Increase in Boko Haram attacks in the Far North region",
+          "original_title": "CAMEROUN: Boko Haram ka binkanniw bɛ ka caya kosɛbɛ \"Extrême nord\" marabolo kɔnɔ nin waati la",
+          "original_language": "fr",
+          "summary": "Reports note a significant increase in Boko Haram attacks and incursions in the Far North region of Cameroon during this period.",
+          "published": "2026-10-16T12:08:49+00:00",
+          "source": "RFI",
+          "url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxPdTlwTjdkTUNQbERJWDlSTXNRcjczT2UxbDdYVkU0SW5tdnFpZmRweGNtMmc3SUFtWEU3QldhWFRDaEZKWW1PbXlaQ2hBd1JhQ25mQ1dsb0s4dXpSLUdlQ2RVN05iT0paNlk0UWQ4bXkzUVM3UG1jMVVFc1dkaEZwejhMYWxsWWVfa2x2eU1MRkFEM2FsMGc5TENfVW9DNHZVZ3cxYjRsSlF3Y1ZWYkQ4U2F0WnNCNE92TVU2VkFvNGxaNk1sZU5LeGFqRUViLXlrTWFjTmhWOWE3N0RwazYyVUtkeUdtYlY5NGZEX2t1OEloSVk?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-10-13T11:38:53+00:00",
-      "last_reported": "2026-10-13T11:38:53+00:00",
+      "last_reported": "2026-10-16T12:08:49+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -26476,7 +27388,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Boko Haram incursions and attacks in Cameroon's Extreme-Nord region.",
       "ai_geo_fingerprint": "a1093810663a3d5a79d2906701d49a7207bc7f48ccfd9e89baea1eec628d1f3b",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 0.885,
+      "dedup_methods": [
+        "very_high_title_similarity"
+      ]
     },
     {
       "id": "62d10b0533ab83fc",
@@ -26497,7 +27413,7 @@
       "collection_locale": "SA:ar",
       "published": "2026-10-13T11:28:50+00:00",
       "source": "BBC",
-      "source_count": 23,
+      "source_count": 24,
       "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBCVEdFbFJ1ZVphR19rdnlQNWpKdVQ4NkNiVjBQeGcxZU00a0NTaWxDSVBmc3pCVGZwX1VNZWRoel9zTE83cUE5bGdGdnNVLTN2UDliYjhlYzhZRE9YWmfSAWNBVV95cUxNZkFsNzZhUmpyUkJJTlVMazl2VjY1YV9BekZFM3BhVnlNaTdpNy16MUtLVHhaanNMTGkydkJkRkhyUS1rczlpdVRjWldteGd5Y19NMXRaWkhhT1hNdXNkVHE2U1k?oc=5",
       "collector": "Google News RSS",
       "country": "Yemen",
@@ -26524,6 +27440,7 @@
         "6a39d5479f002f48ef5e9128c1109b3e4f92436384c0ae57cbf0230df2999e79",
         "809f8afef1896d0c30624bb514202e92fb551c39b76364f2c12747bdd976f3f7",
         "87b649e30c1dd835db01d8e5706c4fee5ff0c78030c199d4bdd310fd00991cc4",
+        "9099acd69d1d973a38a29616384483ab71f83bb9fc06363c4d96a7cbc4981915",
         "94c4dbd371d0ab48fb0f3541f9b69bcc5c7de85ad45316b228c6f633d825f25f",
         "a8f1cd79fec4137414af7bbf9c31d6e3816f4e56af81132951163dac17fd8d8e",
         "b027a5a4ce12e0b8da4a772b503bc0d66bc26cb2d0abe83de91627df151e1e58",
@@ -26560,7 +27477,8 @@
         "النجاح الإخباري",
         "The Guardian",
         "https://www.sabanew.net/",
-        "العربية"
+        "العربية",
+        "Defense Express"
       ],
       "related_articles": [
         {
@@ -26787,11 +27705,20 @@
           "published": "2026-10-15T19:29:59+00:00",
           "source": "العربية",
           "url": "https://news.google.com/rss/articles/CBMilwRBVV95cUxPd1BtVTE2eEVzUFFlMVJsZ3A2RkotaU94R25xMVZ5bUpWWDM3MzdPT2lmUnRMSFVJVTQ3b2JuWnJnY3J2T0pZQjhhNDZCVDV2UW00TkVnWVAxU0llcWE4NFB2ZEh1S0tCdUh1S3J4dlpQT2ZoOFFGazc1UzVWcFBYV2tSQTlpaFc2Y3B5R3FhejFqQW9TaXlSQ0RvRlgyU0s1TU9fWnNBcG9lY0o0MVV5RHo0SmgwOS0xOUR2SFo1c3ZFZU1tTVVQYjNaTzRrZHRrU3N4SUtiS2x1RTR6QXF6SWo2Z2x4OExjOXoyNXlaMlFrWU80SXBDQVdfcS1EV1BVTEQ5WlNqaE04MU9RYlVscXBubmpvN2ZQaU56VXVqcGRqYlNzcFdkcXBNZ01YcWM2UGlLY1V5UzlGVkVKWEY5M0todm1EMVhyOXJodnAtdzNxZUR1d3FHbG9mclM3VmNkQkJBSEt3b1pDTF95Y2k0ekk5TG1JbjkxTG5nUmxEYmZZU3NCZWUyYlZtRUJONnl6Y3pBM2lJdzRyeGZab3h1ZU04dWxUYVF6N2pLdzhoWnFtbGk3dDdqZUM4SUI0TUZhTnpZSjc2NlRtNGc4NDMzVm05blZacmVjUmlrR2tmN3NmUWx3bGpaTVQyMlFZdURWSVdqQk5EMWNWNV9Xa2tkN0wzZVNVaXhPYnRLOS1RYzRmOU9uZ3VB0gGcBEFVX3lxTE83aGp0WThuUGRxMDI0RDlPMWNIUXhmSlhrY0VmYndsQ1Z5clM0T3pCZ1d6b0hsNU0yME5QcnVnNHpBMkNyT2psaTlZMU1CbENZcTZwaGZYLTlnRkJuZGU4RVJ0MmZZdENKcXZtQUdVWUo0MHJyMjc4Q2J5TTZZd0taQWVDYnJJZVFMSnhOMGd2QjBRSG9NLUJDWDJIZU4xNGl2UUI0a1ZYUHpnU2ZxejQ2dFlMSG04U3FlYkE5bExnUkIxSnFhM3czWktLajdzZzJpRjRZLUNBdThyZTg1cGNwS3lLOGRnalQ1QXpmbDhqazBuSWdZQXNZaWc4U2VpYjVpU1hRS09rcjhSRkpEMTgwNmxaSHJFOXNCVWpPdTZxUTVyUkV0R0pDU3dHZEVXdHd1blNQLS00YnV0Vi1LdzFPRlRTemVpd1VRWl95M1VVV0hpVUw1cTlmN3VEOXJVMlF2eEFlZEhlMDVrMjN6UE1JM3hlTGR5Nk5GZUU3UTFzbjhrOHhNLWRVWFBjSGxrekxIX2ZtUUxXT0ZJM0pEQ3ZlMl9zc2ZZM29TeGFSSGlHUjlLYThrOVZMd3lQbnpPOEU0aHBWVk5VRzYtUTZLQjktSjktNTViSTl1TXNiYWdTcE5XQ3phdU9xbHJ3RGdiazc0NUVWbGNzbzdIR2JWX1gyQkdIaFdaVWpHdkRGeXNDOUx6d3k1UHo3T01BUA?oc=5"
+        },
+        {
+          "title": "Yemeni Houthis shoot down Saudi Eurofighter Typhoon",
+          "original_title": "​Yemeni Houthis Shoot Down Second Saudi Eurofighter Typhoon in a Month",
+          "original_language": "en",
+          "summary": "Yemeni Houthi forces report shooting down a Saudi Eurofighter Typhoon aircraft.",
+          "published": "2026-10-16T11:04:45+00:00",
+          "source": "Defense Express",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOemMweUpTZ2JxNEVqN1QxR2FlUTA0ODNGZThSNFhKZVhtVHZNU2dJME9sdUdXclN5d3hmUDVzNE9iWFlXNHhvNTEwLVB2dThVRHJNa3pBdHRuTmNOTlJRNXBJa3V4NXg2MFQ1UDg5ZWNOZ1hzcUZHemRvZzJ3M0xMZ0piakJQd1pPYXJ3ckZDNmwtbkNsUjJXZmFHdjBBdG01WXNqN1dqMkI3YWFHcV96SA?oc=5"
         }
       ],
-      "article_count": 26,
+      "article_count": 27,
       "first_reported": "2026-10-13T11:28:50+00:00",
-      "last_reported": "2026-10-15T17:46:54+00:00",
+      "last_reported": "2026-10-16T11:04:45+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -26834,7 +27761,8 @@
       "dedup_methods": [
         "entity_actor_event_signature",
         "actor_country_action_signature",
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "paraphrase_entity_context"
       ],
       "threat_categories": [
         "Chemicals and Explosives"
@@ -27394,7 +28322,7 @@
       "collection_locale": "SA:ar",
       "published": "2026-10-13T10:41:22+00:00",
       "source": "Reuters",
-      "source_count": 8,
+      "source_count": 9,
       "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1fWEgzaUpzSFVNTkdOemdsLWdSSHFNR1ZuQ3dFR2U0dTAtdTFjRFZXV3VDOFozQjhoVVpuV2xQNU9SUms5b0ZuYjdBajNTMTBMSzZRY2lDclFNQjhuNGltMlY0LWxhUFJLSEJ2SnFIdE11c0ZQemdDVVdoYU85b28?oc=5",
       "collector": "Google News RSS",
       "country": "Saudi Arabia",
@@ -27413,6 +28341,7 @@
         "6910943d016789812ee594b92315b77a43cb8e4e1321387e5d73565b431a3b66",
         "908baa36eae98cd63b7ac512f2e13f4794eabd1b4ea0c16b6547bab2acf93914",
         "c6804434541a9b36d3184be5224770f7fce3653f128e0c7618b97e35d5124d56",
+        "da4c6b85da15f0e684fa74a6d24d9aeb34cee9fbb80454ae0ae674789e2d2608",
         "e295dc2eb6495f50d52fe0ba05ae392a357d40364dfeaff62741d13935ac15e9",
         "fa07dc882172a0137033461beae43fb602736b297a0a197a04f7e6cb0e57c216",
         "ff7d821e42ac1ce7d93acfffac5f963f80e1305ed3397839d0635ccfade5fd97"
@@ -27425,7 +28354,8 @@
         "DW.com",
         "Reuters",
         "https://www.sabanew.net/",
-        "Sky News"
+        "Sky News",
+        "Yemen Online"
       ],
       "related_articles": [
         {
@@ -27499,11 +28429,20 @@
           "published": "2026-10-15T16:22:33+00:00",
           "source": "Sky News",
           "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFB1dkJrczd1b3ZJZGRVOVUwUDMwc3M1aXNvYXkwMncyM21qYXVDbUdpN1NfMzZvMjNIc2xvSXVRSC1ueG5BMzBCSk9kTmlITUhmYlF5LWxn?oc=5"
+        },
+        {
+          "title": "Yemeni Armed Forces Launch Operations Against Houthis as Coalition Intercepts Drone",
+          "original_title": "Yemeni Armed Forces Launch \"Dawn of Yemen\" Operations Against Houthi Targets as Coalition Intercepts Drone Bound for Saudi Arabia",
+          "original_language": "en",
+          "summary": "Yemeni Armed Forces launched 'Dawn of Yemen' operations against Houthi targets while a coalition intercepted a drone bound for Saudi Arabia.",
+          "published": "2026-10-16T12:39:25+00:00",
+          "source": "Yemen Online",
+          "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1va3hUMENmYTJ6TERLODFvaTVDUWpMNzE2bEhBMDZwWnJqWlM0VnphalR4MW11RV9USE5HMnRHNG9tY01BV2JUSHBiRWR6OFhCMzdnMG1YMGlmZw?oc=5"
         }
       ],
-      "article_count": 9,
+      "article_count": 10,
       "first_reported": "2026-10-13T10:41:22+00:00",
-      "last_reported": "2026-10-15T16:22:33+00:00",
+      "last_reported": "2026-10-16T12:39:25+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -27541,7 +28480,7 @@
       "ai_geo_reason": "Egypt promises military support to Saudi Arabia amid Houthi maritime strikes.",
       "ai_geo_fingerprint": "43ceedbdb74bb892123c1118572de98bdbb2c56295517d3fc92afed03479cac4",
       "ai_geo_inferred": true,
-      "dedup_confidence": 0.575,
+      "dedup_confidence": 0.599,
       "dedup_methods": [
         "entity_actor_event_signature",
         "actor_country_action_signature"
@@ -34398,7 +35337,7 @@
       "collection_locale": "NG:en",
       "published": "2026-10-12T19:07:24+00:00",
       "source": "Baird Maritime",
-      "source_count": 5,
+      "source_count": 6,
       "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPNkdWVnl5ajNWUkNHOEVzWkpGM2RqR0Zyb2h3dGxVVTBodHJ2Z1haa1lvenAzU24taWE1dFhJeVU0aS1SWk93UWxFWEh5aWpuWGpleTlFTFVnbF8zX2NjRHZWNng5OE5kVUVicV9VS3A4Q0IwcGRLVlRjVkhQTE9kaW1DZkJzSFVvQk5DNGcwOElwQW_SAaABQVVfeXFMT2pqczY4emhzOGloUHBJZkdQcmJoZ3NmMWotbTlUSk5TX1M4UkRGZ0VQVE13THlyVUpxRmJWS1lFTUNCR2FkTjVaaGNXcEU3YWw2YXJLRU4ySXFpeE1RM1ZkSE1aZkRhb0paYVBqRWNKWDFoZU5mV001djJkSHBtbDd2dWZFbkpwWnFKRzRWSF9GQ2YzUzNfbzlhVUp5d3NHUA?oc=5",
       "collector": "Google News RSS",
       "country": null,
@@ -34412,6 +35351,7 @@
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "8a7b6d9be97aab41ef2f1ab5c34179c4e664a3ddde5128297a3e3c8b77ab693a",
+        "8d39e46f871531860c0636bf15a4247c6cb6c14dd05848ede9e0a75ddc768cd2",
         "8ef2bcf3ff3bfeff0cdf6836233040cede03b83520bdeb07ac1a472f1ebbcde3",
         "d5c82b7dfc818065eb800231cc70887a73dcbd24fb45d8c761a76856391e9afc",
         "eebe34f2f13b4c053cf41b899b39cf1934dace77db4e8291d48a4a400729a36f",
@@ -34422,7 +35362,8 @@
         "24 News HD",
         "ASHARQ AL-AWSAT English",
         "The Moscow Times",
-        "USNI News"
+        "USNI News",
+        "gCaptain"
       ],
       "related_articles": [
         {
@@ -34460,15 +35401,24 @@
           "published": "2026-10-13T16:01:00+00:00",
           "source": "USNI News",
           "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOWmNLcjlfY01nVTJEbUh6TlQ5RVo5TE1oaHlzNW5wWC11ZFl0MlBTS2pwR1VKZnNjVXZRQzdaZURIN2RiV1BvWWxHeGpDRks5R0htX1djWmdMbUhLZTJNRktNSGw3N1g5alBKbGFpTzg3a1FwNVJZX3dhZkZfeWVKRTN6U0RuX3FPYklZZU85MmZhaHdOTjRqNFlyVEFXUQ?oc=5"
+        },
+        {
+          "title": "France Seizes Tanker; Russia Decries Piracy",
+          "original_title": "France Seizes Another ‘Shadow Fleet’ Tanker; Russia Decries ‘Piracy’",
+          "original_language": "en",
+          "summary": "French authorities seized another oil tanker belonging to the 'shadow fleet', prompting accusations of piracy from Russia.",
+          "published": "2026-10-13T12:56:21+00:00",
+          "source": "gCaptain",
+          "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNdGYyMER2clprc25CaHNoLWxZZ0JsdDVvSi1Jay1FRHYzS0puWngtTDhzRGhlV1pmQm5VTnlIRzlrSThMRXZRNjhFVk5veGs1UDRUWm02eDFIc2xnRE1kX0Jha1dLeWd6VUxHcG4yaGhfWjU0ckZiOVpiWnp0S3pBOWZlRzV5MG0wXzJpNTNR?oc=5"
         }
       ],
-      "article_count": 5,
+      "article_count": 6,
       "first_reported": "2026-10-12T19:07:24+00:00",
-      "last_reported": "2026-10-12T22:03:13+00:00",
+      "last_reported": "2026-10-13T12:56:21+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 75,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Operational maritime boarding/security event involving a commercial vessel.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -34502,9 +35452,10 @@
       "ai_geo_reason": "The boarding operation took place in the Indian Ocean.",
       "ai_geo_fingerprint": "d98c2fc5033c81fa1801df4d505cafaa48d4031ec76fbf49853685e1cf870775",
       "ai_geo_inferred": false,
-      "dedup_confidence": 0.759,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "same_incident"
       ]
     },
     {
@@ -70059,7 +71010,7 @@
       "collection_locale": "NG:en",
       "published": "2026-10-09T10:38:36+00:00",
       "source": "Leadership Hausa",
-      "source_count": 3,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQOHNYS1pOTmQ4alRGaDR6ZWZpQ0lpXzlGbDF3U3RwWnY2b1hhU0oxWHlwUFJuYU5DNEtLU1oydzZ3VGp3NzhWN2Y1eDhGS0kxdnMwU1d2c0NLM19uQ3VWWFJXRWdZbi1iODlUVlpSSWk3UEIyRlpyYWVYVGFPV1cwa0w5RVZEYUYxTUJva2xLV0tFdTE1MzdIYVBrM28zdw?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
@@ -70078,12 +71029,14 @@
         "7d5a0b2e138455ab080974de1c55a1c401658e314bb70b2030518d82e32dfbbf",
         "819b1c2ee8433d71cd64fb40728d1c631e76bfacb43fa9e84e840cb8ca0374d9",
         "c518066119498ad6e5ab30558b886ba5cacdcdad5c41fc3831e1597a0b0d7569",
+        "d6c000ba3277412d430d0583be3c45ca2735e8bbc5b0ee6e958bb29b238a2d80",
         "e0ab4fa3ca08471262a3df4df470f3561167113c182e4a7a126f5815e652040c"
       ],
       "sources": [
         "Leadership Hausa",
         "LEADERSHIP Newspapers",
-        "Vanguard News"
+        "Vanguard News",
+        "Premium Times Nigeria"
       ],
       "related_articles": [
         {
@@ -70121,9 +71074,18 @@
           "published": "2026-10-10T21:28:53+00:00",
           "source": "LEADERSHIP Newspapers",
           "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxOM2NWQ0dtU3JoV1huU010N05uUDc3UGI4QjBlU0FNQlViNHEzSDh3X0NkY1RsdVBEVG9IcnhNZEZDQ0tkUXVCcDR6RWZYQnVRbkJrTUI2V3AwRTZ0MFozc0RzUU5GbXV3ZVFSSkN2d1lVY1djZTNZcDhhNnlfREpOT04zTXc3dw?oc=5"
+        },
+        {
+          "title": "Nine die in Benue attacks in Nigeria",
+          "original_title": "Nine die in Benue attacks, days after Otukpo killings",
+          "original_language": "en",
+          "summary": "Nine people were killed in armed attacks in Benue State, Nigeria, following previous killings in Otukpo.",
+          "published": "2026-10-11T09:01:31+00:00",
+          "source": "Premium Times Nigeria",
+          "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQTVF2Y2FDeW1sUXRSUjhvN3dtWWo5WDVHcGVsdkM2TTRMcmNBZE5qT1ZPMUFwWUJXeE10ZjhEY2o0V0Zob3cyX0EzckwxdHl4WlJ6YUp2VlVHVEtYNXk4TDdGVXJBYmpTWkxrRjI5NFdmcFdxbDFBeWZYcjlMTElPRHpqd2hya0YwemtlUG1KMGVJaWZIZUljX3hsRFlza0RVNmV2akNuOWZkaTdOVm9KaHZsWFlKUGpscGc?oc=5"
         }
       ],
-      "article_count": 5,
+      "article_count": 6,
       "first_reported": "2026-10-09T10:38:36+00:00",
       "last_reported": "2026-10-12T03:04:58+00:00",
       "ai_selection_complete": true,
@@ -70167,7 +71129,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "paraphrase_entity_context",
-        "very_high_title_similarity"
+        "very_high_title_similarity",
+        "entity_actor_event_signature"
       ]
     },
     {
@@ -145497,6 +146460,9 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_incident"
+      ],
+      "threat_categories": [
+        "Chemicals and Explosives"
       ]
     },
     {
@@ -197055,152 +198021,6 @@
       "cbrn_subgroups": []
     },
     {
-      "id": "2795b8b8282f53fd",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Attacks",
-        "Maritime Piracy"
-      ],
-      "title": "Somali Intelligence Announces Killing of Al-Shabaab Elements",
-      "summary": "Somali intelligence announced the killing of several members belonging to the Al-Shabaab militant group.",
-      "original_title": "​الاستخبارات الصومالية تعلن مقتل عناصر من حركة الشباب",
-      "original_summary": "​الاستخبارات الصومالية تعلن مقتل عناصر من حركة الشباب صحيفة الأيام عدن",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
-      "published": "2026-09-27T07:00:00+00:00",
-      "source": "صحيفة الأيام عدن",
-      "source_count": 9,
-      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBpSnpqa2c5bUsza1BYMDBCeEpnTEIwMXh1anBtbWsyOW9rX1ZYQk1Ndnc2RWNmZ1VicnM1RGRCZmUwNlg0dnNXMUx5TUVKNUI0UUNRXzJZdG5TR0J3TWFr?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "1d27de0e6824ddff0c55357a9a290275768403f2d23a9f3cce8869c024f16f8c",
-        "376e697ccf1f437c16852de51c9d31c2045b4c376bedfc58cdc3ed1eb58db5ae",
-        "3e8ea364d3ed890215344281ba1e85687472c43cf3fce9ca1694ba1b8e5755dd",
-        "6ceb4c31f305d5a25df1760f746e52625aaaaab93a38f19ac145c857305f319e",
-        "76f4b97e9c8b28817abfdb6688773ef2229a0e53059cde0db9363b07479beaeb",
-        "8185f1a1e07d4f5daa606f48f3fb0e89260cbcbd18fa08139053697e1a3f51b6",
-        "afdd27a072435cf6ddd2c28f0b7bdc0b9e79e24878f17c4a763c3a4942afd646",
-        "b4f17fe3298715a5d8a358aa78dda87eb8d62f36f6dca1a21d531827f211700c",
-        "e4135f29ae7ff2456727dc33f1be14f3cbeab1bb7b803265751a654bd8e0909e",
-        "ee85f6d4eb5642723bb11cd4823792192d43b085bc527251dba8c2f90db6140d"
-      ],
-      "sources": [
-        "صحيفة الأيام عدن",
-        "Demócrata",
-        "جريدة الراية",
-        "qna.org.qa",
-        "مرسال قطر",
-        "almotamar.net",
-        "The News Pakistan",
-        "Shabelle Media",
-        "Shabelle Media Network"
-      ],
-      "related_articles": [
-        {
-          "title": "Somalia Proclaims 'a Great Defeat' of Al-Shabaab and Rebel Militias Around Baidoa",
-          "original_title": "Somalia proclaims \"a great defeat\" of Al Shabaab and rebel militias around Baidoa",
-          "original_language": "en",
-          "summary": "Somali authorities report a major defeat inflicted on Al-Shabaab and rebel militias in operations around Baidoa.",
-          "published": "2026-09-28T12:30:55+00:00",
-          "source": "Demócrata",
-          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQMXJUbk9ZWjdWVmNqb182ZDhkMXBaaW92TFc2LU5qNzMzbnY5NXhrZUNoZ01IZGZOeXZpemd6dW84SEpTdjhVblFBN2tpN1BtVlRnZDVGb2FHR2V0SHFqZVdHT3luUmItYnltb0FMZ0prZXdBZVlnS0diN2hxcTljZ1NYQkdjWDJJTmhTY2pDanBnemJ6bHUwMEgyOVpLRHhFZkNDRkctc2JXSTNSRWI2cVlKQVhVLTFUSWlwVTBmRHgzRERH0gHEAUFVX3lxTFAxclRuT1laN1ZWY2pvXzZkOGQxcFppb3ZMVzYtTmo3MzNudjk1eGtlQ2hnTUhkZk55dml6Z3p1bzhISlN2OFVuUUE3a2k3UG1WVGdkNUZvYUdHZXRIcWplV0dPeW5SYi1ieW1vQUxnSmtld0FlWWdLR2I3aHFxOWNnU1hCR2NYMklOaFNjakNqcGd6YnpsdTAwSDI5WktEeEVmQ0NGRy1zYldJM1JFYjZxWUpBWFUtMVRJaXBVMGZEeDNEREc?oc=5"
-        },
-        {
-          "title": "17 Al-Shabaab militants killed in Somalia",
-          "original_title": "المؤتمر نت - مؤتمر الحوار الوطني - مقتل 17 عنصراً من \"الشباب\" الصومالية",
-          "original_language": "ar",
-          "summary": "Reports indicate 17 members of Al-Shabaab were killed in military operations.",
-          "published": "2026-10-03T22:28:06+00:00",
-          "source": "almotamar.net",
-          "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5pYzBMVlJuY0UzTDU5eFJlVXZERTB3ZTRLLXk2VkxMSHIxNXQtZndaekxZQmdZLXZ5dWtkcnhrSW13dUFrNXR3ZXQ1eDFJTkVjZ2ZHenFrNzNVXzV2c3M5M21wUQ?oc=5"
-        },
-        {
-          "title": "National mourning for Pakistanis killed in Somalia incident",
-          "original_title": "‘Entire nation grieving over deaths of Pakistanis in Somalia incident’",
-          "original_language": "en",
-          "summary": "The Pakistani government expresses national grief over the deaths of sailors in a maritime incident off Somalia.",
-          "published": "2026-10-04T19:00:00+00:00",
-          "source": "The News Pakistan",
-          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQd2ZGUHFVQldjbkd2NUcyUHl2TlA4S0pGbUVDOUo3Q3BTOUlhZFZMdFZQbGRZUWQza3JsX3A3S3RWOXVEYUtYSHRWN0U1NkYyMVJiRzI0U2NmRzl6TEd0VHBrOW1jRDN4Q1g5czdWN0x3ZkQtQWN3VnptM0N4ZTZhd3hNamx4VDdGbm4zdHhRWWJpanJpTjFldjBoRGI1NFkwQWRnUlhLaEM?oc=5"
-        },
-        {
-          "title": "Senior Al-Shabaab leader killed in air operation",
-          "original_title": "Senior Al-Shabaab leader killed in Somalia air operation, officials say",
-          "original_language": "en",
-          "summary": "A senior Al-Shabaab leader was reportedly killed during an air operation in Somalia.",
-          "published": "2026-10-02T07:00:00+00:00",
-          "source": "Shabelle Media",
-          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNdWxlSlVGdF9PdGtUZExYTWpFcDZrQVRyUHJKMEZPVzlqbHFhNjFXYTFVM1RlVXMwQlJydHdQanpKUkZwZ0dtUkwyWURzTElQVjZWOGxBem1EUXNqQWJPdTRrOUxIaHlkaWNDWkdoSUtNdWJPZmRPVmZnOGFacFVrRGdfUmVFemY2YS1VWDBSdUdpSTg5MGNnUm5uWXk3Zw?oc=5"
-        },
-        {
-          "title": "Somali army launches security operation against Al-Shabaab",
-          "original_title": "Somali Army Launches Security Operation Against Al-Shabaab in Lower Shabelle",
-          "original_language": "en",
-          "summary": "The Somali national army has launched a security operation targeting Al-Shabaab militants in the Lower Shabelle region.",
-          "published": "2026-09-27T07:00:00+00:00",
-          "source": "Shabelle Media",
-          "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOSV9RUTY5XzBTUXlEbWJyOTFFOXFxM0t0RldaZGJEYjBNTHNJMFJkWVM5MWxhOGZMTDFEeTBvNkVLc1gtVktJQXlLN3EyanlmOEt5b1BlNFhqaDdVOGNhOGFjTHZTMG5TdWR4RC1Iai04ajE5YVpmUUpXUkpyeW4tRk9HMmZESDBkMkxockJ0bHlkYWNSQzJ2UDNnVXJLZTVadW84TW5R?oc=5"
-        }
-      ],
-      "article_count": 6,
-      "first_reported": "2026-09-27T07:00:00+00:00",
-      "last_reported": "2026-10-03T22:28:06+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports a concrete counter-terrorism operation by Somali intelligence resulting in the killing of Al-Shabaab militants.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "Al-Shabaab",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Somali intelligence operation against Al-Shabaab 2026-09-27",
-      "update_type": "INITIAL",
-      "incident_id": "inc-d23474a6c4d25609",
-      "translated_to_english": true,
-      "ai_canonical_event": "Somali intelligence security operation kills Al-Shabaab militants in Somalia",
-      "title_variants": [
-        "Somali intelligence security operation kills Al-Shabaab militants in Somalia"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Somali Intelligence Announces Killing of Al-Shabaab Elements"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Operation conducted by Somali intelligence against Al-Shabaab in Somalia.",
-      "ai_geo_fingerprint": "868c977aeecaa63c890af7aae7d2f705fc9def807c1c0f6676e31ded823a9cca",
-      "ai_geo_inferred": false,
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "paraphrase_entity_context",
-        "very_high_title_similarity",
-        "actor_country_action_signature",
-        "same_url"
-      ],
-      "cbrn_subgroups": []
-    },
-    {
       "id": "0f1133203401cd49",
       "category": "Chemicals and Explosives",
       "categories": [
@@ -230027,6 +230847,163 @@
         "paraphrase_entity_context",
         "same_incident"
       ]
+    },
+    {
+      "id": "2795b8b8282f53fd",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Attacks",
+        "Maritime Piracy"
+      ],
+      "title": "Somali Intelligence Announces Killing of Al-Shabaab Elements",
+      "summary": "Somali intelligence announced the killing of several members belonging to the Al-Shabaab militant group.",
+      "original_title": "​الاستخبارات الصومالية تعلن مقتل عناصر من حركة الشباب",
+      "original_summary": "​الاستخبارات الصومالية تعلن مقتل عناصر من حركة الشباب صحيفة الأيام عدن",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-09-21T07:00:00+00:00",
+      "source": "صحيفة الأيام عدن",
+      "source_count": 9,
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBpSnpqa2c5bUsza1BYMDBCeEpnTEIwMXh1anBtbWsyOW9rX1ZYQk1Ndnc2RWNmZ1VicnM1RGRCZmUwNlg0dnNXMUx5TUVKNUI0UUNRXzJZdG5TR0J3TWFr?oc=5",
+      "collector": "Google News RSS",
+      "country": "Somalia",
+      "country_code": "SO",
+      "city": "Mogadishu",
+      "region": null,
+      "latitude": 2.03711,
+      "longitude": 45.34375,
+      "location_precision": "country_capital",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_discovery",
+      "source_article_fingerprints": [
+        "1d27de0e6824ddff0c55357a9a290275768403f2d23a9f3cce8869c024f16f8c",
+        "376e697ccf1f437c16852de51c9d31c2045b4c376bedfc58cdc3ed1eb58db5ae",
+        "3e8ea364d3ed890215344281ba1e85687472c43cf3fce9ca1694ba1b8e5755dd",
+        "6ceb4c31f305d5a25df1760f746e52625aaaaab93a38f19ac145c857305f319e",
+        "76f4b97e9c8b28817abfdb6688773ef2229a0e53059cde0db9363b07479beaeb",
+        "8185f1a1e07d4f5daa606f48f3fb0e89260cbcbd18fa08139053697e1a3f51b6",
+        "afdd27a072435cf6ddd2c28f0b7bdc0b9e79e24878f17c4a763c3a4942afd646",
+        "b4f17fe3298715a5d8a358aa78dda87eb8d62f36f6dca1a21d531827f211700c",
+        "bafccc48f119f150bd6430f030794d953285ecd11920f7fe38453cad51c191f7",
+        "e4135f29ae7ff2456727dc33f1be14f3cbeab1bb7b803265751a654bd8e0909e",
+        "ee85f6d4eb5642723bb11cd4823792192d43b085bc527251dba8c2f90db6140d"
+      ],
+      "sources": [
+        "صحيفة الأيام عدن",
+        "Demócrata",
+        "جريدة الراية",
+        "qna.org.qa",
+        "مرسال قطر",
+        "almotamar.net",
+        "The News Pakistan",
+        "Shabelle Media",
+        "Shabelle Media Network"
+      ],
+      "related_articles": [
+        {
+          "title": "Somalia Proclaims 'a Great Defeat' of Al-Shabaab and Rebel Militias Around Baidoa",
+          "original_title": "Somalia proclaims \"a great defeat\" of Al Shabaab and rebel militias around Baidoa",
+          "original_language": "en",
+          "summary": "Somali authorities report a major defeat inflicted on Al-Shabaab and rebel militias in operations around Baidoa.",
+          "published": "2026-09-28T12:30:55+00:00",
+          "source": "Demócrata",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQMXJUbk9ZWjdWVmNqb182ZDhkMXBaaW92TFc2LU5qNzMzbnY5NXhrZUNoZ01IZGZOeXZpemd6dW84SEpTdjhVblFBN2tpN1BtVlRnZDVGb2FHR2V0SHFqZVdHT3luUmItYnltb0FMZ0prZXdBZVlnS0diN2hxcTljZ1NYQkdjWDJJTmhTY2pDanBnemJ6bHUwMEgyOVpLRHhFZkNDRkctc2JXSTNSRWI2cVlKQVhVLTFUSWlwVTBmRHgzRERH0gHEAUFVX3lxTFAxclRuT1laN1ZWY2pvXzZkOGQxcFppb3ZMVzYtTmo3MzNudjk1eGtlQ2hnTUhkZk55dml6Z3p1bzhISlN2OFVuUUE3a2k3UG1WVGdkNUZvYUdHZXRIcWplV0dPeW5SYi1ieW1vQUxnSmtld0FlWWdLR2I3aHFxOWNnU1hCR2NYMklOaFNjakNqcGd6YnpsdTAwSDI5WktEeEVmQ0NGRy1zYldJM1JFYjZxWUpBWFUtMVRJaXBVMGZEeDNEREc?oc=5"
+        },
+        {
+          "title": "17 Al-Shabaab militants killed in Somalia",
+          "original_title": "المؤتمر نت - مؤتمر الحوار الوطني - مقتل 17 عنصراً من \"الشباب\" الصومالية",
+          "original_language": "ar",
+          "summary": "Reports indicate 17 members of Al-Shabaab were killed in military operations.",
+          "published": "2026-10-03T22:28:06+00:00",
+          "source": "almotamar.net",
+          "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5pYzBMVlJuY0UzTDU5eFJlVXZERTB3ZTRLLXk2VkxMSHIxNXQtZndaekxZQmdZLXZ5dWtkcnhrSW13dUFrNXR3ZXQ1eDFJTkVjZ2ZHenFrNzNVXzV2c3M5M21wUQ?oc=5"
+        },
+        {
+          "title": "National mourning for Pakistanis killed in Somalia incident",
+          "original_title": "‘Entire nation grieving over deaths of Pakistanis in Somalia incident’",
+          "original_language": "en",
+          "summary": "The Pakistani government expresses national grief over the deaths of sailors in a maritime incident off Somalia.",
+          "published": "2026-10-04T19:00:00+00:00",
+          "source": "The News Pakistan",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQd2ZGUHFVQldjbkd2NUcyUHl2TlA4S0pGbUVDOUo3Q3BTOUlhZFZMdFZQbGRZUWQza3JsX3A3S3RWOXVEYUtYSHRWN0U1NkYyMVJiRzI0U2NmRzl6TEd0VHBrOW1jRDN4Q1g5czdWN0x3ZkQtQWN3VnptM0N4ZTZhd3hNamx4VDdGbm4zdHhRWWJpanJpTjFldjBoRGI1NFkwQWRnUlhLaEM?oc=5"
+        },
+        {
+          "title": "Senior Al-Shabaab leader killed in air operation",
+          "original_title": "Senior Al-Shabaab leader killed in Somalia air operation, officials say",
+          "original_language": "en",
+          "summary": "A senior Al-Shabaab leader was reportedly killed during an air operation in Somalia.",
+          "published": "2026-10-02T07:00:00+00:00",
+          "source": "Shabelle Media",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNdWxlSlVGdF9PdGtUZExYTWpFcDZrQVRyUHJKMEZPVzlqbHFhNjFXYTFVM1RlVXMwQlJydHdQanpKUkZwZ0dtUkwyWURzTElQVjZWOGxBem1EUXNqQWJPdTRrOUxIaHlkaWNDWkdoSUtNdWJPZmRPVmZnOGFacFVrRGdfUmVFemY2YS1VWDBSdUdpSTg5MGNnUm5uWXk3Zw?oc=5"
+        },
+        {
+          "title": "Somali army launches security operation against Al-Shabaab",
+          "original_title": "Somali Army Launches Security Operation Against Al-Shabaab in Lower Shabelle",
+          "original_language": "en",
+          "summary": "The Somali national army has launched a security operation targeting Al-Shabaab militants in the Lower Shabelle region.",
+          "published": "2026-09-27T07:00:00+00:00",
+          "source": "Shabelle Media",
+          "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOSV9RUTY5XzBTUXlEbWJyOTFFOXFxM0t0RldaZGJEYjBNTHNJMFJkWVM5MWxhOGZMTDFEeTBvNkVLc1gtVktJQXlLN3EyanlmOEt5b1BlNFhqaDdVOGNhOGFjTHZTMG5TdWR4RC1Iai04ajE5YVpmUUpXUkpyeW4tRk9HMmZESDBkMkxockJ0bHlkYWNSQzJ2UDNnVXJLZTVadW84TW5R?oc=5"
+        },
+        {
+          "title": "Somali intelligence operation kills four al-Shabab members in Middle Shabelle",
+          "original_title": "Somalia says intelligence operation kills four al-Shabab members in Middle Shabelle",
+          "original_language": "en",
+          "summary": "A security intelligence operation in Middle Shabelle resulted in the killing of four Al-Shabaab militants.",
+          "published": "2026-09-21T07:00:00+00:00",
+          "source": "Shabelle Media Network",
+          "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQbUVzQmxNRkJXdlh3a1l4cWRIMGozemZBTHV4N1A3WE03ZmdoTVhoQ25NMUI5N2ltYl9fb3BqNkM2d1FBczlTT0toSVBoU2xkQnVTVTA5Z005cXJhVlR5TndkdDNMRTloLUVxVmpuVHoxZlQ0OVJ0Qk9ZbWxveUtVWFp2dnlKWTd6a0U4VXN6eXUxQ29GMTZ0T1lycFpELTB6V2U3djIxOVNfeEFSTjlB?oc=5"
+        }
+      ],
+      "article_count": 7,
+      "first_reported": "2026-09-21T07:00:00+00:00",
+      "last_reported": "2026-10-03T22:28:06+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism operation by Somali intelligence resulting in the killing of Al-Shabaab militants.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "Al-Shabaab",
+      "primary_event_type": "CT_OPERATION",
+      "is_attack": false,
+      "incident_anchor": "Somali intelligence operation against Al-Shabaab 2026-09-27",
+      "update_type": "INITIAL",
+      "incident_id": "inc-d23474a6c4d25609",
+      "translated_to_english": true,
+      "ai_canonical_event": "Somali intelligence security operation kills Al-Shabaab militants in Somalia",
+      "title_variants": [
+        "Somali intelligence security operation kills Al-Shabaab militants in Somalia"
+      ],
+      "location_confidence_score": 0.9,
+      "location_method": "ai_country_capital",
+      "location_evidence": [
+        "Somali Intelligence Announces Killing of Al-Shabaab Elements"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Operation conducted by Somali intelligence against Al-Shabaab in Somalia.",
+      "ai_geo_fingerprint": "868c977aeecaa63c890af7aae7d2f705fc9def807c1c0f6676e31ded823a9cca",
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "paraphrase_entity_context",
+        "very_high_title_similarity",
+        "actor_country_action_signature",
+        "same_url",
+        "title_plus_anchor"
+      ],
+      "cbrn_subgroups": []
     },
     {
       "id": "aa46d94eac102f5f",
@@ -279521,6 +280498,84 @@
       "incident_id": "inc-57b0d3efada3baad"
     },
     {
+      "id": "33dc2a61908ee027",
+      "category": "Weapons",
+      "categories": [
+        "Weapons"
+      ],
+      "title": "Iraqi Interior Ministry seizes 47 drones and 46 projectiles in Anbar",
+      "summary": "The Iraqi Interior Ministry announced the seizure of 47 drones and 46 projectiles in Anbar province.",
+      "original_title": "الداخلية: ضبط 47 طائرة مسيرة و46 مقذوفاً في الأنبار",
+      "original_summary": "الداخلية: ضبط 47 طائرة مسيرة و46 مقذوفاً في الأنبار وكالة الانباء العراقية (واع)",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-09-11T18:27:05+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE5Kci1TWVhpa3NVWnVoTUNhVVZKLXJtenNJRVptMElYSHlqS0lJM2VUNEd2eGtRd2h5dGZYLWE0bVNMaHRrNjRQSzBjSk1YZUJLVFdibWtZbw?oc=5",
+      "collector": "Google News RSS",
+      "country": "Iraq",
+      "country_code": "IQ",
+      "city": null,
+      "region": "Anbar Governorate",
+      "latitude": 33.3986,
+      "longitude": 41.7932,
+      "location_precision": "region",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "ina.iq",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "6308e4a737cedd4456456e7bc87267f0881193313e32fbd5e52ec9bcde0174e6"
+      ],
+      "sources": [
+        "وكالة الانباء العراقية (واع)"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-09-11T18:27:05+00:00",
+      "last_reported": "2026-09-11T18:27:05+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Concrete weapons cache seizure (drones and projectiles) by security forces.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "WEAPONS",
+      "is_attack": false,
+      "incident_anchor": "iraq-seizure-drones-projectiles-anbar-2026-09",
+      "update_type": "INITIAL",
+      "incident_id": "inc-5a1c79a824ab8c04",
+      "translated_to_english": true,
+      "ai_canonical_event": "Iraqi Interior Ministry seizes 47 drones and 46 projectiles in Anbar",
+      "title_variants": [
+        "Iraqi Interior Ministry seizes 47 drones and 46 projectiles in Anbar"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "location_confidence_score": 0.95,
+      "location_method": "ai_region_coordinates",
+      "location_evidence": [
+        "الأنبار"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The Iraqi Interior Ministry seized drones and projectiles in Anbar province.",
+      "ai_geo_fingerprint": "803bf7d9b6eccf640aeb6be3c96bab381a925d0e595ff264616ea6f3e093886f",
+      "ai_geo_inferred": false
+    },
+    {
       "id": "8db857e4e749fc84",
       "category": "Counter Terrorism Action",
       "categories": [
@@ -288358,7 +289413,8 @@
       "id": "3ee59fca3fb9148f",
       "category": "Counter Terrorism Action",
       "categories": [
-        "Counter Terrorism Action"
+        "Counter Terrorism Action",
+        "Attacks"
       ],
       "title": "Malian Armed Forces inflict heavy losses on terrorist groups",
       "summary": "Malian Armed Forces (FAMa) conducted military operations resulting in heavy losses for terrorist groups in Dioura, San, and Sikasso.",
@@ -288370,7 +289426,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-09-10T07:00:00+00:00",
       "source": "malijet.com",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQSkdmWXFESVh4VlZ6UVA4OUpseFZ4U3gyeEx5ZFN3OW9zNlNMUmZmdk5pbmhhY2xsWXE1cmhsOTN0TnZOYkkwWTZyNUtfaEU5ejNOM2lJNzVtVDFjTTJ5TzBoblF1QkJid0JpR2djNEV3RGZKaHhzSGRUQThMZlp4TUE4YWQzNk9OWUFScmIwemtMQ1JPZF9vTTNBb2ZMOE14b09KSXRSMHVfQmxYdzB2M1Y2UDMwbWhRQllYWUtoQ0NaUQ?oc=5",
       "collector": "Google News RSS",
       "country": "Mali",
@@ -288386,10 +289442,12 @@
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
         "a341ec27a9459c145d2bafa6b3169397186721f757952cdf00e4a587d226cf10",
+        "b4da1e4478fb39d3219a5a28df7f1625df1db60821136d3db30b7f556a570eea",
         "d819f03fef77831c1e50c79604b36611a1ab2bc2a070cffac9193ab1298889c3"
       ],
       "sources": [
-        "malijet.com"
+        "malijet.com",
+        "https://malijet.com/"
       ],
       "related_articles": [
         {
@@ -288440,10 +289498,12 @@
       "is_attack": false,
       "incident_anchor": "FAMa military operations Mali 2026-09-10",
       "update_type": "INITIAL",
-      "dedup_confidence": 0.8,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "title_plus_anchor"
-      ]
+        "title_plus_anchor",
+        "same_url"
+      ],
+      "cbrn_subgroups": []
     },
     {
       "id": "743abfb1fa2abbb3",
@@ -296996,7 +298056,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-09-08T09:38:57+00:00",
       "source": "malijet.com",
-      "source_count": 3,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQX0Z0dVN5SlgtM1MtOUhaN3kyUElLbVMwZF9RVXRjRnlxU3BTcWhacUFZZWFXMzJvZDV1TmtmWlQtcHoyS3dwalA4T0RxVHV4MkZhbDgtYVNSMFlCM3BWRGhiUEsyYlVxQmhMVHpWbDNlVjY2TW9PenRuNzBiTWlscFVlQ0F1V0RwbG0yMm04YVBENmdJNlVFNmNsMXBWMUt1WEVPTkZpbWNIUHZGQ2tqRUEzNUhQWVdLczkxTHhoaVExZw?oc=5",
       "collector": "Google News RSS",
       "country": "Mali",
@@ -297009,6 +298069,7 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
+        "282a79d7b5422d193bde1cc723abfa0c7cd37b33d810fe0ae451f9635110191c",
         "2ae653a000eb086b747c1170b48cc105ada22d4ead8c8b05479511317b2d14fb",
         "7aa7cd6e2ce9a8f942b1c18cdf746a2a00cf67d7859ca1447f663b03b23224ec",
         "8838691c8145bd526b789236ad076ab904d2872a9ea443eee4ed2a55fa547a8a",
@@ -297018,7 +298079,8 @@
       "sources": [
         "malijet.com",
         "Maliweb",
-        "maliweb.net"
+        "maliweb.net",
+        "maliweb"
       ],
       "related_articles": [
         {
@@ -297051,7 +298113,7 @@
       ],
       "article_count": 4,
       "first_reported": "2026-09-08T09:38:57+00:00",
-      "last_reported": "2026-09-10T06:37:00+00:00",
+      "last_reported": "2026-09-10T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -297084,14 +298146,16 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "title_plus_anchor",
-        "same_incident"
+        "same_incident",
+        "same_url"
       ],
       "actor_group": "JNIM",
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
       "incident_anchor": "Operation Dougoukoloko Mali 2026-09-08",
       "update_type": "INITIAL",
-      "incident_id": "inc-cc339f453821ac8a"
+      "incident_id": "inc-cc339f453821ac8a",
+      "cbrn_subgroups": []
     },
     {
       "id": "7e36e20919a68a69",
@@ -302028,7 +303092,8 @@
       "id": "32968651e7ad4dfc",
       "category": "Attacks",
       "categories": [
-        "Attacks"
+        "Attacks",
+        "Maritime Piracy"
       ],
       "title": "Over seventy people injured in Saudi Arabia in attacks by the Ansar Allah group",
       "summary": "Over 70 people were reported injured in Saudi Arabia following cross-border attacks attributed to the Ansar Allah (Houthi) group.",
@@ -302040,7 +303105,7 @@
       "collection_locale": "SA:ar",
       "published": "2026-09-07T15:41:00+00:00",
       "source": "BBC",
-      "source_count": 16,
+      "source_count": 17,
       "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE9YTHdoTU1yQkxXcGRMd1N1QjNDeVJJZkl6azJXQWN1ek9Kd2R6c3YtY0stRU5XcS1CX2F5NVRQaGtwQXI2MjhhT2VrZDl2cWNRckxhZzZZcWxxbXVD0gFiQVVfeXFMTVZhTEZuVElGdWF6a3U5N2IwR3F6UW8tUjg4WHJzQTdIU3I3bGRoRDZaYW1kSkZLaGdTbGloUGs1T05ERWE1eGl1bm1ZSi1aUTcwLUtSdlJvZVQ1UGtrYzhsN0E?oc=5",
       "collector": "Google News RSS",
       "country": "Saudi Arabia",
@@ -302058,6 +303123,7 @@
         "0f4f4408f144e3b3a1f6fb49839d29fa6637a5743a58638afe3e7f1c965a6836",
         "15197da5b3410ad3ccf6df78af05ad85e68cd363c12b31f3d0489c7636a8cb5f",
         "1db85dcc8d39073f1a267fd53e419a84eb95e53eca50e8b06bd52ffd1a78cac1",
+        "39adc9ce766a8a04dd86e086f5e6060f7247ae36774c7bf9feb44aa42582e8ff",
         "3befd57f642b110d475816ced8a23dfd49dc704612a3b35963077b243463205a",
         "42d3546cde66802df691dc7886366320729d0b5968e64dcdf93eded67f906b62",
         "50089802ba4d936d7722aaaa019b7bc31dd2572e6abec738386b2cd2f8c501ed",
@@ -302094,7 +303160,8 @@
         "شفق نيوز",
         "سكاي نيوز عربية",
         "وكالة الانباء العراقية (واع)",
-        "ina.iq"
+        "ina.iq",
+        "Hiiraan Online"
       ],
       "related_articles": [
         {
@@ -302186,9 +303253,18 @@
           "published": "2026-09-14T14:15:32+00:00",
           "source": "ina.iq",
           "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE8xNGdGOGF1b1ZQVE9tVFZMWUVxcjR1QTNHVEQ5eFBPYjJWTjRDN0R6N2dEUV8ycEpsUGpTN2Y4ZXdoRjZpc1NMUEsxODR1ek43dXZGWVMyRQ?oc=5"
+        },
+        {
+          "title": "Houthi attacks on Saudi Arabia ignite fires at oil facilities and wound 73 people",
+          "original_title": "Houthi attacks on Saudi Arabia ignite fires at oil facilities and wound 73 people",
+          "original_language": "en",
+          "summary": "Houthi attacks on oil facilities in Saudi Arabia ignited fires and resulted in 73 injuries.",
+          "published": "2026-09-09T07:00:00+00:00",
+          "source": "Hiiraan Online",
+          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQSFJBMDFkNUFYUy1HUzlsamRqQVdhVWlJMXFpcVlUZTU5YkNJdlFpU0FfNUZVang0NEx3OTVqRExEbEEzX203YkJ0TXRGcS1LUHVxYzNCLXlQUnlPdDlYRU45dGN4a2lUeHZIU1h2UnhTSFdCUHZmRUUzXzZGREdKLWpuMjhOMWV4bzFLR252ckM4WVhmRWt3WE9GZjhSSkJHV0Y0dGE0U1MzN1pUeENQNWxiZ0lHZzdoOFlBWkxaeEVjc20wa2gxREtsVjBxdw?oc=5"
         }
       ],
-      "article_count": 10,
+      "article_count": 11,
       "first_reported": "2026-09-07T15:41:00+00:00",
       "last_reported": "2026-09-14T14:15:32+00:00",
       "ai_selection_complete": true,
@@ -302231,7 +303307,8 @@
       "is_attack": true,
       "incident_anchor": "Houthi attacks Saudi Arabia 2026-09",
       "update_type": "INITIAL",
-      "incident_id": "inc-0fbf0cdc35313e49"
+      "incident_id": "inc-0fbf0cdc35313e49",
+      "cbrn_subgroups": []
     },
     {
       "id": "36988020a624a6c4",
@@ -310061,6 +311138,85 @@
       "cbrn_subgroups": []
     },
     {
+      "id": "4647125003ca4651",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "title": "Maritime Risk Intelligence Blog on Nigeria",
+      "summary": "A maritime risk intelligence update regarding security incidents in Nigeria.",
+      "original_title": "Maritime Risk Intelligence Blog | Nigeria (5)",
+      "original_summary": "Maritime Risk Intelligence Blog | Nigeria (5) channel16.dryadglobal.com",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English",
+      "collection_locale": null,
+      "published": "2026-09-06T13:18:22+00:00",
+      "source": "channel16.dryadglobal.com",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9yTUhESU5BS2JUUWstaV95djhSVWNtbEZFS1VPcGlRWFkwaHYtSDBmdDNlenVUa3BYZVJWQ2p3TXN2dHBGQjVhb3dScnhyZUJ6Mk52Nk8yZFE2TTFoSTJPa0M3a2tJUjd3elNoeg?oc=5",
+      "collector": "Google News RSS",
+      "country": "Nigeria",
+      "country_code": "NG",
+      "city": "Abuja",
+      "region": null,
+      "latitude": 9.05785,
+      "longitude": 7.49508,
+      "location_precision": "country_capital",
+      "location_confidence": "high",
+      "acquisition_channel": "targeted_source_query",
+      "targeted_source": "Dryad Global / Verihelm",
+      "targeted_source_kind": "commercial_risk_analysis",
+      "source_article_fingerprints": [
+        "162fa64fc3a3f78481eea48ba78d1fe570a2741a798eb6ae5787119f8697b632"
+      ],
+      "sources": [
+        "channel16.dryadglobal.com"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-09-06T13:18:22+00:00",
+      "last_reported": "2026-09-06T13:18:22+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Maritime security situational update covering maritime crime/piracy risks.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "is_attack": false,
+      "incident_anchor": "Maritime risk report Nigeria Sept 2026",
+      "update_type": "INITIAL",
+      "incident_id": "inc-290cb0bbdc88c1ed",
+      "translated_to_english": false,
+      "ai_canonical_event": "Maritime risk intelligence report for Nigeria",
+      "title_variants": [
+        "Maritime risk intelligence report for Nigeria"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "reported_status": "CONFIRMED",
+      "location_confidence_score": 0.95,
+      "location_method": "ai_country_capital",
+      "location_evidence": [
+        "Nigeria"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Maritime risk intelligence regarding security incidents in Nigeria.",
+      "ai_geo_fingerprint": "a6f335f42e1cf107378da8e78a2a7a5ed81888ea186c030b5adeef3e99a0abe6",
+      "ai_geo_inferred": false
+    },
+    {
       "id": "30e7e2a333454053",
       "category": "Counter Terrorism Action",
       "categories": [
@@ -314416,7 +315572,8 @@
       "id": "9d303b4e3af43f0d",
       "category": "Counter Terrorism Action",
       "categories": [
-        "Counter Terrorism Action"
+        "Counter Terrorism Action",
+        "Attacks"
       ],
       "title": "Danab forces kill 14 Al-Shabaab fighters in Bay region",
       "summary": "Somali Danab Special Forces conducted an operation in the Bay region that resulted in the death of 14 Al-Shabaab fighters.",
@@ -314428,7 +315585,7 @@
       "collection_locale": "NG:en",
       "published": "2026-09-05T07:00:00+00:00",
       "source": "Goobjoog English",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOQnlfZ0J3VU93QWYwSEdjQW44dG5LSmZjdVhac29OOEhEN3pSb01zTkUxN1BfTGg1R1hvc3dWV2t0YWtYZDhuTldUY3ZZYl91T2ZHLWU4UTlwbFh5c3hfcEhVV0xIOWIyVTVLTkl4Wm0td3loYzVDcnNwVXUtTUdDUEM3ZTZGVlpPUHc?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -314443,15 +315600,27 @@
       "targeted_source": "goobjoog.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
+        "217ddc0b61e15327acbda44598eb9d2c512a739b264d286894e77eecb5c33582",
         "8b8777b1d23e306f321dc6f5b4ce6c3ac6f359637c212df0ca028732e778e06d"
       ],
       "sources": [
-        "Goobjoog English"
+        "Goobjoog English",
+        "Goobjoog"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Danab commandos kill 14 Al-Shabaab members in Bay Region operation",
+          "original_title": "Kumaandooska Danab oo 14 xubnood oo ka tirsanaa Al-Shabaab ku dilay howlgal ka dhacay Gobolka Bay",
+          "original_language": "en",
+          "summary": "Somali Danab commandos killed 14 Al-Shabaab militants during an offensive military operation in the Bay Region.",
+          "published": "2026-09-06T12:16:57+00:00",
+          "source": "Goobjoog",
+          "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNQTVhOXJ3ck5KNUlZMTc4a2I0aFZ6c1VGOV9wdEduSHlVOTlNNTdxeFdMTUgxSUlqY1NQbGZfTHF0SElRUC11WXFVQ2RBaWNzcEo4dksyenBDczI5VEVlbExLY2c5aFFpamdCejFqRWItQzZUM3NBNTR1NURfMjdIRnBjbzdnNWZZZjVYbkdCa3dEX0sxanF1TTAzajloVEhZTUw3S29BbVA1cy1fN3c5UUFvaUtVNE1feDBYRjY5RTU5QTJlU3p1WHJ3?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-09-05T07:00:00+00:00",
-      "last_reported": "2026-09-05T07:00:00+00:00",
+      "last_reported": "2026-09-06T12:16:57+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.1-flash-lite",
@@ -314488,7 +315657,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Somali Danab forces conducted an operation killing 14 Al-Shabaab fighters in the Bay region of Somalia.",
       "ai_geo_fingerprint": "82cc80796cb6bb8b44f008a5d4782f9cb4fef4d7559932d3cb0d2e74fccfa815",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 0.767,
+      "dedup_methods": [
+        "title_plus_anchor"
+      ]
     },
     {
       "id": "927c6288165090b0",
@@ -327297,107 +328470,6 @@
       "incident_id": "inc-e9a2768ab654731d"
     },
     {
-      "id": "a4e1070510dfce1a",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Weapons"
-      ],
-      "title": "Malian Armed Forces strike terrorist logistics site in Modiakoy",
-      "summary": "The Malian Armed Forces (FAMa) conducted an airstrike against a terrorist logistics site in the Modiakoy sector during Operation Dougoukoloko.",
-      "original_title": "Opération Dougoukoloko : les FAMa frappent un site logistique terroriste dans le secteur de Modiakoy",
-      "original_summary": "Opération Dougoukoloko : les FAMa frappent un site logistique terroriste dans le secteur de Modiakoy Bamada.net",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French",
-      "collection_locale": "FR:fr",
-      "published": "2026-09-02T20:10:43+00:00",
-      "source": "Bamada.net",
-      "source_count": 3,
-      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOZWZ1NWNoTUlTakFEM3I2bjdibXR0UHVfcjBNdEhRUnA4Q0N5RzFTdWZiaExoZG5INmxlSDJTQlc0REl3a3U2Y0xHaHRBT2hDb1ViUGRCVnRvYTJIeF9uOUNyMGluVWh6TGgxMFBrT3VheVhQN1REdG9DMVBzM2JVRzdzVnlGQTdHNGl3dHlCSkJ1ZUJoeVJPam1NbHFQeE8zcW9YTktoWjJUU0l0ekROdGl5c1V6WU44?oc=5",
-      "collector": "Google News RSS",
-      "country": "Mali",
-      "country_code": "ML",
-      "city": "Modiakoy",
-      "region": null,
-      "latitude": 14.5,
-      "longitude": -4.0,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "Bamada.net",
-        "bamada.net",
-        "malijet.com"
-      ],
-      "related_articles": [
-        {
-          "title": "Malian Armed Forces (FAMa) neutralize terrorist logistics site and thwart supply run in Modiakoy",
-          "original_title": "Coup dur pour les terroristes : les FAMa neutralisent un site logistique et déjouent un ravitaillement à Modiakoy",
-          "original_language": "fr",
-          "summary": "The Malian Armed Forces (FAMa) successfully neutralized a terrorist logistics site and thwarted a supply operation in Modiakoy.",
-          "published": "2026-09-02T20:10:43+00:00",
-          "source": "malijet.com",
-          "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQWDlMdkNONHNVOFFXR1dEaklXdGQ3VEhWdGtwWGdoTkowek14OXh4eWZIRTRtTlltNXpRanR1ZWdLa0RnTmdlSXpQSWhYYXJsTWE1ZTNvTExqc3NoNjRNQVBablhKaHEtOHB4bDRQYzhLRE80N0wzMTRWNkd4SDM1M0xQNF96RVhiemQyRTlFcXczSER2TExUZ3ZjZEM5OTgwalp4MUEyQ3RzdjEyaTU0SFlQaGVLSTZjR0g4ZnM4OUZJQQ?oc=5"
-        },
-        {
-          "title": "Operation Dougoukoloko: Malian Armed Forces strike weapons caches east of Aguelhoc",
-          "original_title": "Opération Dougoukoloko : Coup de massue des FAMa contre des caches d'armes à l'est d'Aguelhoc",
-          "original_language": "fr",
-          "summary": "The Malian Armed Forces (FAMa) conducted an operation resulting in the seizure and destruction of weapon caches east of Aguelhoc.",
-          "published": "2026-09-04T15:54:43+00:00",
-          "source": "malijet.com",
-          "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNa3lKQ0JjeWRwR01WNi1EQVNBTkI4d1ZIblpQUXJSNHFhX0JRMHlicFVmdVh2dlc5SHkwY2doZ3ZJZHZtUFVlZEdNcHNQY2xQdDRYOUh6dkVZWDRYTmJyMVpQMVN5aktmSnNVRXVJaWRXaUVPTFlWSFo3X0k0aTI5VjZOOXg0SG9NZU0zMjR3NlRkeXlQS051Sklfb2xoaUxUaUFwNTJaLXJERmZ6a29GdzY2VzRiM2FIdFczMlo0dnE?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-09-02T20:10:43+00:00",
-      "last_reported": "2026-09-04T15:54:43+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports a specific military counter-terrorism airstrike destroying a terrorist logistics site.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "FAMa airstrike hits terrorist logistics site in Modiakoy",
-      "title_variants": [
-        "Malian Armed Forces airstrike on terrorist logistics site in Modiakoy",
-        "FAMa airstrike hits terrorist logistics site in Modiakoy"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_coordinates",
-      "location_evidence": [
-        "Malian Armed Forces strike terrorist logistical site in Modiakoy"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Operation Dougoukoloko airstrike conducted by FAMa in the Modiakoy sector, Mali.",
-      "ai_geo_fingerprint": "3fb68db5c41d40ef7a53f4118a9883f2e0add80b20e44891722d773a1bdf1152",
-      "ai_geo_inferred": true,
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_url",
-        "title_plus_anchor"
-      ],
-      "source_article_fingerprints": [
-        "9a8aeb3c81ff5802eba8b7eacc95a6d1ef068c0a22ac2a8a96da250c88278056"
-      ],
-      "actor_group": "",
-      "incident_id": "inc-68a20b9f46c16d65",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Operation Dougoukoloko Modiakoy airstrike 2026-09-02",
-      "update_type": "INITIAL"
-    },
-    {
       "id": "15e47503a4da03a1",
       "category": "Counter Terrorism Action",
       "categories": [
@@ -331136,6 +332208,110 @@
       "incident_id": "inc-ef99c65ab261f8d9"
     },
     {
+      "id": "a4e1070510dfce1a",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Weapons"
+      ],
+      "title": "Malian Armed Forces strike terrorist logistics site in Modiakoy",
+      "summary": "The Malian Armed Forces (FAMa) conducted an airstrike against a terrorist logistics site in the Modiakoy sector during Operation Dougoukoloko.",
+      "original_title": "Opération Dougoukoloko : les FAMa frappent un site logistique terroriste dans le secteur de Modiakoy",
+      "original_summary": "Opération Dougoukoloko : les FAMa frappent un site logistique terroriste dans le secteur de Modiakoy Bamada.net",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French",
+      "collection_locale": "FR:fr",
+      "published": "2026-09-02T07:00:00+00:00",
+      "source": "Bamada.net",
+      "source_count": 4,
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOZWZ1NWNoTUlTakFEM3I2bjdibXR0UHVfcjBNdEhRUnA4Q0N5RzFTdWZiaExoZG5INmxlSDJTQlc0REl3a3U2Y0xHaHRBT2hDb1ViUGRCVnRvYTJIeF9uOUNyMGluVWh6TGgxMFBrT3VheVhQN1REdG9DMVBzM2JVRzdzVnlGQTdHNGl3dHlCSkJ1ZUJoeVJPam1NbHFQeE8zcW9YTktoWjJUU0l0ekROdGl5c1V6WU44?oc=5",
+      "collector": "Google News RSS",
+      "country": "Mali",
+      "country_code": "ML",
+      "city": "Modiakoy",
+      "region": null,
+      "latitude": 14.5,
+      "longitude": -4.0,
+      "location_precision": "city",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_discovery",
+      "sources": [
+        "Bamada.net",
+        "bamada.net",
+        "malijet.com",
+        "https://malijet.com/"
+      ],
+      "related_articles": [
+        {
+          "title": "Malian Armed Forces (FAMa) neutralize terrorist logistics site and thwart supply run in Modiakoy",
+          "original_title": "Coup dur pour les terroristes : les FAMa neutralisent un site logistique et déjouent un ravitaillement à Modiakoy",
+          "original_language": "fr",
+          "summary": "The Malian Armed Forces (FAMa) successfully neutralized a terrorist logistics site and thwarted a supply operation in Modiakoy.",
+          "published": "2026-09-02T20:10:43+00:00",
+          "source": "malijet.com",
+          "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQWDlMdkNONHNVOFFXR1dEaklXdGQ3VEhWdGtwWGdoTkowek14OXh4eWZIRTRtTlltNXpRanR1ZWdLa0RnTmdlSXpQSWhYYXJsTWE1ZTNvTExqc3NoNjRNQVBablhKaHEtOHB4bDRQYzhLRE80N0wzMTRWNkd4SDM1M0xQNF96RVhiemQyRTlFcXczSER2TExUZ3ZjZEM5OTgwalp4MUEyQ3RzdjEyaTU0SFlQaGVLSTZjR0g4ZnM4OUZJQQ?oc=5"
+        },
+        {
+          "title": "Operation Dougoukoloko: Malian Armed Forces strike weapons caches east of Aguelhoc",
+          "original_title": "Opération Dougoukoloko : Coup de massue des FAMa contre des caches d'armes à l'est d'Aguelhoc",
+          "original_language": "fr",
+          "summary": "The Malian Armed Forces (FAMa) conducted an operation resulting in the seizure and destruction of weapon caches east of Aguelhoc.",
+          "published": "2026-09-04T15:54:43+00:00",
+          "source": "malijet.com",
+          "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNa3lKQ0JjeWRwR01WNi1EQVNBTkI4d1ZIblpQUXJSNHFhX0JRMHlicFVmdVh2dlc5SHkwY2doZ3ZJZHZtUFVlZEdNcHNQY2xQdDRYOUh6dkVZWDRYTmJyMVpQMVN5aktmSnNVRXVJaWRXaUVPTFlWSFo3X0k0aTI5VjZOOXg0SG9NZU0zMjR3NlRkeXlQS051Sklfb2xoaUxUaUFwNTJaLXJERmZ6a29GdzY2VzRiM2FIdFczMlo0dnE?oc=5"
+        }
+      ],
+      "article_count": 3,
+      "first_reported": "2026-09-02T07:00:00+00:00",
+      "last_reported": "2026-09-04T15:54:43+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a specific military counter-terrorism airstrike destroying a terrorist logistics site.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "translated_to_english": true,
+      "ai_canonical_event": "FAMa airstrike hits terrorist logistics site in Modiakoy",
+      "title_variants": [
+        "Malian Armed Forces airstrike on terrorist logistics site in Modiakoy",
+        "FAMa airstrike hits terrorist logistics site in Modiakoy"
+      ],
+      "location_confidence_score": 0.95,
+      "location_method": "ai_city_coordinates",
+      "location_evidence": [
+        "Malian Armed Forces strike terrorist logistical site in Modiakoy"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Operation Dougoukoloko airstrike conducted by FAMa in the Modiakoy sector, Mali.",
+      "ai_geo_fingerprint": "3fb68db5c41d40ef7a53f4118a9883f2e0add80b20e44891722d773a1bdf1152",
+      "ai_geo_inferred": true,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_url",
+        "title_plus_anchor"
+      ],
+      "source_article_fingerprints": [
+        "9a8aeb3c81ff5802eba8b7eacc95a6d1ef068c0a22ac2a8a96da250c88278056",
+        "e6f47e24d87dc2f8edd8861c2d12459e879a8392e13a11a1bf61ea28decb5353"
+      ],
+      "actor_group": "",
+      "incident_id": "inc-68a20b9f46c16d65",
+      "primary_event_type": "CT_OPERATION",
+      "is_attack": false,
+      "incident_anchor": "Operation Dougoukoloko Modiakoy airstrike 2026-09-02",
+      "update_type": "INITIAL",
+      "cbrn_subgroups": []
+    },
+    {
       "id": "d9924ace5105ab25",
       "category": "Attacks",
       "categories": [
@@ -333760,7 +334936,7 @@
       "collection_locale": null,
       "published": "2026-09-01T13:41:12+00:00",
       "source": "safety4sea.com",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNV1ptakxsQUF4WUgtTnNCbnMweFRfMFlzM0E0cEQ5R2R4RThUUDVwYlJFbTRtMTZ5MHVfa2JZZ1RlYWxlREJJc2FoY1RqNjJ3eVl0eDlSRzJtU3BZblZPNWg5WjdfcERkUDdtYU5aTDFVZWVsWWVpQ0JjQmlNam1id0JhOTU?oc=5",
       "collector": "Google News RSS",
       "country": "Singapore",
@@ -333775,12 +334951,23 @@
       "targeted_source": "SAFETY4SEA",
       "targeted_source_kind": "specialist_media",
       "sources": [
-        "safety4sea.com"
+        "safety4sea.com",
+        "safety4sea"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "ReCAAP ISC reports one incident of armed robbery at sea",
+          "original_title": "ReCAAP ISC: One incident of armed robbery 1-7 September",
+          "original_language": "en",
+          "summary": "ReCAAP ISC reported one incident of armed robbery against ships between September 1 and 7.",
+          "published": "2026-09-08T07:00:00+00:00",
+          "source": "safety4sea",
+          "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxOQ2UyYVl4Q0oxNkFTWDFvWlBQUDBMbHJ1cUVNLUFpLUh6eTZISmNqVmtGV2hLR0FYODFlblBkcjdNY1Y0cEFOaHBuNnl5eVRZZlJDT2JxTzJpdUsyS25zVEtwdllGWnlQLTh0Qmkyb21PSWZNMGdmTUNIaFltUngycDZaMU4?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-09-01T13:41:12+00:00",
-      "last_reported": "2026-09-01T13:41:12+00:00",
+      "last_reported": "2026-09-08T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -333818,7 +335005,14 @@
       "update_type": "INITIAL",
       "actor_scope": "NON_STATE",
       "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008"
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "source_article_fingerprints": [
+        "0170c6da98a5aba760901322a5dbfc18e8931cd3acc92f63cbd0e8adb8c9975b"
+      ],
+      "dedup_confidence": 0.885,
+      "dedup_methods": [
+        "very_high_title_similarity"
+      ]
     },
     {
       "id": "9eb36eb8ed6d8aec",
@@ -336187,6 +337381,87 @@
       "is_attack": false,
       "incident_anchor": "CTD raid killing TTP militant Karachi Pakistan 2026-09-01",
       "update_type": "INITIAL"
+    },
+    {
+      "id": "c0758f5947768eba",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "title": "CJNG allegedly ordered car bomb attack on Zacatecas police station",
+      "summary": "The CJNG cartel reportedly ordered a car bomb attack targeting a police station in Zacatecas.",
+      "original_title": "El CJNG habría ordenado el ataque con un coche bomba en una comandancia de Zacatecas",
+      "original_summary": "El CJNG habría ordenado el ataque con un coche bomba en una comandancia de Zacatecas laopinion.com",
+      "original_language": "es",
+      "collection_language": "es",
+      "collection_language_name": "Spanish / Latin America",
+      "collection_locale": "MX:es-419",
+      "published": "2026-09-01T07:00:00+00:00",
+      "source": "laopinion.com",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQYXJfU2lXaDB6RzNGSDBPX2JvZ2lqSGwwY0xOQ1ZFMzIxcEhCby1XdXlNU3pidTZHWks1NkJ1ZldsTFJFeDR6WEViblgxa3lOemRjRjZEb1kwLUpyOGgxQnJ3eXVnTnNveDVhSVNnWnhrakd0RUdqMVJMNHI0UHY3SmtRcVUxQmZESDhyaFpfZXJkbEtNRlBBQ1JWMkVJcGZ4cDluaEdzM3d3UkQtVEs4bXhaTE1GMDlKbVE?oc=5",
+      "collector": "Google News RSS",
+      "country": "Mexico",
+      "country_code": "MX",
+      "city": "Zacatecas",
+      "region": null,
+      "latitude": 22.76843,
+      "longitude": -102.58141,
+      "location_precision": "city",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_discovery",
+      "source_article_fingerprints": [
+        "a2fd52f5d1bccc0c40b3b78cac02056ab7aa1f2aa89eb7c9b26f329b6d8cdc6f"
+      ],
+      "sources": [
+        "laopinion.com"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-09-01T07:00:00+00:00",
+      "last_reported": "2026-09-01T07:00:00+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports a concrete terrorist/cartel bomb attack against a law enforcement facility.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "CJNG",
+      "primary_event_type": "ATTACK",
+      "is_attack": true,
+      "incident_anchor": "CJNG car bomb attack Zacatecas police station 2026-09-01",
+      "update_type": "INITIAL",
+      "incident_id": "inc-adc3cf99a028a256",
+      "translated_to_english": true,
+      "ai_canonical_event": "CJNG ordered car bomb attack on Zacatecas police station",
+      "title_variants": [
+        "CJNG ordered car bomb attack on Zacatecas police station"
+      ],
+      "actor_scope": "NON_STATE",
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
+      "cbrn_subgroups": [],
+      "reported_status": "ALLEGED",
+      "location_confidence_score": 0.95,
+      "location_method": "ai_city_geonames",
+      "location_evidence": [
+        "Zacatecas"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The CJNG ordered a car bomb attack targeting a police station in Zacatecas.",
+      "ai_geo_fingerprint": "f76597735a564ff07cd85b1505cec84b03c63ade52de865aab9c87becb2c4db5",
+      "ai_geo_inferred": false
     },
     {
       "id": "0700f3796a1f1f97",
@@ -340935,7 +342210,7 @@
       "collection_locale": "NG:en",
       "published": "2026-08-31T07:36:54+00:00",
       "source": "Somali National News Agency",
-      "source_count": 3,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNanV4cXZMN3ZkSmNPdlktTDdwQWI0YXFwUVowdVc0MzFVWW0yNkV0aTI4b2FXZ1JoMFBrYjVjVndKSGg4WlQ3cXJMcE50SDlHczlCbVM2MDVmNllVdm8zSU0tRkp3b0RxM3dCZG1TS2xRb3R2SXppWlAtblFKYVlDMElxcG9OT19Dck9QRGNQVlFFVnhqNXdSNmtFbGs1MlRlb3JtMFJVY2dYdVB4Zk1wR3doWTJITGtYMDRVZFpB?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -340952,7 +342227,8 @@
       "sources": [
         "Somali National News Agency",
         "Goobjoog English",
-        "samaa tv"
+        "samaa tv",
+        "Shabelle Media Network"
       ],
       "related_articles": [
         {
@@ -340972,11 +342248,20 @@
           "published": "2026-09-02T18:02:27+00:00",
           "source": "samaa tv",
           "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNaml2ek02M3RlakZIeGRFckk0N0d2ckZ4MjM3ZlRTNmEtdGw3NHRtdUJ4d25YSlNmZmY2WEY0am9vQWs1d2VkN2xqcGNKSkpLYVBlM1NWeW1RSGRxaUhJRm12M2owdTA3dTJSeTl2bnBORTYwLTlNZERIR1VyZGpuaDBQZEdfQTlnSmY0MVdBSWNsYTNOQ254RQ?oc=5"
+        },
+        {
+          "title": "Somali commandos conduct operations against Al-Shabaab in Lower Shabelle",
+          "original_title": "Somali commandos conduct operations against Al-Shabaab in Lower Shabelle",
+          "original_language": "en",
+          "summary": "Somali commandos carried out offensive security operations targeting Al-Shabaab militants in the Lower Shabelle region.",
+          "published": "2026-09-07T07:00:00+00:00",
+          "source": "Shabelle Media Network",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOZWoydWloeEFHWGZYNzg3QjJ5UGtSZzgwYlBEYUxUMnhnZ0JUbDZvWWJha0JlTEpxbzR4MVFqamFEV1o3RlRYc09mSEVNcVBIUVFTc3JMUHJnZ1V4Q1hmanNaT09xVXB5V24wb210SlVIMW1CQjlpSXVVVWdva1B4WmItcDZxSTQ5WGxnNnIxMHcxa1ZrQXhDd0E1dGZGVkti?oc=5"
         }
       ],
-      "article_count": 3,
+      "article_count": 4,
       "first_reported": "2026-08-31T07:36:54+00:00",
-      "last_reported": "2026-09-02T18:02:27+00:00",
+      "last_reported": "2026-09-07T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -341014,7 +342299,8 @@
       "update_type": "INITIAL",
       "cbrn_subgroups": [],
       "source_article_fingerprints": [
-        "7e09447cb612b2f022dc046e5647ea67e77d83b866a2d60a3600a6eb1bd98176"
+        "7e09447cb612b2f022dc046e5647ea67e77d83b866a2d60a3600a6eb1bd98176",
+        "9bf8dbe8498fc05936c623a24d12ebcf309e34c2fa259f5652f5cc04c8e4eb2e"
       ],
       "dedup_confidence": 1.0,
       "dedup_methods": [
@@ -343991,7 +345277,8 @@
       "id": "a72b6cd8833ee5d5",
       "category": "Counter Terrorism Action",
       "categories": [
-        "Counter Terrorism Action"
+        "Counter Terrorism Action",
+        "Attacks"
       ],
       "title": "Senior Al-Shabaab Intelligence Chief Killed in Jilib Operation",
       "summary": "Somali security forces confirmed the killing of a senior Al-Shabaab intelligence chief during an operation in Jilib.",
@@ -344003,7 +345290,7 @@
       "collection_locale": "NG:en",
       "published": "2026-08-30T15:00:22+00:00",
       "source": "Somali National News Agency",
-      "source_count": 2,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNT3hvWHdTQUNJbzJKOFU3SHJrRkYzbU9IakZ3b21Kekl6UTlrSkp0UWVsQU9fLVdsdWhOX0JpcmF0UTBwM2JteG5vbm9VTUdOVk8yN3dycmptZzNNaFJWeHdHaldja0lWSWpnb3NYUzk4OU1QWTZucUhrRmRwQms0UVFjSno4VHJFSlg2cnEtWTFPVDRM?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -344019,7 +345306,9 @@
       "targeted_source_kind": "local_language_media",
       "sources": [
         "Somali National News Agency",
-        "Shabelle Media"
+        "Shabelle Media",
+        "Hiiraan Online",
+        "Shabelle Media Network"
       ],
       "related_articles": [
         {
@@ -344039,15 +345328,25 @@
           "published": "2026-09-01T07:00:00+00:00",
           "source": "Shabelle Media",
           "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNTmt3SG5lTUgwNlh5ZE9WS3BzN0lNNGE1djA3UWdGMlZrZ3RIbWdXR0FERnhuclFhaEhJZnE2UDQ4OGRjT0N1dVB6bkk5SS16Y2VfaWJGVGxaX05pQ000M1F2UWhlYU5NeEY5MWxTRDQzdWQ2MEdKOWxyeWU4SkhQR0tQS3cxWHJBNlQ3SnpYWGc0ZlpLdUpLTElzX1R0V01VYUo4UXQ2UVR1UkZmeXRN?oc=5"
+        },
+        {
+          "title": "Somali army kills several senior al-Shabab leaders in joint military operations",
+          "original_title": "Somali army kills several senior al-Shabab leaders in joint military operations",
+          "original_language": "en",
+          "summary": "The Somali army killed several senior Al-Shabaab leaders during joint military operations.",
+          "published": "2026-08-31T07:00:00+00:00",
+          "source": "Hiiraan Online",
+          "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPZjhGc1J2YWdkMk9CbzItVTcxLUpPT25iakVEZXlyRGlxLW1lQVFvbUhGb2lZeDJ0c3Z2UGk4b2VmY1kzMDJZejhCb1JRSGlDT1lnQVMtYzVYM1lnOWYxUlBjMGd2eFdPd1U4UWt1RnpORzlTSlpfRlFNRDg1RnYxMVV5dXNUc013YzJTTzFPLUcwbkhRMWg1QkpJem4yWTk0TXQ2YTFSNGNya2pZYm1XRExPbktqcXh3RFE4dVc4anZiazg3ajlocw?oc=5"
         }
       ],
-      "article_count": 3,
+      "article_count": 4,
       "first_reported": "2026-08-30T15:00:22+00:00",
       "last_reported": "2026-09-01T07:00:00+00:00",
-      "dedup_confidence": 0.857,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
         "title_plus_anchor",
-        "paraphrase_entity_context"
+        "paraphrase_entity_context",
+        "same_url"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
@@ -344086,7 +345385,9 @@
       "update_type": "INITIAL",
       "cbrn_subgroups": [],
       "source_article_fingerprints": [
-        "c868034d4c1cd68ea1e14b095e656ba586911b59a848d4475e973f1e3ab8fa7a"
+        "2dfb64d915dc1535b4e12747f99f23b7df1d0f092a4068d3cfe3a570e9400a5e",
+        "c868034d4c1cd68ea1e14b095e656ba586911b59a848d4475e973f1e3ab8fa7a",
+        "e2cc5cfa23ebe0f8f9ed3572e3baefdb799751953b86e964925e4bfae090c656"
       ]
     },
     {
@@ -345616,7 +346917,7 @@
       "collection_locale": null,
       "published": "2026-08-29T07:00:00+00:00",
       "source": "DW.com",
-      "source_count": 26,
+      "source_count": 28,
       "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPMi11d3hudURQazNrNWtQUm54TDVvaHdPb1BJZDVxWWM4c1FlUWlkRWMzVFpfb3pqREVmclB4bDQ0RklxbXl4N3U2QXg0UUZYRHFpd1RQakxOY01OeThRTTZXbUtfNXdXZW9Bc3NQeXBXcWlFN1libkxxT3hKVVQ0TExnSzZGNDBUSExUZ3pJRU10dm1MbE5EdXFSNNIBmwFBVV95cUxQb25lUWNMbFBCd2k5SjlfZFAzckVNcFJBWDRmNG9YbVJpR3JtVF9sRmxJY2U0RU02Nk5tUGNEaGpqUFJadjQxMm9ZMDVoN1kweW5vbUt1WlJZby1YdjNtVkFqZTVxSjVxNUR5YTlnblpfd08wM0R1d2VjR1pfd183NzdXNV8zSFp5MnlvMDVFRHItTEpVQ0N0ODZlNA?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -345653,7 +346954,9 @@
         "Baird Maritime",
         "Firstpost",
         "Shabelle Media",
-        "Somali National News Agency"
+        "Somali National News Agency",
+        "Shabelle Media Network",
+        "Goobjoog English"
       ],
       "related_articles": [
         {
@@ -345799,9 +347102,27 @@
           "published": "2026-08-29T07:00:00+00:00",
           "source": "Somali National News Agency",
           "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPOTJiUy1tY2F6bTh4WEhZd2ttbS1mZFc0Zl8xUjBqLXA2MWZnV3I4akNpX2x4em9CcVhBTHlWQnpkMURScmR3Y1ZrNGRxWWdjdlR5YjVCYkIyZTlETnFkSnc4c2NTa1J2aWlLUjNROWlCQVRPS0ZVdnFKaUNiVGhmY3luMVJuU3dTMVlLaF8tdFFRcUFnejUwZDVB?oc=5"
+        },
+        {
+          "title": "Somalia and Turkey forces free hijacked vessel off Puntland coast",
+          "original_title": "Somalia, Turkey Forces Free Hijacked Vessel Off Puntland Coast",
+          "original_language": "en",
+          "summary": "Somali and Turkish forces successfully freed a hijacked vessel during an operation off the Puntland coast.",
+          "published": "2026-08-29T15:34:08+00:00",
+          "source": "Goobjoog English",
+          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNdExaUFBKSXBCc2xaclJMNkVIZjVMcnh2Uk84VVRKdkIzTHJING1qVnpBWkdFd1Q1amlOMjlGb2xNOWxfTnBaZm84WUNrcWNsNlNZOHpsNXYyeFZtREREYmhkc2wtYmI3RkgtWXotM2tZUHBaYWNrVjc5ZWR0VnFDWkdpTE1SQzl4elI5dVdqSQ?oc=5"
+        },
+        {
+          "title": "Turkish forces storm hijacked ship killing 14 Somali pirates",
+          "original_title": "Turkish forces storm hijacked ship killing 14 Somali pirates",
+          "original_language": "en",
+          "summary": "Turkish forces stormed a hijacked vessel off the coast, killing 14 Somali pirates in the rescue operation.",
+          "published": "2026-08-30T07:00:00+00:00",
+          "source": "TradeWinds News",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQZVBaTUdBWVdVb01tNWNCSlItV29WUFB4dm5Rb0ZQSVZCYzZtRnFQMFQ0VEFTM01VejN5MkxJZm94b3JKSkJvb1RpVjY4MXhGb2UzZ2hFblJzVlEzWU5wMGlvMTBMRzREeGtjSDBKc19GeWEyVkdpOU54aUhtUFFHcEViNS1zU1hTdklpR3lJZHlBN2ltSDRuaEh4ckVyLUs5SGdkcTN1MXk1RjdBd2xpTg?oc=5"
         }
       ],
-      "article_count": 16,
+      "article_count": 18,
       "first_reported": "2026-08-29T07:00:00+00:00",
       "last_reported": "2026-08-31T10:19:00+00:00",
       "dedup_confidence": 1.0,
@@ -345838,11 +347159,14 @@
       "ai_geo_fingerprint": "44ba39a36bec3a563cee79c583959e2b1e58cb40ea0f40b462afda01ef43929f",
       "ai_geo_inferred": true,
       "source_article_fingerprints": [
+        "3b0ba35dffa3d20ae09b7ea58caf52d5fe291f393c61917d92c0dccc76d59d2d",
+        "46e006d5c925ad852ee639c5116b15699192d566b94322468ff704321f01d475",
         "4b64f2d970e975b81440938f6088038370d8b543a509bf2316af3575cbb1cd24",
         "69d714f1266374fec61852d4679a95642ca47cae6e262f320bcfe0e82f9448e7",
         "aa6578ec8823c7381e8924255408f2490c75dd229ea066d8a4e7719891d1d8c9",
         "cce38ce4614c065349ed198c56568a64041ce58f1db4655ce0191ebcb4fb1dd6",
         "e386bcaa7d2f377829d6d2978a4f9e3a68fcd030de83508f5887a39be4c869c4",
+        "e8cdc001f0b8369a7724f76964f9133824179ef0abb7e63d80733a3a6adf1e49",
         "f1c879b9da2c14ed1ba74b87e43e1c636a35944fff1b120239443cdf190c3d1b",
         "f473ce798093d4e2749a45981fe1ebed479de9b4d966b296cd12ed8a96deddd1"
       ],
@@ -348764,7 +350088,8 @@
       "category": "Arrests",
       "categories": [
         "Arrests",
-        "Counter Terrorism Action"
+        "Counter Terrorism Action",
+        "Weapons"
       ],
       "title": "Troops arrest suspected ISWAP member in Borno",
       "summary": "Nigerian troops arrested a suspected ISWAP member and recovered visual evidence of armed groups in Borno state.",
@@ -348791,6 +350116,7 @@
       "targeted_source": "zagazola.org",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
+        "33783364fad2c3da5c7867678ce4e94f7ae358604145e40c0f71acbb456ab9df",
         "890aa8335a83fc007a5dbbc913b2ea2969d5ddfeba433dba4d09e7bb25a4ecf6",
         "c0821791151968ea79b56df670bec3b7bcf8df4a398ae05b67ff15de78e18046",
         "fb41f7016c84b7f23bc44110496a4074b6fa5a3b662723c2db597f523834a6c7"
@@ -348826,7 +350152,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "entity_actor_event_signature",
-        "same_incident"
+        "same_incident",
+        "same_url"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
@@ -350770,6 +352097,85 @@
       "ai_geo_inferred": false
     },
     {
+      "id": "5c2176d30574072e",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "At Least 18 Security Force Members Killed in Terrorist Attack in SW Niger",
+      "summary": "At least 18 security force members were killed in a terrorist attack in southwestern Niger.",
+      "original_title": "At Least 18 Security Force Members Killed In Terrorist Attack in SW Niger",
+      "original_summary": "At Least 18 Security Force Members Killed In Terrorist Attack in SW Niger Goobjoog English",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-08-24T04:39:00+00:00",
+      "source": "Goobjoog English",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQandndlZWNGZ6eFdrZ0lveGktWkRzUzlkcFZoUG9zM3YwQ29TQV9oRTRZd053MHhpR1VHNVZrODlkUms3dGl4YUt5M3dhbnFKVmJkV1cyb1lvSS0yVGJ0LU5wYUxnVWtSb2oyVy13U1JTd0t1cFBCeWdlT2hDMThoaFdJQi1qVHlwNEtzRjRFMHFkR1U2MDVZZVQ3cDlpWFU?oc=5",
+      "collector": "Google News RSS",
+      "country": "Niger",
+      "country_code": "NE",
+      "city": null,
+      "region": "Southwestern Niger",
+      "latitude": 15.0,
+      "longitude": 9.0,
+      "location_precision": "region",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "goobjoog.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "cf5336fa90c5508d0c49786489a2ad9dcf76efbb8c456173a3c79ab22b2cb615"
+      ],
+      "sources": [
+        "Goobjoog English"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-08-24T04:39:00+00:00",
+      "last_reported": "2026-08-24T04:39:00+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete, deadly terrorist attack on security forces in Niger.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "is_attack": true,
+      "incident_anchor": "terrorist attack SW Niger 2026-08",
+      "update_type": "INITIAL",
+      "incident_id": "inc-55432ee29ea8fe4b",
+      "translated_to_english": false,
+      "ai_canonical_event": "Terrorist attack kills security force members in southwestern Niger",
+      "title_variants": [
+        "Terrorist attack kills security force members in southwestern Niger"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "reported_status": "CONFIRMED",
+      "location_confidence_score": 0.9,
+      "location_method": "ai_region_coordinates",
+      "location_evidence": [
+        "SW Niger"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "A terrorist attack killed security force members in southwestern Niger.",
+      "ai_geo_fingerprint": "dc7fbee05849fd8ac7fdfc3a715b979cd3441957479b26b1a2ee7c1a75fd54e3",
+      "ai_geo_inferred": false
+    },
+    {
       "id": "2c923151384eedc3",
       "category": "Attacks",
       "categories": [
@@ -351581,7 +352987,7 @@
       "collection_locale": "NG:en",
       "published": "2026-08-22T07:00:00+00:00",
       "source": "Somali National News Agency",
-      "source_count": 2,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPcFI2Q2dFdjhvODJSLUhZdERQSTlCU0x0YzBPZmY2VGJlTGQ0N3gzZmRsS2U1STNYeVBib3F5UFpINndISWo3S0lpNlZsNWo3Mzc0TEozSVZYSENMbVRXcUJVb0w1bTNjUEpEMHdSU3hXd0NENHFXNHJWRDUzZTZtMEtLWEhYelVvRjZycmNoME53MC1yRlRVSzJfdll0SDBvcUtuOFQzX3A0cGpGUU9NTg?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -351597,7 +353003,8 @@
       "targeted_source_kind": "local_language_media",
       "sources": [
         "Somali National News Agency",
-        "Goobjoog English"
+        "Goobjoog English",
+        "Shabelle Media Network"
       ],
       "related_articles": [
         {
@@ -351635,9 +353042,18 @@
           "published": "2026-08-29T09:04:56+00:00",
           "source": "Goobjoog English",
           "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQSmJadUl5N0RzeXRzMVdueG43N1RLQkZfdFVJSTg1djl0eDVwUVdfQ1p6SmRrUXhaaUdUX3NhOXhLaE1BQWVnYlQtZWc2UUx6UHBqanFxVzZRT0tSTTl2cGgzTlpRZG95c2VKVnVFR3dNcGJRRmQyU3hxRlJZMDJBMG5Yc2NLcDBrVnVEWmJlcw?oc=5"
+        },
+        {
+          "title": "Somali Forces Target Al-Shabaab Hideouts in Bay, Militant Surrenders",
+          "original_title": "Somali Forces Target Al-Shabaab Hideouts in Bay, Militant Surrenders",
+          "original_language": "en",
+          "summary": "Somali forces targeted Al-Shabaab hideouts in the Bay region, resulting in a militant surrender.",
+          "published": "2026-08-22T07:00:00+00:00",
+          "source": "Shabelle Media Network",
+          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOdXA3bEdEUUFWRExPcF8zYlNadktSVXJKODhJZjZKUVJrcHNUOVM4Tm5NV3A5QUFBMy1SUnZKbHFfWFdiRTUyZkhWSUg4bFFmVHpWTzBoUGFJcUhOTkhhY190cEVlZEF5RkJ4MVFkSFNkb01rTk5ZMzRuLWFpZlZ2cmxPRm03ajNGejNsSi1ySmE4LVo5eWUzY2pn?oc=5"
         }
       ],
-      "article_count": 5,
+      "article_count": 6,
       "first_reported": "2026-08-22T07:00:00+00:00",
       "last_reported": "2026-08-23T07:46:55+00:00",
       "ai_selection_complete": true,
@@ -351678,13 +353094,15 @@
       "cbrn_subgroups": [],
       "source_article_fingerprints": [
         "0e49780baec3ef32cc5076fb85716f6f3a1f09bd141c1b9db4cd339a981b12b8",
+        "15f6944aa5835bcc6369430c760ca295b26ec26d6e94a79a09743873409b86d6",
         "607db5a4df5908ef46e45ad271e772616c448496f9c21f060cf3e1e57da220e8",
         "f4dfe29c1adb56a78b9ebacbc327a37f1dd194eef11f5253c76eb166b82f7bed"
       ],
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "very_high_title_similarity",
-        "same_incident"
+        "same_incident",
+        "title_plus_anchor"
       ]
     },
     {
@@ -352152,6 +353570,85 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Operation took place in the Deir ez-Zor region.",
       "ai_geo_fingerprint": "7f62a4ec280c3e815db890126a0bf0d8495225e8589a5c1e3a2b3b8c33a3c10f",
+      "ai_geo_inferred": false
+    },
+    {
+      "id": "9c3a27163ae99150",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Dozens of Civilians Killed and Abducted by Jihadists in Central Nigeria",
+      "summary": "Dozens of civilians were killed and abducted by jihadists in central Nigeria.",
+      "original_title": "Nigeria : des dizaines de civils tués et enlevés par des jihadistes dans le centre du pays",
+      "original_summary": "Nigeria : des dizaines de civils tués et enlevés par des jihadistes dans le centre du pays Maliweb",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-08-22T07:00:00+00:00",
+      "source": "Maliweb",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNSVl6RHR4Sm9ybE9ESFppOVN1d3pZbWp4c2FTdENaLV9qY21raVVnTTY5MEdxMkctN1JXTDZGMTBwcDVnUS1CSDFxVFlacDQtSmZ0ZV9QMDNFUkhtX3dDeGlvdlZqOVAxV3F1ZDFxNmJlclZEWW1hcnJib0lkRjhZSGdLeW0zLW43VEpzanJFNmJhNGk4d2NhQ1hFYTVmQjdxZkRDNVUwUERwMjlWOTFfSXA5X2tFRGdPbjlib1JwSkFPNVZkWmowMl93cVZhaWN0YUd3LUl3?oc=5",
+      "collector": "Google News RSS",
+      "country": "Nigeria",
+      "country_code": "NG",
+      "city": null,
+      "region": "Central Nigeria",
+      "latitude": 9.082,
+      "longitude": 8.6753,
+      "location_precision": "region",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "maliweb.net",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "e91cabbe93b61529f1a48294708339809d2e2041d0291b32aa34e9ff4c5ee07a"
+      ],
+      "sources": [
+        "Maliweb"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-08-22T07:00:00+00:00",
+      "last_reported": "2026-08-22T07:00:00+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete militant attack and mass abduction of civilians.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "is_attack": true,
+      "incident_anchor": "jihadist attack and abduction central Nigeria 2026",
+      "update_type": "INITIAL",
+      "incident_id": "inc-f24835662996e074",
+      "translated_to_english": true,
+      "ai_canonical_event": "Jihadists kill and abduct civilians in central Nigeria",
+      "title_variants": [
+        "Jihadists kill and abduct civilians in central Nigeria"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "reported_status": "CONFIRMED",
+      "location_confidence_score": 0.9,
+      "location_method": "ai_region_coordinates",
+      "location_evidence": [
+        "central Nigeria"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Civilians were killed and abducted by jihadists in central Nigeria.",
+      "ai_geo_fingerprint": "c78727bfaa2cd690cf11e5c0f68635e6c220fb6ce7615540d1bfa16292472005",
       "ai_geo_inferred": false
     },
     {
@@ -353795,7 +355292,7 @@
       "collection_locale": null,
       "published": "2026-08-20T07:00:00+00:00",
       "source": "AP News",
-      "source_count": 14,
+      "source_count": 15,
       "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOd2ZWcnEzSHpvUUo0b0FBWFh5cndyNS1kMVY2dmJzcEpfdU1xM05BR3p1SndrTEthZ0Z4bmFiZWJVQ05zZGRyc3NDNjJwclpHcnZFNUNoMF9hTVF1MHYxMENRNEw4a21pekZzaDN6WHpSYjFiLUJwWFFXRzJHdGhMTnlnMzF6S243SkJYYXpiYzI1T2s?oc=5",
       "collector": "Google News RSS",
       "country": "Yemen",
@@ -353823,7 +355320,8 @@
         "Marine Link",
         "South China Morning Post",
         "Shabelle Media",
-        "Hiiraan Online"
+        "Hiiraan Online",
+        "Shabelle Media Network"
       ],
       "related_articles": [
         {
@@ -353992,7 +355490,9 @@
         "5ba970d8a2ad36049c52589d970518cdc613ef22231d61879f4acd2940d2b93b",
         "5d5951fc5e11ec6b8f8bc8c35ea03ee4a761638caa24e372eaf4146e1074b7da",
         "67bf4ef30cc8aa1b68afc83d802f3e7ebe163d185e9b761eb73c3b7005961cdd",
+        "8bd5f7d3252f9d412f29a004d444d69f7b8a3a698cc53b4f01a9640d7229fe5e",
         "9d281880340113ce7b54868e39c433df1f65d9aff7fe02a44f1f73847224ab5a",
+        "c563b8146812095ba3781d7aac81eebe039d1de53d013a9a55e394de2c899048",
         "c759690f9499953ea9a8f9dd0e41cb786c99888328bdfae4f2b8a2963276fb0e",
         "d28f2fb1e5567a19fa004307b73ee37bf5e22a1a3b903186d6de9b0a15a40b37",
         "ecea55f538a51d6826bc12d7405cd427c058f8daceafbf3c3157ee5fcaab73d0"
@@ -354093,7 +355593,8 @@
       "id": "5ac868a2603761a9",
       "category": "Counter Terrorism Action",
       "categories": [
-        "Counter Terrorism Action"
+        "Counter Terrorism Action",
+        "Weapons"
       ],
       "title": "Operation Dougoukoloko: FAMa announce the neutralization of about twenty terrorists",
       "summary": "The Malian Armed Forces announced the neutralization of around twenty terrorists during Operation Dougoukoloko.",
@@ -354105,7 +355606,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-08-20T07:00:00+00:00",
       "source": "malijet.com",
-      "source_count": 2,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOc0wyOV8wVWo0UFJwdkh0VGVxajFGaS1aOThwYWFuNGhqcmlPdDFVa2prYUhNYmZ6bDdNVC1oWTlneDJQNnVjcU1YVlNXR2R5bkhLWGwtaHpvM3RIY2Iwb2lKY29iVFBCSjJJdzl3V3ZyRUN2X1NBRDNRbGlZd3ZmaGxLN2hlVENwMnhidnZtYjdnQmdrdW80dUpVdFNyUWhqUThuVE96NlFZRTNsWVgtSXJoSzVabmJWbnYya21ZU2JaQQ?oc=5",
       "collector": "Google News RSS",
       "country": "Mali",
@@ -354121,7 +355622,8 @@
       "targeted_source_kind": "local_language_media",
       "sources": [
         "malijet.com",
-        "Maliweb"
+        "Maliweb",
+        "maliweb"
       ],
       "related_articles": [
         {
@@ -354178,11 +355680,13 @@
       "actor_group": "",
       "incident_id": "inc-5bbde2e6f45d3897",
       "source_article_fingerprints": [
-        "794bb7cd803abf0bedce97e7ff2f44c4a49914b170de02fd5643cdefb2d15384"
+        "794bb7cd803abf0bedce97e7ff2f44c4a49914b170de02fd5643cdefb2d15384",
+        "83b7b2b7a73d42afd057a9c04bf2476ce5304b0854cc059df65886175ec2d12d"
       ],
       "dedup_confidence": 1.0,
       "dedup_methods": [
-        "same_incident"
+        "same_incident",
+        "same_url"
       ],
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
@@ -355890,6 +357394,164 @@
       "source_article_fingerprints": []
     },
     {
+      "id": "50d89a005b0240b6",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "title": "ReCAAP ISC Reports One Incident of Armed Robbery Between August 11-17",
+      "summary": "ReCAAP ISC reported one incident of armed robbery against ships between August 11 and 17.",
+      "original_title": "ReCAAP ISC: One incident of armed robbery 11-17 August",
+      "original_summary": "ReCAAP ISC: One incident of armed robbery 11-17 August safety4sea",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English",
+      "collection_locale": null,
+      "published": "2026-08-18T07:00:00+00:00",
+      "source": "safety4sea",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNRzN3LWxvb1lRQ3pFSUZNQ2U3TkZCVFhGSWp3cjhjel9NdTBoX09SX1YtMU1oeFM0NUdLSHRSRkVyakd5VjloU05MN2pyb19MQXRnUk51TnVHYzNtUzVUOVZJTmdaNm9ZM2RNSVl5Zlo2WG95ODJBeUhBaDdIQldIekh1Yw?oc=5",
+      "collector": "Google News RSS",
+      "country": "Singapore",
+      "country_code": "SG",
+      "city": "Singapore",
+      "region": null,
+      "latitude": 1.28967,
+      "longitude": 103.85007,
+      "location_precision": "country_capital",
+      "location_confidence": "medium",
+      "acquisition_channel": "targeted_source_query",
+      "targeted_source": "SAFETY4SEA",
+      "targeted_source_kind": "specialist_media",
+      "source_article_fingerprints": [
+        "f79553ee7c9f7e0ad86d5fb344c0230cb1b3111798779870b05990b973dc7177"
+      ],
+      "sources": [
+        "safety4sea"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-08-18T07:00:00+00:00",
+      "last_reported": "2026-08-18T07:00:00+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports a confirmed maritime armed robbery incident against a vessel.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "is_attack": false,
+      "incident_anchor": "ReCAAP armed robbery report Aug 2026",
+      "update_type": "INITIAL",
+      "incident_id": "inc-ea437bfede48b60f",
+      "translated_to_english": false,
+      "ai_canonical_event": "ReCAAP ISC reports armed robbery incident against ship",
+      "title_variants": [
+        "ReCAAP ISC reports armed robbery incident against ship"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "reported_status": "CONFIRMED",
+      "location_confidence_score": 0.7,
+      "location_method": "ai_country_capital",
+      "location_evidence": [
+        "ReCAAP ISC"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "ReCAAP Information Sharing Centre is headquartered in Singapore, which issues these regional maritime incident reports.",
+      "ai_geo_fingerprint": "18f59dd8aef87c98920f08835fafd0337c8775c6c93cbdb170b3a8dd6e67c96b",
+      "ai_geo_inferred": true
+    },
+    {
+      "id": "350d731f1ef3f2b9",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "title": "Unmanned Cargo Ship Destroyed Off Yemen",
+      "summary": "An unmanned cargo ship was attacked and destroyed off the coast of Yemen.",
+      "original_title": "Unmanned cargo ship destroyed off Yemen",
+      "original_summary": "Unmanned cargo ship destroyed off Yemen Seatrade Maritime News",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English",
+      "collection_locale": null,
+      "published": "2026-08-18T07:00:00+00:00",
+      "source": "Seatrade Maritime News",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPNVFaY0xRbDgzTzB0dXZBMnF1anJLa1RxZkw2WFFBUlZXN09XalNUVmpOd0hvS0JWajZnVGt4b0lMb0J1cmdpaGdDNy11cld4aE8tcEZwc2t2M0o0NzNqYVdNSUVfa0FEOWdlNEtuYzA3OHkwNFJkUm9hdHdaUmdQNXhRRGYxMzNGZVE?oc=5",
+      "collector": "Google News RSS",
+      "country": "Yemen",
+      "country_code": "YE",
+      "city": "Sanaa",
+      "region": null,
+      "latitude": 15.35452,
+      "longitude": 44.20646,
+      "location_precision": "country_capital",
+      "location_confidence": "high",
+      "acquisition_channel": "targeted_source_query",
+      "targeted_source": "Seatrade Maritime",
+      "targeted_source_kind": "specialist_media",
+      "source_article_fingerprints": [
+        "c10876223cb0d0b08bd5e2d60c2e6bbb0e4af92940e0c08a55276d6be54db771"
+      ],
+      "sources": [
+        "Seatrade Maritime News"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-08-18T07:00:00+00:00",
+      "last_reported": "2026-08-18T07:00:00+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a militant attack on commercial shipping in the Red Sea / Gulf of Aden corridor.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "Houthis",
+      "primary_event_type": "PIRACY",
+      "is_attack": false,
+      "incident_anchor": "cargo ship destroyed off Yemen 2026-08",
+      "update_type": "INITIAL",
+      "incident_id": "inc-4aebdd745168e317",
+      "translated_to_english": false,
+      "ai_canonical_event": "Unmanned cargo ship destroyed off Yemen",
+      "title_variants": [
+        "Unmanned cargo ship destroyed off Yemen"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "reported_status": "CONFIRMED",
+      "location_confidence_score": 0.9,
+      "location_method": "ai_country_capital",
+      "location_evidence": [
+        "off Yemen"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "An unmanned cargo ship was destroyed off the coast of Yemen.",
+      "ai_geo_fingerprint": "84fae7565f594a3096010eb1c4764b6ad101c7751d0b71d283e13723462f0d49",
+      "ai_geo_inferred": false
+    },
+    {
       "id": "44e1473de8043624",
       "category": "Maritime Piracy",
       "categories": [
@@ -355903,9 +357565,9 @@
       "collection_language": "en",
       "collection_language_name": "English",
       "collection_locale": null,
-      "published": "2026-08-18T05:46:37+00:00",
+      "published": "2026-08-17T14:25:06+00:00",
       "source": "Gulf News",
-      "source_count": 3,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPWFZBUDVSbFprU0ZsMjFFYVVGRVhESTVFX2VSN0FwNm5ZVWJLdVZLNGUzVFhRaENXdGZoVWVJbVBITjRpX1J0Z2FVQ1lwLXVSRER3a0VMMUtEcDFyZjN2d0lPVXNFM0Y1OXJNTFBaMVFsYXdVUUZlbXk4bGY4YjNLS21jbzNEM2U5SjJlME05QVRUSmtwR1A2amZCeml1NFh4Z2JobnZvRmFQd9IBvAFBVV95cUxPcFpkSnU2clE0M3NJR25veXJITFZnSVUyc25EeWNja043VmdwMWEzOThiMXhVczM0WWhyV2tUT3VrQ00xV0c5b2tGWU9ZQ3FrZHhFMlNIbjFJcElDQmxMN1hIWFRKc0JXMGloV1JWRV9DXzYtQ1paRVFyUTNzWlczOFRYb25NY0pfMDFxNnYxeGtTWVM0ZW5YZXBhdVpLckg2X0lKWW5QWlZ4azZteE9BRDRmWVl2YzFQUUJnVA?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -355919,7 +357581,8 @@
       "sources": [
         "Gulf News",
         "Dawn",
-        "International Business Times"
+        "International Business Times",
+        "TradeWinds News"
       ],
       "related_articles": [
         {
@@ -355939,15 +357602,25 @@
           "published": "2026-08-20T15:11:03+00:00",
           "source": "International Business Times",
           "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOczJBT1ZMU1BQek9vN3cwVWRqTDZqU25RRkt3cWNUMXlvbmFXeWotOG1HWTNrVlRyNGpYb2s1MWg1OEpBaF81Ymt5UUlkcVpQeFVYTmJ3NDVlT2xmTFAwNU93aUlJb2RZVEhoNTJPYmhucHI4cElkUGNaWS1QODFRSDNpS0Z6Z1JPQVIxbEZhWm43VnYtMUpGSHdnYTlsaERjdFRF?oc=5"
+        },
+        {
+          "title": "Armed Somali Pirates Hijack Ship in Fifth Strike in As Many Months",
+          "original_title": "Armed Somali pirates hijack ship in fifth strike in as many months",
+          "original_language": "en",
+          "summary": "Armed Somali pirates hijacked a ship, marking their fifth successful strike in as many months.",
+          "published": "2026-08-17T14:25:06+00:00",
+          "source": "TradeWinds News",
+          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPVlNGSjAzc0RYSDBaVUF2SjllR3JaNUxDcXdZUm0xT0podEx0NEpyLUdQM2oxMU1aZzRJUkl2X292dDhHd04wTW83ZGo5dmdENHNobU0tMk5fRkIxU3doaXQwOUdYS2ttQlJtODJTd0lZN1V4UVpVRGJCaHF6blhfbGxrY3dGQ25JNnRQYmtPZENieERUUWxtWkRMNUdFOGFZeVRyMjZSZ3NfZS1uVFVidlRpU3ZITXFB?oc=5"
         }
       ],
-      "article_count": 3,
-      "first_reported": "2026-08-18T05:46:37+00:00",
+      "article_count": 4,
+      "first_reported": "2026-08-17T14:25:06+00:00",
       "last_reported": "2026-08-20T15:11:03+00:00",
-      "dedup_confidence": 0.8,
+      "dedup_confidence": 0.891,
       "dedup_methods": [
         "paraphrase_entity_context",
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "very_high_title_similarity"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
@@ -355983,7 +357656,10 @@
       "actor_scope": "NON_STATE",
       "cbrn_subgroups": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "reported_status": "CONFIRMED"
+      "reported_status": "CONFIRMED",
+      "source_article_fingerprints": [
+        "b32f930b710063a6f20fb90571d4aed8c7c87c04499b8588951e96b40513f16d"
+      ]
     },
     {
       "id": "7f22121fc053845c",
@@ -356292,7 +357968,7 @@
       "collection_locale": null,
       "published": "2026-08-17T07:00:00+00:00",
       "source": "AP News",
-      "source_count": 12,
+      "source_count": 13,
       "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPdHpBYmdGbFVEcElrSlVXaDZpV2t2b29LNHZuZ0hZR3A0RWI4T1IyY1FYZDBiRGRFWENZZ1ZWTkh4MWlpT3ZSTl96SnVOdGc5TmUzODZQcGs2TlYzRDlJM25YZGFQYnpsaEJEXy03NWdZZnk5cWkwNlhhaHhqNzJWWVdyZEVYS2lCOE9ZLVFDSUxJR0c1SFpuUUIyMzh0Y3pqVmc?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -356315,7 +357991,8 @@
         "TheWire.in",
         "AP News",
         "The Indian Express",
-        "Bhaskar English"
+        "Bhaskar English",
+        "Shabelle Media Network"
       ],
       "related_articles": [
         {
@@ -356389,9 +358066,18 @@
           "published": "2026-08-17T07:00:00+00:00",
           "source": "Seatrade Maritime News",
           "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQSXVSRTJhTmd5emxScEU3a1FiMHhSVDdYYnZUbllLM2M0dFQyamIwWlVWWTNRaXBnOU5CT3g1ckhyV2xNUFJaTVB5bG5ySkh5ZXgyTTkxYUtMcVYwWWd2R3c4QU5mUEhlOEFuWkRLejUyWFNDUzI0am93NF9nSGRObTg5QmliLWdPTUtVenVOdGNtMllNNTZPdjI1dXJjZw?oc=5"
+        },
+        {
+          "title": "Somalia: Pirates Seize Commercial Cargo Ship",
+          "original_title": "Somalia: Pirates seize commercial cargo ship",
+          "original_language": "en",
+          "summary": "Pirates off the coast of Somalia seized a commercial cargo ship.",
+          "published": "2026-08-18T07:00:00+00:00",
+          "source": "Shabelle Media Network",
+          "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE02Wk5EcTFJTjdQQUZ1TmcySFVWRG5XM0lXMGFBY2RDRUx4UXdpU0xGb2JtODRpd2I4cmtHMmxuNzJiWXlZUE04Vmo2TDVnLVFlUXNLNndqUXVxcFE1VjZMMkRBQzUxZDA5NXlSTEJDeVpMR2Jlalp5cGZB?oc=5"
         }
       ],
-      "article_count": 8,
+      "article_count": 9,
       "first_reported": "2026-08-17T07:00:00+00:00",
       "last_reported": "2026-08-21T10:36:00+00:00",
       "dedup_confidence": 1.0,
@@ -356428,6 +358114,7 @@
       "ai_geo_fingerprint": "6c4f48340f58168d0f91da7524372f9bd9094db981276730557c6b75f1b345f4",
       "ai_geo_inferred": true,
       "source_article_fingerprints": [
+        "ed6d18d2ee9e41b2a0144db79b7197b9d08405d3642e6aefc3c5a0fa09b2436b",
         "ed9dd19c327ab3105d27d46295915f2e3ea2c7ed9cd9770d9a6b5961c0dd3ddd"
       ],
       "actor_group": "",
@@ -408742,59 +410429,28 @@
     "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
     "rescue_unlocated_final": 21,
     "ai_for_every_event": true,
-    "cached_events": 3676,
-    "ai_processed_this_run": 64,
-    "ai_pending_at_start": 64,
-    "city": 1395,
-    "region": 1219,
-    "country_capital": 1092,
+    "cached_events": 3733,
+    "ai_processed_this_run": 18,
+    "ai_pending_at_start": 18,
+    "city": 1398,
+    "region": 1226,
+    "country_capital": 1093,
     "unlocated": 34,
-    "mapped_total": 3706,
-    "high_confidence": 3440,
-    "medium_confidence": 280,
+    "mapped_total": 3717,
+    "high_confidence": 3449,
+    "medium_confidence": 282,
     "low_confidence": 20,
     "methods": {
-      "ai_country_capital": 1091,
-      "ai_city_geonames": 1277,
-      "ai_region_coordinates": 1216,
-      "ai_city_coordinates": 112,
+      "ai_region_coordinates": 1223,
+      "ai_city_geonames": 1281,
+      "ai_country_capital": 1092,
+      "ai_city_coordinates": 111,
       "ai_unlocated": 12,
       "ai_unlocated_final": 21,
       "source_verified_region": 3,
       "source_verified_city": 6,
       "source_verified_country": 1,
       "source_verified_unlocated": 1
-    }
-  },
-  "specialist_enrichment": {
-    "Biological Terrorism": {
-      "window_days": 180,
-      "languages": [
-        "ar",
-        "bn",
-        "de",
-        "en",
-        "es",
-        "fa",
-        "fr",
-        "ha",
-        "he",
-        "hi",
-        "id",
-        "it",
-        "ps",
-        "pt",
-        "ru",
-        "so",
-        "sw",
-        "tr",
-        "ur",
-        "zh",
-        "zh-Hant"
-      ],
-      "state_actor_operations": "excluded",
-      "pipeline": "Shared selection schema, English translation and incremental event deduplication",
-      "model": "openai/gpt-oss-120b"
     }
   }
 }
