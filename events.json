@@ -726,7 +726,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-10-16T07:33:02.740529+00:00",
-  "number_of_events": 3740,
+  "number_of_events": 3733,
   "events": [
     {
       "id": "78d82934e36b51f0",
@@ -130154,104 +130154,6 @@
       "cbrn_subgroups": []
     },
     {
-      "id": "b0cfe27bc61415ff",
-      "category": "Weapons",
-      "categories": [
-        "Weapons",
-        "Arrests",
-        "Attacks",
-        "Counter Terrorism Action",
-        "Chemicals and Explosives"
-      ],
-      "title": "SBU detains 16-year-old for manufacturing bomb ordered by Russia for terrorist attack in Khmelnitsky",
-      "summary": "Ukraine's SBU security service detained a 16-year-old youth who allegedly manufactured an improvised explosive device on Russian orders to carry out a terrorist attack in Khmelnitsky.",
-      "original_title": "По заказу рф изготовил самодельную бомбу для теракта в Хмельницком: СБУ задержала 16-летнего юношу",
-      "original_summary": "По заказу рф изготовил самодельную бомбу для теракта в Хмельницком: СБУ задержала 16-летнего юношу Рубрика",
-      "original_language": "ru",
-      "collection_language": "ru",
-      "collection_language_name": "Russian",
-      "collection_locale": "RU:ru",
-      "published": "2026-10-04T12:31:07+00:00",
-      "source": "Рубрика",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOdXBGYlVLUFFhcF9ienlxbzZSWEVzUERKR0lKZWpRVGM1VzhWclNaVkd4VjdEQVFXMDlwSmlzVWVhTDNhUjFjcmdQLWFWdWJ0WDVOZ1ZTUkE3aU42NFpnS0VMREFoLVM1c0dZS0lOSzJuMUVIemtIZHVtQWk3dVJYUy1jbkdGQ0VoMmpXMGNGdG12eW5rRjdjcVZ2VVBnQTFaYzVadXdQdUpDOHpWemVZeUpiVmUzZFNqYzdNWmtFLXNlM3hwZHpHcXZCemYyWFNXZzJRU0FB?oc=5",
-      "collector": "Google News RSS",
-      "country": "Ukraine",
-      "country_code": "UA",
-      "city": "Khmelnitsky",
-      "region": null,
-      "latitude": 49.4229,
-      "longitude": 26.9871,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "089e9a63606d4925c97d4b30d3e394526508718a64a0738a28442a32dfae04ca",
-        "912bed62a7da0fa59936d662a66194d7dbf7e279af78a99308b056d4ab83e192"
-      ],
-      "sources": [
-        "Рубрика",
-        "fakty.ua"
-      ],
-      "related_articles": [
-        {
-          "title": "Terrorist Plot Prevented in Khmelnitsky Involving Teenager",
-          "original_title": "Исполнитель — подросток: еще один теракт предотвращен в Хмельницком (фото)",
-          "original_language": "ru",
-          "summary": "Security services prevented another terrorist attack in Khmelnitsky, noting that the perpetrator was a teenager.",
-          "published": "2026-10-04T13:47:00+00:00",
-          "source": "fakty.ua",
-          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNSmloVGJGdVJkVHB3YXQxVWk1TllTdE1ULUx1YWM2V0dyUTh1UlpUVm9FUFVUMFJ3RllZODFzWDJqX1pDd3d5ZWF5S2VNei1vTE1KTDBOVVZsc3RiTUdURmROUVd3SHVoc0l0VzA5X1RJLVNsNXJZbGhMTEl6V3QzOXFQU25ZNHJkQzZ3N3JtaVB4NGxwZXJSTUV2WnVTSWRtY3fSAacBQVVfeXFMT3MxMGNDUG1jOHVfQ3N2X2wyWDkzMmItVUNFSF9kV2FoV0w4eEU3VTVNY3hGMGx2NWlKdE8wWi1RdGtuZXZyNHBadFk5aWlRcUZ1anU5amJKQXFoa3M2RnpOYVZvRmMwZUZ5anBlTElNS0tCTkVxcGh0UzBJLU1aMlVRdTlHNUh6ZzM5aUp3TTlPSW91dmRGcFJPY01qM2tQc2ZyY0hzb3c?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-10-04T12:31:07+00:00",
-      "last_reported": "2026-10-04T13:47:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete security service arrest and disruption of a bomb plot involving explosive devices.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ARREST",
-      "is_attack": false,
-      "incident_anchor": "Khmelnitsky bomb plot arrest 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-f77899e52b8757ea",
-      "translated_to_english": true,
-      "ai_canonical_event": "SBU detains 16-year-old bomb maker in Khmelnitsky",
-      "title_variants": [
-        "SBU detains 16-year-old bomb maker in Khmelnitsky"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_incident"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_coordinates",
-      "location_evidence": [
-        "SBU detains 16-year-old for manufacturing bomb ordered by Russia for terrorist attack in Khmelnitsky"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The SBU operation and planned attack target are explicitly located in Khmelnitsky, Ukraine.",
-      "ai_geo_fingerprint": "6cc421f26843ac85af1c5096c68d32e14b82acee74bf51fd122cf0b78da84eed",
-      "ai_geo_inferred": false,
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": []
-    },
-    {
       "id": "bdd45a8dd144d41d",
       "category": "Arrests",
       "categories": [
@@ -135350,9 +135252,9 @@
       "actor_group": "",
       "primary_event_type": "ARREST",
       "is_attack": false,
-      "incident_anchor": "Manchester terror suspect Germany background 2026",
+      "incident_anchor": "Manchester plot UK 2026-10-02",
       "update_type": "INVESTIGATION_UPDATE",
-      "incident_id": "inc-dca15d0f2db59390",
+      "incident_id": "inc-528d1549c6d2c0ec",
       "translated_to_english": true,
       "ai_canonical_event": "Manchester terror suspect background in Germany",
       "title_variants": [
@@ -137725,82 +137627,6 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Operation Shujaa is conducted by the Ugandan People's Defence Forces (UPDF) targeting ADF rebels.",
       "ai_geo_fingerprint": "4ceab0e612815b9f3351fbafb8ce13721835b3c8d9ce8c86651c00f9ee42662c",
-      "ai_geo_inferred": true
-    },
-    {
-      "id": "19f121bfc81a061b",
-      "category": "Weapons",
-      "categories": [
-        "Weapons",
-        "Attacks"
-      ],
-      "title": "Fiber optic cable fire: five ignition devices seized",
-      "summary": "Following a fire affecting fiber optic cables in Italy, authorities seized five ignition devices, while no claim of responsibility has been made yet.",
-      "original_title": "Incendio ai cavi della fibra, sequestrati cinque inneschi. Ancora nessuna rivendicazione",
-      "original_summary": "Incendio ai cavi della fibra, sequestrati cinque inneschi. Ancora nessuna rivendicazione la Repubblica",
-      "original_language": "it",
-      "collection_language": "it",
-      "collection_language_name": "Italian",
-      "collection_locale": "IT:it",
-      "published": "2026-10-03T13:53:45+00:00",
-      "source": "la Repubblica",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxOZXRYT2xzTUhqNnFGQTd3S21RRmFOUGdRaFZPdTlGZlNhQjJfMFp6MEs2Z2VCME9taWN6S3FCOW9YYWdOYjdpLUdfNC1PRnZ4R3hFbmdNTTJFNThJUmhMY2p0dzh1MnlkeTAwN2NpeWg5YmY1azYxc3UzLVE5V1c4UExXV1VTZEZJVjZsUGVENldpX1BPbExLbVZIblduT2djMmItS3c1QVVLY19LNnFNUzhxeGF5MVFJOVY1bXRnaXptRXNSZ01NdUhmaE0xUlV3ejF0VjI5THMzN3NZNXVHQ0o1ZW3SAeoBQVVfeXFMTVZxV3dvSXpXTnVna3ZVQVpPRXlmVkI1T1BUTWtxbXBHTE5GMGFKY19NV21pdUhnY0lfVmc5R2s1clVxNjBtc2FONWhaMWF1VFB4bFZUS0E0SWhsX2czSTAwVUc1YnI4UVFxQW1XeUs3UTkzT3NlWURzb0RCT2hNbTlGckVRVmJjYXNNVDlMaHpJRGQ4SlUzcVh6czdyWHpuNUNzSnBjQWg2NVo0S0xkaUNmN3h2dnZGeXY2WDZ1Tjk3NlBtR2E2dmlpUU9fQ3lyZTIxR3J2RTBFVVZZWmZwZ0J3SF96b25Td0xB?oc=5",
-      "collector": "Google News RSS",
-      "country": "Italy",
-      "country_code": "IT",
-      "city": "Rome",
-      "region": null,
-      "latitude": 41.89193,
-      "longitude": 12.51133,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "repubblica.it",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "1ec037a8ef5e947401e887ac2be72e1f9e81cfd5d6e9820ac6f29b241d23a203"
-      ],
-      "sources": [
-        "la Repubblica"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-03T13:53:45+00:00",
-      "last_reported": "2026-10-03T13:53:45+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Concrete sabotage/arson attack on critical infrastructure with explosive/incendiary devices seized.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Fiber optic cable arson Italy 2026-10-03",
-      "update_type": "INITIAL",
-      "incident_id": "inc-e388026acef6be0e",
-      "translated_to_english": true,
-      "ai_canonical_event": "Fiber optic cable arson and seizure of ignition devices in Italy",
-      "title_variants": [
-        "Fiber optic cable arson and seizure of ignition devices in Italy"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "fiber optic cables in Italy"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Authorities seized ignition devices following a fire affecting fiber optic cables in Italy.",
-      "ai_geo_fingerprint": "7ee9a9fdd88adb2af4ec55fc84f6281cfaa658d3185fdfeea43e6690c40740e3",
       "ai_geo_inferred": true
     },
     {
@@ -141032,136 +140858,6 @@
       ]
     },
     {
-      "id": "35da7d02f5383e1e",
-      "category": "Attacks",
-      "categories": [
-        "Attacks",
-        "Weapons",
-        "Chemicals and Explosives"
-      ],
-      "title": "Jews in the crosshairs: The untold major drama in Britain",
-      "summary": "Reporting on a major thwarted or investigated terror plot targeting Jewish communities in Britain.",
-      "original_title": "יהודים על הכוונת: דרמת הענק בבריטניה שטרם סופרה",
-      "original_summary": "יהודים על הכוונת: דרמת הענק בבריטניה שטרם סופרה מעריב",
-      "original_language": "he",
-      "collection_language": "he",
-      "collection_language_name": "Hebrew",
-      "collection_locale": "IL:he",
-      "published": "2026-10-03T10:29:53+00:00",
-      "source": "מעריב",
-      "source_count": 5,
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBRVGs1V3U5Q0VHT1RLUE9CdWNZUFNzOC1VbVh2c3ViZ2dVdXZxdDBOckRqT1JONVhLLTg2UEJmUmJIc05wYmlZWjhOVEp2b0w1M0ZHSGRtcF9fREp3NC1SUA?oc=5",
-      "collector": "Google News RSS",
-      "country": "United Kingdom",
-      "country_code": "GB",
-      "city": "London",
-      "region": null,
-      "latitude": 51.50853,
-      "longitude": -0.12574,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "11236e1e2992758d6b0cf9602bf5a09fe3d2e029782431db1b15634bb0afa168",
-        "1fc6abda4e3cd8320f3af232a2901a87a7ecb4b6628829cc83bed081f0ea33e0",
-        "3404b602240f520c3b7894bce5b17e68bc0212669ed2dbd24df1475f8d724a3c",
-        "4d3d333fc890fd12cae532894aa3a4fd62ff40ac62021028b8b14c17dd8f5ede",
-        "a760605a53d9f6c2f03141bc0de15aa9deaa75c72b8e654aa559396cd216e226",
-        "d114b7a478df977aca10c891575361302a45a20aecc7aaf26d4eb14d4d3ffd62"
-      ],
-      "sources": [
-        "מעריב",
-        "The Times of Israël",
-        "fr.timesofisrael.com",
-        "Рамблер",
-        "lenta.news"
-      ],
-      "related_articles": [
-        {
-          "title": "Iranians reportedly planned chlorine bomb attack against Manchester synagogue",
-          "original_title": "Des Iraniens auraient planifié un attentat à la bombe au chlore contre la synagogue de Manchester",
-          "original_language": "fr",
-          "summary": "Reports indicate that Iranian operatives allegedly planned a chlorine bomb terrorist attack targeting a synagogue in Manchester, United Kingdom.",
-          "published": "2026-10-03T18:24:14+00:00",
-          "source": "The Times of Israël",
-          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOeHg2SFBsS1dEWkpJaDF6M3YxNTdvdHZiVWNNNUYtcDJnUzVibzdab1dxN0NJU2RUUVp0VF8xaWgxR2dRZE1HVjRCNnFCUHlPNzhnczVLNW4xc1NvcHE0YXRwMy1ZMFFHazhsbXN2UGJRZnJxd01sNENXd3UtS0N4Q1N5Z2NkQ1NmUHRMSFJNZUJlX01GSEN3MzhCRC1rclpkbEQ1bldYZWVOVlhKeFRMbFFWb2R1LWdmNExaZk1WcE1GbVBQOHfSAcsBQVVfeXFMT1lJb2dkOF85QkVraFktbGtoZlBDTTJEYmFOel8yYTdxOFhpdlkyOXB6UWZINlJzd1g2UFlKakRsYm95WE5Iak1Kd0FmZWRhdDQ3QURRMnhvZUExeDdwVHQ1eC1kR0RxTklObEd0N3REdDJoaTBKWEpaa3cxZC1Ib19xNUtpYUpfSlF4cXpwaTEwMjRJbGJkbE5TbEhsUjJkUm1Ta2g0aEVtdWtzc1hVOXlWSmlNVV9aSnFfckFVUW1lckdHWHBHSEZzSzQ?oc=5"
-        },
-        {
-          "title": "Iranians reportedly planned chlorine bomb attack against Manchester synagogue",
-          "original_title": "Des Iraniens auraient planifié un attentat à la bombe au chlore contre la synagogue de Manchester",
-          "original_language": "fr",
-          "summary": "Reports indicate that Iranian operatives planned a chlorine bomb attack targeting a synagogue in Manchester.",
-          "published": "2026-10-03T18:32:33+00:00",
-          "source": "fr.timesofisrael.com",
-          "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPWUlvZ2Q4XzlCRWtoWS1sa2hmUENNMkRiYU56XzJhN3E4WGl2WTI5cHpRZkg2UnN3WDZQWUpqRGxib3lYTkhqTUp3QWZlZGF0NDdBRFEyeG9lQTF4N3BUdDV4LWRHRHFOSU5sR3Q3dER0MmhpMEpYSlprdzFkLUhvX3E1S2lhSl9KUXhxenBpMTAyNElsYmRsTlNsSGxSMmRSbVNraDRoRW11a3NzWFU5eVZKaU1VX1pKcV9yQVVRbWVyR0dYcEdIRnNLNNIBywFBVV95cUxPWUlvZ2Q4XzlCRWtoWS1sa2hmUENNMkRiYU56XzJhN3E4WGl2WTI5cHpRZkg2UnN3WDZQWUpqRGxib3lYTkhqTUp3QWZlZGF0NDdBRFEyeG9lQTF4N3BUdDV4LWRHRHFOSU5sR3Q3dER0MmhpMEpYSlprdzFkLUhvX3E1S2lhSl9KUXhxenBpMTAyNElsYmRsTlNsSGxSMmRSbVNraDRoRW11a3NzWFU5eVZKaU1VX1pKcV9yQVVRbWVyR0dYcEdIRnNLNA?oc=5"
-        },
-        {
-          "title": "Two men targeted a synagogue in a planned terrorist attack",
-          "original_title": "Двое мужчин выбрали синагогу целью предполагаемого теракта",
-          "original_language": "ru",
-          "summary": "Two men selected a synagogue as the target for an intended terrorist attack.",
-          "published": "2026-10-04T14:06:51+00:00",
-          "source": "Рамблер",
-          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNT2pyeFMxNGM2VE44Z2Nnajd4cFpBd2NYdE1QRks5WlFySW4yV2tXWGgwMnM5T3dOTTVoVEhZMHQ0S3p3M2h4LWVreWFrQXphRk5WZExIeUNGYk5zVS0tWlhnTmtqZDhaeUQwU1hWeTFXa3NkdjNZNGM2M2RrSkpudDZkX19SMVFlbzBpWlJ6R3M2R240ZUhEb3ZFeDNCb01tVHpWVmtrLXBWdVF0QXfSAa4BQVVfeXFMTU9qcnhTMTRjNlROOGdjZ2o3eHBaQXdjWHRNUEZLOVpRckluMldrV1hoMDJzOU93Tk01aFRIWTB0NEt6dzNoeC1la3lha0F6YUZOVmRMSHlDRmJOc1UtLVpYZ05ramQ4WnlEMFNYVnkxV2tzZHYzWTRjNjNka0pKbnQ2ZF9fUjFRZW8waVpSekdzNkduNGVIRG92RXgzQm9NbVR6VlZray1wVnVRdEF3?oc=5"
-        },
-        {
-          "title": "Two Men Target Synagogue in Planned Terrorist Attack",
-          "original_title": "Двое мужчин выбрали синагогу целью предполагаемого теракта: Общество: Мир",
-          "original_language": "ru",
-          "summary": "Two men selected a synagogue as the target for a planned terrorist attack.",
-          "published": "2026-10-04T14:06:51+00:00",
-          "source": "lenta.news",
-          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOMUpiQzFNRHhfX211TGdtX3YxNy1RUUoxWHhxamYxem9oVXdqZ1BHWnI1MEFHNjVxbldDSVhNYUV4c3N4b2hVMkpwRzdHZ0R1ZUV3RU9jaFVGaXNxWFR5UnBsZ0ROeW15UnR1b280cmVWWUlUTF8weWhlRkhZNTZiN2Y4WUlqUlJNaWlyUno1bmlCbTg5QTgxanVkY0N6UQ?oc=5"
-        }
-      ],
-      "article_count": 5,
-      "first_reported": "2026-10-03T10:29:53+00:00",
-      "last_reported": "2026-10-04T14:06:51+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reporting on counter-terrorism investigations and plots targeting Jewish community sites in the UK.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTEMPTED_ATTACK",
-      "is_attack": false,
-      "incident_anchor": "UK Jewish targets terror plot 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-6f6b69506a041985",
-      "translated_to_english": true,
-      "ai_canonical_event": "Terror plot targeting Jewish targets in Britain",
-      "title_variants": [
-        "Terror plot targeting Jewish targets in Britain"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "major drama in Britain"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The terror plot/investigation targets communities in Britain.",
-      "ai_geo_fingerprint": "4ab978ae1ebd3a8828b4b0f2fc5190aefc64497389ac129e349b3f874f22d5a1",
-      "ai_geo_inferred": false,
-      "cbrn_subgroups": [],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_incident"
-      ],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ]
-    },
-    {
       "id": "b26610e33fc3fbfe",
       "category": "Maritime Piracy",
       "categories": [
@@ -143614,9 +143310,9 @@
       "actor_group": "",
       "primary_event_type": "OTHER_CT",
       "is_attack": false,
-      "incident_anchor": "Manchester synagogue bomb plot UK 2026-10-03",
+      "incident_anchor": "Manchester plot UK 2026-10-02",
       "update_type": "OTHER_UPDATE",
-      "incident_id": "inc-889fae8ce573067a",
+      "incident_id": "inc-528d1549c6d2c0ec",
       "translated_to_english": false,
       "ai_canonical_event": "Security warning regarding Iran-linked bomb plot",
       "title_variants": [
@@ -143639,88 +143335,6 @@
       "ai_geo_reason": "The UK Home Secretary issued a security warning regarding threats in the UK following bomb plot charges.",
       "ai_geo_fingerprint": "770ca61f60ef54e319634efd9da522cbd9dbbaad8725b5d5127ab590ccf26573",
       "ai_geo_inferred": true
-    },
-    {
-      "id": "3095074f2804252a",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Weapons",
-        "Chemicals and Explosives"
-      ],
-      "title": "Bottle thrown at DIGOS deputy chief, anarchist arrested with bomb-making manual on phone",
-      "summary": "An anarchist was arrested in Italy after attacking a DIGOS deputy chief with a bottle; police found bomb-making manuals on their phone.",
-      "original_title": "Bottigliata al vice capo della Digos, arrestato anarchico: nel cellulare manuale per fare ordigni",
-      "original_summary": "Bottigliata al vice capo della Digos, arrestato anarchico: nel cellulare manuale per fare ordigni la Repubblica",
-      "original_language": "it",
-      "collection_language": "it",
-      "collection_language_name": "Italian",
-      "collection_locale": "IT:it",
-      "published": "2026-10-03T07:02:16+00:00",
-      "source": "la Repubblica",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNaXdNSUNrckZkejRldG1xVmVhcTFFckFPMllMNnZKLVlKZXB1bmtNbDdOVlFuUmF4Vm1VdTRCbG9FOUpsZW1qUm13YlFPV3hueFJmWVU0MmFhckxlSjFhM1ItSEhUYVZPc1ZRWDZhRlk1RVJfYlI2dGJUaVZNdmYzbXdRVjBkMnQtYVNKOTFRcWRXMGczV25HQjI3R3RKQ204RklyMzlxQzlPZ0tkNWo4LVRqLVJZUdIBuwFBVV95cUxOc2dtOWEyWHgySnRNYUpGQU10NHFDbzlseGYwZGtlZVJzbW9rX3cxUWF3YXA5bVhIeGFIWEtMMFNURXBoaUh3RDVSeVRBMkFIamJweER4a1l0c3Rzdmd3Sk9xVlhLUzJ2SjRuY2JxVDY2d041eER6NGF0RVRpNFlEVFo5YWg0dmR0YnIxSmt4NjEyQ245UkQ0S25TZFJqZVpUZzY5cElUTzBLdkdteEJJbmRmRFVqamxaalNZ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Italy",
-      "country_code": "IT",
-      "city": "Rome",
-      "region": null,
-      "latitude": 41.89193,
-      "longitude": 12.51133,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "repubblica.it",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "77092323226f11d7740d133aa4044d9545bfad0fed90a80a8b4b725f87363500"
-      ],
-      "sources": [
-        "la Repubblica"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-03T07:02:16+00:00",
-      "last_reported": "2026-10-03T07:02:16+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Operational arrest of an extremist suspect following an assault on a police official and discovery of explosive manuals.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ARREST",
-      "is_attack": false,
-      "incident_anchor": "Anarchist arrest Italy DIGOS assault 2026-10-03",
-      "update_type": "INITIAL",
-      "incident_id": "inc-826ea9f39033aaff",
-      "translated_to_english": true,
-      "ai_canonical_event": "Anarchist arrested for assaulting police officer and possessing explosives manual in Italy",
-      "title_variants": [
-        "Anarchist arrested for assaulting police officer and possessing explosives manual in Italy"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "DIGOS deputy chief, anarchist arrested in Italy"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "DIGOS is the Italian police division and the arrest occurred in Italy.",
-      "ai_geo_fingerprint": "6b39d62c3b153964338c1120ff3f9f0242882b1605b0158600c31953cbd64ee8",
-      "ai_geo_inferred": true,
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": []
     },
     {
       "id": "3256207b64cb32a4",
@@ -144109,7 +143723,7 @@
       "collection_locale": "IT:it",
       "published": "2026-10-03T06:02:00+00:00",
       "source": "ANSA",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxPZTJyMTRqOFM5ZFRZdS1vR0ZuTmlRNHM1Z0dHY0JXU0NxWUZYWkwxdkJpRm41WXNJd2FEUjZwUzdzODdYTUp0WWhsWnluWWVId2ZZdTRDUGxpOC15cm5Sc0Vna2JiWUJoVk1qQ0EzdTEwRUc0RHhYcW9Hejgxc1hMSmt6RFZwdk9mVENxNVVtanJBWTdxcEhuZ3p0Smp3ZEUwRlYzT1FsdWh1SDhBZmpZUGJydmpfNlNNMV9OTE9JSkpaa0hoYTA1RElKekNzUDc4dXU3UEdwd21FYWJqLVpyT1ROOFk5MFdCZFN1NXBXZWxUcDhJbENvadIB_gFBVV95cUxQRVZxQXhjLUZHdnNBSklzSkxTelo4TXlBRWhYMldUZFdZZUljS2I5alV6Q0NMVkozeGpneWctbG1MV0phN1lpaTBOdG1KalV3VGRtekgxYThqWlZrcEJyX0p0NU9GUTVoMWhBeEtUWEZobk9odGl0Tm9HUFl0MU1RN0ZjX3hEZ3RZcGhjR0dQbldNOTFVWm9UMzIxZ1NfV0VXa0RieWVzMFlLUFhIeERCUURaRDlfaVVOV2tkc3FUTnhrUjMtRl9XQUJVMjlXR1l4UGo5bWJPWndxTk9PR2o3Y29IVTBRRXVuUE82b1RJX1dUa1dWNFdjSWV6UGRNQQ?oc=5",
       "collector": "Google News RSS",
       "country": "Italy",
@@ -144124,12 +143738,14 @@
       "targeted_source": "ansa.it",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
+        "77092323226f11d7740d133aa4044d9545bfad0fed90a80a8b4b725f87363500",
         "8708c0201360eae289a7233d998a2beb7b35d7fe66f5457dd687c01c69dedfd3",
         "9b9f8b9206618c9ff23530b3aebabe39aa5ab7a2a76a01d71594c89f9fb7d2e1",
         "a54ad2f9f4b08186426253886cb18c9e07ee90086fe5dcee688362385c1f8e9f"
       ],
       "sources": [
-        "ANSA"
+        "ANSA",
+        "la Repubblica"
       ],
       "related_articles": [
         {
@@ -144140,15 +143756,25 @@
           "published": "2026-10-03T06:02:00+00:00",
           "source": "ANSA",
           "url": "https://news.google.com/rss/articles/CBMi-gFBVV95cUxPemw3VHptOUN1V2NERUpBX2Rtb2lQUEhCTWxNS281S3ZTeFNNei1LRlJwR2RrSXBpa1NrQVk5dFJzOHhhLUg4ZzhRSkZjdElmVE1EZnkzX1VEUmpVcUM5blRTczdwMWktd0N1T21LWDlIcGpCR2dWVEwwTzYzQ01wbzUxMk5maEMzZFd1d1JmVkJXdy1WNktNUjZwOTR3aXlNZ0pEQXlBYi1Jd3NUWlJURy1tUjNXVGpMb2ZtWHhudm44dlNiTE1vSzg1MVNSQ2hObFhpeEdQcWJ0UVJjVTFKbklsSkw1bWtLWEpMTEdPRV9ZdGVNOHNzS2JB0gH_AUFVX3lxTE96SlJYMEdsU1dzM2h4ZE1kUUM3ckFabWFRTUUwRXRMN19kUmNFZjdyVUJ6SENEak0xZ1J1TjY2ODg0US14dXJ1SEtpdjR5dDM2N2dUOU5VYnY3MFpoS0xmbFhuRHE3cGw4MzdEd1B1cFhFUlRaZ2NxVUdIR25nTGV6Y3BkZTZHbktzMWphUnNSZFk1UXVMcDVQWk45RUlIeFVUZGQzSVJYVU1mNWlSaEUyRmtrNFVHTnFfdnFiQTZjV1VYTnlKOExNZXUxSDZCNGs1RksxMk1jTUVzUUtnakZ3Yjg1Y1A2bVdmME15SzBRSVAzM244cGViVjJ6WWdISQ?oc=5"
+        },
+        {
+          "title": "Bottle thrown at DIGOS deputy chief, anarchist arrested with bomb-making manual on phone",
+          "original_title": "Bottigliata al vice capo della Digos, arrestato anarchico: nel cellulare manuale per fare ordigni",
+          "original_language": "it",
+          "summary": "An anarchist was arrested in Italy after attacking a DIGOS deputy chief with a bottle; police found bomb-making manuals on their phone.",
+          "published": "2026-10-03T07:02:16+00:00",
+          "source": "la Repubblica",
+          "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNaXdNSUNrckZkejRldG1xVmVhcTFFckFPMllMNnZKLVlKZXB1bmtNbDdOVlFuUmF4Vm1VdTRCbG9FOUpsZW1qUm13YlFPV3hueFJmWVU0MmFhckxlSjFhM1ItSEhUYVZPc1ZRWDZhRlk1RVJfYlI2dGJUaVZNdmYzbXdRVjBkMnQtYVNKOTFRcWRXMGczV25HQjI3R3RKQ204RklyMzlxQzlPZ0tkNWo4LVRqLVJZUdIBuwFBVV95cUxOc2dtOWEyWHgySnRNYUpGQU10NHFDbzlseGYwZGtlZVJzbW9rX3cxUWF3YXA5bVhIeGFIWEtMMFNURXBoaUh3RDVSeVRBMkFIamJweER4a1l0c3Rzdmd3Sk9xVlhLUzJ2SjRuY2JxVDY2d041eER6NGF0RVRpNFlEVFo5YWg0dmR0YnIxSmt4NjEyQ245UkQ0S25TZFJqZVpUZzY5cElUTzBLdkdteEJJbmRmRFVqamxaalNZ?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 3,
       "first_reported": "2026-10-03T06:02:00+00:00",
-      "last_reported": "2026-10-03T06:15:20+00:00",
-      "dedup_confidence": 0.99,
+      "last_reported": "2026-10-03T07:02:16+00:00",
+      "dedup_confidence": 1.0,
       "dedup_methods": [
         "very_high_title_similarity",
-        "same_normalized_title"
+        "same_normalized_title",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
@@ -145736,7 +145362,9 @@
       "id": "3dc8841e0a566a7f",
       "category": "Attacks",
       "categories": [
-        "Attacks"
+        "Attacks",
+        "Weapons",
+        "Chemicals and Explosives"
       ],
       "title": "Iranian nationals charged with plotting attack in Manchester",
       "summary": "Iranian nationals have been charged with plotting a terrorist attack against the Jewish community in Manchester, UK.",
@@ -145748,7 +145376,7 @@
       "collection_locale": "SA:ar",
       "published": "2026-10-02T23:16:25+00:00",
       "source": "اندبندنت عربية",
-      "source_count": 1,
+      "source_count": 6,
       "url": "https://news.google.com/rss/articles/CBMi8ARBVV95cUxQVHlMek1ndDFEeFNma0RGbEpNV05HZEJBVjZacXpocWM2UUhTOXRqOTlHS2JhXzNvTzRackE2UVhGNUtDRkJUZW92TUl5dFNDQm1sRjJYTGlSYUtjTy04Nm54OWJ6NEhkVVhVUDh1Y2h6Tm5sN0J6Z1U3eGVRT3dkZUVWV3M1amp2WDllWEw4TldTN1djMVpTb3I5ZzByS1BkT0hfLW9oOU1WN1ZSX051YXRmU0U2ZV9paWF5aHNIYXRUa1lCay0xdEY5UmZNUzl1V0RZdk8wQ0JYUzFUVkJCX0g3Y2s5MVRERXdDeWdNYWRNWTdiZlVQUjExeGZzUGVCcHQ0UkZrQVRrVUVUdkppRENOckZDdzBFcEtidzM0U211eWZNaTRSWE5oMDI4MXJwajNuNnc1U1Jlb3RoS2QwYlJqZnhidUZBNE1Tam01UXZNbEJmbmFoMExNckloMkFBcFZ4VGd4MU5NSWdIeXNwSGVSeVhyVjAxMllpQ3FUekg1b052QnBPQzZsQlZrS3R4MmNjeDlobHpGUjZxbGJQT1FEenU0WE9UcllDdkpXS2lyTXlsU2FsWHZlSk4yc3o2dTJ5Nlk1aWhHNGMtVUtTcklodElKNG5XWXkyd1Z5Q1dyNEx3eWs4MWtRY1RnRkFnNXJZeXU5NXhNMnJsbHZUUHM1UEt1VExDWjFLLUFRTDVWa2NUSEUwNkhHaG1vcnotY1BIWWgtV2d1alpSS18ySVpUUGJ3ajFFWEtHNzZoQ3FVYjVPcXJwTktyeHRlVlhNMkhpZXAzRnRNWlFrYmFESm1IZkdCbnZnaGFKYVkyNlQ?oc=5",
       "collector": "Google News RSS",
       "country": "United Kingdom",
@@ -145763,19 +145391,76 @@
       "targeted_source": "independentarabia.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
-        "4bd5859f0cfb0ada0f91b3d6c55ea8e07ae904c5eeaf7b711b8fb498510be073"
+        "11236e1e2992758d6b0cf9602bf5a09fe3d2e029782431db1b15634bb0afa168",
+        "1fc6abda4e3cd8320f3af232a2901a87a7ecb4b6628829cc83bed081f0ea33e0",
+        "3404b602240f520c3b7894bce5b17e68bc0212669ed2dbd24df1475f8d724a3c",
+        "4bd5859f0cfb0ada0f91b3d6c55ea8e07ae904c5eeaf7b711b8fb498510be073",
+        "4d3d333fc890fd12cae532894aa3a4fd62ff40ac62021028b8b14c17dd8f5ede",
+        "a760605a53d9f6c2f03141bc0de15aa9deaa75c72b8e654aa559396cd216e226",
+        "d114b7a478df977aca10c891575361302a45a20aecc7aaf26d4eb14d4d3ffd62"
       ],
       "sources": [
-        "اندبندنت عربية"
+        "اندبندنت عربية",
+        "מעריב",
+        "The Times of Israël",
+        "fr.timesofisrael.com",
+        "Рамблер",
+        "lenta.news"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Jews in the crosshairs: The untold major drama in Britain",
+          "original_title": "יהודים על הכוונת: דרמת הענק בבריטניה שטרם סופרה",
+          "original_language": "he",
+          "summary": "Reporting on a major thwarted or investigated terror plot targeting Jewish communities in Britain.",
+          "published": "2026-10-03T10:29:53+00:00",
+          "source": "מעריב",
+          "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBRVGs1V3U5Q0VHT1RLUE9CdWNZUFNzOC1VbVh2c3ViZ2dVdXZxdDBOckRqT1JONVhLLTg2UEJmUmJIc05wYmlZWjhOVEp2b0w1M0ZHSGRtcF9fREp3NC1SUA?oc=5"
+        },
+        {
+          "title": "Iranians reportedly planned chlorine bomb attack against Manchester synagogue",
+          "original_title": "Des Iraniens auraient planifié un attentat à la bombe au chlore contre la synagogue de Manchester",
+          "original_language": "fr",
+          "summary": "Reports indicate that Iranian operatives allegedly planned a chlorine bomb terrorist attack targeting a synagogue in Manchester, United Kingdom.",
+          "published": "2026-10-03T18:24:14+00:00",
+          "source": "The Times of Israël",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOeHg2SFBsS1dEWkpJaDF6M3YxNTdvdHZiVWNNNUYtcDJnUzVibzdab1dxN0NJU2RUUVp0VF8xaWgxR2dRZE1HVjRCNnFCUHlPNzhnczVLNW4xc1NvcHE0YXRwMy1ZMFFHazhsbXN2UGJRZnJxd01sNENXd3UtS0N4Q1N5Z2NkQ1NmUHRMSFJNZUJlX01GSEN3MzhCRC1rclpkbEQ1bldYZWVOVlhKeFRMbFFWb2R1LWdmNExaZk1WcE1GbVBQOHfSAcsBQVVfeXFMT1lJb2dkOF85QkVraFktbGtoZlBDTTJEYmFOel8yYTdxOFhpdlkyOXB6UWZINlJzd1g2UFlKakRsYm95WE5Iak1Kd0FmZWRhdDQ3QURRMnhvZUExeDdwVHQ1eC1kR0RxTklObEd0N3REdDJoaTBKWEpaa3cxZC1Ib19xNUtpYUpfSlF4cXpwaTEwMjRJbGJkbE5TbEhsUjJkUm1Ta2g0aEVtdWtzc1hVOXlWSmlNVV9aSnFfckFVUW1lckdHWHBHSEZzSzQ?oc=5"
+        },
+        {
+          "title": "Iranians reportedly planned chlorine bomb attack against Manchester synagogue",
+          "original_title": "Des Iraniens auraient planifié un attentat à la bombe au chlore contre la synagogue de Manchester",
+          "original_language": "fr",
+          "summary": "Reports indicate that Iranian operatives planned a chlorine bomb attack targeting a synagogue in Manchester.",
+          "published": "2026-10-03T18:32:33+00:00",
+          "source": "fr.timesofisrael.com",
+          "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPWUlvZ2Q4XzlCRWtoWS1sa2hmUENNMkRiYU56XzJhN3E4WGl2WTI5cHpRZkg2UnN3WDZQWUpqRGxib3lYTkhqTUp3QWZlZGF0NDdBRFEyeG9lQTF4N3BUdDV4LWRHRHFOSU5sR3Q3dER0MmhpMEpYSlprdzFkLUhvX3E1S2lhSl9KUXhxenBpMTAyNElsYmRsTlNsSGxSMmRSbVNraDRoRW11a3NzWFU5eVZKaU1VX1pKcV9yQVVRbWVyR0dYcEdIRnNLNNIBywFBVV95cUxPWUlvZ2Q4XzlCRWtoWS1sa2hmUENNMkRiYU56XzJhN3E4WGl2WTI5cHpRZkg2UnN3WDZQWUpqRGxib3lYTkhqTUp3QWZlZGF0NDdBRFEyeG9lQTF4N3BUdDV4LWRHRHFOSU5sR3Q3dER0MmhpMEpYSlprdzFkLUhvX3E1S2lhSl9KUXhxenBpMTAyNElsYmRsTlNsSGxSMmRSbVNraDRoRW11a3NzWFU5eVZKaU1VX1pKcV9yQVVRbWVyR0dYcEdIRnNLNA?oc=5"
+        },
+        {
+          "title": "Two men targeted a synagogue in a planned terrorist attack",
+          "original_title": "Двое мужчин выбрали синагогу целью предполагаемого теракта",
+          "original_language": "ru",
+          "summary": "Two men selected a synagogue as the target for an intended terrorist attack.",
+          "published": "2026-10-04T14:06:51+00:00",
+          "source": "Рамблер",
+          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNT2pyeFMxNGM2VE44Z2Nnajd4cFpBd2NYdE1QRks5WlFySW4yV2tXWGgwMnM5T3dOTTVoVEhZMHQ0S3p3M2h4LWVreWFrQXphRk5WZExIeUNGYk5zVS0tWlhnTmtqZDhaeUQwU1hWeTFXa3NkdjNZNGM2M2RrSkpudDZkX19SMVFlbzBpWlJ6R3M2R240ZUhEb3ZFeDNCb01tVHpWVmtrLXBWdVF0QXfSAa4BQVVfeXFMTU9qcnhTMTRjNlROOGdjZ2o3eHBaQXdjWHRNUEZLOVpRckluMldrV1hoMDJzOU93Tk01aFRIWTB0NEt6dzNoeC1la3lha0F6YUZOVmRMSHlDRmJOc1UtLVpYZ05ramQ4WnlEMFNYVnkxV2tzZHYzWTRjNjNka0pKbnQ2ZF9fUjFRZW8waVpSekdzNkduNGVIRG92RXgzQm9NbVR6VlZray1wVnVRdEF3?oc=5"
+        },
+        {
+          "title": "Two Men Target Synagogue in Planned Terrorist Attack",
+          "original_title": "Двое мужчин выбрали синагогу целью предполагаемого теракта: Общество: Мир",
+          "original_language": "ru",
+          "summary": "Two men selected a synagogue as the target for a planned terrorist attack.",
+          "published": "2026-10-04T14:06:51+00:00",
+          "source": "lenta.news",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOMUpiQzFNRHhfX211TGdtX3YxNy1RUUoxWHhxamYxem9oVXdqZ1BHWnI1MEFHNjVxbldDSVhNYUV4c3N4b2hVMkpwRzdHZ0R1ZUV3RU9jaFVGaXNxWFR5UnBsZ0ROeW15UnR1b280cmVWWUlUTF8weWhlRkhZNTZiN2Y4WUlqUlJNaWlyUno1bmlCbTg5QTgxanVkY0N6UQ?oc=5"
+        }
+      ],
+      "article_count": 6,
       "first_reported": "2026-10-02T23:16:25+00:00",
-      "last_reported": "2026-10-02T23:16:25+00:00",
+      "last_reported": "2026-10-03T10:29:53+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 75,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Report of a newly disclosed disrupted terror plot targeting a specific community.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -145808,7 +145493,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The text explicitly specifies that the terror plot target and location of the planned attack is Manchester, UK.",
       "ai_geo_fingerprint": "48c35a7176892f0ea9dc639db70677836748850fc2395eab98b442277631bb52",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "ac400383c33b26cc",
@@ -149078,7 +148767,8 @@
       "id": "d938e203bf2d68b5",
       "category": "Attacks",
       "categories": [
-        "Attacks"
+        "Attacks",
+        "Weapons"
       ],
       "title": "Arson Investigation for Terrorism After Telecom Cable Fire in Genoa",
       "summary": "Italian authorities are investigating a telecom cable fire near the San Giorgio bridge in Genoa as an act of terrorism.",
@@ -149106,6 +148796,7 @@
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
         "0d3bd5b6a12d1388a50d6fd380d2a8921dd38acdca3b1ba150e8bd4b101dd011",
+        "1ec037a8ef5e947401e887ac2be72e1f9e81cfd5d6e9820ac6f29b241d23a203",
         "736a9eef530c1b9329f9bebfcee4b40d2cad882470c0779cf6f993bd2a5eb7d3",
         "a2bd357158aa4970c25f47c0d8ba7fcf2909630e2f3e324e31de85e1e0ec87f0",
         "ec349d206eb4e1c09d5440d93b45f694500820cfb1759c3728358163473cc972"
@@ -149141,9 +148832,18 @@
           "published": "2026-10-06T17:55:00+00:00",
           "source": "ANSA",
           "url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxQUmlXWmN0V1dXQm56OFhBSUxaaVNIYkpxaDRDd2FScGhBVFFtZFZyUXNqTDYxZ19DcktMeFFxc3g4bnFsWThNazQ5OTVWNnBlZ0VFejNRdWVRUVh1TDA4Z3dBNW16c05tUDM4ZnpuYl8ybmwyeG16V0VvRkRQNU1Hd2lweXhLSDJzaGl2RWRCbXVRUUgtVVByV043V3ppNTZGclU3blZab29xS0NlU1NJcjVFaUkyTzhtQllobnRjYmU4QTQyN2hReVlrTmRyeWpBazJpMDhZd1A2Vml6OTBSOVRycFE3NTRWcWlaUW5yVWxvd9IB9wFBVV95cUxQNkVXbW9iVVZwZVltRzJwYzk5ME9tb21oRk5Id0REWF95WVF2TzUzNFlpdE5nUGNCSE1VQUxfSm5hWXdiTF9ncTB4bHZ1dHUwX2pZdHEzdWFlWHZLVVhjc2poVTFMVkt4RGFETlItTTFLaTNCQnN2OHlpRVplbUthQjRPUFJfTzM2UU9VMFM3ODNqOFRxRllhQzNJbU1fWHBEYXVnUlQ4dHRObFZIYVhSM2xvSDFpNWN0Y0tvTXVaRTlSR2kxSnM2cHpkS3h2T1ZRVkUtRUV0czRCdUdGVmxPOW5RWEVwWjd1XzN4WGc0UllNdkVhQk1N?oc=5"
+        },
+        {
+          "title": "Fiber optic cable fire: five ignition devices seized",
+          "original_title": "Incendio ai cavi della fibra, sequestrati cinque inneschi. Ancora nessuna rivendicazione",
+          "original_language": "it",
+          "summary": "Following a fire affecting fiber optic cables in Italy, authorities seized five ignition devices, while no claim of responsibility has been made yet.",
+          "published": "2026-10-03T13:53:45+00:00",
+          "source": "la Repubblica",
+          "url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxOZXRYT2xzTUhqNnFGQTd3S21RRmFOUGdRaFZPdTlGZlNhQjJfMFp6MEs2Z2VCME9taWN6S3FCOW9YYWdOYjdpLUdfNC1PRnZ4R3hFbmdNTTJFNThJUmhMY2p0dzh1MnlkeTAwN2NpeWg5YmY1azYxc3UzLVE5V1c4UExXV1VTZEZJVjZsUGVENldpX1BPbExLbVZIblduT2djMmItS3c1QVVLY19LNnFNUzhxeGF5MVFJOVY1bXRnaXptRXNSZ01NdUhmaE0xUlV3ejF0VjI5THMzN3NZNXVHQ0o1ZW3SAeoBQVVfeXFMTVZxV3dvSXpXTnVna3ZVQVpPRXlmVkI1T1BUTWtxbXBHTE5GMGFKY19NV21pdUhnY0lfVmc5R2s1clVxNjBtc2FONWhaMWF1VFB4bFZUS0E0SWhsX2czSTAwVUc1YnI4UVFxQW1XeUs3UTkzT3NlWURzb0RCT2hNbTlGckVRVmJjYXNNVDlMaHpJRGQ4SlUzcVh6czdyWHpuNUNzSnBjQWg2NVo0S0xkaUNmN3h2dnZGeXY2WDZ1Tjk3NlBtR2E2dmlpUU9fQ3lyZTIxR3J2RTBFVVZZWmZwZ0J3SF96b25Td0xB?oc=5"
         }
       ],
-      "article_count": 4,
+      "article_count": 5,
       "first_reported": "2026-10-02T16:33:38+00:00",
       "last_reported": "2026-10-06T17:55:00+00:00",
       "ai_selection_complete": true,
@@ -153543,7 +153243,9 @@
       "categories": [
         "Weapons",
         "Arrests",
-        "Chemicals and Explosives"
+        "Chemicals and Explosives",
+        "Attacks",
+        "Counter Terrorism Action"
       ],
       "title": "Teenager manufactured a bomb to kill a serviceman in Khmelnytskyi on Russian orders",
       "summary": "A teenager in Khmelnytskyi, Ukraine, manufactured an explosive device to assassinate a Ukrainian serviceman following instructions from Russian handlers.",
@@ -153555,7 +153257,7 @@
       "collection_locale": "RU:ru",
       "published": "2026-10-02T10:51:00+00:00",
       "source": "24 Канал",
-      "source_count": 2,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQbFFfdWNjbWJULUdLQjBvMWR0a0hTMmJIVXZVdWVQNG5GZ28xaHIwOC1yNWdEb2NDRXB3Wnp5LVNwZXE5c0szbzJuTTlkYTJNV19wRkxNUmV1dGxMeXJoZ3NFYkRldDJRcXdTTF9qcEIzeGtEWWgydDFrYlRSbWkzWkNYOTNXbGNuUXhXZDBXUFROT0IyQ2V2elRMNWVsS0drMlA2bUNBRzd5SnNReDV5R1JPQV91V1E1NThNQkRB0gHDAUFVX3lxTE9CZDFaZzdCR2FtUl9qcjVvcTNydlNIUFZfSGJXOE9VMVVGcVdkRFFURVVzTkVoZmJ2QzlBTWVZaWhCaWxVTGh2UFY0T0VwcURvR2VfSVFPV1o1N0lEWWNKZ2NwYlFKeF80M19HZ3cyd2hzWUNJSTQ4UjBvQnZwdUhrR3NubUdqVWJlZ0tJX2Q4Sk5udmxDQm82aWZMODF2M3Z3aEs0b1pwMWdnRzdYVkRnQzVlTEdOaTdZSWNGUUZxR2tzSQ?oc=5",
       "collector": "Google News RSS",
       "country": "Ukraine",
@@ -153568,12 +153270,16 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
+        "089e9a63606d4925c97d4b30d3e394526508718a64a0738a28442a32dfae04ca",
         "901d5f1803dd5412e919c9ec369f44a0272a695e772a24087d7cce4b7a3ee9a7",
+        "912bed62a7da0fa59936d662a66194d7dbf7e279af78a99308b056d4ab83e192",
         "976025e9b81874cb30e5e49581b5977d88797291f56e7849aef3f1870d3bc016"
       ],
       "sources": [
         "24 Канал",
-        "Корабелов.ІНФО"
+        "Корабелов.ІНФО",
+        "Рубрика",
+        "fakty.ua"
       ],
       "related_articles": [
         {
@@ -153584,11 +153290,29 @@
           "published": "2026-10-02T14:02:51+00:00",
           "source": "Корабелов.ІНФО",
           "url": "https://news.google.com/rss/articles/CBMigAJBVV95cUxPbUk0N2VkMVVMejROaVRPVmN4aUdCdzU3TUVZWHhWaDVvNjc0M2lpbUt4SnR3VS1wWHhEOFd4MlNFVlpFR1hGOW5tZEV4UXlsaTR6bGxIZ0wyaVRjRjRxOXFCclFqRkhGOFV3aUpRZExKYzRIcmtXZmUzZ3l3ZVBqakhmUXB0dmx0X25JbktLQjNhM3d5ekw3WE1YWUNCSjNjX0VSOHFVV2JJQkM5R25rY29sZHpGUU1OeXVkdkFzWkZ1VmxYaHAyQzNlclBnUWdHZjFuVlpGTGF6aE5yd1N0c1hCSXUzS3dMcHZ4WWRzdnhZUDZWTnM0YXpVQlR4QWI5?oc=5"
+        },
+        {
+          "title": "SBU detains 16-year-old for manufacturing bomb ordered by Russia for terrorist attack in Khmelnitsky",
+          "original_title": "По заказу рф изготовил самодельную бомбу для теракта в Хмельницком: СБУ задержала 16-летнего юношу",
+          "original_language": "ru",
+          "summary": "Ukraine's SBU security service detained a 16-year-old youth who allegedly manufactured an improvised explosive device on Russian orders to carry out a terrorist attack in Khmelnitsky.",
+          "published": "2026-10-04T12:31:07+00:00",
+          "source": "Рубрика",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOdXBGYlVLUFFhcF9ienlxbzZSWEVzUERKR0lKZWpRVGM1VzhWclNaVkd4VjdEQVFXMDlwSmlzVWVhTDNhUjFjcmdQLWFWdWJ0WDVOZ1ZTUkE3aU42NFpnS0VMREFoLVM1c0dZS0lOSzJuMUVIemtIZHVtQWk3dVJYUy1jbkdGQ0VoMmpXMGNGdG12eW5rRjdjcVZ2VVBnQTFaYzVadXdQdUpDOHpWemVZeUpiVmUzZFNqYzdNWmtFLXNlM3hwZHpHcXZCemYyWFNXZzJRU0FB?oc=5"
+        },
+        {
+          "title": "Terrorist Plot Prevented in Khmelnitsky Involving Teenager",
+          "original_title": "Исполнитель — подросток: еще один теракт предотвращен в Хмельницком (фото)",
+          "original_language": "ru",
+          "summary": "Security services prevented another terrorist attack in Khmelnitsky, noting that the perpetrator was a teenager.",
+          "published": "2026-10-04T13:47:00+00:00",
+          "source": "fakty.ua",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNSmloVGJGdVJkVHB3YXQxVWk1TllTdE1ULUx1YWM2V0dyUTh1UlpUVm9FUFVUMFJ3RllZODFzWDJqX1pDd3d5ZWF5S2VNei1vTE1KTDBOVVZsc3RiTUdURmROUVd3SHVoc0l0VzA5X1RJLVNsNXJZbGhMTEl6V3QzOXFQU25ZNHJkQzZ3N3JtaVB4NGxwZXJSTUV2WnVTSWRtY3fSAacBQVVfeXFMT3MxMGNDUG1jOHVfQ3N2X2wyWDkzMmItVUNFSF9kV2FoV0w4eEU3VTVNY3hGMGx2NWlKdE8wWi1RdGtuZXZyNHBadFk5aWlRcUZ1anU5amJKQXFoa3M2RnpOYVZvRmMwZUZ5anBlTElNS0tCTkVxcGh0UzBJLU1aMlVRdTlHNUh6ZzM5aUp3TTlPSW91dmRGcFJPY01qM2tQc2ZyY0hzb3c?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 4,
       "first_reported": "2026-10-02T10:51:00+00:00",
-      "last_reported": "2026-10-02T14:02:51+00:00",
+      "last_reported": "2026-10-04T12:31:07+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -154936,122 +154660,6 @@
       "ai_geo_inferred": true
     },
     {
-      "id": "f3cea2a966a33241",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Weapons",
-        "Arrests"
-      ],
-      "title": "FSB officers prevented a terrorist attack in the North Caucasus",
-      "summary": "Russian Federal Security Service (FSB) personnel thwarted a planned terrorist attack in the North Caucasus region.",
-      "original_title": "Сотрудники ФСБ предотвратили теракт на Северном Кавказе",
-      "original_summary": "Сотрудники ФСБ предотвратили теракт на Северном Кавказе gazeta.press",
-      "original_language": "ru",
-      "collection_language": "ru",
-      "collection_language_name": "Russian",
-      "collection_locale": "RU:ru",
-      "published": "2026-10-02T08:26:48+00:00",
-      "source": "gazeta.press",
-      "source_count": 5,
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5GTEoyeVN2WmZtYTh2LUhPNFFoYXh2TkxfaDBKdzlXZzZMdWxDdjFoMEozMDBwUkxPeU9HdndtWW1DZFN1cmJIeUZrb1JLRlR2cmlWWEZwMjBheUlwNHpuNUJmTHRjYVNac0JKQkpQeXJIT1hl0gF0QVVfeXFMTkZMSjJ5U3ZaZm1hOHYtSE80UWhheHZOTF9oMEp3OVdnNkx1bEN2MWgwSjMwMHBSTE95T0d2d21ZbUNkU3VyYkh5RmtvUktGVHZyaVZYRnAyMGF5SXA0em41QmZMdGNhU1pzQkpCSlB5ckhPWGU?oc=5",
-      "collector": "Google News RSS",
-      "country": "Russia",
-      "country_code": "RU",
-      "city": null,
-      "region": "North Caucasus Federal District",
-      "latitude": 43.4,
-      "longitude": 44.65,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "257ff5b05cf46fe1541967f3896094d6022978aa4e8cb8369d080feac2d5b239",
-        "95b467eba3cc56d8e24677822473a0c52db918664fc9dbde76a291e3e26bb36a",
-        "cd47b903cc1fcbc8f40687f125888570b81dbff64a9cf99370f69d7322a19181",
-        "cf55fa8ff23c73af35908469399d80ababc12dd34a33d6c35b23ff28a79c44ea",
-        "eb54258d0cc909a627e3302ef58ebf0780386886af6c265220fdb332b8cac0ab"
-      ],
-      "sources": [
-        "gazeta.press",
-        "Национальная Служба Новостей",
-        "Радио Свобода",
-        "nsn.fm",
-        "vz.ru"
-      ],
-      "related_articles": [
-        {
-          "title": "Man arrested in North Ossetia for preparing a terrorist act",
-          "original_title": "В Северной Осетии задержали готовившего теракт мужчину",
-          "original_language": "ru",
-          "summary": "Russian security services arrested a man in North Ossetia who was allegedly planning to carry out a terrorist attack.",
-          "published": "2026-10-02T08:36:00+00:00",
-          "source": "Национальная Служба Новостей",
-          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPdGF6VXBoVlhRRjhUcHZ3b0hXcHREWlA1OWFTY0FoUVJsS0t3c1JqQ09DVVVwamNBUTRqMnc1MGF6eHg0akRNQ0VRcUhMMFpTRXdEUEFiT0VQdEtnUXRzbTNJMnNoRzNSOWdLdHY1aXFKalRoNDJVM0dONUNYV1lDdTRSbklRdEpWMXfSAY8BQVVfeXFMTXFFWWlIQ1BnRkRDTVRQcEE2Z19KcHlNank5R2RXdmgwSWlZU002aGd0b0Z3Ym4xRDlnMThxc01lWnpWcWNYeWRfbU96U21oMXFXeWVCUDhVM1hmTWI4MTRmdUxDVmQ5eFk3amFPOE9tZmNHV2Q1S1pwQXZBeG0yRm5OUHdmOFRoLXllS3ZLMlk?oc=5"
-        },
-        {
-          "title": "FSB prevents terror attack in North Ossetia",
-          "original_title": "В ФСБ отчитались о предотвращении теракта в Северной Осетии. 19-летнего задержанного подозревают в работе на Украину",
-          "original_language": "ru",
-          "summary": "The Russian FSB reported the arrest of a 19-year-old suspect accused of plotting a terror attack on behalf of Ukraine.",
-          "published": "2026-10-02T09:31:59+00:00",
-          "source": "Радио Свобода",
-          "url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxQeVVSS2FtVENGcXNhY0JsbGNKc0lBel9kN1RKTVluaTQzbEFRcEtWTzhHOVFaMjNpaUZ4dWtYUW1KbTgwd0hhTk1qbXFKRUtzSkdnRDZtSGhvOFphOXg3ZHctYTVrekxoUVRmeVl5NUJzMDg3TExmQ2FRTG1USThacUtBa0NtWW04aXRPaUlraTFkYklEazBjc1VSYzhHaVlUZmthdEVrYmt4cHRvVUtDS2pJUElobkhZWlFNdkpRMzd5WUxXbVpQYUIwMUZ3dWQ3LW5yWmlhUXppaWRrWm5VYUdqNWN6Z2NyNldWM3JodXdtd9IB9AFBVV95cUxNT2hBWmZuNXpXajN1YnZSSEVWS0NCRm1MT290ZGpablJZRTdXdmNWOWtkMHBBbTQ5NDZQWUp1c01CcXgtUUhUVWhmOFBEc19qRGtEQWw3aXN5OXZoaVFYVmp0RnlWSEdnd2dzT21TZkxpenUtd1lSd3dvcXhuMVZKWUJPWU52bFY2QzlxeDJXQjlVTGZXLXd1RGR2WlJSSFlnVkwzVjRiSzl2MjJReXdPOHR3OWhMMWF6OWVBSmZCYUhQQ3NvUWwwUVZsN2dSZE9LamZ4UWhXb3RXeFFIN1REWTN5NWNjOGE3ejBaWFhKOENpN1dm?oc=5"
-        },
-        {
-          "title": "FSB arrests youth planning a terrorist attack in North Ossetia",
-          "original_title": "ФСБ задержала в Северной Осетии готовившего теракт юношу :: Новости дня / ВЗГЛЯД",
-          "original_language": "ru",
-          "summary": "The Russian Federal Security Service (FSB) arrested a youth in North Ossetia who was preparing to carry out a terrorist attack.",
-          "published": "2026-10-02T09:15:00+00:00",
-          "source": "vz.ru",
-          "url": "https://vz.ru/news/2026/10/2/1457829.html"
-        }
-      ],
-      "article_count": 4,
-      "first_reported": "2026-10-02T08:26:48+00:00",
-      "last_reported": "2026-10-02T08:36:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete counter-terrorism operation disrupting a terrorist plot.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "FSB North Caucasus terror plot disruption 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-b1cc484d09737d3a",
-      "translated_to_english": true,
-      "ai_canonical_event": "FSB prevents terrorist attack in North Caucasus",
-      "title_variants": [
-        "FSB prevents terrorist attack in North Caucasus"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "FSB officers prevented a terrorist attack in the North Caucasus"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Counter-terrorism operation by FSB in the North Caucasus region of Russia.",
-      "ai_geo_fingerprint": "b2534996202ca51ba57f29be45ae34d6ae1f0b8f974667c57e138f233d7b9ff0",
-      "ai_geo_inferred": false,
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "title_plus_anchor",
-        "same_url"
-      ]
-    },
-    {
       "id": "a4e2771a11ce007c",
       "category": "Arrests",
       "categories": [
@@ -155069,7 +154677,7 @@
       "collection_locale": "RU:ru",
       "published": "2026-10-02T08:21:00+00:00",
       "source": "360.ru",
-      "source_count": 23,
+      "source_count": 25,
       "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxORExnQ294U0M5ZXpUU0NuQlBmaDA4OHBhMG83bHN2VE5wRXR5dHJZdnYyUEtwOTk1UWFCdy1KeXBvLUZ3Ri1TdDltWXB2TlFiY1FnWDhtenJNU251UWZDMHM0cDhuVGFhclRhUHVqbER1Yjc0dHJHX2w0cFI1aENfZjdPWFBDLVRyS3hoaGt5cFpFWHlOSXJPSHByV2Y3dw?oc=5",
       "collector": "Google News RSS",
       "country": "Russia",
@@ -155086,6 +154694,7 @@
         "09280be6dd055526c1378a2dc688ccbebdd46242a897b0af777f81eaf93fa286",
         "0937bf6840d3f5de50c7f7cb287ad92de46f2f63d1df3daa3e679c5be818a9a9",
         "15e6dcaef6880781e933a29f00aa0ebeb148c06d556ed71f035de203f46cf714",
+        "257ff5b05cf46fe1541967f3896094d6022978aa4e8cb8369d080feac2d5b239",
         "2d5ad79c671abef90ea336a1eb1f50b25f14e96fc7bf08e43a3775e6a0fd0a10",
         "2e8e3dbcdb5982fbc75f51f3b4272dab4b8bc776324cc1d9e50e64d0366b359d",
         "42b2ae4d3f96f8d75c5447e7d5d2dac6d99f8e30190c7eaa2d91605527c8926b",
@@ -155095,6 +154704,7 @@
         "801498814bbe325e74ea1f7d173a7cda7f6ea8c00cca4c34285ee1f9e9288cb5",
         "945cc0968aeb55e4eb73d69ee9c8b9b668fe5970affa7fd96267d0036632312d",
         "9546fa86046e64cc3e3451c1db96df91d5effa41e82786eb49992fc3ca3659b7",
+        "95b467eba3cc56d8e24677822473a0c52db918664fc9dbde76a291e3e26bb36a",
         "96e9f6c558bcdbc9f265776f534f96a63b67c618fdd8df57eed0179e23fd0be8",
         "a50fb26ae4ef7ee2085afff55923fed9da8d1de981355b61646c3a774361e589",
         "a856e51fd796788e91501b0eb2d3263ed45d2070e2b7838153a49210fd4e9607",
@@ -155103,9 +154713,12 @@
         "bae73e5eb67e9c7fe356a14b06b09569c47c0cfec8603e4565f25520d1c6f88b",
         "bafb7d5dbdc81f68465fae31c43a024d9785e680144b05a63fb7fdc254d33ef9",
         "bd5a5c5a4a86776bd984719bbc36aeee19161f557ad3486d31da2717f0714eb8",
+        "cd47b903cc1fcbc8f40687f125888570b81dbff64a9cf99370f69d7322a19181",
+        "cf55fa8ff23c73af35908469399d80ababc12dd34a33d6c35b23ff28a79c44ea",
         "d62f22a532a5dc6b47eec25ab920a47aa527ef421e6361bd5f346a33cf1c1d6e",
         "e1529addf32cfeb670e1bf82982fed48d6ac83709d56eb1b25e2f434d665e28c",
         "e1daa781825a9cef9580a134f42d4f0a04d84c9e553931ff84a0ff8dbf8b8a63",
+        "eb54258d0cc909a627e3302ef58ebf0780386886af6c265220fdb332b8cac0ab",
         "ee46d42440f0f9ae4dd5476f39bc92b1a1b892d0e8318e044738aac7b92ae6b5"
       ],
       "sources": [
@@ -155131,7 +154744,9 @@
         "Электронная газета «Век»",
         "Новини Донбасу",
         "novostitambova.ru",
-        "Тамбовская жизнь"
+        "Тамбовская жизнь",
+        "nsn.fm",
+        "vz.ru"
       ],
       "related_articles": [
         {
@@ -155340,9 +154955,45 @@
           "published": "2026-10-07T09:12:46+00:00",
           "source": "Общественная служба новостей",
           "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxORUZtVEZaWmxIVWtWZ0F4U055aE1Wc2pLeGlmek5qbHlrX2VWMkd1WTNPT2k3NUZLVW1VajZ4YTRDRzNRWVdodDJmYnpta1g4aTZWa293WkU5UmNSdV9aVm16UlZEa0tnUVoxZ2tqbWZiSkRZTkcxMFRBOUpsZ3duc3RVR0hiMVZicWRpd2kySVd5Sjc2Zmp2eEVpMndsWWdZa3dPMHFnSVNXSFJpQnc?oc=5"
+        },
+        {
+          "title": "FSB officers prevented a terrorist attack in the North Caucasus",
+          "original_title": "Сотрудники ФСБ предотвратили теракт на Северном Кавказе",
+          "original_language": "ru",
+          "summary": "Russian Federal Security Service (FSB) personnel thwarted a planned terrorist attack in the North Caucasus region.",
+          "published": "2026-10-02T08:26:48+00:00",
+          "source": "gazeta.press",
+          "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5GTEoyeVN2WmZtYTh2LUhPNFFoYXh2TkxfaDBKdzlXZzZMdWxDdjFoMEozMDBwUkxPeU9HdndtWW1DZFN1cmJIeUZrb1JLRlR2cmlWWEZwMjBheUlwNHpuNUJmTHRjYVNac0JKQkpQeXJIT1hl0gF0QVVfeXFMTkZMSjJ5U3ZaZm1hOHYtSE80UWhheHZOTF9oMEp3OVdnNkx1bEN2MWgwSjMwMHBSTE95T0d2d21ZbUNkU3VyYkh5RmtvUktGVHZyaVZYRnAyMGF5SXA0em41QmZMdGNhU1pzQkpCSlB5ckhPWGU?oc=5"
+        },
+        {
+          "title": "Man arrested in North Ossetia for preparing a terrorist act",
+          "original_title": "В Северной Осетии задержали готовившего теракт мужчину",
+          "original_language": "ru",
+          "summary": "Russian security services arrested a man in North Ossetia who was allegedly planning to carry out a terrorist attack.",
+          "published": "2026-10-02T08:36:00+00:00",
+          "source": "Национальная Служба Новостей",
+          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPdGF6VXBoVlhRRjhUcHZ3b0hXcHREWlA1OWFTY0FoUVJsS0t3c1JqQ09DVVVwamNBUTRqMnc1MGF6eHg0akRNQ0VRcUhMMFpTRXdEUEFiT0VQdEtnUXRzbTNJMnNoRzNSOWdLdHY1aXFKalRoNDJVM0dONUNYV1lDdTRSbklRdEpWMXfSAY8BQVVfeXFMTXFFWWlIQ1BnRkRDTVRQcEE2Z19KcHlNank5R2RXdmgwSWlZU002aGd0b0Z3Ym4xRDlnMThxc01lWnpWcWNYeWRfbU96U21oMXFXeWVCUDhVM1hmTWI4MTRmdUxDVmQ5eFk3amFPOE9tZmNHV2Q1S1pwQXZBeG0yRm5OUHdmOFRoLXllS3ZLMlk?oc=5"
+        },
+        {
+          "title": "FSB prevents terror attack in North Ossetia",
+          "original_title": "В ФСБ отчитались о предотвращении теракта в Северной Осетии. 19-летнего задержанного подозревают в работе на Украину",
+          "original_language": "ru",
+          "summary": "The Russian FSB reported the arrest of a 19-year-old suspect accused of plotting a terror attack on behalf of Ukraine.",
+          "published": "2026-10-02T09:31:59+00:00",
+          "source": "Радио Свобода",
+          "url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxQeVVSS2FtVENGcXNhY0JsbGNKc0lBel9kN1RKTVluaTQzbEFRcEtWTzhHOVFaMjNpaUZ4dWtYUW1KbTgwd0hhTk1qbXFKRUtzSkdnRDZtSGhvOFphOXg3ZHctYTVrekxoUVRmeVl5NUJzMDg3TExmQ2FRTG1USThacUtBa0NtWW04aXRPaUlraTFkYklEazBjc1VSYzhHaVlUZmthdEVrYmt4cHRvVUtDS2pJUElobkhZWlFNdkpRMzd5WUxXbVpQYUIwMUZ3dWQ3LW5yWmlhUXppaWRrWm5VYUdqNWN6Z2NyNldWM3JodXdtd9IB9AFBVV95cUxNT2hBWmZuNXpXajN1YnZSSEVWS0NCRm1MT290ZGpablJZRTdXdmNWOWtkMHBBbTQ5NDZQWUp1c01CcXgtUUhUVWhmOFBEc19qRGtEQWw3aXN5OXZoaVFYVmp0RnlWSEdnd2dzT21TZkxpenUtd1lSd3dvcXhuMVZKWUJPWU52bFY2QzlxeDJXQjlVTGZXLXd1RGR2WlJSSFlnVkwzVjRiSzl2MjJReXdPOHR3OWhMMWF6OWVBSmZCYUhQQ3NvUWwwUVZsN2dSZE9LamZ4UWhXb3RXeFFIN1REWTN5NWNjOGE3ejBaWFhKOENpN1dm?oc=5"
+        },
+        {
+          "title": "FSB arrests youth planning a terrorist attack in North Ossetia",
+          "original_title": "ФСБ задержала в Северной Осетии готовившего теракт юношу :: Новости дня / ВЗГЛЯД",
+          "original_language": "ru",
+          "summary": "The Russian Federal Security Service (FSB) arrested a youth in North Ossetia who was preparing to carry out a terrorist attack.",
+          "published": "2026-10-02T09:15:00+00:00",
+          "source": "vz.ru",
+          "url": "https://vz.ru/news/2026/10/2/1457829.html"
         }
       ],
-      "article_count": 24,
+      "article_count": 28,
       "first_reported": "2026-10-02T08:21:00+00:00",
       "last_reported": "2026-10-07T09:12:46+00:00",
       "dedup_confidence": 1.0,
@@ -155350,7 +155001,8 @@
         "same_normalized_title",
         "title_plus_anchor",
         "paraphrase_entity_context",
-        "same_url"
+        "same_url",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
