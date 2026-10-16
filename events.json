@@ -283,7 +283,7 @@
         "stop_code": "budget_reached"
       }
     ],
-    "finalized_at": "2026-10-16T20:36:32.503013+00:00",
+    "finalized_at": "2026-10-16T20:38:09.632390+00:00",
     "collect_outcome": "success",
     "geolocate_outcome": "success"
   },
