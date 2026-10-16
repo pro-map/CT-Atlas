@@ -729,7 +729,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-10-16T14:17:49.946602+00:00",
-  "number_of_events": 3751,
+  "number_of_events": 3746,
   "events": [
     {
       "id": "ffa0d4f91e9cf95d",
@@ -300363,157 +300363,6 @@
       "incident_id": "inc-18ffdad7d4e49573"
     },
     {
-      "id": "d3a00e2dfd726c50",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Attacks",
-        "Weapons"
-      ],
-      "title": "Nigerian Troops Repel ISWAP Attack On Military Base In Borno",
-      "summary": "Nigerian military troops successfully repelled an ISWAP attack on a military base in Borno State, recovering weapons and neutralizing attackers.",
-      "original_title": "Nigerian Troops Repel ISWAP Attack On Military Base In Borno, One Soldier Injured",
-      "original_summary": "Nigerian Troops Repel ISWAP Attack On Military Base In Borno, One Soldier Injured Sahara Reporters",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-09-08T05:04:47+00:00",
-      "source": "Sahara Reporters",
-      "source_count": 12,
-      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPdHRkMUFtWE81bkN3ZXF0ZGRUN0E3Y1N2QXB6NjFzUUV1RV9Gbmg3SmtERnBpR05ycEU3ZDl1a1ZXaGxtU1ZtWkdqV0VQdGFubGdrZjdBaGlJc2NZVl9lamhmb2R6cTFnY3c2QmZWLUZ1QUk2LUhCV2V1UFllTmhHZFhmRE81UzBhYlFKbVF3U2w5SnhvenVGRWJ0M2ZHSE9RUFVaTmdiRG1rZmJSWEdBMFdWYw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": null,
-      "region": "Borno State",
-      "latitude": 11.8333,
-      "longitude": 13.15,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "source_article_fingerprints": [
-        "07de9c1be8a9276d34930e60a94446ac96ccb2b393e77a2b651d54e909ca5db3",
-        "081bb22458e31e54fb475434262ef2312d724c774b0ecb6a132e1d967943b2e6",
-        "0a199de6a7e733cb4467978cc54ac5d11149c5cce496c7c79025a84cef870d44",
-        "1baeff9c1772d05e2f88f1cfb3cdb6a669457bbacb5555365b0ebf63264a17d2",
-        "33f0d2ef20d4d0780e5d61fab04bdfe1224f050cbafe9f85e8aa70a4b6631b26",
-        "679a22e4e9f471c3cc82aa62700fdaba06b933d6acb8abc14a9aa21a1cc2c4fe",
-        "69f368b3f718c5e29d873dd32eae6e7e412ce97271dd7019121bf022686313cd",
-        "6e2a79b32e370a8c1d576bfde162ec3efde87d3e905d29cbf1dbac437390ea5a",
-        "73bdfa0113b94881b6737c3c29c85c2b37c3c598003594dc49984549bc4b5acf",
-        "7da64acf15f4ffecd4977fb8c3ad8d33f4486fb3fad89f21712e167b1d0f6347",
-        "96dd7d785b57fc81fac15870ee5f6e84ec6f30080d5fa2207e02443db6d71eec",
-        "9d2abd9b3bc83237ae4385fb8350c43104aa09aaed48ff572b21b3910aaea0d2",
-        "c2b56a5bb2ef7565b193cd6cea36280fbf1519c2021fb4b804a405599c10bf68",
-        "fd79dc9c434c3e58764fc138c12d962eea7d86594df2052eccf00228e36a2aa4",
-        "fe3ec1d3a11175edddacb9837a9357b1bc77ee1dc04fd301e9172648aed655b5"
-      ],
-      "sources": [
-        "zagazola.org",
-        "TheCable",
-        "thefact.ng",
-        "The Trumpet Newspaper Nigeria",
-        "MarketForces Africa",
-        "Premium Times Nigeria",
-        "TVC News",
-        "Daily Post Nigeria",
-        "nigerianeye.com",
-        "The Nation Newspaper",
-        "Sahara Reporters",
-        "UA.NEWS"
-      ],
-      "related_articles": [
-        {
-          "title": "Troops repel terrorist attacks on military base and village in Sokoto",
-          "original_title": "Troops repel terrorist attacks on military base, village in Sokoto",
-          "original_language": "en",
-          "summary": "Nigerian troops successfully repelled coordinated terrorist attacks targeting a military base and a local village in Sokoto State.",
-          "published": "2026-09-08T07:05:00+00:00",
-          "source": "TheCable",
-          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNcFVFSWo5c29ha2VNc2xpdk9XTWV0cUU3a0lSNnV2ZTBXaDlZUzZ6X3o5NmZmdkRtTC1jN21TQWlTc0dhWE5HMFROTnR6bEhFNnVrd1pIdU44eTdFVkVHYmFZTEN0akhVMk01OTBFZzU5UHdNTFZ0TXRTbXY0c1lCYlk5XzRLcnRjZjluNVVvMjd1WnNX?oc=5"
-        },
-        {
-          "title": "Troops Repel ISWAP Attack on Military Base in Pulka, Borno State",
-          "original_title": "Troops stand firm, repel ISWAP attack on Pulka in Borno",
-          "original_language": "en",
-          "summary": "Nigerian military forces successfully repelled an ISWAP terrorist attack on a military position in Pulka, Borno State.",
-          "published": "2026-09-08T08:42:14+00:00",
-          "source": "zagazola.org",
-          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxObmtITkpkZnNTaFBkR2tVV2gxRUMySmlzU2ZPTFNhODNwWWVUUEhMZFFOWGpmM1BoZFQ0LXI3NXBIeTVhNnJMYlVLZmFKWUM0TWVFVTRXWDFqSk1rd3lYdkxPWW1wZ3lna2NUaVRYMFI4eFlmMEJPSVphemtCcURZc3ltN3Zvd082MnJmWkZwLXZmNFhEMXNsWVp4djZrUFpm?oc=5"
-        },
-        {
-          "title": "Soldiers foil terror attack in Borno, recover weapons — Official",
-          "original_title": "Soldiers foil terror attack in Borno, recover weapons — Official",
-          "original_language": "en",
-          "summary": "Nigerian soldiers successfully foiled a terrorist attack in Borno State and recovered weapons from the suspects.",
-          "published": "2026-09-08T09:55:38+00:00",
-          "source": "Premium Times Nigeria",
-          "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQWnNld3NnQ0FqcWNodkNtaTlCNEJSeUxLeXdrVTlzNjJMdkRrV1NESFJxZktzRUpRSzVHd3NYZE5FRk1TbUl6dkRPX0xPblBpeEg1bW43UV9Kd0pYY3haandLMnl2U2JKZjlGV1ZtMXJVdXdIU3dmRXc2VnJPeXhxVEI3TmJ6MGFQOHdVckZqRFl3M1A3dzZrZ1A5QXhLMTlqR3FLVS1STVI1TzlUX2h4MElrUndnbl9NUmc?oc=5"
-        },
-        {
-          "title": "Nigerian Troops Repel ISWAP Attack On Military Base In Borno",
-          "original_title": "Nigerian Troops Repel ISWAP Attack On Military Base In Borno, One Soldier Injured",
-          "original_language": "en",
-          "summary": "Nigerian troops successfully repelled an ISWAP attack on a military base in Borno State, leaving one soldier injured.",
-          "published": "2026-09-08T13:20:38+00:00",
-          "source": "Sahara Reporters",
-          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPdHRkMUFtWE81bkN3ZXF0ZGRUN0E3Y1N2QXB6NjFzUUV1RV9Gbmg3SmtERnBpR05ycEU3ZDl1a1ZXaGxtU1ZtWkdqV0VQdGFubGdrZjdBaGlJc2NZVl9lamhmb2R6cTFnY3c2QmZWLUZ1QUk2LUhCV2V1UFllTmhHZFhmRE81UzBhYlFKbVF3U2w5SnhvenVGRWJ0M2ZHSE9RUFVaTmdiRG1rZmJSWEdBMFdWYw?oc=5"
-        },
-        {
-          "title": "Troops foil terrorist IED attack along Mairari–Gajiram road in Borno",
-          "original_title": "Troops foil terrorist IED attack along Mairari–Gajiram road in Borno",
-          "original_language": "en",
-          "summary": "Nigerian troops successfully foiled an IED attack planted by terrorists along the Mairari-Gajiram road in Borno State.",
-          "published": "2026-09-08T05:04:47+00:00",
-          "source": "zagazola.org",
-          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOTUFTTUY4blBQeW1xbl85bW1MalBEd1Rzb29MTFlsa1ZVZ3lxbmJlaDl5VzBETG15b0ZoRjRlR3hSZkhRMVE1YVNPV0RhS3JZMUx5WTd3Szc5NjJhY3FVeGhIQzV1eWNOZWIxY0hOcnpkVkdZUHNVOVBScURfNGY0aVFhT3dpMWZCcWQ5dUd1eDRta2gweHJMUGtsa0d5SXNrNGREZ05yRHVHRHlKZU90TzhVMA?oc=5"
-        }
-      ],
-      "article_count": 5,
-      "first_reported": "2026-09-08T05:04:47+00:00",
-      "last_reported": "2026-09-08T13:20:38+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Terrorist attack by ISWAP repelled by military forces in an active counter-terrorism engagement.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Nigerian troops repel ISWAP attack on military base in Borno State",
-      "title_variants": [
-        "Troops foil terrorist IED attack in Borno State",
-        "Nigerian troops repel ISWAP attack on military base in Borno State"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "paraphrase_entity_context",
-        "very_high_title_similarity"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Mairari–Gajiram road in Borno State"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The event explicitly occurred along the Mairari-Gajiram road in Borno State, Nigeria.",
-      "ai_geo_fingerprint": "26050eca13faf55765d50fca4c652025a8267fc095c0fda7e6cec1611aadbc40",
-      "ai_geo_inferred": false,
-      "actor_group": "ISWAP",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Borno military base ISWAP attack 2026-09-08",
-      "update_type": "INITIAL",
-      "incident_id": "inc-d6110e9ff1311786"
-    },
-    {
       "id": "2990c32da7978ea6",
       "category": "Attacks",
       "categories": [
@@ -300668,97 +300517,6 @@
       "incident_anchor": "Kaduna Vigilance Service attack Nigeria 2026",
       "update_type": "INITIAL",
       "incident_id": "inc-004e9a251585d540"
-    },
-    {
-      "id": "f6c52cf9e3eadb27",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Weapons"
-      ],
-      "title": "Malian airstrikes target armed militant groups in multiple regions",
-      "summary": "The Malian military has conducted airstrikes targeting armed militant groups across several regions.",
-      "original_title": "ضربات جوية مالية تستهدف تجمعات مسلحة في مناطق عدة",
-      "original_summary": "ضربات جوية مالية تستهدف تجمعات مسلحة في مناطق عدة الحرية نت",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
-      "published": "2026-09-08T02:00:44+00:00",
-      "source": "الحرية نت",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTFA2YzJIWEtEMkxwVnZUNmZCVnhSTFNwZnpRdzRxZ2l2VFJtTDFjQVdlNGFkdXlnNTdlRW9yMVctdHgyNXYyX0ww?oc=5",
-      "collector": "Google News RSS",
-      "country": "Mali",
-      "country_code": "ML",
-      "city": "Bamako",
-      "region": null,
-      "latitude": 12.60915,
-      "longitude": -7.97522,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "39943c903c1fb918ca649bd5242e0c6d74ce26aa14b0097a9d68e8557e8f61e1",
-        "88be20f5a3dcfa7f2a5b3840727651ff2a1046ff97c3bdf600cd1a2405c6bd9b"
-      ],
-      "sources": [
-        "الحرية نت",
-        "Bamada.net"
-      ],
-      "related_articles": [
-        {
-          "title": "Military Operations in Mali: Several Terrorist Positions Targeted and Successfully Engaged",
-          "original_title": "Opérations militaires au Mali : Plusieurs positions terroristes ciblées et traitées avec succès",
-          "original_language": "fr",
-          "summary": "The Malian armed forces conducted successful airstrikes and operations targeting terrorist positions across multiple areas.",
-          "published": "2026-09-08T11:16:08+00:00",
-          "source": "Bamada.net",
-          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNWDkzZ2h3c2J3NnhhSDFIaUE4RVp0RUZrajljQV9QSmNuZVVvTmwzU1pUY2JibENvLUl5Z19OZkJsUjdJcTA3U25HUDB2Uk16bHlOMi05QVNONEFmTFU5aTRKdHA1c1FkUXZJa3lrUXlVVFk0TkFuY1RWRkdtZUNrc2g5NGFuMjhWQ192ZWtlRC1NNl82WnQ0aldrX2ZLaUJONV9UZ1F5dXRXYVE4akZwdVh3?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-09-08T02:00:44+00:00",
-      "last_reported": "2026-09-08T11:16:08+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Counter-terrorism military air operation against insurgent positions.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Malian military airstrikes against armed militant positions",
-      "title_variants": [
-        "Malian military airstrikes targeting armed groups in Mali",
-        "Malian military airstrikes against armed militant positions"
-      ],
-      "dedup_confidence": 0.58,
-      "dedup_methods": [
-        "paraphrase_entity_context"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Malian airstrikes target armed groups"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Military airstrikes conducted by Mali targeting armed groups within the country.",
-      "ai_geo_fingerprint": "a02cca3136506a7d28875feda71407a69aaf11da9fb68eb087064086a4a4f5cc",
-      "ai_geo_inferred": false,
-      "actor_group": "",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Mali military airstrikes against militants 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-b55f34ff0550d0e2"
     },
     {
       "id": "88008b98aa27119b",
@@ -311217,154 +310975,6 @@
       "ai_geo_inferred": false
     },
     {
-      "id": "30e7e2a333454053",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Fourteen Terrorists Neutralized in Southern Somalia",
-      "summary": "Security forces successfully neutralized 14 terrorists during operations in southern Somalia.",
-      "original_title": "Somalie: 14 terroristes neutralisés dans le sud du pays",
-      "original_summary": "Somalie: 14 terroristes neutralisés dans le sud du pays AL24 News",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French / Africa",
-      "collection_locale": "FR:fr",
-      "published": "2026-09-06T12:41:54+00:00",
-      "source": "AL24 News",
-      "source_count": 7,
-      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQR1psWXZrbzNLSjVxTDlHaGZGWFBDVEJRNXN1Q3k4WW5Xb19RQnpGTmhWM0NZdV8zU01Md0hfWjJQdUtIMVA1MUdMVzhCY1R0YWZKZVcxOUMzOGV5VF80V25weThvZUQ3c19ERjM0dDAzc3F2akZJcDZiUzA5bTNXYU9OV20?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Southern Somalia",
-      "latitude": 2.6517,
-      "longitude": 44.8299,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "1b6196fc64bc3963c2b79d69f375e51b51b95e40dffd4e8fe6730f8ab3993d32",
-        "3514f43c8cbe63bafaf83bf231275e81a3e3baf519678a6ea913b10f3cd45259",
-        "3d5b9c055f67fcf8bbc89d36de0582a7b082c55d78f6f4f584c805b65babdc52",
-        "93b328856be881b646f1768c971a320728865a4949007acc3924f740a74b9df7",
-        "c19e2d477efa02fc90582df17afee625a531f69d896c7372f2b7f1302ed75b93",
-        "c1e6e21a945596aa3c573721306aae94b3e487269c4afb4eb01b37b087675bac",
-        "d1d9ad471028a62ca6b14314f9a19138fcaeabd42141db396248e73eb49cb54e",
-        "d547a3c752d16bcf04a2b6afe23c3e47ed21e05333c4c345a53753f2a0ec127a"
-      ],
-      "sources": [
-        "AL24 News",
-        "Agenzia Fides",
-        "المنشر الإخباري",
-        "Qatar news agency",
-        "مرسال قطر",
-        "خليجيون",
-        "برس بي"
-      ],
-      "related_articles": [
-        {
-          "title": "Somalia between security transition and terrorism",
-          "original_title": "Somalia between security transition and terrorism",
-          "original_language": "en",
-          "summary": "An analysis of ongoing security transitions, international mission handovers, and the persistent terrorist threat posed by Al-Shabaab in Somalia.",
-          "published": "2026-09-06T14:47:37+00:00",
-          "source": "Agenzia Fides",
-          "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQT0o0djB5TTMyQUhEWklycHlhNmg5WkJkQ1R3eWxDYm5WUkJSejN5WlFBaUlQZEZaeS02NXRoSUtNbnY2Q1JQV0VjOEJZTE1zNFl6NlZIdXVOb2hDUXpkcVlkS0twWDRMWGV1MzY4TjFYejhDVnE1YjRtUThHOC1lQnhsMWkxekZ2M1BvTEVB?oc=5"
-        },
-        {
-          "title": "Al-Shabaab takes control of new areas in central Somalia",
-          "original_title": "حركة الشباب تسيطر على مناطق جديدة وسط الصومال",
-          "original_language": "ar",
-          "summary": "The militant group al-Shabaab has advanced and seized control of new areas in central Somalia.",
-          "published": "2026-09-06T18:27:45+00:00",
-          "source": "المنشر الإخباري",
-          "url": "https://news.google.com/rss/articles/CBMi0wJBVV95cUxOREJqMldScnBBVW82WU5sWHdFRkFKYmdoYklpQXpjcGp0ZjRkbGJEbE5wY25KOTJDaWVybDIwLXc2Rkk2XzJ2Tzk3WnNVOHJXbTEzc3ZOb3FXZUM4T0pkSFJ1X2pKNFhTaEUySElQY2g5RkFRVHVLVmxFdXZmemlBbTYyWV8zSnFJeWRoU01yVVdfam1od2JseGJSMi1IRVJDMXY2MnFGQWwxLUVYUnpPVmlweVlFam93T2JXUC1XYWtyd3Vla0dxb2lBUm1jMW1BcmVTaDdIVFpUdXM2RUIxVmZwdEZYa0d0NElCMFk2LXhYMGlTWi1JbkpycHA1N1lHNU1GZWZJVFJnMURrUEIwZlVncUpTN1dQOV9rbjg2ZC1mZEY4LTZ4c2ZxR1BRMnBqajdhTkxkbW5qcXE0V1dmVzZmYWRkb0hQNHVDQzhLMUFiaEE?oc=5"
-        },
-        {
-          "title": "Somali army announces killing of several Al-Shabaab members in security operation",
-          "original_title": "الجيش الصومالي يعلن مقتل مجموعة من عناصر حركة الشباب في عملية أمنية",
-          "original_language": "ar",
-          "summary": "The Somali National Army announced the killing of a group of Al-Shabaab members during a security operation.",
-          "published": "2026-09-07T16:41:04+00:00",
-          "source": "Qatar news agency",
-          "url": "https://news.google.com/rss/articles/CBMirARBVV95cUxQOXpkZ3RBZzhPckcxRkVxMlRISGV4TlE3YUhNRU9GbTNsZnppY21YVGtBcmdaeDE2ZG5uRFFnSWtFaU1kcjY4Vjl1bk9VQ3lsalplazc5TlNLVi02VFYxb19QQ2tCWG9fclcxU1c0WFhjMU52NktzeDlEa1l6Qll5VEIzc1dLcjZoWFhCZ3c1NTlKRjZoNnd0TmlEU0JINGlFOUtKcDRwS1Zzc1JWWkYyVTkzdzJaVzc1M0lTcEhYR3FkMzBFRWtwZ0NudUE2eGpDYm9sV1N6c3lDMU9jVjA0dzg4WERWXzFheUYzTWZDdEsyZnRRcXktcTdQbWNmQnRvb29mRWJ5bnp4Y3hWMzdYZ2FhNzV5dTNwOTFQcDNTZ3dQVnkxZzlIOWd0WlF1R3V0YUU1MzVRQndEY3hzV21ubHZIM2tvdXNzRWlzbl81Y2tvTUV2dXYtOHZTemo5Vl9lTFk4VVVlam16UWdpQUI1dHpRNmg1bzFOX0lYVUtRY3FXSnptMmh6UDFyWWwxQ1g4X3czUWRoMjdTQVlaTFk4MThGWE5TS2V6S0RTbTlFUmktVmluejJBak13Q2I5ZzQ1WmdFOXJuZjNvTXRKWWxTNHZvSlpjZE1QSndIanRqLWJ4UXNTYTFudlNscnZFTGVoSUo2SEM1ZzV6TW9EVUxPaXlHeTR1MUxPRF9vMC1JUHZGR3VIdmZCaExtOFNfajF0eUFyNTBaMWNkTTk3?oc=5"
-        },
-        {
-          "title": "Somali army announces killing of Al-Shabaab members in security operation",
-          "original_title": "الجيش الصومالي يعلن مقتل مجموعة من عناصر حركة الشباب في عملية أمنية",
-          "original_language": "ar",
-          "summary": "The Somali army announced the killing of several members of the Al-Shabaab movement during a security operation.",
-          "published": "2026-09-07T18:00:00+00:00",
-          "source": "مرسال قطر",
-          "url": "https://news.google.com/rss/articles/CBMinwJBVV95cUxNVFBma2lOZ2xpYWxNX3gza1Y2OEw1ZG9hcHNvZG1xc1RWZTlOX0JmVDBUYkR4Zk9FZ2JzMzktWks2SHJYTnpBMzdvVE5vMXJyVGVlNlF0MzV5Z0JnMGtlZlRxZ1hJMV9nb2V2U09xc2NyeHdnYjdtZTh3RWxDWHdXMkh1X3B3U0lHcEtWSDY1WFhaMVVoXzl5TUZwVmx1OWQ4OXVRVnpRV21WS29GR1pYTHBKOEJwNHhZNXIxZXQ3TFdpaGNpWjVHczdEU005emxwUzV0dlNCeGJuTVhVRnVkYl82d1BCUUhIT0xZQlVJQVo2TTVsVkFSYlRZOHgwZnBFMXZaZEhRUi1jSFZmVmIxQkJVMWp1bmNicWpWUlBTdw?oc=5"
-        },
-        {
-          "title": "Somali Army announces killing of Al-Shabaab elements in security operation",
-          "original_title": "الجيش الصومالي يعلن مقتل مجموعة من عناصر حركة الشباب في عملية أمنية",
-          "original_language": "ar",
-          "summary": "The Somali National Army announced the killing of several Al-Shabaab members during a security operation.",
-          "published": "2026-09-07T19:04:48+00:00",
-          "source": "خليجيون",
-          "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE40c0toeUwzNmxCZ1AtNWxYbHdNbFFxRm5TZlRCUFFNM1R5aUZQOWk4YURVMzBBRFJzS0NuTERsZ0w4M0xnS2QzbU13?oc=5"
-        },
-        {
-          "title": "Somali Army announces killing of Al-Shabaab elements in security operation",
-          "original_title": "الجيش الصومالي يعلن مقتل مجموعة من عناصر حركة الشباب في عملية أمنية",
-          "original_language": "ar",
-          "summary": "The Somali National Army announced that a group of Al-Shabaab militants were killed during a security operation.",
-          "published": "2026-09-07T19:12:08+00:00",
-          "source": "برس بي",
-          "url": "https://news.google.com/rss/articles/CBMioARBVV95cUxONkFTMEo4OEtxeUZqNUVTcko1YUtKdmpTVHdsWWNlRUYwZ1NSQklMRkhPRmFzOG5LbktPbnpseElhamlLWEdVSTFTeWtxVEl5X0JxOUZ1TFJRdjNObG1iNTZCQlJ0TGZDeTR3YUVUc1hfZFZrUmdfQjF5YXFtR0VwOVFJVEdaYnV3Mlc5anB5cTR1M3dTZW5TYmRNdDBEaTRmWEhjYlFNTDN4c2tEVnc5UlNyVS1QQWpmYU9aVmhrMXV5NUJ2VmlCRGFmcFc2TjVfSVMtVXFqR25PaVBwMmQ5eEQ4Yjd0TmR6M0tnZ1poYXNRSllqalRCZU1qQ2c4VDdNekcyMlNnOUdaV3V6ak8zVkFCanBHY1p6QUpuaV9wLWhINTc3UFItUjdjQ3JaUVlNRHZMSld5Y2Z5YzI4Zk1WSlktd1FnTVpKVXpMNjh1U1MwSTJoaTFacEp6aHRmYVZWTEpHMzI4SVM1ZUpfT2JBR25sQS0yeTQxWS1pZTJOQW0tbm5zc2oyZWlkUmkyQzZDcGE5MllqbVBRenBWbU1xMzJkWVQ0S2pOYS1FSG1XbFdpZTBQbmdSZ1BPbkVuenpQQmszdXYyaXlXVlkxSkZ5ZW50NHlQS2Uxc0pSSDFQcU53X2ZDMVNpVkFhVzZYazJ1bV9QY0U2WUJ4UHJyLUxqUVlTTWF5U3NUYm5HZldEY1J4ZDNSbEFENWJlYzY3VlpW0gFeQVVfeXFMTUtRbkl0d3BIWHF5c2QxYmJHT2t0OWlTa2g5bU8xeHNVclRyZ0NubXVTZWRUU2ZwWWxKTUVHZDRVdW1xZFd4bTZKcllJS1JDeHZpS3ZKNU5hRTdQMjVvQQ?oc=5"
-        }
-      ],
-      "article_count": 7,
-      "first_reported": "2026-09-06T12:41:54+00:00",
-      "last_reported": "2026-09-07T19:12:08+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Security operation neutralizing 14 terrorists in southern Somalia.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "neutralization of 14 Al-Shabaab terrorists in southern Somalia",
-      "title_variants": [
-        "Neutralization of 14 terrorists in southern Somalia",
-        "neutralization of 14 Al-Shabaab terrorists in southern Somalia"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "entity_actor_event_signature",
-        "paraphrase_entity_context",
-        "very_high_title_similarity"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Fourteen Terrorists Neutralized in Southern Somalia"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicit mention of Southern Somalia.",
-      "ai_geo_fingerprint": "fef0b501a8fd1d3d7811ade128fe54406ada9df0fb5fa46707b87fbbc05ea4c7",
-      "ai_geo_inferred": false,
-      "actor_group": "Al-Shabaab",
-      "incident_id": "inc-f069c192f28e31a8",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "southern Somalia CT operation 2026-09-06",
-      "update_type": "INITIAL"
-    },
-    {
       "id": "f5af1fc3a075ff3d",
       "category": "Counter Terrorism Action",
       "categories": [
@@ -311514,80 +311124,6 @@
       "incident_id": "inc-15d3c22280217ab4"
     },
     {
-      "id": "005e70f226df1e87",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Malian reporting details counter-terrorism airstrikes destroying bases in the Sahel",
-      "summary": "Malian operations and airstrikes destroyed militant bases in the Sahel region between August 22 and September 4.",
-      "original_title": "Destruction de bases de combattants et frappes contre les terroristes : les opérations au Sahel du 22 août au 4 septembre",
-      "original_summary": "Destruction de bases de combattants et frappes contre les terroristes : les opérations au Sahel du 22 août au 4 septembre Mali Actu",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French / Africa",
-      "collection_locale": "FR:fr",
-      "published": "2026-09-06T10:30:48+00:00",
-      "source": "Mali Actu",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxOazBzU2dMdXB0OHhFejRVYUJIRjY2N0QzbDlRYTcyR3VGN3ZFa1VoM0sxdURCbC1vQTN2enZxd0c5bzQtdkR4X3k4OVZmbElBX0pfaVVVbTMtYnR1SlluSzFTQnp3VHR4UHRISk5zY19JYjVfY2JZdUMwNmNJQUVLQ1NGODlZQktfNHlaOHh3RURlNXdZc0hiU2p3NldPYy1WSllnVGYxcGlJdG53VXViYzMzUXQ3TkZMckNMNVlSMG9qSXhqV2ZlVzhNUHk1Vzh5UGZJLWV2UlrSAeABQVVfeXFMTkdOOHIyUkhRTjIxU053c19mb2FFZmoxeXlHOWNsYXB1ZDBiazkteXZHcjRNNlNKWFQyVE11RG9qVGQ5cFF3NTduamRmYlZlLVZkNGlQTElVWjNzUVlzejVaX2d6NU5nV2FMeG1ZaFpLZGtWbXdzN0otX2pHSFlsWjRQaXMycE9lTEJISlZZR0lFQThFZExSdUJsdEFoQ1g3ZnBCcjBrT0t5NmJwR2lyT3NkaHRwRHJhZi11NzY2TEk5Z0pwek5JRndTMnlxaWQwVUFJNkZGTXptc3hLMG1mVE0?oc=5",
-      "collector": "Google News RSS",
-      "country": "Mali",
-      "country_code": "ML",
-      "city": null,
-      "region": "Sahel",
-      "latitude": 17.5707,
-      "longitude": -3.9962,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "4777b5522842d359e13a4de54b01626be70360b0f7d131b66eb9ced3ac597b69"
-      ],
-      "sources": [
-        "Mali Actu"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-09-06T10:30:48+00:00",
-      "last_reported": "2026-09-06T10:30:48+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Military counter-terrorism operation destroying insurgent bases in the Sahel.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "destruction of militant bases in Mali Sahel via CT airstrikes",
-      "title_variants": [
-        "security forces conduct counter-terrorism strikes and destroy militant bases in the Sahel",
-        "destruction of militant bases in Mali Sahel via CT airstrikes"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Malian reporting details counter-terrorism operations... in the Sahel"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Counter-terrorism operations and airstrikes conducted by Mali in the Sahel.",
-      "ai_geo_fingerprint": "24c02573b133eecef52d41ae7e2d90a39fc7102f478af8fd2fa4a5d24b578d3f",
-      "ai_geo_inferred": false,
-      "actor_group": "",
-      "incident_id": "inc-c2beb4aea4cd1035",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Sahel militant bases airstrikes Mali 2026",
-      "update_type": "INITIAL"
-    },
-    {
       "id": "92545c08dc8a9529",
       "category": "Attacks",
       "categories": [
@@ -311661,112 +311197,6 @@
       "incident_anchor": "Germany climate extremist infrastructure sabotage manhunt 2026",
       "update_type": "INITIAL",
       "incident_id": "inc-473fd98de92caccd"
-    },
-    {
-      "id": "83487b425b8ee61a",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Weapons"
-      ],
-      "title": "Soldiers raid terrorist hideouts in Sokoto, recover weapons",
-      "summary": "Nigerian military forces raided terrorist forest hideouts in Sokoto state, clearing insurgent positions and recovering weapons.",
-      "original_title": "Soldiers raid terrorist hideouts in Sokoto, recover weapons",
-      "original_summary": "Soldiers raid terrorist hideouts in Sokoto, recover weapons Punch Newspapers",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-09-06T09:06:33+00:00",
-      "source": "Punch Newspapers",
-      "source_count": 3,
-      "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPYlBReHdCeDl6WE53bXRYZkxwV0djM2tlZUdWMzJVYUtIbUJnWmk5YXh5VWRwNk1GTEU0c2lkd0tRTnJqWC11cXhmX1pENUowaEJaOHU5cFBIdmFxOHdweGN6V2ZXaHNCVHY4eXZYVUVhbjFwcjFnY2ZvbFZCaUdVMDJiV2IyQQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": "Sokoto",
-      "region": null,
-      "latitude": 13.06269,
-      "longitude": 5.24322,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "punchng.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "4de4ba6ad6bdd0ec01934977c837e4d9612ef04330be96f5efc74899cb02d3c9",
-        "83fbb5b94af5b5609c56487481e3b5228772ba8a1f04b317ee5b588be322e935",
-        "be9228adc7ae50e850da0f49a7945e3660a4b8ba9e33e80661d810bd362ec2a9",
-        "c730386bbc58c382ff8a4d65f7d85be17b411b5f11042d8324a857ad2c426199",
-        "ea6b0e3a71d83f832c0f75f41bd9288292facb51ac7870ce253971c29cc90262",
-        "fb43f9117106ddde8c24a442c3cec4d120a242e1bf5fe2d6b1254ebbb6be85bd"
-      ],
-      "sources": [
-        "Punch Newspapers",
-        "Peoples Gazette Nigeria",
-        "Vanguard News"
-      ],
-      "related_articles": [
-        {
-          "title": "Troops Foil Terrorist Attack and Recover Arms in Sokoto",
-          "original_title": "Troops ‌⁠‍‍⁠⁠‌‍‌⁠‍‍‍‍‌foil terrorist attack, recover arms in Sokoto",
-          "original_language": "en",
-          "summary": "Security troops successfully foiled a terrorist attack and recovered weapons in Sokoto State, Nigeria.",
-          "published": "2026-09-06T21:54:42+00:00",
-          "source": "Peoples Gazette Nigeria",
-          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQYVczeGhFQ0d3WTVaUlpKMHdaT1hLRldOV1hHMkE5TGlFV0twSjE0SkJfZkNuUlhZWXI3STU1cHZKaVlBQ18wczJPU1JsWDRlYUllZlRhdU52QnFvUmRRc1hmcFo0RlZONVg2dC1ib2hWZkRIQ2NRTlJvVFFHLWxvYlRIemRGZTdSeXNMVWtIZVdTblpYdEV4ZFhKejJqYnkzbmF6OXFLTXFPcXhNVk5UVQ?oc=5"
-        },
-        {
-          "title": "Sokoto: Terrorists flee as troops overrun forest hideouts and seize weapons",
-          "original_title": "Sokoto: Terrorists flee as troops overrun forest hideouts, seize weapons",
-          "original_language": "en",
-          "summary": "Nigerian military troops overran terrorist forest hideouts in Sokoto, forcing militants to flee while seizing weapons and equipment.",
-          "published": "2026-09-07T06:41:01+00:00",
-          "source": "Vanguard News",
-          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPU3ZsWnZaRFlURFZCQ3JrLTZ3aXUwNWh0V2FrSk8zU25ZZmFOYklpdEFKOUlZNjRwVGZscXNrT1hUdG1wZTlWTzExRFVnbWhtSnZiSC1PRmo0WXNJWGRGWGp3U05MUjEzZ1pIZUlaY3RkSlF0YmZxY1oyeEdxOHEtdm5TSEVad0hfQXloTjBkYXp6VE9MUk9ReDh5MkdEbGVHOU1oMXJCQnR0MTjSAbABQVVfeXFMT09hcDlVZ3QwcVpTUG41Q1FsRm85U2toaFZaNlZxUV9LdlVWUzkzZFZCSWJGRThFQWVLOFVIdmI1QjhUal9lcWFkWXZ4SXhwQXp0ck0tbUQtUUJNa0pkY05xYWRpZk0wVzBjVHVDcnROZ0VEYUY0UFpHeHBOdVdYN0dpVGZWWnoxUmRLX2hzSmZSd3JWZ1hyLVFkeDdUNUxoaGtjdlNoRG1aWDJIWUpUNVE?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-09-06T09:06:33+00:00",
-      "last_reported": "2026-09-07T06:41:01+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Military forces conducted a successful raid on terrorist hideouts, seizing arms and clearing positions.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "military raid on terrorist hideouts and weapons recovery in Sokoto",
-      "title_variants": [
-        "military raid on terrorist hideouts and weapons recovery in Sokoto"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Sokoto"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Nigerian military forces raided terrorist hideouts in Sokoto state.",
-      "ai_geo_fingerprint": "3d5d3ca9039382322c986e0ed36422a5f912ebeb51c06b4f6a0c7cc8777fba33",
-      "ai_geo_inferred": false,
-      "dedup_confidence": 0.833,
-      "dedup_methods": [
-        "title_plus_anchor"
-      ],
-      "actor_group": "",
-      "incident_id": "inc-3f390f38c33bf194",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Sokoto hideouts military raid 2026-09-06",
-      "update_type": "INITIAL"
     },
     {
       "id": "56e9d22f467fd9f6",
@@ -313686,7 +313116,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-09-05T14:15:07+00:00",
       "source": "malijet.com",
-      "source_count": 6,
+      "source_count": 8,
       "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNcTYtWDhMVDlIdG0yOUs3M0dzVDRkOWtOUDlvWDI2MjFmWm9XQWFSTUsyM1BZeFdlQmFjTHg5bHRfbE9fOFU1STlDUDFKcHFPSEtaNUxqRDU2aGwyanBncjhmNUJ0dTBHNm1POGJyekY4c29QcVlzZ19FRFhOVnJPY3NQU2plTWZWZ2hHU0xKNENkWTBkamstVVRpQ1dFZ1VmUlFkRk94N3NiZUYtVHprU2lqU2l0S2stVmVaUllIRGE?oc=5",
       "collector": "Google News RSS",
       "country": "Mali",
@@ -313702,7 +313132,10 @@
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
         "200f8084ff7b79afbdde937c2386fb58eb893f0112be768859ecbfc91a84466d",
+        "39943c903c1fb918ca649bd5242e0c6d74ce26aa14b0097a9d68e8557e8f61e1",
+        "4777b5522842d359e13a4de54b01626be70360b0f7d131b66eb9ced3ac597b69",
         "87b587457b91fc65ad74cf944a54204994ba14dff16c226a7f2577d312159600",
+        "88be20f5a3dcfa7f2a5b3840727651ff2a1046ff97c3bdf600cd1a2405c6bd9b",
         "a2fe4183dacb053a551212e5f4b3e835d556ea903cb243217dd8a8b05388e198",
         "a3630934e65352bd380df18e728ea391b32376e63b09781fdcab28889e0e3394",
         "b663f05352b8647de78c7c09392689f0b2a48e0446c10dbe2983a7d295687594",
@@ -313714,7 +313147,9 @@
         "العين الإخبارية",
         "al-ain.com",
         "Maliweb",
-        "maliweb.net"
+        "maliweb.net",
+        "Mali Actu",
+        "الحرية نت"
       ],
       "related_articles": [
         {
@@ -313743,9 +313178,36 @@
           "published": "2026-09-08T10:24:00+00:00",
           "source": "Maliweb",
           "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxNV3R4S3Bld2JvN3B3Zk1Qbk1zVDJWUURFT21rN0kycGhGaVlDd2FsVndCUF83Uk1tZFVXLTVPX1lGeUZHVHZmLUMyREQxUmJORERrQlduR3N6Y3U5ZG5RZXp0bnV6UUNPSlJXbXZoNHNSbGxBZ1NCSmMxSXBQZ0ZqbHRPUVlWN3J6d283VDBnWDZfYmFUQVY0aVZqb3ZCYjduWlpSZkZ2bzBEaWVsZXFNdEFMUTEtMktNbTlTMHg2YkI1c0pnaVdEcWVnZFR1UFJGby02WHI5R25waHdhY3doVW1n?oc=5"
+        },
+        {
+          "title": "Malian reporting details counter-terrorism airstrikes destroying bases in the Sahel",
+          "original_title": "Destruction de bases de combattants et frappes contre les terroristes : les opérations au Sahel du 22 août au 4 septembre",
+          "original_language": "fr",
+          "summary": "Malian operations and airstrikes destroyed militant bases in the Sahel region between August 22 and September 4.",
+          "published": "2026-09-06T10:30:48+00:00",
+          "source": "Mali Actu",
+          "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxOazBzU2dMdXB0OHhFejRVYUJIRjY2N0QzbDlRYTcyR3VGN3ZFa1VoM0sxdURCbC1vQTN2enZxd0c5bzQtdkR4X3k4OVZmbElBX0pfaVVVbTMtYnR1SlluSzFTQnp3VHR4UHRISk5zY19JYjVfY2JZdUMwNmNJQUVLQ1NGODlZQktfNHlaOHh3RURlNXdZc0hiU2p3NldPYy1WSllnVGYxcGlJdG53VXViYzMzUXQ3TkZMckNMNVlSMG9qSXhqV2ZlVzhNUHk1Vzh5UGZJLWV2UlrSAeABQVVfeXFMTkdOOHIyUkhRTjIxU053c19mb2FFZmoxeXlHOWNsYXB1ZDBiazkteXZHcjRNNlNKWFQyVE11RG9qVGQ5cFF3NTduamRmYlZlLVZkNGlQTElVWjNzUVlzejVaX2d6NU5nV2FMeG1ZaFpLZGtWbXdzN0otX2pHSFlsWjRQaXMycE9lTEJISlZZR0lFQThFZExSdUJsdEFoQ1g3ZnBCcjBrT0t5NmJwR2lyT3NkaHRwRHJhZi11NzY2TEk5Z0pwek5JRndTMnlxaWQwVUFJNkZGTXptc3hLMG1mVE0?oc=5"
+        },
+        {
+          "title": "Malian airstrikes target armed militant groups in multiple regions",
+          "original_title": "ضربات جوية مالية تستهدف تجمعات مسلحة في مناطق عدة",
+          "original_language": "ar",
+          "summary": "The Malian military has conducted airstrikes targeting armed militant groups across several regions.",
+          "published": "2026-09-08T02:00:44+00:00",
+          "source": "الحرية نت",
+          "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTFA2YzJIWEtEMkxwVnZUNmZCVnhSTFNwZnpRdzRxZ2l2VFJtTDFjQVdlNGFkdXlnNTdlRW9yMVctdHgyNXYyX0ww?oc=5"
+        },
+        {
+          "title": "Military Operations in Mali: Several Terrorist Positions Targeted and Successfully Engaged",
+          "original_title": "Opérations militaires au Mali : Plusieurs positions terroristes ciblées et traitées avec succès",
+          "original_language": "fr",
+          "summary": "The Malian armed forces conducted successful airstrikes and operations targeting terrorist positions across multiple areas.",
+          "published": "2026-09-08T11:16:08+00:00",
+          "source": "Bamada.net",
+          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNWDkzZ2h3c2J3NnhhSDFIaUE4RVp0RUZrajljQV9QSmNuZVVvTmwzU1pUY2JibENvLUl5Z19OZkJsUjdJcTA3U25HUDB2Uk16bHlOMi05QVNONEFmTFU5aTRKdHA1c1FkUXZJa3lrUXlVVFk0TkFuY1RWRkdtZUNrc2g5NGFuMjhWQ192ZWtlRC1NNl82WnQ0aldrX2ZLaUJONV9UZ1F5dXRXYVE4akZwdVh3?oc=5"
         }
       ],
-      "article_count": 4,
+      "article_count": 7,
       "first_reported": "2026-09-05T14:15:07+00:00",
       "last_reported": "2026-09-08T10:24:00+00:00",
       "ai_selection_complete": true,
@@ -313764,7 +313226,8 @@
       "dedup_methods": [
         "paraphrase_entity_context",
         "title_plus_anchor",
-        "same_url"
+        "same_url",
+        "same_incident"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_region_coordinates",
@@ -313787,7 +313250,8 @@
       "is_attack": false,
       "incident_anchor": "Malian military strikes Douentza Bandiagara 2026",
       "update_type": "INITIAL",
-      "incident_id": "inc-e5bb89276e55a668"
+      "incident_id": "inc-e5bb89276e55a668",
+      "cbrn_subgroups": []
     },
     {
       "id": "a8d8076b9870bdd0",
@@ -315403,20 +314867,22 @@
       "category": "Counter Terrorism Action",
       "categories": [
         "Counter Terrorism Action",
-        "Arrests"
+        "Arrests",
+        "Weapons",
+        "Attacks"
       ],
-      "title": "Police rescue kidnap victims and foil terror attack in Borno",
-      "summary": "Nigerian police successfully rescued five kidnap victims and foiled a planned terrorist attack in Borno State.",
-      "original_title": "Police Rescue Five Kidnap Victims, Foil Terror Attack In Borno",
-      "original_summary": "Police Rescue Five Kidnap Victims, Foil Terror Attack In Borno TVC News",
+      "title": "Nigerian Troops Repel ISWAP Attack On Military Base In Borno",
+      "summary": "Nigerian military troops successfully repelled an ISWAP attack on a military base in Borno State, recovering weapons and neutralizing attackers.",
+      "original_title": "Nigerian Troops Repel ISWAP Attack On Military Base In Borno, One Soldier Injured",
+      "original_summary": "Nigerian Troops Repel ISWAP Attack On Military Base In Borno, One Soldier Injured Sahara Reporters",
       "original_language": "en",
       "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
       "published": "2026-09-05T08:11:00+00:00",
-      "source": "TVC News",
-      "source_count": 3,
-      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQTHZObkhyRmlNVjFSdl9RMFZDendTSk1kVDAwLWkwUmo4bjRjd1JveEQ5ZGVxOFdCQ2hsUXg4X0lWa2hkQmM1VlcyM1loek4wZTRJT0FyOThvTVR3d2dhZGFDbmVuWjVRS3pwRDI1Y0t4cVdoYk9sZkxLdEhIWlZ2V2RqZTJBOHVGNlJSOU5n?oc=5",
+      "source": "Sahara Reporters",
+      "source_count": 16,
+      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPdHRkMUFtWE81bkN3ZXF0ZGRUN0E3Y1N2QXB6NjFzUUV1RV9Gbmg3SmtERnBpR05ycEU3ZDl1a1ZXaGxtU1ZtWkdqV0VQdGFubGdrZjdBaGlJc2NZVl9lamhmb2R6cTFnY3c2QmZWLUZ1QUk2LUhCV2V1UFllTmhHZFhmRE81UzBhYlFKbVF3U2w5SnhvenVGRWJ0M2ZHSE9RUFVaTmdiRG1rZmJSWEdBMFdWYw?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
       "country_code": "NG",
@@ -315427,15 +314893,49 @@
       "location_precision": "region",
       "location_confidence": "high",
       "source_article_fingerprints": [
+        "07de9c1be8a9276d34930e60a94446ac96ccb2b393e77a2b651d54e909ca5db3",
+        "081bb22458e31e54fb475434262ef2312d724c774b0ecb6a132e1d967943b2e6",
+        "0a199de6a7e733cb4467978cc54ac5d11149c5cce496c7c79025a84cef870d44",
+        "1baeff9c1772d05e2f88f1cfb3cdb6a669457bbacb5555365b0ebf63264a17d2",
+        "33f0d2ef20d4d0780e5d61fab04bdfe1224f050cbafe9f85e8aa70a4b6631b26",
+        "4de4ba6ad6bdd0ec01934977c837e4d9612ef04330be96f5efc74899cb02d3c9",
+        "679a22e4e9f471c3cc82aa62700fdaba06b933d6acb8abc14a9aa21a1cc2c4fe",
+        "69f368b3f718c5e29d873dd32eae6e7e412ce97271dd7019121bf022686313cd",
+        "6e2a79b32e370a8c1d576bfde162ec3efde87d3e905d29cbf1dbac437390ea5a",
+        "73bdfa0113b94881b6737c3c29c85c2b37c3c598003594dc49984549bc4b5acf",
+        "7da64acf15f4ffecd4977fb8c3ad8d33f4486fb3fad89f21712e167b1d0f6347",
+        "83fbb5b94af5b5609c56487481e3b5228772ba8a1f04b317ee5b588be322e935",
         "877c32990f7207905eef5ed75483ca715c7c6caf2b375cc794d88e2d7e1f196a",
+        "96dd7d785b57fc81fac15870ee5f6e84ec6f30080d5fa2207e02443db6d71eec",
+        "9d2abd9b3bc83237ae4385fb8350c43104aa09aaed48ff572b21b3910aaea0d2",
+        "be9228adc7ae50e850da0f49a7945e3660a4b8ba9e33e80661d810bd362ec2a9",
+        "c2b56a5bb2ef7565b193cd6cea36280fbf1519c2021fb4b804a405599c10bf68",
+        "c730386bbc58c382ff8a4d65f7d85be17b411b5f11042d8324a857ad2c426199",
         "dbbaf9c0d2d08289aafa4f51acd49460159897a70e40dcb75e7a1af102700aa8",
         "deb9ba58bfaa872b701df785afd9eb887310b856e9496ba3a492bdf69c853271",
-        "e4690ef67cc733a59dd56e502dc584514e41dacccb3ad943dff89b7d2bece43f"
+        "e4690ef67cc733a59dd56e502dc584514e41dacccb3ad943dff89b7d2bece43f",
+        "ea6b0e3a71d83f832c0f75f41bd9288292facb51ac7870ce253971c29cc90262",
+        "fb43f9117106ddde8c24a442c3cec4d120a242e1bf5fe2d6b1254ebbb6be85bd",
+        "fd79dc9c434c3e58764fc138c12d962eea7d86594df2052eccf00228e36a2aa4",
+        "fe3ec1d3a11175edddacb9837a9357b1bc77ee1dc04fd301e9172648aed655b5"
       ],
       "sources": [
         "TVC News",
         "tvcnews.tv",
-        "Punch Newspapers"
+        "Punch Newspapers",
+        "Peoples Gazette Nigeria",
+        "Vanguard News",
+        "zagazola.org",
+        "TheCable",
+        "thefact.ng",
+        "The Trumpet Newspaper Nigeria",
+        "MarketForces Africa",
+        "Premium Times Nigeria",
+        "Daily Post Nigeria",
+        "nigerianeye.com",
+        "The Nation Newspaper",
+        "Sahara Reporters",
+        "UA.NEWS"
       ],
       "related_articles": [
         {
@@ -315446,20 +314946,92 @@
           "published": "2026-09-12T00:21:02+00:00",
           "source": "Punch Newspapers",
           "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5zUnQ2SXg1WWdBMnAwb3NIMTNySDRkRXZxa0VzU3FQc1drTjMyZmlkVU1jWlZfVkxZU3VoYThDUnpSbzNFQUpRSl9kVXpzU2tyWlpVdVFiS2ZKRmlVeThwcFVmcnMyZEdDLXE3YlNJTzJ4VW1QcEx2dVFfYmFFQ0E?oc=5"
+        },
+        {
+          "title": "Soldiers raid terrorist hideouts in Sokoto, recover weapons",
+          "original_title": "Soldiers raid terrorist hideouts in Sokoto, recover weapons",
+          "original_language": "en",
+          "summary": "Nigerian military forces raided terrorist forest hideouts in Sokoto state, clearing insurgent positions and recovering weapons.",
+          "published": "2026-09-06T09:06:33+00:00",
+          "source": "Punch Newspapers",
+          "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPYlBReHdCeDl6WE53bXRYZkxwV0djM2tlZUdWMzJVYUtIbUJnWmk5YXh5VWRwNk1GTEU0c2lkd0tRTnJqWC11cXhmX1pENUowaEJaOHU5cFBIdmFxOHdweGN6V2ZXaHNCVHY4eXZYVUVhbjFwcjFnY2ZvbFZCaUdVMDJiV2IyQQ?oc=5"
+        },
+        {
+          "title": "Troops Foil Terrorist Attack and Recover Arms in Sokoto",
+          "original_title": "Troops ‌⁠‍‍⁠⁠‌‍‌⁠‍‍‍‍‌foil terrorist attack, recover arms in Sokoto",
+          "original_language": "en",
+          "summary": "Security troops successfully foiled a terrorist attack and recovered weapons in Sokoto State, Nigeria.",
+          "published": "2026-09-06T21:54:42+00:00",
+          "source": "Peoples Gazette Nigeria",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQYVczeGhFQ0d3WTVaUlpKMHdaT1hLRldOV1hHMkE5TGlFV0twSjE0SkJfZkNuUlhZWXI3STU1cHZKaVlBQ18wczJPU1JsWDRlYUllZlRhdU52QnFvUmRRc1hmcFo0RlZONVg2dC1ib2hWZkRIQ2NRTlJvVFFHLWxvYlRIemRGZTdSeXNMVWtIZVdTblpYdEV4ZFhKejJqYnkzbmF6OXFLTXFPcXhNVk5UVQ?oc=5"
+        },
+        {
+          "title": "Sokoto: Terrorists flee as troops overrun forest hideouts and seize weapons",
+          "original_title": "Sokoto: Terrorists flee as troops overrun forest hideouts, seize weapons",
+          "original_language": "en",
+          "summary": "Nigerian military troops overran terrorist forest hideouts in Sokoto, forcing militants to flee while seizing weapons and equipment.",
+          "published": "2026-09-07T06:41:01+00:00",
+          "source": "Vanguard News",
+          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPU3ZsWnZaRFlURFZCQ3JrLTZ3aXUwNWh0V2FrSk8zU25ZZmFOYklpdEFKOUlZNjRwVGZscXNrT1hUdG1wZTlWTzExRFVnbWhtSnZiSC1PRmo0WXNJWGRGWGp3U05MUjEzZ1pIZUlaY3RkSlF0YmZxY1oyeEdxOHEtdm5TSEVad0hfQXloTjBkYXp6VE9MUk9ReDh5MkdEbGVHOU1oMXJCQnR0MTjSAbABQVVfeXFMT09hcDlVZ3QwcVpTUG41Q1FsRm85U2toaFZaNlZxUV9LdlVWUzkzZFZCSWJGRThFQWVLOFVIdmI1QjhUal9lcWFkWXZ4SXhwQXp0ck0tbUQtUUJNa0pkY05xYWRpZk0wVzBjVHVDcnROZ0VEYUY0UFpHeHBOdVdYN0dpVGZWWnoxUmRLX2hzSmZSd3JWZ1hyLVFkeDdUNUxoaGtjdlNoRG1aWDJIWUpUNVE?oc=5"
+        },
+        {
+          "title": "Troops repel terrorist attacks on military base and village in Sokoto",
+          "original_title": "Troops repel terrorist attacks on military base, village in Sokoto",
+          "original_language": "en",
+          "summary": "Nigerian troops successfully repelled coordinated terrorist attacks targeting a military base and a local village in Sokoto State.",
+          "published": "2026-09-08T07:05:00+00:00",
+          "source": "TheCable",
+          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNcFVFSWo5c29ha2VNc2xpdk9XTWV0cUU3a0lSNnV2ZTBXaDlZUzZ6X3o5NmZmdkRtTC1jN21TQWlTc0dhWE5HMFROTnR6bEhFNnVrd1pIdU44eTdFVkVHYmFZTEN0akhVMk01OTBFZzU5UHdNTFZ0TXRTbXY0c1lCYlk5XzRLcnRjZjluNVVvMjd1WnNX?oc=5"
+        },
+        {
+          "title": "Troops Repel ISWAP Attack on Military Base in Pulka, Borno State",
+          "original_title": "Troops stand firm, repel ISWAP attack on Pulka in Borno",
+          "original_language": "en",
+          "summary": "Nigerian military forces successfully repelled an ISWAP terrorist attack on a military position in Pulka, Borno State.",
+          "published": "2026-09-08T08:42:14+00:00",
+          "source": "zagazola.org",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxObmtITkpkZnNTaFBkR2tVV2gxRUMySmlzU2ZPTFNhODNwWWVUUEhMZFFOWGpmM1BoZFQ0LXI3NXBIeTVhNnJMYlVLZmFKWUM0TWVFVTRXWDFqSk1rd3lYdkxPWW1wZ3lna2NUaVRYMFI4eFlmMEJPSVphemtCcURZc3ltN3Zvd082MnJmWkZwLXZmNFhEMXNsWVp4djZrUFpm?oc=5"
+        },
+        {
+          "title": "Soldiers foil terror attack in Borno, recover weapons — Official",
+          "original_title": "Soldiers foil terror attack in Borno, recover weapons — Official",
+          "original_language": "en",
+          "summary": "Nigerian soldiers successfully foiled a terrorist attack in Borno State and recovered weapons from the suspects.",
+          "published": "2026-09-08T09:55:38+00:00",
+          "source": "Premium Times Nigeria",
+          "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQWnNld3NnQ0FqcWNodkNtaTlCNEJSeUxLeXdrVTlzNjJMdkRrV1NESFJxZktzRUpRSzVHd3NYZE5FRk1TbUl6dkRPX0xPblBpeEg1bW43UV9Kd0pYY3haandLMnl2U2JKZjlGV1ZtMXJVdXdIU3dmRXc2VnJPeXhxVEI3TmJ6MGFQOHdVckZqRFl3M1A3dzZrZ1A5QXhLMTlqR3FLVS1STVI1TzlUX2h4MElrUndnbl9NUmc?oc=5"
+        },
+        {
+          "title": "Troops foil terrorist IED attack along Mairari–Gajiram road in Borno",
+          "original_title": "Troops foil terrorist IED attack along Mairari–Gajiram road in Borno",
+          "original_language": "en",
+          "summary": "Nigerian troops successfully foiled an IED attack planted by terrorists along the Mairari-Gajiram road in Borno State.",
+          "published": "2026-09-08T05:04:47+00:00",
+          "source": "zagazola.org",
+          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOTUFTTUY4blBQeW1xbl85bW1MalBEd1Rzb29MTFlsa1ZVZ3lxbmJlaDl5VzBETG15b0ZoRjRlR3hSZkhRMVE1YVNPV0RhS3JZMUx5WTd3Szc5NjJhY3FVeGhIQzV1eWNOZWIxY0hOcnpkVkdZUHNVOVBScURfNGY0aVFhT3dpMWZCcWQ5dUd1eDRta2gweHJMUGtsa0d5SXNrNGREZ05yRHVHRHlKZU90TzhVMA?oc=5"
+        },
+        {
+          "title": "Police rescue kidnap victims and foil terror attack in Borno",
+          "original_title": "Police Rescue Five Kidnap Victims, Foil Terror Attack In Borno",
+          "original_language": "en",
+          "summary": "Nigerian police successfully rescued five kidnap victims and foiled a planned terrorist attack in Borno State.",
+          "published": "2026-09-05T08:11:00+00:00",
+          "source": "TVC News",
+          "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQTHZObkhyRmlNVjFSdl9RMFZDendTSk1kVDAwLWkwUmo4bjRjd1JveEQ5ZGVxOFdCQ2hsUXg4X0lWa2hkQmM1VlcyM1loek4wZTRJT0FyOThvTVR3d2dhZGFDbmVuWjVRS3pwRDI1Y0t4cVdoYk9sZkxLdEhIWlZ2V2RqZTJBOHVGNlJSOU5n?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 10,
       "first_reported": "2026-09-05T08:11:00+00:00",
       "last_reported": "2026-09-12T00:21:02+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Concrete counter-terrorism operation foiling an attack and rescuing hostages.",
       "ai_current_ct_event": true,
       "ai_selected": true,
       "translated_to_english": false,
-      "ai_canonical_event": "Police rescue kidnap victims and foil terrorist attack in Borno State",
+      "ai_canonical_event": "Nigerian troops repel ISWAP attack on military base in Borno State",
       "title_variants": [
         "Police foil terror attack and rescue kidnap victims in Borno",
         "Police rescue kidnap victims and foil terrorist attack in Borno State"
@@ -315483,14 +315055,16 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_url",
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "same_incident"
       ],
-      "actor_group": "",
+      "actor_group": "ISWAP",
       "incident_id": "inc-99cd1927b748ae29",
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
       "incident_anchor": "Borno police rescue and foil attack 2026-09-05",
-      "update_type": "INITIAL"
+      "update_type": "INITIAL",
+      "cbrn_subgroups": []
     },
     {
       "id": "dd9c15fd37c6c67c",
@@ -315585,7 +315159,7 @@
       "collection_locale": "NG:en",
       "published": "2026-09-05T07:00:00+00:00",
       "source": "Goobjoog English",
-      "source_count": 2,
+      "source_count": 9,
       "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOQnlfZ0J3VU93QWYwSEdjQW44dG5LSmZjdVhac29OOEhEN3pSb01zTkUxN1BfTGg1R1hvc3dWV2t0YWtYZDhuTldUY3ZZYl91T2ZHLWU4UTlwbFh5c3hfcEhVV0xIOWIyVTVLTkl4Wm0td3loYzVDcnNwVXUtTUdDUEM3ZTZGVlpPUHc?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -315600,12 +315174,27 @@
       "targeted_source": "goobjoog.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
+        "1b6196fc64bc3963c2b79d69f375e51b51b95e40dffd4e8fe6730f8ab3993d32",
         "217ddc0b61e15327acbda44598eb9d2c512a739b264d286894e77eecb5c33582",
-        "8b8777b1d23e306f321dc6f5b4ce6c3ac6f359637c212df0ca028732e778e06d"
+        "3514f43c8cbe63bafaf83bf231275e81a3e3baf519678a6ea913b10f3cd45259",
+        "3d5b9c055f67fcf8bbc89d36de0582a7b082c55d78f6f4f584c805b65babdc52",
+        "8b8777b1d23e306f321dc6f5b4ce6c3ac6f359637c212df0ca028732e778e06d",
+        "93b328856be881b646f1768c971a320728865a4949007acc3924f740a74b9df7",
+        "c19e2d477efa02fc90582df17afee625a531f69d896c7372f2b7f1302ed75b93",
+        "c1e6e21a945596aa3c573721306aae94b3e487269c4afb4eb01b37b087675bac",
+        "d1d9ad471028a62ca6b14314f9a19138fcaeabd42141db396248e73eb49cb54e",
+        "d547a3c752d16bcf04a2b6afe23c3e47ed21e05333c4c345a53753f2a0ec127a"
       ],
       "sources": [
         "Goobjoog English",
-        "Goobjoog"
+        "Goobjoog",
+        "AL24 News",
+        "Agenzia Fides",
+        "المنشر الإخباري",
+        "Qatar news agency",
+        "مرسال قطر",
+        "خليجيون",
+        "برس بي"
       ],
       "related_articles": [
         {
@@ -315616,11 +315205,74 @@
           "published": "2026-09-06T12:16:57+00:00",
           "source": "Goobjoog",
           "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNQTVhOXJ3ck5KNUlZMTc4a2I0aFZ6c1VGOV9wdEduSHlVOTlNNTdxeFdMTUgxSUlqY1NQbGZfTHF0SElRUC11WXFVQ2RBaWNzcEo4dksyenBDczI5VEVlbExLY2c5aFFpamdCejFqRWItQzZUM3NBNTR1NURfMjdIRnBjbzdnNWZZZjVYbkdCa3dEX0sxanF1TTAzajloVEhZTUw3S29BbVA1cy1fN3c5UUFvaUtVNE1feDBYRjY5RTU5QTJlU3p1WHJ3?oc=5"
+        },
+        {
+          "title": "Fourteen Terrorists Neutralized in Southern Somalia",
+          "original_title": "Somalie: 14 terroristes neutralisés dans le sud du pays",
+          "original_language": "fr",
+          "summary": "Security forces successfully neutralized 14 terrorists during operations in southern Somalia.",
+          "published": "2026-09-06T12:41:54+00:00",
+          "source": "AL24 News",
+          "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQR1psWXZrbzNLSjVxTDlHaGZGWFBDVEJRNXN1Q3k4WW5Xb19RQnpGTmhWM0NZdV8zU01Md0hfWjJQdUtIMVA1MUdMVzhCY1R0YWZKZVcxOUMzOGV5VF80V25weThvZUQ3c19ERjM0dDAzc3F2akZJcDZiUzA5bTNXYU9OV20?oc=5"
+        },
+        {
+          "title": "Somalia between security transition and terrorism",
+          "original_title": "Somalia between security transition and terrorism",
+          "original_language": "en",
+          "summary": "An analysis of ongoing security transitions, international mission handovers, and the persistent terrorist threat posed by Al-Shabaab in Somalia.",
+          "published": "2026-09-06T14:47:37+00:00",
+          "source": "Agenzia Fides",
+          "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQT0o0djB5TTMyQUhEWklycHlhNmg5WkJkQ1R3eWxDYm5WUkJSejN5WlFBaUlQZEZaeS02NXRoSUtNbnY2Q1JQV0VjOEJZTE1zNFl6NlZIdXVOb2hDUXpkcVlkS0twWDRMWGV1MzY4TjFYejhDVnE1YjRtUThHOC1lQnhsMWkxekZ2M1BvTEVB?oc=5"
+        },
+        {
+          "title": "Al-Shabaab takes control of new areas in central Somalia",
+          "original_title": "حركة الشباب تسيطر على مناطق جديدة وسط الصومال",
+          "original_language": "ar",
+          "summary": "The militant group al-Shabaab has advanced and seized control of new areas in central Somalia.",
+          "published": "2026-09-06T18:27:45+00:00",
+          "source": "المنشر الإخباري",
+          "url": "https://news.google.com/rss/articles/CBMi0wJBVV95cUxOREJqMldScnBBVW82WU5sWHdFRkFKYmdoYklpQXpjcGp0ZjRkbGJEbE5wY25KOTJDaWVybDIwLXc2Rkk2XzJ2Tzk3WnNVOHJXbTEzc3ZOb3FXZUM4T0pkSFJ1X2pKNFhTaEUySElQY2g5RkFRVHVLVmxFdXZmemlBbTYyWV8zSnFJeWRoU01yVVdfam1od2JseGJSMi1IRVJDMXY2MnFGQWwxLUVYUnpPVmlweVlFam93T2JXUC1XYWtyd3Vla0dxb2lBUm1jMW1BcmVTaDdIVFpUdXM2RUIxVmZwdEZYa0d0NElCMFk2LXhYMGlTWi1JbkpycHA1N1lHNU1GZWZJVFJnMURrUEIwZlVncUpTN1dQOV9rbjg2ZC1mZEY4LTZ4c2ZxR1BRMnBqajdhTkxkbW5qcXE0V1dmVzZmYWRkb0hQNHVDQzhLMUFiaEE?oc=5"
+        },
+        {
+          "title": "Somali army announces killing of several Al-Shabaab members in security operation",
+          "original_title": "الجيش الصومالي يعلن مقتل مجموعة من عناصر حركة الشباب في عملية أمنية",
+          "original_language": "ar",
+          "summary": "The Somali National Army announced the killing of a group of Al-Shabaab members during a security operation.",
+          "published": "2026-09-07T16:41:04+00:00",
+          "source": "Qatar news agency",
+          "url": "https://news.google.com/rss/articles/CBMirARBVV95cUxQOXpkZ3RBZzhPckcxRkVxMlRISGV4TlE3YUhNRU9GbTNsZnppY21YVGtBcmdaeDE2ZG5uRFFnSWtFaU1kcjY4Vjl1bk9VQ3lsalplazc5TlNLVi02VFYxb19QQ2tCWG9fclcxU1c0WFhjMU52NktzeDlEa1l6Qll5VEIzc1dLcjZoWFhCZ3c1NTlKRjZoNnd0TmlEU0JINGlFOUtKcDRwS1Zzc1JWWkYyVTkzdzJaVzc1M0lTcEhYR3FkMzBFRWtwZ0NudUE2eGpDYm9sV1N6c3lDMU9jVjA0dzg4WERWXzFheUYzTWZDdEsyZnRRcXktcTdQbWNmQnRvb29mRWJ5bnp4Y3hWMzdYZ2FhNzV5dTNwOTFQcDNTZ3dQVnkxZzlIOWd0WlF1R3V0YUU1MzVRQndEY3hzV21ubHZIM2tvdXNzRWlzbl81Y2tvTUV2dXYtOHZTemo5Vl9lTFk4VVVlam16UWdpQUI1dHpRNmg1bzFOX0lYVUtRY3FXSnptMmh6UDFyWWwxQ1g4X3czUWRoMjdTQVlaTFk4MThGWE5TS2V6S0RTbTlFUmktVmluejJBak13Q2I5ZzQ1WmdFOXJuZjNvTXRKWWxTNHZvSlpjZE1QSndIanRqLWJ4UXNTYTFudlNscnZFTGVoSUo2SEM1ZzV6TW9EVUxPaXlHeTR1MUxPRF9vMC1JUHZGR3VIdmZCaExtOFNfajF0eUFyNTBaMWNkTTk3?oc=5"
+        },
+        {
+          "title": "Somali army announces killing of Al-Shabaab members in security operation",
+          "original_title": "الجيش الصومالي يعلن مقتل مجموعة من عناصر حركة الشباب في عملية أمنية",
+          "original_language": "ar",
+          "summary": "The Somali army announced the killing of several members of the Al-Shabaab movement during a security operation.",
+          "published": "2026-09-07T18:00:00+00:00",
+          "source": "مرسال قطر",
+          "url": "https://news.google.com/rss/articles/CBMinwJBVV95cUxNVFBma2lOZ2xpYWxNX3gza1Y2OEw1ZG9hcHNvZG1xc1RWZTlOX0JmVDBUYkR4Zk9FZ2JzMzktWks2SHJYTnpBMzdvVE5vMXJyVGVlNlF0MzV5Z0JnMGtlZlRxZ1hJMV9nb2V2U09xc2NyeHdnYjdtZTh3RWxDWHdXMkh1X3B3U0lHcEtWSDY1WFhaMVVoXzl5TUZwVmx1OWQ4OXVRVnpRV21WS29GR1pYTHBKOEJwNHhZNXIxZXQ3TFdpaGNpWjVHczdEU005emxwUzV0dlNCeGJuTVhVRnVkYl82d1BCUUhIT0xZQlVJQVo2TTVsVkFSYlRZOHgwZnBFMXZaZEhRUi1jSFZmVmIxQkJVMWp1bmNicWpWUlBTdw?oc=5"
+        },
+        {
+          "title": "Somali Army announces killing of Al-Shabaab elements in security operation",
+          "original_title": "الجيش الصومالي يعلن مقتل مجموعة من عناصر حركة الشباب في عملية أمنية",
+          "original_language": "ar",
+          "summary": "The Somali National Army announced the killing of several Al-Shabaab members during a security operation.",
+          "published": "2026-09-07T19:04:48+00:00",
+          "source": "خليجيون",
+          "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE40c0toeUwzNmxCZ1AtNWxYbHdNbFFxRm5TZlRCUFFNM1R5aUZQOWk4YURVMzBBRFJzS0NuTERsZ0w4M0xnS2QzbU13?oc=5"
+        },
+        {
+          "title": "Somali Army announces killing of Al-Shabaab elements in security operation",
+          "original_title": "الجيش الصومالي يعلن مقتل مجموعة من عناصر حركة الشباب في عملية أمنية",
+          "original_language": "ar",
+          "summary": "The Somali National Army announced that a group of Al-Shabaab militants were killed during a security operation.",
+          "published": "2026-09-07T19:12:08+00:00",
+          "source": "برس بي",
+          "url": "https://news.google.com/rss/articles/CBMioARBVV95cUxONkFTMEo4OEtxeUZqNUVTcko1YUtKdmpTVHdsWWNlRUYwZ1NSQklMRkhPRmFzOG5LbktPbnpseElhamlLWEdVSTFTeWtxVEl5X0JxOUZ1TFJRdjNObG1iNTZCQlJ0TGZDeTR3YUVUc1hfZFZrUmdfQjF5YXFtR0VwOVFJVEdaYnV3Mlc5anB5cTR1M3dTZW5TYmRNdDBEaTRmWEhjYlFNTDN4c2tEVnc5UlNyVS1QQWpmYU9aVmhrMXV5NUJ2VmlCRGFmcFc2TjVfSVMtVXFqR25PaVBwMmQ5eEQ4Yjd0TmR6M0tnZ1poYXNRSllqalRCZU1qQ2c4VDdNekcyMlNnOUdaV3V6ak8zVkFCanBHY1p6QUpuaV9wLWhINTc3UFItUjdjQ3JaUVlNRHZMSld5Y2Z5YzI4Zk1WSlktd1FnTVpKVXpMNjh1U1MwSTJoaTFacEp6aHRmYVZWTEpHMzI4SVM1ZUpfT2JBR25sQS0yeTQxWS1pZTJOQW0tbm5zc2oyZWlkUmkyQzZDcGE5MllqbVBRenBWbU1xMzJkWVQ0S2pOYS1FSG1XbFdpZTBQbmdSZ1BPbkVuenpQQmszdXYyaXlXVlkxSkZ5ZW50NHlQS2Uxc0pSSDFQcU53X2ZDMVNpVkFhVzZYazJ1bV9QY0U2WUJ4UHJyLUxqUVlTTWF5U3NUYm5HZldEY1J4ZDNSbEFENWJlYzY3VlpW0gFeQVVfeXFMTUtRbkl0d3BIWHF5c2QxYmJHT2t0OWlTa2g5bU8xeHNVclRyZ0NubXVTZWRUU2ZwWWxKTUVHZDRVdW1xZFd4bTZKcllJS1JDeHZpS3ZKNU5hRTdQMjVvQQ?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 9,
       "first_reported": "2026-09-05T07:00:00+00:00",
-      "last_reported": "2026-09-06T12:16:57+00:00",
+      "last_reported": "2026-09-06T12:41:54+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.1-flash-lite",
@@ -315658,9 +315310,10 @@
       "ai_geo_reason": "Somali Danab forces conducted an operation killing 14 Al-Shabaab fighters in the Bay region of Somalia.",
       "ai_geo_fingerprint": "82cc80796cb6bb8b44f008a5d4782f9cb4fef4d7559932d3cb0d2e74fccfa815",
       "ai_geo_inferred": false,
-      "dedup_confidence": 0.767,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "same_incident"
       ]
     },
     {
