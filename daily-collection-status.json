@@ -3,7 +3,7 @@
   "status": "partial",
   "run_started_at": "2026-10-17T18:28:59.515885+00:00",
   "last_attempt_at": "2026-10-17T18:28:59.515885+00:00",
-  "published_at": "2026-10-17T19:18:18.454157+00:00",
+  "published_at": "2026-10-17T19:21:59.336301+00:00",
   "recent": {
     "candidates": 3314,
     "reviewed": 3314,
@@ -129,7 +129,7 @@
       "stop_code": "http_503"
     }
   ],
-  "finalized_at": "2026-10-17T19:20:30.249655+00:00",
+  "finalized_at": "2026-10-17T19:28:04.192933+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success"
 }
