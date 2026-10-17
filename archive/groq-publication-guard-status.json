@@ -1,16 +1,16 @@
 {
   "version": 1,
-  "updated_at": "2026-10-17T16:03:37.390859+00:00",
-  "run_id": "39047278288",
+  "updated_at": "2026-10-17T19:26:56.208533+00:00",
+  "run_id": "39059885785",
   "publication_ready": true,
   "publication_confirmed": false,
   "reason": "validated_working_copy",
   "baseline_snapshot_used": true,
-  "baseline_sha256": "2523cd94acb0ae29878af854b9a2b2b3991ec0c2bd6f24e09c9090d84bd19b2d",
-  "final_map_sha256": "42dab1c8a119097186a3e59dae204a231f02d212796b1f337571b8ab9cf92cd6",
-  "working_copy_sha256": "42dab1c8a119097186a3e59dae204a231f02d212796b1f337571b8ab9cf92cd6",
+  "baseline_sha256": "a359fe2b5ebd4867325690595fac252f77a7505f0375596bdf4568bb73731a6c",
+  "final_map_sha256": "495b07fc9f51feb7b85c904bd7b04a512b646479f1a3f1d2b62be2d06ef49f50",
+  "working_copy_sha256": "495b07fc9f51feb7b85c904bd7b04a512b646479f1a3f1d2b62be2d06ef49f50",
   "recovery_copy_saved": false,
-  "records": 3937,
+  "records": 3988,
   "new_validated_records": 0,
   "note": "Validation and record IDs are not proof of deployed unique real-world incidents."
 }
