@@ -3,8 +3,39 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-17T12:17:48.941589+00:00",
+ "updated_at": "2026-10-17T18:39:47.952193+00:00",
  "articles": [
+  {
+   "id": "radnuc-background-d8d2484a54f257b3",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPeXl6TUxyLVVOUEZuMWx1OTJKMWhoNFhyb1lZUkFDd2ZTbnBISEVmNVcyVjBoaU1KbVJFeEtxSEhyeVF2bTVSbU9oMFpxd2VvaGxVaGQtU3JKdzJTcHFHeTZyM3kwNFExQXNPOFBiMTJ2Zk5DWVVHbG1tN2FQZzhxTl9iS0tONVZXYUIxVw?oc=5",
+   "title": "Desktop nuclear fusion reactor being developed",
+   "summary": "Development is underway for a desktop-scale nuclear fusion reactor. This report represents a technological development in the field of nuclear fusion.",
+   "original_title": "Masaüstü nükleer füzyon reaktörü geliştiriliyor",
+   "original_language": "tr",
+   "source": "DonanımHaber",
+   "published": "2026-10-17T17:30:00+00:00",
+   "collected_at": "2026-10-17T18:39:47.952193+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Matches the 'science_and_technology' topic."
+  },
   {
    "id": "radnuc-background-d21fbcfd3f5ce012",
    "kind": "radnuc_background",
@@ -221,6 +252,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Decommissioning activity at a civilian nuclear site."
+  },
+  {
+   "id": "radnuc-background-9fcaf98781570dd7",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMilwJBVV95cUxOdkdiM1FjV2dDQVNEQ2xlSkgxVy1ybGpnMVZoZDdGU1BUMm5CSWQxWTMzZnM5WjgwbUttck5xVjJxUHYwQkN5Ri1BWjFQMkNvY1hzbGtNTWd6MGNvOFFCZjVXOG5PeWRLQnR6aHB2WFhKZFVPY0RhZmtpNjVGeVVaYldPcVUxYzYydWxwUzBKWWRJNWdtWTdMZHV0VVFTZy1WMWxMUXRNYVhjNkFMS3M5bHlRUkRiVXlOd3VqUTZFWFJrZHJFRFByMC1LczNEdi0tSW45UmhteGxWZUpJTl9mbUNZUUVVWnRzM3VqQmVMUXVYbkJKYzl1VEswb29GZHJ4QXdYbHlZVUhXeHJ2cDdyOHBEbHdzY2_SAZwCQVVfeXFMTU8yMjd3MlNILVRhcDcwOFRMOHQzRXlzLWRmUV9rUkNJLTRUZ2xkTldFMV9OcjFSTzd0NVNVVEx5U180azVUOFE0MkpYeTFRdkYyRDZuRXBDOHVUQVMtT21HZldYVmpqNDU5TzdXaHhkRjVzVXdudG1ZcmQyTm90dWdWbzRTY3V1QXFvVUlhbHlpNXp1T2lfM3psZTRBclpfSU1zRVlIZHRxd3lMUEdac3V4N3dxWktwbXN4aVdua0pwelhsTkxONDVVbjdtVngxS3VfaUxyWGgzMlZsalcxX1FrWUFwX0prZnB1T05EU2NGcWdTNWQ1T2Q1b1JGdEt5RTFaUFMxTHk1TW9IbmxMY2pidUM1NXA1Q2t3NXY?oc=5",
+   "title": "Fact Check: Farmers, women, and children took to the streets in Nabarangpur, Odisha, against a nuclear plant; what is the truth?",
+   "summary": "This report addresses local opposition and public protests concerning the siting of a civilian nuclear facility. The report notes current efforts to verify the details of the reported demonstration.",
+   "original_title": "Fact Check: ओडिशा नवरंगपुर में किसान, महिलाएं और बच्चे परमाणु प्लांट के विरोध में सड़क पर उतरे, क्या है सच्चाई?",
+   "original_language": "hi",
+   "source": "Panchjanya",
+   "published": "2026-10-17T08:56:00+00:00",
+   "collected_at": "2026-10-17T18:39:47.952193+00:00",
+   "background_topics": [
+    "civilian_facility_protests"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Included as a civilian facility protest topic."
   },
   {
    "id": "radnuc-background-8179cc3d22d89616",
@@ -690,6 +752,37 @@
    "ai_relevance_reason": "RadNuc background only: Matches background topics for civilian nuclear industry development and AI applications."
   },
   {
+   "id": "radnuc-background-cc1caaeb9f650a62",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQTVlRU2phMnVXX1dQaFRuYzl1dV9SVC1nVUVVSmlPRjBUREo4QU9XTlBQNTUtSnBjU2g4cWR1Vmh6REhxWHlPaEota040eGJSNzFlWHFHOWJwdGlrbUoyWXRkVlk5UG9oSlVmY1hmQU13Z3JvV3BQZjJGUVgydnhoYVhhRFVPeERWbzE5OUlNclJqYXZBY1lwaU9VZWt5UQ?oc=5",
+   "title": "Agreement to power data centers between Ansaldo and the Japanese company Hitachi",
+   "summary": "Ansaldo and Hitachi have reached an agreement regarding the supply of technology to power data centers. The collaboration involves the nuclear/energy supply chain sector.",
+   "original_title": "Accordo per alimentare i data center tra Ansaldo e i giapponesi di Hitachi",
+   "original_language": "it",
+   "source": "il manifesto",
+   "published": "2026-10-16T22:23:27+00:00",
+   "collected_at": "2026-10-17T18:39:47.952193+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Covers civilian industry supply chain development."
+  },
+  {
    "id": "radnuc-background-1580451533269444",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -719,6 +812,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This pertains to the regulatory processes and legal framework governing a national nuclear regulator."
+  },
+  {
+   "id": "radnuc-background-2d86f56fa80672fe",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPbHpLYkEwR1F3V1ZtT193YnpQOWRIa3hQck5JVXY4TXJFeFF1Wlp1OUluSTZiSzZpNU1UcTh2U3JKaVpGMzlGWC1RYVhYNEV3NFJyU2NvaEl0WTlmZUhSMUtuMlJqWXctTTBnTFpFdGRLTlVOb2lYQ0k1S3BPMnlFLXRpV3o2ZUwtSUlYUG5Rdks3QQ?oc=5",
+   "title": "ITER receives the last component of the plasma chamber built in Italy: progress towards nuclear fusion",
+   "summary": "The final component of the plasma chamber for the ITER project has been delivered. This development marks a milestone in fusion energy research.",
+   "original_title": "ITER riceve l’ultimo componente della camera al plasma costruito in Italia: progresso verso la fusione nucleare",
+   "original_language": "it",
+   "source": "Greenstyle.it",
+   "published": "2026-10-16T21:53:17+00:00",
+   "collected_at": "2026-10-17T18:39:47.952193+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Covers nuclear science and technology progress."
   },
   {
    "id": "radnuc-background-08422604b30921b1",
@@ -998,6 +1122,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This report covers a scientific breakthrough in nuclear technology with potential implications for high-precision measurement."
+  },
+  {
+   "id": "radnuc-background-69e151abaf7b9ec0",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNYjlxWjFfQ0VzdG9JY3l1cjhpOE00Q01NaGxfVm5FQUtkdzNIOFJiakduaFE2Wk54U3NsQ0o5M0ZSSElBMHFsWnlPbW1kd1lrMzJ3bzVzVXhHVC05cjVzdS1IYl84VXZlR0hDLXU3akt2VlNuTXl5cTZIa2hnLVBtcElQdDd4VEV6amlTRnFhVjFmeTZMek5teEJDbF_SAZwBQVVfeXFMTWI5cVoxX0NFc3RvSWN5dXI4aThNNENNTWhsX1ZuRUFLZHczSDhSYmpHbmhRNlpOeFNzbENKOTNGUkhJQTBxbFp5T21tZHdZazMyd281c1V4R1QtOXI1c3UtSGJfOFV2ZUdIQy11N2pLdlZTbk15eXE2SGtoZy1QbXBJUHQ3eFRFemppU0ZxYVYxZnk2THpObXhCQ2xf?oc=5",
+   "title": "322 engineers began their duties in Turkey's nuclear move",
+   "summary": "A group of 322 engineers has commenced duties to support Turkey's developing nuclear energy sector. This deployment represents a workforce expansion for civilian nuclear operations.",
+   "original_title": "Türkiye’nin nükleer hamlesinde 322 mühendis göreve başladı",
+   "original_language": "tr",
+   "source": "enpolitik.com",
+   "published": "2026-10-16T17:22:41+00:00",
+   "collected_at": "2026-10-17T18:39:47.952193+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Accepted: Relates to civilian industry workforce and operational capacity."
   },
   {
    "id": "radnuc-background-3b988e4e5258682e",
@@ -1375,6 +1530,37 @@
    "ai_relevance_reason": "RadNuc background only: Documents a significant technological and engineering advancement in a civilian experimental nuclear facility."
   },
   {
+   "id": "radnuc-background-4dca362121eb3175",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPWDgza0xfLVRVSmZVV0NjVXM5MmxTN2YyS2s2UGNtdmFwVkxsTVh0LVFVbkZtTUJtVDA0cFBTRWhCbHdzNUI0UnpFbXlfbTFUN3pRVXpRTzZINVk1ZC1ma3BIOE9PYklGNl9WbnFhYmZVSGQ5dnVWemx6UXFLWXo5YkV0OVFRc2ktNEJLTVZTdENUMWF5d080U0luc2pGbVBIQzZsN2pNdw?oc=5",
+   "title": "Urenco USA brings sixth cascade online at New Mexico enrichment plant",
+   "summary": "Urenco USA has commissioned the sixth centrifuge cascade at its New Mexico enrichment facility. This expansion increases the plant's operational enrichment capacity.",
+   "original_title": "Urenco USA brings sixth cascade online at New Mexico enrichment plant",
+   "original_language": "en",
+   "source": "ExchangeMonitor",
+   "published": "2026-10-16T14:27:56+00:00",
+   "collected_at": "2026-10-17T18:39:47.952193+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Covers civilian nuclear supply chain operation."
+  },
+  {
    "id": "radnuc-background-27276b88f78a3f28",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -1499,6 +1685,37 @@
    "ai_relevance_reason": "RadNuc background only: Relates to workforce development and operational staffing of the civilian nuclear sector."
   },
   {
+   "id": "radnuc-background-fa293d5b17cbee0f",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQTHRIZnVVRGRtVHRQb3dabTJRczFCTjNMTG9ZWDRQM3VDeExsUnNKSHNtS0hwZmZsbEtNUW9MeGJvcVoyUFJrWUk0Um1yai1Ja3JKbE8tV2hXN05GTjRMdllsWUdOcDhwSkMzQVgwTnVQT0w0ZnRERE1hVXZOTDRuZExZckZYWkxwc2FWaGhOdTM0UFJ5M2ZTbUs0NFkyVm5jd1kxM09oNUV6VnZyYUpiRG1OQ1FYOHlKc1I0a3g4YUgzdFVFTm0tU3VsQmlnMjBnWHpNSXVuRHdFSTVNTnNXcTRNTlRET0NOcDBr0gHrAUFVX3lxTFBMdEhmdVVEZG1UdFBvd1ptMlFzMUJOM0xMb1lYNFAzdUN4TGxSc0pIc21LSHBmZmxsS01Rb0x4Ym9xWjJQUmtZSTRSbXJqLUlrckpsTy1XaFc3TkZONEx2WWxZR05wOHBKQzNBWDBOdVBPTDRmdERETWFVdk5MNG5kTFlyRlhaTHBzYVZoaE51MzRQUnkzZlNtSzQ0WTJWbmN3WTEzT2g1RXpWdnJhSmJEbU5DUVg4eUpzUjRreDhhSDN0VUVObS1TdWxCaWcyMGdYek1JdW5Ed0VJNU1Oc1dxNE1OVERPQ05wMGs?oc=5",
+   "title": "Businesses: \"Nuclear, a European regulatory framework is needed\"",
+   "summary": "Business representatives are calling for the establishment of a cohesive European regulatory framework for nuclear energy. The proposal aims to standardize guidelines across the region for civilian nuclear development.",
+   "original_title": "Le imprese: «Nucleare, serve un quadro normativo europeo»",
+   "original_language": "it",
+   "source": "Corriere della Sera",
+   "published": "2026-10-16T12:49:39+00:00",
+   "collected_at": "2026-10-17T18:39:47.952193+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Accepted: Addresses civilian nuclear regulation policy."
+  },
+  {
    "id": "radnuc-background-4010e89ff86bee9b",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -1621,6 +1838,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This is a specific, dated meeting focused on nuclear fusion research and development."
+  },
+  {
+   "id": "radnuc-background-8e491d64acb2589a",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNQVZ2Y053NTM0bHBrbWgwMzB2LWFteEh4cXNyY0xVTkVqTHBaNnBlZXZ3V2docGJUT1ptWGlRRDZsbi03YUc4MUJZYzFWVlV1aEJrbnJFakg4cVNTLVgzS3Z3STRuTjJnTi1penZXakt5Sl9LUU1yT0NyOVhaNUJIZDFZZElvM3FpZFl1M0dvem03cThTS0pVaFV0UUNmekJlejltc2RaMNIBrAFBVV95cUxORUlSWFBHVnhJMEhBWmM3Sk5ibFAyQVMwWFN6SjQyS3hDWGkzY2lrTXlvRExvLUNMOVJrRmRXSXZxWWxtbllhYWpyZXY0aFpuMHdRU2FxemFUbzV5cVlXTHJvWi1KbEp1eTFRUGlEQWRPTVRiRnMtZTUzUkpSREJrVHIwekoxTGY0cVc0d0NTWEduZEo2b3hWbzdiMjVjRjBobFdPUkJSam42T0J4?oc=5",
+   "title": "322 Engineers Began Duty in Turkey's Nuclear Energy Move",
+   "summary": "322 engineers have been deployed to support Turkey's nuclear energy program. This staffing update supports the development of the national nuclear infrastructure.",
+   "original_title": "Türkiye'nin Nükleer Enerji Hamlesinde 322 Mühendis Görev Başına Geçti",
+   "original_language": "tr",
+   "source": "gazetegundem.tr",
+   "published": "2026-10-16T12:14:48+00:00",
+   "collected_at": "2026-10-17T18:39:47.952193+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Accepted: Relates to civilian industry workforce expansion."
+  },
+  {
+   "id": "radnuc-background-f1980fc89f6f6a58",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQUEg5MVVyNXB0bGFGZk11bW9FMm5MTVV5UzJQbkVFRUNEM1FUMzFBSkRzT0JKVUZicWVrSklDT3JkakJwQklpVWtzTWlVeTA3ZVlRNFJ1Mmh0WHZuNGZQMDF3U05hU0wtd0IwOWdaREhsbjVIVWNNeGVTSFJ1V0d3UngwRGd5UzNZR1BCeDRHRVlmc0xubzZPYTc1N3BaVnpFc1VzQUJEaE5BZjU2ZDRn?oc=5",
+   "title": "322 Turkish youth who received nuclear engineering training have started their duties at Akkuyu",
+   "summary": "A group of 322 Turkish engineers who completed their nuclear engineering training have officially commenced work at the Akkuyu Nuclear Power Plant. This development represents a milestone in the project's human resources and operational staffing cycle.",
+   "original_title": "Akkuyu'da Nükleer Mühendislik Eğitimi Alan 322 Türk Genç Göreve Başladı",
+   "original_language": "tr",
+   "source": "https://www.ajansturkhaber.com/",
+   "published": "2026-10-16T12:13:42+00:00",
+   "collected_at": "2026-10-17T18:39:47.952193+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Industry supply chain/operational staffing development."
   },
   {
    "id": "radnuc-background-b91488ee699e886f",
@@ -1838,6 +2117,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Retained: Civilian facility maintenance/decommissioning."
+  },
+  {
+   "id": "radnuc-background-f09e51cd10e47084",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNeDVFbUg5RktkeVBvdkx2TW5VZHl4UlBhRzFYVmJIM2JrSll2bzcyMTJrVFJZSGxYbXNERGFGaThRa3lsUWEzMm1CTWtyR2JQUlNHeVRwcGtjNXhaSm1vdHZIR1NEMVZHMkxUZVRBZ0NlbVZ0eVB5N2lNSG5Cem1IZ05sdEhqZlJZWlVENVZZY3ZVQ3FST01Fd0t3OWYzWUZyWFl1RjZJNWtVN21OV2ZFUUY5YXVFaE0?oc=5",
+   "title": "Minister Bayraktar announced: 322 students have started their duties at Akkuyu Nuclear Power Plant",
+   "summary": "Turkey's Energy Minister announced that 322 graduates of the nuclear engineering program have begun their professional roles at the Akkuyu Nuclear Power Plant. This staffing initiative is part of the plant's ongoing development and operational preparation.",
+   "original_title": "Bakan Bayraktar açıkladı: 322 öğrenci Akkuyu Nükleer Santrali’nde göreve başladı",
+   "original_language": "tr",
+   "source": "Türkgün",
+   "published": "2026-10-16T10:01:00+00:00",
+   "collected_at": "2026-10-17T18:39:47.952193+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Industry supply chain/operational staffing development (Duplicate of event_id 1)."
+  },
+  {
+   "id": "radnuc-background-13a88c2a5027e9b6",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPZ1E1cXd2WlNHZE9uUW95VTdreGFnX2dIRTRwcWt5SnVMVFAwbFFMMi1hcGxfbmFfVzZYSW5lY3hwQjhLZnJJY0VQWGhobFJoaDAzT2dPYlVyWF95QVZwZFVKRFc5ODU3aDZBQklLUnRSTGhoVDZkekhxdVJscU1IWXRVTG5abW5ESWpYT3RIRGVKMlZJWVlScUc5M2hTVlE?oc=5",
+   "title": "Conference on disseminating knowledge regarding the role of environmental radiation monitoring",
+   "summary": "A conference was held to provide information and training regarding the function and importance of environmental radiation monitoring systems. The event focused on enhancing understanding of radiation oversight and safety protocols.",
+   "original_title": "כנס להפצת ידע על תפקיד ניטור קרינה סביבתית.",
+   "original_language": "he",
+   "source": "Vietnam.vn",
+   "published": "2026-10-16T09:46:05+00:00",
+   "collected_at": "2026-10-17T18:39:47.952193+00:00",
+   "background_topics": [
+    "safety_security_meetings"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Safety and security awareness meeting/consultation."
   },
   {
    "id": "radnuc-background-1153e0fbbcdf9de2",
@@ -2150,6 +2491,37 @@
    "ai_relevance_reason": "RadNuc background only: Inclusion: Significant development in the civilian nuclear fuel supply chain."
   },
   {
+   "id": "radnuc-background-35d2b5e05c651c27",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNb3RuM0E2aDJxYV9fbGJnTzU2clNqY0dNYXI5eFE5VDZucjY0ZmpqWlozdkZFMW9BdnFsbjlSTW1vdlJWbXFaVVpWS3B3QzJQMDhNd3p5QTAtM1doN3VoU3RVVUVHQkRXYVNoQ0pzSHJ1YlBqNG5rYWlwUThYdy0yRmdTYWR0VmRTenp1S0dFZ3NHZklSeW1TM3NVeGY?oc=5",
+   "title": "Hue University announces the establishment of a school to train human resources in AI and nuclear energy.",
+   "summary": "Hue University is launching a new academic department focused on the intersection of AI and nuclear energy applications. The initiative aims to develop human resources for both fields.",
+   "original_title": "אוניברסיטת הואה מודיעה על הקמת בית ספר להכשרת משאבי אנוש בתחומי בינה מלאכותית ואנרגיה גרעינית.",
+   "original_language": "he",
+   "source": "Vietnam.vn",
+   "published": "2026-10-16T06:18:49+00:00",
+   "collected_at": "2026-10-17T18:39:47.952193+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Concerns development of academic training for civilian nuclear industry and AI applications."
+  },
+  {
    "id": "radnuc-background-7aebf34718761452",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -2181,37 +2553,6 @@
    "ai_relevance_reason": "RadNuc background only: Accepted: Relates to local opposition and public inquiry regarding a civilian nuclear facility."
   },
   {
-   "id": "radnuc-background-3001cf9a072e9965",
-   "kind": "radnuc_background",
-   "archive_only": true,
-   "background_reviewed": true,
-   "ai_selected": false,
-   "ai_current_ct_event": false,
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "primary_event_type": "BACKGROUND_INFO",
-   "actor_group": null,
-   "parent_event_id": null,
-   "parent_incident_id": null,
-   "country": null,
-   "region": null,
-   "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNUEtHaEZTWE5rTkVRWnJxRUFqakdxWFZIR0JSMVdkQ1Q2M0Uwd2ktbEsybnlzMS1GX2FxVk5JR2c3aWRHaFBGdUZWNHBpVFpqV091Nm1ILVZkOERLQnBYOVEzWjE1eE04Tkc1eGtzeUQwT1I0RTQ1ZUpuZlNyeF9aQ18wNk9CdmhlV3cxbGpVNnk0LWEyWUlqSC1XZzQ?oc=5",
-   "title": "Hue University announces the creation of a human resources training school in the fields of AI and nuclear energy.",
-   "summary": "Hue University in Vietnam has announced the establishment of a new school focused on training professionals in AI and nuclear energy sectors. This development marks an educational initiative integrating nuclear technology and artificial intelligence.",
-   "original_title": "L'université de Hué annonce la création d'une école de formation des ressources humaines dans les domaines de l'IA et de l'énergie nucléaire.",
-   "original_language": "fr",
-   "source": "Vietnam.vn",
-   "published": "2026-10-16T02:52:17+00:00",
-   "collected_at": "2026-10-16T19:37:26.559521+00:00",
-   "background_topics": [
-    "industry_ai_applications"
-   ],
-   "ai_relevance_score": null,
-   "ai_relevance_reason": "RadNuc background only: Accepted: Relates to industry AI applications and professional development in the civilian nuclear sector."
-  },
-  {
    "id": "radnuc-background-133f03402c78b5e9",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -2241,6 +2582,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Inclusion: Expansion of civilian nuclear industrial capacity."
+  },
+  {
+   "id": "radnuc-background-f49cb7e877c2c787",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQSk9wcU1nUTI1am55UW9yVDZLTS15T3hfeDh5X1hIaXFMbkZ5ejVlV1Q5UkdyZVl3NVFLWmFYSmxFNVZYZHFBZ2hWR212N0lNQ0ZvTWl2ZlJfNDJ0ZGhFRDJmVXVCNV9Fbjg2TVNIMHd2dmdDV0tScEFKUE85cDM1S2wwX2FuLVFtUjlRbHNvZ3lTY21fZTZCTzRQbk1la2N5SUJnaUZKYllqMnNvejJQd3ozS0JrZ2NSRGpsUzNLb0tXc1hrU2ZF0gHMAUFVX3lxTFBBVXFON2Z0eERRMlYzRjNudzhGcVFsTmMxNGtCV0lnSHdmbkFkM1RZTmlUSkwwcnltRXZZTU5yT2xscnF4c29HMG5BYW1SWl82a3lVOGdwVVBsSmZsTkl3dGxCenM5b3pPdzBMSG1lc1VCa1Nyc0JkR0gtLVpvdURTdW15M2RYSEJFWEwxeGo4LUhUOW1udGpISkRPdFFiN0hYeTJ3M0dTODRmal9FQ0xqaFp0cFVqeUpDNTBUNnFFdVFBWC1aY0JrQlBtRA?oc=5",
+   "title": "U.S. Nuclear Fuel Independence Edges Closer as Urenco Expansion Hits 75%",
+   "summary": "The expansion of the Urenco enrichment facility has reached 75% completion, marking progress toward increasing domestic U.S. nuclear fuel capacity. The project aims to bolster the civilian nuclear fuel supply chain.",
+   "original_title": "U.S. Nuclear Fuel Independence Edges Closer as Urenco Expansion Hits 75%",
+   "original_language": "en",
+   "source": "Crude Oil Prices Today | OilPrice.com",
+   "published": "2026-10-15T21:00:00+00:00",
+   "collected_at": "2026-10-17T18:39:47.952193+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to civilian nuclear fuel supply chain infrastructure."
   },
   {
    "id": "radnuc-background-98c92da6761f8e2b",
