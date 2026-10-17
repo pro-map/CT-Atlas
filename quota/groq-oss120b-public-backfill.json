@@ -1,10 +1,10 @@
 {
  "utc_day": "2026-10-17",
- "requests": 5,
- "reserved_tokens": 25174,
+ "requests": 10,
+ "reserved_tokens": 50526,
  "request_cap": 32,
  "token_cap": 160000,
- "last_call_epoch": 1792198354.9326825,
+ "last_call_epoch": 1792221484.5594556,
  "model": "openai/gpt-oss-120b",
- "updated_at": "2026-10-17T00:52:34.932693+00:00"
+ "updated_at": "2026-10-17T07:18:04.559464+00:00"
 }
