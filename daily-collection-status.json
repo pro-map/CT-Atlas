@@ -3,7 +3,7 @@
   "status": "partial",
   "run_started_at": "2026-10-17T12:13:12.169129+00:00",
   "last_attempt_at": "2026-10-17T12:13:12.169129+00:00",
-  "published_at": "2026-10-17T13:13:01.193749+00:00",
+  "published_at": "2026-10-17T13:17:34.581533+00:00",
   "recent": {
     "candidates": 3797,
     "reviewed": 3645,
@@ -132,7 +132,7 @@
       "stop_code": "budget_reached"
     }
   ],
-  "finalized_at": "2026-10-17T13:16:05.128645+00:00",
+  "finalized_at": "2026-10-17T13:23:36.896733+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success"
 }
