@@ -1,15 +1,15 @@
 {
- "updated_at": "2026-10-18T05:34:12.800078+00:00",
+ "updated_at": "2026-10-18T11:45:16.674725+00:00",
  "version": 1,
  "anchor": "2026-10-08",
  "from": "2026-04-11",
  "through": "2026-10-08",
  "window_days": 180,
  "taxonomy_version": "threat-topics-v1-20261008",
- "batch_started_at": "2026-10-18T05:33:55.811580+00:00",
+ "batch_started_at": "2026-10-18T11:44:59.874617+00:00",
  "batch_status": "blocked",
  "model_backend": "groq-free-public-news",
- "run_id": "39099618547",
+ "run_id": "39124439182",
  "daily_collection": "collector.py; shared keyword vocabulary; regular daily schedule",
  "chemical_keywords": "User-supplied vocabulary reviewed on 2026-10-08: 95 specific terms retained; 5 ambiguous contamination terms excluded",
  "categories": {
@@ -151,7 +151,7 @@
     "integrated_reports": 30,
     "new_event_records": 0
    },
-   "state_updated_at": "2026-10-18T05:34:12.788141+00:00",
+   "state_updated_at": "2026-10-18T11:45:16.662709+00:00",
    "native_query_languages": [
     "ar",
     "bn",
