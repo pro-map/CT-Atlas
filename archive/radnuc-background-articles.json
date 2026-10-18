@@ -3,8 +3,132 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-18T12:41:39.693195+00:00",
+ "updated_at": "2026-10-18T18:45:11.670322+00:00",
  "articles": [
+  {
+   "id": "radnuc-background-658b9b81cacbe3bb",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQVXo4SnJEdFdDRWo2aThpR2dLcnl6RDlsRVdXZGxscU1PNWFLdk02TG11Z1EzeER4TGJDZE9KMTBYc29UYWJGNzUyTXdsazQwazcxM3k4VDFUenhBMzU1alRyMXZvMU9YaXk2WVl0S1lBWEhNSEJiRF9FalRxX2JTUQ?oc=5",
+   "title": "China successfully develops a nuclear clock.",
+   "summary": "Researchers in China have developed a nuclear clock, a new type of precision timekeeping technology using nuclear transitions. This represents a technical advancement in nuclear-based scientific instrumentation.",
+   "original_title": "Tiongkok berhasil mengembangkan jam nuklir.",
+   "original_language": "id",
+   "source": "Vietnam.vn",
+   "published": "2026-10-18T04:20:21+00:00",
+   "collected_at": "2026-10-18T18:45:11.670322+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Classified as a scientific/technological advancement within the nuclear domain."
+  },
+  {
+   "id": "radnuc-background-0d398ac19f2f8ef3",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yNHJpclNWSngwQVFTQllOckJHVXUyLWdYRlo5ZUY1ZkRfZ1hjbXNXZENvREp5S1ppS0JEWXA4X0J0TGdIRE9LV2ZwU1k4eXFGeHc?oc=5",
+   "title": "Vietnam and Canada deepen cooperation in nuclear energy development; Canadian side promotes CANDU heavy water reactor technology",
+   "summary": "Vietnam and Canada are strengthening cooperation in nuclear energy, with Canada actively promoting its CANDU heavy water reactor technology for potential development. This engagement highlights ongoing international interest in civil nuclear infrastructure supply chains.",
+   "original_title": "越南与加拿大深化核能开发领域合作 加方推介CANDU重水堆技术",
+   "original_language": "zh",
+   "source": "深圳核博会",
+   "published": "2026-10-18T03:09:00+00:00",
+   "collected_at": "2026-10-18T18:45:11.670322+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This relates to civilian nuclear energy development and supply-chain engagement."
+  },
+  {
+   "id": "radnuc-background-62944275547a7098",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE9nV2ZNLWZrY3NvaExLXzBzWmc3SlB2QXctWFlldnVCaXFTMjY2bFpwVzFuUUd0TnVOWkdXbHRaNjMxbDlpa0RHZjV6UmZIcnh5ZDBWcHZNZXg2QXRRMlRB?oc=5",
+   "title": "The 5th National Nuclear Energy System Welding Professional Skills Competition held in Nanjing",
+   "summary": "The 5th National Nuclear Energy System Welding Professional Skills Competition was held in Nanjing to enhance technical standards within the industry. The event focuses on the workforce development aspects of the nuclear supply chain.",
+   "original_title": "第五届全国核能系统焊接职业技能竞赛在南京举办- 科教",
+   "original_language": "zh",
+   "source": "中工网",
+   "published": "2026-10-18T01:14:00+00:00",
+   "collected_at": "2026-10-18T18:45:11.670322+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a workforce development event within the civilian nuclear industry supply chain."
+  },
+  {
+   "id": "radnuc-background-1fc06fb9b339ad98",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE4wMkhEUUVwc3V0cEFnd0xtUkIyUExVT0hENmd0SW1vMFNLNGFFZjNUTlJ1S1lPV19PUGxzOGlkTlFjdGxSR3JTWUlPVWI4dTZLd2c?oc=5",
+   "title": "Rosatom partners with Prosoft and Reglab to deepen cooperation in promoting Generation IV nuclear power and industrial autonomous automation",
+   "summary": "Rosatom has entered into a cooperation agreement with Prosoft and Reglab to advance automation and AI-driven solutions for fourth-generation nuclear power plants. The partnership aims to enhance industrial autonomy and operational efficiency in nuclear facilities.",
+   "original_title": "俄罗斯国家原子能集团携手普罗软件与雷格拉布深化合作 助推四代核电与工业自主自动化",
+   "original_language": "zh",
+   "source": "深圳核博会",
+   "published": "2026-10-18T01:09:00+00:00",
+   "collected_at": "2026-10-18T18:45:11.670322+00:00",
+   "background_topics": [
+    "industry_ai_applications"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This relates to industrial AI applications in civilian nuclear technology."
+  },
   {
    "id": "radnuc-background-d8d2484a54f257b3",
    "kind": "radnuc_background",
@@ -35,6 +159,99 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Matches the 'science_and_technology' topic."
+  },
+  {
+   "id": "radnuc-background-f9c2bfdf3f982686",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPYWhoaXB2eU9NcmxCSzVNaXNUdWotMGtVbWZZUHM3OTUwR2FBemdjd0NVYzVhbGU4VXpfWE9JTW1oSnBidzJfRXZmU3BDekI0SEJGb3N6TFBselktOGdUR3hIT19qVlhYV0dDaENkNkx4M19kMTFFa2pIZkNlUHB4eVFhQ1k4WnVmYTBBLWZOOXR5Nkd5OGdDR0o0eThCX0JjZ3ZBXw?oc=5",
+   "title": "Indonesia Targets 7 GW Nuclear Power Plant Capacity, USC Experts Remind of Fukushima",
+   "summary": "Indonesia is planning for 7 GW of nuclear power capacity as part of its national energy strategy. Academics have raised discussions regarding safety lessons learned from the Fukushima disaster.",
+   "original_title": "Indonesia Bidik PLTN 7 GW, Pakar USC Ingatkan Fukushima",
+   "original_language": "id",
+   "source": "RRI.co.id",
+   "published": "2026-10-17T14:24:00+00:00",
+   "collected_at": "2026-10-18T18:45:11.670322+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to national policy and regulatory development for the civil nuclear industry."
+  },
+  {
+   "id": "radnuc-background-6472c7516ed7b10b",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQUlJ1WloyNzFRXzRXSFgyRDF6TUhHS256cFVXVl9hTV85MVhjV0piaE9qRnl1cno0X1BZbWEtZXhTOU0wMTRJSkJ6QlRXVUx4eVlRUTJVaHVlaXJ3ZTJxZF9OUk1ndmh3aGlRTjhHMk83MmZqUGNHa185VlZUbm52djhGckl0OTVhYUJYZ1BabnNXeTRwLVA2a2txOTdrelJ4QTUxTXAxcw?oc=5",
+   "title": "Five Countries Offer Nuclear Technology, Indonesia's Nuclear Power Plant Target Increases to 1,500 MW",
+   "summary": "Indonesia is evaluating nuclear technology bids from five countries as part of its updated capacity targets for nuclear power. These developments mark a shift in the procurement phase of the nation's energy strategy.",
+   "original_title": "Lima Negara Tawarkan Teknologi Nuklir, Target PLTN Indonesia Melonjak ke 1.500 MW",
+   "original_language": "id",
+   "source": "berita prioritas",
+   "published": "2026-10-17T12:58:37+00:00",
+   "collected_at": "2026-10-18T18:45:11.670322+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Concerns international collaboration and infrastructure development within the civilian nuclear supply chain."
+  },
+  {
+   "id": "radnuc-background-508141b05b2b408c",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNMEpQdF9XQ2tOVy03TkQyQVB3S2ZNSFpHZDhNc1RDajR1XzdFRmQzXzZVY0lfTEF4R0Jya3Voc1FsU3QtT0o1ZlBUa29DWXBVV0t1LURiWGV3aXEwMnRhcHFLN2NJd0ltQVdxbnlVVFluUUV5SEwzMEhydEpzek1jZTk4dXRoQTRyYXJWLURMNHdQVjVySHlieUdqNUxoeThRVmVYUWM4ZGdQSlZVS3hRckJxQWJqT0Q3R2UzMDd5S3dYWFlqYmJiano3cHg2UQ?oc=5",
+   "title": "National Energy Strategic Step: Indonesia's 7 GW Nuclear Ambition Becomes a Discussion Topic for US Academics",
+   "summary": "The Indonesian government's 7 GW nuclear energy initiative is undergoing academic review by US-based experts. The discussions focus on the strategic framework and planning of the national energy roadmap.",
+   "original_title": "Langkah Strategis Energi Nasional Ambisi PLTN 7 GW Indonesia Jadi Perbincangan Akademisi AS",
+   "original_language": "id",
+   "source": "Media Indonesia",
+   "published": "2026-10-17T12:18:48+00:00",
+   "collected_at": "2026-10-18T18:45:11.670322+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to regulatory and strategic planning for the civilian nuclear sector."
   },
   {
    "id": "radnuc-background-d21fbcfd3f5ce012",
@@ -97,6 +314,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This is a legitimate scientific and technological development update regarding nuclear fusion research."
+  },
+  {
+   "id": "radnuc-background-c714eb78fe5e55d8",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE8zenFWdmJERnNORjdveVNaaE1wRlJONnZxYkJxTFRmTVpJdG90V3ZGZjVhbVB5M3U3VlEzZURpQTk5REZpbkVIZEI4OEEwQmRKNmh5Vg?oc=5",
+   "title": "West seeks to rebuild rare earth supply chain using monazite; China's dominant position difficult to shake in the short term",
+   "summary": "Western nations are exploring the use of monazite—a thorium-bearing rare earth mineral—to restructure their rare earth supply chains. The initiative highlights efforts to diversify sourcing for strategic minerals associated with nuclear material cycles.",
+   "original_title": "西方寻求以独居石重建稀土供应链，中国主导地位短期难被撼动",
+   "original_language": "zh",
+   "source": "虎嗅网",
+   "published": "2026-10-17T11:45:55+00:00",
+   "collected_at": "2026-10-18T18:45:11.670322+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The mining and processing of thorium-bearing minerals (monazite) for industrial supply chains falls within the archive scope."
   },
   {
    "id": "radnuc-background-3a151f28eb638756",
@@ -593,6 +841,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Regulatory approval process for nuclear facility development."
+  },
+  {
+   "id": "radnuc-background-85cb9c413c784130",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPZFZuU2pEUHRpMHhaam4wbjVncUxfZjBEVlBFS2duVGlLSW9tZFMzTUVjU2U2MF9zZ0hBd2pFeC03V0VMT1JYSkxLVDV5Sjh3ZTlYQWdNaXczN25USzhIMXR5MTJNT0g0enJBelBXYklNNjJ0MmthUXZiYUJMWU9uaURYdGxGT2t1cmlMSG5rU2FsMkxZSkE?oc=5",
+   "title": "Successful Safety Valve Test at Rooppur Nuclear Power Plant, Uranium Shipments Arriving Friday",
+   "summary": "The Rooppur Nuclear Power Plant in Bangladesh has completed successful testing of its safety valve systems. Additionally, the facility expects the delivery of a shipment of nuclear fuel on Friday.",
+   "original_title": "রূপপুর পারমাণবিক বিদ্যুৎকেন্দ্রে নিরাপত্তা ভাল্বের পরীক্ষা সফল, শুক্রবার আসছে ইউরেনিয়াম",
+   "original_language": "bn",
+   "source": "দ্য ডেইলি স্টার বাংলা",
+   "published": "2026-10-17T02:15:54+00:00",
+   "collected_at": "2026-10-18T18:45:11.670322+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Concerns facility safety testing and fuel supply chain logistics for a civilian nuclear plant."
   },
   {
    "id": "radnuc-background-7e59fd1275ae8ec5",
