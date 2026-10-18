@@ -129,7 +129,7 @@
       "stop_code": "http_503"
     }
   ],
-  "finalized_at": "2026-10-18T13:36:47.230626+00:00",
+  "finalized_at": "2026-10-18T13:37:28.770207+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success"
 }
