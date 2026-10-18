@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-10T15:24:44.920475+00:00",
+  "removed_at": "2026-10-18T19:22:28.606979+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -763,6 +763,26 @@
       "primary_event_type": "OTHER_CT",
       "ai_relevance_score": 88,
       "ai_relevance_reason": "Auto-accepted: authoritative official source with strong CT category/action evidence in the headline."
+    },
+    {
+      "id": "50f61d9853ebefce",
+      "incident_id": "inc-c490a117ce5db2a5",
+      "url": "https://www.faifaonline.net/2026/04/21/1535.html",
+      "title": "Saudi Arabia supports the UAE after thwarting a terrorist plot",
+      "summary": "Saudi Arabia expressed support for the UAE following the successful thwarting of a terrorist plot.",
+      "original_title": "السعودية تدعم الإمارات بعد إحباط مخطط إرهابي",
+      "original_language": "ar",
+      "source": "faifaonline.net",
+      "published": "2026-04-21T17:15:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Saudi Arabia",
+      "ai_relevance_score": 65,
+      "ai_relevance_reason": "Reflects regional follow-up on a thwarted counter-terrorism operation."
     }
   ]
 }
