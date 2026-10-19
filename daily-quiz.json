@@ -1,14 +1,14 @@
 {
   "category": "International CT Instruments and Institutions",
-  "question": "Where is the global complex for innovation of the International Criminal Police Organization (INTERPOL) primarily located?",
+  "question": "Which specific INTERPOL notice type is utilized to seek or provide information on modus operandi, objects, devices, and concealment methods used by criminals?",
   "options": [
-    "Singapore",
-    "Lyon",
-    "Vienna"
+    "Purple Notice",
+    "Green Notice",
+    "Orange Notice"
   ],
   "correct_index": 0,
-  "explanation": "INTERPOL's General Secretariat comprises a headquarters in Lyon and a global complex for innovation located in Singapore.",
-  "source_url": "https://www.interpol.int/en/Who-we-are/What-is-INTERPOL",
-  "date": "2026-10-18",
-  "source_checked_at": "2026-10-18T12:38:24.931810+00:00"
+  "explanation": "INTERPOL uses Purple Notices to seek or provide information on the modus operandi, objects, devices, and concealment methods utilized by criminals.",
+  "source_url": "https://www.interpol.int/en/How-we-work/Notices/About-Notices",
+  "date": "2026-10-19",
+  "source_checked_at": "2026-10-19T15:41:03.085849+00:00"
 }
