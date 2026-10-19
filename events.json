@@ -725,7 +725,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-10-19T05:51:11.005847+00:00",
-  "number_of_events": 4175,
+  "number_of_events": 4165,
   "events": [
     {
       "id": "927115ea2612a122",
@@ -418340,85 +418340,6 @@
       ]
     },
     {
-      "id": "93ef9e49fec47d5a",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Hijacked tanker held off Puntland after Gulf of Aden seizure",
-      "summary": "A hijacked chemical tanker is being held off the coast of Puntland, Somalia, following a seizure in the Gulf of Aden.",
-      "original_title": "Hijacked tanker held off Puntland after Gulf of Aden seizure",
-      "original_summary": "Hijacked tanker held off Puntland after Gulf of Aden seizure safety4sea",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-22T07:00:00+00:00",
-      "source": "safety4sea",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOc3JGV2VvWVlXS2hWTi12LXJmN29wQzVDZDZ1bVVhQWtYcFhiV2pveTgxeHVCaUdfNHlULTdhQUJtal9rYjlJVTBwRUdvc01GRVBmWDVFTWFLRXhvVlhleVo3YzcyY25GUHJlbEFiNmktbmxnaTJ0QkRwVFpTSUM0ckNlMkx2RTJEUUJqeQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Puntland",
-      "latitude": 8.5,
-      "longitude": 48.5,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "SAFETY4SEA",
-      "targeted_source_kind": "specialist_media",
-      "source_article_fingerprints": [
-        "8729b86b4b729dd821e28f62373a4706bc9e118e8c81883796264b27653a62a4"
-      ],
-      "sources": [
-        "safety4sea"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-22T07:00:00+00:00",
-      "last_reported": "2026-07-22T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete maritime piracy hijacking incident with vessel held off Puntland.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "PIRACY",
-      "is_attack": false,
-      "incident_anchor": "Tanker hijacking Puntland Gulf of Aden 2026-07-22",
-      "update_type": "INITIAL",
-      "incident_id": "inc-07ab7a9f60b1278d",
-      "translated_to_english": false,
-      "ai_canonical_event": "Hijacked tanker held off Puntland Somalia after Gulf of Aden seizure",
-      "title_variants": [
-        "Hijacked tanker held off Puntland Somalia after Gulf of Aden seizure"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "reported_status": "CONFIRMED",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Puntland"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Hijacked tanker held off Puntland after Gulf of Aden seizure.",
-      "ai_geo_fingerprint": "f12754edfe0aa55cce79b3b6775a9bc0a42ceb25ef74c38d7325a077c31f3138",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "da403a1ac81aa21c",
       "category": "Counter Terrorism Action",
       "categories": [
@@ -419625,7 +419546,7 @@
       "collection_locale": null,
       "published": "2026-07-20T07:00:00+00:00",
       "source": "TradeWinds News",
-      "source_count": 5,
+      "source_count": 6,
       "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQRnIyQnc5OHl5dGF2eVZpUkpJME9VZ3R4cFVOdEZ6TEtMa3NibzZIWWFBUnEtUVJnNFZBV1RDUWlVX3QyTlJhVnBpVjdNNXVNVVkyT1M2SGVyQmlIMHdGY2M1dE1RamVOd2VQNTZrY29hbVI0czFxT2FrSGtiNk1qenZtRzJMUWVfYWt0UnB3UFRpdXB4UnFmTmoyT0dPQlNPS2pDNm9TUXZUczRxMzJvZ0lR?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -419644,7 +419565,8 @@
         "safety4sea.com",
         "صوت الإمارات",
         "خبرگزاری صدای افغان(آوا)",
-        "Marine Insight"
+        "Marine Insight",
+        "safety4sea"
       ],
       "related_articles": [
         {
@@ -419690,7 +419612,7 @@
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Concrete maritime piracy incident involving the hijacking of a commercial tanker by Somali pirates.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -419718,7 +419640,9 @@
       "ai_geo_inferred": true,
       "actor_group": "",
       "incident_id": "inc-8501f4a919164032",
-      "source_article_fingerprints": [],
+      "source_article_fingerprints": [
+        "8729b86b4b729dd821e28f62373a4706bc9e118e8c81883796264b27653a62a4"
+      ],
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_incident"
@@ -420383,133 +420307,6 @@
       "incident_id": "inc-6236b2e1edc7f70e"
     },
     {
-      "id": "e0c4c0665ace4036",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Somalia says strike kills founding Al-Shabaab leader",
-      "summary": "Somali authorities report that a military strike has successfully killed a founding leader of the Al-Shabaab terrorist group.",
-      "original_title": "Somalia says strike kills founding Al-Shabaab leader",
-      "original_summary": "Somalia says strike kills founding Al-Shabaab leader Garowe Online",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-07-18T07:00:00+00:00",
-      "source": "Garowe Online",
-      "source_count": 5,
-      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNT1VQRVJDdEVLVGxDUC1RWEFhd2g3dGkwVEIzSXJBWWxrMHRZb19CUXRtRmxyTzE1MEJuaEVObG9oLWhKYlBuaXFtSC1yZzhmcl9lR2FnV0Z0VTN3Tm50QnFhM2lwOUdmZFlHS1dqRUt0WVJyd09TanZEcTJVa0hwXzJfRWJKR1g1MklFMUV2OGxDWHpRMk9VMnJpNGh2Zw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Lower Shabelle",
-      "latitude": 1.8333,
-      "longitude": 44.5,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "garoweonline.com/en",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "Garowe Online",
-        "Goobjoog",
-        "Shabelle Media Network",
-        "Somali National News Agency",
-        "Goobjoog English"
-      ],
-      "related_articles": [
-        {
-          "title": "Danab forces kill 9 Al-Shabaab members in Lower Shabelle operation",
-          "original_title": "Ciidanka Danab oo Hawlgal ay Ka Fuliyeen Shabeellaha Hoose, ku diley 9 xubnood oo Ka Tirsanaa Al-Shabaab",
-          "original_language": "so",
-          "summary": "Somali Danab special forces conducted an operation in Lower Shabelle, killing nine members of Al-Shabaab.",
-          "published": "2026-07-20T07:00:00+00:00",
-          "source": "Goobjoog",
-          "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxOYXllREZsUEZMaWE3MXRsSEVNb2FmVkh2Q0dhV2UtTTdOSWszZTVzSmJKejBaWXE0dm1RVXhJVWREWGRDaFNDY1pYMTc5OXFOV2NMamYxV2lkbVdGc1Z0a3VnUU8xY01PT3N6OTZ2Qkg4Vl9lZktzaWZnMFNRWkRaMEVYWHpMNUY0Um5DV0hHR0RERFFxUXhEYjZ5c1NUSkRDaXdsMExZbHFnTS0yems1ZmpfZ0NtckFFaFktZnJBcE5GdllVbTNpalhjNnNWUWJMSFE?oc=5"
-        },
-        {
-          "title": "Somali elite Danab forces kill nine Al-Shabaab fighters in Lower Shabelle operation",
-          "original_title": "Somali elite Danab forces kill nine Al-Shabaab fighters in Lower Shabelle operation",
-          "original_language": "en",
-          "summary": "Somali elite Danab forces killed nine Al-Shabaab fighters during a security operation in the Lower Shabelle region.",
-          "published": "2026-07-20T17:16:25+00:00",
-          "source": "Shabelle Media Network",
-          "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPMFJQdFlSX2JQVWxRWnFUem41b3hlMC1uRlA5TUtVZFZUMHpjYVJsMkpxUkxLd0pUT2MwcmFMQWtJQjdud1J3Zm9fV2FQcERRTS1sTFlCY25vSVhmVVhpTkNFQjRLWENfcE9ta2dBRmU4SHhFc28zLVBjMWxvd21JSUg3a1pWcVhUOEd5MDlGcGZPSldRck5JMlVScFFhV3ExVkdYX3QzVDBISmpKeVhB?oc=5"
-        },
-        {
-          "title": "Somali Forces, International Partners Conduct Precision Airstrike on Al-Shabaab",
-          "original_title": "Somali Forces, International Partners Conduct Precision Airstrike on Al-Shabaab",
-          "original_language": "en",
-          "summary": "Somali national forces alongside international partners carried out a precision airstrike targeting Al-Shabaab militants.",
-          "published": "2026-07-18T07:00:00+00:00",
-          "source": "Somali National News Agency",
-          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPS1RURGR0X2hCaGU3TmdYMnJkczRzc2hZRjVBTEZwTlNrdEpycXJLNVZPVnJ0a1NmS1hyMHo5bnR2OTlLYUhfVU4xdkpQVFl6TXBlVTBXeG1iSXd6TEh1MVdnZWhqTzM5UnVKaUZWRlM3Z01RVERkRHNGNDdIMXRIRWp6b0xzVTNhZmR5V2psTXNkWlZrcWFKMVhJZ281clZjWGVaSlBzbkk2UQ?oc=5"
-        },
-        {
-          "title": "Joint Somali Forces Target Al-Shabaab Positions in Lower Juba",
-          "original_title": "Joint Somali Forces Target Al-Shabaab Positions in Lower Juba",
-          "original_language": "en",
-          "summary": "Joint Somali forces conducted an operation targeting Al-Shabaab positions in the Lower Juba region.",
-          "published": "2026-07-21T07:00:00+00:00",
-          "source": "Goobjoog English",
-          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOUXFVTG91dVZENFdqOEJLMm12QlBubkk1R3R0czlDczZDNTM3N1p2dWltUmpfaDlZQVZQd1dDYmdjNWVWemJ2MWtZZV81akxYaHRWbXdpeDY5Y09sSjFDc0QzM1JGenJrU2dOLWdMc0JFQVlkREc3dFJ1eWNwRlJ0RFlrMWVOX1gzZ2hTb0kxVQ?oc=5"
-        }
-      ],
-      "article_count": 5,
-      "first_reported": "2026-07-18T07:00:00+00:00",
-      "last_reported": "2026-07-21T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "A precision military strike eliminated a high-profile Al-Shabaab founding leader.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Airstrike kills founding Al-Shabaab leader in Somalia",
-      "title_variants": [
-        "Somali military strike kills founding Al-Shabaab leader in Somalia",
-        "Airstrike kills founding Al-Shabaab leader in Somalia"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "paraphrase_entity_context",
-        "very_high_title_similarity",
-        "same_url"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Somalia says strike kills founding Al-Shabaab leader... Danab forces kill 9 Al-Shabaab members in Lower Shabelle operation"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Operations in Lower Shabelle, Somalia.",
-      "ai_geo_fingerprint": "b4ab0295bd69e848ed6af1d107c4df009336c268598aa49817fb769ec4255444",
-      "ai_geo_inferred": false,
-      "source_article_fingerprints": [
-        "08a1b109a71696ac168acad3ce0b117c743c35c91f52486bb51ad8989e3a844b",
-        "77f6b83093b0ca03fc711b75980138f2ae7e0f2bceff3d22d9507282ef2a8f3d",
-        "c65ca15583fcea55ca204ff704ee451082b641d49eab693921f2a7359d8f2cbf",
-        "eb38dba4f7f4a277c2c76c536ec797d8f091098368ea17b7b5b8975690192e55"
-      ],
-      "actor_group": "Al-Shabaab",
-      "incident_id": "inc-472f2030643f1cfe",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Al-Shabaab founding leader strike Somalia 2026-07-18",
-      "update_type": "INITIAL",
-      "cbrn_subgroups": []
-    },
-    {
       "id": "de1943a0bdccf79a",
       "category": "Counter Terrorism Action",
       "categories": [
@@ -420737,79 +420534,6 @@
       "primary_event_type": "ARREST",
       "is_attack": false,
       "incident_anchor": "Turkey nationwide ISIS sweep detention 2026-07-18",
-      "update_type": "INITIAL"
-    },
-    {
-      "id": "20b1acb7d84a5bcb",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Danab, Jubbaland Forces Destroy Seven Al-Shabaab Bases Near Jilib",
-      "summary": "Somali Danab and Jubbaland regional forces destroyed seven Al-Shabaab bases during an operation near Jilib.",
-      "original_title": "Danab, Jubbaland Forces Destroy Seven Al-Shabaab Bases Near Jilib",
-      "original_summary": "Danab, Jubbaland Forces Destroy Seven Al-Shabaab Bases Near Jilib Somali National News Agency",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-07-18T07:00:00+00:00",
-      "source": "Somali National News Agency",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQOWxpRGVFX2VZT1VBVjYxWFRmTXpjZ0lNeDQ4ZUJNc3Y5WUh2Vm9feDlsWHhyTkhwQWczbU92WVU4cGxSZUhMa25HZzVsUWlTVlNhSThSLUE3ZGxtdXNQa3F0YnVwRmlsQXNubk8yM0c3TktxNmd4WnZMa1plWXJ2elN5QlZwMUNJRE94ZFZQZ1R1MEc5YnBj?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Jilib",
-      "region": null,
-      "latitude": 0.48829,
-      "longitude": 42.78535,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "sonna.so/en",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "Somali National News Agency"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-18T07:00:00+00:00",
-      "last_reported": "2026-07-18T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Somali security forces carried out an offensive operation destroying multiple militant bases.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Danab and Jubbaland forces destroy seven Al-Shabaab bases near Jilib Somalia",
-      "title_variants": [
-        "destruction of seven Al-Shabaab bases by Somali and Jubbaland forces near Jilib",
-        "Danab and Jubbaland forces destroy seven Al-Shabaab bases near Jilib Somalia"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Near Jilib"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The operation by Danab and Jubbaland forces occurred near Jilib, Somalia.",
-      "ai_geo_fingerprint": "a2735aa58bb474815cd09aac39318144bf5db939e9fc2778afa4798d15411717",
-      "ai_geo_inferred": false,
-      "actor_group": "Al-Shabaab",
-      "incident_id": "inc-5c1c8f60ffe3e9c0",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Jilib Al-Shabaab bases destroyed Somalia 2026-07-18",
       "update_type": "INITIAL"
     },
     {
@@ -421417,7 +421141,7 @@
       "collection_locale": "NG:en",
       "published": "2026-07-17T07:00:00+00:00",
       "source": "Goobjoog English",
-      "source_count": 1,
+      "source_count": 5,
       "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOYjBkdk9Ec29xQ1lNd0JsMTdKTEpfWDdzMHNvdVpsRDdWaFFoNWZzZFc0UTZVSjV2UklhTFhobTJYZ3VIeXp5MnBxaW9EaVpiSDg3OF9TY3FqNXpmUXRqZENwaHJjdXVmQWp1MzBkLWNCMUN4bEtQdGhOMnpCY0Roei12R0g2QjZ0S2NYQ0hZWUxlbDJscGhWT1RR?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -421432,19 +421156,82 @@
       "targeted_source": "goobjoog.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
-        "0a81c223f23ab9c7e0ce1b81948cfb171b5b0677dd1e8168e0b3e794f06b0466"
+        "08a1b109a71696ac168acad3ce0b117c743c35c91f52486bb51ad8989e3a844b",
+        "0a81c223f23ab9c7e0ce1b81948cfb171b5b0677dd1e8168e0b3e794f06b0466",
+        "77f6b83093b0ca03fc711b75980138f2ae7e0f2bceff3d22d9507282ef2a8f3d",
+        "c65ca15583fcea55ca204ff704ee451082b641d49eab693921f2a7359d8f2cbf",
+        "eb38dba4f7f4a277c2c76c536ec797d8f091098368ea17b7b5b8975690192e55"
       ],
       "sources": [
-        "Goobjoog English"
+        "Goobjoog English",
+        "Garowe Online",
+        "Goobjoog",
+        "Shabelle Media Network",
+        "Somali National News Agency"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Somalia says strike kills founding Al-Shabaab leader",
+          "original_title": "Somalia says strike kills founding Al-Shabaab leader",
+          "original_language": "en",
+          "summary": "Somali authorities report that a military strike has successfully killed a founding leader of the Al-Shabaab terrorist group.",
+          "published": "2026-07-18T07:00:00+00:00",
+          "source": "Garowe Online",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNT1VQRVJDdEVLVGxDUC1RWEFhd2g3dGkwVEIzSXJBWWxrMHRZb19CUXRtRmxyTzE1MEJuaEVObG9oLWhKYlBuaXFtSC1yZzhmcl9lR2FnV0Z0VTN3Tm50QnFhM2lwOUdmZFlHS1dqRUt0WVJyd09TanZEcTJVa0hwXzJfRWJKR1g1MklFMUV2OGxDWHpRMk9VMnJpNGh2Zw?oc=5"
+        },
+        {
+          "title": "Danab forces kill 9 Al-Shabaab members in Lower Shabelle operation",
+          "original_title": "Ciidanka Danab oo Hawlgal ay Ka Fuliyeen Shabeellaha Hoose, ku diley 9 xubnood oo Ka Tirsanaa Al-Shabaab",
+          "original_language": "so",
+          "summary": "Somali Danab special forces conducted an operation in Lower Shabelle, killing nine members of Al-Shabaab.",
+          "published": "2026-07-20T07:00:00+00:00",
+          "source": "Goobjoog",
+          "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxOYXllREZsUEZMaWE3MXRsSEVNb2FmVkh2Q0dhV2UtTTdOSWszZTVzSmJKejBaWXE0dm1RVXhJVWREWGRDaFNDY1pYMTc5OXFOV2NMamYxV2lkbVdGc1Z0a3VnUU8xY01PT3N6OTZ2Qkg4Vl9lZktzaWZnMFNRWkRaMEVYWHpMNUY0Um5DV0hHR0RERFFxUXhEYjZ5c1NUSkRDaXdsMExZbHFnTS0yems1ZmpfZ0NtckFFaFktZnJBcE5GdllVbTNpalhjNnNWUWJMSFE?oc=5"
+        },
+        {
+          "title": "Somali elite Danab forces kill nine Al-Shabaab fighters in Lower Shabelle operation",
+          "original_title": "Somali elite Danab forces kill nine Al-Shabaab fighters in Lower Shabelle operation",
+          "original_language": "en",
+          "summary": "Somali elite Danab forces killed nine Al-Shabaab fighters during a security operation in the Lower Shabelle region.",
+          "published": "2026-07-20T17:16:25+00:00",
+          "source": "Shabelle Media Network",
+          "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPMFJQdFlSX2JQVWxRWnFUem41b3hlMC1uRlA5TUtVZFZUMHpjYVJsMkpxUkxLd0pUT2MwcmFMQWtJQjdud1J3Zm9fV2FQcERRTS1sTFlCY25vSVhmVVhpTkNFQjRLWENfcE9ta2dBRmU4SHhFc28zLVBjMWxvd21JSUg3a1pWcVhUOEd5MDlGcGZPSldRck5JMlVScFFhV3ExVkdYX3QzVDBISmpKeVhB?oc=5"
+        },
+        {
+          "title": "Somali Forces, International Partners Conduct Precision Airstrike on Al-Shabaab",
+          "original_title": "Somali Forces, International Partners Conduct Precision Airstrike on Al-Shabaab",
+          "original_language": "en",
+          "summary": "Somali national forces alongside international partners carried out a precision airstrike targeting Al-Shabaab militants.",
+          "published": "2026-07-18T07:00:00+00:00",
+          "source": "Somali National News Agency",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPS1RURGR0X2hCaGU3TmdYMnJkczRzc2hZRjVBTEZwTlNrdEpycXJLNVZPVnJ0a1NmS1hyMHo5bnR2OTlLYUhfVU4xdkpQVFl6TXBlVTBXeG1iSXd6TEh1MVdnZWhqTzM5UnVKaUZWRlM3Z01RVERkRHNGNDdIMXRIRWp6b0xzVTNhZmR5V2psTXNkWlZrcWFKMVhJZ281clZjWGVaSlBzbkk2UQ?oc=5"
+        },
+        {
+          "title": "Joint Somali Forces Target Al-Shabaab Positions in Lower Juba",
+          "original_title": "Joint Somali Forces Target Al-Shabaab Positions in Lower Juba",
+          "original_language": "en",
+          "summary": "Joint Somali forces conducted an operation targeting Al-Shabaab positions in the Lower Juba region.",
+          "published": "2026-07-21T07:00:00+00:00",
+          "source": "Goobjoog English",
+          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOUXFVTG91dVZENFdqOEJLMm12QlBubkk1R3R0czlDczZDNTM3N1p2dWltUmpfaDlZQVZQd1dDYmdjNWVWemJ2MWtZZV81akxYaHRWbXdpeDY5Y09sSjFDc0QzM1JGenJrU2dOLWdMc0JFQVlkREc3dFJ1eWNwRlJ0RFlrMWVOX1gzZ2hTb0kxVQ?oc=5"
+        },
+        {
+          "title": "Danab, Jubbaland Forces Destroy Seven Al-Shabaab Bases Near Jilib",
+          "original_title": "Danab, Jubbaland Forces Destroy Seven Al-Shabaab Bases Near Jilib",
+          "original_language": "en",
+          "summary": "Somali Danab and Jubbaland regional forces destroyed seven Al-Shabaab bases during an operation near Jilib.",
+          "published": "2026-07-18T07:00:00+00:00",
+          "source": "Somali National News Agency",
+          "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQOWxpRGVFX2VZT1VBVjYxWFRmTXpjZ0lNeDQ4ZUJNc3Y5WUh2Vm9feDlsWHhyTkhwQWczbU92WVU4cGxSZUhMa25HZzVsUWlTVlNhSThSLUE3ZGxtdXNQa3F0YnVwRmlsQXNubk8yM0c3TktxNmd4WnZMa1plWXJ2elN5QlZwMUNJRE94ZFZQZ1R1MEc5YnBj?oc=5"
+        }
+      ],
+      "article_count": 7,
       "first_reported": "2026-07-17T07:00:00+00:00",
-      "last_reported": "2026-07-17T07:00:00+00:00",
+      "last_reported": "2026-07-18T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
+      "ai_relevance_score": 90,
       "ai_relevance_reason": "Concrete counter-terrorism operation destroying militant bases.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -421478,7 +421265,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Operation took place in the Lower Shabelle region.",
       "ai_geo_fingerprint": "8a1f385666c8aba7705a2f07d9e15aa6b67dc68387ac0215e7466142d196172f",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "032f47079d108676",
@@ -422428,85 +422219,6 @@
       ]
     },
     {
-      "id": "073a263c837cc148",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Several terrorists neutralized on Bougouni-Kadiana axis",
-      "summary": "Malian forces neutralized several terrorists along the Bougouni-Kadiana axis.",
-      "original_title": "Axe Bougouni-Kadiana : Plusieurs terroristes neutralisés",
-      "original_summary": "Axe Bougouni-Kadiana : Plusieurs terroristes neutralisés Maliweb",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French / Africa",
-      "collection_locale": "FR:fr",
-      "published": "2026-07-15T07:00:00+00:00",
-      "source": "Maliweb",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQMXhQVVRYVXRfb28xRDhxbkhmMm5URFdiVTB0SjlpcHJZYVB1Tk5wLUZIOWI4ZHRRVDhUbmRkY0VjaE1yTlRuSkxlQWxBVFY2MHZ3Rjg0d3Fub1dMd2F5VU9KbDhVMElBS3h1Ykp6WGFESHM3WmZYNlRKN0RTUzdWek1xUWk0bkx3TTBuTXlQQ1NaaUtBWlJhMFkyQXB2TE1reVlQeg?oc=5",
-      "collector": "Google News RSS",
-      "country": "Mali",
-      "country_code": "ML",
-      "city": null,
-      "region": "Bougouni-Kadiana axis",
-      "latitude": 11.417,
-      "longitude": 7.483,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "maliweb.net",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "d4bc0f1fb5760dc1a2461738aab5dc84c9f4f59530425d9f9347a5a4a01df14d"
-      ],
-      "sources": [
-        "Maliweb"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-15T07:00:00+00:00",
-      "last_reported": "2026-07-15T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports a concrete offensive counter-terrorism operation by security forces resulting in militant casualties.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Bougouni-Kadiana CT operation Mali 2026-07",
-      "update_type": "INITIAL",
-      "incident_id": "inc-ae3827b7ec3c89f4",
-      "translated_to_english": true,
-      "ai_canonical_event": "Neutralization of several terrorists on Bougouni-Kadiana axis in Mali",
-      "title_variants": [
-        "Neutralization of several terrorists on Bougouni-Kadiana axis in Mali"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "reported_status": "CONFIRMED",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Several terrorists neutralized on Bougouni-Kadiana axis"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Operation occurred along the Bougouni-Kadiana axis in Mali.",
-      "ai_geo_fingerprint": "8dcd4766fa73814cb00ba52c6248db65e20c370732462ea71e2d0a76f7ddeafd",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "62d5fa23a8d27f19",
       "category": "Arrests",
       "categories": [
@@ -422681,7 +422393,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-07-14T07:00:00+00:00",
       "source": "malijet.com",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOWDdtWXpXOGFCM0dXSEpWRlczOEVhTUlyNUlscTRZeEhQSExOM1Y5TUdhdTF0ejdrN0FjUDdRVEotUjZEQW50UVA1WTRvQndhSWdxUGtDT3BlaUFwdWdCZUVqVkJwNnY0WGxzTzFuSmpiZEl4M3FwYkRmSE1xaGdtZk1mOTNfUmtaSHRNQzRSZ2pJUUhYZXpscWdxZkFKbGxrN1lXUkdyS0ZHUWhC?oc=5",
       "collector": "Google News RSS",
       "country": "Mali",
@@ -422696,16 +422408,27 @@
       "targeted_source": "malijet.com",
       "targeted_source_kind": "local_language_media",
       "sources": [
-        "malijet.com"
+        "malijet.com",
+        "Maliweb"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Several terrorists neutralized on Bougouni-Kadiana axis",
+          "original_title": "Axe Bougouni-Kadiana : Plusieurs terroristes neutralisés",
+          "original_language": "fr",
+          "summary": "Malian forces neutralized several terrorists along the Bougouni-Kadiana axis.",
+          "published": "2026-07-15T07:00:00+00:00",
+          "source": "Maliweb",
+          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQMXhQVVRYVXRfb28xRDhxbkhmMm5URFdiVTB0SjlpcHJZYVB1Tk5wLUZIOWI4ZHRRVDhUbmRkY0VjaE1yTlRuSkxlQWxBVFY2MHZ3Rjg0d3Fub1dMd2F5VU9KbDhVMElBS3h1Ykp6WGFESHM3WmZYNlRKN0RTUzdWek1xUWk0bkx3TTBuTXlQQ1NaaUtBWlJhMFkyQXB2TE1reVlQeg?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-07-14T07:00:00+00:00",
-      "last_reported": "2026-07-14T07:00:00+00:00",
+      "last_reported": "2026-07-15T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Malian armed forces conducted an airstrike against a suspected terrorist hideout.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -422736,7 +422459,15 @@
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
       "incident_anchor": "Bougouni Kadiana airstrike Mali 2026-07-14",
-      "update_type": "INITIAL"
+      "update_type": "INITIAL",
+      "cbrn_subgroups": [],
+      "source_article_fingerprints": [
+        "d4bc0f1fb5760dc1a2461738aab5dc84c9f4f59530425d9f9347a5a4a01df14d"
+      ],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "2017fff297c00566",
@@ -425350,9 +425081,9 @@
       "actor_group": "ISIS",
       "primary_event_type": "ATTACK",
       "is_attack": true,
-      "incident_anchor": "Damascus twin bombings 2026-07-07",
+      "incident_anchor": "Morocco Sahel terrorist plots thwarted 2026-07-06",
       "update_type": "INVESTIGATION_UPDATE",
-      "incident_id": "inc-e2e78275e7f7b973",
+      "incident_id": "inc-3e513c99aed56126",
       "cbrn_subgroups": [],
       "source_article_fingerprints": [
         "23d408516356f90c9465f85bec63228e10b36efbe567dbdda755810b792df5e2",
@@ -425701,8 +425432,8 @@
       "ai_geo_fingerprint": "7d0962f6a9f11fc1b28ed7e638c06b2e8aeeeaac2f35cb55d55554e8235f9d39",
       "ai_geo_inferred": false,
       "actor_group": "ISIS",
-      "incident_id": "inc-e2e78275e7f7b973",
-      "incident_anchor": "Damascus twin bombings 2026-07-07",
+      "incident_id": "inc-3e513c99aed56126",
+      "incident_anchor": "Morocco Sahel terrorist plots thwarted 2026-07-06",
       "primary_event_type": "ARREST",
       "is_attack": false,
       "update_type": "ARREST_UPDATE"
@@ -426921,260 +426652,6 @@
       "update_type": "INITIAL"
     },
     {
-      "id": "8363475132e69056",
-      "category": "Attacks",
-      "categories": [
-        "Attacks",
-        "Counter Terrorism Action",
-        "Arrests"
-      ],
-      "title": "Double Bombing in Damascus Near Emmanuel Macron's Hotel",
-      "summary": "Bombs exploded in Damascus during a visit by French President Emmanuel Macron, prompting regional condemnations and security investigations.",
-      "original_title": "Double attentat à Damas : des bombes explosent près de l'hôtel d'Emmanuel Macron",
-      "original_summary": "Double attentat à Damas : des bombes explosent près de l'hôtel d'Emmanuel Macron France 24",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French",
-      "collection_locale": "FR:fr",
-      "published": "2026-07-07T07:00:00+00:00",
-      "source": "France 24",
-      "source_count": 16,
-      "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxOTVBfVUpnbU8yWnFiekpYRWEtUG8yc3F2X0psWkJoUDVJVUltM0tPY1NlN2VqdUw2SGpRVno3bXhVcjNlX1kzYVlHdDZXOGdJWkt6RmFsWFpJZF9kN2FmVUxfakhrMVYxTi1lRFhtSl9idzN6TXJyVDh5cUR1dlBOZkFlSE5MOHBYUk9LVHIwQ3JHVG5rRFFpbWJvOWkwdnZveEQtRFBuLUxmRFB3UEZ3Wl95UFdjb2JPZ21QM1FPMDlqVDBaUlRjMTNtLWM1aEZPUTI0aF9DbGI?oc=5",
-      "collector": "Google News RSS",
-      "country": "Syria",
-      "country_code": "SY",
-      "city": "Damascus",
-      "region": null,
-      "latitude": 33.5102,
-      "longitude": 36.29128,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "france24.com/fr",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "France 24",
-        "الأمانة العامة لمجلس التعاون لدول الخليج العربية",
-        "عكاظ",
-        "صحيفة سبق الإلكترونية",
-        "صحيفة الحدث",
-        "Le Monde.fr",
-        "boldmedya.com",
-        "alarabiya.net",
-        "Infobae",
-        "dw.com",
-        "Diken",
-        "T24",
-        "sana.sy",
-        "حفريات",
-        "سانا",
-        "Maliweb"
-      ],
-      "related_articles": [
-        {
-          "title": "GCC Secretary-General strongly condemns terrorist attack in Damascus",
-          "original_title": "معالي الأمين العام لمجلس التعاون يدين بأشد العبارات الهجوم الإرهابي الذي استهدف العاصمة السورية دمشق، ويؤكد تضامن مجلس التعاون مع الجمهورية العربية السورية",
-          "original_language": "ar",
-          "summary": "The Secretary-General of the Gulf Cooperation Council issued a strong condemnation of the terrorist attack targeting Damascus.",
-          "published": "2026-07-07T07:00:00+00:00",
-          "source": "الأمانة العامة لمجلس التعاون لدول الخليج العربية",
-          "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1JOFlYU0c1dVdDUjRXS2w2MU5KMmx1MGNpOUlXTENScE9sdzEydVd1MmU3MEQ3RGVVTTRtSDNzdEZVQWFnRnZZOWp4RVlYNnRqeHdiM3BCdUVYRC1FWWh2S24zdnNjSm44MXhEdFgwaVdDLTJ0UGdR?oc=5"
-        },
-        {
-          "title": "Syrian Interior Ministry finds lead pointing to perpetrators of attack on Macron's security perimeter",
-          "original_title": "الداخلية السورية: رأس خيط يقود لمنفذي الهجوم على طوق حماية ماكرون",
-          "original_language": "ar",
-          "summary": "Syrian interior security states it has found investigative leads regarding the perpetrators of the attack near the French presidential protection zone.",
-          "published": "2026-07-07T07:00:00+00:00",
-          "source": "عكاظ",
-          "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1nSTdxTm40X0l0UFdBdDE4NENiclRGMFBuYUludGRHUE1oelZHV1dOajRPdUlFMC10UG80RGN3SHZvRWwxd3IzT2VCMnlmZndXbUdkUVhR0gFUQVVfeXFMTlJvalFqZ2xRbUpuTENfTjl5Ymd5N0RxdUVZQ3JraXBiZ2V0d1RrNmR0Mmw1U3VPd0FVNEJzX21Qa3QtTFo4cXlZdU5hQ2tvVkxTVUYt?oc=5"
-        },
-        {
-          "title": "GCC Secretary-General condemns terrorist attack in Damascus",
-          "original_title": "الأمين العام لمجلس التعاون يدين بأشد العبارات الهجوم الإرهابي الذي استهدف العاصمة السورية دمشق",
-          "original_language": "ar",
-          "summary": "The Secretary-General of the Gulf Cooperation Council strongly condemned the terrorist attack targeting Damascus.",
-          "published": "2026-07-07T07:00:00+00:00",
-          "source": "صحيفة سبق الإلكترونية",
-          "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE94ZWJKVzZFYnRycFdYN0xxVTJVU01MNHhteHpHTmV5eXBsYU9qSTJXQ2ZVeGc1bUNNV0VfNDhaUm42T0o4ejdR?oc=5"
-        },
-        {
-          "title": "The Kingdom strongly condemns the terrorist attack in Damascus",
-          "original_title": "المملكة تدين بأشد العبارات الهجوم الإرهابي على دمشق",
-          "original_language": "ar",
-          "summary": "Saudi Arabia issues a strong condemnation of the terrorist bombing in Damascus.",
-          "published": "2026-07-07T07:00:00+00:00",
-          "source": "صحيفة الحدث",
-          "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTFBVbFBIYzFKME5JWHMxSzBRQlhDc3NIUlBFcnY2N09pRVRZdy1FMXowMkRLbnhmQUl6MERQa3ZKNS1IaFNDLUtn?oc=5"
-        },
-        {
-          "title": "GCC Secretary-General strongly condemns terrorist attack in Damascus",
-          "original_title": "HE GCCSG Strongly Condemns the Terrorist Attack that Targeted the Syrian Capital, and Affirms the GCC’s Solidarity with the Syrian Arab Republic",
-          "original_language": "en",
-          "summary": "The Gulf Cooperation Council strongly condemned the terrorist attack targeting the Syrian capital and affirmed solidarity with Syria.",
-          "published": "2026-07-07T12:23:09+00:00",
-          "source": "الأمانة العامة لمجلس التعاون لدول الخليج العربية",
-          "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1ZSHBLUXJJT0M5Q0hMU3ZnWEY2RC00UDFnUFhhUUF1T2QzQkZ6eVRJVmJoek9TMW9Ed0o1T05KVkk5NmhPYkhKVnhMYUwtajR0akk4V0dkS2RZNDE0MUs5SGxyQjRGNnhnbU8tbVJ2MFFtbXJHRU9j?oc=5"
-        },
-        {
-          "title": "Damascus attack during Emmanuel Macron's visit; toll updated to 1 dead and 36 injured",
-          "original_title": "Attentat à Damas pendant la visite d’Emmanuel Macron, le bilan revu à un mort et 36 blessés",
-          "original_language": "fr",
-          "summary": "Following the attack in Damascus during French President Emmanuel Macron's visit, casualty figures were updated to 1 dead and 36 injured.",
-          "published": "2026-07-08T07:00:00+00:00",
-          "source": "Le Monde.fr",
-          "url": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxOUXA0TWZscTJ1TnBJaFNGQ2dIR2FSakxMWnN5Vk1zRXFKbm42WjJFZHJTdlRGcDNBNlZMTUVNSkYwZU1UdXBTWERJYzZtYVIzR092UEtLMWVtTGYwcENTNjdHQnBwLW9hUjY1ZzlQWDNrZHNaMzBoeF91WG9ld1dYamZVcU5pUHpGWVY2aFlibzBVeFF5ajFoYWlfQ0ZMYUxKcl92RV9ka0JJT0hTQ1dORkdUN2JJZmdqVnNadXc4U1hkZC1wQ0hYS0hWeTFqcmtMTWxBQmd1Zi1EcFJfcXFoVVpvb0VSUmpsTUNSem5WN0xhalVRZURR?oc=5"
-        },
-        {
-          "title": "Macron visits Syria in the shadow of a terrorist attack",
-          "original_title": "Terör saldırısı gölgesinde Makron’un Suriye ziyareti",
-          "original_language": "tr",
-          "summary": "French President Emmanuel Macron visits Syria amid security concerns following a recent terrorist attack.",
-          "published": "2026-07-08T07:00:00+00:00",
-          "source": "boldmedya.com",
-          "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNSXJQM3BEQjVuNTNLU0t0REZOTnZvNUhXYV9DWHlLdlJ5QkpVYWlGNE9hZmlQblAzRW1pX2h0anhhMFdXX0JZUlRVYUQ2NTBSak5vdEpRckV4ZHBxbng0UGtBY2FNb3dJdTZKMjFsTlNlcm5ZdzdoVGFndkVhZkZHOVRHS1hscmhMVmtvS2l3?oc=5"
-        },
-        {
-          "title": "GCC Secretary-General condemns Houthi terrorist attack toward southern Saudi Arabia",
-          "original_title": "أمين مجلس التعاون: هجوم الحوثيين الإرهابي باتجاه جنوب السعودية \"اعتداء جبان\"",
-          "original_language": "ar",
-          "summary": "The Secretary-General of the Gulf Cooperation Council denounced a Houthi terrorist drone or missile attack directed toward southern Saudi Arabia.",
-          "published": "2026-07-14T07:00:00+00:00",
-          "source": "alarabiya.net",
-          "url": "https://news.google.com/rss/articles/CBMi5ARBVV95cUxOQm41UFgxVFFheWN4MmpXaFNXMHlsSm9QVVQ1aEhKamFLNzdlNzVlQl9ISzNNdTQ1aG9OeUtBam1UemZMT3R1RDJ6Q3lRdENmOUdBUVd4SEtuVEN5c2ZaTXJEMDFkOVhmdnd4elNzQ2hhQ3QtcVBxTnB2TWdtbXhaUGo2TlBoamJnbjJyR3VqV3pCX3VQWGd3YTlqOWVfSHRmWTM4T0d2YWQwd1d6VEtLV1J3Tk9hSm4tSDNZOG1EckZIT2E4TU1pXzJMdjZzYWxKcXJvek54WEVMZHdmcEZqZFZfdnlmbExTVTZ2MWVMSGdLWHVsMlEwQVpZQjdvdm5JS2tzN1k4NW5RZk5JWWZNNmFVTGs0WWRGU00xa09MdTBLd3pna3BfWFhCMlI0T1VmbHY5SkRqdFpYZWU1U1FwR3dOb3FOb1hENlZXRDNnLVBDbXFVRXpockdZY3NFX3U0YVYwVGtPbHBoRW8tYUI5RVREa1cyS3dnemYwTEJhdUwyUmlhTnhjQk41ZFlVb3Q1RTljVzRmN0o1dm5vOXpoNlRfbEJadm0tSDBpdGpHUV8tLXcyZUZ3TkF1WW5LcjJrdFhtcExlMUJWZ0Zob3RKbWRpckJaa0NCNWdfSjlQMHk4bkhEXy10a1djY1AwSkZ0MzBPbEpTZE1Ed1duSnlwd2dQWXd0T3Z6cHg0OGR5bk4yREpKd1dfRDM0VU1TZkpPMXd6SmdGQUFSTEpTZVFCSGdPMWVNdUJ2bkZ1ZWh0aHlDczhVOExselRLbDhwTVRodXE0c0FUUlhYOVZGVFdnbmlubUjSAeoEQVVfeXFMT2lIeHlPXzl3ZDRRdUlmOTE1dTBhWTVZN3J2QlZiVzRYTUN1Wnh3V2xreFk5UlpkUGZyLTZHM2VrM1Nza1NkMkxtd0JRSFMzdzdnX05oY1Y2TExkbHNLZWtWQTFQLXpwSnFzUXBfdEZ1R1hHTm1DS0JLd2xRc1duUW5CSHl6TWZVTjRySWlSYW1qWDc5SHZlT1NaaG9MX181TXdwbHNRVTlJYjFQVEFUbEJ5dld3RGJadjBTSXlrczVibnZKX251cDJXaDFyODVqSGJYU1BUZDZud2xwdGlCalFRUW9PQkh1UkZwcGFyYkFCS3Jid2xCZG9JRTFJNzFEY2xFNG9wRTZ0MkczM21rUy05X2x4X3pra1c2enNHWFQzNmVOYkEtd1FqX3BqZERQYnFQMTQ1NUNPWGFCSHY5cnlPcHlxRGNkRmN5WWY5S1U1aEtNT2dQUUM4LVo3a3dNMEhEeUZmY2gxLWZmRjhzQnQ5czRhSVdVZUJfVzVpOHZCNjZnaUFrb0VFN0k1RG16RnNJMkluTWV2RS1UNWxqcHJJQ1dzdlktMGVza3JLQVlOM0tkVlBldXJJNDEzUXRha0g0QmdOZENLTXVGbWw3MnFVdFJWLU1WRHBId2ZRcW93SnZuN0VkR09PM2p6QlZacFRLaUVNMVFINHU3V2d6WDRQUlFhM21XZUN1X25xZElSUjRpeXlaZF9JNDhxTjR2clc0WVNreVBYc2lvYkRtdnNSZGcycjB3YXYtZWdYV3A5dDZESnJMd3RQbDRhb1FNY0F5UDNqN294WFg1eVlYaWF5R1h4MXoyRFpR?oc=5"
-        },
-        {
-          "title": "Syria Captures ISIS Cell Linked to Damascus Attacks",
-          "original_title": "Siria captura célula del EI vinculada a atentados en Damasco",
-          "original_language": "es",
-          "summary": "Syrian authorities have captured an Islamic State cell linked to recent attacks in Damascus, including church bombings.",
-          "published": "2026-07-09T07:00:00+00:00",
-          "source": "dw.com",
-          "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNelJ2UHl6cjE5a1M0dHpHMXNfdW1oZWU1SHlSTUNZVUFIMXNQRWVJdWttS2FlcW1xMG1FOHE5alc1VW9pSUxfclRBeEZYQzMtMFNpaDJjM2E1STdmckhqaUFCTHJ4RVdKbXB6RG5USDdDWmp0azN2Q3FzRkg4X1I3ellhZUJPTDROYXdfVmFJM1M3Nm54Q1RqdFBLa0NKR2vSAZ8BQVVfeXFMTzFmRG50OEhMNTEwZG44OWNoQjktUG9Qc0M1aEc1M1FHVU5fMl9NQ25XekJ5NkJ6dHNKRFJOdHNFNDF2QldOSW8tWDJudUF1SXNDdG94by1nWFVEbUs3aVRheTFROWxhaHFYT0pjRDRBOHBHZEFyWllnaVh0S3ZVUzVKemR5NE8yQkRzaFMtZENKdl9lTEFsUTN0ck1kTTZR?oc=5"
-        },
-        {
-          "title": "Syrian Government Blames ISIS for Damascus Attacks During Macron's Visit",
-          "original_title": "El gobierno de Siria responsabilizó al Estado Islámico por los atentados en Damasco durante la visita de Emmanuel Macron",
-          "original_language": "es",
-          "summary": "The Syrian government has blamed the Islamic State for the terrorist attacks in Damascus that occurred during Emmanuel Macron's visit.",
-          "published": "2026-07-10T07:00:00+00:00",
-          "source": "Infobae",
-          "url": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxQZWRZSGd5M0ttd0RnRjhtMHoxQ0ZrbUk3YTU4TVFrSjdvTklSSjdSOXVtRGMxMUFoZW5Mc3luSUxQYUpSM3ktNVBiU1FMb3NLdFF0Z1FOcFVEckE5Y0h4aWFDWE02TW9ZbGVrbVlNSEo2VnRKaXlCZ0JKZ3pYUTFFZlBvLURLVWozdHJpZWxtTnpCNnZEVWJtRFFYaWREenZKeE9LWGpDb3YwQjJjdnVjNlYwN2FUY1RoWURqU3JhTVI2T2NuZ3lRZkcwNFpYMTlPdkNRX0RjVXJGZWZOSE1OMHdvYXVxQThTQzVBOTNkbjdVbXI2aE1NNDFydm1QMk3SAZoCQVVfeXFMTmNzdjJicmMwaUtwTktMbU5sMlg1c2k4UE9IR2lHcDNQRERXYzZlVUVveWRLYW9wR0RlUm1PV3NVRXo4dnlQTjMxVF9ob0taR1BiM0x6OFA2WEFXaTRuV203SG0xY2ZZZG9Mb1hXUlNCa2J4QlVnWjdJS2YxRnlMZkhOOWZFOUpyanJlbVBqUFZ0M1ZwOXJGSWpQSkx4WXluTkRsMHdPN1dYSFJ4YkxFNXkzeml2QXlfc2ZneE9EQ05IcFBiMGZkejltSEQ5cE5jSWtMNGJnR0F1OE9CVFFzWGx5a2VHMW9yWmJNdktvMWJMUmNKVjY2alhnY1hocGtrcy1SaVhNdDd2ZnZTTWdGLWl3ZWlXV0ZGNHdR?oc=5"
-        },
-        {
-          "title": "ISIS confirmed as perpetrator of attacks during Macron's Syria visit",
-          "original_title": "Macron'un Suriye ziyareti sırasındaki saldırıları IŞİD yapmış",
-          "original_language": "tr",
-          "summary": "Reports indicate that the terrorist organization ISIS was responsible for the attacks during Macron's visit to Syria.",
-          "published": "2026-07-13T07:00:00+00:00",
-          "source": "Diken",
-          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNVzQwdHJuc2NTRC1oeXY0UGxuSjBwN2R5RWZWYjFjN3R6MTVRM0dBdWZ0VTE2S2J0a08zMGlXWV9xVnh3bzBTaWxTTlVhZWhwNE5PYUJyMTN5RnFNcDZJYm9FaUhWNU5LdkhxMzNpWmNhNEtkU3NpZWxuYnhvS2QtVkQ4U0wxZVBaRlE4NHFiUQ?oc=5"
-        },
-        {
-          "title": "Syrian Interior Ministry announces bombers during Macron's visit were ISIS members",
-          "original_title": "Suriye İçişleri, Macron’un ziyareti sırasında bombalı saldırı düzenleyenlerin IŞİD üyesi olduğunu açıkladı",
-          "original_language": "tr",
-          "summary": "The Syrian Interior Ministry stated that the individuals who carried out the bombing during Macron's visit were members of ISIS.",
-          "published": "2026-07-13T07:00:00+00:00",
-          "source": "T24",
-          "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNaTRQSnEyejVFb2ZYREI1bzNRQVNEWWQ5QnBKQllOV291V3hZd3hTTXk3ZzZ6OFBVQ1FwNXdrRXdCWkhIb3R1OE5mUmpKakpzT3JtY0hGZlJVVExVbUVRc0ZpQ2cxTENkcVc2RmJxUVN4RG4tVDVBVnl2WlpTajVVRVhHcmVFYmZPeklpMXMzeUxPZWM5dkh1a3JyUU10NU1EblFHNzJtTVp4MmkwVEVJa0tBSlJPVFJLbWh0eWQ5WmVuY1VUU1FjcEdxbTdmX1o3OVdN?oc=5"
-        },
-        {
-          "title": "ISIS detainees confess to Mar Elias church bombing and other planned attacks",
-          "original_title": "ISIS detainees confess to Mar Elias church bombing and other planned attacks",
-          "original_language": "en",
-          "summary": "Detained ISIS members in Syria have confessed to their involvement in the Mar Elias church bombing and plotting additional attacks.",
-          "published": "2026-07-16T07:00:00+00:00",
-          "source": "sana.sy",
-          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFBPdW5kR2RpNzZMQUlIOWtYeko0RDMzdVJHbFh6NGtwT2JpZVpQeXRJTThWMzktZUNFOXJZZUpyUHJZbUtmbGJVaw?oc=5"
-        },
-        {
-          "title": "Syrian Ministry of Interior discloses ISIS plan for Mar Elias Church attack",
-          "original_title": "Suriye İçişleri Bakanlığı, DEAŞ’ın Mar İlyas Kilisesi Saldırısı Planını Açıkladı",
-          "original_language": "tr",
-          "summary": "The Syrian Interior Ministry released details concerning the ISIS plot behind the Mar Elias Church attack.",
-          "published": "2026-07-16T07:00:00+00:00",
-          "source": "سانا",
-          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFBIZzFvalRxLU1HNTFibTROUTdVZVh0VjFoQ1RhR2ZNWmJDbE9KTGRwYzNjcHc2dFFnVURqaG9razVhUnhldGNDcg?oc=5"
-        },
-        {
-          "title": "Syrian Interior Ministry Confirms Daesh Cell Implication in Damascus Attacks",
-          "original_title": "Interior sirio confirma la implicación de una célula de Daesh en atentados de Damasco",
-          "original_language": "es",
-          "summary": "The Syrian Interior Ministry confirmed the involvement of an ISIS/Daesh terrorist cell in attacks carried out in Damascus.",
-          "published": "2026-07-13T11:15:00+00:00",
-          "source": "sana.sy",
-          "url": "https://sana.sy/es/breaking-news/2321461/"
-        },
-        {
-          "title": "Syria: ISIS cells dismantled and prominent leaders arrested",
-          "original_title": "سورية: تفكيك خلايا لـ«داعش» والقبض على قيادات بارزة",
-          "original_language": "ar",
-          "summary": "Security forces in Syria have successfully dismantled ISIS sleeper cells and apprehended several prominent leaders.",
-          "published": "2026-07-09T07:00:00+00:00",
-          "source": "عكاظ",
-          "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5WYlE4cGJPZ0Z0YmxrUUxJVG1Lejk3Y2FNWVU0dGdJeXB3aUk4LWJXaV9YUG9vZWtWeUxNMkhBR3J2R2pkY2swU3NxUkFzTVR0M2V0aWpn0gFUQVVfeXFMTjliMW9mbXJVV3gyWlEzQ093ZTI4TUxxYlpEdlpIWHZSLVo3OEU0Vm55eVNFTF9SSnc5UHlRSHRNYkJNeGxnbnllRFhqd0QyNmMzWWJz?oc=5"
-        },
-        {
-          "title": "Bomb Explosions Reported Near Hotel During Macron's Visit to Damascus",
-          "original_title": "Explosions près de son hôtel: Attentats à la bombe à Damas en pleine visite de Macron !",
-          "original_language": "fr",
-          "summary": "Bomb attacks occurred near a hotel in Damascus during the official visit of French President Emmanuel Macron.",
-          "published": "2026-07-07T09:48:00+00:00",
-          "source": "Maliweb",
-          "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxQUF8zMFR1OHh5YjAwRW9FeGNrYU1KUWNvZ25NM3BtR08tTm9sYTZwN1pzMmFySDFaVVV4ODN0TWx6eXg0RzNub2dkbVdSUTJsaTJpSFZMcUk2R05tdFUtZ1NJTDRjdWlKR2VCT2hDaE5oY3I3Ul8tbTI0NHNjTnNVMU1BWUpWamY4Q3owTV9nSWNEdU1VZXdNQldTaXN3SjJVVkFsQ3NDbW1EeUFqRmQ5Sng4dXFQZkdFRWRJbGJUcDRBcWNOT3U2SjAzTWJIVDNK?oc=5"
-        }
-      ],
-      "article_count": 18,
-      "first_reported": "2026-07-07T07:00:00+00:00",
-      "last_reported": "2026-07-14T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete major terrorist bombing attack during a foreign leader's visit.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Double bombing attack in Damascus Syria during French President visit",
-      "title_variants": [
-        "double bombing attack in Damascus near Emmanuel Macron's hotel in Syria",
-        "Double bombing attack in Damascus Syria during French President visit"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "paraphrase_entity_context",
-        "very_high_title_similarity",
-        "title_plus_anchor",
-        "same_normalized_title",
-        "entity_actor_event_signature",
-        "same_incident"
-      ],
-      "location_confidence_score": 0.99,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Double bombing in Damascus near Emmanuel Macron's hotel"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly states the event happened in Damascus, Syria.",
-      "ai_geo_fingerprint": "c427dd6571ce366e9441830e2bbe4374ac986e2a48ff644b4fb433077ed9576a",
-      "ai_geo_inferred": false,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Damascus twin bombings 2026-07-07",
-      "update_type": "INITIAL",
-      "incident_id": "inc-e2e78275e7f7b973",
-      "source_article_fingerprints": [
-        "22f6e749be1f8e1254d72e0ab6e4093f5a7064d06e8838f50404d540c9ee2fce",
-        "fc81a8d8515179fe9d72ef6346ae1efee0a1adcdfb0afce464ec5b6dfb3d001e"
-      ],
-      "cbrn_subgroups": []
-    },
-    {
       "id": "508289a19d0c83d7",
       "category": "Attacks",
       "categories": [
@@ -427916,7 +427393,7 @@
       "collection_locale": null,
       "published": "2026-07-06T07:00:00+00:00",
       "source": "maritime-executive.com",
-      "source_count": 5,
+      "source_count": 6,
       "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxORXl5ZE5pOElYSWNaM1EyYkF3Y1pRS0hnSlprVFp5WmMtSzRGTVJLZnZxUEU5cjhYZWUzQkRJN25fSzFyWXpfZnVPNzhvMnFaREw2UzRYM3JVVkZIR1E1dlp5b3AxYXJ6Wk1Kb3hLRTdvWHUySEE3c0EtT2szaGpWXzlyWXd4dzhrdXZVbGVmbVRYLUZIZ3FOdW1zZGc0alI4WWZpMg?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -427932,7 +427409,8 @@
         "The Maritime Executive",
         "gCaptain",
         "safety4sea.com",
-        "Hiiraan Online"
+        "Hiiraan Online",
+        "safety4sea"
       ],
       "related_articles": [
         {
@@ -427969,7 +427447,7 @@
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 70,
+      "ai_relevance_score": 80,
       "ai_relevance_reason": "Reporting on ongoing vessel hijackings and hostages held by pirates.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -427998,6 +427476,7 @@
       ],
       "source_article_fingerprints": [
         "55bf46a520e086e5121496a06242a73b711fbf92a51bda68d92f0af00b9f9c67",
+        "9b643813e3e10c9504dd98664f5232b76a54ae7d8ac3c36dcfc75f35364bf9e1",
         "ac22a142c78b915ccb0f5ec1f659fb28fa2defa82f5eeb3b90604850f5f538c5",
         "f5ab5e8ec218a5ca55e5a3cf4985ceb1e086d7c3437003304106ebae4a54907e"
       ],
@@ -428627,7 +428106,7 @@
       "ai_geo_fingerprint": "9339ae8d4747db279a060fe3622e82fc2a8c52186549c0fc8ffe5e82973243cd",
       "ai_geo_inferred": true,
       "actor_group": "",
-      "incident_id": "inc-a7fc5f55ea2d826f",
+      "incident_id": "inc-134addcd851ca5be",
       "source_article_fingerprints": [
         "47151b73ee84524670c957f587856c1c9f00e7c7493a7ab676aaa2c216aaa025"
       ],
@@ -428637,7 +428116,7 @@
       ],
       "primary_event_type": "PIRACY",
       "is_attack": false,
-      "incident_anchor": "seafarers held hostage by pirates 2026",
+      "incident_anchor": "IMO Council meeting maritime security 2026",
       "update_type": "FOLLOW_UP",
       "actor_scope": "NON_STATE",
       "cbrn_subgroups": [],
@@ -428726,20 +428205,22 @@
       "id": "7f167c2901717597",
       "category": "Counter Terrorism Action",
       "categories": [
-        "Counter Terrorism Action"
+        "Counter Terrorism Action",
+        "Attacks",
+        "Arrests"
       ],
-      "title": "Morocco announces thwarting of dangerous terrorist plots linked to the Sahel",
-      "summary": "Morocco announced the disruption of severe terrorist plots connected to the Sahel region, neutralizing security risks.",
-      "original_title": "المغرب يُعلن إحباط مخططات إرهابية 'بالغة الخطورة' في منطقة الساحل",
-      "original_summary": "المغرب يُعلن إحباط مخططات إرهابية 'بالغة الخطورة' في منطقة الساحل Mosaique FM",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
+      "title": "Double Bombing in Damascus Near Emmanuel Macron's Hotel",
+      "summary": "Bombs exploded in Damascus during a visit by French President Emmanuel Macron, prompting regional condemnations and security investigations.",
+      "original_title": "Double attentat à Damas : des bombes explosent près de l'hôtel d'Emmanuel Macron",
+      "original_summary": "Double attentat à Damas : des bombes explosent près de l'hôtel d'Emmanuel Macron France 24",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French",
+      "collection_locale": "FR:fr",
       "published": "2026-07-06T07:00:00+00:00",
-      "source": "Mosaique FM",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMi_wRBVV95cUxPSWRWTndPdk5MRkJ2dHZNUG1rejNDeDZ4S245dnQ4b2NJbldkSzFKN3RGaWVMdWw3V3lXZDMwczkwUDhaWWpTTEdvc0RVZ0NfVXF3MzAzS0NGRWNwNmNhV3NHQ00xSlZCekNhdlc3YjVlWXhWTU5kOHNZZFpKcWZ4YUpzZ243R2NxeEs2anhNOHBwdnVaTEJzLUFRX2xTY0EyYVkyczd2T2daNTJYSjdQNUlDYXQzblBROUY3NnNKOVdPdGtfWVQ2X0U2TldocHJjUTlDdUhZY0pzT29KdW1NUTI1eEI0Tjl4OFIxdDl2VWQxN3ZPcEVTQ3l0aU9BM2h4Rmc3d0xnellDWXVsTDJoak9KZU5jU0l5TDhVQ21WVUpHLVZiTEZWQTExa0tZTnRSR3I2aktoQW10b09UVldiYUJGQXk4c2JxSDhGdEs3d0VqVFdWaE80TWtCNkM1X2pqeTZ1eWlsS1BCY1dMSGt2RW8yRGJmR3VNQmZuSGZHMzBIbHFQT0Q5Z3lYdjN1bEI4cTc5bkc0aXdZbWRGajBUOFJrSVhTM2pNd3JwV2U0RjRVTS1QNnZkSFZXRHlVVTRwajRSbFVVeVhxSkwwNG4xdEJNNEtRRVdrbzNUSElvUXQ3MFROZTJHMURqUDVVX08wZ2d6OFJ5UGtvaVFqbnpBckZBN2JMQi1ONEFDbWdhbkRFOUFhQTlZMmFjOXFPWnd1NFVJeE5ndzk5MWdQNHlQSkR6QlBsdTBjUkhOR1JKallTdjVhZm9rcEtQRTdPUEhvOWJKa0M0NVF0b01mQmt6QU9GREVmd0VMSTloN1hLVlBWOFBpWmZLeGx4N3BPb0E?oc=5",
+      "source": "France 24",
+      "source_count": 17,
+      "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxOTVBfVUpnbU8yWnFiekpYRWEtUG8yc3F2X0psWkJoUDVJVUltM0tPY1NlN2VqdUw2SGpRVno3bXhVcjNlX1kzYVlHdDZXOGdJWkt6RmFsWFpJZF9kN2FmVUxfakhrMVYxTi1lRFhtSl9idzN6TXJyVDh5cUR1dlBOZkFlSE5MOHBYUk9LVHIwQ3JHVG5rRFFpbWJvOWkwdnZveEQtRFBuLUxmRFB3UEZ3Wl95UFdjb2JPZ21QM1FPMDlqVDBaUlRjMTNtLWM1aEZPUTI0aF9DbGI?oc=5",
       "collector": "Google News RSS",
       "country": "Morocco",
       "country_code": "MA",
@@ -428753,7 +428234,23 @@
       "targeted_source": "mosaiquefm.net/ar",
       "targeted_source_kind": "local_language_media",
       "sources": [
-        "Mosaique FM"
+        "Mosaique FM",
+        "France 24",
+        "الأمانة العامة لمجلس التعاون لدول الخليج العربية",
+        "عكاظ",
+        "صحيفة سبق الإلكترونية",
+        "صحيفة الحدث",
+        "Le Monde.fr",
+        "boldmedya.com",
+        "alarabiya.net",
+        "Infobae",
+        "dw.com",
+        "Diken",
+        "T24",
+        "sana.sy",
+        "حفريات",
+        "سانا",
+        "Maliweb"
       ],
       "related_articles": [
         {
@@ -428764,24 +428261,178 @@
           "published": "2026-07-10T07:00:00+00:00",
           "source": "Mosaique FM",
           "url": "https://news.google.com/rss/articles/CBMinwNBVV95cUxQd1lQNnBlc0hQb2ZTeW5MUDlyMlN1WllBOFZQaUItRWJsbWRqTHp3NENFdlJXQ3MzMDRwaXk5cUlxcDA1aXdmZzdqaEh3Qnc1NjVRSzJrdWppeGpTV2UxQjBzSnhrTm9Ib2FxZ1M4dEs4eS1uYm9BT1o3ZFFoZmpnQkEtY1M0SjFrZUtWbW81R2lROXV0c1V3RzBBRHYzdXNUb1VEcmppYlhIaHA0SmtOZ2lUWk1yZC1RNTc5THJfYzYtNm5CWVV4a2JnenR0MUktQWszSDl5R0xPeFhLVGctSEVKRGEwOGhPbWNOWnNKZEtFVmRCS1ZwV0NBNFZEMkdxYkFldlk4QkNKXzI4cEk2VHdhMWg0NUhYWUlyYWxVWGhfcmlHSHd4dk1XNGkxSGYzT2pRdHp3bDR1amlJa0xGSUxTZVo3a25vZFBrbW5YRzU3eDdRdWUybDZBZ1dtQVp2cWlxbVI2ajB4TDRnbVVPUUJYSU1YaVhTWlJldjdYYXdKa2hfcmZVdTNRS2s0VkZieFcyN09pS1FfUTBFTFhF?oc=5"
+        },
+        {
+          "title": "GCC Secretary-General strongly condemns terrorist attack in Damascus",
+          "original_title": "معالي الأمين العام لمجلس التعاون يدين بأشد العبارات الهجوم الإرهابي الذي استهدف العاصمة السورية دمشق، ويؤكد تضامن مجلس التعاون مع الجمهورية العربية السورية",
+          "original_language": "ar",
+          "summary": "The Secretary-General of the Gulf Cooperation Council issued a strong condemnation of the terrorist attack targeting Damascus.",
+          "published": "2026-07-07T07:00:00+00:00",
+          "source": "الأمانة العامة لمجلس التعاون لدول الخليج العربية",
+          "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1JOFlYU0c1dVdDUjRXS2w2MU5KMmx1MGNpOUlXTENScE9sdzEydVd1MmU3MEQ3RGVVTTRtSDNzdEZVQWFnRnZZOWp4RVlYNnRqeHdiM3BCdUVYRC1FWWh2S24zdnNjSm44MXhEdFgwaVdDLTJ0UGdR?oc=5"
+        },
+        {
+          "title": "Syrian Interior Ministry finds lead pointing to perpetrators of attack on Macron's security perimeter",
+          "original_title": "الداخلية السورية: رأس خيط يقود لمنفذي الهجوم على طوق حماية ماكرون",
+          "original_language": "ar",
+          "summary": "Syrian interior security states it has found investigative leads regarding the perpetrators of the attack near the French presidential protection zone.",
+          "published": "2026-07-07T07:00:00+00:00",
+          "source": "عكاظ",
+          "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1nSTdxTm40X0l0UFdBdDE4NENiclRGMFBuYUludGRHUE1oelZHV1dOajRPdUlFMC10UG80RGN3SHZvRWwxd3IzT2VCMnlmZndXbUdkUVhR0gFUQVVfeXFMTlJvalFqZ2xRbUpuTENfTjl5Ymd5N0RxdUVZQ3JraXBiZ2V0d1RrNmR0Mmw1U3VPd0FVNEJzX21Qa3QtTFo4cXlZdU5hQ2tvVkxTVUYt?oc=5"
+        },
+        {
+          "title": "GCC Secretary-General condemns terrorist attack in Damascus",
+          "original_title": "الأمين العام لمجلس التعاون يدين بأشد العبارات الهجوم الإرهابي الذي استهدف العاصمة السورية دمشق",
+          "original_language": "ar",
+          "summary": "The Secretary-General of the Gulf Cooperation Council strongly condemned the terrorist attack targeting Damascus.",
+          "published": "2026-07-07T07:00:00+00:00",
+          "source": "صحيفة سبق الإلكترونية",
+          "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE94ZWJKVzZFYnRycFdYN0xxVTJVU01MNHhteHpHTmV5eXBsYU9qSTJXQ2ZVeGc1bUNNV0VfNDhaUm42T0o4ejdR?oc=5"
+        },
+        {
+          "title": "The Kingdom strongly condemns the terrorist attack in Damascus",
+          "original_title": "المملكة تدين بأشد العبارات الهجوم الإرهابي على دمشق",
+          "original_language": "ar",
+          "summary": "Saudi Arabia issues a strong condemnation of the terrorist bombing in Damascus.",
+          "published": "2026-07-07T07:00:00+00:00",
+          "source": "صحيفة الحدث",
+          "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTFBVbFBIYzFKME5JWHMxSzBRQlhDc3NIUlBFcnY2N09pRVRZdy1FMXowMkRLbnhmQUl6MERQa3ZKNS1IaFNDLUtn?oc=5"
+        },
+        {
+          "title": "Damascus attack during Emmanuel Macron's visit; toll updated to 1 dead and 36 injured",
+          "original_title": "Attentat à Damas pendant la visite d’Emmanuel Macron, le bilan revu à un mort et 36 blessés",
+          "original_language": "fr",
+          "summary": "Following the attack in Damascus during French President Emmanuel Macron's visit, casualty figures were updated to 1 dead and 36 injured.",
+          "published": "2026-07-08T07:00:00+00:00",
+          "source": "Le Monde.fr",
+          "url": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxOUXA0TWZscTJ1TnBJaFNGQ2dIR2FSakxMWnN5Vk1zRXFKbm42WjJFZHJTdlRGcDNBNlZMTUVNSkYwZU1UdXBTWERJYzZtYVIzR092UEtLMWVtTGYwcENTNjdHQnBwLW9hUjY1ZzlQWDNrZHNaMzBoeF91WG9ld1dYamZVcU5pUHpGWVY2aFlibzBVeFF5ajFoYWlfQ0ZMYUxKcl92RV9ka0JJT0hTQ1dORkdUN2JJZmdqVnNadXc4U1hkZC1wQ0hYS0hWeTFqcmtMTWxBQmd1Zi1EcFJfcXFoVVpvb0VSUmpsTUNSem5WN0xhalVRZURR?oc=5"
+        },
+        {
+          "title": "Macron visits Syria in the shadow of a terrorist attack",
+          "original_title": "Terör saldırısı gölgesinde Makron’un Suriye ziyareti",
+          "original_language": "tr",
+          "summary": "French President Emmanuel Macron visits Syria amid security concerns following a recent terrorist attack.",
+          "published": "2026-07-08T07:00:00+00:00",
+          "source": "boldmedya.com",
+          "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNSXJQM3BEQjVuNTNLU0t0REZOTnZvNUhXYV9DWHlLdlJ5QkpVYWlGNE9hZmlQblAzRW1pX2h0anhhMFdXX0JZUlRVYUQ2NTBSak5vdEpRckV4ZHBxbng0UGtBY2FNb3dJdTZKMjFsTlNlcm5ZdzdoVGFndkVhZkZHOVRHS1hscmhMVmtvS2l3?oc=5"
+        },
+        {
+          "title": "GCC Secretary-General condemns Houthi terrorist attack toward southern Saudi Arabia",
+          "original_title": "أمين مجلس التعاون: هجوم الحوثيين الإرهابي باتجاه جنوب السعودية \"اعتداء جبان\"",
+          "original_language": "ar",
+          "summary": "The Secretary-General of the Gulf Cooperation Council denounced a Houthi terrorist drone or missile attack directed toward southern Saudi Arabia.",
+          "published": "2026-07-14T07:00:00+00:00",
+          "source": "alarabiya.net",
+          "url": "https://news.google.com/rss/articles/CBMi5ARBVV95cUxOQm41UFgxVFFheWN4MmpXaFNXMHlsSm9QVVQ1aEhKamFLNzdlNzVlQl9ISzNNdTQ1aG9OeUtBam1UemZMT3R1RDJ6Q3lRdENmOUdBUVd4SEtuVEN5c2ZaTXJEMDFkOVhmdnd4elNzQ2hhQ3QtcVBxTnB2TWdtbXhaUGo2TlBoamJnbjJyR3VqV3pCX3VQWGd3YTlqOWVfSHRmWTM4T0d2YWQwd1d6VEtLV1J3Tk9hSm4tSDNZOG1EckZIT2E4TU1pXzJMdjZzYWxKcXJvek54WEVMZHdmcEZqZFZfdnlmbExTVTZ2MWVMSGdLWHVsMlEwQVpZQjdvdm5JS2tzN1k4NW5RZk5JWWZNNmFVTGs0WWRGU00xa09MdTBLd3pna3BfWFhCMlI0T1VmbHY5SkRqdFpYZWU1U1FwR3dOb3FOb1hENlZXRDNnLVBDbXFVRXpockdZY3NFX3U0YVYwVGtPbHBoRW8tYUI5RVREa1cyS3dnemYwTEJhdUwyUmlhTnhjQk41ZFlVb3Q1RTljVzRmN0o1dm5vOXpoNlRfbEJadm0tSDBpdGpHUV8tLXcyZUZ3TkF1WW5LcjJrdFhtcExlMUJWZ0Zob3RKbWRpckJaa0NCNWdfSjlQMHk4bkhEXy10a1djY1AwSkZ0MzBPbEpTZE1Ed1duSnlwd2dQWXd0T3Z6cHg0OGR5bk4yREpKd1dfRDM0VU1TZkpPMXd6SmdGQUFSTEpTZVFCSGdPMWVNdUJ2bkZ1ZWh0aHlDczhVOExselRLbDhwTVRodXE0c0FUUlhYOVZGVFdnbmlubUjSAeoEQVVfeXFMT2lIeHlPXzl3ZDRRdUlmOTE1dTBhWTVZN3J2QlZiVzRYTUN1Wnh3V2xreFk5UlpkUGZyLTZHM2VrM1Nza1NkMkxtd0JRSFMzdzdnX05oY1Y2TExkbHNLZWtWQTFQLXpwSnFzUXBfdEZ1R1hHTm1DS0JLd2xRc1duUW5CSHl6TWZVTjRySWlSYW1qWDc5SHZlT1NaaG9MX181TXdwbHNRVTlJYjFQVEFUbEJ5dld3RGJadjBTSXlrczVibnZKX251cDJXaDFyODVqSGJYU1BUZDZud2xwdGlCalFRUW9PQkh1UkZwcGFyYkFCS3Jid2xCZG9JRTFJNzFEY2xFNG9wRTZ0MkczM21rUy05X2x4X3pra1c2enNHWFQzNmVOYkEtd1FqX3BqZERQYnFQMTQ1NUNPWGFCSHY5cnlPcHlxRGNkRmN5WWY5S1U1aEtNT2dQUUM4LVo3a3dNMEhEeUZmY2gxLWZmRjhzQnQ5czRhSVdVZUJfVzVpOHZCNjZnaUFrb0VFN0k1RG16RnNJMkluTWV2RS1UNWxqcHJJQ1dzdlktMGVza3JLQVlOM0tkVlBldXJJNDEzUXRha0g0QmdOZENLTXVGbWw3MnFVdFJWLU1WRHBId2ZRcW93SnZuN0VkR09PM2p6QlZacFRLaUVNMVFINHU3V2d6WDRQUlFhM21XZUN1X25xZElSUjRpeXlaZF9JNDhxTjR2clc0WVNreVBYc2lvYkRtdnNSZGcycjB3YXYtZWdYV3A5dDZESnJMd3RQbDRhb1FNY0F5UDNqN294WFg1eVlYaWF5R1h4MXoyRFpR?oc=5"
+        },
+        {
+          "title": "Syria Captures ISIS Cell Linked to Damascus Attacks",
+          "original_title": "Siria captura célula del EI vinculada a atentados en Damasco",
+          "original_language": "es",
+          "summary": "Syrian authorities have captured an Islamic State cell linked to recent attacks in Damascus, including church bombings.",
+          "published": "2026-07-09T07:00:00+00:00",
+          "source": "dw.com",
+          "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNelJ2UHl6cjE5a1M0dHpHMXNfdW1oZWU1SHlSTUNZVUFIMXNQRWVJdWttS2FlcW1xMG1FOHE5alc1VW9pSUxfclRBeEZYQzMtMFNpaDJjM2E1STdmckhqaUFCTHJ4RVdKbXB6RG5USDdDWmp0azN2Q3FzRkg4X1I3ellhZUJPTDROYXdfVmFJM1M3Nm54Q1RqdFBLa0NKR2vSAZ8BQVVfeXFMTzFmRG50OEhMNTEwZG44OWNoQjktUG9Qc0M1aEc1M1FHVU5fMl9NQ25XekJ5NkJ6dHNKRFJOdHNFNDF2QldOSW8tWDJudUF1SXNDdG94by1nWFVEbUs3aVRheTFROWxhaHFYT0pjRDRBOHBHZEFyWllnaVh0S3ZVUzVKemR5NE8yQkRzaFMtZENKdl9lTEFsUTN0ck1kTTZR?oc=5"
+        },
+        {
+          "title": "Syrian Government Blames ISIS for Damascus Attacks During Macron's Visit",
+          "original_title": "El gobierno de Siria responsabilizó al Estado Islámico por los atentados en Damasco durante la visita de Emmanuel Macron",
+          "original_language": "es",
+          "summary": "The Syrian government has blamed the Islamic State for the terrorist attacks in Damascus that occurred during Emmanuel Macron's visit.",
+          "published": "2026-07-10T07:00:00+00:00",
+          "source": "Infobae",
+          "url": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxQZWRZSGd5M0ttd0RnRjhtMHoxQ0ZrbUk3YTU4TVFrSjdvTklSSjdSOXVtRGMxMUFoZW5Mc3luSUxQYUpSM3ktNVBiU1FMb3NLdFF0Z1FOcFVEckE5Y0h4aWFDWE02TW9ZbGVrbVlNSEo2VnRKaXlCZ0JKZ3pYUTFFZlBvLURLVWozdHJpZWxtTnpCNnZEVWJtRFFYaWREenZKeE9LWGpDb3YwQjJjdnVjNlYwN2FUY1RoWURqU3JhTVI2T2NuZ3lRZkcwNFpYMTlPdkNRX0RjVXJGZWZOSE1OMHdvYXVxQThTQzVBOTNkbjdVbXI2aE1NNDFydm1QMk3SAZoCQVVfeXFMTmNzdjJicmMwaUtwTktMbU5sMlg1c2k4UE9IR2lHcDNQRERXYzZlVUVveWRLYW9wR0RlUm1PV3NVRXo4dnlQTjMxVF9ob0taR1BiM0x6OFA2WEFXaTRuV203SG0xY2ZZZG9Mb1hXUlNCa2J4QlVnWjdJS2YxRnlMZkhOOWZFOUpyanJlbVBqUFZ0M1ZwOXJGSWpQSkx4WXluTkRsMHdPN1dYSFJ4YkxFNXkzeml2QXlfc2ZneE9EQ05IcFBiMGZkejltSEQ5cE5jSWtMNGJnR0F1OE9CVFFzWGx5a2VHMW9yWmJNdktvMWJMUmNKVjY2alhnY1hocGtrcy1SaVhNdDd2ZnZTTWdGLWl3ZWlXV0ZGNHdR?oc=5"
+        },
+        {
+          "title": "ISIS confirmed as perpetrator of attacks during Macron's Syria visit",
+          "original_title": "Macron'un Suriye ziyareti sırasındaki saldırıları IŞİD yapmış",
+          "original_language": "tr",
+          "summary": "Reports indicate that the terrorist organization ISIS was responsible for the attacks during Macron's visit to Syria.",
+          "published": "2026-07-13T07:00:00+00:00",
+          "source": "Diken",
+          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNVzQwdHJuc2NTRC1oeXY0UGxuSjBwN2R5RWZWYjFjN3R6MTVRM0dBdWZ0VTE2S2J0a08zMGlXWV9xVnh3bzBTaWxTTlVhZWhwNE5PYUJyMTN5RnFNcDZJYm9FaUhWNU5LdkhxMzNpWmNhNEtkU3NpZWxuYnhvS2QtVkQ4U0wxZVBaRlE4NHFiUQ?oc=5"
+        },
+        {
+          "title": "Syrian Interior Ministry announces bombers during Macron's visit were ISIS members",
+          "original_title": "Suriye İçişleri, Macron’un ziyareti sırasında bombalı saldırı düzenleyenlerin IŞİD üyesi olduğunu açıkladı",
+          "original_language": "tr",
+          "summary": "The Syrian Interior Ministry stated that the individuals who carried out the bombing during Macron's visit were members of ISIS.",
+          "published": "2026-07-13T07:00:00+00:00",
+          "source": "T24",
+          "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNaTRQSnEyejVFb2ZYREI1bzNRQVNEWWQ5QnBKQllOV291V3hZd3hTTXk3ZzZ6OFBVQ1FwNXdrRXdCWkhIb3R1OE5mUmpKakpzT3JtY0hGZlJVVExVbUVRc0ZpQ2cxTENkcVc2RmJxUVN4RG4tVDVBVnl2WlpTajVVRVhHcmVFYmZPeklpMXMzeUxPZWM5dkh1a3JyUU10NU1EblFHNzJtTVp4MmkwVEVJa0tBSlJPVFJLbWh0eWQ5WmVuY1VUU1FjcEdxbTdmX1o3OVdN?oc=5"
+        },
+        {
+          "title": "ISIS detainees confess to Mar Elias church bombing and other planned attacks",
+          "original_title": "ISIS detainees confess to Mar Elias church bombing and other planned attacks",
+          "original_language": "en",
+          "summary": "Detained ISIS members in Syria have confessed to their involvement in the Mar Elias church bombing and plotting additional attacks.",
+          "published": "2026-07-16T07:00:00+00:00",
+          "source": "sana.sy",
+          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFBPdW5kR2RpNzZMQUlIOWtYeko0RDMzdVJHbFh6NGtwT2JpZVpQeXRJTThWMzktZUNFOXJZZUpyUHJZbUtmbGJVaw?oc=5"
+        },
+        {
+          "title": "Syrian Ministry of Interior discloses ISIS plan for Mar Elias Church attack",
+          "original_title": "Suriye İçişleri Bakanlığı, DEAŞ’ın Mar İlyas Kilisesi Saldırısı Planını Açıkladı",
+          "original_language": "tr",
+          "summary": "The Syrian Interior Ministry released details concerning the ISIS plot behind the Mar Elias Church attack.",
+          "published": "2026-07-16T07:00:00+00:00",
+          "source": "سانا",
+          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFBIZzFvalRxLU1HNTFibTROUTdVZVh0VjFoQ1RhR2ZNWmJDbE9KTGRwYzNjcHc2dFFnVURqaG9razVhUnhldGNDcg?oc=5"
+        },
+        {
+          "title": "Syrian Interior Ministry Confirms Daesh Cell Implication in Damascus Attacks",
+          "original_title": "Interior sirio confirma la implicación de una célula de Daesh en atentados de Damasco",
+          "original_language": "es",
+          "summary": "The Syrian Interior Ministry confirmed the involvement of an ISIS/Daesh terrorist cell in attacks carried out in Damascus.",
+          "published": "2026-07-13T11:15:00+00:00",
+          "source": "sana.sy",
+          "url": "https://sana.sy/es/breaking-news/2321461/"
+        },
+        {
+          "title": "Syria: ISIS cells dismantled and prominent leaders arrested",
+          "original_title": "سورية: تفكيك خلايا لـ«داعش» والقبض على قيادات بارزة",
+          "original_language": "ar",
+          "summary": "Security forces in Syria have successfully dismantled ISIS sleeper cells and apprehended several prominent leaders.",
+          "published": "2026-07-09T07:00:00+00:00",
+          "source": "عكاظ",
+          "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5WYlE4cGJPZ0Z0YmxrUUxJVG1Lejk3Y2FNWVU0dGdJeXB3aUk4LWJXaV9YUG9vZWtWeUxNMkhBR3J2R2pkY2swU3NxUkFzTVR0M2V0aWpn0gFUQVVfeXFMTjliMW9mbXJVV3gyWlEzQ093ZTI4TUxxYlpEdlpIWHZSLVo3OEU0Vm55eVNFTF9SSnc5UHlRSHRNYkJNeGxnbnllRFhqd0QyNmMzWWJz?oc=5"
+        },
+        {
+          "title": "Bomb Explosions Reported Near Hotel During Macron's Visit to Damascus",
+          "original_title": "Explosions près de son hôtel: Attentats à la bombe à Damas en pleine visite de Macron !",
+          "original_language": "fr",
+          "summary": "Bomb attacks occurred near a hotel in Damascus during the official visit of French President Emmanuel Macron.",
+          "published": "2026-07-07T09:48:00+00:00",
+          "source": "Maliweb",
+          "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxQUF8zMFR1OHh5YjAwRW9FeGNrYU1KUWNvZ25NM3BtR08tTm9sYTZwN1pzMmFySDFaVVV4ODN0TWx6eXg0RzNub2dkbVdSUTJsaTJpSFZMcUk2R05tdFUtZ1NJTDRjdWlKR2VCT2hDaE5oY3I3Ul8tbTI0NHNjTnNVMU1BWUpWamY4Q3owTV9nSWNEdU1VZXdNQldTaXN3SjJVVkFsQ3NDbW1EeUFqRmQ5Sng4dXFQZkdFRWRJbGJUcDRBcWNOT3U2SjAzTWJIVDNK?oc=5"
+        },
+        {
+          "title": "Morocco announces thwarting of dangerous terrorist plots linked to the Sahel",
+          "original_title": "المغرب يُعلن إحباط مخططات إرهابية 'بالغة الخطورة' في منطقة الساحل",
+          "original_language": "ar",
+          "summary": "Morocco announced the disruption of severe terrorist plots connected to the Sahel region, neutralizing security risks.",
+          "published": "2026-07-06T07:00:00+00:00",
+          "source": "Mosaique FM",
+          "url": "https://news.google.com/rss/articles/CBMi_wRBVV95cUxPSWRWTndPdk5MRkJ2dHZNUG1rejNDeDZ4S245dnQ4b2NJbldkSzFKN3RGaWVMdWw3V3lXZDMwczkwUDhaWWpTTEdvc0RVZ0NfVXF3MzAzS0NGRWNwNmNhV3NHQ00xSlZCekNhdlc3YjVlWXhWTU5kOHNZZFpKcWZ4YUpzZ243R2NxeEs2anhNOHBwdnVaTEJzLUFRX2xTY0EyYVkyczd2T2daNTJYSjdQNUlDYXQzblBROUY3NnNKOVdPdGtfWVQ2X0U2TldocHJjUTlDdUhZY0pzT29KdW1NUTI1eEI0Tjl4OFIxdDl2VWQxN3ZPcEVTQ3l0aU9BM2h4Rmc3d0xnellDWXVsTDJoak9KZU5jU0l5TDhVQ21WVUpHLVZiTEZWQTExa0tZTnRSR3I2aktoQW10b09UVldiYUJGQXk4c2JxSDhGdEs3d0VqVFdWaE80TWtCNkM1X2pqeTZ1eWlsS1BCY1dMSGt2RW8yRGJmR3VNQmZuSGZHMzBIbHFQT0Q5Z3lYdjN1bEI4cTc5bkc0aXdZbWRGajBUOFJrSVhTM2pNd3JwV2U0RjRVTS1QNnZkSFZXRHlVVTRwajRSbFVVeVhxSkwwNG4xdEJNNEtRRVdrbzNUSElvUXQ3MFROZTJHMURqUDVVX08wZ2d6OFJ5UGtvaVFqbnpBckZBN2JMQi1ONEFDbWdhbkRFOUFhQTlZMmFjOXFPWnd1NFVJeE5ndzk5MWdQNHlQSkR6QlBsdTBjUkhOR1JKallTdjVhZm9rcEtQRTdPUEhvOWJKa0M0NVF0b01mQmt6QU9GREVmd0VMSTloN1hLVlBWOFBpWmZLeGx4N3BPb0E?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 19,
       "first_reported": "2026-07-06T07:00:00+00:00",
       "last_reported": "2026-07-10T07:00:00+00:00",
-      "dedup_confidence": 0.99,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "same_normalized_title"
+        "same_normalized_title",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Reports official operational success in disrupting cross-border terror plots.",
       "ai_current_ct_event": true,
       "ai_selected": true,
       "translated_to_english": true,
-      "ai_canonical_event": "thwarting of terrorist plots linked to Sahel region by Morocco",
+      "ai_canonical_event": "Double bombing attack in Damascus Syria during French President visit",
       "title_variants": [
         "Morocco announces thwarting of dangerous terrorist plots in Sahel region",
         "thwarting of terrorist plots linked to Sahel region by Morocco"
@@ -428807,7 +428458,12 @@
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
       "incident_anchor": "Morocco Sahel terrorist plots thwarted 2026-07-06",
-      "update_type": "INITIAL"
+      "update_type": "INITIAL",
+      "cbrn_subgroups": [],
+      "source_article_fingerprints": [
+        "22f6e749be1f8e1254d72e0ab6e4093f5a7064d06e8838f50404d540c9ee2fce",
+        "fc81a8d8515179fe9d72ef6346ae1efee0a1adcdfb0afce464ec5b6dfb3d001e"
+      ]
     },
     {
       "id": "22dfe5634b4f29e2",
@@ -429176,84 +428832,6 @@
       "ai_geo_reason": "International Maritime Organization (IMO) council session meeting at its headquarters (London, UK), though it is a procedural/institutional event.",
       "ai_geo_fingerprint": "d1cfea3697bd869c06273d4dd7dd8914fd7754d89e2385e02434e8f4aa453652",
       "ai_geo_inferred": true
-    },
-    {
-      "id": "ac066c2d04dc26b2",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Operation ATALANTA secures bulk carrier following pirate attack off Somalia",
-      "summary": "EU Naval Force Operation Atalanta secured a bulk carrier following a pirate attack off the coast of Somalia.",
-      "original_title": "Operation ATALANTA secures bulk carrier following pirate attack off Somalia",
-      "original_summary": "Operation ATALANTA secures bulk carrier following pirate attack off Somalia safety4sea",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-06T07:00:00+00:00",
-      "source": "safety4sea",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOWGp4UnEyNXJtRDZ4cGxOX0hEa2lJSzJmQkV1bFZIckplc2ZoZGlWdEpjWTQ1ei0xUWJkTGRGcEVHNXdyOGlzUU1lUXJzUmJ1YWNHQlNNZDZIaG12eFZoMnFuek51eDg2UlpEZzBHbzM1WUlIbDFBREpUZTR2cEpXX0xWSHBSLUdNbklZVVdUMnlHaUkxdVdqV3FJQmtMQk9n?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "medium",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "SAFETY4SEA",
-      "targeted_source_kind": "specialist_media",
-      "source_article_fingerprints": [
-        "9b643813e3e10c9504dd98664f5232b76a54ae7d8ac3c36dcfc75f35364bf9e1"
-      ],
-      "sources": [
-        "safety4sea"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-06T07:00:00+00:00",
-      "last_reported": "2026-07-06T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Reports a concrete naval security intervention following a pirate attack and hijacking attempt off Somalia.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "PIRACY",
-      "is_attack": false,
-      "incident_anchor": "Operation Atalanta bulk carrier pirate attack Somalia 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-957de1fef64665f7",
-      "translated_to_english": false,
-      "ai_canonical_event": "Operation Atalanta secures bulk carrier after pirate attack off Somalia",
-      "title_variants": [
-        "Operation Atalanta secures bulk carrier after pirate attack off Somalia"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.8,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Operation ATALANTA secures bulk carrier following pirate attack off Somalia"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Pirate attack and rescue occurred off the coast of Somalia.",
-      "ai_geo_fingerprint": "5bb7752c41cf469a3fa8d1189b0b58fac005a9d4bffbc9910ca73ce6022a0ab2",
-      "ai_geo_inferred": false
     },
     {
       "id": "4d7634a7e1c7a788",
@@ -429885,7 +429463,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-07-04T07:00:00+00:00",
       "source": "leFaso.net - L'actualité au Burkina Faso",
-      "source_count": 2,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFBzUFRmZGc5ZThPeVZrc3VaMUx5amFWZ01fUXhlUHpyYTUwZ0wxeG5WeUhsSUx1SzlFV3U2d25UWk8xZ0Z1anJSa09Db3lTYXQ4U0hR?oc=5",
       "collector": "Google News RSS",
       "country": "Mali",
@@ -429901,7 +429479,8 @@
       "targeted_source_kind": "local_language_media",
       "sources": [
         "leFaso.net - L'actualité au Burkina Faso",
-        "malijet.com"
+        "malijet.com",
+        "Maliweb"
       ],
       "related_articles": [
         {
@@ -429912,9 +429491,18 @@
           "published": "2026-07-05T07:00:00+00:00",
           "source": "malijet.com",
           "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNd3gwUi1sMk5TcUx1cF93Ry1od2hrSEZtMm5ZVVJ0MTY5TW80OU5hekdPWEZPWmh3UXF0aG9hbl9MdVZKYm9PTW9RQ3RkR2FuLXN3U2JRQlJ5UlhGMHVOWHJ1b2xmcEVWQTFMQUtBV1g3RWVRaFVUVmxCeGFhelh3MGV4R0c5NDVKeFh1VEZyR0tqSlJxanFBeU9xMzg5Wnd1MTVlX3JyY2lHeEhTalQyZw?oc=5"
+        },
+        {
+          "title": "Mali: Heavy losses for terrorist groups at Konna and Somadougou",
+          "original_title": "Mali: Lourdes pertes des groupes terroristes à Konna et Somadougou",
+          "original_language": "fr",
+          "summary": "The Malian army reported neutralizing significant numbers of militants during operations in Konna and Somadougou.",
+          "published": "2026-07-04T07:00:00+00:00",
+          "source": "Maliweb",
+          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNOU5rVUhHWmxzeWc4WW5Ya3hlcjVsX2I5VXRENmcxTnlsQ1VMcUNPM1ZaUlJKN2dGV2dDSnZUM1hqNW9fVlk5TFdHWnpoYXJwOVJoTk9idHIxejBsRmR2U3pOV1V5YTlWVmpTQ1dPNmFYcjhaOXFfRlZmdmlWeHdURi1rTnNoSWUxQnBIT1EzbGtEWDRYOFJVOXpsY1RhN01ZWjc2em1qdDJXVlhlSF90Szc5MA?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 3,
       "first_reported": "2026-07-04T07:00:00+00:00",
       "last_reported": "2026-07-05T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -429930,9 +429518,10 @@
         "repulsion of terrorist attacks and killing of 26 assailants by Mali armed forces in Mali",
         "Mali armed forces repel terrorist attacks and neutralize 26 assailants in Mali 2026-07-04"
       ],
-      "dedup_confidence": 0.593,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "paraphrase_entity_context"
+        "paraphrase_entity_context",
+        "same_incident"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_country_capital",
@@ -429955,85 +429544,11 @@
       "is_attack": false,
       "incident_anchor": "Mali armed forces CT operation 2026-07-04",
       "update_type": "INITIAL",
-      "incident_id": "inc-1e5092def4ecf7ed"
-    },
-    {
-      "id": "924d36774618f6aa",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Mali: Heavy losses for terrorist groups at Konna and Somadougou",
-      "summary": "The Malian army reported neutralizing significant numbers of militants during operations in Konna and Somadougou.",
-      "original_title": "Mali: Lourdes pertes des groupes terroristes à Konna et Somadougou",
-      "original_summary": "Mali: Lourdes pertes des groupes terroristes à Konna et Somadougou Maliweb",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French / Africa",
-      "collection_locale": "FR:fr",
-      "published": "2026-07-04T07:00:00+00:00",
-      "source": "Maliweb",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNOU5rVUhHWmxzeWc4WW5Ya3hlcjVsX2I5VXRENmcxTnlsQ1VMcUNPM1ZaUlJKN2dGV2dDSnZUM1hqNW9fVlk5TFdHWnpoYXJwOVJoTk9idHIxejBsRmR2U3pOV1V5YTlWVmpTQ1dPNmFYcjhaOXFfRlZmdmlWeHdURi1rTnNoSWUxQnBIT1EzbGtEWDRYOFJVOXpsY1RhN01ZWjc2em1qdDJXVlhlSF90Szc5MA?oc=5",
-      "collector": "Google News RSS",
-      "country": "Mali",
-      "country_code": "ML",
-      "city": "Konna",
-      "region": null,
-      "latitude": 14.9536,
-      "longitude": -3.89,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "maliweb.net",
-      "targeted_source_kind": "local_language_media",
+      "incident_id": "inc-1e5092def4ecf7ed",
+      "cbrn_subgroups": [],
       "source_article_fingerprints": [
         "a9f7ea0eee9afa7b3ad5acf4f9a0c92c3f40d48ee1dce9a659dd5a5eaf4029c9"
-      ],
-      "sources": [
-        "Maliweb"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-04T07:00:00+00:00",
-      "last_reported": "2026-07-04T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Reports a concrete offensive military operation against non-state groups.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Mali military operations 2026-07-04",
-      "update_type": "INITIAL",
-      "incident_id": "inc-a94cf2f84ddd18d1",
-      "translated_to_english": true,
-      "ai_canonical_event": "Malian military operations against terrorists in Konna and Somadougou",
-      "title_variants": [
-        "Malian military operations against terrorists in Konna and Somadougou"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_city_coordinates",
-      "location_evidence": [
-        "Mali: Lourdes pertes des groupes terroristes à Konna et Somadougou"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Operations took place in Konna and Somadougou, Mali.",
-      "ai_geo_fingerprint": "8d49aba4d4facd070fdabd9e4c99a6a58b5cd77a03f5ca566fa80cf375e96f76",
-      "ai_geo_inferred": false
+      ]
     },
     {
       "id": "97741ee1a8e45940",
@@ -430474,90 +429989,6 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Criminal Investigation Department foiled a suspected car bomb attack in Sorman, Libya.",
       "ai_geo_fingerprint": "e0b80656172dd4efd5c1f618372f748b1c2807ad4cf1b865d1ea26412465d2d3",
-      "ai_geo_inferred": false,
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_url"
-      ]
-    },
-    {
-      "id": "3958ed118dd281fa",
-      "category": "Attacks",
-      "categories": [
-        "Attacks",
-        "Chemicals and Explosives"
-      ],
-      "title": "Car bomb attack reported in Hejaz area, Damascus",
-      "summary": "An explosive attack occurred in the Hejaz area of Damascus.",
-      "original_title": "The car bomb attack in the Hejaz area, the heart of Damascus",
-      "original_summary": "The car bomb attack in the Hejaz area, the heart of Damascus تيار المستقبل السوري",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": "US:en",
-      "published": "2026-07-03T07:00:00+00:00",
-      "source": "تيار المستقبل السوري",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxNRi1kU0JZRjdRQ2JWY0dSVVB2VkRwRHc3T1dnVXVLOWVpd2c4MEZqbmRSUFhqa01SV3hjRDFPNVRZS0VwaFdXYmZ2cVRkUGVHQm12OWdha0t3VWMwSnhiSkdGNmtESk9QTTJMZm15cEJ3WDZ0cFZkeUs3SF9zbkJPTXU4Z3pkeWQ3ZngyQ0xGdTM1NldFTml3?oc=5",
-      "collector": "Google News RSS",
-      "country": "Syria",
-      "country_code": "SY",
-      "city": "Damascus",
-      "region": null,
-      "latitude": 33.5102,
-      "longitude": 36.29128,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "0c56f1cdfbc48d5be98f40c8b00aa932ab0da4b83f88449e3b1655890f175be6"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Reports a concrete explosive attack in a high-security urban environment.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Hejaz Damascus bombing 2026-07-03",
-      "update_type": "INITIAL",
-      "incident_id": "inc-dc6515dabfc3d758",
-      "translated_to_english": false,
-      "ai_canonical_event": "car bomb attack in Hejaz area Damascus",
-      "title_variants": [
-        "car bomb attack in Hejaz area Damascus"
-      ],
-      "actor_scope": "UNKNOWN",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": [],
-      "sources": [
-        "تيار المستقبل السوري"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-03T07:00:00+00:00",
-      "last_reported": "2026-07-03T07:00:00+00:00",
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Hejaz area, Damascus"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Car bomb attack reported in the Hejaz area of Damascus.",
-      "ai_geo_fingerprint": "b13f3b4687a1904013d5f3819513c6eff14387de60e2d73f7e2931ebb54117cd",
       "ai_geo_inferred": false,
       "dedup_confidence": 1.0,
       "dedup_methods": [
@@ -431041,7 +430472,10 @@
       "ai_geo_inferred": true,
       "actor_group": "",
       "incident_id": "inc-07fe1fab017750b6",
-      "source_article_fingerprints": [],
+      "source_article_fingerprints": [
+        "48823eee384af52e90addfebcc09c253f8fa7e2ff60054b13a172b19f0b41a69",
+        "e089e7b46d91dfed2658a42ce504c9f23317e65a51144068459b9d7a62734eb5"
+      ],
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
       "incident_anchor": "Gulf of Aden merchant ship pirate attack 2026-07-02",
@@ -431511,7 +430945,7 @@
       "collection_locale": "SA:ar",
       "published": "2026-07-02T07:00:00+00:00",
       "source": "القدس العربي",
-      "source_count": 5,
+      "source_count": 6,
       "url": "https://news.google.com/rss/articles/CBMixwJBVV95cUxOS19Fc2dULVNSQ2NZWU9vR0p6ZVVMT053MzNlMzJ5Ukhrb1p0S0hDUzc0NHFvNWdkeENwUE80NUx0LW1FRWc5dHpkV245SFhYX0dObXA3MHl2ZVVmVHMtYkQ5RmZBX3l0aXROYXcxQzI2LW1LRW1mRkxmN2F6M0V0SW5oTVBKYmVYVHlscWNsaFJLQVBDc0VtVjZFVjNzRGVlSzhBSW1sMlNfaU85WV93aGF6c3NEdlJ5TF9ZRllJR0dtSG5QWEVLRXZEY2FiR1hDaEl3X1BQWEFxVHZVSGR6dkxwemFXX2JDLTQzT1hVbHkyakVqMDdxblR5S2lmMC1ua1V6ZWFtVG1kc3hIUXZYT2JsUTZaZ1R5dF94N2gybHZSczFHZElMYXI0WDVtWFVwNUZhbmtyRm1HOERmOHUzb3JSaXRmYXM?oc=5",
       "collector": "Google News RSS",
       "country": "Syria",
@@ -431524,6 +430958,7 @@
       "location_confidence": "high",
       "acquisition_channel": "archive_enrichment",
       "source_article_fingerprints": [
+        "0c56f1cdfbc48d5be98f40c8b00aa932ab0da4b83f88449e3b1655890f175be6",
         "645fa7221ee56e15df17dfe91b73af2e6b0a288a20511c940b654d2c7a519e0e",
         "6631c204f1c7680ee81a9298f92c60889293fcf1ed8cf2288a009d7961c62fb1",
         "d6baf9b8fcd83c361b505c87fce213c9134d374cb67df44676f69c67d7ddfb84",
@@ -431559,7 +430994,8 @@
         "رأي اليوم",
         "Kapitalis",
         "جريدة زمان التركية",
-        "NewsCord"
+        "NewsCord",
+        "تيار المستقبل السوري"
       ],
       "related_articles": [
         {
@@ -431597,9 +431033,18 @@
           "published": "2026-07-03T07:00:00+00:00",
           "source": "NewsCord",
           "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxOUUtabm1FV3RDcHU3NnJHQmNybmI0bkV3YlJDeldKcFRfNVlkQ1RlR0tuQmdrTTh0OGtRQjdBTE93T19NaDRMSkpSQVRIQnp6bzJiN1VHWTZMWkVKMVJOZUhpdmJLQmdQRUFidUV2bDZlZGlReTF4c2Vza1RqbzIwb1VONFBjYk85U0Nia3dpNjNPNl9BTmNSbEVFemlHTkpaM1ZUSkJVOUhYYWpyTjVmcGpHeE5HX244SS1OWEN1RFI5b3VRaTUyeGF2bVN2WWEwLWw5NGgzOVF2QXBqYXJra2o4bHkwM1lyb0E?oc=5"
+        },
+        {
+          "title": "Car bomb attack reported in Hejaz area, Damascus",
+          "original_title": "The car bomb attack in the Hejaz area, the heart of Damascus",
+          "original_language": "en",
+          "summary": "An explosive attack occurred in the Hejaz area of Damascus.",
+          "published": "2026-07-03T07:00:00+00:00",
+          "source": "تيار المستقبل السوري",
+          "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxNRi1kU0JZRjdRQ2JWY0dSVVB2VkRwRHc3T1dnVXVLOWVpd2c4MEZqbmRSUFhqa01SV3hjRDFPNVRZS0VwaFdXYmZ2cVRkUGVHQm12OWdha0t3VWMwSnhiSkdGNmtESk9QTTJMZm15cEJ3WDZ0cFZkeUs3SF9zbkJPTXU4Z3pkeWQ3ZngyQ0xGdTM1NldFTml3?oc=5"
         }
       ],
-      "article_count": 5,
+      "article_count": 6,
       "first_reported": "2026-07-02T07:00:00+00:00",
       "last_reported": "2026-07-03T07:00:00+00:00",
       "dedup_confidence": 1.0,
@@ -431623,162 +431068,6 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "IED detonated inside a cafe near the Palace of Justice in Damascus.",
       "ai_geo_fingerprint": "3b71e490d5df5ae6411a8f2bd4b1edb4c0c13c43ca33a8f03f45d092f6545051",
-      "ai_geo_inferred": false
-    },
-    {
-      "id": "4637452f135c6e83",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Bulker damaged as crew retreat to citadel in boarding",
-      "summary": "A bulk carrier was boarded by pirates; the crew retreated to the citadel for safety.",
-      "original_title": "Bulker damaged as crew retreat to citadel in boarding",
-      "original_summary": "Bulker damaged as crew retreat to citadel in boarding TradeWinds News",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-02T07:00:00+00:00",
-      "source": "TradeWinds News",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPdXZidGhEYWtJRjNnMFhZZ3JBZ2JzX0RlMm5KdkZFUHI0YVpyVmNWckZhOFpIUVYxR1VHbEVKa1VNbGlMZW5KVTVud3FGY09YRFBMS2hjNnhkMy1EZGJ2ODJITHNlXzdYYVNyOFQzbjRVaWFIbjRRSno4V2MyQndjYTZhTm50SkJ5RWtJQXl0MTk0ZE9VU0JhVWthUEdVZHYtSG1ENlRtQQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Yemen",
-      "country_code": "YE",
-      "city": null,
-      "region": "Gulf of Aden / Red Sea waters south of Yemen",
-      "latitude": 13.0,
-      "longitude": 48.0,
-      "location_precision": "region",
-      "location_confidence": "medium",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "TradeWinds",
-      "targeted_source_kind": "specialist_media",
-      "source_article_fingerprints": [
-        "e089e7b46d91dfed2658a42ce504c9f23317e65a51144068459b9d7a62734eb5"
-      ],
-      "sources": [
-        "TradeWinds News"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-02T07:00:00+00:00",
-      "last_reported": "2026-07-02T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Concrete report of maritime boarding.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "PIRACY",
-      "is_attack": false,
-      "incident_anchor": "Bulker boarding 2026-07-02",
-      "update_type": "INITIAL",
-      "incident_id": "inc-157a4ee256d52017",
-      "translated_to_english": false,
-      "ai_canonical_event": "Pirate boarding of bulk carrier",
-      "title_variants": [
-        "Pirate boarding of bulk carrier"
-      ],
-      "actor_scope": "UNKNOWN",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.7,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Related to piracy event south of Yemen"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Directly linked to the maritime pirate boarding incident occurring south of Yemen.",
-      "ai_geo_fingerprint": "8b0f88fdd31bb595e5b0ea566281aecae695293d3e0180498d10bb720311aa1d",
-      "ai_geo_inferred": true
-    },
-    {
-      "id": "61914e7942d16410",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Pirates board and damage tanker south of Yemen",
-      "summary": "A tanker was boarded and damaged by pirates in waters south of Yemen.",
-      "original_title": "Pirates board and damage tanker south of Yemen",
-      "original_summary": "Pirates board and damage tanker south of Yemen Splash247",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-02T07:00:00+00:00",
-      "source": "Splash247",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5FUV9YZDljTDN2OTczR3Rla0JOWmVEcnJjaGx2MUxkM0hlUkxEZXRobi12dk9NaUZLRGxIX1dualBKcGxVajFIWENER3VXeHBGQjNmMzh6eldaWHFtTnRRSlhDbXJlYk5LTlNkb2dOOWtvSzV2S2VXaw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Yemen",
-      "country_code": "YE",
-      "city": null,
-      "region": "Waters south of Yemen",
-      "latitude": 12.5,
-      "longitude": 44.5,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "Splash 247",
-      "targeted_source_kind": "specialist_media",
-      "source_article_fingerprints": [
-        "48823eee384af52e90addfebcc09c253f8fa7e2ff60054b13a172b19f0b41a69"
-      ],
-      "sources": [
-        "Splash247"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-02T07:00:00+00:00",
-      "last_reported": "2026-07-02T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Reports a concrete maritime piracy incident.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "PIRACY",
-      "is_attack": false,
-      "incident_anchor": "Yemen tanker boarding 2026-07-02",
-      "update_type": "INITIAL",
-      "incident_id": "inc-c9ca954f09ce5e05",
-      "translated_to_english": false,
-      "ai_canonical_event": "Pirate boarding of tanker",
-      "title_variants": [
-        "Pirate boarding of tanker"
-      ],
-      "actor_scope": "UNKNOWN",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "south of Yemen"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The title and summary explicitly state the tanker was boarded and damaged in waters south of Yemen.",
-      "ai_geo_fingerprint": "6bc9d0e9870c9cbad2e3d7d07dbe9482ec75798a5ed4947e849e0b7b7ad6c89b",
       "ai_geo_inferred": false
     },
     {
