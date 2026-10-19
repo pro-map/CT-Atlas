@@ -1,43 +1,41 @@
 {
   "schema_version": 2,
   "status": "partial",
-  "run_started_at": "2026-10-19T15:38:08.606371+00:00",
-  "last_attempt_at": "2026-10-19T15:38:08.606371+00:00",
-  "published_at": "2026-10-19T16:35:04.162248+00:00",
+  "run_started_at": "2026-10-19T21:02:15.166882+00:00",
+  "last_attempt_at": "2026-10-19T21:02:15.166882+00:00",
+  "published_at": "2026-10-19T22:03:32.281243+00:00",
   "recent": {
-    "candidates": 3078,
-    "reviewed": 2405,
-    "cached": 1509,
-    "new_reviews": 896,
+    "candidates": 3024,
+    "reviewed": 3024,
+    "cached": 1760,
+    "new_reviews": 1264,
     "official_auto_accepted": 0,
-    "retained": 156,
-    "rejected": 2249,
-    "pending": 673,
-    "status": "partial",
-    "calls": 34,
+    "retained": 240,
+    "rejected": 2784,
+    "pending": 0,
+    "status": "complete",
+    "calls": 47,
     "primary_calls": 30,
-    "overflow_calls": 4,
-    "reasons": [
-      "transient_error"
-    ],
-    "window_start": "2026-10-16T15:38:08.606371+00:00",
-    "window_end": "2026-10-19T15:38:08.606371+00:00"
+    "overflow_calls": 17,
+    "reasons": [],
+    "window_start": "2026-10-16T21:02:15.166882+00:00",
+    "window_end": "2026-10-19T21:02:15.166882+00:00"
   },
   "backlog": {
-    "candidates": 1308,
-    "reviewed": 693,
-    "cached": 693,
-    "new_reviews": 0,
+    "candidates": 1357,
+    "reviewed": 863,
+    "cached": 671,
+    "new_reviews": 192,
     "official_auto_accepted": 0,
-    "retained": 0,
-    "rejected": 693,
-    "pending": 615,
+    "retained": 31,
+    "rejected": 832,
+    "pending": 494,
     "status": "partial",
-    "calls": 5,
+    "calls": 8,
     "primary_calls": 0,
-    "overflow_calls": 5,
+    "overflow_calls": 8,
     "reasons": [
-      "transient_error"
+      "run_budget"
     ]
   },
   "maintenance": {
@@ -62,24 +60,23 @@
     },
     "gdelt": {
       "attempted": 10,
-      "failed": 8,
-      "rate_limited": 8,
-      "successful": 2
+      "failed": 10,
+      "rate_limited": 9,
+      "invalid_response": 1
     },
-    "errors": 8,
+    "errors": 10,
     "status": "partial"
   },
   "reasons": [
-    "transient_error",
-    "recent_pending",
+    "run_budget",
     "backlog_pending",
     "source_errors",
     "category_pending"
   ],
   "queue_filter": {
-    "expired": 6725,
-    "retired": 437,
-    "cancelled_history": 109,
+    "expired": 6759,
+    "retired": 439,
+    "cancelled_history": 153,
     "duplicates": 0
   },
   "budgets": {
@@ -87,27 +84,27 @@
       "per_run": 30,
       "per_day": 60,
       "used_this_run": 30,
-      "used_today": 30
+      "used_today": 60
     },
     "overflow": {
       "model": "gemini-3.1-flash-lite",
       "per_run": 25,
       "per_day": 50,
-      "used_this_run": 9,
-      "used_today": 9
+      "used_this_run": 25,
+      "used_today": 34
     },
     "historical_calls_per_run": 10,
-    "historical_calls_used": 5,
+    "historical_calls_used": 8,
     "maintenance_calls_per_run": 2
   },
   "geolocation": {
     "status": "complete",
     "pending": 0,
-    "located": 4180,
-    "unlocated": 39,
-    "completed_unlocated": 39,
+    "located": 4271,
+    "unlocated": 42,
+    "completed_unlocated": 42,
     "outcome": "success",
-    "processed_this_run": 59
+    "processed_this_run": 94
   },
   "categories": [
     {
@@ -132,7 +129,7 @@
       "stop_code": "http_503"
     }
   ],
-  "finalized_at": "2026-10-19T16:48:44.050204+00:00",
+  "finalized_at": "2026-10-19T22:05:11.008746+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success"
 }
