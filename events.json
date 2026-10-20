@@ -153,7 +153,7 @@
     "status": "partial",
     "run_started_at": "2026-10-20T13:34:28.660656+00:00",
     "last_attempt_at": "2026-10-20T13:34:28.660656+00:00",
-    "published_at": "2026-10-20T14:53:48.123361+00:00",
+    "published_at": "2026-10-20T17:33:37.215968+00:00",
     "recent": {
       "candidates": 3253,
       "reviewed": 3126,
@@ -257,7 +257,8 @@
       "unlocated": 44,
       "completed_unlocated": 44,
       "outcome": "success",
-      "processed_this_run": 82
+      "processed_this_run": 82,
+      "review_required": 0
     },
     "categories": [
       {
@@ -282,7 +283,7 @@
         "stop_code": "http_503"
       }
     ],
-    "finalized_at": "2026-10-20T15:00:30.561338+00:00",
+    "finalized_at": "2026-10-20T19:01:40.509716+00:00",
     "collect_outcome": "success",
     "geolocate_outcome": "success"
   },
