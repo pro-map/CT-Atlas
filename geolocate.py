@@ -1483,104 +1483,9 @@ def resolve_country_code(
     return ""
 
 
-def resolve_city(
-    city_name,
-    country_code
-):
-    key = normalize_name(
-        city_name
-    )
-
-    if not key:
-        return None
-
-    candidates = CITY_INDEX.get(
-        key,
-        []
-    )
-
-    if country_code:
-        same_country = [
-            candidate
-            for candidate
-            in candidates
-            if (
-                candidate.get(
-                    "countrycode"
-                )
-                or
-                ""
-            ).upper()
-            ==
-            country_code
-        ]
-
-        if same_country:
-            return same_country[0]
-
-    if candidates:
-        return candidates[0]
-
-    # Conservative fuzzy validation around names beginning with
-    # the same first character. AI already chose the city; this step
-    # merely resolves spelling/transliteration.
-    best = None
-    best_score = 0.0
-
-    first = (
-        key[0]
-        if key
-        else ""
-    )
-
-    for indexed_name, indexed_candidates in CITY_INDEX.items():
-        if (
-            not indexed_name
-            or
-            indexed_name[0]
-            !=
-            first
-        ):
-            continue
-
-        score = SequenceMatcher(
-            None,
-            key,
-            indexed_name,
-        ).ratio()
-
-        if score < 0.90:
-            continue
-
-        candidate_pool = indexed_candidates
-
-        if country_code:
-            candidate_pool = [
-                candidate
-                for candidate
-                in indexed_candidates
-                if (
-                    candidate.get(
-                        "countrycode"
-                    )
-                    or
-                    ""
-                ).upper()
-                ==
-                country_code
-            ]
-
-        if (
-            candidate_pool
-            and
-            score
-            >
-            best_score
-        ):
-            best_score = score
-            best = candidate_pool[0]
-
-    return best
+def resolve_city(city_name, country_code):
+    from daily_reliability import canonical_city
+    return canonical_city(CITY_INDEX.get(normalize_name(city_name), []), city_name, country_code)
 
 
 def resolve_capital(
@@ -1628,6 +1533,17 @@ def apply_ai_result(
     result,
     fingerprint
 ):
+    from daily_reliability import city_resolution_guard
+    result = city_resolution_guard(event, dict(result, country_code=resolve_country_code(result)),
+                                   CITY_INDEX, normalize_name)
+    issue = result.get('_city_validation_issue')
+    if issue:
+        event['geolocation_review_required'] = True
+        event['geolocation_validation_issue'] = issue
+        event['geolocation_requested_city'] = result.get('_requested_city')
+    else:
+        for field in ('geolocation_review_required', 'geolocation_validation_issue', 'geolocation_requested_city'):
+            event.pop(field, None)
     clear_location(
         event
     )

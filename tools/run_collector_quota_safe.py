@@ -8,6 +8,8 @@ if str(ROOT) not in sys.path: sys.path.insert(0,str(ROOT))
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import collector
 import archive_review
+from daily_reliability import recovery_caps, SLOTS
+RESUME_PENDING = sys.argv[1:] == ['resume-pending']
 
 THRESHOLD=int(os.getenv("AI_SELECTION_THRESHOLD","60"))
 BATCH=max(1,min(40,int(os.getenv("AI_SELECTION_BATCH_SIZE","25"))))
@@ -71,6 +73,17 @@ def starting_calls(key="calls"):
     except Exception: return 0
 START_CALLS=starting_calls()
 START_OVERFLOW=starting_calls("overflow_calls")
+START_DAY=pacific_day()
+try:
+    START_USAGE=json.loads(Path(collector.AI_SELECTION_CACHE_FILE).read_text(encoding='utf-8')).get('selection_quota_usage',{})
+except (OSError, ValueError, AttributeError):
+    START_USAGE={}
+COMPLETED_SLOTS=set(START_USAGE.get('completed_daily_slots',[])) & set(SLOTS) if START_USAGE.get('pacific_day')==START_DAY else set()
+if RESUME_PENDING:
+    RUN_BUDGET,OVERFLOW_RUN_BUDGET=recovery_caps(START_USAGE,START_DAY,RUN_BUDGET,DAY_BUDGET,OVERFLOW_RUN_BUDGET,OVERFLOW_DAY_BUDGET)
+    HISTORICAL_RUN_BUDGET=min(HISTORICAL_RUN_BUDGET,RUN_BUDGET+OVERFLOW_RUN_BUDGET)
+    MAINTENANCE_RUN_BUDGET=0
+
 def today_calls(): return START_CALLS+calls
 def today_overflow(): return START_OVERFLOW+overflow_calls
 def overflow_left():
@@ -134,6 +147,7 @@ def runtime_telemetry():
 def inject(cache):
     mark_overflow(cache)
     cache["selection_quota_usage"]={"pacific_day":pacific_day(),"calls":today_calls(),"daily_budget":DAY_BUDGET,"overflow_calls":today_overflow(),"overflow_daily_budget":OVERFLOW_DAY_BUDGET,"last_updated":datetime.now(timezone.utc).isoformat()}
+    cache['selection_quota_usage']['completed_daily_slots']=sorted(COMPLETED_SLOTS) if pacific_day()==START_DAY else []
     cache["selection_runtime_telemetry"]=runtime_telemetry()
     return cache
 
@@ -218,6 +232,10 @@ def post(url,*args,**kwargs):
     global calls,hit429,budget_hit,primary_spent
     gemini="generativelanguage.googleapis.com" in str(url)
     sel=gemini and is_selection(kwargs)
+    if RESUME_PENDING and gemini and pacific_day()!=START_DAY:
+        quota_stop('recovery_day_boundary','Recovery stopped at the Pacific day boundary; restart with a freshly read ledger.')
+    if RESUME_PENDING and gemini and not sel:
+        raise collector.AISelectionQuotaError('Queue-only recovery does not request trend or incident-maintenance AI.')
     if sel:
         check_lane_budget()
         if primary_spent or calls>=RUN_BUDGET or today_calls()>=DAY_BUDGET:
@@ -465,4 +483,22 @@ def weekly(events,existing_weekly=None):
     return WEEKLY(events,existing_weekly=existing_weekly)
 collector.generate_weekly_analysis=weekly
 
-if __name__=="__main__": collector.main()
+def run_main():
+    if RESUME_PENDING:
+        # No sources are fetched. Only the already durable daily queue is read.
+        sys.argv=[sys.argv[0]]
+        previous=collector.load_database_strict()
+        collector.collect_all=lambda *args,**kwargs: []
+        collector.generate_24h_trend_summary=lambda events: previous.get('trend_summary',{})
+        collector.generate_weekly_analysis=lambda events,existing_weekly=None: existing_weekly or previous.get('weekly_analysis',{})
+        consolidate=collector.consolidate_incidents
+        collector.consolidate_incidents=lambda events,state=None,**kwargs: consolidate(events,state,max_calls=0,use_gemini=False)
+        print(f'QUEUE-ONLY RECOVERY: at most {RUN_BUDGET} primary and {OVERFLOW_RUN_BUDGET} overflow calls; ordinary slots reserved.')
+    collector.main()
+    slot=os.getenv('CT_ATLAS_SCHEDULE','')
+    if not RESUME_PENDING and slot in SLOTS and pacific_day()==START_DAY:
+        COMPLETED_SLOTS.add(slot)
+        collector.save_selection_cache(collector.load_selection_cache())
+
+if __name__=="__main__": run_main()
+

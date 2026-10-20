@@ -19,6 +19,7 @@ import enrich_archive
 import collection_config
 import radnuc_background as background
 import radnuc_background_topics as topics
+from daily_reliability import retry_delay
 
 LOOKBACK_DAYS = 3
 RETENTION_DAYS = 730
@@ -142,12 +143,17 @@ and is_anti_war=false. No CT relevance scores, no map classifications.\n'''+topi
         except collector.requests.RequestException:
             if attempt == 0:
                 print('RADNUC_REVIEW_RETRY network_error',flush=True)
+                time.sleep(retry_delay(attempt))
                 continue
             raise
         if response.status_code == 200:
             break
         if attempt == 0 and response.status_code in (408,409,500,502,503,504):
+            delay = retry_delay(attempt, response)
+            if delay is None:
+                raise BackgroundHTTPError(response.status_code)
             print('RADNUC_REVIEW_RETRY HTTP_'+str(response.status_code),flush=True)
+            time.sleep(delay)
             continue
         raise BackgroundHTTPError(response.status_code)
     wire = response.json()
