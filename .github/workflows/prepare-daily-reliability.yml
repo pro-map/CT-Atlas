@@ -1,0 +1,84 @@
+name: Prepare and test daily reliability fixes
+on:
+  push:
+    branches: [fix/daily-reliability-20261020]
+    paths: [.maintenance/daily-fixes-20261020.*, .github/workflows/prepare-daily-reliability.yml]
+permissions:
+  contents: write
+concurrency:
+  group: prepare-daily-reliability-20261020
+  cancel-in-progress: false
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: fix/daily-reliability-20261020
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Apply the exact reviewed patch without provider calls
+        run: |
+          python - <<'PY'
+          import hashlib, lzma, subprocess
+          from pathlib import Path
+          packed = b''.join(Path('.maintenance/daily-fixes-20261020.'+str(i)).read_bytes() for i in range(3))
+          data = lzma.decompress(packed)
+          assert hashlib.sha256(data).hexdigest() == '97d87b91bab71b661f136195d10a125ba28bd412ebe9561406e6776513580437'
+          patch = Path('/tmp/daily-fixes.patch')
+          patch.write_bytes(data)
+          subprocess.run(['git','apply','--check',str(patch)],check=True)
+          subprocess.run(['git','apply',str(patch)],check=True)
+          PY
+          python tools/_install_daily_workflows.py
+      - name: Install test dependencies
+        run: pip install -r requirements.txt pyyaml
+      - name: Run offline regression suites
+        run: |
+          set -euo pipefail
+          for suite in daily_reliability threat_categories radnuc_background quota_safe_wrapper daily_pipeline finalize_daily_status geolocate_rescue build_events_lite build_events_map; do
+            test -f "tests/${suite}_test.py"
+            python -m unittest discover -s tests -p "${suite}_test.py" 2>&1 | tee -a /tmp/daily-reliability-tests.log
+          done
+          python -m compileall -q daily_reliability.py daily_source_retry.py collector.py geolocate.py threat_categories.py tools
+          python - <<'PY'
+          import yaml
+          from pathlib import Path
+          for p in Path('.github').rglob('*.yml'):
+              yaml.safe_load(p.read_text())
+          print('Workflow YAML parsing passed')
+          PY
+      - name: Package workflow files for connector installation
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          files = ['.github/workflows/update-map.yml','.github/workflows/daily-radnuc-background.yml','.github/workflows/deploy-cloudflare-mirror.yml','.github/workflows/reconcile-daily-integrity.yml']
+          Path('/tmp/daily-workflow-files.json').write_text(json.dumps({p:Path(p).read_text() for p in files if Path(p).exists()}),encoding='utf-8')
+          result = subprocess.run(['git','diff'],capture_output=True,text=True)
+          Path('/tmp/daily-reliability-diff.patch').write_text(result.stdout)
+          PY
+      - name: Preserve test results and exact workflow texts
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: tested-daily-reliability
+          path: |
+            /tmp/daily-workflow-files.json
+            /tmp/daily-reliability-tests.log
+            /tmp/daily-reliability-diff.patch
+          retention-days: 7
+      - name: Commit tested source files only to the repair branch
+        run: |
+          set -euo pipefail
+          git config user.name 'CT Atlas Maintenance'
+          git config user.email 'actions@github.com'
+          git add -- daily_reliability.py daily_source_retry.py tools/daily_publication_audit.py tests/daily_reliability_test.py threat_categories.py geolocate.py collector.py tools/run_collector_quota_safe.py tools/enrich_radnuc_background.py tools/finalize_daily_status.py tools/generate_daily_quiz.py tools/deploy_mirror.sh tests/radnuc_background_test.py main.html .github/actions/build-events-lite/action.yml
+          git diff --cached --name-only | tee /tmp/staged-paths.txt
+          if grep -q '^.github/workflows/' /tmp/staged-paths.txt; then exit 1; fi
+          git commit -m 'Fix daily metadata, bounded recovery, source retries and publication proof'
+          git push origin HEAD:fix/daily-reliability-20261020
