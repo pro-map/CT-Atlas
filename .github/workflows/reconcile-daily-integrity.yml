@@ -1,0 +1,95 @@
+name: Reconcile daily dataset integrity
+on:
+  push:
+    branches: [main]
+    paths:
+      - "daily_reliability.py"
+      - "threat_categories.py"
+      - "tools/daily_publication_audit.py"
+      - ".github/workflows/reconcile-daily-integrity.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: ct-map-update-main
+  cancel-in-progress: false
+  queue: max
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      data_sha: ${{ steps.commit.outputs.data_sha }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - name: No-network safety regressions
+        run: python -m unittest discover -s tests -p 'daily_reliability_test.py'
+      - name: Snapshot and repair only validated metadata and the audited Garsten contradiction
+        run: |
+          python tools/daily_publication_audit.py snapshot
+          python tools/daily_publication_audit.py repair --apply --repair-known-geography --output "archive/daily-integrity-repair-${GITHUB_RUN_ID}.json"
+          python tools/daily_publication_audit.py receipt --output "$RUNNER_TEMP/maintenance-receipt.json"
+      - name: Preserve recovery and exact field-change evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: daily-integrity-repair-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/daily-before.json
+            ${{ runner.temp }}/maintenance-receipt.json
+            archive/daily-integrity-repair-*.json
+          retention-days: 7
+          if-no-files-found: ignore
+      - name: Commit the bounded repair without overwriting concurrent data
+        id: commit
+        run: |
+          set -euo pipefail
+          git config user.name "CT Intelligence Map Bot"
+          git config user.email "actions@github.com"
+          git add -- events.json "archive/daily-integrity-repair-${GITHUB_RUN_ID}.json"
+          if ! git diff --cached --quiet; then
+            git commit -m "Reconcile validated category metadata and audited Garsten location (zero AI)"
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort
+              exit 1
+            fi
+            git push origin HEAD:main
+          fi
+          echo "data_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+  deploy:
+    needs: repair
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.repair.outputs.data_sha }}
+      - uses: actions/configure-pages@v6
+      - uses: ./.github/actions/build-events-lite
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: "."
+      - uses: actions/deploy-pages@v5
+        id: deployment
+      - name: Verify the deployed repair
+        run: python tools/daily_publication_audit.py verify --url "${{ steps.deployment.outputs.page_url }}" --expected publication-manifest.json --output publication-receipt-pages.json
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: repaired-publication-proof-${{ github.run_id }}
+          path: |
+            publication-manifest.json
+            publication-receipt-pages.json
+          retention-days: 7
