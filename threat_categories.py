@@ -53,7 +53,10 @@ def annotate(event, result=None):
     labels = [c for c in raw if c not in LEGACY]
     # Compatibility with pre-migration Gemini responses and saved checkpoints.
     subgroup = result.get('cbrn_subgroups') if isinstance(result, dict) and 'cbrn_subgroups' in result else event.get('cbrn_subgroups')
-    legacy_decision = explicit is None or any(c in LEGACY for c in (explicit or []))
+    # Accept a compatibility subgroup only from this decision, never from
+    # stale event metadata once an explicit modern decision was returned.
+    current_radnuc = isinstance(result, dict) and 'RADNUC' in (result.get('cbrn_subgroups') or [])
+    legacy_decision = explicit is None or any(c in LEGACY for c in (explicit or [])) or current_radnuc
     if not legacy_decision:
         subgroup = ['RADNUC'] if RN in raw else []
     if legacy_decision and 'RADNUC' in (subgroup or []):

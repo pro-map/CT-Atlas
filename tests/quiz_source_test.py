@@ -20,42 +20,45 @@ class QuizSourceTests(unittest.TestCase):
     def candidate(self, **changes):
         return dict(dict(category='Financing', question='Which body adopted this instrument?', options=['A','B','C'], correct_index=1, explanation='A short verified explanation.', source_url='https://www.fatf-gafi.org/en/example.html'), **changes)
 
-    def test_retry_includes_limits_rejected_source_and_reason_then_publishes(self):
+    def test_retirement_preserves_existing_quiz_and_history_without_calls(self):
         with tempfile.TemporaryDirectory() as tmp:
-            quiz_path=Path(tmp)/'quiz.json'; history_path=Path(tmp)/'history.json'
-            old=self.candidate(date='2026-09-01'); quiz_path.write_text(json.dumps(old))
-            bad=self.candidate(question='x'*241)
-            good=self.candidate(question='Which institution maintains the second instrument?',source_url='https://www.interpol.int/example')
-            with patch.object(q,'QUIZ_PATH',quiz_path), patch.object(q,'HISTORY_PATH',history_path), patch.dict(q.os.environ,{'GEMINI_API_KEY':'fixture'}), patch.object(q,'ai_json',side_effect=[bad,good]) as ai, patch.object(q,'verify_source') as verify:
+            quiz_path = Path(tmp) / 'quiz.json'
+            history_path = Path(tmp) / 'history.json'
+            before = json.dumps(self.candidate(date='2026-09-01'))
+            quiz_path.write_text(before)
+            history_path.write_text('[]')
+            with patch.object(q, 'QUIZ_PATH', quiz_path), patch.object(q, 'HISTORY_PATH', history_path), patch.object(q, 'ai_json') as ai, patch.object(q, 'verify_source') as verify, patch.object(q, 'fetch_source') as fetch:
                 q.main()
-            self.assertIn('question at most 240',ai.call_args_list[0].args[1])
-            retry=ai.call_args_list[1].args[1]
-            self.assertIn('Rejected candidates',retry)
-            self.assertIn('SOURCE TEXT:',retry)
-            self.assertIn('question must be a string of at most 240 characters',retry)
-            self.assertEqual(json.loads(quiz_path.read_text())['question'],good['question'])
-            self.assertEqual(len(json.loads(history_path.read_text())),2)
-            verify.assert_called_once()
+            ai.assert_not_called()
+            verify.assert_not_called()
+            fetch.assert_not_called()
+            self.assertEqual(quiz_path.read_text(), before)
+            self.assertEqual(history_path.read_text(), '[]')
 
-    def test_all_rejections_preserve_published_quiz_and_history(self):
+    def test_retirement_needs_no_api_key_and_creates_no_files(self):
         with tempfile.TemporaryDirectory() as tmp:
-            quiz_path=Path(tmp)/'quiz.json'; history_path=Path(tmp)/'history.json'
-            before=json.dumps(self.candidate(date='2026-09-01')); quiz_path.write_text(before);history_path.write_text('[]')
-            with patch.object(q,'QUIZ_PATH',quiz_path), patch.object(q,'HISTORY_PATH',history_path), patch.dict(q.os.environ,{'GEMINI_API_KEY':'fixture'}), patch.object(q,'ai_json',return_value=self.candidate(question='What distinguishes these sanctions regimes?')), patch.object(q,'verify_source',side_effect=ValueError('Source is inaccessible')) as verify:
-                with self.assertRaises(RuntimeError):q.main()
-            self.assertEqual(quiz_path.read_text(),before)
-            self.assertEqual(history_path.read_text(),'[]')
-            self.assertEqual(verify.call_count,4)
+            quiz_path = Path(tmp) / 'quiz.json'
+            history_path = Path(tmp) / 'history.json'
+            with patch.object(q, 'QUIZ_PATH', quiz_path), patch.object(q, 'HISTORY_PATH', history_path), patch.dict(q.os.environ, {}, clear=True), patch.object(q, 'ai_json') as ai, patch.object(q, 'fetch_source') as fetch:
+                q.main()
+            ai.assert_not_called()
+            fetch.assert_not_called()
+            self.assertFalse(quiz_path.exists())
+            self.assertFalse(history_path.exists())
 
-    def test_same_day_retry_does_not_replace_question_or_call_ai(self):
+    def test_repeated_retired_entrypoint_never_creates_history(self):
         with tempfile.TemporaryDirectory() as tmp:
-            quiz_path=Path(tmp)/'quiz.json'; history_path=Path(tmp)/'history.json'
-            today=q.datetime.now(q.ZoneInfo('Europe/Paris')).date().isoformat()
-            before=json.dumps(self.candidate(date=today));quiz_path.write_text(before)
-            with patch.object(q,'QUIZ_PATH',quiz_path), patch.object(q,'HISTORY_PATH',history_path), patch.object(q,'ai_json') as ai:
-                q.main();q.main()
-            ai.assert_not_called();self.assertEqual(quiz_path.read_text(),before)
-            self.assertEqual(len(json.loads(history_path.read_text())),1)
+            quiz_path = Path(tmp) / 'quiz.json'
+            history_path = Path(tmp) / 'history.json'
+            today = q.datetime.now(q.ZoneInfo('Europe/Paris')).date().isoformat()
+            before = json.dumps(self.candidate(date=today))
+            quiz_path.write_text(before)
+            with patch.object(q, 'QUIZ_PATH', quiz_path), patch.object(q, 'HISTORY_PATH', history_path), patch.object(q, 'ai_json') as ai:
+                q.main()
+                q.main()
+            ai.assert_not_called()
+            self.assertEqual(quiz_path.read_text(), before)
+            self.assertFalse(history_path.exists())
 
     def test_allowlist(self):
         self.assertTrue(q.trusted_url('https://main.un.org/example'))
@@ -85,7 +88,6 @@ class QuizSourceTests(unittest.TestCase):
         self.assertEqual(len(history), 1)
         self.assertEqual(history[0]["category"], "C")
 
-
     def test_challenge_rejected(self):
         self.source_patch.stop()
         response=types.SimpleNamespace(status_code=202,url='https://un.org/',headers={},text='')
@@ -93,5 +95,3 @@ class QuizSourceTests(unittest.TestCase):
             with self.assertRaises(ValueError):q.verify_source('test',{'source_url':'https://un.org/'})
 
 if __name__=='__main__':unittest.main()
-
-

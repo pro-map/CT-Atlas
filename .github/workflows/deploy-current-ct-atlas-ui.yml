@@ -51,10 +51,6 @@ on:
       - "tab-health.js"
       - "tab-health.css"
       - "ct-atlas-runtime.json"
-      - "daily-quiz.js"
-      - "daily-quiz.css"
-      - "daily-quiz.json"
-      - "daily-quiz-history.json"
       - "sanctions-crypto.json"
       - "feedback.css"
   workflow_dispatch:
@@ -102,14 +98,11 @@ jobs:
             echo "Legacy print dialog code is still present" >&2
             exit 1
           fi
-          test -s daily-quiz.js
-          test -s daily-quiz.css
-          grep -q 'dailyQuizButton' daily-quiz.js
-          grep -q 'launcher.appendChild(trigger)' daily-quiz.js
-          grep -q 'mainQuizLauncher' main.html
-          grep -q 'daily-quiz.js?v=freshness-20261004' main.html
-          node --check daily-quiz.js
-          grep -q 'margin:4px 0 3px;padding:9px 10px' daily-quiz.css
+          # The quiz is retired: validate its absence, not the old launcher.
+          if grep -q 'mainQuizLauncher\|<script[^>]*daily-quiz.js' main.html; then
+            echo "Retired quiz launcher or client is still active" >&2
+            exit 1
+          fi
           grep -q 'id="feedbackButton"' main.html
           grep -q 'SEND FEEDBACK / REPORT BUG' main.html
           grep -q 'fbWorkspace' feedback.js
@@ -206,6 +199,3 @@ jobs:
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
-
-
-
