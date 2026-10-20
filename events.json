@@ -724,7 +724,7 @@
     "UK Government / Counter-Terrorism",
     "INTERPOL English News"
   ],
-  "last_updated": "2026-10-20T05:53:53.566450+00:00",
+  "last_updated": "2026-10-20T12:15:05.094829+00:00",
   "number_of_events": 4313,
   "events": [
     {
@@ -472011,75 +472011,6 @@
       "threat_categories": [
         "Chemicals and Explosives"
       ]
-    },
-    {
-      "id": "8d66affde7f713d6",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Second French peacekeeper dies in Lebanon after ambush blamed on Hezbollah",
-      "summary": "A second French peacekeeper has died in Lebanon following an ambush that authorities have blamed on Hezbollah.",
-      "original_title": "Second French peacekeeper dies in Lebanon after ambush blamed on Hezbollah",
-      "original_summary": "Second French peacekeeper dies in Lebanon after ambush blamed on Hezbollah France 24",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-23T07:00:00+00:00",
-      "source": "France 24",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPSGtQX2xKbUNrelNHai15MDZUYjd3M3I1blB1UnJMM000XzdPS0hETV9WR1N1M2NCXzVWZkh5NmF6Z004VDBWTGtTMDlDRDZ0TDBkZFpFZkxfU1hVS0lWV0lKX2pSZjhoV0dwRG1HNWlEVWw0RUk1ck9LeTM5S1N3c1hWclpYY2c5YnlZUU43SHdKV1hsWjRKM0o0SmJKZV9GN196OHp2ck1WVURZeGQ0VDEwaVJwdEpM?oc=5",
-      "collector": "Google News RSS",
-      "country": "Lebanon",
-      "country_code": "LB",
-      "city": "Beirut",
-      "region": null,
-      "latitude": 33.89332,
-      "longitude": 35.50157,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "France 24 English",
-      "targeted_source_kind": "international_media",
-      "sources": [
-        "France 24"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-23T07:00:00+00:00",
-      "last_reported": "2026-04-23T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Reports the fatal consequence and ongoing fallout from an armed ambush against peacekeepers attributed to Hezbollah.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "death of second French peacekeeper following ambush in Lebanon attributed to Hezbollah",
-      "title_variants": [
-        "death of a second French peacekeeper in Lebanon following an ambush blamed on Hezbollah",
-        "death of second French peacekeeper following ambush in Lebanon attributed to Hezbollah"
-      ],
-      "location_confidence_score": 0.99,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "dies in Lebanon"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Ambush and death of peacekeepers occurred in Lebanon.",
-      "ai_geo_fingerprint": "71eaed8b946028b4122ed40591156177138bf7afeaee64fa0dc6cd56efd60f6e",
-      "ai_geo_inferred": false,
-      "actor_group": "Hezbollah",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Lebanon peacekeeper ambush 2026",
-      "update_type": "FOLLOW_UP",
-      "incident_id": "inc-17359f5836d750eb"
     }
   ],
   "geolocation": {
