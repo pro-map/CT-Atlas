@@ -39,6 +39,8 @@ if ! python3 tools/build_events_map.py --input events.json --output "$STAGING/ev
   echo "warning: events-map.json not built; the mirror map will filter events-lite.json itself" >&2
 fi
 
+python3 tools/daily_publication_audit.py manifest --directory "$STAGING" --output "$STAGING/publication-manifest.json"
+
 # index.html references the logo as "CT-ATLAS.png" (exact case) -- GitHub
 # Pages serves it fine regardless of case, but Cloudflare Workers assets are
 # an exact-match lookup, so the on-disk lowercase ct-atlas.png must be

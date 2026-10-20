@@ -263,6 +263,10 @@ def finalize(database_path, *, collect_outcome, geolocate_outcome, started_at,
         status["status"] = "unknown"
     else:
         status["status"] = "complete"
+    status['geolocation']['review_required'] = sum(event.get('geolocation_review_required') is True for event in events)
+    if status['geolocation']['review_required']:
+        reasons.append('geolocation_review_required')
+        if status['status']=='complete': status['status']='partial'
     status["reasons"] = list(dict.fromkeys(reason for reason in reasons if isinstance(reason, str)))
     database["collection_status"] = status
     atomic_write(database_path, database)

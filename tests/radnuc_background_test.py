@@ -45,6 +45,11 @@ class Gate:
 
 
 class BackgroundTests(unittest.TestCase):
+    def setUp(self):
+        sleeper = patch.object(daily.time, 'sleep')
+        sleeper.start()
+        self.addCleanup(sleeper.stop)
+
     def test_transient_http_retries_are_counted_and_cannot_exceed_the_existing_gate(self):
         responses=[SimpleNamespace(status_code=503),SimpleNamespace(status_code=200,json=lambda:{})]
         with patch.dict('os.environ',{'GEMINI_API_KEY':'synthetic-test-key'}), \

@@ -15,6 +15,7 @@ on:
         type: choice
         options:
           - daily
+          - resume-pending
           - backfill-new-sources
           - backfill
       force_ai:
@@ -24,6 +25,7 @@ on:
         type: boolean
 
 permissions:
+  actions: read
   contents: write
   pages: write
   id-token: write
@@ -40,7 +42,9 @@ jobs:
     timeout-minutes: 330
     outputs:
       checkpoint_outcome: ${{ steps.commit.outcome }}
+      data_sha: ${{ steps.commit.outputs.data_sha }}
     env:
+      CT_ATLAS_SCHEDULE: ${{ github.event.schedule || '' }}
       COLLECTION_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'daily' }}
       FORCE_GEO_REQUESTED: ${{ github.event_name == 'workflow_dispatch' && inputs.force_ai || false }}
     steps:
@@ -60,6 +64,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Snapshot the full dataset before daily processing
+        id: baseline
+        run: python -u tools/daily_publication_audit.py snapshot
 
       - name: Record already processed locations before collection
         id: prepare
@@ -137,6 +145,9 @@ jobs:
             exit 1
           fi
           case "$COLLECTION_MODE" in
+            resume-pending)
+              python -u tools/run_collector_quota_safe.py resume-pending
+              ;;
             backfill-new-sources)
               echo "Targeted incremental backfill: Arabic additions, Africa, Afghanistan, Syria, and Latin America."
               python -u tools/run_collector_quota_safe.py backfill-new-sources
@@ -173,11 +184,18 @@ jobs:
           if [ "$COLLECTION_MODE" = "backfill-new-sources" ]; then
             echo "Protecting all previously located/processed events; full refresh is disabled."
             AI_GEO_FORCE=0 AI_GEO_PRESERVE_IDS_FILE="$PRESERVE_FILE" python -u geolocate.py
+          elif [ "$COLLECTION_MODE" = "resume-pending" ]; then
+            AI_GEO_FORCE=0 AI_GEO_PRESERVE_IDS_FILE="$PRESERVE_FILE" python -u geolocate.py
           elif [ "$FORCE_GEO_REQUESTED" = "true" ]; then
             AI_GEO_FORCE=1 python -u geolocate.py
           else
-            AI_GEO_FORCE=0 python -u geolocate.py
+            AI_GEO_FORCE=0 AI_GEO_PRESERVE_IDS_FILE="$PRESERVE_FILE" python -u geolocate.py
           fi
+
+      - name: Reconcile validated category metadata without AI calls
+        id: reconcile
+        if: ${{ steps.collect.outcome == 'success' }}
+        run: python -u tools/daily_publication_audit.py repair --apply --output "$RUNNER_TEMP/daily-label-repair.json"
 
       - name: Finalize visible daily progress
         id: finalize_status
@@ -191,7 +209,15 @@ jobs:
             --collect-outcome "$COLLECT_OUTCOME" \
             --geolocate-outcome "$GEOLOCATE_OUTCOME"
 
-      # Quiz generation runs independently in refresh-daily-quiz.yml.
+      - name: Record actual dataset changes and trigger timing
+        id: audit
+        if: ${{ always() && steps.baseline.outcome == 'success' && steps.finalize_status.outcome == 'success' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CT_ATLAS_RUN_STARTED_AT: ${{ steps.prepare.outputs.started_at }}
+        run: python -u tools/daily_publication_audit.py receipt --output "$RUNNER_TEMP/daily-publication-audit.json"
+
+      # Quiz generation is retired; it consumes no model or deployment resources.
       # Independent of collection: the sanctioned-address list is refreshed once a
       # day (and on manual runs). A failed download keeps the previous file.
       - name: Refresh OFAC sanctioned crypto addresses
@@ -209,6 +235,9 @@ jobs:
             daily_candidate_queue.json
             daily-collection-status.json
             events.json
+            ${{ runner.temp }}/daily-publication-audit.json
+            ${{ runner.temp }}/daily-label-repair.json
+            ${{ runner.temp }}/daily-before.json
           if-no-files-found: ignore
           retention-days: 7
 
@@ -218,6 +247,8 @@ jobs:
         env:
           COLLECT_OUTCOME: ${{ steps.collect.outcome }}
           STATUS_OUTCOME: ${{ steps.finalize_status.outcome }}
+          AUDIT_OUTCOME: ${{ steps.audit.outcome }}
+          RECONCILE_OUTCOME: ${{ steps.reconcile.outcome }}
         run: |
           set -euo pipefail
           git config user.name "CT Intelligence Map Bot"
@@ -225,6 +256,10 @@ jobs:
           python - <<'PY'
           import json, os, subprocess
           from pathlib import Path
+          if os.environ['AUDIT_OUTCOME'] != 'success':
+              raise RuntimeError('Publication audit failed; recovery files retained')
+          if os.environ['COLLECT_OUTCOME'] == 'success' and os.environ['RECONCILE_OUTCOME'] != 'success':
+              raise RuntimeError('Metadata reconciliation failed; refusing to publish')
           cache = Path("ai_article_selection_cache.json")
           if cache.exists():
               obj = json.loads(cache.read_text(encoding="utf-8"))
@@ -260,12 +295,13 @@ jobs:
           # background-articles.json is likewise independent of whether collection's
           # events.json write succeeded -- it is written incrementally inside
           # ai_select_events() itself, not part of the final database swap above.
-          for generated in ("daily-quiz.json", "daily-quiz-history.json", "sanctions-crypto.json", "background-articles.json"):
+          for generated in ("sanctions-crypto.json", "background-articles.json"):
               if Path(generated).exists():
                   subprocess.run(["git", "add", "--", generated], check=True)
           PY
           if git diff --cached --quiet; then
             echo "No database or cache changes to commit."
+            echo "data_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git commit -m "Update CT database and resumable AI checkpoints"
@@ -277,6 +313,7 @@ jobs:
               exit 1
             fi
             if git push origin HEAD:main; then
+              echo "data_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
               exit 0
             fi
             sleep $((attempt * 4))
@@ -293,10 +330,10 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout updated repository
+      - name: Checkout the committed dataset revision
         uses: actions/checkout@v6
         with:
-          ref: main
+          ref: ${{ needs.update.outputs.data_sha }}
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6
       - name: Build lightweight map data (events-lite.json)
@@ -308,5 +345,15 @@ jobs:
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
-
-
+      - name: Verify the data actually served by GitHub Pages
+        run: python -u tools/daily_publication_audit.py verify --url "${{ steps.deployment.outputs.page_url }}" --expected publication-manifest.json --output publication-receipt-pages.json
+      - name: Retain post-deployment proof even when verification fails
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: daily-publication-proof-${{ github.run_id }}
+          path: |
+            publication-manifest.json
+            publication-receipt-pages.json
+          retention-days: 7
+          if-no-files-found: ignore

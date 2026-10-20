@@ -44,7 +44,8 @@ def annotate(event, result=None):
         raise TypeError('An event must be an object')
     if result and result.get('actor_scope'):
         event['actor_scope'] = result['actor_scope']
-    raw = event.get('categories') or ([event.get('category')] if event.get('category') else [])
+    explicit = result.get('categories') if isinstance(result, dict) else None
+    raw = explicit if explicit is not None else event.get('categories') or ([event.get('category')] if event.get('category') else [])
     if not isinstance(raw, list): raw = [raw]
     raw = list(dict.fromkeys(canonical(c) for c in raw if c))
     explicit = result.get('categories') if isinstance(result, dict) else None
@@ -52,7 +53,12 @@ def annotate(event, result=None):
     labels = [c for c in raw if c not in LEGACY]
     # Compatibility with pre-migration Gemini responses and saved checkpoints.
     subgroup = result.get('cbrn_subgroups') if isinstance(result, dict) and 'cbrn_subgroups' in result else event.get('cbrn_subgroups')
-    legacy_decision = explicit is None or any(c in LEGACY for c in (explicit or [])) or bool(subgroup)
+    # Accept a compatibility subgroup only from this decision, never from
+    # stale event metadata once an explicit modern decision was returned.
+    current_radnuc = isinstance(result, dict) and 'RADNUC' in (result.get('cbrn_subgroups') or [])
+    legacy_decision = explicit is None or any(c in LEGACY for c in (explicit or [])) or current_radnuc
+    if not legacy_decision:
+        subgroup = ['RADNUC'] if RN in raw else []
     if legacy_decision and 'RADNUC' in (subgroup or []):
         labels.append(RN)
     elif legacy and subgroup is None and radnuc.has_material(event):
@@ -87,6 +93,11 @@ def annotate(event, result=None):
     elif isinstance(result, dict) and 'cbrn_subgroups' in result:
         event['cbrn_subgroups'] = []
     if result is not None:
+        # Derived fields must also be cleared after a validated non-specialist decision.
+        event['categories'] = labels
+        event['category'] = labels[0] if labels else ''
+        event['threat_categories'] = [c for c in labels if c in LABELS]
+        event['cbrn_subgroups'] = ['RADNUC'] if RN in labels else []
         event['threat_taxonomy_version'] = VERSION
     if result and result.get('reported_status') in {'CONFIRMED','SUSPECTED','ALLEGED','THREAT','HOAX','UNKNOWN'}:
         event['reported_status'] = result['reported_status']

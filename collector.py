@@ -3136,39 +3136,9 @@ def gdelt_doc_url(query, days=None, start_dt=None, end_dt=None):
 
 
 def fetch_gdelt_doc_articles(query, days=None, start_dt=None, end_dt=None, label="gdelt"):
-    url = gdelt_doc_url(query, days=days, start_dt=start_dt, end_dt=end_dt)
-    GDELT_STATS["attempted"] += 1
-    try:
-        response = requests.get(
-            url,
-            headers={"User-Agent": "Mozilla/5.0 CT-Atlas-Collector/1.0"},
-            timeout=20,
-        )
-    except requests.RequestException as exc:
-        GDELT_STATS["failed"] += 1
-        GDELT_STATS["request_errors"] += 1
-        print(f"   GDELT DOC request failed for {label}: {exc}")
-        return []
-    if response.status_code != 200:
-        GDELT_STATS["failed"] += 1
-        if response.status_code == 429:
-            GDELT_STATS["rate_limited"] += 1
-        print(f"   GDELT DOC HTTP {response.status_code} for {label}")
-        return []
-    try:
-        payload = response.json()
-    except ValueError:
-        GDELT_STATS["failed"] += 1
-        GDELT_STATS["invalid_response"] += 1
-        print(f"   GDELT DOC returned non-JSON for {label}")
-        return []
-    articles = payload.get("articles") if isinstance(payload, dict) else None
-    if not isinstance(articles, list):
-        GDELT_STATS["failed"] += 1
-        GDELT_STATS["invalid_response"] += 1
-        return []
-    GDELT_STATS["successful"] += 1
-    return articles
+    from daily_source_retry import fetch_articles
+    return fetch_articles(requests, gdelt_doc_url(query, days=days, start_dt=start_dt, end_dt=end_dt),
+                          GDELT_STATS, label=label, sleep=time.sleep)
 
 
 def parse_gdelt_seendate(value):

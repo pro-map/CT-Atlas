@@ -3,7 +3,7 @@ description: >
   Derive events-lite.json (events.json without the collector's bookkeeping fields, which
   neither the map nor the Worker read) and events-map.json (only the attacks the map shows,
   plus a whole-database summary) from the events.json in the checkout, right before the site
-  is published. Never fails the deployment: a file that cannot be built is removed, and the
+  is published. Builders retain their fallbacks; final integrity validation blocks incomplete publication. The
   map and the Worker fall back to the next larger file. It also leaves the background jobs'
   data (archive/, quota/) out of the published site: nothing on the site reads it, and it
   grows every night.
@@ -28,6 +28,9 @@ runs:
           rm -f events-map.json
           echo "::warning::events-map.json could not be built; the map will filter events-lite.json itself."
         fi
+    - name: Validate the publication dataset and record its manifest
+      shell: bash
+      run: python3 tools/daily_publication_audit.py manifest --output publication-manifest.json
     - name: Leave the background jobs' data out of the site
       shell: bash
       run: |

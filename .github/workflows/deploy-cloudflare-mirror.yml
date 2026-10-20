@@ -21,7 +21,7 @@ on:
   workflow_run:
     # Groq commits use GITHUB_TOKEN and do not trigger ordinary push workflows.
     # Publish the post-backfill main data only after a successful trusted run.
-    workflows: ["Daily CT Intelligence Map Update", "Retire Judicial collection", "Refresh daily collection status", "Daily CT Atlas Quiz", "Apply CT Atlas usage upgrade", "Deploy current CT Atlas UI", "Enrich RADNUC — six months, all collection languages", "Enrich specialist categories", "Gemini Chinese eight-category historical backfill", "Groq Free - six-month CBRNE and Chinese historical backfill"]
+    workflows: ["Daily CT Intelligence Map Update", "Retire Judicial collection", "Refresh daily collection status", "Apply CT Atlas usage upgrade", "Deploy current CT Atlas UI", "Enrich RADNUC — six months, all collection languages", "Enrich specialist categories", "Gemini Chinese eight-category historical backfill", "Groq Free - six-month CBRNE and Chinese historical backfill", "Groq Free - six-month Biological historical backfill", "Reconcile daily dataset integrity"]
     types: [completed]
     branches: [main]
 
@@ -61,6 +61,16 @@ jobs:
       - name: Deploy identical static mirror
         if: steps.cloudflare.outputs.configured == 'true'
         run: bash tools/deploy_mirror.sh
-
-
-
+      - name: Verify the data actually served by the mirror
+        if: steps.cloudflare.outputs.configured == 'true'
+        run: python3 tools/daily_publication_audit.py verify --url "https://ct-atlas-mirror.fairpeace.workers.dev" --expected _pages_mirror/publication-manifest.json --output publication-receipt-mirror.json
+      - name: Retain mirror publication proof
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: mirror-publication-proof-${{ github.run_id }}
+          path: |
+            _pages_mirror/publication-manifest.json
+            publication-receipt-mirror.json
+          retention-days: 7
+          if-no-files-found: ignore
