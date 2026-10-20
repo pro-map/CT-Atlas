@@ -32,6 +32,10 @@ jobs:
           patch.write_bytes(data)
           subprocess.run(['git','apply','--check',str(patch)],check=True)
           subprocess.run(['git','apply',str(patch)],check=True)
+          p = Path('daily_source_retry.py')
+          s = p.read_text().replace("    error = 'unknown'", "    limited_query = False\n    error = 'unknown'")
+          s = s.replace("                stats['rate_limited'] += 1", "                stats['rate_limit_http_attempts'] += 1\n                if not limited_query:\n                    stats['rate_limited'] += 1\n                    limited_query = True")
+          p.write_text(s)
           PY
           python tools/_install_daily_workflows.py
       - name: Install test dependencies
