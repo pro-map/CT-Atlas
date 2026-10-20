@@ -3,7 +3,7 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-20T13:43:26.056979+00:00",
+ "updated_at": "2026-10-20T20:03:38.338240+00:00",
  "articles": [
   {
    "id": "radnuc-background-ba6d72c705c09a20",
@@ -628,6 +628,37 @@
    "ai_relevance_reason": "RadNuc background only: This details the expansion of the civilian nuclear supply chain through new facility proposals."
   },
   {
+   "id": "radnuc-background-fbfef56eda85b891",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxOdWpxdGZpV0NCRFM4VkRoTXIyQmpZQ19ObWtZMHpud01DLWV3NDRjWW5ZdVVRVjhDbk1TRHppM0M0cXVEamlOYk1QeGlxUFJ3UVM2ZFdqYjdwVmo1UWdod0M1TVNLSmZmWGk0QkxyRnVNZWNPTGRZVHNqSGZ5YXZfYjM5Q1VLaTFlSVdIbDNUeEFxQ2RTSGN1alZ6WEFrQ0IyNVJTV19rS2R6czNObTE0bEFqeldRVnhra1FhWG9PeDBHVVFwTHdxeHFmMmRCQXRUUlE?oc=5",
+   "title": "More than a thousand tests conducted at the first unit of the Akkuyu NPP in Turkey",
+   "summary": "Over a thousand individual tests have been completed at the first power unit of Turkey's Akkuyu Nuclear Power Plant. These activities form part of the facility's construction and commissioning phase.",
+   "original_title": "Türkiye’de Akkuyu NGS birinci bloğunda binden fazla test yapıldı (Ria Novosti)",
+   "original_language": "tr",
+   "source": "İletişim Başkanlığı",
+   "published": "2026-10-19T16:22:22+00:00",
+   "collected_at": "2026-10-20T20:03:38.338240+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a record of technical commissioning activities for a civilian nuclear power facility."
+  },
+  {
    "id": "radnuc-background-735e25d85b4929d1",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -845,6 +876,37 @@
    "ai_relevance_reason": "RadNuc background only: Concerns international collaboration on regulatory and safety capacity building."
   },
   {
+   "id": "radnuc-background-cdc3b18e06190b8d",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQQWdKYjVNUklEek5qbWJKdjBsVHdVOTh1OHVyWl9QY0xjWkpzMkdMcDFMaGtQNUFPVjVHNmVzY19QWWhrQzh0dFI2cXVZNnhiS2tMNTdXMHA0blVveGFacXJlRlp1cWE5ZHRTZTRqSlo2djlaTWNkTWhsd1JKQ29jNm9yRG9ORW9sMENSVEhHTEpEUVVh0gGUAUFVX3lxTFBBZ0piNU1SSUR6TmptYkp2MGxUd1U5OHU4dXJaX1BjTGNaSnMyR0xwMUxoa1A1QU9WNUc2ZXNjX1BZaGtDOHR0UjZxdVk2eGJLa0w1N1cwcDRuVW94YVpxcmVGWnVxYTlkdFNlNGpKWjZ2OVpNY2RNaGx3UkpDb2M2b3JEb05Fb2wwQ1JUSEdMSkRRVWE?oc=5",
+   "title": "USA Opening Nuclear Power Plants for Artificial Intelligence Energy Needs",
+   "summary": "The United States is reportedly repurposing or reopening nuclear power generation assets to meet the rising electricity demands of artificial intelligence infrastructure. This development reflects a shift in energy supply-chain strategies for the tech sector.",
+   "original_title": "ABD Yapay Zeka Enerjisi İçin Nükleer Santralleri Açıyor",
+   "original_language": "tr",
+   "source": "Diriliş Postası",
+   "published": "2026-10-19T13:58:00+00:00",
+   "collected_at": "2026-10-20T20:03:38.338240+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This update pertains to the civilian nuclear industry's response to changing supply-chain and energy requirements."
+  },
+  {
    "id": "radnuc-background-2f4d9d99dd62cab6",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -1029,6 +1091,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Concerns cooperation and development in the civilian nuclear industry supply chain/science."
+  },
+  {
+   "id": "radnuc-background-c90b40795f6ed0c5",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNa2lZRU16ZkxhVFVUVVdIenNTVDA2YzBxaVM4WDBya2JNcEJwd2NPaXAyWUxpUmhSaVRRc0xLRE83UEZsRHQwUFVGZzNneUh6NzlzbDYwQmZGWWNYT0lKMXVOZGszejFWWFRrYVVwRmVVX0tSQ0VhSkVtRlNOYzV1dGFlaXFtZjF0eVBVZktaaTZLOWpaQ3BSNA?oc=5",
+   "title": "Tihange 3 Nuclear Reactor in Belgium Restarted",
+   "summary": "The Tihange 3 nuclear reactor in Belgium has been brought back online. This follows standard procedures for re-initiating operations after an outage or maintenance period.",
+   "original_title": "Belçika'da Tihange 3 Nükleer Reaktörü Yeniden Devreye Alındı",
+   "original_language": "tr",
+   "source": "Bayburt Haber",
+   "published": "2026-10-19T12:48:13+00:00",
+   "collected_at": "2026-10-20T20:03:38.338240+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This reports on the status of a civilian nuclear power plant's operations."
   },
   {
    "id": "radnuc-background-3427f91fa7f37b2b",
