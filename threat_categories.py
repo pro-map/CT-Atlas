@@ -6,6 +6,7 @@ incident identity, source evidence, dates, reported status and coordinates stay.
 from __future__ import annotations
 import json
 import re
+import unicodedata
 from functools import lru_cache
 from pathlib import Path
 
@@ -23,6 +24,100 @@ def vocabulary():
     if data['category_labels'] != list(LABELS):
         raise ValueError('Threat-category vocabulary labels disagree with the taxonomy')
     return data
+
+
+@lru_cache(maxsize=1)
+def bio_monitoring_vocabulary():
+    """Provisional daily-only incident queries supplied by the Bio colleague."""
+    return json.loads(Path(__file__).with_name('bio-monitoring-keywords.json').read_text(encoding='utf-8'))
+
+
+def _monitoring_text(value):
+    value = unicodedata.normalize('NFKC', str(value or '')).casefold()
+    return re.sub(r'\s+', ' ', re.sub(r'[‐‑‒–—-]', ' ', value)).strip()
+
+
+def _monitoring_pattern(term):
+    term = _monitoring_text(term)
+    # Chinese text does not separate words with spaces. Other scripts still
+    # need whole terms: "meth" must not match "method" or "methane".
+    if re.search(r'[\u3400-\u9fff]', term):
+        return re.escape(term)
+    return r'(?<!\w)' + re.escape(term) + r'(?!\w)'
+
+
+@lru_cache(maxsize=1)
+def _bio_monitoring_patterns():
+    item = bio_monitoring_vocabulary()
+    exclusions = item['noise_exclusions'] + [term for language in item['languages'].values()
+                                           for term in language.get('noise_exclusions', [])]
+    noise = re.compile('|'.join(_monitoring_pattern(term) for term in exclusions))
+    languages = []
+    for code, language in item['languages'].items():
+        patterns = {key: re.compile('|'.join(_monitoring_pattern(term) for term in language[key]))
+                    for key in ('powder', 'response', 'mail', 'mail_context', 'targeted', 'target')}
+        # Ordinary inflections preserve the colleague's English response words.
+        if code == 'en':
+            patterns['response'] = re.compile(patterns['response'].pattern + r'|\b(?:evacuat\w*|cordon\w*|decontaminat\w*|quarantin\w*)\b')
+        elif code == 'fr':
+            patterns['response'] = re.compile(patterns['response'].pattern + r'|\b(?:évacu\w*|decontamin\w*|décontamin\w*)\b')
+        languages.append(patterns)
+    return noise, languages
+
+
+def bio_monitoring_match(title, summary=''):
+    """Cheap candidate gate; the AI must still establish a current incident.
+
+    No agent confirmation or terrorism attribution is required for this narrow
+    daily monitoring scope. The three pairs preserve the supplied Boolean ANDs.
+    """
+    body = _monitoring_text(str(title or '') + ' ' + str(summary or ''))
+    noise, languages = _bio_monitoring_patterns()
+    if noise.search(body):
+        return False
+    for groups in languages:
+        if ((groups['powder'].search(body) and groups['response'].search(body))
+                or (groups['mail'].search(body) and groups['mail_context'].search(body))
+                or (groups['targeted'].search(body) and groups['target'].search(body))):
+            return True
+    return False
+
+
+def bio_noise_match(title, summary=''):
+    noise, _ = _bio_monitoring_patterns()
+    return bool(noise.search(_monitoring_text(str(title or '') + ' ' + str(summary or ''))))
+
+
+def bio_monitoring_queries(code='en'):
+    """Split equivalent OR groups to fit provider limits, retaining every AND."""
+    item = bio_monitoring_vocabulary()
+    language = item['languages'].get(code)
+    if not language:
+        return []
+    exclusions = list(dict.fromkeys(item['noise_exclusions'] + language.get('noise_exclusions', [])))
+    noise = ' '.join('-"' + term.replace('"', '') + '"' for term in exclusions)
+    result = []
+
+    def bounded(left, right):
+        query = query_group(left) + ' ' + query_group(right) + ' ' + noise
+        if len(query) <= 680:
+            result.append(query)
+            return
+        # Splitting an OR side into separate queries leaves the union identical.
+        target = left if len(query_group(left)) >= len(query_group(right)) else right
+        if len(target) < 2:
+            raise ValueError(f'Bio monitoring query exceeds provider limit: {code}')
+        midpoint = len(target) // 2
+        if target is left:
+            bounded(left[:midpoint], right)
+            bounded(left[midpoint:], right)
+        else:
+            bounded(left, right[:midpoint])
+            bounded(left, right[midpoint:])
+
+    for left, right in (('powder', 'response'), ('mail', 'mail_context'), ('targeted', 'target')):
+        bounded(language[left], language[right])
+    return list(dict.fromkeys(result))
 
 def canonical(value):
     value = str(value or '').strip()
@@ -107,6 +202,8 @@ def scope_reason(event, result=None):
     import radnuc
     cats = set(event.get('categories') or [])
     wanted = {canonical(c) for c in (result or {}).get('categories', [])}
+    if BIO in cats | wanted and bio_noise_match(event.get('title'), event.get('summary')):
+        return 'Bio monitoring noise exclusion from the supplied keyword filter'
     if (cats | wanted) & set(LABELS) or wanted & LEGACY or event.get('legacy_category') in LEGACY:
         if (result or {}).get('actor_scope',event.get('actor_scope')) == 'STATE_ONLY':
             return 'Specialist terrorism topics exclude operations by states or regular armed forces'
@@ -161,6 +258,12 @@ def collection_queries(category, code='en'):
     return queries(category, code) or seed_queries(category, code)
 
 
+def daily_queries(category, code='en'):
+    """Daily provisional monitoring never expands the frozen historical plan."""
+    base = collection_queries(category, code)
+    return list(dict.fromkeys(base + (bio_monitoring_queries(code) if category == BIO else [])))
+
+
 def install_collection(namespace):
     """One vocabulary powers ordinary daily collection and specialist backfill."""
     for name in ('CATEGORIES','CORE_SEARCH_QUERIES','OFFICIAL_SOURCE_QUERIES','TARGETED_MEDIA_CATEGORY_TERMS'):
@@ -189,10 +292,12 @@ def install_collection(namespace):
     collection_config.extend_specialist_profiles(namespace['MULTILINGUAL_PROFILES'])
     for profile in namespace['MULTILINGUAL_PROFILES']:
         for label in LABELS:
-            for query in collection_queries(label, profile['code']):
+            for query in daily_queries(label, profile['code']):
                 item = {'term': query, 'category': label}
                 if item not in profile['queries']:
                     profile['queries'].append(item)
+    for name in ('CATEGORIES', 'CORE_SEARCH_QUERIES', 'OFFICIAL_SOURCE_QUERIES', 'TARGETED_MEDIA_CATEGORY_TERMS'):
+        namespace[name][BIO] = daily_queries(BIO)[0] if name == 'TARGETED_MEDIA_CATEGORY_TERMS' else daily_queries(BIO)
     for label, terms in ((RN,['radiological','radioactive','nuclear','uranium','dirty bomb']),
                          (CE,['chemical weapon','sarin','nerve agent','explosives','explosive device','ied']),
                          (BIO,['bioterrorism','biological weapon','anthrax','ricin','botulinum','agroterrorism'])):
@@ -211,13 +316,16 @@ used or planned for harm and terrorist explosive devices, seizures and plots.
 Firearms alone, generic weapons, drones alone and general terrorism do NOT qualify.
 Biological Terrorism covers deliberate biological/toxin attacks, attempted plots,
 reported threats and hoaxes, terrorism-linked possession/theft/trafficking,
-investigations, including biological agroterrorism.
+investigations, including biological agroterrorism. Its provisional DAILY
+monitoring scope ALSO includes current suspicious-mail and unidentified-powder
+incidents as detailed below, pending advice from the specialised unit.
 Standalone judicial developments are excluded from every specialist category.
 Agent/disease names alone do NOT qualify. Require related incident context and a
-reported terrorism nexus. Exclude natural outbreaks, accidental contamination,
-lab accidents, medicine, research, exercises, policy and ordinary crime.
-Suspicious powders and food/water contamination are NOT automatically biological:
-require reported biological involvement or an explicitly biological threat.
+reported terrorism nexus EXCEPT for the provisional suspicious-mail/powder
+monitoring scope below. Exclude natural outbreaks, accidental contamination,
+lab accidents, medicine, research, exercises, policy and unrelated ordinary crime.
+Food/water contamination still requires reported biological involvement or an
+explicitly biological threat; suspicious-mail/powder monitoring does not.
 Preserve suspected/alleged/hoax status in the English summary. Never infer a
 confirmed agent from a powder alert. reported_status describes the source's
 reported status: CONFIRMED, SUSPECTED, ALLEGED, THREAT, HOAX or UNKNOWN.
@@ -232,4 +340,8 @@ is legacy machine compatibility, NOT a CBRN parent or a user-facing subgroup.
 # prompt. Configuration rules must reach it, not merely sit in a JSON comment.
 SELECTION_NOTE += '\nCHEMICAL/EXPLOSIVES INCIDENT-REPORTING RULES:\n' + '\n'.join(
     vocabulary()['chemical_explosives'].get('rules', [])
+) + '\n'
+
+SELECTION_NOTE += '\nPROVISIONAL BIO DAILY MONITORING RULES (pending specialised advice):\n' + '\n'.join(
+    vocabulary()['biological'].get('rules', [])
 ) + '\n'

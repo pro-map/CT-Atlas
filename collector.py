@@ -2140,10 +2140,18 @@ def is_relevant_article(
 ):
     if out_of_scope_reason({"title": title, "summary": summary}):
         return False
+    if category == threat_categories.BIO and threat_categories.bio_noise_match(title, summary):
+        return False
 
     combined = normalize_relevance_text(
         title + " " + summary
     )
+
+    # Provisional Bio monitoring explicitly includes suspicious mail/powder
+    # alerts without a confirmed agent or terrorist motive. AI still checks
+    # that this is a new concrete incident rather than background commentary.
+    if category == threat_categories.BIO and threat_categories.bio_monitoring_match(title, summary):
+        return True
 
     title_text = normalize_relevance_text(
         title
@@ -2948,7 +2956,7 @@ def collect_query(
         )
 
         radnuc_hint = category in threat_categories.LABELS and AI_SELECTION_ENABLED
-        if (out_of_scope_reason({"title": title, "summary": summary})
+        if (category == threat_categories.BIO and threat_categories.bio_noise_match(title, summary)) or (out_of_scope_reason({"title": title, "summary": summary})
                 or radnuc.state_operation_reason({"title": title, "summary": summary})) or (
                 not radnuc_hint and not is_relevant_article(category, title, summary)):
             rejected += 1
@@ -3038,7 +3046,8 @@ def collect_broad_query(
         # These tightly scoped specialist searches must reach semantic review
         # even when source terminology fails the general English keyword gate.
         # With AI disabled, keep the original deterministic filtering behavior.
-        if AI_SELECTION_ENABLED and category_hint in {"Maritime Piracy", "CBRN", *threat_categories.LABELS}:
+        if (AI_SELECTION_ENABLED and category_hint in {"Maritime Piracy", "CBRN", *threat_categories.LABELS}
+                and not (category_hint == threat_categories.BIO and threat_categories.bio_noise_match(title, summary))):
             if category_hint not in categories:
                 categories.append(category_hint)
 
@@ -3863,7 +3872,9 @@ You are the final editorial relevance filter for an operational
 counter-terrorism situational-awareness map.
 
 For EVERY candidate event, judge whether it is genuinely useful as a CURRENT
-counter-terrorism intelligence event, OR a current maritime-piracy / armed-robbery-at-sea event.
+counter-terrorism intelligence event, OR a current maritime-piracy / armed-robbery-at-sea event,
+OR a current suspicious-mail / unidentified-powder incident within the
+provisional Bio monitoring rules below.
 
 Maritime Piracy is explicitly in scope even when no terrorist nexus is stated.
 Exclude ordinary maritime accidents, smuggling, fishing disputes and digital/media
@@ -3916,7 +3927,10 @@ MANDATORY ACTOR SCOPE (takes precedence over relevance scores):
   may be included even when the Taliban act as the governing authority.
   This does NOT include routine Afghan diplomacy, economics or governance,
   and does NOT exempt articles about other countries from Afghan publishers.
-- CBRN, weapons and cyber stories need the same concrete non-state-actor nexus;
+- CBRN, weapons and cyber stories need the same concrete non-state-actor nexus,
+  EXCEPT provisional Bio suspicious-mail/powder monitoring: a current concrete
+  alert, response or hoax is eligible with actor_scope=UNKNOWN when attribution
+  or motive is unknown, without a confirmed biological agent or terrorism nexus;
   interstate nuclear programmes and state-to-state cyberwar are out of scope.
 - Maritime Security is the DISPLAY name for the Maritime Piracy category.
   Its scope remains actual piracy/armed robbery at sea, vessel hijacking and
@@ -3935,8 +3949,10 @@ is_current_ct_event=false; never relabel them to an active category.
 OPERATIONAL EVENT REQUIREMENT (takes precedence over relevance scores): to score
 >= 50, the article must itself report at least one concrete, dated operational
 fact -- an attack, attempted attack, raid, arrest, seizure, financing action,
-weapons find, plot disruption, or similar. An
-article that only analyzes, opines on, explains, editorializes about, or
+weapons find, plot disruption, or similar. An actual suspicious-mail/powder
+alert, evacuation, hazmat response, testing result
+or hoax investigation within provisional Bio scope is also an operational fact.
+An article that only analyzes, opines on, explains, editorializes about, or
 discusses the broader context/implications/history of terrorism, a security
 policy, or a past event -- without itself reporting a NEW concrete operational
 fact -- must score below 50, no matter how substantive, well-sourced or
@@ -3967,7 +3983,8 @@ HIGH-SCORING EXAMPLES:
 
 LOW-SCORING / REJECT EXAMPLES:
 - generic political commentary mentioning terrorism only incidentally;
-- ordinary crime with no meaningful terrorism nexus;
+- ordinary crime with no meaningful terrorism nexus, except the explicitly
+  included provisional Bio suspicious-mail/powder incidents;
 - historical retrospectives, anniversaries or commemorations;
 - generic opinion pieces, book reviews or cultural references;
 - broad foreign-policy stories where terrorism is not the event;
@@ -4432,6 +4449,11 @@ def selection_fingerprint(
                 1000,
             ),
     }
+
+    # Reconsider only fetched candidates affected by the widened Bio policy.
+    # Keep unrelated cached decisions valid; this does not replay history.
+    if threat_categories.bio_monitoring_match(event.get('title'), event.get('summary')):
+        material['bio_monitoring_policy'] = threat_categories.bio_monitoring_vocabulary()['version']
 
     return hashlib.sha256(
         json.dumps(

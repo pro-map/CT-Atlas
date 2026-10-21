@@ -67,7 +67,7 @@ def configure(root, now, run_id, event='workflow_dispatch', continuation=False):
         control = {'end_at': config.get('end_at'), 'runs': []}
     runs = control.get('runs') or []
     # Late automatically queued jobs never revert to an extra ordinary run.
-    enabled = not continuation or live
+    enabled = backfill_control.specialist_history_enabled(root) and (not continuation or live)
     if live and len(runs) >= int(config['max_rounds']) and run_id not in runs:
         enabled = False
     latest = read(root, STATUS)
@@ -95,6 +95,8 @@ def configure(root, now, run_id, event='workflow_dispatch', continuation=False):
 def continuation_decision(root, now):
     if not backfill_control.history_enabled(root):
         return False, 'Historical backfills cancelled by operator; no continuation.'
+    if not backfill_control.specialist_history_enabled(root):
+        return False, 'All specialist historical backfills cancelled by user; daily collection remains enabled.'
     config = read(root, CONFIG)
     if not active(config, now):
         return False, 'Same-day acceleration window ended; normal daily schedule remains.'
@@ -157,7 +159,8 @@ def summary(root):
         lines += ['', '### Additional Radiological/Nuclear keyword backfill', '```json', json.dumps(supplement,indent=2), '```']
     for name in LABELS:
         row = (report.get('categories') or {}).get(name, {})
-        last = row.get('last_run', {})
+        last = ({'stop':row.get('cancellation_reason', 'Cancelled by user; saved progress preserved')}
+                if row.get('backfill_status') == 'cancelled' else row.get('last_run', {}))
         lines += ['', f'### {name}', '```json', json.dumps({'stop':last.get('stop','Not reached'),
                   'reviewed_this_batch':last.get('reviewed',0),
                   'successful_fetches_this_batch':last.get('fetched',0),

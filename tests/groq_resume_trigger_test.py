@@ -32,6 +32,7 @@ class GroqResumeTriggerTest(unittest.TestCase):
         text = (ROOT / ".github/workflows/groq-free-backfill.yml").read_text()
         self.assertNotIn("  schedule:", text)
         self.assertIn("(cancelled)", text.splitlines()[0])
+        self.assertIn("  workflow_dispatch:", text)
         for required in ("group: ct-map-update-main", "cancel-in-progress: false",
                          '(("SPECIALIST_POSTS_INPUT",5),)',
                          "backfill_publication_guard.py finalize",

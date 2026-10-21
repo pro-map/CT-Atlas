@@ -35,7 +35,7 @@ class TaxonomyTests(unittest.TestCase):
 
     def test_every_specialist_english_query_reaches_daily_collection(self):
         for label in t.LABELS:
-            self.assertEqual(collector.CORE_SEARCH_QUERIES[label],t.queries(label))
+            self.assertEqual(collector.CORE_SEARCH_QUERIES[label],t.daily_queries(label))
             self.assertTrue(t.queries(label))
         for label in t.LABELS:
             for p in collector.MULTILINGUAL_PROFILES:

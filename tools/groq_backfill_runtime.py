@@ -228,8 +228,10 @@ def preflight(root: Path, *, maintenance=False, day=None) -> dict:
         used, tokens = ledger.get("requests", 0), ledger.get("reserved_tokens", 0)
         if nonnegative_integer(used) is None or nonnegative_integer(tokens) is None:
             raise ValueError("Invalid quota counters; refusing backfill")
-    run = historical_enabled and (maintenance or (used < REQUEST_CAP and tokens + MIN_RUN_RESERVATION <= RESERVED_TOKEN_CAP))
+    history_enabled = historical_enabled and backfill_control.specialist_history_enabled(root)
+    run = history_enabled and (maintenance or (used < REQUEST_CAP and tokens + MIN_RUN_RESERVATION <= RESERVED_TOKEN_CAP))
     return {"run_needed": run, "utc_day": day, "maintenance": maintenance,
+            "history_enabled": history_enabled,
             "requests": used, "reserved_tokens": tokens,
             "request_cap": REQUEST_CAP, "token_cap": RESERVED_TOKEN_CAP}
 

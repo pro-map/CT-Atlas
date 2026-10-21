@@ -24,7 +24,7 @@ class Controls(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
         config=json.loads((ROOT/c.CONFIG).read_text())
-        config.update(start_at='2026-10-08T09:00:00+00:00',end_at='2026-10-08T22:00:00+00:00')
+        config.update(enabled=True,start_at='2026-10-08T09:00:00+00:00',end_at='2026-10-08T22:00:00+00:00')
         config.pop('first_round_minutes',None)
         c.write(self.root,c.CONFIG,config)
         self.report = {'categories': {name: {'pending_searches': 10, 'queued_candidates': 0,

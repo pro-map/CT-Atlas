@@ -7,7 +7,7 @@
     "Biological Terrorism"
   ],
   "biological": {
-    "status": "Provisional daily vocabulary pending specialised advice",
+    "status": "Provisional daily monitoring, including suspicious mail and unidentified powders, pending advice from the specialised unit; historical backfill stopped",
     "terms": {
       "en": [
         "bioterrorism",
@@ -234,13 +234,18 @@
       "All term groups belong to one standalone category, Biological Terrorism. They are retrieval roles, not map subcategories.",
       "Core phrases retrieve candidates, not automatic map events. Exclude generic policy, exercises, research, commentary and historical retrospectives unless they report a new in-scope incident.",
       "Agent and disease names require related incident context in the title or the same relevant passage. An unrelated terrorism paragraph elsewhere in an article is insufficient.",
-      "Food or water contamination, agricultural sabotage and suspicious powders are not automatically biological. Establish reported biological involvement or an explicitly biological threat before assignment.",
-      "Retain suspected plots, threats, hoaxes, investigations when within scope, but preserve the reported status. Never label a suspicious powder as a confirmed biological agent without supporting evidence.",
-      "A terrorism nexus must be reported or supported by credible evidence. Ordinary crime, natural outbreaks, accidental contamination and laboratory accidents do not become terrorism because a pathogen is mentioned.",
+      "Provisional DAILY monitoring also covers current hoaxes, suspicious letters/envelopes/packages/parcels and unknown or unidentified powders/substances even when no biological agent or terrorist motive is established. This broadening is pending advice from the specialised unit and must not initiate historical backfill.",
+      "Retain an incident when suspicious/white/unknown/unidentified powder or an unidentified/suspicious substance is reported together with hazmat, evacuation, cordon, decontamination, shelter in place, quarantine, field testing, negative tests or a finding of no hazardous substance.",
+      "Retain suspicious mail, a powder letter or a powder-filled item when the same incident involves powder, a substance, anthrax, ricin, biohazard, hazmat or a mailroom; a suspicious package alone without qualifying context does not suffice.",
+      "Retain white/suspicious powder or a suspicious envelope/letter/package at a courthouse, embassy, consulate, parliament, city hall, town hall, ministry, election office, school, university, hospital, newspaper, senator, mayor, judge, prosecutor or campaign office. Institutional targeting is monitoring context, not proof of terrorism or biological involvement.",
+      "For this provisional powder/mail monitoring, exclude cocaine, heroin, fentanyl, meth, protein powder, baking, recipe and cosmetic as whole terms; avoid substring matches such as meth in method. Native-language equivalents use the same noise filter.",
+      "Negative laboratory or field tests, no hazardous findings and confirmed hoaxes remain relevant monitoring incidents; preserve their outcome. Never describe an unidentified powder as a confirmed biological agent or a suspicious letter as a confirmed terrorist or biological attack. Use actor_scope=UNKNOWN when attribution is unknown and is_attack=false unless the source reports an actual attack.",
+      "Food or water contamination and agricultural sabotage outside the provisional suspicious-mail/powder monitoring scope still require reported biological involvement or an explicitly biological threat before Bio assignment.",
+      "Outside the provisional suspicious-mail/powder monitoring scope, a terrorism nexus must be reported or supported by credible evidence. Ordinary crime, natural outbreaks, accidental contamination and laboratory accidents do not become terrorism because a pathogen is mentioned.",
       "Theft or trafficking without a reported terrorism nexus may be reviewed as a candidate but must not be published as biological terrorism automatically.",
       "Some toxins overlap chemical and biological classifications. Use one canonical incident identifier; relevant filters may share that record without inflating overall incident counts.",
       "Apply word boundaries, punctuation and case normalization, and appropriate language-specific normalization. Short acronyms and ambiguous words must not trigger on substrings.",
-      "English, French, Arabic, Simplified Chinese and Traditional Chinese curated seed phrases are included. Language-specific seeds need colleague validation and do not establish exhaustive coverage or automatic terrorist attribution."
+      "The existing internationally sourced agent/disease/toxin terms are discovery aids pending specialist validation; their presence is not a claim of agent confirmation or an exhaustive recognized list. Native-language monitoring seeds need specialist validation and do not establish automatic terrorist attribution."
     ],
     "sources": [
       {
@@ -478,7 +483,14 @@
         "دہشتگرد"
       ]
     },
-    "native_query_note": "Shared daily and historical discovery seeds for 16 additional codes. Existing query text is preserved; not a full translation of every English keyword or proof of successful source coverage."
+    "native_query_note": "Shared daily and historical discovery seeds for 16 additional codes. Existing query text is preserved; not a full translation of every English keyword or proof of successful source coverage.",
+    "monitoring_vocabulary": "bio-monitoring-keywords.json",
+    "monitoring_review": {
+      "date": "2026-10-21",
+      "source": "User-supplied specialist monitoring criteria",
+      "status": "Provisional pending advice from the specialised unit",
+      "agent_list": "Existing internationally sourced agent/disease/toxin discovery terms retained; specialist validation pending. Terms never establish agent identity or terrorist intent."
+    }
   },
   "chemical_explosives": {
     "status": "User-supplied vocabulary reviewed on 2026-10-08: 95 specific terms retained; 5 ambiguous contamination terms excluded",

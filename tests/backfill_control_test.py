@@ -1,4 +1,4 @@
-"""Cancelled RN history must stay stopped without changing daily or checkpoints."""
+"""Cancelled specialist history stays stopped without changing daily or checkpoints."""
 import copy
 import json
 import sys
@@ -199,6 +199,70 @@ class BackfillCancellation(unittest.TestCase):
             self.assertEqual({q['category'] for q in profile['queries']},set(collector.CATEGORIES))
         self.assertTrue(control.task_disabled({'category':'Attacks','group':'gemini_chinese_map'},set(),lanes))
         self.assertFalse(control.task_disabled({'category':'Attacks','code':'fr'},set(),lanes))
+
+    def test_bio_cancellation_blocks_manual_backend_before_loading_or_replaying(self):
+        (self.root/control.CONFIG).write_text(json.dumps({'disabled_categories':list(topics.LABELS)}))
+        saved = self.root/'archive/biological-enrichment-state.json'
+        saved.parent.mkdir()
+        saved.write_text('{"saved":"unchanged"}')
+        before = saved.read_bytes()
+        with patch.object(specialist.archive_review, 'load_collector', side_effect=AssertionError('Must not start')), \
+             patch('requests.sessions.Session.request', side_effect=AssertionError('Must not call API')):
+            report = specialist.run(self.root, categories=[topics.BIO])
+        self.assertEqual(report['backfill_status'], 'cancelled')
+        self.assertEqual(report['requests_this_run'], 0)
+        self.assertEqual(saved.read_bytes(), before)
+
+    def test_all_cancelled_preflight_and_stale_continuations_cannot_restart_history(self):
+        from datetime import datetime, timezone
+        (self.root/control.CONFIG).write_text(json.dumps({'disabled_categories':list(topics.LABELS)}))
+        catchup.write(self.root, catchup.CONFIG, {
+            'enabled':True, 'start_at':'2026-10-21T00:00:00+00:00', 'end_at':'2026-10-22T00:00:00+00:00',
+            'max_rounds':18, 'minutes_per_round':45, 'searches_per_round':2400,
+            'ai_requests_per_round':120, 'enrichment_daily_allocation':600})
+        now = datetime(2026,10,21,10,tzinfo=timezone.utc)
+        before = {p:p.read_bytes() for p in self.root.rglob('*') if p.is_file()}
+        for maintenance in (False, True):
+            self.assertFalse(groq_runtime.preflight(self.root,maintenance=maintenance)['run_needed'])
+        for continuation in (False, True):
+            self.assertFalse(catchup.configure(self.root,now,'manual',continuation=continuation)['enabled'])
+        self.assertFalse(catchup.continuation_decision(self.root,now)[0])
+        self.assertEqual(before, {p:p.read_bytes() for p in self.root.rglob('*') if p.is_file()})
+
+    def test_legacy_cbrn_history_cannot_bypass_all_specialist_cancellations(self):
+        disabled = set(topics.LABELS)
+        for legacy in ('CBRN','CBRNE'):
+            self.assertTrue(control.task_disabled({'category':legacy,'code':'en'}, disabled, set()))
+        self.assertFalse(control.task_disabled({'category':'Attacks','code':'en'}, disabled, set()))
+        # A mixed legacy query remains usable while another specialist history is enabled.
+        self.assertFalse(control.task_disabled({'category':'CBRN'}, {topics.BIO}, set()))
+
+    def test_production_bio_stop_preserves_daily_queries_and_historical_checkpoints(self):
+        self.assertFalse(control.specialist_history_enabled(ROOT))
+        names = ('CATEGORIES','CORE_SEARCH_QUERIES','OFFICIAL_SOURCE_QUERIES',
+                 'TARGETED_MEDIA_CATEGORY_TERMS','MULTILINGUAL_PROFILES')
+        daily = {name:copy.deepcopy(getattr(collector,name)) for name in names}
+        historical = copy.deepcopy(daily)
+        control.apply_to_collector(historical,ROOT)
+        self.assertIn(topics.BIO,daily['CATEGORIES'])
+        self.assertTrue(any(q.get('category') == topics.BIO
+                            for p in daily['MULTILINGUAL_PROFILES'] for q in p['queries']))
+        self.assertNotIn(topics.BIO,historical['CATEGORIES'])
+        self.assertFalse(any(q.get('category') in (*topics.LABELS,'CBRN','CBRNE')
+                             for p in historical['MULTILINGUAL_PROFILES'] for q in p['queries']))
+        self.assertEqual(daily,{name:getattr(collector,name) for name in names})
+
+    def test_refresh_all_cancelled_never_claims_empty_active_set_completed(self):
+        (self.root/control.CONFIG).write_text(json.dumps({'disabled_categories':list(topics.LABELS)}))
+        catchup.write(self.root,specialist.MANIFEST,{'anchor':'2026-10-08'})
+        with patch.object(specialist.archive_review,'load_collector',return_value=object()), \
+             patch.object(specialist,'plan_tasks',return_value=[]), \
+             patch.object(specialist,'progress',return_value={
+                 'backfill_status':'cancelled','complete':False,'processing_complete':False}):
+            report=specialist.refresh_status(self.root,phase='failed')
+        self.assertEqual(report['batch_status'],'cancelled')
+        self.assertFalse(report['complete'])
+        self.assertFalse(report['processing_complete'])
 
 
 if __name__=='__main__': unittest.main()

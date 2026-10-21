@@ -167,6 +167,7 @@ class GroqHistoryRuntimeTests(unittest.TestCase):
     def test_workflow_keeps_publication_and_serialization_guards(self):
         text=(ROOT/'.github/workflows/groq-free-backfill.yml').read_text()
         self.assertNotIn('  schedule:',text)
+        self.assertIn('  workflow_dispatch:',text)
         self.assertIn('(cancelled)',text.splitlines()[0])
         self.assertIn('group: ct-map-update-main',text)
         self.assertIn('cancel-in-progress: false',text)

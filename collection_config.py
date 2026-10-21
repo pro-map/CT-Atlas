@@ -90,7 +90,7 @@ def effective(namespace):
         'vocabulary_sources': {
             topics.RN: ['radnuc.py', 'radnuc-keywords.json', 'radnuc_vocabulary.py'],
             topics.CE: ['threat-category-keywords.json'],
-            topics.BIO: ['threat-category-keywords.json'],
+            topics.BIO: ['threat-category-keywords.json', 'bio-monitoring-keywords.json'],
         },
         'coverage_note': 'Configured queries, not completed retrieval or exhaustive coverage. Some added daily editions search specialist topics only; one Chinese language uses two writing systems.',
     }

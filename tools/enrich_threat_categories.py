@@ -182,9 +182,12 @@ def refresh_status(root=ROOT, phase=None):
         for category in topics.LABELS}
     report.update(frozen)
     report['updated_at'] = datetime.now(timezone.utc).isoformat()
-    report['complete'] = all(row['complete'] for row in backfill_control.active_rows(report))
-    report['processing_complete'] = all(row['processing_complete'] for row in backfill_control.active_rows(report))
-    if phase:
+    active = backfill_control.active_rows(report)
+    report['complete'] = bool(active) and all(row['complete'] for row in active)
+    report['processing_complete'] = bool(active) and all(row['processing_complete'] for row in active)
+    if not active:
+        report['batch_status'] = 'cancelled'
+    elif phase:
         report['batch_status'] = phase
     if report.get('batch_status') in ('interrupted','failed'):
         report['complete'] = False
