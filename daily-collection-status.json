@@ -1,35 +1,37 @@
 {
   "schema_version": 2,
   "status": "partial",
-  "run_started_at": "2026-10-20T19:59:32.599114+00:00",
-  "last_attempt_at": "2026-10-20T19:59:32.599114+00:00",
-  "published_at": "2026-10-21T01:00:16.658854+00:00",
+  "run_started_at": "2026-10-21T13:50:10.298645+00:00",
+  "last_attempt_at": "2026-10-21T13:50:10.298645+00:00",
+  "published_at": "2026-10-21T15:13:48.534167+00:00",
   "recent": {
-    "candidates": 3186,
-    "reviewed": 3186,
-    "cached": 2051,
-    "new_reviews": 1135,
+    "candidates": 3250,
+    "reviewed": 2930,
+    "cached": 1810,
+    "new_reviews": 1120,
     "official_auto_accepted": 0,
-    "retained": 148,
-    "rejected": 3038,
-    "pending": 0,
-    "status": "complete",
-    "calls": 36,
+    "retained": 155,
+    "rejected": 2775,
+    "pending": 320,
+    "status": "partial",
+    "calls": 45,
     "primary_calls": 30,
-    "overflow_calls": 6,
-    "reasons": [],
-    "window_start": "2026-10-17T19:59:32.599114+00:00",
-    "window_end": "2026-10-20T19:59:32.599114+00:00"
+    "overflow_calls": 15,
+    "reasons": [
+      "transient_error"
+    ],
+    "window_start": "2026-10-18T13:50:10.298645+00:00",
+    "window_end": "2026-10-21T13:50:10.298645+00:00"
   },
   "backlog": {
-    "candidates": 1347,
-    "reviewed": 1007,
-    "cached": 687,
-    "new_reviews": 320,
+    "candidates": 831,
+    "reviewed": 789,
+    "cached": 533,
+    "new_reviews": 256,
     "official_auto_accepted": 0,
-    "retained": 82,
-    "rejected": 925,
-    "pending": 340,
+    "retained": 88,
+    "rejected": 701,
+    "pending": 42,
     "status": "partial",
     "calls": 10,
     "primary_calls": 0,
@@ -56,15 +58,15 @@
   "source": {
     "google": {
       "retry_waves": 0,
-      "successful": 1132
+      "successful": 1222
     },
     "gdelt": {
       "attempted": 10,
-      "http_attempts": 19,
-      "successful": 2,
-      "rate_limit_http_attempts": 16,
-      "rate_limited": 9,
-      "failed": 8,
+      "http_attempts": 17,
+      "successful": 1,
+      "rate_limit_http_attempts": 14,
+      "rate_limited": 7,
+      "failed": 9,
       "deferred_queries": [
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+weapons%22+OR+%22terrorist+arms%22+OR+%22terrorist+firearms%22+OR+%22weapons+smuggling%22+terrorism+OR+%22arms+trafficking%22+terrorism%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
@@ -85,6 +87,12 @@
           "recovered": false
         },
         {
+          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+arrested%22+OR+%22terrorists+arrested%22+OR+%22terror+suspect+arrested%22+OR+%22terror+suspects+arrested%22+OR+%22terrorism+arrest%22%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
+          "label": "gdelt:Arrests",
+          "reason": "http_429",
+          "recovered": false
+        },
+        {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22security+forces+kill%22+terrorist+OR+%22security+forces+killed%22+militants+OR+%22troops+kill%22+terrorists+OR+%22militants+killed+in+raid%22+OR+%22terrorists+killed+in+raid%22%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
           "label": "gdelt:Counter Terrorism Action",
           "reason": "http_429",
@@ -99,7 +107,7 @@
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28nuclear+OR+radioactive+OR+radiological+OR+cesium+OR+caesium+OR+thorium+OR+radiopharmaceutical+OR+%22dirty+bomb%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+%22bomb+plot%22%29+OR+%28%22uranium+smuggling%22+OR+%22illegal+uranium+mining%22+OR+%22red+mercury%22+OR+radioactive+OR+radiopharmaceutical+OR+cesium+OR+thorium%29+%28smuggling+OR+trafficking+OR+stolen+OR+theft+OR+seizure+OR+arrest+OR+investigation%29+OR+%28%22nuclear+power+plant%22+OR+%22nuclear+supply+chain%22+OR+%22nuclear+transport%22+OR+%22nuclear+sites%22%29+%28cyberattack+OR+sabotage+OR+drones+OR+%22terror+plot%22%29+OR+%28%22AI+for+nuclear%22+OR+%22cyberattack+on+nuclear+plant%22+OR+%22drones+over+nuclear+sites%22+OR+%22dirty+bomb%22%29+%28terrorist+OR+terrorism+OR+plot+OR+investigation%29+OR+%28%22Radioactive+material+theft%22+OR+%22Stolen+radioactive+source%22+OR+%22Missing+radioactive+source%22+OR+%22Lost+radioactive+material%22+OR+%22Nuclear+material+theft%22+OR+%22Nuclear+smuggling%22%29%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
           "label": "gdelt:Radiological/Nuclear",
-          "reason": "http_429",
+          "reason": "invalid_response",
           "recovered": false
         },
         {
@@ -115,22 +123,24 @@
           "recovered": false
         }
       ],
-      "invalid_response": 1
+      "invalid_response": 2
     },
-    "errors": 8,
+    "errors": 9,
     "status": "partial"
   },
   "reasons": [
+    "transient_error",
     "historical_budget",
-    "geolocation_review_required",
+    "recent_pending",
     "backlog_pending",
     "source_errors",
-    "category_pending"
+    "category_pending",
+    "geolocation_review_required"
   ],
   "queue_filter": {
-    "expired": 6700,
-    "retired": 436,
-    "cancelled_history": 132,
+    "expired": 7366,
+    "retired": 413,
+    "cancelled_history": 707,
     "duplicates": 0
   },
   "budgets": {
@@ -138,14 +148,14 @@
       "per_run": 30,
       "per_day": 60,
       "used_this_run": 30,
-      "used_today": 60
+      "used_today": 30
     },
     "overflow": {
       "model": "gemini-3.1-flash-lite",
       "per_run": 25,
       "per_day": 50,
-      "used_this_run": 16,
-      "used_today": 41
+      "used_this_run": 25,
+      "used_today": 25
     },
     "historical_calls_per_run": 10,
     "historical_calls_used": 10,
@@ -154,12 +164,12 @@
   "geolocation": {
     "status": "complete",
     "pending": 0,
-    "located": 4420,
-    "unlocated": 52,
-    "completed_unlocated": 52,
+    "located": 4510,
+    "unlocated": 55,
+    "completed_unlocated": 55,
     "outcome": "success",
-    "processed_this_run": 78,
-    "review_required": 2
+    "processed_this_run": 98,
+    "review_required": 8
   },
   "categories": [
     {
@@ -184,7 +194,7 @@
       "stop_code": "http_503"
     }
   ],
-  "finalized_at": "2026-10-21T06:23:38.932804+00:00",
+  "finalized_at": "2026-10-21T15:17:07.852910+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success"
 }

@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-18T19:22:28.606979+00:00",
+  "removed_at": "2026-10-21T15:07:23.312197+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -783,6 +783,27 @@
       "country": "Saudi Arabia",
       "ai_relevance_score": 65,
       "ai_relevance_reason": "Reflects regional follow-up on a thwarted counter-terrorism operation."
+    },
+    {
+      "id": "7093678359eccfdf",
+      "incident_id": "inc-3c3fd3f46251c137",
+      "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPa24xS1dVeG9HRXJMNDNCOUk2UVBLUDRSU3NkdVNSbW5EWTJnZmZYRVdEZGhsQUNJRkpIQ2FsOU5sbkpQaWhKdDExVlBDTUJlTHFDd1pUMlllWHhKZjBQWWJjM3lOOTc1bWY0a0dGWlFSaExCdVFTVDVKUGZyYTBhNVVtYWRzSGNXN0E?oc=5",
+      "title": "FSB prevents terrorist attack against Roskomnadzor leadership",
+      "summary": "Russia's Federal Security Service stated that it successfully prevented a planned terrorist attack targeting the leadership of Roskomnadzor.",
+      "original_title": "ФСБ предотвратила теракт против руководителей Роскомнадзора",
+      "original_language": "ru",
+      "source": "expert.ru",
+      "published": "2026-04-24T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Russia",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports the prevention of a terrorist plot by security services."
     }
   ]
 }
