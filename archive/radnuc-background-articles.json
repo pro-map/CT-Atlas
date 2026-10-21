@@ -3,7 +3,7 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-21T13:59:40.984206+00:00",
+ "updated_at": "2026-10-21T20:16:07.077210+00:00",
  "articles": [
   {
    "id": "radnuc-background-ba6d72c705c09a20",
@@ -1186,6 +1186,37 @@
    "ai_relevance_reason": "RadNuc background only: Accepted: Relates to technological modernization of civilian nuclear power infrastructure."
   },
   {
+   "id": "radnuc-background-57aee937bc6e1ac3",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxQeE1yVEc4TmNSZ2xXVDRlM2RhRWZhaDlIRld2dklGNWc1VFg4OTRwQ1A4N242TzdoSmVaWDRSUjkyMEhVWC1PZUlEaTEwMG9oV1lzanN3QmdHenI3eUR0bGhvQUktdkRrZ180S041TjY0TFctN3BXM19ydVQ5V0hnOFRJa3U2b1ZacmNXckJfbERoRjVOMzBTSDJMY3N6MXlwTXRMTEY2MVZ1Y2hwTERJS2U4ckZDeVlVQUl4VUtiNXlJLWp2SXFENV93?oc=5",
+   "title": "Radnostix submits letter to NRC for license transfer to NANO Nuclear",
+   "summary": "Radnostix has submitted a formal letter to the U.S. Nuclear Regulatory Commission (NRC) regarding the transfer of a license to NANO Nuclear. This regulatory development marks a change in the administrative status of the nuclear facility license.",
+   "original_title": "Radnostix submita carta à NRC para transferência de licença à NANO Nuclear",
+   "original_language": "pt",
+   "source": "Investing.com Brasil - Finanças, Câmbio e Investimentos",
+   "published": "2026-10-19T12:13:00+00:00",
+   "collected_at": "2026-10-21T20:16:07.077210+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Civilian nuclear regulatory and licensing development."
+  },
+  {
    "id": "radnuc-background-8cca1d56cb8a3ee9",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -1247,6 +1278,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Relates to the civilian nuclear fuel supply chain."
+  },
+  {
+   "id": "radnuc-background-f405f63e237a2ace",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQNVJ3d1JMWElHdDNZM3A5M2E3dFlmb2UyRXNvTlp1VHZ6bm9nZmpkamZ4WVp6ZlUxMU5sVm5IQXNURms0MF9zVk1DUi0xQm9MbGhpSzNrUEJnbEVrdmFPQTllT0RnNnNzVlFUaS1yVktNRmZwTFlSS180YTZXUC1PV1kxOVM3SDA?oc=5",
+   "title": "Major Preparation Against Nuclear Danger in Kırşehir!",
+   "summary": "Authorities in Kırşehir are conducting large-scale preparations to address potential nuclear or radiological hazards. These activities focus on enhancing emergency response readiness.",
+   "original_title": "Kırşehir'de Nükleer Tehlikeye Karşı Büyük Hazırlık!",
+   "original_language": "tr",
+   "source": "Kırşehir Çiğdem",
+   "published": "2026-10-19T10:30:00+00:00",
+   "collected_at": "2026-10-21T20:16:07.077210+00:00",
+   "background_topics": [
+    "emergency_exercises"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Civilian nuclear/radiological emergency preparedness."
+  },
+  {
+   "id": "radnuc-background-cd7c52f21f283ba9",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOSk1YWk1nTWV3T3ZjSkRGdVoxcWJtelVON1BKbTlFdGNncHNxbXJyS2JaaXR0T3hGMUpJTGdrNkktU1IwMzJELWUzMm1RVWctb1U0LW5mRklkLUVzQ1NvMkx0eHhQQWhFVjA3X0pZWXJOUkdocWcyUnA5THE4NmpnN0c1d1dONlZhcWRUZmJ0QWZPOWFk?oc=5",
+   "title": "CBRN Drill Conducted in Kırşehir for Patient Safety",
+   "summary": "A Chemical, Biological, Radiological, and Nuclear (CBRN) emergency drill was carried out in Kırşehir to improve patient safety protocols. The exercise focused on refining response procedures in a healthcare setting.",
+   "original_title": "Kırşehir’de Hasta Güvenliği İçin KBRN Tatbikatı Yapıldı",
+   "original_language": "tr",
+   "source": "Kırşehir Memleket Haber Portalı",
+   "published": "2026-10-19T10:30:00+00:00",
+   "collected_at": "2026-10-21T20:16:07.077210+00:00",
+   "background_topics": [
+    "emergency_exercises"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Radiological/CBRN emergency training and preparedness."
   },
   {
    "id": "radnuc-background-3c0542736917c28d",
@@ -1342,6 +1435,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Covers civilian nuclear technology development for energy supply."
+  },
+  {
+   "id": "radnuc-background-94abf8e3b3ab4e15",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQSUJOZ0tTaUxJRjBORFBzNkhsQ2QyZFhGaUZLYkRqVmlyRWlONmxjUFRzdFE3enc5RnZOME80aGE2T2FSSThacTFDQ2RJX1l1bnE1dUNuUG1Uem95dDFCVDNVaENMZDlZSmJsbU4wNHR4MGpwLUpwckp5RDBBWExYVjVHZ3R0Q3dSbG1PajlSSmhoNWJkOVRyeVZvX1HSAZwBQVVfeXFMUElCTmdLU2lMSUYwTkRQczZIbENkMmRYRmlGS2JEalZpckVpTjZsY1BUc3RRN3p3OUZ2TjBPNGhhNk9hUkk4WnExQ0NkSV9ZdW5xNXVDblBtVHpveXQxQlQzVWhDTGQ5WUpibG1OMDR0eDBqcC1KcHJKeUQwQVhMWFY1R2d0dEN3UmxtT2o5UkpoaDViZDlUcnlWb19R?oc=5",
+   "title": "Turkish scientists propose a 49-watt neutron source for a 10 MW thorium reactor",
+   "summary": "Researchers in Turkey have proposed a technical design specification involving a 49-watt neutron source to support a 10 MW thorium reactor. This represents a technical development in thorium-based nuclear reactor research.",
+   "original_title": "Türk bilim insanları toryum reaktöründe 10 MW için 49 vatlık nötron kaynağı önerdi",
+   "original_language": "tr",
+   "source": "Son Dakika",
+   "published": "2026-10-19T07:02:58+00:00",
+   "collected_at": "2026-10-21T20:16:07.077210+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Scientific and technological advance in nuclear reactor research."
   },
   {
    "id": "radnuc-background-f42fb8c867af382e",

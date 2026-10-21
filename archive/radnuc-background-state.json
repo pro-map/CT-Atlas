@@ -1053,93 +1053,34 @@
   "00c9012555895b68": "2026-10-20T20:03:38.338240+00:00",
   "7245139dbd3c9cd0": "2026-10-20T20:03:38.338240+00:00",
   "6e54d76315d33246": "2026-10-20T20:03:38.338240+00:00",
-  "5f935cba674f33cf": "2026-10-20T20:03:38.338240+00:00"
+  "5f935cba674f33cf": "2026-10-20T20:03:38.338240+00:00",
+  "f483b19b827335a9": "2026-10-21T20:16:07.077210+00:00",
+  "04fdab174110e2f2": "2026-10-21T20:16:07.077210+00:00",
+  "1559626efc5e8596": "2026-10-21T20:16:07.077210+00:00",
+  "8ee1c3440ab04412": "2026-10-21T20:16:07.077210+00:00",
+  "952c7862047c8ea1": "2026-10-21T20:16:07.077210+00:00",
+  "5debb6324fcea528": "2026-10-21T20:16:07.077210+00:00",
+  "2a9de52af372b9ae": "2026-10-21T20:16:07.077210+00:00"
  },
  "pending": [
   {
-   "id": "27e52f77411c1fd3",
+   "id": "6f53645ef4cb57a2",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Bruxelas atribui 3,4 mil milhões de euros a 77 projetos de tecnologias limpas",
-   "summary": "Bruxelas atribui 3,4 mil milhões de euros a 77 projetos de tecnologias limpas SAPO",
-   "original_title": "Bruxelas atribui 3,4 mil milhões de euros a 77 projetos de tecnologias limpas",
-   "original_summary": "Bruxelas atribui 3,4 mil milhões de euros a 77 projetos de tecnologias limpas SAPO",
-   "original_language": "pt",
-   "collection_language": "pt",
-   "collection_language_name": "Portuguese / Brazil",
-   "collection_locale": "BR:pt-419",
-   "published": "2026-10-19T14:21:47+00:00",
-   "source": "SAPO",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNYjcyNFV6M2lzQWczaHBZOTM5ZVdJbTc3R1RFWnJNbUxZZXlub0l2b0t0Qjh5eXMyUjRZVHJBMXBOWE11THAzQnVYeW43cVlPV001eDN3cmNVMTFDT1dYN2tWcWxYOEhWUmZTd2JTWUVoc09FM2NzUGM5V2k5OHU4OVB2bzFQN3Jvc1EtaUowaVAzYjdOSVRQYVh2Y1JRamxlT24yQVpZRm04d2U4TGZ2MEJ5dVNwS0JRUTFNWGFNM3V0dXB4bU95ag?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "a43832a2f2e04403c31d2ca1fd3fb192bc4ff7a4aeb77962c10578c19b29d7f7"
-   ],
-   "background_query_language": "pt"
-  },
-  {
-   "id": "9f0fe90938d3c9ab",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Radnostix submita carta à NRC para transferência de licença à NANO Nuclear",
-   "summary": "Radnostix submita carta à NRC para transferência de licença à NANO Nuclear Investing.com Brasil - Finanças, Câmbio e Investimentos",
-   "original_title": "Radnostix submita carta à NRC para transferência de licença à NANO Nuclear",
-   "original_summary": "Radnostix submita carta à NRC para transferência de licença à NANO Nuclear Investing.com Brasil - Finanças, Câmbio e Investimentos",
-   "original_language": "pt",
-   "collection_language": "pt",
-   "collection_language_name": "Portuguese / Brazil",
-   "collection_locale": "BR:pt-419",
-   "published": "2026-10-19T12:13:00+00:00",
-   "source": "Investing.com Brasil - Finanças, Câmbio e Investimentos",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxQeE1yVEc4TmNSZ2xXVDRlM2RhRWZhaDlIRld2dklGNWc1VFg4OTRwQ1A4N242TzdoSmVaWDRSUjkyMEhVWC1PZUlEaTEwMG9oV1lzanN3QmdHenI3eUR0bGhvQUktdkRrZ180S041TjY0TFctN3BXM19ydVQ5V0hnOFRJa3U2b1ZacmNXckJfbERoRjVOMzBTSDJMY3N6MXlwTXRMTEY2MVZ1Y2hwTERJS2U4ckZDeVlVQUl4VUtiNXlJLWp2SXFENV93?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "54d1d3419e31289113fcbd98d4a3b27314baed1c5b4da1f83351b32ca786fc62"
-   ],
-   "background_query_language": "pt"
-  },
-  {
-   "id": "a89c347161915cd2",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Kırşehir'de Nükleer Tehlikeye Karşı Büyük Hazırlık!",
-   "summary": "Kırşehir'de Nükleer Tehlikeye Karşı Büyük Hazırlık! Kırşehir Çiğdem",
-   "original_title": "Kırşehir'de Nükleer Tehlikeye Karşı Büyük Hazırlık!",
-   "original_summary": "Kırşehir'de Nükleer Tehlikeye Karşı Büyük Hazırlık! Kırşehir Çiğdem",
+   "title": "Amazon Nvidia'dan binlerce yapay zekâ çipi alıyor ama hepsini çalıştıracak elektriği yok",
+   "summary": "Amazon Nvidia'dan binlerce yapay zekâ çipi alıyor ama hepsini çalıştıracak elektriği yok DonanımHaber",
+   "original_title": "Amazon Nvidia'dan binlerce yapay zekâ çipi alıyor ama hepsini çalıştıracak elektriği yok",
+   "original_summary": "Amazon Nvidia'dan binlerce yapay zekâ çipi alıyor ama hepsini çalıştıracak elektriği yok DonanımHaber",
    "original_language": "tr",
    "collection_language": "tr",
    "collection_language_name": "Turkish",
    "collection_locale": "TR:tr",
-   "published": "2026-10-19T10:30:00+00:00",
-   "source": "Kırşehir Çiğdem",
+   "published": "2026-10-21T17:55:00+00:00",
+   "source": "DonanımHaber",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQNVJ3d1JMWElHdDNZM3A5M2E3dFlmb2UyRXNvTlp1VHZ6bm9nZmpkamZ4WVp6ZlUxMU5sVm5IQXNURms0MF9zVk1DUi0xQm9MbGhpSzNrUEJnbEVrdmFPQTllT0RnNnNzVlFUaS1yVktNRmZwTFlSS180YTZXUC1PV1kxOVM3SDA?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQQXlWWkpFekxYc2FxbGVNd3kyc2s1cmJhR09xQmxrdmRWYzhtR29Gc01vcWtXY0M3Yl8wclF6Nml2aE43LWRtTGNPM3dDYzBqTFBSRGlkanRWU05MdUd1UG9YOW96dUhZaE9pRE1ta1RUYUZiMjhHRlM5aW5Ea0x1bUdFdl9zbE1jVmRqdk5UbFdUQ2pydUZVV0hZeDZ2SFdUMHdhMQ?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1151,28 +1092,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "8f7a8589dc478dea13e2698a72b9350a2d6ec1332e288b1fc4c1ce41859bf5a2"
+    "ac3f8a7ae467e4f96b143687001bbfc95dd964d22984510b687d668db564dd9e"
    ],
    "background_query_language": "tr"
   },
   {
-   "id": "3dc7003ed4e894ac",
+   "id": "aa96dc32802140c8",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Kırşehir’de Hasta Güvenliği İçin KBRN Tatbikatı Yapıldı",
-   "summary": "Kırşehir’de Hasta Güvenliği İçin KBRN Tatbikatı Yapıldı Kırşehir Memleket Haber Portalı",
-   "original_title": "Kırşehir’de Hasta Güvenliği İçin KBRN Tatbikatı Yapıldı",
-   "original_summary": "Kırşehir’de Hasta Güvenliği İçin KBRN Tatbikatı Yapıldı Kırşehir Memleket Haber Portalı",
+   "title": "Araştırma: Yapay zeka, sivil altyapıya yönelik siber saldırılarda ustalaşıyor",
+   "summary": "Araştırma: Yapay zeka, sivil altyapıya yönelik siber saldırılarda ustalaşıyor Gazete Oksijen",
+   "original_title": "Araştırma: Yapay zeka, sivil altyapıya yönelik siber saldırılarda ustalaşıyor",
+   "original_summary": "Araştırma: Yapay zeka, sivil altyapıya yönelik siber saldırılarda ustalaşıyor Gazete Oksijen",
    "original_language": "tr",
    "collection_language": "tr",
    "collection_language_name": "Turkish",
    "collection_locale": "TR:tr",
-   "published": "2026-10-19T10:30:00+00:00",
-   "source": "Kırşehir Memleket Haber Portalı",
+   "published": "2026-10-21T17:43:00+00:00",
+   "source": "Gazete Oksijen",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOSk1YWk1nTWV3T3ZjSkRGdVoxcWJtelVON1BKbTlFdGNncHNxbXJyS2JaaXR0T3hGMUpJTGdrNkktU1IwMzJELWUzMm1RVWctb1U0LW5mRklkLUVzQ1NvMkx0eHhQQWhFVjA3X0pZWXJOUkdocWcyUnA5THE4NmpnN0c1d1dONlZhcWRUZmJ0QWZPOWFk?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOeGMxMG9vX3p3WjYtTWZGWDU1bVlXVFdNVHd3enJvZURvYTZFam9pSTRLVlAxc2N0bmlOVXVRWGhUYS00c1V0ZGdjWmhSS0U1X3RKdERkZF9fUWdvTGh0SlZmNEdhNzR0dzRNcWVjNXFXclUxYVBPMHRrTEtqSENuY2Q1akEwbk0zR2VTcmRaeHFmalRGRS1KZ055WEJZUFFlbk8xWjZybXppNENfUFd3VWc1SFlzcUpEVUxZUllFVDFYVFVHNFE?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1184,28 +1125,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "b745c150781b1d2117b662d5dc0df6c5d709fecafc612139d40dc2c2aade5f60"
+    "3cff8d18390d0d2d8f5c27c61eb0ef546ddccb9b6991a9fac1391693e46b2ff9"
    ],
    "background_query_language": "tr"
   },
   {
-   "id": "9afdd8c72b6947ee",
+   "id": "06d35201792a701b",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "ABD Nükleer Tesisleri Karşılaştırması: Y-12, Hanford, Savannah River",
-   "summary": "ABD Nükleer Tesisleri Karşılaştırması: Y-12, Hanford, Savannah River Envanter Medya",
-   "original_title": "ABD Nükleer Tesisleri Karşılaştırması: Y-12, Hanford, Savannah River",
-   "original_summary": "ABD Nükleer Tesisleri Karşılaştırması: Y-12, Hanford, Savannah River Envanter Medya",
+   "title": "Dışişleri Bakan Yardımcısı Büyükelçi Kulaklıkaya, Cenevre’de temaslarda bulundu",
+   "summary": "Dışişleri Bakan Yardımcısı Büyükelçi Kulaklıkaya, Cenevre’de temaslarda bulundu www.ensondakika.com.tr",
+   "original_title": "Dışişleri Bakan Yardımcısı Büyükelçi Kulaklıkaya, Cenevre’de temaslarda bulundu",
+   "original_summary": "Dışişleri Bakan Yardımcısı Büyükelçi Kulaklıkaya, Cenevre’de temaslarda bulundu www.ensondakika.com.tr",
    "original_language": "tr",
    "collection_language": "tr",
    "collection_language_name": "Turkish",
    "collection_locale": "TR:tr",
-   "published": "2026-10-19T10:00:00+00:00",
-   "source": "Envanter Medya",
+   "published": "2026-10-21T16:49:08+00:00",
+   "source": "www.ensondakika.com.tr",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5iLW1ZaFIzV1ZSTWxQSXRVNUlGY1VlSF9meERZUUliSEIyTjhuVjVBSU5TYmQ5Q1ZnbDVIM0JVVER3TE1PbDFpbURKUktBblJsTzZlQ0FLUGdwb0NUbENkLU1FaFh1S2RFZTRhTzVCOA?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPZ2VMMFhfNjE0TUIyNFNZMjFsa1JSUUFJbVZSMldIRFl6LWRpcnVkZ2l1eWxjdElQakRKb0ktQ0NlanhjcWlEdm12R3gwX3BVM3QtVnFtczJnQ1RKSXBLdjZiSmFybVpUM19rQ2o5UlpRSnlNYkc0TGpyU1BSOVIwM1NYSHZMY0xMU01CSTdRTEZLc1FzRjdWWmlKUTRMTktqNFQwVmhwWlFMYzBMS0oyWTZYenZQMmZh?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1217,28 +1158,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "b1bc4f80e9e2436e0a41a2136849d0e672d83df9f54a029da85b8658248350da"
+    "80f3c97b956ffe5db9b0fad66af90d6aacf68a82f664c8b8a3bf99983691c1e7"
    ],
    "background_query_language": "tr"
   },
   {
-   "id": "0618069af7ae8dfc",
+   "id": "b7eff812876a82b4",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Türk bilim insanları toryum reaktöründe 10 MW için 49 vatlık nötron kaynağı önerdi",
-   "summary": "Türk bilim insanları toryum reaktöründe 10 MW için 49 vatlık nötron kaynağı önerdi Son Dakika",
-   "original_title": "Türk bilim insanları toryum reaktöründe 10 MW için 49 vatlık nötron kaynağı önerdi",
-   "original_summary": "Türk bilim insanları toryum reaktöründe 10 MW için 49 vatlık nötron kaynağı önerdi Son Dakika",
+   "title": "İngiliz şarkıcı IAMDDB, İsrail hükümetini yapay zeka videosunda kimliğini çalmakla suçladı",
+   "summary": "İngiliz şarkıcı IAMDDB, İsrail hükümetini yapay zeka videosunda kimliğini çalmakla suçladı www.ensondakika.com.tr",
+   "original_title": "İngiliz şarkıcı IAMDDB, İsrail hükümetini yapay zeka videosunda kimliğini çalmakla suçladı",
+   "original_summary": "İngiliz şarkıcı IAMDDB, İsrail hükümetini yapay zeka videosunda kimliğini çalmakla suçladı www.ensondakika.com.tr",
    "original_language": "tr",
    "collection_language": "tr",
    "collection_language_name": "Turkish",
    "collection_locale": "TR:tr",
-   "published": "2026-10-19T07:02:58+00:00",
-   "source": "Son Dakika",
+   "published": "2026-10-21T16:46:35+00:00",
+   "source": "www.ensondakika.com.tr",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQSUJOZ0tTaUxJRjBORFBzNkhsQ2QyZFhGaUZLYkRqVmlyRWlONmxjUFRzdFE3enc5RnZOME80aGE2T2FSSThacTFDQ2RJX1l1bnE1dUNuUG1Uem95dDFCVDNVaENMZDlZSmJsbU4wNHR4MGpwLUpwckp5RDBBWExYVjVHZ3R0Q3dSbG1PajlSSmhoNWJkOVRyeVZvX1HSAZwBQVVfeXFMUElCTmdLU2lMSUYwTkRQczZIbENkMmRYRmlGS2JEalZpckVpTjZsY1BUc3RRN3p3OUZ2TjBPNGhhNk9hUkk4WnExQ0NkSV9ZdW5xNXVDblBtVHpveXQxQlQzVWhDTGQ5WUpibG1OMDR0eDBqcC1KcHJKeUQwQVhMWFY1R2d0dEN3UmxtT2o5UkpoaDViZDlUcnlWb19R?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPVkpnTkV6enhKNE5DYmRuMVBGRW8wTjEzWFQyYUhNejJGXzctbmxiY3ladUh1a0dwcFBudEIwZXVnZXczR3hrdkhvdkhuSEYxak44RGswSkh5eFFlbExZekZWY1dCczZQUjlJaVlIbkJ4aWdIeHkyemdScW9DVG1JYTFEbzE4c0NmcHgzaGtDanlydGZadVNlNGVGcUt6TDNGLVZtWTNKSHdXdUlubTNlX200Y2pVTVlCanI1THFxS1lWY3FhY0FJ?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1250,28 +1191,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "b3b69400a17849cd9214c6904bbc6c7fceda520439bcd3e92f258a4c2199a2eb"
+    "ba769ba047d7b3e0ebb3eaad66eb9d032aec64fc25048da6e0e77236752d89d6"
    ],
    "background_query_language": "tr"
   },
   {
-   "id": "ea6921121ded1d24",
+   "id": "c749f69c9fc0744a",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Akkuyu’dan 20 gigavata: Türkiye nükleer hedefine nasıl ulaşacak?",
-   "summary": "Akkuyu’dan 20 gigavata: Türkiye nükleer hedefine nasıl ulaşacak? Daily Ummah",
-   "original_title": "Akkuyu’dan 20 gigavata: Türkiye nükleer hedefine nasıl ulaşacak?",
-   "original_summary": "Akkuyu’dan 20 gigavata: Türkiye nükleer hedefine nasıl ulaşacak? Daily Ummah",
+   "title": "ABD yıllar önce kapattığı üç nükleer santrali yeniden açıyor: Sebebi ise yapay zekâ",
+   "summary": "ABD yıllar önce kapattığı üç nükleer santrali yeniden açıyor: Sebebi ise yapay zekâ DonanımHaber",
+   "original_title": "ABD yıllar önce kapattığı üç nükleer santrali yeniden açıyor: Sebebi ise yapay zekâ",
+   "original_summary": "ABD yıllar önce kapattığı üç nükleer santrali yeniden açıyor: Sebebi ise yapay zekâ DonanımHaber",
    "original_language": "tr",
    "collection_language": "tr",
    "collection_language_name": "Turkish",
    "collection_locale": "TR:tr",
-   "published": "2026-10-19T03:12:00+00:00",
-   "source": "Daily Ummah",
+   "published": "2026-10-21T15:22:00+00:00",
+   "source": "DonanımHaber",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOWUdSRG5UdHE4OHdBOW9Xb0dzM01VQzhkTVc1UDJaX2gzaGV0N1c3SE8yS192WTVTTUJHQlZzRE54amZkbDZmS0VMaUVuTThjeHdfUVNkVF9ES2l4ZzVPU3VLMHpsZWxkWWVJSnROVFZFLVFwVDB3aVFlSGpYSm9iSENPRGJuQlNTdnpNWWxn?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOX3NjRkFXUG8yS3NIdG5NRWZxRXZOTnRLYkRwU1ZVNG54S3VMYlhsOXYxZ1RrVVVUQkZhZW1JcVRFdnFveHZSZ2NpLTJxNDN1RThrTzZQdU93VVg3YVZsN1hBNjlETGVjR2duS3FtSEhKUFVkN2VneHUzQm9ITVN2bUlkZlZVdUpVZi03ZlFobXlmN0U3WllwUA?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1283,7 +1224,106 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "3349ee930305c44661d6e3270af9bb522923861cc5821795bced22fe0a59e0c2"
+    "001bc32fb83676275a5062d41b7f3192bd5b52999358c57305d92c0012a08ef5"
+   ],
+   "background_query_language": "tr"
+  },
+  {
+   "id": "664aef734e56ff5d",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Yapay zekâ enerji talebini artırdı: ABD’den 4,4 milyar dolarlık destek",
+   "summary": "Yapay zekâ enerji talebini artırdı: ABD’den 4,4 milyar dolarlık destek Türkinform",
+   "original_title": "Yapay zekâ enerji talebini artırdı: ABD’den 4,4 milyar dolarlık destek",
+   "original_summary": "Yapay zekâ enerji talebini artırdı: ABD’den 4,4 milyar dolarlık destek Türkinform",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-21T15:16:00+00:00",
+   "source": "Türkinform",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQLTRhTEZnTTlraE9BM0VmcGlaWjRwRDhPck94aGw5RjJBa19IV3Z0MllhREJtd3lOSWN0cHk1NTAyVnY3am9mQ0hnYkFnbDMtWUJNaWdwcVFHMk9TZnBrTmRzMFo2XzVRQjMxTDkwVjZKN3ZRWHRQZDFNOUxpMnIxMUZFRXlBeVdaTlo5LUM4c1RXdW5LMmF5bg?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "3ea944da340f1421487ee506682a9fbbd1bef673c58801d5dc70abfb8484a52a"
+   ],
+   "background_query_language": "tr"
+  },
+  {
+   "id": "5d0001d787be6162",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Google DeepMind, Nükleer Fizikçiler ve Nükleer Mühendisler İçin İşe Alım Başlattı",
+   "summary": "Google DeepMind, Nükleer Fizikçiler ve Nükleer Mühendisler İçin İşe Alım Başlattı ÇözümPark",
+   "original_title": "Google DeepMind, Nükleer Fizikçiler ve Nükleer Mühendisler İçin İşe Alım Başlattı",
+   "original_summary": "Google DeepMind, Nükleer Fizikçiler ve Nükleer Mühendisler İçin İşe Alım Başlattı ÇözümPark",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-21T13:32:29+00:00",
+   "source": "ÇözümPark",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxORWltSUdwNFFRSjE1bUhzSXB3eFp0SW9BQWJReURuSHpGMmlRTU1BWTVPMTJXcF9Uc0dFcHNha0RSNzZlT1M3ZlZTNlItMmZ2Qi12Q3pJMmctMDRGNVdPMER0aFhDOXZLQzFLYkM0SzQ2MU1CeFA2UDRvSTVSdEo1Ym45TE1NX1E1RDB1bUk1emhCUXRCdnZnZEp3c2VWMFdrcHVsS3lZUl9FX2c?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "075aba043adf0cea607417e43141bbb5448d47143649399ebc0a8b9139054b0f"
+   ],
+   "background_query_language": "tr"
+  },
+  {
+   "id": "cb97b4cdf76fdc1c",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "GSI Darmstadt, süperağır elementlerin bağlanması üzerine araştırmalar yapmaktadır",
+   "summary": "GSI Darmstadt, süperağır elementlerin bağlanması üzerine araştırmalar yapmaktadır da.news",
+   "original_title": "GSI Darmstadt, süperağır elementlerin bağlanması üzerine araştırmalar yapmaktadır",
+   "original_summary": "GSI Darmstadt, süperağır elementlerin bağlanması üzerine araştırmalar yapmaktadır da.news",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-21T11:27:30+00:00",
+   "source": "da.news",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5KUldpM1lNLVR5MUNLdnBIMm4yOVpBdVo2bkVGbjlfT3o4ZnlBTFlaaDVwVG8yb0d1ekg1UXFxZ1F5dW9zd0lrUkNWRVd2NVVzUDdpTDVwZWxrX290cmdjOFR6ZkN6T1QzcUxNdk9IeHBQRVZx?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "96224cf56992c1609eaa43d0cbae96350aac7d8be056ff43bb318b9a7e0fcfec"
    ],
    "background_query_language": "tr"
   },
@@ -17326,6 +17366,6 @@
    "background_query_language": "it"
   }
  ],
- "cursor": 27,
- "updated_at": "2026-10-21T13:59:40.984206+00:00"
+ "cursor": 28,
+ "updated_at": "2026-10-21T20:16:07.077210+00:00"
 }
