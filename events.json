@@ -780,7 +780,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-10-21T01:00:16.658854+00:00",
-  "number_of_events": 4472,
+  "number_of_events": 4468,
   "events": [
     {
       "id": "dca24f6ff1b2b3e8",
@@ -464618,137 +464618,6 @@
       "update_type": "INITIAL"
     },
     {
-      "id": "7d9b41dfa44d79c2",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy",
-        "Counter Terrorism Action"
-      ],
-      "title": "Indian Navy foils piracy attack on merchant ship in Gulf of Aden",
-      "summary": "The Indian Navy successfully foiled a pirate attack on a merchant ship in the Gulf of Aden, ensuring the safety of the crew.",
-      "original_title": "Indian Navy foils piracy attack on merchant ship in Gulf of Aden, crew including an Indian sailor safe",
-      "original_summary": "Indian Navy foils piracy attack on merchant ship in Gulf of Aden, crew including an Indian sailor safe The Times of India",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-02T07:00:00+00:00",
-      "source": "The Times of India",
-      "source_count": 6,
-      "url": "https://news.google.com/rss/articles/CBMihwJBVV95cUxNb0lSa2FUSW5NMWFQczNIbHVGMzljOHFPWUFuLWhYNjJiRDZVZWtBNzZGMVV2WmVPa1RPQmFrODNOY29WVUMzZ0dUMVB5bExfMFo2Mk1JdzZnNU0zZ3BwS29COFo1WDVseEMwaUVnaFZ4Z19nX3VwVXZNWGNLb2lRU01reXBneUgtRkRqeUhnenR2b2xReXgyV2o5WVVoT1c5TVk5SUxWSkVzM2hXbUozMVhxcDNMZlE1cW5PZ3E1VDgtbG8xS3BOSUU4a3NLZGlybXpOb2tzNDlJaHVZQTZYa3Z5eW5EdVVzNVd6cUtNQmlzYkZ1N3ZwMndLb0ZBbHd0dVdUdFF5Y9IBjAJBVV95cUxPNEdfUEZmdGRhd3kwRm1uQWNXUHFRMDF5X3hGVjYyTG5GUVFjVkVrY1JUOG1RMGNGS09sZzhyVjBxM2N6ZHR1dUlEdFRDT3hTQnJNbFZwWEdadUJzdnlkUlctTEhHQl91NktkbVNLQ1BrV1EtcXlIblhaN1o4UWZ6OFcxX0dEdmpYUEttMTFfTnhaaTNxUDVxQ0FmUzRTREZEa1pjYW00V1laRXphYS1TdHJ0RVVPb3RmcFhvenA5S1RicDhjMEJ1azUxcHgtXzFqQ1RvbDk4MkJjblUxc0FnT2xSVXlnajJRaHZ4bXNXTnl0a2dSMnV0NDdiUmtsWE1VMm9lbkJBbzc5ZjlI?oc=5",
-      "collector": "Google News RSS",
-      "country": "Yemen",
-      "country_code": "YE",
-      "city": null,
-      "region": "Gulf of Aden",
-      "latitude": 12.5833,
-      "longitude": 47.9167,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "sources": [
-        "The Times of India",
-        "Bharat Shakti",
-        "India TV News",
-        "Kerala Kaumudi",
-        "Splash247",
-        "TradeWinds News"
-      ],
-      "related_articles": [
-        {
-          "title": "Indian Navy MARCOS Foils Pirate Attack on Merchant Ship in Gulf of Aden, Rescues Crew",
-          "original_title": "Indian Navy MARCOS Foils Pirate Attack on Merchant Ship in Gulf of Aden, Rescues Crew",
-          "original_language": "en",
-          "summary": "Indian Navy MARCOS Foils Pirate Attack on Merchant Ship in Gulf of Aden, Rescues Crew Bharat Shakti",
-          "published": "2026-07-02T07:00:00+00:00",
-          "source": "Bharat Shakti",
-          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOZWo3UXVBdUFRdGI1NnNqb0hSRmdLY2s2WVBUNUlRb2JKdU1SNDRtX0xyRVdrLWJrVGhYTEZic0YxZVJqQ25oZ3VWb0dsZXU1VTFkMTF2VXNzQmQxU00yaEFESUIzZTFHVnJHWlVDbklEVXhFc2lEV29wOGFsLWVOc05uczM3UHNVSzRrc0lTMXBoZjhLUEJOeW9idldjYXlSVkFfV08wNFNIYmVsNnc?oc=5"
-        },
-        {
-          "title": "Indian Navy foils pirate attack in Gulf of Aden, secures merchant vessel and crew",
-          "original_title": "Indian Navy foils pirate attack in Gulf of Aden, secures merchant vessel and crew",
-          "original_language": "en",
-          "summary": "Indian Navy foils pirate attack in Gulf of Aden, secures merchant vessel and crew India TV News",
-          "published": "2026-07-02T07:00:00+00:00",
-          "source": "India TV News",
-          "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxOVkZIZUNuN2c5WFcwbEt4S2JuSlpwSWNFbkJNMnYtalpUVXBOb0NMMUFEWGtHN25remZSYk9MU25mcUluNzFfYzVleG53dlRlNnFic0lMcmEtMlRCMHZpZHNqVi1DWGhERFZ4VXpEV1pUUm9WQ1dTVlJRYUNIVmRZMlJNUTZndFYySndYMmh3UHBTeHRGY1FMQmMwN3JZLTBodW1uUVp0TmNPcmt3SjZyQzh4ZVhZRFd2bjd6SUlqWkVfd1B2N0NRcWpNc2Y3U3prWXVoUNIB2gFBVV95cUxONklmNnA0WldQcl9uc1Z1QWhaa1JxdFAwNnlmakRxZWhrTTVmS29WaE5zZ3E5b1ptdVhMN0I1VXlUVTRoWVIxNk56czhQT1RRSEp1SGo1TGk1cnRpV2NlaGVhYVFjZlJMUTcycW53WDhleWZnRDhJSjJhLU9QdUpTTHRUUVFJRFNLb1RQWWloSlZOVUw3TlZTUjlLeVZXby00dy1EZzEwYWlVMFUwUjBSSXpQLVRhNW5UQTl5SUw3cm12d3B5TUVSOXNMTS1lYV9rd09mUTlIVmJnUQ?oc=5"
-        },
-        {
-          "title": "Indian Navy foils pirate attack on cargo ship in Gulf of Aden - INDIA - GENERAL",
-          "original_title": "Indian Navy foils pirate attack on cargo ship in Gulf of Aden - INDIA - GENERAL",
-          "original_language": "en",
-          "summary": "Indian Navy foils pirate attack on cargo ship in Gulf of Aden - INDIA - GENERAL Kerala Kaumudi",
-          "published": "2026-07-03T07:00:00+00:00",
-          "source": "Kerala Kaumudi",
-          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOZVJnS1VTX1lZVnFqcXBZZFRpV0VPcGZDMlB1THlCTnNHNngzdnhYNlFHUENVTVRLcjdRX25KRXZqamhpS05ON2JXZ1RoSDVfZWJXX2JCNm8zcm5fekpfWVBHcE11QXI4clNiR2pkUmxWWXRqWEJ6Qk1oUzZJZnZ6ZVRmQUhYN1NIeEFScmtIekNSZ2ZYT29XYTJQM1V5cUdiWFNWUG5Jb0hISGJKQ0pYVlNn?oc=5"
-        },
-        {
-          "title": "Pirates board and damage tanker south of Yemen",
-          "original_title": "Pirates board and damage tanker south of Yemen",
-          "original_language": "en",
-          "summary": "Pirates boarded and caused damage to a tanker vessel in waters south of Yemen.",
-          "published": "2026-07-02T07:00:00+00:00",
-          "source": "Splash247",
-          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5FUV9YZDljTDN2OTczR3Rla0JOWmVEcnJjaGx2MUxkM0hlUkxEZXRobi12dk9NaUZLRGxIX1dualBKcGxVajFIWENER3VXeHBGQjNmMzh6eldaWHFtTnRRSlhDbXJlYk5LTlNkb2dOOWtvSzV2S2VXaw?oc=5"
-        },
-        {
-          "title": "Bulker damaged as crew retreat to citadel in boarding",
-          "original_title": "Bulker damaged as crew retreat to citadel in boarding",
-          "original_language": "en",
-          "summary": "A bulk carrier was damaged during a pirate/armed robbery boarding attempt while the crew retreated to the citadel.",
-          "published": "2026-07-02T07:00:00+00:00",
-          "source": "TradeWinds News",
-          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPdXZidGhEYWtJRjNnMFhZZ3JBZ2JzX0RlMm5KdkZFUHI0YVpyVmNWckZhOFpIUVYxR1VHbEVKa1VNbGlMZW5KVTVud3FGY09YRFBMS2hjNnhkMy1EZGJ2ODJITHNlXzdYYVNyOFQzbjRVaWFIbjRRSno4V2MyQndjYTZhTm50SkJ5RWtJQXl0MTk0ZE9VU0JhVWthUEdVZHYtSG1ENlRtQQ?oc=5"
-        }
-      ],
-      "article_count": 6,
-      "first_reported": "2026-07-02T07:00:00+00:00",
-      "last_reported": "2026-07-03T07:00:00+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "title_plus_anchor",
-        "same_url",
-        "same_incident"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Concrete military intervention and counter-piracy operation successfully foiling an attack on a merchant ship.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Indian Navy foils pirate attack on merchant ship in Gulf of Aden",
-      "title_variants": [
-        "Indian Navy foils pirate attack on merchant ship in Gulf of Aden"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Indian Navy foils piracy attack on merchant ship in Gulf of Aden"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The Gulf of Aden is off the coast of Yemen/Somalia; standard geographic centroid applies.",
-      "ai_geo_fingerprint": "e9653fed6b39189472a94b0812f7fb6d646258c02e33648f4f75d9c414e0b98a",
-      "ai_geo_inferred": true,
-      "actor_group": "",
-      "incident_id": "inc-07fe1fab017750b6",
-      "source_article_fingerprints": [
-        "48823eee384af52e90addfebcc09c253f8fa7e2ff60054b13a172b19f0b41a69",
-        "e089e7b46d91dfed2658a42ce504c9f23317e65a51144068459b9d7a62734eb5"
-      ],
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Gulf of Aden merchant ship pirate attack 2026-07-02",
-      "update_type": "INITIAL",
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": []
-    },
-    {
       "id": "aee69f261b0fe4e3",
       "category": "Online / Cyber / AI",
       "categories": [
@@ -466020,7 +465889,8 @@
       "id": "d1efe40a8ec04eed",
       "category": "Maritime Piracy",
       "categories": [
-        "Maritime Piracy"
+        "Maritime Piracy",
+        "Counter Terrorism Action"
       ],
       "title": "Pirates board vessel and pursue second ship in Gulf of Aden",
       "summary": "Pirates boarded and damaged a vessel in the Gulf of Aden before initiating a pursuit of a second ship in the area.",
@@ -466032,7 +465902,7 @@
       "collection_locale": null,
       "published": "2026-07-01T07:00:00+00:00",
       "source": "The Maritime Executive",
-      "source_count": 1,
+      "source_count": 7,
       "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOMHlOelc4aV9CRnVvWktodXY5dWE0YjZ4UXhEZEswel9HamE0YzBQZXQ0aFJUdU5nN1RLVWtSbER0YUdMaW9UUXNmM3RCNnZDVWhtQWoySE5YRUsxVmNIX2pnQnlqYk9zcHJsMmZyQ1B6WWJzQUp2VDRwMWE4UENnNDd3Y1MtMmpxaXRZeUhSLVl2Y1lBYmpiZzNla3RKSi1qS3NCOVlrbEVpQkdmRDRHdUtVWk8?oc=5",
       "collector": "Google News RSS",
       "country": "Yemen",
@@ -466047,15 +465917,78 @@
       "targeted_source": "The Maritime Executive",
       "targeted_source_kind": "specialist_media",
       "source_article_fingerprints": [
-        "088f6e147e11876f08146d022d1f86606654ad45e302ad01f740527cf37a89be"
+        "088f6e147e11876f08146d022d1f86606654ad45e302ad01f740527cf37a89be",
+        "48823eee384af52e90addfebcc09c253f8fa7e2ff60054b13a172b19f0b41a69",
+        "e089e7b46d91dfed2658a42ce504c9f23317e65a51144068459b9d7a62734eb5"
       ],
       "sources": [
-        "The Maritime Executive"
+        "The Maritime Executive",
+        "The Times of India",
+        "Bharat Shakti",
+        "India TV News",
+        "Kerala Kaumudi",
+        "Splash247",
+        "TradeWinds News"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Indian Navy foils piracy attack on merchant ship in Gulf of Aden",
+          "original_title": "Indian Navy foils piracy attack on merchant ship in Gulf of Aden, crew including an Indian sailor safe",
+          "original_language": "en",
+          "summary": "The Indian Navy successfully foiled a pirate attack on a merchant ship in the Gulf of Aden, ensuring the safety of the crew.",
+          "published": "2026-07-02T07:00:00+00:00",
+          "source": "The Times of India",
+          "url": "https://news.google.com/rss/articles/CBMihwJBVV95cUxNb0lSa2FUSW5NMWFQczNIbHVGMzljOHFPWUFuLWhYNjJiRDZVZWtBNzZGMVV2WmVPa1RPQmFrODNOY29WVUMzZ0dUMVB5bExfMFo2Mk1JdzZnNU0zZ3BwS29COFo1WDVseEMwaUVnaFZ4Z19nX3VwVXZNWGNLb2lRU01reXBneUgtRkRqeUhnenR2b2xReXgyV2o5WVVoT1c5TVk5SUxWSkVzM2hXbUozMVhxcDNMZlE1cW5PZ3E1VDgtbG8xS3BOSUU4a3NLZGlybXpOb2tzNDlJaHVZQTZYa3Z5eW5EdVVzNVd6cUtNQmlzYkZ1N3ZwMndLb0ZBbHd0dVdUdFF5Y9IBjAJBVV95cUxPNEdfUEZmdGRhd3kwRm1uQWNXUHFRMDF5X3hGVjYyTG5GUVFjVkVrY1JUOG1RMGNGS09sZzhyVjBxM2N6ZHR1dUlEdFRDT3hTQnJNbFZwWEdadUJzdnlkUlctTEhHQl91NktkbVNLQ1BrV1EtcXlIblhaN1o4UWZ6OFcxX0dEdmpYUEttMTFfTnhaaTNxUDVxQ0FmUzRTREZEa1pjYW00V1laRXphYS1TdHJ0RVVPb3RmcFhvenA5S1RicDhjMEJ1azUxcHgtXzFqQ1RvbDk4MkJjblUxc0FnT2xSVXlnajJRaHZ4bXNXTnl0a2dSMnV0NDdiUmtsWE1VMm9lbkJBbzc5ZjlI?oc=5"
+        },
+        {
+          "title": "Indian Navy MARCOS Foils Pirate Attack on Merchant Ship in Gulf of Aden, Rescues Crew",
+          "original_title": "Indian Navy MARCOS Foils Pirate Attack on Merchant Ship in Gulf of Aden, Rescues Crew",
+          "original_language": "en",
+          "summary": "Indian Navy MARCOS Foils Pirate Attack on Merchant Ship in Gulf of Aden, Rescues Crew Bharat Shakti",
+          "published": "2026-07-02T07:00:00+00:00",
+          "source": "Bharat Shakti",
+          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOZWo3UXVBdUFRdGI1NnNqb0hSRmdLY2s2WVBUNUlRb2JKdU1SNDRtX0xyRVdrLWJrVGhYTEZic0YxZVJqQ25oZ3VWb0dsZXU1VTFkMTF2VXNzQmQxU00yaEFESUIzZTFHVnJHWlVDbklEVXhFc2lEV29wOGFsLWVOc05uczM3UHNVSzRrc0lTMXBoZjhLUEJOeW9idldjYXlSVkFfV08wNFNIYmVsNnc?oc=5"
+        },
+        {
+          "title": "Indian Navy foils pirate attack in Gulf of Aden, secures merchant vessel and crew",
+          "original_title": "Indian Navy foils pirate attack in Gulf of Aden, secures merchant vessel and crew",
+          "original_language": "en",
+          "summary": "Indian Navy foils pirate attack in Gulf of Aden, secures merchant vessel and crew India TV News",
+          "published": "2026-07-02T07:00:00+00:00",
+          "source": "India TV News",
+          "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxOVkZIZUNuN2c5WFcwbEt4S2JuSlpwSWNFbkJNMnYtalpUVXBOb0NMMUFEWGtHN25remZSYk9MU25mcUluNzFfYzVleG53dlRlNnFic0lMcmEtMlRCMHZpZHNqVi1DWGhERFZ4VXpEV1pUUm9WQ1dTVlJRYUNIVmRZMlJNUTZndFYySndYMmh3UHBTeHRGY1FMQmMwN3JZLTBodW1uUVp0TmNPcmt3SjZyQzh4ZVhZRFd2bjd6SUlqWkVfd1B2N0NRcWpNc2Y3U3prWXVoUNIB2gFBVV95cUxONklmNnA0WldQcl9uc1Z1QWhaa1JxdFAwNnlmakRxZWhrTTVmS29WaE5zZ3E5b1ptdVhMN0I1VXlUVTRoWVIxNk56czhQT1RRSEp1SGo1TGk1cnRpV2NlaGVhYVFjZlJMUTcycW53WDhleWZnRDhJSjJhLU9QdUpTTHRUUVFJRFNLb1RQWWloSlZOVUw3TlZTUjlLeVZXby00dy1EZzEwYWlVMFUwUjBSSXpQLVRhNW5UQTl5SUw3cm12d3B5TUVSOXNMTS1lYV9rd09mUTlIVmJnUQ?oc=5"
+        },
+        {
+          "title": "Indian Navy foils pirate attack on cargo ship in Gulf of Aden - INDIA - GENERAL",
+          "original_title": "Indian Navy foils pirate attack on cargo ship in Gulf of Aden - INDIA - GENERAL",
+          "original_language": "en",
+          "summary": "Indian Navy foils pirate attack on cargo ship in Gulf of Aden - INDIA - GENERAL Kerala Kaumudi",
+          "published": "2026-07-03T07:00:00+00:00",
+          "source": "Kerala Kaumudi",
+          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOZVJnS1VTX1lZVnFqcXBZZFRpV0VPcGZDMlB1THlCTnNHNngzdnhYNlFHUENVTVRLcjdRX25KRXZqamhpS05ON2JXZ1RoSDVfZWJXX2JCNm8zcm5fekpfWVBHcE11QXI4clNiR2pkUmxWWXRqWEJ6Qk1oUzZJZnZ6ZVRmQUhYN1NIeEFScmtIekNSZ2ZYT29XYTJQM1V5cUdiWFNWUG5Jb0hISGJKQ0pYVlNn?oc=5"
+        },
+        {
+          "title": "Pirates board and damage tanker south of Yemen",
+          "original_title": "Pirates board and damage tanker south of Yemen",
+          "original_language": "en",
+          "summary": "Pirates boarded and caused damage to a tanker vessel in waters south of Yemen.",
+          "published": "2026-07-02T07:00:00+00:00",
+          "source": "Splash247",
+          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5FUV9YZDljTDN2OTczR3Rla0JOWmVEcnJjaGx2MUxkM0hlUkxEZXRobi12dk9NaUZLRGxIX1dualBKcGxVajFIWENER3VXeHBGQjNmMzh6eldaWHFtTnRRSlhDbXJlYk5LTlNkb2dOOWtvSzV2S2VXaw?oc=5"
+        },
+        {
+          "title": "Bulker damaged as crew retreat to citadel in boarding",
+          "original_title": "Bulker damaged as crew retreat to citadel in boarding",
+          "original_language": "en",
+          "summary": "A bulk carrier was damaged during a pirate/armed robbery boarding attempt while the crew retreated to the citadel.",
+          "published": "2026-07-02T07:00:00+00:00",
+          "source": "TradeWinds News",
+          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPdXZidGhEYWtJRjNnMFhZZ3JBZ2JzX0RlMm5KdkZFUHI0YVpyVmNWckZhOFpIUVYxR1VHbEVKa1VNbGlMZW5KVTVud3FGY09YRFBMS2hjNnhkMy1EZGJ2ODJITHNlXzdYYVNyOFQzbjRVaWFIbjRRSno4V2MyQndjYTZhTm50SkJ5RWtJQXl0MTk0ZE9VU0JhVWthUEdVZHYtSG1ENlRtQQ?oc=5"
+        }
+      ],
+      "article_count": 7,
       "first_reported": "2026-07-01T07:00:00+00:00",
-      "last_reported": "2026-07-01T07:00:00+00:00",
+      "last_reported": "2026-07-02T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.1-flash-lite",
@@ -466093,7 +466026,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Maritime pirate attacks took place in the Gulf of Aden.",
       "ai_geo_fingerprint": "69f4fcd452c09bbe20941ba239347fd6a4fd0e8761504981ff209b5f10b0f43a",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "1f5bf4f88f9a729e",
@@ -471126,7 +471063,8 @@
       "id": "4e7ddb2896acf439",
       "category": "Attacks",
       "categories": [
-        "Attacks"
+        "Attacks",
+        "Counter Terrorism Action"
       ],
       "title": "Al Qaeda-linked jihadists claim deadly attack on Niger airport",
       "summary": "Al-Qaeda-linked JNIM militants claimed responsibility for a deadly attack on an airport in Niger that resulted in the deaths of 11 soldiers and numerous others.",
@@ -471138,7 +471076,7 @@
       "collection_locale": null,
       "published": "2026-06-18T07:00:00+00:00",
       "source": "France 24",
-      "source_count": 8,
+      "source_count": 9,
       "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPUjV0Mm5TMi02QnoyNERHaU8tVzAyajVvSVZIenY3MGx4SkVDX0dhX2dHQTE0V2tSMUtVVGVNWU0zaC00SDRJN0ZEYlJkb1QyVDBBZ1dJSnlxSVl3X1RRZjliNnFtX3FZUnFhMjlZX3FmT0FIODltUXozM0EzeDBRQUVtUWxPS0dmX0h1U213NHpWZDFBX1JTZXo5WTFjQ2NZM1NGZTZCR1ZkVzI0Mnc?oc=5",
       "collector": "Google News RSS",
       "country": "Niger",
@@ -471157,7 +471095,8 @@
         "الجزيرة نت",
         "Agenzia Nova",
         "nation.africa",
-        "Daily Nation"
+        "Daily Nation",
+        "Premium Times Nigeria"
       ],
       "related_articles": [
         {
@@ -471222,9 +471161,18 @@
           "published": "2026-06-18T07:00:00+00:00",
           "source": "libyaupdate.com",
           "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxPZkhBeTlkdVltQmdoZkhXdzM1bENZcUd0T3M5SEd5V01xdkNySnlnZmUwSFVLVE9JTWEzdHY2UlJ4RnVEczFFX3Y2NkkxWHFIOTlGcWhHaGNwS3NvaThzYnRoRG1hVUpMYTMwRmNPQndFT3p1S1hEdWQ3NmpZTkVhdENDZjJlTkZDa0ZNVXpVNU9JTFhSb05tWEdPeEFFei1wQktzUl8wY0lrSE45SWg1LVlBcVVvYnh5WEtIVjJzTEVVNVpjMm1vVmxQVGhlcl9UTGI1REZBamZ2WWZuRDBOOGNjbjhRSklOMEtYSDJR?oc=5"
+        },
+        {
+          "title": "Airport attack in Nigeria",
+          "original_title": "11 soldiers, 22 terrorists killed in deadly airport attack",
+          "original_language": "en",
+          "summary": "11 soldiers and 22 militants were killed following an attack on an airport in Nigeria.",
+          "published": "2026-06-18T07:00:00+00:00",
+          "source": "Premium Times Nigeria",
+          "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQLU51WkQxYlhfV1U2NEw2YlBobFBxZlM0RE1jQVNiUHBybHhmVWZ4OTF2dXRUM0t6ekNCcmR6cV9GMkY3bkJFMC0wdTVRaVpBZHRIbnVFWGFPOThzbkNhS043ZGhydzhLR3ZUYTlDSzBBWUtzTjE2aTVhZEw3VDdvNjNPaExNU3dMRFllTmJVZmlOelBtZVJQYVpSZF9OaUJWMmg1N0tOWlNuQVFBc1RQdDRYTDhiUQ?oc=5"
         }
       ],
-      "article_count": 8,
+      "article_count": 9,
       "first_reported": "2026-06-18T07:00:00+00:00",
       "last_reported": "2026-06-20T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -471260,6 +471208,7 @@
       ],
       "source_article_fingerprints": [
         "3e1b4e9d1e4c2a7e244ff50a702a139c6aec69cf43af116dbe66b7fb432bd573",
+        "43f13f23fef3701623a944a69dac5eadc04be9ca97d9d49b6a35dcba887a1ecd",
         "e2eb24d3fd4095dd1876873499465c8eeebf422306e7ebdf809a5fbe28fa14db"
       ],
       "actor_group": "JNIM",
@@ -471487,86 +471436,6 @@
       "incident_anchor": "Niamey airport attack Niger 2026-06",
       "update_type": "FOLLOW_UP",
       "incident_id": "inc-53ba7bd26b3dc277"
-    },
-    {
-      "id": "58ab5816957ae641",
-      "category": "Attacks",
-      "categories": [
-        "Attacks",
-        "Counter Terrorism Action"
-      ],
-      "title": "Airport attack in Nigeria",
-      "summary": "11 soldiers and 22 militants were killed following an attack on an airport in Nigeria.",
-      "original_title": "11 soldiers, 22 terrorists killed in deadly airport attack",
-      "original_summary": "11 soldiers, 22 terrorists killed in deadly airport attack Premium Times Nigeria",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-06-18T07:00:00+00:00",
-      "source": "Premium Times Nigeria",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQLU51WkQxYlhfV1U2NEw2YlBobFBxZlM0RE1jQVNiUHBybHhmVWZ4OTF2dXRUM0t6ekNCcmR6cV9GMkY3bkJFMC0wdTVRaVpBZHRIbnVFWGFPOThzbkNhS043ZGhydzhLR3ZUYTlDSzBBWUtzTjE2aTVhZEw3VDdvNjNPaExNU3dMRFllTmJVZmlOelBtZVJQYVpSZF9OaUJWMmg1N0tOWlNuQVFBc1RQdDRYTDhiUQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": "Abuja",
-      "region": null,
-      "latitude": 9.05785,
-      "longitude": 7.49508,
-      "location_precision": "country_capital",
-      "location_confidence": "medium",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "premiumtimesng.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "43f13f23fef3701623a944a69dac5eadc04be9ca97d9d49b6a35dcba887a1ecd"
-      ],
-      "sources": [
-        "Premium Times Nigeria"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-18T07:00:00+00:00",
-      "last_reported": "2026-06-18T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Reports a concrete, dated terrorist attack and security force response.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Nigeria_airport_attack_2026-06-18",
-      "update_type": "INITIAL",
-      "incident_id": "inc-fbd564a3fe51f19a",
-      "translated_to_english": false,
-      "ai_canonical_event": "Attack on airport in Nigeria",
-      "title_variants": [
-        "Attack on airport in Nigeria"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_categories": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.8,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "attack on an airport in Nigeria"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The attack took place in Nigeria, but no specific city or airport name is given.",
-      "ai_geo_fingerprint": "cdf690747835e9e1711c9512728c50313051f3e61a1c5176c5b98545da75f792",
-      "ai_geo_inferred": false
     },
     {
       "id": "e4a650637041b5ac",
@@ -472743,91 +472612,6 @@
       "update_type": "INITIAL"
     },
     {
-      "id": "1df27e083b0fc866",
-      "category": "Chemicals and Explosives",
-      "categories": [
-        "Chemicals and Explosives",
-        "Attacks"
-      ],
-      "title": "FBI announces disruption of plot targeting Trump",
-      "summary": "The FBI announced that it has successfully thwarted a plot involving drones, explosives, and snipers aimed at targeting Donald Trump.",
-      "original_title": "مسيّرات ومتفجرات وقناصة.. \"إف بي آي\" يعلن إجهاض مخطط لاستهداف ترمب",
-      "original_summary": "مسيّرات ومتفجرات وقناصة.. \"إف بي آي\" يعلن إجهاض مخطط لاستهداف ترمب الجزيرة نت",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
-      "published": "2026-06-17T07:00:00+00:00",
-      "source": "الجزيرة نت",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1hQUxvRzlnZ3lVZzdReXJsdmI1UTlQM3lFUnpxT2dYWkxxZkdnME5tc2tUVEQtMEloWWxtQnlWSWZFemo0SVpfdnRwVF9FemdEWEU1anVpcER3X2QyazNZZEdUWVdZeTVWa3doRk1yaWVBSDNLdHZn0gF8QVVfeXFMTk1teXV4RUs2YkJXZTZkaWktbmFBcjBUQ1A2QWVDZzJ3WjN4QjdhT19FMUZ5cE5tYnFlRGV4Tk4weXBDZlJjV3Y1dHRuUVB5V2tuOVhiRHlGclpGTjRXNFNEd21jd0s1YlJkSmhmVU13OWlGSmNFOHVXZUl3dw?oc=5",
-      "collector": "Google News RSS",
-      "country": "United States",
-      "country_code": "US",
-      "city": "Washington",
-      "region": null,
-      "latitude": 38.89511,
-      "longitude": -77.03637,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "1693f2fb8c14ed6a253ace94337400224f6e754082a1cd1af39f5899426d18bc"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Direct report of a specific, disrupted terrorist plot against a high-profile political target.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "DISRUPTED_PLOT",
-      "is_attack": false,
-      "incident_anchor": "Trump assassination plot 2026-06-17",
-      "update_type": "INITIAL",
-      "incident_id": "inc-fecb25fb6666cd93",
-      "translated_to_english": true,
-      "ai_canonical_event": "Disrupted plot to target Donald Trump with drones and explosives",
-      "title_variants": [
-        "Disrupted plot to target Donald Trump with drones and explosives"
-      ],
-      "actor_scope": "UNKNOWN",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": [],
-      "reported_status": "CONFIRMED",
-      "sources": [
-        "الجزيرة نت"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-17T07:00:00+00:00",
-      "last_reported": "2026-06-17T07:00:00+00:00",
-      "location_confidence_score": 0.85,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "\"إف بي آي\" يعلن إجهاض مخطط لاستهداف ترمب"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The FBI announced the disruption of a plot against Donald Trump in the United States.",
-      "ai_geo_fingerprint": "e3ba1d46c48edf26e7ca1c8616c2d5f247b566b9c1fa1ffb9aef366d8d911c29",
-      "ai_geo_inferred": true,
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_url"
-      ]
-    },
-    {
       "id": "2baad98fda290d64",
       "category": "Arrests",
       "categories": [
@@ -472932,7 +472716,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-06-16T07:00:00+00:00",
       "source": "RTL",
-      "source_count": 6,
+      "source_count": 7,
       "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNUFl4Y3dCTF9qRDlQVXlRWUMwbTFWb0tJaFZsWUdPa19VODhZeWhNdnJpdEtFaG1WQVQ2eEZUZVBzLVlzV1pCYUd4QndWRm1WZTJnVVhNX2Z5MFcycU8yZEZBSnBJU0RXSFpsSUx3VFFzNEhrVFF5UHNYeXRnM014WnluVjZWYkFoNGpjMFlBaE5PNlByc1NJOWdhYUR1MVJRLVRXS1dpU3B5UHRXVDRseEpENzBlVlJ4a01HQnAySzZQNGc3dHBFeUoxSjJRN3dreTNRc3Rpcm1VaDhsYkNrWmVYd1F2ZHhSMkZuRDljNVMtNWM3MDhCOXNqdmhlU0V1WkxfRk9PQnFXZS1VMWxqT2c3SEphUE50eVJHRVQ4MXhMYTAyN3c?oc=5",
       "collector": "Google News RSS",
       "country": "United States",
@@ -472950,7 +472734,8 @@
         "tagesschau.de",
         "MMA Mania",
         "BroBible",
-        "RTL"
+        "RTL",
+        "الجزيرة نت"
       ],
       "related_articles": [
         {
@@ -472997,9 +472782,18 @@
           "published": "2026-06-16T07:00:00+00:00",
           "source": "Hürriyet",
           "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQSHVjd2s1S2FBM1VsbU5mV2VxLVk3UkhkTUVkVFlvX1JYTTVrR0Z0T2NPZ0hlYWtxR21DRVZCQnFCbkhDcHVobzZ6Mk5FZFRob2o0aVhaRVl2RTlSc2N2SVNNbzZpT1kyVjQ2cEd0RU83V1FPOHgzZUlCZWhlUW5yaFItYmZpbzZXYnRBcjN2bjhuMFRaZ0xzdUp5S1l3b3hIOEo0QjVsUVduLVc0?oc=5"
+        },
+        {
+          "title": "FBI announces disruption of plot targeting Trump",
+          "original_title": "مسيّرات ومتفجرات وقناصة.. \"إف بي آي\" يعلن إجهاض مخطط لاستهداف ترمب",
+          "original_language": "ar",
+          "summary": "The FBI announced that it has successfully thwarted a plot involving drones, explosives, and snipers aimed at targeting Donald Trump.",
+          "published": "2026-06-17T07:00:00+00:00",
+          "source": "الجزيرة نت",
+          "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1hQUxvRzlnZ3lVZzdReXJsdmI1UTlQM3lFUnpxT2dYWkxxZkdnME5tc2tUVEQtMEloWWxtQnlWSWZFemo0SVpfdnRwVF9FemdEWEU1anVpcER3X2QyazNZZEdUWVdZeTVWa3doRk1yaWVBSDNLdHZn0gF8QVVfeXFMTk1teXV4RUs2YkJXZTZkaWktbmFBcjBUQ1A2QWVDZzJ3WjN4QjdhT19FMUZ5cE5tYnFlRGV4Tk4weXBDZlJjV3Y1dHRuUVB5V2tuOVhiRHlGclpGTjRXNFNEd21jd0s1YlJkSmhmVU13OWlGSmNFOHVXZUl3dw?oc=5"
         }
       ],
-      "article_count": 6,
+      "article_count": 7,
       "first_reported": "2026-06-16T07:00:00+00:00",
       "last_reported": "2026-06-17T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -473030,6 +472824,7 @@
       "actor_group": "",
       "incident_id": "inc-4d9c890890e3571e",
       "source_article_fingerprints": [
+        "1693f2fb8c14ed6a253ace94337400224f6e754082a1cd1af39f5899426d18bc",
         "c44c530bf27d06fbc79fd42ed5fd2cb104b1e12117728bc57f1ca642f0e2eb0b",
         "f3ebb3267ce352b3b184396d361677940a1e444add8f1276d25715b6b94f22df",
         "fce42135574e174b09929ff7512ba661fccfd25afcfa4ce9d1ded2ef17a65aa0"
@@ -475920,7 +475715,8 @@
       "category": "Arrests",
       "categories": [
         "Arrests",
-        "Chemicals and Explosives"
+        "Chemicals and Explosives",
+        "Attacks"
       ],
       "title": "Moscow Police Arrest Two Teenagers for Plotting Car Bomb Attack",
       "summary": "Police in Moscow have arrested two teenagers on suspicion of planning a car bomb attack.",
@@ -475932,7 +475728,7 @@
       "collection_locale": "US:en",
       "published": "2026-06-10T07:00:00+00:00",
       "source": "The Moscow Times",
-      "source_count": 1,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQX3U4QTlUT0k2VWJhdVkzbE55NGM4MmY0aTkxLTA1Z0Nzdnl0cTgtZkFWbzdQclp6eFNFa0FTdURaRWJLTEpRUTNSZG5yTFo2clNNNDliWk4zUlV3UEpuWTROX0V5VURmZk1LRXdxeTFhbUVnSFFWS3Vib05jMV94NTA1WktHQm5lb1JXajF3MDNDZ2FSLUF3anloTnBRRVRXN1NxTDdmRGptYnh0bGJMMGllYzFoNTgtU1c4bkYwWQ?oc=5",
       "collector": "Google News RSS",
       "country": "Russia",
@@ -475945,6 +475741,8 @@
       "location_confidence": "high",
       "acquisition_channel": "archive_enrichment",
       "source_article_fingerprints": [
+        "0275ecea9df16aa5281162bd9bcbbe3769c8c5106f5238a387eedc8e9abf678d",
+        "aedf1bc91d8035444b7a7eecb658d40f751431646af4ca1d9c6ef0b3d5d9b0b4",
         "fbbce530af34f6e682ed3b0ba1813d1e1a4fd16d7358bcfffea0b225adc0b18b"
       ],
       "ai_selection_complete": true,
@@ -475957,9 +475755,9 @@
       "actor_group": "",
       "primary_event_type": "ARREST",
       "is_attack": false,
-      "incident_anchor": "Moscow car bomb plot 2026-06-10",
+      "incident_anchor": "Moscow car bomb attack 2026-06-10",
       "update_type": "INITIAL",
-      "incident_id": "inc-cf8d0c098f299514",
+      "incident_id": "inc-77f505cf6cc6cf32",
       "translated_to_english": false,
       "ai_canonical_event": "Arrest of two suspects for car bomb plot in Moscow",
       "title_variants": [
@@ -475973,10 +475771,31 @@
       "cbrn_subgroups": [],
       "reported_status": "SUSPECTED",
       "sources": [
-        "The Moscow Times"
+        "The Moscow Times",
+        "Daily Beirut",
+        "Le Monde.fr"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Russian Officer Killed in Car Bombing in Moscow",
+          "original_title": "Moscow Car Bomb Kills Russian Rocket Forces Officer",
+          "original_language": "en",
+          "summary": "A Russian rocket forces officer was killed in a car bomb explosion in Moscow.",
+          "published": "2026-06-10T07:00:00+00:00",
+          "source": "Daily Beirut",
+          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNaGQ5ejZBVXRwcFdkbVVkY3pvUWNLVjFmaEtlZU1BbU1zdmd3QVNZWjdyRGJfRzhsZjg3ZUpwUVVsMTgtQ05lUlVEaExDandBcWFCRWVOVEZOQTk0dVhHak1NZ3I5WDI2eDg3UFpxRzByblg0T3Vka256Rk1mdW9sNXBkc09rNzVDNGxYd3ZoVUlFM0hkeTFFanVYMnk3ajB3YjRlLVFWNHBNTWJMdDVzem93?oc=5"
+        },
+        {
+          "title": "New Car Bomb Attack Targets Russian General in Moscow",
+          "original_title": "New car bomb attack targets Russian general in Moscow, undermining Kremlin's security claims",
+          "original_language": "en",
+          "summary": "A car bomb explosion has targeted a Russian general in Moscow.",
+          "published": "2026-06-11T07:00:00+00:00",
+          "source": "Le Monde.fr",
+          "url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxNYUdXSXl0T2ZnX0JkcmQxbHFvTVZKOFlzWTNpUFhiRTFmMURXcTNjMms0ZVFaOFZ3UEtiVGlRcVR0bGtDMnlSWFJRci1wYnRHYmFUN1kxWTRKSGVGbXRwR1BQdndGVWVjTmY2b0NLeHBHNVJOM3FJMmIzeElYRjMxQklHckpvNm9NU1oxQXkwd3psRUU0N284c05QRzNCTmdOc3ZrcThkWlhFbzVNRndZWGRybHNlSUdGN2Z4bzFxcDRFSjZmQXZGdTJ1OVA4di1VanI4eEY2VlJ5Ymh0cE9uMUxIaG13VzNpMmxEMWJUY285T2FJZVZhbg?oc=5"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-06-10T07:00:00+00:00",
       "last_reported": "2026-06-10T07:00:00+00:00",
       "location_confidence_score": 0.95,
@@ -475997,106 +475816,9 @@
       "ai_geo_inferred": false,
       "dedup_confidence": 1.0,
       "dedup_methods": [
-        "same_url"
+        "same_url",
+        "same_incident"
       ]
-    },
-    {
-      "id": "951a5cbbe6ea6e6f",
-      "category": "Attacks",
-      "categories": [
-        "Attacks",
-        "Chemicals and Explosives"
-      ],
-      "title": "Russian Officer Killed in Car Bombing in Moscow",
-      "summary": "A Russian rocket forces officer was killed in a car bomb explosion in Moscow.",
-      "original_title": "Moscow Car Bomb Kills Russian Rocket Forces Officer",
-      "original_summary": "Moscow Car Bomb Kills Russian Rocket Forces Officer Daily Beirut",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": "US:en",
-      "published": "2026-06-10T07:00:00+00:00",
-      "source": "Daily Beirut",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNaGQ5ejZBVXRwcFdkbVVkY3pvUWNLVjFmaEtlZU1BbU1zdmd3QVNZWjdyRGJfRzhsZjg3ZUpwUVVsMTgtQ05lUlVEaExDandBcWFCRWVOVEZOQTk0dVhHak1NZ3I5WDI2eDg3UFpxRzByblg0T3Vka256Rk1mdW9sNXBkc09rNzVDNGxYd3ZoVUlFM0hkeTFFanVYMnk3ajB3YjRlLVFWNHBNTWJMdDVzem93?oc=5",
-      "collector": "Google News RSS",
-      "country": "Russia",
-      "country_code": "RU",
-      "city": "Moscow",
-      "region": null,
-      "latitude": 55.75204,
-      "longitude": 37.61781,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "0275ecea9df16aa5281162bd9bcbbe3769c8c5106f5238a387eedc8e9abf678d",
-        "aedf1bc91d8035444b7a7eecb658d40f751431646af4ca1d9c6ef0b3d5d9b0b4"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Reports a concrete terrorist/militant-style attack.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Moscow car bomb attack 2026-06-10",
-      "update_type": "INITIAL",
-      "incident_id": "inc-77f505cf6cc6cf32",
-      "translated_to_english": false,
-      "ai_canonical_event": "Car bomb attack on officer in Moscow",
-      "title_variants": [
-        "Car bomb attack on officer in Moscow"
-      ],
-      "actor_scope": "UNKNOWN",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": [],
-      "reported_status": "CONFIRMED",
-      "sources": [
-        "Daily Beirut",
-        "Le Monde.fr"
-      ],
-      "related_articles": [
-        {
-          "title": "New Car Bomb Attack Targets Russian General in Moscow",
-          "original_title": "New car bomb attack targets Russian general in Moscow, undermining Kremlin's security claims",
-          "original_language": "en",
-          "summary": "A car bomb explosion has targeted a Russian general in Moscow.",
-          "published": "2026-06-11T07:00:00+00:00",
-          "source": "Le Monde.fr",
-          "url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxNYUdXSXl0T2ZnX0JkcmQxbHFvTVZKOFlzWTNpUFhiRTFmMURXcTNjMms0ZVFaOFZ3UEtiVGlRcVR0bGtDMnlSWFJRci1wYnRHYmFUN1kxWTRKSGVGbXRwR1BQdndGVWVjTmY2b0NLeHBHNVJOM3FJMmIzeElYRjMxQklHckpvNm9NU1oxQXkwd3psRUU0N284c05QRzNCTmdOc3ZrcThkWlhFbzVNRndZWGRybHNlSUdGN2Z4bzFxcDRFSjZmQXZGdTJ1OVA4di1VanI4eEY2VlJ5Ymh0cE9uMUxIaG13VzNpMmxEMWJUY285T2FJZVZhbg?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-06-10T07:00:00+00:00",
-      "last_reported": "2026-06-11T07:00:00+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "very_high_title_similarity",
-        "same_url"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Moscow Car Bomb Kills Russian Rocket Forces Officer"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "A car bomb explosion killed a Russian officer in Moscow, Russia.",
-      "ai_geo_fingerprint": "252f4454b17e74195670e94f37ca1dd191d1233512c786f23af698417fde23ad",
-      "ai_geo_inferred": false
     },
     {
       "id": "c26ba82a201b7db5",
