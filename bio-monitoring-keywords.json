@@ -1,0 +1,1360 @@
+{
+  "version": "bio-monitoring-provisional-v1-20261021",
+  "status": "Provisional daily Bio monitoring based on supplied specialist feedback; pending specialised unit advice. Native discovery phrases require colleague validation and do not establish agent identity or terrorist intent.",
+  "noise_exclusions": [
+    "cocaine",
+    "heroin",
+    "fentanyl",
+    "meth",
+    "protein powder",
+    "baking",
+    "recipe",
+    "cosmetic"
+  ],
+  "languages": {
+    "en": {
+      "powder": [
+        "white powder",
+        "suspicious powder",
+        "unknown powder",
+        "unidentified powder",
+        "unidentified substance",
+        "suspicious substance"
+      ],
+      "response": [
+        "hazmat",
+        "evacuate",
+        "cordoned",
+        "decontaminate",
+        "shelter in place",
+        "quarantine",
+        "tested negative",
+        "field test",
+        "no hazardous"
+      ],
+      "mail": [
+        "suspicious letter",
+        "suspicious envelope",
+        "suspicious package",
+        "suspicious parcel",
+        "powder letter",
+        "powder-filled"
+      ],
+      "mail_context": [
+        "powder",
+        "substance",
+        "anthrax",
+        "ricin",
+        "biohazard",
+        "hazmat",
+        "mailroom"
+      ],
+      "targeted": [
+        "white powder",
+        "suspicious powder",
+        "suspicious envelope",
+        "suspicious letter",
+        "suspicious package"
+      ],
+      "target": [
+        "courthouse",
+        "embassy",
+        "consulate",
+        "parliament",
+        "city hall",
+        "town hall",
+        "ministry",
+        "election office",
+        "school",
+        "university",
+        "hospital",
+        "newspaper",
+        "senator",
+        "mayor",
+        "judge",
+        "prosecutor",
+        "campaign office"
+      ]
+    },
+    "fr": {
+      "powder": [
+        "poudre blanche",
+        "poudre suspecte",
+        "poudre inconnue",
+        "poudre non identifiée",
+        "substance non identifiée",
+        "substance suspecte"
+      ],
+      "response": [
+        "matières dangereuses",
+        "évacuation",
+        "périmètre de sécurité",
+        "décontamination",
+        "confinement",
+        "quarantaine",
+        "tests négatifs",
+        "test de terrain",
+        "sans danger"
+      ],
+      "mail": [
+        "lettre suspecte",
+        "enveloppe suspecte",
+        "colis suspect",
+        "paquet suspect",
+        "lettre contenant de la poudre",
+        "rempli de poudre"
+      ],
+      "mail_context": [
+        "poudre",
+        "substance",
+        "anthrax",
+        "ricine",
+        "risque biologique",
+        "matières dangereuses",
+        "service du courrier"
+      ],
+      "targeted": [
+        "poudre blanche",
+        "poudre suspecte",
+        "enveloppe suspecte",
+        "lettre suspecte",
+        "colis suspect"
+      ],
+      "target": [
+        "palais de justice",
+        "ambassade",
+        "consulat",
+        "parlement",
+        "hôtel de ville",
+        "mairie",
+        "ministère",
+        "bureau électoral",
+        "école",
+        "université",
+        "hôpital",
+        "journal",
+        "sénateur",
+        "maire",
+        "juge",
+        "procureur",
+        "permanence électorale"
+      ]
+    },
+    "ar": {
+      "powder": [
+        "مسحوق أبيض",
+        "مسحوق مشبوه",
+        "مسحوق مجهول",
+        "مسحوق غير معروف",
+        "مادة غير محددة",
+        "مادة مشبوهة"
+      ],
+      "response": [
+        "مواد خطرة",
+        "إخلاء",
+        "طوق أمني",
+        "إزالة التلوث",
+        "الاحتماء في المكان",
+        "حجر صحي",
+        "نتائج سلبية",
+        "اختبار ميداني",
+        "غير خطرة"
+      ],
+      "mail": [
+        "رسالة مشبوهة",
+        "مظروف مشبوه",
+        "طرد مشبوه",
+        "رزمة مشبوهة",
+        "رسالة تحتوي على مسحوق",
+        "مملوء بالمسحوق"
+      ],
+      "mail_context": [
+        "مسحوق",
+        "مادة",
+        "الجمرة الخبيثة",
+        "الريسين",
+        "خطر بيولوجي",
+        "مواد خطرة",
+        "غرفة البريد"
+      ],
+      "targeted": [
+        "مسحوق أبيض",
+        "مسحوق مشبوه",
+        "مظروف مشبوه",
+        "رسالة مشبوهة",
+        "طرد مشبوه"
+      ],
+      "target": [
+        "محكمة",
+        "سفارة",
+        "قنصلية",
+        "برلمان",
+        "مبنى البلدية",
+        "بلدية",
+        "وزارة",
+        "مكتب انتخابات",
+        "مدرسة",
+        "جامعة",
+        "مستشفى",
+        "صحيفة",
+        "عضو مجلس الشيوخ",
+        "رئيس البلدية",
+        "قاض",
+        "مدع عام",
+        "مقر الحملة الانتخابية"
+      ]
+    },
+    "de": {
+      "powder": [
+        "weißes Pulver",
+        "verdächtiges Pulver",
+        "unbekanntes Pulver",
+        "nicht identifiziertes Pulver",
+        "nicht identifizierte Substanz",
+        "verdächtige Substanz"
+      ],
+      "response": [
+        "Gefahrgut",
+        "Evakuierung",
+        "abgesperrt",
+        "Dekontamination",
+        "Schutz in Gebäuden",
+        "Quarantäne",
+        "negativ getestet",
+        "Schnelltest",
+        "ungefährlich"
+      ],
+      "mail": [
+        "verdächtiger Brief",
+        "verdächtiger Umschlag",
+        "verdächtiges Paket",
+        "verdächtiges Päckchen",
+        "Pulverbrief",
+        "mit Pulver gefüllt"
+      ],
+      "mail_context": [
+        "Pulver",
+        "Substanz",
+        "Milzbrand",
+        "Rizin",
+        "Biogefährdung",
+        "Gefahrgut",
+        "Poststelle"
+      ],
+      "targeted": [
+        "weißes Pulver",
+        "verdächtiges Pulver",
+        "verdächtiger Umschlag",
+        "verdächtiger Brief",
+        "verdächtiges Paket"
+      ],
+      "target": [
+        "Gerichtsgebäude",
+        "Botschaft",
+        "Konsulat",
+        "Parlament",
+        "Rathaus",
+        "Gemeindehaus",
+        "Ministerium",
+        "Wahlbüro",
+        "Schule",
+        "Universität",
+        "Krankenhaus",
+        "Zeitung",
+        "Senator",
+        "Bürgermeister",
+        "Richter",
+        "Staatsanwalt",
+        "Wahlkampfbüro"
+      ]
+    },
+    "es": {
+      "powder": [
+        "polvo blanco",
+        "polvo sospechoso",
+        "polvo desconocido",
+        "polvo no identificado",
+        "sustancia no identificada",
+        "sustancia sospechosa"
+      ],
+      "response": [
+        "materiales peligrosos",
+        "evacuación",
+        "acordonado",
+        "descontaminación",
+        "refugiarse en el lugar",
+        "cuarentena",
+        "resultado negativo",
+        "prueba de campo",
+        "no peligroso"
+      ],
+      "mail": [
+        "carta sospechosa",
+        "sobre sospechoso",
+        "paquete sospechoso",
+        "bulto sospechoso",
+        "carta con polvo",
+        "lleno de polvo"
+      ],
+      "mail_context": [
+        "polvo",
+        "sustancia",
+        "ántrax",
+        "ricina",
+        "riesgo biológico",
+        "materiales peligrosos",
+        "sala de correo"
+      ],
+      "targeted": [
+        "polvo blanco",
+        "polvo sospechoso",
+        "sobre sospechoso",
+        "carta sospechosa",
+        "paquete sospechoso"
+      ],
+      "target": [
+        "palacio de justicia",
+        "embajada",
+        "consulado",
+        "parlamento",
+        "ayuntamiento",
+        "alcaldía",
+        "ministerio",
+        "oficina electoral",
+        "escuela",
+        "universidad",
+        "hospital",
+        "periódico",
+        "senador",
+        "alcalde",
+        "juez",
+        "fiscal",
+        "oficina de campaña"
+      ]
+    },
+    "it": {
+      "powder": [
+        "polvere bianca",
+        "polvere sospetta",
+        "polvere sconosciuta",
+        "polvere non identificata",
+        "sostanza non identificata",
+        "sostanza sospetta"
+      ],
+      "response": [
+        "materiali pericolosi",
+        "evacuazione",
+        "area transennata",
+        "decontaminazione",
+        "ripararsi al chiuso",
+        "quarantena",
+        "test negativo",
+        "test sul campo",
+        "non pericoloso"
+      ],
+      "mail": [
+        "lettera sospetta",
+        "busta sospetta",
+        "pacco sospetto",
+        "plico sospetto",
+        "lettera con polvere",
+        "pieno di polvere"
+      ],
+      "mail_context": [
+        "polvere",
+        "sostanza",
+        "antrace",
+        "ricina",
+        "rischio biologico",
+        "materiali pericolosi",
+        "ufficio posta"
+      ],
+      "targeted": [
+        "polvere bianca",
+        "polvere sospetta",
+        "busta sospetta",
+        "lettera sospetta",
+        "pacco sospetto"
+      ],
+      "target": [
+        "tribunale",
+        "ambasciata",
+        "consolato",
+        "parlamento",
+        "municipio",
+        "comune",
+        "ministero",
+        "ufficio elettorale",
+        "scuola",
+        "università",
+        "ospedale",
+        "giornale",
+        "senatore",
+        "sindaco",
+        "giudice",
+        "procuratore",
+        "sede elettorale"
+      ]
+    },
+    "pt": {
+      "powder": [
+        "pó branco",
+        "pó suspeito",
+        "pó desconhecido",
+        "pó não identificado",
+        "substância não identificada",
+        "substância suspeita"
+      ],
+      "response": [
+        "materiais perigosos",
+        "evacuação",
+        "isolamento da área",
+        "descontaminação",
+        "abrigo no local",
+        "quarentena",
+        "teste negativo",
+        "teste de campo",
+        "não perigoso"
+      ],
+      "mail": [
+        "carta suspeita",
+        "envelope suspeito",
+        "pacote suspeito",
+        "encomenda suspeita",
+        "carta com pó",
+        "cheio de pó"
+      ],
+      "mail_context": [
+        "pó",
+        "substância",
+        "antraz",
+        "ricina",
+        "risco biológico",
+        "materiais perigosos",
+        "sala de correspondência"
+      ],
+      "targeted": [
+        "pó branco",
+        "pó suspeito",
+        "envelope suspeito",
+        "carta suspeita",
+        "pacote suspeito"
+      ],
+      "target": [
+        "tribunal",
+        "embaixada",
+        "consulado",
+        "parlamento",
+        "prefeitura",
+        "câmara municipal",
+        "ministério",
+        "escritório eleitoral",
+        "escola",
+        "universidade",
+        "hospital",
+        "jornal",
+        "senador",
+        "prefeito",
+        "juiz",
+        "procurador",
+        "sede de campanha"
+      ]
+    },
+    "ru": {
+      "powder": [
+        "белый порошок",
+        "подозрительный порошок",
+        "неизвестный порошок",
+        "неопознанный порошок",
+        "неопознанное вещество",
+        "подозрительное вещество"
+      ],
+      "response": [
+        "опасные материалы",
+        "эвакуация",
+        "оцепление",
+        "дезактивация",
+        "укрыться на месте",
+        "карантин",
+        "отрицательный результат",
+        "полевой тест",
+        "неопасное вещество"
+      ],
+      "mail": [
+        "подозрительное письмо",
+        "подозрительный конверт",
+        "подозрительный пакет",
+        "подозрительная посылка",
+        "письмо с порошком",
+        "наполненный порошком"
+      ],
+      "mail_context": [
+        "порошок",
+        "вещество",
+        "сибирская язва",
+        "рицин",
+        "биологическая опасность",
+        "опасные материалы",
+        "почтовое отделение"
+      ],
+      "targeted": [
+        "белый порошок",
+        "подозрительный порошок",
+        "подозрительный конверт",
+        "подозрительное письмо",
+        "подозрительный пакет"
+      ],
+      "target": [
+        "здание суда",
+        "посольство",
+        "консульство",
+        "парламент",
+        "мэрия",
+        "ратуша",
+        "министерство",
+        "избирательная комиссия",
+        "школа",
+        "университет",
+        "больница",
+        "газета",
+        "сенатор",
+        "мэр",
+        "судья",
+        "прокурор",
+        "предвыборный штаб"
+      ]
+    },
+    "tr": {
+      "powder": [
+        "beyaz toz",
+        "şüpheli toz",
+        "bilinmeyen toz",
+        "tanımlanamayan toz",
+        "tanımlanamayan madde",
+        "şüpheli madde"
+      ],
+      "response": [
+        "tehlikeli madde",
+        "tahliye",
+        "güvenlik çemberi",
+        "dekontaminasyon",
+        "yerinde sığınma",
+        "karantina",
+        "testi negatif",
+        "saha testi",
+        "tehlikesiz"
+      ],
+      "mail": [
+        "şüpheli mektup",
+        "şüpheli zarf",
+        "şüpheli paket",
+        "şüpheli koli",
+        "tozlu mektup",
+        "toz dolu"
+      ],
+      "mail_context": [
+        "toz",
+        "madde",
+        "şarbon",
+        "risin",
+        "biyolojik tehlike",
+        "tehlikeli madde",
+        "posta odası"
+      ],
+      "targeted": [
+        "beyaz toz",
+        "şüpheli toz",
+        "şüpheli zarf",
+        "şüpheli mektup",
+        "şüpheli paket"
+      ],
+      "target": [
+        "adliye",
+        "büyükelçilik",
+        "konsolosluk",
+        "parlamento",
+        "belediye binası",
+        "belediye",
+        "bakanlık",
+        "seçim bürosu",
+        "okul",
+        "üniversite",
+        "hastane",
+        "gazete",
+        "senatör",
+        "belediye başkanı",
+        "hâkim",
+        "savcı",
+        "kampanya ofisi"
+      ]
+    },
+    "he": {
+      "powder": [
+        "אבקה לבנה",
+        "אבקה חשודה",
+        "אבקה לא ידועה",
+        "אבקה לא מזוהה",
+        "חומר לא מזוהה",
+        "חומר חשוד"
+      ],
+      "response": [
+        "חומרים מסוכנים",
+        "פינוי",
+        "סגרו את האזור",
+        "טיהור",
+        "הסתגרות במקום",
+        "הסגר",
+        "בדיקה שלילית",
+        "בדיקת שטח",
+        "אינו מסוכן"
+      ],
+      "mail": [
+        "מכתב חשוד",
+        "מעטפה חשודה",
+        "חבילה חשודה",
+        "משלוח חשוד",
+        "מכתב עם אבקה",
+        "מלא באבקה"
+      ],
+      "mail_context": [
+        "אבקה",
+        "חומר",
+        "אנתרקס",
+        "ריצין",
+        "סיכון ביולוגי",
+        "חומרים מסוכנים",
+        "חדר דואר"
+      ],
+      "targeted": [
+        "אבקה לבנה",
+        "אבקה חשודה",
+        "מעטפה חשודה",
+        "מכתב חשוד",
+        "חבילה חשודה"
+      ],
+      "target": [
+        "בית משפט",
+        "שגרירות",
+        "קונסוליה",
+        "פרלמנט",
+        "בניין העירייה",
+        "עירייה",
+        "משרד ממשלתי",
+        "משרד בחירות",
+        "בית ספר",
+        "אוניברסיטה",
+        "בית חולים",
+        "עיתון",
+        "סנאטור",
+        "ראש העיר",
+        "שופט",
+        "תובע",
+        "מטה בחירות"
+      ]
+    },
+    "fa": {
+      "powder": [
+        "پودر سفید",
+        "پودر مشکوک",
+        "پودر ناشناخته",
+        "پودر شناسایی نشده",
+        "ماده شناسایی نشده",
+        "ماده مشکوک"
+      ],
+      "response": [
+        "مواد خطرناک",
+        "تخلیه",
+        "محاصره امنیتی",
+        "آلودگی زدایی",
+        "پناه گرفتن در محل",
+        "قرنطینه",
+        "آزمایش منفی",
+        "آزمایش میدانی",
+        "غیرخطرناک"
+      ],
+      "mail": [
+        "نامه مشکوک",
+        "پاکت مشکوک",
+        "بسته مشکوک",
+        "مرسوله مشکوک",
+        "نامه حاوی پودر",
+        "پر از پودر"
+      ],
+      "mail_context": [
+        "پودر",
+        "ماده",
+        "سیاه زخم",
+        "ریسین",
+        "خطر زیستی",
+        "مواد خطرناک",
+        "اتاق پست"
+      ],
+      "targeted": [
+        "پودر سفید",
+        "پودر مشکوک",
+        "پاکت مشکوک",
+        "نامه مشکوک",
+        "بسته مشکوک"
+      ],
+      "target": [
+        "دادگاه",
+        "سفارت",
+        "کنسولگری",
+        "پارلمان",
+        "ساختمان شهرداری",
+        "شهرداری",
+        "وزارت",
+        "دفتر انتخابات",
+        "مدرسه",
+        "دانشگاه",
+        "بیمارستان",
+        "روزنامه",
+        "سناتور",
+        "شهردار",
+        "قاضی",
+        "دادستان",
+        "دفتر کارزار انتخاباتی"
+      ]
+    },
+    "ur": {
+      "powder": [
+        "سفید پاؤڈر",
+        "مشکوک پاؤڈر",
+        "نامعلوم پاؤڈر",
+        "غیر شناخت شدہ پاؤڈر",
+        "غیر شناخت شدہ مادہ",
+        "مشکوک مادہ"
+      ],
+      "response": [
+        "خطرناک مواد",
+        "انخلا",
+        "گھیراؤ",
+        "آلودگی سے پاک",
+        "جگہ پر پناہ",
+        "قرنطینہ",
+        "منفی ٹیسٹ",
+        "فیلڈ ٹیسٹ",
+        "غیر مضر"
+      ],
+      "mail": [
+        "مشکوک خط",
+        "مشکوک لفافہ",
+        "مشکوک پیکیج",
+        "مشکوک پارسل",
+        "پاؤڈر والا خط",
+        "پاؤڈر سے بھرا"
+      ],
+      "mail_context": [
+        "پاؤڈر",
+        "مادہ",
+        "اینتھراکس",
+        "رائسن",
+        "حیاتیاتی خطرہ",
+        "خطرناک مواد",
+        "ڈاک کا کمرہ"
+      ],
+      "targeted": [
+        "سفید پاؤڈر",
+        "مشکوک پاؤڈر",
+        "مشکوک لفافہ",
+        "مشکوک خط",
+        "مشکوک پیکیج"
+      ],
+      "target": [
+        "عدالت",
+        "سفارت خانہ",
+        "قونصل خانہ",
+        "پارلیمنٹ",
+        "بلدیہ کی عمارت",
+        "بلدیہ",
+        "وزارت",
+        "انتخابی دفتر",
+        "اسکول",
+        "یونیورسٹی",
+        "ہسپتال",
+        "اخبار",
+        "سینیٹر",
+        "میئر",
+        "جج",
+        "استغاثہ",
+        "انتخابی مہم کا دفتر"
+      ]
+    },
+    "ps": {
+      "powder": [
+        "سپین پوډر",
+        "شکمن پوډر",
+        "نامعلوم پوډر",
+        "ناپېژندل شوی پوډر",
+        "ناپېژندل شوې ماده",
+        "شکمنه ماده"
+      ],
+      "response": [
+        "خطرناک مواد",
+        "تخلیه",
+        "امنیتي محاصره",
+        "د ککړتیا پاکول",
+        "په ځای کې پناه",
+        "قرنطین",
+        "منفي ازموینه",
+        "ساحوي ازموینه",
+        "بې خطره"
+      ],
+      "mail": [
+        "شکمن لیک",
+        "شکمن پاکټ",
+        "شکمنه بسته",
+        "شکمن پارسل",
+        "پوډر لرونکی لیک",
+        "له پوډرو ډک"
+      ],
+      "mail_context": [
+        "پوډر",
+        "ماده",
+        "انتراکس",
+        "ریسین",
+        "بیولوژیکي خطر",
+        "خطرناک مواد",
+        "د پوستې خونه"
+      ],
+      "targeted": [
+        "سپین پوډر",
+        "شکمن پوډر",
+        "شکمن پاکټ",
+        "شکمن لیک",
+        "شکمنه بسته"
+      ],
+      "target": [
+        "محکمه",
+        "سفارت",
+        "قونسلګري",
+        "پارلمان",
+        "د ښاروالۍ ودانۍ",
+        "ښاروالي",
+        "وزارت",
+        "د ټاکنو دفتر",
+        "ښوونځی",
+        "پوهنتون",
+        "روغتون",
+        "ورځپاڼه",
+        "سناتور",
+        "ښاروال",
+        "قاضي",
+        "څارنوال",
+        "د ټاکنیز کمپاین دفتر"
+      ]
+    },
+    "hi": {
+      "powder": [
+        "सफेद पाउडर",
+        "संदिग्ध पाउडर",
+        "अज्ञात पाउडर",
+        "अज्ञात चूर्ण",
+        "अज्ञात पदार्थ",
+        "संदिग्ध पदार्थ"
+      ],
+      "response": [
+        "खतरनाक सामग्री",
+        "निकासी",
+        "घेराबंदी",
+        "विसंदूषण",
+        "जहाँ हैं वहीं आश्रय",
+        "संगरोध",
+        "जांच नकारात्मक",
+        "मैदानी जांच",
+        "गैर खतरनाक"
+      ],
+      "mail": [
+        "संदिग्ध पत्र",
+        "संदिग्ध लिफाफा",
+        "संदिग्ध पैकेट",
+        "संदिग्ध पार्सल",
+        "पाउडर वाला पत्र",
+        "पाउडर से भरा"
+      ],
+      "mail_context": [
+        "पाउडर",
+        "पदार्थ",
+        "एंथ्रेक्स",
+        "रिसिन",
+        "जैविक खतरा",
+        "खतरनाक सामग्री",
+        "डाक कक्ष"
+      ],
+      "targeted": [
+        "सफेद पाउडर",
+        "संदिग्ध पाउडर",
+        "संदिग्ध लिफाफा",
+        "संदिग्ध पत्र",
+        "संदिग्ध पैकेट"
+      ],
+      "target": [
+        "न्यायालय",
+        "दूतावास",
+        "वाणिज्य दूतावास",
+        "संसद",
+        "नगर भवन",
+        "नगरपालिका",
+        "मंत्रालय",
+        "चुनाव कार्यालय",
+        "स्कूल",
+        "विश्वविद्यालय",
+        "अस्पताल",
+        "अखबार",
+        "सीनेटर",
+        "महापौर",
+        "न्यायाधीश",
+        "अभियोजक",
+        "अभियान कार्यालय"
+      ]
+    },
+    "bn": {
+      "powder": [
+        "সাদা গুঁড়া",
+        "সন্দেহজনক গুঁড়া",
+        "অজানা গুঁড়া",
+        "অজ্ঞাত গুঁড়া",
+        "অজ্ঞাত পদার্থ",
+        "সন্দেহজনক পদার্থ"
+      ],
+      "response": [
+        "বিপজ্জনক পদার্থ",
+        "সরিয়ে নেওয়া",
+        "ঘিরে রাখা",
+        "দূষণমুক্তকরণ",
+        "নিজ স্থানে আশ্রয়",
+        "কোয়ারেন্টাইন",
+        "পরীক্ষা নেগেটিভ",
+        "মাঠ পরীক্ষা",
+        "বিপজ্জনক নয়"
+      ],
+      "mail": [
+        "সন্দেহজনক চিঠি",
+        "সন্দেহজনক খাম",
+        "সন্দেহজনক প্যাকেট",
+        "সন্দেহজনক পার্সেল",
+        "গুঁড়াভর্তি চিঠি",
+        "গুঁড়া ভর্তি"
+      ],
+      "mail_context": [
+        "গুঁড়া",
+        "পদার্থ",
+        "অ্যানথ্রাক্স",
+        "রিসিন",
+        "জৈবিক ঝুঁকি",
+        "বিপজ্জনক পদার্থ",
+        "ডাকঘর"
+      ],
+      "targeted": [
+        "সাদা গুঁড়া",
+        "সন্দেহজনক গুঁড়া",
+        "সন্দেহজনক খাম",
+        "সন্দেহজনক চিঠি",
+        "সন্দেহজনক প্যাকেট"
+      ],
+      "target": [
+        "আদালত",
+        "দূতাবাস",
+        "কনস্যুলেট",
+        "সংসদ",
+        "নগর ভবন",
+        "পৌরসভা",
+        "মন্ত্রণালয়",
+        "নির্বাচনী কার্যালয়",
+        "বিদ্যালয়",
+        "বিশ্ববিদ্যালয়",
+        "হাসপাতাল",
+        "সংবাদপত্র",
+        "সিনেটর",
+        "মেয়র",
+        "বিচারক",
+        "কৌঁসুলি",
+        "প্রচার কার্যালয়"
+      ]
+    },
+    "id": {
+      "powder": [
+        "bubuk putih",
+        "bubuk mencurigakan",
+        "bubuk tidak dikenal",
+        "bubuk tak teridentifikasi",
+        "zat tak teridentifikasi",
+        "zat mencurigakan"
+      ],
+      "response": [
+        "bahan berbahaya",
+        "evakuasi",
+        "garis polisi",
+        "dekontaminasi",
+        "berlindung di tempat",
+        "karantina",
+        "hasil negatif",
+        "uji lapangan",
+        "tidak berbahaya"
+      ],
+      "mail": [
+        "surat mencurigakan",
+        "amplop mencurigakan",
+        "paket mencurigakan",
+        "bingkisan mencurigakan",
+        "surat berisi bubuk",
+        "berisi bubuk"
+      ],
+      "mail_context": [
+        "bubuk",
+        "zat",
+        "antraks",
+        "risin",
+        "bahaya biologis",
+        "bahan berbahaya",
+        "ruang surat"
+      ],
+      "targeted": [
+        "bubuk putih",
+        "bubuk mencurigakan",
+        "amplop mencurigakan",
+        "surat mencurigakan",
+        "paket mencurigakan"
+      ],
+      "target": [
+        "gedung pengadilan",
+        "kedutaan",
+        "konsulat",
+        "parlemen",
+        "balai kota",
+        "kantor wali kota",
+        "kementerian",
+        "kantor pemilu",
+        "sekolah",
+        "universitas",
+        "rumah sakit",
+        "surat kabar",
+        "senator",
+        "wali kota",
+        "hakim",
+        "jaksa",
+        "kantor kampanye"
+      ]
+    },
+    "so": {
+      "powder": [
+        "budo cad",
+        "budo laga shakisan yahay",
+        "budo aan la garanayn",
+        "budo aan la aqoonsan",
+        "walax aan la aqoonsan",
+        "walax laga shakisan yahay"
+      ],
+      "response": [
+        "walxo halis ah",
+        "daadgureyn",
+        "goobta oo la xiray",
+        "nadiifinta wasakhowga",
+        "meesha ku gabbaad",
+        "karantiil",
+        "baaritaan taban",
+        "baaritaan goobta",
+        "aan halis ahayn"
+      ],
+      "mail": [
+        "warqad laga shakisan yahay",
+        "baqshad laga shakisan yahay",
+        "xirmo laga shakisan yahay",
+        "baakad laga shakisan yahay",
+        "warqad budo leh",
+        "budo ka buuxdo"
+      ],
+      "mail_context": [
+        "budo",
+        "walax",
+        "kud",
+        "ricin",
+        "khatar bayooloji",
+        "walxo halis ah",
+        "qolka boostada"
+      ],
+      "targeted": [
+        "budo cad",
+        "budo laga shakisan yahay",
+        "baqshad laga shakisan yahay",
+        "warqad laga shakisan yahay",
+        "xirmo laga shakisan yahay"
+      ],
+      "target": [
+        "maxkamad",
+        "safaarad",
+        "qunsuliyad",
+        "baarlamaan",
+        "dhismaha degmada",
+        "degmo",
+        "wasaarad",
+        "xafiiska doorashada",
+        "dugsi",
+        "jaamacad",
+        "isbitaal",
+        "wargeys",
+        "senatar",
+        "duqa magaalada",
+        "garsoore",
+        "xeer ilaaliye",
+        "xafiiska ololaha"
+      ]
+    },
+    "ha": {
+      "powder": [
+        "farin foda",
+        "foda mai shakku",
+        "foda da ba a sani ba",
+        "foda da ba a tantance ba",
+        "sinadari da ba a tantance ba",
+        "sinadari mai shakku"
+      ],
+      "response": [
+        "kayan haɗari",
+        "kwashe mutane",
+        "killace wurin",
+        "kawar da gurɓatawa",
+        "fakewa a wurin",
+        "keɓewa",
+        "gwaji ya nuna babu",
+        "gwajin fili",
+        "ba mai haɗari ba"
+      ],
+      "mail": [
+        "wasiƙa mai shakku",
+        "ambulaf mai shakku",
+        "kunshin mai shakku",
+        "fakiti mai shakku",
+        "wasiƙa mai foda",
+        "cike da foda"
+      ],
+      "mail_context": [
+        "foda",
+        "sinadari",
+        "anthrax",
+        "ricin",
+        "haɗarin halittu",
+        "kayan haɗari",
+        "ɗakin wasiƙu"
+      ],
+      "targeted": [
+        "farin foda",
+        "foda mai shakku",
+        "ambulaf mai shakku",
+        "wasiƙa mai shakku",
+        "kunshin mai shakku"
+      ],
+      "target": [
+        "kotun shari’a",
+        "ofishin jakadanci",
+        "ofishin ƙaramin jakada",
+        "majalisa",
+        "ofishin birni",
+        "ƙaramar hukuma",
+        "ma’aikata",
+        "ofishin zaɓe",
+        "makaranta",
+        "jami’a",
+        "asibiti",
+        "jarida",
+        "sanata",
+        "shugaban birni",
+        "alƙali",
+        "mai gabatar da ƙara",
+        "ofishin yakin neman zaɓe"
+      ]
+    },
+    "sw": {
+      "powder": [
+        "unga mweupe",
+        "unga wa kutia shaka",
+        "unga usiojulikana",
+        "unga ambao haujatambuliwa",
+        "dutu ambayo haijatambuliwa",
+        "dutu ya kutia shaka"
+      ],
+      "response": [
+        "vifaa hatari",
+        "uhamishaji",
+        "eneo limezingirwa",
+        "kuondoa uchafuzi",
+        "kujikinga mahali ulipo",
+        "karantini",
+        "kipimo hasi",
+        "kipimo cha eneo",
+        "si hatari"
+      ],
+      "mail": [
+        "barua ya kutia shaka",
+        "bahasha ya kutia shaka",
+        "kifurushi cha kutia shaka",
+        "furushi la kutia shaka",
+        "barua yenye unga",
+        "iliyojaa unga"
+      ],
+      "mail_context": [
+        "unga",
+        "dutu",
+        "kimeta",
+        "risini",
+        "hatari ya kibaolojia",
+        "vifaa hatari",
+        "chumba cha barua"
+      ],
+      "targeted": [
+        "unga mweupe",
+        "unga wa kutia shaka",
+        "bahasha ya kutia shaka",
+        "barua ya kutia shaka",
+        "kifurushi cha kutia shaka"
+      ],
+      "target": [
+        "jengo la mahakama",
+        "ubalozi",
+        "ubalozi mdogo",
+        "bunge",
+        "ukumbi wa jiji",
+        "ukumbi wa mji",
+        "wizara",
+        "ofisi ya uchaguzi",
+        "shule",
+        "chuo kikuu",
+        "hospitali",
+        "gazeti",
+        "seneta",
+        "meya",
+        "hakimu",
+        "mwendesha mashtaka",
+        "ofisi ya kampeni"
+      ]
+    },
+    "zh": {
+      "powder": [
+        "白色粉末",
+        "可疑粉末",
+        "不明粉末",
+        "未识别粉末",
+        "不明物质",
+        "可疑物质"
+      ],
+      "response": [
+        "危险物质",
+        "疏散",
+        "封锁",
+        "去污",
+        "就地避难",
+        "隔离",
+        "检测阴性",
+        "现场检测",
+        "无危险"
+      ],
+      "mail": [
+        "可疑信件",
+        "可疑信封",
+        "可疑包裹",
+        "可疑邮包",
+        "粉末信件",
+        "装有粉末"
+      ],
+      "mail_context": [
+        "粉末",
+        "物质",
+        "炭疽",
+        "蓖麻毒素",
+        "生物危害",
+        "危险物质",
+        "收发室"
+      ],
+      "targeted": [
+        "白色粉末",
+        "可疑粉末",
+        "可疑信封",
+        "可疑信件",
+        "可疑包裹"
+      ],
+      "target": [
+        "法院",
+        "大使馆",
+        "领事馆",
+        "议会",
+        "市政厅",
+        "镇政府",
+        "部委",
+        "选举办公室",
+        "学校",
+        "大学",
+        "医院",
+        "报社",
+        "参议员",
+        "市长",
+        "法官",
+        "检察官",
+        "竞选办公室"
+      ]
+    },
+    "zh-Hant": {
+      "powder": [
+        "白色粉末",
+        "可疑粉末",
+        "不明粉末",
+        "未識別粉末",
+        "不明物質",
+        "可疑物質"
+      ],
+      "response": [
+        "危險物質",
+        "疏散",
+        "封鎖",
+        "除污",
+        "就地避難",
+        "隔離",
+        "檢測陰性",
+        "現場檢測",
+        "無危險"
+      ],
+      "mail": [
+        "可疑信件",
+        "可疑信封",
+        "可疑包裹",
+        "可疑郵包",
+        "粉末信件",
+        "裝有粉末"
+      ],
+      "mail_context": [
+        "粉末",
+        "物質",
+        "炭疽",
+        "蓖麻毒素",
+        "生物危害",
+        "危險物質",
+        "收發室"
+      ],
+      "targeted": [
+        "白色粉末",
+        "可疑粉末",
+        "可疑信封",
+        "可疑信件",
+        "可疑包裹"
+      ],
+      "target": [
+        "法院",
+        "大使館",
+        "領事館",
+        "議會",
+        "市政廳",
+        "鎮公所",
+        "部會",
+        "選舉辦公室",
+        "學校",
+        "大學",
+        "醫院",
+        "報社",
+        "參議員",
+        "市長",
+        "法官",
+        "檢察官",
+        "競選辦公室"
+      ]
+    }
+  }
+}

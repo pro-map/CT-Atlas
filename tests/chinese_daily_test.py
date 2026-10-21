@@ -50,7 +50,7 @@ class ChineseDailyTests(unittest.TestCase):
                 self.assertEqual(current, [scripts[lang][0]])
             for category in topics.LABELS:
                 q = [x["term"] for x in profile["queries"] if x["category"] == category]
-                self.assertEqual(q, topics.queries(category, lang))
+                self.assertEqual(q, topics.daily_queries(category, lang))
                 self.assertTrue(q)
 
     def test_multilingual_intake_uses_gemini_without_new_quota_settings(self):

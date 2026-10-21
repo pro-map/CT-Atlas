@@ -213,7 +213,7 @@ class CompleteSnapshots(unittest.TestCase):
 
     def test_first_round_is_short_validation_then_normal_catchup_rounds(self):
         config=json.loads((ROOT/c.CONFIG).read_text())
-        config.update(start_at='2026-10-09T07:00:00+00:00',end_at='2026-10-09T22:00:00+00:00',first_round_minutes=6)
+        config.update(enabled=True,start_at='2026-10-09T07:00:00+00:00',end_at='2026-10-09T22:00:00+00:00',first_round_minutes=6)
         c.write(self.root,c.CONFIG,config)
         self.assertEqual(c.configure(self.root,NOW,'first')['minutes'],6)
         self.assertEqual(c.configure(self.root,NOW,'next')['minutes'],45)

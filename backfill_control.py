@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 CONFIG = 'backfill-control.json'
+SPECIALIST_CATEGORIES = ('Radiological/Nuclear', 'Chemicals and Explosives', 'Biological Terrorism')
 
 
 def disabled_categories(root):
@@ -16,6 +17,12 @@ def disabled_categories(root):
 
 def enabled(root, category):
     return category not in disabled_categories(root)
+
+
+def specialist_history_enabled(root):
+    """Whether any specialist historical lane may run; daily never uses this."""
+    disabled = disabled_categories(root)
+    return any(category not in disabled for category in SPECIALIST_CATEGORIES)
 
 
 def disabled_lanes(root):
@@ -33,6 +40,8 @@ def lane_enabled(root, lane):
 
 def task_disabled(task, categories, lanes):
     return (task.get('category') in categories or
+            (task.get('category') in ('CBRN', 'CBRNE') and
+             set(SPECIALIST_CATEGORIES).issubset(categories)) or
             ('chinese_map' in lanes and
              (task.get('group') == 'gemini_chinese_map' or
               (task.get('code') in ('zh', 'zh-Hant') and task.get('category') not in
@@ -48,6 +57,8 @@ def apply_to_collector(namespace, root):
     """Remove only cancelled historical discovery queries, after mode selection."""
     disabled = disabled_categories(root)
     lanes = disabled_lanes(root)
+    if set(SPECIALIST_CATEGORIES).issubset(disabled):
+        disabled |= {'CBRN', 'CBRNE'}
     for name in ('CATEGORIES', 'CORE_SEARCH_QUERIES', 'OFFICIAL_SOURCE_QUERIES',
                  'TARGETED_MEDIA_CATEGORY_TERMS'):
         for category in disabled:

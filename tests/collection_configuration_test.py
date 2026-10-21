@@ -83,7 +83,7 @@ class CollectionConfigurationTests(unittest.TestCase):
 
     def test_core_english_queries_and_curated_lists_unchanged(self):
         for category in topics.LABELS:
-            self.assertEqual(collector.CORE_SEARCH_QUERIES[category],topics.queries(category))
+            self.assertEqual(collector.CORE_SEARCH_QUERIES[category],topics.daily_queries(category))
         english = topics.vocabulary()['chemical_explosives']['terms']['en']
         self.assertEqual(len(english),95)
         self.assertEqual(hashlib.sha256('\n'.join(english).encode()).hexdigest(),

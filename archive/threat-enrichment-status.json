@@ -7,7 +7,7 @@
  "window_days": 180,
  "taxonomy_version": "threat-topics-v1-20261008",
  "batch_started_at": "2026-10-21T01:00:04.817730+00:00",
- "batch_status": "partial",
+ "batch_status": "cancelled",
  "model_backend": "groq-free-public-news",
  "run_id": "39524610977",
  "daily_collection": "collector.py; shared keyword vocabulary; regular daily schedule",
@@ -175,7 +175,10 @@
     "zh",
     "zh-Hant"
    ],
-   "gdelt_scope": "all source languages indexed by the provider; not exhaustive web coverage"
+   "gdelt_scope": "all source languages indexed by the provider; not exhaustive web coverage",
+   "backfill_status": "cancelled",
+   "cancelled_at": "2026-10-21T06:12:51.020167+00:00",
+   "cancellation_reason": "Bio historical backfill stopped by user pending specialised advice; saved progress preserved and daily monitoring remains enabled."
   }
  },
  "complete": false,
@@ -183,5 +186,7 @@
  "requests_this_run": 5,
  "searches_this_run": 42,
  "current_category": null,
- "completion_meaning": "Enabled categories only; cancelled backfills are not completed. Processed queries do not guarantee all real-world cases were found."
+ "completion_meaning": "Historical backfills cancelled by user, not completed; saved search progress and source coverage limitations are preserved. Daily collection remains enabled.",
+ "cancelled_at": "2026-10-21T06:12:51.020167+00:00",
+ "cancellation_reason": "All specialist historical backfills stopped by user; Bio daily monitoring continues provisionally pending specialised advice."
 }

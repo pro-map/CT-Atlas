@@ -1,6 +1,7 @@
 name: Groq Free - six-month Biological historical backfill
 
-# Biological history only; RadNuc, ChemEx and separate Chinese map history are cancelled.
+# All specialist historical backfills are cancelled by user as of 2026-10-21.
+# Kept for operator visibility; preflight blocks runs via backfill-control.json.
 # Only PUBLIC Google News and GDELT titles/excerpts are sent to Groq.
 # No Dark Web material, internal INTERPOL records or SOCMINT workspaces.
 # Existing daily Gemini collection, archives and quotas remain independent.
@@ -9,16 +10,10 @@ on:
     branches: [main]
     paths:
       - .github/workflows/groq-free-backfill.yml
-  schedule:
-    # Two-hour checkpointed runs. Read-only preflight skips exhausted budgets.
-    # Own UTC-day internal budget stops
-    # further calls automatically even after manual dispatches / reruns.
-    - cron: "45 */2 * * *"
-      timezone: Europe/Paris
   workflow_dispatch:
     inputs:
       specialist_posts:
-        description: "Groq API calls for Biological history only (max 5)"
+        description: "Historical requests (disabled by backfill-control.json; max 5)"
         required: false
         default: "5"
 

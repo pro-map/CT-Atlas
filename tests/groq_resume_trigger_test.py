@@ -20,15 +20,16 @@ class GroqResumeTriggerTest(unittest.TestCase):
         self.assertNotIn("CHINESE_POSTS_INPUT", text)
         self.assertNotIn("inputs.chinese_posts", text)
         self.assertNotIn("id: chinese", text)
-        push = text.split("  push:", 1)[1].split("  schedule:", 1)[0]
+        push = text.split("  push:", 1)[1].split("  workflow_dispatch:", 1)[0]
         self.assertIn("branches: [main]", push)
         self.assertIn("paths:\n      - .github/workflows/groq-free-backfill.yml", push)
         self.assertNotIn("pull_request", text)
 
-    def test_authorized_cadence_retains_lock_limits_and_publication_gates(self):
+    def test_cancelled_schedule_retains_lock_limits_and_publication_gates(self):
         text = (ROOT / ".github/workflows/groq-free-backfill.yml").read_text()
-        for required in ('cron: "45 */2 * * *"', "timezone: Europe/Paris",
-                         "group: ct-map-update-main", "cancel-in-progress: false",
+        self.assertNotIn("  schedule:", text)
+        self.assertIn("  workflow_dispatch:", text)
+        for required in ("group: ct-map-update-main", "cancel-in-progress: false",
                          '(("SPECIALIST_POSTS_INPUT",5),)',
                          "backfill_publication_guard.py finalize",
                          "backfill_publication_guard.py verify",

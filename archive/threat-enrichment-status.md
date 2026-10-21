@@ -1,14 +1,14 @@
 # Specialist six-month backfill
 
-Last checkpoint (UTC): 2026-10-10T13:16:59.379974+00:00
+Last checkpoint (UTC): 2026-10-21T01:05:35.724118+00:00
 
-**Batch result: blocked. Whole backfill complete: NO.**
+**Batch result: cancelled. Active backfills complete: NO.**
 
 | Category | Root queries processed / planned | Rejected queries | Pending work | Awaiting AI review | New event records this batch |
 |---|---:|---:|---:|---:|---:|
-| Radiological/Nuclear | 2104 / 7560 | 0 | 5459 | 15 | 0 |
-| Chemicals and Explosives | 1479 / 2403 | 0 | 924 | 0 | 0 |
-| Biological Terrorism | 624 / 2916 | 0 | 2295 | 0 | 0 |
+| Radiological/Nuclear (cancelled by user) | Progress preserved | — | Not scheduled | Not scheduled | 0 |
+| Chemicals and Explosives (cancelled by user) | Progress preserved | — | Not scheduled | Not scheduled | 0 |
+| Biological Terrorism (cancelled by user) | Progress preserved | — | Not scheduled | Not scheduled | 0 |
 
 Processed roots include windows replaced by narrower queries. Rejected queries are NOT successful retrievals. Pending work includes these replacement queries and tasks awaiting review.
 
@@ -24,8 +24,8 @@ Catch-up rounds started: 9. Acceleration ends at 2026-10-09T22:00:00+00:00.
   "from": "2026-04-12",
   "through": "2026-10-09",
   "planned_searches": 5238,
-  "completed_searches": 0,
-  "pending_searches": 5238,
+  "completed_searches": 3,
+  "pending_searches": 5235,
   "queued_candidates": 0,
   "processing_complete": false
 }
@@ -34,7 +34,7 @@ Catch-up rounds started: 9. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ### Radiological/Nuclear
 ```json
 {
-  "stop": "daily allocation already used",
+  "stop": "Cancelled by user; saved progress preserved",
   "reviewed_this_batch": 0,
   "successful_fetches_this_batch": 0,
   "rejected_queries": 0,
@@ -50,7 +50,7 @@ Catch-up rounds started: 9. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ### Chemicals and Explosives
 ```json
 {
-  "stop": "daily allocation already used",
+  "stop": "Cancelled by user; saved progress preserved",
   "reviewed_this_batch": 0,
   "successful_fetches_this_batch": 0,
   "rejected_queries": 0,
@@ -66,7 +66,7 @@ Catch-up rounds started: 9. Acceleration ends at 2026-10-09T22:00:00+00:00.
 ### Biological Terrorism
 ```json
 {
-  "stop": "daily allocation already used",
+  "stop": "Bio historical backfill stopped by user pending specialised advice; saved progress preserved and daily monitoring remains enabled.",
   "reviewed_this_batch": 0,
   "successful_fetches_this_batch": 0,
   "rejected_queries": 0,

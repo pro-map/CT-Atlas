@@ -2,10 +2,11 @@
   "disabled_categories": [
     "Radiological/Nuclear",
     "Chemicals and Explosives",
+    "Biological Terrorism",
     "Legal / Judicial"
   ],
   "disabled_lanes": [
     "chinese_map"
   ],
-  "reason": "RadNuc, ChemEx and separate Chinese map historical backfills cancelled by user on 2026-10-13; daily collection remains enabled. Legal / Judicial retired from both daily and historical collection by user on 2026-10-14."
+  "reason": "RadNuc, ChemEx and separate Chinese map historical backfills cancelled by user on 2026-10-13; daily collection remains enabled. Legal / Judicial retired from both daily and historical collection by user on 2026-10-14. Biological historical backfill stopped by user on 2026-10-21 pending specialised advice; Bio is included in daily monitoring using the supplied provisional criteria."
 }

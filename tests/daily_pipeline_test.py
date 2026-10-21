@@ -45,6 +45,22 @@ class DailyPipelineTests(unittest.TestCase):
         self.assertEqual(backlog, [])
         self.assertEqual((dropped["expired"], dropped["retired"], dropped["cancelled_history"]), (1, 1, 1))
 
+    def test_cancelled_specialist_history_filters_old_legacy_queue_but_keeps_recent_bio(self):
+        disabled = set(collector.threat_categories.LABELS)
+        queued = [article('queued-old-bio',20,'Biological Terrorism'),
+                  article('queued-old-cbrn',20,'CBRN'),
+                  article('queued-recent-cbrne',1,'CBRNE')]
+        fresh = [article('fresh-old-cbrne',20,'CBRNE'),
+                 article('fresh-recent-bio',1,'Biological Terrorism'),
+                 article('fresh-old-arrest',20,'Arrests')]
+        originals = deepcopy((fresh,queued))
+        with patch.object(collector,'deduplicate_events',side_effect=lambda rows:rows):
+            recent,backlog,dropped=daily.prepare(fresh,queued,[],collector,NOW,disabled)
+        self.assertEqual({row['id'] for row in recent},{'queued-recent-cbrne','fresh-recent-bio'})
+        self.assertEqual([row['id'] for row in backlog],['fresh-old-arrest'])
+        self.assertEqual(dropped['cancelled_history'],3)
+        self.assertEqual((fresh,queued),originals)
+
     def test_queues_are_clustered_separately_and_cached_original_is_unchanged(self):
         queued = article("queued", 10)
         fresh = [deepcopy(queued), article("new"), article("older", 8)]

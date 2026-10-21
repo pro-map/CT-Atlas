@@ -1,6 +1,6 @@
 {
-  "enabled": true,
-  "purpose": "User-requested corrected recovery run and same-day continuations; no billing, model or credential changes",
+  "enabled": false,
+  "purpose": "Specialist historical backfills stopped by user; saved progress retained and daily collection remains enabled",
   "start_at": "2026-10-09T07:00:00+00:00",
   "end_at": "2026-10-09T22:00:00+00:00",
   "max_rounds": 18,

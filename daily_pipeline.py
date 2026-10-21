@@ -6,6 +6,8 @@ from datetime import datetime, timedelta, timezone
 import json
 from pathlib import Path
 
+import backfill_control
+
 QUEUE_FILE = "daily_candidate_queue.json"
 STATUS_FILE = "daily-collection-status.json"
 
@@ -35,6 +37,7 @@ def partition(events, engine, now, disabled_history=()):
     """
     cutoff = now - timedelta(days=engine.DAILY_LOOKBACK_DAYS)
     retention = now - timedelta(days=engine.RETENTION_DAYS)
+    disabled_history = set(disabled_history)
     recent, backlog, seen = [], [], set()
     dropped = {"expired": 0, "retired": 0, "cancelled_history": 0, "duplicates": 0}
     for item in events:
@@ -54,7 +57,10 @@ def partition(events, engine, now, disabled_history=()):
             recent.append(item)
         else:
             categories = item.get("categories") or [item.get("category")]
-            if set(categories) & set(disabled_history):
+            if isinstance(categories, str):
+                categories = [categories]
+            if any(backfill_control.task_disabled({'category': category}, disabled_history, set())
+                   for category in categories):
                 dropped["cancelled_history"] += 1
                 continue
             backlog.append(item)
