@@ -1,4 +1,5 @@
 {
+  "historical_enabled": false,
   "disabled_categories": [
     "Radiological/Nuclear",
     "Chemicals and Explosives",
@@ -8,5 +9,5 @@
   "disabled_lanes": [
     "chinese_map"
   ],
-  "reason": "RadNuc, ChemEx and separate Chinese map historical backfills cancelled by user on 2026-10-13; daily collection remains enabled. Legal / Judicial retired from both daily and historical collection by user on 2026-10-14. Biological historical backfill stopped by user on 2026-10-21 pending specialised advice; Bio is included in daily monitoring using the supplied provisional criteria."
+  "reason": "All historical backfills stopped by user on 2026-10-21, including Bio, archive enrichment and separate Chinese map history. Recent daily collection includes Bio with provisional vocabulary pending specialised advice. Legal / Judicial remains retired from daily and historical collection."
 }

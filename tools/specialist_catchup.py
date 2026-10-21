@@ -57,6 +57,9 @@ def remaining(report):
 
 
 def configure(root, now, run_id, event='workflow_dispatch', continuation=False):
+    if not backfill_control.history_enabled(root):
+        return {**NORMAL, 'enabled': False, 'catchup': False, 'round': 0,
+                'end_at': None, 'event': event}
     config = read(root, CONFIG)
     control = read(root, STATE)
     live = active(config, now)
@@ -90,6 +93,8 @@ def configure(root, now, run_id, event='workflow_dispatch', continuation=False):
 
 
 def continuation_decision(root, now):
+    if not backfill_control.history_enabled(root):
+        return False, 'Historical backfills cancelled by operator; no continuation.'
     if not backfill_control.specialist_history_enabled(root):
         return False, 'All specialist historical backfills cancelled by user; daily collection remains enabled.'
     config = read(root, CONFIG)

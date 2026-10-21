@@ -6,6 +6,16 @@ CONFIG = 'backfill-control.json'
 SPECIALIST_CATEGORIES = ('Radiological/Nuclear', 'Chemicals and Explosives', 'Biological Terrorism')
 
 
+def history_enabled(root):
+    """Global historical-discovery switch; daily intake remains independent."""
+    path = Path(root) / CONFIG
+    data = json.loads(path.read_text(encoding='utf-8')) if path.exists() else {}
+    enabled = data.get('historical_enabled', True)
+    if type(enabled) is not bool:
+        raise ValueError('Invalid global historical backfill control')
+    return enabled
+
+
 def disabled_categories(root):
     path = Path(root) / CONFIG
     data = json.loads(path.read_text(encoding='utf-8')) if path.exists() else {}
@@ -16,13 +26,13 @@ def disabled_categories(root):
 
 
 def enabled(root, category):
-    return category not in disabled_categories(root)
+    return history_enabled(root) and category not in disabled_categories(root)
 
 
 def specialist_history_enabled(root):
     """Whether any specialist historical lane may run; daily never uses this."""
     disabled = disabled_categories(root)
-    return any(category not in disabled for category in SPECIALIST_CATEGORIES)
+    return history_enabled(root) and any(category not in disabled for category in SPECIALIST_CATEGORIES)
 
 
 def disabled_lanes(root):
@@ -35,7 +45,7 @@ def disabled_lanes(root):
 
 
 def lane_enabled(root, lane):
-    return lane not in disabled_lanes(root)
+    return history_enabled(root) and lane not in disabled_lanes(root)
 
 
 def task_disabled(task, categories, lanes):

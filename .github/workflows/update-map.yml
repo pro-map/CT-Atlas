@@ -9,17 +9,15 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "daily = recent news; backfill-new-sources = regional additions only; backfill = all sources"
+        description: "daily = recent news including Bio; resume-pending = recover pending daily work"
         required: true
         default: "daily"
         type: choice
         options:
           - daily
           - resume-pending
-          - backfill-new-sources
-          - backfill
       force_ai:
-        description: "Re-run all geolocation (ignored for backfill-new-sources)"
+        description: "Re-run all geolocation"
         required: true
         default: false
         type: boolean
@@ -37,7 +35,25 @@ concurrency:
   queue: max
 
 jobs:
+  validate_mode:
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Reject cancelled historical collection before setup
+        env:
+          COLLECTION_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'daily' }}
+        run: |
+          case "$COLLECTION_MODE" in
+            daily|resume-pending) ;;
+            backfill|backfill-new-sources)
+              echo "::error::Historical backfills were cancelled by the user on 2026-10-21."
+              exit 1
+              ;;
+            *) echo "::error::Unknown collection mode"; exit 1 ;;
+          esac
+
   update:
+    needs: validate_mode
     runs-on: ubuntu-latest
     timeout-minutes: 330
     outputs:
@@ -148,13 +164,9 @@ jobs:
             resume-pending)
               python -u tools/run_collector_quota_safe.py resume-pending
               ;;
-            backfill-new-sources)
-              echo "Targeted incremental backfill: Arabic additions, Africa, Afghanistan, Syria, and Latin America."
-              python -u tools/run_collector_quota_safe.py backfill-new-sources
-              ;;
-            backfill)
-              echo "Incremental backfill across all configured sources."
-              python -u tools/run_collector_quota_safe.py backfill
+            backfill|backfill-new-sources)
+              echo "::error::Historical backfills were cancelled by the user on 2026-10-21."
+              exit 1
               ;;
             daily)
               python -u tools/run_collector_quota_safe.py

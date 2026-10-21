@@ -626,6 +626,12 @@ def run(root, collector, max_posts, max_fetches, today=None, now=None, searcher=
         review_first=False, prioritize_native=False, refine_saturated=False, on_checkpoint=None,
         interleave_supplement=False, ledger_factory=None, review_batch_size=None,
         review_provider="Gemini"):
+    import backfill_control
+    if not backfill_control.history_enabled(root):
+        return {key: 0 for key in (
+            'tasks_done', 'fetched', 'candidates', 'skipped', 'skipped_cached',
+            'reviewed', 'kept', 'archived_incident', 'unanswerable', 'source_failures',
+            'query_errors', 'split', 'given_up')}, 'historical backfills cancelled by operator'
     now = now or datetime.now(timezone.utc)
     today = today or now.date()
     started = clock()
@@ -888,6 +894,11 @@ def main(argv=None):
     parser.add_argument("--max-fetches", type=int, default=MAX_FETCHES, help="Searches this run.")
     parser.add_argument("--dry-run", action="store_true", help="Show the plan without searching or calling Gemini.")
     args = parser.parse_args(argv)
+
+    import backfill_control
+    if not backfill_control.history_enabled(ROOT):
+        print('Historical backfills cancelled by operator; saved progress preserved.')
+        return 0
 
     collector = archive_review.prepare_collector(archive_review.load_collector(ROOT), archive_review.REVIEW_MODEL,
                                                  threshold=archive_review.map_threshold(ROOT))

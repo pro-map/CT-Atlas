@@ -1,16 +1,19 @@
-"""Static regressions for the explicit, bounded history-resume trigger.
+"""Offline regressions for cancelled history and preserved daily/maintenance work.
 
 No workflow is dispatched and no source/model/credential is accessed here.
 """
 from pathlib import Path
 import ast
+import os
+import subprocess
+import textwrap
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class GroqResumeTriggerTest(unittest.TestCase):
-    def test_only_explicit_main_push_enables_normal_history_budgets(self):
+    def test_legacy_resume_allocation_remains_bounded_and_maintenance_push_is_scoped(self):
         text = (ROOT / ".github/workflows/groq-free-backfill.yml").read_text()
         for name, argument, limit in (("SPECIALIST_POSTS_INPUT", "specialist_posts", 5),):
             expected = (name + ": ${{ github.event_name == 'push' && "
@@ -25,9 +28,10 @@ class GroqResumeTriggerTest(unittest.TestCase):
         self.assertIn("paths:\n      - .github/workflows/groq-free-backfill.yml", push)
         self.assertNotIn("pull_request", text)
 
-    def test_cancelled_schedule_retains_lock_limits_and_publication_gates(self):
+    def test_cancelled_history_has_no_schedule_and_retains_publication_guards(self):
         text = (ROOT / ".github/workflows/groq-free-backfill.yml").read_text()
         self.assertNotIn("  schedule:", text)
+        self.assertIn("(cancelled)", text.splitlines()[0])
         self.assertIn("  workflow_dispatch:", text)
         for required in ("group: ct-map-update-main", "cancel-in-progress: false",
                          '(("SPECIALIST_POSTS_INPUT",5),)',
@@ -37,6 +41,38 @@ class GroqResumeTriggerTest(unittest.TestCase):
                          "steps.checkpoint.outputs.publication_ready != 'true'"):
             self.assertIn(required, text)
         self.assertNotIn("repository_dispatch", text)
+
+    def test_general_archive_history_has_no_schedule_but_existing_review_still_does(self):
+        history = (ROOT / ".github/workflows/enrich-archive.yml").read_text()
+        review = (ROOT / ".github/workflows/review-archive-backlog.yml").read_text()
+        self.assertNotIn("  schedule:", history)
+        self.assertIn("  workflow_dispatch:", history)
+        self.assertIn("(cancelled)", history.splitlines()[0])
+        self.assertIn("  schedule:", review)
+        self.assertIn("tools/review_pending_archive.py", review)
+
+    def test_daily_rejects_historical_dispatch_before_setup_and_accepts_daily_recovery(self):
+        workflow = (ROOT / ".github/workflows/update-map.yml").read_text()
+        validation = workflow.split("  validate_mode:", 1)[1].split("\n  update:", 1)[0]
+        update = workflow.split("\n  update:", 1)[1]
+        self.assertIn("needs: validate_mode", update)
+        self.assertNotIn("secrets.", validation)
+        self.assertNotIn("actions/checkout", validation)
+        self.assertNotIn("pip install", validation)
+        self.assertIn('cron: "17 10 * * *"', workflow)
+        self.assertIn('cron: "17 18 * * *"', workflow)
+        options = workflow.split("        options:\n", 1)[1].split("      force_ai:", 1)[0]
+        self.assertEqual([line.strip()[2:] for line in options.splitlines() if line.strip()],
+                         ["daily", "resume-pending"])
+        script = textwrap.dedent(validation.split("        run: |\n", 1)[1])
+        for mode, accepted in (("daily", True), ("resume-pending", True),
+                               ("backfill", False), ("backfill-new-sources", False),
+                               ("unknown-mode", False)):
+            with self.subTest(mode=mode):
+                result = subprocess.run(["bash", "-c", script],
+                                        env={**os.environ, "COLLECTION_MODE": mode},
+                                        capture_output=True, text=True, check=False)
+                self.assertEqual(result.returncode == 0, accepted, result.stdout + result.stderr)
 
     def test_authorized_caps_have_one_source_and_model_pacing_stay_unchanged(self):
         tree = ast.parse((ROOT / "tools/groq_backfill.py").read_text())

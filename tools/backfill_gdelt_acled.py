@@ -150,6 +150,9 @@ collector.requests.post = _guarded_post
 
 
 def main():
+    if not backfill_control.history_enabled(ROOT):
+        print('Historical backfills cancelled by operator; saved progress preserved.')
+        return
     # Historical cancellations apply to this manual discovery path as well.
     backfill_control.apply_to_collector(vars(collector), ROOT)
     db = collector.load_database_strict()

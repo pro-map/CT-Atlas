@@ -4,6 +4,7 @@ import json
 import sys
 import tempfile
 import unittest
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import Mock, patch
 
@@ -17,7 +18,9 @@ import enrich_threat_categories as specialist
 import enrich_archive as archive
 import specialist_catchup as catchup
 import enrich_chinese_map as chinese
-import groq_backfill_runtime as history_runtime
+import backfill_gdelt_acled as gdelt
+import groq_backfill_runtime as groq_runtime
+import daily_pipeline
 
 
 class BackfillCancellation(unittest.TestCase):
@@ -26,6 +29,63 @@ class BackfillCancellation(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
         (self.root/control.CONFIG).write_text(json.dumps({'disabled_categories':[topics.RN]}))
+
+    def test_global_stop_blocks_every_discovery_entrypoint_without_touching_checkpoints(self):
+        (self.root/control.CONFIG).write_text(json.dumps({'historical_enabled': False}))
+        checkpoint = self.root / 'archive/saved-state.json'
+        checkpoint.parent.mkdir()
+        checkpoint.write_text('{"saved":"unchanged"}')
+        before = {p.relative_to(self.root): p.read_bytes() for p in self.root.rglob('*') if p.is_file()}
+        with patch('requests.sessions.Session.request', side_effect=AssertionError('No network')), \
+             patch.object(archive, 'load_state', side_effect=AssertionError('No replay')), \
+             patch.object(archive.archive_review, 'load_collector', side_effect=AssertionError('No collector load')), \
+             patch.object(collector, 'parse_collection_mode', return_value=(True, 'backfill')), \
+             patch.object(collector, '__file__', str(self.root/'collector.py')), \
+             patch.object(collector.collection_config, 'validate_runtime', side_effect=AssertionError('Must stop first')), \
+             patch.object(gdelt, 'ROOT', self.root), \
+             patch.object(gdelt.collector, 'load_database_strict', side_effect=AssertionError('No database replay')):
+            for backend in (rn, specialist, chinese):
+                self.assertEqual(backend.run(self.root)['backfill_status'], 'cancelled')
+            summary, reason = archive.run(self.root, collector, 100, 100)
+            self.assertTrue(all(value == 0 for value in summary.values()))
+            self.assertIn('cancelled', reason)
+            collector.main()
+            gdelt.main()
+            now = datetime.now(timezone.utc)
+            self.assertFalse(catchup.configure(self.root, now, 'cancelled')['enabled'])
+            self.assertFalse(catchup.continuation_decision(self.root, now)[0])
+            for maintenance in (False, True):
+                self.assertFalse(groq_runtime.preflight(self.root, maintenance=maintenance)['run_needed'])
+        after = {p.relative_to(self.root): p.read_bytes() for p in self.root.rglob('*') if p.is_file()}
+        self.assertEqual(before, {path: after[path] for path in before})
+        self.assertEqual(set(after) - set(before), {Path(chinese.STATUS)})
+        self.assertEqual(json.loads(after[Path(chinese.STATUS)])['backfill_status'], 'cancelled')
+
+    def test_global_control_requires_a_boolean_and_defaults_to_legacy_enabled(self):
+        self.assertTrue(control.history_enabled(self.root))
+        for invalid in ('false', 0, None):
+            (self.root/control.CONFIG).write_text(json.dumps({'historical_enabled': invalid}))
+            with self.assertRaises(ValueError):
+                control.history_enabled(self.root)
+
+    def test_production_stop_preserves_recent_bio_and_daily_language_queries(self):
+        self.assertFalse(control.history_enabled(ROOT))
+        self.assertFalse(control.enabled(ROOT, topics.BIO))
+        self.assertIn(topics.BIO, control.disabled_categories(ROOT))
+        self.assertIn(topics.BIO, collector.CORE_SEARCH_QUERIES)
+        for profile in collector.MULTILINGUAL_PROFILES:
+            self.assertIn(topics.BIO, {query['category'] for query in profile['queries']})
+        now = datetime.now(timezone.utc)
+        def candidate(name, age):
+            return {'id': name, 'title': 'Police investigate a biological terror threat '+name,
+                    'url': 'https://example.org/'+name, 'category': topics.BIO,
+                    'categories': [topics.BIO], 'published': (now-timedelta(days=age)).isoformat()}
+        recent, backlog, dropped = daily_pipeline.partition(
+            [candidate('recent', 1), candidate('historical', 20)], collector, now,
+            control.disabled_categories(ROOT))
+        self.assertEqual([item['id'] for item in recent], ['recent'])
+        self.assertEqual(backlog, [])
+        self.assertEqual(dropped['cancelled_history'], 1)
 
     def test_direct_rn_and_explicit_specialist_requests_cannot_restart_or_touch_state(self):
         state = self.root/'archive/radnuc-enrichment-state.json'
@@ -163,7 +223,7 @@ class BackfillCancellation(unittest.TestCase):
         now = datetime(2026,10,21,10,tzinfo=timezone.utc)
         before = {p:p.read_bytes() for p in self.root.rglob('*') if p.is_file()}
         for maintenance in (False, True):
-            self.assertFalse(history_runtime.preflight(self.root,maintenance=maintenance)['run_needed'])
+            self.assertFalse(groq_runtime.preflight(self.root,maintenance=maintenance)['run_needed'])
         for continuation in (False, True):
             self.assertFalse(catchup.configure(self.root,now,'manual',continuation=continuation)['enabled'])
         self.assertFalse(catchup.continuation_decision(self.root,now)[0])

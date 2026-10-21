@@ -1,7 +1,8 @@
-name: Groq Free - six-month Biological historical backfill
+name: Groq Free - Biological historical backfill (cancelled)
 
-# All specialist historical backfills are cancelled by user as of 2026-10-21.
-# Kept for operator visibility; preflight blocks runs via backfill-control.json.
+# All historical backfills, including Biological, were cancelled on 2026-10-21.
+# Saved checkpoints and manual compatibility are retained; shared backfill
+# controls prevent historical searches or AI calls while disabled.
 # Only PUBLIC Google News and GDELT titles/excerpts are sent to Groq.
 # No Dark Web material, internal INTERPOL records or SOCMINT workspaces.
 # Existing daily Gemini collection, archives and quotas remain independent.
@@ -13,7 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       specialist_posts:
-        description: "Historical requests (disabled by backfill-control.json; max 5)"
+        description: "Historical backfill is cancelled; saved allocation only (max 5)"
         required: false
         default: "5"
 
@@ -59,9 +60,9 @@ jobs:
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       # Code-maintenance pushes repair and deploy without consuming AI quota.
-      # Scheduled/manual backfills retain their existing bounded allocations.
-      # An operator-approved main commit starting [resume-groq-history] opts
-      # into ONE normal bounded batch; it never resets or raises daily caps.
+      # Manual inputs and the legacy resume marker cannot override the shared
+      # historical cancellation. Existing bounded allocations are retained
+      # only for compatibility if historical work is explicitly re-enabled.
       SPECIALIST_POSTS_INPUT: ${{ github.event_name == 'push' && !startsWith(github.event.head_commit.message, '[resume-groq-history]') && '0' || inputs.specialist_posts || '5' }}
     steps:
       - name: Checkout current production and durable checkpoints
