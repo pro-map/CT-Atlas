@@ -9,9 +9,13 @@ import copy
 import hashlib
 import json
 import os
+import sys
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import backfill_control
 
 # Operator-authorized allocation, NOT Groq's public or account-specific limits.
 REQUEST_CAP = 32
@@ -214,6 +218,7 @@ def call_with_recovery(backend, gate, inputs, *, _sub_batch=False):
 
 def preflight(root: Path, *, maintenance=False, day=None) -> dict:
     """Read-only decision before dependency install or archive replay."""
+    historical_enabled = backfill_control.history_enabled(root)
     day = day or datetime.now(timezone.utc).date().isoformat()
     ledger = read_json(root / "quota/groq-oss120b-public-backfill.json", {})
     if not isinstance(ledger, dict):
@@ -223,7 +228,7 @@ def preflight(root: Path, *, maintenance=False, day=None) -> dict:
         used, tokens = ledger.get("requests", 0), ledger.get("reserved_tokens", 0)
         if nonnegative_integer(used) is None or nonnegative_integer(tokens) is None:
             raise ValueError("Invalid quota counters; refusing backfill")
-    run = maintenance or (used < REQUEST_CAP and tokens + MIN_RUN_RESERVATION <= RESERVED_TOKEN_CAP)
+    run = historical_enabled and (maintenance or (used < REQUEST_CAP and tokens + MIN_RUN_RESERVATION <= RESERVED_TOKEN_CAP))
     return {"run_needed": run, "utc_day": day, "maintenance": maintenance,
             "requests": used, "reserved_tokens": tokens,
             "request_cap": REQUEST_CAP, "token_cap": RESERVED_TOKEN_CAP}

@@ -1,4 +1,4 @@
-name: Enrich archive
+name: Enrich archive historical backfill (cancelled)
 
 # Six months of reporting the daily collection never reviewed
 # (tools/enrich_archive.py): week-by-week searches in the languages it does
@@ -11,12 +11,11 @@ name: Enrich archive
 # above 0 go to archive/enriched-articles-*.json, which the nightly
 # sync-background-corpus run loads into the D1 archive, one copy per story.
 #
-# 02:43 Paris: no other job uses 3.1 Flash Lite then (archive review 05:13,
-# incident consolidation 07:37), and few users ask for reports.
+# Historical collection was cancelled by the user on 2026-10-21.
+# The manual entry point remains compatible with saved checkpoints; the
+# shared backfill control prevents retrieval while historical work is disabled.
+# Daily collection and review of existing archive items remain independent.
 on:
-  schedule:
-    - cron: "43 2 * * *"
-      timezone: "Europe/Paris"
   workflow_dispatch:
     inputs:
       max_posts:

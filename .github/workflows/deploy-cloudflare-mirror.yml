@@ -21,7 +21,7 @@ on:
   workflow_run:
     # Groq commits use GITHUB_TOKEN and do not trigger ordinary push workflows.
     # Publish the post-backfill main data only after a successful trusted run.
-    workflows: ["Daily CT Intelligence Map Update", "Retire Judicial collection", "Refresh daily collection status", "Apply CT Atlas usage upgrade", "Deploy current CT Atlas UI", "Enrich RADNUC — six months, all collection languages", "Enrich specialist categories", "Gemini Chinese eight-category historical backfill", "Groq Free - six-month CBRNE and Chinese historical backfill", "Groq Free - six-month Biological historical backfill", "Reconcile daily dataset integrity"]
+    workflows: ["Daily CT Intelligence Map Update", "Retire Judicial collection", "Refresh daily collection status", "Apply CT Atlas usage upgrade", "Deploy current CT Atlas UI", "Enrich RADNUC — six months, all collection languages", "Enrich specialist categories", "Gemini Chinese eight-category historical backfill", "Groq Free - six-month CBRNE and Chinese historical backfill", "Groq Free - six-month Biological historical backfill", "Groq Free - Biological historical backfill (cancelled)", "Reconcile daily dataset integrity"]
     types: [completed]
     branches: [main]
 

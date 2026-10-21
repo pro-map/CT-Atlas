@@ -10717,6 +10717,11 @@ def consolidate_incidents(events, state=None, max_calls=None, now=None, use_gemi
 def main():
     global COLLECTION_SCOPE, COLLECTION_STATUS
     is_backfill, COLLECTION_SCOPE = parse_collection_mode()
+    if is_backfill:
+        import backfill_control
+        if not backfill_control.history_enabled(Path(__file__).resolve().parent):
+            print('Historical backfills cancelled by operator; daily collection remains enabled.')
+            return
     effective_config = collection_config.validate_runtime(globals())
     print('Effective configured collection: ' + json.dumps(effective_config, ensure_ascii=False))
     if is_backfill:
