@@ -777,7 +777,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-10-22T14:55:57.405522+00:00",
-  "number_of_events": 4644,
+  "number_of_events": 4642,
   "events": [
     {
       "id": "1d4b4518efecf6c4",
@@ -495215,7 +495215,8 @@
       "is_attack": false,
       "incident_anchor": "Somalia security operations against al-Shabaab 2026-06-02",
       "update_type": "INITIAL",
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "02083d4cd0060e23",
@@ -495825,7 +495826,8 @@
       "cbrn_subgroups": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "reported_status": "CONFIRMED",
-      "threat_categories": []
+      "threat_categories": [],
+      "dedup_review_required": true
     },
     {
       "id": "27a076f4af94c454",
@@ -496311,7 +496313,8 @@
       "dedup_confidence": 0.636,
       "dedup_methods": [
         "actor_country_action_signature"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "98893312dfa46487",
@@ -496390,7 +496393,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Joint operation involving Nigeria against ISWAP.",
       "ai_geo_fingerprint": "71b8889b8bb46f5fbcdee772897447546df638dabb55daf7b90fd384eee7c2ec",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "59f4444245cef281",
@@ -497060,7 +497064,7 @@
       "collection_locale": "ES:es",
       "published": "2026-05-28T07:00:00+00:00",
       "source": "Castilla-La Mancha Media - CMM",
-      "source_count": 3,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQZlRtb0ZuM0xOLWdKZUZfR3lhTGNiS1Q5aDcwTFJSSFNkd0hKNFlscmctd1lxTzFMU1hTYnc0dWNCR0Zia0trMnM5c2xHLVZULV95OFlhUDg2ZHhFeGwteEZ3azQybWJzWEdMUk1ZSlRyc214UVlDWFJXUXJOMVZ3XzlNUXdGTWhHMmtGaUpxSXZOWldLamZOVVZxbmNIbnRaWWFzU9IBqgFBVV95cUxQdGs3dWlJTVVSQzFjS2FLOUNnSTZ5UC1JaVB4WElRM2lMUEtnTGt0Z0c5R3F5ZXpnTFJaOXRIdGdUaVJTVmpQdFdtWERhN0E4OVRNM2FJbzZxQ0ctYTdKNlAwX0NFOU5FQkQ0STdzVUN0Zm1hOWNBa3hyRUhxa0swMzZXeWxpOWVuZ2s5S1lfQWdTeWt4ZUZ1cGx0UHBKMGs2alJmeUR6b0J4QQ?oc=5",
       "collector": "Google News RSS",
       "country": "Spain",
@@ -497075,7 +497079,8 @@
       "sources": [
         "Castilla-La Mancha Media - CMM",
         "Onda Regional de Murcia | ORM",
-        "20Minutos"
+        "20Minutos",
+        "EL PAÍS"
       ],
       "related_articles": [
         {
@@ -497095,9 +497100,18 @@
           "published": "2026-05-29T07:00:00+00:00",
           "source": "20Minutos",
           "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNVGc5MHlZNUhoRGVGUTdrbzZpaTBFeHhkc3p1THRLRTlvMENuTGtoMmpFUHFmSkZ1dW1NMnRxeU5jdGRxSkNYdjFTb3hLa2JyS3c1eVFob2w5YWhLd09ud3hHOFFNbDlnOTctU3hRdG84RkFWZGpYQWtfaUpOZURVc2JJSXVuZDVCZnlLWjlTWDlHbHFNWGNYQ0RIRWpIdkZaY0h3Y2VxLUZ3SF8wdlM3RHJmbThzdjMxNjEzUUowdzVjWHNZTzNWbVRGdS1yQdIB0wFBVV95cUxPSFdsb05aVXRtZndtVDFNa2Q2NDdsVHBXM04tb1dybW1BdlFsLXItVnc3RnpGRng0RjJpOWpYYVZWbTR6LVl6aUhoMXRsNzdOWGVjQVVtYU1aR1JmaGNEWG9TNGlDUDNlakdyMWF5S0ZHVmFrNExqbTNQQkJSc2lIclpzT2pFekExbURrOGd0bzhkTlZqNXdVQmZCbWJ4V2puYlZSdFZJQVR1NzBGVi1MSXREVjVQTldjOFhncHh4SG5HRVFxNGF6QXZGUlRDMEs0QkYw?oc=5"
+        },
+        {
+          "title": "Six members of Tren de Aragua arrested in Spain",
+          "original_title": "Detenidos seis miembros de Tren de Aragua, la “violentísima” banda detrás del asalto y secuestro del empresario que financió a Alvise",
+          "original_language": "es",
+          "summary": "Authorities in Spain have arrested six members of the Tren de Aragua gang linked to the kidnapping and assault of an businessman.",
+          "published": "2026-05-28T07:00:00+00:00",
+          "source": "EL PAÍS",
+          "url": "https://news.google.com/rss/articles/CBMiiwJBVV95cUxNUE9DRFJhd0cyZm9ydVRWVF9Fc3g3Z09ram83MVBsODBPUU9lWDR0UllmMzhxc0pnUXZCZksyMG5QSms4cEVZZVhCWE5DUXdDc2pHN2xYanZrT1p3NWVWYW1fWGVHZ2Vpai1xVjdGT2FUTUtQQUY1aVVCV3diN2xkeWFIbWliVXJ4SGJEZ2FpY0RGUXR4dUc4Qk1QdmQxUzkxbG03WnRUZkJjcElVUExjQ3AxckZEOWVLbk1wYVdVNnp0RFRvWl94Z2g2RFVzWXhrZk83SGU2VnhQRlNZY0lXMDBSV0pJQU5lV1JLb3F0RVA3cktTdnRmRXdVdDczZzFtQnNRMUVIV0tPMGvSAZ8CQVVfeXFMT2dubUVuZDcwcnFmbWplajE0VzVkY0hUMTF5dkJRN2Ntam1qQUxMVzlpcW5oVDBGcWVYVFlSaUI1UmVPSE42bXJRRzFCVjBUOUhKcU9GVFVFeXVMZm1kWHB4NzNMOC00YURYamJSMG9KOG9IYTVqaVVjbnhuTFF6VzNOYi1ZNDBuVll0cjFSUENEZXFBdU5xYjJ0LUY0dG9tM1hZQUwzWkdkSTFxZVVqYTlsSDRVUHBHUUZjbkhWSlJFZUtuczhGLTJ2VVhyNDJjaFhfbl9QR1dBdjRzZlF1VWtXNks1dDc3cjNmTlNkYW5EZ0tKY0Q3ZjhYRVd3ZHhUenZDaWotWnVKSzg0ZnNOWFFiQ0U0XzZOcnhCWmt0NGs?oc=5"
         }
       ],
-      "article_count": 3,
+      "article_count": 4,
       "first_reported": "2026-05-28T07:00:00+00:00",
       "last_reported": "2026-05-29T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -497127,7 +497141,9 @@
       "ai_geo_inferred": false,
       "actor_group": "",
       "incident_id": "inc-5f3b09c6f4befae9",
-      "source_article_fingerprints": [],
+      "source_article_fingerprints": [
+        "a03e1a5460e3910f84bc16f07834b406a3c8ddb2ff9da4ad7f14431b7634f724"
+      ],
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_incident"
@@ -497135,7 +497151,8 @@
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
       "incident_anchor": "Spanish security forces counter-terrorism sweep against jihadism 2026-05-28",
-      "update_type": "INITIAL"
+      "update_type": "INITIAL",
+      "cbrn_subgroups": []
     },
     {
       "id": "d072a9a4e04cf2b1",
@@ -497629,83 +497646,6 @@
       "dedup_methods": [
         "same_url"
       ]
-    },
-    {
-      "id": "c12a531c023f48b3",
-      "category": "Arrests",
-      "categories": [
-        "Arrests"
-      ],
-      "title": "Six members of Tren de Aragua arrested in Spain",
-      "summary": "Authorities in Spain have arrested six members of the Tren de Aragua gang linked to the kidnapping and assault of an businessman.",
-      "original_title": "Detenidos seis miembros de Tren de Aragua, la “violentísima” banda detrás del asalto y secuestro del empresario que financió a Alvise",
-      "original_summary": "Detenidos seis miembros de Tren de Aragua, la “violentísima” banda detrás del asalto y secuestro del empresario que financió a Alvise EL PAÍS",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish / Latin America",
-      "collection_locale": "MX:es-419",
-      "published": "2026-05-28T07:00:00+00:00",
-      "source": "EL PAÍS",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiiwJBVV95cUxNUE9DRFJhd0cyZm9ydVRWVF9Fc3g3Z09ram83MVBsODBPUU9lWDR0UllmMzhxc0pnUXZCZksyMG5QSms4cEVZZVhCWE5DUXdDc2pHN2xYanZrT1p3NWVWYW1fWGVHZ2Vpai1xVjdGT2FUTUtQQUY1aVVCV3diN2xkeWFIbWliVXJ4SGJEZ2FpY0RGUXR4dUc4Qk1QdmQxUzkxbG03WnRUZkJjcElVUExjQ3AxckZEOWVLbk1wYVdVNnp0RFRvWl94Z2g2RFVzWXhrZk83SGU2VnhQRlNZY0lXMDBSV0pJQU5lV1JLb3F0RVA3cktTdnRmRXdVdDczZzFtQnNRMUVIV0tPMGvSAZ8CQVVfeXFMT2dubUVuZDcwcnFmbWplajE0VzVkY0hUMTF5dkJRN2Ntam1qQUxMVzlpcW5oVDBGcWVYVFlSaUI1UmVPSE42bXJRRzFCVjBUOUhKcU9GVFVFeXVMZm1kWHB4NzNMOC00YURYamJSMG9KOG9IYTVqaVVjbnhuTFF6VzNOYi1ZNDBuVll0cjFSUENEZXFBdU5xYjJ0LUY0dG9tM1hZQUwzWkdkSTFxZVVqYTlsSDRVUHBHUUZjbkhWSlJFZUtuczhGLTJ2VVhyNDJjaFhfbl9QR1dBdjRzZlF1VWtXNks1dDc3cjNmTlNkYW5EZ0tKY0Q3ZjhYRVd3ZHhUenZDaWotWnVKSzg0ZnNOWFFiQ0U0XzZOcnhCWmt0NGs?oc=5",
-      "collector": "Google News RSS",
-      "country": "Spain",
-      "country_code": "ES",
-      "city": "Madrid",
-      "region": null,
-      "latitude": 40.4165,
-      "longitude": -3.70256,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "a03e1a5460e3910f84bc16f07834b406a3c8ddb2ff9da4ad7f14431b7634f724"
-      ],
-      "sources": [
-        "EL PAÍS"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-05-28T07:00:00+00:00",
-      "last_reported": "2026-05-28T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 60,
-      "ai_relevance_reason": "Reports concrete operational arrests of a transnational militant/criminal group.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "Tren de Aragua",
-      "primary_event_type": "ARREST",
-      "is_attack": false,
-      "incident_anchor": "Arrest of Tren de Aragua members Spain 2026-05-28",
-      "update_type": "INITIAL",
-      "incident_id": "inc-b040b3dc1ec7b30f",
-      "translated_to_english": true,
-      "ai_canonical_event": "Arrest of Tren de Aragua members in Spain",
-      "title_variants": [
-        "Arrest of Tren de Aragua members in Spain"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_categories": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Authorities in Spain have arrested six members of the Tren de Aragua gang"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Arrests took place in Spain.",
-      "ai_geo_fingerprint": "0aec5ae77ea4bc43280b05c1ae2afe9639f80ea801d4755a32ac4b943ed5d757",
-      "ai_geo_inferred": false
     },
     {
       "id": "0c02730ff09e0450",
@@ -499778,7 +499718,8 @@
       "cbrn_subgroups": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "reported_status": "SUSPECTED",
-      "threat_categories": []
+      "threat_categories": [],
+      "dedup_review_required": true
     },
     {
       "id": "79f69b7d8b831276",
@@ -500824,7 +500765,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Hostages held by pirates off the coast of Somalia.",
       "ai_geo_fingerprint": "600833a99e9e502b0d8c93dcdf1ab886a74fb5e4dc52bdf4fdbcd6d82734a817",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "544981905d10bea4",
@@ -502429,7 +502371,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Analytical overview regarding the death of ISWAP commander Al-Minuki, whose context relates to Nigeria.",
       "ai_geo_fingerprint": "d6ea96ae75b78dcde4eeb7b2dd9ecd9443b80a903d5c022167893b8d580d6de2",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "4561159e20c03948",
@@ -502658,7 +502601,8 @@
       "is_attack": false,
       "incident_anchor": "Joint US-Nigerian operation killing Islamic State senior leader 2026-05-16",
       "update_type": "INITIAL",
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "ab7e1731df39ce9c",
@@ -502906,7 +502850,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Elimination of ISWAP No. 2 (Al-Minuki) announced in joint operations involving Abuja.",
       "ai_geo_fingerprint": "6e1c8e47a48c0aed75755cd9d39ab948bad4b2489e789bf0f40f2fcdd40d8291",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "1c9c2173072025d0",
@@ -502985,7 +502930,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The Nigerian military and presidency confirmed the identity of the killed ISWAP commander.",
       "ai_geo_fingerprint": "ebef08dfd14dcdc06d6b7762a0ef4ddfdb895ea56919e8fc6a76e7ed2fce999a",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "f34a995e0b0b120d",
@@ -503556,101 +503502,6 @@
       "update_type": "INITIAL"
     },
     {
-      "id": "ee2f489427058320",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Somali pirates hike ransom demand for hijacked tanker to $10m",
-      "summary": "Somali pirates have increased their ransom demand to $10 million for a previously hijacked chemical tanker.",
-      "original_title": "Somali pirates hike ransom demand for hijacked tanker to $10m",
-      "original_summary": "Somali pirates hike ransom demand for hijacked tanker to $10m TradeWinds News",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-05-14T07:00:00+00:00",
-      "source": "TradeWinds News",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNZUdNT0hHbTRoSklqM0pPTlJJMmg0TWREdnVrb1FuV1lkekJmbUdNd2UwVlpiQXZtdTNhdi13d2ppdXBMSWtvaXdvMWkzakp3cVJXZ21mMUlMYVJIMkpEcFN4WFllR1Q5OHZUVEJiUXBLeGx0VE9JRWZRYmpwLTAtTEx6U1BJR1pUVVl0S2pjcjZfT25jN1VXZW5wb3JZN1RTMDNQX2dnbGxINlB2aHlaSg?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "TradeWinds",
-      "targeted_source_kind": "specialist_media",
-      "sources": [
-        "TradeWinds News",
-        "Hiiraan Online"
-      ],
-      "related_articles": [
-        {
-          "title": "Somali pirates demand ransom for tanker",
-          "original_title": "Somali pirates reportedly demand $10M to release small product tanker",
-          "original_language": "en",
-          "summary": "Somali pirates are reported to be demanding $10 million for the release of a captured product tanker.",
-          "published": "2026-05-14T07:00:00+00:00",
-          "source": "Hiiraan Online",
-          "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQeFNXWmtYTlVERGE4azMyZ1dyc1JPOFMtdmNQUVU2OUt2S09ya1JzZ0Q0NlVsbEVKMWg3Q0xIWHdIVlFMY0dKaE5DYnVNZ0EzUk81dkFvT0xXRXVVQVV6SF93V2I4TjBIdnNGWXlTSUNSamxLeUVTY05BZ3haaFJSQmlkQ2h6Y2JxSEVNNmdxekltdUJIMVA4MElNNDBJLS1VZlJPUHZaZ1BQVzA2T2VEbjlOaThBNE9Hd2pz?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-05-14T07:00:00+00:00",
-      "last_reported": "2026-05-14T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Concrete operational update in an ongoing maritime piracy hijacking case.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Somali pirates increase ransom demand for hijacked tanker",
-      "title_variants": [
-        "Somali pirates increase ransom demand to $10 million for hijacked tanker",
-        "Somali pirates increase ransom demand for hijacked tanker"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Somali pirates hike ransom demand"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Piracy incident associated with Somali pirates.",
-      "ai_geo_fingerprint": "213f2989460f860859be58473ee4a7ef1f1e1c50d2961d8728be74c57a5de377",
-      "ai_geo_inferred": true,
-      "actor_group": "",
-      "incident_id": "inc-90314a67d77f22a7",
-      "primary_event_type": "PIRACY",
-      "is_attack": false,
-      "incident_anchor": "Somali pirate tanker hijacking ransom 2026",
-      "update_type": "FOLLOW_UP",
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [],
-      "source_article_fingerprints": [
-        "4f3752b17778c2466418906bcfbcca14ff03ce55d13d0cef91fb8546e9cb44d5"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "very_high_title_similarity"
-      ]
-    },
-    {
       "id": "a64c3ad26c1f0b1e",
       "category": "Arrests",
       "categories": [
@@ -503828,7 +503679,7 @@
       "collection_locale": null,
       "published": "2026-05-13T07:00:00+00:00",
       "source": "Marine Insight",
-      "source_count": 4,
+      "source_count": 6,
       "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPdDI0Q0VUQkd0bnNtYWM2d05BMnlicWF4Mi1NaWZXb2FJUUZlZGtfZHptZ3dIQklOTlVlcWpJc1R3VGV0bkp1ZUNtbjVTQ0pZcmhyTEtJMnhPczNTTnprR2JyZWwwdFlURTNFY0VCYXFoZU84dXg1WEM0VkZHVFROaGNWekxVc1g1RUdxM2p5dm1VT3BQX0o0cWJnd0NYODltQTJWS21mS1MwVFV0SzY5UGY0Q2JLYkczSEhVZ3lHdUhkQlA1Y0MyYjNmaDJBc1U?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -503843,7 +503694,9 @@
         "Marine Insight",
         "The Express Tribune",
         "Pakistan Today",
-        "Marine Link"
+        "Marine Link",
+        "TradeWinds News",
+        "Hiiraan Online"
       ],
       "related_articles": [
         {
@@ -503872,9 +503725,27 @@
           "published": "2026-05-13T07:00:00+00:00",
           "source": "Marine Link",
           "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQNjc5NlFvOE5SSEx6Nnh2OVhZYS1VX29KUUt6UjhqTmJ3R19MaEtnUnk4cWZyU0dhNTdHTThvX1c0NFltdmZyVjFDeTFoR1FFZUZ6M2t3WGo1R2J5WElUVGJ2d3JsR20yUENNZ0x3S3VZZEJzY1VQZ3NvbmFGb1V2bkpuS3k?oc=5"
+        },
+        {
+          "title": "Somali pirates hike ransom demand for hijacked tanker to $10m",
+          "original_title": "Somali pirates hike ransom demand for hijacked tanker to $10m",
+          "original_language": "en",
+          "summary": "Somali pirates have increased their ransom demand to $10 million for a previously hijacked chemical tanker.",
+          "published": "2026-05-14T07:00:00+00:00",
+          "source": "TradeWinds News",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNZUdNT0hHbTRoSklqM0pPTlJJMmg0TWREdnVrb1FuV1lkekJmbUdNd2UwVlpiQXZtdTNhdi13d2ppdXBMSWtvaXdvMWkzakp3cVJXZ21mMUlMYVJIMkpEcFN4WFllR1Q5OHZUVEJiUXBLeGx0VE9JRWZRYmpwLTAtTEx6U1BJR1pUVVl0S2pjcjZfT25jN1VXZW5wb3JZN1RTMDNQX2dnbGxINlB2aHlaSg?oc=5"
+        },
+        {
+          "title": "Somali pirates demand ransom for tanker",
+          "original_title": "Somali pirates reportedly demand $10M to release small product tanker",
+          "original_language": "en",
+          "summary": "Somali pirates are reported to be demanding $10 million for the release of a captured product tanker.",
+          "published": "2026-05-14T07:00:00+00:00",
+          "source": "Hiiraan Online",
+          "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQeFNXWmtYTlVERGE4azMyZ1dyc1JPOFMtdmNQUVU2OUt2S09ya1JzZ0Q0NlVsbEVKMWg3Q0xIWHdIVlFMY0dKaE5DYnVNZ0EzUk81dkFvT0xXRXVVQVV6SF93V2I4TjBIdnNGWXlTSUNSamxLeUVTY05BZ3haaFJSQmlkQ2h6Y2JxSEVNNmdxekltdUJIMVA4MElNNDBJLS1VZlJPUHZaZ1BQVzA2T2VEbjlOaThBNE9Hd2pz?oc=5"
         }
       ],
-      "article_count": 4,
+      "article_count": 6,
       "first_reported": "2026-05-13T07:00:00+00:00",
       "last_reported": "2026-05-15T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -503905,7 +503776,8 @@
       "actor_group": "",
       "incident_id": "inc-653f012858509371",
       "source_article_fingerprints": [
-        "15d892b9050259fbcf116068102bcca1a600678b455b77ce617d48bfce521848"
+        "15d892b9050259fbcf116068102bcca1a600678b455b77ce617d48bfce521848",
+        "4f3752b17778c2466418906bcfbcca14ff03ce55d13d0cef91fb8546e9cb44d5"
       ],
       "dedup_confidence": 1.0,
       "dedup_methods": [
@@ -503919,7 +503791,8 @@
       "actor_scope": "NON_STATE",
       "cbrn_subgroups": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": []
+      "threat_categories": [],
+      "dedup_review_required": true
     },
     {
       "id": "d1906a54b7f6acac",
@@ -504654,7 +504527,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Maritime piracy and hijacked dhows reported in Somalia.",
       "ai_geo_fingerprint": "12da4df8aa8284df65a251e3ea6f232530f0649ca38f3393ed008fc9bff0bb0a",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "b8c4b3494633856a",
