@@ -777,7 +777,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-10-21T21:14:13.765491+00:00",
-  "number_of_events": 4632,
+  "number_of_events": 4621,
   "events": [
     {
       "id": "9b89f788d7399cb7",
@@ -14875,85 +14875,6 @@
       "ai_geo_inferred": false
     },
     {
-      "id": "cb72a03fe579e80b",
-      "category": "Biological Terrorism",
-      "categories": [
-        "Biological Terrorism"
-      ],
-      "title": "Suspicious Letters Containing White Powder Received by Arizona Lawmakers",
-      "summary": "Three Arizona lawmakers received suspicious letters containing white powder, prompting security investigations.",
-      "original_title": "白粉信件再现 亚省三名国会议员收到可疑信件",
-      "original_summary": "白粉信件再现 亚省三名国会议员收到可疑信件 Arizona Chinese News",
-      "original_language": "zh",
-      "collection_language": "zh",
-      "collection_language_name": "Chinese (Simplified)",
-      "collection_locale": "CN:zh-Hans",
-      "published": "2026-10-20T03:30:57+00:00",
-      "source": "Arizona Chinese News",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQNFV0d3dvX2tHQ21RMlB6dGRGTFJieEk4dzhsSlhWZGFxam9EWVFGUkNQbWJhdUZ2a3RPbklOWi0xcXJHYnZlUVBqUlotN0tRMEJVVzVJeGFCYjNVbzYyLVd5M1Y4S2lnZVRRVE94WkNJNVczeV9wb3pQTklIUWRUZ01wckw3TU1JQ1M4bHM1OA?oc=5",
-      "collector": "Google News RSS",
-      "country": "United States",
-      "country_code": "US",
-      "city": null,
-      "region": "Arizona",
-      "latitude": 34.0489,
-      "longitude": -111.0937,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "ef444d07a657c3204e06e494ec4449a05c5653e52aeba5b05ccbac4274706198"
-      ],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Biological Terrorism"
-      ],
-      "cbrn_subgroups": [],
-      "sources": [
-        "Arizona Chinese News"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-20T03:30:57+00:00",
-      "last_reported": "2026-10-20T03:30:57+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Qualifies under provisional Bio monitoring rules for suspicious mail/powder incidents targeting elected officials.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CBRN",
-      "is_attack": false,
-      "incident_anchor": "Suspicious powder letters Arizona lawmakers 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-d81fde36be6d589b",
-      "translated_to_english": true,
-      "ai_canonical_event": "Suspicious white powder letters Arizona lawmakers",
-      "title_variants": [
-        "Suspicious white powder letters Arizona lawmakers"
-      ],
-      "actor_scope": "UNKNOWN",
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Arizona"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Arizona lawmakers received suspicious letters.",
-      "ai_geo_fingerprint": "42c0a6e76357d4bb85c756d1dc2332057e151e7ab1b35011a2c4a0b941c75721",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "0a6cb1102e5ea5f3",
       "category": "Arrests",
       "categories": [
@@ -15034,85 +14955,6 @@
       "ai_geo_fingerprint": "fb4b445c33a2ce10a2dd9d9d6c5b96b7e5248a10c5bbbd489609e304a1464e1d",
       "ai_geo_inferred": false,
       "threat_categories": []
-    },
-    {
-      "id": "9437ed77e8c42836",
-      "category": "Biological Terrorism",
-      "categories": [
-        "Biological Terrorism"
-      ],
-      "title": "Investigation Into Suspicious Envelope Sent to Representative Debbie Wasserman Schultz's Office",
-      "summary": "Authorities are investigating a suspicious envelope sent to US Representative Debbie Wasserman Schultz's office in Florida.",
-      "original_title": "Investigan envío de sobre sospechoso a oficina de la representante Debbie Wasserman Schultz en Florida",
-      "original_summary": "Investigan envío de sobre sospechoso a oficina de la representante Debbie Wasserman Schultz en Florida Telemundo Miami",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish",
-      "collection_locale": "ES:es",
-      "published": "2026-10-20T02:42:35+00:00",
-      "source": "Telemundo Miami",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPaklBVDhfRFJhclZwcmVaZzJoWWFERms2Mi1aZGxxTzctQmRqY3hLdlRPVzV3Vlc3amM2R2FPYlo0RGw0REpjaUxQSEZwdXgxd252LUxmQzhFWklqUi1EUmQ1NmtQV1ZGYjY2YUFuVkhCR1dQWFlZVTc1eDhPTEZVMmgzQWdhdmMxQjJTZ01zV2t1UG9pLUtZR1p1VGY3LXdyRFBleDB0b2s1dDIyT3BHTU1ReURfZGVYR0Y2TGR6bzQ4dXhiYXVGZzJUVzBsTHhwQ0pLUVM1UVJ0OFZnSkpvRE5nR1ZzOU1aSlHSAfIBQVVfeXFMT2UzN1YyWFZkQkw0VGZOYW5GbERfM0dQWkhWVmtSUUhUUUIxMmg4ajVMa1B6QzJNR09aVERJcS1YVmdqVGUySlJJazRLSkdsQk9TWlBWV0pJVWpSUHRwQUViNURtYTFrQ3ZCYm5OWEdyZE80cnVERnBPLWlrallkVEQwaER1OTY4SHdFYVBJTFctbThqdnZwMFZWQkY4NXdSSVZFckZyS2hKUmJ1ODZRWnRfVHBibkNqVkF4R2hySDZoT0t6cDV4bWptZFV5aEl1VVNoM3dVXzE5LXpHTGlLTFNuNVdxbkRBRjA4TmEyaXhsY3c?oc=5",
-      "collector": "Google News RSS",
-      "country": "United States",
-      "country_code": "US",
-      "city": null,
-      "region": "Florida",
-      "latitude": 27.6648,
-      "longitude": -81.5158,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "7f6a4adf0dbaf9f3a18f50aa3e515f457473729bd0252abc2881465cb8d1147b"
-      ],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Biological Terrorism"
-      ],
-      "cbrn_subgroups": [],
-      "sources": [
-        "Telemundo Miami"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-20T02:42:35+00:00",
-      "last_reported": "2026-10-20T02:42:35+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Qualifies under provisional Bio monitoring rules for suspicious mail incidents targeting an elected official's office.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CBRN",
-      "is_attack": false,
-      "incident_anchor": "Suspicious envelope Debbie Wasserman Schultz office Florida 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-5bf175c0f88b659a",
-      "translated_to_english": true,
-      "ai_canonical_event": "Suspicious envelope investigation Debbie Wasserman Schultz office Florida",
-      "title_variants": [
-        "Suspicious envelope investigation Debbie Wasserman Schultz office Florida"
-      ],
-      "actor_scope": "UNKNOWN",
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Florida"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Suspicious envelope sent to representative's office in Florida.",
-      "ai_geo_fingerprint": "bcf21258d4e464a1c24aabaef89c40120a5b0ad9777a685c9e76bd2cc33f9a29",
-      "ai_geo_inferred": false
     },
     {
       "id": "fb540746fd6999be",
@@ -15834,85 +15676,6 @@
       "ai_geo_inferred": false
     },
     {
-      "id": "8e8a07ec200f05a4",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Cuba accuses US after speedboat raid",
-      "summary": "Cuba accuses the United States of allowing terrorists to operate with impunity following a speedboat raid incident.",
-      "original_title": "Cuba accuses US of letting terrorists operate with impunity after speedboat raid",
-      "original_summary": "Cuba accuses US of letting terrorists operate with impunity after speedboat raid Reuters",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-10-20T00:50:00+00:00",
-      "source": "Reuters",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxOZVlrd2ZUN2tTTmJpa1ZUbHZlV2hsWXJmc3Z2NWRBWC1HY1JRa1dMS2NFQmwwZEs5YlU1c0JSTlFPOElRb2Z3Y1R4SUNJY1VDNzVCeElwWVVKM3I2ZDVSdUhCUVFKOFBWYnJIWW1TZ19hcmtKbXpmWGwyby11UWpUTlBhUWVZcV8zZlZDNG0xVHZSbjc2UXpINWUxdUlKZHBnYWNYQ2JXak1UNkJwTmswQm84cEM3UDBwR0ZHc3UzMVNkb0lFV3hr?oc=5",
-      "collector": "Google News RSS",
-      "country": "Cuba",
-      "country_code": "CU",
-      "city": "Havana",
-      "region": null,
-      "latitude": 23.13302,
-      "longitude": -82.38304,
-      "location_precision": "country_capital",
-      "location_confidence": "medium",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "Reuters",
-      "targeted_source_kind": "international_media",
-      "source_article_fingerprints": [
-        "8820de89d3cba17310b091fca9d04e4ef4296a52d3320dd32653b9560d822904"
-      ],
-      "sources": [
-        "Reuters"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-20T00:50:00+00:00",
-      "last_reported": "2026-10-20T00:50:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Reports on an armed speedboat raid incident and resulting international allegations.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Cuba speedboat raid 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-b839098da1111f4a",
-      "translated_to_english": false,
-      "ai_canonical_event": "Cuba accuses US after speedboat raid",
-      "title_variants": [
-        "Cuba accuses US after speedboat raid"
-      ],
-      "actor_scope": "UNKNOWN",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.8,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Cuba accuses US of letting terrorists operate with impunity after speedboat raid"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The incident stems from a speedboat raid involving Cuba.",
-      "ai_geo_fingerprint": "061394f383d7d78d1acfccc3a95ed658bed83b65ee51f6c002c04d5bb1ce8859",
-      "ai_geo_inferred": true,
-      "threat_categories": []
-    },
-    {
       "id": "d85d0033ca39dd77",
       "category": "Chemicals and Explosives",
       "categories": [
@@ -16364,199 +16127,6 @@
       "ai_geo_inferred": false
     },
     {
-      "id": "7e203596fe64d0dc",
-      "category": "Biological Terrorism",
-      "categories": [
-        "Biological Terrorism"
-      ],
-      "title": "Suspicious envelope triggers evacuation at Rep. Subramanyam’s Leesburg office",
-      "summary": "A suspicious envelope triggered an evacuation at US Representative Suhas Subramanyam's Leesburg office.",
-      "original_title": "Suspicious envelope triggers evacuation at Rep. Subramanyam’s Leesburg office",
-      "original_summary": "Suspicious envelope triggers evacuation at Rep. Subramanyam’s Leesburg office KOKI FOX 23",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-10-20T00:31:08+00:00",
-      "source": "KOKI FOX 23",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMixAJBVV95cUxPaTVWNnZMZXk5Y0pYbk1QdG8ya0NkOGtaSlV2d0VTT21ycFZVRXFMcXlhZlNEanBiUDJfWm0yRl9SZExONzlZMkt2WW50UlVzdHZVQkxndjJvVGV1M2lCVmtjdXJxWVFCMmZkT2xlM01XUXhyRHdDYUQ1NXFDSW02UXQwaXNGZzBNY0pKOE1IbTI1a1doVUJOMjlaeW53dEk2Y2dPWUxPRmZib2xwTV80R2F0OXRubldCNk9rMFBsN2VxSWhseXE2TDFKOV9UY1d3ZDlHOFZpODAtc19Ma2E5d3haV1RDT01obDF3OWotWk85WUlZbmJSSVNYNFV3bWREWC1lTzdCdkl5TE9PLTJjQTNaajdjd1FCVEhCc3BFck14NUJyNHJPVUtxeVBTMTUxSC01Ync4U3pPSG1Cc21nSmJIbDM?oc=5",
-      "collector": "Google News RSS",
-      "country": "United States",
-      "country_code": "US",
-      "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
-      "source_article_fingerprints": [
-        "30d3274bde8c74f6920c948fae104dbc605d9c266cb78812928f7f7663b1fa88",
-        "a522b0f609015c22d5d5c707380fd25b4afb0c97681d0157e06e39263197c0f9",
-        "ac3a53f97cd2665219a842019eb2926561bfb1282a8c08f4f9a93de82d446396"
-      ],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Biological Terrorism"
-      ],
-      "cbrn_subgroups": [],
-      "sources": [
-        "KOKI FOX 23",
-        "UA.NEWS"
-      ],
-      "related_articles": [
-        {
-          "title": "US Congressman Subramaniam's office evacuated due to suspicious substance",
-          "summary": "The office of a US Congressman was evacuated following the discovery of a suspicious substance.",
-          "original_title": "美国国会议员苏布拉马尼亚姆办公室因可疑物质被疏散——The Hill",
-          "original_summary": "美国国会议员苏布拉马尼亚姆办公室因可疑物质被疏散——The Hill UA.NEWS",
-          "original_language": "zh",
-          "source": "UA.NEWS",
-          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOYjIwM09haVJtdFh4U0hkN3FlUW44MEg4LXpHT2dFVUZPUm9pUmp5ME1VUm16aWN1c0t1WHJTM0ZxNUJ4bmZsQ2NlNm1qU1M1MTFFeFp6WWg5S2FtUURENnZMQ1NBTm5FSnJCS0hCWURzY2VjdC1PRUd1d244aWdXXzNUUm5WeFRIeWp1SnVnUE9MVDNkQVVmUWtmMHBvYkNlQVU0M3VXMjh0M3pXUWc?oc=5",
-          "published": "2026-10-19T12:43:00+00:00"
-        },
-        {
-          "title": "Офис конгрессмена Субраманьяма в США эвакуировали из-за подозрительного вещества — The Hill",
-          "original_title": "Офис конгрессмена Субраманьяма в США эвакуировали из-за подозрительного вещества — The Hill",
-          "original_language": "ru",
-          "summary": "Офис конгрессмена Субраманьяма в США эвакуировали из-за подозрительного вещества — The Hill UA.NEWS",
-          "published": "2026-10-19T17:47:15+00:00",
-          "source": "UA.NEWS",
-          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOWnc3RV9fS2JCclVTUnpIUnB6d2pzY2lUeEZuMEpvTzZJNzY5ZGQ1cWZNVndaUWQ5MXJuRTVLVURKdTdKTHFDVDNweXhyUzItakxsdzRNYWRibGdkRURDX3RlVFZSZkRiWmlweGNvRWVMVHp0Zm43TmNlVHB5b3I2YmZqRURKNGMtQmt5SzVmdzhGTmlUWVQ2SHp2N0NDUUozRi1JVHlXN2V3TW4xeWc?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-10-19T12:43:00+00:00",
-      "last_reported": "2026-10-20T00:31:08+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Concrete suspicious mail incident involving office evacuation under provisional bio/suspicious package monitoring scope.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CBRN",
-      "is_attack": false,
-      "incident_anchor": "Leesburg office suspicious envelope 2026-10-20",
-      "update_type": "INITIAL",
-      "incident_id": "inc-51a5902a2db673b9",
-      "translated_to_english": false,
-      "ai_canonical_event": "Suspicious envelope incident at Rep. Subramanyam office in Leesburg",
-      "title_variants": [
-        "Suspicious envelope triggers evacuation at Rep. Subramanyam’s Leesburg office",
-        "US Congressman Subramaniam's office evacuated due to suspicious substance",
-        "Офис конгрессмена Субраманьяма в США эвакуировали из-за подозрительного вещества — The Hill"
-      ],
-      "actor_scope": "UNKNOWN",
-      "reported_status": "SUSPECTED",
-      "location_confidence_score": 0.5,
-      "location_method": "ai_unlocated",
-      "location_evidence": [
-        "Leesburg"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Suspicious envelope triggers evacuation at Leesburg office.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
-      "geolocation_requested_city": "Leesburg",
-      "ai_geo_fingerprint": "0d528973dc7e0fd1be2d7fbe4113918ac7288159357dfb7fef17e3fa829e5ca0",
-      "ai_geo_inferred": false,
-      "integrity_review_version": "map-evidence-review-20261022",
-      "integrity_review_reason": "Same Suhas Subramanyam office suspicious-mail evacuation in adjacent reporting dates, corroborated at the report level by name, office and action; no distinct follow-up stated.",
-      "duplicate_record_ids": [
-        "e1e8e57eeaab29cc"
-      ]
-    },
-    {
-      "id": "fce7f052204a3b9a",
-      "category": "Weapons",
-      "categories": [
-        "Weapons"
-      ],
-      "title": "Men who attempted to infiltrate Cuba confess; expert analysis determines high caliber of weapons",
-      "summary": "Confessions and forensic expert analysis regarding high-caliber weapons recovered from men who attempted infiltration in Cuba.",
-      "original_title": "Hombres que intentaron infiltrarse en Cuba confesaron; peritaje determina alto calibre de armas",
-      "original_summary": "Hombres que intentaron infiltrarse en Cuba confesaron; peritaje determina alto calibre de armas América TeVé",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish",
-      "collection_locale": "ES:es",
-      "published": "2026-10-20T00:14:52+00:00",
-      "source": "América TeVé",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOckJDRld3c0RwSXZwLXNuX2U3a1NrVy1IWXZIU2ZfZlRTQlh4SFdidXVrWkRSLTNuajlreWRBVUJUOUVLdzJJOVVLZlVHWEI4M1I1ZUhTZXRVMFRPUEJXS01OZkw5dENxRVNnU0dyYVdRd1VqUUZHLW01ZkdjbzZkYjVVTnJ3bHZzc1JtQWszdnpZQVJWWFJqLTZNMHhrZFVwZkJMWmFuV0E2VVBZVVJRU25YVWlpcmF0RWZndHdBTjAxcl8tVDdiQ9IByAFBVV95cUxOckJDRld3c0RwSXZwLXNuX2U3a1NrVy1IWXZIU2ZfZlRTQlh4SFdidXVrWkRSLTNuajlreWRBVUJUOUVLdzJJOVVLZlVHWEI4M1I1ZUhTZXRVMFRPUEJXS01OZkw5dENxRVNnU0dyYVdRd1VqUUZHLW01ZkdjbzZkYjVVTnJ3bHZzc1JtQWszdnpZQVJWWFJqLTZNMHhrZFVwZkJMWmFuV0E2VVBZVVJRU25YVWlpcmF0RWZndHdBTjAxcl8tVDdiQw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Cuba",
-      "country_code": "CU",
-      "city": "Havana",
-      "region": null,
-      "latitude": 23.13302,
-      "longitude": -82.38304,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "12b28b13237067629c9c538282f15ec7b07097b4c59dee13c64da82eb1d2d5fa"
-      ],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [],
-      "cbrn_subgroups": [],
-      "sources": [
-        "América TeVé"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-20T00:14:52+00:00",
-      "last_reported": "2026-10-20T00:14:52+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 70,
-      "ai_relevance_reason": "Reports a concrete infiltration attempt, confessions, and weapons seizures.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Cuba infiltration weapons seizure 2026-10-20",
-      "update_type": "INITIAL",
-      "incident_id": "inc-64f50c98f9df1890",
-      "translated_to_english": true,
-      "ai_canonical_event": "Infiltration attempt in Cuba with weapons recovery and confessions",
-      "title_variants": [
-        "Infiltration attempt in Cuba with weapons recovery and confessions"
-      ],
-      "actor_scope": "UNKNOWN",
-      "reported_status": "CONFIRMED",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Hombres que intentaron infiltrarse en Cuba confesaron"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The event involves men attempting to infiltrate Cuba.",
-      "ai_geo_fingerprint": "9be944e91a609ad39bba3fa41cdd6b82fc7bb5fef01d8cc3a5d0581bde2c83a9",
-      "ai_geo_inferred": false,
-      "integrity_review_version": "map-evidence-review-20261022",
-      "integrity_review_reason": "Retained source identifies high-calibre firearms, not chemical or explosive material.",
-      "integrity_source_evidence": "82d57c189f8123199c8b43f0626c3d38cdac8d40a2cb9457f22bd5730672be91"
-    },
-    {
       "id": "fa781fcd8c15b210",
       "category": "Arrests",
       "categories": [
@@ -16947,90 +16517,6 @@
       "ai_geo_inferred": false
     },
     {
-      "id": "8a37f8043bd36c3d",
-      "category": "Biological Terrorism",
-      "categories": [
-        "Biological Terrorism"
-      ],
-      "title": "White-powder letter sent to Napa office of Rep. Thompson",
-      "summary": "A suspicious letter containing white powder was received at the Napa office of US Representative Mike Thompson.",
-      "original_title": "White-powder letter sent to Napa office of Rep. Thompson",
-      "original_summary": "White-powder letter sent to Napa office of Rep. Thompson The Napa Valley Register",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-10-19T23:15:00+00:00",
-      "source": "The Napa Valley Register",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxNUzVIVmdyMFp3d0JOTjg3a0dHYjdBelF4VjU2RXBrZkdBZHBEWXFySEwxR2JsZVh5ZmxGVjBJVERmTktuRWI4LTlPVUJnZ0k1MkdJUm9uMzlEaGFFTFZFTXBvWkllZjdhMWFKaUZiTFBKcDlLZGM2RGZIaFZKbmhoM3JQdWxxZ3VTeTcyeUdlUzJ6NnRwdHBuRXFrR3RLMXd1N3dTOWVWRk4yR19YUzltSDlNcE55QjJkTTU3S0pFMGdELUJ4WWtBSV9GOGZvZEhLUHMxME04YWozVDdlUmh4UW9ibUJEWHcwQ2Z1bm1DZw?oc=5",
-      "collector": "Google News RSS",
-      "country": "United States",
-      "country_code": "US",
-      "city": "Napa",
-      "region": null,
-      "latitude": 38.29714,
-      "longitude": -122.28553,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "source_article_fingerprints": [
-        "1ba022c7a248b5ff6b80556bb6dff1b1caeacc223bd1e7caa7b667e2b49221a4",
-        "95090c01e127639624a8284e4840eb231e32d108e3bc351cea702c63aa95d1b2"
-      ],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Biological Terrorism"
-      ],
-      "cbrn_subgroups": [],
-      "sources": [
-        "The Napa Valley Register"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-19T23:15:00+00:00",
-      "last_reported": "2026-10-19T23:15:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Concrete suspicious-mail/powder incident targeting an official's office under provisional monitoring rules.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CBRN",
-      "is_attack": false,
-      "incident_anchor": "Napa office white powder letter 2026-10-19",
-      "update_type": "INITIAL",
-      "incident_id": "inc-af8da3eccc9b886d",
-      "translated_to_english": false,
-      "ai_canonical_event": "White powder letter sent to Rep. Thompson office in Napa",
-      "title_variants": [
-        "White powder letter sent to Rep. Thompson office in Napa"
-      ],
-      "actor_scope": "UNKNOWN",
-      "reported_status": "SUSPECTED",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_url"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "White-powder letter sent to Napa office of Rep. Thompson"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The suspicious letter was received at the Napa office in California.",
-      "ai_geo_fingerprint": "c98ba65474e763c33513e8136d46102fa53ddf2592b72d8c3d92b8009dbb9b39",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "df7b9f4d3e3345f3",
       "category": "Attacks",
       "categories": [
@@ -17399,104 +16885,6 @@
       "ai_geo_reason": "The event concerns an Arab-Israeli doctor prosecuted/imprisoned in Israel.",
       "ai_geo_fingerprint": "ecbf99cf4e0f723c29ff6c68ca77a42e98fd417f137ff7f44238694e3a08d38a",
       "ai_geo_inferred": true
-    },
-    {
-      "id": "aa17d79316ff12e4",
-      "category": "Biological Terrorism",
-      "categories": [
-        "Biological Terrorism"
-      ],
-      "title": "Al Green Reports Suspicious Envelope With Powder at Houston Office",
-      "summary": "U.S. Representative Al Green reported that a suspicious envelope received at his Houston office contained an unknown powder.",
-      "original_title": "Al Green says suspicious envelope at Houston office contained powder",
-      "original_summary": "Al Green says suspicious envelope at Houston office contained powder CW39 Houston",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-10-19T22:01:04+00:00",
-      "source": "CW39 Houston",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE11c09tRU54eldBUzhKYl8waHJKZlhfU3ZtOFdwSmdKZDNrVEl4VlRYa3FrSHVDRU1rRXBtS25fcmFNZWhCUjZIT0JhXzJjZTViWm9aRWc5a0VuZDF2X3lVVkFaeXl2WndzTlJKQTFJc9IBdEFVX3lxTE5OM2MzVXVZX3NBczBKRHFaZmhCY2U2ckZhcTY1VmFGNHpoelZ3VjAtQWdGemFoVFk0ZkFYWVN1ZWQ2aTluNGFXbFZ6ZGpxTmpzSjR2QlFuOGdkOVJmeGVhM2x5QkpVWDNpajRLbDRCUG94SHlw?oc=5",
-      "collector": "Google News RSS",
-      "country": "United States",
-      "country_code": "US",
-      "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
-      "source_article_fingerprints": [
-        "86bb1b82e3ded29c1678c24db025a50c03863a008aadbe9013574bcd05899f7b",
-        "edd113250f321ab5853e8983a8162bf2559a3332883931ff188eb2ab520c0018"
-      ],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Biological Terrorism"
-      ],
-      "cbrn_subgroups": [],
-      "sources": [
-        "CW39 Houston",
-        "Daily Republic"
-      ],
-      "related_articles": [
-        {
-          "title": "Congressman Thompson's Napa office receives suspicious envelope with white powder",
-          "original_title": "Thompson's Napa office received suspicious envelope with white powder",
-          "original_language": "en",
-          "summary": "A suspicious envelope containing white powder was received at U.S. Representative Mike Thompson's office in Napa, California.",
-          "published": "2026-10-20T09:00:00+00:00",
-          "source": "Daily Republic",
-          "url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPS1NEbDQ3YXo5WU5MMlNaajRocjFjVTRsOXJtV0lVb2JXNkl1Wm1URDVaYkF0cGRoT2tFNm1Jc2d6WkxuOG1tMUdNQ0NjX1hGZ19FbDBnTTdhV01BWVczZG5Rakt4QWVCb2tudW5ENW5IM0dmTnBBeHZPUjVQX1dOT1cyd1AwZ0hOZmkwdWlaX19rV1plSnBGUHQ5MUdtUzRsZzItbmRKVTI1ZEVDaTFlMjlCcWZBWE9hZWdEaTN5Wk44QVFnaXRRQVdyYlFtTTllUHJlTjNtM3VUMV9SckpCRFVZQXdQZVM2?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-10-19T22:01:04+00:00",
-      "last_reported": "2026-10-20T09:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Concrete suspicious-mail/powder incident targeting an elected official's office, meeting provisional daily monitoring criteria.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CBRN",
-      "is_attack": false,
-      "incident_anchor": "Al Green office suspicious powder Houston 2026-10-19",
-      "update_type": "INITIAL",
-      "incident_id": "inc-625e896232a245ed",
-      "translated_to_english": false,
-      "ai_canonical_event": "suspicious envelope with powder received at Al Green Houston office",
-      "title_variants": [
-        "suspicious envelope with powder received at Al Green Houston office"
-      ],
-      "actor_scope": "UNKNOWN",
-      "reported_status": "SUSPECTED",
-      "dedup_confidence": 0.8,
-      "dedup_methods": [
-        "title_plus_anchor"
-      ],
-      "location_confidence_score": 0.5,
-      "location_method": "ai_unlocated",
-      "location_evidence": [
-        "Al Green says suspicious envelope at Houston office contained powder"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The suspicious envelope was received at U.S. Representative Al Green's office in Houston, Texas.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
-      "geolocation_requested_city": "Houston",
-      "ai_geo_fingerprint": "406eba841b8b61fe536d305a0af5ad95df38d6f728c1214384833937a332140d",
-      "ai_geo_inferred": false
     },
     {
       "id": "29f9e0c4c0cb59b7",
@@ -17896,20 +17284,21 @@
       "id": "2a33363754a00c3d",
       "category": "Attacks",
       "categories": [
-        "Attacks"
+        "Attacks",
+        "Weapons"
       ],
-      "title": "Men attempt to infiltrate Cuba and confess to armed attack",
-      "summary": "Individuals attempted to infiltrate Cuba and reportedly confessed to an armed attack.",
-      "original_title": "Hombres intentaron infiltrarse en Cuba y confesaron ataque armado",
-      "original_summary": "Hombres intentaron infiltrarse en Cuba y confesaron ataque armado Pulso Diario San Luis",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish",
-      "collection_locale": "ES:es",
+      "title": "Cuba accuses US after speedboat raid",
+      "summary": "Cuba accuses the United States of allowing terrorists to operate with impunity following a speedboat raid incident.",
+      "original_title": "Cuba accuses US of letting terrorists operate with impunity after speedboat raid",
+      "original_summary": "Cuba accuses US of letting terrorists operate with impunity after speedboat raid Reuters",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English",
+      "collection_locale": null,
       "published": "2026-10-19T21:46:00+00:00",
-      "source": "Pulso Diario San Luis",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNUmpuTXJrWkJhSlByOF9qbEJrUmZtZEZ5NEprUFF0TTBvRjZPWmx4WFBEa3BpU0xuWlZPOXdqRl8yVGJVMUlRVHVKWWlUa19kakJ1OERsTjZVVmhIUlRfS2VqanAwZEdHTl9qU05lY3JqY3Jmc0N0NkZHSGowdEZ1WG5vQTM5ZTZQQ1RCejRacEhNMVJHSmlXanhjbEtoWDNIOVlOOdIBqgFBVV95cUxOaVdDV0Uxek01Zy05aXByVXhsQUY3TFNmM3BlZ2tOWFBUb1RXLTRTNEhnRG5lc3FqS054czQzZmpYVVJsbG1LQkRFakVNNXAwLTh3RjNUM3FyRUYzTVBDS0JRbU5GMGxOcE9wUktwMUJWdFFWZW44bE1YNHRYdmNINnRTeEZQUlFBeHVVRnZ1aXpSWkg2V0J6MHI5enQ4RVBHeEtQNGNnelZVZw?oc=5",
+      "source": "Reuters",
+      "source_count": 3,
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxOZVlrd2ZUN2tTTmJpa1ZUbHZlV2hsWXJmc3Z2NWRBWC1HY1JRa1dMS2NFQmwwZEs5YlU1c0JSTlFPOElRb2Z3Y1R4SUNJY1VDNzVCeElwWVVKM3I2ZDVSdUhCUVFKOFBWYnJIWW1TZ19hcmtKbXpmWGwyby11UWpUTlBhUWVZcV8zZlZDNG0xVHZSbjc2UXpINWUxdUlKZHBnYWNYQ2JXak1UNkJwTmswQm84cEM3UDBwR0ZHc3UzMVNkb0lFV3hr?oc=5",
       "collector": "Google News RSS",
       "country": "Cuba",
       "country_code": "CU",
@@ -17921,18 +17310,41 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
-        "0890c755feedfea2e0c0598c9c2d0e1887d4eb2ce9dc644e38306c7ce36e4586"
+        "0890c755feedfea2e0c0598c9c2d0e1887d4eb2ce9dc644e38306c7ce36e4586",
+        "12b28b13237067629c9c538282f15ec7b07097b4c59dee13c64da82eb1d2d5fa",
+        "8820de89d3cba17310b091fca9d04e4ef4296a52d3320dd32653b9560d822904"
       ],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "threat_categories": [],
       "cbrn_subgroups": [],
       "sources": [
-        "Pulso Diario San Luis"
+        "Pulso Diario San Luis",
+        "América TeVé",
+        "Reuters"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Men who attempted to infiltrate Cuba confess; expert analysis determines high caliber of weapons",
+          "original_title": "Hombres que intentaron infiltrarse en Cuba confesaron; peritaje determina alto calibre de armas",
+          "original_language": "es",
+          "summary": "Confessions and forensic expert analysis regarding high-caliber weapons recovered from men who attempted infiltration in Cuba.",
+          "published": "2026-10-20T00:14:52+00:00",
+          "source": "América TeVé",
+          "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOckJDRld3c0RwSXZwLXNuX2U3a1NrVy1IWXZIU2ZfZlRTQlh4SFdidXVrWkRSLTNuajlreWRBVUJUOUVLdzJJOVVLZlVHWEI4M1I1ZUhTZXRVMFRPUEJXS01OZkw5dENxRVNnU0dyYVdRd1VqUUZHLW01ZkdjbzZkYjVVTnJ3bHZzc1JtQWszdnpZQVJWWFJqLTZNMHhrZFVwZkJMWmFuV0E2VVBZVVJRU25YVWlpcmF0RWZndHdBTjAxcl8tVDdiQ9IByAFBVV95cUxOckJDRld3c0RwSXZwLXNuX2U3a1NrVy1IWXZIU2ZfZlRTQlh4SFdidXVrWkRSLTNuajlreWRBVUJUOUVLdzJJOVVLZlVHWEI4M1I1ZUhTZXRVMFRPUEJXS01OZkw5dENxRVNnU0dyYVdRd1VqUUZHLW01ZkdjbzZkYjVVTnJ3bHZzc1JtQWszdnpZQVJWWFJqLTZNMHhrZFVwZkJMWmFuV0E2VVBZVVJRU25YVWlpcmF0RWZndHdBTjAxcl8tVDdiQw?oc=5"
+        },
+        {
+          "title": "Men attempt to infiltrate Cuba and confess to armed attack",
+          "original_title": "Hombres intentaron infiltrarse en Cuba y confesaron ataque armado",
+          "original_language": "es",
+          "summary": "Individuals attempted to infiltrate Cuba and reportedly confessed to an armed attack.",
+          "published": "2026-10-19T21:46:00+00:00",
+          "source": "Pulso Diario San Luis",
+          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNUmpuTXJrWkJhSlByOF9qbEJrUmZtZEZ5NEprUFF0TTBvRjZPWmx4WFBEa3BpU0xuWlZPOXdqRl8yVGJVMUlRVHVKWWlUa19kakJ1OERsTjZVVmhIUlRfS2VqanAwZEdHTl9qU05lY3JqY3Jmc0N0NkZHSGowdEZ1WG5vQTM5ZTZQQ1RCejRacEhNMVJHSmlXanhjbEtoWDNIOVlOOdIBqgFBVV95cUxOaVdDV0Uxek01Zy05aXByVXhsQUY3TFNmM3BlZ2tOWFBUb1RXLTRTNEhnRG5lc3FqS054czQzZmpYVVJsbG1LQkRFakVNNXAwLTh3RjNUM3FyRUYzTVBDS0JRbU5GMGxOcE9wUktwMUJWdFFWZW44bE1YNHRYdmNINnRTeEZQUlFBeHVVRnZ1aXpSWkg2V0J6MHI5enQ4RVBHeEtQNGNnelZVZw?oc=5"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-10-19T21:46:00+00:00",
-      "last_reported": "2026-10-19T21:46:00+00:00",
+      "last_reported": "2026-10-20T00:50:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.1-flash-lite",
@@ -17946,8 +17358,8 @@
       "incident_anchor": "Cuba-infiltration-attempt-2026-10-19",
       "update_type": "INITIAL",
       "incident_id": "inc-3564c3a1d645e4fe",
-      "translated_to_english": true,
-      "ai_canonical_event": "Attempted infiltration and confession to armed attack in Cuba",
+      "translated_to_english": false,
+      "ai_canonical_event": "Cuba accuses US after speedboat raid",
       "title_variants": [
         "Attempted infiltration and confession to armed attack in Cuba"
       ],
@@ -17967,7 +17379,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Men attempted to infiltrate Cuba and confessed to an armed attack.",
       "ai_geo_fingerprint": "acdf8e3cd9795b222bc308bfed2aded58272e1cfcc90045ed98b7455f777d9d7",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "dc60074f20ab8150",
@@ -28683,19 +28099,21 @@
       "collection_locale": null,
       "published": "2026-10-19T07:00:00+00:00",
       "source": "WCTI",
-      "source_count": 14,
+      "source_count": 20,
       "url": "https://news.google.com/rss/articles/CBMimAJBVV95cUxOOXZXdG9UdjJCY0VSNlZvZDhRbFlXelg2SjhPZldRTHYzaTYyX28tOWNqQ2VOeHl0Y1kyQ2gyMVFua3g1TVcxbExITTIwV005b2NoSDAtSnpPUlJZbUFFSFFCcUZHOEcxSWNnZXM3ZUNLckF0bDRaMHNEa0JzazJ3UUtkMW9TYTVKc2M2Wk5PWWZRZXZuN3RMQTd4UTB3dmxOUEdRaUJEOGF4dVhYcFhCa01vV1gzNThxajBlb3lnTEtOcWpFZml1czhHN0lPUFVTeTZoSXBmU0c1VGoxU1E1dHhsVXBJQWhOT1FHdnJmbU03TEhrV3hiSEM1WnVKcWRBeU9qSGtBNGJGbi1CbmZiWEVleUxDTERr?oc=5",
       "collector": "Google News RSS",
       "country": "United States",
       "country_code": "US",
-      "city": null,
+      "city": "Napa",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
+      "latitude": 38.29714,
+      "longitude": -122.28553,
+      "location_precision": "city",
       "location_confidence": "high",
       "source_article_fingerprints": [
+        "1ba022c7a248b5ff6b80556bb6dff1b1caeacc223bd1e7caa7b667e2b49221a4",
         "278922c2b138f83aad99be9f631b9ebbd1a40e39c907fbe01f9e605ad1d97429",
+        "30d3274bde8c74f6920c948fae104dbc605d9c266cb78812928f7f7663b1fa88",
         "43eb447f09c26935e9f635dd7920a16a92cae5bc916486da0ee10e8070ee8586",
         "48b945fc8a04996d642dd8f5d5581d49cd4810633438202b16bfbd387ae0c7c9",
         "4fea093b60c57688e875c66cb9365392383756f075517b94fd8d361d751303ae",
@@ -28703,12 +28121,19 @@
         "7654eeea0ff728f5e5e0fe09444dd562e761f38451384add6ba0fceef9aec3e4",
         "767ba8d44cd657ace61ea76ce72abfeaedf2204aacd5482f110266f128808c58",
         "7cd5559e91ed7314081f008862a8f35b52242f08b7193e42939dca17bafd4f3c",
+        "7f6a4adf0dbaf9f3a18f50aa3e515f457473729bd0252abc2881465cb8d1147b",
+        "86bb1b82e3ded29c1678c24db025a50c03863a008aadbe9013574bcd05899f7b",
         "940e28900c205b3fa0e9757678c052ab740b6fa4a3448e44de77725fbf013596",
+        "95090c01e127639624a8284e4840eb231e32d108e3bc351cea702c63aa95d1b2",
+        "a522b0f609015c22d5d5c707380fd25b4afb0c97681d0157e06e39263197c0f9",
+        "ac3a53f97cd2665219a842019eb2926561bfb1282a8c08f4f9a93de82d446396",
         "c51bdd1403b6fe6adb2b6761338c428ec33eba024eb66032cabbfdb72089e635",
         "ce24a8de45717f7edba143b5935c88f899fa408fe0ae669cbb067e6cb20edb2a",
         "e0a8cd1271686d6d160ea952da0360e2152901413257b5514449e7c30592d455",
         "e6d3d752d0fa2535fa0b5aefbbd82fef95cdd27880fbde2e7f118dfa37436ee1",
-        "eb9d7ba61c72945b309380959b69ec8ddd867efd7cd40328af74d0af02608de7"
+        "eb9d7ba61c72945b309380959b69ec8ddd867efd7cd40328af74d0af02608de7",
+        "edd113250f321ab5853e8983a8162bf2559a3332883931ff188eb2ab520c0018",
+        "ef444d07a657c3204e06e494ec4449a05c5653e52aeba5b05ccbac4274706198"
       ],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "threat_categories": [
@@ -28729,7 +28154,13 @@
         "WJLA",
         "KOMO",
         "KMPH Fox 26",
-        "YourCentralValley.com"
+        "YourCentralValley.com",
+        "CW39 Houston",
+        "Daily Republic",
+        "The Napa Valley Register",
+        "UA.NEWS",
+        "Telemundo Miami",
+        "Arizona Chinese News"
       ],
       "related_articles": [
         {
@@ -28848,15 +28279,88 @@
           "published": "2026-10-21T01:14:20+00:00",
           "source": "YourCentralValley.com",
           "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOcVd6bzBVbjR5QlhZV0NxellKek1LQzdnZUZLZ2RYYVVHbVFMeXUwOVhoSGJONEd6Q2FmNjE2MXdNeUJ6Rkwtb3VuSDBNZmtSMmV0Q2lId3V5dDlGMTJFYlRIS1FQQlJySDdmSVlIbUFkMjJNMWljc21qLWVtYjJEc3BBWGswMkc0LVctMUxIU1VzS29fbk5WWHBjWHdQck5XUXMyVnNXaF9maGo0Z0hUQjFR0gG3AUFVX3lxTFByMmRISFZUTklBT0VmZ2haYV92ZFhoR1dyQnpQVjc3a2FpcFVSUUxxQkZuTFd0UUJqOGVPV1hPM2RvUTJWUFAyQmNaLWU0OG1KWnVLQkhOT3NVd0VERm1QSnRHVGROdUdKNWFlM3pYY0hjaVY2bnNjTWEzNktVMU54S2l6M3FCS2ZnWkRudmZ5djZnbE5YY1JGRGVMT0pQMTZOWHZJV0VaQjJkNXVRZFZuSGl1WHlJZw?oc=5"
+        },
+        {
+          "title": "Al Green Reports Suspicious Envelope With Powder at Houston Office",
+          "original_title": "Al Green says suspicious envelope at Houston office contained powder",
+          "original_language": "en",
+          "summary": "U.S. Representative Al Green reported that a suspicious envelope received at his Houston office contained an unknown powder.",
+          "published": "2026-10-19T22:01:04+00:00",
+          "source": "CW39 Houston",
+          "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE11c09tRU54eldBUzhKYl8waHJKZlhfU3ZtOFdwSmdKZDNrVEl4VlRYa3FrSHVDRU1rRXBtS25fcmFNZWhCUjZIT0JhXzJjZTViWm9aRWc5a0VuZDF2X3lVVkFaeXl2WndzTlJKQTFJc9IBdEFVX3lxTE5OM2MzVXVZX3NBczBKRHFaZmhCY2U2ckZhcTY1VmFGNHpoelZ3VjAtQWdGemFoVFk0ZkFYWVN1ZWQ2aTluNGFXbFZ6ZGpxTmpzSjR2QlFuOGdkOVJmeGVhM2x5QkpVWDNpajRLbDRCUG94SHlw?oc=5"
+        },
+        {
+          "title": "Congressman Thompson's Napa office receives suspicious envelope with white powder",
+          "original_title": "Thompson's Napa office received suspicious envelope with white powder",
+          "original_language": "en",
+          "summary": "A suspicious envelope containing white powder was received at U.S. Representative Mike Thompson's office in Napa, California.",
+          "published": "2026-10-20T09:00:00+00:00",
+          "source": "Daily Republic",
+          "url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPS1NEbDQ3YXo5WU5MMlNaajRocjFjVTRsOXJtV0lVb2JXNkl1Wm1URDVaYkF0cGRoT2tFNm1Jc2d6WkxuOG1tMUdNQ0NjX1hGZ19FbDBnTTdhV01BWVczZG5Rakt4QWVCb2tudW5ENW5IM0dmTnBBeHZPUjVQX1dOT1cyd1AwZ0hOZmkwdWlaX19rV1plSnBGUHQ5MUdtUzRsZzItbmRKVTI1ZEVDaTFlMjlCcWZBWE9hZWdEaTN5Wk44QVFnaXRRQVdyYlFtTTllUHJlTjNtM3VUMV9SckpCRFVZQXdQZVM2?oc=5"
+        },
+        {
+          "title": "White-powder letter sent to Napa office of Rep. Thompson",
+          "original_title": "White-powder letter sent to Napa office of Rep. Thompson",
+          "original_language": "en",
+          "summary": "A suspicious letter containing white powder was received at the Napa office of US Representative Mike Thompson.",
+          "published": "2026-10-19T23:15:00+00:00",
+          "source": "The Napa Valley Register",
+          "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxNUzVIVmdyMFp3d0JOTjg3a0dHYjdBelF4VjU2RXBrZkdBZHBEWXFySEwxR2JsZVh5ZmxGVjBJVERmTktuRWI4LTlPVUJnZ0k1MkdJUm9uMzlEaGFFTFZFTXBvWkllZjdhMWFKaUZiTFBKcDlLZGM2RGZIaFZKbmhoM3JQdWxxZ3VTeTcyeUdlUzJ6NnRwdHBuRXFrR3RLMXd1N3dTOWVWRk4yR19YUzltSDlNcE55QjJkTTU3S0pFMGdELUJ4WWtBSV9GOGZvZEhLUHMxME04YWozVDdlUmh4UW9ibUJEWHcwQ2Z1bm1DZw?oc=5"
+        },
+        {
+          "title": "Suspicious envelope triggers evacuation at Rep. Subramanyam’s Leesburg office",
+          "original_title": "Suspicious envelope triggers evacuation at Rep. Subramanyam’s Leesburg office",
+          "original_language": "en",
+          "summary": "A suspicious envelope triggered an evacuation at US Representative Suhas Subramanyam's Leesburg office.",
+          "published": "2026-10-20T00:31:08+00:00",
+          "source": "KOKI FOX 23",
+          "url": "https://news.google.com/rss/articles/CBMixAJBVV95cUxPaTVWNnZMZXk5Y0pYbk1QdG8ya0NkOGtaSlV2d0VTT21ycFZVRXFMcXlhZlNEanBiUDJfWm0yRl9SZExONzlZMkt2WW50UlVzdHZVQkxndjJvVGV1M2lCVmtjdXJxWVFCMmZkT2xlM01XUXhyRHdDYUQ1NXFDSW02UXQwaXNGZzBNY0pKOE1IbTI1a1doVUJOMjlaeW53dEk2Y2dPWUxPRmZib2xwTV80R2F0OXRubldCNk9rMFBsN2VxSWhseXE2TDFKOV9UY1d3ZDlHOFZpODAtc19Ma2E5d3haV1RDT01obDF3OWotWk85WUlZbmJSSVNYNFV3bWREWC1lTzdCdkl5TE9PLTJjQTNaajdjd1FCVEhCc3BFck14NUJyNHJPVUtxeVBTMTUxSC01Ync4U3pPSG1Cc21nSmJIbDM?oc=5"
+        },
+        {
+          "title": "US Congressman Subramaniam's office evacuated due to suspicious substance",
+          "summary": "The office of a US Congressman was evacuated following the discovery of a suspicious substance.",
+          "original_title": "美国国会议员苏布拉马尼亚姆办公室因可疑物质被疏散——The Hill",
+          "original_summary": "美国国会议员苏布拉马尼亚姆办公室因可疑物质被疏散——The Hill UA.NEWS",
+          "original_language": "zh",
+          "source": "UA.NEWS",
+          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOYjIwM09haVJtdFh4U0hkN3FlUW44MEg4LXpHT2dFVUZPUm9pUmp5ME1VUm16aWN1c0t1WHJTM0ZxNUJ4bmZsQ2NlNm1qU1M1MTFFeFp6WWg5S2FtUURENnZMQ1NBTm5FSnJCS0hCWURzY2VjdC1PRUd1d244aWdXXzNUUm5WeFRIeWp1SnVnUE9MVDNkQVVmUWtmMHBvYkNlQVU0M3VXMjh0M3pXUWc?oc=5",
+          "published": "2026-10-19T12:43:00+00:00"
+        },
+        {
+          "title": "Офис конгрессмена Субраманьяма в США эвакуировали из-за подозрительного вещества — The Hill",
+          "original_title": "Офис конгрессмена Субраманьяма в США эвакуировали из-за подозрительного вещества — The Hill",
+          "original_language": "ru",
+          "summary": "Офис конгрессмена Субраманьяма в США эвакуировали из-за подозрительного вещества — The Hill UA.NEWS",
+          "published": "2026-10-19T17:47:15+00:00",
+          "source": "UA.NEWS",
+          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOWnc3RV9fS2JCclVTUnpIUnB6d2pzY2lUeEZuMEpvTzZJNzY5ZGQ1cWZNVndaUWQ5MXJuRTVLVURKdTdKTHFDVDNweXhyUzItakxsdzRNYWRibGdkRURDX3RlVFZSZkRiWmlweGNvRWVMVHp0Zm43TmNlVHB5b3I2YmZqRURKNGMtQmt5SzVmdzhGTmlUWVQ2SHp2N0NDUUozRi1JVHlXN2V3TW4xeWc?oc=5"
+        },
+        {
+          "title": "Investigation Into Suspicious Envelope Sent to Representative Debbie Wasserman Schultz's Office",
+          "original_title": "Investigan envío de sobre sospechoso a oficina de la representante Debbie Wasserman Schultz en Florida",
+          "original_language": "es",
+          "summary": "Authorities are investigating a suspicious envelope sent to US Representative Debbie Wasserman Schultz's office in Florida.",
+          "published": "2026-10-20T02:42:35+00:00",
+          "source": "Telemundo Miami",
+          "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPaklBVDhfRFJhclZwcmVaZzJoWWFERms2Mi1aZGxxTzctQmRqY3hLdlRPVzV3Vlc3amM2R2FPYlo0RGw0REpjaUxQSEZwdXgxd252LUxmQzhFWklqUi1EUmQ1NmtQV1ZGYjY2YUFuVkhCR1dQWFlZVTc1eDhPTEZVMmgzQWdhdmMxQjJTZ01zV2t1UG9pLUtZR1p1VGY3LXdyRFBleDB0b2s1dDIyT3BHTU1ReURfZGVYR0Y2TGR6bzQ4dXhiYXVGZzJUVzBsTHhwQ0pLUVM1UVJ0OFZnSkpvRE5nR1ZzOU1aSlHSAfIBQVVfeXFMT2UzN1YyWFZkQkw0VGZOYW5GbERfM0dQWkhWVmtSUUhUUUIxMmg4ajVMa1B6QzJNR09aVERJcS1YVmdqVGUySlJJazRLSkdsQk9TWlBWV0pJVWpSUHRwQUViNURtYTFrQ3ZCYm5OWEdyZE80cnVERnBPLWlrallkVEQwaER1OTY4SHdFYVBJTFctbThqdnZwMFZWQkY4NXdSSVZFckZyS2hKUmJ1ODZRWnRfVHBibkNqVkF4R2hySDZoT0t6cDV4bWptZFV5aEl1VVNoM3dVXzE5LXpHTGlLTFNuNVdxbkRBRjA4TmEyaXhsY3c?oc=5"
+        },
+        {
+          "title": "Suspicious Letters Containing White Powder Received by Arizona Lawmakers",
+          "original_title": "白粉信件再现 亚省三名国会议员收到可疑信件",
+          "original_language": "zh",
+          "summary": "Three Arizona lawmakers received suspicious letters containing white powder, prompting security investigations.",
+          "published": "2026-10-20T03:30:57+00:00",
+          "source": "Arizona Chinese News",
+          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQNFV0d3dvX2tHQ21RMlB6dGRGTFJieEk4dzhsSlhWZGFxam9EWVFGUkNQbWJhdUZ2a3RPbklOWi0xcXJHYnZlUVBqUlotN0tRMEJVVzVJeGFCYjNVbzYyLVd5M1Y4S2lnZVRRVE94WkNJNVczeV9wb3pQTklIUWRUZ01wckw3TU1JQ1M4bHM1OA?oc=5"
         }
       ],
-      "article_count": 14,
+      "article_count": 22,
       "first_reported": "2026-10-19T07:00:00+00:00",
-      "last_reported": "2026-10-19T07:00:00+00:00",
+      "last_reported": "2026-10-20T03:30:57+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Concrete biological/chemical threat incident involving a suspicious powder letter sent to a government official's office.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -28874,7 +28378,7 @@
       "actor_scope": "UNKNOWN",
       "reported_status": "THREAT",
       "location_confidence_score": 0.9,
-      "location_method": "ai_unlocated",
+      "location_method": "ai_city_geonames",
       "location_evidence": [
         "Rep. Adam Smith says staff evacuated after suspicious powder letter at district office"
       ],
@@ -28889,9 +28393,10 @@
       "ai_geo_reason": "Incident involving U.S. Representative Adam Smith's district office in the United States.",
       "ai_geo_fingerprint": "9e70f14c592fc3f4f8044e0d32c66c4ec5ce028f10f1eb06aad7a6f7758293c6",
       "ai_geo_inferred": true,
-      "dedup_confidence": 0.9,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "very_high_title_similarity"
+        "very_high_title_similarity",
+        "same_incident"
       ]
     },
     {
@@ -29857,9 +29362,9 @@
       "actor_group": "Sinaloa Cartel",
       "primary_event_type": "ARREST",
       "is_attack": false,
-      "incident_anchor": "Sinaloa tourist kidnapping arrests SEDENA 2026-10-19",
+      "incident_anchor": "arrest-el-taliban-sinaloa-2026",
       "update_type": "INITIAL",
-      "incident_id": "inc-2401498e8d9f10b3",
+      "incident_id": "inc-429e0f451fe86c51",
       "translated_to_english": true,
       "ai_canonical_event": "SEDENA links five arrested suspects to tourist kidnapping in Sinaloa",
       "title_variants": [
@@ -32735,101 +32240,6 @@
       "threat_categories": []
     },
     {
-      "id": "70de83a60d58c71e",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Investigation into alleged fracture within FARC dissidents over theft of funds",
-      "summary": "Authorities are investigating a potential internal split within the FARC dissident group led by 'Ivan Mordisco' following the alleged theft of 10 billion pesos by a member known as alias Paciencia.",
-      "original_title": "Investigan una posible fractura en las disidencias de ‘Iván Mordisco’ tras la supuesta fuga de alias Paciencia con $10.000 millones",
-      "original_summary": "Investigan una posible fractura en las disidencias de ‘Iván Mordisco’ tras la supuesta fuga de alias Paciencia con $10.000 millones Infobae",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish / Latin America",
-      "collection_locale": "MX:es-419",
-      "published": "2026-10-19T00:46:00+00:00",
-      "source": "Infobae",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxQQl9MUHpibGk5RWVERi1KRzZJem5Vd00xTmtfUG9EemNOYlp4LXRHeEZvenZwWkpZWEV5VEV1Y2xydFQ1WTFNdW9XVWVfbDF5S0FINFNkNGIybTV4M3g4NTZ3RW00aXlHZW43YkVyNml3ZFl3UUxYQ1U3bUh4d3dyUl91X3c1Um51dE9XOUtNYUZPeGxUdldMMlY3c3lQY3BQLW5Dd1lEM09wTHRUWG8teWVpTWp3WFVzU3RraEtKdjk5S0pGTDc1c0FpZGtxM0RWU0FDYmlpZG9lVm1mdlQwcVZMUFNkRWNOUi1HaDRvQjRUZ0NrNU5tQ0E1UzZTSFlLUGfSAZwCQVVfeXFMUDdmTGs2aUV1MUpfd3ZrcWx0a2pSdjVYVDZ0TTNxUXFOS19jZG5YS2ladUl6RUNOaVdULUZVaGJmQWFQWkg4NjFkRmg4QlU3NGM2b3ZZMzB1UXFRRHNlb2NDNTlSYjY0akpMVHlYOHFOeGg1WVNpcHNKNTB1SXZGbXd1VFJvdVEyc1BaVm1ONEd5MktnZzNqYTVOMDNqRGRCcTBSbTBCRUZTWGlVSmJYSTNXUFhWRkRJSXhCQ0huTlQyaTU5bi1qemxpRjZaNURZU3JsRmEzTW5zUjFkTHNtUkNwUG1NcFhjYjdZSDNHMDdWd0RhaHNna3h0dzgxWk9UbGg3NnZaVmlGSjkxQjhLejF2eThkM2NhcXB0V2I?oc=5",
-      "collector": "Google News RSS",
-      "country": "Colombia",
-      "country_code": "CO",
-      "city": "Bogotá",
-      "region": null,
-      "latitude": 4.60971,
-      "longitude": -74.08175,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "infobae.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "4dc39c7b8483fa51e8bde8e460641814c0b04498c95867e78698f984ca3fd1eb",
-        "b1528a5b9b7564c781ed65c07e347e283eeea579df872dd5c34c359bb470066f"
-      ],
-      "sources": [
-        "Infobae",
-        "El País"
-      ],
-      "related_articles": [
-        {
-          "title": "Investigan fractura en las disidencias de alias Iván Mordisco por supuesta fuga de alias Paciencia con $10.000 millones",
-          "original_title": "Investigan fractura en las disidencias de alias Iván Mordisco por supuesta fuga de alias Paciencia con $10.000 millones",
-          "original_language": "es",
-          "summary": "Investigan fractura en las disidencias de alias Iván Mordisco por supuesta fuga de alias Paciencia con $10.000 millones El País",
-          "published": "2026-10-19T01:16:16+00:00",
-          "source": "El País",
-          "url": "https://news.google.com/rss/articles/CBMi-gFBVV95cUxOSUhONUVQS2VzdFNHZGdZaXVjalBVcTMyWmN5ZndxN3NCUTA4amlQVWdfUktRQnpFLWRiUTJkaWVTZkNuZjhYeS1MN0pyWXc5ZXRtZVZfZkRCeHp1d1UtekdxYjFfWlFpbnJXSmFmZDUxWjI2aFlybTNuaUNLWFotOXRwM1VtTTJHa0hsZFQ2WFBhallDUlhuS2dSVXdjRXVFakhVdndGZGxJMFBISFRYYUtnVGttb1Q5QnhoYVN4RFNtY1o4TTUwX0RFTEJVSk1UWW1WYzJyNG1SQnllSlA0MWw3NUt4eElyalliM1djeEQwMFdKRjh6ZUhn0gH6AUFVX3lxTE5JSE41RVBLZXN0U0dkZ1lpdWNqUFVxMzJaY3lmd3E3c0JRMDhqaVBVZ19SS1FCekUtZGJRMmRpZVNmQ25mOFh5LUw3SnJZdzlldG1lVl9mREJ4enV3VS16R3FiMV9aUWlucldKYWZkNTFaMjZoWXJtM25pQ0tYWi05dHAzVW1NMkdrSGxkVDZYUGFqWUNSWG5LZ1JVd2NFdUVqSFV2d0ZkbEkwUEhIVFhhS2dUa21vVDlCeGhhU3hEU21jWjhNNTBfREVMQlVKTVRZbVZjMnI0bVJCeWVKUDQxbDc1S3h4SXJqWWIzV2N4RDAwV0pGOHplSGc?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-10-19T00:46:00+00:00",
-      "last_reported": "2026-10-19T01:16:16+00:00",
-      "cbrn_subgroups": [],
-      "dedup_confidence": 0.933,
-      "dedup_methods": [
-        "very_high_title_similarity"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Reports on internal fracture and criminal activities of an active militant/insurgent group.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "FARC dissidents",
-      "primary_event_type": "OTHER_CT",
-      "is_attack": false,
-      "incident_anchor": "FARC dissidents internal rift 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-d25c048dea106841",
-      "translated_to_english": true,
-      "ai_canonical_event": "Internal FARC dissident split over theft",
-      "title_variants": [
-        "Internal FARC dissident split over theft"
-      ],
-      "actor_scope": "NON_STATE",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Investigation into alleged fracture within FARC dissidents"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "FARC dissidents operate primarily in Colombia.",
-      "ai_geo_fingerprint": "e41baf9954a4c55b1bf077a257776d17a710faf0e646d873f3f373ea857e9fac",
-      "ai_geo_inferred": false,
-      "threat_categories": []
-    },
-    {
       "id": "b1924299bc0c44f3",
       "category": "Online / Cyber / AI",
       "categories": [
@@ -33920,7 +33330,7 @@
       "collection_locale": "MX:es-419",
       "published": "2026-10-18T22:26:43+00:00",
       "source": "Revista Semana",
-      "source_count": 1,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMipgJBVV95cUxPUER6UDN1ZW5kQk9zak9PMkpFTDRTQnJOeVFXeVZLNm1FMV8wY1RzVmxWXzhEMnJEdzZDazFvcHdBc0FvbC1RbVpOSk1PSWZoMUJTUmJCM3NrYlh6NVN1RzRsVXJZU2RPME1pNFp4TWlWZFN5anFDc01objExbjQtU0lBNlBzODdhTTdVOS12U01HWmNDUDZ0WnhEUi1lajI4c1VhY1pmSUpIVXBfMjQ5V05Sc3FOSEM4ajhNNFoyOGFYenRhOFB5QVFPNWljRjhnOFlnQUhMVDBHTkQyM1FTVG44RDI5TlFsbWxpamRHQ0Y2WGRDVmNubFlTR2xMTXJoSlBsVFlLQm01cVBsUlB0R2l1S0VNZWk3bjlocTFkWFZOZW1JY3fSAaYCQVVfeXFMT1BEelAzdWVuZEJPc2pPTzJKRUw0U0JyTnlRV3lWSzZtRTFfMGNUc1ZsVl84RDJyRHc2Q2sxb3B3QXNBb2wtUW1aTkpNT0lmaDFCU1JiQjNza2JYejVTdUc0bFVyWVNkTzBNaTRaeE1pVmRTeWpxQ3NNaG4xMW40LVNJQTZQczg3YU03VTktdlNNR1pjQ1A2dFp4RFItZWoyOHNVYWNaZklKSFVwXzI0OVdOUnNxTkhDOGo4TTRaMjhhWHp0YThQeUFRTzVpY0Y4ZzhZZ0FITFQwR05EMjNRU1RuOEQyOU5RbG1saWpkR0NGNlhkQ1ZjbmxZU0dsTE1yaEpQbFRZS0JtNXFQbFJQdEdpdUtFTWVpN245aHExZFhWTmVtSWN3?oc=5",
       "collector": "Google News RSS",
       "country": "Colombia",
@@ -33935,19 +33345,42 @@
       "targeted_source": "semana.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
+        "4dc39c7b8483fa51e8bde8e460641814c0b04498c95867e78698f984ca3fd1eb",
+        "b1528a5b9b7564c781ed65c07e347e283eeea579df872dd5c34c359bb470066f",
         "c15dc3d45048793b4b16f2c6b07737442add26257fbaf726e3a30129a9351e58"
       ],
       "sources": [
-        "Revista Semana"
+        "Revista Semana",
+        "Infobae",
+        "El País"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Investigation into alleged fracture within FARC dissidents over theft of funds",
+          "original_title": "Investigan una posible fractura en las disidencias de ‘Iván Mordisco’ tras la supuesta fuga de alias Paciencia con $10.000 millones",
+          "original_language": "es",
+          "summary": "Authorities are investigating a potential internal split within the FARC dissident group led by 'Ivan Mordisco' following the alleged theft of 10 billion pesos by a member known as alias Paciencia.",
+          "published": "2026-10-19T00:46:00+00:00",
+          "source": "Infobae",
+          "url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxQQl9MUHpibGk5RWVERi1KRzZJem5Vd00xTmtfUG9EemNOYlp4LXRHeEZvenZwWkpZWEV5VEV1Y2xydFQ1WTFNdW9XVWVfbDF5S0FINFNkNGIybTV4M3g4NTZ3RW00aXlHZW43YkVyNml3ZFl3UUxYQ1U3bUh4d3dyUl91X3c1Um51dE9XOUtNYUZPeGxUdldMMlY3c3lQY3BQLW5Dd1lEM09wTHRUWG8teWVpTWp3WFVzU3RraEtKdjk5S0pGTDc1c0FpZGtxM0RWU0FDYmlpZG9lVm1mdlQwcVZMUFNkRWNOUi1HaDRvQjRUZ0NrNU5tQ0E1UzZTSFlLUGfSAZwCQVVfeXFMUDdmTGs2aUV1MUpfd3ZrcWx0a2pSdjVYVDZ0TTNxUXFOS19jZG5YS2ladUl6RUNOaVdULUZVaGJmQWFQWkg4NjFkRmg4QlU3NGM2b3ZZMzB1UXFRRHNlb2NDNTlSYjY0akpMVHlYOHFOeGg1WVNpcHNKNTB1SXZGbXd1VFJvdVEyc1BaVm1ONEd5MktnZzNqYTVOMDNqRGRCcTBSbTBCRUZTWGlVSmJYSTNXUFhWRkRJSXhCQ0huTlQyaTU5bi1qemxpRjZaNURZU3JsRmEzTW5zUjFkTHNtUkNwUG1NcFhjYjdZSDNHMDdWd0RhaHNna3h0dzgxWk9UbGg3NnZaVmlGSjkxQjhLejF2eThkM2NhcXB0V2I?oc=5"
+        },
+        {
+          "title": "Investigan fractura en las disidencias de alias Iván Mordisco por supuesta fuga de alias Paciencia con $10.000 millones",
+          "original_title": "Investigan fractura en las disidencias de alias Iván Mordisco por supuesta fuga de alias Paciencia con $10.000 millones",
+          "original_language": "es",
+          "summary": "Investigan fractura en las disidencias de alias Iván Mordisco por supuesta fuga de alias Paciencia con $10.000 millones El País",
+          "published": "2026-10-19T01:16:16+00:00",
+          "source": "El País",
+          "url": "https://news.google.com/rss/articles/CBMi-gFBVV95cUxOSUhONUVQS2VzdFNHZGdZaXVjalBVcTMyWmN5ZndxN3NCUTA4amlQVWdfUktRQnpFLWRiUTJkaWVTZkNuZjhYeS1MN0pyWXc5ZXRtZVZfZkRCeHp1d1UtekdxYjFfWlFpbnJXSmFmZDUxWjI2aFlybTNuaUNLWFotOXRwM1VtTTJHa0hsZFQ2WFBhallDUlhuS2dSVXdjRXVFakhVdndGZGxJMFBISFRYYUtnVGttb1Q5QnhoYVN4RFNtY1o4TTUwX0RFTEJVSk1UWW1WYzJyNG1SQnllSlA0MWw3NUt4eElyalliM1djeEQwMFdKRjh6ZUhn0gH6AUFVX3lxTE5JSE41RVBLZXN0U0dkZ1lpdWNqUFVxMzJaY3lmd3E3c0JRMDhqaVBVZ19SS1FCekUtZGJRMmRpZVNmQ25mOFh5LUw3SnJZdzlldG1lVl9mREJ4enV3VS16R3FiMV9aUWlucldKYWZkNTFaMjZoWXJtM25pQ0tYWi05dHAzVW1NMkdrSGxkVDZYUGFqWUNSWG5LZ1JVd2NFdUVqSFV2d0ZkbEkwUEhIVFhhS2dUa21vVDlCeGhhU3hEU21jWjhNNTBfREVMQlVKTVRZbVZjMnI0bVJCeWVKUDQxbDc1S3h4SXJqWWIzV2N4RDAwV0pGOHplSGc?oc=5"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-10-18T22:26:43+00:00",
-      "last_reported": "2026-10-18T22:26:43+00:00",
+      "last_reported": "2026-10-19T00:46:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 70,
+      "ai_relevance_score": 75,
       "ai_relevance_reason": "Concrete investigation into terrorist/insurgent financing and internal factional embezzlement.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -33982,7 +33415,11 @@
       "ai_geo_reason": "The event involves FARC dissidents (Mordisco faction) in Colombia.",
       "ai_geo_fingerprint": "ef0bcac57aed489d5eedb8e84adf53cb8f2c7701c14d7a6be274a8ed3dd251f5",
       "ai_geo_inferred": true,
-      "threat_categories": []
+      "threat_categories": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "f1acfebbc4a12507",
@@ -37778,84 +37215,6 @@
       ]
     },
     {
-      "id": "69496bc66f6807f3",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Terrorist plot against JEMS kindergarten thwarted",
-      "summary": "Reports indicate that a terrorist plot targeting the JEMS kindergarten has been thwarted.",
-      "original_title": "Сорван теракт против детского сада JEMS",
-      "original_summary": "Сорван теракт против детского сада JEMS Новости Израиля | 7 КАНАЛ",
-      "original_language": "ru",
-      "collection_language": "ru",
-      "collection_language_name": "Russian",
-      "collection_locale": "RU:ru",
-      "published": "2026-10-18T14:59:55+00:00",
-      "source": "Новости Израиля | 7 КАНАЛ",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE9lbUFIRjZFNDNtdnp5TEY2VWM4eWJPdmxTU0k2UWlwdllnZG5DZ2tDRmZrZ1hGelAzMUhKLTRwUG9HdW50VHIzcHd5ZGw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Israel",
-      "country_code": "IL",
-      "city": "Jerusalem",
-      "region": null,
-      "latitude": 31.76904,
-      "longitude": 35.21633,
-      "location_precision": "country_capital",
-      "location_confidence": "medium",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "21c9d024f34e562c70249c4c17dfb75440c842a5d0e3dbd42bb4ef3880099ac8"
-      ],
-      "sources": [
-        "Новости Израиля | 7 КАНАЛ"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-18T14:59:55+00:00",
-      "last_reported": "2026-10-18T14:59:55+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete disrupted terrorist plot against a target.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "DISRUPTED_PLOT",
-      "is_attack": false,
-      "incident_anchor": "JEMS kindergarten thwarted plot 2026-10-18",
-      "update_type": "INITIAL",
-      "incident_id": "inc-40816684ac37f5c7",
-      "translated_to_english": true,
-      "ai_canonical_event": "Thwarted terrorist plot against JEMS kindergarten",
-      "title_variants": [
-        "Thwarted terrorist plot against JEMS kindergarten"
-      ],
-      "actor_scope": "UNKNOWN",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "reported_status": "CONFIRMED",
-      "location_confidence_score": 0.8,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Terrorist plot against JEMS kindergarten thwarted (reported by Israeli news source)"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Disrupted terrorist plot reported by Israeli news.",
-      "ai_geo_fingerprint": "20958d8255785a54d34d5093afc8685ef929a336d15d7de3c22bd2ff60704702",
-      "ai_geo_inferred": true,
-      "threat_categories": []
-    },
-    {
       "id": "650794aaadea474f",
       "category": "Attacks",
       "categories": [
@@ -38008,84 +37367,6 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Multi-region clashes across Yemen.",
       "ai_geo_fingerprint": "5c0e12b462531c480e9c42a4dac7620ba7f5f5a2bbed04d8a151ffc1d40fcb09",
-      "ai_geo_inferred": false,
-      "threat_categories": []
-    },
-    {
-      "id": "f9e6450ae26a8a61",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Bus attack in Santander: Reward announced and security council convened in Cerrito",
-      "summary": "Following an attack on a bus in Santander, authorities announced a reward and convened a security council in Cerrito.",
-      "original_title": "Ataque a bus en Santander: anuncian recompensa y habrá consejo de seguridad en Cerrito",
-      "original_summary": "Ataque a bus en Santander: anuncian recompensa y habrá consejo de seguridad en Cerrito Caracol Radio",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish / Latin America",
-      "collection_locale": "MX:es-419",
-      "published": "2026-10-18T14:18:22+00:00",
-      "source": "Caracol Radio",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOS3ljUkUwaElLQ2ZRNnhVam5IaDRZWkhlTUZwVHFrRWFtSlJLbXNjZFF2cEZCVjc2UHZ1MnJJNTJORUk5ZUlYX1JySzVuY0pDT25LZWM1UTk5Ykhsd3RhMmNwdVRVRHhoU2t3NS05T0t3Ui1Jek02anlvSk5ia1gtUVB5c0k0X2k2XzdxSWFqRXNwUVN4MFhXQ2dIZ2kwaWxWdThzUG1Xai1EbEZYSzBReHctT1ZRbFBDazh0a9IB0AFBVV95cUxQVGg2MG40NWo1U3B5LTZlWmx5ZWdVMHFFWU9SVVh3MlRzcF9YUXBkd19BQVgyUHg3MUp2T3FQcEVScURTRGh2ZDEzYkVKLVlSVjBhTFQ1cWZpRlQtV2RkeG04dTFVaUVSOE1nQVpMTzM4c3ZyeVJWT1l3TG50NzRjWnd2OXBORFprWmo2c2VsM2NkNW1xRXhEUmJrbU5KQnJmV3hvOFZxaTNwbkw2UUhLeENMVVc0MTRuR1pDWVJHaWNIUEZzT0R0eUV5Z2dTZDZJ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Colombia",
-      "country_code": "CO",
-      "city": "El Cerrito",
-      "region": null,
-      "latitude": 3.68549,
-      "longitude": -76.31372,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "5e89bb84a7448a39d2279ceb0e1c1526c2567264f67419327bda6a88528e1a0e"
-      ],
-      "sources": [
-        "Caracol Radio"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-18T14:18:22+00:00",
-      "last_reported": "2026-10-18T14:18:22+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 70,
-      "ai_relevance_reason": "Concrete militant attack on a passenger bus, prompting security measures and rewards.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "ELN",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Bus attack Santander 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-ac19e2c933e25286",
-      "translated_to_english": true,
-      "ai_canonical_event": "Bus attack in Santander with security council convened",
-      "title_variants": [
-        "Bus attack in Santander with security council convened"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "reported_status": "CONFIRMED",
-      "location_confidence_score": 1.0,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Following an attack on a bus in Santander, authorities announced a reward and convened a security council in Cerrito."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Security council and response held in Cerrito, Santander, Colombia.",
-      "ai_geo_fingerprint": "e678e55204cde94df51eb3768b89d0762049e180dad5ce38c6c8df06eec3be0a",
       "ai_geo_inferred": false,
       "threat_categories": []
     },
@@ -41672,9 +40953,9 @@
       "actor_group": "",
       "primary_event_type": "DISRUPTED_PLOT",
       "is_attack": false,
-      "incident_anchor": "JEMS kindergarten thwarted plot 2026-10-18",
+      "incident_anchor": "Los Angeles Chabad kindergarten plot arrest 2026",
       "update_type": "INVESTIGATION_UPDATE",
-      "incident_id": "inc-40816684ac37f5c7",
+      "incident_id": "inc-38bc3fd495db9eee",
       "translated_to_english": true,
       "ai_canonical_event": "FBI discloses details on terrorist plot against Jewish kindergarten",
       "title_variants": [
@@ -49138,6 +48419,7 @@
         "2ab6acc41739b19a1f3c8240545fd073954e5ff4d76d1797f206db2a3620d3da",
         "3d0b3119fcc5527517e99d7d896096dc4d692b86f7a9ee6819b35b422fc76186",
         "464be5c10e2b507578b15d45dbf486773395e340f18d7ca59d1af7899bbecdfa",
+        "5e89bb84a7448a39d2279ceb0e1c1526c2567264f67419327bda6a88528e1a0e",
         "830b085d9cb93d001023edf979f0a0868e521e7ea7ca3e5e39db78868f88ccd6",
         "a1436da6d312c6096fb48d9ab3ef29834096d511ef1ed1f9d00d3da1a416f5f5",
         "a4191939f483c5f98420ebd5e12b6cae86110b0cd278b017fbc87744300ddb0c",
@@ -49334,9 +48616,18 @@
           "published": "2026-10-21T16:30:45+00:00",
           "source": "CAMBIO Colombia",
           "url": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxPaWUyY1B0ZXNqTmJCWWctLUFuV3ZxbFlxNmlIbm5GdS1Ha2dsRnNUTEFYcEJyUFJfSkRMMXVoUlZHTjA4TXNQcDE1cWwweHZUcmk5VExPSThFb05SNHJkYjZfRkRzUTVFZVozQU1oMURNcnVrQjRQM1ltM2JqWFZIRk1MdkVnbnBPcXhSenlIVDVPdW5yeHNJaWo1ZDZDekJpTmc0QW83aVpVSUpMNEFtblA5YXJrYzNPdnZzdlpLdXQybkZ5Z3RPakFkTWZFZ0ZOaTQ1NWlxM281a3VVQm9pNlVPTWRSd2ZnUnBLbnVFSDU1cWhQaHMw?oc=5"
+        },
+        {
+          "title": "Bus attack in Santander: Reward announced and security council convened in Cerrito",
+          "original_title": "Ataque a bus en Santander: anuncian recompensa y habrá consejo de seguridad en Cerrito",
+          "original_language": "es",
+          "summary": "Following an attack on a bus in Santander, authorities announced a reward and convened a security council in Cerrito.",
+          "published": "2026-10-18T14:18:22+00:00",
+          "source": "Caracol Radio",
+          "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOS3ljUkUwaElLQ2ZRNnhVam5IaDRZWkhlTUZwVHFrRWFtSlJLbXNjZFF2cEZCVjc2UHZ1MnJJNTJORUk5ZUlYX1JySzVuY0pDT25LZWM1UTk5Ykhsd3RhMmNwdVRVRHhoU2t3NS05T0t3Ui1Jek02anlvSk5ia1gtUVB5c0k0X2k2XzdxSWFqRXNwUVN4MFhXQ2dIZ2kwaWxWdThzUG1Xai1EbEZYSzBReHctT1ZRbFBDazh0a9IB0AFBVV95cUxQVGg2MG40NWo1U3B5LTZlWmx5ZWdVMHFFWU9SVVh3MlRzcF9YUXBkd19BQVgyUHg3MUp2T3FQcEVScURTRGh2ZDEzYkVKLVlSVjBhTFQ1cWZpRlQtV2RkeG04dTFVaUVSOE1nQVpMTzM4c3ZyeVJWT1l3TG50NzRjWnd2OXBORFprWmo2c2VsM2NkNW1xRXhEUmJrbU5KQnJmV3hvOFZxaTNwbkw2UUhLeENMVVc0MTRuR1pDWVJHaWNIUEZzT0R0eUV5Z2dTZDZJ?oc=5"
         }
       ],
-      "article_count": 20,
+      "article_count": 21,
       "first_reported": "2026-10-17T14:17:38+00:00",
       "last_reported": "2026-10-21T15:30:16+00:00",
       "ai_selection_complete": true,
@@ -49821,7 +49112,7 @@
       "collection_locale": "IL:he",
       "published": "2026-10-17T13:37:00+00:00",
       "source": "חדשות 04",
-      "source_count": 10,
+      "source_count": 11,
       "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFA0RkVpR1VSaDl0YWZoWWdQaDAtX25mM1BScXYxLU1HQVR6VjFZelNVcG9TMnA4ZG8ybnJ2OXZsMWdEX2xHT2JIai1R?oc=5",
       "collector": "Google News RSS",
       "country": "United States",
@@ -49836,6 +49127,7 @@
       "targeted_source": "haaretz.co.il",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
+        "21c9d024f34e562c70249c4c17dfb75440c842a5d0e3dbd42bb4ef3880099ac8",
         "36314a3fd799a2bc5b7c8d2a89031f97444ee80c02fcbb2c768dcefb755cc600",
         "387f230b5a9255a1f8f672bb89139dd69cdf0849e66d4bd94adfec314670bdc1",
         "464f03b23fa6813755aaed672b4f15e87efb56ad896664e262d4d418517d5e23",
@@ -49857,7 +49149,8 @@
         "IsraJ",
         "וואלה",
         "C14",
-        "כיכר השבת"
+        "כיכר השבת",
+        "Новости Израиля | 7 КАНАЛ"
       ],
       "related_articles": [
         {
@@ -49940,11 +49233,20 @@
           "published": "2026-10-18T10:45:45+00:00",
           "source": "כיכר השבת",
           "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQTUQ4OUNMNVRZSFRxOUNqNTlodUJqbUNBSUo4WHJPdXdrWlJBcUhhMDVQWkNmdVhrWE5qZnVLbEJ6cWxjeW1MYzlULVVaVXc5QjRuX284bkpBd2pmRy1DLTljbld1YWhsYnJLRWlJY2ZUanNoSG1pQmIxUHYxajFvZHJrVjI4QkJLOGpvQm93?oc=5"
+        },
+        {
+          "title": "Terrorist plot against JEMS kindergarten thwarted",
+          "original_title": "Сорван теракт против детского сада JEMS",
+          "original_language": "ru",
+          "summary": "Reports indicate that a terrorist plot targeting the JEMS kindergarten has been thwarted.",
+          "published": "2026-10-18T14:59:55+00:00",
+          "source": "Новости Израиля | 7 КАНАЛ",
+          "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE9lbUFIRjZFNDNtdnp5TEY2VWM4eWJPdmxTU0k2UWlwdllnZG5DZ2tDRmZrZ1hGelAzMUhKLTRwUG9HdW50VHIzcHd5ZGw?oc=5"
         }
       ],
-      "article_count": 10,
+      "article_count": 11,
       "first_reported": "2026-10-17T13:37:00+00:00",
-      "last_reported": "2026-10-18T12:38:46+00:00",
+      "last_reported": "2026-10-18T14:59:55+00:00",
       "cbrn_subgroups": [],
       "dedup_confidence": 1.0,
       "dedup_methods": [
@@ -245811,100 +245113,6 @@
       "ai_geo_inferred": false
     },
     {
-      "id": "01221defda47175c",
-      "category": "Arrests",
-      "categories": [
-        "Arrests"
-      ],
-      "title": "Sixth arrest following Fairford alert",
-      "summary": "Authorities have made a sixth arrest in connection with the security alert in Fairford.",
-      "original_title": "Sechste Festnahme nach Fairford-Alaram",
-      "original_summary": "Sechste Festnahme nach Fairford-Alaram zentralplus",
-      "original_language": "de",
-      "collection_language": "de",
-      "collection_language_name": "German",
-      "collection_locale": "DE:de",
-      "published": "2026-10-01T23:41:03+00:00",
-      "source": "zentralplus",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxOTkpwaGJ5d05tZm1TQzd0MFd1RVRZSGs0RS1CM2ZET3NrSFB2WjFwbmlvdnBhemFCc0NEc2dxMDFCVndFR181QUlYNjdueG5sMVI5dnNha2lvNzl5WG5CWE9IVXRLQTZzR0pEcVZzQ3VZSnNnd0NDM3Z6UWtab0x3WUx5bmx5Zw?oc=5",
-      "collector": "Google News RSS",
-      "country": "United Kingdom",
-      "country_code": "GB",
-      "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "801aa205fc504e89ae2abc1cff2f7206fa50ffe663bfff66e769214398e2df64",
-        "fa7dc668196e78fc748498958a1b19fb9050427a1fd464a927156b3af4e90699"
-      ],
-      "sources": [
-        "zentralplus",
-        "اندبندنت عربية"
-      ],
-      "related_articles": [
-        {
-          "title": "Arrest in London linked to Fairford plot",
-          "original_title": "لندن تعتقل بريطانيا من أصل إيراني على خلفية مخطط فيرفورد",
-          "original_language": "ar",
-          "summary": "London authorities have arrested a British citizen of Iranian descent in connection with a security plot in Fairford.",
-          "published": "2026-10-01T23:47:27+00:00",
-          "source": "اندبندنت عربية",
-          "url": "https://news.google.com/rss/articles/CBMilwRBVV95cUxQRXBjeDBVcUI2YnlvcHJJa2w1TTRLNXVjbGNCTnV1c0l0UmhaWmY2UlhTMnIzUzBMVHpZRFZUa1V0dnFWOGttbVk4MUEya2JSRTd2eEFXVW5GOU1saU82RFVpU0o2NUROSzlaQWlhQVhhUVQxSlA4d0RlMjRvMDBnOWFYcFNuWlE0QVJnWEU5cmd2aHdDUGsxeDRXS3hUVnFNRTFmdmJKUFhEU3ZNalB2dUhDUmV4T2xUYkRpUkJVWmRCMkJOWXFuQi1VVi1SRnlfcmFjdzFpdXRxVmZXa3Q5RDk1Q2FjRFNwMEJFaTN5d0dBUThjX0JSSjY4LXd0TlFHV0pqRC1nWXU2OG51QzNVX0JET0ExcVktdUNiZXk3WXpEcTVyZ0pUWVlSTk1vc0hwaTZNX0lCUEtUeGpIaGRfckRMaUFQbGEzSEEwVnhZQjBLRGctVEx2RVlJLWw1VGVqZEhRSS1Wd19zTWg4TWlLSnV0UFlfR0hPSENEVDFmdXU5Y0wwR3FUVXpFZ1hCSXhFZFhkLWl0ZUhNa1B2d2hmczhfYTJUSjdVeHV6bEhqa3k4T1V2R3M2LVcwVi12YVNVRDFvbnBNUWk2RlJPZXZ3R0Z3QlBVZjlLN1YwUGwwb21ocm8wTGpjN2JYSzB1R3I1dzNUZFlCT09OclZuc3YwZVo4T1U0YmtCRlJEV1BFRWpkaUEyQmIw?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-10-01T23:41:03+00:00",
-      "last_reported": "2026-10-01T23:47:27+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports a concrete, dated arrest related to an ongoing security investigation.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ARREST",
-      "is_attack": false,
-      "incident_anchor": "RAF Fairford security incident 2026-10-01",
-      "update_type": "ARREST_UPDATE",
-      "incident_id": "inc-4f1c6cb756e59e64",
-      "translated_to_english": true,
-      "ai_canonical_event": "sixth arrest in Fairford plot",
-      "title_variants": [
-        "sixth arrest in Fairford plot"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_incident"
-      ],
-      "location_confidence_score": 0.0,
-      "location_method": "reviewed_unsupported_point_withdrawn",
-      "location_evidence": [
-        "Authorities have made a sixth arrest in connection with the security alert in Fairford. ... zentralplus"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Covered by Swiss regional news 'zentralplus' regarding a local security alert (Fairford being a local area/context).",
-      "ai_geo_fingerprint": "6519989a3105eda31790cddb80f4dedfe94c8c15a725b215d606b3425368c01a",
-      "ai_geo_inferred": false,
-      "geolocation_review_required": true,
-      "location_review_reason": "Fairford reporting is in the United Kingdom; Swiss publisher does not establish Switzerland. Exact place of the sixth arrest is not established.",
-      "integrity_review_version": "map-evidence-review-20261022",
-      "integrity_review_reason": "Fairford reporting is in the United Kingdom; Swiss publisher does not establish Switzerland. Exact place of the sixth arrest is not established.",
-      "integrity_source_evidence": "1f2e9615558842a949f5ed2d7d80d9087db6142b6869cfa4a12b1792ae43ec98"
-    },
-    {
       "id": "f7301277b2b94b4a",
       "category": "Terrorist Financing",
       "categories": [
@@ -249196,7 +248404,7 @@
       "collection_locale": "DE:de",
       "published": "2026-10-01T18:30:00+00:00",
       "source": "Der Standard",
-      "source_count": 3,
+      "source_count": 5,
       "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPNzR4dDVQM1pRVVViQTFSSDJicWdmNGJhLXJWWnBEdTJmUFBhRVJfYUIzQ2NGTkhaRHNSQ3RyaW1TbWRSSnE2V0MtN24wVkNUa0JFcHVMdklRUE1EbndYRkRXWWpmMUZqanVwbVJMZjNpRW1ab2NYVWJMRVgxZnNqZXhUTElhWDFCT3FfZDVWN00weWVFTzRIRnF1WF9xTXRuNEtv?oc=5",
       "collector": "Google News RSS",
       "country": "United Kingdom",
@@ -249209,14 +248417,18 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
+        "801aa205fc504e89ae2abc1cff2f7206fa50ffe663bfff66e769214398e2df64",
         "9cc442d8bd2d752edaf3a76419e99cefaddbd32ee055385d167f29f3905635e3",
         "b438d820a28e39ed908104a0d013eefa7f273ef0903901d2c7a0f27f7a32fe50",
-        "d6f528797b5149b8acbc42b8b45bf55921766d2d2d5c3a5535ab1a8e3e3c842c"
+        "d6f528797b5149b8acbc42b8b45bf55921766d2d2d5c3a5535ab1a8e3e3c842c",
+        "fa7dc668196e78fc748498958a1b19fb9050427a1fd464a927156b3af4e90699"
       ],
       "sources": [
         "Der Standard",
         "Tachles",
-        "香港01"
+        "香港01",
+        "zentralplus",
+        "اندبندنت عربية"
       ],
       "related_articles": [
         {
@@ -249236,20 +248448,39 @@
           "published": "2026-10-06T21:52:00+00:00",
           "source": "香港01",
           "url": "https://news.google.com/rss/articles/CBMi_AJBVV95cUxNejNSa0RFbjhWX1hzaVgyX29KWmlVSV83VzZSd0k2eVU0T3pXcEdSMzB6RkgwdkVIMGo5RG52X2c3RnViV1UtenpDN3NuU241eGhkSG1vdmx0UkpNa3FQN01Vek44Yzl6TW5xY0F5QzFtTUhjUVVWZzBZcHZJWmt6cFUtM0gzVW91YmFqTjR6d3F5aFVZaFRfaDlnUHZxZlBNNVU4cFJLdG14ekNKNUJxT0JZNTZHQUxpQzFEWHlxeWRKNWFpQk82NGxCekRNSVI1bjdZczlfaXdhVUpoRktrOW1EU0pjRnZKM216Y3c3VmV1NUxwY29DVHdCSmV3Q0syY3g3OXVsVklBQ2JZYnFwYnBoeVRBbVpORlo2eUtUdlEwS05MRmZGbXU1R1RldFZiX3RkdXVONTZ1WTF6cE1yZkc0bUxmaGdpRHJFVWoyRWtzVFo5NlNQa0d4UmtMdUw2NEhkRHVWQTJEWXJ2aTFtNW4wZmtYc0Zzc3F3Ng?oc=5"
+        },
+        {
+          "title": "Sixth arrest following Fairford alert",
+          "original_title": "Sechste Festnahme nach Fairford-Alaram",
+          "original_language": "de",
+          "summary": "Authorities have made a sixth arrest in connection with the security alert in Fairford.",
+          "published": "2026-10-01T23:41:03+00:00",
+          "source": "zentralplus",
+          "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxOTkpwaGJ5d05tZm1TQzd0MFd1RVRZSGs0RS1CM2ZET3NrSFB2WjFwbmlvdnBhemFCc0NEc2dxMDFCVndFR181QUlYNjdueG5sMVI5dnNha2lvNzl5WG5CWE9IVXRLQTZzR0pEcVZzQ3VZSnNnd0NDM3Z6UWtab0x3WUx5bmx5Zw?oc=5"
+        },
+        {
+          "title": "Arrest in London linked to Fairford plot",
+          "original_title": "لندن تعتقل بريطانيا من أصل إيراني على خلفية مخطط فيرفورد",
+          "original_language": "ar",
+          "summary": "London authorities have arrested a British citizen of Iranian descent in connection with a security plot in Fairford.",
+          "published": "2026-10-01T23:47:27+00:00",
+          "source": "اندبندنت عربية",
+          "url": "https://news.google.com/rss/articles/CBMilwRBVV95cUxQRXBjeDBVcUI2YnlvcHJJa2w1TTRLNXVjbGNCTnV1c0l0UmhaWmY2UlhTMnIzUzBMVHpZRFZUa1V0dnFWOGttbVk4MUEya2JSRTd2eEFXVW5GOU1saU82RFVpU0o2NUROSzlaQWlhQVhhUVQxSlA4d0RlMjRvMDBnOWFYcFNuWlE0QVJnWEU5cmd2aHdDUGsxeDRXS3hUVnFNRTFmdmJKUFhEU3ZNalB2dUhDUmV4T2xUYkRpUkJVWmRCMkJOWXFuQi1VVi1SRnlfcmFjdzFpdXRxVmZXa3Q5RDk1Q2FjRFNwMEJFaTN5d0dBUThjX0JSSjY4LXd0TlFHV0pqRC1nWXU2OG51QzNVX0JET0ExcVktdUNiZXk3WXpEcTVyZ0pUWVlSTk1vc0hwaTZNX0lCUEtUeGpIaGRfckRMaUFQbGEzSEEwVnhZQjBLRGctVEx2RVlJLWw1VGVqZEhRSS1Wd19zTWg4TWlLSnV0UFlfR0hPSENEVDFmdXU5Y0wwR3FUVXpFZ1hCSXhFZFhkLWl0ZUhNa1B2d2hmczhfYTJUSjdVeHV6bEhqa3k4T1V2R3M2LVcwVi12YVNVRDFvbnBNUWk2RlJPZXZ3R0Z3QlBVZjlLN1YwUGwwb21ocm8wTGpjN2JYSzB1R3I1dzNUZFlCT09OclZuc3YwZVo4T1U0YmtCRlJEV1BFRWpkaUEyQmIw?oc=5"
         }
       ],
-      "article_count": 3,
+      "article_count": 5,
       "first_reported": "2026-10-01T18:30:00+00:00",
       "last_reported": "2026-10-06T21:52:00+00:00",
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "very_high_title_similarity",
-        "same_url"
+        "same_url",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Follow-up arrest regarding a security breach at a military facility.",
       "ai_current_ct_event": true,
       "ai_selected": true,
