@@ -4927,6 +4927,14 @@ def apply_ai_selection(
     event,
     result,
 ):
+    from map_evidence_integrity import explicit_category_conflict, matched_rule
+    conflict = explicit_category_conflict(event, result)
+    rule = matched_rule(event)
+    if conflict or (rule and rule.get("action") == "quarantine"):
+        event["ai_selected"] = False
+        event["ai_current_ct_event"] = False
+        event["ai_scope_rejection"] = conflict or rule["reason"]
+        return False
     # Fresh foreign-language candidates get the same inexpensive court screen
     # after faithful translation; a court verdict cannot become an arrest merely
     # because the active schema no longer contains JUDICIAL.
@@ -7209,6 +7217,9 @@ def event_match(
     incoming,
     existing,
 ):
+    from map_evidence_integrity import primary_pair_supported
+    if not primary_pair_supported(incoming, existing):
+        return (False, 0.0, "unverified_primary_evidence")
     best_match = (
         False,
         0.0,
@@ -7721,6 +7732,9 @@ def merge_event(
             "summary"
         )
 
+        # A promoted source must carry its own raw evidence, not the prior source's.
+        existing["original_title"] = new.get("original_title") or new.get("title", "")
+        existing["original_summary"] = new.get("original_summary") or new.get("summary", "")
         for field in (
             "original_title",
             "original_summary",
@@ -10120,6 +10134,8 @@ def generate_weekly_analysis(events, existing_weekly=None):
 
 
 def save_database(events, trend_summary=None, weekly_analysis=None):
+    from map_evidence_integrity import filter_reviewed
+    events = filter_reviewed(events)
     for event in events:
         threat_categories.annotate(event)
     output = {
@@ -10639,6 +10655,11 @@ def merge_incident_records(events):
                     continue
                 if event_dt and kept_dt and abs((event_dt - kept_dt).total_seconds()) > limit_days * 86400:
                     continue
+                from map_evidence_integrity import primary_pair_supported
+                if not primary_pair_supported(kept, event):
+                    kept["dedup_review_required"] = True
+                    event["dedup_review_required"] = True
+                    continue
                 target = kept_index
                 break
             if target is None:
@@ -10656,13 +10677,15 @@ def consolidate_incidents(events, state=None, max_calls=None, now=None, use_gemi
     state = state if state is not None else load_incident_state()
     max_calls = INCIDENT_CONSOLIDATION_MAX_CALLS if max_calls is None else max_calls
     now_iso = (now or datetime.now(timezone.utc)).isoformat()
+    from map_evidence_integrity import filter_reviewed, matched_rule, primary_pair_supported
+    events = filter_reviewed(events)
     aliases, reviewed = state["aliases"], state["reviewed"]
     stats = {"aliased_records": 0, "windows_pending": 0, "windows_reviewed": 0,
              "incidents_merged": 0, "records_merged": 0, "error": None}
 
     for event in events:
         incident_id = event.get("incident_id")
-        if incident_id and incident_id in aliases:
+        if incident_id and incident_id in aliases and not (matched_rule(event) or {}).get("isolated_incident"):
             event["incident_id"] = resolve_incident_alias(incident_id, aliases)
             stats["aliased_records"] += 1
 
@@ -10693,6 +10716,15 @@ def consolidate_incidents(events, state=None, max_calls=None, now=None, use_gemi
             stats["windows_reviewed"] += 1
             reviewed_keys.update(keys)
             for group in groups:
+                # Model grouping alone cannot prove an incident association.
+                compatible = all(any(primary_pair_supported(events[i], events[j])
+                                     for i in profiles[a]["indices"] for j in profiles[b]["indices"])
+                                 for n, a in enumerate(group) for b in group[n+1:])
+                if not compatible:
+                    for key in group:
+                        for i in profiles[key]["indices"]:
+                            events[i]["dedup_review_required"] = True
+                    continue
                 root = find(group[0])
                 for key in group[1:]:
                     other = find(key)
