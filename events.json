@@ -777,7 +777,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-10-22T14:55:57.405522+00:00",
-  "number_of_events": 4656,
+  "number_of_events": 4644,
   "events": [
     {
       "id": "1d4b4518efecf6c4",
@@ -217683,7 +217683,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_url"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "ce15ea813c7642d0",
@@ -218745,233 +218746,6 @@
       "ai_geo_inferred": false
     },
     {
-      "id": "3329e7af08752a2d",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Counter Terrorism Action"
-      ],
-      "title": "Syrian security arrests Jamal Tarabulsi, deputy to Me raj Ural",
-      "summary": "Syrian security forces arrested Jamal Tarabulsi, deputy to Me raj Ural known as the 'Butcher of Banias'.",
-      "original_title": "الأمن السوري يلقي القبض على جمال طرابلسي نائب \"معراج أورال\" الملقب بـ\"جزار بانياس\"",
-      "original_summary": "الأمن السوري يلقي القبض على جمال طرابلسي نائب \"معراج أورال\" الملقب بـ\"جزار بانياس\" Euronews.com",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic / Syria",
-      "collection_locale": "SA:ar",
-      "published": "2026-10-04T18:16:06+00:00",
-      "source": "Euronews.com",
-      "source_count": 14,
-      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQNWhTQUVuSFpBRUJ2WEZLWnRlOUdBbHJFMmROSmdwM3NjM2ZxYUoyZVJweUVvaVo5NzNEbGZ0OG54SHpkMmZYR25RRDd1eVNSdzJUeFlMamZCV1I0VG1xRVJqTXVZVWVFVlBOVFNPalpjMnZfZU5XZnp5TmtFU1hXZEw0M0hnM0ZnM21oczhWdnMtSkhfSEl1UGRDTWFoZkVzcFFzZ2tJQnAteU5TSlBuQ1VZVWZFb3ZmR1hEektZNmFTQQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Syria",
-      "country_code": "SY",
-      "city": "Damascus",
-      "region": null,
-      "latitude": 33.5102,
-      "longitude": 36.29128,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "sana.sy",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "0c3496923a052f3f4c072b8f770a1cc366905343d51bce2cd7339adf87978a8c",
-        "202eb845bb77b749b016162f8b9382571826839397e347ee8d174c0b988ee775",
-        "22bdd275da8f1d01bc31bce1c9b3b19af1781836831f1dd95e72552bd2c4bfa0",
-        "43b9b8c4635bc8ede35f5f2d4ee3c07ba9cfc992aba76546fca30cf72a6d7e3a",
-        "43ee8f5744f8e48a0c5299b29387bc3cb8bcd5293cf0a32564d1ccfbc32e3613",
-        "4e9e16fee4bff70309733545a0a9a8850827d02f929020d41f74002a523323ab",
-        "50ccac19cd1e222e68fa785be94a2361d65c549230b65a324369774f260bb642",
-        "79c01d2cc941117ac232a6b61da393cd1276542b63e5f710d9d82facfb81bcea",
-        "8f84be031e4b245db1a68854e510b5769fc151a333ed977eefb6c8fb549b427f",
-        "99fdd23b4475e05956d35373cd3690dd625760c216839330930202d637031af3",
-        "a4918ac9c8b623703b96e1ea4a188786b00931e2d859096962fb128df1bd02d1",
-        "c9cfed138d21de39c2cc44014657984ec51115ee99f1c9f92e2598cde7de7a91",
-        "c9fd421c38315622c3afcebe076fb0e43331abb8f506675b1d43903241d151a9",
-        "dff219aeff74c5496e62e009c0aaff193861e755f85ab65ea99006be79d49208",
-        "fd22fe12b4455f285db0b3fcdd9dfb7043b73bf7b9e5174e5ef388acc7aefc6a"
-      ],
-      "sources": [
-        "وكالة الأنباء السورية – سانا",
-        "aawsat.com",
-        "SY24",
-        "المرصد السوري لحقوق الإنسان",
-        "TGRT Haber",
-        "تلفزيون سوريا",
-        "زمان الوصل",
-        "الشرق الأوسط",
-        "الجزيرة نت",
-        "اسلام تايمز",
-        "Euronews.com",
-        "زاد الاردن",
-        "قناة ومنصة المشهد - أخبار العالم اليوم",
-        "سكاي نيوز عربية"
-      ],
-      "related_articles": [
-        {
-          "title": "Arrest of Cemal Trablusi in Syria",
-          "original_title": "اعــتــقــال \"جمال طرابلسي\" المتهم بالمشاركة في معارك ومــجــا ز ر إلى جانب قوات النظام السابق في سهل الغاب",
-          "original_language": "ar",
-          "summary": "Cemal Trablusi, accused of participating in massacres alongside the former regime in Sahl al-Ghab, has been arrested.",
-          "published": "2026-10-04T19:41:41+00:00",
-          "source": "المرصد السوري لحقوق الإنسان",
-          "url": "https://news.google.com/rss/articles/CBMiwwJBVV95cUxONjZIcFl6Sm5VekNXcENOTlp0U1R4NkxlZW1ENzdqS3VXV05MRncwM1BacVNraXB6U2k2QWd6SXl3LWNhdnN2TURkT045OHU2Sjl5QjZqZ2lpMkFPTGtHUlZTMHBiaWhFeGNEUi1jX0VkRHRPaGpjTzNtbmRxb0R4azlnRFFjbHhTTmNLN1dFd0FzcUg2RVpWeUNKUGRqOVpPNVM2ZjdBT3hDYmNDS0xoUHlLTjlsM3VuT2tDTklCZlBWZ1I0dHZXa085MC1pOTFCS0VaUkFPeDFhWk0zUnZvUE83ZnBjVEs1UHdad1BUQTFDMGs0ZFBCNjVKVGlGNkR2aGtUYklCN2FHdFctV3drOXhFT09XclRIbTc1Wlo2enh2X2p4VjEwem1HTHZFNmpKTEhWVjZiNlZPSVRqMkxsS2JaMA?oc=5"
-        },
-        {
-          "title": "Security forces arrest Jamal Trabelsi",
-          "original_title": "الأمن الداخلي: إدارة مكافحة الإرهاب تلقي القبض على المجرم جمال طرابلسي نائب المجرم علي كيالي المعروف بـ \"معراج أورال\"",
-          "original_language": "ar",
-          "summary": "Interior security forces in Syria arrested Jamal Trabelsi, described as a deputy to Ali Kayali (Mi'raj Ural).",
-          "published": "2026-10-04T18:53:31+00:00",
-          "source": "SY24",
-          "url": "https://news.google.com/rss/articles/CBMiQ0FVX3lxTE1VNjRUMWlxLXB5WXo4SWpnTDg0aEN4X0swb0p5aGJjVEo0c1RNNVJBWFFxYy12U3RWWWZ5WGN0T3N4SjQ?oc=5"
-        },
-        {
-          "title": "Arrest of militia figure in Syria",
-          "original_title": "الأمن الداخلي: القبض على جمال طرابلسي نائب علي كيالي المعروف بـ \"معراج أورال\" | تلفزيون سوريا",
-          "original_language": "ar",
-          "summary": "Internal security forces in Syria arrested Jamal Trabelsi, described as a deputy to Mihrac Ural.",
-          "published": "2026-10-04T20:43:37+00:00",
-          "source": "تلفزيون سوريا",
-          "url": "https://news.google.com/rss/articles/CBMivgRBVV95cUxNWVJEVW9HVUpzR2Q4VWNuYTZvNjZmcGxxLS1oajJTcHpQc3dXalZ4M3pZNzRfWmNJRjNLaWM3NXZ0OVItT19NTW0wOHBQTXNNMzlFM0lvVGpxdnFYaGwzVUg1M3NidkE2Yy03R0pQY0tqWXBaLVI4ZFlXYnBGclYxc19qRFg2SkRhLV91dFp5SWl4X3d2QUZoeUN3VTVGVndLdVpVMzBTSDhDYVR2ZjltQ3lTMlZpc191elhzTWJTVm4zaUR1TkUwS0dPeXBDblhDel90SXVWZ3hhY2N1Q05XdlItbU1ZS041aS1ld3hnbTdYamFyWXlUcWRoTlBoMnFfblBDQld4UUdJUVFOQlEzVkFtWllhb1ZNNmlOZzNMU21ldmgtb0tBMVQ1ZmJNMHdKVjVnTVRRdDczWVl3blFpcHJ0d1hlOU45UGk4b01HaHBuYjdIWUtUVF8yUnd6a0hNLWE5T0hDdkhzUmhZeTNwejIyVHhiTzFweDhZUHM4eHVfenlUZlVvNjdoMU8xeXhsSS0xMmFUWWZNY3ZQQloybTA0N251ZU5jRkN3QTB4M3BjNTM1LXhGbURLR1J0Nm0yVlJablQ4U3lDWnYzSzlLV0VCU2Vka3FSQkVRckhmaktLek5oLWRCR0N4N0JjYW9DSjd2djM4a01EZTBHSm5zNmpUTlRZZDJLeS0yQkZYeW1PRldqQkZ5UFlORHliUzFqZUhZM0tqVFEtdEp0dHZEbk1CUGFid084VUdVbk9B0gG-BEFVX3lxTE1ZUkRVb0dVSnNHZDhVY25hNm82NmZwbHEtLWhqMlNwelBzd1dqVngzelk3NF9aY0lGM0tpYzc1dnQ5Ui1PX01NbTA4cFBNc00zOUUzSW9UanF2cVhobDNVSDUzc2J2QTZjLTdHSlBjS2pZcFotUjhkWVdicEZyVjFzX2pEWDZKRGEtX3V0WnlJaXhfd3ZBRmh5Q3dVNUZWd0t1WlUzMFNIOENhVHZmOW1DeVMyVmlzX3V6WHNNYlNWbjNpRHVORTBLR095cENuWEN6X3RJdVZneGFjY3VDTld2Ui1tTVlLTjVpLWV3eGdtN1hqYXJZeVRxZGhOUGgycV9uUENCV3hRR0lRUU5CUTNWQW1aWWFvVk02aU5nM0xTbWV2aC1vS0ExVDVmYk0wd0pWNWdNVFF0NzNZWXduUWlwcnR3WGU5TjlQaThvTUdocG5iN0hZS1RUXzJSd3prSE0tYTlPSEN2SHNSaFl5M3B6MjJUeGJPMXB4OFlQczh4dV96eVRmVW82N2gxTzF5eGxJLTEyYVRZZk1jdlBCWjJtMDQ3bnVlTmNGQ3dBMHgzcGM1MzUteEZtREtHUnQ2bTJWUlpuVDhTeUNadjNLOUtXRUJTZWRrcVJCRVFySGZqS0t6TmgtZEJHQ3g3QmNhb0NKN3Z2MzhrTURlMEdKbnM2alROVFlkMkt5LTJCRlh5bU9GV2pCRnlQWU5EeWJTMWplSFkzS2pUUS10SnR0dkRuTUJQYWJ3TzhVR1VuT0E?oc=5"
-        },
-        {
-          "title": "Internal Security arrests Jamal Trabelsi, deputy to Mihrac Ural",
-          "original_title": "الأمن الداخلي يلقي القبض على جمال طرابلسي نائب معراج أورال",
-          "original_language": "ar",
-          "summary": "Syrian Internal Security forces arrested Jamal Trabelsi, described as a deputy to Mihrac Ural, leader of the Acilciler group.",
-          "published": "2026-10-05T05:43:44+00:00",
-          "source": "زمان الوصل",
-          "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFA2emxoQUtHbmpBQzVkODJ4Rnhsd1VqRkU1RWpvZXM5Z2ZGbE1ueHhhMHpJX0JxblB6amdLdXhoSFNnalcxZDJLT2FwSEFVM2M3LVhaRzZCZGkyUQ?oc=5"
-        },
-        {
-          "title": "Syrian security announces arrest of Miraj Ural's right-hand man",
-          "original_title": "الأمن السوري يعلن اعتقال اليد اليمنى لـ\"معراج أورال\"",
-          "original_language": "ar",
-          "summary": "Syrian security forces announced the arrest of an individual described as the right-hand man of militant figure Miraj Ural.",
-          "published": "2026-10-05T20:03:26+00:00",
-          "source": "الجزيرة نت",
-          "url": "https://news.google.com/rss/articles/CBMi2gJBVV95cUxOenlLdjVDX2tTWnpBajZtWE1UcEQtbFMtT0wxMjZHUng1QkZQR1hzakt2RkRaUzFQX044aFB3b1BJVDhMNGJMNjRUdHZ4X01PUHQwSEY0blJDV2xweDZfSWVJa3dkVXNaeDM3aEJxblpxVkVIZk9LN1pIX0NWcUlWRG9haWZyanJfVUJOTWU4LTJNSVJyVnV5cF93RGhNa0QzaThYYldnMVl0VmdGMnZlenVkOWoxNmppNlJuUjFJZnZKbW1id3VQTDJUWTl1eEc2Q0JTbGxMT3gxdGk3c0FYWG4tY2pFamFpZ3VUUF9HckZLaXNTd0ZQSG00Wk9BcTdCQm8yd2pTNUx2c1VXUVB4RUpRSkg1M3FZVkFNWTlsNnd2NW5xNm1ud1pEZndkWFpsRmE4ejZxTFJKclgydjRUdXBURHI3N1NiYTR4ZG5XVUtRRVVIUlVqM2NR0gHfAkFVX3lxTE9GYzR4OXZYM2F6dGs3WnpIZXRwOXRLS05meTZGUkkwd3BwY0ItY1ZTOW9xWmZQelFQUFlKSW81enVfSms4NjZOT0s3OGYwUU94ei1fSlFPdmJfdkdiV05qUHJlQU9SQmdrTTlmWjVxVFRITE16T2FYOGIzRkZoTDBjNktITU9ZaENqXzc1bUc4XzNCVDJJUnVKTXQxRzZ1bDl0dlhFdFFQRXlSTzJBQjNGdEd5bXRLQS1ZWWFfX3BGSUgyUEl0aDFvOUlweUstN0F0aFBfVlQ4UmY4c19pQldRZTc5c2ZlVGplYUg3MW1FTndtRVFoUTJSX0V6X3hlUkdkTHkzSjZ3aFNRdEs5dWZnZXBuVjFpOTgya0JDU0hzRjI3U3NSM0RGM21tV2lMb2xDVTBTbngxenBnLTAxdnFNd2ZSaDdScS1KN0RpdjVUbEdnMTdXOXd4Wi00aEltYw?oc=5"
-        },
-        {
-          "title": "Syria: Arrest of the \"deputy\" of the Butcher of Baniyas",
-          "original_title": "سوريا: القبض على «نائب» جزار بانياس",
-          "original_language": "ar",
-          "summary": "Security forces in Syria arrested the deputy of the individual known as the Butcher of Baniyas.",
-          "published": "2026-10-05T14:55:18+00:00",
-          "source": "aawsat.com",
-          "url": "https://news.google.com/rss/articles/CBMi5ANBVV95cUxPN0hwZzJBdzJSZDFZVU5vNXFFeXg3M011clQ5VXBxOG9KX0NMRjBkX3YyblJiQzJGV1hoVVhGa2NYcGl0RFVaRU5JU2RORTNVNzRST0p0WmM0V1oxc0x1TnNsVXZ3c2Y0ODZsM3VWSmVBdkFQaWRqUjNIX1dPbkpfMTY2OVlreFpJX3ZMcjlySW11MVU4RFVqekV3VGI1a3hJTVphM1pIRk9JREdwaWpXVFRMelRTNExmUzRTdk1jbElXUDFYenNzczRKNlRvTUZLQ21KNWlwaXBGNFo0TUxCQktZaFBOZjZSYTVkLVlNUTlDcGFRTzRDMjhIS2xid0ExS3NUei1qSnlGdkpOcHI0eXZpQXd2bjVVdnlteUJ0VC1ENENfT08ySmZPRnFIbHMzcjBvZ2J6Ym8wNGhxTUZkeWZjTHBHWjR0VkZFUXpIY0lrYzY0QXpDLW41aFE4TjhSOU8zQVozdGc0MWlLYXoxNzd0NnEzTFM0dE9adDlSLWE4Sk9YT1JWMTNKV1lYdUl6RHpranNka3Bnczh0UHU5U0xGdWhVNlVvMkxaZ0NyNTh0ZjNCUm5BOG16RmNGR2VNU2hjb1ZpbXhmcWVsem9XdlZrV1lhTTdxbDl6TUhjZnBqdUxa?oc=5"
-        },
-        {
-          "title": "Internal Security arrests individual for random gunfire in Raqqa",
-          "original_title": "الأمن الداخلي يوقف شخصا أطلق النار عشوائيا في الرقة",
-          "original_language": "ar",
-          "summary": "Internal security forces in Raqqa arrested an individual responsible for random gunfire.",
-          "published": "2026-10-05T18:18:53+00:00",
-          "source": "اسلام تايمز",
-          "url": "https://news.google.com/rss/articles/CBMiuANBVV95cUxQR2lXOVY0V1FwVWt0bGtOV3FHbmhMbUJPdm85NEZuaVpfNk9sT0dPQ0hxVXhidThxbnRSU3VQV2NncWcybFpINFU3RmVvWmNvM1VwUUNtVEdtUzZyTFBmamMwQnpzUzJMWmhuY3JQX3RWT2lxQ2NrdndUYWw3TWdmbVlYNEs5bzhoZGp2OExrQUNRUUdEQUdRSWNmVExvRVVzUlV1YzM5dU9ib2lHdHRzMnRzbnc5OUo0enl1cW84RGY0d1Zad3J3UjBlTUdHd211TXJla1A1UXRWaWhWNmJtbm1YTG5uSkduMlJaWGVBNGpJckplVjNRNjZ4dUJnRlh6bjlCTGNtZHJtQ280V1NqY0hzRnEya3dzLTdkU0tlNVl1b1FBY0t3aC1yNlVaa1ZCOUdYRTV0dkE4OENBeUxnSlhVQ1hoTEpZRk9qNE9tRlVrRjhHLXc3dzJUZXVSSGRINWFLYVU0b0NYUW5rWTY0dGJvY284Y21naUN3U1EtaVRYbXpwU1VpVElvMEoyaUZ3YzlzaFNhdnZycDk0R1NIZXFaVGIzMVE1dnFvckJjUDktcGZQbFJ6TQ?oc=5"
-        },
-        {
-          "title": "Counter-Terrorism Administration Arrests Jamal Trab尔si, Deputy to Ali Kayali",
-          "original_title": "إدارة مكافحة الإرهاب تلقي القبض على المجرم جمال طرابلسي نائب المجرم علي ‏كيالي",
-          "original_language": "ar",
-          "summary": "Syrian counter-terrorism forces arrested Jamal Trabelsi, described as the deputy to Ali Kayali.",
-          "published": "2026-10-04T18:16:06+00:00",
-          "source": "وكالة الأنباء السورية – سانا",
-          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE40Q1FaVFhrTVlSUV9DOTRiUHNibWp5Z2pxUmNfVFdKcmJlT2djXy1oQ1h1enFLUm1oNDVET3NDazIxblNfV0czeA?oc=5"
-        },
-        {
-          "title": "Syrian security announces arrest of Jamal Tarabulsi",
-          "original_title": "الأمن السوري يعلن اعتقال جمال طرابلسي.. الضربة الأبرز لفلول \"معراج أورال\"",
-          "original_language": "ar",
-          "summary": "Syrian security forces announced the arrest of Jamal Tarabulsi, described as a prominent blow to the remnants of Miraj Ural's group.",
-          "published": "2026-10-05T10:30:33+00:00",
-          "source": "الجزيرة نت",
-          "url": "https://news.google.com/rss/articles/CBMi3wJBVV95cUxPRmM0eDl2WDNhenRrN1p6SGV0cDl0S0tOZnk2RlJJMHdwcGNCLWNWUzlvcVpmUHpRUFBZSklvNXp1X0prODY2Tk9LNzhmMFFPeHotX0pRT3ZiX3ZHYldOalByZUFPUkJna005Zlo1cVRUSExNek9hWDhiM0ZGaEwwYzZLSE1PWWhDal83NW1HOF8zQlQySVJ1Sk10MUc2dWw5dHZYRXRRUEV5Uk8yQUIzRnRHeW10S0EtWVlhX19wRklIMlBJdGgxbzlJcHlLLTdBdGhQX1ZUOFJmOHNfaUJXUWU3OXNmZVRqZWFINzFtRU53bUVRaFEyUl9Fel94ZVJHZEx5M0o2d2hTUXRLOXVmZ2VwblYxaTk4MmtCQ1NIc0YyN1NzUjNERjNtbVdpTG9sQ1UwU254MXpwZy0wMXZxTXdmUmg3UnEtSjdEaXY1VGxHZzE3Vzl3eFotNGhJbWPSAd8CQVVfeXFMT0ZjNHg5dlgzYXp0azdaekhldHA5dEtLTmZ5NkZSSTB3cHBjQi1jVlM5b3FaZlB6UVBQWUpJbzV6dV9Kazg2Nk5PSzc4ZjBRT3h6LV9KUU92Yl92R2JXTmpQcmVBT1JCZ2tNOWZaNXFUVEhMTXpPYVg4YjNGRmhMMGM2S0hNT1loQ2pfNzVtRzhfM0JUMklSdUpNdDFHNnVsOXR2WEV0UVBFeVJPMkFCM0Z0R3ltdEtBLVlZYV9fcEZJSDJQSXRoMW85SXB5Sy03QXRoUF9WVDhSZjhzX2lCV1FlNzlzZmVUamVhSDcxbUVOd21FUWhRMlJfRXpfeGVSR2RMeTNKNndoU1F0Szl1ZmdlcG5WMWk5ODJrQkNTSHNGMjdTc1IzREYzbW1XaUxvbENVMFNueDF6cGctMDF2cU13ZlJoN1JxLUo3RGl2NVRsR2cxN1c5d3haLTRoSW1j?oc=5"
-        },
-        {
-          "title": "Syrian security announces arrest of Mihraç Ural's right-hand man",
-          "original_title": "الأمن السوري يعلن اعتقال اليد اليمنى لـ\"معراج أورال\"",
-          "original_language": "ar",
-          "summary": "Syrian security forces announced the arrest of the primary aide to militant leader Mihraç Ural.",
-          "published": "2026-10-05T16:07:00+00:00",
-          "source": "زاد الاردن",
-          "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1la2FCVjJNWUFrb0pWS1o3VkJGTXNyQy15T1FETG8xSkhDNHNyeDNlV0JuZWRmUUI1QXFBTU8tYW5manlrdXhhUy1KeEJKNkxkVElWZUpFcDhaMTZyN1ByY1l5eGl4OTliNFE?oc=5"
-        },
-        {
-          "title": "Deputy of the 'Butcher of Baniyas' in Syrian security custody: Who is Mihraç Ural?",
-          "original_title": "نائب \"جزار بانياس\" بقبضة الأمن السوري.. من هو معراج أورال؟",
-          "original_language": "ar",
-          "summary": "Syrian security forces captured Mihraç Ural, known as the deputy of the 'Butcher of Baniyas'.",
-          "published": "2026-10-06T08:16:14+00:00",
-          "source": "قناة ومنصة المشهد - أخبار العالم اليوم",
-          "url": "https://news.google.com/rss/articles/CBMi6ANBVV95cUxQS0wwcHhVMm41Q3lIaFZTRnktWXJWSGJnaHh5VEVvZVVMemxnQVh1UXNQY29uTWR6T0FhY0h4ODhjUW1BblhDcWJZNEdJNHhCcWtoUEY3UUVseEliWVVHRVZMNVkwSks0Y25YcVhrejZaVmxEeU9ZQzVvMEZqRVBmTE91bElybE04bktJYW9JNmhQbUNsc3ZsbzlYemY2T05oQ0pfZnFKQnBZVmlOcW8yaDRfMURSVG9veU00LUJMX1RELUNmNXBLdW9heUh0OWtJQk5BMVM1VVR2RzZOcmVpNDFWMXlucFJ2ZkFLMVFJUlRtVXh1a015eWxMQmxSWTNISXRiTEtuMjZ5UTlsV21uN1ZTaVhNemdmYTRFNy1BYWlubXphdWhsVFQwV2VCQmVPZ3ljRU5HR3A4RkFheVJmakdWbFVfa2VlT3R1MThYbWRWQUkzNDlLZURHOVpmclNqRWVwZk1PYXFpel90S1YzTllLZlNnZjlpZ0xnRXZNSW1KeDYtelZ3MHVtTFFhYjJJdEUxenM1YUVZc3N6Vk9ES2ZJa2xIRDl4WDNuTzFVa01sbnVVVmJEcDJBbXZBeDhrWmZPRGs3YldLWlVCeTA0ZVM2bjUteDlKVlBJdkZ5T3NfaUVtMmpredIB7gNBVV95cUxQYVVpOXk3bVo1TXRaelJpMzBtM1RRODZjYWhqTU9CTC1xeC15S3NLbTdXNTdwMGxuQkVyV0pJVDZLMXdXRS1GMjdGa2lQWFJfRjZ0b1ZFcGM1S0lHT1FwVkNsSGluSWVtX1YyZnItZ3diRjdKZ2JWandSOVhucmNwcG43ZU8xNTRXTFc4blVEU0dBWXNrMEdZM2JkcGNOd29OZmQxX3ZKWTI3d0dGa1NzZERHZVJOb0hIREZHOEtyV2lBaVJ1X3hQVjBpWTBFaG82dEYxVWhXTXFmRS0yZjdKbTNPeVBfLVdPalhmYU82eFEtVVcwQmN4dkFLVFZkR2V6TXNfTHRIazZfeUp4TUVsX0cxNzI3SHlqREtpSDBwZURiQ04yVFpUdFJ3SlE3SEpHR1N0WDZodkk4UW53ZGNncHdSMUYtT2FiUUw1TlE1RFFzckR4UF8weGtLWlhYTS1wcmVJNlZFVmFteWh4R0VSdGVtVnVjZ0trdTE5dHdhS2czbm9ZajdobUVYNlE5eVZHRnNYTW5FaDRLT3NZMzdpS1BBOWZPUktGRG1pM1dXbmMyRnM1Q3U1SW9ZVzVkSUFHTXMxVHJLY3dsbWlVQTg4aWM2amlUYk9GYmQ0SXRURDFMSERWZGNleDIwSHk3UQ?oc=5"
-        },
-        {
-          "title": "Mihrac Ural's aide Cemal Trablusi arrested in Syria",
-          "original_title": "Hatay Reyhanlı'da 53 vatandaş yitmişti! Terörist Mihraç Ural'ın yardımcısı Cemal Trablusi Suriye'de yakalandı",
-          "original_language": "tr",
-          "summary": "Cemal Trablusi, an aide to Mihrac Ural, has been arrested in Syria for his alleged role in historical attacks.",
-          "published": "2026-10-04T18:16:06+00:00",
-          "source": "TGRT Haber",
-          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNLWx1d19fVV9iRzkxUmUzdXVxUk9vUEFlaHE5bkhBbDZXOXFaVW5fTlBzcnBJTUF6M1p6RVdNTldCajFLaGMzdnlOazFELTRDX2FhYV9SQkRCQmlOdlgxZnZHWkR6UjRCVUZ1eV9nZGsyWFpTaUZkTWhJdFJmTVZ4ZjJjRkpvSXd3aVRJeFRxV2Q2SFhUNnVyb3l2Q3ZlUjJkMndQOHN1bUxTTWlJbTFYR0lWYlhhdEszZndoVnZEeVRYbVlu?oc=5"
-        },
-        {
-          "title": "Syrian security forces arrest 'Guardian of the Capital'",
-          "original_title": "الأمن السوري يعتقل \"حارس العاصمة\" في عهد الأسد",
-          "original_language": "ar",
-          "summary": "Syrian authorities arrested a prominent figure known as the 'Guardian of the Capital' (Hares al-Asima).",
-          "published": "2026-10-10T17:24:00+00:00",
-          "source": "سكاي نيوز عربية",
-          "url": "https://news.google.com/rss/articles/CBMi_wJBVV95cUxPNDZIQ2xjaFVvb0lnbXUxc3I3NHJiX0pqTTNPcmx5c1BlY0RlMWhtV1NBNDZROG1ud2FwVkZXTDVIUXZiemh0TWtLdzlBaUtYalg2N0JOWFFDWkI3S19qWGl5b0dmbUhEdWc2cUpCZFA3T0lpbUZxZ3NORzQxSHpGUjBBREticjFTbWRPNWNFbjR0UnVZZ01WZU5fb0pPSkVVRVk4UDYwOHpGVFp2NEtMZnlkeUhXY2lXMWJrZnhXSVNLaWlsYnJFdWRVUnc5dFZMM2hwcUVnczl0cjJJdmV5MWFmQXM0Nm92cWhjRm52dmV6Y19pVGYtV1k3Wm9ONGw1b2pnSGs0Umw0SE8yNzA1M0VkNnBlSEFqZFFjcF9pa3N6ZFdjc1FOZVFpbHNQRlFyWDU5bFh6RE9WQ0d6YjUzaTdRaUdGbk9XSVVvWS1YeE0zcWRLNVdtbXJYMFVjY0dMMkFXTXBDTC1wR0U2MklnekxQUWhWblJ3SzFKVnFqMNIBhANBVV95cUxPSTYzanFUSHRiN0J1bE9JRlVNNy1GWWZydDdHbmdrSTBsTWl5a1B0RjBaNndCZy1ZLU5qbDBzODNTVGNzRDhYZTROYV9xRXB6Rk0xOUJKdzJxVnpOZE5rdFJ5aE9hWHROb2hUNTFnSFE2RWJ2OGt5TVRfSUJJSF9HdXhKVEFkYUluTTNhbi10QmRBclBpODlqaEd1OEN4ZFphcjBUTTc4N2N1c21QckdtaW9xS0x3emJBMXdfa0QteUJudDM0X0REVG5tQ2o0Zi0yYkNDeG5EUFl6UFl1TFNRNDNwZlVLVC1mN1FnYVZJcERoX0ljdE90U3lob1J5VmFRcWJzdXZtaGY1NnQ1ZnpTbmY2MGdpUWNQNHkxMWtLMGVjRUtBQ004eC1fUkxjblk4cGlYOFJCZ0ZRNUZhcVp3UUpPbXNTblg3WDJJMjdmUnpQVnMzam56R1p1azh6QnNQWmxYcy1DOWNRdUFsQzdVTzdQMnl4ZDh1bWhCeTZacG5CVGg4?oc=5"
-        }
-      ],
-      "article_count": 14,
-      "first_reported": "2026-10-04T18:16:06+00:00",
-      "last_reported": "2026-10-10T17:24:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete counter-terrorism arrest operation conducted by authorities against a named militant figure.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ARREST",
-      "is_attack": false,
-      "incident_anchor": "Arrest of Jamal Trabelsi Syria 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-e8db1406add310cd",
-      "translated_to_english": true,
-      "ai_canonical_event": "Syrian security arrests Jamal Tarabulsi deputy of Meraj Ural",
-      "title_variants": [
-        "Counter-Terrorism Administration arrests Jamal Trabelsi in Syria"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Syrian counter-terrorism forces arrested Jamal Trabelsi"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Event occurred in Syria involving Syrian counter-terrorism forces.",
-      "ai_geo_fingerprint": "290d9ea263da59b5bc924df313c91bfc70b9ddddb6ea87aeca32546e31001f25",
-      "ai_geo_inferred": true,
-      "cbrn_subgroups": [],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_incident",
-        "very_high_title_similarity"
-      ]
-    },
-    {
       "id": "d8dd421a74e83ef4",
       "category": "Attacks",
       "categories": [
@@ -219231,7 +219005,7 @@
       "collection_locale": "SA:ar",
       "published": "2026-10-04T17:23:15+00:00",
       "source": "Euronews.com",
-      "source_count": 44,
+      "source_count": 50,
       "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQbGNjZkxFand3LTdmaExyVVN2WHJ3d1lSQ1NzMWduajY5Z1c1ZGdDT2dDTzNEVzNsSVQ4ZXFJdG5IaW1QS0stRmZqZjEwdmQ3djk1RDNGOTlRVmpWRXpGRDFiTFUwMGpnSDhnSnFrV0hXQzVSLV9EamVaZ0VQMGg5c3U3eFZNOFFBMTRYVGg0Z01aTUJCQjNQdnpzLUVYNWJNMWd4SU9BSEQtRDlRUDdCWlBkRTlMWW45aDFCaGJZRWw?oc=5",
       "collector": "Google News RSS",
       "country": "Syria",
@@ -219248,24 +219022,32 @@
       "source_article_fingerprints": [
         "032500b86a242b0366aa719e386ad5c7d9b355c61e90dd7f6b3b5eceb0613ea9",
         "099c8cc644f47fedfd43f12c6a190c1a542993efed19c93d72cc3181a72d66ba",
+        "0c3496923a052f3f4c072b8f770a1cc366905343d51bce2cd7339adf87978a8c",
         "104925919e6692838397ed56332dd646f2c669a2aea099a184cf1f42f3de1194",
         "139710104b28f31c377d0d9f5cf9d40fa8853e428a91a4e3515115cec7dfb4d2",
         "180fbb57d361bfbf3179c615440377d1a5e11d91b647dc7efc83b4b2e498823e",
         "1829861315cda69e82b0727c356c67c6933fa9825fc393b6f77faf1856d215a1",
+        "202eb845bb77b749b016162f8b9382571826839397e347ee8d174c0b988ee775",
         "219f8cf7b8a1e6411548064752de563d5240694071dd6f2750a416ea53d06f69",
+        "22bdd275da8f1d01bc31bce1c9b3b19af1781836831f1dd95e72552bd2c4bfa0",
         "22e2b21f28c55080d980afd8dc51d0aa1a0559c0ee561d24e25579c98db1cd9a",
         "25bde22ff3a60eb399de338f70d3f232c0deac447823cb4430f5415600b63a34",
         "2d4c807884bb92d2b8c16dcd32803e70f76657b6e5c1bba302fc459dea856a64",
         "361ba927f655abddaa68c50e0541cdcd6d97044fd0e2be91f4f7c3464f54b5cc",
         "401e168be2a3937c670a3011a9e18c76f752f5a306b6255ed392931c606a7b1c",
+        "43b9b8c4635bc8ede35f5f2d4ee3c07ba9cfc992aba76546fca30cf72a6d7e3a",
+        "43ee8f5744f8e48a0c5299b29387bc3cb8bcd5293cf0a32564d1ccfbc32e3613",
         "4c7454566378ca2ca7d675c38ea4f96be14a2bbfb97b615b23e14a03807e67d7",
+        "4e9e16fee4bff70309733545a0a9a8850827d02f929020d41f74002a523323ab",
         "50a625c401ad0b525319400c9095fc2d49a941c8c392139a2fe25b961c7bd8e6",
+        "50ccac19cd1e222e68fa785be94a2361d65c549230b65a324369774f260bb642",
         "5379a86642935175194f689d24867434a1560e3d11b48afc8222171582ebe382",
         "557a87648856eabcad6d3575f979232e316067f5a6bfbde29551b549b11f5e75",
         "63d8ce77648298d5d66f3c90c7bdda3d95a116096abb441fa2cb63b10eec634e",
         "6545360a6874a75c249bdca8fd881aa462aee5d6a98d75b08ff9d519b8ec5be6",
         "7686e901de206c1aa2a422b124f822ed966130ba47485138f84d908531aa22a4",
         "77f85e91b0e8f464723e2c323b419dfea62b1a7c1c6fb0d97a85455982c6d6db",
+        "79c01d2cc941117ac232a6b61da393cd1276542b63e5f710d9d82facfb81bcea",
         "7cf2a79b06d0208ed81b9b9a80c9cc1c375c4e66588a12357648c787ce413a7d",
         "81d2df40645af6a08a490e7f01e5d0ad888229f4f3f37b249a76b32aa1e7b17a",
         "8237e030ce4f45f5642eb10bf5cd102caa350056cac955063d3b481e024c0a91",
@@ -219274,11 +219056,14 @@
         "8bdd94ad6e85b4f1319f1b15aa4a15beaef4ba33390b483a934a93c9b4872461",
         "8d2f053a7cf5f29e9ed8736542e7789d8bc9b1abab99912385df0b247c961aa8",
         "8d7e6212d2d628b9343e465bd4972dbedee4842e2aa8fe585e54d3028809def0",
+        "8f84be031e4b245db1a68854e510b5769fc151a333ed977eefb6c8fb549b427f",
         "905d2121c5ba0e84ac909cb3ec35edf7870c2219f08c7c3f2529c8da50d0b58a",
         "99bc469026ecf3dfb74b0f8d1e41985cea09a92533e752a2fe4db51d0fc1d091",
+        "99fdd23b4475e05956d35373cd3690dd625760c216839330930202d637031af3",
         "9ab870fea59c6185710d1474b9620dd9afe4b15261ce9e6dab905cdff1b69d57",
         "a25a1d4294794cab9206eced686515ea24a4ad87cb084ab458287701d2040fbd",
         "a37919f9698b4b31fb8f06e098bd91b63a03038b3468b59638172387aeaca229",
+        "a4918ac9c8b623703b96e1ea4a188786b00931e2d859096962fb128df1bd02d1",
         "a5e35b9bf0fb437855a4968347636e9d67a2dc3433ecf7f52c5b435e5e9127c0",
         "a603197f1fbe04102817526c566de67dc41933bde05dd6a48fb0e258a51e12c3",
         "a63c362ea5eb47ff64bc7dfb8cf2f9d83bfc0d6e041859559551694be098bd48",
@@ -219290,16 +219075,20 @@
         "b8edee98959223ba9dc7fc9ec6eb7b107903d0023a2a619da7fe0c398a96dbbb",
         "c52ba0e330f64cb51204c5fdf305abdb81188c40d34817d664c90071cf9b2e6d",
         "c5fd6f921c36a92dbb935c3ac30fa119ba7ded3b29c5790f9759080df085067e",
+        "c9cfed138d21de39c2cc44014657984ec51115ee99f1c9f92e2598cde7de7a91",
+        "c9fd421c38315622c3afcebe076fb0e43331abb8f506675b1d43903241d151a9",
         "d47c20582861abf46458eeeccfa0b927c3317388ec4aae43c397a252d3aed090",
         "da9d3f0c543eccdb9541bf83e86262e1959f9ece6ba1c34fbc466a81a0aaff0f",
         "dd8622522a8f849a9ed83adf2a6a663ac6f2e5cf18dfef0f0eafbb95b58f0659",
         "de25ef11507e9d485e0aebd533f65b0a833326bb3a92f7bf2b9ca98935a2eb67",
+        "dff219aeff74c5496e62e009c0aaff193861e755f85ab65ea99006be79d49208",
         "e74b736bedd01ea954d6ff585aa1cffda05bb0230287f2c2ade4cc090b4e2ddb",
         "e9510d2054bfad2db11585dcaaa0ba1daaa03697b7a8d1cfed78f0a35fe00d10",
         "e95e4dbab2d35f3c12261824da20b0e621b476c1bd47232e9d1c08e3e97b85a2",
         "f4cbaffe2021d1f569d35c504f80d12becda255dfd8a6aed96a49c015f73e5aa",
         "fa7dc0f33cbb6f8793034bf1a946d52f4f06956b3499bd9887ddc16f11946c50",
-        "fb7062ba481c5d5ed89c547d54134f023b2d8f9e28c3dfafe1f5bea497e01d36"
+        "fb7062ba481c5d5ed89c547d54134f023b2d8f9e28c3dfafe1f5bea497e01d36",
+        "fd22fe12b4455f285db0b3fcdd9dfb7043b73bf7b9e5174e5ef388acc7aefc6a"
       ],
       "sources": [
         "المرصد السوري لحقوق الإنسان",
@@ -219345,7 +219134,13 @@
         "Elsiyasa",
         "اندبندنت عربية",
         "YNET",
-        "مونت كارلو الدولية"
+        "مونت كارلو الدولية",
+        "aawsat.com",
+        "SY24",
+        "TGRT Haber",
+        "زمان الوصل",
+        "زاد الاردن",
+        "قناة ومنصة المشهد - أخبار العالم اليوم"
       ],
       "related_articles": [
         {
@@ -219797,15 +219592,141 @@
           "published": "2026-10-07T14:31:05+00:00",
           "source": "مونت كارلو الدولية",
           "url": "https://news.google.com/rss/articles/CBMiyAVBVV95cUxPTU5vMGdwTUtkYm04YTVmU191LWh5Y0FfMzIyejc5ZllzeWZkN21Mb2RPM19IV0xESmRaQXltVWNOajBXdFNaOGJDenhoaEpPTGRuNmhSdTBDbGxyZGd3Mlc4R2hhaWZxMTE2VGZPREkyenJrQUt5OTVhNjV1SUQ4V1d4cWNWXzJGQU9LanNiRTNIMjVNYWlETEFja3VtSDNXUEtsRUFBWnhadng3aWYtS0dlckEtZktpRGhNVUk3Nm1LLU9sSjAzNXNyRlBnTWl6SEFaS09vaHZDLU9JYkhuTkdxdnpaS0ZwTzZ4YnAzMS1uTHZILUpIYnNaWTBxUklTZkVwdExDZGswMEp3cksyaW1xdzBGWGpSTmFIbGRXM2dCTi1aTy1tb3ZvdU9VQVR1YUtKc3dPd0ozR3JISFFGNjhudVg2M1JsYnV2dDdLRzVqdThhQ2plcl9IRzF6Ukgzb1o4QlcwSEFnTVZTTk1iMktHdVhHMm9PMFlvU2FFdXRFUzA0N3hNYnVNbFQ3UGRjZlhVLTZTRW5xalFCXzJlZkFMdFBGdThkcUdVWXlvaHhsdi0xeXE0eURCMXh3OENmTU9KSmwwamYxc0dnb196dmI0TmhqRm11M1V2OWlGSkZZd0toRzZLWDN1MW5DRjFZMVotX0U1VWhVSklwQURKdlZLRVRQTnRJSXFkWVZRdU43UnV2WjFNeDRwY2NQa3pkUkJFSE81TUdnTjJSdG01bHVsVVRWb2dkeEtZRE9qZmRpUHpwczFUbS1oSDA0ejE0aUFkMTdtci1ja2NlX3ZETlRnTnZFb1p3V1djaXFsajVRVUtjXzlIMXVpT25LYWgxbmZ2R3d2alBSMlNCcnpQU2NqU05BZ0xVbW45ZDV4WnNseHJyQmdnQzdnYy1iMEZ3SVlRMGJ6a3hJR0lMWl95UW1yU2FfeXAt?oc=5"
+        },
+        {
+          "title": "Syrian security arrests Jamal Tarabulsi, deputy to Me raj Ural",
+          "original_title": "الأمن السوري يلقي القبض على جمال طرابلسي نائب \"معراج أورال\" الملقب بـ\"جزار بانياس\"",
+          "original_language": "ar",
+          "summary": "Syrian security forces arrested Jamal Tarabulsi, deputy to Me raj Ural known as the 'Butcher of Banias'.",
+          "published": "2026-10-04T18:16:06+00:00",
+          "source": "Euronews.com",
+          "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQNWhTQUVuSFpBRUJ2WEZLWnRlOUdBbHJFMmROSmdwM3NjM2ZxYUoyZVJweUVvaVo5NzNEbGZ0OG54SHpkMmZYR25RRDd1eVNSdzJUeFlMamZCV1I0VG1xRVJqTXVZVWVFVlBOVFNPalpjMnZfZU5XZnp5TmtFU1hXZEw0M0hnM0ZnM21oczhWdnMtSkhfSEl1UGRDTWFoZkVzcFFzZ2tJQnAteU5TSlBuQ1VZVWZFb3ZmR1hEektZNmFTQQ?oc=5"
+        },
+        {
+          "title": "Arrest of Cemal Trablusi in Syria",
+          "original_title": "اعــتــقــال \"جمال طرابلسي\" المتهم بالمشاركة في معارك ومــجــا ز ر إلى جانب قوات النظام السابق في سهل الغاب",
+          "original_language": "ar",
+          "summary": "Cemal Trablusi, accused of participating in massacres alongside the former regime in Sahl al-Ghab, has been arrested.",
+          "published": "2026-10-04T19:41:41+00:00",
+          "source": "المرصد السوري لحقوق الإنسان",
+          "url": "https://news.google.com/rss/articles/CBMiwwJBVV95cUxONjZIcFl6Sm5VekNXcENOTlp0U1R4NkxlZW1ENzdqS3VXV05MRncwM1BacVNraXB6U2k2QWd6SXl3LWNhdnN2TURkT045OHU2Sjl5QjZqZ2lpMkFPTGtHUlZTMHBiaWhFeGNEUi1jX0VkRHRPaGpjTzNtbmRxb0R4azlnRFFjbHhTTmNLN1dFd0FzcUg2RVpWeUNKUGRqOVpPNVM2ZjdBT3hDYmNDS0xoUHlLTjlsM3VuT2tDTklCZlBWZ1I0dHZXa085MC1pOTFCS0VaUkFPeDFhWk0zUnZvUE83ZnBjVEs1UHdad1BUQTFDMGs0ZFBCNjVKVGlGNkR2aGtUYklCN2FHdFctV3drOXhFT09XclRIbTc1Wlo2enh2X2p4VjEwem1HTHZFNmpKTEhWVjZiNlZPSVRqMkxsS2JaMA?oc=5"
+        },
+        {
+          "title": "Security forces arrest Jamal Trabelsi",
+          "original_title": "الأمن الداخلي: إدارة مكافحة الإرهاب تلقي القبض على المجرم جمال طرابلسي نائب المجرم علي كيالي المعروف بـ \"معراج أورال\"",
+          "original_language": "ar",
+          "summary": "Interior security forces in Syria arrested Jamal Trabelsi, described as a deputy to Ali Kayali (Mi'raj Ural).",
+          "published": "2026-10-04T18:53:31+00:00",
+          "source": "SY24",
+          "url": "https://news.google.com/rss/articles/CBMiQ0FVX3lxTE1VNjRUMWlxLXB5WXo4SWpnTDg0aEN4X0swb0p5aGJjVEo0c1RNNVJBWFFxYy12U3RWWWZ5WGN0T3N4SjQ?oc=5"
+        },
+        {
+          "title": "Arrest of militia figure in Syria",
+          "original_title": "الأمن الداخلي: القبض على جمال طرابلسي نائب علي كيالي المعروف بـ \"معراج أورال\" | تلفزيون سوريا",
+          "original_language": "ar",
+          "summary": "Internal security forces in Syria arrested Jamal Trabelsi, described as a deputy to Mihrac Ural.",
+          "published": "2026-10-04T20:43:37+00:00",
+          "source": "تلفزيون سوريا",
+          "url": "https://news.google.com/rss/articles/CBMivgRBVV95cUxNWVJEVW9HVUpzR2Q4VWNuYTZvNjZmcGxxLS1oajJTcHpQc3dXalZ4M3pZNzRfWmNJRjNLaWM3NXZ0OVItT19NTW0wOHBQTXNNMzlFM0lvVGpxdnFYaGwzVUg1M3NidkE2Yy03R0pQY0tqWXBaLVI4ZFlXYnBGclYxc19qRFg2SkRhLV91dFp5SWl4X3d2QUZoeUN3VTVGVndLdVpVMzBTSDhDYVR2ZjltQ3lTMlZpc191elhzTWJTVm4zaUR1TkUwS0dPeXBDblhDel90SXVWZ3hhY2N1Q05XdlItbU1ZS041aS1ld3hnbTdYamFyWXlUcWRoTlBoMnFfblBDQld4UUdJUVFOQlEzVkFtWllhb1ZNNmlOZzNMU21ldmgtb0tBMVQ1ZmJNMHdKVjVnTVRRdDczWVl3blFpcHJ0d1hlOU45UGk4b01HaHBuYjdIWUtUVF8yUnd6a0hNLWE5T0hDdkhzUmhZeTNwejIyVHhiTzFweDhZUHM4eHVfenlUZlVvNjdoMU8xeXhsSS0xMmFUWWZNY3ZQQloybTA0N251ZU5jRkN3QTB4M3BjNTM1LXhGbURLR1J0Nm0yVlJablQ4U3lDWnYzSzlLV0VCU2Vka3FSQkVRckhmaktLek5oLWRCR0N4N0JjYW9DSjd2djM4a01EZTBHSm5zNmpUTlRZZDJLeS0yQkZYeW1PRldqQkZ5UFlORHliUzFqZUhZM0tqVFEtdEp0dHZEbk1CUGFid084VUdVbk9B0gG-BEFVX3lxTE1ZUkRVb0dVSnNHZDhVY25hNm82NmZwbHEtLWhqMlNwelBzd1dqVngzelk3NF9aY0lGM0tpYzc1dnQ5Ui1PX01NbTA4cFBNc00zOUUzSW9UanF2cVhobDNVSDUzc2J2QTZjLTdHSlBjS2pZcFotUjhkWVdicEZyVjFzX2pEWDZKRGEtX3V0WnlJaXhfd3ZBRmh5Q3dVNUZWd0t1WlUzMFNIOENhVHZmOW1DeVMyVmlzX3V6WHNNYlNWbjNpRHVORTBLR095cENuWEN6X3RJdVZneGFjY3VDTld2Ui1tTVlLTjVpLWV3eGdtN1hqYXJZeVRxZGhOUGgycV9uUENCV3hRR0lRUU5CUTNWQW1aWWFvVk02aU5nM0xTbWV2aC1vS0ExVDVmYk0wd0pWNWdNVFF0NzNZWXduUWlwcnR3WGU5TjlQaThvTUdocG5iN0hZS1RUXzJSd3prSE0tYTlPSEN2SHNSaFl5M3B6MjJUeGJPMXB4OFlQczh4dV96eVRmVW82N2gxTzF5eGxJLTEyYVRZZk1jdlBCWjJtMDQ3bnVlTmNGQ3dBMHgzcGM1MzUteEZtREtHUnQ2bTJWUlpuVDhTeUNadjNLOUtXRUJTZWRrcVJCRVFySGZqS0t6TmgtZEJHQ3g3QmNhb0NKN3Z2MzhrTURlMEdKbnM2alROVFlkMkt5LTJCRlh5bU9GV2pCRnlQWU5EeWJTMWplSFkzS2pUUS10SnR0dkRuTUJQYWJ3TzhVR1VuT0E?oc=5"
+        },
+        {
+          "title": "Internal Security arrests Jamal Trabelsi, deputy to Mihrac Ural",
+          "original_title": "الأمن الداخلي يلقي القبض على جمال طرابلسي نائب معراج أورال",
+          "original_language": "ar",
+          "summary": "Syrian Internal Security forces arrested Jamal Trabelsi, described as a deputy to Mihrac Ural, leader of the Acilciler group.",
+          "published": "2026-10-05T05:43:44+00:00",
+          "source": "زمان الوصل",
+          "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFA2emxoQUtHbmpBQzVkODJ4Rnhsd1VqRkU1RWpvZXM5Z2ZGbE1ueHhhMHpJX0JxblB6amdLdXhoSFNnalcxZDJLT2FwSEFVM2M3LVhaRzZCZGkyUQ?oc=5"
+        },
+        {
+          "title": "Syrian security announces arrest of Miraj Ural's right-hand man",
+          "original_title": "الأمن السوري يعلن اعتقال اليد اليمنى لـ\"معراج أورال\"",
+          "original_language": "ar",
+          "summary": "Syrian security forces announced the arrest of an individual described as the right-hand man of militant figure Miraj Ural.",
+          "published": "2026-10-05T20:03:26+00:00",
+          "source": "الجزيرة نت",
+          "url": "https://news.google.com/rss/articles/CBMi2gJBVV95cUxOenlLdjVDX2tTWnpBajZtWE1UcEQtbFMtT0wxMjZHUng1QkZQR1hzakt2RkRaUzFQX044aFB3b1BJVDhMNGJMNjRUdHZ4X01PUHQwSEY0blJDV2xweDZfSWVJa3dkVXNaeDM3aEJxblpxVkVIZk9LN1pIX0NWcUlWRG9haWZyanJfVUJOTWU4LTJNSVJyVnV5cF93RGhNa0QzaThYYldnMVl0VmdGMnZlenVkOWoxNmppNlJuUjFJZnZKbW1id3VQTDJUWTl1eEc2Q0JTbGxMT3gxdGk3c0FYWG4tY2pFamFpZ3VUUF9HckZLaXNTd0ZQSG00Wk9BcTdCQm8yd2pTNUx2c1VXUVB4RUpRSkg1M3FZVkFNWTlsNnd2NW5xNm1ud1pEZndkWFpsRmE4ejZxTFJKclgydjRUdXBURHI3N1NiYTR4ZG5XVUtRRVVIUlVqM2NR0gHfAkFVX3lxTE9GYzR4OXZYM2F6dGs3WnpIZXRwOXRLS05meTZGUkkwd3BwY0ItY1ZTOW9xWmZQelFQUFlKSW81enVfSms4NjZOT0s3OGYwUU94ei1fSlFPdmJfdkdiV05qUHJlQU9SQmdrTTlmWjVxVFRITE16T2FYOGIzRkZoTDBjNktITU9ZaENqXzc1bUc4XzNCVDJJUnVKTXQxRzZ1bDl0dlhFdFFQRXlSTzJBQjNGdEd5bXRLQS1ZWWFfX3BGSUgyUEl0aDFvOUlweUstN0F0aFBfVlQ4UmY4c19pQldRZTc5c2ZlVGplYUg3MW1FTndtRVFoUTJSX0V6X3hlUkdkTHkzSjZ3aFNRdEs5dWZnZXBuVjFpOTgya0JDU0hzRjI3U3NSM0RGM21tV2lMb2xDVTBTbngxenBnLTAxdnFNd2ZSaDdScS1KN0RpdjVUbEdnMTdXOXd4Wi00aEltYw?oc=5"
+        },
+        {
+          "title": "Syria: Arrest of the \"deputy\" of the Butcher of Baniyas",
+          "original_title": "سوريا: القبض على «نائب» جزار بانياس",
+          "original_language": "ar",
+          "summary": "Security forces in Syria arrested the deputy of the individual known as the Butcher of Baniyas.",
+          "published": "2026-10-05T14:55:18+00:00",
+          "source": "aawsat.com",
+          "url": "https://news.google.com/rss/articles/CBMi5ANBVV95cUxPN0hwZzJBdzJSZDFZVU5vNXFFeXg3M011clQ5VXBxOG9KX0NMRjBkX3YyblJiQzJGV1hoVVhGa2NYcGl0RFVaRU5JU2RORTNVNzRST0p0WmM0V1oxc0x1TnNsVXZ3c2Y0ODZsM3VWSmVBdkFQaWRqUjNIX1dPbkpfMTY2OVlreFpJX3ZMcjlySW11MVU4RFVqekV3VGI1a3hJTVphM1pIRk9JREdwaWpXVFRMelRTNExmUzRTdk1jbElXUDFYenNzczRKNlRvTUZLQ21KNWlwaXBGNFo0TUxCQktZaFBOZjZSYTVkLVlNUTlDcGFRTzRDMjhIS2xid0ExS3NUei1qSnlGdkpOcHI0eXZpQXd2bjVVdnlteUJ0VC1ENENfT08ySmZPRnFIbHMzcjBvZ2J6Ym8wNGhxTUZkeWZjTHBHWjR0VkZFUXpIY0lrYzY0QXpDLW41aFE4TjhSOU8zQVozdGc0MWlLYXoxNzd0NnEzTFM0dE9adDlSLWE4Sk9YT1JWMTNKV1lYdUl6RHpranNka3Bnczh0UHU5U0xGdWhVNlVvMkxaZ0NyNTh0ZjNCUm5BOG16RmNGR2VNU2hjb1ZpbXhmcWVsem9XdlZrV1lhTTdxbDl6TUhjZnBqdUxa?oc=5"
+        },
+        {
+          "title": "Internal Security arrests individual for random gunfire in Raqqa",
+          "original_title": "الأمن الداخلي يوقف شخصا أطلق النار عشوائيا في الرقة",
+          "original_language": "ar",
+          "summary": "Internal security forces in Raqqa arrested an individual responsible for random gunfire.",
+          "published": "2026-10-05T18:18:53+00:00",
+          "source": "اسلام تايمز",
+          "url": "https://news.google.com/rss/articles/CBMiuANBVV95cUxQR2lXOVY0V1FwVWt0bGtOV3FHbmhMbUJPdm85NEZuaVpfNk9sT0dPQ0hxVXhidThxbnRSU3VQV2NncWcybFpINFU3RmVvWmNvM1VwUUNtVEdtUzZyTFBmamMwQnpzUzJMWmhuY3JQX3RWT2lxQ2NrdndUYWw3TWdmbVlYNEs5bzhoZGp2OExrQUNRUUdEQUdRSWNmVExvRVVzUlV1YzM5dU9ib2lHdHRzMnRzbnc5OUo0enl1cW84RGY0d1Zad3J3UjBlTUdHd211TXJla1A1UXRWaWhWNmJtbm1YTG5uSkduMlJaWGVBNGpJckplVjNRNjZ4dUJnRlh6bjlCTGNtZHJtQ280V1NqY0hzRnEya3dzLTdkU0tlNVl1b1FBY0t3aC1yNlVaa1ZCOUdYRTV0dkE4OENBeUxnSlhVQ1hoTEpZRk9qNE9tRlVrRjhHLXc3dzJUZXVSSGRINWFLYVU0b0NYUW5rWTY0dGJvY284Y21naUN3U1EtaVRYbXpwU1VpVElvMEoyaUZ3YzlzaFNhdnZycDk0R1NIZXFaVGIzMVE1dnFvckJjUDktcGZQbFJ6TQ?oc=5"
+        },
+        {
+          "title": "Counter-Terrorism Administration Arrests Jamal Trab尔si, Deputy to Ali Kayali",
+          "original_title": "إدارة مكافحة الإرهاب تلقي القبض على المجرم جمال طرابلسي نائب المجرم علي ‏كيالي",
+          "original_language": "ar",
+          "summary": "Syrian counter-terrorism forces arrested Jamal Trabelsi, described as the deputy to Ali Kayali.",
+          "published": "2026-10-04T18:16:06+00:00",
+          "source": "وكالة الأنباء السورية – سانا",
+          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE40Q1FaVFhrTVlSUV9DOTRiUHNibWp5Z2pxUmNfVFdKcmJlT2djXy1oQ1h1enFLUm1oNDVET3NDazIxblNfV0czeA?oc=5"
+        },
+        {
+          "title": "Syrian security announces arrest of Jamal Tarabulsi",
+          "original_title": "الأمن السوري يعلن اعتقال جمال طرابلسي.. الضربة الأبرز لفلول \"معراج أورال\"",
+          "original_language": "ar",
+          "summary": "Syrian security forces announced the arrest of Jamal Tarabulsi, described as a prominent blow to the remnants of Miraj Ural's group.",
+          "published": "2026-10-05T10:30:33+00:00",
+          "source": "الجزيرة نت",
+          "url": "https://news.google.com/rss/articles/CBMi3wJBVV95cUxPRmM0eDl2WDNhenRrN1p6SGV0cDl0S0tOZnk2RlJJMHdwcGNCLWNWUzlvcVpmUHpRUFBZSklvNXp1X0prODY2Tk9LNzhmMFFPeHotX0pRT3ZiX3ZHYldOalByZUFPUkJna005Zlo1cVRUSExNek9hWDhiM0ZGaEwwYzZLSE1PWWhDal83NW1HOF8zQlQySVJ1Sk10MUc2dWw5dHZYRXRRUEV5Uk8yQUIzRnRHeW10S0EtWVlhX19wRklIMlBJdGgxbzlJcHlLLTdBdGhQX1ZUOFJmOHNfaUJXUWU3OXNmZVRqZWFINzFtRU53bUVRaFEyUl9Fel94ZVJHZEx5M0o2d2hTUXRLOXVmZ2VwblYxaTk4MmtCQ1NIc0YyN1NzUjNERjNtbVdpTG9sQ1UwU254MXpwZy0wMXZxTXdmUmg3UnEtSjdEaXY1VGxHZzE3Vzl3eFotNGhJbWPSAd8CQVVfeXFMT0ZjNHg5dlgzYXp0azdaekhldHA5dEtLTmZ5NkZSSTB3cHBjQi1jVlM5b3FaZlB6UVBQWUpJbzV6dV9Kazg2Nk5PSzc4ZjBRT3h6LV9KUU92Yl92R2JXTmpQcmVBT1JCZ2tNOWZaNXFUVEhMTXpPYVg4YjNGRmhMMGM2S0hNT1loQ2pfNzVtRzhfM0JUMklSdUpNdDFHNnVsOXR2WEV0UVBFeVJPMkFCM0Z0R3ltdEtBLVlZYV9fcEZJSDJQSXRoMW85SXB5Sy03QXRoUF9WVDhSZjhzX2lCV1FlNzlzZmVUamVhSDcxbUVOd21FUWhRMlJfRXpfeGVSR2RMeTNKNndoU1F0Szl1ZmdlcG5WMWk5ODJrQkNTSHNGMjdTc1IzREYzbW1XaUxvbENVMFNueDF6cGctMDF2cU13ZlJoN1JxLUo3RGl2NVRsR2cxN1c5d3haLTRoSW1j?oc=5"
+        },
+        {
+          "title": "Syrian security announces arrest of Mihraç Ural's right-hand man",
+          "original_title": "الأمن السوري يعلن اعتقال اليد اليمنى لـ\"معراج أورال\"",
+          "original_language": "ar",
+          "summary": "Syrian security forces announced the arrest of the primary aide to militant leader Mihraç Ural.",
+          "published": "2026-10-05T16:07:00+00:00",
+          "source": "زاد الاردن",
+          "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1la2FCVjJNWUFrb0pWS1o3VkJGTXNyQy15T1FETG8xSkhDNHNyeDNlV0JuZWRmUUI1QXFBTU8tYW5manlrdXhhUy1KeEJKNkxkVElWZUpFcDhaMTZyN1ByY1l5eGl4OTliNFE?oc=5"
+        },
+        {
+          "title": "Deputy of the 'Butcher of Baniyas' in Syrian security custody: Who is Mihraç Ural?",
+          "original_title": "نائب \"جزار بانياس\" بقبضة الأمن السوري.. من هو معراج أورال؟",
+          "original_language": "ar",
+          "summary": "Syrian security forces captured Mihraç Ural, known as the deputy of the 'Butcher of Baniyas'.",
+          "published": "2026-10-06T08:16:14+00:00",
+          "source": "قناة ومنصة المشهد - أخبار العالم اليوم",
+          "url": "https://news.google.com/rss/articles/CBMi6ANBVV95cUxQS0wwcHhVMm41Q3lIaFZTRnktWXJWSGJnaHh5VEVvZVVMemxnQVh1UXNQY29uTWR6T0FhY0h4ODhjUW1BblhDcWJZNEdJNHhCcWtoUEY3UUVseEliWVVHRVZMNVkwSks0Y25YcVhrejZaVmxEeU9ZQzVvMEZqRVBmTE91bElybE04bktJYW9JNmhQbUNsc3ZsbzlYemY2T05oQ0pfZnFKQnBZVmlOcW8yaDRfMURSVG9veU00LUJMX1RELUNmNXBLdW9heUh0OWtJQk5BMVM1VVR2RzZOcmVpNDFWMXlucFJ2ZkFLMVFJUlRtVXh1a015eWxMQmxSWTNISXRiTEtuMjZ5UTlsV21uN1ZTaVhNemdmYTRFNy1BYWlubXphdWhsVFQwV2VCQmVPZ3ljRU5HR3A4RkFheVJmakdWbFVfa2VlT3R1MThYbWRWQUkzNDlLZURHOVpmclNqRWVwZk1PYXFpel90S1YzTllLZlNnZjlpZ0xnRXZNSW1KeDYtelZ3MHVtTFFhYjJJdEUxenM1YUVZc3N6Vk9ES2ZJa2xIRDl4WDNuTzFVa01sbnVVVmJEcDJBbXZBeDhrWmZPRGs3YldLWlVCeTA0ZVM2bjUteDlKVlBJdkZ5T3NfaUVtMmpredIB7gNBVV95cUxQYVVpOXk3bVo1TXRaelJpMzBtM1RRODZjYWhqTU9CTC1xeC15S3NLbTdXNTdwMGxuQkVyV0pJVDZLMXdXRS1GMjdGa2lQWFJfRjZ0b1ZFcGM1S0lHT1FwVkNsSGluSWVtX1YyZnItZ3diRjdKZ2JWandSOVhucmNwcG43ZU8xNTRXTFc4blVEU0dBWXNrMEdZM2JkcGNOd29OZmQxX3ZKWTI3d0dGa1NzZERHZVJOb0hIREZHOEtyV2lBaVJ1X3hQVjBpWTBFaG82dEYxVWhXTXFmRS0yZjdKbTNPeVBfLVdPalhmYU82eFEtVVcwQmN4dkFLVFZkR2V6TXNfTHRIazZfeUp4TUVsX0cxNzI3SHlqREtpSDBwZURiQ04yVFpUdFJ3SlE3SEpHR1N0WDZodkk4UW53ZGNncHdSMUYtT2FiUUw1TlE1RFFzckR4UF8weGtLWlhYTS1wcmVJNlZFVmFteWh4R0VSdGVtVnVjZ0trdTE5dHdhS2czbm9ZajdobUVYNlE5eVZHRnNYTW5FaDRLT3NZMzdpS1BBOWZPUktGRG1pM1dXbmMyRnM1Q3U1SW9ZVzVkSUFHTXMxVHJLY3dsbWlVQTg4aWM2amlUYk9GYmQ0SXRURDFMSERWZGNleDIwSHk3UQ?oc=5"
+        },
+        {
+          "title": "Mihrac Ural's aide Cemal Trablusi arrested in Syria",
+          "original_title": "Hatay Reyhanlı'da 53 vatandaş yitmişti! Terörist Mihraç Ural'ın yardımcısı Cemal Trablusi Suriye'de yakalandı",
+          "original_language": "tr",
+          "summary": "Cemal Trablusi, an aide to Mihrac Ural, has been arrested in Syria for his alleged role in historical attacks.",
+          "published": "2026-10-04T18:16:06+00:00",
+          "source": "TGRT Haber",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNLWx1d19fVV9iRzkxUmUzdXVxUk9vUEFlaHE5bkhBbDZXOXFaVW5fTlBzcnBJTUF6M1p6RVdNTldCajFLaGMzdnlOazFELTRDX2FhYV9SQkRCQmlOdlgxZnZHWkR6UjRCVUZ1eV9nZGsyWFpTaUZkTWhJdFJmTVZ4ZjJjRkpvSXd3aVRJeFRxV2Q2SFhUNnVyb3l2Q3ZlUjJkMndQOHN1bUxTTWlJbTFYR0lWYlhhdEszZndoVnZEeVRYbVlu?oc=5"
+        },
+        {
+          "title": "Syrian security forces arrest 'Guardian of the Capital'",
+          "original_title": "الأمن السوري يعتقل \"حارس العاصمة\" في عهد الأسد",
+          "original_language": "ar",
+          "summary": "Syrian authorities arrested a prominent figure known as the 'Guardian of the Capital' (Hares al-Asima).",
+          "published": "2026-10-10T17:24:00+00:00",
+          "source": "سكاي نيوز عربية",
+          "url": "https://news.google.com/rss/articles/CBMi_wJBVV95cUxPNDZIQ2xjaFVvb0lnbXUxc3I3NHJiX0pqTTNPcmx5c1BlY0RlMWhtV1NBNDZROG1ud2FwVkZXTDVIUXZiemh0TWtLdzlBaUtYalg2N0JOWFFDWkI3S19qWGl5b0dmbUhEdWc2cUpCZFA3T0lpbUZxZ3NORzQxSHpGUjBBREticjFTbWRPNWNFbjR0UnVZZ01WZU5fb0pPSkVVRVk4UDYwOHpGVFp2NEtMZnlkeUhXY2lXMWJrZnhXSVNLaWlsYnJFdWRVUnc5dFZMM2hwcUVnczl0cjJJdmV5MWFmQXM0Nm92cWhjRm52dmV6Y19pVGYtV1k3Wm9ONGw1b2pnSGs0Umw0SE8yNzA1M0VkNnBlSEFqZFFjcF9pa3N6ZFdjc1FOZVFpbHNQRlFyWDU5bFh6RE9WQ0d6YjUzaTdRaUdGbk9XSVVvWS1YeE0zcWRLNVdtbXJYMFVjY0dMMkFXTXBDTC1wR0U2MklnekxQUWhWblJ3SzFKVnFqMNIBhANBVV95cUxPSTYzanFUSHRiN0J1bE9JRlVNNy1GWWZydDdHbmdrSTBsTWl5a1B0RjBaNndCZy1ZLU5qbDBzODNTVGNzRDhYZTROYV9xRXB6Rk0xOUJKdzJxVnpOZE5rdFJ5aE9hWHROb2hUNTFnSFE2RWJ2OGt5TVRfSUJJSF9HdXhKVEFkYUluTTNhbi10QmRBclBpODlqaEd1OEN4ZFphcjBUTTc4N2N1c21QckdtaW9xS0x3emJBMXdfa0QteUJudDM0X0REVG5tQ2o0Zi0yYkNDeG5EUFl6UFl1TFNRNDNwZlVLVC1mN1FnYVZJcERoX0ljdE90U3lob1J5VmFRcWJzdXZtaGY1NnQ1ZnpTbmY2MGdpUWNQNHkxMWtLMGVjRUtBQ004eC1fUkxjblk4cGlYOFJCZ0ZRNUZhcVp3UUpPbXNTblg3WDJJMjdmUnpQVnMzam56R1p1azh6QnNQWmxYcy1DOWNRdUFsQzdVTzdQMnl4ZDh1bWhCeTZacG5CVGg4?oc=5"
         }
       ],
-      "article_count": 51,
+      "article_count": 65,
       "first_reported": "2026-10-04T17:23:15+00:00",
       "last_reported": "2026-10-06T17:12:46+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 70,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Reports a concrete arrest of a non-state militia leader.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -219820,11 +219741,12 @@
       "title_variants": [
         "Arrest of militia leader in Homs"
       ],
-      "dedup_confidence": 0.892,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
         "very_high_title_similarity",
         "paraphrase_entity_context",
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "same_incident"
       ],
       "location_confidence_score": 0.99,
       "location_method": "ai_city_geonames",
@@ -220415,7 +220337,8 @@
       "dedup_confidence": 0.555,
       "dedup_methods": [
         "entity_actor_event_signature"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "65dc6ad4a4bb6595",
@@ -221811,7 +221734,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Explicit city provided.",
       "ai_geo_fingerprint": "2f8c82c32ef336fa66d5fa9038aefeab0fd205d3d8c68f14b90b786f8373ca1e",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "9f5c766466a93ce7",
@@ -222879,7 +222803,8 @@
       "ai_geo_reason": "An ISIS explosive remnant blast occurred south of Nineveh, Iraq.",
       "ai_geo_fingerprint": "df21970e814bb4859be707466f8f5b3ebc08b5cd463db117f41df9ca059e504d",
       "ai_geo_inferred": false,
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "3d15f46803c09e70",
@@ -225890,7 +225815,8 @@
       ],
       "integrity_review_version": "map-evidence-review-20261022",
       "integrity_review_reason": "Shared model incident identifier grouped different cases/targets; isolate this reviewed record without claiming a new incident.",
-      "integrity_source_evidence": "79c940f6bf6a86d5f38a7507eaaf7f2b3542e9b425095237eaf4838cbdfbb5b1"
+      "integrity_source_evidence": "79c940f6bf6a86d5f38a7507eaaf7f2b3542e9b425095237eaf4838cbdfbb5b1",
+      "dedup_review_required": true
     },
     {
       "id": "1ea6057e6e14c6a9",
@@ -234073,7 +233999,8 @@
       ],
       "integrity_review_version": "map-evidence-review-20261022",
       "integrity_review_reason": "Shared model incident identifier grouped different cases/targets; isolate this reviewed record without claiming a new incident.",
-      "integrity_source_evidence": "7944f1631f60768b2f4b8203a9defd64b67013e6dd5d6f0b8d310004b44ce794"
+      "integrity_source_evidence": "7944f1631f60768b2f4b8203a9defd64b67013e6dd5d6f0b8d310004b44ce794",
+      "dedup_review_required": true
     },
     {
       "id": "578a752dc73d44ab",
@@ -241080,7 +241007,8 @@
       "ai_geo_inferred": false,
       "integrity_review_version": "map-evidence-review-20261022",
       "integrity_review_reason": "Shared model incident identifier grouped different cases/targets; isolate this reviewed record without claiming a new incident.",
-      "integrity_source_evidence": "2c3fac4a77353c38e49f51712943f41bf136f17b7927f8e415871e54f1ce5722"
+      "integrity_source_evidence": "2c3fac4a77353c38e49f51712943f41bf136f17b7927f8e415871e54f1ce5722",
+      "dedup_review_required": true
     },
     {
       "id": "0f8f33487255b897",
@@ -244040,9 +243968,9 @@
       "actor_group": "",
       "primary_event_type": "ATTACK",
       "is_attack": true,
-      "incident_anchor": "Sistan Baluchestan roadside bomb attack 2026-10",
+      "incident_anchor": "Zahedan terrorist cell raid Iran 2026",
       "update_type": "INITIAL",
-      "incident_id": "inc-34836669cad8b5d3",
+      "incident_id": "inc-1535b575064b3400",
       "translated_to_english": true,
       "ai_canonical_event": "IRGC security member killed by roadside bomb in Sistan and Baluchestan",
       "title_variants": [
@@ -244069,7 +243997,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The attack occurred in Sistan and Baluchestan province, Iran.",
       "ai_geo_fingerprint": "cec79b7a684a34b4a72265d93bd88e23c11eb393751e1e801523f37981e8a6bd",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "4c285f338f376d8f",
@@ -245645,7 +245574,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Clashes in Taiz, Yemen.",
       "ai_geo_fingerprint": "68500dd78574444597e0184ed27c382b53086e506b032c4507c7179d4289310a",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "4ee8c54984de3010",
@@ -246633,117 +246563,6 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The operation and courthouse referral are explicitly centered in Istanbul, Turkey.",
       "ai_geo_fingerprint": "8c3b3730651fd3b7813753be7cb55c0ada8ca71b2d116fbe94bbbd5fccf65dae",
-      "ai_geo_inferred": false
-    },
-    {
-      "id": "7c5498d965a51656",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Attacks"
-      ],
-      "title": "Iraq confirms deaths of two civilians in anti-ISIS operation in Kirkuk",
-      "summary": "Iraqi authorities confirmed the death of two civilian minors during a counter-terrorism operation directed against ISIS in Kirkuk.",
-      "original_title": "Irak confirma la muerte de dos civiles en una operación lanzada contra Estado Islámico en Kirkuk",
-      "original_summary": "Irak confirma la muerte de dos civiles en una operación lanzada contra Estado Islámico en Kirkuk Europa Press",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish",
-      "collection_locale": "ES:es",
-      "published": "2026-10-02T07:55:11+00:00",
-      "source": "Europa Press",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxQZ2U1bnFDYXhJcUduZGhBUm5yekJBWmhYX2dYdEJvVGJKUzJMMk9XeEVMbDdKaHcyc2hBOHVhT2lWSFFRWFhLOVVra0c4WERUTWtubzhCeUlZWDFTME9vS3I0TUNhRDVBcWpoRDVKVDRBdnFwbnNKMzd2RzIwc3N3SnhvZmR5VzdMX3dsTHZCTW1WMUtPNDNfYkVabExxVHJqWGNkTEFIS2d5ejAwSVMyak81V3lDcnltRjRYSjN4QTBjUzlGcGZLQ3MxMFF0VFNDVEhmb1FTTktaam9YazRLRF9MZw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Iraq",
-      "country_code": "IQ",
-      "city": "Kirkuk",
-      "region": null,
-      "latitude": 35.46806,
-      "longitude": 44.39222,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "8dfbfa2d9552af56f7935966c1403e15d3da6b04dd729f60545ef17ac25e7421",
-        "8e47819bd68d9b8aba31d31e9fc4d3e037fd623b81cea15dc0032c23233bbd63",
-        "bbfed8c19251405cd8f61c3eed8fb5a23955f49f1cefa8f7fc99b8b3b9fda2f1",
-        "d5738735f9745865a5a9075b44ba5cb0fc16f8d09d033d58a103d37878f2dfdd"
-      ],
-      "sources": [
-        "Europa Press",
-        "Demócrata"
-      ],
-      "related_articles": [
-        {
-          "title": "Irak admite la muerte de dos menores civiles en una operación contra Estado Islámico en Kirkuk",
-          "original_title": "Irak admite la muerte de dos menores civiles en una operación contra Estado Islámico en Kirkuk",
-          "original_language": "es",
-          "summary": "Irak admite la muerte de dos menores civiles en una operación contra Estado Islámico en Kirkuk Demócrata",
-          "published": "2026-10-02T07:58:53+00:00",
-          "source": "Demócrata",
-          "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPbFd2anp3b3RzM1JXWFN4eXNBRGNZQkxNanJxNnJnUHRDUHZmakZ3bHRxT0JUMkF6QXRVWEhQQ1hBOUV0Qm91MHAxbmpKLXZuOWJiakRDOTZOTklpMGM2OHpnR1J0NkZHaU11d09QaXpRYjg2Rkt6aUFTTVFIanlzODZzLWhuQXVFeWc5VFJVSDZleDF2NG9PRXdXRmZkUXFhOW5WQllUSkFRSXFzeUZ5WWJxRG0wWThOZ0ptVV9zY1dZMlNjVjVDUGkzQ3pUSnfSAdQBQVVfeXFMTmpoeXY0cjRTUV8tMnNyOEtuTUxMRmVSWTh4a2M3ZUdMWWxVLUxNc0ttNk9JN2xNSXE1Nk9CQXU0MWh5X2ZYME1lZEZMLVl6dHlOYlM1QnNjYVdtYU1uejg5dHJETkJic3lUbFFZU3FHVW9aenF2SHBpTm5MMzVuSE82ZzlyWHFFU1c4Q2J1dVAxSUtvTHVYa1ktTEdjR190REw2aW1MbHJZeDhtZFNTVHNCeDh1NF9rcVRMV1VkSEhLaWlBS1VweHJoaklaUGhjOVZscGs?oc=5"
-        },
-        {
-          "title": "Iraq admits deaths of two civilian minors in anti-Islamic State operation in Kirkuk",
-          "original_title": "Iraq ammette la morte di due minori civili in un'operazione contro lo Stato Islamico a Kirkuk",
-          "original_language": "it",
-          "summary": "Iraqi authorities acknowledged the death of two civilian minors during a counter-terrorism operation against the Islamic State in Kirkuk.",
-          "published": "2026-10-02T07:58:53+00:00",
-          "source": "Demócrata",
-          "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNT0ZmT05HZVJhUEFISTVKeW81UXJacWVnSXJMa0RfSzRIU2IwVTkyTlBxdUxtVTA1Q1Bwc2lPbkZnQnRraVhXR3ZTYU9oNFJ3a0dSTWpTYTF1MlJMeV9WdGxDNmhTNVdhUzM0aDVqQWVoQ1pWV1hpbDMyRUpmRnJZSmZYU3A5NXd2WHdJREFGQldmb2E0aHQ5MTBVcEw4cnBCSXFvelZFLVNWUnU2OHpvZmRhbEJ2Q2poSjNLcU0teWt4R0dJMXRBeWFDTG0xekxjSjhR0gHYAUFVX3lxTE5jUF9UV0tnRldVYzlyWWVMejlpSkQ4YUp3Q1hXbngtQnVSM1hvdWUyOHgweThfVXFaRXhxTi1zWEpkT0xoOWdHWlpSdkh1dDBIUktJa012VTRpY1ZrcmMxT3FpTFBkb3VHYUx0VFVYUG1mZFBNR0p4ZnVvUC1VQllKaUlFWEhkQmlRNXA4TWh4dnBlN3F6X25rUFo2S1VyV1B5WENNcW9FZ2ZIVVZRYU9lUVNrSHZSMWVETkJTc1MwOVd0QWVRUVdBSlhrQW9UWlFWWlZFZUdzdQ?oc=5"
-        },
-        {
-          "title": "Iraq admits the death of two minor civilians in an operation against the Islamic State in Kirkuk",
-          "original_title": "Irak admite la muerte de dos menores civiles en una operación contra Estado Islámico en Kirkuk",
-          "original_language": "es",
-          "summary": "Iraqi authorities acknowledged civilian casualties during a security operation targeting ISIS militants in Kirkuk.",
-          "published": "2026-10-02T07:58:53+00:00",
-          "source": "Demócrata",
-          "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxOamh5djRyNFNRXy0yc3I4S25NTExGZVJZOHhrYzdlR0xZbFUtTE1zS202T0k3bE1JcTU2T0JBdTQxaHlfZlgwTWVkRkwtWXp0eU5iUzVCc2NhV21hTW56ODl0ckROQmJzeVRsUVlTcUdVb1p6cXZIcGlObkwzNW5ITzZnOXJYcUVTVzhDYnV1UDFJS29MdVhrWS1MR2NHX3RETDZpbUxscll4OG1kU1NUc0J4OHU0X2txVExXVWRISEtpaUFLVXB4cmhqSVpQaGM5Vmxwa9IB1AFBVV95cUxOamh5djRyNFNRXy0yc3I4S25NTExGZVJZOHhrYzdlR0xZbFUtTE1zS202T0k3bE1JcTU2T0JBdTQxaHlfZlgwTWVkRkwtWXp0eU5iUzVCc2NhV21hTW56ODl0ckROQmJzeVRsUVlTcUdVb1p6cXZIcGlObkwzNW5ITzZnOXJYcUVTVzhDYnV1UDFJS29MdVhrWS1MR2NHX3RETDZpbUxscll4OG1kU1NUc0J4OHU0X2txVExXVWRISEtpaUFLVXB4cmhqSVpQaGM5Vmxwaw?oc=5"
-        }
-      ],
-      "article_count": 4,
-      "first_reported": "2026-10-02T07:55:11+00:00",
-      "last_reported": "2026-10-02T07:58:53+00:00",
-      "dedup_confidence": 0.906,
-      "dedup_methods": [
-        "title_plus_anchor",
-        "very_high_title_similarity"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports on an official confirmation regarding civilian casualties during a security operation against ISIS in Kirkuk.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "ISIS",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "anti-ISIS operation Kirkuk 2026-10-02",
-      "update_type": "INITIAL",
-      "incident_id": "inc-b2cedb6b5d2098ab",
-      "translated_to_english": true,
-      "ai_canonical_event": "civilian casualties during anti-ISIS operation in Kirkuk",
-      "title_variants": [
-        "civilian casualties during anti-ISIS operation in Kirkuk"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "operation against Estado Islámico en Kirkuk"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The counter-terrorism operation against ISIS took place in Kirkuk, Iraq.",
-      "ai_geo_fingerprint": "7ca6d3fe4287c9772758edbf569ea0702230378d9fef626e17307adfa7ed0a44",
       "ai_geo_inferred": false
     },
     {
@@ -250548,7 +250367,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The event involves government contracts from the Baja California Prosecutor's Office.",
       "ai_geo_fingerprint": "219afbb8061e6f4878ccf435d7fcfa4317c5933fbbb9d494d8027dda1794678f",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "e2a08141d2d6c8e3",
@@ -252593,79 +252413,6 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The event is connected to a terror alert in England.",
       "ai_geo_fingerprint": "19a150de991324b2976b161c03cb3ccf6daa1dc19b1171a5a708bb4b13151785",
-      "ai_geo_inferred": true
-    },
-    {
-      "id": "b02b4d2bb469dbd0",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Three PKK terrorists neutralized",
-      "summary": "Three PKK terrorists were neutralized in security operations.",
-      "original_title": "Siyonistler bu habere ağlasın ; 3 PKKlı terörist etkisiz hale getirildi – Netinternet Haber",
-      "original_summary": "",
-      "original_language": "tr",
-      "collection_language": "tr",
-      "collection_language_name": "Turkish",
-      "collection_locale": null,
-      "published": "2026-10-01T19:15:00+00:00",
-      "source": "netinternethaber.com",
-      "source_count": 1,
-      "url": "https://netinternethaber.com/siyonistler-bu-habere-aglasin-3-pkkli-terorist-etkisiz-hale-getirildi/",
-      "collector": "GDELT DOC 2.0",
-      "acquisition_channel": "gdelt_doc_search",
-      "country": "Turkey",
-      "country_code": "TR",
-      "city": "Ankara",
-      "region": null,
-      "latitude": 39.91987,
-      "longitude": 32.85427,
-      "location_precision": "country_capital",
-      "location_confidence": "medium",
-      "source_article_fingerprints": [
-        "17477438a490bb92c4490f9f8d973bc8c8322abb1ab0f154f5ef779282182fbe"
-      ],
-      "sources": [
-        "netinternethaber.com"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-01T19:15:00+00:00",
-      "last_reported": "2026-10-01T19:15:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Operational counter-terrorism report detailing the neutralization of three PKK members.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "PKK",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "PKK members neutralized Turkey 2026-10-01",
-      "update_type": "INITIAL",
-      "incident_id": "inc-91dcc98d1a6c24b8",
-      "translated_to_english": true,
-      "ai_canonical_event": "Three PKK terrorists neutralized in Turkey",
-      "title_variants": [
-        "Three PKK terrorists neutralized in Turkey"
-      ],
-      "location_confidence_score": 0.8,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Three PKK terrorists were neutralized"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "PKK neutralization operations typically occur in Turkey or northern Iraq; Turkey is the default country context for this source and terminology.",
-      "ai_geo_fingerprint": "08cd9808b03eb47909769bc853de59f5871c1e5076de1485a71da7f7e23f1e7c",
       "ai_geo_inferred": true
     },
     {
@@ -255187,7 +254934,7 @@
       "collection_locale": null,
       "published": "2026-10-01T14:55:00+00:00",
       "source": "کوردستان 24",
-      "source_count": 2,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQUlNLeWJWa1BEWDN5QkVzYXY5MVV5YXJvUEI1VGZ0RGpKRGh3Q0p6eVNNckpvZzRPVHlYX0w2dlY0MGNQYjhKc0poMy1odzRaREFUOWZkTmRpX2JSWjBTWFZkRWg0SVUzNjlIYjUwSVdNdGNXcVpqUTNPQllFUjlfY00zWldmdWc5R2lnRFoxZ1RJMXRzbWJIcEUxV1I1R0VBS1NUNm9hYjdlVHNEWVM2cXFTSUtlbWZuOUFTbzhhUWJkLWNOeUpfOUhTRUNZMkxJV2VvRjQzTktiZ0ZfWjV1WQ?oc=5",
       "collector": "Google News RSS",
       "country": "Iraq",
@@ -255199,12 +254946,18 @@
       "location_precision": "city",
       "location_confidence": "high",
       "source_article_fingerprints": [
+        "8dfbfa2d9552af56f7935966c1403e15d3da6b04dd729f60545ef17ac25e7421",
+        "8e47819bd68d9b8aba31d31e9fc4d3e037fd623b81cea15dc0032c23233bbd63",
+        "bbfed8c19251405cd8f61c3eed8fb5a23955f49f1cefa8f7fc99b8b3b9fda2f1",
         "c114edd35975338f5acf00c849edf85fc3fd1d6527c3955bf61aca4fbf44a300",
+        "d5738735f9745865a5a9075b44ba5cb0fc16f8d09d033d58a103d37878f2dfdd",
         "e38e74a7b07f4dabbd2171960f9575c18e496e5c3145e160a93bcbb80a12272f"
       ],
       "sources": [
         "کوردستان 24",
-        "almaalomah.me"
+        "almaalomah.me",
+        "Europa Press",
+        "Demócrata"
       ],
       "related_articles": [
         {
@@ -255215,11 +254968,47 @@
           "published": "2026-10-01T17:55:20+00:00",
           "source": "almaalomah.me",
           "url": "https://news.google.com/rss/articles/CBMigARBVV95cUxQZDZtcUVBNWVBYTkyM3JISGxrVE9yR0JwSEpVRkFGbE9KbTVSUDNtZVJxS01hRHBBam0yY1pZRUJETFdOSFN3OWNXTlJLYnZmeXJlYUJvdnk4Ti1zMnhNWk5qM0RxN3hQMnhVODFiQ05uZWdpeVV3TXVjeFAweEU3YzZZWlFReDlwMGkzNkhDdE0wUDNFcmJnX2dMNzU0bl9WTmxxcV9TMURkeEF5dWZoWDd6OEVad2RSVUNESU5UclE2TjFZRXVlZ2pxU1Nsc3lTcnZMWjVmNVpFRXpGa0xRZkVWZzZZTWwya3R2NlZTS0NTdW1fYjJ6NHRtMW13ak9DTGpfNHl6Z1VSNlBDaTJMRUxwTDhiQ2dObjVfRlpPN29FWTNYQzN0M3VYTUJRZWVaTFBneWM3dHp1UzUtSjFZTG1rSmJCcEhMeHpCamFLbUQ2VUJTU0FOR0RFWjI3WFNQRGJKS0hCTVQ4SWQxblR2emFiazBTaUxOV2dfMm1sNkJnZkcyZ1RMcndEU2RXcldnXzJKUzVnMllKeXBsbXltU3NyNWxRSGdraXlCb0lUXzlJaFAwU3FZaGlYWDdHVHZKWU16U2t6d0o2WG9EVldYYjY4MVRpZjRLWC1HNjcyZzJzOXh0Q09TVGFTRVR0OXdoWHFWWm8yVlpKT2N2ZWlDNg?oc=5"
+        },
+        {
+          "title": "Iraq confirms deaths of two civilians in anti-ISIS operation in Kirkuk",
+          "original_title": "Irak confirma la muerte de dos civiles en una operación lanzada contra Estado Islámico en Kirkuk",
+          "original_language": "es",
+          "summary": "Iraqi authorities confirmed the death of two civilian minors during a counter-terrorism operation directed against ISIS in Kirkuk.",
+          "published": "2026-10-02T07:55:11+00:00",
+          "source": "Europa Press",
+          "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxQZ2U1bnFDYXhJcUduZGhBUm5yekJBWmhYX2dYdEJvVGJKUzJMMk9XeEVMbDdKaHcyc2hBOHVhT2lWSFFRWFhLOVVra0c4WERUTWtubzhCeUlZWDFTME9vS3I0TUNhRDVBcWpoRDVKVDRBdnFwbnNKMzd2RzIwc3N3SnhvZmR5VzdMX3dsTHZCTW1WMUtPNDNfYkVabExxVHJqWGNkTEFIS2d5ejAwSVMyak81V3lDcnltRjRYSjN4QTBjUzlGcGZLQ3MxMFF0VFNDVEhmb1FTTktaam9YazRLRF9MZw?oc=5"
+        },
+        {
+          "title": "Irak admite la muerte de dos menores civiles en una operación contra Estado Islámico en Kirkuk",
+          "original_title": "Irak admite la muerte de dos menores civiles en una operación contra Estado Islámico en Kirkuk",
+          "original_language": "es",
+          "summary": "Irak admite la muerte de dos menores civiles en una operación contra Estado Islámico en Kirkuk Demócrata",
+          "published": "2026-10-02T07:58:53+00:00",
+          "source": "Demócrata",
+          "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPbFd2anp3b3RzM1JXWFN4eXNBRGNZQkxNanJxNnJnUHRDUHZmakZ3bHRxT0JUMkF6QXRVWEhQQ1hBOUV0Qm91MHAxbmpKLXZuOWJiakRDOTZOTklpMGM2OHpnR1J0NkZHaU11d09QaXpRYjg2Rkt6aUFTTVFIanlzODZzLWhuQXVFeWc5VFJVSDZleDF2NG9PRXdXRmZkUXFhOW5WQllUSkFRSXFzeUZ5WWJxRG0wWThOZ0ptVV9zY1dZMlNjVjVDUGkzQ3pUSnfSAdQBQVVfeXFMTmpoeXY0cjRTUV8tMnNyOEtuTUxMRmVSWTh4a2M3ZUdMWWxVLUxNc0ttNk9JN2xNSXE1Nk9CQXU0MWh5X2ZYME1lZEZMLVl6dHlOYlM1QnNjYVdtYU1uejg5dHJETkJic3lUbFFZU3FHVW9aenF2SHBpTm5MMzVuSE82ZzlyWHFFU1c4Q2J1dVAxSUtvTHVYa1ktTEdjR190REw2aW1MbHJZeDhtZFNTVHNCeDh1NF9rcVRMV1VkSEhLaWlBS1VweHJoaklaUGhjOVZscGs?oc=5"
+        },
+        {
+          "title": "Iraq admits deaths of two civilian minors in anti-Islamic State operation in Kirkuk",
+          "original_title": "Iraq ammette la morte di due minori civili in un'operazione contro lo Stato Islamico a Kirkuk",
+          "original_language": "it",
+          "summary": "Iraqi authorities acknowledged the death of two civilian minors during a counter-terrorism operation against the Islamic State in Kirkuk.",
+          "published": "2026-10-02T07:58:53+00:00",
+          "source": "Demócrata",
+          "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNT0ZmT05HZVJhUEFISTVKeW81UXJacWVnSXJMa0RfSzRIU2IwVTkyTlBxdUxtVTA1Q1Bwc2lPbkZnQnRraVhXR3ZTYU9oNFJ3a0dSTWpTYTF1MlJMeV9WdGxDNmhTNVdhUzM0aDVqQWVoQ1pWV1hpbDMyRUpmRnJZSmZYU3A5NXd2WHdJREFGQldmb2E0aHQ5MTBVcEw4cnBCSXFvelZFLVNWUnU2OHpvZmRhbEJ2Q2poSjNLcU0teWt4R0dJMXRBeWFDTG0xekxjSjhR0gHYAUFVX3lxTE5jUF9UV0tnRldVYzlyWWVMejlpSkQ4YUp3Q1hXbngtQnVSM1hvdWUyOHgweThfVXFaRXhxTi1zWEpkT0xoOWdHWlpSdkh1dDBIUktJa012VTRpY1ZrcmMxT3FpTFBkb3VHYUx0VFVYUG1mZFBNR0p4ZnVvUC1VQllKaUlFWEhkQmlRNXA4TWh4dnBlN3F6X25rUFo2S1VyV1B5WENNcW9FZ2ZIVVZRYU9lUVNrSHZSMWVETkJTc1MwOVd0QWVRUVdBSlhrQW9UWlFWWlZFZUdzdQ?oc=5"
+        },
+        {
+          "title": "Iraq admits the death of two minor civilians in an operation against the Islamic State in Kirkuk",
+          "original_title": "Irak admite la muerte de dos menores civiles en una operación contra Estado Islámico en Kirkuk",
+          "original_language": "es",
+          "summary": "Iraqi authorities acknowledged civilian casualties during a security operation targeting ISIS militants in Kirkuk.",
+          "published": "2026-10-02T07:58:53+00:00",
+          "source": "Demócrata",
+          "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxOamh5djRyNFNRXy0yc3I4S25NTExGZVJZOHhrYzdlR0xZbFUtTE1zS202T0k3bE1JcTU2T0JBdTQxaHlfZlgwTWVkRkwtWXp0eU5iUzVCc2NhV21hTW56ODl0ckROQmJzeVRsUVlTcUdVb1p6cXZIcGlObkwzNW5ITzZnOXJYcUVTVzhDYnV1UDFJS29MdVhrWS1MR2NHX3RETDZpbUxscll4OG1kU1NUc0J4OHU0X2txVExXVWRISEtpaUFLVXB4cmhqSVpQaGM5Vmxwa9IB1AFBVV95cUxOamh5djRyNFNRXy0yc3I4S25NTExGZVJZOHhrYzdlR0xZbFUtTE1zS202T0k3bE1JcTU2T0JBdTQxaHlfZlgwTWVkRkwtWXp0eU5iUzVCc2NhV21hTW56ODl0ckROQmJzeVRsUVlTcUdVb1p6cXZIcGlObkwzNW5ITzZnOXJYcUVTVzhDYnV1UDFJS29MdVhrWS1MR2NHX3RETDZpbUxscll4OG1kU1NUc0J4OHU0X2txVExXVWRISEtpaUFLVXB4cmhqSVpQaGM5Vmxwaw?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 6,
       "first_reported": "2026-10-01T14:55:00+00:00",
-      "last_reported": "2026-10-01T17:55:20+00:00",
+      "last_reported": "2026-10-02T07:55:11+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -259138,7 +258927,7 @@
       "collection_locale": "TR:tr",
       "published": "2026-10-01T08:29:05+00:00",
       "source": "Anadolu Ajansı",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPVlM5ZmRwcUNWUW1qbHRkVndvSVFhYnVLMXE2UXZORlgtenJLallZZzQyekpOVEZHSFB2OWkzMzN0dzFESWRGalRIdU9tRzhmS2hqNFdMYW54NnJWalNMTk5RdGpQX1Y0NUdkOHlCblMyNzhnelBKb0l0dVN1MGFEaUFITjhvcjZwSF8xZ1Q5aWJJUnVXY2R5VVpXS1FVWkNNbGVoMg?oc=5",
       "collector": "Google News RSS",
       "country": "Turkey",
@@ -259153,11 +258942,13 @@
       "targeted_source": "aa.com.tr/tr",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
+        "17477438a490bb92c4490f9f8d973bc8c8322abb1ab0f154f5ef779282182fbe",
         "56c8853d35ff8ce8a16795c3f012d7e8ccf48fa3b8db1f4ace38012aa57f5d11",
         "8d04f50d2a4f699b7056d090e20555a1ee923723844a2bafab470dea293634d8"
       ],
       "sources": [
-        "Anadolu Ajansı"
+        "Anadolu Ajansı",
+        "netinternethaber.com"
       ],
       "related_articles": [
         {
@@ -259168,14 +258959,24 @@
           "published": "2026-10-01T09:59:35+00:00",
           "source": "Anadolu Ajansı",
           "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNY2FrdE5YcnFROERkU0IwcTI5alE0RG40Mk5vT01LMzZJaktJd0J6QXhjZG9xcFRtWE9zcW1sYVk0ZmVyeXVYLS1oMUpUN2JRSHppUGxmX2kxczV0RV9HUlp4c1Rrc0ozVm9GMnAyTlBhZVo1YXpuMEhZTFk5T1ViMFBscVZHbEplMkZfXzQ5cUlFN21zWjNoYg?oc=5"
+        },
+        {
+          "title": "Three PKK terrorists neutralized",
+          "original_title": "Siyonistler bu habere ağlasın ; 3 PKKlı terörist etkisiz hale getirildi – Netinternet Haber",
+          "original_language": "tr",
+          "summary": "Three PKK terrorists were neutralized in security operations.",
+          "published": "2026-10-01T19:15:00+00:00",
+          "source": "netinternethaber.com",
+          "url": "https://netinternethaber.com/siyonistler-bu-habere-aglasin-3-pkkli-terorist-etkisiz-hale-getirildi/"
         }
       ],
-      "article_count": 2,
+      "article_count": 3,
       "first_reported": "2026-10-01T08:29:05+00:00",
-      "last_reported": "2026-10-01T09:59:35+00:00",
-      "dedup_confidence": 0.904,
+      "last_reported": "2026-10-01T19:15:00+00:00",
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "very_high_title_similarity"
+        "very_high_title_similarity",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
@@ -259210,7 +259011,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The Turkish Ministry of Defense announced the surrender of a PKK terrorist.",
       "ai_geo_fingerprint": "a5a6c64c34bb27f3cf12d289a972c46df345538c8db3359ea86f6d62aa5aeac8",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "cbrn_subgroups": []
     },
     {
       "id": "b9c6fe7aa4c19cf3",
@@ -260775,109 +260577,6 @@
       "cbrn_subgroups": []
     },
     {
-      "id": "8aa5e6bf796e0605",
-      "category": "Attacks",
-      "categories": [
-        "Attacks",
-        "Counter Terrorism Action"
-      ],
-      "title": "Tasnim Agency: Policeman killed while thwarting armed terrorist attack targeting checkpoint at Rask city entrance",
-      "summary": "Iranian security forces thwarted an armed terrorist attack targeting a checkpoint near Rask, resulting in the death of a police officer.",
-      "original_title": "وكالة تسنيم: مقتل شرطي خلال إحباط هجوم إرهابي مسلح استهدف نقطة تفتيش عند المدخل المؤدي إلى مدينة راسك",
-      "original_summary": "وكالة تسنيم: مقتل شرطي خلال إحباط هجوم إرهابي مسلح استهدف نقطة تفتيش عند المدخل المؤدي إلى مدينة راسك Lebanon ON",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
-      "published": "2026-10-01T06:44:19+00:00",
-      "source": "Lebanon ON",
-      "source_count": 3,
-      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE0yNnEzRDNxM2dTSmk4Xy1OamxSVG1NLWJpTlZGaXBCNC1FQjhKcnBERE5UMjQ5THkwbnRjLXpad2JiRWpqVXRDU1FKMXdfZw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Iran",
-      "country_code": "IR",
-      "city": "Rāsak",
-      "region": null,
-      "latitude": 26.23682,
-      "longitude": 61.39901,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "7985b05291070378a7f8f2218472f081b2477e7fbf834995b830e0b782a45bfc",
-        "8b811cd809d0139dd6b691b067f81e5043e39ed8a4aaa73a816215e6fca881d2",
-        "b27555f6b41ada9d753dc6a08e83035ae41880f57994b3d8792ce6effc20fa02",
-        "c9ffeecddf961d9d9d70995035f13326e35eedb0d5a49c8e49464b6136f6dd01"
-      ],
-      "sources": [
-        "Lebanon ON",
-        "خبرگزاری مهر",
-        "ar.mehrnews.com"
-      ],
-      "related_articles": [
-        {
-          "title": "Terrorist gang preparing for attacks dismantled in Iran",
-          "original_title": "İran'da saldırı hazırlığındaki terör çetesi çökertildi",
-          "original_language": "tr",
-          "summary": "Iranian security forces have dismantled a terrorist cell that was preparing to carry out attacks.",
-          "published": "2026-10-01T10:29:09+00:00",
-          "source": "خبرگزاری مهر",
-          "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOaEZIS21Bd2JtQU54Y0pZcnlaVnBlNEJYelRZZ081cGJwdzc2Y2phTUpBYjdKMUhMRkdjcGFab0NheFYxS2FzZnc2RVMwT29rWDQtWlEzeC1Lc3h0YXdxTk4tOE1waF93OVpyT2lWc0JwMV83THo5UlpSRjZ0bi1sZ3k5WXlqcnJwNUktUzJGaGFDb3pMSWpHdUUtSG9mUW9zV2hZMUlLQ09rNGVFeVpaZzY1U1ZETWdPNUcwM0lDeTVWMDhsMWVUVVAzdUNFR25DOVhMQjZXZ0JKUzVWT3hR?oc=5"
-        },
-        {
-          "title": "Operation to purge the village of Jangal in Rask city of mercenary terrorists",
-          "original_title": "عملية تطهير قرية \"جنغل\" في مدينة راسك من وجود الإرهابيين المرتزقة",
-          "original_language": "ar",
-          "summary": "Iranian security forces carried out a clearance operation to purge the village of Jangal in Rask city of armed militant elements.",
-          "published": "2026-10-02T10:36:00+00:00",
-          "source": "خبرگزاری مهر",
-          "url": "https://news.google.com/rss/articles/CBMigwRBVV95cUxNaFNJTTNIdF9mMHlJRHpxU1dueXNtbDBSOE54NHE2eF9oOW02ZGdhU3hiRUVjdm9KeVRuNkpmVG9PUTRvdnJCNXN5UVlXUjNfdWpnYS0xRWZnSllVNzdlNjFuM3ZILTVLc3l1enJCM1ZFbi1OMkJWV2QtTnBJaU5yY0JOb2NhR1MwQzNzbm9tdjViT2JYSUJFZUJ0Y3J0a0lsWTJnUlRGZ2w0R1d5MW5iNjBibjR1aWlXT0d2M2ZBRVZHLTcyTVlyM1BVR1dwRHdkNkZETGtLTHZNS3VlcC10cW51LXZYV2owVzh6V0RSbzAwaHhzblZ6Z2ZLU2R5akJPbHh3SEMyUEdKRVdkbzQzdnl2N1ZPbVRGY2xya29GNjZ0U3laNEVRaE1SZHNXVnhEZVJVc0E1b2VPZllDaU9uaXhqTzc0Q2d5cFJQTmFvR0p3SVNiTFhiYzkwZGViV0VRa1hIRHg2QWxXQ3NWUnhvdE9UdmQtamV1eENrNWZfSk1mTVhXQWhPR0xaaFpySkpmaUg3akJvNUV0M1ljSHZWSjhQY0hvMS1reWFreXIyS19FS04zNThzbE16dVpxWVhwcHlLU0pSRFFoYm4xc2FiQi11cy1QRGl6c20wRmx0cDYxTGFBTE85VmdUQTdpOWd5eEJISWZCNXd5S2lxNDZ0YUN4aw?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-10-01T06:44:19+00:00",
-      "last_reported": "2026-10-02T10:36:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete armed terrorist attack on a security checkpoint resulting in a fatality and counter-terrorism response.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Rask checkpoint terrorist attack Iran 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-340a22af666f2886",
-      "translated_to_english": true,
-      "ai_canonical_event": "Armed terrorist attack on checkpoint at Rask city entrance Iran",
-      "title_variants": [
-        "Armed terrorist attack on checkpoint at Rask city entrance Iran"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "paraphrase_entity_context",
-        "same_incident"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "checkpoint at Rask city entrance"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly mentions Rask city entrance in Iran.",
-      "ai_geo_fingerprint": "7d0a595f31960945cffe8c5ceb7323b53725ef61d3734d1dbd2781ed24a5fd3f",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "6a94aacae91a4e9e",
       "category": "Attacks",
       "categories": [
@@ -260926,9 +260625,9 @@
       "actor_group": "",
       "primary_event_type": "ATTACK",
       "is_attack": true,
-      "incident_anchor": "Rask checkpoint terrorist attack Iran 2026",
+      "incident_anchor": "Zahedan terrorist cell raid Iran 2026",
       "update_type": "FOLLOW_UP",
-      "incident_id": "inc-340a22af666f2886",
+      "incident_id": "inc-1535b575064b3400",
       "translated_to_english": true,
       "ai_canonical_event": "Martyrdom of Sergeant Alireza Sanjooli in Rask terrorist incident Iran",
       "title_variants": [
@@ -260955,7 +260654,8 @@
       "id": "fab5eb60caa20a12",
       "category": "Counter Terrorism Action",
       "categories": [
-        "Counter Terrorism Action"
+        "Counter Terrorism Action",
+        "Attacks"
       ],
       "title": "Tasnim Agency: Iranian security forces begin operation to clear terrorist cell hideout in Zahedan",
       "summary": "Iranian security forces launched an operational raid to clear out a terrorist cell's hideout in Zahedan.",
@@ -260967,7 +260667,7 @@
       "collection_locale": "SA:ar",
       "published": "2026-10-01T06:36:44+00:00",
       "source": "شفقنا العربي",
-      "source_count": 2,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE9iQlk4WmJFc253YVVEV2xyYVM2a05oSTVKcjJ3Y0JKVG9ZQVU4cmF3OE95dTczUXdXQ3pKVExJd2FfVXlYYS1nMVpn?oc=5",
       "collector": "Google News RSS",
       "country": "Iran",
@@ -260981,11 +260681,17 @@
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "148af4c3e13f801e21fff985d6a52b28578ad77380d01d26c27287331857faeb",
+        "7985b05291070378a7f8f2218472f081b2477e7fbf834995b830e0b782a45bfc",
+        "8b811cd809d0139dd6b691b067f81e5043e39ed8a4aaa73a816215e6fca881d2",
+        "b27555f6b41ada9d753dc6a08e83035ae41880f57994b3d8792ce6effc20fa02",
+        "c9ffeecddf961d9d9d70995035f13326e35eedb0d5a49c8e49464b6136f6dd01",
         "d8f342f089015b60d41252b978909873843d6d68849c47455166d367e8f8be27"
       ],
       "sources": [
         "شفقنا العربي",
-        "خبرگزاری مهر"
+        "خبرگزاری مهر",
+        "Lebanon ON",
+        "ar.mehrnews.com"
       ],
       "related_articles": [
         {
@@ -260996,9 +260702,27 @@
           "published": "2026-10-01T16:18:45+00:00",
           "source": "خبرگزاری مهر",
           "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOaEZIS21Bd2JtQU54Y0pZcnlaVnBlNEJYelRZZ081cGJwdzc2Y2phTUpBYjdKMUhMRkdjcGFab0NheFYxS2FzZnc2RVMwT29rWDQtWlEzeC1Lc3h0YXdxTk4tOE1waF93OVpyT2lWc0JwMV83THo5UlpSRjZ0bi1sZ3k5WXlqcnJwNUktUzJGaGFDb3pMSWpHdUUtSG9mUW9zV2hZMUlLQ09rNGVFeVpaZzY1U1ZETWdPNUcwM0lDeTVWMDhsMWVUVVAzdUNFR25DOVhMQjZXZ0JKUzVWT3hR?oc=5"
+        },
+        {
+          "title": "Tasnim Agency: Policeman killed while thwarting armed terrorist attack targeting checkpoint at Rask city entrance",
+          "original_title": "وكالة تسنيم: مقتل شرطي خلال إحباط هجوم إرهابي مسلح استهدف نقطة تفتيش عند المدخل المؤدي إلى مدينة راسك",
+          "original_language": "ar",
+          "summary": "Iranian security forces thwarted an armed terrorist attack targeting a checkpoint near Rask, resulting in the death of a police officer.",
+          "published": "2026-10-01T06:44:19+00:00",
+          "source": "Lebanon ON",
+          "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE0yNnEzRDNxM2dTSmk4Xy1OamxSVG1NLWJpTlZGaXBCNC1FQjhKcnBERE5UMjQ5THkwbnRjLXpad2JiRWpqVXRDU1FKMXdfZw?oc=5"
+        },
+        {
+          "title": "Operation to purge the village of Jangal in Rask city of mercenary terrorists",
+          "original_title": "عملية تطهير قرية \"جنغل\" في مدينة راسك من وجود الإرهابيين المرتزقة",
+          "original_language": "ar",
+          "summary": "Iranian security forces carried out a clearance operation to purge the village of Jangal in Rask city of armed militant elements.",
+          "published": "2026-10-02T10:36:00+00:00",
+          "source": "خبرگزاری مهر",
+          "url": "https://news.google.com/rss/articles/CBMigwRBVV95cUxNaFNJTTNIdF9mMHlJRHpxU1dueXNtbDBSOE54NHE2eF9oOW02ZGdhU3hiRUVjdm9KeVRuNkpmVG9PUTRvdnJCNXN5UVlXUjNfdWpnYS0xRWZnSllVNzdlNjFuM3ZILTVLc3l1enJCM1ZFbi1OMkJWV2QtTnBJaU5yY0JOb2NhR1MwQzNzbm9tdjViT2JYSUJFZUJ0Y3J0a0lsWTJnUlRGZ2w0R1d5MW5iNjBibjR1aWlXT0d2M2ZBRVZHLTcyTVlyM1BVR1dwRHdkNkZETGtLTHZNS3VlcC10cW51LXZYV2owVzh6V0RSbzAwaHhzblZ6Z2ZLU2R5akJPbHh3SEMyUEdKRVdkbzQzdnl2N1ZPbVRGY2xya29GNjZ0U3laNEVRaE1SZHNXVnhEZVJVc0E1b2VPZllDaU9uaXhqTzc0Q2d5cFJQTmFvR0p3SVNiTFhiYzkwZGViV0VRa1hIRHg2QWxXQ3NWUnhvdE9UdmQtamV1eENrNWZfSk1mTVhXQWhPR0xaaFpySkpmaUg3akJvNUV0M1ljSHZWSjhQY0hvMS1reWFreXIyS19FS04zNThzbE16dVpxWVhwcHlLU0pSRFFoYm4xc2FiQi11cy1QRGl6c20wRmx0cDYxTGFBTE85VmdUQTdpOWd5eEJISWZCNXd5S2lxNDZ0YUN4aw?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 4,
       "first_reported": "2026-10-01T06:36:44+00:00",
       "last_reported": "2026-10-01T16:18:45+00:00",
       "ai_selection_complete": true,
@@ -261039,7 +260763,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_incident"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "5d1ab34d6c902aaa",
@@ -261666,7 +261391,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Explicitly states Mexico City as the last known location.",
       "ai_geo_fingerprint": "bba8f8c8506701cf5e3747cca2c2e8af39a1d430a80c22b5b9300f19186bbb50",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "dd19e9d6b1da92cc",
@@ -262122,7 +261848,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Mentions links in Mexico City (CDMX).",
       "ai_geo_fingerprint": "b10e5d34b4628d52906746ac09cb76cb154b68c0924e2b7873ee5abb0420559c",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "0edd66e0203afca4",
@@ -262197,7 +261924,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Explicitly mentions Culiacan, Mexico.",
       "ai_geo_fingerprint": "927bb86b3522c4a9409cb9b25d4ea027f8a76f04858ab7e3b29e27b3752f843e",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "9437afb92eba4648",
@@ -263304,7 +263032,8 @@
       "cbrn_subgroups": [],
       "integrity_review_version": "map-evidence-review-20261022",
       "integrity_review_reason": "Shared model incident identifier grouped different cases/targets; isolate this reviewed record without claiming a new incident.",
-      "integrity_source_evidence": "c977338ef3a036e8dbd63350b6c9f5adfe85bcda5b311bffefcef9d3108cc15c"
+      "integrity_source_evidence": "c977338ef3a036e8dbd63350b6c9f5adfe85bcda5b311bffefcef9d3108cc15c",
+      "dedup_review_required": true
     },
     {
       "id": "e298764baa9723fa",
@@ -263467,7 +263196,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The event location is explicitly named as Tijuana, Mexico.",
       "ai_geo_fingerprint": "69af9d4b6f3258e86b782ac3ee74da7ced02177e3484fba8325aafe2144a1e8c",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "d2cf05cced697be2",
@@ -264072,96 +263802,6 @@
       "dedup_methods": [
         "same_incident"
       ]
-    },
-    {
-      "id": "838ed911e2c3cbcd",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Arrests"
-      ],
-      "title": "Hezbollah denies connection to 'cell' arrested by Syrian authorities in Daraa",
-      "summary": "Hezbollah has denied any relationship with a militant cell recently detained by Syrian security forces in the Daraa governorate.",
-      "original_title": "حزب الله ينفي علاقته بـ\"خلية\" أوقفتها السلطات السورية في درعا",
-      "original_summary": "حزب الله ينفي علاقته بـ\"خلية\" أوقفتها السلطات السورية في درعا TRT عربي",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic / Syria",
-      "collection_locale": "SA:ar",
-      "published": "2026-09-30T15:16:22+00:00",
-      "source": "TRT عربي",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE9KNnFQb0I3OHQyU01pNlVWeDVuTnptLTc5WVJRX0lNTGRjQ2xCYUZVVy1wZG9ydnZZMlJqU2h5RndDQlVuTTM1dkhDcnZaZ1B6ODlNdzBRU0I?oc=5",
-      "collector": "Google News RSS",
-      "country": "Syria",
-      "country_code": "SY",
-      "city": "Dar‘ā",
-      "region": null,
-      "latitude": 32.61889,
-      "longitude": 36.10213,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "67e0301f8c0555a1e7dcb189386e3123be6ef3cccda24abc371a3faef47d3519",
-        "6b37a40215a7a54da5986e49e21f2222fd1b378d47a38370caaf20ea217e6f80"
-      ],
-      "sources": [
-        "TRT عربي",
-        "saba.ye"
-      ],
-      "related_articles": [
-        {
-          "title": "Hezbollah denies any connection to a cell whose arrest Syria announced in Daraa",
-          "original_title": "Hisbollah bestreitet jegliche Verbindung zu einer Zelle, deren Festnahme Syrien in Daraa bekannt gegeben hat",
-          "original_language": "de",
-          "summary": "Hezbollah has denied any links to a militant cell whose arrest was recently announced by Syrian authorities in Daraa.",
-          "published": "2026-09-30T16:32:12+00:00",
-          "source": "saba.ye",
-          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE92ZlRjdktDeENGYmlOZnhoMGRvRmRLQzF4cFU0N2VqUnJUcDBLZlFKcW91aVJ4SWVfR0h1a1ZJbHotT3NPb2FhRzEwb2puT2s?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-09-30T15:16:22+00:00",
-      "last_reported": "2026-09-30T16:32:12+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Concrete security operation involving the arrest of a militant cell by state authorities, with terrorist group attribution denial.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "Hezbollah",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "syrian-security-arrest-daraa-2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-e27ac869529d3f11",
-      "translated_to_english": true,
-      "ai_canonical_event": "Syrian security arrest of cell in Daraa and Hezbollah denial",
-      "title_variants": [
-        "Syrian security arrest of cell in Daraa and Hezbollah denial"
-      ],
-      "dedup_confidence": 0.805,
-      "dedup_methods": [
-        "title_plus_anchor"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Syrian security forces in the Daraa governorate"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The arrest and related cell activity occurred in the Daraa governorate, Syria.",
-      "ai_geo_fingerprint": "d9868a7af5caf8d5ab4be83848c9ec1768198f2854a9c0de64dbdc6a1dd3a8b1",
-      "ai_geo_inferred": false
     },
     {
       "id": "3f4a7794fcf4086b",
@@ -268564,7 +268204,8 @@
       "cbrn_subgroups": [],
       "integrity_review_version": "map-evidence-review-20261022",
       "integrity_review_reason": "Shared model incident identifier grouped different cases/targets; isolate this reviewed record without claiming a new incident.",
-      "integrity_source_evidence": "8680fd7ce70c5afd77a601535a904d7c01fa40848dd0ef3d48b607f32581b9e3"
+      "integrity_source_evidence": "8680fd7ce70c5afd77a601535a904d7c01fa40848dd0ef3d48b607f32581b9e3",
+      "dedup_review_required": true
     },
     {
       "id": "ba12df888bd9c47a",
@@ -273563,100 +273204,6 @@
       ]
     },
     {
-      "id": "5ff8edfad019cb84",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Popayán-Cali Highway: Attack at former Tunía toll booth leaves at least 10 uniformed personnel injured",
-      "summary": "An attack at the former Tunía toll booth along the Popayán-Cali highway left at least 10 police officers injured.",
-      "original_title": "Vía Popayán-Cali: ataque en el antiguo peaje de Tunía deja al menos 10 uniformados heridos",
-      "original_summary": "Vía Popayán-Cali: ataque en el antiguo peaje de Tunía deja al menos 10 uniformados heridos elpais.com.co",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish / Latin America",
-      "collection_locale": "MX:es-419",
-      "published": "2026-09-29T18:47:07+00:00",
-      "source": "elpais.com.co",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPMVBBaXllSHozMG9FYXF0YjRTS1ZFQmZhYk5pbkhNUVJrcE9sdlhNOWVMekdxSTJaSDJOellsT21zcVZUYUVGcnZEYzhiTGdxUjJRdGVQWnVTU3NvYWtMbENyN1FGSFl3d0dueXRvcko1ZW93NmptektidVdsazlrNHpqMGkxcWk4UFhlSUY3aXd4MlBKaUdCQVYyVlJXeUNZY3hBdzNrTUNoRkJOYllBRWExcmQzQU1UTFN5NVpCZWlYLU1UaXVaaXptclR3VVpVNG9aVNIB1AFBVV95cUxPMVBBaXllSHozMG9FYXF0YjRTS1ZFQmZhYk5pbkhNUVJrcE9sdlhNOWVMekdxSTJaSDJOellsT21zcVZUYUVGcnZEYzhiTGdxUjJRdGVQWnVTU3NvYWtMbENyN1FGSFl3d0dueXRvcko1ZW93NmptektidVdsazlrNHpqMGkxcWk4UFhlSUY3aXd4MlBKaUdCQVYyVlJXeUNZY3hBdzNrTUNoRkJOYllBRWExcmQzQU1UTFN5NVpCZWlYLU1UaXVaaXptclR3VVpVNG9aVA?oc=5",
-      "collector": "Google News RSS",
-      "country": "Colombia",
-      "country_code": "CO",
-      "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "74e6918bcec328d8b06fe58e73234901c00fc769de63ae832b93e3c792214c81",
-        "d189b27ffa949c8808214834ffe03e175195616fb047676d2727d1d7e8f70084"
-      ],
-      "sources": [
-        "elpais.com.co",
-        "Revista Semana"
-      ],
-      "related_articles": [
-        {
-          "title": "FARC dissident armed attack injures security personnel in Cauca",
-          "original_title": "Ataque armado de las disidencias de las Farc en el corregimiento de Tunía, Cauca, deja varios uniformados heridos",
-          "original_language": "es",
-          "summary": "An armed attack by FARC dissidents in the township of Tunía, Cauca, leaves several police/military personnel wounded.",
-          "published": "2026-09-29T19:45:25+00:00",
-          "source": "Revista Semana",
-          "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQRmR4ZkxUSUhzN2pVdU9yd3Z5OURNenNQQVlNdUpoVWZQMGF2cVdrQlhoNl96bHE5REZMbDU3VzZFRVdaN1dXUDBwQlMtLUdjNm9JZmN4TWNKaWhUalVrb0oyYlB0Y3lweGxfSE5HUHZQUFFoRGt5N3NDY19PVlpzdjg4WUlxdHY4dFNIS1RoTndWdTczclpUd3A4NkpiWHRFUy1WbkhVWTZmdkRmQTBscHFnZENhWW52Vjc5WVRhVE9DbmFJanRvMGl3VHJoZHJKcDc2R1lyY0pqWVhpLWdEVllzSk9TNUV1dzljc1g4TQ?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-09-29T18:47:07+00:00",
-      "last_reported": "2026-09-29T19:45:25+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports a concrete armed attack injuring security forces in Colombia.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Tunía toll booth attack Colombia 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-24f096eb8de8f0d6",
-      "translated_to_english": true,
-      "ai_canonical_event": "Attack at Tunía toll booth on Popayán-Cali highway Colombia 2026",
-      "title_variants": [
-        "Attack at Tunía toll booth on Popayán-Cali highway Colombia 2026"
-      ],
-      "location_confidence_score": 0.0,
-      "location_method": "reviewed_unsupported_point_withdrawn",
-      "location_evidence": [
-        "Popayán-Cali Highway, former Tunía toll booth"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Attack at former Tunía toll booth along the Popayán-Cali highway.",
-      "ai_geo_fingerprint": "5f70a771b4bb242784f085cfdbb7790710b3358da748b15dd7bef3b74f0a0712",
-      "ai_geo_inferred": false,
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_incident"
-      ],
-      "geolocation_review_required": true,
-      "location_review_reason": "Stored point matches a namesake in AL rather than the recorded country CO. Exact incident locality is not established; withdraw the unsupported point.",
-      "integrity_review_version": "map-evidence-review-20261022",
-      "integrity_review_reason": "Stored point matches a namesake in AL rather than the recorded country CO. Exact incident locality is not established; withdraw the unsupported point.",
-      "integrity_source_evidence": "b7b74803caf3a0b29c19aacf224d5441424860d98f86d8f14f1b87f445378dad"
-    },
-    {
       "id": "e3976bdc1dc3c3d4",
       "category": "Attacks",
       "categories": [
@@ -274075,7 +273622,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Mexico's UIF blocks accounts following US sanctions on Sinaloa Cartel associates.",
       "ai_geo_fingerprint": "c1d190152fdfbf44787fce35a781608ab9fd17c5610d959ce90d174a471f8f65",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "80608e957df15e8a",
@@ -274095,7 +273643,7 @@
       "collection_locale": "MX:es-419",
       "published": "2026-09-29T17:52:26+00:00",
       "source": "Blu Radio",
-      "source_count": 5,
+      "source_count": 7,
       "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQMEJIeEMyNlFwejNHcUJ0UE9zMUVrWUxRMmcwLTdoaHcwOVFzTHhXdXpKRENtdGVid2l1MWNZTXAzdlFzV2pkVjJsaDk4UGFCMmlCNXpiUk1RaU1GTFMtckYtUmZ0d2drQVQ1NE9HbDAyVXJ6N1NnMEtkN2lScmZhNEttSGk0eFpKYm9lYUhVVThvTnpOdTNtTEc5S0hWWmVkLWRMeURHYWlZSVZhTEtmMkxERS1KYzZ5UDk5azJPdnFBUzNUTmdJQ2xvQ3M0UDFmRXBYY1NR0gHjAUFVX3lxTE02WVl0OVNvbmVfNGo1WjRMdWV5SGJVWWxfUTlkVHltUWozYWQtWUU1VnkzTkhQbzl1blpGbVhPMTVZektpWF9RanRqTkYzbnBiRlpCTElOYmthU3Mxdkd5akR5WkZCY2tPb0ZQLWdVUnEzbnYxd0VGVWNoaHdZZFNoRGJ6WDhxUHRfb3JCWGFwUlV5OEF2QlpiTUlqWlE0VERZOENnRkswdHBFQWh3UUtjbEc5SWpRNnQwZGplVlVNUDZMNVZqMllDZk4tRUJRcUpNOGV2VUstcDl2aGp3Rzllc3N3?oc=5",
       "collector": "Google News RSS",
       "country": "Colombia",
@@ -274111,7 +273659,9 @@
         "31e8b3480a791a44e140a892c12e2f7fce013a188c99bccb1fabe92689a01da3",
         "6031813a3cdc3825f6225015c2e5e0ec0cc70138f0d0b8a2fd4cfd4415ad1516",
         "6414f8f2d2ccc3a50eda02db226ef5e186efa4d6ef3adcba345244e0265eb9ba",
+        "74e6918bcec328d8b06fe58e73234901c00fc769de63ae832b93e3c792214c81",
         "a4f09ad9bbdddd525a809e4087445c4b1942c981255877c56e8c9da63edc0e48",
+        "d189b27ffa949c8808214834ffe03e175195616fb047676d2727d1d7e8f70084",
         "f6f5b8e4c23998210a9cf1ef297cb205bae6f8b65351aa0be3372b1b033a9069"
       ],
       "sources": [
@@ -274119,7 +273669,9 @@
         "Hoy Diario del Magdalena",
         "Infobae",
         "El Tabloide",
-        "El Colombiano"
+        "El Colombiano",
+        "elpais.com.co",
+        "Revista Semana"
       ],
       "related_articles": [
         {
@@ -274148,20 +273700,39 @@
           "published": "2026-09-29T19:00:16+00:00",
           "source": "El Tabloide",
           "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPQ1lFaVhfT1dhX0pxN0RMU1dQTkxmTUVxZlh0VjVpMHVXR1owaFZSOGRrN25LX2V1dDRydlpFT3JHd2JiLW0xOTdiWGtQQWpYZEluTlo4QTBmZ0lXUjF5VkZvRlVGTUhWVnhTODF5V0t4cWFDVFJ5UUpCNnAwMU5tWERiLXhkcER4YUdCVHRTSnlxaEZZcmlDbjlwbzk4N3V1Unc?oc=5"
+        },
+        {
+          "title": "Popayán-Cali Highway: Attack at former Tunía toll booth leaves at least 10 uniformed personnel injured",
+          "original_title": "Vía Popayán-Cali: ataque en el antiguo peaje de Tunía deja al menos 10 uniformados heridos",
+          "original_language": "es",
+          "summary": "An attack at the former Tunía toll booth along the Popayán-Cali highway left at least 10 police officers injured.",
+          "published": "2026-09-29T18:47:07+00:00",
+          "source": "elpais.com.co",
+          "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPMVBBaXllSHozMG9FYXF0YjRTS1ZFQmZhYk5pbkhNUVJrcE9sdlhNOWVMekdxSTJaSDJOellsT21zcVZUYUVGcnZEYzhiTGdxUjJRdGVQWnVTU3NvYWtMbENyN1FGSFl3d0dueXRvcko1ZW93NmptektidVdsazlrNHpqMGkxcWk4UFhlSUY3aXd4MlBKaUdCQVYyVlJXeUNZY3hBdzNrTUNoRkJOYllBRWExcmQzQU1UTFN5NVpCZWlYLU1UaXVaaXptclR3VVpVNG9aVNIB1AFBVV95cUxPMVBBaXllSHozMG9FYXF0YjRTS1ZFQmZhYk5pbkhNUVJrcE9sdlhNOWVMekdxSTJaSDJOellsT21zcVZUYUVGcnZEYzhiTGdxUjJRdGVQWnVTU3NvYWtMbENyN1FGSFl3d0dueXRvcko1ZW93NmptektidVdsazlrNHpqMGkxcWk4UFhlSUY3aXd4MlBKaUdCQVYyVlJXeUNZY3hBdzNrTUNoRkJOYllBRWExcmQzQU1UTFN5NVpCZWlYLU1UaXVaaXptclR3VVpVNG9aVA?oc=5"
+        },
+        {
+          "title": "FARC dissident armed attack injures security personnel in Cauca",
+          "original_title": "Ataque armado de las disidencias de las Farc en el corregimiento de Tunía, Cauca, deja varios uniformados heridos",
+          "original_language": "es",
+          "summary": "An armed attack by FARC dissidents in the township of Tunía, Cauca, leaves several police/military personnel wounded.",
+          "published": "2026-09-29T19:45:25+00:00",
+          "source": "Revista Semana",
+          "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQRmR4ZkxUSUhzN2pVdU9yd3Z5OURNenNQQVlNdUpoVWZQMGF2cVdrQlhoNl96bHE5REZMbDU3VzZFRVdaN1dXUDBwQlMtLUdjNm9JZmN4TWNKaWhUalVrb0oyYlB0Y3lweGxfSE5HUHZQUFFoRGt5N3NDY19PVlpzdjg4WUlxdHY4dFNIS1RoTndWdTczclpUd3A4NkpiWHRFUy1WbkhVWTZmdkRmQTBscHFnZENhWW52Vjc5WVRhVE9DbmFJanRvMGl3VHJoZHJKcDc2R1lyY0pqWVhpLWdEVllzSk9TNUV1dzljc1g4TQ?oc=5"
         }
       ],
-      "article_count": 4,
+      "article_count": 6,
       "first_reported": "2026-09-29T17:52:26+00:00",
       "last_reported": "2026-09-29T19:00:16+00:00",
-      "dedup_confidence": 0.889,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
         "very_high_title_similarity",
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Concrete armed attack using explosives and drones against critical transport infrastructure by armed actors.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -274797,82 +274368,6 @@
       "ai_geo_inferred": true
     },
     {
-      "id": "82832f87dc68d997",
-      "category": "Attacks",
-      "categories": [
-        "Attacks",
-        "Arrests"
-      ],
-      "title": "West Bank: Israeli raid on Al-Mughayyir, arrest of a Palestinian amid settler attacks",
-      "summary": "Israeli forces raided Al-Mughayyir in the West Bank, arresting a Palestinian amid ongoing settler attacks in the area.",
-      "original_title": "الضفة.. اقتحام إسرائيلي للمغيّر واعتقال فلسطيني وسط هجمات للمستوطنين",
-      "original_summary": "الضفة.. اقتحام إسرائيلي للمغيّر واعتقال فلسطيني وسط هجمات للمستوطنين Anadolu Ajansı",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
-      "published": "2026-09-29T16:16:37+00:00",
-      "source": "Anadolu Ajansı",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMi6AVBVV95cUxOSjY4RWZUVC1QZ1g0VWNkR3FqM0RVa2JjQlFjVThDRVFCamJ5bXA5alRic0tTaV9vVy1FY1F4aEd0REZlNTJSd3ZIY2VKTURSdkJLcGtjamZqR0xYaEswRjJIb0N6a3NlSnkwbEFxSHFSUGgwdk5lNFpMVldpNDlWX25vcmd5VGM3LTRsUEd3YUNSWWRzc0lvOEh0R2pQZFNzXzNIVllYV1VnclZDQWNReUFTdURYZWR3X1h1dWlRay03dDJJNnZiWHVOMEZ4MGJaTXFUOEh3RWZTSjh6YWhLTmhDMGl6RzJJOU9ETDJ6eHVtMTJNTXp5ejg5UXg5TTBrSlUzVGVHdDkyV3ozUzMxS2NtUVBvWmxpNm9sNU9FdVRSd3FrM2x2UGtUWko4aDNMLWowUVdneHpnNFpFVXRnN0ZxenNzYlRQNmN4dzJkd0lkOXdJQkdCWmM1WnZzUTFuQkxnVVY3UkJtQUVyTUdLWUh0SVVGYkV1czJpLUlXVmZ6QWRQX3c3LWVtNHNxT1FweUswNG1XNzc5WjZOLWZtRlBpR3llVzdXN1R0RmhDb0VHUnA5ZTFIV0tYajZkYk1PaGNrblNzT01mOGl4cHgtZ1RGZ2R2ZFlCY3BkXzhqTzBodEViMnd0QnhIYVpUSW9zbUJvckN6Um1rWGd5SUN1X2wtVmFhaVY4V01ycW8tbURURFQ2WEpObmJHVmcxQVIteXFPS0NXYnRCcWNMblc2dm1ydnZHa3RfWUR5cXYtYV9PWVVwNW1LVTdZeTVlMkx5cU1GUDgwRkJoS09TLVdsMWpXZ2x4SDNwTlE2enF0d0pONlpsaEZnNC1pcGVqYlprRmI4Q1UyZUNBa3M4STMtN2dMb1l5T0ZLZHNYaWFyOGx4dnFJc2pOSl90TndDWWJJTmZCYVdSSDFLeTFPbnhTNzF1QmVqd0IzLWpRS0IxbVpEc0JodDY5S1hEX01nTjBrYmZpYklKOEQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Palestinian Territory",
-      "country_code": "PS",
-      "city": "Al Mughayyir",
-      "region": null,
-      "latitude": 32.0192,
-      "longitude": 35.34783,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "aa.com.tr/ar",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "ad4e7e4142f4edbaefac54b176725b797f4a5ab139a9dda3c474460509815c34"
-      ],
-      "sources": [
-        "Anadolu Ajansı"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-09-29T16:16:37+00:00",
-      "last_reported": "2026-09-29T16:16:37+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Reports on a concrete security raid, arrest, and violent incidents in the West Bank.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Al-Mughayyir West Bank raid 2026-09-29",
-      "update_type": "INITIAL",
-      "incident_id": "inc-1953edd5bebedd2d",
-      "translated_to_english": true,
-      "ai_canonical_event": "Israeli raid and arrest in Al-Mughayyir West Bank",
-      "title_variants": [
-        "Israeli raid and arrest in Al-Mughayyir West Bank"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Al-Mughayyir, West Bank"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Israeli raid on Al-Mughayyir in the West Bank.",
-      "ai_geo_fingerprint": "509c2d5a459b794966800d1881ca11f88f2cbf359daa7f01b101bcd1e9a7ec71",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "ac5bc2cec09b3f37",
       "category": "Arrests",
       "categories": [
@@ -275345,7 +274840,8 @@
       "dedup_confidence": 0.99,
       "dedup_methods": [
         "same_normalized_title"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "a74dac56b358494c",
@@ -279311,7 +278807,7 @@
       "collection_locale": "IL:he",
       "published": "2026-09-29T04:57:26+00:00",
       "source": "מעריב",
-      "source_count": 3,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE52dTJWcEVILTUzZms1cGE3M1V4VEk3OXJaVnV0cThqeUstYUYyY3RQQmJwU0YzNWRHbkJPT3ZNamFfSzZWYWdpM2hfSGdzU2JEMlZ6SmxsN3hYMHpmS1VOQXdSa3Q?oc=5",
       "collector": "Google News RSS",
       "country": "Palestinian Territory",
@@ -279324,6 +278820,7 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
+        "ad4e7e4142f4edbaefac54b176725b797f4a5ab139a9dda3c474460509815c34",
         "b4586acbbede829bd870a934e3d796f327e51ab9fbd870ac1534956d8e872cd6",
         "c019ad2a458db1a44af2bdb39a166c7c5a727cde163bd9116a6aba61fd4aaddf",
         "f1637a40330a38851ed54b68fee52c7f666622c48be944f589a3be5112e90586"
@@ -279331,7 +278828,8 @@
       "sources": [
         "מעריב",
         "YNET",
-        "شبكة يافا الإخبارية"
+        "شبكة يافا الإخبارية",
+        "Anadolu Ajansı"
       ],
       "related_articles": [
         {
@@ -279351,19 +278849,29 @@
           "published": "2026-09-29T07:59:48+00:00",
           "source": "شبكة يافا الإخبارية",
           "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE45QjZIQWNnN1hFaEtGX0p6TXVGbzFjN3R1azJxOXgyd1R0elBENExTYmlqYXVFVWJGV1NNdWhNemdqUk5VbnNaZE9Oall3YjNFWFVrMWZ3?oc=5"
+        },
+        {
+          "title": "West Bank: Israeli raid on Al-Mughayyir, arrest of a Palestinian amid settler attacks",
+          "original_title": "الضفة.. اقتحام إسرائيلي للمغيّر واعتقال فلسطيني وسط هجمات للمستوطنين",
+          "original_language": "ar",
+          "summary": "Israeli forces raided Al-Mughayyir in the West Bank, arresting a Palestinian amid ongoing settler attacks in the area.",
+          "published": "2026-09-29T16:16:37+00:00",
+          "source": "Anadolu Ajansı",
+          "url": "https://news.google.com/rss/articles/CBMi6AVBVV95cUxOSjY4RWZUVC1QZ1g0VWNkR3FqM0RVa2JjQlFjVThDRVFCamJ5bXA5alRic0tTaV9vVy1FY1F4aEd0REZlNTJSd3ZIY2VKTURSdkJLcGtjamZqR0xYaEswRjJIb0N6a3NlSnkwbEFxSHFSUGgwdk5lNFpMVldpNDlWX25vcmd5VGM3LTRsUEd3YUNSWWRzc0lvOEh0R2pQZFNzXzNIVllYV1VnclZDQWNReUFTdURYZWR3X1h1dWlRay03dDJJNnZiWHVOMEZ4MGJaTXFUOEh3RWZTSjh6YWhLTmhDMGl6RzJJOU9ETDJ6eHVtMTJNTXp5ejg5UXg5TTBrSlUzVGVHdDkyV3ozUzMxS2NtUVBvWmxpNm9sNU9FdVRSd3FrM2x2UGtUWko4aDNMLWowUVdneHpnNFpFVXRnN0ZxenNzYlRQNmN4dzJkd0lkOXdJQkdCWmM1WnZzUTFuQkxnVVY3UkJtQUVyTUdLWUh0SVVGYkV1czJpLUlXVmZ6QWRQX3c3LWVtNHNxT1FweUswNG1XNzc5WjZOLWZtRlBpR3llVzdXN1R0RmhDb0VHUnA5ZTFIV0tYajZkYk1PaGNrblNzT01mOGl4cHgtZ1RGZ2R2ZFlCY3BkXzhqTzBodEViMnd0QnhIYVpUSW9zbUJvckN6Um1rWGd5SUN1X2wtVmFhaVY4V01ycW8tbURURFQ2WEpObmJHVmcxQVIteXFPS0NXYnRCcWNMblc2dm1ydnZHa3RfWUR5cXYtYV9PWVVwNW1LVTdZeTVlMkx5cU1GUDgwRkJoS09TLVdsMWpXZ2x4SDNwTlE2enF0d0pONlpsaEZnNC1pcGVqYlprRmI4Q1UyZUNBa3M4STMtN2dMb1l5T0ZLZHNYaWFyOGx4dnFJc2pOSl90TndDWWJJTmZCYVdSSDFLeTFPbnhTNzF1QmVqd0IzLWpRS0IxbVpEc0JodDY5S1hEX01nTjBrYmZpYklKOEQ?oc=5"
         }
       ],
-      "article_count": 3,
+      "article_count": 4,
       "first_reported": "2026-09-29T04:57:26+00:00",
-      "last_reported": "2026-09-29T07:59:48+00:00",
-      "dedup_confidence": 0.99,
+      "last_reported": "2026-09-29T16:16:37+00:00",
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "same_normalized_title"
+        "same_normalized_title",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 65,
+      "ai_relevance_score": 75,
       "ai_relevance_reason": "Concrete violent incident involving extremist elements attacking soldiers, leading to injuries and arrests.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -279393,7 +278901,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The clashes and arrests followed settler violence in Al-Jalud, West Bank.",
       "ai_geo_fingerprint": "7af0f36508f1ba65822d307b15277606bace0f5f6a339461d9d60fa60540496c",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "cbrn_subgroups": []
     },
     {
       "id": "806465d56a45bb6d",
@@ -286284,18 +285793,18 @@
         "Counter Terrorism Action",
         "Weapons"
       ],
-      "title": "Syrian security dismantles a cell planning terrorist operations",
-      "summary": "Syrian security forces dismantled a terrorist cell that had planned attacks.",
-      "original_title": "الأمن السوري يفكك خلية خططت لعمليات إرهابية",
-      "original_summary": "الأمن السوري يفكك خلية خططت لعمليات إرهابية middle-east-online.com",
+      "title": "Hezbollah denies connection to 'cell' arrested by Syrian authorities in Daraa",
+      "summary": "Hezbollah has denied any relationship with a militant cell recently detained by Syrian security forces in the Daraa governorate.",
+      "original_title": "حزب الله ينفي علاقته بـ\"خلية\" أوقفتها السلطات السورية في درعا",
+      "original_summary": "حزب الله ينفي علاقته بـ\"خلية\" أوقفتها السلطات السورية في درعا TRT عربي",
       "original_language": "ar",
       "collection_language": "ar",
-      "collection_language_name": "Arabic",
+      "collection_language_name": "Arabic / Syria",
       "collection_locale": "SA:ar",
       "published": "2026-09-27T18:22:55+00:00",
-      "source": "middle-east-online.com",
-      "source_count": 9,
-      "url": "https://news.google.com/rss/articles/CBMi-wJBVV95cUxQanpRYWhLdWRyN2xiVmo0MHp6SUdmMDRZd0FBQlpLX01CdVkxd0xrSU5FRjMybFZUZG11OTUyMjdNRVhaOVBhNlhCVHV4YnZreFJNQTVia0RxWUxIWl9TUGkyR2swYlBHenJ5UFZ1SnJ2ZmMwYW5fN3J5MTZwNlhwQnNVd1BSclFrMUdsZ1ZzYjlxMTkwRkJqVk51My15SnZodXNqbVpHS2JDcUdFQ21HTzN4bHJsOEFfXy1ZUmMwdUFCVlBmcVhsRDJaV3dlN0FKZUVxMkh5X21jOW9walEtSlZ0cUlXcVZNUnZaUUMtRHI0VzhQeGxjNjZKeE42Y28zSk8yWV9nem1jV2JRMF9oVExvRzR4djlUNEJ6LUpuNUFfeERCTzJXQmhORTh5MXBkNHpIblVJUGV0TzNMeS1UUWhDSmdLRGI4V2hUa3BJUFpsSFhnUnBoSDVDU283R3NaVG5QZks0QXZvOWFURi1LS2tPQWUwVVJmWF9B?oc=5",
+      "source": "TRT عربي",
+      "source_count": 11,
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE9KNnFQb0I3OHQyU01pNlVWeDVuTnptLTc5WVJRX0lNTGRjQ2xCYUZVVy1wZG9ydnZZMlJqU2h5RndDQlVuTTM1dkhDcnZaZ1B6ODlNdzBRU0I?oc=5",
       "collector": "Google News RSS",
       "country": "Syria",
       "country_code": "SY",
@@ -286312,6 +285821,8 @@
         "2742d47e35a61d603c2bc829d07571f21d8da6ab81eb23565d630600ca70bdc7",
         "4dd1e2b353019c3f4307b59731344b3ca0ac2e16810a0a0c038e9621eef1de12",
         "52317379cc9603228a0e38856b81d1ec6f776e9507ae5036a3686b695d3d519d",
+        "67e0301f8c0555a1e7dcb189386e3123be6ef3cccda24abc371a3faef47d3519",
+        "6b37a40215a7a54da5986e49e21f2222fd1b378d47a38370caaf20ea217e6f80",
         "8b626a2801184b799c6cff2b66c2f773904c10e498c346dc3d50493aec8ac08b",
         "8d9c5ff4280e770db2b97ed5d0ccd9fec7fc78ed6c2ca3832fe07bb289865bc4",
         "9fa72bc866872544b3310d9bfab007d9856a11a2e092d2cb40ab245ce23170f5",
@@ -286327,7 +285838,9 @@
         "alwatannews.net",
         "Anadolu Ajansı",
         "العين الإخبارية",
-        "YNET"
+        "YNET",
+        "TRT عربي",
+        "saba.ye"
       ],
       "related_articles": [
         {
@@ -286338,11 +285851,29 @@
           "published": "2026-09-29T17:17:34+00:00",
           "source": "alquds.co.uk",
           "url": "https://news.google.com/rss/articles/CBMixgJBVV95cUxNbHZtN3F0QWhzb2xPTC1ySDAtOHRnbThlcUtDY2ZBblN4QWdTdS1BVE9pdnQwVWFxRjBDTmlkYkJpamNxSE5od1VWU2ZRUkFfdzRpUDRGODgta2cxdHJqQy03MmFIMmtxYk5WOEVobkJPTlVrNmxFT25RNjYzYVlXeWJHRkJmNUhDM1Zub3BBMWk2b3g3bnhCNkpHX19yQjZpeWlPemVhak5yMzlTQm9XamVrcmd1OFFaV0ViYVdlQmZEX3E3T1I4ZHg2bW82RHd0UFJqcHUzdFJ0TEpERnNUd0pyRGJ0OGY1R2ZFVWNLZ2Y2YVhPR2ZhNFRkZE90cl9DUmFFRmJRbmxzdjJwbzhDVFRYVHNnaUpYVS1EQzlRcFR3TVlVa1Y2cGdOVDBWWXdJTTlnVXJMQjg0T0ZKejZXSWk2dzNlQQ?oc=5"
+        },
+        {
+          "title": "Hezbollah denies any connection to a cell whose arrest Syria announced in Daraa",
+          "original_title": "Hisbollah bestreitet jegliche Verbindung zu einer Zelle, deren Festnahme Syrien in Daraa bekannt gegeben hat",
+          "original_language": "de",
+          "summary": "Hezbollah has denied any links to a militant cell whose arrest was recently announced by Syrian authorities in Daraa.",
+          "published": "2026-09-30T16:32:12+00:00",
+          "source": "saba.ye",
+          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE92ZlRjdktDeENGYmlOZnhoMGRvRmRLQzF4cFU0N2VqUnJUcDBLZlFKcW91aVJ4SWVfR0h1a1ZJbHotT3NPb2FhRzEwb2puT2s?oc=5"
+        },
+        {
+          "title": "Syrian security dismantles a cell planning terrorist operations",
+          "original_title": "الأمن السوري يفكك خلية خططت لعمليات إرهابية",
+          "original_language": "ar",
+          "summary": "Syrian security forces dismantled a terrorist cell that had planned attacks.",
+          "published": "2026-09-27T18:22:55+00:00",
+          "source": "middle-east-online.com",
+          "url": "https://news.google.com/rss/articles/CBMi-wJBVV95cUxQanpRYWhLdWRyN2xiVmo0MHp6SUdmMDRZd0FBQlpLX01CdVkxd0xrSU5FRjMybFZUZG11OTUyMjdNRVhaOVBhNlhCVHV4YnZreFJNQTVia0RxWUxIWl9TUGkyR2swYlBHenJ5UFZ1SnJ2ZmMwYW5fN3J5MTZwNlhwQnNVd1BSclFrMUdsZ1ZzYjlxMTkwRkJqVk51My15SnZodXNqbVpHS2JDcUdFQ21HTzN4bHJsOEFfXy1ZUmMwdUFCVlBmcVhsRDJaV3dlN0FKZUVxMkh5X21jOW9walEtSlZ0cUlXcVZNUnZaUUMtRHI0VzhQeGxjNjZKeE42Y28zSk8yWV9nem1jV2JRMF9oVExvRzR4djlUNEJ6LUpuNUFfeERCTzJXQmhORTh5MXBkNHpIblVJUGV0TzNMeS1UUWhDSmdLRGI4V2hUa3BJUFpsSFhnUnBoSDVDU283R3NaVG5QZks0QXZvOWFURi1LS2tPQWUwVVJmWF9B?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 4,
       "first_reported": "2026-09-27T18:22:55+00:00",
-      "last_reported": "2026-09-29T17:17:34+00:00",
+      "last_reported": "2026-09-30T15:16:22+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -286350,14 +285881,14 @@
       "ai_relevance_reason": "Counter-terrorism raid and dismantling of a terrorist cell.",
       "ai_current_ct_event": true,
       "ai_selected": true,
-      "actor_group": "",
+      "actor_group": "Hezbollah",
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
       "incident_anchor": "terrorist cell dismantled Syria 2026",
       "update_type": "INITIAL",
       "incident_id": "inc-039be23dfbd06a23",
       "translated_to_english": true,
-      "ai_canonical_event": "Syrian security dismantles terrorist cell planning attacks",
+      "ai_canonical_event": "Syrian security arrest of cell in Daraa and Hezbollah denial",
       "title_variants": [
         "Syrian security dismantles terrorist cell planning attacks"
       ],
@@ -286377,10 +285908,12 @@
       "ai_geo_reason": "Syrian security forces conducted the operation within Syria.",
       "ai_geo_fingerprint": "9385e7876954e197d43bd6ec260369e1d2aaa5366f5cf6f7dd63f45d88b0ad5d",
       "ai_geo_inferred": false,
-      "dedup_confidence": 0.556,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "entity_actor_event_signature"
-      ]
+        "entity_actor_event_signature",
+        "same_incident"
+      ],
+      "cbrn_subgroups": []
     },
     {
       "id": "25326c793c8fe3b5",
@@ -467265,7 +466798,8 @@
       "is_attack": true,
       "incident_anchor": "DRC Christian massacre 2026-07-23",
       "update_type": "INITIAL",
-      "incident_id": "inc-7df594e5718650d8"
+      "incident_id": "inc-7df594e5718650d8",
+      "dedup_review_required": true
     },
     {
       "id": "6c849bc4e32a17e1",
@@ -467332,7 +466866,8 @@
       "is_attack": false,
       "incident_anchor": "DRC Christian massacre 2026-07-23",
       "update_type": "FOLLOW_UP",
-      "incident_id": "inc-7df594e5718650d8"
+      "incident_id": "inc-7df594e5718650d8",
+      "dedup_review_required": true
     },
     {
       "id": "7b83ba07d4e94519",
@@ -467821,7 +467356,7 @@
       "collection_locale": "NG:en",
       "published": "2026-07-23T07:00:00+00:00",
       "source": "Channels Television",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxObE5xYUFFQmRWaTg3M18zSF9VMGFfUDBtUGFjcnUwTTdvSUhBLW90R1RrdU1DQ19sNEJJNFViMENMRllDbjhNX1FoZ1dtWG9ZTlY5aDhrN3ZNYlJHTGhELVoxZWdrUWQ1elFkamF5UzJxZklTLUh3NUt4Y1l6WmRueGRMQjVhNTVSaWFGWVF0VFIzSmFLVkpBNDdxLWFCLUY4UnlzWlIwWjBxMk5EN3hjckR4VGtaV2pUbE9fWWJmNA?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
@@ -467836,13 +467371,25 @@
       "targeted_source": "channelstv.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
+        "551e36a89d8b920460d2d38d56848fed14ec4dedf08beb00b8ffe86ee0e2e1ed",
         "9a57e9156c256520f1bafeace8eaf90e7d2c4a34c13cf0cb7aceafaae5745029"
       ],
       "sources": [
-        "Channels Television"
+        "Channels Television",
+        "Daily Trust"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Soldier wanted for alleged sale of uniforms to terrorists",
+          "original_title": "Soldier declared wanted over alleged sale of military uniforms to terrorists",
+          "original_language": "en",
+          "summary": "A Nigerian soldier has been declared wanted following investigations into the alleged sale of military uniforms to terrorists.",
+          "published": "2026-07-23T07:00:00+00:00",
+          "source": "Daily Trust",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOZllpTmdzLS1BS19yYmpjY1RkSHpKVnJiUDVIT0UyelZGMU1NNWhfUVBiMkEtOXEwWE5uMkVvQmVHMEJ3NmdyaXBCRHpPeHVRSE05RDRXX25ZcXNrRUNIay1Dd1VmdW1CZ0FFSTNwVG51ZEE1ZVRjX193NENMT1BDMUM4NkV2alpUaDN2bG1Eclk0RUZTVmlOVXNHLVZpb0cxTVE?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-07-23T07:00:00+00:00",
       "last_reported": "2026-07-23T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -467882,86 +467429,11 @@
       "ai_geo_reason": "Nigerian military declares soldier wanted, reported by Nigerian media.",
       "ai_geo_fingerprint": "a84b149d4b8153a999b360fcebfff5e961f5f1e175747108ab8cf0fd6917e725",
       "ai_geo_inferred": false,
-      "threat_categories": []
-    },
-    {
-      "id": "c5e769ddcf9e4cff",
-      "category": "Arrests",
-      "categories": [
-        "Arrests"
-      ],
-      "title": "Soldier wanted for alleged sale of uniforms to terrorists",
-      "summary": "A Nigerian soldier has been declared wanted following investigations into the alleged sale of military uniforms to terrorists.",
-      "original_title": "Soldier declared wanted over alleged sale of military uniforms to terrorists",
-      "original_summary": "Soldier declared wanted over alleged sale of military uniforms to terrorists Daily Trust",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-07-23T07:00:00+00:00",
-      "source": "Daily Trust",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOZllpTmdzLS1BS19yYmpjY1RkSHpKVnJiUDVIT0UyelZGMU1NNWhfUVBiMkEtOXEwWE5uMkVvQmVHMEJ3NmdyaXBCRHpPeHVRSE05RDRXX25ZcXNrRUNIay1Dd1VmdW1CZ0FFSTNwVG51ZEE1ZVRjX193NENMT1BDMUM4NkV2alpUaDN2bG1Eclk0RUZTVmlOVXNHLVZpb0cxTVE?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": "Abuja",
-      "region": null,
-      "latitude": 9.05785,
-      "longitude": 7.49508,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "dailytrust.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "551e36a89d8b920460d2d38d56848fed14ec4dedf08beb00b8ffe86ee0e2e1ed"
-      ],
-      "sources": [
-        "Daily Trust"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-23T07:00:00+00:00",
-      "last_reported": "2026-07-23T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 60,
-      "ai_relevance_reason": "Reports a concrete investigative action against terrorist financing/logistics support.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "OTHER_CT",
-      "is_attack": false,
-      "incident_anchor": "Wanted soldier Nigeria 2026-07-23",
-      "update_type": "INITIAL",
-      "incident_id": "inc-790374c361b413d0",
-      "translated_to_english": false,
-      "ai_canonical_event": "Investigation and wanted notice for soldier selling uniforms to terrorists",
-      "title_variants": [
-        "Investigation and wanted notice for soldier selling uniforms to terrorists"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
       "threat_categories": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Soldier declared wanted over alleged sale of military uniforms to terrorists"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "A Nigerian soldier was declared wanted by authorities in Nigeria.",
-      "ai_geo_fingerprint": "69a726e55bfbf440a542f4910323ba295a0149ed3b13b89f93d8e6295b876108",
-      "ai_geo_inferred": false
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "310592d54f8b5d96",
@@ -468997,7 +468469,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_url"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "15ea73544955bc93",
@@ -473231,85 +472704,6 @@
       ]
     },
     {
-      "id": "9b2d75cfe71a25f5",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "FAMa destroys terrorist refuge in Bougouni",
-      "summary": "Malian Armed Forces (FAMa) destroyed a major terrorist base located in the Kékoro forest during a counter-terrorism operation.",
-      "original_title": "Opération antiterroriste à Bougouni : les FAMa détruisent un important refuge terroriste dans la forêt de Kékoro",
-      "original_summary": "Opération antiterroriste à Bougouni : les FAMa détruisent un important refuge terroriste dans la forêt de Kékoro maliweb",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French / Africa",
-      "collection_locale": "FR:fr",
-      "published": "2026-07-15T07:00:00+00:00",
-      "source": "maliweb",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxPMlVlNF9oaV9aSHpVNUJ2dTlPZFl0VVBsWDE2OHVpOXhJWHRxd1FBQU1SXzhKSVZVeUwzZGdKZWZTNWxyMWVoSWdnSk55QVM0Wlg4bURUbFZXc21Jd01WaDlZb0xjWHFXeW81cXo0dnFzQVZFVTVUTHg5VTU0ZTZGVGpjTHpQM0FhOTk1VVo4OG9LM1RFUlk1d0FqMkxnWmdrVGZVdFN6QU5xTExfU3JTRG1pbzlua3VTUFV3VmpVY092NzVSdkFtUmNLUU1ockdIR0ZLcXB0VUlNckZ0UDFUbHppaDZ5ZF90eVhHbHhtMA?oc=5",
-      "collector": "Google News RSS",
-      "country": "Mali",
-      "country_code": "ML",
-      "city": null,
-      "region": "Bougouni",
-      "latitude": 11.4149,
-      "longitude": -7.4832,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "maliweb.net",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "fad6c7557830fa257ac1098bc7c1c495c84c2d5304b54d568df55a681bb5fc06"
-      ],
-      "sources": [
-        "maliweb"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-15T07:00:00+00:00",
-      "last_reported": "2026-07-15T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Reports a concrete counter-terrorism military operation.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "FAMa operation Kékoro forest 2026-07-15",
-      "update_type": "INITIAL",
-      "incident_id": "inc-b7c37f16e4d384e3",
-      "translated_to_english": true,
-      "ai_canonical_event": "Destruction of terrorist refuge by FAMa in Kékoro forest, Mali",
-      "title_variants": [
-        "Destruction of terrorist refuge by FAMa in Kékoro forest, Mali"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_categories": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Opération antiterroriste à Bougouni : les FAMa détruisent un important refuge..."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Malian Armed Forces destroyed a terrorist refuge in the Kékoro forest in Bougouni, Mali.",
-      "ai_geo_fingerprint": "8d05b843e8536de521dc0ee0eb7f529e1a572f9f8e6909071d7680be436e083b",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "62d5fa23a8d27f19",
       "category": "Arrests",
       "categories": [
@@ -473484,7 +472878,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-07-14T07:00:00+00:00",
       "source": "malijet.com",
-      "source_count": 2,
+      "source_count": 3,
       "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOWDdtWXpXOGFCM0dXSEpWRlczOEVhTUlyNUlscTRZeEhQSExOM1Y5TUdhdTF0ejdrN0FjUDdRVEotUjZEQW50UVA1WTRvQndhSWdxUGtDT3BlaUFwdWdCZUVqVkJwNnY0WGxzTzFuSmpiZEl4M3FwYkRmSE1xaGdtZk1mOTNfUmtaSHRNQzRSZ2pJUUhYZXpscWdxZkFKbGxrN1lXUkdyS0ZHUWhC?oc=5",
       "collector": "Google News RSS",
       "country": "Mali",
@@ -473500,7 +472894,8 @@
       "targeted_source_kind": "local_language_media",
       "sources": [
         "malijet.com",
-        "Maliweb"
+        "Maliweb",
+        "maliweb"
       ],
       "related_articles": [
         {
@@ -473511,9 +472906,18 @@
           "published": "2026-07-15T07:00:00+00:00",
           "source": "Maliweb",
           "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQMXhQVVRYVXRfb28xRDhxbkhmMm5URFdiVTB0SjlpcHJZYVB1Tk5wLUZIOWI4ZHRRVDhUbmRkY0VjaE1yTlRuSkxlQWxBVFY2MHZ3Rjg0d3Fub1dMd2F5VU9KbDhVMElBS3h1Ykp6WGFESHM3WmZYNlRKN0RTUzdWek1xUWk0bkx3TTBuTXlQQ1NaaUtBWlJhMFkyQXB2TE1reVlQeg?oc=5"
+        },
+        {
+          "title": "FAMa destroys terrorist refuge in Bougouni",
+          "original_title": "Opération antiterroriste à Bougouni : les FAMa détruisent un important refuge terroriste dans la forêt de Kékoro",
+          "original_language": "fr",
+          "summary": "Malian Armed Forces (FAMa) destroyed a major terrorist base located in the Kékoro forest during a counter-terrorism operation.",
+          "published": "2026-07-15T07:00:00+00:00",
+          "source": "maliweb",
+          "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxPMlVlNF9oaV9aSHpVNUJ2dTlPZFl0VVBsWDE2OHVpOXhJWHRxd1FBQU1SXzhKSVZVeUwzZGdKZWZTNWxyMWVoSWdnSk55QVM0Wlg4bURUbFZXc21Jd01WaDlZb0xjWHFXeW81cXo0dnFzQVZFVTVUTHg5VTU0ZTZGVGpjTHpQM0FhOTk1VVo4OG9LM1RFUlk1d0FqMkxnWmdrVGZVdFN6QU5xTExfU3JTRG1pbzlua3VTUFV3VmpVY092NzVSdkFtUmNLUU1ockdIR0ZLcXB0VUlNckZ0UDFUbHppaDZ5ZF90eVhHbHhtMA?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 3,
       "first_reported": "2026-07-14T07:00:00+00:00",
       "last_reported": "2026-07-15T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -473553,7 +472957,8 @@
       "update_type": "INITIAL",
       "cbrn_subgroups": [],
       "source_article_fingerprints": [
-        "d4bc0f1fb5760dc1a2461738aab5dc84c9f4f59530425d9f9347a5a4a01df14d"
+        "d4bc0f1fb5760dc1a2461738aab5dc84c9f4f59530425d9f9347a5a4a01df14d",
+        "fad6c7557830fa257ac1098bc7c1c495c84c2d5304b54d568df55a681bb5fc06"
       ],
       "dedup_confidence": 1.0,
       "dedup_methods": [
@@ -483820,85 +483225,6 @@
       ]
     },
     {
-      "id": "e277a5a719e1aabd",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "School attack in Borno results in death and abductions",
-      "summary": "A school in Borno State was attacked by gunmen, resulting in the death of a teacher and the abduction of several students, with 10 subsequently rescued.",
-      "original_title": "Borno school attack: Teacher killed, students abducted, 10 rescued",
-      "original_summary": "Borno school attack: Teacher killed, students abducted, 10 rescued Daily Trust",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-06-30T07:00:00+00:00",
-      "source": "Daily Trust",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQeXpGb2UtR2Fod3dIbnVHQkdiS0doa0JfSmFFY3RjSzVGWWVuek1Ickt3OWZXZ01HU3hXVkV1aDVOdl8tSkZsSTJQZG8zYjBmOENuRkNkVXk0NWNmVk5BWWN3NjVrRkJDX1BvYUJSbnA4bTJfQXdQdnNnZEJwZ1lJcFJEaFZ1azB4WXg0d0lMZVA?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": null,
-      "region": "Borno State",
-      "latitude": 11.8333,
-      "longitude": 13.15,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "dailytrust.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "86d1f1d15a8d38ab9e6b653e046cc92ff69ece19f2f58ac66f23962187660d79"
-      ],
-      "sources": [
-        "Daily Trust"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-30T07:00:00+00:00",
-      "last_reported": "2026-06-30T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Reports a concrete attack/abduction incident.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Borno school attack 2026-06-30",
-      "update_type": "INITIAL",
-      "incident_id": "inc-446251808ec7f1e7",
-      "translated_to_english": false,
-      "ai_canonical_event": "Attack on school and kidnapping in Borno, Nigeria",
-      "title_variants": [
-        "Attack on school and kidnapping in Borno, Nigeria"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_categories": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Borno school attack: Teacher killed, students abducted"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "A school in Borno State, Nigeria, was attacked.",
-      "ai_geo_fingerprint": "d41c7b9bafa4845d2636f6359f3158f62198af2a15e9c1e77e3cf436a75e60a4",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "5b87986920d08b93",
       "category": "Counter Terrorism Action",
       "categories": [
@@ -484101,7 +483427,7 @@
       "collection_locale": "NG:en",
       "published": "2026-06-29T07:00:00+00:00",
       "source": "Premium Times Nigeria",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPTkZLdkRxZE5EMlM3Z3lVMjZLcmdXMEN0aXhpYzNPbmlneVhpdjU5MTZobHpKMUhPYUpwZjg1SGllLXZCdHhweHJXWlc1Z3FuYk9YcGlKaVRiTUNNRzRVUXZLRnRiTDhkSnpzUmZLcEtpVHhBSDh0RTVkRUl4RGFJRXIxck1sXzFQUEpvbG9lLWFjTlNPbWxfZTUzSHg1V21FTm9WeG84V29CYkMteVJLRUR0TDd1UDdTNy0yNQ?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
@@ -484116,15 +483442,27 @@
       "targeted_source": "premiumtimesng.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
+        "86d1f1d15a8d38ab9e6b653e046cc92ff69ece19f2f58ac66f23962187660d79",
         "d2a09bba2ffa81886e2561e27647953de9ed034eabdbe56014ea1c5ac13e1039"
       ],
       "sources": [
-        "Premium Times Nigeria"
+        "Premium Times Nigeria",
+        "Daily Trust"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "School attack in Borno results in death and abductions",
+          "original_title": "Borno school attack: Teacher killed, students abducted, 10 rescued",
+          "original_language": "en",
+          "summary": "A school in Borno State was attacked by gunmen, resulting in the death of a teacher and the abduction of several students, with 10 subsequently rescued.",
+          "published": "2026-06-30T07:00:00+00:00",
+          "source": "Daily Trust",
+          "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQeXpGb2UtR2Fod3dIbnVHQkdiS0doa0JfSmFFY3RjSzVGWWVuek1Ickt3OWZXZ01HU3hXVkV1aDVOdl8tSkZsSTJQZG8zYjBmOENuRkNkVXk0NWNmVk5BWWN3NjVrRkJDX1BvYUJSbnA4bTJfQXdQdnNnZEJwZ1lJcFJEaFZ1azB4WXg0d0lMZVA?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-06-29T07:00:00+00:00",
-      "last_reported": "2026-06-29T07:00:00+00:00",
+      "last_reported": "2026-06-30T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -484159,7 +483497,12 @@
       "is_attack": true,
       "incident_anchor": "Borno school abduction Nigeria 2026-06-29",
       "update_type": "INITIAL",
-      "incident_id": "inc-709aa02fabc4b948"
+      "incident_id": "inc-709aa02fabc4b948",
+      "cbrn_subgroups": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "52607073efd21a96",
@@ -485564,85 +484907,6 @@
       "ai_geo_inferred": false
     },
     {
-      "id": "7c1748269bdcd3b1",
-      "category": "Terrorist Financing",
-      "categories": [
-        "Terrorist Financing"
-      ],
-      "title": "CBN orders freezing of accounts linked to six terrorism financing suspects",
-      "summary": "The Central Bank of Nigeria has ordered commercial banks to freeze accounts associated with six individuals suspected of terrorism financing.",
-      "original_title": "CBN orders banks to freeze accounts linked to six terrorism financing suspects",
-      "original_summary": "CBN orders banks to freeze accounts linked to six terrorism financing suspects Premium Times Nigeria",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-06-25T07:00:00+00:00",
-      "source": "Premium Times Nigeria",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxQWVN5S2VxbVhydmg2SktSeHJDZ2Z4SVBFNHYteUw5MktqZ3Y5VnRLRkRXaUdyWHM4Mlg0Ml9FUnV6WFZUVFRhMjUxQUM0UVhhMFdMZmJYQnFBMC11VW1TQnFjdF9vNkdNQ2tkejFMSFUwOHNTS25wbUxpLUVHakRIZjgxTUxUR2pmRFFUMlppaW9INkZmYzVvZGRPbWFRRDVVNk52SWR3WVVVeTU4RzZvbDltUS10cFFIR1VlUnEyRlh6S0hVRTNvUW92Nk5JVS13UWljN2Z3N3c5cm5L?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": "Abuja",
-      "region": null,
-      "latitude": 9.05785,
-      "longitude": 7.49508,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "premiumtimesng.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "8a192bdb3819a41a18c265531a2030f3dfda9f27de12a5264ecf657754d9b3e7"
-      ],
-      "sources": [
-        "Premium Times Nigeria"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-25T07:00:00+00:00",
-      "last_reported": "2026-06-25T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Reports a concrete, new terrorism financing action.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "FINANCING",
-      "is_attack": false,
-      "incident_anchor": "CBN financing account freeze 2026-06-25",
-      "update_type": "INITIAL",
-      "incident_id": "inc-dcc82a78f34b30f2",
-      "translated_to_english": false,
-      "ai_canonical_event": "Asset freeze of six suspected terrorism financiers by CBN",
-      "title_variants": [
-        "Asset freeze of six suspected terrorism financiers by CBN"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_categories": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "CBN orders freezing of accounts linked to six terrorism financing suspects"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Central Bank of Nigeria ordered nationwide financial freezes regarding terrorism financing.",
-      "ai_geo_fingerprint": "d59bcfafc003f1e0dbf3290590291977295b0230cb499dbadbf35d20929500ac",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "c72475fca6de36c7",
       "category": "Arrests",
       "categories": [
@@ -486086,10 +485350,20 @@
       "sources": [
         "Premium Times Nigeria"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "CBN orders freezing of accounts linked to six terrorism financing suspects",
+          "original_title": "CBN orders banks to freeze accounts linked to six terrorism financing suspects",
+          "original_language": "en",
+          "summary": "The Central Bank of Nigeria has ordered commercial banks to freeze accounts associated with six individuals suspected of terrorism financing.",
+          "published": "2026-06-25T07:00:00+00:00",
+          "source": "Premium Times Nigeria",
+          "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxQWVN5S2VxbVhydmg2SktSeHJDZ2Z4SVBFNHYteUw5MktqZ3Y5VnRLRkRXaUdyWHM4Mlg0Ml9FUnV6WFZUVFRhMjUxQUM0UVhhMFdMZmJYQnFBMC11VW1TQnFjdF9vNkdNQ2tkejFMSFUwOHNTS25wbUxpLUVHakRIZjgxTUxUR2pmRFFUMlppaW9INkZmYzVvZGRPbWFRRDVVNk52SWR3WVVVeTU4RzZvbDltUS10cFFIR1VlUnEyRlh6S0hVRTNvUW92Nk5JVS13UWljN2Z3N3c5cm5L?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-06-24T07:00:00+00:00",
-      "last_reported": "2026-06-24T07:00:00+00:00",
+      "last_reported": "2026-06-25T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -486128,7 +485402,14 @@
       "actor_scope": "NON_STATE",
       "cbrn_subgroups": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": []
+      "threat_categories": [],
+      "source_article_fingerprints": [
+        "8a192bdb3819a41a18c265531a2030f3dfda9f27de12a5264ecf657754d9b3e7"
+      ],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "6594c222efa064cd",
@@ -495122,7 +494403,7 @@
       "collection_locale": "NG:en",
       "published": "2026-06-05T07:00:00+00:00",
       "source": "zagazola.org",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNNHJ3VGQ1YVZxYnFlQ3NuTWVRWUNZaVVsak1VTUZxa0lYdTA4N09EWGVnRFhVeGxidFFNcFYwOTY2RnJjZ1VucV9fYzM5MEJzNVNWejdLM0loLWs1U1djZW9kLVN4RTF1dURrM0xDUE1rZHp0TUxHVUJBYnZxTnJTek10Tlk5czVhbVBCb1J5bS00NXJWQ2d2Tmg4aFZXclVncjdXVmxqdGZWb01FZ0E?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
@@ -495137,10 +494418,21 @@
       "targeted_source": "zagazola.org",
       "targeted_source_kind": "local_language_media",
       "sources": [
-        "zagazola.org"
+        "zagazola.org",
+        "ZAgazola"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Troops foil militants' movement in Sokoto",
+          "original_title": "Troops Foil Suspected Terrorists’ Movement With Rustled Livestock in Sokoto",
+          "original_language": "en",
+          "summary": "Security forces intercepted militants moving with rustled livestock in Sokoto.",
+          "published": "2026-06-05T07:00:00+00:00",
+          "source": "ZAgazola",
+          "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQem5reUstZ1o3U19XT1FhNWpZRWJZX2Y5bkdzZXJFNFFKTTI2eW81WE00TXZTYl9fUGRhb2thRGp3QTYwQVN3TzMtTXZvcUo2LVhUcjJKMGc1TVZCTXRuc2VrdXd5bHI0b2VwVEJTZkdyX0YydWw1TldraTdPRFZWSXJTeWRFSVg1ZktHUHdhZnpsRTRoZXlXQmZGNGhUczNCNkNESGkyZXdXczgtYnRjV09zTHZheUdVR09z?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-06-05T07:00:00+00:00",
       "last_reported": "2026-06-05T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -495173,96 +494465,20 @@
       "ai_geo_fingerprint": "3b7c89b086dcab939f15de8bc1358a342d826d6b6ecfb9368f5e0a8da2420c56",
       "ai_geo_inferred": false,
       "actor_group": "",
-      "incident_id": "inc-f549c74bfee92cb7",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Sokoto terrorists flee military patrol 2026-06",
-      "update_type": "INITIAL"
-    },
-    {
-      "id": "20cc1185d8d9e4e9",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Troops foil militants' movement in Sokoto",
-      "summary": "Security forces intercepted militants moving with rustled livestock in Sokoto.",
-      "original_title": "Troops Foil Suspected Terrorists’ Movement With Rustled Livestock in Sokoto",
-      "original_summary": "Troops Foil Suspected Terrorists’ Movement With Rustled Livestock in Sokoto ZAgazola",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-06-05T07:00:00+00:00",
-      "source": "ZAgazola",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQem5reUstZ1o3U19XT1FhNWpZRWJZX2Y5bkdzZXJFNFFKTTI2eW81WE00TXZTYl9fUGRhb2thRGp3QTYwQVN3TzMtTXZvcUo2LVhUcjJKMGc1TVZCTXRuc2VrdXd5bHI0b2VwVEJTZkdyX0YydWw1TldraTdPRFZWSXJTeWRFSVg1ZktHUHdhZnpsRTRoZXlXQmZGNGhUczNCNkNESGkyZXdXczgtYnRjV09zTHZheUdVR09z?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": null,
-      "region": "Sokoto State",
-      "latitude": 13.062,
-      "longitude": 5.233,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "zagazola.org",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "9bc1d845c6ab5d6f216f354246436cb1d06959bab45e6da6ae9d10309b055335",
-        "d969e359d56d658b89698f2efd60ac3cb95711fb20100e90897e0cd77b58a121"
-      ],
-      "sources": [
-        "ZAgazola",
-        "zagazola.org"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-05T07:00:00+00:00",
-      "last_reported": "2026-06-05T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 60,
-      "ai_relevance_reason": "Reports a concrete tactical interception of militants.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
+      "incident_id": "inc-139757569939a576",
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
       "incident_anchor": "Sokoto security operation 2026-06-05",
       "update_type": "INITIAL",
-      "incident_id": "inc-139757569939a576",
-      "translated_to_english": false,
-      "ai_canonical_event": "foiled militant movement",
-      "title_variants": [
-        "foiled militant movement"
-      ],
-      "actor_scope": "NON_STATE",
       "cbrn_subgroups": [],
-      "threat_categories": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "source_article_fingerprints": [
+        "9bc1d845c6ab5d6f216f354246436cb1d06959bab45e6da6ae9d10309b055335",
+        "d969e359d56d658b89698f2efd60ac3cb95711fb20100e90897e0cd77b58a121"
+      ],
       "dedup_confidence": 1.0,
       "dedup_methods": [
-        "same_url"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "operation in Sokoto"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The operation occurred in Sokoto, Nigeria.",
-      "ai_geo_fingerprint": "674797184053d62985ad12ee88c3fc4d6ffedd4c9cb602132d4cb025d4c3508a",
-      "ai_geo_inferred": false
+        "same_incident"
+      ]
     },
     {
       "id": "a341f88ec273a696",
@@ -495567,7 +494783,8 @@
       "primary_event_type": "ARREST",
       "is_attack": false,
       "incident_anchor": "Terrorist logistics supplier arrest Maiduguri Nigeria 2026-06",
-      "update_type": "INITIAL"
+      "update_type": "INITIAL",
+      "dedup_review_required": true
     },
     {
       "id": "5040a7799937f698",
@@ -496858,7 +496075,8 @@
       "is_attack": false,
       "incident_anchor": "Military repels insurgent movement Borno 2026-06",
       "update_type": "INITIAL",
-      "incident_id": "inc-5ddeb53a96662bc5"
+      "incident_id": "inc-5ddeb53a96662bc5",
+      "dedup_review_required": true
     },
     {
       "id": "d5355cdcaf102b7c",
