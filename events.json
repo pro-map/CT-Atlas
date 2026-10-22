@@ -275,11 +275,11 @@
     "reasons": [
       "transient_error",
       "historical_budget",
+      "geolocation_review_required",
       "recent_pending",
       "backlog_pending",
       "source_errors",
-      "category_pending",
-      "geolocation_review_required"
+      "category_pending"
     ],
     "queue_filter": {
       "expired": 7283,
@@ -318,27 +318,27 @@
     "categories": [
       {
         "category": "Radiological/Nuclear",
-        "last_attempt_at": "2026-10-22T13:57:48.364843+00:00",
+        "last_attempt_at": "2026-10-22T20:13:59.833377+00:00",
         "status": "partial",
-        "reviewed": 11,
+        "reviewed": 16,
         "pending": 495,
-        "candidates": 506,
+        "candidates": 511,
         "recent_pending": 9,
         "backlog_pending": 486,
         "undated_pending": 0,
         "source_discovery": {
           "planned_queries": 50,
-          "attempted_queries": 7,
-          "searched_queries": 7,
+          "attempted_queries": 4,
+          "searched_queries": 4,
           "failed_queries": 0,
-          "pending_queries": 43,
+          "pending_queries": 46,
           "complete": false,
           "stop_code": "http_503"
         },
         "stop_code": "http_503"
       }
     ],
-    "finalized_at": "2026-10-22T21:11:25.238600+00:00",
+    "finalized_at": "2026-10-22T21:12:47.069425+00:00",
     "collect_outcome": "success",
     "geolocate_outcome": "success"
   },
