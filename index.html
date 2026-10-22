@@ -8139,7 +8139,7 @@ function createMarker(
     ) {
 
         locationText =
-            "No reliable country identified";
+            event.country ? `${escapeHtml(event.country)} — precise location pending review` : "No reliable country identified";
 
 
         locationBadge =

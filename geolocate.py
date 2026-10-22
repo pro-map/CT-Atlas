@@ -1863,6 +1863,9 @@ def apply_ai_result(
 
 def save_checkpoint(data, label):
     """Atomically preserve completed geolocation batches for the next run."""
+    from map_evidence_integrity import filter_reviewed
+    data["events"] = filter_reviewed(data.get("events", []))
+    data["number_of_events"] = len(data["events"])
     temporary = str(OUTPUT_FILE) + ".tmp"
     try:
         with open(temporary, "w", encoding="utf-8") as handle:
