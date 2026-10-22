@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-21T15:07:23.312197+00:00",
+  "removed_at": "2026-10-22T14:46:00.551091+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -804,6 +804,109 @@
       "country": "Russia",
       "ai_relevance_score": 85,
       "ai_relevance_reason": "Reports the prevention of a terrorist plot by security services."
+    },
+    {
+      "id": "048133aae5f1bf48",
+      "incident_id": "inc-f4ca47540d47d4a1",
+      "url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxPYURLb3lkOUhyN0dBcFM0dDd6b0RfQXNkV0NWWUZCYUxRazZsS3Fvem1MdU9mZ0xxM1dCdDBVUXFHeU5VMTNVNmJjMGtlaDRuSDkwODlPa0NSRTdZcWF0cWpnUVRVLS12amFRcmZNRmdLMEhSenk4WnJzcmREVGs5Z05BRGRndjZUemxTdFBzcDdLQ1FDRndsYzV6U2VsTGVxWTdWS0tEZU9obF9OQTBoeG9ZOUhSZ0JNU1lMblphRzB0eEhHcHFVSGFmak8zRDJKc2JyVjVBdUdOdlpZOFpIRmJ2R1psVU5PNkxSVi14VlVJMmlBMkE?oc=5",
+      "title": "Mali: Jihadists and Tuareg separatists claim coordinated attacks on several cities",
+      "summary": "Jihadists and Tuareg separatist groups have claimed responsibility for coordinated attacks against multiple towns in Mali.",
+      "original_title": "Mali: jihadistes et indépendantistes touaregs revendiquent des attaques coordonnées contre plusieurs villes du pays",
+      "original_language": "fr",
+      "source": "rfi.fr",
+      "published": "2026-04-25T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "JNIM",
+      "primary_event_type": "ATTACK",
+      "country": "Mali",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports large-scale coordinated terrorist and armed group attacks across multiple cities in Mali."
+    },
+    {
+      "id": "967e0795b3ba7c8c",
+      "incident_id": "inc-398f72c542824574",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQZ2xBZzFEZEMxWDQwdnBYUmYybmtpWUNOYjQ5bFV6N1AybndyMkpjdThtcHlrY3kzVW1RTmR2cEJtX3MxejFpd002WndXWWtFRFBkTl9IUzlBaTZ6QksySEJ5NTFaNWJSVXlGY3o0a1pjeW5kcnVDU01xSDZMMlJPT0h6OFFpdE55NTRJRm16TFNYaFlIV3V3QVpkbkFyQdIBngFBVV95cUxQdjh4aVgwUXphUmJnQ3U1b0pVX2NyS09KWWdkejNJU0JpdHZlckp1QUNDMXpLU25JNmxodm84SjJxMlhKTW1ZVTQxVnkxdEhjNnB4d0dtVnlveDVYd0dyZG5XWk5GeVo4aFd6VnZCZUQ3NkNfVXZBRTBRbi13LWhsX0xkU2lzSTZMbFVpQXdKUXlPeU5hVG1mRnYyUlNoQQ?oc=5",
+      "title": "Terrorist attack in Kyiv: Investigation reconstructs full chronology",
+      "summary": "Investigators have reconstructed the complete timeline of a terrorist attack that took place in Kyiv.",
+      "original_title": "Теракт в Киеве: Следствие восстановило полную хронологию",
+      "original_language": "ru",
+      "source": "dw.com",
+      "published": "2026-04-25T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "OTHER_CT",
+      "country": "Ukraine",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports investigative updates and chronological reconstruction of a terrorist attack in Kyiv."
+    },
+    {
+      "id": "a141b1a5578962c7",
+      "incident_id": "inc-e47ed0b53e4a7300",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPaU1obC0zbWppYlU1TXhNb0IxUUFlS3MzMTRXWkRkb0tIZGhaTjRtdThYNWctSV9vRTJFY0FwcW03bWF5cjdubmhKYUd6N2xOWnVSeGdkdjZNTFVBY0t5bmJFa3M1ZUg3Vnp5RjZBZGd4bkJ2dm5BVGhRaHdtZnExamZxbHZUTGVVcEtBODh4Q3FBRmFJN0FDRUZ6OFRrZGZCSV9lel9FMTQ?oc=5",
+      "title": "Troops, CJTF Arrest Suspected Terrorist Collaborator in Borno",
+      "summary": "Nigerian troops and the Civilian Joint Task Force arrested a suspected terrorist collaborator in Borno State.",
+      "original_title": "Troops, CJTF Arrest Suspected Terrorist Collaborator in Borno",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-04-25T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Nigeria",
+      "region": "Borno State",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Operational arrest of a terrorist collaborator by security forces."
+    },
+    {
+      "id": "1cbacf7dab056b3e",
+      "incident_id": "inc-5fc78de3f3b70b4f",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPSVNkQXZpYk9GRW5kRmNOZW5nbW55b2EyQ0lHdG44Y2JhaUhlMzliLW5TM25TUEhUTThJWkt5R0tELTFHLTZvVV9SV2NWU1FrTVNMenJFT21LS29ud3NTTWpGMmtkdWkyYVl6bl9zdm5teElLQUZQNGw4N0tjclAyaHk0WFBPWGFFQ0NwMUhNb1ZCZC1FYkh0ZVljYVhVVjVIcEE?oc=5",
+      "title": "Somali pirates hijack fuel tanker with 17 crew",
+      "summary": "Officials report that Somali pirates have seized a fuel tanker carrying a 17-member crew off the coast of Somalia.",
+      "original_title": "Somali Pirates Seize Fuel Tanker Carrying 17 Crew Off Coast, Officials Say",
+      "original_language": "en",
+      "source": "Shabelle Media Network",
+      "published": "2026-04-25T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "Somalia",
+      "ai_relevance_score": 90,
+      "ai_relevance_reason": "Reports a concrete, current hijacking incident at sea."
+    },
+    {
+      "id": "12d68098d0f55331",
+      "incident_id": "inc-cf976f71a810aaa0",
+      "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQVGlrTWlNVzYtTkQ0R1luc01nV3d6ZDdXVzIwRXZNeTF2QjJLQkFfWW5BVUxVNmhlMkt6dERvQjZRTU5CQjFWdDB5ZDlOX3BFT2dlcGxRZmdxY2x2ZXpTeUdjb0VEY0pnNWVEYzVaNVg5Sy1ELVhTbXF2WlV0TWFOQzVkaG1xbWJ2MmQ4alVoVjRVTHNWMjBaYzRUYmtTYTltVWNjbDNCNU9GbzhRaEczYnJXdTRycXY2alRhcUpMaHZvMVlxYVZRVnVWaXR1LXhRNHc?oc=5",
+      "title": "Mali army engaged in combat against militants",
+      "summary": "The Malian army has announced that combat operations are currently underway in response to recent terrorist attacks across the country.",
+      "original_title": "Attaques terroristes au Mali : l’armée annonce des combats en cours et appelle au calme",
+      "original_language": "fr",
+      "source": "maliweb",
+      "published": "2026-04-25T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Mali",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports active combat operations by state forces against militants."
     }
   ]
 }
