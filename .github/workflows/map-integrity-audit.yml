@@ -19,8 +19,8 @@ jobs:
         run: |
           mkdir -p /tmp/map-integrity-audit
           python - <<'PY'
-          import json, pathlib, collections, shutil, hashlib
-          import geolocate, geonamescache, feedparser, collector
+          import json, pathlib, collections, shutil
+          import geolocate, geonamescache, feedparser
           out=pathlib.Path('/tmp/map-integrity-audit')
           data=json.loads(pathlib.Path('events.json').read_text()); events=data['events']
           report={'records':len(events),'duplicate_ids':[],'wrong_country_cities':[],'unresolved_cities':[],'same_incident_groups':[]}
@@ -43,11 +43,13 @@ jobs:
           (out/'audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
           (out/'baseline.json').write_text(json.dumps(data,ensure_ascii=False))
           for module in (geonamescache,feedparser): shutil.copytree(pathlib.Path(module.__file__).parent,out/'deps'/module.__name__)
-          import sgmllib
-          shutil.copy(sgmllib.__file__,out/'deps'/pathlib.Path(sgmllib.__file__).name)
+          for path in pathlib.Path(feedparser.__file__).parent.parent.glob('*sgmllib*'):
+              if path.is_dir(): shutil.copytree(path,out/'deps'/path.name)
+              else: shutil.copy(path,out/'deps'/path.name)
           print(json.dumps({k:len(v) if isinstance(v,list) else v for k,v in report.items()}))
           PY
       - uses: actions/upload-artifact@v6
+        if: always()
         with:
           name: map-evidence-audit
           path: /tmp/map-integrity-audit
