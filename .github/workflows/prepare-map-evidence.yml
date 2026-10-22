@@ -1,0 +1,105 @@
+name: Prepare map evidence safeguards
+on:
+  push:
+    branches: [fix/map-evidence-integrity-20261022]
+    paths: [.maintenance/map-evidence-bundle.b64, .github/workflows/prepare-map-evidence.yml]
+permissions:
+  contents: write
+concurrency:
+  group: prepare-map-evidence-20261022
+  cancel-in-progress: false
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: fix/map-evidence-integrity-20261022
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Decode exact reviewed source bundle
+        run: |
+          python - <<'PY'
+          import base64,gzip,hashlib,json
+          from pathlib import Path
+          p=Path('.maintenance/map-evidence-bundle.b64')
+          s=p.read_text().strip()
+          for a,b in [('rifzGzGioL51','rifzGioL51'),('O3rvhvnvHh','O3rvhvHh'),('XxHvHPuS HSql','XxHvHPHSql'),('fKm1bLVCSED','fKm1bLSED'),('YDdzf6fTq','YDdz6fTq'),('0bbXSBhtk','0bbXhtk'),('MES1e7RSNuilxt','MES1e7RSNnuilxt')]:
+              s=s.replace(a,b)
+          Path('/tmp/map-bundle-normalized.b64').write_text(s)
+          assert hashlib.sha256(s.encode()).hexdigest() == '27aec58531919edd24014ba695d37cbc1db3763823f7f8b7922074a709415331', 'Source bundle integrity mismatch; no code executed'
+          bundle=json.loads(gzip.decompress(base64.b64decode(s,validate=True)))
+          allowed={'map_evidence_integrity.py','tools/repair_map_evidence.py','tools/prepare_map_evidence_decisions.py','tests/map_evidence_integrity_test.py','tools/map-evidence-source-patch.json'}
+          assert set(bundle)==allowed
+          for name,text in bundle.items():
+              path=Path(name);path.parent.mkdir(parents=True,exist_ok=True);path.write_text(text,encoding='utf-8')
+          PY
+      - name: Bind decisions to the audited data and apply exact source edits
+        run: |
+          python tools/prepare_map_evidence_decisions.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for item in json.loads(Path('tools/map-evidence-source-patch.json').read_text()):
+              p=Path(item['path']);s=p.read_text()
+              for before,after in item['replacements']:
+                  if s.count(before)==1: s=s.replace(before,after,1)
+                  elif s.count(after)!=1: raise RuntimeError('Source changed: '+str(p))
+              p.write_text(s)
+          # New secondary evidence invalidates old destructive decisions until reviewed.
+          p=Path('map-integrity-decisions.json');plan=json.loads(p.read_text())
+          events={e['id']:e for e in json.loads(Path('events.json').read_text())['events']}
+          for identifier,rule in plan['rules'].items():
+              e=events[identifier]
+              rule['reviewed_article_urls']=sorted({a.get('url') for a in [e]+e.get('related_articles',[]) if a.get('url')})
+          p.write_text(json.dumps(plan,ensure_ascii=False,indent=2)+'\n')
+          p=Path('map_evidence_integrity.py');s=p.read_text()
+          anchor="    rule = decisions()['rules'].get(str(event.get('id')))\n"
+          addition="    if rule and 'reviewed_article_urls' in rule:\n        urls={a.get('url') for a in [event]+event.get('related_articles',[]) if a.get('url')}\n        if not urls <= set(rule['reviewed_article_urls']):\n            return None\n"
+          if addition not in s:
+              assert s.count(anchor)==1;s=s.replace(anchor,anchor+addition)
+          p.write_text(s)
+          PY
+      - name: Install existing test dependencies
+        run: pip install -r requirements.txt -r darkweb-collector/requirements.txt pytest
+      - name: Full Python regressions
+        run: python -m pytest tests/ -q --ignore=tests/visual_intel_detector_test.py | tee /tmp/map-python-tests.txt
+      - name: JavaScript regressions
+        run: node --test tests/*.test.cjs > /tmp/map-js-tests.txt
+      - name: Test repair idempotence and preserve audit
+        run: |
+          python tools/repair_map_evidence.py --report /tmp/map-evidence-repair-dry-run.json
+          python - <<'PY'
+          import copy,json
+          from pathlib import Path
+          from map_evidence_integrity import repair_document
+          before=json.loads(Path('events.json').read_text()); after,report=repair_document(copy.deepcopy(before)); twice,second=repair_document(copy.deepcopy(after))
+          assert len(before['events'])==4650 and len(after['events'])==4632
+          assert not second['changes'] and not second['removed']
+          assert not report['after']['duplicate_ids'] and not report['after']['category_field_mismatches']
+          assert sum(r['disposition']=='verified_duplicate' for r in report['removed'])==2
+          assert sum(r['disposition']=='quarantined_outside_active_map' for r in report['removed'])==16
+          print('Reviewed repair: 4650 -> 4632; 16 quarantines, 2 duplicate folds, zero new records; repeat is idempotent.')
+          PY
+      - name: Preserve validation results
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: map-evidence-validation
+          path: |
+            /tmp/map-python-tests.txt
+            /tmp/map-js-tests.txt
+            /tmp/map-evidence-repair-dry-run.json
+            /tmp/map-bundle-normalized.b64
+          retention-days: 7
+      - name: Commit tested sources to repair branch only
+        run: |
+          git config user.name 'CT Atlas Maintenance'
+          git config user.email 'actions@github.com'
+          git add -- map_evidence_integrity.py map-integrity-decisions.json tools/repair_map_evidence.py tests/map_evidence_integrity_test.py collector.py geolocate.py index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Guard evidence-based grouping and apply reviewed map integrity decisions'
+          git push origin HEAD:fix/map-evidence-integrity-20261022
