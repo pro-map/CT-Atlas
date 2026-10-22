@@ -3,7 +3,7 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-22T13:57:48.364843+00:00",
+ "updated_at": "2026-10-22T20:13:59.833377+00:00",
  "articles": [
   {
    "id": "radnuc-background-91572307c12cbe0f",
@@ -66,6 +66,161 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This reports on scientific and technological developments in the nuclear fusion sector."
+  },
+  {
+   "id": "radnuc-background-d9ef78bc8a393cbf",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1ScDMwc0NVV0RQSks2Ti03OGV2aFc3dFdJbjhBV3NCSld1dE9NWE1mTmFfckVFRUl5WU12eUlQQjRtdl9ob2Z6UUxXTXo2dlk?oc=5",
+   "title": "Up to 2 billion shekels: A plan for Israel's integration into the nuclear fusion industry",
+   "summary": "The Israeli government is proposing a plan to invest up to 2 billion NIS to support the country's participation in the nuclear fusion industry. The initiative aims to foster development and technological capabilities within the nuclear energy sector.",
+   "original_title": "עד 2 מיליארד שקל: תוכנית להשתלבות ישראל בתעשיית היתוך גרעיני",
+   "original_language": "he",
+   "source": "JDN",
+   "published": "2026-10-22T08:50:43+00:00",
+   "collected_at": "2026-10-22T20:13:59.833377+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report details a state-level policy development regarding civilian nuclear fusion technology investment."
+  },
+  {
+   "id": "radnuc-background-32fff0f56ed73955",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1sX20yb3FsNWQzVlBKR2F3YWdnc2ZoejRYc2FHclAwS1NOdVRzNXdtVGpUd1Q5cFd6Wnp2QjFJTUJTSVM0X1hV?oc=5",
+   "title": "Ministry of Energy: 'Israel must integrate as soon as possible into the global race for nuclear fusion development'",
+   "summary": "The Israeli Ministry of Energy has announced plans to prioritize participation in global nuclear fusion development initiatives. The move aims to secure Israel's position in the emerging nuclear energy market.",
+   "original_title": "משרד האנרגיה: \"על ישראל להשתלב בהקדם במרוץ העולמי לפיתוח היתוך גרעיני\"",
+   "original_language": "he",
+   "source": "אתר החדשות דבר",
+   "published": "2026-10-22T07:21:00+00:00",
+   "collected_at": "2026-10-22T20:13:59.833377+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Report concerns advancements and policy planning in nuclear fusion technology."
+  },
+  {
+   "id": "radnuc-background-8e2abca9eb912b69",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE40MUdnM1lCSllfbXRoLTg1T1VGSHBOZGxiMWllUDNUN2luODRCMmVCcGtGUkh6MkJ4RFFDZ1c4UU05dHJ2S1NBMEdxUTRUYlpBVzRaRERtX1NBaDhMTXc?oc=5",
+   "title": "Potential of hundreds of billions: Will Israel enter the 'Holy Grail' of the energy market?",
+   "summary": "Reports indicate that Israel is evaluating entry into the nuclear fusion energy sector, citing significant long-term economic and energy security potential. This initiative aligns with broader national efforts to explore advanced nuclear technologies.",
+   "original_title": "פוטנציאל של מאות מיליארדים: ישראל תיכנס ל\"גביע הקדוש\" של שוק האנרגיה?",
+   "original_language": "he",
+   "source": "YNET",
+   "published": "2026-10-22T03:57:26+00:00",
+   "collected_at": "2026-10-22T20:13:59.833377+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Discusses strategic development and investment interest in nuclear fusion technology."
+  },
+  {
+   "id": "radnuc-background-27b43151ab77d70a",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5vcHYyZ0xwWDR3RVp2QWM2bTZRbzBoOWNLTHJ6c0ZIb3pUSGg5aGFEMDE1a05TS1o4R19TTDdkNWhGdkVQTUp3LUNmMTBDYy0wNlNCUXJ5ZkJMekVCX0hWcUlLUkFFdVNf?oc=5",
+   "title": "Not enough electricity? The state wants to invest in nuclear fusion",
+   "summary": "In response to energy capacity concerns, the Israeli government is planning investments in nuclear fusion research and development. The initiative aims to leverage fusion as a future sustainable energy solution.",
+   "original_title": "אין מספיק חשמל? המדינה רוצה להשקיע בהיתוך גרעיני",
+   "original_language": "he",
+   "source": "calcalist",
+   "published": "2026-10-22T03:05:00+00:00",
+   "collected_at": "2026-10-22T20:13:59.833377+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to governmental policy and investment in civilian nuclear fusion technology."
+  },
+  {
+   "id": "radnuc-background-be37afd8cb9cc12e",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTFBCVjRmcjlfWmpSQnIxN182UW5LSkg1QkVzRUlDUUI4ZFpzak5OdlpwVFZKcnZwWkFwdkRUWUlpaEo1ZTBKYkxQRnlNSkRlRUFZR2dUOFNBY1dGRjUzRFBLaUJB?oc=5",
+   "title": "Ministry of Energy warns: Israel may miss out on a market of hundreds of billions",
+   "summary": "The Israeli Ministry of Energy has issued a warning regarding the potential economic consequences of failing to invest in the nuclear fusion sector. The ministry advocates for rapid integration into global fusion development programs.",
+   "original_title": "משרד האנרגיה מזהיר: ישראל עלולה לפספס שוק של מאות מיליארדים",
+   "original_language": "he",
+   "source": "מעריב",
+   "published": "2026-10-22T03:00:52+00:00",
+   "collected_at": "2026-10-22T20:13:59.833377+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Addresses national strategy and policy regarding future civilian nuclear energy technology."
   },
   {
    "id": "radnuc-background-c889891694c3a4be",
@@ -221,6 +376,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Matches the scientific and technological advancement criteria."
+  },
+  {
+   "id": "radnuc-background-b7a7a5f8a252166c",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNald0c0hZam1rZ2hNRDF2T0FtaGJGWUNoUzA1bnZzTTdIeFowd3ZXWVJmWThISWxjazNNT3N1WFRBeUt0S3FyQVJVTmhlNnNoNlVqUUdhRGpoT25ldGtzWkFxZTZrV0pIdTVnYWtHd2ItelFEM2FnREw4bm84TU41Wg?oc=5",
+   "title": "Uzbekistan is drafting new laws on waste management",
+   "summary": "Uzbekistan is currently in the process of formulating new regulatory frameworks for waste management. The legislative update aims to establish updated national standards for handling waste materials.",
+   "original_title": "אוזבקיסטן מנסחת חוקים חדשים בנושא ניהול פסולת.",
+   "original_language": "he",
+   "source": "Vietnam.vn",
+   "published": "2026-10-21T07:46:34+00:00",
+   "collected_at": "2026-10-22T20:13:59.833377+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Covers regulatory developments in the management of waste materials, relevant to nuclear/radiological policy."
+  },
+  {
+   "id": "radnuc-background-48f527a526f6a229",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPZ1hpZnhZODR3Uzh1anFPMjBhSUVVLW0yNXdYNWtUNER5MVB4MS1hXzBrUHZHR0FaQXlaSFBWUEQ0UGgzbzA5RG0xYjJhNURLb1lLLXdCanh1bTEzdWFveUNTN3g5Z29YTXpJLXktdVNGOTBlUGhySnA5R18zVWMyUDlJaFg0U0Z1Q0txMFFuREJCNXkyd2djbkdTR2RQa2JkU3ZKWDFVcjBkTWZpZ1lnT1BBc3JGbW9ramlkRXFmYw?oc=5",
+   "title": "Scientists from the Russian Federation have developed a laser method for monitoring nuclear fuel reprocessing",
+   "summary": "Researchers in the Russian Federation have developed a new laser-based technique to monitor the reprocessing of nuclear fuel. The technology is designed to improve oversight and analytical capabilities within the nuclear fuel cycle.",
+   "original_title": "Ученые из РФ разработали лазерный метод контроля переработки ядерного топлива",
+   "original_language": "ru",
+   "source": "prospect.com.ru",
+   "published": "2026-10-20T14:01:43+00:00",
+   "collected_at": "2026-10-22T20:13:59.833377+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Describes a technological advancement relevant to nuclear fuel cycle monitoring and safety."
   },
   {
    "id": "radnuc-background-ba6d72c705c09a20",
