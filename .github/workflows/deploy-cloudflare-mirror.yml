@@ -19,9 +19,8 @@ on:
       - ".github/workflows/deploy-cloudflare-mirror.yml"
   workflow_dispatch:
   workflow_run:
-    # Groq commits use GITHUB_TOKEN and do not trigger ordinary push workflows.
-    # Publish the post-backfill main data only after a successful trusted run.
-    workflows: ["Daily CT Intelligence Map Update", "Retire Judicial collection", "Refresh daily collection status", "Apply CT Atlas usage upgrade", "Deploy current CT Atlas UI", "Enrich RADNUC — six months, all collection languages", "Enrich specialist categories", "Gemini Chinese eight-category historical backfill", "Groq Free - six-month CBRNE and Chinese historical backfill", "Groq Free - six-month Biological historical backfill", "Groq Free - Biological historical backfill (cancelled)", "Reconcile daily dataset integrity"]
+    # Data commits use GITHUB_TOKEN; publish only after a successful trusted run.
+    workflows: ["Daily CT Intelligence Map Update", "Retire Judicial collection", "Refresh daily collection status", "Apply CT Atlas usage upgrade", "Deploy current CT Atlas UI", "Enrich RADNUC — six months, all collection languages", "Enrich specialist categories", "Gemini Chinese eight-category historical backfill", "Groq Free - six-month CBRNE and Chinese historical backfill", "Groq Free - six-month Biological historical backfill", "Groq Free - Biological historical backfill (cancelled)", "Reconcile daily dataset integrity", "Apply reviewed map evidence corrections"]
     types: [completed]
     branches: [main]
 

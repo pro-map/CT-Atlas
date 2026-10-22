@@ -1,0 +1,111 @@
+name: Apply reviewed map evidence corrections
+on:
+  push:
+    branches: [main]
+    paths:
+      - map-integrity-decisions.json
+      - map_evidence_integrity.py
+      - tools/repair_map_evidence.py
+      - .github/workflows/repair-map-evidence.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: ct-map-update-main
+  cancel-in-progress: false
+  queue: max
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      data_sha: ${{ steps.commit.outputs.data_sha }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - name: No-provider regression tests
+        run: python -m unittest discover -s tests -p 'map_evidence_integrity_test.py'
+      - name: Snapshot full database and apply source-bound decisions
+        run: |
+          python tools/daily_publication_audit.py snapshot
+          python tools/repair_map_evidence.py --apply --report "archive/map-evidence-repair-${GITHUB_RUN_ID}.json"
+          python tools/daily_publication_audit.py receipt --output "$RUNNER_TEMP/map-evidence-receipt.json"
+          python - <<'PY'
+          import copy,json,os
+          from pathlib import Path
+          from map_evidence_integrity import decisions,repair_document
+          before=json.loads(Path(os.environ['RUNNER_TEMP'],'daily-before.json').read_text())
+          after=json.loads(Path('events.json').read_text())
+          old={e['id']:e for e in before['events']};new={e['id']:e for e in after['events']}
+          plan=decisions();allowed=set(plan['rules'])|{m['canonical_id']for m in plan['merges']}|{m['retired_id']for m in plan['merges']}
+          assert len(new)==len(after['events']) and set(new)<=set(old)
+          assert (set(old)-set(new))<=allowed
+          assert all(old[i]==new[i] for i in set(old)&set(new)-allowed)
+          _,again=repair_document(copy.deepcopy(after))
+          assert not again['changes'] and not again['removed'], 'Repair must be idempotent'
+          assert not again['after']['duplicate_ids'] and not again['after']['category_field_mismatches']
+          # No output path outside events and the evidence archive is staged below.
+          PY
+      - name: Preserve full original data and correction evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: map-evidence-recovery-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/daily-before.json
+            ${{ runner.temp }}/map-evidence-receipt.json
+            archive/map-evidence-repair-*.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Commit bounded repair without overwriting concurrent data
+        id: commit
+        run: |
+          set -euo pipefail
+          git config user.name 'CT Intelligence Map Bot'
+          git config user.email 'actions@github.com'
+          git add -- events.json "archive/map-evidence-repair-${GITHUB_RUN_ID}.json"
+          if ! git diff --cached --quiet; then
+            git commit -m 'Apply source-reviewed map corrections and preserve quarantined evidence (zero AI)'
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort
+              exit 1
+            fi
+            git push origin HEAD:main
+          fi
+          echo "data_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+  deploy:
+    needs: repair
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.repair.outputs.data_sha }}
+      - uses: actions/configure-pages@v6
+      - uses: ./.github/actions/build-events-lite
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: '.'
+      - uses: actions/deploy-pages@v5
+        id: deployment
+      - name: Verify the three data files actually served
+        run: python tools/daily_publication_audit.py verify --url "${{ steps.deployment.outputs.page_url }}" --expected publication-manifest.json --output publication-receipt-pages.json
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: map-evidence-publication-proof-${{ github.run_id }}
+          path: |
+            publication-manifest.json
+            publication-receipt-pages.json
+          retention-days: 7
