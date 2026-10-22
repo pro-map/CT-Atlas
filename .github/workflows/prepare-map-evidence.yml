@@ -25,11 +25,9 @@ jobs:
           python - <<'PY'
           import base64,gzip,hashlib,json
           from pathlib import Path
-          p=Path('.maintenance/map-evidence-bundle.b64')
-          s=p.read_text().strip()
+          s=Path('.maintenance/map-evidence-bundle.b64').read_text().strip()
           for a,b in [('rifzGzGioL51','rifzGioL51'),('O3rvhvnvHh','O3rvhvHh'),('XxHvHPuS HSql','XxHvHPHSql'),('fKm1bLVCSED','fKm1bLSED'),('YDdzf6fTq','YDdz6fTq'),('0bbXSBhtk','0bbXhtk'),('MES1e7RSNuilxt','MES1e7RSNnuilxt')]:
               s=s.replace(a,b)
-          Path('/tmp/map-bundle-normalized.b64').write_text(s)
           assert hashlib.sha256(s.encode()).hexdigest() == '27aec58531919edd24014ba695d37cbc1db3763823f7f8b7922074a709415331', 'Source bundle integrity mismatch; no code executed'
           bundle=json.loads(gzip.decompress(base64.b64decode(s,validate=True)))
           allowed={'map_evidence_integrity.py','tools/repair_map_evidence.py','tools/prepare_map_evidence_decisions.py','tests/map_evidence_integrity_test.py','tools/map-evidence-source-patch.json'}
@@ -37,19 +35,18 @@ jobs:
           for name,text in bundle.items():
               path=Path(name);path.parent.mkdir(parents=True,exist_ok=True);path.write_text(text,encoding='utf-8')
           PY
-      - name: Bind decisions to the audited data and apply exact source edits
+      - name: Bind decisions to audited data and preserve source formatting
         run: |
           python tools/prepare_map_evidence_decisions.py
           python - <<'PY'
           import json
           from pathlib import Path
           for item in json.loads(Path('tools/map-evidence-source-patch.json').read_text()):
-              p=Path(item['path']);s=p.read_text()
+              p=Path(item['path']);crlf=b'\r\n' in p.read_bytes();s=p.read_text()
               for before,after in item['replacements']:
                   if s.count(before)==1: s=s.replace(before,after,1)
                   elif s.count(after)!=1: raise RuntimeError('Source changed: '+str(p))
-              p.write_text(s)
-          # New secondary evidence invalidates old destructive decisions until reviewed.
+              p.write_bytes((s.replace('\n','\r\n') if crlf else s).encode('utf-8'))
           p=Path('map-integrity-decisions.json');plan=json.loads(p.read_text())
           events={e['id']:e for e in json.loads(Path('events.json').read_text())['events']}
           for identifier,rule in plan['rules'].items():
@@ -59,14 +56,18 @@ jobs:
           p=Path('map_evidence_integrity.py');s=p.read_text()
           anchor="    rule = decisions()['rules'].get(str(event.get('id')))\n"
           addition="    if rule and 'reviewed_article_urls' in rule:\n        urls={a.get('url') for a in [event]+event.get('related_articles',[]) if a.get('url')}\n        if not urls <= set(rule['reviewed_article_urls']):\n            return None\n"
-          if addition not in s:
-              assert s.count(anchor)==1;s=s.replace(anchor,anchor+addition)
+          assert s.count(anchor)==1;s=s.replace(anchor,anchor+addition)
+          anchor="    data['map_integrity_audit']="
+          addition="    status_geo=(data.get('collection_status') or {}).get('geolocation')\n    if isinstance(status_geo,dict):\n        status_geo['located']=sum(e.get('latitude') is not None and e.get('longitude') is not None for e in data['events'])\n        status_geo['unlocated']=report['after']['unlocated']\n        status_geo['completed_unlocated']=sum(e.get('ai_geo_complete') is True and (e.get('latitude') is None or e.get('longitude') is None) for e in data['events'])\n        status_geo['review_required']=len(report['after']['geolocation_review_ids'])\n"
+          assert s.count(anchor)==1;s=s.replace(anchor,addition+anchor)
           p.write_text(s)
           PY
       - name: Install existing test dependencies
         run: pip install -r requirements.txt -r darkweb-collector/requirements.txt pytest
       - name: Full Python regressions
-        run: python -m pytest tests/ -q --ignore=tests/visual_intel_detector_test.py | tee /tmp/map-python-tests.txt
+        run: |
+          set -euo pipefail
+          python -m pytest tests/ -q --ignore=tests/visual_intel_detector_test.py | tee /tmp/map-python-tests.txt
       - name: JavaScript regressions
         run: node --test tests/*.test.cjs > /tmp/map-js-tests.txt
       - name: Test repair idempotence and preserve audit
@@ -75,13 +76,17 @@ jobs:
           python - <<'PY'
           import copy,json
           from pathlib import Path
-          from map_evidence_integrity import repair_document
+          from map_evidence_integrity import repair_document,matched_rule
           before=json.loads(Path('events.json').read_text()); after,report=repair_document(copy.deepcopy(before)); twice,second=repair_document(copy.deepcopy(after))
           assert len(before['events'])==4650 and len(after['events'])==4632
           assert not second['changes'] and not second['removed']
           assert not report['after']['duplicate_ids'] and not report['after']['category_field_mismatches']
           assert sum(r['disposition']=='verified_duplicate' for r in report['removed'])==2
           assert sum(r['disposition']=='quarantined_outside_active_map' for r in report['removed'])==16
+          event=copy.deepcopy(next(e for e in before['events']if e['id']=='c4b373aed298cbe1'))
+          assert matched_rule(event)
+          event.setdefault('related_articles',[]).append({'url':'https://example.org/new-evidence'})
+          assert matched_rule(event) is None, 'Unreviewed new evidence must prevent automatic quarantine'
           print('Reviewed repair: 4650 -> 4632; 16 quarantines, 2 duplicate folds, zero new records; repeat is idempotent.')
           PY
       - name: Preserve validation results
@@ -93,7 +98,6 @@ jobs:
             /tmp/map-python-tests.txt
             /tmp/map-js-tests.txt
             /tmp/map-evidence-repair-dry-run.json
-            /tmp/map-bundle-normalized.b64
           retention-days: 7
       - name: Commit tested sources to repair branch only
         run: |
