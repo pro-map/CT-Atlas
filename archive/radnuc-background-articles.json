@@ -3,8 +3,225 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-21T20:16:07.077210+00:00",
+ "updated_at": "2026-10-22T13:57:48.364843+00:00",
  "articles": [
+  {
+   "id": "radnuc-background-91572307c12cbe0f",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQQ2NUMkctc1ctM2lKelNXbXBiR3lVcm5zNkdCOWx1RzQxS25kM2daclMwMnU3VEZwNl9YeWgwcVVHWHE2QXJpYjR2LXpWMjBmQnQxZzlyeUtzcVdlYVJBNjdEUWNXRkNMNFBicUFSa2xuRVFxSDdERHR0Y2RvN190NjdtTEgxNkJ2dGhxRjYyaVpYanM?oc=5",
+   "title": "Establish an organizing committee to conduct radiological and nuclear incident response exercises.",
+   "summary": "An organizing committee has been established to conduct emergency response drills for radiological and nuclear incidents. The initiative aims to enhance readiness for potential radiation-related events.",
+   "original_title": "Создать организационный комитет для проведения учений по реагированию на радиационные и ядерные инциденты.",
+   "original_language": "ru",
+   "source": "Vietnam.vn",
+   "published": "2026-10-22T12:16:33+00:00",
+   "collected_at": "2026-10-22T13:57:48.364843+00:00",
+   "background_topics": [
+    "emergency_exercises"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a legitimate record of radiological/nuclear emergency response preparedness."
+  },
+  {
+   "id": "radnuc-background-6c4951c979d54b6d",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFBMVW1DaWlwaElXa3VySWVPbkVaZEdZTUw4UG5RUEQ0cEZuVDBoQmgySVJwNzRXdGE0R0xQMDBlTWRNa2EtdTFWeTdWLVp0SEVq?oc=5",
+   "title": "The Ministry of Energy and Infrastructure presents a new strategic report: Israel faces a historic opportunity to integrate into the global nuclear fusion industry.",
+   "summary": "Israel's Ministry of Energy and Infrastructure has released a strategic report outlining potential pathways for the country to engage with the international nuclear fusion sector. The report emphasizes the economic and technological importance of participating in global fusion energy development.",
+   "original_title": "משרד האנרגיה והתשתיות מציג דוח אסטרטגי חדש: ישראל ניצבת בפני חלון הזדמנויות היסטורי להשתלב בתעשיית ההיתוך הגרעיני העולמית",
+   "original_language": "he",
+   "source": "Gov.il",
+   "published": "2026-10-22T10:41:15+00:00",
+   "collected_at": "2026-10-22T13:57:48.364843+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This reports on scientific and technological developments in the nuclear fusion sector."
+  },
+  {
+   "id": "radnuc-background-c889891694c3a4be",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNbDZvcXFTZFFXclhYQWNERUdjTU5ndm8taHp0c2xsY0tQLWdTdkgzVjc0R3ZfQ081WUg5V2phR0laWF8xeDdvQy1STGtFdlJ3anhLckpTUk1MNHRQMVlQeFNIa0JnOUdWc3BTQlJlZTYtSU42Tm9DcnFGS1JBRndlRUVLRG05OTRVRlo5U2ROLV9jTHhiS0p1d0MyemF1ai16WGFTMmJlSzNZN3VsNjU4WURDYm9Mb2VqZW9ZQVFYekRxYVQ4WFow0gHHAUFVX3lxTE1sNm9xcVNkUVdyWFhBY0RFR2NNTmd2by1oenRzbGxjS1AtZ1N2SDNWNzRHdl9DTzVZSDlXamFHSVpYXzF4N29DLVJMa0V2UndqeEtySlNSTUw0dFAxWVB4U0hrQmc5R1ZzcFNCUmVlNi1JTjZOb0NycUZLUkFGd2VFRUtEbTk5NFVGWjlTZE4tX2NMeGJLSnV3QzJ6YXVqLXpYYVMyYmVLM1k3dWw2NThZRENib0xvZWplb1lBUVh6RHFhVDhYWjA?oc=5",
+   "title": "Amazon to deploy 12 small modular reactors at a coal-fired power plant site in the United States.",
+   "summary": "Amazon plans to install 12 small modular reactors (SMRs) at the site of a former coal power plant in the United States to support energy needs. This project represents a significant civilian application of modular nuclear technology for industrial power supply.",
+   "original_title": "Amazon разместит 12 малых ядерных реакторов на месте угольной электростанции в США",
+   "original_language": "ru",
+   "source": "iXBT.com",
+   "published": "2026-10-21T19:14:24+00:00",
+   "collected_at": "2026-10-22T13:57:48.364843+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This details a civilian industry facility development involving nuclear power deployment."
+  },
+  {
+   "id": "radnuc-background-c2aeebe3b97c129a",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOX3NjRkFXUG8yS3NIdG5NRWZxRXZOTnRLYkRwU1ZVNG54S3VMYlhsOXYxZ1RrVVVUQkZhZW1JcVRFdnFveHZSZ2NpLTJxNDN1RThrTzZQdU93VVg3YVZsN1hBNjlETGVjR2duS3FtSEhKUFVkN2VneHUzQm9ITVN2bUlkZlZVdUpVZi03ZlFobXlmN0U3WllwUA?oc=5",
+   "title": "The US is reopening three nuclear power plants closed years ago due to artificial intelligence",
+   "summary": "The United States is reactivating three previously closed nuclear power plants to meet the rising energy demands driven by AI expansion. This development highlights shifts in the civilian nuclear energy supply chain to support large-scale technological infrastructure.",
+   "original_title": "ABD yıllar önce kapattığı üç nükleer santrali yeniden açıyor: Sebebi ise yapay zekâ",
+   "original_language": "tr",
+   "source": "DonanımHaber",
+   "published": "2026-10-21T15:22:00+00:00",
+   "collected_at": "2026-10-22T13:57:48.364843+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Matches civilian nuclear industry supply chain/facility operation development."
+  },
+  {
+   "id": "radnuc-background-2180b0c6a8300116",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQLTRhTEZnTTlraE9BM0VmcGlaWjRwRDhPck94aGw5RjJBa19IV3Z0MllhREJtd3lOSWN0cHk1NTAyVnY3am9mQ0hnYkFnbDMtWUJNaWdwcVFHMk9TZnBrTmRzMFo2XzVRQjMxTDkwVjZKN3ZRWHRQZDFNOUxpMnIxMUZFRXlBeVdaTlo5LUM4c1RXdW5LMmF5bg?oc=5",
+   "title": "Artificial intelligence increased energy demand: 4.4 billion dollars of support from the USA",
+   "summary": "The U.S. government has announced 4.4 billion dollars in support to address energy demand spikes resulting from AI development. This funding is relevant to the nuclear energy supply chain as a mechanism for sustaining operational capacity at power facilities.",
+   "original_title": "Yapay zekâ enerji talebini artırdı: ABD’den 4,4 milyar dolarlık destek",
+   "original_language": "tr",
+   "source": "Türkinform",
+   "published": "2026-10-21T15:16:00+00:00",
+   "collected_at": "2026-10-22T13:57:48.364843+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relevant to national energy policies supporting nuclear facility capacity."
+  },
+  {
+   "id": "radnuc-background-fd57185e96e97e9d",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxORWltSUdwNFFRSjE1bUhzSXB3eFp0SW9BQWJReURuSHpGMmlRTU1BWTVPMTJXcF9Uc0dFcHNha0RSNzZlT1M3ZlZTNlItMmZ2Qi12Q3pJMmctMDRGNVdPMER0aFhDOXZLQzFLYkM0SzQ2MU1CeFA2UDRvSTVSdEo1Ym45TE1NX1E1RDB1bUk1emhCUXRCdnZnZEp3c2VWMFdrcHVsS3lZUl9FX2c?oc=5",
+   "title": "Google DeepMind has started recruiting nuclear physicists and nuclear engineers",
+   "summary": "Google DeepMind has initiated recruitment for nuclear physicists and engineers. This indicates the firm's ongoing efforts to apply AI technologies to nuclear industry or research domains.",
+   "original_title": "Google DeepMind, Nükleer Fizikçiler ve Nükleer Mühendisler İçin İşe Alım Başlattı",
+   "original_language": "tr",
+   "source": "ÇözümPark",
+   "published": "2026-10-21T13:32:29+00:00",
+   "collected_at": "2026-10-22T13:57:48.364843+00:00",
+   "background_topics": [
+    "industry_ai_applications"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Matches the development of AI applications in the nuclear sector."
+  },
+  {
+   "id": "radnuc-background-05b8775c00c9584e",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5KUldpM1lNLVR5MUNLdnBIMm4yOVpBdVo2bkVGbjlfT3o4ZnlBTFlaaDVwVG8yb0d1ekg1UXFxZ1F5dW9zd0lrUkNWRVd2NVVzUDdpTDVwZWxrX290cmdjOFR6ZkN6T1QzcUxNdk9IeHBQRVZx?oc=5",
+   "title": "GSI Darmstadt is conducting research on the bonding of superheavy elements",
+   "summary": "GSI Darmstadt is currently engaged in scientific research concerning the bonding properties of superheavy elements. This research represents an advancement in nuclear science and technology.",
+   "original_title": "GSI Darmstadt, süperağır elementlerin bağlanması üzerine araştırmalar yapmaktadır",
+   "original_language": "tr",
+   "source": "da.news",
+   "published": "2026-10-21T11:27:30+00:00",
+   "collected_at": "2026-10-22T13:57:48.364843+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Matches the scientific and technological advancement criteria."
+  },
   {
    "id": "radnuc-background-ba6d72c705c09a20",
    "kind": "radnuc_background",

@@ -1060,27 +1060,38 @@
   "8ee1c3440ab04412": "2026-10-21T20:16:07.077210+00:00",
   "952c7862047c8ea1": "2026-10-21T20:16:07.077210+00:00",
   "5debb6324fcea528": "2026-10-21T20:16:07.077210+00:00",
-  "2a9de52af372b9ae": "2026-10-21T20:16:07.077210+00:00"
+  "2a9de52af372b9ae": "2026-10-21T20:16:07.077210+00:00",
+  "225b97fde9410171": "2026-10-22T13:57:48.364843+00:00",
+  "8393b7f21c845c98": "2026-10-22T13:57:48.364843+00:00",
+  "22cead8e9851d306": "2026-10-22T13:57:48.364843+00:00",
+  "8fedc54586b83bef": "2026-10-22T13:57:48.364843+00:00",
+  "28ecef2ddc1ee9a8": "2026-10-22T13:57:48.364843+00:00",
+  "f8d210025d1a1df9": "2026-10-22T13:57:48.364843+00:00",
+  "3093be05e246be00": "2026-10-22T13:57:48.364843+00:00",
+  "952b714a9808966d": "2026-10-22T13:57:48.364843+00:00",
+  "b07bc8f5ce48169a": "2026-10-22T13:57:48.364843+00:00",
+  "545be54cd9f1541e": "2026-10-22T13:57:48.364843+00:00",
+  "de55f7ab5789c2f4": "2026-10-22T13:57:48.364843+00:00"
  },
  "pending": [
   {
-   "id": "6f53645ef4cb57a2",
+   "id": "bca6733b4bd2dbe2",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Amazon Nvidia'dan binlerce yapay zekâ çipi alıyor ama hepsini çalıştıracak elektriği yok",
-   "summary": "Amazon Nvidia'dan binlerce yapay zekâ çipi alıyor ama hepsini çalıştıracak elektriği yok DonanımHaber",
-   "original_title": "Amazon Nvidia'dan binlerce yapay zekâ çipi alıyor ama hepsini çalıştıracak elektriği yok",
-   "original_summary": "Amazon Nvidia'dan binlerce yapay zekâ çipi alıyor ama hepsini çalıştıracak elektriği yok DonanımHaber",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-21T17:55:00+00:00",
-   "source": "DonanımHaber",
+   "title": "משרד האנרגיה: \"על ישראל להשתלב בהקדם במרוץ העולמי לפיתוח היתוך גרעיני\"",
+   "summary": "משרד האנרגיה: \"על ישראל להשתלב בהקדם במרוץ העולמי לפיתוח היתוך גרעיני\" אתר החדשות דבר",
+   "original_title": "משרד האנרגיה: \"על ישראל להשתלב בהקדם במרוץ העולמי לפיתוח היתוך גרעיני\"",
+   "original_summary": "משרד האנרגיה: \"על ישראל להשתלב בהקדם במרוץ העולמי לפיתוח היתוך גרעיני\" אתר החדשות דבר",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-10-22T07:21:00+00:00",
+   "source": "אתר החדשות דבר",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQQXlWWkpFekxYc2FxbGVNd3kyc2s1cmJhR09xQmxrdmRWYzhtR29Gc01vcWtXY0M3Yl8wclF6Nml2aE43LWRtTGNPM3dDYzBqTFBSRGlkanRWU05MdUd1UG9YOW96dUhZaE9pRE1ta1RUYUZiMjhHRlM5aW5Ea0x1bUdFdl9zbE1jVmRqdk5UbFdUQ2pydUZVV0hZeDZ2SFdUMHdhMQ?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1sX20yb3FsNWQzVlBKR2F3YWdnc2ZoejRYc2FHclAwS1NOdVRzNXdtVGpUd1Q5cFd6Wnp2QjFJTUJTSVM0X1hV?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1092,28 +1103,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "ac3f8a7ae467e4f96b143687001bbfc95dd964d22984510b687d668db564dd9e"
+    "28fdef403db9eaccfb5838610d5fb5d0549a46bdcd462dd2dc4344ea8d7f45f0"
    ],
-   "background_query_language": "tr"
+   "background_query_language": "he"
   },
   {
-   "id": "aa96dc32802140c8",
+   "id": "915dd4af1ccd9c2e",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Araştırma: Yapay zeka, sivil altyapıya yönelik siber saldırılarda ustalaşıyor",
-   "summary": "Araştırma: Yapay zeka, sivil altyapıya yönelik siber saldırılarda ustalaşıyor Gazete Oksijen",
-   "original_title": "Araştırma: Yapay zeka, sivil altyapıya yönelik siber saldırılarda ustalaşıyor",
-   "original_summary": "Araştırma: Yapay zeka, sivil altyapıya yönelik siber saldırılarda ustalaşıyor Gazete Oksijen",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-21T17:43:00+00:00",
-   "source": "Gazete Oksijen",
+   "title": "פוטנציאל של מאות מיליארדים: ישראל תיכנס ל\"גביע הקדוש\" של שוק האנרגיה?",
+   "summary": "פוטנציאל של מאות מיליארדים: ישראל תיכנס ל\"גביע הקדוש\" של שוק האנרגיה? YNET",
+   "original_title": "פוטנציאל של מאות מיליארדים: ישראל תיכנס ל\"גביע הקדוש\" של שוק האנרגיה?",
+   "original_summary": "פוטנציאל של מאות מיליארדים: ישראל תיכנס ל\"גביע הקדוש\" של שוק האנרגיה? YNET",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-10-22T03:57:26+00:00",
+   "source": "YNET",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOeGMxMG9vX3p3WjYtTWZGWDU1bVlXVFdNVHd3enJvZURvYTZFam9pSTRLVlAxc2N0bmlOVXVRWGhUYS00c1V0ZGdjWmhSS0U1X3RKdERkZF9fUWdvTGh0SlZmNEdhNzR0dzRNcWVjNXFXclUxYVBPMHRrTEtqSENuY2Q1akEwbk0zR2VTcmRaeHFmalRGRS1KZ055WEJZUFFlbk8xWjZybXppNENfUFd3VWc1SFlzcUpEVUxZUllFVDFYVFVHNFE?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE40MUdnM1lCSllfbXRoLTg1T1VGSHBOZGxiMWllUDNUN2luODRCMmVCcGtGUkh6MkJ4RFFDZ1c4UU05dHJ2S1NBMEdxUTRUYlpBVzRaRERtX1NBaDhMTXc?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1125,28 +1136,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "3cff8d18390d0d2d8f5c27c61eb0ef546ddccb9b6991a9fac1391693e46b2ff9"
+    "93cf2d6c11be2b04f03a22f66c9889a040c147f11286bbae391f0c7e22d88694"
    ],
-   "background_query_language": "tr"
+   "background_query_language": "he"
   },
   {
-   "id": "06d35201792a701b",
+   "id": "6f21ed1a36c08828",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Dışişleri Bakan Yardımcısı Büyükelçi Kulaklıkaya, Cenevre’de temaslarda bulundu",
-   "summary": "Dışişleri Bakan Yardımcısı Büyükelçi Kulaklıkaya, Cenevre’de temaslarda bulundu www.ensondakika.com.tr",
-   "original_title": "Dışişleri Bakan Yardımcısı Büyükelçi Kulaklıkaya, Cenevre’de temaslarda bulundu",
-   "original_summary": "Dışişleri Bakan Yardımcısı Büyükelçi Kulaklıkaya, Cenevre’de temaslarda bulundu www.ensondakika.com.tr",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-21T16:49:08+00:00",
-   "source": "www.ensondakika.com.tr",
+   "title": "אין מספיק חשמל? המדינה רוצה להשקיע בהיתוך גרעיני",
+   "summary": "אין מספיק חשמל? המדינה רוצה להשקיע בהיתוך גרעיני calcalist",
+   "original_title": "אין מספיק חשמל? המדינה רוצה להשקיע בהיתוך גרעיני",
+   "original_summary": "אין מספיק חשמל? המדינה רוצה להשקיע בהיתוך גרעיני calcalist",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-10-22T03:05:00+00:00",
+   "source": "calcalist",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPZ2VMMFhfNjE0TUIyNFNZMjFsa1JSUUFJbVZSMldIRFl6LWRpcnVkZ2l1eWxjdElQakRKb0ktQ0NlanhjcWlEdm12R3gwX3BVM3QtVnFtczJnQ1RKSXBLdjZiSmFybVpUM19rQ2o5UlpRSnlNYkc0TGpyU1BSOVIwM1NYSHZMY0xMU01CSTdRTEZLc1FzRjdWWmlKUTRMTktqNFQwVmhwWlFMYzBMS0oyWTZYenZQMmZh?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5vcHYyZ0xwWDR3RVp2QWM2bTZRbzBoOWNLTHJ6c0ZIb3pUSGg5aGFEMDE1a05TS1o4R19TTDdkNWhGdkVQTUp3LUNmMTBDYy0wNlNCUXJ5ZkJMekVCX0hWcUlLUkFFdVNf?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1158,28 +1169,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "80f3c97b956ffe5db9b0fad66af90d6aacf68a82f664c8b8a3bf99983691c1e7"
+    "1fcb4c2c9ea779998f66959c4811aae71451823ea26280976408db214d9e8304"
    ],
-   "background_query_language": "tr"
+   "background_query_language": "he"
   },
   {
-   "id": "b7eff812876a82b4",
+   "id": "0b70baa876368d2d",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "İngiliz şarkıcı IAMDDB, İsrail hükümetini yapay zeka videosunda kimliğini çalmakla suçladı",
-   "summary": "İngiliz şarkıcı IAMDDB, İsrail hükümetini yapay zeka videosunda kimliğini çalmakla suçladı www.ensondakika.com.tr",
-   "original_title": "İngiliz şarkıcı IAMDDB, İsrail hükümetini yapay zeka videosunda kimliğini çalmakla suçladı",
-   "original_summary": "İngiliz şarkıcı IAMDDB, İsrail hükümetini yapay zeka videosunda kimliğini çalmakla suçladı www.ensondakika.com.tr",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-21T16:46:35+00:00",
-   "source": "www.ensondakika.com.tr",
+   "title": "משרד האנרגיה מזהיר: ישראל עלולה לפספס שוק של מאות מיליארדים",
+   "summary": "משרד האנרגיה מזהיר: ישראל עלולה לפספס שוק של מאות מיליארדים מעריב",
+   "original_title": "משרד האנרגיה מזהיר: ישראל עלולה לפספס שוק של מאות מיליארדים",
+   "original_summary": "משרד האנרגיה מזהיר: ישראל עלולה לפספס שוק של מאות מיליארדים מעריב",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-10-22T03:00:52+00:00",
+   "source": "מעריב",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPVkpnTkV6enhKNE5DYmRuMVBGRW8wTjEzWFQyYUhNejJGXzctbmxiY3ladUh1a0dwcFBudEIwZXVnZXczR3hrdkhvdkhuSEYxak44RGswSkh5eFFlbExZekZWY1dCczZQUjlJaVlIbkJ4aWdIeHkyemdScW9DVG1JYTFEbzE4c0NmcHgzaGtDanlydGZadVNlNGVGcUt6TDNGLVZtWTNKSHdXdUlubTNlX200Y2pVTVlCanI1THFxS1lWY3FhY0FJ?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTFBCVjRmcjlfWmpSQnIxN182UW5LSkg1QkVzRUlDUUI4ZFpzak5OdlpwVFZKcnZwWkFwdkRUWUlpaEo1ZTBKYkxQRnlNSkRlRUFZR2dUOFNBY1dGRjUzRFBLaUJB?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1191,28 +1202,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "ba769ba047d7b3e0ebb3eaad66eb9d032aec64fc25048da6e0e77236752d89d6"
+    "1dbf9c43517e381d7d5401470064abebd4813346832885e0e63e193dac008479"
    ],
-   "background_query_language": "tr"
+   "background_query_language": "he"
   },
   {
-   "id": "c749f69c9fc0744a",
+   "id": "e836aee314c14a0c",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "ABD yıllar önce kapattığı üç nükleer santrali yeniden açıyor: Sebebi ise yapay zekâ",
-   "summary": "ABD yıllar önce kapattığı üç nükleer santrali yeniden açıyor: Sebebi ise yapay zekâ DonanımHaber",
-   "original_title": "ABD yıllar önce kapattığı üç nükleer santrali yeniden açıyor: Sebebi ise yapay zekâ",
-   "original_summary": "ABD yıllar önce kapattığı üç nükleer santrali yeniden açıyor: Sebebi ise yapay zekâ DonanımHaber",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-21T15:22:00+00:00",
-   "source": "DonanımHaber",
+   "title": "ישראל מצטרפת למרוץ להיתוך גרעיני",
+   "summary": "ישראל מצטרפת למרוץ להיתוך גרעיני היום",
+   "original_title": "ישראל מצטרפת למרוץ להיתוך גרעיני",
+   "original_summary": "ישראל מצטרפת למרוץ להיתוך גרעיני היום",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-10-21T16:25:00+00:00",
+   "source": "היום",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOX3NjRkFXUG8yS3NIdG5NRWZxRXZOTnRLYkRwU1ZVNG54S3VMYlhsOXYxZ1RrVVVUQkZhZW1JcVRFdnFveHZSZ2NpLTJxNDN1RThrTzZQdU93VVg3YVZsN1hBNjlETGVjR2duS3FtSEhKUFVkN2VneHUzQm9ITVN2bUlkZlZVdUpVZi03ZlFobXlmN0U3WllwUA?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE11bVNNYmZzZXVfeXZld3htNmlja3MzUEQ1ckNVSnNpUEF0SUhRWEtkZGhPU3Z0MG1yZ0liV3VBM2pFVE1MZjJyU19pTWpaQnBUNmF6UE90bDdnQkRwVlhrNC1feEluY1BHSldlQnQwa1jSAXhBVV95cUxNVHVtSk85VTg5UkVhamJRWVRwbVk3YWx5UXhYd3BJT2JPeU1YSUNwNEpVeXNMMXoxeHcwQ3FRek5pYk1xX3BTY0pRVkt6SXRWVkJGaVZfYjhfX25PdGFpendfa2Mxby15TEZMLWVhWGVDbGQxUFQtZ2k?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1224,28 +1235,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "001bc32fb83676275a5062d41b7f3192bd5b52999358c57305d92c0012a08ef5"
+    "8fb552c3f77498803a5b6a1959ac4135a0bad5fbe6579c319d8f2a7434ad1262"
    ],
-   "background_query_language": "tr"
+   "background_query_language": "he"
   },
   {
-   "id": "664aef734e56ff5d",
+   "id": "df3b87d41f15c86f",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Yapay zekâ enerji talebini artırdı: ABD’den 4,4 milyar dolarlık destek",
-   "summary": "Yapay zekâ enerji talebini artırdı: ABD’den 4,4 milyar dolarlık destek Türkinform",
-   "original_title": "Yapay zekâ enerji talebini artırdı: ABD’den 4,4 milyar dolarlık destek",
-   "original_summary": "Yapay zekâ enerji talebini artırdı: ABD’den 4,4 milyar dolarlık destek Türkinform",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-21T15:16:00+00:00",
-   "source": "Türkinform",
+   "title": "אוזבקיסטן מנסחת חוקים חדשים בנושא ניהול פסולת.",
+   "summary": "אוזבקיסטן מנסחת חוקים חדשים בנושא ניהול פסולת. Vietnam.vn",
+   "original_title": "אוזבקיסטן מנסחת חוקים חדשים בנושא ניהול פסולת.",
+   "original_summary": "אוזבקיסטן מנסחת חוקים חדשים בנושא ניהול פסולת. Vietnam.vn",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-10-21T07:46:34+00:00",
+   "source": "Vietnam.vn",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQLTRhTEZnTTlraE9BM0VmcGlaWjRwRDhPck94aGw5RjJBa19IV3Z0MllhREJtd3lOSWN0cHk1NTAyVnY3am9mQ0hnYkFnbDMtWUJNaWdwcVFHMk9TZnBrTmRzMFo2XzVRQjMxTDkwVjZKN3ZRWHRQZDFNOUxpMnIxMUZFRXlBeVdaTlo5LUM4c1RXdW5LMmF5bg?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNald0c0hZam1rZ2hNRDF2T0FtaGJGWUNoUzA1bnZzTTdIeFowd3ZXWVJmWThISWxjazNNT3N1WFRBeUt0S3FyQVJVTmhlNnNoNlVqUUdhRGpoT25ldGtzWkFxZTZrV0pIdTVnYWtHd2ItelFEM2FnREw4bm84TU41Wg?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1257,28 +1268,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "3ea944da340f1421487ee506682a9fbbd1bef673c58801d5dc70abfb8484a52a"
+    "36f312a9315a077798ceb33bff65bcca6394d11da64d47bbf7bba3ee382a070d"
    ],
-   "background_query_language": "tr"
+   "background_query_language": "he"
   },
   {
-   "id": "5d0001d787be6162",
+   "id": "ade4a552cb1c914a",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Google DeepMind, Nükleer Fizikçiler ve Nükleer Mühendisler İçin İşe Alım Başlattı",
-   "summary": "Google DeepMind, Nükleer Fizikçiler ve Nükleer Mühendisler İçin İşe Alım Başlattı ÇözümPark",
-   "original_title": "Google DeepMind, Nükleer Fizikçiler ve Nükleer Mühendisler İçin İşe Alım Başlattı",
-   "original_summary": "Google DeepMind, Nükleer Fizikçiler ve Nükleer Mühendisler İçin İşe Alım Başlattı ÇözümPark",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-21T13:32:29+00:00",
-   "source": "ÇözümPark",
+   "title": "מטוסי קרב ישראליים טסו לכיוון איראן – וטראמפ שיגר אזהרה",
+   "summary": "מטוסי קרב ישראליים טסו לכיוון איראן – וטראמפ שיגר אזהרה C14",
+   "original_title": "מטוסי קרב ישראליים טסו לכיוון איראן – וטראמפ שיגר אזהרה",
+   "original_summary": "מטוסי קרב ישראליים טסו לכיוון איראן – וטראמפ שיגר אזהרה C14",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-10-21T03:40:20+00:00",
+   "source": "C14",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxORWltSUdwNFFRSjE1bUhzSXB3eFp0SW9BQWJReURuSHpGMmlRTU1BWTVPMTJXcF9Uc0dFcHNha0RSNzZlT1M3ZlZTNlItMmZ2Qi12Q3pJMmctMDRGNVdPMER0aFhDOXZLQzFLYkM0SzQ2MU1CeFA2UDRvSTVSdEo1Ym45TE1NX1E1RDB1bUk1emhCUXRCdnZnZEp3c2VWMFdrcHVsS3lZUl9FX2c?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBWWk12QW1CZzhGSmN6TnpKSmRhallhaUgtQWozdURZQzNMZHdHaTB3QlR2ODQ4TVA3TlR3b3U0SnNDcUxzc3N4Zk1hTXJvdw?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1290,28 +1301,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "075aba043adf0cea607417e43141bbb5448d47143649399ebc0a8b9139054b0f"
+    "5ef74e7c4256e59b186a1bebfe73a708f38e1ff6fa9f281c02a6234ed7b26244"
    ],
-   "background_query_language": "tr"
+   "background_query_language": "he"
   },
   {
-   "id": "cb97b4cdf76fdc1c",
+   "id": "1a6400546bcec33a",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "GSI Darmstadt, süperağır elementlerin bağlanması üzerine araştırmalar yapmaktadır",
-   "summary": "GSI Darmstadt, süperağır elementlerin bağlanması üzerine araştırmalar yapmaktadır da.news",
-   "original_title": "GSI Darmstadt, süperağır elementlerin bağlanması üzerine araştırmalar yapmaktadır",
-   "original_summary": "GSI Darmstadt, süperağır elementlerin bağlanması üzerine araştırmalar yapmaktadır da.news",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-21T11:27:30+00:00",
-   "source": "da.news",
+   "title": "Ученые из РФ разработали лазерный метод контроля переработки ядерного топлива",
+   "summary": "Ученые из РФ разработали лазерный метод контроля переработки ядерного топлива prospect.com.ru",
+   "original_title": "Ученые из РФ разработали лазерный метод контроля переработки ядерного топлива",
+   "original_summary": "Ученые из РФ разработали лазерный метод контроля переработки ядерного топлива prospect.com.ru",
+   "original_language": "ru",
+   "collection_language": "ru",
+   "collection_language_name": "Russian",
+   "collection_locale": "RU:ru",
+   "published": "2026-10-20T14:01:43+00:00",
+   "source": "prospect.com.ru",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5KUldpM1lNLVR5MUNLdnBIMm4yOVpBdVo2bkVGbjlfT3o4ZnlBTFlaaDVwVG8yb0d1ekg1UXFxZ1F5dW9zd0lrUkNWRVd2NVVzUDdpTDVwZWxrX290cmdjOFR6ZkN6T1QzcUxNdk9IeHBQRVZx?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPZ1hpZnhZODR3Uzh1anFPMjBhSUVVLW0yNXdYNWtUNER5MVB4MS1hXzBrUHZHR0FaQXlaSFBWUEQ0UGgzbzA5RG0xYjJhNURLb1lLLXdCanh1bTEzdWFveUNTN3g5Z29YTXpJLXktdVNGOTBlUGhySnA5R18zVWMyUDlJaFg0U0Z1Q0txMFFuREJCNXkyd2djbkdTR2RQa2JkU3ZKWDFVcjBkTWZpZ1lnT1BBc3JGbW9ramlkRXFmYw?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1323,9 +1334,42 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "96224cf56992c1609eaa43d0cbae96350aac7d8be056ff43bb318b9a7e0fcfec"
+    "9dd8251aace3308a98c6184d2ec7b8ccec8ea63a33f2d5d4f62cf85673bfdfeb"
    ],
-   "background_query_language": "tr"
+   "background_query_language": "ru"
+  },
+  {
+   "id": "c0e6b81937f51960",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Ученые разработали метод лазерного контроля переработки ядерного топлива",
+   "summary": "Ученые разработали метод лазерного контроля переработки ядерного топлива prospect.com.ru",
+   "original_title": "Ученые разработали метод лазерного контроля переработки ядерного топлива",
+   "original_summary": "Ученые разработали метод лазерного контроля переработки ядерного топлива prospect.com.ru",
+   "original_language": "ru",
+   "collection_language": "ru",
+   "collection_language_name": "Russian",
+   "collection_locale": "RU:ru",
+   "published": "2026-10-20T03:51:40+00:00",
+   "source": "prospect.com.ru",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNQ0lYTVpkLW1mTjQ0d0lwa1NvNkU1dHRLT25JU3dtMjYyQ1Qtb3J0dlJtak55NnhMVm1CQXRnZy1hbU5XLXU0TzNRRVdrcGhFZk4yZV8yV3JuQ01sTWFaREZDRDBSNVdXLWptWk9lZXFFeUFrRlhjdkZRMVRvUnlfQzctc3FReXc0bllqbVBrR1ZnTkZERjZqWGtPUnk4ZDQybXd5ZHJHVzkyZGo5aDE4OGFfS1A2NldL?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "dcaedc4459ccc857dce48f7422acdd0bcde5b6d440dc708ed7b9c053653161cb"
+   ],
+   "background_query_language": "ru"
   },
   {
    "id": "1595a09de4e6322a",
@@ -17366,6 +17410,6 @@
    "background_query_language": "it"
   }
  ],
- "cursor": 28,
- "updated_at": "2026-10-21T20:16:07.077210+00:00"
+ "cursor": 35,
+ "updated_at": "2026-10-22T13:57:48.364843+00:00"
 }
