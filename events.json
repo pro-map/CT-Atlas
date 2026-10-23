@@ -784,7 +784,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-10-22T21:09:45.921831+00:00",
-  "number_of_events": 4714,
+  "number_of_events": 4700,
   "events": [
     {
       "id": "e348cb4db9520006",
@@ -244448,7 +244448,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The maritime attack and killing of the sailors took place in Somalia.",
       "ai_geo_fingerprint": "ce89dcff413b6835bdeeced9f9afa853e9169c1449f4134628ab087a7d7b8eaf",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "a2ba517ac520d456",
@@ -257145,7 +257146,8 @@
       "dedup_confidence": 0.833,
       "dedup_methods": [
         "title_plus_anchor"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "1e109c13a13107ba",
@@ -258452,7 +258454,8 @@
       "dedup_confidence": 0.833,
       "dedup_methods": [
         "title_plus_anchor"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "bd9a63bb5c3e1cbe",
@@ -258526,111 +258529,6 @@
       "ai_geo_reason": "The attack occurred in Samaria (West Bank), involving the IDF.",
       "ai_geo_fingerprint": "02624697b91fe1c590890e9f24d7d7da08879d7fe64f730081b75a96627323cb",
       "ai_geo_inferred": false
-    },
-    {
-      "id": "beee10fb98ce23fa",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Eco-guard killed in attack on RFO in Mambasa",
-      "summary": "An ICCN eco-guard was killed during an armed attack against the Okapi Wildlife Reserve (RFO) in Mambasa.",
-      "original_title": "Mambasa : un écogarde de l’ICCN tué lors d’une attaque contre la RFO",
-      "original_summary": "Mambasa : un écogarde de l’ICCN tué lors d’une attaque contre la RFO beroyafm.net",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French / Africa",
-      "collection_locale": "FR:fr",
-      "published": "2026-10-01T18:33:40+00:00",
-      "source": "beroyafm.net",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPS1lQREFYR3p1azRQZ3ZtUEJXMGhfSzdxRy1HT0Z5aHhaMlp6cTdzSjBORHpHYnhlNjdHYTBlNDV3ZU1lQkJjWjZweDRDUHV6RzhIRVdCeEN4blkyWXRxeUVKZm5oX3lFbnJPa2ZCdTlzdlpKSEJlYTVwSk9IUHJHc2phbEU4ajlmZm9nR09uZw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Democratic Republic of the Congo",
-      "country_code": "CD",
-      "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "0147f070e784cabe6f0f32a727e86de7a2b822b57e9c50a150472a865af85c11",
-        "78220bdd2878b67caab2b8136ba0903c95e5dbf57a118f2022175f85dd3242cb",
-        "deb18802399d241b8ed96203d34b118a736b703fe33c5ad80d8daabbe98ef10a"
-      ],
-      "sources": [
-        "beroyafm.net",
-        "mediacongo.net"
-      ],
-      "related_articles": [
-        {
-          "title": "Ituri: ICCN eco-guard killed in ADF attack in Mambasa",
-          "original_title": "Actualité | Ituri : un écogarde de l’ICCN tué dans une attaque des ADF à Mambasa",
-          "original_language": "fr",
-          "summary": "An eco-guard from the Congolese Institute for Nature Conservation (ICCN) was killed during an attack attributed to ADF militants in Mambasa, Ituri.",
-          "published": "2026-10-01T20:09:53+00:00",
-          "source": "mediacongo.net",
-          "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPT1hSelV0SnJIRlJHc18xcm9nRm1QakVQZ1FfMnBnQnMzckRjcnpKNmRCRUFVanpkMXl5aDVUOTVjU0N5M1ZTbmEyQ2xBc0hQdXJoa0tYb2ltQ3RBYVpMN19HbHc5NzBMeHdOV3pJZ2YzOXpCeUxrTTJBS2I1TjJMNXhiUWFnd05mTWdMU1dZbjdGQ21GOUpockJINGlFdTBER0RENGlVNFdRRTVvZkY5Z0RqZng1dTd3TldZQlBHMXk?oc=5"
-        },
-        {
-          "title": "Ituri: Eco-guard of Okapi Wildlife Reserve Killed in Attack Attributed to ADF",
-          "original_title": "Actualité | Ituri : un écogarde de la Réserve de faune à Okapis tué dans une attaque attribuée aux ADF",
-          "original_language": "fr",
-          "summary": "An eco-guard working at the Okapi Wildlife Reserve in Ituri province was killed in an armed attack attributed to ADF rebels.",
-          "published": "2026-10-02T10:12:51+00:00",
-          "source": "mediacongo.net",
-          "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOTHdfdkJSN0h1M2hvVnptaWR5TEgzQm1mYzMxalllYkpOQkwxZWg4SmNVV3JKNTU5S3kwcmhuVlFqYlVRaFVEWUo2SThwVzdWdFRIalR0MjRxWDROZGFRSktkck9VSGJBdlh5alJneGRXQTRBaTJyQzN0WGpldlNsMlI4bThpLTNVVjlzbHhGdENCOS0waFhXWVdKbk95aDVkeVZOeklWVU1wem9vOTRqS3F2ak03djhOSXllUGhEcjVIVzZmSy16cFVVTmZVRnJ5NXBSNTdONERldDIwSXc?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-10-01T18:33:40+00:00",
-      "last_reported": "2026-10-02T10:12:51+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Concrete armed militia/rebel attack resulting in a fatality in the DRC.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Mambasa RFO attack 2026-10-01",
-      "update_type": "INITIAL",
-      "incident_id": "inc-87eea2b7cdbeac22",
-      "translated_to_english": true,
-      "ai_canonical_event": "Armed attack on RFO facility in Mambasa resulting in eco-guard death 2026-10-01",
-      "title_variants": [
-        "Armed attack on RFO facility in Mambasa resulting in eco-guard death 2026-10-01"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_incident",
-        "title_plus_anchor"
-      ],
-      "location_confidence_score": 0.0,
-      "location_method": "reviewed_unsupported_point_withdrawn",
-      "location_evidence": [
-        "attack against the Okapi Wildlife Reserve (RFO) in Mambasa"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Mambasa, Ituri province in DRC, is the explicit location of the attack.",
-      "ai_geo_fingerprint": "b22abc4ca9572b61234a4b8fdea45bec44207eafdce4bf9d3b67f9c0f7e8c270",
-      "ai_geo_inferred": false,
-      "geolocation_review_required": true,
-      "location_review_reason": "Stored point matches a namesake in KE rather than the recorded country CD. Exact incident locality is not established; withdraw the unsupported point.",
-      "integrity_review_version": "map-evidence-review-20261022",
-      "integrity_review_reason": "Stored point matches a namesake in KE rather than the recorded country CD. Exact incident locality is not established; withdraw the unsupported point.",
-      "integrity_source_evidence": "084f64e689d02747de0a2f61873a64999e153f0e96551eb0383b108a280c39fa"
     },
     {
       "id": "9a81ade5048d8527",
@@ -259551,7 +259449,8 @@
       "ai_geo_reason": "Incident and police operations centered in Imo State, Nigeria.",
       "ai_geo_fingerprint": "1f9445bdb354f24b858ac6b9b3a10c5a4d5ac0d839cd65dfccd571ff742d4d95",
       "ai_geo_inferred": false,
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "04232af1e3f8623e",
@@ -259624,7 +259523,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The diplomatic engagement relates to maritime actions involving Somalia.",
       "ai_geo_fingerprint": "2a18bee22933be9769de9d69b419a6d632b57bc5766e6f83027e71b58b579114",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "b9c094518d50f1b1",
@@ -259804,7 +259704,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Explicitly states Imo State, Nigeria.",
       "ai_geo_fingerprint": "c6180a879da075935225d2e77a14a2f1625dbb514e59ad3cacdae70cbe0d0bee",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "e3a4cdb3240114e7",
@@ -267496,7 +267397,8 @@
       "dedup_methods": [
         "paraphrase_entity_context",
         "entity_actor_event_signature"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "36e65846415e4260",
@@ -271547,7 +271449,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The event described is a rescue operation resulting in deaths that took place in Somalia, reported by the Pakistan Foreign Office.",
       "ai_geo_fingerprint": "0ec31655970160be0766a1a89866a1f9e62004f8569aca029fe87e75f6d6021a",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "f32e8041e62820e3",
@@ -278220,7 +278123,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Maritime piracy incident occurred off the coast of Yemen.",
       "ai_geo_fingerprint": "776a1cce48cbe5e690c01c417543dca5b297c359f8b273e18e0484039b83856a",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "4541aed69f2c76db",
@@ -278313,85 +278217,6 @@
       ]
     },
     {
-      "id": "488a2dea54539f7a",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "ISWAP family members surrender, minor rescued in Gwoza, Nigeria",
-      "summary": "Several family members associated with ISWAP surrendered to troops, and a minor was rescued in Gwoza.",
-      "original_title": "Six ISWAP family members surrender, minor rescued in Gwoza",
-      "original_summary": "Six ISWAP family members surrender, minor rescued in Gwoza ZAgazola",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-09-30T07:00:00+00:00",
-      "source": "ZAgazola",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPcEpmcHdBemNTVVlRZzBTZ213a0puYnZxNGYyRzBweU50ZUlHc19jczR3eDlFTHFWbWdBOXdHRDdGb0NZMkduNHlFRWlld3dTQjd0ZmJTekNnVEVaMzFWZDJnNHQ0QThCaFVKWVlFblNOS2M0dmN3NGlZSVhSOThTQTFtQUtwTml1dDFLdUJ0WmJXN1Y1UUlpeDJBSmtnMmIzOTk2bw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": "Gwoza",
-      "region": null,
-      "latitude": 11.08313,
-      "longitude": 13.69595,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "zagazola.org",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "ae22d0c443c7eb34ee7bd21c9dda6fbb8cbf40d5a2bc9869031078594799cecf"
-      ],
-      "sources": [
-        "ZAgazola"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-09-30T07:00:00+00:00",
-      "last_reported": "2026-09-30T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 65,
-      "ai_relevance_reason": "Relevant counter-terrorism operational development involving the surrender and extraction of individuals associated with a militant group.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "ISWAP",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "ISWAP surrender Gwoza 2026-09-30",
-      "update_type": "INITIAL",
-      "incident_id": "inc-eb2f041553a3260b",
-      "translated_to_english": false,
-      "ai_canonical_event": "ISWAP surrender and minor rescue in Gwoza",
-      "title_variants": [
-        "ISWAP surrender and minor rescue in Gwoza"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_categories": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Six ISWAP family members surrender, minor rescued in Gwoza"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The event occurred in Gwoza, Nigeria.",
-      "ai_geo_fingerprint": "2632444b366ee58b45e1237a3b0f6a6638ed1df8788dd228e6851bdc6f982a68",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "96f313d941a733fa",
       "category": "Maritime Piracy",
       "categories": [
@@ -278473,7 +278298,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_url"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "b7a022e70a124659",
@@ -278574,7 +278400,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The maritime pirate attack and rescue occurred off the Gulf of Aden.",
       "ai_geo_fingerprint": "05cba8282e758820f1ec774cc120f22cb4969b3f8aeaf2042b9895bad3fffaca",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "823520ac9c5e4d1d",
@@ -280093,7 +279920,8 @@
         "same_url",
         "entity_actor_event_signature",
         "title_plus_anchor"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "c673831f8ff492ef",
@@ -280530,7 +280358,8 @@
       "ai_geo_reason": "Rescue operation on a hijacked ship off the coast of Somalia.",
       "ai_geo_fingerprint": "c5931bc26b69022cb90d5a7de4d52ec37c7dd2e627391a1813ac52c4f8be1259",
       "ai_geo_inferred": true,
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "21221d3e405c3b98",
@@ -280926,7 +280755,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-09-29T13:50:34+00:00",
       "source": "mediacongo.net",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQdXhQWkJxSTluMnhXYzVpRjJyVlRRMUlOTGxtVG0wbjNXOVVaQ0YzMlBuVjN4TWxhUGR0U25OZW9aUEYyVmEtMDYtV19taFpSbkZSaE5weTJEUTc1enRlOWY5b0lUaXFhcng2UTVBaElncnZaQUwtX0FSb29oNVdMaGdPQjAwRC1JTGJCQ1JWMHpzdzc2VHc4ajlJaHRab2JKMWJILXFUX0lkd0VoTnVtRzRtcHRaOC03MXp1cHpSV21VVlpITGFZV2JHRjQ?oc=5",
       "collector": "Google News RSS",
       "country": "Democratic Republic of the Congo",
@@ -280939,19 +280768,51 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
-        "d05a06284937cc2c87d4a5a3110c0da783dac27eabe1ebe7f733abcf97d9d926"
+        "0147f070e784cabe6f0f32a727e86de7a2b822b57e9c50a150472a865af85c11",
+        "78220bdd2878b67caab2b8136ba0903c95e5dbf57a118f2022175f85dd3242cb",
+        "d05a06284937cc2c87d4a5a3110c0da783dac27eabe1ebe7f733abcf97d9d926",
+        "deb18802399d241b8ed96203d34b118a736b703fe33c5ad80d8daabbe98ef10a"
       ],
       "sources": [
-        "mediacongo.net"
+        "mediacongo.net",
+        "beroyafm.net"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Eco-guard killed in attack on RFO in Mambasa",
+          "original_title": "Mambasa : un écogarde de l’ICCN tué lors d’une attaque contre la RFO",
+          "original_language": "fr",
+          "summary": "An ICCN eco-guard was killed during an armed attack against the Okapi Wildlife Reserve (RFO) in Mambasa.",
+          "published": "2026-10-01T18:33:40+00:00",
+          "source": "beroyafm.net",
+          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPS1lQREFYR3p1azRQZ3ZtUEJXMGhfSzdxRy1HT0Z5aHhaMlp6cTdzSjBORHpHYnhlNjdHYTBlNDV3ZU1lQkJjWjZweDRDUHV6RzhIRVdCeEN4blkyWXRxeUVKZm5oX3lFbnJPa2ZCdTlzdlpKSEJlYTVwSk9IUHJHc2phbEU4ajlmZm9nR09uZw?oc=5"
+        },
+        {
+          "title": "Ituri: ICCN eco-guard killed in ADF attack in Mambasa",
+          "original_title": "Actualité | Ituri : un écogarde de l’ICCN tué dans une attaque des ADF à Mambasa",
+          "original_language": "fr",
+          "summary": "An eco-guard from the Congolese Institute for Nature Conservation (ICCN) was killed during an attack attributed to ADF militants in Mambasa, Ituri.",
+          "published": "2026-10-01T20:09:53+00:00",
+          "source": "mediacongo.net",
+          "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPT1hSelV0SnJIRlJHc18xcm9nRm1QakVQZ1FfMnBnQnMzckRjcnpKNmRCRUFVanpkMXl5aDVUOTVjU0N5M1ZTbmEyQ2xBc0hQdXJoa0tYb2ltQ3RBYVpMN19HbHc5NzBMeHdOV3pJZ2YzOXpCeUxrTTJBS2I1TjJMNXhiUWFnd05mTWdMU1dZbjdGQ21GOUpockJINGlFdTBER0RENGlVNFdRRTVvZkY5Z0RqZng1dTd3TldZQlBHMXk?oc=5"
+        },
+        {
+          "title": "Ituri: Eco-guard of Okapi Wildlife Reserve Killed in Attack Attributed to ADF",
+          "original_title": "Actualité | Ituri : un écogarde de la Réserve de faune à Okapis tué dans une attaque attribuée aux ADF",
+          "original_language": "fr",
+          "summary": "An eco-guard working at the Okapi Wildlife Reserve in Ituri province was killed in an armed attack attributed to ADF rebels.",
+          "published": "2026-10-02T10:12:51+00:00",
+          "source": "mediacongo.net",
+          "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOTHdfdkJSN0h1M2hvVnptaWR5TEgzQm1mYzMxalllYkpOQkwxZWg4SmNVV3JKNTU5S3kwcmhuVlFqYlVRaFVEWUo2SThwVzdWdFRIalR0MjRxWDROZGFRSktkck9VSGJBdlh5alJneGRXQTRBaTJyQzN0WGpldlNsMlI4bThpLTNVVjlzbHhGdENCOS0waFhXWVdKbk95aDVkeVZOeklWVU1wem9vOTRqS3F2ak03djhOSXllUGhEcjVIVzZmSy16cFVVTmZVRnJ5NXBSNTdONERldDIwSXc?oc=5"
+        }
+      ],
+      "article_count": 4,
       "first_reported": "2026-09-29T13:50:34+00:00",
-      "last_reported": "2026-09-29T13:50:34+00:00",
+      "last_reported": "2026-10-01T18:33:40+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
+      "ai_relevance_score": 80,
       "ai_relevance_reason": "Reports a concrete fatal attack by a terrorist/militant group (ADF).",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -280981,7 +280842,12 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Explicitly mentions Bandisende in the Ituri province of the DRC.",
       "ai_geo_fingerprint": "1e3e9b0e1459fa424495c9e8fff0d8e695113e8edbb6659858060cc6fdb7d961",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "cbrn_subgroups": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "86642962a35e57b1",
@@ -281745,7 +281611,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The operation took place in Puntland, an autonomous region of Somalia.",
       "ai_geo_fingerprint": "dfdd994d4e99d96ea754ceff4416a62466cab6654966a7797f8fbe794ab20565",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "ac80bdceea9e07a0",
@@ -282187,135 +282054,6 @@
       "ai_geo_reason": "The speech and event occurred in Melbourne, Australia.",
       "ai_geo_fingerprint": "0bf62a1174eba036dcf8cbe8cd2bd29cdbcfb12c6ef99cbf5021247cf6682e63",
       "ai_geo_inferred": false
-    },
-    {
-      "id": "e78aab175288cdf9",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Attacks"
-      ],
-      "title": "Troops to the rescue as bandits abduct travellers from Senegal",
-      "summary": "Nigerian troops deployed to rescue travellers abducted by armed bandits originating from Senegal.",
-      "original_title": "Troops to the rescue as bandits abduct travellers from Senegal",
-      "original_summary": "Troops to the rescue as bandits abduct travellers from Senegal Daily Trust",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-09-29T09:28:56+00:00",
-      "source": "Daily Trust",
-      "source_count": 6,
-      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPbU5xR09lVURIZnI5cVhEdVNzSEQzRVNDZU05VlpISm5fTDZlNWJzeDVfM1FWamFvVU16T0FCaUVFRzQwckFGSmo2THNhWmQwWHU1UzhmTHlyYzhpZHpScFVFQUdCb0E0Ui1TS2NBdi1vTHdkd05NV2RlMlBhamJfT0lzWm9Hd0FQVExoZl94WQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": null,
-      "region": "Zamfara State",
-      "latitude": 12.1628,
-      "longitude": 6.6612,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "dailytrust.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "64ac12802a326323685628a363f0d7a818213adec075e82f3c1928fcab0b2772",
-        "7848fb7cf863f91db1fbbf4c4e92ed15afa584eabeba291ca43bfa07c962a46d",
-        "904c7c974d9e6a60d54895ecf4baa2a218357a287aaae6d43abc8ab37d5b29ee",
-        "90edace23f4e7c6279aae930b5cf4c553d1266f5ffd1199d69edf19553cc7e96",
-        "d9515b3cac491b953600c2e6e49b82caa317949355726c764f252d4b8381638a",
-        "ed5e1c33fc04a3fb73d3569b975e745e15188e0876e37d622f926dbfd79a6987"
-      ],
-      "sources": [
-        "Daily Trust",
-        "Channels Television",
-        "leadership.ng",
-        "LEADERSHIP Newspapers",
-        "Vanguard News",
-        "Punch Newspapers"
-      ],
-      "related_articles": [
-        {
-          "title": "Troops Rescue 41 Travelers Abducted Along Zamfara Highway",
-          "original_title": "Troops Rescue 41 Travelers Abducted Along Zamfara Highway",
-          "original_language": "en",
-          "summary": "Nigerian troops successfully rescued 41 travelers who had been abducted along a highway in Zamfara State.",
-          "published": "2026-09-29T14:43:53+00:00",
-          "source": "Channels Television",
-          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNeXBiRWRKYjBCQmlKci1WRkp3d0dsNXhuOW1GVExya0piNEhHZm92dnFfcXZsMlowM3c2cUUxV2h4UHIxMGZGRVBvbEdnOTIxV2pRVFVkYVUyZ1FfUFR5dWZ2bkJBeGxRMW00UlloNldoenNibXU1aURGbGdqZGNVUnVPUVVfeE5rMkd2RzBFQU9nQWRMOG1aRlNsR2Y?oc=5"
-        },
-        {
-          "title": "Troops Rescue 41 Travellers Abducted By Bandits In Zamfara",
-          "original_title": "Troops Rescue 41 Travellers Abducted By Bandits In Zamfara",
-          "original_language": "en",
-          "summary": "Nigerian troops successfully rescued 41 travellers who had been abducted by armed bandits in Zamfara State.",
-          "published": "2026-09-29T09:29:34+00:00",
-          "source": "leadership.ng",
-          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQeEd3UHZjUHBXUVhta0R0dERGekhwSVdLaU1Cc2Y5VUdBcTc0ZmRSV2h5UUdUemhNamd2VGJiVW9femlYa3pnQXNyNXpjM0xGS28wc2d4Q01EWWxhT010S3k2UGlRTHdEREUwODBIejlqWVhxTHgySUhPTEZnMDd3cGJFeVA1Nmhi?oc=5"
-        },
-        {
-          "title": "Troops rescue abducted victims in Zamfara",
-          "original_title": "Troops rescue abducted victims in Zamfara",
-          "original_language": "en",
-          "summary": "Nigerian military troops successfully rescued abducted victims during an operation in Zamfara State.",
-          "published": "2026-10-05T13:30:56+00:00",
-          "source": "Vanguard News",
-          "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPTHVfSEd6T0pINTllVXBvV1ljdHFVM3ZRSkp0U3lCN0FhRWo0U2hBOEtlbVVyXzBLc3BaN1JOR2hUek5lLVgtZWlpdzhzMzdnRXR5VVBBd2Ewb0ltMzQ2bTlnQnZHZkE0Y01sX3BNUV9yeDg3TXhrc2JHOHl4cHlUSkNIeEHSAYoBQVVfeXFMTlBadmRqRDJHem53Y042MHlUNzZfV2EzVTlPUHhyVVFBaTJVcG96YzhjX1NIakQ3MlVrdDRZXzRfSFE5eEQ4MzNBaWhYSERDTjhtM3UxOG4xU29yTmY4aC0wNFAzMExIOXFDdldyTFhCUjNlUkIxenhCblluN2loWjBkd1dDZjNWcHhB?oc=5"
-        },
-        {
-          "title": "Troops rescue victims from kidnappers in Zamfara",
-          "original_title": "Troops rescue two victims from Zamfara terrorists",
-          "original_language": "en",
-          "summary": "Nigerian troops successfully rescued two kidnapping victims from militants in Zamfara state.",
-          "published": "2026-10-06T01:14:47+00:00",
-          "source": "Punch Newspapers",
-          "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE15Wk5WMk5sc28zOWdBZWV6NHNFZng1dFVNazJSUVlSNFJYWjJjczdYMFlIeWE1VVdndGpvdGxtSEt5RWR2NTZZamxEc0paa3JzLV9iN3AxVXdSWVdQNkJMdDVPNlhCMkszSklnNWpFeWNuS1pTdkdXOTlR?oc=5"
-        }
-      ],
-      "article_count": 5,
-      "first_reported": "2026-09-29T09:28:56+00:00",
-      "last_reported": "2026-10-06T01:14:47+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 65,
-      "ai_relevance_reason": "Reports an armed bandit attack involving abductions and a subsequent military rescue/counter-action operation.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "bandit abduction and military rescue travellers 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-68b6f35bae883609",
-      "translated_to_english": false,
-      "ai_canonical_event": "troops rescue travelers abducted by armed bandits",
-      "title_variants": [
-        "troops rescue travelers abducted by armed bandits"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "title_plus_anchor",
-        "very_high_title_similarity"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Nigerian troops deployed to rescue travellers abducted along Zamfara Highway."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Related article specifies Zamfara highway as the location of the traveler rescue operation by Nigerian troops.",
-      "ai_geo_fingerprint": "f044bed4be461e8549559438c95c4759dbe6c92f9acc11dd5d2002f30b34f024",
-      "ai_geo_inferred": true,
-      "cbrn_subgroups": []
     },
     {
       "id": "bb7373ab73583e9e",
@@ -283060,81 +282798,6 @@
       "ai_geo_fingerprint": "0848f44f9026b3700b7688eac9a23e4c5a79da77a35b2627a82750c923556f64",
       "ai_geo_inferred": false,
       "cbrn_subgroups": []
-    },
-    {
-      "id": "ae9ac53fdece2a9c",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Army bolsters security in Kebbi State",
-      "summary": "The Nigerian Army has established three new formations in Kebbi State to enhance counter-insurgency and counter-terrorism capabilities.",
-      "original_title": "Kebbi excited as Army fortifies state against terrorists with 3 new formations",
-      "original_summary": "Kebbi excited as Army fortifies state against terrorists with 3 new formations Vanguard News",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-09-29T07:34:44+00:00",
-      "source": "Vanguard News",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNem1TbVFLNjZ5c1l3VjNiTkFqSmNPekR5NVVjQ1hmb0E5eDVPOV9xOVNnUmd0OWZOaVJTMjFZbGYydFFUTS1qTHlPOVZZTVRtTlhGR1o5aXJ1NWFsNVNXTG9yS29CV2JNNDB4N2ZubXB1SUtJSHpFOFhuUlV5UG9KNWs2WUhQQ21yd09UbkVYQkpOUDVWbVFxVGNFS2FFUkxBcFNlT2N3d2xqZVVZOHVDc3ItNjhjUQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": null,
-      "region": "Kebbi State",
-      "latitude": 12.4539,
-      "longitude": 4.1975,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "vanguardngr.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "6bd5780670eb46f1f8e6bf9f83ef06766ffd3943efb96b5c2107b027eea03fa8"
-      ],
-      "sources": [
-        "Vanguard News"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-09-29T07:34:44+00:00",
-      "last_reported": "2026-09-29T07:34:44+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 60,
-      "ai_relevance_reason": "Reports a concrete operational deployment/structural change to address security threats.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Security reinforcement Kebbi 2026-09-29",
-      "update_type": "INITIAL",
-      "incident_id": "inc-fd75c01862016acb",
-      "translated_to_english": false,
-      "ai_canonical_event": "Establishment of new military formations in Kebbi, Nigeria",
-      "title_variants": [
-        "Establishment of new military formations in Kebbi, Nigeria"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Kebbi State, Nigerian Army"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Nigerian Army established new formations in Kebbi State.",
-      "ai_geo_fingerprint": "5ed91a936486e635ebaec696b992ad4794cf6e2d1c42ab4fcbb0c8c29e15021c",
-      "ai_geo_inferred": false
     },
     {
       "id": "5073063ae12342d9",
@@ -285559,7 +285222,8 @@
       "dedup_methods": [
         "paraphrase_entity_context",
         "title_plus_anchor"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "ad648175493ef110",
@@ -287126,7 +286790,7 @@
       "collection_locale": "NG:en",
       "published": "2026-09-28T14:02:00+00:00",
       "source": "Channels Television",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOTXN4dHB0ZmlGdUdnX0lNT0p5ZnBNbkQ5MjNzZ3dKdDVUVmdJaEc5N2t6NmFxMko3d1U0Z0pIbzRiYUM5Vlh0LUlaVHlIdDdidWFFeERZaGxGWWhaelIxTUdCc01LQ3FOQkFKV2tCZXhobXkyYlRsdmJjaHhWSThIVVB2ZFdsaDRXVDEzMTdEblhCbmZid1gtckNkM2dhNFFvYmVHa2Y0YTNickZJRGhCTmhZM1dzV2hZQ3lqR2FFaFFHRmRoNGc?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
@@ -287141,15 +286805,27 @@
       "targeted_source": "channelstv.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
+        "6bd5780670eb46f1f8e6bf9f83ef06766ffd3943efb96b5c2107b027eea03fa8",
         "8b2a394c9ca707dd77464936888df7a12c8dcf394df6bcc69a54c651dbec0b38"
       ],
       "sources": [
-        "Channels Television"
+        "Channels Television",
+        "Vanguard News"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Army bolsters security in Kebbi State",
+          "original_title": "Kebbi excited as Army fortifies state against terrorists with 3 new formations",
+          "original_language": "en",
+          "summary": "The Nigerian Army has established three new formations in Kebbi State to enhance counter-insurgency and counter-terrorism capabilities.",
+          "published": "2026-09-29T07:34:44+00:00",
+          "source": "Vanguard News",
+          "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNem1TbVFLNjZ5c1l3VjNiTkFqSmNPekR5NVVjQ1hmb0E5eDVPOV9xOVNnUmd0OWZOaVJTMjFZbGYydFFUTS1qTHlPOVZZTVRtTlhGR1o5aXJ1NWFsNVNXTG9yS29CV2JNNDB4N2ZubXB1SUtJSHpFOFhuUlV5UG9KNWs2WUhQQ21yd09UbkVYQkpOUDVWbVFxVGNFS2FFUkxBcFNlT2N3d2xqZVVZOHVDc3ItNjhjUQ?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-09-28T14:02:00+00:00",
-      "last_reported": "2026-09-28T14:02:00+00:00",
+      "last_reported": "2026-09-29T07:34:44+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.1-flash-lite",
@@ -287183,7 +286859,12 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The Nigerian Army established a new brigade in Kebbi State.",
       "ai_geo_fingerprint": "00cebc331c606b15f56a9573474c9a6aa217d350825ce2e140d4a2781e64b2c7",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "cbrn_subgroups": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "9ec0204aa76e6923",
@@ -288121,7 +287802,7 @@
       "collection_locale": "NG:en",
       "published": "2026-09-28T11:43:38+00:00",
       "source": "Channels Television",
-      "source_count": 6,
+      "source_count": 8,
       "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxObkplMktZa3YxcTlRZDZRelBoS0MyRmtHYlJXX3FtVEo3aG5tVUJmSnl0aE1SSE9zSUdqSkNpMFFYSTNlX21HRzBwUTdLREg1V2dvWTVmS1BPc1dGTVlYcHE1TDdtY1dIbGpzYjA1RmxJb3RyYlhKaTl6WkZJX3ZYMnh3OFpYaUFCcEFCUWFyVnpvejZnbi11WmVvdlFHQnM?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
@@ -288141,9 +287822,15 @@
         "2ffef066bb1f0bb153549274b7b3bb3e9a78693652d3053f90257ea500cb1082",
         "53d1e2afaac2fdc0ed88c70e185fc95259f7e3462ed315d4ed059ff0ee31d999",
         "552292d8515443edb050be61f4b1a9ab8c3f49b0726731d94f7b3282b854377b",
+        "64ac12802a326323685628a363f0d7a818213adec075e82f3c1928fcab0b2772",
+        "7848fb7cf863f91db1fbbf4c4e92ed15afa584eabeba291ca43bfa07c962a46d",
         "79d36db575bcac706271d22f05325fb92ba5c6bcef283870136b1e9d7b6bfdeb",
+        "904c7c974d9e6a60d54895ecf4baa2a218357a287aaae6d43abc8ab37d5b29ee",
+        "90edace23f4e7c6279aae930b5cf4c553d1266f5ffd1199d69edf19553cc7e96",
         "93e93f42205d3c21fad9b57dd75ae02c5f89d42568cc88960a239afc6e46eaaa",
-        "d4e63e954f1940d9dd6d4890c51176d73e48505f36581fb82dfde7d02f4ca461"
+        "d4e63e954f1940d9dd6d4890c51176d73e48505f36581fb82dfde7d02f4ca461",
+        "d9515b3cac491b953600c2e6e49b82caa317949355726c764f252d4b8381638a",
+        "ed5e1c33fc04a3fb73d3569b975e745e15188e0876e37d622f926dbfd79a6987"
       ],
       "sources": [
         "Channels Television",
@@ -288151,7 +287838,9 @@
         "Punch Newspapers",
         "Alwihda Info",
         "premiumtimesng.com",
-        "Vanguard News"
+        "Vanguard News",
+        "Daily Trust",
+        "leadership.ng"
       ],
       "related_articles": [
         {
@@ -288207,16 +287896,62 @@
           "published": "2026-09-28T14:01:25+00:00",
           "source": "Vanguard News",
           "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPVTVWZ0UzNEJjdEI0NXVVWTJnQWpNQmNrdEw2TXBpOVEzYVRtQWpWYlBRSGZST3ZkU29ndTU3QVNHMFA4dmRxVl91eHhrSjRMa0NmT0tQN2JYSTlkMUkwR0kxNE8yblhXQjRuNjVEeFRIZEYyMDZpXzZPdHBqRktUQWRISUwwb2JE0gGOAUFVX3lxTFAxc1lEZVp6M2RTYXdWd05DZlFJQUxlVEhBcGYwMUhja2JMams3a3lFaWo4VjVxS19PbU83ZF9PZVVoUUhrTFdTV01GN3g3VUN5bzZvU0pQYTltNjdIMENDSzRPZnZtLXBTU240a0pfc3p2OXB3TEtzNmx2Ync5WW56cjVGQzlYLTlucUVrQ3c?oc=5"
+        },
+        {
+          "title": "Troops to the rescue as bandits abduct travellers from Senegal",
+          "original_title": "Troops to the rescue as bandits abduct travellers from Senegal",
+          "original_language": "en",
+          "summary": "Nigerian troops deployed to rescue travellers abducted by armed bandits originating from Senegal.",
+          "published": "2026-09-29T09:28:56+00:00",
+          "source": "Daily Trust",
+          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPbU5xR09lVURIZnI5cVhEdVNzSEQzRVNDZU05VlpISm5fTDZlNWJzeDVfM1FWamFvVU16T0FCaUVFRzQwckFGSmo2THNhWmQwWHU1UzhmTHlyYzhpZHpScFVFQUdCb0E0Ui1TS2NBdi1vTHdkd05NV2RlMlBhamJfT0lzWm9Hd0FQVExoZl94WQ?oc=5"
+        },
+        {
+          "title": "Troops Rescue 41 Travelers Abducted Along Zamfara Highway",
+          "original_title": "Troops Rescue 41 Travelers Abducted Along Zamfara Highway",
+          "original_language": "en",
+          "summary": "Nigerian troops successfully rescued 41 travelers who had been abducted along a highway in Zamfara State.",
+          "published": "2026-09-29T14:43:53+00:00",
+          "source": "Channels Television",
+          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNeXBiRWRKYjBCQmlKci1WRkp3d0dsNXhuOW1GVExya0piNEhHZm92dnFfcXZsMlowM3c2cUUxV2h4UHIxMGZGRVBvbEdnOTIxV2pRVFVkYVUyZ1FfUFR5dWZ2bkJBeGxRMW00UlloNldoenNibXU1aURGbGdqZGNVUnVPUVVfeE5rMkd2RzBFQU9nQWRMOG1aRlNsR2Y?oc=5"
+        },
+        {
+          "title": "Troops Rescue 41 Travellers Abducted By Bandits In Zamfara",
+          "original_title": "Troops Rescue 41 Travellers Abducted By Bandits In Zamfara",
+          "original_language": "en",
+          "summary": "Nigerian troops successfully rescued 41 travellers who had been abducted by armed bandits in Zamfara State.",
+          "published": "2026-09-29T09:29:34+00:00",
+          "source": "leadership.ng",
+          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQeEd3UHZjUHBXUVhta0R0dERGekhwSVdLaU1Cc2Y5VUdBcTc0ZmRSV2h5UUdUemhNamd2VGJiVW9femlYa3pnQXNyNXpjM0xGS28wc2d4Q01EWWxhT010S3k2UGlRTHdEREUwODBIejlqWVhxTHgySUhPTEZnMDd3cGJFeVA1Nmhi?oc=5"
+        },
+        {
+          "title": "Troops rescue abducted victims in Zamfara",
+          "original_title": "Troops rescue abducted victims in Zamfara",
+          "original_language": "en",
+          "summary": "Nigerian military troops successfully rescued abducted victims during an operation in Zamfara State.",
+          "published": "2026-10-05T13:30:56+00:00",
+          "source": "Vanguard News",
+          "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPTHVfSEd6T0pINTllVXBvV1ljdHFVM3ZRSkp0U3lCN0FhRWo0U2hBOEtlbVVyXzBLc3BaN1JOR2hUek5lLVgtZWlpdzhzMzdnRXR5VVBBd2Ewb0ltMzQ2bTlnQnZHZkE0Y01sX3BNUV9yeDg3TXhrc2JHOHl4cHlUSkNIeEHSAYoBQVVfeXFMTlBadmRqRDJHem53Y042MHlUNzZfV2EzVTlPUHhyVVFBaTJVcG96YzhjX1NIakQ3MlVrdDRZXzRfSFE5eEQ4MzNBaWhYSERDTjhtM3UxOG4xU29yTmY4aC0wNFAzMExIOXFDdldyTFhCUjNlUkIxenhCblluN2loWjBkd1dDZjNWcHhB?oc=5"
+        },
+        {
+          "title": "Troops rescue victims from kidnappers in Zamfara",
+          "original_title": "Troops rescue two victims from Zamfara terrorists",
+          "original_language": "en",
+          "summary": "Nigerian troops successfully rescued two kidnapping victims from militants in Zamfara state.",
+          "published": "2026-10-06T01:14:47+00:00",
+          "source": "Punch Newspapers",
+          "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE15Wk5WMk5sc28zOWdBZWV6NHNFZng1dFVNazJSUVlSNFJYWjJjczdYMFlIeWE1VVdndGpvdGxtSEt5RWR2NTZZamxEc0paa3JzLV9iN3AxVXdSWVdQNkJMdDVPNlhCMkszSklnNWpFeWNuS1pTdkdXOTlR?oc=5"
         }
       ],
-      "article_count": 7,
+      "article_count": 12,
       "first_reported": "2026-09-28T11:43:38+00:00",
-      "last_reported": "2026-09-29T08:02:27+00:00",
+      "last_reported": "2026-09-29T09:28:56+00:00",
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "very_high_title_similarity",
         "title_plus_anchor",
-        "paraphrase_entity_context"
+        "paraphrase_entity_context",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
@@ -288251,7 +287986,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The rescue operations took place in Zamfara State, Nigeria.",
       "ai_geo_fingerprint": "03d7e198e3176ccfa5072d45958013ee40f5db1432a5b3dec0640863da055181",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "cbrn_subgroups": []
     },
     {
       "id": "b6e8a150024d7b27",
@@ -288583,7 +288319,7 @@
       "collection_locale": "NG:en",
       "published": "2026-09-28T11:03:25+00:00",
       "source": "zagazola.org",
-      "source_count": 3,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxQUGN5MU1RUFZlM0NvTDVsYVlueUhhRlJxU04yVjJTcXFlZXNNcmt5bUd3dHNSVEE2T1diX2k3S012WU5FT202LXhHbHhhWjZTYmNObVNEY2k1RUdiaDBJblNEZmRpeDdWV3RlbFd5OFY1MjZ5bWFrZWRHWEV1bXhtcVd0aUVuaEVvM1RFUW1jQnloWUhpTHR3UEZEamRuNXlFSHY5RXFBSmhfaEwtRVREZzVvS1Nxb0lnMGwtUjAtZFNDekhJRkQ3MDliRmZTdUdL?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
@@ -288598,6 +288334,7 @@
       "source_article_fingerprints": [
         "100aa2bad5c9e59f582018fd95b278fcb22c55c94f590f2dcc7bc9e7d71b7596",
         "4425bbbe68dae2566aa4a7158f893c81a0756eaffb1427b1d8c461ea1a2f08c9",
+        "ae22d0c443c7eb34ee7bd21c9dda6fbb8cbf40d5a2bc9869031078594799cecf",
         "bce1aaeb56edf43889cfdf2798d5c4eac825261e1daa31e04912443d7eb806be",
         "bfc6656f9e6e784dd4ff5c860924602ac09ba954232d46592b845fd7f783b723",
         "e5e34a79699375ab2124e63b0eff4436ac3cb311901ccc2fcc0a2c39e359a6ec"
@@ -288605,7 +288342,8 @@
       "sources": [
         "zagazola.org",
         "PRNigeria News",
-        "opitanglobalmedia.com"
+        "opitanglobalmedia.com",
+        "ZAgazola"
       ],
       "related_articles": [
         {
@@ -288638,7 +288376,7 @@
       ],
       "article_count": 4,
       "first_reported": "2026-09-28T11:03:25+00:00",
-      "last_reported": "2026-09-29T08:30:00+00:00",
+      "last_reported": "2026-09-30T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -288677,7 +288415,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "ISWAP-linked persons surrendered in Borno State.",
       "ai_geo_fingerprint": "9efcd2c1051a398252d5bdf79596dd1e5636ccbe9d52a15cbb814f7b9f2ec13b",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "cbrn_subgroups": []
     },
     {
       "id": "97937d420e84e926",
@@ -292903,116 +292642,6 @@
       "ai_geo_inferred": true
     },
     {
-      "id": "1472b962be432276",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Weapons",
-        "Attacks"
-      ],
-      "title": "Nigerian troops kill terrorist and recover AK-47 in Sokoto",
-      "summary": "Nigerian troops killed a terrorist and recovered an AK-47 rifle and a motorcycle during an operation in Sokoto.",
-      "original_title": "Troops kill terrorist , recover AK - 47 , motorcycle in Sokoto",
-      "original_summary": "",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-09-27T10:45:00+00:00",
-      "source": "tribuneonlineng.com",
-      "source_count": 6,
-      "url": "https://tribuneonlineng.com/troops-kill-terrorist-recover-ak-47-motorcycle-in-sokoto/",
-      "collector": "GDELT DOC 2.0",
-      "acquisition_channel": "gdelt_doc_search",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": "Sokoto",
-      "region": null,
-      "latitude": 13.06269,
-      "longitude": 5.24322,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "source_article_fingerprints": [
-        "1af02e9b21252fa40efb8950a00fe42a2c178ff4a65805fa227be5ecf8bd6208",
-        "3788d37227df094b1b821a6729e8daa49ef4e98f234d894db823db92d7e79f20",
-        "3bb5939464effe5c4e40c5f211e81123e8b93ea72266931871be3fe9188f39c8",
-        "8a996d01c3553cc8463ddbd56070b2d0fd970a2b1b8d885dfb48b6ecbeedd958",
-        "92d2cb041cf4020532c2263aeae9ab081c876fb5e63735c0b937ef9917bac653",
-        "bb6b6ec50735f7f4ec999d80b28cd8cdf8ef08707d6bd4ab6b42353b79d88b69"
-      ],
-      "sources": [
-        "tribuneonlineng.com",
-        "Real Broadcasting Network",
-        "Vanguard News",
-        "punchng.com",
-        "TheCable",
-        "vanguardngr.com"
-      ],
-      "related_articles": [
-        {
-          "title": "Troops Neutralise Terrorist, Recover AK-47 in Sokoto Raid",
-          "original_title": "Troops Neutralise Terrorist, Recover AK-47 in Sokoto Raid",
-          "original_language": "en",
-          "summary": "Military troops neutralized a terrorist and recovered an AK-47 rifle during a raid in Sokoto.",
-          "published": "2026-09-27T14:51:58+00:00",
-          "source": "Real Broadcasting Network",
-          "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNOHF5RjNhdmNpdjVhcFl5SkM0SkY5a2dTRGVUQ2RFNmZWRWlWSW10enJ6bVlWQXEwNlAyRWI3WHBfb1BIdUNNX3J4RDhmaVY1STVnb2x6dGt2RWdkWHpHc0RBWExPNWRidHhqNnVtUUVtdWF4c2pWanRUcXc4bTNiblUtVEJJMUNSVXJCYzRybGVjdw?oc=5"
-        },
-        {
-          "title": "Troops kill scores of terrorists, recover arms in Adamawa",
-          "original_title": "Troops kill scores of terrorists, recover arms in Adamawa",
-          "original_language": "en",
-          "summary": "Nigerian military forces killed numerous terrorists and recovered weapons during operations in Adamawa State.",
-          "published": "2026-10-01T07:30:55+00:00",
-          "source": "Vanguard News",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPdjhHREgxNWtiNThIMnphMVFGN1lhaUIxTUF5T3RUdHpBNFVwMDZZdTRvOG9jYk1rY1ZBSDNUZURnVlE0OC1mRmQ0YkVHc01hWk44RXIzUWJaME5tRzhWWHFxUWFWTng5ajNEZmNVS3F1Q3ZzSEFFR0l4ZXA3YkpuQVpQRUZ1V3RabzBzV2Y0ajN5STN6cElnddIBngFBVV95cUxNNTQ1aHRzZ1NJRHA0ZGhtSzIzbFNfUHl6ZFA5OUdQeC0tM2xNRzA4SUlRUnhpOHRtWG1ydDNzSUZDNm1oX3JrU0hYRFJ1NkRhX0gzdi1tUjE0SWpnNnBxUFhDUGJlcm9Pc0JMYWc3QzBkNkJ2Q2JGM3BkT3dSTnNjWUxwamlzWVNPZkZUV3pGYXBnZk5BLVdrRk1yYnR6QQ?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-09-27T10:45:00+00:00",
-      "last_reported": "2026-10-01T07:30:55+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete counter-terrorism operation resulting in the death of a militant and weapons seizure.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Sokoto security operation Nigeria 2026-09-27",
-      "update_type": "INITIAL",
-      "incident_id": "inc-58a0abdf4824c266",
-      "translated_to_english": false,
-      "ai_canonical_event": "troops kill terrorist and seize weapon in Sokoto Nigeria",
-      "title_variants": [
-        "troops kill terrorist and seize weapon in Sokoto Nigeria"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Nigerian troops kill terrorist and recover AK-47 in Sokoto"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Operation took place in Sokoto, Nigeria.",
-      "ai_geo_fingerprint": "0f92ccd31f35965f390637d9691907abb9eb61d6d9a70d8116c31b21f0bd76c0",
-      "ai_geo_inferred": false,
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_incident",
-        "title_plus_anchor",
-        "same_url"
-      ]
-    },
-    {
       "id": "0f8650dcf0a8d260",
       "category": "Attacks",
       "categories": [
@@ -293472,7 +293101,9 @@
       "id": "648c5051b0bafef9",
       "category": "Counter Terrorism Action",
       "categories": [
-        "Counter Terrorism Action"
+        "Counter Terrorism Action",
+        "Weapons",
+        "Attacks"
       ],
       "title": "Sokoto steps up war on banditry, approves N1.59bn for 30 Hilux vehicles",
       "summary": "The Sokoto State government approved funds to purchase security vehicles to step up operations against armed bandits.",
@@ -293484,7 +293115,7 @@
       "collection_locale": "NG:en",
       "published": "2026-09-27T08:43:23+00:00",
       "source": "vanguardngr.com",
-      "source_count": 1,
+      "source_count": 6,
       "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOS0xwcURPWUp0UXZtNHdPZExXSDdqRWY3Wk9Ma3Y5bzR2Q1pGZ1UydXJTUEpOY0tkMklIQXZqT28xbnAwZjlCTklsSi11MWd2b0RibGs5a2Jwc20zZ3FoTlJ6LXp1azI1U0ZhdWRrTW02ZHdQNU9RNHVISnFuclp1dFA3MkdBV3VScVEtYkw3eVgydnViWXFTOGJTV1cwOE5ydHp5YjNMR2hCUVnSAbABQVVfeXFMT2FBOEFLWTNpYk0zRUhEQWpkbDc3YW5qY05JZlpsS21LWWtYRzVXR25jSVFjSkFsMXY3dnlOZnFTallVNTVBZldYcVZlS0dtZEdEY1M1ZkMwcUh0MzZ5dHMyQlZvaTJJWnl2QTBKdDUtNEdKSE8zbW13akl6dHNjM0xVNlc0dmJNUmxUUHJILWFGZE5ock5rRFlrUHFIVWtZVE5HMmZ4OFNCSXdKNGJQR2Q?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
@@ -293499,19 +293130,58 @@
       "targeted_source": "vanguardngr.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
+        "1af02e9b21252fa40efb8950a00fe42a2c178ff4a65805fa227be5ecf8bd6208",
+        "3788d37227df094b1b821a6729e8daa49ef4e98f234d894db823db92d7e79f20",
+        "3bb5939464effe5c4e40c5f211e81123e8b93ea72266931871be3fe9188f39c8",
+        "8a996d01c3553cc8463ddbd56070b2d0fd970a2b1b8d885dfb48b6ecbeedd958",
+        "92d2cb041cf4020532c2263aeae9ab081c876fb5e63735c0b937ef9917bac653",
+        "bb6b6ec50735f7f4ec999d80b28cd8cdf8ef08707d6bd4ab6b42353b79d88b69",
         "d740b0a3d8549c6acb58361dbc43bbc39eeda0190d207d1b38f7545319fa496f"
       ],
       "sources": [
-        "vanguardngr.com"
+        "vanguardngr.com",
+        "tribuneonlineng.com",
+        "Real Broadcasting Network",
+        "Vanguard News",
+        "punchng.com",
+        "TheCable"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Nigerian troops kill terrorist and recover AK-47 in Sokoto",
+          "original_title": "Troops kill terrorist , recover AK - 47 , motorcycle in Sokoto",
+          "original_language": "en",
+          "summary": "Nigerian troops killed a terrorist and recovered an AK-47 rifle and a motorcycle during an operation in Sokoto.",
+          "published": "2026-09-27T10:45:00+00:00",
+          "source": "tribuneonlineng.com",
+          "url": "https://tribuneonlineng.com/troops-kill-terrorist-recover-ak-47-motorcycle-in-sokoto/"
+        },
+        {
+          "title": "Troops Neutralise Terrorist, Recover AK-47 in Sokoto Raid",
+          "original_title": "Troops Neutralise Terrorist, Recover AK-47 in Sokoto Raid",
+          "original_language": "en",
+          "summary": "Military troops neutralized a terrorist and recovered an AK-47 rifle during a raid in Sokoto.",
+          "published": "2026-09-27T14:51:58+00:00",
+          "source": "Real Broadcasting Network",
+          "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNOHF5RjNhdmNpdjVhcFl5SkM0SkY5a2dTRGVUQ2RFNmZWRWlWSW10enJ6bVlWQXEwNlAyRWI3WHBfb1BIdUNNX3J4RDhmaVY1STVnb2x6dGt2RWdkWHpHc0RBWExPNWRidHhqNnVtUUVtdWF4c2pWanRUcXc4bTNiblUtVEJJMUNSVXJCYzRybGVjdw?oc=5"
+        },
+        {
+          "title": "Troops kill scores of terrorists, recover arms in Adamawa",
+          "original_title": "Troops kill scores of terrorists, recover arms in Adamawa",
+          "original_language": "en",
+          "summary": "Nigerian military forces killed numerous terrorists and recovered weapons during operations in Adamawa State.",
+          "published": "2026-10-01T07:30:55+00:00",
+          "source": "Vanguard News",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPdjhHREgxNWtiNThIMnphMVFGN1lhaUIxTUF5T3RUdHpBNFVwMDZZdTRvOG9jYk1rY1ZBSDNUZURnVlE0OC1mRmQ0YkVHc01hWk44RXIzUWJaME5tRzhWWHFxUWFWTng5ajNEZmNVS3F1Q3ZzSEFFR0l4ZXA3YkpuQVpQRUZ1V3RabzBzV2Y0ajN5STN6cElnddIBngFBVV95cUxNNTQ1aHRzZ1NJRHA0ZGhtSzIzbFNfUHl6ZFA5OUdQeC0tM2xNRzA4SUlRUnhpOHRtWG1ydDNzSUZDNm1oX3JrU0hYRFJ1NkRhX0gzdi1tUjE0SWpnNnBxUFhDUGJlcm9Pc0JMYWc3QzBkNkJ2Q2JGM3BkT3dSTnNjWUxwamlzWVNPZkZUV3pGYXBnZk5BLVdrRk1yYnR6QQ?oc=5"
+        }
+      ],
+      "article_count": 4,
       "first_reported": "2026-09-27T08:43:23+00:00",
-      "last_reported": "2026-09-27T08:43:23+00:00",
+      "last_reported": "2026-09-27T10:45:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "State-level counter-insurgency/anti-banditry funding and operations against armed non-state groups.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -293541,7 +293211,12 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The event is centered on the Sokoto State government in Nigeria taking counter-banditry measures.",
       "ai_geo_fingerprint": "02230e7ebd3d63043bbf2fd8e6e4b7d155cdcbfcfad82a8274dafcc0758321d2",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "cbrn_subgroups": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "61907ed3d047a961",
@@ -460489,18 +460164,18 @@
       "categories": [
         "Attacks"
       ],
-      "title": "Al-Qaeda attack kills 10 Mali soldiers",
-      "summary": "An attack by al-Qaeda terrorists resulted in the deaths of 10 soldiers from the Malian army.",
-      "original_title": "10 قتلى في هجوم لـ«القاعدة» الإرهابي على جيش مالي",
-      "original_summary": "10 قتلى في هجوم لـ«القاعدة» الإرهابي على جيش مالي عكاظ",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
+      "title": "JNIM militants attack military camp in central Mali",
+      "summary": "Militants belonging to the JNIM attacked a military base in the central region of Mali.",
+      "original_title": "Mali: les jihadistes du Jnim attaquent un camp militaire de l'armée dans le centre du pays",
+      "original_summary": "Mali: les jihadistes du Jnim attaquent un camp militaire de l'armée dans le centre du pays RFI",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
       "published": "2026-08-09T07:00:00+00:00",
-      "source": "عكاظ",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFB4Q2JndjdZdVp6OFBZb1ZoWmY4RVRmODRqZTNzYlVoOFVzM1RnaXFfQ3RncFlWRFZ5eExFZDljVjVlVER1NzUzdzhseElySlRxR2RfVXNn0gFUQVVfeXFMTzhUU3A3Ti10S3ZMYW5qYTllb1lwRjVnemwzS2IwNWFLZXp3U3VqeGRNajZwZkRtLWk4Q3JQbEJsRFhmamhZNEZIRWJSajA4WFJ6Ri1S?oc=5",
+      "source": "RFI",
+      "source_count": 3,
+      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQTWVrOG42dWZtR3VqRHVKMFgxZVhLUVpBa0NDQ0Y1eEozZHdVTjJvRzNPa2pVNWQtMUtlanRwNF92dVM0TDlBTmtTbTIzX3RIeDRNYkVrTk9aVXpiOTZycGZoX0k5eXFZZzg3TlRqcy1SbGNmZHFWd3B4T05qRVpPNEVSTlpoMVEyamJONHdPUGZ5Y3oyNjVJWHFZVUhZbFZpNHdYOTU1bF9VMUs2bXE5VnBNRDNUemE0T3N2Q25VNjdXYmJKQzBhdkZnVWhPQQ?oc=5",
       "collector": "Google News RSS",
       "country": "Mali",
       "country_code": "ML",
@@ -460512,10 +460187,31 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "sources": [
-        "عكاظ"
+        "عكاظ",
+        "RFI",
+        "Sahel Intelligence"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Mali: Ten soldiers killed in jihadist attack on camp in San",
+          "original_title": "Mali : Au moins dix militaires tués dans une attaque jihadiste contre un camp à San",
+          "original_language": "fr",
+          "summary": "At least ten soldiers were killed during a jihadist attack on a military camp in San, Mali.",
+          "published": "2026-08-10T07:00:00+00:00",
+          "source": "Sahel Intelligence",
+          "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOaGpkMWdSa2k0YndyRmhuLUVOLXBVZi1wdjVCQWtEQV9naHYwX1RBNzVGaldLM2JqWGlaTUU4ejZ0dUw3UTVscUl2cHB2VmhJcWVDRlhzVTFrdVNQQmxJQzU0bDNFRUpUTGt5NXdWRHAwLVdwYlpzNTlNQ2QzYzY4S2NPTENuUUNVdnotYnhmV0EwdkNXUFd4MDFiZE9rQ1ZBTWlzOXNkMndHZkNzVzgzOVBnRW1wenZ4UVFvMW45bXQ?oc=5"
+        },
+        {
+          "title": "Al-Qaeda attack kills 10 Mali soldiers",
+          "original_title": "10 قتلى في هجوم لـ«القاعدة» الإرهابي على جيش مالي",
+          "original_language": "ar",
+          "summary": "An attack by al-Qaeda terrorists resulted in the deaths of 10 soldiers from the Malian army.",
+          "published": "2026-08-09T07:00:00+00:00",
+          "source": "عكاظ",
+          "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFB4Q2JndjdZdVp6OFBZb1ZoWmY4RVRmODRqZTNzYlVoOFVzM1RnaXFfQ3RncFlWRFZ5eExFZDljVjVlVER1NzUzdzhseElySlRxR2RfVXNn0gFUQVVfeXFMTzhUU3A3Ti10S3ZMYW5qYTllb1lwRjVnemwzS2IwNWFLZXp3U3VqeGRNajZwZkRtLWk4Q3JQbEJsRFhmamhZNEZIRWJSajA4WFJ6Ri1S?oc=5"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-08-09T07:00:00+00:00",
       "last_reported": "2026-08-09T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -460526,7 +460222,7 @@
       "ai_current_ct_event": true,
       "ai_selected": true,
       "translated_to_english": true,
-      "ai_canonical_event": "Al-Qaeda attack killing 10 soldiers in Mali",
+      "ai_canonical_event": "Attack on a military camp by JNIM in central Mali",
       "title_variants": [
         "Al-Qaeda terrorist attack against Malian army in Mali",
         "Al-Qaeda attack killing 10 soldiers in Mali"
@@ -460543,12 +460239,21 @@
       "ai_geo_reason": "Attack targeting Malian soldiers in Mali.",
       "ai_geo_fingerprint": "9acdd1899eeafdff3f0a3bd8621fc1d9fae673ff1147e09a4a4f6faa7d762605",
       "ai_geo_inferred": false,
-      "actor_group": "Al-Qaeda",
+      "actor_group": "JNIM",
       "primary_event_type": "ATTACK",
       "is_attack": true,
-      "incident_anchor": "Al-Qaeda attack Mali soldiers 2026-08-09",
+      "incident_anchor": "JNIM attack Mali 2026-08-09",
       "update_type": "INITIAL",
-      "incident_id": "inc-17450e99d1d1f581"
+      "incident_id": "inc-0c6ff1399573bbb5",
+      "cbrn_subgroups": [],
+      "source_article_fingerprints": [
+        "5314813a937b03be279396b4097ba7ca4982fe25e297132b2982e69b9600c7dc",
+        "81b22c686ec977187a8741e4475dc310ef166e7852de3e9222a44a0092f996d5"
+      ],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "38514950c1eb8509",
@@ -460858,101 +460563,6 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_url"
-      ]
-    },
-    {
-      "id": "8c1cfddb0064ec96",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "JNIM militants attack military camp in central Mali",
-      "summary": "Militants belonging to the JNIM attacked a military base in the central region of Mali.",
-      "original_title": "Mali: les jihadistes du Jnim attaquent un camp militaire de l'armée dans le centre du pays",
-      "original_summary": "Mali: les jihadistes du Jnim attaquent un camp militaire de l'armée dans le centre du pays RFI",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French / Africa",
-      "collection_locale": "FR:fr",
-      "published": "2026-08-09T07:00:00+00:00",
-      "source": "RFI",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQTWVrOG42dWZtR3VqRHVKMFgxZVhLUVpBa0NDQ0Y1eEozZHdVTjJvRzNPa2pVNWQtMUtlanRwNF92dVM0TDlBTmtTbTIzX3RIeDRNYkVrTk9aVXpiOTZycGZoX0k5eXFZZzg3TlRqcy1SbGNmZHFWd3B4T05qRVpPNEVSTlpoMVEyamJONHdPUGZ5Y3oyNjVJWHFZVUhZbFZpNHdYOTU1bF9VMUs2bXE5VnBNRDNUemE0T3N2Q25VNjdXYmJKQzBhdkZnVWhPQQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Mali",
-      "country_code": "ML",
-      "city": null,
-      "region": "Central Mali",
-      "latitude": 14.5,
-      "longitude": -4.0,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "rfi.fr/fr",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "5314813a937b03be279396b4097ba7ca4982fe25e297132b2982e69b9600c7dc",
-        "81b22c686ec977187a8741e4475dc310ef166e7852de3e9222a44a0092f996d5"
-      ],
-      "sources": [
-        "RFI",
-        "Sahel Intelligence"
-      ],
-      "related_articles": [
-        {
-          "title": "Mali: Ten soldiers killed in jihadist attack on camp in San",
-          "original_title": "Mali : Au moins dix militaires tués dans une attaque jihadiste contre un camp à San",
-          "original_language": "fr",
-          "summary": "At least ten soldiers were killed during a jihadist attack on a military camp in San, Mali.",
-          "published": "2026-08-10T07:00:00+00:00",
-          "source": "Sahel Intelligence",
-          "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOaGpkMWdSa2k0YndyRmhuLUVOLXBVZi1wdjVCQWtEQV9naHYwX1RBNzVGaldLM2JqWGlaTUU4ejZ0dUw3UTVscUl2cHB2VmhJcWVDRlhzVTFrdVNQQmxJQzU0bDNFRUpUTGt5NXdWRHAwLVdwYlpzNTlNQ2QzYzY4S2NPTENuUUNVdnotYnhmV0EwdkNXUFd4MDFiZE9rQ1ZBTWlzOXNkMndHZkNzVzgzOVBnRW1wenZ4UVFvMW45bXQ?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-08-09T07:00:00+00:00",
-      "last_reported": "2026-08-10T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Reports a concrete military attack by a known terrorist group.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "JNIM",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "JNIM attack Mali 2026-08-09",
-      "update_type": "INITIAL",
-      "incident_id": "inc-0c6ff1399573bbb5",
-      "translated_to_english": true,
-      "ai_canonical_event": "Attack on a military camp by JNIM in central Mali",
-      "title_variants": [
-        "Attack on a military camp by JNIM in central Mali"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_categories": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Mali: les jihadistes du Jnim attaquent un camp militaire... dans le centre du pays"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "JNIM militants attacked a military camp in central Mali.",
-      "ai_geo_fingerprint": "d9c480bac2c9cc5c09fa75ffba303cbfa7069738f2159c17ffa55725427ac92b",
-      "ai_geo_inferred": false,
-      "dedup_confidence": 0.821,
-      "dedup_methods": [
-        "title_plus_anchor"
       ]
     },
     {
@@ -465527,163 +465137,11 @@
       "threat_categories": []
     },
     {
-      "id": "375bd32c76c8349a",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Terrorist attack reported in Zamfara",
-      "summary": "A terrorist attack was carried out by armed bandits/militants in Zamfara State.",
-      "original_title": "terrorist attack in zamfara",
-      "original_summary": "terrorist attack in zamfara HumAngle",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-08-02T05:29:22+00:00",
-      "source": "HumAngle",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBxbmhNM2hqaWVzX25tbjhLenVtbVhNYU5xQ0NGWkxtamRTTlR1OXR5SjRzMzVURnhVZTY3anZEbXNPQkxmTEFFMUdXem42THozS0ZydmtncEY0NUdlWW9TVF9HcFVpWGRiMjVEZHpn?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": null,
-      "region": "Zamfara State",
-      "latitude": 12.1728,
-      "longitude": 6.6575,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "humanglemedia.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "11214c1ee31c20f8c58724a2d2d6f75d99c5b056dca8050a3020135b1876cb64"
-      ],
-      "sources": [
-        "HumAngle"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-08-02T05:29:22+00:00",
-      "last_reported": "2026-08-02T05:29:22+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Reports a concrete militant attack in Zamfara.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Zamfara terrorist attack 2026-08-02",
-      "update_type": "INITIAL",
-      "incident_id": "inc-957c64cba3225302",
-      "translated_to_english": false,
-      "ai_canonical_event": "Armed terrorist attack in Zamfara State",
-      "title_variants": [
-        "Armed terrorist attack in Zamfara State"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Zamfara"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Terrorist attack reported in Zamfara State.",
-      "ai_geo_fingerprint": "5219d373b899844a5dc13d938b83f42bea09ad718d7c776f6c1cbbe159c91669",
-      "ai_geo_inferred": false,
-      "threat_categories": []
-    },
-    {
-      "id": "9efea35507f2a231",
+      "id": "c87d77a169ae9a3d",
       "category": "Attacks",
       "categories": [
         "Attacks",
         "Counter Terrorism Action"
-      ],
-      "title": "Terrorists on Rampage in Zamfara After Military Forces Foiled Initial Attack",
-      "summary": "Terrorists launched retaliatory rampages in Zamfara state after military forces successfully foiled their initial attack.",
-      "original_title": "Terrorists On Rampage In Zamfara After Military Forces Foiled Initial Attack",
-      "original_summary": "Terrorists On Rampage In Zamfara After Military Forces Foiled Initial Attack HumAngle",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-08-02T05:17:57+00:00",
-      "source": "HumAngle",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOQ1dMX3ZxcXl6MGx4cndwWVVUeW04X05YVmFsQXhSaFNxRXk4cmNocjF3b3l0OFl1c1pRelR1c3V3ZjR6N2dpZXZMcjk5WjZaVktIbUdqVUY2cTBZUDdVbGdET0ZOZ2JoS2VXcVdMUUl6TEhteGk0eE1NSmdQUW9OQTEwNU9ibjd5ckpLR1VrUVJqbUNoVUFoOGVFRmNTNmktX19xSmRrSDFMZw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": null,
-      "region": "Zamfara",
-      "latitude": 12.1628,
-      "longitude": 6.2236,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "humanglemedia.com",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "HumAngle"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-08-02T05:17:57+00:00",
-      "last_reported": "2026-08-02T05:17:57+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete reports of militant retaliatory attacks and military action in Zamfara state.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Terrorists launch retaliatory rampage in Zamfara after foiled attack 2026-08",
-      "title_variants": [
-        "terrorist rampage and foiled attack in Zamfara",
-        "Terrorists launch retaliatory rampage in Zamfara after foiled attack 2026-08"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Zamfara state"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicit mention of Zamfara state, Nigeria.",
-      "ai_geo_fingerprint": "ea7fdb260a85404f0ac12401e944604b310415e05dd0afa43728d6f9c609ce41",
-      "ai_geo_inferred": false,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Zamfara terrorist rampage after foiled attack 2026-08-02",
-      "update_type": "INITIAL",
-      "incident_id": "inc-af9693d6811b48c5"
-    },
-    {
-      "id": "c87d77a169ae9a3d",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
       ],
       "title": "Terrorists abduct 105 farmers in Zamfara and demand negotiations",
       "summary": "Armed terrorists abducted 105 farmers in Zamfara State and called on the state governor to negotiate with them.",
@@ -465710,15 +465168,35 @@
       "targeted_source": "humanglemedia.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
+        "11214c1ee31c20f8c58724a2d2d6f75d99c5b056dca8050a3020135b1876cb64",
         "36141839168b9c3eed43833d03b3926b0e3376943de9c8495e0450206b18558e"
       ],
       "sources": [
         "HumAngle"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Terrorists on Rampage in Zamfara After Military Forces Foiled Initial Attack",
+          "original_title": "Terrorists On Rampage In Zamfara After Military Forces Foiled Initial Attack",
+          "original_language": "en",
+          "summary": "Terrorists launched retaliatory rampages in Zamfara state after military forces successfully foiled their initial attack.",
+          "published": "2026-08-02T05:17:57+00:00",
+          "source": "HumAngle",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOQ1dMX3ZxcXl6MGx4cndwWVVUeW04X05YVmFsQXhSaFNxRXk4cmNocjF3b3l0OFl1c1pRelR1c3V3ZjR6N2dpZXZMcjk5WjZaVktIbUdqVUY2cTBZUDdVbGdET0ZOZ2JoS2VXcVdMUUl6TEhteGk0eE1NSmdQUW9OQTEwNU9ibjd5ckpLR1VrUVJqbUNoVUFoOGVFRmNTNmktX19xSmRrSDFMZw?oc=5"
+        },
+        {
+          "title": "Terrorist attack reported in Zamfara",
+          "original_title": "terrorist attack in zamfara",
+          "original_language": "en",
+          "summary": "A terrorist attack was carried out by armed bandits/militants in Zamfara State.",
+          "published": "2026-08-02T05:29:22+00:00",
+          "source": "HumAngle",
+          "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBxbmhNM2hqaWVzX25tbjhLenVtbVhNYU5xQ0NGWkxtamRTTlR1OXR5SjRzMzVURnhVZTY3anZEbXNPQkxmTEFFMUdXem42THozS0ZydmtncEY0NUdlWW9TVF9HcFVpWGRiMjVEZHpn?oc=5"
+        }
+      ],
+      "article_count": 3,
       "first_reported": "2026-08-02T01:35:11+00:00",
-      "last_reported": "2026-08-02T01:35:11+00:00",
+      "last_reported": "2026-08-02T05:29:22+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -465756,7 +465234,11 @@
       "ai_geo_reason": "Terrorists abduct 105 farmers in Zamfara State.",
       "ai_geo_fingerprint": "c362809291efec2e23c7f79fc9134ed92a7a7e9d0a80d9058d4328dc90c42768",
       "ai_geo_inferred": false,
-      "threat_categories": []
+      "threat_categories": [],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "7ad3108e1ee3c59a",
@@ -479578,97 +479060,6 @@
       ]
     },
     {
-      "id": "2017fff297c00566",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "NISA Says 20 More Al-Shabaab Militants Killed in Latest Operations",
-      "summary": "Somalia's National Intelligence and Security Agency reported that 20 additional Al-Shabaab militants were killed in ongoing military operations.",
-      "original_title": "NISA Says 20 More Al-Shabaab Militants Killed in Latest Operations Amid Intensified Military Offensive",
-      "original_summary": "NISA Says 20 More Al-Shabaab Militants Killed in Latest Operations Amid Intensified Military Offensive Goobjoog English",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-07-14T07:00:00+00:00",
-      "source": "Goobjoog English",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxONklMU1RLUUJldHhHalNyblpLUTJGZ25PRFdtSDBNdHk4SGE5b0Rjckw2RHFkQVh0X0lnMFBSVHZ1dlRHaGZwZ3c2RGRITDlydDRkekMwckVMMXRxclY5aFhlY3JJMVUyaVhVdEZIOVBCMjh1UGw0ZmNLZ0pWeXlqQzBYOE9KMWgzU25CVjRuU0tuaTdmTVMyUjEzeGFjQUxicmY3bUtQUHp5NHE5a0dxdE1CUU9fU3NPWmpGX1lwLWxwMm82M2c?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "goobjoog.com",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "Goobjoog English",
-        "Goobjoog"
-      ],
-      "related_articles": [
-        {
-          "title": "NISA operations in Hiiraan and Middle Shabelle kill 20 militants",
-          "original_title": "NISA oo sheegtay in howlgallo ka dhacay Gobollada Hiiraan iyo Shabeellaha Dhexe lagu diley 20 xubnood oo Al-Shabaab ka tirsan – Goobjoog",
-          "original_language": "en",
-          "summary": "Somali intelligence agency (NISA) reported that security operations in the Hiiraan and Middle Shabelle regions resulted in the killing of 20 Al-Shabaab militants.",
-          "published": "2026-07-14T07:00:00+00:00",
-          "source": "Goobjoog",
-          "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxNOW80VHYzM2hIVE5HbENkZDc2NUtXeTRvSGhScVdKRElQc2Mxc2IwZC1Sdzdpd3U1UTNkRWF3dWFUbjFETnlYbHpzSG5QNm9rY01aZElGa0IxcHBLRjVUOWVUZ09pbklMdXpURWI3UjJFUy1tdVNnNHNwTG9ONjU2TmlSeFdPd1ZpMWQ3V1RPQUFDNHBMTEVSV2QxZkNKU2Rkc1ZaU2xpRXp2MHJVWWg3NmlQUkUyS0lKbS01c1lWanlPcjlEUjZRYk9QSnFZTVc3RXd0b05JdGxYTHpkMS14R2JiUXRkWjB2YXBtY0c4WQ?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-07-14T07:00:00+00:00",
-      "last_reported": "2026-07-14T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Somali intelligence and security operations resulted in the killing of 20 Al-Shabaab militants.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "NISA reports 20 Al-Shabaab militants killed in operations in Somalia",
-      "title_variants": [
-        "NISA reports 20 Al-Shabaab militants killed in operations in Somalia"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Somalia's National Intelligence and Security Agency (NISA)"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Operations conducted by NISA against Al-Shabaab within Somalia.",
-      "ai_geo_fingerprint": "65ba47c8930172f993ed6b63df7a2489fbcacc179992abcc56ae4218bb36b578",
-      "ai_geo_inferred": false,
-      "actor_group": "Al-Shabaab",
-      "incident_id": "inc-587704781dd890f7",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "NISA Al-Shabaab operation Somalia 2026-07-14",
-      "update_type": "INITIAL",
-      "cbrn_subgroups": [],
-      "source_article_fingerprints": [
-        "e12bdc279629727cf5302e325ddd106bda69da5c8c2249b09667925bc461078c"
-      ],
-      "dedup_confidence": 0.645,
-      "dedup_methods": [
-        "paraphrase_entity_context"
-      ]
-    },
-    {
       "id": "c5427367d605147e",
       "category": "Arrests",
       "categories": [
@@ -481215,9 +480606,27 @@
           "published": "2026-07-15T07:00:00+00:00",
           "source": "Hiiraan Online",
           "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPajVaekE5XzFBUVg1U2NHQnhIeTV2cUFQLWNBZEJjcjJjaHBYbEtyRjBIeWZSaEtkVERPZ3ZvR2MyMi1uZjRpQlhmbHF4MGJoazk2ZndoWS1uNXRuLVhkYzQzTGw0QWdiTDRIU09nbWVVS1QxWDBhb0ZrSjMxWUQ0eHFUNVNCcHY1cWhCSzRpSFFrYVRSTFF6Z0J3LXRHdGs1OVhxLVZGU2dQTi1KQU4xdExn?oc=5"
+        },
+        {
+          "title": "NISA Says 20 More Al-Shabaab Militants Killed in Latest Operations",
+          "original_title": "NISA Says 20 More Al-Shabaab Militants Killed in Latest Operations Amid Intensified Military Offensive",
+          "original_language": "en",
+          "summary": "Somalia's National Intelligence and Security Agency reported that 20 additional Al-Shabaab militants were killed in ongoing military operations.",
+          "published": "2026-07-14T07:00:00+00:00",
+          "source": "Goobjoog English",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxONklMU1RLUUJldHhHalNyblpLUTJGZ25PRFdtSDBNdHk4SGE5b0Rjckw2RHFkQVh0X0lnMFBSVHZ1dlRHaGZwZ3c2RGRITDlydDRkekMwckVMMXRxclY5aFhlY3JJMVUyaVhVdEZIOVBCMjh1UGw0ZmNLZ0pWeXlqQzBYOE9KMWgzU25CVjRuU0tuaTdmTVMyUjEzeGFjQUxicmY3bUtQUHp5NHE5a0dxdE1CUU9fU3NPWmpGX1lwLWxwMm82M2c?oc=5"
+        },
+        {
+          "title": "NISA operations in Hiiraan and Middle Shabelle kill 20 militants",
+          "original_title": "NISA oo sheegtay in howlgallo ka dhacay Gobollada Hiiraan iyo Shabeellaha Dhexe lagu diley 20 xubnood oo Al-Shabaab ka tirsan – Goobjoog",
+          "original_language": "en",
+          "summary": "Somali intelligence agency (NISA) reported that security operations in the Hiiraan and Middle Shabelle regions resulted in the killing of 20 Al-Shabaab militants.",
+          "published": "2026-07-14T07:00:00+00:00",
+          "source": "Goobjoog",
+          "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxNOW80VHYzM2hIVE5HbENkZDc2NUtXeTRvSGhScVdKRElQc2Mxc2IwZC1Sdzdpd3U1UTNkRWF3dWFUbjFETnlYbHpzSG5QNm9rY01aZElGa0IxcHBLRjVUOWVUZ09pbklMdXpURWI3UjJFUy1tdVNnNHNwTG9ONjU2TmlSeFdPd1ZpMWQ3V1RPQUFDNHBMTEVSV2QxZkNKU2Rkc1ZaU2xpRXp2MHJVWWg3NmlQUkUyS0lKbS01c1lWanlPcjlEUjZRYk9QSnFZTVc3RXd0b05JdGxYTHpkMS14R2JiUXRkWjB2YXBtY0c4WQ?oc=5"
         }
       ],
-      "article_count": 8,
+      "article_count": 10,
       "first_reported": "2026-07-12T07:00:00+00:00",
       "last_reported": "2026-07-14T07:00:00+00:00",
       "ai_selection_complete": true,
@@ -481237,7 +480646,8 @@
       "dedup_methods": [
         "very_high_title_similarity",
         "title_plus_anchor",
-        "same_url"
+        "same_url",
+        "same_incident"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_region_coordinates",
@@ -481268,6 +480678,7 @@
         "a5bcac8a5a972da9548421846a2c69c20f6dafe60caa889f28efd75c12bfb679",
         "b5469ed0d9f870ebefffdaeac6008eb0270658b7e95ff0c59dd0d2f886b9eaf3",
         "d16830aaed38ae2eaf2b9740bc5e6040c2fba001a52df83c02d4b703abf6ca92",
+        "e12bdc279629727cf5302e325ddd106bda69da5c8c2249b09667925bc461078c",
         "f88aeecb01b3aa6105b2c26ad07f89e41dea31b28ea87ad56eb05fbb508e4c26"
       ],
       "actor_group": "Al-Shabaab",
@@ -482650,112 +482061,6 @@
       ]
     },
     {
-      "id": "de395f6645dd4dfb",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Weapons",
-        "Attacks"
-      ],
-      "title": "Anéfis, Tabrichat and Koulébala localities: Nearly a hundred terrorists neutralized",
-      "summary": "Malian security forces neutralized nearly a hundred terrorists during large-scale operations in Anéfis, Tabrichat, and Koulébala.",
-      "original_title": "Localités d’Anéfis, Tabrichat et Koulébala : Près d’une centaine de terroristes neutralisés",
-      "original_summary": "Localités d’Anéfis, Tabrichat et Koulébala : Près d’une centaine de terroristes neutralisés Maliweb",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French / Africa",
-      "collection_locale": "FR:fr",
-      "published": "2026-07-10T07:00:00+00:00",
-      "source": "Maliweb",
-      "source_count": 3,
-      "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQdXVkSEczU3R5aXZRMktiQjhGT3lBOC1WYjNkTFhwY2JaMGxwTHFFTVlZek9LSHlHQml5bmVkSlNEaHphekY4U194WXlfbGN5OVY2WVVXQzVsb2NucWk3RC1Vc0N6c2JZNEtCS1hXUmtOTjdHT1pqaFJoWndZd25YMW5lNlFyVTVZTFU2MFJpNnBHYldYZXFBZXVuU09jcFJEbTh3UXpUel96Sy1IVjFXWUZZQjU1Mlhoc0kxOHRaeFhpWm5mUmxyVVdzTUZTOE0?oc=5",
-      "collector": "Google News RSS",
-      "country": "Mali",
-      "country_code": "ML",
-      "city": null,
-      "region": "Kidal",
-      "latitude": 17.6534,
-      "longitude": 0.4784,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "maliweb.net",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "2fe28f1e23804e3a009f65a61bea0f274a857f4a4c9f698e84d3148abc16b658",
-        "d5a08df56db675db07ba3de19d94f695624c8174f1f440378a9f1b6cb584d0ba"
-      ],
-      "sources": [
-        "Maliweb",
-        "malijet.com",
-        "maliweb"
-      ],
-      "related_articles": [
-        {
-          "title": "Battle of Anéfis: Chief of Staff assures the situation is under control",
-          "original_title": "Bataille d'Anéfis : le Chef d'État-major assure que la situation est sous contrôle",
-          "original_language": "fr",
-          "summary": "The Malian Chief of Staff has assured the public that the security situation following the battle of Anéfis is under control.",
-          "published": "2026-07-11T07:00:00+00:00",
-          "source": "malijet.com",
-          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQZWo0bWstZFRlZm1GWWZSWU1va3hfemtYd0pwdmh3QnA5MU91SEplWDdPYTNxTXU3Zzh5SjE5RU5hTWtKeWJRamhIeEVZOFRIYXhCdkFEYXBjbGZPU3dpYXNEU0F6UzhabXFzV1Bva2ZJM3lvOEtvNTNZUnhHMlFZQ3hqYUQ4eUY2Y0x0T0Z1cm81S2NPQmNHSUg4c1h3TEF0WVh3bkQtR0U?oc=5"
-        },
-        {
-          "title": "Anéfis: Over 1,000 terrorists neutralized, vehicles and equipment destroyed, says Army Chief of Staff",
-          "original_title": "Anéfis : plus de 1 000 terroristes neutralisés, 14 blindés, 24 véhicules armés et 300 motos détruits, selon le Chef d'État-major des Armées.",
-          "original_language": "fr",
-          "summary": "The Malian Army Chief of Staff reported that over 1,000 terrorists were neutralized and numerous armored vehicles and motorcycles were destroyed in Anéfis.",
-          "published": "2026-07-12T07:00:00+00:00",
-          "source": "malijet.com",
-          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOOEZRS0pnc0V1WDJ2WlpDVkJwLThRTjUxOWpTamEycXVXaldtYmRjLW1uU1pvbUlxVkVVbWFLRGR0N2ZfWnE3alF3Z0g2Q2JmZHV3VlUxU2JzMTZPaTNoOXhCYUtKMThqN2sxcC1HcFVSNExFdDFaaDFHS0hfQmVHdGRiM1hYbUlaVW5hY3NzMzVtU3hsLVJDQ2NsOHRIb1RpSlVUdFdJRQ?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-07-10T07:00:00+00:00",
-      "last_reported": "2026-07-12T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Malian security forces carried out major counter-terrorism operations neutralizing nearly a hundred terrorists.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": true,
-      "ai_canonical_event": "Malian security forces neutralize nearly a hundred terrorists in Anéfis Tabrichat and Koulébala Mali",
-      "title_variants": [
-        "neutralization of nearly a hundred terrorists by security forces in northern Mali",
-        "Malian security forces neutralize nearly a hundred terrorists in Anéfis Tabrichat and Koulébala Mali"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Anéfis, Tabrichat and Koulébala localities: Nearly a hundred terrorists neutralized"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Localities such as Anéfis are in Mali where Malian security forces conducted operations.",
-      "ai_geo_fingerprint": "ef489a38ee7e2383f86f99d336bafd2b88bc07ceea1d0cb7195472d1254d7952",
-      "ai_geo_inferred": false,
-      "actor_group": "",
-      "incident_id": "inc-c1618c144c96fb4f",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_incident",
-        "same_url"
-      ],
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Anefis Tabrichat Koulebala CT operations Mali 2026-07-10",
-      "update_type": "INITIAL",
-      "cbrn_subgroups": []
-    },
-    {
       "id": "86befdbefdd48ac0",
       "category": "Chemicals and Explosives",
       "categories": [
@@ -483008,7 +482313,8 @@
       "dedup_confidence": 0.678,
       "dedup_methods": [
         "actor_country_action_signature"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "e20874bf86b5b25c",
@@ -483551,7 +482857,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "ISWAP operations are primarily situated in Nigeria.",
       "ai_geo_fingerprint": "6fc75b603f75cdd625dc0bf60be2082ae2c1f0646e535033c9b8c555ed37df37",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "b5f24b8436d73ea7",
@@ -484897,7 +484204,8 @@
       "category": "Counter Terrorism Action",
       "categories": [
         "Counter Terrorism Action",
-        "Attacks"
+        "Attacks",
+        "Weapons"
       ],
       "title": "Mali Armed Forces claim heavy toll against terrorist armed groups in Anefis",
       "summary": "The Malian Armed Forces (FAMa) reported a heavy toll inflicted on terrorist armed groups during operations in Anefis.",
@@ -484909,7 +484217,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-07-07T07:00:00+00:00",
       "source": "Maliweb",
-      "source_count": 3,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQOVp4aXgyY2VORDd3X2FIRHBVYmxDTWZlWF9wcnlZMm5YRmpUZ2JrWjdNR0Z5QS1ETFd3MDRIZk5ySm02NmdpbFVYZXVqT2ZUM1FPeld4bkc4Z1BsT2gyNldVbHNWTExVeWJqNFZsVHhMUy1IOXhpMTFmM0JfdnhIdWZiQ3hhR21jVDFHSHltbkZ1ZWlndGl2aVQ1aVFQM3YyLU5LbUxVUHE3Q2U5ak13WjR4b3IxOFBYNmdyLUg1Vzc2dnJpYnBJ?oc=5",
       "collector": "Google News RSS",
       "country": "Mali",
@@ -484926,13 +484234,16 @@
       "source_article_fingerprints": [
         "0a7c334cb49eb2f00adc1d250279d1f998e3d26ab5b4d0859ff4ea89ff6609bd",
         "2739bd0b59752b15ea34758a4347f7626f72ee0917cecf2952bf48c050989685",
+        "2fe28f1e23804e3a009f65a61bea0f274a857f4a4c9f698e84d3148abc16b658",
         "41cc6fc10b9c0ce375b16b0255e9da70d149a4ee05316a4d650ba63d34dbbd27",
-        "63fe35d22bede36393ea9298ce84712ada5ae80866bbb2f5e1f02b2e9bbda0d4"
+        "63fe35d22bede36393ea9298ce84712ada5ae80866bbb2f5e1f02b2e9bbda0d4",
+        "d5a08df56db675db07ba3de19d94f695624c8174f1f440378a9f1b6cb584d0ba"
       ],
       "sources": [
         "Maliweb",
         "malijet.com",
-        "leFaso.net - L'actualité au Burkina Faso"
+        "leFaso.net - L'actualité au Burkina Faso",
+        "maliweb"
       ],
       "related_articles": [
         {
@@ -484961,15 +484272,33 @@
           "published": "2026-07-12T07:00:00+00:00",
           "source": "malijet.com",
           "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOOEZRS0pnc0V1WDJ2WlpDVkJwLThRTjUxOWpTamEycXVXaldtYmRjLW1uU1pvbUlxVkVVbWFLRGR0N2ZfWnE3alF3Z0g2Q2JmZHV3VlUxU2JzMTZPaTNoOXhCYUtKMThqN2sxcC1HcFVSNExFdDFaaDFHS0hfQmVHdGRiM1hYbUlaVW5hY3NzMzVtU3hsLVJDQ2NsOHRIb1RpSlVUdFdJRQ?oc=5"
+        },
+        {
+          "title": "Anéfis, Tabrichat and Koulébala localities: Nearly a hundred terrorists neutralized",
+          "original_title": "Localités d’Anéfis, Tabrichat et Koulébala : Près d’une centaine de terroristes neutralisés",
+          "original_language": "fr",
+          "summary": "Malian security forces neutralized nearly a hundred terrorists during large-scale operations in Anéfis, Tabrichat, and Koulébala.",
+          "published": "2026-07-10T07:00:00+00:00",
+          "source": "Maliweb",
+          "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQdXVkSEczU3R5aXZRMktiQjhGT3lBOC1WYjNkTFhwY2JaMGxwTHFFTVlZek9LSHlHQml5bmVkSlNEaHphekY4U194WXlfbGN5OVY2WVVXQzVsb2NucWk3RC1Vc0N6c2JZNEtCS1hXUmtOTjdHT1pqaFJoWndZd25YMW5lNlFyVTVZTFU2MFJpNnBHYldYZXFBZXVuU09jcFJEbTh3UXpUel96Sy1IVjFXWUZZQjU1Mlhoc0kxOHRaeFhpWm5mUmxyVVdzTUZTOE0?oc=5"
+        },
+        {
+          "title": "Battle of Anéfis: Chief of Staff assures the situation is under control",
+          "original_title": "Bataille d'Anéfis : le Chef d'État-major assure que la situation est sous contrôle",
+          "original_language": "fr",
+          "summary": "The Malian Chief of Staff has assured the public that the security situation following the battle of Anéfis is under control.",
+          "published": "2026-07-11T07:00:00+00:00",
+          "source": "malijet.com",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQZWo0bWstZFRlZm1GWWZSWU1va3hfemtYd0pwdmh3QnA5MU91SEplWDdPYTNxTXU3Zzh5SjE5RU5hTWtKeWJRamhIeEVZOFRIYXhCdkFEYXBjbGZPU3dpYXNEU0F6UzhabXFzV1Bva2ZJM3lvOEtvNTNZUnhHMlFZQ3hqYUQ4eUY2Y0x0T0Z1cm81S2NPQmNHSUg4c1h3TEF0WVh3bkQtR0U?oc=5"
         }
       ],
-      "article_count": 4,
+      "article_count": 6,
       "first_reported": "2026-07-07T07:00:00+00:00",
       "last_reported": "2026-07-12T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
+      "ai_relevance_score": 90,
       "ai_relevance_reason": "Reports concrete counter-terrorism military operations and clashes against armed terrorist groups.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -484987,10 +484316,11 @@
       "actor_scope": "NON_STATE",
       "cbrn_subgroups": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "dedup_confidence": 0.8,
+      "dedup_confidence": 1.0,
       "dedup_methods": [
         "paraphrase_entity_context",
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "same_incident"
       ],
       "location_confidence_score": 0.95,
       "location_method": "ai_city_coordinates",
@@ -487102,85 +486432,6 @@
       ]
     },
     {
-      "id": "ba0b3415b6583a3e",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Terrorists burn vehicles in Yobe attack",
-      "summary": "Terrorists set four vehicles on fire during an attack in Yobe state, Nigeria.",
-      "original_title": "Terrorists Set 4 Vehicles Ablaze In Fresh Yobe Attack",
-      "original_summary": "Terrorists Set 4 Vehicles Ablaze In Fresh Yobe Attack LEADERSHIP Newspapers",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-07-05T05:22:58+00:00",
-      "source": "LEADERSHIP Newspapers",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOQThYNEMwdE96Tjl0OVVuUjA2Rl83X0EtMG5BbWJwNnpXUEZvTW45MFJDQmZBSEtMSHpXa0sxMHlWZm5tRlhiTlJZWVd4WHhDdG9qUThCRnZiRWpVcU1MWWJ0N3ktSmcySVUtQTJFdHlZdi03WlRHQ2ctVjRyVGtnZ3Zn?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": null,
-      "region": "Yobe",
-      "latitude": 12.0,
-      "longitude": 11.5,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "leadership.ng",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "f45085687521e7117b4d7747630617d7e603394ec583d824e475f81cf7bf6c38"
-      ],
-      "sources": [
-        "LEADERSHIP Newspapers"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-05T05:22:58+00:00",
-      "last_reported": "2026-07-05T05:22:58+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Reports a recent armed attack by militants.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Yobe vehicle attack 2026-07-05",
-      "update_type": "INITIAL",
-      "incident_id": "inc-079c4f4a70242e61",
-      "translated_to_english": false,
-      "ai_canonical_event": "Attack involving arson of vehicles in Yobe, Nigeria",
-      "title_variants": [
-        "Attack involving arson of vehicles in Yobe, Nigeria"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_categories": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.95,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Yobe state, Nigeria"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Attack occurred in Yobe state, Nigeria.",
-      "ai_geo_fingerprint": "040f9cc784a518eea40b739d50500742aedcba205a600ced48336a6e00906a9c",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "be9d0a6b5f131200",
       "category": "Terrorist Financing",
       "categories": [
@@ -487753,7 +487004,7 @@
       "collection_locale": "NG:en",
       "published": "2026-07-03T07:00:00+00:00",
       "source": "Daily Trust",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE5EN1B5YlNrY0ZmekdrUHp1WHJnZDRZR3AzTFdwU0x4OV94YjRjZWRwZkQ0MEpSUFBCbGw2aHd2TTBFcTZWZHQxLXNsWHNzRGgzdk1ybk1Oci16S2x4VkpwRVY3TWJYN2pYMnZxeFVrOHg4MmJzWU1N?oc=5",
       "collector": "Google News RSS",
       "country": "Nigeria",
@@ -487768,12 +487019,23 @@
       "targeted_source": "dailytrust.com",
       "targeted_source_kind": "local_language_media",
       "sources": [
-        "Daily Trust"
+        "Daily Trust",
+        "LEADERSHIP Newspapers"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Terrorists burn vehicles in Yobe attack",
+          "original_title": "Terrorists Set 4 Vehicles Ablaze In Fresh Yobe Attack",
+          "original_language": "en",
+          "summary": "Terrorists set four vehicles on fire during an attack in Yobe state, Nigeria.",
+          "published": "2026-07-05T05:22:58+00:00",
+          "source": "LEADERSHIP Newspapers",
+          "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOQThYNEMwdE96Tjl0OVVuUjA2Rl83X0EtMG5BbWJwNnpXUEZvTW45MFJDQmZBSEtMSHpXa0sxMHlWZm5tRlhiTlJZWVd4WHhDdG9qUThCRnZiRWpVcU1MWWJ0N3ktSmcySVUtQTJFdHlZdi03WlRHQ2ctVjRyVGtnZ3Zn?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-07-03T07:00:00+00:00",
-      "last_reported": "2026-07-03T07:00:00+00:00",
+      "last_reported": "2026-07-05T05:22:58+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -487808,7 +487070,15 @@
       "is_attack": true,
       "incident_anchor": "Yobe State vehicle arson Nigeria 2026-07-03",
       "update_type": "INITIAL",
-      "incident_id": "inc-8045715a6819c0b2"
+      "incident_id": "inc-8045715a6819c0b2",
+      "cbrn_subgroups": [],
+      "source_article_fingerprints": [
+        "f45085687521e7117b4d7747630617d7e603394ec583d824e475f81cf7bf6c38"
+      ],
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "cd4f9eb4f661c635",
@@ -515945,75 +515215,6 @@
       "ai_geo_inferred": false
     },
     {
-      "id": "5fb1f16419a5aa70",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Golders Green terror suspect moments after first attack",
-      "summary": "Footage emerges showing the Golders Green terror suspect shortly after carrying out the initial attack.",
-      "original_title": "Golders Green terror suspect moments after first attack",
-      "original_summary": "Golders Green terror suspect moments after first attack Sky News",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-30T09:59:03+00:00",
-      "source": "Sky News",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPWHNyV2F2RVpMUm4zeTZLbS1faXZ5RUhwLXVxbW9ONVZlcENaYndNNEhaa0VmZXZ5dG5kV0xOZ0hGVUhVSl9fQ3RlNmF0Yll3RXFfbnl2bEFDS3FSMWcwS3dONFRTWVJ2c1gzcExnalFIRFJ4d0dHN0JjVXZfWmxzRGZjVUVIZWZNdGpLLTNra29aTUx0TkE?oc=5",
-      "collector": "Google News RSS",
-      "country": "United Kingdom",
-      "country_code": "GB",
-      "city": "London",
-      "region": null,
-      "latitude": 51.50853,
-      "longitude": -0.12574,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "Sky News",
-      "targeted_source_kind": "international_media",
-      "sources": [
-        "Sky News"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-30T09:59:03+00:00",
-      "last_reported": "2026-04-30T09:59:03+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Provides follow-up investigative details and footage regarding the recent terrorist attack in Golders Green, London.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "terrorist attack investigation and footage in Golders Green London",
-      "title_variants": [
-        "Media footage released of Golders Green terror suspect after attack in London",
-        "terrorist attack investigation and footage in Golders Green London"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Golders Green terror suspect"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Golders Green is a suburban area in northwest London, UK.",
-      "ai_geo_fingerprint": "00022025b2501043fd7a219733514148f3cc798b6a70dfb3dd9e024dde6ce58a",
-      "ai_geo_inferred": false,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Extreme-right wing terrorist convicted for planning gun attack",
-      "update_type": "INVESTIGATION_UPDATE",
-      "incident_id": "inc-68d378df3357a4ea"
-    },
-    {
       "id": "c090220ef262b8d7",
       "category": "Attacks",
       "categories": [
@@ -516109,9 +515310,9 @@
       "actor_group": "",
       "primary_event_type": "ATTACK",
       "is_attack": true,
-      "incident_anchor": "Extreme-right wing terrorist convicted for planning gun attack",
+      "incident_anchor": "Golders Green memorial wall arson attack London 2026",
       "update_type": "INITIAL",
-      "incident_id": "inc-68d378df3357a4ea",
+      "incident_id": "inc-e20eef9d34444652",
       "source_article_fingerprints": [
         "2694d9a24ce15d28ddb8c40cb4f8abeb6f98dc18657bad909d3280dcfe0a724e",
         "bcbe2abab25611c1a8bef5a0be14538d0afd1dbd82e64c0784a9cb3892aaf146"
@@ -516126,7 +515327,8 @@
       "threat_categories": [],
       "integrity_review_version": "map-evidence-review-20261022",
       "integrity_review_reason": "Threat-level update relates to a stabbing, with no nuclear component in any retained source.",
-      "integrity_source_evidence": "36a197897dd36bf5b7f10658d666e845f8b9660e582e1f8c368158700e32c83d"
+      "integrity_source_evidence": "36a197897dd36bf5b7f10658d666e845f8b9660e582e1f8c368158700e32c83d",
+      "dedup_review_required": true
     },
     {
       "id": "4dfe468ddcb046c1",
@@ -516447,9 +515649,9 @@
       "actor_group": "",
       "primary_event_type": "ATTACK",
       "is_attack": true,
-      "incident_anchor": "London stabbing attack 2026-04-30",
+      "incident_anchor": "Golders Green memorial wall arson attack London 2026",
       "update_type": "INITIAL",
-      "incident_id": "inc-5c95f0c6d96e177f",
+      "incident_id": "inc-e20eef9d34444652",
       "translated_to_english": false,
       "ai_canonical_event": "Stabbing attack, London",
       "title_variants": [
@@ -516474,7 +515676,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "A stabbing and subsequent terrorist declaration took place in London, United Kingdom.",
       "ai_geo_fingerprint": "ff6299eaa09b6c0e56acc95329c26d6708c10b3e005e5431a31da9b6db66ed69",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "30ceff747bead229",
@@ -516576,7 +515779,9 @@
     {
       "id": "f7dba96544b6950e",
       "category": "",
-      "categories": [],
+      "categories": [
+        "Attacks"
+      ],
       "title": "Public unrest during London police press conference",
       "summary": "Police faced public heckling while providing an update on the ongoing investigation into the recent Golders Green terror attack.",
       "original_title": "Police heckled while giving Golders Green terror attack update",
@@ -516607,23 +515812,33 @@
       "sources": [
         "Sky News"
       ],
-      "related_articles": [],
-      "article_count": 1,
+      "related_articles": [
+        {
+          "title": "Golders Green terror suspect moments after first attack",
+          "original_title": "Golders Green terror suspect moments after first attack",
+          "original_language": "en",
+          "summary": "Footage emerges showing the Golders Green terror suspect shortly after carrying out the initial attack.",
+          "published": "2026-04-30T09:59:03+00:00",
+          "source": "Sky News",
+          "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPWHNyV2F2RVpMUm4zeTZLbS1faXZ5RUhwLXVxbW9ONVZlcENaYndNNEhaa0VmZXZ5dG5kV0xOZ0hGVUhVSl9fQ3RlNmF0Yll3RXFfbnl2bEFDS3FSMWcwS3dONFRTWVJ2c1gzcExnalFIRFJ4d0dHN0JjVXZfWmxzRGZjVUVIZWZNdGpLLTNra29aTUx0TkE?oc=5"
+        }
+      ],
+      "article_count": 2,
       "first_reported": "2026-04-29T15:18:49+00:00",
-      "last_reported": "2026-04-29T15:18:49+00:00",
+      "last_reported": "2026-04-30T09:59:03+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 65,
+      "ai_relevance_score": 75,
       "ai_relevance_reason": "A follow-up update to an active terrorist investigation.",
       "ai_current_ct_event": true,
       "ai_selected": true,
       "actor_group": "",
       "primary_event_type": "OTHER_CT",
       "is_attack": false,
-      "incident_anchor": "London stabbing attack 2026-04-30",
+      "incident_anchor": "Golders Green memorial wall arson attack London 2026",
       "update_type": "INVESTIGATION_UPDATE",
-      "incident_id": "inc-5c95f0c6d96e177f",
+      "incident_id": "inc-e20eef9d34444652",
       "translated_to_english": false,
       "ai_canonical_event": "Police press conference update, Golders Green attack",
       "title_variants": [
@@ -516648,7 +515863,11 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "A police press conference updating on the Golders Green attack took place in London, UK.",
       "ai_geo_fingerprint": "3473af4bd7513c0399e221de00864ef3f69f703e1b000e9aaa0b02474e505ce3",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ]
     },
     {
       "id": "ca6b5a857570fc3f",
@@ -517151,85 +516370,6 @@
       "geolocation_validation_issue": "ambiguous_or_unresolved_city",
       "geolocation_requested_city": "San Miguel",
       "ai_geo_fingerprint": "d3dc90dee4a24ffd2be5c603041e6dc89e849e80d9827e3113cd57aea03df9bd",
-      "ai_geo_inferred": false
-    },
-    {
-      "id": "1fa36770c332bfed",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Somali pirates attack tanker in Indian Ocean",
-      "summary": "A tanker has been attacked by pirates deep in the Indian Ocean, marking a significant incident.",
-      "original_title": "Somali pirates attack tanker deep in Indian Ocean",
-      "original_summary": "Somali pirates attack tanker deep in Indian Ocean TradeWinds News",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-29T07:00:00+00:00",
-      "source": "TradeWinds News",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPZHRYZUt4LW4zWktVVzkzWlVaaWJCX3RmWTE2VjVLeUVDRFp3cTNXYWNnbm1MUnMxeU5qcnFQdEV5MVIwMjdhbW00VnAtVGVsSjk4MWR5TXNWMXVHcXZBMlZYSkpNREJEMjFuWGk2YUJMUVVTQXR0c0JZMlphQ2pMLUQ3V0psOVhuT0RTalFhdnNBQ29aZjBCcmlwdDhmX0dLWHc?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Indian Ocean",
-      "latitude": -5.0,
-      "longitude": 65.0,
-      "location_precision": "region",
-      "location_confidence": "medium",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "TradeWinds",
-      "targeted_source_kind": "specialist_media",
-      "source_article_fingerprints": [
-        "27472c32753ea40dc29ceb82eaf89077feb674728fedfb517d32bae0c2ddc687"
-      ],
-      "sources": [
-        "TradeWinds News"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-04-29T07:00:00+00:00",
-      "last_reported": "2026-04-29T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete maritime piracy attack.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "PIRACY",
-      "is_attack": false,
-      "incident_anchor": "Pirate attack on tanker Indian Ocean 2026-04-29",
-      "update_type": "INITIAL",
-      "incident_id": "inc-d71cd0489a202cc6",
-      "translated_to_english": false,
-      "ai_canonical_event": "Pirate attack on tanker, Indian Ocean",
-      "title_variants": [
-        "Pirate attack on tanker, Indian Ocean"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_categories": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.8,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Somali pirates attack tanker deep in Indian Ocean"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Somali pirates attacked a tanker in the Indian Ocean.",
-      "ai_geo_fingerprint": "ca7f803a8b0efd549742e458395388cddebe9e595b78b01ee802a6d560b16649",
       "ai_geo_inferred": false
     },
     {
@@ -518308,134 +517448,6 @@
       "ai_geo_inferred": false
     },
     {
-      "id": "33aae41145a2dfc6",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Ship hijacked by pirates off Somalia",
-      "summary": "A ship has been hijacked by pirates off the coast of Somalia, with multiple security sources confirming the trend.",
-      "original_title": "Ship hijacked by pirates off coast of Somalia",
-      "original_summary": "Ship hijacked by pirates off coast of Somalia TradeWinds News",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-04-27T07:00:00+00:00",
-      "source": "TradeWinds News",
-      "source_count": 4,
-      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNYXlfMFpYMS1uVGxCZU04STdqZXFuTmJ2SEhiWjdjTlRETHFZMWtPYWFPcXBDZERydzRMM0xsZTE4U0R1NjJ3cUZYb0ljczREZ201Y0pFaXVvZXhYS2lCT3V4ZzU0TzVwT0RRLWpzUUhsYTJZd1lPVU4yVFk5U2hXUDU0bHJkTk91MGJOa0EydmVEX29HWHVTMDFNVWM5T1Yw?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Coast of Somalia",
-      "latitude": 5.0,
-      "longitude": 48.0,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "TradeWinds",
-      "targeted_source_kind": "specialist_media",
-      "source_article_fingerprints": [
-        "2aa79f34823eac9fcdafe478c04b97ee1a7dc493f5b83efa35ae738c62b3dfc3",
-        "44b08c5b86d181b4fc33eaee4bc03e0eced0c1165762c40ce54cbf792ae53483",
-        "505eb43dca3941f60442f718ecf4a2f55a1568b0c8db7e83ef4f399c31122f6b",
-        "55bf123e266283517e6d624d33840c9f8c5543d2f3bb800564679c3029bd469a",
-        "f4d33df592bbf413d9a74ed5d796c3ac998279066e63cd76758154fb8fcf8eec"
-      ],
-      "sources": [
-        "TradeWinds News",
-        "Seatrade Maritime News",
-        "Marine Link",
-        "EUNAVFOR"
-      ],
-      "related_articles": [
-        {
-          "title": "Tanker approached by pirates off Somalia",
-          "original_title": "Tanker approached by pirates off Somalia",
-          "original_language": "en",
-          "summary": "Tanker approached by pirates off Somalia Seatrade Maritime News",
-          "published": "2026-04-28T07:00:00+00:00",
-          "source": "Seatrade Maritime News",
-          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNUmFaMjN6MlI3b1NHT2g1ZWIxREgySEJ3bEdES1V0NXVPV0VDTGdiTldLclhvVUgtM3d3OUpUVEJ2dlIwbDZTdERoRkY0N2k4UzFDWUt5cEJDazRDY21XWnlCdWFWcGo3QzlOWTZXS3VDUFBwQm00eEttOUo2cFlVdEtfYnJhZ0l6?oc=5"
-        },
-        {
-          "title": "Suspected pirates take control of ship off Somalia",
-          "original_title": "Suspected Pirates Take Control Of Ship Off Somalia",
-          "original_language": "en",
-          "summary": "Reports confirm that suspected pirates have successfully seized control of a vessel off the coast of Somalia.",
-          "published": "2026-04-27T07:00:00+00:00",
-          "source": "Marine Link",
-          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE9IbVNLYUJJTjN1dU1zU0syV3lMQ1VYTmtocEx6Rkh4cjNFeGIxRlZaajh3RDAwYzJhcmhwT2FneDdFNWgzUzdJb3pQNUlrMFBaRmEwcFFYTGhKUk8yNU1xUGNDSmMxOFY4UDVuTDhXcDZwazBVVjJuTXdwMlU1dw?oc=5"
-        },
-        {
-          "title": "EU Navfor monitors pirated vessels off Somalia",
-          "original_title": "EU Navfor monitoring pirated ships off Somalia",
-          "original_language": "en",
-          "summary": "EU Navfor is currently monitoring the status of cargo vessels held by pirates off the coast of Somalia.",
-          "published": "2026-04-28T07:00:00+00:00",
-          "source": "Seatrade Maritime News",
-          "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQLVNaUzVXRU1VLVljSUdDV2FrRW9WTkN3bmZZVVZyTURCZHNYQ3NhM2loemJYT3VwZFRvM0FSWVZxZjJMVTBMaHVqWllDTFA2bGVXdkl1NUNTc1VkOGdVdFlGQmtUREk2Z2dzUE9BcDBxZlFIQl9XT2ZjNGRhb1BKT1U1Vk96YW91TDhxYzFNcnQ?oc=5"
-        },
-        {
-          "title": "EUNAVFOR reports piracy off Somalia coast",
-          "original_title": "PIRACY INCIDENTS OFF THE NORTHERN COAST OF SOMALIA",
-          "original_language": "en",
-          "summary": "The EU naval force has issued a report on recent piracy incidents near the northern coast of Somalia.",
-          "published": "2026-04-28T07:00:00+00:00",
-          "source": "EUNAVFOR",
-          "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9Cd0VYVHhFTV83dTVzZ0tsUEhTOTA4cnFMV3NTcFZqSFdQd3U1TEhYdU5IRUx5T1Jwb2tJd3RtSERnQ0NrYXpmbFdKUGo4R1JCSWw2eGlmckN4T3FHOE90R0Z3d0p6RFo0TTVWWF95dU1KQQ?oc=5"
-        }
-      ],
-      "article_count": 5,
-      "first_reported": "2026-04-27T07:00:00+00:00",
-      "last_reported": "2026-04-28T07:00:00+00:00",
-      "cbrn_subgroups": [],
-      "dedup_confidence": 0.99,
-      "dedup_methods": [
-        "paraphrase_entity_context",
-        "same_normalized_title"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete hijacking incident.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "PIRACY",
-      "is_attack": false,
-      "incident_anchor": "Hijacking of vessel Somalia 2026-04-27",
-      "update_type": "INITIAL",
-      "incident_id": "inc-3ffbda313fdc1f84",
-      "translated_to_english": false,
-      "ai_canonical_event": "Hijacking of vessel, Somalia",
-      "title_variants": [
-        "Hijacking of vessel, Somalia"
-      ],
-      "actor_scope": "NON_STATE",
-      "threat_categories": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "off coast of Somalia"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Ship hijacking occurred off the coast of Somalia.",
-      "ai_geo_fingerprint": "65c4b5adc40948903c608b42a4a55ce64e496b9611f5382b52f2f53d4eef6aa8",
-      "ai_geo_inferred": false
-    },
-    {
       "id": "ba8e29205882804b",
       "category": "Counter Terrorism Action",
       "categories": [
@@ -518539,7 +517551,7 @@
       "collection_locale": null,
       "published": "2026-04-26T07:00:00+00:00",
       "source": "The Guardian",
-      "source_count": 7,
+      "source_count": 10,
       "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOendyVkEwTk9USkxMMnNPeDVLRmVzN1BzOUZPbndrc042d0tIWTRzLV96a1k1bzRSRVVKMFJOS3E5Qm9hNlFWWFhNRHNDUnR1czE4NjVnNHZzQWU4ZEl4WnFwc2FLR28wWkxNeWhZYmJfUTdNQ3U3c3UtRThucmVsOTZycENiaXU0c1JqOUlMMzM2djhRZUFmOGtVY0VvMDBfalZNeVJ6Q285TndsSVgw?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
@@ -518557,7 +517569,10 @@
         "dunyanews.tv",
         "Hum News English",
         "Pakistan Today",
-        "Aaj English TV"
+        "Aaj English TV",
+        "TradeWinds News",
+        "Marine Link",
+        "EUNAVFOR"
       ],
       "related_articles": [
         {
@@ -518613,15 +517628,69 @@
           "published": "2026-04-30T07:00:00+00:00",
           "source": "Aaj English TV",
           "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNczlwejNiMFRFSC1rakowS1huY2VOeG1najZ4MEJRM1ZmUUFMdlRaRDB5MkVwSC0xNDhfSmRiaU83a19NLXdIbmliQ1dLWGNtSm1zUS1UbVUyQWtwTDdWc1E4UXJiaHkzdThHOHlzaHhpYThhVVFFYjJoTlNZaDNNajJXZy1Sd0Q1c0dWTGJaTmFLSmw2cHJVNDY0LVFsRUN0R2pPdHF2M3JHNlpnS3FtUUMwQUxTMk0?oc=5"
+        },
+        {
+          "title": "Ship hijacked by pirates off Somalia",
+          "original_title": "Ship hijacked by pirates off coast of Somalia",
+          "original_language": "en",
+          "summary": "A ship has been hijacked by pirates off the coast of Somalia, with multiple security sources confirming the trend.",
+          "published": "2026-04-27T07:00:00+00:00",
+          "source": "TradeWinds News",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNYXlfMFpYMS1uVGxCZU04STdqZXFuTmJ2SEhiWjdjTlRETHFZMWtPYWFPcXBDZERydzRMM0xsZTE4U0R1NjJ3cUZYb0ljczREZ201Y0pFaXVvZXhYS2lCT3V4ZzU0TzVwT0RRLWpzUUhsYTJZd1lPVU4yVFk5U2hXUDU0bHJkTk91MGJOa0EydmVEX29HWHVTMDFNVWM5T1Yw?oc=5"
+        },
+        {
+          "title": "Tanker approached by pirates off Somalia",
+          "original_title": "Tanker approached by pirates off Somalia",
+          "original_language": "en",
+          "summary": "Tanker approached by pirates off Somalia Seatrade Maritime News",
+          "published": "2026-04-28T07:00:00+00:00",
+          "source": "Seatrade Maritime News",
+          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNUmFaMjN6MlI3b1NHT2g1ZWIxREgySEJ3bEdES1V0NXVPV0VDTGdiTldLclhvVUgtM3d3OUpUVEJ2dlIwbDZTdERoRkY0N2k4UzFDWUt5cEJDazRDY21XWnlCdWFWcGo3QzlOWTZXS3VDUFBwQm00eEttOUo2cFlVdEtfYnJhZ0l6?oc=5"
+        },
+        {
+          "title": "Suspected pirates take control of ship off Somalia",
+          "original_title": "Suspected Pirates Take Control Of Ship Off Somalia",
+          "original_language": "en",
+          "summary": "Reports confirm that suspected pirates have successfully seized control of a vessel off the coast of Somalia.",
+          "published": "2026-04-27T07:00:00+00:00",
+          "source": "Marine Link",
+          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE9IbVNLYUJJTjN1dU1zU0syV3lMQ1VYTmtocEx6Rkh4cjNFeGIxRlZaajh3RDAwYzJhcmhwT2FneDdFNWgzUzdJb3pQNUlrMFBaRmEwcFFYTGhKUk8yNU1xUGNDSmMxOFY4UDVuTDhXcDZwazBVVjJuTXdwMlU1dw?oc=5"
+        },
+        {
+          "title": "EU Navfor monitors pirated vessels off Somalia",
+          "original_title": "EU Navfor monitoring pirated ships off Somalia",
+          "original_language": "en",
+          "summary": "EU Navfor is currently monitoring the status of cargo vessels held by pirates off the coast of Somalia.",
+          "published": "2026-04-28T07:00:00+00:00",
+          "source": "Seatrade Maritime News",
+          "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQLVNaUzVXRU1VLVljSUdDV2FrRW9WTkN3bmZZVVZyTURCZHNYQ3NhM2loemJYT3VwZFRvM0FSWVZxZjJMVTBMaHVqWllDTFA2bGVXdkl1NUNTc1VkOGdVdFlGQmtUREk2Z2dzUE9BcDBxZlFIQl9XT2ZjNGRhb1BKT1U1Vk96YW91TDhxYzFNcnQ?oc=5"
+        },
+        {
+          "title": "EUNAVFOR reports piracy off Somalia coast",
+          "original_title": "PIRACY INCIDENTS OFF THE NORTHERN COAST OF SOMALIA",
+          "original_language": "en",
+          "summary": "The EU naval force has issued a report on recent piracy incidents near the northern coast of Somalia.",
+          "published": "2026-04-28T07:00:00+00:00",
+          "source": "EUNAVFOR",
+          "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9Cd0VYVHhFTV83dTVzZ0tsUEhTOTA4cnFMV3NTcFZqSFdQd3U1TEhYdU5IRUx5T1Jwb2tJd3RtSERnQ0NrYXpmbFdKUGo4R1JCSWw2eGlmckN4T3FHOE90R0Z3d0p6RFo0TTVWWF95dU1KQQ?oc=5"
+        },
+        {
+          "title": "Somali pirates attack tanker in Indian Ocean",
+          "original_title": "Somali pirates attack tanker deep in Indian Ocean",
+          "original_language": "en",
+          "summary": "A tanker has been attacked by pirates deep in the Indian Ocean, marking a significant incident.",
+          "published": "2026-04-29T07:00:00+00:00",
+          "source": "TradeWinds News",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPZHRYZUt4LW4zWktVVzkzWlVaaWJCX3RmWTE2VjVLeUVDRFp3cTNXYWNnbm1MUnMxeU5qcnFQdEV5MVIwMjdhbW00VnAtVGVsSjk4MWR5TXNWMXVHcXZBMlZYSkpNREJEMjFuWGk2YUJMUVVTQXR0c0JZMlphQ2pMLUQ3V0psOVhuT0RTalFhdnNBQ29aZjBCcmlwdDhmX0dLWHc?oc=5"
         }
       ],
-      "article_count": 7,
+      "article_count": 13,
       "first_reported": "2026-04-26T07:00:00+00:00",
-      "last_reported": "2026-04-28T07:00:00+00:00",
+      "last_reported": "2026-04-29T07:00:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
+      "ai_relevance_score": 85,
       "ai_relevance_reason": "Reporting on a cluster of concrete maritime piracy vessel hijackings.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -518650,7 +517719,13 @@
         "same_incident"
       ],
       "source_article_fingerprints": [
-        "7d32953c0c45e4ed42bcd439daa3d6eaa26aa0c786ed17a795f46d9c07bc69eb"
+        "27472c32753ea40dc29ceb82eaf89077feb674728fedfb517d32bae0c2ddc687",
+        "2aa79f34823eac9fcdafe478c04b97ee1a7dc493f5b83efa35ae738c62b3dfc3",
+        "44b08c5b86d181b4fc33eaee4bc03e0eced0c1165762c40ce54cbf792ae53483",
+        "505eb43dca3941f60442f718ecf4a2f55a1568b0c8db7e83ef4f399c31122f6b",
+        "55bf123e266283517e6d624d33840c9f8c5543d2f3bb800564679c3029bd469a",
+        "7d32953c0c45e4ed42bcd439daa3d6eaa26aa0c786ed17a795f46d9c07bc69eb",
+        "f4d33df592bbf413d9a74ed5d796c3ac998279066e63cd76758154fb8fcf8eec"
       ],
       "actor_group": "",
       "incident_id": "inc-47e78ee1c60ed658",
