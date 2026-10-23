@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-22T14:46:00.551091+00:00",
+  "removed_at": "2026-10-23T14:46:08.526585+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -907,6 +907,91 @@
       "country": "Mali",
       "ai_relevance_score": 85,
       "ai_relevance_reason": "Reports active combat operations by state forces against militants."
+    },
+    {
+      "id": "ba8e29205882804b",
+      "incident_id": "inc-f4ca47540d47d4a1",
+      "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxPclQtcS1MN3VQNXFEZl9vNDNLZG9yUGxuV0NTUXBwZHFvdDQ1TW9ESlhYdWxRWXZaaFE1eFhldWJRVXZwNVUwVlJqb2k3S2JRT1VlSEJzaWxIWFFPSHNzU1BPYWZEQ1VuRDlJb2owazMyVF90SnE0VmVZajIxUWNTLXlaS2trQzJfUC10dHpKS29NY0VNOGRXV1dGeWo4dXhMblFzZkNlYUlHTWZVMDdod3NwbEl1QnBuM01GY2FCMlR0ckE2M1pfVzJ3SXpwYVZJZjVrUzVLdExpX3BZMVVncw?oc=5",
+      "title": "Mali: The unified anti-jihadist force carried out strikes following weekend attacks, according to Niger",
+      "summary": "According to Niger, a unified anti-jihadist force launched airstrikes in Mali in response to weekend terrorist attacks.",
+      "original_title": "Mali : la force unifiée antidjihadiste a mené des frappes après les attaques du week-end, selon le Niger",
+      "original_language": "fr",
+      "source": "Le Figaro",
+      "published": "2026-04-26T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Weapons",
+        "Attacks"
+      ],
+      "actor_group": "JNIM",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Mali",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports a concrete offensive counter-terrorism air operation conducted by regional security forces against jihadists in Mali."
+    },
+    {
+      "id": "ec2581e71164e351",
+      "incident_id": "inc-47e78ee1c60ed658",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOendyVkEwTk9USkxMMnNPeDVLRmVzN1BzOUZPbndrc042d0tIWTRzLV96a1k1bzRSRVVKMFJOS3E5Qm9hNlFWWFhNRHNDUnR1czE4NjVnNHZzQWU4ZEl4WnFwc2FLR28wWkxNeWhZYmJfUTdNQ3U3c3UtRThucmVsOTZycENiaXU0c1JqOUlMMzM2djhRZUFmOGtVY0VvMDBfalZNeVJ6Q285TndsSVgw?oc=5",
+      "title": "Fears of resurgence in Somali piracy after three vessels hijacked in a week",
+      "summary": "International monitors express concern over a major resurgence in Somali piracy after three commercial vessels were hijacked within a single week.",
+      "original_title": "Fears of resurgence in Somali piracy after three vessels hijacked in a week",
+      "original_language": "en",
+      "source": "The Guardian",
+      "published": "2026-04-26T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "Somalia",
+      "region": "Indian Ocean",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reporting on a cluster of concrete maritime piracy vessel hijackings."
+    },
+    {
+      "id": "bb48f01bc56accbb",
+      "incident_id": "inc-99ce37c5b61b8cb0",
+      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNQW4wSEtSUGtZOFo0bElHNjRUSXBXUVpVeTRfVjR6d3lYUHQ3bnRFVHZ1WXdqekV4MzJnTzJJZW9kUEx4Y3NlQnRwY2JDcTNZMEI2U29YMDY5aTJXd2NGT1RXc1FyekZ3ZVlLRXZYSmpGSEhBYlpUMHlWd0lXck5ZVHpsTUhxV2o5b2N2dmd30gGTAUFVX3lxTE5SRzV3cm5sMG5EZ2pwWFVsRVktenREcUNEcEItNDFmbFlxWWkwdVVHOUhDZlBkOHFUR3pGNlB5MnJFOVh5N3kwa1hjcDFEMkxoQXU1SmFPRDNNaW11cFJjWkZ0bzJJem8xNHFqR2pJSEI0VEdseWVScXJvdlMtOFZ4ajBOUXNtbllRN2tSOGpFTElwcw?oc=5",
+      "title": "Bombing terrorist attack in Colombia kills 14 people",
+      "summary": "A bomb attack attributed to terrorist groups in Colombia has resulted in the deaths of 14 people.",
+      "original_title": "Kolombiya'da bombalı terör saldırısı. 14 kişi öldü",
+      "original_language": "tr",
+      "source": "NTV Haber",
+      "published": "2026-04-26T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "ELN",
+      "primary_event_type": "ATTACK",
+      "country": "Colombia",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports a major fatal terrorist bombing attack in Colombia resulting in 14 fatalities."
+    },
+    {
+      "id": "e59453e64910988e",
+      "incident_id": "inc-017b6cc5095e755e",
+      "url": "https://news.google.com/rss/articles/CBMiwwJBVV95cUxPUGk4dlBmM0laS2RLTDlETGp2VHhoQWxOTXhMSmVwTUZxRjJxaWtFX3FJR0pmNlRPakw2aEJHeVlGcHNyVFlyYTM4LXM1Mk16a1VYS2ZQdHRSV24zejNqOEN2Y1Q3MUM5UFhLX3BkeTNZVHk1dFA2by1yVnZDTWFtb1gxU29ZZlU1TktGSG5mRzU0TUZ6SEprVGxfcFBJb2c4NTQ4ckV3V2hjenJYTVdDeWdmRjVyVE9mNEdGU1Nia3l1NnpaSnBUVHV5T3JVYjZHTzJaejlabnhxdGMzZFpvWk9EZkhESk16NkZPTlVOX1A4NjRzMDJKd3NDd3dpWWZzTWV3SUtvQ1psUG8yQWdoYVh0N0dBVlJkaUZDX3ROclg3clJDN0xEbVhtcG9ZaXNSX3FHVUZXN2V5Qk1XOThBc24zbw?oc=5",
+      "title": "Mali Defense Minister killed in suicide car bomb attack",
+      "summary": "The Defense Minister of Mali was killed in a suicide car bomb attack.",
+      "original_title": "马里国防部长在自杀式汽车炸弹袭击中丧生",
+      "original_language": "zh",
+      "source": "RFI",
+      "published": "2026-04-26T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Mali",
+      "ai_relevance_score": 90,
+      "ai_relevance_reason": "Reports a concrete, dated assassination of a high-ranking official via car bomb."
     }
   ]
 }
