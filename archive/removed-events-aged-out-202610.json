@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-23T14:46:08.526585+00:00",
+  "removed_at": "2026-10-24T13:46:08.798945+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -992,6 +992,109 @@
       "country": "Mali",
       "ai_relevance_score": 90,
       "ai_relevance_reason": "Reports a concrete, dated assassination of a high-ranking official via car bomb."
+    },
+    {
+      "id": "484a257280e1174d",
+      "incident_id": "inc-16b8445fd2793418",
+      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPMWtabTg1azhFX19BdnppMVZJQlhMMlNMWlcwc01BV0MydUN4SjF0QUdtVzVrYjJCU0tOclY4RDdKY1VGZDNXbFVrUzdTcHZfWDA1Wmd4RmtKR0ExcG5ZY0dGVXFzVUxIZEZ2SnVFSklQa3F4QUdGVWVYalhucnpyM09kWFdUWUZFMWRyQ2VDdkZnbFhQb3E0MjZQdzZRakhObm5MTllvZ253bjdWVXZ0cGhMR2tBaFNuUlBrUzdHMENVR3pUNnRnQzNXczJ1dw?oc=5",
+      "title": "ISIS attack on Israeli consulate exposes Hizb ut-Tahrir’s role in radicalization pipeline in Turkey",
+      "summary": "An ISIS attack targeting an Israeli consulate in Turkey has brought to light the radicalization and recruitment role played by Hizb ut-Tahrir within the country.",
+      "original_title": "ISIS attack on Israeli consulate exposes Hizb ut-Tahrir’s role in radicalization pipeline in Turkey",
+      "original_language": "en",
+      "source": "Nordic Monitor",
+      "published": "2026-04-27T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Online / Cyber / AI"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "OTHER_CT",
+      "country": "Turkey",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Examines radicalization networks and recruitment pipelines connected to militant attacks in Turkey."
+    },
+    {
+      "id": "a0cc23654498f835",
+      "incident_id": "inc-6a63a17e7176d8b8",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQTUJGSjhVME1ESWhsWlBqWkQ2UUNNNkZYbllaOXBwal93alFjQWtFSDJtSm44dmVYaHFIYlkyVnYwbmlUT3J4QUJkYkZucUVoYnBHSGlkU3ZhWk4wVjhtS0JJRVFNNW4tZXQwNXlTSFJabTh5ZVRCOWZ5Z3ZYbnNMR0JrZVBRSUxfRGVyM1FSVzZrVWhxLXc?oc=5",
+      "title": "U.S.-Backed Air Strikes Kill Dozens of Al-Shabaab Fighters in Southern Somalia",
+      "summary": "U.S.-backed airstrikes in southern Somalia resulted in the deaths of dozens of Al-Shabaab fighters.",
+      "original_title": "U.S.-Backed Air Strikes Kill Dozens of Al-Shabaab Fighters in Southern Somalia",
+      "original_language": "en",
+      "source": "Goobjoog English",
+      "published": "2026-04-27T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "Al-Shabaab",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Somalia",
+      "region": "Southern Somalia",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports concrete operational airstrikes against Al-Shabaab."
+    },
+    {
+      "id": "fffd57010c11a41c",
+      "incident_id": "inc-9ffb03b98c4aa295",
+      "url": "https://news.google.com/rss/articles/CBMimwNBVV95cUxObXBpR1dTT09TRzVOME9tTlI3bG5WRVpqZTdhUWFyZmpJWmhxa1hfekcxNEVJcHdiRTBIYUx5dlhKQ19aVkg2Q1pfUkJSclRRRTJReGVNUVhRYy13WFhRRDFRc0k0X3JDbGdxcDRGbHJlQ0NpazBBcFpDS2UxVkJEeUFoRGJvRkxWNWVoX1hfdUN0bko5T3ROSGNySWM2XzNrOHk3QmloME9aYXZvSWYyWk5WT1ZwMVZHZ2lxdmVCNlFwVklMdzM2Y3R3QVQ1REMwSXJNMk9CUWtLQ3dNVVUyaE1SbUIzWU9NUzltUk1sVHRWaGpMcW5IUE90Q3Y2d0p4RURhYlg1ckJFYkFLUHB5Wm5oZ2F5OFFwYmpCVDRTWVdGd0RXekctVGRSdEtPc21uc0ZrZ2NnaExaWGNKNTJiVS1FQnpCdTJqb2dNX1c0Zm1lclV4eHViek9tZFVlc09lTm01Skc5V3V4VGQzQjRZeUxyd0h4ekRwM1V4UF80MGpyblE0S01hNHkwMFFnV2R0eFdPSTdDR3d0TDTSAaADQVVfeXFMT2p1a1lOd1FmTG53M3RHM3hzbzZxY05JbTRibG90M2RiTFVHVXppT2ZHRXMzSTRpWGc5dWxDQXBtTjdjdVl1Zkh1M3RneGttdENYVkNMd29DWXlhazd3alR4ZV92emtvbUM5WklBYnJfbTVmLU1vSndTMzAyaHdGR0Z1LUd6bTlrWW1DREk2VE9MSnhDWm5OcU10QzBDVmFGY1dfbFlWWk5sMlhBSU1QUGZMbHBHWWhyZVplMFR1b2dMNXNuSXNBR0hZR1E3eWVVNERYYmNOZU1JQTQ5WnYxU3NZUW84MTJvbW01bDdMeGFCQml0UlY5ZmdNUUQyMnE4M3ktbnZsMGk1LU1NT2lnNDRxYk5QSUV4VVNJT0JxMW94bWdLeFFQVVJDd3JOQW1fRENaRUN0MlRNWjdBY01LcW1OSGgtaV8yOEFTZ05XRl9XRjRUb193UFBHb21nNndyT2lvMDViekJaVzZUVzhYR0dPZ2V2WjJta2lMU2phWE04czBKcjBqaF92MHlyTm9fNk9sSTRkZW5kZ1kyYUtHaE0?oc=5",
+      "title": "Terrorist cell arrested in Homs, Syria",
+      "summary": "Security forces in Homs, Syria, have arrested a cell suspected of planning a sabotage attack.",
+      "original_title": "حمص: ضبط خلية \"إرهابية\" كانت بصدد تنفيذ عمل تخريبي",
+      "original_language": "ar",
+      "source": "المدن",
+      "published": "2026-04-27T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Syria",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports a counter-terrorism operation resulting in the arrest of a suspect cell."
+    },
+    {
+      "id": "443491e8032d8d1f",
+      "incident_id": "inc-a374a5c0eb37f405",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQX1J6SElkM0NYekxsNFFwQU1nMVNDa29xNWpOY1FiTE9OU3ZNaDVLUGRnWUZ6Y1hJYW1jMU1QR3ZpSkJ2ZFRIUFozSDFoQmFjZ2RnOVpfSVkyQjdGeTdrM3p2WWtZcEtTbHdjeEk1M19MREtwcm1HSXlWZDAyellzbDhyNHFnNVQ4NnNuRlpmSHcxaU9SSU9yamNtN0MweVVwWDcxWDFMTVAtU3p0UWhoYUhQTXB3WDlvbHFF?oc=5",
+      "title": "Humanitarian crisis in DRC following ADF attacks",
+      "summary": "A worsening humanitarian crisis in Bafwasende, DRC, as tens of thousands flee following recent violent attacks attributed to the ADF.",
+      "original_title": "RDC : crise humanitaire persistante à Bafwasende, plus de 68 000 nouveaux déplacés s’ajoutent aux 4 380 victimes des exactions des ADF récemment recensées",
+      "original_language": "fr",
+      "source": "Actualite.cd",
+      "published": "2026-04-27T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "ADF",
+      "primary_event_type": "ATTACK",
+      "country": "Democratic Republic of the Congo",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete reporting on the aftermath of militant attacks."
+    },
+    {
+      "id": "ffd78e0342b47543",
+      "incident_id": "inc-3795028d9a12c259",
+      "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPNTVvb2V2VDB2bE9ZZlNWYUU3X184M2tVR2RreXhEUml3Z0lRUWpJUFNuMTA0VEVkWE1qQ3dNV2dGZXZ1UXhtb040TGtPeEYzM1VROVl3YWFrVVpxUFI2bVIwUUxSdm9ZSWJ5Z2ctMVphT0ZrM3RzWjBzalRMeW1nRXRvYWdsdw?oc=5",
+      "title": "Cargo vessel hijacked off Somalia",
+      "summary": "A cargo vessel has been hijacked off the coast of Somalia as regional piracy concerns intensify.",
+      "original_title": "Cargo Vessel Hijacked Off Somalia as Piracy Fears Rise",
+      "original_language": "en",
+      "source": "Goobjoog English",
+      "published": "2026-04-27T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "Somalia",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Concrete vessel hijacking event."
     }
   ]
 }
