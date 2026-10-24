@@ -3,8 +3,412 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-23T20:00:04.530652+00:00",
+ "updated_at": "2026-10-24T12:49:54.474761+00:00",
  "articles": [
+  {
+   "id": "radnuc-background-216b2680b18ac899",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE5FcVZHU3lzWXFEamhGVy1XQ242OG9LOWZOYmxHX2xBemZwSlprc0wxQmlUSjVzMmpET2xPbmJ0UHhvWks2b2hMUF9n?oc=5",
+   "title": "The IAEA projects a tripling of nuclear energy use by 2060",
+   "summary": "The IAEA has released a projection forecasting that global nuclear energy capacity will triple by 2060. The announcement highlights international energy trends regarding civilian nuclear power infrastructure.",
+   "original_title": "L'AIEA prévoit un triplement de l'utilisation de l'énergie nucléaire d'ici 2060",
+   "original_language": "fr",
+   "source": "وكالة الأنباء السعودية",
+   "published": "2026-10-24T09:49:31+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "iaea_guidance"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a high-level update from the IAEA regarding global industry growth projections."
+  },
+  {
+   "id": "radnuc-background-0f1a39d4b21d823d",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxPbHBJU0xGbjJzcFplck0tb3JXVGVsRG5JUUtEZ1RPTXVma3E3N1ZHeVg1MU1Kc2lVYXZGS084RE1LeFE4NlVnM1pQNVp4ZXN3ZDhCRUoycENrNi1Wa1pmUjRMY2NRVHRaY215S3lINTJ2cmdEcEhlcUI4bVVUVm5jc0lJOUhkM2tZZkJpWVZBVGVDQVloOEUwdEdlMnhLRlRNdWFNaC1FWDlsdzNvbXBhcXN4anNIMmVCY0t1emhfTWU2a1YyR3lvdWpBX1BNalJqQ2w1ZjRZUklqOGZhVUY1c0NhWDBGN1liUUMxQUQ5RUs4bFJXaU1rNQ?oc=5",
+   "title": "35 countries are assembling a 23,000-tonne machine in Provence: what delayed its first ignition by 18 years was neither physics nor money",
+   "summary": "The report discusses the assembly and project delays of a large-scale fusion machine located in Provence, France. It serves as a background update on scientific developments within the civilian nuclear fusion sector.",
+   "original_title": "35 pays assemblent en Provence une machine de 23 000 tonnes : ce qui a repoussé de 18 ans son premier allumage n'était ni la physique ni l'argent",
+   "original_language": "fr",
+   "source": "Sciencepost",
+   "published": "2026-10-24T07:57:00+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Covers a technological development in the civilian fusion industry."
+  },
+  {
+   "id": "radnuc-background-b4fb248dc60e929f",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQcEplY0JyamZWSlpGNWxJUTJId0NZOG9NZnN3NVFDY2J4UUFMRTM0alZTaWczZzNNdHhTUTJtZGV2Qm9mSGdMcVdrX0hHeW5CdUNUd0hEcERNNlFyc1E3TDFpN1dKQmtBX1IxOFRoakItZ01VcWtWaGx1VkFFTGZxOU5iN2hNNFBtMTdJNVY3Sm_SAV9BVV95cUxPSGs3Wl9oaUNGUGlkQjVfWk1hRkNrSmlxYkJjME9rYWpJd1J4VUxfM3cxRmJUNTIxZFVLRmN2N3p4dDM1aHdIUnZUTU42b3pkLXBRVWN4bXloQnB1cVE0Yw?oc=5",
+   "title": "IAEA: Global nuclear energy use expected to increase more than threefold by 2060",
+   "summary": "The IAEA released projections indicating that global nuclear energy capacity is expected to more than triple by 2060. This assessment highlights the organization's long-term outlook on the growth of the civilian nuclear sector.",
+   "original_title": "IAEA：2060年全球核能使用規模可望增至3倍以上",
+   "original_language": "zh-Hant",
+   "source": "經濟日報",
+   "published": "2026-10-24T07:36:32+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "iaea_guidance"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Official IAEA projection regarding future nuclear energy industry development."
+  },
+  {
+   "id": "radnuc-background-10aec2fa93949b25",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPOFY1cDM1ajc5YmllMkFYcnR1aXNQOWlsM2pzSGdqbUJtVllKRE9zOC1BLV9NUFo3Q1lLaWxTdl9vRmZZcnJ2c0FtWmdxNk9KOURTMWwyM3FaQ0UyS0Foa2lqNy1CZmwtaHVjMWNZZDdhTWJ3UnZXNm0zVURFZGtNcDVoUThNbEtaUGNlSGpUcjY3T1JBSWlRTlVhby1ieXZTV1FLX01Da0Q0bmJIM0h2aHJmazhWZ3k2b0lUMUFfYVdKN01jdHJFb3hjRnJXb1JjUHc?oc=5",
+   "title": "Finland: First nuclear waste repository in the world receives operating license",
+   "summary": "Finland has officially granted an operating license for the world's first permanent nuclear waste repository. This milestone marks the conclusion of the regulatory and licensing process for the long-term storage facility.",
+   "original_title": "Finnland: Erstes Atommüllendlager weltweit erhält Betriebsgenehmigung",
+   "original_language": "de",
+   "source": "Spiegel",
+   "published": "2026-10-24T07:06:00+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "regulation_and_licensing",
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Matches topic criteria for regulation and licensing of civilian nuclear facility operations."
+  },
+  {
+   "id": "radnuc-background-4bc40748fcaee8b9",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOTm5oeGVqWnF0VFdQenpuTTdEa2E3OWpva1AzZExHcUNpd3dtanFjZjBZVUw5MGdRaWM2aC1MTTF4SGo5aHBPblRmTDlhMnc3ZkM4Rko3c0JVTmJFdjNUNGFhb1k2TDhCaVk4ZG1OZFV5SnhWT1gtUDV3SmprQ1lWZGRnU2g4WUxnT3VCSmJpRjVVRXg3V3BPM1kxRQ?oc=5",
+   "title": "ITER vacuum vessel exempted from fission-based regulation",
+   "summary": "The ITER fusion project has received an exemption from regulatory frameworks typically applied to fission-based nuclear facilities. This decision clarifies the oversight requirements for the project's vacuum vessel component.",
+   "original_title": "ITER vacuum vessel exempted from fission-based regulation",
+   "original_language": "en",
+   "source": "American Nuclear Society",
+   "published": "2026-10-24T07:04:17+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Regulatory update for a nuclear research facility."
+  },
+  {
+   "id": "radnuc-background-3ba5e491d3191b00",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQQ1NhSlVqTV9nMDU2Vktzbmo5eGhJSEh5LVJSU2xzeEh4YjNVeVdsTG9BYmU2SjYzYlViZURJWWJQaGhKb21zQkF2X3dDM2ZlVlR6eWlHblZlRFN6X21XSFRDSFdGYzZuNlpLTVJKWEJEWEJraExGZk02LVVxNHkwTWJ4b0lUclpYdE82Tk9KUXVOZkNwX2lYTHB3TE5aWjcwWXhsekoyMEE1MmZXcEt0cl9Qeks0RVpoMUxIRF94YnlxZzA?oc=5",
+   "title": "US invests $389 million in power semiconductors, targeting AI data centers and nuclear fusion applications",
+   "summary": "The U.S. government is investing $389 million to support power semiconductor research, specifically targeting advancements in nuclear fusion and AI-driven energy systems. This development highlights ongoing technological support for emerging fusion power research.",
+   "original_title": "美國砸 3.89 億美元扶植功率半導體，鎖定 AI 資料中心與核融合應用",
+   "original_language": "zh-Hant",
+   "source": "TechNews 科技新報",
+   "published": "2026-10-24T06:21:31+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Direct technological development link to nuclear fusion research."
+  },
+  {
+   "id": "radnuc-background-3553bc2bc03b07a7",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOQXVURkI2b01vdXhyNGpFYzdpQ3lvakRBVDhBbVN0UzZuU3dwY1huX3ZMVGMyYjlqeDE5Q0tIREYwU29UVU5yRm16ZkdwOW1vY0tud0RSREpsY2s2RGxWalJlRFA2azdsa3pmaklBNkNldVlEX3UtcTY4TXRST0RqT05waVhjTWtRazF3ZVl3eURocjEwZkE3enA4TlpCeWNpajlLVnRvVmJ2N3FvMlRFTk1QbDl4T2JISGNNYVdkalhsSHo4cnc?oc=5",
+   "title": "Safety committee reviews embrittlement data from Diablo Canyon",
+   "summary": "A safety committee is reviewing technical data regarding reactor vessel embrittlement at the Diablo Canyon nuclear plant. This assessment is part of ongoing regulatory and safety oversight for the facility.",
+   "original_title": "Safety committee reviews embrittlement data from Diablo Canyon",
+   "original_language": "en",
+   "source": "KCBX",
+   "published": "2026-10-23T23:03:00+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Accepted: Regulatory/safety oversight process for a civilian facility."
+  },
+  {
+   "id": "radnuc-background-16bc4203c1e71d39",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMivwJBVV95cUxOdGNVMGdYWkNxdVEwTk9XUlZ4RFRVU1JxMGcxaFhMWmlwSmQ2SncwTk14UTZLNFplMXZiTGQwajZTaXhGYXRZSndMWjhvNThCcmk5SDJOR0VZclZIYi1vMDhqY29GTTVJNjA3NUo3WEdaaU9YeFNlaUJlNDBNSW5PdnN5VVhSaEZ4WVoxZ2VpSzFaSnloU1RyT21fQk1Lb1lyX1dESXg5ZWt1eklIT1NwX09MZWNoSTZ1LWMwR2I4VVRNUWstRS05MWJSdzdjcElNeFRMS3JtOEItNV9sRWZCVkdybWJQSXRBWjc0d3NBc0dNcUNNamZrQnNqRnJ1NlJRTXdzbXM4c1Z1dUZJQ3BLLXJCdFgyYmJyNmVJajdYYVRNODNUeE16R2MwbDkwNkNyRzFPQmwtR3hLV2hORmZZ?oc=5",
+   "title": "East Feliciana residents want information of possible nuclear waste recycling facility in parish",
+   "summary": "Local residents in East Feliciana, Louisiana, are seeking further information regarding a potential nuclear waste recycling facility proposed for the area. The inquiry reflects local community interest in the siting and development of nuclear infrastructure.",
+   "original_title": "East Feliciana residents want information of possible nuclear waste recycling facility in parish",
+   "original_language": "en",
+   "source": "The Advocate",
+   "published": "2026-10-23T22:45:00+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "civilian_facility_protests"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report documents civilian opposition/interest in the siting of a nuclear facility, fitting the civilian_facility_protests topic."
+  },
+  {
+   "id": "radnuc-background-efc0a1a8010366bb",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNVEptdmlzYnJJcGhRejZweWhwanVleHh2SXExNDJlbUV4VmJDc3I2bm42VHlEbWJkOE5WWVpXbXY1bVBhM2tsNVpxdHI1SHBxTC04TzYzTzhfZnV5aVJLUVRxLXVQRU1remdWWEplbHZxUWd0ODN4QWZyOEdTNUFhbkozS0pNVHVQbXllYjRYZjRDcHBzaENnR0tZZFhSamhkdGR2eE1DYTh0S18xcmxXblQ0elVsZ08tbE5Vd2RlMmJjNzFldHA1M1ZvS1hnZw?oc=5",
+   "title": "Idaho could see nuclear boom as small modular reactors near reality; Twin Falls panel set for Oct. 27",
+   "summary": "A public panel is scheduled for October 27 in Twin Falls, Idaho, to discuss the ongoing progress and local impacts of small modular reactor (SMR) development. The session serves as a forum for updates on the deployment of emerging nuclear technologies.",
+   "original_title": "Idaho could see nuclear boom as small modular reactors near reality; Twin Falls panel set for Oct. 27",
+   "original_language": "en",
+   "source": "Idaho News 6",
+   "published": "2026-10-23T21:40:00+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "safety_security_meetings"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The announcement of a public panel regarding the development of SMRs fits the criteria for safety_security_meetings or industry updates."
+  },
+  {
+   "id": "radnuc-background-d767b85064175216",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE12MzZkNU8zT29UZElyVWU1dlZXemdkX200WndqeHd2ZjBJcDVqY19Lb2RzcjJHdFlRQjhqa0xvcDFGVWh0U2Y5cUw1X29zblRVUlRuTWwyRl9lNmRWQVE4dWVOMWxGTWlORHhwOXVuSnUtZVRKRTJsOHhUa1g?oc=5",
+   "title": "The DOE combines the cleanup of old nuclear sites with the development of new energy centers",
+   "summary": "The U.S. Department of Energy (DOE) is integrating environmental remediation efforts at former nuclear sites with the construction of new energy facilities. This initiative links site decommissioning and waste management with future infrastructure planning.",
+   "original_title": "El DOE combina la limpieza de antiguos sitios nucleares con el desarrollo de nuevos centros energéticos",
+   "original_language": "es",
+   "source": "EcoPortal.net",
+   "published": "2026-10-23T21:18:23+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Matches criteria for industry supply chain (decommissioning and facility siting)."
+  },
+  {
+   "id": "radnuc-background-c2a00718d1f02e71",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNQzNrUDMyVmhWSXVDeWxKUkdkeDlNM2xseDhIQ0NCYmNQeU5Lc0xXSk43aVRLQkplYzdUekVjTTZUNEdNa1RfZDhDeGE0MVhrY1ZRcnYtWUV0OTQzYWxGbnpGWGpyODRzSDdPWGlrVU5qM2JFNWFWZS14MmpzM2tSZXlUWWtWTGUwQ3pUUzlKN1V0S1dBTkNrUDV5QzRDSzRSN1Z6TElmbC1mS1BBckhucnplNU9JV1k?oc=5",
+   "title": "Data centers and nuclear in Paraguay; ethanol at the Port of Santos",
+   "summary": "Recent reports indicate discussions regarding the potential integration of nuclear power to support data center infrastructure in Paraguay. This development concerns the civilian energy supply chain.",
+   "original_title": "Data centers e nuclear no Paraguai; etanol no Porto de Santos",
+   "original_language": "pt",
+   "source": "Agência eixos",
+   "published": "2026-10-23T21:13:00+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Inclusion: Relates to civilian nuclear energy supply chain development."
+  },
+  {
+   "id": "radnuc-background-18303477b25070d2",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQSmQtNE4yQVdmOVNXSkpfdjZvY2xFOU5UZVVyamo5SEk3MDhtMlFaNnRHelQyOXA5TFRCVXlZSWJfM21GajZUQ1JiaWpwMXBUNVBnWXRFYy1rYmtyTFpoRkxiUGN0Vi1sWHZ4MzNDazZWZzlLWlhMV2VNZzJoTzVGR3lTUXZQY1BrUGRZNDZEMXJjWUpOMnVxTlpTbUNfTWZzNXdiZVRkdDZvckd2Qlhn?oc=5",
+   "title": "NRC hosts FERC for joint meeting on nuclear generation, grid reliability",
+   "summary": "The U.S. Nuclear Regulatory Commission held a joint meeting with the Federal Energy Regulatory Commission to discuss nuclear generation capacity and grid stability. The meeting focused on the intersection of nuclear plant operations and broader energy infrastructure reliability.",
+   "original_title": "NRC hosts FERC for joint meeting on nuclear generation, grid reliability -- ANS / Nuclear Newswire",
+   "original_language": "en",
+   "source": "American Nuclear Society",
+   "published": "2026-10-23T21:11:42+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "safety_security_meetings"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Accepted: Dated inter-agency meeting regarding nuclear safety and industry operation."
+  },
+  {
+   "id": "radnuc-background-22d80b4bc3a43513",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPRTJnYlJNSUNyd3piclkwaEFONWt2dVdOZjNzYVFETmtTZzBMaURULXlYWlZQR3NubXNMVHhteDNUaVd4c2ZGNXFFTUVwdFNvN3ljc1VMZ3NNRGo5dzR4NjhicDRLZUtENzVESnZ3dFJGSE04ZDk5S3V1bmlIMExsTk5FNURhdDJGLW5rMThMX1JJcHczM2VOVHZyQk82aWxZLUlXa2FLbk5pSmZmbGhlTUJn?oc=5",
+   "title": "NRC opens new licensing path for advanced nuclear reactors using federal test data",
+   "summary": "The U.S. Nuclear Regulatory Commission has established a new licensing pathway that allows advanced reactor developers to leverage data from federal testing programs. This measure aims to streamline the approval process for new reactor designs.",
+   "original_title": "NRC opens new licensing path for advanced nuclear reactors using federal test data",
+   "original_language": "en",
+   "source": "Oil & Gas 360",
+   "published": "2026-10-23T18:59:12+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Changes to civilian reactor licensing policy."
+  },
   {
    "id": "radnuc-background-d427c358f119750c",
    "kind": "radnuc_background",
@@ -193,6 +597,37 @@
    "ai_relevance_reason": "RadNuc background only: Matches topic industry_ai_applications; concerns civil nuclear technology development."
   },
   {
+   "id": "radnuc-background-60c1036c2eab00a2",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQVWJnSGZweFJ0REdKYmlybjhVdVIyX2FvRmtQdzRZUUtpcjR1NHRaV3dqT1c1dFlyMWtxSjRSS2MwMDJRZi1RQjJ0cGJyZXNBNFRKbmptSEtvVS1LN280bVlzV0diTXo1V0pZYmZEUHRLMlpPRDVDenNQT1BhblpGUEln?oc=5",
+   "title": "Kentucky nuclear campus plans six reactors",
+   "summary": "Plans have been announced for the development of a new nuclear campus in Kentucky featuring six reactors. The project represents a significant expansion in regional energy infrastructure.",
+   "original_title": "Kentucky nuclear campus plans six reactors",
+   "original_language": "en",
+   "source": "Nuclear Engineering International",
+   "published": "2026-10-23T15:31:08+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Facility siting and construction development."
+  },
+  {
    "id": "radnuc-background-8b650cbbfb6a3bc5",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -284,6 +719,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Reports a significant development in nuclear waste management infrastructure and licensing."
+  },
+  {
+   "id": "radnuc-background-2ca1ed3adf9c7083",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBvSTNzc3Z5Rko2azhxYjd4Ulp3R1RGbnpwSmlWaG0xd2RqeUMyRDFHRldyaHFFUEtIdi1VSFdXVGFMWVdvdmdQR2VIZ2RWNzJEcnREbjBB?oc=5",
+   "title": "Canada Competing for Turkey's Second Nuclear Power Plant as Prime Minister Visits Ankara to Upgrade Strategic Partnership",
+   "summary": "Canada is actively bidding for the contract to construct Turkey's second nuclear power plant. This development follows a high-level visit to Ankara aimed at strengthening the strategic partnership between the two nations.",
+   "original_title": "加拿大角逐土耳其第二座核電廠 總理訪安卡拉升級戰略夥伴 | 民視新聞網",
+   "original_language": "zh-Hant",
+   "source": "LINE TODAY",
+   "published": "2026-10-23T14:33:07+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to civilian nuclear facility infrastructure and supply chain development."
+  },
+  {
+   "id": "radnuc-background-ebfc072058f0c1aa",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOekVJRlVaSVVZSXJCNzRpeWtYSkxpSTBKWU1ZV19CRTdLS0ZZdVF5NC1tNm1tT2hxZEZOQW1VWHBqWmRlZjd1bk9fUDBrQVViS0xLVUxvY3dPci1xeWRGQl9TRi00dGoySi1oUUdnYm5PTEJmMF9lZHRNZ05helFiLU5PNG53VktXRnZLVFZXdUFfMTdrWU1waVRyb3U?oc=5",
+   "title": "ONR considering further action over Sellafield blunder",
+   "summary": "The UK Office for Nuclear Regulation is evaluating potential additional regulatory actions regarding past management issues at the Sellafield site. This follows ongoing reviews of facility safety and administrative performance.",
+   "original_title": "ONR considering further action over Sellafield blunder",
+   "original_language": "en",
+   "source": "The Chemical Engineer",
+   "published": "2026-10-23T14:24:57+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Regulatory oversight activity."
   },
   {
    "id": "radnuc-background-ec2226c14876c5f4",
@@ -564,6 +1061,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Retained as civilian facility protest background."
+  },
+  {
+   "id": "radnuc-background-05316302781f6577",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQSHRwdWRkS2IxaWdRUDQtYUE5aGZGRjd1S0V2RTlTNlNnUVB3eEMtRVVObnd3eG5ORWRlanZYNFdsbXVvSXMtXy1GYnhMcnk5bmQtOE51YVlLNWtwcGo0RXVBRkRZbFhybG1HUld6d3lueWFhLVktczZGVm9pLTZrY0JfZTJKTmJGeTdMc2gzMGZnaVk2aUhxbVRGSTJzT1Fm?oc=5",
+   "title": "ONR finds safety shortcomings at Sellafield following radiation incident",
+   "summary": "The UK Office for Nuclear Regulation (ONR) has identified safety deficiencies at the Sellafield facility. The findings follow an investigation into a recent radiation incident at the site.",
+   "original_title": "ONR finds safety shortcomings at Sellafield following radiation incident",
+   "original_language": "en",
+   "source": "SSBCrack",
+   "published": "2026-10-23T13:02:50+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Regulatory safety assessment report."
+  },
+  {
+   "id": "radnuc-background-c8464069a4364d45",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNVUVPV255WjdESE5jc19VVmdpaUxPRWRvYWU5MGxXa0xZS0c4QWNUTVk1SzJJamRoRHJldzdVSnNDdER0UldrOXVxQVRjR0prVlI5b3RiZl9CQUpESGZZMm9WUTBQQ2N6UUxZUEVnMU44bEF4emJYTlpldkEyVmpmdGQwZG9QRFE4VE9ld3FQTjA3SFI1c3NoWDc2aTRpQ2czb2tzRTdRZXBkM2RHeFB5R1V5YW1ZWlFwUFE?oc=5",
+   "title": "US NRC Finalises Rule To Simplify Licensing Of Government-Tested Reactor Designs",
+   "summary": "The U.S. Nuclear Regulatory Commission has finalized a rule to streamline the licensing process for reactor designs that have undergone government-sponsored testing. This effort is designed to facilitate the deployment of advanced nuclear technologies.",
+   "original_title": "US NRC Finalises Rule To Simplify Licensing Of Government-Tested Reactor Designs",
+   "original_language": "en",
+   "source": "NucNet",
+   "published": "2026-10-23T13:01:20+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Regulatory change for civilian reactor licensing."
   },
   {
    "id": "radnuc-background-96e83c7cb4b27288",
@@ -1283,6 +1842,68 @@
    "ai_relevance_reason": "RadNuc background only: Concerns fusion research facility infrastructure, which is a recognized scientific advancement in the nuclear sector."
   },
   {
+   "id": "radnuc-background-9870edb41053ee75",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNQU84QnF1N0UxQjFYbTFrOXpkLUxDVmUtQTdSUHUwWGN2Sy1xdHVmZGR2amZmUEVCQ3ljNHhnSkxDOEVRYUdzc0d3X2NCYVFDbkRSenRjcGhsSHdDMkNwVzlNTW03bXprOFlkLUZENElpTVRwUHBwLXlkU1BGY3Fvd0pfeDluMWFPTGc0M1EyZERFT2E3aVlfdnVtRmx5bkJTZGoyMko4bU03bE43NmJGZXhZT1hFSkE?oc=5",
+   "title": "Reporting From Alaska- AIDEA diverts $25 million for 'anchor investment' in Idaho nuclear startup",
+   "summary": "The Alaska Industrial Development and Export Authority (AIDEA) has committed $25 million to support an Idaho-based nuclear startup. This investment reflects state-level financial backing for the development of civilian nuclear supply chain technologies.",
+   "original_title": "Reporting From Alaska- AIDEA diverts $25 million for 'anchor investment' in Idaho nuclear startup",
+   "original_language": "en",
+   "source": "Reporting From Alaska",
+   "published": "2026-10-23T07:51:13+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This update pertains to the funding and development phase of the civilian nuclear industry supply chain."
+  },
+  {
+   "id": "radnuc-background-f7cc83ebed2c8f04",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi3wNBVV95cUxQTW1oOEtZU19ZVFpEbVNHclp6dWl2V0VYc0owZm05bkJSQ2NTQUh0ajk0eEJXckN5cXY0ZlhybElqYkFSY3VWTFNmTVRFTUhRZmhLZ05yb1ZEaW1NNGNqSkZQb1Jac0dzcm05VEJBRUFDTVNFRXZ5QkNvVGg4STZKV2J3UFg3WGIyM1FCb2xkdDQwZWozcHJRSnJMREpUVjJNRTZFYTMxcGU2aC1kYm15NlJjMF9DNE0wX1NoYVFqMWhzRDQ2NXBmQXlSZDNYRjNYWWJWMzN0dm5lU25SV0lGSl9jalMxMVMtTV9EOUpfQUpGNzgwd1lXeDkzV0FlaEMwTXBEU1huYUhTNFZzM3M0X2VTYnJoeGpEX1VXRXFjR1Q0N2d2SkF2VUYzN050eU41THVuOTJOQzBzeFBqU0psTWplYWlhUjhtcmVMRHcwTzlrTU9QT2RKQWhxTkU2SkRhMVdzTkhabXMweXgzd09LVU14cUtuSVZ2RTh2cld0dTZOYjJac1F1WnBwYXhyRDdIalhlSnFhZ2lBTEdJQ20tVWlkVTV1cFlacVJlMVM1bnNwd3ItQTNLSzZpQ1ZVa3kyVnI1b1BNM1BpNl8yTWZCUUxuOEVkMVR1bE1tY1lNMA?oc=5",
+   "title": "4 companies favored: US Department of Commerce pours $389 million into semiconductors! Targeting nuclear fusion and AI power supply tracks",
+   "summary": "The U.S. Department of Commerce is allocating $389 million to support semiconductor firms, with a strategic focus on enabling technology for nuclear fusion power supplies. This marks a targeted investment in the advancement of fusion-related energy infrastructure.",
+   "original_title": "這4家公司獲青睞 美商務部砸3.89億美元扶植半導體！搶進核融合與AI供電關鍵賽道",
+   "original_language": "zh-Hant",
+   "source": "Yahoo新聞",
+   "published": "2026-10-23T07:48:10+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Direct technological development link to nuclear fusion energy supply."
+  },
+  {
    "id": "radnuc-background-16e7919df5190932",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -1343,38 +1964,6 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This pertains to the development and construction of a civilian nuclear facility."
-  },
-  {
-   "id": "radnuc-background-f52619907948cfd3",
-   "kind": "radnuc_background",
-   "archive_only": true,
-   "background_reviewed": true,
-   "ai_selected": false,
-   "ai_current_ct_event": false,
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "primary_event_type": "BACKGROUND_INFO",
-   "actor_group": null,
-   "parent_event_id": null,
-   "parent_incident_id": null,
-   "country": null,
-   "region": null,
-   "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE95UHd2bllaa01IRVpzaFNmRE1qcXY4TXQzSmFZZzN2VlJKQkVwQ0xFdU82SWRPMU9zbHhyX0N0ODlDd2RqTjFwdHVSeGJYbGhFOXZrVFJjNlctdkJtRWNIa2h4M2NtbFRrc1pmbUlGNnZzbWxKTFY0djZB?oc=5",
-   "title": "Finland Grants Operating Licence to World’s First Nuclear Waste Repository",
-   "summary": "Finland has officially issued an operating license for the Onkalo nuclear waste repository. This milestone marks the formal authorization for the world's first permanent deep geological repository for spent nuclear fuel.",
-   "original_title": "Finland Grants Operating Licence to World’s First Nuclear Waste Repository",
-   "original_language": "en",
-   "source": "GreekReporter.com",
-   "published": "2026-10-23T07:31:19+00:00",
-   "collected_at": "2026-10-23T13:40:01.700344+00:00",
-   "background_topics": [
-    "regulation_and_licensing",
-    "industry_supply_chain"
-   ],
-   "ai_relevance_score": null,
-   "ai_relevance_reason": "RadNuc background only: This reports a significant licensing development for civilian nuclear waste management infrastructure."
   },
   {
    "id": "radnuc-background-9f7216a13264baad",
@@ -1654,6 +2243,38 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Covers nuclear facility construction developments."
+  },
+  {
+   "id": "radnuc-background-7ea658ee06320121",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQb2RiZ2dHQmJDZnVSb1VFNEpkS2twdEpxd0hOWGhPN3hfVFYzalNJS0s4STlpazhwS0J0bG5Pd1dTczU2UHROOUIwOFZBc29HUWNpNjBTRGNQakZCU3Q5eVQ0UWRFUDRESmlIWEw3V1VqdUZaZEw0TDdwR3BZak1aZWlSRGE2dTIzSlFKd1JKWkpLSTlTR3R1WkFKaVVsWjg?oc=5",
+   "title": "Panelists talk domestic enrichment expansion at Global 2026",
+   "summary": "At the Global 2026 conference, panelists discussed strategies and developments regarding the expansion of domestic uranium enrichment capabilities. The discussion focused on industry growth and supply chain security.",
+   "original_title": "Panelists talk domestic enrichment expansion at Global 2026",
+   "original_language": "en",
+   "source": "American Nuclear Society",
+   "published": "2026-10-23T05:24:52+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "industry_supply_chain",
+    "safety_security_meetings"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a record of an industry conference discussing supply chain expansion."
   },
   {
    "id": "radnuc-background-51847fb23c14c932",
@@ -2060,6 +2681,37 @@
    "ai_relevance_reason": "RadNuc background only: Accepted as a scientific and technological development update."
   },
   {
+   "id": "radnuc-background-86d97088aaac1920",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBIR0JFU1U1NUo5TzFBeWhydzdMa0E5V1g0aWltbGJQU1V6SnhicEFtd1hvLUZxNmdwc1NNVlFSZmhFR3pidWZMbEtKbU9UUTg?oc=5",
+   "title": "Trump administration plans to invest in 4 companies; $389 million allocated for power semiconductor and critical materials research",
+   "summary": "The U.S. government is set to fund four companies to advance power semiconductor research, a sector critical for the development of nuclear fusion technology. This initiative supports the technological maturation of advanced energy systems.",
+   "original_title": "川普政府擬入股4家企業！砸3.89億美元支持功率半導體與關鍵材料研發",
+   "original_language": "zh-Hant",
+   "source": "鉅亨網",
+   "published": "2026-10-22T23:40:38+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Direct technological development link to nuclear fusion energy advancement."
+  },
+  {
    "id": "radnuc-background-a75c67bfb3d7f75d",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -2151,6 +2803,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This constitutes an update to the national regulatory framework for licensing."
+  },
+  {
+   "id": "radnuc-background-5b1610dc87d0eee2",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOdWVkenRzS2xOclZxeVI2VjAxN3BtcElieGI5cHFsVk14Rm9OZDBQdDFldUpoZ045OHRxTjJzZ1BxeHU5QW1CVl9GUHRMd1FTRml2N2U3WTlVSmx2Z1ppeG50dEQxQ1ZHdGVZcEQzSVVWb3gtUWpvR2FORThLU1VscmxUUE14NTdkM1VIUmtmeVBCSjltaVFsaGRTNzR3azV6S2Znb09DV1E0RGdtWTBnU2dVekQzWVZkYzZ5RFlfQ2tUQQ?oc=5",
+   "title": "Canada bolsters space nuclear sector through new center, radioisotope projects funding",
+   "summary": "Canada has announced new funding for a center focused on space-related nuclear research and specific radioisotope projects. This initiative aims to advance the integration of nuclear technology within the aerospace sector.",
+   "original_title": "Canada bolsters space nuclear sector through new center, radioisotope projects funding",
+   "original_language": "en",
+   "source": "American Nuclear Society",
+   "published": "2026-10-22T19:36:18+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a dated technological advancement in the civil/space nuclear sector."
   },
   {
    "id": "radnuc-background-ef3841b2cf3e63e3",
@@ -2278,6 +2961,37 @@
    "ai_relevance_reason": "RadNuc background only: Matches science_and_technology and industry_ai_applications for civil energy research."
   },
   {
+   "id": "radnuc-background-af92a7676ed9bfb7",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNV0VVbVlDN3BOWGlJclJUdVhVNENKTWNxejlDT3NYaGNBSEE1TzJ5R3hQM1Z4WmZyNU9FVFdIT2s2cGNGdmNvOTBwUFc3QXdrYjBfb050MDNxXzl6ZUw1NFBZdG1pRVJ3RWJYMHMzNTZrX3c1RF9mVTd0WHBteldiTzh0VUo?oc=5",
+   "title": "US to fund speculative nuclear fusion venture backed by investors with ties to Trump",
+   "summary": "The U.S. government has authorized funding for a nuclear fusion research venture. This development represents a recent administrative decision regarding long-term fusion energy R&D.",
+   "original_title": "US to fund speculative nuclear fusion venture backed by investors with ties to Trump",
+   "original_language": "en",
+   "source": "Financial Times",
+   "published": "2026-10-22T17:20:01+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report captures a new development in governmental funding for fusion energy technology."
+  },
+  {
    "id": "radnuc-background-c07746b1b4b62423",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -2308,6 +3022,38 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This is a regulatory and licensing update for civilian nuclear waste storage."
+  },
+  {
+   "id": "radnuc-background-672a088dab716644",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQTUNaRU1Mcmt0V0FudEdhU1l1R0NkYUttUjVyU2MxZGp5SVNKNGUxdGdMM0ItT251MmRudEQ2dWtYb3BJY3JzX2s1X0QyQnRlZ3dDREZyX1FlTHpTZVZkc0V3enZPOG5WRjJtQ01oU3g4MF8wcHdGWmRnMUd0NGhoRENrX2UyeUdNeDBuMTU4TTFjSTVqdXNBam9JLTQ0TlNHR2pnR1EyRC1VX0d0ZjBQMEd3?oc=5",
+   "title": "Finland grants licence for world's first nuclear waste repository",
+   "summary": "Finland has officially granted a license for the operation of the Onkalo nuclear waste repository, the world's first permanent facility for deep geological disposal of spent fuel. The site is expected to begin receiving waste in the near future.",
+   "original_title": "Finland grants licence for world's first nuclear waste repository",
+   "original_language": "en",
+   "source": "France 24",
+   "published": "2026-10-22T16:15:21+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "industry_supply_chain",
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Licensing of waste storage infrastructure."
   },
   {
    "id": "radnuc-background-9035a8d017578ae1",
@@ -2465,6 +3211,37 @@
    "ai_relevance_reason": "RadNuc background only: Matches science_and_technology regarding advanced manufacturing for the nuclear industry."
   },
   {
+   "id": "radnuc-background-f2e7f382de9d4d12",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9oNDkzRDktcnNPSVpLdVY0bE5vNGhuMjdHdzRuUVVNQ2lyb3NySURmemxnOUpFLTNKTm5YUm81TEhDUkgtcWFLSEI0RnRkazk4?oc=5",
+   "title": "Referendum on Abolishing 'Nuclear-Free Homeland' Policy Approaches; Government Sets Three Conditions for Nuclear Restart",
+   "summary": "Ahead of a national referendum on Taiwan's nuclear policy, the government has stipulated that any restart of nuclear power must satisfy three conditions: safety assurances, a resolution for nuclear waste, and social consensus. These criteria frame the regulatory and political requirements for potential future energy infrastructure changes.",
+   "original_title": "廢除非核家園公投將登場 府：重啟核能須符3條件",
+   "original_language": "zh-Hant",
+   "source": "信吉衛視+",
+   "published": "2026-10-22T13:20:00+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Pertains to national energy policy and regulatory conditions for nuclear facility operations."
+  },
+  {
    "id": "radnuc-background-ef29a91c8c383e6d",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -2527,6 +3304,37 @@
    "ai_relevance_reason": "RadNuc background only: Matches industry_supply_chain regarding material lifecycle and resource management."
   },
   {
+   "id": "radnuc-background-dab734d63da8203d",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE12QkNGdXg4cVo4QjBRMGpVVk8zelRldEx6TkpXeFRFV3RySVpSRm5JeV91V3hQSGJYNk4yQ09QUXQ2NS04NFpLbEJGelDSAUxBVV95cUxNdkJDRnV4OHFaOEIwUTBqVVZPM3pUZXRMek5KV3hURVd0cklaUkZuSXlfdVd4UEhiWDZOMkNPUFF0NjUtODRaS2xCRnpQ?oc=5",
+   "title": "Will Nuclear Power Resume? Lai Ching-te Sets Three Conditions: Proven Safety, Solved Waste Disposal, and Social Consensus",
+   "summary": "President Lai Ching-te has clarified the conditions under which nuclear energy could be reconsidered in Taiwan. The requirements focus on establishing institutional frameworks for nuclear safety and long-term waste management.",
+   "original_title": "是否重啟核能？賴清德明定3條件：安全無虞、核廢有解、社會有共識",
+   "original_language": "zh-Hant",
+   "source": "三立新聞",
+   "published": "2026-10-22T13:02:00+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to the national regulatory and policy framework for nuclear energy."
+  },
+  {
    "id": "radnuc-background-6c4951c979d54b6d",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -2587,6 +3395,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Matches science_and_technology regarding nuclear fusion infrastructure."
+  },
+  {
+   "id": "radnuc-background-7b6ef77878529b8b",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9Wd182REZ0bVNlNjBRUjdxdVItVXV1TGhvYkdLREo0TXF6OExnSGk2MmhuRFp3MHFXM2FiYi0xWVpQQW55YWNTc1VzYzY5bUdKVVM0cVpHNlZPLXY0c0N4S3BVTmF2Vm9PMkVvTk5XSUlqZw?oc=5",
+   "title": "Philippines Aims for 1.2GW of Nuclear Power by 2032 and Vietnam Restarts Nuclear Energy Plans; How to Address the Talent Gap?",
+   "summary": "Both the Philippines and Vietnam are advancing plans for nuclear energy development as part of their respective energy strategies. The reporting highlights the industry's need for skilled labor to support the planned infrastructure and lifecycle operations.",
+   "original_title": "菲律賓拚2032年核電1.2GW、越南重啟核能計畫，人才斷層如何補上？",
+   "original_language": "zh-Hant",
+   "source": "Reccessary",
+   "published": "2026-10-22T09:07:36+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Discusses nuclear industry development and infrastructure supply chain requirements."
   },
   {
    "id": "radnuc-background-d9ef78bc8a393cbf",
@@ -2775,6 +3614,68 @@
    "ai_relevance_reason": "RadNuc background only: Addresses national strategy and policy regarding future civilian nuclear energy technology."
   },
   {
+   "id": "radnuc-background-a7dc14f5259423fa",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOUTdOY3RUOFhRRm5SbzF1T2lmSzdzRzdNNFpkb21TYW4wRXZObG9NQnM0QTktYlZpLU9SNkNwZlRfSTI0bzJRWGo0c2g1QXYxMGJqVHJEM1k1Ujg5Q0JwMGtxRFZ2VmVOeVpuV3VKbmh6RU1CTzVadkVlcmROaDZJNnVObzVZTld5TUExbko1RHA5aDVDRThFclViaWE?oc=5",
+   "title": "Centrus buys manufacturing company in $116 million transaction",
+   "summary": "Centrus Energy has acquired a manufacturing company for $116 million. This acquisition is intended to strengthen their operational supply chain capabilities.",
+   "original_title": "Centrus buys manufacturing company in $116 million transaction",
+   "original_language": "en",
+   "source": "ExchangeMonitor",
+   "published": "2026-10-22T03:00:14+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This pertains to a corporate expansion within the nuclear fuel supply chain."
+  },
+  {
+   "id": "radnuc-background-824f310a8ba87ff3",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQbDVvSjNvQWswaC1vSjlkM2UzdW5wUnU1LUxBVHNhemZTel9laFNSTnNTYnBEUjNoMlIyd2RjWWUzRzhlQzRhamxqMERzX0kyc2dCS2lVQTFLdGg2Y1VVZ3BFSXIwbkc1aFZwTkdrS0VKLXllQlRzbV9udGZKeUVfU1ZhNEpoSnhxSG54c0ZkT1pSTXI3dTFNRW9pdGR2akxlSXplZ3U3RU9kd19IbzBMNVdGT2R0aFlHYUtEcHJLVXpFSk9jMWJra2JSUjU4YlE?oc=5",
+   "title": "Westinghouse Announces Landmark Expansion in South Carolina to Advance Next-Generation Nuclear Fuel",
+   "summary": "Westinghouse announced a major facility expansion in South Carolina dedicated to the advancement and production of next-generation nuclear fuel. The site is expected to play a key role in supporting future fuel supply requirements.",
+   "original_title": "Westinghouse Announces Landmark Expansion in South Carolina to Advance Next-Generation Nuclear Fuel",
+   "original_language": "en",
+   "source": "SightLine | U308",
+   "published": "2026-10-21T20:02:20+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This details industrial expansion for nuclear fuel production."
+  },
+  {
    "id": "radnuc-background-c889891694c3a4be",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -2804,6 +3705,38 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This details a civilian industry facility development involving nuclear power deployment."
+  },
+  {
+   "id": "radnuc-background-e498e94ba94f3bba",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxNOUxTaGxneUdXV0xHalZyMWdQc2dqYnBtX01OaW5wODU3NlhSSHFQaE1xRGFDQnUzLUJWcmNrTncyUjg2UEp0Sl95TVpyT3ctOXFZalRBR0hJYjlFb19rakZxYjU3YU83VlZoTmlGT3p5bzVzUE96S192eUo0SFlVVGQzN3BxVkZuMXJlNHpMalpwV05lZjY0c000TjgzUldQcmlQZWlPMFc3VGFWUEp4cmJWblZqcXdzNDJNb094M2ZjZlV1VlAzNzdmTXByTjdsTEhUbG1JUE1lSml1UHluZGg4a2NfOXdKYUtsSTk0aFlrUWNBOE9XYWZfQQ?oc=5",
+   "title": "Uranium enrichment expansion, Scout Motors supplier net Richland County tax breaks",
+   "summary": "A uranium enrichment expansion project has received local tax incentives in Richland County. These financial mechanisms are part of local regulatory and economic support for industrial nuclear site development.",
+   "original_title": "Uranium enrichment expansion, Scout Motors supplier net Richland County tax breaks",
+   "original_language": "en",
+   "source": "Post and Courier",
+   "published": "2026-10-21T18:09:00+00:00",
+   "collected_at": "2026-10-24T12:49:54.474761+00:00",
+   "background_topics": [
+    "industry_supply_chain",
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This records a regulatory/economic development for a nuclear industry facility."
   },
   {
    "id": "radnuc-background-b4caab585463c5dc",
