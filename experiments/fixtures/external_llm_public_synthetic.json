@@ -1,0 +1,360 @@
+{
+  "source": "SYNTHETIC_PUBLIC_EXAMPLES_ONLY",
+  "version": 1,
+  "description": "Fictional, public and unclassified training snippets. Never use as incidents or as independent real-world accuracy evidence.",
+  "items": [
+    {
+      "id": "cls-rn-ar",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "ar",
+      "title": "الشرطة تحقق في تهديد يتعلق بمصدر طبي مشع",
+      "summary": "Police reported an alleged extremist threat involving a stolen radioactive medical source. Investigators said they had not confirmed any explosive device.",
+      "published": "2026-09-24",
+      "expected_labels": [
+        "Radiological/Nuclear",
+        "Arrests"
+      ],
+      "expected_country": "",
+      "expected_status": "SUSPECTED"
+    },
+    {
+      "id": "cls-chem-fr",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "fr",
+      "title": "Un suspect mis en examen dans un projet d'attentat à l'explosif",
+      "summary": "Judges charged a suspect over an alleged terrorist explosives plot that police said was interrupted before any attack.",
+      "published": "2026-09-24",
+      "expected_labels": [
+        "Chemicals and Explosives",
+        "Legal / Judicial"
+      ],
+      "expected_country": "France",
+      "expected_status": "ALLEGED"
+    },
+    {
+      "id": "cls-bio-en",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "en",
+      "title": "Police classify biological threat letter as hoax",
+      "summary": "Officials described a letter that claimed an extremist biological attack as a hoax; testing found no biological material.",
+      "published": "2026-09-24",
+      "expected_labels": [
+        "Biological Terrorism"
+      ],
+      "expected_country": "",
+      "expected_status": "HOAX"
+    },
+    {
+      "id": "cls-fin-zh",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "zh",
+      "title": "法院冻结涉嫌恐怖融资账户",
+      "summary": "A court froze an account during an investigation into alleged financing of a terrorist organization.",
+      "published": "2026-09-24",
+      "expected_labels": [
+        "Terrorist Financing",
+        "Legal / Judicial"
+      ],
+      "expected_country": "",
+      "expected_status": "ALLEGED"
+    },
+    {
+      "id": "cls-wep-es",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "es",
+      "title": "Policía incauta armas a una célula extremista",
+      "summary": "Police reported seizing weapons belonging to an alleged terrorist cell and opening an investigation.",
+      "published": "2026-09-24",
+      "expected_labels": [
+        "Weapons",
+        "Counter Terrorism Action"
+      ],
+      "expected_country": "",
+      "expected_status": "SUSPECTED"
+    },
+    {
+      "id": "cls-piracy-en",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "en",
+      "title": "Pirates board cargo ship near Somalia",
+      "summary": "A vessel operator reported that pirates boarded a cargo ship near Somalia and abducted crew members; authorities reported no terrorism connection.",
+      "published": "2026-09-24",
+      "expected_labels": [
+        "Maritime Piracy"
+      ],
+      "expected_country": "Somalia",
+      "expected_status": "ALLEGED"
+    },
+    {
+      "id": "cls-cyber-zhant",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "zh-Hant",
+      "title": "警方調查疑似極端組織網上招募行動",
+      "summary": "Police opened an investigation into a suspected extremist recruitment channel operating on social media.",
+      "published": "2026-09-24",
+      "expected_labels": [
+        "Online / Cyber / AI",
+        "Counter Terrorism Action"
+      ],
+      "expected_country": "",
+      "expected_status": "SUSPECTED"
+    },
+    {
+      "id": "cls-attack-ar",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "ar",
+      "title": "تقارير عن هجوم لجماعة مسلحة غير حكومية",
+      "summary": "Authorities reported an attack attributed to a non-state extremist group. Responsibility remains unverified.",
+      "published": "2026-09-24",
+      "expected_labels": [
+        "Attacks"
+      ],
+      "expected_country": "",
+      "expected_status": "ALLEGED"
+    },
+    {
+      "id": "cls-operation-fr",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "fr",
+      "title": "Opération antiterroriste : plusieurs suspects interpellés",
+      "summary": "Police reported arresting suspected members of a terrorist cell during a security operation.",
+      "published": "2026-09-24",
+      "expected_labels": [
+        "Counter Terrorism Action",
+        "Arrests"
+      ],
+      "expected_country": "",
+      "expected_status": "SUSPECTED"
+    },
+    {
+      "id": "cls-arrests-pt",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "pt",
+      "title": "Polícia prende suspeito em investigação sobre terrorismo",
+      "summary": "Police detained a suspect as part of an ongoing terrorism investigation; no conviction has been announced.",
+      "published": "2026-09-24",
+      "expected_labels": [
+        "Arrests"
+      ],
+      "expected_country": "",
+      "expected_status": "SUSPECTED"
+    },
+    {
+      "id": "cls-judicial-de",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "de",
+      "title": "Gericht verurteilt Angeklagten wegen Mitgliedschaft in Terrorgruppe",
+      "summary": "The court convicted a defendant of membership in a non-state terrorist group.",
+      "published": "2026-09-24",
+      "expected_labels": [
+        "Legal / Judicial"
+      ],
+      "expected_country": "",
+      "expected_status": "CONFIRMED"
+    },
+    {
+      "id": "cls-geo-zh",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "zh",
+      "title": "巴西媒体报道美国警方逮捕涉恐嫌疑人",
+      "summary": "A Brazilian-language outlet reported a terrorism-suspect arrest that took place in the United States, not in Brazil.",
+      "published": "2026-09-24",
+      "expected_labels": [
+        "Arrests"
+      ],
+      "expected_country": "United States",
+      "expected_status": "ALLEGED"
+    },
+    {
+      "id": "cls-no-nuclear-en",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "en",
+      "title": "Industrial radiation sensor leak investigated",
+      "summary": "A radiation sensor malfunction at a nuclear research site was accidental; authorities ruled out any terrorism connection.",
+      "published": "2026-09-24",
+      "expected_labels": [],
+      "expected_country": "",
+      "expected_status": "CONFIRMED"
+    },
+    {
+      "id": "cls-no-bio-fr",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "fr",
+      "title": "Épidémie naturelle étudiée par les médecins",
+      "summary": "Health officials described a naturally occurring infectious disease outbreak, with no deliberate contamination or terrorism nexus.",
+      "published": "2026-09-24",
+      "expected_labels": [],
+      "expected_country": "",
+      "expected_status": "CONFIRMED"
+    },
+    {
+      "id": "cls-state-zhant",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "zh-Hant",
+      "title": "兩國軍方就核設施衝突發表聲明",
+      "summary": "The article describes armed forces of two countries exchanging military strikes near a nuclear site. No non-state actor or terrorism investigation is reported.",
+      "published": "2026-09-24",
+      "expected_labels": [],
+      "expected_country": "",
+      "expected_status": "CONFIRMED"
+    },
+    {
+      "id": "cls-history-es",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "es",
+      "title": "Aniversario de un atentado de hace veinte años",
+      "summary": "An anniversary essay recalls a bombing twenty years earlier. No newly reported arrest, investigation, or trial is described.",
+      "published": "2026-09-24",
+      "expected_labels": [],
+      "expected_country": "",
+      "expected_status": "UNKNOWN"
+    },
+    {
+      "id": "cls-ordinary-en",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "en",
+      "title": "Local dispute leads to arrest",
+      "summary": "Police arrested a person over an ordinary family dispute. Authorities said there was no extremist motive.",
+      "published": "2026-09-24",
+      "expected_labels": [],
+      "expected_country": "",
+      "expected_status": "CONFIRMED"
+    },
+    {
+      "id": "cls-negative-editorial-ar",
+      "task": "classification",
+      "synthetic_public": true,
+      "language": "ar",
+      "title": "افتتاحية عن الأمن العالمي",
+      "summary": "An editorial reflects on international security policy. It reports no concrete incident or investigation.",
+      "published": "2026-09-24",
+      "expected_labels": [],
+      "expected_country": "",
+      "expected_status": "UNKNOWN"
+    },
+    {
+      "id": "tr-ar-01",
+      "task": "translation",
+      "synthetic_public": true,
+      "language": "ar",
+      "title": "صدور عدد جديد من النشرة في 10 أكتوبر 2026",
+      "summary": "The notice announces an October 10, 2026 bulletin issue. It does not describe a separate attack.",
+      "published": "2026-10-10",
+      "expected_title_en": "New bulletin issue published on 10 October 2026",
+      "required_numbers": [
+        "10",
+        "2026"
+      ]
+    },
+    {
+      "id": "tr-zh-02",
+      "task": "translation",
+      "synthetic_public": true,
+      "language": "zh",
+      "title": "警方公布2026年10月3日调查进展",
+      "summary": "The Chinese article says police released an investigation update. No alleged extremist affiliation has been confirmed.",
+      "published": "2026-10-10",
+      "expected_title_en": "Police announce investigation update on 3 October 2026",
+      "required_numbers": [
+        "2026",
+        "3"
+      ]
+    },
+    {
+      "id": "tr-fr-03",
+      "task": "translation",
+      "synthetic_public": true,
+      "language": "fr",
+      "title": "Le tribunal reporte l'audience au 15 novembre 2026",
+      "summary": "The statement concerns an upcoming court hearing, not a conviction.",
+      "published": "2026-10-10",
+      "expected_title_en": "Court postpones hearing until 15 November 2026",
+      "required_numbers": [
+        "15",
+        "2026"
+      ]
+    },
+    {
+      "id": "tr-es-04",
+      "task": "translation",
+      "synthetic_public": true,
+      "language": "es",
+      "title": "El periódico anuncia su edición número 42",
+      "summary": "Only the title of newspaper edition 42 is given. No contents or incidents are described.",
+      "published": "2026-10-10",
+      "expected_title_en": "Newspaper announces issue number 42",
+      "required_numbers": [
+        "42"
+      ]
+    },
+    {
+      "id": "tr-ar-05",
+      "task": "translation",
+      "synthetic_public": true,
+      "language": "ar",
+      "title": "بيان بشأن التحقيق رقم 27",
+      "summary": "The brief statement refers to investigation 27. It does not say whether a suspect was charged.",
+      "published": "2026-10-10",
+      "expected_title_en": "Statement on investigation number 27",
+      "required_numbers": [
+        "27"
+      ]
+    },
+    {
+      "id": "tr-zhant-06",
+      "task": "translation",
+      "synthetic_public": true,
+      "language": "zh-Hant",
+      "title": "政府發布2026年度安全報告",
+      "summary": "A national administration announced its annual security report. The source does not describe any new attack.",
+      "published": "2026-10-10",
+      "expected_title_en": "Government releases 2026 annual security report",
+      "required_numbers": [
+        "2026"
+      ]
+    },
+    {
+      "id": "tr-de-07",
+      "task": "translation",
+      "synthetic_public": true,
+      "language": "de",
+      "title": "Ermittler veröffentlichen Bericht Nr. 18",
+      "summary": "A public note says a report has been published without disclosing its findings.",
+      "published": "2026-10-10",
+      "expected_title_en": "Investigators publish report number 18",
+      "required_numbers": [
+        "18"
+      ]
+    },
+    {
+      "id": "tr-pt-08",
+      "task": "translation",
+      "synthetic_public": true,
+      "language": "pt",
+      "title": "Polícia publica balanço de 2026",
+      "summary": "Authorities issued a public annual summary without specifying a new terrorism incident.",
+      "published": "2026-10-10",
+      "expected_title_en": "Police release 2026 annual summary",
+      "required_numbers": [
+        "2026"
+      ]
+    }
+  ]
+}
