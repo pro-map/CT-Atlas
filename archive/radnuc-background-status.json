@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-25T13:48:21.841365+00:00",
+ "updated_at": "2026-10-25T19:49:40.197063+00:00",
  "archive_only": true,
  "category": "Radiological/Nuclear",
  "topic_ids": [
@@ -40,16 +40,16 @@
  "lookback_days": 3,
  "backfill": false,
  "counts": {
-  "searched": 17,
+  "searched": 0,
   "source_errors": 0,
-  "reviewed": 60,
-  "accepted": 18,
-  "rejected": 42,
-  "requests": 13,
-  "recent_reviewed": 52,
-  "backlog_reviewed": 8,
+  "reviewed": 0,
+  "accepted": 0,
+  "rejected": 0,
+  "requests": 2,
+  "recent_reviewed": 0,
+  "backlog_reviewed": 0,
   "undated_reviewed": 0,
-  "source_capped_queries": 3
+  "source_capped_queries": 0
  },
  "pending_reviews": 500,
  "recent_pending": 10,
@@ -57,15 +57,15 @@
  "undated_pending": 0,
  "source_discovery": {
   "planned_queries": 50,
-  "attempted_queries": 17,
-  "searched_queries": 17,
+  "attempted_queries": 0,
+  "searched_queries": 0,
   "failed_queries": 0,
-  "pending_queries": 33,
+  "pending_queries": 50,
   "complete": false,
   "stop_code": "http_503"
  },
  "stop": "Review deferred: http_503",
- "failed": false,
+ "failed": true,
  "shared_daily_review_allocation": 40,
  "max_requests_per_run": 20,
  "requests_available_at_start": 20,
@@ -74,10 +74,8 @@
  "review_complete": false,
  "stop_code": "http_503",
  "review_batch_size": 8,
- "review_attempts": 10,
- "review_validation_errors": {
-  "Background review is incomplete": 4
- },
+ "review_attempts": 1,
+ "review_validation_errors": {},
  "map_events_written": 0,
  "destination": "background archive; D1 sync is separate"
 }
