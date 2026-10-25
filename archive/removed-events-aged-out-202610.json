@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-24T13:46:08.798945+00:00",
+  "removed_at": "2026-10-25T14:38:08.407261+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -1095,6 +1095,173 @@
       "country": "Somalia",
       "ai_relevance_score": 85,
       "ai_relevance_reason": "Concrete vessel hijacking event."
+    },
+    {
+      "id": "ee14af6e94a0379d",
+      "incident_id": "inc-e20eef9d34444652",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQWUtPWFIxT0hYRV9QQWh0VmJaT0lyTHJMNTJNamZpOEhQaXdHUnFpWkxZT3RxUnVOM1ZJTVNNUjA1YXE1aGtjWXFmWDRKX2JONmdtUFkzeHhZQlQxYldLZFp5Z2FpVkZYczFMWjFVUDk3TVJPUldpQWtEOFpYRUFsbl9iME42NVJxZ1JHRzFVVWZ1dzY0N1dYMEctREE4NE9tQTJpYnZoYUFRSjNqNEQ5OFZxdXplYVdjNTlxblZB?oc=5",
+      "title": "Counter-terror police investigate suspected arson attack on Golders Green memorial wall",
+      "summary": "UK counter-terrorism police are investigating a suspected arson attack on a memorial wall in Golders Green and have made arrests.",
+      "original_title": "Terror police investigating suspected arson attack on Golders Green memorial wall",
+      "original_language": "en",
+      "source": "Sky News",
+      "published": "2026-04-28T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "United Kingdom",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports counter-terrorism arrests and ongoing investigation into a terrorist arson attack in London."
+    },
+    {
+      "id": "55bc38698aa0ad75",
+      "incident_id": "inc-284eec41d35dfc5d",
+      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPWGJyVFpmbE5JbnhIODE4QjVDel9aYXdWeHptTHVfS0xvcUR0N1ROUU1wZEx4UkZHRXpDU1JMQldLYTBtTWxjWnZ3R1RNeF9GWmFvVksxQjQ1OW9yYmZ3cDNiWVdPTncxYUtsdURuNlppQkRHU2w4b21nQW5fREdnNzFZTjBLakt0UXRmd2p4cTZHNlJhaV9wbFpfZUR4cFJibGRmQUhCQ2M2a3l3TEVOU1lvLWk?oc=5",
+      "title": "ISWAP, Boko Haram clash in Bama, fighters capture 18 spouses",
+      "summary": "Clashes between ISWAP and Boko Haram in Bama resulted in fighters capturing 18 spouses.",
+      "original_title": "ISWAP, Boko Haram clash in Bama, fighters reportedly capture 18 spouses",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-04-28T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "Boko Haram",
+      "primary_event_type": "ATTACK",
+      "country": "Nigeria",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports violent operational clashes and abductions between terrorist factions Boko Haram and ISWAP in Bama."
+    },
+    {
+      "id": "78915994934ad579",
+      "incident_id": "inc-8cc0cb1d53c50535",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOZkVDMUlSWEpMSW1IVlB1dERmN281ZVlCOEY2aTBDLWdMOXpGeGI5OEhWbTBqUXNEMnZfbzlBZm4yNmctRlhaU3hBZDZULW95RW9Sel9zWFdzV1dPc0lmZ2s3QW93QjhCMVU2d2FZeVVwbEItSkl2bXZfQUQyWFY1SXpuOFBxUGwwdFJSY1BGYW41NmlzT2lqU21TZDg0TVduZmF0ZE5PWENqbUd1UU1vNFNuTDYwVWh4bUdn?oc=5",
+      "title": "ISWAP terrorists flee as troops repel another attack near Kukareta in Yobe",
+      "summary": "Nigerian troops successfully repelled an attack by ISWAP terrorists near Kukareta in Yobe state, forcing them to flee.",
+      "original_title": "ISWAP terrorists flee as troops repel another attack near Kukareta in Yobe",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-04-28T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Attacks"
+      ],
+      "actor_group": "ISWAP",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports a military counter-terrorism operation repelling an ISWAP militant attack in Yobe State."
+    },
+    {
+      "id": "3967f116de0476a0",
+      "incident_id": "inc-64f382da74b248f3",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPSmlhMV9kWktEbTN2Q2Judnpabnpkc1BZTnlJSUpoVlBFbjBCcUdvYTJrbEU2OVVPeVRlS3VwaElaZjNha1JQSmRSR1k4MHJHZFVZaE5VQ1Bsb1pNQ1E0WEc4SW9pRTUzM0JYUS13X2ZuSXhhekx0V09ubE0yckVOZXRodERZYUQ1c0g1UEpsWWVrNFNWZnNGblZmTGk5Zw?oc=5",
+      "title": "Mozambique: 10 alleged Tanzanian terrorists captured",
+      "summary": "Mozambican authorities captured ten alleged Tanzanian terrorists, according to an AIM report.",
+      "original_title": "Mozambique: 10 alleged Tanzanian terrorists captured — AIM report",
+      "original_language": "en",
+      "source": "CLUB OF MOZAMBIQUE",
+      "published": "2026-04-28T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Mozambique",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Operational capture of terrorism suspects by security forces."
+    },
+    {
+      "id": "d3c97f1b68b117e8",
+      "incident_id": "inc-69880aa835fa5eef",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE4tSlNtNkkxRFg4V2Rydk9PalNzWlFKN0ZsU1NnLWZmNERCdWV2azlYUW1HOTh6ZXBZbEZaTjlyX25jTlhKQS1sQXR4MUdfVnFlS0xvTWxsWU5YZw?oc=5",
+      "title": "Arrest made in connection with Dunmurry car bomb attack",
+      "summary": "A man in his 60s has been arrested in Northern Ireland as part of an investigation into the car bomb attack at a police station in Dunmurry.",
+      "original_title": "Dunmurry car bomb: Man in his 60s arrested in connection with police station bomb",
+      "original_language": "en",
+      "source": "BBC",
+      "published": "2026-04-28T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Chemicals and Explosives",
+        "Attacks",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "United Kingdom",
+      "ai_relevance_score": 90,
+      "ai_relevance_reason": "This reports a concrete arrest following a terrorist attack."
+    },
+    {
+      "id": "7004b82f87846af8",
+      "incident_id": "inc-7ebc519cb0c321c3",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOVVhzUEhGemk1V2ZmSFVhLVYyNXc1MWhYcmd3dVgyQXRQNnB6S1ZjbGZGWjdZaUhWV0pBOGpBYmJHempOM0trTjdRNjEyZl9CU1V3eGJBemZVdTNCV3RSdjByT1NZWmQtNUhLSXRJRFBsOHFaOGJVMGl5WHVIUkxMY2ZTdTZwVnR6Zy1nN1hUT3NXS1BVVXpwTEFyWmdXMWJlTUFkNlRqUHhQY3VLQVpSUkpZQ2JCdHVacnVwTS1FSGNFUQ?oc=5",
+      "title": "Capture of CJNG operator 'El Jardinero' hits extortion structure",
+      "summary": "The capture of a high-level operator for the CJNG, known as 'El Jardinero', has severely impacted the group's extortion and financial network.",
+      "original_title": "CAPTURA DE “EL JARDINERO” GOLPEA ESTRUCTURA FINANCIERA Y DE EXTORSIÓN DEL CJNG: HARFUCH",
+      "original_language": "es",
+      "source": "CDMX",
+      "published": "2026-04-28T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "CJNG",
+      "primary_event_type": "ARREST",
+      "country": "Mexico",
+      "region": "Mexico City",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "High-value arrest of a leader in a non-state criminal/militant group."
+    },
+    {
+      "id": "55ee5d981b91ba25",
+      "incident_id": "inc-7b4ea396cbf34586",
+      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxObWlROENHRmc1WVNveWJMVENJR2FibzlOdmJQeUVCY3hfQTd5V1RxbnNrd2FhNUVXN3ZtTlRzekZFcGZhZkg0WmgzNHRrSVJzMURkZ0huZ1ZYNDRMUHQzcGJCVjdWbEF5UDVLQ1hMWmV3amwyZFBFOTBEblZheUVrNVAzTnN5Smc4MDdMaUQ1dTRJbFVwckFpbDJieHUyZUJaamVqWG1fdw?oc=5",
+      "title": "Suspected Boko Haram militants attack Dapchi",
+      "summary": "Suspected Boko Haram militants attacked the town of Dapchi, resulting in the burning of a police station.",
+      "original_title": "Suspected Boko Haram Terrorists Attack Dapchi, Burn Police Station",
+      "original_language": "en",
+      "source": "Channels Television",
+      "published": "2026-04-28T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "Boko Haram",
+      "primary_event_type": "ATTACK",
+      "country": "Nigeria",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Concrete militant attack on security infrastructure."
+    },
+    {
+      "id": "752ad3d838db9568",
+      "incident_id": "inc-59f980824d91888b",
+      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9Cd0VYVHhFTV83dTVzZ0tsUEhTOTA4cnFMV3NTcFZqSFdQd3U1TEhYdU5IRUx5T1Jwb2tJd3RtSERnQ0NrYXpmbFdKUGo4R1JCSWw2eGlmckN4T3FHOE90R0Z3d0p6RFo0TTVWWF95dU1KQQ?oc=5",
+      "title": "EUNAVFOR reports piracy off Somalia coast",
+      "summary": "The EU naval force has issued a report on recent piracy incidents near the northern coast of Somalia.",
+      "original_title": "PIRACY INCIDENTS OFF THE NORTHERN COAST OF SOMALIA",
+      "original_language": "en",
+      "source": "EUNAVFOR",
+      "published": "2026-04-28T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "Somalia",
+      "region": "Northern Coast of Somalia",
+      "ai_relevance_score": 65,
+      "ai_relevance_reason": "Official monitoring report of active piracy."
     }
   ]
 }

@@ -1,41 +1,43 @@
 {
   "schema_version": 2,
   "status": "partial",
-  "run_started_at": "2026-10-24T18:46:51.189182+00:00",
-  "last_attempt_at": "2026-10-24T18:46:51.189182+00:00",
-  "published_at": "2026-10-24T19:44:41.456408+00:00",
+  "run_started_at": "2026-10-25T13:43:51.286975+00:00",
+  "last_attempt_at": "2026-10-25T13:43:51.286975+00:00",
+  "published_at": "2026-10-25T14:38:43.691839+00:00",
   "recent": {
-    "candidates": 3798,
-    "reviewed": 3798,
-    "cached": 2728,
-    "new_reviews": 1070,
+    "candidates": 3765,
+    "reviewed": 3149,
+    "cached": 2189,
+    "new_reviews": 960,
     "official_auto_accepted": 0,
-    "retained": 261,
-    "rejected": 3537,
-    "pending": 0,
-    "status": "complete",
-    "calls": 37,
+    "retained": 205,
+    "rejected": 2944,
+    "pending": 616,
+    "status": "partial",
+    "calls": 35,
     "primary_calls": 30,
-    "overflow_calls": 7,
-    "reasons": [],
-    "window_start": "2026-10-21T18:46:51.189182+00:00",
-    "window_end": "2026-10-24T18:46:51.189182+00:00"
+    "overflow_calls": 5,
+    "reasons": [
+      "transient_error"
+    ],
+    "window_start": "2026-10-22T13:43:51.286975+00:00",
+    "window_end": "2026-10-25T13:43:51.286975+00:00"
   },
   "backlog": {
-    "candidates": 1641,
-    "reviewed": 827,
-    "cached": 507,
-    "new_reviews": 320,
+    "candidates": 1408,
+    "reviewed": 510,
+    "cached": 510,
+    "new_reviews": 0,
     "official_auto_accepted": 0,
-    "retained": 42,
-    "rejected": 785,
-    "pending": 814,
+    "retained": 1,
+    "rejected": 509,
+    "pending": 898,
     "status": "partial",
-    "calls": 10,
+    "calls": 5,
     "primary_calls": 0,
-    "overflow_calls": 10,
+    "overflow_calls": 5,
     "reasons": [
-      "historical_budget"
+      "transient_error"
     ]
   },
   "maintenance": {
@@ -72,14 +74,14 @@
           "recovered": false
         },
         {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+weapons%22+OR+%22terrorist+arms%22+OR+%22terrorist+firearms%22+OR+%22weapons+smuggling%22+terrorism+OR+%22arms+trafficking%22+terrorism%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
-          "label": "gdelt:Weapons",
+          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22maritime+piracy%22+OR+%22pirate+attack%22+ship+OR+%22pirate+attacks%22+vessel+OR+%22armed+robbery+at+sea%22+OR+pirates+hijacked+vessel%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
+          "label": "gdelt:Maritime Piracy",
           "reason": "http_429",
           "recovered": false
         },
         {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22maritime+piracy%22+OR+%22pirate+attack%22+ship+OR+%22pirate+attacks%22+vessel+OR+%22armed+robbery+at+sea%22+OR+pirates+hijacked+vessel%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
-          "label": "gdelt:Maritime Piracy",
+          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+attack%22+OR+%22terror+attacks%22+OR+%22terror+attack%22+OR+%22terrorist+bombing%22+OR+%22terrorist+bomb+attack%22%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
+          "label": "gdelt:Attacks",
           "reason": "http_429",
           "recovered": false
         },
@@ -114,16 +116,17 @@
     "status": "partial"
   },
   "reasons": [
-    "historical_budget",
-    "geolocation_review_required",
+    "transient_error",
+    "recent_pending",
     "backlog_pending",
     "source_errors",
-    "category_pending"
+    "category_pending",
+    "geolocation_review_required"
   ],
   "queue_filter": {
-    "expired": 7391,
-    "retired": 438,
-    "cancelled_history": 752,
+    "expired": 7386,
+    "retired": 432,
+    "cancelled_history": 739,
     "duplicates": 0
   },
   "budgets": {
@@ -131,28 +134,28 @@
       "per_run": 30,
       "per_day": 60,
       "used_this_run": 30,
-      "used_today": 60
+      "used_today": 30
     },
     "overflow": {
       "model": "gemini-3.1-flash-lite",
       "per_run": 25,
       "per_day": 50,
-      "used_this_run": 17,
-      "used_today": 42
+      "used_this_run": 10,
+      "used_today": 10
     },
     "historical_calls_per_run": 10,
-    "historical_calls_used": 10,
+    "historical_calls_used": 5,
     "maintenance_calls_per_run": 2
   },
   "geolocation": {
     "status": "complete",
     "pending": 0,
-    "located": 4995,
+    "located": 5053,
     "unlocated": 92,
     "completed_unlocated": 92,
     "outcome": "success",
-    "processed_this_run": 86,
-    "review_required": 81
+    "processed_this_run": 66,
+    "review_required": 89
   },
   "categories": [
     {
@@ -177,7 +180,7 @@
       "stop_code": "budget_reached"
     }
   ],
-  "finalized_at": "2026-10-24T19:49:06.002170+00:00",
+  "finalized_at": "2026-10-25T14:40:11.925517+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success"
 }
