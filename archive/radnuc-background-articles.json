@@ -3,8 +3,39 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-26T16:14:10.471532+00:00",
+ "updated_at": "2026-10-26T21:44:07.752072+00:00",
  "articles": [
+  {
+   "id": "radnuc-background-e1ecd613ddc643e7",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNRnBGYThPZHJiX0hQNUN5QVM0OTlIM3FVMUVxTDQ5MV9jMkdBbnU5S05tdGoyXzY1Qm1iVnNBdkpiV1dDSlQ0dWFlYXp1aHZPT1BDLWRNQnk5SkNGeHNkeXA4ZGVFQzVWMHk1eW9IV1pPLWdvdko5LXY2SnNDdjM3R05GQVQ5ZGxJLXpoYWlIV3NzYXhheUN2TQ?oc=5",
+   "title": "7,800 tons of wastewater are being discharged into the ocean at Fukushima Daiichi",
+   "summary": "TEPCO has commenced the 25th release of treated wastewater from the Fukushima Daiichi Nuclear Power Plant. This operation is part of the ongoing decommissioning process to manage stored water at the site.",
+   "original_title": "Fukuşima Daiichi'de 7 bin 800 ton atık su okyanusa boşaltılıyor",
+   "original_language": "tr",
+   "source": "İlke Haber Ajansı",
+   "published": "2026-10-26T14:32:09+00:00",
+   "collected_at": "2026-10-26T21:44:07.752072+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a record of civilian nuclear industry facility decommissioning and waste management."
+  },
   {
    "id": "radnuc-background-4318b82bc1140a33",
    "kind": "radnuc_background",
@@ -161,6 +192,37 @@
    "ai_relevance_reason": "RadNuc background only: This report pertains to advancements and public discussion regarding nuclear fusion technology."
   },
   {
+   "id": "radnuc-background-e8c6c3cd41ec6637",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBFNDZYdGZlUjMzU3hSUzg2N2NKWlBubmhCR3BJd2lnMV9WZS1sTXEta3JfZUJPQW83dHdoMms1Y2ZxYmlfTDc3a29fdzJJcFljMXpiMnI4WnNBVkJxaDR4RQ?oc=5",
+   "title": "SoloTech team from RTU MIREA won the Rosatom track on additive technologies at the Open#Mosprom hackathon",
+   "summary": "The SoloTech team from RTU MIREA secured victory in a competition focused on additive manufacturing technologies hosted by Rosatom. The hackathon aimed to foster innovation in industrial technologies within the Russian nuclear sector.",
+   "original_title": "Команда SoloTech из РТУ МИРЭА победила в треке «Росатома» по аддитивным технологиям на хакатоне «Открой#Моспром»",
+   "original_language": "ru",
+   "source": "Атомная энергия 2.0",
+   "published": "2026-10-26T11:57:02+00:00",
+   "collected_at": "2026-10-26T21:44:07.752072+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Reports on technological advancements and industry-supported innovation in additive manufacturing for the nuclear sector."
+  },
+  {
    "id": "radnuc-background-8f2a642afb8d40fa",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -192,6 +254,37 @@
    "ai_relevance_reason": "RadNuc background only: Relevant to industry supply chain/facility repurposing within the nuclear sector."
   },
   {
+   "id": "radnuc-background-77028ba188dd561f",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNWGxxenFLUFBicFhsd1FGYUtxWmNxOVBRUGhDeEY2alhKLU16QTFQWDBqV3RUTXNReEY3el8ydlpHX2prMW1kUEFXVVhMSV9GbDdxN2NMaVdZR2FJTlFaS0JmOVdlYll3SVQ0V2dRNjl1cmEzS21TcDY1aUYyQnl2c1ZMeDlNQ0x2bWtlWmJB?oc=5",
+   "title": "Tüpraş is entering the mini nuclear reactor business",
+   "summary": "Turkish petroleum company Tüpraş has announced intentions to enter the Small Modular Reactor (SMR) sector. This signals a new industrial development in civilian nuclear energy technology.",
+   "original_title": "Tüpraş mini nükleer reaktör işine giriyor",
+   "original_language": "tr",
+   "source": "Deniz Haber",
+   "published": "2026-10-26T09:26:26+00:00",
+   "collected_at": "2026-10-26T21:44:07.752072+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Records a business move into civilian nuclear power development."
+  },
+  {
    "id": "radnuc-background-ae68263787deded9",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -221,6 +314,99 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This is a record of academic and scientific development in nuclear fusion."
+  },
+  {
+   "id": "radnuc-background-cbb625d8cfb1fa6f",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQUFNpc2hZNUdMUnBvVlcwUnhoRVNQNUhrX0J5X0ZGR1FRamZsWVhtWFIzdFVNMVd5YVc1dEFyNGVHazBZWkwxMkFFeWJCTkk2cERmLUs4M3ROWkR1M3BuUl9kZnJWR1RZeF9HdVNwSjd4Z3pCeW5pUURqR0JmNFpQS1UzWTJmd0U?oc=5",
+   "title": "A world first... Finland's underground nuclear waste facility",
+   "summary": "Finland has advanced the status of its geological repository project for the final disposal of high-level nuclear waste. This facility represents a significant milestone in civilian nuclear waste lifecycle management.",
+   "original_title": "Dünyada ilk… Finlandiya’dan yeraltına nükleer atık tesisi",
+   "original_language": "tr",
+   "source": "İz Gazete",
+   "published": "2026-10-26T09:16:00+00:00",
+   "collected_at": "2026-10-26T21:44:07.752072+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Reports on the advancement of civilian radioactive waste management infrastructure."
+  },
+  {
+   "id": "radnuc-background-d6dd2d6fb6cc8e68",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxQYUNSOHRtRVVKVnpvamJxMjVNcEFBaTJvbXRNbkQtNEhKeGF3YlFRRU9lY3VMY0hUazhJR0JlcjY4RzBCdnJza3RrTkRoTXo1SUJIS2lDbTEtbGlmUVlwaDlUS1psVGo0RzhVZTJEZmttU0JYUHBtY09CeWxHTjFLMnNRNF9kdw?oc=5",
+   "title": "Carney: Negotiations intensifying on CANDU proposal",
+   "summary": "Diplomatic and industrial negotiations are intensifying regarding the proposal to utilize CANDU reactor technology. This reflects ongoing activity in nuclear supply chain and facility planning.",
+   "original_title": "Carney: CANDU teklifinde müzakereler yoğunlaşıyor",
+   "original_language": "tr",
+   "source": "Turkville",
+   "published": "2026-10-26T05:08:09+00:00",
+   "collected_at": "2026-10-26T21:44:07.752072+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Concerns civilian nuclear industry commercial and technological negotiation."
+  },
+  {
+   "id": "radnuc-background-911e44a400600224",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9wRHZ4MFQyQVJUVFFMbTVEUERqZXZ0QnhmcWlhYzNJZnJ3dzlicnlXbktLZU5MTkR0X0NJa0tGWmtGUUFXbWF0Z0d6bHVBZGJtei00QVUwc0hBLTF0Y0V4bldUbkw2SVZRQjZrRThB?oc=5",
+   "title": "Ben-Gurion University students to design small nuclear reactors",
+   "summary": "Students at Ben-Gurion University are set to undertake a project focused on the design of small modular nuclear reactors. This academic initiative aims to explore advancements in compact nuclear power technology.",
+   "original_title": "סטודנטים מאוניברסיטת בן-גוריון יתכננו כורים גרעיניים קטנים",
+   "original_language": "he",
+   "source": "YNET",
+   "published": "2026-10-26T04:13:01+00:00",
+   "collected_at": "2026-10-26T21:44:07.752072+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Focuses on academic research and technological development within the civilian nuclear industry."
   },
   {
    "id": "radnuc-background-8375b4a1f919aa5c",
@@ -2279,37 +2465,6 @@
    "ai_relevance_reason": "RadNuc background only: Updates regarding nuclear-related emergency response training."
   },
   {
-   "id": "radnuc-background-c93523f67b8b5a7a",
-   "kind": "radnuc_background",
-   "archive_only": true,
-   "background_reviewed": true,
-   "ai_selected": false,
-   "ai_current_ct_event": false,
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "primary_event_type": "BACKGROUND_INFO",
-   "actor_group": null,
-   "parent_event_id": null,
-   "parent_incident_id": null,
-   "country": null,
-   "region": null,
-   "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPMkZYendieVlMV2ppNWRjZE9BZl9UYXlFTTZGSnpqMkdDV3ZGZlBBc2s3SzRwalJjd01uQ3NnYnVMaHRuRW1qb09XMkFYVkRaYTlncU5yNENZY29qN1k2V0NZNmVxWlQ0eVhIbUwzUldQQVFTYlVfQkVIR3IxM1h3UWtMNlB1YTZWWlo4UW1zNVlPLXhRUDYtZHpKR1NfeEN2bDlQaE14dw?oc=5",
-   "title": "Finland is the first country in the world to approve an underground nuclear waste storage facility",
-   "summary": "Finland has officially authorized the operation of an underground repository for the long-term storage of nuclear waste. This marks a milestone in the development of civilian nuclear fuel-cycle infrastructure.",
-   "original_title": "فنلندا أول دولة في العالم تقر مستودعا لتخزين النفايات النووية تحت الأرض",
-   "original_language": "ar",
-   "source": "بوابة الشروق",
-   "published": "2026-10-23T13:19:19+00:00",
-   "collected_at": "2026-10-23T13:40:01.700344+00:00",
-   "background_topics": [
-    "industry_supply_chain"
-   ],
-   "ai_relevance_score": null,
-   "ai_relevance_reason": "RadNuc background only: This concerns the civilian nuclear industry lifecycle (waste storage) which is eligible under industry_supply_chain."
-  },
-  {
    "id": "radnuc-background-7be1a6f1c0b2df8e",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -3709,38 +3864,6 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Represents a technological development in the nuclear sector."
-  },
-  {
-   "id": "radnuc-background-66bb558ebafd8c10",
-   "kind": "radnuc_background",
-   "archive_only": true,
-   "background_reviewed": true,
-   "ai_selected": false,
-   "ai_current_ct_event": false,
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "primary_event_type": "BACKGROUND_INFO",
-   "actor_group": null,
-   "parent_event_id": null,
-   "parent_incident_id": null,
-   "country": null,
-   "region": null,
-   "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPUjBYVEdFX2x4OFJLSzZQNkowWXRRa2IwWDVqMDdabGtPRnRqXzE2ckxDMndvTlA1T2NEXzh1R1pzN25mMl9QMlkyQlIza1RFWVlTbEhtaXBISUNOUWMzdGlUVXFOcFhoVXdsdThLdllPdlU1STVfWVJheGRfMy03TE1jT0pVYklUc0J1SFEyVmdrcVo3YkZScmNxRVMxQlVWLXF2VGFHS1BqZw?oc=5",
-   "title": "Finland approved the construction of the world's first permanent nuclear waste storage facility.",
-   "summary": "Finland has officially approved the development of a permanent repository for nuclear waste. This marks a significant milestone in the civilian nuclear lifecycle and regulatory progress.",
-   "original_title": "פינלנד אישרה הקמת מתקן אחסון פסולת גרעינית קבוע ראשון בעולם.",
-   "original_language": "he",
-   "source": "Vietnam.vn",
-   "published": "2026-10-23T04:51:47+00:00",
-   "collected_at": "2026-10-24T18:54:56.902302+00:00",
-   "background_topics": [
-    "industry_supply_chain",
-    "regulation_and_licensing"
-   ],
-   "ai_relevance_score": null,
-   "ai_relevance_reason": "RadNuc background only: Documented progress in nuclear waste management and facility licensing."
   },
   {
    "id": "radnuc-background-90e047067018ad66",

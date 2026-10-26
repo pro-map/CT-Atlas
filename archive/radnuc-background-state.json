@@ -1648,27 +1648,45 @@
   "0fb7cdf9650854f1": "2026-10-26T16:14:10.471532+00:00",
   "12353c5542464b14": "2026-10-26T16:14:10.471532+00:00",
   "2b62ed68d9e4f53c": "2026-10-26T16:14:10.471532+00:00",
-  "73f5aa27a7a359c4": "2026-10-26T16:14:10.471532+00:00"
+  "73f5aa27a7a359c4": "2026-10-26T16:14:10.471532+00:00",
+  "3037f46b5ed775aa": "2026-10-26T21:44:07.752072+00:00",
+  "28369d3d09f51411": "2026-10-26T21:44:07.752072+00:00",
+  "81de47ea5ea44dc1": "2026-10-26T21:44:07.752072+00:00",
+  "5a3314f1f3bf3e80": "2026-10-26T21:44:07.752072+00:00",
+  "567e96455e7e882a": "2026-10-26T21:44:07.752072+00:00",
+  "37a057a2e71b942a": "2026-10-26T21:44:07.752072+00:00",
+  "077f121d4023f192": "2026-10-26T21:44:07.752072+00:00",
+  "79ca2356398b9e1c": "2026-10-26T21:44:07.752072+00:00",
+  "b17db11cd588c77c": "2026-10-26T21:44:07.752072+00:00",
+  "d87d2f9a491ede34": "2026-10-26T21:44:07.752072+00:00",
+  "28cce56502a68d8e": "2026-10-26T21:44:07.752072+00:00",
+  "635b56daaa5e349d": "2026-10-26T21:44:07.752072+00:00",
+  "a1d4e2bbfa1146a3": "2026-10-26T21:44:07.752072+00:00",
+  "7a3bd4fdf6ab226a": "2026-10-26T21:44:07.752072+00:00",
+  "600341e26f483f55": "2026-10-26T21:44:07.752072+00:00",
+  "13c604aeb8580152": "2026-10-26T21:44:07.752072+00:00",
+  "cbcc5fc8cfb7b183": "2026-10-26T21:44:07.752072+00:00",
+  "bda63908945ad1ac": "2026-10-26T21:44:07.752072+00:00"
  },
  "pending": [
   {
-   "id": "6487c44dbfc57731",
+   "id": "3b6135c586278c29",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Fukuşima Daiichi'de 7 bin 800 ton atık su okyanusa boşaltılıyor",
-   "summary": "Fukuşima Daiichi'de 7 bin 800 ton atık su okyanusa boşaltılıyor İlke Haber Ajansı",
-   "original_title": "Fukuşima Daiichi'de 7 bin 800 ton atık su okyanusa boşaltılıyor",
-   "original_summary": "Fukuşima Daiichi'de 7 bin 800 ton atık su okyanusa boşaltılıyor İlke Haber Ajansı",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-26T14:32:09+00:00",
-   "source": "İlke Haber Ajansı",
+   "title": "דילמה אסטרטגית משמעותית בפני רוסיה: איום פצצת הגרעין מתהפך",
+   "summary": "דילמה אסטרטגית משמעותית בפני רוסיה: איום פצצת הגרעין מתהפך מעריב",
+   "original_title": "דילמה אסטרטגית משמעותית בפני רוסיה: איום פצצת הגרעין מתהפך",
+   "original_summary": "דילמה אסטרטגית משמעותית בפני רוסיה: איום פצצת הגרעין מתהפך מעריב",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-10-26T08:30:00+00:00",
+   "source": "מעריב",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNRnBGYThPZHJiX0hQNUN5QVM0OTlIM3FVMUVxTDQ5MV9jMkdBbnU5S05tdGoyXzY1Qm1iVnNBdkpiV1dDSlQ0dWFlYXp1aHZPT1BDLWRNQnk5SkNGeHNkeXA4ZGVFQzVWMHk1eW9IV1pPLWdvdko5LXY2SnNDdjM3R05GQVQ5ZGxJLXpoYWlIV3NzYXhheUN2TQ?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1SR2NpMHN5UHZHSEpCMTRraWExWGpSTFpvbmxSbEpqUTdDNlJLWEhvSnh5bDlvSkNCbmJNWHhmb0dldlRBbG1DUXpfc2EzN1lkZjZVaDd6SzVLQUNlUHJySQ?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1680,160 +1698,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "b46c6f3549aa340b4a0940974a4b8b5d014eca06efa214f916fde1dc060f9c53"
+    "c0e81ae86710abb0c814191112e00b98b1cf5f1e2126f35a782a4b5fcb1acf10"
    ],
-   "background_query_language": "tr"
+   "background_query_language": "he"
   },
   {
-   "id": "5f579bed766fe276",
+   "id": "29a49e9659a501e1",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Japonya Fukuşima Daiichi'den 25. partide 7.800 ton atık suyu okyanusa boşaltıyor",
-   "summary": "Japonya Fukuşima Daiichi'den 25. partide 7.800 ton atık suyu okyanusa boşaltıyor Haberler",
-   "original_title": "Japonya Fukuşima Daiichi'den 25. partide 7.800 ton atık suyu okyanusa boşaltıyor",
-   "original_summary": "Japonya Fukuşima Daiichi'den 25. partide 7.800 ton atık suyu okyanusa boşaltıyor Haberler",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-26T11:31:42+00:00",
-   "source": "Haberler",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNUVRvNWNiOEdENEM1dzFKOUdib040c25LSHlvRk45TVozd21ySXVudTRuRXhsdFNJZDlMRmpObS11dGlFdnlnNGVqY052UTk0RTlscm1ub09RSGk0Z3hrc3poeGhHZG5pbXpMbnItTUVQOVQxWTZKdWRMNU04N1UtTF9qXzJTTERBRGJRbU1zcVFxbHNzZ2lUeEY5cw?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "ef0c0bb88d16207fd94f0925f80fe78e301060b0af6c3bab740497657b96722c"
-   ],
-   "background_query_language": "tr"
-  },
-  {
-   "id": "e7295269cda811dd",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Tüpraş mini nükleer reaktör işine giriyor",
-   "summary": "Tüpraş mini nükleer reaktör işine giriyor Deniz Haber",
-   "original_title": "Tüpraş mini nükleer reaktör işine giriyor",
-   "original_summary": "Tüpraş mini nükleer reaktör işine giriyor Deniz Haber",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-26T09:26:26+00:00",
-   "source": "Deniz Haber",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNWGxxenFLUFBicFhsd1FGYUtxWmNxOVBRUGhDeEY2alhKLU16QTFQWDBqV3RUTXNReEY3el8ydlpHX2prMW1kUEFXVVhMSV9GbDdxN2NMaVdZR2FJTlFaS0JmOVdlYll3SVQ0V2dRNjl1cmEzS21TcDY1aUYyQnl2c1ZMeDlNQ0x2bWtlWmJB?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "4e660c6abc6c7bd129ae527a127ad37c23e12f53069820ff2c98af90036dad36"
-   ],
-   "background_query_language": "tr"
-  },
-  {
-   "id": "4acf26b58498b2a7",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Dünyada ilk… Finlandiya’dan yeraltına nükleer atık tesisi",
-   "summary": "Dünyada ilk… Finlandiya’dan yeraltına nükleer atık tesisi İz Gazete",
-   "original_title": "Dünyada ilk… Finlandiya’dan yeraltına nükleer atık tesisi",
-   "original_summary": "Dünyada ilk… Finlandiya’dan yeraltına nükleer atık tesisi İz Gazete",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-26T09:16:00+00:00",
-   "source": "İz Gazete",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQUFNpc2hZNUdMUnBvVlcwUnhoRVNQNUhrX0J5X0ZGR1FRamZsWVhtWFIzdFVNMVd5YVc1dEFyNGVHazBZWkwxMkFFeWJCTkk2cERmLUs4M3ROWkR1M3BuUl9kZnJWR1RZeF9HdVNwSjd4Z3pCeW5pUURqR0JmNFpQS1UzWTJmd0U?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "e93905e2401c8a41055a8844894cce95ceaf6f8bf4a704df0fa0d302c9dc170f"
-   ],
-   "background_query_language": "tr"
-  },
-  {
-   "id": "0b11f3c7d76972ef",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Carney: CANDU teklifinde müzakereler yoğunlaşıyor",
-   "summary": "Carney: CANDU teklifinde müzakereler yoğunlaşıyor Turkville",
-   "original_title": "Carney: CANDU teklifinde müzakereler yoğunlaşıyor",
-   "original_summary": "Carney: CANDU teklifinde müzakereler yoğunlaşıyor Turkville",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-26T05:08:09+00:00",
-   "source": "Turkville",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxQYUNSOHRtRVVKVnpvamJxMjVNcEFBaTJvbXRNbkQtNEhKeGF3YlFRRU9lY3VMY0hUazhJR0JlcjY4RzBCdnJza3RrTkRoTXo1SUJIS2lDbTEtbGlmUVlwaDlUS1psVGo0RzhVZTJEZmttU0JYUHBtY09CeWxHTjFLMnNRNF9kdw?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "debf9228465e1df079e233b663f6ae40b72d98c019db8cef0ea179e5f45c4887"
-   ],
-   "background_query_language": "tr"
-  },
-  {
-   "id": "09ca8293ce33af82",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Nükleer teknolojinin potansiyelini etkin ve güvenli bir şekilde kullanmak.",
-   "summary": "Nükleer teknolojinin potansiyelini etkin ve güvenli bir şekilde kullanmak. Vietnam.vn",
-   "original_title": "Nükleer teknolojinin potansiyelini etkin ve güvenli bir şekilde kullanmak.",
-   "original_summary": "Nükleer teknolojinin potansiyelini etkin ve güvenli bir şekilde kullanmak. Vietnam.vn",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-26T04:29:19+00:00",
+   "title": "ניצול יעיל ובטוח של הפוטנציאל של טכנולוגיה גרעינית.",
+   "summary": "ניצול יעיל ובטוח של הפוטנציאל של טכנולוגיה גרעינית. Vietnam.vn",
+   "original_title": "ניצול יעיל ובטוח של הפוטנציאל של טכנולוגיה גרעינית.",
+   "original_summary": "ניצול יעיל ובטוח של הפוטנציאל של טכנולוגיה גרעינית. Vietnam.vn",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-10-26T04:25:05+00:00",
    "source": "Vietnam.vn",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNOUoxOFZ1Q0NVZzFESU4wUEdSMXVnTU1uR3dNM3VpWjRIbldLeE5OM3lrLUVxOUJ0dk9sMi1CZG9udzVEb21Lc2VrdUkyaVZBM3hqSERPSnVTbWdNN2I2ajROTEd2MEpkRHYtOVZQQzh1UTF1UjVLTWhoMFZEZndZSHN5d2paOWI3?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOLTFxVS1kajVrS1JMaG53TzJYWWcwaHVRVWZMNGVENXBKZVpqZmJEX0Q3VmZSQ0dXZmZ5VzlNQWxfSTYya1VGWTIyMzZiQi1za3Nsc1dJOHd3cXJ3a2t4WGs4bXl0UWt3ZWlmQVFtZnFKTFdBQVlHUW52UnJuRk00Q29fNHNwMHJh?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1845,28 +1731,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "76902225ef6defaa71704bfcfc5660c2b8bfeae4956eca672bcf6ce14b476397"
+    "d928d3112a061c1e568ee38efe8bde065064841aa4cad50fcf1ec24f8e0baae1"
    ],
-   "background_query_language": "tr"
+   "background_query_language": "he"
   },
   {
-   "id": "49ac689d7cae576a",
+   "id": "74a15d00005ca5b2",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Radyasyonla çalıştık, sendikalaştık, işten atıldık: Taşeronun ödülü klinik şefine",
-   "summary": "Radyasyonla çalıştık, sendikalaştık, işten atıldık: Taşeronun ödülü klinik şefine Evrensel",
-   "original_title": "Radyasyonla çalıştık, sendikalaştık, işten atıldık: Taşeronun ödülü klinik şefine",
-   "original_summary": "Radyasyonla çalıştık, sendikalaştık, işten atıldık: Taşeronun ödülü klinik şefine Evrensel",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-25T20:23:27+00:00",
-   "source": "Evrensel",
+   "title": "מטוסי טייפון בריטיים השתתפו בתרגיל גרעיני צרפתי",
+   "summary": "מטוסי טייפון בריטיים השתתפו בתרגיל גרעיני צרפתי Israel Defense",
+   "original_title": "מטוסי טייפון בריטיים השתתפו בתרגיל גרעיני צרפתי",
+   "original_summary": "מטוסי טייפון בריטיים השתתפו בתרגיל גרעיני צרפתי Israel Defense",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-10-25T12:00:01+00:00",
+   "source": "Israel Defense",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQcy1KUTBVRmRpYVpzS18xaGE0YWdlWDlSRm5xOUFxU1lhTTJkN3RZOU9lSnY5aEpmRXl3WXljSVQ0OW5YVG55a3pQRGJYRFBmbVJ6bXhMemV0dmx4LVNOS1JYUm43X05NTk0yanB0Mno0WmxoV0hzdHc5VWdvNEtEbGRaNTM2V1kzR3RrS18tSG1wRGN4SXM4Q0JFUF81ZmltNEZ2X2tOdEYtS2oxX2pfUXpFSS12bnI4?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE96aWRaNVRyNnpqRUNRUjZYZ1hUR0x4ZFFvY0lTc0FCYWthT1dDN3dmQ1JVYlN6QTgtTXI3OTZNLVFPYkZKMHo1eTVoamJ3UVhtY1AzeQ?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1878,28 +1764,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "3d6ebe9e05f9678edf4627ae089b5f396b1afa8021ec01d01c2a1cd4d14e064f"
+    "7d1fd23a3ca6e81384be252bf2aecefbc435798333a6dff9c6708293e42b9dc8"
    ],
-   "background_query_language": "tr"
+   "background_query_language": "he"
   },
   {
-   "id": "93125637d2f4a366",
+   "id": "21224dc64f50bcf9",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "2026 KPSS Ortaöğretim sonuçları ne zaman açıklanacak?",
-   "summary": "2026 KPSS Ortaöğretim sonuçları ne zaman açıklanacak? Mihrap Haber",
-   "original_title": "2026 KPSS Ortaöğretim sonuçları ne zaman açıklanacak?",
-   "original_summary": "2026 KPSS Ortaöğretim sonuçları ne zaman açıklanacak? Mihrap Haber",
-   "original_language": "tr",
-   "collection_language": "tr",
-   "collection_language_name": "Turkish",
-   "collection_locale": "TR:tr",
-   "published": "2026-10-25T18:03:00+00:00",
-   "source": "Mihrap Haber",
+   "title": "ל\"נסיבות קיצוניות\": צרפת ובריטניה קיימו תרגיל תקיפה גרעינית",
+   "summary": "ל\"נסיבות קיצוניות\": צרפת ובריטניה קיימו תרגיל תקיפה גרעינית mako",
+   "original_title": "ל\"נסיבות קיצוניות\": צרפת ובריטניה קיימו תרגיל תקיפה גרעינית",
+   "original_summary": "ל\"נסיבות קיצוניות\": צרפת ובריטניה קיימו תרגיל תקיפה גרעינית mako",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-10-25T09:31:00+00:00",
+   "source": "mako",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPZ3k0T2tRbmQzb3YwVEtwQXRvTjBVV3B5aksxTko2d2lCdFpVbFFoak1xbkFEeUR0ZUtodjd4ZU5kd2ZETXI3NG4tMmh3R3YzRlRvbjdfT1k1dlNTMjVVYk5VWHFNSlp4Y3lLeHhmN2FEazBValkwWVBFTUdpbGRzQWc2QmhTTEJUUUJmeUFsVDVKeVR2eHFFbndB0gGfAUFVX3lxTFBwV091UW11U3dJRTlQUjBqRTBYMTJEMUFsbTllb3VfVEZsdkVBTnAwSm5zb1hpTlgwRllNMWVhNVFzRTdXMmotZUUzU1VNbWlvRWNaZVBGZVVKY0Y1YWFETWVSd3dlUjgzRnFidVR4Z0RqbHFYX0oyX05wUmRYZnJPR0VRVHNQVkljUW5MREpERktJNkc5UW9naXFFOUM1UQ?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE1yQk9mb3JvMTRGejkxUTUwcVExYWFIZy1pMENuc09vak81djBkczdyMlFYQVA0UDJrYlNQeVh3NkJCRW1uNmlHS09peXc0Z1BfR1ltNDRORldsSEtKem9ERkMwTnlTZXRzY0FQWW1OOGRBSkNs?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1911,9 +1797,108 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "c9d14d2bacdcddc6b5dd701f82a7c451375ab7f2f9501140903816750e5727d0"
+    "421232db9fc048b5e82d22c5f7e51464c3e65b11e4e524f88dfa1df4cf89d43d"
    ],
-   "background_query_language": "tr"
+   "background_query_language": "he"
+  },
+  {
+   "id": "c231fd753fc9f838",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "בריטניה וצרפת עורכות תרגילים בתגובה למתקפה נגד נאט\"ו.",
+   "summary": "בריטניה וצרפת עורכות תרגילים בתגובה למתקפה נגד נאט\"ו. Vietnam.vn",
+   "original_title": "בריטניה וצרפת עורכות תרגילים בתגובה למתקפה נגד נאט\"ו.",
+   "original_summary": "בריטניה וצרפת עורכות תרגילים בתגובה למתקפה נגד נאט\"ו. Vietnam.vn",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-10-25T01:53:32+00:00",
+   "source": "Vietnam.vn",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPaFVFU3VyUTNuNUxGd1JHRWlVY3AzZjJxaDVXQkc1VzRTSHRkdkF2RjZISkNONnBoX1k0VDlreGVUczNHY1FtSTc0dTMyNk5PRzBUNnRWMU11N2RmOEtZMmxISmxoUXQzM2U3ME1tb0xiRU1nOTNWdXdIV1VnUDBMaXZpLWZadw?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "e9887d000f29783bdb99e6abace563f3164cf57328654a4421d6634befe0017f"
+   ],
+   "background_query_language": "he"
+  },
+  {
+   "id": "8c6f8d3379c71219",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "פיתוח אוניברסיטת דה לאט למרכז הכשרה איכותי.",
+   "summary": "פיתוח אוניברסיטת דה לאט למרכז הכשרה איכותי. Vietnam.vn",
+   "original_title": "פיתוח אוניברסיטת דה לאט למרכז הכשרה איכותי.",
+   "original_summary": "פיתוח אוניברסיטת דה לאט למרכז הכשרה איכותי. Vietnam.vn",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-10-24T15:06:25+00:00",
+   "source": "Vietnam.vn",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQRmEwZU5KcGtqTGMtNXVjd25nNDkxZ1psWEpyZm9jczlRaEV0X0tTd0cwemlUbnJ3MFVxSllZejBoYzF0cm1FMDhNVnk0aUhPckU1cG9FT3gydF85Yk9vWExzU1hiUnJ3eS1LcFNvUFdlam9tNEhDN3o3RjJFYzQ3c2pubU0yVFIzRF9ELTl2bmwyM1JwQk9nVWk4ZXFMQQ?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "8501c8cd7a032d6cefa4799674bff4b9051cb1c899c6e3807b3e15cbecbce61b"
+   ],
+   "background_query_language": "he"
+  },
+  {
+   "id": "b0453f4c1c3d73f6",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "בריטניה וצרפת מבצעות את התקיפה הגרעינית המשותפת הראשונה שלהן.",
+   "summary": "בריטניה וצרפת מבצעות את התקיפה הגרעינית המשותפת הראשונה שלהן. Vietnam.vn",
+   "original_title": "בריטניה וצרפת מבצעות את התקיפה הגרעינית המשותפת הראשונה שלהן.",
+   "original_summary": "בריטניה וצרפת מבצעות את התקיפה הגרעינית המשותפת הראשונה שלהן. Vietnam.vn",
+   "original_language": "he",
+   "collection_language": "he",
+   "collection_language_name": "Hebrew",
+   "collection_locale": "IL:he",
+   "published": "2026-10-24T10:53:02+00:00",
+   "source": "Vietnam.vn",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQX0lkaUpKUUxBWHhUeURhZ2Q1Nm5PLWd3RkRlaG9qUzNJYmtwd0V5OW5tVFBRLUcyRkxlYkFFTmJxS05NVHFEek91UjZiZGx2ZE5rNnUxZXYtWDk4S3pTSXRzdms5dU50eXU5NHAzSjFRWHY0QWx2UHNaOEdlOUlpcUdmUGlMbGxGWVRfdw?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "f754288053cbfa1c81d7d463896a3501a07fb8212ddf1c81330a119a441d20b1"
+   ],
+   "background_query_language": "he"
   },
   {
    "id": "de7948636c12c6a0",
@@ -18086,6 +18071,6 @@
    "background_query_language": "it"
   }
  ],
- "cursor": 27,
- "updated_at": "2026-10-26T16:14:10.471532+00:00"
+ "cursor": 35,
+ "updated_at": "2026-10-26T21:44:07.752072+00:00"
 }
