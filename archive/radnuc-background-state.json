@@ -1617,27 +1617,58 @@
   "f3f0771aeffcc506": "2026-10-25T13:48:21.841365+00:00",
   "0b22dcf8a163ed8f": "2026-10-25T13:48:21.841365+00:00",
   "35b5925a83c047db": "2026-10-25T13:48:21.841365+00:00",
-  "be28a1a98b56a3ae": "2026-10-25T13:48:21.841365+00:00"
+  "be28a1a98b56a3ae": "2026-10-25T13:48:21.841365+00:00",
+  "30e63eda3c9c070e": "2026-10-26T16:14:10.471532+00:00",
+  "98b2b2187305f650": "2026-10-26T16:14:10.471532+00:00",
+  "162edf3e3a80c705": "2026-10-26T16:14:10.471532+00:00",
+  "121e097ec40b9512": "2026-10-26T16:14:10.471532+00:00",
+  "c1263087ddc5fbb7": "2026-10-26T16:14:10.471532+00:00",
+  "8d718bb15d84f2e4": "2026-10-26T16:14:10.471532+00:00",
+  "783ecba10e599200": "2026-10-26T16:14:10.471532+00:00",
+  "9ce407a22a0f7f56": "2026-10-26T16:14:10.471532+00:00",
+  "6802b16a3875ca52": "2026-10-26T16:14:10.471532+00:00",
+  "523fbee28d81c66c": "2026-10-26T16:14:10.471532+00:00",
+  "3ca1a41289ca34d0": "2026-10-26T16:14:10.471532+00:00",
+  "9de21adf5d01302f": "2026-10-26T16:14:10.471532+00:00",
+  "a8ef5e869938ef36": "2026-10-26T16:14:10.471532+00:00",
+  "c6027d7342cb5524": "2026-10-26T16:14:10.471532+00:00",
+  "90de41778ccaacca": "2026-10-26T16:14:10.471532+00:00",
+  "16b299ca631c4b9c": "2026-10-26T16:14:10.471532+00:00",
+  "17aa9d9afc68d1b7": "2026-10-26T16:14:10.471532+00:00",
+  "7097d5c1cbdc5b68": "2026-10-26T16:14:10.471532+00:00",
+  "fb87a28bd8404eac": "2026-10-26T16:14:10.471532+00:00",
+  "45836540c62bd9bb": "2026-10-26T16:14:10.471532+00:00",
+  "4c3db8d91c2634c3": "2026-10-26T16:14:10.471532+00:00",
+  "23dd492efab8ac07": "2026-10-26T16:14:10.471532+00:00",
+  "510ba70f99c55f99": "2026-10-26T16:14:10.471532+00:00",
+  "16f0cb3095692763": "2026-10-26T16:14:10.471532+00:00",
+  "75dea834921896f1": "2026-10-26T16:14:10.471532+00:00",
+  "1b2f2d3ec31e2136": "2026-10-26T16:14:10.471532+00:00",
+  "7258cf9f9538d197": "2026-10-26T16:14:10.471532+00:00",
+  "0fb7cdf9650854f1": "2026-10-26T16:14:10.471532+00:00",
+  "12353c5542464b14": "2026-10-26T16:14:10.471532+00:00",
+  "2b62ed68d9e4f53c": "2026-10-26T16:14:10.471532+00:00",
+  "73f5aa27a7a359c4": "2026-10-26T16:14:10.471532+00:00"
  },
  "pending": [
   {
-   "id": "d9fd2504fab967d8",
+   "id": "6487c44dbfc57731",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Netanyahu muestra Tel Aviv bajo ataque nuclear y advierte de otro Holocausto",
-   "summary": "Netanyahu muestra Tel Aviv bajo ataque nuclear y advierte de otro Holocausto Noticias de Israel",
-   "original_title": "Netanyahu muestra Tel Aviv bajo ataque nuclear y advierte de otro Holocausto",
-   "original_summary": "Netanyahu muestra Tel Aviv bajo ataque nuclear y advierte de otro Holocausto Noticias de Israel",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-10-25T12:26:37+00:00",
-   "source": "Noticias de Israel",
+   "title": "Fukuşima Daiichi'de 7 bin 800 ton atık su okyanusa boşaltılıyor",
+   "summary": "Fukuşima Daiichi'de 7 bin 800 ton atık su okyanusa boşaltılıyor İlke Haber Ajansı",
+   "original_title": "Fukuşima Daiichi'de 7 bin 800 ton atık su okyanusa boşaltılıyor",
+   "original_summary": "Fukuşima Daiichi'de 7 bin 800 ton atık su okyanusa boşaltılıyor İlke Haber Ajansı",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-26T14:32:09+00:00",
+   "source": "İlke Haber Ajansı",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQSHN1M1phQkFGbE0zNGNmXzVVaUJodXVIVjFsM25KN3dEby1PUjh1alZLSk02LWc0TFRrOE9CdE81RGxfOEZwSEtkQVI4Y1N6ZU9iLUJ0TmVYR3NWRTN0LUVIRTZIZUUzRTRFeFVTVy1zU1ZFOXFZLXJ0UlA2dE1BelBvMWZ2Q01oQmFnLTJfVm5iS3ltZnhhSGktbTYxVERpdDNyYWtXY05FSHNGWnhpcklINA?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNRnBGYThPZHJiX0hQNUN5QVM0OTlIM3FVMUVxTDQ5MV9jMkdBbnU5S05tdGoyXzY1Qm1iVnNBdkpiV1dDSlQ0dWFlYXp1aHZPT1BDLWRNQnk5SkNGeHNkeXA4ZGVFQzVWMHk1eW9IV1pPLWdvdko5LXY2SnNDdjM3R05GQVQ5ZGxJLXpoYWlIV3NzYXhheUN2TQ?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1649,28 +1680,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "1685f6d2c320a5aab5ed2480b2f2eef7e77f444855671b74ff26c3bd56be2772"
+    "b46c6f3549aa340b4a0940974a4b8b5d014eca06efa214f916fde1dc060f9c53"
    ],
-   "background_query_language": "es"
+   "background_query_language": "tr"
   },
   {
-   "id": "b774a56169e99837",
+   "id": "5f579bed766fe276",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Netanyahu advierte riesgo de un “segundo Holocausto” si pierde las elecciones en Israel y desata críticas en la oposición",
-   "summary": "Netanyahu advierte riesgo de un “segundo Holocausto” si pierde las elecciones en Israel y desata críticas en la oposición La Tercera",
-   "original_title": "Netanyahu advierte riesgo de un “segundo Holocausto” si pierde las elecciones en Israel y desata críticas en la oposición",
-   "original_summary": "Netanyahu advierte riesgo de un “segundo Holocausto” si pierde las elecciones en Israel y desata críticas en la oposición La Tercera",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-10-25T11:27:55+00:00",
-   "source": "La Tercera",
+   "title": "Japonya Fukuşima Daiichi'den 25. partide 7.800 ton atık suyu okyanusa boşaltıyor",
+   "summary": "Japonya Fukuşima Daiichi'den 25. partide 7.800 ton atık suyu okyanusa boşaltıyor Haberler",
+   "original_title": "Japonya Fukuşima Daiichi'den 25. partide 7.800 ton atık suyu okyanusa boşaltıyor",
+   "original_summary": "Japonya Fukuşima Daiichi'den 25. partide 7.800 ton atık suyu okyanusa boşaltıyor Haberler",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-26T11:31:42+00:00",
+   "source": "Haberler",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMikwJBVV95cUxQTW5NQ2FFLXRxSnBtTDBBelFrdTNYVWE4RW5KU1ZQUnBXTFlIX1dlSTlpLV9ucGh2X1dnTHB1MW5TUS1kYmZJX252ck85ZU81WVJ5MEdTTkRjNENzb2d6a1JHTkpyQW40T0JGS0FudkZJSksyOUotZGFsb09mbXdQMm1QR0djNFBqMzBYLVJmNlUzN1hpcERLZUVOQ2VRUDFmT081R3VfU3pjOHpkcXBhYUxTZkRCQlY0UUR0WS1xZHpMaUFTVm5ReUFvTGR1NGlzUjk1OGhUYTFjQ0hqWlF2OEZvY1I4TzlMU0ZPTHBmbm5CZ3F0OWwwWGFGcC1zWGE1X2tfMlltRzRvMXlVTEVYS2l0MNIBkwJBVV95cUxQTW5NQ2FFLXRxSnBtTDBBelFrdTNYVWE4RW5KU1ZQUnBXTFlIX1dlSTlpLV9ucGh2X1dnTHB1MW5TUS1kYmZJX252ck85ZU81WVJ5MEdTTkRjNENzb2d6a1JHTkpyQW40T0JGS0FudkZJSksyOUotZGFsb09mbXdQMm1QR0djNFBqMzBYLVJmNlUzN1hpcERLZUVOQ2VRUDFmT081R3VfU3pjOHpkcXBhYUxTZkRCQlY0UUR0WS1xZHpMaUFTVm5ReUFvTGR1NGlzUjk1OGhUYTFjQ0hqWlF2OEZvY1I4TzlMU0ZPTHBmbm5CZ3F0OWwwWGFGcC1zWGE1X2tfMlltRzRvMXlVTEVYS2l0MA?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNUVRvNWNiOEdENEM1dzFKOUdib040c25LSHlvRk45TVozd21ySXVudTRuRXhsdFNJZDlMRmpObS11dGlFdnlnNGVqY052UTk0RTlscm1ub09RSGk0Z3hrc3poeGhHZG5pbXpMbnItTUVQOVQxWTZKdWRMNU04N1UtTF9qXzJTTERBRGJRbU1zcVFxbHNzZ2lUeEY5cw?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1682,28 +1713,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "7a679752ce4e215fee88e1daae60377ce1b307093457d1d9ae8ca5cde1b03424"
+    "ef0c0bb88d16207fd94f0925f80fe78e301060b0af6c3bab740497657b96722c"
    ],
-   "background_query_language": "es"
+   "background_query_language": "tr"
   },
   {
-   "id": "4355f239df6d0ad0",
+   "id": "e7295269cda811dd",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Ni blanca ni azul: descubren una estrella verde fantasmal que desafía todo lo que sabíamos",
-   "summary": "Ni blanca ni azul: descubren una estrella verde fantasmal que desafía todo lo que sabíamos El Nacional.cat",
-   "original_title": "Ni blanca ni azul: descubren una estrella verde fantasmal que desafía todo lo que sabíamos",
-   "original_summary": "Ni blanca ni azul: descubren una estrella verde fantasmal que desafía todo lo que sabíamos El Nacional.cat",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-10-25T11:00:00+00:00",
-   "source": "El Nacional.cat",
+   "title": "Tüpraş mini nükleer reaktör işine giriyor",
+   "summary": "Tüpraş mini nükleer reaktör işine giriyor Deniz Haber",
+   "original_title": "Tüpraş mini nükleer reaktör işine giriyor",
+   "original_summary": "Tüpraş mini nükleer reaktör işine giriyor Deniz Haber",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-26T09:26:26+00:00",
+   "source": "Deniz Haber",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQSHVkVlExaFVrZUdsVFdLOTJCWVpEWGpaYUswZzVwdzBtenIySHFUaU9paDVrUmV4b1h1NHdBSXRnSnFjMGEyaXNWeVdGNWhjMHJabWdmVEhJRUN4Rm9WRC1lZWpBYjdTa2JzanBNMTdUNGRQWG1EM2xVbGp1VmNSclFFdlBjMzZMc1paX25DcFAtMTBjbDNPaGpTcy1tUGZTOW9QcnhkSHlWZUtRRWx0cXg4V2ZZb2R3Nm1pOVJtNTZUbVZ6d29fekUzVVc?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNWGxxenFLUFBicFhsd1FGYUtxWmNxOVBRUGhDeEY2alhKLU16QTFQWDBqV3RUTXNReEY3el8ydlpHX2prMW1kUEFXVVhMSV9GbDdxN2NMaVdZR2FJTlFaS0JmOVdlYll3SVQ0V2dRNjl1cmEzS21TcDY1aUYyQnl2c1ZMeDlNQ0x2bWtlWmJB?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1715,28 +1746,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "8beb745a0db9ff0ca7e66aea2f72986083c62b6fe1b43125cb3c978afeb68323"
+    "4e660c6abc6c7bd129ae527a127ad37c23e12f53069820ff2c98af90036dad36"
    ],
-   "background_query_language": "es"
+   "background_query_language": "tr"
   },
   {
-   "id": "9b963c843f7e86b3",
+   "id": "4acf26b58498b2a7",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Netanyahu dice que si no es reelegido puede haber \"un segundo holocausto\"",
-   "summary": "Netanyahu dice que si no es reelegido puede haber \"un segundo holocausto\" El Confidencial",
-   "original_title": "Netanyahu dice que si no es reelegido puede haber \"un segundo holocausto\"",
-   "original_summary": "Netanyahu dice que si no es reelegido puede haber \"un segundo holocausto\" El Confidencial",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-10-25T10:43:00+00:00",
-   "source": "El Confidencial",
+   "title": "Dünyada ilk… Finlandiya’dan yeraltına nükleer atık tesisi",
+   "summary": "Dünyada ilk… Finlandiya’dan yeraltına nükleer atık tesisi İz Gazete",
+   "original_title": "Dünyada ilk… Finlandiya’dan yeraltına nükleer atık tesisi",
+   "original_summary": "Dünyada ilk… Finlandiya’dan yeraltına nükleer atık tesisi İz Gazete",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-26T09:16:00+00:00",
+   "source": "İz Gazete",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPNjBrY19fM0lpaE5ud1lxY09vS24tQTB1aEJjMVc1YnFrUGY5czM4V2hOT3A1SnVQRjhVbER3dWhlZ3FnV01SRzRIOXdrLVFsS2dLWjV6WUdrQjFKLTVwQ0owRVNiWVdTUEF3LUVwNVU4S3ZtVEdHRVo5a1dHVVJBRmJQOTNxUXVaTXpEWW5QMWdaTlZwbjl6dzRNVFVHWUIwUEY2TEVSU1hNV2pzLU8wXw?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQUFNpc2hZNUdMUnBvVlcwUnhoRVNQNUhrX0J5X0ZGR1FRamZsWVhtWFIzdFVNMVd5YVc1dEFyNGVHazBZWkwxMkFFeWJCTkk2cERmLUs4M3ROWkR1M3BuUl9kZnJWR1RZeF9HdVNwSjd4Z3pCeW5pUURqR0JmNFpQS1UzWTJmd0U?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1748,28 +1779,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "80a7b068539c236b0f9395cb34e3c17b8b535e48b4152898bfd0c260e551fc47"
+    "e93905e2401c8a41055a8844894cce95ceaf6f8bf4a704df0fa0d302c9dc170f"
    ],
-   "background_query_language": "es"
+   "background_query_language": "tr"
   },
   {
-   "id": "f83789ce1516a95e",
+   "id": "0b11f3c7d76972ef",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "¿Puede Alemania reformar su economía antes de que la AfD siga creciendo?",
-   "summary": "¿Puede Alemania reformar su economía antes de que la AfD siga creciendo? DW.com",
-   "original_title": "¿Puede Alemania reformar su economía antes de que la AfD siga creciendo?",
-   "original_summary": "¿Puede Alemania reformar su economía antes de que la AfD siga creciendo? DW.com",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-10-25T07:35:23+00:00",
-   "source": "DW.com",
+   "title": "Carney: CANDU teklifinde müzakereler yoğunlaşıyor",
+   "summary": "Carney: CANDU teklifinde müzakereler yoğunlaşıyor Turkville",
+   "original_title": "Carney: CANDU teklifinde müzakereler yoğunlaşıyor",
+   "original_summary": "Carney: CANDU teklifinde müzakereler yoğunlaşıyor Turkville",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-26T05:08:09+00:00",
+   "source": "Turkville",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPeE5aZGRRVVZ6LXNfeWxrR0tfY21sOC1Ga25mUkpTY00wM2tlQTdpcXNQTS1RS3VFWkFaTjNkb011ZEFQOFdjVjAxNUhNUjEzS1hULVNnQUkyQmpqSHZZZVd2MzJpQXVzNU1RUkRwdlhXVTMyWFVVUTFFNjh1TFVBbEZXUHQyamphZERjNl9fd1NCQVVIcXptVWRLdFJMNkZpSDgwN3h1bGh5NDdG0gGsAUFVX3lxTE5rZXBZRUZuanNvZ294bUxvT0JPZzZTcjJmUXh1V2NJZzlwRkdBQkdGc2d6NWNGSzQwbmFtdUxwMmp0V2F3cFhhaVBjdVcyZXZKdVJfVXV0dGxFM3RPU3V6TGIxbFdZR3g0a01SWlRBeXRIVWJJYmxFRVV3ZlRpQUN6bEhqTG1OLVpMZFV3QXVVOE9KYTM4YmQ4d0FIQUxMckxMM20zczYwQUZrTDY?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxQYUNSOHRtRVVKVnpvamJxMjVNcEFBaTJvbXRNbkQtNEhKeGF3YlFRRU9lY3VMY0hUazhJR0JlcjY4RzBCdnJza3RrTkRoTXo1SUJIS2lDbTEtbGlmUVlwaDlUS1psVGo0RzhVZTJEZmttU0JYUHBtY09CeWxHTjFLMnNRNF9kdw?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1781,61 +1812,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "b322b1a45471bdf9098f7b37ecc873296c87450f2cbb789b2be94cb375a64c6e"
+    "debf9228465e1df079e233b663f6ae40b72d98c019db8cef0ea179e5f45c4887"
    ],
-   "background_query_language": "es"
+   "background_query_language": "tr"
   },
   {
-   "id": "e294cffeabf15ac4",
+   "id": "09ca8293ce33af82",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "El reto energético: renovables, demanda y energía nuclear",
-   "summary": "El reto energético: renovables, demanda y energía nuclear La Razón",
-   "original_title": "El reto energético: renovables, demanda y energía nuclear",
-   "original_summary": "El reto energético: renovables, demanda y energía nuclear La Razón",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-10-25T05:00:38+00:00",
-   "source": "La Razón",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOc1kzXzN4dVRweE5EOEZVQ2xLMWtBanJaY0Jla0RjMl9Sb210VmtHbFIzbVEzQXZmbEpja0tqZ3NzcUR5WldscmIwTzg1UFJiNFFESzNral84ZEZmaVJ5NktzSXNWRkJfdnMtY0lDMngzRzhBS05HYVZHM1RYT2UxTkQ1cWZQVVJSb1JNdkRjRi1temRjTUcwUmZVazVJckFhSnNkUkxlb0dULVNtTENXLUZJZ1RKSndLMXRXZDhHWGNBb0JuTlhTYThWTnNKR1ZJ0gHQAUFVX3lxTE5zWTNfM3h1VHB4TkQ4RlVDbEsxa0FqclpjQmVrRGMyX1JvbXRWa0dsUjNtUTNBdmZsSmNrS2pnc3NxRHlaV2xyYjBPODVQUmI0UURLM2tqXzhkRmZpUnk2S3NJc1ZGQl92cy1jSUMyeDNHOEFLTkdhVkczVFhPZTFORDVxZlBVUlJvUk12RGNGLW16ZGNNRzBSZlVrNUlyQWFKc2RSTGVvR1QtU21MQ1ctRklnVEpKd0sxdFdkOEdYY0FvQm5OWFNhOFZOc0pHVkk?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "8fad8343c8aac6c00de3c33a4c7e54f5909a269c0494e39375c554d88fd3a7bb"
-   ],
-   "background_query_language": "es"
-  },
-  {
-   "id": "3f13e5230ed0a08b",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Estados Unidos anuncia la conversión exitosa de mercurio en oro.",
-   "summary": "Estados Unidos anuncia la conversión exitosa de mercurio en oro. Vietnam.vn",
-   "original_title": "Estados Unidos anuncia la conversión exitosa de mercurio en oro.",
-   "original_summary": "Estados Unidos anuncia la conversión exitosa de mercurio en oro. Vietnam.vn",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-10-25T04:09:07+00:00",
+   "title": "Nükleer teknolojinin potansiyelini etkin ve güvenli bir şekilde kullanmak.",
+   "summary": "Nükleer teknolojinin potansiyelini etkin ve güvenli bir şekilde kullanmak. Vietnam.vn",
+   "original_title": "Nükleer teknolojinin potansiyelini etkin ve güvenli bir şekilde kullanmak.",
+   "original_summary": "Nükleer teknolojinin potansiyelini etkin ve güvenli bir şekilde kullanmak. Vietnam.vn",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-26T04:29:19+00:00",
    "source": "Vietnam.vn",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxORGlCMVJnNFMtUE1ZV0hmRUZtSktuUzRRQmtrSmVDY3pITzRseHBMVXZPRTlZZjJRemJUVXQwek5oekRzc3VfWXVfdlc3bTNCZUdTczY5RkZwNGlBTEIwVW83UVlJRVZpYl9jWk9FQVRiXy1CemRXc0NxZDk1akJiWDgwc0xOcEU?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNOUoxOFZ1Q0NVZzFESU4wUEdSMXVnTU1uR3dNM3VpWjRIbldLeE5OM3lrLUVxOUJ0dk9sMi1CZG9udzVEb21Lc2VrdUkyaVZBM3hqSERPSnVTbWdNN2I2ajROTEd2MEpkRHYtOVZQQzh1UTF1UjVLTWhoMFZEZndZSHN5d2paOWI3?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1847,28 +1845,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "303d956aa0b51f017ccca7b30e87f26ee3e0b2a8b22081ac7787e0cae3173348"
+    "76902225ef6defaa71704bfcfc5660c2b8bfeae4956eca672bcf6ce14b476397"
    ],
-   "background_query_language": "es"
+   "background_query_language": "tr"
   },
   {
-   "id": "7179ad52272d0a72",
+   "id": "49ac689d7cae576a",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Broadcom, energía nuclear para centros de datos y audiolibros en Spotify",
-   "summary": "Broadcom, energía nuclear para centros de datos y audiolibros en Spotify Foro3D",
-   "original_title": "Broadcom, energía nuclear para centros de datos y audiolibros en Spotify",
-   "original_summary": "Broadcom, energía nuclear para centros de datos y audiolibros en Spotify Foro3D",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-10-25T03:07:37+00:00",
-   "source": "Foro3D",
+   "title": "Radyasyonla çalıştık, sendikalaştık, işten atıldık: Taşeronun ödülü klinik şefine",
+   "summary": "Radyasyonla çalıştık, sendikalaştık, işten atıldık: Taşeronun ödülü klinik şefine Evrensel",
+   "original_title": "Radyasyonla çalıştık, sendikalaştık, işten atıldık: Taşeronun ödülü klinik şefine",
+   "original_summary": "Radyasyonla çalıştık, sendikalaştık, işten atıldık: Taşeronun ödülü klinik şefine Evrensel",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-25T20:23:27+00:00",
+   "source": "Evrensel",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQY1RBeFNXRkZ4V1dZbkdZd3ZqNldFWHhTV3JlZ21KSUNrcmswRVNER0RyNEFraFIwaUg2dWZ1ZVFoVmZfeFkyN1NrRDUtX094ZVFHeG1MYy02S3ZqTWNUbHduYlVjNEpKSXg3ZEtTN2IwRGp1cHc4c2t1eWhQYVNqTWo5ZGZSQWF2cGQyUW90QzA3d2FpeGNLaWstQzlfcnREWi16c0x1aktDT2c?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQcy1KUTBVRmRpYVpzS18xaGE0YWdlWDlSRm5xOUFxU1lhTTJkN3RZOU9lSnY5aEpmRXl3WXljSVQ0OW5YVG55a3pQRGJYRFBmbVJ6bXhMemV0dmx4LVNOS1JYUm43X05NTk0yanB0Mno0WmxoV0hzdHc5VWdvNEtEbGRaNTM2V1kzR3RrS18tSG1wRGN4SXM4Q0JFUF81ZmltNEZ2X2tOdEYtS2oxX2pfUXpFSS12bnI4?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1880,28 +1878,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "e19521ce8e169a419059db328ce8013c715700b87057eda1eb3346100b53ae0e"
+    "3d6ebe9e05f9678edf4627ae089b5f396b1afa8021ec01d01c2a1cd4d14e064f"
    ],
-   "background_query_language": "es"
+   "background_query_language": "tr"
   },
   {
-   "id": "5f870d3852123687",
+   "id": "93125637d2f4a366",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "TPNW - El mundo ante la amenaza nuclear: la Conferencia de Nueva York llama a los gobiernos a la responsabilidad",
-   "summary": "TPNW - El mundo ante la amenaza nuclear: la Conferencia de Nueva York llama a los gobiernos a la responsabilidad Pressenza - International Press Agency",
-   "original_title": "TPNW - El mundo ante la amenaza nuclear: la Conferencia de Nueva York llama a los gobiernos a la responsabilidad",
-   "original_summary": "TPNW - El mundo ante la amenaza nuclear: la Conferencia de Nueva York llama a los gobiernos a la responsabilidad Pressenza - International Press Agency",
-   "original_language": "es",
-   "collection_language": "es",
-   "collection_language_name": "Spanish",
-   "collection_locale": "ES:es",
-   "published": "2026-10-24T15:29:38+00:00",
-   "source": "Pressenza - International Press Agency",
+   "title": "2026 KPSS Ortaöğretim sonuçları ne zaman açıklanacak?",
+   "summary": "2026 KPSS Ortaöğretim sonuçları ne zaman açıklanacak? Mihrap Haber",
+   "original_title": "2026 KPSS Ortaöğretim sonuçları ne zaman açıklanacak?",
+   "original_summary": "2026 KPSS Ortaöğretim sonuçları ne zaman açıklanacak? Mihrap Haber",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-25T18:03:00+00:00",
+   "source": "Mihrap Haber",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxPZERGSEVESWx1bWZjWjlDeXdrTllsWm1MX1E1c1hZSjlReVdEOUxIY190Qkl3UVlXUzM3N3lyVzVVaG9UNFJydW5CRF9EWmVET0RCMlpzTkJvNzBwZTB4ZVRxa2NVbGhiVGFMT056SFptUHNDZ2tLcE12WHhwZWM0Q096OFllRlJKSXFjSHJMbW52SnVsbE05UnktNDFLSkQ1SWd0TFBZRTdzY1J0MFN4NFk2NFBHRjVTMnFEVEVGWXZoNlJmVHRwZ29JUUlSdDREem1MZFpHM2ZkYXpwUHNjdw?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPZ3k0T2tRbmQzb3YwVEtwQXRvTjBVV3B5aksxTko2d2lCdFpVbFFoak1xbkFEeUR0ZUtodjd4ZU5kd2ZETXI3NG4tMmh3R3YzRlRvbjdfT1k1dlNTMjVVYk5VWHFNSlp4Y3lLeHhmN2FEazBValkwWVBFTUdpbGRzQWc2QmhTTEJUUUJmeUFsVDVKeVR2eHFFbndB0gGfAUFVX3lxTFBwV091UW11U3dJRTlQUjBqRTBYMTJEMUFsbTllb3VfVEZsdkVBTnAwSm5zb1hpTlgwRllNMWVhNVFzRTdXMmotZUUzU1VNbWlvRWNaZVBGZVVKY0Y1YWFETWVSd3dlUjgzRnFidVR4Z0RqbHFYX0oyX05wUmRYZnJPR0VRVHNQVkljUW5MREpERktJNkc5UW9naXFFOUM1UQ?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1913,42 +1911,9 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "26ebe769fed754a2dcf3a14c2fca2891e3e9ab9ffd7071001d3e02cf43a81f6c"
+    "c9d14d2bacdcddc6b5dd701f82a7c451375ab7f2f9501140903816750e5727d0"
    ],
-   "background_query_language": "es"
-  },
-  {
-   "id": "61f01b0e2a8f3099",
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "title": "Dissuasion nucléaire : Rafale et Typhoon réalisent une première",
-   "summary": "Dissuasion nucléaire : Rafale et Typhoon réalisent une première Le Revenu",
-   "original_title": "Dissuasion nucléaire : Rafale et Typhoon réalisent une première",
-   "original_summary": "Dissuasion nucléaire : Rafale et Typhoon réalisent une première Le Revenu",
-   "original_language": "fr",
-   "collection_language": "fr",
-   "collection_language_name": "French",
-   "collection_locale": "FR:fr",
-   "published": "2026-10-23T16:34:00+00:00",
-   "source": "Le Revenu",
-   "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNQklOZGlLVjFzQlVvb1FqTzBhYXRBNVFrTWRQTjhQcVRnMXZSOU9RaTJGQkdNWmpoZWVvdFBEcFBGTExKUEVHSEswQ2trWms0LVNwcF8xT0tERnhmV3VyTGpzdGZRRWlkMUdfVGxHNmJpYXQ0aGVQZG1WcHFLSldFd2UybGNsR1haTmZqc0Y3dGNRWlhWVXA1WjlzMTRNZi1vTmhwS0Q3ckdyTjJZ?oc=5",
-   "collector": "Google News RSS",
-   "country": null,
-   "country_code": null,
-   "city": null,
-   "region": null,
-   "latitude": null,
-   "longitude": null,
-   "location_precision": "unknown",
-   "location_confidence": "low",
-   "acquisition_channel": "archive_enrichment",
-   "source_article_fingerprints": [
-    "f6289aff79696c08c4de97c283242032065102d6e4eb1a366eadf55625134140"
-   ],
-   "background_query_language": "fr"
+   "background_query_language": "tr"
   },
   {
    "id": "de7948636c12c6a0",
@@ -18121,6 +18086,6 @@
    "background_query_language": "it"
   }
  ],
- "cursor": 22,
- "updated_at": "2026-10-25T19:49:40.197063+00:00"
+ "cursor": 27,
+ "updated_at": "2026-10-26T16:14:10.471532+00:00"
 }

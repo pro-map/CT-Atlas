@@ -3,8 +3,256 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-25T19:49:40.197063+00:00",
+ "updated_at": "2026-10-26T16:14:10.471532+00:00",
  "articles": [
+  {
+   "id": "radnuc-background-4318b82bc1140a33",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMihwJBVV95cUxNMEJmMkJuWklMbTN4S2hNNTZUS2x0U1ZkQXVOS3ltclRFN3RjODZrbG1oNUVzWWR4S0szZkZFeDJZNWpvQW5rdzkyX3B6enFOT2JGVXBFdEZOZGNBaEtkRnA1ck5wNFpzeE5xZlhHb0RhdVF2Zk5kLXZEZ2w1LW9FbTh6Mjd0S0RZc1ppelBjNUQ1akhYNVJpSi0wdWk5MVJSU3VFNW5UYWsxQi1mNFB1cm1sQnl5dllNbURoTmQzRUliUVdIelo0SXRjdjdRb0JNQUJ0NE9kSkJUTkRJa0tKR0pSa05WTXlFRTJzWVJvR2pGRzRKaFduSDJ6bmY1YUcycnZJSWFFWQ?oc=5",
+   "title": "Nuclear: First year of the Research Program covering new reactors, training, and health applications",
+   "summary": "The ENEA research program has completed its first year, focusing on new reactor technologies and nuclear applications in the health sector. The initiative also emphasizes professional training within the nuclear field.",
+   "original_title": "Nucleare: primo anno del Programma di Ricerca tra nuovi reattori, formazione e applicazioni per la salute",
+   "original_language": "it",
+   "source": "ENEA-media",
+   "published": "2026-10-26T14:07:26+00:00",
+   "collected_at": "2026-10-26T16:14:10.471532+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report describes progress in civilian nuclear research and technological training."
+  },
+  {
+   "id": "radnuc-background-435fbde5e704ce86",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQQmxmM3pfakNHNXpZVnBZbm42WkhhTjZWZGJhSzBHTWZsWmpEeUV1M1NraUg1aE94dWhfS2FVQkRKOWpRUzVMU01WOS1vV1BiRVU1WlV2NEZNdG5kRXRSRzhSZk9MWXEyMWdmNEJ5cVk1SzZZTGdWVVVHbDF4eFpKVzlxUER4OW1tRzBQc0dWVW9zb213RHNmVzc2WXlITnBlOFE?oc=5",
+   "title": "Nuclear fusion, a mathematical shortcut for ignition",
+   "summary": "Researchers have identified a new mathematical method aimed at facilitating the ignition process in nuclear fusion experiments. This advancement contributes to the ongoing development of fusion energy technology.",
+   "original_title": "Fusione nucleare, una scorciatoia matematica per l’ignizione",
+   "original_language": "it",
+   "source": "TecnoAndroid",
+   "published": "2026-10-26T13:20:00+00:00",
+   "collected_at": "2026-10-26T16:14:10.471532+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a dated scientific update regarding advancements in nuclear fusion research."
+  },
+  {
+   "id": "radnuc-background-ba2c696d85bbaac4",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPeFNzenVScUNqWDdvc09XM3J3SVliWjgxU0hQV200aFhsMFJodl81TGNfMVc0dUNDSHBoZE9uVjdRNTBqYkVmOEpscHFlSTJ2Q0F0RlBXaDRyUmRrTmduVE1seS1zNDY3aGpvSm5UTlBQajB4NlJScGpud0lVWURIdmJ2enJ6emV5ekw0YUlFX3YwbVJrRVRBOGdNMEhWeTlEVGhnSUlIRDducTJKZlZOU0ZwWEN5aGxYLURFQ3M0ZExTRXFQUHQzbQ?oc=5",
+   "title": "How does Finland intend to store nuclear fuel 450 meters deep?",
+   "summary": "Finland is developing deep geological repository technology to store spent nuclear fuel at a depth of 450 meters. This project represents a significant development in long-term radioactive waste management infrastructure.",
+   "original_title": "Como a Finlândia pretende armazenar combustível nuclear a 450 metros de profundidade?",
+   "original_language": "pt",
+   "source": "Times Brasil | CNBC",
+   "published": "2026-10-26T13:00:00+00:00",
+   "collected_at": "2026-10-26T16:14:10.471532+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Topic: industry_supply_chain (waste storage/decommissioning infrastructure)."
+  },
+  {
+   "id": "radnuc-background-0a29518d4b5b4fac",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5CUWJpVjh5Ql9MLWR0c0RQLWVBN0tkRENBbzUtREJLOGlGTS00TDJsOXROLXI0aTUwaU9pOHpsamF4aFhYUVRnaHZaeEpKU0pPNXVvNHlRSEl5QjQ0VV9kNlB1WXlCQnM3THZWSGM1d2RDOVk?oc=5",
+   "title": "Artificial Intelligence and nuclear: 'Behind the meter' reactors or a true renaissance?",
+   "summary": "Industry experts are debating the role of AI in driving the deployment of nuclear reactors to support energy demand. The discussion explores whether AI-integrated systems represent a genuine resurgence for the civilian nuclear sector.",
+   "original_title": "Intelligenza artificiale e nucleare: reattori “dietro il contatore” o vero rinascimento?",
+   "original_language": "it",
+   "source": "Quotidiano Energia",
+   "published": "2026-10-26T12:34:27+00:00",
+   "collected_at": "2026-10-26T16:14:10.471532+00:00",
+   "background_topics": [
+    "industry_ai_applications"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This covers industry trends regarding the application of AI in the nuclear energy sector."
+  },
+  {
+   "id": "radnuc-background-9dd0f08291199f7e",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPb24zaXMxZXpoNFp2TFBjdDRNWUlhV2VfQ3I0TFlGR2pOM1BiWFlyVTF6aW8tdVJodHBJLVdCZ1NEOE5iaXR4VmU4QkM5bldNbjRpNDRnUU9mYS1MV1V1M2Y4aGVNdnVwR19hOHA4REp4Q0k1VVFEeF9YdWxaMDVOaGVhS0ZELXl0S3pNX2VPYTNsNUtLQ05oUEo1b0xzUlpzdXpYY3EwQVpLdDhmTzhEXw?oc=5",
+   "title": "Rome, Wednesday event 'All possible energies: from renewables to fusion'",
+   "summary": "A public event in Rome is scheduled to discuss the energy landscape, covering developments from renewable sources to nuclear fusion. The event aims to address the integration of various energy technologies.",
+   "original_title": "Roma, mercoledì evento “Tutte le energie possibili: dalle rinnovabili alla fusione”",
+   "original_language": "it",
+   "source": "Askanews",
+   "published": "2026-10-26T12:22:21+00:00",
+   "collected_at": "2026-10-26T16:14:10.471532+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report pertains to advancements and public discussion regarding nuclear fusion technology."
+  },
+  {
+   "id": "radnuc-background-8f2a642afb8d40fa",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNVEFscVNiRkJaaV8zenFCTHZWeW9SRTBaUExCbVlzWWIySDctMTRpeVQ1ZlBBaTlCSVN1WXRmMUZKY3FFZ2RJTVh3MWVad3VkZkVlblJidGROQ0FvZWVtVml6V3I4emgtNjVJdmpyWFZZQnpDOW15WDA2cFkwNmVHTTNGc2wyMlZhZGN3RmptTm84Y2dkSC1yWXYxUExlQW02cGo4X1Z4ZHRrWEZBUjdIaQ?oc=5",
+   "title": "NVIDIA considers transforming old German nuclear power plants into data centers",
+   "summary": "NVIDIA is reportedly evaluating the conversion of decommissioned nuclear power plant sites in Germany into data center facilities. This initiative concerns the repurposing of existing nuclear industry infrastructure.",
+   "original_title": "NVIDIA pondera transformar antigas centrais nucleares alemãs em centros de dados",
+   "original_language": "pt",
+   "source": "TugaTech",
+   "published": "2026-10-26T09:27:49+00:00",
+   "collected_at": "2026-10-26T16:14:10.471532+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relevant to industry supply chain/facility repurposing within the nuclear sector."
+  },
+  {
+   "id": "radnuc-background-ae68263787deded9",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNWWR3cTR5UGxCRG9UbXVUMDh4T2dPN3BOUWZBb3ZGa2M4Q0ZNdWhvTENlSHI5WHpGTjhsTGJGVGJMUW9BTEJ4cVZyLWUtYVpma2VYUXR2alNJV3hvMDZ1SWhZdU5YSUhJZVFyYnhEd3ZFUFoxVGpVRjhqQTFCcHhzWDdvSkgxMHZneWJvV0pKcTE3YnNaNmVraGt4V2UwbVVvSUh1ZTJJZ0V6UG90VTZXRXBta2xLeFI5bEFFQmg3Nmg?oc=5",
+   "title": "Nuclear fusion, international recognition for researchers from the University of Pavia",
+   "summary": "Researchers from the University of Pavia have received international recognition for their contributions to nuclear fusion science. The award highlights progress made in the field of fusion technology research.",
+   "original_title": "Fusione nucleare, riconoscimento internazionale per i ricercatori dell’Università di Pavia",
+   "original_language": "it",
+   "source": "Prima Pavia",
+   "published": "2026-10-26T09:23:31+00:00",
+   "collected_at": "2026-10-26T16:14:10.471532+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a record of academic and scientific development in nuclear fusion."
+  },
+  {
+   "id": "radnuc-background-8375b4a1f919aa5c",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxQVVk2ejJ6SW83blVHTDdhTl8zNy1zSmFwRDVtek9zUl9HRkUxWXFGVVB1X3dNRXdlQmpybzJsOXAtU1RCcXlLNnE3alVRck1jYTF4TXB4bmdFQmhVb2VUcXljZkpoeDZsZktWeGJybjFLbU9MMWwteGdzRHVRSUJKYVduQ2ZTdw?oc=5",
+   "title": "The Alchemists are coming: Nuclear Fusion Gold?",
+   "summary": "This report covers recent scientific developments concerning nuclear fusion applications and related research outcomes. It highlights potential technological advances in the fusion field.",
+   "original_title": "Os Alquimistas estão chegando: Ouro de Fusão Nuclear?",
+   "original_language": "pt",
+   "source": "Meio Bit",
+   "published": "2026-10-25T22:39:20+00:00",
+   "collected_at": "2026-10-26T16:14:10.471532+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to nuclear fusion technology developments."
+  },
   {
    "id": "radnuc-background-ca27dcd0fff5680d",
    "kind": "radnuc_background",
@@ -1406,6 +1654,38 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Official outlook published by an international nuclear organization relevant to industry development."
+  },
+  {
+   "id": "radnuc-background-4031816577115c23",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPXzVaTm9fQ1ZZTnRmbnRqcEM5MUE0OXV4WE5QN0l2eHhheWNhR1hkMWtHdDAtb2UzWUJIenRjOXNENzV0dmZPSmRCa04wM1JhNkxqWWFPRkdCOE1MNW1XdnJyN2N2d3VXMVZtQlZrejBVN3FTaTVSVmdNdFg4TjN6MHlOMDJIR2V4LWZUR091X2trYVpvRjFxeXlsYjFzS0h4d2RsVWFyUWpNb2xLMHhPMDdQSzJJbGxEal8zSFVSX2VnbC1NNjI5VWt1SnQ?oc=5",
+   "title": "Finland receives license to bury spent nuclear fuel more than 400 meters deep, while Brazil stores Angra's fuel in containers next to the plants, without a defined destination",
+   "summary": "Finnish regulators have granted a license for the deep geological disposal of spent nuclear fuel. The report contrasts this with the current storage situation at Brazil's Angra facility.",
+   "original_title": "Finlândia recebe licença para enterrar combustível nuclear usado a mais de 400 metros de profundidade, enquanto o Brasil guarda o de Angra em contêineres ao lado das usinas, sem destino definido",
+   "original_language": "pt",
+   "source": "Revista Sociedade Militar",
+   "published": "2026-10-23T19:00:00+00:00",
+   "collected_at": "2026-10-26T16:14:10.471532+00:00",
+   "background_topics": [
+    "regulation_and_licensing",
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Topic: regulation_and_licensing and industry_supply_chain (waste storage)."
   },
   {
    "id": "radnuc-background-22d80b4bc3a43513",
