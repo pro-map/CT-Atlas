@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-25T20:39:08.112333+00:00",
+  "removed_at": "2026-10-26T17:21:53.516806+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -1282,6 +1282,174 @@
       "country": "Nigeria",
       "ai_relevance_score": 75,
       "ai_relevance_reason": "Reports a high-casualty terrorist attack in Nigeria resulting in 29 deaths."
+    },
+    {
+      "id": "f7dba96544b6950e",
+      "incident_id": "inc-e20eef9d34444652",
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOSzdCam1nOEdIb3owVUNIYU1pZi1MaUl3ZHY0cmtlaVZYdHViallXVld2S2RIRXJYUDlLLTdMU1hQcjhxdVlqMHVXQ01ySXQ0TFBpTWlmOU9ib1N1UXV0bzd0RktPTVZiOHVyR3VmQmJwZFIxdm1TNDh1LTZPOFdsN2NUMVJCNmRDMnk1b1JFYk52VFVKbUc2NGFiUTJMbGs?oc=5",
+      "title": "Public unrest during London police press conference",
+      "summary": "Police faced public heckling while providing an update on the ongoing investigation into the recent Golders Green terror attack.",
+      "original_title": "Police heckled while giving Golders Green terror attack update",
+      "original_language": "en",
+      "source": "Sky News",
+      "published": "2026-04-29T15:18:49+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "OTHER_CT",
+      "country": "United Kingdom",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "A follow-up update to an active terrorist investigation."
+    },
+    {
+      "id": "ca6b5a857570fc3f",
+      "incident_id": "inc-1efad2ca9650ee3a",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQYU1xS0xXeksxTEktUlNTZlpfckNUb3VVTlhxVmsyeXMxejRJaW9RZ0I4VXUtZlN5VEtHa2Z2cVM0T0tkTVJsNFVEbmREMG5GZEFsc0N4RTlybE9MTDhvTE9rRWxkQWJoTjB1U1FBQ2Q5dUYyMHFiTFFTRnZWSGtrYm1JWllTN3hteFctckwxalQxYnFYc3pBaC1UOTg3emFmbW9TV0tJZGU5NHZ0RHc2bG5GZnJDQQ?oc=5",
+      "title": "Four killed in ISIS attack on telecom vehicle in Bari region",
+      "summary": "An attack attributed to ISIS targeting a telecommunications vehicle in the Bari region has left four people dead.",
+      "original_title": "Four killed in ISIS attack on Telecom vehicle in Bari region",
+      "original_language": "en",
+      "source": "Hiiraan Online",
+      "published": "2026-04-29T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "ATTACK",
+      "country": "Somalia",
+      "region": "Bari",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a lethal terrorist attack by ISIS targeting a telecommunications vehicle in Somalia's Bari region."
+    },
+    {
+      "id": "5aabd496b261b7ef",
+      "incident_id": "inc-43b23451e5006eb3",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQUWFYNlJHVHR1X3A0b0o5clFTbjBXY0lWRUhodjlyRGxxSWU4WTBBMzNtMU1TNlF1dGhhLWdRNTI0bXlfMllwT3FMVXkxWklVWG4xWHpuYWpSN095ZUFocmhTRm9FczVKRUVYajE2SzA1alFVb25VM05SUjl0bXI3Y2xKVW9ScktVT0F4MXU5cHllRFFBYjhCZmpwTkpNb29PbnNUeTNzNl9hSHFGb3c2c01PbUJVUXd0?oc=5",
+      "title": "Dismantling of a terrorist propaganda network: A former police officer at the center of the case",
+      "summary": "Security forces have dismantled a terrorist propaganda network, identifying a former police officer as a central figure.",
+      "original_title": "Démantèlement d’un réseau de propagande terroriste : un ancien policier au cœur de l’affaire",
+      "original_language": "fr",
+      "source": "algerie360.com",
+      "published": "2026-04-29T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Arrests",
+        "Online / Cyber / AI"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Algeria",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports the operational dismantling of a terrorist propaganda network and suspect arrests."
+    },
+    {
+      "id": "155afb596e2b01ee",
+      "incident_id": "inc-d6571eaf27bf3df8",
+      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE14WklvZ3VvQ2VyT0pjNUtTM0EtdVVULTM4cU90WFhqYmZVQ0pNNnc0M3RWdXdRdS1SNFlrZnUzTm91cHExTUNlajU2d3dya282bnpUYXdEYVNlWEdpWjRqc1NpWGYycy1v?oc=5",
+      "title": "Al-Qaeda terrorist attack in Abyan leaves one Southern forces soldier dead and another wounded",
+      "summary": "An Al-Qaeda attack in Abyan governorate killed one soldier from the Southern forces and injured another.",
+      "original_title": "هجوم إرهابي للقاعدة في أبين.. قتيل ومصاب من القوات الجنوبية",
+      "original_language": "ar",
+      "source": "العين الإخبارية",
+      "published": "2026-04-29T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "Al-Qaeda",
+      "primary_event_type": "ATTACK",
+      "country": "Yemen",
+      "region": "Abyan",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete, dated Al-Qaeda terrorist attack against security forces."
+    },
+    {
+      "id": "2d2a7601c4c4da9f",
+      "incident_id": "inc-31ceb365aad7535f",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE4zUm54ZmxseFJzNGpxWnhYUFk2WmRHM1YyMjAxNERrUjNwRmllbnFCdUxDUS1xdEdWUHRoVWJILXVVU0k4ZnJYaEZLRExSM1HSAUtBVV95cUxPa2w0M1djd09XSFZEOWpkUGhCN244aUdjYzZ0aDhwWkkzRUtwVXVOUENKZ3NQVHpNdVVKNTV6QTd3Ny1nVHdPenZrcG8?oc=5",
+      "title": "FSB reports prevention of terrorist attack against law enforcement head in Crimea",
+      "summary": "Russia's Federal Security Service announced the disruption of a planned terrorist attack targeting a senior law enforcement official in Crimea.",
+      "original_title": "ФСБ сообщила о предотвращении теракта против руководителя одной из правоохранительных структур Крыма",
+      "original_language": "ru",
+      "source": "Интерфакс",
+      "published": "2026-04-29T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Ukraine",
+      "region": "Crimea",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete disrupted terrorist plot and security operation by the FSB."
+    },
+    {
+      "id": "97a07aa4ce010eec",
+      "incident_id": "inc-425d99b122f46d57",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNSHhvbGFreXlnUlg3clR6elR5RmtlVWc4MnE2ZkZRT3ZQNUZpejNjcGticUN0TVc3c3VPb1dvYmhBZFAtZFVaemFOTzZBMHVZVW45eWk5VU81NlhPT0JVSTM0TnZkdHZrNGdCQ0pPaGNPblJrNVZhSTVBcVBuU29Gc09TRFlYZ0draDJBbUtaaERYbUFrQ2U2QWJB?oc=5",
+      "title": "Somali Forces Kill 22 Al Shabaab Fighters in Lower Shabelle Operation",
+      "summary": "Somali security forces killed 22 Al-Shabaab fighters during a military operation in the Lower Shabelle region.",
+      "original_title": "Somali Forces Kill 22 Al Shabaab Fighters in Lower Shabelle Operation",
+      "original_language": "en",
+      "source": "Goobjoog English",
+      "published": "2026-04-29T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "Al-Shabaab",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Somalia",
+      "region": "Lower Shabelle",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete military operation resulting in militant casualties."
+    },
+    {
+      "id": "6679f60f429fcee1",
+      "incident_id": "inc-8b66f5ebc7d5e6ff",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOa0o2bUtrRmxFM2JCTTIyejh3WF9IMnowWHU1eHNRX2lURE5VNllHLVd4bnpGOExDVXplc2hxZkZoYThhSndoT2hQQVpja2p3c0d0b1BNZTZTUHpQUVlpdno3VHR5M3pRT2ZpaUFQQVBFdTZiQkgxNFpyTGxpYUJHZmZ6Y3JkMUUzMnFZUEJ3VFdkSmpuVDFKaEVRRkljaW95UVc5WXpRZHBnMjRVLVBQTWVZX2lwd0R4bEVhQlNkN0VYZw?oc=5",
+      "title": "Venezuelans detained for kidnapping businessman linked to Tren de Aragua",
+      "summary": "Authorities in Chile arrested Venezuelan nationals involved in the kidnapping of an 84-year-old businessman, identifying links to the Tren de Aragua criminal group.",
+      "original_title": "Secuestro de empresario de 84 años: Venezolanos detenidos tienen vínculos con el Tren de Aragua",
+      "original_language": "es",
+      "source": "Teletrece",
+      "published": "2026-04-29T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "Tren de Aragua",
+      "primary_event_type": "ARREST",
+      "country": "Chile",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Follow-up arrest report regarding the Tren de Aragua kidnapping case."
+    },
+    {
+      "id": "1fa36770c332bfed",
+      "incident_id": "inc-d71cd0489a202cc6",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPZHRYZUt4LW4zWktVVzkzWlVaaWJCX3RmWTE2VjVLeUVDRFp3cTNXYWNnbm1MUnMxeU5qcnFQdEV5MVIwMjdhbW00VnAtVGVsSjk4MWR5TXNWMXVHcXZBMlZYSkpNREJEMjFuWGk2YUJMUVVTQXR0c0JZMlphQ2pMLUQ3V0psOVhuT0RTalFhdnNBQ29aZjBCcmlwdDhmX0dLWHc?oc=5",
+      "title": "Somali pirates attack tanker in Indian Ocean",
+      "summary": "A tanker has been attacked by pirates deep in the Indian Ocean, marking a significant incident.",
+      "original_title": "Somali pirates attack tanker deep in Indian Ocean",
+      "original_language": "en",
+      "source": "TradeWinds News",
+      "published": "2026-04-29T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "Somalia",
+      "region": "Indian Ocean",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Concrete maritime piracy attack."
     }
   ]
 }

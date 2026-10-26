@@ -1,35 +1,37 @@
 {
   "schema_version": 2,
   "status": "partial",
-  "run_started_at": "2026-10-25T19:35:44.810342+00:00",
-  "last_attempt_at": "2026-10-25T19:35:44.810342+00:00",
-  "published_at": "2026-10-25T20:39:48.719772+00:00",
+  "run_started_at": "2026-10-26T16:09:05.875342+00:00",
+  "last_attempt_at": "2026-10-26T16:09:05.875342+00:00",
+  "published_at": "2026-10-26T17:23:35.126739+00:00",
   "recent": {
-    "candidates": 3803,
-    "reviewed": 3803,
-    "cached": 2390,
-    "new_reviews": 1413,
+    "candidates": 3641,
+    "reviewed": 3329,
+    "cached": 1601,
+    "new_reviews": 1728,
     "official_auto_accepted": 0,
-    "retained": 284,
-    "rejected": 3519,
-    "pending": 0,
-    "status": "complete",
+    "retained": 361,
+    "rejected": 2968,
+    "pending": 312,
+    "status": "partial",
     "calls": 55,
     "primary_calls": 30,
     "overflow_calls": 25,
-    "reasons": [],
-    "window_start": "2026-10-22T19:35:44.810342+00:00",
-    "window_end": "2026-10-25T19:35:44.810342+00:00"
+    "reasons": [
+      "run_budget"
+    ],
+    "window_start": "2026-10-23T16:09:05.875342+00:00",
+    "window_end": "2026-10-26T16:09:05.875342+00:00"
   },
   "backlog": {
-    "candidates": 1521,
-    "reviewed": 514,
-    "cached": 514,
+    "candidates": 1559,
+    "reviewed": 500,
+    "cached": 500,
     "new_reviews": 0,
     "official_auto_accepted": 0,
     "retained": 0,
-    "rejected": 514,
-    "pending": 1007,
+    "rejected": 500,
+    "pending": 1059,
     "status": "partial",
     "calls": 0,
     "primary_calls": 0,
@@ -60,10 +62,10 @@
     },
     "gdelt": {
       "attempted": 10,
-      "http_attempts": 14,
-      "rate_limit_http_attempts": 7,
-      "rate_limited": 4,
-      "failed": 5,
+      "http_attempts": 16,
+      "rate_limit_http_attempts": 11,
+      "rate_limited": 6,
+      "failed": 7,
       "deferred_queries": [
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+financing%22+OR+%22terror+financing%22+OR+%22financing+terrorism%22+OR+%22terrorist+funding%22+OR+%22terror+finance+network%22%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
@@ -72,8 +74,20 @@
           "recovered": false
         },
         {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22maritime+piracy%22+OR+%22pirate+attack%22+ship+OR+%22pirate+attacks%22+vessel+OR+%22armed+robbery+at+sea%22+OR+pirates+hijacked+vessel%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
-          "label": "gdelt:Maritime Piracy",
+          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+weapons%22+OR+%22terrorist+arms%22+OR+%22terrorist+firearms%22+OR+%22weapons+smuggling%22+terrorism+OR+%22arms+trafficking%22+terrorism%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
+          "label": "gdelt:Weapons",
+          "reason": "http_429",
+          "recovered": false
+        },
+        {
+          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22security+forces+kill%22+terrorist+OR+%22security+forces+killed%22+militants+OR+%22troops+kill%22+terrorists+OR+%22militants+killed+in+raid%22+OR+%22terrorists+killed+in+raid%22%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
+          "label": "gdelt:Counter Terrorism Action",
+          "reason": "http_429",
+          "recovered": false
+        },
+        {
+          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22online+radicalization%22+terrorism+OR+%22online+radicalisation%22+terrorism+OR+%22online+extremist+radicalization%22+OR+%22online+extremist+radicalisation%22+OR+%22terrorist+propaganda%22+online%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
+          "label": "gdelt:Online / Cyber / AI",
           "reason": "http_429",
           "recovered": false
         },
@@ -96,23 +110,24 @@
           "recovered": false
         }
       ],
-      "successful": 5,
+      "successful": 3,
       "invalid_response": 2
     },
-    "errors": 5,
+    "errors": 7,
     "status": "partial"
   },
   "reasons": [
     "run_budget",
-    "geolocation_review_required",
+    "recent_pending",
     "backlog_pending",
     "source_errors",
-    "category_pending"
+    "category_pending",
+    "geolocation_review_required"
   ],
   "queue_filter": {
-    "expired": 7266,
-    "retired": 428,
-    "cancelled_history": 728,
+    "expired": 7321,
+    "retired": 415,
+    "cancelled_history": 747,
     "duplicates": 0
   },
   "budgets": {
@@ -120,14 +135,14 @@
       "per_run": 30,
       "per_day": 60,
       "used_this_run": 30,
-      "used_today": 60
+      "used_today": 30
     },
     "overflow": {
       "model": "gemini-3.1-flash-lite",
       "per_run": 25,
       "per_day": 50,
       "used_this_run": 25,
-      "used_today": 35
+      "used_today": 25
     },
     "historical_calls_per_run": 10,
     "historical_calls_used": 0,
@@ -136,12 +151,12 @@
   "geolocation": {
     "status": "complete",
     "pending": 0,
-    "located": 5132,
+    "located": 5206,
     "unlocated": 93,
     "completed_unlocated": 93,
     "outcome": "success",
-    "processed_this_run": 81,
-    "review_required": 93
+    "processed_this_run": 82,
+    "review_required": 101
   },
   "categories": [
     {
@@ -166,7 +181,7 @@
       "stop_code": "http_503"
     }
   ],
-  "finalized_at": "2026-10-25T20:44:05.770703+00:00",
+  "finalized_at": "2026-10-26T17:26:38.266014+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success"
 }
