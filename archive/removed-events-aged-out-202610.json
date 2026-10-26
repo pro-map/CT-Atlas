@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-26T17:21:53.516806+00:00",
+  "removed_at": "2026-10-26T22:40:18.792918+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -1450,6 +1450,28 @@
       "region": "Indian Ocean",
       "ai_relevance_score": 85,
       "ai_relevance_reason": "Concrete maritime piracy attack."
+    },
+    {
+      "id": "30ceff747bead229",
+      "incident_id": "inc-5d346fec8b7c3577",
+      "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxOMXV4T3Y5QTk2VE1iMEZtRWVfMWZOUWZ0UkRZWGdZYzhMWlpyT3lDVl8xWHQ3cTRaWlE2UkFESlk5QUYxb0dYSzdBYUNEZm5FVWtQYTRQWHZreFZLaHkwM19ZSm12QXZWdFBZcmR2c3VOOVQ2Nk9VM2l4bG9xSVNBa2VBRUJ1d3c5SmJNYXBaOE5jbFBxaUFBTzFBNUFGeGJZZmNMTU5XejlXd0VFb0tZYXBKMFFtQ3FYSTRYSmhBTW16V0U5emJoOGR3ZlFSdlVLV2duZElwUzJDQmt6SE1KaEd3?oc=5",
+      "title": "Syrian official involved in Eastern Ghouta chemical attack arrested",
+      "summary": "A suspect allegedly involved in the chemical attack in Eastern Ghouta, Syria, has been arrested.",
+      "original_title": "Syrie: l'arrestation d'un responsable de l'attaque chimique dans la Ghouta orientale ravive les souvenirs",
+      "original_language": "fr",
+      "source": "RFI",
+      "published": "2026-04-29T19:40:47+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Syria",
+      "region": "Damascus Governorate",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete arrest of a suspect regarding a historical chemical weapons attack."
     }
   ]
 }
