@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-26T22:40:18.792918+00:00",
+  "removed_at": "2026-10-27T16:33:35.378107+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -1472,6 +1472,129 @@
       "region": "Damascus Governorate",
       "ai_relevance_score": 75,
       "ai_relevance_reason": "Concrete arrest of a suspect regarding a historical chemical weapons attack."
+    },
+    {
+      "id": "c090220ef262b8d7",
+      "incident_id": "inc-e20eef9d34444652",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxPamRkRnBWOW9DcE5oQnVMY3IwQlNuZnJVY1NZanhhdk5HdnlRblBDamZfMV9iVnF3b1BWTlMwTXRNdFlpd1JJTGFCSUxaSVVYMmVNM1ZNRk5sSXBxSVJCMFUwUGN5eC1HLTZpRWZjY2FFZmZsN3g5ZmN6UF9HQlpFNVR3?oc=5",
+      "title": "UK raises national threat level to SEVERE",
+      "summary": "The UK government has officially raised the national terrorism threat level to SEVERE.",
+      "original_title": "UK National Threat Level raised to SEVERE",
+      "original_language": "en",
+      "source": "GOV.UK",
+      "published": "2026-04-30T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "United Kingdom",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports the official terrorist designation of a violent stabbing attack in London."
+    },
+    {
+      "id": "4dfe468ddcb046c1",
+      "incident_id": "inc-af38decd966802c6",
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQT05uSzQyTFRoM0xsVGpmblEwUVJiaHRPTkU4dWhBWTV4dEZyN1p4cnBROThzX3EzRG1CNEtvN0NndWJuRTF6Mi13R19Pc1NoSW1JRGhVcVc4cFI5WHU4ZlZlTE00Q2I2T1lVRUlQc245UjJVdDJuU01jTVBGeURUeXp6RXBYb3hCZGRJZlJESWtVd1dPeXVFNmQ3MWtnRUdlbERwd05qTU82VXNFN1p2Q1M2T3NFU0ZlY1NDUWhaR1kxNkU?oc=5",
+      "title": "Mali: JNIM jihadists begin imposing a road blockade on Bamako",
+      "summary": "JNIM jihadist militants have begun enforcing a road blockade targeting Bamako in Mali.",
+      "original_title": "Mali : les djihadistes du JNIM commencent à imposer un blocus routier sur Bamako",
+      "original_language": "fr",
+      "source": "Le Figaro",
+      "published": "2026-04-30T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Terrorist Financing"
+      ],
+      "actor_group": "JNIM",
+      "primary_event_type": "ATTACK",
+      "country": "Mali",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports concrete militant offensive activity by JNIM imposing a blockade and exerting pressure on Bamako."
+    },
+    {
+      "id": "552a9ee254b3c80c",
+      "incident_id": "inc-f8f4af58f7eae73a",
+      "url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxPVlBjTlV4TjF1RGMtYXRQX2JOREs0azlhMG80QzlMQkNnbXdyRFZCR1FXN29EYVlwUVR1dV9fSFI5Q0cwU0E4S3dKM2hLYlRaNk1PRm02ZDl1MzllRlhZQWw1R19lSVoxV1FSazA5SmlwNmg2dFlacjJYWmN3bTdUbjFkc0MtQmZKVTVRVzZ5SnZQVG1LbTE1QndHLXczYzN6WEVib2RxdDBpWGdmeW5ZQlhyMk1QZ2JFSzhIR3hUNUVnaEROMi1qLThhd0tKYXRQWDR5bnp4Mmp3Uk1vb0gzbzhfT2rSAeoBQVVfeXFMTzRERTVIQlFCZW9lVlJQcG0yTEVqMVEzcFE0T2NTOVNYOTRtRjRCMWNIbzBPU09FTUlxdnFscE1ZTWhmbjllYnl5cndRMGdSeS0ycmRvNG90S0Q0RXlWcVM5ZkhDWjZnVlA5NlFROWUyRzV3cXdMNVhxTUsyM3ZWNXdBNHd2NTdPa19rQklLTFJOd3pFdGVkeFJsQWdfXzhmZFB1VUttV2U3QkNHRW9hZUtMQkZhWThFeExzcGpwbUs0Xy1TMWtjbENiVWdmel9obzBLSXBtZTBSR0dkSFZPQ1ZkVnEtXzdXeFVR?oc=5",
+      "title": "Radiological threat against RSS headquarters in Nagpur",
+      "summary": "Authorities have issued a high alert in Nagpur following a threat letter claiming the presence of radioactive material at the RSS headquarters and other locations.",
+      "original_title": "RSS: नागपुर में आरएसएस मुख्यालय समेत कई जगहों को मिली धमकी, रेडियोएक्टिव पदार्थ रखने का दावा, हाई अलर्ट जारी",
+      "original_language": "hi",
+      "source": "Amar Ujala",
+      "published": "2026-04-30T07:00:00+00:00",
+      "category": "Radiological/Nuclear",
+      "categories": [
+        "Radiological/Nuclear",
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTEMPTED_ATTACK",
+      "country": "India",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Report of a specific, concrete threat involving a claim of radiological material targeting a known organization."
+    },
+    {
+      "id": "673c130781acf583",
+      "incident_id": "inc-e41d16e204f57488",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOWjBWc2J0OHFHanQzVXRiSmt0YmZXelNKMy1QRUJWQnBua0p5NFNNdVlCM3ZXLXc5TDh1dl92TlZCWExWV3pYTl9oS0F6bFdVZ2xlQTdtak1DOXR1MUpqVVJOYzFFdXFCdlM0NEQyckVmYzhQTnVJVy1NQVhlaVJZT1RBZnN0VUltSkt5Z3owSFNGVURKem84SXZPT0o0Wmt4RUhZY1AyMUtyQVZqaWFpR0J0NWgzdXc?oc=5",
+      "title": "Terrorists lose assets in Kidal",
+      "summary": "Terrorist groups lost significant logistical equipment during operations in the Kidal region, Mali.",
+      "original_title": "Kidal: Les groupes terroristes perdent d'importants moyens logistiques",
+      "original_language": "fr",
+      "source": "maliweb",
+      "published": "2026-04-30T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Mali",
+      "region": "Kidal",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Report of CT operations resulting in asset loss for militants."
+    },
+    {
+      "id": "709f39a52a8c875a",
+      "incident_id": "inc-e20eef9d34444652",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNZXp5RjRzbmJKRHRtTlhHSWRiS3pkeTJlVEctQXVPNnR2OUprWlM0Si1rdlhnU2RnM01jY3VTQ3pTSVk3blVLb1hUTkQ0ZEtnTW1VZDQ3ajBDeGRXMWpGdzV3VmFzRmI5M2N4UkZsYzZqLUM0TFlHOTZ3V25lQWxRSnF3d3ctTEpHYTVaM2hWLTZPRGpuLVYwWVNQTXhaMFlSRWFDSFBZRmkxTHhLT0dEbUVWaGJHcUFBd3l0allB?oc=5",
+      "title": "London police declare terror incident after stabbing",
+      "summary": "Police have officially declared a terrorist incident following a stabbing attack on two Jewish men in London.",
+      "original_title": "Police declare terrorist incident after two Jewish men stabbed in London",
+      "original_language": "en",
+      "source": "the-star.co.ke",
+      "published": "2026-04-30T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "United Kingdom",
+      "ai_relevance_score": 90,
+      "ai_relevance_reason": "Concrete reported terrorist attack."
+    },
+    {
+      "id": "901633b17510a794",
+      "incident_id": "inc-fde59a8403620cb3",
+      "url": "https://news.google.com/rss/articles/CBMiigJBVV95cUxPSGdrdlZHeldVR1dtMDV5STFjTEtWOVBrLU5NcFR5bGMyRzBPT2ZBdWc2clJfMHE3REhxY0c5S1BaWjNfRlJwSzNJMUJvclRkbXJHSlJiQll1bGlIU2M1MUFNT1hyOXZLT2s0TXU4aGhzMXUwWE0zdm9sdjVDNGw5aVYzcG50V0ZjN18tTTBXYzBsbl9NZDVKT3pURDRnSTJnc3JiV3dFQUNYTkpoT2dfZ3U0bUNhZW1mNk0tMkNfcUprVEEzMzNvVEEwSFlBRURXRmFoM09pdkFjT0ZaajhjbDFVMkoxVzhlTHJIU0cwUnc0aFZBNmgtUFJLOEhWZ2J1MjJ6UWVuZU9Ydw?oc=5",
+      "title": "Preventive prison for individuals linked to Tren de Aragua in Chile",
+      "summary": "Several suspects involved in the kidnapping of a hardware store owner in Chile have been ordered into preventive custody due to links with the Tren de Aragua criminal group.",
+      "original_title": "Prisión preventiva para imputados por secuestro de ferretero: tienen vínculos con Tren de Aragua",
+      "original_language": "es",
+      "source": "BioBioChile",
+      "published": "2026-04-30T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests"
+      ],
+      "actor_group": "Tren de Aragua",
+      "primary_event_type": "ARREST",
+      "country": "Chile",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports the detention of individuals with links to a significant non-state criminal organization."
     }
   ]
 }
