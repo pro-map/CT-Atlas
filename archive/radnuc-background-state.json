@@ -1666,27 +1666,40 @@
   "600341e26f483f55": "2026-10-26T21:44:07.752072+00:00",
   "13c604aeb8580152": "2026-10-26T21:44:07.752072+00:00",
   "cbcc5fc8cfb7b183": "2026-10-26T21:44:07.752072+00:00",
-  "bda63908945ad1ac": "2026-10-26T21:44:07.752072+00:00"
+  "bda63908945ad1ac": "2026-10-26T21:44:07.752072+00:00",
+  "d104cba1a4457e11": "2026-10-27T15:28:18.691877+00:00",
+  "d0d380a65b35bdba": "2026-10-27T15:28:18.691877+00:00",
+  "5373354e80744e51": "2026-10-27T15:28:18.691877+00:00",
+  "45f1a5d035e5d243": "2026-10-27T15:28:18.691877+00:00",
+  "7e353eb4b9a13aa0": "2026-10-27T15:28:18.691877+00:00",
+  "f02889eda883f24d": "2026-10-27T15:28:18.691877+00:00",
+  "1597e8b2bfca5b98": "2026-10-27T15:28:18.691877+00:00",
+  "b7b944cb650e5fd3": "2026-10-27T15:28:18.691877+00:00",
+  "fcfa91c69592a540": "2026-10-27T15:28:18.691877+00:00",
+  "bcb6991f9cea297e": "2026-10-27T15:28:18.691877+00:00",
+  "14abd4904ea5bc46": "2026-10-27T15:28:18.691877+00:00",
+  "79c1ff77cbf02a78": "2026-10-27T15:28:18.691877+00:00",
+  "99ab1fafe095fb40": "2026-10-27T15:28:18.691877+00:00"
  },
  "pending": [
   {
-   "id": "3b6135c586278c29",
+   "id": "b8961044c8dd2e65",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "דילמה אסטרטגית משמעותית בפני רוסיה: איום פצצת הגרעין מתהפך",
-   "summary": "דילמה אסטרטגית משמעותית בפני רוסיה: איום פצצת הגרעין מתהפך מעריב",
-   "original_title": "דילמה אסטרטגית משמעותית בפני רוסיה: איום פצצת הגרעין מתהפך",
-   "original_summary": "דילמה אסטרטגית משמעותית בפני רוסיה: איום פצצת הגרעין מתהפך מעריב",
-   "original_language": "he",
-   "collection_language": "he",
-   "collection_language_name": "Hebrew",
-   "collection_locale": "IL:he",
-   "published": "2026-10-26T08:30:00+00:00",
-   "source": "מעריב",
+   "title": "रीवा में न्यूक्लियर पावर प्लांट के विरोध में प्रदर्शन खत्म, आधी रात तालाब से निकाले गए प्रदर्शनकारी",
+   "summary": "रीवा में न्यूक्लियर पावर प्लांट के विरोध में प्रदर्शन खत्म, आधी रात तालाब से निकाले गए प्रदर्शनकारी People's Update",
+   "original_title": "रीवा में न्यूक्लियर पावर प्लांट के विरोध में प्रदर्शन खत्म, आधी रात तालाब से निकाले गए प्रदर्शनकारी",
+   "original_summary": "रीवा में न्यूक्लियर पावर प्लांट के विरोध में प्रदर्शन खत्म, आधी रात तालाब से निकाले गए प्रदर्शनकारी People's Update",
+   "original_language": "hi",
+   "collection_language": "hi",
+   "collection_language_name": "Hindi",
+   "collection_locale": "IN:hi",
+   "published": "2026-10-27T14:44:00+00:00",
+   "source": "People's Update",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1SR2NpMHN5UHZHSEpCMTRraWExWGpSTFpvbmxSbEpqUTdDNlJLWEhvSnh5bDlvSkNCbmJNWHhmb0dldlRBbG1DUXpfc2EzN1lkZjZVaDd6SzVLQUNlUHJySQ?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQdFcxNUpXRnNlNGhUY1YwcWw5WGg1cWQ2dklTcW0tcXZYYU8xVDIySEJSTmlST1BDcndyY0tITE9vb0FVVzdncDBzaVA2RGh3SlpaRkFhMk9USmE4ZXdKMHNhMGJkODhKdjVjeXFaN2dpWUxJOVJZWHhyc2FnbzNOc0VZWkk4Wl9hVlE?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1698,28 +1711,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "c0e81ae86710abb0c814191112e00b98b1cf5f1e2126f35a782a4b5fcb1acf10"
+    "6f4ab7fa2ee511090af01b296550f424c338908e6f60e24851529ca24c70506e"
    ],
-   "background_query_language": "he"
+   "background_query_language": "hi"
   },
   {
-   "id": "29a49e9659a501e1",
+   "id": "5328ec939ac19593",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "ניצול יעיל ובטוח של הפוטנציאל של טכנולוגיה גרעינית.",
-   "summary": "ניצול יעיל ובטוח של הפוטנציאל של טכנולוגיה גרעינית. Vietnam.vn",
-   "original_title": "ניצול יעיל ובטוח של הפוטנציאל של טכנולוגיה גרעינית.",
-   "original_summary": "ניצול יעיל ובטוח של הפוטנציאל של טכנולוגיה גרעינית. Vietnam.vn",
-   "original_language": "he",
-   "collection_language": "he",
-   "collection_language_name": "Hebrew",
-   "collection_locale": "IL:he",
-   "published": "2026-10-26T04:25:05+00:00",
-   "source": "Vietnam.vn",
+   "title": "TM Special: रीवा में परमाणु परियोजना पर टकराव तेज! जल सत्याग्रह में आदिवासी महिला की मौत से बढ़ा विवाद",
+   "summary": "TM Special: रीवा में परमाणु परियोजना पर टकराव तेज! जल सत्याग्रह में आदिवासी महिला की मौत से बढ़ा विवाद The Mooknayak",
+   "original_title": "TM Special: रीवा में परमाणु परियोजना पर टकराव तेज! जल सत्याग्रह में आदिवासी महिला की मौत से बढ़ा विवाद",
+   "original_summary": "TM Special: रीवा में परमाणु परियोजना पर टकराव तेज! जल सत्याग्रह में आदिवासी महिला की मौत से बढ़ा विवाद The Mooknayak",
+   "original_language": "hi",
+   "collection_language": "hi",
+   "collection_language_name": "Hindi",
+   "collection_locale": "IN:hi",
+   "published": "2026-10-27T12:47:48+00:00",
+   "source": "The Mooknayak",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOLTFxVS1kajVrS1JMaG53TzJYWWcwaHVRVWZMNGVENXBKZVpqZmJEX0Q3VmZSQ0dXZmZ5VzlNQWxfSTYya1VGWTIyMzZiQi1za3Nsc1dJOHd3cXJ3a2t4WGs4bXl0UWt3ZWlmQVFtZnFKTFdBQVlHUW52UnJuRk00Q29fNHNwMHJh?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMirgJBVV95cUxQTVZxcG5jaUQ0Y3ZRWFZ5UFlTU0pyaE80Z0g1VkRsb1p3c3hQa0g5LVpLZ01QSVJTT3VWbkRJdzZDd1ZJc29RdXB0N25ZNnBxSHlZd1M1QmRUV1BnRmVEREFuX0dycnpqbENMc0RwRDlIMXRqNHhMYndaNjVLLWRqcHZod1hYbk1KNTdmckNXT1c1QWpvZnBES1kzOVE5ekRqSGM1NElTcThudFFMYTVSNHE2aC1MMXp5My1Kc0NqRENHQmhoS1VIQjhTaFZqVWFSb213ZE5JQWpBT2FHQlFycEEzXzU2SVpYcmJOSngxaWlBRDhLdE05X3ZaM1ltZGQ5MUtnd2U1cml3c1ROaFlPQWRWWFlBSlE4RTNlM1poeS0xQ2ctazVrX2F4LVdpUQ?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1731,28 +1744,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "d928d3112a061c1e568ee38efe8bde065064841aa4cad50fcf1ec24f8e0baae1"
+    "29f173a5349c1e6483dbd62777dd7f97af41e2e1ba733017aaa23c0451969e9a"
    ],
-   "background_query_language": "he"
+   "background_query_language": "hi"
   },
   {
-   "id": "74a15d00005ca5b2",
+   "id": "b859604d7f084310",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "מטוסי טייפון בריטיים השתתפו בתרגיל גרעיני צרפתי",
-   "summary": "מטוסי טייפון בריטיים השתתפו בתרגיל גרעיני צרפתי Israel Defense",
-   "original_title": "מטוסי טייפון בריטיים השתתפו בתרגיל גרעיני צרפתי",
-   "original_summary": "מטוסי טייפון בריטיים השתתפו בתרגיל גרעיני צרפתי Israel Defense",
-   "original_language": "he",
-   "collection_language": "he",
-   "collection_language_name": "Hebrew",
-   "collection_locale": "IL:he",
-   "published": "2026-10-25T12:00:01+00:00",
-   "source": "Israel Defense",
+   "title": "October 27, 2026 परमाणु की आहट, विरोध में जलती जल-क्रांति: तालाब में उतरे ग्रामीण, प्रशासन ने निकाला बाहर",
+   "summary": "October 27, 2026 परमाणु की आहट, विरोध में जलती जल-क्रांति: तालाब में उतरे ग्रामीण, प्रशासन ने निकाला बाहर yashbharat.co.in",
+   "original_title": "October 27, 2026 परमाणु की आहट, विरोध में जलती जल-क्रांति: तालाब में उतरे ग्रामीण, प्रशासन ने निकाला बाहर",
+   "original_summary": "October 27, 2026 परमाणु की आहट, विरोध में जलती जल-क्रांति: तालाब में उतरे ग्रामीण, प्रशासन ने निकाला बाहर yashbharat.co.in",
+   "original_language": "hi",
+   "collection_language": "hi",
+   "collection_language_name": "Hindi",
+   "collection_locale": "IN:hi",
+   "published": "2026-10-27T09:06:29+00:00",
+   "source": "yashbharat.co.in",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE96aWRaNVRyNnpqRUNRUjZYZ1hUR0x4ZFFvY0lTc0FCYWthT1dDN3dmQ1JVYlN6QTgtTXI3OTZNLVFPYkZKMHo1eTVoamJ3UVhtY1AzeQ?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9pbGx4UVJ4QkJuTjNNLWlmeC1pbnVnQ0dxWnNwNWxmRHVRTXpNeE5BZlN2YkFUemlNZTdOcDhLeXc0bDh0QkV0dmdkWXFJUQ?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1764,28 +1777,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "7d1fd23a3ca6e81384be252bf2aecefbc435798333a6dff9c6708293e42b9dc8"
+    "589ffcdcfc5e05299c8042a2b91aaf69ab7538efbb6b8ec633056c1d5198879f"
    ],
-   "background_query_language": "he"
+   "background_query_language": "hi"
   },
   {
-   "id": "21224dc64f50bcf9",
+   "id": "799240b0b17c4894",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "ל\"נסיבות קיצוניות\": צרפת ובריטניה קיימו תרגיל תקיפה גרעינית",
-   "summary": "ל\"נסיבות קיצוניות\": צרפת ובריטניה קיימו תרגיל תקיפה גרעינית mako",
-   "original_title": "ל\"נסיבות קיצוניות\": צרפת ובריטניה קיימו תרגיל תקיפה גרעינית",
-   "original_summary": "ל\"נסיבות קיצוניות\": צרפת ובריטניה קיימו תרגיל תקיפה גרעינית mako",
-   "original_language": "he",
-   "collection_language": "he",
-   "collection_language_name": "Hebrew",
-   "collection_locale": "IL:he",
-   "published": "2026-10-25T09:31:00+00:00",
-   "source": "mako",
+   "title": "वैश्विक व्यवधानों के बीच ऊर्जा आपूर्ति श्रृंखला को मजबूत बनाने की जरूरत:मंत्री नाइक",
+   "summary": "वैश्विक व्यवधानों के बीच ऊर्जा आपूर्ति श्रृंखला को मजबूत बनाने की जरूरत:मंत्री नाइक ThePrint Hindi",
+   "original_title": "वैश्विक व्यवधानों के बीच ऊर्जा आपूर्ति श्रृंखला को मजबूत बनाने की जरूरत:मंत्री नाइक",
+   "original_summary": "वैश्विक व्यवधानों के बीच ऊर्जा आपूर्ति श्रृंखला को मजबूत बनाने की जरूरत:मंत्री नाइक ThePrint Hindi",
+   "original_language": "hi",
+   "collection_language": "hi",
+   "collection_language_name": "Hindi",
+   "collection_locale": "IN:hi",
+   "published": "2026-10-27T07:34:51+00:00",
+   "source": "ThePrint Hindi",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE1yQk9mb3JvMTRGejkxUTUwcVExYWFIZy1pMENuc09vak81djBkczdyMlFYQVA0UDJrYlNQeVh3NkJCRW1uNmlHS09peXc0Z1BfR1ltNDRORldsSEtKem9ERkMwTnlTZXRzY0FQWW1OOGRBSkNs?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQVXotakVkTngzaUR1OThSWW0tb0JHWGFhYWJGczB1cEt1Q1pWMlRNY1E5UnJZQXBMQl9qaFBjTnZxWk1YanczM3N6SGxYSFRiSTNyQksxd29xUlRkcExEXzlENEZRYlplWWxCMU1MWUl4QkVmTm1YMkdjMV9fSUVXaFd5Wms3aTFkLUVzaG1jWlBKbE4tMnFDdGZadmxjc1puUzNiS0dVOG9EWmphSnlxaDFjMzdNcnhzOHpxc1YxU2xjU2Y3R0Q4cTJVUdIB0AFBVV95cUxPMFZLdjgzQlB3UWhNdUZ2WTdEU3Y4Rlc1M0xOZGJKczFGa2xDQlNzZDFUVGp0eHBxZVNQakw3NFRma2NnZWI2VUxwU05vejlIMGR3a1JER3U2VVpfQXFCdllNbWpfU1NzLXZwYWRUUjl4ak5zNTdTTzB4SVVnR2I1elRTYy1POUlfbVpUdnZ5Q3BldngyOENqbVk1b19OZUdKVzJDdkViMS1GS09NT0YwbGhzbjdhcmxPQkdvWi12b1BGeE1nMXVTZG84LVNmbUFx?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1797,28 +1810,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "421232db9fc048b5e82d22c5f7e51464c3e65b11e4e524f88dfa1df4cf89d43d"
+    "0090a7d36146ba8414452e341bf8c602105bbfd6da14c5bb497f6a577136786d"
    ],
-   "background_query_language": "he"
+   "background_query_language": "hi"
   },
   {
-   "id": "c231fd753fc9f838",
+   "id": "1ce721b345f1a720",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "בריטניה וצרפת עורכות תרגילים בתגובה למתקפה נגד נאט\"ו.",
-   "summary": "בריטניה וצרפת עורכות תרגילים בתגובה למתקפה נגד נאט\"ו. Vietnam.vn",
-   "original_title": "בריטניה וצרפת עורכות תרגילים בתגובה למתקפה נגד נאט\"ו.",
-   "original_summary": "בריטניה וצרפת עורכות תרגילים בתגובה למתקפה נגד נאט\"ו. Vietnam.vn",
-   "original_language": "he",
-   "collection_language": "he",
-   "collection_language_name": "Hebrew",
-   "collection_locale": "IL:he",
-   "published": "2026-10-25T01:53:32+00:00",
-   "source": "Vietnam.vn",
+   "title": "फिनलैंड ने ओंकालो के लाइसेंस को मंजूरी दी, पहला स्थायी परमाणु भंडारण",
+   "summary": "फिनलैंड ने ओंकालो के लाइसेंस को मंजूरी दी, पहला स्थायी परमाणु भंडारण Foro3D",
+   "original_title": "फिनलैंड ने ओंकालो के लाइसेंस को मंजूरी दी, पहला स्थायी परमाणु भंडारण",
+   "original_summary": "फिनलैंड ने ओंकालो के लाइसेंस को मंजूरी दी, पहला स्थायी परमाणु भंडारण Foro3D",
+   "original_language": "hi",
+   "collection_language": "hi",
+   "collection_language_name": "Hindi",
+   "collection_locale": "IN:hi",
+   "published": "2026-10-27T06:49:08+00:00",
+   "source": "Foro3D",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPaFVFU3VyUTNuNUxGd1JHRWlVY3AzZjJxaDVXQkc1VzRTSHRkdkF2RjZISkNONnBoX1k0VDlreGVUczNHY1FtSTc0dTMyNk5PRzBUNnRWMU11N2RmOEtZMmxISmxoUXQzM2U3ME1tb0xiRU1nOTNWdXdIV1VnUDBMaXZpLWZadw?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQeEFJaUFKZGlRZEE4TzFaVGZSd0hzWGtZd2ZCNzdfLVdaSEo2MGlFMWxKeHo2elZocEVxNFc0SDhWU3Q0OVExNlRMLUFzbDllOFNMMTh3VkZVT0JwemZseHVNNk5RVDhYeGhjOUN1cUE0RDljMWVMMTV3aWxPNHRLU1dXY0VIX1MwMVN0Zk1uS1NiYkMzbnM1TjNkbmJoOXF3dUhEYjZoTVFfeDZOUVgw?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1830,9 +1843,108 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "e9887d000f29783bdb99e6abace563f3164cf57328654a4421d6634befe0017f"
+    "c5d19bb77a78ac786983f959ceb28da6ddd30fbb1dbaa323506ffa18f0b01bc6"
    ],
-   "background_query_language": "he"
+   "background_query_language": "hi"
+  },
+  {
+   "id": "18e76c609d5f9fb3",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "रीवा में परमाणु परियोजना पर विवाद, नेता प्रतिपक्ष बोले- ग्राम सभा की मंजूरी के बिना NOC कैसे जारी हुई?",
+   "summary": "रीवा में परमाणु परियोजना पर विवाद, नेता प्रतिपक्ष बोले- ग्राम सभा की मंजूरी के बिना NOC कैसे जारी हुई? AajTak",
+   "original_title": "रीवा में परमाणु परियोजना पर विवाद, नेता प्रतिपक्ष बोले- ग्राम सभा की मंजूरी के बिना NOC कैसे जारी हुई?",
+   "original_summary": "रीवा में परमाणु परियोजना पर विवाद, नेता प्रतिपक्ष बोले- ग्राम सभा की मंजूरी के बिना NOC कैसे जारी हुई? AajTak",
+   "original_language": "hi",
+   "collection_language": "hi",
+   "collection_language_name": "Hindi",
+   "collection_locale": "IN:hi",
+   "published": "2026-10-26T17:04:25+00:00",
+   "source": "AajTak",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNWkxGWkFaZ2NjWU1EXy1tR29Pb3RfMUhOMnFMR1NrR0dhRzF0VjVrYzlSWEgzV3Z1eUM3Z3NTa0RmbFdBNFZKZGJHSmxkNEVUS2pCWF8teW5JR2hLOWN6NWRPbmg2MEU3UVVOWE4zRWFpdjRucl9WUjJROVRIWVFYX3Uwb05LU1N0YnhNYmY3Vzd4SVhZS0dFQ0FyT3dsWGJfa1pZVS12bzRHRm9RZlVWM1lTRnhoV1BMX0c3SVdiY21hdnc4Z01FT2htUTBMd9IB0wFBVV95cUxOeTBteWFPd09abWpiY3lvSU13NlVEMVdPUVN3WEtyQXk4MjNKLXdyRGlqSTBhS1lCWE1MM1ByMGFFdzlOVTdYVUxBNVdEQzRfdVl0eGZNd1BlQmwzNkZmcjV6RUV3aUlsUU16RFVSS0d3NzA1MzNreWdvOFp5UzEzcFU4d29FamlYbUpiYlRCMjdGb2RZOHhYZEg2cnY4TkMwQWUzQzF5T2VmQ0dvdEVWQm01MWJ3ZXJIYnd5ZEIydVk1SlFuYnVEWWkzWjc3ZGN2WGI0?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "67128050d350fd741bb1e6dd98541ed4d4a8266a59fef2f73166ee7efab33923"
+   ],
+   "background_query_language": "hi"
+  },
+  {
+   "id": "f5efe8006f921c91",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "मप्र में ग्रामसभा के विरोध के बावजूद परमाणु परियोजना के लिए ड्रिलिंग की अनुमति दी गई : सिंघार",
+   "summary": "मप्र में ग्रामसभा के विरोध के बावजूद परमाणु परियोजना के लिए ड्रिलिंग की अनुमति दी गई : सिंघार ThePrint Hindi",
+   "original_title": "मप्र में ग्रामसभा के विरोध के बावजूद परमाणु परियोजना के लिए ड्रिलिंग की अनुमति दी गई : सिंघार",
+   "original_summary": "मप्र में ग्रामसभा के विरोध के बावजूद परमाणु परियोजना के लिए ड्रिलिंग की अनुमति दी गई : सिंघार ThePrint Hindi",
+   "original_language": "hi",
+   "collection_language": "hi",
+   "collection_language_name": "Hindi",
+   "collection_locale": "IN:hi",
+   "published": "2026-10-26T16:49:41+00:00",
+   "source": "ThePrint Hindi",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxPbm9WcmhXTjFYSGFfX0VkbWFhUWVfX1h4MEJXU2QxRHpmTWZuRW1zRmxXRTlSellzV0lreHp3QnY2STJhUVBkQ2JwVU5HeWlTdjVXUDVIU2xiNFYtVmJLOWRNRE8tQ0VHYkFQRUtycFZBWTFuNUpDbUMwUDRTVV8wTjFXcnVaMmVXOFc3dHljN2hKYko1dnJyNDdpNy1BQ0ZFUEZVeUZucVJQQlI3a19wRE5xRnFCWllZczJrbmtVeVgtdzBJQUNURDVfdF9oakx5R1Fj0gHYAUFVX3lxTE5RQ2Y3bzY1d25sdUw3dFo5N1d6VTQ2d3NTVHZuVFFaS2plX2lIaHhmYUpxYlhoQ1BnWHl2SzVpQTF5eE84S08teElXdEdjTGp4YVlVZE11TnFNLUMycEF2SkVPOFhQcXpjZHFWV0pkLVA2WEFIUWNZWkZ5OVhiZXpVTnpLOW1GQXpOUkdpTE0xeW1kZnZLMGFIeDJkNVNVMi1WSWpTekdVVFhlSWQyTVhYTzMzMXlJZ2lmdUZhWVU2VGpfOGtpeEtzX2VXc2lJaF80cktWQlpjRw?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "9256f269e6d11448146f5d77a5d7323eff3ff2a5701034a877dd12c8273c8806"
+   ],
+   "background_query_language": "hi"
+  },
+  {
+   "id": "ed991250cbcf020e",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "गैल विजयपुर में पहली राष्ट्रीय स्थिरता सम्मेलन, ऊर्जा और पर्यावरण के बीच संतुलन",
+   "summary": "गैल विजयपुर में पहली राष्ट्रीय स्थिरता सम्मेलन, ऊर्जा और पर्यावरण के बीच संतुलन Head Topics",
+   "original_title": "गैल विजयपुर में पहली राष्ट्रीय स्थिरता सम्मेलन, ऊर्जा और पर्यावरण के बीच संतुलन",
+   "original_summary": "गैल विजयपुर में पहली राष्ट्रीय स्थिरता सम्मेलन, ऊर्जा और पर्यावरण के बीच संतुलन Head Topics",
+   "original_language": "hi",
+   "collection_language": "hi",
+   "collection_language_name": "Hindi",
+   "collection_locale": "IN:hi",
+   "published": "2026-10-26T15:49:00+00:00",
+   "source": "Head Topics",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5kLVdYQkkxZXhuUGhJNVY3S1FDTFY5a2k5Wi1Za3BmcFBtUDJ1bjBaTU1IT0NrOVNRekNiYWNmanhRaWtuTTNDVjVXcEI4bkVTN2VvUklOZUFBTmpRTDBidVVHdGZXd3NqM1RLeFFB?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "e89310292c92f466f0beb8ebd160c5b4bb2d00d1438ab56c34581cf46b214a75"
+   ],
+   "background_query_language": "hi"
   },
   {
    "id": "8c6f8d3379c71219",
@@ -18071,6 +18183,6 @@
    "background_query_language": "it"
   }
  ],
- "cursor": 35,
- "updated_at": "2026-10-26T21:44:07.752072+00:00"
+ "cursor": 39,
+ "updated_at": "2026-10-27T15:28:18.691877+00:00"
 }
