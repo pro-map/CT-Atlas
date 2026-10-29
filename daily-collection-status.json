@@ -1,18 +1,18 @@
 {
   "schema_version": 2,
   "status": "partial",
-  "run_started_at": "2026-10-28T21:39:07.967962+00:00",
-  "last_attempt_at": "2026-10-28T21:39:07.967962+00:00",
-  "published_at": "2026-10-28T22:41:48.373353+00:00",
+  "run_started_at": "2026-10-29T16:09:16.559095+00:00",
+  "last_attempt_at": "2026-10-29T16:09:16.559095+00:00",
+  "published_at": "2026-10-29T17:25:57.374259+00:00",
   "recent": {
-    "candidates": 4236,
-    "reviewed": 3791,
-    "cached": 2031,
-    "new_reviews": 1760,
+    "candidates": 3803,
+    "reviewed": 3560,
+    "cached": 1928,
+    "new_reviews": 1632,
     "official_auto_accepted": 0,
-    "retained": 341,
-    "rejected": 3450,
-    "pending": 445,
+    "retained": 321,
+    "rejected": 3239,
+    "pending": 243,
     "status": "partial",
     "calls": 55,
     "primary_calls": 30,
@@ -20,18 +20,18 @@
     "reasons": [
       "run_budget"
     ],
-    "window_start": "2026-10-25T21:39:07.967962+00:00",
-    "window_end": "2026-10-28T21:39:07.967962+00:00"
+    "window_start": "2026-10-26T16:09:16.559095+00:00",
+    "window_end": "2026-10-29T16:09:16.559095+00:00"
   },
   "backlog": {
-    "candidates": 1510,
-    "reviewed": 463,
-    "cached": 463,
+    "candidates": 1846,
+    "reviewed": 473,
+    "cached": 473,
     "new_reviews": 0,
     "official_auto_accepted": 0,
     "retained": 0,
-    "rejected": 463,
-    "pending": 1047,
+    "rejected": 473,
+    "pending": 1373,
     "status": "partial",
     "calls": 0,
     "primary_calls": 0,
@@ -62,21 +62,14 @@
     },
     "gdelt": {
       "attempted": 10,
-      "http_attempts": 17,
-      "rate_limit_http_attempts": 12,
-      "rate_limited": 7,
-      "failed": 8,
+      "http_attempts": 18,
+      "invalid_response": 3,
+      "failed": 7,
       "deferred_queries": [
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+financing%22+OR+%22terror+financing%22+OR+%22financing+terrorism%22+OR+%22terrorist+funding%22+OR+%22terror+finance+network%22%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
           "label": "gdelt:Terrorist Financing",
-          "reason": "http_429",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+weapons%22+OR+%22terrorist+arms%22+OR+%22terrorist+firearms%22+OR+%22weapons+smuggling%22+terrorism+OR+%22arms+trafficking%22+terrorism%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
-          "label": "gdelt:Weapons",
-          "reason": "http_429",
+          "reason": "invalid_response",
           "recovered": false
         },
         {
@@ -88,7 +81,7 @@
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+arrested%22+OR+%22terrorists+arrested%22+OR+%22terror+suspect+arrested%22+OR+%22terror+suspects+arrested%22+OR+%22terrorism+arrest%22%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
           "label": "gdelt:Arrests",
-          "reason": "invalid_response",
+          "reason": "http_429",
           "recovered": false
         },
         {
@@ -106,34 +99,35 @@
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22improvised+explosive+device%22+OR+%22IED%22+OR+%22home-made+explosive+device%22+OR+%22improvised+explosive+device+cell%22+OR+%22IED+components+procurement%22+OR+%22clandestine+bomb+workshop%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22arrested%22+OR+%22seized%22%29+OR+%28%22bomb-making+materials%22+OR+%22bomb-making+instructions%22+OR+%22darknet+bomb-making+instructions%22+OR+%22bomb+plot%22+OR+%22explosives+manufacturing%22+OR+%22explosives+trafficking%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22arrested%22+OR+%22seized%22%29+OR+%28%22explosives+seizure%22+OR+%22stolen+detonators%22+OR+%22explosives+cache%22+OR+%22ANFO+bomb%22+OR+%22ammonium+nitrate+diversion%22+OR+%22TATP%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22arrested%22+OR+%22seized%22%29+OR+%28%22HMTD%22+OR+%22homemade+explosive+synthesis%22+OR+%22homemade+plastic+explosive%22+OR+%22pipe+bomb+plot%22+OR+%22pressure+cooker+bomb%22+OR+%22nail+bomb%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22arrested%22+OR+%22seized%22%29+OR+%28%22VBIED%22+OR+%22car+bomb%22+OR+%22suicide+vest%22+OR+%22explosive-laden+drone%22+OR+%22explosives+dropped+from+drones%22+OR+%22drone-dropped+grenade%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22arrested%22+OR+%22seized%22%29%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
           "label": "gdelt:Chemicals and Explosives",
-          "reason": "http_429",
+          "reason": "invalid_response",
           "recovered": false
         },
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22bioterrorism%22+OR+%22bio-terrorism%22+OR+%22bioterrorist%22+OR+%22biological+terrorism%22+OR+%22biological+attack%22+OR+%22biological+terror+attack%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22threat%22+OR+%22hoax%22+OR+%22arrested%22+OR+%22seized%22+OR+%22investigation%22%29+OR+%28%22biological+terror+plot%22+OR+%22biological+weapons%22+OR+%22biological+weapon%22+OR+%22bioweapon%22+OR+%22bio-weapon%22+OR+%22bacteriological+attack%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22threat%22+OR+%22hoax%22+OR+%22arrested%22+OR+%22seized%22+OR+%22investigation%22%29+OR+%28%22bacteriological+weapons%22+OR+%22germ+warfare%22+OR+%22biological+warfare%22+OR+%22toxin+attack%22+OR+%22toxin+terror+plot%22+OR+%22agroterrorism%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22threat%22+OR+%22hoax%22+OR+%22arrested%22+OR+%22seized%22+OR+%22investigation%22%29+OR+%28%22agro-terrorism%22+OR+%22agricultural+terrorism%22+OR+%22anthrax+attack%22+OR+%22anthrax+threat%22+OR+%22anthrax+hoax%22+OR+%22anthrax+letters%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22threat%22+OR+%22hoax%22+OR+%22arrested%22+OR+%22seized%22+OR+%22investigation%22%29+OR+%28%22anthrax+scare%22+OR+%22ricin+attack%22+OR+%22ricin+plot%22+OR+%22ricin+threat%22+OR+%22ricin+letters%22+OR+%22biological+threat+letter%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22threat%22+OR+%22hoax%22+OR+%22arrested%22+OR+%22seized%22+OR+%22investigation%22%29%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
           "label": "gdelt:Biological Terrorism",
-          "reason": "invalid_response",
+          "reason": "http_429",
           "recovered": false
         }
       ],
-      "successful": 2,
-      "invalid_response": 3
+      "rate_limit_http_attempts": 12,
+      "rate_limited": 8,
+      "successful": 3
     },
-    "errors": 8,
+    "errors": 7,
     "status": "partial"
   },
   "reasons": [
     "run_budget",
-    "geolocation_review_required",
     "recent_pending",
     "backlog_pending",
     "source_errors",
-    "category_pending"
+    "category_pending",
+    "geolocation_review_required"
   ],
   "queue_filter": {
-    "expired": 6027,
-    "retired": 401,
-    "cancelled_history": 683,
+    "expired": 6576,
+    "retired": 408,
+    "cancelled_history": 749,
     "duplicates": 0
   },
   "budgets": {
@@ -141,14 +135,14 @@
       "per_run": 30,
       "per_day": 60,
       "used_this_run": 30,
-      "used_today": 60
+      "used_today": 30
     },
     "overflow": {
       "model": "gemini-3.1-flash-lite",
       "per_run": 25,
       "per_day": 50,
       "used_this_run": 25,
-      "used_today": 38
+      "used_today": 25
     },
     "historical_calls_per_run": 10,
     "historical_calls_used": 0,
@@ -157,12 +151,12 @@
   "geolocation": {
     "status": "complete",
     "pending": 0,
-    "located": 5587,
-    "unlocated": 104,
-    "completed_unlocated": 104,
+    "located": 5704,
+    "unlocated": 107,
+    "completed_unlocated": 107,
     "outcome": "success",
-    "processed_this_run": 104,
-    "review_required": 129
+    "processed_this_run": 123,
+    "review_required": 139
   },
   "categories": [
     {
@@ -187,7 +181,7 @@
       "stop_code": "budget_reached"
     }
   ],
-  "finalized_at": "2026-10-28T22:47:15.274370+00:00",
+  "finalized_at": "2026-10-29T17:29:50.563320+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success"
 }

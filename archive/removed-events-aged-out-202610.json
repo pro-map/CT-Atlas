@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-27T16:33:35.378107+00:00",
+  "removed_at": "2026-10-29T17:24:12.800342+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -1595,6 +1595,67 @@
       "country": "Chile",
       "ai_relevance_score": 75,
       "ai_relevance_reason": "Reports the detention of individuals with links to a significant non-state criminal organization."
+    },
+    {
+      "id": "925aa8a8d09daa88",
+      "incident_id": "inc-29ecbc0f31bdc515",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxOT2Z1SmVQS2hkc25mMFFGUkdDdk1temYxLUVkTXcySi1nMnZpb0UzdGJkcXRUUHlRSm1yWVByYWEwTDdZcnE3aUdwTDNWbDVzbGJxdVM2RHhuX3NwOW81ZTlvZU1nd1N4UVZJX2tEYWtqd011QU9DRGg3OFBaekZkNEMzSXA0SFBRZHdDaDRtbk5YWTczVXdub1JZNjk0THNnNE02R2JTbFpvZms3YVlHVGM5aHp4aUlkeVo5Q253VDVOOHRCem5v?oc=5",
+      "title": "Boko Haram, ISWAP Battle for Dominance in Sambisa Forest",
+      "summary": "Deadly clashes have intensified between Boko Haram and ISWAP factions battling for dominance in the Sambisa Forest.",
+      "original_title": "Boko Haram, ISWAP Battle for Dominance in Sambisa Forest” as deadly clashes intensify",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-05-02T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "Boko Haram",
+      "primary_event_type": "ATTACK",
+      "country": "Nigeria",
+      "region": "Sambisa Forest",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Reports ongoing deadly clashes between rival terrorist factions Boko Haram and ISWAP in Nigeria's Sambisa Forest."
+    },
+    {
+      "id": "ba487649ebea91a2",
+      "incident_id": "inc-8d44f1f95566e9b0",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOR3hoRW1LLU52SHJ3UEljUWN6Q2JfRzdTdVQwbzN3azNkb0hoaVBBeldnUlJ5b2hxWGgzWWtFUHhNS1lDR2Y1bXJGNTdLZGxYLXU1THZudGVhbVYtbWVIdWkzU2NTendkS2FqWmNZelR5OXdNQXNlVzhxNkFfUHpwOGFkVFhxUzd3d3VDMjIzZEk1V1F0c3dDMHFQQS1nUXNrRHV4MWVWWGoxX2RZMFRMNDdZUmF0Wmx2bUVuOG9nWG5XNmxocnpidEd3?oc=5",
+      "title": "FAMa neutralizes over 200 terrorists",
+      "summary": "The Malian Armed Forces (FAMa) conducted airstrikes resulting in the neutralization of over 200 terrorists.",
+      "original_title": "FAMa : plus de 200 terroristes neutralisés par des frappes aériennes",
+      "original_language": "fr",
+      "source": "malijet.com",
+      "published": "2026-05-02T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Mali",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Significant concrete CT combat operation."
+    },
+    {
+      "id": "df180caf92afc8f2",
+      "incident_id": "inc-c7f665cc68136e07",
+      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE40N3FIS2hCNnBZQjZQLVc2VjBaUWx5aHJkbWNHaG12emNreVBYS1I4cjJQUFBKdGxtUm9PQUhETDhJbUhxR0tiRm1IYXlWQzY1QUw2NGpPUmdDUnpMVlg3R1NmSkxzYkoxR2dzWlViZkh0UQ?oc=5",
+      "title": "Terrorists kill civilians in Niger",
+      "summary": "Terrorists killed a nurse and four farmers in a rural area of Niger.",
+      "original_title": "Terrorists kill nurse, 4 farmers in Niger",
+      "original_language": "en",
+      "source": "Daily Trust",
+      "published": "2026-05-02T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Nigeria",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Confirmed recent attack on civilians by non-state actors."
     }
   ]
 }
