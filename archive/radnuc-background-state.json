@@ -1865,27 +1865,31 @@
   "2f49cce2aaeea109": "2026-10-28T21:48:26.166433+00:00",
   "4e29a8b55cd491e9": "2026-10-28T21:48:26.166433+00:00",
   "22ec0725a29355ba": "2026-10-28T21:48:26.166433+00:00",
-  "6c050a1a627ffad5": "2026-10-28T21:48:26.166433+00:00"
+  "6c050a1a627ffad5": "2026-10-28T21:48:26.166433+00:00",
+  "354e2c96c5b2c826": "2026-10-29T16:17:50.361608+00:00",
+  "deec09c937ef03ac": "2026-10-29T16:17:50.361608+00:00",
+  "11035454a2ad70d1": "2026-10-29T16:17:50.361608+00:00",
+  "38886a4638611566": "2026-10-29T16:17:50.361608+00:00"
  },
  "pending": [
   {
-   "id": "a3a9f4439c3da14e",
+   "id": "6b4d78fc86b4097f",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Forza lavoro giovane e la sfida di raggiungere l'autosufficienza tecnologica nucleare in Vietnam.",
-   "summary": "Forza lavoro giovane e la sfida di raggiungere l'autosufficienza tecnologica nucleare in Vietnam. Vietnam.vn",
-   "original_title": "Forza lavoro giovane e la sfida di raggiungere l'autosufficienza tecnologica nucleare in Vietnam.",
-   "original_summary": "Forza lavoro giovane e la sfida di raggiungere l'autosufficienza tecnologica nucleare in Vietnam. Vietnam.vn",
-   "original_language": "it",
-   "collection_language": "it",
-   "collection_language_name": "Italian",
-   "collection_locale": "IT:it",
-   "published": "2026-10-28T07:49:52+00:00",
+   "title": "ABD'deki bir nükleer araştırma tesisinde yangın çıktı; nedeni henüz belli değil.",
+   "summary": "ABD'deki bir nükleer araştırma tesisinde yangın çıktı; nedeni henüz belli değil. Vietnam.vn",
+   "original_title": "ABD'deki bir nükleer araştırma tesisinde yangın çıktı; nedeni henüz belli değil.",
+   "original_summary": "ABD'deki bir nükleer araştırma tesisinde yangın çıktı; nedeni henüz belli değil. Vietnam.vn",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-29T10:51:28+00:00",
    "source": "Vietnam.vn",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNZWxDUE1COW0tQTJLV0FzTmlZZUp4Y0xra0dBMWhlek8wZkFiWjh4a2VBaE1qZ1d2azFkVmw1SERfRXVlUWlTZy1hRE1Sa3ZrVWE2alRsZEh0cmZJSUxfMVdCYl91VU1RUDdpRUZJTVU3elVMM185ZC1TTkI1d05nU0MxaXdmbXdZc0t3SFh6RWdadktmMGRfV3ZGQ05EQQ?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxObVVzY3dOLWNIam91YXhGaDhzVHVXUFhiRVFXcFZ2TlIwU3NjX1RXZ2F4aVVHTnlDWHRYLXFEWkFjaG9YcDhtZFJRM09kRUZ4eUN4XzlkTkIzYUt2SWZMTWdYZG5yMWRTR3dLS05xa2ZCeU0tV0p5UHpDd3p0dkxLcjJvYy1Cc3BzWFJjOWV2cVYwbzlOYVR4eGxER2xxQQ?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1897,28 +1901,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "e4e471e8405599cf0bc798981dda7d0fc7348195130650bc5c89a0641f5bb4bf"
+    "c3bc49c04d38fdef23077eefe283005ed12f8780f0be5d4ac1caabb1dfdd557f"
    ],
-   "background_query_language": "it"
+   "background_query_language": "tr"
   },
   {
-   "id": "3763626fae1655b5",
+   "id": "a6601aad6b4ed958",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Dal caro energia al nucleare, fino alla sfida dell’intelligenza artificiale: tutte le voci dal Forum sul futuro dell’Italia e dell’Europa",
-   "summary": "Dal caro energia al nucleare, fino alla sfida dell’intelligenza artificiale: tutte le voci dal Forum sul futuro dell’Italia e dell’Europa il Giornale",
-   "original_title": "Dal caro energia al nucleare, fino alla sfida dell’intelligenza artificiale: tutte le voci dal Forum sul futuro dell’Italia e dell’Europa",
-   "original_summary": "Dal caro energia al nucleare, fino alla sfida dell’intelligenza artificiale: tutte le voci dal Forum sul futuro dell’Italia e dell’Europa il Giornale",
-   "original_language": "it",
-   "collection_language": "it",
-   "collection_language_name": "Italian",
-   "collection_locale": "IT:it",
-   "published": "2026-10-27T08:20:04+00:00",
-   "source": "il Giornale",
+   "title": "ABD’deki nükleer laboratuvarda yangın: Radyoaktif sızıntı yaşandı",
+   "summary": "ABD’deki nükleer laboratuvarda yangın: Radyoaktif sızıntı yaşandı Harici",
+   "original_title": "ABD’deki nükleer laboratuvarda yangın: Radyoaktif sızıntı yaşandı",
+   "original_summary": "ABD’deki nükleer laboratuvarda yangın: Radyoaktif sızıntı yaşandı Harici",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-29T08:15:01+00:00",
+   "source": "Harici",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPVldsd2pIWWYtTkpxZ1R3ZUx5SkpDajEyYlBQN3djV1ZhMS04aElOenl6Qmo4VktiSVRBcFlhR2lSYkNyeEpvdWpnaE5mWXM4OGFmTTJodHE0RFZDNkRpakNSY2RGaHFLaUx4eDUxYXdiXzh0X1RDLWlrWnAxYzNiazVYZHhxa3JMTHNacUhMdnB1MXBCNzlxTWJPdXVxZzFNdVA2Ni1mVFphUQ?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQTlVfZFpoTWFQSnZLcjM4bnpkM0pIY2h6UlcyWWI4NHVFUEtFc0VSUUpHUk5xVnJjbnV6alVmNDZ0Ym44TUhOWThJYjJXSTczVWQxRW5HZXBpYlVPbGxqaEZHMUlmOE1jNjRISEdSNURnWlFyekZYdXhSLTdwSTllREhleGlUWm94M0pYdUhwSdIBjwFBVV95cUxQTlVfZFpoTWFQSnZLcjM4bnpkM0pIY2h6UlcyWWI4NHVFUEtFc0VSUUpHUk5xVnJjbnV6alVmNDZ0Ym44TUhOWThJYjJXSTczVWQxRW5HZXBpYlVPbGxqaEZHMUlmOE1jNjRISEdSNURnWlFyekZYdXhSLTdwSTllREhleGlUWm94M0pYdUhwSQ?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1930,28 +1934,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "562aa89253af8abf27345e0944a3773dc87e752a6e8add6a2ea54aae10567ff4"
+    "feba520135b0dba0d27d1d9eee3a6bac2fc881a1f54e2d71723f7be12b04f77e"
    ],
-   "background_query_language": "it"
+   "background_query_language": "tr"
   },
   {
-   "id": "10bc56a3a8b919c0",
+   "id": "739034c3af02e54a",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Dichiarazione di Roma: Nobel e leader mondiali per una pace disarmata e disarmante su IA e nucleare",
-   "summary": "Dichiarazione di Roma: Nobel e leader mondiali per una pace disarmata e disarmante su IA e nucleare www.lavitadelpopolo.it",
-   "original_title": "Dichiarazione di Roma: Nobel e leader mondiali per una pace disarmata e disarmante su IA e nucleare",
-   "original_summary": "Dichiarazione di Roma: Nobel e leader mondiali per una pace disarmata e disarmante su IA e nucleare www.lavitadelpopolo.it",
-   "original_language": "it",
-   "collection_language": "it",
-   "collection_language_name": "Italian",
-   "collection_locale": "IT:it",
-   "published": "2026-10-27T07:45:42+00:00",
-   "source": "www.lavitadelpopolo.it",
+   "title": "Güney Kore ve Amerika Birleşik Devletleri ortak nükleer kapasite tatbikatları düzenliyor.",
+   "summary": "Güney Kore ve Amerika Birleşik Devletleri ortak nükleer kapasite tatbikatları düzenliyor. Vietnam.vn",
+   "original_title": "Güney Kore ve Amerika Birleşik Devletleri ortak nükleer kapasite tatbikatları düzenliyor.",
+   "original_summary": "Güney Kore ve Amerika Birleşik Devletleri ortak nükleer kapasite tatbikatları düzenliyor. Vietnam.vn",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-29T07:16:13+00:00",
+   "source": "Vietnam.vn",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxObHBycXBYN3hxMFZpWl95ejBIYVVhelhBb1pja3pHaTFpZGp2ekJzcmg5WVpqR0szSThYQWRBZlVVQW9xYndTTU9FNUFNZjNQUnhZU1d1OXMwdldROE9iSWRrNUVCd3ZRNU9VYWVjeTFmaFNKV3phOWh2N0NaQjhVXzRIcE11YW8yUmlySEljU2JrY3B6LU54UzVpS1F5RDZ4SFZuTXlPT2NrTThTdFNjMUgwSGhDVFhSTC1XUzFqX2hpUE5YbkxwT0tCNm55ajdHSjQtTDBsQmdqQl9zRDZyZnl3?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOcDRiV0RuQ203MEtXMVVJNFNLdVZpQ0hDejBCOUwzcU00Xy1vaGtxTVhFdEowck1IbG5IYU9sTXFPWDRTUURjeHRhOW16Yk1NekpVOGh3eXQ3VG40VWR0RzlOclZZc0xEWnVsUVhjMkpfNVFPRWFVbEZCNUhEMGpZbmhn?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1963,28 +1967,28 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "566325aab5b79c302a0620afdc51e8c4c28ca9f2f84486bae93c065ada3bc7ee"
+    "9749ae1e97dfc813f016dcf3e9c0afa12ec1958f0fd97781b8872b4f56ff8248"
    ],
-   "background_query_language": "it"
+   "background_query_language": "tr"
   },
   {
-   "id": "2f5a8f82f8e656e4",
+   "id": "e2dd685a4ae1a48e",
    "category": "Radiological/Nuclear",
    "categories": [
     "Radiological/Nuclear"
    ],
-   "title": "Fusione nucleare Pavia sperimenta l’energia pulita",
-   "summary": "Fusione nucleare Pavia sperimenta l’energia pulita Zazoom Social News",
-   "original_title": "Fusione nucleare Pavia sperimenta l’energia pulita",
-   "original_summary": "Fusione nucleare Pavia sperimenta l’energia pulita Zazoom Social News",
-   "original_language": "it",
-   "collection_language": "it",
-   "collection_language_name": "Italian",
-   "collection_locale": "IT:it",
-   "published": "2026-10-27T05:44:46+00:00",
-   "source": "Zazoom Social News",
+   "title": "ABD'deki nükleer laboratuvarda yangın. Bir çalışan yaralandı",
+   "summary": "ABD'deki nükleer laboratuvarda yangın. Bir çalışan yaralandı NTV Haber",
+   "original_title": "ABD'deki nükleer laboratuvarda yangın. Bir çalışan yaralandı",
+   "original_summary": "ABD'deki nükleer laboratuvarda yangın. Bir çalışan yaralandı NTV Haber",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-29T06:32:24+00:00",
+   "source": "NTV Haber",
    "source_count": 1,
-   "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPNFk0cWg4T2U0OG5Wa1lieVFuTVBsajZsY2EyTV9HdS1LeU53MlRhd3VEblI4dHVQa1AyaHJ5OUdNVDNvNjRuNnVvSU1PV0h4aVBpWVNyMVpKWTdrVlJuNlQ3dVFLcUJtd3FLaVJCSlBxdjczOUhsd1JuZ2h0UWlZNXFGRFdpbHRFN1B3RDVLZFNMa1dCV3JZ?oc=5",
+   "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNclAzS3BucG0wS2lDMVJCb1R1SElycDJqRVp1ZXRwV201b1h3YTBhQVZwMzd1TXVrV3J5a1FOYTljdEJnUmg5Q3RMSWtELUhldVZXMHFmeFVESE94bGd0RWlwRG9CRUdFWGxONlN1WTJlWW1XUWNWeEVqODRSMUdrYkNNNnN0Qmd1ZXFmZFVUeFpuLWtmb3hoQ195WdIBoAFBVV95cUxPaWJPTjRqMU9VTjBUUGVUZlRFZXpqR0MwcTBLSl9YTEFDSlA1VDNicnI4Ykp4ZHluT2hzR2R0eTFGWXg0cG1fN1VVZXp2UmdaY0xlclJGZHRLTmx3Z0FZUm5EREZKR1JGM2J6ck1FMFllekFrQW9adjNvcTVBQ0JGU2h2UUpQMkh2WFV3LUpCeVpyR0k0dzl3NXN2LThfNkst?oc=5",
    "collector": "Google News RSS",
    "country": null,
    "country_code": null,
@@ -1996,9 +2000,141 @@
    "location_confidence": "low",
    "acquisition_channel": "archive_enrichment",
    "source_article_fingerprints": [
-    "fcadbb8664a210ee32e231da9c3db9cabcff4650c09404e1aa11bf488a4f64c4"
+    "6185024423f36fc24b79a1aba717896badfb7e045eeff4ee4da5ba10574c1956"
    ],
-   "background_query_language": "it"
+   "background_query_language": "tr"
+  },
+  {
+   "id": "80e586b296947405",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Yıllardır gündemdeydi! İzmir’in Çernobil’i artık tarih oldu! O alanda radyolojik engel kalmadı",
+   "summary": "Yıllardır gündemdeydi! İzmir’in Çernobil’i artık tarih oldu! O alanda radyolojik engel kalmadı Yeni Asır",
+   "original_title": "Yıllardır gündemdeydi! İzmir’in Çernobil’i artık tarih oldu! O alanda radyolojik engel kalmadı",
+   "original_summary": "Yıllardır gündemdeydi! İzmir’in Çernobil’i artık tarih oldu! O alanda radyolojik engel kalmadı Yeni Asır",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-28T12:29:19+00:00",
+   "source": "Yeni Asır",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNNGVlY0stN25yNXFYV0NWVFFhbnBsajVfTDRndmtua3V1WlBST1JPZmlGLUoyakJSazVBQjZtQ0pBZUJ1U2RtdFhfUDlFZWRfSGFsdFRQcGxCMS02OEFHaVpSa0UzTXNjWHdDMW9NbG5OQmRidzc0U283eDhtVkRSX1FvRGNhYUN5VlNaN1BLamFnOHR0dkluWjMwT3oza19vNDZ2Z0tUY2RLS1FEcDNuZG56YXVmbjNhdDZxQzMzZjZELWlpcGpaU25FaVFRd2s4?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "ea16782e22dcdbe3a225178067bdf1af16d7ca831aa21a20c339a4fdba33c23c"
+   ],
+   "background_query_language": "tr"
+  },
+  {
+   "id": "2bf05c91721da9dd",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Genç nesilde nükleer bilime olan tutkuyu ateşlemek.",
+   "summary": "Genç nesilde nükleer bilime olan tutkuyu ateşlemek. Vietnam.vn",
+   "original_title": "Genç nesilde nükleer bilime olan tutkuyu ateşlemek.",
+   "original_summary": "Genç nesilde nükleer bilime olan tutkuyu ateşlemek. Vietnam.vn",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-28T08:51:06+00:00",
+   "source": "Vietnam.vn",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQTHQxMkFXa29xSzZBQVR2MEtXYV8yZTEzQTlPN1hFUGFsMmpTaXhBenhKWlJrQmRNQjV2OGc2WWJoeFdYU3VQWUZWbm9NbnFCYngzcVpCdE5FSkVveDdzZUFZcmtSeDRyZ3EybVNZUF93TW1NU3NrQWdKYTB3TjNmMzNPSWM?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "3fafc1f3a98a9904640025afce195ba2f3d68b4635283f13e97f648fc9c37718"
+   ],
+   "background_query_language": "tr"
+  },
+  {
+   "id": "667f74142f8fde22",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "İzmir Gaziemir'de Radyoaktif Kirlilik Giderildi! NDK'den Yıllar Sonra Kritik Karar",
+   "summary": "İzmir Gaziemir'de Radyoaktif Kirlilik Giderildi! NDK'den Yıllar Sonra Kritik Karar Doğayı Dinle",
+   "original_title": "İzmir Gaziemir'de Radyoaktif Kirlilik Giderildi! NDK'den Yıllar Sonra Kritik Karar",
+   "original_summary": "İzmir Gaziemir'de Radyoaktif Kirlilik Giderildi! NDK'den Yıllar Sonra Kritik Karar Doğayı Dinle",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-27T20:06:07+00:00",
+   "source": "Doğayı Dinle",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQd0Y2T3N1dkVNOTRUWlVZeFpSdE45M1pFaUV5YTZJajhUVVJ5LVEwNWpad1poeGpOY09Td2lXQy1TVjliZjFjYmVuaG5wRlp1UDZmMjN6RmFTNGhQYlpfZ2ZtY19NQkdXcW5YZ1IzV0RSdDVmcnVOOXFNcnB3MDJkcFVncDhSTmFSSDhsSnFZak44Mm1ZUWtXT0FqU1pQVEhudkJNcWRGWHR3VHpXcnpLV1YtMG9tdkhkUXpxT2h6QktGdlE0OVE?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "9fff01209551c4274f679576ba99dbeb6e827b981f750b078c4d92c8b4d900aa"
+   ],
+   "background_query_language": "tr"
+  },
+  {
+   "id": "1fe279da443d41fb",
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "title": "Nükleer Tesislerde Sayım ve Kontrol Kararı",
+   "summary": "Nükleer Tesislerde Sayım ve Kontrol Kararı Akdeniz Gazetesi",
+   "original_title": "Nükleer Tesislerde Sayım ve Kontrol Kararı",
+   "original_summary": "Nükleer Tesislerde Sayım ve Kontrol Kararı Akdeniz Gazetesi",
+   "original_language": "tr",
+   "collection_language": "tr",
+   "collection_language_name": "Turkish",
+   "collection_locale": "TR:tr",
+   "published": "2026-10-27T19:40:00+00:00",
+   "source": "Akdeniz Gazetesi",
+   "source_count": 1,
+   "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE93djR3RVN0bzJ4MG5ha2VOOGFwZTEwakRSVmJZMFlWd0ZQbFFnU2g0VEtyQklQa1ZiTV9tY25Ra0RvRGlvdS1BYVJDMWtMZnhXWk9NdkptelRxWGZmcHVobWxmaHdIZGFnUm9yX1E4ZWEtbmZta1g1aFpqVW1mWmM?oc=5",
+   "collector": "Google News RSS",
+   "country": null,
+   "country_code": null,
+   "city": null,
+   "region": null,
+   "latitude": null,
+   "longitude": null,
+   "location_precision": "unknown",
+   "location_confidence": "low",
+   "acquisition_channel": "archive_enrichment",
+   "source_article_fingerprints": [
+    "4be4dbee01bd43bd7e2f874ce45ae2a99968e3687d2f42d4f163885e8a398864"
+   ],
+   "background_query_language": "tr"
   },
   {
    "id": "8c6f8d3379c71219",
@@ -18237,6 +18373,6 @@
    "background_query_language": "it"
   }
  ],
- "cursor": 26,
- "updated_at": "2026-10-28T21:48:26.166433+00:00"
+ "cursor": 27,
+ "updated_at": "2026-10-29T16:17:50.361608+00:00"
 }

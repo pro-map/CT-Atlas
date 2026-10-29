@@ -3,7 +3,7 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-28T21:48:26.166433+00:00",
+ "updated_at": "2026-10-29T16:17:50.361608+00:00",
  "articles": [
   {
    "id": "radnuc-background-45f29a4831a794a0",
@@ -687,6 +687,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Qualified background update regarding international nuclear safety/policy meetings."
+  },
+  {
+   "id": "radnuc-background-e263b5703428edf9",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNZWxDUE1COW0tQTJLV0FzTmlZZUp4Y0xra0dBMWhlek8wZkFiWjh4a2VBaE1qZ1d2azFkVmw1SERfRXVlUWlTZy1hRE1Sa3ZrVWE2alRsZEh0cmZJSUxfMVdCYl91VU1RUDdpRUZJTVU3elVMM185ZC1TTkI1d05nU0MxaXdmbXdZc0t3SFh6RWdadktmMGRfV3ZGQ05EQQ?oc=5",
+   "title": "Young workforce and the challenge of achieving nuclear technological self-sufficiency in Vietnam.",
+   "summary": "Vietnam faces challenges in developing the necessary technical expertise and workforce to achieve self-sufficiency in nuclear energy. The report highlights the focus on training younger generations to support future nuclear technology development.",
+   "original_title": "Forza lavoro giovane e la sfida di raggiungere l'autosufficienza tecnologica nucleare in Vietnam.",
+   "original_language": "it",
+   "source": "Vietnam.vn",
+   "published": "2026-10-28T07:49:52+00:00",
+   "collected_at": "2026-10-29T16:17:50.361608+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report pertains to the development of the nuclear industry and workforce capacity, falling under industry_supply_chain."
   },
   {
    "id": "radnuc-background-f11d80529a29b3c2",
