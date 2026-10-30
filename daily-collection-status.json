@@ -1,43 +1,41 @@
 {
   "schema_version": 2,
   "status": "partial",
-  "run_started_at": "2026-10-30T15:57:26.876719+00:00",
-  "last_attempt_at": "2026-10-30T15:57:26.876719+00:00",
-  "published_at": "2026-10-30T17:12:19.760919+00:00",
+  "run_started_at": "2026-10-30T21:29:30.136656+00:00",
+  "last_attempt_at": "2026-10-30T21:29:30.136656+00:00",
+  "published_at": "2026-10-30T22:24:47.900667+00:00",
   "recent": {
-    "candidates": 3641,
-    "reviewed": 3342,
-    "cached": 1614,
-    "new_reviews": 1728,
+    "candidates": 3440,
+    "reviewed": 3440,
+    "cached": 2373,
+    "new_reviews": 1067,
     "official_auto_accepted": 0,
-    "retained": 332,
-    "rejected": 3010,
-    "pending": 299,
-    "status": "partial",
-    "calls": 55,
+    "retained": 227,
+    "rejected": 3213,
+    "pending": 0,
+    "status": "complete",
+    "calls": 38,
     "primary_calls": 30,
-    "overflow_calls": 25,
-    "reasons": [
-      "run_budget"
-    ],
-    "window_start": "2026-10-27T15:57:26.876719+00:00",
-    "window_end": "2026-10-30T15:57:26.876719+00:00"
+    "overflow_calls": 8,
+    "reasons": [],
+    "window_start": "2026-10-27T21:29:30.136656+00:00",
+    "window_end": "2026-10-30T21:29:30.136656+00:00"
   },
   "backlog": {
-    "candidates": 2107,
-    "reviewed": 460,
-    "cached": 460,
-    "new_reviews": 0,
+    "candidates": 2196,
+    "reviewed": 743,
+    "cached": 423,
+    "new_reviews": 320,
     "official_auto_accepted": 0,
-    "retained": 0,
-    "rejected": 460,
-    "pending": 1647,
+    "retained": 51,
+    "rejected": 692,
+    "pending": 1453,
     "status": "partial",
-    "calls": 0,
+    "calls": 10,
     "primary_calls": 0,
-    "overflow_calls": 0,
+    "overflow_calls": 10,
     "reasons": [
-      "run_budget"
+      "historical_budget"
     ]
   },
   "maintenance": {
@@ -62,9 +60,9 @@
     },
     "gdelt": {
       "attempted": 10,
-      "http_attempts": 19,
-      "rate_limit_http_attempts": 15,
-      "rate_limited": 9,
+      "http_attempts": 18,
+      "rate_limit_http_attempts": 14,
+      "rate_limited": 8,
       "failed": 10,
       "deferred_queries": [
         {
@@ -76,13 +74,13 @@
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+weapons%22+OR+%22terrorist+arms%22+OR+%22terrorist+firearms%22+OR+%22weapons+smuggling%22+terrorism+OR+%22arms+trafficking%22+terrorism%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
           "label": "gdelt:Weapons",
-          "reason": "invalid_response",
+          "reason": "http_429",
           "recovered": false
         },
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22maritime+piracy%22+OR+%22pirate+attack%22+ship+OR+%22pirate+attacks%22+vessel+OR+%22armed+robbery+at+sea%22+OR+pirates+hijacked+vessel%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
           "label": "gdelt:Maritime Piracy",
-          "reason": "http_429",
+          "reason": "invalid_response",
           "recovered": false
         },
         {
@@ -100,7 +98,7 @@
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22security+forces+kill%22+terrorist+OR+%22security+forces+killed%22+militants+OR+%22troops+kill%22+terrorists+OR+%22militants+killed+in+raid%22+OR+%22terrorists+killed+in+raid%22%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
           "label": "gdelt:Counter Terrorism Action",
-          "reason": "invalid_response",
+          "reason": "http_429",
           "recovered": false
         },
         {
@@ -124,7 +122,7 @@
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22bioterrorism%22+OR+%22bio-terrorism%22+OR+%22bioterrorist%22+OR+%22biological+terrorism%22+OR+%22biological+attack%22+OR+%22biological+terror+attack%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22threat%22+OR+%22hoax%22+OR+%22arrested%22+OR+%22seized%22+OR+%22investigation%22%29+OR+%28%22biological+terror+plot%22+OR+%22biological+weapons%22+OR+%22biological+weapon%22+OR+%22bioweapon%22+OR+%22bio-weapon%22+OR+%22bacteriological+attack%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22threat%22+OR+%22hoax%22+OR+%22arrested%22+OR+%22seized%22+OR+%22investigation%22%29+OR+%28%22bacteriological+weapons%22+OR+%22germ+warfare%22+OR+%22biological+warfare%22+OR+%22toxin+attack%22+OR+%22toxin+terror+plot%22+OR+%22agroterrorism%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22threat%22+OR+%22hoax%22+OR+%22arrested%22+OR+%22seized%22+OR+%22investigation%22%29+OR+%28%22agro-terrorism%22+OR+%22agricultural+terrorism%22+OR+%22anthrax+attack%22+OR+%22anthrax+threat%22+OR+%22anthrax+hoax%22+OR+%22anthrax+letters%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22threat%22+OR+%22hoax%22+OR+%22arrested%22+OR+%22seized%22+OR+%22investigation%22%29+OR+%28%22anthrax+scare%22+OR+%22ricin+attack%22+OR+%22ricin+plot%22+OR+%22ricin+threat%22+OR+%22ricin+letters%22+OR+%22biological+threat+letter%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22threat%22+OR+%22hoax%22+OR+%22arrested%22+OR+%22seized%22+OR+%22investigation%22%29%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
           "label": "gdelt:Biological Terrorism",
-          "reason": "http_429",
+          "reason": "invalid_response",
           "recovered": false
         }
       ],
@@ -134,17 +132,16 @@
     "status": "partial"
   },
   "reasons": [
-    "run_budget",
-    "geolocation_review_required",
-    "recent_pending",
+    "historical_budget",
     "backlog_pending",
     "source_errors",
-    "category_pending"
+    "category_pending",
+    "geolocation_review_required"
   ],
   "queue_filter": {
-    "expired": 6079,
-    "retired": 407,
-    "cancelled_history": 710,
+    "expired": 6231,
+    "retired": 412,
+    "cancelled_history": 656,
     "duplicates": 0
   },
   "budgets": {
@@ -152,28 +149,28 @@
       "per_run": 30,
       "per_day": 60,
       "used_this_run": 30,
-      "used_today": 30
+      "used_today": 60
     },
     "overflow": {
       "model": "gemini-3.1-flash-lite",
       "per_run": 25,
       "per_day": 50,
-      "used_this_run": 25,
-      "used_today": 25
+      "used_this_run": 18,
+      "used_today": 43
     },
     "historical_calls_per_run": 10,
-    "historical_calls_used": 0,
+    "historical_calls_used": 10,
     "maintenance_calls_per_run": 2
   },
   "geolocation": {
     "status": "complete",
     "pending": 0,
-    "located": 5822,
-    "unlocated": 107,
-    "completed_unlocated": 107,
+    "located": 5912,
+    "unlocated": 108,
+    "completed_unlocated": 108,
     "outcome": "success",
-    "processed_this_run": 122,
-    "review_required": 146
+    "processed_this_run": 91,
+    "review_required": 153
   },
   "categories": [
     {
@@ -198,7 +195,7 @@
       "stop_code": "budget_reached"
     }
   ],
-  "finalized_at": "2026-10-30T17:18:52.914698+00:00",
+  "finalized_at": "2026-10-30T22:26:32.744859+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success"
 }
