@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-29T17:24:12.800342+00:00",
+  "removed_at": "2026-10-30T17:11:25.218900+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -1656,6 +1656,90 @@
       "country": "Nigeria",
       "ai_relevance_score": 85,
       "ai_relevance_reason": "Confirmed recent attack on civilians by non-state actors."
+    },
+    {
+      "id": "1e885c32caf5c8ba",
+      "incident_id": "inc-40766e32fbee28a5",
+      "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE1EdW5lRFlnS2pwdzZiOXAxOGc3eXMyb2l1THhNTHI2bW5PdkJoYnJya05qUDVQZUpmOG1XVmlkcXpOY1YtT0NQa2YweGV2cGptRV9Lb0hUZTk1d3RySHM4c3lNSy1Eb0sxS0VISG9yLUVDLW5FX21pdDJn?oc=5",
+      "title": "Somali Pirates Hijack Oil Tanker Off Yemen Coast",
+      "summary": "Somali pirates have successfully hijacked an oil tanker off the coast of Yemen.",
+      "original_title": "Somali Pirates Hijack Oil Tanker Off Yemen Coast",
+      "original_language": "en",
+      "source": "Arise News",
+      "published": "2026-05-03T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "Yemen",
+      "region": "Gulf of Aden / Yemen Coast",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Concrete, dated maritime piracy attack and vessel hijacking."
+    },
+    {
+      "id": "52f671ad8c3de88a",
+      "incident_id": "inc-3e6b688ca337e442",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNeUtWb0VocEdOZHBVSUFmUDZvU0RWeXVzc18wVzdmXzV5SHNDenZqYkpnbFdwNFVGZENxNFNVbE9QUjhsemhxaEg1VnJ5ZXc2TmRJMWVydFhEY3lqZDNIMThFb19UMnktMThmRWdBcHlMcVgwLWQwd241czdoTnQ5YUlSNGFYX2lQaVEtSk41NnpkVmNDR3pockRad0lITDkyUk04N3Y3djRKTGl6Y0hkYUJBZ1l1eHBlTzJDREhTRlQ?oc=5",
+      "title": "Video appears to show hijacked Galaxy Leader partially sunk off Yemen",
+      "summary": "New video footage shows the previously hijacked vessel Galaxy Leader appearing partially sunk off the coast of Yemen.",
+      "original_title": "Video appears to show hijacked Galaxy Leader partially sunk off Yemen",
+      "original_language": "en",
+      "source": "TradeWinds News",
+      "published": "2026-05-03T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "Houthis",
+      "primary_event_type": "PIRACY",
+      "country": "Yemen",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Concrete operational update regarding a previously hijacked vessel in maritime security / Houthi shipping attacks."
+    },
+    {
+      "id": "a7d5c6dde89f2ad5",
+      "incident_id": "inc-49887d13934dd70f",
+      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPQzM2SS1xWi1YMGloNWZCTjJZU1lRcHg0clhPSWRyTWFGaW0wN3pWay04aDZybi1ldFl0NF9Ga3k1NDNmQ0ItX3pBV1RuV3NjNjVMMzNOQWN5a25SRlhGRExOSXY1aTRuUmk2OEJod1VjM0YxS1JiaU52b1ZnZlZ1UnZfUy1XQmVfNHllVkRLQQ?oc=5",
+      "title": "Cargo Ship Attacked Off Iran Approaching Strait of Hormuz",
+      "summary": "A cargo ship was attacked off the coast of Iran as it approached the Strait of Hormuz.",
+      "original_title": "Cargo ship attacked off Iran approaching Strait of Hormuz",
+      "original_language": "en",
+      "source": "Seatrade Maritime News",
+      "published": "2026-05-03T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Iran",
+      "region": "Strait of Hormuz",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports a concrete armed attack on a commercial vessel at sea."
+    },
+    {
+      "id": "5ce97f6886e00219",
+      "incident_id": "inc-e9d2d74475008bf5",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9nRnZJOHFob24yQ2lra3hfUmhCeWI4M25nc2hHWGdZY3EtOGxORnhKbU85allKTDRPUWtlSHlHN29aV016UUlGVXVXZm15TlRKcEE?oc=5",
+      "title": "Iraqi intelligence destroys ISIS explosive devices in Hit",
+      "summary": "The Anbar Intelligence Directorate conducted a controlled demolition of explosive devices attributed to ISIS in the Hit district.",
+      "original_title": "مديرية استخبارات الأنبار تفجر عبوات داعش في هيت",
+      "original_language": "ar",
+      "source": "وكالة بغداد اليوم الاخبارية",
+      "published": "2026-05-03T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Iraq",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete report of a CT operation involving the neutralization of terrorist explosive material."
     }
   ]
 }
