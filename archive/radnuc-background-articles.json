@@ -3,8 +3,165 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-30T21:38:45.673160+00:00",
+ "updated_at": "2026-10-31T15:26:03.021484+00:00",
  "articles": [
+  {
+   "id": "radnuc-background-ae6bda0bb36f71ee",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFA2X0U3QWZEMlN1WnlNOUVmZWU5NmJWMHJEVTVFQlplQlJEbVdDTUZpSmNYNUtncFNVaVd4SUY2YmZUSHExeFN1UmRQVXhZVkwzaHY1VTJLekh3NVJseHE2cVBYcE1iZkkyUnJ5MVpkLWdEVHM?oc=5",
+   "title": "AI enters nuclear power plants, the most difficult algorithm is 'learning to say no' - written in the first autumn after the implementation of China's first Atomic Energy Law",
+   "summary": "The article discusses the integration of artificial intelligence into nuclear power plant operations and the regulatory challenges highlighted by China's new Atomic Energy Law. It emphasizes the importance of safety-oriented constraints for AI algorithms within the nuclear sector.",
+   "original_title": "AI 走进核电站，最难的算法是\"学会说不\"——写在我国首部《原子能法》施行后的第一个秋天",
+   "original_language": "zh",
+   "source": "潮新闻客户端",
+   "published": "2026-10-31T10:17:29+00:00",
+   "collected_at": "2026-10-31T15:26:03.021484+00:00",
+   "background_topics": [
+    "industry_ai_applications",
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Covers AI applications in nuclear power and regulatory compliance."
+  },
+  {
+   "id": "radnuc-background-f0a60bc5a628c38a",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5uTWNnVjhOMXVXTG1zUWRuTXVVUG5ZVXZZTDJuV0xoQklnNTN1eUdUWHR1MnFncl9hcUNaR0FNaTJBd0s3TGJZdW84Y1JOTjdmeWtpZA?oc=5",
+   "title": "2026 Shenzhen Nuclear Expo | Jinshi Robot: Transforming vacant land into 3D storage instantly",
+   "summary": "At the 2026 Shenzhen Nuclear Expo, Jinshi Robot showcased automated 3D storage solutions designed for nuclear industry applications. This technology focuses on optimizing logistics and storage efficiency within nuclear facilities.",
+   "original_title": "2026深圳核博会 | 金石机器人：一片空地秒变立体仓库",
+   "original_language": "zh",
+   "source": "深圳核博会",
+   "published": "2026-10-31T08:55:42+00:00",
+   "collected_at": "2026-10-31T15:26:03.021484+00:00",
+   "background_topics": [
+    "science_and_technology",
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Presents technological innovation for nuclear facility logistics and supply chain support."
+  },
+  {
+   "id": "radnuc-background-6b93b56f6ef3f7b4",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBBSnhTUnJiTzJSRDc1SXQzeW5qQl9YaW1LM3pOUEkxQnROM0t4cjhqR0ZnbE5ZaFhza29vX0NTSG9McmR4dWtjbkRSQi1sMVRSeTFkZA?oc=5",
+   "title": "2026 Shenzhen Nuclear Expo | Jindun Testing: Cybersecurity compliance experts, value creation through service",
+   "summary": "Jindun Testing showcased its cybersecurity compliance services specifically tailored for the nuclear industry at the 2026 Shenzhen Nuclear Expo. The firm focuses on enhancing the digital security and resilience of nuclear infrastructure.",
+   "original_title": "2026深圳核博会丨金盾检测：网络安全合规专家、服务创造价值",
+   "original_language": "zh",
+   "source": "深圳核博会",
+   "published": "2026-10-31T08:29:07+00:00",
+   "collected_at": "2026-10-31T15:26:03.021484+00:00",
+   "background_topics": [
+    "facility_cybersecurity"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Covers cybersecurity defensive development and compliance in the nuclear sector."
+  },
+  {
+   "id": "radnuc-background-ac4b8b7d1da23ae4",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE84NzBhTXVseG9tMTlLYXo2cjctWHlEV0oza0hBWTFmUllHTEQwazQ0VW1ESXZnRVpxMTduVzh4TG02S0Z0Q0pFTklaWjlRVUg0aENNcExtQ0YtUnFLdUV0OQ?oc=5",
+   "title": "China's operating nuclear power capacity is expected to rank first in the world by 2030",
+   "summary": "China reports projections for its domestic nuclear power sector, anticipating that its operating installed capacity will lead the world by 2030. This highlights a significant expansion in the civilian nuclear infrastructure supply chain.",
+   "original_title": "我国运行核电装机规模有望在2030年前跃居世界第一",
+   "original_language": "zh",
+   "source": "ThePaper.cn",
+   "published": "2026-10-31T03:37:59+00:00",
+   "collected_at": "2026-10-31T15:26:03.021484+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Reports on the strategic growth and supply chain development of the civilian nuclear industry."
+  },
+  {
+   "id": "radnuc-background-f97dc96daf231132",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQV1ZXTEluX09CYzFaY1QyQ2NUcFoySmVhcFRCWGVPUV9iVXBrak5aSm9tYUNIb0VlQUt2ZTczRURqb2xiZ0d1Sk1JUkhMYm85QzV6TGlOZlhOdGxSRTlDQ3kwMUczYTRzRzZST2FZbVNQbmlJZlVJQWN1UmxTSDNTdzFQOGZOYTJ4YlVsS3RlbU1sUEhDYmQzNGdPWEptWDVTeWRFTQ?oc=5",
+   "title": "An 'artificial sun', a world first! Wuxi uses innovative capabilities to support future race tracks",
+   "summary": "Wuxi is advancing its technological capabilities in fusion energy research, referred to as an 'artificial sun'. The report highlights regional innovation initiatives supporting the development of advanced nuclear power technologies.",
+   "original_title": "一颗“人造太阳”，一个全球第一！无锡用创新能级“托”起未来赛道",
+   "original_language": "zh",
+   "source": "搜狐网",
+   "published": "2026-10-31T02:02:34+00:00",
+   "collected_at": "2026-10-31T15:26:03.021484+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Reports on technological advancement in nuclear fusion research."
+  },
   {
    "id": "radnuc-background-2564ebdff60feeed",
    "kind": "radnuc_background",
@@ -190,6 +347,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: The report highlights high-level industry cybersecurity concerns and resilience management."
+  },
+  {
+   "id": "radnuc-background-03988668b56fd42d",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOUWs3S0dQYmJQY3l4cVZXSzczM21VQ25IOVdSQUdVYkV4dURoYVRXbnhjUE10M2NqYTFnOHRkZlhMV253NUYtNzVGOG5hZzNUN1ZrbUYzLUpWZXNJLXBVeWR5ZDNraDJWRDVRR040Q19VOWljSUNXV3V5WTZlNTJwc2d4bF9wdFJH?oc=5",
+   "title": "Curtiss-Wright invests $30 million to expand nuclear instrument manufacturing plant in Texas",
+   "summary": "Curtiss-Wright is investing $30 million to expand its manufacturing facility for nuclear instrumentation in Texas. This investment aims to increase capacity within the civilian nuclear supply chain.",
+   "original_title": "柯蒂斯-莱特投资3000万美元扩建得州核仪器制造工厂",
+   "original_language": "zh",
+   "source": "搜狐网",
+   "published": "2026-10-30T15:03:00+00:00",
+   "collected_at": "2026-10-31T15:26:03.021484+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a legitimate industry supply chain development for civilian nuclear infrastructure."
   },
   {
    "id": "radnuc-background-29876b735fe87b43",
@@ -2520,6 +2708,37 @@
    "ai_relevance_reason": "RadNuc background only: This relates to national policy changes regarding nuclear regulation."
   },
   {
+   "id": "radnuc-background-6bf66d12d592f3da",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE9Ed2JYVnVPdmVKQTE3SE4xNC0tZUZIMG1aaFFUVHcyakY5QlpUMVNNNkZSNE5FLWp4LXhfdGVBb3ZvUXl3V21iQg?oc=5",
+   "title": "Paving the way for nuclear energy development: Trump administration proposes easing environmental reviews for nuclear reactors",
+   "summary": "The Trump administration has proposed regulatory changes to streamline and ease environmental review processes for nuclear reactor projects. The move is intended to facilitate the expansion of civilian nuclear energy.",
+   "original_title": "为发展核能“铺路”：特朗普政府提议放宽对核反应堆的环境审查",
+   "original_language": "zh",
+   "source": "财联社",
+   "published": "2026-10-29T10:50:23+00:00",
+   "collected_at": "2026-10-31T15:26:03.021484+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report details proposed changes to national nuclear regulatory and licensing policies."
+  },
+  {
    "id": "radnuc-background-5e006d17f0fb2486",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -2582,6 +2801,37 @@
    "ai_relevance_reason": "RadNuc background only: This update pertains to the civilian nuclear fuel supply chain and waste management."
   },
   {
+   "id": "radnuc-background-f28fd3a77b930887",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5uby0xVER4YXJuME9rSi1SM0tRTTFjczBZZ0cyQXg1TVRMWGJxNWtEWGZsdm9EM0VfX0pKN21hMEtDbmFTMVdBLTlYSFpMbE1lTkUyZkZZVGZoNnZpTUVQR3B3?oc=5",
+   "title": "Construction plan for radioactive waste disposal site scheduled to begin in 2027",
+   "summary": "Belarus plans to start the drafting and development of construction documentation for a radioactive waste disposal facility in 2027. This development relates to the long-term management of nuclear waste.",
+   "original_title": "放射性废物处置点建筑方案拟于 2027 年启动编制",
+   "original_language": "zh",
+   "source": "白俄罗斯新闻",
+   "published": "2026-10-29T09:17:00+00:00",
+   "collected_at": "2026-10-31T15:26:03.021484+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a legitimate development in the nuclear waste supply chain lifecycle."
+  },
+  {
    "id": "radnuc-background-7d947348c3f2f6ac",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -2611,6 +2861,38 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: The report captures an industry-led call for regulatory evaluation of restarting nuclear power capacity for energy security."
+  },
+  {
+   "id": "radnuc-background-cd2f2b65b1a02e36",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNRGVsMThuZHdhTzBmeTI2MkxFeVR2N05YVmZuajIySFlzTTMwcDFaSFBMV1Z5RUp6aGJkWmZkcmlLeTJHTkhfV2RCQzF1bmRiUmVKdUZuV29UVkJZX1RHZ3R2OWJQS3lwNjlJWFF4UmZFb1M5S2lEVUg3WkNCeU9JMEE0NHRGQndidUE5clc4OXdlRU55TmE5ck1aQjEzQVltanE1dmJmQ09vQlVHc0dlQlpVT0ZNQ0x5WmRRc29Ud2ZaU2s?oc=5",
+   "title": "South Korea hosts its first IAEA Ministerial Conference on Nuclear Power, focusing on SMRs and AI applications",
+   "summary": "South Korea hosted an IAEA Ministerial Conference on nuclear energy, where delegates discussed the integration of AI in nuclear sectors and the deployment of Small Modular Reactors (SMRs). The meeting served as a forum for international cooperation on nuclear safety and technology advancement.",
+   "original_title": "韩国首次承办IAEA核能部长级会议落幕 聚焦SMR与AI应用",
+   "original_language": "zh",
+   "source": "디지털투데이",
+   "published": "2026-10-29T08:01:59+00:00",
+   "collected_at": "2026-10-31T15:26:03.021484+00:00",
+   "background_topics": [
+    "safety_security_meetings",
+    "industry_ai_applications"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The event covers international nuclear safety meetings and industrial AI applications."
   },
   {
    "id": "radnuc-background-0d172e26ce0f53f4",
@@ -2766,6 +3048,100 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This reports on the regulatory process for new civilian nuclear power plant development."
+  },
+  {
+   "id": "radnuc-background-6aec7bbc2e8e8d1e",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5QS0RJWlRJajl6T2hlRG81QU91VU1BTUs2cDZaYTMtaUJKbjBNRFlFOXAzdTJ1UERBU2NCSlFpOEU2dndmMjJKNzI2QlN5MGIwYmN2aVVpZkNtaXJFa0gzWWUydw?oc=5",
+   "title": "Department of Energy plans to provide $5 billion in loans to Constellation to support capacity expansion at eight nuclear power plants",
+   "summary": "The U.S. Department of Energy intends to support the capacity expansion of eight existing nuclear power plants through a $5 billion loan package for Constellation Energy. This initiative is part of national policy to boost civilian nuclear generation.",
+   "original_title": "能源部拟向Constellation提供50亿美元贷款支持八座核电站扩容-能源电力",
+   "original_language": "zh",
+   "source": "至顶网",
+   "published": "2026-10-29T03:13:45+00:00",
+   "collected_at": "2026-10-31T15:26:03.021484+00:00",
+   "background_topics": [
+    "regulation_and_licensing",
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This involves government regulatory policy and supply chain capacity expansion."
+  },
+  {
+   "id": "radnuc-background-9978d26e17f3becb",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE0xMTVHS2lYZkwwNDJZM2tpdEFMTzR3QldUaTFRYzR1Vk5QTFNCSENjeDZYaTRPbVQ0UVU1aHNyRUV4R29FQXFUdkdWM0JydF9nb3c?oc=5",
+   "title": "IAEA Incheon conference calls for accelerated nuclear energy deployment",
+   "summary": "Participants at the IAEA conference in Incheon emphasized the need to accelerate the deployment of nuclear energy globally to meet energy needs. The discussion focused on the role of nuclear power in future energy strategies.",
+   "original_title": "国际原子能机构仁川会议呼吁加速核能部署",
+   "original_language": "zh",
+   "source": "深圳核博会",
+   "published": "2026-10-29T02:51:00+00:00",
+   "collected_at": "2026-10-31T15:26:03.021484+00:00",
+   "background_topics": [
+    "safety_security_meetings"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a summary of an international meeting regarding civilian nuclear energy deployment."
+  },
+  {
+   "id": "radnuc-background-ff6c79c5b3b361e7",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE45M3FYLWtqazZLc3JfVjJlNmFsc2xPZEZTT2RudTk5YWdsaHhLWTdNUjJldkpkVjRlRTU2eFJqU1BOcUFPQllOUVpzalpYSm5UeFE?oc=5",
+   "title": "U.S. company Deep Isolation announces site preparation for Texas deep borehole demonstration project",
+   "summary": "Deep Isolation has begun site preparation for a demonstration project in Texas aimed at testing deep borehole technology for nuclear waste disposal. This development represents a step in the supply chain for radioactive waste management.",
+   "original_title": "美国公司Deep Isolation宣布德克萨斯深井示范项目启动场地准备",
+   "original_language": "zh",
+   "source": "深圳核博会",
+   "published": "2026-10-29T02:36:00+00:00",
+   "collected_at": "2026-10-31T15:26:03.021484+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a legitimate industrial development regarding nuclear waste disposal technology and infrastructure."
   },
   {
    "id": "radnuc-background-dcb2c286711c987b",
