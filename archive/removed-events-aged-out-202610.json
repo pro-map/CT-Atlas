@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-10-30T17:11:25.218900+00:00",
+  "removed_at": "2026-10-31T16:21:29.540171+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -1740,6 +1740,67 @@
       "country": "Iraq",
       "ai_relevance_score": 75,
       "ai_relevance_reason": "Concrete report of a CT operation involving the neutralization of terrorist explosive material."
+    },
+    {
+      "id": "72a5b3d9b9ac8c21",
+      "incident_id": "inc-bf989bc0986a67a0",
+      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNeWpjUjRRUENuTmZtUEpqQjRFN3RTVHYtYlZZbjljYWNlUGVOSkZZbnBGcVoxVXo3T0l1M25vTm1pNFRlTThXRmt2ckpzOVZnajEwcjRtTTZOVzJiNm9IbFFRY3BMWExYa2pEdGsxZzgtZlVJTTlhZm9WUEdsU04wMndkU3hidUUwTHZPN1RsdVZJVGhx?oc=5",
+      "title": "Somalia Issues New Sanctions List Targeting Al-Shabaab Financiers",
+      "summary": "The Somali government has released a new sanctions list targeting key Al-Shabaab financiers and commanders.",
+      "original_title": "Somalia Issues New Sanctions List Targeting Al-Shabaab Financiers",
+      "original_language": "en",
+      "source": "Goobjoog English",
+      "published": "2026-05-04T07:00:00+00:00",
+      "category": "Terrorist Financing",
+      "categories": [
+        "Terrorist Financing"
+      ],
+      "actor_group": "Al-Shabaab",
+      "primary_event_type": "FINANCING",
+      "country": "Somalia",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete operational sanctions measure targeting terrorist financiers."
+    },
+    {
+      "id": "928d1e3b38ddae14",
+      "incident_id": "inc-9ac9129e8c938fc8",
+      "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxOUktmSVZWcXFnVFlremtjOFdfMjJ6dTdIX3dtMEMzMHBMbGZ1aXZvUUQxdnJUVWNxVV9ncjBLeUlKd2hsakNlVWhkZVR4ZXdldVRTLXNHMWcyTTYwaFhwY3J4MW8xNXhsbkxyTS1lZEFuVW5pLW90MGp3d2dTM01EcGRKQnd4Y2ZhbEJBZWpuZDFHVTVPUnNVVVh5bVc0Q2pwd3JENnBZa1EzNzRGOFBXcm1mZDdsSjFUcUdwSy1Ob3JRQUNwZE83RzlzbE9rZnZWRHdPUENDSlFudWUyMUdqTg?oc=5",
+      "title": "Police report partial detonation of car bomb at MAC facility",
+      "summary": "Police investigation reveals that a car bomb targeting the Metropolitan Area Express (MAC) only partially detonated, significantly limiting the potential damage.",
+      "original_title": "'Simply luck': Police say MAC car bomb could've been 5 times bigger if all explosives had gone off",
+      "original_language": "en",
+      "source": "KGW",
+      "published": "2026-05-04T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "United States",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports on a concrete car bombing incident and the subsequent police assessment of the explosive device's impact."
+    },
+    {
+      "id": "2bf397384d7bc71e",
+      "incident_id": "inc-9d19868869d9afcb",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQNk9LMmMzTGdzZ1ZtN19fclhHcTdxQnV1T2J2clVOeGdvcXdtdGFkMDIzemp0M3NfajNwVk5vNlBIQ0U1ZHdtVE9MVGFRTE4wWDdHX09qR0tnWGFKb3NBMG9MeEFWZ1NFVFdaTF9sdjloMk5uUWx6QVFWQ0JrRV8yd1pRWXlYbzVYSGJMT1hlVEh1QnoxMl9YMnI3V3k5YmNtTDJIanQ0SE5sdlgxWE9VUE81N19icDJBd184eFk0aC14d1NvNkE?oc=5",
+      "title": "Terrorists neutralized in Sébabougou, Mali",
+      "summary": "Several terrorists were neutralized by security forces in the locality of Sébabougou, Kita Region.",
+      "original_title": "Région de Kita : Plusieurs terroristes neutralisés dans la localité de Sébabougou",
+      "original_language": "fr",
+      "source": "maliweb",
+      "published": "2026-05-04T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Mali",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Concrete military action resulting in militant casualties."
     }
   ]
 }
