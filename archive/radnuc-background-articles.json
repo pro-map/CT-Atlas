@@ -3,8 +3,350 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-10-31T20:32:44.119427+00:00",
+ "updated_at": "2026-11-01T16:11:23.527106+00:00",
  "articles": [
+  {
+   "id": "radnuc-background-e15c742afdf63b8b",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOY1VsYmg0QVVWMFl4OW9UNDlkRU5ROEFrT3ZxWEtIVjhfTmpIdkRyVnRicnJKZEIzOGs1SERqTnJ5QXY4Zy13WjdOZEtVN0hScjZBc3ZpQTV4ZTdhUW9hNEtsYURxN2Rwby1idkxMX0NsaHpZQVNCdFhpdGRhekFpNTNxOFU3Tlk5MnA5M2NHakxJQQ?oc=5",
+   "title": "Hamdan bin Zayed receives FANR, delegation, commends efforts of national talent in protecting nation and future of its generations",
+   "summary": "Hamdan bin Zayed Al Nahyan received a delegation from the Federal Authority for Nuclear Regulation (FANR) to discuss the authority's progress in managing nuclear safety and oversight. The meeting highlighted the role of Emirati national talent in ensuring the continued safe operation of the nation's nuclear infrastructure.",
+   "original_title": "Hamdan bin Zayed receives FANR, delegation, commends efforts of national talent in protecting nation and future of its generations",
+   "original_language": "en",
+   "source": "www.wam.ae",
+   "published": "2026-11-01T15:51:29+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report pertains to the regulatory oversight and safety management of national nuclear facilities."
+  },
+  {
+   "id": "radnuc-background-fc824950946814e5",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi9wNBVV95cUxOaUl6TXlKVTA3dVVVRHgydnZZck53ampRNjJ6d2FncWoxSDdFS2xsOHhxOWxNMG9ibnEzOUpfVjM2ZEZySVRXQzFsbWxBRkpvYk54YXJsRy03SG8xNzUyTWtNNlg1ZXBzamZ6UF8xWUVfR0tNajRsN0NUdTlrczJVclh5VWRyMDItWUdQQ21KT3hNRnlrX1pWOURQOVlZNWp6d0RsVl9SZzNIOXVqZVVISndXZkhaMTdVSGtERGRrM0kzaVhvU21RLTR1eUs0SDRYTnRFQS1tY0lsUFhqamF2UG1MRUFSdHlxOFFacDRIOTJuM2F2aXBtNk5ZVTl5UFRMbFFqVGNBeW1mdGZ5UmI5MzFndFB6WVdBMGtFZlBRcjFlSkpNQWpCZWh6MzNFM1FMd1BEdTlOMndmcUFRWVBwUUlkLXFudnNVd3oxMG1sYWVqcmdBdExKT0pxVDlTMWdFbXFLVVpGOG03MkJ4Q25KVng1a05NM2hsdmV1LVpFaEhLWEFLTWxnWDBwZXdMQUIxWlVMX0hQc2VUQlRWb25lcTZNbXpTRWoycGY5Y3hkVVl5VVpKRFhxTkJZWEdpMFc2Nm9JOWFZNDMxRk5WdzQwMk5USXljbElSSVhNZDdhWDlNQlJ2amNyM2taaXp6N1I3SDZTSldQSQ?oc=5",
+   "title": "Algeria launches second phase of radioactive waste cleanup at In Ekker experimental tunnels in Tamanrasset Province",
+   "summary": "Algeria has initiated the second phase of an operation to clear radioactive waste from the In Ekker experimental tunnels. This project focuses on the remediation of historical nuclear testing sites.",
+   "original_title": "阿尔及利亚启动第二阶段清理塔曼拉塞特省比雷尔试验隧道放射性废物行动",
+   "original_language": "zh",
+   "source": "وكالة الأنباء الجزائرية",
+   "published": "2026-11-01T11:41:00+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report concerns the management and remediation of radioactive waste, which is a key industrial supply chain and safety activity."
+  },
+  {
+   "id": "radnuc-background-87a03e64d4f2befd",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1BRFRYZWpYc25seV9HbS1OVFNuYUl1NjBvMXJvS2FCNzF0M2EyTHRBVE9fWjBycDRUU1M0a0l2QmQwU2UxTFgzLU9vcDZIQTdOU0RNUHVvUXlqUm1TU0ZvNkswOS1YM0FmUGxWbWJDeXA5WnQxamc?oc=5",
+   "title": "Longda Xiangyun Nuclear Fusion Material Project and Enterprise Research Institute Launch Construction",
+   "summary": "The Longda Xiangyun project focused on nuclear fusion materials has officially commenced construction. The initiative includes the establishment of an enterprise research institute to advance fusion technology development.",
+   "original_title": "隆达·翔云核聚变材料项目暨企业研究院启动建设",
+   "original_language": "zh",
+   "source": "新浪财经",
+   "published": "2026-11-01T11:33:57+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report describes a new industrial development related to nuclear fusion materials, qualifying as a science and technology background update."
+  },
+  {
+   "id": "radnuc-background-7262a25b1fea0860",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBiN3Y3MVZyWi1TWGVrWkoxWGs2bkdnV3BTVlA5X3NNeVBkSzRyTlZtb2NBNl81dV8tRV9uLTlsamhnbTB0b1Z6RkdkZmt0ZWs4MFdySFExRQ?oc=5",
+   "title": "South Korea finalizes 12 exclusion criteria for high-level nuclear waste disposal site",
+   "summary": "South Korean authorities have finalized a set of 12 exclusion criteria to guide the selection of a permanent disposal site for high-level radioactive waste. These requirements serve to standardize the regulatory process for future waste facility siting.",
+   "original_title": "South Korea finalizes 12 exclusion criteria for high-level nuclear waste disposal site",
+   "original_language": "en",
+   "source": "헤럴드경제",
+   "published": "2026-11-01T10:09:20+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "regulation_and_licensing",
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a regulatory update regarding nuclear waste management and facility siting."
+  },
+  {
+   "id": "radnuc-background-8c1f96a07aca5ad1",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBnbE5IQzF5TXVWcVctZ01HTE1lX3NCMmxPa2hJWWJmYk9VRGJGbGh3aVNYZjhZQldBZ05aXzFORzVkRzcwY1oyOGxvTm5zbDl4cXoyOTE0V3h5d2s4TTJoNVhtblpSZEE?oc=5",
+   "title": "Thailand prepares rules and workforce for small nuclear reactors",
+   "summary": "Thailand has initiated the development of regulatory frameworks and human resource programs to support the future implementation of small nuclear reactors. The effort focuses on establishing the necessary oversight and technical expertise for potential deployment.",
+   "original_title": "Thailand prepares rules and workforce for small nuclear reactors",
+   "original_language": "en",
+   "source": "Nation Thailand",
+   "published": "2026-11-01T09:36:00+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This update pertains to national policy and regulatory preparations for civilian nuclear infrastructure."
+  },
+  {
+   "id": "radnuc-background-de5f6563629ab97c",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBlN3pkNlZUYlBfSUxCTUlqQmFlTHVmNWJvSFdiVXpUbTdCbHpwREU2b0VzXzlWTFd3OTZFa0k2V0NaMTdyaGlLVnZaWGJEV19kblhlM2J1cjAyT3hXMF83T1I4OFNGNV9jdVpUM2RB?oc=5",
+   "title": "China's operating nuclear power installed capacity is expected to rank first in the world by 2030",
+   "summary": "China projects that its operational nuclear power capacity will surpass all other nations by 2030. This growth reflects the ongoing expansion of the country's civilian nuclear energy infrastructure.",
+   "original_title": "陸運行核電裝機規模 有望2030年躍居世界第一",
+   "original_language": "zh-Hant",
+   "source": "中時新聞網",
+   "published": "2026-11-01T05:09:41+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This update describes the growth and development of the civilian nuclear industry supply chain and infrastructure."
+  },
+  {
+   "id": "radnuc-background-1af6fd3a450cc73e",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQV0xWQVdKaEtTZzhMOVZocGNJX2IxNTlQM3JoUTRyLTlXQ2l5MVhiVTJ4X0diV2ZFX0h1MVU0LTZON1Q1X1FoNTJRM1BYYlVCT0o2bEpoaXdpbGltRlY0ZDJCVWg3dThHZ3BkdFdNbUY5NWNTNXF2bkl6dUQ0c1RhZnJyZkJxSENq?oc=5",
+   "title": "Batteries, hydrogen, and nuclear fusion: Major scientific infrastructure empowers advanced energy at the Greater Bay Area Science Forum",
+   "summary": "Participants at the Greater Bay Area Science Forum discussed how large-scale scientific infrastructure facilitates advancements in fusion energy. The forum highlights ongoing research and development trends in the civilian fusion energy sector.",
+   "original_title": "电池、氢能、核聚变，大科学装置赋能先进能源 | 大湾区科学论坛",
+   "original_language": "zh",
+   "source": "搜狐网",
+   "published": "2026-11-01T04:17:14+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Contains information about civilian nuclear fusion technology development."
+  },
+  {
+   "id": "radnuc-background-b50a2c84f868de78",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE1aSGRtQjZzSmZNSXR0Vmx1Qm1iTDR0NC1oWVhFd3ZWVnRkQWpfZjF1TE1jemh1ZnhTQlBVWjEyNEtUYzhLTnZ3YURxcks2M2t4eVh0ZkNneDdueUhFWGEtUkEwNXU?oc=5",
+   "title": "High-level radioactive waste disposal sites must not be built within 8 km of active faults: Exclusion criteria finalized",
+   "summary": "Regulatory bodies have finalized exclusion criteria prohibiting the construction of high-level radioactive waste repositories within eight kilometers of active seismic faults. These standards are intended to enhance the geological safety of long-term storage facilities.",
+   "original_title": "高放射性废物处置场不得建在距活动断层8公里以内……排除标准敲定- 阿视亚经济",
+   "original_language": "zh",
+   "source": "아시아경제",
+   "published": "2026-11-01T04:02:31+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a regulatory development regarding the siting and safety of nuclear waste disposal facilities."
+  },
+  {
+   "id": "radnuc-background-91256b5efeb17860",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE92c01IelpvSlF6MmlfM1ZoX2h3NUJzZWo2Vlp0cnFvaTZZMTlqdFVDclktVXdaQ0JUdi16NDRYaGJQUkYydXo3QjNIR3FNYzJLb0x6ZmRKby03aEYxck80M2plSUZqQQ?oc=5",
+   "title": "Environmental Impact Assessment Approved for 13.33 Million Yuan Project Involving China National Nuclear Power's Indirect Subsidiary",
+   "summary": "An environmental impact assessment for a project involving an indirect subsidiary of China National Nuclear Power has received official approval. The project is valued at 13.33 million yuan.",
+   "original_title": "中国核电间接参股公司1333.25万元项目环评获同意",
+   "original_language": "zh",
+   "source": "每日经济新闻",
+   "published": "2026-11-01T03:29:00+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This update pertains to the regulatory process for a civilian nuclear-linked company project, fitting the regulation and licensing topic."
+  },
+  {
+   "id": "radnuc-background-bb66c6b8ee91018b",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE94QVRMRGdBeXNUbUxmYVo0OHVLcjlwSlpSX2V4Sm5vc1JjYXhsNEJWejBiU2NQYy1kVFdRdWxHMFo3dlZETkFsbzlOOHFTTEoyMWU1WW4yR0ZSaGhxQTN6ajlQcU10S2piMF8yLVVn?oc=5",
+   "title": "Research on Ni radioisotope separation and activity measurement in radioactive waste samples using 3D-printed components",
+   "summary": "A study details the use of 3D-printed components to facilitate the separation and measurement of Nickel radioisotopes in radioactive waste samples. The research aims to improve technical capabilities for nuclear waste characterization.",
+   "original_title": "基于3D打印组件的放射性废物样品中Ni放射性同位素分离与活度测定研究",
+   "original_language": "zh",
+   "source": "生物通",
+   "published": "2026-11-01T00:24:47+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This constitutes a technological advancement in the analysis and management of nuclear materials."
+  },
+  {
+   "id": "radnuc-background-a3a583bd995a38ec",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPN2ZvMDZyVnBLWFJhVXJUbEpIS0hSZ3oybXZLNlZCWnhqcllfVVhGYVZNNGZ0N3NuaUFFLV9wWkRhcll0VUszUFZDQWs4VVliSXhXWFFjenBlN3hTcGRVWlZkVHlSdWhCVDJvQ1g4YjllazZaNmFlWFhZdjRTVlR2T09RaWY?oc=5",
+   "title": "Why the United States, Russia and China are competing to place nuclear reactors on the moon",
+   "summary": "Major powers are engaged in a competitive development of small modular nuclear reactors for lunar surface energy requirements. This reflects an international development in nuclear technology and infrastructure for space exploration.",
+   "original_title": "চাঁদে পারমাণবিক চুল্লি বসাতে কেন প্রতিযোগিতায় নেমেছে যুক্তরাষ্ট্র, রাশিয়া ও চীন",
+   "original_language": "bn",
+   "source": "Amar Desh",
+   "published": "2026-10-31T23:43:00+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Eligible as a development in nuclear technology applications."
+  },
   {
    "id": "radnuc-background-fe79fe5ce801091b",
    "kind": "radnuc_background",
@@ -130,6 +472,37 @@
    "ai_relevance_reason": "RadNuc background only: This is a dated scientific advance in nuclear fusion technology."
   },
   {
+   "id": "radnuc-background-15cf4ec068c00067",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQUS1XVjgxYWxlWTVCa0ZodDNZeGNuTGFpUkRncFRRT2o2RmZ0Y1FtQWdhZzU5QTlBbUFnWk5scEJrbTdxM2lNZEoyZkxoek04Ukg4bnVEM2syQzZoNmhlRjduMFhhMXBvZkdGOTUtaEQ0amhnUEswYXRheUJkTVhIU05PRGF2V2s?oc=5",
+   "title": "Grace Fu to Visit UK and France to Strengthen Singapore-Europe Nuclear Safety Research Cooperation",
+   "summary": "Minister Grace Fu will visit the UK and France to foster collaboration in nuclear safety research between Singapore and European counterparts. The visit aims to enhance international cooperation on safety standards.",
+   "original_title": "傅海燕将出访英国法国 加强新加坡同欧洲核能安全研究合作",
+   "original_language": "zh",
+   "source": "华人头条",
+   "published": "2026-10-31T16:01:25+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "safety_security_meetings"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This meeting is focused on international cooperation in civilian nuclear safety research, which aligns with safety and security meetings."
+  },
+  {
    "id": "radnuc-background-b55cc5ff41e5369c",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -159,6 +532,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This report describes a scheduled emergency preparedness exercise rather than a real criminal incident."
+  },
+  {
+   "id": "radnuc-background-800cc2221b1c7d77",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5uXzQzaFdNMGw1dHZHMDdVeGtVc3RycWhGV05JTWluRjlBcXA3R2pjbmVPcWRENWJUZktmeEQ4MU13X1lteUs1cXY0cDNJLUFKaXlIcWZuMU5DZnc1SHlGcVdNNA?oc=5",
+   "title": "Phase III construction of Haiyang Nuclear Power Base in Shandong begins; expected to supply power to 54 million people upon completion",
+   "summary": "Construction has officially commenced on the third phase of the Haiyang nuclear power plant in Shandong Province. Once operational, the expansion is intended to support the energy needs of millions of residents.",
+   "original_title": "山东海阳核电基地三期工程开工，投运后可满足5400万人全年生活用电",
+   "original_language": "zh",
+   "source": "封面新闻",
+   "published": "2026-10-31T15:53:00+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a significant industrial development concerning the construction of a civilian nuclear power facility."
   },
   {
    "id": "radnuc-background-e44aeb5b8a5cee12",
@@ -192,6 +596,37 @@
    "ai_relevance_reason": "RadNuc background only: This report discusses the potential siting or development of a civilian nuclear industry facility, which falls under industry supply chain."
   },
   {
+   "id": "radnuc-background-35f8e0ad85d592cd",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE92Q0EzMjhWOTh4VktWV3FrZE9DUl8yNHBjblE0RXZrMS10R0UycVJWdlNCaFVKTW12aC1ybzlrMHp5LXFUNExsSEkyWTAxcmVYUzF6TGhB?oc=5",
+   "title": "Another shipment of uranium arrives at Rooppur under tight security",
+   "summary": "A new shipment of nuclear fuel has arrived at the Rooppur Nuclear Power Plant in Bangladesh. This follows standard procedures for fuel supply chains at a civilian nuclear facility.",
+   "original_title": "কঠোর নিরাপত্তায় রূপপুরে পৌঁছেছে আরও এক চালান ইউরেনিয়াম | বাণিজ্য | বাংলাদেশ সংবাদ সংস্থা (বাসস)",
+   "original_language": "bn",
+   "source": "Bangladesh Sangbad Sangstha (BSS)",
+   "published": "2026-10-31T13:22:19+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Eligible as an industry supply chain development for a civilian facility."
+  },
+  {
    "id": "radnuc-background-1c3f651e26b513e3",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -222,6 +657,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Describes a significant financial and policy development for civilian nuclear energy infrastructure."
+  },
+  {
+   "id": "radnuc-background-6bedb36fc678b6a4",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNd3Fxb0cxLTBQYkNLNVdZaFJyUmhRdnBtRHpmQ00zcDBfRVBOdnJjTVNFWHZnbllrVGxwUWlnczZYRHRSX000VXVSZF9mSjhEWm1ZRUp1dERNYm9BVjd4RHBXeWx2X2pLaFF2alA1UnJ6aUtaakR1UmV3ZkxRb1FZYkFfXzlydEJnN0Z4eFB6YmxFUGx0YTRVOWVNQ2hKMVJBenB3Q0V3?oc=5",
+   "title": "Building a multidisciplinary human resource ecosystem and expanding the application of nuclear technology.",
+   "summary": "An initiative is underway to strengthen human resources and expand the civilian use of nuclear technology. The project aims to improve technical expertise and broaden industrial and scientific applications.",
+   "original_title": "בניית מערכת אקולוגית רב-תחומית של משאבי אנוש והרחבת היישום של טכנולוגיה גרעינית.",
+   "original_language": "he",
+   "source": "Vietnam.vn",
+   "published": "2026-10-31T12:12:10+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Addresses expansion of civilian nuclear technology and industry human resources."
+  },
+  {
+   "id": "radnuc-background-855b572bf7d8cc47",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTFBGYS1jU3o4NmNsT3Zzd2FZYW5oekhNX1cxMzd6OXFZZlNyMkd4YWxucUJQRzFjbzktVmNOeXF0am5Sc2tLNTJFQlNnV0pvSnp0Q1V1ZE43VW44QndCODZzNDFyRTF6eTZfTElRTE1ORWVidm1Y?oc=5",
+   "title": "Construction begins on Haiyang Nuclear Power Project Phase III: Units upgraded to 1.3 million kilowatts to create the world's largest passive nuclear power base",
+   "summary": "Phase III of the Haiyang nuclear project has started, featuring upgraded 1.3 GW generation units. The project aims to establish the facility as the world's largest base for passive nuclear power technology.",
+   "original_title": "山东海阳核电项目三期工程开工：单台机组提升至 130 万千瓦，将成全球最大非能动核电基地",
+   "original_language": "zh",
+   "source": "新浪网",
+   "published": "2026-10-31T12:11:55+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a significant industrial development concerning the construction and capacity expansion of a civilian nuclear power facility."
   },
   {
    "id": "radnuc-background-5443c6a6258309b1",
@@ -317,6 +814,37 @@
    "ai_relevance_reason": "RadNuc background only: This is a record of participation in a formal international nuclear energy meeting."
   },
   {
+   "id": "radnuc-background-f27640670f6235a5",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5NZGxvXzA5MmE5WHZZa1NUMWo5aEtPeEplN3RIQV9NZThJbDlvb3JwS1BuOWFpX1p0N1Z2cm5Qd0VmdGRDYmRJcnk4SXlVM1psMlN2S18zLWhuMDQ1VEJKaE9jNVJUTzdQdWdsU3Foaw?oc=5",
+   "title": "Harbin Engineering University hosts IAEA's 'Lise Meitner' global nuclear flagship program",
+   "summary": "Harbin Engineering University is hosting the IAEA's Lise Meitner Program, a flagship initiative aimed at international cooperation and human resource development in the nuclear field. The event focuses on fostering nuclear expertise and collaboration among global participants.",
+   "original_title": "哈工程承办IAEA“莉泽・迈特纳” 全球核领域旗舰项目",
+   "original_language": "zh",
+   "source": "中国新闻网",
+   "published": "2026-10-31T10:19:00+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "safety_security_meetings"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is an international meeting/cooperation event concerning the nuclear industry."
+  },
+  {
    "id": "radnuc-background-ae6bda0bb36f71ee",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -379,6 +907,38 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Presents technological innovation for nuclear facility logistics and supply chain support."
+  },
+  {
+   "id": "radnuc-background-4dd43f3d84ae7f93",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNdmVJX19fRXZoXzJqR05zVWJfU09DWkJCNzhmS3BxUG1xRGFaaXBlM0VHNzBVT2JVVmMxUkotVnB2MGhHSVp0VUU3bjVtZkxielVqNGlPNVBEUElRN1R4Y3BoQnZFd3RsNFdvWlVKLU8wQkJBZVR1WVFRb09POGJKcnhkUEUtWXJLSHVaUklzTFY?oc=5",
+   "title": "IAEA Chief Praises UAE Nuclear Programme During Barakah Visit",
+   "summary": "The IAEA Director General visited the Barakah Nuclear Energy Plant to assess the progress and safety standards of the UAE's civilian nuclear programme. The visit underscored the successful integration of international safety guidance and regulatory compliance at the facility.",
+   "original_title": "IAEA Chief Praises UAE Nuclear Programme During Barakah Visit",
+   "original_language": "en",
+   "source": "DD News",
+   "published": "2026-10-31T08:51:32+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "regulation_and_licensing",
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report covers high-level regulatory assessment and civilian nuclear infrastructure progress."
   },
   {
    "id": "radnuc-background-6b93b56f6ef3f7b4",
@@ -505,6 +1065,37 @@
    "ai_relevance_reason": "RadNuc background only: This is a record of radiological/nuclear emergency response training."
   },
   {
+   "id": "radnuc-background-ab110433ea1e7c1c",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQS3lMRkY0WWdZNXpsSnVRUHNPWHdJSk96MXB5Z2FvWUdTaTlKX2hOS1FtempVaDlXV2pORW1oZE9yS3V4LUJ6SGFqbldPd1h4bDd0WGhLckVLclYyN1ZBTHdqOWM4X1hpREhyeTZNU01sMU9wdHZjdEhXLUF2cUhLWVpwazdBWDF1dkJKTkRJQl9iblBKWG1nczV5NHRvVXl6RG0zUWhBYjZaQ291enU3ME11bTBQaXNzeGdidA?oc=5",
+   "title": "Russia is looking for opportunities to develop nuclear energy in Africa, offering options at different scales to meet demand.",
+   "summary": "Russia is exploring the development of nuclear energy projects in Africa. The proposal includes various reactor scales to accommodate different regional energy needs.",
+   "original_title": "רוסיה מחפשת הזדמנויות לפתח אנרגיה גרעינית באפריקה, ומציעה אפשרויות בקנה מידה שונה כדי לענות על הביקוש.",
+   "original_language": "he",
+   "source": "Vietnam.vn",
+   "published": "2026-10-31T07:04:11+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Covers civilian nuclear energy supply chain and facility development."
+  },
+  {
    "id": "radnuc-background-6a88166dc977a5cf",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -565,68 +1156,6 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Relates to civilian nuclear energy industry development."
-  },
-  {
-   "id": "radnuc-background-ac4b8b7d1da23ae4",
-   "kind": "radnuc_background",
-   "archive_only": true,
-   "background_reviewed": true,
-   "ai_selected": false,
-   "ai_current_ct_event": false,
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "primary_event_type": "BACKGROUND_INFO",
-   "actor_group": null,
-   "parent_event_id": null,
-   "parent_incident_id": null,
-   "country": null,
-   "region": null,
-   "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE84NzBhTXVseG9tMTlLYXo2cjctWHlEV0oza0hBWTFmUllHTEQwazQ0VW1ESXZnRVpxMTduVzh4TG02S0Z0Q0pFTklaWjlRVUg0aENNcExtQ0YtUnFLdUV0OQ?oc=5",
-   "title": "China's operating nuclear power capacity is expected to rank first in the world by 2030",
-   "summary": "China reports projections for its domestic nuclear power sector, anticipating that its operating installed capacity will lead the world by 2030. This highlights a significant expansion in the civilian nuclear infrastructure supply chain.",
-   "original_title": "我国运行核电装机规模有望在2030年前跃居世界第一",
-   "original_language": "zh",
-   "source": "ThePaper.cn",
-   "published": "2026-10-31T03:37:59+00:00",
-   "collected_at": "2026-10-31T15:26:03.021484+00:00",
-   "background_topics": [
-    "industry_supply_chain"
-   ],
-   "ai_relevance_score": null,
-   "ai_relevance_reason": "RadNuc background only: Reports on the strategic growth and supply chain development of the civilian nuclear industry."
-  },
-  {
-   "id": "radnuc-background-f7b55cb6589a8ebd",
-   "kind": "radnuc_background",
-   "archive_only": true,
-   "background_reviewed": true,
-   "ai_selected": false,
-   "ai_current_ct_event": false,
-   "category": "Radiological/Nuclear",
-   "categories": [
-    "Radiological/Nuclear"
-   ],
-   "primary_event_type": "BACKGROUND_INFO",
-   "actor_group": null,
-   "parent_event_id": null,
-   "parent_incident_id": null,
-   "country": null,
-   "region": null,
-   "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNd3ZaT0F5bXBuNXVnbElERWxIWG4zQVFqM09mc0loRjJZY3hzWnRoUG1YenlhZE9COTVURlJIT05wLUZ3Zy16ZjdLZlk4c0xMWElmcHAxVFVlOFJ4d3RmRThudDlydFduS1c3aXFfYi1MTmZBZGxXZEpfVDRIRlpCYWlSem1aSFZuTnZCRHJFS09UWTFHQmluaS1DVE9TYXJKdmFBbkFGbDVwdVpHV1lIVy1zUFJVZ3NnQWdCRA?oc=5",
-   "title": "Russia seeks nuclear energy development opportunities in Africa, offering options of different scales to meet demand.",
-   "summary": "Russia is actively identifying opportunities to export nuclear energy solutions and infrastructure of varying scales to African nations. These efforts are aimed at addressing regional energy demand through civilian nuclear deployment.",
-   "original_title": "La Russie recherche des opportunités de développement de l'énergie nucléaire en Afrique, proposant des options de différentes échelles pour répondre à la demande.",
-   "original_language": "fr",
-   "source": "Vietnam.vn",
-   "published": "2026-10-31T03:05:02+00:00",
-   "collected_at": "2026-10-31T20:32:44.119427+00:00",
-   "background_topics": [
-    "industry_supply_chain"
-   ],
-   "ai_relevance_score": null,
-   "ai_relevance_reason": "RadNuc background only: Civilian nuclear industry supply chain/infrastructure development."
   },
   {
    "id": "radnuc-background-3679b170f1070b8d",
@@ -1653,6 +2182,38 @@
    "ai_relevance_reason": "RadNuc background only: Reports on the regulatory review and safety licensing status of a specific civilian reactor design."
   },
   {
+   "id": "radnuc-background-603a48d070758d8c",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPQ1ZWN0lYWVM4Ri1jUk5yVTVqc1VxUVpqTENCR0RIc1k5ZXAtaDBvaVgtNE15TzhwcWcyc2FFcVlxLXNldE5lNUpuTlJjbTBqU3Nrakp0M2Y0LVpkU1VEUEtFMGxuMEFaOUk2YXRGOHdlVTZQT3pWRTFQdVVCbkVEWDZwOGRiU3FrMXBkNjIwWmVhMHI2RUFWVjFPRWRQb1ItUkNqdmNRX1BRVUdLR1IyZEdTYnF0N1RVelIyMnNOcmJHTU1WWFE0dg?oc=5",
+   "title": "NUCLEAR UPGRADES: Constellation Gets Conditional Loan up to $5 billion for US Nuclear Plant Upgrades",
+   "summary": "Constellation Energy has secured a conditional loan of up to $5 billion from the U.S. government to support upgrades at existing nuclear power plants. The funding is intended to facilitate capital improvements and operational enhancements for civilian nuclear assets.",
+   "original_title": "NUCLEAR UPGRADES: Constellation Gets Conditional Loan up to $5 billion for US Nuclear Plant Upgrades",
+   "original_language": "en",
+   "source": "EnergyNow.com",
+   "published": "2026-10-30T12:59:12+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "regulation_and_licensing",
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report concerns civilian industry infrastructure and regulatory-backed financial support."
+  },
+  {
    "id": "radnuc-background-71e92a120c3d1a23",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -1899,6 +2460,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This is a formal update regarding technological development and intellectual property in the civilian nuclear fuel supply chain."
+  },
+  {
+   "id": "radnuc-background-d0fdf15a50704d72",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE1OLUdWNjBIRWhYTjVOeE1KRGxsNVlhWGZSazJKellJTEl1Y2dPQXVGYzZIaURPaUFTZnY1eGJJUEplRDBocmFab2pSbnhDd1hZZmhsTkR3UF93TXRVb20xbmlEVUE?oc=5",
+   "title": "Merz of Germany Visits Japanese Nuclear Fusion Company",
+   "summary": "German politician Friedrich Merz visited a Japanese company specializing in nuclear fusion technology. The visit highlights ongoing international interest in fusion energy advancement.",
+   "original_title": "Merz dari Jerman Kunjungi Perusahaan Fusi Nuklir Jepang",
+   "original_language": "id",
+   "source": "NHKニュース",
+   "published": "2026-10-30T10:58:56+00:00",
+   "collected_at": "2026-11-01T16:11:23.527106+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report focuses on technological development within the nuclear fusion sector."
   },
   {
    "id": "radnuc-background-cde8e8bad9ec654a",
