@@ -3,8 +3,226 @@
  "kind": "radnuc_background",
  "archive_only": true,
  "retention_days": 730,
- "updated_at": "2026-11-01T16:11:23.527106+00:00",
+ "updated_at": "2026-11-01T21:18:04.290139+00:00",
  "articles": [
+  {
+   "id": "radnuc-background-d1c9af89f74bf680",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi3gNBVV95cUxOLWxXNmFXUnJ2X1k4Z0c0RzY2cEdOVDlKWDR1ZkdtNTBUdXAwako0b2RlODIxbzh4dVdlSWZDVENQckloVkpxQlphVGhSdGhYR3paM1hWX3VWaWtTSFhQaW4zNVdEUU8xSjZDemdCSGpWTUVDMXFpencxNG1vVDBqZDVrWTlPSi1wbG5UQVhPOWRYSEd0aXN1Qk5ZQkxZdXFiVll5dzBWNEh5QjhGUUkzZmE0REdBR1V0U2kzNl9odC1VUTcteGJuSjE2NGh3UXhTbE9NWnQzeWdkWkNtUjN6WWtIT0lSV25QQUQ5aWM2M1Z4c24zMGkxQ1RMQTdVUFFFQ3FYeWkxazlVMm8yUVYzRjlqaUJuRHNmMWdTdVo5SGF6VlBYbDlUX2ZTaE00eUtsbk9CVlZlZFlIX3RGMloxOHI5dXU1VVpYTFBzMTN5VTF2OWNzWS1PS3FCSzRwU2h4TTlFVkd6eTJ4amR1OVQxY0kzUzctVE15cGRKUnJna1FCOXR5NzYyOF8tUDlqSXhSYk9uR0VoZWwxcGRwVmxfT0xuOGdxU3hHMFFPbFpmZ1hVTmpzNjJhNkU1R3dub05IMXRyYnQ4UENDTUYtbGdxVHRqQ1RKVG9oQXk4VUV3?oc=5",
+   "title": "Al-Masaa - The second cleanup operation of the In Ecker nuclear test site has begun",
+   "summary": "Algerian authorities have initiated the second phase of decontamination efforts at the former In Ecker nuclear test site. This work focuses on remediating environmental impacts from legacy nuclear testing.",
+   "original_title": "المساء - انطلاق ثاني عملية لتطهير موقع التجارب النووية بإن يكر",
+   "original_language": "ar",
+   "source": "المساء",
+   "published": "2026-11-01T20:36:13+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report details a specific remediation/decommissioning project at a legacy nuclear site, which qualifies under industry supply chain management."
+  },
+  {
+   "id": "radnuc-background-29655081623ce951",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBBWml3SEVEZ1pHMkNIVm9lQ0RKb2xoT21VOXFBcjFNODBiLTVMQlp3SWJnakZTQWQwcVFfcVVBT0EyeklXWmNiMVlXZUd1STlhbUNFZWkxelZxSXM0STRfN1NCTVJFSFVFNWfSAW9BVV95cUxNUzRfUHhPbnMxMzR1dG5XYUF0dzd0TTZmd2N6SjMwZkgwaXJiQ19mZGljb19SN1ozMnA2NjYxUldYLVhTMlA3dkdpa2g3d2N6bE42dGJTS01hMDlJaHB5dUNzUWdWWWdHc1JkY0dqVGs?oc=5",
+   "title": "Texas A&M receives $5.4 million grant to research conversion of nuclear waste into fuel",
+   "summary": "Texas A&M University has been awarded $5.4 million to conduct research on the recycling and conversion of nuclear waste into reusable fuel. This project focuses on advancing nuclear material management and sustainability technologies.",
+   "original_title": "Texas A&M gets $5.4M to turn nuclear waste into fuel",
+   "original_language": "en",
+   "source": "CW39 Houston",
+   "published": "2026-11-01T20:00:00+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "science_and_technology",
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report details a research development related to nuclear waste management and fuel cycle technology."
+  },
+  {
+   "id": "radnuc-background-830ed21d9be71a0c",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5QMGhWaGxsMDh3NTgwOXJWNnVZUjJVN0tyMFN6dGp2NzJNRUxRQ3NmeXpKcU56MkQ5YTM5MU11ZVEyTXFZYTcyX1BjX09sOGJ1Q2pSa1JpTmpEeXBSOC00MDVtUFFqSXBGUEE?oc=5",
+   "title": "Bahrain's ambassador to Korea participates in the International Ministerial Conference on Nuclear Energy",
+   "summary": "The Bahraini ambassador to South Korea attended an international ministerial conference dedicated to nuclear energy. The event focused on high-level cooperation and policy discussions within the nuclear energy sector.",
+   "original_title": "سفير البحرين لدى كوريا يشارك في المؤتمر الوزاري الدولي للطاقة النووية",
+   "original_language": "ar",
+   "source": "الأيام البحرينية",
+   "published": "2026-11-01T19:54:27+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "safety_security_meetings"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a record of a dated international meeting concerning civilian nuclear energy policy."
+  },
+  {
+   "id": "radnuc-background-986dc45ceb089366",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5KZVdTcDlXLXJRWFBfMXBPRTZXblNYRlVVQng1U1F2bFR3X3ZoRHprNmVabjRRQWNHNXFiYkNxZktwREhGODR6eEktVGFsQjhrbVHSAVBBVV95cUxQQ2VmT0twNi1fSVRsVThCQUFpdFJyaVRFZU5wejhLZm5DMzdRdWpSMzRlRmFCTGVFelduNGxsd0tWWmlEQ3cxRTZTRHczNnBPag?oc=5",
+   "title": "Algerian Defense Ministry launches second cleanup operation of French nuclear test sites",
+   "summary": "The Algerian Ministry of Defense has commenced a second stage of cleanup operations at sites previously used for French nuclear testing. This mission is part of ongoing efforts to address radiological contamination in these regions.",
+   "original_title": "الدفاع الجزائرية تطلق ثاني عملية تطهير لمواقع تجارب نووية فرنسية",
+   "original_language": "ar",
+   "source": "المشهد العربي",
+   "published": "2026-11-01T18:33:04+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report documents ongoing decontamination and waste management efforts at legacy nuclear sites."
+  },
+  {
+   "id": "radnuc-background-c209401e6fe99e1d",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMixAJBVV95cUxPdG90WXRjY3FNZFM3UG1sb01MRGdkTzFndGtuTS1xWTd6WHNxaWR0X1AyNkxCeHRkMFJKM3VVXzh4eE5OeGxjQ0lzcEMxZDdwTzRXa2tzN2tHQjNuTlBCajk0Yjd4WE10eHYwX05IRDlpaGtIY25Fc2xzMEpHaVhXZjRqNlBRVUhNUGxETnV4eEFOOFo3ZkduXzZ6c1lhQUVWNkFCZWtWU0V4U25wNUtnT3Q2OGg0QXJGNkx0Mnc1bEh3c3FmLWNtZW1tWFdGTjVmODR2dWtGdUNCbndHRTJ1SWNzajNqU2JxQU5LNnFiS01XaWk2OUlLQm1xdnZLTURqVWJIbExQZmN5ZWhGdmo3ckxZVU4tek9pajdmT245VUkwTXBubVBJRFJEQ2ZRWk1mWk91eWwzTThHTGduQmg2ZE5GZWE?oc=5",
+   "title": "Algeria launches a new operation to clean up a French nuclear test site",
+   "summary": "A new phase of radiological decontamination has been initiated at a legacy nuclear test site in Algeria. The operation is aimed at cleaning up residual contamination from historical tests.",
+   "original_title": "الجزائر تطلق عملية جديدة لتطهير موقع لتجارب فرنسا النووية",
+   "original_language": "ar",
+   "source": "شبكة رؤية الإخبارية",
+   "published": "2026-11-01T17:38:58+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report covers ongoing remediation activities at a former nuclear testing facility."
+  },
+  {
+   "id": "radnuc-background-9863b86df7250555",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1ncG50VmN0dDVzV0NzWkhVbFhQVUtMVlIxcmI4cnBtUXBDQ2pDNFh6Y3h4c0tJRVZodC05LU9IMmlUakZ2clJwYzQ3dUNhaXItYTRSUnozYmJVWlNZWUE?oc=5",
+   "title": "Algeria launches the second phase of cleaning up French nuclear test sites in the Sahara",
+   "summary": "Algeria has started the second stage of remediation at Saharan sites formerly used by France for nuclear testing. The project aims to mitigate long-term radiological environmental impact.",
+   "original_title": "الجزائر تطلق المرحلة الثانية من تطهير مواقع التجارب النووية الفرنسية في الصحراء",
+   "original_language": "ar",
+   "source": "emirates24.net",
+   "published": "2026-11-01T16:49:23+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report details a specific environmental remediation project at a nuclear site."
+  },
+  {
+   "id": "radnuc-background-f25139a7c8a94a3a",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi7gNBVV95cUxPRDZPOHJVMlY1V3hDQl84ZE8zVXlqMmhqYzNlY3BpNmVMNGJXWHZuUkdIT3NWTzhTZGtjQk1pbjdab2JIR1N4YlA2QkpsTnpwY0txYWRFWXBKOHl3clRRN1N2c25sbFZwSnp2MTU2MEwxbk1TUmdzN2txZHFzNlRrZFFKOHc3aU1samNlOVlhUkxxc3gtMVM5eUlmYTZyMVJEeGF5NGJTbEwyQWp1ZVh6V1k4X2Rvcnk2SEJfdzdwbW90U3o0TmEtU251OXQxNXM5Ni1SR2dXNEdQWDdIaXpwSHpQSk8zMUxBVWd0eUlqM0QyakhVYmltRFFON0VJQXNjRWFjeHM3U2VPemxmWGwtYlc4dm10eERGMEtfcEZTSnNxSzR4cTYtVzZIcXFaclRudjhVTl9yVVRJYlFNOXhGd3AzWElPQUprMDVHYzhKeXBLM3hEY0hjZnBBSE15cUk3ZGN4a1o5VkdGYTZDOVhIZjFGcWhlSlEzM2RpaGdBMFFlVkhMS3BGclA4SWplYkdvbFlObnpsd25xQ0dzeTNNcndtV3BFTlEzS0o2NExYVERiMEYwWmpaY0RSWU5TU0NlWF9Ra0xPZGhoQnRoOW01b0s1MDRFWFJmbndqZXAtLVppZ0dVMVhzZ1pkdmVlUdIB8wNBVV95cUxQaWpXVjFmaVMtbzNYZUtVU3JZMHotbk1qc3dNYm55aEtDVkxkbFdGQ04ySWxZRE81a1hnTmFRLUJOcTRGY2pSeWhsRDJrc3MtS01XSTIyV1FRSF9YMWdObWllRFhja2F2c19wbXM3bWZqSHYtMEE1SnFVbi1iTUFYdXlHSi1WSGU0WjZkMGpadzFVYUU0YjdTZ053ZlVsXzJ1SlhWdGN1elJHbkN6M1BuM2UzaVhmY25ac1hodkhtU1dSckdjN0d6OEhFTTc5R1BlbGJIa19GdlFTUk9ZaVRXdEtYZENQb2hwcTFzbS04OUVyYkhhWFBUZmZES25STzRTbjYydHVuZ2pyMU5pRHc4SVBzbUVEcktkeEdsMU9LYXMxb3pRZEhyOElKSnY3TmtlcHRLTVZBenpfWFBYcV9zSkNSUmdQZnRwQTlhQVNTY0tZRlVtYks2Zm1LeC1zWmRhUDJaMVBRS05WcGdCMTU2VHBsMXJZM0YxaFdwWGdleTU5S0xDS193dVVWbFdLckE3Y0dsSlJzSDFwblkycEQ5bk1NSE9wc2NqYzVtR2ZmVFkzczM3NngzZmpfQ1FXczNsUDRnWF8zWUdmS3VQd0NzVmhZeVI4MVNUekhScUtaMC11Nm1rbjYyYzdaREttVHdQQ3hF?oc=5",
+   "title": "Algeria accuses Paris of evading the delivery of nuclear waste maps",
+   "summary": "Algerian officials have expressed grievances regarding the alleged failure of France to provide detailed maps of nuclear waste burial sites. These records are considered essential for conducting effective decontamination operations.",
+   "original_title": "الجزائر تتهم باريس بالتهرّب من تسليم خرائط النفايات النووية",
+   "original_language": "ar",
+   "source": "العربي الجديد",
+   "published": "2026-11-01T16:37:38+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report pertains to the administrative and technical management of nuclear legacy waste and site characterization."
+  },
   {
    "id": "radnuc-background-e15c742afdf63b8b",
    "kind": "radnuc_background",
@@ -35,6 +253,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This report pertains to the regulatory oversight and safety management of national nuclear facilities."
+  },
+  {
+   "id": "radnuc-background-3a727f93d2189d8d",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMixgJBVV95cUxQdzFQdkJhSzhCc09VN0pkR0xsZXhHZjU4NElBVElsNlZ1b2M2RTBhQ0p4aDZhWXQ2R29hUDBCT2NPU1c3a3hoRWZRTXR2elR4Z0FWblRkSVJ6Yk9fMVdSbU1FZmg2RkJNS3Vxa1VmLTBVRzlwdW1hWFN4V1drMXVYSklkV0hkSXRfWHZ3S2Z4ZVVSLU8tMkpjc2xBS09GbkowbV9kd1g2dUdra25oYVA5V2hZRUdJQmFqM1oxcmJqcHV2YTRkQXRpQXBsTkotZTlBSjFlSHYzX0pCSHFobjNZRFg5LTM4WWJNaklhdy1vRU9PbEtUWE9VNEpJSHdIM3lJYk5HcDlMYjZBT1JZXzJ5dlRUUTVXQ25Tb1NQR0xjc3FJTktOVU45Tlo5Ykp0WVVlSjZSNGhZaV91YWxtZFFRbUlQc3gydw?oc=5",
+   "title": "Cleanup operations continue at French nuclear test sites in the south of the country",
+   "summary": "Radiological remediation activities are ongoing at former French nuclear testing sites located in southern Algeria. The focus remains on managing the environmental impact and legacy waste at these locations.",
+   "original_title": "تواصل عمليات تطهير مواقع التجارب النووية الفرنسية في جنوب البلاد",
+   "original_language": "ar",
+   "source": "https://www.internews.dz/",
+   "published": "2026-11-01T13:28:44+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is an update on the ongoing cleanup/remediation of legacy nuclear waste sites."
+  },
+  {
+   "id": "radnuc-background-2630fc1b8331272e",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQWUpZYVJlVHRnd1RyNDBoLWhHSDJ5ejdKX0ZOS1ZWSDd4SklQcHFBRm5saVZ1M2l1RVl4Q2dfME9uTG9JX2htUHQ0eHRBNVdBZ015dTRtcm9ES0V4LTdWTkJpMnFVNHpFOTBKWGxjS21jcXpXdThMeE9HUy1EZG5HUWY5Q3d5VWJjVUxxYzVLOGJuZ1V6V1HSAZYBQVVfeXFMUFlKWWFSZVR0Z3dUcjQwaC1oR0gyeXo3Sl9GTktWVkg3eEpJUHBxQUZubGlWdTNpdUVZeENnXzBPbkxvSV9obVB0NHh0QTVXQWdNeXU0bXJvREtFeC03Vk5CaTJxVTR6RTkwSlhsY0ttY3F6V3U4THhPR1MtRGRuR1FmOUN3eVViY1VMcWM1SzhibmdVeldR?oc=5",
+   "title": "Mahama returns from Russia-Africa Summit after proposing nuclear power plant, deeper bilateral ties",
+   "summary": "Ghanaian leadership proposed the development of a nuclear power plant following discussions at the Russia-Africa Summit. The proposal aims to strengthen bilateral energy cooperation.",
+   "original_title": "Mahama returns from Russia-Africa Summit after proposing nuclear power plant, deeper bilateral ties",
+   "original_language": "en",
+   "source": "Modern Ghana",
+   "published": "2026-11-01T12:25:00+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to civilian nuclear industry supply chain and infrastructure development."
   },
   {
    "id": "radnuc-background-fc824950946814e5",
@@ -99,6 +379,69 @@
    "ai_relevance_reason": "RadNuc background only: This report describes a new industrial development related to nuclear fusion materials, qualifying as a science and technology background update."
   },
   {
+   "id": "radnuc-background-eb8379e4c80cc0e3",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQWURhMmN4N2o3ZXJFek91Z3gtM3ZjcmhMT3dVX3ItVHVzZi1TRWNfbnVzb3RQb1V5dFFpTlJZaEhYenhSS2xSakNrQnBxdGNQVTI3dU9GUkhHZkw0NWcxNWZpaUQtOUFYVFZUdDJodmk1Y3UtOFhvU19LcVN0ZkNMRWtjSXk4ZkZaRXlvMThsQjRBQTQ?oc=5",
+   "title": "First Turkish engineers graduate from Akkuyu NPP",
+   "summary": "The first group of Turkish engineers has graduated to work at the Akkuyu Nuclear Power Plant project. This development marks a milestone in the human resources training for the construction and operation of the facility.",
+   "original_title": "Akkuyu NGS'nin ilk Türk mühendisleri mezun oldu",
+   "original_language": "tr",
+   "source": "Haber 7",
+   "published": "2026-11-01T11:17:00+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report concerns the development of the civilian nuclear power industry workforce."
+  },
+  {
+   "id": "radnuc-background-8878a18ed946cd3b",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPWlBVSVFaUnNtdFZ2bFpielhqTnlBblBGTlcxUU5aa3VNWEVtVU5VVGZIZEVudWtsTDZWOTRGYnRtV2dLMlpRanFKNEFuNXdTNFRHbVQwX29HR3dMamRZZGlIbGpncTAxTFUxN1EzWEVUSUNNS1VvZ0R4aS0za1EyQkgtdGxjLXYyT3Jac3ZzS0d6S3VtYV9aSTNZOVRBX05RVl9kZUJyWEtQTU5YN0pjY0xfV29jNjc3bHhFWTljODVONkdweEMw?oc=5",
+   "title": "Finland authorizes the Onkalo nuclear repository, designed to contain waste for 100,000 years",
+   "summary": "Finland has officially authorized the operation of the Onkalo nuclear repository. This facility is engineered to provide secure long-term storage for radioactive waste for a duration of up to 100,000 years.",
+   "original_title": "Finlandia autoriza el depósito nuclear Onkalo, diseñado para contener residuos por 100.000 años",
+   "original_language": "es",
+   "source": "LA17",
+   "published": "2026-11-01T10:38:00+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "regulation_and_licensing",
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report concerns the regulatory authorization and commissioning of a civilian nuclear waste disposal facility, fitting the criteria for background reporting on industry supply chain and regulation."
+  },
+  {
    "id": "radnuc-background-7262a25b1fea0860",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -131,6 +474,37 @@
    "ai_relevance_reason": "RadNuc background only: This is a regulatory update regarding nuclear waste management and facility siting."
   },
   {
+   "id": "radnuc-background-a1de368785179d74",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNc0xBZkV0MjZhU1RxeDdIRzRpQTk3X1Y2VkNnRGVjZEJaREZaTzFzamhkNVF4OVg4SVhkNTVpVEpkVjFCVWN4alBEYlJTRFh0U3piRDM3ZV8xVjk4U2ZSWlV1ZlhnV2c4dTlKbzY4S1YzcVp2LW8zMFY2dTIzNkVXVW9tb2RGRG9VYUxpSnZjckJsSzdQd3BaSTVnSmY?oc=5",
+   "title": "Nuclear plant, defence pact, scholarships: Here are 6 key commitments Mahama secured from Putin at Russia-Africa Summit",
+   "summary": "Ghana secured a commitment from Russia to support the development of a nuclear power plant. This agreement is part of a broader set of bilateral commitments made during the summit.",
+   "original_title": "Nuclear plant, defence pact, scholarships: Here are 6 key commitments Mahama secured from Putin at Russia-Africa Summit",
+   "original_language": "en",
+   "source": "Pulse Ghana",
+   "published": "2026-11-01T10:04:17+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to civilian nuclear industry infrastructure development."
+  },
+  {
    "id": "radnuc-background-8c1f96a07aca5ad1",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -160,6 +534,68 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This update pertains to national policy and regulatory preparations for civilian nuclear infrastructure."
+  },
+  {
+   "id": "radnuc-background-4a53c0da29c332a4",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNOXF2X2ZHVHBXMldLQWM5aE01enRYZDhHVGNpNzAtcHlHNk4wNjRHLU51UXhUMTBVMkJURGxJVGd1ejYyTVBta0wzTjlKUm5Sd1Q3Q1JTdFF1UU9lZ3RNd0dIRlo5aElJVDhRMnQ5bkxrTjF5MTlMNFVyVnlIejE0OTF4ZDVreEFuZ1RNM0JiajZiYzYzRE0yYmNtM0oyeTRaSXlfMlBaeXlKWWRzMm9GaXA5d1RWTy1paWVyRnhaUUhwUUnSAcgBQVVfeXFMTzd1ZVBGanpjTUxGZGhsem1NTUNKQmRJSy1XY3FVM0E5SDRzWTNncGs3NEJPMkR2MF83Ullkc1RyakdNREQwMW9OWmZMREhuOXpJV1EyNklZNjd4djVYTjJzQmZNRzY0eWhmbTFNcjR5cUNZUW5LTm9wUkxkS2dLWXloM3BqSjJUZmJsSHVzM0VyODJPbWRhZzV2eVhQVEV1d0gtQV9JbzhDOUtfMU1wZTNaSFIyczBtR2pieUhpU2ZyWFNXU3hwbWM?oc=5",
+   "title": "Satyagrahis removed from pond in Rewa at midnight: Protesting against nuclear power plant; 4 including AAP leader...",
+   "summary": "Protesters in Rewa demonstrating against a proposed nuclear power plant were removed from a local pond. The event highlights local opposition to the siting of a civilian nuclear facility.",
+   "original_title": "रीवा में आधी रात तालाब से हटाए गए जल सत्याग्रही: न्यूक्लियर पावर प्लांट का कर रहे थे विरोध; आप नेता समेत 4 ...",
+   "original_language": "hi",
+   "source": "Dainik Bhaskar",
+   "published": "2026-11-01T05:58:17+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "civilian_facility_protests"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This event describes local environmental/community opposition to a civilian nuclear facility."
+  },
+  {
+   "id": "radnuc-background-f077634cdff3b9af",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi7gJBVV95cUxPaXdIRjRTS19XQU9wWHhpemJlYkx3c2lENmNQUmRRWWJtVWc0djhVVWhlMUZiOW1RT2szbHlfcm5MYnVGbm8xNGZCWnFwY1BvakxIVEY4TnlsWVZGVmZTNnB0dnY5MlowT1NOUkd3U3VoVl9Uc2poeDNveWNZbW5vUnR3S08tel9KSUhVbXZ1TmEtQWhHbnVzT2ZTTS1Fa1YxYkVLcXpnSUtVUnk4WHpXYVRNek85WTB0ZGc1THhKbFJpY1B5Um81aklnb0hnSGxDZHNHUXEyS3dMejlOcVItODFVLUx0d21zc2l5WUVZaC15S0JiVFdwS29hVnQ5SHNmeXpkeUZTamhNM0ZhMnYwWXpxQW5tYlFRMi01MkFQUTRJc2FlWV9sVjV3bkNPeEo2eWwyYVl0cGVIMmd6LU93VFZrRkNpcnhxZFpFUktLVzNrdy1NV21PNDRqczRIV2trVDRnbS1LaTE5OENaM1E?oc=5",
+   "title": "After stacking six 110-ton modules, engineers finish the core of a 13-tesla electromagnet in France, a part that will reach 1,000 tons and will be used to control the plasma of a gigantic experimental reactor",
+   "summary": "Engineers in France have completed the central core of a large 13-tesla electromagnet. The component is intended for use in plasma control for an experimental nuclear fusion reactor.",
+   "original_title": "Depois de empilhar seis módulos de 110 toneladas, engenheiros terminam o núcleo de um eletroímã de 13 teslas na França, peça que chegará a mil toneladas e será usada para controlar o plasma de um gigantesco reator experimental",
+   "original_language": "pt",
+   "source": "Canal Rural",
+   "published": "2026-11-01T05:37:00+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Significant technological progress in fusion energy research."
   },
   {
    "id": "radnuc-background-de5f6563629ab97c",
@@ -286,6 +722,68 @@
    "ai_relevance_reason": "RadNuc background only: This update pertains to the regulatory process for a civilian nuclear-linked company project, fitting the regulation and licensing topic."
   },
   {
+   "id": "radnuc-background-7ab51c641c4af152",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOR0thMzVxdGh5LWk4bGtsdlRldDdpcVU1Vzc5T01rQW9qekdLZ0NHWC03R2NuV1Yxd0Z0bHd3WW9tOXFDR2hfM3h3V2xBM1U4YnE1QURMOC1iTk9zRllzWUpoRXZIWWNkcXlYMDFFZkdKU19tMDlFejBaZ1NRLVB2c0U1SHBNT2lSU0lTcWgzXzJlZGZ3NF9HZ3lRYkVld2dI?oc=5",
+   "title": "Russia is assisting Ghana in building a nuclear power plant, strengthening collaborative relations.",
+   "summary": "Russia is providing support to Ghana for the construction of a nuclear power plant. This represents a significant international supply chain and development project for a new civilian nuclear facility.",
+   "original_title": "रूस घाना को परमाणु ऊर्जा संयंत्र बनाने में सहायता कर रहा है, जिससे सहयोगात्मक संबंध मजबूत हो रहे हैं।",
+   "original_language": "hi",
+   "source": "Vietnam.vn",
+   "published": "2026-11-01T00:42:59+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The report highlights a major industry development involving nuclear facility construction."
+  },
+  {
+   "id": "radnuc-background-291cc0f0a11a9d78",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQSFFYR3VVb2hkWEtrR3RNbGgxeU4yWmlKR2d6VF96cFltWk1zTjJ0YTZaUGhTZFdzNGl0cHpXMnctVmJRbDRmT3RLRUhoRjNIQWp5UVdZZktfQmVqUXhYZXFsSUYybTVmSVdLeVdnejRReG45MTh5TlVhTjNRaE1hWFE4bGRDV3hyUHhzZWVQa05LR2VfZlUxRTJiaVFPeXJQTXlQay1iRjJuRDhFc3c?oc=5",
+   "title": "This West African country in talks with Russia for the construction of its first nuclear power plant",
+   "summary": "A West African nation has entered discussions with Russia regarding the potential construction of its first civilian nuclear power plant. This development relates to international civilian nuclear project planning.",
+   "original_title": "Ce pays ouest-africain en pourparlers avec la Russie pour la construction de sa première centrale nucléaire",
+   "original_language": "fr",
+   "source": "AfrikMag",
+   "published": "2026-11-01T00:25:10+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This fits the industry supply chain background topic as it concerns the planning phase of new nuclear infrastructure."
+  },
+  {
    "id": "radnuc-background-bb66c6b8ee91018b",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -348,6 +846,68 @@
    "ai_relevance_reason": "RadNuc background only: Eligible as a development in nuclear technology applications."
   },
   {
+   "id": "radnuc-background-6b230b75c912786c",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPeXZLZTdMekkydkdQeEtXN0l3dENTNXFvRG5raElUYU8tV3ViOUljLS1jRUtydkVOeFphenlIMGZxWTVfVHV5cklLUEczMTZFaUk1RGFTdXFadHZJbU1pSHlEM0hFSmNnSnhucUY0U0hFUUFqZldnbDZFWXl0cEFPcDVzNGpRdk9PZkNPMzVMek5TVDdiYWRMVzRB?oc=5",
+   "title": "Ghana-Russia Summit: What Mahama Secured from Putin",
+   "summary": "Ghana reached an agreement with Russia regarding support for the construction of a new nuclear power facility. The deal was formalized during bilateral summit meetings.",
+   "original_title": "Ghana-Russia Summit: What Mahama Secured from Putin ‎",
+   "original_language": "en",
+   "source": "Modern Ghana",
+   "published": "2026-10-31T21:45:00+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to civilian nuclear industry supply chain and infrastructure development."
+  },
+  {
+   "id": "radnuc-background-9823242585b467b0",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOTVI4eUVJSXBBRHdkTU5SOEg1NjZSbWJkZFRpVjRJNUR1Q2c5RDNCRjVheTNyNWVaa3I4MEN4Z3FUdzJ6eWtVOWNmY0V4bTNybHJuNkY1VHJOVnlReTRENjRwRl9vY1FLX0g4TXFoUC1LSUZXdzRrS2hDSFFFakZ5eEdFZ1VwMzBKREMwMUFUZVlOTTVTRWhkSExCXzBzcVpaU1hoaw?oc=5",
+   "title": "The reactor symbolic of the nuclear revival is still stopped: what is happening?",
+   "summary": "A nuclear reactor identified as central to a reported nuclear revival remains inactive due to unspecified ongoing issues. The development highlights technical or regulatory challenges facing current nuclear industry initiatives.",
+   "original_title": "Il reattore simbolo della rinascita nucleare è ancora fermo: cosa sta succedendo?",
+   "original_language": "it",
+   "source": "Everyeye Tech",
+   "published": "2026-10-31T20:32:00+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: The article discusses the status of a civilian nuclear reactor, which relates to the regulation and operation of the nuclear industry."
+  },
+  {
    "id": "radnuc-background-fe79fe5ce801091b",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -377,6 +937,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This report details a developing regulatory policy regarding the oversight and licensing of nuclear-powered vessels in civilian or state-territorial waters, fitting the regulation_and_licensing topic."
+  },
+  {
+   "id": "radnuc-background-384f923b196f446c",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNa3FJa3hyUm8xU0JTWlItT2p3VHFtX0ZUdWNkeF9YcTRMcGt3THlZdFJXUWUtQzhlc240WmdLci1ORHlBSEVrbzR3LXZEM2dOd0FGTmZneXRCbk5Qa2xGZ1pnZGZoS01USFEwQWI2elpNTVZhQlMwMkdmTEV3RGZUZDdScU5YMlpJOWFOUA?oc=5",
+   "title": "Russia agrees to support Ghana's 2,000 MW nuclear power project",
+   "summary": "Russia has officially agreed to provide support for Ghana's planned 2,000 MW nuclear power project. This project marks a significant development in the country's civilian nuclear infrastructure roadmap.",
+   "original_title": "Russia agrees to support Ghana's 2,000 MW nuclear power project",
+   "original_language": "en",
+   "source": "Latest news from Azerbaijan",
+   "published": "2026-10-31T19:54:04+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to civilian nuclear industry supply chain and infrastructure development."
   },
   {
    "id": "radnuc-background-ea9cb0258602f249",
@@ -1003,6 +1594,37 @@
    "ai_relevance_reason": "RadNuc background only: This is a record of radiological/nuclear emergency response training."
   },
   {
+   "id": "radnuc-background-6a184e8bfbdc97f3",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE41TlFtYmh1VHJkUV9aVGxJSEw3V0tmTWxkcXZmRS16Sm5JaGFhM3NvVF9iT1lSM09SUXhrQmFrMFB0d1VNTEFYRUN4SkowdldiN2NrcmJGaXVUUFg2NFBV?oc=5",
+   "title": "Competition among superpowers to install nuclear reactors on the moon",
+   "summary": "Global powers are engaging in a competitive effort to develop and install nuclear reactors for use on the moon. These projects focus on advanced space-based nuclear energy technology.",
+   "original_title": "চাঁদে পারমাণবিক চুল্লি বসাতে পরাশক্তিগুলোর প্রতিযোগিতা",
+   "original_language": "bn",
+   "source": "24 Live Newspaper",
+   "published": "2026-10-31T08:01:00+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "science_and_technology"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Relates to civilian scientific and technological development in the nuclear sector."
+  },
+  {
    "id": "radnuc-background-bc1ddafdefac89fa",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -1032,6 +1654,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This is a record of radiological/nuclear emergency response training."
+  },
+  {
+   "id": "radnuc-background-f59bce14d73bb414",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNV2E3T0VMTFA3eGNidE9hOGVxRHRwOXEwZVRKS2c4UnZVTXRkbk01bWZzX0NmUUpOY0RpcHVSNGZwMGY4Q2REVDBXUjVKRzdZd0NQaXpTWWxvSDVLSmt1UVQzRWF1QjhpVjBHR1BfSnFNcENWeV9DMjVNQW0yNk5TTkFmcEhiNnJYblRQTEc5ZXF1azE2T2Z1eFcxUjN0QnlDSERXc1E3NzfSAa4BQVVfeXFMTXkwLWlEc29fdFBhY3dMbGRmdFl0VGlNa2ZLS2sxV2VhZ2p4dzhmdUhHN2tXUWhmbEJ5UWhZT2xEU2FnSEdRcmVtNnNEOXZOa01uc2pEazFadUp1V1p3RG5md3NtWWppeW5iQ016eDdKSm8yYkw5cEczVXhwY3E2Q01fWE5pWktxdnJfM0NjVnBKNjc3T2k4TE9VQmtLRXZkd182bjE3YkJWcTlVVHN3?oc=5",
+   "title": "Emergency services in Çanakkale are in training for CBRN threats",
+   "summary": "Emergency response personnel in Çanakkale, Turkey, are undergoing training to prepare for potential chemical, biological, radiological, and nuclear (CBRN) threats. This exercise aims to enhance the readiness of local emergency services.",
+   "original_title": "Çanakkale'de acil servisler kbrn tehditlerine karşı hazırlık eğitiminde",
+   "original_language": "tr",
+   "source": "Aksiyon.com.TR",
+   "published": "2026-10-31T07:42:13+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "emergency_exercises"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This is a radiological/nuclear emergency preparedness exercise."
   },
   {
    "id": "radnuc-background-5439de3af19c66a1",
@@ -1065,6 +1718,37 @@
    "ai_relevance_reason": "RadNuc background only: This is a record of radiological/nuclear emergency response training."
   },
   {
+   "id": "radnuc-background-15af18e64395e15f",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxPY0lVY1JZbUZRaUlEd2JLamwzYVBMdGh2SFViTmZNR1dVVDdSTzctM0VMWW1GWHBQTUNVbFdHX2NyYzgyN1FuZ0x2R18tRDhIdEE2OFZpdjJXTHBhWDdSTjRmelJCZmFfcnRfYUZ5TklrSXM2TTU1dUE1NVBBdVpsaDdn?oc=5",
+   "title": "BAPETEN affirms readiness for oversight and safety principles in the development of floating nuclear power plants",
+   "summary": "Indonesia's nuclear regulatory body, BAPETEN, has confirmed its preparedness to oversee safety principles for the potential development of floating nuclear power plants. This reflects ongoing regulatory efforts for emerging nuclear technologies.",
+   "original_title": "BAPETEN Tegaskan Kesiapan Pengawasan dan Prinsip Keselamatan dalam Pengembangan PLTN Terapung",
+   "original_language": "id",
+   "source": "OG INDONESIA",
+   "published": "2026-10-31T07:39:03+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Accepted: Relates to civilian regulatory oversight and policy development for nuclear power plants."
+  },
+  {
    "id": "radnuc-background-ab110433ea1e7c1c",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -1094,6 +1778,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: Covers civilian nuclear energy supply chain and facility development."
+  },
+  {
+   "id": "radnuc-background-a64b71fb1554e72b",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPME1tVVdmMFRqM3Y2Wk1tWVgwM21IWnpFQVV0LW5NQlhCU3YtRkZiODZ0RFFNMGI4bkVBM1FFRE9sYmlTMEEwVUppWWZfQmFubllsVUhjOTM3akVaRkVaNXR2dFYxOVJkdHVoeDJVUkwwVHBGcTROU1d5WFo0T3BIS2Mwc044alhnakRMakI3RUYwOC1RX0JyazZ4R2FhdHQzV2c0S1pPVzNSeDJBMHhSTEFR?oc=5",
+   "title": "BAPETEN speaks out on floating nuclear power plant plans in North Maluku: No license application received yet",
+   "summary": "BAPETEN clarifies that it has not yet received any formal license applications for proposed floating nuclear power plants in North Maluku. The regulatory agency maintains that proper licensing procedures are required.",
+   "original_title": "BAPETEN Buka Suara Soal Rencana PLTN Terapung di Maluku Utara: Belum Ada Izin Masuk",
+   "original_language": "id",
+   "source": "Dunia Energi",
+   "published": "2026-10-31T07:00:11+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Accepted: Relates to civilian nuclear licensing and regulatory status."
   },
   {
    "id": "radnuc-background-6a88166dc977a5cf",
@@ -1251,6 +1966,69 @@
    "ai_relevance_reason": "RadNuc background only: This is a background report on sector-wide facility risk and cybersecurity resilience rather than a specific criminal incident report."
   },
   {
+   "id": "radnuc-background-e1006aa406ae400f",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQZ1dlZk40aXU5Skdxeng1UURqeWxrcDJBdVhUWHlTUmJENUZianRYelE3ZzJEYm9iTkNiOHRDYVRYTmZTZWhTMTZDU2dzbERJNlREOTA1emc3X0hvbWxQaU9tX09pa2tacGFzaUEyOWg3bHR5TDlEaVY3c2Q3ZHJ2ZEwtNW53a3RSbFhWNXNVaUwyeXc0R0owWFUxMjhDZG9PM25ZZ3o2VQ?oc=5",
+   "title": "Russia in talks with four African countries to build a large-scale nuclear power plant.",
+   "summary": "Russia is conducting negotiations with four unnamed African nations regarding the potential construction of a large-scale nuclear power plant. The discussions reflect ongoing efforts to expand nuclear energy infrastructure in the region.",
+   "original_title": "Rusya, büyük ölçekli bir nükleer santral inşa etmek için dört Afrika ülkesiyle görüşmeler yürütüyor.",
+   "original_language": "tr",
+   "source": "Vietnam.vn",
+   "published": "2026-10-31T00:16:17+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This concerns the supply chain development of a civilian nuclear energy project."
+  },
+  {
+   "id": "radnuc-background-61e340f2a32e4764",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNMHFCSnVUckNXLWl0Y1ZzTGp3MUV2ZUR4YWYwa3l5LTJZRGNWdHB3a1dMNUl3ekEtanNzNS01TGs1TDRWZGlKcmhJNW01dEpWODQ4b21DYnNzVlFlYVFzN2duWjAyUDVKMjUzaGNYUlljQWtLTjlaUmNXakpQYkdMTmNvVUxIODQyWDZLSFA0czdZekY2YUdJQ0dSa1BnNV9fdFE3ZUV3MHpPM2FmS1VsWFFKb0tQbG5RV21hb0Z2OXN5U0w50gHKAUFVX3lxTFBOVkthM0ttX2Yzb3lma2F6YVNXQWY3a0Qzdi1nOWxlcmVLeEVjcGlQd1NyRnJ5aXNfYzZSa0ZZaDBHU3hFZFlLNExzMGJ1V2xPcldQVlBpLXBIRlQzeGdyUk5uYzBrNGF0RzVXQ1BMMnpHRkRvbWdreWwtRDBnMUw2SmZGVFdybWh5eHBtbnFNYk9rS2FZYTZIaVB4X0lqOGlYZlVpbWx0QjBCQl9ZWFpLNTJyajN3SmE5RktkbnNkbDN5M240VmVYQkE?oc=5",
+   "title": "Sandia National Laboratories to play major role in nuclear fuel reuse research",
+   "summary": "Sandia National Laboratories has been selected to lead research initiatives focused on the reuse of spent nuclear fuel. The work aims to develop new technologies for improving the nuclear fuel cycle.",
+   "original_title": "Sandia National Laboratories to play big role in research into nuclear fuel reuse",
+   "original_language": "en",
+   "source": "KRQE",
+   "published": "2026-10-31T00:08:38+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "science_and_technology",
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This report covers a scientific and technological development regarding the nuclear fuel cycle."
+  },
+  {
    "id": "radnuc-background-b793846d4849a725",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -1280,6 +2058,38 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This covers industry workforce development, which relates to the nuclear industry supply chain."
+  },
+  {
+   "id": "radnuc-background-df7da3646affcd08",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOa3Q3Wm1qSG94Rkp4TVNicE9XVzFXcEppQ0s5TjExRGlMU1JrdXkwVTV0VjdqWlU4MDVZMnQ2Uk1nU182UHlWVGh0X0N5eS01SkF6aV9xeWxUdlotOW02ZllSUV91UDBwcmlPN1A4S2JhN2d2VlhUSldlc2RlY01KbGtoN0ZRNklKcHZWQzJuM3UzQVdsUWdzQ3NxRnRQUQ?oc=5",
+   "title": "35 Gigawatt nuclear power plant: Construction to begin in 2032, commissioning in 2060",
+   "summary": "A long-term development plan for Indonesia's nuclear power sector aims to initiate the construction of 35 gigawatts of nuclear capacity starting in 2032, with an expected operational date by 2060. This timeline outlines the future expansion of the civilian nuclear industry.",
+   "original_title": "35 Gigawatt Pembangkit Nuklir: Mulai Dibangun 2032, Nyala 2060",
+   "original_language": "id",
+   "source": "Betahita",
+   "published": "2026-10-30T23:34:55+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain",
+    "regulation_and_licensing"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: Accepted: Relates to long-term national policy and planning for civilian nuclear infrastructure."
   },
   {
    "id": "radnuc-background-db615d710048a81a",
@@ -1562,6 +2372,37 @@
    "ai_relevance_reason": "RadNuc background only: The report highlights specific research achievements in nuclear fusion, which falls under science and technology."
   },
   {
+   "id": "radnuc-background-acdbb5a24c676ecf",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPYmZ5aU5wcmNMaFkzbUpUTUtQOVprejl3YzhHQjFxRGllb1Y0MEdTekdRVC1WaEZDVVBVR25JMW5KY0o1MDdibndRTTlBdmZpMVJmNGFQNURHZkE5Mm9qLXhoQmQ3a1ZCQ0I4SWl0R09QQ2dVeFRpWmpTS1BfS2d2S3hIalhOTG5HZ3NmZWk4V1luZ1B3VzhOZVlNRVJWTnczMWtIMTdZbkt3T1BWZUlnZnRKZ0xaZzdhTGhiUDVDSlhTeFNUT1NKZlJ3eGtTRC1QMDJadnNqemNHc196amNnenA3U0t6Z1EzaFE?oc=5",
+   "title": "Third Quarter | Cameco is optimistic, but cautious, about AI demand",
+   "summary": "Uranium producer Cameco has released its third-quarter outlook, noting both optimism and caution regarding fuel demand driven by artificial intelligence sectors. This relates to the civilian nuclear fuel supply chain.",
+   "original_title": "Troisième trimestre | Cameco se montre optimiste, mais prudent, quant à la demande en matière d’IA",
+   "original_language": "fr",
+   "source": "La Presse",
+   "published": "2026-10-30T16:26:38+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This update pertains to civilian nuclear industry supply chain market trends."
+  },
+  {
    "id": "radnuc-background-95662e1f0c20613a",
    "kind": "radnuc_background",
    "archive_only": true,
@@ -1839,6 +2680,37 @@
    ],
    "ai_relevance_score": null,
    "ai_relevance_reason": "RadNuc background only: This relates to civilian industry fuel supply chain development and policy support."
+  },
+  {
+   "id": "radnuc-background-690f4d2421013cc8",
+   "kind": "radnuc_background",
+   "archive_only": true,
+   "background_reviewed": true,
+   "ai_selected": false,
+   "ai_current_ct_event": false,
+   "category": "Radiological/Nuclear",
+   "categories": [
+    "Radiological/Nuclear"
+   ],
+   "primary_event_type": "BACKGROUND_INFO",
+   "actor_group": null,
+   "parent_event_id": null,
+   "parent_incident_id": null,
+   "country": null,
+   "region": null,
+   "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxOaGZDQjJkaTkwSk85bGgtQUF3ZTZ0T1RDVEo3emsyVW9Ya1NYUDZXcHNZYVlaNW1qSU0teFVNYW5GMmFDUWg4UkZuMl9jWUg5NnhPS1dOWEZzZ3dPWl9XMzBYZnFiX0lMNnRQTDJacG05T0g4VXFrNGpwUTFWeHlvUXhDRmQ?oc=5",
+   "title": "US ships first home-built centrifuge to boost nuclear fuel supply for next-gen reactors",
+   "summary": "The United States has shipped the first domestically produced centrifuge for advanced reactor fuel production. This initiative is intended to strengthen the domestic supply chain for next-generation nuclear facilities.",
+   "original_title": "US ships first home-built centrifuge to boost nuclear fuel supply for next-gen reactors",
+   "original_language": "en",
+   "source": "Interesting Engineering",
+   "published": "2026-10-30T14:27:00+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
+   "background_topics": [
+    "industry_supply_chain"
+   ],
+   "ai_relevance_score": null,
+   "ai_relevance_reason": "RadNuc background only: This update represents a significant development in the civilian nuclear fuel supply chain."
   },
   {
    "id": "radnuc-background-321758352f410e33",
@@ -3269,7 +4141,7 @@
    "ai_relevance_reason": "RadNuc background only: This is a report on technological advancement in nuclear waste management and recycling."
   },
   {
-   "id": "radnuc-background-186daf33e4dd73b9",
+   "id": "radnuc-background-1bc4744e9fa8c340",
    "kind": "radnuc_background",
    "archive_only": true,
    "background_reviewed": true,
@@ -3285,19 +4157,19 @@
    "parent_incident_id": null,
    "country": null,
    "region": null,
-   "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPZXVRM3p5TEFOT3dJNEpKa1J5Vkpod2pYcWNSbmZCLTlNcVI5YmJSTGlJZ1lxQlRqTjZJUjI4UmVwVVh0ZFdWaFVFOXd4enhpdWoycG9pNFNvMGRweUk3TGN2QmdaaXl1dzJVRHhsQnZ0ZXh5U09tY1ZGZkFMbk95dkFERjEtUFo0RVIzejNtSjVfeml3YmfSAaoBQVVfeXFMTWZWbm9xN085ZkNVVjdoc1BDcl81bjY0Y2h6dHdFalJLTFFCSzRvVjhkZ0dEV3g3OExfQ2F3M1l5NXhxVnRnMFM2M0draTNPQ000TkczeFVMQnRpWUFXRGFWeWRhQ1djeV92c3BSNWkxOWl3SGRkSjQyN3FtNGlUalFCS2Jyb3RFOW5EcWN0YjNFT29wOXc1TjFuaE5MUTFfdXNfTWY3dS1reFE?oc=5",
-   "title": "Texas A&M gets $5.4M to research turning nuclear waste into fuel",
-   "summary": "Texas A&M University secured a $5.4 million grant to explore nuclear waste recycling technologies. The research will focus on the potential for repurposing spent nuclear material as fuel.",
-   "original_title": "Texas A&M gets $5.4M to research turning nuclear waste into fuel",
+   "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNQzJZY2dIdzlOV19JLXdWb0plbnV2dEVydEo0X1pZdUdhVmx3M2RpLUxabW1PWDlyVmxTc2lHUVN2SUR5T1ZMRE0tRXNCYjdNQUJrYlRvYmFxWWVDVXNVLUk2MmpULTBRcEdfTVJHVWNaV3RoU0ZFTjdxVk84TUJtUDlhajFVcmlYeDV4bThXUm11TzgzT0JxZ2JpMmNtbXo4Z3dTMUpmX0EyNzN2YVhEbUJtZ2JWNTlwVzZwcFk3OE9DRTA?oc=5",
+   "title": "Global Laser Enrichment Secures Victory for First-of-a-Kind Uranium Enrichment License",
+   "summary": "Global Laser Enrichment has successfully obtained a license for a new type of uranium enrichment technology. This marks a regulatory milestone for the deployment of advanced fuel cycle capabilities.",
+   "original_title": "Global Laser Enrichment Secures Victory for First-of-a-Kind Uranium Enrichment License",
    "original_language": "en",
-   "source": "KBTX News 3",
-   "published": "2026-10-30T03:56:00+00:00",
-   "collected_at": "2026-10-30T16:06:24.677314+00:00",
+   "source": "Orrick",
+   "published": "2026-10-30T03:10:19+00:00",
+   "collected_at": "2026-11-01T21:18:04.290139+00:00",
    "background_topics": [
-    "science_and_technology"
+    "regulation_and_licensing"
    ],
    "ai_relevance_score": null,
-   "ai_relevance_reason": "RadNuc background only: This is a duplicate of the development reported in event 0."
+   "ai_relevance_reason": "RadNuc background only: This event constitutes a significant regulatory milestone for a new civilian nuclear technology."
   },
   {
    "id": "radnuc-background-453def9cf29382f6",
