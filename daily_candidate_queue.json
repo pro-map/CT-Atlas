@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-01T17:15:10.576231+00:00",
+  "updated_at": "2026-11-01T22:04:28.211600+00:00",
   "events": [
     {
       "id": "fab8b8f36832be62",
@@ -780,6 +780,47 @@
       "article_count": 1,
       "first_reported": "2026-10-22T07:11:25+00:00",
       "last_reported": "2026-10-22T07:11:25+00:00"
+    },
+    {
+      "id": "aaf62086c61e8d7c",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Blanchiment de capitaux : le Cameroun accélère ses réformes pour sortir de la liste grise du GAFI",
+      "summary": "Blanchiment de capitaux : le Cameroun accélère ses réformes pour sortir de la liste grise du GAFI Actu Cameroun",
+      "original_title": "Blanchiment de capitaux : le Cameroun accélère ses réformes pour sortir de la liste grise du GAFI",
+      "original_summary": "Blanchiment de capitaux : le Cameroun accélère ses réformes pour sortir de la liste grise du GAFI Actu Cameroun",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-10-22T07:00:00+00:00",
+      "source": "Actu Cameroun",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxOYWQ1YXU2a3JxWlY0Vm4yUnIzRG11em9fRDNYcnd1ZGFSamZPeVpCdUlFeHNTUGJpT1hZQ3QxRURFc2tIWDM1ZUxHR3VURkhWMFVPeGxuRWZHZi1RMlV4X1dvTGcwX0M4QUM1WHg2clVxVFBkRTJrcUdCUDNfQ0lzMEY0ZlBDc3dha3hMSXBHQUlPZnJKbE9mSGU1N3lZdkNDNTFuU05rVVdLSjRJRjlLbmpwYTc3Yjg5aHR3QjNnRlpCb2hpV3RvLTZ5YXk?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "actucameroun.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "79febba5e8a7b64c6df05236fb9e3f38832bcbd550aa8853113f641d04515586"
+      ],
+      "sources": [
+        "Actu Cameroun"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-22T07:00:00+00:00",
+      "last_reported": "2026-10-22T07:00:00+00:00"
     },
     {
       "id": "38ae7e41111fc631",
@@ -19331,6 +19372,47 @@
       "last_reported": "2026-10-19T15:57:32+00:00"
     },
     {
+      "id": "4bf991957e14ade0",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "وزير التربية يوجه بتوفير مستلزمات المدارس المهنية » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "summary": "وزير التربية يوجه بتوفير مستلزمات المدارس المهنية » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_title": "وزير التربية يوجه بتوفير مستلزمات المدارس المهنية » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "original_summary": "وزير التربية يوجه بتوفير مستلزمات المدارس المهنية » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-19T15:30:44+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFBNVDNHQ2pmNUY0R0lRenJGRi0wZ0k0X0x6OHZtU0NtU0VabFduQ1RXWTRObWJlSDJNUTIzWkxzRFFmVTlUbW5mUmlPdjU?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "ina.iq",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "35fc56cfa7250dff4f8be24e22ec1ead6e2cc56e0bae3b8fb1f6048b82684cfd"
+      ],
+      "sources": [
+        "وكالة الانباء العراقية (واع)"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-19T15:30:44+00:00",
+      "last_reported": "2026-10-19T15:30:44+00:00"
+    },
+    {
       "id": "3f4759ea534e5fec",
       "category": "Attacks",
       "categories": [
@@ -19936,6 +20018,47 @@
       "article_count": 1,
       "first_reported": "2026-10-19T07:41:15+00:00",
       "last_reported": "2026-10-19T07:41:15+00:00"
+    },
+    {
+      "id": "50f0b467f3791e47",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "النقل تفعّل الدفع الإلكتروني في باصات جامعة بغداد » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "summary": "النقل تفعّل الدفع الإلكتروني في باصات جامعة بغداد » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_title": "النقل تفعّل الدفع الإلكتروني في باصات جامعة بغداد » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "original_summary": "النقل تفعّل الدفع الإلكتروني في باصات جامعة بغداد » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-19T07:29:52+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE45eFp6OGJOV1V4b0dBUXZlTFJIWlFLblFfdmE5aHNlM3dwMExhcFdGb1E1cVNVV3Q0WXhpM0R6TnQyUFNxNFdOMHdYUWI?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "ina.iq",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "118bb86cc79239659fbd749de5769738deb0f6665ceaf0db57e5122232b770ac"
+      ],
+      "sources": [
+        "وكالة الانباء العراقية (واع)"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-19T07:29:52+00:00",
+      "last_reported": "2026-10-19T07:29:52+00:00"
     },
     {
       "id": "eb0976add0db7586",
@@ -20717,6 +20840,47 @@
       "last_reported": "2026-10-18T12:12:00+00:00"
     },
     {
+      "id": "44804d9b2c0adc16",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "الانتخابات النصفية الأمريكية 2026",
+      "summary": "الانتخابات النصفية الأمريكية 2026 الجزيرة نت",
+      "original_title": "الانتخابات النصفية الأمريكية 2026",
+      "original_summary": "الانتخابات النصفية الأمريكية 2026 الجزيرة نت",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-18T09:26:43+00:00",
+      "source": "الجزيرة نت",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE91MEgyUzJrN2EtLTRSVUlkOEg4bGIwY0M5V3BCQzFZbzlaUlhvcnBlNTRnTGRQQUtXY3dNNHczY3pQTDlLbWZRR1gtODlwN1hjeExLVjkyMFZKT2pCU085aW13?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "aljazeera.net",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "9e86a9e91c46c763497e5523ff10422e4606b0904b78af4c1f85df5312d38b18"
+      ],
+      "sources": [
+        "الجزيرة نت"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-18T09:26:43+00:00",
+      "last_reported": "2026-10-18T09:26:43+00:00"
+    },
+    {
       "id": "3386bb7d5b006d69",
       "category": "Attacks",
       "categories": [
@@ -20915,6 +21079,47 @@
       ],
       "sources": [
         "Seatrade Maritime News"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-18T07:00:00+00:00",
+      "last_reported": "2026-10-18T07:00:00+00:00"
+    },
+    {
+      "id": "09817d3fec300fec",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Kenyans urged to break mental health silence, seek timely help",
+      "summary": "Kenyans urged to break mental health silence, seek timely help www.standardmedia.co.ke",
+      "original_title": "Kenyans urged to break mental health silence, seek timely help",
+      "original_summary": "Kenyans urged to break mental health silence, seek timely help www.standardmedia.co.ke",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-10-18T07:00:00+00:00",
+      "source": "www.standardmedia.co.ke",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxPNWZNaE8zblZ1TmtzeUdlSDhhNmFSZmhJVVRRdC1rdXRuNUYwNXpYWnNHWHBKMzRiWGkwZm1JTnBJdnp3ZG9RZjM5LWpHblJpeHlna3E4Ynd1UTNOSEM0Ym50RVNQeko5X201dW5IYkg1OUFIU1l3eVRFRHI0ZFcxNnhRb2NFZ0lHUUJoYWZ4cEd3bzVlT1pMMGxFRm5jSHZ4UkJoS3MxalFqTFNXbVppZUZiU3VqSEF3WjYtR1hGWXFkTER0NkE?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "standardmedia.co.ke",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "0a277dbbf77613b13c435d4c887dd2fdbddb0c1faaf95c609a52f72932655405"
+      ],
+      "sources": [
+        "www.standardmedia.co.ke"
       ],
       "related_articles": [],
       "article_count": 1,
@@ -22150,6 +22355,47 @@
       "article_count": 1,
       "first_reported": "2026-10-16T18:00:00+00:00",
       "last_reported": "2026-10-16T18:00:00+00:00"
+    },
+    {
+      "id": "4a2e9e99126bbdec",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Pashteen Accuses Pakistani Military of Exploiting Pakhtunkhwa’s Resources",
+      "summary": "Pashteen Accuses Pakistani Military of Exploiting Pakhtunkhwa’s Resources TOLOnews",
+      "original_title": "Pashteen Accuses Pakistani Military of Exploiting Pakhtunkhwa’s Resources",
+      "original_summary": "Pashteen Accuses Pakistani Military of Exploiting Pakhtunkhwa’s Resources TOLOnews",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Afghanistan",
+      "collection_locale": "US:en",
+      "published": "2026-10-16T15:01:40+00:00",
+      "source": "TOLOnews",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFByNWI5VVhpempQakYzUF9TYzlUb3d1YWN6Q251RW1OY2RxNXZKeE9tYmoyeVNxbC1icC1LN3pEZ1doUTVCU2RrUEExZ3g0bVdUaERTZi1XemUzUQ?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "tolonews.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "941530198efa4e64298bd430b01228015ca2265e415049f1729acf6386a4590b"
+      ],
+      "sources": [
+        "TOLOnews"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-16T15:01:40+00:00",
+      "last_reported": "2026-10-16T15:01:40+00:00"
     },
     {
       "id": "980cdb9d567c65cf",
@@ -24821,6 +25067,47 @@
       "last_reported": "2026-10-12T13:53:37+00:00"
     },
     {
+      "id": "f4c7f5c5bd846925",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "مستشار الأمن القومي: الحكومة ماضية بتنفيذ برنامجها وإعادة إدماج نازحي سنجار مجتمعياً",
+      "summary": "مستشار الأمن القومي: الحكومة ماضية بتنفيذ برنامجها وإعادة إدماج نازحي سنجار مجتمعياً وكالة الانباء العراقية (واع)",
+      "original_title": "مستشار الأمن القومي: الحكومة ماضية بتنفيذ برنامجها وإعادة إدماج نازحي سنجار مجتمعياً",
+      "original_summary": "مستشار الأمن القومي: الحكومة ماضية بتنفيذ برنامجها وإعادة إدماج نازحي سنجار مجتمعياً وكالة الانباء العراقية (واع)",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-12T11:29:03+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFBfZGtaWE9Zb1hvSFJrbEpaWGhIRWhyZDJWQjhIN2NjWUxVX3drdUY5OVJXQm9zODJWNUdLb25Wbnh3YmdFQVNzTUtNTmo?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "ina.iq",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "b379edd7e9fff3b249b4a098dd6be93485f59bf21f8e8055124cbd98ff280b20"
+      ],
+      "sources": [
+        "وكالة الانباء العراقية (واع)"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-12T11:29:03+00:00",
+      "last_reported": "2026-10-12T11:29:03+00:00"
+    },
+    {
       "id": "365282ead2cba436",
       "category": "Attacks",
       "categories": [
@@ -26464,6 +26751,88 @@
       "last_reported": "2026-10-06T01:05:21+00:00"
     },
     {
+      "id": "b7e27e617b0fc341",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "I sondaggi delle elezioni Usa: ecco come può andare il voto di midterm",
+      "summary": "I sondaggi delle elezioni Usa: ecco come può andare il voto di midterm la Repubblica",
+      "original_title": "I sondaggi delle elezioni Usa: ecco come può andare il voto di midterm",
+      "original_summary": "I sondaggi delle elezioni Usa: ecco come può andare il voto di midterm la Repubblica",
+      "original_language": "it",
+      "collection_language": "it",
+      "collection_language_name": "Italian",
+      "collection_locale": "IT:it",
+      "published": "2026-10-05T18:42:16+00:00",
+      "source": "la Repubblica",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE1ZdU5UWmxPM3NxQmlTM1pTUGc2NFQyQ3pEb3p0SGZwUld3RmNFTW4zUzNTaG9udFRqbDVDcThtNmNURkNOdDVFNjdLYzJremFQLWZTMllIcG1rTXhzcFdGY1hWTHg?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "repubblica.it",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "59ac12c6f3eb9d64badd924641f72c534dec55d5f20a86cfeb4bfde282a59dcc"
+      ],
+      "sources": [
+        "la Repubblica"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-05T18:42:16+00:00",
+      "last_reported": "2026-10-05T18:42:16+00:00"
+    },
+    {
+      "id": "8a6b41826702c57a",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "تحقيقات وتقارير",
+      "summary": "تحقيقات وتقارير تلفزيون سوريا",
+      "original_title": "تحقيقات وتقارير",
+      "original_summary": "تحقيقات وتقارير تلفزيون سوريا",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-05T16:49:53+00:00",
+      "source": "تلفزيون سوريا",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNRWZ5WC1fWE1HdWt5VUc5bDhGaURna1plWWY0Y0hHNVJ4ZlZReFh6aFcwMjdIQkUzLV82aE5QLU1XOTNJdlJ2cUlBT0NOY0tDemo1ZmZ5Szd4OGZ5NUMwTDctMFVVVVRFMDctNFYxX0t0VUxmNDAtZGpUVVRmZzBJZWthd0RzOWgta1VXV09OSjlkbnczMVAyWG1NbF9LdjBHNnQ3OGtHRmZzakU1VGlBRkF0eVpCWkE3bnZFU0h2UVFsa0dXaXdZWG1mSzZwQQ?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "syria.tv",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "3244116650aa1345f3790fd3f1c1d8719b3dea705931f315dfd2e2a7dfead414"
+      ],
+      "sources": [
+        "تلفزيون سوريا"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-05T16:49:53+00:00",
+      "last_reported": "2026-10-05T16:49:53+00:00"
+    },
+    {
       "id": "49a0283fb79f2c7e",
       "category": "Attacks",
       "categories": [
@@ -27518,6 +27887,47 @@
       ]
     },
     {
+      "id": "54f0951371d01add",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "International Crisis Group: Afghanistan Still Faces Major Challenges",
+      "summary": "International Crisis Group: Afghanistan Still Faces Major Challenges TOLOnews",
+      "original_title": "International Crisis Group: Afghanistan Still Faces Major Challenges",
+      "original_summary": "International Crisis Group: Afghanistan Still Faces Major Challenges TOLOnews",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Afghanistan",
+      "collection_locale": "US:en",
+      "published": "2026-09-29T19:40:44+00:00",
+      "source": "TOLOnews",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5ycjFlTEN3X0ZrdDJpREZEcnVJcHNiSWpqT1FFcFMwbTUzREx0VkszbGVZcTE0SVQ1d1NPZWtKNjZSZDE2WjU0Q3ZlcXF2SXdJUDJ4UkZB?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "tolonews.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "60bbf46fb0a47a66e3f2f85bdb48f6a58a258da0ede82e4c14ad1a3cc1be22f5"
+      ],
+      "sources": [
+        "TOLOnews"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-09-29T19:40:44+00:00",
+      "last_reported": "2026-09-29T19:40:44+00:00"
+    },
+    {
       "id": "6aeb7f2bee5a88d3",
       "category": "Attacks",
       "categories": [
@@ -27988,6 +28398,47 @@
       ],
       "sources": [
         "Hiiraan Online"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-09-28T07:00:00+00:00",
+      "last_reported": "2026-09-28T07:00:00+00:00"
+    },
+    {
+      "id": "21e3221890c825e4",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Waza : le couple présidentiel vole au secours des populations après les attaques de Boko Haram",
+      "summary": "Waza : le couple présidentiel vole au secours des populations après les attaques de Boko Haram Actu Cameroun",
+      "original_title": "Waza : le couple présidentiel vole au secours des populations après les attaques de Boko Haram",
+      "original_summary": "Waza : le couple présidentiel vole au secours des populations après les attaques de Boko Haram Actu Cameroun",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-09-28T07:00:00+00:00",
+      "source": "Actu Cameroun",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQTjluMEFsYnVuTmY0anI5aEViQXFIZkl4Q1k2MmttZ2tOZU5JVXhMYXlaNXlJNHVEWEp6MEdsaGhpOVVGbmJPajdRRlBjamRCX05LcjVpbU9td0w3Z2RKY0xsRHNUY3BlZTd4S29pMm1mTE02RGh5d0prbC16bVBuMWdNV2Y3Y1h6TGRsODQ0UHJwQ2FVZ2VCeE5FRjlPS29ZZ0tGWk1WTldYNVpTVEt5MWR4OHZRQWpvVnk3THFQbl9RX1dOWkdDSg?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "actucameroun.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "78cd3e3365b9ad33acf798361a0320922af3bd5b148fb2e5962b03a0d2959edb"
+      ],
+      "sources": [
+        "Actu Cameroun"
       ],
       "related_articles": [],
       "article_count": 1,
@@ -37910,6 +38361,47 @@
       "last_reported": "2026-07-28T07:00:00+00:00"
     },
     {
+      "id": "5ae316195ecd89f5",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Somali army ground commander visits Galmudug to boost operations against Al-Shabaab",
+      "summary": "Somali army ground commander visits Galmudug to boost operations against Al-Shabaab Shabelle Media Network",
+      "original_title": "Somali army ground commander visits Galmudug to boost operations against Al-Shabaab",
+      "original_summary": "Somali army ground commander visits Galmudug to boost operations against Al-Shabaab Shabelle Media Network",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-07-28T07:00:00+00:00",
+      "source": "Shabelle Media Network",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOaWNGNjJ2WGlHNnEwbUhkWHRDY0lwekZlZ0RQeUxPdy1wVExJc096NC12a1ZSQ3hzNGcybnlqdGJaYUl6T1FNa0x4NzgtazljZXFpa2E3cnNkWWxjd0hSZjltYmNBQUZrZUpMbU11YXprM1ZNVDlacGd1emNTZC1DYzBmQW81cGozRk1LSkt0M2ZaTFFhMXlSQ2ZHRUN1SG9FMUlrLTUydVdkVUxzVHNV?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "shabellemedia.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "f29b0144dab9729d41b0cdfbf4334bf3abe38692fdfd3d8f3626dbd5eb75d651"
+      ],
+      "sources": [
+        "Shabelle Media Network"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-07-28T07:00:00+00:00",
+      "last_reported": "2026-07-28T07:00:00+00:00"
+    },
+    {
       "id": "23993b9f826eeb3d",
       "category": "Attacks",
       "categories": [
@@ -38083,6 +38575,88 @@
       ],
       "sources": [
         "Shabelle Media Network"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-07-26T07:00:00+00:00",
+      "last_reported": "2026-07-26T07:00:00+00:00"
+    },
+    {
+      "id": "e72fab2c1c88e8df",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "title": "Joint Maritime Information Center Update 077 to JMIC Advisory Note: 01 March – 28 July 2026",
+      "summary": "Joint Maritime Information Center Update 077 to JMIC Advisory Note: 01 March – 28 July 2026 UKMTO",
+      "original_title": "Joint Maritime Information Center Update 077 to JMIC Advisory Note: 01 March – 28 July 2026",
+      "original_summary": "Joint Maritime Information Center Update 077 to JMIC Advisory Note: 01 March – 28 July 2026 UKMTO",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English",
+      "collection_locale": null,
+      "published": "2026-07-26T07:00:00+00:00",
+      "source": "UKMTO",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOeUFxVGtSNW4wbzJZUUlGeF9hZmNYS1hFUWMtN0oxLTZlLW1IbmQwb3JIdjZuM0lJd2ZKc3BOZmRvUU44dUk1VHlzb1FPc05pQ1pKV2gwZWhLUFBCT0J6TTdENDQ4NWZxUTBDRTI3b0Z2b3RjeDM3RmVrVm5CYWtsbExvNjZoRUR6U1RUTFdFdw?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "targeted_source_query",
+      "targeted_source": "UKMTO",
+      "targeted_source_kind": "official_maritime_source",
+      "source_article_fingerprints": [
+        "7d6e1710753e8f0e7cbe01c6bb29a6cc38eb096a391319862a4d60b6c5dd3228"
+      ],
+      "sources": [
+        "UKMTO"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-07-26T07:00:00+00:00",
+      "last_reported": "2026-07-26T07:00:00+00:00"
+    },
+    {
+      "id": "a2fcf85d68abdfd9",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "An3 du CNSP : Chronologie des faits marquants depuis le 26 juillet 2023",
+      "summary": "An3 du CNSP : Chronologie des faits marquants depuis le 26 juillet 2023 Agence Nigérienne de Presse – ANP",
+      "original_title": "An3 du CNSP : Chronologie des faits marquants depuis le 26 juillet 2023",
+      "original_summary": "An3 du CNSP : Chronologie des faits marquants depuis le 26 juillet 2023 Agence Nigérienne de Presse – ANP",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-07-26T07:00:00+00:00",
+      "source": "Agence Nigérienne de Presse – ANP",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiqwJBVV95cUxQU01vNVJFZlM5MDRjZTkzVF9xSUtuMXhVTm95d1R3NGY0UW9VM0RzZkU0cDl4VVBGcVZiQWxvVTlRZVNtTzZQYmZIVkZHbDhKRDFsMUdyUkY0eTdWRk1zQlQ2R2FwM1lxbjh0QXVzaF9yX2xPRzh0LTVpWDBYRFVTaHBxMDRISDhRek1xTkFlUDZQLWYtWWRUUEpJeWpROWR3bkRZanVqRFF4MVY2T0l5V1o0TFU2OEhycXlDWDNySmU3anVXZUpXc1E4ZzRxSUhrT3VLaFpXZUFEZTl3b1FSY1FMbTl6blI4UmNjVlpnNFJ1b3JMV2VQei1mSlhfRXRnb3Zpek5WVWJDaWlLdGcwV1lZVng5ZGptZlM3Uk9tTVVReHVmRXdrZ1g2VQ?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "anp.ne",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "98eab4bd2c22a9a52f2bfaaf37d84be567b51b9d5ad9f01a0100f3e54ec294ea"
+      ],
+      "sources": [
+        "Agence Nigérienne de Presse – ANP"
       ],
       "related_articles": [],
       "article_count": 1,
@@ -40609,6 +41183,47 @@
       "last_reported": "2026-07-10T07:00:00+00:00"
     },
     {
+      "id": "2e22d86c6f1bfeb2",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "title": "BW LPG trims older tonnage after VLGC newbuild order",
+      "summary": "BW LPG trims older tonnage after VLGC newbuild order Seatrade Maritime News",
+      "original_title": "BW LPG trims older tonnage after VLGC newbuild order",
+      "original_summary": "BW LPG trims older tonnage after VLGC newbuild order Seatrade Maritime News",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English",
+      "collection_locale": null,
+      "published": "2026-07-10T07:00:00+00:00",
+      "source": "Seatrade Maritime News",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQR1Z3S0ZvVU1XRW1NRzdfZGsycjI0eDlWVVVIYmJlbVdJWm5uRWVmZ25aTGt1M2pzV0FpNzFJQjQtYjFpOUNab1Z1el82cjZDaXowenZEMnQ3WjdrRXhHdzF3elUzQ2gyb1pXcFB1a2FqY3lPNS05T3c2R1dTeEdrM1RWbkdxS3p6S2s0ekJTZEVyQWJsaEZzQjh3?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "targeted_source_query",
+      "targeted_source": "Seatrade Maritime",
+      "targeted_source_kind": "specialist_media",
+      "source_article_fingerprints": [
+        "5477f39f420cf562e10be9c18dc7510558ef244b7d017a8e3091674099afb855"
+      ],
+      "sources": [
+        "Seatrade Maritime News"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-07-10T07:00:00+00:00",
+      "last_reported": "2026-07-10T07:00:00+00:00"
+    },
+    {
       "id": "d8808e151ed0fba5",
       "category": "Attacks",
       "categories": [
@@ -41854,6 +42469,47 @@
       "last_reported": "2026-07-03T07:00:00+00:00"
     },
     {
+      "id": "13795c38a165fd93",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Nigeria pushing anti-jihadist collaboration with Benin, Niger: defence minister",
+      "summary": "Nigeria pushing anti-jihadist collaboration with Benin, Niger: defence minister standardmedia.co.ke",
+      "original_title": "Nigeria pushing anti-jihadist collaboration with Benin, Niger: defence minister",
+      "original_summary": "Nigeria pushing anti-jihadist collaboration with Benin, Niger: defence minister standardmedia.co.ke",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-07-03T07:00:00+00:00",
+      "source": "standardmedia.co.ke",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNYXpLTkU1TWJiU1pzVm45ZlAteG1UTGhodDVUb0liS3BrSFd2LVpfREFuLUZzQ0wwcF9Rb21Wb0VKOEd0Rml4ZU01eHYzVmpUMUE5Ul95MzhMelJ3aVROQXpFMnJhWmxIOWdxbTZELVNucnRFVm5ybVJILUpLVXI2WG41cmxDbUEzRVU2b2FtcUw4SDMwY0xIYnNyUWx5R0VoMEhjME9hckdtVVk3UHctWDdoRG5LcVRwdmdiUlhBWk1YVHlueF9MZUp3MjhwcTJf?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "standardmedia.co.ke",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "6a6b000f921dfff13c90d2a45926b62dccaf4a61f1292c1f17e0c0ba8f377a6c"
+      ],
+      "sources": [
+        "standardmedia.co.ke"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-07-03T07:00:00+00:00",
+      "last_reported": "2026-07-03T07:00:00+00:00"
+    },
+    {
       "id": "fff758976110fc45",
       "category": "Attacks",
       "categories": [
@@ -42303,6 +42959,47 @@
       "last_reported": "2026-06-30T07:00:00+00:00"
     },
     {
+      "id": "cea3fb51a0138c3f",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Douentza: Plusieurs chefs terroristes neutralisés dans la ville de Boulkessi",
+      "summary": "Douentza: Plusieurs chefs terroristes neutralisés dans la ville de Boulkessi maliweb",
+      "original_title": "Douentza: Plusieurs chefs terroristes neutralisés dans la ville de Boulkessi",
+      "original_summary": "Douentza: Plusieurs chefs terroristes neutralisés dans la ville de Boulkessi maliweb",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-06-30T07:00:00+00:00",
+      "source": "maliweb",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOVFE2OHF2REtPM3lkcFFTYWt4ZTZ3dDlWaDQ3SGF3bEJseEY1elhjVlcyaExjRlFoT2RfclEtN2FuSUpzTFpwT2plMEFPZmRYYVJDZF9nZGk3VzBtbHhpU09XaHVGaENfeURoMzlXWUJGSVFLeG5yLUJCRGhOUFZtd2NQN1k4TWhSbjhmY0FDR3lNSjBIekJxM3VyaUFuakxYV2UtNFJ4VS1fYXMtMEhqdXZ3XzMxZ0Q3OWFIZDhDRkc?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "maliweb.net",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "fd27924ba8c17f920168658acb97ddfdccac4c5f8f8b77f9f588b5388a2ec95f"
+      ],
+      "sources": [
+        "maliweb"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-06-30T07:00:00+00:00",
+      "last_reported": "2026-06-30T07:00:00+00:00"
+    },
+    {
       "id": "40f2e21bb7518dcd",
       "category": "Maritime Piracy",
       "categories": [
@@ -42583,6 +43280,47 @@
       ],
       "sources": [
         "Actualite.cd"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-06-26T07:00:00+00:00",
+      "last_reported": "2026-06-26T07:00:00+00:00"
+    },
+    {
+      "id": "41da8280ff93e571",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Trafic illicite de minerais de l'Est de la RDC : Washington sanctionne des sociétés rwandaises",
+      "summary": "Trafic illicite de minerais de l'Est de la RDC : Washington sanctionne des sociétés rwandaises Radio Okapi |",
+      "original_title": "Trafic illicite de minerais de l'Est de la RDC : Washington sanctionne des sociétés rwandaises",
+      "original_summary": "Trafic illicite de minerais de l'Est de la RDC : Washington sanctionne des sociétés rwandaises Radio Okapi |",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-06-26T07:00:00+00:00",
+      "source": "Radio Okapi |",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQbWU5UThBQkc3dUdMakJXcDBZSldMN2hZaC14LXVxYWM3ZmxtQmhGRmtUd25CRGJUdXY2UXJEaTNfMzEtdkpHRnhfWDVkUEl0WllCSjg3WVJDS0RoYmRLZDhqOFNiWFNPalJkTmxsNFc1SjNfV2VmTU05OEhma2dwUXBCbG5pd3FHbndTaGVZVjN0aXVpY1A1dmdQSlpnUmVqd0I1RjhPMWctWnowUHJiRkNRTGpuRmJqdmFpQl9lbkppY1k?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "radiookapi.net",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "dc941ccdd6755af4a8e4e4aa9194fc6d2dac20abd4a84318f892eb7ab9ba3270"
+      ],
+      "sources": [
+        "Radio Okapi |"
       ],
       "related_articles": [],
       "article_count": 1,
@@ -43338,6 +44076,47 @@
       ],
       "sources": [
         "Maliweb"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-06-22T07:00:00+00:00",
+      "last_reported": "2026-06-22T07:00:00+00:00"
+    },
+    {
+      "id": "b7a722d94b824bde",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "title": "CHAIR OF THE EUROPEAN UNION MILITARY COMMITTEE VISIT TO ATALANTA HEADQUARTERS",
+      "summary": "CHAIR OF THE EUROPEAN UNION MILITARY COMMITTEE VISIT TO ATALANTA HEADQUARTERS EUNAVFOR",
+      "original_title": "CHAIR OF THE EUROPEAN UNION MILITARY COMMITTEE VISIT TO ATALANTA HEADQUARTERS",
+      "original_summary": "CHAIR OF THE EUROPEAN UNION MILITARY COMMITTEE VISIT TO ATALANTA HEADQUARTERS EUNAVFOR",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English",
+      "collection_locale": null,
+      "published": "2026-06-22T07:00:00+00:00",
+      "source": "EUNAVFOR",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxONkZBNHRmb0VyOERTaktvUVdtV3ktUzk5NkVzdXJHUWlCbW5NMTNSeUp1UG5FMVVLdjFFdXptdkI0YkJNbTlNMDBJQkFMYktZeEZMcFBtYU5XSEtRMHl3cXZnN2MyWWUwelR4SURITTA3LUdsbzNwNFNocE52WE54UEMyQU5OVUZHLWVzT3NVbHV2THlXV040?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "targeted_source_query",
+      "targeted_source": "EUNAVFOR Atalanta",
+      "targeted_source_kind": "official_maritime_source",
+      "source_article_fingerprints": [
+        "46be19d81858efa6d8f56861d1f7460e4be82cf649b39e72944b1f81b1f7cae6"
+      ],
+      "sources": [
+        "EUNAVFOR"
       ],
       "related_articles": [],
       "article_count": 1,
@@ -44927,6 +45706,47 @@
       "last_reported": "2026-06-10T07:00:00+00:00"
     },
     {
+      "id": "6534be1a63840c4c",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Kikwit : ouverture du procès de cinq bandits poursuivis pour terrorisme",
+      "summary": "Kikwit : ouverture du procès de cinq bandits poursuivis pour terrorisme Actualite.cd",
+      "original_title": "Kikwit : ouverture du procès de cinq bandits poursuivis pour terrorisme",
+      "original_summary": "Kikwit : ouverture du procès de cinq bandits poursuivis pour terrorisme Actualite.cd",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-06-10T07:00:00+00:00",
+      "source": "Actualite.cd",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQODFUOHVlY0tfejFiT3E2eGlZVm5yRXNTeGZuR2xNVWIwY2U2WDROT25GS2dqSzlSelFrTVo5VzgteDBYcE9uQ2E5akpOZXlNbmlVNzRWSlZuanVSbkxvRTBvVHp1LXAxSGtwSFFJSEhGdXNfT1ZOb3hPZWZhTzZQWFpxVWJpZUxZLXlwYUpLc0ZERmo2QXdKQXZpT2RvWVVWamZv?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "actualite.cd",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "43731e124cdfb321b70b1fe6dded634cd6975d4f87e72d250c142d1269048371"
+      ],
+      "sources": [
+        "Actualite.cd"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-06-10T07:00:00+00:00",
+      "last_reported": "2026-06-10T07:00:00+00:00"
+    },
+    {
       "id": "8d0612aebbe8fc87",
       "category": "Attacks",
       "categories": [
@@ -46073,6 +46893,47 @@
       "article_count": 1,
       "first_reported": "2026-05-30T09:19:22+00:00",
       "last_reported": "2026-05-30T09:19:22+00:00"
+    },
+    {
+      "id": "ea0efa53c85ca216",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Portrait : Abdoulaye Wade, le centenaire qui a incarné le changement au Sénégal",
+      "summary": "Portrait : Abdoulaye Wade, le centenaire qui a incarné le changement au Sénégal Tchadinfos",
+      "original_title": "Portrait : Abdoulaye Wade, le centenaire qui a incarné le changement au Sénégal",
+      "original_summary": "Portrait : Abdoulaye Wade, le centenaire qui a incarné le changement au Sénégal Tchadinfos",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-05-29T07:00:00+00:00",
+      "source": "Tchadinfos",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNMjZnR2FXQ0JaVEV5MXgzYmJ6ZG9BTThOYTl4SW9IZTEtcDhlMHM0LWlRWlhnWm1vQ3dZdndvRkI2OTZPNEtZMjZYaHZjc1c2XzZnRHJyNzlVdWpucmVqYlREbzNySkM4LTg2d1RLZ0pZd3F6cmU4ZURnTXRMU1JSZ2lHcnR2LU4yQnYtOFVsSlFPMXNIaV8tN2xEbnAxWmZFa294LUplNWhfMnZvaHc3Rw?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "tchadinfos.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "e0bc7a350a6df4434fbcc091cfe19a1e5af05f0c706b6602c3b1ae8b0b1eafd5"
+      ],
+      "sources": [
+        "Tchadinfos"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-05-29T07:00:00+00:00",
+      "last_reported": "2026-05-29T07:00:00+00:00"
     },
     {
       "id": "cb1caf936dc873cb",
@@ -48207,6 +49068,47 @@
       "last_reported": "2026-05-08T07:00:00+00:00"
     },
     {
+      "id": "578fbffbde3e360a",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Mali : Abdoulaye Diop exclut tout dialogue avec les groupes terroristes et dénonce les « sponsors étatiques",
+      "summary": "Mali : Abdoulaye Diop exclut tout dialogue avec les groupes terroristes et dénonce les « sponsors étatiques leFaso.net - L'actualité au Burkina Faso",
+      "original_title": "Mali : Abdoulaye Diop exclut tout dialogue avec les groupes terroristes et dénonce les « sponsors étatiques",
+      "original_summary": "Mali : Abdoulaye Diop exclut tout dialogue avec les groupes terroristes et dénonce les « sponsors étatiques leFaso.net - L'actualité au Burkina Faso",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-05-08T07:00:00+00:00",
+      "source": "leFaso.net - L'actualité au Burkina Faso",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE9RQ0Y0dGdKUkpEWXhUS2V4T1NZbFNoaEJ4cFpFNVFDNXhNUkEyMlhBRjBzSWRRckU5dFdOcGNNMnl5M2pnaVdFZkRhc0JVS25YM1gwSmNiSy1iZlBHY0xUbXM1bw?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "lefaso.net",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "59171b9bb1e819de786818d78d9bd3fbccdcd7909502fffea09d95ae9504fc4a"
+      ],
+      "sources": [
+        "leFaso.net - L'actualité au Burkina Faso"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-05-08T07:00:00+00:00",
+      "last_reported": "2026-05-08T07:00:00+00:00"
+    },
+    {
       "id": "d48883117ec3af8e",
       "category": "Maritime Piracy",
       "categories": [
@@ -48412,23 +49314,23 @@
       "last_reported": "2026-05-06T07:00:00+00:00"
     },
     {
-      "id": "578fbffbde3e360a",
+      "id": "171122e3c90312cc",
       "category": "Attacks",
       "categories": [
         "Attacks"
       ],
-      "title": "Mali : Abdoulaye Diop exclut tout dialogue avec les groupes terroristes et dénonce les « sponsors étatiques",
-      "summary": "Mali : Abdoulaye Diop exclut tout dialogue avec les groupes terroristes et dénonce les « sponsors étatiques leFaso.net - L'actualité au Burkina Faso",
-      "original_title": "Mali : Abdoulaye Diop exclut tout dialogue avec les groupes terroristes et dénonce les « sponsors étatiques",
-      "original_summary": "Mali : Abdoulaye Diop exclut tout dialogue avec les groupes terroristes et dénonce les « sponsors étatiques leFaso.net - L'actualité au Burkina Faso",
+      "title": "Tchad : 23 soldats tués et 26 autres blessés dans une nouvelle attaque de Boko Haram sur une île du Lac Tchad",
+      "summary": "Tchad : 23 soldats tués et 26 autres blessés dans une nouvelle attaque de Boko Haram sur une île du Lac Tchad actuniger.com",
+      "original_title": "Tchad : 23 soldats tués et 26 autres blessés dans une nouvelle attaque de Boko Haram sur une île du Lac Tchad",
+      "original_summary": "Tchad : 23 soldats tués et 26 autres blessés dans une nouvelle attaque de Boko Haram sur une île du Lac Tchad actuniger.com",
       "original_language": "fr",
       "collection_language": "fr",
       "collection_language_name": "French / Africa",
       "collection_locale": "FR:fr",
-      "published": "2026-05-08T07:00:00+00:00",
-      "source": "leFaso.net - L'actualité au Burkina Faso",
+      "published": "2026-05-06T07:00:00+00:00",
+      "source": "actuniger.com",
       "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE9RQ0Y0dGdKUkpEWXhUS2V4T1NZbFNoaEJ4cFpFNVFDNXhNUkEyMlhBRjBzSWRRckU5dFdOcGNNMnl5M2pnaVdFZkRhc0JVS25YM1gwSmNiSy1iZlBHY0xUbXM1bw?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxOSVBNS0o5eHJBcWpMUnpHMGFpUWhBMHdxWTNoTVB2SE0yWWRIU2dWVUtGa21QY2RsZ3FkRzA3VXJrWGNpcjhYUFNKUkJjQk1EVnJyMEwwLS15YmkxOExmSmU1emFhQUVGRFU2U1NmUTlGNXBDWkN0ODkyS3g4SlVGSjJwU200YnVrRHN3bldILXo4a0hiTHllM0VGZ1p4Z09SbjZ4LVhJbmNSWmQ1YmFTQUR2WFk3MnVaLTdNWHhtTUxxNHpscVNEbTQ2cW1ObXJha09YYjJkQ3VpbmxXUmlZbVNyZ19iSUltSFE?oc=5",
       "collector": "Google News RSS",
       "country": null,
       "country_code": null,
@@ -48439,119 +49341,37 @@
       "location_precision": "unknown",
       "location_confidence": "low",
       "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "lefaso.net",
+      "targeted_source": "actuniger.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
-        "59171b9bb1e819de786818d78d9bd3fbccdcd7909502fffea09d95ae9504fc4a"
+        "6dc594e5a1e6b907ca341dd92edea127e74ef75bc986c43aedb340ac1fd1b938"
       ],
       "sources": [
-        "leFaso.net - L'actualité au Burkina Faso"
+        "actuniger.com"
       ],
       "related_articles": [],
       "article_count": 1,
-      "first_reported": "2026-05-08T07:00:00+00:00",
-      "last_reported": "2026-05-08T07:00:00+00:00"
+      "first_reported": "2026-05-06T07:00:00+00:00",
+      "last_reported": "2026-05-06T07:00:00+00:00"
     },
     {
-      "id": "ea0efa53c85ca216",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Portrait : Abdoulaye Wade, le centenaire qui a incarné le changement au Sénégal",
-      "summary": "Portrait : Abdoulaye Wade, le centenaire qui a incarné le changement au Sénégal Tchadinfos",
-      "original_title": "Portrait : Abdoulaye Wade, le centenaire qui a incarné le changement au Sénégal",
-      "original_summary": "Portrait : Abdoulaye Wade, le centenaire qui a incarné le changement au Sénégal Tchadinfos",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French / Africa",
-      "collection_locale": "FR:fr",
-      "published": "2026-05-29T07:00:00+00:00",
-      "source": "Tchadinfos",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNMjZnR2FXQ0JaVEV5MXgzYmJ6ZG9BTThOYTl4SW9IZTEtcDhlMHM0LWlRWlhnWm1vQ3dZdndvRkI2OTZPNEtZMjZYaHZjc1c2XzZnRHJyNzlVdWpucmVqYlREbzNySkM4LTg2d1RLZ0pZd3F6cmU4ZURnTXRMU1JSZ2lHcnR2LU4yQnYtOFVsSlFPMXNIaV8tN2xEbnAxWmZFa294LUplNWhfMnZvaHc3Rw?oc=5",
-      "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
-      "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unknown",
-      "location_confidence": "low",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "tchadinfos.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "e0bc7a350a6df4434fbcc091cfe19a1e5af05f0c706b6602c3b1ae8b0b1eafd5"
-      ],
-      "sources": [
-        "Tchadinfos"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-05-29T07:00:00+00:00",
-      "last_reported": "2026-05-29T07:00:00+00:00"
-    },
-    {
-      "id": "6534be1a63840c4c",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Kikwit : ouverture du procès de cinq bandits poursuivis pour terrorisme",
-      "summary": "Kikwit : ouverture du procès de cinq bandits poursuivis pour terrorisme Actualite.cd",
-      "original_title": "Kikwit : ouverture du procès de cinq bandits poursuivis pour terrorisme",
-      "original_summary": "Kikwit : ouverture du procès de cinq bandits poursuivis pour terrorisme Actualite.cd",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French / Africa",
-      "collection_locale": "FR:fr",
-      "published": "2026-06-10T07:00:00+00:00",
-      "source": "Actualite.cd",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQODFUOHVlY0tfejFiT3E2eGlZVm5yRXNTeGZuR2xNVWIwY2U2WDROT25GS2dqSzlSelFrTVo5VzgteDBYcE9uQ2E5akpOZXlNbmlVNzRWSlZuanVSbkxvRTBvVHp1LXAxSGtwSFFJSEhGdXNfT1ZOb3hPZWZhTzZQWFpxVWJpZUxZLXlwYUpLc0ZERmo2QXdKQXZpT2RvWVVWamZv?oc=5",
-      "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
-      "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unknown",
-      "location_confidence": "low",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "actualite.cd",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "43731e124cdfb321b70b1fe6dded634cd6975d4f87e72d250c142d1269048371"
-      ],
-      "sources": [
-        "Actualite.cd"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-10T07:00:00+00:00",
-      "last_reported": "2026-06-10T07:00:00+00:00"
-    },
-    {
-      "id": "b7a722d94b824bde",
+      "id": "8ec4f1bed6fa9583",
       "category": "Maritime Piracy",
       "categories": [
         "Maritime Piracy"
       ],
-      "title": "CHAIR OF THE EUROPEAN UNION MILITARY COMMITTEE VISIT TO ATALANTA HEADQUARTERS",
-      "summary": "CHAIR OF THE EUROPEAN UNION MILITARY COMMITTEE VISIT TO ATALANTA HEADQUARTERS EUNAVFOR",
-      "original_title": "CHAIR OF THE EUROPEAN UNION MILITARY COMMITTEE VISIT TO ATALANTA HEADQUARTERS",
-      "original_summary": "CHAIR OF THE EUROPEAN UNION MILITARY COMMITTEE VISIT TO ATALANTA HEADQUARTERS EUNAVFOR",
+      "title": "Families of Pakistani Hostages Call for Rescue from Somali Pirates",
+      "summary": "Families of Pakistani Hostages Call for Rescue from Somali Pirates Marine News Magazine",
+      "original_title": "Families of Pakistani Hostages Call for Rescue from Somali Pirates",
+      "original_summary": "Families of Pakistani Hostages Call for Rescue from Somali Pirates Marine News Magazine",
       "original_language": "en",
       "collection_language": "en",
       "collection_language_name": "English",
       "collection_locale": null,
-      "published": "2026-06-22T07:00:00+00:00",
-      "source": "EUNAVFOR",
+      "published": "2026-05-13T07:00:00+00:00",
+      "source": "Marine News Magazine",
       "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxONkZBNHRmb0VyOERTaktvUVdtV3ktUzk5NkVzdXJHUWlCbW5NMTNSeUp1UG5FMVVLdjFFdXptdkI0YkJNbTlNMDBJQkFMYktZeEZMcFBtYU5XSEtRMHl3cXZnN2MyWWUwelR4SURITTA3LUdsbzNwNFNocE52WE54UEMyQU5OVUZHLWVzT3NVbHV2THlXV040?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQNjc5NlFvOE5SSEx6Nnh2OVhZYS1VX29KUUt6UjhqTmJ3R19MaEtnUnk4cWZyU0dhNTdHTThvX1c0NFltdmZyVjFDeTFoR1FFZUZ6M2t3WGo1R2J5WElUVGJ2d3JsR20yUENNZ0x3S3VZZEJzY1VQZ3NvbmFGb1V2bkpuS3k?oc=5",
       "collector": "Google News RSS",
       "country": null,
       "country_code": null,
@@ -48562,37 +49382,37 @@
       "location_precision": "unknown",
       "location_confidence": "low",
       "acquisition_channel": "targeted_source_query",
-      "targeted_source": "EUNAVFOR Atalanta",
-      "targeted_source_kind": "official_maritime_source",
+      "targeted_source": "MarineLink",
+      "targeted_source_kind": "specialist_media",
       "source_article_fingerprints": [
-        "46be19d81858efa6d8f56861d1f7460e4be82cf649b39e72944b1f81b1f7cae6"
+        "77226f7db5cfa2e1024dc169dd3e201db6ac6ad7e6b53dd85fecd09646244174"
       ],
       "sources": [
-        "EUNAVFOR"
+        "Marine News Magazine"
       ],
       "related_articles": [],
       "article_count": 1,
-      "first_reported": "2026-06-22T07:00:00+00:00",
-      "last_reported": "2026-06-22T07:00:00+00:00"
+      "first_reported": "2026-05-13T07:00:00+00:00",
+      "last_reported": "2026-05-13T07:00:00+00:00"
     },
     {
-      "id": "41da8280ff93e571",
+      "id": "8c3b85594fe04cf1",
       "category": "Attacks",
       "categories": [
         "Attacks"
       ],
-      "title": "Trafic illicite de minerais de l'Est de la RDC : Washington sanctionne des sociétés rwandaises",
-      "summary": "Trafic illicite de minerais de l'Est de la RDC : Washington sanctionne des sociétés rwandaises Radio Okapi |",
-      "original_title": "Trafic illicite de minerais de l'Est de la RDC : Washington sanctionne des sociétés rwandaises",
-      "original_summary": "Trafic illicite de minerais de l'Est de la RDC : Washington sanctionne des sociétés rwandaises Radio Okapi |",
+      "title": "Niger : L’armée aux frontières algérienne et tchadienne",
+      "summary": "Niger : L’armée aux frontières algérienne et tchadienne Sahel Intelligence",
+      "original_title": "Niger : L’armée aux frontières algérienne et tchadienne",
+      "original_summary": "Niger : L’armée aux frontières algérienne et tchadienne Sahel Intelligence",
       "original_language": "fr",
       "collection_language": "fr",
       "collection_language_name": "French / Africa",
       "collection_locale": "FR:fr",
-      "published": "2026-06-26T07:00:00+00:00",
-      "source": "Radio Okapi |",
+      "published": "2026-05-19T07:00:00+00:00",
+      "source": "Sahel Intelligence",
       "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQbWU5UThBQkc3dUdMakJXcDBZSldMN2hZaC14LXVxYWM3ZmxtQmhGRmtUd25CRGJUdXY2UXJEaTNfMzEtdkpHRnhfWDVkUEl0WllCSjg3WVJDS0RoYmRLZDhqOFNiWFNPalJkTmxsNFc1SjNfV2VmTU05OEhma2dwUXBCbG5pd3FHbndTaGVZVjN0aXVpY1A1dmdQSlpnUmVqd0I1RjhPMWctWnowUHJiRkNRTGpuRmJqdmFpQl9lbkppY1k?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPUzhGZVBocy1SUDhhV1Azb1lQZzJwVk5tTHJaWERpQmVOektWanVuQktYQnU1a3FhQ2xtNy1rUElydGlYQmk0RFEwWEVFZ2xtdzlRT1NsTWU1OXp0SW03c1drb0VPLUZDM1o4a0kwUWJZLXF5eEZqVDBpR1U5b21mQUN0TTdoSW9tSGlFZEVOWkRIOVEtNi0yM2RR?oc=5",
       "collector": "Google News RSS",
       "country": null,
       "country_code": null,
@@ -48603,78 +49423,37 @@
       "location_precision": "unknown",
       "location_confidence": "low",
       "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "radiookapi.net",
+      "targeted_source": "sahel-intelligence.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
-        "dc941ccdd6755af4a8e4e4aa9194fc6d2dac20abd4a84318f892eb7ab9ba3270"
+        "19c3876637f88578d4522e48138a344fad73ba7f2992db259dbfdff12f87878d"
       ],
       "sources": [
-        "Radio Okapi |"
+        "Sahel Intelligence"
       ],
       "related_articles": [],
       "article_count": 1,
-      "first_reported": "2026-06-26T07:00:00+00:00",
-      "last_reported": "2026-06-26T07:00:00+00:00"
+      "first_reported": "2026-05-19T07:00:00+00:00",
+      "last_reported": "2026-05-19T07:00:00+00:00"
     },
     {
-      "id": "cea3fb51a0138c3f",
+      "id": "e694fd146a645ba1",
       "category": "Attacks",
       "categories": [
         "Attacks"
       ],
-      "title": "Douentza: Plusieurs chefs terroristes neutralisés dans la ville de Boulkessi",
-      "summary": "Douentza: Plusieurs chefs terroristes neutralisés dans la ville de Boulkessi maliweb",
-      "original_title": "Douentza: Plusieurs chefs terroristes neutralisés dans la ville de Boulkessi",
-      "original_summary": "Douentza: Plusieurs chefs terroristes neutralisés dans la ville de Boulkessi maliweb",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French / Africa",
-      "collection_locale": "FR:fr",
-      "published": "2026-06-30T07:00:00+00:00",
-      "source": "maliweb",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOVFE2OHF2REtPM3lkcFFTYWt4ZTZ3dDlWaDQ3SGF3bEJseEY1elhjVlcyaExjRlFoT2RfclEtN2FuSUpzTFpwT2plMEFPZmRYYVJDZF9nZGk3VzBtbHhpU09XaHVGaENfeURoMzlXWUJGSVFLeG5yLUJCRGhOUFZtd2NQN1k4TWhSbjhmY0FDR3lNSjBIekJxM3VyaUFuakxYV2UtNFJ4VS1fYXMtMEhqdXZ3XzMxZ0Q3OWFIZDhDRkc?oc=5",
-      "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
-      "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unknown",
-      "location_confidence": "low",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "maliweb.net",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "fd27924ba8c17f920168658acb97ddfdccac4c5f8f8b77f9f588b5388a2ec95f"
-      ],
-      "sources": [
-        "maliweb"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-06-30T07:00:00+00:00",
-      "last_reported": "2026-06-30T07:00:00+00:00"
-    },
-    {
-      "id": "13795c38a165fd93",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Nigeria pushing anti-jihadist collaboration with Benin, Niger: defence minister",
-      "summary": "Nigeria pushing anti-jihadist collaboration with Benin, Niger: defence minister standardmedia.co.ke",
-      "original_title": "Nigeria pushing anti-jihadist collaboration with Benin, Niger: defence minister",
-      "original_summary": "Nigeria pushing anti-jihadist collaboration with Benin, Niger: defence minister standardmedia.co.ke",
+      "title": "Role of Intelligence in Nigeria-US Joint Counter-Terrorism...",
+      "summary": "Role of Intelligence in Nigeria-US Joint Counter-Terrorism... Daily Trust",
+      "original_title": "Role of Intelligence in Nigeria-US Joint Counter-Terrorism...",
+      "original_summary": "Role of Intelligence in Nigeria-US Joint Counter-Terrorism... Daily Trust",
       "original_language": "en",
       "collection_language": "en",
       "collection_language_name": "English / Africa",
       "collection_locale": "NG:en",
-      "published": "2026-07-03T07:00:00+00:00",
-      "source": "standardmedia.co.ke",
+      "published": "2026-05-24T07:00:00+00:00",
+      "source": "Daily Trust",
       "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNYXpLTkU1TWJiU1pzVm45ZlAteG1UTGhodDVUb0liS3BrSFd2LVpfREFuLUZzQ0wwcF9Rb21Wb0VKOEd0Rml4ZU01eHYzVmpUMUE5Ul95MzhMelJ3aVROQXpFMnJhWmxIOWdxbTZELVNucnRFVm5ybVJILUpLVXI2WG41cmxDbUEzRVU2b2FtcUw4SDMwY0xIYnNyUWx5R0VoMEhjME9hckdtVVk3UHctWDdoRG5LcVRwdmdiUlhBWk1YVHlueF9MZUp3MjhwcTJf?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOR3FmQ0FjdFhQRVhIeDUtWG1xZUlFUVJRQS1mcVlVeHJFaWhieUZ1YzZaT2RZaW95ZFNqSFM4X1JyNlRzTVZzMk1rbjhFbXJfdXRWMk9mT3VfYlFfVFpIUFhrS0k5RUZxc3E1V2prMXZ4amwybTVDVmxOZE15TS1CMXc1aHNQVHpOc3JwUXhXNXVlTnJPYS12VzE1cWM1ZGUwTDRQQko1UURCUW5NbVJJb0o1dVFmdDdRRUtlTmRYUjZHNmR1WXp6MkhybjYyREJpdWJrclV3?oc=5",
       "collector": "Google News RSS",
       "country": null,
       "country_code": null,
@@ -48685,37 +49464,37 @@
       "location_precision": "unknown",
       "location_confidence": "low",
       "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "standardmedia.co.ke",
+      "targeted_source": "dailytrust.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
-        "6a6b000f921dfff13c90d2a45926b62dccaf4a61f1292c1f17e0c0ba8f377a6c"
+        "da894e3f6aaa1c63ce3a4d942ccd6c01dbcda78fde6f8bd8579396871d061ce0"
       ],
       "sources": [
-        "standardmedia.co.ke"
+        "Daily Trust"
       ],
       "related_articles": [],
       "article_count": 1,
-      "first_reported": "2026-07-03T07:00:00+00:00",
-      "last_reported": "2026-07-03T07:00:00+00:00"
+      "first_reported": "2026-05-24T07:00:00+00:00",
+      "last_reported": "2026-05-24T07:00:00+00:00"
     },
     {
-      "id": "2e22d86c6f1bfeb2",
+      "id": "4e2dcb5f97afd70e",
       "category": "Maritime Piracy",
       "categories": [
         "Maritime Piracy"
       ],
-      "title": "BW LPG trims older tonnage after VLGC newbuild order",
-      "summary": "BW LPG trims older tonnage after VLGC newbuild order Seatrade Maritime News",
-      "original_title": "BW LPG trims older tonnage after VLGC newbuild order",
-      "original_summary": "BW LPG trims older tonnage after VLGC newbuild order Seatrade Maritime News",
+      "title": "US fires hellfire missile at VLCC headed to Kharg Island",
+      "summary": "US fires hellfire missile at VLCC headed to Kharg Island Seatrade Maritime News",
+      "original_title": "US fires hellfire missile at VLCC headed to Kharg Island",
+      "original_summary": "US fires hellfire missile at VLCC headed to Kharg Island Seatrade Maritime News",
       "original_language": "en",
       "collection_language": "en",
       "collection_language_name": "English",
       "collection_locale": null,
-      "published": "2026-07-10T07:00:00+00:00",
+      "published": "2026-06-02T07:00:00+00:00",
       "source": "Seatrade Maritime News",
       "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQR1Z3S0ZvVU1XRW1NRzdfZGsycjI0eDlWVVVIYmJlbVdJWm5uRWVmZ25aTGt1M2pzV0FpNzFJQjQtYjFpOUNab1Z1el82cjZDaXowenZEMnQ3WjdrRXhHdzF3elUzQ2gyb1pXcFB1a2FqY3lPNS05T3c2R1dTeEdrM1RWbkdxS3p6S2s0ekJTZEVyQWJsaEZzQjh3?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQLUF1VXV5VmR0N2xuQ2pHZFBvaXBkTGpOMEVkR2dncndYNGZTN0xwSC1VQUR6MHV4Y3AwZS1xS2pGeFVJdlU5dzlUZ2NsT0VzZzhtMS1Idlk5amFlZVRyTGxKS1FYVVVpRW9FNl92UUxqRGJ4R2puZGtaM3M5LXNLWmRubWIyempneF9oWHdTS1ROME4zaXNQZ240R3pVWVli?oc=5",
       "collector": "Google News RSS",
       "country": null,
       "country_code": null,
@@ -48729,75 +49508,34 @@
       "targeted_source": "Seatrade Maritime",
       "targeted_source_kind": "specialist_media",
       "source_article_fingerprints": [
-        "5477f39f420cf562e10be9c18dc7510558ef244b7d017a8e3091674099afb855"
+        "ef829e6642df4880b162bc3fb02480a3f3e9c14fb12f0d95e312b763c9187c7d"
       ],
       "sources": [
         "Seatrade Maritime News"
       ],
       "related_articles": [],
       "article_count": 1,
-      "first_reported": "2026-07-10T07:00:00+00:00",
-      "last_reported": "2026-07-10T07:00:00+00:00"
+      "first_reported": "2026-06-02T07:00:00+00:00",
+      "last_reported": "2026-06-02T07:00:00+00:00"
     },
     {
-      "id": "e72fab2c1c88e8df",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy"
-      ],
-      "title": "Joint Maritime Information Center Update 077 to JMIC Advisory Note: 01 March – 28 July 2026",
-      "summary": "Joint Maritime Information Center Update 077 to JMIC Advisory Note: 01 March – 28 July 2026 UKMTO",
-      "original_title": "Joint Maritime Information Center Update 077 to JMIC Advisory Note: 01 March – 28 July 2026",
-      "original_summary": "Joint Maritime Information Center Update 077 to JMIC Advisory Note: 01 March – 28 July 2026 UKMTO",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": null,
-      "published": "2026-07-26T07:00:00+00:00",
-      "source": "UKMTO",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOeUFxVGtSNW4wbzJZUUlGeF9hZmNYS1hFUWMtN0oxLTZlLW1IbmQwb3JIdjZuM0lJd2ZKc3BOZmRvUU44dUk1VHlzb1FPc05pQ1pKV2gwZWhLUFBCT0J6TTdENDQ4NWZxUTBDRTI3b0Z2b3RjeDM3RmVrVm5CYWtsbExvNjZoRUR6U1RUTFdFdw?oc=5",
-      "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
-      "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unknown",
-      "location_confidence": "low",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "UKMTO",
-      "targeted_source_kind": "official_maritime_source",
-      "source_article_fingerprints": [
-        "7d6e1710753e8f0e7cbe01c6bb29a6cc38eb096a391319862a4d60b6c5dd3228"
-      ],
-      "sources": [
-        "UKMTO"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-26T07:00:00+00:00",
-      "last_reported": "2026-07-26T07:00:00+00:00"
-    },
-    {
-      "id": "a2fcf85d68abdfd9",
+      "id": "805514760356ad48",
       "category": "Attacks",
       "categories": [
         "Attacks"
       ],
-      "title": "An3 du CNSP : Chronologie des faits marquants depuis le 26 juillet 2023",
-      "summary": "An3 du CNSP : Chronologie des faits marquants depuis le 26 juillet 2023 Agence Nigérienne de Presse – ANP",
-      "original_title": "An3 du CNSP : Chronologie des faits marquants depuis le 26 juillet 2023",
-      "original_summary": "An3 du CNSP : Chronologie des faits marquants depuis le 26 juillet 2023 Agence Nigérienne de Presse – ANP",
+      "title": "KOULPELOGO",
+      "summary": "KOULPELOGO 'Agence d'Information du Burkina (AIB)",
+      "original_title": "KOULPELOGO",
+      "original_summary": "KOULPELOGO 'Agence d'Information du Burkina (AIB)",
       "original_language": "fr",
       "collection_language": "fr",
       "collection_language_name": "French / Africa",
       "collection_locale": "FR:fr",
-      "published": "2026-07-26T07:00:00+00:00",
-      "source": "Agence Nigérienne de Presse – ANP",
+      "published": "2026-06-10T19:43:35+00:00",
+      "source": "'Agence d'Information du Burkina (AIB)",
       "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiqwJBVV95cUxQU01vNVJFZlM5MDRjZTkzVF9xSUtuMXhVTm95d1R3NGY0UW9VM0RzZkU0cDl4VVBGcVZiQWxvVTlRZVNtTzZQYmZIVkZHbDhKRDFsMUdyUkY0eTdWRk1zQlQ2R2FwM1lxbjh0QXVzaF9yX2xPRzh0LTVpWDBYRFVTaHBxMDRISDhRek1xTkFlUDZQLWYtWWRUUEpJeWpROWR3bkRZanVqRFF4MVY2T0l5V1o0TFU2OEhycXlDWDNySmU3anVXZUpXc1E4ZzRxSUhrT3VLaFpXZUFEZTl3b1FSY1FMbTl6blI4UmNjVlpnNFJ1b3JMV2VQei1mSlhfRXRnb3Zpek5WVWJDaWlLdGcwV1lZVng5ZGptZlM3Uk9tTVVReHVmRXdrZ1g2VQ?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTFBUVjNOQTg3dC1QbkhfamN6aWJtV3pQRXpSUGttTnphSVBJaHBvak9ZR0Y5S2JnX0s3amFtUTR1VnN5ZnQ5R0JEOElXSTRtb28tdl9hX2VtN1BidmVmd082clFlbWV3QTdKMFhKaTlDRVROYWtPUXFpRA?oc=5",
       "collector": "Google News RSS",
       "country": null,
       "country_code": null,
@@ -48808,78 +49546,37 @@
       "location_precision": "unknown",
       "location_confidence": "low",
       "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "anp.ne",
+      "targeted_source": "aib.media",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
-        "98eab4bd2c22a9a52f2bfaaf37d84be567b51b9d5ad9f01a0100f3e54ec294ea"
+        "3f1bab84752911536ede8e0a64c2e4be8fe40bd4d02737b12556a2fb18877bb9"
       ],
       "sources": [
-        "Agence Nigérienne de Presse – ANP"
+        "'Agence d'Information du Burkina (AIB)"
       ],
       "related_articles": [],
       "article_count": 1,
-      "first_reported": "2026-07-26T07:00:00+00:00",
-      "last_reported": "2026-07-26T07:00:00+00:00"
+      "first_reported": "2026-06-10T19:43:35+00:00",
+      "last_reported": "2026-06-10T19:43:35+00:00"
     },
     {
-      "id": "5ae316195ecd89f5",
+      "id": "30fbe6736680c845",
       "category": "Attacks",
       "categories": [
         "Attacks"
       ],
-      "title": "Somali army ground commander visits Galmudug to boost operations against Al-Shabaab",
-      "summary": "Somali army ground commander visits Galmudug to boost operations against Al-Shabaab Shabelle Media Network",
-      "original_title": "Somali army ground commander visits Galmudug to boost operations against Al-Shabaab",
-      "original_summary": "Somali army ground commander visits Galmudug to boost operations against Al-Shabaab Shabelle Media Network",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-07-28T07:00:00+00:00",
-      "source": "Shabelle Media Network",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOaWNGNjJ2WGlHNnEwbUhkWHRDY0lwekZlZ0RQeUxPdy1wVExJc096NC12a1ZSQ3hzNGcybnlqdGJaYUl6T1FNa0x4NzgtazljZXFpa2E3cnNkWWxjd0hSZjltYmNBQUZrZUpMbU11YXprM1ZNVDlacGd1emNTZC1DYzBmQW81cGozRk1LSkt0M2ZaTFFhMXlSQ2ZHRUN1SG9FMUlrLTUydVdkVUxzVHNV?oc=5",
-      "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
-      "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unknown",
-      "location_confidence": "low",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "shabellemedia.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "f29b0144dab9729d41b0cdfbf4334bf3abe38692fdfd3d8f3626dbd5eb75d651"
-      ],
-      "sources": [
-        "Shabelle Media Network"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-07-28T07:00:00+00:00",
-      "last_reported": "2026-07-28T07:00:00+00:00"
-    },
-    {
-      "id": "21e3221890c825e4",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Waza : le couple présidentiel vole au secours des populations après les attaques de Boko Haram",
-      "summary": "Waza : le couple présidentiel vole au secours des populations après les attaques de Boko Haram Actu Cameroun",
-      "original_title": "Waza : le couple présidentiel vole au secours des populations après les attaques de Boko Haram",
-      "original_summary": "Waza : le couple présidentiel vole au secours des populations après les attaques de Boko Haram Actu Cameroun",
+      "title": "Burkina Faso - Page 50",
+      "summary": "Burkina Faso - Page 50 Actu Cameroun",
+      "original_title": "Burkina Faso - Page 50",
+      "original_summary": "Burkina Faso - Page 50 Actu Cameroun",
       "original_language": "fr",
       "collection_language": "fr",
       "collection_language_name": "French / Africa",
       "collection_locale": "FR:fr",
-      "published": "2026-09-28T07:00:00+00:00",
+      "published": "2026-06-15T12:09:13+00:00",
       "source": "Actu Cameroun",
       "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQTjluMEFsYnVuTmY0anI5aEViQXFIZkl4Q1k2MmttZ2tOZU5JVXhMYXlaNXlJNHVEWEp6MEdsaGhpOVVGbmJPajdRRlBjamRCX05LcjVpbU9td0w3Z2RKY0xsRHNUY3BlZTd4S29pMm1mTE02RGh5d0prbC16bVBuMWdNV2Y3Y1h6TGRsODQ0UHJwQ2FVZ2VCeE5FRjlPS29ZZ0tGWk1WTldYNVpTVEt5MWR4OHZRQWpvVnk3THFQbl9RX1dOWkdDSg?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE05M1FZV3BGa0xwV0NwVG5qQTZFWHEzNWwxXzg2RDJXLUpEZ1dtSW1SZU85YWE4emphaGpqX0M2MGdEd3FneVlXNWZNUXZWZGZKM0g4YVRacUhmS2kyTGRr?oc=5",
       "collector": "Google News RSS",
       "country": null,
       "country_code": null,
@@ -48893,34 +49590,34 @@
       "targeted_source": "actucameroun.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
-        "78cd3e3365b9ad33acf798361a0320922af3bd5b148fb2e5962b03a0d2959edb"
+        "041e13cdebe5291c93df230422e45c5a99334419f8e643a796efbcf165926006"
       ],
       "sources": [
         "Actu Cameroun"
       ],
       "related_articles": [],
       "article_count": 1,
-      "first_reported": "2026-09-28T07:00:00+00:00",
-      "last_reported": "2026-09-28T07:00:00+00:00"
+      "first_reported": "2026-06-15T12:09:13+00:00",
+      "last_reported": "2026-06-15T12:09:13+00:00"
     },
     {
-      "id": "54f0951371d01add",
+      "id": "a8dcf2f7a0c3ff58",
       "category": "Attacks",
       "categories": [
         "Attacks"
       ],
-      "title": "International Crisis Group: Afghanistan Still Faces Major Challenges",
-      "summary": "International Crisis Group: Afghanistan Still Faces Major Challenges TOLOnews",
-      "original_title": "International Crisis Group: Afghanistan Still Faces Major Challenges",
-      "original_summary": "International Crisis Group: Afghanistan Still Faces Major Challenges TOLOnews",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Afghanistan",
-      "collection_locale": "US:en",
-      "published": "2026-09-29T19:40:44+00:00",
-      "source": "TOLOnews",
+      "title": "Clément Kaptoum - Page 79",
+      "summary": "Clément Kaptoum - Page 79 Actu Cameroun",
+      "original_title": "Clément Kaptoum - Page 79",
+      "original_summary": "Clément Kaptoum - Page 79 Actu Cameroun",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-06-16T05:37:29+00:00",
+      "source": "Actu Cameroun",
       "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5ycjFlTEN3X0ZrdDJpREZEcnVJcHNiSWpqT1FFcFMwbTUzREx0VkszbGVZcTE0SVQ1d1NPZWtKNjZSZDE2WjU0Q3ZlcXF2SXdJUDJ4UkZB?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9SdEtobU0tRUxQUE8wS19zMDRFbVFWNWRwa3NQcUo3S1A0XzRmRkpMUmsybHFIZzJrVXhITEZmd0Z1V2NOdFZwMXFXLWdPYnFWQ2xackMxQ0JWdw?oc=5",
       "collector": "Google News RSS",
       "country": null,
       "country_code": null,
@@ -48931,37 +49628,242 @@
       "location_precision": "unknown",
       "location_confidence": "low",
       "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "tolonews.com",
+      "targeted_source": "actucameroun.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
-        "60bbf46fb0a47a66e3f2f85bdb48f6a58a258da0ede82e4c14ad1a3cc1be22f5"
+        "b4f6fdc4baed91cac6f138db229ccac2ab0c0d44edc4933d9e6715bd8fb21450"
       ],
       "sources": [
-        "TOLOnews"
+        "Actu Cameroun"
       ],
       "related_articles": [],
       "article_count": 1,
-      "first_reported": "2026-09-29T19:40:44+00:00",
-      "last_reported": "2026-09-29T19:40:44+00:00"
+      "first_reported": "2026-06-16T05:37:29+00:00",
+      "last_reported": "2026-06-16T05:37:29+00:00"
     },
     {
-      "id": "8a6b41826702c57a",
+      "id": "c39245a0e287102d",
       "category": "Attacks",
       "categories": [
         "Attacks"
       ],
-      "title": "تحقيقات وتقارير",
-      "summary": "تحقيقات وتقارير تلفزيون سوريا",
-      "original_title": "تحقيقات وتقارير",
-      "original_summary": "تحقيقات وتقارير تلفزيون سوريا",
+      "title": "Lutte contre le terrorisme : Comment intensifier la traque ? - Actualités au Mali en temps réel et info en direct",
+      "summary": "Lutte contre le terrorisme : Comment intensifier la traque ? - Actualités au Mali en temps réel et info en direct maliweb",
+      "original_title": "Lutte contre le terrorisme : Comment intensifier la traque ? - Actualités au Mali en temps réel et info en direct",
+      "original_summary": "Lutte contre le terrorisme : Comment intensifier la traque ? - Actualités au Mali en temps réel et info en direct maliweb",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-06-22T07:00:00+00:00",
+      "source": "maliweb",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPYm5CRlJTMWtyckVXdVdPMWVaRGdnNjJBVUpjVlRIcGdjcjNyU2dYU0JsLUtkVWdWeFpjYlpBZVc1dmNDcWtwY2RNYlNQSGc2RFAteERrZzJvT0swNXJ1Z3lkN2xoanBzN3h0eUtBcUZpRlBRdkNsSTVhYlZnT0pwRHJ2X0ZaZFdYeFUyeGhkeG9iVnF3YnRyOGVzUE16UzJwWUY3ZkViSQ?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "maliweb.net",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "aec6ae4f32729c584fb347621a220264557e38536d55cad8cc5cf15cb8431b6e"
+      ],
+      "sources": [
+        "maliweb"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-06-22T07:00:00+00:00",
+      "last_reported": "2026-06-22T07:00:00+00:00"
+    },
+    {
+      "id": "d76660b284514ea7",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Niger – Page 247",
+      "summary": "Niger – Page 247 Sahel Intelligence",
+      "original_title": "Niger – Page 247",
+      "original_summary": "Niger – Page 247 Sahel Intelligence",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-07-18T15:21:16+00:00",
+      "source": "Sahel Intelligence",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE83TUpnRjZucjFYaWhiYXY4Vl8xcGsweVJpa3VQNnZOMGs2R0dqRnUtVUF2U0pfSENDWWV6SWNGc3ZTOXJjbVFQVEUwRGktTzdJbWNzQmxsVWlUVERXQlE?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "sahel-intelligence.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "44e4bce0cd8b757ffd9c190810e765ecd2eee4b5f63d10cb523216922c366e7f"
+      ],
+      "sources": [
+        "Sahel Intelligence"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-07-18T15:21:16+00:00",
+      "last_reported": "2026-07-18T15:21:16+00:00"
+    },
+    {
+      "id": "e083f2d96ed5e7d2",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Tahoua – Page 6",
+      "summary": "Tahoua – Page 6 Sahel Intelligence",
+      "original_title": "Tahoua – Page 6",
+      "original_summary": "Tahoua – Page 6 Sahel Intelligence",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-07-18T19:27:01+00:00",
+      "source": "Sahel Intelligence",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5xZ0szcEJ0VnlYVWxsRlAyMDVxZFRRM3hTOFM5LW15OVpZaFVKTk02VXVTZV9SYlBRemEwZ0YweUZ1Z3RKbnY0WlE4OE5kSDlvNkV5SDFLVlVOUmdn?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "sahel-intelligence.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "d57f0778ee013511f5dd064e22a5288b2a12298730a5ee63f5d5c6efe5c077e4"
+      ],
+      "sources": [
+        "Sahel Intelligence"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-07-18T19:27:01+00:00",
+      "last_reported": "2026-07-18T19:27:01+00:00"
+    },
+    {
+      "id": "990e72b55249ba4d",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Mauritanie : L’insécurité aux frontières, le jeu du régime militaire algérien",
+      "summary": "Mauritanie : L’insécurité aux frontières, le jeu du régime militaire algérien Sahel Intelligence",
+      "original_title": "Mauritanie : L’insécurité aux frontières, le jeu du régime militaire algérien",
+      "original_summary": "Mauritanie : L’insécurité aux frontières, le jeu du régime militaire algérien Sahel Intelligence",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-08-31T07:00:00+00:00",
+      "source": "Sahel Intelligence",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPUXF4WENnSUtFVW1RXzFxZ1BDWHl1T1JHd0liLXRLaWNzeGpyZ0dsd2s5R01QSzMtU2U4S2tUdUtqZkg2Z3ktcExqQnYtZTRPY3RiR1JqZXUwOXZUOXp0ZERuZzRQWnMtSDFaWmx0QWZZemFGemZVR0R0SWVhSHdkOTl1TFJLRmVoUXNWZzZsbUNSZTlKU0daZW84YUFqVEFraTlDbDM5N0hLaERuS2ItQ0pNZnU?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "sahel-intelligence.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "21812d8de14db3c360f06be8d2125d67fb7eda31dc5a600c5ec80385dc1a0c16"
+      ],
+      "sources": [
+        "Sahel Intelligence"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-08-31T07:00:00+00:00",
+      "last_reported": "2026-08-31T07:00:00+00:00"
+    },
+    {
+      "id": "aa063b2bce374e4c",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Troops kill terrorists, seize ammunition in Zamfara, Kaduna",
+      "summary": "Troops kill terrorists, seize ammunition in Zamfara, Kaduna Daily Trust",
+      "original_title": "Troops kill terrorists, seize ammunition in Zamfara, Kaduna",
+      "original_summary": "Troops kill terrorists, seize ammunition in Zamfara, Kaduna Daily Trust",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-09-03T07:00:00+00:00",
+      "source": "Daily Trust",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQYzQyQUcxN3ZQUjA0c2Eyd0ZoTjdtSjFjWWtJTnNMNUoyTWxPay1GZmN3M0ZJMVBEcE9WSlBPVDEwZm4yS1NlUjEzM1VFd2s1bjRUdnZBS2RPdkVlVGFTWnVCUmVqdGFHMHNycmxNSWZvRnAtcTNCY3h4ZHQ3M2VEbm9mRG5qRTlu?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "dailytrust.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "86cbaeb305d3696e2c8d9b9ce2970572e09de975387c7d57b83793be897620ee"
+      ],
+      "sources": [
+        "Daily Trust"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-09-03T07:00:00+00:00",
+      "last_reported": "2026-09-03T07:00:00+00:00"
+    },
+    {
+      "id": "88c385c2c7b1b03e",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "زيلنسكي: أوكرانيا تدعم الخطوات الرامية إلى خفض التصعيد وإنهاء الحرب » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "summary": "زيلنسكي: أوكرانيا تدعم الخطوات الرامية إلى خفض التصعيد وإنهاء الحرب » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_title": "زيلنسكي: أوكرانيا تدعم الخطوات الرامية إلى خفض التصعيد وإنهاء الحرب » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "original_summary": "زيلنسكي: أوكرانيا تدعم الخطوات الرامية إلى خفض التصعيد وإنهاء الحرب » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
       "original_language": "ar",
       "collection_language": "ar",
       "collection_language_name": "Arabic",
       "collection_locale": "SA:ar",
-      "published": "2026-10-05T16:49:53+00:00",
-      "source": "تلفزيون سوريا",
+      "published": "2026-10-11T15:51:16+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
       "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNRWZ5WC1fWE1HdWt5VUc5bDhGaURna1plWWY0Y0hHNVJ4ZlZReFh6aFcwMjdIQkUzLV82aE5QLU1XOTNJdlJ2cUlBT0NOY0tDemo1ZmZ5Szd4OGZ5NUMwTDctMFVVVVRFMDctNFYxX0t0VUxmNDAtZGpUVVRmZzBJZWthd0RzOWgta1VXV09OSjlkbnczMVAyWG1NbF9LdjBHNnQ3OGtHRmZzakU1VGlBRkF0eVpCWkE3bnZFU0h2UVFsa0dXaXdZWG1mSzZwQQ?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE5fTDNtdl92NDY2WTBZNWVWZ2R2ZTNOeE5DZTBXbXp5MHBVMENXaUNKTDByb2FwN21mN3dPZ3otdlNmVjYwaTdSUWg0R3hDOUtQSDhkSDZ2NA?oc=5",
       "collector": "Google News RSS",
       "country": null,
       "country_code": null,
@@ -48972,37 +49874,1142 @@
       "location_precision": "unknown",
       "location_confidence": "low",
       "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "syria.tv",
+      "targeted_source": "ina.iq",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
-        "3244116650aa1345f3790fd3f1c1d8719b3dea705931f315dfd2e2a7dfead414"
+        "00a8370ac7348d7f3c3e4f182db290dcd3a152c8beb2e10bde3881d77845eed3"
       ],
       "sources": [
-        "تلفزيون سوريا"
+        "وكالة الانباء العراقية (واع)"
       ],
       "related_articles": [],
       "article_count": 1,
-      "first_reported": "2026-10-05T16:49:53+00:00",
-      "last_reported": "2026-10-05T16:49:53+00:00"
+      "first_reported": "2026-10-11T15:51:16+00:00",
+      "last_reported": "2026-10-11T15:51:16+00:00"
     },
     {
-      "id": "b7e27e617b0fc341",
+      "id": "8a6acfd3b4ff72d2",
       "category": "Attacks",
       "categories": [
         "Attacks"
       ],
-      "title": "I sondaggi delle elezioni Usa: ecco come può andare il voto di midterm",
-      "summary": "I sondaggi delle elezioni Usa: ecco come può andare il voto di midterm la Repubblica",
-      "original_title": "I sondaggi delle elezioni Usa: ecco come può andare il voto di midterm",
-      "original_summary": "I sondaggi delle elezioni Usa: ecco come può andare il voto di midterm la Repubblica",
+      "title": "كوريا الشمالية تختبر طوربيد فائق السرعة والدقة يعمل بالذكاء الاصطناعي » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "summary": "كوريا الشمالية تختبر طوربيد فائق السرعة والدقة يعمل بالذكاء الاصطناعي » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_title": "كوريا الشمالية تختبر طوربيد فائق السرعة والدقة يعمل بالذكاء الاصطناعي » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "original_summary": "كوريا الشمالية تختبر طوربيد فائق السرعة والدقة يعمل بالذكاء الاصطناعي » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-16T22:30:14+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE5vWUItTnJrY3J4bEVnZ2ZrNEdocW93Ti1IM0I3cWtrMERwTG5Cdy1lQ3JtajJJVWhuc0tTamVxbURyT01jOFpLSmtlNXdQWWdwRXRFaVhlZw?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "ina.iq",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "13ec98cd06752602a39b77614ab38c45209269b93614f3ce074fbfd2e0b26cdf"
+      ],
+      "sources": [
+        "وكالة الانباء العراقية (واع)"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-16T22:30:14+00:00",
+      "last_reported": "2026-10-16T22:30:14+00:00"
+    },
+    {
+      "id": "9587e5cdf631fb0d",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "غارات جوية وقصف صاروخي يستهدفان مناطق في محافظة صعدة شمالي اليمن » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "summary": "غارات جوية وقصف صاروخي يستهدفان مناطق في محافظة صعدة شمالي اليمن » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_title": "غارات جوية وقصف صاروخي يستهدفان مناطق في محافظة صعدة شمالي اليمن » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "original_summary": "غارات جوية وقصف صاروخي يستهدفان مناطق في محافظة صعدة شمالي اليمن » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-17T05:15:59+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE1xTnBpR2tyNldNd1JRSzN0Q1RGWFpGRzc3THl2R2pPUmpQQW1ydThDMEpGdE82RTJIRG5BMXhPUjROSjN0elVRZkhydUw3anBQSEtZR0Rkaw?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "ina.iq",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "d457d71d5dd968fe2ecf28a080ee48f8d48598af860981f5338421d2341cde96"
+      ],
+      "sources": [
+        "وكالة الانباء العراقية (واع)"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-17T05:15:59+00:00",
+      "last_reported": "2026-10-17T05:15:59+00:00"
+    },
+    {
+      "id": "7e001ba22de86b4a",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "وزير الخارجية الروسي: مستمرون في تطوير علاقتنا بإيران » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "summary": "وزير الخارجية الروسي: مستمرون في تطوير علاقتنا بإيران » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_title": "وزير الخارجية الروسي: مستمرون في تطوير علاقتنا بإيران » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "original_summary": "وزير الخارجية الروسي: مستمرون في تطوير علاقتنا بإيران » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-19T13:34:14+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE5PNzZRX3Q5UXFOdFhqbUFFTkRqRzR5QTUzdmp1TGdFcGh0XzEtcnl0LTVGYmRtd2lTX1llQzhic2xSalktMDBEQ1k2MVZfOWFGVUh4Mkh6Zw?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "ina.iq",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "7d556adf0015aba81e1bdc66e4b521f2050b522b1740441f077d99d24307bea6"
+      ],
+      "sources": [
+        "وكالة الانباء العراقية (واع)"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-19T13:34:14+00:00",
+      "last_reported": "2026-10-19T13:34:14+00:00"
+    },
+    {
+      "id": "d69ed00f75d57cca",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "حصار الحوثي يقتل الحياة في تعز... نفايات وأوبئة ونقص مياه",
+      "summary": "حصار الحوثي يقتل الحياة في تعز... نفايات وأوبئة ونقص مياه اندبندنت عربية",
+      "original_title": "حصار الحوثي يقتل الحياة في تعز... نفايات وأوبئة ونقص مياه",
+      "original_summary": "حصار الحوثي يقتل الحياة في تعز... نفايات وأوبئة ونقص مياه اندبندنت عربية",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-21T07:00:00+00:00",
+      "source": "اندبندنت عربية",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMisARBVV95cUxNLXpJMHo2RUNabV9mbi1Mc25MT1p2WENVdE5CNEN6R204OHZvZldlZFVpR3dQZjZrWUFseGNVNktQYnFzd1NNb09NMDFsRzIzaHhYOVhqUGQ5RUROXzdObWp5eFZIdHlUakN5bWtlYmRNMnZRNjl0NV9Ka0xkLTlqbW00ZVJQRHpZanVrX01SNU9aODJaZmVac3V4aE9BT2JLVDFSTUNGejBwcGYyeVJKaHRBaXlnUVh6bFhEeDBCVnlYOS1VTXBOc0lRNG05aTFYd1VmdWwzemdYbi1IcHB3Y19ycUUzZ05kTzNIVjJVUFlwMXJZOVhCWk0wclRpa1lVa04zd094TFU1LW1yR2dfREhmalRJM0Fac0M4ck5QOGZXSkN4bGEtM01OZnFuTThPNzBWeDduQ0VRdUd2TTFpNWJlcEltMUJaWTB2WVJfNnNvTkJoUUVfQkhWOVQ0aTNVejVleVdSS28xRVN1cFFZTUdKZEpVQS1kTldWaVE1aXpJT1lydjNwakxMcmFtZkhrb1VkbGtnbTk4OEVjSEd2WDRneGt0bmNJZkRBcGFtSi16eE1kM3pESmM5a3ExNjUwd2N6VDl4b1RmY0E3Qjk5YTctcWxCcDlGcEpZTGJpZzcxZDREOW9wLXFIVThfR1doY0xnZTBvLS1qMmJzWHcxOGxUcFVYTG5JMkpyMFJiS3FtaHAyQjFlT0Vpanh0STZ5ODRvdVo4ckJDUjB1SnJvdQ?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "independentarabia.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "417451c85bd56ce4655b25614111e5ab3a42ac1c1c19921b9e8d0b057b19ad42"
+      ],
+      "sources": [
+        "اندبندنت عربية"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-21T07:00:00+00:00",
+      "last_reported": "2026-10-21T07:00:00+00:00"
+    },
+    {
+      "id": "9a2dc0c281dd6949",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "الطيران المدني السعودي: ارتفاع حصيلة الوفيات جراء استهداف مطار الملك فهد إلى حالتين",
+      "summary": "الطيران المدني السعودي: ارتفاع حصيلة الوفيات جراء استهداف مطار الملك فهد إلى حالتين وكالة الانباء العراقية (واع)",
+      "original_title": "الطيران المدني السعودي: ارتفاع حصيلة الوفيات جراء استهداف مطار الملك فهد إلى حالتين",
+      "original_summary": "الطيران المدني السعودي: ارتفاع حصيلة الوفيات جراء استهداف مطار الملك فهد إلى حالتين وكالة الانباء العراقية (واع)",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-22T06:50:33+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE9aTmlhMjZZU01NUllvRnZKa2RKWlZGNjNBWENnS3NuTmRaY2V1ZHpvYXlmMXN5STJVWEhKYkVPRHVCdjNNSGtyZGVsd1p5TEZIeDVZVDVIRQ?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "ina.iq",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "5c518906d24486a5233b78462921d3e23832ceab414e397690d0994699653901"
+      ],
+      "sources": [
+        "وكالة الانباء العراقية (واع)"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-22T06:50:33+00:00",
+      "last_reported": "2026-10-22T06:50:33+00:00"
+    },
+    {
+      "id": "9f7be733b81e1467",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "باكستان تطالب الأمم المتحدة بمحاسبة (داعمي الإرهاب) العابر للحدود » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "summary": "باكستان تطالب الأمم المتحدة بمحاسبة (داعمي الإرهاب) العابر للحدود » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_title": "باكستان تطالب الأمم المتحدة بمحاسبة (داعمي الإرهاب) العابر للحدود » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "original_summary": "باكستان تطالب الأمم المتحدة بمحاسبة (داعمي الإرهاب) العابر للحدود » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-22T15:14:29+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE5VWDIzRHNKbmNxSzJrX1Y3WUxjeFYzMDR0d21XRWlVZTMyOXF4THBZWHpUMi0xV2NkSDhXOGFUU2czNnpCMGhqRlpnU1B1NWpXUG9MTzlQTQ?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "ina.iq",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "751fef1db2185867e361d937949a09865e3283a7056b7ed2ae85e65319ab1c33"
+      ],
+      "sources": [
+        "وكالة الانباء العراقية (واع)"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-22T15:14:29+00:00",
+      "last_reported": "2026-10-22T15:14:29+00:00"
+    },
+    {
+      "id": "73d8780e473d6b9d",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "تحذير من تسونامي بعد رصد زلزالين قبالة فانواتو » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "summary": "تحذير من تسونامي بعد رصد زلزالين قبالة فانواتو » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_title": "تحذير من تسونامي بعد رصد زلزالين قبالة فانواتو » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "original_summary": "تحذير من تسونامي بعد رصد زلزالين قبالة فانواتو » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-24T05:08:17+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBoZUprRkIzUXVDUWtBZUVDNWt3RWpVOTNjbEZEc3BlVVk4VC01THprTXUtTGhRQzB5SmZmaVNKNjdKV1RLcW1pNldZTE5kSTZhcnNybUoxYw?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "ina.iq",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "eb5139bde4a4172f670dbec41f0c22311bc4a0819a6e0886a66af17a7e8d25b8"
+      ],
+      "sources": [
+        "وكالة الانباء العراقية (واع)"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-24T05:08:17+00:00",
+      "last_reported": "2026-10-24T05:08:17+00:00"
+    },
+    {
+      "id": "004a9309efbc93a2",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "باكستان تحذر مواطنيها من اضطراب الرحلات الجوية إلى الشرق الاوسط » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "summary": "باكستان تحذر مواطنيها من اضطراب الرحلات الجوية إلى الشرق الاوسط » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_title": "باكستان تحذر مواطنيها من اضطراب الرحلات الجوية إلى الشرق الاوسط » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "original_summary": "باكستان تحذر مواطنيها من اضطراب الرحلات الجوية إلى الشرق الاوسط » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-24T12:27:43+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBGOWcyWmFaRWp5S3Y5ZnlseVdUVWtub0pVa3FGdmdMdDJ2b0xoMzYtWE42Zm9vNThJMGxYVnZXZC1UR1VPVW5JSG94d2lMVG5yMmF3YUdJMA?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "ina.iq",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "6e61f2bd18bf0443dc97a1e58cb387e9f50516932edab4f7dd29dde9335355d9"
+      ],
+      "sources": [
+        "وكالة الانباء العراقية (واع)"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-24T12:27:43+00:00",
+      "last_reported": "2026-10-24T12:27:43+00:00"
+    },
+    {
+      "id": "ff41aa7c3eb65a44",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "أربعة طيارين فلبينيين يلقون حتفهم في حادث تحطم طائرتين خلال تدريب عسكري",
+      "summary": "أربعة طيارين فلبينيين يلقون حتفهم في حادث تحطم طائرتين خلال تدريب عسكري وكالة الانباء العراقية (واع)",
+      "original_title": "أربعة طيارين فلبينيين يلقون حتفهم في حادث تحطم طائرتين خلال تدريب عسكري",
+      "original_summary": "أربعة طيارين فلبينيين يلقون حتفهم في حادث تحطم طائرتين خلال تدريب عسكري وكالة الانباء العراقية (واع)",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-25T04:09:08+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE5qaEh1X1VMS0NyQ3BLT0FzWHdRVU9IZkRZeHBKUDR3blVlSXZ2VGtfNU5DeG5MdWxOZkxZcjhiMXpwV01nd093T2l4enRSYWUySDJRV1BVTQ?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "ina.iq",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "56755aea51ac1c3b7e779e49b3f2d6b5154d85639c0b5cce6daf08c8ea03533f"
+      ],
+      "sources": [
+        "وكالة الانباء العراقية (واع)"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-25T04:09:08+00:00",
+      "last_reported": "2026-10-25T04:09:08+00:00"
+    },
+    {
+      "id": "53ac3a5f75aa53d0",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Thousands Flee Deadly Ethiopia Clashes as Moyale Violence Spills Into Kenya",
+      "summary": "Thousands Flee Deadly Ethiopia Clashes as Moyale Violence Spills Into Kenya Garowe Online",
+      "original_title": "Thousands Flee Deadly Ethiopia Clashes as Moyale Violence Spills Into Kenya",
+      "original_summary": "Thousands Flee Deadly Ethiopia Clashes as Moyale Violence Spills Into Kenya Garowe Online",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / East Africa",
+      "collection_locale": "KE:en",
+      "published": "2026-10-25T05:15:44+00:00",
+      "source": "Garowe Online",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNYjhmS2J4YW1YYjdPNl9LSlRSR2FLUV9qUTJQZjZMVWp5ekRyR2tnYkJLZmRGT0s5eUVqNmJUR2FUXzB5Z3ZyTm5JX1lvTnpleklpOTIzdXUzZi1PeUhfSEVEMENLZEUyRktNbU5GTE5WV0lJbmVNUS0ydU5aRXpyOGZWMGRTU3Njb0dneE5BSDZIU0xySmltbndLTlMxdUhjTU1tUWV1SzZiczNablBNNzNSMGsxZzhXLXRuRA?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "garoweonline.com/en",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "b1c27ea544f51a4cdbe2b10552466927354bcce47e557cac4601e82a91f1ee1e"
+      ],
+      "sources": [
+        "Garowe Online"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-25T05:15:44+00:00",
+      "last_reported": "2026-10-25T05:15:44+00:00"
+    },
+    {
+      "id": "bb4217efdb71ab39",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "هذا ما ينتظر إسرائيل بعد أهم انتخابات تشهدها منذ سنوات",
+      "summary": "هذا ما ينتظر إسرائيل بعد أهم انتخابات تشهدها منذ سنوات اندبندنت عربية",
+      "original_title": "هذا ما ينتظر إسرائيل بعد أهم انتخابات تشهدها منذ سنوات",
+      "original_summary": "هذا ما ينتظر إسرائيل بعد أهم انتخابات تشهدها منذ سنوات اندبندنت عربية",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-26T11:13:44+00:00",
+      "source": "اندبندنت عربية",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMioARBVV95cUxPaVdNb0JieE5WUkx3MGlVdHFhX2pPeVIxaERrbGRzaTBWcWZWOXBqMTM5WDdmX3hHN0dTT0p6SUpJNFR4WGdkaVdGS0xDUkhSY3ZWQmtDcl9mMkstZnJ5R2x6ZDNtVnJaYnNCOGdzQjZhcDBUZ01aVUlVcmpNc3NwdExJaUZSZGFQcVc2LXBMUTcxLURQQk9DNUtRcUdFMlJxWmZYSXFsX3d2cTZsRDBfWGZCY1F6NlFtamhOS1I2akhCVGZualRDbUlLWlRUTkRYTDIzdWNVaHh3Y1h2YlhNcmo2Tjk2MmNieWtvYkl4NEVaSENtV09OS21kc2M0a2VweC1UMWVQU3J3OTZxcDZGYllNQWtubnJYTnhEMEl2OGlSNHNua1JmZ05oRkVJUXVNU2N4d05qWVBUd2VZV1lzUzhRUmFDNUItd1pLMC1sa1pjUTV0Uk5SbjNZcGFQekZ6VkIyZG5iUW5OeEpTelJURzVmNTY2S05LNXdRQkdaSUREWWhqeGJfUUpCR0taWWFSTEFVVy15ekhkaTZMTVJxdjVrNDUycVh1UXZQVnlHNkIyYkdDc1VOUmE5ZHIwYWJPWm1ZRkRkNzhaNFhRNHhLdGs4UUpsQm1zQUhLdTh3VUVwNDdjV3QyamlkNWVFTjlETUxUa0dXX25ySFhsNmZsNG5GcUJJd2JzVnExUGs5NUpsdHVvN1RsNXZUcldfX01D?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "independentarabia.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "10268a78bdbee457c2a71f2ed241e19fae78597c7e3593d57c46727de03654c6"
+      ],
+      "sources": [
+        "اندبندنت عربية"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-26T11:13:44+00:00",
+      "last_reported": "2026-10-26T11:13:44+00:00"
+    },
+    {
+      "id": "9b3e2f40d574d584",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "أردوغان: تركيا لا تسعى لتحقيق مكاسب على حساب أي طرف في (شرق المتوسط) » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "summary": "أردوغان: تركيا لا تسعى لتحقيق مكاسب على حساب أي طرف في (شرق المتوسط) » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_title": "أردوغان: تركيا لا تسعى لتحقيق مكاسب على حساب أي طرف في (شرق المتوسط) » وكالة الانباء العراقية (واع) | اخبار العراق",
+      "original_summary": "أردوغان: تركيا لا تسعى لتحقيق مكاسب على حساب أي طرف في (شرق المتوسط) » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-26T16:27:39+00:00",
+      "source": "وكالة الانباء العراقية (واع)",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFBRU2NwU3d6S2lqaWlEaGRKdmhZOFduVGJZMGZ4WGt4eUNRSC00eVBDMWJ3TzZocWpFaVZQVW5JUzlzNXhFTDJTX3dnTUROU1c0U0t6Sk9nYw?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "ina.iq",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "c8db06154fc47e72691f7db9e6c7596544c4b1c30e551cd94d7501cce7e9c838"
+      ],
+      "sources": [
+        "وكالة الانباء العراقية (واع)"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-26T16:27:39+00:00",
+      "last_reported": "2026-10-26T16:27:39+00:00"
+    },
+    {
+      "id": "9ace52bcd1c47c2b",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "INEC publishes preliminary voter register online after missing legal deadline",
+      "summary": "INEC publishes preliminary voter register online after missing legal deadline Premium Times Nigeria",
+      "original_title": "INEC publishes preliminary voter register online after missing legal deadline",
+      "original_summary": "INEC publishes preliminary voter register online after missing legal deadline Premium Times Nigeria",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-10-26T20:00:51+00:00",
+      "source": "Premium Times Nigeria",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOcG5IMVFhc21aR2tZMHZRejNaazVfLUlNcUprYU83SGZIXzlnNS13WWdVUTFSaXNhZGRCbFJablE1MGRaRkplcHpNVS03WDdfWDFuejRQY3ZFZkFBZ2wtcGdzMnoyWldOTWJCbW95RUtMbEJfbU5mNVFZMGpkOEZlQ0publFvT0lvMGw4QUlaNGlySk11Nk1zT2JYYnYzVVpwaXNtcURQTjlSUWc2a1FpNEdYa1hFMi1FRF9QajR3RnZPS0ZUNk5Gc2ZBR0NoUFVq?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "premiumtimesng.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "1b8adf2d6435cc9b47908cb58754870c5b88c3980968cf702d6b88b09bf92b40"
+      ],
+      "sources": [
+        "Premium Times Nigeria"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-26T20:00:51+00:00",
+      "last_reported": "2026-10-26T20:00:51+00:00"
+    },
+    {
+      "id": "bddb827a20ba6268",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "\"كهوف سنغافورة\" مخازن جديدة للنفط السعودي",
+      "summary": "\"كهوف سنغافورة\" مخازن جديدة للنفط السعودي اندبندنت عربية",
+      "original_title": "\"كهوف سنغافورة\" مخازن جديدة للنفط السعودي",
+      "original_summary": "\"كهوف سنغافورة\" مخازن جديدة للنفط السعودي اندبندنت عربية",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-27T15:12:26+00:00",
+      "source": "اندبندنت عربية",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiywNBVV95cUxQZFFMZjRZaktBZjJ2elhhVlpTeDcxWG9ESUhKcGNkQXgtdWF6b0FEMzlUbjF5REhFUDZJcUMyU3k4S1lQNS1RY3BVS09rTnNUUVd5MmlRb2otdVBhUGtvWl91OWxtWVJIZUJ5cVNvRW8wSUVoRWpmNHdhZFR0WGo2TXhqMWdCT3ZldV91cDVsSXRoZHItMVFrMzYwN0VGakVBSVRpWnJ6OEtSZkdLQVFfMkM2WGxFcWJJaWp3SXpHWGV4SFF6UVUxVW4xQlJPczkwTXRZSWZIUFVXZnk1UGdnVHVFMnJNSzVyMFNkMm91UzJYUEstQVlPdjJQNHUwdjI5U0tDdXdXRG9NdFBwa0lpdXBiam5oM0tFYm04Tno5ZnlCZ2NmN3lUZTUteHRrcXpLWTFaN0tGQ2kxN3BnTlBBVkZ5aE5tZzBncmhIUEpKaUhpNDU1M1BTakFHT21oUmZtYS1fd1AzM2tyMGluMjEwWXJoNmp2OEpZZXZadUhHODB0ZVFSZFl3WDBjY0J6RkhOWVZ1cjhnLUJ0WmtnNU5vM0g4dmVoMS1Pd3FJRnFqNE1SWkpCR3hWNnh0ZmlaUkR0WmZabFp0eFZmblU?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "independentarabia.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "21609c3531be5529bc665dd0f4589cf2b91765072267041c6b961fc42d021e8f"
+      ],
+      "sources": [
+        "اندبندنت عربية"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-27T15:12:26+00:00",
+      "last_reported": "2026-10-27T15:12:26+00:00"
+    },
+    {
+      "id": "88e7e9cfdfb467ea",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Proposed gas pipeline will cut costs, boost South-East economy — Tinubu",
+      "summary": "Proposed gas pipeline will cut costs, boost South-East economy — Tinubu Vanguard News",
+      "original_title": "Proposed gas pipeline will cut costs, boost South-East economy — Tinubu",
+      "original_summary": "Proposed gas pipeline will cut costs, boost South-East economy — Tinubu Vanguard News",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-10-27T17:20:07+00:00",
+      "source": "Vanguard News",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNOEVublp3T1RPMmprODRNLWsxa29CazlGOHk5dk5ab1kzT2VLYXJGczQ2OEt4REt3UGJnc0NBQWxCWkhmR0w0NlZZUUJibEVLQ1FzR2FkNzlTSTc0QjdPcUdqS1ZQck5RRXh4dDU5Q0hFNjdQSkFoOW1scDJNcEZqcGZYNEVwWjFMYTFIOHhpNkZtM19NOTlNRXhhLTZSd0tGTVVXOVFXZznSAa4BQVVfeXFMUGRqelR6ODZHY3RmNk5WTi0zdHZFaHNxcm9JLWoxOTVOa0N4OVQydWVYdWViR1FqS2FFUGR1cl9SLWRTa0J0N3lXODJTMEFjMWFuOXIzb0RIRzJES05Nb3diOW1feUVEVTF0WnFFdmd2TmFURlhtYXFld2ZPQ3dfdnlqWmdXZGRmand2YnVZMXU2Tjg2VUtTaVJvQnJ0Y3N3dnZRYllacFpHX0h4UFBn?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "vanguardngr.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "fe1457a3200884475ea96b0851dd1291a369fc25570f0b1e046cd49323335643"
+      ],
+      "sources": [
+        "Vanguard News"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-27T17:20:07+00:00",
+      "last_reported": "2026-10-27T17:20:07+00:00"
+    },
+    {
+      "id": "cab82f96307bd0c7",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Tinubu needs another term to consolidate reforms — Tompolo",
+      "summary": "Tinubu needs another term to consolidate reforms — Tompolo Vanguard News",
+      "original_title": "Tinubu needs another term to consolidate reforms — Tompolo",
+      "original_summary": "Tinubu needs another term to consolidate reforms — Tompolo Vanguard News",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-10-27T17:32:32+00:00",
+      "source": "Vanguard News",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPZWNRTDV6aGl6d2lYNW5UV2lDaGxiTHV2akZCaUF6S2MtOWJrWnN2blJ6dzZyU3dUdC11ZEVzckNkX1RWY0ZsRzN2N3U2N3hVUS1BUUNkZnU1SmJ5WEZPTWVfSkNtZDkxMjBqUDNKcnpNUWE2UU9ETURrZmcyQm55dVU2SWJLejdLQks1WmlaT1lHQVJuLVY5T9IBngFBVV95cUxQcTZNZTNkLTlBMi05RTVEVUQ0ZzdCN29BUGNTeXVBUDBQZ21PUmFsVGthcVhpZ1BsNXFfR1owbUhnZ29aM29xaThtWlhJRDUzT1RnZi04ZFVHcmVyell0RHh6T1UtWHd0VV9zN29YZS1BdG9sY2JQcnlPMFlyT21QQTYzUHh0UnhSTVpHRHN1ejJIOUlwS1VSeHZVbkM2dw?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "vanguardngr.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "328c0d40f3104be6f3fb5b958ae76f347cc84a90fe92b329591f765aede199e6"
+      ],
+      "sources": [
+        "Vanguard News"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-27T17:32:32+00:00",
+      "last_reported": "2026-10-27T17:32:32+00:00"
+    },
+    {
+      "id": "bd668546209cd123",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "بالأرقام.. تقدم كبير للأحزاب العربية في انتخابات إسرائيل",
+      "summary": "بالأرقام.. تقدم كبير للأحزاب العربية في انتخابات إسرائيل سكاي نيوز عربية",
+      "original_title": "بالأرقام.. تقدم كبير للأحزاب العربية في انتخابات إسرائيل",
+      "original_summary": "بالأرقام.. تقدم كبير للأحزاب العربية في انتخابات إسرائيل سكاي نيوز عربية",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-27T22:55:09+00:00",
+      "source": "سكاي نيوز عربية",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE9kamVVRXc1OWdJNFotWGpTNm56d29TSUoyZEZPRFBaNjdSRUdzUU1iLVdlRW9tZ3p0ME90N3lvWnRMYl9yVEg4NzZhMl9ndlIyM2tSU3RtRHHSAdQDQVVfeXFMT2VhVzhDY2NoemxJLVNHZGNJMUw3M1R6VjlYWEdWcVlJV0RDNGwtM1gxS2N1REhURkJiODYzdGVpbzZZSzZUa1lobjk0UmJOR0VrTllvZWd4azVKYTlIS2wtSjJPczNLdU5JT2V4Z0ZVV2NvaVpBOTJoOXp4WTJNODFkM0pSc2dzdV9IUEVqc0ZHZU5SWERHNVd6cnRnaUg1YlV5dWpYaU5wX3kzcFItOGsyT1JoVDlJdWZ3TGtVNEg3aUtiVEFIei1VaWxNSGxWZEJPYXZRNHIyYmRfMElVaXgzcEdLNzhNRGYzZG5teHc1ay1QbDltcVVPbmUtdmtWWE51eWl6RkpxQVNoaUk1bUpodWtxb21Hd3BYanBRMWdEVk9LZWNQbkpjYVlWTzJzTWI3V1lEV3hCYXhkRGVvRE53emlpQ1h6TVcyOHlvdElhNjVIOVN5RkVlWFJ0Y0o3YmJ1eWtvSjJQYlMzd0JlU29KbVQ1UmtDWXJlcGY5cEVKNm9hcGtXWDhmVTQwUVgtOW5QaWthTWlSTUpjMUdvZlo4TkVXT0dhbVJpYlBuYWFxVmFRZEVXR1diMUowV0JReXljUkZad2kzM2ZKb1VkUUxKZTR0?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "skynewsarabia.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "e62ce23b3e251024a7a5910ae26253198deb7ee39e7f2ffccaa85f99757114ed"
+      ],
+      "sources": [
+        "سكاي نيوز عربية"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-27T22:55:09+00:00",
+      "last_reported": "2026-10-27T22:55:09+00:00"
+    },
+    {
+      "id": "2942d48560cb5ada",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Polisario: Time for accountability in the face of terrorism accusations?",
+      "summary": "Polisario: Time for accountability in the face of terrorism accusations? Sahel Intelligence",
+      "original_title": "Polisario: Time for accountability in the face of terrorism accusations?",
+      "original_summary": "Polisario: Time for accountability in the face of terrorism accusations? Sahel Intelligence",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-10-28T11:29:22+00:00",
+      "source": "Sahel Intelligence",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOaDhVMXdVS1E1NWR3c0owWHFsS242NDIwa3ROY2VURC1oNzBWYk01RVFFNnREMmRLSTFQUEVzV1ZVZHpVQnpXRHZ3ZGJmUVdWR0NsTnN2WTFMbEc1NFBjdEpSXzF5VGZVdWp0cWRlTmdMellDbTQzOHoyWlpfdUNxM3E2NGpoUUxMNHlQYUx5NXMzbGJ1UGRrM2hkOUhEQktURE45VFNMWHVtSXlkdWYwWWpB?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "sahel-intelligence.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "888bca20efbf165ab9274f5dae75c3f88b9e92904075d6d3e0160eebe89e7bbd"
+      ],
+      "sources": [
+        "Sahel Intelligence"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-28T11:29:22+00:00",
+      "last_reported": "2026-10-28T11:29:22+00:00"
+    },
+    {
+      "id": "1b1943891b5472d1",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Tinubu has done more for Plateau than past presidents — Yilwatda",
+      "summary": "Tinubu has done more for Plateau than past presidents — Yilwatda Vanguard News",
+      "original_title": "Tinubu has done more for Plateau than past presidents — Yilwatda",
+      "original_summary": "Tinubu has done more for Plateau than past presidents — Yilwatda Vanguard News",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-10-28T15:14:39+00:00",
+      "source": "Vanguard News",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOZkxfV1Q4dV9HQ1RXRDE3YTFkSm5xNVdubUZ2NU9sUjdPUjhzWGVXcDh4amg5SFlOeHotWGVwTlQ1N2E5eUhzVW5EaVRvMXBJaUktTHo4Vy02Q1hqanV0OXlSVzUwbnVIbUtqV0I4NFYyYjlZZTB5OWZVeGNvWl9QbHlCal9YT0RvSkpIMDlyM0pBR2x0YS0yMDZ4VW9abTIw0gGmAUFVX3lxTE5FZDNtckYwbHJHaUFtM3M4M1NveEdYdmkzbnJQMmhJYkpScDlNVjRYcnpRVkx4bVlHQzZ2M29IR1dZUm84enpiZjZkWHUtMzdKMFlVTGFxeE5UNGZiSzZlc1ZnN1NNU2hpcUFRdzhvQ2RsZDAzVlNwYk0xbjVtVzlTWE5yVTM0cjE4aU8ybUNDTHlJYzdORzVQeHNPZTNwdkZxRmdvT3c?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "vanguardngr.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "dfbd56e274b152d569c01ef5adc1502820d95908ff12a2beef1e5d2437c73110"
+      ],
+      "sources": [
+        "Vanguard News"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-28T15:14:39+00:00",
+      "last_reported": "2026-10-28T15:14:39+00:00"
+    },
+    {
+      "id": "e12251a62fb27897",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Espagne: un accident de trains fait au moins 68 morts / Israël: percée historique des partis arabes / Attentat de Trappes: un hommage national est prévu...",
+      "summary": "Espagne: un accident de trains fait au moins 68 morts / Israël: percée historique des partis arabes / Attentat de Trappes: un hommage national est prévu... Le français facile avec RFI",
+      "original_title": "Espagne: un accident de trains fait au moins 68 morts / Israël: percée historique des partis arabes / Attentat de Trappes: un hommage national est prévu...",
+      "original_summary": "Espagne: un accident de trains fait au moins 68 morts / Israël: percée historique des partis arabes / Attentat de Trappes: un hommage national est prévu... Le français facile avec RFI",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French / Africa",
+      "collection_locale": "FR:fr",
+      "published": "2026-10-28T18:05:40+00:00",
+      "source": "Le français facile avec RFI",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi4AJBVV95cUxObE1UVlduQmZiQWV1ZG1JblpXby1MSFlZMHpnbFk2Nm5ERl82SkJiX3FsanZiM1ZtZFpnR0tkRmJuU1h3Xy0ycjRnQ0ZOVm5LbGhoUm5PYUM1N21LSGJMSDhad0NWZ0UxeVpTNGpJUUMwRFlyTkRCTmJ4c1A4RXFxTDBBdUZMVVhoQWpjSzBFQ3dLM0F1NFR2VXBkNFpqN1FQUXRjYVFIaWF5T1BfeXRQdDhTME0xU2JLY0diN0J5VmxNRmtDdWU1QWdFZFJYSmI3cjZwUV9jaWYyZF82c21SNktoTmE4cVN1MkJnenNfeUt6dkJwMFJSMGFsaHdDQVBoaGhlWE9ta1M5R2hIdi1tMjFKX3lhSk5rMHNCMGxhQkFPQlRGOWF0ZWRyVUhiVW9aWWMzRXA3WkVBUzl5eTlQMTdaam1FN3JYNGNJVGd2SGRzOV9RNHNwd0pVMi1SRDNv?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "rfi.fr/fr",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "7313780869d53ea6e7f706ba1f636ca2f26a7f87705a55eecf7e0c20c3449efa"
+      ],
+      "sources": [
+        "Le français facile avec RFI"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-28T18:05:40+00:00",
+      "last_reported": "2026-10-28T18:05:40+00:00"
+    },
+    {
+      "id": "fb55ae997bf1e1bd",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Salim Saleh leading talks to release jailed Besigye, Minister Balaam tells Rukungiri residents",
+      "summary": "Salim Saleh leading talks to release jailed Besigye, Minister Balaam tells Rukungiri residents Daily Monitor",
+      "original_title": "Salim Saleh leading talks to release jailed Besigye, Minister Balaam tells Rukungiri residents",
+      "original_summary": "Salim Saleh leading talks to release jailed Besigye, Minister Balaam tells Rukungiri residents Daily Monitor",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-10-28T19:37:56+00:00",
+      "source": "Daily Monitor",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxOOUk5eU9tRXRMcy0wNkhCbUVlejZmX1RBajJZV1ZTckdrd25UV3JPb190dEZ4QWVqa2s4cnBtcXNtcEJlbm9RSFBaNlJ5R2w4LUJyNmVOUExLME9mUllmaGFTeVA0Qzh5SXgxbnlESTB4VTJWUkFHYWU1dFNZNUxXak9IQURPV1o0QU9qMWk3VXNLQ3I0ZHdKeGZ4blJFbDhTLV81dnlib2s2OVZycGVObW9sbl9IUUx5UndycHpmTWx4QXdFbE1NMDF4S09CZi1XR2tZTy12R2xNcGVpVjcwMjlB?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "monitor.co.ug",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "51b6fd3119d2784f9a71ddf1c49fbe75c677682e0934d05959dba29cd3c97db9"
+      ],
+      "sources": [
+        "Daily Monitor"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-28T19:37:56+00:00",
+      "last_reported": "2026-10-28T19:37:56+00:00"
+    },
+    {
+      "id": "6d0c84dc614786dd",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Educationists weigh readiness for health and life skills policy",
+      "summary": "Educationists weigh readiness for health and life skills policy Daily Monitor",
+      "original_title": "Educationists weigh readiness for health and life skills policy",
+      "original_summary": "Educationists weigh readiness for health and life skills policy Daily Monitor",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-10-29T07:26:35+00:00",
+      "source": "Daily Monitor",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPeGk3RW1xa2lRdnVva2k3bWhuMXdTa2Eyc1hNREJHWWg2R3hCUEVBTnlLY1ByZkJjQ0pjZGNlY2k4WXJ4VFVnMkVhSThwZzVWejdaZXdnYWVYQno3XzBBdG1LUkRXYWNPbWh6LXN1MnJiSFUwbzRmSmJMNlpfajVrOGpIYUNQalo3amZZcWptZE1kTndjNXpnSkZXLWY4bUNqaVZJaDhRRTFjdGpOWDJCLW5uR2wwQkRrUW1B?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "monitor.co.ug",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "5f16a8f09bb1ec07183a10192de4eecae7988676994d1ded615ee55da52e941b"
+      ],
+      "sources": [
+        "Daily Monitor"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-29T07:26:35+00:00",
+      "last_reported": "2026-10-29T07:26:35+00:00"
+    },
+    {
+      "id": "25f637ea2a11a3b2",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "“It’s Selfish Business”: How Mr Eazi’s Locker Room Bonus Bypasses FAs To Pay Lower-League Players",
+      "summary": "“It’s Selfish Business”: How Mr Eazi’s Locker Room Bonus Bypasses FAs To Pay Lower-League Players Channels Television",
+      "original_title": "“It’s Selfish Business”: How Mr Eazi’s Locker Room Bonus Bypasses FAs To Pay Lower-League Players",
+      "original_summary": "“It’s Selfish Business”: How Mr Eazi’s Locker Room Bonus Bypasses FAs To Pay Lower-League Players Channels Television",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-10-29T09:44:36+00:00",
+      "source": "Channels Television",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPZGdaQmhoSXlIWjBHNG1sQ2JQeXNwT1VXRUZtUXc0empnYkhTN1V0QlN6dE9Bb2dRY3RzMEhqQWFvb3EwSkZUZEpVbFFUdlg3aTFvdllnaTY2OUN6ajZkWUt2TFVkVXFZdDlMbExmOVRUaVc5eUdlSkFIdTVSam1LWEMtTXJxNjBxek5pSWxwc0xBOElDZXZhdnF2X0dWS1RaUTV2M1h6bHVfblhHU042Uy1BVE9hNC1NZnlsN2lSZkZNV1VldzFvQTdFUQ?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "channelstv.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "d795aee3c5297128cfb539702b32535899feb894db591e3f7ca1c43e08b49a8c"
+      ],
+      "sources": [
+        "Channels Television"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-29T09:44:36+00:00",
+      "last_reported": "2026-10-29T09:44:36+00:00"
+    },
+    {
+      "id": "d2874dd0ea588fa1",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Court Rejects KC Luxury’s Bail Application Over Lack Of Expert Evidence",
+      "summary": "Court Rejects KC Luxury’s Bail Application Over Lack Of Expert Evidence LEADERSHIP Newspapers",
+      "original_title": "Court Rejects KC Luxury’s Bail Application Over Lack Of Expert Evidence",
+      "original_summary": "Court Rejects KC Luxury’s Bail Application Over Lack Of Expert Evidence LEADERSHIP Newspapers",
+      "original_language": "en",
+      "collection_language": "en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
+      "published": "2026-10-29T12:28:22+00:00",
+      "source": "LEADERSHIP Newspapers",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOdm9DTG1Na3ltaG9MS1lVM3d2ZG9BZk5NVkpReVN1TE9jM2cyaUpNaDhITnZrUzJSSDhFTmg0bGMtMVF3NWZxX0Y2ci0yMVpUSFlHQU8wN1BfQXVOQnVkYmUzd3JzM2VxYmd0R2N5cW9lQkpXeWlNVlVselBUYk4wOXpmZUVNRVRLMEp2Q2tQVWR0b1ZkY1hpSQ?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "leadership.ng",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "1bb94bf4794e3dc78fab60e92a9229fb05abc8fa4a98c48a86f6c5980d1cd642"
+      ],
+      "sources": [
+        "LEADERSHIP Newspapers"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-29T12:28:22+00:00",
+      "last_reported": "2026-10-29T12:28:22+00:00"
+    },
+    {
+      "id": "100edb4351caf5ef",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "ارتفاع قتلى القطارين في إسبانيا إلى 69 وجهود الإنقاذ مستمرة",
+      "summary": "ارتفاع قتلى القطارين في إسبانيا إلى 69 وجهود الإنقاذ مستمرة اندبندنت عربية",
+      "original_title": "ارتفاع قتلى القطارين في إسبانيا إلى 69 وجهود الإنقاذ مستمرة",
+      "original_summary": "ارتفاع قتلى القطارين في إسبانيا إلى 69 وجهود الإنقاذ مستمرة اندبندنت عربية",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-29T13:34:23+00:00",
+      "source": "اندبندنت عربية",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi0wRBVV95cUxNTnJ4Yzk0Z25TcVFlMVlqTW8waVhCcUlGclh2S2RZMnp3Z2pENGRwbk5uODJWSDlqUmkzelE5djNPS0xLN2tCYTBpSXZlWUcyVFVCYS1VQkNHTDBJSFlheXE5TWlCQmt6c3N3ODZRajFTbzNnZVlUbHBhX3BTSkpqcU5xc05XQTVHQUpwa3N1MHYxMmNaYkhIOG1DdjM5WXJkeElKM01qYWJVREI1Y2h5a0pBQUtSUXVsUWw2UkZxRlZObU9hNGc3c2QySFV1S2RTM1h0dVNBTzRuak8xREZIaWRsR3VHMnEwSHM0LTFSc2RUYlV4TW5udFgzN1ZRZFo5Qk5xY05qUktjLWRTbVp4cm5BSkFKVmtEYVY0OEVQR2owWl95bkN2ZjJ2NGNlMWdrY1h4VExIM0RYNUZONEh3TmJCMjh2SV9XVURaeUNUMnBXNmpQVEg2M3hrTElKWTQ0b3FxNDBrQ192VkJ4VVEzWUZ4bmlIbnBaTGtlU1BoZncxd3l4aVpVYWxqM29VQml6Vk1nU0RSb2hzVTBFYnozV1I3aWVmVzVEYUw4aWFuZnVuNVJIOFk0SzdXRE9rbl9Pa2xlMXo3VnlSRFVlR0hLOURMWEVtek0wVi01MHRYVkx5N2dHUTNNT2pOb2M0d2N5cVJsY2hKdm5pY3ZlZlFVMXJRWlpFUk56MmFNNTVISmNoU2Z2UmxRTHpOVkFSOXBHQzh3dnpMZk4zS3A0MFhETWxQZm56c0JzaG9uMkVWOWN2MXNrWUQzaXdMRFdWNkZzVU1B?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "independentarabia.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "25239e9cda266d2cc2f3a65d3259b7c10b325877712b40ac5f28139fc1f18925"
+      ],
+      "sources": [
+        "اندبندنت عربية"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-29T13:34:23+00:00",
+      "last_reported": "2026-10-29T13:34:23+00:00"
+    },
+    {
+      "id": "5456c625526a0b50",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "لبنان.. تشديد على خيار بناء الدولة وحصر السلاح",
+      "summary": "لبنان.. تشديد على خيار بناء الدولة وحصر السلاح سكاي نيوز عربية",
+      "original_title": "لبنان.. تشديد على خيار بناء الدولة وحصر السلاح",
+      "original_summary": "لبنان.. تشديد على خيار بناء الدولة وحصر السلاح سكاي نيوز عربية",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-10-29T16:20:40+00:00",
+      "source": "سكاي نيوز عربية",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi_gJBVV95cUxPSGkzYngtTTNEaUFuR2ZvaFFtNFJIZ21IQlBCZlhTRzVkQjVRUXhCZFNWUTlpZUc1bUxBVnJvQ1dEZG1PanZ2c3VodFZOcHgxMzFUczdsYldzNHlFOTFTd25sMGdsUElSNlZtaDkzSl84elhfNjFyeFlvMnNoTHl6NDNGbTF2NFFDR1k2MEprNS1JZm0wWEFmOE05eGdWSUpzWUFKbXV2Y0hSLXV5N2s1RjlEdUx4VUZPOTRnSEREdUlSb25ZaUpKcGtTVkZBbFB6Wl9jVkpmajlBUmJaSU1USWdmcHlpU2JDbDJ4eThIWUl1a1NsUy1tdU5NclFtRk9hbHhaQWpCRzdZUmhUaHp2OFhVV21meFh5WHZGMk1lelYwVlNiQnVsM0VweWprOUVzaC1CWVdSRVhhUUJyYTFKU2NaaXphUVFlYmN0NXFnNkVCUVFFZXVvaVdrYnFwU0RkUi1rVi12bVBkRHZ3VTVQNlFsOUozUWpXa0x1dEtR?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "skynewsarabia.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "3ec2fec5f57547f758342b75472d2db3f04622ce85472bad6fc475bcd8f16b0d"
+      ],
+      "sources": [
+        "سكاي نيوز عربية"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-29T16:20:40+00:00",
+      "last_reported": "2026-10-29T16:20:40+00:00"
+    },
+    {
+      "id": "73b0983075726a24",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Grupo terrorista Hezbollah parabeniza Lula por reeleição",
+      "summary": "Grupo terrorista Hezbollah parabeniza Lula por reeleição OCP News",
+      "original_title": "Grupo terrorista Hezbollah parabeniza Lula por reeleição",
+      "original_summary": "Grupo terrorista Hezbollah parabeniza Lula por reeleição OCP News",
+      "original_language": "pt",
+      "collection_language": "pt",
+      "collection_language_name": "Portuguese / Brazil",
+      "collection_locale": "BR:pt-419",
+      "published": "2026-10-29T20:38:53+00:00",
+      "source": "OCP News",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1FLUpoODI3WjBRQ1kyTVZjcUx2SWI4Qm1IRld4WHVMVExyWUFnUi1aR2dHNUFiLXQyU2p6MG9ROF94bzZEcWpLZEZsTDJwSVR2bjVocEJENzY5Rm5fWjV2dkJsZXhGbmxCVEN5c01lRXY5N2M?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unknown",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_discovery",
+      "source_article_fingerprints": [
+        "645352267152b054e616d8bf9547a593ac21ba2bf92cfc980beacf65782cd971"
+      ],
+      "sources": [
+        "OCP News"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-10-29T20:38:53+00:00",
+      "last_reported": "2026-10-29T20:38:53+00:00"
+    },
+    {
+      "id": "ee392223a5642b4f",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Cobolli in lacrime: si fa male a Vienna durante il derby con Berrettini, rischia Davis e Finals",
+      "summary": "Cobolli in lacrime: si fa male a Vienna durante il derby con Berrettini, rischia Davis e Finals la Repubblica",
+      "original_title": "Cobolli in lacrime: si fa male a Vienna durante il derby con Berrettini, rischia Davis e Finals",
+      "original_summary": "Cobolli in lacrime: si fa male a Vienna durante il derby con Berrettini, rischia Davis e Finals la Repubblica",
       "original_language": "it",
       "collection_language": "it",
       "collection_language_name": "Italian",
       "collection_locale": "IT:it",
-      "published": "2026-10-05T18:42:16+00:00",
+      "published": "2026-10-29T20:38:55+00:00",
       "source": "la Repubblica",
       "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE1ZdU5UWmxPM3NxQmlTM1pTUGc2NFQyQ3pEb3p0SGZwUld3RmNFTW4zUzNTaG9udFRqbDVDcThtNmNURkNOdDVFNjdLYzJremFQLWZTMllIcG1rTXhzcFdGY1hWTHg?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNbDFIdzVINUJTSFdNd3puSGtwLUc2M1V5SGFEZjJXd0FqcllCMGhNMkhoYTdiNmpBQzRQWnpBbE5DSFVzY1ZzSzVJUXVYcmRDVG1DaTF3eUtvT2pjTmxfN2s1bEs5eGQxejh6RURrLUR4UTJ0MjBadmhUUnVPbHRqOWhjaU12cGd6MmlFNEJLQW5lSThJV0YtemxJVnhpazdCaXdYb3NfczNvZFkyaGtfZFR4VktUOEZpNEQtdXkxb9IBxAFBVV95cUxNN3N2V1ZDQmQ4b3llcXNFRHFnbkhiV19KZXg0akdGRWlmSG5Tdm5PdmNtUEItc2RvZDNhV2lIV3NDZ3ZXZXpRYmZZd2sxejNWOE1OX1Qza2JOeHVMbU1Cc1VaOGZRb1B6N3M0dS1NdWwzUFBzZTFuQ0l5QjdsbWRkN1ZuMEhDWXZVQ1JfR2diZlBvSVhfY1NqY2lWU20zM0lMeXh0ZFJkWEJfdW5FVHFlTjR2elV4TzdNdE16LVpJZXlvb2xR?oc=5",
       "collector": "Google News RSS",
       "country": null,
       "country_code": null,
@@ -49016,75 +51023,34 @@
       "targeted_source": "repubblica.it",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
-        "59ac12c6f3eb9d64badd924641f72c534dec55d5f20a86cfeb4bfde282a59dcc"
+        "0b758e53042ecd47c8f2af391be11cabee2392cd2ed8a6d18eb013ef27b339c5"
       ],
       "sources": [
         "la Repubblica"
       ],
       "related_articles": [],
       "article_count": 1,
-      "first_reported": "2026-10-05T18:42:16+00:00",
-      "last_reported": "2026-10-05T18:42:16+00:00"
+      "first_reported": "2026-10-29T20:38:55+00:00",
+      "last_reported": "2026-10-29T20:38:55+00:00"
     },
     {
-      "id": "f4c7f5c5bd846925",
+      "id": "c035cb2d5c4fc54d",
       "category": "Attacks",
       "categories": [
         "Attacks"
       ],
-      "title": "مستشار الأمن القومي: الحكومة ماضية بتنفيذ برنامجها وإعادة إدماج نازحي سنجار مجتمعياً",
-      "summary": "مستشار الأمن القومي: الحكومة ماضية بتنفيذ برنامجها وإعادة إدماج نازحي سنجار مجتمعياً وكالة الانباء العراقية (واع)",
-      "original_title": "مستشار الأمن القومي: الحكومة ماضية بتنفيذ برنامجها وإعادة إدماج نازحي سنجار مجتمعياً",
-      "original_summary": "مستشار الأمن القومي: الحكومة ماضية بتنفيذ برنامجها وإعادة إدماج نازحي سنجار مجتمعياً وكالة الانباء العراقية (واع)",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
-      "published": "2026-10-12T11:29:03+00:00",
-      "source": "وكالة الانباء العراقية (واع)",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFBfZGtaWE9Zb1hvSFJrbEpaWGhIRWhyZDJWQjhIN2NjWUxVX3drdUY5OVJXQm9zODJWNUdLb25Wbnh3YmdFQVNzTUtNTmo?oc=5",
-      "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
-      "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unknown",
-      "location_confidence": "low",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "ina.iq",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "b379edd7e9fff3b249b4a098dd6be93485f59bf21f8e8055124cbd98ff280b20"
-      ],
-      "sources": [
-        "وكالة الانباء العراقية (واع)"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-12T11:29:03+00:00",
-      "last_reported": "2026-10-12T11:29:03+00:00"
-    },
-    {
-      "id": "4a2e9e99126bbdec",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Pashteen Accuses Pakistani Military of Exploiting Pakhtunkhwa’s Resources",
-      "summary": "Pashteen Accuses Pakistani Military of Exploiting Pakhtunkhwa’s Resources TOLOnews",
-      "original_title": "Pashteen Accuses Pakistani Military of Exploiting Pakhtunkhwa’s Resources",
-      "original_summary": "Pashteen Accuses Pakistani Military of Exploiting Pakhtunkhwa’s Resources TOLOnews",
+      "title": "A village chief in Congo works to overcome Ebola prejudice even as the disease kills his relatives",
+      "summary": "A village chief in Congo works to overcome Ebola prejudice even as the disease kills his relatives Sentinel Colorado",
+      "original_title": "A village chief in Congo works to overcome Ebola prejudice even as the disease kills his relatives",
+      "original_summary": "A village chief in Congo works to overcome Ebola prejudice even as the disease kills his relatives Sentinel Colorado",
       "original_language": "en",
       "collection_language": "en",
-      "collection_language_name": "English / Afghanistan",
-      "collection_locale": "US:en",
-      "published": "2026-10-16T15:01:40+00:00",
-      "source": "TOLOnews",
+      "collection_language_name": "English / East Africa",
+      "collection_locale": "KE:en",
+      "published": "2026-10-29T20:43:58+00:00",
+      "source": "Sentinel Colorado",
       "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFByNWI5VVhpempQakYzUF9TYzlUb3d1YWN6Q251RW1OY2RxNXZKeE9tYmoyeVNxbC1icC1LN3pEZ1doUTVCU2RrUEExZ3g0bVdUaERTZi1XemUzUQ?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxOdkdSdlhMZEhRc3RhNi11bEVTWXczb1Q1M3Uyd01ZOFdWU19XYXlEMjZYQ0pnVUltckdDYmZvNmxGQ0l0NE1xaVJyTmdsWHpyWmlhZzBvLVJlSkdrbk1OcmpuRTBkYkpSY2pkMDFtVkRNT3pCR29IMHFEM1ZYUHBrTXFHdGkwV0ZNaW10cTFxVTBpQ2xmcVVaVlJta0lsWE1BVnd6WUNrWlpST3FXMi1MWnE3Nk1NYW1QUWdyMnRLV042YlhOX1NjbmVkV0xZakdYbnFKZnZob0M5UQ?oc=5",
       "collector": "Google News RSS",
       "country": null,
       "country_code": null,
@@ -49094,38 +51060,36 @@
       "longitude": null,
       "location_precision": "unknown",
       "location_confidence": "low",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "tolonews.com",
-      "targeted_source_kind": "local_language_media",
+      "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
-        "941530198efa4e64298bd430b01228015ca2265e415049f1729acf6386a4590b"
+        "7558e82b2d1b3250cadf6b15293d661293450274f230cc660c9d1d862809f2f4"
       ],
       "sources": [
-        "TOLOnews"
+        "Sentinel Colorado"
       ],
       "related_articles": [],
       "article_count": 1,
-      "first_reported": "2026-10-16T15:01:40+00:00",
-      "last_reported": "2026-10-16T15:01:40+00:00"
+      "first_reported": "2026-10-29T20:43:58+00:00",
+      "last_reported": "2026-10-29T20:43:58+00:00"
     },
     {
-      "id": "09817d3fec300fec",
+      "id": "cfbcc17cdcff66e3",
       "category": "Attacks",
       "categories": [
         "Attacks"
       ],
-      "title": "Kenyans urged to break mental health silence, seek timely help",
-      "summary": "Kenyans urged to break mental health silence, seek timely help www.standardmedia.co.ke",
-      "original_title": "Kenyans urged to break mental health silence, seek timely help",
-      "original_summary": "Kenyans urged to break mental health silence, seek timely help www.standardmedia.co.ke",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-10-18T07:00:00+00:00",
-      "source": "www.standardmedia.co.ke",
+      "title": "Dritto e rovescio: La copertina di Paolo Del Debbio Video",
+      "summary": "Dritto e rovescio: La copertina di Paolo Del Debbio Video Mediaset Infinity",
+      "original_title": "Dritto e rovescio: La copertina di Paolo Del Debbio Video",
+      "original_summary": "Dritto e rovescio: La copertina di Paolo Del Debbio Video Mediaset Infinity",
+      "original_language": "it",
+      "collection_language": "it",
+      "collection_language_name": "Italian",
+      "collection_locale": "IT:it",
+      "published": "2026-10-29T20:46:54+00:00",
+      "source": "Mediaset Infinity",
       "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxPNWZNaE8zblZ1TmtzeUdlSDhhNmFSZmhJVVRRdC1rdXRuNUYwNXpYWnNHWHBKMzRiWGkwZm1JTnBJdnp3ZG9RZjM5LWpHblJpeHlna3E4Ynd1UTNOSEM0Ym50RVNQeko5X201dW5IYkg1OUFIU1l3eVRFRHI0ZFcxNnhRb2NFZ0lHUUJoYWZ4cEd3bzVlT1pMMGxFRm5jSHZ4UkJoS3MxalFqTFNXbVppZUZiU3VqSEF3WjYtR1hGWXFkTER0NkE?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPV3Q5ZVNkTmM4b2t4SllHRDNVSHRrcEFSRzdTOGlXcm0yYmNtMlQ4STN4UFl4YURqTWdiV1kyLXFwVHdtRUR4MlRvNGhHTFAxMENCaVd0TS1SQ1RMOVp6OU96aXJyZ1FnS3VBWW9sWUtFY0tLVkItTTZzdmZRaW4yMFhRVUFiRzRhLWJRZU1vTkEzdW4weFB6TGRpcWVuNzFiV0JqdGZDM3FaaFJO?oc=5",
       "collector": "Google News RSS",
       "country": null,
       "country_code": null,
@@ -49135,38 +51099,36 @@
       "longitude": null,
       "location_precision": "unknown",
       "location_confidence": "low",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "standardmedia.co.ke",
-      "targeted_source_kind": "local_language_media",
+      "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
-        "0a277dbbf77613b13c435d4c887dd2fdbddb0c1faaf95c609a52f72932655405"
+        "15462486244373c43ce464033a1b58f1355d653b082a73276a579e9be9e6363f"
       ],
       "sources": [
-        "www.standardmedia.co.ke"
+        "Mediaset Infinity"
       ],
       "related_articles": [],
       "article_count": 1,
-      "first_reported": "2026-10-18T07:00:00+00:00",
-      "last_reported": "2026-10-18T07:00:00+00:00"
+      "first_reported": "2026-10-29T20:46:54+00:00",
+      "last_reported": "2026-10-29T20:46:54+00:00"
     },
     {
-      "id": "44804d9b2c0adc16",
+      "id": "9f61850396730463",
       "category": "Attacks",
       "categories": [
         "Attacks"
       ],
-      "title": "الانتخابات النصفية الأمريكية 2026",
-      "summary": "الانتخابات النصفية الأمريكية 2026 الجزيرة نت",
-      "original_title": "الانتخابات النصفية الأمريكية 2026",
-      "original_summary": "الانتخابات النصفية الأمريكية 2026 الجزيرة نت",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
-      "published": "2026-10-18T09:26:43+00:00",
-      "source": "الجزيرة نت",
+      "title": "Pensioni, FdI e Forza Italia all’attacco della nuova Quota 100. La Lega: decisione già presa",
+      "summary": "Pensioni, FdI e Forza Italia all’attacco della nuova Quota 100. La Lega: decisione già presa la Repubblica",
+      "original_title": "Pensioni, FdI e Forza Italia all’attacco della nuova Quota 100. La Lega: decisione già presa",
+      "original_summary": "Pensioni, FdI e Forza Italia all’attacco della nuova Quota 100. La Lega: decisione già presa la Repubblica",
+      "original_language": "it",
+      "collection_language": "it",
+      "collection_language_name": "Italian",
+      "collection_locale": "IT:it",
+      "published": "2026-10-29T21:09:48+00:00",
+      "source": "la Repubblica",
       "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE91MEgyUzJrN2EtLTRSVUlkOEg4bGIwY0M5V3BCQzFZbzlaUlhvcnBlNTRnTGRQQUtXY3dNNHczY3pQTDlLbWZRR1gtODlwN1hjeExLVjkyMFZKT2pCU085aW13?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQemwxV2ZGbmg3V0laRWc4djNkSnp1QXlMWkpVOGM0SHRqaHBsNG9ibHpQRWpjQ2lYdW05WUZFZk8tU1p6aENjYklVT041U28wTENzemo5cHh0YTFoMXRzTW04WDBldTNtZXdBRkEzLUR2NkJvRXpZZ0VDZVJiWFZCM253VjhxcUhOdnFwb2lQQUNyNmRjSE5sVmUwUE45RE1FRFo5NWx3NDJjTXRqM0RNUkptdHNYbi1ZTEVjSkxENUlLenY5T3lkaTJRbnJyTFhXZTdtdjBYRnJHNUlmSmg3X1RFQ2lLMmp5RlhQM0ptaw?oc=5",
       "collector": "Google News RSS",
       "country": null,
       "country_code": null,
@@ -49177,141 +51139,18 @@
       "location_precision": "unknown",
       "location_confidence": "low",
       "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "aljazeera.net",
+      "targeted_source": "repubblica.it",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
-        "9e86a9e91c46c763497e5523ff10422e4606b0904b78af4c1f85df5312d38b18"
+        "021b127da1ac82889bb32e5182a03fe7cdf7fbe6ad88727a8cc78d848c047595"
       ],
       "sources": [
-        "الجزيرة نت"
+        "la Repubblica"
       ],
       "related_articles": [],
       "article_count": 1,
-      "first_reported": "2026-10-18T09:26:43+00:00",
-      "last_reported": "2026-10-18T09:26:43+00:00"
-    },
-    {
-      "id": "50f0b467f3791e47",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "النقل تفعّل الدفع الإلكتروني في باصات جامعة بغداد » وكالة الانباء العراقية (واع) | اخبار العراق",
-      "summary": "النقل تفعّل الدفع الإلكتروني في باصات جامعة بغداد » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
-      "original_title": "النقل تفعّل الدفع الإلكتروني في باصات جامعة بغداد » وكالة الانباء العراقية (واع) | اخبار العراق",
-      "original_summary": "النقل تفعّل الدفع الإلكتروني في باصات جامعة بغداد » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
-      "published": "2026-10-19T07:29:52+00:00",
-      "source": "وكالة الانباء العراقية (واع)",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE45eFp6OGJOV1V4b0dBUXZlTFJIWlFLblFfdmE5aHNlM3dwMExhcFdGb1E1cVNVV3Q0WXhpM0R6TnQyUFNxNFdOMHdYUWI?oc=5",
-      "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
-      "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unknown",
-      "location_confidence": "low",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "ina.iq",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "118bb86cc79239659fbd749de5769738deb0f6665ceaf0db57e5122232b770ac"
-      ],
-      "sources": [
-        "وكالة الانباء العراقية (واع)"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-19T07:29:52+00:00",
-      "last_reported": "2026-10-19T07:29:52+00:00"
-    },
-    {
-      "id": "4bf991957e14ade0",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "وزير التربية يوجه بتوفير مستلزمات المدارس المهنية » وكالة الانباء العراقية (واع) | اخبار العراق",
-      "summary": "وزير التربية يوجه بتوفير مستلزمات المدارس المهنية » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
-      "original_title": "وزير التربية يوجه بتوفير مستلزمات المدارس المهنية » وكالة الانباء العراقية (واع) | اخبار العراق",
-      "original_summary": "وزير التربية يوجه بتوفير مستلزمات المدارس المهنية » وكالة الانباء العراقية (واع) | اخبار العراق وكالة الانباء العراقية (واع)",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic",
-      "collection_locale": "SA:ar",
-      "published": "2026-10-19T15:30:44+00:00",
-      "source": "وكالة الانباء العراقية (واع)",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFBNVDNHQ2pmNUY0R0lRenJGRi0wZ0k0X0x6OHZtU0NtU0VabFduQ1RXWTRObWJlSDJNUTIzWkxzRFFmVTlUbW5mUmlPdjU?oc=5",
-      "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
-      "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unknown",
-      "location_confidence": "low",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "ina.iq",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "35fc56cfa7250dff4f8be24e22ec1ead6e2cc56e0bae3b8fb1f6048b82684cfd"
-      ],
-      "sources": [
-        "وكالة الانباء العراقية (واع)"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-19T15:30:44+00:00",
-      "last_reported": "2026-10-19T15:30:44+00:00"
-    },
-    {
-      "id": "aaf62086c61e8d7c",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Blanchiment de capitaux : le Cameroun accélère ses réformes pour sortir de la liste grise du GAFI",
-      "summary": "Blanchiment de capitaux : le Cameroun accélère ses réformes pour sortir de la liste grise du GAFI Actu Cameroun",
-      "original_title": "Blanchiment de capitaux : le Cameroun accélère ses réformes pour sortir de la liste grise du GAFI",
-      "original_summary": "Blanchiment de capitaux : le Cameroun accélère ses réformes pour sortir de la liste grise du GAFI Actu Cameroun",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French / Africa",
-      "collection_locale": "FR:fr",
-      "published": "2026-10-22T07:00:00+00:00",
-      "source": "Actu Cameroun",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxOYWQ1YXU2a3JxWlY0Vm4yUnIzRG11em9fRDNYcnd1ZGFSamZPeVpCdUlFeHNTUGJpT1hZQ3QxRURFc2tIWDM1ZUxHR3VURkhWMFVPeGxuRWZHZi1RMlV4X1dvTGcwX0M4QUM1WHg2clVxVFBkRTJrcUdCUDNfQ0lzMEY0ZlBDc3dha3hMSXBHQUlPZnJKbE9mSGU1N3lZdkNDNTFuU05rVVdLSjRJRjlLbmpwYTc3Yjg5aHR3QjNnRlpCb2hpV3RvLTZ5YXk?oc=5",
-      "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
-      "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unknown",
-      "location_confidence": "low",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "actucameroun.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "79febba5e8a7b64c6df05236fb9e3f38832bcbd550aa8853113f641d04515586"
-      ],
-      "sources": [
-        "Actu Cameroun"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-22T07:00:00+00:00",
-      "last_reported": "2026-10-22T07:00:00+00:00"
+      "first_reported": "2026-10-29T21:09:48+00:00",
+      "last_reported": "2026-10-29T21:09:48+00:00"
     }
   ]
 }
