@@ -1,0 +1,67 @@
+{
+  "removed_at": "2026-11-01T17:05:38.933972+00:00",
+  "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
+  "events": [
+    {
+      "id": "b13c20d0e57d73e3",
+      "incident_id": "inc-6e27db2ef20c5154",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1mN1ZrT3YtR2pDZTJhSzFLTEVKLWtQd0VhS1dtMGk5T0kxcnl5TDhIbGRGaDJ6TGh3UkU5MDh1N2dybjE1Z3ppS3ZwZDVYZzlKMjJVWjJrMjlYUWlaX3FKUUM1amc1eHA1aV9wQ9IBbEFVX3lxTE0zZmkxcnlOU3ItTUhYTWt5OWxCc1AxVXQ3VXZYd05fcDY2TnVDYmZCVnVMYjFlUlI3dkU4TnlvbHF0U0hYdVRCbXNrSG9yZFBFVENVNEFnMEI2bUg2bUUtU2IwQlhKN05RWkNaRQ?oc=5",
+      "title": "Boko Haram militants kill at least 23 troops in Chad attack",
+      "summary": "An ambush by Boko Haram militants in Chad left at least 23 soldiers dead.",
+      "original_title": "Boko Haram militants kill at least 23 troops in Chad attack",
+      "original_language": "en",
+      "source": "DW.com",
+      "published": "2026-05-05T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "Boko Haram",
+      "primary_event_type": "ATTACK",
+      "country": "Chad",
+      "ai_relevance_score": 87,
+      "ai_relevance_reason": "Reports a concrete deadly terrorist ambush against military forces."
+    },
+    {
+      "id": "b2205c70ad467f4b",
+      "incident_id": "inc-5da51310219f3bb9",
+      "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxPeDZsdTBJaWRDMGZUcVJXTGg3Y0xoMWF2enBrT2lvRWo4bXpXUngtbDRQcDZjZ2ZJZ2lXS2dNTTVzYlFxMzJ3aGtGek5ZQjJWSm1KOU56ZktuaS1kcU53OXQ1RG9GdXh2X1FKTUdmQ3A2dDViNDFRTG1LTUd5YzJXT3p2aFI2OEhYVDFoWFhMbExWYk9ZTVFMeHhialZid2Z5UE9UWTBQWG9FQTR6MzRDcWFpVldjSGUwSFFFRXhHQWl4enlhdGkzZ0d1TVVORDBwVDBYbF9tRG5nQQ?oc=5",
+      "title": "UK Counter Terrorism Police investigate arson attack on abandoned synagogue in London",
+      "summary": "UK Counter Terrorism Police launched an investigation and made arrests following an arson attack on an abandoned synagogue in London.",
+      "original_title": "UK Counter Terrorism Police Investigate Arson Attack On Abandoned Synagogue In London",
+      "original_language": "en",
+      "source": "i24NEWS",
+      "published": "2026-05-05T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "United Kingdom",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports concrete counter-terrorism police investigation and arrests regarding an arson attack."
+    },
+    {
+      "id": "60086db9f3493209",
+      "incident_id": "inc-7e7ece1a195e5a88",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOaG1jaUhNb1RtUWtPVEE1TnZoejFHTlJxVWxURzBZbmdreGg1ajZSQWNiX01aOXFHYkJ5Y0NGb3hERGV3QzhjZHJqMzNtVi01Sk1YQVRuQVBERHF3VVRidUZEOUgtQW5kSjdxZEVxcWpFZUx6elh4T05SbGhMa0dNb2dSZkdNYnJYLV9RSlgwOURITXhjNGZTU2x2RjdvYTFOcWZHajU0QzhhNWtHVUlsWGJDd3FsejJvWFM4Q3VfQXjSAcABQVVfeXFMTmhtY2lITW9UbVFrT1RBNU52aHoxR05ScVVsVEcwWW5na3hoNWo2UkFjYl9NWjlxR2JCeWNDRm94RERld0M4Y2RyajMzbVYtNUpNWEFUbkFQRERxd1VUYnVGRDlILUFuZEo3cWRFcXFqRWVMenpYeE9OUmxoTGtHTW9nUmZHTWJyWC1fUUpYMDlESE14YzRmU1NsdkY3b2ExTnFmR2o1NEM4YTVrR1VJbFhiQ3dxbHoyb1hTOEN1X0F4?oc=5",
+      "title": "Businessman kidnapped by Tren de Aragua",
+      "summary": "A businessman was kidnapped in San Miguel, Chile, in an operation reportedly planned by the Tren de Aragua from a prison in Bogota, Colombia.",
+      "original_title": "A nombre del Tren de Aragua: Secuestro de empresario en San Miguel fue planificado desde cárcel en Bogotá",
+      "original_language": "es",
+      "source": "Teletrece",
+      "published": "2026-05-05T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "Tren de Aragua",
+      "primary_event_type": "ATTACK",
+      "country": "Chile",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Current report of a kidnapping operation with a specific actor and location."
+    }
+  ]
+}

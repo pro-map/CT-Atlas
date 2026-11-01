@@ -1,41 +1,41 @@
 {
   "schema_version": 2,
   "status": "partial",
-  "run_started_at": "2026-10-31T20:27:17.715664+00:00",
-  "last_attempt_at": "2026-10-31T20:27:17.715664+00:00",
-  "published_at": "2026-10-31T21:29:29.575038+00:00",
+  "run_started_at": "2026-11-01T16:04:11.226479+00:00",
+  "last_attempt_at": "2026-11-01T16:04:11.226479+00:00",
+  "published_at": "2026-11-01T17:14:53.116663+00:00",
   "recent": {
-    "candidates": 3474,
-    "reviewed": 3474,
-    "cached": 2267,
-    "new_reviews": 1207,
+    "candidates": 3219,
+    "reviewed": 3219,
+    "cached": 1665,
+    "new_reviews": 1554,
     "official_auto_accepted": 0,
-    "retained": 298,
-    "rejected": 3176,
+    "retained": 341,
+    "rejected": 2878,
     "pending": 0,
     "status": "complete",
-    "calls": 39,
+    "calls": 50,
     "primary_calls": 30,
-    "overflow_calls": 9,
+    "overflow_calls": 20,
     "reasons": [],
-    "window_start": "2026-10-28T20:27:17.715664+00:00",
-    "window_end": "2026-10-31T20:27:17.715664+00:00"
+    "window_start": "2026-10-29T16:04:11.226479+00:00",
+    "window_end": "2026-11-01T16:04:11.226479+00:00"
   },
   "backlog": {
-    "candidates": 2053,
-    "reviewed": 796,
-    "cached": 476,
-    "new_reviews": 320,
+    "candidates": 1889,
+    "reviewed": 725,
+    "cached": 565,
+    "new_reviews": 160,
     "official_auto_accepted": 0,
-    "retained": 36,
-    "rejected": 760,
-    "pending": 1257,
+    "retained": 25,
+    "rejected": 700,
+    "pending": 1164,
     "status": "partial",
-    "calls": 10,
+    "calls": 5,
     "primary_calls": 0,
-    "overflow_calls": 10,
+    "overflow_calls": 5,
     "reasons": [
-      "historical_budget"
+      "run_budget"
     ]
   },
   "maintenance": {
@@ -60,15 +60,14 @@
     },
     "gdelt": {
       "attempted": 10,
-      "http_attempts": 19,
-      "rate_limit_http_attempts": 16,
-      "rate_limited": 9,
+      "http_attempts": 16,
+      "invalid_response": 6,
       "failed": 10,
       "deferred_queries": [
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+financing%22+OR+%22terror+financing%22+OR+%22financing+terrorism%22+OR+%22terrorist+funding%22+OR+%22terror+finance+network%22%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
           "label": "gdelt:Terrorist Financing",
-          "reason": "http_429",
+          "reason": "invalid_response",
           "recovered": false
         },
         {
@@ -86,7 +85,7 @@
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+attack%22+OR+%22terror+attacks%22+OR+%22terror+attack%22+OR+%22terrorist+bombing%22+OR+%22terrorist+bomb+attack%22%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
           "label": "gdelt:Attacks",
-          "reason": "http_429",
+          "reason": "invalid_response",
           "recovered": false
         },
         {
@@ -104,19 +103,19 @@
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22online+radicalization%22+terrorism+OR+%22online+radicalisation%22+terrorism+OR+%22online+extremist+radicalization%22+OR+%22online+extremist+radicalisation%22+OR+%22terrorist+propaganda%22+online%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
           "label": "gdelt:Online / Cyber / AI",
-          "reason": "http_429",
+          "reason": "invalid_response",
           "recovered": false
         },
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28nuclear+OR+radioactive+OR+radiological+OR+cesium+OR+caesium+OR+thorium+OR+radiopharmaceutical+OR+%22dirty+bomb%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+%22bomb+plot%22%29+OR+%28%22uranium+smuggling%22+OR+%22illegal+uranium+mining%22+OR+%22red+mercury%22+OR+radioactive+OR+radiopharmaceutical+OR+cesium+OR+thorium%29+%28smuggling+OR+trafficking+OR+stolen+OR+theft+OR+seizure+OR+arrest+OR+investigation%29+OR+%28%22nuclear+power+plant%22+OR+%22nuclear+supply+chain%22+OR+%22nuclear+transport%22+OR+%22nuclear+sites%22%29+%28cyberattack+OR+sabotage+OR+drones+OR+%22terror+plot%22%29+OR+%28%22AI+for+nuclear%22+OR+%22cyberattack+on+nuclear+plant%22+OR+%22drones+over+nuclear+sites%22+OR+%22dirty+bomb%22%29+%28terrorist+OR+terrorism+OR+plot+OR+investigation%29+OR+%28%22Radioactive+material+theft%22+OR+%22Stolen+radioactive+source%22+OR+%22Missing+radioactive+source%22+OR+%22Lost+radioactive+material%22+OR+%22Nuclear+material+theft%22+OR+%22Nuclear+smuggling%22%29%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
           "label": "gdelt:Radiological/Nuclear",
-          "reason": "invalid_response",
+          "reason": "http_429",
           "recovered": false
         },
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%28%22improvised+explosive+device%22+OR+%22IED%22+OR+%22home-made+explosive+device%22+OR+%22improvised+explosive+device+cell%22+OR+%22IED+components+procurement%22+OR+%22clandestine+bomb+workshop%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22arrested%22+OR+%22seized%22%29+OR+%28%22bomb-making+materials%22+OR+%22bomb-making+instructions%22+OR+%22darknet+bomb-making+instructions%22+OR+%22bomb+plot%22+OR+%22explosives+manufacturing%22+OR+%22explosives+trafficking%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22arrested%22+OR+%22seized%22%29+OR+%28%22explosives+seizure%22+OR+%22stolen+detonators%22+OR+%22explosives+cache%22+OR+%22ANFO+bomb%22+OR+%22ammonium+nitrate+diversion%22+OR+%22TATP%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22arrested%22+OR+%22seized%22%29+OR+%28%22HMTD%22+OR+%22homemade+explosive+synthesis%22+OR+%22homemade+plastic+explosive%22+OR+%22pipe+bomb+plot%22+OR+%22pressure+cooker+bomb%22+OR+%22nail+bomb%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22arrested%22+OR+%22seized%22%29+OR+%28%22VBIED%22+OR+%22car+bomb%22+OR+%22suicide+vest%22+OR+%22explosive-laden+drone%22+OR+%22explosives+dropped+from+drones%22+OR+%22drone-dropped+grenade%22%29+%28%22terrorism%22+OR+%22terrorist%22+OR+%22extremist%22+OR+%22plot%22+OR+%22arrested%22+OR+%22seized%22%29%29&mode=artlist&format=json&maxrecords=75&timespan=3d",
           "label": "gdelt:Chemicals and Explosives",
-          "reason": "http_429",
+          "reason": "invalid_response",
           "recovered": false
         },
         {
@@ -126,22 +125,23 @@
           "recovered": false
         }
       ],
-      "invalid_response": 3
+      "rate_limit_http_attempts": 10,
+      "rate_limited": 6
     },
     "errors": 10,
     "status": "partial"
   },
   "reasons": [
-    "historical_budget",
-    "geolocation_review_required",
+    "run_budget",
     "backlog_pending",
     "source_errors",
-    "category_pending"
+    "category_pending",
+    "geolocation_review_required"
   ],
   "queue_filter": {
-    "expired": 5921,
-    "retired": 412,
-    "cancelled_history": 714,
+    "expired": 6426,
+    "retired": 383,
+    "cancelled_history": 718,
     "duplicates": 0
   },
   "budgets": {
@@ -149,28 +149,28 @@
       "per_run": 30,
       "per_day": 60,
       "used_this_run": 30,
-      "used_today": 60
+      "used_today": 30
     },
     "overflow": {
       "model": "gemini-3.1-flash-lite",
       "per_run": 25,
       "per_day": 50,
-      "used_this_run": 19,
-      "used_today": 30
+      "used_this_run": 25,
+      "used_today": 25
     },
     "historical_calls_per_run": 10,
-    "historical_calls_used": 10,
+    "historical_calls_used": 5,
     "maintenance_calls_per_run": 2
   },
   "geolocation": {
     "status": "complete",
     "pending": 0,
-    "located": 6049,
-    "unlocated": 109,
-    "completed_unlocated": 109,
+    "located": 6141,
+    "unlocated": 110,
+    "completed_unlocated": 110,
     "outcome": "success",
-    "processed_this_run": 75,
-    "review_required": 161
+    "processed_this_run": 96,
+    "review_required": 167
   },
   "categories": [
     {
@@ -195,7 +195,7 @@
       "stop_code": "budget_reached"
     }
   ],
-  "finalized_at": "2026-10-31T21:34:28.782083+00:00",
+  "finalized_at": "2026-11-01T17:20:09.223960+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success"
 }
