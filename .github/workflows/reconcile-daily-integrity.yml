@@ -36,13 +36,13 @@ jobs:
       - name: Snapshot and repair only validated metadata and the audited Garsten contradiction
         run: |
           python tools/daily_publication_audit.py snapshot
-          python tools/daily_publication_audit.py repair --apply --repair-known-geography --output "archive/daily-integrity-repair-${GITHUB_RUN_ID}.json"
+          python tools/daily_publication_audit.py repair --apply --repair-known-geography --output "archive/daily-integrity-repair-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.json"
           python tools/daily_publication_audit.py receipt --output "$RUNNER_TEMP/maintenance-receipt.json"
       - name: Preserve recovery and exact field-change evidence
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: daily-integrity-repair-${{ github.run_id }}
+          name: daily-integrity-repair-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/daily-before.json
             ${{ runner.temp }}/maintenance-receipt.json
@@ -55,7 +55,7 @@ jobs:
           set -euo pipefail
           git config user.name "CT Intelligence Map Bot"
           git config user.email "actions@github.com"
-          git add -- events.json "archive/daily-integrity-repair-${GITHUB_RUN_ID}.json"
+          git add -- events.json "archive/daily-integrity-repair-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.json"
           if ! git diff --cached --quiet; then
             git commit -m "Reconcile validated category metadata and audited Garsten location (zero AI)"
             git fetch origin main
@@ -80,15 +80,18 @@ jobs:
       - uses: ./.github/actions/build-events-lite
       - uses: actions/upload-pages-artifact@v5
         with:
+          name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
           path: "."
       - uses: actions/deploy-pages@v5
         id: deployment
+        with:
+          artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Verify the deployed repair
         run: python tools/daily_publication_audit.py verify --url "${{ steps.deployment.outputs.page_url }}" --expected publication-manifest.json --output publication-receipt-pages.json
       - uses: actions/upload-artifact@v6
         if: always()
         with:
-          name: repaired-publication-proof-${{ github.run_id }}
+          name: repaired-publication-proof-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             publication-manifest.json
             publication-receipt-pages.json

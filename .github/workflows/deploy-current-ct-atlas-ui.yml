@@ -201,17 +201,20 @@ jobs:
       - name: Upload website
         uses: actions/upload-pages-artifact@v5
         with:
+          name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
           path: "."
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+        with:
+          artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Verify the data actually served by GitHub Pages
         run: python3 tools/daily_publication_audit.py verify --url "${{ steps.deployment.outputs.page_url }}" --expected publication-manifest.json --output publication-receipt-pages.json
       - name: Retain Pages publication proof
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: ui-publication-proof-${{ github.run_id }}
+          name: ui-publication-proof-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             publication-manifest.json
             publication-receipt-pages.json
