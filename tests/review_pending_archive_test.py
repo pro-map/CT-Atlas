@@ -33,6 +33,7 @@ def answering(scores, calls, omit=()):
     def call_batch(payload):
         calls.append([entry["event_id"] for entry in payload])
         return [{"event_id": entry["event_id"], "relevance_score": scores(entry["title"]),
+                 "is_current_ct_event": scores(entry["title"]) >= 60,
                  "reason": "test", "categories": ["Attacks"], "english_title": f"EN {entry['title']}"}
                 for entry in payload if entry["title"] not in omit]
     return call_batch

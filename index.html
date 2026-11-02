@@ -6647,6 +6647,7 @@ let databaseResultsKey = "";
 let databaseResultsLoadedAt = 0;
 let databaseSourceVersion = "";
 let mapDatabaseVersion = "";
+let mapInitialLoadComplete = false;
 const DATABASE_RESULTS_CACHE_MS = 60 * 1000;
 let databaseLastError = "";
 let databaseLastStatus = "";
@@ -6949,7 +6950,7 @@ function loadEventsDatabase() {
     )
     .catch(
         () => fetch(
-            "events.json"
+            "events.json", { cache: "no-store" }
         )
         .then(
             response => {
@@ -7009,12 +7010,26 @@ const MAP_RECENT_EVENT_DAYS = 181;
 // The map's own file (events-map.json, built at publication time: attacks only,
 // ~1/4 of events-lite.json) or, if it is missing or unusable, the full database
 // reduced to the same shape here.
+// Keep a fingerprint of the received bytes before internal map keys are attached.
+function readMapSnapshotResponse(response) {
+    if (typeof response.arrayBuffer !== "function" || !globalThis.crypto?.subtle) return response.json();
+    return response.arrayBuffer().then(async bytes => {
+        const digest = await globalThis.crypto.subtle.digest("SHA-256", bytes);
+        const hash = Array.from(new Uint8Array(digest), value => value.toString(16).padStart(2, "0")).join("");
+        const data = JSON.parse(new TextDecoder().decode(bytes));
+        if (data && typeof data === "object") {
+            Object.defineProperty(data, "_publicationBytesHash", { value: hash, enumerable: false });
+        }
+        return data;
+    });
+}
+
 function loadMapDatabase() {
 
     return fetch("events-map.json", { cache: "no-store" })
     .then(response => {
         if (!response.ok) throw new Error("events-map.json unavailable");
-        return response.json();
+        return readMapSnapshotResponse(response);
     })
     .then(data => {
         if (!data || !Array.isArray(data.events) || !Array.isArray(data.recent_events)) {
@@ -7109,9 +7124,10 @@ function collectionStatusView(data) {
             status: String(item.status || "unknown")
         })) : [];
     const reportedReasons = Array.isArray(status.reasons) ? status.reasons : [];
-    const sourceErrors = Array.isArray(status.source?.errors) ? status.source.errors : [];
+    const sourceErrors = Array.isArray(status.source?.errors) ? status.source.errors.length
+        : collectionStatusCount(status.source?.errors) || 0;
     const reasons = [...new Set(reportedReasons.map(String))];
-    const sourceIncomplete = sourceErrors.length || status.source?.status === "partial" || status.source?.status === "failed"
+    const sourceIncomplete = sourceErrors > 0 || status.source?.status === "partial" || status.source?.status === "failed"
         || (collectionStatusCount(status.source?.failed_requests) || 0) > 0;
     if (sourceIncomplete && !reasons.includes("source_errors")) reasons.push("source_errors");
     const reasonLabels = {
@@ -7134,6 +7150,7 @@ function collectionStatusView(data) {
         maintenance_pending: "Earlier records await re-review",
         geolocation_failed: "Location review could not finish",
         geolocation_pending: "Some location reviews remain pending",
+        geolocation_review_required: "Some reported locations need verification",
         radnuc_background_partial: "RadNuc background collection is incomplete",
         category_pending: "Some category updates are incomplete",
         collection_failed: "News collection could not finish",
@@ -7141,6 +7158,8 @@ function collectionStatusView(data) {
     };
     let state = ["complete", "partial", "failed"].includes(status.status) ? status.status : "unknown";
     const locationPending = collectionStatusCount(status.geolocation?.pending);
+    const locationReview = collectionStatusCount(status.geolocation?.review_required);
+    if (locationReview > 0 && !reasons.includes("geolocation_review_required")) reasons.push("geolocation_review_required");
     const completedUnlocated = collectionStatusCount(status.geolocation?.completed_unlocated);
     const locationUnlocated = completedUnlocated !== null ? completedUnlocated
         : status.geolocation?.status === "complete" && locationPending === 0 ? collectionStatusCount(status.geolocation?.unlocated) : null;
@@ -7166,8 +7185,9 @@ function collectionStatusView(data) {
     const end = collectionStatusDate(status.recent?.window_end);
     const window = start !== "Not reported" && end !== "Not reported" ? "Recent window: " + start + " – " + end : "";
     const reasonText = [...new Set(reasons.map(reason => reasonLabels[reason] || "Other collection issue"))].join(" · ");
-    const locations = locationPending !== null || locationUnlocated !== null
-        ? "Location reviews pending: " + format(locationPending) + " · Reviewed without a location: " + format(locationUnlocated) : "";
+    const locations = locationPending !== null || locationUnlocated !== null || locationReview !== null
+        ? "Location reviews pending: " + format(locationPending) + " · Reviewed without a location: " + format(locationUnlocated)
+            + (locationReview !== null ? " · Reported locations needing verification: " + format(locationReview) : "") : "";
     for (const item of categories) item.note = reasonLabels[item.stopCode] || "";
     return {
         state, title, counts: counts.join("\n"),
@@ -7229,6 +7249,44 @@ loadMapDatabase()
 .then(
     data => {
         renderCollectionStatus(data);
+        applyMapDatabase(data);
+    }
+)
+
+.catch(
+    error => {
+
+
+        console.error(
+            error
+        );
+
+
+        renderCollectionStatus(null);
+        const statusTitle = document.getElementById("collectionStatusTitle");
+        if (statusTitle) statusTitle.textContent = "Update status unavailable";
+
+        document.getElementById(
+            "counter"
+        ).innerText =
+            "Database unavailable";
+
+    }
+)
+.finally(() => { mapInitialLoadComplete = true; });
+
+
+
+// A visible page follows newly published datasets without resetting its filters or view.
+// Poll only the small manifest; download map data when its canonical hash changes.
+let mapSnapshotStatusFinalizedAt = "";
+let mapSnapshotBytesHash = "";
+let mapPublicationSignature = "";
+let mapPublicationCheckedAt = 0;
+let mapPublicationPromise = null;
+const MAP_PUBLICATION_POLL_MS = 60 * 1000;
+
+function applyMapDatabase(data) {
         for (const id of ['collectionQueryCount', 'healthQueryCount']) {
             const element = document.getElementById(id);
             if (element) element.textContent = Number.isFinite(data.search_query_count) ? data.search_query_count : '—';
@@ -7273,6 +7331,8 @@ loadMapDatabase()
 
 
         mapDatabaseVersion = String(data.last_updated || data.updated_at || "");
+        mapSnapshotStatusFinalizedAt = String(data.collection_status?.finalized_at || "");
+        mapSnapshotBytesHash = String(data._publicationBytesHash || "");
         if (databaseActivated && !databaseSnapshotCompatible()) {
             queryDatabase(true).catch(() => {});
         }
@@ -7343,30 +7403,63 @@ loadMapDatabase()
 
         refreshDashboard();
 
+}
+
+function mapPublicationMatches(data, target) {
+    return !!target && typeof target.sha256_bytes === "string" && /^[a-f0-9]{64}$/.test(target.sha256_bytes)
+        && data._publicationBytesHash === target.sha256_bytes
+        && typeof target.last_updated === "string" && !!target.last_updated
+        && String(data.last_updated || data.updated_at || "") === target.last_updated
+        && String(data.collection_status?.finalized_at || "") === String(target.collection_status_finalized_at || "")
+        && Array.isArray(data.events) && Array.isArray(data.recent_events)
+        && data.events.length + data.recent_events.length === target.record_count;
+}
+
+function refreshMapPublication(force = false) {
+    if (!mapInitialLoadComplete || chronologySelectedKeys.size) return Promise.resolve();
+    if (document.visibilityState === "hidden") return Promise.resolve();
+    if (mapPublicationPromise) return mapPublicationPromise;
+    if (!force && mapPublicationCheckedAt && Date.now() - mapPublicationCheckedAt < MAP_PUBLICATION_POLL_MS) {
+        return Promise.resolve();
     }
-)
-
-.catch(
-    error => {
-
-
-        console.error(
-            error
-        );
-
-
-        renderCollectionStatus(null);
-        const statusTitle = document.getElementById("collectionStatusTitle");
-        if (statusTitle) statusTitle.textContent = "Update status unavailable";
-
-        document.getElementById(
-            "counter"
-        ).innerText =
-            "Database unavailable";
-
-    }
-);
-
+    mapPublicationCheckedAt = Date.now();
+    const previousSource = window.eventsDataSource;
+    mapPublicationPromise = fetch("publication-manifest.json", { cache: "no-store" })
+        .then(response => {
+            if (!response.ok) throw new Error("Publication manifest unavailable");
+            return response.json();
+        })
+        .then(async manifest => {
+            const target = manifest?.files?.["events-map.json"];
+            const signature = target?.sha256_canonical_json;
+            if (typeof signature !== "string" || !/^[a-f0-9]{64}$/.test(signature)) {
+                throw new Error("Invalid map publication manifest");
+            }
+            if (signature === mapPublicationSignature) return;
+            const loaded = {last_updated: mapDatabaseVersion, _publicationBytesHash: mapSnapshotBytesHash,
+                collection_status: {finalized_at: mapSnapshotStatusFinalizedAt},
+                events: allEvents, recent_events: recentContextEvents};
+            if (!mapPublicationSignature && mapPublicationMatches(loaded, target)) {
+                mapPublicationSignature = signature;
+                return;
+            }
+            const data = await loadMapDatabase();
+            if (!mapPublicationMatches(data, target)) {
+                throw new Error("Published map and manifest are not yet synchronized");
+            }
+            if (chronologySelectedKeys.size) return;
+            renderCollectionStatus(data);
+            applyMapDatabase(data);
+            mapPublicationSignature = signature;
+        })
+        .catch(error => {
+            // Keep the last successful map throughout transient publication or network failures.
+            window.eventsDataSource = previousSource;
+            console.warn("Map refresh deferred:", error.message || error);
+        })
+        .finally(() => { mapPublicationPromise = null; });
+    return mapPublicationPromise;
+}
 
 
 function withinDays(
@@ -15001,6 +15094,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const refreshVisibleArchive = () => {
         if (document.visibilityState !== "hidden") {
             refreshDatabaseArchiveTotal();
+            refreshMapPublication();
             refreshVisibleDatabaseBackground();
             refreshTimeSensitiveDashboard();
         }

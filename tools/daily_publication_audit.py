@@ -3,6 +3,7 @@
 from __future__ import annotations
 import argparse
 import copy
+import hashlib
 import json
 import os
 import shutil
@@ -92,7 +93,10 @@ def receipt(before, output):
 
 
 def manifest(directory, output):
-    root = Path(directory); documents = {name: read(root/name) for name in FILES}
+    root = Path(directory)
+    from compact_mirror_json import read_mirror_bytes
+    payloads = {name: read_mirror_bytes(root, name) for name in FILES}
+    documents = {name: json.loads(content) for name, content in payloads.items()}
     import build_events_lite as light
     from retired_categories import active_event, is_retired_judicial_event
     light.validate(documents['events-lite.json'], documents['events.json'])
@@ -108,6 +112,10 @@ def manifest(directory, output):
     result = {'version': 1, 'created_at': datetime.now(timezone.utc).isoformat(),
               'source_revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
               'files': {name: {'sha256_canonical_json': digest(document),
+                              'sha256_bytes': hashlib.sha256(payloads[name]).hexdigest(),
+                              'size_bytes': len(payloads[name]),
+                              'last_updated': document.get('last_updated'),
+                              'collection_status_finalized_at': (document.get('collection_status') or {}).get('finalized_at'),
                               'record_count': len(rows(document, name=='events-map.json'))}
                         for name, document in documents.items()}}
     write(output, result)
@@ -125,11 +133,18 @@ def verify(url, expected_path, output, attempts=5, sleep=time.sleep):
                 raise ValueError('Unexpected manifest path')
             try:
                 request = urllib.request.Request(url.rstrip('/')+'/'+name+'?integrity='+str(time.time_ns()),
-                    headers={'Cache-Control': 'no-cache', 'User-Agent':'CT-Atlas-Publication-Check/1.0'})
-                with urllib.request.urlopen(request, timeout=30) as response:
-                    content = response.read(40*1024*1024+1)
-                if len(content)>40*1024*1024:
-                    raise ValueError('Published dataset exceeds audit read limit')
+                    headers={'Cache-Control': 'no-cache', 'Accept-Encoding': 'identity',
+                             'User-Agent':'CT-Atlas-Publication-Check/1.0'})
+                # The local build manifest is trusted and knows the real payload size.
+                # A fixed 40 MiB ceiling rejected valid deployments as the database grew.
+                expected_size = target.get('size_bytes', 0)
+                if not isinstance(expected_size, int) or isinstance(expected_size, bool) or expected_size < 0:
+                    raise ValueError('Invalid expected dataset size')
+                read_limit = max(40 * 1024 * 1024, expected_size)
+                with urllib.request.urlopen(request, timeout=60) as response:
+                    content = response.read(read_limit + 1)
+                if len(content) > read_limit:
+                    raise ValueError('Published dataset exceeds its expected size bound')
                 data = json.loads(content)
                 if digest(data) != target['sha256_canonical_json'] or len(rows(data, name=='events-map.json')) != target['record_count']:
                     raise ValueError('Published data differs from expected deployment')

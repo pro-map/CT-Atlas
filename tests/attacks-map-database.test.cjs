@@ -62,7 +62,7 @@ async function runLoader(responses){
       return {ok:true,status:200,json:async()=>body};
     }
   });
-  vm.runInContext(retirementDataSource+extract('isMapAttackEvent')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 181;'+extract('loadMapDatabase'),c);
+  vm.runInContext(retirementDataSource+extract('isMapAttackEvent')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 181;'+extract('readMapSnapshotResponse')+extract('loadMapDatabase'),c);
   const data=await vm.runInContext('loadMapDatabase()',c);
   return {data:plain(data),source:c.window.eventsDataSource};
 }
@@ -716,7 +716,7 @@ test('an open map ages a RadNuc item out of the 24h badge and marker cache witho
   assert.equal(draws,1);
   c.refreshTimeSensitiveDashboard();assert.equal(draws,1,'same minute does not redraw markers');
   now+=61000;c.refreshTimeSensitiveDashboard();assert.equal(draws,1,'unchanged membership preserves marker state');
-  assert.match(html,/refreshDatabaseArchiveTotal\(\);\s*refreshVisibleDatabaseBackground\(\);\s*refreshTimeSensitiveDashboard\(\);/);
+  assert.match(html,/refreshDatabaseArchiveTotal\(\);\s*refreshMapPublication\(\);\s*refreshVisibleDatabaseBackground\(\);\s*refreshTimeSensitiveDashboard\(\);/);
 });
 
 

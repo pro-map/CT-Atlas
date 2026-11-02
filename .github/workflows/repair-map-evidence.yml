@@ -41,17 +41,24 @@ jobs:
           python - <<'PY'
           import copy,json,os
           from pathlib import Path
-          from map_evidence_integrity import decisions,repair_document
+          from map_evidence_integrity import decisions,repair_document,audit
+          from geolocate import resolve_city
           before=json.loads(Path(os.environ['RUNNER_TEMP'],'daily-before.json').read_text())
           after=json.loads(Path('events.json').read_text())
           old={e['id']:e for e in before['events']};new={e['id']:e for e in after['events']}
           plan=decisions();allowed=set(plan['rules'])|{m['canonical_id']for m in plan['merges']}|{m['retired_id']for m in plan['merges']}
+          # Deterministic repairs are bounded by evidence in this run's full
+          # snapshot: failed city lookups and repeated original primary articles.
+          # Neither a similar translated title nor a reused incident ID qualifies.
+          allowed|={e['id']for e in before['events']if e.get('geolocation_validation_issue')=='ambiguous_or_unresolved_city'}
+          allowed|={i for group in audit(before['events'])['duplicate_original_article_groups']for i in group}
           assert len(new)==len(after['events']) and set(new)<=set(old)
           assert (set(old)-set(new))<=allowed
           assert all(old[i]==new[i] for i in set(old)&set(new)-allowed)
-          _,again=repair_document(copy.deepcopy(after))
+          _,again=repair_document(copy.deepcopy(after),resolve_city=resolve_city)
           assert not again['changes'] and not again['removed'], 'Repair must be idempotent'
           assert not again['after']['duplicate_ids'] and not again['after']['category_field_mismatches']
+          assert not again['after']['duplicate_original_article_groups']
           # No output path outside events and the evidence archive is staged below.
           PY
       - name: Preserve full original data and correction evidence

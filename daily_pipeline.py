@@ -121,7 +121,7 @@ def finish_status(status, telemetry, google, gdelt, now, recent_days=3):
     reasons = list(telemetry.get("reasons") or [])
     for lane in ("recent", "backlog", "maintenance"):
         if result[lane].get("pending", 0):
-            reason = "recent_pending" if lane == "recent" else "backlog_pending"
+            reason = f"{lane}_pending"
             if reason not in reasons:
                 reasons.append(reason)
     if source_errors:

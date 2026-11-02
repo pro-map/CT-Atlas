@@ -21,7 +21,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 LANES = ("recent", "backlog", "maintenance")
 DERIVED_REASONS = {"recent_pending", "backlog_pending", "maintenance_pending", "category_pending",
-                   "geolocation_pending", "source_errors", "radnuc_background_partial"}
+                   "geolocation_pending", "geolocation_review_required", "source_errors", "radnuc_background_partial"}
 
 
 def timestamp(value):

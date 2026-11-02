@@ -105,7 +105,7 @@ class CompactMirrorJsonTests(unittest.TestCase):
 
     def test_deploy_script_uses_compaction_and_size_check_before_upload(self):
         script = (ROOT / "tools/deploy_mirror.sh").read_text()
-        compact = 'tools/compact_mirror_json.py --input events.json --output "$STAGING/events.json"'
+        compact = 'tools/compact_mirror_json.py --input events.json --output "$STAGING/events.json" --allow-chunks'
         size_check = 'tools/compact_mirror_json.py --check-directory "$STAGING"'
         self.assertIn(compact, script)
         self.assertIn(size_check, script)
@@ -122,8 +122,54 @@ class CompactMirrorJsonTests(unittest.TestCase):
         compact = mirror.compact_json_bytes(raw)
         self.assertEqual(mirror._decode(raw), mirror._decode(compact))
         self.assertEqual(source.read_bytes(), raw)
-        self.assertLessEqual(len(compact), mirror.MAX_ASSET_BYTES)
         self.assertEqual(len(json.loads(raw)["events"]), len(json.loads(compact)["events"]))
+        mirror.write_mirror_copy(source, self.target)
+        self.assertEqual(mirror.read_mirror_bytes(self.target.parent), compact)
+        mirror.check_asset_sizes(self.target.parent)
+
+    def test_oversized_json_uses_exact_bytes_even_across_unicode_and_numbers(self):
+        raw = '{"events":[{"id":"a","summary":"عربي 中文 😀"}],"n":1.2300e+04}'.encode()
+        self.source.write_bytes(raw)
+        self.target.write_bytes(b"old oversized asset")
+        report = mirror.write_mirror_copy(self.source, self.target, limit=30, chunk_bytes=7)
+        self.assertFalse(self.target.exists())
+        self.assertEqual(report["format"], mirror.SHARD_FORMAT)
+        self.assertGreater(len(report["parts"]), 1)
+        for part in report["parts"]:
+            self.assertLessEqual((self.target.parent / part["path"]).stat().st_size, 7)
+        self.assertEqual(mirror.read_mirror_bytes(self.target.parent), mirror.compact_json_bytes(raw))
+        self.assertEqual(self.source.read_bytes(), raw)
+
+    def test_chunk_content_damage_and_path_escape_are_refused(self):
+        self.source.write_bytes(b'{"events":[{"id":"a","summary":"a long string"}]}')
+        report = mirror.write_mirror_copy(self.source, self.target, limit=30, chunk_bytes=10)
+        part = self.target.parent / report["parts"][0]["path"]
+        original = part.read_bytes()
+        part.write_bytes(b"x" * len(original))
+        with self.assertRaisesRegex(ValueError, "content"):
+            mirror.read_mirror_bytes(self.target.parent)
+        part.write_bytes(original)
+        manifest_path = self.target.parent / mirror.SHARD_MANIFEST
+        manifest = json.loads(manifest_path.read_bytes())
+        manifest["parts"][0]["path"] = "../events.json"
+        manifest_path.write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(ValueError, "path"):
+            mirror.read_mirror_bytes(self.target.parent)
+
+    def test_small_document_keeps_ordinary_full_json(self):
+        self.source.write_bytes(b'{"events":[{"id":"a"}]}')
+        report = mirror.write_mirror_copy(self.source, self.target)
+        self.assertEqual(report["format"], "single-json")
+        self.assertTrue(self.target.exists())
+        self.assertFalse((self.target.parent / mirror.SHARD_MANIFEST).exists())
+
+    def test_chunk_failure_keeps_preexisting_full_asset(self):
+        self.source.write_bytes(b'{"events":[{"id":"a","summary":"a long string"}]}')
+        self.target.write_bytes(b"previous")
+        with patch.object(mirror, "_atomic_write", side_effect=OSError("test")):
+            with self.assertRaises(OSError):
+                mirror.write_mirror_copy(self.source, self.target, limit=20)
+        self.assertEqual(self.target.read_bytes(), b"previous")
 
 
 if __name__ == "__main__":
