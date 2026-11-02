@@ -92,8 +92,13 @@ jobs:
           grep -q 'id="databasePanel"' index.html
           grep -q 'id="attackTickerList"' index.html
           grep -q 'CT Atlas Infrastructure' index.html
-          grep -q '<div id="disclaimerSubtitle">CT Atlas</div>' index.html
-          grep -q 'independent OSINT prototype created for research and analytical purposes' index.html
+          grep -q 'id="readme"' main.html
+          grep -q 'Use only for authorised duties.' main.html
+          grep -q 'Do not retain results on CT ATLAS beyond relevance assessment.' main.html
+          if grep -q 'id="disclaimerButton"\|id="disclaimerPanel"\|id="operationalDisclaimer"' index.html; then
+            echo "Superseded general map disclaimer is still present" >&2
+            exit 1
+          fi
           grep -q 'OFFICIAL REGIONS' index.html
           grep -q 'MEMBER COUNTRIES' index.html
           grep -q 'INTERPOL_CT_events_' index.html

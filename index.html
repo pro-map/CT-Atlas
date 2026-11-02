@@ -2097,23 +2097,6 @@ body::before {
     letter-spacing: .11em;
 }
 
-#operationalDisclaimer {
-    position: fixed;
-    left: 250px;
-    right: 292px;
-    bottom: 0;
-    z-index: 750;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    color: rgba(129,151,165,.50);
-    font-size: 7px;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-}
-
 /* Responsive fallback */
 @media (max-width: 1180px) {
     #main {
@@ -2122,11 +2105,6 @@ body::before {
 
     #analyticsRail {
         display: none;
-    }
-
-    #operationalDisclaimer {
-        left: 230px;
-        right: 0;
     }
 
     #classificationBlock {
@@ -2176,20 +2154,7 @@ body::before {
 #healthStatusNote{margin-top:11px;padding:9px 10px;color:#647d8e;background:rgba(3,11,17,.38);border-left:2px solid #29485b;font-size:8px;line-height:1.55}
 
 
-#healthStatusLauncher{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-#disclaimerButton{width:100%;min-height:31px;padding:6px 9px;background:rgba(8,24,35,.72);color:#8fa8b8;border:1px solid #223b4c;border-radius:3px;font-size:9px;font-weight:650;letter-spacing:.10em;text-transform:uppercase;cursor:pointer}
-#disclaimerButton:hover{color:#dceaf2;border-color:#3a627b;background:#102433}
 
-#disclaimerPanel{position:fixed;inset:0;z-index:3110;display:none;pointer-events:none}
-#disclaimerPanel.open{display:block}
-#disclaimerWindow{position:absolute;left:270px;bottom:28px;width:440px;background:rgba(7,20,30,.97);border:1px solid #2a4658;border-radius:4px;box-shadow:0 20px 60px rgba(0,0,0,.55);backdrop-filter:blur(10px);pointer-events:auto}
-#disclaimerHeader{display:flex;align-items:center;justify-content:space-between;padding:13px 14px 11px;background:#0a1924;border-bottom:1px solid #294151}
-#disclaimerTitle{color:#edf4f8;font-size:11px;font-weight:750;letter-spacing:.11em}
-#disclaimerSubtitle{margin-top:4px;color:#70899b;font-size:8px;letter-spacing:.06em;text-transform:uppercase}
-#disclaimerClose{width:26px;height:26px;padding:0;border:1px solid #294455;border-radius:3px;background:#0a1721;color:#9bb0be;font-size:18px;cursor:pointer}
-#disclaimerBody{padding:14px;color:#a9bcc8;font-size:10px;line-height:1.65}
-#disclaimerBody p{margin:0 0 12px}
-#disclaimerBody p:last-child{margin-bottom:0}
 
 
 /* ============================================================
@@ -3118,8 +3083,7 @@ html, body {
 
     /* Large panels fit completely inside iPhone screen. */
     #chronologyPanel,
-    #healthPanel,
-    #disclaimerPanel {
+    #healthPanel {
         width: calc(100vw - 16px) !important;
         max-width: calc(100vw - 16px) !important;
         max-height: calc(100dvh - 80px) !important;
@@ -5438,7 +5402,6 @@ Visible rate
 
 <div id="healthStatusLauncher">
   <button id="healthStatusButton" type="button">Health Status</button>
-  <button id="disclaimerButton" type="button">Disclaimer</button>
 </div>
 
 
@@ -5528,9 +5491,6 @@ Visible rate
 
 </div>
 
-<div id="operationalDisclaimer">
-    Open-source analytical environment · 11 source languages translated into English · header casualty counts cover the most recently completed Paris calendar day (yesterday, 00:00-24:00 Paris), split into victims killed/wounded and terrorists killed/captured; publication date alone is never sufficient to confirm timing · verify against primary sources before operational use
-</div>
 
 
 </div>
@@ -5605,22 +5565,6 @@ Visible rate
 
 
 
-<div id="disclaimerPanel" aria-hidden="true">
-  <div id="disclaimerWindow">
-    <div id="disclaimerHeader">
-      <div>
-        <div id="disclaimerTitle">DISCLAIMER</div>
-        <div id="disclaimerSubtitle">CT Atlas</div>
-      </div>
-      <button id="disclaimerClose" type="button" aria-label="Close">×</button>
-    </div>
-    <div id="disclaimerBody">
-      <p>
-        This analytical tool is an independent OSINT prototype created for research and analytical purposes. The information displayed is derived from open sources and automated AI-assisted processing. It should not be considered verified intelligence and must be independently validated before any operational or decision-making use.
-      </p>
-    </div>
-  </div>
-</div>
 
 
 
@@ -12614,20 +12558,6 @@ document.addEventListener("DOMContentLoaded",()=>{
 });
 
 
-function openDisclaimer(){
-  const p=document.getElementById("disclaimerPanel");
-  if(p){p.classList.add("open");p.setAttribute("aria-hidden","false");}
-}
-function closeDisclaimer(){
-  const p=document.getElementById("disclaimerPanel");
-  if(p){p.classList.remove("open");p.setAttribute("aria-hidden","true");}
-}
-document.addEventListener("DOMContentLoaded",()=>{
-  document.getElementById("disclaimerButton")?.addEventListener("click",openDisclaimer);
-  document.getElementById("disclaimerClose")?.addEventListener("click",closeDisclaimer);
-  document.getElementById("disclaimerPanel")?.addEventListener("click",e=>{if(e.target.id==="disclaimerPanel")closeDisclaimer();});
-  document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDisclaimer();});
-});
 
 
 function initialiseFacetCountBadges() {
