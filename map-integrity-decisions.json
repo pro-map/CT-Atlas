@@ -1260,6 +1260,86 @@
         "https://news.google.com/rss/articles/CBMipAFBVV95cUxNM2JtZVdvWWNSZlFZemRsZDRjazJNemVXNUVud0tLN0ZONkdnMnlwa056ZjZpRkZWSXVuMHFKR0xMc0tDQ3ZBa3lSWVc0OElyLVJLc1NRT2E3eUcwNXhCeTZRNXViNG9zMnpWZ1ZpaU9RT09Va0JtTmEzcU1pRVdXb252U1J2dEhOMmZ4eTNoRlNKbmNBa0NSVzl1QWl6SjlmMlpPdg?oc=5",
         "https://news.google.com/rss/articles/CBMirAFBVV95cUxON1NURk1abFV0dXpSTlJQd3dzaS1yRzBFckxoSS1aQnFHYUpuMnpQcnZyWWpEaG1qZjB2eTdwU01QVDM1VFphTThJc2t5anpTeGZwSXJ2bWVSYUtfRFQ3TTZRaW9zUmpaSk1DSXJ6TjV6QXdDNUFBcWJYVHVJVXRtcnZQbHhSSERYQlhULTc1MmIydFJySkFUWEUxSWoxc29tWXFzZzZfUEwtSFlr?oc=5"
       ]
+    },
+    "d936532386fe67a6": {
+      "expected_primary_evidence": "f8830144e5e6dcc948b64353f4a48181a6c7d208c00ca8f6aa08f979200a4a3d",
+      "reason": "The retained source describes people assembling for fuel-price demonstrations, with no terrorist or criminal incident identified; AI marks current_ct_event=false and supplies no supported category. Retain outside the active incident map for review.",
+      "action": "quarantine",
+      "reviewed_article_urls": [
+        "https://news.google.com/rss/articles/CBMitwFBVV95cUxNM19ZRXVuTG0zbGpvc2l5VE1kWkVkcXVRM1JITVY3Ql9tbWpjZlNvZWY1NE1NQmNWLWpBbHBfZkNPOGhtUE5tbEtRQzJRc3lpQjZKYjk5RlFyaFFkS0dGMUcyM1Y5Ui15aWd1c2hSRGJDSFFOSWNZT2ZrajhWNDZmVGxOSG5DWnJpU3UxblpZMVhiMVQ5XzlkWVdIY1BfeXZWX19kQ2lvdzFJUGZUVjlIbi02UFZTc1k?oc=5"
+      ]
+    },
+    "4ec6a7647d3f4c05": {
+      "expected_primary_evidence": "95a39702be45a0ae683405e2088dfed2f167ef9ed6878697dd9f3a9d8c0d2246",
+      "reason": "The retained source reports a missing priest and a request for assistance, without evidence of kidnapping or a terrorist nexus; AI marks current_ct_event=false and supplies no supported category. Retain outside the active incident map for review.",
+      "action": "quarantine",
+      "reviewed_article_urls": [
+        "https://news.google.com/rss/articles/CBMi6AFBVV95cUxQWGdManhIX1pMZGxlZ1pTS0tsLVJhbXZZblRJMVJVVmwzUnJTVGs5cTgxRGJGM0JZYVctSUtMbU03cVF3MEluRFphOV90eXF6cmFnUUdCUFFkc29NTXBoX3ZzZDYwZGw1UnB0SVduWVlWLUxnaEhPV05uWklZMFdGMHpJNWszUmpwVV96RVJPZVdaVU5OQndoMFpsMVhOeHMtTE1idWx4VDFtY2w5OVlNdnkzd240Ung4MUFtRkNPQzlrOGRtbGgxUU9Nb04zQ1RYTWl0UHVyTjN3Z1ZZTF9WNjBXdkJ4WGdp0gGDAkFVX3lxTE5fQkJ1b2N1S0Y4Yl93Wm5XekMzdjQtUjBPYUd2SWpOcjUyLXc1Si1telVrYzh6ZmpyaGRJWkZERGVhWmJyQk1ybnk4WS1vTXctWjRnRjZjV2Z1YWx6TTVLZU1nZEtRQTlXdDZRbDNBLVRWNDFpTFdlcWJFX00wZjA4WmVHWm1jSVhhcjNldjAyOVBzS1Y2cDVGQ2dYZGJoNC13aVFCVjZZZmhCUUpzeWZxZmM5SURTNFdsaGZHdHpTenVsYkRuQTJzc3lwU2d0cWtEX3dBNWduN2FTWlNVSVpNMlJfekJXZDU3OWxVWFNRbVZRbzhIQjhEbFdVeDVRX21vdkk?oc=5"
+      ]
+    },
+    "19ff3e0be9e82517": {
+      "expected_primary_evidence": "a10aa6fd62b8977b1f3c9a08c60fb1c9f77ccd00b0990c4afd7c8df09ecdd1bc",
+      "reason": "The retained source describes an arrest following a shooting and seizure of two M16 rifles, without chemical agents or explosives. Classify as arrests and weapons.",
+      "categories": [
+        "Arrests",
+        "Weapons"
+      ],
+      "reviewed_article_urls": [
+        "https://news.google.com/rss/articles/CBMi7AVBVV95cUxOMnN5QVc4eFZyV24zLXBLdHR1LUFpNDRVdmN1MEdWVW45SlM2Z2dmbXh1OE1USEoxblZscEF0dy01aWplYjZsWWJiRko0SXBKM29GdU9NbFlvU1Ffd0Izc3Q2QnowdFFQcktaRUdESmFBZlM0Tnl3cmxPa0Q2bUFSc1VPMWNvZGJhZVk3RGxFMk1BeGU4cXhVQTVhZmk0RnA5LTlYQlNuSDVPZUc5MHdlVlJlRnpLemFmT3lJaEVJQVFNbGo2UVJvczBMLVhoUVhlalFrVFFIdTdVTnFYUWY3QUdjSFFMbzlYYWFMOEF3aU9ZQUl6cVg3clZSdmMyaDlIYXhnWjZPNTBRWTZ4VUE3TlFweW9LNzByUmVCbDdDb3oxNXRaallIYzU4dTRwQndyTUgzT2pZMEs1MVBqUFVKTTl0Sk1VQjJtYXBMSXpqWVlES3JBcElhanVKSTE3Q25GOFJpOFdEaGRWbU5VZFB1aWhwdDg0cEo4dHBUa3IwbFhjUS1NbVZUbmUySGxNc0NhYWJJS3FHYUJWdmp1ZGgwNGxRejJJbVRIUTB1MGV3T09wYTR5X0NEZk1oNnhBMWpTOGFfMkhwWDdMVnVXd1Rtb1NUSUFFQ0JzcmxkYkR2b1RycjBSNkJVQWJYRVlIdTdEZUVfaDhuMEJ5WlhfZTlOemJ3RnNzS05HNXJKOEVhV1lwbnE1eTk0QWRIbEhGOUh1ZjlLSlFVUFJpd29odm02RmdybFlpSHVsazZ5YnJkZ2NGeUpWb3hJTWdMYU1DWnRNQWVja0JhUE42YVRYYjBRSWpVRVpSbTdMS3czdlM0TmZmNFJOM0JYYmJpdy1wRllsdUYxOHJHdHpKT0d5d3M3QUlERlhhLVZLWFVoUUFqV2xxX2tkNlBtTWxuU2g0QzVaZEJlLWE3UzRsVGYtNzFLYTdwR3UyckRXQThwb1ltU0JsYXJJM0JnN0RMdFR6dDl3TndEUXlrNHRjLWFJ0gFPQVVfeXFMTmNMZHAtZUdYejFlcHp0YUlnb291VEE1S2VIMHd4cTY5U1ZGOVFFV1FYbGdHbXJzd1EtV1U4dTh3MUdCMU5Jd1pISGZtUWF1WQ?oc=5"
+      ]
+    },
+    "f7a8dcfce5f5d916": {
+      "expected_primary_evidence": "d6d590f8e0824e6af96cb376ce14cc3ec8472419eea8d7a413ca3c91302ba68c",
+      "reason": "The retained source describes an arrest following a shooting and seizure of two M16 rifles, without chemical agents or explosives. Classify as arrests and weapons.",
+      "categories": [
+        "Arrests",
+        "Weapons"
+      ],
+      "reviewed_article_urls": [
+        "https://news.google.com/rss/articles/CBMi5wVBVV95cUxNMU9xR1NJcE8tUjhNbVNuQm1XcnBFRmJUdG03WWpDdHBjTEgxZE1kNWxoZzdLZHNoWjVaVWdNOE1WeEtZUmxwMU9jcW1TbXFTaldxWWZzLV9pUndYbVFYSS04b05BTWY1blZGT1dYMTRsLTRmZWdKOHVxaFdoVmVWTllvWXBROVEyRnJ0N3FNakFxb1JfMmZWSGFfaEx3VzZOY3NzVkI4THNOdm1pdEV2aklacHpJQk95eTBKSWkzUGNiMG55ajBYa2NHblBqVXdJM3NkMmVVWkphQzFLZFpBbmthUXhVYkEwbG5mY2hkSHlGMnEwSm52RnFUWVlvOXBiU3NlbTlNSXI0cUwyamVPRFJ2cllqNDBUSmd5LTl2eUhrSnJ3WjdnNWJIbGtDYkZxV3dDMS1Ya3Rza3NyNW1MaGlPbGJxTnBXcUI5aXpCbWlraU9UamlUdWRLV1k1Y3hjMkNnYkpENEtfallMei1pSW9qVk9OYmNGMlJ2eHVZckJCN3Q5OVVPS0RTZ2NzbnV1aFpCUDdlaTlyNHh0bWd5WlE4cjB0djBST2xEZXJmODVLSFdzWkJqajEyYnNTNnBXblo2QjJpT2pEMlhJcmJwYXVxRl91SmpDU20xR3h2MFlweGVrYTNXaFFLU29BMU9MbTZLQTdPRHJmSEFPdjV5TFR3QU8zdlhDNDBTZWlZVjJ4amd0dHZKRDJWdHV4eGgtVks3WEtmcVlLV1VTcnMxSzdMTG9Jd3V0UE9ZcUd4YUlvS05Pa0YxSEtQVExpZXFvM2FmTTJIVjA4NDFMdjBxU0dnZnBTQnBTZFRmS2NEY005OEJoU0lQYXdrbmRZYjBDYklmOGZYamxlWnFJa09meFVjSDE5MHpRVUFtSS1fZWQzdVNOdzA2YnZ3dFZFR1N1SVRrSUhQVWt4RmlmbFFVSUZMZHFXUU8tel9tZTAwZW1ha3ZHMmVKSVdsU1ZWcVItRUZNaEZQb9IBSkFVX3lxTFBucEZEOEhuM0FpQUZ3R1F0dEFvN041ay0tSklIQ29NX2hkRDZIZ2wwMHF4X3dnZUN4Q3doNzNUMjhoV2R0dVlGSGJR?oc=5"
+      ]
+    },
+    "b384bae962f5a713": {
+      "expected_primary_evidence": "7e5be721b6b20e5c6231de07f85abb46f6b036142349171e7d88eb309fe24d88",
+      "reason": "The retained source reports a bus fire during a police operation, but no terrorist or organised-crime perpetrator is established. The classifier rationale merely infers that arson is often associated with such actors and explicitly marks current_ct_event=false; quarantine the unsupported active CT classification pending evidence.",
+      "action": "quarantine",
+      "reviewed_article_urls": [
+        "https://news.google.com/rss/articles/CBMinAFBVV95cUxPVXpGYTNCcGl1WFlqRUZfazB2VkdBbWRrVUtGSGh1NWh4SHR5TmRWb3l0V0o2UXVjSmtnbFJqWkJ6S1c3bzB4a2J1a3ZNUVlXSENsZlQ0ZTRtOXFfbDIxSmVOQ2RHN1I5bF9ZemdNWHVNSVJ0WTkxTGRGd19XUmdnR0dkR3F1MlctYjQ5VElTbXF4ejljb28tOVZNbnbSAasBQVVfeXFMTWRlRnNESVhJX3Y2R0djX3d1d0MwR29MVlVBUUl3b3lpcDFISnBwemdkQ2NhTGlIMUpBaU01UW03WjFaYnVlZG5JT2VIYVFQOUNsZEV1OTlJQjUwaHBRem41emw2WjNMZmJEWEtsSXYtVEN6akNBb1htVzBWRlZ5RUhodS1tNGJYU19WQ3h1RVROWnVYeVFjOU9ZakVBLU9oUUVGUnBoMXhrSk1n?oc=5"
+      ]
+    },
+    "408c03d5c5e294c8": {
+      "expected_primary_evidence": "7a4f860925bcc0068349c69e611d36dec53a1b98e69ed64d8c1b5881f9231726",
+      "reason": "The retained source reports explosions at a Syrian army position without an attributed non-state perpetrator or attack cause. The classifier explicitly states that non-state involvement versus interstate conflict is unclear and current_ct_event=false; quarantine the unsupported attack classification pending evidence.",
+      "action": "quarantine",
+      "reviewed_article_urls": [
+        "https://news.google.com/rss/articles/CBMiowFBVV95cUxOaklqVE8tbkRwZ2E0eEtXbEJNbS1ZTXdoekl4ekpSYmdaM0RKbjRuSl95eWdtNjY0VnRGZFkzZE96Zm1hREluWWpXbnEyUzZmUlFXSWVKZWtiWEVaNUlMOW0xLTlBX2sxV2h1QnVxSU1LMjUwTmd3RU5qWVB3SjQtVUVPVTc0RVJJa0RXUnNROEtXc2V4MlVSYng5c2VOTG45Y0Jv?oc=5"
+      ]
+    },
+    "26bb6ef707f77454": {
+      "expected_primary_evidence": "76b106efc5c5394e34233a55a90f25937619c72a0c1158bac337a6e555fc41b1",
+      "reason": "The retained official source describes UK sanctions against Russian chemical-weapons development associated with state poisoning cases. It is state-actor background, not a terrorist-financing incident; preserve outside the active incident map.",
+      "action": "quarantine",
+      "reviewed_article_urls": [
+        "https://news.google.com/rss/articles/CBMiygFBVV95cUxOTWxkaWRWNFBSSjNOS2pMN0tiUlZrRGZ0LVR4aGFnWFdmZTVacXg5cDIzbF9TZEZ3WndNc2hvZTZzenQ2d1k3YTFyQ2FKMU9tVk8yaGdtb194dUdSUEdWei11bWhiZTh4dkJfdWF5WGh3SlgxMFlLVHFSNzZ2V0tGZWdISkZqeVh4SkFDeWtlYUlvTkZaM29MWEF1RnFVbVJfelQxb1BDNEthOW4ySnlyYnhhdXM5SlFKbVkzcHpob2k1UmVzRjg5bEVR?oc=5"
+      ]
+    },
+    "3fb386b6e69bdacc": {
+      "expected_primary_evidence": "ae4427db358b00edd649ed0838f52deccf0b907e02e6c8debb6a12b545615179",
+      "reason": "The retained German-language sources explicitly describe arrest after an ATM explosion (Bankomatsprengung), a concrete criminal explosives incident within the specialist monitoring scope. Retain as Arrests and Chemicals and Explosives; the earlier current_ct_event=false label conflicts with that source-supported scope.",
+      "categories": [
+        "Arrests",
+        "Chemicals and Explosives"
+      ],
+      "ai_current_ct_event": true,
+      "reviewed_article_urls": [
+        "https://news.google.com/rss/articles/CBMitAFBVV95cUxOMHFjVG1xdzAtazVVZUxmTkZDWU9OODJzYV8zMmdWOHNTZ0dESHJqaUxNNEVXTUx3SG91QzBlVm5IY3ItdFJoRmVvTmQzUkpiT2FJVUJiNnZDRUh6TW5ya19SQkFVMjdfVXFyelh2RTQzMzF0R08wZktQdUNWMkxJUEE2eG8wd2NraE94a1BrQjM0alQ4TlJ2aVVELTFuNG9ScUZKN1hBVVlTZlc4dUt1LUpIRk0?oc=5",
+        "https://news.google.com/rss/articles/CBMijwFBVV95cUxNLTV0TVlMbGE1ektqVnFMN0dHYmYtRkFnU0d2bURzYWczem1oQkItRUx3Y3BNUnJzSlNmOWR3ZExPT0NralhNbnh2VEVRc0JBM2RfWlVaOWFZWkw1M2FYWG5Ub0RFRk1CMmJtZDZ4TEhqVlVkaW1FbjNQajJFblRhVm9RaV8yUGVpQ0R5ZHFWTQ?oc=5",
+        "https://news.google.com/rss/articles/CBMipAFBVV95cUxQNGpDbzZmT1dGUFV3VGlUQUxnYm1GdGtxZXp4MUl1Y0duZkJ0QjB4MlNzRl9WMjZyQUlOTXR2dlRNQlFpMVlHRXE3bDRGTGJYRWlsbUU4Y2Q2TWJoNTBDTWZtZTVNZVBuV3pjeDNCQTJ1ekhER0N4aDY0aXE3aDh2YldBZERZYmNSY1F5UTl0eWk2MkdINDZCMzE5WFZhNUdoT2t1RQ?oc=5",
+        "https://news.google.com/rss/articles/CBMimwFBVV95cUxPQTN1N1ZjMlEteVJPU1hLQVE5TGFvdHh6eUhkcVV1V2dLZVdtTWp2S2tzaEJGTkcwN1FNcTlkN1JUeHRHOGFSams2UUdkVjFHNFExX1NseWVqLUJWcnVrejJneUxtSVVBTU9HUGhWU2REMXhHTEw3RUJYNVZSMjZ4S1JhbGNPRlRtQzlGZlNGMXJYaFJZYjlvQ3QxYw?oc=5",
+        "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNXy1lZWpFRmhYVGdyNWpuc2pNSXBJbWtMYnc0OFRVd1ZzYXpCT19sRndJYkJxa2ZBRjdmZnR1QWJUSW5WemxQTzZqR2YxVDZVYzBJY25FQnRXMWhzMWlydVFRS2thNGlnTTFaY3BMX0hvZmUtdnJ2SFNleGJPRWQwQVhMN2J1cGJsdE5NRmFSS0Y4bnNLYmNFZ3FHY0ExVkVRTUpHSVlBNkQtYU12REt5VHpZdWRJTjQ4NUs1clc0QTJoMWMzSWRwdFlfQ19uYTl3VmJV?oc=5",
+        "https://news.google.com/rss/articles/CBMirAFBVV95cUxQUnBYSldtWDdOUVZxT3pNLV9vcjlhd0dBVmlQeWUxY0JzWTFQckxPSkFsVklxNXNTMmxnajlZNUV1Tm9UNEFwMWpwdlBUT1dGNVVuaGNEQ1FudGRBc0dMczdyall6Qy1ESFRkYUdqdDV5X2ptU1k3bzJxcUxMVTNjcHlBekpKdFoxVVduVzU5dHFGanlXRnNZMXNsSUp6WDUwTTMyU1V4UG9pWGR6?oc=5",
+        "https://news.google.com/rss/articles/CBMivAFBVV95cUxOT1lKZjhtUmlxd2hXRGRGZldQYjhLQnFWVG4zdnVCbVhpRWxSZUd0WV9aeDBrWG16M2FlUkR3NHNQQjcyMkNMOEpHMWZQVFFEUEI0NTFiWnl3ZzNMNWdDaFZKWVNGZGszOXRVTEdoOWh0VnVkcVVYbV9adWFJSFB1dmlUQXp5OXFKQ1ZLREtPcTYwTmF0T2VzZGQ5VE40NDZvVTdPZ0lhUEVKcWlpejRYaEtQTTRJQjFYX2NoRw?oc=5"
+      ]
     }
   },
   "merges": [
@@ -1276,6 +1356,13 @@
       "expected_canonical_evidence": "52e4df6bf455fee27ca883058526216193269e3b7a9829d7bc59a74c431acae9",
       "expected_retired_evidence": "42281db7fbe549700c49de0685e171c287530561fe92d84ecb359bbf62acab5a",
       "reason": "Same Suhas Subramanyam office suspicious-mail evacuation in adjacent reporting dates, corroborated at the report level by name, office and action; no distinct follow-up stated."
+    },
+    {
+      "canonical_id": "0b0f8446916ba933",
+      "retired_id": "7f32b2e2ba73c8c2",
+      "expected_canonical_evidence": "bd0eda9e3f1af83df7e6df05ec1c9869eaa39959fb961c687ef1b33abf024944",
+      "expected_retired_evidence": "46392cfdb1f7c64444ae4e46406d628d37329a28ccca5af3a4ed4a8272b3c934",
+      "reason": "Same original primary headline and exact publication timestamp from the same publisher, labelled www.pressafrik.com and Pressafrik; different RSS URL and generated translation."
     }
   ]
 }

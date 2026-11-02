@@ -1,4 +1,5 @@
 import hashlib
+import html
 import json
 import math
 import os
@@ -207,38 +208,11 @@ COUNTRY_NAME_ALIASES = {
 
 
 def normalize_name(value):
-    value = str(
-        value
-        or
-        ""
-    ).strip()
-
-    value = unicodedata.normalize(
-        "NFKD",
-        value
-    )
-
-    value = "".join(
-        character
-        for character in value
-        if not unicodedata.combining(
-            character
-        )
-    )
-
-    value = value.casefold()
-
-    value = re.sub(
-        r"[^a-z0-9]+",
-        " ",
-        value
-    )
-
-    return re.sub(
-        r"\s+",
-        " ",
-        value
-    ).strip()
+    # GeoNames supplies Arabic, Chinese and other native-script aliases too.
+    # Stripping them to ASCII erased valid requested place names and prevented
+    # the same country-locked resolver from finding their canonical entries.
+    from daily_reliability import normal_name
+    return normal_name(html.unescape(str(value or '')))
 
 
 CITY_INDEX = defaultdict(list)
@@ -1423,9 +1397,8 @@ def resolve_country_code(
         country_name
     )
 
-    alias_code = COUNTRY_NAME_ALIASES.get(
-        normalized
-    )
+    alias_code = next((code for name, code in COUNTRY_NAME_ALIASES.items()
+                       if normalize_name(name) == normalized), None)
 
     if (
         alias_code
@@ -1485,7 +1458,8 @@ def resolve_country_code(
 
 def resolve_city(city_name, country_code):
     from daily_reliability import canonical_city
-    return canonical_city(CITY_INDEX.get(normalize_name(city_name), []), city_name, country_code)
+    name = normalize_name(city_name)
+    return canonical_city(CITY_INDEX.get(name, []), name, country_code)
 
 
 def resolve_capital(
@@ -1534,7 +1508,8 @@ def apply_ai_result(
     fingerprint
 ):
     from daily_reliability import city_resolution_guard
-    result = city_resolution_guard(event, dict(result, country_code=resolve_country_code(result)),
+    result = city_resolution_guard(event, dict(result, country_code=resolve_country_code(result),
+                                               city=html.unescape(str(result.get('city') or ''))),
                                    CITY_INDEX, normalize_name)
     issue = result.get('_city_validation_issue')
     if issue:
@@ -1663,6 +1638,19 @@ def apply_ai_result(
         event["country_code"] = (
             country_code
         )
+
+    if issue:
+        # The model supplied a locality that cannot be resolved uniquely. A
+        # capital marker would imply an unrelated location, so retain its
+        # country and requested locality for review without an invented point.
+        event['location_method'] = 'unresolved_city_no_capital_fallback'
+        event['location_confidence'] = 'low'
+        event['location_confidence_score'] = 0.0
+        event['location_review_reason'] = (
+            'The requested locality could not be resolved unambiguously; '
+            'a country capital is not evidence of the incident location.'
+        )
+        return
 
     # --------------------------------------------------------
     # CITY

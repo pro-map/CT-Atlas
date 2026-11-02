@@ -198,6 +198,16 @@ class FinalizeDailyStatusTests(unittest.TestCase):
         self.assertEqual(result["geolocation"]["outcome"], "failure")
         self.assertIn("transient_error", result["reasons"])
 
+    def test_refresh_clears_resolved_geolocation_review_reason(self):
+        previous = progress(status="partial", reasons=["geolocation_review_required"],
+                            geolocation={"status": "complete", "outcome": "success", "pending": 0,
+                                         "review_required": 1})
+        self.write(self.path, {**self.original, "collection_status": previous})
+        result = self.run_finalize(refresh=True)
+        self.assertEqual(result["geolocation"]["review_required"], 0)
+        self.assertNotIn("geolocation_review_required", result["reasons"])
+        self.assertEqual(result["status"], "complete")
+
     def test_refresh_rejects_prior_success_cache_counters_for_a_newer_failed_attempt(self):
         unknown = {"candidates": None, "reviewed": None, "pending": None}
         previous = progress(status="failed", collect_outcome="failure", recent=unknown,

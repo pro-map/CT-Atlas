@@ -29,3 +29,14 @@ test("every file the deploy checks or syntax-checks exists",()=>{
   }
   for(const file of files)assert.ok(fs.existsSync(file),file);
 });
+
+
+test("UI publication shares the data-update lock from checkout through deployment",()=>{
+  const daily=fs.readFileSync(".github/workflows/update-map.yml","utf8");
+  const concurrency=source=>source.match(/^concurrency:\n([\s\S]*?)(?=^\S)/m)?.[1]||"";
+  for(const source of [workflow,daily]){
+    assert.match(concurrency(source),/group: ct-map-update-main/);
+    assert.match(concurrency(source),/cancel-in-progress: false/);
+    assert.match(concurrency(source),/queue: max/);
+  }
+});

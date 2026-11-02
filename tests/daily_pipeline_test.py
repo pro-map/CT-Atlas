@@ -128,7 +128,7 @@ class DailyPipelineTests(unittest.TestCase):
     def test_gdelt_rate_limit_is_visible_independently_of_google(self):
         collector.GDELT_STATS.clear()
         response = SimpleNamespace(status_code=429)
-        with patch.object(collector.requests, "get", return_value=response):
+        with patch.object(collector.requests, "get", return_value=response), patch.object(collector.time, "sleep"):
             self.assertEqual(collector.fetch_gdelt_doc_articles("terrorism", days=3), [])
         telemetry = {"lanes": {"recent": {"candidates": 0, "reviewed": 0, "pending": 0},
                                  "backlog": {"candidates": 0, "reviewed": 0, "pending": 0}}, "reasons": []}
@@ -137,6 +137,13 @@ class DailyPipelineTests(unittest.TestCase):
         self.assertEqual(status["source"]["errors"], 1)
         self.assertEqual(status["source"]["gdelt"]["rate_limited"], 1)
         collector.GDELT_STATS.clear()
+
+    def test_maintenance_pending_has_its_own_reason(self):
+        status = daily.finish_status(daily.begin_status(NOW), {
+            "lanes": {"recent": {"pending": 0}, "backlog": {"pending": 0},
+                      "maintenance": {"pending": 1}}, "reasons": []}, {}, {}, NOW)
+        self.assertIn("maintenance_pending", status["reasons"])
+        self.assertNotIn("backlog_pending", status["reasons"])
 
     def test_successful_split_subbatch_is_checkpointed_before_later_quota_error(self):
         rows = [article("left"), article("right")]

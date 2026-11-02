@@ -142,3 +142,24 @@ test('unresolved locations are distinct from reviews completed without a locatio
     assert.equal(c.collectionStatusView({collection_status:status({maintenance:{pending:8}})}).state,'partial');
     assert.equal(c.collectionStatusView({collection_status:status({source:{status:'partial',errors:[]}})}).state,'partial');
 });
+
+test('numeric source failure counts cannot be reported as a complete update',()=>{
+    const c=context();
+    const view=c.collectionStatusView({collection_status:status({source:{errors:10}})});
+    assert.equal(view.state,'partial');
+    assert.match(view.reasons,/Some news searches were incomplete/);
+    assert.equal(c.collectionStatusView({collection_status:status({source:{errors:0}})}).state,'complete');
+});
+
+test('flagged locations remain visible after automatic geolocation has finished',()=>{
+    const c=context();
+    const view=c.collectionStatusView({collection_status:status({
+        geolocation:{status:'complete',pending:0,completed_unlocated:110,review_required:167}
+    })});
+    assert.equal(view.state,'partial');
+    assert.match(view.reasons,/Some reported locations need verification/);
+    assert.match(view.locations,/Reported locations needing verification: 167/);
+    assert.equal(view.locationPending,'0');
+    assert.equal(view.locationUnlocated,'110');
+    assert.doesNotMatch(view.reasons,/Other collection issue/);
+});

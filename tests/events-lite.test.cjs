@@ -371,7 +371,7 @@ test('the map fallback removes Judicial records across topics and retains real i
 
 test('events.json is fetched in exactly one place in the map, and the startup chain uses the loader',()=>{
  const html=read('index.html');
- assert.equal((html.match(/fetch\(\s*"events\.json"\s*\)/g)||[]).length,1);
+ assert.equal((html.match(/fetch\(\s*"events\.json"\s*,/g)||[]).length,1);
  assert.equal((html.match(/fetch\(\s*"events-lite\.json"\s*,/g)||[]).length,1);
  assert.match(html,/loadEventsDatabase\(\)\s*\.then\(/);
 });

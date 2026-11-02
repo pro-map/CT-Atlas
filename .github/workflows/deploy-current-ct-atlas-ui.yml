@@ -26,6 +26,11 @@ on:
       - "workspace-ui.css"
       - "tab-access.js"
       - "tools/build_events_map.py"
+      - "tools/build_events_lite.py"
+      - "tools/daily_publication_audit.py"
+      - "tools/compact_mirror_json.py"
+      - "daily_reliability.py"
+      - "retired_categories.py"
       - "index.html"
       - "main.html"
       - "ip.html"
@@ -61,10 +66,11 @@ permissions:
   id-token: write
 
 concurrency:
-  # UI-only publishing must not wait for the long-running database collector.
-  # Both jobs check out an immutable snapshot of main; this job never writes data.
-  group: ct-atlas-ui-deploy
+  # Serialize checkout through publication with data writers and their deploys.
+  # Otherwise an earlier UI checkout can finish last and republish stale data.
+  group: ct-map-update-main
   cancel-in-progress: false
+  queue: max
 
 jobs:
   deploy:
@@ -199,3 +205,15 @@ jobs:
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+      - name: Verify the data actually served by GitHub Pages
+        run: python3 tools/daily_publication_audit.py verify --url "${{ steps.deployment.outputs.page_url }}" --expected publication-manifest.json --output publication-receipt-pages.json
+      - name: Retain Pages publication proof
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ui-publication-proof-${{ github.run_id }}
+          path: |
+            publication-manifest.json
+            publication-receipt-pages.json
+          retention-days: 7
+          if-no-files-found: ignore

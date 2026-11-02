@@ -269,6 +269,7 @@ class RunTests(unittest.TestCase):
             gate.posts += 1
             self.calls.append(len(payload))
             return [{"event_id": e["event_id"], "relevance_score": score(e["title"]), "reason": "r",
+                     "is_current_ct_event": score(e["title"]) >= 60,
                      "categories": ["Attacks"], "english_title": "EN " + e["title"]} for e in payload]
         searcher = FakeSearcher(per_task, fail, reject, full, rate_limited)
         summary, stop = enrich_archive.run(self.root, collector, budget, max_fetches, today=now.date(), now=now,

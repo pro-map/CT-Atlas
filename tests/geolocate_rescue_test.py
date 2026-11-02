@@ -115,6 +115,37 @@ class DailyQuotaTests(unittest.TestCase):
 
 
 class SourceFaithfulGeolocationTests(unittest.TestCase):
+    def test_city_normalization_keeps_nonlatin_aliases_and_decodes_entities(self):
+        self.assertEqual(geolocate.normalize_name('北京'), '北京')
+        self.assertEqual(geolocate.normalize_name('C&#xfa;cuta'), geolocate.normalize_name('Cúcuta'))
+        self.assertEqual(geolocate.resolve_city('北京', 'CN')['name'], 'Beijing')
+        self.assertEqual(geolocate.resolve_city('القاهرة', 'EG')['name'], 'Cairo')
+        self.assertEqual(geolocate.resolve_city('C&#xfa;cuta', 'CO')['name'], 'Cúcuta')
+
+    def test_ambiguous_city_never_becomes_a_capital_point(self):
+        event = {'id':'unresolved','title':'Incident in an unresolved Colombian locality'}
+        geolocate.apply_ai_result(event, {'precision':'city','city':'Unresolved village',
+            'country_iso2':'CO','confidence':.99,'latitude':1,'longitude':2,
+            'evidence':'Source names the village','reason':'Location requires review'}, 'fingerprint')
+        self.assertEqual(event['country_code'], 'CO')
+        self.assertIsNone(event['latitude'])
+        self.assertIsNone(event['city'])
+        self.assertEqual(event['geolocation_requested_city'], 'Unresolved village')
+        self.assertTrue(event['geolocation_review_required'])
+        self.assertEqual(event['location_evidence'], ['Source names the village'])
+
+    def test_country_only_result_remains_an_explicit_country_level_marker(self):
+        event = {}
+        geolocate.apply_ai_result(event, {'precision':'country','country_iso2':'CO',
+            'confidence':.8,'evidence':'Colombia only'}, 'fingerprint')
+        self.assertEqual(event['location_precision'], 'country_capital')
+        self.assertEqual(event['city'], 'Bogotá')
+        self.assertNotIn('geolocation_review_required', event)
+
+    def test_punctuated_country_alias_is_normalized_on_both_sides(self):
+        self.assertEqual(geolocate.resolve_country_code({'country':'U.S.A.'}), 'US')
+        self.assertEqual(geolocate.resolve_country_code({'country':'Côte d’ivoire'}), 'CI')
+
     def test_payload_keeps_original_language_text_for_geography(self):
         event = {
             "id": "e-source",

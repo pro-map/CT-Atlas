@@ -11,6 +11,7 @@ import re
 import unicodedata
 from functools import lru_cache
 from pathlib import Path
+from datetime import datetime, timezone
 
 ROOT = Path(__file__).resolve().parent
 VERSION = 'map-evidence-review-20261022'
@@ -18,6 +19,116 @@ SPECIALIST = {'Radiological/Nuclear', 'Chemicals and Explosives', 'Biological Te
 ARTICLE_FIELDS = ('title','summary','original_title','original_summary','original_language','source','url','published')
 # Generic actions, actors and numbers cannot anchor distinct cases together.
 GENERIC = set('the this that with from into after before during following over under against about near across alleged suspected reported reports report says said more than killed kills killing dead death deaths injured attack attacks attacked terrorist terrorists terrorism terror militant militants police officer officers forces security army military troops arrest arrested arrests arresting detained detention suspects suspect operation operations weapons weapon explosive explosives bomb bombing bombs plot thwarted foiled counter raid raids seize seized seizure smuggling group groups members member leader officials official people killed two three four five houthi houthis hezbollah hamas isis isil iswap daesh qaeda taliban farc current news update latest material support investigation announces video authorities government new national state country year years children teenager teenagers'.split())
+
+
+def original_article_key(event):
+    """Identify the same primary article despite a changed RSS redirect/translation.
+
+    This is deliberately narrower than incident matching: require an original
+    headline, the same publisher and an exact, timezone-aware publication time.
+    A matching translated headline, a day, or a secondary article is insufficient.
+    """
+    title = ' '.join(unicodedata.normalize('NFKC', str(event.get('original_title') or '')).casefold().split())
+    source = ' '.join(unicodedata.normalize('NFKC', str(event.get('source') or '')).casefold().split())
+    published = event.get('primary_source_published') or event.get('published')
+    if len(title) < 25 or not source or not isinstance(published, str) or 'T' not in published:
+        return None
+    try:
+        timestamp = datetime.fromisoformat(published.replace('Z', '+00:00'))
+    except ValueError:
+        return None
+    if timestamp.tzinfo is None:
+        return None
+    return source, title, timestamp.astimezone(timezone.utc).isoformat()
+
+
+def same_original_article(left, right):
+    key = original_article_key(left)
+    return bool(key and key == original_article_key(right))
+
+
+def withdraw_unresolved_city_fallback(event):
+    """Remove a capital substituted for a failed city lookup, without guessing.
+
+    Deliberate country-level markers are untouched. The country, requested
+    locality, source evidence and original AI decision remain available.
+    """
+    if (event.get('geolocation_validation_issue') != 'ambiguous_or_unresolved_city'
+            or event.get('location_method') != 'ai_country_capital'
+            or event.get('location_precision') != 'country_capital'):
+        return False
+    event.update(city=None, region=None, latitude=None, longitude=None,
+                 location_precision='unlocated', location_confidence='low',
+                 location_confidence_score=0.0,
+                 location_method='unresolved_city_no_capital_fallback',
+                 geolocation_review_required=True, excluded_from_map=False,
+                 location_review_reason='The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location.')
+    return True
+
+
+def repair_unresolved_city(event, resolve_city):
+    """Reapply only an exact country-locked lookup after text normalization fixes."""
+    if event.get('geolocation_validation_issue') != 'ambiguous_or_unresolved_city':
+        return False
+    requested = event.get('geolocation_requested_city')
+    country = event.get('country_code')
+    if not requested or not country:
+        return False
+    city = resolve_city(requested, country)
+    if not city or city.get('countrycode') != country:
+        return False
+    event.update(city=city['name'], region=None, latitude=float(city['latitude']),
+                 longitude=float(city['longitude']), location_precision='city',
+                 location_method='source_name_geonames_correction',
+                 location_confidence='medium', location_confidence_score=0.75,
+                 geolocation_review_required=False,
+                 geolocation_resolution_geonameid=city.get('geonameid'),
+                 location_review_reason='The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.')
+    event.pop('geolocation_validation_issue', None)
+    return True
+
+
+def collapse_original_article_duplicates(events):
+    """Fold only repeated primary articles, retaining every source and preimage."""
+    from collections import defaultdict
+    groups = defaultdict(list)
+    for event in events:
+        key = original_article_key(event)
+        if key:
+            groups[key].append(event)
+    removed = set()
+    for group in groups.values():
+        if len(group) < 2 or len({e.get('id') for e in group}) != len(group):
+            continue
+        # A reviewed separation always wins over automatic duplicate detection.
+        if any((matched_rule(e) or {}).get('isolated_incident') for e in group):
+            continue
+        canonical = min(group, key=lambda e: (
+            -bool(matched_rule(e)), -len(e.get('related_articles') or []),
+            -int(e.get('location_precision') == 'city' and not e.get('geolocation_review_required')),
+            str(e.get('id'))))
+        for old in group:
+            if old is canonical:
+                continue
+            preimage = copy.deepcopy(old)
+            fingerprint_union = set(canonical.get('source_article_fingerprints') or []) | set(old.get('source_article_fingerprints') or [])
+            canonical.setdefault('related_articles', []).append(independent_article(old))
+            canonical['related_articles'].extend(copy.deepcopy(old.get('related_articles') or []))
+            rebuild_sources(canonical)
+            canonical['source_article_fingerprints'] = sorted(fingerprint_union | set(canonical['source_article_fingerprints']))
+            canonical['duplicate_record_ids'] = sorted(set(canonical.get('duplicate_record_ids') or []) | set(old.get('duplicate_record_ids') or []) | {old['id']})
+            snapshots = canonical.setdefault('duplicate_record_evidence', [])
+            if preimage not in snapshots:
+                snapshots.append(preimage)
+            canonical['article_identity_deduplication'] = 'same_original_headline_publisher_and_timestamp'
+            dates = [e.get(k) for e in (canonical, old) for k in ('first_reported', 'published') if e.get(k)]
+            if dates:
+                canonical['first_reported'] = min(dates)
+            dates = [e.get(k) for e in (canonical, old) for k in ('last_reported', 'published') if e.get(k)]
+            if dates:
+                canonical['last_reported'] = max(dates)
+            removed.add(old['id'])
+    return [event for event in events if event.get('id') not in removed]
 
 
 def evidence_key(event):
@@ -62,6 +173,8 @@ def primary_pair_supported(left, right):
         rule = matched_rule(e)
         if rule and rule.get('isolated_incident') and e.get('id') != other.get('id'):
             return False
+    if same_original_article(left, right):
+        return True
     if left.get('url') and left.get('url') == right.get('url'):
         return True
     a, b = str(left.get('title')or '').casefold().strip(), str(right.get('title')or '').casefold().strip()
@@ -92,7 +205,10 @@ def explicit_category_conflict(event, result):
 
 
 def independent_article(event):
-    return {k:copy.deepcopy(event[k]) for k in ARTICLE_FIELDS if k in event}
+    article = {k:copy.deepcopy(event[k]) for k in ARTICLE_FIELDS if k in event}
+    if event.get('primary_source_published'):
+        article['published'] = event['primary_source_published']
+    return article
 
 
 def rebuild_sources(event):
@@ -135,6 +251,8 @@ def apply_rule(event):
         event['category']=event['categories'][0] if event['categories'] else ''
         event['threat_categories']=[c for c in event['categories'] if c in SPECIALIST]
         event['cbrn_subgroups']=['RADNUC'] if 'Radiological/Nuclear' in event['categories'] else []
+    if type(rule.get('ai_current_ct_event')) is bool:
+        event['ai_current_ct_event'] = rule['ai_current_ct_event']
     if rule.get('clear_geography'):
         # No invented replacement point. Preserve known country and source text.
         event.update(city=None,region=None,latitude=None,longitude=None,
@@ -160,6 +278,7 @@ def filter_reviewed(events):
         rule=matched_rule(event)
         if rule and rule.get('action')=='quarantine': continue
         apply_rule(event)
+        withdraw_unresolved_city_fallback(event)
         result.append(event)
     by_id={str(e.get('id')):e for e in result}
     removed=set()
@@ -181,7 +300,7 @@ def filter_reviewed(events):
         dates=[d for d in (canonical.get('last_reported'),old.get('last_reported'),canonical.get('published'),old.get('published')) if d]
         if dates: canonical['last_reported']=max(dates)
         removed.add(old['id'])
-    return [e for e in result if e.get('id') not in removed]
+    return collapse_original_article_duplicates([e for e in result if e.get('id') not in removed])
 
 
 def audit(events):
@@ -196,7 +315,12 @@ def audit(events):
             for right in group[n+1:]:
                 if not primary_pair_supported(left,right):
                     unresolved.append({'ids':[left['id'],right['id']],'incident_id':incident,'stage':stage,'reason':'No comparable primary-headline anchor; do not auto-merge'})
+    article_groups=defaultdict(list)
+    for e in events:
+        key=original_article_key(e)
+        if key: article_groups[key].append(e['id'])
     return {'records':len(events),'duplicate_ids':[i for i,n in ids.items() if n>1],
+            'duplicate_original_article_groups':[group for group in article_groups.values() if len(group)>1],
             'category_field_mismatches':[e['id'] for e in events if set(e.get('threat_categories',[]))!=set(e.get('categories',[]))&SPECIALIST],
             'geolocation_review_ids':[e['id'] for e in events if e.get('geolocation_review_required')],
             'country_level_markers':sum(e.get('location_precision')=='country_capital' for e in events),
@@ -205,8 +329,11 @@ def audit(events):
             'scope':'Structural scan and reviewed source-excerpt corrections; not independent verification of every incident or location.'}
 
 
-def repair_document(data):
+def repair_document(data, resolve_city=None):
     original=copy.deepcopy(data); old={e['id']:copy.deepcopy(e) for e in data['events']}
+    if resolve_city is not None:
+        for event in data['events']:
+            repair_unresolved_city(event, resolve_city)
     data['events']=filter_reviewed(data['events']); new={e['id']:e for e in data['events']}
     if len(new)!=len(data['events']) or not set(new)<=set(old):
         raise ValueError('Repair introduced or duplicated record identifiers')
@@ -215,6 +342,10 @@ def repair_document(data):
         if identifier not in new:
             rule=decisions()['rules'].get(identifier,{})
             merge=next((m for m in decisions()['merges'] if m['retired_id']==identifier),None)
+            if not merge:
+                canonical=next((e for e in new.values() if identifier in e.get('duplicate_record_ids',[])),None)
+                if canonical:
+                    merge={'canonical_id':canonical['id'],'reason':'Same original primary headline, publisher and exact publication timestamp; different RSS URL or generated translation.'}
             removed.append({'id':identifier,'disposition':'verified_duplicate' if merge else 'quarantined_outside_active_map',
                             'reason':merge['reason'] if merge else rule.get('reason'),
                             'canonical_id':merge['canonical_id'] if merge else None,'record':previous})
@@ -239,8 +370,9 @@ def repair_document(data):
         status_geo['unlocated']=report['after']['unlocated']
         status_geo['completed_unlocated']=sum(e.get('ai_geo_complete') is True and (e.get('latitude') is None or e.get('longitude') is None) for e in data['events'])
         status_geo['review_required']=len(report['after']['geolocation_review_ids'])
-    data['map_integrity_audit']={'version':VERSION,'new_events':0,'quarantined_records':sum(x['disposition']=='quarantined_outside_active_map'for x in removed),
-                                'folded_duplicate_records':sum(x['disposition']=='verified_duplicate'for x in removed),
-                                'review_required':len(report['after']['geolocation_review_ids']),
-                                'scope':report['after']['scope']}
+    if changes or removed:
+        data['map_integrity_audit']={'version':VERSION,'new_events':0,'quarantined_records':sum(x['disposition']=='quarantined_outside_active_map'for x in removed),
+                                    'folded_duplicate_records':sum(x['disposition']=='verified_duplicate'for x in removed),
+                                    'review_required':len(report['after']['geolocation_review_ids']),
+                                    'scope':report['after']['scope']}
     return data,report

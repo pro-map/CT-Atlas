@@ -3095,10 +3095,10 @@ def collect_broad_query(
 # broad-source query below -- no separate, lower bar for this source.
 #
 # GDELT enforces roughly one request every 5 seconds; queries here are
-# spaced well above that and run once per CT Atlas category per collection
-# run (not once per language), since GDELT has no per-language query mode
-# and mixes languages in one response, tagged via each article's own
-# reported language field.
+# spaced above that and search each category once per collection run (not
+# once per language). Compound Google queries must be split into supported
+# GDELT queries: its OR groups cannot be nested. Each article retains the
+# language reported by the source, independently of the English query.
 # ============================================================
 
 GDELT_DOC_SEARCH_URL = "https://api.gdeltproject.org/api/v2/doc/doc"
@@ -3110,19 +3110,46 @@ GDELT_LANGUAGE_NAME_TO_CODE = {
     "english": "en", "french": "fr", "arabic": "ar", "german": "de",
     "spanish": "es", "italian": "it", "turkish": "tr", "russian": "ru",
     "persian": "fa", "dari": "fa", "urdu": "ur", "hebrew": "he", "pashto": "ps",
+    "arab": "ar", "bengali": "bn", "chinese": "zh", "chinese (simplified)": "zh",
+    "chinese (traditional)": "zh-Hant", "hausa": "ha", "hindi": "hi",
+    "indonesian": "id", "portuguese": "pt", "somali": "so", "swahili": "sw",
 }
 GDELT_LANGUAGE_CODE_TO_NAME = {
     "en": "English", "fr": "French", "ar": "Arabic", "de": "German",
     "es": "Spanish", "it": "Italian", "tr": "Turkish", "ru": "Russian",
     "fa": "Dari / Persian", "ur": "Urdu", "he": "Hebrew", "ps": "Pashto",
+    "bn": "Bengali", "zh": "Chinese", "zh-Hant": "Traditional Chinese",
+    "ha": "Hausa", "hi": "Hindi", "id": "Indonesian", "pt": "Portuguese",
+    "so": "Somali", "sw": "Swahili", "und": "Unknown",
 }
 
 
-def gdelt_doc_category_query(category):
+def gdelt_doc_category_queries(category):
+    """Preserve the configured terms/anchors without unsupported nested ORs.
+
+    The provider's documented grammar supports flat AND-of-OR expressions:
+    https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/
+    Reuse the syntax-only splitter; this does not enable historical searches.
+    """
+    from tools.backfill_query import gdelt_queries, groups, render
+
     terms = CATEGORIES.get(category, [])[:GDELT_DOC_TERMS_PER_CATEGORY]
-    if not terms:
-        return ""
-    return "(" + " OR ".join(terms) + ")"
+    atomic, compound = [], []
+    for term in terms:
+        parts = groups(term)
+        if len(parts) == 1:
+            atomic.extend(parts[0])
+        else:
+            compound.append(term)
+    expressions = ([render([list(dict.fromkeys(atomic))])] if atomic else []) + compound
+    return list(dict.fromkeys(query for expression in expressions
+                              for query in gdelt_queries(expression)))
+
+
+def gdelt_doc_category_query(category):
+    """Compatibility accessor; collection executes the complete query list."""
+    queries = gdelt_doc_category_queries(category)
+    return queries[0] if queries else ""
 
 
 def gdelt_doc_url(query, days=None, start_dt=None, end_dt=None):
@@ -3131,6 +3158,7 @@ def gdelt_doc_url(query, days=None, start_dt=None, end_dt=None):
         "mode": "artlist",
         "format": "json",
         "maxrecords": str(GDELT_DOC_RESULTS_PER_QUERY),
+        "sort": "datedesc",
     }
     # An explicit date range (used by the historical backfill to slice 180
     # days into monthly chunks, since maxrecords caps each single query at
@@ -3170,7 +3198,7 @@ def gdelt_article_to_event(article, categories):
     published_dt = parse_gdelt_seendate(article.get("seendate"))
     published = published_dt.isoformat() if published_dt else None
     language_code = GDELT_LANGUAGE_NAME_TO_CODE.get(
-        clean_text(article.get("language", "")).lower(), "en"
+        clean_text(article.get("language", "")).lower(), "und"
     )
 
     event = {
@@ -3183,7 +3211,7 @@ def gdelt_article_to_event(article, categories):
         "original_summary": "",
         "original_language": language_code,
         "collection_language": language_code,
-        "collection_language_name": GDELT_LANGUAGE_CODE_TO_NAME.get(language_code, "English"),
+        "collection_language_name": GDELT_LANGUAGE_CODE_TO_NAME.get(language_code, "Unknown"),
         "collection_locale": None,
         "published": published,
         "source": clean_text(article.get("domain", "")) or "GDELT source",
@@ -3218,12 +3246,30 @@ def collect_gdelt_category_query(category, days=None, start_dt=None, end_dt=None
     # and out_of_scope_reason() still screens out state-vs-state war
     # reporting, diplomatic condemnations and similar non-CT-Atlas framing
     # using the same title-based guard every other source is held to.
-    query = gdelt_doc_category_query(category)
-    if not query:
+    queries = gdelt_doc_category_queries(category)
+    if not queries:
         return []
-    articles = fetch_gdelt_doc_articles(
-        query, days=days, start_dt=start_dt, end_dt=end_dt, label=f"gdelt:{category}"
-    )
+    articles = []
+    seen_urls = set()
+    for index, query in enumerate(queries):
+        if index and not GDELT_STATS.get("circuit_open"):
+            time.sleep(GDELT_DOC_QUERY_SPACING_SECONDS)
+        found = fetch_gdelt_doc_articles(
+            query, days=days, start_dt=start_dt, end_dt=end_dt,
+            label=f"gdelt:{category}:{index + 1}/{len(queries)}"
+        )
+        # A source can match several equivalent query fragments. Fold exact
+        # article URLs before the shared event deduplication and AI review.
+        for article in found:
+            if not isinstance(article, dict):
+                GDELT_STATS["invalid_articles"] += 1
+                continue
+            url = clean_text(article.get("url") or article.get("url_mobile") or "")
+            if url and url in seen_urls:
+                continue
+            if url:
+                seen_urls.add(url)
+            articles.append(article)
     results = []
     rejected = 0
     for article in articles:
@@ -3627,8 +3673,8 @@ def _collect_all_once(days):
 
     # ========================================================
     # 4. GDELT DOC 2.0 DISCOVERY (additional source, not a replacement)
-    #    One query per CT Atlas category, spaced to respect GDELT's
-    #    ~1 request/5 seconds limit.
+    #    Provider-compatible query fragments per category, spaced to respect
+    #    GDELT's limit; a persistent refusal pauses this source for the run.
     # ========================================================
 
     print()
@@ -3653,7 +3699,7 @@ def _collect_all_once(days):
 
         print(f"      accepted → {len(results)}")
 
-        if category_number < len(gdelt_categories):
+        if category_number < len(gdelt_categories) and not GDELT_STATS.get("circuit_open"):
             time.sleep(GDELT_DOC_QUERY_SPACING_SECONDS)
 
     print()
@@ -3967,7 +4013,9 @@ known? Only the former qualifies.
 Score relevance from 0 to 100.
 
 KEEPING POLICY:
-- The software keeps every event with score >= 50.
+- The software keeps current operational CT events with at least one supported
+  category and score >= 50. A score cannot override a false current-event
+  decision or an empty category list.
 - Therefore do NOT be excessively strict.
 - A plausible, operationally useful CT event should normally score at least 50.
 - Strong, specific current CT events should score 75-100.
@@ -4987,33 +5035,6 @@ def apply_ai_selection(
         in CATEGORIES
     ]
 
-    if (
-        score
-        >=
-        AI_SELECTION_THRESHOLD
-
-        and
-
-        not categories
-    ):
-        categories = normalize_categories(
-            event.get(
-                "categories"
-            )
-            or
-            (
-                [
-                    event.get(
-                        "category"
-                    )
-                ]
-                if event.get(
-                    "category"
-                )
-                else []
-            )
-        )
-
     event[
         "ai_selection_complete"
     ] = True
@@ -5042,11 +5063,7 @@ def apply_ai_selection(
 
     event[
         "ai_current_ct_event"
-    ] = bool(
-        result.get(
-            "is_current_ct_event"
-        )
-    )
+    ] = result.get("is_current_ct_event") is True
 
     event[
         "ai_selected"
@@ -5054,6 +5071,7 @@ def apply_ai_selection(
         score
         >=
         AI_SELECTION_THRESHOLD
+        and event["ai_current_ct_event"]
     )
 
     if categories:
@@ -5215,19 +5233,27 @@ def apply_ai_selection(
         ] = variants
 
     radnuc.annotate(event, result)
+    # The current semantic decision is authoritative. Do not turn a search
+    # hint into a retained category after the model rejected the event or
+    # returned no supported category. Legacy CBRN compatibility is resolved
+    # by annotate() first, preserving valid saved RADNUC decisions.
+    active_categories = [category for category in normalize_categories(event.get("categories") or [])
+                         if category in CATEGORIES]
+    event["categories"] = active_categories
+    event["category"] = active_categories[0] if active_categories else ""
     scope_reason = threat_categories.scope_reason(event, result)
     scope_reason = scope_reason or out_of_scope_reason(event)
+    if not event["ai_current_ct_event"]:
+        scope_reason = scope_reason or "AI decision does not identify a current CT event"
+    if not active_categories:
+        scope_reason = scope_reason or "AI decision has no supported operational category"
     if scope_reason:
         event["ai_selected"] = False
         event["ai_current_ct_event"] = False
         event["ai_scope_rejection"] = scope_reason
         return False
 
-    return (
-        score
-        >=
-        AI_SELECTION_THRESHOLD
-    )
+    return event["ai_selected"]
 
 
 def load_background_articles():
@@ -7440,6 +7466,14 @@ def merge_event(
         new
     )
 
+    # The cluster date below becomes the earliest report, which may belong to
+    # a different source. Keep each editorial representative's own timestamp
+    # before changing cluster chronology or promoting the incoming source.
+    existing_primary_published = existing.get('primary_source_published') or existing.get('published')
+    new_primary_published = new.get('primary_source_published') or new.get('published')
+    if existing_primary_published:
+        existing['primary_source_published'] = existing_primary_published
+
     existing_categories = normalize_categories(
         (
             existing.get(
@@ -7493,9 +7527,7 @@ def merge_event(
                     "",
                 ),
             "published":
-                existing.get(
-                    "published",
-                ),
+                existing_primary_published,
         }
     )
 
@@ -7529,9 +7561,7 @@ def merge_event(
                 "",
             ),
         "published":
-            new.get(
-                "published"
-            ),
+            new_primary_published,
         "source":
             new.get(
                 "source",
@@ -7655,9 +7685,7 @@ def merge_event(
                     "",
                 ),
             "published":
-                existing.get(
-                    "published"
-                ),
+                existing_primary_published,
             "source":
                 existing.get(
                     "source",
@@ -7712,6 +7740,10 @@ def merge_event(
         ] = new.get(
             "title"
         )
+        if new_primary_published:
+            existing['primary_source_published'] = new_primary_published
+        else:
+            existing.pop('primary_source_published', None)
 
         # The promoted article is the headline now; it was appended to the
         # related articles above and must not stay there as a second copy.

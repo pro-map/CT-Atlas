@@ -2,17 +2,21 @@
 # Rebuilds and redeploys the ct-atlas-mirror Cloudflare Worker (a static
 # mirror of the site on a domain independent of ct-atlas.com/github.io, for
 # networks that block the main domain). Run this after any push that changes
-# the tracked static frontend files -- the mirror never updates on its own.
+# the tracked static frontend files; the mirror workflow also invokes this script.
 #
 # Usage: CLOUDFLARE_API_TOKEN=... tools/deploy_mirror.sh
 set -euo pipefail
+if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != "--prepare-only" ]; }; then
+  echo "Usage: tools/deploy_mirror.sh [--prepare-only]" >&2
+  exit 2
+fi
 cd "$(dirname "$0")/.."
 
 STAGING=_pages_mirror
 rm -rf "$STAGING"
 mkdir -p "$STAGING"
 
-cp index.html main.html crypto.html social.html facial.html privacy.html robots.txt events.json ct-atlas-runtime.json \
+cp index.html main.html crypto.html social.html facial.html privacy.html robots.txt ct-atlas-runtime.json \
    pdf-export.js deep-search.js deep-search.css report-illustration.js feedback.js feedback.css \
    crypto.js crypto-report.js crypto.css crypto-launcher.js social.js social.css facial.js facial.css \
    intelligence-map.svg crypto-intelligence.svg social-intelligence.svg facial-intelligence.svg \
@@ -24,11 +28,12 @@ cp index.html main.html crypto.html social.html facial.html privacy.html robots.
    darkweb.html darkweb.js darkweb.css darkweb-intelligence.svg \
    "$STAGING"/
 
-# Keep the complete fallback, but remove formatting only from its mirror copy.
-# Source files and all event fields remain unchanged. Workers assets cap: 25 MiB.
-python3 tools/compact_mirror_json.py --input events.json --output "$STAGING/events.json"
+# Preserve the complete fallback, using byte chunks when compaction alone cannot
+# meet the 25 MiB asset cap. The Worker streams it at the same /events.json URL.
+python3 tools/compact_mirror_json.py --input events.json --output "$STAGING/events.json" --allow-chunks
+cp tools/mirror-worker.mjs "$STAGING/mirror-worker.mjs"
 
-# Lightweight map data, derived from the events.json copied just above (so it can never be
+# Lightweight map data, derived from the same source events.json (so it can never be
 # older than it). If it cannot be built the mirror simply serves the full events.json.
 if ! python3 tools/build_events_lite.py --input events.json --output "$STAGING/events-lite.json"; then
   rm -f "$STAGING/events-lite.json"
@@ -56,19 +61,26 @@ done
 
 cat > "$STAGING/wrangler.toml" <<'EOF'
 name = "ct-atlas-mirror"
+main = "mirror-worker.mjs"
 compatibility_date = "2026-09-11"
 
 [assets]
 directory = "."
+binding = "ASSETS"
+run_worker_first = ["/events.json"]
 EOF
 
 cat > "$STAGING/.assetsignore" <<'EOF'
 .wrangler
 wrangler.toml
 .assetsignore
+mirror-worker.mjs
 EOF
 
 # Fail before upload if any future asset exceeds the platform file-size limit.
 python3 tools/compact_mirror_json.py --check-directory "$STAGING"
 
+if [ "${1:-}" = "--prepare-only" ]; then
+  exit 0
+fi
 (cd "$STAGING" && python3 ../tools/wrangler_retry.py deploy)
