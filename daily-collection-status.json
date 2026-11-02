@@ -3,7 +3,7 @@
   "status": "partial",
   "run_started_at": "2026-11-01T21:10:31.114968+00:00",
   "last_attempt_at": "2026-11-01T21:10:31.114968+00:00",
-  "published_at": "2026-11-01T22:04:19.339760+00:00",
+  "published_at": "2026-11-02T07:58:38.773546+00:00",
   "recent": {
     "candidates": 3133,
     "reviewed": 3133,
@@ -133,10 +133,10 @@
   },
   "reasons": [
     "transient_error",
-    "geolocation_review_required",
     "backlog_pending",
     "source_errors",
-    "category_pending"
+    "category_pending",
+    "geolocation_review_required"
   ],
   "queue_filter": {
     "expired": 6335,
@@ -165,12 +165,12 @@
   "geolocation": {
     "status": "complete",
     "pending": 0,
-    "located": 6168,
-    "unlocated": 110,
-    "completed_unlocated": 110,
+    "located": 6024,
+    "unlocated": 244,
+    "completed_unlocated": 244,
     "outcome": "success",
     "processed_this_run": 27,
-    "review_required": 167
+    "review_required": 166
   },
   "categories": [
     {
@@ -195,7 +195,15 @@
       "stop_code": "budget_reached"
     }
   ],
-  "finalized_at": "2026-11-01T22:11:31.015388+00:00",
+  "finalized_at": "2026-11-02T08:04:42.614360+00:00",
   "collect_outcome": "success",
-  "geolocate_outcome": "success"
+  "geolocate_outcome": "success",
+  "data_maintenance": {
+    "kind": "reviewed_map_evidence_repair",
+    "applied_at": "2026-11-02T07:58:38.773546+00:00",
+    "changed_records": 141,
+    "removed_records": 10,
+    "new_records": 0,
+    "ai_calls": 0
+  }
 }

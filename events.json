@@ -284,10 +284,10 @@
     },
     "reasons": [
       "transient_error",
-      "geolocation_review_required",
       "backlog_pending",
       "source_errors",
-      "category_pending"
+      "category_pending",
+      "geolocation_review_required"
     ],
     "queue_filter": {
       "expired": 6335,
@@ -346,7 +346,7 @@
         "stop_code": "budget_reached"
       }
     ],
-    "finalized_at": "2026-11-01T22:11:31.015388+00:00",
+    "finalized_at": "2026-11-02T08:04:42.614360+00:00",
     "collect_outcome": "success",
     "geolocate_outcome": "success",
     "data_maintenance": {
