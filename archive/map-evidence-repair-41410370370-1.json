@@ -1,0 +1,1625 @@
+{
+  "version": 1,
+  "review_version": "map-evidence-review-20261022",
+  "before": {
+    "records": 6268,
+    "duplicate_ids": [],
+    "duplicate_original_article_groups": [],
+    "category_field_mismatches": [],
+    "geolocation_review_ids": [
+      "433e48a8f4f86c1c",
+      "c3f7c565932e8e5c",
+      "0b3b6f8b80d74ace",
+      "fe9306a52a86352a",
+      "0ca0e40ece37a7e9",
+      "8ddb26c3bf6f68e1",
+      "ec492868173d69a3",
+      "a43ab813a13a6479",
+      "f24f2c81e1e3a705",
+      "43e561aa5de4bcdc",
+      "71f2e23814413644",
+      "77665d83a8f818cc",
+      "8e9e51286a1c5d36",
+      "c32ef7bc02ecd829",
+      "7dfd36d9e6e9da8f",
+      "bf589fd9617335b4",
+      "e8872372b072243a",
+      "0b3fd4bd8005c514",
+      "42e6ca55c9a599ec",
+      "6a24908642e10836",
+      "d711878af4eacead",
+      "e4908900e44d0d9f",
+      "75ac3e3a99f2359d",
+      "231912e3c356ff9c",
+      "54d83edd3dce3a70",
+      "c7e001b39c246b31",
+      "69050febf56e4c26",
+      "583ff1a432cabadb",
+      "c2620997cec0745c",
+      "1f886c969445e3b5",
+      "0845825e2106f715",
+      "1bdde655820fcf79",
+      "42cc2ad68384f9ff",
+      "25c5ad842be14893",
+      "7c7b11c83fa3f905",
+      "b2e2bac3f0c1411c",
+      "093ebd97079be65d",
+      "4f8ac9e4e02f89fb",
+      "843ed12a2ab49f27",
+      "d07707dcfcf0ce14",
+      "42ac439c1c6e7a9e",
+      "893628353732dbf4",
+      "1610e25bf4da8c79",
+      "d42ff34eaa90f718",
+      "0e282b64ed1a4540",
+      "22e08a355c288b8a",
+      "3abf85a4cc6e941d",
+      "c27195a7db0e6281",
+      "0ac012d0977ca34e",
+      "3ce7ef2027eadba9",
+      "67f621463c6fe489",
+      "21f80640defe1963",
+      "491ea2bdb608922a",
+      "736f5a24cca14e17",
+      "85493b9f27608aa9",
+      "db37924ef18dd6ee",
+      "1abefc2b70df717c",
+      "9a11c44b08cc1a5d",
+      "a77df289223fd966",
+      "8875a880900e08cb",
+      "ed0131986b67ef27",
+      "292cc2ab7a778c4f",
+      "ed8de6340c05dcc0",
+      "c027d9e2b38cac38",
+      "99bf714b7717d0d6",
+      "dba93d780c5617f9",
+      "b5e648fb40635e66",
+      "229adc9503920665",
+      "9526251a293c95ff",
+      "97e8511d530df23f",
+      "fc608c5fbd632a80",
+      "5f6e3a2d2263b49d",
+      "bdc54667ae74a4fc",
+      "87ddc6cf4e2294ce",
+      "5aedf7e824fa8b15",
+      "b4a15302e21d3ffa",
+      "1869219f815c6dd4",
+      "8cc6a6e657aba723",
+      "fda1362bea285e70",
+      "a1218ad2000d983b",
+      "25bcbaeac56bc86e",
+      "8bc098a4410d28a7",
+      "ebc8044ba8a2e5ca",
+      "28de62a654704616",
+      "6c003c533b2d694b",
+      "cb4fe9de85a30fcb",
+      "9ece307f451c0460",
+      "998d984906246cd9",
+      "70ed92a9ec69f813",
+      "04929552840907fa",
+      "2c650976a6e84432",
+      "173ae382289734bc",
+      "3c1c32d04ee7f396",
+      "faeecbcf205462e7",
+      "c181b00cc140f201",
+      "94ee6d11959e48a0",
+      "cd2dbfb000f23560",
+      "f3840bb0af47cd1b",
+      "914a98a26c3d84d7",
+      "39edeb22deb1e8c8",
+      "7301717e8842cb28",
+      "3e5163d632fcc92f",
+      "e693e3240ece0315",
+      "10091dedc2c067fd",
+      "6aa912b41f5fc8db",
+      "cfd8743c32576ddb",
+      "72874fefe5f88b62",
+      "82563a7869a5317b",
+      "85d8cb6c510a3479",
+      "7917e15088a86d81",
+      "b0c1d3da70e35736",
+      "aec84378c48da65b",
+      "db225b2166f53329",
+      "e407e9470025be27",
+      "0af92f3329d579d9",
+      "73ecd758589f7158",
+      "ed1ee0f03c97b086",
+      "b2abdba5ad4632f9",
+      "fc58f17e925c6ab6",
+      "b06febebd3339309",
+      "57e9c87f8c4263cd",
+      "fa8df2aae8ce9f99",
+      "3045d91439babb0f",
+      "21abd68a2fb0710b",
+      "66a2ca971f297e77",
+      "d8e66c2ad47ad7e4",
+      "874d0f8b5cdd63cb",
+      "e798af033618d396",
+      "4b655f10ffc81ac8",
+      "74190dbc95d82fb2",
+      "2c2e5a8dd67b1790",
+      "fed1569a049fda8a",
+      "aed443e1cc07e9db",
+      "e592023a1057c15b",
+      "4f467f3f786616ce",
+      "aeb3353136a02561",
+      "501afd67da900bbb",
+      "62c674e59bf2e880",
+      "52f6942a3b6cb36e",
+      "bb3d1360a84d0308",
+      "dc60074f20ab8150",
+      "e9a6224440e441f0",
+      "2544715a2dcf6de7",
+      "8b0891d2beb5e113",
+      "93cda6bd878ca478",
+      "7dc59f7c5e8c11f8",
+      "4cd9b0d969e7b91a",
+      "3937480e2ef58df3",
+      "c228d37f100837b7",
+      "c037fe8163c24323",
+      "ac190ea1746a7d57",
+      "8eacedf143de6a99",
+      "76984f15eba404cc",
+      "1a0f41365975dab5",
+      "4e3646eb5ab759ef",
+      "d6e576410a056017",
+      "7e701ab1ce62ca8e",
+      "28459a017ab58a6d",
+      "cefb69ed8ba20bb7",
+      "4f34d047ba54a97a",
+      "6c62df7aadb967fe",
+      "318d4c37dccf4ea9",
+      "e40ab9ceb8f9d2d9",
+      "bfe790ab1c61e730",
+      "674b87f6a351042d",
+      "7dd57cde42b727b9"
+    ],
+    "country_level_markers": 1709,
+    "unlocated": 244,
+    "ambiguous_incident_pairs": [
+      {
+        "ids": [
+          "e5119ead75871fff",
+          "b1ee1edca90d588a"
+        ],
+        "incident_id": "inc-37899ddd01e78744",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "712f621a193da0a1",
+          "ef97cd7117afd352"
+        ],
+        "incident_id": "inc-550cdd6b26f5d1ea",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "81a99f20dacfda5a",
+          "b4209d68b686c04a"
+        ],
+        "incident_id": "inc-ecdf36a8fc3317ec",
+        "stage": "INITIAL",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d8320706597ff918",
+          "f94432e96bfc1103"
+        ],
+        "incident_id": "inc-0ed4186864bcc044",
+        "stage": "INITIAL",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "04e1e1cb42b65f97",
+          "9175b8c39aaa5272"
+        ],
+        "incident_id": "inc-91badb4afba4c831",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c027d9e2b38cac38",
+          "1b978b7066e8ed04"
+        ],
+        "incident_id": "inc-50fa9345851e5436",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c027d9e2b38cac38",
+          "b3e49e811abda363"
+        ],
+        "incident_id": "inc-50fa9345851e5436",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c027d9e2b38cac38",
+          "8a195a155d407ddc"
+        ],
+        "incident_id": "inc-50fa9345851e5436",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "1b978b7066e8ed04",
+          "b3e49e811abda363"
+        ],
+        "incident_id": "inc-50fa9345851e5436",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "1b978b7066e8ed04",
+          "8a195a155d407ddc"
+        ],
+        "incident_id": "inc-50fa9345851e5436",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "b3e49e811abda363",
+          "9ece307f451c0460"
+        ],
+        "incident_id": "inc-50fa9345851e5436",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "9ece307f451c0460",
+          "8a195a155d407ddc"
+        ],
+        "incident_id": "inc-50fa9345851e5436",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "9526251a293c95ff",
+          "fc608c5fbd632a80"
+        ],
+        "incident_id": "inc-949d20b12d2c2a5f",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c4643daf95fa0971",
+          "e5e7d1906ac167d3"
+        ],
+        "incident_id": "inc-91badb4afba4c831",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "b41ea2b6fad1df9f",
+          "803be28998b8e99b"
+        ],
+        "incident_id": "inc-ccb611ba04f0af1f",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d49e2ff1741fdfa2",
+          "8bc098a4410d28a7"
+        ],
+        "incident_id": "inc-3ea62e164ed34c22",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d49e2ff1741fdfa2",
+          "ebc8044ba8a2e5ca"
+        ],
+        "incident_id": "inc-3ea62e164ed34c22",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "8bc098a4410d28a7",
+          "ebc8044ba8a2e5ca"
+        ],
+        "incident_id": "inc-3ea62e164ed34c22",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "04929552840907fa",
+          "2c650976a6e84432"
+        ],
+        "incident_id": "inc-53607b4553fb86ee",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "173ae382289734bc",
+          "5e402d5de060eb70"
+        ],
+        "incident_id": "inc-957a2f802e2738b9",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "500cb4b0098af768",
+          "e693e3240ece0315"
+        ],
+        "incident_id": "inc-859278f6bd85cb38",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "547d7b5245e2dac0",
+          "1bfda6e1b416dffb"
+        ],
+        "incident_id": "inc-4990e6e43450b5fa",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "211313e9f9b59356",
+          "be1cef68354e6304"
+        ],
+        "incident_id": "inc-6162fe7f8b26f137",
+        "stage": "INITIAL",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "3d1d81af736d73c0",
+          "b6a295f3e5856b58"
+        ],
+        "incident_id": "inc-1559e52c30a71c50",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "a07db029e69d5dad",
+          "f10a8d569e7cd47f"
+        ],
+        "incident_id": "inc-83cfff7c15c01ef5",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "a07db029e69d5dad",
+          "fc58f17e925c6ab6"
+        ],
+        "incident_id": "inc-83cfff7c15c01ef5",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "f10a8d569e7cd47f",
+          "fc58f17e925c6ab6"
+        ],
+        "incident_id": "inc-83cfff7c15c01ef5",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "910cfe78c1233795",
+          "62c674e59bf2e880"
+        ],
+        "incident_id": "inc-47f77a8ba7451ca2",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "6997134cbfb01aef",
+          "368297547d2ca3e2"
+        ],
+        "incident_id": "inc-ec91cc31f9dc7926",
+        "stage": "INITIAL",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "736194c4861f33c9",
+          "dfec8a207b0b1f5a"
+        ],
+        "incident_id": "inc-4f1c6cb756e59e64",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "590ac5513342ab17",
+          "8ffcbd28506d1a68"
+        ],
+        "incident_id": "inc-2f2b7ce5b9a4929c",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "efb4bb9ffcd5b9a3",
+          "c015c034faeb74fc"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "efb4bb9ffcd5b9a3",
+          "c10f6bef49ea0444"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "efb4bb9ffcd5b9a3",
+          "7592478ec4e4fe3e"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "efb4bb9ffcd5b9a3",
+          "fedc69a2ee88499e"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "efb4bb9ffcd5b9a3",
+          "155d6b172ef0f0ef"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "efb4bb9ffcd5b9a3",
+          "daaa0399b9bd239f"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c015c034faeb74fc",
+          "fedc69a2ee88499e"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c10f6bef49ea0444",
+          "7592478ec4e4fe3e"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "7592478ec4e4fe3e",
+          "fedc69a2ee88499e"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "fedc69a2ee88499e",
+          "155d6b172ef0f0ef"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "fedc69a2ee88499e",
+          "daaa0399b9bd239f"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c3734495f5a53859",
+          "fbc8ed94cc2e6ebf"
+        ],
+        "incident_id": "inc-08489f247b144113",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c3734495f5a53859",
+          "43aacb1d7ff02798"
+        ],
+        "incident_id": "inc-08489f247b144113",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "fbc8ed94cc2e6ebf",
+          "b0fcd74303998458"
+        ],
+        "incident_id": "inc-08489f247b144113",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "b0fcd74303998458",
+          "43aacb1d7ff02798"
+        ],
+        "incident_id": "inc-08489f247b144113",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "57dba68821006537",
+          "d6b9b68686e27fe8"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "57dba68821006537",
+          "7dd4f7efb78c1dcd"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "57dba68821006537",
+          "5405df33d23999d6"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d6b9b68686e27fe8",
+          "0a94a653d5c6f556"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d6b9b68686e27fe8",
+          "15d5361463cd5930"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d6b9b68686e27fe8",
+          "2347c31cb64feb89"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d6b9b68686e27fe8",
+          "7dd4f7efb78c1dcd"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d6b9b68686e27fe8",
+          "5405df33d23999d6"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "0a94a653d5c6f556",
+          "7dd4f7efb78c1dcd"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "15d5361463cd5930",
+          "7dd4f7efb78c1dcd"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "15d5361463cd5930",
+          "5405df33d23999d6"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "2347c31cb64feb89",
+          "7dd4f7efb78c1dcd"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "4bc7d11ebb245f91",
+          "fab5eb60caa20a12"
+        ],
+        "incident_id": "inc-1535b575064b3400",
+        "stage": "INITIAL",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "8e4847b489f92d5f",
+          "7e2a6679c73d889c"
+        ],
+        "incident_id": "inc-340cc1de5b3f6df5",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "9fb894d2248aab5c",
+          "fa9f6b28b6533e64"
+        ],
+        "incident_id": "inc-f1ea82e15bd8c8e9",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "75a6dd35d43be777",
+          "fa9f6b28b6533e64"
+        ],
+        "incident_id": "inc-f1ea82e15bd8c8e9",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "6a73d6fe672e20e9",
+          "e04afc98c2d39795"
+        ],
+        "incident_id": "inc-d0731968b382f04c",
+        "stage": "INITIAL",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "e28a058837da6ab0",
+          "8c1d624f5d8390d2"
+        ],
+        "incident_id": "inc-f2a987b1ff7404a9",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "8a7f0c581e6d9b43",
+          "33527d93a9b8e54c"
+        ],
+        "incident_id": "inc-adebecd6b4d7cf64",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "08a72c4ae7d8fc56",
+          "8c31835cc0470d45"
+        ],
+        "incident_id": "inc-8777e6de7a461a8d",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "fb29e0a050d5c163",
+          "28fe4e7704cece6f"
+        ],
+        "incident_id": "inc-2eb3184af07d4023",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "eb073b4284596b5f",
+          "137fe731373d983b"
+        ],
+        "incident_id": "inc-77c98ed7794a9206",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "e4883c170bcf77e8",
+          "e481f6f964eb8f94"
+        ],
+        "incident_id": "inc-e209565974f3327a",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "01c76ea433b7b779",
+          "ca09ef7cae895be5"
+        ],
+        "incident_id": "inc-8a363b38e30e1dd8",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      }
+    ],
+    "scope": "Structural scan and reviewed source-excerpt corrections; not independent verification of every incident or location."
+  },
+  "after": {
+    "records": 6268,
+    "duplicate_ids": [],
+    "duplicate_original_article_groups": [],
+    "category_field_mismatches": [],
+    "geolocation_review_ids": [
+      "433e48a8f4f86c1c",
+      "c3f7c565932e8e5c",
+      "0b3b6f8b80d74ace",
+      "fe9306a52a86352a",
+      "0ca0e40ece37a7e9",
+      "8ddb26c3bf6f68e1",
+      "ec492868173d69a3",
+      "a43ab813a13a6479",
+      "f24f2c81e1e3a705",
+      "43e561aa5de4bcdc",
+      "71f2e23814413644",
+      "77665d83a8f818cc",
+      "8e9e51286a1c5d36",
+      "c32ef7bc02ecd829",
+      "7dfd36d9e6e9da8f",
+      "bf589fd9617335b4",
+      "e8872372b072243a",
+      "0b3fd4bd8005c514",
+      "42e6ca55c9a599ec",
+      "6a24908642e10836",
+      "d711878af4eacead",
+      "e4908900e44d0d9f",
+      "75ac3e3a99f2359d",
+      "231912e3c356ff9c",
+      "54d83edd3dce3a70",
+      "c7e001b39c246b31",
+      "69050febf56e4c26",
+      "583ff1a432cabadb",
+      "c2620997cec0745c",
+      "1f886c969445e3b5",
+      "0845825e2106f715",
+      "1bdde655820fcf79",
+      "42cc2ad68384f9ff",
+      "25c5ad842be14893",
+      "7c7b11c83fa3f905",
+      "b2e2bac3f0c1411c",
+      "093ebd97079be65d",
+      "4f8ac9e4e02f89fb",
+      "843ed12a2ab49f27",
+      "d07707dcfcf0ce14",
+      "42ac439c1c6e7a9e",
+      "893628353732dbf4",
+      "1610e25bf4da8c79",
+      "d42ff34eaa90f718",
+      "0e282b64ed1a4540",
+      "22e08a355c288b8a",
+      "3abf85a4cc6e941d",
+      "c27195a7db0e6281",
+      "0ac012d0977ca34e",
+      "3ce7ef2027eadba9",
+      "67f621463c6fe489",
+      "21f80640defe1963",
+      "491ea2bdb608922a",
+      "736f5a24cca14e17",
+      "85493b9f27608aa9",
+      "db37924ef18dd6ee",
+      "1abefc2b70df717c",
+      "9a11c44b08cc1a5d",
+      "a77df289223fd966",
+      "8875a880900e08cb",
+      "ed0131986b67ef27",
+      "292cc2ab7a778c4f",
+      "ed8de6340c05dcc0",
+      "c027d9e2b38cac38",
+      "99bf714b7717d0d6",
+      "dba93d780c5617f9",
+      "b5e648fb40635e66",
+      "229adc9503920665",
+      "9526251a293c95ff",
+      "97e8511d530df23f",
+      "fc608c5fbd632a80",
+      "5f6e3a2d2263b49d",
+      "bdc54667ae74a4fc",
+      "87ddc6cf4e2294ce",
+      "5aedf7e824fa8b15",
+      "b4a15302e21d3ffa",
+      "1869219f815c6dd4",
+      "8cc6a6e657aba723",
+      "fda1362bea285e70",
+      "a1218ad2000d983b",
+      "25bcbaeac56bc86e",
+      "8bc098a4410d28a7",
+      "ebc8044ba8a2e5ca",
+      "28de62a654704616",
+      "6c003c533b2d694b",
+      "cb4fe9de85a30fcb",
+      "9ece307f451c0460",
+      "998d984906246cd9",
+      "70ed92a9ec69f813",
+      "04929552840907fa",
+      "2c650976a6e84432",
+      "173ae382289734bc",
+      "3c1c32d04ee7f396",
+      "faeecbcf205462e7",
+      "c181b00cc140f201",
+      "94ee6d11959e48a0",
+      "cd2dbfb000f23560",
+      "f3840bb0af47cd1b",
+      "914a98a26c3d84d7",
+      "39edeb22deb1e8c8",
+      "7301717e8842cb28",
+      "3e5163d632fcc92f",
+      "e693e3240ece0315",
+      "10091dedc2c067fd",
+      "6aa912b41f5fc8db",
+      "cfd8743c32576ddb",
+      "72874fefe5f88b62",
+      "82563a7869a5317b",
+      "85d8cb6c510a3479",
+      "7917e15088a86d81",
+      "b0c1d3da70e35736",
+      "aec84378c48da65b",
+      "db225b2166f53329",
+      "e407e9470025be27",
+      "0af92f3329d579d9",
+      "73ecd758589f7158",
+      "ed1ee0f03c97b086",
+      "b2abdba5ad4632f9",
+      "fc58f17e925c6ab6",
+      "b06febebd3339309",
+      "57e9c87f8c4263cd",
+      "fa8df2aae8ce9f99",
+      "3045d91439babb0f",
+      "21abd68a2fb0710b",
+      "66a2ca971f297e77",
+      "d8e66c2ad47ad7e4",
+      "874d0f8b5cdd63cb",
+      "e798af033618d396",
+      "4b655f10ffc81ac8",
+      "74190dbc95d82fb2",
+      "2c2e5a8dd67b1790",
+      "fed1569a049fda8a",
+      "aed443e1cc07e9db",
+      "e592023a1057c15b",
+      "4f467f3f786616ce",
+      "aeb3353136a02561",
+      "501afd67da900bbb",
+      "62c674e59bf2e880",
+      "52f6942a3b6cb36e",
+      "bb3d1360a84d0308",
+      "dc60074f20ab8150",
+      "e9a6224440e441f0",
+      "2544715a2dcf6de7",
+      "8b0891d2beb5e113",
+      "93cda6bd878ca478",
+      "7dc59f7c5e8c11f8",
+      "4cd9b0d969e7b91a",
+      "3937480e2ef58df3",
+      "c228d37f100837b7",
+      "c037fe8163c24323",
+      "ac190ea1746a7d57",
+      "8eacedf143de6a99",
+      "76984f15eba404cc",
+      "1a0f41365975dab5",
+      "4e3646eb5ab759ef",
+      "d6e576410a056017",
+      "7e701ab1ce62ca8e",
+      "28459a017ab58a6d",
+      "cefb69ed8ba20bb7",
+      "4f34d047ba54a97a",
+      "6c62df7aadb967fe",
+      "318d4c37dccf4ea9",
+      "e40ab9ceb8f9d2d9",
+      "bfe790ab1c61e730",
+      "674b87f6a351042d",
+      "7dd57cde42b727b9"
+    ],
+    "country_level_markers": 1709,
+    "unlocated": 244,
+    "ambiguous_incident_pairs": [
+      {
+        "ids": [
+          "e5119ead75871fff",
+          "b1ee1edca90d588a"
+        ],
+        "incident_id": "inc-37899ddd01e78744",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "712f621a193da0a1",
+          "ef97cd7117afd352"
+        ],
+        "incident_id": "inc-550cdd6b26f5d1ea",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "81a99f20dacfda5a",
+          "b4209d68b686c04a"
+        ],
+        "incident_id": "inc-ecdf36a8fc3317ec",
+        "stage": "INITIAL",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d8320706597ff918",
+          "f94432e96bfc1103"
+        ],
+        "incident_id": "inc-0ed4186864bcc044",
+        "stage": "INITIAL",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "04e1e1cb42b65f97",
+          "9175b8c39aaa5272"
+        ],
+        "incident_id": "inc-91badb4afba4c831",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c027d9e2b38cac38",
+          "1b978b7066e8ed04"
+        ],
+        "incident_id": "inc-50fa9345851e5436",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c027d9e2b38cac38",
+          "b3e49e811abda363"
+        ],
+        "incident_id": "inc-50fa9345851e5436",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c027d9e2b38cac38",
+          "8a195a155d407ddc"
+        ],
+        "incident_id": "inc-50fa9345851e5436",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "1b978b7066e8ed04",
+          "b3e49e811abda363"
+        ],
+        "incident_id": "inc-50fa9345851e5436",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "1b978b7066e8ed04",
+          "8a195a155d407ddc"
+        ],
+        "incident_id": "inc-50fa9345851e5436",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "b3e49e811abda363",
+          "9ece307f451c0460"
+        ],
+        "incident_id": "inc-50fa9345851e5436",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "9ece307f451c0460",
+          "8a195a155d407ddc"
+        ],
+        "incident_id": "inc-50fa9345851e5436",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "9526251a293c95ff",
+          "fc608c5fbd632a80"
+        ],
+        "incident_id": "inc-949d20b12d2c2a5f",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c4643daf95fa0971",
+          "e5e7d1906ac167d3"
+        ],
+        "incident_id": "inc-91badb4afba4c831",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "b41ea2b6fad1df9f",
+          "803be28998b8e99b"
+        ],
+        "incident_id": "inc-ccb611ba04f0af1f",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d49e2ff1741fdfa2",
+          "8bc098a4410d28a7"
+        ],
+        "incident_id": "inc-3ea62e164ed34c22",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d49e2ff1741fdfa2",
+          "ebc8044ba8a2e5ca"
+        ],
+        "incident_id": "inc-3ea62e164ed34c22",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "8bc098a4410d28a7",
+          "ebc8044ba8a2e5ca"
+        ],
+        "incident_id": "inc-3ea62e164ed34c22",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "04929552840907fa",
+          "2c650976a6e84432"
+        ],
+        "incident_id": "inc-53607b4553fb86ee",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "173ae382289734bc",
+          "5e402d5de060eb70"
+        ],
+        "incident_id": "inc-957a2f802e2738b9",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "500cb4b0098af768",
+          "e693e3240ece0315"
+        ],
+        "incident_id": "inc-859278f6bd85cb38",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "547d7b5245e2dac0",
+          "1bfda6e1b416dffb"
+        ],
+        "incident_id": "inc-4990e6e43450b5fa",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "211313e9f9b59356",
+          "be1cef68354e6304"
+        ],
+        "incident_id": "inc-6162fe7f8b26f137",
+        "stage": "INITIAL",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "3d1d81af736d73c0",
+          "b6a295f3e5856b58"
+        ],
+        "incident_id": "inc-1559e52c30a71c50",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "a07db029e69d5dad",
+          "f10a8d569e7cd47f"
+        ],
+        "incident_id": "inc-83cfff7c15c01ef5",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "a07db029e69d5dad",
+          "fc58f17e925c6ab6"
+        ],
+        "incident_id": "inc-83cfff7c15c01ef5",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "f10a8d569e7cd47f",
+          "fc58f17e925c6ab6"
+        ],
+        "incident_id": "inc-83cfff7c15c01ef5",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "910cfe78c1233795",
+          "62c674e59bf2e880"
+        ],
+        "incident_id": "inc-47f77a8ba7451ca2",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "6997134cbfb01aef",
+          "368297547d2ca3e2"
+        ],
+        "incident_id": "inc-ec91cc31f9dc7926",
+        "stage": "INITIAL",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "736194c4861f33c9",
+          "dfec8a207b0b1f5a"
+        ],
+        "incident_id": "inc-4f1c6cb756e59e64",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "590ac5513342ab17",
+          "8ffcbd28506d1a68"
+        ],
+        "incident_id": "inc-2f2b7ce5b9a4929c",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "efb4bb9ffcd5b9a3",
+          "c015c034faeb74fc"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "efb4bb9ffcd5b9a3",
+          "c10f6bef49ea0444"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "efb4bb9ffcd5b9a3",
+          "7592478ec4e4fe3e"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "efb4bb9ffcd5b9a3",
+          "fedc69a2ee88499e"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "efb4bb9ffcd5b9a3",
+          "155d6b172ef0f0ef"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "efb4bb9ffcd5b9a3",
+          "daaa0399b9bd239f"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c015c034faeb74fc",
+          "fedc69a2ee88499e"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c10f6bef49ea0444",
+          "7592478ec4e4fe3e"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "7592478ec4e4fe3e",
+          "fedc69a2ee88499e"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "fedc69a2ee88499e",
+          "155d6b172ef0f0ef"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "fedc69a2ee88499e",
+          "daaa0399b9bd239f"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c3734495f5a53859",
+          "fbc8ed94cc2e6ebf"
+        ],
+        "incident_id": "inc-08489f247b144113",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "c3734495f5a53859",
+          "43aacb1d7ff02798"
+        ],
+        "incident_id": "inc-08489f247b144113",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "fbc8ed94cc2e6ebf",
+          "b0fcd74303998458"
+        ],
+        "incident_id": "inc-08489f247b144113",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "b0fcd74303998458",
+          "43aacb1d7ff02798"
+        ],
+        "incident_id": "inc-08489f247b144113",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "57dba68821006537",
+          "d6b9b68686e27fe8"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "57dba68821006537",
+          "7dd4f7efb78c1dcd"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "57dba68821006537",
+          "5405df33d23999d6"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d6b9b68686e27fe8",
+          "0a94a653d5c6f556"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d6b9b68686e27fe8",
+          "15d5361463cd5930"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d6b9b68686e27fe8",
+          "2347c31cb64feb89"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d6b9b68686e27fe8",
+          "7dd4f7efb78c1dcd"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "d6b9b68686e27fe8",
+          "5405df33d23999d6"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "0a94a653d5c6f556",
+          "7dd4f7efb78c1dcd"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "15d5361463cd5930",
+          "7dd4f7efb78c1dcd"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "15d5361463cd5930",
+          "5405df33d23999d6"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "2347c31cb64feb89",
+          "7dd4f7efb78c1dcd"
+        ],
+        "incident_id": "inc-46fcf68ee0bdbff1",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "4bc7d11ebb245f91",
+          "fab5eb60caa20a12"
+        ],
+        "incident_id": "inc-1535b575064b3400",
+        "stage": "INITIAL",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "8e4847b489f92d5f",
+          "7e2a6679c73d889c"
+        ],
+        "incident_id": "inc-340cc1de5b3f6df5",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "9fb894d2248aab5c",
+          "fa9f6b28b6533e64"
+        ],
+        "incident_id": "inc-f1ea82e15bd8c8e9",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "75a6dd35d43be777",
+          "fa9f6b28b6533e64"
+        ],
+        "incident_id": "inc-f1ea82e15bd8c8e9",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "6a73d6fe672e20e9",
+          "e04afc98c2d39795"
+        ],
+        "incident_id": "inc-d0731968b382f04c",
+        "stage": "INITIAL",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "e28a058837da6ab0",
+          "8c1d624f5d8390d2"
+        ],
+        "incident_id": "inc-f2a987b1ff7404a9",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "8a7f0c581e6d9b43",
+          "33527d93a9b8e54c"
+        ],
+        "incident_id": "inc-adebecd6b4d7cf64",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "08a72c4ae7d8fc56",
+          "8c31835cc0470d45"
+        ],
+        "incident_id": "inc-8777e6de7a461a8d",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "fb29e0a050d5c163",
+          "28fe4e7704cece6f"
+        ],
+        "incident_id": "inc-2eb3184af07d4023",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "eb073b4284596b5f",
+          "137fe731373d983b"
+        ],
+        "incident_id": "inc-77c98ed7794a9206",
+        "stage": "FOLLOW_UP",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "e4883c170bcf77e8",
+          "e481f6f964eb8f94"
+        ],
+        "incident_id": "inc-e209565974f3327a",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      },
+      {
+        "ids": [
+          "01c76ea433b7b779",
+          "ca09ef7cae895be5"
+        ],
+        "incident_id": "inc-8a363b38e30e1dd8",
+        "stage": "INVESTIGATION_UPDATE",
+        "reason": "No comparable primary-headline anchor; do not auto-merge"
+      }
+    ],
+    "scope": "Structural scan and reviewed source-excerpt corrections; not independent verification of every incident or location."
+  },
+  "added_record_ids": [],
+  "removed": [],
+  "changes": []
+}
