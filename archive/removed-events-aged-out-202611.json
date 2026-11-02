@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-01T17:05:38.933972+00:00",
+  "removed_at": "2026-11-02T20:31:39.574331+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -62,6 +62,111 @@
       "country": "Chile",
       "ai_relevance_score": 85,
       "ai_relevance_reason": "Current report of a kidnapping operation with a specific actor and location."
+    },
+    {
+      "id": "bb90f1532784706a",
+      "incident_id": "inc-1fa849546a4e354a",
+      "url": "https://executivedigest.sapo.pt/megaoperacao-em-12-estados-alemaes-contra-jovens-neonazis-ligados-a-partido-de-extrema-direita/",
+      "title": "Mega-operation in 12 German states against neo-Nazi youths",
+      "summary": "German law enforcement conducted a massive nationwide operation across 12 federal states targeting neo-Nazi extremist youths linked to a right-wing party.",
+      "original_title": "Megaoperao em 12 estados alemães contra jovens neonazis ligados a partido de extrema - direita",
+      "original_language": "pt",
+      "source": "executivedigest.sapo.pt",
+      "published": "2026-05-06T12:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Germany",
+      "ai_relevance_score": 88,
+      "ai_relevance_reason": "Reports a large-scale nationwide counter-extremism law enforcement operation."
+    },
+    {
+      "id": "9e616336a504a04b",
+      "incident_id": "inc-21de518a4f0007aa",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNN2Ixa3BRS0pOLW9RY0pMcVhReHZsWDdKdENJQU9HWkJkcDYzVzhvZ2lUTVAyUjFwaWQzdDI3NDdYVGRIWnpScHdCQmVxTTF5WURtQjhDa3NTdFNuWTRDbkQ5Wm93amlReXlBanBrRFY2N2ZoNHg3MHVmdUZJUFFNMDZCYmUxS0F0R2lZemNjZ2NCb0pHajJRXzBSOEZ6Yl80UTE4aUNQUzVMUXVxMzFN?oc=5",
+      "title": "Jihadist attack destroys historic Catholic church in northern Mozambique",
+      "summary": "Jihadist militants carried out an attack that completely destroyed a historic Catholic church in northern Mozambique.",
+      "original_title": "Jihadist attack destroys historic Catholic church in northern Mozambique",
+      "original_language": "en",
+      "source": "The Catholic Herald",
+      "published": "2026-05-06T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Mozambique",
+      "region": "Northern Mozambique",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete militant attack destroying property."
+    },
+    {
+      "id": "bc7e8895b0bb7788",
+      "incident_id": "inc-5da51310219f3bb9",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQYWxibTllVGdhSFZHVk5IYm93bThYSDZIZkhXcU5lYUtuWk9uclp3SWt4WG92WEozeDE3TG9Hd1FqUFF0anprbXNJZC1iX05ISkl5S1UzVDdCT045UmRIWi0xRExPdzVGTkZMSlRQZXRpWGlGSGI2WUF1TGNWS1h4dHF2MUFxQWdGaXlBR2hDWGpBLUxMbmcyLUxqVkxuLW5iZldab2JWMmhCQkdCcVZELQ?oc=5",
+      "title": "British police to establish special team to protect Jewish communities in London",
+      "summary": "British law enforcement announced the creation of a specialized unit to protect Jewish communities in London following security threats.",
+      "original_title": "משטרת בריטניה תקים צוות מיוחד לשמירה על הקהילות היהודיות בלונדון",
+      "original_language": "he",
+      "source": "הארץ",
+      "published": "2026-05-06T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "United Kingdom",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports a concrete security countermeasure and establishment of a specialized protective unit responding to threats."
+    },
+    {
+      "id": "d7463b007332de7f",
+      "incident_id": "inc-722e3c1e6bfb8049",
+      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQV2FHaS1JaGJnZmhVV1BubHl5andwcWpfQ1VvczdKb1dBSnBocGdKZE9aY21NaThRRnhFRUt5UlVVODE1UzdPcmFBdkhhTU5uOFZHb1kzTzN5MjZ5YThhLTZoWHFKd29IVEZYTjcwZndCeWIwV1ptbEx2MTZ3THZwdEhTVmdlT0NOMnBLTFRqNUNzVmVkS1V0ODhfeVNQVWt5UWlFaEFZbktwSktQZlA4Yg?oc=5",
+      "title": "Troops neutralise four terrorists, capture one in Timbuktu Triangle",
+      "summary": "Military troops neutralized four terrorists and captured one during an operation in the Timbuktu Triangle.",
+      "original_title": "Troops neutralise four terrorists, capture one in Timbuktu Triangle",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-05-06T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Arrests"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Mali",
+      "region": "Timbuktu Triangle",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism military operation resulting in casualties and arrests."
+    },
+    {
+      "id": "f6ecf3d3d4b6e07f",
+      "incident_id": "inc-d140c90b84a7c8d2",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQVW80ZGRkSGRBYzFmb1g3UTNQQWpEVzEzZENxVFJqSTVjYTJvY0NscWdJZ2pDUlNzdGVnaXE3emRfT0owdkpmMUx0YlY1bkV6bGpyWTRmaGVRcUl2RmpKUlc5MzJ1OXBrbWRqUzNZd1RUSDZlZHZaRF9Mb3pyS1ZSQ3ByeEZoajFZbW96U1FhSmF3TEs4UUFQZ1hnM0ZIcllJa2hWblNDQVd2SUw3M19N?oc=5",
+      "title": "Three arrested in Lurgan police station car bomb investigation",
+      "summary": "Three individuals, including a 15-year-old, were arrested regarding the investigation into a car bomb attack at a Lurgan police station.",
+      "original_title": "Boy, 15, among three people arrested in Lurgan police station car bomb probe",
+      "original_language": "en",
+      "source": "Sky News",
+      "published": "2026-05-06T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "United Kingdom",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Arrest update concerning an explosive-based attack on a police facility."
     }
   ]
 }
