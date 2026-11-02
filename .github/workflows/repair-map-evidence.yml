@@ -31,8 +31,10 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install -r requirements.txt
-      - name: No-provider regression tests
-        run: python -m unittest discover -s tests -p 'map_evidence_integrity_test.py'
+      - name: No-provider regression tests and shared-queue safety
+        run: |
+          python -m unittest discover -s tests -p 'workflow_concurrency_test.py'
+          python -m unittest discover -s tests -p 'map_evidence_integrity_test.py'
       - name: Snapshot full database and apply source-bound decisions
         run: |
           python tools/daily_publication_audit.py snapshot

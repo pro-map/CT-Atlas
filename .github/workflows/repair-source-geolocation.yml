@@ -1,12 +1,9 @@
 name: Repair source-country geolocation
 
+# Historical one-shot migration from October 7. The source-reviewed
+# repair-map-evidence.yml workflow supersedes these hardcoded corrections.
+# Editing this workflow must never replay old coordinates over newer evidence.
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "tools/repair_source_geolocation.py"
-      - ".github/workflows/repair-source-geolocation.yml"
   workflow_dispatch:
 
 permissions:
@@ -16,6 +13,7 @@ permissions:
 concurrency:
   group: ct-map-update-main
   cancel-in-progress: false
+  queue: max
 
 jobs:
   repair:

@@ -27,9 +27,11 @@ permissions:
   id-token: write
 
 # Same group as the collector: no simultaneous database/site deployment.
+# queue:max is required on every member; the default replaces pending repairs.
 concurrency:
   group: ct-map-update-main
   cancel-in-progress: false
+  queue: max
 
 jobs:
   apply-and-deploy:
