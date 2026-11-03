@@ -1,43 +1,43 @@
 {
   "schema_version": 2,
   "status": "partial",
-  "run_started_at": "2026-11-02T23:53:12.214890+00:00",
-  "last_attempt_at": "2026-11-02T23:53:12.214890+00:00",
-  "published_at": "2026-11-03T00:44:11.606256+00:00",
+  "run_started_at": "2026-11-03T17:07:52.612379+00:00",
+  "last_attempt_at": "2026-11-03T17:07:52.612379+00:00",
+  "published_at": "2026-11-03T18:18:36.988934+00:00",
   "recent": {
-    "candidates": 3521,
-    "reviewed": 2731,
-    "cached": 1867,
-    "new_reviews": 864,
+    "candidates": 3924,
+    "reviewed": 2948,
+    "cached": 1572,
+    "new_reviews": 1376,
     "official_auto_accepted": 0,
-    "retained": 170,
-    "rejected": 2561,
-    "pending": 790,
+    "retained": 281,
+    "rejected": 2667,
+    "pending": 976,
     "status": "partial",
-    "calls": 35,
+    "calls": 55,
     "primary_calls": 30,
-    "overflow_calls": 5,
+    "overflow_calls": 25,
     "reasons": [
-      "transient_error"
+      "run_budget"
     ],
-    "window_start": "2026-10-30T23:53:12.214890+00:00",
-    "window_end": "2026-11-02T23:53:12.214890+00:00"
+    "window_start": "2026-10-31T17:07:52.612379+00:00",
+    "window_end": "2026-11-03T17:07:52.612379+00:00"
   },
   "backlog": {
-    "candidates": 1734,
-    "reviewed": 575,
-    "cached": 575,
+    "candidates": 1882,
+    "reviewed": 530,
+    "cached": 530,
     "new_reviews": 0,
     "official_auto_accepted": 0,
     "retained": 0,
-    "rejected": 575,
-    "pending": 1159,
+    "rejected": 530,
+    "pending": 1352,
     "status": "partial",
-    "calls": 5,
+    "calls": 0,
     "primary_calls": 0,
-    "overflow_calls": 5,
+    "overflow_calls": 0,
     "reasons": [
-      "transient_error"
+      "run_budget"
     ]
   },
   "maintenance": {
@@ -62,25 +62,21 @@
     },
     "gdelt": {
       "attempted": 42,
-      "http_attempts": 2,
-      "rate_limit_http_attempts": 2,
-      "rate_limited": 1,
+      "http_attempts": 4,
+      "rate_limit_http_attempts": 3,
+      "rate_limited": 2,
+      "successful": 1,
+      "consecutive_unavailable_queries": 0,
       "circuit_open": true,
       "pause_reason": "rate_limit",
-      "failed": 42,
+      "failed": 41,
       "deferred_queries": [
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+financing%22+OR+%22terror+financing%22+OR+%22financing+terrorism%22+OR+%22terrorist+funding%22+OR+%22terror+finance+network%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Terrorist Financing:1/1",
-          "reason": "http_429",
-          "recovered": false,
-          "provider_message": "Please limit requests to one every 5 seconds or contact kalev.leetaru5@gmail.com for larger queries. All high-traffic users should switch to our ngrams dataset: https://blog.gdeltproject.org/using-the"
-        },
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+weapons%22+OR+%22terrorist+arms%22+OR+%22terrorist+firearms%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
           "label": "gdelt:Weapons:1/3",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
+          "reason": "http_429",
+          "recovered": false,
+          "provider_message": "Please limit requests to one every 5 seconds or contact kalev.leetaru5@gmail.com for larger queries. All high-traffic users should switch to our ngrams dataset: https://blog.gdeltproject.org/using-the"
         },
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22weapons+smuggling%22+terrorism&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
@@ -323,13 +319,13 @@
           "recovered": false
         }
       ],
-      "skipped_http_queries": 41
+      "skipped_http_queries": 40
     },
-    "errors": 42,
+    "errors": 41,
     "status": "partial"
   },
   "reasons": [
-    "transient_error",
+    "run_budget",
     "recent_pending",
     "backlog_pending",
     "source_errors",
@@ -337,9 +333,9 @@
     "geolocation_review_required"
   ],
   "queue_filter": {
-    "expired": 6651,
-    "retired": 432,
-    "cancelled_history": 698,
+    "expired": 6389,
+    "retired": 427,
+    "cancelled_history": 734,
     "duplicates": 0
   },
   "budgets": {
@@ -347,28 +343,28 @@
       "per_run": 30,
       "per_day": 60,
       "used_this_run": 30,
-      "used_today": 60
+      "used_today": 30
     },
     "overflow": {
       "model": "gemini-3.1-flash-lite",
       "per_run": 25,
       "per_day": 50,
-      "used_this_run": 10,
-      "used_today": 31
+      "used_this_run": 25,
+      "used_today": 25
     },
     "historical_calls_per_run": 10,
-    "historical_calls_used": 5,
+    "historical_calls_used": 0,
     "maintenance_calls_per_run": 2
   },
   "geolocation": {
     "status": "complete",
     "pending": 0,
-    "located": 6143,
-    "unlocated": 250,
-    "completed_unlocated": 250,
+    "located": 6238,
+    "unlocated": 258,
+    "completed_unlocated": 258,
     "outcome": "success",
-    "processed_this_run": 50,
-    "review_required": 167
+    "processed_this_run": 108,
+    "review_required": 172
   },
   "categories": [
     {
@@ -393,7 +389,7 @@
       "stop_code": "http_503"
     }
   ],
-  "finalized_at": "2026-11-03T00:47:20.447615+00:00",
+  "finalized_at": "2026-11-03T18:21:55.175307+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success"
 }

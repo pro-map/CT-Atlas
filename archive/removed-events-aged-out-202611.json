@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-02T20:31:39.574331+00:00",
+  "removed_at": "2026-11-03T18:16:58.238682+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -167,6 +167,112 @@
       "country": "United Kingdom",
       "ai_relevance_score": 85,
       "ai_relevance_reason": "Arrest update concerning an explosive-based attack on a police facility."
+    },
+    {
+      "id": "96e1ae934dbe9088",
+      "incident_id": "inc-0597ab18b1d7c802",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPZkN0UVhRZ3VjVERSU0tiTFF1S0V0c3M3Yks0Y3JoLTdzUFhYRUk1V2JfdjRLb2c0RUJvZU9BUkZZN0w5VDFSOVBpTDJ3XzFfUUdHZ09DRHR5SGFYOTN0Y0ZGdGQ3TktFZ2hTSEdkMTZJaGl6aFZ6M1ZXOTlmRlNfa2laUUZSOUJtQlJqOHBsck9JMW1xLWhmelRUamJ5d3d3aXVhak9naDVqeGFvX0VmMWhWRElpWXhzYXVRcg?oc=5",
+      "title": "Somali Pirates Seize Another Dhow for Potential Mothership",
+      "summary": "Reports indicate that Somali pirates have seized another dhow, potentially to use it as a mothership for further attacks.",
+      "original_title": "Report That Somali Pirates Seized Another Dhow for Potential Mothership",
+      "original_language": "en",
+      "source": "The Maritime Executive",
+      "published": "2026-05-07T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "Somalia",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete maritime piracy vessel seizure incident."
+    },
+    {
+      "id": "bbe95cf61553c2af",
+      "incident_id": "inc-a770d27d49653950",
+      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQdW5aSzRHNXdiMm9fYUJsSVlhS0FyY0pnLWR2NFVWd0p3eldCandmSUdqMVRRLWZqMUhWdEVZcVBlZ2xWcGlNZ0xkRkxlTFpiN1dabFFGdHlYZy12OGZUX2txZklpQlZnc01jeHQzY0xIcE5nV2hxMXpSY1Z5Yk1oRzZESXZBbkxCLW9TcEFGMVJXdTBp0gGaAUFVX3lxTE00cWhxNE1QVEdLVXBXeTNNVW96amg0RVFoLXZjMmpXbGItZHU2X3BXejNMQmVMcWF1Z2V0YmtWVDZJU0d2aWs2RUc4UzJ0d0tzSWZWR0RrLUdHQXZqR2doUTJkeWJYVDlnNFZRREhIVGE5aWQxT3lFdDFJVUZ6ZlB3UmVzRDBvc042Zkw3X0RaWGl2MVRFN2VDQXc?oc=5",
+      "title": "Axes, arrows and crossbow found as brothers arrested during counter-terrorism raid",
+      "summary": "Two brothers were arrested during a counter-terrorism police raid in which weapons including axes, arrows, and a crossbow were recovered.",
+      "original_title": "Axes, arrows and crossbow found as brothers arrested during counter terrorism raid",
+      "original_language": "en",
+      "source": "Wales Online",
+      "published": "2026-05-07T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Arrests",
+        "Weapons"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "United Kingdom",
+      "region": "Wales",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a counter-terrorism police raid, arrests, and weapons recovery."
+    },
+    {
+      "id": "4f279a05aed695a7",
+      "incident_id": "inc-d84d4ea519c62552",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOOW90d1pGMGlBM0JTODJRRXc5MUZJYmcxVmozLWtmaXA0ZTdyMGNfcjlYdWF2WGpad1lqUUNJeUpQTkoybzRLSTloS3Y0NkFSNlRRMjJIcDVqdS1CNFNkcXdqekI5UUQ0eWMxOGEzQUhwZHZTY3FJTjU0TlF4X1RjQnpibThFbThRd3RYa2ZkRFpPVGl0NjNFbg?oc=5",
+      "title": "Operation against ISIS terrorist organization in Istanbul: 11 detentions",
+      "summary": "Turkish security forces detained 11 suspects during counter-terrorism operations targeting the ISIS terrorist organization in Istanbul.",
+      "original_title": "İstanbul’da, terör örgütü DEAŞ’a operasyon: 11 gözaltı | Video videosunu izle | Son Dakika Haberleri",
+      "original_language": "tr",
+      "source": "Sabah",
+      "published": "2026-05-07T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Arrests"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Turkey",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a specific counter-terrorism raid and arrests targeting an ISIS cell."
+    },
+    {
+      "id": "fb8490461cda291d",
+      "incident_id": "inc-a7395476780ba367",
+      "url": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxQVXFrMmdQZC1yYzBQSnR0MFFjRWN0cDNaWk96aUpSell2WkV2WW50Nkp1NWg0M0VYclhnX3VnQ2RZTmVjTFh1Q2szZlJPbWNORUQwXzhLellJWmh3OElVRFZObGxUU0pIbEI1OGNKbjhPNlg1UUF3RnN6UzhHd1JYajkteVJYOUhkaTRaT05id053UTVLbjZ1U2s3WTFyLTNQSHpVQVNxTXNlaWltdGt5S0MwcWFyZkNHN3h6NVhVTnAzcHNqSmswTFJSUzBWSzZodHJCWm9ka2tyNHFVMHpxLWZsTEFfeWZ2Rk56eE1qQ3NnX3poclR2RHh4YWYxMkXSAZoCQVVfeXFMTUgxaW9JX2JoV3M5b3RlN2JmWHFoeS0zck1fWnhvOWtyNExnTU5aZ1hsRExiTmRSZ2JDc1BaY194XzVuZngzZl9NZGExeFpUSHlJY0swSTlqNHlXNjhRRWNDVE9DZkExd0xwa1lTdFZzRzIzUzlIMGhhM0xRR1hrbGhJSFVwNDVzSkxxdzJSQUJjUzlWbEN1Y0dwVkxpTmZlaHowN0RPa3FfVk1uRkNHMVV5NnlOS0c4Y1lXS0dDVWFZTTk3NjltZHAtbkNiblhHOTRiTUt4ZmdaWEhNSGNnd2hpM2xkcVA3YzI4NmF0ZF8xMzYwNzlQajFLbjdmWHZJazZqTC1uSWM1aXpLM3o0YWxQS0pLaEtQNm1R?oc=5",
+      "title": "Police in Michoacan accused of supporting CJNG attack",
+      "summary": "Local police are accused of supporting a CJNG armed attack against inhabitants of an indigenous community in Michoacan.",
+      "original_title": "Acusan a miembros de la policía michoacana de apoyar ataque del CJNG contra habitantes de la comunidad indígena de Acachuén",
+      "original_language": "es",
+      "source": "El Imparcial",
+      "published": "2026-05-07T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "CJNG",
+      "primary_event_type": "ATTACK",
+      "country": "Mexico",
+      "region": "Michoacán",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports a concrete attack by a known non-state militant group."
+    },
+    {
+      "id": "e6a1ecd1d94a8269",
+      "incident_id": "inc-e6091628b6a24c74",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxQYTBnRUc5U0RlbjlyZFhlRnBvVEpOTDYzWU1PQk40ZWFYaGplYnhUUWJNdlluckV6NTNqZm9zWkU3dDlqd29ILXlOUzFXaEY0U1E2eTFhT05TOWI0YzVmbDM5c0MxWURVSEVNZmYwVXBacVpIaFV2Nm1CQllEZTRiUktPc3NQQ2tqNEpEVVhBNUhvaVhiQUJNeTZSQ2NBRUZqNFozWkJOZk9wTVhHWEhmQ1IyODlQM2hpN2ViY2M1UUthZzBfbU9MTFF3?oc=5",
+      "title": "Troops clear ISWAP enclaves in Timbuktu Triangle",
+      "summary": "Troops cleared several ISWAP enclaves in the Timbuktu Triangle and are continuing offensive operations.",
+      "original_title": "Troops clear several ISWAP enclaves in Timbuktu Triangle, sustain offensive operations",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-05-07T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "ISWAP",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "region": "Timbuktu Triangle",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports a concrete, dated military operation against militants."
     }
   ]
 }
