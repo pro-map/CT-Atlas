@@ -1,18 +1,18 @@
 {
   "schema_version": 2,
   "status": "partial",
-  "run_started_at": "2026-11-03T17:07:52.612379+00:00",
-  "last_attempt_at": "2026-11-03T17:07:52.612379+00:00",
-  "published_at": "2026-11-03T18:18:36.988934+00:00",
+  "run_started_at": "2026-11-03T22:17:57.452718+00:00",
+  "last_attempt_at": "2026-11-03T22:17:57.452718+00:00",
+  "published_at": "2026-11-03T23:23:23.874609+00:00",
   "recent": {
-    "candidates": 3924,
-    "reviewed": 2948,
-    "cached": 1572,
-    "new_reviews": 1376,
+    "candidates": 3886,
+    "reviewed": 3750,
+    "cached": 2182,
+    "new_reviews": 1568,
     "official_auto_accepted": 0,
-    "retained": 281,
-    "rejected": 2667,
-    "pending": 976,
+    "retained": 322,
+    "rejected": 3428,
+    "pending": 136,
     "status": "partial",
     "calls": 55,
     "primary_calls": 30,
@@ -20,18 +20,18 @@
     "reasons": [
       "run_budget"
     ],
-    "window_start": "2026-10-31T17:07:52.612379+00:00",
-    "window_end": "2026-11-03T17:07:52.612379+00:00"
+    "window_start": "2026-10-31T22:17:57.452718+00:00",
+    "window_end": "2026-11-03T22:17:57.452718+00:00"
   },
   "backlog": {
-    "candidates": 1882,
-    "reviewed": 530,
-    "cached": 530,
+    "candidates": 1950,
+    "reviewed": 511,
+    "cached": 511,
     "new_reviews": 0,
     "official_auto_accepted": 0,
     "retained": 0,
-    "rejected": 530,
-    "pending": 1352,
+    "rejected": 511,
+    "pending": 1439,
     "status": "partial",
     "calls": 0,
     "primary_calls": 0,
@@ -63,26 +63,24 @@
     "gdelt": {
       "attempted": 42,
       "http_attempts": 4,
-      "rate_limit_http_attempts": 3,
-      "rate_limited": 2,
       "successful": 1,
       "consecutive_unavailable_queries": 0,
-      "circuit_open": true,
-      "pause_reason": "rate_limit",
+      "invalid_response": 1,
       "failed": 41,
       "deferred_queries": [
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+weapons%22+OR+%22terrorist+arms%22+OR+%22terrorist+firearms%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
           "label": "gdelt:Weapons:1/3",
-          "reason": "http_429",
+          "reason": "invalid_response",
           "recovered": false,
-          "provider_message": "Please limit requests to one every 5 seconds or contact kalev.leetaru5@gmail.com for larger queries. All high-traffic users should switch to our ngrams dataset: https://blog.gdeltproject.org/using-the"
+          "provider_message": "{}"
         },
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22weapons+smuggling%22+terrorism&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
           "label": "gdelt:Weapons:2/3",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
+          "reason": "http_429",
+          "recovered": false,
+          "provider_message": "Please limit requests to one every 5 seconds or contact kalev.leetaru5@gmail.com for larger queries. All high-traffic users should switch to our ngrams dataset: https://blog.gdeltproject.org/using-the"
         },
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22arms+trafficking%22+terrorism&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
@@ -319,7 +317,11 @@
           "recovered": false
         }
       ],
-      "skipped_http_queries": 40
+      "rate_limit_http_attempts": 2,
+      "rate_limited": 1,
+      "circuit_open": true,
+      "pause_reason": "rate_limit",
+      "skipped_http_queries": 39
     },
     "errors": 41,
     "status": "partial"
@@ -333,9 +335,9 @@
     "geolocation_review_required"
   ],
   "queue_filter": {
-    "expired": 6389,
-    "retired": 427,
-    "cancelled_history": 734,
+    "expired": 6347,
+    "retired": 453,
+    "cancelled_history": 672,
     "duplicates": 0
   },
   "budgets": {
@@ -343,14 +345,14 @@
       "per_run": 30,
       "per_day": 60,
       "used_this_run": 30,
-      "used_today": 30
+      "used_today": 60
     },
     "overflow": {
       "model": "gemini-3.1-flash-lite",
       "per_run": 25,
       "per_day": 50,
       "used_this_run": 25,
-      "used_today": 25
+      "used_today": 50
     },
     "historical_calls_per_run": 10,
     "historical_calls_used": 0,
@@ -359,12 +361,12 @@
   "geolocation": {
     "status": "complete",
     "pending": 0,
-    "located": 6238,
-    "unlocated": 258,
-    "completed_unlocated": 258,
+    "located": 6306,
+    "unlocated": 263,
+    "completed_unlocated": 263,
     "outcome": "success",
-    "processed_this_run": 108,
-    "review_required": 172
+    "processed_this_run": 74,
+    "review_required": 176
   },
   "categories": [
     {
@@ -389,7 +391,7 @@
       "stop_code": "budget_reached"
     }
   ],
-  "finalized_at": "2026-11-03T18:26:19.907777+00:00",
+  "finalized_at": "2026-11-03T23:25:03.594458+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success"
 }
