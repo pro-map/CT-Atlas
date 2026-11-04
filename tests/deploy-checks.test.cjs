@@ -32,6 +32,21 @@ test("every file the deploy checks or syntax-checks exists",()=>{
 });
 
 
+test("the UI deploy runs the whole Node suite before it publishes",()=>{
+  // Map and Database logic inline in index.html is tested only by this suite,
+  // and the mirror now deploys pushed UI files only after this workflow passes.
+  const steps=workflow.split(/\n      - /);
+  const suite=steps.findIndex(step=>/^\s*run: node --test tests\/\*\.test\.cjs\s*$/m.test(step));
+  const configure=steps.findIndex(step=>step.startsWith("name: Configure GitHub Pages"));
+  assert.ok(suite>0,"node --test tests/*.test.cjs step is missing");
+  assert.ok(configure>suite,"the suite must pass before Pages is configured");
+});
+
+test("the UI deploy watches the pages it publishes that had no trigger",()=>{
+  const paths=workflow.match(/^    paths:\n((?:      - .*\n)+)/m)[1];
+  for(const file of ["privacy.html","robots.txt","CT-ATLAS.png"])assert.ok(paths.includes(`- "${file}"`),file);
+});
+
 test("UI publication shares the data-update lock from checkout through deployment",()=>{
   const daily=fs.readFileSync(".github/workflows/update-map.yml","utf8").replace(/\r\n/g,"\n");
   const concurrency=source=>source.match(/^concurrency:\n([\s\S]*?)(?=^\S)/m)?.[1]||"";

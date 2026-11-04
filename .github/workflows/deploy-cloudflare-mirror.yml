@@ -4,13 +4,12 @@ on:
   push:
     branches:
       - main
+    # No site files but the database: a UI push deploys through "Deploy current
+    # CT Atlas UI", which runs the test suite first, and the mirror follows its
+    # success below. (tests/publication_workflows_test.py checks that one of the
+    # two watches every staged file.)
     paths:
-      - "*.html"
-      - "*.js"
-      - "*.css"
-      - "*.svg"
-      - "*.png"
-      - "*.json"
+      - "events.json"
       - "tools/deploy_mirror.sh"
       - "tools/compact_mirror_json.py"
       - "tools/mirror-worker.mjs"
@@ -24,7 +23,22 @@ on:
   workflow_dispatch:
   workflow_run:
     # Data commits use GITHUB_TOKEN; publish only after a successful trusted run.
-    workflows: ["Daily CT Intelligence Map Update", "Retire Judicial collection", "Refresh daily collection status", "Apply CT Atlas usage upgrade", "Deploy current CT Atlas UI", "Enrich RADNUC — six months, all collection languages", "Enrich specialist categories", "Gemini Chinese eight-category historical backfill", "Groq Free - six-month CBRNE and Chinese historical backfill", "Groq Free - six-month Biological historical backfill", "Groq Free - Biological historical backfill (cancelled)", "Reconcile daily dataset integrity", "Apply reviewed map evidence corrections"]
+    # Exactly the name: of every workflow that deploys GitHub Pages
+    # (tests/publication_workflows_test.py keeps this list complete and current).
+    workflows:
+      - "Daily CT Intelligence Map Update"
+      - "Refresh daily collection status"
+      - "Deploy current CT Atlas UI"
+      - "Reconcile daily dataset integrity"
+      - "Apply reviewed map evidence corrections"
+      - "Retire Judicial collection"
+      - "Actualiser le logo uniquement"
+      - "Backfill actor/group field (existing events)"
+      - "Backfill GDELT + ACLED (6-month, additive only)"
+      - "Recategorize Counter Terrorism Action (backfill)"
+      - "Specialist CBRNE Gemini backup (manual only)"
+      - "Chinese history Gemini backup (cancelled)"
+      - "Groq Free - Biological historical backfill (cancelled)"
     types: [completed]
     branches: [main]
 
@@ -61,17 +75,33 @@ jobs:
         with:
           ref: main
 
+      - name: Skip a revision the mirror already serves
+        id: current
+        if: steps.cloudflare.outputs.configured == 'true' && github.event_name == 'workflow_run'
+        shell: bash
+        run: |
+          # A status refresh that committed nothing leaves main where it was, so its
+          # completion (like any repeated trigger) has nothing new to mirror. The
+          # mirror's own manifest names the revision it was built from; when that is
+          # unknown or another revision, deploy, so a pending run that a newer
+          # trigger replaced is still mirrored. Manual runs always redeploy.
+          served="$(python3 tools/daily_publication_audit.py served-revision --url "https://ct-atlas-mirror.fairpeace.workers.dev")"
+          if [ -n "$served" ] && [ "$served" = "$(git rev-parse HEAD)" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "The mirror already serves main at $served; nothing to redeploy."
+          fi
+
       - name: Deploy identical static mirror
-        if: steps.cloudflare.outputs.configured == 'true'
+        if: steps.cloudflare.outputs.configured == 'true' && steps.current.outputs.skip != 'true'
         run: bash tools/deploy_mirror.sh
       - name: Verify the data actually served by the mirror
-        if: steps.cloudflare.outputs.configured == 'true'
+        if: steps.cloudflare.outputs.configured == 'true' && steps.current.outputs.skip != 'true'
         run: python3 tools/daily_publication_audit.py verify --url "https://ct-atlas-mirror.fairpeace.workers.dev" --expected _pages_mirror/publication-manifest.json --output publication-receipt-mirror.json
       - name: Retain mirror publication proof
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: mirror-publication-proof-${{ github.run_id }}
+          name: mirror-publication-proof-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             _pages_mirror/publication-manifest.json
             publication-receipt-mirror.json

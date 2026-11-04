@@ -405,9 +405,12 @@ test('events-lite.json is derived, never committed',()=>{
 });
 
 test('the Cloudflare mirror builds and serves events-lite.json from the events.json it copies',()=>{
+ // Built aside, then staged through the lossless chunking, like events.json: a
+ // whole file over the 25 MiB asset cap failed every deploy. The old "rm on
+ // failure" fallback is gone because the publication manifest needs the file.
  const script=read('tools/deploy_mirror.sh');
- assert.match(script,/python3 tools\/build_events_lite\.py --input events\.json --output "\$STAGING\/events-lite\.json"/);
- assert.match(script,/rm -f "\$STAGING\/events-lite\.json"/);
+ assert.match(script,/python3 tools\/build_events_lite\.py --input events\.json --output "\$DERIVED\/events-lite\.json"/);
+ assert.match(script,/python3 tools\/compact_mirror_json\.py --input "\$DERIVED\/events-lite\.json" --output "\$STAGING\/events-lite\.json" --allow-chunks/);
 });
 
 test('the live smoke test rejects a lite file that disagrees with events.json but only warns when it is absent',()=>{

@@ -161,9 +161,26 @@ def verify(url, expected_path, output, attempts=5, sleep=time.sleep):
     raise RuntimeError('Deployment content verification failed; see receipt')
 
 
+def served_revision(url):
+    """Source revision of the manifest a deployment serves now; None when unknown."""
+    if not url.startswith('https://'):
+        raise ValueError('An HTTPS deployment URL is required')
+    try:
+        request = urllib.request.Request(url.rstrip('/')+'/publication-manifest.json?integrity='+str(time.time_ns()),
+            headers={'Cache-Control': 'no-cache', 'User-Agent': 'CT-Atlas-Publication-Check/1.0'})
+        with urllib.request.urlopen(request, timeout=30) as response:
+            revision = json.loads(response.read(1024 * 1024)).get('source_revision')
+    except Exception:
+        # Unknown means "deploy": a skipped redeploy must never hide a stale site.
+        return None
+    if isinstance(revision, str) and len(revision) == 40 and all(c in '0123456789abcdef' for c in revision):
+        return revision
+    return None
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('mode', choices=['snapshot', 'repair', 'receipt', 'manifest', 'verify'])
+    p.add_argument('mode', choices=['snapshot', 'repair', 'receipt', 'manifest', 'verify', 'served-revision'])
     p.add_argument('--before', default=os.getenv('RUNNER_TEMP', '.')+'/daily-before.json')
     p.add_argument('--output', default='publication-audit.json')
     p.add_argument('--directory', default='.')
@@ -177,5 +194,6 @@ def main():
     elif a.mode=='receipt': receipt(a.before, a.output)
     elif a.mode=='manifest': manifest(a.directory, a.output)
     elif a.mode=='verify': verify(a.url or '', a.expected, a.output)
+    elif a.mode=='served-revision': print(served_revision(a.url or '') or '')
 
 if __name__=='__main__': main()

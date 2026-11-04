@@ -4,7 +4,9 @@ import json
 import subprocess
 import tempfile
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
+from unittest.mock import patch
 
 SPEC = importlib.util.spec_from_file_location("finalize_daily_status", Path(__file__).resolve().parents[1] / "tools/finalize_daily_status.py")
 MODULE = importlib.util.module_from_spec(SPEC)
@@ -22,6 +24,13 @@ def progress(**overrides):
              "source": {"status": "complete", "errors": []}, "reasons": []}
     value.update(overrides)
     return value
+
+
+class LaterClock(datetime):
+    """A clock one hour on, so a rewritten finalized_at is visible."""
+    @classmethod
+    def now(cls, tz=None):
+        return datetime(2026, 10, 14, 13, 0, tzinfo=timezone.utc)
 
 
 class FinalizeDailyStatusTests(unittest.TestCase):
@@ -232,6 +241,56 @@ class FinalizeDailyStatusTests(unittest.TestCase):
         self.assertEqual(result["status"], "failed")
         self.assertEqual(result["recent"]["reviewed"], 3)
         self.assertEqual(result["recent"]["pending"], 7)
+
+    def refresh_later(self):
+        with patch.object(MODULE, "datetime", LaterClock):
+            return self.run_finalize(refresh=True)
+
+    def test_refresh_without_any_change_keeps_finalized_at_and_both_files(self):
+        # The second refresh of a cycle only changed finalized_at, which made git
+        # commit and Pages, the mirror and every open map republish the same data.
+        self.write(self.path, {**self.original, "collection_status": progress(
+            geolocation={"status": "complete", "outcome": "success", "pending": 0})})
+        first = self.run_finalize(refresh=True)
+        database, sidecar = self.path.read_bytes(), self.sidecar.read_bytes()
+        second = self.refresh_later()
+        self.assertEqual(second, first)
+        self.assertEqual(self.path.read_bytes(), database)
+        self.assertEqual(self.sidecar.read_bytes(), sidecar)
+        self.assertEqual(json.loads(database)["collection_status"]["finalized_at"], first["finalized_at"])
+
+    def test_refresh_with_a_real_change_still_records_a_new_finalized_at(self):
+        self.write(self.path, {**self.original, "collection_status": progress(
+            geolocation={"status": "complete", "outcome": "success", "pending": 0})})
+        first = self.run_finalize(refresh=True)
+        self.write(self.radnuc, {"updated_at": "2026-10-14T12:30:00Z", "counts": {"reviewed": 3},
+                                "pending_reviews": 2, "batch_status": "partial"})
+        second = self.refresh_later()
+        self.assertEqual(second["finalized_at"], "2026-10-14T13:00:00+00:00")
+        self.assertNotEqual(second["finalized_at"], first["finalized_at"])
+        self.assertEqual(json.loads(self.path.read_text())["collection_status"], second)
+        self.assertEqual(json.loads(self.sidecar.read_text()), second)
+
+    def test_unchanged_refresh_still_repairs_a_missing_sidecar(self):
+        self.write(self.path, {**self.original, "collection_status": progress(
+            geolocation={"status": "complete", "outcome": "success", "pending": 0})})
+        first = self.run_finalize(refresh=True)
+        database = self.path.read_bytes()
+        self.sidecar.unlink()
+        second = self.refresh_later()
+        self.assertEqual(second["finalized_at"], first["finalized_at"])
+        self.assertEqual(self.path.read_bytes(), database)
+        self.assertEqual(json.loads(self.sidecar.read_text()), first)
+
+    def test_collection_run_always_records_its_own_finalized_at(self):
+        # Only --refresh-existing may keep the previous value: a collection
+        # attempt is new publication state even when the counters repeat.
+        self.write(self.sidecar, progress())
+        first = self.run_finalize()
+        with patch.object(MODULE, "datetime", LaterClock):
+            second = self.run_finalize()
+        self.assertEqual(second["finalized_at"], "2026-10-14T13:00:00+00:00")
+        self.assertNotEqual(first["finalized_at"], second["finalized_at"])
 
     def test_independent_radnuc_partial_is_visible_with_its_own_attempt_timestamp(self):
         self.write(self.sidecar, progress())

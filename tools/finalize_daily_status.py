@@ -268,9 +268,18 @@ def finalize(database_path, *, collect_outcome, geolocate_outcome, started_at,
         reasons.append('geolocation_review_required')
         if status['status']=='complete': status['status']='partial'
     status["reasons"] = list(dict.fromkeys(reason for reason in reasons if isinstance(reason, str)))
-    database["collection_status"] = status
-    atomic_write(database_path, database)
-    if status_path:
+    # A refresh that changes nothing but the clock keeps the published
+    # finalized_at and leaves both files untouched: git then sees no diff, so
+    # nothing is committed or redeployed, and open maps (whose publication
+    # manifest includes finalized_at) do not download the same data again.
+    unchanged = (refresh_existing and isinstance(existing, dict) and bool(existing.get("finalized_at"))
+                 and {**status, "finalized_at": existing["finalized_at"]} == existing)
+    if unchanged:
+        status["finalized_at"] = existing["finalized_at"]
+    else:
+        database["collection_status"] = status
+        atomic_write(database_path, database)
+    if status_path and not (unchanged and sidecar == status):
         atomic_write(Path(status_path), status)
     return status
 

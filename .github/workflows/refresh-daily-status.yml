@@ -8,7 +8,12 @@ on:
       - "tools/finalize_daily_status.py"
       - ".github/workflows/refresh-daily-status.yml"
   workflow_run:
-    workflows: ["Daily CT Intelligence Map Update", "Daily RadNuc background archive"]
+    # Not "Daily RadNuc background archive": it starts 10 min after the map
+    # update's slot and finishes long before it (1-8 min against 60-80), so the
+    # refresh after the map update already publishes the new RadNuc row; a late
+    # one waits for the next map update. Its own trigger only queued one more
+    # member of the shared lock, where a later arrival cancels a pending run.
+    workflows: ["Daily CT Intelligence Map Update"]
     types: [completed]
     branches: [main]
   workflow_dispatch:
@@ -39,10 +44,13 @@ jobs:
       - name: Refresh independent collection progress without AI calls
         run: python tools/finalize_daily_status.py --refresh-existing
       - name: Commit verified progress
+        id: commit
         run: |
           set -euo pipefail
           git add -- events.json daily-collection-status.json
           if git diff --cached --quiet; then
+            # The refresh keeps finalized_at when nothing else changed.
+            echo "Collection status unchanged; nothing to commit."
             exit 0
           fi
           git config user.name "CT Intelligence Map Bot"
@@ -50,26 +58,69 @@ jobs:
           # GitHub refuses files over 100 MiB: say so before the push fails.
           python3 tools/check_committed_sizes.py
           git commit -m "Refresh visible daily and RadNuc processing status"
-          git fetch origin main
-          if ! git rebase origin/main; then
-            git rebase --abort || true
-            exit 1
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo "Concurrent status conflict; the next refresh rebuilds it."
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              echo "changed=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            sleep $((attempt * 4))
+          done
+          echo "Status push failed; the next refresh rebuilds it."
+          exit 1
+      - name: Decide whether GitHub Pages needs this refresh
+        id: publish
+        env:
+          CHANGED: ${{ steps.commit.outputs.changed }}
+          EVENT: ${{ github.event_name }}
+          TRIGGER_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+        run: |
+          # An unchanged status is already published: redeploying it would only
+          # add a Pages and a mirror deploy. A manual run, and the run after a map
+          # update that did not succeed (its own deploy may be missing), still
+          # republish main as a safety net.
+          if [ "$CHANGED" = "true" ] || [ "$EVENT" = "workflow_dispatch" ] ||
+             { [ "$EVENT" = "workflow_run" ] && [ "$TRIGGER_CONCLUSION" != "success" ]; }; then
+            echo "pages=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "GitHub Pages keeps its current publication."
           fi
-          git push origin HEAD:main
       - name: Configure GitHub Pages
+        if: steps.publish.outputs.pages == 'true'
         uses: actions/configure-pages@v6
       - name: Build active map and Database data
+        if: steps.publish.outputs.pages == 'true'
         uses: ./.github/actions/build-events-lite
       - name: Upload website
+        if: steps.publish.outputs.pages == 'true'
         uses: actions/upload-pages-artifact@v5
         with:
           name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
           path: "."
       - name: Deploy GitHub Pages
         id: deployment
+        if: steps.publish.outputs.pages == 'true'
         uses: actions/deploy-pages@v5
         with:
           artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Verify the data actually served by GitHub Pages
+        if: steps.publish.outputs.pages == 'true'
+        run: python3 tools/daily_publication_audit.py verify --url "${{ steps.deployment.outputs.page_url }}" --expected publication-manifest.json --output publication-receipt-pages.json
+      - name: Retain Pages publication proof
+        if: ${{ always() && steps.publish.outputs.pages == 'true' }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: status-publication-proof-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            publication-manifest.json
+            publication-receipt-pages.json
+          retention-days: 7
+          if-no-files-found: ignore
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

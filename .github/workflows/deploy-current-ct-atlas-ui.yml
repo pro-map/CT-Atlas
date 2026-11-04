@@ -33,6 +33,12 @@ on:
       - "retired_categories.py"
       - "index.html"
       - "main.html"
+      - "privacy.html"
+      - "robots.txt"
+      - "CT-ATLAS.png"
+      - "daily-quiz.js"
+      - "daily-quiz.css"
+      - "daily-quiz.json"
       - "ip.html"
       - "ip.js"
       - "ip.css"
@@ -199,6 +205,10 @@ jobs:
           node --check crypto-report.js
           node --check pdf-export.js
           node --check crypto-launcher.js
+      - name: Run the Node regression suite
+        # The map and Database logic inline in index.html is covered only here;
+        # the Cloudflare mirror deploys this UI only after this workflow succeeds.
+        run: node --test tests/*.test.cjs
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6
       - name: Build lightweight map data (events-lite.json)

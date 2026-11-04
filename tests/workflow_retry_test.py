@@ -9,8 +9,11 @@ PUBLISHERS = (
     "update-map.yml", "deploy-current-ct-atlas-ui.yml", "repair-map-evidence.yml",
     "refresh-daily-status.yml", "reconcile-daily-integrity.yml", "apply-usage-upgrade.yml",
 )
+
+# Manual publishers are re-run too; the logo refresh used the default artifact name.
+MANUAL_PUBLISHERS = ("refresh-logo-only.yml",)
 WORKFLOWS = {name: (ROOT / ".github/workflows" / name).read_text(encoding="utf-8")
-             for name in PUBLISHERS}
+             for name in PUBLISHERS + MANUAL_PUBLISHERS}
 
 
 def action_steps(source, action):

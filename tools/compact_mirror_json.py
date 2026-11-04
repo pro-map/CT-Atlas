@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Prepare lossless mirror data; preserve every JSON token and string byte.
 
-Workers static assets must fit within 25 MiB. Oversized documents are split
-into immutable byte chunks and streamed at the unchanged /events.json URL.
+Workers static assets must fit within 25 MiB. Oversized publication files
+(events.json, events-lite.json, events-map.json) are split into immutable byte
+chunks and streamed at their unchanged URLs.
 Never truncate events, change source data, or omit the full-data fallback.
 """
 from __future__ import annotations
@@ -19,7 +20,18 @@ MAX_ASSET_BYTES = 25 * 1024 * 1024
 CHUNK_BYTES = 8 * 1024 * 1024
 SHARD_MANIFEST = "events-shards.json"
 SHARD_FORMAT = "ct-atlas-byte-shards-v1"
+# The routes tools/mirror-worker.mjs can stream from chunks (its DATASETS).
+CHUNKED_FILES = ("events.json", "events-lite.json", "events-map.json")
 JSON_WHITESPACE = frozenset(b" \t\r\n")
+
+
+def shard_manifest_name(name: str) -> str:
+    """'<stem>-shards.json'; events.json keeps the deployed 'events-shards.json'."""
+    return Path(name).stem + "-shards.json"
+
+
+def shard_path(name: str, checksum: str, index: int) -> str:
+    return f"_events/{Path(name).stem}-{checksum[:16]}-{index:05d}.bin"
 
 
 def _reject_constant(value: str):
@@ -106,13 +118,13 @@ def write_mirror_copy(source: Path, target: Path, *, limit: int = MAX_ASSET_BYTE
     """Stage the complete JSON, chunking bytes only when a single asset cannot fit."""
     source, target = Path(source), Path(target)
     _validate_target(source, target)
-    if target.name != "events.json":
-        raise ValueError("The mirror full-data route must be events.json")
+    if target.name not in CHUNKED_FILES:
+        raise ValueError("The mirror chunked routes are " + ", ".join(CHUNKED_FILES))
     if limit <= 0 or chunk_bytes <= 0:
         raise ValueError("Asset and chunk size limits must be positive")
     raw = source.read_bytes()
     compact = compact_json_bytes(raw)
-    manifest_path = target.parent / SHARD_MANIFEST
+    manifest_path = target.parent / shard_manifest_name(target.name)
     if len(compact) <= limit:
         _atomic_write(target, compact)
         manifest_path.unlink(missing_ok=True)
@@ -123,11 +135,11 @@ def write_mirror_copy(source: Path, target: Path, *, limit: int = MAX_ASSET_BYTE
         parts = []
         for index, offset in enumerate(range(0, len(compact), size)):
             chunk = compact[offset:offset + size]
-            name = f"_events/events-{checksum[:16]}-{index:05d}.bin"
+            name = shard_path(target.name, checksum, index)
             _atomic_write(target.parent / name, chunk)
             parts.append({"path": name, "size_bytes": len(chunk),
                           "sha256": hashlib.sha256(chunk).hexdigest()})
-        report = {"format": SHARD_FORMAT, "filename": "events.json",
+        report = {"format": SHARD_FORMAT, "filename": target.name,
                   "size_bytes": len(compact), "sha256": checksum, "parts": parts}
         encoded = (json.dumps(report, sort_keys=True, separators=(",", ":")) + "\n").encode()
         if len(encoded) > MAX_ASSET_BYTES:
@@ -147,14 +159,15 @@ def read_mirror_bytes(directory: Path, name: str = "events.json") -> bytes:
     directory = Path(directory)
     if (directory / name).is_file():
         return (directory / name).read_bytes()
-    if name != "events.json":
+    manifest_path = directory / shard_manifest_name(name)
+    if name not in CHUNKED_FILES or not manifest_path.is_file():
         raise ValueError("Missing publication dataset: " + name)
-    manifest = json.loads((directory / SHARD_MANIFEST).read_bytes())
+    manifest = json.loads(manifest_path.read_bytes())
     if manifest.get("format") != SHARD_FORMAT or manifest.get("filename") != name:
         raise ValueError("Unsupported mirror shard manifest")
     output = bytearray()
     for index, part in enumerate(manifest["parts"]):
-        expected = f"_events/events-{manifest['sha256'][:16]}-{index:05d}.bin"
+        expected = shard_path(name, manifest["sha256"], index)
         if part["path"] != expected:
             raise ValueError("Invalid mirror shard path")
         content = (directory / expected).read_bytes()
@@ -190,7 +203,7 @@ def main() -> None:
     parser.add_argument("--output", type=Path)
     parser.add_argument("--check-directory", type=Path)
     parser.add_argument("--allow-chunks", action="store_true",
-                        help="Stream oversized events.json from lossless static byte chunks")
+                        help="Stream an oversized " + "/".join(CHUNKED_FILES) + " from lossless static byte chunks")
     args = parser.parse_args()
     try:
         if args.check_directory is not None:

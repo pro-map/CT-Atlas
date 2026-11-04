@@ -1,10 +1,16 @@
-// Keep the complete /events.json response when it exceeds the static-asset cap.
+// Keep each complete publication file (/events.json, /events-lite.json and
+// /events-map.json) at its URL when it exceeds the static-asset cap.
 // Chunks contain the original compacted bytes, including all collector metadata.
 // Byte streams (not JSON parsing or concatenated strings) keep Worker memory bounded.
 const FORMAT = "ct-atlas-byte-shards-v1";
+// Same names as tools/compact_mirror_json.py: '<stem>-shards.json' lists the
+// chunks '_events/<stem>-<sha16>-<index>.bin' (events.json: events-shards.json).
+// tools/deploy_mirror.sh routes exactly these paths through the Worker.
+const DATASETS = new Set(["events.json", "events-lite.json", "events-map.json"]);
 
-function validateManifest(manifest) {
-  if (manifest?.format !== FORMAT || manifest.filename !== "events.json" ||
+function validateManifest(manifest, filename) {
+  const stem = filename.slice(0, -".json".length);
+  if (manifest?.format !== FORMAT || manifest.filename !== filename ||
       !/^[a-f0-9]{64}$/.test(manifest.sha256) ||
       !Number.isSafeInteger(manifest.size_bytes) || manifest.size_bytes <= 0 ||
       !Array.isArray(manifest.parts) || !manifest.parts.length) {
@@ -12,7 +18,7 @@ function validateManifest(manifest) {
   }
   let total = 0;
   for (const [index, part] of manifest.parts.entries()) {
-    const path = `_events/events-${manifest.sha256.slice(0, 16)}-${String(index).padStart(5, "0")}.bin`;
+    const path = `_events/${stem}-${manifest.sha256.slice(0, 16)}-${String(index).padStart(5, "0")}.bin`;
     if (part.path !== path || !Number.isSafeInteger(part.size_bytes) ||
         part.size_bytes <= 0 || part.size_bytes > 25 * 1024 * 1024 ||
         !/^[a-f0-9]{64}$/.test(part.sha256)) {
@@ -75,19 +81,21 @@ function chunkStream(env, parts, firstReader) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (url.pathname !== "/events.json") return env.ASSETS.fetch(request);
+    const filename = url.pathname.slice(1);
+    if (!DATASETS.has(filename)) return env.ASSETS.fetch(request);
     if (request.method !== "GET" && request.method !== "HEAD") {
       return new Response("Method not allowed", { status: 405, headers: { Allow: "GET, HEAD" } });
     }
-    // Small deployments keep using the ordinary full JSON asset.
+    // Small deployments keep using the ordinary JSON asset.
     const direct = await env.ASSETS.fetch(request);
     if (direct.status !== 404) return direct;
     if (direct.body) await direct.body.cancel();
     try {
-      const response = await env.ASSETS.fetch("https://assets.local/events-shards.json");
+      const stem = filename.slice(0, -".json".length);
+      const response = await env.ASSETS.fetch(`https://assets.local/${stem}-shards.json`);
       if (response.status !== 200) throw new Error("Mirror manifest is unavailable");
       const manifest = await response.json();
-      validateManifest(manifest);
+      validateManifest(manifest, filename);
       const etag = `"sha256-${manifest.sha256}"`;
       const headers = {
         "Content-Type": "application/json; charset=utf-8",

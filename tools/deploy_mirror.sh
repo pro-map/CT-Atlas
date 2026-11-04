@@ -29,28 +29,29 @@ cp index.html main.html crypto.html social.html facial.html privacy.html robots.
    "$STAGING"/
 
 # Preserve the complete fallback, using byte chunks when compaction alone cannot
-# meet the 25 MiB asset cap. The Worker streams it at the same /events.json URL.
+# meet the 25 MiB asset cap. The Worker streams it at the same /events.json URL
+# (and the derived files below at theirs).
 python3 tools/compact_mirror_json.py --input events.json --output "$STAGING/events.json" --allow-chunks
 cp tools/mirror-worker.mjs "$STAGING/mirror-worker.mjs"
 
 # Lightweight map data, derived from the same source events.json (so it can never be
-# older than it). If it cannot be built the mirror simply serves the full events.json.
-if ! python3 tools/build_events_lite.py --input events.json --output "$STAGING/events-lite.json"; then
-  rm -f "$STAGING/events-lite.json"
-  echo "warning: events-lite.json not built; the mirror will serve the full events.json" >&2
-fi
-if ! python3 tools/build_events_map.py --input events.json --output "$STAGING/events-map.json"; then
-  rm -f "$STAGING/events-map.json"
-  echo "warning: events-map.json not built; the mirror map will filter events-lite.json itself" >&2
-fi
+# older than it). Both grow with the database, so they are staged like events.json:
+# byte chunks at the same URL once a file outgrows the 25 MiB asset cap. The
+# publication manifest below requires all three files, so a failed build stops here.
+DERIVED="$(mktemp -d)"
+trap 'rm -rf "$DERIVED"' EXIT
+python3 tools/build_events_lite.py --input events.json --output "$DERIVED/events-lite.json"
+python3 tools/compact_mirror_json.py --input "$DERIVED/events-lite.json" --output "$STAGING/events-lite.json" --allow-chunks
+python3 tools/build_events_map.py --input events.json --output "$DERIVED/events-map.json"
+python3 tools/compact_mirror_json.py --input "$DERIVED/events-map.json" --output "$STAGING/events-map.json" --allow-chunks
 
 python3 tools/daily_publication_audit.py manifest --directory "$STAGING" --output "$STAGING/publication-manifest.json"
 
-# index.html references the logo as "CT-ATLAS.png" (exact case) -- GitHub
-# Pages serves it fine regardless of case, but Cloudflare Workers assets are
-# an exact-match lookup, so the on-disk lowercase ct-atlas.png must be
-# copied under the exact uppercase name the page actually requests.
-cp ct-atlas.png "$STAGING/CT-ATLAS.png"
+# The pages request the logo as "CT-ATLAS.png" (exact case), the file the logo
+# workflow versions. GitHub Pages serves it regardless of case, but Cloudflare
+# Workers assets are an exact-match lookup, so stage that exact name (the
+# tracked lowercase ct-atlas.png duplicate is not what the pages use).
+cp CT-ATLAS.png "$STAGING/CT-ATLAS.png"
 
 for required in facial.html facial.js facial.css facial-intelligence.svg tab-health.js tab-health.css facial-crops.js; do
   if [ ! -s "$STAGING/$required" ]; then
@@ -67,7 +68,7 @@ compatibility_date = "2026-09-11"
 [assets]
 directory = "."
 binding = "ASSETS"
-run_worker_first = ["/events.json"]
+run_worker_first = ["/events.json", "/events-lite.json", "/events-map.json"]
 EOF
 
 cat > "$STAGING/.assetsignore" <<'EOF'

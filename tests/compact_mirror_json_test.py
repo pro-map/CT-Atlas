@@ -118,6 +118,85 @@ class CompactMirrorJsonTests(unittest.TestCase):
         self.assertLess(script.index(compact), script.index(deploy))
         self.assertLess(script.index(size_check), script.index(deploy))
 
+    def test_deploy_script_stages_derived_files_through_chunking_and_worker(self):
+        # events-lite.json and events-map.json grow with the database like
+        # events.json; written whole, either one over 25 MiB failed every deploy.
+        script = (ROOT / "tools/deploy_mirror.sh").read_text(encoding="utf-8")
+        deploy = script.index('(cd "$STAGING" && python3 ../tools/wrangler_retry.py deploy)')
+        for name, builder in (("events-lite.json", "build_events_lite"), ("events-map.json", "build_events_map")):
+            with self.subTest(name=name):
+                build = f'python3 tools/{builder}.py --input events.json --output "$DERIVED/{name}"'
+                stage = (f'python3 tools/compact_mirror_json.py --input "$DERIVED/{name}" '
+                         f'--output "$STAGING/{name}" --allow-chunks')
+                self.assertIn(build, script)
+                self.assertIn(stage, script)
+                self.assertLess(script.index(build), script.index(stage))
+                self.assertLess(script.index(stage), deploy)
+                self.assertEqual(script.count(f'--output "$STAGING/{name}"'), 1,
+                                 "Only the chunking step may write it into the staging directory")
+        self.assertIn('run_worker_first = ["/events.json", "/events-lite.json", "/events-map.json"]', script)
+
+    def test_deploy_script_copies_the_logo_the_pages_request(self):
+        # The pages and the logo workflow use CT-ATLAS.png; the lowercase
+        # duplicate would keep serving an old logo after a logo-only update.
+        script = (ROOT / "tools/deploy_mirror.sh").read_text(encoding="utf-8")
+        self.assertIn('cp CT-ATLAS.png "$STAGING/CT-ATLAS.png"', script)
+        self.assertNotIn("cp ct-atlas.png", script)
+        self.assertIn('src="CT-ATLAS.png', (ROOT / "index.html").read_text(encoding="utf-8"))
+        logo = (ROOT / ".github/workflows/refresh-logo-only.yml").read_text(encoding="utf-8")
+        self.assertIn('Path("CT-ATLAS.png")', logo)
+
+    def test_every_publication_file_over_the_asset_cap_is_chunked_losslessly(self):
+        row = json.dumps({"summary": "عربي 中文 😀 " * 64, "n": 1.5}, ensure_ascii=False,
+                         separators=(",", ":")).encode()
+        source = self.root / "oversized.json"
+        source.write_bytes(b'{"events": [\n' + b",\n".join([row] * (mirror.MAX_ASSET_BYTES // len(row) + 1))
+                           + b'\n], "n": 1.2300e+04}')
+        compact = mirror.compact_json_bytes(source.read_bytes())
+        self.assertGreater(len(compact), mirror.MAX_ASSET_BYTES)
+        for name in mirror.CHUNKED_FILES:
+            with self.subTest(name=name):
+                staging = self.root / ("staging-" + name)
+                target = staging / name
+                report = mirror.write_mirror_copy(source, target)
+                self.assertFalse(target.exists(), "An oversized whole copy must not be uploaded")
+                manifest = json.loads((staging / mirror.shard_manifest_name(name)).read_bytes())
+                self.assertEqual(manifest["filename"], name)
+                self.assertEqual(report["format"], mirror.SHARD_FORMAT)
+                stem = name[:-len(".json")]
+                for index, part in enumerate(manifest["parts"]):
+                    self.assertEqual(part["path"], f"_events/{stem}-{manifest['sha256'][:16]}-{index:05d}.bin")
+                self.assertGreater(len(manifest["parts"]), 1)
+                self.assertEqual(mirror.read_mirror_bytes(staging, name), compact)
+                mirror.check_asset_sizes(staging)
+        # The deployed Worker and its tests already use these events.json names.
+        self.assertEqual(mirror.shard_manifest_name("events.json"), mirror.SHARD_MANIFEST)
+
+    def test_derived_files_share_one_staging_directory_without_mixing_chunks(self):
+        staging = self.target.parent
+        for name in mirror.CHUNKED_FILES:
+            source = self.root / ("source-" + name)
+            source.write_bytes(json.dumps({"events": [{"id": name, "summary": "a long string " * 4}]}).encode())
+            mirror.write_mirror_copy(source, staging / name, limit=30, chunk_bytes=16)
+        for name in mirror.CHUNKED_FILES:
+            with self.subTest(name=name):
+                self.assertEqual(json.loads(mirror.read_mirror_bytes(staging, name))["events"][0]["id"], name)
+        lite_manifest = staging / mirror.shard_manifest_name("events-lite.json")
+        manifest = json.loads(lite_manifest.read_bytes())
+        manifest["filename"] = "events.json"
+        lite_manifest.write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(ValueError, "manifest"):
+            mirror.read_mirror_bytes(staging, "events-lite.json")
+
+    def test_only_publication_routes_can_be_chunked_or_reconstructed(self):
+        self.source.write_bytes(b'{"events":[]}')
+        with self.assertRaises(ValueError):
+            mirror.write_mirror_copy(self.source, self.target.parent / "daily-quiz.json")
+        with self.assertRaisesRegex(ValueError, "Missing publication dataset"):
+            mirror.read_mirror_bytes(self.target.parent, "events-map.json")
+        with self.assertRaisesRegex(ValueError, "Missing publication dataset"):
+            mirror.read_mirror_bytes(self.target.parent, "daily-quiz.json")
+
     def test_full_repository_snapshot_preserved_when_present(self):
         source = ROOT / "events.json"
         if not source.exists():

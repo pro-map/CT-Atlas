@@ -75,8 +75,12 @@ jobs:
       - name: Upload current website
         uses: actions/upload-pages-artifact@v5
         with:
+          # deploy-pages rejects multiple matching artifacts from prior attempts.
+          name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
           path: "."
 
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+        with:
+          artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}

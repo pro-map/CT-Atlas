@@ -53,6 +53,44 @@ class PublicationAuditTests(unittest.TestCase):
                              hashlib.sha256((root / "events-map.json").read_bytes()).hexdigest())
             self.assertEqual(set(result["files"]), set(audit.FILES))
 
+    def test_manifest_reconstructs_chunked_derived_files(self):
+        # The mirror chunks events-lite.json and events-map.json once they
+        # outgrow the asset cap; the manifest must still read and check them.
+        data = {"events": [{"id": "a", "title": "A source", "published": "2026-11-01", "summary": "Example " * 8}]}
+        lite = light.build_lite(data, light.load_excluded())
+        mapped = {"events": lite["events"], "recent_events": []}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name, document in (("events.json", data), ("events-lite.json", lite), ("events-map.json", mapped)):
+                source = root / ("source-" + name)
+                source.write_text(json.dumps(document, indent=2))
+                mirror.write_mirror_copy(source, root / name, limit=60, chunk_bytes=50)
+                self.assertFalse((root / name).exists())
+            result = audit.manifest(root, root / "publication-manifest.json")
+            for name in audit.FILES:
+                compact = mirror.compact_json_bytes((root / ("source-" + name)).read_bytes())
+                self.assertEqual(result["files"][name]["sha256_bytes"], hashlib.sha256(compact).hexdigest())
+            self.assertEqual(result["files"]["events-map.json"]["record_count"], 1)
+
+    def test_served_revision_reads_the_deployed_manifest_and_never_guesses(self):
+        revision = "0123456789abcdef0123456789abcdef01234567"
+        def served(body):
+            with patch.object(audit.urllib.request, "urlopen", return_value=io.BytesIO(body)) as opened:
+                result = audit.served_revision("https://mirror.example.test/")
+            self.assertTrue(opened.call_args[0][0].full_url.startswith(
+                "https://mirror.example.test/publication-manifest.json?integrity="))
+            return result
+        self.assertEqual(served(json.dumps({"source_revision": revision}).encode()), revision)
+        # Anything unexpected means "unknown", so the mirror deploys instead of skipping.
+        for body in (b"{}", b"not json", json.dumps({"source_revision": "HEAD"}).encode(),
+                     json.dumps({"source_revision": revision.upper()}).encode()):
+            with self.subTest(body=body):
+                self.assertIsNone(served(body))
+        with patch.object(audit.urllib.request, "urlopen", side_effect=OSError("offline")):
+            self.assertIsNone(audit.served_revision("https://mirror.example.test"))
+        with self.assertRaises(ValueError):
+            audit.served_revision("http://mirror.example.test")
+
 
 if __name__ == "__main__":
     unittest.main()
