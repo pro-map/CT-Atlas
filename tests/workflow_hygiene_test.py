@@ -89,10 +89,13 @@ class CollectionFailFastTests(unittest.TestCase):
     def smoke(self):
         return self.steps[self.names.index("Check the pipeline modules compile and import")]
 
-    def test_compile_and_import_check_runs_right_after_install_before_any_data_step(self):
+    def test_compile_and_import_check_runs_after_the_snapshots_right_before_collection(self):
+        # After the data snapshot and the preserve list, before the collection:
+        # a module that no longer imports leaves the collection 'skipped', and
+        # finalize, the audit and the commit still publish the failed status.
         index = self.names.index("Check the pipeline modules compile and import")
-        self.assertEqual(self.names[index - 1], "Install dependencies")
-        self.assertEqual(self.names[index + 1], "Snapshot the full dataset before daily processing")
+        self.assertEqual(self.names[index - 1], "Record already processed locations before collection")
+        self.assertEqual(self.names[index + 1], "Collect multilingual and AI-select CT events")
         smoke = self.smoke()
         # A test subset here would let a flaky test skip a map update.
         self.assertNotIn("pytest", smoke)

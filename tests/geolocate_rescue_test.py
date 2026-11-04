@@ -242,6 +242,26 @@ class RunCapTests(unittest.TestCase):
             self.assertIs(saved[event_id]["ai_geo_complete"], True)
             self.assertEqual(saved[event_id]["location_method"], "ai_city_geonames")
 
+    def test_a_forced_refresh_larger_than_the_cap_is_finished_by_scheduled_runs(self):
+        current = geolocate.AI_GEO_VERSION
+        events = [self.answered(f"e{n}", current, (-12.0 - n / 100, -77.0), fingerprint=True) for n in range(3)]
+        saved, sent, _ = self.run_main(events, force=True, cap=1)
+        self.assertEqual(len(sent), 1)
+        pending = [event_id for event_id, event in saved.items() if event.get("ai_geo_refresh_pending")]
+        self.assertEqual(len(pending), 2, "the two events the cap left are marked")
+        for event_id in pending:
+            self.assertEqual(saved[event_id]["location_method"], "ai_city_geonames", "their points are kept")
+        # A new event arrives: scheduled runs answer it first, then the refresh.
+        later = list(saved.values()) + [{"id": "new", "title": "Attack new"}]
+        saved, sent, _ = self.run_main(later, cap=1)
+        self.assertIn('"event_id": "new"', sent[0]["input"])
+        for _ in range(2):
+            saved, sent, _ = self.run_main(list(saved.values()), cap=1)
+            self.assertEqual(len(sent), 1)
+        self.assertFalse(any(event.get("ai_geo_refresh_pending") for event in saved.values()))
+        saved, sent, _ = self.run_main(list(saved.values()), cap=1)
+        self.assertEqual(sent, [], "nothing left once the refresh is done")
+
     def test_an_exhausted_rescue_keeps_no_low_confidence_point(self):
         def reply(body):
             if body["model"] == "rescue-model":

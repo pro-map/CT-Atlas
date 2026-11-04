@@ -620,7 +620,9 @@ def is_cached(
     The only exception is an explicit manual run with AI_GEO_FORCE=1.
     """
 
-    if FORCE_AI:
+    # A forced refresh too large for one run's request cap marks every event
+    # it covers; scheduled runs finish the marked ones (see main()).
+    if FORCE_AI or event.get(REFRESH_PENDING_KEY):
         return False
 
     return (
@@ -629,6 +631,11 @@ def is_cached(
         )
         is True
     )
+
+
+# Set on every event a forced refresh covers, removed when the event's answer
+# lands: the refresh then survives the per-run request cap.
+REFRESH_PENDING_KEY = "ai_geo_refresh_pending"
 
 
 # ============================================================
@@ -1789,6 +1796,8 @@ def apply_ai_result(
     )
 
     event["ai_geo_complete"] = True
+    # This answer completes the event's part of a forced refresh.
+    event.pop(REFRESH_PENDING_KEY, None)
 
     event["ai_geo_fingerprint"] = (
         fingerprint
@@ -2452,8 +2461,9 @@ def main():
     for index, event in enumerate(
         events
     ):
-        # Protected events never enter primary or rescue processing.
-        if str(event.get("id", "")) in preserved_event_ids:
+        # Protected events never enter primary or rescue processing, unless a
+        # forced refresh still has to reach them.
+        if str(event.get("id", "")) in preserved_event_ids and not event.get(REFRESH_PENDING_KEY):
             cached_count += 1
             continue
 
@@ -2520,20 +2530,29 @@ def main():
             payload
         )
 
-    if FORCE_AI:
-        # The request cap spreads a forced refresh over several runs: events
-        # the current engine has not answered for their content go first.
-        def answered_by_current_engine(item):
-            event = event_by_id[item["event_id"]]
-            return (
-                event.get("ai_geo_complete") is True
-                and event.get("ai_geo_version") == AI_GEO_VERSION
-                and event.get("ai_geo_fingerprint") == fingerprints[item["event_id"]]
-            )
+    if FORCE_AI and not any(event.get(REFRESH_PENDING_KEY) for event in event_by_id.values()):
+        # A new forced refresh: mark every event it covers, so the scheduled
+        # runs carry on with whatever this run's request cap leaves (a manual
+        # run while a refresh is under way continues that refresh instead).
+        for item in pending:
+            event_by_id[item["event_id"]][REFRESH_PENDING_KEY] = True
 
-        pending.sort(
-            key=answered_by_current_engine
+    def answered_by_current_engine(item):
+        event = event_by_id[item["event_id"]]
+        return (
+            event.get("ai_geo_complete") is True
+            and event.get("ai_geo_version") == AI_GEO_VERSION
+            and event.get("ai_geo_fingerprint") == fingerprints[item["event_id"]]
         )
+
+    # New events first, then a refresh's remaining events; within them, the
+    # ones the current engine has not answered for their content.
+    pending.sort(
+        key=lambda item: (
+            bool(event_by_id[item["event_id"]].get(REFRESH_PENDING_KEY)) and not FORCE_AI,
+            answered_by_current_engine(item),
+        )
+    )
 
     if cleared_count:
         save_checkpoint(

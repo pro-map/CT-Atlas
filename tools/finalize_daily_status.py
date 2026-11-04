@@ -200,7 +200,8 @@ def finalize(database_path, *, collect_outcome, geolocate_outcome, started_at,
         reasons.append("source_errors")
     original_ids = {str(event.get("id")) for event in baseline["events"] if event.get("id") is not None}
     original_by_id = {str(event["id"]): event for event in baseline["events"] if event.get("id") is not None}
-    pending_geo = sum(event.get("ai_geo_complete") is False or
+    # Events a forced geolocation refresh has not reached yet are pending too.
+    pending_geo = sum(event.get("ai_geo_complete") is False or bool(event.get("ai_geo_refresh_pending")) or
                       (event.get("id") is not None and str(event["id"]) not in original_ids
                        and event.get("ai_geo_complete") is not True) for event in events)
     completed_geo = [event for event in events if event.get("ai_geo_complete") is True]

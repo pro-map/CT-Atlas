@@ -85,11 +85,6 @@ jobs:
       # collector.py imports daily_source_retry and map_evidence_integrity only
       # mid-run, so they are imported explicitly. No tests run here: a flaky
       # test must not skip a map update (python-tests.yml runs them on push).
-      - name: Check the pipeline modules compile and import
-        run: |
-          python -m py_compile collector.py geolocate.py daily_pipeline.py daily_reliability.py daily_source_retry.py map_evidence_integrity.py retired_categories.py tools/run_collector_quota_safe.py
-          python -c "import sys; sys.path.insert(0, 'tools'); import collector, geolocate, daily_pipeline, daily_reliability, daily_source_retry, map_evidence_integrity, retired_categories, run_collector_quota_safe"
-
       - name: Snapshot the full dataset before daily processing
         id: baseline
         run: python -u tools/daily_publication_audit.py snapshot
@@ -127,6 +122,13 @@ jobs:
               output.write("started_at=" + datetime.now(timezone.utc).isoformat() + "\n")
           print(f"Existing locations/AI decisions protected: {len(preserve)}")
           PY
+
+      # Placed after the snapshot steps: if a module no longer imports, the
+      # collection is skipped and the run still publishes its failed status.
+      - name: Check the pipeline modules compile and import
+        run: |
+          python -m py_compile collector.py geolocate.py daily_pipeline.py daily_reliability.py daily_source_retry.py map_evidence_integrity.py retired_categories.py tools/run_collector_quota_safe.py
+          python -c "import sys; sys.path.insert(0, 'tools'); import collector, geolocate, daily_pipeline, daily_reliability, daily_source_retry, map_evidence_integrity, retired_categories, run_collector_quota_safe"
 
       - name: Collect multilingual and AI-select CT events
         # Runs take 30-45 min; the limit leaves the geolocation and the
