@@ -84,6 +84,8 @@ jobs:
 
       - name: Collect and review current RadNuc background articles
         id: collect
+        # A Gemini 429/5xx or network error only warns (the checkpoint is saved
+        # and the next run retries) until it happens 3 runs in a row.
         timeout-minutes: 22
         run: python -u tools/enrich_radnuc_background.py --max-posts 20 --max-fetches 50 --deadline-minutes 20
 

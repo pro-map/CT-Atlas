@@ -265,14 +265,14 @@ async function enrichDarkweb(env) {
       parsed = await translateDarkwebTitlesWithCloudflare(env, translationBatch, modelText);
     } else {
     // Translation is the priority. If the primary background model is quota-limited
-    // or temporarily unavailable, try the same rescue models already used elsewhere
-    // in CT Atlas. The chain is bounded and stops on the first successful response.
+    // or temporarily unavailable, try 3.8 Flash, the rescue model used elsewhere
+    // in CT Atlas. Deprecated 3.7 Flash redirects to 3.8, and deprecated 3.5 Flash
+    // to the 3.6 pool reserved for Report and Deep Search, so neither is tried.
+    // The chain is bounded and stops on the first successful response.
     const configuredModels = String(env.DARKWEB_GEMINI_MODELS || "").split(",").map(x => x.trim()).filter(Boolean);
     const models = [...new Set(configuredModels.length ? configuredModels : [
       env.DARKWEB_GEMINI_MODEL || "gemini-3.1-flash-lite",
-      "gemini-3.7-flash",
-      "gemini-3.8-flash",
-      "gemini-3.5-flash"
+      "gemini-3.8-flash"
     ])];
     let response = null;
     const translationSignal = AbortSignal.timeout(25000);

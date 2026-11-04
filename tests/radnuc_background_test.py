@@ -1,5 +1,7 @@
 """Daily RadNuc background reaches only the archive, even on review failure."""
+import contextlib
 import copy
+import io
 import json
 import sys
 import tempfile
@@ -308,6 +310,102 @@ class BackgroundTests(unittest.TestCase):
             self.assertTrue(report['failed'])
             self.assertEqual(len(archive_review.read_json(root/bg.STATE_FILE)['pending']),2)
             self.assertEqual(archive_review.read_json(root/bg.ARTICLES_FILE)['articles'],[])
+
+    def test_transient_503_with_a_stale_full_queue_defers_after_searching(self):
+        # Runs 40723425571 (10-28) and 41511857381 (11-02): 486 rows left from
+        # the first runs kept the queue full, so the first action was a review,
+        # a 503 ended the run before any search, and the run exited 1.
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            stale=[candidate(i,published=(NOW-timedelta(days=20)).isoformat()) for i in range(487)]
+            recent=[candidate(1000+i,published=(NOW-timedelta(hours=i+1)).isoformat()) for i in range(10)]
+            archive_review.write_json(root/bg.STATE_FILE,{'version':1,'seen':{},'cursor':0,'pending':[*stale,*recent]})
+            searched=[]
+            class Searcher:
+                def search(self,task):searched.append(task['query']);return [],False
+            def review(payload):raise daily.BackgroundHTTPError(503)
+            report=daily.run(root,collector=collector,searcher=Searcher(),review=review,
+                gate_factory=lambda *_:Gate(),max_fetches=2,now=NOW)
+            self.assertFalse(report['failed'])
+            self.assertEqual(report['stop_code'],'http_503')
+            self.assertEqual(report['consecutive_transient_failures'],1)
+            self.assertEqual(report['counts']['stale_pending_dropped'],487)
+            self.assertEqual(len(searched),2)
+            self.assertEqual(report['source_discovery']['searched_queries'],2)
+            self.assertEqual(report['pending_reviews'],10)
+            pending=archive_review.read_json(root/bg.STATE_FILE)['pending']
+            self.assertEqual({row['url'] for row in pending},{row['url'] for row in recent})
+            saved=archive_review.read_json(root/bg.STATUS_FILE)
+            self.assertEqual(saved['consecutive_transient_failures'],1)
+
+    def test_pending_rows_older_than_fourteen_days_are_dropped_at_load_and_counted(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            rows=[candidate(0,published=(NOW-timedelta(days=15)).isoformat()),
+                  candidate(1,published=(NOW-timedelta(days=13)).isoformat()),candidate(2,published=''),candidate(3)]
+            archive_review.write_json(root/bg.STATE_FILE,{'version':1,'seen':{},'cursor':0,'pending':rows})
+            report=daily.run(root,max_posts=0,max_fetches=0,collector=collector,
+                review=lambda _:self.fail('No request budget'),gate_factory=lambda *_:Gate(),now=NOW)
+            self.assertEqual(report['counts']['stale_pending_dropped'],1)
+            self.assertEqual(report['pending_max_age_days'],14)
+            self.assertEqual((report['recent_pending'],report['backlog_pending'],report['undated_pending']),(1,1,1))
+            pending=archive_review.read_json(root/bg.STATE_FILE)['pending']
+            self.assertEqual({row['url'] for row in pending},{candidate(i)['url'] for i in (1,2,3)})
+            self.assertFalse(report['failed'])
+
+    def test_three_transient_failures_in_a_row_fail_the_run_and_a_review_resets_the_count(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            archive_review.write_json(root/bg.STATE_FILE,{'version':1,'seen':{},'cursor':0,'pending':[candidate(1)]})
+            outcomes=[]
+            # The gate reports a 429 as quota_reached; all three are retried next run.
+            for error in (daily.BackgroundHTTPError(503),collector.requests.ConnectionError('reset'),
+                          collector.AISelectionQuotaError('Gemini returned 429')):
+                def review(payload,error=error):raise error
+                report=daily.run(root,max_fetches=0,collector=collector,review=review,
+                    gate_factory=lambda *_:Gate(),now=NOW)
+                outcomes.append((report['stop_code'],report['consecutive_transient_failures'],report['failed']))
+            self.assertEqual(outcomes,[('http_503',1,False),('network_error',2,False),('quota_reached',3,True)])
+            self.assertEqual(len(archive_review.read_json(root/bg.STATE_FILE)['pending']),1)
+            report=daily.run(root,max_fetches=0,collector=collector,gate_factory=lambda *_:Gate(),now=NOW,
+                review=lambda payload:[decision(row['event_id']) for row in payload])
+            self.assertEqual(report['consecutive_transient_failures'],0)
+            self.assertFalse(report['failed'])
+            self.assertEqual(report['counts']['reviewed'],1)
+
+    def test_invalid_responses_and_non_transient_http_errors_still_fail_at_once(self):
+        def forbidden(payload):raise daily.BackgroundHTTPError(403)
+        for review in (lambda _:[],forbidden):
+            with self.subTest(review=review), tempfile.TemporaryDirectory() as tmp:
+                root=Path(tmp)
+                # An earlier deferral neither softens nor delays a real failure.
+                archive_review.write_json(root/bg.STATUS_FILE,{'consecutive_transient_failures':1})
+                archive_review.write_json(root/bg.STATE_FILE,{'version':1,'seen':{},'cursor':0,'pending':[candidate(1)]})
+                report=daily.run(root,max_fetches=0,collector=collector,review=review,
+                    gate_factory=lambda *_:Gate(),now=NOW)
+                self.assertTrue(report['failed'])
+                self.assertEqual(report['consecutive_transient_failures'],0)
+                self.assertEqual(len(archive_review.read_json(root/bg.STATE_FILE)['pending']),1)
+
+    def test_main_warns_on_a_deferral_and_exits_1_only_for_a_failed_run(self):
+        cases=(({'failed':False,'consecutive_transient_failures':1,'stop_code':'http_503'},0,'::warning '),
+               ({'failed':True,'consecutive_transient_failures':3,'stop_code':'http_503'},1,'::error '),
+               ({'failed':True,'consecutive_transient_failures':0,'stop_code':'invalid_response'},1,None),
+               ({'failed':False,'consecutive_transient_failures':0,'stop_code':'budget_reached'},0,None))
+        for report,code,annotation in cases:
+            with self.subTest(report=report):
+                out=io.StringIO()
+                with patch.object(daily,'run',return_value=report), \
+                     patch.object(sys,'argv',['enrich_radnuc_background.py']), contextlib.redirect_stdout(out):
+                    try:
+                        daily.main(); exit_code=0
+                    except SystemExit as error:
+                        exit_code=error.code
+                self.assertEqual(exit_code,code)
+                if annotation:
+                    self.assertTrue(out.getvalue().startswith(annotation+'title=RadNuc review deferred::http_503'))
+                else:
+                    self.assertNotIn('::',out.getvalue())
 
     def test_partial_siblings_are_matched_by_id_and_unresolved_rows_stay_pending(self):
         with tempfile.TemporaryDirectory() as tmp:

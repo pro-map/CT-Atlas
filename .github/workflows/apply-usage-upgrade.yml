@@ -1,32 +1,16 @@
 name: Apply CT Atlas usage upgrade
 
+# One-off migration: index.html has carried usage-admin.js since 2026-09-05, so
+# the patch step is a no-op. Manual only: on every UI push it redeployed Pages
+# a second time, without the served-data verification, and triggered one more
+# mirror deploy. deploy-current-ct-atlas-ui.yml publishes the UI.
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "index.html"
-      - "privacy.html"
-      - "daily-quiz.*"
-      - "feedback.*"
-      - "crypto.*"
-      - "tests/crypto*.test.cjs"
-      - "tools/usage_upgrade.patch"
-      - "usage-admin.js"
-      - "usage-admin.css"
-      - "usage-auth-fix.js"
-      - "deep-search.js"
-      - "deep-search.css"
-      - "cloudflare-worker/**"
-      - ".github/workflows/apply-usage-upgrade.yml"
   workflow_dispatch:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
-# Same group as the collector: no simultaneous database/site deployment.
+# Same group as the collector: its index.html commit never races a data write.
 # queue:max is required on every member; the default replaces pending repairs.
 concurrency:
   group: ct-map-update-main
@@ -34,11 +18,8 @@ concurrency:
   queue: max
 
 jobs:
-  apply-and-deploy:
+  apply:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -84,6 +65,8 @@ jobs:
           node --check cloudflare-worker/deep-search.js
           node --check cloudflare-worker/index.js
 
+      # No Pages deploy: with the patch applied, a commit here only changes
+      # line endings, which the next UI or data deploy publishes.
       - name: Commit upgraded index
         shell: bash
         run: |
@@ -93,22 +76,20 @@ jobs:
           git add index.html
           if git diff --cached --quiet; then
             echo "No index.html changes to commit."
-          else
-            git commit -m "Add usage analytics and report cooldown UI"
-            git push origin HEAD:main
+            exit 0
           fi
-
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v6
-      - name: Build lightweight map data (events-lite.json)
-        uses: ./.github/actions/build-events-lite
-      - name: Upload website
-        uses: actions/upload-pages-artifact@v5
-        with:
-          name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
-          path: "."
-      - name: Deploy GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
-        with:
-          artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
+          git commit -m "Add usage analytics and report cooldown UI"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo "index.html changed on main meanwhile; run this again." >&2
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 4))
+          done
+          echo "Push failed after 3 attempts." >&2
+          exit 1

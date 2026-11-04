@@ -6,13 +6,11 @@ name: Review archive backlog
 # (added to the D1 archive by the nightly sync-background-corpus run), the rest
 # are dropped. It uses a model whose free quota the collection does not touch
 # (Gemini 3.1 Flash Lite, 500 requests/day of its own), at most 40 requests a
-# Pacific day (quota/gemini-3.1-archive-review.json). It runs after the archive
-# enrichment (02:43) and before the incident consolidation (07:37), so the
-# jobs sharing that model never run at once.
+# Pacific day (quota/gemini-3.1-archive-review.json). Manual only: the queue
+# has been empty since 2026-10-05 (no recovery-pending-review file exists; only
+# the manual tools/recover_from_history.py writes one), so a daily run was a
+# no-op that shared its concurrency group with the RadNuc background job.
 on:
-  schedule:
-    - cron: "13 5 * * *"
-      timezone: "Europe/Paris"
   workflow_dispatch:
     inputs:
       max_calls:

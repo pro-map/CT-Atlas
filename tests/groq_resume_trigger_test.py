@@ -42,13 +42,17 @@ class GroqResumeTriggerTest(unittest.TestCase):
             self.assertIn(required, text)
         self.assertNotIn("repository_dispatch", text)
 
-    def test_general_archive_history_has_no_schedule_but_existing_review_still_does(self):
+    def test_general_archive_history_and_empty_review_queue_have_no_schedule(self):
         history = (ROOT / ".github/workflows/enrich-archive.yml").read_text()
         review = (ROOT / ".github/workflows/review-archive-backlog.yml").read_text()
         self.assertNotIn("  schedule:", history)
         self.assertIn("  workflow_dispatch:", history)
         self.assertIn("(cancelled)", history.splitlines()[0])
-        self.assertIn("  schedule:", review)
+        # The review queue has been empty since 2026-10-05: its daily run was
+        # a no-op in the RadNuc job's concurrency group, so it is manual only.
+        self.assertNotIn("  schedule:", review)
+        self.assertNotIn("cron:", review)
+        self.assertIn("  workflow_dispatch:", review)
         self.assertIn("tools/review_pending_archive.py", review)
 
     def test_daily_rejects_historical_dispatch_before_setup_and_accepts_daily_recovery(self):

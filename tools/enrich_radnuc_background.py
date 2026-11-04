@@ -27,6 +27,15 @@ DAILY_ALLOCATION = 40  # SAME existing archive-review allocation/ledger.
 BATCH_SIZE = 8
 MAX_PENDING = 500
 PER_QUERY_CANDIDATES = 8
+# Discovery only queues the last LOOKBACK_DAYS, so an older pending row is the
+# leftover of an earlier run and can never be queued again once dropped.
+PENDING_MAX_AGE_DAYS = 14
+# A provider overload, rate limit (the gate turns a 429 into quota_reached) or
+# network error after the checkpoint is saved: the next run retries, so the run
+# warns instead of failing until it happens this many runs in a row.
+TRANSIENT_STOP_CODES = frozenset({'http_408','http_429','http_500','http_502','http_503','http_504',
+                                  'network_error','quota_reached'})
+MAX_CONSECUTIVE_TRANSIENT_FAILURES = 3
 
 
 class BackgroundHTTPError(RuntimeError):
@@ -205,11 +214,21 @@ def run(root=ROOT, max_posts=20, max_fetches=50, deadline_minutes=20, *, now=Non
     articles = (archive_review.read_json(root/background.ARTICLES_FILE) or {}).get('articles') or []
     seen = {k:v for k,v in state.get('seen',{}).items() if v>= (now-timedelta(days=30)).isoformat()}
     pending = list(state.get('pending') or [])
+    # The lane's first runs left ~490 rows (published 10-10..10-13) that kept
+    # the queue at MAX_PENDING: every run reviewed them before searching and
+    # stopped discovery early. Undated rows keep their own lane.
+    stale_before = now-timedelta(days=PENDING_MAX_AGE_DAYS)
+    loaded = len(pending)
+    pending = [row for row in pending if (collector.event_datetime(row) or now)>=stale_before]
+    previous = archive_review.read_json(root/background.STATUS_FILE)
+    previous_transient = previous.get('consecutive_transient_failures') if isinstance(previous,dict) else 0
+    previous_transient = previous_transient if type(previous_transient) is int and previous_transient>0 else 0
     keys = set(seen)|{candidate_key(row) for row in pending}|{candidate_key(row) for row in articles}
     ledger = archive_review.DailyLedger(archive_review.ledger_path('archive-review',root),DAILY_ALLOCATION,now=now)
     budget = ledger.budget(max_posts)
     counts = {'searched':0,'source_errors':0,'reviewed':0,'accepted':0,'rejected':0,'requests':0,
-              'recent_reviewed':0,'backlog_reviewed':0,'undated_reviewed':0,'source_capped_queries':0}
+              'recent_reviewed':0,'backlog_reviewed':0,'undated_reviewed':0,'source_capped_queries':0,
+              'stale_pending_dropped':loaded-len(pending)}
     cutoff = now-timedelta(days=LOOKBACK_DAYS)
 
     def lane(item):
@@ -302,7 +321,8 @@ def run(root=ROOT, max_posts=20, max_fetches=50, deadline_minutes=20, *, now=Non
                     break
                 # A full checkpoint previously prevented all discovery until
                 # the next run. Make bounded room before fetching, using the
-                # same request ledger rather than dropping pending evidence.
+                # same request ledger rather than dropping pending evidence
+                # (only rows older than PENDING_MAX_AGE_DAYS are dropped).
                 while len(pending)>MAX_PENDING-PER_QUERY_CANDIDATES and can_review():
                     if not review_batch(): break
                 if len(pending)>MAX_PENDING-PER_QUERY_CANDIDATES:
@@ -342,7 +362,8 @@ def run(root=ROOT, max_posts=20, max_fetches=50, deadline_minutes=20, *, now=Non
         elif isinstance(error,collector.requests.RequestException): stop_code = 'network_error'
         elif isinstance(error,ValueError): stop_code = 'invalid_response'
         else: stop_code = 'runtime_error'
-        stop = 'Review deferred: '+stop_code; failed = counts['reviewed']==0
+        stop = 'Review deferred: '+stop_code
+        failed = counts['reviewed']==0 and stop_code not in TRANSIENT_STOP_CODES
     finally:
         counts['requests'] = gate.posts
         checkpoint()
@@ -350,6 +371,12 @@ def run(root=ROOT, max_posts=20, max_fetches=50, deadline_minutes=20, *, now=Non
         stop_code = 'deadline_reached' if not within_deadline() else 'budget_reached'
         stop = 'Review budget/deadline reached; candidates preserved'
     if pending and counts['reviewed']==0 and review_errors and stop_code not in ('budget_reached','quota_reached'):
+        failed = True
+    # Counted across runs through the committed status file; any review, or
+    # any other outcome, resets it. A lasting outage still fails the run.
+    deferred = not failed and counts['reviewed']==0 and stop_code in TRANSIENT_STOP_CODES
+    transient_failures = previous_transient+1 if deferred else 0
+    if transient_failures>=MAX_CONSECUTIVE_TRANSIENT_FAILURES:
         failed = True
     source_complete = counts['searched']==len(tasks) and counts['source_errors']==0
     if not source_complete and not discovery_stop_code:
@@ -367,7 +394,8 @@ def run(root=ROOT, max_posts=20, max_fetches=50, deadline_minutes=20, *, now=Non
                   'searched_queries':counts['searched'],'failed_queries':counts['source_errors'],
                   'pending_queries':len(tasks)-counts['searched'],'complete':source_complete,
                   'stop_code':discovery_stop_code},
-              'stop':stop,'failed':failed,'shared_daily_review_allocation':DAILY_ALLOCATION,
+              'stop':stop,'failed':failed,'consecutive_transient_failures':transient_failures,
+              'pending_max_age_days':PENDING_MAX_AGE_DAYS,'shared_daily_review_allocation':DAILY_ALLOCATION,
               'max_requests_per_run':max_posts,'requests_available_at_start':budget,
               'batch_status':'complete' if complete else 'partial','complete':complete,
               'review_complete':not pending,'stop_code':stop_code,'review_batch_size':BATCH_SIZE,
@@ -385,6 +413,11 @@ def main():
     parser.add_argument('--deadline-minutes',type=int,default=20)
     args = parser.parse_args()
     report = run(max_posts=args.max_posts,max_fetches=args.max_fetches,deadline_minutes=args.deadline_minutes)
+    transient = report.get('consecutive_transient_failures') or 0
+    if transient:
+        print('::'+('error' if report['failed'] else 'warning')+' title=RadNuc review deferred::'
+              +report['stop_code']+f' ({transient} run(s) in a row; fails at {MAX_CONSECUTIVE_TRANSIENT_FAILURES}).'
+              ' Candidates are saved for the next run.',flush=True)
     if report['failed']: raise SystemExit(1)
 
 

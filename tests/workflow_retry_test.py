@@ -5,9 +5,11 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+# apply-usage-upgrade.yml no longer publishes Pages (its unverified duplicate
+# deploy was removed on 2026-11-04); workflow_concurrency_test.py checks that.
 PUBLISHERS = (
     "update-map.yml", "deploy-current-ct-atlas-ui.yml", "repair-map-evidence.yml",
-    "refresh-daily-status.yml", "reconcile-daily-integrity.yml", "apply-usage-upgrade.yml",
+    "refresh-daily-status.yml", "reconcile-daily-integrity.yml",
 )
 
 # Manual publishers are re-run too; the logo refresh used the default artifact name.

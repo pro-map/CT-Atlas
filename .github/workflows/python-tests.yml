@@ -3,10 +3,17 @@ name: Python tests
 # The collector, the geolocation, the archive tools and their tests. Until
 # this workflow only `node --test` ran in CI (before the Worker deploy), so a
 # Python change that broke tests/ could reach the scheduled jobs unnoticed.
-# Bot commits (pushed with GITHUB_TOKEN) never trigger it.
+# Bot commits (pushed with GITHUB_TOKEN) never trigger it, so the broad "*.py",
+# "*.json" and workflow globs cost nothing on data commits: they cover the
+# modules the collector and geolocation import (daily_pipeline.py,
+# map_evidence_integrity.py...) and the workflows the tests read.
 on:
   push:
     paths:
+      - "*.py"
+      - "*.json"
+      - ".github/workflows/**"
+      - ".github/actions/**"
       - "collector.py"
       - "collection_config.py"
       - "backfill_control.py"
@@ -32,6 +39,10 @@ on:
       - ".github/workflows/python-tests.yml"
   pull_request:
     paths:
+      - "*.py"
+      - "*.json"
+      - ".github/workflows/**"
+      - ".github/actions/**"
       - "collector.py"
       - "collection_config.py"
       - "backfill_control.py"

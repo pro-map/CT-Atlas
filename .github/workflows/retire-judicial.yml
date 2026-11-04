@@ -1,12 +1,9 @@
 name: Retire Judicial collection
 
+# Migration completed on 2026-10-14. Manual only: retired_categories.py is
+# imported by the collector and the map builders, so a push trigger replayed
+# the migration and redeployed Pages, unverified, on any edit to it.
 on:
-  push:
-    branches: [main]
-    paths:
-      - "retired_categories.py"
-      - "tools/retire_judicial.py"
-      - ".github/workflows/retire-judicial.yml"
   workflow_dispatch:
 
 permissions:

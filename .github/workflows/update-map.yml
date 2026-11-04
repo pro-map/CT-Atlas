@@ -81,6 +81,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      # A broken main fails here, in seconds, before any step touches the data.
+      # collector.py imports daily_source_retry and map_evidence_integrity only
+      # mid-run, so they are imported explicitly. No tests run here: a flaky
+      # test must not skip a map update (python-tests.yml runs them on push).
+      - name: Check the pipeline modules compile and import
+        run: |
+          python -m py_compile collector.py geolocate.py daily_pipeline.py daily_reliability.py daily_source_retry.py map_evidence_integrity.py retired_categories.py tools/run_collector_quota_safe.py
+          python -c "import sys; sys.path.insert(0, 'tools'); import collector, geolocate, daily_pipeline, daily_reliability, daily_source_retry, map_evidence_integrity, retired_categories, run_collector_quota_safe"
+
       - name: Snapshot the full dataset before daily processing
         id: baseline
         run: python -u tools/daily_publication_audit.py snapshot
@@ -193,10 +202,7 @@ jobs:
             echo "GEMINI_API_KEY GitHub secret is missing."
             exit 1
           fi
-          if [ "$COLLECTION_MODE" = "backfill-new-sources" ]; then
-            echo "Protecting all previously located/processed events; full refresh is disabled."
-            AI_GEO_FORCE=0 AI_GEO_PRESERVE_IDS_FILE="$PRESERVE_FILE" python -u geolocate.py
-          elif [ "$COLLECTION_MODE" = "resume-pending" ]; then
+          if [ "$COLLECTION_MODE" = "resume-pending" ]; then
             AI_GEO_FORCE=0 AI_GEO_PRESERVE_IDS_FILE="$PRESERVE_FILE" python -u geolocate.py
           elif [ "$FORCE_GEO_REQUESTED" = "true" ]; then
             AI_GEO_FORCE=1 python -u geolocate.py

@@ -481,16 +481,19 @@ test('Dark Web enrichment uses the background model, a Pacific-day cap, backoff 
  // A provider error backs off without charging the record.
  unlock();status=429;t=Date.now();assert.equal((await h.call('/darkweb/enrich',{})).status,503);
  assert.equal(record(second).enrich_attempts,2);assert.equal(h.values.get('darkweb:enrich-backoff').failures,1);
- assert.deepEqual(models.slice(-4),['gemini-test-model','gemini-3.7-flash','gemini-3.8-flash','gemini-3.5-flash']);
+ // Only 3.8 Flash rescues: deprecated 3.7 Flash redirects to 3.8 and deprecated
+ // 3.5 Flash to the 3.6 pool reserved for Report and Deep Search.
+ assert.deepEqual(models.slice(2),['gemini-test-model','gemini-3.8-flash']);
+ assert.ok(!models.includes('gemini-3.7-flash')&&!models.includes('gemini-3.5-flash'));
  unlock();h.values.delete('darkweb:enrich-backoff');status=200;
- r=await h.call('/darkweb/enrich',{});assert.equal(r.data.reason,'daily_limit');assert.equal(r.data.daily_limit,3);assert.equal(models.length,6);
+ r=await h.call('/darkweb/enrich',{});assert.equal(r.data.reason,'daily_limit');assert.equal(r.data.daily_limit,3);assert.equal(models.length,4);
  // The backoff doubles up to 6 hours.
  h.values.delete('darkweb:enrich-ledger');h.values.set('darkweb:enrich-backoff',{failures:9,until:0});answer={titles:[]};t=Date.now();
  await h.call('/darkweb/enrich',{});backoff=h.values.get('darkweb:enrich-backoff');assert.equal(backoff.failures,10);assert.ok(Math.abs(backoff.until-t-21600000)<5000);
  // Today's/newest-day record is never permanently stranded by old failed attempts.
  assert.equal(record(second).enrich_attempts,3);assert.ok(h.values.has('darkweb:publication-pending:2:'+second.id));
  unlock();h.values.delete('darkweb:enrich-backoff');
- r=await h.call('/darkweb/enrich',{});assert.equal(r.data.cached,undefined);assert.equal(models.length,8);assert.equal(record(second).enrich_attempts,1);
+ r=await h.call('/darkweb/enrich',{});assert.equal(r.data.cached,undefined);assert.equal(models.length,6);assert.equal(record(second).enrich_attempts,1);
  await h.call('/darkweb/ingest',{outlet_id:id,items:[publication(2,{original_text:'نص جديد'})],scan_ok:true},'',true);
  assert.equal(record(second).enrich_attempts,0,'A source change makes the record eligible again');
  unlock();h.values.delete('darkweb:enrich-backoff');h.env.DARKWEB_ENRICH_DAILY='0';assert.equal((await h.call('/darkweb/enrich',{})).data.reason,'daily_limit');

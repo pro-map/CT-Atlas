@@ -65,12 +65,23 @@ class WorkflowConcurrencyTests(unittest.TestCase):
                          "otherwise a UI/manual workflow can cancel pending repairs and daily runs")
 
 
-    def test_obsolete_geolocation_migration_cannot_run_on_workflow_edits(self):
-        source = (ROOT / ".github/workflows/repair-source-geolocation.yml").read_text()
-        triggers = re.search(r"^on:\n((?:[ \t].*\n|\n)+)", source, re.M)
-        self.assertIsNotNone(triggers)
-        self.assertEqual(re.findall(r"^  ([\w-]+):", triggers[1], re.M), ["workflow_dispatch"],
-                         "The October 7 migration must not automatically overwrite later reviewed corrections")
+    # The October 7 repair-source-geolocation migration was deleted (it could
+    # only fail or replay stale corrections); its dispatch-only test went too.
+    def test_completed_migrations_are_manual_and_the_usage_upgrade_never_publishes(self):
+        for name in ("apply-usage-upgrade.yml", "retire-judicial.yml"):
+            with self.subTest(workflow=name):
+                source = (ROOT / ".github/workflows" / name).read_text(encoding="utf-8")
+                triggers = re.search(r"^on:\n((?:[ \t].*\n|\n)+)", source, re.M)
+                self.assertIsNotNone(triggers)
+                self.assertEqual(re.findall(r"^  ([\w-]+):", triggers[1], re.M), ["workflow_dispatch"],
+                                 "A push replayed the migration and redeployed Pages without verification")
+        usage = (ROOT / ".github/workflows/apply-usage-upgrade.yml").read_text(encoding="utf-8")
+        for publishing in ("actions/configure-pages", "actions/upload-pages-artifact", "actions/deploy-pages",
+                           "build-events-lite", "github-pages", "pages: write", "id-token: write"):
+            self.assertNotIn(publishing, usage)
+        commit = usage.split("- name: Commit upgraded index", 1)[1]
+        self.assertIn("git rebase origin/main", commit)
+        self.assertLess(commit.index("git fetch origin main"), commit.index("git push origin HEAD:main"))
 
 
 if __name__ == "__main__":
