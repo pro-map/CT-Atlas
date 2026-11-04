@@ -24,7 +24,48 @@ def normal_name(value):
                            if not unicodedata.combining(ch)).split())
 
 
-def canonical_city(candidates, name, country):
+NAMESAKE_MATCH_KM = 50
+SAME_PLACE_KM = 10
+
+
+def distance_km(lat1, lon1, lat2, lon2):
+    """Great-circle (haversine) distance."""
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    h = (math.sin((p2 - p1) / 2) ** 2
+         + math.cos(p1) * math.cos(p2) * math.sin(math.radians(lon2 - lon1) / 2) ** 2)
+    return 12742.0 * math.asin(min(1.0, math.sqrt(h)))
+
+
+def map_point(lat, lon):
+    """(lat, lon) as floats, or None for a missing, out-of-range or 0,0 point."""
+    try:
+        lat, lon = float(lat), float(lon)
+    except (TypeError, ValueError):
+        return None
+    if not (-90 <= lat <= 90 and -180 <= lon <= 180) or (lat == 0 and lon == 0):
+        return None
+    return lat, lon
+
+
+def one_place(matches, point):
+    """Several same-country matches name one place only on geographic evidence."""
+    if len(matches) == 1:
+        return matches[0]
+    points = [map_point(c.get('latitude'), c.get('longitude')) for c in matches]
+    populations = sorted((c.get('population') or 0 for c in matches), reverse=True)
+    # GeoNames lists one town twice (Karak/Kerak, 6 km apart): its main,
+    # strictly most populous entry. A tie leaves no main entry to choose.
+    if (None not in points and populations[0] > populations[1]
+            and all(distance_km(*a, *b) <= SAME_PLACE_KM for a in points for b in points)):
+        return max(matches, key=lambda c: c.get('population') or 0)
+    # Otherwise only the model's own point picks a namesake, never population.
+    if point is None:
+        return None
+    nearest = min(((distance_km(*point, *p), n) for n, p in enumerate(points) if p), default=None)
+    return matches[nearest[1]] if nearest and nearest[0] <= NAMESAKE_MATCH_KM else None
+
+
+def canonical_city(candidates, name, country, lat=None, lon=None):
     """Never resolve into another country or choose a namesake by population."""
     wanted = normal_name(name)
     if not wanted or not country:
@@ -33,10 +74,8 @@ def canonical_city(candidates, name, country):
             for c in candidates if str(c.get('countrycode', '')).upper() == country.upper()}
     exact = [c for c in pool.values() if normal_name(c.get('name')) == wanted
              or normal_name(c.get('asciiname')) == wanted]
-    if len(exact) == 1:
-        return exact[0]
-    if len(exact) > 1:
-        return None
+    if exact:
+        return one_place(exact, map_point(lat, lon))
     aliases = []
     for c in pool.values():
         names = c.get('alternatenames') or []
@@ -44,7 +83,7 @@ def canonical_city(candidates, name, country):
             names = names.split(',')
         if wanted in {normal_name(n) for n in names}:
             aliases.append(c)
-    return aliases[0] if len(aliases) == 1 else None
+    return one_place(aliases, map_point(lat, lon)) if aliases else None
 
 
 def city_resolution_guard(event, result, city_index, normalize):
@@ -61,7 +100,7 @@ def city_resolution_guard(event, result, city_index, normalize):
     # The model normally supplies country_code; its absence must not cause us
     # to invent a code from the publisher. The caller can resolve a real name.
     pool = city_index.get(normalize(name), [])
-    chosen = canonical_city(pool, name, country)
+    chosen = canonical_city(pool, name, country, result.get('latitude'), result.get('longitude'))
     if chosen is not None:
         return result
     # Even when no city is indexed, unchecked AI coordinates are not a verified

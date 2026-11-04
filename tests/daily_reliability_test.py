@@ -36,12 +36,41 @@ class ReliabilityTests(unittest.TestCase):
         self.assertIsNone(safe.canonical_city([city('Springfield','US',geonameid='1'),
             city('Springfield','US',geonameid='2')],'Springfield','US'))
 
+    def test_model_point_picks_the_namesake_within_50_km(self):
+        wa=city('Perth','AU',geonameid='2063523',latitude=-31.95224,longitude=115.8614,population=2384371)
+        tas=city('Perth','AU',geonameid='2153391',latitude=-41.57231,longitude=147.17096,population=2907)
+        self.assertEqual(safe.canonical_city([tas,wa],'Perth','AU',-31.9,115.9),wa)
+        self.assertEqual(safe.canonical_city([wa,tas],'Perth','AU','-41.6','147.2'),tas)
+        # A point near neither namesake (Sydney), none, or a 0,0 placeholder chooses none.
+        for point in ((-33.87,151.21),(None,None),(0,0)):
+            self.assertIsNone(safe.canonical_city([wa,tas],'Perth','AU',*point))
+
+    def test_one_place_listed_twice_needs_no_coordinates(self):
+        # Karak: two GeoNames entries 6 km apart, both only carrying the alias.
+        main=city('Qir Moav','JO',geonameid='250624',latitude=31.18248,longitude=35.69999,
+                  population=22581,alternatenames=['Karak'])
+        twin=city('Karak City','JO',geonameid='6946409',latitude=31.16368,longitude=35.76204,
+                  population=21678,alternatenames=['Karak'])
+        self.assertEqual(safe.canonical_city([twin,main],'Karak','JO'),main)
+        # Distant namesakes are not one place, whatever their population.
+        self.assertIsNone(safe.canonical_city([dict(twin,latitude=32.5,longitude=36.9),main],'Karak','JO'))
+
+    def test_guard_keeps_a_city_its_own_point_disambiguates(self):
+        wa=city('Perth','AU',geonameid='1',latitude=-31.95224,longitude=115.8614,population=2384371)
+        tas=city('Perth','AU',geonameid='2',latitude=-41.57231,longitude=147.17096,population=2907)
+        index={'perth':[wa,tas]}
+        result={'precision':'city','city':'Perth','country_code':'AU','confidence':.9,
+                'latitude':-31.95,'longitude':115.86}
+        self.assertEqual(safe.city_resolution_guard({},result,index,safe.normal_name),result)
+        guarded=safe.city_resolution_guard({},dict(result,latitude=None,longitude=None),index,safe.normal_name)
+        self.assertEqual(guarded['_city_validation_issue'],'ambiguous_or_unresolved_city')
+
     def test_validated_transliteration_and_nonlatin_names(self):
         self.assertEqual(safe.canonical_city([city('München','DE',alternatenames=['Munich'])],'Munich','DE')['name'],'München')
         self.assertEqual(safe.normal_name('北京'), '北京')
 
     def test_actual_geocoder_uses_country_locked_resolver(self):
-        tree=ast.parse((ROOT/'geolocate.py').read_text())
+        tree=ast.parse((ROOT/'geolocate.py').read_text(encoding='utf-8'))
         node=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='resolve_city')
         namespace={'CITY_INDEX':{'al bayda':[city('Al Bayda','LY')]},'normalize_name':safe.normal_name}
         exec(compile(ast.Module(body=[node],type_ignores=[]),'geolocate.py','exec'),namespace)

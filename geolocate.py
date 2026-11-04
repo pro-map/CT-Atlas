@@ -43,6 +43,7 @@ import requests
 #   AI_GEO_BATCH_SIZE   optional, default: 20
 #   AI_GEO_FORCE        optional, "1"/"true" to refresh every event
 #   AI_GEO_PRESERVE_IDS_FILE optional JSON list of protected existing event IDs
+#   AI_GEO_MAX_CALLS_PER_RUN optional, default: 12 Gemini requests per run
 # ============================================================
 
 
@@ -112,6 +113,20 @@ FORCE_AI = (
 REQUEST_ATTEMPTS = 5
 REQUEST_TIMEOUT = 240
 REQUEST_PAUSE_SECONDS = 10.0
+
+# Normal runs need 2-7 requests. The cap keeps a forced refresh or a mass
+# reset from spending the Flash-Lite day shared with selection, Reports and
+# Deep Search: the rest waits for later runs, through the quota checkpoint.
+MAX_CALLS_PER_RUN = max(
+    0,
+    int(
+        os.getenv(
+            "AI_GEO_MAX_CALLS_PER_RUN",
+            "12",
+        )
+    ),
+)
+GEMINI_REQUESTS_SENT = 0
 
 try:
     sys.stdout.reconfigure(
@@ -215,7 +230,34 @@ def normalize_name(value):
     return normal_name(html.unescape(str(value or '')))
 
 
+# Reviewed spellings GeoNames lacks for towns the model keeps naming (audit of
+# 2026-11-04): each is that same-country GeoNames entry under another
+# transliteration, never a nearby or larger place.
+CITY_ALIAS_SUPPLEMENT = {
+    "79415": ["Hodeidah"],            # Al Hudaydah, YE
+    "172955": ["Al-Raqqah"],          # Ar Raqqah, SY
+    "170794": ["Deir Ezzor"],         # Deir ez-Zor, SY
+    "163750": ["Tel Abyad"],          # Tall Abyad, SY
+    "165533": ["Rankous"],            # Rankus, SY
+    "390188": ["Hawija"],             # Al Hawijah, IQ
+    "1277085": ["Baramulla"],         # Baramula, IN
+    "1258891": ["Rajouri"],           # Rajaori, IN
+    "1167550": ["Qilla Saifullah"],   # Qila Saifullah, PK
+    "294981": ["Givat Shmuel"],       # Giv'at Shmuel, IL
+    "2469262": ["Manzel Bouzelfa"],   # Mennzel Bou Zelfa, TN
+}
+
+for geonameid, aliases in CITY_ALIAS_SUPPLEMENT.items():
+    if geonameid in CITIES:
+        known = CITIES[geonameid].get("alternatenames") or []
+        if isinstance(known, str):
+            known = known.split(",")
+        CITIES[geonameid]["alternatenames"] = list(known) + aliases
+
+
 CITY_INDEX = defaultdict(list)
+# Every GeoNames place of a country, for checking AI coordinates against it.
+COUNTRY_POINTS = defaultdict(list)
 
 for city in CITIES.values():
     country_code = (
@@ -225,6 +267,13 @@ for city in CITIES.values():
         or
         ""
     ).upper()
+
+    COUNTRY_POINTS[country_code].append(
+        (
+            float(city["latitude"]),
+            float(city["longitude"]),
+        )
+    )
 
     names = set()
 
@@ -769,6 +818,10 @@ class GeminiTransientError(RuntimeError):
     """Temporary Gemini service/capacity problem after retries."""
 
 
+class GeminiCallCapError(GeminiQuotaError):
+    """This run's AI_GEO_MAX_CALLS_PER_RUN Gemini requests are spent."""
+
+
 def extract_gemini_text(
     response_json
 ):
@@ -884,7 +937,10 @@ def call_gemini_batch(
     Repeated 5xx/timeouts are surfaced as GeminiTransientError.
     `incomplete` is surfaced as GeminiIncompleteError so the caller can
     recursively split the batch.
+    A spent per-run request cap is surfaced as GeminiCallCapError.
     """
+
+    global GEMINI_REQUESTS_SENT
 
     api_key = os.getenv(
         "GEMINI_API_KEY"
@@ -984,6 +1040,15 @@ def call_gemini_batch(
         1,
         REQUEST_ATTEMPTS + 1,
     ):
+        # Every request counts, retries and split halves included.
+        if GEMINI_REQUESTS_SENT >= MAX_CALLS_PER_RUN:
+            raise GeminiCallCapError(
+                f"Per-run cap of {MAX_CALLS_PER_RUN} Gemini requests "
+                "(AI_GEO_MAX_CALLS_PER_RUN) reached."
+            )
+
+        GEMINI_REQUESTS_SENT += 1
+
         try:
             response = requests.post(
                 GEMINI_INTERACTIONS_URL,
@@ -1456,10 +1521,11 @@ def resolve_country_code(
     return ""
 
 
-def resolve_city(city_name, country_code):
+def resolve_city(city_name, country_code, latitude=None, longitude=None):
+    # The model's own point, when given, picks among same-country namesakes.
     from daily_reliability import canonical_city
     name = normalize_name(city_name)
-    return canonical_city(CITY_INDEX.get(name, []), name, country_code)
+    return canonical_city(CITY_INDEX.get(name, []), name, country_code, latitude, longitude)
 
 
 def resolve_capital(
@@ -1479,9 +1545,141 @@ def resolve_capital(
     if not capital:
         return None
 
+    # A capital is the named national seat, not a namesake choice: the most
+    # populous exact same-country match (Washington, D.C. among 16
+    # Washingtons, Hanoi, San José). CITY_INDEX is sorted by population.
+    wanted = normalize_name(
+        capital
+    )
+
+    for city in CITY_INDEX.get(wanted, []):
+        if (
+            city.get("countrycode") == country_code
+            and
+            wanted in {
+                normalize_name(city.get("name")),
+                normalize_name(city.get("asciiname")),
+            }
+        ):
+            return city
+
     return resolve_city(
         capital,
         country_code
+    )
+
+
+def country_place_within(
+    latitude,
+    longitude,
+    country_code,
+    km,
+):
+    """Whether a GeoNames place of the country lies within km of the point."""
+    from daily_reliability import distance_km
+    band = km / 110.0
+    return any(
+        abs(lat - latitude) <= band
+        and distance_km(latitude, longitude, lat, lon) <= km
+        for lat, lon in COUNTRY_POINTS.get(country_code, ())
+    )
+
+
+# A model point this far from every place of its country, whose mirror
+# (lat, -lon) lies within SIGN_FLIP_MATCH_KM of one, lost its minus sign.
+# The every-run repair of stored points reaches 300 km (Segou, Mali, stored
+# 363 km from the country), a reach reviewed against the whole database.
+SIGN_FLIP_FAR_KM = 500
+SIGN_FLIP_REPAIR_FAR_KM = 300
+SIGN_FLIP_MATCH_KM = 50
+
+
+def flipped_longitude(
+    latitude,
+    longitude,
+    country_code,
+    far_km=SIGN_FLIP_FAR_KM,
+):
+    """
+    The negated longitude when only it puts the point in its country, else None.
+
+    Sinaloa at 24.54, 107.55 is in China and Cauca at 2.44, 76.61 in the
+    Indian Ocean; their mirrors lie in Mexico and Colombia. Overseas departments
+    (Réunion coded FR) and maritime points have no such mirror and keep their
+    coordinates: distance alone never moves a point to a capital.
+    """
+    if not country_code or not valid_coordinates(latitude, longitude):
+        return None
+
+    latitude = float(latitude)
+    longitude = float(longitude)
+
+    if longitude == 0 or country_place_within(
+        latitude, longitude, country_code, far_km
+    ):
+        return None
+
+    if country_place_within(
+        latitude, -longitude, country_code, SIGN_FLIP_MATCH_KM
+    ):
+        return -longitude
+
+    return None
+
+
+def store_ai_point(
+    event,
+    result,
+    country_code,
+):
+    """Store the model's own coordinates, restoring a dropped minus sign."""
+    event["latitude"] = float(
+        result["latitude"]
+    )
+
+    event["longitude"] = float(
+        result["longitude"]
+    )
+
+    corrected = flipped_longitude(
+        event["latitude"],
+        event["longitude"],
+        country_code,
+    )
+
+    if corrected is not None:
+        event["longitude"] = corrected
+        event["ai_geo_coordinate_correction"] = "longitude_sign"
+
+
+def place_on_capital(
+    event,
+    capital,
+):
+    event["city"] = (
+        capital.get(
+            "name"
+        )
+    )
+
+    event["latitude"] = float(
+        capital.get(
+            "latitude"
+        )
+    )
+
+    event["longitude"] = float(
+        capital.get(
+            "longitude"
+        )
+    )
+
+    event["location_precision"] = (
+        "country_capital"
+    )
+
+    event["location_method"] = (
+        "ai_country_capital"
     )
 
 
@@ -1519,6 +1717,7 @@ def apply_ai_result(
     else:
         for field in ('geolocation_review_required', 'geolocation_validation_issue', 'geolocation_requested_city'):
             event.pop(field, None)
+    event.pop("ai_geo_coordinate_correction", None)
     clear_location(
         event
     )
@@ -1671,7 +1870,13 @@ def apply_ai_result(
     ):
         city = resolve_city(
             city_name,
-            country_code
+            country_code,
+            result.get(
+                "latitude"
+            ),
+            result.get(
+                "longitude"
+            ),
         )
 
         if city:
@@ -1716,16 +1921,10 @@ def apply_ai_result(
         ):
             event["city"] = city_name
 
-            event["latitude"] = float(
-                result[
-                    "latitude"
-                ]
-            )
-
-            event["longitude"] = float(
-                result[
-                    "longitude"
-                ]
+            store_ai_point(
+                event,
+                result,
+                country_code,
             )
 
             event["location_precision"] = (
@@ -1769,16 +1968,10 @@ def apply_ai_result(
                 ]
             )
 
-            event["latitude"] = float(
-                result[
-                    "latitude"
-                ]
-            )
-
-            event["longitude"] = float(
-                result[
-                    "longitude"
-                ]
+            store_ai_point(
+                event,
+                result,
+                country_code,
             )
 
             event["location_precision"] = (
@@ -1804,30 +1997,9 @@ def apply_ai_result(
         )
 
         if capital:
-            event["city"] = (
-                capital.get(
-                    "name"
-                )
-            )
-
-            event["latitude"] = float(
-                capital.get(
-                    "latitude"
-                )
-            )
-
-            event["longitude"] = float(
-                capital.get(
-                    "longitude"
-                )
-            )
-
-            event["location_precision"] = (
-                "country_capital"
-            )
-
-            event["location_method"] = (
-                "ai_country_capital"
+            place_on_capital(
+                event,
+                capital,
             )
 
             return
@@ -1891,16 +2063,26 @@ def quota_or_capacity_error(
     )
 
 
+def reset_rescue_state(
+    event,
+):
+    event["ai_geo_rescue_complete"] = False
+    event["ai_geo_rescue_status"] = None
+    event["ai_geo_rescue_model"] = None
+    event["ai_geo_rescue_reason"] = None
+
+
 def prepare_pending_event(
     event,
 ):
     """
     AI-only mapping safeguard.
 
-    Any event not yet processed by this AI version has its old/legacy
+    An event no AI version has processed yet has its old/legacy (lexical)
     geolocation removed before API processing. If quota is reached, remaining
     events stay unlocated (and therefore hidden from the map) rather than
-    showing a lexical false positive.
+    showing a lexical false positive. Events an AI version has answered never
+    come here: they keep their point until their own batch is answered.
     """
 
     clear_location(
@@ -1908,10 +2090,9 @@ def prepare_pending_event(
     )
 
     event["ai_geo_complete"] = False
-    event["ai_geo_rescue_complete"] = False
-    event["ai_geo_rescue_status"] = None
-    event["ai_geo_rescue_model"] = None
-    event["ai_geo_rescue_reason"] = None
+    reset_rescue_state(
+        event
+    )
     event["ai_geo_version"] = AI_GEO_VERSION
     event["ai_geo_model"] = None
     event["ai_geo_reason"] = (
@@ -1936,7 +2117,8 @@ def mark_rescue_complete(
     Freeze the automatic rescue decision for this event.
 
     Normal scheduled runs will never send it to the rescue model again.
-    AI_GEO_FORCE=1 resets the rescue state through prepare_pending_event().
+    AI_GEO_FORCE=1 resets the rescue state when the forced primary answer is
+    applied.
     """
     event["ai_geo_rescue_complete"] = True
     event["ai_geo_rescue_status"] = status
@@ -2039,6 +2221,9 @@ def rescue_unknown_events(
                             GEMINI_RESCUE_MODEL,
                     )
                     break
+                except GeminiCallCapError:
+                    # The run's request cap, not this model's quota.
+                    raise
                 except GeminiQuotaError as error:
                     # This model's free quota is spent: the next one has its own.
                     models.pop(0)
@@ -2085,6 +2270,94 @@ def rescue_unknown_events(
 
 
 # ============================================================
+# STORED-LOCATION REPAIRS (NO AI)
+# ============================================================
+
+def repair_stored_locations(
+    events,
+):
+    """
+    Correct points stored by earlier versions, on every run, without AI.
+
+    Idempotent: a repaired record no longer matches its rule. No request is
+    sent, and nothing is re-queued for Gemini or flagged for review.
+    """
+    counts = Counter()
+
+    for event in events:
+        latitude = event.get("latitude")
+        longitude = event.get("longitude")
+        country_code = event.get("country_code")
+
+        # The rescue found no country: no low-confidence point may remain.
+        if (
+            event.get("ai_geo_rescue_status") == "unlocated_final"
+            and event.get("excluded_from_map") is True
+            and (latitude is not None or longitude is not None)
+        ):
+            event.update(city=None, region=None, latitude=None, longitude=None)
+            counts["unlocated_final_cleared"] += 1
+            continue
+
+        # Region/city coordinates with a dropped minus sign (Colombia and
+        # Mexico drawn in Asia). Reviewed against the whole database, the
+        # 300 km reach selects exactly the 14 audited records (9 CO, 4 MX,
+        # 1 ML); maritime and overseas-territory points have no mirror.
+        if event.get("location_method") in {
+            "ai_region_coordinates",
+            "ai_city_coordinates",
+        }:
+            corrected = flipped_longitude(
+                latitude,
+                longitude,
+                country_code,
+                SIGN_FLIP_REPAIR_FAR_KM,
+            )
+            if corrected is not None:
+                event["longitude"] = corrected
+                event["ai_geo_coordinate_correction"] = "longitude_sign"
+                counts["longitude_sign"] += 1
+            continue
+
+        # A country-level answer the old capital lookup could not place
+        # (Washington, Hanoi and San José each have same-country namesakes).
+        # A requested locality that failed is not a country-level answer.
+        if (
+            event.get("location_method") == "ai_unlocated"
+            and event.get("ai_geo_complete") is True
+            and country_code
+            and not event.get("city")
+            and not event.get("geolocation_validation_issue")
+            and latitude is None
+            and longitude is None
+        ):
+            capital = resolve_capital(
+                country_code
+            )
+            if capital:
+                place_on_capital(
+                    event,
+                    capital,
+                )
+                counts["capital_placed"] += 1
+
+    print(
+        "Stored-location repair (no AI): "
+        f"{counts['longitude_sign']} longitude sign(s) restored"
+    )
+    print(
+        "Stored-location repair (no AI): "
+        f"{counts['capital_placed']} country-level event(s) placed on the capital"
+    )
+    print(
+        "Stored-location repair (no AI): "
+        f"{counts['unlocated_final_cleared']} unlocated_final point(s) cleared"
+    )
+
+    return counts
+
+
+# ============================================================
 # MAIN
 # ============================================================
 
@@ -2122,6 +2395,9 @@ def main():
     )
     print(
         f"Batch size: {BATCH_SIZE}"
+    )
+    print(
+        f"Gemini request cap per run: {MAX_CALLS_PER_RUN}"
     )
     print(
         f"Force refresh: {FORCE_AI}"
@@ -2171,6 +2447,7 @@ def main():
     event_by_id = {}
 
     cached_count = 0
+    cleared_count = 0
 
     for index, event in enumerate(
         events
@@ -2228,15 +2505,37 @@ def main():
             cached_count += 1
             continue
 
-        prepare_pending_event(
-            event
-        )
+        # A forced refresh or an omitted/unreached batch must not erase an
+        # AI point: apply_ai_result clears each event when its answer lands.
+        if not event.get(
+            "ai_geo_version"
+        ):
+            prepare_pending_event(
+                event
+            )
+
+            cleared_count += 1
 
         pending.append(
             payload
         )
 
-    if pending:
+    if FORCE_AI:
+        # The request cap spreads a forced refresh over several runs: events
+        # the current engine has not answered for their content go first.
+        def answered_by_current_engine(item):
+            event = event_by_id[item["event_id"]]
+            return (
+                event.get("ai_geo_complete") is True
+                and event.get("ai_geo_version") == AI_GEO_VERSION
+                and event.get("ai_geo_fingerprint") == fingerprints[item["event_id"]]
+            )
+
+        pending.sort(
+            key=answered_by_current_engine
+        )
+
+    if cleared_count:
         save_checkpoint(
             data,
             "pending legacy locations cleared",
@@ -2301,6 +2600,9 @@ def main():
             ) as error:
                 print()
                 print(
+                    "Gemini request cap for this run reached."
+                    if isinstance(error, GeminiCallCapError)
+                    else
                     "Gemini quota/capacity temporarily unavailable."
                 )
                 print(
@@ -2348,6 +2650,13 @@ def main():
                         event_id
                     )
                     continue
+
+                # A new primary answer reopens the one automatic rescue.
+                reset_rescue_state(
+                    event_by_id[
+                        event_id
+                    ]
+                )
 
                 apply_ai_result(
                     event_by_id[
@@ -2548,6 +2857,8 @@ def main():
             event["location_precision"] = "unlocated"
             event["location_method"] = "ai_unlocated_final"
             event["excluded_from_map"] = True
+            # A low-confidence primary point is not kept on an unlocated event.
+            event.update(city=None, region=None, latitude=None, longitude=None)
 
             rescue_exhausted += 1
 
@@ -2564,6 +2875,19 @@ def main():
             data,
             "optional Gemini rescue pass (if billing verified)",
         )
+
+    # --------------------------------------------------------
+    # STORED-LOCATION REPAIRS: NO AI, EVERY RUN, SAVED BELOW.
+    # After this run's answers, so they are checked the same way.
+    # --------------------------------------------------------
+
+    print()
+    repair_stored_locations(
+        data.get(
+            "events",
+            []
+        )
+    )
 
     # --------------------------------------------------------
     # SUMMARY
