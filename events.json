@@ -376543,8 +376543,7 @@
       "threat_categories": [],
       "integrity_review_version": "map-evidence-review-20261022",
       "integrity_review_reason": "Shared model incident identifier grouped different cases/targets; isolate this reviewed record without claiming a new incident.",
-      "integrity_source_evidence": "f56aa6b766a091d5e2d626724ff5b5c842a7b9d44b52f86c6b0c83400f485f19",
-      "dedup_review_required": true
+      "integrity_source_evidence": "f56aa6b766a091d5e2d626724ff5b5c842a7b9d44b52f86c6b0c83400f485f19"
     },
     {
       "id": "f314f90609f3d05a",
@@ -406950,8 +406949,7 @@
       "ai_geo_inferred": false,
       "integrity_review_version": "map-evidence-review-20261022",
       "integrity_review_reason": "Shared model incident identifier grouped different cases/targets; isolate this reviewed record without claiming a new incident.",
-      "integrity_source_evidence": "4c655124882b073ff61bbd302d66bb991997244a7317219eef170d8506e0496e",
-      "dedup_review_required": true
+      "integrity_source_evidence": "4c655124882b073ff61bbd302d66bb991997244a7317219eef170d8506e0496e"
     },
     {
       "id": "e569007cf09bf756",
@@ -454797,8 +454795,7 @@
       ],
       "integrity_review_version": "map-evidence-review-20261022",
       "integrity_review_reason": "Shared model incident identifier grouped different cases/targets; isolate this reviewed record without claiming a new incident.",
-      "integrity_source_evidence": "79c940f6bf6a86d5f38a7507eaaf7f2b3542e9b425095237eaf4838cbdfbb5b1",
-      "dedup_review_required": true
+      "integrity_source_evidence": "79c940f6bf6a86d5f38a7507eaaf7f2b3542e9b425095237eaf4838cbdfbb5b1"
     },
     {
       "id": "1ea6057e6e14c6a9",
@@ -462981,8 +462978,7 @@
       ],
       "integrity_review_version": "map-evidence-review-20261022",
       "integrity_review_reason": "Shared model incident identifier grouped different cases/targets; isolate this reviewed record without claiming a new incident.",
-      "integrity_source_evidence": "7944f1631f60768b2f4b8203a9defd64b67013e6dd5d6f0b8d310004b44ce794",
-      "dedup_review_required": true
+      "integrity_source_evidence": "7944f1631f60768b2f4b8203a9defd64b67013e6dd5d6f0b8d310004b44ce794"
     },
     {
       "id": "578a752dc73d44ab",
@@ -469990,8 +469986,7 @@
       "ai_geo_inferred": false,
       "integrity_review_version": "map-evidence-review-20261022",
       "integrity_review_reason": "Shared model incident identifier grouped different cases/targets; isolate this reviewed record without claiming a new incident.",
-      "integrity_source_evidence": "2c3fac4a77353c38e49f51712943f41bf136f17b7927f8e415871e54f1ce5722",
-      "dedup_review_required": true
+      "integrity_source_evidence": "2c3fac4a77353c38e49f51712943f41bf136f17b7927f8e415871e54f1ce5722"
     },
     {
       "id": "0f8f33487255b897",
@@ -491926,8 +491921,7 @@
       "cbrn_subgroups": [],
       "integrity_review_version": "map-evidence-review-20261022",
       "integrity_review_reason": "Shared model incident identifier grouped different cases/targets; isolate this reviewed record without claiming a new incident.",
-      "integrity_source_evidence": "c977338ef3a036e8dbd63350b6c9f5adfe85bcda5b311bffefcef9d3108cc15c",
-      "dedup_review_required": true
+      "integrity_source_evidence": "c977338ef3a036e8dbd63350b6c9f5adfe85bcda5b311bffefcef9d3108cc15c"
     },
     {
       "id": "e298764baa9723fa",
@@ -497099,8 +497093,7 @@
       "cbrn_subgroups": [],
       "integrity_review_version": "map-evidence-review-20261022",
       "integrity_review_reason": "Shared model incident identifier grouped different cases/targets; isolate this reviewed record without claiming a new incident.",
-      "integrity_source_evidence": "8680fd7ce70c5afd77a601535a904d7c01fa40848dd0ef3d48b607f32581b9e3",
-      "dedup_review_required": true
+      "integrity_source_evidence": "8680fd7ce70c5afd77a601535a904d7c01fa40848dd0ef3d48b607f32581b9e3"
     },
     {
       "id": "ba12df888bd9c47a",
