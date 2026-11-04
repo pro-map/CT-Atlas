@@ -154,7 +154,7 @@
     "status": "partial",
     "run_started_at": "2026-11-03T22:17:57.452718+00:00",
     "last_attempt_at": "2026-11-03T22:17:57.452718+00:00",
-    "published_at": "2026-11-03T23:23:23.874609+00:00",
+    "published_at": "2026-11-04T01:27:05.205699+00:00",
     "recent": {
       "candidates": 3886,
       "reviewed": 3750,
@@ -512,12 +512,12 @@
     "geolocation": {
       "status": "complete",
       "pending": 0,
-      "located": 6306,
-      "unlocated": 263,
-      "completed_unlocated": 263,
+      "located": 6353,
+      "unlocated": 216,
+      "completed_unlocated": 216,
       "outcome": "success",
       "processed_this_run": 74,
-      "review_required": 176
+      "review_required": 129
     },
     "categories": [
       {
@@ -544,7 +544,15 @@
     ],
     "finalized_at": "2026-11-04T00:14:15.192298+00:00",
     "collect_outcome": "success",
-    "geolocate_outcome": "success"
+    "geolocate_outcome": "success",
+    "data_maintenance": {
+      "kind": "reviewed_map_evidence_repair",
+      "applied_at": "2026-11-04T01:27:05.205699+00:00",
+      "changed_records": 47,
+      "removed_records": 0,
+      "new_records": 0,
+      "ai_calls": 0
+    }
   },
   "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
   "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
@@ -987,7 +995,7 @@
     "UK Government / Counter-Terrorism",
     "INTERPOL English News"
   ],
-  "last_updated": "2026-11-03T23:23:23.874609+00:00",
+  "last_updated": "2026-11-04T01:27:05.205699+00:00",
   "number_of_events": 6569,
   "events": [
     {
@@ -4701,12 +4709,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "973aa5547adec588525662de6c2b07c1c652d33b687e95d1f2168455e5e6eb20",
@@ -4770,8 +4778,8 @@
         "title_plus_anchor",
         "same_normalized_title"
       ],
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Karak church attack in Jordan"
       ],
@@ -4784,12 +4792,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Terrorism-related charges filed against perpetrators of the church attack in Karak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "7bbc1d24ab28e4d1ff3ade1891b57729c34c2ffb97574f88d301c276dd7f674c",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "b58ace7daec1b8c4",
@@ -33691,12 +33699,12 @@
       "collector": "Google News RSS",
       "country": "Yemen",
       "country_code": "YE",
-      "city": null,
+      "city": "Al Ḩudaydah",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 14.79781,
+      "longitude": 42.95452,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "7d0363d60964c8457d130cfe27a88abb0a479554e9d5f59fa74523fd9bae7264",
@@ -33746,8 +33754,8 @@
       "dedup_methods": [
         "paraphrase_entity_context"
       ],
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Airstrikes Hit Oil Facility in Hodeidah"
       ],
@@ -33760,12 +33768,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Explicitly mentions airstrikes hitting an oil facility in Hodeidah, Yemen.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Hodeidah",
       "ai_geo_fingerprint": "c5c78fca27dd7e044cb41a74d3a83b06364247d3cfc8fd338afa8f4714070724",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 79415
     },
     {
       "id": "7f5d17e03a9a069d",
@@ -62856,12 +62864,12 @@
       "collector": "Google News RSS",
       "country": "Syria",
       "country_code": "SY",
-      "city": null,
+      "city": "Rankūs",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 33.75623,
+      "longitude": 36.3883,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "4fc880e9231235611e064eacb1641a69c6c921d0a67f0c94a7a0b2752a383cad"
@@ -62895,8 +62903,8 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Rankous, Rif Dimashq"
       ],
@@ -62909,12 +62917,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The clashes occurred in the town of Rankous in the Damascus countryside, Syria.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Rankous",
       "ai_geo_fingerprint": "411c289cc4fd84a7334066269488ea0ff701415ff295de8b497a2e729ec8048d",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 165533
     },
     {
       "id": "661a43ae06028572",
@@ -79278,12 +79286,12 @@
       "collector": "Google News RSS",
       "country": "India",
       "country_code": "IN",
-      "city": null,
+      "city": "Rajaori",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 33.37526,
+      "longitude": 74.3092,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "18c47e08d65096b115190e32b44ada7e5d0b9ba958fac189b90bbe8ba4dbcbde"
@@ -79319,8 +79327,8 @@
         "Security forces raid militant hideout Rajouri"
       ],
       "actor_scope": "NON_STATE",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Rajouri district of Jammu and Kashmir"
       ],
@@ -79333,12 +79341,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The militant hideout was busted in Rajouri, Jammu and Kashmir, India.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Rajouri",
       "ai_geo_fingerprint": "3e748fa67e61c07cdccde964fabdc9f6f48da1e9ac6696e5790e1c11b7e50434",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 1258891
     },
     {
       "id": "e4873267c8433ee4",
@@ -90926,12 +90934,12 @@
       "collector": "Google News RSS",
       "country": "India",
       "country_code": "IN",
-      "city": null,
+      "city": "Rajaori",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 33.37526,
+      "longitude": 74.3092,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "8766090223ccc46a7b5d913d59900f061a2c806d29a73a212b560e1885b7c4da"
@@ -90968,8 +90976,8 @@
       ],
       "actor_scope": "UNKNOWN",
       "reported_status": "CONFIRMED",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Security forces discovered a terrorist hideout in Rajouri, recovering a large cache of ammunition..."
       ],
@@ -90982,12 +90990,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Explicitly states the operation took place in Rajouri.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Rajouri",
       "ai_geo_fingerprint": "74b90371a082354ef171767c03b5d0b113e51b639f5d77efc70d5970f468bae5",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 1258891
     },
     {
       "id": "093ebd97079be65d",
@@ -118185,12 +118193,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "b21c4b825efa7705ff238388d47ae90f2cbe7685a8724490bfa3095ed82e8408"
@@ -118224,8 +118232,8 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "arrests in Kark attack case"
       ],
@@ -118238,12 +118246,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The arrests are tied to the attack in Kark (Karak), Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "70fa2a352651f5cf7a585ffd118d95c136bac38ec4a11bc0ca0a6119025658d6",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "d714ab5dc1a0e3ed",
@@ -121632,12 +121640,12 @@
       "collector": "Google News RSS",
       "country": "Syria",
       "country_code": "SY",
-      "city": null,
+      "city": "Tall Abyaḑ",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 36.69648,
+      "longitude": 38.95382,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "sana.sy",
       "targeted_source_kind": "local_language_media",
@@ -121673,8 +121681,8 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "تل أبيض"
       ],
@@ -121687,12 +121695,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Acts of sabotage and pursuit occurred in Tel Abyad.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Tel Abyad",
       "ai_geo_fingerprint": "4a4cbec27696ee76afb9dca235e9f48eeec0400c73dd8fa36468ffa996281291",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 163750
     },
     {
       "id": "db37924ef18dd6ee",
@@ -125358,12 +125366,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "dee89c427e8e3579e248835f69c375b8a3528e643a4ad0b8821e1ac22943eb17",
@@ -125409,8 +125417,8 @@
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "reported_status": "CONFIRMED",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "security operation that overthrew Karak attack suspects"
       ],
@@ -125423,8 +125431,7 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The security operation relates directly to the Karak attack in Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "b5fec0465e89dba44083f4070157d881f492d262dc2c086e7cf9823a662926e3",
       "ai_geo_inferred": false,
@@ -125432,7 +125439,8 @@
       "dedup_methods": [
         "very_high_title_similarity"
       ],
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "8875a880900e08cb",
@@ -125456,12 +125464,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "9482fe338c03208fb416a54ee1f0ed864e3a2c1e2b3da131205a04e395c97a1d"
@@ -125496,8 +125504,8 @@
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "reported_status": "CONFIRMED",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Jordanian Interior Minister reveals details of identifying and apprehending perpetrators of Karak terrorist operation"
       ],
@@ -125510,12 +125518,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The terrorist operation and subsequent arrests took place in Karak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "8e0fa2284c26961854eaec44fb42d2a9aa05100d54af49b00dd37a272548c9c5",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "75d139fc4a3eb6a3",
@@ -127343,12 +127351,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "source_article_fingerprints": [
         "732eafef4169a74137094c43aa33d685a61699ade1535cb851dcb2944a82705b",
         "cff883dca7b9f6ef048b0e82218e635b38d9952b948c255defee097db9afe725"
@@ -127394,8 +127402,8 @@
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "reported_status": "CONFIRMED",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "terrorist attack in Karak"
       ],
@@ -127408,8 +127416,7 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Arrests and press conference followed a terrorist attack in Karak.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "b1afb7fb916438a2580e22754db5cdcc6167be0093841e32f74dfae41db6dd0a",
       "ai_geo_inferred": false,
@@ -127417,7 +127424,8 @@
       "dedup_methods": [
         "very_high_title_similarity"
       ],
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "66194875829cd39b",
@@ -129485,12 +129493,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "00c551d86e8b2c6e675c030dffce5057facc8bc7f7ac167dbbd1063c73a0fc94",
@@ -129541,8 +129549,8 @@
         "title_plus_anchor"
       ],
       "dedup_review_required": true,
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Al-Karak attack perpetrators"
       ],
@@ -129555,12 +129563,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Perpetrators and details related to the Al-Karak attack in Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Al-Karak",
       "ai_geo_fingerprint": "f52b87e5a8ca69b8cf2e812a894b723950d0dbd678893610c50029a4bb92a829",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "3511c339427d25c8",
@@ -129989,12 +129997,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "source_article_fingerprints": [
         "714c6769cf629723ec9680c1441959f0160c18008e425d69a813c128624786e8",
         "c3ef807b53ac835c9af7a18f905c09fcaf71b3b8b6f93431eacc8b031480934b"
@@ -130045,8 +130053,8 @@
         "paraphrase_entity_context"
       ],
       "dedup_review_required": true,
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Karak terrorist attack"
       ],
@@ -130059,12 +130067,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Arrests and operations following the Karak terrorist attack in Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "7b4ba6142831c2269838f737b2c404fdda10a5759049124c01340c5250bf6383",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "e71f0fa1c7537c5a",
@@ -137799,12 +137807,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "1ff8b303a10ae4998f9963a830ded541b7883ef5df4ad3adb3be8e7b1a507666",
@@ -137884,8 +137892,8 @@
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "reported_status": "CONFIRMED",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Residents of Karak hold mourning house for martyrs of terrorist attack on Hammoud Church"
       ],
@@ -137898,8 +137906,7 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Mourning gathering held in Karak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "18abb7833ac56967227588c31bb0828a5a0250196eea18f3043715cef5cfdf13",
       "ai_geo_inferred": false,
@@ -137907,7 +137914,8 @@
       "dedup_methods": [
         "very_high_title_similarity"
       ],
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "000cbc15eb9172c1",
@@ -138117,12 +138125,12 @@
       "collector": "Google News RSS",
       "country": "Syria",
       "country_code": "SY",
-      "city": null,
+      "city": "Deir ez-Zor",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 35.33588,
+      "longitude": 40.14084,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "2d2f6125993f7d5c2a5dab797f5e4480cc00a989a4b21c7700cae0268a5abb51",
@@ -138168,8 +138176,8 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Ayyash warehouse area in the western suburbs of Deir Ezzor"
       ],
@@ -138182,8 +138190,7 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Explosion reported near Ayyash warehouses in Deir Ezzor, Syria.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Deir Ezzor",
       "ai_geo_fingerprint": "9fed48341bc7cc66dba5902e37f81ebfb71ad9faaa7d1c250db1db0729531a35",
       "ai_geo_inferred": false,
@@ -138191,7 +138198,8 @@
       "dedup_methods": [
         "very_high_title_similarity"
       ],
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 170794
     },
     {
       "id": "c27bb7aee98341f8",
@@ -139142,12 +139150,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "skynewsarabia.com",
       "targeted_source_kind": "local_language_media",
@@ -139184,8 +139192,8 @@
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "dedup_review_required": true,
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "الكرك"
       ],
@@ -139198,12 +139206,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The clashes occurred in Karak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "6e53c6da6eee3b228b0ff514c109d94a380e9bd9173e72e5039bb82482009f4e",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "8adb10c587dc96fc",
@@ -142918,12 +142926,12 @@
       "collector": "Google News RSS",
       "country": "Pakistan",
       "country_code": "PK",
-      "city": null,
+      "city": "Qila Saifullah",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 30.70077,
+      "longitude": 68.35984,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "source_article_fingerprints": [
         "f9359f6443f3ebcf046738e54e6b88b7afa5c59acf81b634028870e92c01ea05"
       ],
@@ -142957,8 +142965,8 @@
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "reported_status": "CONFIRMED",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Security Forces Kill Wanted Terrorist Commander in Qilla Saifullah Operation"
       ],
@@ -142971,12 +142979,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Operation took place in Qilla Saifullah, Pakistan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Qilla Saifullah",
       "ai_geo_fingerprint": "17ffc2fed528565fd6065b1ea2db4189199159b4f34611136416c18c68f138f6",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 1167550
     },
     {
       "id": "8f3ef99c6fee322c",
@@ -145702,12 +145710,12 @@
       "acquisition_channel": "gdelt_doc_search",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "source_article_fingerprints": [
         "f202d6080a0f998b8f8f95a54ebc4755850d0df64379db693bc278d92a23ddb2"
       ],
@@ -145741,8 +145749,8 @@
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "reported_status": "CONFIRMED",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "الكرك والإرهاب"
       ],
@@ -145755,12 +145763,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Targeting and security events in Al-Karak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Al-Karak",
       "ai_geo_fingerprint": "ac24d4205c40440beb65a99add5fc5b54e4f1a141243e0b352cf45afaab261ab",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "bb184cc3e189be6f",
@@ -149779,12 +149787,12 @@
       "collector": "Google News RSS",
       "country": "Israel",
       "country_code": "IL",
-      "city": null,
+      "city": "Giv'at Shmuel",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 32.07817,
+      "longitude": 34.84858,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "c3b5e29ed39772f7f03204326d62c685e0609a5066a3f15934df234d494d36ab"
@@ -149818,8 +149826,8 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Givat Shmuel"
       ],
@@ -149832,12 +149840,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "School security guard's weapon stolen in Givat Shmuel, Israel.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Givat Shmuel",
       "ai_geo_fingerprint": "95ab3a1bdd878b3d9222775c8940d68c4b47ba398fb73ec10b5d45d09e57dd6c",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 294981
     },
     {
       "id": "25bcbaeac56bc86e",
@@ -151726,12 +151734,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "alaraby.co.uk",
       "targeted_source_kind": "local_language_media",
@@ -151768,8 +151776,8 @@
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "dedup_review_required": true,
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "جريمة الكرك: ماذا في أدمغة الإرهابيين؟"
       ],
@@ -151782,12 +151790,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Explicitly discusses the terrorist attack and perpetrators in Karak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "43424db13a5f2ec1f3c63fee8f24b78ec4cea6849dd79392d4c63bb284579124",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "ebc8044ba8a2e5ca",
@@ -155895,12 +155903,12 @@
       "collector": "Google News RSS",
       "country": "Syria",
       "country_code": "SY",
-      "city": null,
+      "city": "Rankūs",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 33.75623,
+      "longitude": 36.3883,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "alquds.co.uk",
       "targeted_source_kind": "local_language_media",
@@ -155936,8 +155944,8 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "أهالي رنكوس يطالبون السلطات السورية بـ«الأدلة»: سبعة قتلى في العملية الأمنية"
       ],
@@ -155950,12 +155958,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Security operation and resulting deaths in Rankous, Syria.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Rankous",
       "ai_geo_fingerprint": "8a61c1819517fb0949b3b16ff9be2207d50e8eb1fddb57648464731d625c42ec",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 165533
     },
     {
       "id": "f93550122d2dcad6",
@@ -156374,12 +156382,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "395809c7133b81b8433df65e131ad17c93e74f96864b2e825304d5c737bcac08"
@@ -156415,8 +156423,8 @@
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "reported_status": "CONFIRMED",
       "dedup_review_required": true,
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "church attack in Karak"
       ],
@@ -156429,12 +156437,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The church attack took place in Karak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "51b8a370da9f5447b8469e124e38707d8d4a1c8d3d15b472ce9015e24b5f0bb4",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "27d5cf866f419933",
@@ -157720,12 +157728,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "source_article_fingerprints": [
         "31a4d4f65b97ac29cd59db4299f7237fff144288510f9a6bcd47e96ac854ebfb",
         "53d16de28e7924b74b27a9d2c4f2d120995542876fa2b1e1be6338545b23e1c6",
@@ -157805,8 +157813,8 @@
       "dedup_methods": [
         "same_incident"
       ],
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Church in Karak Governorate / Jordan reels after massacre at Orthodox church"
       ],
@@ -157819,12 +157827,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Massacre at an Orthodox church located in Karak Governorate, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "e5f5098de10f5ccde5abf6d5d9c15783f9cfdce6be385ffbc144503ed303b0bf",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "576a1d35dcc3cdab",
@@ -159984,12 +159992,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "3f7c5b976a2f137aad9206a4279c16a9715a08b2b6d0c80229748dfa1d082e4f",
@@ -160085,8 +160093,8 @@
         "very_high_title_similarity"
       ],
       "dedup_review_required": true,
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "الهجوم الإرهابي بالكرك"
       ],
@@ -160099,12 +160107,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Terrorist attack occurred in Karak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "6e7eb3074cd49b09b1ab408b2d668560aa430d50a39e0cbc9215a658054a737a",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "3bb06bf600f78318",
@@ -163331,12 +163339,12 @@
       "collector": "Google News RSS",
       "country": "Syria",
       "country_code": "SY",
-      "city": null,
+      "city": "Rankūs",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 33.75623,
+      "longitude": 36.3883,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "syriahr.com",
       "targeted_source_kind": "local_language_media",
@@ -163372,8 +163380,8 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Hundreds join Rankous funeral as residents challenge official account"
       ],
@@ -163386,12 +163394,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Security operation and funeral took place in Rankous, Syria.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Rankous",
       "ai_geo_fingerprint": "a14be532ba73e2ba7fc6db2480b33ae363275afe22509889a669065d7b0255cb",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 165533
     },
     {
       "id": "62a666ac21da5043",
@@ -163830,12 +163838,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "889961e5ed6f5cc226b002b7fb107f1ec669ae199d6774104fec386c8065e9c9",
@@ -163898,8 +163906,8 @@
         "very_high_title_similarity"
       ],
       "dedup_review_required": true,
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Karak Church"
       ],
@@ -163912,12 +163920,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The attack took place at a church in Karak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "a094c86a523eeb7ae9177b6f5cc9c98343b59d00f5cbb118ca75e0eebaa71500",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "3c7b5499663eea94",
@@ -164055,12 +164063,12 @@
       "acquisition_channel": "gdelt_doc_search",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "source_article_fingerprints": [
         "25d2ef49f38e11ff92fd884cc13d4a6a9428edf8e866f8441b3bdcab5b95c60a",
         "48a71107cede8bddb787c18b40afef80f6f5acfd8ac71654f1d168132c35cb21",
@@ -164174,8 +164182,8 @@
         "same_incident",
         "very_high_title_similarity"
       ],
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "الكلك (Karak)"
       ],
@@ -164188,12 +164196,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Terrorist attack occurred in Karak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "b11758b4052424596320ca552a2aed219f86f3ff5dc072043a59e7289b6c5a19",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "02645a0cee08f952",
@@ -164735,12 +164743,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "c8a619bd64b9f9b570255cc505e07750b6a921ee6104a46f3643f9bf7d711ff7"
@@ -164775,8 +164783,8 @@
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "dedup_review_required": true,
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Jordan tightens security measures following Kerak attack"
       ],
@@ -164789,12 +164797,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The referenced attack occurred in Kerak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Kerak",
       "ai_geo_fingerprint": "f643515057f1da97e8d9cc12d737d8efb91a2d9d3aa23b126c96618a14bc33e6",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "5e402d5de060eb70",
@@ -169617,12 +169625,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "alarabiya.net",
       "targeted_source_kind": "local_language_media",
@@ -169659,8 +169667,8 @@
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "dedup_review_required": true,
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Al Arabiya reports from Karak attack site"
       ],
@@ -169673,12 +169681,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The attack site is located in Karak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "7cdcb593571a39ee12ffc9911975a70ad293ce76a23c1684f0611ec270ec5568",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "22e261af2a869150",
@@ -170179,12 +170187,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "aljazeera.net",
       "targeted_source_kind": "local_language_media",
@@ -170357,8 +170365,8 @@
         "very_high_title_similarity",
         "title_plus_anchor"
       ],
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Terrorism strikes a church in Karak, Jordan"
       ],
@@ -170371,12 +170379,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The terrorist attack occurred in Karak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "0e9daddc4ed7ca561bd853a4fee2950f69201bdb0f8d39f302acbf943d564ce8",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "77f66a1848a06f8b",
@@ -172382,12 +172390,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "syria.tv",
       "targeted_source_kind": "local_language_media",
@@ -172425,8 +172433,8 @@
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "reported_status": "CONFIRMED",
       "dedup_review_required": true,
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "هجوم الكرك"
       ],
@@ -172439,12 +172447,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Refers to the Karak attack incident (misidentified as Syria in source title context, but well-established as Jordan's Karak).",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "0836d21a72837d46c50673402c2a06747e05a0093a7fde84d5d76ebeb711a7ce",
       "ai_geo_inferred": true,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "b22556e7d2fae48c",
@@ -172625,12 +172633,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "skynewsarabia.com",
       "targeted_source_kind": "local_language_media",
@@ -172666,8 +172674,8 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "ضحايا الكرك"
       ],
@@ -172680,12 +172688,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Jordanian mourning period declared for the victims of the attack in Kerak.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Kerak",
       "ai_geo_fingerprint": "4242cbc0b25acbda8aa970d9f82fb4760f24251c41c281eed1f36d98109f058c",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "35f953cd18c8db0c",
@@ -173163,12 +173171,12 @@
       "collector": "Google News RSS",
       "country": "Syria",
       "country_code": "SY",
-      "city": null,
+      "city": "Rankūs",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 33.75623,
+      "longitude": 36.3883,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "38f342288912ea969fa60c2fa33b8fd78d7c4f5745a5eb3914bad343fa1b42e9",
@@ -173246,8 +173254,8 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "security operation conducted in the town of Rankous in the Damascus countryside"
       ],
@@ -173260,8 +173268,7 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The text explicitly names Rankous in Rif Dimashq as the location of the security operation.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Rankous",
       "ai_geo_fingerprint": "3eca5e16e5a8f5461b6f9e63951818219b35c4e44859615c6ca5a0e4d677d1f8",
       "ai_geo_inferred": false,
@@ -173269,7 +173276,8 @@
       "dedup_methods": [
         "very_high_title_similarity"
       ],
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 165533
     },
     {
       "id": "b0c4424de1d24ab9",
@@ -173998,12 +174006,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "f126af56abee09868cc4639ce56a55dcfb8be49ea8e96a86d0ce924e1d599de9"
@@ -174039,8 +174047,8 @@
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "reported_status": "CONFIRMED",
       "dedup_review_required": true,
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Casualties reported in Kerak attack"
       ],
@@ -174053,12 +174061,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Attack occurred in Kerak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Kerak",
       "ai_geo_fingerprint": "c3a62eceb52c165afa831869c227c181b8c35bd210c734fd2d67b20bb90cca4d",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "f07f7aa2b8d97f52",
@@ -174260,12 +174268,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "140b690677f8b1eaf3ae1dcd18baaaf7562c7818374112c1b84b011bc1f22949",
@@ -174329,8 +174337,8 @@
         "same_incident",
         "paraphrase_entity_context"
       ],
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Jordanian King visits victims of Kerak church terrorist attack"
       ],
@@ -174343,12 +174351,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Church terrorist attack occurred in Kerak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Kerak",
       "ai_geo_fingerprint": "71d5e49135e99147f6b839ab872b94faa27c9bfae9a366e3988429fa46080de8",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "8513e874b510ecdc",
@@ -174691,12 +174699,12 @@
       "collector": "Google News RSS",
       "country": "Mexico",
       "country_code": "MX",
-      "city": null,
+      "city": "Coahuayana de Hidalgo",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 18.70358,
+      "longitude": -103.66271,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "milenio.com",
       "targeted_source_kind": "local_language_media",
@@ -174765,8 +174773,8 @@
         "very_high_title_similarity",
         "same_url"
       ],
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Coahuayana"
       ],
@@ -174779,12 +174787,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The suspects were captured following a car bomb attack in Coahuayana, Michoacán, Mexico.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Coahuayana",
       "ai_geo_fingerprint": "31db7e10835de2d4a8323e15a12db0da6d3be8d07d4c014bef11e6ced3fa9b59",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 4025994
     },
     {
       "id": "665fb5024495563a",
@@ -178284,12 +178292,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "source_article_fingerprints": [
         "0007b2b06a55fd16dfe5032c53d023bd88d469d2d19ba5e9f5706ef89366c6b1",
         "13496ceaed30800d17cd863ae1e26954f71edce93af72b3a878dff455ce79e99",
@@ -178372,8 +178380,8 @@
         "very_high_title_similarity"
       ],
       "dedup_review_required": true,
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Karak"
       ],
@@ -178386,12 +178394,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Prime minister chairs emergency Security Cabinet meeting in Karak following a terrorist attack.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "0413fe756e36b8dec42ceee4e81be6c7aaaa10c4b5ef358bf77994b7b16cb4a2",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "8facecad4b77ef07",
@@ -179660,12 +179668,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "2761ddd8967ff66116b52b6424bfe39085a1769aa1ebf16e909196c3d39fa2ac",
@@ -179727,8 +179735,8 @@
         "very_high_title_similarity",
         "same_incident"
       ],
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Publication ban on the investigative case of the Karak terrorist attack"
       ],
@@ -179741,12 +179749,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The terrorist attack and subsequent publication ban took place in Karak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "e97d5fb7d933f6423298e319ac73329b6f464abd7a3afe9be0b3ec6784fbf3aa",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "d4ba603f6227541a",
@@ -179848,12 +179856,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "b0788608909908ceffc2e34ed450fd37eea5f824cfb76066730f3c10edbad986"
@@ -179887,8 +179895,8 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Seven fatalities reported in attack on mourning gathering / church in Karak."
       ],
@@ -179901,12 +179909,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Cross-referencing related articles about the church attack in Jordan pointing to Karak.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "2431e7dbae6b3f311ba5fedf3caee1a71e8869ef308532744d5d8acbc8cb8ac0",
       "ai_geo_inferred": true,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "b0c1d3da70e35736",
@@ -179929,12 +179937,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "alarabiya.net",
       "targeted_source_kind": "local_language_media",
@@ -180042,8 +180050,8 @@
         "same_normalized_title",
         "title_plus_anchor"
       ],
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "First video reveals faces of Karak church attackers and their escape route"
       ],
@@ -180056,12 +180064,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The church attack took place in Karak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "7137093c87aed9fc124b3225b21a60ddede91b6fd2e7f6d4747f85b4631656db",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "909bb526a3894d23",
@@ -180554,12 +180562,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "935ae30dcc6a2d2cd887dc4ea27cde3c13c2f8ee561a16aabb71c2a7f85f1ecf",
@@ -180606,8 +180614,8 @@
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "reported_status": "CONFIRMED",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Karak"
       ],
@@ -180620,8 +180628,7 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "King Abdullah comments on the Karak attack in Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Al-Karak",
       "ai_geo_fingerprint": "b03ac480e6be98f7bc5bf41a93b7f4cf10ec0fad75892de9b146ec02af75c22a",
       "ai_geo_inferred": false,
@@ -180629,7 +180636,8 @@
       "dedup_methods": [
         "very_high_title_similarity"
       ],
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "6c7e53159013d509",
@@ -182050,12 +182058,12 @@
       "collector": "Google News RSS",
       "country": "Syria",
       "country_code": "SY",
-      "city": null,
+      "city": "Ar Raqqah",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 35.95283,
+      "longitude": 39.00788,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "syriahr.com",
       "targeted_source_kind": "local_language_media",
@@ -182092,8 +182100,8 @@
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "reported_status": "CONFIRMED",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Two Kurdish men were detained in Al-Raqqah"
       ],
@@ -182106,12 +182114,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Explicitly stated as Al-Raqqah, Syria.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Al-Raqqah",
       "ai_geo_fingerprint": "e96cc83986bb7854f5cc4ca7e17c76f5d80f5477a8d8628d0a1954ed84ff3b64",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 172955
     },
     {
       "id": "0af92f3329d579d9",
@@ -183211,12 +183219,12 @@
       "collector": "Google News RSS",
       "country": "Jordan",
       "country_code": "JO",
-      "city": null,
+      "city": "Qīr Moāv",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.18248,
+      "longitude": 35.69999,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "00e84b94b0ebe36b8aa2c2cfae86e2ebe06b5bc28cd042c20d2052be1a655571",
@@ -184369,8 +184377,8 @@
         "very_high_title_similarity"
       ],
       "dedup_review_required": true,
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Armed attack on church in Jordan / Karak."
       ],
@@ -184383,12 +184391,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Church attack took place in Karak, Jordan.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Karak",
       "ai_geo_fingerprint": "bcd888bf617d1616f4bc806f5c302a4fad80047b48667d19d0f05c65cc8594ef",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 250624
     },
     {
       "id": "9fd33c79eb438aa4",
@@ -204720,12 +204728,12 @@
       "collector": "Google News RSS",
       "country": "Iraq",
       "country_code": "IQ",
-      "city": null,
+      "city": "Al Ḩawījah",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 35.32592,
+      "longitude": 43.77267,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "shafaq.com/ar",
       "targeted_source_kind": "local_language_media",
@@ -204835,8 +204843,8 @@
         "very_high_title_similarity",
         "actor_country_action_signature"
       ],
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Kirkuk / Hawija"
       ],
@@ -204849,12 +204857,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "ISIS attack targeting PMF camera and remnants in Hawija, Kirkuk.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Hawija",
       "ai_geo_fingerprint": "d29b51d0fe4fb8675669913b8ebddf1da7eb1a1ee11a5e1af003745cf79c9a9e",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 390188
     },
     {
       "id": "58bc98ce5ff3765a",
@@ -206141,12 +206149,12 @@
       "collector": "Google News RSS",
       "country": "Tunisia",
       "country_code": "TN",
-      "city": null,
+      "city": "Mennzel Bou Zelfa",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 36.68312,
+      "longitude": 10.58431,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "alaraby.co.uk",
       "targeted_source_kind": "local_language_media",
@@ -206182,8 +206190,8 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "منزل بوزلفة (Manzel Bouzelfa)"
       ],
@@ -206196,12 +206204,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The protest and killing occurred in Manzel Bouzelfa, Tunisia.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Manzel Bouzelfa",
       "ai_geo_fingerprint": "71490d6746e1673a4f15efdbab3955a1e13011cd4f8be36d27bbab705710839e",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 2469262
     },
     {
       "id": "92359ddc53d5295a",
@@ -209890,12 +209898,12 @@
       "collector": "Google News RSS",
       "country": "Syria",
       "country_code": "SY",
-      "city": null,
+      "city": "Rankūs",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 33.75623,
+      "longitude": 36.3883,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "syriahr.com",
       "targeted_source_kind": "local_language_media",
@@ -210028,8 +210036,8 @@
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "dedup_review_required": true,
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Rankous"
       ],
@@ -210042,8 +210050,7 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Clashes occurred in Rankous, Syria.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Rankous",
       "ai_geo_fingerprint": "30d030877b24d8a0065d28bbdf1dd71d07464cb24722ffa022167c6e1b8251d1",
       "ai_geo_inferred": false,
@@ -210052,7 +210059,8 @@
         "paraphrase_entity_context",
         "very_high_title_similarity"
       ],
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 165533
     },
     {
       "id": "42c32cde6fd4c0d5",
@@ -213617,12 +213625,12 @@
       "collector": "Google News RSS",
       "country": "Syria",
       "country_code": "SY",
-      "city": null,
+      "city": "Rankūs",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 33.75623,
+      "longitude": 36.3883,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "aec5a331974d0f626a9ff0408e01c9b1d61af5e361e13ef586d775282554176a",
@@ -213673,8 +213681,8 @@
       "dedup_methods": [
         "same_incident"
       ],
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "ضربة استباقية تطيح بخلية ارهابية في رنكوس بريف دمشق"
       ],
@@ -213687,12 +213695,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Security strike targeting a terrorist cell in Rankous, Rural Damascus.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Rankous",
       "ai_geo_fingerprint": "df68aac8515aef9e851687f035f2a1d6104c5c1d2f567047824705b5a31be090",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 165533
     },
     {
       "id": "ed706879d5309fd3",
@@ -214056,12 +214064,12 @@
       "collector": "Google News RSS",
       "country": "India",
       "country_code": "IN",
-      "city": null,
+      "city": "Bāramūla",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 34.209,
+      "longitude": 74.34285,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "3818862ea80374e3109b3d034cdb667f9bc2f4a2c9287e94d2197017b9eff944",
@@ -214126,8 +214134,8 @@
         "same_incident",
         "very_high_title_similarity"
       ],
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "बारामूला में बड़ा सुरक्षा अभियान: दो संदिग्ध आतंकवादी सहयोगी गिरफ्तार"
       ],
@@ -214140,12 +214148,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Security operation and arrests in Baramulla, Jammu and Kashmir.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Baramulla",
       "ai_geo_fingerprint": "d4e91204895ee88783ee92ddc23c8615107b19bbcb595d8379db345d5669340c",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 1277085
     },
     {
       "id": "61c1f7704d0a2990",
@@ -736397,21 +736405,21 @@
     "cached_events": 6495,
     "ai_processed_this_run": 74,
     "ai_pending_at_start": 74,
-    "city": 2385,
+    "city": 2432,
     "region": 2126,
     "country_capital": 1791,
-    "unlocated": 267,
-    "mapped_total": 6302,
+    "unlocated": 220,
+    "mapped_total": 6353,
     "high_confidence": 5796,
-    "medium_confidence": 554,
-    "low_confidence": 219,
+    "medium_confidence": 601,
+    "low_confidence": 172,
     "methods": {
       "ai_city_geonames": 2256,
       "ai_region_coordinates": 2123,
       "ai_country_capital": 1790,
-      "unresolved_city_no_capital_fallback": 144,
+      "unresolved_city_no_capital_fallback": 97,
       "ai_unlocated": 82,
-      "source_name_geonames_correction": 2,
+      "source_name_geonames_correction": 49,
       "ai_city_coordinates": 121,
       "reviewed_unsupported_point_withdrawn": 19,
       "ai_unlocated_final": 21,
@@ -736420,5 +736428,13 @@
       "source_verified_country": 1,
       "source_verified_unlocated": 1
     }
+  },
+  "map_integrity_audit": {
+    "version": "map-evidence-review-20261022",
+    "new_events": 0,
+    "quarantined_records": 0,
+    "folded_duplicate_records": 0,
+    "review_required": 129,
+    "scope": "Structural scan and reviewed source-excerpt corrections; not independent verification of every incident or location."
   }
 }
