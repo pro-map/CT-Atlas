@@ -137,7 +137,8 @@ def atomic_json(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = None
     try:
-        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent,
+        # LF line endings: the proof below hashes LF bytes, on every platform.
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", newline="\n", dir=path.parent,
                                          prefix=path.name + ".", suffix=".tmp", delete=False) as handle:
             temporary = Path(handle.name)
             json.dump(value, handle, ensure_ascii=False, indent=2)

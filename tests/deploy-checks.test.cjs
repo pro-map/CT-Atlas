@@ -7,7 +7,8 @@ const assert=require("node:assert/strict");
 const fs=require("node:fs");
 const {execFileSync}=require("node:child_process");
 
-const workflow=fs.readFileSync(".github/workflows/deploy-current-ct-atlas-ui.yml","utf8");
+// Normalised: a Windows checkout (core.autocrlf) has CRLF line endings.
+const workflow=fs.readFileSync(".github/workflows/deploy-current-ct-atlas-ui.yml","utf8").replace(/\r\n/g,"\n");
 const checks=workflow.split("\n").map(line=>line.trim()).filter(line=>/^grep -q /.test(line));
 
 test("the deploy workflow has its grep checks",()=>{
@@ -32,7 +33,7 @@ test("every file the deploy checks or syntax-checks exists",()=>{
 
 
 test("UI publication shares the data-update lock from checkout through deployment",()=>{
-  const daily=fs.readFileSync(".github/workflows/update-map.yml","utf8");
+  const daily=fs.readFileSync(".github/workflows/update-map.yml","utf8").replace(/\r\n/g,"\n");
   const concurrency=source=>source.match(/^concurrency:\n([\s\S]*?)(?=^\S)/m)?.[1]||"";
   for(const source of [workflow,daily]){
     assert.match(concurrency(source),/group: ct-map-update-main/);

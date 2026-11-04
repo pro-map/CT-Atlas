@@ -74,8 +74,13 @@ export async function handleDarkweb(request, env, ctx) {
     const raw = await response.json();
     const state = await withHostedFiles(collector ? { policy: raw.policy, outlets: raw.outlets } : raw, env);
     if (collector) {
-      const parts = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date()).map(p => [p.type,p.value]));
-      const today = `${parts.year}-${parts.month}-${parts.day}`;
+      // Calendar days in Paris time, for today and for the last successful pass
+      // alike (a UTC date would lag one day each night from 23:00 or 22:00 UTC).
+      const parisDay = date => {
+        const parts = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(date).map(p => [p.type,p.value]));
+        return `${parts.year}-${parts.month}-${parts.day}`;
+      };
+      const today = parisDay(new Date());
       // The daily collector is intentionally restricted to the Bessira outlet.
       // Keep common transliteration variants so an admin label change does not
       // accidentally re-enable unrelated outlets.
@@ -88,7 +93,8 @@ export async function handleDarkweb(request, env, ctx) {
       // de-duplication handles publications already seen on that same day.
       // If no successful pass exists yet, fall back to the administrator's
       // retained collection start date.
-      const lastSuccessDay = String(outlets[0]?.last_success || "").slice(0, 10);
+      const lastSuccess = new Date(String(outlets[0]?.last_success || ""));
+      const lastSuccessDay = Number.isNaN(lastSuccess.getTime()) ? "" : parisDay(lastSuccess);
       const from = /^\d{4}-\d{2}-\d{2}$/.test(lastSuccessDay) ? lastSuccessDay : state.policy.from;
       const policy = { ...state.policy, from, through: today };
       return reply({ version: DARKWEB_VERSION, policy, files_storage: state.files_storage, outlets }, 200, env);

@@ -62,10 +62,14 @@ class CompactMirrorJsonTests(unittest.TestCase):
         self.source.write_bytes(b'{"events":[]}')
         with self.assertRaises(ValueError):
             mirror.write_compact_copy(self.source, self.source)
-        self.target.symlink_to(self.source)
-        with self.assertRaises(ValueError):
-            mirror.write_compact_copy(self.source, self.target)
-        self.target.unlink()
+        try:
+            self.target.symlink_to(self.source)
+        except OSError:
+            pass  # Windows without the symlink privilege: the hard link below still checks aliasing.
+        else:
+            with self.assertRaises(ValueError):
+                mirror.write_compact_copy(self.source, self.target)
+            self.target.unlink()
         os.link(self.source, self.target)
         with self.assertRaises(ValueError):
             mirror.write_compact_copy(self.source, self.target)

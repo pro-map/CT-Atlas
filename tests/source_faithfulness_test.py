@@ -62,7 +62,7 @@ class SourceFaithfulnessTest(unittest.TestCase):
         self.assertEqual([p.read_bytes() for p in self.files], after)
 
     def test_different_source_with_reused_id_refuses_before_any_write(self):
-        data = json.loads(self.files[0].read_text())
+        data = json.loads(self.files[0].read_text(encoding="utf-8"))
         data["events"][0]["published"] = "2026-10-08"
         self.files[0].write_text(json.dumps(data))
         before = [p.read_bytes() for p in self.files]
@@ -79,7 +79,7 @@ class SourceFaithfulnessTest(unittest.TestCase):
         self.assertEqual(value, before)
 
     def test_ambiguous_occurrence_does_not_change_any_file(self):
-        data = json.loads(self.files[0].read_text())
+        data = json.loads(self.files[0].read_text(encoding="utf-8"))
         data["unrelated_metadata"] = repair.OLD_SUMMARY
         self.files[0].write_text(json.dumps(data))
         before = [p.read_bytes() for p in self.files]
