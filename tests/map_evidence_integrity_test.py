@@ -45,6 +45,18 @@ class IntegrityTests(unittest.TestCase):
   self.assertTrue(m.repair_unresolved_city(e,lambda *args:c))
   self.assertEqual(e['city'],'Cúcuta');self.assertFalse(e['geolocation_review_required'])
   self.assertNotIn('geolocation_validation_issue',e)
+ def test_city_repair_shows_the_source_spelling_not_the_geonames_main_name(self):
+  karak={'name':'Qīr Moāv','countrycode':'JO','latitude':31.18248,'longitude':35.69999,'geonameid':250624}
+  e={'country_code':'JO','geolocation_validation_issue':'ambiguous_or_unresolved_city','geolocation_requested_city':' Karak '}
+  self.assertTrue(m.repair_unresolved_city(e,lambda *args:karak))
+  self.assertEqual((e['city'],e['latitude'],e['geolocation_resolution_geonameid']),('Karak',31.18248,250624))
+  self.assertFalse(m.restore_requested_city_label(e))
+  # Records corrected before the fix carry the GeoNames main name.
+  old=dict(e,city='Qīr Moāv');self.assertTrue(m.restore_requested_city_label(old));self.assertEqual(old['city'],'Karak')
+  self.assertFalse(m.restore_requested_city_label(old))
+  for other in (dict(old,city='Qīr Moāv',location_method='ai_city'),dict(old,city='Garsten',geolocation_requested_city=None),
+                dict(old,city='Qīr Moāv',geolocation_resolution_geonameid=None)):
+   before=copy.deepcopy(other);self.assertFalse(m.restore_requested_city_label(other));self.assertEqual(other,before)
  def test_numbers_and_secondary_sources_do_not_establish_same_incident(self):
   a={'title':'Lebanese army seizes 200 kilograms of explosives','related_articles':[{'url':'same'}]}
   b={'title':'200 spectators attend football match in Brazil','related_articles':[{'url':'same'}]}

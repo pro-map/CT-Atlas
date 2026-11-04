@@ -55,6 +55,10 @@ jobs:
           # Neither a similar translated title nor a reused incident ID qualifies.
           allowed|={e['id']for e in before['events']if e.get('geolocation_validation_issue')=='ambiguous_or_unresolved_city'}
           allowed|={i for group in audit(before['events'])['duplicate_original_article_groups']for i in group}
+          # A GeoNames-bound correction may only get its source spelling back.
+          relabel={e['id']for e in before['events']if e.get('location_method')=='source_name_geonames_correction'and e.get('geolocation_resolution_geonameid')}-allowed
+          assert all({k for k in set(old[i])|set(new[i])if old[i].get(k)!=new[i].get(k)}<={'city'}for i in relabel&set(new))
+          allowed|=relabel
           assert len(new)==len(after['events']) and set(new)<=set(old)
           assert (set(old)-set(new))<=allowed
           assert all(old[i]==new[i] for i in set(old)&set(new)-allowed)

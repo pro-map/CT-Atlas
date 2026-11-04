@@ -66,6 +66,25 @@ def withdraw_unresolved_city_fallback(event):
     return True
 
 
+def requested_city_label(requested):
+    """The source's own spelling, as the live geolocation shows it ('Karak',
+    'Hodeidah'), not the GeoNames main name ('Qir Moav', 'Al Hudaydah'); only
+    the coordinates and the geonameid come from GeoNames."""
+    import html
+    return ' '.join(html.unescape(str(requested or '')).split())
+
+
+def restore_requested_city_label(event):
+    """Records corrected before 2026-11-04 show the GeoNames main name."""
+    requested = requested_city_label(event.get('geolocation_requested_city'))
+    if (event.get('location_method') != 'source_name_geonames_correction'
+            or not event.get('geolocation_resolution_geonameid')
+            or not requested or event.get('city') == requested):
+        return False
+    event['city'] = requested
+    return True
+
+
 def repair_unresolved_city(event, resolve_city):
     """Reapply only an exact country-locked lookup after text normalization fixes."""
     if event.get('geolocation_validation_issue') != 'ambiguous_or_unresolved_city':
@@ -77,7 +96,7 @@ def repair_unresolved_city(event, resolve_city):
     city = resolve_city(requested, country)
     if not city or city.get('countrycode') != country:
         return False
-    event.update(city=city['name'], region=None, latitude=float(city['latitude']),
+    event.update(city=requested_city_label(requested) or city['name'], region=None, latitude=float(city['latitude']),
                  longitude=float(city['longitude']), location_precision='city',
                  location_method='source_name_geonames_correction',
                  location_confidence='medium', location_confidence_score=0.75,
@@ -333,7 +352,7 @@ def repair_document(data, resolve_city=None):
     original=copy.deepcopy(data); old={e['id']:copy.deepcopy(e) for e in data['events']}
     if resolve_city is not None:
         for event in data['events']:
-            repair_unresolved_city(event, resolve_city)
+            repair_unresolved_city(event, resolve_city) or restore_requested_city_label(event)
     data['events']=filter_reviewed(data['events']); new={e['id']:e for e in data['events']}
     if len(new)!=len(data['events']) or not set(new)<=set(old):
         raise ValueError('Repair introduced or duplicated record identifiers')
