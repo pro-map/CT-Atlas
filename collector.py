@@ -6408,7 +6408,76 @@ COUNTRY_CANONICAL = {
     "ecuador": {
         "ecuador", "ecuadorian", "ecuadorean",
     },
+    # 2026-11-04: countries of the database (three or more records) that had
+    # no entry (786 records), e.g. a Nigerian and a Jordanian death toll
+    # merged as country-less. They are COUNTRY_CONFLICT_ONLY: they keep
+    # different countries apart but never make two stories alike.
+    # Not added: Georgia (also a US state), Guinea (Equatorial, Bissau), and
+    # China, Azerbaijan, Vietnam and Benin, which are mostly outlet names in
+    # summaries ('South China Morning Post', 'Latest news from Azerbaijan',
+    # 'Vietnam.vn', 'Benin Web TV'). Language and nationality words
+    # ('Spanish media', 'Omani pilot') are not aliases.
+    "italy": {"italy", "italian", "italia"},
+    "jordan": {"jordan", "jordanian"},
+    "spain": {"spain", "españa"},
+    "democratic republic of the congo": {
+        "democratic republic of the congo", "dr congo", "drc", "congo", "congolese",
+    },
+    "poland": {"poland", "polish"},
+    "bangladesh": {"bangladesh", "bangladeshi"},
+    "austria": {"austria", "austrian"},
+    "cameroon": {"cameroon", "cameroonian"},
+    "sudan": {"sudan", "sudanese"},
+    "chad": {"chad", "chadian"},
+    "oman": {"oman"},
+    "kazakhstan": {"kazakhstan", "kazakh"},
+    "bulgaria": {"bulgaria", "bulgarian"},
+    "greece": {"greece", "greek"},
+    "portugal": {"portugal"},
+    "singapore": {"singapore", "singaporean"},
+    "serbia": {"serbia", "serbian"},
+    "argentina": {"argentina", "argentine", "argentinian"},
+    "ethiopia": {"ethiopia", "ethiopian"},
+    "chile": {"chile", "chilean"},
+    "uganda": {"uganda", "ugandan"},
+    "romania": {"romania", "romanian"},
+    "kuwait": {"kuwait", "kuwaiti"},
+    "south korea": {"south korea", "south korean"},
+    "north korea": {"north korea", "dprk"},
+    "switzerland": {"switzerland", "swiss"},
+    "netherlands": {"netherlands", "dutch"},
+    "ivory coast": {"ivory coast", "cote d'ivoire", "côte d'ivoire", "ivorian"},
+    "albania": {"albania", "albanian"},
+    "guatemala": {"guatemala", "guatemalan"},
+    "south africa": {"south africa"},
+    "lithuania": {"lithuania", "lithuanian"},
+    "thailand": {"thailand", "thai"},
+    "cyprus": {"cyprus", "cypriot"},
+    "honduras": {"honduras", "honduran"},
+    "japan": {"japan", "japanese"},
+    "haiti": {"haiti", "haitian"},
+    "el salvador": {"el salvador", "salvadoran"},
+    "hong kong": {"hong kong"},
 }
+
+COUNTRY_CONFLICT_ONLY = frozenset({
+    "italy", "jordan", "spain", "democratic republic of the congo", "poland",
+    "bangladesh", "austria", "cameroon", "sudan", "chad", "oman", "kazakhstan",
+    "bulgaria", "greece", "portugal", "singapore", "serbia", "argentina",
+    "ethiopia", "chile", "uganda", "romania", "kuwait", "south korea",
+    "north korea", "switzerland", "netherlands", "ivory coast", "albania",
+    "guatemala", "south africa", "lithuania", "thailand", "cyprus", "honduras",
+    "japan", "haiti", "el salvador", "hong kong",
+})
+
+# Places named after a country that are elsewhere (regular expressions over
+# normalize_event_text output): Lake Chad is mostly Nigerian, Cameroonian and
+# Nigerien reporting, the Jordan Valley Israeli or Palestinian, South Sudan is
+# not Sudan, and the Republic of the Congo is not the DR Congo.
+COUNTRY_TEXT_MASKS = (
+    r"lake[ -]chad", r"jordan[ -](?:valley|river)", r"south[ -]sudan(?:ese)?",
+    r"republic of (?:the )?congo", r"congo[ -]brazzaville", r"brazzaville",
+)
 
 
 def ascii_text(text):
@@ -6762,6 +6831,9 @@ def extract_country_families(text):
     )
 
     found = set()
+
+    for phrase in COUNTRY_TEXT_MASKS:
+        normalized = re.sub(r"(?<![a-z0-9])" + phrase + r"(?![a-z0-9])", " ", normalized)
 
     for canonical, aliases in COUNTRY_CANONICAL.items():
         for alias in aliases:
@@ -7252,13 +7324,11 @@ def profile_pair_score(
         ],
     )
 
+    # Countries added on 2026-11-04 only keep different countries apart
+    # (country_conflict below); they never count as a shared anchor.
     country_overlap = containment_similarity(
-        profile1[
-            "countries"
-        ],
-        profile2[
-            "countries"
-        ],
+        set(profile1["countries"]) - COUNTRY_CONFLICT_ONLY,
+        set(profile2["countries"]) - COUNTRY_CONFLICT_ONLY,
     )
 
     number_overlap = containment_similarity(
@@ -8551,7 +8621,7 @@ def _quick_candidate_compatible(
         incoming_countries
         &
         existing_countries
-    )
+    ) - COUNTRY_CONFLICT_ONLY
 
     shared_entities = (
         incoming_signature[
@@ -10660,6 +10730,12 @@ INCIDENT_WINDOW_MAX = 120
 INCIDENT_CONSOLIDATION_MAX_CALLS = int(os.getenv("INCIDENT_CONSOLIDATION_MAX_CALLS", "10"))
 INCIDENT_INITIAL_MERGE_DAYS = 3.0
 INCIDENT_UPDATE_MERGE_DAYS = 1.5
+# How a Gemini group is checked against the headlines. Changing it re-opens,
+# once, the incidents an earlier rule refused to merge (dedup_review_required),
+# so their windows are reviewed again under the new rule.
+# 2026-11-04: distinctive-word support components replace the all-pairs veto,
+# which rejected every large real incident (Karak, Trappes) for one weak pair.
+INCIDENT_CONSOLIDATION_RULE_VERSION = "support-components-20261104"
 
 # Same broad regions as the Report Generator (cloudflare-worker/shared.js).
 # Overlaps are deliberate: a country in two regions is compared with both.
@@ -10757,7 +10833,10 @@ def load_incident_state(path=None):
         state = {}
     aliases = state.get("aliases") if isinstance(state.get("aliases"), dict) else {}
     reviewed = state.get("reviewed") if isinstance(state.get("reviewed"), dict) else {}
-    return {"version": 1, "aliases": aliases, "reviewed": reviewed}
+    loaded = {"version": 1, "aliases": aliases, "reviewed": reviewed}
+    if isinstance(state.get("rule_version"), str):
+        loaded["rule_version"] = state["rule_version"]
+    return loaded
 
 
 def save_incident_state(state, events, path=None):
@@ -11023,24 +11102,64 @@ def merge_incident_records(events):
     return [event for index, event in enumerate(events) if index not in absorbed]
 
 
-def consolidate_incidents(events, state=None, max_calls=None, now=None, use_gemini=True):
+def _isolated_by_review(event):
+    from map_evidence_integrity import matched_rule
+    return bool((matched_rule(event) or {}).get("isolated_incident"))
+
+
+def refused_incident_keys(events, state):
+    """The keys reopen_refused_incidents would send back to review: those of
+    records an earlier rule flagged, except records a review isolated (they
+    never merge, so another Gemini call cannot change them)."""
+    if state.get("rule_version") == INCIDENT_CONSOLIDATION_RULE_VERSION:
+        return set()
+    isolated = {_incident_key(event) for event in events if _isolated_by_review(event)}
+    return {_incident_key(event) for event in events if event.get("dedup_review_required")} - isolated
+
+
+def reopen_refused_incidents(events, state):
+    """Once per INCIDENT_CONSOLIDATION_RULE_VERSION: send the incidents an
+    earlier rule refused to merge back to review. The flags stay: a key the
+    new review merges loses its flag, one it leaves alone keeps the refusal.
+    Returns how many keys were re-opened."""
+    if state.get("rule_version") == INCIDENT_CONSOLIDATION_RULE_VERSION:
+        return 0
+    keys = refused_incident_keys(events, state)
+    for key in keys:
+        state["reviewed"].pop(key, None)
+    for event in events:
+        # A reviewed isolation is settled, not a doubt.
+        if event.get("dedup_review_required") and _isolated_by_review(event):
+            event.pop("dedup_review_required")
+    state["rule_version"] = INCIDENT_CONSOLIDATION_RULE_VERSION
+    return len(keys)
+
+
+def consolidate_incidents(events, state=None, max_calls=None, now=None, use_gemini=True, reopen=False):
     """Unify duplicate incident ids, then merge duplicate records.
     Returns (events, stats). Never raises on Gemini failure: unreviewed
-    windows simply wait for the next run."""
+    windows simply wait for the next run. reopen=True (the scheduled
+    consolidation job, on its own Gemini ledger) first re-opens the keys an
+    earlier rule refused; the collector's own calls stay on today's windows."""
     state = state if state is not None else load_incident_state()
     max_calls = INCIDENT_CONSOLIDATION_MAX_CALLS if max_calls is None else max_calls
     now_iso = (now or datetime.now(timezone.utc)).isoformat()
-    from map_evidence_integrity import filter_reviewed, matched_rule, primary_pair_supported
+    from map_evidence_integrity import (consolidation_pair_supported, consolidation_weak_words,
+                                        filter_reviewed, matched_rule, supported_incident_components)
     events = filter_reviewed(events)
     aliases, reviewed = state["aliases"], state["reviewed"]
     stats = {"aliased_records": 0, "windows_pending": 0, "windows_reviewed": 0,
-             "incidents_merged": 0, "records_merged": 0, "error": None}
+             "incidents_merged": 0, "records_merged": 0, "reopened_incidents": 0, "error": None}
 
     for event in events:
         incident_id = event.get("incident_id")
         if incident_id and incident_id in aliases and not (matched_rule(event) or {}).get("isolated_incident"):
             event["incident_id"] = resolve_incident_alias(incident_id, aliases)
             stats["aliased_records"] += 1
+
+    # Only a run that can review them re-opens them (not --dry-run or resume-pending).
+    if reopen and use_gemini and max_calls > 0:
+        stats["reopened_incidents"] = reopen_refused_incidents(events, state)
 
     profiles = build_incident_profiles(events)
     pending = [keys for keys in incident_windows(profiles) if any(key not in reviewed for key in keys)]
@@ -11058,7 +11177,18 @@ def consolidate_incidents(events, state=None, max_calls=None, now=None, use_gemi
         return key
 
     reviewed_keys = set()
-    if use_gemini:
+    floor_time = datetime.min.replace(tzinfo=timezone.utc)
+    if use_gemini and pending[:max(0, max_calls)]:
+        weak = consolidation_weak_words(events, [alias for names in COUNTRY_CANONICAL.values() for alias in names])
+        link_cache = {}
+
+        def linked(a, b):
+            pair = (a, b) if a < b else (b, a)
+            if pair not in link_cache:
+                link_cache[pair] = any(consolidation_pair_supported(events[i], events[j], weak)
+                                       for i in profiles[a]["indices"] for j in profiles[b]["indices"])
+            return link_cache[pair]
+
         for keys in pending[:max(0, max_calls)]:
             try:
                 groups = review_incident_window(keys, profiles)
@@ -11069,20 +11199,22 @@ def consolidate_incidents(events, state=None, max_calls=None, now=None, use_gemi
             stats["windows_reviewed"] += 1
             reviewed_keys.update(keys)
             for group in groups:
-                # Model grouping alone cannot prove an incident association.
-                compatible = all(any(primary_pair_supported(events[i], events[j])
-                                     for i in profiles[a]["indices"] for j in profiles[b]["indices"])
-                                 for n, a in enumerate(group) for b in group[n+1:])
-                if not compatible:
-                    for key in group:
-                        for i in profiles[key]["indices"]:
+                # Model grouping alone cannot prove an incident association:
+                # merge the keys their headlines link through a distinctive
+                # word, and leave out (and flag) only the keys they do not.
+                group = sorted(group, key=lambda key: (profiles[key]["first"] or floor_time, key))
+                components, left_out = supported_incident_components(group, linked)
+                for key in left_out:
+                    for i in profiles[key]["indices"]:
+                        # A reviewed isolation is settled, not a doubt.
+                        if not _isolated_by_review(events[i]):
                             events[i]["dedup_review_required"] = True
-                    continue
-                root = find(group[0])
-                for key in group[1:]:
-                    other = find(key)
-                    if other != root:
-                        parent[other] = root
+                for members in components:
+                    root = find(members[0])
+                    for key in members[1:]:
+                        other = find(key)
+                        if other != root:
+                            parent[other] = root
 
     clusters = defaultdict(list)
     for key in reviewed_keys:
@@ -11103,6 +11235,10 @@ def consolidate_incidents(events, state=None, max_calls=None, now=None, use_gemi
                 aliases[key] = canonical
             for index in profiles[key]["indices"]:
                 events[index]["incident_id"] = canonical
+                if len(members) > 1:
+                    # Merged after all (through another group of the run);
+                    # merge_incident_records below flags its own doubts.
+                    events[index].pop("dedup_review_required", None)
                 if anchor and len(members) > 1:
                     events[index]["incident_anchor"] = anchor
             reviewed[key] = now_iso
@@ -11116,7 +11252,9 @@ def consolidate_incidents(events, state=None, max_calls=None, now=None, use_gemi
         f"{stats['windows_reviewed']}/{stats['windows_pending']} pending windows reviewed, "
         f"{stats['incidents_merged']} duplicate incident ids merged, "
         f"{stats['records_merged']} duplicate records folded, "
-        f"{stats['aliased_records']} records remapped from earlier decisions."
+        f"{stats['aliased_records']} records remapped from earlier decisions"
+        + (f", {stats['reopened_incidents']} refused incidents re-opened for the new rule."
+           if stats["reopened_incidents"] else ".")
     )
     return events, stats
 

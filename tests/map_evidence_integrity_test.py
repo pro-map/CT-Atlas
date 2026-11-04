@@ -122,4 +122,82 @@ class IntegrityTests(unittest.TestCase):
    collector.merge_event(existing,new)
   self.assertEqual(existing['published'],'2026-11-01T08:00:00Z')
   self.assertEqual(existing['primary_source_published'],'2026-11-01T09:00:00Z')
+
+class ConsolidationSupportTests(unittest.TestCase):
+ """Gemini proposes; the headlines decide which keys of its group merge."""
+ def test_accents_fold_and_only_headlines_count(self):
+  e={'title':'Attaque à Kerák','original_title':'هجوم الكرك','incident_anchor':'Amman attack','city':'Amman','summary':'Amman'}
+  self.assertEqual(m.headline_words(e),{'attaque','kerak','هجوم','الكرك'})
+ def test_country_names_and_widespread_words_are_weak(self):
+  week=lambda n:f'2026-{9+n//4:02d}-{1+7*(n%4):02d}T10:00:00+00:00'
+  # 'atentado': 4 countries x 3 weeks = 12 (country, week) pairs.
+  events=[{'title':f'Atentado contra patrol {c}{n}','country':c,'country_code':c[:2].upper(),'published':week(n)}
+          for c in ('Spain','Colombia','Mexico','Peru') for n in range(3)]
+  # 'borno' comes back in 6 Nigerian weeks: weak in Nigeria only.
+  events+=[{'title':f'Borno ambush {n}','country':'Nigeria','country_code':'NG','published':week(n)} for n in range(6)]
+  # One incident's name reported from 6 countries in its week stays distinctive.
+  events+=[{'title':'Flydubai copilot attack','country':c,'country_code':c,'published':week(0)} for c in ('AE','IL','AU','IN','SA','OM')]
+  events.append({'title':'Karak church attack','country':'Jordan','country_code':'JO','published':week(0)})
+  weak=m.consolidation_weak_words(events,['jordanian'])
+  self.assertTrue({'atentado','contra','patrol','spain','jordan','jordanian'}<=weak.common)
+  self.assertEqual(weak.distinctive({'borno','karak','flydubai','copilot'},'NG'),{'karak','flydubai','copilot'})
+  self.assertEqual(weak.distinctive({'borno','karak','flydubai'},'JO'),{'borno','karak','flydubai'})
+ def test_accented_and_plain_spellings_support_each_other(self):
+  self.assertTrue(m.consolidation_pair_supported({'id':'a','title':'Gunmen strike in Kerák'},{'id':'b','title':'Kerak mourning continues'},set()))
+ def test_a_weak_shared_word_is_not_support_but_identity_still_is(self):
+  a={'id':'a','title':'Nigerian army kills bandit leaders'};b={'id':'b','title':'Nigerian customs intercept cocaine'}
+  self.assertTrue(m.primary_pair_supported(a,b));self.assertFalse(m.consolidation_pair_supported(a,b,{'nigerian'}))
+  self.assertTrue(m.consolidation_pair_supported(a,dict(b,title='Nigerian army kills bandit leaders in Zamfara'),{'nigerian'}))
+  self.assertTrue(m.consolidation_pair_supported(a,dict(b,title='Zamfara bandits',url='u'),set()) is False)
+  self.assertTrue(m.consolidation_pair_supported(dict(a,url='u'),dict(b,url='u'),{'nigerian'}))
+ def test_an_isolated_record_is_never_supported(self):
+  a={'id':'a','title':'Karak church attack'};b={'id':'b','title':'Karak church mourning'}
+  self.assertTrue(m.consolidation_pair_supported(a,b,set()))
+  with patch.object(m,'matched_rule',lambda e:{'isolated_incident':'inc-review-a'} if e['id']=='a' else None):
+   self.assertFalse(m.consolidation_pair_supported(a,b,set()))
+ def test_components_keep_the_supported_keys_and_leave_out_a_one_link_intruder(self):
+  edges={frozenset(p) for p in ('ab','ac','ad','ae','bc','bd','be','cd','ce','de','ex')}
+  linked=lambda x,y:frozenset((x,y)) in edges
+  self.assertEqual(m.supported_incident_components(list('abcdex'),linked),([list('abcde')],['x']))
+  # Two cases Gemini put in one group stay two cases; an unlinked key stays alone.
+  edges={frozenset(p) for p in ('ab','cd')}
+  self.assertEqual(m.supported_incident_components(list('abcdz'),linked),([['a','b'],['c','d']],['z']))
+  # A short chain is a real case (a real group of 3 rarely has all 3 pairs).
+  edges={frozenset(p) for p in ('ab','bc')}
+  self.assertEqual(m.supported_incident_components(list('abc'),linked),([['a','b','c']],[]))
+  self.assertEqual(m.supported_incident_components([],linked),([],[]))
+  self.assertEqual(m.supported_incident_components(list('abab'),linked),([['a','b']],[]))
+ def test_an_intruder_does_not_evict_a_genuine_member(self):
+  # Chain a-b-c-d (time order) and x linked to a only: x leaves, d stays.
+  edges={frozenset(p) for p in ('ab','bc','cd','ax')}
+  linked=lambda x,y:frozenset((x,y)) in edges
+  self.assertEqual(m.supported_incident_components(list('abcdx'),linked),([list('abcd')],['x']))
+ def test_a_hub_keeps_its_earliest_links_and_a_ring_stays_merged_in_parts(self):
+  edges={frozenset(('h',leaf)) for leaf in '123456789'}
+  linked=lambda x,y:frozenset((x,y)) in edges
+  self.assertEqual(m.supported_incident_components(list('h123456789'),linked),([list('h123')],list('456789')))
+  ring='abcdefgh';edges={frozenset((ring[n],ring[(n+1)%8])) for n in range(8)}
+  self.assertEqual(m.supported_incident_components(list(ring),linked),([list('abcd')],list('efgh')))
+ def test_set_aside_keys_are_not_grouped_among_themselves(self):
+  # Re-grouping them built 40- to 130-key false incidents when Gemini lumped
+  # a whole window into one group (2026-11-04 stress test).
+  edges={frozenset(p) for p in ('ab','bc','cd','de','ex')}
+  linked=lambda x,y:frozenset((x,y)) in edges
+  self.assertEqual(m.supported_incident_components(list('abcdex'),linked),([list('abcd')],['e','x']))
+ def test_a_lumped_window_is_refused_whole(self):
+  keys=[f'k{n:03d}' for n in range(m.CONSOLIDATION_MAX_GROUP_KEYS+1)]
+  self.assertEqual(m.supported_incident_components(keys,lambda x,y:True),([],keys))
+  self.assertEqual(m.supported_incident_components(keys[:-1],lambda x,y:True),([keys[:-1]],[]))
+ def test_foreign_country_names_and_one_language_generic_words_are_weak(self):
+  weak=m.consolidation_weak_words([])
+  for word in ('الاردن','jordanie','francia','nuevo','המחבלים','patlayici'):
+   self.assertIn(word,weak.common,word)
+  self.assertEqual(m.headline_words({'title':'هجوم في الأردن'})-weak.common,{'هجوم'})
+ def test_a_key_linked_to_a_third_of_its_component_stays(self):
+  # 7 keys: core a-f fully linked, g linked to a and b (2 of 6 = 1/3).
+  edges={frozenset((x,y)) for x in 'abcdef' for y in 'abcdef' if x<y}|{frozenset(('g',x)) for x in 'ab'}
+  linked=lambda x,y:frozenset((x,y)) in edges
+  self.assertEqual(m.supported_incident_components(list('abcdefg'),linked),([list('abcdefg')],[]))
+  edges.discard(frozenset('gb'))
+  self.assertEqual(m.supported_incident_components(list('abcdefg'),linked),([list('abcdef')],['g']))
 if __name__=='__main__':unittest.main()

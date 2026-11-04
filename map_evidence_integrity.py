@@ -188,21 +188,204 @@ def primary_pair_supported(left, right):
     Existing matcher/date/stage checks still decide whether a supported pair
     should merge. Missing comparable anchors preserve both records.
     """
+    if isolated_pair(left, right):
+        return False
+    if same_primary_identity(left, right):
+        return True
+    a, b = str(left.get('title')or '').casefold().strip(), str(right.get('title')or '').casefold().strip()
+    # Use source-language headlines too; do not substitute generated incident anchors.
+    at = words(a+' '+str(left.get('original_title')or ''))
+    bt = words(b+' '+str(right.get('original_title')or ''))
+    return bool(at & bt)
+
+
+def isolated_pair(left, right):
+    """A reviewed isolated_incident record pairs with no other record."""
     for e, other in ((left,right),(right,left)):
         rule = matched_rule(e)
         if rule and rule.get('isolated_incident') and e.get('id') != other.get('id'):
-            return False
+            return True
+    return False
+
+
+def same_primary_identity(left, right):
+    """Same original article, same URL, or one headline extending the other."""
     if same_original_article(left, right):
         return True
     if left.get('url') and left.get('url') == right.get('url'):
         return True
     a, b = str(left.get('title')or '').casefold().strip(), str(right.get('title')or '').casefold().strip()
-    if a and b and (a==b or (min(len(a),len(b))>=8 and (a.startswith(b+' ') or b.startswith(a+' ')))):
+    return bool(a and b and (a==b or (min(len(a),len(b))>=8 and (a.startswith(b+' ') or b.startswith(a+' ')))))
+
+
+# Shared vocabulary is not evidence that two keys are one case. A word is weak
+# everywhere when its headlines span WEAK_WORD_MIN_COUNTRIES countries and
+# WEAK_WORD_MIN_BUCKETS (country, ISO week) pairs ('atentado', 'Anschlag',
+# 'church'), and weak inside one country when it comes back there in
+# WEAK_WORD_MIN_WEEKS_IN_COUNTRY weeks ('Borno', 'Balochistan', 'Moscow',
+# 'disidencias'). One incident's own name stays distinctive, even reported from
+# six countries in its week or two (Flydubai, Starlink), as does a town hit
+# once (Karak, Trappes). Measured on the 2026-11-04 dataset.
+WEAK_WORD_MIN_COUNTRIES = 3
+WEAK_WORD_MIN_BUCKETS = 12
+WEAK_WORD_MIN_WEEKS_IN_COUNTRY = 6
+# Seen tying different cases together in the 2026-11-04 stress test, below
+# those spreads: country names in other languages and generic words of one or
+# two languages. Accents and Arabic hamza are folded, as in headline_words.
+CONSOLIDATION_WEAK = frozenset('''
+الاردن الأردن الاردني الأردني jordanie jordania jordanien urdun السعودية السعودي سوريا السوري العراق
+العراقي اليمن اليمني لبنان مصر المصري اسرائيل إسرائيل الاسرائيلي فلسطين الفلسطيني ليبيا الجزائر
+تونس المغرب تركيا ايران إيران باكستان افغانستان أفغانستان الصومال نيجيريا فرنسا المانيا ألمانيا روسيا
+باريس موسكو francia franca fransa allemagne alemania deutschland almanya espagne spanien ispanya
+italie italien italya russie rusia russland rusya россия россии российской москве москва turquie
+turquia turkei inde indien hindistan colombie kolumbien kolombiya mexique mexiko meksika nigeria
+pakistan
+nuevo nueva nuevos nuevas hombre hombres jefe acusan muerto muertos captura nacional violencia policias
+policia segundo zwei deutsche deutschen patlayici patlayıcı imha guncelleme daki הפיגוע המחבלים המחבל
+مصدر اشتباكات الهجوم severe
+'''.split())
+# A Gemini group this large is a lumped window, not one incident: the
+# largest genuine group in the 2026-11-04 data had 32 keys.
+CONSOLIDATION_MAX_GROUP_KEYS = 40
+
+
+def headline_words(event):
+    """Headline words, accents folded ('Kerák' = 'kerak'). Primary and
+    source-language headlines only: never anchors, places or related articles."""
+    value = unicodedata.normalize('NFKD', ' '.join(str(event.get(k) or '') for k in ('title', 'original_title')))
+    value = ''.join(ch for ch in value if not unicodedata.combining(ch)).casefold()
+    return {x for x in re.findall(r'[^\W\d_]+', value) if len(x) >= 4 and x not in GENERIC}
+
+
+def _country_key(event):
+    return str(event.get('country_code') or event.get('country') or '').upper()
+
+
+def _iso_week(value):
+    try:
+        moment = datetime.fromisoformat(str(value or '').replace('Z', '+00:00'))
+    except ValueError:
+        return None
+    if moment.tzinfo is not None:
+        moment = moment.astimezone(timezone.utc)
+    return tuple(moment.isocalendar()[:2])
+
+
+class WeakWords:
+    """Words that cannot link two incidents: everywhere, or in one country."""
+
+    def __init__(self, common=(), by_country=None):
+        self.common = set(common)
+        self.by_country = by_country or {}
+
+    def distinctive(self, words, *countries):
+        words = set(words) - self.common
+        for country in countries:
+            words -= self.by_country.get(country, set())
+        return words
+
+
+def consolidation_weak_words(events, extra_words=()):
+    """WeakWords for these records: GENERIC, country names (the records' own
+    countries plus extra_words such as demonyms) and the vocabulary measured
+    as described at WEAK_WORD_MIN_COUNTRIES."""
+    from collections import defaultdict
+    weeks = defaultdict(lambda: defaultdict(set))
+    common = set()
+    for event in events:
+        country, week = _country_key(event), _iso_week(event.get('published'))
+        for word in headline_words(event):
+            weeks[word][country].add(week)
+        common |= headline_words({'title': event.get('country')})
+    for word in [*extra_words, *CONSOLIDATION_WEAK]:
+        common |= headline_words({'title': word})
+    by_country = defaultdict(set)
+    for word, per_country in weeks.items():
+        if (len(per_country) >= WEAK_WORD_MIN_COUNTRIES
+                and sum(len(found) for found in per_country.values()) >= WEAK_WORD_MIN_BUCKETS):
+            common.add(word)
+        for country, found in per_country.items():
+            if len(found) >= WEAK_WORD_MIN_WEEKS_IN_COUNTRY:
+                by_country[country].add(word)
+    return WeakWords(common, dict(by_country))
+
+
+def consolidation_pair_supported(left, right, weak):
+    """Whether two records' own headlines tie them to one incident, for
+    consolidation: the isolated-incident veto and the primary-identity checks
+    of primary_pair_supported, then a shared DISTINCTIVE headline word (see
+    WeakWords). A country name or shared vocabulary does not tie two keys:
+    'nigerian' tied a Borno army raid to a Lagos cocaine seizure."""
+    if not isinstance(weak, WeakWords):
+        weak = WeakWords(weak or ())
+    if isolated_pair(left, right):
+        return False
+    if same_primary_identity(left, right):
         return True
-    # Use source-language headlines too; do not substitute generated incident anchors.
-    at = words(a+' '+str(left.get('original_title')or ''))
-    bt = words(b+' '+str(right.get('original_title')or ''))
-    return bool(at & bt)
+    shared = headline_words(left) & headline_words(right)
+    return bool(weak.distinctive(shared, _country_key(left), _country_key(right)))
+
+
+def supported_incident_components(keys, linked, min_support=1/3, max_keys=CONSOLIDATION_MAX_GROUP_KEYS):
+    """Split one Gemini group into the sets of keys the headlines can carry.
+
+    linked(a, b) says whether two keys share distinctive headline evidence.
+    Within each connected set, the least linked key is set aside, one at a
+    time, while it is linked to fewer than min_support of the others: an
+    intruder Gemini added through one word leaves, the genuine keys stay.
+    Set-aside keys stay apart (re-grouping them built false incidents when
+    Gemini lumped a window). Groups of 4 keys or fewer are protected by the
+    distinctive-word check alone, and a hub with many single-link leaves keeps
+    its 3 earliest. A group over max_keys is refused whole. keys should come
+    in time order: on a tie the latest key is set aside first. The rule this
+    replaces rejected a whole group for any one unsupported pair.
+    Returns (components of 2+ keys, keys left out), both in the given order."""
+    import math
+    keys = list(dict.fromkeys(keys))
+    if len(keys) > max_keys:
+        return [], keys
+    order = {key: index for index, key in enumerate(keys)}
+    edges = {key: {other for other in keys if other != key and linked(key, other)} for key in keys}
+
+    def connected(nodes):
+        parts, seen = [], set()
+        for start in sorted(nodes, key=order.get):
+            if start in seen:
+                continue
+            part, todo = set(), [start]
+            while todo:
+                key = todo.pop()
+                if key not in part:
+                    part.add(key)
+                    todo.extend(edges[key] & (nodes - part))
+            seen |= part
+            parts.append(part)
+        return parts
+
+    components, left_out = [], []
+    pending = [set(keys)] if keys else []
+    while pending:
+        for part in connected(pending.pop()):
+            while len(part) >= 2:
+                need = math.ceil(min_support * (len(part) - 1))
+                degree = {key: len(edges[key] & part) for key in part}
+                weakest = [key for key in part if degree[key] < need]
+                if not weakest:
+                    break
+                victim = min(weakest, key=lambda key: (degree[key], -order[key]))
+                part = part - {victim}
+                left_out.append(victim)
+                pieces = connected(part)
+                if len(pieces) > 1:
+                    # Each piece is judged on its own size.
+                    pending.extend(pieces)
+                    part = set()
+            if len(part) >= 2:
+                components.append(sorted(part, key=order.get))
+            else:
+                left_out.extend(part)
+    return (sorted(components, key=lambda part: order[part[0]]),
+            sorted(set(left_out), key=order.get))
 
 
 def explicit_category_conflict(event, result):

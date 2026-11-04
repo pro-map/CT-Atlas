@@ -209,5 +209,167 @@ class ConsolidationTests(unittest.TestCase):
         self.assertIn("inc-a", saved["aliases"])
 
 
+def jordan(title, published, incident_id, update="FOLLOW_UP"):
+    return record(title, published, incident_id, "Jordan", "JO", update=update)
+
+
+class SupportComponentTests(unittest.TestCase):
+    """2026-11-04: the all-pairs veto rejected a whole Gemini group for one
+    pair of headlines without a shared word, so the 23 Oct Karak church attack
+    stayed 58 records under 39 ids, and the refused keys were never retried."""
+
+    def setUp(self):
+        self.original = collector.call_gemini_json
+        self.state = {"version": 1, "aliases": {}, "reviewed": {}}
+
+    def tearDown(self):
+        collector.call_gemini_json = self.original
+
+    def run_pass(self, events, stub, **kwargs):
+        collector.call_gemini_json = stub
+        return collector.consolidate_incidents(events, self.state, max_calls=kwargs.get("max_calls", 50),
+                                               now=datetime(2026, 10, 25, tzinfo=timezone.utc),
+                                               use_gemini=kwargs.get("use_gemini", True),
+                                               reopen=kwargs.get("reopen", False))
+
+    def karak(self):
+        return [
+            jordan("Gunmen attack Karak church funeral", "2026-10-23T09:00:00+00:00", "inc-a", "INITIAL"),
+            jordan("King vows punishment after Karak church attack", "2026-10-23T12:00:00+00:00", "inc-b"),
+            jordan("Hammoud village mourns Karak victims", "2026-10-24T08:00:00+00:00", "inc-c"),
+            jordan("Hammoud funeral attackers identified", "2026-10-24T18:00:00+00:00", "inc-d",
+                   "INVESTIGATION_UPDATE"),
+        ]
+
+    def test_a_real_incident_merges_although_one_headline_pair_shares_no_word(self):
+        events = self.karak()
+        mic = __import__("map_evidence_integrity")
+        self.assertFalse(mic.primary_pair_supported(events[1], events[3]))  # the old rule's veto
+        events, stats = self.run_pass(events, GeminiStub(["karak", "hammoud"]))
+        self.assertEqual({e["incident_id"] for e in events}, {"inc-a"})
+        self.assertEqual(stats["incidents_merged"], 3)
+        self.assertFalse(any(e.get("dedup_review_required") for e in events))
+
+    def test_an_intruder_linked_by_one_word_is_left_out_and_flagged_alone(self):
+        events = [record(f"Trappes shooting {detail}", f"2026-10-23T1{n}:00:00+00:00", f"inc-t{n}", "France", "FR")
+                  for n, detail in enumerate(("leaves two dead", "suspect named", "in Yvelines town",
+                                              "victims honoured", "gunman charged"))]
+        events.append(record("Yvelines prefect bans protest march", "2026-10-24T10:00:00+00:00", "inc-x", "France", "FR"))
+        events, _ = self.run_pass(events, GeminiStub(["trappes", "yvelines"]))
+        ids = {e["title"]: e["incident_id"] for e in events}
+        self.assertEqual({ids[t] for t in ids if t.startswith("Trappes")}, {"inc-t0"})
+        self.assertEqual(ids["Yvelines prefect bans protest march"], "inc-x")
+        flagged = [e["title"] for e in events if e.get("dedup_review_required")]
+        self.assertEqual(flagged, ["Yvelines prefect bans protest march"])
+
+    def test_a_shared_country_name_does_not_link_two_incidents(self):
+        # Both pairs pass primary_pair_supported through 'nigerian': the old
+        # rule merged any such two-key group Gemini proposed.
+        events = [record("Nigerian army kills bandit leaders in Zamfara", "2026-10-23T09:00:00+00:00", "inc-n1", "Nigeria", "NG"),
+                  record("Nigerian customs intercept cocaine shipment", "2026-10-23T15:00:00+00:00", "inc-n2", "Nigeria", "NG")]
+        events, _ = self.run_pass(events, GeminiStub(["nigerian"]))
+        self.assertEqual(sorted(e["incident_id"] for e in events), ["inc-n1", "inc-n2"])
+        self.assertTrue(all(e.get("dedup_review_required") for e in events))
+
+    def test_refused_incidents_are_reviewed_again_once_per_rule_version(self):
+        events = self.karak()
+        events.append(jordan("Amman traffic accident", "2026-10-24T09:00:00+00:00", "inc-e"))
+        for event in events:
+            event["dedup_review_required"] = True  # refused by the all-pairs rule
+        self.state["reviewed"] = {key: "2026-10-24T00:00:00+00:00" for key in ("inc-a", "inc-b", "inc-c", "inc-d", "inc-e")}
+        for kwargs in ({"use_gemini": False, "reopen": True},  # resume-pending, --dry-run
+                       {"reopen": False}):                     # the collector's own calls
+            free = GeminiStub(["karak", "hammoud"])
+            events, stats = self.run_pass(events, free, **kwargs)
+            self.assertEqual((free.calls, stats["reopened_incidents"]), (0, 0))
+            self.assertNotIn("rule_version", self.state)
+        self.assertEqual(len(collector.refused_incident_keys(events, self.state)), 5)
+        stub = GeminiStub(["karak", "hammoud"])
+        events, stats = self.run_pass(events, stub, reopen=True)
+        self.assertEqual((stub.calls, stats["reopened_incidents"]), (1, 5))
+        ids = {e["title"]: e["incident_id"] for e in events}
+        self.assertEqual(ids["Amman traffic accident"], "inc-e")
+        self.assertEqual({ids[t] for t in ids if t != "Amman traffic accident"}, {"inc-a"})
+        # Merged keys lose the refusal; a key Gemini left alone keeps it.
+        self.assertEqual([e["title"] for e in events if e.get("dedup_review_required")], ["Amman traffic accident"])
+        self.assertEqual(self.state["rule_version"], collector.INCIDENT_CONSOLIDATION_RULE_VERSION)
+        self.assertEqual(collector.refused_incident_keys(events, self.state), set())
+        again = GeminiStub(["karak", "hammoud"])
+        self.run_pass(events, again, reopen=True)
+        self.assertEqual(again.calls, 0)
+
+    def test_a_reviewed_isolation_is_neither_flagged_nor_re_opened(self):
+        events = self.karak()
+        # The King record carries a reviewed isolated_incident rule.
+        king_record = lambda event: event.get("id", "").startswith("King")
+        mic = __import__("map_evidence_integrity")
+        originals = mic.isolated_pair, collector._isolated_by_review
+        mic.isolated_pair = lambda left, right: king_record(left) != king_record(right)
+        collector._isolated_by_review = king_record
+        try:
+            events[1]["dedup_review_required"] = True
+            self.assertEqual(collector.refused_incident_keys(events, self.state), set())
+            events[1].pop("dedup_review_required")
+            events, _ = self.run_pass(events, GeminiStub(["karak", "hammoud"]))
+        finally:
+            mic.isolated_pair, collector._isolated_by_review = originals
+        king = next(e for e in events if e["title"].startswith("King"))
+        self.assertEqual(king["incident_id"], "inc-b")
+        self.assertNotIn("dedup_review_required", king)
+        self.assertEqual({e["incident_id"] for e in events if e is not king}, {"inc-a"})
+
+    def test_the_rule_version_survives_a_save_and_load(self):
+        self.run_pass(self.karak(), GeminiStub(["karak"]), reopen=True)
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "state.json"
+            collector.save_incident_state(self.state, [], path)
+            self.assertEqual(collector.load_incident_state(path)["rule_version"],
+                             collector.INCIDENT_CONSOLIDATION_RULE_VERSION)
+            path.write_text('{"aliases": {}, "reviewed": {}}', encoding="utf-8")
+            self.assertNotIn("rule_version", collector.load_incident_state(path))
+
+
+class CountryTableTests(unittest.TestCase):
+    """2026-11-04: 786 records' countries had no entry in COUNTRY_CANONICAL."""
+
+    def test_the_database_countries_are_recognised(self):
+        self.assertEqual(collector.extract_country_families("Jordanian King visits Kerak victims"), {"jordan"})
+        for country in ("italy", "spain", "democratic republic of the congo", "poland", "bangladesh", "sudan"):
+            self.assertIn(country, collector.COUNTRY_CANONICAL)
+            self.assertIn(country, collector.COUNTRY_CONFLICT_ONLY)
+        self.assertLessEqual(collector.COUNTRY_CONFLICT_ONLY, set(collector.COUNTRY_CANONICAL))
+
+    def test_places_outlets_and_languages_named_after_a_country_are_not_that_country(self):
+        for text in ("Navy kills ISWAP fighters on Lake Chad", "Attack near Al-Auja in the Jordan Valley",
+                     "Clashes in South Sudan's Upper Nile", "Latest news from Azerbaijan",
+                     "South China Morning Post", "Spanish media report an arrest", "Omani pilot detained",
+                     "Lake-Chad region attack", "South Sudanese troops clash",
+                     "Attack in Republic of Congo capital Brazzaville", "Congo-Brazzaville unrest"):
+            with self.subTest(text=text):
+                self.assertEqual(collector.extract_country_families(text), set())
+        self.assertEqual(collector.extract_country_families("Chad army repels Boko Haram near Lake Chad"), {"chad"})
+
+    def test_a_new_country_keeps_two_countries_apart_but_never_makes_two_stories_alike(self):
+        def news(title, url):
+            return {"id": url, "title": title, "original_title": title, "summary": title, "url": url,
+                    "source": "Outlet", "published": "2026-10-24T10:00:00+00:00", "category": "Attacks"}
+        # Merged as country-less before 2026-11-04 (title_plus_anchor 0.71).
+        nigeria = news("Death toll from gunman attack in northeastern Nigeria rises to 62", "https://a.test/ng")
+        jordan_toll = news("Death toll from church attack in Jordan rises to nine", "https://a.test/jo")
+        self.assertEqual(collector.event_match(nigeria, jordan_toll)[0:3:2], (False, "country_conflict"))
+        # Two developments of the Karak attack: as an anchor 'Jordanian' would
+        # fold them into one record (paraphrase_entity_context 0.66); records
+        # are developments, so they stay two and consolidation links them.
+        visit = news("Jordanian King visits victims of Kerak church terrorist attack", "https://a.test/1")
+        vow = news("Jordanian King vows severe penalties for perpetrators of terrorist attack", "https://a.test/2")
+        self.assertEqual(collector.event_match(visit, vow)[0:3:2], (False, "different_event"))
+        saved = collector.COUNTRY_CONFLICT_ONLY
+        try:
+            collector.COUNTRY_CONFLICT_ONLY = frozenset()
+            self.assertEqual(collector.event_match(visit, vow)[0:3:2], (True, "paraphrase_entity_context"))
+        finally:
+            collector.COUNTRY_CONFLICT_ONLY = saved
+
+
 if __name__ == "__main__":
     unittest.main()

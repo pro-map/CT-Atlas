@@ -18,6 +18,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import copy
 import importlib.util
 import json
 import os
@@ -69,6 +70,13 @@ def main(argv=None):
     events_before = json.dumps(events, ensure_ascii=False, sort_keys=True)
     state_before = json.dumps(state, ensure_ascii=False, sort_keys=True)
     if args.dry_run:
+        # Show the backlog a real run would face, re-open included (on copies).
+        state = copy.deepcopy(state)
+        events = copy.deepcopy(events)
+        reopened = collector.reopen_refused_incidents(events, state)
+        if reopened:
+            print(f"A real run first re-opens {reopened} refused incident(s) for rule "
+                  f"{collector.INCIDENT_CONSOLIDATION_RULE_VERSION}.")
         events, stats = collector.consolidate_incidents(events, state, max_calls=args.max_calls, use_gemini=False)
     else:
         ledger = archive_review.DailyLedger(archive_review.ledger_path("consolidation", ROOT), DAILY_CALLS)
@@ -77,8 +85,10 @@ def main(argv=None):
         # The gate does the pacing.
         collector.AI_SELECTION_PAUSE_SECONDS = 0
         with archive_review.GeminiGate(collector, budget, archive_review.SECONDS_BETWEEN_POSTS, on_post=ledger.save):
+            # The re-open of refused incidents is paid here, on this ledger,
+            # not from the collector's gemini-3.5-flash-lite calls.
             events, stats = collector.consolidate_incidents(
-                events, state, max_calls=budget, use_gemini=budget > 0
+                events, state, max_calls=budget, use_gemini=budget > 0, reopen=True
             )
     incidents_after = len({collector._incident_key(event) for event in events})
 
