@@ -74,14 +74,17 @@ def prepare(fresh, queued, existing, engine, now, disabled_history=()):
     """Keep queued clusters unchanged so cached partial reviews stay reusable.
 
     New stories are clustered separately in each lane. Their source fingerprints
-    prevent feeds from reintroducing copies already held in the durable queue.
+    and links prevent feeds from reintroducing copies already held in the
+    durable queue, including a copy whose headline or snippet was edited since.
     """
     queued = engine.exclude_reviewed_articles(queued, existing)
     known = {engine.selection_fingerprint(item) for item in queued}
     for item in queued:
         known.update(item.get("source_article_fingerprints") or [])
+    known_urls = engine.article_urls(queued)
     fresh = engine.exclude_reviewed_articles(fresh, existing)
-    fresh = [item for item in fresh if engine.selection_fingerprint(item) not in known]
+    fresh = [item for item in fresh if engine.selection_fingerprint(item) not in known
+             and engine.canonical_url(item.get("url") or "") not in known_urls]
     recent, backlog, dropped = partition(fresh, engine, now, disabled_history)
     old_recent, old_backlog, old_dropped = partition(queued, engine, now, disabled_history)
     for key in dropped:

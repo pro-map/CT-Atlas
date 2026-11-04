@@ -86,6 +86,11 @@ SERVER_ERROR_STREAK_LIMIT = 4
 
 QUERY_STATS = Counter()
 GDELT_STATS = Counter()
+# Successful Google News answers of the running collection wave, by URL (None
+# outside collect_all). The specialist queries are appended to every profile
+# of a language, so profiles sharing a locale request identical URLs (about
+# 290 of 1,220 requests a run); each caller still parses with its own labels.
+GOOGLE_NEWS_WAVE_RESPONSES = None
 COLLECTION_STATUS = {}
 AI_SELECTION_PARTIAL_CHECKPOINT = None
 SERVER_ERROR_STREAK = 0
@@ -2586,13 +2591,30 @@ def reviewed_article_fingerprints(events):
     return fingerprints
 
 
+def article_urls(events):
+    """Canonical links of every headline and related article of `events`."""
+    urls = set()
+    for event in events:
+        for article in [event] + list(event.get("related_articles") or []):
+            if isinstance(article, dict):
+                url = canonical_url(article.get("url") or "")
+                if url:
+                    urls.add(url)
+    return urls
+
+
 def exclude_reviewed_articles(fresh, existing):
     known = reviewed_article_fingerprints(existing)
+    # A re-fetched copy whose snippet, headline or outlet label changed has a
+    # new fingerprint but the same link: reviewed again, it became a second
+    # record holding an article an existing record already holds.
+    known_urls = article_urls(
+        event for event in existing if event.get("ai_selection_complete"))
     pending = []
     seen = set()
     for event in fresh:
         fingerprint = selection_fingerprint(event)
-        if fingerprint in known:
+        if fingerprint in known or canonical_url(event.get("url") or "") in known_urls:
             BACKFILL_STATS["already_reviewed_articles"] += 1
             continue
         if fingerprint in seen:
@@ -2679,6 +2701,13 @@ def _request_google_news_network(
     """
     global SERVER_ERROR_STREAK
     check_collection_deadline()
+    wave_responses = GOOGLE_NEWS_WAVE_RESPONSES
+    if wave_responses is not None and url in wave_responses:
+        # Still a successful query, so the failure-rate gate and the status
+        # compare with runs that fetched every copy.
+        QUERY_STATS["successful"] += 1
+        QUERY_STATS["deduplicated_urls"] += 1
+        return wave_responses[url]
     for attempt in range(
         1,
         REQUEST_ATTEMPTS + 1,
@@ -2759,6 +2788,8 @@ def _request_google_news_network(
 
             SERVER_ERROR_STREAK = 0
             QUERY_STATS["successful"] += 1
+            if wave_responses is not None:
+                wave_responses[url] = response
 
             time.sleep(
                 REQUEST_PAUSE_SECONDS
@@ -3804,6 +3835,10 @@ def _collect_all_once(days):
         f"Throttle responses (429/503): "
         f"{QUERY_STATS['throttled']}"
     )
+    print(
+        f"Repeated Google News URLs answered without a new request: "
+        f"{QUERY_STATS['deduplicated_urls']}"
+    )
 
     total_requests = (
         QUERY_STATS[
@@ -4323,6 +4358,7 @@ def merge_acled_metadata(existing, new):
 
 def collect_all(*args, **kwargs):
     """Retry the entire collection once if Google News broadly fails."""
+    global GOOGLE_NEWS_WAVE_RESPONSES
     attempts = max(1, GOOGLE_NEWS_GLOBAL_RETRY_ATTEMPTS)
     last_error = None
 
@@ -4330,6 +4366,8 @@ def collect_all(*args, **kwargs):
         QUERY_STATS.clear()
         GDELT_STATS.clear()
         QUERY_STATS["retry_waves"] = attempt - 1
+        # A retry wave asks Google again: answers are reused within a wave only.
+        GOOGLE_NEWS_WAVE_RESPONSES = {}
         try:
             if attempt > 1:
                 print(
@@ -4370,6 +4408,10 @@ def collect_all(*args, **kwargs):
                 "the entire collection wave..."
             )
             time.sleep(delay)
+
+        finally:
+            # The wave's feeds are parsed by now; do not keep them in memory.
+            GOOGLE_NEWS_WAVE_RESPONSES = None
 
     if last_error is not None:
         raise last_error
@@ -6399,6 +6441,15 @@ def normalize_event_text(text):
         value,
     )
 
+    # Soft hyphens and zero-width characters that some outlets put inside
+    # words would otherwise split each word in two.
+    value = re.sub(
+        "[\N{SOFT HYPHEN}\N{ZERO WIDTH SPACE}-\N{ZERO WIDTH JOINER}"
+        "\N{WORD JOINER}\N{ZERO WIDTH NO-BREAK SPACE}]",
+        "",
+        value,
+    )
+
     value = re.sub(
         r"[^a-z0-9$€£%'\-\s]",
         " ",
@@ -6464,6 +6515,44 @@ def meaningful_tokens(text):
     return set(
         tokens
     )
+
+
+# Elided articles and prepositions before an apostrophe (French l'attaque,
+# Italian dell'attentato). After any other word the apostrophe starts a
+# suffix (Turkish Van'daki, Van'da; English Pakistan's).
+ELIDED_PREFIXES = {
+    "l", "d", "j", "m", "n", "s", "t", "c", "qu", "jusqu", "lorsqu",
+    "puisqu", "un", "dell", "dall", "nell", "sull", "all", "coll",
+    "quell", "quest",
+}
+
+
+def headline_stems(tokens):
+    """Title tokens without their apostrophe suffix or elided article, so
+    "Van'daki" and "Van'da" are one word and "van" vs "silvan" stays two."""
+    stems = set()
+
+    for token in tokens:
+        parts = [
+            part
+            for part in token.split("'")
+            if part
+        ]
+
+        if not parts:
+            continue
+
+        if len(parts) > 1 and parts[0] in ELIDED_PREFIXES:
+            stems.add(
+                parts[1]
+            )
+
+        else:
+            stems.add(
+                parts[0]
+            )
+
+    return stems
 
 
 def jaccard(
@@ -6908,6 +6997,11 @@ def _build_profile_cached(
                 title
             ),
 
+        "latin_share":
+            latin_letter_share(
+                title
+            ),
+
         "summary_tokens":
             meaningful_tokens(
                 summary
@@ -7026,11 +7120,34 @@ def profile_pair_score(
             "missing_title",
         )
 
-    if title1 == title2:
+    # The normalization keeps Latin letters only: an Arabic, Hebrew, Cyrillic
+    # or CJK headline is reduced to its digits, punctuation and stray Latin
+    # words ("3", "-", "telegram"), which two unrelated headlines easily
+    # share. Such titles (the same test as create_event_id) cannot be
+    # compared here; they still merge through the same link, the same
+    # original article, or once Gemini has given them English titles.
+    if (
+        not profile1[
+            "title_tokens"
+        ]
+        or
+        not profile2[
+            "title_tokens"
+        ]
+        or
+        min(
+            profile1[
+                "latin_share"
+            ],
+            profile2[
+                "latin_share"
+            ],
+        ) < EVENT_ID_MIN_LATIN_SHARE
+    ):
         return (
-            True,
-            0.99,
-            "same_normalized_title",
+            False,
+            0.0,
+            "non_comparable_title",
         )
 
     dt1 = event_datetime(
@@ -7058,6 +7175,16 @@ def profile_pair_score(
                 0.0,
                 "outside_time_window",
             )
+
+    # After the window check: templated bulletins ("ReCAAP ISC reports two
+    # armed robbery incidents at sea") repeat word for word for new
+    # incidents weeks apart. A re-fetched copy keeps its own date.
+    if title1 == title2:
+        return (
+            True,
+            0.99,
+            "same_normalized_title",
+        )
 
     sequence = SequenceMatcher(
         None,
@@ -7246,8 +7373,43 @@ def profile_pair_score(
         ]
     )
 
-    # Very similar headline: usually the same wire story or rewrite.
-    if lexical >= 0.86:
+    # Very similar headline: usually the same wire story or rewrite. A
+    # template headline that only swaps the place ("Van'daki terör
+    # saldırısı" / "Silvan'daki terör saldırısı") is just as similar letter
+    # for letter, so the ratio alone decides only when the headlines share
+    # three words or one merely adds words to the other; otherwise the
+    # anchored rules below decide.
+    stems1 = headline_stems(
+        profile1[
+            "title_tokens"
+        ]
+    )
+
+    stems2 = headline_stems(
+        profile2[
+            "title_tokens"
+        ]
+    )
+
+    rewrite_not_template = (
+        len(
+            stems1
+            &
+            stems2
+        ) >= 3
+        or
+        not (
+            stems1 - stems2
+            and
+            stems2 - stems1
+        )
+    )
+
+    if (
+        lexical >= 0.86
+        and
+        rewrite_not_template
+    ):
         return (
             True,
             max(
@@ -10602,7 +10764,11 @@ def save_incident_state(state, events, path=None):
     """Keep only entries that still describe something in the database."""
     live_ids = {event.get("incident_id") for event in events if event.get("incident_id")}
     state["reviewed"] = {key: value for key, value in state["reviewed"].items() if key in live_ids}
-    state["aliases"] = {key: value for key, value in state["aliases"].items() if value in live_ids}
+    # A -> B, then B merged into C: re-point A to C instead of dropping it,
+    # so an article whose anchor still hashes to A is remapped for free.
+    aliases = state["aliases"]
+    resolved = {key: resolve_incident_alias(value, aliases) for key, value in aliases.items()}
+    state["aliases"] = {key: value for key, value in resolved.items() if value in live_ids and key != value}
     atomic_json_write(path or INCIDENT_STATE_FILE, state)
 
 
