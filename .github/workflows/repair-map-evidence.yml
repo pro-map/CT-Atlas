@@ -21,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     outputs:
+      changed: ${{ steps.commit.outputs.changed }}
       data_sha: ${{ steps.commit.outputs.data_sha }}
     steps:
       - uses: actions/checkout@v6
@@ -80,21 +81,31 @@ jobs:
           set -euo pipefail
           git config user.name 'CT Intelligence Map Bot'
           git config user.email 'actions@github.com'
-          git add -- events.json "archive/map-evidence-repair-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.json"
-          if ! git diff --cached --quiet; then
-            # GitHub refuses files over 100 MiB: say so before the push fails.
-            python3 tools/check_committed_sizes.py
-            git commit -m 'Apply source-reviewed map corrections and preserve quarantined evidence (zero AI)'
-            git fetch origin main
-            if ! git rebase origin/main; then
-              git rebase --abort
-              exit 1
-            fi
-            git push origin HEAD:main
+          git add -- events.json
+          if git diff --cached --quiet; then
+            # Nothing left to correct: the empty receipt stays in the run
+            # artifact only. Committing it made a bot commit, a Pages deploy and
+            # a mirror deploy after every code push, racing the UI deploy.
+            echo "Map evidence already corrected; nothing to commit or publish."
+            echo "data_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
+          git add -- "archive/map-evidence-repair-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.json"
+          # GitHub refuses files over 100 MiB: say so before the push fails.
+          python3 tools/check_committed_sizes.py
+          git commit -m 'Apply source-reviewed map corrections and preserve quarantined evidence (zero AI)'
+          git fetch origin main
+          if ! git rebase origin/main; then
+            git rebase --abort
+            exit 1
+          fi
+          git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
           echo "data_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
   deploy:
     needs: repair
+    # Publish only a pushed repair; a manual run still republishes main.
+    if: ${{ needs.repair.outputs.changed == 'true' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages

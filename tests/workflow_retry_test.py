@@ -72,7 +72,7 @@ class MapPublicationRetryTests(unittest.TestCase):
             with self.subTest(workflow=name):
                 source = WORKFLOWS[name]
                 written = re.search(r'--(?:report|output) "(archive/' + re.escape(prefix) + r'[^"\n]+)"', source)
-                staged = re.search(r'git add -- events.json "(archive/[^"\n]+)"', source)
+                staged = re.search(r'git add -- "(archive/[^"\n]+)"', source)
                 self.assertIsNotNone(written)
                 self.assertIsNotNone(staged)
                 self.assertEqual(written[1], staged[1])
@@ -80,6 +80,26 @@ class MapPublicationRetryTests(unittest.TestCase):
                          .replace("${GITHUB_RUN_ATTEMPT}", str(attempt))
                          for run_id in (41350576341, 41350576342) for attempt in (1, 2)}
                 self.assertEqual(len(paths), 4, "Repair retries must not replace an earlier report")
+
+    def test_a_repair_with_nothing_to_change_neither_commits_nor_republishes(self):
+        # Both run after every push of their code: an empty receipt committed on
+        # its own made a bot commit, a Pages deploy and a mirror deploy each time.
+        for name in ("repair-map-evidence.yml", "reconcile-daily-integrity.yml"):
+            with self.subTest(workflow=name):
+                source = WORKFLOWS[name]
+                commit = source.split("id: commit\n", 1)[1].split("\n  deploy:", 1)[0]
+                unchanged = commit.index("git add -- events.json\n")
+                check = commit.index("if git diff --cached --quiet; then", unchanged)
+                no_op = commit[check:commit.index("          fi\n", check)]
+                self.assertIn("exit 0", no_op)
+                self.assertNotIn("changed=true", no_op)
+                self.assertNotIn("git commit", no_op)
+                self.assertLess(check, commit.index('git add -- "archive/'))
+                self.assertLess(commit.index("git push origin HEAD:main"), commit.index('echo "changed=true"'))
+                self.assertIn("changed: ${{ steps.commit.outputs.changed }}", source)
+                deploy = source.split("\n  deploy:", 1)[1]
+                self.assertIn("if: ${{ needs.repair.outputs.changed == 'true' || "
+                              "github.event_name == 'workflow_dispatch' }}", deploy.split("steps:", 1)[0])
 
 
 if __name__ == "__main__":
