@@ -47,6 +47,8 @@ jobs:
           fi
           git config user.name "CT Intelligence Map Bot"
           git config user.email "actions@github.com"
+          # GitHub refuses files over 100 MiB: say so before the push fails.
+          python3 tools/check_committed_sizes.py
           git commit -m "Refresh visible daily and RadNuc processing status"
           git fetch origin main
           if ! git rebase origin/main; then

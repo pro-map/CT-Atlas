@@ -316,6 +316,8 @@ jobs:
             echo "data_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          # GitHub refuses files over 100 MiB: say so before the push fails.
+          python3 tools/check_committed_sizes.py
           git commit -m "Update CT database and resumable AI checkpoints"
           for attempt in 1 2 3 4 5; do
             git fetch origin main

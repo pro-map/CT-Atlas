@@ -151,6 +151,8 @@ jobs:
             echo "Archive checkpoints are already saved."
             exit 0
           fi
+          # GitHub refuses files over 100 MiB: say so before the push fails.
+          python3 tools/check_committed_sizes.py
           git commit -m "Update daily RadNuc background archive and checkpoints"
           for attempt in 1 2 3 4 5; do
             git fetch origin main

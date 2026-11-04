@@ -13,13 +13,11 @@ name: Consolidate duplicate incidents
 # review, the enrichment and the Report Generator/Deep Search/Atlas AI fallback.
 on:
   schedule:
-    # Clear of the collector (10:17 / 18:17), the cleanup rescore (14:17) and
-    # the D1 sync (20:47) so they never share a Gemini minute.
+    # Once a day: the backlog was drained in October and the collector
+    # consolidates its own new incidents every run. GitHub starts scheduled
+    # runs hours late, so the old midday and afternoon slots landed inside the
+    # delayed map updates and held their shared lock.
     - cron: "37 7 * * *"
-      timezone: "Europe/Paris"
-    - cron: "37 12 * * *"
-      timezone: "Europe/Paris"
-    - cron: "7 16 * * *"
       timezone: "Europe/Paris"
   workflow_dispatch:
     inputs:
@@ -85,6 +83,8 @@ jobs:
             echo "Nothing consolidated; no commit needed."
             exit 0
           fi
+          # GitHub refuses files over 100 MiB: say so before the push fails.
+          python3 tools/check_committed_sizes.py
           git commit -m "Consolidate duplicate incidents"
           for attempt in 1 2 3 4 5; do
             git fetch origin main

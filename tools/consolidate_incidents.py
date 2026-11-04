@@ -64,6 +64,10 @@ def main(argv=None):
     incidents_before = len({collector._incident_key(event) for event in events})
     records_before = len(events)
     state = collector.load_incident_state(args.state)
+    # consolidate_incidents edits the records in place: remember them as text,
+    # so a run that merges nothing rewrites (and commits) nothing.
+    events_before = json.dumps(events, ensure_ascii=False, sort_keys=True)
+    state_before = json.dumps(state, ensure_ascii=False, sort_keys=True)
     if args.dry_run:
         events, stats = collector.consolidate_incidents(events, state, max_calls=args.max_calls, use_gemini=False)
     else:
@@ -92,6 +96,12 @@ def main(argv=None):
 
     if args.dry_run:
         print("Dry run: nothing written.")
+        return 0
+
+    if json.dumps(events, ensure_ascii=False, sort_keys=True) == events_before:
+        if json.dumps(state, ensure_ascii=False, sort_keys=True) != state_before:
+            collector.save_incident_state(state, events, args.state)
+        print(f"::notice title=Incident consolidation::nothing merged; {remaining} windows left")
         return 0
 
     database["events"] = events

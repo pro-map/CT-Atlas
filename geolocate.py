@@ -1858,6 +1858,8 @@ def save_checkpoint(data, label):
     try:
         with open(temporary, "w", encoding="utf-8") as handle:
             json.dump(data, handle, ensure_ascii=False, indent=2)
+            # The same bytes as every other events.json writer.
+            handle.write("\n")
             handle.flush()
             os.fsync(handle.fileno())
         os.replace(temporary, OUTPUT_FILE)

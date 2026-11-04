@@ -164,6 +164,17 @@ def record_failure(reason,detail):
         SELECTION_ERRORS[ACTIVE_LANE].append(CURRENT_FAILURE)
 
 
+LANE_SKIPPED_BATCH=False
+def batch_skipped(error):
+    """collector.ai_select_events skipped one batch after a temporary error and
+    goes on: a later, different failure must still be recorded, and the
+    candidates left undecided are already explained by that error."""
+    global CURRENT_FAILURE,LANE_SKIPPED_BATCH
+    CURRENT_FAILURE=None
+    LANE_SKIPPED_BATCH=True
+collector.selection_batch_skipped=batch_skipped
+
+
 def quota_stop(reason,detail):
     global budget_hit
     budget_hit=True
@@ -338,8 +349,8 @@ def recover(events):
 
 
 def _select_lane(events,lane):
-    global auto_count,partial,recent_count,backlog_count,ACTIVE_LANE,CURRENT_FAILURE
-    previous_lane=ACTIVE_LANE; ACTIVE_LANE=lane; CURRENT_FAILURE=None
+    global auto_count,partial,recent_count,backlog_count,ACTIVE_LANE,CURRENT_FAILURE,LANE_SKIPPED_BATCH
+    previous_lane=ACTIVE_LANE; ACTIVE_LANE=lane; CURRENT_FAILURE=None; LANE_SKIPPED_BATCH=False
     cache=collector.load_selection_cache(); auto=[]; cached_selected=[]; cached_rejected=[]; remaining=[]
     if lane=="maintenance":
         # An earlier relevance-only verdict does not establish the incident
@@ -401,16 +412,22 @@ def _select_lane(events,lane):
                 record_failure(reason,error)
             out=None
         if out is None:
-            if CURRENT_FAILURE is None: record_failure("selection_incomplete","AI selection returned without every candidate decision.")
+            if CURRENT_FAILURE is None and not LANE_SKIPPED_BATCH:
+                record_failure("selection_incomplete","AI selection returned without every candidate decision.")
             out=recover(remaining)
         mark_models(out)
         cache=collector.load_selection_cache()
         kept_ids={id(event) for event in auto+cached_selected+out}
+        # A decision this run used again stays in the cache (collector prunes
+        # decisions unused for AI_SELECTION_CACHE_RETENTION_DAYS); reviewed_at
+        # keeps the review date, which mark_overflow relies on.
+        seen_at=datetime.now(timezone.utc).isoformat()
         for e in events:
             fp=original_fingerprint(e)
             x=cache.get("items",{}).get(fp)
             if isinstance(x,dict) and x.get("version")==collector.AI_SELECTION_VERSION and isinstance(x.get("result"),dict):
                 records[fp].update(reviewed=True,kept=id(e) in kept_ids)
+                x["last_seen_at"]=seen_at
         telemetry=runtime_telemetry(); partial=telemetry["partial"]
         recent_count=telemetry["recent_pending"]; backlog_count=telemetry["backlog_pending"]
         pending=telemetry["lanes"][lane]["pending"]

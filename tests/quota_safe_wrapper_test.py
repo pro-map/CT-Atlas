@@ -334,14 +334,18 @@ class QuotaSafeWrapperTests(unittest.TestCase):
         self.assertEqual(data["mutated_pending"], [])
 
     def test_transient_and_incomplete_failures_are_partial_with_separate_reasons(self):
-        for mode, reason in (("transient", "transient_error"), ("incomplete", "incomplete_response")):
+        # A temporary error skips its batch (r2 stays queued) and the lane goes
+        # on (r3 is reviewed); an incomplete answer still stops the lane.
+        for mode, reason, retained, complete in (
+                ("transient", "transient_error", ["r1", "r3"], [True, False, True]),
+                ("incomplete", "incomplete_response", ["r1"], [True, False, False])):
             with self.subTest(mode=mode):
                 data = self.lanes(mode)
-                self.assertEqual(data["retained"], ["r1"])
+                self.assertEqual(data["retained"], retained)
                 self.assertTrue(data["telemetry"]["partial"])
                 self.assertEqual(data["telemetry"]["lanes"]["recent"]["reasons"], [reason])
                 self.assertFalse(data["telemetry"]["budget_reached"])
-                self.assertEqual(data["complete"], [True, False, False])
+                self.assertEqual(data["complete"], complete)
 
     def test_cached_retained_and_rejected_decisions_do_not_count_as_new_ai_reviews(self):
         data = self.lanes("cached")

@@ -136,6 +136,11 @@ AI_SELECTION_VERSION = "gemini-ct-selection-v7-standalone-threat-topics"
 AI_SELECTION_CACHE_FILE = "ai_article_selection_cache.json"
 
 AI_SELECTION_ATTEMPTS = 5
+# A 5xx/network outage is usually over in a minute: three tries per batch,
+# then the batch waits for the next run instead of spending five requests.
+AI_SELECTION_TRANSIENT_ATTEMPTS = int(os.getenv("AI_SELECTION_TRANSIENT_ATTEMPTS", "3"))
+# Batches that may fail on a temporary error in a row before the lane stops.
+AI_SELECTION_MAX_CONSECUTIVE_TRANSIENT = int(os.getenv("AI_SELECTION_MAX_CONSECUTIVE_TRANSIENT", "2"))
 AI_SELECTION_TIMEOUT = 240
 AI_SELECTION_PAUSE_SECONDS = 8.0
 
@@ -312,6 +317,16 @@ STYLE:
 GOOGLE_NEWS_GLOBAL_RETRY_ATTEMPTS = int(
     os.getenv("GOOGLE_NEWS_GLOBAL_RETRY_ATTEMPTS", "2")
 )
+# The failure rate is judged once this many queries have answered.
+GOOGLE_NEWS_EARLY_ABORT_AFTER = int(os.getenv("GOOGLE_NEWS_EARLY_ABORT_AFTER", "60"))
+# A second collection wave starts only this early in the run.
+GOOGLE_NEWS_RETRY_WAVE_MAX_ELAPSED_MINUTES = float(
+    os.getenv("GOOGLE_NEWS_RETRY_WAVE_MAX_ELAPSED_MINUTES", "60")
+)
+# The whole collection stops this long after the process started (the update
+# step's own timeout is 240 min; selection, geolocation and the commit follow).
+COLLECTION_DEADLINE_MINUTES = float(os.getenv("COLLECTION_DEADLINE_MINUTES", "150"))
+COLLECTION_STARTED = time.monotonic()
 GOOGLE_NEWS_GLOBAL_RETRY_DELAY_SECONDS = float(
     os.getenv("GOOGLE_NEWS_GLOBAL_RETRY_DELAY_SECONDS", "45")
 )
@@ -2498,11 +2513,19 @@ BACKFILL_STATS = Counter()
 COLLECTION_QUERY_VERSION = "query-coverage-v1"
 
 
-def atomic_json_write(path, data):
+def atomic_json_write(path, data, compact=False):
+    """Write JSON atomically. Same bytes as tools/finalize_daily_status.py and
+    tools/daily_publication_audit.py (indent 2, final newline), so a run that
+    changes nothing leaves the file byte-identical and commits nothing.
+    compact: no indentation (the AI selection cache, read only by machines)."""
     temporary = str(path) + ".tmp"
     try:
         with open(temporary, "w", encoding="utf-8") as handle:
-            json.dump(data, handle, ensure_ascii=False, indent=2)
+            if compact:
+                json.dump(data, handle, ensure_ascii=False, separators=(",", ":"))
+            else:
+                json.dump(data, handle, ensure_ascii=False, indent=2)
+            handle.write("\n")
             handle.flush()
             os.fsync(handle.fileno())
         os.replace(temporary, path)
@@ -2655,7 +2678,7 @@ def _request_google_news_network(
     the GitHub Actions runner.
     """
     global SERVER_ERROR_STREAK
-
+    check_collection_deadline()
     for attempt in range(
         1,
         REQUEST_ATTEMPTS + 1,
@@ -2709,6 +2732,9 @@ def _request_google_news_network(
                     f"{delay:.0f}s"
                 )
 
+                if attempt >= REQUEST_ATTEMPTS:
+                    # The query has failed: no point waiting before giving up.
+                    continue
                 if (
                     SERVER_ERROR_STREAK
                     >=
@@ -2719,18 +2745,14 @@ def _request_google_news_network(
                         f"global cooldown "
                         f"{SERVER_ERROR_COOLDOWN_SECONDS}s"
                     )
-
                     time.sleep(
                         SERVER_ERROR_COOLDOWN_SECONDS
                     )
-
                     SERVER_ERROR_STREAK = 0
-
                 else:
                     time.sleep(
                         delay
                     )
-
                 continue
 
             response.raise_for_status()
@@ -2771,8 +2793,33 @@ def _request_google_news_network(
                 )
 
     QUERY_STATS["failed"] += 1
-
+    stop_if_google_news_is_failing()
     return None
+
+
+def stop_if_google_news_is_failing():
+    """End the wave as soon as the failure rate is clear, instead of spending
+    up to an hour per hundred throttled queries before the end-of-wave check
+    in _collect_all_once (same message, so collect_all can retry once)."""
+    answered = QUERY_STATS["successful"] + QUERY_STATS["failed"]
+    if answered >= GOOGLE_NEWS_EARLY_ABORT_AFTER and QUERY_STATS["failed"] / answered > 0.20:
+        raise RuntimeError(
+            "Too many Google News queries failed "
+            f"({QUERY_STATS['failed']}/{answered} so far). "
+            "Database not replaced to avoid an incomplete collection."
+        )
+
+
+def check_collection_deadline():
+    """A collection that is still searching this late will not finish inside
+    its workflow step: stop it cleanly (the checkpoint is committed) rather
+    than be killed by the step timeout."""
+    elapsed = (time.monotonic() - COLLECTION_STARTED) / 60
+    if COLLECTION_DEADLINE_MINUTES > 0 and elapsed >= COLLECTION_DEADLINE_MINUTES:
+        raise RuntimeError(
+            f"Google News collection deadline reached ({elapsed:.0f} min; "
+            f"COLLECTION_DEADLINE_MINUTES={COLLECTION_DEADLINE_MINUTES:.0f})."
+        )
 
 
 def entry_to_event(
@@ -4306,6 +4353,14 @@ def collect_all(*args, **kwargs):
                 )
                 raise
 
+            elapsed = (time.monotonic() - COLLECTION_STARTED) / 60
+            if elapsed >= GOOGLE_NEWS_RETRY_WAVE_MAX_ELAPSED_MINUTES:
+                print(
+                    f"[google-news] {elapsed:.0f} min already spent; no second "
+                    "collection wave. Aborting safely."
+                )
+                raise
+
             delay = GOOGLE_NEWS_GLOBAL_RETRY_DELAY_SECONDS
             print(
                 f"[google-news] Abnormal Google News failure detected: {message}"
@@ -4568,9 +4623,88 @@ def load_selection_cache():
         }
 
 
+# A cached decision is kept while it is in use: reviewed or seen again by a
+# collection run (last_seen_at, stamped by tools/run_collector_quota_safe.py)
+# within this many days. Feeds only look back DAILY_LOOKBACK_DAYS, queued
+# candidates are kept regardless, and the nightly D1 sync has long copied the
+# archive's reviews: older entries only made the committed file grow (GitHub
+# refuses files over 100 MiB).
+SELECTION_CACHE_RETENTION_DAYS = int(os.getenv("AI_SELECTION_CACHE_RETENTION_DAYS", "21"))
+# Off-topic verdicts (79% of the cache) keep only these fields after a few days.
+SELECTION_CACHE_SLIM_ZERO_AFTER_DAYS = int(os.getenv("AI_SELECTION_CACHE_SLIM_ZERO_AFTER_DAYS", "3"))
+SLIM_DECISION_FIELDS = frozenset({"event_id", "relevance_score", "is_current_ct_event"})
+_SELECTION_CACHE_PRUNED = False
+
+
+def queued_selection_fingerprints(path="daily_candidate_queue.json"):
+    """Fingerprints of the candidates waiting in the durable daily queue."""
+    try:
+        with open(path, encoding="utf-8") as handle:
+            events = (json.load(handle) or {}).get("events") or []
+    except (OSError, ValueError, AttributeError):
+        return set()
+    fingerprints = set()
+    for event in events:
+        if isinstance(event, dict):
+            fingerprints.add(selection_fingerprint(event))
+            fingerprints.update(event.get("source_article_fingerprints") or [])
+    return fingerprints
+
+
+def slim_off_topic_decisions(cache, now=None, days=None):
+    """An off-topic verdict (score 0) only ever rejects its candidate again:
+    after a few days keep just what that needs. Returns how many were slimmed."""
+    days = SELECTION_CACHE_SLIM_ZERO_AFTER_DAYS if days is None else days
+    if days < 0:
+        return 0
+    cutoff = ((now or datetime.now(timezone.utc)) - timedelta(days=days)).isoformat()
+    slimmed = 0
+    for item in (cache.get("items") or {}).values():
+        result = item.get("result") if isinstance(item, dict) else None
+        if not isinstance(result, dict) or str(item.get("reviewed_at") or "") >= cutoff:
+            continue
+        try:
+            score = int(result.get("relevance_score"))
+        except (TypeError, ValueError):
+            continue
+        if score != 0 or set(result) <= SLIM_DECISION_FIELDS:
+            continue
+        item["result"] = {key: result[key] for key in SLIM_DECISION_FIELDS if key in result}
+        slimmed += 1
+    return slimmed
+
+
+def prune_selection_cache(cache, now=None, days=None, keep=None):
+    """Drop decisions nobody used for `days` days. Returns how many."""
+    slim_off_topic_decisions(cache, now)
+    days = SELECTION_CACHE_RETENTION_DAYS if days is None else days
+    if days <= 0:
+        return 0
+    cutoff = ((now or datetime.now(timezone.utc)) - timedelta(days=days)).isoformat()
+    keep = queued_selection_fingerprints() if keep is None else keep
+    items = cache.get("items") or {}
+    stale = [
+        fingerprint for fingerprint, item in items.items()
+        if isinstance(item, dict)
+        and max(str(item.get("reviewed_at") or ""), str(item.get("last_seen_at") or "")) < cutoff
+        and "article" not in item
+        and fingerprint not in keep
+    ]
+    for fingerprint in stale:
+        del items[fingerprint]
+    return len(stale)
+
+
 def save_selection_cache(
     cache
 ):
+    global _SELECTION_CACHE_PRUNED
+    if not _SELECTION_CACHE_PRUNED:
+        _SELECTION_CACHE_PRUNED = True
+        removed = prune_selection_cache(cache)
+        if removed:
+            print(f"AI selection cache: {removed} decision(s) unused for "
+                  f"{SELECTION_CACHE_RETENTION_DAYS} days removed.")
     cache[
         "version"
     ] = AI_SELECTION_VERSION
@@ -4590,7 +4724,7 @@ def save_selection_cache(
     ).isoformat()
 
     cache["backfill_rss_snapshots"] = BACKFILL_RSS_SNAPSHOTS
-    atomic_json_write(AI_SELECTION_CACHE_FILE, cache)
+    atomic_json_write(AI_SELECTION_CACHE_FILE, cache, compact=True)
 
 
 def extract_interaction_text(
@@ -4808,7 +4942,7 @@ def call_ai_selection_batch(
                     f"retrying in {delay}s"
                 )
 
-                if attempt >= AI_SELECTION_ATTEMPTS:
+                if attempt >= min(AI_SELECTION_ATTEMPTS, AI_SELECTION_TRANSIENT_ATTEMPTS):
                     raise AISelectionTransientError(
                         "Gemini article-selection service unavailable."
                     )
@@ -4864,7 +4998,7 @@ def call_ai_selection_batch(
             raise
 
         except requests.RequestException as error:
-            if attempt >= AI_SELECTION_ATTEMPTS:
+            if attempt >= min(AI_SELECTION_ATTEMPTS, AI_SELECTION_TRANSIENT_ATTEMPTS):
                 raise AISelectionTransientError(
                     "Gemini article-selection network failure."
                 ) from error
@@ -5641,6 +5775,7 @@ def ai_select_events(
         AI_SELECTION_BATCH_SIZE
     )
 
+    consecutive_transient = 0
     for start in range(
         0,
         len(
@@ -5690,10 +5825,30 @@ def ai_select_events(
             results = process_ai_selection_batch(
                 batch
             )
+            consecutive_transient = 0
+
+        except AISelectionTransientError as error:
+            consecutive_transient += 1
+            if consecutive_transient < AI_SELECTION_MAX_CONSECUTIVE_TRANSIENT:
+                # One unlucky batch: its candidates stay undecided (queued for
+                # the next run) and the rest of the lane goes on.
+                save_selection_cache(cache)
+                print(f"AI selection batch {batch_number} skipped after a temporary "
+                      f"Gemini error ({error}); continuing.")
+                hook = globals().get("selection_batch_skipped")
+                if callable(hook):
+                    hook(error)
+                continue
+            save_selection_cache(cache)
+            print()
+            print("AI article selection stopped: temporary Gemini errors "
+                  f"on {consecutive_transient} batches in a row ({error}).")
+            print("The AI selection cache has been saved so the next "
+                  "workflow run can resume.")
+            return None
 
         except (
             AISelectionQuotaError,
-            AISelectionTransientError,
             AISelectionIncompleteError,
         ) as error:
             save_selection_cache(

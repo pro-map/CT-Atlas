@@ -82,6 +82,8 @@ jobs:
           git config user.email 'actions@github.com'
           git add -- events.json "archive/map-evidence-repair-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.json"
           if ! git diff --cached --quiet; then
+            # GitHub refuses files over 100 MiB: say so before the push fails.
+            python3 tools/check_committed_sizes.py
             git commit -m 'Apply source-reviewed map corrections and preserve quarantined evidence (zero AI)'
             git fetch origin main
             if ! git rebase origin/main; then
