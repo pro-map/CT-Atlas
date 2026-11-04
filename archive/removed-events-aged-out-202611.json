@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-03T18:16:58.238682+00:00",
+  "removed_at": "2026-11-04T18:04:36.020959+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -273,6 +273,199 @@
       "region": "Timbuktu Triangle",
       "ai_relevance_score": 80,
       "ai_relevance_reason": "Reports a concrete, dated military operation against militants."
+    },
+    {
+      "id": "5fb07246816c97e3",
+      "incident_id": "inc-7ed4b06640162a90",
+      "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE5BM1BtZE82Rk5WM25CTlJsemJvR2xwVEJzeDhPTVlLbzM3SkN3V0lhUl9sUGJnZ1Bla09heVo4ZGNlOHh2RmtFRzlfNV94dXpDM2w5M25xS1RNeXc5UE14bkZXMFZsdDdmdW80UndHQzM1V0ZyQkpJbEdB?oc=5",
+      "title": "Two soldiers, terrorists killed in Borno attack",
+      "summary": "Two soldiers and multiple terrorists were killed during an insurgent attack and subsequent clash in Borno State.",
+      "original_title": "Two soldiers, terrorists killed in Borno attack",
+      "original_language": "en",
+      "source": "Daily Trust",
+      "published": "2026-05-08T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "region": "Borno State",
+      "ai_relevance_score": 86,
+      "ai_relevance_reason": "Reports a concrete insurgent attack and military counter-action with casualties on both sides."
+    },
+    {
+      "id": "a4494b1cb3401764",
+      "incident_id": "inc-f67f0ae647935a58",
+      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQOWFSZ3dIQzJ0b2ZuMUZhU1JFYUNvcEZLS0l4YnRKaW5aMUVjakVzUV9zeVQ4c3FqM1hWTjhfRW9RdFFJTEtaUmVycEl0eUF6NDZYUlZGUUV1NnEzVmVJNmlTNFR2YUg2ektCeEFoaUNlak1fMFF3SmFUOV9Lcm8wdA?oc=5",
+      "title": "Soldiers kill three terrorists, recover arms in Zamfara",
+      "summary": "Nigerian soldiers killed three terrorists and recovered weapons during a security operation in Zamfara.",
+      "original_title": "Soldiers kill three terrorists, recover arms in Zamfara",
+      "original_language": "en",
+      "source": "Punch Newspapers",
+      "published": "2026-05-08T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Weapons"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "region": "Zamfara State",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism operation resulting in militant casualties and weapons seizure."
+    },
+    {
+      "id": "db45e043222f64cb",
+      "incident_id": "inc-0a3ca9d5b125efc9",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPQThBV2tvME1BUm9MNzdxdktlWmV0R0JfMmd0R1d3REFKUjNqWVNHdHBuWldvbUZJLUx3b2ZONmsxdWFQYWF5bXlPUE9XVWpYZUNGajB5SUV4ZHlqbi1SSjdLMDRrMWNHbF9BX2ZlV0p1b2pCOTZQUXdRcUxLa1NVV2ttX09La1hRdkJSaDhLdk01Um9aRE5JWFRKLWF6Q1ZJVXhkTThwbFRzZ1M5TWRz?oc=5",
+      "title": "Dozens killed in jihadist attacks on villages in central Mali",
+      "summary": "Jihadist militants carried out coordinated attacks on villages in central Mali, leaving dozens of civilians dead.",
+      "original_title": "Dozens killed in jihadist attacks on villages in central Mali",
+      "original_language": "en",
+      "source": "the-star.co.ke",
+      "published": "2026-05-08T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "JNIM",
+      "primary_event_type": "ATTACK",
+      "country": "Mali",
+      "region": "Central Mali",
+      "ai_relevance_score": 86,
+      "ai_relevance_reason": "Reports concrete coordinated terrorist attacks resulting in mass civilian casualties."
+    },
+    {
+      "id": "7ceac16997471bc8",
+      "incident_id": "inc-14a5d2f7dad0c1d7",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOVjVOVFJfbmo0UkZpTVMxMjdVNUx3aHU5OUYxamFRWl9yeEQtLXdIbWhRQUlkeTUwWm1uTFlkd1prX0pfMWo3ZkRoQTVLYVBud2w2WXpoVU5NX1hIdzJCLWwta3VpN1J5dEFwWW1SYTlMRk80eEpUOHE4TEZKVEJ5WG5HelpfWGFtdFJGeDFUUzVWcGVDQ3Fjcw?oc=5",
+      "title": "Drone attack on Zaporozhye nuclear power plant",
+      "summary": "Report of a drone attack targeting the Zaporozhye nuclear power plant.",
+      "original_title": "Ucrania ataca con drones la central nuclear de Zaporozhye",
+      "original_language": "es",
+      "source": "MONCLOA.COM",
+      "published": "2026-05-08T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Radiological/Nuclear"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Ukraine",
+      "region": "Zaporizhzhia Oblast",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete report of a hostile drone attack on critical infrastructure (nuclear facility)."
+    },
+    {
+      "id": "5f14757c2e3431b1",
+      "incident_id": "inc-6e73141722e03621",
+      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQOWxqSnhKTzRUaWpOam16VEdJU1hTWkltUnJJNVp6UDNlTmd6MjJ0OUM2T1RCbkFqalhmVmx5ODRTdWNpQ3o5czFZMFFWYmxFTjBsd3J5c19IR2JUTkFOX1FlckNneEhuQzd6bTVIODVTQWdBRnlMdmNEU0dWRTJoaFF0UdIBgwFBVV95cUxOUGdRMUgtUmdhQzhjMnJDdUNiM0JCLWw0RVdoZm8tQmdPYk5ZZWw4ZklfVzhkWW9QamJmbFktVVU5MDZCTDdDb1Z1MWF3emlJTC1lUXdncjAzOUJqYWlSWjRtamRXLVNkSlhrX1JidVZxUWNoeWZ3RjJUWTdyT1ViZ1JNRQ?oc=5",
+      "title": "Forest fire in Chernobyl exclusion zone following drone strike",
+      "summary": "Large forest fire in the Chernobyl exclusion zone allegedly caused by two drone crashes.",
+      "original_title": "Chernóbil sufre un incendio forestal de más de 1.000 hectáreas en zona radiactiva tras la caída de dos drones",
+      "original_language": "es",
+      "source": "El Mundo",
+      "published": "2026-05-08T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Radiological/Nuclear"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Ukraine",
+      "region": "Chernobyl Exclusion Zone",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Concrete incident report of an attack/crash resulting in a fire within a restricted, sensitive nuclear-related zone."
+    },
+    {
+      "id": "af8a4456d67b5bc1",
+      "incident_id": "inc-6e73141722e03621",
+      "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxPVG1DMjlTWHFyNEZPdnI3WW50NFRJZWl5ZHZvSkVyODZQV1RvVlMySVZNX0NjckN6X196Znh4N2dnVDVSeUkwUnBoYVRtTG1JT1RIc0Fqejdtb2xiSlh0cUlhMDN4TlBuVFhNdlU1THpoeXNRWkhkRkFnVVJ1QnFrRXFrc0ZsWUV6NVlFY0FfMVVvX3B1S0VraTRrT2ZBX1RxQ3dsMXFYTkJlT2pGMi1Xa1g4T1kxTXI3dks1Z1ZxbGw1dEJwMFF0X2RKc2J2RmpBZ0p3bHhERVE2Sm1TVjFsNUV1c2ZKd9IB8AFBVV95cUxOb2ZKOEVvNEVMR21ORFY5T3g4N0JGQ0dvWFM0czNpbGJfSTFWMC0xZW1JaF90LVF4M1NNblpGYXpNdHgweE55d1lOeHNEOVVzRDNUWkc5eG45cW44RHNMeUZlZXhXamRKTHE1OC1DV2RTTW93ZncyNXZMNXVZNXBPSE5jRk9GMC04dzF0bkM5aW9TcTI2aGNyN01HTkdEcXA2Ti1lWDNtbGZBNHpNSzRKSFVBZS1LazdwSzBJVVkxT3J5bEZRckZ6X2pRTkRVd1NVcEdSTFpwN0Q3NWttTFc2bjdDWFE3cnlEZ2dvMWd0R2Y?oc=5",
+      "title": "Drone-induced fire in Chernobyl zone",
+      "summary": "A drone caused a fire in the Chernobyl exclusion zone.",
+      "original_title": "Un dron provoca un enorme incendio en la zona de exclusión de Chernóbil",
+      "original_language": "es",
+      "source": "Libertad Digital",
+      "published": "2026-05-08T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Radiological/Nuclear"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Ukraine",
+      "region": "Chernobyl Exclusion Zone",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Deduplication of previous incident; provides reinforcement of the attack reporting."
+    },
+    {
+      "id": "9fdbc8448c6417a3",
+      "incident_id": "inc-7d68dc96a0725c37",
+      "url": "https://news.google.com/rss/articles/CBMi4ANBVV95cUxQVTIxbTRYSHBrNGhWOW4tT0xUREd3ZXZYZExxZnVKNS1iSmVQY2JQU19Fb1RRMTNYc25ocFFaby1kM1FOWFNGWGN4OTB3WXA1ZldkUUJhU3FVTnhjRTNzMmJ5SC1JZndHMzRYaFNXTFRsTVdPWmZ3TDVqRFZtczRPNXhfZDZ3dDJvWmlYUFNYZzZTSEF1NENuTmNlM1NIUnJEWjhkS3A2dHkyODg4NEdjUzJUZDlfd2JycjY5dkFkcnRKWm1IeTRDUWg1X1hRWmJyNXdQOEhsZG5lOVd2ZnZWcms5VGx6OFVCTEJfdjZ0dVhILXA1Q1MzSmN5dDc3dEJhejk1NVBHRmtMcFluSEE0eFFVMHJKUGdqNWQ1RUpfSkdjWE1lY1RGSUJONjFMVVBFUEFKbS1jYmdzb1hMUkN2VDg5dW5NWGIyMWtkUHNCQ0hzc0tzVEtramhfTkx0cEtwd1kzZUVRZXBMYlRhUlNIUjl0TjBCejdKVUNrNW81SHlIbHlia1NSMXlqM1dHQ1lDRTdPWW5DemFrNjJBV24tWGNudnVxR1ZMZ3BzMmdINzFVNUo4bWhIU0Fua1J1alFJZXZkcXNMYmRTOTdILUVWMnoyOTRfMTlFMm9GWWxSNmnSAeYDQVVfeXFMTzYwdDdWVzROanBEODJIdy1GaGhobDM5MUZyMDRGb0JaRmtQYXptVEtHVGtOUEZ1S3l2OUJNaGVaeDRRYXN0bHZxaExQSmxEbGN2MXRONjI5WXR1blNkV0hteW5LZWVmMWkwUENCVjFRNHNmSmIwWFBsWk1OelRqVFpvdzd4MHhIa3VZTHZidk9XNjFnWldBam9WNEdvRm5rcXo3N2pjMll2V284SFBua253RVlScUNMcF9VVUNCNExQNktLSTNpUVR6Qy1XaThYT1ZDQmdmOFBvY25BWUdWNVJEdl9uaVlHVFh2Ti15cjNWSlhLbGZmay1wOTVwalppUUgyZjdLb3I3bUxBZ1JTYV94ZGRGbE9SZXh6UTZPMkpFa19ZamNFbHBnUHNaUHNqVGdZcmlsOW91ZTA5dU9xY0dkYnJnVGxEVTFFNU84VFVtOE9qYlA4VGpSU251NHZPdFdRNE1UYUx4djQzMUQ5aVF5cDNILVpzQ1JHZTljdFo2b0J4OHBwTjdMaF9QS09CRkVLSG15a0p3S0tOMmFSTWhFazVmUVNXd1gycmpFNFpJdnFjSmUxczhKcEhqYVBYRkNYb2lpS3pISnZuS09EZEx2QV9PMGUwYXFjck5rWF9UOTh4QWZ3?oc=5",
+      "title": "ISIS claims responsibility for IED assassination of religious figure in Damascus",
+      "summary": "ISIS has claimed responsibility for an IED attack in Damascus that killed a prominent religious official at the Sayyida Zeinab shrine.",
+      "original_title": "\"داعش\" يتبنى اغتيال خطيب مقام السيدة زينب في دمشق بعبوة ناسفة",
+      "original_language": "ar",
+      "source": "العربي الجديد",
+      "published": "2026-05-08T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "ATTACK",
+      "country": "Syria",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Concrete terrorist attack by a non-state actor involving an explosive device."
+    },
+    {
+      "id": "292ac446ab08add7",
+      "incident_id": "inc-a43f15f27db8ace7",
+      "url": "https://news.google.com/rss/articles/CBMiuwJBVV95cUxNdFp6MzAtaDEwVzNuN1RLZ3JOVV9naE5saVN3ZFBHb01uQjZQVllZNF9WeFZ0WHkxTkVsT2NqLU4wODN0dG02dTdDWHJyM1E4LURPeE90bUxQNjhrVW1zZWdqRTVEUW5hUS1YYVVUM19EUTRUS3paRW1JQUNIWlR3RExzSWVGMmFhMERFSUt4eXMzbjYwWHA2V283RGIyNTY2eGo5STctMjN4RU5kaE9DWmVTUzFXeUNOVWN3bmVMN3REQ2tqM3ZnX3lzR1Q2UjJ4RzgzZTJYOG5NRjlzcFhqU0lPdXFweFZiUzlTMlhlaFQ5emY0YzdYYUV2UHY5emFRQW03dVdvOHktSVVzXzk4a2ZWVDFBM0N5bkM1NEFxaHhjLUwxejZ1eGR4c19UR1JxNUlNNEUwTWNsczA?oc=5",
+      "title": "IED explosion reported in Hit, Anbar",
+      "summary": "An IED explosion occurred in the city of Hit, located in Iraq's Anbar province.",
+      "original_title": "انفجار عبوة ناسفة في هيت بالأنبار",
+      "original_language": "ar",
+      "source": "شفق نيوز",
+      "published": "2026-05-08T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Iraq",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Reported IED attack. While the actor is unidentified, such incidents in Anbar are generally considered CT-relevant security events."
+    },
+    {
+      "id": "de2b9bfb8bf38bac",
+      "incident_id": "inc-a7da2826eba43396",
+      "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxQWnJsZDdJQnNRMWQ4NjVxbGxVSm9HRHlrWTExSnVrZkZaakRick40aFFUMmoxMS1aX0lMUktpOTY1SzUwOHVrdzdTb0MtandyY1o3Zmx3Y0hXV0c2b1pSMWt1UHQzUmFUdUJndHpra1lULTh4MmJyS08yWkwtRVQzUl9RTVN5ZHNOeWxudFNtcGJabHB3M19SeGhhbDh4UkUwSHJBbTBhQnAwY1Z0azhfVjhUVjR3dVZ6UVF4ODYzU3ZKRnJRWHZseDFqZWpKWncx0gHkAUFVX3lxTFAxSjFfakNOazd3R0Q4RDB5NFI0NzVWVE5oWURZZUtJeENnYTFJY3ljTnZSWVFzV2g3N0xoSWp4RERVLVVmd3VjN0ZBR0hoT3hnSVZlcXlocjZZVHJIOHM2STlTTVMzZFBEcGJsX2hQRTFLbWVieDFla2k1UUIwSE5wdG12b1ZTZXBUSmx2ZXd1QmFxdGdWdGlGVkM3RG84ZnRCbWpsZlpMWnBOby1QSHR2WWVYLW9QSDZ4RnNSU1VzTXo5Y1dHWGF3SzFBQVdMeWY1MWY1WTRfbkZYSzkyOVRtNGk2Ug?oc=5",
+      "title": "Chilean authorities alert to kidnapping threat from Tren de Aragua",
+      "summary": "Chilean authorities are on high alert due to extortion kidnappings committed by Tren de Aragua and its factions.",
+      "original_title": "Chile, en alerta ante los secuestros extorsivos cometidos por el Tren de Aragua y sus facciones",
+      "original_language": "es",
+      "source": "EL PAÍS",
+      "published": "2026-05-08T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "actor_group": "Tren de Aragua",
+      "primary_event_type": "OTHER_CT",
+      "country": "Chile",
+      "ai_relevance_score": 65,
+      "ai_relevance_reason": "Reports active criminal-militant extortion and kidnapping activities."
     }
   ]
 }

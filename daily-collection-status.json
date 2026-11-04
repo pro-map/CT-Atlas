@@ -1,43 +1,43 @@
 {
   "schema_version": 2,
   "status": "partial",
-  "run_started_at": "2026-11-03T22:17:57.452718+00:00",
-  "last_attempt_at": "2026-11-03T22:17:57.452718+00:00",
-  "published_at": "2026-11-03T23:23:23.874609+00:00",
+  "run_started_at": "2026-11-04T17:17:19.853052+00:00",
+  "last_attempt_at": "2026-11-04T17:17:19.853052+00:00",
+  "published_at": "2026-11-04T18:09:50.866219+00:00",
   "recent": {
-    "candidates": 3886,
-    "reviewed": 3750,
-    "cached": 2182,
-    "new_reviews": 1568,
+    "candidates": 3413,
+    "reviewed": 2529,
+    "cached": 1921,
+    "new_reviews": 608,
     "official_auto_accepted": 0,
-    "retained": 322,
-    "rejected": 3428,
-    "pending": 136,
+    "retained": 88,
+    "rejected": 2441,
+    "pending": 884,
     "status": "partial",
-    "calls": 55,
+    "calls": 36,
     "primary_calls": 30,
-    "overflow_calls": 25,
+    "overflow_calls": 6,
     "reasons": [
-      "run_budget"
+      "transient_error"
     ],
-    "window_start": "2026-10-31T22:17:57.452718+00:00",
-    "window_end": "2026-11-03T22:17:57.452718+00:00"
+    "window_start": "2026-11-01T17:17:19.853052+00:00",
+    "window_end": "2026-11-04T17:17:19.853052+00:00"
   },
   "backlog": {
-    "candidates": 1950,
-    "reviewed": 511,
-    "cached": 511,
+    "candidates": 1888,
+    "reviewed": 379,
+    "cached": 379,
     "new_reviews": 0,
     "official_auto_accepted": 0,
-    "retained": 0,
-    "rejected": 511,
-    "pending": 1439,
+    "retained": 1,
+    "rejected": 378,
+    "pending": 1509,
     "status": "partial",
-    "calls": 0,
+    "calls": 6,
     "primary_calls": 0,
-    "overflow_calls": 0,
+    "overflow_calls": 6,
     "reasons": [
-      "run_budget"
+      "transient_error"
     ]
   },
   "maintenance": {
@@ -58,14 +58,19 @@
   "source": {
     "google": {
       "retry_waves": 0,
-      "successful": 1222
+      "successful": 1222,
+      "deduplicated_urls": 288
     },
     "gdelt": {
       "attempted": 42,
-      "http_attempts": 4,
+      "http_attempts": 3,
       "successful": 1,
       "consecutive_unavailable_queries": 0,
+      "rate_limit_http_attempts": 1,
+      "rate_limited": 1,
       "invalid_response": 1,
+      "circuit_open": true,
+      "pause_reason": "rate_limit",
       "failed": 41,
       "deferred_queries": [
         {
@@ -78,9 +83,8 @@
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22weapons+smuggling%22+terrorism&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
           "label": "gdelt:Weapons:2/3",
-          "reason": "http_429",
-          "recovered": false,
-          "provider_message": "Please limit requests to one every 5 seconds or contact kalev.leetaru5@gmail.com for larger queries. All high-traffic users should switch to our ngrams dataset: https://blog.gdeltproject.org/using-the"
+          "reason": "source_paused_rate_limit",
+          "recovered": false
         },
         {
           "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22arms+trafficking%22+terrorism&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
@@ -317,17 +321,13 @@
           "recovered": false
         }
       ],
-      "rate_limit_http_attempts": 2,
-      "rate_limited": 1,
-      "circuit_open": true,
-      "pause_reason": "rate_limit",
-      "skipped_http_queries": 39
+      "skipped_http_queries": 40
     },
     "errors": 41,
     "status": "partial"
   },
   "reasons": [
-    "run_budget",
+    "transient_error",
     "recent_pending",
     "backlog_pending",
     "source_errors",
@@ -335,9 +335,9 @@
     "geolocation_review_required"
   ],
   "queue_filter": {
-    "expired": 6347,
-    "retired": 453,
-    "cancelled_history": 672,
+    "expired": 3817,
+    "retired": 292,
+    "cancelled_history": 278,
     "duplicates": 0
   },
   "budgets": {
@@ -345,28 +345,28 @@
       "per_run": 30,
       "per_day": 60,
       "used_this_run": 30,
-      "used_today": 60
+      "used_today": 30
     },
     "overflow": {
       "model": "gemini-3.1-flash-lite",
       "per_run": 25,
       "per_day": 50,
-      "used_this_run": 25,
-      "used_today": 50
+      "used_this_run": 12,
+      "used_today": 12
     },
     "historical_calls_per_run": 10,
-    "historical_calls_used": 0,
+    "historical_calls_used": 6,
     "maintenance_calls_per_run": 2
   },
   "geolocation": {
     "status": "complete",
     "pending": 0,
-    "located": 6306,
-    "unlocated": 263,
-    "completed_unlocated": 263,
+    "located": 6366,
+    "unlocated": 207,
+    "completed_unlocated": 207,
     "outcome": "success",
-    "processed_this_run": 74,
-    "review_required": 176
+    "processed_this_run": 39,
+    "review_required": 132
   },
   "categories": [
     {
@@ -391,7 +391,7 @@
       "stop_code": "budget_reached"
     }
   ],
-  "finalized_at": "2026-11-04T00:14:15.192298+00:00",
+  "finalized_at": "2026-11-04T18:11:11.030884+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success"
 }
