@@ -187,6 +187,7 @@ test("the assessment has the agreed shape and says its thresholds are provisiona
   assert.equal(result.thresholds.high,60);
   assert.equal(result.thresholds.provisional,true);
   assert.match(result.thresholds.note,/synthetic data only/);
+  assert.equal(result.not_evaluated.find(item=>item.code==="THRESHOLD_CALIBRATION").reason,result.thresholds.note,"an analyst must see this, not only a client");
   assert.equal(result.disclaimer,DISCLAIMER);
   assert.match(DISCLAIMER,/^Indicator, not proof\./);
   assert.equal(result.assessed_at,"2026-11-05T12:00:00.000Z");

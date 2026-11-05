@@ -790,6 +790,8 @@ function notEvaluated(data, coverage, usable, labels) {
   if (!labels.some(label => String(label?.category || "").toUpperCase() === "EXCHANGE")) add("EXCHANGE_HOPPING", "No sourced exchange label matched this sample.");
   add("ONE_HOP_EXPOSURE", "Runs in the browser, on request.");
   add("PEEL_CHAIN", "Runs in the browser, on traced wallets.");
+  // Listed here because this is the list the page and the report print in full.
+  add("THRESHOLD_CALIBRATION", THRESHOLDS.note);
   return list;
 }
 
