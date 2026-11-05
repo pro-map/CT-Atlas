@@ -152,43 +152,44 @@
   "collection_status": {
     "schema_version": 2,
     "status": "partial",
-    "run_started_at": "2026-11-05T17:26:18.909381+00:00",
-    "last_attempt_at": "2026-11-05T17:26:18.909381+00:00",
-    "published_at": "2026-11-05T18:04:12.231836+00:00",
+    "run_started_at": "2026-11-05T22:40:38.730513+00:00",
+    "last_attempt_at": "2026-11-05T22:40:38.730513+00:00",
+    "published_at": "2026-11-05T23:10:25.362007+00:00",
     "recent": {
-      "candidates": 3710,
-      "reviewed": 1848,
-      "cached": 1816,
-      "new_reviews": 32,
-      "official_auto_accepted": 0,
-      "retained": 9,
-      "rejected": 1839,
-      "pending": 1862,
-      "status": "partial",
-      "calls": 8,
-      "primary_calls": 8,
-      "overflow_calls": 0,
-      "reasons": [
-        "transient_error"
-      ],
-      "window_start": "2026-11-02T17:26:18.909381+00:00",
-      "window_end": "2026-11-05T17:26:18.909381+00:00"
-    },
-    "backlog": {
-      "candidates": 2033,
-      "reviewed": 397,
-      "cached": 397,
+      "candidates": 4194,
+      "reviewed": 1578,
+      "cached": 1578,
       "new_reviews": 0,
       "official_auto_accepted": 0,
       "retained": 0,
-      "rejected": 397,
-      "pending": 1636,
+      "rejected": 1578,
+      "pending": 2616,
       "status": "partial",
       "calls": 6,
       "primary_calls": 6,
       "overflow_calls": 0,
       "reasons": [
         "transient_error"
+      ],
+      "window_start": "2026-11-02T22:40:38.730513+00:00",
+      "window_end": "2026-11-05T22:40:38.730513+00:00"
+    },
+    "backlog": {
+      "candidates": 2077,
+      "reviewed": 465,
+      "cached": 401,
+      "new_reviews": 64,
+      "official_auto_accepted": 0,
+      "retained": 4,
+      "rejected": 461,
+      "pending": 1612,
+      "status": "partial",
+      "calls": 10,
+      "primary_calls": 10,
+      "overflow_calls": 0,
+      "reasons": [
+        "transient_error",
+        "historical_budget"
       ]
     },
     "maintenance": {
@@ -212,293 +213,30 @@
         "successful": 1222,
         "deduplicated_urls": 288
       },
-      "gdelt": {
-        "attempted": 42,
-        "http_attempts": 4,
-        "successful": 1,
-        "consecutive_unavailable_queries": 0,
-        "invalid_response": 2,
-        "failed": 41,
-        "deferred_queries": [
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+weapons%22+OR+%22terrorist+arms%22+OR+%22terrorist+firearms%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Weapons:1/3",
-            "reason": "invalid_response",
-            "recovered": false,
-            "provider_message": "{}"
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22weapons+smuggling%22+terrorism&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Weapons:2/3",
-            "reason": "invalid_response",
-            "recovered": false,
-            "provider_message": "{}"
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22arms+trafficking%22+terrorism&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Weapons:3/3",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22maritime+piracy%22+OR+%22armed+robbery+at+sea%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Maritime Piracy:1/4",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22pirate+attack%22+ship&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Maritime Piracy:2/4",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22pirate+attacks%22+vessel&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Maritime Piracy:3/4",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=pirates+hijacked+vessel&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Maritime Piracy:4/4",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+attack%22+OR+%22terror+attacks%22+OR+%22terror+attack%22+OR+%22terrorist+bombing%22+OR+%22terrorist+bomb+attack%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Attacks:1/1",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+arrested%22+OR+%22terrorists+arrested%22+OR+%22terror+suspect+arrested%22+OR+%22terror+suspects+arrested%22+OR+%22terrorism+arrest%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Arrests:1/1",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22militants+killed+in+raid%22+OR+%22terrorists+killed+in+raid%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Counter Terrorism Action:1/4",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22security+forces+kill%22+terrorist&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Counter Terrorism Action:2/4",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22security+forces+killed%22+militants&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Counter Terrorism Action:3/4",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22troops+kill%22+terrorists&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Counter Terrorism Action:4/4",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22online+extremist+radicalization%22+OR+%22online+extremist+radicalisation%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Online / Cyber / AI:1/4",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22online+radicalization%22+terrorism&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Online / Cyber / AI:2/4",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22online+radicalisation%22+terrorism&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Online / Cyber / AI:3/4",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22terrorist+propaganda%22+online&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Online / Cyber / AI:4/4",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22Radioactive+material+theft%22+OR+%22Stolen+radioactive+source%22+OR+%22Missing+radioactive+source%22+OR+%22Lost+radioactive+material%22+OR+%22Nuclear+material+theft%22+OR+%22Nuclear+smuggling%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Radiological/Nuclear:1/6",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28nuclear+OR+radioactive+OR+radiological+OR+cesium+OR+caesium+OR+thorium+OR+radiopharmaceutical+OR+%22dirty+bomb%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+%22bomb+plot%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Radiological/Nuclear:2/6",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22uranium+smuggling%22+OR+%22illegal+uranium+mining%22+OR+%22red+mercury%22+OR+radioactive%29+%28smuggling+OR+trafficking+OR+stolen+OR+theft+OR+seizure+OR+arrest+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Radiological/Nuclear:3/6",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28radiopharmaceutical+OR+cesium+OR+thorium%29+%28smuggling+OR+trafficking+OR+stolen+OR+theft+OR+seizure+OR+arrest+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Radiological/Nuclear:4/6",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22nuclear+power+plant%22+OR+%22nuclear+supply+chain%22+OR+%22nuclear+transport%22+OR+%22nuclear+sites%22%29+%28cyberattack+OR+sabotage+OR+drones+OR+%22terror+plot%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Radiological/Nuclear:5/6",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22AI+for+nuclear%22+OR+%22cyberattack+on+nuclear+plant%22+OR+%22drones+over+nuclear+sites%22+OR+%22dirty+bomb%22%29+%28terrorist+OR+terrorism+OR+plot+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Radiological/Nuclear:6/6",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22improvised+explosive+device%22+OR+IED+OR+%22home-made+explosive+device%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Chemicals and Explosives:1/8",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22improvised+explosive+device+cell%22+OR+%22IED+components+procurement%22+OR+%22clandestine+bomb+workshop%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Chemicals and Explosives:2/8",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22bomb-making+materials%22+OR+%22bomb-making+instructions%22+OR+%22darknet+bomb-making+instructions%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Chemicals and Explosives:3/8",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22bomb+plot%22+OR+%22explosives+manufacturing%22+OR+%22explosives+trafficking%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Chemicals and Explosives:4/8",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22explosives+seizure%22+OR+%22stolen+detonators%22+OR+%22explosives+cache%22+OR+%22ANFO+bomb%22+OR+%22ammonium+nitrate+diversion%22+OR+TATP%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Chemicals and Explosives:5/8",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28HMTD+OR+%22homemade+explosive+synthesis%22+OR+%22homemade+plastic+explosive%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Chemicals and Explosives:6/8",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22pipe+bomb+plot%22+OR+%22pressure+cooker+bomb%22+OR+%22nail+bomb%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Chemicals and Explosives:7/8",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28VBIED+OR+%22car+bomb%22+OR+%22suicide+vest%22+OR+%22explosive-laden+drone%22+OR+%22explosives+dropped+from+drones%22+OR+%22drone-dropped+grenade%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Chemicals and Explosives:8/8",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28bioterrorism+OR+bio-terrorism+OR+bioterrorist%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Biological Terrorism:1/10",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22biological+terrorism%22+OR+%22biological+attack%22+OR+%22biological+terror+attack%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Biological Terrorism:2/10",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22biological+terror+plot%22+OR+%22biological+weapons%22+OR+%22biological+weapon%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Biological Terrorism:3/10",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28bioweapon+OR+bio-weapon+OR+%22bacteriological+attack%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Biological Terrorism:4/10",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22bacteriological+weapons%22+OR+%22germ+warfare%22+OR+%22biological+warfare%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Biological Terrorism:5/10",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22toxin+attack%22+OR+%22toxin+terror+plot%22+OR+agroterrorism%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Biological Terrorism:6/10",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28agro-terrorism+OR+%22agricultural+terrorism%22+OR+%22anthrax+attack%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Biological Terrorism:7/10",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22anthrax+threat%22+OR+%22anthrax+hoax%22+OR+%22anthrax+letters%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Biological Terrorism:8/10",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22anthrax+scare%22+OR+%22ricin+attack%22+OR+%22ricin+plot%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Biological Terrorism:9/10",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          },
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22ricin+threat%22+OR+%22ricin+letters%22+OR+%22biological+threat+letter%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Biological Terrorism:10/10",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
-          }
-        ],
-        "rate_limit_http_attempts": 1,
-        "rate_limited": 1,
-        "circuit_open": true,
-        "pause_reason": "rate_limit",
-        "skipped_http_queries": 39
-      },
-      "errors": 41,
-      "status": "partial"
+      "gdelt": {},
+      "errors": 0,
+      "status": "complete"
     },
     "reasons": [
       "transient_error",
+      "historical_budget",
       "recent_pending",
       "backlog_pending",
-      "source_errors",
-      "geolocation_pending",
       "category_pending",
       "geolocation_review_required"
     ],
     "queue_filter": {
-      "expired": 3746,
-      "retired": 294,
-      "cancelled_history": 229,
+      "expired": 3766,
+      "retired": 302,
+      "cancelled_history": 216,
       "duplicates": 0
     },
     "budgets": {
       "primary": {
         "per_run": 30,
         "per_day": 60,
-        "used_this_run": 14,
-        "used_today": 14
+        "used_this_run": 16,
+        "used_today": 30
       },
       "overflow": {
         "model": "gemini-3.1-flash-lite",
@@ -508,18 +246,18 @@
         "used_today": 0
       },
       "historical_calls_per_run": 10,
-      "historical_calls_used": 6,
+      "historical_calls_used": 10,
       "maintenance_calls_per_run": 2
     },
     "geolocation": {
-      "status": "partial",
-      "pending": 7,
-      "located": 6175,
-      "unlocated": 205,
-      "completed_unlocated": 198,
+      "status": "complete",
+      "pending": 0,
+      "located": 6182,
+      "unlocated": 199,
+      "completed_unlocated": 199,
       "outcome": "success",
-      "processed_this_run": 0,
-      "review_required": 124
+      "processed_this_run": 8,
+      "review_required": 125
     },
     "categories": [
       {
@@ -544,81 +282,88 @@
         "stop_code": "budget_reached"
       }
     ],
-    "finalized_at": "2026-11-05T18:09:18.735574+00:00",
+    "finalized_at": "2026-11-05T23:11:04.833230+00:00",
     "collect_outcome": "success",
     "geolocate_outcome": "success"
   },
   "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
   "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
   "trend_summary": {
-    "status": "fallback",
-    "model": "gemini-3.5-flash-lite",
-    "window_hours": 24,
-    "generated_at": "2026-11-05T18:02:24.775262+00:00",
-    "candidate_events": 27,
-    "overview": "AI trend synthesis was unavailable for this update. The highest-relevance CT events reported or updated in the last 24 hours are shown below without additional analytical synthesis.",
+    "overview": "Recent developments include the Russian FSB disrupting terrorist plots using explosive-rigged drone control goggles in Moscow, an armed attack in Jordan resulting in a security element killed and an officer wounded in Amman, and a shooting at an oil refinery between Erbil and Kirkuk leaving one person dead and three injured.",
     "developments": [
       {
         "event_id": "70ae3b5b881b4e79",
-        "severity": "SIGNIFICANT",
-        "category": "Chemicals and Explosives",
+        "severity": "CRITICAL",
+        "category": "Counter Terrorism Action",
         "headline": "Russia's FSB prevents series of terrorist attacks using rigged drone goggles",
-        "detail": "The Russian Federal Security Service (FSB) disrupted terrorist plots involving explosive-rigged drone control goggles.",
+        "detail": "The Russian Federal Security Service disrupted terrorist plots involving explosive-rigged drone control goggles.",
         "location": "Moscow, Russia"
       },
       {
-        "event_id": "7e2a96227388571a",
+        "event_id": "59adfee8d1d11be8",
         "severity": "HIGH",
+        "category": "Attacks",
+        "headline": "Jordanian Security Element Killed and Officer Wounded in Attack in Amman",
+        "detail": "A Jordanian security personnel member was killed and an officer was wounded in an armed attack.",
+        "location": "Amman, Jordan"
+      },
+      {
+        "event_id": "13817a84ccdda4ec",
+        "severity": "HIGH",
+        "category": "Attacks",
+        "headline": "One Killed and Three Injured in Shooting at Oil Refinery Between Erbil and Kirkuk",
+        "detail": "One person was killed and three others injured in a shooting targeting an oil refinery.",
+        "location": "Erbil and Kirkuk, Iraq"
+      },
+      {
+        "event_id": "865edd6b3d45fd4d",
+        "severity": "HIGH",
+        "category": "Attacks",
+        "headline": "Security Personnel Killed in Armed Attack in Libya",
+        "detail": "A security personnel member was killed in an armed attack, which the government confirmed as a terrorist act.",
+        "location": "Libya"
+      },
+      {
+        "event_id": "a1c635c44af6c8c6",
+        "severity": "SIGNIFICANT",
         "category": "Arrests",
-        "headline": "Massive terrorist plot foiled at Temple Mount with arrest of suspect",
-        "detail": "A 19-year-old from East Jerusalem was arrested, foiling a major terrorist plot planned for the Temple Mount.",
-        "location": "Jerusalem, Israel"
+        "headline": "New Criminal Cases Opened Against Suspect in Shopping Mall Terrorist Plot in Adygea",
+        "detail": "Authorities in Adygea have opened new criminal cases against a suspect previously detained for preparing a terrorist attack at a shopping mall.",
+        "location": "Adygea, Russia"
       },
       {
-        "event_id": "bbaa909706673ccd",
-        "severity": "HIGH",
-        "category": "Counter Terrorism Action",
-        "headline": "Nigerian army kills ISWAP leaders and fighters in Borno",
-        "detail": "The Nigerian military announced a successful offensive operation in Borno State resulting in the killing of several ISWAP terrorist leaders and Arab fighters.",
-        "location": "Kukawa, Nigeria"
-      },
-      {
-        "event_id": "e837261346026238",
+        "event_id": "0cc45e3c49079998",
         "severity": "SIGNIFICANT",
         "category": "Attacks",
-        "headline": "Deaths reported in alleged Venezuelan airstrike on ELN camp",
-        "detail": "Multiple reports indicate an airstrike by Venezuelan military forces on an ELN guerrilla camp in the border state of Apure, resulting in fatalities.",
-        "location": "Apure, Venezuela"
-      },
-      {
-        "event_id": "700d37f40edbdcda",
-        "severity": "SIGNIFICANT",
-        "category": "Attacks",
-        "headline": "Massacre prevented in Jerusalem: Massive combined terrorist attack foiled",
-        "detail": "Israeli security forces thwarted a massive, complex terrorist plot involving explosives and firearms aimed at causing mass casualties in Jerusalem.",
-        "location": "Jerusalem, Israel"
+        "headline": "Clashes Between ELN and Clan del Golfo in Chocó Leave Two Dead and Displaced",
+        "detail": "Armed clashes between the ELN and Clan del Golfo resulted in two deaths, one disappearance, and hundreds of displaced persons.",
+        "location": "Chocó, Colombia"
       }
     ],
-    "warning": "Gemini trend temporary error 503",
-    "top_hash": "c26441f85d68f96d453bb0c8f4b55301c4c17183452d6dc9f5089b5c80925b0e",
-    "top_event_count": 10,
+    "status": "ok",
+    "model": "gemini-3.5-flash-lite",
+    "window_hours": 24,
+    "generated_at": "2026-11-05T23:09:58.330910+00:00",
+    "candidate_events": 8,
+    "top_hash": "4b6aaa8f84e8bb1a97a9f51fc447fb31610eb4898b7ca63d7dd9040b08765731",
+    "top_event_count": 8,
     "reused": false
   },
   "weekly_analysis": {
     "status": "ok",
     "version": "weekly-analysis-v2-analytical-synthesis",
     "model": "gemini-3.5-flash-lite",
-    "generated_at": "2026-11-01T17:14:23.693912+00:00",
-    "sunday_key": "2026-11-01",
-    "trigger": "scheduled_sunday",
-    "title": "Weekly Counter-Terrorism and Criminal Analysis Assessment: 25 October to 1 November 2026",
-    "analysis": "EXECUTIVE ASSESSMENT. This weekly counter-terrorism criminal-analysis assessment covers the reporting period from 2026-10-25T17:14:23.693912+00:00 to 2026-11-01T17:14:23.693912+00:00, compared against the preceding period from 2026-10-18T17:14:23.693912+00:00 to 2026-10-25T17:14:23.693912+00:00. The global threat picture during the current period is characterized by persistent tactical adaptation in asymmetrical warfare, notably the sustained employment of weaponized drones and vehicle-borne improvised explosive devices (VBIEDs) by non-state actors in Latin America and the Middle East, alongside aggressive kinetic counter-terrorism (CT) campaigns in West Africa and the Levant. Rather than indicating isolated criminal acts, distinct incidents point to three central developments: the maturation of drone delivery mechanisms by dissident factions in Colombia, cross-border infiltration attempts along the Syrian-Jordanian and Yemeni corridors, and heightened lone-actor and extremist threat vectors targeting religious and state infrastructure across Europe and Russia. State responses increasingly emphasize proactive logistics disruption—such as the targeted destruction of material depots and financial networks—to blunt the operational tempo of entrenched militant groups. KEY CHANGES. A material change in the operational landscape is the intensified tactical reliance on unmanned aerial systems (UAS) for offensive strikes by armed groups in Colombia, specifically highlighted by repeat drone attacks in Catatumbo and the capture of key technical personnel such as ELN drone operator alias 'El Compita' in Cesar. This represents an operational evolution from auxiliary surveillance to regular kinetic delivery against security installations, persisting as a stable tactical trend rather than a single event. A second material change involves cross-border logistical interdiction: security forces in Yemen successfully intercepted a major Houthi weapons and explosive-laden truck in Shabwah Governorate, which parallels proactive raids in Tripoli and Lebanon targeting C4 and explosive components. This indicates an ongoing effort by regional actors to choke supply lines feeding maritime and land attacks. A third notable shift is the geographic dispersion of foiled high-visibility plots targeting religious sites in Western Europe, evidenced by the arrest of suspects planning attacks against a synagogue and mosque in Milan, and the disruption of a mass terror plot against a Roman synagogue. These developments confirm an active intent among violent extremists to target Jewish and Islamic community hubs, maintaining continuity with preceding threats while reflecting adaptive local cell structures. GEOGRAPHIC / OPERATIONAL SHIFTS. Operational activity concentrated heavily in Latin America, West Africa, and the Middle East, anchored by distinct kinetic engagements rather than raw reporting volume. In Colombia, activity clustered intensely within Cauca, Cesar, and the border zones with Venezuela, where FARC dissident factions and the ELN executed multiple explosive attacks on critical infrastructure and police stations, prompting extensive military counter-operations including the bombing of insurgent camps and the destruction of drone explosive caches in Buenaventura and Cajibío. In Nigeria, intense military operations in Borno, Yobe, and Lake Chad by Operation Hadin Kai resulted in high-casualty engagements against ISWAP and Boko Haram elements, contrasting with major insurgent ambushes such as the Lakurawa attacks in Kebbi State. In the Middle East, the theater remained dominated by Houthi offensive actions against regional infrastructure—including strikes near Aden airport and attempted drone/missile launches toward Saudi Arabia—which met with heavy coalition air campaigns and localized ground countermeasures by Yemeni government and allied forces. Meanwhile, active counter-terrorism sweeps in Syria and Jordan targeted infiltration corridors and domestic militant cells following church and state infrastructure threats. SIGNIFICANT DEVELOPMENTS. Several distinct incidents carry high operational significance due to the capabilities demonstrated and vulnerabilities exposed. First, the capture of alias 'El Compita' alongside the seizure of a large-scale drone explosive depot in Buenaventura demonstrates that Colombian armed groups are systematically scaling up indigenous drone warfare capabilities, exposing vulnerabilities in fixed-position police and military installations. Second, the Israeli Defense Forces' targeted strike in Gaza killing two operatives tied directly to Hamas financial networks—which transferred millions of funds from Iran and Turkey—illustrates an operational shift toward dismantling transnational financial pipelines rather than solely neutralizing frontline combatants. Third, the arrest of suspects preparing synchronized attacks against a synagogue and mosque in Milan, alongside the disruption of a mass terror plot in Rome, exposes resilient transnational extremist networks capable of exploiting local vulnerabilities for multi-target ideological attacks in Europe. Fourth, the thwarting of a Houthi weapons truck and C4 cache in Shabwah Governorate highlights the critical importance of regional interior lines in disrupting maritime and asymmetric missile supply chains. OUTLOOK / WATCHPOINTS. Analysts should monitor the following observable indicators during the next reporting cycle: First, track whether FARC dissident and ELN drone attacks in Colombia expand from localized police station targets to economic infrastructure, which would indicate a broader tactical escalation requiring enhanced electronic countermeasures and airspace monitoring. Second, observe if additional kinetic interdictions along the Syrian-Jordanian border follow the recent border guard foil and subsequent airstrikes, which would clarify whether infiltration routes are undergoing sustained militarization. Third, monitor intelligence-sharing outcomes and subsequent arrests following the U.S. warning and FSB detentions regarding terrorist threats in Moscow, providing insight into cross-border intelligence cooperation and domestic threat group resilience. Fourth, watch for retaliatory financial transactions or shifts in underground banking methods following the Yemeni Prosecutor General’s asset freeze on Houthi-linked entities, which will test the efficacy of financial counter-terrorism sanctions in cutting off militant supply chains.",
-    "current_period_start": "2026-10-25T17:14:23.693912+00:00",
-    "current_period_end": "2026-11-01T17:14:23.693912+00:00",
-    "comparison_period_start": "2026-10-18T17:14:23.693912+00:00",
-    "comparison_period_end": "2026-10-25T17:14:23.693912+00:00",
-    "current_event_count": 1112,
-    "comparison_event_count": 1006
+    "generated_at": "2026-11-05T23:10:16.238248+00:00",
+    "sunday_key": "",
+    "trigger": "owner_request",
+    "title": "Weekly Counter-Terrorism and Criminal Analysis Assessment",
+    "analysis": "EXECUTIVE ASSESSMENT: This assessment evaluates the global counter-terrorism and security threat picture between the current period of October 29, 2026, and November 5, 2026, compared immediately against the preceding period of October 22, 2026, to October 29, 2026. The operational environment this week is characterized by a continued high tempo of kinetic state-level counter-terrorism actions, persistent asymmetric attacks utilizing vehicle-borne improvised explosive devices (VBIEDs) and commercial drones, and robust intelligence sharing across international borders to disrupt complex plots. While raw event metrics varied, the core threat landscape remained stable: domestic insurgent networks in Colombia and Nigeria continued sustained asymmetric campaigns against infrastructure and security checkpoints, while European and Russian jurisdictions experienced acute domestic threat disruptions, particularly concerning lone-actor plots and right-wing extremism. International intelligence cooperation proved operationally decisive, notably via intelligence-sharing vectors that thwarted high-consequence attacks in urban centers. KEY CHANGES: A material change in the current period involves an increased reliance on international intelligence-sharing mechanisms to thwart domestic terrorist plots, specifically highlighted by US intelligence warnings leading directly to preemptive arrests and disrupted plots by the Russian FSB in Moscow. This represents a functional continuation of cross-border counter-terrorism collaboration despite geopolitical tensions, rather than a novel trend. A second operational change involves the tactical evolution of explosive delivery mechanisms in South America, where armed groups increasingly integrate drone harassment and localized explosive depots alongside traditional vehicle and motorcycle bombings, as evidenced by multiple incidents across Colombia's Cauca and Tolima departments. This reflects a steady tactical adaptation rather than an isolated anomaly. Finally, threat actors in Europe demonstrated a continuing intent to target religious and migrant infrastructure, illustrated by disrupted plots in Germany (Lower Saxony and northern Germany) and Italy (Rome), confirming persistent violent extremist persistence across western theaters. GEOGRAPHIC / OPERATIONAL SHIFTS: Operational activity remained heavily concentrated in traditional conflict zones and asymmetric flashpoints, led by Nigeria, Colombia, and Yemen. In Nigeria, security forces focused heavily on combat counter-terrorism operations, resulting in significant militant attrition in Borno and Yobe states against ISWAP and Lakurawa elements. In Colombia, distinct attack patterns shifted slightly toward urban and peri-urban infrastructure targeting, marked by multiple explosive device detonations targeting critical transport routes and toll booths along the Pan-American Highway in Cauca and Nariño. In the Middle East, Houthi-linked maritime and regional missile/drone launch attempts persisted against Saudi infrastructure and Yemeni frontlines, while Israeli forces sustained a high tempo of targeted kinetic strikes and cell dismantling operations across the West Bank and Gaza Strip. SIGNIFICANT DEVELOPMENTS: Several specific incidents underscore critical operational capabilities and vulnerabilities. In Syria, authorities foiled a distinct plot by Hezbollah targeting the Homs oil refinery in Baniyas, demonstrating persistent threat actor intent to strike strategic energy infrastructure and exposing vulnerabilities in domestic industrial security. In Russia, the FSB disrupted multiple terrorist plots involving explosive-rigged drone control goggles, highlighting ongoing tactical experimentation with modified consumer technology for remote-detonation attacks. In Italy, security forces successfully thwarted a mass terror attack plot targeting a Rome synagogue, with the apprehended suspect leaving an ideological will, exposing the persistent danger posed by radicalized lone actors operating inside European urban centers. In Colombia, the continuous use of improvised motorcycle and truck bombs across multiple departments—such as the fatal blast in Planadas, Tolima—illustrates the resilient explosive manufacturing capacity of dissident factions despite localized military seizures of precursor materials. OUTLOOK / WATCHPOINTS: Analysts should monitor three specific observable indicators in the coming week. First, track whether international intelligence-sharing channels yield further preemptive disruptions in European and Russian capitals, which would validate a broader trend of enhanced counter-terrorism intelligence cooperation against lone-actor threats. Second, observe whether Colombian security operations in Cauca and Valle del Cauca successfully neutralize the identified drone explosive depots belonging to FARC dissident factions, as this will clarify whether insurgent groups can sustain their aerial bombing campaign against infrastructure. Third, monitor Houthi military posture along Yemeni frontlines and maritime approaches to determine if recent asset freezes and targeted leadership neutralizations degrade their capacity to launch complex cross-border drone strikes.",
+    "current_period_start": "2026-10-29T23:10:16.238248+00:00",
+    "current_period_end": "2026-11-05T23:10:16.238248+00:00",
+    "comparison_period_start": "2026-10-22T23:10:16.238248+00:00",
+    "comparison_period_end": "2026-10-29T23:10:16.238248+00:00",
+    "current_event_count": 775,
+    "comparison_event_count": 990
   },
   "ai_article_selection": {
     "enabled": true,
@@ -894,12 +639,10 @@
     "Hausa": [],
     "Swahili": []
   },
-  "backfill_completed_queries": {},
   "incremental_collection_stats": {
-    "already_reviewed_articles": 1379,
-    "duplicate_input_articles": 3794
+    "already_reviewed_articles": 1273,
+    "duplicate_input_articles": 3837
   },
-  "last_collection_scope": "all",
   "last_planned_query_count": 1222,
   "specialist_coverage": {
     "maritime_sources": [
@@ -982,8 +725,8 @@
     "UK Government / Counter-Terrorism",
     "INTERPOL English News"
   ],
-  "last_updated": "2026-11-05T18:04:12.231836+00:00",
-  "number_of_events": 6380,
+  "last_updated": "2026-11-05T23:10:25.362007+00:00",
+  "number_of_events": 6381,
   "events": [
     {
       "id": "0cc45e3c49079998",
@@ -1004,14 +747,14 @@
       "source_count": 1,
       "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxNUzhtekdGdlVZVmgzYlFrdE5kRnlEc1VnQldvLVlkZXNzbC1uVDd4NE1aWlV5RWp0NXdycWRpalRmaUxlSFVkejJfUjZMYkh4dFhsN21zM0ctaENnU3hVQk11U2V4cXhKa09BZko5akFocjRNeTRrclAzQ2NteVFCNXBDeHFXd0UtUWNVcWkwbDFHMDg5MlN6OFpuSFcwb3dLcDhBQU5hZ0l0eU9STWxva21OaG9Yc3lqa0RrLXBjVEJXcTVGNU41eHJsY2NKSDdDLWpoa3ZDNWZZelhiVXVfblBMNFp4QkUybWh3?oc=5",
       "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
+      "country": "Colombia",
+      "country_code": "CO",
       "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "region": "Choc3",
+      "latitude": 6.5,
+      "longitude": -77.0,
+      "location_precision": "region",
+      "location_confidence": "high",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "semana.com",
       "targeted_source_kind": "local_language_media",
@@ -1047,18 +790,22 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "awaiting_ai_geolocation",
-      "location_evidence": [],
+      "location_confidence_score": 0.9,
+      "location_method": "ai_region_coordinates",
+      "location_evidence": [
+        "Choc3"
+      ],
       "excluded_from_map": false,
-      "ai_geo_complete": false,
+      "ai_geo_complete": true,
       "ai_geo_rescue_complete": false,
       "ai_geo_rescue_status": null,
       "ai_geo_rescue_model": null,
       "ai_geo_rescue_reason": null,
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": null,
-      "ai_geo_reason": "Awaiting Gemini semantic geolocation"
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Clashes between ELN and Clan del Golfo occurred in Choc3 department.",
+      "ai_geo_fingerprint": "64be8b3dcad1dcde7305ad159cb0c12c065827dff45c9c3fa956196f6368ed78",
+      "ai_geo_inferred": false
     },
     {
       "id": "13817a84ccdda4ec",
@@ -1079,14 +826,14 @@
       "source_count": 1,
       "url": "https://news.google.com/rss/articles/CBMijwRBVV95cUxORmt2a3djUmdRSmpndkIweDhJRi1fTVQwbFN4WllqdDRtMFViMWRwajgxWEN4R19VdVg4SzBmWEtucFhqRm5RVzZMcmNCUFVSSERoT29udWhNRDM0YlFxNkt2akNTR0d0ajk3U21JSmc0V05BNTVtNkI2Z25Md20xLVFHYU9IOXcwNXJRZDVmZXVoOHRkcDJZSXhuTUZ4cmpmUnFqNGlqR3ZZLVoyaGN1YVlOOFFyU0o5dHdnRldVWlltV093T3pTbUdRd2RvdFhTYmJDbHgzYl85cThZVkYyNG5wbUs2aGZyX2xaenVFRHh6OWU1RUNhVG1vT1pRYVAwQ1hsRWhWTUJTTWZGNklzUWR2TVkwTVEzaWUtRi1XSzdQTTM1aDVRcWZvbE9ubzQwbEJna0xmbGtqbF9pTU5uUFpwYkpWdWJvQUQ2dExvNUk1djJzX2lsM0VPbEVKdXlyQXo5Y1dMRVJvYndiV3JfRUVYaTlmbGxHbVpBMG1Vay1oaWREVDY2a2ZqbjBVMEdNLVF4Y1VQZ1R1a0VLdFZGXzY3Q0JVcGZ3YnlFc2FpN2VQX21uUWg5dHJ5bXlYYnoxXzR5ZUc0OVNkTGZpTHM5bXNfLXdVT0lxMFhhdWR4dTBwS3d5RDZtQkd6aUJ1WFBmYjNaanBva3RxbExveU1yX2dUZFI1bXBHVUlWbGF2bw?oc=5",
       "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
+      "country": "Iraq",
+      "country_code": "IQ",
       "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "region": "Erbil / Kirkuk",
+      "latitude": 35.5,
+      "longitude": 44.0,
+      "location_precision": "region",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "alsumaria.tv",
       "targeted_source_kind": "local_language_media",
@@ -1122,18 +869,22 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "awaiting_ai_geolocation",
-      "location_evidence": [],
+      "location_confidence_score": 0.8,
+      "location_method": "ai_region_coordinates",
+      "location_evidence": [
+        "مصفاة نفط بين أربيل وكركوك"
+      ],
       "excluded_from_map": false,
-      "ai_geo_complete": false,
+      "ai_geo_complete": true,
       "ai_geo_rescue_complete": false,
       "ai_geo_rescue_status": null,
       "ai_geo_rescue_model": null,
       "ai_geo_rescue_reason": null,
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": null,
-      "ai_geo_reason": "Awaiting Gemini semantic geolocation"
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The oil refinery shooting took place in the area between Erbil and Kirkuk.",
+      "ai_geo_fingerprint": "83f61d7c15a386c71d512de7d774d805cf97b689ed00c08eeb77116e59a70578",
+      "ai_geo_inferred": false
     },
     {
       "id": "865edd6b3d45fd4d",
@@ -1154,14 +905,14 @@
       "source_count": 1,
       "url": "https://news.google.com/rss/articles/CBMiwAJBVV95cUxOYk9yLU8xZDd2WGFSWVVQZ0FrSG9wS3FsY2JBcllEQ2MwRERMVGt1OUYwTk9hdElLanBpazRUakJEa2Q2ZmMzU3AwY0RRNXBlMUFuY3NUazIweTI4Ui1ramxLZV9nRC0tR19aQkdQdTFrQ1NWYmUxVkhzUXg4anJLQ1RGODByUHRnRTJSSThGdGlBaGdscVFXY2xaVWZzY1NtdG5ETDItcmFhdmM4cFR2M2M1aXIyZlZTeEQxUjhXN1kzTW5qU3BkbG91RGVSXzZJa1E4bmlpWk9yZ1R4NTBNMDVHVTF5YVF1YnMwd25SMEU1RVkxODd3UGxDcVQtbUdSZ3FockNSSWs1WjZhdi13OGNXM2ROSHdyNm1Fb1NqVEdUbGk1eTVOUnRSczktd0g3cGI5YkZ0OVpUaFVvTDh2YQ?oc=5",
       "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
-      "city": null,
+      "country": "Libya",
+      "country_code": "LY",
+      "city": "Tripoli",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 32.88743,
+      "longitude": 13.18733,
+      "location_precision": "country_capital",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "1a5f1581acd3f53bfdefd88c2b7f1589c5510e441195c4e7ee0db76d019b6cf7"
@@ -1195,18 +946,22 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "awaiting_ai_geolocation",
-      "location_evidence": [],
+      "location_confidence_score": 0.8,
+      "location_method": "ai_country_capital",
+      "location_evidence": [
+        "ليبيا"
+      ],
       "excluded_from_map": false,
-      "ai_geo_complete": false,
+      "ai_geo_complete": true,
       "ai_geo_rescue_complete": false,
       "ai_geo_rescue_status": null,
       "ai_geo_rescue_model": null,
       "ai_geo_rescue_reason": null,
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": null,
-      "ai_geo_reason": "Awaiting Gemini semantic geolocation"
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The armed attack on security personnel occurred in Libya.",
+      "ai_geo_fingerprint": "2cb2aa6247f5185e6c68f5c2522a858e30e89f7726b37b7887eeed11c5e11c0f",
+      "ai_geo_inferred": false
     },
     {
       "id": "a1c635c44af6c8c6",
@@ -1228,14 +983,14 @@
       "source_count": 1,
       "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPbTZMcm53dktLc1Jzc1A5WGVkZjFiNmp5alg4ZzZfY1lGT2RFSVM1WkRmSHFhMElkYXFTMGdXMEotc2UwWUNWQUNnV2o3cEFGMWhvX3d6Vy16clhpOUV4ZW14RjdfUG02b2RfOW0zRWNub094ZjNRbFFibnMzSW9HN3VtMUVQNDZldUVvTUJqTjhZQzA?oc=5",
       "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
+      "country": "Russia",
+      "country_code": "RU",
       "city": null,
-      "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "region": "Adygea",
+      "latitude": 44.6,
+      "longitude": 40.1,
+      "location_precision": "region",
+      "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "a586c4aaebeb5d6b9cb303c50a3f309a55292957da0df683f13c2e892eb1bf9d"
@@ -1269,18 +1024,22 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "awaiting_ai_geolocation",
-      "location_evidence": [],
+      "location_confidence_score": 0.9,
+      "location_method": "ai_region_coordinates",
+      "location_evidence": [
+        "В Адыгее"
+      ],
       "excluded_from_map": false,
-      "ai_geo_complete": false,
+      "ai_geo_complete": true,
       "ai_geo_rescue_complete": false,
       "ai_geo_rescue_status": null,
       "ai_geo_rescue_model": null,
       "ai_geo_rescue_reason": null,
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": null,
-      "ai_geo_reason": "Awaiting Gemini semantic geolocation"
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "Criminal cases opened against the suspect in the Republic of Adygea, Russia.",
+      "ai_geo_fingerprint": "9fcf181ef036d62409f680f453c29bfe3f5159ee14173cd78259b28a70c0d040",
+      "ai_geo_inferred": false
     },
     {
       "id": "c295b0a3b24ee594",
@@ -1301,8 +1060,8 @@
       "source_count": 1,
       "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxOYW9YUzRyRHVFOXkwN2U3aEp0bzZkWWpxdnZFdHkyNmxmcG5jVjdnVlpTTGM3dnhtamZGRlMxOFNVUG5LRnNoQk5yV0RWQlFxRlFUbUVxdnp4QndsTDNUUlE4NWJuNEdxc3d2NTRfSXE2RFN1S0FqNGl2WllNUzhiNjZhWnB2ZXdEQm1YbkFhUzd1cENGMlNFX2tLZ2R2ck94WEk0WkRPSnFjZEpFRUs2QmhtUVVraE5WWWkta3ZGWnNhelJPZGd2M294NzR2aU5GS2FnZUpobG1ySmlQVk5QZXB3?oc=5",
       "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
+      "country": "Colombia",
+      "country_code": "CO",
       "city": null,
       "region": null,
       "latitude": null,
@@ -1347,17 +1106,25 @@
       ],
       "cbrn_subgroups": [],
       "location_confidence_score": 0.0,
-      "location_method": "awaiting_ai_geolocation",
-      "location_evidence": [],
+      "location_method": "unresolved_city_no_capital_fallback",
+      "location_evidence": [
+        "Alcald3a de Bogot3"
+      ],
       "excluded_from_map": false,
-      "ai_geo_complete": false,
+      "ai_geo_complete": true,
       "ai_geo_rescue_complete": false,
       "ai_geo_rescue_status": null,
       "ai_geo_rescue_model": null,
       "ai_geo_rescue_reason": null,
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": null,
-      "ai_geo_reason": "Awaiting Gemini semantic geolocation"
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The terrorist threats were sent from the email account of the Bogot3 Mayor's Office.",
+      "geolocation_review_required": true,
+      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_requested_city": "Bogot3",
+      "ai_geo_fingerprint": "a14adb5c52c71c6a6ec1e5ad6cdd206c5b7a82ec570595e6739e7f729fa13785",
+      "ai_geo_inferred": false,
+      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
     },
     {
       "id": "a2cb194fb52533e6",
@@ -1378,14 +1145,14 @@
       "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMiwwJBVV95cUxPQ0hKRkJVZXZiTTBJZkNFaTJ2RVhJcnllZlNNVUpkWnY5TDZaTnpndWc2RDZBaVdVNngzYUlSeUZhbmloZi1rTFVhWDktVlkyUWl2UHg4RDdxN0hJcFhuT1RWU0VCYWpFTnpEWW16RWZjRi1pbGFueU9vZWFGc1RjTkZWTURhRjhCbnhXQU1hSFZoTGhlQ0Q1VlBDUndwN1BKWDNmZzcteXp1NS1oUGtOTnBSOHRZZ3ZpanY4WjZOYzBQbG9jcDVHUUNuR2M1dGVVVjFpd0tBWkg1S1lCTG94dndtM3RKTGRGNDRfdzF0TDc3dWM2QXBUWVZEOVZTV1g3Ty1zVFQ2eHJaWlZzakN2S3VjcTB0ZllkSEVYdXVjdlkxd1J4eHFlZ0pTOWRGUVlRYjg4Y1JrWXJld3A4bTdSSmhoRQ?oc=5",
       "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
-      "city": null,
+      "country": "Syria",
+      "country_code": "SY",
+      "city": "Ma‘arrat an Nu‘mān",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 35.6483,
+      "longitude": 36.67693,
+      "location_precision": "city",
+      "location_confidence": "high",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "syriahr.com",
       "targeted_source_kind": "local_language_media",
@@ -1438,18 +1205,22 @@
       "dedup_methods": [
         "very_high_title_similarity"
       ],
-      "location_confidence_score": 0.0,
-      "location_method": "awaiting_ai_geolocation",
-      "location_evidence": [],
+      "location_confidence_score": 0.95,
+      "location_method": "ai_city_geonames",
+      "location_evidence": [
+        "معرة النعمان"
+      ],
       "excluded_from_map": false,
-      "ai_geo_complete": false,
+      "ai_geo_complete": true,
       "ai_geo_rescue_complete": false,
       "ai_geo_rescue_status": null,
       "ai_geo_rescue_model": null,
       "ai_geo_rescue_reason": null,
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": null,
-      "ai_geo_reason": "Awaiting Gemini semantic geolocation"
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "RPG attack targeted a road security building in Maarrat al-Nu'man, Idlib countryside.",
+      "ai_geo_fingerprint": "f3b98215ffb7f1a105c0288d4d06d7c90477ef90fadc91ce0dd29f5576a371ff",
+      "ai_geo_inferred": false
     },
     {
       "id": "59adfee8d1d11be8",
@@ -1470,14 +1241,14 @@
       "source_count": 1,
       "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE54ZTRCTXFMbEpHZERWRi1tZGRFYXdyVTkxUWhZT0RyMW9rQ1RfNGU1cDVSenBjNEJBQzVLbEZlWEZvYkpudUd2TkJLa2diOFE?oc=5",
       "collector": "Google News RSS",
-      "country": null,
-      "country_code": null,
-      "city": null,
+      "country": "Jordan",
+      "country_code": "JO",
+      "city": "Amman",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 31.95522,
+      "longitude": 35.94503,
+      "location_precision": "city",
+      "location_confidence": "high",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "sana.sy",
       "targeted_source_kind": "local_language_media",
@@ -1513,18 +1284,22 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "awaiting_ai_geolocation",
-      "location_evidence": [],
+      "location_confidence_score": 0.95,
+      "location_method": "ai_city_geonames",
+      "location_evidence": [
+        "بعمان"
+      ],
       "excluded_from_map": false,
-      "ai_geo_complete": false,
+      "ai_geo_complete": true,
       "ai_geo_rescue_complete": false,
       "ai_geo_rescue_status": null,
       "ai_geo_rescue_model": null,
       "ai_geo_rescue_reason": null,
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": null,
-      "ai_geo_reason": "Awaiting Gemini semantic geolocation"
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The attack took place in Amman, Jordan.",
+      "ai_geo_fingerprint": "95e8180a34e6e903fd759126c3e058bce796563e6961a696b529dc157128ae95",
+      "ai_geo_inferred": false
     },
     {
       "id": "94bb9d67e1251fe8",
@@ -18849,111 +18624,6 @@
       "dedup_methods": [
         "paraphrase_entity_context"
       ]
-    },
-    {
-      "id": "c7eac6b268ab5af8",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Trappes racist attack update: 30 victims identified",
-      "summary": "The national anti-terrorism prosecutor reports that 30 victims have been identified in the Trappes racist attack.",
-      "original_title": "Attentat raciste de Trappes : 30 victimes ont été identifiées, selon le procureur national antiterroriste",
-      "original_summary": "Attentat raciste de Trappes : 30 victimes ont été identifiées, selon le procureur national antiterroriste Le Monde.fr",
-      "original_language": "fr",
-      "collection_language": "fr",
-      "collection_language_name": "French",
-      "collection_locale": "FR:fr",
-      "published": "2026-11-03T09:03:03+00:00",
-      "source": "Le Monde.fr",
-      "source_count": 3,
-      "url": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxPbjZJY1NaYWlhTTNsbW9XRGRZWkZEUEQwUklyY2kzYXFMYUtWb0l4U21qVDNRVmFfMEZhUUUwdGtJRkk5UGxwX0p4YnZRcF9hdlVQU2N6d1I5WEZqN0szWkpUZUE0bjc5blB2TEt5TjBMOHJPWEQyc1BNNnFXR2NLMlhjcXdORjBjbEdSLXdRR1VRb0JfT2FTUGc2eFREMzhmVVhXcExjMmZRSGpWS1BpVnBsUXZDV1ZWRlJTU3pJS3JOWDNrYk45Q095ZW9uYnJBMHFoQ0FybTRjRTB1YXU5S0ozOVlmcXl1eXI5MVIzQm9xcldkU2FEakx0UVM4Q1U?oc=5",
-      "collector": "Google News RSS",
-      "country": "France",
-      "country_code": "FR",
-      "city": "Trappes",
-      "region": null,
-      "latitude": 48.77413,
-      "longitude": 2.01781,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "3657aa37e390a899d48277d87490f844418a822e77a7a2741bd19bd586d6eb49",
-        "6ef88a461b0c6470b5e98b448f57ef936a81be19ad68cc2b4901b3f9a96604a2",
-        "c854348863fa98d80202eddd62b99f3b148bb96d29145fed5ca339fd3a3092f1"
-      ],
-      "sources": [
-        "Le Monde.fr",
-        "Libération",
-        "20 Minutes"
-      ],
-      "related_articles": [
-        {
-          "title": "Trappes racist attack update: perpetrator bought weapon clandestinely",
-          "original_title": "Attentat raciste de Trappes : Kevin T. avait acheté son arme «clandestinement»",
-          "original_language": "fr",
-          "summary": "New information reveals that the perpetrator of the racist attack in Trappes acquired his weapon through clandestine channels.",
-          "published": "2026-11-03T09:40:49+00:00",
-          "source": "Libération",
-          "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxPY3pNOG1pYjJWZlpENEVyRFVhMEQ3M1Itb0pJU1ZjX3F6VUtZMmNVZ2w1TUk5dTZTN2xndFpqcklTSUkyM3JVSDF3dmlZa0YyVDB0UTZUZTI4Z0MwSkNOaV8wWTM2RzRvX0xCc3FWQW1sUjk4TEUwbE80QV9WRE4tQjR5UGEtR2YxTjRVRE1rUXY3ZmhpLWRzWm9CVExrb1V3QmdDVGdTTF82dTBGU09CVExESDlsaUdBLXpCUzQtdGc2RXZ3VmZOeXk5ZURrTEpTQnZyb1dIU3dlQUFHSmhMemR1Z1NCLVBLaGppc2ltVQ?oc=5"
-        },
-        {
-          "title": "L’auteur de l’attentat de Trappes a acheté son arme « clandestinement »",
-          "original_title": "L’auteur de l’attentat de Trappes a acheté son arme « clandestinement »",
-          "original_language": "fr",
-          "summary": "L’auteur de l’attentat de Trappes a acheté son arme « clandestinement » 20 Minutes",
-          "published": "2026-11-03T09:41:00+00:00",
-          "source": "20 Minutes",
-          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQMDRDLUdWUE9xeEpydnJudnFTVlJ2LVZqWmhKU0NHM0tnZWtxRFBYOEoyaUxQUkxkSWRWeXltTHNIVTB3dUNiUzQxRExLeUdRTFVKdldNM1duYzltNHpXOUYxM2VRNjVHdTFybnZLc1dkMkkxd2dib3U2LUdPM041Zkd5eTA3MExpVGJFbXlwOS1lVHJWeThzejE2bEJXMFJ0M3JUdUlvQWVUWkZhUDRDaS1aRnp1SFB5Nl9LMmRabVVXdHM?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-11-03T09:03:03+00:00",
-      "last_reported": "2026-11-03T09:40:49+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Operational update regarding the victim count of a terrorist attack.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "OTHER_CT",
-      "is_attack": false,
-      "incident_anchor": "Trappes attack 2026",
-      "update_type": "INVESTIGATION_UPDATE",
-      "incident_id": "inc-c2cd6029cf922677",
-      "translated_to_english": true,
-      "ai_canonical_event": "Trappes racist attack 2026-11-03",
-      "title_variants": [
-        "Trappes racist attack 2026-11-03"
-      ],
-      "actor_scope": "UNKNOWN",
-      "cbrn_subgroups": [],
-      "threat_categories": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "primary_source_published": "2026-11-03T09:03:03+00:00",
-      "dedup_confidence": 0.99,
-      "dedup_methods": [
-        "same_normalized_title"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Attentat raciste de Trappes"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The racist attack occurred in Trappes, France.",
-      "ai_geo_fingerprint": "a3beda54be812a3473cc12c2bcc5ae83f9eceb4f2980ecea4f8ba16f40b70d92",
-      "ai_geo_inferred": false
     },
     {
       "id": "f0b55eb08c021011",
@@ -38493,6 +38163,100 @@
       "dedup_review_required": true
     },
     {
+      "id": "78ad6656fdc3d5b5",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Police and Army statement on the attack in Algeciras, Huila",
+      "summary": "The National Police and Army issued a joint statement regarding the recent attack in Algeciras, Huila.",
+      "original_title": "Pronunciamiento de la Policía Nacional y el Ejército sobre el atentado en Algeciras, Huila",
+      "original_summary": "Pronunciamiento de la Policía Nacional y el Ejército sobre el atentado en Algeciras, Huila Infobae",
+      "original_language": "es",
+      "collection_language": "es",
+      "collection_language_name": "Spanish / Latin America",
+      "collection_locale": "MX:es-419",
+      "published": "2026-11-01T21:48:29+00:00",
+      "source": "Infobae",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPRWN5Q1R0LU9iakZmUTlMLTczWnJPQi12amo1MzF3T2xNbWNicml3akdxTkZ0eUpyU1lySTJYYUs5OEVmZUtkMkRFeDVvSzVENVZxOEF1djUwNUFuNHBRS1A4ZUdwbXNxU1VNX3l1Vjc2ci1RM0RxX0k5MEVoOWVJcHhXWUxxTWhxSjFRd29wREVLRG1IdzF5ZlVJVU5ILTJoMWtKazE4Wk9DTjJqZnppOFVKUkYzNzBZbnpRak9BODRtYlBzMkJQUUZGTWtXNHZOR1BaRw?oc=5",
+      "collector": "Google News RSS",
+      "country": "Colombia",
+      "country_code": "CO",
+      "city": "Algeciras",
+      "region": null,
+      "latitude": 2.52385,
+      "longitude": -75.31733,
+      "location_precision": "city",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_discovery",
+      "source_article_fingerprints": [
+        "ab9ee129578f9a423912e3f74453d41e05f3db6b0b9a50a6aca04683ea9c444d",
+        "ff83f9de68b52137564d34277ed440d001fc3b0ec18e6cdbbb75756e0ae758af"
+      ],
+      "sources": [
+        "Infobae"
+      ],
+      "related_articles": [
+        {
+          "title": "National Police reinforces security after attack in Algeciras",
+          "original_title": "La Policía Nacional refuerza la seguridad con despliegue de uniformados tras atentado en Algeciras",
+          "original_language": "es",
+          "summary": "Following an attack in Algeciras, the National Police deployed additional forces to reinforce local security.",
+          "published": "2026-11-01T21:53:33+00:00",
+          "source": "Infobae",
+          "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxNU2NOWEdUWU5tU2FNSHFZekpGMmE2bzRmN2FIeTg2OFVJdFBLN1B4Z0F0Y0VXaTlFa1JTcGlRMy1YajU5X0RRck14bm9wN2xwOXBFbnl0dWVocWotMkVUMEtOYVFkQm9mTUl4SkdOMDhHeWM4aFRGTnNkRGZtb1J5ZWJXSVRBUWRGR0xXbHFSdVo1RXRrMS1KNG5STUI5UkdHdTlGbm00TFZVTWdON0E0NHZzOHFVR3VVYzM3b2JFLXRVZi1Iei1TN3NPWVRZNXJrMEllTlpkYWFRMHpIRWtoSg?oc=5"
+        }
+      ],
+      "article_count": 2,
+      "first_reported": "2026-11-01T21:48:29+00:00",
+      "last_reported": "2026-11-01T21:53:33+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Official statement following an attack.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "OTHER_CT",
+      "is_attack": false,
+      "incident_anchor": "Algeciras attack police army statement 2026",
+      "update_type": "FOLLOW_UP",
+      "incident_id": "inc-13dc2048a9ff8e9c",
+      "translated_to_english": true,
+      "ai_canonical_event": "police and army statement on Algeciras attack",
+      "title_variants": [
+        "police and army statement on Algeciras attack"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_categories": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "reported_status": "CONFIRMED",
+      "primary_source_published": "2026-11-01T21:48:29+00:00",
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "same_incident"
+      ],
+      "location_confidence_score": 0.95,
+      "location_method": "ai_city_geonames",
+      "location_evidence": [
+        "Algeciras, Huila"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The attack occurred in Algeciras, Huila department, Colombia.",
+      "ai_geo_fingerprint": "9d6eab18eb98cd4d25981b6af278121766b12d86ee3cb793253f2923786ee125",
+      "ai_geo_inferred": false
+    },
+    {
       "id": "134d26d8d6e3ed53",
       "category": "Online / Cyber / AI",
       "categories": [
@@ -54809,6 +54573,7 @@
       "source_article_fingerprints": [
         "1f9e189b4be8a41e69397b4b66a5d37908a960d61c3739b4bf1b52d987863849",
         "3d8b21a915aab2f333e8198e745e6605e6a81fda5d0fb9c72996b070dde98eed",
+        "597d1ace9e036e2be5232f0201095b45c12b342914b1e40ad97535dd36a66240",
         "6d80752dc77893df5c35ed166becf5f8ced5cfbce894667d3c70dab2100cbee8",
         "7bb5ce6d6ed1cdeff8e84a1bb2260320d0535c81719a8420a944777d07280f4b",
         "7da3a3f1f8901fe77d279d6df720e41c937987db08cd90e2cec74a68311b1dc5",
@@ -54916,9 +54681,18 @@
           "published": "2026-10-31T13:17:02+00:00",
           "source": "El Tiempo",
           "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNbk1SY2FvbWxwU3pPV2s5NEVZckRRRkc2WUFKdHZtOFprbGJsMHMweEhqai1abGpfbHRVUzBlRGhzY3lHZ1ltSV9hVzd4bGZrRU04djRZYnR6ZGNBc0F2WFA0RmhWOVpHWEVoVC1LeU5faUFzSGx5UGVHRTg4THF1MTFtS1oxYVBqX2ZidE9tc3JmMF9JYll1RzgtM2xULW5NTk1DQVY0bnhVUFA1b09DLUxVYTlxLXRDTWg2VVBKTXQ2Z9IBxwFBVV95cUxOZlNGXzVzNnZjb25PZ3dMVUlpdlpWcER2azczQUdWeG1nRFV1QU9BYnA4Q2YxaWNPNkwwakJaNHRwRHotUEtfM3BfM1hydEp2NDdJbE1lSTNLV2JyV0ZJTWdzVUluZDgtSW1UemRqNElqY2xneWhham1UQ1RmMVF3SFNiOVVQeEtjSVZmNW1uZkYxXzRfWGptNUVlMm5DWmlsMWhXQ2o2M0tNLS1KWjI0dDhiSU15ZmRrV0drdGtJT3RnNWNoV1Zn?oc=5"
+        },
+        {
+          "title": "Car bomb attack at toll plaza in Cauca",
+          "original_title": "Nuevo atentado con motobomba en peaje de la vía Panamericana, en Cauca: esto se sabe",
+          "original_language": "es",
+          "summary": "A car bomb attack occurred at the Pan-American Highway toll plaza in Cauca.",
+          "published": "2026-10-31T12:54:24+00:00",
+          "source": "Noticias Caracol",
+          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPS1V3Ri1WT1JPVDZEbUtEblJ1Rzl5amY4TUpzYzlUX2M4N2hlOWhvb1hoRmlPMDFnWUUzQkJhS1ZSWHdhZnZZOXpNRVVVenBNWHNYbU5RNF9famQxbWgwRnhYSVVBOXRRZWxPNWJDZWdfU2lRUDBqcHBYQkxwVG5MbUtiTzR3eGU4Q2FkYVhrQUgwVmk3VWZOdlduSVB0M1pVem9jNjBqd1pmTWVCRDhfSG82OHpTUzdCN3JZM2tBNEE5MDVJa29r0gHUAUFVX3lxTE83YTlhcjFSVU56RVg1WmFWa2g3TllEUkVfS0RfZkJhNVpKc1dISmI0NzhpaEVVWGt6WklUT253MHJwS3FjdkJoZ01nRHFiVDZTYXFBSEQ4bndZeC1vaWIzQXVkeHF6NTM2dzNhU0t0YWVhcUwxVGZkVTdhbGp1b0h4R0xCXzZ2ZE1aWFNGdTV3WVpZa3ZlbWpRUEtEYVFiREg0TDN5QkdpU3hhMVlKUHpnRzJURmlIN3RQZk9WUTNXRVBsSHg0SjUwY05TRnAzUnBxa09t?oc=5"
         }
       ],
-      "article_count": 10,
+      "article_count": 11,
       "first_reported": "2026-10-31T12:51:54+00:00",
       "last_reported": "2026-11-04T12:56:02+00:00",
       "dedup_confidence": 1.0,
@@ -63136,6 +62910,217 @@
       "dedup_methods": [
         "same_url"
       ]
+    },
+    {
+      "id": "c7eac6b268ab5af8",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Trappes racist attack update: 30 victims identified",
+      "summary": "The national anti-terrorism prosecutor reports that 30 victims have been identified in the Trappes racist attack.",
+      "original_title": "Attentat raciste de Trappes : 30 victimes ont été identifiées, selon le procureur national antiterroriste",
+      "original_summary": "Attentat raciste de Trappes : 30 victimes ont été identifiées, selon le procureur national antiterroriste Le Monde.fr",
+      "original_language": "fr",
+      "collection_language": "fr",
+      "collection_language_name": "French",
+      "collection_locale": "FR:fr",
+      "published": "2026-10-30T20:00:27+00:00",
+      "source": "Le Monde.fr",
+      "source_count": 8,
+      "url": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxPbjZJY1NaYWlhTTNsbW9XRGRZWkZEUEQwUklyY2kzYXFMYUtWb0l4U21qVDNRVmFfMEZhUUUwdGtJRkk5UGxwX0p4YnZRcF9hdlVQU2N6d1I5WEZqN0szWkpUZUE0bjc5blB2TEt5TjBMOHJPWEQyc1BNNnFXR2NLMlhjcXdORjBjbEdSLXdRR1VRb0JfT2FTUGc2eFREMzhmVVhXcExjMmZRSGpWS1BpVnBsUXZDV1ZWRlJTU3pJS3JOWDNrYk45Q095ZW9uYnJBMHFoQ0FybTRjRTB1YXU5S0ozOVlmcXl1eXI5MVIzQm9xcldkU2FEakx0UVM4Q1U?oc=5",
+      "collector": "Google News RSS",
+      "country": "France",
+      "country_code": "FR",
+      "city": "Trappes",
+      "region": null,
+      "latitude": 48.77413,
+      "longitude": 2.01781,
+      "location_precision": "city",
+      "location_confidence": "high",
+      "acquisition_channel": "multilingual_discovery",
+      "source_article_fingerprints": [
+        "019bbe0fd099d6fa78518d8bca7e97d1055293cafe5825c978dea597d1e8b461",
+        "1b980ace4e131568c8cc8af5befc10b58f1530d1320f384470347775ffec083e",
+        "3657aa37e390a899d48277d87490f844418a822e77a7a2741bd19bd586d6eb49",
+        "3f3d851ec382b4368bb50c9e1ed51bb319c25d627c663ccfdde34148e4ecdfdb",
+        "6ef88a461b0c6470b5e98b448f57ef936a81be19ad68cc2b4901b3f9a96604a2",
+        "8244e264aaa1ea3b0b03f882484be93755ee583d6063fedcbfff5a6c45796af2",
+        "92e70eadaa5f73056aac6c1fd9dc19ace3e51ba2ad98dd8e1283483a1a1a7e04",
+        "b85e587d817117e7d617136e5bc52652fd49dce6b5585b5f1a3b570fd445151f",
+        "b890fcb45dbe89c5b965ed06616c378e0bf06a0c9f098ab6a4ab0b6c33ad7af7",
+        "c854348863fa98d80202eddd62b99f3b148bb96d29145fed5ca339fd3a3092f1",
+        "e14cb59ae4f4294dc8667296d38144c25902057e49824db8c04fa26e8f485e2e",
+        "f0022eb3f6c0f8ec52404db570b06c4086cb28c658483a3c8b40c467b4252165",
+        "fb43c7a5e45793a8cd2cd2e53d2825f960236c1f673cf420251d76cb19cde112"
+      ],
+      "sources": [
+        "Le Monde.fr",
+        "Libération",
+        "20 Minutes",
+        "TF1 Info",
+        "BFM",
+        "Le Parisien",
+        "franceinfo",
+        "SO FOOT.com"
+      ],
+      "related_articles": [
+        {
+          "title": "Trappes racist attack update: perpetrator bought weapon clandestinely",
+          "original_title": "Attentat raciste de Trappes : Kevin T. avait acheté son arme «clandestinement»",
+          "original_language": "fr",
+          "summary": "New information reveals that the perpetrator of the racist attack in Trappes acquired his weapon through clandestine channels.",
+          "published": "2026-11-03T09:40:49+00:00",
+          "source": "Libération",
+          "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxPY3pNOG1pYjJWZlpENEVyRFVhMEQ3M1Itb0pJU1ZjX3F6VUtZMmNVZ2w1TUk5dTZTN2xndFpqcklTSUkyM3JVSDF3dmlZa0YyVDB0UTZUZTI4Z0MwSkNOaV8wWTM2RzRvX0xCc3FWQW1sUjk4TEUwbE80QV9WRE4tQjR5UGEtR2YxTjRVRE1rUXY3ZmhpLWRzWm9CVExrb1V3QmdDVGdTTF82dTBGU09CVExESDlsaUdBLXpCUzQtdGc2RXZ3VmZOeXk5ZURrTEpTQnZyb1dIU3dlQUFHSmhMemR1Z1NCLVBLaGppc2ltVQ?oc=5"
+        },
+        {
+          "title": "L’auteur de l’attentat de Trappes a acheté son arme « clandestinement »",
+          "original_title": "L’auteur de l’attentat de Trappes a acheté son arme « clandestinement »",
+          "original_language": "fr",
+          "summary": "L’auteur de l’attentat de Trappes a acheté son arme « clandestinement » 20 Minutes",
+          "published": "2026-11-03T09:41:00+00:00",
+          "source": "20 Minutes",
+          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQMDRDLUdWUE9xeEpydnJudnFTVlJ2LVZqWmhKU0NHM0tnZWtxRFBYOEoyaUxQUkxkSWRWeXltTHNIVTB3dUNiUzQxRExLeUdRTFVKdldNM1duYzltNHpXOUYxM2VRNjVHdTFybnZLc1dkMkkxd2dib3U2LUdPM041Zkd5eTA3MExpVGJFbXlwOS1lVHJWeThzejE2bEJXMFJ0M3JUdUlvQWVUWkZhUDRDaS1aRnp1SFB5Nl9LMmRabVVXdHM?oc=5"
+        },
+        {
+          "title": "Tributes paid to victims of racist attack in Trappes",
+          "original_title": "Attentat à Trappes : l'hommage aux victimes",
+          "original_language": "fr",
+          "summary": "Thousands of people gathered in Trappes and La Verrière to pay tribute to the victims of the racist attack.",
+          "published": "2026-10-30T20:00:27+00:00",
+          "source": "TF1 Info",
+          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPV052c2ljYzZQbmlJNnpHanVQQXJPVVRpRnhsbS1YRVA1UFI1ZjV2OTQxbFU4bDVVckRMSGYyUjVRcmdFR3pnclNrRUNLVHppLW5VbkgxaE9GRU5LcTNrV1ViT2hzWTYyVGc5T3FXMmdiYkRia3hOcFo3elA5aGlvaTN1NEtTZUdwOXNPWGEzemxMTTB6b082MEJaWnpsbFRjMFMtZnIzZXdjS2NGOU9YcS1QRnI3SmZa?oc=5"
+        },
+        {
+          "title": "Attentat raciste dans les Yvelines: des milliers de personnes réunies à Trappes et à La Verrière pour rendre hommage aux victimes",
+          "original_title": "Attentat raciste dans les Yvelines: des milliers de personnes réunies à Trappes et à La Verrière pour rendre hommage aux victimes",
+          "original_language": "fr",
+          "summary": "Attentat raciste dans les Yvelines: des milliers de personnes réunies à Trappes et à La Verrière pour rendre hommage aux victimes BFM",
+          "published": "2026-10-30T20:17:12+00:00",
+          "source": "BFM",
+          "url": "https://news.google.com/rss/articles/CBMilAJBVV95cUxOVXFESGFLQXdITDhIbUp4NmRkRE55dVVqQXBrbGZ1YkoydzB4ZTJaeXQxekJzakxZVklTLVpKT1hzNHBWckdWZTBGOExzWFRwTEFZWnNnRGp4eE5RdVRRbFE3VnF1Qzg2cVc2MDRwWnVCemJlZHZ6ZTBSVW5wOTJUOVlJY1dDT0M1TmpHSnpNc0I5OUk2cERQZ2RjdlpialQ0V2NXVGxQZXNJVGlYTzNvelFTcG0yWGZ6NG5uY0xjMkNPNkIwRHNGMWI5MXctQjB4UFo1VENhUVFRZHFBSGNfdDluQ2w0d19aemsyeF9aWEhiQUpENlJJQmxBNFo4cFZXdDFiWkRnRHRxc2ZnMTZGdl8wNko?oc=5"
+        },
+        {
+          "title": "Trappes : le temps d’un hommage aux victimes de l’attentat raciste, la gauche présente un visage uni",
+          "original_title": "Trappes : le temps d’un hommage aux victimes de l’attentat raciste, la gauche présente un visage uni",
+          "original_language": "fr",
+          "summary": "Trappes : le temps d’un hommage aux victimes de l’attentat raciste, la gauche présente un visage uni Le Parisien",
+          "published": "2026-10-30T20:27:14+00:00",
+          "source": "Le Parisien",
+          "url": "https://news.google.com/rss/articles/CBMigwJBVV95cUxPdkc4WmRpMHJoV0NXY2ZDb2ZtMG9iYUtiSGs2UHRuQk82Rm1FY1Nhb1NzbDFPYm90N0VzZ0xId0swbkxzMEVwb1pDcXl2YTZfZVhwZ2JYMW9JQno4LVEtdS03Q2duZjJweHVvY1JDWkNjZmtUVmZXZ3NBbEIxWVJUcDB0RFNBM3gwQU94a3gzbUhzUDNIeUY3ZG5SUzlLQm9MOW4xTms0bGNQUEEwdGx1SG55WUJidmpQbnpyZXhfZlRpamk3OUt2WjNwbWhrLU1JSVlDZmt0NWYta2hsbTREbmFwdEVQeTVqSDRVbUJYdEdLWUU0Z2I5dmV6ZVBBZWJVNGh3?oc=5"
+        },
+        {
+          "title": "Attentat raciste dans les Yvelines : des milliers de personnes rassemblées à Trappes",
+          "original_title": "Attentat raciste dans les Yvelines : des milliers de personnes rassemblées à Trappes",
+          "original_language": "fr",
+          "summary": "Attentat raciste dans les Yvelines : des milliers de personnes rassemblées à Trappes Le Monde.fr",
+          "published": "2026-10-30T20:50:59+00:00",
+          "source": "Le Monde.fr",
+          "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPUzhtRzFCNGVWQkkwSVp2b0tibGtWc2F6SHA4Sm1VRnZWMFcyaVZ1bkNpWjlWYmdMdks0cS1sX0JfdTZzVVhKM0pSVDVRYnRHY3FuTWhzd2hPZ0xTS2VudUczQUt0MnF5X1FjRm1BcmlGSzA2VTROaHJ4bElQXzZmb2JSUzVhUTVfdWswRlRVS3FSM010bmQ3NGlRd2F6MnBMQ25XdUtQNUlXNGZueEF0czJIb003blVIOTMzNG81Rm8yblU5SU40R0J3a2RQYUlGTWQ2VGViS0lNU21xTnNoUXJn?oc=5"
+        },
+        {
+          "title": "Attentat dans les Yvelines : les images des milliers de personnes rassemblées contre le racisme à Trappes et La Verrière",
+          "original_title": "Attentat dans les Yvelines : les images des milliers de personnes rassemblées contre le racisme à Trappes et La Verrière",
+          "original_language": "fr",
+          "summary": "Attentat dans les Yvelines : les images des milliers de personnes rassemblées contre le racisme à Trappes et La Verrière TF1 Info",
+          "published": "2026-10-30T21:18:49+00:00",
+          "source": "TF1 Info",
+          "url": "https://news.google.com/rss/articles/CBMijgJBVV95cUxPY3FZYi1XR2thbzhENDRDNkFYcVhuYXFyRmFULWZBaTZvbHh1S3ZiQXFfeDJpcm1qaGNGeWJuazJoX3BZUWRkelMzZUtvUlFlcUlLQnhMSzBaelpwektxTXphOGlxMm9ZS3VHY0dwYXZJdXVfdXd5QUdDVGZaSlFWMC00YUxkMlY4Sko0NEhTakJYNmVOalY4UFZ5Skp2Rl81MHo5UEJxMUVBUVJid2tOZ1RZdUhfTXpiSmRMQ2ZZQTF4ZnF6cE00YzRLV0RIRzZzUVVHS3pLcWNqOEMwck5kN3JhMl9FV1U1YzlfR2pvTkhQSUgtU0JrYlo3TWFzdkhJRlktb1pkVWNWRjNzRmc?oc=5"
+        },
+        {
+          "title": "Attentat raciste à Trappes et à La Verrière : des hommages séparés",
+          "original_title": "Attentat raciste à Trappes et à La Verrière : des hommages séparés",
+          "original_language": "fr",
+          "summary": "Attentat raciste à Trappes et à La Verrière : des hommages séparés franceinfo",
+          "published": "2026-10-30T23:16:24+00:00",
+          "source": "franceinfo",
+          "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxQS0V0TmxDRWxVTUhhMEJxY2RsTTQtcXVqVkRxOFNnMW1QMnd5RnFOcEZNOVFobXZYMUp1emhkTUh2dEtKemtTOGxWWWlwSS1YVzFHVHpzelBuVENPa2NyUWt4Ny1IQVdOY2ZuMHVhSEFUTTZfWW9OWjExc0JvZkRhZkFqQUQyWE9abm5qS1R3emxqMGlGRUNYMnZnMmNXOGRERWtkaTAtNnZlUmxPQkZlcmxyaUk3eFdGY0k5aU1OQ0hmSjFGS1B5T3NIMDA1UjQ5YVZHWDNkYjlDOTlCWjNLaDU1QlNZQjhIV2c?oc=5"
+        },
+        {
+          "title": "Trappes : neuf jours après l’attentat raciste, un bel hommage rendu aux victimes avant le match de Coupe de France contre le Racing Club de France",
+          "original_title": "Trappes : neuf jours après l’attentat raciste, un bel hommage rendu aux victimes avant le match de Coupe de France contre le Racing Club de France",
+          "original_language": "fr",
+          "summary": "Trappes : neuf jours après l’attentat raciste, un bel hommage rendu aux victimes avant le match de Coupe de France contre le Racing Club de France Le Parisien",
+          "published": "2026-11-01T16:31:44+00:00",
+          "source": "Le Parisien",
+          "url": "https://news.google.com/rss/articles/CBMiygJBVV95cUxQRXNjNVdULS1CQUdxVklfTktRS3NQYWhVV2RLb1ZPbVk0YXRPXzczQVNpRW8wTEVSZEJVVzFTY2huTmEwcWJZSldRbE5kYXZUcVBlbUlOUktDRnFHdkZrT0x0MFlDc3k4RGZyZFgwTEFOUTF1T0s2TDJneUxIVW8yb0t3cDVNamRhemRyaGxhQ242akhPN3pjamlURXpabGsyNUNlQ3lJby1Fd2FKY2xTc285a3phUV93UWtkRlM0Y3ExRFd6aUVyQ2tDVFdNYlI5QWc0OS1DQy1fOVQ1eUpxcnRpRXBHX0t0NFZ2WFZRaWZicmx5ZXdRTjhpRzBsSzVwTldoUWxyUjF2TWdPa0ZwQTNjRmhNVEhyMWNqT1Y4aDducWhnaHJ4aUxTTDV5dFlZMVJKV2dmNkFWTkJzQWlRSEM1OE43cHNIc1E?oc=5"
+        },
+        {
+          "title": "Attentat raciste de Trappes: \"J'ai regretté qu'il n'y ait pas eu de représentant de droite\" à l'hommage aux victimes, déplore Emmanuel Grégoire, maire PS de Paris",
+          "original_title": "Attentat raciste de Trappes: \"J'ai regretté qu'il n'y ait pas eu de représentant de droite\" à l'hommage aux victimes, déplore Emmanuel Grégoire, maire PS de Paris",
+          "original_language": "fr",
+          "summary": "Attentat raciste de Trappes: \"J'ai regretté qu'il n'y ait pas eu de représentant de droite\" à l'hommage aux victimes, déplore Emmanuel Grégoire, maire PS de Paris BFM",
+          "published": "2026-11-01T18:16:24+00:00",
+          "source": "BFM",
+          "url": "https://news.google.com/rss/articles/CBMi3wJBVV95cUxQMlk4ckhOZFluYXVScUdLYTBOVXV6SjdOQVVweHYzX1JLUDlwWWo0NzZhWWVKNC1KRk9BcV93MjB0Tk9rTzJqQVRpaGEyR01ScVoyWjN6QWw1LThPeWV4YlJMYk1Ed3UtSzZOVUlUMGlRejdpOHJXSDRvYjNVbk9Ddmh3MEVVaUVkZGk4dTdWd18xUmpWTXYxaWxkdFpYaGppNjRmWXNOQUJYQzJHRGlLdDZVVUtRU0UyLVZuMUJTc3pvajc0RDZUYXdOZ2tYNlA0cHozUDhmRFNSdno2MElwcVYwTUdheTFWdkdBSV9iYktkVFhNWTRqLTAwTGo4cklGY2w5a3lTM0hHVVhQa1V2SUtxNHBKZWxyV3VSNURPYXFURGNGZDg3X2h5OEdWTkNzdWNaTGlJWTdQM0RYNnpidkF3SE02RjNOQVBvQXZILVpReU54YkZDcDdzSlNqZDQ?oc=5"
+        },
+        {
+          "title": "\"Il n'y avait que des dirigeants de gauche\": Raphaël Glucksmann déplore qu'il n'y ait pas eu \"de moment d'unité nationale\" lors de l'hommage aux victimes de l'attentat à Trappes",
+          "original_title": "\"Il n'y avait que des dirigeants de gauche\": Raphaël Glucksmann déplore qu'il n'y ait pas eu \"de moment d'unité nationale\" lors de l'hommage aux victimes de l'attentat à Trappes",
+          "original_language": "fr",
+          "summary": "\"Il n'y avait que des dirigeants de gauche\": Raphaël Glucksmann déplore qu'il n'y ait pas eu \"de moment d'unité nationale\" lors de l'hommage aux victimes de l'attentat à Trappes BFM",
+          "published": "2026-11-02T08:24:35+00:00",
+          "source": "BFM",
+          "url": "https://news.google.com/rss/articles/CBMiyAJBVV95cUxNTWRBWFp2dEpGbFpnVDh3YUxpbXFyRFlfbklwTnR2QjZLSXIwem1kME92dG5NZ1pWaTlaTmFoeF9ndXFwc3BPZ3ZoM01udzNSaGpUR0lTWTd4ak95R1ZqRHc2cUV3OVBKWGZBdHVTSERjY1h0amd6QkhSSEVBbWdUTUNPdEJXeFduX0ZKZWs0bDJhRGxMMlJnUmpxVkdHNmY0UkpaRDlwUFdYTnp1OFJYQUdud2xGYXdzam1hOFV5cXNQWW1ucERiSGltNi1iMXY4NVNhWGExNEhPdVpNRksxR3ZTbVI0X1pwNWZ3UERMYnRmR1p5VU9VaGlrOTRieGQ5U0RibEpWcHJuVjJwTUhxQ29ocTRjN3MzV3JEYUVPUEVsa0ZneTdLTjFtVHZ1LUd6djBJVTAzR05qalZHWVlEMWZlMGRMdWlx?oc=5"
+        },
+        {
+          "title": "L'hommage du club de Trappes aux victimes de l’attentat terroriste et raciste du 23 octobre",
+          "original_title": "L'hommage du club de Trappes aux victimes de l’attentat terroriste et raciste du 23 octobre",
+          "original_language": "fr",
+          "summary": "L'hommage du club de Trappes aux victimes de l’attentat terroriste et raciste du 23 octobre SO FOOT.com",
+          "published": "2026-11-02T09:55:28+00:00",
+          "source": "SO FOOT.com",
+          "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOVEt4WHdfdm1sQUlNWks2UVYxelZ0amIxZ2Rxa2dldjN2dWhwZ3VUSjlXeGlJMFlFN3F6UlF2Tlp1dEdpOTl0RzRiTkxRRUtDRVNyNGxDV1hyWl83b18teU42WlhKNzFSUTQzLVhzTVFqVHFBWWpnamxTQUE0V2UxWjhBVXRSNW0yOVIzTEpMOVJzaDBnUlU1ZlFBLUNOVjZJWnF4NElvdWdBQkZfX2h5c2RvSVVNMjZkd0xYVmhWQ3Q1dGJaV2Uxdl8xeEVKQTd1ZEdYLU11a1VNbHVkX3c?oc=5"
+        }
+      ],
+      "article_count": 13,
+      "first_reported": "2026-10-30T20:00:27+00:00",
+      "last_reported": "2026-11-03T09:40:49+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.1-flash-lite",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Operational update regarding the victim count of a terrorist attack.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "OTHER_CT",
+      "is_attack": false,
+      "incident_anchor": "Trappes attack 2026",
+      "update_type": "INVESTIGATION_UPDATE",
+      "incident_id": "inc-c2cd6029cf922677",
+      "translated_to_english": true,
+      "ai_canonical_event": "Trappes racist attack 2026-11-03",
+      "title_variants": [
+        "Trappes racist attack 2026-11-03"
+      ],
+      "actor_scope": "UNKNOWN",
+      "cbrn_subgroups": [],
+      "threat_categories": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "primary_source_published": "2026-11-03T09:03:03+00:00",
+      "dedup_confidence": 0.99,
+      "dedup_methods": [
+        "same_normalized_title",
+        "title_plus_anchor"
+      ],
+      "location_confidence_score": 0.95,
+      "location_method": "ai_city_geonames",
+      "location_evidence": [
+        "Attentat raciste de Trappes"
+      ],
+      "excluded_from_map": false,
+      "ai_geo_complete": true,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": "gemini-3.5-flash-lite",
+      "ai_geo_reason": "The racist attack occurred in Trappes, France.",
+      "ai_geo_fingerprint": "a3beda54be812a3473cc12c2bcc5ae83f9eceb4f2980ecea4f8ba16f40b70d92",
+      "ai_geo_inferred": false
     },
     {
       "id": "2351b839b60861a0",
@@ -724590,22 +724575,21 @@
     "rescue_unlocated_final": 21,
     "ai_for_every_event": true,
     "cached_events": 6373,
-    "ai_processed_this_run": 0,
-    "ai_pending_at_start": 7,
-    "city": 2305,
-    "region": 2086,
-    "country_capital": 1784,
-    "unlocated": 205,
-    "mapped_total": 6175,
-    "high_confidence": 5640,
-    "medium_confidence": 569,
-    "low_confidence": 171,
+    "ai_processed_this_run": 8,
+    "ai_pending_at_start": 8,
+    "city": 2308,
+    "region": 2089,
+    "country_capital": 1785,
+    "unlocated": 199,
+    "mapped_total": 6182,
+    "high_confidence": 5645,
+    "medium_confidence": 571,
+    "low_confidence": 165,
     "methods": {
-      "awaiting_ai_geolocation": 7,
-      "ai_region_coordinates": 2083,
-      "ai_country_capital": 1783,
-      "ai_city_geonames": 2159,
-      "unresolved_city_no_capital_fallback": 91,
+      "ai_region_coordinates": 2086,
+      "ai_country_capital": 1784,
+      "unresolved_city_no_capital_fallback": 92,
+      "ai_city_geonames": 2162,
       "ai_unlocated": 67,
       "source_name_geonames_correction": 21,
       "ai_city_coordinates": 119,

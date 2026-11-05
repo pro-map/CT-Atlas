@@ -1,43 +1,44 @@
 {
   "schema_version": 2,
   "status": "partial",
-  "run_started_at": "2026-11-05T17:26:18.909381+00:00",
-  "last_attempt_at": "2026-11-05T17:26:18.909381+00:00",
-  "published_at": "2026-11-05T18:04:12.231836+00:00",
+  "run_started_at": "2026-11-05T22:40:38.730513+00:00",
+  "last_attempt_at": "2026-11-05T22:40:38.730513+00:00",
+  "published_at": "2026-11-05T23:10:25.362007+00:00",
   "recent": {
-    "candidates": 3710,
-    "reviewed": 1848,
-    "cached": 1816,
-    "new_reviews": 32,
-    "official_auto_accepted": 0,
-    "retained": 9,
-    "rejected": 1839,
-    "pending": 1862,
-    "status": "partial",
-    "calls": 8,
-    "primary_calls": 8,
-    "overflow_calls": 0,
-    "reasons": [
-      "transient_error"
-    ],
-    "window_start": "2026-11-02T17:26:18.909381+00:00",
-    "window_end": "2026-11-05T17:26:18.909381+00:00"
-  },
-  "backlog": {
-    "candidates": 2033,
-    "reviewed": 397,
-    "cached": 397,
+    "candidates": 4194,
+    "reviewed": 1578,
+    "cached": 1578,
     "new_reviews": 0,
     "official_auto_accepted": 0,
     "retained": 0,
-    "rejected": 397,
-    "pending": 1636,
+    "rejected": 1578,
+    "pending": 2616,
     "status": "partial",
     "calls": 6,
     "primary_calls": 6,
     "overflow_calls": 0,
     "reasons": [
       "transient_error"
+    ],
+    "window_start": "2026-11-02T22:40:38.730513+00:00",
+    "window_end": "2026-11-05T22:40:38.730513+00:00"
+  },
+  "backlog": {
+    "candidates": 2077,
+    "reviewed": 465,
+    "cached": 401,
+    "new_reviews": 64,
+    "official_auto_accepted": 0,
+    "retained": 4,
+    "rejected": 461,
+    "pending": 1612,
+    "status": "partial",
+    "calls": 10,
+    "primary_calls": 10,
+    "overflow_calls": 0,
+    "reasons": [
+      "transient_error",
+      "historical_budget"
     ]
   },
   "maintenance": {
@@ -61,293 +62,30 @@
       "successful": 1222,
       "deduplicated_urls": 288
     },
-    "gdelt": {
-      "attempted": 42,
-      "http_attempts": 4,
-      "successful": 1,
-      "consecutive_unavailable_queries": 0,
-      "invalid_response": 2,
-      "failed": 41,
-      "deferred_queries": [
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+weapons%22+OR+%22terrorist+arms%22+OR+%22terrorist+firearms%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Weapons:1/3",
-          "reason": "invalid_response",
-          "recovered": false,
-          "provider_message": "{}"
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22weapons+smuggling%22+terrorism&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Weapons:2/3",
-          "reason": "invalid_response",
-          "recovered": false,
-          "provider_message": "{}"
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22arms+trafficking%22+terrorism&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Weapons:3/3",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22maritime+piracy%22+OR+%22armed+robbery+at+sea%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Maritime Piracy:1/4",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22pirate+attack%22+ship&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Maritime Piracy:2/4",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22pirate+attacks%22+vessel&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Maritime Piracy:3/4",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=pirates+hijacked+vessel&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Maritime Piracy:4/4",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+attack%22+OR+%22terror+attacks%22+OR+%22terror+attack%22+OR+%22terrorist+bombing%22+OR+%22terrorist+bomb+attack%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Attacks:1/1",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+arrested%22+OR+%22terrorists+arrested%22+OR+%22terror+suspect+arrested%22+OR+%22terror+suspects+arrested%22+OR+%22terrorism+arrest%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Arrests:1/1",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22militants+killed+in+raid%22+OR+%22terrorists+killed+in+raid%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Counter Terrorism Action:1/4",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22security+forces+kill%22+terrorist&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Counter Terrorism Action:2/4",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22security+forces+killed%22+militants&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Counter Terrorism Action:3/4",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22troops+kill%22+terrorists&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Counter Terrorism Action:4/4",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22online+extremist+radicalization%22+OR+%22online+extremist+radicalisation%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Online / Cyber / AI:1/4",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22online+radicalization%22+terrorism&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Online / Cyber / AI:2/4",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22online+radicalisation%22+terrorism&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Online / Cyber / AI:3/4",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22terrorist+propaganda%22+online&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Online / Cyber / AI:4/4",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22Radioactive+material+theft%22+OR+%22Stolen+radioactive+source%22+OR+%22Missing+radioactive+source%22+OR+%22Lost+radioactive+material%22+OR+%22Nuclear+material+theft%22+OR+%22Nuclear+smuggling%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Radiological/Nuclear:1/6",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28nuclear+OR+radioactive+OR+radiological+OR+cesium+OR+caesium+OR+thorium+OR+radiopharmaceutical+OR+%22dirty+bomb%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+%22bomb+plot%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Radiological/Nuclear:2/6",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22uranium+smuggling%22+OR+%22illegal+uranium+mining%22+OR+%22red+mercury%22+OR+radioactive%29+%28smuggling+OR+trafficking+OR+stolen+OR+theft+OR+seizure+OR+arrest+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Radiological/Nuclear:3/6",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28radiopharmaceutical+OR+cesium+OR+thorium%29+%28smuggling+OR+trafficking+OR+stolen+OR+theft+OR+seizure+OR+arrest+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Radiological/Nuclear:4/6",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22nuclear+power+plant%22+OR+%22nuclear+supply+chain%22+OR+%22nuclear+transport%22+OR+%22nuclear+sites%22%29+%28cyberattack+OR+sabotage+OR+drones+OR+%22terror+plot%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Radiological/Nuclear:5/6",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22AI+for+nuclear%22+OR+%22cyberattack+on+nuclear+plant%22+OR+%22drones+over+nuclear+sites%22+OR+%22dirty+bomb%22%29+%28terrorist+OR+terrorism+OR+plot+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Radiological/Nuclear:6/6",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22improvised+explosive+device%22+OR+IED+OR+%22home-made+explosive+device%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Chemicals and Explosives:1/8",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22improvised+explosive+device+cell%22+OR+%22IED+components+procurement%22+OR+%22clandestine+bomb+workshop%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Chemicals and Explosives:2/8",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22bomb-making+materials%22+OR+%22bomb-making+instructions%22+OR+%22darknet+bomb-making+instructions%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Chemicals and Explosives:3/8",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22bomb+plot%22+OR+%22explosives+manufacturing%22+OR+%22explosives+trafficking%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Chemicals and Explosives:4/8",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22explosives+seizure%22+OR+%22stolen+detonators%22+OR+%22explosives+cache%22+OR+%22ANFO+bomb%22+OR+%22ammonium+nitrate+diversion%22+OR+TATP%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Chemicals and Explosives:5/8",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28HMTD+OR+%22homemade+explosive+synthesis%22+OR+%22homemade+plastic+explosive%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Chemicals and Explosives:6/8",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22pipe+bomb+plot%22+OR+%22pressure+cooker+bomb%22+OR+%22nail+bomb%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Chemicals and Explosives:7/8",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28VBIED+OR+%22car+bomb%22+OR+%22suicide+vest%22+OR+%22explosive-laden+drone%22+OR+%22explosives+dropped+from+drones%22+OR+%22drone-dropped+grenade%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+arrested+OR+seized%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Chemicals and Explosives:8/8",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28bioterrorism+OR+bio-terrorism+OR+bioterrorist%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Biological Terrorism:1/10",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22biological+terrorism%22+OR+%22biological+attack%22+OR+%22biological+terror+attack%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Biological Terrorism:2/10",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22biological+terror+plot%22+OR+%22biological+weapons%22+OR+%22biological+weapon%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Biological Terrorism:3/10",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28bioweapon+OR+bio-weapon+OR+%22bacteriological+attack%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Biological Terrorism:4/10",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22bacteriological+weapons%22+OR+%22germ+warfare%22+OR+%22biological+warfare%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Biological Terrorism:5/10",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22toxin+attack%22+OR+%22toxin+terror+plot%22+OR+agroterrorism%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Biological Terrorism:6/10",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28agro-terrorism+OR+%22agricultural+terrorism%22+OR+%22anthrax+attack%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Biological Terrorism:7/10",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22anthrax+threat%22+OR+%22anthrax+hoax%22+OR+%22anthrax+letters%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Biological Terrorism:8/10",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22anthrax+scare%22+OR+%22ricin+attack%22+OR+%22ricin+plot%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Biological Terrorism:9/10",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        },
-        {
-          "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22ricin+threat%22+OR+%22ricin+letters%22+OR+%22biological+threat+letter%22%29+%28terrorism+OR+terrorist+OR+extremist+OR+plot+OR+threat+OR+hoax+OR+arrested+OR+seized+OR+investigation%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-          "label": "gdelt:Biological Terrorism:10/10",
-          "reason": "source_paused_rate_limit",
-          "recovered": false
-        }
-      ],
-      "rate_limit_http_attempts": 1,
-      "rate_limited": 1,
-      "circuit_open": true,
-      "pause_reason": "rate_limit",
-      "skipped_http_queries": 39
-    },
-    "errors": 41,
-    "status": "partial"
+    "gdelt": {},
+    "errors": 0,
+    "status": "complete"
   },
   "reasons": [
     "transient_error",
+    "historical_budget",
     "recent_pending",
     "backlog_pending",
-    "source_errors",
-    "geolocation_pending",
     "category_pending",
     "geolocation_review_required"
   ],
   "queue_filter": {
-    "expired": 3746,
-    "retired": 294,
-    "cancelled_history": 229,
+    "expired": 3766,
+    "retired": 302,
+    "cancelled_history": 216,
     "duplicates": 0
   },
   "budgets": {
     "primary": {
       "per_run": 30,
       "per_day": 60,
-      "used_this_run": 14,
-      "used_today": 14
+      "used_this_run": 16,
+      "used_today": 30
     },
     "overflow": {
       "model": "gemini-3.1-flash-lite",
@@ -357,18 +95,18 @@
       "used_today": 0
     },
     "historical_calls_per_run": 10,
-    "historical_calls_used": 6,
+    "historical_calls_used": 10,
     "maintenance_calls_per_run": 2
   },
   "geolocation": {
-    "status": "partial",
-    "pending": 7,
-    "located": 6175,
-    "unlocated": 205,
-    "completed_unlocated": 198,
+    "status": "complete",
+    "pending": 0,
+    "located": 6182,
+    "unlocated": 199,
+    "completed_unlocated": 199,
     "outcome": "success",
-    "processed_this_run": 0,
-    "review_required": 124
+    "processed_this_run": 8,
+    "review_required": 125
   },
   "categories": [
     {
@@ -393,7 +131,7 @@
       "stop_code": "budget_reached"
     }
   ],
-  "finalized_at": "2026-11-05T18:09:18.735574+00:00",
+  "finalized_at": "2026-11-05T23:11:04.833230+00:00",
   "collect_outcome": "success",
   "geolocate_outcome": "success"
 }
