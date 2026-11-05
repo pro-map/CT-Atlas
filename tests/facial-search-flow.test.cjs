@@ -147,6 +147,12 @@ test("SEARCH asks BEFORE opening anything, then opens Yandex on ONE small hosted
   assert.match(h.confirms[0],/deletes its copy automatically/);
   assert.match(h.confirms[0],/its own retention rules/);
   assert.match(h.confirms[0],/Nothing is uploaded unless you press OK/);
+  assert.match(h.confirms[0],/Russian-law operator/);
+  assert.match(h.confirms[0],/your IP address, any Yandex account signed in there/);
+  assert.match(h.confirms[0],/CT Atlas API host name/);
+  assert.match(h.confirms[0],/cannot be recalled/);
+  assert.match(h.confirms[0],/separate browser profile/);
+  assert.match(h.confirms[0],/may return look-alikes/);
 
   assert.equal(h.opened.length,1,"one Yandex tab");
   assert.ok(h.opened.every(win=>win.url==="about:blank"&&win.opener===null),"blank tabs first, no reference back to CT Atlas");

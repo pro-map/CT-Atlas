@@ -213,7 +213,17 @@ test("the UI wires the crops in, states the third-party disclosure, and keeps th
   assert.ok(read("facial-crops.js").includes('data-fc-links='),"each row has its own place for engines that got no tab");
   assert.match(html,/only when you paste it there/);
   assert.match(html,/leads, not identifications/);
-  assert.ok(html.includes("NON-IDENTIFYING ANALYSIS"),"the existing guardrail must remain");
+  assert.ok(!html.includes("NON-IDENTIFYING ANALYSIS"),"true of the service, not of SEARCH");
+  assert.match(html,/THE ANALYSIS DOES NOT IDENTIFY ANYONE\. SEARCH SENDS A FACE TO A THIRD PARTY\./);
+  assert.match(html,/may return look-alikes/);
+  for(const page of [html,read("privacy.html")]){
+    assert.match(page,/Russian-law operator/);
+    assert.match(page,/IP address,\s+any Yandex account signed in\s+there/);
+    assert.match(page,/CT Atlas API host name/);
+    assert.match(page,/cannot\s+be recalled/);
+    assert.match(page,/separate browser profile/);
+  }
+  assert.ok(!html.includes("not sent to Yandex as the referring site"),"true but misleading: the link itself names the CT Atlas API host");
   assert.match(html,/outside CT Atlas's retention controls/);
   assert.ok(js.includes("window.CTAtlasFaceCrops?.attach({payload,files:lastFiles,api:API,getToken:()=>String(sessionStorage.getItem(TOKEN)||\"\")})"));
   assert.ok(js.includes("lastFiles=files"));

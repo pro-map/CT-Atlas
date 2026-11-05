@@ -482,6 +482,9 @@ function openPlaceholder(){
   return win;
 }
 
+const YANDEX_EXPOSURE="Yandex is a Russian-law operator. The search runs in your own browser, so Yandex also sees your IP address, any Yandex account signed in there, and the CT Atlas API host name in the link. What it receives cannot be recalled: use a separate browser profile with no Yandex login.\n\n"+
+  "Yandex may return look-alikes: a result does not identify anyone.";
+
 function confirmText(record,engines,hostedShare){
   const name=engines[0]?.name||"Yandex Images";
   if(hostedShare){
@@ -489,11 +492,13 @@ function confirmText(record,engines,hostedShare){
     return "Also search face "+record.label+" on "+name+"?\n\n"+
       "This crop is already hosted on CT Atlas's temporary storage (EU) and will be deleted automatically in about "+minutes+" minute(s). "+
       "Pressing OK gives the same link to "+name+", which will download the crop and apply its own retention rules to it.\n\n"+
+      YANDEX_EXPOSURE+"\n\n"+
       "Nothing is shared with "+name+" unless you press OK.";
   }
   return "Search face "+record.label+" directly on "+name+"?\n\n"+
     "Yandex Images can only search by web address, so this ONE crop (a small JPEG without metadata) will be hosted on CT Atlas's temporary storage (EU) for about 10 minutes. "+
     "Anyone holding its unguessable link can view it during that time, Yandex Images downloads it and applies its own retention rules to that copy, and CT Atlas deletes its copy automatically afterwards.\n\n"+
+    YANDEX_EXPOSURE+"\n\n"+
     "Nothing is uploaded unless you press OK.";
 }
 
