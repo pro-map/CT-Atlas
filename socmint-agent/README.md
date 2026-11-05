@@ -13,8 +13,8 @@ It works in three modes:
 
 1. **Known public URLs** — works immediately.
 2. **Link expansion** — follows relevant public links found on those pages.
-3. **Independent public search** — optional; enable SearXNG or Brave Search
-   later without changing the agent.
+3. **Independent public search** — production uses Brave Search; SearXNG also
+   works, and search can be disabled.
 
 If search is unavailable, the investigation continues from known URLs instead
 of failing.
@@ -27,6 +27,10 @@ socmint-agent/
     __init__.py
     agent.py
     tools.py
+    evidence_ledger.py
+    run_budget.py
+    telegram_evidence.py
+  server.py
   tests/
   pyproject.toml
   agents-cli-manifest.yaml
@@ -96,15 +100,10 @@ When ready to deploy, authenticate to a Google Cloud project with billing
 enabled, then use the Agents CLI Cloud Run workflow or the official ADK Cloud
 Run deployment flow.
 
-After deployment, CT Atlas needs only the service URL in the Worker environment:
-
-```
-SOCMINT_AGENT_URL=https://...
-SOCMINT_AGENT_APP=app
-```
-
-An optional shared-secret header can be configured later if a proxy is placed
-in front of the ADK service.
+Production deploys through `.github/workflows/deploy-socmint-agent.yml`, which
+sets `--concurrency 1`, `--timeout 130` and `--memory 1Gi`, then connects the
+Worker (see below). Each deploy generates a new shared secret, so the agent
+refuses the Worker until the Worker's secret step has finished.
 
 Until `SOCMINT_AGENT_URL` exists, CT Atlas continues using its existing
 single-call SOCMINT backend as a fallback.
@@ -120,6 +119,40 @@ The agent must distinguish:
 A similar username, profile image, narrative, wallet mention or shared channel
 is never treated as proof of common identity, ownership or terrorist
 affiliation.
+
+### Evidence ledger
+
+`server.py` records every URL a collector actually returned and sends the list
+in `meta.evidence_ledger`. The Worker keeps a report's sources and citations only
+if they are in the ledger or were supplied by the analyst, and takes each
+source's kind from the ledger, never from the model:
+
+- `direct_public_page` — `fetch_public_url` retrieved it;
+- `search_result` — a search collector listed it, nobody read the page;
+- `telegram_collected_post`, `telegram_public_preview`, `transcribed_media`;
+- `discovered_link` — seen on a page or in a post, not read;
+- `analyst_supplied` — given by the analyst, not read by the agent.
+
+Any other URL is removed and listed in `unverified_sources`. A finding that
+loses all its citations this way drops to LOW confidence.
+
+### Run limits
+
+A run has 12 LLM calls and a deadline of 100 seconds, sent by the Worker, whose
+own limit is 115 seconds. The last call, or the first one in the final 25 seconds,
+is made with tools switched off so that the model writes its report. If a run
+still ends without a usable report, the agent returns the ledger as a partial
+report (`meta.partial`, `meta.stop_reason`) instead of discarding the evidence.
+
+The Worker allows 3 runs per account and 10 overall per Paris day, one at a time
+per account (`SOCMINT_*` in `cloudflare-worker/shared.js`).
+
+### Platforms CT Atlas never fetches
+
+`NO_DIRECT_FETCH_HOSTS` in `app/tools.py` and `cloudflare-worker/social-intel.js`
+lists LinkedIn, Facebook, Instagram, Threads, X, TikTok and Reddit, with their
+short-link domains. Their terms or robots notices forbid automated access, so
+their URLs can only appear as search-index leads. Both lists must stay identical.
 
 
 ## Connect the deployed agent to CT Atlas
@@ -143,20 +176,13 @@ POST <SOCMINT_AGENT_URL>/investigate
 X-CT-Atlas-Agent-Key: <shared-secret>
 ```
 
-The Worker health endpoint exposes only:
+The Worker's `/health` says only whether both values exist. `/health/status`
+reaches the agent, including `/auth-check` with the shared key, so a stale key
+shows as `down`. Neither exposes the URL or secret.
 
-```json
-{
-  "social_agent_configured": true,
-  "social_agent_client_version": "..."
-}
-```
-
-It never exposes the URL or secret.
-
-When `social_agent_configured` is false, the Social Media Analysis page displays
-`GEMINI FALLBACK`. When both settings are present and the new Worker is
-deployed, the badge changes to `ADK AGENT`.
+The Social Media Analysis badge follows `components.agent.status` from
+`/health/status`: `ADK AGENT` when it answers, `AGENT DOWN` when it fails,
+`GEMINI FALLBACK` when it is not configured.
 
 ### Cloudflare secret commands
 
@@ -178,29 +204,31 @@ For a Cloud Run deployment, configure at least:
 ```
 GEMINI_API_KEY=<AI Studio key>
 CT_ATLAS_AGENT_SHARED_SECRET=<same shared secret>
-SOCMINT_AGENT_MODEL=gemini-2.5-flash-lite
-SOCMINT_SEARCH_PROVIDER=disabled
+SOCMINT_AGENT_MODEL=gemini-3.5-flash-lite
+SOCMINT_SEARCH_PROVIDER=brave
+BRAVE_SEARCH_API_KEY=<Brave key>
 ```
 
-Because Google Search grounding is unavailable on the current Gemini API
-project, leave `SOCMINT_SEARCH_PROVIDER=disabled` initially. The agent will
-still iterate through supplied public URLs and relevant links discovered from
-those pages.
-
-Later, public-web discovery can be added independently with SearXNG or Brave
-without changing the CT Atlas Worker or UI.
+Google Search grounding is unavailable on the current Gemini API project, so
+public-web discovery depends on Brave or SearXNG. With
+`SOCMINT_SEARCH_PROVIDER=disabled` the agent still iterates through supplied
+public URLs and relevant links discovered from those pages.
 
 
 ## Free social-source collectors
 
 The ADK agent now has dedicated PUBLIC-source collectors:
 
-- **Bluesky**: unauthenticated public AppView search for posts and accounts.
+- **Bluesky**: unauthenticated account search on the public AppView. Post search
+  is refused there (403), so it uses `api.bsky.app`, which still answers without
+  login but is undocumented: treat it as a stopgap until CT Atlas has a declared
+  account with an app password. `bluesky_post_search` shows whether it works.
 - **Mastodon**: unauthenticated account/hashtag discovery on public instances.
 - **YouTube Data API**: enabled when `YOUTUBE_API_KEY` is configured.
-- **Reddit Data API**: enabled when `REDDIT_CLIENT_ID` and
-  `REDDIT_CLIENT_SECRET` are configured. OAuth is required; unauthenticated
-  Reddit API traffic is not used.
+- **X and Reddit**: off. X Developer Agreement XIV.B(a) and XIV.C bar intelligence
+  use without written approval, and Reddit's policy is reported to bar helping
+  government surveillance. A key alone does nothing: `X_WRITTEN_APPROVAL=1` or
+  `REDDIT_WRITTEN_APPROVAL=1` must also be set, and only with the approval on file.
 - **Telegram public pages**: known `t.me` pages can be fetched directly;
   discovery uses the configured independent public-web provider, avoiding
   private chats and authentication-gated data.
@@ -212,13 +240,15 @@ The ADK agent now has dedicated PUBLIC-source collectors:
 Bluesky and basic Mastodon discovery require no key. All optional credentials
 must be stored as deployment secrets and never committed.
 
+`social_capabilities` probes the keyless collectors with a small real request,
+cached for five minutes, so `/health` shows a refusing provider as false. Keyed
+collectors report only that their key is configured.
+
 ### Optional free-tier secrets
 
 ```
 BRAVE_SEARCH_API_KEY=
 YOUTUBE_API_KEY=
-REDDIT_CLIENT_ID=
-REDDIT_CLIENT_SECRET=
 GROQ_API_KEY=
 ```
 

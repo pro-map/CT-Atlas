@@ -26,7 +26,7 @@ jobs:
 
       - name: Compile agent sources
         run: |
-          python -m py_compile             socmint-agent/app/__init__.py             socmint-agent/app/agent.py             socmint-agent/app/tools.py             socmint-agent/server.py
+          python -m py_compile             socmint-agent/app/__init__.py             socmint-agent/app/agent.py             socmint-agent/app/tools.py             socmint-agent/app/evidence_ledger.py             socmint-agent/app/run_budget.py             socmint-agent/app/telegram_evidence.py             socmint-agent/server.py
 
       - name: Install ADK agent
         run: |

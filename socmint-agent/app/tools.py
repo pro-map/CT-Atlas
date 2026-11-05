@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import ipaddress
 import json
 import os
@@ -8,7 +9,9 @@ import re
 import socket
 import subprocess
 import sys
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
 from html import unescape
 from typing import Any
 from urllib.parse import parse_qsl, quote, urlencode, urljoin, urlsplit, urlunsplit
@@ -20,8 +23,19 @@ from bs4 import BeautifulSoup
 USER_AGENT = "CT-Atlas-SOCMINT-Agent/0.1 (+public-osint)"
 MAX_FETCH_BYTES = 1_000_000
 MAX_LINKS = 50
+MAX_ANCHORS_SCANNED = 200
 DEFAULT_TIMEOUT = 12
 ALLOWED_SCHEMES = {"http", "https"}
+
+# These platforms' terms or robots notices forbid automated fetching. Their URLs
+# may appear as search-index leads but are never retrieved, here or through a
+# redirect. Keep in step with NO_DIRECT_FETCH_HOSTS in
+# cloudflare-worker/social-intel.js.
+NO_DIRECT_FETCH_HOSTS = (
+    "linkedin.com", "lnkd.in", "facebook.com", "fb.com", "fb.me", "fb.watch",
+    "instagram.com", "instagr.am", "threads.net", "threads.com", "x.com",
+    "twitter.com", "t.co", "tiktok.com", "reddit.com", "redd.it",
+)
 
 BTC_RE = re.compile(r"\b(?:bc1[a-zA-HJ-NP-Z0-9]{20,87}|[13][a-km-zA-HJ-NP-Z1-9]{25,34})\b")
 EVM_RE = re.compile(r"\b0x[a-fA-F0-9]{40}\b")
@@ -125,7 +139,8 @@ def _is_public_ip(value: str) -> bool:
     )
 
 
-def _validate_public_url(value: str) -> str:
+def _check_url_shape(value: str) -> Any:
+    """Every check that needs no network. Returns the parsed URL."""
     raw = str(value or "").strip()
     try:
         parsed = urlsplit(raw)
@@ -141,6 +156,18 @@ def _validate_public_url(value: str) -> str:
         raise ValueError("Local URLs are not allowed.")
     if host.endswith((".local", ".internal", ".localhost")):
         raise ValueError("Local/private hostnames are not allowed.")
+    try:
+        ipaddress.ip_address(host)
+    except ValueError:
+        return parsed
+    if not _is_public_ip(host):
+        raise ValueError("Private network addresses are not allowed.")
+    return parsed
+
+
+def _validate_public_url(value: str) -> str:
+    parsed = _check_url_shape(value)
+    host = (parsed.hostname or "").strip().lower()
 
     try:
         infos = socket.getaddrinfo(host, parsed.port or (443 if parsed.scheme == "https" else 80))
@@ -154,8 +181,29 @@ def _validate_public_url(value: str) -> str:
     return urlunsplit(parsed)
 
 
+class PolicyBlockedError(ValueError):
+    """The URL is on a platform CT Atlas never fetches directly."""
+
+
+def is_no_direct_fetch(url: str) -> bool:
+    try:
+        host = (urlsplit(str(url or "").strip()).hostname or "").lower().rstrip(".")
+    except ValueError:
+        return False
+    return any(host == blocked or host.endswith("." + blocked) for blocked in NO_DIRECT_FETCH_HOSTS)
+
+
+def _validate_fetch_target(url: str) -> str:
+    if is_no_direct_fetch(url):
+        raise PolicyBlockedError(
+            "CT Atlas does not retrieve pages from this platform. Treat any search "
+            "snippet as an index lead only, not as a directly observed page."
+        )
+    return _validate_public_url(url)
+
+
 def _manual_fetch(url: str, timeout: int = DEFAULT_TIMEOUT) -> requests.Response:
-    current = _validate_public_url(url)
+    current = _validate_fetch_target(url)
     for _ in range(4):
         response = requests.get(
             current,
@@ -169,7 +217,7 @@ def _manual_fetch(url: str, timeout: int = DEFAULT_TIMEOUT) -> requests.Response
             response.close()
             if not location:
                 raise ValueError("Redirect did not provide a destination.")
-            current = _validate_public_url(urljoin(current, location))
+            current = _validate_fetch_target(urljoin(current, location))
             continue
         response.raise_for_status()
         response._ct_atlas_final_url = current
@@ -216,13 +264,14 @@ def _page_payload(url: str, body: bytes, content_type: str) -> dict[str, Any]:
 
     links: list[dict[str, str]] = []
     seen: set[str] = set()
-    for anchor in soup.find_all("a", href=True):
+    # A page's links are only leads: DNS is checked when one is actually fetched,
+    # so a hostile page cannot force thousands of lookups here.
+    for anchor in soup.find_all("a", href=True, limit=MAX_ANCHORS_SCANNED):
         href = str(anchor.get("href") or "").strip()
         if not href:
             continue
-        absolute = urljoin(final_url, href)
         try:
-            safe = _validate_public_url(absolute)
+            safe = urlunsplit(_check_url_shape(urljoin(final_url, href)))
         except Exception:
             continue
         if safe in seen:
@@ -252,6 +301,9 @@ def fetch_public_url(url: str) -> dict[str, Any]:
     It blocks localhost/private-network targets, follows at most three
     validated redirects, limits response size, and returns readable page text
     plus public links that may be explored in later tool calls.
+
+    It returns status 'policy_blocked' for LinkedIn, Facebook, Instagram, Threads,
+    X, TikTok and Reddit: CT Atlas never retrieves those pages, so do not retry.
     """
     try:
         response = _manual_fetch(url)
@@ -259,7 +311,9 @@ def fetch_public_url(url: str) -> dict[str, Any]:
         content_type = response.headers.get("Content-Type", "")
         body = _read_limited(response)
         response.close()
-        return _page_payload(final_url, body, content_type)
+        return {**_page_payload(final_url, body, content_type), "requested_url": _clean(url, 1500)}
+    except PolicyBlockedError as exc:
+        return {"status": "policy_blocked", "url": _clean(url, 1500), "reason": str(exc)}
     except Exception as exc:
         return {
             "status": "error",
@@ -360,7 +414,7 @@ def search_public_web(query: str, limit: int = 8) -> dict[str, Any]:
     The agent must continue from known URLs when search is unavailable.
     """
     clean_query = _clean(query, 500)
-    requested = max(1, min(int(limit or 8), 10))
+    requested = max(1, min(_as_int(limit, 8), 10))
     provider = os.getenv("SOCMINT_SEARCH_PROVIDER", "disabled").strip().lower()
 
     if not clean_query:
@@ -401,33 +455,89 @@ def search_public_web(query: str, limit: int = 8) -> dict[str, Any]:
 _reddit_token_cache: dict[str, Any] = {"token": "", "expires_at": 0.0}
 _twitch_token_cache: dict[str, Any] = {"token": "", "expires_at": 0.0}
 
+# X Developer Agreement XIV.B(a) bars surveillance and gathering intelligence, and
+# XIV.C bars government end users whose mission includes intelligence, without
+# X's written approval. Reddit's Public Content Policy is reported to bar helping
+# government surveillance. A token alone must therefore never enable these
+# collectors: set the flag only once the platform's written approval is on file.
+def x_approved() -> bool:
+    return os.getenv("X_WRITTEN_APPROVAL", "").strip() == "1"
+
+
+def reddit_approved() -> bool:
+    return os.getenv("REDDIT_WRITTEN_APPROVAL", "").strip() == "1"
+
+
+# name -> (URL, query parameters, text a healthy answer contains). A small real
+# request per keyless collector, so that a provider that has started refusing us
+# shows as off instead of as a constant True.
+_COLLECTOR_PROBES = {
+    "bluesky_public": ("https://public.api.bsky.app/xrpc/app.bsky.actor.searchActors", {"q": "bsky", "limit": 1}, "actors"),
+    "bluesky_post_search": ("https://api.bsky.app/xrpc/app.bsky.feed.searchPosts", {"q": "bluesky", "limit": 1}, "posts"),
+    "mastodon_public": ("https://mastodon.social/api/v2/search", {"q": "mastodon", "type": "accounts", "limit": 1, "resolve": "false"}, "accounts"),
+    "fourchan_public": ("https://a.4cdn.org/boards.json", {}, "boards"),
+    "telegram_public_pages": ("https://t.me/s/telegram", {}, "tgme_widget_message"),
+    "wayback_captures": ("https://web.archive.org/cdx/search/cdx", {"url": "example.com", "limit": 1, "output": "json"}, "timestamp"),
+    "odysee_public": ("https://lighthouse.odysee.tv/search", {"s": "news", "size": 1}, "claimId"),
+}
+_COLLECTOR_PROBE_TIMEOUT = 5
+_COLLECTOR_PROBE_TTL = 300
+_collector_cache: dict[str, Any] = {"at": 0.0, "flags": None}
+_collector_lock = threading.Lock()
+
+
+def _probe_collector(url: str, params: dict[str, Any], marker: str) -> bool:
+    try:
+        response = requests.get(
+            url,
+            params=params,
+            headers={"User-Agent": USER_AGENT},
+            timeout=_COLLECTOR_PROBE_TIMEOUT,
+        )
+        return response.ok and marker in response.text
+    except Exception:
+        return False
+
+
+def _collector_status() -> dict[str, bool]:
+    with _collector_lock:
+        flags = _collector_cache["flags"]
+        if flags is not None and time.monotonic() - _collector_cache["at"] < _COLLECTOR_PROBE_TTL:
+            return flags
+        with ThreadPoolExecutor(max_workers=len(_COLLECTOR_PROBES)) as pool:
+            futures = {name: pool.submit(_probe_collector, *probe) for name, probe in _COLLECTOR_PROBES.items()}
+            flags = {name: future.result() for name, future in futures.items()}
+        _collector_cache.update(at=time.monotonic(), flags=flags)
+        return flags
+
 
 def social_capabilities() -> dict[str, Any]:
     """Report which SOCMINT collectors are currently usable.
 
-    Most of these are genuinely free/public (no key, or a free-tier key):
-    Bluesky and basic Mastodon discovery need no key at all. x_api is the one
-    exception -- X has required a paid API subscription (Basic tier or
-    higher) for search access since 2023, so x_api being true means a paid
-    subscription is configured, not a free source. See x_api_requires_paid_tier.
+    Keyless collectors are probed with a small real request, cached for a few
+    minutes; keyed ones report whether their key is configured. x_api and
+    reddit_oauth stay false without the platform's written approval, and X also
+    bills per post read, so x_api is never a free source.
 
-    This returns configuration state only and never exposes API keys or secrets.
+    This never exposes API keys or secrets.
     """
     provider = os.getenv("SOCMINT_SEARCH_PROVIDER", "disabled").strip().lower()
-    reddit_ready = bool(
+    reddit_ready = reddit_approved() and bool(
         os.getenv("REDDIT_CLIENT_ID", "").strip()
         and os.getenv("REDDIT_CLIENT_SECRET", "").strip()
     )
+    probed = _collector_status()
     return {
         "status": "success",
-        "bluesky_public": True,
-        "fourchan_public": True,
-        "mastodon_public": True,
-        "telegram_public_pages": True,
-        "telegram_channel_reader": True,
+        "bluesky_public": probed["bluesky_public"],
+        "bluesky_post_search": probed["bluesky_post_search"],
+        "fourchan_public": probed["fourchan_public"],
+        "mastodon_public": probed["mastodon_public"],
+        "telegram_public_pages": probed["telegram_public_pages"],
+        "telegram_channel_reader": probed["telegram_public_pages"],
         "telegram_global_discovery": provider in {"brave", "searxng"},
-        "wayback_captures": True,
-        "odysee_public": True,
+        "wayback_captures": probed["wayback_captures"],
+        "odysee_public": probed["odysee_public"],
         "linkedin_public_discovery": provider in {"brave", "searxng"},
         "youtube_api": bool(os.getenv("YOUTUBE_API_KEY", "").strip()),
         "twitch_api": bool(
@@ -436,7 +546,7 @@ def social_capabilities() -> dict[str, Any]:
         ),
         "flickr_api": bool(os.getenv("FLICKR_API_KEY", "").strip()),
         "tumblr_api": bool(os.getenv("TUMBLR_API_KEY", "").strip()),
-        "x_api": bool(os.getenv("X_BEARER_TOKEN", "").strip()),
+        "x_api": x_approved() and bool(os.getenv("X_BEARER_TOKEN", "").strip()),
         "x_api_requires_paid_tier": True,
         "reddit_oauth": reddit_ready,
         "groq_whisper": bool(os.getenv("GROQ_API_KEY", "").strip()),
@@ -445,7 +555,7 @@ def social_capabilities() -> dict[str, Any]:
             and os.getenv("CLOUDFLARE_AI_API_TOKEN", "").strip()
         ),
         "openrouter_free": bool(os.getenv("OPENROUTER_API_KEY", "").strip()),
-        "sherlock_username_discovery": True,
+        "sherlock_username_discovery": importlib.util.find_spec("sherlock_project") is not None,
         "independent_web_search": provider in {"brave", "searxng"},
         "search_provider": provider or "disabled",
         "notes": (
@@ -458,11 +568,12 @@ def social_capabilities() -> dict[str, Any]:
 def search_bluesky(query: str, limit: int = 10, mode: str = "posts") -> dict[str, Any]:
     """Search PUBLIC Bluesky posts or accounts without authentication.
 
-    mode='posts' uses app.bsky.feed.searchPosts.
-    mode='accounts' uses app.bsky.actor.searchActors.
+    mode='posts' uses app.bsky.feed.searchPosts and can be refused: if it fails,
+    say so in the coverage instead of retrying. mode='accounts' uses
+    app.bsky.actor.searchActors.
     """
     clean_query = _clean(query, 400)
-    requested = max(1, min(int(limit or 10), 25))
+    requested = max(1, min(_as_int(limit, 10), 25))
     selected = _clean(mode, 20).lower() or "posts"
     if not clean_query:
         return {"status": "error", "error": "Empty Bluesky query.", "results": []}
@@ -470,8 +581,11 @@ def search_bluesky(query: str, limit: int = 10, mode: str = "posts") -> dict[str
     if selected not in {"posts", "accounts"}:
         return {"status": "error", "error": "mode must be posts or accounts.", "results": []}
 
+    # Stopgap: public.api.bsky.app answers 403 to searchPosts. api.bsky.app still
+    # serves it without login, but that is undocumented and pagination is reported
+    # to fail. The durable fix is an app password on a declared CT Atlas account.
     endpoint = (
-        "https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts"
+        "https://api.bsky.app/xrpc/app.bsky.feed.searchPosts"
         if selected == "posts"
         else "https://public.api.bsky.app/xrpc/app.bsky.actor.searchActors"
     )
@@ -553,7 +667,7 @@ def search_mastodon(
     """
     clean_query = _clean(query, 400)
     host = _clean(instance, 300).lower().replace("https://", "").replace("http://", "").strip("/")
-    requested = max(1, min(int(limit or 10), 20))
+    requested = max(1, min(_as_int(limit, 10), 20))
     selected = _clean(result_type, 20).lower() or "accounts"
     if selected not in {"accounts", "hashtags", "statuses"}:
         return {"status": "error", "error": "result_type must be accounts, hashtags or statuses.", "results": []}
@@ -638,7 +752,7 @@ def search_youtube(query: str, limit: int = 10) -> dict[str, Any]:
     """Search PUBLIC YouTube videos/channels through the free Data API quota."""
     key = os.getenv("YOUTUBE_API_KEY", "").strip()
     clean_query = _clean(query, 400)
-    requested = max(1, min(int(limit or 10), 25))
+    requested = max(1, min(_as_int(limit, 10), 25))
     if not key:
         return {
             "status": "unavailable",
@@ -743,7 +857,7 @@ def search_fourchan(
     to respect the API rule of no more than one request per second.
     """
     clean_query = _clean(query, 200).lower()
-    requested = max(1, min(int(limit or 10), 25))
+    requested = max(1, min(_as_int(limit, 10), 25))
     board_list = [
         re.sub(r"[^a-z0-9]", "", part.lower())
         for part in str(boards or "pol,int,news").split(",")
@@ -837,7 +951,7 @@ def search_twitch(query: str, limit: int = 10, live_only: bool = False) -> dict[
     client_id = os.getenv("TWITCH_CLIENT_ID", "").strip()
     client_secret = os.getenv("TWITCH_CLIENT_SECRET", "").strip()
     clean_query = _clean(query, 250)
-    requested = max(1, min(int(limit or 10), 20))
+    requested = max(1, min(_as_int(limit, 10), 20))
     if not client_id or not client_secret:
         return {
             "status": "unavailable",
@@ -909,7 +1023,7 @@ def search_flickr(query: str, limit: int = 10) -> dict[str, Any]:
     """
     key = os.getenv("FLICKR_API_KEY", "").strip()
     clean_query = _clean(query, 300)
-    requested = max(1, min(int(limit or 10), 50))
+    requested = max(1, min(_as_int(limit, 10), 50))
     if not key:
         return {
             "status": "unavailable",
@@ -1004,7 +1118,7 @@ def search_tumblr(query: str, limit: int = 10) -> dict[str, Any]:
     """
     key = os.getenv("TUMBLR_API_KEY", "").strip()
     clean_query = _clean(query, 200).lstrip("#")
-    requested = max(1, min(int(limit or 10), 20))
+    requested = max(1, min(_as_int(limit, 10), 20))
     if not key:
         return {
             "status": "unavailable",
@@ -1085,7 +1199,14 @@ def search_x(query: str, limit: int = 10) -> dict[str, Any]:
     """
     token = os.getenv("X_BEARER_TOKEN", "").strip()
     clean_query = _clean(query, 500)
-    requested = max(1, min(int(limit or 10), 25))
+    requested = max(1, min(_as_int(limit, 10), 25))
+    if not x_approved():
+        return {
+            "status": "unavailable",
+            "platform": "x",
+            "results": [],
+            "reason": "X search needs X's written approval (X_WRITTEN_APPROVAL=1).",
+        }
     if not token:
         return {
             "status": "unavailable",
@@ -1187,10 +1308,17 @@ def _reddit_access_token() -> str:
 def search_reddit(query: str, limit: int = 10, sort: str = "new") -> dict[str, Any]:
     """Search PUBLIC Reddit posts through OAuth free-access credentials."""
     clean_query = _clean(query, 400)
-    requested = max(1, min(int(limit or 10), 25))
+    requested = max(1, min(_as_int(limit, 10), 25))
     selected_sort = _clean(sort, 20).lower() or "new"
     if selected_sort not in {"new", "relevance", "top", "hot", "comments"}:
         selected_sort = "new"
+    if not reddit_approved():
+        return {
+            "status": "unavailable",
+            "platform": "reddit",
+            "results": [],
+            "reason": "Reddit search needs Reddit's written approval (REDDIT_WRITTEN_APPROVAL=1).",
+        }
     if not os.getenv("REDDIT_CLIENT_ID", "").strip() or not os.getenv("REDDIT_CLIENT_SECRET", "").strip():
         return {
             "status": "unavailable",
@@ -1271,7 +1399,7 @@ def search_linkedin_public(
     result_type may be: all, people, companies, posts.
     """
     clean_query = _clean(query, 350)
-    requested = max(1, min(int(limit or 10), 10))
+    requested = max(1, min(_as_int(limit, 10), 10))
     selected = _clean(result_type, 30).lower() or "all"
     if selected not in {"all", "people", "companies", "posts"}:
         return {
@@ -1300,7 +1428,8 @@ def search_linkedin_public(
     result["result_type"] = selected
     result["access_note"] = (
         "Results come from public-web indexing only. LinkedIn login-gated or "
-        "non-public content is not accessed."
+        "non-public content is not accessed, and CT Atlas never fetches LinkedIn "
+        "pages: these snippets are index leads, not directly observed pages."
     )
     return result
 
@@ -1343,7 +1472,7 @@ def _as_int(value: Any, default: int) -> int:
     """Tool arguments come from an LLM and may be strings; never raise on them."""
     try:
         return int(value)
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):
         return default
 
 
@@ -1960,7 +2089,8 @@ def transcribe_public_media(url: str, language: str = "") -> dict[str, Any]:
             "text": "",
         }
     try:
-        safe_url = _validate_public_url(url)
+        # Groq would fetch the URL for us, so the direct-fetch policy applies here too.
+        safe_url = _validate_fetch_target(url)
         payload: dict[str, str] = {
             "model": os.getenv("GROQ_WHISPER_MODEL", "whisper-large-v3-turbo").strip()
             or "whisper-large-v3-turbo",
@@ -1985,6 +2115,8 @@ def transcribe_public_media(url: str, language: str = "") -> dict[str, Any]:
             "source_url": safe_url,
             "text": _clean(data.get("text"), 20000),
         }
+    except PolicyBlockedError as exc:
+        return {"status": "policy_blocked", "provider": "groq", "source_url": _clean(url, 1200), "text": "", "reason": str(exc)}
     except Exception as exc:
         return {
             "status": "error",
@@ -1993,6 +2125,15 @@ def transcribe_public_media(url: str, language: str = "") -> dict[str, Any]:
             "text": "",
             "error": _clean(exc, 600),
         }
+
+
+def _sherlock_hits(output: Any) -> list[dict[str, str]]:
+    """Profile URLs from Sherlock's '[+] Site: URL' lines only: its other output
+    includes an update notice with a GitHub release URL, which is not a hit."""
+    if isinstance(output, bytes):
+        output = output.decode("utf-8", errors="replace")
+    found = [url for line in str(output or "").splitlines() if line.lstrip().startswith("[+]") for url in URL_RE.findall(line)]
+    return [{"url": url} for url in list(dict.fromkeys(found))[:100]]
 
 
 def search_username_profiles(username: str, timeout_seconds: int = 45) -> dict[str, Any]:
@@ -2009,11 +2150,12 @@ def search_username_profiles(username: str, timeout_seconds: int = 45) -> dict[s
             "results": [],
             "error": "Username contains unsupported characters.",
         }
-    timeout_value = max(10, min(int(timeout_seconds or 45), 60))
+    timeout_value = max(10, min(_as_int(timeout_seconds, 45), 60))
     try:
         proc = subprocess.run(
             [
                 sys.executable,
+                "-u",  # unbuffered, so hits printed before a timeout are not lost
                 "-m",
                 "sherlock_project",
                 value,
@@ -2027,24 +2169,22 @@ def search_username_profiles(username: str, timeout_seconds: int = 45) -> dict[s
             timeout=timeout_value,
             check=False,
         )
-        output = (proc.stdout or "") + "\n" + (proc.stderr or "")
-        urls = list(dict.fromkeys(URL_RE.findall(output)))[:100]
         return {
             "status": "success" if proc.returncode in {0, 1} else "partial",
             "provider": "sherlock",
             "username": value,
-            "results": [{"url": url} for url in urls],
+            "results": _sherlock_hits(proc.stdout),
             "caveat": (
                 "Same-username hits are candidate profiles only and require "
                 "independent corroboration before identity attribution."
             ),
         }
-    except subprocess.TimeoutExpired:
+    except subprocess.TimeoutExpired as exc:
         return {
             "status": "partial",
             "provider": "sherlock",
             "username": value,
-            "results": [],
+            "results": _sherlock_hits(exc.stdout),
             "error": "Sherlock timed out before completing the scan.",
         }
     except Exception as exc:

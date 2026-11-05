@@ -46,7 +46,11 @@ test("history rows read as what was searched, with its filters and outcome",()=>
   assert.equal(face[2],"Face F2 @ 3.5s · reverse-image search");
   assert.deepEqual([...face[3]].map(pair=>[...pair]),[["Upload size","2.0 MB"],["Engines","yandex"],["Crop SHA-256","ab".repeat(32)],["Outcome","Crop hosted"]]);
   assert.equal(api.adminHistoryEntry({at,feature:"facial_extraction",files:3,videos:1,bytes:3145728})[3].find(pair=>pair[0]==="Upload size")[1],"3.0 MB");
-  assert.match(api.adminHistoryHtml([{at,feature:"social",target:"Retired search"},{at,feature:"tab_social"}]),/No details recorded/);
+  assert.match(api.adminHistoryHtml([{at,feature:"tab_social"}]),/No details recorded/);
+  const social=api.adminHistoryEntry({at,feature:"social",target:"Example Person",usernames:["handle"],platforms:["Telegram"],objective:"Find links",outcome:"failed"});
+  assert.deepEqual([social[1],social[2]],["SOCMINT","Example Person"]);
+  assert.deepEqual([...social[3]].map(pair=>[...pair]),[["Usernames","handle"],["Platforms","Telegram"],["Objective","Find links"],["Outcome","Failed"]]);
+  assert.match(api.adminHistoryHtml([{at,feature:"social",target:"Example Person"}]),/Example Person/);
   assert.equal(api.adminHistoryEntry({at,feature:"tab_crypto"})[1],"CRYPTO OPENED");
   assert.equal(api.adminHistoryEntry({at,feature:"ip_lookup",target:"8.8.8.8",kind:"ip"})[2],"8.8.8.8");
 });

@@ -24,11 +24,11 @@ const SCOPE_NOTE =
   "(direct relationships only, no indirect exposure).";
 
 const WALLET_SCOPE_NOTE =
-  "Wallet strings were extracted from the report text and checksum-validated, which proves only that they are " +
+  "Wallet strings were extracted from the report text and its collected posts and checksum-validated, which proves only that they are " +
   "well-formed. A list match means this exact string appears on a sanctions list; it says nothing about who " +
   "published or controls it. No match does NOT mean an address is safe: coverage is limited to the listed " +
   "source(s) and only strings present in this report were screened.";
-const MAX_REPORT_WALLETS = 40;
+const MAX_REPORT_WALLETS = 200;
 const REPORT_WALLET_FIELDS = [
   "executive_assessment", "source_coverage", "identity_alias_findings", "network_associations",
   "content_narrative", "activity_timeline", "locations_travel_signals", "financial_crypto_indicators",
@@ -269,12 +269,18 @@ function screenAnalysis(analysis, state, now = Date.now()) {
 
 // Text of a SOCMINT report that may carry wallet strings. The analyst's own
 // query (report.query) and the source list are deliberately excluded: only what
-// the investigation reports as observed is screened.
+// the investigation reports as observed is screened. That includes the Telegram
+// annex: a wallet in a collected post must not depend on the model repeating it.
 function reportWalletText(report) {
   const parts = REPORT_WALLET_FIELDS.map(key => report?.[key]);
   for (const item of Array.isArray(report?.key_findings) ? report.key_findings : []) parts.push(item?.finding, item?.basis);
   for (const item of Array.isArray(report?.entities) ? report.entities : []) parts.push(item?.value, item?.basis);
   for (const item of Array.isArray(report?.watchpoints) ? report.watchpoints : []) parts.push(item?.issue, item?.indicator);
+  const telegram = report?.telegram_evidence;
+  for (const item of Array.isArray(telegram?.messages) ? telegram.messages : []) {
+    parts.push(item?.text, ...(Array.isArray(item?.wallets) ? item.wallets : []));
+  }
+  parts.push(...(Array.isArray(telegram?.wallets) ? telegram.wallets : []));
   return parts.filter(Boolean).join("\n");
 }
 

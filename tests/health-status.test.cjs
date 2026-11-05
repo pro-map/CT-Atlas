@@ -91,6 +91,29 @@ test("the response never contains a key, secret or backend URL",async()=>{
   assert.ok(!text.includes("agent.example")&&!text.includes("visual.example"),"backend URLs must not be exposed");
 });
 
+test("a stale agent key shows as down even though the agent's public /health answers",async()=>{
+  const {fetchImpl}=router({"agent.example.run.app/auth-check":async(_url,init)=>{
+    assert.equal(init.headers["X-CT-Atlas-Agent-Key"],SECRETS.agent);
+    return {ok:false,status:401};
+  }});
+  const {body}=await harness(fetchImpl).handleHealthStatus(FULL_ENV);
+  assert.equal(body.components.agent.status,"down");
+  assert.equal(body.components.agent.auth,"rejected");
+  assert.match(body.components.agent.error,/refused the Worker's key/);
+  assert.doesNotMatch(JSON.stringify(body),/secret|apikey|api_key/i,"live-smoke fails on these words");
+});
+
+test("an agent that predates /auth-check, or a failed check, is not reported as a key problem",async()=>{
+  for(const reply of [async()=>({ok:false,status:404}),async()=>{throw new Error("reset");}]){
+    const {fetchImpl}=router({"agent.example.run.app/auth-check":reply});
+    const {body}=await harness(fetchImpl).handleHealthStatus(FULL_ENV);
+    assert.equal(body.components.agent.status,"operational");
+    assert.equal(body.components.agent.auth,"unknown");
+  }
+  const {fetchImpl}=router();
+  assert.equal((await harness(fetchImpl).handleHealthStatus(FULL_ENV)).body.components.agent.auth,"ok");
+});
+
 test("unconfigured services are 'not_configured' (not down); Bitcoin is keyless and still probed",async()=>{
   const {fetchImpl,calls}=router();
   const h=harness(fetchImpl);

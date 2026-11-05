@@ -140,19 +140,39 @@ async function probeSanctions(env) {
   };
 }
 
+// The agent's /health is public, so a stale shared key looks healthy there while
+// every investigation is refused. Only a clear refusal counts: an agent older than
+// /auth-check answers 404, which says nothing about the key.
+async function probeAgentAuth(base, key) {
+  try {
+    const response = await fetch(base + "/auth-check", {
+      headers: { "X-CT-Atlas-Agent-Key": key },
+      signal: AbortSignal.timeout(PROBE_TIMEOUT_MS)
+    });
+    if (response.status === 401 || response.status === 403) return "rejected";
+    return response.ok ? "ok" : "unknown";
+  } catch (_) {
+    return "unknown";
+  }
+}
+
 function probeAgent(env) {
   const base = httpsBase(env?.SOCMINT_AGENT_URL);
-  if (!base || !String(env?.SOCMINT_AGENT_SHARED_SECRET || "").trim()) return notConfigured();
+  const key = String(env?.SOCMINT_AGENT_SHARED_SECRET || "").trim();
+  if (!base || !key) return notConfigured();
   return timedProbe(async () => {
     const payload = await (await probeFetch(base + "/health", {}, COLD_START_TIMEOUT_MS)).json();
     if (!payload?.ok) throw new Error("Agent reported not ok");
+    const auth = await probeAgentAuth(base, key);
     return {
       version: cleanText(payload.version, 80),
       model: cleanText(payload.model, 80),
       search_provider: cleanText(payload.search_provider, 40),
-      collectors: booleanFlags(payload.social_sources)
+      collectors: booleanFlags(payload.social_sources),
+      auth,
+      ...(auth === "rejected" ? { status: "down", error: "The agent refused the Worker's key: investigations will fail." } : {})
     };
-  }, [base], { coldStart: true });
+  }, [base, key], { coldStart: true });
 }
 
 function probeVisual(env) {

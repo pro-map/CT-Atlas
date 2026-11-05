@@ -221,11 +221,13 @@ const ADMIN_HISTORY_TITLES={
   "tab:darkweb":"DARK WEB OPENED","tab:ip":"IP INTELLIGENCE OPENED"
 };
 const ADMIN_FEATURE_LABELS={
-  report_generator:"SITUATION REPORT",deep_search:"CUSTOM INTELLIGENCE",event_list:"EVENT LIST",blockchain:"BLOCKCHAIN",
+  report_generator:"SITUATION REPORT",deep_search:"CUSTOM INTELLIGENCE",event_list:"EVENT LIST",blockchain:"BLOCKCHAIN",social:"SOCMINT",
   facial_extraction:"FACIAL EXTRACTION",facial_search:"FACIAL SEARCH",darkweb_search:"DARK WEB",ip_lookup:"IP LOOKUP",
   tab_map:"MAP OPENED",tab_crypto:"CRYPTO OPENED",tab_facial:"FACIAL OPENED",tab_darkweb:"DARK WEB OPENED",tab_ip:"IP INTELLIGENCE OPENED"
 };
 const ADMIN_HISTORY_FIELDS=[
+  ["usernames","Usernames"],["keywords","Keywords"],["platforms","Platforms"],["urls","URLs"],["objective","Objective"],["mode","Mode"],
+  ["countries_regions","Regions"],["languages","Languages"],["date_from","From"],["date_to","To"],["discovery_mode","Collection path"],
   ["region","Region"],["topic","Category"],["actor_group","Group"],["period_days","Period"],["compare","Comparison"],["scope","Database scope"],
   ["country","Country"],["sort","Sort"],["view","View"],["outlet","Outlet"],["material","Material"],["loaded_back_to","Loaded back to"],
   ["results","Results shown"],["kind","Type"],["chain","Chain"],["chain_hint","Chain selected"],["origin","Origin"],["limit","Transactions"],
@@ -233,7 +235,7 @@ const ADMIN_HISTORY_FIELDS=[
   ["videos","Videos"],["bytes","Upload size"],["engines","Engines"],["face","Face"],["sha256","Crop SHA-256"],["period","Period found"],["title","Result"],["outcome","Outcome"]
 ];
 const ADMIN_OUTCOMES={cached:"Served from cache",generated:"Generated",no_events:"No matching events",failed:"Failed",hosted:"Crop hosted"};
-const ADMIN_MAIN_FIELD={deep_search:"question",event_list:"text",darkweb_search:"text",blockchain:"query",ip_lookup:"target"};
+const ADMIN_MAIN_FIELD={deep_search:"question",event_list:"text",darkweb_search:"text",blockchain:"query",ip_lookup:"target",social:"target"};
 
 function adminHistoryValue(name,value){
   if(Array.isArray(value))return value.join(", ");
@@ -262,7 +264,7 @@ function adminHistoryEntry(row){
     main=(row.files||0)+" file(s) analysed";skip.add("files");
   }else if(feature.startsWith("tab_")){
     main="Workspace opened";
-  }else if(feature==="event_list"||feature==="darkweb_search"){
+  }else if(feature==="event_list"||feature==="darkweb_search"||feature==="social"){
     main="(filters only)";
   }
   const details=ADMIN_HISTORY_FIELDS.filter(([name])=>!skip.has(name)&&row[name]!==undefined&&row[name]!==""&&!(Array.isArray(row[name])&&!row[name].length))
@@ -273,7 +275,7 @@ function adminHistoryEntry(row){
 }
 
 function adminHistoryHtml(rows){
-  rows=rows.filter(row=>row.feature!=="social"&&row.feature!=="tab_social");
+  rows=rows.filter(row=>row.feature!=="tab_social");
   if(!rows.length)return '<div class="admin-history-empty">No details recorded for this period.</div>';
   return rows.map(row=>{
     const [when,label,main,details]=adminHistoryEntry(row);

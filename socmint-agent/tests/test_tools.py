@@ -1,3 +1,4 @@
+from app import tools
 from app.tools import (
     extract_public_indicators,
     preprocess_public_text_free,
@@ -24,6 +25,7 @@ def test_free_public_capabilities_and_optional_keys(monkeypatch):
     monkeypatch.delenv("REDDIT_CLIENT_ID", raising=False)
     monkeypatch.delenv("REDDIT_CLIENT_SECRET", raising=False)
     monkeypatch.delenv("GROQ_API_KEY", raising=False)
+    monkeypatch.setattr(tools, "_collector_status", lambda: dict.fromkeys(tools._COLLECTOR_PROBES, True))
 
     caps = social_capabilities()
     assert caps["bluesky_public"] is True
