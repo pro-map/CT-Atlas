@@ -321,6 +321,10 @@ button,input,select{font:inherit}
 .alert-item.high{border-left-color:#d35d5d}
 .alert-item.medium{border-left-color:#d7aa4c}
 .alert-item.low{border-left-color:#5da17a}
+.alert-item.acknowledged{opacity:.6}
+.alert-item .intel-actions,.crypto-watch-card .intel-actions{margin-top:6px}
+.crypto-watch-card{grid-column:1/-1}
+#cryptoWatchlist{max-height:340px;overflow-y:auto}
 .crosschain-item{border-left:3px solid #7b68b5}
 .crosschain-service{font:800 8px/1 ui-monospace,SFMono-Regular,Consolas,monospace;color:#cabaff}
 .workspace-saving{opacity:.62}

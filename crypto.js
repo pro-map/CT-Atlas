@@ -162,6 +162,8 @@ const WORKSPACE_CONTROL_IDS=[
   "monitorSeedButton","monitorCheckButton"
 ];
 const WORKSPACE_SAVE_ATTEMPTS=3;
+// The Worker keeps the first 300 and silently drops the rest (sanitizeWorkspace).
+const WATCHLIST_CAP=300;
 
 function syncWorkspaceControls(loadFailed=false){
   for(const id of WORKSPACE_CONTROL_IDS){
@@ -400,6 +402,7 @@ function renderWorkspaceUi(){
   renderExchangeAdminAccess();
   renderCaseUi();
   renderAlerts();
+  renderWatchlist();
   if(lastPayload?.kind==="address")renderIntelligencePanels();
 }
 
@@ -1969,6 +1972,10 @@ function monitorSeed(){
     item.chain===lastPayload.chain&&normalizeAddressForChain(item.address,item.chain)===key
   );
   if(!watch){
+    if((cryptoWorkspace.watchlist||[]).length>=WATCHLIST_CAP){
+      document.getElementById("monitorStatus").textContent="The monitoring list is full ("+WATCHLIST_CAP+" wallets). Delete one before adding this seed.";
+      return;
+    }
     watch={
       id:makeId("watch"),chain:lastPayload.chain,address:lastPayload.query,
       label:labelForAddress(lastPayload.query,lastPayload.chain)?.name||short(lastPayload.query,9),
@@ -1982,6 +1989,7 @@ function monitorSeed(){
   watch.updated_at=new Date().toISOString();
   scheduleWorkspaceSave();
   renderAlerts();
+  renderWatchlist();
   document.getElementById("monitorStatus").textContent="Seed is monitored. Baseline saved; automatic checks rotate every 6 hours. CHECK NOW remains available.";
 }
 
@@ -2078,7 +2086,7 @@ async function checkMonitored(){
       }
       await sleep(250);
     }
-    scheduleWorkspaceSave();renderAlerts();
+    scheduleWorkspaceSave();renderAlerts();renderWatchlist();
     status.textContent="Monitoring check complete · "+checked+" wallet(s) checked · "+created+" new alert(s).";
   }finally{
     if(button){button.disabled=false;button.textContent="CHECK MONITORED NOW";}
@@ -2090,12 +2098,61 @@ function renderAlerts(){
   if(!box)return;
   const alerts=(cryptoWorkspace.alerts||[]).slice(0,30);
   if(!alerts.length){box.innerHTML='<div class="intel-result">No saved monitoring alerts.</div>';return;}
-  box.innerHTML=alerts.map(item=>
-    '<div class="intel-item alert-item '+String(item.severity||"low").toLowerCase()+'"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.title)+'</div>'+
-    '<div class="intel-meta">'+esc(item.type)+' · '+esc(short(item.address,8))+' · '+esc(fmtTime(item.created_at))+'</div></div>'+
-    '<span class="intel-badge '+String(item.severity||"low").toLowerCase()+'">'+esc(item.severity||"LOW")+'</span></div>'+
-    '<div class="intel-detail">'+esc(item.detail||"")+'</div></div>'
-  ).join("");
+  box.innerHTML=alerts.map(item=>{
+    const severity=esc(String(item.severity||"low").toLowerCase());
+    const acknowledged=item.acknowledged===true;
+    return '<div class="intel-item alert-item '+severity+(acknowledged?" acknowledged":"")+'"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.title)+'</div>'+
+      '<div class="intel-meta">'+esc(item.type)+' · '+esc(short(item.address,8))+' · '+esc(fmtTime(item.created_at))+'</div></div>'+
+      '<span class="intel-badge '+severity+'">'+esc(item.severity||"LOW")+'</span></div>'+
+      '<div class="intel-detail">'+esc(item.detail||"")+'</div>'+
+      (acknowledged
+        ?'<div class="intel-meta">ACKNOWLEDGED</div>'
+        :'<div class="intel-actions"><button type="button" class="crypto-small-button" data-alert-ack="'+esc(item.id)+'">ACKNOWLEDGE</button></div>')+
+      '</div>';
+  }).join("");
+}
+
+function acknowledgeAlert(id){
+  const alert=(cryptoWorkspace.alerts||[]).find(item=>item.id===id);
+  if(!alert)return;
+  alert.acknowledged=true;
+  scheduleWorkspaceSave();renderAlerts();renderWatchlist();
+}
+
+function renderWatchlist(){
+  const box=document.getElementById("cryptoWatchlist");
+  const count=document.getElementById("cryptoWatchCount");
+  const watches=cryptoWorkspace.watchlist||[];
+  const open=(cryptoWorkspace.alerts||[]).filter(item=>item.acknowledged!==true).length;
+  if(count){
+    count.textContent=watches.length+" of "+WATCHLIST_CAP+" wallets monitored"+
+      (watches.length>=WATCHLIST_CAP?" (list full: delete one to add another)":"")+" · "+open+" unacknowledged alert(s)";
+  }
+  if(!box)return;
+  if(!watches.length){box.innerHTML='<div class="intel-result">No monitored wallets. Analyse a wallet, then select MONITOR SEED.</div>';return;}
+  box.innerHTML=watches.map(item=>{
+    const paused=item.enabled===false;
+    const limits=thresholdsText(item);
+    const checked=item.last_snapshot?.checked_at?fmtTime(item.last_snapshot.checked_at):"never";
+    return '<div class="intel-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.label||short(item.address,9))+'</div>'+
+      '<div class="intel-meta">'+esc(item.chain)+' · '+esc(short(item.address,9))+' · last checked '+esc(checked)+'</div></div>'+
+      '<span class="intel-badge '+(paused?"unscreened":"clear")+'">'+(paused?"PAUSED":"ACTIVE")+'</span></div>'+
+      (limits?'<div class="intel-detail">'+esc(limits)+'</div>':"")+
+      '<div class="intel-actions"><button type="button" class="crypto-small-button" data-watch-toggle="'+esc(item.id)+'">'+(paused?"RESUME":"PAUSE")+'</button>'+
+      '<button type="button" class="crypto-small-button" data-watch-delete="'+esc(item.id)+'">DELETE</button></div></div>';
+  }).join("");
+}
+
+function toggleWatch(id){
+  const watch=(cryptoWorkspace.watchlist||[]).find(item=>item.id===id);
+  if(!watch)return;
+  watch.enabled=watch.enabled===false;
+  scheduleWorkspaceSave();renderWatchlist();
+}
+
+function deleteWatch(id){
+  cryptoWorkspace.watchlist=(cryptoWorkspace.watchlist||[]).filter(item=>item.id!==id);
+  scheduleWorkspaceSave();renderWatchlist();
 }
 
 function knownServiceFor(address,chain){
@@ -3674,6 +3731,16 @@ function bind(){
   document.getElementById("monitorSeedButton")?.addEventListener("click",monitorSeed);
   document.getElementById("monitorCheckButton")?.addEventListener("click",checkMonitored);
   document.getElementById("workspaceRetryButton")?.addEventListener("click",loadCryptoWorkspace);
+  document.getElementById("cryptoWatchlist")?.addEventListener("click",event=>{
+    const toggle=event.target.closest("[data-watch-toggle]");
+    const remove=event.target.closest("[data-watch-delete]");
+    if(toggle)toggleWatch(toggle.dataset.watchToggle);
+    if(remove)deleteWatch(remove.dataset.watchDelete);
+  });
+  document.getElementById("cryptoAlerts")?.addEventListener("click",event=>{
+    const button=event.target.closest("[data-alert-ack]");
+    if(button)acknowledgeAlert(button.dataset.alertAck);
+  });
 
   FILTER_IDS.forEach(id=>{
     const el=document.getElementById(id);

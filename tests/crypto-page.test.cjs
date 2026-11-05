@@ -43,6 +43,7 @@ function harness({respond}={}){
       setPayloadOnly(payload){lastPayload=payload;},
       detectPatterns,renderPatterns,riskView,renderRisk,combineRisk,checkOneHop,oneHopCandidates,peelChainFinding,oneHopFinding,
       riskOverlays,snapshotFromPayload,paintGraphFrame,render,exportCasePdf,
+      renderWatchlist,toggleWatch,deleteWatch,acknowledgeAlert,renderAlerts,monitorSeed,
       selectCase(id){activeCaseId=id;},
       traceKeys(){return [...tracePayloads.keys()];},
       traceRun(){return autoTraceRun;},
@@ -884,6 +885,79 @@ test("the full report and the Case PDF carry the same risk view",async()=>{
 test("the strings the deployment checks look for are still there",()=>{
   assert.ok(fs.readFileSync("crypto.html","utf8").includes("Behavioral Pattern Detection"));
   assert.ok(fs.readFileSync("crypto.js","utf8").includes("detectPatterns"));
+});
+
+// ---------------------------------------------------------------- watchlist and alerts
+
+const watchItem=(id,extra={})=>({id,chain:"ethereum",address:addr(1),label:"Wallet "+id,enabled:true,thresholds:{min_amount:5},last_snapshot:{checked_at:iso(0)},...extra});
+
+test("the watchlist lists each wallet with its state, and works before any analysis",async()=>{
+  const h=harness({respond:()=>({json:{ok:true,workspace:emptyWorkspace({watchlist:[watchItem("w1"),watchItem("w2",{enabled:false})],alerts:[{id:"a1",acknowledged:false},{id:"a2",acknowledged:true}]})}})});
+  await h.api.loadCryptoWorkspace();
+  const html=h.el("cryptoWatchlist").innerHTML;
+  assert.match(html,/Wallet w1[\s\S]*ACTIVE[\s\S]*single transfer ≥ 5[\s\S]*data-watch-toggle="w1">PAUSE/);
+  assert.match(html,/Wallet w2[\s\S]*PAUSED[\s\S]*data-watch-toggle="w2">RESUME/);
+  assert.match(html,/data-watch-delete="w2"/);
+  assert.equal(h.el("cryptoWatchCount").textContent,"2 of 300 wallets monitored · 1 unacknowledged alert(s)");
+});
+
+test("pause, resume and delete change the workspace and are saved",async()=>{
+  const h=harness({respond:call=>({json:{ok:true,workspace:call.method==="GET"?emptyWorkspace({watchlist:[watchItem("w1"),watchItem("w2")]}):call.body.workspace}})});
+  await h.api.loadCryptoWorkspace();
+  h.api.toggleWatch("w1");
+  assert.equal(h.api.workspace().watchlist[0].enabled,false);
+  h.api.toggleWatch("w1");
+  assert.equal(h.api.workspace().watchlist[0].enabled,true);
+  h.api.toggleWatch("w1");
+  h.api.deleteWatch("w2");
+  assert.deepEqual(h.api.workspace().watchlist.map(item=>item.id),["w1"]);
+  await new Promise(resolve=>setTimeout(resolve,20));
+  const saved=posts(h.calls).at(-1).body.workspace;
+  assert.deepEqual(saved.watchlist.map(item=>[item.id,item.enabled]),[["w1",false]]);
+});
+
+test("an alert can be acknowledged once, and the state is saved and shown",async()=>{
+  const alert={id:"a1",type:"LARGE_TRANSFER",severity:"HIGH",title:"Transfer",detail:"d",address:addr(1),created_at:iso(0),acknowledged:false};
+  const h=harness({respond:call=>({json:{ok:true,workspace:call.method==="GET"?emptyWorkspace({alerts:[alert]}):call.body.workspace}})});
+  await h.api.loadCryptoWorkspace();
+  assert.match(h.el("cryptoAlerts").innerHTML,/data-alert-ack="a1">ACKNOWLEDGE/);
+  h.api.acknowledgeAlert("a1");
+  const html=h.el("cryptoAlerts").innerHTML;
+  assert.ok(!html.includes("data-alert-ack"));
+  assert.match(html,/alert-item high acknowledged/);
+  assert.match(h.el("cryptoWatchCount").textContent,/0 unacknowledged/);
+  await new Promise(resolve=>setTimeout(resolve,20));
+  assert.equal(posts(h.calls).at(-1).body.workspace.alerts[0].acknowledged,true);
+});
+
+test("a full watchlist says so and refuses another wallet instead of dropping the oldest",async()=>{
+  const full=Array.from({length:300},(_,i)=>watchItem("w"+i,{address:addr(1000+i)}));
+  const h=harness({respond:()=>({json:{ok:true,workspace:emptyWorkspace({watchlist:full})}})});
+  await h.api.loadCryptoWorkspace();
+  assert.match(h.el("cryptoWatchCount").textContent,/300 of 300 wallets monitored \(list full/);
+  h.api.seed(wallet(addr(5),[]));
+  h.api.monitorSeed();
+  assert.equal(h.api.workspace().watchlist.length,300);
+  assert.match(h.el("monitorStatus").textContent,/list is full/);
+  h.api.seed(wallet(addr(1000),[]));
+  h.api.monitorSeed();
+  assert.match(h.el("monitorStatus").textContent,/Seed is monitored/,"updating a wallet already on the list still works");
+});
+
+test("an unexpected severity cannot break out of the class attribute",async()=>{
+  const h=harness({respond:()=>({json:{ok:true,workspace:emptyWorkspace({alerts:[{id:"a",title:"t",severity:'x" onmouseover="alert(1)'}]})}})});
+  await h.api.loadCryptoWorkspace();
+  assert.ok(!h.el("cryptoAlerts").innerHTML.includes('" onmouseover'));
+});
+
+test("the watchlist and acknowledge controls are wired on the page",()=>{
+  const html=fs.readFileSync("crypto.html","utf8");
+  const client=fs.readFileSync("crypto.js","utf8");
+  assert.ok(html.includes('id="cryptoWatchlist"')&&html.includes('id="cryptoWatchCount"'));
+  const home=html.slice(html.indexOf('id="cryptoWorkspaceHome"'),html.indexOf('id="cryptoStatus"'));
+  assert.ok(home.includes('id="cryptoWatchlist"'),"visible without running an analysis first");
+  assert.ok(client.includes('getElementById("cryptoWatchlist")?.addEventListener("click"'));
+  assert.ok(client.includes('getElementById("cryptoAlerts")?.addEventListener("click"'));
 });
 
 test("the Risk Indicators card sits directly above the sanctions card, with the exact title",()=>{
