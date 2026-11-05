@@ -16,6 +16,10 @@ ALLOWED_ORIGIN = "https://ct-atlas.com"
 # mirrors of the static site hosted elsewhere (e.g. for networks that block
 # the main domain). See corsHeaders() in shared.js.
 EXTRA_ALLOWED_ORIGINS = "https://ct-atlas-mirror.fairpeace.workers.dev,https://pro-map.github.io"
+# schedule-dispatcher.js starts the timed workflows only when this is "true" and the secret
+# GITHUB_DISPATCH_TOKEN is set in Cloudflare (never commit it). Keep "false" while the
+# workflows have their own schedule: triggers, or every slot runs twice.
+SCHEDULE_DISPATCH_ENABLED = "false"
 
 # Optional Workers AI binding for title/excerpt translation. Merely adding this
 # binding does NOT turn on external Dark Web transmission. Both separate Worker
@@ -66,8 +70,10 @@ database_id = "7c00bac7-05b6-443c-a305-c2bd9352c857"
 
 # Automatic Crypto watchlist monitoring. The Worker rotates a maximum of
 # 8 monitored wallets per run to protect explorer/API and subrequest quotas.
+# The second expression wakes schedule-dispatcher.js instead. scheduled() in index.js tells
+# them apart by controller.cron, so it must stay identical to DISPATCH_CRON.
 [triggers]
-crons = ["17 */6 * * *"]
+crons = ["17 */6 * * *", "7,17,27,37,47,57 * * * *"]
 
 # Create this private Standard bucket before deploying this binding.
 # Keep public access (r2.dev and custom domains) disabled.
