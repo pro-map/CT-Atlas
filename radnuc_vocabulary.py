@@ -1,7 +1,7 @@
-"""Shared user-supplied RN vocabulary for daily retrieval and incremental history.
+"""Shared user-supplied RN vocabulary for daily retrieval.
 
 This adds discovery queries; it does not weaken the existing CT publication
-criteria. The old multilingual queries and saved task identities remain intact.
+criteria. The old multilingual queries remain intact.
 """
 from __future__ import annotations
 import json
@@ -73,7 +73,6 @@ def queries(code='en'):
 # classes, NOT a claim that all 181 English names have been individually translated.
 # The unchanged full 181-entry vocabulary continues through English Google News
 # and GDELT's multilingual index, including Chinese-indexed reporting.
-# Shared by daily retrieval and the fixed six-month supplemental backfill.
 CHINESE_SUPPLEMENT_QUERIES = {
     "zh": {
         "name": "Chinese (Simplified) RN supplement",

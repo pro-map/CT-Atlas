@@ -239,7 +239,7 @@ def query_group(terms):
 
 
 def seed_queries(category, code):
-    """Shared native seeds; the old historical query strings remain identical."""
+    """Shared native seeds."""
     key = {CE: 'chemical_explosives', BIO: 'biological'}.get(category)
     if key is None:
         return []
@@ -254,18 +254,18 @@ def seed_queries(category, code):
 
 
 def collection_queries(category, code='en'):
-    """Authoritative complete query API shared by daily and historical intake."""
+    """Authoritative complete query API for daily intake."""
     return queries(category, code) or seed_queries(category, code)
 
 
 def daily_queries(category, code='en'):
-    """Daily provisional monitoring never expands the frozen historical plan."""
+    """The complete query set plus the provisional Bio monitoring queries."""
     base = collection_queries(category, code)
     return list(dict.fromkeys(base + (bio_monitoring_queries(code) if category == BIO else [])))
 
 
 def install_collection(namespace):
-    """One vocabulary powers ordinary daily collection and specialist backfill."""
+    """One vocabulary powers the daily collection."""
     for name in ('CATEGORIES','CORE_SEARCH_QUERIES','OFFICIAL_SOURCE_QUERIES','TARGETED_MEDIA_CATEGORY_TERMS'):
         mapping = namespace[name]
         mapping.pop('CBRN',None)
@@ -274,14 +274,14 @@ def install_collection(namespace):
             mapping[label] = q[0] if name == 'TARGETED_MEDIA_CATEGORY_TERMS' else list(q)
     for profile in namespace['MULTILINGUAL_PROFILES']:
         for label in LABELS:
-            # Retain the legacy general-archive replay surface; the Chinese
-            # supplement already has its own historical checkpoint cohort.
+            # The Chinese RN supplement joins in the daily pass below, which
+            # keeps the order of these daily queries.
             if label == RN and profile['code'] in ('zh', 'zh-Hant'):
                 import radnuc
-                replay_queries = radnuc.queries(profile['code'])
+                base_queries = radnuc.queries(profile['code'])
             else:
-                replay_queries = queries(label, profile['code'])
-            for query in replay_queries:
+                base_queries = queries(label, profile['code'])
+            for query in base_queries:
                 item = {'term':query,'category':label}
                 if item not in profile['queries']: profile['queries'].append(item)
     import collection_config

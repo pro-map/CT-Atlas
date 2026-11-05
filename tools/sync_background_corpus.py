@@ -143,7 +143,7 @@ def live_incidents(events):
 
 def review_verdict(item, threshold, incidents=None, aliases=None):
     """(kind, parent map event or None) for an article Gemini reviewed for the
-    archive (tools/review_pending_archive.py, tools/enrich_archive.py), filed
+    archive (tools/review_pending_archive.py, the former six-month enrichment), filed
     as the map would file it: kept only when the map's selection kept it
     (apply_ai_selection: the map's threshold, and in scope once translated).
     A kept article about an incident still on the map is one more outlet's
@@ -263,8 +263,8 @@ def removed_events(files, now, threshold=None, incidents=None, aliases=None):
 
 
 def enriched_articles(paths, threshold=None, incidents=None, aliases=None):
-    """Articles the six-month enrichment found and Gemini reviewed
-    (archive/enriched-articles-*.json, tools/enrich_archive.py): English
+    """Articles the former six-month enrichment found and Gemini reviewed
+    (archive/enriched-articles-*.json): English
     headline and summary, the original headline kept for twin matching. They
     are only ever inserted: a link already stored keeps the verdict it has."""
     threshold = map_threshold() if threshold is None else threshold

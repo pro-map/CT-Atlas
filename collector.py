@@ -45,15 +45,13 @@ except Exception:
 
 # ============================================================
 # INTERPOL CT INTELLIGENCE MAP
-# OSINT COLLECTOR V13 — INCREMENTAL BACKFILL + RESUMABLE COLLECTION
+# OSINT COLLECTOR V13 — RESUMABLE DAILY COLLECTION
 #
 # EFFECTIVE CONFIGURATION (not the historical defaults in this file):
 # - threat_categories.install_collection loads the three specialist categories
 #   from threat-category-keywords.json, radnuc.py and radnuc-keywords.json.
 # - collection_config aligns daily specialist searches with all 21 codes.
 # - tools/run_collector_quota_safe.py supplies the DAILY model/budget/threshold.
-# - tools/enrich_threat_categories.py and tools/enrich_chinese_map.py have
-#   separate historical checkpoints and choose their backend in the workflow.
 # Inspect without collecting: python tools/describe_collection.py --check
 # See docs/COLLECTION_CONFIGURATION.md. CBRN source hints/legacy fields are
 # deliberate compatibility, not a user-facing parent category.
@@ -1617,7 +1615,6 @@ MULTILINGUAL_PROFILES.extend([
 
 
 # Chinese Simplified/Traditional for the NORMAL Gemini daily intake.
-# Daily and historical Chinese searches use separate bounded query plans.
 # The daily path deliberately runs ONLY ONE
 # source-context query per non-specialist map category and source edition.
 # Existing specialist category queries are appended below by
@@ -3069,7 +3066,7 @@ def gdelt_doc_category_queries(category):
 
     The provider's documented grammar supports flat AND-of-OR expressions:
     https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/
-    Reuse the syntax-only splitter; this does not enable historical searches.
+    Reuse the syntax-only splitter.
     """
     from tools.backfill_query import gdelt_queries, groups, render
 
@@ -3100,10 +3097,7 @@ def gdelt_doc_url(query, days=None, start_dt=None, end_dt=None):
         "maxrecords": str(GDELT_DOC_RESULTS_PER_QUERY),
         "sort": "datedesc",
     }
-    # An explicit date range (used by the historical backfill to slice 180
-    # days into monthly chunks, since maxrecords caps each single query at
-    # GDELT_DOC_RESULTS_PER_QUERY regardless of window length) takes priority
-    # over the relative "last N days" window the daily collector uses.
+    # An explicit date range takes priority over the relative "last N days" window.
     if start_dt and end_dt:
         params["startdatetime"] = start_dt.strftime("%Y%m%d%H%M%S")
         params["enddatetime"] = end_dt.strftime("%Y%m%d%H%M%S")
@@ -3401,7 +3395,7 @@ def _collect_all_once(days):
     print()
     print("=" * 70)
     print("INTERPOL CT Intelligence Map")
-    print("OSINT Collector V13 — incremental backfill and resumable collection")
+    print("OSINT Collector V13 — resumable daily collection")
     print("=" * 70)
     print(f"Window: {days} days")
     print("Collection languages: English + French + Arabic + German + Spanish + Italian + Turkish + Russian + Urdu + Persian/Dari + Pashto + Hebrew")
@@ -3705,7 +3699,7 @@ def _collect_all_once(days):
         ]
     )
 
-    # Never silently build a backfill from a severely throttled sample.
+    # Never silently build a database update from a severely throttled sample.
     # A failed workflow leaves the previous events.json untouched.
     if (
         total_requests >= 10
@@ -3721,7 +3715,7 @@ def _collect_all_once(days):
         raise RuntimeError(
             "Too many Google News queries failed "
             f"({QUERY_STATS['failed']}/{total_requests}). "
-            "Database not replaced to avoid an incomplete backfill."
+            "Database not replaced to avoid an incomplete update."
         )
 
     return records
@@ -5540,7 +5534,7 @@ def ai_select_events(
     lane=None,
 ):
     global AI_SELECTION_PARTIAL_CHECKPOINT
-    # Replayed queues and direct specialist runners can bypass discovery filters.
+    # Replayed queues can bypass discovery filters.
     # Retire court-only candidates before cache lookup or any paid AI request.
     events = [event for event in events
               if not retired_categories.is_retired_judicial_event(event)

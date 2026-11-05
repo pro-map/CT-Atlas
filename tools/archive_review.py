@@ -1,6 +1,6 @@
 """Gemini 3.1 Flash Lite work for the background jobs, shared by
-tools/review_pending_archive.py (former map events), tools/enrich_archive.py
-(the six-month enrichment) and tools/consolidate_incidents.py.
+tools/review_pending_archive.py (former map events), the RadNuc background
+job and tools/consolidate_incidents.py.
 
 Gemini 3.1 Flash Lite's free quota (500 requests a Pacific day, 15 a minute)
 is shared by those jobs, the collection's overflow and the interactive
