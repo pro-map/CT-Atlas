@@ -124,8 +124,8 @@ function buildZip(entries,date=new Date()){
 // Yandex Images is the reverse-image engine retained for face-crop searches. It does not accept
 // an upload from another site, so it is opened on a URL of the crop (search-by-URL). That needs the crop
 // to be reachable: on an explicit click, and after a confirmation, this one crop is hosted for a few minutes by
-// the CT Atlas Worker (see shareCrop below). `url` is the engine's own upload page, used when hosting fails: the
-// crop is then put on the clipboard and the analyst pastes it there (it reaches the service only when pasted).
+// the CT Atlas Worker (see shareCrop below). `url` is the engine's own upload page, used when hosting fails: a dialog
+// then copies the crop and opens that page, and the analyst pastes it there (it reaches the service only when pasted).
 const encode=encodeURIComponent;
 const SEARCH_ENGINES=Object.freeze([
   {id:"yandex",name:"Yandex Images",url:"https://yandex.com/images/search?rpt=imageview",note:"free · strongest on faces",
@@ -550,6 +550,33 @@ function showNextStep(record,queued){
 }
 let nextStepPrompt=showNextStep;
 
+// Hosting failed, so the crop has to be pasted by hand. The clipboard refuses a page without the focus, so this
+// dialog waits for a click on this page; `proceed` runs inside that click.
+function showCopyFallback(record,engines,reason,proceed){
+  const dialog=document.createElement("dialog");
+  dialog.className="fc-consent fc-next";
+  dialog.setAttribute("aria-labelledby","fcPasteTitle");
+  dialog.setAttribute("aria-describedby","fcPasteText");
+  const names=engines.map(engine=>engine.name).join(", ");
+  dialog.innerHTML='<div class="fc-consent-title" id="fcPasteTitle">FACE '+esc(record.label)+' · HOSTING FAILED</div>'+
+    '<div class="fc-consent-text" id="fcPasteText">CT Atlas could not host this crop ('+esc(reason)+'), so nothing was sent to '+esc(names)+'. Click below to copy the crop and open that page, then open its image-upload box and press Ctrl+V. The face reaches '+esc(names)+' only if you paste it there, and the warnings you have just read apply to it in the same way.</div>'+
+    '<div class="fc-consent-actions"><button type="button" class="fc-btn" data-fc-paste="close">LATER</button>'+
+    '<button type="button" class="fc-btn fc-btn-primary" data-fc-paste="copy">COPY CROP &amp; OPEN '+esc(names.toUpperCase())+' ↗</button></div>';
+  dialog.addEventListener("click",event=>{
+    const choice=event.target.closest?.("[data-fc-paste]")?.dataset.fcPaste;
+    if(!choice)return;
+    if(typeof dialog.close==="function")dialog.close();
+    dialog.remove();
+    if(choice==="copy")proceed();
+  });
+  dialog.addEventListener("close",()=>dialog.remove());
+  document.body.appendChild(dialog);
+  if(typeof dialog.showModal==="function")dialog.showModal();else dialog.setAttribute("open","");
+  const first=dialog.querySelector('[data-fc-paste="copy"]');
+  if(first)first.focus();
+}
+let fallbackPrompt=showCopyFallback;
+
 // In-page confirmation. The browser's built-in confirm box is NOT used: the search tab is opened in the same click,
 // takes the focus, and a dialog raised by the tab that just went to the background can be suppressed
 // by the browser, which reads as "cancel" (the tab appears and vanishes). This dialog belongs to the
@@ -621,6 +648,23 @@ async function startSearch(record,engines){
   finally{record.searching=false;}
 }
 
+// The copy comes first: the new tab takes the focus, and the clipboard needs it. If the copy fails, staying on this
+// page keeps the instruction to download the JPEG in view instead of leaving the analyst on an empty upload page.
+async function copyAndOpen(record,engines){
+  const pages=engines.map(engine=>({engine,url:engine.url}));
+  if(!await copy(record)){showLinks(record,pages,[],0);return;}
+  const opened=[],queued=[];
+  for(const page of pages){
+    const win=openPlaceholder();
+    if(win){win.location.replace(page.url);opened.push(page);}
+    else queued.push(page);
+  }
+  showLinks(record,queued,opened,0);
+  setStatus(opened.length
+    ?"Face "+record.label+" copied. On "+opened.map(page=>page.engine.name).join(", ")+" open the image-upload box and press Ctrl+V: the face reaches it only if you paste it."
+    :"Face "+record.label+" copied, but the browser blocked the new tab: use the link in this row, then press Ctrl+V on that page.");
+}
+
 async function runDirectSearch(record,engines){
   clearLinks(record.key);
   const windows=engines.map(()=>openPlaceholder());       // synchronous: still inside the click / the OK click
@@ -648,12 +692,12 @@ async function runDirectSearch(record,engines){
       :"Face "+record.label+": the Yandex search tab was closed before the results could load. The crop stays hosted for about "+minutes+" more minute(s): use the link in this row ("+names(queued)+").");
     if(queued.length)nextStepPrompt(record,queued);
   }catch(error){
-    // Fall back to the paste flow: each window goes to the engine's own upload page.
-    engines.forEach((engine,index)=>{try{if(windows[index])windows[index].location.replace(engine.url);}catch(_){/* window closed by the user */}});
-    const copied=await copy(record);
-    setStatus("Direct search unavailable ("+(error.message||"error")+"). "+(copied
-      ?"The crop was copied instead: on the engine's page open its image-upload box and press Ctrl+V."
-      :"Download the JPEG and drag it onto the engine's page."),"error");
+    // The placeholder holds the focus, so copying from here would always be refused: close it and come back.
+    windows.forEach(win=>{try{if(win)win.close();}catch(_){/* window closed by the user */}});
+    window.focus?.();
+    const reason=error.message||"error";
+    setStatus("Direct search unavailable ("+reason+"). Nothing was sent. Use the dialog to copy the crop, or download the JPEG and drag it onto the engine's page.","error");
+    fallbackPrompt(record,engines,reason,()=>copyAndOpen(record,engines));
   }
 }
 
@@ -704,7 +748,8 @@ function bindControls(){
 
 root.CTAtlasFaceCrops={attach,helpers,
   setConsentPrompt:fn=>{consentPrompt=typeof fn==="function"?fn:askConsent;},
-  setNextStepPrompt:fn=>{nextStepPrompt=typeof fn==="function"?fn:showNextStep;}};
+  setNextStepPrompt:fn=>{nextStepPrompt=typeof fn==="function"?fn:showNextStep;},
+  setFallbackPrompt:fn=>{fallbackPrompt=typeof fn==="function"?fn:showCopyFallback;}};
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bindControls);
 else bindControls();
 })(typeof window!=="undefined"?window:globalThis);

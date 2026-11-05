@@ -185,6 +185,15 @@ test("PRIVACY GUARD: a crop leaves the browser only through an explicit SEARCH c
   assert.ok(!next.includes("window.open")&&!next.includes("fetch("));
   assert.match(next,/aria-labelledby/);
   assert.equal((src.match(/nextStepPrompt\(record,queued\)/g)||[]).length,1,"a single call, after the hosting succeeded");
+  // The paste fallback: its dialog opens nothing itself. The copy runs in that click, before the tab.
+  const fallback=src.slice(src.indexOf("function showCopyFallback"),src.indexOf("let fallbackPrompt"));
+  assert.ok(!fallback.includes("window.open")&&!fallback.includes("fetch(")&&!fallback.includes("clipboard"));
+  assert.match(fallback,/aria-labelledby/);
+  assert.match(fallback,/aria-describedby/);
+  const paste=src.slice(src.indexOf("async function copyAndOpen"),src.indexOf("async function runDirectSearch"));
+  assert.ok(paste.indexOf("await copy(record)")>-1&&paste.indexOf("await copy(record)")<paste.indexOf("openPlaceholder()"));
+  assert.ok(!flow.includes("await copy(record)"),"never from the failed search itself: its page does not have the focus");
+  assert.equal((src.match(/copyAndOpen\(record,engines\)/g)||[]).length,2,"definition + the dialog's click");
 });
 
 test("the UI wires the crops in, states the third-party disclosure, and keeps the non-identification guardrails",()=>{

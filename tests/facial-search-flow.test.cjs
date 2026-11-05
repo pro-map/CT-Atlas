@@ -16,8 +16,8 @@ const YANDEX_PAGE="https://yandex.com/images/search?rpt=imageview";
 const MAX=140*1024;
 
 function harness(options={}){
-  const {confirmAnswer=true,popupLimit=Infinity,token="tok-1",fetchImpl,clipboard=true}=options;
-  const elements=new Map(),listeners={},opened=[],confirms=[],tabsAtPrompt=[],nextSteps=[],fetchCalls=[],clipboardWrites=[];
+  const {confirmAnswer=true,popupLimit=Infinity,token="tok-1",fetchImpl,clipboard=true,clipboardRefuses=false}=options;
+  const elements=new Map(),listeners={},opened=[],confirms=[],tabsAtPrompt=[],nextSteps=[],fallbacks=[],fetchCalls=[],clipboardWrites=[],tabsAtCopy=[];
   let answer=confirmAnswer;
   const el=id=>{
     if(!elements.has(id))elements.set(id,{id,dataset:{},style:{},hidden:false,disabled:false,textContent:"",className:"",value:"standard",checked:true,
@@ -63,7 +63,10 @@ function harness(options={}){
   }
   const context=vm.createContext({
     window,document,URL:TestURL,TextEncoder,Uint8Array,Blob,Date:TestDate,Promise,Number,Math,Error,JSON,setTimeout:fastTimeout,clearTimeout:clearTimer,AbortController,console,
-    navigator:clipboard?{clipboard:{write:async items=>{clipboardWrites.push(items);}}}:{},
+    navigator:clipboard?{clipboard:{write:async items=>{
+      if(clipboardRefuses)throw new Error("Document is not focused.");
+      clipboardWrites.push(items);tabsAtCopy.push(opened.filter(win=>!win.closed).length);
+    }}}:{},
     ClipboardItem:class{constructor(data){this.data=data;}},
     createImageBitmap:async input=>input&&input.w?{width:input.w,height:input.h,close(){}}:{width:1000,height:640,close(){}},
     fetch:async(url,init)=>{fetchCalls.push({url,init});return (fetchImpl||okShare)(url,init);}
@@ -76,7 +79,8 @@ function harness(options={}){
     if(answer)accept();else if(cancel)cancel();
   });
   crops.setNextStepPrompt((record,queued)=>nextSteps.push({label:record.label,ids:queued.map(item=>item.engine.id),urls:queued.map(item=>item.url)}));
-  return {crops,el,listeners,opened,confirms,tabsAtPrompt,nextSteps,fetchCalls,clipboardWrites,window,cells,
+  crops.setFallbackPrompt((record,engines,reason,proceed)=>fallbacks.push({label:record.label,ids:engines.map(engine=>engine.id),reason,proceed}));
+  return {crops,el,listeners,opened,confirms,tabsAtPrompt,nextSteps,fallbacks,fetchCalls,clipboardWrites,tabsAtCopy,window,cells,
     setAnswer:value=>{answer=value;},advance:ms=>{clock.offset+=ms;},
     fireLongTimers:()=>longTimers.filter(t=>!t.cleared).forEach(t=>{t.cleared=true;t.fn();}),
     async attach(){
@@ -228,7 +232,9 @@ test("a stalled hosting request times out and falls back instead of leaving blan
   await h.attach();
   await h.click();
   assert.match(h.status(),/did not answer in time/);
-  assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE]);
+  assert.equal(h.opened[0].closed,true,"no blank tab is left behind");
+  assert.deepEqual(h.opened[0].locations,[]);
+  assert.equal(h.fallbacks.length,1);
 });
 
 test("repeated clicks while a search is in flight neither host twice nor ask twice",async()=>{
@@ -283,7 +289,7 @@ test("the row's links belong to one hosting and are removed when it expires",asy
 
 // ---------------------------------------------------------------- failures never lose the search
 
-test("if hosting fails the Yandex tab falls back to its upload page and the crop is copied for Ctrl+V",async()=>{
+test("if hosting fails the blank tab is closed and nothing is copied or opened until a click on the dialog",async()=>{
   const cases=[
     ["network down",async()=>{throw new Error("offline");},/could not be reached/],
     ["server refusal",async()=>({ok:false,status:503,json:async()=>({error:"Face search hosting is not configured."})}),/not configured/],
@@ -294,12 +300,68 @@ test("if hosting fails the Yandex tab falls back to its upload page and the crop
     const h=harness({fetchImpl});
     await h.attach();
     await h.click();
-    assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE],label+": Yandex upload page");
-    assert.equal(h.clipboardWrites.length,1,label+": crop copied");
+    assert.equal(h.opened[0].closed,true,label+": the tab that took the focus is gone");
+    assert.deepEqual(h.opened[0].locations,[],label+": Yandex was not opened");
+    assert.equal(h.clipboardWrites.length,0,label+": a page without the focus cannot copy, so it does not try");
     assert.match(h.status(),expected,label);
-    assert.match(h.status(),/Ctrl\+V/,label);
+    assert.match(h.status(),/Nothing was sent/,label);
+    assert.equal(h.fallbacks.length,1,label);
+    assert.equal(h.fallbacks[0].label,"F1",label);
+    assert.equal(JSON.stringify(h.fallbacks[0].ids),JSON.stringify(["yandex"]),label);
+    assert.match(h.fallbacks[0].reason,expected,label);
     assert.equal(h.nextSteps.length,0,label);
   }
+});
+
+const hostingDown=async()=>({ok:false,status:503,json:async()=>({error:"Face search hosting is not configured."})});
+
+test("the dialog's click copies the crop first, then opens Yandex's own page, and says what to do there",async()=>{
+  const h=harness({fetchImpl:hostingDown});
+  await h.attach();
+  await h.click();
+  await h.fallbacks[0].proceed();
+  assert.equal(h.clipboardWrites.length,1);
+  assert.deepEqual(h.tabsAtCopy,[0],"no other tab exists while copying: it would take the focus and the clipboard would refuse");
+  assert.equal(h.opened.length,2);
+  assert.equal(h.opened[1].url,"about:blank");
+  assert.equal(h.opened[1].opener,null);
+  assert.deepEqual(h.opened[1].locations,[YANDEX_PAGE]);
+  assert.match(h.status(),/Face F1 copied/);
+  assert.match(h.status(),/Ctrl\+V/);
+  assert.match(h.status(),/only if you paste it/);
+  assert.match(h.cells.links.innerHTML,/<span>Reopen:<\/span>/,"a way back to the page if the tab is closed");
+  assert.equal(h.fetchCalls.length,1,"the click uploads nothing");
+});
+
+test("if the copy is refused no tab opens: the analyst stays where the instruction is, with a link for later",async()=>{
+  const h=harness({fetchImpl:hostingDown,clipboardRefuses:true});
+  await h.attach();
+  await h.click();
+  await h.fallbacks[0].proceed();
+  assert.equal(h.opened.length,1,"only the closed placeholder");
+  assert.match(h.status(),/Copy was blocked/);
+  assert.match(h.status(),/download the JPEG/);
+  assert.equal(h.cells.links.hidden,false);
+  assert.ok(h.cells.links.innerHTML.includes(YANDEX_PAGE));
+});
+
+test("a browser without image copying gets the same treatment",async()=>{
+  const h=harness({fetchImpl:hostingDown,clipboard:false});
+  await h.attach();
+  await h.click();
+  await h.fallbacks[0].proceed();
+  assert.equal(h.opened.length,1);
+  assert.match(h.status(),/cannot copy images/);
+});
+
+test("if the browser blocks the tab after the copy, the row offers a link and the status says so",async()=>{
+  const h=harness({fetchImpl:hostingDown,popupLimit:1});
+  await h.attach();
+  await h.click();
+  await h.fallbacks[0].proceed();
+  assert.equal(h.clipboardWrites.length,1);
+  assert.match(h.status(),/blocked the new tab/);
+  assert.match(h.cells.links.innerHTML,/Also open:.*Yandex Images/s);
 });
 
 test("a hosting answer that is not a CT Atlas link is never handed to a search engine",async()=>{
@@ -307,8 +369,8 @@ test("a hosting answer that is not a CT Atlas link is never handed to a search e
     const h=harness({fetchImpl:async()=>({ok:true,status:200,json:async()=>({ok:true,url,ttl_seconds:600})})});
     await h.attach();
     await h.click();
-    assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE],String(url));
-    assert.ok(!h.opened.some(win=>win.locations.some(l=>l.includes("evil")||l.includes("javascript"))),String(url));
+    assert.deepEqual(h.opened[0].locations,[],String(url));
+    assert.equal(h.fallbacks.length,1,String(url));
     assert.match(h.status(),/not a valid CT Atlas link/);
   }
 });
@@ -319,5 +381,5 @@ test("without a session no upload is attempted",async()=>{
   await h.click();
   assert.equal(h.fetchCalls.length,0);
   assert.match(h.status(),/sign in again/);
-  assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE]);
+  assert.equal(h.fallbacks.length,1,"the analyst can still paste it by hand");
 });
