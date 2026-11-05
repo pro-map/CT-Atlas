@@ -3,6 +3,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import hmac
+import io
 import math
 import os
 import tempfile
@@ -21,6 +22,7 @@ SERVICE_VERSION = "ct-atlas-visual-intel-v2"
 MAX_FILES = 10
 MAX_TOTAL_BYTES = 30 * 1024 * 1024
 MAX_IMAGE_SIDE = 2200
+MAX_IMAGE_PIXELS = 50_000_000  # a 435 KB PNG can decode to a 412 MiB frame, and the service has 1 GiB
 MAX_VIDEO_FRAMES = 8
 QUALITY_SIDE = 112  # raw Laplacian variance falls as resolution rises, so faces are measured at one size
 QUALITY_FULL_SHARPNESS = 400.0
@@ -192,8 +194,8 @@ def _detect_boxes(frame: np.ndarray) -> list[tuple[int, int, int, int, float | N
     return _merge_detections(candidates)
 
 
-def _detect_faces(frame: np.ndarray) -> list[dict[str, Any]]:
-    work, scale = _resize_for_analysis(frame)
+def _detect_faces(frame: np.ndarray, analysis: tuple[np.ndarray, float] | None = None) -> list[dict[str, Any]]:
+    work, scale = analysis or _resize_for_analysis(frame)
     boxes = sorted(_detect_boxes(work), key=lambda b: b[2] * b[3], reverse=True)[:40]
     inv = 1.0 / scale
     h, w = frame.shape[:2]
@@ -245,11 +247,14 @@ def _detect_faces(frame: np.ndarray) -> list[dict[str, Any]]:
     return results
 
 
-def _annotated_data_uri(frame: np.ndarray, faces: list[dict[str, Any]]) -> str:
-    preview = frame.copy()
+def _annotated_data_uri(work: np.ndarray, faces: list[dict[str, Any]], scale: float = 1.0) -> str:
+    """`work` is the frame after _resize_for_analysis and `scale` the factor that function applied: face boxes are
+    in the pixels of the original frame."""
+    height, width = work.shape[:2]
+    shrink = min(1.0, 1280.0 / max(height, width))
+    preview = cv2.resize(work, (int(width * shrink), int(height * shrink))) if shrink < 1.0 else work.copy()
     for face in faces:
-        box = face["box"]
-        x, y, w, h = box["x"], box["y"], box["w"], box["h"]
+        x, y, w, h = (int(face["box"][key] * scale * shrink) for key in ("x", "y", "w", "h"))
         cv2.rectangle(preview, (x, y), (x + w, y + h), (255, 255, 255), 2)
         cv2.putText(
             preview,
@@ -261,10 +266,6 @@ def _annotated_data_uri(frame: np.ndarray, faces: list[dict[str, Any]]) -> str:
             1,
             cv2.LINE_AA,
         )
-    h, w = preview.shape[:2]
-    if max(h, w) > 1280:
-        scale = 1280.0 / max(h, w)
-        preview = cv2.resize(preview, (int(w * scale), int(h * scale)))
     ok, encoded = cv2.imencode(".jpg", preview, [int(cv2.IMWRITE_JPEG_QUALITY), 76])
     if not ok:
         return ""
@@ -276,9 +277,8 @@ def _phash(frame: np.ndarray) -> str:
     return str(imagehash.phash(Image.fromarray(rgb)))
 
 
-def _ocr(frame: np.ndarray) -> str:
+def _ocr(work: np.ndarray) -> str:
     try:
-        work, _ = _resize_for_analysis(frame)
         rgb = cv2.cvtColor(work, cv2.COLOR_BGR2RGB)
         text = pytesseract.image_to_string(rgb, config="--psm 11", timeout=6)
         return _clean(text, 4000)
@@ -311,7 +311,7 @@ def _gps_to_decimal(values: Any, ref: Any) -> float | None:
 
 def _extract_exif(raw: bytes) -> dict[str, Any]:
     try:
-        image = Image.open(__import__("io").BytesIO(raw))
+        image = Image.open(io.BytesIO(raw))
         exif = image.getexif()
         if not exif:
             return {}
@@ -349,7 +349,21 @@ def _extract_exif(raw: bytes) -> dict[str, Any]:
         return {}
 
 
+def _too_large() -> ValueError:
+    return ValueError(f"Image exceeds the {MAX_IMAGE_PIXELS // 1_000_000} megapixel limit.")
+
+
 def _decode_image(raw: bytes) -> np.ndarray:
+    # cv2 allocates the whole frame before anyone can look at it, so the size is read from the header first.
+    try:
+        with Image.open(io.BytesIO(raw)) as header:
+            width, height = header.size
+    except Image.DecompressionBombError:
+        raise _too_large() from None
+    except Exception:
+        raise ValueError("Unable to decode image.") from None
+    if width * height > MAX_IMAGE_PIXELS:
+        raise _too_large()
     arr = np.frombuffer(raw, dtype=np.uint8)
     frame = cv2.imdecode(arr, cv2.IMREAD_COLOR)
     if frame is None:
@@ -358,7 +372,8 @@ def _decode_image(raw: bytes) -> np.ndarray:
 
 
 def _analyze_frame(frame: np.ndarray, label: str, timestamp: float | None = None, do_ocr: bool = True) -> dict[str, Any]:
-    faces = _detect_faces(frame)
+    work, scale = _resize_for_analysis(frame)  # once: each step copying a large frame is what exhausts memory
+    faces = _detect_faces(frame, (work, scale))
     return {
         "label": label,
         "face_detector": _load_detector()[1],
@@ -367,9 +382,9 @@ def _analyze_frame(frame: np.ndarray, label: str, timestamp: float | None = None
         "height": int(frame.shape[0]),
         "faces": faces,
         "face_count": len(faces),
-        "ocr_text": _ocr(frame) if do_ocr else "",
-        "phash": _phash(frame),
-        "annotated_preview": _annotated_data_uri(frame, faces),
+        "ocr_text": _ocr(work) if do_ocr else "",
+        "phash": _phash(work),
+        "annotated_preview": _annotated_data_uri(work, faces, scale),
     }
 
 
@@ -394,6 +409,9 @@ def _analyze_video(name: str, raw: bytes, suffix: str) -> dict[str, Any]:
         cap = cv2.VideoCapture(temp.name)
         if not cap.isOpened():
             raise ValueError("Unable to decode video.")
+        if cap.get(cv2.CAP_PROP_FRAME_WIDTH) * cap.get(cv2.CAP_PROP_FRAME_HEIGHT) > MAX_IMAGE_PIXELS:
+            cap.release()
+            raise _too_large()
         fps = float(cap.get(cv2.CAP_PROP_FPS) or 0.0)
         frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT) or 0)
         duration = (frame_count / fps) if fps > 0 and frame_count > 0 else 0.0

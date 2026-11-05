@@ -9,14 +9,18 @@ Run:  python3 tests/visual_intel_detector_test.py
 (also run inside the built container by .github/workflows/deploy-visual-intel.yml)
 """
 import asyncio
+import base64
 import hashlib
+import io
 import os
 import sys
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import cv2
 import numpy as np
+from PIL import Image
 
 HERE = Path(__file__).resolve().parent
 for candidate in (os.environ.get("VISUAL_SERVICE_DIR"), HERE.parent / "visual-intel-service", "/app"):
@@ -316,6 +320,49 @@ class FaceQuality(unittest.TestCase):
         self.assertLess(face["sharpness"], app.QUALITY_MIN_SHARPNESS)
         self.assertGreaterEqual(face["quality_score"], 42, "without the floor this blurred face would read MEDIUM")
         self.assertEqual(face["quality"], "LOW")
+
+
+class ImageLimits(unittest.TestCase):
+    @staticmethod
+    def blank_png(width, height):
+        out = io.BytesIO()
+        Image.new("1", (width, height)).save(out, "PNG")
+        return out.getvalue()
+
+    def test_a_tiny_file_that_would_decode_to_a_huge_frame_is_refused_before_decoding(self):
+        raw = self.blank_png(12000, 12000)
+        self.assertLess(len(raw), 1_000_000)
+        with mock.patch.object(app.cv2, "imdecode", side_effect=AssertionError("must not be decoded")):
+            with self.assertRaisesRegex(ValueError, "50 megapixel limit"):
+                app._decode_image(raw)
+
+    def test_an_image_large_enough_for_pillow_to_refuse_gets_the_same_answer(self):
+        with self.assertRaisesRegex(ValueError, "50 megapixel limit"):
+            app._decode_image(self.blank_png(20000, 20000))
+
+    def test_the_limit_itself_is_allowed(self):
+        with mock.patch.object(app, "MAX_IMAGE_PIXELS", 40 * 40):
+            self.assertEqual(app._decode_image(self.blank_png(40, 40)).shape[:2], (40, 40))
+            with self.assertRaises(ValueError):
+                app._decode_image(self.blank_png(41, 40))
+
+    def test_what_is_not_an_image_is_still_reported_as_undecodable(self):
+        for raw in (b"not an image", FIXTURE.read_bytes()[:40]):
+            with self.assertRaisesRegex(ValueError, "Unable to decode image"):
+                app._decode_image(raw)
+
+    def test_a_frame_above_the_analysis_size_keeps_its_boxes_in_original_pixels_and_gets_a_small_labelled_preview(self):
+        frame = cv2.resize(load(), (2600, 2600), interpolation=cv2.INTER_CUBIC)
+        item = app._analyze_frame(frame, "large", do_ocr=False)
+        self.assertEqual((item["width"], item["height"]), (2600, 2600))
+        box = item["faces"][0]["box"]
+        self.assertGreater(iou((box["x"], box["y"], box["w"], box["h"]), tuple(v * 2600 / 512 for v in FACE)), 0.6)
+        raw = base64.b64decode(item["annotated_preview"].split(",", 1)[1])
+        preview = cv2.imdecode(np.frombuffer(raw, np.uint8), cv2.IMREAD_COLOR)
+        self.assertEqual(preview.shape[:2], (1280, 1280))
+        ratio = 1280 / 2600
+        top = int(box["y"] * ratio)
+        self.assertGreater(preview[top, int((box["x"] + box["w"] / 2) * ratio)].mean(), 200, "the box is drawn where the face is")
 
 
 if __name__ == "__main__":
