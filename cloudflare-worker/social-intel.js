@@ -876,6 +876,8 @@ function sanitizeSocialReport(report) {
   for (const [key, value] of Object.entries(report)) {
     if (key === "user_id" || key === "username") continue;
     if (key === "telegram_evidence") { safe[key] = normalizeTelegramEvidence(value); continue; }
+    // Built server-side and already bounded by MAX_REPORT_WALLETS.
+    if (key === "wallet_screening") { safe[key] = value; continue; }
     if (key === "sources") { safe[key] = (Array.isArray(value) ? value : []).slice(0,200).map(item=>walk(item)); continue; }
     safe[key] = walk(value, key === "source_url" || key === "url" || key === "source_urls" ? 1500 : 8000);
   }

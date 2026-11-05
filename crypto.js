@@ -296,7 +296,7 @@ async function saveCryptoWorkspace(){
         continue;
       }
       if(!response.ok)throw new Error(payload.error||"Unable to save Crypto workspace.");
-      if(payload.workspace)adoptServerWorkspace(payload,sent);
+      if(payload.workspace){adoptServerWorkspace(payload,sent);renderWatchlist();}
       return true;
     }
     throw new Error("The workspace kept changing elsewhere, so this save did not finish. Your edits are still on this page.");
@@ -798,7 +798,11 @@ function combineRisk(base,overlays){
   if(best.filter(item=>item.strength==="strong").length<(Number(limits.strong_families_for_high)||3)){
     behaviour=Math.min(behaviour,Number(limits.behaviour_cap)||high-1);
   }
-  const score=Math.max(workerScore,Math.min(100,Math.round(behaviour+pointsOf([...bestByCode.values()]))));
+  let total=behaviour+pointsOf([...bestByCode.values()]);
+  if(best.filter(item=>item.strength==="strong").length<(Number(limits.strong_families_for_high)||3)&&[...bestByCode.values()].every(item=>item.strength==="info")){
+    total=Math.min(total,Number(limits.behaviour_cap)||high-1);
+  }
+  const score=Math.max(workerScore,Math.min(100,Math.round(total)));
   let label=findings.some(item=>item.floor==="HIGH")||score>=high?"HIGH":score>=elevated?"ELEVATED":"LOW";
   if(RISK_ORDER.indexOf(label)<RISK_ORDER.indexOf(workerLabel))label=workerLabel;
   if(label==="LOW"&&workerLabel==="NOT_ASSESSED")label=workerLabel;
@@ -2046,6 +2050,8 @@ async function checkMonitored(){
   let created=0,checked=0;
   try{
     if(workspaceRevision!==null){
+      clearTimeout(workspaceSaveTimer);
+      await saveCryptoWorkspace();
       await checkMonitoredOnServer(watches.slice(0,50),status);
       return;
     }
@@ -2286,12 +2292,13 @@ function sanctionsHits(){
   const groups=new Map();
   const add=(address,depth,role,via,match)=>{
     const key=traceKey(address,lastPayload.chain);
-    const group=groups.get(key)||{address,depth,role,via:new Set(),in_count:0,out_count:0,last_seen:"",match};
+    const group=groups.get(key)||{address,depth,role,via:new Set(),in_count:0,out_count:0,spent_count:0,last_seen:"",match};
     group.depth=Math.min(group.depth,depth);
     if(role==="wallet")group.role="wallet";
     if(via)group.via.add(via);
     group.in_count+=Number(match.received_from_count||0);
     group.out_count+=Number(match.sent_to_count||0);
+    group.spent_count+=Number(match.spent_with_count||0);
     if(match.last_seen&&String(match.last_seen)>group.last_seen)group.last_seen=String(match.last_seen);
     groups.set(key,group);
   };
@@ -2350,7 +2357,7 @@ function sanctionsView(){
       context="Input or output of this transaction.";
     }else if(hit.role!=="wallet"){
       context="Seen with "+via.slice(0,3).map(address=>short(address,8)).join(", ")+(via.length>3?" +"+(via.length-3)+" more":"")+
-        ": received from "+hit.in_count+"× · sent to "+hit.out_count+"× in the returned sample"+
+        ": received from "+hit.in_count+"× · sent to "+hit.out_count+"×"+(hit.spent_count?" · spent together "+hit.spent_count+"×":"")+" in the returned sample"+
         (hit.last_seen?" · last "+fmtTime(hit.last_seen):"")+".";
     }
     return {

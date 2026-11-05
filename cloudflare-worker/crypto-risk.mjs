@@ -623,6 +623,10 @@ function isDustRow(row) {
   return row.amount <= (DUST_FLOOR[String(row.asset).toUpperCase()] ?? 0);
 }
 
+function isUnvaluedToken(row) {
+  return Boolean(row.token_contract) && row.stable !== true && row.amount > 0;
+}
+
 function detectDustSpray({ byAsset }) {
   let best = null;
   for (const rows of byAsset.values()) {
@@ -683,7 +687,7 @@ function directSanctionsFinding(match, linked) {
     last_seen: match.last_seen || ""
   };
   // Anyone can send to any address, so a tiny unsolicited receipt says nothing about the owner.
-  if (!sent && !spentWith && live.length && live.every(isDustRow)) {
+  if (!sent && !spentWith && live.length && live.every(isDustRow) && !live.some(isUnvaluedToken)) {
     return finding({
       code: "SANCTIONED_DUST_RECEIVED",
       family: "EXPOSURE",
@@ -694,6 +698,20 @@ function directSanctionsFinding(match, linked) {
       metrics,
       rows: live,
       benign: ["unsolicited dusting"]
+    });
+  }
+  // No price exists for this token: it can be spam or real money, so it needs an analyst.
+  if (!sent && !spentWith && live.length && live.every(isDustRow)) {
+    return finding({
+      code: "LISTED_UNKNOWN_TOKEN_RECEIVED",
+      family: "EXPOSURE",
+      strength: "moderate",
+      points: 30,
+      title: "Inbound token of unknown value from a listed address",
+      explanation: "The only link to this listed address is an inbound token whose value CT Atlas cannot price, so this may be spam or real funds.",
+      metrics,
+      rows: live,
+      benign: ["spam or airdropped token", "anyone can send a token to any address"]
     });
   }
   const terrorism = (match.entities || []).some(entity => entity?.terrorism === true);
@@ -832,7 +850,13 @@ function assessWallet(analysis, ctx = {}) {
   }
   const exposureByCode = new Map();
   for (const item of exposure) exposureByCode.set(item.code, Math.max(exposureByCode.get(item.code) || 0, item.points));
-  const score = Math.min(100, Math.round(behaviourScore + sum([...exposureByCode.values()])));
+  let total = behaviourScore + sum([...exposureByCode.values()]);
+  // An informational finding must not be what lifts behaviour past its cap.
+  if (top.filter(item => item.strength === "strong").length < THRESHOLDS.strong_families_for_high
+      && exposure.every(item => item.strength === "info")) {
+    total = Math.min(total, THRESHOLDS.behaviour_cap);
+  }
+  const score = Math.min(100, Math.round(total));
 
   const findings = [...exposure, ...behaviour].sort((a, b) => b.points - a.points || a.code.localeCompare(b.code));
   const scoring = findings.filter(item => item.points > 0);

@@ -7,7 +7,7 @@ on:
     paths:
       - "visual-intel-service/**"
       - "tests/visual_intel_detector_test.py"
-      - "tests/fixtures/**"
+      - "tests/fixtures/astronaut*.jpg"
       - "cloudflare-worker/visual-intel.js"
       - ".github/workflows/deploy-visual-intel.yml"
   workflow_dispatch:

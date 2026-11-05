@@ -432,14 +432,14 @@ async function analyzeBitcoin(target, limit) {
     },
     coverage: buildCoverage(transactions, {
       complete: lifetime !== null && confirmedKept >= lifetime,
-      lifetimeTxCount: lifetime,
+      lifetimeTxCount: lifetime === null ? null : lifetime + (finiteNumber(info?.mempool_stats?.tx_count) || 0),
       failedSources
     }),
     transactions,
     flows: aggregateFlows(transactions, target.value),
     observations: [...buildObservations(transactions, target.value), ...coverageNotes(failedSources, !info)],
     sampling_note: "Blockstream returns recent history first. This view holds the newest " + transactions.length + " records" +
-      (lifetime === null ? "" : " of " + lifetime + " confirmed lifetime transactions") + "."
+      (lifetime === null ? "" : " of " + (lifetime + (finiteNumber(info?.mempool_stats?.tx_count) || 0)) + " lifetime transactions") + "."
   };
 }
 

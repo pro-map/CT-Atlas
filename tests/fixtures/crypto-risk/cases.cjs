@@ -191,7 +191,7 @@ add("native dust from a listed address is not HIGH",["LOW"],["SANCTIONED_DUST_RE
   [...quiet(),native(15*DAY,"IN",0.00001,a(66))],hit(listed(a(66)))
 ));
 
-add("unknown token from a listed address is not HIGH, whatever its amount",["LOW"],["SANCTIONED_DUST_RECEIVED"],wallet(
+add("unknown token from a listed address asks for review, whatever its amount",["ELEVATED"],["LISTED_UNKNOWN_TOKEN_RECEIVED"],wallet(
   [...quiet(),native(15*DAY,"IN",5000000,a(66),{asset:"JUNK",asset_key:"0xjunk",token_contract:"0xjunk"})],hit(listed(a(66)))
 ));
 

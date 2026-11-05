@@ -295,6 +295,10 @@ class KnownIncidents:
                 self.accept(event, view, target, target is wanted)
                 return
         self.record_verdict(view, targets[-1], reason, targets[-1] is wanted)
+        if targets[-1] is not wanted:
+            # In shadow this copied anchor still joins the incident by hash:
+            # above zero, a new attack may have lost its own id and map point.
+            self.stats["copied_anchor_refused"] += 1
         if self.mode == "on":
             event["incident_reuse_refused"] = reason
             if own is not None:

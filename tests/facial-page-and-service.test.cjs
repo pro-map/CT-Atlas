@@ -95,7 +95,7 @@ test("deployment runs the detector tests in the built image before pushing it, t
   assert.ok(test_>-1);
   assert.ok(test_>wf.indexOf("docker build")&&test_<wf.indexOf("docker push"),"tested after the build and before the push");
   assert.match(wf,/"tests\/visual_intel_detector_test\.py"/);
-  assert.match(wf,/"tests\/fixtures\/\*\*"/);
+  assert.match(wf,/"tests\/fixtures\/astronaut\*\.jpg"/);
   assert.match(wf,/"face_detection":"yunet_2023mar"/);
   assert.match(wf,/astronaut\.jpg/);
   assert.match(wf,/face_count"\] == 1/);

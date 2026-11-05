@@ -14543,6 +14543,8 @@ function linkDatabaseRowsToMap() {
             return;
         }
         const mapped = mapKeyByMatchKey.get(row.match_key || eventMatchKey(row));
+        // A row served from events.json has no flag; the map file knows.
+        if (mapped?.attack_update === true) row.attack_update = true;
         row._mapEventKey = mapped && isMapAttackEvent(row) === isMapAttackEvent(mapped)
             ? mapped._mapKey || "" : "";
     });
