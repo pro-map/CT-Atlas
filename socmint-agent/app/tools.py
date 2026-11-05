@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import ipaddress
 import json
 import os
@@ -8,7 +9,9 @@ import re
 import socket
 import subprocess
 import sys
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
 from html import unescape
 from typing import Any
 from urllib.parse import parse_qsl, quote, urlencode, urljoin, urlsplit, urlunsplit
@@ -437,33 +440,89 @@ def search_public_web(query: str, limit: int = 8) -> dict[str, Any]:
 _reddit_token_cache: dict[str, Any] = {"token": "", "expires_at": 0.0}
 _twitch_token_cache: dict[str, Any] = {"token": "", "expires_at": 0.0}
 
+# X Developer Agreement XIV.B(a) bars surveillance and gathering intelligence, and
+# XIV.C bars government end users whose mission includes intelligence, without
+# X's written approval. Reddit's Public Content Policy is reported to bar helping
+# government surveillance. A token alone must therefore never enable these
+# collectors: set the flag only once the platform's written approval is on file.
+def x_approved() -> bool:
+    return os.getenv("X_WRITTEN_APPROVAL", "").strip() == "1"
+
+
+def reddit_approved() -> bool:
+    return os.getenv("REDDIT_WRITTEN_APPROVAL", "").strip() == "1"
+
+
+# name -> (URL, query parameters, text a healthy answer contains). A small real
+# request per keyless collector, so that a provider that has started refusing us
+# shows as off instead of as a constant True.
+_COLLECTOR_PROBES = {
+    "bluesky_public": ("https://public.api.bsky.app/xrpc/app.bsky.actor.searchActors", {"q": "bsky", "limit": 1}, "actors"),
+    "bluesky_post_search": ("https://api.bsky.app/xrpc/app.bsky.feed.searchPosts", {"q": "bluesky", "limit": 1}, "posts"),
+    "mastodon_public": ("https://mastodon.social/api/v2/search", {"q": "mastodon", "type": "accounts", "limit": 1, "resolve": "false"}, "accounts"),
+    "fourchan_public": ("https://a.4cdn.org/boards.json", {}, "boards"),
+    "telegram_public_pages": ("https://t.me/s/telegram", {}, "tgme_widget_message"),
+    "wayback_captures": ("https://web.archive.org/cdx/search/cdx", {"url": "example.com", "limit": 1, "output": "json"}, "timestamp"),
+    "odysee_public": ("https://lighthouse.odysee.tv/search", {"s": "news", "size": 1}, "claimId"),
+}
+_COLLECTOR_PROBE_TIMEOUT = 5
+_COLLECTOR_PROBE_TTL = 300
+_collector_cache: dict[str, Any] = {"at": 0.0, "flags": None}
+_collector_lock = threading.Lock()
+
+
+def _probe_collector(url: str, params: dict[str, Any], marker: str) -> bool:
+    try:
+        response = requests.get(
+            url,
+            params=params,
+            headers={"User-Agent": USER_AGENT},
+            timeout=_COLLECTOR_PROBE_TIMEOUT,
+        )
+        return response.ok and marker in response.text
+    except Exception:
+        return False
+
+
+def _collector_status() -> dict[str, bool]:
+    with _collector_lock:
+        flags = _collector_cache["flags"]
+        if flags is not None and time.monotonic() - _collector_cache["at"] < _COLLECTOR_PROBE_TTL:
+            return flags
+        with ThreadPoolExecutor(max_workers=len(_COLLECTOR_PROBES)) as pool:
+            futures = {name: pool.submit(_probe_collector, *probe) for name, probe in _COLLECTOR_PROBES.items()}
+            flags = {name: future.result() for name, future in futures.items()}
+        _collector_cache.update(at=time.monotonic(), flags=flags)
+        return flags
+
 
 def social_capabilities() -> dict[str, Any]:
     """Report which SOCMINT collectors are currently usable.
 
-    Most of these are genuinely free/public (no key, or a free-tier key):
-    Bluesky and basic Mastodon discovery need no key at all. x_api is the one
-    exception -- X has required a paid API subscription (Basic tier or
-    higher) for search access since 2023, so x_api being true means a paid
-    subscription is configured, not a free source. See x_api_requires_paid_tier.
+    Keyless collectors are probed with a small real request, cached for a few
+    minutes; keyed ones report whether their key is configured. x_api and
+    reddit_oauth stay false without the platform's written approval, and X also
+    bills per post read, so x_api is never a free source.
 
-    This returns configuration state only and never exposes API keys or secrets.
+    This never exposes API keys or secrets.
     """
     provider = os.getenv("SOCMINT_SEARCH_PROVIDER", "disabled").strip().lower()
-    reddit_ready = bool(
+    reddit_ready = reddit_approved() and bool(
         os.getenv("REDDIT_CLIENT_ID", "").strip()
         and os.getenv("REDDIT_CLIENT_SECRET", "").strip()
     )
+    probed = _collector_status()
     return {
         "status": "success",
-        "bluesky_public": True,
-        "fourchan_public": True,
-        "mastodon_public": True,
-        "telegram_public_pages": True,
-        "telegram_channel_reader": True,
+        "bluesky_public": probed["bluesky_public"],
+        "bluesky_post_search": probed["bluesky_post_search"],
+        "fourchan_public": probed["fourchan_public"],
+        "mastodon_public": probed["mastodon_public"],
+        "telegram_public_pages": probed["telegram_public_pages"],
+        "telegram_channel_reader": probed["telegram_public_pages"],
         "telegram_global_discovery": provider in {"brave", "searxng"},
-        "wayback_captures": True,
-        "odysee_public": True,
+        "wayback_captures": probed["wayback_captures"],
+        "odysee_public": probed["odysee_public"],
         "linkedin_public_discovery": provider in {"brave", "searxng"},
         "youtube_api": bool(os.getenv("YOUTUBE_API_KEY", "").strip()),
         "twitch_api": bool(
@@ -472,7 +531,7 @@ def social_capabilities() -> dict[str, Any]:
         ),
         "flickr_api": bool(os.getenv("FLICKR_API_KEY", "").strip()),
         "tumblr_api": bool(os.getenv("TUMBLR_API_KEY", "").strip()),
-        "x_api": bool(os.getenv("X_BEARER_TOKEN", "").strip()),
+        "x_api": x_approved() and bool(os.getenv("X_BEARER_TOKEN", "").strip()),
         "x_api_requires_paid_tier": True,
         "reddit_oauth": reddit_ready,
         "groq_whisper": bool(os.getenv("GROQ_API_KEY", "").strip()),
@@ -481,7 +540,7 @@ def social_capabilities() -> dict[str, Any]:
             and os.getenv("CLOUDFLARE_AI_API_TOKEN", "").strip()
         ),
         "openrouter_free": bool(os.getenv("OPENROUTER_API_KEY", "").strip()),
-        "sherlock_username_discovery": True,
+        "sherlock_username_discovery": importlib.util.find_spec("sherlock_project") is not None,
         "independent_web_search": provider in {"brave", "searxng"},
         "search_provider": provider or "disabled",
         "notes": (
@@ -494,8 +553,9 @@ def social_capabilities() -> dict[str, Any]:
 def search_bluesky(query: str, limit: int = 10, mode: str = "posts") -> dict[str, Any]:
     """Search PUBLIC Bluesky posts or accounts without authentication.
 
-    mode='posts' uses app.bsky.feed.searchPosts.
-    mode='accounts' uses app.bsky.actor.searchActors.
+    mode='posts' uses app.bsky.feed.searchPosts and can be refused: if it fails,
+    say so in the coverage instead of retrying. mode='accounts' uses
+    app.bsky.actor.searchActors.
     """
     clean_query = _clean(query, 400)
     requested = max(1, min(int(limit or 10), 25))
@@ -506,8 +566,11 @@ def search_bluesky(query: str, limit: int = 10, mode: str = "posts") -> dict[str
     if selected not in {"posts", "accounts"}:
         return {"status": "error", "error": "mode must be posts or accounts.", "results": []}
 
+    # Stopgap: public.api.bsky.app answers 403 to searchPosts. api.bsky.app still
+    # serves it without login, but that is undocumented and pagination is reported
+    # to fail. The durable fix is an app password on a declared CT Atlas account.
     endpoint = (
-        "https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts"
+        "https://api.bsky.app/xrpc/app.bsky.feed.searchPosts"
         if selected == "posts"
         else "https://public.api.bsky.app/xrpc/app.bsky.actor.searchActors"
     )
@@ -1121,7 +1184,14 @@ def search_x(query: str, limit: int = 10) -> dict[str, Any]:
     """
     token = os.getenv("X_BEARER_TOKEN", "").strip()
     clean_query = _clean(query, 500)
-    requested = max(1, min(int(limit or 10), 25))
+    requested = max(1, min(_as_int(limit, 10), 25))
+    if not x_approved():
+        return {
+            "status": "unavailable",
+            "platform": "x",
+            "results": [],
+            "reason": "X search needs X's written approval (X_WRITTEN_APPROVAL=1).",
+        }
     if not token:
         return {
             "status": "unavailable",
@@ -1227,6 +1297,13 @@ def search_reddit(query: str, limit: int = 10, sort: str = "new") -> dict[str, A
     selected_sort = _clean(sort, 20).lower() or "new"
     if selected_sort not in {"new", "relevance", "top", "hot", "comments"}:
         selected_sort = "new"
+    if not reddit_approved():
+        return {
+            "status": "unavailable",
+            "platform": "reddit",
+            "results": [],
+            "reason": "Reddit search needs Reddit's written approval (REDDIT_WRITTEN_APPROVAL=1).",
+        }
     if not os.getenv("REDDIT_CLIENT_ID", "").strip() or not os.getenv("REDDIT_CLIENT_SECRET", "").strip():
         return {
             "status": "unavailable",

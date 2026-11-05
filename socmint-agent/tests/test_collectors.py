@@ -341,7 +341,8 @@ def test_odysee_handles_empty_results_bad_mode_and_provider_errors(monkeypatch):
     assert tools.search_odysee("x")["status"] == "error"
 
 
-def test_new_free_collectors_are_advertised_and_registered_with_the_agent():
+def test_new_free_collectors_are_advertised_and_registered_with_the_agent(monkeypatch):
+    monkeypatch.setattr(tools, "_collector_status", lambda: dict.fromkeys(tools._COLLECTOR_PROBES, True))
     caps = social_capabilities()
     for flag in ("telegram_channel_reader", "wayback_captures", "odysee_public"):
         assert caps[flag] is True

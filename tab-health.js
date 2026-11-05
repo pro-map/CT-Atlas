@@ -73,7 +73,7 @@ const SCOPES={
 // Free collectors need no key; key-based ones depend on the agent's configuration.
 const COLLECTORS=[
   ["FREE COLLECTORS · NO KEY",[
-    ["telegram_channel_reader","Telegram public channels"],["bluesky_public","Bluesky"],["mastodon_public","Mastodon"],
+    ["telegram_channel_reader","Telegram public channels"],["bluesky_public","Bluesky accounts"],["bluesky_post_search","Bluesky posts"],["mastodon_public","Mastodon"],
     ["fourchan_public","4chan"],["odysee_public","Odysee"],["wayback_captures","Internet Archive captures"],
     ["sherlock_username_discovery","Username discovery"]
   ]],
