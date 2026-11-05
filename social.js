@@ -292,14 +292,21 @@ async function runInvestigation(event){
     reports=[result.report,...reports.filter(x=>x.id!==result.report.id)].slice(0,50);
     renderHistory();
     renderReport(result.report);
-    finishSound?.(result.fallback==="brave_evidence_only"?"error":"success");
     const sourceCount=Array.isArray(result.report?.sources)?result.report.sources.length:0;
+    const count=sourceCount+" public source"+(sourceCount===1?"":"s");
+    const saved=result.saved===false?(result.warning||"The report could not be saved."):"Saved.";
+    const degraded=result.saved===false||result.partial||["brave_evidence_only","url_context_agent_fallback"].includes(result.fallback);
+    finishSound?.(degraded?"error":"success");
     if(result.fallback==="brave_evidence_only"){
-      setStatus("ADK analysis was unavailable; Brave returned "+sourceCount+" public source"+(sourceCount===1?"":"s")+" for analyst review. Report saved.","warning");
+      setStatus("ADK analysis was unavailable; Brave returned "+count+" for analyst review. "+saved,"warning");
+    }else if(result.fallback==="url_context_agent_fallback"){
+      setStatus("The ADK agent failed: this report comes only from a single model reading the supplied URLs · "+count+". "+saved,"warning");
+    }else if(result.partial){
+      setStatus("Automated synthesis did not finish: the collected evidence is listed for analyst review · "+count+". "+saved,"warning");
     }else if(result.fallback){
-      setStatus("SOCMINT report generated through Brave fallback · "+sourceCount+" public source"+(sourceCount===1?"":"s")+" · saved.","success");
+      setStatus("SOCMINT report generated through Brave fallback · "+count+". "+saved,degraded?"warning":"success");
     }else{
-      setStatus("SOCMINT report generated · "+sourceCount+" public source"+(sourceCount===1?"":"s")+" · saved.","success");
+      setStatus("SOCMINT report generated · "+count+". "+saved,degraded?"warning":"success");
     }
   }catch(error){
     finishSound?.("error");
@@ -356,13 +363,13 @@ function pdfBlocks(report){
     blocks.push({text:(item.issue||"")+"\nIndicator: "+(item.indicator||""),type:"body"});
   }
   blocks.push({text:"ANALYTICAL GAPS / LIMITATIONS",type:"heading"},{text:report.analytical_gaps||"",type:"body"});
-  blocks.push({text:"SOURCES",type:"heading"});
   const telegram=report.telegram_evidence;
   if(telegram){
     blocks.push({text:"TELEGRAM EVIDENCE",type:"heading"},{text:telegram.messages_retained+" retained / "+telegram.messages_observed+" observed posts. Collected "+telegram.retrieved_at+". "+telegram.scope+(telegram.truncated?" Collection truncated to 120 retained posts.":""),type:"body"});
     for(const edge of telegram.relationships||[])blocks.push({text:"@"+edge.channel+" → "+edge.target+" · "+edge.type+" · "+edge.count+" posts\n"+edge.source_urls.join("\n"),type:"body"});
     for(const post of telegram.messages||[])blocks.push({text:"@"+post.channel+" · "+post.date+"\n"+post.url+"\n"+post.text+(post.text_truncated?"\n[Text truncated]":""),type:"source"});
   }
+  blocks.push({text:"SOURCES",type:"heading"});
   for(const source of report.sources||[]){
     blocks.push({text:(source.title||source.url)+"\n"+source.url+(source.snippet?"\n"+source.snippet:""),type:"source"});
   }
@@ -389,14 +396,23 @@ async function refreshAgentStatus(){
   const badge=$("socialAgentBadge");
   if(!badge)return;
   try{
-    const response=await fetch(API+"/health",{cache:"no-store"});
+    const response=await fetch(API+"/health/status",{cache:"no-store"});
     const health=await response.json().catch(()=>({}));
-    if(response.ok&&health.social_agent_configured===true){
+    const status=response.ok?health.components?.agent?.status:"";
+    if(status==="operational"||status==="degraded"){
       badge.textContent="ADK AGENT";
-      badge.title="CT Atlas SOCMINT is routed through the ADK investigation agent.";
-    }else{
+      badge.title=status==="degraded"
+        ?"The ADK agent answered slowly, probably waking up from idle; the first investigation may take longer."
+        :"CT Atlas SOCMINT is routed through the ADK investigation agent.";
+    }else if(status==="down"){
+      badge.textContent="AGENT DOWN";
+      badge.title="The ADK agent is failing, so investigations use the Brave and Gemini fallback.";
+    }else if(status==="not_configured"){
       badge.textContent="GEMINI FALLBACK";
       badge.title="ADK agent is not configured yet; CT Atlas is using the existing Gemini SOCMINT workflow.";
+    }else{
+      badge.textContent="SOCMINT AGENT";
+      badge.title="The state of the ADK agent could not be checked.";
     }
   }catch(_){
     badge.textContent="SOCMINT AGENT";

@@ -232,7 +232,7 @@ function extractToolSources(payload) {
 
 async function braveWorkerDiscovery(env, query) {
   const key = String(env?.BRAVE_SEARCH_API_KEY || "").trim();
-  if (!key) return { provider: "disabled", sources: [] };
+  if (!key) return { provider: "disabled", sources: [], errors: [] };
 
   // Do not stuff every identifier into one query. A name + several handles +
   // several keywords can easily produce zero search hits even when each
@@ -249,7 +249,7 @@ async function braveWorkerDiscovery(env, query) {
   } else {
     for (const value of (query.keywords || []).slice(0, 4)) addAnchor(value);
   }
-  if (!anchors.length) return { provider: "brave", sources: [] };
+  if (!anchors.length) return { provider: "brave", sources: [], errors: [] };
 
   const platformSites = {
     LinkedIn: "site:linkedin.com",
@@ -288,6 +288,7 @@ async function braveWorkerDiscovery(env, query) {
   const seenQuery = new Set();
   const seenUrl = new Set();
   const sources = [];
+  const errors = new Set();
   for (const rawQuery of queries) {
     const q = cleanText(rawQuery, 450);
     if (!q || seenQuery.has(q) || sources.length >= 12) continue;
@@ -302,7 +303,10 @@ async function braveWorkerDiscovery(env, query) {
           "X-Subscription-Token": key
         }
       });
-      if (!response.ok) continue;
+      if (!response.ok) {
+        errors.add("HTTP " + response.status);
+        continue;
+      }
       const payload = await response.json().catch(() => ({}));
       for (const item of (payload?.web?.results || [])) {
         const url = safePublicUrl(item?.url);
@@ -318,9 +322,10 @@ async function braveWorkerDiscovery(env, query) {
       }
     } catch (_) {
       // Discovery fallback is best-effort; the ADK/URL analysis path remains authoritative.
+      errors.add("network error");
     }
   }
-  return { provider: "brave", sources };
+  return { provider: "brave", sources, errors: [...errors] };
 }
 
 function htmlToEvidenceText(value) {
@@ -1100,7 +1105,7 @@ async function runSocialInvestigation(env, run, query, agentConfigured) {
             const fallbackResult = await geminiEvidenceSynthesis(env, fallbackQuery, evidence);
             const report = normalizeReport(
               fallbackResult.parsed,
-              fallbackQuery,
+              query,
               reportSources,
               fallbackResult.model,
               "brave_worker+direct_fetch+gemini_synthesis"
@@ -1125,7 +1130,7 @@ async function runSocialInvestigation(env, run, query, agentConfigured) {
               const sources = Array.from(merged.values()).slice(0, 100);
               const report = normalizeReport(
                 fallbackResult.parsed,
-                fallbackQuery,
+                query,
                 sources,
                 fallbackResult.model,
                 "brave_worker+url_context_secondary_fallback"
@@ -1163,9 +1168,13 @@ async function runSocialInvestigation(env, run, query, agentConfigured) {
           }
         }
 
+        // A refused search says nothing about the query, so refining it would not help.
+        const braveFailure = discovery.errors?.length
+          ? `the Brave search provider failed (${discovery.errors.join(", ")}), so no public source could be searched. This is a service problem, not a problem with your query: retry later or add known public URLs.`
+          : "";
         if (agentQuota) {
           return jsonResponse({
-            error: env.BRAVE_SEARCH_API_KEY
+            error: braveFailure ? "The SOCMINT agent reached its Gemini quota and " + braveFailure : env.BRAVE_SEARCH_API_KEY
               ? "The SOCMINT agent reached its Gemini quota and Brave fallback found no usable public sources. Refine the target, select another platform, or add known public URLs."
               : "The SOCMINT agent reached its Gemini quota and the independent Brave fallback is not configured.",
             code: "SOCMINT_AGENT_QUOTA_EXHAUSTED",
@@ -1174,10 +1183,10 @@ async function runSocialInvestigation(env, run, query, agentConfigured) {
           }, 429, env);
         }
         return jsonResponse({
-          error: env.BRAVE_SEARCH_API_KEY
+          error: braveFailure ? "The SOCMINT agent returned no usable evidence and " + braveFailure : env.BRAVE_SEARCH_API_KEY
             ? "The SOCMINT agent returned no usable evidence and Brave fallback also found no public sources. Refine the target, try a username separately, select another platform, or add a known public URL."
             : "The SOCMINT agent returned no usable evidence and the Worker-side independent search fallback is not configured. Add known public URLs or configure Brave for the Worker.",
-          code: "SOCMINT_AGENT_UNAVAILABLE",
+          code: braveFailure ? "SOCMINT_SEARCH_PROVIDER_ERROR" : "SOCMINT_AGENT_UNAVAILABLE",
           detail: agentFailure.message || null
         }, status >= 400 && status < 600 ? status : 502, env);
       }
@@ -1206,7 +1215,7 @@ async function runSocialInvestigation(env, run, query, agentConfigured) {
   } catch (error) {
     const status = Number(error?.status || 0);
 
-    if (query.mode === "discover" && query.urls.length && [400,403,404,429,500,502,503,504].includes(status)) {
+    if (!urlOnlyAgentFallback && query.mode === "discover" && query.urls.length && [400,403,404,429,500,502,503,504].includes(status)) {
       // Search grounding can be unavailable or quota-limited on free projects.
       // Preserve usefulness by analyzing analyst-supplied public URLs instead.
       try {
