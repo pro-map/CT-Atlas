@@ -1,4 +1,6 @@
-const SOCIAL_AGENT_CLIENT_VERSION = "socmint-adk-client-v1";
+const SOCIAL_AGENT_CLIENT_VERSION = "socmint-adk-client-v2";
+// Below the 115 s abort: the agent stops itself in time to return what it collected.
+const SOCIAL_AGENT_DEADLINE_SECONDS = 100;
 
 function clean(value, max = 1200) {
   return String(value || "").replace(/\s+/g, " ").trim().slice(0, max);
@@ -52,7 +54,8 @@ async function runSocialAgent(env, username, query) {
       },
       body: JSON.stringify({
         user_id: username,
-        query
+        query,
+        deadline_seconds: SOCIAL_AGENT_DEADLINE_SECONDS
       })
     });
   } catch (cause) {

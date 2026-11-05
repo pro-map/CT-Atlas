@@ -43,6 +43,11 @@ function formPayload(){
   };
 }
 
+// Plain text on purpose: these URLs were never returned by a tool, so no link is offered.
+function unverifiedNote(urls){
+  return (urls||[]).length?'<div class="finding-basis"><strong>Unverified citation removed:</strong> no collector returned '+esc(urls.join(" · "))+'</div>':"";
+}
+
 function sourceLinks(urls){
   return (urls||[]).filter(url=>/^https?:\/\//i.test(String(url))).map(url=>'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+esc(url)+'</a>').join("<br>");
 }
@@ -155,6 +160,7 @@ function renderReport(report){
         </div>
         <div class="finding-basis">${esc(item.basis)}</div>
         ${(item.source_urls||[]).length?'<div class="finding-basis">'+sourceLinks(item.source_urls)+'</div>':""}
+        ${unverifiedNote(item.unverified_source_urls)}
       </div>`).join("")
     : '<div class="empty-state">No supported key findings.</div>';
 
@@ -162,7 +168,7 @@ function renderReport(report){
     ? (report.entities||[]).map(item=>`
       <tr>
         <td>${esc(item.type)}</td>
-        <td>${esc(item.value)}${(item.source_urls||[]).length?'<div class="finding-basis">'+sourceLinks(item.source_urls)+'</div>':""}</td>
+        <td>${esc(item.value)}${(item.source_urls||[]).length?'<div class="finding-basis">'+sourceLinks(item.source_urls)+'</div>':""}${unverifiedNote(item.unverified_source_urls)}</td>
         <td>${esc(item.platform||"—")}</td>
         <td><span class="confidence ${esc(item.confidence)}">${esc(item.confidence)}</span></td>
         <td>${esc(item.basis)}</td>
@@ -188,6 +194,7 @@ function renderReport(report){
         ${source.snippet?'<div class="source-snippet">'+esc(source.snippet)+'</div>':""}
       </div>`).join("")
     : '<div class="empty-state">No retrievable public source URLs were returned.</div>';
+  $("reportSources").insertAdjacentHTML("beforeend",unverifiedNote(report.unverified_sources));
 
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -358,6 +365,9 @@ function pdfBlocks(report){
   }
   for(const source of report.sources||[]){
     blocks.push({text:(source.title||source.url)+"\n"+source.url+(source.snippet?"\n"+source.snippet:""),type:"source"});
+  }
+  if(report.unverified_sources?.length){
+    blocks.push({text:"UNVERIFIED CITATIONS REMOVED",type:"heading"},{text:"No collector returned these URLs:\n"+report.unverified_sources.join("\n"),type:"body"});
   }
   blocks.push({text:"ANALYTICAL LIMITATION",type:"heading"},{text:"Public-source analytical output. Similar usernames, content, imagery, contacts or activity patterns do not by themselves establish identity, control, criminality or terrorist affiliation. Significant findings require independent analyst validation.",type:"footer"});
   return blocks;

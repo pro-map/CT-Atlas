@@ -541,26 +541,49 @@ function buildDiscoveryOnlyReport(query, sources, agentFailure) {
   };
 }
 
-function normalizeAgentSources(raw, query) {
+const AGENT_SOURCE_KINDS = new Set([
+  "direct_public_page", "search_result", "telegram_collected_post",
+  "telegram_public_preview", "transcribed_media", "discovered_link"
+]);
+
+// Two spellings of one page, so a harmless difference cannot fail a citation.
+function sourceKey(url) {
+  return String(url).replace(/#.*$/, "").replace(/\/+$/, "");
+}
+
+// The agent's ledger of tool outputs decides which URLs exist and what kind of
+// observation each one is. The model's sources and kinds are only claims: anything
+// outside the ledger is dropped here and flagged as unverified in normalizeReport.
+// An agent that sends no ledger therefore proves nothing beyond its Telegram annex.
+function normalizeAgentSources(raw, query, ledger) {
+  const observed = new Map();
+  for (const entry of Array.isArray(ledger) ? ledger : []) {
+    const url = safePublicUrl(entry?.url);
+    if (url && !observed.has(sourceKey(url))) observed.set(sourceKey(url), entry);
+  }
   const items = [];
   const seen = new Set();
-  const add = (url, title = "", kind = "agent_public_source") => {
+  const add = (url, title = "", fallbackKind = "") => {
     const safe = safePublicUrl(url);
-    if (!safe || seen.has(safe)) return;
-    seen.add(safe);
+    if (!safe || seen.has(sourceKey(safe))) return;
+    const entry = observed.get(sourceKey(safe));
+    const kind = entry ? (AGENT_SOURCE_KINDS.has(entry.kind) ? entry.kind : "search_result") : fallbackKind;
+    if (!kind) return;
+    seen.add(sourceKey(safe));
     items.push({
-      url: safe,
-      title: cleanText(title, 300),
-      snippet: "",
-      kind: cleanText(kind, 60) || "agent_public_source"
+      url: safePublicUrl(entry?.url) || safe,
+      title: cleanText(entry?.title || title, 300),
+      snippet: cleanText(entry?.snippet, 700),
+      kind
     });
   };
 
   for (const message of normalizeTelegramEvidence(raw?.telegram_evidence)?.messages || []) {
     add(message.url, `Telegram @${message.channel} · ${message.date || message.id}`, "telegram_collected_post");
   }
-  for (const item of Array.isArray(raw?.sources) ? raw.sources : []) {
-    add(item?.url, item?.title, item?.kind);
+  for (const item of Array.isArray(raw?.sources) ? raw.sources : []) add(item?.url, item?.title);
+  for (const item of [...(Array.isArray(raw?.key_findings) ? raw.key_findings : []), ...(Array.isArray(raw?.entities) ? raw.entities : [])]) {
+    for (const url of listText(item?.source_urls, 8, 1500)) add(url);
   }
   for (const url of query.urls || []) add(url, "", "analyst_supplied");
   return items.slice(0, 200);
@@ -609,17 +632,32 @@ function needsIndependentDiscoveryFallback(query, sources) {
 }
 
 function normalizeReport(raw, query, toolSources, model, discoveryMode) {
-  const safeUrls = new Set(toolSources.map(s => s.url));
-  for (const url of query.urls) safeUrls.add(url);
-
-  const sourceUrls = value => listText(value, 8, 1500)
-    .map(safePublicUrl)
-    .filter(url => url && safeUrls.has(url));
+  const safeUrls = new Map(toolSources.map(s => [sourceKey(s.url), s.url]));
+  for (const url of query.urls) safeUrls.set(sourceKey(url), url);
+  const unverified = new Set();
 
   const conf = value => {
     const v = cleanText(value, 16).toUpperCase();
     return ["HIGH","MEDIUM","LOW"].includes(v) ? v : "LOW";
   };
+
+  // A finding left with nothing behind it cannot keep the confidence it claimed.
+  const citations = item => {
+    const cited = listText(item?.source_urls, 8, 1500).map(safePublicUrl).filter(Boolean);
+    const rejected = cited.filter(url => !safeUrls.has(sourceKey(url)));
+    const accepted = cited.filter(url => safeUrls.has(sourceKey(url))).map(url => safeUrls.get(sourceKey(url)));
+    for (const url of rejected) unverified.add(url);
+    return {
+      confidence: rejected.length && !accepted.length ? "LOW" : conf(item?.confidence),
+      source_urls: [...new Set(accepted)],
+      ...(rejected.length ? { unverified_source_urls: rejected } : {})
+    };
+  };
+
+  for (const item of Array.isArray(raw?.sources) ? raw.sources : []) {
+    const url = safePublicUrl(item?.url);
+    if (url && !safeUrls.has(sourceKey(url))) unverified.add(url);
+  }
 
   return {
     id: crypto.randomUUID(),
@@ -641,24 +679,23 @@ function normalizeReport(raw, query, toolSources, model, discoveryMode) {
     ct_relevance: cleanText(raw?.ct_relevance, 7000),
     key_findings: Array.isArray(raw?.key_findings) ? raw.key_findings.slice(0,12).map(x => ({
       finding: cleanText(x?.finding, 1800),
-      confidence: conf(x?.confidence),
       basis: cleanText(x?.basis, 2400),
-      source_urls: sourceUrls(x?.source_urls)
+      ...citations(x)
     })).filter(x => x.finding) : [],
     entities: Array.isArray(raw?.entities) ? raw.entities.slice(0,60).map(x => ({
       type: cleanText(x?.type, 60).toUpperCase(),
       value: cleanText(x?.value, 300),
       platform: cleanText(x?.platform, 80),
-      confidence: conf(x?.confidence),
       basis: cleanText(x?.basis, 1800),
-      source_urls: sourceUrls(x?.source_urls)
+      ...citations(x)
     })).filter(x => x.value) : [],
     analytical_gaps: cleanText(raw?.analytical_gaps, 5000),
     watchpoints: Array.isArray(raw?.watchpoints) ? raw.watchpoints.slice(0,10).map(x => ({
       issue: cleanText(x?.issue, 1000),
       indicator: cleanText(x?.indicator, 1400)
     })).filter(x => x.issue) : [],
-    sources: toolSources
+    sources: toolSources,
+    unverified_sources: [...unverified].slice(0, 50)
   };
 }
 
