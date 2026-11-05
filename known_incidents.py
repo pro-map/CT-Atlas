@@ -11,11 +11,19 @@ from __future__ import annotations
 import copy
 import hashlib
 import math
+import re
+import unicodedata
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
 
 import map_evidence_integrity as mei
-from tools.repair_weak_incident_ids import weak_anchor
+
+
+def weak_anchor(value):
+    """A paragraph marker such as 'p2', not a description of an incident."""
+    anchor = unicodedata.normalize("NFKD", str(value or "")).strip().lower()
+    return bool(re.fullmatch(r"(?:p|para|paragraph|item|row|event|article|ref)[-_ ]?\d{1,4}", anchor))
+
 
 ELIGIBLE_TYPES = {"ATTACK", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT", "CT_OPERATION", "ARREST", "PIRACY", "CBRN"}
 TYPE_FAMILIES = {"ATTACK": "attack", "ATTEMPTED_ATTACK": "attack", "DISRUPTED_PLOT": "plot", "ARREST": "plot",

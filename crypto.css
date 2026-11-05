@@ -296,6 +296,7 @@ button,input,select{font:inherit}
 .exchange-source-badge{margin-left:5px}
 .intel-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
 .intel-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.intel-form[hidden]{display:none}
 .intel-form>.intel-actions,.intel-form>.intel-result,.intel-form>#cryptoAlerts{grid-column:1/-1}
 #labelForm{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #2d414d}
 .intel-result{font-size:9px;line-height:1.55;color:#9eb2bd}

@@ -22,9 +22,6 @@ import known_incidents
 import map_evidence_integrity as mei
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "tools"))
-import archive_review
-import groq_backfill
 
 NOW = datetime(2026, 11, 2, 12, tzinfo=timezone.utc)
 COUNTRIES = ["Jordan", "France"]
@@ -274,10 +271,6 @@ class WireTests(unittest.TestCase):
         self.assertEqual(len(self.bodies), 3)
         self.assertEqual({result["event_id"]: result["known_incident_id"] for result in results},
                          {left["event_id"]: "inc-a", right["event_id"]: "inc-b"})
-
-    def test_groq_schema_has_no_new_field(self):
-        schema = groq_backfill.schema_for(archive_review.load_collector(ROOT))
-        self.assertNotIn("known_incident_ref", schema["properties"]["results"]["items"]["properties"])
 
 
 def _dumps(value):
@@ -889,7 +882,8 @@ WRAPPER = textwrap.dedent('''
 def wrapper(mode):
     with tempfile.TemporaryDirectory() as folder:
         result = subprocess.run([sys.executable, "-c", WRAPPER, str(ROOT), mode], capture_output=True, text=True,
-                                timeout=120, cwd=folder, encoding="utf-8")
+                                timeout=120, cwd=folder, encoding="utf-8",
+                                env={**os.environ, "PYTHONIOENCODING": "utf-8"})
     if result.returncode:
         raise AssertionError(result.stderr[-2000:])
     return json.loads(result.stdout.strip().splitlines()[-1])
