@@ -1,4 +1,6 @@
 name: Daily RadNuc background archive
+# cloudflare-worker/schedule-dispatcher.js recognises a started slot by this title.
+run-name: ${{ inputs.slot && format('Slot {0}', inputs.slot) || github.workflow }}
 
 # Current background reporting only. The runner never updates events.json or
 # builds/deploys the map. Source articles are retained for 730 days. Twenty requests
@@ -18,6 +20,12 @@ on:
     - cron: "27 10,18 * * *"
       timezone: "Europe/Paris"
   workflow_dispatch:
+    inputs:
+      slot:
+        description: "Timed slot this run stands for, sent by the dispatcher; empty for a manual run"
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: write

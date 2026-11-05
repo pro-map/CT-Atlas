@@ -1,4 +1,6 @@
 name: Sync background corpus to D1
+# cloudflare-worker/schedule-dispatcher.js recognises a started slot by this title.
+run-name: ${{ inputs.slot && format('Slot {0}', inputs.slot) || github.workflow }}
 
 # Loads articles already in the repository (map events' related articles,
 # archived removals, the collector's local fallback file, cached Gemini
@@ -36,6 +38,11 @@ on:
           - apply
           - plan
         default: apply
+      slot:
+        description: "Timed slot this run stands for, sent by the dispatcher; empty for a manual run"
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: read

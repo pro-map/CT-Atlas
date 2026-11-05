@@ -1,4 +1,6 @@
 name: Consolidate duplicate incidents
+# cloudflare-worker/schedule-dispatcher.js recognises a started slot by this title.
+run-name: ${{ inputs.slot && format('Slot {0}', inputs.slot) || github.workflow }}
 
 # Retroactive pass over the 180-day database (tools/consolidate_incidents.py):
 # Gemini groups incident ids that are the same real-world incident, duplicate
@@ -31,6 +33,11 @@ on:
         description: "Max Gemini window reviews this run"
         required: true
         default: "40"
+        type: string
+      slot:
+        description: "Timed slot this run stands for, sent by the dispatcher; empty for a manual run"
+        required: false
+        default: ""
         type: string
 
 permissions:

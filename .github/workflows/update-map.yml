@@ -1,4 +1,6 @@
 name: Daily CT Intelligence Map Update
+# cloudflare-worker/schedule-dispatcher.js recognises a started slot by this title.
+run-name: ${{ inputs.slot && format('Slot {0}', inputs.slot) || github.workflow }}
 
 on:
   schedule:
@@ -21,6 +23,11 @@ on:
         required: true
         default: false
         type: boolean
+      slot:
+        description: "Timed slot this run stands for, sent by the dispatcher; empty for a manual run"
+        required: false
+        default: ""
+        type: string
 
 permissions:
   actions: read
@@ -60,7 +67,7 @@ jobs:
       checkpoint_outcome: ${{ steps.commit.outcome }}
       data_sha: ${{ steps.commit.outputs.data_sha }}
     env:
-      CT_ATLAS_SCHEDULE: ${{ github.event.schedule || '' }}
+      CT_ATLAS_SCHEDULE: ${{ github.event.schedule || inputs.slot || '' }}
       COLLECTION_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'daily' }}
       FORCE_GEO_REQUESTED: ${{ github.event_name == 'workflow_dispatch' && inputs.force_ai || false }}
     steps:
@@ -241,7 +248,7 @@ jobs:
       # Independent of collection: the sanctioned-address list is refreshed once a
       # day (and on manual runs). A failed download keeps the previous file.
       - name: Refresh OFAC sanctioned crypto addresses
-        if: ${{ always() && steps.checkout.outcome == 'success' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && github.event.schedule == '17 10 * * *')) }}
+        if: ${{ always() && steps.checkout.outcome == 'success' && (github.event.schedule == '17 10 * * *' || inputs.slot == '17 10 * * *' || (github.event_name == 'workflow_dispatch' && inputs.slot == '')) }}
         continue-on-error: true
         run: python -u tools/update_sanctions.py
 
