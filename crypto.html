@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CT ATLAS — Crypto Intelligence</title>
 <link rel="icon" href="CT-ATLAS.png">
-<link rel="stylesheet" href="crypto.css?v=8">
+<link rel="stylesheet" href="crypto.css?v=9">
 <link rel="stylesheet" href="tab-health.css?v=1">
   <script src="tab-access.js?v=no-social-20261006" defer></script>
 </head>
@@ -54,6 +54,11 @@
         <span class="crypto-example">Test example: <button id="cryptoTestExample" class="crypto-example-button" type="button">OFAC-listed Bitcoin address with listed counterparties (demo)</button></span>
       </div>
     </section>
+
+    <div id="workspaceLoadNotice" class="workspace-load-notice" role="status" hidden>
+      <span>The saved workspace could not be loaded, so labels, cases and monitoring are switched off. Nothing stored has been changed.</span>
+      <button id="workspaceRetryButton" class="crypto-small-button" type="button">RETRY</button>
+    </div>
 
     <section id="cryptoWorkspaceHome" class="crypto-grid">
       <article class="crypto-card">
@@ -146,6 +151,18 @@
           </details>
         </div>
       </article>
+
+      <article class="crypto-card crypto-watch-card">
+        <div class="crypto-card-head">
+          <div>
+            <div class="crypto-card-title">Monitored Wallets</div>
+            <div id="cryptoWatchCount" class="crypto-card-note"></div>
+          </div>
+        </div>
+        <div class="crypto-card-body">
+          <div id="cryptoWatchlist" class="intel-list"></div>
+        </div>
+      </article>
     </section>
 
     <div id="cryptoStatus" class="crypto-status"></div>
@@ -164,6 +181,22 @@
       </div>
 
       <div id="cryptoKpis" class="crypto-kpis"></div>
+
+      <article id="cryptoRisk" class="crypto-card risk-card" hidden>
+        <div class="crypto-card-head">
+          <div>
+            <div class="crypto-card-title">Risk indicators (automated, not a finding)</div>
+            <div class="crypto-card-note">Prompts for analyst review from the seed wallet's own records. Transaction filters do not change them.</div>
+          </div>
+          <div class="intel-actions">
+            <button id="cryptoOneHop" class="crypto-small-button" type="button" title="Analyses the top 5 counterparties by value: 5 extra provider look-ups">CHECK ONE HOP</button>
+            <span id="cryptoRiskBadge" class="intel-badge">—</span>
+          </div>
+        </div>
+        <div class="crypto-card-body">
+          <div id="cryptoRiskBody" class="intel-list" aria-live="polite"></div>
+        </div>
+      </article>
 
       <article id="cryptoSanctions" class="crypto-card sanctions-card">
         <div class="crypto-card-head">
@@ -194,8 +227,8 @@
             <label class="crypto-field compact"><span>Status</span><select id="filterStatus"><option value="all">All statuses</option><option value="confirmed">Confirmed / successful</option><option value="pending">Pending / unconfirmed</option><option value="failed">Failed</option></select></label>
             <label class="crypto-field compact"><span>Minimum amount</span><input id="filterMinAmount" inputmode="decimal" placeholder="0"></label>
             <label class="crypto-field compact"><span>Maximum amount</span><input id="filterMaxAmount" inputmode="decimal" placeholder="No maximum"></label>
-            <label class="crypto-field compact"><span>From date</span><input id="filterFromDate" type="date"></label>
-            <label class="crypto-field compact"><span>To date</span><input id="filterToDate" type="date"></label>
+            <label class="crypto-field compact"><span>From date (UTC)</span><input id="filterFromDate" type="date"></label>
+            <label class="crypto-field compact"><span>To date (UTC)</span><input id="filterToDate" type="date"></label>
             <label class="crypto-field compact wide"><span>Counterparty / TX / token contract</span><input id="filterText" autocomplete="off" spellcheck="false" placeholder="Address, tx hash, token name or contract"></label>
             <label class="crypto-field compact"><span>Graph: min linked records</span><input id="filterGraphMinLinks" type="number" min="1" max="99" step="1" value="1"></label>
             <label class="crypto-field compact"><span>Graph: maximum nodes</span><select id="filterGraphNodes"><option value="20">20</option><option value="40">40</option><option value="60">60</option><option value="80" selected>80</option></select></label>
@@ -219,7 +252,7 @@
             <div class="crypto-card-head">
               <div>
                 <div class="crypto-card-title">Exposure Engine</div>
-                <div class="crypto-card-note">Direct and indirect exposure to analyst-sourced labels/watchlists.</div>
+                <div class="crypto-card-note">Direct and indirect exposure to analyst-sourced labels/watchlists, for funds sent and funds received.</div>
               </div>
             </div>
             <div class="crypto-card-body">
@@ -367,8 +400,8 @@
   </main>
 </div>
 <script src="pdf-export.js?v=20261003"></script>
-<script src="crypto-report.js?v=7"></script>
-<script src="crypto.js?v=2026100601"></script>
+<script src="crypto-report.js?v=8"></script>
+<script src="crypto.js?v=2026110501"></script>
 <script src="tab-health.js?v=1" data-health-scope="crypto"></script>
 </body>
 </html>

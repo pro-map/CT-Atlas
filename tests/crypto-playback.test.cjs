@@ -45,8 +45,8 @@ test("renderGraph builds the model and delegates drawing to a pure paintGraphFra
 
 test("playback timeline derivation mirrors buildNetworkModel's own IN/OUT edge-direction rule",()=>{
   // buildNetworkModel: an IN row's counterparty produces an edge counterparty->source; OUT produces source->counterparty.
-  assert.ok(client.includes('if(neighbor.incoming>0)addEdge(neighbor.id,source,neighbor.incoming,assets,childDepth);'));
-  assert.ok(client.includes('if(neighbor.outgoing>0)addEdge(source,neighbor.id,neighbor.outgoing,assets,childDepth);'));
+  assert.ok(client.includes('if(neighbor.incoming>0)addEdge(neighbor.id,source,neighbor.inTx,assets,childDepth);'));
+  assert.ok(client.includes('if(neighbor.outgoing>0)addEdge(source,neighbor.id,neighbor.outTx,assets,childDepth);'));
   const timelineBody=client.match(/function buildPlaybackTimeline\(model,payload\)\{[\s\S]*?\n\}/)[0];
   assert.ok(timelineBody.includes('const fromKey=direction==="IN"?cpKey:sourceKey;'));
   assert.ok(timelineBody.includes('const toKey=direction==="IN"?sourceKey:cpKey;'));

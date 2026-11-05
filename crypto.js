@@ -23,12 +23,25 @@ let autoTraceRun=null;
 let exchangeAttributions=new Map();
 // While an automatic trace runs, the graph keeps its whole frontier (no node cap).
 let autoTraceActive=false;
+// Raised by a new search or a cleared trace: whatever an older trace was waiting for is dropped.
+let traceGeneration=0;
+// The last CHECK ONE HOP run (checkOneHop). Reset with the trace.
+let oneHopRun=null;
+let oneHopBusy=false;
 let currentNetworkModel=null;
 let graphDisplayModel=null;
 let exchangeGraphMode="auto";
 let selectedExchangePath="";
 let activeExchangePath=null;
 let cryptoWorkspace={version:"crypto-workspace-v1",labels:[],watchlist:[],cases:[],alerts:[]};
+// The server stores a save whole, so a save from the blank default would wipe the analyst's
+// workspace: nothing is saved until a load has succeeded.
+let workspaceLoaded=false;
+// The last copy the server acknowledged, and its revision: what a stale save merges against.
+let workspaceBase=null;
+let workspaceRevision=null;
+let workspaceSaveRunning=false;
+let workspaceSaveQueued=false;
 let sharedExchangeLabels=new Map();
 let activeCaseId="";
 let lastFoundPath=null;
@@ -143,45 +156,161 @@ function makeId(prefix){
   return prefix+"-"+id;
 }
 
+const WORKSPACE_CONTROL_IDS=[
+  "caseNewButton","caseCreateButton","caseAddSeedButton","caseSavePathButton","caseOffchainToggle","caseCrosschainToggle",
+  "offchainSaveButton","crosschainSaveButton","caseAddNoteButton","labelSeedButton","labelSaveButton",
+  "monitorSeedButton","monitorCheckButton"
+];
+const WORKSPACE_SAVE_ATTEMPTS=3;
+// The Worker keeps the first 300 and silently drops the rest (sanitizeWorkspace).
+const WATCHLIST_CAP=300;
+
+function syncWorkspaceControls(loadFailed=false){
+  for(const id of WORKSPACE_CONTROL_IDS){
+    const control=document.getElementById(id);
+    if(control)control.disabled=!workspaceLoaded;
+  }
+  const notice=document.getElementById("workspaceLoadNotice");
+  if(notice)notice.hidden=workspaceLoaded||!loadFailed;
+}
+
+function normalizeWorkspace(workspace){
+  const copy={...workspace};
+  for(const key of ["labels","watchlist","cases","alerts"])copy[key]=Array.isArray(copy[key])?copy[key]:[];
+  return copy;
+}
+
+function workspaceCopy(workspace){return JSON.parse(JSON.stringify(workspace));}
+
+function revisionOf(payload){
+  const value=payload?.revision??payload?.workspace?.revision;
+  return typeof value==="number"&&Number.isFinite(value)?value:null;
+}
+
+async function fetchCryptoWorkspace(){
+  const response=await fetch(API_BASE+"/crypto-workspace?user_id="+encodeURIComponent(user()),{
+    headers:sessionHeaders(),cache:"no-store"
+  });
+  const payload=await response.json().catch(()=>({}));
+  if(!response.ok)throw new Error(payload.error||"Unable to load Crypto workspace.");
+  if(!payload.workspace||typeof payload.workspace!=="object")throw new Error("The Crypto workspace response was empty.");
+  return payload;
+}
+
 async function loadCryptoWorkspace(){
   try{
-    const response=await fetch(API_BASE+"/crypto-workspace?user_id="+encodeURIComponent(user()),{
-      headers:sessionHeaders(),cache:"no-store"
-    });
-    const payload=await response.json().catch(()=>({}));
-    if(!response.ok)throw new Error(payload.error||"Unable to load Crypto workspace.");
-    cryptoWorkspace=payload.workspace||cryptoWorkspace;
-    cryptoWorkspace.labels=Array.isArray(cryptoWorkspace.labels)?cryptoWorkspace.labels:[];
-    cryptoWorkspace.watchlist=Array.isArray(cryptoWorkspace.watchlist)?cryptoWorkspace.watchlist:[];
-    cryptoWorkspace.cases=Array.isArray(cryptoWorkspace.cases)?cryptoWorkspace.cases:[];
-    cryptoWorkspace.alerts=Array.isArray(cryptoWorkspace.alerts)?cryptoWorkspace.alerts:[];
+    const payload=await fetchCryptoWorkspace();
+    cryptoWorkspace=normalizeWorkspace(payload.workspace);
+    workspaceBase=workspaceCopy(cryptoWorkspace);
+    workspaceRevision=revisionOf(payload);
+    workspaceLoaded=true;
+    syncWorkspaceControls();
     renderWorkspaceUi();
     return true;
   }catch(error){
     console.warn("Crypto workspace load failed",error);
+    syncWorkspaceControls(true);
     setStatus("Crypto analysis is available, but the persistent investigation workspace could not be loaded.","warning");
     return false;
   }
 }
 
+// A three-way merge by id: what this page changed since `base` is replayed on the server's newer
+// copy, and everything else stays as the server has it. `resolve(mine,theirs,old)` settles an item
+// changed here that the server also holds.
+function mergeById(base,local,server,resolve=mine=>mine){
+  const idOf=item=>String(item?.id||"");
+  const before=new Map((base||[]).map(item=>[idOf(item),item]));
+  const mine=new Map((local||[]).map(item=>[idOf(item),item]));
+  const theirs=new Set((server||[]).map(idOf));
+  const added=(local||[]).filter(item=>!before.has(idOf(item))&&!theirs.has(idOf(item)));
+  const kept=(server||[]).filter(item=>!before.has(idOf(item))||mine.has(idOf(item))).map(item=>{
+    const edited=mine.get(idOf(item)),old=before.get(idOf(item));
+    return !edited||JSON.stringify(edited)===JSON.stringify(old)?item:resolve(edited,item,old);
+  });
+  return [...added,...kept];
+}
+
+function newerSnapshot(a,b){
+  if(!a||!b)return a||b||null;
+  return (Date.parse(a.checked_at||"")||0)>=(Date.parse(b.checked_at||"")||0)?a:b;
+}
+
+function mergeCase(mine,theirs,old){
+  const merged={...theirs};
+  for(const key of ["name","description","status","chain"]){
+    if(mine[key]!==old?.[key])merged[key]=mine[key];
+  }
+  for(const key of ["saved_paths","notes","offchain_nodes","crosschain_links"]){
+    merged[key]=mergeById(old?.[key],mine[key],theirs[key]);
+  }
+  const seeds=(mine.seed_addresses||[]).filter(address=>!(old?.seed_addresses||[]).includes(address));
+  merged.seed_addresses=[...new Set([...(theirs.seed_addresses||[]),...seeds])];
+  return merged;
+}
+
+function mergeWorkspace(base,local,server){
+  return {
+    ...server,
+    labels:mergeById(base?.labels,local.labels,server.labels),
+    watchlist:mergeById(base?.watchlist,local.watchlist,server.watchlist,(mine,theirs)=>({
+      ...mine,last_snapshot:newerSnapshot(mine.last_snapshot,theirs.last_snapshot)
+    })),
+    cases:mergeById(base?.cases,local.cases,server.cases,mergeCase),
+    // The monitor owns an alert's content; the page only ever adds alerts or acknowledges them.
+    alerts:mergeById(base?.alerts,local.alerts,server.alerts,(mine,theirs)=>({
+      ...theirs,acknowledged:mine.acknowledged===true||theirs.acknowledged===true
+    }))
+  };
+}
+
+function adoptServerWorkspace(payload,base){
+  const server=normalizeWorkspace(payload.workspace);
+  cryptoWorkspace=mergeWorkspace(base,cryptoWorkspace,server);
+  workspaceBase=workspaceCopy(server);
+  workspaceRevision=revisionOf(payload)??workspaceRevision;
+}
+
 async function saveCryptoWorkspace(){
+  if(!workspaceLoaded){
+    setStatus("Not saved: the persistent workspace has not been loaded.","warning");
+    return false;
+  }
+  if(workspaceSaveRunning){workspaceSaveQueued=true;return false;}
+  workspaceSaveRunning=true;
   document.body.classList.add("workspace-saving");
   try{
-    const response=await fetch(API_BASE+"/crypto-workspace",{
-      method:"POST",
-      headers:sessionHeaders({"Content-Type":"application/json"}),
-      body:JSON.stringify({user_id:user(),workspace:cryptoWorkspace})
-    });
-    const payload=await response.json().catch(()=>({}));
-    if(!response.ok)throw new Error(payload.error||"Unable to save Crypto workspace.");
-    cryptoWorkspace=payload.workspace||cryptoWorkspace;
-    return true;
+    for(let attempt=0;attempt<WORKSPACE_SAVE_ATTEMPTS;attempt++){
+      const sent=workspaceCopy(cryptoWorkspace);
+      const response=await fetch(API_BASE+"/crypto-workspace",{
+        method:"POST",
+        headers:sessionHeaders({"Content-Type":"application/json"}),
+        body:JSON.stringify({user_id:user(),workspace:sent,revision:workspaceRevision})
+      });
+      const payload=await response.json().catch(()=>({}));
+      if(response.status===409){
+        // Another tab or the scheduled monitor saved first: this page's edits go on top of that copy.
+        adoptServerWorkspace(payload.workspace?payload:await fetchCryptoWorkspace(),workspaceBase);
+        renderWorkspaceUi();
+        renderFilteredViews();
+        continue;
+      }
+      if(!response.ok)throw new Error(payload.error||"Unable to save Crypto workspace.");
+      if(payload.workspace)adoptServerWorkspace(payload,sent);
+      return true;
+    }
+    throw new Error("The workspace kept changing elsewhere, so this save did not finish. Your edits are still on this page.");
   }catch(error){
     console.warn("Crypto workspace save failed",error);
     setStatus(error?.message||"Unable to save Crypto workspace.","warning");
     return false;
   }finally{
+    workspaceSaveRunning=false;
     document.body.classList.remove("workspace-saving");
+    if(workspaceSaveQueued){
+      workspaceSaveQueued=false;
+      scheduleWorkspaceSave();
+    }
   }
 }
 
@@ -273,6 +402,7 @@ function renderWorkspaceUi(){
   renderExchangeAdminAccess();
   renderCaseUi();
   renderAlerts();
+  renderWatchlist();
   if(lastPayload?.kind==="address")renderIntelligencePanels();
 }
 
@@ -393,8 +523,8 @@ function activeFilterLabels(){
   if(f.status!=="all")labels.push(f.status.toUpperCase());
   if(f.minAmount!==null)labels.push("MIN "+f.minAmount);
   if(f.maxAmount!==null)labels.push("MAX "+f.maxAmount);
-  if(f.from)labels.push("FROM "+f.from);
-  if(f.to)labels.push("TO "+f.to);
+  if(f.from)labels.push("FROM "+f.from+" UTC");
+  if(f.to)labels.push("TO "+f.to+" UTC");
   if(f.text)labels.push("MATCH "+f.text);
   return labels;
 }
@@ -409,7 +539,7 @@ function allTraceRows(filtered=true){
   for(const entry of traceEntries()){
     const sourceRows=filtered?filterRows(entry.payload):(entry.payload.transactions||[]);
     for(const row of sourceRows){
-      const key=[entry.key,row.id,row.asset,row.direction,(row.counterparties||[]).join(",")].join("|");
+      const key=[entry.key,row.id,row.asset,row.direction,(row.counterparties||[]).join(","),row.amount,row.log_index??""].join("|");
       if(seen.has(key))continue;
       seen.add(key);
       rows.push({...row,_trace_source:entry.address,_trace_depth:entry.depth});
@@ -479,151 +609,434 @@ function openCryptoSearch(address,chain){
   }
 }
 
-function maxCountInWindow(rows,windowMs){
-  const times=rows.map(row=>Date.parse(row.time||"")).filter(Number.isFinite).sort((a,b)=>a-b);
-  let best=0,left=0;
-  for(let right=0;right<times.length;right++){
-    while(times[right]-times[left]>windowMs)left++;
-    best=Math.max(best,right-left+1);
-  }
-  return best;
+// ---------------------------------------------------------------------------
+// Risk indicators. The rules run in the Worker (cloudflare-worker/crypto-risk.mjs), on all rows of a
+// wallet, so filters never change them. The page reads their findings and adds only what needs
+// browser-only data: an analyst's own labels and the expanded trace.
+// ---------------------------------------------------------------------------
+const ONE_HOP_LIMIT=5;
+const PEEL_MIN_HOPS=3;
+const PEEL_FORWARD_SHARE=0.8;
+const PEEL_MAX_SEARCH_STEPS=2000;
+const DAY_MS=86400000;
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const RISK_BADGE_CLASS={HIGH:"high",ELEVATED:"medium",LOW:"low",NOT_ASSESSED:"unscreened"};
+const RISK_ORDER=["NOT_ASSESSED","LOW","ELEVATED","HIGH"];
+
+// Rows that moved value at a known time: what the overlays are allowed to compare.
+function settledRows(payload){
+  return (Array.isArray(payload?.transactions)?payload.transactions:[]).filter(row=>
+    (row.direction==="IN"||row.direction==="OUT")&&row.failed!==true&&row.spam!==true&&row.self_spend!==true&&
+    Number.isFinite(Date.parse(row.time||""))&&Math.abs(Number(row.amount))>0
+  );
 }
 
-function amountCluster(rows){
-  const values=rows.map(row=>Math.abs(Number(row.amount))).filter(x=>Number.isFinite(x)&&x>0).sort((a,b)=>a-b);
-  let best=[];
-  for(let i=0;i<values.length;i++){
-    const anchor=values[i];
-    const cluster=values.filter(value=>Math.abs(value-anchor)/Math.max(anchor,1e-12)<=0.03);
-    if(cluster.length>best.length)best=cluster;
-  }
-  return best;
+function hasParty(row,address){
+  const key=traceKey(address,lastPayload.chain);
+  return (row.counterparties||[]).some(party=>traceKey(party,lastPayload.chain)===key);
 }
 
+// An analyst's own MIXER label exists only in this browser, so the Worker cannot score it.
+function labelledMixerFinding(){
+  if((lastPayload.risk_assessment?.findings||[]).some(item=>item?.code==="DIRECT_MIXER_EXPOSURE"))return null;
+  const rows=settledRows(lastPayload).filter(row=>(row.counterparties||[]).some(address=>
+    String(labelForAddress(address,lastPayload.chain)?.category||"").toUpperCase()==="MIXER"
+  ));
+  if(!rows.length)return null;
+  return {
+    code:"DIRECT_MIXER_EXPOSURE",family:"EXPOSURE",strength:"strong",points:45,overlay:true,
+    title:"Direct transfer with a wallet labelled as a mixer in this workspace",
+    explanation:"A record in this sample links this wallet directly to a wallet an analyst labelled as a mixer.",
+    metrics:{records:rows.length},tx_ids:[...new Set(rows.map(row=>row.id))].slice(0,12),
+    benign:["Using a privacy service is not illicit in itself.","The label is an analyst attribution with its own source and confidence."],
+    limits:"Uses the labels saved in this workspace, which the automated rules cannot see."
+  };
+}
+
+// One listed counterparty of an H1 wallet: 2 hops from the seed. The link counts for more when
+// funds could have followed it, in the same asset, in the right order and of a similar size,
+// and when it carries at least a tenth of the seed's flow in that asset.
+function oneHopLink(entry,match,seedRows){
+  const seedLink=seedRows.filter(row=>hasParty(row,entry.address));
+  const listedLink=settledRows(entry.payload).filter(row=>hasParty(row,match.address));
+  const value=row=>Math.abs(Number(row.amount));
+  const total=rows=>rows.reduce((sum,row)=>sum+value(row),0);
+  let best=null;
+  for(const first of seedLink){
+    const sameFlow=row=>row.direction===first.direction&&assetKeyOf(row)===assetKeyOf(first);
+    const share=total(seedLink.filter(sameFlow))/total(seedRows.filter(sameFlow));
+    if(share<0.1||(best&&share<=best.share))continue;
+    for(const second of listedLink.filter(sameFlow)){
+      const [earlier,later]=first.direction==="OUT"?[first,second]:[second,first];
+      const similar=Math.min(value(first),value(second))/Math.max(value(first),value(second))>=0.1;
+      if(similar&&Date.parse(earlier.time)<=Date.parse(later.time)){
+        best={share,first,second};
+        break;
+      }
+    }
+  }
+  return {entry,match,best,points:best?45:30};
+}
+
+function oneHopFinding(){
+  const seedRows=settledRows(lastPayload);
+  const rootKey=traceKey(lastPayload.query,lastPayload.chain);
+  const links=[];
+  for(const entry of traceEntries()){
+    if(entry.depth!==1||exchangeStatusOf(entry.address,lastPayload.chain))continue;
+    for(const match of Array.isArray(entry.payload?.sanctions_screening?.counterparty_matches)?entry.payload.sanctions_screening.counterparty_matches:[]){
+      // A listed address the seed touched itself is direct exposure, which the Worker scores.
+      if(traceKey(match.address,lastPayload.chain)===rootKey||seedRows.some(row=>hasParty(row,match.address)))continue;
+      links.push(oneHopLink(entry,match,seedRows));
+    }
+  }
+  if(!links.length)return null;
+  const top=links.sort((a,b)=>b.points-a.points||(b.best?.share||0)-(a.best?.share||0))[0];
+  const flow=top.best?{direction:top.best.first.direction==="OUT"?"funds to":"funds from",asset:top.best.first.asset,link_share:Math.round(top.best.share*100)+"%"}:{};
+  return {
+    code:"ONE_HOP_EXPOSURE",family:"EXPOSURE",strength:top.best?"strong":"moderate",points:top.points,overlay:true,
+    title:"A direct counterparty also transacted with a listed address",
+    explanation:"A wallet this seed transacted with has a listed address among its own counterparties, 2 hops from the seed.",
+    metrics:{list_entry:top.match.summary||"Listed address",via_wallet:short(top.entry.address,8),listed_links:links.length,value_order_fits:top.best?"yes":"no",...flow},
+    tx_ids:(top.best?[top.best.first.id,top.best.second.id]:Array.isArray(top.match.tx_ids)?top.match.tx_ids:[]).slice(0,12),
+    benign:["A shared counterparty does not mean the same funds moved on.","The intermediate wallet may serve many unrelated users."],
+    limits:"Reads only the counterparties analysed so far; a list match is an address-string match."
+  };
+}
+
+// Follows one asset through the analysed wallets: each must pass on at least 80% of what it received
+// within 24 hours, in a smaller amount. The test is on value, so a narrow graph alone is never a chain.
+function peelChainFinding(){
+  const chain=lastPayload.chain;
+  const wallets=new Map(traceEntries().map(entry=>{
+    const rows=settledRows(entry.payload).map(row=>({row,asset:assetKeyOf(row),time:Date.parse(row.time),value:Math.abs(Number(row.amount))}));
+    return [entry.key,{
+      address:entry.address,
+      receipts:rows.filter(item=>item.row.direction==="IN"),
+      receiptById:new Map(rows.filter(item=>item.row.direction==="IN").map(item=>[item.row.id+"|"+item.asset,item])),
+      sends:rows.filter(item=>item.row.direction==="OUT").sort((a,b)=>a.time-b.time)
+    }];
+  }));
+  // What reached the next wallet: its own receipt when analysed, because a Bitcoin row's amount
+  // covers every output and the fee; otherwise a row with one recipient.
+  const hopValue=(send,nextKey,recipients)=>{
+    const receipt=wallets.get(nextKey)?.receiptById.get(send.row.id+"|"+send.asset);
+    if(receipt)return receipt.value;
+    return recipients===1?Math.abs(Number(send.row.payment_amount??send.row.amount)):null;
+  };
+  let steps=0;
+  const follow=(key,asset,amount,time,visited)=>{
+    let longest=[];
+    for(const send of wallets.get(key)?.sends||[]){
+      if(send.time-time>DAY_MS)break;
+      if(send.asset!==asset||send.time<time)continue;
+      const recipients=[...new Set((send.row.counterparties||[]).filter(Boolean))];
+      for(const recipient of recipients){
+        const next=traceKey(recipient,chain);
+        if(visited.has(next))continue;
+        const value=hopValue(send,next,recipients.length);
+        if(value===null||value<amount*PEEL_FORWARD_SHARE||value>=amount||++steps>PEEL_MAX_SEARCH_STEPS)continue;
+        const rest=follow(next,asset,value,send.time,new Set(visited).add(next));
+        if(rest.length+1>longest.length){
+          longest=[{from:wallets.get(key).address,to:recipient,asset:send.row.asset,received:amount,forwarded:value,minutes:Math.round((send.time-time)/60000),tx_id:send.row.id},...rest];
+        }
+      }
+    }
+    return longest;
+  };
+  let hops=[];
+  for(const [key,wallet] of wallets){
+    for(const receipt of wallet.receipts){
+      const found=follow(key,receipt.asset,receipt.value,receipt.time,new Set([key]));
+      if(found.length>hops.length)hops=found;
+    }
+  }
+  if(hops.length<PEEL_MIN_HOPS)return null;
+  return {
+    code:"PEEL_CHAIN",family:"FRAGMENTATION",strength:"strong",points:30,overlay:true,
+    title:"Value passed on hop after hop in shrinking amounts",
+    explanation:"Consecutive analysed wallets each passed on most of what they received within 24 hours, in a smaller amount.",
+    metrics:{forwarding_hops:hops.length,asset:hops[0].asset,first_amount:hops[0].received,last_amount:hops[hops.length-1].forwarded},
+    tx_ids:hops.map(hop=>hop.tx_id).slice(0,12),hops,
+    benign:["Ordinary payments that return change to a new address look similar.","A service can move its own balance between wallets this way."],
+    limits:"Reads only the wallets expanded in this trace; other branches were not followed."
+  };
+}
+
+function riskOverlays(){
+  return [labelledMixerFinding(),oneHopFinding(),peelChainFinding()].filter(Boolean);
+}
+
+function riskLabelOf(value){
+  const label=String(value||"").trim().toUpperCase().replace(/\s+/g,"_");
+  return RISK_BADGE_CLASS[label]?label:"NOT_ASSESSED";
+}
+
+// The Worker's rules decide what a finding is worth. This repeats only their arithmetic, so that an
+// overlay counts the same way: the best finding per family, the service discount, the behaviour cap,
+// then the best finding per exposure code on top. An overlay adds evidence, so it can never lower
+// the Worker's result.
+function combineRisk(base,overlays){
+  const findings=[...(Array.isArray(base?.findings)?base.findings:[]),...overlays]
+    .sort((a,b)=>(Number(b.points)||0)-(Number(a.points)||0));
+  const workerLabel=riskLabelOf(base?.label);
+  const workerScore=Number.isFinite(Number(base?.score))?Number(base.score):0;
+  if(!base||!overlays.length)return {label:workerLabel,score:workerScore,findings};
+
+  const limits=base.thresholds||{};
+  const high=Number(limits.high)||60,elevated=Number(limits.elevated)||25;
+  // Sorted by points above, so the first finding of a family or a code is its best.
+  const bestByFamily=new Map(),bestByCode=new Map();
+  for(const item of findings){
+    const group=item.family==="EXPOSURE"?bestByCode:bestByFamily;
+    const key=item.family==="EXPOSURE"?item.code:item.family;
+    if(!group.has(key))group.set(key,item);
+  }
+  const pointsOf=items=>items.reduce((sum,item)=>sum+(Number(item.points)||0),0);
+  const best=[...bestByFamily.values()];
+  let behaviour=pointsOf(best)*(base.service_discount?Number(limits.service_factor)||0.25:1);
+  if(best.filter(item=>item.strength==="strong").length<(Number(limits.strong_families_for_high)||3)){
+    behaviour=Math.min(behaviour,Number(limits.behaviour_cap)||high-1);
+  }
+  const score=Math.max(workerScore,Math.min(100,Math.round(behaviour+pointsOf([...bestByCode.values()]))));
+  let label=findings.some(item=>item.floor==="HIGH")||score>=high?"HIGH":score>=elevated?"ELEVATED":"LOW";
+  if(RISK_ORDER.indexOf(label)<RISK_ORDER.indexOf(workerLabel))label=workerLabel;
+  if(label==="LOW"&&workerLabel==="NOT_ASSESSED")label=workerLabel;
+  return {label,score,findings};
+}
+
+function monthYear(value){
+  const date=new Date(value||"");
+  return Number.isNaN(date.getTime())?"":MONTHS[date.getUTCMonth()]+" "+date.getUTCFullYear();
+}
+
+// One line for what the assessment read, such as "25 of 135 transactions, Mar 2024 to Oct 2025, 2 failed rows excluded".
+function coverageLine(payload,coverage){
+  const rows=Array.isArray(payload.transactions)?payload.transactions:[];
+  const times=rows.map(row=>Date.parse(row.time||"")).filter(Number.isFinite);
+  const count=typeof coverage?.rows==="number"?coverage.rows:rows.length;
+  const lifetime=Number(coverage?.lifetime_tx_count)||0;
+  const parts=[
+    lifetime?count+" of "+lifetime+" transactions":count+(coverage?.complete===true?" transactions, complete history":" transactions in this sample")
+  ];
+  const oldest=monthYear(coverage?.oldest||(times.length?Math.min(...times):"")),newest=monthYear(coverage?.newest||(times.length?Math.max(...times):""));
+  if(oldest&&newest)parts.push(oldest===newest?oldest:oldest+" to "+newest);
+  const failed=rows.filter(row=>row.failed===true).length;
+  if(failed)parts.push(failed+" failed row"+(failed===1?"":"s")+" excluded");
+  if(coverage?.partial)parts.push("partial: a provider request failed");
+  return parts.join(", ");
+}
+
+function explorerUrlFor(id){
+  for(const entry of traceEntries()){
+    const row=(entry.payload?.transactions||[]).find(item=>item.id===id);
+    if(row)return /^https:\/\//i.test(String(row.explorer_url||""))?String(row.explorer_url):"";
+  }
+  return "";
+}
+
+function riskFindingView(item,coverage){
+  const metrics=Object.entries(item.metrics&&typeof item.metrics==="object"?item.metrics:{})
+    .map(([name,value])=>[name.replaceAll("_"," "),Array.isArray(value)?value.join(", "):String(value??"")]);
+  const window_=item.window?.from&&item.window?.to
+    ?String(item.window.from).slice(0,16).replace("T"," ")+" to "+String(item.window.to).slice(0,16).replace("T"," ")+" UTC":"";
+  const limits=[item.limits,item.needs_trace].filter(Boolean).map(String);
+  if(!item.overlay)limits.push(coverage?.complete===true
+    ?"The whole history the provider returned was read."
+    :"Only this sample was read; older records are not part of this finding.");
+  return {
+    code:String(item.code||""),title:String(item.title||item.code||"Indicator"),explanation:String(item.explanation||""),family:String(item.family||""),
+    strength:String(item.strength||""),points:Number(item.points)||0,metrics,window:window_,
+    txs:(Array.isArray(item.tx_ids)?item.tx_ids:[]).map(id=>({id:String(id),url:explorerUrlFor(id)})),
+    benign:(Array.isArray(item.benign)?item.benign:[]).map(String),limits:limits.join(" "),
+    hops:Array.isArray(item.hops)?item.hops:[]
+  };
+}
+
+function ruleName(code){
+  const text=String(code).replaceAll("_"," ").toLowerCase();
+  return text.charAt(0).toUpperCase()+text.slice(1);
+}
+
+// The Worker lists the two browser rules as always pending; only the page knows if they have run.
+function notEvaluatedRules(base,findings){
+  const rules=(Array.isArray(base?.not_evaluated)?base.not_evaluated:[])
+    .map(item=>({code:String(item?.code||item||""),reason:String(item?.reason||"")}))
+    .filter(item=>item.code&&item.code!=="ONE_HOP_EXPOSURE"&&item.code!=="PEEL_CHAIN")
+    .map(item=>({rule:ruleName(item.code),reason:item.reason}));
+  const found=code=>findings.some(item=>item.code===code);
+  if(!oneHopRun&&!found("ONE_HOP_EXPOSURE"))rules.push({rule:"One-hop exposure",reason:"Runs on request: CHECK ONE HOP analyses the top "+ONE_HOP_LIMIT+" counterparties by value."});
+  if(!found("PEEL_CHAIN")&&tracePayloads.size<PEEL_MIN_HOPS)rules.push({rule:"Multi-hop peel chain",reason:"Needs AUTO TRACE: at least "+PEEL_MIN_HOPS+" consecutive expanded hops."});
+  return rules;
+}
+
+function oneHopSummary(findings){
+  if(!oneHopRun)return "";
+  const {wallets,failed}=oneHopRun;
+  return "One-hop check: "+wallets+" counterpart"+(wallets===1?"y":"ies")+" read"+(failed?", "+failed+" could not be read":"")+". "+
+    (findings.some(item=>item.code==="ONE_HOP_EXPOSURE")
+      ?"See the one-hop finding below."
+      :"No listed address among their counterparties in this sample, which is not a clearance.");
+}
+
+// Everything the Risk Indicators card shows, as data: the card renders it, and the reports reuse it word for word.
+function riskView(){
+  if(!lastPayload||lastPayload.kind!=="address")return null;
+  const wording=window.CTAtlasCryptoReport?.RISK_WORDING||{};
+  const base=lastPayload.risk_assessment&&typeof lastPayload.risk_assessment==="object"?lastPayload.risk_assessment:null;
+  const overlays=riskOverlays();
+  const {label,score,findings}=combineRisk(base,overlays);
+  const coverage=base?.coverage||lastPayload.coverage||null;
+  const reasons=!overlays.length&&Array.isArray(base?.reasons)
+    ?base.reasons.map(item=>typeof item==="string"?item:item?.title)
+    :findings.filter(item=>Number(item.points)>0).map(item=>item.title);
+  const chips=[];
+  if(base?.service_discount)chips.push({cls:"low",text:"SERVICE-LIKE WALLET"});
+  if(lastPayload.sanctions_screening?.status==="stale")chips.push({cls:"unscreened",text:"LIST OLDER THAN 7 DAYS"});
+  return {
+    available:Boolean(base),label,labelText:label.replace("_"," "),badgeClass:RISK_BADGE_CLASS[label],
+    summary:(base?wording[label]:wording.missing)||"",
+    score:label==="NOT_ASSESSED"?null:score,
+    reasons:reasons.filter(Boolean).map(String).slice(0,3),
+    coverage:coverageLine(lastPayload,coverage),chips,
+    findings:findings.map(item=>riskFindingView(item,coverage)),
+    notEvaluated:notEvaluatedRules(base,findings),
+    oneHop:oneHopSummary(findings),
+    disclaimer:wording.disclaimer||""
+  };
+}
+
+function riskFindingHtml(item,open){
+  const metrics=item.metrics.map(([name,value])=>'<span class="pattern-metric">'+esc(name)+": "+esc(value)+"</span>").join("");
+  const hops=item.hops.map(hop=>'<div class="risk-hop">'+esc(short(hop.from,7))+" → "+esc(short(hop.to,7))+" · "+esc(fmtNumber(hop.forwarded))+" of "+esc(fmtNumber(hop.received))+" "+esc(hop.asset)+" · after "+esc(hop.minutes)+" min</div>").join("");
+  const txs=item.txs.map(tx=>tx.url
+    ?'<a class="tx-link" href="'+esc(tx.url)+'" target="_blank" rel="noopener noreferrer">'+esc(short(tx.id,8))+"</a>"
+    :esc(short(tx.id,8))).join(" · ");
+  const badge=item.points?item.points+" pts":"INFO";
+  return '<details class="risk-finding" data-code="'+esc(item.code)+'"'+(open?" open":"")+"><summary>"+esc(item.title)+
+    '<span class="intel-badge pattern">'+esc(badge)+"</span></summary>"+
+    (item.explanation||metrics||item.window?'<div class="intel-detail"><strong>Observed:</strong> '+esc(item.explanation)+" "+metrics+esc(item.window)+"</div>":"")+
+    (hops?'<div class="intel-detail">'+hops+"</div>":"")+
+    (txs?'<div class="intel-detail"><strong>Transactions:</strong> '+txs+"</div>":"")+
+    (item.benign.length?'<div class="intel-detail"><strong>Ordinary explanations:</strong> '+item.benign.map(esc).join(" · ")+"</div>":"")+
+    (item.limits?'<div class="intel-detail"><strong>Limits of this sample:</strong> '+esc(item.limits)+"</div>":"")+
+    "</details>";
+}
+
+function renderRisk(){
+  const card=document.getElementById("cryptoRisk");
+  const body=document.getElementById("cryptoRiskBody");
+  const badge=document.getElementById("cryptoRiskBadge");
+  if(!card||!body||!badge)return;
+  const view=riskView();
+  card.hidden=!view;
+  if(!view)return;
+
+  const open=new Set([...body.querySelectorAll("details[open]")].map(item=>item.dataset.code));
+  card.classList.toggle("high",view.label==="HIGH");
+  card.classList.toggle("elevated",view.label==="ELEVATED");
+  badge.className="intel-badge "+view.badgeClass;
+  badge.textContent=view.labelText;
+
+  const parts=['<div class="risk-summary">'+esc(view.summary)+(view.score===null?"":' <strong>Score '+view.score+"/100</strong>, rules-based, not a probability.")+"</div>"];
+  if(view.chips.length)parts.push('<div class="intel-actions">'+view.chips.map(chip=>'<span class="intel-badge '+esc(chip.cls)+'">'+esc(chip.text)+"</span>").join("")+"</div>");
+  if(view.reasons.length)parts.push('<ul class="risk-reasons">'+view.reasons.map(reason=>"<li>"+esc(reason)+"</li>").join("")+"</ul>");
+  parts.push('<div class="sanctions-scope">'+esc(view.coverage)+"</div>");
+  if(view.oneHop)parts.push('<div class="intel-result">'+esc(view.oneHop)+"</div>");
+  parts.push(...view.findings.map(item=>riskFindingHtml(item,open.has(item.code))));
+  if(view.notEvaluated.length){
+    parts.push('<details class="risk-finding" data-code="not-evaluated"'+(open.has("not-evaluated")?" open":"")+"><summary>Rules not evaluated ("+view.notEvaluated.length+")</summary>"+
+      view.notEvaluated.map(item=>'<div class="intel-detail"><strong>'+esc(item.rule)+"</strong>"+(item.reason?": "+esc(item.reason):"")+"</div>").join("")+"</details>");
+  }
+  parts.push('<div class="sanctions-scope">'+esc(view.disclaimer)+"</div>");
+  body.innerHTML=parts.join("");
+}
+
+function seedRiskChip(){
+  const view=riskView();
+  if(!view||(!view.available&&!view.findings.length))return "";
+  return '<g class="graph-risk-chip '+esc(view.badgeClass)+'" transform="translate(0 -47)"><title>Risk indicators: '+esc(view.labelText)+' (automated, not a finding)</title>'+
+    '<rect x="-36" y="-8" width="72" height="15" rx="7.5" ry="7.5"></rect><text x="0" y="3" text-anchor="middle">'+esc(view.labelText)+"</text></g>";
+}
+
+// The seed's direct counterparties by their largest share of any one asset: amounts of different
+// assets cannot be ranked against each other, shares can.
+function oneHopCandidates(){
+  const chain=lastPayload.chain;
+  const rows=settledRows(lastPayload);
+  return neighborStats(lastPayload,rows)
+    .filter(node=>isSearchableAddress(node.id,chain)&&exchangeStatusOf(node.id,chain)?.basis!=="sourced")
+    .map(node=>({key:node.key,address:node.id,share:directShares(node.id,rows)[0]?.share||0}))
+    .sort((a,b)=>b.share-a.share||a.key.localeCompare(b.key))
+    .slice(0,ONE_HOP_LIMIT);
+}
+
+// Costs one provider analysis per wallet, so it runs only when asked. The wallets join the trace at
+// H1, so the sanctions card, the graph and the report show the same evidence as the finding.
+async function checkOneHop(){
+  if(oneHopBusy||!lastPayload||lastPayload.kind!=="address")return;
+  const generation=traceGeneration,chain=lastPayload.chain;
+  const button=document.getElementById("cryptoOneHop");
+  const candidates=oneHopCandidates();
+  const missing=candidates.filter(item=>!tracePayloads.has(item.key));
+  const run={wallets:candidates.length-missing.length,failed:0};
+  oneHopBusy=true;
+  if(button){button.disabled=true;button.textContent="CHECKING…";}
+  try{
+    for(const item of missing){
+      try{
+        const payload=await fetchAddressAnalysis(item.address,chain,100);
+        if(generation!==traceGeneration)return;
+        absorbExchangeLabels(payload,false);
+        tracePayloads.set(item.key,{key:item.key,address:item.address,payload,depth:1});
+        traceExpanded.add(item.key);
+        run.wallets++;
+      }catch(error){
+        if(generation!==traceGeneration)return;
+        run.failed++;
+        console.warn("One-hop wallet skipped",item.address,error);
+      }
+      await sleep(400);
+      if(generation!==traceGeneration)return;
+    }
+    oneHopRun=run;
+    populateAssetFilter();
+    renderFilteredViews();
+  }finally{
+    if(generation===traceGeneration){
+      oneHopBusy=false;
+      if(button){button.disabled=false;button.textContent="CHECK ONE HOP";}
+    }
+  }
+}
+
+function patternFromFinding(item,entry){
+  const strength=String(item.strength||"").toLowerCase();
+  const metrics=Object.entries(item.metrics&&typeof item.metrics==="object"?item.metrics:{})
+    .map(([name,value])=>name.replaceAll("_"," ")+" "+(Array.isArray(value)?value.join(", "):String(value??""))).join(" · ");
+  const benign=Array.isArray(item.benign)?item.benign.join("; "):"";
+  return {
+    name:String(item.title||item.code||"Indicator"),
+    severity:strength==="strong"?"high":strength==="info"?"low":"medium",
+    level:strength||"indicator",
+    metric:[entry?"H"+entry.depth+" · "+short(entry.address,8):"Across the trace",metrics].filter(Boolean).join(" · "),
+    detail:[item.explanation,benign?"Ordinary explanations: "+benign+".":""].filter(Boolean).join(" ")
+  };
+}
+
+// Reads the Worker's behaviour findings for every analysed wallet, plus the trace-level overlay.
 function detectPatterns(){
-  const rows=allTraceRows(true);
+  if(!lastPayload||lastPayload.kind!=="address")return [];
   const patterns=[];
-  if(!rows.length)return patterns;
-
-  const bySource=new Map();
-  for(const row of rows){
-    const key=String(row._trace_source||"");
-    if(!bySource.has(key))bySource.set(key,[]);
-    bySource.get(key).push(row);
-  }
-
-  for(const [source,sourceRows] of bySource){
-    const incoming=sourceRows.filter(row=>row.direction==="IN");
-    const outgoing=sourceRows.filter(row=>row.direction==="OUT");
-    const inCp=new Set(incoming.flatMap(row=>row.counterparties||[]));
-    const outCp=new Set(outgoing.flatMap(row=>row.counterparties||[]));
-
-    if(inCp.size>=4){
-      patterns.push({
-        name:"FAN-IN / CONSOLIDATION",
-        severity:inCp.size>=10?"medium":"low",
-        metric:inCp.size+" incoming counterparties",
-        detail:"Multiple observed counterparties converge on "+short(source,8)+". This is a structural consolidation pattern only."
-      });
-    }
-    if(outCp.size>=4){
-      patterns.push({
-        name:"FAN-OUT / DISPERSION",
-        severity:outCp.size>=10?"medium":"low",
-        metric:outCp.size+" outgoing counterparties",
-        detail:short(source,8)+" distributes value to multiple observed counterparties."
-      });
-    }
-
-    const velocity=maxCountInWindow(sourceRows,24*3600000);
-    if(velocity>=10){
-      patterns.push({
-        name:"HIGH VELOCITY",
-        severity:velocity>=30?"high":"medium",
-        metric:velocity+" records / 24h",
-        detail:"High transaction frequency is observed in a rolling 24-hour window."
-      });
-    }
-    const burst=maxCountInWindow(sourceRows,3600000);
-    if(burst>=6){
-      patterns.push({
-        name:"BURST ACTIVITY",
-        severity:burst>=15?"high":"medium",
-        metric:burst+" records / 1h",
-        detail:"A concentrated burst of on-chain activity is present in the returned sample."
-      });
-    }
-
-    const times=sourceRows.map(row=>Date.parse(row.time||"")).filter(Number.isFinite).sort((a,b)=>a-b);
-    let maxGap=0;
-    for(let i=1;i<times.length;i++)maxGap=Math.max(maxGap,times[i]-times[i-1]);
-    if(maxGap>=30*86400000){
-      patterns.push({
-        name:"DORMANT → ACTIVE",
-        severity:"low",
-        metric:Math.floor(maxGap/86400000)+" day observed gap",
-        detail:"The returned history contains a long inactivity gap followed by later activity. Full lifetime history may be required to confirm dormancy."
-      });
-    }
-
-    const cluster=amountCluster(outgoing);
-    if(cluster.length>=4){
-      const center=cluster.reduce((sum,x)=>sum+x,0)/cluster.length;
-      patterns.push({
-        name:"REPEATED SIMILAR AMOUNTS",
-        severity:"low",
-        metric:cluster.length+" transfers near "+fmtNumber(center),
-        detail:"Several outgoing transfers have closely similar values (±3%). This can reflect batching, splitting, payroll-like activity or other benign/illicit processes."
-      });
-    }
-
-    const incomingSorted=incoming.filter(row=>Number.isFinite(Date.parse(row.time||""))).sort((a,b)=>Date.parse(a.time)-Date.parse(b.time));
-    const outgoingSorted=outgoing.filter(row=>Number.isFinite(Date.parse(row.time||""))).sort((a,b)=>Date.parse(a.time)-Date.parse(b.time));
-    let passThrough=0;
-    for(const inc of incomingSorted){
-      const it=Date.parse(inc.time);
-      const ia=Math.abs(Number(inc.amount)||0);
-      const match=outgoingSorted.find(out=>{
-        const dt=Date.parse(out.time)-it;
-        const oa=Math.abs(Number(out.amount)||0);
-        return dt>=0&&dt<=6*3600000&&ia>0&&oa>=ia*0.5&&oa<=ia*1.5;
-      });
-      if(match)passThrough++;
-    }
-    if(passThrough>=2){
-      patterns.push({
-        name:"RAPID PASS-THROUGH",
-        severity:passThrough>=5?"high":"medium",
-        metric:passThrough+" matched receive/send pairs ≤6h",
-        detail:"Incoming value is followed by similarly sized outgoing value within six hours. This does not by itself establish layering or common ownership."
-      });
+  const peel=peelChainFinding();
+  if(peel)patterns.push(patternFromFinding(peel,null));
+  for(const entry of traceEntries()){
+    const findings=entry.payload?.risk_assessment?.findings;
+    for(const item of Array.isArray(findings)?findings:[]){
+      if(item?.family!=="EXPOSURE")patterns.push(patternFromFinding(item,entry));
     }
   }
-
-  const model=currentNetworkModel;
-  if(model&&model.maxVisibleDepth>=2){
-    const degree=new Map();
-    for(const edge of model.edges){
-      degree.set(edge.fromKey,(degree.get(edge.fromKey)||0)+1);
-      degree.set(edge.toKey,(degree.get(edge.toKey)||0)+1);
-    }
-    const chainLike=model.nodes.filter(node=>node.depth>0&&node.depth<model.maxVisibleDepth&&(degree.get(node.key)||0)<=3);
-    if(chainLike.length>=2){
-      patterns.push({
-        name:"POSSIBLE PEELING-LIKE CHAIN",
-        severity:"low",
-        metric:chainLike.length+" low-branch intermediate nodes",
-        detail:"The traced graph contains a narrow multi-hop continuation resembling a peeling-chain topology. Confirmation requires full transaction/value analysis and should not be inferred from topology alone."
-      });
-    }
-  }
-
-  const unique=new Map();
-  for(const item of patterns){
-    const key=item.name+"|"+item.metric+"|"+item.detail;
-    if(!unique.has(key))unique.set(key,item);
-  }
-  return [...unique.values()].slice(0,20);
+  return patterns;
 }
 
 function directedAdjacency(){
@@ -665,6 +1078,46 @@ function displayAddressForKey(key){
   return label?.address||key;
 }
 
+function assetKeyOf(row){
+  return row?.asset_key||(row?.token_contract?String(row.token_contract).toLowerCase():"native:"+String(row?.asset||""));
+}
+
+const EXPOSURE_FLOW_TEXT={to:"funds to",from:"funds from",both:"funds to and from",mixed:"connected, mixed directions"};
+
+// How the seed reaches a labelled wallet within three hops. A flow is claimed only along a directed
+// path, in the order the funds moved; a link whose directions alternate is only a connection.
+function exposureRoute(model,key){
+  const withinReach=path=>path&&path.length>1&&path.length<=4?path:null;
+  const sent=withinReach(directedExchangePath(model,model.rootKey,key));
+  const received=withinReach(directedExchangePath(model,key,model.rootKey));
+  if(sent&&received)return {path:sent.length<=received.length?sent:received,direction:"both"};
+  if(sent||received)return {path:sent||received,direction:sent?"to":"from"};
+  const connection=withinReach(directedExchangePath(model,model.rootKey,key,true));
+  return connection?{path:connection,direction:"mixed"}:null;
+}
+
+// The seed's value with one address, as a share of what it sent or received in each asset. Assets
+// are never added together, and two labels of one category each keep their own figure.
+function directShares(address,rows){
+  const key=traceKey(address,lastPayload.chain);
+  const totals=new Map(),linked=new Map();
+  for(const row of rows){
+    const direction=String(row.direction||"").toUpperCase();
+    const amount=Math.abs(Number(row.amount)||0);
+    if(row.failed===true||!amount||(direction!=="IN"&&direction!=="OUT"))continue;
+    const id=assetKeyOf(row)+"|"+direction;
+    totals.set(id,(totals.get(id)||0)+amount);
+    const parties=[...new Set((row.counterparties||[]).filter(Boolean))];
+    if(!parties.some(party=>traceKey(party,lastPayload.chain)===key))continue;
+    const item=linked.get(id)||{id,asset:String(row.asset||""),direction:direction==="IN"?"from":"to",value:0};
+    item.value+=amount/parties.length;
+    linked.set(id,item);
+  }
+  return [...linked.values()]
+    .map(item=>({asset:item.asset,direction:item.direction,share:Math.min(100,100*item.value/totals.get(item.id))}))
+    .sort((a,b)=>b.share-a.share);
+}
+
 function exposureFindings(){
   if(!lastPayload||!currentNetworkModel)return [];
   const sensitive=new Set(["CT WATCHLIST","SANCTIONS","DARKNET","MIXER","EXCHANGE","BRIDGE","DEX","GAMBLING","SCAM/FRAUD"]);
@@ -685,41 +1138,28 @@ function exposureFindings(){
     }
   }
 
+  // Every analysed row, not the display model: the graph on screen keeps only the top counterparties.
+  const model=buildNetworkModel(lastPayload,true,true);
   for(const item of candidates){
     const key=normalizeAddressForChain(item.address,lastPayload.chain);
     if(seen.has(item.category+"|"+key))continue;
     seen.add(item.category+"|"+key);
-    const path=shortestPath(new Set([key]),3);
-    if(!path||path.length<2)continue;
+    const route=exposureRoute(model,key);
+    if(!route)continue;
     findings.push({
       ...item,
-      hop:path.length-1,
-      path
+      ...route,
+      hop:route.path.length-1,
+      flow:EXPOSURE_FLOW_TEXT[route.direction]
     });
   }
 
-  const rootEntry=tracePayloads.get(currentNetworkModel.rootKey);
+  const rootEntry=tracePayloads.get(model.rootKey);
   const rootRows=rootEntry?filterRows(rootEntry.payload):[];
-  const totalOutgoing=rootRows.filter(row=>row.direction==="OUT").reduce((sum,row)=>sum+Math.abs(Number(row.amount)||0),0);
-  const directValueByCategory=new Map();
-  for(const row of rootRows.filter(row=>row.direction==="OUT")){
-    const cps=(row.counterparties||[]).filter(Boolean);
-    if(!cps.length)continue;
-    const share=Math.abs(Number(row.amount)||0)/cps.length;
-    for(const cp of cps){
-      const label=labelForAddress(cp,lastPayload.chain);
-      if(label&&sensitive.has(String(label.category||"").toUpperCase())){
-        directValueByCategory.set(label.category,(directValueByCategory.get(label.category)||0)+share);
-      }
-    }
-  }
-
-  return findings.sort((a,b)=>a.hop-b.hop||String(a.category).localeCompare(String(b.category))).map(item=>({
-    ...item,
-    direct_share:item.hop===1&&totalOutgoing>0
-      ? Math.min(100,100*(directValueByCategory.get(item.category)||0)/totalOutgoing)
-      : null
-  }));
+  return findings.sort((a,b)=>a.hop-b.hop||String(a.category).localeCompare(String(b.category))).map(item=>{
+    const shares=item.hop===1?directShares(item.address,rootRows):[];
+    return {...item,direct_shares:shares,direct_share:shares[0]?.share??null,direct_share_asset:shares[0]?.asset||""};
+  });
 }
 
 function renderPatterns(){
@@ -727,14 +1167,17 @@ function renderPatterns(){
   if(!box)return;
   const patterns=detectPatterns();
   if(!patterns.length){
-    box.innerHTML='<div class="intel-result">No configured behavioral pattern crossed its heuristic threshold in the currently traced/filtered sample.</div>';
+    const assessed=traceEntries().some(entry=>entry.payload?.risk_assessment);
+    box.innerHTML='<div class="intel-result">'+(assessed
+      ?"No configured behavioral pattern crossed its heuristic threshold in the analysed wallets."
+      :"Behavior indicators are not available for this analysis yet. That says nothing about the wallet.")+"</div>";
     return;
   }
-  box.innerHTML=patterns.map(item=>
+  box.innerHTML=patterns.slice(0,20).map(item=>
     '<div class="intel-item"><div class="intel-item-head"><div class="intel-title">'+esc(item.name)+'</div>'+
-    '<span class="intel-badge '+esc(item.severity)+'">'+esc(item.severity.toUpperCase())+'</span></div>'+
+    '<span class="intel-badge '+esc(item.severity)+'">'+esc(item.level.toUpperCase())+'</span></div>'+
     '<div class="intel-meta">'+esc(item.metric)+'</div><div class="intel-detail">'+esc(item.detail)+'</div></div>'
-  ).join("");
+  ).join("")+(patterns.length>20?'<div class="intel-result">Showing 20 of '+patterns.length+" patterns; the full report lists more.</div>":"");
 }
 
 function exchangeIdentificationFindings(){
@@ -846,12 +1289,12 @@ function renderExposure(){
   }
   box.innerHTML=findings.map(item=>{
     const label=item.name||short(item.address,8);
-    const share=item.direct_share!==null
-      ? '<div class="exposure-row"><span>Direct value</span><span class="exposure-bar"><i style="width:'+Math.max(2,item.direct_share)+'%"></i></span><strong>'+item.direct_share.toFixed(1)+'%</strong></div>'
-      :"";
-    return '<div class="intel-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.category)+' · H'+item.hop+'</div>'+
+    const shares=item.direct_shares.slice(0,3).map(share=>
+      '<div class="exposure-row"><span>'+(share.direction==="to"?"Sent ":"Received ")+esc(share.asset)+'</span><span class="exposure-bar"><i style="width:'+Math.max(2,share.share)+'%"></i></span><strong>'+share.share.toFixed(1)+'%</strong></div>'
+    ).join("");
+    return '<div class="intel-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.category)+' · H'+item.hop+' · '+esc(item.flow)+'</div>'+
       '<div class="intel-meta">'+esc(label)+' · '+esc(short(item.address,9))+'</div></div><span class="intel-badge exposure">EXPOSURE</span></div>'+
-      share+'<div class="intel-detail">Observed path: '+item.path.map(key=>esc(short(displayAddressForKey(key),6))).join(" → ")+'</div></div>';
+      shares+'<div class="intel-detail">Observed path: '+item.path.map(key=>esc(short(displayAddressForKey(key),6))).join(item.direction==="mixed"?" — ":" → ")+'</div></div>';
   }).join("");
 }
 
@@ -1237,6 +1680,7 @@ async function exportCasePdf(){
   const exposure=exposureFindings();
   const cross=crossChainFindings();
   const labels=visibleRelevantLabels();
+  const risk=riskView();
 
   const blocks=[
     {text:"CASE SUMMARY",type:"heading"},
@@ -1244,6 +1688,7 @@ async function exportCasePdf(){
     {text:"STATUS: "+(item.status||"OPEN")+" · CHAIN: "+(item.chain||lastPayload?.chain||"—"),type:"meta"},
     {text:"SEED ADDRESSES",type:"heading"},
     {text:(item.seed_addresses||[]).join("\n")||"No seeds saved.",type:"body"},
+    ...(risk?window.CTAtlasCryptoReport?.riskSection?.({risk})||[]:[]),
     {text:"BEHAVIORAL PATTERNS",type:"heading"},
     ...((patterns.length?patterns:[{name:"No configured pattern threshold crossed",metric:"",detail:""}]).map(p=>({
       text:p.name+(p.metric?" · "+p.metric:"")+(p.detail?"\n"+p.detail:""),type:"body"
@@ -1257,7 +1702,7 @@ async function exportCasePdf(){
     }))),
     {text:"EXPOSURE",type:"heading"},
     ...((exposure.length?exposure:[{category:"No labelled H1-H3 exposure observed",hop:"",name:"",address:""}]).map(e=>({
-      text:e.category+(e.hop?" · H"+e.hop:"")+(e.name?" · "+e.name:"")+(e.address?"\n"+e.address:""),type:"body"
+      text:e.category+(e.hop?" · H"+e.hop:"")+(e.flow?" · "+e.flow:"")+(e.name?" · "+e.name:"")+(e.address?"\n"+e.address:""),type:"body"
     }))),
     {text:"SOURCED LABELS",type:"heading"},
     ...((labels.length?labels:[{name:"No visible sourced labels",category:"",confidence:"",address:""}]).map(label=>({
@@ -1388,6 +1833,7 @@ function collectReportModel(){
 
   return {
     ...base,
+    risk:riskView(),
     balance:payload.balance||null,
     counts:{
       wallets:tracePayloads.size,maxDepth:displayed.maxVisibleDepth,
@@ -1501,7 +1947,8 @@ function snapshotFromPayload(payload){
     newest_tx_id:String(rows[0]?.id||""),
     newest_tx_time:String(rows[0]?.time||""),
     tx_count:recent.length,
-    aggregate_value:recent.reduce((sum,row)=>sum+Math.abs(Number(row.amount)||0),0)
+    aggregate_value:recent.reduce((sum,row)=>sum+Math.abs(Number(row.amount)||0),0),
+    risk_label:String(payload.risk_assessment?.label||"")
   };
 }
 
@@ -1534,6 +1981,10 @@ function monitorSeed(){
     item.chain===lastPayload.chain&&normalizeAddressForChain(item.address,item.chain)===key
   );
   if(!watch){
+    if((cryptoWorkspace.watchlist||[]).length>=WATCHLIST_CAP){
+      document.getElementById("monitorStatus").textContent="The monitoring list is full ("+WATCHLIST_CAP+" wallets). Delete one before adding this seed.";
+      return;
+    }
     watch={
       id:makeId("watch"),chain:lastPayload.chain,address:lastPayload.query,
       label:labelForAddress(lastPayload.query,lastPayload.chain)?.name||short(lastPayload.query,9),
@@ -1547,7 +1998,43 @@ function monitorSeed(){
   watch.updated_at=new Date().toISOString();
   scheduleWorkspaceSave();
   renderAlerts();
-  document.getElementById("monitorStatus").textContent="Seed is monitored. Baseline saved; automatic checks rotate every 6 hours. CHECK NOW remains available.";
+  renderWatchlist();
+  document.getElementById("monitorStatus").textContent="Seed is monitored. Automatic checks rotate every 6 hours. CHECK NOW remains available.";
+}
+
+// A Worker with revisions takes alerts and baselines only from its own monitor, so a save from this
+// page could not add them: the check has to run there. An older Worker has no revisions or route.
+async function checkMonitoredOnServer(watches,status){
+  let created=0,checked=0,failed=0;
+  for(const watch of watches){
+    status.textContent="Checking "+(checked+failed+1)+"/"+watches.length+" · "+short(watch.address,8);
+    try{
+      const response=await fetch(API_BASE+"/crypto-monitor-check",{
+        method:"POST",
+        headers:sessionHeaders({"Content-Type":"application/json"}),
+        body:JSON.stringify({user_id:user(),watch_id:watch.id})
+      });
+      const payload=await response.json().catch(()=>({}));
+      if(response.status===401){redirectToLogin();return;}
+      if(!response.ok)throw new Error(payload.error||"Monitor check failed.");
+      created+=Number(payload.alerts_added)||0;
+      checked++;
+    }catch(error){
+      failed++;
+      console.warn("Monitor check failed",watch.address,error);
+    }
+    await sleep(250);
+  }
+  let refreshed=true;
+  try{
+    adoptServerWorkspace(await fetchCryptoWorkspace(),workspaceBase);
+    renderWorkspaceUi();
+  }catch(error){
+    refreshed=false;
+    console.warn("Crypto workspace refresh failed",error);
+  }
+  status.textContent="Monitoring check complete · "+checked+" wallet(s) checked · "+created+" new alert(s)"+
+    (failed?" · "+failed+" could not be checked":"")+(refreshed?".":". Reload the page to see them.");
 }
 
 async function checkMonitored(){
@@ -1558,6 +2045,10 @@ async function checkMonitored(){
   if(button){button.disabled=true;button.textContent="CHECKING…";}
   let created=0,checked=0;
   try{
+    if(workspaceRevision!==null){
+      await checkMonitoredOnServer(watches.slice(0,50),status);
+      return;
+    }
     for(const watch of watches.slice(0,50)){
       status.textContent="Checking "+(checked+1)+"/"+Math.min(watches.length,50)+" · "+short(watch.address,8);
       try{
@@ -1631,15 +2122,19 @@ async function checkMonitored(){
           }
         }
 
-        watch.last_snapshot=snap;
-        watch.updated_at=new Date().toISOString();
+        // A save can replace the workspace objects while this check waits on the provider.
+        const live=(cryptoWorkspace.watchlist||[]).find(item=>item.id===watch.id);
+        if(live){
+          live.last_snapshot=snap;
+          live.updated_at=new Date().toISOString();
+        }
         checked++;
       }catch(error){
         console.warn("Monitor check failed",watch.address,error);
       }
       await sleep(250);
     }
-    scheduleWorkspaceSave();renderAlerts();
+    scheduleWorkspaceSave();renderAlerts();renderWatchlist();
     status.textContent="Monitoring check complete · "+checked+" wallet(s) checked · "+created+" new alert(s).";
   }finally{
     if(button){button.disabled=false;button.textContent="CHECK MONITORED NOW";}
@@ -1651,12 +2146,61 @@ function renderAlerts(){
   if(!box)return;
   const alerts=(cryptoWorkspace.alerts||[]).slice(0,30);
   if(!alerts.length){box.innerHTML='<div class="intel-result">No saved monitoring alerts.</div>';return;}
-  box.innerHTML=alerts.map(item=>
-    '<div class="intel-item alert-item '+String(item.severity||"low").toLowerCase()+'"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.title)+'</div>'+
-    '<div class="intel-meta">'+esc(item.type)+' · '+esc(short(item.address,8))+' · '+esc(fmtTime(item.created_at))+'</div></div>'+
-    '<span class="intel-badge '+String(item.severity||"low").toLowerCase()+'">'+esc(item.severity||"LOW")+'</span></div>'+
-    '<div class="intel-detail">'+esc(item.detail||"")+'</div></div>'
-  ).join("");
+  box.innerHTML=alerts.map(item=>{
+    const severity=esc(String(item.severity||"low").toLowerCase());
+    const acknowledged=item.acknowledged===true;
+    return '<div class="intel-item alert-item '+severity+(acknowledged?" acknowledged":"")+'"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.title)+'</div>'+
+      '<div class="intel-meta">'+esc(item.type)+' · '+esc(short(item.address,8))+' · '+esc(fmtTime(item.created_at))+'</div></div>'+
+      '<span class="intel-badge '+severity+'">'+esc(item.severity||"LOW")+'</span></div>'+
+      '<div class="intel-detail">'+esc(item.detail||"")+'</div>'+
+      (acknowledged
+        ?'<div class="intel-meta">ACKNOWLEDGED</div>'
+        :'<div class="intel-actions"><button type="button" class="crypto-small-button" data-alert-ack="'+esc(item.id)+'">ACKNOWLEDGE</button></div>')+
+      '</div>';
+  }).join("");
+}
+
+function acknowledgeAlert(id){
+  const alert=(cryptoWorkspace.alerts||[]).find(item=>item.id===id);
+  if(!alert)return;
+  alert.acknowledged=true;
+  scheduleWorkspaceSave();renderAlerts();renderWatchlist();
+}
+
+function renderWatchlist(){
+  const box=document.getElementById("cryptoWatchlist");
+  const count=document.getElementById("cryptoWatchCount");
+  const watches=cryptoWorkspace.watchlist||[];
+  const open=(cryptoWorkspace.alerts||[]).filter(item=>item.acknowledged!==true).length;
+  if(count){
+    count.textContent=watches.length+" of "+WATCHLIST_CAP+" wallets monitored"+
+      (watches.length>=WATCHLIST_CAP?" (list full: delete one to add another)":"")+" · "+open+" unacknowledged alert(s)";
+  }
+  if(!box)return;
+  if(!watches.length){box.innerHTML='<div class="intel-result">No monitored wallets. Analyse a wallet, then select MONITOR SEED.</div>';return;}
+  box.innerHTML=watches.map(item=>{
+    const paused=item.enabled===false;
+    const limits=thresholdsText(item);
+    const checked=item.last_snapshot?.checked_at?fmtTime(item.last_snapshot.checked_at):"never";
+    return '<div class="intel-item"><div class="intel-item-head"><div><div class="intel-title">'+esc(item.label||short(item.address,9))+'</div>'+
+      '<div class="intel-meta">'+esc(item.chain)+' · '+esc(short(item.address,9))+' · last checked '+esc(checked)+'</div></div>'+
+      '<span class="intel-badge '+(paused?"unscreened":"clear")+'">'+(paused?"PAUSED":"ACTIVE")+'</span></div>'+
+      (limits?'<div class="intel-detail">'+esc(limits)+'</div>':"")+
+      '<div class="intel-actions"><button type="button" class="crypto-small-button" data-watch-toggle="'+esc(item.id)+'">'+(paused?"RESUME":"PAUSE")+'</button>'+
+      '<button type="button" class="crypto-small-button" data-watch-delete="'+esc(item.id)+'">DELETE</button></div></div>';
+  }).join("");
+}
+
+function toggleWatch(id){
+  const watch=(cryptoWorkspace.watchlist||[]).find(item=>item.id===id);
+  if(!watch)return;
+  watch.enabled=watch.enabled===false;
+  scheduleWorkspaceSave();renderWatchlist();
+}
+
+function deleteWatch(id){
+  cryptoWorkspace.watchlist=(cryptoWorkspace.watchlist||[]).filter(item=>item.id!==id);
+  scheduleWorkspaceSave();renderWatchlist();
 }
 
 function knownServiceFor(address,chain){
@@ -1859,6 +2403,7 @@ function renderSanctions(){
 
 function renderIntelligencePanels(){
   renderSanctions();
+  renderRisk();
   renderPatterns();
   renderExchangeIdentification();
   renderExposure();
@@ -1889,7 +2434,7 @@ function renderKpis(payload,filteredRows){
   const maxDepth=currentNetworkModel?.maxVisibleDepth??0;
   const balance=payload.balance?fmtNumber(payload.balance.amount)+" "+String(payload.balance.asset||""):"—";
   box.innerHTML=[
-    kpi("Seed balance",balance),
+    kpi("Seed balance (native asset only)",balance),
     kpi("Filtered records",String(rows.length)),
     kpi("Analyzed wallets",String(tracePayloads.size)),
     kpi("Visible nodes",String(currentNetworkModel?.nodes?.length||counterparties.size)),
@@ -1936,9 +2481,9 @@ function renderTable(payload,rows){
     const status=rowStatus(row);
     const tokenBadge=isTokenRow(row,payload)?'<span class="crypto-type-badge">TOKEN</span>':'<span class="crypto-type-badge">NATIVE</span>';
     const statusHtml='<span class="crypto-status-dot '+status+'"></span>'+status.toUpperCase();
-    const depth=Math.max(0,Math.min(3,Number(row._trace_depth)||0));
+    const depth=Math.max(0,Number(row._trace_depth)||0);
     return "<tr>"+
-      '<td class="crypto-hop-cell"><span class="crypto-hop-badge h'+depth+'">H'+depth+'</span><span class="crypto-source-address" title="'+esc(row._trace_source||"")+'">'+esc(short(row._trace_source||"",7))+"</span></td>"+
+      '<td class="crypto-hop-cell"><span class="crypto-hop-badge h'+Math.min(3,depth)+'">H'+depth+'</span><span class="crypto-source-address" title="'+esc(row._trace_source||"")+'">'+esc(short(row._trace_source||"",7))+"</span></td>"+
       "<td>"+esc(fmtTime(row.time))+'<br><span class="crypto-card-note">'+statusHtml+"</span></td>"+
       '<td class="'+cls+'">'+esc(dir||"—")+"</td>"+
       "<td>"+esc(row.asset||"—")+tokenBadge+"</td>"+
@@ -1961,29 +2506,31 @@ function neighborStats(payload,rows){
     const key=traceKey(address,payload.chain);
     let node=map.get(key);
     if(!node){
-      node={id:address,key,incoming:0,outgoing:0,total:0,assets:new Set()};
+      node={id:address,key,incoming:0,outgoing:0,total:0,assets:new Set(),txs:new Set(),inTx:new Set(),outTx:new Set()};
       map.set(key,node);
     }
     return node;
   }
 
-  for(const row of rows){
+  for(const [index,row] of rows.entries()){
     const direction=String(row.direction||"").toUpperCase();
     const unique=[...new Set((row.counterparties||[]).filter(Boolean))];
+    const txId=String(row.id||"row-"+index);
     for(const cp of unique){
       if(traceKey(cp,payload.chain)===traceKey(source,payload.chain))continue;
       const node=nodeFor(cp);
       node.total+=1;
+      node.txs.add(txId);
       if(row.asset)node.assets.add(String(row.asset));
-      if(direction==="IN")node.incoming+=1;
-      else if(direction==="OUT")node.outgoing+=1;
+      if(direction==="IN"){node.incoming+=1;node.inTx.add(txId);}
+      else if(direction==="OUT"){node.outgoing+=1;node.outTx.add(txId);}
     }
   }
 
   return [...map.values()].sort((a,b)=>b.total-a.total||b.incoming+b.outgoing-(a.incoming+a.outgoing));
 }
 
-function buildNetworkModel(payload,allAnalyzed=false){
+function buildNetworkModel(payload,allAnalyzed=false,settledOnly=false){
   const root=String(payload.query||"");
   const rootKey=traceKey(root,payload.chain);
   const f=readFilters();
@@ -1995,7 +2542,7 @@ function buildNetworkModel(payload,allAnalyzed=false){
     const key=traceKey(address,payload.chain);
     let node=nodes.get(key);
     if(!node){
-      node={id:address,key,depth,total:0,incoming:0,outgoing:0,assets:new Set()};
+      node={id:address,key,depth,total:0,incoming:0,outgoing:0,assets:new Set(),txs:new Set(),inTx:new Set(),outTx:new Set()};
       nodes.set(key,node);
     }else{
       node.depth=Math.min(node.depth,depth);
@@ -2003,17 +2550,19 @@ function buildNetworkModel(payload,allAnalyzed=false){
     return node;
   }
 
-  function addEdge(from,to,count,assets,hop){
-    if(!count)return;
+  // Counted by transaction id: when both ends are analysed, one transaction appears in both samples.
+  function addEdge(from,to,txs,assets,hop){
+    if(!txs.size)return;
     const fromKey=traceKey(from,payload.chain);
     const toKey=traceKey(to,payload.chain);
     const key=fromKey+"|"+toKey;
     let edge=edges.get(key);
     if(!edge){
-      edge={from,to,fromKey,toKey,count:0,assets:new Set(),hop};
+      edge={from,to,fromKey,toKey,count:0,assets:new Set(),txs:new Set(),hop};
       edges.set(key,edge);
     }
-    edge.count+=count;
+    txs.forEach(id=>edge.txs.add(id));
+    edge.count=edge.txs.size;
     edge.hop=Math.min(edge.hop,hop);
     (assets||[]).forEach(asset=>edge.assets.add(asset));
   }
@@ -2024,27 +2573,33 @@ function buildNetworkModel(payload,allAnalyzed=false){
   for(const entry of entries){
     const source=entry.address;
     const sourceNode=ensureNode(source,entry.depth);
-    const rows=filterRows(entry.payload);
+    const rows=filterRows(entry.payload).filter(row=>!settledOnly||row.failed!==true);
+    const cap=allAnalyzed||(reportUnfiltered&&entry.depth===0)?Infinity:entry.depth===0?Math.min(14,f.graphNodes-1):settings.branch;
     const neighbors=neighborStats(entry.payload,rows)
       .filter(node=>allAnalyzed||node.total>=f.graphMinLinks)
-      .slice(0,allAnalyzed?undefined:entry.depth===0?Math.min(14,f.graphNodes-1):settings.branch);
+      // An expanded wallet keeps its link to the wallet it came from, whatever its rank.
+      .filter((node,index)=>index<cap||tracePayloads.has(node.key));
 
     for(const neighbor of neighbors){
       const childDepth=allAnalyzed?entry.depth+1:Math.min(settings.maxDepth,entry.depth+1);
       const child=ensureNode(neighbor.id,childDepth);
-      child.total+=neighbor.total;
-      child.incoming+=neighbor.incoming;
-      child.outgoing+=neighbor.outgoing;
+      neighbor.txs.forEach(id=>{child.txs.add(id);sourceNode.txs.add(id);});
+      neighbor.inTx.forEach(id=>child.inTx.add(id));
+      neighbor.outTx.forEach(id=>child.outTx.add(id));
       neighbor.assets.forEach(asset=>child.assets.add(asset));
-      sourceNode.total+=neighbor.total;
 
       const assets=[...neighbor.assets];
-      if(neighbor.incoming>0)addEdge(neighbor.id,source,neighbor.incoming,assets,childDepth);
-      if(neighbor.outgoing>0)addEdge(source,neighbor.id,neighbor.outgoing,assets,childDepth);
+      if(neighbor.incoming>0)addEdge(neighbor.id,source,neighbor.inTx,assets,childDepth);
+      if(neighbor.outgoing>0)addEdge(source,neighbor.id,neighbor.outTx,assets,childDepth);
     }
   }
 
   let nodeList=[...nodes.values()];
+  nodeList.forEach(node=>{
+    node.total=node.txs.size;
+    node.incoming=node.inTx.size;
+    node.outgoing=node.outTx.size;
+  });
   // Expanded wallets and the exchanges the automatic trace reached stay visible.
   const keepKeys=new Set([rootKey,...traceEntries().map(entry=>entry.key),...(autoTraceRun?.exchanges||[]).map(item=>item.key)]);
   const nodeCap=autoTraceActive?Math.max(f.graphNodes,REPORT_GRAPH_NODE_CAP):f.graphNodes;
@@ -2250,6 +2805,7 @@ async function expandTraceNode(address,options={}){
   }
   if(traceBusy.has(key))return false;
 
+  const generation=traceGeneration;
   traceBusy.add(key);
   renderFilteredViews();
   if(!options.quiet)setTraceStatus("Expanding "+short(address,9)+" from H"+node.depth+" to H"+(node.depth+1)+"…","working");
@@ -2257,6 +2813,7 @@ async function expandTraceNode(address,options={}){
   try{
     // The automatic trace reads a larger sample: the exchange score needs it.
     const payload=await fetchAddressAnalysis(address,lastPayload.chain,options.limit||40);
+    if(generation!==traceGeneration)return false;
     absorbExchangeLabels(payload,false);
     tracePayloads.set(key,{key,address,payload,depth:node.depth});
     traceExpanded.add(key);
@@ -2267,11 +2824,14 @@ async function expandTraceNode(address,options={}){
     }
     return true;
   }catch(error){
+    if(generation!==traceGeneration)return false;
     if(!options.quiet)setTraceStatus(error?.message||"Trace expansion failed.","error");
     throw error;
   }finally{
-    traceBusy.delete(key);
-    renderFilteredViews();
+    if(generation===traceGeneration){
+      traceBusy.delete(key);
+      renderFilteredViews();
+    }
   }
 }
 
@@ -2343,12 +2903,14 @@ async function requestExchangeAttributions(model,exchanges){
       assets:node?.assets||[],related_exchange:item.behavior?.related_exchange?.name||"",labelled_neighbours:neighbours.slice(0,12)};
   });
   if(!wallets.length)return 0;
+  const generation=traceGeneration;
   const response=await fetch(API_BASE+"/crypto-exchange-attribution",{
     method:"POST",
     headers:sessionHeaders({"Content-Type":"application/json"}),
     body:JSON.stringify({user_id:user(),chain,wallets})
   });
   const payload=await response.json().catch(()=>({}));
+  if(generation!==traceGeneration)return 0;
   if(!response.ok)throw new Error(payload.error||"AI attribution unavailable.");
   let count=0;
   for(const item of Array.isArray(payload.attributions)?payload.attributions:[]){
@@ -2376,6 +2938,8 @@ async function autoTrace(){
   const depthSelect=document.getElementById("traceMaxDepth");
   if(depthSelect)depthSelect.value=String(AUTO_TRACE_MAX_DEPTH);
   const settings=traceSettings();
+  const generation=traceGeneration;
+  const cancelled=()=>generation!==traceGeneration;
   if(button){button.disabled=true;button.textContent="TRACING…";}
   autoTraceActive=true;
   setTraceStatus("Automatic trace started: following the strongest branches until they reach a documented exchange (up to H"+AUTO_TRACE_MAX_DEPTH+", "+AUTO_TRACE_MAX_WALLETS+" wallets).","working");
@@ -2410,6 +2974,7 @@ async function autoTrace(){
         break;
       }
       for(let i=0;i<candidates.length;i++){
+        if(cancelled())return;
         if(run.expanded+run.failed>=AUTO_TRACE_MAX_WALLETS){run.stop="wallet budget reached ("+AUTO_TRACE_MAX_WALLETS+")";break;}
         const node=candidates[i];
         setTraceStatus("Auto trace H"+depth+" → H"+(depth+1)+" · "+(i+1)+"/"+candidates.length+" · "+short(node.id,8)+
@@ -2428,6 +2993,7 @@ async function autoTrace(){
         }
         await sleep(400);
       }
+      if(cancelled())return;
       if(run.stop)break;
     }
     if(!run.stop)run.stop="maximum depth H"+AUTO_TRACE_MAX_DEPTH+" reached";
@@ -2456,6 +3022,7 @@ async function autoTrace(){
       }catch(error){
         run.attribution="unavailable: "+(error?.message||"AI attribution failed");
       }
+      if(cancelled())return;
     }
     run.finishedAt=new Date().toISOString();
     autoTraceRun=run;
@@ -2476,18 +3043,33 @@ async function autoTrace(){
       "success"
     );
   }catch(error){
-    setTraceStatus(error?.message||"Automatic trace failed.","error");
+    if(!cancelled())setTraceStatus(error?.message||"Automatic trace failed.","error");
   }finally{
-    if(autoTraceActive){
-      autoTraceActive=false;
-      renderFilteredViews();
+    // A cancelled run has already handed the page over to whatever cancelled it.
+    if(!cancelled()){
+      if(autoTraceActive){
+        autoTraceActive=false;
+        renderFilteredViews();
+      }
+      if(button){button.disabled=false;button.textContent="AUTO TRACE";}
     }
-    if(button){button.disabled=false;button.textContent="AUTO TRACE";}
   }
+}
+
+function cancelTraceWork(){
+  traceGeneration++;
+  autoTraceActive=false;
+  oneHopBusy=false;
+  oneHopRun=null;
+  const button=document.getElementById("cryptoAutoTrace");
+  if(button){button.disabled=false;button.textContent="AUTO TRACE";}
+  const oneHop=document.getElementById("cryptoOneHop");
+  if(oneHop){oneHop.disabled=false;oneHop.textContent="CHECK ONE HOP";}
 }
 
 function clearTrace(){
   if(!lastPayload||lastPayload.kind!=="address")return;
+  cancelTraceWork();
   const root=String(lastPayload.query||"");
   const key=traceKey(root,lastPayload.chain);
   tracePayloads=new Map([[key,{key,address:root,payload:lastPayload,depth:0}]]);
@@ -2678,6 +3260,7 @@ function paintGraphFrame(payload,model){
         '<circle class="graph-node seed" cx="0" cy="0" r="35"></circle>'+
         '<text class="graph-label" x="0" y="-3" text-anchor="middle">'+esc(seedLabel?.name?short(seedLabel.name,10):seedBehavior?"EXCHANGE-LIKE":"SEED")+'</text>'+
         '<text class="graph-sub" x="0" y="13" text-anchor="middle">'+esc(seedSub)+"</text>"+
+        seedRiskChip()+
         "</g>";
       continue;
     }
@@ -2978,6 +3561,7 @@ function renderFilteredViews(){
 }
 
 function resetTraceState(payload){
+  cancelTraceWork();
   exchangeGraphMode="auto";
   selectedExchangePath="";
   activeExchangePath=null;
@@ -3014,6 +3598,7 @@ function render(payload){
     renderKpis(payload,[]);
     const pre=document.getElementById("cryptoTransactionJson");
     if(pre)pre.textContent=JSON.stringify(payload.transaction||{},null,2);
+    renderRisk();
     renderSanctions();
   }else{
     if(addressView)addressView.hidden=false;
@@ -3036,6 +3621,7 @@ async function run({silent=false}={}){
 
   const finishSound=silent?null:window.CTAtlasSound?.begin();
   if(button){button.disabled=true;button.textContent="ANALYSING…";}
+  cancelTraceWork();
   setStatus("Querying on-chain provider and building transaction relationships…","working");
   const result=document.getElementById("cryptoResult");
   if(result)result.hidden=true;
@@ -3062,8 +3648,8 @@ async function run({silent=false}={}){
 // Demo address: listed on the OFAC SDN list (sanctions-crypto.json; a test fails if a
 // refresh ever delists it), and chosen because one analysis shows most of the tool:
 // a sanctions match on the wallet itself, a dozen other listed wallets among its
-// counterparties, large-transfer / burst / dormant-reactivation patterns and a wide
-// graph to trace. Only the list's own attribution is stated; nothing else is claimed.
+// counterparties, risk indicators and a wide graph to trace. Only the list's own
+// attribution is stated; nothing else is claimed.
 const TEST_ADDRESS="3FoD1f6Tfnq3s8MYHgJqFPWv9cUrtUdBSv";
 
 function loadTestExample(){
@@ -3119,6 +3705,7 @@ function bind(){
   document.getElementById("playbackScrubber")?.addEventListener("input",event=>scrubPlayback(event.target.value));
   document.getElementById("cryptoClearTrace")?.addEventListener("click",clearTrace);
   document.getElementById("cryptoAutoTrace")?.addEventListener("click",autoTrace);
+  document.getElementById("cryptoOneHop")?.addEventListener("click",checkOneHop);
   document.getElementById("traceMaxDepth")?.addEventListener("change",()=>renderFilteredViews());
   document.getElementById("traceBranch")?.addEventListener("change",()=>renderFilteredViews());
   document.getElementById("pathFindButton")?.addEventListener("click",runPathFinder);
@@ -3191,6 +3778,17 @@ function bind(){
   document.getElementById("crosschainSaveButton")?.addEventListener("click",saveCrosschainLink);
   document.getElementById("monitorSeedButton")?.addEventListener("click",monitorSeed);
   document.getElementById("monitorCheckButton")?.addEventListener("click",checkMonitored);
+  document.getElementById("workspaceRetryButton")?.addEventListener("click",loadCryptoWorkspace);
+  document.getElementById("cryptoWatchlist")?.addEventListener("click",event=>{
+    const toggle=event.target.closest("[data-watch-toggle]");
+    const remove=event.target.closest("[data-watch-delete]");
+    if(toggle)toggleWatch(toggle.dataset.watchToggle);
+    if(remove)deleteWatch(remove.dataset.watchDelete);
+  });
+  document.getElementById("cryptoAlerts")?.addEventListener("click",event=>{
+    const button=event.target.closest("[data-alert-ack]");
+    if(button)acknowledgeAlert(button.dataset.alertAck);
+  });
 
   FILTER_IDS.forEach(id=>{
     const el=document.getElementById(id);
@@ -3202,9 +3800,13 @@ function bind(){
 
 async function start(){
   bind();
+  syncWorkspaceControls();
   const autoRun=applyUrlQuery();
   const ok=await verifySession();
-  if(!ok)return;
+  if(!ok){
+    syncWorkspaceControls(true);
+    return;
+  }
   renderExchangeAdminAccess();
   await providerHealth();
   await loadCryptoWorkspace();

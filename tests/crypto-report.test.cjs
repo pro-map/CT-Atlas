@@ -69,7 +69,7 @@ test("an address report has every section, in a readable order, with the right t
   assert.match(report.filename,/^CT-Atlas-Crypto-Report-bitcoin-bc1q5rkr-jeqg0k-20260926-1405$/);
   assert.match(report.meta,/Bitcoin · Blockstream Esplora · generated 2026-09-26 14:05:33 UTC · analyst alice/);
   assert.deepEqual(headings(report.blocks),[
-    "SUMMARY","TRACE CONCLUSION","SANCTIONS-LIST SCREENING","KEY OBSERVATIONS","BEHAVIOURAL PATTERNS","EXCHANGE IDENTIFICATION","LABELLED EXPOSURE (H1–H3)","SOURCED LABELS",
+    "SUMMARY","TRACE CONCLUSION","SANCTIONS-LIST SCREENING","RISK INDICATORS (AUTOMATED, NOT A FINDING)","KEY OBSERVATIONS","BEHAVIOURAL PATTERNS","EXCHANGE IDENTIFICATION","LABELLED EXPOSURE (H1–H3)","SOURCED LABELS",
     "SERVICE / BRIDGE / DEX TOUCHPOINTS","WATCHLIST & MONITORING","TRANSACTION FLOW GRAPH","SEED COUNTERPARTIES","ANALYSED WALLETS",
     "TRANSACTION RECORDS","ACTIVE CASE","METHOD & LIMITATIONS"
   ]);
@@ -233,7 +233,7 @@ test("a plain 'no match' with a partial or stale coverage warning is qualified, 
 
 test("a sanctions match is described as an address-string match, never as ownership or a determination",()=>{
   const report=R.build(fixture());
-  const section=textOf(report.blocks).split("SANCTIONS-LIST SCREENING")[1].split("KEY OBSERVATIONS")[0];
+  const section=textOf(report.blocks).split("SANCTIONS-LIST SCREENING")[1].split("RISK INDICATORS")[0];
   assert.match(section,/1 MATCH — listed address\(es\) found among the analysed wallet\(s\) and their counterparties/);
   assert.match(section,/TERRORISM PROGRAM · COUNTERPARTY · H1 · XBT/);
   assert.match(section,/not a compliance determination/);
@@ -244,7 +244,7 @@ test("a sanctions match is described as an address-string match, never as owners
 test("over-claiming words appear only inside the disclaimers that deny them",()=>{
   const report=R.build(fixture());
   const risky=/ownership|terrorist financing|criminality|identity attribution|proof of control|custody/i;
-  const allowed=new Set([R.DISCLAIMER,R.EXCHANGE_LIMITATIONS,R.LABEL_LIMITATIONS,R.LIMITATIONS,R.SANCTIONS_NOTE]);
+  const allowed=new Set([R.DISCLAIMER,R.EXCHANGE_LIMITATIONS,R.LABEL_LIMITATIONS,R.LIMITATIONS,R.SANCTIONS_NOTE,R.RISK_WORDING.disclaimer]);
   for(const block of report.blocks){
     const value=block.type==="table"?"":String(block.text||"");
     if(risky.test(value)){
@@ -415,4 +415,87 @@ test("the report concludes from the automatic trace actually reached: depth, exc
 test("without an automatic trace the conclusion says so and points to AUTO TRACE",()=>{
   const all=R.build(fixture()).blocks.map(block=>block.text||"").join("\n");
   assert.match(all,/No automatic trace was run\. This report covers the trace as expanded by hand/);
+});
+
+// ---------------------------------------------------------------- risk indicators
+
+const riskFixture=(overrides={})=>({
+  available:true,label:"ELEVATED",labelText:"ELEVATED",badgeClass:"medium",summary:R.RISK_WORDING.ELEVATED,score:42,
+  reasons:["Funds left soon after arriving"],coverage:"25 of 135 transactions, Mar 2024 to Oct 2025, 2 failed rows excluded",
+  chips:[{cls:"low",text:"SERVICE-LIKE WALLET"}],oneHop:"",disclaimer:R.RISK_WORDING.disclaimer,
+  findings:[{code:"RAPID_PASS_THROUGH",title:"Funds left soon after arriving",family:"FLOW",strength:"strong",points:30,
+    metrics:[["matched pairs","3"],["asset","USDT"]],window:"2026-10-01 10:00 to 2026-10-01 11:00 UTC",txs:[{id:HASH(1),url:""}],
+    benign:["exchange or payment hot wallet","arbitrage or bot activity"],limits:"Only this sample was read; older records are not part of this finding.",hops:[]}],
+  notEvaluated:[{rule:"Multi-hop peel chain",reason:"Needs AUTO TRACE: at least 3 consecutive expanded hops."}],
+  ...overrides
+});
+
+test("the risk section follows the sanctions section and carries label, score, coverage, findings, explanations and the disclaimer",()=>{
+  const report=R.build(fixture({risk:riskFixture()}));
+  const h=headings(report.blocks);
+  assert.equal(h.indexOf("RISK INDICATORS (AUTOMATED, NOT A FINDING)"),h.indexOf("SANCTIONS-LIST SCREENING")+1);
+  const all=textOf(report.blocks);
+  const section=all.split("RISK INDICATORS (AUTOMATED, NOT A FINDING)")[1].split("KEY OBSERVATIONS")[0];
+  assert.ok(section.includes(R.RISK_WORDING.ELEVATED));
+  assert.match(section,/Score\n42\/100, rules-based, not a probability/);
+  assert.match(section,/25 of 135 transactions, Mar 2024 to Oct 2025, 2 failed rows excluded/);
+  assert.match(section,/SERVICE-LIKE WALLET/);
+  assert.ok(section.includes("Funds left soon after arriving"));
+  assert.ok(section.includes(R.RISK_WORDING.disclaimer));
+  assert.match(section,/Multi-hop peel chain: Needs AUTO TRACE/);
+  const table=report.blocks.find(b=>b.type==="table"&&b.columns.some(c=>c.key==="points"));
+  assert.match(table.rows[0].detail,/Observed: matched pairs: 3 · asset: USDT · 2026-10-01 10:00 to/);
+  const explained=R.build(fixture({risk:riskFixture({findings:[{...riskFixture().findings[0],explanation:"Most of what arrived left within minutes."}]})}));
+  const row=explained.blocks.find(b=>b.type==="table"&&b.columns.some(c=>c.key==="points")).rows[0];
+  assert.match(row.detail,/Observed: Most of what arrived left within minutes\. · matched pairs: 3/);
+  assert.match(table.rows[0].detail,/Ordinary explanations: exchange or payment hot wallet; arbitrage or bot activity/);
+  assert.ok(table.rows[0].detail.includes("Transactions: "+HASH(1)));
+  assert.match(table.rows[0].detail,/Limits of this sample: Only this sample was read/);
+});
+
+test("the summary carries a risk label row, for an address and never for a transaction",()=>{
+  const all=textOf(R.build(fixture({risk:riskFixture()})).blocks);
+  assert.match(all,/Risk label\nELEVATED · score 42\/100/);
+  assert.match(textOf(R.build(fixture({risk:riskFixture({label:"NOT_ASSESSED",labelText:"NOT ASSESSED",score:null})})).blocks),/Risk label\nNOT ASSESSED\n/);
+  const tx=textOf(R.build({generatedAt:"2026-09-26T14:05:33.000Z",subject:{kind:"transaction",chain:"tron",chainName:"TRON",query:HASH(7),provider:"TronGrid"},counts:{},filters:{active:[]}}).blocks);
+  assert.ok(!tx.includes("Risk label")&&!tx.includes("RISK INDICATORS"));
+});
+
+test("an analysis with no assessment says so and is never presented as clean",()=>{
+  const all=textOf(R.build(fixture()).blocks);
+  const section=all.split("RISK INDICATORS (AUTOMATED, NOT A FINDING)")[1].split("KEY OBSERVATIONS")[0];
+  assert.ok(section.includes(R.RISK_WORDING.missing));
+  assert.match(section,/Do not read this as clean/);
+  assert.ok(section.includes(R.RISK_WORDING.disclaimer));
+  const empty=textOf(R.build(fixture({risk:riskFixture({available:false,label:"NOT_ASSESSED",labelText:"NOT ASSESSED",summary:R.RISK_WORDING.missing,score:null,findings:[],notEvaluated:[]}),patterns:[]})).blocks);
+  assert.match(empty,/Behavioural indicators were not available for this analysis/);
+  assert.ok(!/No configured behavioural pattern crossed/.test(empty),"an absent backend must not read as no pattern found");
+});
+
+test("the wording is exactly the agreed text",()=>{
+  assert.equal(R.RISK_WORDING.title,"Risk indicators (automated, not a finding)");
+  assert.equal(R.RISK_WORDING.HIGH,"HIGH: priority for analyst review. Strong indicators or list evidence appear in this sample.");
+  assert.equal(R.RISK_WORDING.ELEVATED,"ELEVATED: review recommended. These patterns can also have ordinary explanations.");
+  assert.equal(R.RISK_WORDING.LOW,"LOW: no strong indicator in this sample. This is not a clearance.");
+  assert.equal(R.RISK_WORDING.NOT_ASSESSED,"NOT ASSESSED: too few usable records, or sanctions screening did not run. Do not read this as clean.");
+  assert.equal(R.RISK_WORDING.disclaimer,"Indicator, not proof. Automated rules applied to a bounded public sample. This does not establish identity, ownership, intent, criminality, terrorist financing or sanctions liability.");
+});
+
+test("a very long findings list gets the same 'first N of M' notice as the other tables",()=>{
+  const findings=Array.from({length:R.LIMITS.patterns+2},(_,i)=>({code:"F"+i,title:"Finding "+i,family:"FLOW",points:1,metrics:[],txs:[],benign:[],hops:[]}));
+  assert.match(textOf(R.build(fixture({risk:riskFixture({findings})})).blocks),new RegExp("first "+R.LIMITS.patterns+" of "+(R.LIMITS.patterns+2)+" finding"));
+});
+
+test("the exposure table states the flow and names the asset of the direct share",()=>{
+  const report=R.build(fixture({exposure:[{hop:1,category:"MIXER",flow:"funds from",name:"Mixer",confidence:"HIGH",address:CP2,direct_share:12.34,direct_share_asset:"USDT"}]}));
+  const table=report.blocks.find(b=>b.type==="table"&&b.columns.some(c=>c.key==="share"));
+  assert.equal(table.rows[0].flow,"funds from");
+  assert.equal(table.rows[0].share,"12.3% of USDT");
+  assert.ok(!/all assets are summed/.test(textOf(report.blocks)));
+});
+
+test("the graph chip has its own rules in the standalone SVG",()=>{
+  for(const rule of [".graph-risk-chip rect",".graph-risk-chip.high rect",".graph-risk-chip text"]){
+    assert.ok(R.GRAPH_CSS.includes(rule)&&read("crypto.css").includes(rule),rule);
+  }
 });

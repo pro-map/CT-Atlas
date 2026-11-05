@@ -21,6 +21,16 @@ const SANCTIONS_NOTE="A sanctions-list match means this exact address string app
 const NOT_SCREENED="Sanctions screening was NOT performed for this analysis, so the absence of a match must not be read as a clean result.";
 const AI_ATTRIBUTION_NOTE="An AI-assessed operator is an investigative lead drawn from the wallet's behaviour, its labelled neighbours and publicly documented patterns. It is not a sourced attribution and does not establish control or ownership; confirm it with the exchange or a sourced label before operational use.";
 const HOPS="H0 is the seed wallet, H1 its direct counterparties; H2 and beyond (up to H6) are wallets the analyst or AUTO TRACE expanded. A ring colour encodes a node's minimum hop. Node size and edge width reflect the number of linked records, not ownership probability.";
+// The Risk Indicators card reads these too, so the page and every PDF say the same thing.
+const RISK_WORDING=Object.freeze({
+  title:"Risk indicators (automated, not a finding)",
+  HIGH:"HIGH: priority for analyst review. Strong indicators or list evidence appear in this sample.",
+  ELEVATED:"ELEVATED: review recommended. These patterns can also have ordinary explanations.",
+  LOW:"LOW: no strong indicator in this sample. This is not a clearance.",
+  NOT_ASSESSED:"NOT ASSESSED: too few usable records, or sanctions screening did not run. Do not read this as clean.",
+  missing:"NOT ASSESSED: this analysis carries no automated assessment. Do not read this as clean.",
+  disclaimer:"Indicator, not proof. Automated rules applied to a bounded public sample. This does not establish identity, ownership, intent, criminality, terrorist financing or sanctions liability."
+});
 
 function badgeText(badge){return text(badge&&typeof badge==="object"?badge.text:badge,80);}
 function text(value,max=6000){
@@ -96,6 +106,10 @@ function summarySection(model){
       :"not run — the report covers the trace as expanded by hand"]);
   }
   rows.push(["Sanctions-list screening",badgeText(model.sanctions?.badge)||"—"]);
+  if(s.kind!=="transaction"){
+    const risk=model.risk;
+    rows.push(["Risk label",risk?text(risk.labelText)+(num(risk.score)===null?"":" · score "+num(risk.score)+"/100"):"NOT ASSESSED"]);
+  }
   if(model.filters?.active?.length){
     rows.push(["Transaction filters active on screen",model.filters.active.join(" · ")+" — every section of this report (including the graph's node and flow tables) uses ALL records regardless of these filters"]);
   }else{
@@ -202,6 +216,52 @@ function sanctionsSection(model){
   return blocks;
 }
 
+function riskFindingDetail(item){
+  const lines=[];
+  const metrics=list(item.metrics).map(pair=>text(list(pair)[0])+": "+text(list(pair)[1])).join(" · ");
+  const observed=[text(item.explanation),metrics,text(item.window)].filter(Boolean).join(" · ");
+  if(observed)lines.push("Observed: "+observed);
+  for(const hop of list(item.hops)){
+    lines.push("Hop: "+text(hop.from)+" → "+text(hop.to)+" · "+fmtAmount(hop.forwarded)+" of "+fmtAmount(hop.received)+" "+text(hop.asset)+" · after "+(num(hop.minutes)??"—")+" min");
+  }
+  if(list(item.txs).length)lines.push("Transactions: "+list(item.txs).map(tx=>text(tx.id)).join(", "));
+  if(list(item.benign).length)lines.push("Ordinary explanations: "+list(item.benign).map(value=>text(value)).join("; "));
+  if(item.limits)lines.push("Limits of this sample: "+text(item.limits));
+  return lines.join("\n");
+}
+
+function riskSection(model){
+  if((model.subject||{}).kind==="transaction")return [];
+  const risk=model.risk;
+  const blocks=[heading(RISK_WORDING.title.toUpperCase())];
+  if(!risk){
+    blocks.push(alert(RISK_WORDING.missing),small(RISK_WORDING.disclaimer));
+    return blocks;
+  }
+  blocks.push(risk.label==="HIGH"?alert(text(risk.summary)):body(text(risk.summary)));
+  blocks.push(keyValueTable([
+    ["Label",text(risk.labelText)],
+    ["Score",num(risk.score)===null?"—":num(risk.score)+"/100, rules-based, not a probability"],
+    ["Coverage",text(risk.coverage)],
+    ...(list(risk.chips).length?[["Notes",list(risk.chips).map(chip=>text(chip.text)).join(" · ")]]:[])
+  ]));
+  for(const reason of list(risk.reasons))blocks.push(bullet(text(reason)));
+  if(risk.oneHop)blocks.push(small(text(risk.oneHop)));
+  const all=list(risk.findings);
+  const findings=all.slice(0,LIMITS.patterns);
+  if(findings.length){
+    blocks.push({type:"table",caption:"Findings, highest first",fontSize:14,columns:[{key:"points",label:"Points",width:1.4,align:"right"},{key:"title",label:"Finding",width:7.6},{key:"family",label:"Family",width:3}],
+      rows:findings.map(item=>({points:{text:String(num(item.points)??0),bold:true},title:text(item.title),family:text(item.family)||"—",detail:riskFindingDetail(item)}))});
+  }else blocks.push(noneRecorded("No indicator crossed its threshold in the analysed sample."));
+  if(all.length>findings.length)blocks.push(alert("This table lists the first "+findings.length+" of "+all.length+" finding(s); the report is capped to stay readable."));
+  if(list(risk.notEvaluated).length){
+    blocks.push(sub("RULES NOT EVALUATED"));
+    for(const item of list(risk.notEvaluated))blocks.push(small(text(item.rule)+(item.reason?": "+text(item.reason):"")));
+  }
+  blocks.push(small(text(risk.disclaimer)||RISK_WORDING.disclaimer));
+  return blocks;
+}
+
 function observationsSection(model){
   const notes=list(model.observations).map(item=>text(item)).filter(Boolean);
   if(!notes.length&&!model.samplingNote)return [];
@@ -216,12 +276,14 @@ function patternsSection(model){
   const patterns=all.slice(0,LIMITS.patterns);
   const blocks=[heading("BEHAVIOURAL PATTERNS"),small("Heuristics describe observed transaction behaviour — not criminal intent. Computed on every record of every analysed wallet.")];
   if(!patterns.length){
-    blocks.push(noneRecorded("No configured behavioural pattern crossed its heuristic threshold in the analysed sample."));
+    blocks.push(noneRecorded(model.risk?.available===false
+      ?"Behavioural indicators were not available for this analysis. That says nothing about the wallet."
+      :"No configured behavioural pattern crossed its heuristic threshold in the analysed sample."));
     return blocks;
   }
   blocks.push({type:"table",fontSize:14,columns:[{key:"sev",label:"Level",width:1.4},{key:"name",label:"Pattern",width:3.4},{key:"metric",label:"Metric",width:3},{key:"note",label:"Detail",width:5}],
     rows:patterns.map(p=>({
-      sev:{text:text(p.severity).toUpperCase(),bold:true,color:p.severity==="high"?"#8a1f2c":p.severity==="medium"?"#8a5a10":"#18252d"},
+      sev:{text:text(p.level||p.severity).toUpperCase(),bold:true,color:p.severity==="high"?"#8a1f2c":p.severity==="medium"?"#8a5a10":"#18252d"},
       name:text(p.name),metric:text(p.metric),note:text(p.detail)
     }))});
   if(all.length>patterns.length)blocks.push(alert("This table lists the first "+patterns.length+" of "+all.length+" pattern(s) found; the report is capped to stay readable."));
@@ -256,13 +318,13 @@ function exchangeSection(model){
 
 function exposureSection(model){
   const items=list(model.exposure).slice(0,LIMITS.exposure);
-  const blocks=[heading("LABELLED EXPOSURE (H1–H3)"),small("Addresses carrying an analyst label or watchlist category that were observed within three hops of the seed along the direction of value flow. Every label is an analyst attribution with its own source and confidence.")];
+  const blocks=[heading("LABELLED EXPOSURE (H1–H3)"),small("Addresses carrying an analyst label or watchlist category that were observed within three hops of the seed, for funds sent and funds received. \"Flow\" follows the recorded transfer directions; a mixed connection claims no flow. Every label is an analyst attribution with its own source and confidence.")];
   if(!items.length)blocks.push(noneRecorded("No path from the seed to a currently labelled sensitive category was observed within H1–H3 in the analysed sample."));
   else{
-    blocks.push({type:"table",fontSize:14,columns:[{key:"hop",label:"Hop",width:1},{key:"category",label:"Category",width:3},{key:"name",label:"Label",width:4},{key:"conf",label:"Confidence",width:2},{key:"share",label:"Direct share",width:2,align:"right"}],
-      rows:items.map(item=>({hop:"H"+(num(item.hop)??"?"),category:text(item.category),name:text(item.name)||"—",conf:text(item.confidence)||"—",
-        share:item.direct_share===null||item.direct_share===undefined?"—":(Math.round(Number(item.direct_share)*10)/10)+"%",detail:text(item.address)}))});
-    blocks.push(small("\"Direct share\" is a heuristic: each outgoing record's amount is split evenly across its counterparties and all assets are summed without unit conversion; it is not a value share."));
+    blocks.push({type:"table",fontSize:14,columns:[{key:"hop",label:"Hop",width:1},{key:"category",label:"Category",width:2.6},{key:"flow",label:"Flow",width:2.6},{key:"name",label:"Label",width:3},{key:"conf",label:"Confidence",width:1.8},{key:"share",label:"Direct share",width:2.2,align:"right"}],
+      rows:items.map(item=>({hop:"H"+(num(item.hop)??"?"),category:text(item.category),flow:text(item.flow)||"—",name:text(item.name)||"—",conf:text(item.confidence)||"—",
+        share:item.direct_share===null||item.direct_share===undefined?"—":(Math.round(Number(item.direct_share)*10)/10)+"%"+(item.direct_share_asset?" of "+text(item.direct_share_asset):""),detail:text(item.address)}))});
+    blocks.push(small("\"Direct share\" is the largest share of the seed's sent or received amount in any one asset, with each record's amount split evenly across its counterparties. Assets are never added together, and it is not a value in any currency."));
   }
   if(model.path&&list(model.path.nodes).length){
     blocks.push(sub("SHORTEST OBSERVED PATH · "+(list(model.path.nodes).length-1)+" hop(s)"));
@@ -443,6 +505,7 @@ function build(model){
     ...summarySection(m),
     ...traceConclusionSection(m),
     ...sanctionsSection(m),
+    ...riskSection(m),
     ...observationsSection(m)
   ];
   if(isTransaction){
@@ -500,7 +563,11 @@ const GRAPH_CSS=[
   ".graph-edge.offchain-link{stroke:#9aaab3;stroke-width:1.5;stroke-dasharray:6 5;stroke-opacity:.58}",
   ".graph-edge.crosschain-link{stroke:#c084df;stroke-width:2;stroke-dasharray:3 4;stroke-opacity:.82}",
   ".graph-aux-node.offchain-node rect{fill:#20313d;stroke:#9aaab3;stroke-width:1.6;stroke-dasharray:5 3}",
-  ".graph-aux-node.crosschain-node polygon{fill:#3b2b57;stroke:#c39beb;stroke-width:1.8}"
+  ".graph-aux-node.crosschain-node polygon{fill:#3b2b57;stroke:#c39beb;stroke-width:1.8}",
+  ".graph-risk-chip rect{fill:#162a33;stroke:#436b7a}",
+  ".graph-risk-chip.high rect{fill:#32191b;stroke:#a94a4a}",
+  ".graph-risk-chip.medium rect,.graph-risk-chip.unscreened rect{fill:#302718;stroke:#a27935}",
+  ".graph-risk-chip text{fill:#f2f8fb;font:900 7px Arial,sans-serif}"
 ].join("");
 
 function standaloneGraphSvg(markup){
@@ -523,7 +590,7 @@ function standaloneGraphSvg(markup){
     inner+"</svg>";
 }
 
-const api={build,standaloneGraphSvg,reportFilename,fmtAmount,fmtUtc,LIMITS,DISCLAIMER,EXCHANGE_LIMITATIONS,LABEL_LIMITATIONS,LIMITATIONS,SANCTIONS_NOTE,NOT_SCREENED,GRAPH_CSS};
+const api={build,riskSection,standaloneGraphSvg,reportFilename,fmtAmount,fmtUtc,LIMITS,DISCLAIMER,EXCHANGE_LIMITATIONS,LABEL_LIMITATIONS,LIMITATIONS,SANCTIONS_NOTE,NOT_SCREENED,RISK_WORDING,GRAPH_CSS};
 if(typeof module!=="undefined"&&module.exports)module.exports=api;
 root.CTAtlasCryptoReport=api;
 })(typeof window!=="undefined"?window:globalThis);
