@@ -3,8 +3,8 @@
 
 // Face crops for Facial Intelligence: cuts each detected face out of the ORIGINAL
 // uploaded file, in the browser (canvas), so nothing extra leaves the machine while
-// cropping. Crops can be downloaded as JPEG (one by one or as a ZIP) and searched on free
-// reverse-image engines. A crop leaves the browser only through an explicit SEARCH click
+// cropping. Crops can be downloaded as JPEG (one by one or as a ZIP) and searched on Yandex
+// Images, a free reverse-image engine. A crop leaves the browser only through an explicit SEARCH click
 // (see shareCrop) or when the user pastes it into a search page.
 //
 // The pure helpers at the top are unit-tested in Node; the DOM part is below.
@@ -17,8 +17,8 @@ const MIN_SIDE=300;          // engines do poorly on tiny crops
 const MAX_UPSCALE=6;
 const JPEG_QUALITY=0.92;
 
-// Haar boxes hug the face; a margin (relative to the face size) keeps hair, chin and ears,
-// which reverse-image engines need. Clamped to the source bounds.
+// The detector's boxes hug the face; a margin (relative to the face size) keeps hair, chin and
+// ears, which reverse-image engines need. Clamped to the source bounds.
 function paddedBox(box,marginRatio,srcW,srcH){
   const pad=Math.round(Math.max(box.w,box.h)*Math.max(0,marginRatio||0));
   const x=Math.max(0,box.x-pad);
@@ -423,7 +423,7 @@ async function copy(record){
 }
 
 // ---- Direct search: host ONE crop briefly, then open the engines on its URL ------------------
-// Only requestSearch() below leads here, and only from a click on a SEARCH menu entry.
+// Only requestSearch() below leads here, and only from a click on the SEARCH button.
 
 // A small JPEG (re-encoded from the crop: canvas output carries no EXIF/GPS) under the size
 // the Worker accepts.
