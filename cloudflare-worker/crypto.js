@@ -31,6 +31,7 @@ const PROVIDER_TIMEOUT_MS = 12000;
 const RATE_LIMIT_RETRY_MS = 1100;
 const RATE_LIMIT_RE = /rate limit|too many requests/i;
 const NO_ROWS_RE = /no (?:\w+ )?(?:transactions|records) found/i;
+const DISPLAY_COUNTERPARTIES = 12;
 
 function finiteNumber(value, fallback = 0) {
   const number = Number(value);
@@ -371,6 +372,18 @@ function buildObservations(transactions, seed) {
   return notes;
 }
 
+// The display cap must not limit what is screened: one transaction can carry
+// thousands of outputs, and a listed one past the cap would read as NO MATCH.
+function counterpartyFields(addresses) {
+  const all = [...new Set(addresses)];
+  return {
+    counterparties: all.slice(0, DISPLAY_COUNTERPARTIES),
+    all_counterparties: all,
+    counterparties_total: all.length,
+    counterparties_truncated: all.length > DISPLAY_COUNTERPARTIES
+  };
+}
+
 function btcAddressTransactions(address, raw) {
   return (raw || []).map(tx => {
     const received = (tx.vout || [])
@@ -381,8 +394,9 @@ function btcAddressTransactions(address, raw) {
       .reduce((sum, input) => sum + finiteNumber(input?.prevout?.value), 0);
     const net = received - sent;
     const direction = net > 0 ? "IN" : net < 0 ? "OUT" : "SELF";
+    const inputAddresses = (tx.vin || []).map(input => input?.prevout?.scriptpubkey_address).filter(item => item && item !== address);
     const counterparties = direction === "IN"
-      ? (tx.vin || []).map(input => input?.prevout?.scriptpubkey_address).filter(Boolean)
+      ? inputAddresses
       : (tx.vout || []).map(output => output?.scriptpubkey_address).filter(item => item && item !== address);
 
     return {
@@ -393,7 +407,11 @@ function btcAddressTransactions(address, raw) {
       asset: "BTC",
       amount: Math.abs(net) / 1e8,
       fee: finiteNumber(tx.fee) / 1e8,
-      counterparties: [...new Set(counterparties)].slice(0, 12),
+      ...counterpartyFields(counterparties),
+      // Spent alongside the seed: a closer link than a payment, but no value went
+      // to them, so they are screened without counting as recipients. Other outputs
+      // of an IN row are not kept: they are only fellow payees of a batch payout.
+      co_inputs: direction === "IN" ? [] : [...new Set(inputAddresses)],
       explorer_url: "https://blockstream.info/tx/" + encodeURIComponent(tx.txid)
     };
   });
@@ -419,7 +437,11 @@ async function analyzeBitcoin(target, limit) {
         inputs: (tx.vin || []).length,
         outputs: (tx.vout || []).length,
         input_addresses: [...new Set((tx.vin || []).map(item => item?.prevout?.scriptpubkey_address).filter(Boolean))].slice(0, 30),
-        output_addresses: [...new Set((tx.vout || []).map(item => item?.scriptpubkey_address).filter(Boolean))].slice(0, 30)
+        output_addresses: [...new Set((tx.vout || []).map(item => item?.scriptpubkey_address).filter(Boolean))].slice(0, 30),
+        all_addresses: [...new Set([
+          ...(tx.vin || []).map(item => item?.prevout?.scriptpubkey_address),
+          ...(tx.vout || []).map(item => item?.scriptpubkey_address)
+        ].filter(Boolean))]
       },
       transactions: [],
       flows: [],
@@ -815,13 +837,24 @@ async function withSanctionsScreening(result, env) {
   };
 }
 
+// These lists can run to thousands of addresses per row and exist only for the
+// screening step; the response keeps the capped display fields.
+function withoutServerFields(result) {
+  const { all_addresses: _parties, ...transaction } = result.transaction || {};
+  return {
+    ...result,
+    transactions: (result.transactions || []).map(({ all_counterparties: _all, co_inputs: _spent, ...row }) => row),
+    ...(result.transaction ? { transaction } : {})
+  };
+}
+
 async function runAnalysis(target, limit, env) {
   let result;
   if (target.chain === "bitcoin") result = await analyzeBitcoin(target, limit);
   else if (target.chain === "tron") result = await analyzeTron(target, limit, env);
   else if (EVM_CHAIN_KEYS.has(target.chain)) result = await analyzeEvm(target, limit, env);
   else throw new Error("Unsupported blockchain.");
-  return withSanctionsScreening(result, env);
+  return withoutServerFields(await withSanctionsScreening(result, env));
 }
 
 async function analyzeCryptoAddress(address, chain, limit, env) {

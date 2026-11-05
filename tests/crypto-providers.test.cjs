@@ -29,7 +29,7 @@ function harness(fetchImpl){
   vm.runInContext(stripped("cloudflare-worker/sanctions.js"),context);
   Object.assign(context,moduleExports(context,"cloudflare-worker/exchange-behavior.mjs",["detectExchangeBehavior","EXCHANGE_BEHAVIOR_VERSION"]));
   vm.runInContext(stripped("cloudflare-worker/crypto.js"),context);
-  return vm.runInContext("({detectCryptoInput,analyzeCryptoAddress,resetSanctionsCache})",context);
+  return vm.runInContext("({detectCryptoInput,analyzeCryptoAddress,runAnalysis})",context);
 }
 
 const json=(value,status=200)=>new Response(JSON.stringify(value),{status,headers:{"content-type":"application/json"}});
@@ -148,6 +148,85 @@ test("uppercase bech32 is normalised, so rows match the seed instead of reading 
   assert.equal(result.query,BC1);
   assert.equal(result.transactions[0].direction,"IN");
   assert.equal(result.transactions[0].amount,0.001);
+});
+
+const LISTED="1BoatSLRHtKNngkdXEeobR76b53LETtpyT";
+const LIST_WITH_LISTED={
+  ...SANCTIONS,
+  entities:[{id:"1",name:"SYNTHETIC ENTITY",programs:["SDGT"],terrorism:true,list:"OFAC_SDN"}],
+  addresses:[{a:LISTED,c:"XBT",f:"bitcoin",e:[0]}]
+};
+const manyOutputs=count=>Array.from({length:count},(_,index)=>({
+  scriptpubkey_address:index===count-1?LISTED:"bc1qfiller"+index,value:1000
+}));
+
+test("a listed output past the 12-item display cap is still screened, and the cap stays in the response",async()=>{
+  const spend=btcTx("d".repeat(64),{
+    vin:[{prevout:{scriptpubkey_address:BC1,value:30000}}],
+    vout:manyOutputs(21)
+  });
+  const {fetchImpl}=esplora({["/address/"+BC1]:btcInfo(),["/address/"+BC1+"/txs"]:[spend]},LIST_WITH_LISTED);
+  const result=await harness(fetchImpl).analyzeCryptoAddress(BC1,"bitcoin",50,ENV);
+  const row=result.transactions[0];
+  assert.equal(result.sanctions_screening.hit,true);
+  assert.equal(result.sanctions_screening.counterparty_matches[0].address,LISTED);
+  assert.equal(result.sanctions_screening.counterparties_checked,21);
+  assert.equal(row.counterparties.length,12);
+  assert.equal(row.counterparties_total,21);
+  assert.equal(row.counterparties_truncated,true);
+  assert.equal("all_counterparties" in row,false,"the uncapped list must not leave the Worker");
+});
+
+test("no listed address past the cap reaches a wallet with 25 rows either",async()=>{
+  const rows=Array.from({length:25},(_,index)=>btcTx(String(index).padStart(64,"0"),{
+    vin:[{prevout:{scriptpubkey_address:BC1,value:30000}}],
+    vout:index===24?manyOutputs(40):[{scriptpubkey_address:"bc1qother"+index,value:1000}]
+  }));
+  const {fetchImpl}=esplora({["/address/"+BC1]:btcInfo(25),["/address/"+BC1+"/txs"]:rows},LIST_WITH_LISTED);
+  const result=await harness(fetchImpl).analyzeCryptoAddress(BC1,"bitcoin",100,ENV);
+  assert.equal(result.transactions.length,25);
+  assert.equal(result.sanctions_screening.counterparty_matches.length,1);
+});
+
+test("a listed address spent alongside the seed is screened, without counting as a recipient",async()=>{
+  // The shape behind the demo address's four missed listings: one spend, many inputs, one output.
+  const spend=btcTx("e".repeat(64),{
+    vin:[{prevout:{scriptpubkey_address:BC1,value:30000}},{prevout:{scriptpubkey_address:LISTED,value:30000}}],
+    vout:[{scriptpubkey_address:"bc1qdestination",value:59000}]
+  });
+  const {fetchImpl}=esplora({["/address/"+BC1]:btcInfo(),["/address/"+BC1+"/txs"]:[spend]},LIST_WITH_LISTED);
+  const result=await harness(fetchImpl).analyzeCryptoAddress(BC1,"bitcoin",50,ENV);
+  const match=result.sanctions_screening.counterparty_matches[0];
+  assert.equal(match.address,LISTED);
+  assert.equal(match.spent_with_count,1);
+  assert.equal(match.sent_to_count,0);
+  assert.equal(result.transactions[0].counterparties.includes(LISTED),false);
+  assert.equal("co_inputs" in result.transactions[0],false);
+});
+
+test("a fellow payee of a batch payout is not a counterparty of the seed",async()=>{
+  const payout=btcTx("f".repeat(64),{
+    vin:[{prevout:{scriptpubkey_address:"bc1qexchange",value:500000}}],
+    vout:[{scriptpubkey_address:BC1,value:100000},{scriptpubkey_address:LISTED,value:100000}]
+  });
+  const {fetchImpl}=esplora({["/address/"+BC1]:btcInfo(),["/address/"+BC1+"/txs"]:[payout]},LIST_WITH_LISTED);
+  const result=await harness(fetchImpl).analyzeCryptoAddress(BC1,"bitcoin",50,ENV);
+  assert.equal(result.sanctions_screening.hit,false);
+  assert.deepEqual(Array.from(result.transactions[0].counterparties),["bc1qexchange"]);
+});
+
+test("the single-transaction view screens every party, not only the 30 it displays",async()=>{
+  const txid="9".repeat(64);
+  const fetchImpl=async url=>{
+    const parsed=new URL(String(url));
+    if(parsed.hostname==="sanctions.test")return json(LIST_WITH_LISTED);
+    return json(btcTx(txid,{vout:manyOutputs(45)}));
+  };
+  const h=harness(fetchImpl);
+  const result=await h.runAnalysis(h.detectCryptoInput(txid,"bitcoin"),50,ENV);
+  assert.equal(result.transaction.output_addresses.length,30);
+  assert.equal(result.sanctions_screening.hit,true);
+  assert.equal("all_addresses" in result.transaction,false);
 });
 
 test("forbidden base58 characters, bad checksums and mixed-case bech32 stop before any provider call",()=>{

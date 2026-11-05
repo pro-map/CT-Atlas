@@ -6,7 +6,7 @@ import { findWalletCandidates } from "./address-utils.js";
 // digital-currency addresses (currently the OFAC SDN list, refreshed by
 // tools/update_sanctions.py into sanctions-crypto.json). Bump whenever the
 // screening output SHAPE changes.
-const SANCTIONS_VERSION = "sanctions-screening-v1-ofac-sdn";
+const SANCTIONS_VERSION = "sanctions-screening-v2-co-inputs";
 
 const SANCTIONS_CACHE_TTL_MS = 30 * 60 * 1000;
 const SANCTIONS_STALE_AFTER_MS = 7 * 24 * 60 * 60 * 1000;
@@ -170,14 +170,15 @@ function summarizeEntities(entities) {
 
 function collectCounterparties(analysis, family) {
   const found = new Map();
-  const add = (address, row) => {
+  const add = (address, row, coInput = false) => {
     const value = String(address || "").trim();
     if (!value) return;
     const key = indexKey(family, value);
-    const entry = found.get(key) || { address: value, in_count: 0, out_count: 0, tx_ids: [], first_seen: "", last_seen: "" };
+    const entry = found.get(key) || { address: value, in_count: 0, out_count: 0, co_input_count: 0, tx_ids: [], first_seen: "", last_seen: "" };
     if (row) {
       const direction = String(row.direction || "").toUpperCase();
-      if (direction === "IN") entry.in_count++;
+      if (coInput) entry.co_input_count++;
+      else if (direction === "IN") entry.in_count++;
       else if (direction === "OUT") entry.out_count++;
       const time = String(row.time || "");
       if (time && (!entry.first_seen || time < entry.first_seen)) entry.first_seen = time;
@@ -188,14 +189,18 @@ function collectCounterparties(analysis, family) {
     found.set(key, entry);
   };
 
+  // all_counterparties, where a row has it, is the uncapped list behind the display field.
   for (const row of Array.isArray(analysis?.transactions) ? analysis.transactions : []) {
-    for (const counterparty of Array.isArray(row?.counterparties) ? row.counterparties : []) add(counterparty, row);
+    const parties = row?.all_counterparties || row?.counterparties;
+    for (const counterparty of Array.isArray(parties) ? parties : []) add(counterparty, row);
+    for (const address of Array.isArray(row?.co_inputs) ? row.co_inputs : []) add(address, row, true);
   }
 
   // Single-transaction lookups carry their parties directly.
   const tx = analysis?.transaction;
   if (analysis?.kind === "transaction" && tx && typeof tx === "object") {
     for (const address of [
+      ...(Array.isArray(tx.all_addresses) ? tx.all_addresses : []),
       ...(Array.isArray(tx.input_addresses) ? tx.input_addresses : []),
       ...(Array.isArray(tx.output_addresses) ? tx.output_addresses : []),
       tx.from, tx.to, tx.owner_address, tx.to_address
@@ -253,15 +258,15 @@ function screenAnalysis(analysis, state, now = Date.now()) {
       summary: summarizeEntities(matchEntities),
       received_from_count: entry.in_count,
       sent_to_count: entry.out_count,
+      spent_with_count: entry.co_input_count,
       first_seen: entry.first_seen,
       last_seen: entry.last_seen,
       tx_ids: entry.tx_ids
     });
   }
 
-  base.counterparty_matches.sort((a, b) =>
-    (b.received_from_count + b.sent_to_count) - (a.received_from_count + a.sent_to_count)
-  );
+  const linkCount = match => match.received_from_count + match.sent_to_count + match.spent_with_count;
+  base.counterparty_matches.sort((a, b) => linkCount(b) - linkCount(a));
   base.counterparty_matches = base.counterparty_matches.slice(0, MAX_REPORTED_MATCHES);
   base.hit = Boolean(base.seed_match) || base.counterparty_matches.length > 0;
   return base;
