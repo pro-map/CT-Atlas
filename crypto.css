@@ -375,6 +375,19 @@ button,input,select{font:inherit}
 .sanctions-address{display:block;margin-top:5px;font:800 8px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;color:#cfe0e8;word-break:break-all}
 .sanctions-warning{border:1px solid #a27935;background:#302718;color:#e7c06f;border-radius:5px;padding:8px 10px;font-size:9px;line-height:1.55}
 .sanctions-scope{font-size:8px;line-height:1.55;color:#77909f}
+/* Risk indicators (crypto.js: riskView/renderRisk) */
+.risk-card{margin-bottom:12px}
+.risk-card.high{border-color:#a94a4a}
+.risk-card.elevated{border-color:#a27935}
+.risk-summary{font-size:10px;line-height:1.55;color:#dceaf2}
+.risk-reasons{margin:0;padding-left:15px;font-size:9px;line-height:1.55;color:#a8bcc7}
+.risk-finding{border:1px solid #2f4654;background:#111d26;border-radius:5px;padding:7px 10px}
+.risk-finding summary{display:flex;justify-content:space-between;gap:8px;align-items:center;cursor:pointer;font-size:9px;font-weight:900;letter-spacing:.04em;color:#e9f2f6}
+.risk-hop{font:700 8px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;color:#cfe0e8;overflow-wrap:anywhere}
+.graph-risk-chip rect{fill:#162a33;stroke:#436b7a}
+.graph-risk-chip.high rect{fill:#32191b;stroke:#a94a4a}
+.graph-risk-chip.medium rect,.graph-risk-chip.unscreened rect{fill:#302718;stroke:#a27935}
+.graph-risk-chip text{fill:#f2f8fb;font:900 7px Arial,sans-serif}
 /* Full analysis report button (crypto-report.js) */
 .crypto-topline-actions{display:flex;flex:0 0 auto;align-items:flex-start;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .crypto-report-button{flex:0 0 auto;border:1px solid #4f7ea0;background:#21465a;color:#e6f2f7;border-radius:4px;padding:8px 10px;font-size:9px;font-weight:900;letter-spacing:.08em;cursor:pointer}
