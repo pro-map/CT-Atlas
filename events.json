@@ -152,44 +152,43 @@
   "collection_status": {
     "schema_version": 2,
     "status": "partial",
-    "run_started_at": "2026-11-04T22:37:49.116320+00:00",
-    "last_attempt_at": "2026-11-04T22:37:49.116320+00:00",
-    "published_at": "2026-11-04T23:36:29.849196+00:00",
+    "run_started_at": "2026-11-05T17:26:18.909381+00:00",
+    "last_attempt_at": "2026-11-05T17:26:18.909381+00:00",
+    "published_at": "2026-11-05T18:04:12.231836+00:00",
     "recent": {
-      "candidates": 3560,
-      "reviewed": 3469,
-      "cached": 2125,
-      "new_reviews": 1344,
+      "candidates": 3710,
+      "reviewed": 1848,
+      "cached": 1816,
+      "new_reviews": 32,
       "official_auto_accepted": 0,
-      "retained": 227,
-      "rejected": 3242,
-      "pending": 91,
+      "retained": 9,
+      "rejected": 1839,
+      "pending": 1862,
       "status": "partial",
-      "calls": 55,
-      "primary_calls": 30,
-      "overflow_calls": 25,
+      "calls": 8,
+      "primary_calls": 8,
+      "overflow_calls": 0,
       "reasons": [
-        "transient_error",
-        "run_budget"
+        "transient_error"
       ],
-      "window_start": "2026-11-01T22:37:49.116320+00:00",
-      "window_end": "2026-11-04T22:37:49.116320+00:00"
+      "window_start": "2026-11-02T17:26:18.909381+00:00",
+      "window_end": "2026-11-05T17:26:18.909381+00:00"
     },
     "backlog": {
-      "candidates": 1941,
-      "reviewed": 391,
-      "cached": 391,
+      "candidates": 2033,
+      "reviewed": 397,
+      "cached": 397,
       "new_reviews": 0,
       "official_auto_accepted": 0,
       "retained": 0,
-      "rejected": 391,
-      "pending": 1550,
+      "rejected": 397,
+      "pending": 1636,
       "status": "partial",
-      "calls": 0,
-      "primary_calls": 0,
+      "calls": 6,
+      "primary_calls": 6,
       "overflow_calls": 0,
       "reasons": [
-        "run_budget"
+        "transient_error"
       ]
     },
     "maintenance": {
@@ -215,31 +214,25 @@
       },
       "gdelt": {
         "attempted": 42,
-        "http_attempts": 2,
-        "rate_limit_http_attempts": 2,
-        "rate_limited": 1,
-        "circuit_open": true,
-        "pause_reason": "rate_limit",
-        "failed": 42,
+        "http_attempts": 4,
+        "successful": 1,
+        "consecutive_unavailable_queries": 0,
+        "invalid_response": 2,
+        "failed": 41,
         "deferred_queries": [
-          {
-            "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+financing%22+OR+%22terror+financing%22+OR+%22financing+terrorism%22+OR+%22terrorist+funding%22+OR+%22terror+finance+network%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
-            "label": "gdelt:Terrorist Financing:1/1",
-            "reason": "http_429",
-            "recovered": false,
-            "provider_message": "Please limit requests to one every 5 seconds or contact kalev.leetaru5@gmail.com for larger queries. All high-traffic users should switch to our ngrams dataset: https://blog.gdeltproject.org/using-the"
-          },
           {
             "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22terrorist+weapons%22+OR+%22terrorist+arms%22+OR+%22terrorist+firearms%22%29&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
             "label": "gdelt:Weapons:1/3",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
+            "reason": "invalid_response",
+            "recovered": false,
+            "provider_message": "{}"
           },
           {
             "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22weapons+smuggling%22+terrorism&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
             "label": "gdelt:Weapons:2/3",
-            "reason": "source_paused_rate_limit",
-            "recovered": false
+            "reason": "invalid_response",
+            "recovered": false,
+            "provider_message": "{}"
           },
           {
             "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22arms+trafficking%22+terrorism&mode=artlist&format=json&maxrecords=75&sort=datedesc&timespan=3d",
@@ -476,53 +469,57 @@
             "recovered": false
           }
         ],
-        "skipped_http_queries": 41
+        "rate_limit_http_attempts": 1,
+        "rate_limited": 1,
+        "circuit_open": true,
+        "pause_reason": "rate_limit",
+        "skipped_http_queries": 39
       },
-      "errors": 42,
+      "errors": 41,
       "status": "partial"
     },
     "reasons": [
       "transient_error",
-      "run_budget",
       "recent_pending",
       "backlog_pending",
       "source_errors",
+      "geolocation_pending",
       "category_pending",
       "geolocation_review_required"
     ],
     "queue_filter": {
-      "expired": 3808,
-      "retired": 282,
-      "cancelled_history": 225,
+      "expired": 3746,
+      "retired": 294,
+      "cancelled_history": 229,
       "duplicates": 0
     },
     "budgets": {
       "primary": {
         "per_run": 30,
         "per_day": 60,
-        "used_this_run": 30,
-        "used_today": 60
+        "used_this_run": 14,
+        "used_today": 14
       },
       "overflow": {
         "model": "gemini-3.1-flash-lite",
         "per_run": 25,
         "per_day": 50,
-        "used_this_run": 25,
-        "used_today": 37
+        "used_this_run": 0,
+        "used_today": 0
       },
       "historical_calls_per_run": 10,
-      "historical_calls_used": 0,
+      "historical_calls_used": 6,
       "maintenance_calls_per_run": 2
     },
     "geolocation": {
-      "status": "complete",
-      "pending": 0,
-      "located": 6408,
-      "unlocated": 209,
-      "completed_unlocated": 209,
+      "status": "partial",
+      "pending": 7,
+      "located": 6175,
+      "unlocated": 205,
+      "completed_unlocated": 198,
       "outcome": "success",
-      "processed_this_run": 87,
-      "review_required": 133
+      "processed_this_run": 0,
+      "review_required": 124
     },
     "categories": [
       {
@@ -547,70 +544,63 @@
         "stop_code": "http_503"
       }
     ],
-    "finalized_at": "2026-11-04T23:40:03.070635+00:00",
+    "finalized_at": "2026-11-05T18:07:34.775455+00:00",
     "collect_outcome": "success",
     "geolocate_outcome": "success"
   },
   "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
   "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
   "trend_summary": {
-    "overview": "Recent counter-terrorism developments highlight significant operations and thwartings across multiple regions, featuring an Israeli security forces arrest in Jerusalem that prevented a major combined bombing and shooting plot. In Washington, the FBI arrested a suspect linked to a biological threat campaign involving numerous white-powder letters sent to officials, while Nigerian military forces successfully neutralized several ISWAP leaders and fighters during an offensive in Borno State.",
+    "status": "fallback",
+    "model": "gemini-3.5-flash-lite",
+    "window_hours": 24,
+    "generated_at": "2026-11-05T18:02:24.775262+00:00",
+    "candidate_events": 27,
+    "overview": "AI trend synthesis was unavailable for this update. The highest-relevance CT events reported or updated in the last 24 hours are shown below without additional analytical synthesis.",
     "developments": [
       {
-        "event_id": "7e2a96227388571a",
-        "severity": "CRITICAL",
-        "category": "Counter Terrorism Action",
-        "headline": "Massive terrorist plot foiled at Temple Mount with arrest of suspect",
-        "detail": "A 19-year-old from East Jerusalem was arrested, foiling a major terrorist plot planned for the Temple Mount involving explosives.",
-        "location": "East Jerusalem"
+        "event_id": "70ae3b5b881b4e79",
+        "severity": "SIGNIFICANT",
+        "category": "Chemicals and Explosives",
+        "headline": "Russia's FSB prevents series of terrorist attacks using rigged drone goggles",
+        "detail": "The Russian Federal Security Service (FSB) disrupted terrorist plots involving explosive-rigged drone control goggles.",
+        "location": "Moscow, Russia"
       },
       {
-        "event_id": "bea03fe361260a0f",
-        "severity": "CRITICAL",
+        "event_id": "7e2a96227388571a",
+        "severity": "HIGH",
         "category": "Arrests",
-        "headline": "FBI arrests suspect sending white powder threat letters to US officials",
-        "detail": "The FBI arrested a suspect accused of sending more than 700 threatening letters containing white powder to US officials.",
-        "location": "Washington, United States"
+        "headline": "Massive terrorist plot foiled at Temple Mount with arrest of suspect",
+        "detail": "A 19-year-old from East Jerusalem was arrested, foiling a major terrorist plot planned for the Temple Mount.",
+        "location": "Jerusalem, Israel"
       },
       {
         "event_id": "bbaa909706673ccd",
         "severity": "HIGH",
         "category": "Counter Terrorism Action",
         "headline": "Nigerian army kills ISWAP leaders and fighters in Borno",
-        "detail": "The Nigerian military announced a successful offensive operation resulting in the killing of several ISWAP terrorist leaders and Arab fighters.",
-        "location": "Kukawa, Borno State, Nigeria"
+        "detail": "The Nigerian military announced a successful offensive operation in Borno State resulting in the killing of several ISWAP terrorist leaders and Arab fighters.",
+        "location": "Kukawa, Nigeria"
       },
       {
-        "event_id": "17cbfa28c10585c1",
-        "severity": "HIGH",
-        "category": "Counter Terrorism Action",
-        "headline": "Two terrorists including suicide bomber killed in police operation in Khyber Pakhtunkhwa",
-        "detail": "Security forces killed two terrorists, including a suicide bomber, during an intelligence-based counter-terrorism operation.",
-        "location": "Khyber Pakhtunkhwa, Pakistan"
-      },
-      {
-        "event_id": "c62bedc4ca5b8153",
-        "severity": "HIGH",
-        "category": "Attacks",
-        "headline": "Car bomb detonated against police substation in El Patia, Cauca",
-        "detail": "A car bomb was detonated against a police substation in El Patia in a terrorist attack attributed to armed groups.",
-        "location": "Cauca, Colombia"
-      },
-      {
-        "event_id": "956729e953107c84",
+        "event_id": "e837261346026238",
         "severity": "SIGNIFICANT",
-        "category": "Arrests",
-        "headline": "Threats to the US and Israel, violent videos on WhatsApp and ISIS flag on social media: 27-year-old arrested",
-        "detail": "Italian police arrested a 27-year-old man who shared violent videos, threats against the United States and Israel, and Islamic State symbols on social media.",
-        "location": "Milan, Italy"
+        "category": "Attacks",
+        "headline": "Deaths reported in alleged Venezuelan airstrike on ELN camp",
+        "detail": "Multiple reports indicate an airstrike by Venezuelan military forces on an ELN guerrilla camp in the border state of Apure, resulting in fatalities.",
+        "location": "Apure, Venezuela"
+      },
+      {
+        "event_id": "700d37f40edbdcda",
+        "severity": "SIGNIFICANT",
+        "category": "Attacks",
+        "headline": "Massacre prevented in Jerusalem: Massive combined terrorist attack foiled",
+        "detail": "Israeli security forces thwarted a massive, complex terrorist plot involving explosives and firearms aimed at causing mass casualties in Jerusalem.",
+        "location": "Jerusalem, Israel"
       }
     ],
-    "status": "ok",
-    "model": "gemini-3.5-flash-lite",
-    "window_hours": 24,
-    "generated_at": "2026-11-04T23:36:26.909275+00:00",
-    "candidate_events": 80,
-    "top_hash": "f75571dd5ddf547c4b7cf8a29b19fd9c34cd60c917cd2c7ac76fd0ca73966b51",
+    "warning": "Gemini trend temporary error 503",
+    "top_hash": "c26441f85d68f96d453bb0c8f4b55301c4c17183452d6dc9f5089b5c80925b0e",
     "top_event_count": 10,
     "reused": false
   },
@@ -906,8 +896,8 @@
   },
   "backfill_completed_queries": {},
   "incremental_collection_stats": {
-    "already_reviewed_articles": 1584,
-    "duplicate_input_articles": 3952
+    "already_reviewed_articles": 1379,
+    "duplicate_input_articles": 3794
   },
   "last_collection_scope": "all",
   "last_planned_query_count": 1222,
@@ -992,9 +982,550 @@
     "UK Government / Counter-Terrorism",
     "INTERPOL English News"
   ],
-  "last_updated": "2026-11-04T23:36:29.849196+00:00",
-  "number_of_events": 6379,
+  "last_updated": "2026-11-05T18:04:12.231836+00:00",
+  "number_of_events": 6380,
   "events": [
+    {
+      "id": "0cc45e3c49079998",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Clashes Between ELN and Clan del Golfo in Chocó Leave Two Dead and Displaced",
+      "summary": "Armed clashes between the ELN and Clan del Golfo in Chocó resulted in two deaths, one disappearance, and hundreds of displaced persons.",
+      "original_title": "Terror en Chocó: dos muertos, un desaparecido y 258 desplazados por enfrentamientos entre ELN y Clan del Golfo",
+      "original_summary": "Terror en Chocó: dos muertos, un desaparecido y 258 desplazados por enfrentamientos entre ELN y Clan del Golfo Revista Semana",
+      "original_language": "es",
+      "collection_language": "es",
+      "collection_language_name": "Spanish / Latin America",
+      "collection_locale": "MX:es-419",
+      "published": "2026-11-05T17:27:23+00:00",
+      "source": "Revista Semana",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxNUzhtekdGdlVZVmgzYlFrdE5kRnlEc1VnQldvLVlkZXNzbC1uVDd4NE1aWlV5RWp0NXdycWRpalRmaUxlSFVkejJfUjZMYkh4dFhsN21zM0ctaENnU3hVQk11U2V4cXhKa09BZko5akFocjRNeTRrclAzQ2NteVFCNXBDeHFXd0UtUWNVcWkwbDFHMDg5MlN6OFpuSFcwb3dLcDhBQU5hZ0l0eU9STWxva21OaG9Yc3lqa0RrLXBjVEJXcTVGNU41eHJsY2NKSDdDLWpoa3ZDNWZZelhiVXVfblBMNFp4QkUybWh3?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unlocated",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "semana.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "bd670267657d760fbb47bfb1b52135f8352fead41cab0a926e41985e55d35975"
+      ],
+      "sources": [
+        "Revista Semana"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-11-05T17:27:23+00:00",
+      "last_reported": "2026-11-05T17:27:23+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete armed clashes between non-state armed groups resulting in casualties and displacement.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "ELN",
+      "primary_event_type": "ATTACK",
+      "is_attack": true,
+      "incident_anchor": "ELN Clan del Golfo clashes Choco 2026-11-05",
+      "update_type": "INITIAL",
+      "incident_id": "inc-0b7c25e92941d8c3",
+      "translated_to_english": true,
+      "ai_canonical_event": "Clashes between ELN and Clan del Golfo in Chocó",
+      "title_variants": [
+        "Clashes between ELN and Clan del Golfo in Chocó"
+      ],
+      "actor_scope": "NON_STATE",
+      "cbrn_subgroups": [],
+      "threat_categories": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "location_confidence_score": 0.0,
+      "location_method": "awaiting_ai_geolocation",
+      "location_evidence": [],
+      "excluded_from_map": false,
+      "ai_geo_complete": false,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": null,
+      "ai_geo_reason": "Awaiting Gemini semantic geolocation"
+    },
+    {
+      "id": "13817a84ccdda4ec",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "One Killed and Three Injured in Shooting at Oil Refinery Between Erbil and Kirkuk",
+      "summary": "One person was killed and three others injured in a shooting targeting an oil refinery located between Erbil and Kirkuk.",
+      "original_title": "قتيل وثلاثة مصابين بإطلاق نار باتجاه مصفاة نفط بين أربيل وكركوك",
+      "original_summary": "قتيل وثلاثة مصابين بإطلاق نار باتجاه مصفاة نفط بين أربيل وكركوك Alsumaria",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-11-05T17:24:05+00:00",
+      "source": "Alsumaria",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMijwRBVV95cUxORmt2a3djUmdRSmpndkIweDhJRi1fTVQwbFN4WllqdDRtMFViMWRwajgxWEN4R19VdVg4SzBmWEtucFhqRm5RVzZMcmNCUFVSSERoT29udWhNRDM0YlFxNkt2akNTR0d0ajk3U21JSmc0V05BNTVtNkI2Z25Md20xLVFHYU9IOXcwNXJRZDVmZXVoOHRkcDJZSXhuTUZ4cmpmUnFqNGlqR3ZZLVoyaGN1YVlOOFFyU0o5dHdnRldVWlltV093T3pTbUdRd2RvdFhTYmJDbHgzYl85cThZVkYyNG5wbUs2aGZyX2xaenVFRHh6OWU1RUNhVG1vT1pRYVAwQ1hsRWhWTUJTTWZGNklzUWR2TVkwTVEzaWUtRi1XSzdQTTM1aDVRcWZvbE9ubzQwbEJna0xmbGtqbF9pTU5uUFpwYkpWdWJvQUQ2dExvNUk1djJzX2lsM0VPbEVKdXlyQXo5Y1dMRVJvYndiV3JfRUVYaTlmbGxHbVpBMG1Vay1oaWREVDY2a2ZqbjBVMEdNLVF4Y1VQZ1R1a0VLdFZGXzY3Q0JVcGZ3YnlFc2FpN2VQX21uUWg5dHJ5bXlYYnoxXzR5ZUc0OVNkTGZpTHM5bXNfLXdVT0lxMFhhdWR4dTBwS3d5RDZtQkd6aUJ1WFBmYjNaanBva3RxbExveU1yX2dUZFI1bXBHVUlWbGF2bw?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unlocated",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "alsumaria.tv",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "1e0bc3ab29990f4b09638218af03fb258a895a82191cd1346ab3892b944483ab"
+      ],
+      "sources": [
+        "Alsumaria"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-11-05T17:24:05+00:00",
+      "last_reported": "2026-11-05T17:24:05+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete armed attack on an industrial oil facility resulting in casualties.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "is_attack": true,
+      "incident_anchor": "Oil refinery shooting Erbil Kirkuk 2026-11-05",
+      "update_type": "INITIAL",
+      "incident_id": "inc-b37003b09bf8bcd9",
+      "translated_to_english": true,
+      "ai_canonical_event": "Shooting attack at oil refinery between Erbil and Kirkuk",
+      "title_variants": [
+        "Shooting attack at oil refinery between Erbil and Kirkuk"
+      ],
+      "actor_scope": "UNKNOWN",
+      "cbrn_subgroups": [],
+      "threat_categories": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "location_confidence_score": 0.0,
+      "location_method": "awaiting_ai_geolocation",
+      "location_evidence": [],
+      "excluded_from_map": false,
+      "ai_geo_complete": false,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": null,
+      "ai_geo_reason": "Awaiting Gemini semantic geolocation"
+    },
+    {
+      "id": "865edd6b3d45fd4d",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Security Personnel Killed in Armed Attack in Libya",
+      "summary": "A security personnel member was killed in an armed attack, which the government confirmed as a terrorist act.",
+      "original_title": "مقتل رجل أمن في هجوم مسلّح.. الحكومة تؤكّد: عمل إرهابي",
+      "original_summary": "مقتل رجل أمن في هجوم مسلّح.. الحكومة تؤكّد: عمل إرهابي عين ليبيا",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-11-05T17:13:46+00:00",
+      "source": "عين ليبيا",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiwAJBVV95cUxOYk9yLU8xZDd2WGFSWVVQZ0FrSG9wS3FsY2JBcllEQ2MwRERMVGt1OUYwTk9hdElLanBpazRUakJEa2Q2ZmMzU3AwY0RRNXBlMUFuY3NUazIweTI4Ui1ramxLZV9nRC0tR19aQkdQdTFrQ1NWYmUxVkhzUXg4anJLQ1RGODByUHRnRTJSSThGdGlBaGdscVFXY2xaVWZzY1NtdG5ETDItcmFhdmM4cFR2M2M1aXIyZlZTeEQxUjhXN1kzTW5qU3BkbG91RGVSXzZJa1E4bmlpWk9yZ1R4NTBNMDVHVTF5YVF1YnMwd25SMEU1RVkxODd3UGxDcVQtbUdSZ3FockNSSWs1WjZhdi13OGNXM2ROSHdyNm1Fb1NqVEdUbGk1eTVOUnRSczktd0g3cGI5YkZ0OVpUaFVvTDh2YQ?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unlocated",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_discovery",
+      "source_article_fingerprints": [
+        "1a5f1581acd3f53bfdefd88c2b7f1589c5510e441195c4e7ee0db76d019b6cf7"
+      ],
+      "sources": [
+        "عين ليبيا"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-11-05T17:13:46+00:00",
+      "last_reported": "2026-11-05T17:13:46+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete armed attack resulting in the death of a security officer.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "is_attack": true,
+      "incident_anchor": "Security personnel killed armed attack Libya 2026-11-05",
+      "update_type": "INITIAL",
+      "incident_id": "inc-8a0c14385f20423e",
+      "translated_to_english": true,
+      "ai_canonical_event": "Armed attack kills security personnel in Libya",
+      "title_variants": [
+        "Armed attack kills security personnel in Libya"
+      ],
+      "actor_scope": "UNKNOWN",
+      "cbrn_subgroups": [],
+      "threat_categories": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "location_confidence_score": 0.0,
+      "location_method": "awaiting_ai_geolocation",
+      "location_evidence": [],
+      "excluded_from_map": false,
+      "ai_geo_complete": false,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": null,
+      "ai_geo_reason": "Awaiting Gemini semantic geolocation"
+    },
+    {
+      "id": "a1c635c44af6c8c6",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Weapons"
+      ],
+      "title": "New Criminal Cases Opened Against Suspect in Shopping Mall Terrorist Plot in Adygea",
+      "summary": "Authorities in Adygea have opened new criminal cases against a suspect previously detained for preparing a terrorist attack at a shopping mall.",
+      "original_title": "В Адыгее завели новые дела на подозреваемого в подготовке теракта в ТЦ",
+      "original_summary": "В Адыгее завели новые дела на подозреваемого в подготовке теракта в ТЦ Life.ru",
+      "original_language": "ru",
+      "collection_language": "ru",
+      "collection_language_name": "Russian",
+      "collection_locale": "RU:ru",
+      "published": "2026-11-05T17:12:55+00:00",
+      "source": "Life.ru",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPbTZMcm53dktLc1Jzc1A5WGVkZjFiNmp5alg4ZzZfY1lGT2RFSVM1WkRmSHFhMElkYXFTMGdXMEotc2UwWUNWQUNnV2o3cEFGMWhvX3d6Vy16clhpOUV4ZW14RjdfUG02b2RfOW0zRWNub094ZjNRbFFibnMzSW9HN3VtMUVQNDZldUVvTUJqTjhZQzA?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unlocated",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_discovery",
+      "source_article_fingerprints": [
+        "a586c4aaebeb5d6b9cb303c50a3f309a55292957da0df683f13c2e892eb1bf9d"
+      ],
+      "sources": [
+        "Life.ru"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-11-05T17:12:55+00:00",
+      "last_reported": "2026-11-05T17:12:55+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Investigative developments and new criminal charges regarding a disrupted terrorist plot.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "is_attack": false,
+      "incident_anchor": "Shopping mall terrorist plot Adygea 2026",
+      "update_type": "INVESTIGATION_UPDATE",
+      "incident_id": "inc-00ec6409088c0deb",
+      "translated_to_english": true,
+      "ai_canonical_event": "New criminal cases opened against terrorist plot suspect in Adygea",
+      "title_variants": [
+        "New criminal cases opened against terrorist plot suspect in Adygea"
+      ],
+      "actor_scope": "UNKNOWN",
+      "cbrn_subgroups": [],
+      "threat_categories": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "location_confidence_score": 0.0,
+      "location_method": "awaiting_ai_geolocation",
+      "location_evidence": [],
+      "excluded_from_map": false,
+      "ai_geo_complete": false,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": null,
+      "ai_geo_reason": "Awaiting Gemini semantic geolocation"
+    },
+    {
+      "id": "c295b0a3b24ee594",
+      "category": "Biological Terrorism",
+      "categories": [
+        "Biological Terrorism"
+      ],
+      "title": "Terrorist Threats Allegedly Sent from Bogotá Mayor's Office Email Account",
+      "summary": "Authorities are investigating terrorist threats that were allegedly sent using an email account belonging to the Bogotá Mayor's Office.",
+      "original_title": "Amenazas terroristas habrían sido enviadas desde una cuenta de correo de la Alcaldía de Bogotá",
+      "original_summary": "Amenazas terroristas habrían sido enviadas desde una cuenta de correo de la Alcaldía de Bogotá Revista Semana",
+      "original_language": "es",
+      "collection_language": "es",
+      "collection_language_name": "Spanish / Latin America",
+      "collection_locale": "MX:es-419",
+      "published": "2026-11-05T17:06:58+00:00",
+      "source": "Revista Semana",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxOYW9YUzRyRHVFOXkwN2U3aEp0bzZkWWpxdnZFdHkyNmxmcG5jVjdnVlpTTGM3dnhtamZGRlMxOFNVUG5LRnNoQk5yV0RWQlFxRlFUbUVxdnp4QndsTDNUUlE4NWJuNEdxc3d2NTRfSXE2RFN1S0FqNGl2WllNUzhiNjZhWnB2ZXdEQm1YbkFhUzd1cENGMlNFX2tLZ2R2ck94WEk0WkRPSnFjZEpFRUs2QmhtUVVraE5WWWkta3ZGWnNhelJPZGd2M294NzR2aU5GS2FnZUpobG1ySmlQVk5QZXB3?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unlocated",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "semana.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "364d90f026622d792ddb0964978176161da283046427fed4fca85e1b5880a4bb"
+      ],
+      "sources": [
+        "Revista Semana"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-11-05T17:06:58+00:00",
+      "last_reported": "2026-11-05T17:06:58+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Concrete security investigation into transmitted terrorist threats from an official email account.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "CBRN",
+      "is_attack": false,
+      "incident_anchor": "Bogota Mayors Office threat investigation 2026-11-05",
+      "update_type": "INITIAL",
+      "incident_id": "inc-6ff1df639f33626d",
+      "translated_to_english": true,
+      "ai_canonical_event": "Terrorist threats sent from Bogotá Mayor Office email account",
+      "title_variants": [
+        "Terrorist threats sent from Bogotá Mayor Office email account"
+      ],
+      "actor_scope": "UNKNOWN",
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "threat_categories": [
+        "Biological Terrorism"
+      ],
+      "cbrn_subgroups": [],
+      "location_confidence_score": 0.0,
+      "location_method": "awaiting_ai_geolocation",
+      "location_evidence": [],
+      "excluded_from_map": false,
+      "ai_geo_complete": false,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": null,
+      "ai_geo_reason": "Awaiting Gemini semantic geolocation"
+    },
+    {
+      "id": "a2cb194fb52533e6",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Road Security Building Targeted by RPG in Maarrat al-Nu'man Amid Security Chaos Concerns",
+      "summary": "An RPG projectile targeted the vicinity of a road security building in Maarrat al-Nu'man, raising concerns over growing security chaos and weapons proliferation.",
+      "original_title": "اســتــهــداف محيط مبنى لأمــن الطرق بقذيفة RPG في معرة النعمان.. مخاوف من اتساع الفوضى الأمــنــيــة وانتشار الســلاح",
+      "original_summary": "اســتــهــداف محيط مبنى لأمــن الطرق بقذيفة RPG في معرة النعمان.. مخاوف من اتساع الفوضى الأمــنــيــة وانتشار الســلاح المرصد السوري لحقوق الإنسان",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic / Syria",
+      "collection_locale": "SA:ar",
+      "published": "2026-11-05T17:06:58+00:00",
+      "source": "المرصد السوري لحقوق الإنسان",
+      "source_count": 2,
+      "url": "https://news.google.com/rss/articles/CBMiwwJBVV95cUxPQ0hKRkJVZXZiTTBJZkNFaTJ2RVhJcnllZlNNVUpkWnY5TDZaTnpndWc2RDZBaVdVNngzYUlSeUZhbmloZi1rTFVhWDktVlkyUWl2UHg4RDdxN0hJcFhuT1RWU0VCYWpFTnpEWW16RWZjRi1pbGFueU9vZWFGc1RjTkZWTURhRjhCbnhXQU1hSFZoTGhlQ0Q1VlBDUndwN1BKWDNmZzcteXp1NS1oUGtOTnBSOHRZZ3ZpanY4WjZOYzBQbG9jcDVHUUNuR2M1dGVVVjFpd0tBWkg1S1lCTG94dndtM3RKTGRGNDRfdzF0TDc3dWM2QXBUWVZEOVZTV1g3Ty1zVFQ2eHJaWlZzakN2S3VjcTB0ZllkSEVYdXVjdlkxd1J4eHFlZ0pTOWRGUVlRYjg4Y1JrWXJld3A4bTdSSmhoRQ?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unlocated",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "syriahr.com",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "045b9f2ff731876546f783b7eb5b7de944021174aab6d914ccf72c4e151d891e",
+        "7b95af7f0c4eef2364be94e02de0cc97864aa7629fa8df8304699adbb252a02a"
+      ],
+      "sources": [
+        "المرصد السوري لحقوق الإنسان",
+        "الجزيرة نت"
+      ],
+      "related_articles": [
+        {
+          "title": "RPG Attack Targets Road Security Building in Maarrat al-Nu'man, Idlib Countryside",
+          "original_title": "عاجل | مصدر أمني سوري للجزيرة: هجوم بقذيفة آر بي جي استهدف مبنى لأمن الطرقات في معرة النعمان بريف إدلب دون إصابات",
+          "original_language": "ar",
+          "summary": "An RPG projectile targeted a road security building in Maarrat al-Nu'man in the Idlib countryside, causing no injuries.",
+          "published": "2026-11-05T17:09:25+00:00",
+          "source": "الجزيرة نت",
+          "url": "https://news.google.com/rss/articles/CBMisgJBVV95cUxNal9lVkpvS0Z2cnJtelJQVndFZHZvQUxsMEhWQUtSdlJYSE90RGE0SE9OVk9EZnVPVC1aSGtRT2hfcWloVDYzUDEwV0IzR3M4REktQVdCMUlyUHQtV01ZaG1GLVFOYXMzZ3RiVjJOSV82bUktclFCQnFaOENWM2tjeUw1MzhWaHVfMkhSS04wbFhuTGppcnJKQTJyZzd6Q3BzcHRvOFBCMWJyMUw0OE5SaENVOGY0c2pkSklPeHVieFNWcjBGREV6WG9MclBLbkhERVNSaVhZTGh3SEp4Y1FlRzlOdTZaMWVmVy1qdkE2WjYwVkYwajREam5LZ1NmaXNjSUtickF6dEttZUVpNWJzOXFkNV9ZdUM2XzdIcnVaaVR1anNBaFJlU1ZPM3FlcUhlSGc?oc=5"
+        }
+      ],
+      "article_count": 2,
+      "first_reported": "2026-11-05T17:06:58+00:00",
+      "last_reported": "2026-11-05T17:09:25+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete armed attack on a security building using an RPG.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "is_attack": true,
+      "incident_anchor": "RPG attack road security Maarrat al-Numan 2026-11-05",
+      "update_type": "FOLLOW_UP",
+      "incident_id": "inc-97275e543a9a6310",
+      "translated_to_english": true,
+      "ai_canonical_event": "RPG attack targets road security building in Maarrat al-Nu'man",
+      "title_variants": [
+        "RPG attack targets road security building in Maarrat al-Nu'man"
+      ],
+      "actor_scope": "UNKNOWN",
+      "cbrn_subgroups": [],
+      "threat_categories": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "primary_source_published": "2026-11-05T17:06:58+00:00",
+      "dedup_confidence": 1.0,
+      "dedup_methods": [
+        "very_high_title_similarity"
+      ],
+      "location_confidence_score": 0.0,
+      "location_method": "awaiting_ai_geolocation",
+      "location_evidence": [],
+      "excluded_from_map": false,
+      "ai_geo_complete": false,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": null,
+      "ai_geo_reason": "Awaiting Gemini semantic geolocation"
+    },
+    {
+      "id": "59adfee8d1d11be8",
+      "category": "Attacks",
+      "categories": [
+        "Attacks"
+      ],
+      "title": "Jordanian Security Element Killed and Officer Wounded in Attack in Amman",
+      "summary": "A Jordanian security personnel member was killed and an officer was wounded in an armed attack in Amman.",
+      "original_title": "مقتل عنصر أمن أردني وإصابة ضابط في هجوم بعمان",
+      "original_summary": "مقتل عنصر أمن أردني وإصابة ضابط في هجوم بعمان سانا",
+      "original_language": "ar",
+      "collection_language": "ar",
+      "collection_language_name": "Arabic",
+      "collection_locale": "SA:ar",
+      "published": "2026-11-05T17:06:45+00:00",
+      "source": "سانا",
+      "source_count": 1,
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE54ZTRCTXFMbEpHZERWRi1tZGRFYXdyVTkxUWhZT0RyMW9rQ1RfNGU1cDVSenBjNEJBQzVLbEZlWEZvYkpudUd2TkJLa2diOFE?oc=5",
+      "collector": "Google News RSS",
+      "country": null,
+      "country_code": null,
+      "city": null,
+      "region": null,
+      "latitude": null,
+      "longitude": null,
+      "location_precision": "unlocated",
+      "location_confidence": "low",
+      "acquisition_channel": "multilingual_targeted_source",
+      "targeted_source": "sana.sy",
+      "targeted_source_kind": "local_language_media",
+      "source_article_fingerprints": [
+        "9fea71a2a0c4509775e7642b1b2fa34452620c533fedc46ff29d4578fd3db0e6"
+      ],
+      "sources": [
+        "سانا"
+      ],
+      "related_articles": [],
+      "article_count": 1,
+      "first_reported": "2026-11-05T17:06:45+00:00",
+      "last_reported": "2026-11-05T17:06:45+00:00",
+      "ai_selection_complete": true,
+      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
+      "ai_selection_model": "gemini-3.5-flash-lite",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Concrete lethal armed attack targeting security personnel in Amman.",
+      "ai_current_ct_event": true,
+      "ai_selected": true,
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "is_attack": true,
+      "incident_anchor": "Security attack Amman Jordan 2026-11-05",
+      "update_type": "INITIAL",
+      "incident_id": "inc-0524cbdf80d18b76",
+      "translated_to_english": true,
+      "ai_canonical_event": "Armed attack kills security personnel and wounds officer in Amman",
+      "title_variants": [
+        "Armed attack kills security personnel and wounds officer in Amman"
+      ],
+      "actor_scope": "UNKNOWN",
+      "cbrn_subgroups": [],
+      "threat_categories": [],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "location_confidence_score": 0.0,
+      "location_method": "awaiting_ai_geolocation",
+      "location_evidence": [],
+      "excluded_from_map": false,
+      "ai_geo_complete": false,
+      "ai_geo_rescue_complete": false,
+      "ai_geo_rescue_status": null,
+      "ai_geo_rescue_model": null,
+      "ai_geo_rescue_reason": null,
+      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
+      "ai_geo_model": null,
+      "ai_geo_reason": "Awaiting Gemini semantic geolocation"
+    },
     {
       "id": "94bb9d67e1251fe8",
       "category": "Arrests",
@@ -34341,6 +34872,7 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
+        "029629157245b6519479df1588338b98af00e7ba2c4d855f6ef2e4a5a00bf10b",
         "029808ced28b3dc295631a3712f29960a1a53c8a8a6cc799ecee6c4266c8817f",
         "0442b5463437a989dbe17819a47b6855dfc80a8c96965c3f6a31e83e06651856",
         "04909b0a6d9eb6eeac9a7c5fe6adddfe34dc6cc95a327ed120d0c5fdc0e706f7",
@@ -34860,11 +35392,20 @@
           "published": "2026-11-02T09:16:58+00:00",
           "source": "صحيفة الوطن",
           "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE4tbkpIb0JfYjBDbjlYREdCWmhHdVBhdEFIUDlSZFhuYmxIQlJMRm9EdkZ0dk93d0FrbEc2N0lrYXc4REJuelZvTGU1c25UWWNSVEQ3WdIBVEFVX3lxTE4tbkpIb0JfYjBDbjlYREdCWmhHdVBhdEFIUDlSZFhuYmxIQlJMRm9EdkZ0dk93d0FrbEc2N0lrYXc4REJuelZvTGU1c25UWWNSVEQ3WQ?oc=5"
+        },
+        {
+          "title": "FSB Prevents Major Terrorist Attack in Shopping Mall",
+          "original_title": "ФСБ предотвратила крупный теракт в торговом центре",
+          "original_language": "ru",
+          "summary": "Russia's FSB security service successfully prevented a major terrorist attack planned at a shopping mall.",
+          "published": "2026-11-05T17:07:00+00:00",
+          "source": "NEWS.ru",
+          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE40SlptVW51NXdHLWhNWjVzUWwxbmFkOVJzSFZMdVdBYUxfbTd3OHBKbVpKTXdzYnBoYktRT2tyYzFCSHdrRFhfRm9rajI4Z3JrYlBWNTl6LTl0c3ZjR3BpcWh2Q2hrUmJHLXhxeTRCc3IxeTNFSVVHS1RQTjhjbXPSAYQBQVVfeXFMUE8xLWs1LVVaNF9DT2NyQXF1THRXXzlZa19BOFVjbFp4Q0pCMHBjOWI5RkkyRF9lTUZpQkhTek1DNlFHMzVkWHp5NlNnQWdyMlRrVjk3RFJacG1fTDh5aWM2bGU4QlZsemJFZ3ZfNXA3clJfUEFkRlFjZ3BXdElpMklUQVJV?oc=5"
         }
       ],
-      "article_count": 48,
+      "article_count": 49,
       "first_reported": "2026-11-02T06:44:00+00:00",
-      "last_reported": "2026-11-03T11:17:30+00:00",
+      "last_reported": "2026-11-05T17:07:00+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -34894,7 +35435,8 @@
       "dedup_methods": [
         "very_high_title_similarity",
         "title_plus_anchor",
-        "same_incident"
+        "same_incident",
+        "paraphrase_entity_context"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_country_capital",
@@ -77050,7 +77592,9 @@
         "9535b62cc844db7a942eb50148fe7d6daf7886612922cfcde3306b3c7d0b8d72"
       ],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [],
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
       "cbrn_subgroups": [],
       "sources": [
         "দৈনিক আজকের দর্পণ"
@@ -78807,7 +79351,9 @@
       ],
       "actor_scope": "NON_STATE",
       "cbrn_subgroups": [],
-      "threat_categories": [],
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "location_confidence_score": 0.95,
       "location_method": "ai_city_geonames",
@@ -93653,7 +94199,9 @@
       ],
       "actor_scope": "UNKNOWN",
       "cbrn_subgroups": [],
-      "threat_categories": [],
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "reported_status": "CONFIRMED",
       "location_confidence_score": 0.95,
@@ -113460,7 +114008,9 @@
         "Suspect admission in French racist shooting"
       ],
       "actor_scope": "UNKNOWN",
-      "threat_categories": [],
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "location_confidence_score": 0.9,
       "location_method": "ai_city_geonames",
@@ -116781,8 +117331,7 @@
       "id": "f4240d9692a24d8f",
       "category": "Arrests",
       "categories": [
-        "Arrests",
-        "Chemicals and Explosives"
+        "Arrests"
       ],
       "title": "Britain: State security charges brought against two individuals following an incident near an air base",
       "summary": "UK authorities charged two individuals with offenses against state security in connection with an incident near a military air base.",
@@ -118434,7 +118983,9 @@
       ],
       "actor_scope": "UNKNOWN",
       "cbrn_subgroups": [],
-      "threat_categories": [],
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "location_confidence_score": 0.95,
       "location_method": "ai_city_geonames",
@@ -284728,7 +285279,9 @@
       "ai_geo_reason": "The security operation took place in Rural Damascus.",
       "ai_geo_fingerprint": "24ca4331d7e00e539ed9f1f974c26d0e7a1e94f938c1b0225575e93090a35350",
       "ai_geo_inferred": false,
-      "threat_categories": [],
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
       "primary_source_published": "2026-10-16T17:18:26+00:00"
     },
     {
@@ -398589,7 +399142,9 @@
       "ai_geo_reason": "Explicitly stated bombing in Kobani, Syria.",
       "ai_geo_fingerprint": "1ed12e73d4b8a13c3c84036de5b2605328669910332e3b1f0eb7741c0c9ce942",
       "ai_geo_inferred": false,
-      "threat_categories": [],
+      "threat_categories": [
+        "Chemicals and Explosives"
+      ],
       "primary_source_published": "2026-10-09T19:21:00+00:00",
       "dedup_confidence": 1.0,
       "dedup_methods": [
@@ -400054,6 +400609,10 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_incident"
+      ],
+      "threat_taxonomy_version": "threat-topics-v1-20261008",
+      "threat_categories": [
+        "Chemicals and Explosives"
       ]
     },
     {
@@ -724016,736 +724575,6 @@
       "ai_geo_reason": "The event involves Somali pirates operating off the coast of Somalia.",
       "ai_geo_fingerprint": "91815a9d955bed87b0ac6c243f23a86f32679446e572401ceeffe0b3d0fcd856",
       "ai_geo_inferred": true
-    },
-    {
-      "id": "396ac82d4b0c829b",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action"
-      ],
-      "title": "Somali Army, Clan Fighters Launch Operation Against Al-Shabaab in Central Region",
-      "summary": "The Somali National Army, joined by local clan fighters, launched a joint offensive operation against Al-Shabaab militants in the central region.",
-      "original_title": "Somali Army, Clan Fighters Launch Operation Against Al-Shabaab in Central Region",
-      "original_summary": "Somali Army, Clan Fighters Launch Operation Against Al-Shabaab in Central Region Shabelle Media Network",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-05-09T07:00:00+00:00",
-      "source": "Shabelle Media Network",
-      "source_count": 4,
-      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOcnNkUHBSTWpqampCX2o4N3ZFcUJQcHY1YTdPeUZEbWJIUXgwM0ppaThiaWNpTi01VEJFdllZd1lsMGJsM0ZRQW8xX0s3d1NwOXpNOHBQTVRTNUVnR204bFA3Ukpkdmo3S2FGTV9jVEI1T3FYWU5OUHdnNW93YmE0SVVMRnlmTWRobkx2SlJrajN6c1VFS2ZkVFgtLTlwcFVyV2gtMzduWkt5QQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": null,
-      "region": "Central Region",
-      "latitude": 4.0,
-      "longitude": 46.0,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "shabellemedia.com",
-      "targeted_source_kind": "local_language_media",
-      "sources": [
-        "Shabelle Media Network",
-        "Goobjoog English",
-        "shabellemedia.com",
-        "Shabelle Media"
-      ],
-      "related_articles": [
-        {
-          "title": "Somali Forces Say 50 Al-Shabaab Fighters Killed in Baidoa Area Operation",
-          "original_title": "Somali Forces Say 50 Al-Shabaab Fighters Killed in Baidoa Area Operation",
-          "original_language": "en",
-          "summary": "Somali security forces reported killing approximately 50 Al-Shabaab fighters during a military operation in the Baidoa area.",
-          "published": "2026-05-15T07:00:00+00:00",
-          "source": "Goobjoog English",
-          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQWmk1cDRDakhETXFsdTRneGd0WktnMG9PbFp2d1N1Wkc2RkhlVFV5WEFvZWJRclJibXBhMWhaMDl5UW1fV0N3RmR2b2IzX3I3R2dnUmczRWhfaVM1U0dWb2ZYYmt5NG5FT28wUzdyMk1Cc091LTV3ZG95U1VVZXV4Mks1dGdUTTVwUXlObnMzZTFicy1WRlNaSEVBbkg5Zw?oc=5"
-        },
-        {
-          "title": "Somali army operation against Al-Shabaab",
-          "original_title": "Somali army kills 14 Al-Shabaab members in latest military operation",
-          "original_language": "en",
-          "summary": "The Somali National Army killed 14 Al-Shabaab members during a recent military operation.",
-          "published": "2026-05-09T07:00:00+00:00",
-          "source": "Shabelle Media",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNNVotWWF4SjFzNTFNM09teGIzR2hQVnJQaG11U3lURUdZcGpVQ2QtQjA5LWFGcGI0WmpxbHZVRzFib1ZEZnMxMExVUDNZTzR5OWNiRWFRbGdkN3FBWHdzNVpvRmM2cFlVMHRQeFZGZG41RHMtck9oWmZuV2Y0TTBhTWV0UWVFUEgweVN3N2ZtREJibUY2MFdYQlozdw?oc=5"
-        }
-      ],
-      "article_count": 3,
-      "first_reported": "2026-05-09T07:00:00+00:00",
-      "last_reported": "2026-05-15T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Reports a joint offensive military operation against Al-Shabaab.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Somali National Army and clan fighters launch offensive against Al-Shabaab in central region",
-      "title_variants": [
-        "Somali army and clan fighters launch offensive operation against Al-Shabaab in central region",
-        "Somali National Army and clan fighters launch offensive against Al-Shabaab in central region"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "paraphrase_entity_context",
-        "same_url",
-        "very_high_title_similarity"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Somali Army... in the central region"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Somali military operation against Al-Shabaab in central Somalia.",
-      "ai_geo_fingerprint": "861bf2cc81ad4c71cf6226396b5b6fae9377c0106d659b495fe6c7167dce88da",
-      "ai_geo_inferred": true,
-      "source_article_fingerprints": [
-        "299e10446a831b079357f5b25eb6cc65c9a9f8090c256df445e0cdd309fec539",
-        "a18592e1f4908b170fb787f535b6407f82736bc18ab62ca88c8c103dfa78439f",
-        "f504e9cfd5040b3e436673c8c60c07d938974609dea9c2d33c8c96dcd05ee25c",
-        "fb3d57971672d9b578f6e45b0d8770d39da9f3ae5c07680492c2e7bd3df4e26c"
-      ],
-      "actor_group": "Al-Shabaab",
-      "incident_id": "inc-39f9d9852a2c4277",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Somali Army and clan operation against Al-Shabaab in central region 2026-05-13",
-      "update_type": "INITIAL",
-      "cbrn_subgroups": []
-    },
-    {
-      "id": "9b319b4364e5f690",
-      "category": "Chemicals and Explosives",
-      "categories": [
-        "Chemicals and Explosives"
-      ],
-      "title": "£20k reward offered for information on Dunmurry police station bomb",
-      "summary": "A reward of £20,000 has been offered for information regarding a car bomb attack at a police station in Dunmurry.",
-      "original_title": "Dunmurry: Reward of £20k offered for police station bomb information",
-      "original_summary": "Dunmurry: Reward of £20k offered for police station bomb information BBC",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": "US:en",
-      "published": "2026-05-09T07:00:00+00:00",
-      "source": "BBC",
-      "source_count": 5,
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9QUWtHanY4a01YSkpoV3BSM3Bud1RjYWhyc2ZJOHRRS3FBY1VYMldWcmlVQWlEOUk3cmJNTEtBYXZjQ3dHYWNFZFBVQUtIUDNNQVhzVWFmSWpSdw?oc=5",
-      "collector": "Google News RSS",
-      "country": "United Kingdom",
-      "country_code": "GB",
-      "city": "Belfast",
-      "region": null,
-      "latitude": 54.59682,
-      "longitude": -5.92541,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "0f6b27634a9a4636d9fded4dbcd9b41fa17aa80c336cb70612e9b26846ffda51",
-        "6d9f4c72331321836ddb2a9084ff9739d6b00fe5008d4fc688f03256a9dfb096",
-        "95eb40706921fad0a6da83d782af64a319acb8e4af9d89130376aae93571977a",
-        "c6a301c8f844021f9801f83f6e823e93ac31cc590a1249b1ffe55f5a0b3da3ea",
-        "c965da96ac9eb9810a50eebb10f6500ab55288202cb9b00f30576a88d79ad0b8",
-        "d403e4a19fd1d92a7f1681ebcd38cfa549868f4be3793ecf384bada2e1dd6fbd"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 60,
-      "ai_relevance_reason": "Reports a new investigative development (reward offer) in a terrorism-related bombing.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "OTHER_CT",
-      "is_attack": false,
-      "incident_anchor": "Lurgan police station car bomb 2026",
-      "update_type": "INVESTIGATION_UPDATE",
-      "incident_id": "inc-d140c90b84a7c8d2",
-      "translated_to_english": false,
-      "ai_canonical_event": "Investigation into police station car bomb in Dunmurry",
-      "title_variants": [
-        "Police reward offer for Dunmurry car bomb investigation"
-      ],
-      "actor_scope": "UNKNOWN",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": [],
-      "sources": [
-        "Belfast Media Group",
-        "BBC",
-        "Belfast Telegraph",
-        "ITVX",
-        "RTE.ie"
-      ],
-      "related_articles": [
-        {
-          "title": "Detectives revisit Dunmurry after reward offered for bomb information",
-          "original_title": "Detectives revisit Dunmurry as reward offered for information about car bomb",
-          "original_language": "en",
-          "summary": "Police investigators returned to the site of a car bomb attack in Dunmurry as a £20,000 reward was announced for information leading to those responsible.",
-          "published": "2026-05-09T07:00:00+00:00",
-          "source": "Belfast Telegraph",
-          "url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxPVVNlYkJoYnE4Z3Boa3RyaDlEMF9NOWZ6LUVYTy12bS1nZVp0ejJjM0lCZnhMYU1ybTdfWEl3bHNRV1F3eTU0aTNNRWRCSWY0YlJYUzI1OXB0dnJhd0VkMzlucVVJZklYZXl1VjcwVVdfSWc2OVlUUUc3SU9vM2FEb01WMTdjVEpmck9JNi1TT0pIbnE2YWE4NFNrRzlxMHcyTExYNUl2UWR6eE9ZLWQ3U1Vvbm1tQUhxdWZWbENXeGtPZFdMM050VE1xZENrZjVHNnp4N0xYNEhZcTk1c1ZEU2ZXY3c?oc=5"
-        },
-        {
-          "title": "Detectives revisit Dunmurry car bomb scene for fresh appeal",
-          "original_title": "Detectives return to Dunmurry car bomb scene in fresh appeal two weeks on",
-          "original_language": "en",
-          "summary": "Detectives returned to the scene of a car bomb attack in Dunmurry to conduct a fresh appeal for information two weeks after the incident.",
-          "published": "2026-05-10T07:00:00+00:00",
-          "source": "Belfast Telegraph",
-          "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxPMDRmOUp2ODFsTGJfelVJVVNsdklHbmJKWTVUYWVaVW10cmtCempDamRrQlZTN1VyX0FDT3Q2cV9VRTJwY2l4Q204b1d2UkJHZjVlMW9vQmZSU19pb3hEZ1l1Y1c1Mk5wa1Y2SUZ6TWlSRXpabGxTaWd3aVlWVmlNc2VBNHE0d2FqV2NsaGlweEpEQVM3QzhGTTBhanhvLU1oSy1oek5hMUh5Q1RqSTR3Y2k3T0NJOTh2UjhEVF96MjFSbFBHRUkwY0paalZCN1lsMHZjdFdNb3hGQmZLNnNaUA?oc=5"
-        },
-        {
-          "title": "Police revisit Dunmurry bomb scene as reward offered",
-          "original_title": "£20K Reward offered as police revisit Dunmurry car bomb scene | ITV News",
-          "original_language": "en",
-          "summary": "Police have returned to the scene of a recent car bomb attack in Dunmurry, with a £20,000 reward offered for information.",
-          "published": "2026-05-10T07:00:00+00:00",
-          "source": "ITVX",
-          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOV1lUR1Z3VjIwWFpyd1JZTkZpRjZrOUw3X3ZyRFJhZDIxQ1c1MFhzUHVlaFFrOWZZd3JQdmFsa29oTmZsbGw5aWlDazhmcHJiMjhoYUxZdUJZTEFKdnNZWmRBVm9SRWV5SlQtUzhqT0JOVEctbEpKTU9zdTJDMmlZaFFCVmdmckRWRWJmQmhNZEtmWEtReFRNU28ycUtMc1d4VlE?oc=5"
-        },
-        {
-          "title": "Police revisit Dunmurry as reward offered over attack",
-          "original_title": "Detectives revisit Dunmurry as reward offered over attack",
-          "original_language": "en",
-          "summary": "Detectives have revisited the site of a car bomb attack in Dunmurry as part of a renewed effort to gather information.",
-          "published": "2026-05-10T07:00:00+00:00",
-          "source": "RTE.ie",
-          "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9MbkllZ3hlT25fZ093bTc3c3VwTURLWEFSMVgzZWxGaDhiZVZhWlBHWmtJakE5M29aandiQkhPX25YbkZaemlJQWNoSjFIQXpDc21XREhaR3NScVlocER0cVlGSHpPbW1qZnk0ZVhpS2Y?oc=5"
-        },
-        {
-          "title": "PSNI issue reward for information regarding Dunmurry car bomb",
-          "original_title": "PSNI issue reward of £20,000 after revisiting Dunmurry car bomb scene",
-          "original_language": "en",
-          "summary": "The Police Service of Northern Ireland (PSNI) has offered a £20,000 reward for information related to a car bombing in Dunmurry.",
-          "published": "2026-05-11T07:00:00+00:00",
-          "source": "Belfast Media Group",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQeFI2a0JJd1U1MXNRNmRVNDlHLTA5MmROR241QTliSkNJb3lFTUdxbHN3Z2lsZXprbFRrdTVKMkphYk1CTm56ak9iTm5QRmNLQllmYlFaYnJQekd3ZEtJTWZNN3RzZXhVeTlUcHBWTkdYdFFta2s3bzl1M0NPWE5uT2l4c2hETGFxYTl3V3h4WGhhdm5Ncms0cg?oc=5"
-        }
-      ],
-      "article_count": 6,
-      "first_reported": "2026-05-09T07:00:00+00:00",
-      "last_reported": "2026-05-11T07:00:00+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "title_plus_anchor",
-        "same_url"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Dunmurry: Reward of £20k offered for police station bomb information"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Occurred in Dunmurry, a suburban settlement in Belfast, Northern Ireland.",
-      "ai_geo_fingerprint": "640a205bc50606a9de44f84af529772513191a501ee65e6ce86cdec2084a08d5",
-      "ai_geo_inferred": false
-    },
-    {
-      "id": "b6fab142cc04344e",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Weapons",
-        "Chemicals and Explosives",
-        "Attacks"
-      ],
-      "title": "Car bomb attack kills 15 police officers in Pakistan",
-      "summary": "A car bomb attack targeted and killed 15 police officers in northwestern Pakistan.",
-      "original_title": "Pakistan car bomb attack kills 15 police officers",
-      "original_summary": "Pakistan car bomb attack kills 15 police officers BBC",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English",
-      "collection_locale": "US:en",
-      "published": "2026-05-09T07:00:00+00:00",
-      "source": "BBC",
-      "source_count": 6,
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5NUkJMZnJmX3c1OXRRbHJic2FoQV9NS1dDWTZTbFVkOFJ1d183UTdDVDhYQXZvRjFOaFZuTHZrc0pRZXJjaW90MVJIb1h2cVVCNlFqMzRfRWdydw?oc=5",
-      "collector": "Google News RSS",
-      "country": "India",
-      "country_code": "IN",
-      "city": "Delhi",
-      "region": null,
-      "latitude": 28.65195,
-      "longitude": 77.23149,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "sources": [
-        "India Today",
-        "La Libre.be",
-        "Al Jazeera",
-        "BBC",
-        "Daily Sabah",
-        "马来西亚东方日报"
-      ],
-      "related_articles": [
-        {
-          "title": "Car bomb attack kills at least 15 police officers in Pakistan",
-          "original_title": "Pakistan: un attentat à la voiture piégée contre des policiers fait au moins 15 morts",
-          "original_language": "fr",
-          "summary": "At least 15 police officers were killed in a car bomb attack in Pakistan. The incident is classified as a targeted attack against security forces.",
-          "published": "2026-05-10T08:07:07+00:00",
-          "source": "La Libre.be",
-          "url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxQNi1CWGZOXzF2X1NUVDExYjM3MjVCT045a3Nzc3FqdzF1Sm9uWklsSm8tdnctOFJXRk82Smh4dUZfaXRmdS1rQTNIOHNEcDAzaHFvdFlNTHEwVGluWWxKT2VlM1NBYXRPZ055YjZtZnVXVmhtRjRvenN2cEV4bVJNNUROYWVlZi0tRVZ1NEh6TjhUMExuUmNOcFV1YUJTU05NTHBZWElCWHR6X0psTENpME9MZVBhRDNiNjNIZVBxYzRlWm5qcTliQjZFY1F6MHN2SUFxMUFENFp5QjJqMktsSHFfcW5zZ3JCaGFrU05LVEUzV2FmWFFyZg?oc=5"
-        },
-        {
-          "title": "Delhi on alert as intelligence warns of terror attack following Pakistan module bust",
-          "original_title": "Delhi on alert as intel warns of terror attack weeks after Pak module bust",
-          "original_language": "ur",
-          "summary": "New Delhi has been placed on high security alert following intelligence reports warning of a potential terrorist attack, weeks after security forces busted a militant module linked to Pakistan.",
-          "published": "2026-05-09T07:00:00+00:00",
-          "source": "India Today",
-          "url": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxPWlE5QVp4MGhacGk3cDZ3ekF5SEwtQzZuV1d2M3BCQTBhS2lXV0cxN3pna0J0VElONk9ZMGFQNTM4Q18teXhtUWZORlZ2N09LYlowUmZPa2xrMzNIR3Bia19ieXpKdnNfN3VsMDBWQjQtQ0JSdEJwbXp3Vk5jeEVLR2xWeWpKY2NUR2pJOGRlbUdOMFh4a3MzMXcwVURLeTU2V3ZVRi1KdGp3OWdiRjlmY1VJNG12Mm9kcENocGdWSmRuRkRQakhJMDN5VlNJak1yYkxScXoxNDhVS1JhcHZ3WTVrX01tODNLX2h6NtIB8gFBVV95cUxNQlN3cGxZQkdWaEtSejRKSUMtbUhxY0F6QWxOWDF5blBUcG5BWVc1azMxOFFFTnpuc1VPUEtpNGpGX2lRVHR1Uk85RzN6cHVEZkg3enRHeS1iWk1YZHdWS1h3NFVLa3lfb2pQOVlIUXRheE5HWndEa0lxREtSRF8waTZlSjdrY0xVLWVyRFFELVl2a1I5M2tXenpQaDNsN0FDVVEtdDBqejRWRXhRRGdoYnNyNEozYUo3enY5MFZjQXVqeG1hVmkzc1V4ODIyM21XQUMxR1BSUlQ2czlHeDlVSmRSQU9ySGtxMDl2TlY4aVlBQQ?oc=5"
-        },
-        {
-          "title": "14 police officers killed in terrorist attack in NW Pakistan",
-          "original_title": "NW Pakistan terrorist attack kills at least 14 police officers",
-          "original_language": "en",
-          "summary": "A terrorist attack in northwestern Pakistan has resulted in the deaths of at least 14 police officers.",
-          "published": "2026-05-10T07:00:00+00:00",
-          "source": "Daily Sabah",
-          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQSTJvWG54bktKQ3l1R3MxbGlpOXp5dlpXc2pZYnZ5bEZWLVlrZklNNnBSb0cwQTU2bldNcTVYVUlSZTI0Y2luZ3VMcklaZzB2VW9NcUNEMXdGcEZ4OHlEVTF0MW94Wkxyc0ZZQ0JpMkpfUWtJRklBdWtHZXd6M2FReE5LclNRX1dyZzJpLUd0MkViSlFUNmd5X09EbjdrYnJFUWV5Z1VoaTR5MURn?oc=5"
-        },
-        {
-          "title": "Car bomb attack and ambush in northwest Pakistan kill at least 21 police",
-          "original_title": "Car bomb attack and ambush in northwest Pakistan kill at least 21 police",
-          "original_language": "en",
-          "summary": "At least 21 police officers were killed in a car bomb attack followed by an ambush in northwest Pakistan.",
-          "published": "2026-05-09T07:00:00+00:00",
-          "source": "Al Jazeera",
-          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQM1Nqc1I5dmZWX3g4ZHEzelNFdVhQMUJqcWM1UVFmc3QybG9rR2tsQTRhdzc3NENITDJBeG5mSEFUYU5yaF9BZWFsZFRaWlJPSV9FNFJRVUd0a3k5MllaUWR1aWl4ZExnUGZSZWt3RmxuN2NzRUVMalhVcG5KWENEbjVrUTBlb2FoTDZnYTlFdEtVVlVzQjJadWdHR3Y4SjdrUF8xY3BId0JWMTNabWfSAbMBQVVfeXFMUDE4dkhuMHB1eDFaMnRqOHM0ZWVFaHc0WnF3anZlLXpzaXlqdXZ1RExLOUtnTnNoMHJGUnlQN19oT3lCdFR5dGhHWThPeHROWGIzUlVtSFlDcVB0aVhraEwtRHpfMDNOaGpLM01qN2lKdXNuOWh6QTFtZHowY1FmT0FIVEdkdnZ0c2Y2MTNUYVJpZE5rOExVZlBkSHNkVU1LMDBZVDhBSmR6M0h5YUVDd05QT00?oc=5"
-        },
-        {
-          "title": "Car bomb attack kills 15 at Pakistani police checkpoint",
-          "original_title": "汽车炸弹袭击 巴基斯坦警察检查站15死",
-          "original_language": "zh",
-          "summary": "A car bomb exploded at a police checkpoint in Pakistan, resulting in 15 deaths.",
-          "published": "2026-05-10T07:00:00+00:00",
-          "source": "马来西亚东方日报",
-          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9ocXROUmNzeUlvYkl2VUR5dlZQbmFpcmZvcnNMcHBGelNuT1JyYTFZZ0xZOHJXNUZoSDV2QkYwZDFHOGpONXUxMG9LY0toMmt5UUlyUlA2Zm1BTXlBdHBqNHhBOElNcVFzUkJiNFNuQUh6eVg1bmMwdg?oc=5"
-        }
-      ],
-      "article_count": 6,
-      "first_reported": "2026-05-09T07:00:00+00:00",
-      "last_reported": "2026-05-10T08:07:07+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Reports security alerts and operational follow-ups following a militant module bust.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "translated_to_english": false,
-      "ai_canonical_event": "Car bomb attack against police in Pakistan",
-      "title_variants": [
-        "Security high alert in Delhi following intelligence warnings of terrorist attack",
-        "New Delhi security alert and counter-terrorism measures following Pakistan militant module bust"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Delhi on alert as intelligence warns of terror attack"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_version": "gemini-ai-first-v5-resilient",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The alert and security measures are centered in New Delhi, India.",
-      "ai_geo_fingerprint": "2559cf5861964f33dcb73d0beae63ac2dc231f621dfee99cde30eb395448881d",
-      "ai_geo_inferred": false,
-      "actor_group": "",
-      "incident_id": "inc-a60fd7910390c5bf",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "New Delhi high alert and militant module bust follow-up 2026-05-09",
-      "update_type": "FOLLOW_UP",
-      "cbrn_subgroups": [],
-      "source_article_fingerprints": [
-        "3a7d0c34698679d063edcce83dc634c1f8724d7eb58d3625a0e05a429ff3687b",
-        "7e0c189d196e0c6867c594eb56b5f9e5e69faea088d12f9b3ad21988c24a1840",
-        "b4aada98dc1eeb19b16732ee0f729a3bc56478391d06b77c8bc2b6432ee05083",
-        "bc192c88e5ac8cfbc7e3275cd17c4728e61b8f7e759501c8572d6b21e3c7f3c3",
-        "f3fd9a72b6614d294571094365508534ec3b0706376a59e28595d6f20c2aeae2"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "entity_actor_event_signature",
-        "same_url",
-        "title_plus_anchor",
-        "very_high_title_similarity"
-      ],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ]
-    },
-    {
-      "id": "f0b92d0b0ef881d8",
-      "category": "Radiological/Nuclear",
-      "categories": [
-        "Radiological/Nuclear"
-      ],
-      "title": "US secures highly enriched uranium from Venezuela",
-      "summary": "The United States has transported 13.5 kilograms of highly enriched uranium from Venezuela, an action aimed at preventing nuclear proliferation risks.",
-      "original_title": "अमेरिका ने वेनेजुएला से हाईली एनरिच्ड यूरेनियम निकाला: 13.5 किलो न्यूक्लियर मटेरियल वॉशिंगटन लाया गया, 34 स...",
-      "original_summary": "अमेरिका ने वेनेजुएला से हाईली एनरिच्ड यूरेनियम निकाला: 13.5 किलो न्यूक्लियर मटेरियल वॉशिंगटन लाया गया, 34 स... Dainik Bhaskar",
-      "original_language": "hi",
-      "collection_language": "hi",
-      "collection_language_name": "Hindi",
-      "collection_locale": "IN:hi",
-      "published": "2026-05-09T07:00:00+00:00",
-      "source": "Dainik Bhaskar",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQSjcwakRSSkR3VlVQNE14V29oTlZPdnM5aHRpU1NSaDZodnl3WTNXakhTVHhBM1RLWTRwbVlaczE0TnNmeGNZZFJrcmQ2MGxjZ2tra2pLUmdTOUlDcXNzM0M2VmxLeUdQSXJmTVJwekM0bk03b3hMVy1ZaHZraEQtdzFrWERLSzFhenVEdnh1NXRzOXFoSFJoRHMwRlh5RmxYODNnNFhROU1LclXSAbABQVVfeXFMUGJEUDl2eUlpd0lUMjQ3MFRsdzd1V0ZzbjdKdDY1YllfaFhJS1JSODFPUUF6WWZZSFlBWkJFNEZPTDVpeTRYanBDVlRoTS1ZcjhVdEFhb0JlYVNrcmFXM2NzR3JHMVZ2SlVXYjBMb3RTYTRBdzZHX3lKc255TnBSSDFaNU94M011QVJVaFdOYURCcnFxVWhRVzRlcFlEQnpMekF2TGRVTF84a2dFX2dRRlk?oc=5",
-      "collector": "Google News RSS",
-      "country": "Venezuela",
-      "country_code": "VE",
-      "city": "Caracas",
-      "region": null,
-      "latitude": 10.48801,
-      "longitude": -66.87919,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "441284dd021f4769baab9663a2086650f76f72234f1489c12426b21f90b45310",
-        "9413d2f6e2cdf541030694cfcaeda62fe3f0c6f5f8372c0cb2e942c407de1702"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Concrete security operation involving nuclear material trafficking prevention.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CBRN",
-      "is_attack": false,
-      "incident_anchor": "US securing HEU Venezuela 2026-05-09",
-      "update_type": "INITIAL",
-      "incident_id": "inc-5e5fe05761ef40cc",
-      "translated_to_english": true,
-      "ai_canonical_event": "Securing of highly enriched uranium from Venezuela",
-      "title_variants": [
-        "Securing of highly enriched uranium from Venezuela"
-      ],
-      "actor_scope": "UNKNOWN",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Radiological/Nuclear"
-      ],
-      "cbrn_subgroups": [
-        "RADNUC"
-      ],
-      "reported_status": "CONFIRMED",
-      "sources": [
-        "Dainik Bhaskar",
-        "Bd24live"
-      ],
-      "related_articles": [
-        {
-          "title": "US secures 13.5kg of enriched uranium",
-          "original_title": "সাড়ে ১৩ কেজি সমৃদ্ধ ইউরেনিয়াম জব্দ করে নিয়ে গেল যুক্তরাষ্ট্র",
-          "original_language": "bn",
-          "summary": "The United States secured 13.5 kilograms of highly enriched uranium in a specialized removal operation.",
-          "published": "2026-05-09T07:00:00+00:00",
-          "source": "Bd24live",
-          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5Sa00xUVEzUngyeTZmUWk0SUpmZzE5NG5DTmtuS1E1WmVwcFVFOVdQcmN1NnhyQjJHZmVfQzZTbjk5OE5MTDdXalk5T0k4ZmM?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-05-09T07:00:00+00:00",
-      "last_reported": "2026-05-09T07:00:00+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "paraphrase_entity_context",
-        "same_url"
-      ],
-      "location_confidence_score": 1.0,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "US secures highly enriched uranium from Venezuela"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The nuclear material was secured and removed from Venezuela.",
-      "ai_geo_fingerprint": "618c18d23ec67a2eeeaa6821f2d72d03de96d3b76c964ba40b4380cd86ba66dc",
-      "ai_geo_inferred": false
-    },
-    {
-      "id": "fc67e2ed07fa2312",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Chemicals and Explosives",
-        "Online / Cyber / AI"
-      ],
-      "title": "Thai police arrest Chinese national and seize large cache of military weapons",
-      "summary": "Thai authorities arrested a Chinese man and seized a large quantity of military-grade weapons and explosives.",
-      "original_title": "泰警拘捕中国男，搜获大批战争武器",
-      "original_summary": "泰警拘捕中国男，搜获大批战争武器 星岛环球网",
-      "original_language": "zh",
-      "collection_language": "zh",
-      "collection_language_name": "Chinese (Simplified)",
-      "collection_locale": "CN:zh-Hans",
-      "published": "2026-05-09T07:00:00+00:00",
-      "source": "星岛环球网",
-      "source_count": 8,
-      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE1iS1NKLTJja2R4b3QtU0dPOWtUam9VSnExenJyTWlhSG9ZTFdOQkV6dFFmRDJNdXZseFJqS0NUbUFXalNKRG9tNUtsUUdmSi1oNC1aaURqRQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Thailand",
-      "country_code": "TH",
-      "city": "Chon Buri",
-      "region": null,
-      "latitude": 13.3622,
-      "longitude": 100.98345,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "archive_enrichment",
-      "source_article_fingerprints": [
-        "2b88de2da059d3fb5cdf3d45b96990049a073e636bd97cc15ce78bdd40c5a08e",
-        "3d1e5da0fa8037c05976e0514e3496002b4f1ddecaa44d4a3d07d864521c56e1",
-        "5160d3903724df2a38fdd3ade9dd625ca974eb23491877795441a5d0d6fdcf28",
-        "6295398bc41d9a7a84a19f9fe699faf2ec97bff9c326cb6377c86701bdd68379",
-        "b80dbcffba88fafc84c8c8be4fd7828bd9adbe707f60ecb5304356e88e0c11e7",
-        "b9b6923d074d195c66f6bcfd72e5d1b3d3629a82258c32e1e07c4a892b8bf6fb",
-        "c542bbeb03b9604117c0f38472659cde7da0b52407907454c39c5b7f5910ef71",
-        "f82c63fc39df2092fe91680102aa742ebd4b73384862fbcd2e0ddb93ee58275a"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 95,
-      "ai_relevance_reason": "Follow-up reporting on the arrest of a terror suspect.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ARREST",
-      "is_attack": false,
-      "incident_anchor": "Arrest of terror suspect Thailand 2026-05-09",
-      "update_type": "FOLLOW_UP",
-      "incident_id": "inc-6ec4790f076e9237",
-      "translated_to_english": true,
-      "ai_canonical_event": "Arrest of Chinese national for possession of explosives and terror plot planning, Thailand",
-      "title_variants": [
-        "Arrest of Chinese national for possession of explosives and terror plot planning, Thailand"
-      ],
-      "actor_scope": "NON_STATE",
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": [],
-      "sources": [
-        "星岛环球网",
-        "泰国头条新闻Thailand Headlines",
-        "亚洲电视新闻",
-        "yeeyi",
-        "星島頭條",
-        "QQ News",
-        "阿波罗新闻网",
-        "Vision Thai 看見泰國"
-      ],
-      "related_articles": [
-        {
-          "title": "Chinese man in Chonburi arrested for storing weapons and C4 explosives; case escalated to national security",
-          "original_title": "中籍男子在春武里藏匿军火与C4炸药 已升级为国安案件！",
-          "original_language": "zh",
-          "summary": "Thai police arrested a Chinese national in Chonburi after discovering military weapons and C4 explosives at his residence. The case has been classified as a national security matter.",
-          "published": "2026-05-09T07:00:00+00:00",
-          "source": "泰国头条新闻Thailand Headlines",
-          "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1nbFU3aDVKdk5IS1VLYnVLc2RRYU9ZWHk0Vzd3RzdBRnViSGdfOEp0QVpNYWRWMTQ0aGJ0LUNVUklucWh6bVRKRHVXV1k2Zw?oc=5"
-        },
-        {
-          "title": "Thai police uncover weapons cache; Chinese man confesses to suicide attack plot",
-          "original_title": "泰警意外揭发军火库 中国男称欲“自杀式袭击”",
-          "original_language": "zh",
-          "summary": "Following the discovery of a weapons cache, a Chinese national arrested by Thai police has confessed to planning a suicide attack.",
-          "published": "2026-05-09T07:00:00+00:00",
-          "source": "亚洲电视新闻",
-          "url": "https://news.google.com/rss/articles/CBMirgJBVV95cUxNV24zcURHVmFJRWI4UXBaRmc2UENlNUJ4aWVqd05NNzRCZ3R6QUhDV1h3U1oyX3laRE14QUs1cEVGdmFCODNBc2F6RkZGa1hnejZUd1dhREYweDBYVlg5Y0NPanVoSnlaWlY5NThWVFp4Zk10aTVMWFlmbFA4LXJwSE1GaVNSVDY3UUlxX2ZnNGxtZWNiLV9vdUFqcWlLdzdxbWpqdE8xUEl2bDNURzBwaHRTTVJ0QW9rb3hYZG9SRm5ja0dPYVdVTTZKcWhFbGkwWXVvYlJCLUJfTWtpS3gtRzJVTS1iMVY2dUpOTEJzbWlxeFV0U3JOT2ZhR2JaM3pqUjJ6M1RsaGNwbXlKWlgyREJkVU03YlFmVDBVc3VTNDZQQ3ZfbkpDS1p3aGVpZw?oc=5"
-        },
-        {
-          "title": "Chinese pair caught in traffic stop discovered with weapons, suicide vests and multiple identities by Thai police",
-          "original_title": "中国男女翻车竟翻出“军火库”！人肉炸弹背心和多重身份吓坏泰国警方-yeeyi",
-          "original_language": "zh",
-          "summary": "Thai police apprehended a Chinese man and woman following a vehicle incident, where they subsequently found a weapons cache, suicide vests, and documentation indicating multiple identities.",
-          "published": "2026-05-09T07:00:00+00:00",
-          "source": "yeeyi",
-          "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1DZHhKbWdCZUJWOWpXQThWRmVTYXhzeUpWRzQzMXJiNk5WYzJPY09JUnJ3aFl5SXlNdzVJd1FENWw2X3M3eXJNU1dBemlFVF85SUtZNG1n?oc=5"
-        },
-        {
-          "title": "Thai police arrest Chinese national; seizure of military weapons suggests planned terror attack",
-          "original_title": "泰警拘捕中國男 搜獲大批軍事武器疑策劃恐怖襲擊",
-          "original_language": "zh",
-          "summary": "Thai authorities have arrested a Chinese national and seized a large cache of military weapons, leading to suspicions that a terrorist attack was being planned.",
-          "published": "2026-05-09T07:00:00+00:00",
-          "source": "星島頭條",
-          "url": "https://news.google.com/rss/articles/CBMi6AJBVV95cUxNQlpHSzBoeU5sbTRPVnZrRWg1OEFBTW8yTl81WXdjOUNjY3o2bFprazZxZGZrVmNHTklQVlE5NU1tZDI1VnBjbFBDSVd3VUZLcXhtbHFwdU1pbHQ1SXlkR1dVcVhjZWdDWDlLSkxNQ3M2dUlSaU5QNnlnb055aEdIMTJISnNaWmw0Q0RNMmlpakVsNFgzRHFvQ1pkUklodHBtenB5azA0Y1NmM09oQlZEYXpybk9RbnhJZHBLLXV3aHU1ZXlINWpYVDVtUGpObm4wRl9uR0doVEFvNnNEVVZ0WVJDT00wRVdIemlEdGR0SDltNER1a05PeG1MaUtJd0g1Vndwc2dJN09nTUg0U1pHTkpUNTUzQ3ZFNGQxTEVBdWFFRmRQQnViWkVCZFd5MWluZjhkR3Vqd1lPaVdQVTJRZVRjZXhnVUNjZElodHY2akZab0x5MThabjNINGRKNjN0YjFVQ3FOb0w?oc=5"
-        },
-        {
-          "title": "Thai police search residence of Chinese suspect; find weapons cache and records of AI-assisted terror planning",
-          "original_title": "泰国警方搜查中国男子翻车住所，发现小型军火库和GPT聊天记录咨询破坏行动方法",
-          "original_language": "zh",
-          "summary": "Thai police raided the home of a Chinese suspect and uncovered a weapons cache, along with ChatGPT chat logs where the suspect consulted on how to carry out disruptive attacks.",
-          "published": "2026-05-10T07:00:00+00:00",
-          "source": "QQ News",
-          "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1XU2tDY2ZkZkRJTVVTU0x2YlAzcWNRajczV0xZVGs5ZFdZbDRHY1N0OFA5WlRpMDFYN2JMd1VzZlhWSWxNU1h2amE2dzN5RzhBVFFDZ0t3?oc=5"
-        },
-        {
-          "title": "Chinese man's home contains large cache of weapons and explosives; confessed to planning suicide attack",
-          "original_title": "中国男住宅藏大量武器炸药！称拟发动自杀式爆炸",
-          "original_language": "zh",
-          "summary": "A Chinese man was apprehended in Thailand with a significant quantity of weapons and explosives; he has reportedly admitted to intending to launch a suicide attack.",
-          "published": "2026-05-10T07:00:00+00:00",
-          "source": "阿波罗新闻网",
-          "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE5rWDVIbmdnb0dNTmp5YmdyUjJsZUhBaV9nS0NLUE9FdzRJQ2otY2pLX2k2UEJVeUpycXY1TnRuNXRkeHlFcV9FV2hwTFVYaHJOOTVTNnhTbFJHYUhhZUHSAWNBVV95cUxNeE1mOXhVU1VkVjl2Ul83aXE0U016bWJpTkVmUHVRVjgyZUNud3NwSUIzcDIxRzl3UDRLMnVBU093NlZlaUFtZTJ3LXFfSEgxRVNUYkRuRzIwUkpXM09nSzdIRVU?oc=5"
-        },
-        {
-          "title": "Chinese man arrested in Thailand with suicide vest; investigation reveals online research into terror tactics",
-          "original_title": "租屋處宛如軍火庫！中國男泰國藏自殺炸彈背心 台女同車被逮 手機查「如何恐攻」",
-          "original_language": "zh",
-          "summary": "A Chinese national was arrested in Thailand after authorities discovered a suicide vest and a weapons cache at his residence. Evidence suggests the suspect was researching how to conduct terror attacks using online tools.",
-          "published": "2026-05-11T07:00:00+00:00",
-          "source": "Vision Thai 看見泰國",
-          "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQc0M1OHFsSDgtelBlaXI1cWxQYlNENWYxRnkwa0pMWXpLX2treVBFRTR4ZFFiVUpYeXBpN1Q4TGY0b01mZlNnRHJDN21CeGlzdmZqTXBUeW12YjRUYXk3LVJqOGxEbk1VWC02cmlJQUtSR3FwaV90MTg2VXpveVBQWktaNTFkZmxFTXgtTXF3?oc=5"
-        }
-      ],
-      "article_count": 8,
-      "first_reported": "2026-05-09T07:00:00+00:00",
-      "last_reported": "2026-05-11T07:00:00+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_normalized_title",
-        "same_url"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Chinese man in Chonburi arrested for storing weapons and C4 explosives"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Related articles and context specify that the suspect was arrested and weapons were stored in Chonburi, Thailand.",
-      "ai_geo_fingerprint": "0966cdabd42b047aea5edc19ca09811d28e207fd400bd26cf689e21f53c9f605",
-      "ai_geo_inferred": false
-    },
-    {
-      "id": "8c2ef0df9b4648b1",
-      "category": "Attacks",
-      "categories": [
-        "Attacks",
-        "Counter Terrorism Action"
-      ],
-      "title": "Troops repel ISWAP attack on Yobe military base",
-      "summary": "Nigerian troops repelled an ISWAP assault on a military base in Yobe, killing 50 of the militants.",
-      "original_title": "Troops repel ISWAP attack on Military Base in Yobe, kill 50 terrorists",
-      "original_summary": "Troops repel ISWAP attack on Military Base in Yobe, kill 50 terrorists Daily Trust",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-05-09T07:00:00+00:00",
-      "source": "Daily Trust",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQemVoVUxxcHBIckM5cGVtVDBPRzFOMlhaUXo2ZkRwbU4xT2E0UU9YVUlEOElNQ2NVVzRYbGFNLXJvNVQtM1BwZnRZdXE1SWpOQUZ2WHZiank4VV96V01PRGRSQkhGT1ZoSlFHb19KQ3V6M2I2b2V0SFE2M0x2dm0wczB2RkM0c21Id1FWTlI5ZWNmVzllNUJnNg?oc=5",
-      "collector": "Google News RSS",
-      "country": "Nigeria",
-      "country_code": "NG",
-      "city": null,
-      "region": "Yobe",
-      "latitude": 12.0,
-      "longitude": 11.5,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "dailytrust.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "899a111d36a7c170a0655ab719916d0768358467b357979b82c272ec2a7d820b"
-      ],
-      "sources": [
-        "Daily Trust"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-05-09T07:00:00+00:00",
-      "last_reported": "2026-05-09T07:00:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 90,
-      "ai_relevance_reason": "Reports a concrete, large-scale militant attack and subsequent counter-attack.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "ISWAP",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "ISWAP attack Yobe Nigeria 2026-05-09",
-      "update_type": "INITIAL",
-      "incident_id": "inc-1c5575a78427655b",
-      "translated_to_english": false,
-      "ai_canonical_event": "ISWAP attack and subsequent CT operation Yobe Nigeria 2026-05-09",
-      "title_variants": [
-        "ISWAP attack and subsequent CT operation Yobe Nigeria 2026-05-09"
-      ],
-      "actor_scope": "NON_STATE",
-      "cbrn_subgroups": [],
-      "threat_categories": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Troops repel ISWAP attack on Military Base in Yobe"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Military base attack repelled in Yobe State, Nigeria.",
-      "ai_geo_fingerprint": "52764f23a6b330e5116e219e3dc223b06ea7bdb4ed4aa132538691212557f3f8",
-      "ai_geo_inferred": false
     }
   ],
   "geolocation": {
@@ -724760,26 +724589,27 @@
     "rescue_policy": "one_automatic_rescue_then_freeze_if_billing_verified",
     "rescue_unlocated_final": 21,
     "ai_for_every_event": true,
-    "cached_events": 6530,
-    "ai_processed_this_run": 87,
-    "ai_pending_at_start": 87,
-    "city": 2435,
-    "region": 2151,
-    "country_capital": 1822,
-    "unlocated": 209,
-    "mapped_total": 6408,
-    "high_confidence": 5838,
-    "medium_confidence": 604,
-    "low_confidence": 175,
+    "cached_events": 6373,
+    "ai_processed_this_run": 0,
+    "ai_pending_at_start": 7,
+    "city": 2305,
+    "region": 2086,
+    "country_capital": 1784,
+    "unlocated": 205,
+    "mapped_total": 6175,
+    "high_confidence": 5640,
+    "medium_confidence": 569,
+    "low_confidence": 171,
     "methods": {
-      "ai_region_coordinates": 2148,
-      "ai_country_capital": 1821,
-      "ai_city_geonames": 2260,
-      "unresolved_city_no_capital_fallback": 101,
+      "awaiting_ai_geolocation": 7,
+      "ai_region_coordinates": 2083,
+      "ai_country_capital": 1783,
+      "ai_city_geonames": 2159,
+      "unresolved_city_no_capital_fallback": 91,
       "ai_unlocated": 67,
-      "source_name_geonames_correction": 48,
-      "ai_city_coordinates": 121,
-      "reviewed_unsupported_point_withdrawn": 19,
+      "source_name_geonames_correction": 21,
+      "ai_city_coordinates": 119,
+      "reviewed_unsupported_point_withdrawn": 18,
       "ai_unlocated_final": 21,
       "source_verified_region": 3,
       "source_verified_city": 6,

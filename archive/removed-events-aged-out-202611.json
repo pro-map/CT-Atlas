@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-04T18:04:36.020959+00:00",
+  "removed_at": "2026-11-05T18:02:01.181774+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -466,6 +466,134 @@
       "country": "Chile",
       "ai_relevance_score": 65,
       "ai_relevance_reason": "Reports active criminal-militant extortion and kidnapping activities."
+    },
+    {
+      "id": "396ac82d4b0c829b",
+      "incident_id": "inc-39f9d9852a2c4277",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOcnNkUHBSTWpqampCX2o4N3ZFcUJQcHY1YTdPeUZEbWJIUXgwM0ppaThiaWNpTi01VEJFdllZd1lsMGJsM0ZRQW8xX0s3d1NwOXpNOHBQTVRTNUVnR204bFA3Ukpkdmo3S2FGTV9jVEI1T3FYWU5OUHdnNW93YmE0SVVMRnlmTWRobkx2SlJrajN6c1VFS2ZkVFgtLTlwcFVyV2gtMzduWkt5QQ?oc=5",
+      "title": "Somali Army, Clan Fighters Launch Operation Against Al-Shabaab in Central Region",
+      "summary": "The Somali National Army, joined by local clan fighters, launched a joint offensive operation against Al-Shabaab militants in the central region.",
+      "original_title": "Somali Army, Clan Fighters Launch Operation Against Al-Shabaab in Central Region",
+      "original_language": "en",
+      "source": "Shabelle Media Network",
+      "published": "2026-05-09T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "Al-Shabaab",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Somalia",
+      "region": "Central Region",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a joint offensive military operation against Al-Shabaab."
+    },
+    {
+      "id": "9b319b4364e5f690",
+      "incident_id": "inc-d140c90b84a7c8d2",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9QUWtHanY4a01YSkpoV3BSM3Bud1RjYWhyc2ZJOHRRS3FBY1VYMldWcmlVQWlEOUk3cmJNTEtBYXZjQ3dHYWNFZFBVQUtIUDNNQVhzVWFmSWpSdw?oc=5",
+      "title": "£20k reward offered for information on Dunmurry police station bomb",
+      "summary": "A reward of £20,000 has been offered for information regarding a car bomb attack at a police station in Dunmurry.",
+      "original_title": "Dunmurry: Reward of £20k offered for police station bomb information",
+      "original_language": "en",
+      "source": "BBC",
+      "published": "2026-05-09T07:00:00+00:00",
+      "category": "Chemicals and Explosives",
+      "categories": [
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "OTHER_CT",
+      "country": "United Kingdom",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Reports a new investigative development (reward offer) in a terrorism-related bombing."
+    },
+    {
+      "id": "b6fab142cc04344e",
+      "incident_id": "inc-a60fd7910390c5bf",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5NUkJMZnJmX3c1OXRRbHJic2FoQV9NS1dDWTZTbFVkOFJ1d183UTdDVDhYQXZvRjFOaFZuTHZrc0pRZXJjaW90MVJIb1h2cVVCNlFqMzRfRWdydw?oc=5",
+      "title": "Car bomb attack kills 15 police officers in Pakistan",
+      "summary": "A car bomb attack targeted and killed 15 police officers in northwestern Pakistan.",
+      "original_title": "Pakistan car bomb attack kills 15 police officers",
+      "original_language": "en",
+      "source": "BBC",
+      "published": "2026-05-09T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Weapons",
+        "Chemicals and Explosives",
+        "Attacks"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "India",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports security alerts and operational follow-ups following a militant module bust."
+    },
+    {
+      "id": "f0b92d0b0ef881d8",
+      "incident_id": "inc-5e5fe05761ef40cc",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQSjcwakRSSkR3VlVQNE14V29oTlZPdnM5aHRpU1NSaDZodnl3WTNXakhTVHhBM1RLWTRwbVlaczE0TnNmeGNZZFJrcmQ2MGxjZ2tra2pLUmdTOUlDcXNzM0M2VmxLeUdQSXJmTVJwekM0bk03b3hMVy1ZaHZraEQtdzFrWERLSzFhenVEdnh1NXRzOXFoSFJoRHMwRlh5RmxYODNnNFhROU1LclXSAbABQVVfeXFMUGJEUDl2eUlpd0lUMjQ3MFRsdzd1V0ZzbjdKdDY1YllfaFhJS1JSODFPUUF6WWZZSFlBWkJFNEZPTDVpeTRYanBDVlRoTS1ZcjhVdEFhb0JlYVNrcmFXM2NzR3JHMVZ2SlVXYjBMb3RTYTRBdzZHX3lKc255TnBSSDFaNU94M011QVJVaFdOYURCcnFxVWhRVzRlcFlEQnpMekF2TGRVTF84a2dFX2dRRlk?oc=5",
+      "title": "US secures highly enriched uranium from Venezuela",
+      "summary": "The United States has transported 13.5 kilograms of highly enriched uranium from Venezuela, an action aimed at preventing nuclear proliferation risks.",
+      "original_title": "अमेरिका ने वेनेजुएला से हाईली एनरिच्ड यूरेनियम निकाला: 13.5 किलो न्यूक्लियर मटेरियल वॉशिंगटन लाया गया, 34 स...",
+      "original_language": "hi",
+      "source": "Dainik Bhaskar",
+      "published": "2026-05-09T07:00:00+00:00",
+      "category": "Radiological/Nuclear",
+      "categories": [
+        "Radiological/Nuclear"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CBRN",
+      "country": "Venezuela",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Concrete security operation involving nuclear material trafficking prevention."
+    },
+    {
+      "id": "fc67e2ed07fa2312",
+      "incident_id": "inc-6ec4790f076e9237",
+      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE1iS1NKLTJja2R4b3QtU0dPOWtUam9VSnExenJyTWlhSG9ZTFdOQkV6dFFmRDJNdXZseFJqS0NUbUFXalNKRG9tNUtsUUdmSi1oNC1aaURqRQ?oc=5",
+      "title": "Thai police arrest Chinese national and seize large cache of military weapons",
+      "summary": "Thai authorities arrested a Chinese man and seized a large quantity of military-grade weapons and explosives.",
+      "original_title": "泰警拘捕中国男，搜获大批战争武器",
+      "original_language": "zh",
+      "source": "星岛环球网",
+      "published": "2026-05-09T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Chemicals and Explosives",
+        "Online / Cyber / AI"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Thailand",
+      "ai_relevance_score": 95,
+      "ai_relevance_reason": "Follow-up reporting on the arrest of a terror suspect."
+    },
+    {
+      "id": "8c2ef0df9b4648b1",
+      "incident_id": "inc-1c5575a78427655b",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQemVoVUxxcHBIckM5cGVtVDBPRzFOMlhaUXo2ZkRwbU4xT2E0UU9YVUlEOElNQ2NVVzRYbGFNLXJvNVQtM1BwZnRZdXE1SWpOQUZ2WHZiank4VV96V01PRGRSQkhGT1ZoSlFHb19KQ3V6M2I2b2V0SFE2M0x2dm0wczB2RkM0c21Id1FWTlI5ZWNmVzllNUJnNg?oc=5",
+      "title": "Troops repel ISWAP attack on Yobe military base",
+      "summary": "Nigerian troops repelled an ISWAP assault on a military base in Yobe, killing 50 of the militants.",
+      "original_title": "Troops repel ISWAP attack on Military Base in Yobe, kill 50 terrorists",
+      "original_language": "en",
+      "source": "Daily Trust",
+      "published": "2026-05-09T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "ISWAP",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "region": "Yobe",
+      "ai_relevance_score": 90,
+      "ai_relevance_reason": "Reports a concrete, large-scale militant attack and subsequent counter-attack."
     }
   ]
 }
