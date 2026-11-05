@@ -1,1 +1,13 @@
+# Text is stored with LF and checked out with LF on every machine, whatever
+# core.autocrlf says. A file already committed with CR keeps its bytes (the
+# text=auto rule) until someone runs git add --renormalize on it. Do not run
+# that repo-wide: index.html rewritten whole would conflict with every agent.
+* text=auto eol=lf
+
+# Windows launchers need CRLF.
 darkweb-collector/*.cmd -text
+
+# Never text, whatever the content looks like.
+*.png  binary
+*.jpg  binary
+*.onnx binary
