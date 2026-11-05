@@ -6,10 +6,14 @@ from datetime import datetime, timedelta, timezone
 import json
 from pathlib import Path
 
-import backfill_control
-
 QUEUE_FILE = "daily_candidate_queue.json"
 STATUS_FILE = "daily-collection-status.json"
+# Older queued reporting in these categories is never reviewed: their historical
+# collection was cancelled on 2026-10-21 and Legal / Judicial is retired.
+CANCELLED_BACKLOG_CATEGORIES = frozenset({
+    "Radiological/Nuclear", "Chemicals and Explosives", "Biological Terrorism",
+    "Legal / Judicial", "CBRN", "CBRNE",
+})
 
 
 def load_queue(path=QUEUE_FILE):
@@ -59,8 +63,7 @@ def partition(events, engine, now, disabled_history=()):
             categories = item.get("categories") or [item.get("category")]
             if isinstance(categories, str):
                 categories = [categories]
-            if any(backfill_control.task_disabled({'category': category}, disabled_history, set())
-                   for category in categories):
+            if any(category in disabled_history for category in categories):
                 dropped["cancelled_history"] += 1
                 continue
             backlog.append(item)

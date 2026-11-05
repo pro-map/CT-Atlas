@@ -33,12 +33,6 @@ on:
       - "Apply reviewed map evidence corrections"
       - "Retire Judicial collection"
       - "Actualiser le logo uniquement"
-      - "Backfill actor/group field (existing events)"
-      - "Backfill GDELT + ACLED (6-month, additive only)"
-      - "Recategorize Counter Terrorism Action (backfill)"
-      - "Specialist CBRNE Gemini backup (manual only)"
-      - "Chinese history Gemini backup (cancelled)"
-      - "Groq Free - Biological historical backfill (cancelled)"
     types: [completed]
     branches: [main]
 

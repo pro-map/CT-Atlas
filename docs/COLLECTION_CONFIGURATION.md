@@ -7,15 +7,6 @@
 The wrapper sets the active Gemini model, threshold and budgets. Initial defaults
 in `collector.py` are not the complete scheduled configuration.
 
-**Specialist historical backfill:** `.github/workflows/groq-free-backfill.yml`
-invokes `tools/enrich_threat_categories.py`. It imports collector functions for
-schema, selection and deduplication, but runs fixed historical source tasks and
-separate checkpoints. `CT_ATLAS_BACKFILL_PROVIDER=groq` selects the Groq backend.
-
-**Other active topics in Chinese:** the same workflow invokes
-`tools/enrich_chinese_map.py`. Its `gemini-chinese-map-*` checkpoint filenames are
-historical compatibility names; its separate historical lane is disabled.
-
 **Custom Intelligence:** `cloudflare-worker/deep-search.js` and `deep-search.js`
 are a separate interactive search system. Its 14 language/script codes are not
 the daily/specialist pipeline's 21 codes.
@@ -27,11 +18,10 @@ the daily/specialist pipeline's 21 codes.
 | `threat-category-keywords.json` | Curated CE/BIO words, context and native search groups for all configured codes. Existing English 95-term CE list and curated seed sets are retained. |
 | `radnuc.py` | Existing multilingual RN discovery and scope rules. |
 | `radnuc-keywords.json` / `radnuc_vocabulary.py` | The 181-term RN supplement and its bounded query construction. The full English vocabulary is not 181 individually translated terms in every language. |
-| `threat_categories.collection_queries(category, code)` | Complete shared specialist query API for daily and historical intake. |
-| `threat_categories.queries(category, code)` | Original curated query subset, retained for compatibility and frozen general-archive replay. |
+| `threat_categories.collection_queries(category, code)` | Complete shared specialist query API for daily intake. |
+| `threat_categories.queries(category, code)` | Original curated query subset, retained for compatibility. |
 | `collection_config.py` | Missing specialist editions, effective language counts and validation against published runtime metadata. |
 | `ct-atlas-runtime.json` | UI metadata and existing scheduled threshold; language fields must match the loaded collector. |
-| `tools/historical_specialist_queries.py` | Compatibility interface only. Its old inline seed lists now come from the shared vocabulary file. |
 
 `collector.py` installs specialist settings before collection. Superseded initial
 CBRN blocks have been removed. Remaining CBRN source queries are broad discovery
@@ -107,10 +97,9 @@ reviewed/pending counts. Missing evidence never becomes a complete status.
 
 ## Historical continuity
 
-Judicial collection and its keywords are retired. RadNuc and ChemEx historical
-backfills and the separate Chinese historical lane remain disabled by
-`backfill-control.json`; daily collection continues according to its active
-configuration. Changing daily priority or batch size does not restart those
-backfills. Existing checkpoints and the historical replay profile remain intact.
-Configured searches describe discovery capability, not exhaustive coverage or
-proof of a completed update.
+Judicial collection and its keywords are retired. The historical backfills and
+their code were removed; their checkpoints stay in `archive/` and `quota/` as
+records. `daily_pipeline.CANCELLED_BACKLOG_CATEGORIES` keeps older queued reporting
+in the cancelled categories out of review; recent reporting in those categories
+is still collected every day. Configured searches describe discovery capability,
+not exhaustive coverage or proof of a completed update.

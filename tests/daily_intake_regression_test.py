@@ -1,6 +1,7 @@
 """Offline regressions for confirmed collection and semantic-retention defects."""
 from collections import Counter
 from copy import deepcopy
+import inspect
 from itertools import product
 from types import SimpleNamespace
 import unittest
@@ -32,6 +33,9 @@ def alternatives(query):
 
 
 class GdeltDailyTests(unittest.TestCase):
+    def test_the_daily_collection_no_longer_searches_gdelt(self):
+        self.assertNotIn('gdelt', inspect.getsource(collector._collect_all_once).lower())
+
     def test_every_daily_category_query_uses_supported_grammar_without_losing_anchors(self):
         for category, configured in collector.CATEGORIES.items():
             with self.subTest(category=category):

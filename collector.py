@@ -1,4 +1,3 @@
-import argparse
 import radnuc
 import threat_categories
 import collection_config
@@ -22,7 +21,7 @@ from datetime import datetime, timezone, timedelta
 from difflib import SequenceMatcher
 from functools import lru_cache
 from email.utils import parsedate_to_datetime
-from urllib.parse import quote_plus, urlsplit, urlunsplit, parse_qsl, urlencode
+from urllib.parse import quote_plus, urlsplit, urlunsplit, urlencode
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -46,15 +45,13 @@ except Exception:
 
 # ============================================================
 # INTERPOL CT INTELLIGENCE MAP
-# OSINT COLLECTOR V13 — INCREMENTAL BACKFILL + RESUMABLE COLLECTION
+# OSINT COLLECTOR V13 — RESUMABLE DAILY COLLECTION
 #
 # EFFECTIVE CONFIGURATION (not the historical defaults in this file):
 # - threat_categories.install_collection loads the three specialist categories
 #   from threat-category-keywords.json, radnuc.py and radnuc-keywords.json.
 # - collection_config aligns daily specialist searches with all 21 codes.
 # - tools/run_collector_quota_safe.py supplies the DAILY model/budget/threshold.
-# - tools/enrich_threat_categories.py and tools/enrich_chinese_map.py have
-#   separate historical checkpoints and choose their backend in the workflow.
 # Inspect without collecting: python tools/describe_collection.py --check
 # See docs/COLLECTION_CONFIGURATION.md. CBRN source hints/legacy fields are
 # deliberate compatibility, not a user-facing parent category.
@@ -1618,7 +1615,6 @@ MULTILINGUAL_PROFILES.extend([
 
 
 # Chinese Simplified/Traditional for the NORMAL Gemini daily intake.
-# Daily and historical Chinese searches use separate bounded query plans.
 # The daily path deliberately runs ONLY ONE
 # source-context query per non-specialist map category and source edition.
 # Existing specialist category queries are appended below by
@@ -1654,63 +1650,11 @@ for _edition in CHINESE_DAILY_PROFILES:
 
 # Specialist queries are installed below, after all taxonomy maps exist.
 
-# Run only the publisher additions from this expansion:
-# python collector.py backfill-new-sources
-# Equivalent: python collector.py backfill --scope regional-additions
-# Existing daily and ordinary incremental-backfill commands keep their scope.
-COLLECTION_SCOPE = "all"
-REGIONAL_BACKFILL_PROFILE_NAMES = {
-    "Arabic", "French / Africa", "English / Africa",
-    "Dari / Afghanistan", "Pashto / Afghanistan", "English / Afghanistan",
-    "Arabic / Syria", "English / Syria",
-    "Spanish / Latin America", "Portuguese / Brazil",
-}
-
-
-def regional_backfill_profiles():
-    profiles = []
-    seen = set()
-    for profile in MULTILINGUAL_PROFILES:
-        if profile["name"] not in REGIONAL_BACKFILL_PROFILE_NAMES:
-            continue
-        sites = []
-        for site in profile.get("sites", []):
-            # These two Arabic publishers predate the source expansion.
-            if profile["name"] == "Arabic" and site in {"aljazeera.net", "alarabiya.net"}:
-                continue
-            identity = (site, profile["code"], profile["ceid"], profile["site_terms"])
-            if identity not in seen:
-                seen.add(identity)
-                sites.append(site)
-        if sites:
-            # Only site-restricted requests; broad discovery could query old sources.
-            profiles.append(dict(profile, sites=sites, queries=[]))
-    return profiles
-
-
 def planned_collection_query_count():
-    if COLLECTION_SCOPE == "regional-additions":
-        return sum(len(profile["sites"]) for profile in regional_backfill_profiles())
     return (sum(len(v) for v in CORE_SEARCH_QUERIES.values())
             + len(OFFICIAL_BROAD_QUERIES)
             + sum(len(targeted_source_queries(source)) for source in TARGETED_SOURCE_SITES)
             + multilingual_query_count())
-
-
-def parse_collection_mode(argv=None):
-    parser = argparse.ArgumentParser(description="Incremental CT news collector")
-    parser.add_argument("mode", nargs="?", default="daily",
-                        choices=["daily", "backfill", "backfill-new-sources"])
-    parser.add_argument("--scope", choices=["all", "regional-additions"], default=None)
-    args = parser.parse_args(argv)
-    scope = args.scope or "all"
-    if args.mode == "backfill-new-sources":
-        if args.scope == "all":
-            parser.error("backfill-new-sources cannot use --scope all")
-        scope = "regional-additions"
-    if args.mode == "daily" and scope != "all":
-        parser.error("regional-additions scope requires a backfill mode")
-    return args.mode != "daily", scope
 
 
 def multilingual_query_count():
@@ -2507,16 +2451,7 @@ def build_google_url(
 
 
 
-# Incremental backfill state lives in the two files already used by the workflow:
-# events.json: completed historical query manifest (only published after AI).
-# ai_article_selection_cache.json: successful RSS snapshots and AI checkpoints.
-# The workflow must restore and persist these files, including cache on failure.
-BACKFILL_ACTIVE = False
-BACKFILL_COMPLETED_QUERIES = {}
-BACKFILL_PENDING_QUERIES = {}
-BACKFILL_RSS_SNAPSHOTS = {}
-BACKFILL_STATS = Counter()
-COLLECTION_QUERY_VERSION = "query-coverage-v1"
+COLLECTION_STATS = Counter()
 
 
 def atomic_json_write(path, data, compact=False):
@@ -2553,26 +2488,6 @@ def load_database_strict():
         return data
     except (OSError, ValueError) as exc:
         raise RuntimeError("Cannot read existing events.json; refusing to replace it.") from exc
-
-
-def initialize_incremental_state(is_backfill):
-    global BACKFILL_ACTIVE, BACKFILL_COMPLETED_QUERIES
-    global BACKFILL_PENDING_QUERIES, BACKFILL_RSS_SNAPSHOTS
-    BACKFILL_ACTIVE = is_backfill
-    BACKFILL_STATS.clear()
-    database = load_database_strict()
-    manifest = database.get("backfill_completed_queries", {})
-    BACKFILL_COMPLETED_QUERIES = manifest if isinstance(manifest, dict) else {}
-    BACKFILL_PENDING_QUERIES = {}
-    # A valid empty database may still record queries whose results were rejected.
-    cache = load_selection_cache()
-    snapshots = cache.get("backfill_rss_snapshots", {})
-    today = datetime.now(timezone.utc).date().isoformat()
-    # Relative Google News windows are only replayable on the same UTC day.
-    BACKFILL_RSS_SNAPSHOTS = {
-        key: row for key, row in snapshots.items()
-        if isinstance(row, dict) and row.get("day") == today
-    } if isinstance(snapshots, dict) else {}
 
 
 def reviewed_article_fingerprints(events):
@@ -2616,77 +2531,20 @@ def exclude_reviewed_articles(fresh, existing):
     for event in fresh:
         fingerprint = selection_fingerprint(event)
         if fingerprint in known or canonical_url(event.get("url") or "") in known_urls:
-            BACKFILL_STATS["already_reviewed_articles"] += 1
+            COLLECTION_STATS["already_reviewed_articles"] += 1
             continue
         if fingerprint in seen:
-            BACKFILL_STATS["duplicate_input_articles"] += 1
+            COLLECTION_STATS["duplicate_input_articles"] += 1
             continue
         seen.add(fingerprint)
         pending.append(event)
     print(f"Already reviewed unchanged articles skipped before Gemini: "
-          f"{BACKFILL_STATS['already_reviewed_articles']}")
+          f"{COLLECTION_STATS['already_reviewed_articles']}")
     return pending
 
 
 def request_google_news(url, label="query"):
-    if not BACKFILL_ACTIVE:
-        return _request_google_news_network(url, label=label)
-    now = datetime.now(timezone.utc)
-    today = now.date()
-    parts = urlsplit(url)
-    params = dict(parse_qsl(parts.query))
-    query = params.get("q", "")
-    match = re.search(r" when:(\d+)d$", query)
-    if not match:
-        return _request_google_news_network(url, label=label)
-    requested_days = int(match.group(1))
-    bare_query = query[:match.start()]
-    identity = dict(params, q=bare_query, coverage_version=COLLECTION_QUERY_VERSION)
-    key = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
-    completed = BACKFILL_COMPLETED_QUERIES.get(key, {})
-    days = requested_days
-    try:
-        checked = datetime.fromisoformat(completed["checked_at"]).date()
-        gap = (today - checked).days
-        if 0 <= gap < requested_days and completed.get("window_days", 0) >= requested_days:
-            # Revisit recent days for delayed indexing; no historical recollection.
-            days = min(requested_days, max(DAILY_LOOKBACK_DAYS, gap + 1))
-            BACKFILL_STATS["historical_queries_reused"] += 1
-    except (KeyError, TypeError, ValueError):
-        pass
-    if days == requested_days:
-        BACKFILL_STATS["historical_queries_requested"] += 1
-    params["q"] = f"{bare_query} when:{days}d"
-    effective_url = urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(params), parts.fragment))
-    snapshot_key = hashlib.sha256(f"{today}|{effective_url}".encode()).hexdigest()
-    snapshot = BACKFILL_RSS_SNAPSHOTS.get(snapshot_key)
-    response = None
-    if snapshot:
-        candidate = feedparser.parse(snapshot.get("rss", ""))
-        if candidate.get("version") and not candidate.bozo:
-            response = requests.Response()
-            response.status_code = 200
-            response._content = snapshot["rss"].encode("utf-8")
-            BACKFILL_STATS["rss_checkpoints_replayed"] += 1
-            QUERY_STATS["successful"] += 1
-            print(f"      Resuming cached RSS: {label}")
-    if response is None:
-        response = _request_google_news_network(effective_url, label=label)
-        if response is None:
-            raise RuntimeError(f"Backfill paused: query failed ({label}); database unchanged, successful RSS checkpoints retained.")
-        parsed = feedparser.parse(response.content)
-        if parsed.bozo or not parsed.get("version"):
-            raise RuntimeError(f"Backfill paused: invalid RSS ({label}); query not marked complete.")
-        BACKFILL_RSS_SNAPSHOTS[snapshot_key] = {
-            "day": str(today), "rss": response.content.decode("utf-8"),
-        }
-        # Save each successful query, before moving to the next network request.
-        save_selection_cache(load_selection_cache())
-    BACKFILL_PENDING_QUERIES[key] = {
-        "checked_at": now.isoformat(), "window_days": requested_days,
-        "query": bare_query, "locale": params.get("ceid", ""),
-    }
-    return response
+    return _request_google_news_network(url, label=label)
 
 
 def _request_google_news_network(
@@ -3208,7 +3066,7 @@ def gdelt_doc_category_queries(category):
 
     The provider's documented grammar supports flat AND-of-OR expressions:
     https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/
-    Reuse the syntax-only splitter; this does not enable historical searches.
+    Reuse the syntax-only splitter.
     """
     from tools.backfill_query import gdelt_queries, groups, render
 
@@ -3239,10 +3097,7 @@ def gdelt_doc_url(query, days=None, start_dt=None, end_dt=None):
         "maxrecords": str(GDELT_DOC_RESULTS_PER_QUERY),
         "sort": "datedesc",
     }
-    # An explicit date range (used by the historical backfill to slice 180
-    # days into monthly chunks, since maxrecords caps each single query at
-    # GDELT_DOC_RESULTS_PER_QUERY regardless of window length) takes priority
-    # over the relative "last N days" window the daily collector uses.
+    # An explicit date range takes priority over the relative "last N days" window.
     if start_dt and end_dt:
         params["startdatetime"] = start_dt.strftime("%Y%m%d%H%M%S")
         params["enddatetime"] = end_dt.strftime("%Y%m%d%H%M%S")
@@ -3537,17 +3392,10 @@ def collect_multilingual(days, profiles=None):
 
 
 def _collect_all_once(days):
-    if COLLECTION_SCOPE == "regional-additions":
-        if not BACKFILL_ACTIVE:
-            raise RuntimeError("Regional-only collection requires incremental backfill mode.")
-        profiles = regional_backfill_profiles()
-        print(f"TARGETED REGIONAL BACKFILL: {planned_collection_query_count()} publisher/language queries; {days} days")
-        print("Sources: Arabic additions, Africa, Afghanistan, Syria, and Latin America only.")
-        return collect_multilingual(days, profiles=profiles)
     print()
     print("=" * 70)
     print("INTERPOL CT Intelligence Map")
-    print("OSINT Collector V13 — incremental backfill and resumable collection")
+    print("OSINT Collector V13 — resumable daily collection")
     print("=" * 70)
     print(f"Window: {days} days")
     print("Collection languages: English + French + Arabic + German + Spanish + Italian + Turkish + Russian + Urdu + Persian/Dari + Pashto + Hebrew")
@@ -3751,41 +3599,7 @@ def _collect_all_once(days):
         )
 
     # ========================================================
-    # 4. GDELT DOC 2.0 DISCOVERY (additional source, not a replacement)
-    #    Provider-compatible query fragments per category, spaced to respect
-    #    GDELT's limit; a persistent refusal pauses this source for the run.
-    # ========================================================
-
-    print()
-    print("=" * 70)
-    print("GDELT DOC 2.0 DISCOVERY")
-    print("=" * 70)
-
-    gdelt_total = 0
-    gdelt_categories = list(CATEGORIES.keys())
-
-    for category_number, category in enumerate(gdelt_categories, start=1):
-        print()
-        print(
-            f"[GDELT {category_number}/{len(gdelt_categories)}] "
-            f"{category}"
-        )
-
-        results = collect_gdelt_category_query(category, days)
-
-        records.extend(results)
-        gdelt_total += len(results)
-
-        print(f"      accepted → {len(results)}")
-
-        if category_number < len(gdelt_categories) and not GDELT_STATS.get("circuit_open"):
-            time.sleep(GDELT_DOC_QUERY_SPACING_SECONDS)
-
-    print()
-    print(f"GDELT TOTAL: {gdelt_total}")
-
-    # ========================================================
-    # 5. MULTILINGUAL DISCOVERY
+    # 4. MULTILINGUAL DISCOVERY
     # ========================================================
 
     multilingual_records = collect_multilingual(
@@ -3815,10 +3629,6 @@ def _collect_all_once(days):
     print(
         f"Targeted-source records: "
         f"{targeted_total}"
-    )
-    print(
-        f"GDELT DOC 2.0 records: "
-        f"{gdelt_total}"
     )
     print(
         f"Multilingual records: "
@@ -3851,7 +3661,7 @@ def _collect_all_once(days):
         ]
     )
 
-    # Never silently build a backfill from a severely throttled sample.
+    # Never silently build a database update from a severely throttled sample.
     # A failed workflow leaves the previous events.json untouched.
     if (
         total_requests >= 10
@@ -3867,7 +3677,7 @@ def _collect_all_once(days):
         raise RuntimeError(
             "Too many Google News queries failed "
             f"({QUERY_STATS['failed']}/{total_requests}). "
-            "Database not replaced to avoid an incomplete backfill."
+            "Database not replaced to avoid an incomplete update."
         )
 
     return records
@@ -4638,7 +4448,6 @@ def load_selection_cache():
                 "threshold":
                     AI_SELECTION_THRESHOLD,
                 "items": {},
-                "backfill_rss_snapshots": cache.get("backfill_rss_snapshots", {}),
             }
 
         if not isinstance(
@@ -4766,7 +4575,6 @@ def save_selection_cache(
         timezone.utc
     ).isoformat()
 
-    cache["backfill_rss_snapshots"] = BACKFILL_RSS_SNAPSHOTS
     atomic_json_write(AI_SELECTION_CACHE_FILE, cache, compact=True)
 
 
@@ -5688,7 +5496,7 @@ def ai_select_events(
     lane=None,
 ):
     global AI_SELECTION_PARTIAL_CHECKPOINT
-    # Replayed queues and direct specialist runners can bypass discovery filters.
+    # Replayed queues can bypass discovery filters.
     # Retire court-only candidates before cache lookup or any paid AI request.
     events = [event for event in events
               if not retired_categories.is_retired_judicial_event(event)
@@ -9193,12 +9001,13 @@ def prune_old(events, aged_out=None):
 
 
 AGED_OUT_ARCHIVE_DIR = "archive"
-# What the background archive needs from an aged-out map event (its related
-# articles already reached the archive while it was on the map).
+# What the background archive keeps of an aged-out map event. Its related
+# articles stay with it: this file is their only copy, because the nightly sync
+# keeps one article per incident and D1 never holds them.
 AGED_OUT_ARCHIVE_FIELDS = (
     "id", "incident_id", "url", "title", "summary", "original_title", "original_language",
     "source", "published", "category", "categories", "actor_group", "primary_event_type",
-    "country", "region", "ai_relevance_score", "ai_relevance_reason",
+    "country", "region", "ai_relevance_score", "ai_relevance_reason", "related_articles",
 )
 
 
@@ -10693,11 +10502,7 @@ def save_database(events, trend_summary=None, weekly_analysis=None):
             profile["name"]: list(profile.get("sites", []))
             for profile in MULTILINGUAL_PROFILES
         },
-        "backfill_completed_queries": {
-            **BACKFILL_COMPLETED_QUERIES, **BACKFILL_PENDING_QUERIES,
-        },
-        "incremental_collection_stats": dict(BACKFILL_STATS),
-        "last_collection_scope": COLLECTION_SCOPE,
+        "incremental_collection_stats": dict(COLLECTION_STATS),
         "last_planned_query_count": planned_collection_query_count(),
         "specialist_coverage": {
             "maritime_sources": [name for name, site, kind in MARITIME_SOURCE_SITES],
@@ -11299,57 +11104,37 @@ def consolidate_incidents(events, state=None, max_calls=None, now=None, use_gemi
 
 
 def main():
-    global COLLECTION_SCOPE, COLLECTION_STATUS
-    is_backfill, COLLECTION_SCOPE = parse_collection_mode()
-    if is_backfill:
-        import backfill_control
-        if not backfill_control.history_enabled(Path(__file__).resolve().parent):
-            print('Historical backfills cancelled by operator; daily collection remains enabled.')
-            return
+    global COLLECTION_STATUS
     effective_config = collection_config.validate_runtime(globals())
     print('Effective configured collection: ' + json.dumps(effective_config, ensure_ascii=False))
-    if is_backfill:
-        import backfill_control
-        backfill_control.apply_to_collector(globals(), Path(__file__).resolve().parent)
     existing_weekly_analysis = load_existing_weekly_analysis()
 
-    initialize_incremental_state(is_backfill)
+    COLLECTION_STATS.clear()
 
-    if is_backfill:
-        print(
-            "180-DAY INCREMENTAL BACKFILL MODE"
-        )
+    print(
+        "DAILY UPDATE MODE"
+    )
 
-        days = RETENTION_DAYS
-        existing = load_existing()
+    days = DAILY_LOOKBACK_DAYS
+    existing = load_existing()
 
-    else:
-        print(
-            "DAILY UPDATE MODE"
-        )
-
-        days = DAILY_LOOKBACK_DAYS
-        existing = load_existing()
-
-        print(
-            f"Existing database loaded: "
-            f"{len(existing)} events"
-        )
+    print(
+        f"Existing database loaded: "
+        f"{len(existing)} events"
+    )
 
     run_now = datetime.now(timezone.utc)
     from types import SimpleNamespace
     daily_engine = SimpleNamespace(**globals())
-    if not is_backfill:
-        COLLECTION_STATUS = daily_pipeline.begin_status(run_now, load_database_strict().get("last_updated"))
-        atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
+    COLLECTION_STATUS = daily_pipeline.begin_status(run_now, load_database_strict().get("last_updated"))
+    atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
     try:
         fresh = exclude_reviewed_articles(collect_all(days), existing)
     except Exception:
-        if not is_backfill:
-            COLLECTION_STATUS = daily_pipeline.finish_status(COLLECTION_STATUS, {}, QUERY_STATS, GDELT_STATS, run_now)
-            COLLECTION_STATUS["status"] = "failed"
-            COLLECTION_STATUS["reasons"] = ["source_errors"]
-            atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
+        COLLECTION_STATUS = daily_pipeline.finish_status(COLLECTION_STATUS, {}, QUERY_STATS, GDELT_STATS, run_now)
+        COLLECTION_STATUS["status"] = "failed"
+        COLLECTION_STATUS["reasons"] = ["source_errors"]
+        atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
         raise
 
     print()
@@ -11370,32 +11155,26 @@ def main():
         "Clustering fresh candidate records before AI selection..."
     )
 
-    if is_backfill:
-        fresh_clusters = deduplicate_events(fresh)
-        selected_fresh = ai_select_events(fresh_clusters)
-        originals = []
-    else:
-        import backfill_control
-        recent, backlog, dropped = daily_pipeline.prepare(
-            fresh, daily_pipeline.load_queue(), existing, daily_engine, run_now,
-            backfill_control.disabled_categories(Path(__file__).resolve().parent))
-        fresh_clusters = recent + backlog
-        # Save ORIGINAL candidate clusters before translation or any AI call.
-        # Completed decisions remain queued until the database is published.
-        from copy import deepcopy
-        originals = deepcopy(fresh_clusters)
-        daily_pipeline.save_queue(originals, atomic_json_write, now=run_now)
-        COLLECTION_STATUS.update(queue_filter=dropped,
-            recent={"candidates": len(recent), "reviewed": 0, "pending": len(recent)},
-            backlog={"candidates": len(backlog), "reviewed": 0, "pending": len(backlog)})
-        COLLECTION_STATUS["source"] = {"google": dict(QUERY_STATS), "gdelt": dict(GDELT_STATS),
-            "errors": QUERY_STATS["failed"] + GDELT_STATS["failed"]}
-        atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
-        print(f"Separate daily queues: {len(recent)} recent; {len(backlog)} older. Recent review runs first.")
-        selected_recent = ai_select_events(recent, lane="recent")
-        selected_backlog = ai_select_events(backlog, lane="backlog") if selected_recent is not None else None
-        selected_fresh = (selected_recent + selected_backlog
-            if selected_recent is not None and selected_backlog is not None else None)
+    recent, backlog, dropped = daily_pipeline.prepare(
+        fresh, daily_pipeline.load_queue(), existing, daily_engine, run_now,
+        daily_pipeline.CANCELLED_BACKLOG_CATEGORIES)
+    fresh_clusters = recent + backlog
+    # Save ORIGINAL candidate clusters before translation or any AI call.
+    # Completed decisions remain queued until the database is published.
+    from copy import deepcopy
+    originals = deepcopy(fresh_clusters)
+    daily_pipeline.save_queue(originals, atomic_json_write, now=run_now)
+    COLLECTION_STATUS.update(queue_filter=dropped,
+        recent={"candidates": len(recent), "reviewed": 0, "pending": len(recent)},
+        backlog={"candidates": len(backlog), "reviewed": 0, "pending": len(backlog)})
+    COLLECTION_STATUS["source"] = {"google": dict(QUERY_STATS), "gdelt": dict(GDELT_STATS),
+        "errors": QUERY_STATS["failed"] + GDELT_STATS["failed"]}
+    atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
+    print(f"Separate daily queues: {len(recent)} recent; {len(backlog)} older. Recent review runs first.")
+    selected_recent = ai_select_events(recent, lane="recent")
+    selected_backlog = ai_select_events(backlog, lane="backlog") if selected_recent is not None else None
+    selected_fresh = (selected_recent + selected_backlog
+        if selected_recent is not None and selected_backlog is not None else None)
 
     if selected_fresh is None:
         print()
@@ -11514,29 +11293,27 @@ def main():
         existing_weekly=existing_weekly_analysis,
     )
 
-    if not is_backfill:
-        telemetry = globals().get("selection_runtime_status", lambda: {})()
-        COLLECTION_STATUS = daily_pipeline.finish_status(COLLECTION_STATUS, telemetry,
-            QUERY_STATS, GDELT_STATS, run_now, DAILY_LOOKBACK_DAYS)
-        remaining_maintenance = sum(not event.get("primary_event_type") or not event.get("incident_id")
-                                    for event in existing)
-        maintenance = COLLECTION_STATUS.setdefault("maintenance", {})
-        maintenance.update(candidates=len(legacy_incident_records),
-            reviewed=max(0, len(legacy_incident_records) - remaining_maintenance),
-            pending=remaining_maintenance, status="partial" if remaining_maintenance else "complete")
-        if remaining_maintenance:
-            COLLECTION_STATUS["status"] = "partial"
-            COLLECTION_STATUS["reasons"] = list(dict.fromkeys(COLLECTION_STATUS["reasons"] + ["maintenance_pending"]))
-        COLLECTION_STATUS["published_at"] = datetime.now(timezone.utc).isoformat()
-        atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
+    telemetry = globals().get("selection_runtime_status", lambda: {})()
+    COLLECTION_STATUS = daily_pipeline.finish_status(COLLECTION_STATUS, telemetry,
+        QUERY_STATS, GDELT_STATS, run_now, DAILY_LOOKBACK_DAYS)
+    remaining_maintenance = sum(not event.get("primary_event_type") or not event.get("incident_id")
+                                for event in existing)
+    maintenance = COLLECTION_STATUS.setdefault("maintenance", {})
+    maintenance.update(candidates=len(legacy_incident_records),
+        reviewed=max(0, len(legacy_incident_records) - remaining_maintenance),
+        pending=remaining_maintenance, status="partial" if remaining_maintenance else "complete")
+    if remaining_maintenance:
+        COLLECTION_STATUS["status"] = "partial"
+        COLLECTION_STATUS["reasons"] = list(dict.fromkeys(COLLECTION_STATUS["reasons"] + ["maintenance_pending"]))
+    COLLECTION_STATUS["published_at"] = datetime.now(timezone.utc).isoformat()
+    atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
     save_database(
         events,
         trend_summary=trend_summary,
         weekly_analysis=weekly_analysis,
     )
-    if not is_backfill:
-        pending = daily_pipeline.unresolved(originals, load_selection_cache(), daily_engine)
-        daily_pipeline.save_queue(pending, atomic_json_write)
+    pending = daily_pipeline.unresolved(originals, load_selection_cache(), daily_engine)
+    daily_pipeline.save_queue(pending, atomic_json_write)
     print()
     print("=" * 70)
     print("COLLECTION PUBLISHED — PARTIAL" if COLLECTION_STATUS.get("status") == "partial" else "COLLECTION COMPLETE")
@@ -11565,4 +11342,7 @@ def main():
 
 
 if __name__ == "__main__":
+    # Only the daily collection is left: an old "backfill" command must not start one.
+    if sys.argv[1:] not in ([], ["daily"]):
+        raise SystemExit("collector.py takes no argument other than 'daily'.")
     main()

@@ -36,7 +36,8 @@ ENGLISH_SPECIALIST_PROFILE = {
 
 
 def specialist_profiles(daily_profiles):
-    """Use the daily language/edition inventory for all specialist history."""
+    """The daily language/edition inventory, as copies: the editions the RadNuc
+    background job searches."""
     unique = {}
     for profile in (*CHINESE_SPECIALIST_PROFILES, ENGLISH_SPECIALIST_PROFILE,
                     *daily_profiles):
@@ -44,7 +45,7 @@ def specialist_profiles(daily_profiles):
         unique.setdefault(identity, copy.deepcopy(profile))
     codes = {profile['code'] for profile in unique.values()}
     if codes != set(language_metadata(daily_profiles)['language_codes']):
-        raise ValueError('Daily and historical specialist languages disagree')
+        raise ValueError('Daily and specialist languages disagree')
     return list(unique.values())
 
 

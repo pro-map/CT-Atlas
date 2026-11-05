@@ -183,7 +183,7 @@ def quota_stop(reason,detail):
 
 
 def check_lane_budget():
-    if collector.BACKFILL_ACTIVE or ACTIVE_LANE not in ("backlog","maintenance"):
+    if ACTIVE_LANE not in ("backlog","maintenance"):
         return
     historical_calls=sum(sum(LANE_CALLS[lane].values()) for lane in ("backlog","maintenance"))
     if historical_calls>=HISTORICAL_RUN_BUDGET:
@@ -431,9 +431,6 @@ def _select_lane(events,lane):
         telemetry=runtime_telemetry(); partial=telemetry["partial"]
         recent_count=telemetry["recent_pending"]; backlog_count=telemetry["backlog_pending"]
         pending=telemetry["lanes"][lane]["pending"]
-        if pending and collector.BACKFILL_ACTIVE:
-            collector.BACKFILL_PENDING_QUERIES.clear()
-            collector.BACKFILL_STATS["ai_deferred_backfill"]+=pending
         collector.save_selection_cache(cache)
         print(f"Selection telemetry ({lane}): reviewed={telemetry['lanes'][lane]['reviewed']}, pending={pending}, calls={calls}, overflow={overflow_calls}, partial={partial}.")
         return auto+cached_selected+out

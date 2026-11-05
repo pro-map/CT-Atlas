@@ -38,6 +38,6 @@ runs:
         # Internal checkpoints nothing on the site reads (the AI cache alone
         # was half of every Pages upload).
         rm -f ai_article_selection_cache.json incident_consolidation_state.json
-        rm -f map-integrity-decisions.json specialist-catchup.json backfill-control.json
+        rm -f map-integrity-decisions.json
         rm -f weekly-analysis-request.json
         rm -rf archive quota

@@ -1,24 +1,14 @@
-"""Offline specialist taxonomy, daily queries, fixed backfill and evidence safety."""
+"""Offline specialist taxonomy, daily queries and evidence safety."""
 import copy
 import hashlib
-import json
 import sys
-import tempfile
 import unittest
-from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT));sys.path.insert(0,str(ROOT/'tools'))
 import collector
 import radnuc
 import threat_categories as t
-import archive_review as a
-import enrich_archive as e
-import enrich_radnuc as r
-import enrich_threat_categories as b
-import backfill_query as q
-import migrate_threat_categories as m
 
 class TaxonomyTests(unittest.TestCase):
     def decision(self,categories,**extra):
@@ -71,10 +61,8 @@ class TaxonomyTests(unittest.TestCase):
         self.assertEqual(collector.CORE_SEARCH_QUERIES[t.CE],t.queries(t.CE))
         self.assertEqual(collector.OFFICIAL_SOURCE_QUERIES[t.CE],t.queries(t.CE))
 
-    def test_chinese_biological_and_chemical_terms_have_context_in_historical_searches(self):
+    def test_chinese_biological_and_chemical_terms_have_context_in_daily_searches(self):
         expected={'zh','zh-Hant'}
-        self.assertTrue(expected <= set(b.enrich_radnuc.profiles(collector)[i]['code']
-                                           for i in range(len(b.enrich_radnuc.profiles(collector)))))
         self.assertEqual({p['code'] for p in collector.MULTILINGUAL_PROFILES
                           if p['code'] in expected}, expected,
                          'User now requested both Chinese editions in daily Gemini updates')
@@ -88,10 +76,6 @@ class TaxonomyTests(unittest.TestCase):
                 self.assertTrue(all(len(q)<700 for q in queries))
                 for term in t.vocabulary()[vocab_name]['terms'][code]:
                     self.assertIn('"'+term+'"',' '.join(queries))
-                plan=b.plan_tasks(label,date(2026,10,8),collector)
-                native=[x for x in plan if x['source']=='google' and x['code']==code]
-                self.assertTrue(native)
-                self.assertEqual({x['query'] for x in native},set(queries))
 
     def test_configuration_rules_reach_the_shared_editorial_filter(self):
         rules=t.vocabulary()['chemical_explosives']['rules']
@@ -146,90 +130,5 @@ class TaxonomyTests(unittest.TestCase):
         x={'id':'x','category':'CBRN','title':'Materials seized in a terrorism investigation','cbrn_subgroups':[]}
         t.annotate(x);self.assertTrue(x['category_review_required']);self.assertEqual(x['categories'],[])
         self.assertEqual(x['id'],'x')
-
-class BackfillTests(unittest.TestCase):
-    def test_backfill_covers_six_months_for_each_category(self):
-        today=date(2026,10,8)
-        for label in t.LABELS:
-            plan=b.plan_tasks(label,today,collector)
-            windows=sorted({e.window(q) for q in plan if not q.get('supplemental_vocabulary')})
-            self.assertEqual(windows[0][0],today-timedelta(days=180))
-            self.assertEqual(windows[-1][1],today+timedelta(days=1))
-            self.assertTrue(all(x[1]==y[0] for x,y in zip(windows,windows[1:])))
-            self.assertEqual(len(plan),len({q['key'] for q in plan}))
-            self.assertEqual({q['category'] for q in plan},{label})
-
-    def test_all_reviewed_chemical_queries_cover_each_historical_window(self):
-        plan=b.plan_tasks(t.CE,date(2026,10,8),collector)
-        expected=set(t.queries(t.CE,'en'))
-        self.assertEqual(len(expected),16)
-        windows={e.window(task) for task in plan}
-        for window in windows:
-            rows=[task for task in plan if e.window(task)==window]
-            self.assertEqual({task['query'] for task in rows if task['source']=='google' and task['code']=='en'},expected)
-            self.assertEqual({task['query'] for task in rows if task['source']=='gdelt'},
-                             {query for raw in expected for query in q.gdelt_queries(raw)})
-        # Search identities include the query: an old completed query cannot
-        # incorrectly mark an expanded vocabulary's different query complete.
-        task=next(task for task in plan if task['source']=='google' and task['code']=='en')
-        old_key=e.task_key({**task,'query':'"previous provisional search"'})
-        self.assertNotEqual(task['key'],old_key)
-
-    def test_fixed_anchor_never_rolls_forward_on_a_daily_rerun(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            first=b.manifest(tmp,date(2026,10,8));second=b.manifest(tmp,date(2026,10,9))
-            self.assertEqual(first,second)
-            anchor=date.fromisoformat(first['anchor'])
-            self.assertEqual(b.plan_tasks(t.BIO,anchor,collector),b.plan_tasks(t.BIO,date.fromisoformat(second['anchor']),collector))
-
-    def test_radnuc_existing_search_keys_are_preserved(self):
-        anchor=date(2026,10,7)
-        self.assertEqual([task for task in b.plan_tasks(t.RN,anchor,collector) if task['source']=='google'],
-                         [task for task in r.plan_tasks(anchor,collector) if task['source']=='google'])
-        for task in b.plan_tasks(t.RN,anchor,collector):
-            self.assertEqual(task['key'],e.task_key({**task,'category':'CBRN'}))
-
-    def test_output_integrates_bio_and_chemical_with_recovery_and_no_duplicate(self):
-        now=datetime.now(timezone.utc)
-        for label in (t.BIO,t.CE):
-            with tempfile.TemporaryDirectory() as tmp:
-                root=Path(tmp);a.write_json(root/'events.json',{'events':[{'id':'existing','title':'Unrelated arrest','published':now.isoformat(),'category':'Arrests','latitude':1,'longitude':2}]})
-                event={'id':'new','title':'Police arrest extremist cell in a concrete plot','summary':'Police disrupted a terrorist plot.',
-                       'published':now.isoformat(),'category':label,'categories':[label],'source':'Official',
-                       'url':'https://example.test/article','country':'France','actor_scope':'NON_STATE',
-                       'ai_selected':True,'ai_current_ct_event':True,'primary_event_type':'ARREST','reported_status':'SUSPECTED'}
-                out=r.IntegratedOutput(root,now,collector,label,b.PREFIXES[label]);out.add([{'selected_event':event}]);out.save()
-                again=r.IntegratedOutput(root,now,collector,label,b.PREFIXES[label]);again.save()
-                events=a.read_json(root/'events.json')['events']
-                self.assertEqual(len(events),2);self.assertEqual(next(x for x in events if x['id']=='existing')['latitude'],1)
-                self.assertEqual(next(x for x in events if x['id']=='new')['reported_status'],'SUSPECTED')
-
-    def test_off_topic_seen_namespaces_do_not_hide_new_specialist_queries(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            Path(tmp,'archive').mkdir()
-            now=datetime.now(timezone.utc)
-            e.save_seen(tmp,now,{'old'})
-            self.assertNotIn('old',e.load_seen(tmp,'biological-v1'))
-            e.save_seen(tmp,now,{'new'},'biological-v1')
-            self.assertIn('new',e.load_seen(tmp,'biological-v1'))
-            self.assertNotIn('new',e.load_seen(tmp))
-
-    def test_archive_only_items_are_not_silently_skipped_from_new_backfill(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            a.write_json(Path(tmp)/'events.json',{'events':[]})
-            a.write_json(Path(tmp)/'archive/old.json',{'articles':[{'title':'Biological threat','source':'Official','url':'https://example.test/old'}]})
-            self.assertEqual(b.known_map_keys(tmp),set())
-            self.assertTrue(e.known_article_keys(tmp))
-
-    def test_migration_never_changes_ids_sources_dates_or_locations(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            path=Path(tmp)/'events.json'
-            x={'id':'x','categories':['CBRN'],'cbrn_subgroups':['RADNUC'],'published':'2026-07-08T10:00:00Z','latitude':1,'longitude':2,'source':'Official','url':'https://example.test/x'}
-            a.write_json(path,{'events':[x]})
-            report=m.migrate(path,write=True)
-            self.assertEqual(report['events_preserved'],1)
-            migrated=a.read_json(path)['events'][0]
-            for key in ('id','published','latitude','longitude','source','url'):self.assertEqual(migrated[key],x[key])
-            self.assertEqual(m.migrate(path,write=True)['records_reclassified'],0)
 
 if __name__=='__main__':unittest.main()

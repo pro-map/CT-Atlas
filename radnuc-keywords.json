@@ -2,11 +2,6 @@
   "version": "radiological-nuclear-keywords-v1-20261009",
   "category": "Radiological/Nuclear",
   "provenance": "All 181 user-supplied keywords, 9 October 2026; none removed.",
-  "backfill": {
-    "anchor": "2026-10-09",
-    "window_days": 180,
-    "mode": "supplement existing checkpoint; do not reset previously completed searches"
-  },
   "keyword_groups": [
     {
       "name": "Materials and isotopes",

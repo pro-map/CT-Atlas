@@ -103,9 +103,6 @@ class BioMonitoringTest(unittest.TestCase):
             self.assertEqual(collector.selection_fingerprint(ordinary), ordinary_before)
             self.assertNotEqual(collector.selection_fingerprint(alert), alert_before)
         self.assertTrue(set(topics.bio_monitoring_queries()) - set(topics.collection_queries(topics.BIO)))
-        replay = {row['term'] for profile in collector.HISTORICAL_REPLAY_PROFILES
-                  for row in profile['queries'] if row['category'] == topics.BIO}
-        self.assertFalse(replay & set(topics.bio_monitoring_queries()))
 
     def test_bio_configuration_rules_reach_final_ai_selection(self):
         for rule in topics.vocabulary()['biological']['rules']:

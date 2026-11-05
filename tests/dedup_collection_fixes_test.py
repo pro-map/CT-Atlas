@@ -155,7 +155,7 @@ class AlreadyHeldArticleTests(unittest.TestCase):
     GNEWS = "https://news.google.com/rss/articles/"
 
     def setUp(self):
-        collector.BACKFILL_STATS.clear()
+        collector.COLLECTION_STATS.clear()
         self.existing = record("Attack on the embassy in Belgrade", "2026-10-28", "https://outlet.test/belgrade",
                                "Serbia", ai_selection_complete=True,
                                related_articles=[{"title": "Embassy attacked in Belgrade", "summary": "s",
@@ -170,7 +170,7 @@ class AlreadyHeldArticleTests(unittest.TestCase):
         ]
         pending = quietly(collector.exclude_reviewed_articles, fresh, [self.existing])
         self.assertEqual([e["url"] for e in pending], ["https://outlet.test/other"])
-        self.assertEqual(collector.BACKFILL_STATS["already_reviewed_articles"], 2)
+        self.assertEqual(collector.COLLECTION_STATS["already_reviewed_articles"], 2)
 
     def test_only_reviewed_records_hold_their_links(self):
         # Same rule as the fingerprints: a record Gemini never reviewed does not block.
