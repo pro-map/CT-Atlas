@@ -76,7 +76,7 @@ const USAGE_LOG_FIELDS = Object.freeze({
   deep_search: { question: ["text", 1200], region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], scope: ["text", 200], outcome: ["text", 20], title: ["text", 200], period: ["text", 120] },
   blockchain: { query: ["text", 180], kind: ["text", 20], chain: ["text", 40], chain_hint: ["text", 40], origin: ["text", 16], limit: ["num"] },
   facial_extraction: { files: ["num"], videos: ["num"], bytes: ["num"] },
-  facial_search: { engines: ["list", 4, 20], face: ["text", 40] },
+  facial_search: { engines: ["list", 4, 20], face: ["text", 40], sha256: ["text", 64], bytes: ["num"], outcome: ["text", 20] },
   event_list: { text: ["text", 200], region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], period_days: ["num"], scope: ["text", 200], country: ["text", 120], sort: ["text", 10], results: ["num"] },
   darkweb_search: { text: ["text", 200], view: ["text", 16], outlet: ["text", 120], material: ["text", 16], results: ["num"], loaded_back_to: ["text", 10] },
   ip_lookup: { target: ["text", 253], kind: ["text", 10], registered_domain: ["text", 253], parent_domain: ["text", 253] },
@@ -1888,9 +1888,6 @@ export class ReportGate {
           searches: 1,
           event_list_searches: 1
         }, now, body.details ? this.usageLogEntry(username, "event_list", body.details, now) : null);
-      } else if (action === "facial_search") {
-        await this.incrementUsage(username, { facial_searches: 1 }, now,
-          body.details ? this.usageLogEntry(username, "facial_search", body.details, now) : null);
       } else if (action === "darkweb_search") {
         await this.incrementUsage(username, { darkweb_searches: 1 }, now,
           this.usageLogEntry(username, "darkweb_search", body.details, now));

@@ -156,7 +156,7 @@ if (action === "tab_access") {
   const tab = cleanText(usageBody.tab, 16).toLowerCase();
   if (!["map", "crypto", "facial", "social", "darkweb", "ip"].includes(tab)) return jsonResponse({ error: "Unsupported workspace tab." }, 400, env);
   usagePayload.tab = tab;
-} else if (!["map_search", "event_list_search", "facial_search", "darkweb_search"].includes(action)) {
+} else if (!["map_search", "event_list_search", "darkweb_search"].includes(action)) {
   return jsonResponse({ error: "Unsupported usage action." }, 400, env);
 } else if (usageBody.details && typeof usageBody.details === "object" && !Array.isArray(usageBody.details)) {
   // What was searched, for the admin search history; the gate keeps only whitelisted, capped fields.

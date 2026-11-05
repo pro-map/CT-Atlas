@@ -3,8 +3,8 @@
 
 // Face crops for Facial Intelligence: cuts each detected face out of the ORIGINAL
 // uploaded file, in the browser (canvas), so nothing extra leaves the machine while
-// cropping. Crops can be downloaded as JPEG (one by one or as a ZIP) and searched on free
-// reverse-image engines. A crop leaves the browser only through an explicit SEARCH click
+// cropping. Crops can be downloaded as JPEG (one by one or as a ZIP) and searched on Yandex
+// Images, a free reverse-image engine. A crop leaves the browser only through an explicit SEARCH click
 // (see shareCrop) or when the user pastes it into a search page.
 //
 // The pure helpers at the top are unit-tested in Node; the DOM part is below.
@@ -17,8 +17,8 @@ const MIN_SIDE=300;          // engines do poorly on tiny crops
 const MAX_UPSCALE=6;
 const JPEG_QUALITY=0.92;
 
-// Haar boxes hug the face; a margin (relative to the face size) keeps hair, chin and ears,
-// which reverse-image engines need. Clamped to the source bounds.
+// The detector's boxes hug the face; a margin (relative to the face size) keeps hair, chin and
+// ears, which reverse-image engines need. Clamped to the source bounds.
 function paddedBox(box,marginRatio,srcW,srcH){
   const pad=Math.round(Math.max(box.w,box.h)*Math.max(0,marginRatio||0));
   const x=Math.max(0,box.x-pad);
@@ -124,8 +124,8 @@ function buildZip(entries,date=new Date()){
 // Yandex Images is the reverse-image engine retained for face-crop searches. It does not accept
 // an upload from another site, so it is opened on a URL of the crop (search-by-URL). That needs the crop
 // to be reachable: on an explicit click, and after a confirmation, this one crop is hosted for a few minutes by
-// the CT Atlas Worker (see shareCrop below). `url` is the engine's own upload page, used when hosting fails: the
-// crop is then put on the clipboard and the analyst pastes it there (it reaches the service only when pasted).
+// the CT Atlas Worker (see shareCrop below). `url` is the engine's own upload page, used when hosting fails: a dialog
+// then copies the crop and opens that page, and the analyst pastes it there (it reaches the service only when pasted).
 const encode=encodeURIComponent;
 const SEARCH_ENGINES=Object.freeze([
   {id:"yandex",name:"Yandex Images",url:"https://yandex.com/images/search?rpt=imageview",note:"free · strongest on faces",
@@ -166,7 +166,15 @@ function shareUsable(share,now){
   return Boolean(share)&&Number.isFinite(share.expiresAt)&&share.expiresAt-now>SHARE_MIN_LIFETIME_MS;
 }
 
-const helpers={MARGINS,MIN_SIDE,MAX_UPSCALE,paddedBox,outputSize,mapBoxToSource,safeStem,cropFileName,uniqueName,crc32,buildZip,SEARCH_ENGINES,SEARCH_ALL_IDS,MAX_SHARE_BYTES,MAX_SHARE_SIDE,shareDimensions,directSearchUrl,validShareUrl,shareUsable};
+// Low-detail faces are where look-alike leads are most likely, so the analyst is told before searching one.
+function cropWarning(record){
+  const reasons=[];
+  if(record.quality==="LOW")reasons.push("low quality");
+  if(record.upscaled)reasons.push("upscaled from "+record.sourceWidth+"×"+record.sourceHeight+" px");
+  return reasons.length?"This crop is "+reasons.join(" and ")+", so look-alike results are more likely. Prefer a sharper image of this person if you have one.":"";
+}
+
+const helpers={MARGINS,MIN_SIDE,MAX_UPSCALE,paddedBox,outputSize,mapBoxToSource,safeStem,cropFileName,uniqueName,crc32,buildZip,SEARCH_ENGINES,SEARCH_ALL_IDS,MAX_SHARE_BYTES,MAX_SHARE_SIDE,shareDimensions,directSearchUrl,validShareUrl,shareUsable,cropWarning};
 if(typeof module!=="undefined"&&module.exports)module.exports=helpers;
 if(typeof document==="undefined"){root.CTAtlasFaceCropsHelpers=helpers;return;}
 
@@ -177,7 +185,7 @@ const $=id=>document.getElementById(id);
 const esc=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 
 let generation=0;
-let records=new Map();      // key -> {key,name,blob,url,width,height,upscaled,state,error,label}
+let records=new Map();      // key -> {key,name,blob,url,width,height,sourceWidth,sourceHeight,upscaled,quality,state,error,label}
 let context=null;           // {payload,files}
 
 function setStatus(message,tone){
@@ -270,7 +278,8 @@ function paintCell(record){
   const actions=cell(record.key,".fc-actions");
   if(thumb){
     thumb.innerHTML=record.state==="ready"
-      ?'<img src="'+esc(record.url)+'" alt="Cropped face '+esc(record.label)+'" width="'+esc(Math.min(72,record.width))+'">'
+      ?'<img src="'+esc(record.url)+'" alt="Cropped face '+esc(record.label)+'" width="'+esc(Math.min(72,record.width))+'">'+
+        '<div class="fc-source">'+esc(record.sourceWidth)+'×'+esc(record.sourceHeight)+' px'+(record.upscaled?' <span class="fc-badge">UPSCALED</span>':'')+'</div>'
       :'<span class="fc-fail" title="'+esc(record.error||"")+'">n/a</span>';
   }
   if(actions){
@@ -287,6 +296,7 @@ function paintCell(record){
         '<button type="button" class="fc-btn fc-btn-search" data-fc-action="search-all" data-fc-key="'+esc(record.key)+'" title="Host this crop for about 10 minutes and search it on Yandex Images">SEARCH</button>'+
       '</div>'+
       '<div class="fc-search-note">Yandex Images</div>'+
+      (cropWarning(record)?'<div class="fc-weak" title="'+esc(cropWarning(record))+'">Weak crop: look-alikes more likely</div>':'')+
       '<div class="fc-links" data-fc-links="'+esc(record.key)+'" hidden></div>';
   }
 }
@@ -349,7 +359,7 @@ async function generate(){
       for(const face of faces){
         const key=job.fi+":"+job.ri+":"+face.face_id;
         const label="F"+face.face_id+(job.isVideo?" @ "+job.frame.timestamp_seconds+"s":"");
-        const record={key,label,state:"error",error:failure,consented:new Set(),name:uniqueName(cropFileName(job.fileName,face,job.isVideo?job.frame.timestamp_seconds:null),used)};
+        const record={key,label,quality:face.quality,state:"error",error:failure,consented:new Set(),name:uniqueName(cropFileName(job.fileName,face,job.isVideo?job.frame.timestamp_seconds:null),used)};
         if(!failure){
           try{
             const crop=cropFromSource(source,srcW,srcH,job.frame,face,opts);
@@ -413,7 +423,7 @@ async function copy(record){
 }
 
 // ---- Direct search: host ONE crop briefly, then open the engines on its URL ------------------
-// Only requestSearch() below leads here, and only from a click on a SEARCH menu entry.
+// Only requestSearch() below leads here, and only from a click on the SEARCH button.
 
 // A small JPEG (re-encoded from the crop: canvas output carries no EXIF/GPS) under the size
 // the Worker accepts.
@@ -449,7 +459,8 @@ async function shareCrop(record){
   const sentAt=Date.now();
   let response;
   try{
-    response=await fetch(api+"/face-share",{method:"POST",headers:{"X-Session-Token":token,"Content-Type":"image/jpeg"},body,...(controller?{signal:controller.signal}:{})});
+    // The label ("F2 @ 3.5s") is for the admin search history, which the Worker writes when it hosts the crop.
+    response=await fetch(api+"/face-share?face="+encode(record.label),{method:"POST",headers:{"X-Session-Token":token,"Content-Type":"image/jpeg"},body,...(controller?{signal:controller.signal}:{})});
   }catch(error){
     throw new Error(error&&error.name==="AbortError"?"CT Atlas did not answer in time":"CT Atlas could not be reached");
   }finally{clearTimeout(timer);}
@@ -481,18 +492,24 @@ function openPlaceholder(){
   return win;
 }
 
+const YANDEX_EXPOSURE="Yandex is a Russian-law operator. The search runs in your own browser, so Yandex also sees your IP address, any Yandex account signed in there, and the CT Atlas API host name in the link. What it receives cannot be recalled: use a separate browser profile with no Yandex login.\n\n"+
+  "Yandex may return look-alikes: a result does not identify anyone.";
+
 function confirmText(record,engines,hostedShare){
   const name=engines[0]?.name||"Yandex Images";
+  const warning=cropWarning(record)?"WARNING: "+cropWarning(record)+"\n\n":"";
   if(hostedShare){
     const minutes=Math.max(1,Math.round((hostedShare.expiresAt-Date.now())/60000));
-    return "Also search face "+record.label+" on "+name+"?\n\n"+
+    return "Also search face "+record.label+" on "+name+"?\n\n"+warning+
       "This crop is already hosted on CT Atlas's temporary storage (EU) and will be deleted automatically in about "+minutes+" minute(s). "+
       "Pressing OK gives the same link to "+name+", which will download the crop and apply its own retention rules to it.\n\n"+
+      YANDEX_EXPOSURE+"\n\n"+
       "Nothing is shared with "+name+" unless you press OK.";
   }
-  return "Search face "+record.label+" directly on "+name+"?\n\n"+
+  return "Search face "+record.label+" directly on "+name+"?\n\n"+warning+
     "Yandex Images can only search by web address, so this ONE crop (a small JPEG without metadata) will be hosted on CT Atlas's temporary storage (EU) for about 10 minutes. "+
     "Anyone holding its unguessable link can view it during that time, Yandex Images downloads it and applies its own retention rules to that copy, and CT Atlas deletes its copy automatically afterwards.\n\n"+
+    YANDEX_EXPOSURE+"\n\n"+
     "Nothing is uploaded unless you press OK.";
 }
 
@@ -548,6 +565,33 @@ function showNextStep(record,queued){
   if(first)first.focus();
 }
 let nextStepPrompt=showNextStep;
+
+// Hosting failed, so the crop has to be pasted by hand. The clipboard refuses a page without the focus, so this
+// dialog waits for a click on this page; `proceed` runs inside that click.
+function showCopyFallback(record,engines,reason,proceed){
+  const dialog=document.createElement("dialog");
+  dialog.className="fc-consent fc-next";
+  dialog.setAttribute("aria-labelledby","fcPasteTitle");
+  dialog.setAttribute("aria-describedby","fcPasteText");
+  const names=engines.map(engine=>engine.name).join(", ");
+  dialog.innerHTML='<div class="fc-consent-title" id="fcPasteTitle">FACE '+esc(record.label)+' · HOSTING FAILED</div>'+
+    '<div class="fc-consent-text" id="fcPasteText">CT Atlas could not host this crop ('+esc(reason)+'), so nothing was sent to '+esc(names)+'. Click below to copy the crop and open that page, then open its image-upload box and press Ctrl+V. The face reaches '+esc(names)+' only if you paste it there, and the warnings you have just read apply to it in the same way.</div>'+
+    '<div class="fc-consent-actions"><button type="button" class="fc-btn" data-fc-paste="close">LATER</button>'+
+    '<button type="button" class="fc-btn fc-btn-primary" data-fc-paste="copy">COPY CROP &amp; OPEN '+esc(names.toUpperCase())+' ↗</button></div>';
+  dialog.addEventListener("click",event=>{
+    const choice=event.target.closest?.("[data-fc-paste]")?.dataset.fcPaste;
+    if(!choice)return;
+    if(typeof dialog.close==="function")dialog.close();
+    dialog.remove();
+    if(choice==="copy")proceed();
+  });
+  dialog.addEventListener("close",()=>dialog.remove());
+  document.body.appendChild(dialog);
+  if(typeof dialog.showModal==="function")dialog.showModal();else dialog.setAttribute("open","");
+  const first=dialog.querySelector('[data-fc-paste="copy"]');
+  if(first)first.focus();
+}
+let fallbackPrompt=showCopyFallback;
 
 // In-page confirmation. The browser's built-in confirm box is NOT used: the search tab is opened in the same click,
 // takes the focus, and a dialog raised by the tab that just went to the background can be suppressed
@@ -613,29 +657,28 @@ function requestSearch(record,engines,returnFocus){
   return running;
 }
 
-// Records the search action with the engines and the face label (e.g. "F2 @ 3.5s") for the
-// admin search history; never the crop, its file name or the hosted link.
-function recordFacialSearchUsage(record,engines){
-  try{
-    const details={engines:(engines||[]).map(engine=>String(engine&&engine.id||engine||"")).filter(Boolean).slice(0,4),face:String(record&&record.label||"").slice(0,40)};
-    const api=context&&String(context.api||"").replace(/\/$/,"");
-    const token=context&&context.getToken?String(context.getToken()||""):"";
-    const username=String(sessionStorage.getItem("ct_map_username")||"").trim().toLowerCase();
-    if(!api||!token||!username)return;
-    fetch(api+"/usage-record",{
-      method:"POST",
-      headers:{"Content-Type":"application/json","X-Session-Token":token},
-      body:JSON.stringify({username,action:"facial_search",details})
-    }).catch(()=>{});
-  }catch(_){}
-}
-
 async function startSearch(record,engines){
   if(record.searching)return;
   record.searching=true;
-  recordFacialSearchUsage(record,engines);
   try{await runDirectSearch(record,engines);}
   finally{record.searching=false;}
+}
+
+// The copy comes first: the new tab takes the focus, and the clipboard needs it. If the copy fails, staying on this
+// page keeps the instruction to download the JPEG in view instead of leaving the analyst on an empty upload page.
+async function copyAndOpen(record,engines){
+  const pages=engines.map(engine=>({engine,url:engine.url}));
+  if(!await copy(record)){showLinks(record,pages,[],0);return;}
+  const opened=[],queued=[];
+  for(const page of pages){
+    const win=openPlaceholder();
+    if(win){win.location.replace(page.url);opened.push(page);}
+    else queued.push(page);
+  }
+  showLinks(record,queued,opened,0);
+  setStatus(opened.length
+    ?"Face "+record.label+" copied. On "+opened.map(page=>page.engine.name).join(", ")+" open the image-upload box and press Ctrl+V: the face reaches it only if you paste it."
+    :"Face "+record.label+" copied, but the browser blocked the new tab: use the link in this row, then press Ctrl+V on that page.");
 }
 
 async function runDirectSearch(record,engines){
@@ -665,12 +708,12 @@ async function runDirectSearch(record,engines){
       :"Face "+record.label+": the Yandex search tab was closed before the results could load. The crop stays hosted for about "+minutes+" more minute(s): use the link in this row ("+names(queued)+").");
     if(queued.length)nextStepPrompt(record,queued);
   }catch(error){
-    // Fall back to the paste flow: each window goes to the engine's own upload page.
-    engines.forEach((engine,index)=>{try{if(windows[index])windows[index].location.replace(engine.url);}catch(_){/* window closed by the user */}});
-    const copied=await copy(record);
-    setStatus("Direct search unavailable ("+(error.message||"error")+"). "+(copied
-      ?"The crop was copied instead: on the engine's page open its image-upload box and press Ctrl+V."
-      :"Download the JPEG and drag it onto the engine's page."),"error");
+    // The placeholder holds the focus, so copying from here would always be refused: close it and come back.
+    windows.forEach(win=>{try{if(win)win.close();}catch(_){/* window closed by the user */}});
+    window.focus?.();
+    const reason=error.message||"error";
+    setStatus("Direct search unavailable ("+reason+"). Nothing was sent. Use the dialog to copy the crop, or download the JPEG and drag it onto the engine's page.","error");
+    fallbackPrompt(record,engines,reason,()=>copyAndOpen(record,engines));
   }
 }
 
@@ -721,7 +764,8 @@ function bindControls(){
 
 root.CTAtlasFaceCrops={attach,helpers,
   setConsentPrompt:fn=>{consentPrompt=typeof fn==="function"?fn:askConsent;},
-  setNextStepPrompt:fn=>{nextStepPrompt=typeof fn==="function"?fn:showNextStep;}};
+  setNextStepPrompt:fn=>{nextStepPrompt=typeof fn==="function"?fn:showNextStep;},
+  setFallbackPrompt:fn=>{fallbackPrompt=typeof fn==="function"?fn:showCopyFallback;}};
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bindControls);
 else bindControls();
 })(typeof window!=="undefined"?window:globalThis);

@@ -93,6 +93,7 @@ jobs:
             --allow-unauthenticated \
             --memory 1Gi \
             --cpu 1 \
+            --concurrency 1 \
             --timeout 180 \
             --quiet \
             --set-env-vars "CT_ATLAS_VISUAL_SHARED_SECRET=$VISUAL_SHARED_SECRET"

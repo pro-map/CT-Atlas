@@ -27,12 +27,14 @@ function faceTable(faces,prefix){
  return '<div class="face-scroll"><table class="face-table"><thead><tr><th>Crop</th><th>Face</th><th>Confidence</th><th>Quality</th><th>Sharpness</th><th>Brightness</th><th>Image area</th><th>Actions</th></tr></thead><tbody>'+
  faces.map(f=>{const key=esc(prefix+':'+f.face_id);return '<tr><td class="fc-thumb" data-fc-key="'+key+'"><span class="fc-pending">…</span></td><td>F'+esc(f.face_id)+'</td><td>'+(f.detection_score!=null?esc(Math.round(Number(f.detection_score)*100))+'%':'—')+'</td><td><span class="quality">'+esc(f.quality)+' '+esc(f.quality_score)+'</span></td><td>'+esc(f.sharpness)+'</td><td>'+esc(f.brightness)+'</td><td>'+esc((Number(f.size_ratio||0)*100).toFixed(1))+'%</td><td class="fc-actions" data-fc-key="'+key+'"></td></tr>';}).join("")+'</tbody></table></div>';
 }
+// Why a frame has no OCR text: "nothing there" and "nothing read" are different findings.
+const OCR_NOTES={no_text:"No text found.",timeout:"Timed out on this frame: any text in it was not read.",failed:"Failed on this frame: any text in it was not read.",skipped:"Skipped: this analysis reached its OCR time limit."};
 function previewCard(frame,prefix){
  return '<div class="preview-card">'+
-  (frame.annotated_preview?'<img src="'+frame.annotated_preview+'" alt="Annotated visual analysis preview">':'')+
+  (/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(frame.annotated_preview||"")?'<img src="'+frame.annotated_preview+'" alt="Annotated visual analysis preview">':'')+
   '<div class="preview-info"><div class="media-meta">'+esc(frame.label)+(frame.timestamp_seconds!=null?' · '+esc(frame.timestamp_seconds)+'s':'')+' · '+esc(frame.width)+'×'+esc(frame.height)+' · '+esc(frame.face_count)+' face(s)</div>'+
   faceTable(frame.faces,prefix)+
-  (frame.ocr_text?'<div class="ocr"><b>OCR</b><br>'+esc(frame.ocr_text)+'</div>':'')+
+  (frame.ocr_text||OCR_NOTES[frame.ocr_status]?'<div class="ocr"><b>OCR</b><br>'+esc(frame.ocr_text||OCR_NOTES[frame.ocr_status])+'</div>':'')+
   '</div></div>';
 }
 function render(payload){
@@ -40,7 +42,6 @@ function render(payload){
  const files=payload.files||[];
  const frames=files.reduce((n,f)=>n+(f.kind==="video"?(f.sampled_frames||[]).length:1),0);
  const faces=files.reduce((n,f)=>n+Number(f.face_count||0),0);
- const gps=files.filter(f=>f.exif&&f.exif.GPS).length;
  $("fiSummary").innerHTML=[
   [files.length,"FILES ANALYZED"],[frames,"IMAGES / FRAMES"],[faces,"FACE DETECTIONS"],[(payload.similarity_pairs||[]).length,"SIMILAR PAIRS"]
  ].map(x=>'<div class="summary-card"><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div>').join("");
@@ -79,7 +80,10 @@ $("fiForm").addEventListener("submit",async e=>{
   const r=await fetch(API+"/visual-analyze"+counts,{method:"POST",headers:{"X-Session-Token":token},body:data});
   const p=await r.json().catch(()=>({}));
   if(!r.ok)throw new Error(p.error||p.detail||"Visual analysis failed.");
-  render(p);finishSound?.((p.errors||[]).length?"error":"success");status.textContent="Analysis complete.";
+  render(p);
+  if(p.ok===false)throw new Error("Analysis failed: no file could be read. The reasons are under PROCESSING WARNINGS.");
+  finishSound?.((p.errors||[]).length?"error":"success");
+  status.textContent="Analysis complete."+(p.ocr_skipped?" OCR was skipped on "+p.ocr_skipped+" frame(s): its time limit was reached.":"");
  }catch(err){finishSound?.("error");status.className="status error";status.textContent=err.message||"Visual analysis failed.";}
  finally{finishWait?.();$("fiRun").disabled=false;}
 });

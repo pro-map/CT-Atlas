@@ -29,15 +29,21 @@ class FakeStorage{
 
 function world(options={}){
  const clock={t:START};
+ const records=[];
  class FakeDate extends Date{static now(){return clock.t;}}
  const instances=new Map();
  const touched=[];
  const context=vm.createContext({
-  Response,Request,URL,Uint8Array,Map,Promise,Number,String,Math,JSON,btoa,crypto,Date:FakeDate,
+  Response,Request,URL,Uint8Array,Array,Map,Promise,Number,String,Math,JSON,btoa,crypto,Date:FakeDate,
   cleanText:(v,n)=>String(v||'').replace(/\s+/g,' ').trim().slice(0,n),
   jsonResponse:(body,status)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}}),
   isAllowedUser:name=>ALLOWED.has(String(name)),
   gateCall:async(env,path,payload)=>{
+   if(path==='/usage-increment'){
+    records.push(payload);
+    if(options.recordFails==='throw')throw new Error('gate down');
+    return new Response('{}',{status:options.recordFails?500:200});
+   }
    const username=SESSIONS[payload.session_token];
    return username
     ?new Response(JSON.stringify({username}),{status:200})
@@ -60,15 +66,15 @@ function world(options={}){
  let jurisdiction=null;
  const binding=options.eu===false?namespace:Object.assign(Object.create(namespace),{jurisdiction:name=>{jurisdiction=name;return namespace;}});
  const env={FACE_SHARE:options.noBinding?undefined:binding};
- return {api,env,clock,instances,touched,namespace,get jurisdiction(){return jurisdiction;}};
+ return {api,env,clock,instances,touched,namespace,records,get jurisdiction(){return jurisdiction;}};
 }
 
 const jpeg=(size=2000)=>{const b=new Uint8Array(size);b[0]=0xff;b[1]=0xd8;b[2]=0xff;for(let i=3;i<size;i++)b[i]=(i*31)%251;return b;};
 
-function upload(w,{token='tok-alice',type='image/jpeg',body=jpeg(),headers={}}={}){
+function upload(w,{token='tok-alice',type='image/jpeg',body=jpeg(),headers={},query=''}={}){
  const h={'Content-Type':type,...headers};
  if(token)h['X-Session-Token']=token;
- return w.api.handleFaceShareUpload(new Request('https://worker.test/face-share',{method:'POST',headers:h,body}),w.env,w.clock.t);
+ return w.api.handleFaceShareUpload(new Request('https://worker.test/face-share'+query,{method:'POST',headers:h,body}),w.env,w.clock.t);
 }
 const get=(w,path,method='GET')=>w.api.handleFaceShareGet(new Request('https://worker.test'+path,{method}),w.env);
 
@@ -146,9 +152,15 @@ test('a successful upload returns an unguessable https link that expires in 10 m
  assert.equal(record.storage.alarm,START+600_000,'the object schedules its own deletion');
 });
 
-test('it also works when the runtime has no jurisdiction API',async()=>{
+test('without the EU jurisdiction nothing is hosted: the page promises EU storage, so there is no global fallback',async()=>{
  const w=world({eu:false});
- assert.equal((await upload(w)).status,200);
+ const r=await upload(w);
+ assert.equal(r.status,503);
+ assert.match((await r.json()).error,/EU storage/);
+ assert.equal(w.touched.length,0,'no object was created in the global namespace');
+ assert.equal(w.records.length,0);
+ assert.equal((await get(w,'/face-share/AAAAAAAAAAAAAAAAAAAAAA.jpg')).status,404);
+ assert.equal(w.touched.length,0,'and none is read from it');
 });
 
 test('ids are random: 200 uploads never collide and none is sequential',async()=>{
@@ -170,6 +182,51 @@ test('at most 40 uploads per user per hour, counted per user, released after the
  assert.equal((await upload(w,{token:'tok-bob'})).status,200,'another user is not affected');
  w.clock.t+=3600_000+1;
  assert.equal((await upload(w)).status,200,'allowed again after an hour');
+});
+
+// ---------------------------------------------------------------- the record of a search
+
+test('a hosted crop is recorded on the server with its face label, size and hash, and only the session decides whose search it is',async()=>{
+ const w=world();
+ const bytes=jpeg(3000);
+ await uploadOk(w,{body:bytes,query:'?face='+encodeURIComponent('F2 @ 3.5s')+'&username=bob'});
+ assert.equal(w.records.length,1);
+ const hash=require('node:crypto').createHash('sha256').update(bytes).digest('hex');
+ assert.equal(JSON.stringify(w.records[0]),JSON.stringify({username:'alice',metrics:{facial_searches:1},log:{feature:'facial_search',details:{engines:['yandex'],face:'F2 @ 3.5s',sha256:hash,bytes:3000,outcome:'hosted'}}}));
+});
+
+test('a direct POST with no label is still recorded',async()=>{
+ const w=world();
+ await uploadOk(w);
+ assert.equal(w.records.length,1);
+ assert.equal(w.records[0].log.details.face,'');
+});
+
+test('a refused or failed upload records nothing: only searches that happened are in the history',async()=>{
+ const w=world();
+ await upload(w,{token:''});
+ await upload(w,{token:'tok-mallory'});
+ await upload(w,{type:'image/png'});
+ await upload(w,{body:new Uint8Array([1,2,3,4,5,6])});
+ await upload(w,{body:jpeg(w.api.FACE_SHARE_MAX_BYTES+1)});
+ assert.equal(w.records.length,0);
+ const failing=world();
+ failing.namespace.get=()=>({fetch:async()=>new Response('no',{status:500})});
+ assert.equal((await upload(failing)).status,502);
+ assert.equal(failing.records.length,0);
+});
+
+test('no record, no link: if the search cannot be recorded the link is not released',async()=>{
+ for(const recordFails of [true,'throw']){
+  const w=world({recordFails});
+  const r=await upload(w);
+  assert.equal(r.status,503);
+  const body=await r.json();
+  assert.match(body.error,/could not be recorded/);
+  assert.equal(body.url,undefined);
+  const record=[...w.instances.values()][0];
+  assert.equal(record.storage.alarm,START+600_000,'the unreleased crop still deletes itself');
+ }
 });
 
 // ---------------------------------------------------------------- serving
@@ -270,7 +327,7 @@ test('malformed or unknown links are 404 without touching any storage object',as
 
 // ---------------------------------------------------------------- wiring
 
-test('the Worker routes, exports and binds the hosting; health reports it; the module never logs',()=>{
+test('the Worker routes, exports and binds the hosting; health reports it; the module never writes to the console',()=>{
  const index=fs.readFileSync('cloudflare-worker/index.js','utf8');
  assert.match(index,/import \{ handleFaceShareUpload, handleFaceShareGet, FACE_SHARE_VERSION \} from "\.\/face-share\.js";/);
  assert.match(index,/url\.pathname === "\/face-share" && request\.method === "POST"/);

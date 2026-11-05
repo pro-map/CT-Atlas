@@ -9,14 +9,21 @@ Run:  python3 tests/visual_intel_detector_test.py
 (also run inside the built container by .github/workflows/deploy-visual-intel.yml)
 """
 import asyncio
+import base64
 import hashlib
+import inspect
+import io
 import os
+import shutil
 import sys
+import time
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import cv2
 import numpy as np
+from PIL import Image
 
 HERE = Path(__file__).resolve().parent
 for candidate in (os.environ.get("VISUAL_SERVICE_DIR"), HERE.parent / "visual-intel-service", "/app"):
@@ -276,6 +283,168 @@ class ServiceOutput(unittest.TestCase):
         self.assertEqual(info["face_detection_error"], "")
         self.assertIs(info["identity_recognition"], False)
         self.assertEqual(app.SERVICE_VERSION, "ct-atlas-visual-intel-v2")
+
+
+class FaceQuality(unittest.TestCase):
+    """The label is the only guidance on which crop to search. Raw Laplacian variance falls as resolution rises and
+    the face's share of the frame punishes group photos, so the same face used to go from HIGH at 400 px to LOW at
+    2200 px, and a sharp 285 px face read LOW while a 27 px one read HIGH."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.base = cv2.imread(str(HERE / "fixtures" / "astronaut_1600.jpg"))
+
+    def at(self, side):
+        interpolation = cv2.INTER_AREA if side < 1600 else cv2.INTER_CUBIC
+        faces = app._detect_faces(cv2.resize(self.base, (side, side), interpolation=interpolation))
+        self.assertEqual(len(faces), 1, side)
+        return faces[0]
+
+    def test_the_same_face_does_not_get_worse_as_the_resolution_rises(self):
+        sides = (150, 400, 800, 1600, 2200)
+        scores = [self.at(side)["quality_score"] for side in sides]
+        self.assertEqual(scores, sorted(scores))
+        self.assertEqual([self.at(side)["quality"] for side in sides], ["LOW", "MEDIUM", "HIGH", "HIGH", "HIGH"])
+
+    def test_a_tiny_face_cannot_read_high(self):
+        face = self.at(150)
+        self.assertLess(min(face["box"]["w"], face["box"]["h"]), 40)
+        self.assertEqual(face["quality"], "LOW")
+
+    def test_a_sharp_face_in_a_large_frame_is_not_punished_for_the_empty_space_around_it(self):
+        canvas = np.full((3000, 4000, 3), 128, np.uint8)
+        canvas[1000:1800, 1500:2300] = cv2.resize(self.base, (800, 800), interpolation=cv2.INTER_AREA)
+        face = app._detect_faces(canvas)[0]
+        self.assertLess(face["size_ratio"], 0.01)
+        self.assertEqual(face["quality"], "HIGH")
+
+    def test_a_large_blurred_face_is_low_whatever_its_size_earns_it(self):
+        face = app._detect_faces(cv2.GaussianBlur(self.base, (0, 0), 8))[0]
+        self.assertLess(face["sharpness"], app.QUALITY_MIN_SHARPNESS)
+        self.assertGreaterEqual(face["quality_score"], 42, "without the floor this blurred face would read MEDIUM")
+        self.assertEqual(face["quality"], "LOW")
+
+
+class ImageLimits(unittest.TestCase):
+    @staticmethod
+    def blank_png(width, height):
+        out = io.BytesIO()
+        Image.new("1", (width, height)).save(out, "PNG")
+        return out.getvalue()
+
+    def test_a_tiny_file_that_would_decode_to_a_huge_frame_is_refused_before_decoding(self):
+        raw = self.blank_png(12000, 12000)
+        self.assertLess(len(raw), 1_000_000)
+        with mock.patch.object(app.cv2, "imdecode", side_effect=AssertionError("must not be decoded")):
+            with self.assertRaisesRegex(ValueError, "50 megapixel limit"):
+                app._decode_image(raw)
+
+    def test_an_image_large_enough_for_pillow_to_refuse_gets_the_same_answer(self):
+        with self.assertRaisesRegex(ValueError, "50 megapixel limit"):
+            app._decode_image(self.blank_png(20000, 20000))
+
+    def test_the_limit_itself_is_allowed(self):
+        with mock.patch.object(app, "MAX_IMAGE_PIXELS", 40 * 40):
+            self.assertEqual(app._decode_image(self.blank_png(40, 40)).shape[:2], (40, 40))
+            with self.assertRaises(ValueError):
+                app._decode_image(self.blank_png(41, 40))
+
+    def test_what_is_not_an_image_is_still_reported_as_undecodable(self):
+        for raw in (b"not an image", FIXTURE.read_bytes()[:40]):
+            with self.assertRaisesRegex(ValueError, "Unable to decode image"):
+                app._decode_image(raw)
+
+    def test_a_frame_above_the_analysis_size_keeps_its_boxes_in_original_pixels_and_gets_a_small_labelled_preview(self):
+        frame = cv2.resize(load(), (2600, 2600), interpolation=cv2.INTER_CUBIC)
+        item = app._analyze_frame(frame, "large", do_ocr=False)
+        self.assertEqual((item["width"], item["height"]), (2600, 2600))
+        box = item["faces"][0]["box"]
+        self.assertGreater(iou((box["x"], box["y"], box["w"], box["h"]), tuple(v * 2600 / 512 for v in FACE)), 0.6)
+        raw = base64.b64decode(item["annotated_preview"].split(",", 1)[1])
+        preview = cv2.imdecode(np.frombuffer(raw, np.uint8), cv2.IMREAD_COLOR)
+        self.assertEqual(preview.shape[:2], (1280, 1280))
+        ratio = 1280 / 2600
+        top = int(box["y"] * ratio)
+        self.assertGreater(preview[top, int((box["x"] + box["w"] / 2) * ratio)].mean(), 200, "the box is drawn where the face is")
+
+
+class OcrStatus(unittest.TestCase):
+    def run_ocr(self, deadline=None, **behaviour):
+        with mock.patch.object(app.pytesseract, "image_to_string", **behaviour) as call:
+            return app._ocr(np.zeros((40, 40, 3), np.uint8), deadline), call
+
+    def test_text_and_no_text_are_told_apart(self):
+        self.assertEqual(self.run_ocr(return_value=" Hello  world\n")[0], ("Hello world", "ok"))
+        self.assertEqual(self.run_ocr(return_value=" \n")[0], ("", "no_text"))
+
+    def test_a_timeout_or_a_crash_is_not_reported_as_an_empty_image(self):
+        self.assertEqual(self.run_ocr(side_effect=RuntimeError("Tesseract process timeout"))[0], ("", "timeout"))
+        self.assertEqual(self.run_ocr(side_effect=app.pytesseract.TesseractError(1, "no language pack"))[0], ("", "failed"))
+
+    def test_the_languages_and_the_per_call_timeout_reach_tesseract(self):
+        _, call = self.run_ocr(return_value="x")
+        self.assertEqual(call.call_args.kwargs["lang"], "eng+fra+ara+rus")
+        self.assertEqual(call.call_args.kwargs["timeout"], app.OCR_TIMEOUT_SECONDS)
+
+    def test_a_call_cannot_run_past_the_request_budget_and_none_starts_once_it_is_spent(self):
+        _, call = self.run_ocr(deadline=time.monotonic() + 2, return_value="x")
+        self.assertLessEqual(call.call_args.kwargs["timeout"], 2)
+        result, call = self.run_ocr(deadline=time.monotonic() - 1, return_value="x")
+        self.assertEqual(result, ("", "skipped"))
+        call.assert_not_called()
+
+
+@unittest.skipUnless(shutil.which("tesseract"), "tesseract is installed in the service image only")
+class OcrInTheServiceImage(unittest.TestCase):
+    def test_the_language_packs_are_installed_and_ocr_runs(self):
+        self.assertLessEqual({"eng", "fra", "ara", "rus"}, set(app.pytesseract.get_languages()))
+        frame = np.full((200, 900, 3), 255, np.uint8)
+        cv2.putText(frame, "CT ATLAS 2026", (30, 120), cv2.FONT_HERSHEY_SIMPLEX, 2.5, (0, 0, 0), 5)
+        self.assertNotEqual(app._ocr(frame)[1], "failed")
+        # Printed, not asserted: a slow runner must not block a deployment, but the 6 s timeout needs this number.
+        for name, sample in (("text line", frame), ("1600 px photo", cv2.imread(str(HERE / "fixtures" / "astronaut_1600.jpg")))):
+            started = time.monotonic()
+            status = app._ocr(sample)[1]
+            print(f"OCR {app.OCR_LANGUAGES} on {name}: {status} in {time.monotonic() - started:.1f} s")
+
+
+class AnalyzeEndpoint(unittest.TestCase):
+    def setUp(self):
+        patcher = mock.patch.dict(os.environ, {"CT_ATLAS_VISUAL_SHARED_SECRET": "test-key"})
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    @staticmethod
+    def call(name, raw, content_type="image/jpeg"):
+        upload = app.UploadFile(file=io.BytesIO(raw), filename=name, headers={"content-type": content_type})
+        return app.analyze(files=[upload], x_ct_atlas_visual_key="test-key")
+
+    def test_analysis_stays_off_the_event_loop_so_health_answers_during_it(self):
+        self.assertFalse(inspect.iscoroutinefunction(app.analyze))
+        self.assertTrue(inspect.iscoroutinefunction(app.health))
+
+    def test_a_file_nothing_can_decode_comes_back_as_not_ok_with_its_reason(self):
+        result = self.call("broken.jpg", b"not an image")
+        self.assertIs(result["ok"], False)
+        self.assertEqual(result["files"], [])
+        self.assertEqual(result["errors"], [{"filename": "broken.jpg", "error": "Unable to decode image."}])
+
+    def test_every_frame_says_how_ocr_went_and_a_spent_budget_is_counted(self):
+        with mock.patch.object(app.pytesseract, "image_to_string", return_value="") as ocr:
+            result = self.call("astronaut.jpg", FIXTURE.read_bytes())
+            self.assertEqual(result["files"][0]["ocr_status"], "no_text")
+            self.assertEqual(result["ocr_skipped"], 0)
+            ocr.reset_mock()
+            with mock.patch.object(app, "OCR_BUDGET_SECONDS", 0):
+                result = self.call("astronaut.jpg", FIXTURE.read_bytes())
+            ocr.assert_not_called()
+        self.assertIs(result["ok"], True, "the analysis itself still completes")
+        self.assertEqual(result["files"][0]["ocr_status"], "skipped")
+        self.assertEqual(result["ocr_skipped"], 1)
+
+    def test_video_frames_count_towards_the_skipped_total(self):
+        items = [{"kind": "video", "sampled_frames": [{"ocr_status": "skipped"}, {"ocr_status": "ok"}, {"ocr_status": "not_run"}]}, {"kind": "image", "ocr_status": "skipped"}]
+        self.assertEqual(app._ocr_skipped(items), 2)
 
 
 if __name__ == "__main__":

@@ -230,9 +230,9 @@ const ADMIN_HISTORY_FIELDS=[
   ["country","Country"],["sort","Sort"],["view","View"],["outlet","Outlet"],["material","Material"],["loaded_back_to","Loaded back to"],
   ["results","Results shown"],["kind","Type"],["chain","Chain"],["chain_hint","Chain selected"],["origin","Origin"],["limit","Transactions"],
   ["registered_domain","Registered domain"],["parent_domain","From domain"],["files","Files"],
-  ["videos","Videos"],["bytes","Upload size"],["engines","Engines"],["face","Face"],["period","Period found"],["title","Result"],["outcome","Outcome"]
+  ["videos","Videos"],["bytes","Upload size"],["engines","Engines"],["face","Face"],["sha256","Crop SHA-256"],["period","Period found"],["title","Result"],["outcome","Outcome"]
 ];
-const ADMIN_OUTCOMES={cached:"Served from cache",generated:"Generated",no_events:"No matching events",failed:"Failed"};
+const ADMIN_OUTCOMES={cached:"Served from cache",generated:"Generated",no_events:"No matching events",failed:"Failed",hosted:"Crop hosted"};
 const ADMIN_MAIN_FIELD={deep_search:"question",event_list:"text",darkweb_search:"text",blockchain:"query",ip_lookup:"target"};
 
 function adminHistoryValue(name,value){

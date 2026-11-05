@@ -12,7 +12,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CT ATLAS — Facial Intelligence</title>
 <link rel="icon" href="CT-ATLAS.png">
-<link rel="stylesheet" href="facial.css?v=7">
+<link rel="stylesheet" href="facial.css?v=8">
 <link rel="stylesheet" href="tab-health.css?v=1">
   <script src="tab-access.js?v=no-social-20261006" defer></script>
 </head>
@@ -38,14 +38,14 @@
       <div class="panel-kicker">VISUAL INPUT</div>
       <h1>Analyze images and video</h1>
       <p class="lead">Detect faces, assess crop quality, extract public metadata and OCR text, sample video frames, and identify duplicate or near-duplicate visuals.</p>
-      <div class="guardrail"><strong>NON-IDENTIFYING ANALYSIS.</strong> CT Atlas does not create biometric face embeddings, identify a person, or conclude that two faces belong to the same individual.</div>
+      <div class="guardrail"><strong>THE ANALYSIS DOES NOT IDENTIFY ANYONE. SEARCH SENDS A FACE TO A THIRD PARTY.</strong> The CT Atlas service does not create biometric face embeddings, identify a person, or conclude that two faces belong to the same individual. SEARCH is different: it sends one face to Yandex Images, an outside service that may return look-alikes. Treat every result as an unverified lead.</div>
       <div class="guardrail"><strong>RETENTION.</strong> Uploaded files are processed in memory on the analysis service and are not stored there. The report and any preview images returned to your browser persist only in this session unless you use Download JSON yourself. Face crops are cut in your browser and go nowhere until you click SEARCH. A direct SEARCH hosts that one crop on CT Atlas's temporary storage (EU) for about 10 minutes so Yandex Images can download it, then deletes it automatically. Downloading crops, or pasting one into a third-party search engine, is your own action and outside CT Atlas's retention controls.</div>
 
       <form id="fiForm">
         <label class="dropzone" for="fiFiles">
           <span class="drop-title">SELECT IMAGES OR VIDEOS</span>
-          <span class="drop-help">Up to 10 files · combined maximum 30 MB · JPG, PNG, WEBP, MP4, MOV, WEBM and common formats</span>
-          <input id="fiFiles" type="file" multiple accept="image/*,video/*">
+          <span class="drop-help">Up to 10 files · combined maximum 30 MB and 50 megapixels per image · JPG, PNG, WEBP, BMP, TIFF, MP4, MOV, M4V, AVI, WEBM, MKV · GIF, AVIF and HEIC are not supported</span>
+          <input id="fiFiles" type="file" multiple accept="image/jpeg,image/png,image/webp,image/bmp,image/tiff,video/mp4,video/quicktime,video/x-m4v,video/x-msvideo,video/webm,video/x-matroska,.m4v,.mkv">
         </label>
         <div id="fiFileList" class="file-list"></div>
         <label class="consent-check">
@@ -58,7 +58,7 @@
 
       <section class="capabilities">
         <div><b>Face detection</b><span>Bounding boxes + face crop quality</span></div>
-        <div><b>OCR</b><span>Visible text extraction with Tesseract</span></div>
+        <div><b>OCR</b><span>Visible text in English, French, Arabic and Russian, with Tesseract</span></div>
         <div><b>EXIF / GPS</b><span>Only metadata embedded in the uploaded file</span></div>
         <div><b>Video sampling</b><span>Representative frames with timestamps</span></div>
         <div><b>Visual similarity</b><span>Whole-image/frame perceptual hash comparison</span></div>
@@ -102,7 +102,7 @@
             <label class="fc-check"><input id="fcUpscale" type="checkbox" checked> Upscale small crops to 300 px</label>
           </div>
           <div id="fcStatus" class="fc-status" aria-live="polite"></div>
-          <div class="fc-notice"><strong>THIRD-PARTY SEARCH.</strong> Cutting, JPEG, ZIP and COPY happen only in your browser. SEARCH opens Yandex Images on the face. Yandex can only search by web address, so after a confirmation one crop is hosted on CT Atlas's temporary storage for about 10 minutes (anyone holding its unguessable link can view it meanwhile), Yandex downloads it and applies its own retention rules to that copy, and CT Atlas then deletes its hosted copy automatically. If hosting fails, the crop is copied instead so you can paste it on Yandex's own page: the face then reaches Yandex only when you paste it there. CT Atlas is not sent to Yandex as the referring site. Results are leads, not identifications (look-alikes are common), and Yandex is not operated or verified by CT Atlas.</div>
+          <div class="fc-notice"><strong>THIRD-PARTY SEARCH.</strong> Cutting, JPEG, ZIP and COPY happen only in your browser. SEARCH opens Yandex Images on the face. Yandex can only search by web address, so after a confirmation one crop is hosted on CT Atlas's temporary storage for about 10 minutes (anyone holding its unguessable link can view it meanwhile), Yandex downloads it and applies its own retention rules to that copy, and CT Atlas then deletes its hosted copy automatically. <strong>Yandex is a Russian-law operator.</strong> The search runs in your own browser, so Yandex also sees your IP address, any Yandex account signed in there, and the CT Atlas API host name in the link, even though the page address is not sent as the referrer. What it receives cannot be recalled: use a separate browser profile with no Yandex login. If hosting fails, nothing is sent and a dialog offers to copy the crop and open Yandex's own page: the face then reaches Yandex only when you paste it there. Results are leads, not identifications (look-alikes are common), and Yandex is not operated or verified by CT Atlas.</div>
         </section>
         <section id="fiSimilaritySection" class="report-section" hidden>
           <h3>VISUAL SIMILARITY</h3>
@@ -114,8 +114,8 @@
     </section>
   </main>
 </div>
-<script src="facial-crops.js?v=8"></script>
-<script src="facial.js?v=20261006"></script>
+<script src="facial-crops.js?v=9"></script>
+<script src="facial.js?v=20261105"></script>
 <script src="tab-health.js?v=1" data-health-scope="facial"></script>
 </body>
 </html>

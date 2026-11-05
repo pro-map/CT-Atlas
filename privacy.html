@@ -62,7 +62,7 @@
   <div class="subtitle">Global Counter-Terrorism Intelligence</div>
 
   <h1 style="margin-top:0;border-top:none;padding-top:0">Privacy Notice</h1>
-  <p class="updated">Last updated: 6 October 2026</p>
+  <p class="updated">Last updated: 5 November 2026</p>
 
   <p>This notice explains what personal data CT Atlas collects from its
   registered users, why, and how it is protected. CT Atlas is a
@@ -96,8 +96,10 @@
     (and whether it came from a search, a trace expansion or a monitor check); the
     SOCMINT investigation inputs; the Dark Web search text, outlet name and material
     type; the IP address or domain looked up in IP Intelligence; and, for Facial
-    Intelligence, only the number and size of uploaded files and the label of a
-    searched face crop (never images, file names or links). The outcome of a report
+    Intelligence, only the number and size of uploaded files and, for each face crop
+    hosted for a search, its label, size and SHA-256 fingerprint (never images, file
+    names or links; the fingerprint recognises that exact file and is not a face
+    template). The outcome of a report
     request (generated, served from cache, no matching events or failed) and the
     report title may be added. Only the administrator can view this history; it is
     kept for 90 days and then deleted automatically.</li>
@@ -140,7 +142,9 @@
     the unguessable link can view the crop during that time, Yandex's own
     retention rules apply to what it downloads, and Cloudflare's provider-level
     recovery records (see &ldquo;Retention&rdquo;) are outside CT Atlas's
-    application-level deletion.</li>
+    application-level deletion. The analysis service does not identify anyone, but
+    SEARCH sends a face to a third party that may return look-alikes (see
+    &ldquo;Who else processes data&rdquo;).</li>
     <li><strong>Dark Web Intelligence and IP Intelligence.</strong> Dark Web
     searches filter the collected publications in your browser; the search text,
     the selected outlet's name and the material type are recorded in the search
@@ -196,11 +200,17 @@
     necessary to answer Crypto Intelligence requests on supported chains.</li>
     <li><strong>GDELT, ACLED and other public reporting sources</strong> &mdash;
     provide open-source event or reporting data used by CT Atlas.</li>
-    <li><strong>Reverse-image search engine</strong> &mdash; Yandex Images receives
-    the temporary link of a face crop only when an analyst clicks SEARCH and
-    confirms. If hosting is unavailable the analyst can paste the crop into
-    Yandex's own page instead, and it then reaches that service only when pasted.
-    Yandex is not operated by CT Atlas.</li>
+    <li><strong>Reverse-image search engine</strong> &mdash; only when an analyst
+    clicks SEARCH and confirms, Yandex Images receives the temporary link of a face
+    crop, downloads the crop and applies its own retention rules to that copy.
+    Yandex is a Russian-law operator. The search runs in the analyst's own browser,
+    so Yandex also receives the analyst's IP address, any Yandex account signed in
+    there, and the CT Atlas API host name contained in the link. What it receives
+    cannot be recalled, and analysts are advised to use a separate browser profile
+    with no Yandex login. Yandex may return look-alikes: its results are unverified
+    leads, not identifications. If hosting is unavailable nothing is sent, and the
+    analyst can copy the crop and paste it into Yandex's own page, where it reaches
+    that service only when pasted. Yandex is not operated by CT Atlas.</li>
   </ul>
 
   <h1>Retention</h1>

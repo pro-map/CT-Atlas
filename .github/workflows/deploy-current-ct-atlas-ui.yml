@@ -163,7 +163,7 @@ jobs:
           test -s facial.css
           grep -q 'RUN VISUAL ANALYSIS' facial.html
           grep -q 'visual-analyze' facial.js
-          grep -q 'NON-IDENTIFYING ANALYSIS' facial.html
+          grep -q 'THE ANALYSIS DOES NOT IDENTIFY ANYONE' facial.html
           node --check facial.js
           test -s facial-crops.js
           node --check facial-crops.js

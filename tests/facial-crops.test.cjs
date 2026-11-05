@@ -105,6 +105,14 @@ test("search engine: exactly Yandex Images, free, https, opened by URL",()=>{
   for(const removed of ["tineye.com","bing.com","lens.google.com","images.google.com","graph.baidu.com","search4faces"])assert.ok(!source.includes(removed),removed+" was removed");
 });
 
+test("cropWarning names what is weak about a crop and stays silent on a good one",()=>{
+  assert.equal(h.cropWarning({quality:"HIGH",upscaled:false}),"");
+  assert.equal(h.cropWarning({quality:"MEDIUM"}),"");
+  assert.equal(h.cropWarning({}),"","a detector with no quality says nothing");
+  assert.match(h.cropWarning({quality:"LOW"}),/^This crop is low quality, so look-alike/);
+  assert.match(h.cropWarning({quality:"HIGH",upscaled:true,sourceWidth:50,sourceHeight:60}),/^This crop is upscaled from 50×60 px, so look-alike/);
+});
+
 test("the hosted-crop link is only accepted when it points at the CT Atlas API's own hosting path",()=>{
   const api="https://ct-report-generator.fairpeace.workers.dev";
   const good=api+"/face-share/AbCdEfGhIjKlMnOpQrStUv.jpg";
@@ -140,16 +148,11 @@ test("PRIVACY GUARD: a crop leaves the browser only through an explicit SEARCH c
   for(const forbidden of ["XMLHttpRequest","sendBeacon","FormData","WebSocket","location.href","location.assign","navigator.share"]){
     assert.ok(!src.includes(forbidden),"facial-crops.js must not use "+forbidden);
   }
-  // The resized crop is uploaded once to CT Atlas. A separate request records
-  // only the search action and username; no crop or image data leaves in telemetry.
-  assert.equal((src.match(/\bfetch\(/g)||[]).length,2);
-  assert.equal((src.match(/fetch\(api\+"\/face-share"/g)||[]).length,1);
-  assert.equal((src.match(/fetch\(api\+"\/usage-record"/g)||[]).length,1);
-  const usage=src.slice(src.indexOf("function recordFacialSearchUsage"),src.indexOf("async function startSearch"));
-  assert.ok(usage.includes('body:JSON.stringify({username,action:"facial_search",details})'));
-  assert.ok(!usage.includes("record.blob")&&!usage.includes("record.file")&&!usage.includes("record.canvas"));
-  // Only the engines and the face label go to the admin search history: no file name, URL or share link.
-  assert.ok(usage.includes("record.label")&&!usage.includes("record.name")&&!usage.includes("record.url")&&!usage.includes("share"));
+  // The resized crop is uploaded once to CT Atlas. The search history is written by the Worker when it hosts the
+  // crop, so a browser can neither skip the record nor log a search that failed.
+  assert.equal((src.match(/\bfetch\(/g)||[]).length,1);
+  assert.equal((src.match(/fetch\(api\+"\/face-share\?face="\+encode\(record\.label\),/g)||[]).length,1,"only the face label travels with the crop: no file name");
+  assert.ok(!src.includes("usage-record"),"the browser reports nothing itself");
   // ...reachable from one place only (runDirectSearch), which is started only through requestSearch, which only a click handler calls.
   assert.equal((src.match(/shareCrop\(record\)/g)||[]).length,2,"definition + the single call in runDirectSearch");
   assert.equal((src.match(/runDirectSearch\(record,engines\)/g)||[]).length,2,"definition + the single call in startSearch");
@@ -190,6 +193,15 @@ test("PRIVACY GUARD: a crop leaves the browser only through an explicit SEARCH c
   assert.ok(!next.includes("window.open")&&!next.includes("fetch("));
   assert.match(next,/aria-labelledby/);
   assert.equal((src.match(/nextStepPrompt\(record,queued\)/g)||[]).length,1,"a single call, after the hosting succeeded");
+  // The paste fallback: its dialog opens nothing itself. The copy runs in that click, before the tab.
+  const fallback=src.slice(src.indexOf("function showCopyFallback"),src.indexOf("let fallbackPrompt"));
+  assert.ok(!fallback.includes("window.open")&&!fallback.includes("fetch(")&&!fallback.includes("clipboard"));
+  assert.match(fallback,/aria-labelledby/);
+  assert.match(fallback,/aria-describedby/);
+  const paste=src.slice(src.indexOf("async function copyAndOpen"),src.indexOf("async function runDirectSearch"));
+  assert.ok(paste.indexOf("await copy(record)")>-1&&paste.indexOf("await copy(record)")<paste.indexOf("openPlaceholder()"));
+  assert.ok(!flow.includes("await copy(record)"),"never from the failed search itself: its page does not have the focus");
+  assert.equal((src.match(/copyAndOpen\(record,engines\)/g)||[]).length,2,"definition + the dialog's click");
 });
 
 test("the UI wires the crops in, states the third-party disclosure, and keeps the non-identification guardrails",()=>{
@@ -209,7 +221,17 @@ test("the UI wires the crops in, states the third-party disclosure, and keeps th
   assert.ok(read("facial-crops.js").includes('data-fc-links='),"each row has its own place for engines that got no tab");
   assert.match(html,/only when you paste it there/);
   assert.match(html,/leads, not identifications/);
-  assert.ok(html.includes("NON-IDENTIFYING ANALYSIS"),"the existing guardrail must remain");
+  assert.ok(!html.includes("NON-IDENTIFYING ANALYSIS"),"true of the service, not of SEARCH");
+  assert.match(html,/THE ANALYSIS DOES NOT IDENTIFY ANYONE\. SEARCH SENDS A FACE TO A THIRD PARTY\./);
+  assert.match(html,/may return look-alikes/);
+  for(const page of [html,read("privacy.html")]){
+    assert.match(page,/Russian-law operator/);
+    assert.match(page,/IP address,\s+any Yandex account signed in\s+there/);
+    assert.match(page,/CT Atlas API host name/);
+    assert.match(page,/cannot\s+be recalled/);
+    assert.match(page,/separate browser profile/);
+  }
+  assert.ok(!html.includes("not sent to Yandex as the referring site"),"true but misleading: the link itself names the CT Atlas API host");
   assert.match(html,/outside CT Atlas's retention controls/);
   assert.ok(js.includes("window.CTAtlasFaceCrops?.attach({payload,files:lastFiles,api:API,getToken:()=>String(sessionStorage.getItem(TOKEN)||\"\")})"));
   assert.ok(js.includes("lastFiles=files"));
@@ -223,6 +245,6 @@ test("the crop component ships everywhere the Facial page does",()=>{
   const ui=read(".github/workflows/deploy-current-ct-atlas-ui.yml");
   assert.ok(ui.includes('"facial-crops.js"'));
   const css=read("facial.css");
-  for(const selector of [".fc-bar",".fc-btn-search",".fc-links",".fc-more-link",".fc-consent",".fc-thumb"])assert.ok(css.includes(selector),selector);
+  for(const selector of [".fc-bar",".fc-btn-search",".fc-links",".fc-more-link",".fc-consent",".fc-thumb",".fc-source",".fc-badge",".fc-weak"])assert.ok(css.includes(selector),selector);
   for(const gone of [".fc-menu",".fc-engine",".fc-search summary"])assert.ok(!css.includes(gone),gone+" belonged to the removed engine menu");
 });

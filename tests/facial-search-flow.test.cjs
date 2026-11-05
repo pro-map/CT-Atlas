@@ -16,8 +16,8 @@ const YANDEX_PAGE="https://yandex.com/images/search?rpt=imageview";
 const MAX=140*1024;
 
 function harness(options={}){
-  const {confirmAnswer=true,popupLimit=Infinity,token="tok-1",fetchImpl,clipboard=true}=options;
-  const elements=new Map(),listeners={},opened=[],confirms=[],tabsAtPrompt=[],nextSteps=[],fetchCalls=[],clipboardWrites=[];
+  const {confirmAnswer=true,popupLimit=Infinity,token="tok-1",fetchImpl,clipboard=true,clipboardRefuses=false}=options;
+  const elements=new Map(),listeners={},opened=[],confirms=[],tabsAtPrompt=[],nextSteps=[],fallbacks=[],fetchCalls=[],clipboardWrites=[],tabsAtCopy=[];
   let answer=confirmAnswer;
   const el=id=>{
     if(!elements.has(id))elements.set(id,{id,dataset:{},style:{},hidden:false,disabled:false,textContent:"",className:"",value:"standard",checked:true,
@@ -63,7 +63,10 @@ function harness(options={}){
   }
   const context=vm.createContext({
     window,document,URL:TestURL,TextEncoder,Uint8Array,Blob,Date:TestDate,Promise,Number,Math,Error,JSON,setTimeout:fastTimeout,clearTimeout:clearTimer,AbortController,console,
-    navigator:clipboard?{clipboard:{write:async items=>{clipboardWrites.push(items);}}}:{},
+    navigator:clipboard?{clipboard:{write:async items=>{
+      if(clipboardRefuses)throw new Error("Document is not focused.");
+      clipboardWrites.push(items);tabsAtCopy.push(opened.filter(win=>!win.closed).length);
+    }}}:{},
     ClipboardItem:class{constructor(data){this.data=data;}},
     createImageBitmap:async input=>input&&input.w?{width:input.w,height:input.h,close(){}}:{width:1000,height:640,close(){}},
     fetch:async(url,init)=>{fetchCalls.push({url,init});return (fetchImpl||okShare)(url,init);}
@@ -76,13 +79,14 @@ function harness(options={}){
     if(answer)accept();else if(cancel)cancel();
   });
   crops.setNextStepPrompt((record,queued)=>nextSteps.push({label:record.label,ids:queued.map(item=>item.engine.id),urls:queued.map(item=>item.url)}));
-  return {crops,el,listeners,opened,confirms,tabsAtPrompt,nextSteps,fetchCalls,clipboardWrites,window,cells,
+  crops.setFallbackPrompt((record,engines,reason,proceed)=>fallbacks.push({label:record.label,ids:engines.map(engine=>engine.id),reason,proceed}));
+  return {crops,el,listeners,opened,confirms,tabsAtPrompt,nextSteps,fallbacks,fetchCalls,clipboardWrites,tabsAtCopy,window,cells,
     setAnswer:value=>{answer=value;},advance:ms=>{clock.offset+=ms;},
     fireLongTimers:()=>longTimers.filter(t=>!t.cleared).forEach(t=>{t.cleared=true;t.fn();}),
-    async attach(){
+    async attach(face={box:{x:100,y:50,w:800,h:500}}){
       // one 1000x640 image with a large face: its crop is 1000x640 (~235 KB), so it must be shrunk to be hosted
       await crops.attach({
-        payload:{files:[{kind:"image",filename:"a.jpg",width:1000,height:640,faces:[{face_id:1,box:{x:100,y:50,w:800,h:500}}]}],errors:[]},
+        payload:{files:[{kind:"image",filename:"a.jpg",width:1000,height:640,faces:[{face_id:1,...face}]}],errors:[]},
         files:[{name:"a.jpg"}],api:API,getToken:()=>token
       });
     },
@@ -109,6 +113,29 @@ test("only Yandex Images is offered, behind one SEARCH button (no engine menu)",
   assert.doesNotMatch(html,/<details|fc-menu|search-direct|Bing|Google|Baidu|Search4faces/i);
   assert.equal(JSON.stringify(h.crops.helpers.SEARCH_ENGINES.map(engine=>engine.id)),JSON.stringify(["yandex"]));
   assert.equal(JSON.stringify([...h.crops.helpers.SEARCH_ALL_IDS]),JSON.stringify(["yandex"]));
+});
+
+test("a small face shows its source size and an UPSCALED badge, and SEARCH warns before anything is sent",async()=>{
+  const h=harness();
+  await h.attach({box:{x:100,y:50,w:30,h:30},quality:"LOW"});
+  assert.match(h.cells.thumb.innerHTML,/48×48 px <span class="fc-badge">UPSCALED<\/span>/);
+  assert.match(h.cells.actions.innerHTML,/fc-weak/);
+  await h.click();
+  assert.match(h.confirms[0],/^Search face F1 directly on Yandex Images\?\n\nWARNING: This crop is low quality and upscaled from 48×48 px, so look-alike results are more likely/);
+});
+
+test("a low-quality face that was not upscaled is warned about too; a good crop carries neither mark",async()=>{
+  const weak=harness();
+  await weak.attach({box:{x:100,y:50,w:800,h:500},quality:"LOW"});
+  assert.doesNotMatch(weak.cells.thumb.innerHTML,/UPSCALED/);
+  assert.match(weak.cells.actions.innerHTML,/fc-weak/);
+  const good=harness();
+  await good.attach({box:{x:100,y:50,w:800,h:500},quality:"HIGH"});
+  assert.match(good.cells.thumb.innerHTML,/1000×640 px<\/div>/);
+  assert.doesNotMatch(good.cells.thumb.innerHTML,/UPSCALED/);
+  assert.doesNotMatch(good.cells.actions.innerHTML,/fc-weak/);
+  await good.click();
+  assert.doesNotMatch(good.confirms[0],/WARNING/);
 });
 
 test("cutting the faces sends nothing anywhere",async()=>{
@@ -143,12 +170,18 @@ test("SEARCH asks BEFORE opening anything, then opens Yandex on ONE small hosted
   assert.match(h.confirms[0],/deletes its copy automatically/);
   assert.match(h.confirms[0],/its own retention rules/);
   assert.match(h.confirms[0],/Nothing is uploaded unless you press OK/);
+  assert.match(h.confirms[0],/Russian-law operator/);
+  assert.match(h.confirms[0],/your IP address, any Yandex account signed in there/);
+  assert.match(h.confirms[0],/CT Atlas API host name/);
+  assert.match(h.confirms[0],/cannot be recalled/);
+  assert.match(h.confirms[0],/separate browser profile/);
+  assert.match(h.confirms[0],/may return look-alikes/);
 
   assert.equal(h.opened.length,1,"one Yandex tab");
   assert.ok(h.opened.every(win=>win.url==="about:blank"&&win.opener===null),"blank tabs first, no reference back to CT Atlas");
   assert.equal(h.fetchCalls.length,1);
   const call=h.fetchCalls[0];
-  assert.equal(call.url,API+"/face-share");
+  assert.equal(call.url,API+"/face-share?face=F1");
   assert.equal(call.init.method,"POST");
   assert.equal(call.init.headers["X-Session-Token"],"tok-1");
   assert.equal(call.init.headers["Content-Type"],"image/jpeg");
@@ -228,7 +261,9 @@ test("a stalled hosting request times out and falls back instead of leaving blan
   await h.attach();
   await h.click();
   assert.match(h.status(),/did not answer in time/);
-  assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE]);
+  assert.equal(h.opened[0].closed,true,"no blank tab is left behind");
+  assert.deepEqual(h.opened[0].locations,[]);
+  assert.equal(h.fallbacks.length,1);
 });
 
 test("repeated clicks while a search is in flight neither host twice nor ask twice",async()=>{
@@ -283,7 +318,7 @@ test("the row's links belong to one hosting and are removed when it expires",asy
 
 // ---------------------------------------------------------------- failures never lose the search
 
-test("if hosting fails the Yandex tab falls back to its upload page and the crop is copied for Ctrl+V",async()=>{
+test("if hosting fails the blank tab is closed and nothing is copied or opened until a click on the dialog",async()=>{
   const cases=[
     ["network down",async()=>{throw new Error("offline");},/could not be reached/],
     ["server refusal",async()=>({ok:false,status:503,json:async()=>({error:"Face search hosting is not configured."})}),/not configured/],
@@ -294,12 +329,68 @@ test("if hosting fails the Yandex tab falls back to its upload page and the crop
     const h=harness({fetchImpl});
     await h.attach();
     await h.click();
-    assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE],label+": Yandex upload page");
-    assert.equal(h.clipboardWrites.length,1,label+": crop copied");
+    assert.equal(h.opened[0].closed,true,label+": the tab that took the focus is gone");
+    assert.deepEqual(h.opened[0].locations,[],label+": Yandex was not opened");
+    assert.equal(h.clipboardWrites.length,0,label+": a page without the focus cannot copy, so it does not try");
     assert.match(h.status(),expected,label);
-    assert.match(h.status(),/Ctrl\+V/,label);
+    assert.match(h.status(),/Nothing was sent/,label);
+    assert.equal(h.fallbacks.length,1,label);
+    assert.equal(h.fallbacks[0].label,"F1",label);
+    assert.equal(JSON.stringify(h.fallbacks[0].ids),JSON.stringify(["yandex"]),label);
+    assert.match(h.fallbacks[0].reason,expected,label);
     assert.equal(h.nextSteps.length,0,label);
   }
+});
+
+const hostingDown=async()=>({ok:false,status:503,json:async()=>({error:"Face search hosting is not configured."})});
+
+test("the dialog's click copies the crop first, then opens Yandex's own page, and says what to do there",async()=>{
+  const h=harness({fetchImpl:hostingDown});
+  await h.attach();
+  await h.click();
+  await h.fallbacks[0].proceed();
+  assert.equal(h.clipboardWrites.length,1);
+  assert.deepEqual(h.tabsAtCopy,[0],"no other tab exists while copying: it would take the focus and the clipboard would refuse");
+  assert.equal(h.opened.length,2);
+  assert.equal(h.opened[1].url,"about:blank");
+  assert.equal(h.opened[1].opener,null);
+  assert.deepEqual(h.opened[1].locations,[YANDEX_PAGE]);
+  assert.match(h.status(),/Face F1 copied/);
+  assert.match(h.status(),/Ctrl\+V/);
+  assert.match(h.status(),/only if you paste it/);
+  assert.match(h.cells.links.innerHTML,/<span>Reopen:<\/span>/,"a way back to the page if the tab is closed");
+  assert.equal(h.fetchCalls.length,1,"the click uploads nothing");
+});
+
+test("if the copy is refused no tab opens: the analyst stays where the instruction is, with a link for later",async()=>{
+  const h=harness({fetchImpl:hostingDown,clipboardRefuses:true});
+  await h.attach();
+  await h.click();
+  await h.fallbacks[0].proceed();
+  assert.equal(h.opened.length,1,"only the closed placeholder");
+  assert.match(h.status(),/Copy was blocked/);
+  assert.match(h.status(),/download the JPEG/);
+  assert.equal(h.cells.links.hidden,false);
+  assert.ok(h.cells.links.innerHTML.includes(YANDEX_PAGE));
+});
+
+test("a browser without image copying gets the same treatment",async()=>{
+  const h=harness({fetchImpl:hostingDown,clipboard:false});
+  await h.attach();
+  await h.click();
+  await h.fallbacks[0].proceed();
+  assert.equal(h.opened.length,1);
+  assert.match(h.status(),/cannot copy images/);
+});
+
+test("if the browser blocks the tab after the copy, the row offers a link and the status says so",async()=>{
+  const h=harness({fetchImpl:hostingDown,popupLimit:1});
+  await h.attach();
+  await h.click();
+  await h.fallbacks[0].proceed();
+  assert.equal(h.clipboardWrites.length,1);
+  assert.match(h.status(),/blocked the new tab/);
+  assert.match(h.cells.links.innerHTML,/Also open:.*Yandex Images/s);
 });
 
 test("a hosting answer that is not a CT Atlas link is never handed to a search engine",async()=>{
@@ -307,8 +398,8 @@ test("a hosting answer that is not a CT Atlas link is never handed to a search e
     const h=harness({fetchImpl:async()=>({ok:true,status:200,json:async()=>({ok:true,url,ttl_seconds:600})})});
     await h.attach();
     await h.click();
-    assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE],String(url));
-    assert.ok(!h.opened.some(win=>win.locations.some(l=>l.includes("evil")||l.includes("javascript"))),String(url));
+    assert.deepEqual(h.opened[0].locations,[],String(url));
+    assert.equal(h.fallbacks.length,1,String(url));
     assert.match(h.status(),/not a valid CT Atlas link/);
   }
 });
@@ -319,5 +410,5 @@ test("without a session no upload is attempted",async()=>{
   await h.click();
   assert.equal(h.fetchCalls.length,0);
   assert.match(h.status(),/sign in again/);
-  assert.deepEqual(h.opened.map(win=>win.locations[0]),[YANDEX_PAGE]);
+  assert.equal(h.fallbacks.length,1,"the analyst can still paste it by hand");
 });
