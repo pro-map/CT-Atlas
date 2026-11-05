@@ -23,6 +23,7 @@ from bs4 import BeautifulSoup
 USER_AGENT = "CT-Atlas-SOCMINT-Agent/0.1 (+public-osint)"
 MAX_FETCH_BYTES = 1_000_000
 MAX_LINKS = 50
+MAX_ANCHORS_SCANNED = 200
 DEFAULT_TIMEOUT = 12
 ALLOWED_SCHEMES = {"http", "https"}
 
@@ -138,7 +139,8 @@ def _is_public_ip(value: str) -> bool:
     )
 
 
-def _validate_public_url(value: str) -> str:
+def _check_url_shape(value: str) -> Any:
+    """Every check that needs no network. Returns the parsed URL."""
     raw = str(value or "").strip()
     try:
         parsed = urlsplit(raw)
@@ -154,6 +156,18 @@ def _validate_public_url(value: str) -> str:
         raise ValueError("Local URLs are not allowed.")
     if host.endswith((".local", ".internal", ".localhost")):
         raise ValueError("Local/private hostnames are not allowed.")
+    try:
+        ipaddress.ip_address(host)
+    except ValueError:
+        return parsed
+    if not _is_public_ip(host):
+        raise ValueError("Private network addresses are not allowed.")
+    return parsed
+
+
+def _validate_public_url(value: str) -> str:
+    parsed = _check_url_shape(value)
+    host = (parsed.hostname or "").strip().lower()
 
     try:
         infos = socket.getaddrinfo(host, parsed.port or (443 if parsed.scheme == "https" else 80))
@@ -250,13 +264,14 @@ def _page_payload(url: str, body: bytes, content_type: str) -> dict[str, Any]:
 
     links: list[dict[str, str]] = []
     seen: set[str] = set()
-    for anchor in soup.find_all("a", href=True):
+    # A page's links are only leads: DNS is checked when one is actually fetched,
+    # so a hostile page cannot force thousands of lookups here.
+    for anchor in soup.find_all("a", href=True, limit=MAX_ANCHORS_SCANNED):
         href = str(anchor.get("href") or "").strip()
         if not href:
             continue
-        absolute = urljoin(final_url, href)
         try:
-            safe = _validate_public_url(absolute)
+            safe = urlunsplit(_check_url_shape(urljoin(final_url, href)))
         except Exception:
             continue
         if safe in seen:
@@ -399,7 +414,7 @@ def search_public_web(query: str, limit: int = 8) -> dict[str, Any]:
     The agent must continue from known URLs when search is unavailable.
     """
     clean_query = _clean(query, 500)
-    requested = max(1, min(int(limit or 8), 10))
+    requested = max(1, min(_as_int(limit, 8), 10))
     provider = os.getenv("SOCMINT_SEARCH_PROVIDER", "disabled").strip().lower()
 
     if not clean_query:
@@ -558,7 +573,7 @@ def search_bluesky(query: str, limit: int = 10, mode: str = "posts") -> dict[str
     app.bsky.actor.searchActors.
     """
     clean_query = _clean(query, 400)
-    requested = max(1, min(int(limit or 10), 25))
+    requested = max(1, min(_as_int(limit, 10), 25))
     selected = _clean(mode, 20).lower() or "posts"
     if not clean_query:
         return {"status": "error", "error": "Empty Bluesky query.", "results": []}
@@ -652,7 +667,7 @@ def search_mastodon(
     """
     clean_query = _clean(query, 400)
     host = _clean(instance, 300).lower().replace("https://", "").replace("http://", "").strip("/")
-    requested = max(1, min(int(limit or 10), 20))
+    requested = max(1, min(_as_int(limit, 10), 20))
     selected = _clean(result_type, 20).lower() or "accounts"
     if selected not in {"accounts", "hashtags", "statuses"}:
         return {"status": "error", "error": "result_type must be accounts, hashtags or statuses.", "results": []}
@@ -737,7 +752,7 @@ def search_youtube(query: str, limit: int = 10) -> dict[str, Any]:
     """Search PUBLIC YouTube videos/channels through the free Data API quota."""
     key = os.getenv("YOUTUBE_API_KEY", "").strip()
     clean_query = _clean(query, 400)
-    requested = max(1, min(int(limit or 10), 25))
+    requested = max(1, min(_as_int(limit, 10), 25))
     if not key:
         return {
             "status": "unavailable",
@@ -842,7 +857,7 @@ def search_fourchan(
     to respect the API rule of no more than one request per second.
     """
     clean_query = _clean(query, 200).lower()
-    requested = max(1, min(int(limit or 10), 25))
+    requested = max(1, min(_as_int(limit, 10), 25))
     board_list = [
         re.sub(r"[^a-z0-9]", "", part.lower())
         for part in str(boards or "pol,int,news").split(",")
@@ -936,7 +951,7 @@ def search_twitch(query: str, limit: int = 10, live_only: bool = False) -> dict[
     client_id = os.getenv("TWITCH_CLIENT_ID", "").strip()
     client_secret = os.getenv("TWITCH_CLIENT_SECRET", "").strip()
     clean_query = _clean(query, 250)
-    requested = max(1, min(int(limit or 10), 20))
+    requested = max(1, min(_as_int(limit, 10), 20))
     if not client_id or not client_secret:
         return {
             "status": "unavailable",
@@ -1008,7 +1023,7 @@ def search_flickr(query: str, limit: int = 10) -> dict[str, Any]:
     """
     key = os.getenv("FLICKR_API_KEY", "").strip()
     clean_query = _clean(query, 300)
-    requested = max(1, min(int(limit or 10), 50))
+    requested = max(1, min(_as_int(limit, 10), 50))
     if not key:
         return {
             "status": "unavailable",
@@ -1103,7 +1118,7 @@ def search_tumblr(query: str, limit: int = 10) -> dict[str, Any]:
     """
     key = os.getenv("TUMBLR_API_KEY", "").strip()
     clean_query = _clean(query, 200).lstrip("#")
-    requested = max(1, min(int(limit or 10), 20))
+    requested = max(1, min(_as_int(limit, 10), 20))
     if not key:
         return {
             "status": "unavailable",
@@ -1293,7 +1308,7 @@ def _reddit_access_token() -> str:
 def search_reddit(query: str, limit: int = 10, sort: str = "new") -> dict[str, Any]:
     """Search PUBLIC Reddit posts through OAuth free-access credentials."""
     clean_query = _clean(query, 400)
-    requested = max(1, min(int(limit or 10), 25))
+    requested = max(1, min(_as_int(limit, 10), 25))
     selected_sort = _clean(sort, 20).lower() or "new"
     if selected_sort not in {"new", "relevance", "top", "hot", "comments"}:
         selected_sort = "new"
@@ -1384,7 +1399,7 @@ def search_linkedin_public(
     result_type may be: all, people, companies, posts.
     """
     clean_query = _clean(query, 350)
-    requested = max(1, min(int(limit or 10), 10))
+    requested = max(1, min(_as_int(limit, 10), 10))
     selected = _clean(result_type, 30).lower() or "all"
     if selected not in {"all", "people", "companies", "posts"}:
         return {
@@ -1457,7 +1472,7 @@ def _as_int(value: Any, default: int) -> int:
     """Tool arguments come from an LLM and may be strings; never raise on them."""
     try:
         return int(value)
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):
         return default
 
 
@@ -2112,6 +2127,15 @@ def transcribe_public_media(url: str, language: str = "") -> dict[str, Any]:
         }
 
 
+def _sherlock_hits(output: Any) -> list[dict[str, str]]:
+    """Profile URLs from Sherlock's '[+] Site: URL' lines only: its other output
+    includes an update notice with a GitHub release URL, which is not a hit."""
+    if isinstance(output, bytes):
+        output = output.decode("utf-8", errors="replace")
+    found = [url for line in str(output or "").splitlines() if line.lstrip().startswith("[+]") for url in URL_RE.findall(line)]
+    return [{"url": url} for url in list(dict.fromkeys(found))[:100]]
+
+
 def search_username_profiles(username: str, timeout_seconds: int = 45) -> dict[str, Any]:
     """Use Sherlock to identify candidate PUBLIC profiles sharing a username.
 
@@ -2126,11 +2150,12 @@ def search_username_profiles(username: str, timeout_seconds: int = 45) -> dict[s
             "results": [],
             "error": "Username contains unsupported characters.",
         }
-    timeout_value = max(10, min(int(timeout_seconds or 45), 60))
+    timeout_value = max(10, min(_as_int(timeout_seconds, 45), 60))
     try:
         proc = subprocess.run(
             [
                 sys.executable,
+                "-u",  # unbuffered, so hits printed before a timeout are not lost
                 "-m",
                 "sherlock_project",
                 value,
@@ -2144,24 +2169,22 @@ def search_username_profiles(username: str, timeout_seconds: int = 45) -> dict[s
             timeout=timeout_value,
             check=False,
         )
-        output = (proc.stdout or "") + "\n" + (proc.stderr or "")
-        urls = list(dict.fromkeys(URL_RE.findall(output)))[:100]
         return {
             "status": "success" if proc.returncode in {0, 1} else "partial",
             "provider": "sherlock",
             "username": value,
-            "results": [{"url": url} for url in urls],
+            "results": _sherlock_hits(proc.stdout),
             "caveat": (
                 "Same-username hits are candidate profiles only and require "
                 "independent corroboration before identity attribution."
             ),
         }
-    except subprocess.TimeoutExpired:
+    except subprocess.TimeoutExpired as exc:
         return {
             "status": "partial",
             "provider": "sherlock",
             "username": value,
-            "results": [],
+            "results": _sherlock_hits(exc.stdout),
             "error": "Sherlock timed out before completing the scan.",
         }
     except Exception as exc:
