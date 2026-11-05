@@ -82,16 +82,18 @@ test("admin usage returns current per-user counters and excludes legacy Social c
   assert.equal(parisDayKey(), parisDayKey(Date.now()));
 });
 
-test("the facial search usage action increments its per-user counter", async () => {
+test("a facial search counts when the Worker reports it, and a browser can no longer report one", async () => {
   const [{}, { ReportGate }] = await loadGateModules();
   const gate = new ReportGate({ storage: new MemoryStorage() }, { AUTH_USERS_JSON: JSON.stringify(USERS) });
-  const response = await gate.fetch(new Request("https://gate.internal/usage-record", {
+  const call = (path, body) => gate.fetch(new Request("https://gate.internal" + path, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username: "group-s-2", action: "facial_search" })
+    body: JSON.stringify(body)
   }));
+  const response = await call("/usage-increment", { username: "group-s-2", metrics: { facial_searches: 1 } });
   assert.equal(response.status, 200);
   assert.equal((await response.json()).ok, true);
+  assert.equal((await call("/usage-record", { username: "group-s-2", action: "facial_search" })).status, 400);
   const stats = await gate.usageStats("all");
   assert.equal(stats.users.find(item => item.username === "group-s-2").facial_searches, 1);
 });

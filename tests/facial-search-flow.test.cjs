@@ -148,7 +148,7 @@ test("SEARCH asks BEFORE opening anything, then opens Yandex on ONE small hosted
   assert.ok(h.opened.every(win=>win.url==="about:blank"&&win.opener===null),"blank tabs first, no reference back to CT Atlas");
   assert.equal(h.fetchCalls.length,1);
   const call=h.fetchCalls[0];
-  assert.equal(call.url,API+"/face-share");
+  assert.equal(call.url,API+"/face-share?face=F1");
   assert.equal(call.init.method,"POST");
   assert.equal(call.init.headers["X-Session-Token"],"tok-1");
   assert.equal(call.init.headers["Content-Type"],"image/jpeg");

@@ -449,7 +449,8 @@ async function shareCrop(record){
   const sentAt=Date.now();
   let response;
   try{
-    response=await fetch(api+"/face-share",{method:"POST",headers:{"X-Session-Token":token,"Content-Type":"image/jpeg"},body,...(controller?{signal:controller.signal}:{})});
+    // The label ("F2 @ 3.5s") is for the admin search history, which the Worker writes when it hosts the crop.
+    response=await fetch(api+"/face-share?face="+encode(record.label),{method:"POST",headers:{"X-Session-Token":token,"Content-Type":"image/jpeg"},body,...(controller?{signal:controller.signal}:{})});
   }catch(error){
     throw new Error(error&&error.name==="AbortError"?"CT Atlas did not answer in time":"CT Atlas could not be reached");
   }finally{clearTimeout(timer);}
@@ -613,27 +614,9 @@ function requestSearch(record,engines,returnFocus){
   return running;
 }
 
-// Records the search action with the engines and the face label (e.g. "F2 @ 3.5s") for the
-// admin search history; never the crop, its file name or the hosted link.
-function recordFacialSearchUsage(record,engines){
-  try{
-    const details={engines:(engines||[]).map(engine=>String(engine&&engine.id||engine||"")).filter(Boolean).slice(0,4),face:String(record&&record.label||"").slice(0,40)};
-    const api=context&&String(context.api||"").replace(/\/$/,"");
-    const token=context&&context.getToken?String(context.getToken()||""):"";
-    const username=String(sessionStorage.getItem("ct_map_username")||"").trim().toLowerCase();
-    if(!api||!token||!username)return;
-    fetch(api+"/usage-record",{
-      method:"POST",
-      headers:{"Content-Type":"application/json","X-Session-Token":token},
-      body:JSON.stringify({username,action:"facial_search",details})
-    }).catch(()=>{});
-  }catch(_){}
-}
-
 async function startSearch(record,engines){
   if(record.searching)return;
   record.searching=true;
-  recordFacialSearchUsage(record,engines);
   try{await runDirectSearch(record,engines);}
   finally{record.searching=false;}
 }

@@ -1,13 +1,15 @@
 import { jsonResponse, cleanText, gateCall, isAllowedUser } from "./shared.js";
 
-// Temporary hosting of ONE face crop so that reverse-image engines (Yandex, Bing, Baidu,
-// Google Lens, TinEye) can fetch it by URL and open their results directly.
+// Temporary hosting of ONE face crop so that Yandex Images, the reverse-image engine that
+// facial-crops.js offers, can fetch it by URL and open its results directly.
 //
-// Why this exists: none of those engines accepts an upload from another site, and none
-// can be embedded in a frame, so the only way to give an analyst a one-click result page
-// is a URL the engine can download from. Design constraints:
+// Why this exists: Yandex does not accept an upload from another site and cannot be
+// embedded in a frame, so the only way to give an analyst a one-click result page is a
+// URL it can download from. Design constraints:
 //   - upload needs an authenticated, allow-listed session; only the analyst's explicit
-//     click on an engine triggers it (see facial-crops.js);
+//     click on SEARCH triggers it (see facial-crops.js);
+//   - every hosted crop is written to the admin search history here, on the server, before
+//     its link is released: a browser cannot skip the record or log a search that failed;
 //   - one Durable Object per image (EU jurisdiction when available) that deletes ITSELF
 //     through an alarm after FACE_SHARE_TTL_MS, so nothing accumulates or needs cleaning;
 //   - the link is 128 bits of randomness, served no-store / noindex, capped in reads.
@@ -16,6 +18,7 @@ const FACE_SHARE_TTL_MS = 10 * 60 * 1000;
 const FACE_SHARE_MAX_BYTES = 150 * 1024;
 const FACE_SHARE_MAX_READS = 25;
 const FACE_SHARE_UPLOADS_PER_HOUR = 40;
+const FACE_SHARE_ENGINES = ["yandex"];
 const FACE_SHARE_ID_RE = /^[A-Za-z0-9_-]{22}$/;
 const FACE_SHARE_PATH_RE = /^\/face-share\/([A-Za-z0-9_-]{22})\.jpg$/;
 
@@ -126,6 +129,18 @@ class FaceShare {
   }
 }
 
+// The hash lets a hosted crop be recognised later without keeping it; it is not a face template.
+async function recordFaceSearch(env, username, face, bytes) {
+  const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", bytes));
+  const sha256 = Array.from(digest, byte => byte.toString(16).padStart(2, "0")).join("");
+  const recorded = await gateCall(env, "/usage-increment", {
+    username,
+    metrics: { facial_searches: 1 },
+    log: { feature: "facial_search", details: { engines: FACE_SHARE_ENGINES, face, sha256, bytes: bytes.length, outcome: "hosted" } }
+  });
+  return recorded.ok;
+}
+
 async function handleFaceShareUpload(request, env, now = Date.now()) {
   const token = cleanText(request.headers.get("X-Session-Token"), 160);
   if (!token) return jsonResponse({ error: "Authenticated session required." }, 401, env);
@@ -161,6 +176,11 @@ async function handleFaceShareUpload(request, env, now = Date.now()) {
     body: bytes
   });
   if (!stored.ok) return jsonResponse({ error: "Could not host the image." }, 502, env);
+
+  // No record, no link: a crop whose link is never released deletes itself at expiry unseen.
+  const face = cleanText(new URL(request.url).searchParams.get("face"), 40);
+  const recorded = await recordFaceSearch(env, session.username, face, bytes).catch(() => false);
+  if (!recorded) return jsonResponse({ error: "The search could not be recorded, so the image was not shared." }, 503, env);
 
   return jsonResponse({
     ok: true,

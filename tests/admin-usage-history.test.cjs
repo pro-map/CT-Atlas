@@ -42,7 +42,9 @@ test("history rows read as what was searched, with its filters and outcome",()=>
   assert.equal(deep[2],"Who claimed the attack?");
   assert.deepEqual([...deep[3]].map(pair=>pair[0]),["Database scope","Period found","Outcome"]);
   assert.equal(api.adminHistoryEntry({at,feature:"darkweb_search",outlet:"Outlet B"})[2],"(filters only)");
-  assert.equal(api.adminHistoryEntry({at,feature:"facial_search",face:"F2 @ 3.5s",engines:["yandex"]})[2],"Face F2 @ 3.5s · reverse-image search");
+  const face=api.adminHistoryEntry({at,feature:"facial_search",face:"F2 @ 3.5s",engines:["yandex"],sha256:"ab".repeat(32),bytes:2097152,outcome:"hosted"});
+  assert.equal(face[2],"Face F2 @ 3.5s · reverse-image search");
+  assert.deepEqual([...face[3]].map(pair=>[...pair]),[["Upload size","2.0 MB"],["Engines","yandex"],["Crop SHA-256","ab".repeat(32)],["Outcome","Crop hosted"]]);
   assert.equal(api.adminHistoryEntry({at,feature:"facial_extraction",files:3,videos:1,bytes:3145728})[3].find(pair=>pair[0]==="Upload size")[1],"3.0 MB");
   assert.match(api.adminHistoryHtml([{at,feature:"social",target:"Retired search"},{at,feature:"tab_social"}]),/No details recorded/);
   assert.equal(api.adminHistoryEntry({at,feature:"tab_crypto"})[1],"CRYPTO OPENED");
