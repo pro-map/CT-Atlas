@@ -5,12 +5,13 @@ import {
   jsonResponse,
   gateCall
 } from "./shared.js";
-import { tronAddress } from "./address-utils.js";
+import { tronAddress, isValidWalletAddress } from "./address-utils.js";
 import { loadSanctions, screenAnalysis, sanctionsObservation } from "./sanctions.js";
 import { resolveExchangeLabels } from "./exchange-addresses.js";
 import { detectExchangeBehavior, EXCHANGE_BEHAVIOR_VERSION } from "./exchange-behavior.mjs";
+import { isStablecoin, assessWallet, derivePatterns, deriveAlertSummary } from "./crypto-risk.mjs";
 
-const CRYPTO_VERSION = "crypto-intel-v5-exchange-behavior";
+const CRYPTO_VERSION = "crypto-intel-v6-risk-assessment";
 
 const EVM_CHAINS = {
   ethereum: { chainid: "1", name: "Ethereum", symbol: "ETH", explorer: "https://etherscan.io" },
@@ -25,7 +26,18 @@ const HEX64_RE = /^[a-fA-F0-9]{64}$/;
 const EVM_ADDRESS_RE = /^0x[a-fA-F0-9]{40}$/;
 const EVM_TX_RE = /^0x[a-fA-F0-9]{64}$/;
 const TRON_ADDRESS_RE = /^T[1-9A-HJ-NP-Za-km-z]{33}$/;
-const BTC_ADDRESS_RE = /^(?:bc1[ac-hj-np-z02-9]{11,71}|[13][a-km-zA-HJ-NP-Z1-9]{24,33})$/i;
+const BTC_BASE58_RE = /^[13][a-km-zA-HJ-NP-Z1-9]{24,33}$/;
+const BTC_BECH32_RE = /^bc1[ac-hj-np-z02-9]{11,71}$/i;
+const PROVIDER_TIMEOUT_MS = 12000;
+const RATE_LIMIT_RETRY_MS = 1100;
+const RATE_LIMIT_RE = /rate limit|too many requests/i;
+const NO_ROWS_RE = /no (?:\w+ )?(?:transactions|records) found/i;
+const DISPLAY_COUNTERPARTIES = 12;
+const BTC_PAGE_SIZE = 25;
+const MAX_OUT_VALUES = 30;
+const COINJOIN_MIN_PARTIES = 5;
+// Airdrop spam advertises itself in the token's own name.
+const SPAM_TOKEN_RE = /https?:|www\.|\b(?:claim|visit|airdrop|reward)\b|\.(?:io|org|net|xyz|app|top|site|click|live|vip)\b/i;
 
 function finiteNumber(value, fallback = 0) {
   const number = Number(value);
@@ -44,19 +56,32 @@ function normalizeChainHint(value) {
   return hint || "auto";
 }
 
+function looksLikeBitcoinAddress(value) {
+  return BTC_BASE58_RE.test(value) || BTC_BECH32_RE.test(value);
+}
+
+// Bech32 is case-insensitive and QR codes use upper case, but providers answer in
+// lower case: an upper-case seed would never match its own rows.
+function addressTarget(chain, value) {
+  if (!isValidWalletAddress(chain, value)) {
+    return { error: "This address fails its checksum. Check that it was copied in full." };
+  }
+  return { chain, kind: "address", value: /^bc1/i.test(value) ? value.toLowerCase() : value };
+}
+
 function detectCryptoInput(query, chainHint = "auto") {
   const value = cleanText(query, 180);
   const hint = normalizeChainHint(chainHint);
   if (!value) return { error: "Enter a wallet address or transaction hash." };
 
   if (hint === "bitcoin") {
-    if (BTC_ADDRESS_RE.test(value)) return { chain: "bitcoin", kind: "address", value };
+    if (looksLikeBitcoinAddress(value)) return addressTarget("bitcoin", value);
     if (HEX64_RE.test(value)) return { chain: "bitcoin", kind: "transaction", value: value.toLowerCase() };
     return { error: "This does not look like a Bitcoin address or transaction ID." };
   }
 
   if (hint === "tron") {
-    if (TRON_ADDRESS_RE.test(value)) return { chain: "tron", kind: "address", value };
+    if (TRON_ADDRESS_RE.test(value)) return addressTarget("tron", value);
     if (HEX64_RE.test(value)) return { chain: "tron", kind: "transaction", value: value.toLowerCase() };
     return { error: "This does not look like a TRON address or transaction ID." };
   }
@@ -67,9 +92,9 @@ function detectCryptoInput(query, chainHint = "auto") {
     return { error: "This does not look like an EVM address or transaction hash." };
   }
 
-  if (TRON_ADDRESS_RE.test(value)) return { chain: "tron", kind: "address", value };
+  if (TRON_ADDRESS_RE.test(value)) return addressTarget("tron", value);
   if (EVM_ADDRESS_RE.test(value)) return { chain: "ethereum", kind: "address", value: value.toLowerCase() };
-  if (BTC_ADDRESS_RE.test(value)) return { chain: "bitcoin", kind: "address", value };
+  if (looksLikeBitcoinAddress(value)) return addressTarget("bitcoin", value);
   if (EVM_TX_RE.test(value)) {
     return {
       error: "A 0x transaction hash can exist on several EVM chains. Select Ethereum, BNB Chain, Polygon, Arbitrum or Base."
@@ -90,154 +115,36 @@ async function readJson(response, label) {
     const message = payload?.error || payload?.message || response.statusText || "request failed";
     throw new Error(label + ": " + cleanText(message, 220));
   }
+  // A maintenance or challenge page arrives as 200 HTML; read as data it would
+  // pass for an empty, clean wallet.
+  if (payload === null) throw new Error(label + ": the provider did not return JSON.");
   return payload;
 }
 
+const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+// Etherscan reports its rate limit as an HTTP 200, so the status code alone would
+// miss it. One retry only: every attempt spends a subrequest.
 async function getJson(url, options, label) {
-  return readJson(await fetch(url, options), label);
-}
-
-function sortTransactionsByTime(transactions) {
-  return (Array.isArray(transactions) ? transactions : []).slice().sort((a, b) => {
-    const ta = Date.parse(String(a?.time || ""));
-    const tb = Date.parse(String(b?.time || ""));
-    if (Number.isFinite(ta) && Number.isFinite(tb)) return tb - ta;
-    return String(b?.time || "").localeCompare(String(a?.time || ""));
-  });
-}
-
-function txIds(rows) {
-  return (rows || []).map(row => cleanText(row?.id || "", 180)).filter(Boolean).slice(0, 12);
-}
-
-function makePattern(code, label, severity, confidence, explanation, evidence, score = 50) {
-  return {
-    code,
-    label,
-    severity: ["HIGH", "MEDIUM", "LOW"].includes(String(severity || "").toUpperCase()) ? String(severity).toUpperCase() : "MEDIUM",
-    confidence: ["HIGH", "MEDIUM", "LOW"].includes(String(confidence || "").toUpperCase()) ? String(confidence).toUpperCase() : "MEDIUM",
-    score: Math.max(0, Math.min(100, Number(score) || 50)),
-    explanation: cleanText(explanation, 1800),
-    evidence: Object.assign({}, evidence || {}),
-    tx_ids: txIds(Array.isArray(evidence?.txs) ? evidence.txs : [])
-  };
-}
-
-// Heuristic-only pattern flags -- none of these establish laundering, ownership
-// or intent by themselves. Each explanation says so explicitly so an analyst
-// never mistakes a flag for a finding.
-function detectSuspiciousPatterns(transactions, seed) {
-  const rows = sortTransactionsByTime(transactions);
-  if (!rows.length) return [];
-  const patterns = [];
-
-  const incoming = rows.filter(row => String(row?.direction || "").toUpperCase() === "IN");
-  const outgoing = rows.filter(row => String(row?.direction || "").toUpperCase() === "OUT");
-  const recent = rows.filter(row => {
-    const time = Date.parse(String(row?.time || ""));
-    return Number.isFinite(time) && Date.now() - time <= 24 * 3600 * 1000;
-  });
-
-  if (incoming.length >= 2 && outgoing.length >= 2 && recent.length >= 4) {
-    const inValue = incoming.reduce((sum, row) => sum + Math.abs(finiteNumber(row.amount, 0)), 0);
-    const outValue = outgoing.reduce((sum, row) => sum + Math.abs(finiteNumber(row.amount, 0)), 0);
-    const ratio = inValue > 0 && outValue > 0 ? Math.min(inValue, outValue) / Math.max(inValue, outValue) : 0;
-    if (ratio >= 0.6) {
-      patterns.push(makePattern(
-        "RAPID_PASS_THROUGH",
-        "Rapid pass-through flow",
-        "MEDIUM",
-        "MEDIUM",
-        "The address received and then redistributed comparable value within a short window. This can indicate quick pass-through behavior, but the pattern is not proof of laundering or illicit intent.",
-        {
-          txs: recent.slice(0, 12),
-          inflow_amount: inValue,
-          outflow_amount: outValue,
-          ratio
-        },
-        64
-      ));
+  for (let attempt = 0; ; attempt++) {
+    let response;
+    try {
+      response = await fetch(url, { ...options, signal: AbortSignal.timeout(PROVIDER_TIMEOUT_MS) });
+    } catch (error) {
+      if (error?.name === "TimeoutError") throw new Error(label + ": the provider did not answer in time.");
+      throw error;
     }
-  }
-
-  const burstWindow = rows.filter(row => {
-    const rowTime = Date.parse(String(row?.time || ""));
-    if (!Number.isFinite(rowTime)) return false;
-    const first = Date.parse(String(rows[0]?.time || ""));
-    return Number.isFinite(first) && (first - rowTime) <= 3 * 60 * 60 * 1000;
-  });
-  if (burstWindow.length >= 4) {
-    patterns.push(makePattern(
-      "BURST_ACTIVITY",
-      "Burst activity spike",
-      "MEDIUM",
-      "MEDIUM",
-      "A significant number of transfers occurred in a compressed time window, which can indicate a fast conversion or routing sequence.",
-      { txs: burstWindow.slice(0, 10), count: burstWindow.length },
-      58
-    ));
-  }
-
-  const counterpartyMap = new Map();
-  for (const row of rows) {
-    for (const cp of Array.isArray(row?.counterparties) ? row.counterparties : []) {
-      const key = String(cp || "").trim();
-      if (!key || key.toLowerCase() === String(seed || "").toLowerCase()) continue;
-      counterpartyMap.set(key, (counterpartyMap.get(key) || 0) + 1);
+    if (response.status === 429 && attempt === 0) {
+      await pause(RATE_LIMIT_RETRY_MS);
+      continue;
     }
-  }
-  const fanOutCount = [...counterpartyMap.values()].filter(value => value >= 2).length;
-  if (fanOutCount >= 4) {
-    patterns.push(makePattern(
-      "FAN_OUT",
-      "Fan-out splitting pattern",
-      "MEDIUM",
-      "MEDIUM",
-      "The address interacts with several counterparties in a short sequence, a pattern consistent with value fragmentation or rapid redistribution.",
-      { txs: rows.slice(0, 12), counterparties: [...counterpartyMap.keys()].slice(0, 10), count: fanOutCount },
-      62
-    ));
-  }
-
-  if (rows.length >= 3) {
-    const times = rows.map(row => Date.parse(String(row?.time || ""))).filter(Number.isFinite);
-    if (times.length >= 2) {
-      const gaps = [];
-      for (let i = 1; i < times.length; i++) {
-        gaps.push(Math.abs(times[i] - times[i - 1]));
-      }
-      const largestGap = gaps.length ? Math.max(...gaps) : 0;
-      const oldest = Math.min(...times);
-      const newest = Math.max(...times);
-      const inactivityDays = (newest - oldest) / (24 * 3600 * 1000);
-      if (largestGap >= 7 * 24 * 3600 * 1000 && inactivityDays >= 10 && rows[0]?.time) {
-        patterns.push(makePattern(
-          "DORMANT_REACTIVATION",
-          "Dormant wallet reactivation",
-          "MEDIUM",
-          "MEDIUM",
-          "The wallet appears to have been inactive for a long interval before a new burst of activity, which is compatible with reactivation after dormancy.",
-          { txs: rows.slice(0, 8), inactivity_days: inactivityDays, largest_gap_ms: largestGap },
-          60
-        ));
-      }
+    const payload = await readJson(response, label);
+    if (attempt === 0 && typeof payload?.result === "string" && RATE_LIMIT_RE.test(payload.result)) {
+      await pause(RATE_LIMIT_RETRY_MS);
+      continue;
     }
+    return payload;
   }
-
-  const largeTransfers = rows.filter(row => Math.abs(finiteNumber(row.amount, 0)) >= 5).slice(0, 6);
-  if (largeTransfers.length >= 2) {
-    patterns.push(makePattern(
-      "LARGE_TRANSFER_CLUSTER",
-      "Large transfer cluster",
-      "HIGH",
-      "HIGH",
-      "Several sizable transfers are concentrated in a compact time window and warrant closer review even though the pattern alone does not establish criminality.",
-      { txs: largeTransfers },
-      76
-    ));
-  }
-
-  return patterns.slice(0, 5);
 }
 
 function aggregateFlows(transactions, seed) {
@@ -245,6 +152,7 @@ function aggregateFlows(transactions, seed) {
   const seedLower = String(seed || "").toLowerCase();
 
   for (const tx of transactions || []) {
+    if (tx.failed === true) continue;
     const asset = cleanText(tx.asset || "", 32) || "UNKNOWN";
     const amount = Math.abs(finiteNumber(tx.amount, 0));
     const counterparties = Array.isArray(tx.counterparties) ? tx.counterparties.filter(Boolean) : [];
@@ -256,11 +164,13 @@ function aggregateFlows(transactions, seed) {
       const outgoing = tx.direction === "OUT";
       const from = outgoing ? seed : counterparty;
       const to = outgoing ? counterparty : seed;
-      const key = [from.toLowerCase(), to.toLowerCase(), asset].join("|");
+      // By contract where known: a symbol is free text, so a fake USDT must not merge with the real one.
+      const key = [from.toLowerCase(), to.toLowerCase(), tx.asset_key || asset].join("|");
       const item = map.get(key) || {
         from,
         to,
         asset,
+        ...(tx.asset_key ? { asset_key: tx.asset_key } : {}),
         amount: 0,
         tx_count: 0,
         approximation: false
@@ -282,8 +192,6 @@ function buildObservations(transactions, seed) {
   const rows = Array.isArray(transactions) ? transactions : [];
   const incoming = rows.filter(row => row.direction === "IN");
   const outgoing = rows.filter(row => row.direction === "OUT");
-  const totalIn = incoming.reduce((sum, row) => sum + Math.abs(finiteNumber(row.amount, 0)), 0);
-  const totalOut = outgoing.reduce((sum, row) => sum + Math.abs(finiteNumber(row.amount, 0)), 0);
   const counterparties = new Set(rows.flatMap(row => Array.isArray(row.counterparties) ? row.counterparties : []).filter(Boolean));
   const assets = new Set(rows.map(row => row.asset).filter(Boolean));
   const notes = [];
@@ -298,11 +206,17 @@ function buildObservations(transactions, seed) {
     notes.push(`Direction mix in the returned sample: ${incoming.length} incoming and ${outgoing.length} outgoing records.`);
   }
 
-  if (totalIn > 0 && totalOut > 0) {
-    const ratio = Math.min(totalIn, totalOut) / Math.max(totalIn, totalOut);
-    if (ratio >= 0.7) {
-      notes.push("The sample shows substantial value moving in both directions. This can indicate pass-through activity, but it is not by itself evidence of layering, laundering, or common ownership.");
-    }
+  // Per asset: 2,000 USDT in and 1,800 ETH out are not comparable amounts.
+  const totals = new Map();
+  for (const row of rows) {
+    if (row.failed === true) continue;
+    const key = row.asset_key || row.asset || "";
+    const entry = totals.get(key) || { IN: 0, OUT: 0 };
+    if (row.direction in entry) entry[row.direction] += Math.abs(finiteNumber(row.amount, 0));
+    totals.set(key, entry);
+  }
+  if ([...totals.values()].some(({ IN, OUT }) => IN > 0 && OUT > 0 && Math.min(IN, OUT) / Math.max(IN, OUT) >= 0.7)) {
+    notes.push("The sample shows substantial value moving in both directions in one asset. This can indicate pass-through activity, but it is not by itself evidence of layering, laundering, or common ownership.");
   }
 
   const activity = new Map();
@@ -319,28 +233,54 @@ function buildObservations(transactions, seed) {
   const top = [...activity.entries()].sort((a, b) => b[1].count - a[1].count || b[1].value - a[1].value)[0];
   if (top) notes.push(`Most frequently observed counterparty in this sample: ${top[0]} (${top[1].count} linked record(s)).`);
 
-  const patterns = detectSuspiciousPatterns(rows, seed);
-  if (patterns.length) {
-    notes.push("Suspicious pattern review: " + patterns.map(pattern => pattern.label).join("; ") + ".");
-  }
-
   notes.push("On-chain linkage shows transaction relationships only. It does not establish that two addresses have the same owner or identify a person or organization.");
   return notes;
 }
 
+// The display cap must not limit what is screened: one transaction can carry
+// thousands of outputs, and a listed one past the cap would read as NO MATCH.
+function counterpartyFields(addresses) {
+  const all = [...new Set(addresses)];
+  return {
+    counterparties: all.slice(0, DISPLAY_COUNTERPARTIES),
+    all_counterparties: all,
+    counterparties_total: all.length,
+    counterparties_truncated: all.length > DISPLAY_COUNTERPARTIES
+  };
+}
+
+function looksLikeCoinjoin(inputs, outputs) {
+  if (inputs.length < COINJOIN_MIN_PARTIES) return false;
+  const counts = new Map();
+  for (const output of outputs) {
+    const value = finiteNumber(output?.value);
+    if (value > 0) counts.set(value, (counts.get(value) || 0) + 1);
+  }
+  return [...counts.values()].some(count => count >= COINJOIN_MIN_PARTIES);
+}
+
 function btcAddressTransactions(address, raw) {
   return (raw || []).map(tx => {
-    const received = (tx.vout || [])
+    const inputs = tx.vin || [];
+    const outputs = tx.vout || [];
+    const seedInputs = inputs.filter(input => input?.prevout?.scriptpubkey_address === address);
+    const otherOutputs = outputs.filter(output =>
+      output?.scriptpubkey_address !== address && (output?.scriptpubkey_address || finiteNumber(output?.value) > 0)
+    );
+    const received = outputs
       .filter(output => output?.scriptpubkey_address === address)
       .reduce((sum, output) => sum + finiteNumber(output.value), 0);
-    const sent = (tx.vin || [])
-      .filter(input => input?.prevout?.scriptpubkey_address === address)
-      .reduce((sum, input) => sum + finiteNumber(input?.prevout?.value), 0);
+    const sent = seedInputs.reduce((sum, input) => sum + finiteNumber(input?.prevout?.value), 0);
     const net = received - sent;
-    const direction = net > 0 ? "IN" : net < 0 ? "OUT" : "SELF";
+    // A paid fee keeps the net from reaching zero, so a spend back to itself has to
+    // be recognised from its parties. Its amount is what moved, not the fee.
+    const selfSpend = inputs.length > 0 && seedInputs.length === inputs.length && otherOutputs.length === 0;
+    const direction = selfSpend || net === 0 ? "SELF" : net > 0 ? "IN" : "OUT";
+    const inputAddresses = inputs.map(input => input?.prevout?.scriptpubkey_address).filter(item => item && item !== address);
     const counterparties = direction === "IN"
-      ? (tx.vin || []).map(input => input?.prevout?.scriptpubkey_address).filter(Boolean)
-      : (tx.vout || []).map(output => output?.scriptpubkey_address).filter(item => item && item !== address);
+      ? inputAddresses
+      : outputs.map(output => output?.scriptpubkey_address).filter(item => item && item !== address);
+    const amountSats = selfSpend ? received : Math.abs(net);
 
     return {
       id: tx.txid,
@@ -348,12 +288,63 @@ function btcAddressTransactions(address, raw) {
       confirmed: Boolean(tx.status?.confirmed),
       direction,
       asset: "BTC",
-      amount: Math.abs(net) / 1e8,
+      asset_key: "native",
+      amount: amountSats / 1e8,
+      amount_raw: String(amountSats),
       fee: finiteNumber(tx.fee) / 1e8,
-      counterparties: [...new Set(counterparties)].slice(0, 12),
+      ...counterpartyFields(counterparties),
+      // Spent alongside the seed: a closer link than a payment, but no value went
+      // to them, so they are screened without counting as recipients. Other outputs
+      // of an IN row are not kept: they are only fellow payees of a batch payout.
+      co_inputs: direction === "IN" ? [] : [...new Set(inputAddresses)],
+      inputs_count: inputs.length,
+      outputs_count: outputs.length,
+      out_values: sent > 0 ? otherOutputs.slice(0, MAX_OUT_VALUES).map(output => finiteNumber(output.value) / 1e8) : [],
+      self_spend: selfSpend,
+      // What was paid, without the fee that a net amount includes.
+      payment_amount: sent > 0 ? otherOutputs.reduce((sum, output) => sum + finiteNumber(output.value), 0) / 1e8 : null,
+      coinjoin_like: looksLikeCoinjoin(inputs, outputs),
+      is_coinbase: Boolean(inputs[0]?.is_coinbase),
+      block_height: tx.status?.block_height ?? null,
       explorer_url: "https://blockstream.info/tx/" + encodeURIComponent(tx.txid)
     };
   });
+}
+
+function arrayOrThrow(payload, label) {
+  if (!Array.isArray(payload)) throw new Error(label + ": unexpected response.");
+  return payload;
+}
+
+function buildCoverage(rows, { complete, lifetimeTxCount = null, failedSources = [] }) {
+  const times = rows.map(row => Date.parse(String(row?.time || ""))).filter(Number.isFinite);
+  const partial = failedSources.length > 0;
+  return {
+    rows: rows.length,
+    oldest: times.length ? new Date(Math.min(...times)).toISOString() : "",
+    newest: times.length ? new Date(Math.max(...times)).toISOString() : "",
+    complete: Boolean(complete) && !partial,
+    lifetime_tx_count: lifetimeTxCount,
+    partial,
+    ...(partial ? { failed_sources: failedSources } : {})
+  };
+}
+
+// Partial history beats none as long as it says so. With every history call failed
+// there is nothing to show, and a wallet with no rows must not read as clean.
+function settledLists(results, labels) {
+  if (results.every(result => result.status === "rejected")) throw results[0].reason;
+  return {
+    lists: results.map(result => result.status === "fulfilled" ? result.value : []),
+    failedSources: labels.filter((_, index) => results[index].status === "rejected")
+  };
+}
+
+function coverageNotes(failedSources, summaryMissing = false) {
+  return [
+    ...(failedSources.length ? ["Partial result: " + failedSources.join(", ") + " could not be read, so records are missing from this sample."] : []),
+    ...(summaryMissing ? ["The address summary could not be read, so the balance is not shown."] : [])
+  ];
 }
 
 async function analyzeBitcoin(target, limit) {
@@ -376,7 +367,11 @@ async function analyzeBitcoin(target, limit) {
         inputs: (tx.vin || []).length,
         outputs: (tx.vout || []).length,
         input_addresses: [...new Set((tx.vin || []).map(item => item?.prevout?.scriptpubkey_address).filter(Boolean))].slice(0, 30),
-        output_addresses: [...new Set((tx.vout || []).map(item => item?.scriptpubkey_address).filter(Boolean))].slice(0, 30)
+        output_addresses: [...new Set((tx.vout || []).map(item => item?.scriptpubkey_address).filter(Boolean))].slice(0, 30),
+        all_addresses: [...new Set([
+          ...(tx.vin || []).map(item => item?.prevout?.scriptpubkey_address),
+          ...(tx.vout || []).map(item => item?.scriptpubkey_address)
+        ].filter(Boolean))]
       },
       transactions: [],
       flows: [],
@@ -385,14 +380,42 @@ async function analyzeBitcoin(target, limit) {
     };
   }
 
-  const [info, txs] = await Promise.all([
-    getJson(base + "/address/" + encodeURIComponent(target.value), {}, "Blockstream address lookup"),
-    getJson(base + "/address/" + encodeURIComponent(target.value) + "/txs", {}, "Blockstream transaction history")
+  const address = base + "/address/" + encodeURIComponent(target.value);
+  const historyLabel = "Blockstream transaction history";
+  const [infoResult, historyResult] = await Promise.allSettled([
+    getJson(address, {}, "Blockstream address lookup").then(payload => {
+      if (!payload?.chain_stats) throw new Error("Blockstream address lookup: unexpected response.");
+      return payload;
+    }),
+    getJson(address + "/txs", {}, historyLabel).then(payload => arrayOrThrow(payload, historyLabel))
   ]);
-  const transactions = btcAddressTransactions(target.value, txs).slice(0, limit);
+  if (historyResult.status === "rejected") throw historyResult.reason;
+  const info = infoResult.status === "fulfilled" ? infoResult.value : null;
+  const lifetime = info ? finiteNumber(info.chain_stats.tx_count) : null;
+
+  // Older pages are keyed on the last confirmed txid and a page holds 25, so the
+  // loop runs at most 3 more times. A failed page keeps what was already read.
+  const failedSources = [];
+  const rows = btcAddressTransactions(target.value, historyResult.value);
+  let page = historyResult.value.filter(tx => tx?.status?.confirmed);
+  let confirmedRead = page.length;
+  while (rows.length < limit && page.length >= BTC_PAGE_SIZE && (lifetime === null || confirmedRead < lifetime)) {
+    const label = "Blockstream older transactions";
+    try {
+      page = arrayOrThrow(await getJson(address + "/txs/chain/" + encodeURIComponent(page[page.length - 1].txid), {}, label), label);
+    } catch (error) {
+      console.warn("Blockstream pagination stopped", error);
+      failedSources.push(label);
+      break;
+    }
+    rows.push(...btcAddressTransactions(target.value, page));
+    confirmedRead += page.length;
+  }
+
+  const transactions = rows.slice(0, limit);
+  const confirmedKept = transactions.filter(row => row.confirmed).length;
   const funded = finiteNumber(info?.chain_stats?.funded_txo_sum) + finiteNumber(info?.mempool_stats?.funded_txo_sum);
   const spent = finiteNumber(info?.chain_stats?.spent_txo_sum) + finiteNumber(info?.mempool_stats?.spent_txo_sum);
-  const suspiciousPatterns = detectSuspiciousPatterns(transactions, target.value);
 
   return {
     chain: "bitcoin",
@@ -401,22 +424,22 @@ async function analyzeBitcoin(target, limit) {
     query: target.value,
     provider: "Blockstream Esplora",
     explorer_url: "https://blockstream.info/address/" + encodeURIComponent(target.value),
-    balance: { amount: (funded - spent) / 1e8, asset: "BTC" },
+    balance: info ? { amount: (funded - spent) / 1e8, asset: "BTC" } : null,
     activity: {
-      confirmed_tx_count: finiteNumber(info?.chain_stats?.tx_count),
-      mempool_tx_count: finiteNumber(info?.mempool_stats?.tx_count),
+      confirmed_tx_count: lifetime,
+      mempool_tx_count: info ? finiteNumber(info.mempool_stats?.tx_count) : null,
       returned_records: transactions.length
     },
+    coverage: buildCoverage(transactions, {
+      complete: lifetime !== null && confirmedKept >= lifetime,
+      lifetimeTxCount: lifetime,
+      failedSources
+    }),
     transactions,
     flows: aggregateFlows(transactions, target.value),
-    observations: buildObservations(transactions, target.value),
-    suspicious_patterns: suspiciousPatterns,
-    alert_summary: suspiciousPatterns.length ? {
-      highest_severity: suspiciousPatterns.reduce((max, item) => (max?.score || 0) > (item?.score || 0) ? max : item, null)?.severity || "LOW",
-      highest_score: Math.max(...suspiciousPatterns.map(item => Number(item?.score || 0))),
-      total: suspiciousPatterns.length
-    } : { highest_severity: "LOW", highest_score: 0, total: 0 },
-    sampling_note: "Blockstream's address endpoint returns recent history first; the current CT Atlas view uses the returned recent sample, not a full lifetime crawl."
+    observations: [...buildObservations(transactions, target.value), ...coverageNotes(failedSources, !info)],
+    sampling_note: "Blockstream returns recent history first. This view holds the newest " + transactions.length + " records" +
+      (lifetime === null ? "" : " of " + lifetime + " confirmed lifetime transactions") + "."
   };
 }
 
@@ -427,24 +450,43 @@ function etherscanUrl(params, apiKey) {
 
 function parseEtherscanList(payload, label) {
   if (payload?.status === "1" && Array.isArray(payload.result)) return payload.result;
-  const message = String(payload?.result || payload?.message || "");
-  if (/no transactions found/i.test(message)) return [];
-  throw new Error(label + ": " + cleanText(message || "provider error", 240));
+  // The empty answer is status "0" with result []. An empty array is truthy, so
+  // `result || message` read as "" and every wallet with an empty list failed.
+  const detail = typeof payload?.result === "string" && payload.result ? payload.result : String(payload?.message || "");
+  if (NO_ROWS_RE.test(detail)) return [];
+  throw new Error(label + ": " + cleanText(detail || "provider error", 240));
 }
 
-function evmRows(address, nativeRows, tokenRows, chain) {
-  const addressLower = address.toLowerCase();
+function evmDirection(tx, addressLower) {
+  const from = String(tx.from || "").toLowerCase();
+  const to = String(tx.to || "").toLowerCase();
+  return from === addressLower && to === addressLower ? "SELF" : from === addressLower ? "OUT" : "IN";
+}
+
+// Value is compared by contract: a symbol is free text, so anyone can mint a "USDT".
+function tokenFields(chainKey, contract, symbol, name, rawValue) {
+  const stable = isStablecoin(chainKey, contract);
+  return {
+    asset_key: cleanText(contract || "unknown-token", 80).toLowerCase(),
+    amount_raw: String(rawValue ?? "0"),
+    ...(stable ? { stable: true } : {}),
+    ...(!stable && SPAM_TOKEN_RE.test(String(symbol || "") + " " + String(name || "")) ? { spam: true } : {})
+  };
+}
+
+function evmRows(target, { nativeRows, tokenRows, internalRows }, chain) {
+  const addressLower = target.value.toLowerCase();
   const native = nativeRows.map(tx => {
-    const from = String(tx.from || "").toLowerCase();
-    const to = String(tx.to || "").toLowerCase();
-    const direction = from === addressLower && to === addressLower ? "SELF" : from === addressLower ? "OUT" : "IN";
+    const direction = evmDirection(tx, addressLower);
     return {
       id: tx.hash,
       time: tx.timeStamp ? new Date(Number(tx.timeStamp) * 1000).toISOString() : "",
       confirmed: Number(tx.confirmations || 0) > 0,
       direction,
       asset: chain.symbol,
+      asset_key: "native",
       amount: finiteNumber(tx.value) / 1e18,
+      amount_raw: String(tx.value ?? "0"),
       fee: finiteNumber(tx.gasUsed) * finiteNumber(tx.gasPrice) / 1e18,
       counterparties: [direction === "OUT" ? tx.to : tx.from].filter(Boolean),
       from_address: cleanText(tx.from || "", 80),
@@ -452,15 +494,39 @@ function evmRows(address, nativeRows, tokenRows, chain) {
       method_id: cleanText(tx.methodId || "", 24),
       function_name: cleanText(tx.functionName || "", 180),
       input_present: Boolean(tx.input && tx.input !== "0x"),
+      block_number: finiteNumber(tx.blockNumber, null),
+      nonce: finiteNumber(tx.nonce, null),
+      explorer_url: chain.explorer + "/tx/" + tx.hash,
+      failed: String(tx.isError || "0") === "1"
+    };
+  });
+
+  // Native value paid out by a contract, such as a mixer withdrawal or an exchange
+  // payout, exists only here. A zero-value trace moves nothing and would crowd the sample.
+  const internal = internalRows.filter(tx => finiteNumber(tx.value) > 0).map(tx => {
+    const direction = evmDirection(tx, addressLower);
+    return {
+      id: tx.hash,
+      time: tx.timeStamp ? new Date(Number(tx.timeStamp) * 1000).toISOString() : "",
+      confirmed: true,
+      direction,
+      asset: chain.symbol,
+      asset_key: "native",
+      amount: finiteNumber(tx.value) / 1e18,
+      amount_raw: String(tx.value ?? "0"),
+      fee: null,
+      counterparties: [direction === "OUT" ? tx.to : tx.from].filter(Boolean),
+      from_address: cleanText(tx.from || "", 80),
+      to_address: cleanText(tx.to || "", 80),
+      internal: true,
+      block_number: finiteNumber(tx.blockNumber, null),
       explorer_url: chain.explorer + "/tx/" + tx.hash,
       failed: String(tx.isError || "0") === "1"
     };
   });
 
   const tokens = tokenRows.map(tx => {
-    const from = String(tx.from || "").toLowerCase();
-    const to = String(tx.to || "").toLowerCase();
-    const direction = from === addressLower && to === addressLower ? "SELF" : from === addressLower ? "OUT" : "IN";
+    const direction = evmDirection(tx, addressLower);
     const decimals = clamp(finiteNumber(tx.tokenDecimal, 0), 0, 30);
     const divisor = 10 ** Math.min(decimals, 18);
     let amount = finiteNumber(tx.value);
@@ -474,22 +540,23 @@ function evmRows(address, nativeRows, tokenRows, chain) {
       asset: cleanText(tx.tokenSymbol || "TOKEN", 24),
       token_name: cleanText(tx.tokenName || "", 80),
       token_contract: cleanText(tx.contractAddress || "", 80),
+      ...tokenFields(target.chain, tx.contractAddress, tx.tokenSymbol, tx.tokenName, tx.value),
       amount,
       fee: null,
       counterparties: [direction === "OUT" ? tx.to : tx.from].filter(Boolean),
       from_address: cleanText(tx.from || "", 80),
       to_address: cleanText(tx.to || "", 80),
+      block_number: finiteNumber(tx.blockNumber, null),
       explorer_url: chain.explorer + "/tx/" + tx.hash,
       failed: false
     };
   });
 
-  return [...native, ...tokens]
-    .sort((a, b) => String(b.time).localeCompare(String(a.time)))
-    .slice(0, 100);
+  return [...native, ...internal, ...tokens]
+    .sort((a, b) => String(b.time).localeCompare(String(a.time)));
 }
 
-async function analyzeEvm(target, limit, env) {
+async function analyzeEvm(target, limit, env, options = {}) {
   if (!env.ETHERSCAN_API_KEY) {
     throw new Error("EVM analysis is installed but ETHERSCAN_API_KEY is not configured in the Cloudflare Worker.");
   }
@@ -503,7 +570,9 @@ async function analyzeEvm(target, limit, env) {
       {},
       "Etherscan transaction lookup"
     );
-    if (!payload?.result) throw new Error("Etherscan did not return this transaction on the selected chain.");
+    if (!payload?.result || typeof payload.result !== "object") {
+      throw new Error("Etherscan did not return this transaction on the selected chain.");
+    }
     const tx = payload.result;
     return {
       chain: target.chain,
@@ -529,32 +598,34 @@ async function analyzeEvm(target, limit, env) {
   }
 
   const offset = Math.min(100, Math.max(10, limit));
-  const [balancePayload, nativePayload, tokenPayload] = await Promise.all([
-    getJson(
+  const history = (action, label) => getJson(
+    etherscanUrl({ ...common, module: "account", action, address: target.value, startblock: "0", endblock: "9999999999", page: "1", offset: String(offset), sort: "desc" }, env.ETHERSCAN_API_KEY),
+    {},
+    label
+  ).then(payload => parseEtherscanList(payload, label));
+  const historyLabels = ["Etherscan transactions", "Etherscan token transfers", "Etherscan internal transactions"];
+
+  const [balanceResult, ...historyResults] = await Promise.allSettled([
+    options.skipBalance ? null : getJson(
       etherscanUrl({ ...common, module: "account", action: "balance", address: target.value, tag: "latest" }, env.ETHERSCAN_API_KEY),
       {},
       "Etherscan balance"
-    ),
-    getJson(
-      etherscanUrl({ ...common, module: "account", action: "txlist", address: target.value, startblock: "0", endblock: "9999999999", page: "1", offset: String(offset), sort: "desc" }, env.ETHERSCAN_API_KEY),
-      {},
-      "Etherscan transactions"
-    ),
-    getJson(
-      etherscanUrl({ ...common, module: "account", action: "tokentx", address: target.value, startblock: "0", endblock: "9999999999", page: "1", offset: String(offset), sort: "desc" }, env.ETHERSCAN_API_KEY),
-      {},
-      "Etherscan token transfers"
-    )
+    ).then(payload => {
+      if (payload?.status !== "1") {
+        throw new Error("Etherscan balance: " + cleanText(payload?.result || payload?.message || "provider error", 220));
+      }
+      return payload.result;
+    }),
+    history("txlist", historyLabels[0]),
+    history("tokentx", historyLabels[1]),
+    history("txlistinternal", historyLabels[2])
   ]);
 
-  if (balancePayload?.status !== "1") {
-    throw new Error("Etherscan balance: " + cleanText(balancePayload?.result || balancePayload?.message || "provider error", 220));
-  }
-
-  const nativeRows = parseEtherscanList(nativePayload, "Etherscan transactions");
-  const tokenRows = parseEtherscanList(tokenPayload, "Etherscan token transfers");
-  const transactions = evmRows(target.value, nativeRows, tokenRows, chain).slice(0, limit);
-  const suspiciousPatterns = detectSuspiciousPatterns(transactions, target.value);
+  const { lists, failedSources } = settledLists(historyResults, historyLabels);
+  const [nativeRows, tokenRows, internalRows] = lists;
+  const merged = evmRows(target, { nativeRows, tokenRows, internalRows }, chain);
+  const transactions = merged.slice(0, limit);
+  const balanceRaw = balanceResult.status === "fulfilled" ? balanceResult.value : null;
 
   return {
     chain: target.chain,
@@ -563,22 +634,24 @@ async function analyzeEvm(target, limit, env) {
     query: target.value,
     provider: "Etherscan API V2",
     explorer_url: chain.explorer + "/address/" + target.value,
-    balance: { amount: finiteNumber(balancePayload.result) / 1e18, asset: chain.symbol },
+    balance: balanceRaw === null ? null : { amount: finiteNumber(balanceRaw) / 1e18, asset: chain.symbol },
     activity: {
       native_records_found: nativeRows.length,
       token_records_found: tokenRows.length,
+      internal_records_found: internalRows.length,
       returned_records: transactions.length
     },
+    coverage: buildCoverage(transactions, {
+      complete: lists.every(list => list.length < offset) && merged.length <= limit,
+      failedSources
+    }),
     transactions,
     flows: aggregateFlows(transactions, target.value),
-    observations: buildObservations(transactions, target.value),
-    suspicious_patterns: suspiciousPatterns,
-    alert_summary: suspiciousPatterns.length ? {
-      highest_severity: suspiciousPatterns.reduce((max, item) => (max?.score || 0) > (item?.score || 0) ? max : item, null)?.severity || "LOW",
-      highest_score: Math.max(...suspiciousPatterns.map(item => Number(item?.score || 0))),
-      total: suspiciousPatterns.length
-    } : { highest_severity: "LOW", highest_score: 0, total: 0 },
-    sampling_note: "The CT Atlas Crypto view requests a bounded recent page of native and token transfers; it is not a complete archival crawl."
+    observations: [
+      ...buildObservations(transactions, target.value),
+      ...coverageNotes(failedSources, balanceResult.status === "rejected")
+    ],
+    sampling_note: "The CT Atlas Crypto view requests a bounded recent page of native, internal and token transfers; it is not a complete archival crawl."
   };
 }
 
@@ -597,7 +670,8 @@ function tronHeaders(env) {
 
 function tronTokenRows(address, rows) {
   const seed = address.toLowerCase();
-  return (rows || []).map(tx => {
+  // Only a Transfer moves value: an Approval's value is an allowance, often near 2^256.
+  return (rows || []).filter(tx => !tx?.type || tx.type === "Transfer").map(tx => {
     const from = tronAddress(tx.from);
     const to = tronAddress(tx.to);
     const direction = from.toLowerCase() === seed && to.toLowerCase() === seed ? "SELF" : from.toLowerCase() === seed ? "OUT" : "IN";
@@ -613,9 +687,10 @@ function tronTokenRows(address, rows) {
       asset: cleanText(tx.token_info?.symbol || "TRC20", 24),
       token_name: cleanText(tx.token_info?.name || "", 80),
       token_contract: cleanText(tx.token_info?.address || "", 80),
+      ...tokenFields("tron", tx.token_info?.address, tx.token_info?.symbol, tx.token_info?.name, tx.value),
       amount,
       fee: null,
-      counterparties: [direction === "OUT" ? to : from].filter(Boolean),
+      counterparties: direction === "SELF" ? [] : [direction === "OUT" ? to : from].filter(Boolean),
       from_address: cleanText(from, 80),
       to_address: cleanText(to, 80),
       explorer_url: "https://tronscan.org/#/transaction/" + (tx.transaction_id || "")
@@ -625,7 +700,7 @@ function tronTokenRows(address, rows) {
 
 function tronTrxRows(address, outgoingRows, incomingRows) {
   const merged = new Map();
-  const add = (tx, direction) => {
+  const add = (tx, listDirection) => {
     const contract = tx?.raw_data?.contract?.[0];
     // Every TRC20/dApp interaction on TRON is also a "TransferContract"-shaped
     // entry in this same transaction list, but as a TriggerSmartContract call
@@ -638,7 +713,11 @@ function tronTrxRows(address, outgoingRows, incomingRows) {
     const amountSun = finiteNumber(value.amount, 0);
     const ownerAddress = tronAddress(value.owner_address);
     const toAddress = tronAddress(value.to_address);
-    const counterparty = direction === "OUT" ? toAddress : ownerAddress;
+    // A self-transfer is in both lists, so the list a row came from cannot give its direction.
+    const direction = ownerAddress === address && toAddress === address ? "SELF"
+      : ownerAddress === address ? "OUT"
+        : toAddress === address ? "IN" : listDirection;
+    const counterparty = direction === "SELF" ? "" : direction === "OUT" ? toAddress : ownerAddress;
     const id = tx.txID || tx.txid || "";
     if (!id || merged.has(id)) return;
     merged.set(id, {
@@ -647,8 +726,11 @@ function tronTrxRows(address, outgoingRows, incomingRows) {
       confirmed: true,
       direction,
       asset: "TRX",
+      asset_key: "native",
       amount: amountSun / 1e6,
+      amount_raw: String(amountSun),
       fee: null,
+      failed: Boolean(tx.ret?.[0]?.contractRet) && tx.ret[0].contractRet !== "SUCCESS",
       counterparties: counterparty ? [counterparty] : [],
       from_address: cleanText(ownerAddress, 100),
       to_address: cleanText(toAddress, 100),
@@ -661,7 +743,12 @@ function tronTrxRows(address, outgoingRows, incomingRows) {
   return [...merged.values()].sort((a, b) => String(b.time).localeCompare(String(a.time)));
 }
 
-async function analyzeTron(target, limit, env) {
+function tronRows(payload, label) {
+  if (!Array.isArray(payload?.data)) throw new Error(label + ": unexpected response.");
+  return payload.data;
+}
+
+async function analyzeTron(target, limit, env, options = {}) {
   if (!env.TRONGRID_API_KEY) {
     throw new Error("TRON analysis is installed but TRONGRID_API_KEY is not configured in the Cloudflare Worker.");
   }
@@ -703,20 +790,25 @@ async function analyzeTron(target, limit, env) {
 
   const bounded = Math.min(100, Math.max(10, limit));
   const q = "only_confirmed=true&limit=" + bounded + "&order_by=block_timestamp,desc";
-  const [accountPayload, tokenPayload, outPayload, inPayload] = await Promise.all([
-    getJson(base + "/v1/accounts/" + encodeURIComponent(target.value) + "?only_confirmed=true", { headers }, "TronGrid account"),
-    getJson(base + "/v1/accounts/" + encodeURIComponent(target.value) + "/transactions/trc20?" + q, { headers }, "TronGrid TRC-20 history"),
-    getJson(base + "/v1/accounts/" + encodeURIComponent(target.value) + "/transactions?" + q + "&only_from=true", { headers }, "TronGrid outgoing history"),
-    getJson(base + "/v1/accounts/" + encodeURIComponent(target.value) + "/transactions?" + q + "&only_to=true", { headers }, "TronGrid incoming history")
+  const account = base + "/v1/accounts/" + encodeURIComponent(target.value);
+  const history = (path, label) => getJson(account + path, { headers }, label).then(payload => tronRows(payload, label));
+  const historyLabels = ["TronGrid TRC-20 history", "TronGrid outgoing history", "TronGrid incoming history"];
+  const [accountResult, ...historyResults] = await Promise.allSettled([
+    options.skipBalance ? null : history("?only_confirmed=true", "TronGrid account"),
+    history("/transactions/trc20?" + q, historyLabels[0]),
+    history("/transactions?" + q + "&only_from=true", historyLabels[1]),
+    history("/transactions?" + q + "&only_to=true", historyLabels[2])
   ]);
 
-  const account = Array.isArray(accountPayload?.data) ? accountPayload.data[0] : null;
-  const tokenRows = tronTokenRows(target.value, tokenPayload?.data || []);
-  const trxRows = tronTrxRows(target.value, outPayload?.data || [], inPayload?.data || []);
-  const transactions = [...tokenRows, ...trxRows]
-    .sort((a, b) => String(b.time).localeCompare(String(a.time)))
-    .slice(0, limit);
-  const suspiciousPatterns = detectSuspiciousPatterns(transactions, target.value);
+  const { lists, failedSources } = settledLists(historyResults, historyLabels);
+  const [tokenList, outgoingList, incomingList] = lists;
+  const accountData = accountResult.status === "fulfilled" ? accountResult.value : null;
+  const accountRow = accountData?.[0] || null;
+  const tokenRows = tronTokenRows(target.value, tokenList);
+  const trxRows = tronTrxRows(target.value, outgoingList, incomingList);
+  const merged = [...tokenRows, ...trxRows]
+    .sort((a, b) => String(b.time).localeCompare(String(a.time)));
+  const transactions = merged.slice(0, limit);
 
   return {
     chain: "tron",
@@ -725,21 +817,23 @@ async function analyzeTron(target, limit, env) {
     query: target.value,
     provider: "TronGrid",
     explorer_url: "https://tronscan.org/#/address/" + target.value,
-    balance: { amount: finiteNumber(account?.balance) / 1e6, asset: "TRX" },
+    balance: accountData ? { amount: finiteNumber(accountRow?.balance) / 1e6, asset: "TRX" } : null,
     activity: {
       trc20_records_found: tokenRows.length,
       trx_records_found: trxRows.length,
-      returned_records: transactions.length
+      returned_records: transactions.length,
+      ...(accountRow?.create_time ? { account_created_at: new Date(Number(accountRow.create_time)).toISOString() } : {})
     },
+    coverage: buildCoverage(transactions, {
+      complete: lists.every(list => list.length < bounded) && merged.length <= limit,
+      failedSources
+    }),
     transactions,
     flows: aggregateFlows(transactions, target.value),
-    observations: buildObservations(transactions, target.value),
-    suspicious_patterns: suspiciousPatterns,
-    alert_summary: suspiciousPatterns.length ? {
-      highest_severity: suspiciousPatterns.reduce((max, item) => (max?.score || 0) > (item?.score || 0) ? max : item, null)?.severity || "LOW",
-      highest_score: Math.max(...suspiciousPatterns.map(item => Number(item?.score || 0))),
-      total: suspiciousPatterns.length
-    } : { highest_severity: "LOW", highest_score: 0, total: 0 },
+    observations: [
+      ...buildObservations(transactions, target.value),
+      ...coverageNotes(failedSources, accountResult.status === "rejected")
+    ],
     sampling_note: "The CT Atlas Crypto view requests a bounded recent page of confirmed TRX and TRC-20 activity. It is not a complete archival crawl."
   };
 }
@@ -768,21 +862,50 @@ async function withSanctionsScreening(result, env) {
   };
 }
 
-async function runAnalysis(target, limit, env) {
-  let result;
-  if (target.chain === "bitcoin") result = await analyzeBitcoin(target, limit);
-  else if (target.chain === "tron") result = await analyzeTron(target, limit, env);
-  else if (EVM_CHAIN_KEYS.has(target.chain)) result = await analyzeEvm(target, limit, env);
-  else throw new Error("Unsupported blockchain.");
-  return withSanctionsScreening(result, env);
+// These lists can run to thousands of addresses per row and exist only for the
+// screening step; the response keeps the capped display fields.
+function withoutServerFields(result) {
+  const { all_addresses: _parties, ...transaction } = result.transaction || {};
+  return {
+    ...result,
+    transactions: (result.transactions || []).map(({ all_counterparties: _all, co_inputs: _spent, ...row }) => row),
+    ...(result.transaction ? { transaction } : {})
+  };
 }
 
-async function analyzeCryptoAddress(address, chain, limit, env) {
+// One path for searches and monitors, so the two cannot disagree about a wallet.
+async function withRiskAssessment(result, env, now = Date.now()) {
+  const exchangeLabels = await resolveExchangeLabels(result, env);
+  const exchangeBehavior = detectExchangeBehavior(result, exchangeLabels);
+  const labelled = { ...result, exchange_labels: exchangeLabels, exchange_behavior: exchangeBehavior };
+  if (result.kind !== "address") return labelled;
+  const assessment = assessWallet(result, { labels: exchangeLabels, exchangeBehavior, now });
+  return {
+    ...labelled,
+    risk_assessment: assessment,
+    suspicious_patterns: derivePatterns(assessment),
+    alert_summary: deriveAlertSummary(assessment),
+    observations: assessment.reasons.length
+      ? [...(result.observations || []), "Automated indicators in this sample, not findings: " + assessment.reasons.join("; ") + "."]
+      : result.observations
+  };
+}
+
+async function runAnalysis(target, limit, env, options = {}) {
+  let result;
+  if (target.chain === "bitcoin") result = await analyzeBitcoin(target, limit);
+  else if (target.chain === "tron") result = await analyzeTron(target, limit, env, options);
+  else if (EVM_CHAIN_KEYS.has(target.chain)) result = await analyzeEvm(target, limit, env, options);
+  else throw new Error("Unsupported blockchain.");
+  return withoutServerFields(await withRiskAssessment(await withSanctionsScreening(result, env), env));
+}
+
+async function analyzeCryptoAddress(address, chain, limit, env, options = {}) {
   const target = detectCryptoInput(address, chain);
   if (target.error) throw new Error(target.error);
   if (target.kind !== "address") throw new Error("Automatic monitoring supports wallet addresses only.");
   const bounded = clamp(Math.trunc(finiteNumber(limit, 50)), 10, 100);
-  return runAnalysis(target, bounded, env);
+  return runAnalysis(target, bounded, env, options);
 }
 
 async function authenticate(request, env, username) {
@@ -816,8 +939,6 @@ async function handleCrypto(request, env) {
 
   try {
     const result = await runAnalysis(target, limit, env);
-    const exchangeLabels = await resolveExchangeLabels(result, env);
-    const exchangeBehavior = detectExchangeBehavior(result, exchangeLabels);
     try {
       // What was looked up, for the admin search history (origin: search, url, trace or monitor).
       const origin = cleanText(body.origin, 16).toLowerCase();
@@ -840,8 +961,6 @@ async function handleCrypto(request, env) {
       exchange_behavior_version: EXCHANGE_BEHAVIOR_VERSION,
       generated_at: new Date().toISOString(),
       ...result,
-      exchange_labels: exchangeLabels,
-      exchange_behavior: exchangeBehavior,
       suspicious_patterns: Array.isArray(result?.suspicious_patterns) ? result.suspicious_patterns : [],
       alert_summary: result?.alert_summary || { highest_severity: "LOW", highest_score: 0, total: 0 }
     }, 200, env);
@@ -857,9 +976,9 @@ export {
   detectCryptoInput,
   aggregateFlows,
   buildObservations,
-  detectSuspiciousPatterns,
   withSanctionsScreening,
   analyzeCryptoAddress,
+  authenticate,
   handleCrypto
 };
 

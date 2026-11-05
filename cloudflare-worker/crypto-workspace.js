@@ -62,6 +62,14 @@ function sanitizeLabel(label) {
   };
 }
 
+// The page sends null for a blank field, and Number(null) is a finite 0: unchecked,
+// that clamped to velocity 1 and dormant 1, so every wallet alerted on any activity.
+function thresholdNumber(value, min, max = Infinity) {
+  if (value === null || value === undefined || String(value).trim() === "") return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? Math.max(min, Math.min(max, number)) : null;
+}
+
 function sanitizeWatch(item) {
   const thresholds = item?.thresholds || {};
   return {
@@ -74,18 +82,21 @@ function sanitizeWatch(item) {
       ? item.categories.map(safeCategory).slice(0, 20)
       : [],
     thresholds: {
-      min_amount: Number.isFinite(Number(thresholds.min_amount)) ? Math.max(0, Number(thresholds.min_amount)) : null,
-      aggregate_24h: Number.isFinite(Number(thresholds.aggregate_24h)) ? Math.max(0, Number(thresholds.aggregate_24h)) : null,
-      velocity_24h: Number.isFinite(Number(thresholds.velocity_24h)) ? Math.max(1, Math.min(10000, Number(thresholds.velocity_24h))) : null,
-      dormant_days: Number.isFinite(Number(thresholds.dormant_days)) ? Math.max(1, Math.min(3650, Number(thresholds.dormant_days))) : null
+      min_amount: thresholdNumber(thresholds.min_amount, 0),
+      aggregate_24h: thresholdNumber(thresholds.aggregate_24h, 0),
+      velocity_24h: thresholdNumber(thresholds.velocity_24h, 1, 10000),
+      dormant_days: thresholdNumber(thresholds.dormant_days, 1, 3650),
+      asset: cleanText(thresholds.asset, 80)
     },
+    thresholds_version: 2,
     last_snapshot: item?.last_snapshot && typeof item.last_snapshot === "object"
       ? {
           checked_at: cleanText(item.last_snapshot.checked_at, 64),
           newest_tx_id: cleanText(item.last_snapshot.newest_tx_id, 180),
           newest_tx_time: cleanText(item.last_snapshot.newest_tx_time, 64),
           tx_count: Number(item.last_snapshot.tx_count || 0),
-          aggregate_value: Number(item.last_snapshot.aggregate_value || 0)
+          aggregate_value: Number(item.last_snapshot.aggregate_value || 0),
+          risk_label: cleanText(item.last_snapshot.risk_label, 24)
         }
       : null,
     created_at: cleanText(item?.created_at, 64) || new Date().toISOString(),
@@ -215,9 +226,10 @@ async function handleCryptoWorkspace(request, env) {
     return jsonResponse(payload, response.status, env);
   }
 
-  if (request.method === "POST") {
+  if (request.method === "POST" || request.method === "PUT") {
     const workspace = sanitizeWorkspace(body.workspace || {}, username);
-    const response = await gateCall(env, "/crypto-workspace-put", { username, workspace });
+    const revision = body.revision ?? body.workspace?.revision ?? null;
+    const response = await gateCall(env, "/crypto-workspace-put", { username, workspace, revision });
     const payload = await response.json().catch(() => ({}));
     return jsonResponse(payload, response.status, env);
   }

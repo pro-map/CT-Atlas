@@ -1,8 +1,12 @@
-import { cleanText, gateCall } from "./shared.js";
-import { analyzeCryptoAddress } from "./crypto.js";
+import { cleanText, normalizeUsername, isAllowedUser, jsonResponse, gateCall } from "./shared.js";
+import { analyzeCryptoAddress, authenticate } from "./crypto.js";
 
-const CRYPTO_MONITOR_VERSION = "crypto-monitor-v1-scheduled-6h";
+const CRYPTO_MONITOR_VERSION = "crypto-monitor-v2-scheduled-6h";
 const MONITOR_BATCH_LIMIT = 8;
+// Each wallet costs 3 provider calls (Bitcoin: address read plus 2 pages of 25), a
+// label lookup and an update. A full batch then spends 42 of the 50 subrequests a
+// run may use, and the rest covers rate-limit retries.
+const MONITOR_SAMPLE_ROWS = 50;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 function normalizeAddress(address, chain) {
@@ -18,24 +22,56 @@ function numberOrNull(value) {
   return Number.isFinite(n) ? n : null;
 }
 
-function snapshotFromAnalysis(analysis, now = Date.now()) {
+function thresholdScope(watch) {
+  return cleanText(watch?.thresholds?.asset, 80).toLowerCase();
+}
+
+// Amounts only compare within one asset. With no asset chosen, a threshold covers
+// the native asset and allow-listed stablecoins: a 100 meant for ETH must not fire
+// on 5,000,000 of a token whose value is unknown.
+function inThresholdScope(row, scope) {
+  if (scope) return [row?.asset, row?.asset_key, row?.token_contract].some(value => String(value || "").toLowerCase() === scope);
+  return !row?.token_contract || row?.stable === true;
+}
+
+function movedValue(row) {
+  return row?.failed !== true && row?.spam !== true && Number(row?.amount) !== 0;
+}
+
+function recentTransfers(rows, now) {
+  return rows.filter(row => {
+    const time = Date.parse(row.time || "");
+    return movedValue(row) && Number.isFinite(time) && time >= now - DAY_MS;
+  });
+}
+
+function largestAssetTotal(rows, scope) {
+  const totals = new Map();
+  for (const row of rows) {
+    if (String(row?.direction || "").toUpperCase() === "SELF" || !inThresholdScope(row, scope)) continue;
+    const key = row.asset_key || row.asset || "";
+    const entry = totals.get(key) || { asset: cleanText(row.asset, 24), total: 0 };
+    entry.total += Math.abs(Number(row.amount) || 0);
+    totals.set(key, entry);
+  }
+  return [...totals.values()].reduce((best, item) => item.total > best.total ? item : best, { asset: "", total: 0 });
+}
+
+function snapshotFromAnalysis(analysis, now = Date.now(), scope = "") {
   const rows = (analysis?.transactions || [])
     .slice()
     .sort((a,b) => String(b.time || "").localeCompare(String(a.time || "")));
-  const recent = rows.filter(row => {
-    const time = Date.parse(row.time || "");
-    return Number.isFinite(time) && time >= now - DAY_MS;
-  });
+  const recent = recentTransfers(rows, now);
   return {
     checked_at: new Date(now).toISOString(),
     newest_tx_id: cleanText(rows[0]?.id, 180),
     newest_tx_time: cleanText(rows[0]?.time, 64),
     tx_count: recent.length,
-    aggregate_value: recent.reduce((sum,row) => sum + Math.abs(Number(row.amount) || 0), 0)
+    aggregate_value: largestAssetTotal(recent, scope).total
   };
 }
 
-function alertBase(watch, type, severity, title, detail, txId = "") {
+function alertBase(watch, type, severity, title, detail, txId = "", dayBucket = "") {
   return {
     id: crypto.randomUUID(),
     watch_id: cleanText(watch.id, 80),
@@ -46,6 +82,7 @@ function alertBase(watch, type, severity, title, detail, txId = "") {
     title,
     detail,
     tx_id: cleanText(txId, 180),
+    day_bucket: dayBucket,
     created_at: new Date().toISOString()
   };
 }
@@ -54,14 +91,19 @@ function buildMonitorAlerts(target, analysis, now = Date.now()) {
   const watch = target.watch || {};
   const previous = watch.last_snapshot || null;
   const rows = Array.isArray(analysis?.transactions) ? analysis.transactions : [];
-  const snapshot = snapshotFromAnalysis(analysis, now);
+  const scope = thresholdScope(watch);
+  const snapshot = snapshotFromAnalysis(analysis, now, scope);
+  const dayBucket = new Date(now).toISOString().slice(0, 10);
   const alerts = [];
 
+  // No snapshot means no baseline yet. A snapshot with no time means the wallet was
+  // empty when it was taken, so everything seen since is new.
   const previousTime = Date.parse(previous?.newest_tx_time || "");
-  const newRows = Number.isFinite(previousTime)
+  const hasBaselineTime = Number.isFinite(previousTime);
+  const newRows = previous
     ? rows.filter(row => {
         const time = Date.parse(row.time || "");
-        return Number.isFinite(time) && time > previousTime;
+        return movedValue(row) && Number.isFinite(time) && (!hasBaselineTime || time > previousTime);
       })
     : [];
 
@@ -82,7 +124,12 @@ function buildMonitorAlerts(target, analysis, now = Date.now()) {
 
   const minAmount = numberOrNull(watch.thresholds?.min_amount);
   if (minAmount !== null && minAmount > 0) {
-    for (const row of newRows.filter(row => Math.abs(Number(row.amount) || 0) >= minAmount).slice(0, 10)) {
+    const crossing = newRows.filter(row =>
+      String(row.direction || "").toUpperCase() !== "SELF" &&
+      inThresholdScope(row, scope) &&
+      Math.abs(Number(row.amount) || 0) >= minAmount
+    );
+    for (const row of crossing.slice(0, 10)) {
       alerts.push(alertBase(
         watch,
         "LARGE_TRANSFER",
@@ -97,12 +144,15 @@ function buildMonitorAlerts(target, analysis, now = Date.now()) {
 
   const aggregate = numberOrNull(watch.thresholds?.aggregate_24h);
   if (aggregate !== null && aggregate > 0 && snapshot.aggregate_value >= aggregate) {
+    const largest = largestAssetTotal(recentTransfers(rows, now), scope);
     alerts.push(alertBase(
       watch,
       "AGGREGATE_24H",
       "MEDIUM",
       "24h aggregate threshold crossed",
-      String(snapshot.aggregate_value) + " observed aggregate value across the returned last-24h sample."
+      String(Number(largest.total.toPrecision(10))) + " " + largest.asset + " observed in the returned last-24h sample.",
+      "",
+      dayBucket
     ));
   }
 
@@ -113,28 +163,25 @@ function buildMonitorAlerts(target, analysis, now = Date.now()) {
       "VELOCITY_24H",
       "MEDIUM",
       "24h velocity threshold crossed",
-      snapshot.tx_count + " transaction records observed in the last 24 hours."
+      snapshot.tx_count + " transaction records observed in the last 24 hours.",
+      "",
+      dayBucket
     ));
   }
 
+  // The gap ends at the oldest new row, not the newest: a check that runs ten days
+  // late must not read a wallet active every day as ten quiet days.
   const dormantDays = numberOrNull(watch.thresholds?.dormant_days);
-  if (
-    previous &&
-    dormantDays !== null &&
-    dormantDays > 0 &&
-    Number.isFinite(previousTime) &&
-    snapshot.newest_tx_time &&
-    snapshot.newest_tx_id !== previous.newest_tx_id
-  ) {
-    const gap = Date.parse(snapshot.newest_tx_time) - previousTime;
-    if (Number.isFinite(gap) && gap >= dormantDays * DAY_MS) {
+  if (dormantDays !== null && dormantDays > 0 && hasBaselineTime && newRows.length) {
+    const firstNew = newRows.reduce((first, row) => Date.parse(row.time) < Date.parse(first.time) ? row : first);
+    if (Date.parse(firstNew.time) - previousTime >= dormantDays * DAY_MS) {
       alerts.push(alertBase(
         watch,
         "REACTIVATION",
         "MEDIUM",
         "Activity after configured dormant interval",
         "New activity followed an observed gap of at least " + dormantDays + " days.",
-        snapshot.newest_tx_id
+        firstNew.id
       ));
     }
   }
@@ -162,11 +209,35 @@ function buildMonitorAlerts(target, analysis, now = Date.now()) {
     }
   }
 
+  // NOT_ASSESSED says nothing about the wallet, so it keeps the last real label:
+  // otherwise a screening outage followed by recovery would read as a rise.
+  const assessment = analysis?.risk_assessment;
+  snapshot.risk_label = RISK_RANK[assessment?.label] ? assessment.label : cleanText(previous?.risk_label, 24);
+
   // Sanctions hits are the highest-value alerts and the gate keeps only the
   // first 40 per update, so they go to the front. The gate de-duplicates on
-  // watch|type|tx|title, so a persistent hit alerts once, not every 6 hours.
+  // watch|type|tx|title|day, so a persistent hit alerts once, not every 6 hours.
   const sanctionsAlerts = buildSanctionsAlerts(watch, analysis?.sanctions_screening);
-  return { snapshot, alerts: [...sanctionsAlerts, ...alerts] };
+  return { snapshot, alerts: [...sanctionsAlerts, ...buildRiskAlert(watch, previous, assessment, dayBucket), ...alerts] };
+}
+
+const RISK_RANK = Object.freeze({ LOW: 1, ELEVATED: 2, HIGH: 3 });
+
+function buildRiskAlert(watch, previous, assessment, dayBucket) {
+  const before = RISK_RANK[previous?.risk_label];
+  const after = RISK_RANK[assessment?.label];
+  if (!before || !after || after <= before) return [];
+  const reasons = (assessment.reasons || []).map(reason => cleanText(reason, 160)).join("; ");
+  return [alertBase(
+    watch,
+    "RISK_LABEL_RAISED",
+    assessment.label === "HIGH" ? "HIGH" : "MEDIUM",
+    "Automated risk label raised to " + assessment.label,
+    "The label moved from " + previous.risk_label + " to " + assessment.label + (reasons ? ": " + reasons : "") +
+      ". Indicator, not proof: review the wallet before relying on it.",
+    "",
+    dayBucket
+  )];
 }
 
 const MAX_SANCTIONS_ALERTS = 12;
@@ -210,6 +281,24 @@ function providerAvailable(chain, env) {
   return false;
 }
 
+async function checkMonitorTarget(target, env) {
+  const watch = target.watch || {};
+  const analysis = await analyzeCryptoAddress(watch.address, watch.chain, MONITOR_SAMPLE_ROWS, env, { skipBalance: true });
+  // A baseline taken from a partial read would make the next full read look like
+  // new activity, so the wallet waits for its next turn.
+  if (analysis?.coverage?.partial) throw new Error("Partial provider history; baseline left unchanged.");
+  const { snapshot, alerts } = buildMonitorAlerts(target, analysis);
+  const updateResponse = await gateCall(env, "/crypto-monitor-update", {
+    username: target.username,
+    watch_id: watch.id,
+    snapshot,
+    alerts
+  });
+  const updatePayload = await updateResponse.json().catch(() => ({}));
+  if (!updateResponse.ok) throw new Error(updatePayload?.error || "Unable to save monitoring result.");
+  return Number(updatePayload.alerts_added || 0);
+}
+
 async function runCryptoMonitor(env) {
   const targetResponse = await gateCall(env, "/crypto-monitor-targets", {
     limit: MONITOR_BATCH_LIMIT
@@ -233,18 +322,8 @@ async function runCryptoMonitor(env) {
     }
 
     try {
-      const analysis = await analyzeCryptoAddress(watch.address, watch.chain, 60, env);
-      const { snapshot, alerts } = buildMonitorAlerts(target, analysis);
-      const updateResponse = await gateCall(env, "/crypto-monitor-update", {
-        username: target.username,
-        watch_id: watch.id,
-        snapshot,
-        alerts
-      });
-      const updatePayload = await updateResponse.json().catch(() => ({}));
-      if (!updateResponse.ok) throw new Error(updatePayload?.error || "Unable to save monitoring result.");
+      alertsAdded += await checkMonitorTarget(target, env);
       checked++;
-      alertsAdded += Number(updatePayload.alerts_added || 0);
     } catch (error) {
       failed++;
       console.error("Crypto automatic monitor failed", target.username, watch.address, error);
@@ -266,11 +345,52 @@ async function runCryptoMonitor(env) {
   return result;
 }
 
+// CHECK NOW for one wallet. The gate takes alerts and baselines only from the
+// monitor, so an on-demand check has to run here, through the same alert builder.
+async function handleCryptoMonitorCheck(request, env) {
+  let body;
+  try { body = await request.json(); }
+  catch { return jsonResponse({ error: "Invalid JSON request." }, 400, env); }
+
+  const username = normalizeUsername(body.user_id);
+  if (!username || !isAllowedUser(username, env)) return jsonResponse({ error: "Unknown user." }, 400, env);
+  const auth = await authenticate(request, env, username);
+  if (!auth.ok) return jsonResponse({ error: auth.error }, auth.status, env);
+  // Without an id the gate would answer with the scheduled rotation, other users' wallets included.
+  const watchId = cleanText(body.watch_id, 80);
+  if (!watchId) return jsonResponse({ error: "Choose a monitored wallet." }, 400, env);
+
+  const targetResponse = await gateCall(env, "/crypto-monitor-targets", { username, watch_id: watchId });
+  const targetPayload = await targetResponse.json().catch(() => ({}));
+  const target = Array.isArray(targetPayload.targets) ? targetPayload.targets[0] : null;
+  if (!targetResponse.ok || !target) return jsonResponse({ error: "Monitored wallet not found." }, 404, env);
+  if (!providerAvailable(target.watch.chain, env)) {
+    return jsonResponse({ error: "This chain's provider is not configured." }, 503, env);
+  }
+
+  try {
+    const alertsAdded = await checkMonitorTarget(target, env);
+    await gateCall(env, "/usage-increment", {
+      username,
+      metrics: { blockchain_searches: 1 },
+      log: { feature: "blockchain", details: {
+        query: target.watch.address, kind: "address", chain: target.watch.chain,
+        chain_hint: target.watch.chain, limit: MONITOR_SAMPLE_ROWS, origin: "monitor"
+      } }
+    }).catch(error => console.error("Blockchain search usage record failed", error));
+    return jsonResponse({ ok: true, alerts_added: alertsAdded }, 200, env);
+  } catch (error) {
+    console.error("Crypto monitor check failed", error);
+    return jsonResponse({ error: cleanText(error?.message || "Monitor check failed.", 320) }, 503, env);
+  }
+}
+
 export {
   CRYPTO_MONITOR_VERSION,
   MONITOR_BATCH_LIMIT,
   snapshotFromAnalysis,
   buildMonitorAlerts,
   buildSanctionsAlerts,
-  runCryptoMonitor
+  runCryptoMonitor,
+  handleCryptoMonitorCheck
 };
