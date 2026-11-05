@@ -152,9 +152,15 @@ test('a successful upload returns an unguessable https link that expires in 10 m
  assert.equal(record.storage.alarm,START+600_000,'the object schedules its own deletion');
 });
 
-test('it also works when the runtime has no jurisdiction API',async()=>{
+test('without the EU jurisdiction nothing is hosted: the page promises EU storage, so there is no global fallback',async()=>{
  const w=world({eu:false});
- assert.equal((await upload(w)).status,200);
+ const r=await upload(w);
+ assert.equal(r.status,503);
+ assert.match((await r.json()).error,/EU storage/);
+ assert.equal(w.touched.length,0,'no object was created in the global namespace');
+ assert.equal(w.records.length,0);
+ assert.equal((await get(w,'/face-share/AAAAAAAAAAAAAAAAAAAAAA.jpg')).status,404);
+ assert.equal(w.touched.length,0,'and none is read from it');
 });
 
 test('ids are random: 200 uploads never collide and none is sequential',async()=>{

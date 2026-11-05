@@ -10,7 +10,7 @@ import { jsonResponse, cleanText, gateCall, isAllowedUser } from "./shared.js";
 //     click on SEARCH triggers it (see facial-crops.js);
 //   - every hosted crop is written to the admin search history here, on the server, before
 //     its link is released: a browser cannot skip the record or log a search that failed;
-//   - one Durable Object per image (EU jurisdiction when available) that deletes ITSELF
+//   - one Durable Object per image, in the EU jurisdiction only, that deletes ITSELF
 //     through an alarm after FACE_SHARE_TTL_MS, so nothing accumulates or needs cleaning;
 //   - the link is 128 bits of randomness, served no-store / noindex, capped in reads.
 const FACE_SHARE_VERSION = "face-share-v1";
@@ -36,10 +36,12 @@ function looksLikeJpeg(bytes) {
   return bytes.length > 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
 }
 
-function faceShareStub(env, id) {
-  const namespace = typeof env.FACE_SHARE?.jurisdiction === "function"
-    ? env.FACE_SHARE.jurisdiction("eu")
-    : env.FACE_SHARE;
+// The page and the privacy notice promise EU storage, so there is no global fallback.
+function euFaceShare(env) {
+  return typeof env.FACE_SHARE?.jurisdiction === "function" ? env.FACE_SHARE.jurisdiction("eu") : null;
+}
+
+function faceShareStub(namespace, id) {
   return namespace.get(namespace.idFromName(id));
 }
 
@@ -152,6 +154,8 @@ async function handleFaceShareUpload(request, env, now = Date.now()) {
   }
 
   if (!env.FACE_SHARE) return jsonResponse({ error: "Face search hosting is not configured." }, 503, env);
+  const namespace = euFaceShare(env);
+  if (!namespace) return jsonResponse({ error: "EU storage for face search hosting is unavailable." }, 503, env);
 
   const contentType = String(request.headers.get("Content-Type") || "").toLowerCase();
   if (!contentType.startsWith("image/jpeg")) return jsonResponse({ error: "A JPEG image is required." }, 415, env);
@@ -170,7 +174,7 @@ async function handleFaceShareUpload(request, env, now = Date.now()) {
 
   const id = newFaceShareId();
   const expiresAt = now + FACE_SHARE_TTL_MS;
-  const stored = await faceShareStub(env, id).fetch("https://face.internal/put", {
+  const stored = await faceShareStub(namespace, id).fetch("https://face.internal/put", {
     method: "PUT",
     headers: { "X-Expires-At": String(expiresAt) },
     body: bytes
@@ -198,10 +202,11 @@ async function handleFaceShareGet(request, env) {
     headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow, noarchive" }
   });
   const match = FACE_SHARE_PATH_RE.exec(new URL(request.url).pathname);
-  if (!match || !FACE_SHARE_ID_RE.test(match[1]) || !env.FACE_SHARE) return notFound();
+  const namespace = euFaceShare(env);
+  if (!match || !FACE_SHARE_ID_RE.test(match[1]) || !namespace) return notFound();
 
   const head = request.method === "HEAD";
-  const stored = await faceShareStub(env, match[1]).fetch("https://face.internal/" + (head ? "head" : "get"));
+  const stored = await faceShareStub(namespace, match[1]).fetch("https://face.internal/" + (head ? "head" : "get"));
   if (!stored.ok) return notFound();
 
   return new Response(head ? null : stored.body, {
