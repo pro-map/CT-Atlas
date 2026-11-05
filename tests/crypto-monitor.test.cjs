@@ -228,6 +228,60 @@ test("failed, spam and self rows do not cross a value threshold",()=>{
   assert.equal(result.snapshot.tx_count,1,"the self-transfer moved value, so it still counts as activity");
 });
 
+const withLabel=(label,reasons=[])=>({transactions:[eth({id:"new",amount:1})],risk_assessment:{label,reasons}});
+const baseline=riskLabel=>watchWith({},{newest_tx_id:"old",newest_tx_time:"2026-09-22T10:00:00Z",...(riskLabel?{risk_label:riskLabel}:{})});
+const riskAlert=result=>result.alerts.find(alert=>alert.type==="RISK_LABEL_RAISED");
+
+test("a label rising to HIGH raises a HIGH alert with a day bucket and the reasons",()=>{
+  const h=harness();
+  const result=h.buildMonitorAlerts(baseline("LOW"),withLabel("HIGH",["Direct transfer with a listed address"]),NOW);
+  const alert=riskAlert(result);
+  assert.equal(alert.severity,"HIGH");
+  assert.equal(alert.day_bucket,"2026-09-23");
+  assert.match(alert.title,/raised to HIGH/);
+  assert.match(alert.detail,/from LOW to HIGH: Direct transfer with a listed address/);
+  assert.match(alert.detail,/Indicator, not proof/);
+  assert.equal(result.snapshot.risk_label,"HIGH");
+});
+
+test("a label rising to ELEVATED raises a MEDIUM alert, and sanctions alerts still come first",()=>{
+  const h=harness();
+  const result=h.buildMonitorAlerts(baseline("LOW"),{...withLabel("ELEVATED"),sanctions_screening:HIT},NOW);
+  assert.equal(riskAlert(result).severity,"MEDIUM");
+  assert.equal(result.alerts[0].type,"SANCTIONS_EXPOSURE");
+});
+
+test("a label that holds or falls raises nothing and the baseline follows it down",()=>{
+  const h=harness();
+  assert.equal(riskAlert(h.buildMonitorAlerts(baseline("HIGH"),withLabel("HIGH"),NOW)),undefined);
+  const fell=h.buildMonitorAlerts(baseline("HIGH"),withLabel("LOW"),NOW);
+  assert.equal(riskAlert(fell),undefined);
+  assert.equal(fell.snapshot.risk_label,"LOW");
+});
+
+test("the first labelled check sets a baseline without alerting",()=>{
+  const h=harness();
+  const result=h.buildMonitorAlerts(baseline(""),withLabel("HIGH"),NOW);
+  assert.equal(riskAlert(result),undefined);
+  assert.equal(result.snapshot.risk_label,"HIGH");
+});
+
+test("NOT_ASSESSED neither alerts nor loses the last real label, so recovery is not a rise",()=>{
+  const h=harness();
+  const outage=h.buildMonitorAlerts(baseline("HIGH"),withLabel("NOT_ASSESSED"),NOW);
+  assert.equal(riskAlert(outage),undefined);
+  assert.equal(outage.snapshot.risk_label,"HIGH");
+  const recovered=h.buildMonitorAlerts(baseline(outage.snapshot.risk_label),withLabel("HIGH"),NOW);
+  assert.equal(riskAlert(recovered),undefined);
+});
+
+test("a monitor run on an older analysis with no assessment keeps working",()=>{
+  const h=harness();
+  const result=h.buildMonitorAlerts(baseline("LOW"),{transactions:[eth({id:"new",amount:1})]},NOW);
+  assert.equal(riskAlert(result),undefined);
+  assert.equal(result.snapshot.risk_label,"LOW");
+});
+
 function monitorRoute(answers={}){
   const calls=[];
   const gate=async(_env,path,payload)=>{

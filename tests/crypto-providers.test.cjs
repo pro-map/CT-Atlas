@@ -19,18 +19,23 @@ function moduleExports(context,file,names){
   return vm.runInContext("(function(){"+stripped(file)+"\nreturn {"+names.join(",")+"};})()",context);
 }
 
-function harness(fetchImpl){
+function harness(fetchImpl,overrides={}){
   const context=vm.createContext({
     cleanText,URLSearchParams,URL,AbortSignal,console,setTimeout,
     fetch:fetchImpl,
-    resolveExchangeLabels:async()=>[]
+    resolveExchangeLabels:async()=>[],
+    normalizeUsername:value=>cleanText(value,80).toLowerCase(),
+    isAllowedUser:()=>true,
+    jsonResponse:(value,status=200)=>({value,status}),
+    gateCall:async(_env,path)=>({ok:true,json:async()=>path==="/session-get"?{username:"analyst"}:{ok:true}}),
+    ...overrides
   });
   vm.runInContext(stripped("cloudflare-worker/address-utils.js"),context);
   vm.runInContext(stripped("cloudflare-worker/sanctions.js"),context);
   Object.assign(context,moduleExports(context,"cloudflare-worker/exchange-behavior.mjs",["detectExchangeBehavior","EXCHANGE_BEHAVIOR_VERSION"]));
-  Object.assign(context,moduleExports(context,"cloudflare-worker/crypto-risk.mjs",["isStablecoin"]));
+  Object.assign(context,moduleExports(context,"cloudflare-worker/crypto-risk.mjs",["isStablecoin","assessWallet","derivePatterns","deriveAlertSummary"]));
   vm.runInContext(stripped("cloudflare-worker/crypto.js"),context);
-  return vm.runInContext("({detectCryptoInput,analyzeCryptoAddress,runAnalysis,aggregateFlows,buildObservations})",context);
+  return vm.runInContext("({detectCryptoInput,analyzeCryptoAddress,runAnalysis,aggregateFlows,buildObservations,handleCrypto,CRYPTO_VERSION})",context);
 }
 
 const json=(value,status=200)=>new Response(JSON.stringify(value),{status,headers:{"content-type":"application/json"}});
@@ -567,6 +572,80 @@ test("flows and the both-directions note compare one asset at a time and skip fa
   assert.equal(h.buildObservations(same,seed).some(note=>/both directions/.test(note)),true);
   const failed=[{direction:"OUT",asset:"ETH",amount:5,failed:true,counterparties:["a"]}];
   assert.equal(h.aggregateFlows(failed,seed).length,0);
+});
+
+const searchRequest=body=>({json:async()=>({user_id:"analyst",...body}),headers:{get:()=>"session-token"}});
+
+test("a search response carries the assessment, its coverage, and the derived older fields",async()=>{
+  const spend=btcTx("d".repeat(64),{vin:[{prevout:{scriptpubkey_address:BC1,value:30000}}],vout:manyOutputs(21)});
+  const {fetchImpl}=esplora({["/address/"+BC1]:btcInfo(1),["/address/"+BC1+"/txs"]:[spend]},LIST_WITH_LISTED);
+  const response=await harness(fetchImpl).handleCrypto(searchRequest({query:BC1,chain:"bitcoin"}),ENV);
+  assert.equal(response.status,200);
+  const body=response.value;
+  assert.equal(body.version,"crypto-intel-v6-risk-assessment");
+  const assessment=body.risk_assessment;
+  for(const key of ["version","label","score","thresholds","service_discount","reasons","findings","not_evaluated","coverage","disclaimer"]){
+    assert.ok(key in assessment,key);
+  }
+  assert.equal(assessment.label,"HIGH");
+  assert.equal(assessment.findings[0].code,"DIRECT_SANCTIONS_EXPOSURE");
+  assert.deepEqual(Array.from(assessment.findings[0].tx_ids),["d".repeat(64)],"the row past the display cap is the evidence");
+  assert.equal(assessment.coverage.lifetime_tx_count,1);
+  assert.equal(body.coverage.complete,true);
+  assert.equal(assessment.coverage.complete,true);
+  assert.equal(body.suspicious_patterns[0].code,"DIRECT_SANCTIONS_EXPOSURE");
+  assert.equal(body.alert_summary.highest_severity,"HIGH");
+  assert.ok(body.observations.some(note=>/Automated indicators in this sample, not findings/.test(note)));
+  assert.equal(JSON.stringify(body).includes("all_counterparties"),false);
+  assert.equal(JSON.stringify(body).includes("co_inputs"),false);
+});
+
+test("a search and a monitor read of the same wallet reach the same label",async()=>{
+  const spend=btcTx("d".repeat(64),{vin:[{prevout:{scriptpubkey_address:BC1,value:30000}}],vout:manyOutputs(21)});
+  const stub=()=>esplora({["/address/"+BC1]:btcInfo(1),["/address/"+BC1+"/txs"]:[spend]},LIST_WITH_LISTED).fetchImpl;
+  const search=(await harness(stub()).handleCrypto(searchRequest({query:BC1,chain:"bitcoin"}),ENV)).value;
+  const monitor=await harness(stub()).analyzeCryptoAddress(BC1,"bitcoin",50,ENV,{skipBalance:true});
+  assert.equal(monitor.risk_assessment.label,search.risk_assessment.label);
+  assert.equal(monitor.risk_assessment.score,search.risk_assessment.score);
+});
+
+test("exchange labels reach the assessment, so a sourced exchange seed gets the service discount",async()=>{
+  const {fetchImpl}=esplora({["/address/"+BC1]:btcInfo(1),["/address/"+BC1+"/txs"]:[btcTx("c".repeat(64))]});
+  const labels=[{chain:"bitcoin",address:BC1,name:"Synthetic exchange",category:"EXCHANGE",source_title:"Synthetic source"}];
+  const h=harness(fetchImpl,{resolveExchangeLabels:async()=>labels});
+  const result=await h.analyzeCryptoAddress(BC1,"bitcoin",50,ENV);
+  assert.equal(result.exchange_behavior.status,"sourced_match");
+  assert.equal(result.risk_assessment.service_discount,true);
+  assert.equal(result.exchange_labels.length,1);
+});
+
+test("a partial read cannot come back LOW, and says what is missing",async()=>{
+  const {fetchImpl}=etherscan({balance:OK("0"),txlist:OK([nativeTx()]),tokentx:{status:"0",message:"NOTOK",result:"Query Timeout occurred"}});
+  const result=await harness(fetchImpl).analyzeCryptoAddress(ETH,"ethereum",50,ENV);
+  assert.equal(result.risk_assessment.label,"NOT_ASSESSED");
+  assert.equal(result.risk_assessment.coverage.partial,true);
+  assert.ok(Array.from(result.risk_assessment.not_evaluated).some(item=>item.code==="PARTIAL_HISTORY"));
+});
+
+test("an unavailable sanctions list cannot come back LOW either",async()=>{
+  const fetchImpl=async url=>{
+    const parsed=new URL(String(url));
+    if(parsed.hostname==="sanctions.test")throw new Error("list down");
+    return json(parsed.pathname.endsWith("/txs")?btcPage(0,10):btcInfo(10));
+  };
+  const result=await harness(fetchImpl).analyzeCryptoAddress(BC1,"bitcoin",50,ENV);
+  assert.equal(result.sanctions_screening.status,"unavailable");
+  assert.equal(result.risk_assessment.label,"NOT_ASSESSED");
+});
+
+test("a single-transaction view has no wallet assessment and keeps the older empty fields",async()=>{
+  const txid="9".repeat(64);
+  const fetchImpl=async url=>new URL(String(url)).hostname==="sanctions.test"?json(SANCTIONS):json(btcTx(txid));
+  const response=await harness(fetchImpl).handleCrypto(searchRequest({query:txid,chain:"bitcoin"}),ENV);
+  assert.equal(response.status,200);
+  assert.equal(response.value.risk_assessment,undefined);
+  assert.equal(response.value.suspicious_patterns.length,0);
+  assert.equal(response.value.alert_summary.highest_severity,"LOW");
 });
 
 test("forbidden base58 characters, bad checksums and mixed-case bech32 stop before any provider call",()=>{

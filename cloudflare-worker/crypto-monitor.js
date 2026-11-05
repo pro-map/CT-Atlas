@@ -209,11 +209,35 @@ function buildMonitorAlerts(target, analysis, now = Date.now()) {
     }
   }
 
+  // NOT_ASSESSED says nothing about the wallet, so it keeps the last real label:
+  // otherwise a screening outage followed by recovery would read as a rise.
+  const assessment = analysis?.risk_assessment;
+  snapshot.risk_label = RISK_RANK[assessment?.label] ? assessment.label : cleanText(previous?.risk_label, 24);
+
   // Sanctions hits are the highest-value alerts and the gate keeps only the
   // first 40 per update, so they go to the front. The gate de-duplicates on
-  // watch|type|tx|title, so a persistent hit alerts once, not every 6 hours.
+  // watch|type|tx|title|day, so a persistent hit alerts once, not every 6 hours.
   const sanctionsAlerts = buildSanctionsAlerts(watch, analysis?.sanctions_screening);
-  return { snapshot, alerts: [...sanctionsAlerts, ...alerts] };
+  return { snapshot, alerts: [...sanctionsAlerts, ...buildRiskAlert(watch, previous, assessment, dayBucket), ...alerts] };
+}
+
+const RISK_RANK = Object.freeze({ LOW: 1, ELEVATED: 2, HIGH: 3 });
+
+function buildRiskAlert(watch, previous, assessment, dayBucket) {
+  const before = RISK_RANK[previous?.risk_label];
+  const after = RISK_RANK[assessment?.label];
+  if (!before || !after || after <= before) return [];
+  const reasons = (assessment.reasons || []).map(reason => cleanText(reason, 160)).join("; ");
+  return [alertBase(
+    watch,
+    "RISK_LABEL_RAISED",
+    assessment.label === "HIGH" ? "HIGH" : "MEDIUM",
+    "Automated risk label raised to " + assessment.label,
+    "The label moved from " + previous.risk_label + " to " + assessment.label + (reasons ? ": " + reasons : "") +
+      ". Indicator, not proof: review the wallet before relying on it.",
+    "",
+    dayBucket
+  )];
 }
 
 const MAX_SANCTIONS_ALERTS = 12;

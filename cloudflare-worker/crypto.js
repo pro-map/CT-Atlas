@@ -9,9 +9,9 @@ import { tronAddress, isValidWalletAddress } from "./address-utils.js";
 import { loadSanctions, screenAnalysis, sanctionsObservation } from "./sanctions.js";
 import { resolveExchangeLabels } from "./exchange-addresses.js";
 import { detectExchangeBehavior, EXCHANGE_BEHAVIOR_VERSION } from "./exchange-behavior.mjs";
-import { isStablecoin } from "./crypto-risk.mjs";
+import { isStablecoin, assessWallet, derivePatterns, deriveAlertSummary } from "./crypto-risk.mjs";
 
-const CRYPTO_VERSION = "crypto-intel-v5-exchange-behavior";
+const CRYPTO_VERSION = "crypto-intel-v6-risk-assessment";
 
 const EVM_CHAINS = {
   ethereum: { chainid: "1", name: "Ethereum", symbol: "ETH", explorer: "https://etherscan.io" },
@@ -147,149 +147,6 @@ async function getJson(url, options, label) {
   }
 }
 
-function sortTransactionsByTime(transactions) {
-  return (Array.isArray(transactions) ? transactions : []).slice().sort((a, b) => {
-    const ta = Date.parse(String(a?.time || ""));
-    const tb = Date.parse(String(b?.time || ""));
-    if (Number.isFinite(ta) && Number.isFinite(tb)) return tb - ta;
-    return String(b?.time || "").localeCompare(String(a?.time || ""));
-  });
-}
-
-function txIds(rows) {
-  return (rows || []).map(row => cleanText(row?.id || "", 180)).filter(Boolean).slice(0, 12);
-}
-
-function makePattern(code, label, severity, confidence, explanation, evidence, score = 50) {
-  return {
-    code,
-    label,
-    severity: ["HIGH", "MEDIUM", "LOW"].includes(String(severity || "").toUpperCase()) ? String(severity).toUpperCase() : "MEDIUM",
-    confidence: ["HIGH", "MEDIUM", "LOW"].includes(String(confidence || "").toUpperCase()) ? String(confidence).toUpperCase() : "MEDIUM",
-    score: Math.max(0, Math.min(100, Number(score) || 50)),
-    explanation: cleanText(explanation, 1800),
-    evidence: Object.assign({}, evidence || {}),
-    tx_ids: txIds(Array.isArray(evidence?.txs) ? evidence.txs : [])
-  };
-}
-
-// Heuristic-only pattern flags -- none of these establish laundering, ownership
-// or intent by themselves. Each explanation says so explicitly so an analyst
-// never mistakes a flag for a finding.
-function detectSuspiciousPatterns(transactions, seed) {
-  const rows = sortTransactionsByTime(transactions);
-  if (!rows.length) return [];
-  const patterns = [];
-
-  const incoming = rows.filter(row => String(row?.direction || "").toUpperCase() === "IN");
-  const outgoing = rows.filter(row => String(row?.direction || "").toUpperCase() === "OUT");
-  const recent = rows.filter(row => {
-    const time = Date.parse(String(row?.time || ""));
-    return Number.isFinite(time) && Date.now() - time <= 24 * 3600 * 1000;
-  });
-
-  if (incoming.length >= 2 && outgoing.length >= 2 && recent.length >= 4) {
-    const inValue = incoming.reduce((sum, row) => sum + Math.abs(finiteNumber(row.amount, 0)), 0);
-    const outValue = outgoing.reduce((sum, row) => sum + Math.abs(finiteNumber(row.amount, 0)), 0);
-    const ratio = inValue > 0 && outValue > 0 ? Math.min(inValue, outValue) / Math.max(inValue, outValue) : 0;
-    if (ratio >= 0.6) {
-      patterns.push(makePattern(
-        "RAPID_PASS_THROUGH",
-        "Rapid pass-through flow",
-        "MEDIUM",
-        "MEDIUM",
-        "The address received and then redistributed comparable value within a short window. This can indicate quick pass-through behavior, but the pattern is not proof of laundering or illicit intent.",
-        {
-          txs: recent.slice(0, 12),
-          inflow_amount: inValue,
-          outflow_amount: outValue,
-          ratio
-        },
-        64
-      ));
-    }
-  }
-
-  const burstWindow = rows.filter(row => {
-    const rowTime = Date.parse(String(row?.time || ""));
-    if (!Number.isFinite(rowTime)) return false;
-    const first = Date.parse(String(rows[0]?.time || ""));
-    return Number.isFinite(first) && (first - rowTime) <= 3 * 60 * 60 * 1000;
-  });
-  if (burstWindow.length >= 4) {
-    patterns.push(makePattern(
-      "BURST_ACTIVITY",
-      "Burst activity spike",
-      "MEDIUM",
-      "MEDIUM",
-      "A significant number of transfers occurred in a compressed time window, which can indicate a fast conversion or routing sequence.",
-      { txs: burstWindow.slice(0, 10), count: burstWindow.length },
-      58
-    ));
-  }
-
-  const counterpartyMap = new Map();
-  for (const row of rows) {
-    for (const cp of Array.isArray(row?.counterparties) ? row.counterparties : []) {
-      const key = String(cp || "").trim();
-      if (!key || key.toLowerCase() === String(seed || "").toLowerCase()) continue;
-      counterpartyMap.set(key, (counterpartyMap.get(key) || 0) + 1);
-    }
-  }
-  const fanOutCount = [...counterpartyMap.values()].filter(value => value >= 2).length;
-  if (fanOutCount >= 4) {
-    patterns.push(makePattern(
-      "FAN_OUT",
-      "Fan-out splitting pattern",
-      "MEDIUM",
-      "MEDIUM",
-      "The address interacts with several counterparties in a short sequence, a pattern consistent with value fragmentation or rapid redistribution.",
-      { txs: rows.slice(0, 12), counterparties: [...counterpartyMap.keys()].slice(0, 10), count: fanOutCount },
-      62
-    ));
-  }
-
-  if (rows.length >= 3) {
-    const times = rows.map(row => Date.parse(String(row?.time || ""))).filter(Number.isFinite);
-    if (times.length >= 2) {
-      const gaps = [];
-      for (let i = 1; i < times.length; i++) {
-        gaps.push(Math.abs(times[i] - times[i - 1]));
-      }
-      const largestGap = gaps.length ? Math.max(...gaps) : 0;
-      const oldest = Math.min(...times);
-      const newest = Math.max(...times);
-      const inactivityDays = (newest - oldest) / (24 * 3600 * 1000);
-      if (largestGap >= 7 * 24 * 3600 * 1000 && inactivityDays >= 10 && rows[0]?.time) {
-        patterns.push(makePattern(
-          "DORMANT_REACTIVATION",
-          "Dormant wallet reactivation",
-          "MEDIUM",
-          "MEDIUM",
-          "The wallet appears to have been inactive for a long interval before a new burst of activity, which is compatible with reactivation after dormancy.",
-          { txs: rows.slice(0, 8), inactivity_days: inactivityDays, largest_gap_ms: largestGap },
-          60
-        ));
-      }
-    }
-  }
-
-  const largeTransfers = rows.filter(row => Math.abs(finiteNumber(row.amount, 0)) >= 5).slice(0, 6);
-  if (largeTransfers.length >= 2) {
-    patterns.push(makePattern(
-      "LARGE_TRANSFER_CLUSTER",
-      "Large transfer cluster",
-      "HIGH",
-      "HIGH",
-      "Several sizable transfers are concentrated in a compact time window and warrant closer review even though the pattern alone does not establish criminality.",
-      { txs: largeTransfers },
-      76
-    ));
-  }
-
-  return patterns.slice(0, 5);
-}
-
 function aggregateFlows(transactions, seed) {
   const map = new Map();
   const seedLower = String(seed || "").toLowerCase();
@@ -375,11 +232,6 @@ function buildObservations(transactions, seed) {
   }
   const top = [...activity.entries()].sort((a, b) => b[1].count - a[1].count || b[1].value - a[1].value)[0];
   if (top) notes.push(`Most frequently observed counterparty in this sample: ${top[0]} (${top[1].count} linked record(s)).`);
-
-  const patterns = detectSuspiciousPatterns(rows, seed);
-  if (patterns.length) {
-    notes.push("Suspicious pattern review: " + patterns.map(pattern => pattern.label).join("; ") + ".");
-  }
 
   notes.push("On-chain linkage shows transaction relationships only. It does not establish that two addresses have the same owner or identify a person or organization.");
   return notes;
@@ -564,7 +416,6 @@ async function analyzeBitcoin(target, limit) {
   const confirmedKept = transactions.filter(row => row.confirmed).length;
   const funded = finiteNumber(info?.chain_stats?.funded_txo_sum) + finiteNumber(info?.mempool_stats?.funded_txo_sum);
   const spent = finiteNumber(info?.chain_stats?.spent_txo_sum) + finiteNumber(info?.mempool_stats?.spent_txo_sum);
-  const suspiciousPatterns = detectSuspiciousPatterns(transactions, target.value);
 
   return {
     chain: "bitcoin",
@@ -587,12 +438,6 @@ async function analyzeBitcoin(target, limit) {
     transactions,
     flows: aggregateFlows(transactions, target.value),
     observations: [...buildObservations(transactions, target.value), ...coverageNotes(failedSources, !info)],
-    suspicious_patterns: suspiciousPatterns,
-    alert_summary: suspiciousPatterns.length ? {
-      highest_severity: suspiciousPatterns.reduce((max, item) => (max?.score || 0) > (item?.score || 0) ? max : item, null)?.severity || "LOW",
-      highest_score: Math.max(...suspiciousPatterns.map(item => Number(item?.score || 0))),
-      total: suspiciousPatterns.length
-    } : { highest_severity: "LOW", highest_score: 0, total: 0 },
     sampling_note: "Blockstream returns recent history first. This view holds the newest " + transactions.length + " records" +
       (lifetime === null ? "" : " of " + lifetime + " confirmed lifetime transactions") + "."
   };
@@ -781,7 +626,6 @@ async function analyzeEvm(target, limit, env, options = {}) {
   const merged = evmRows(target, { nativeRows, tokenRows, internalRows }, chain);
   const transactions = merged.slice(0, limit);
   const balanceRaw = balanceResult.status === "fulfilled" ? balanceResult.value : null;
-  const suspiciousPatterns = detectSuspiciousPatterns(transactions, target.value);
 
   return {
     chain: target.chain,
@@ -807,12 +651,6 @@ async function analyzeEvm(target, limit, env, options = {}) {
       ...buildObservations(transactions, target.value),
       ...coverageNotes(failedSources, balanceResult.status === "rejected")
     ],
-    suspicious_patterns: suspiciousPatterns,
-    alert_summary: suspiciousPatterns.length ? {
-      highest_severity: suspiciousPatterns.reduce((max, item) => (max?.score || 0) > (item?.score || 0) ? max : item, null)?.severity || "LOW",
-      highest_score: Math.max(...suspiciousPatterns.map(item => Number(item?.score || 0))),
-      total: suspiciousPatterns.length
-    } : { highest_severity: "LOW", highest_score: 0, total: 0 },
     sampling_note: "The CT Atlas Crypto view requests a bounded recent page of native, internal and token transfers; it is not a complete archival crawl."
   };
 }
@@ -971,7 +809,6 @@ async function analyzeTron(target, limit, env, options = {}) {
   const merged = [...tokenRows, ...trxRows]
     .sort((a, b) => String(b.time).localeCompare(String(a.time)));
   const transactions = merged.slice(0, limit);
-  const suspiciousPatterns = detectSuspiciousPatterns(transactions, target.value);
 
   return {
     chain: "tron",
@@ -997,12 +834,6 @@ async function analyzeTron(target, limit, env, options = {}) {
       ...buildObservations(transactions, target.value),
       ...coverageNotes(failedSources, accountResult.status === "rejected")
     ],
-    suspicious_patterns: suspiciousPatterns,
-    alert_summary: suspiciousPatterns.length ? {
-      highest_severity: suspiciousPatterns.reduce((max, item) => (max?.score || 0) > (item?.score || 0) ? max : item, null)?.severity || "LOW",
-      highest_score: Math.max(...suspiciousPatterns.map(item => Number(item?.score || 0))),
-      total: suspiciousPatterns.length
-    } : { highest_severity: "LOW", highest_score: 0, total: 0 },
     sampling_note: "The CT Atlas Crypto view requests a bounded recent page of confirmed TRX and TRC-20 activity. It is not a complete archival crawl."
   };
 }
@@ -1042,13 +873,31 @@ function withoutServerFields(result) {
   };
 }
 
+// One path for searches and monitors, so the two cannot disagree about a wallet.
+async function withRiskAssessment(result, env, now = Date.now()) {
+  const exchangeLabels = await resolveExchangeLabels(result, env);
+  const exchangeBehavior = detectExchangeBehavior(result, exchangeLabels);
+  const labelled = { ...result, exchange_labels: exchangeLabels, exchange_behavior: exchangeBehavior };
+  if (result.kind !== "address") return labelled;
+  const assessment = assessWallet(result, { labels: exchangeLabels, exchangeBehavior, now });
+  return {
+    ...labelled,
+    risk_assessment: assessment,
+    suspicious_patterns: derivePatterns(assessment),
+    alert_summary: deriveAlertSummary(assessment),
+    observations: assessment.reasons.length
+      ? [...(result.observations || []), "Automated indicators in this sample, not findings: " + assessment.reasons.join("; ") + "."]
+      : result.observations
+  };
+}
+
 async function runAnalysis(target, limit, env, options = {}) {
   let result;
   if (target.chain === "bitcoin") result = await analyzeBitcoin(target, limit);
   else if (target.chain === "tron") result = await analyzeTron(target, limit, env, options);
   else if (EVM_CHAIN_KEYS.has(target.chain)) result = await analyzeEvm(target, limit, env, options);
   else throw new Error("Unsupported blockchain.");
-  return withoutServerFields(await withSanctionsScreening(result, env));
+  return withoutServerFields(await withRiskAssessment(await withSanctionsScreening(result, env), env));
 }
 
 async function analyzeCryptoAddress(address, chain, limit, env, options = {}) {
@@ -1090,8 +939,6 @@ async function handleCrypto(request, env) {
 
   try {
     const result = await runAnalysis(target, limit, env);
-    const exchangeLabels = await resolveExchangeLabels(result, env);
-    const exchangeBehavior = detectExchangeBehavior(result, exchangeLabels);
     try {
       // What was looked up, for the admin search history (origin: search, url, trace or monitor).
       const origin = cleanText(body.origin, 16).toLowerCase();
@@ -1114,8 +961,6 @@ async function handleCrypto(request, env) {
       exchange_behavior_version: EXCHANGE_BEHAVIOR_VERSION,
       generated_at: new Date().toISOString(),
       ...result,
-      exchange_labels: exchangeLabels,
-      exchange_behavior: exchangeBehavior,
       suspicious_patterns: Array.isArray(result?.suspicious_patterns) ? result.suspicious_patterns : [],
       alert_summary: result?.alert_summary || { highest_severity: "LOW", highest_score: 0, total: 0 }
     }, 200, env);
@@ -1131,7 +976,6 @@ export {
   detectCryptoInput,
   aggregateFlows,
   buildObservations,
-  detectSuspiciousPatterns,
   withSanctionsScreening,
   analyzeCryptoAddress,
   authenticate,
