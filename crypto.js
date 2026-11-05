@@ -2402,8 +2402,8 @@ function renderSanctions(){
 }
 
 function renderIntelligencePanels(){
-  renderRisk();
   renderSanctions();
+  renderRisk();
   renderPatterns();
   renderExchangeIdentification();
   renderExposure();
