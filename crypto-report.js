@@ -256,13 +256,13 @@ function exchangeSection(model){
 
 function exposureSection(model){
   const items=list(model.exposure).slice(0,LIMITS.exposure);
-  const blocks=[heading("LABELLED EXPOSURE (H1–H3)"),small("Addresses carrying an analyst label or watchlist category that were observed within three hops of the seed along the direction of value flow. Every label is an analyst attribution with its own source and confidence.")];
+  const blocks=[heading("LABELLED EXPOSURE (H1–H3)"),small("Addresses carrying an analyst label or watchlist category that were observed within three hops of the seed, for funds sent and funds received. \"Flow\" follows the recorded transfer directions; a mixed connection claims no flow. Every label is an analyst attribution with its own source and confidence.")];
   if(!items.length)blocks.push(noneRecorded("No path from the seed to a currently labelled sensitive category was observed within H1–H3 in the analysed sample."));
   else{
-    blocks.push({type:"table",fontSize:14,columns:[{key:"hop",label:"Hop",width:1},{key:"category",label:"Category",width:3},{key:"name",label:"Label",width:4},{key:"conf",label:"Confidence",width:2},{key:"share",label:"Direct share",width:2,align:"right"}],
-      rows:items.map(item=>({hop:"H"+(num(item.hop)??"?"),category:text(item.category),name:text(item.name)||"—",conf:text(item.confidence)||"—",
-        share:item.direct_share===null||item.direct_share===undefined?"—":(Math.round(Number(item.direct_share)*10)/10)+"%",detail:text(item.address)}))});
-    blocks.push(small("\"Direct share\" is a heuristic: each outgoing record's amount is split evenly across its counterparties and all assets are summed without unit conversion; it is not a value share."));
+    blocks.push({type:"table",fontSize:14,columns:[{key:"hop",label:"Hop",width:1},{key:"category",label:"Category",width:2.6},{key:"flow",label:"Flow",width:2.6},{key:"name",label:"Label",width:3},{key:"conf",label:"Confidence",width:1.8},{key:"share",label:"Direct share",width:2.2,align:"right"}],
+      rows:items.map(item=>({hop:"H"+(num(item.hop)??"?"),category:text(item.category),flow:text(item.flow)||"—",name:text(item.name)||"—",conf:text(item.confidence)||"—",
+        share:item.direct_share===null||item.direct_share===undefined?"—":(Math.round(Number(item.direct_share)*10)/10)+"%"+(item.direct_share_asset?" of "+text(item.direct_share_asset):""),detail:text(item.address)}))});
+    blocks.push(small("\"Direct share\" is the largest share of the seed's sent or received amount in any one asset, with each record's amount split evenly across its counterparties. Assets are never added together, and it is not a value in any currency."));
   }
   if(model.path&&list(model.path.nodes).length){
     blocks.push(sub("SHORTEST OBSERVED PATH · "+(list(model.path.nodes).length-1)+" hop(s)"));

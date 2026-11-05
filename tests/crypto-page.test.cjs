@@ -37,7 +37,10 @@ function harness({respond}={}){
       seed(payload){lastPayload=payload;resetTraceState(payload);currentNetworkModel=buildNetworkModel(payload);},
       setLabels(labels){cryptoWorkspace.labels=labels;},
       addTrace(address,payload,depth){const key=traceKey(address,lastPayload.chain);tracePayloads.set(key,{key,address,payload,depth});traceExpanded.add(key);currentNetworkModel=buildNetworkModel(lastPayload);},
-      expandTraceNode,autoTrace,clearTrace,
+      expandTraceNode,autoTrace,clearTrace,exposureFindings,renderExposure,buildNetworkModel,allTraceRows,renderTable,neighborStats,
+      inReportMode(fn){return withoutTransactionFilters(fn);},
+      reportModel:()=>collectReportModel(),
+      setPayloadOnly(payload){lastPayload=payload;},
       traceKeys(){return [...tracePayloads.keys()];},
       traceRun(){return autoTraceRun;},
       isAutoTraceActive(){return autoTraceActive;}
@@ -274,4 +277,138 @@ test("CLEAR TRACE also drops what was in flight",async()=>{
   release();
   await pending;
   assert.deepEqual(plain(h.api.traceKeys()),[addr(1)]);
+});
+
+// ---------------------------------------------------------------- exposure
+
+const label=(address,category,name="Label",extra={})=>({id:"l-"+address,chain:"ethereum",address,name,category,confidence:"HIGH",...extra});
+const exposure=h=>plain(h.api.exposureFindings().map(item=>({category:item.category,hop:item.hop,direction:item.direction,flow:item.flow})));
+
+test("funds received from a labelled mixer are exposure, and the finding says which way they moved",()=>{
+  const h=harness();
+  h.api.setLabels([label(addr(2),"MIXER")]);
+  h.api.seed(wallet(addr(1),[tx("t1",0,"IN","ETH",10,addr(2)),tx("t2",10,"OUT","ETH",9,addr(3))]));
+  assert.deepEqual(exposure(h),[{category:"MIXER",hop:1,direction:"from",flow:"funds from"}]);
+  const sent=harness();
+  sent.api.setLabels([label(addr(2),"MIXER")]);
+  sent.api.seed(wallet(addr(1),[tx("t1",0,"OUT","ETH",10,addr(2))]));
+  assert.deepEqual(exposure(sent),[{category:"MIXER",hop:1,direction:"to",flow:"funds to"}]);
+  const both=harness();
+  both.api.setLabels([label(addr(2),"MIXER")]);
+  both.api.seed(wallet(addr(1),[tx("t1",0,"OUT","ETH",10,addr(2)),tx("t2",5,"IN","ETH",9,addr(2))]));
+  assert.equal(exposure(both)[0].direction,"both");
+});
+
+test("a two-hop inbound path keeps its flow order, and alternating directions claim no flow",()=>{
+  const h=harness();
+  h.api.setLabels([label(addr(5),"DARKNET")]);
+  h.api.seed(wallet(addr(1),[tx("t1",5,"IN","ETH",1,addr(2))]));
+  h.api.addTrace(addr(2),wallet(addr(2),[tx("t0",0,"IN","ETH",1,addr(5)),tx("t1",5,"OUT","ETH",1,addr(1))]),1);
+  const [finding]=plain(h.api.exposureFindings());
+  assert.equal(finding.direction,"from");
+  assert.deepEqual(finding.path,[addr(5),addr(2),addr(1)],"funds run from the labelled wallet to the seed");
+  const mixed=harness();
+  mixed.api.setLabels([label(addr(5),"DARKNET")]);
+  mixed.api.seed(wallet(addr(1),[tx("t1",5,"OUT","ETH",1,addr(2))]));
+  mixed.api.addTrace(addr(2),wallet(addr(2),[tx("t2",9,"IN","ETH",1,addr(5)),tx("t1",5,"IN","ETH",1,addr(1))]),1);
+  assert.deepEqual(exposure(mixed),[{category:"DARKNET",hop:2,direction:"mixed",flow:"connected, mixed directions"}]);
+  mixed.api.renderExposure();
+  assert.match(mixed.el("cryptoExposureSummary").innerHTML,/ — /,"no arrows on a mere connection");
+});
+
+test("exposure is not limited to the 14 counterparties the graph draws, on screen or in the report",()=>{
+  const h=harness();
+  const rows=[];
+  for(let i=0;i<20;i++)for(let k=0;k<3;k++)rows.push(tx("r"+i+"-"+k,i*10+k,"OUT","ETH",1,addr(100+i)));
+  rows.push(tx("hidden",999,"OUT","ETH",50,addr(500)));
+  h.api.setLabels([label(addr(500),"DARKNET")]);
+  h.api.seed(wallet(addr(1),rows));
+  const screen=h.api.buildNetworkModel(wallet(addr(1),rows));
+  assert.ok(!plain(screen.nodes.map(node=>node.key)).includes(addr(500)),"the display model really leaves it out");
+  assert.equal(exposure(h).length,1,"on screen");
+  assert.equal(h.api.inReportMode(()=>h.api.exposureFindings()).length,1,"in the report");
+});
+
+test("the report's labels and watchlist also reach past the 14 the screen draws",()=>{
+  const h=harness();
+  const rows=[];
+  for(let i=0;i<20;i++)for(let k=0;k<3;k++)rows.push(tx("r"+i+"-"+k,i*10+k,"OUT","ETH",1,addr(100+i)));
+  rows.push(tx("hidden",999,"OUT","ETH",50,addr(500)));
+  h.api.seed(wallet(addr(1),rows));
+  const keys=h.api.inReportMode(()=>plain(h.api.buildNetworkModel(wallet(addr(1),rows)).nodes.map(node=>node.key)));
+  assert.ok(keys.includes(addr(500)));
+});
+
+test("a failed transaction moved no funds, so it creates no exposure",()=>{
+  const h=harness();
+  h.api.setLabels([label(addr(2),"MIXER")]);
+  h.api.seed(wallet(addr(1),[tx("f1",0,"OUT","ETH",5,addr(2),{failed:true}),tx("ok",1,"OUT","ETH",5,addr(3))]));
+  assert.deepEqual(exposure(h),[]);
+});
+
+test("direct share is per address and per asset: units are never added together",()=>{
+  const h=harness();
+  h.api.setLabels([label(addr(2),"EXCHANGE","Ex A"),label(addr(3),"EXCHANGE","Ex B")]);
+  h.api.seed(wallet(addr(1),[
+    tx("a",0,"OUT","SHIB",9000000,addr(2)),tx("a2",1,"OUT","SHIB",1000000,addr(9)),
+    tx("b",2,"OUT","ETH",1,addr(3)),tx("b2",3,"OUT","ETH",3,addr(9)),
+    tx("c",4,"IN","ETH",2,addr(3))
+  ]));
+  const shares=Object.fromEntries(plain(h.api.exposureFindings()).map(item=>[item.name,item.direct_shares]));
+  assert.deepEqual(shares["Ex A"],[{asset:"SHIB",direction:"to",share:90}]);
+  assert.deepEqual(shares["Ex B"],[{asset:"ETH",direction:"from",share:100},{asset:"ETH",direction:"to",share:25}]);
+});
+
+test("a token and a coin with the same symbol stay separate assets",()=>{
+  const h=harness();
+  h.api.setLabels([label(addr(2),"EXCHANGE")]);
+  h.api.seed(wallet(addr(1),[
+    tx("a",0,"OUT","USDT",10,addr(2),{token_contract:"0xREAL"}),
+    tx("b",1,"OUT","USDT",990,addr(3),{token_contract:"0xFAKE"})
+  ]));
+  assert.equal(plain(h.api.exposureFindings())[0].direct_share,100);
+});
+
+// ---------------------------------------------------------------- display and counting
+
+test("the hop column prints the real hop; only the colour class stops at H3",()=>{
+  const h=harness();
+  const payload=wallet(addr(1),[]);
+  h.api.seed(payload);
+  h.api.renderTable(payload,[tx("a",0,"OUT","ETH",1,addr(2),{_trace_depth:5,_trace_source:addr(1)})]);
+  assert.match(h.el("cryptoTableBody").innerHTML,/crypto-hop-badge h3">H5</);
+});
+
+test("one transaction between two analysed wallets counts once, on the edge and on the nodes",()=>{
+  const h=harness();
+  h.api.seed(wallet(addr(1),[tx("same",0,"OUT","ETH",1,addr(2)),tx("other",1,"OUT","ETH",1,addr(3))]));
+  h.api.addTrace(addr(2),wallet(addr(2),[tx("same",0,"IN","ETH",1,addr(1))]),1);
+  const model=plain(h.api.buildNetworkModel(wallet(addr(1),[])));
+  const edge=model.edges.find(item=>item.fromKey===addr(1)&&item.toKey===addr(2));
+  assert.equal(edge.count,1);
+  assert.equal(model.nodes.find(node=>node.key===addr(2)).total,1);
+});
+
+test("two transfers in one transaction with different amounts both stay in the table",()=>{
+  const h=harness();
+  h.api.seed(wallet(addr(1),[tx("same",0,"OUT","USDT",100,addr(9)),tx("same",0,"OUT","USDT",250,addr(9))]));
+  assert.deepEqual(plain(h.api.allTraceRows(false).map(row=>row.amount)).sort((a,b)=>a-b),[100,250]);
+});
+
+test("an expanded wallet ranked past the cap keeps its link to the seed",()=>{
+  const h=harness();
+  const rows=[];
+  for(let i=0;i<20;i++)for(let k=0;k<3;k++)rows.push(tx("r"+i+"-"+k,i*10+k,"OUT","ETH",1,addr(100+i)));
+  rows.push(tx("low",999,"OUT","ETH",50,addr(500)));
+  const seed=wallet(addr(1),rows);
+  h.api.seed(seed);
+  h.api.addTrace(addr(500),wallet(addr(500),[tx("n",1000,"OUT","ETH",1,addr(600))]),1);
+  const model=plain(h.api.buildNetworkModel(seed));
+  assert.ok(model.edges.some(edge=>edge.fromKey===addr(1)&&edge.toKey===addr(500)));
+});
+
+test("date filters say they are UTC, and the balance says it is the native asset only",()=>{
+  const html=fs.readFileSync("crypto.html","utf8");
+  assert.ok(html.includes("<span>From date (UTC)</span>")&&html.includes("<span>To date (UTC)</span>"));
+  assert.ok(fs.readFileSync("crypto.js","utf8").includes('kpi("Seed balance (native asset only)"'));
 });

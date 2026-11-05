@@ -199,8 +199,8 @@
             <label class="crypto-field compact"><span>Status</span><select id="filterStatus"><option value="all">All statuses</option><option value="confirmed">Confirmed / successful</option><option value="pending">Pending / unconfirmed</option><option value="failed">Failed</option></select></label>
             <label class="crypto-field compact"><span>Minimum amount</span><input id="filterMinAmount" inputmode="decimal" placeholder="0"></label>
             <label class="crypto-field compact"><span>Maximum amount</span><input id="filterMaxAmount" inputmode="decimal" placeholder="No maximum"></label>
-            <label class="crypto-field compact"><span>From date</span><input id="filterFromDate" type="date"></label>
-            <label class="crypto-field compact"><span>To date</span><input id="filterToDate" type="date"></label>
+            <label class="crypto-field compact"><span>From date (UTC)</span><input id="filterFromDate" type="date"></label>
+            <label class="crypto-field compact"><span>To date (UTC)</span><input id="filterToDate" type="date"></label>
             <label class="crypto-field compact wide"><span>Counterparty / TX / token contract</span><input id="filterText" autocomplete="off" spellcheck="false" placeholder="Address, tx hash, token name or contract"></label>
             <label class="crypto-field compact"><span>Graph: min linked records</span><input id="filterGraphMinLinks" type="number" min="1" max="99" step="1" value="1"></label>
             <label class="crypto-field compact"><span>Graph: maximum nodes</span><select id="filterGraphNodes"><option value="20">20</option><option value="40">40</option><option value="60">60</option><option value="80" selected>80</option></select></label>
@@ -224,7 +224,7 @@
             <div class="crypto-card-head">
               <div>
                 <div class="crypto-card-title">Exposure Engine</div>
-                <div class="crypto-card-note">Direct and indirect exposure to analyst-sourced labels/watchlists.</div>
+                <div class="crypto-card-note">Direct and indirect exposure to analyst-sourced labels/watchlists, for funds sent and funds received.</div>
               </div>
             </div>
             <div class="crypto-card-body">
