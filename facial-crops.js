@@ -166,7 +166,15 @@ function shareUsable(share,now){
   return Boolean(share)&&Number.isFinite(share.expiresAt)&&share.expiresAt-now>SHARE_MIN_LIFETIME_MS;
 }
 
-const helpers={MARGINS,MIN_SIDE,MAX_UPSCALE,paddedBox,outputSize,mapBoxToSource,safeStem,cropFileName,uniqueName,crc32,buildZip,SEARCH_ENGINES,SEARCH_ALL_IDS,MAX_SHARE_BYTES,MAX_SHARE_SIDE,shareDimensions,directSearchUrl,validShareUrl,shareUsable};
+// Low-detail faces are where look-alike leads are most likely, so the analyst is told before searching one.
+function cropWarning(record){
+  const reasons=[];
+  if(record.quality==="LOW")reasons.push("low quality");
+  if(record.upscaled)reasons.push("upscaled from "+record.sourceWidth+"×"+record.sourceHeight+" px");
+  return reasons.length?"This crop is "+reasons.join(" and ")+", so look-alike results are more likely. Prefer a sharper image of this person if you have one.":"";
+}
+
+const helpers={MARGINS,MIN_SIDE,MAX_UPSCALE,paddedBox,outputSize,mapBoxToSource,safeStem,cropFileName,uniqueName,crc32,buildZip,SEARCH_ENGINES,SEARCH_ALL_IDS,MAX_SHARE_BYTES,MAX_SHARE_SIDE,shareDimensions,directSearchUrl,validShareUrl,shareUsable,cropWarning};
 if(typeof module!=="undefined"&&module.exports)module.exports=helpers;
 if(typeof document==="undefined"){root.CTAtlasFaceCropsHelpers=helpers;return;}
 
@@ -177,7 +185,7 @@ const $=id=>document.getElementById(id);
 const esc=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 
 let generation=0;
-let records=new Map();      // key -> {key,name,blob,url,width,height,upscaled,state,error,label}
+let records=new Map();      // key -> {key,name,blob,url,width,height,sourceWidth,sourceHeight,upscaled,quality,state,error,label}
 let context=null;           // {payload,files}
 
 function setStatus(message,tone){
@@ -270,7 +278,8 @@ function paintCell(record){
   const actions=cell(record.key,".fc-actions");
   if(thumb){
     thumb.innerHTML=record.state==="ready"
-      ?'<img src="'+esc(record.url)+'" alt="Cropped face '+esc(record.label)+'" width="'+esc(Math.min(72,record.width))+'">'
+      ?'<img src="'+esc(record.url)+'" alt="Cropped face '+esc(record.label)+'" width="'+esc(Math.min(72,record.width))+'">'+
+        '<div class="fc-source">'+esc(record.sourceWidth)+'×'+esc(record.sourceHeight)+' px'+(record.upscaled?' <span class="fc-badge">UPSCALED</span>':'')+'</div>'
       :'<span class="fc-fail" title="'+esc(record.error||"")+'">n/a</span>';
   }
   if(actions){
@@ -287,6 +296,7 @@ function paintCell(record){
         '<button type="button" class="fc-btn fc-btn-search" data-fc-action="search-all" data-fc-key="'+esc(record.key)+'" title="Host this crop for about 10 minutes and search it on Yandex Images">SEARCH</button>'+
       '</div>'+
       '<div class="fc-search-note">Yandex Images</div>'+
+      (cropWarning(record)?'<div class="fc-weak" title="'+esc(cropWarning(record))+'">Weak crop: look-alikes more likely</div>':'')+
       '<div class="fc-links" data-fc-links="'+esc(record.key)+'" hidden></div>';
   }
 }
@@ -349,7 +359,7 @@ async function generate(){
       for(const face of faces){
         const key=job.fi+":"+job.ri+":"+face.face_id;
         const label="F"+face.face_id+(job.isVideo?" @ "+job.frame.timestamp_seconds+"s":"");
-        const record={key,label,state:"error",error:failure,consented:new Set(),name:uniqueName(cropFileName(job.fileName,face,job.isVideo?job.frame.timestamp_seconds:null),used)};
+        const record={key,label,quality:face.quality,state:"error",error:failure,consented:new Set(),name:uniqueName(cropFileName(job.fileName,face,job.isVideo?job.frame.timestamp_seconds:null),used)};
         if(!failure){
           try{
             const crop=cropFromSource(source,srcW,srcH,job.frame,face,opts);
@@ -487,15 +497,16 @@ const YANDEX_EXPOSURE="Yandex is a Russian-law operator. The search runs in your
 
 function confirmText(record,engines,hostedShare){
   const name=engines[0]?.name||"Yandex Images";
+  const warning=cropWarning(record)?"WARNING: "+cropWarning(record)+"\n\n":"";
   if(hostedShare){
     const minutes=Math.max(1,Math.round((hostedShare.expiresAt-Date.now())/60000));
-    return "Also search face "+record.label+" on "+name+"?\n\n"+
+    return "Also search face "+record.label+" on "+name+"?\n\n"+warning+
       "This crop is already hosted on CT Atlas's temporary storage (EU) and will be deleted automatically in about "+minutes+" minute(s). "+
       "Pressing OK gives the same link to "+name+", which will download the crop and apply its own retention rules to it.\n\n"+
       YANDEX_EXPOSURE+"\n\n"+
       "Nothing is shared with "+name+" unless you press OK.";
   }
-  return "Search face "+record.label+" directly on "+name+"?\n\n"+
+  return "Search face "+record.label+" directly on "+name+"?\n\n"+warning+
     "Yandex Images can only search by web address, so this ONE crop (a small JPEG without metadata) will be hosted on CT Atlas's temporary storage (EU) for about 10 minutes. "+
     "Anyone holding its unguessable link can view it during that time, Yandex Images downloads it and applies its own retention rules to that copy, and CT Atlas deletes its copy automatically afterwards.\n\n"+
     YANDEX_EXPOSURE+"\n\n"+

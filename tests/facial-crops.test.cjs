@@ -105,6 +105,14 @@ test("search engine: exactly Yandex Images, free, https, opened by URL",()=>{
   for(const removed of ["tineye.com","bing.com","lens.google.com","images.google.com","graph.baidu.com","search4faces"])assert.ok(!source.includes(removed),removed+" was removed");
 });
 
+test("cropWarning names what is weak about a crop and stays silent on a good one",()=>{
+  assert.equal(h.cropWarning({quality:"HIGH",upscaled:false}),"");
+  assert.equal(h.cropWarning({quality:"MEDIUM"}),"");
+  assert.equal(h.cropWarning({}),"","a detector with no quality says nothing");
+  assert.match(h.cropWarning({quality:"LOW"}),/^This crop is low quality, so look-alike/);
+  assert.match(h.cropWarning({quality:"HIGH",upscaled:true,sourceWidth:50,sourceHeight:60}),/^This crop is upscaled from 50×60 px, so look-alike/);
+});
+
 test("the hosted-crop link is only accepted when it points at the CT Atlas API's own hosting path",()=>{
   const api="https://ct-report-generator.fairpeace.workers.dev";
   const good=api+"/face-share/AbCdEfGhIjKlMnOpQrStUv.jpg";
@@ -237,6 +245,6 @@ test("the crop component ships everywhere the Facial page does",()=>{
   const ui=read(".github/workflows/deploy-current-ct-atlas-ui.yml");
   assert.ok(ui.includes('"facial-crops.js"'));
   const css=read("facial.css");
-  for(const selector of [".fc-bar",".fc-btn-search",".fc-links",".fc-more-link",".fc-consent",".fc-thumb"])assert.ok(css.includes(selector),selector);
+  for(const selector of [".fc-bar",".fc-btn-search",".fc-links",".fc-more-link",".fc-consent",".fc-thumb",".fc-source",".fc-badge",".fc-weak"])assert.ok(css.includes(selector),selector);
   for(const gone of [".fc-menu",".fc-engine",".fc-search summary"])assert.ok(!css.includes(gone),gone+" belonged to the removed engine menu");
 });

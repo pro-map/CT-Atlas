@@ -83,10 +83,10 @@ function harness(options={}){
   return {crops,el,listeners,opened,confirms,tabsAtPrompt,nextSteps,fallbacks,fetchCalls,clipboardWrites,tabsAtCopy,window,cells,
     setAnswer:value=>{answer=value;},advance:ms=>{clock.offset+=ms;},
     fireLongTimers:()=>longTimers.filter(t=>!t.cleared).forEach(t=>{t.cleared=true;t.fn();}),
-    async attach(){
+    async attach(face={box:{x:100,y:50,w:800,h:500}}){
       // one 1000x640 image with a large face: its crop is 1000x640 (~235 KB), so it must be shrunk to be hosted
       await crops.attach({
-        payload:{files:[{kind:"image",filename:"a.jpg",width:1000,height:640,faces:[{face_id:1,box:{x:100,y:50,w:800,h:500}}]}],errors:[]},
+        payload:{files:[{kind:"image",filename:"a.jpg",width:1000,height:640,faces:[{face_id:1,...face}]}],errors:[]},
         files:[{name:"a.jpg"}],api:API,getToken:()=>token
       });
     },
@@ -113,6 +113,29 @@ test("only Yandex Images is offered, behind one SEARCH button (no engine menu)",
   assert.doesNotMatch(html,/<details|fc-menu|search-direct|Bing|Google|Baidu|Search4faces/i);
   assert.equal(JSON.stringify(h.crops.helpers.SEARCH_ENGINES.map(engine=>engine.id)),JSON.stringify(["yandex"]));
   assert.equal(JSON.stringify([...h.crops.helpers.SEARCH_ALL_IDS]),JSON.stringify(["yandex"]));
+});
+
+test("a small face shows its source size and an UPSCALED badge, and SEARCH warns before anything is sent",async()=>{
+  const h=harness();
+  await h.attach({box:{x:100,y:50,w:30,h:30},quality:"LOW"});
+  assert.match(h.cells.thumb.innerHTML,/48×48 px <span class="fc-badge">UPSCALED<\/span>/);
+  assert.match(h.cells.actions.innerHTML,/fc-weak/);
+  await h.click();
+  assert.match(h.confirms[0],/^Search face F1 directly on Yandex Images\?\n\nWARNING: This crop is low quality and upscaled from 48×48 px, so look-alike results are more likely/);
+});
+
+test("a low-quality face that was not upscaled is warned about too; a good crop carries neither mark",async()=>{
+  const weak=harness();
+  await weak.attach({box:{x:100,y:50,w:800,h:500},quality:"LOW"});
+  assert.doesNotMatch(weak.cells.thumb.innerHTML,/UPSCALED/);
+  assert.match(weak.cells.actions.innerHTML,/fc-weak/);
+  const good=harness();
+  await good.attach({box:{x:100,y:50,w:800,h:500},quality:"HIGH"});
+  assert.match(good.cells.thumb.innerHTML,/1000×640 px<\/div>/);
+  assert.doesNotMatch(good.cells.thumb.innerHTML,/UPSCALED/);
+  assert.doesNotMatch(good.cells.actions.innerHTML,/fc-weak/);
+  await good.click();
+  assert.doesNotMatch(good.confirms[0],/WARNING/);
 });
 
 test("cutting the faces sends nothing anywhere",async()=>{
