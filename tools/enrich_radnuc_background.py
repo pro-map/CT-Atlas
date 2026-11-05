@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT/'tools')]
 import archive_review
 import archive_dedup
-import enrich_archive
+import news_search
 import collection_config
 import radnuc_background as background
 import radnuc_background_topics as topics
@@ -190,7 +190,7 @@ def plan_queries(collector, now):
 
 
 def candidate_key(item):
-    return enrich_archive.article_key(item.get('original_title') or item.get('title'),item.get('source'))
+    return news_search.article_key(item.get('original_title') or item.get('title'),item.get('source'))
 
 
 def save_articles(root, articles, now):
@@ -252,7 +252,7 @@ def run(root=ROOT, max_posts=20, max_fetches=50, deadline_minutes=20, *, now=Non
     tasks = plan_queries(collector,now)
     cursor = int(state.get('cursor',0))%len(tasks) if tasks else 0
     ordered = tasks[cursor:]+tasks[:cursor]
-    searcher = searcher or enrich_archive.Searcher(collector)
+    searcher = searcher or news_search.Searcher(collector)
     gate = (gate_factory or (lambda posts:archive_review.GeminiGate(collector,posts,on_post=ledger.save)))(budget)
     stop = 'daily batch complete'; failed = False
     review_errors = Counter(); batch_size = BATCH_SIZE; attempts = 0
@@ -337,7 +337,7 @@ def run(root=ROOT, max_posts=20, max_fetches=50, deadline_minutes=20, *, now=Non
                     found,full = searcher.search(task)
                     counts['searched'] += 1
                     if full: counts['source_capped_queries'] += 1
-                except (enrich_archive.SourceUnavailable,enrich_archive.QueryRejected):
+                except (news_search.SourceUnavailable,news_search.QueryRejected):
                     counts['source_errors'] += 1; checkpoint(); continue
                 fresh = sorted(found,key=lambda row:row.get('published') or '',reverse=True)
                 taken = 0

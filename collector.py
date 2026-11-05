@@ -1,4 +1,5 @@
 import argparse
+import backfill_control
 import radnuc
 import threat_categories
 import collection_config
@@ -11302,14 +11303,12 @@ def main():
     global COLLECTION_SCOPE, COLLECTION_STATUS
     is_backfill, COLLECTION_SCOPE = parse_collection_mode()
     if is_backfill:
-        import backfill_control
         if not backfill_control.history_enabled(Path(__file__).resolve().parent):
             print('Historical backfills cancelled by operator; daily collection remains enabled.')
             return
     effective_config = collection_config.validate_runtime(globals())
     print('Effective configured collection: ' + json.dumps(effective_config, ensure_ascii=False))
     if is_backfill:
-        import backfill_control
         backfill_control.apply_to_collector(globals(), Path(__file__).resolve().parent)
     existing_weekly_analysis = load_existing_weekly_analysis()
 
@@ -11375,10 +11374,9 @@ def main():
         selected_fresh = ai_select_events(fresh_clusters)
         originals = []
     else:
-        import backfill_control
         recent, backlog, dropped = daily_pipeline.prepare(
             fresh, daily_pipeline.load_queue(), existing, daily_engine, run_now,
-            backfill_control.disabled_categories(Path(__file__).resolve().parent))
+            daily_pipeline.CANCELLED_BACKLOG_CATEGORIES)
         fresh_clusters = recent + backlog
         # Save ORIGINAL candidate clusters before translation or any AI call.
         # Completed decisions remain queued until the database is published.

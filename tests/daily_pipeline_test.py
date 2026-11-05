@@ -46,7 +46,7 @@ class DailyPipelineTests(unittest.TestCase):
         self.assertEqual((dropped["expired"], dropped["retired"], dropped["cancelled_history"]), (1, 1, 1))
 
     def test_cancelled_specialist_history_filters_old_legacy_queue_but_keeps_recent_bio(self):
-        disabled = set(collector.threat_categories.LABELS)
+        disabled = daily.CANCELLED_BACKLOG_CATEGORIES
         queued = [article('queued-old-bio',20,'Biological Terrorism'),
                   article('queued-old-cbrn',20,'CBRN'),
                   article('queued-recent-cbrne',1,'CBRNE')]
@@ -60,6 +60,19 @@ class DailyPipelineTests(unittest.TestCase):
         self.assertEqual([row['id'] for row in backlog],['fresh-old-arrest'])
         self.assertEqual(dropped['cancelled_history'],3)
         self.assertEqual((fresh,queued),originals)
+
+    def test_cancelled_categories_stay_in_recent_daily_collection(self):
+        bio = collector.threat_categories.BIO
+        self.assertIn(bio, daily.CANCELLED_BACKLOG_CATEGORIES)
+        self.assertIn(bio, collector.CORE_SEARCH_QUERIES)
+        for profile in collector.MULTILINGUAL_PROFILES:
+            self.assertIn(bio, {query["category"] for query in profile["queries"]})
+        recent, backlog, dropped = daily.partition(
+            [article("recent-bio", 1, bio), article("old-bio", 20, bio)],
+            collector, NOW, daily.CANCELLED_BACKLOG_CATEGORIES)
+        self.assertEqual([row["id"] for row in recent], ["recent-bio"])
+        self.assertEqual(backlog, [])
+        self.assertEqual(dropped["cancelled_history"], 1)
 
     def test_queues_are_clustered_separately_and_cached_original_is_unchanged(self):
         queued = article("queued", 10)
