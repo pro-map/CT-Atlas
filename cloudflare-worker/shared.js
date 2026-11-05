@@ -251,7 +251,7 @@ function corsHeaders(env) {
   const origin = allowlist.includes(requestOrigin) ? requestOrigin : (env.ALLOWED_ORIGIN || "*");
   return {
     "Access-Control-Allow-Origin": origin,
-    "Access-Control-Allow-Methods": "POST,OPTIONS,GET",
+    "Access-Control-Allow-Methods": "POST,PUT,OPTIONS,GET",
     "Access-Control-Allow-Headers": "Content-Type,X-Session-Token",
     "Vary": "Origin",
     "Content-Type": "application/json; charset=utf-8"

@@ -225,7 +225,7 @@ return handleCrypto(request, env);
 if (url.pathname === "/crypto-exchange-attribution" && request.method === "POST") {
 return handleExchangeAttribution(request, env);
 }
-if (url.pathname === "/crypto-workspace" && ["GET","POST"].includes(request.method)) {
+if (url.pathname === "/crypto-workspace" && ["GET","POST","PUT"].includes(request.method)) {
 return handleCryptoWorkspace(request, env);
 }
 if (url.pathname === "/crypto-address-labels" && ["GET", "POST"].includes(request.method)) {

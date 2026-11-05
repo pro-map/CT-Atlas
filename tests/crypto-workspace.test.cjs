@@ -66,6 +66,33 @@ test("case sanitizer keeps off-chain nodes and sourced cross-chain links",()=>{
   assert.equal(workspace.cases[0].crosschain_links[0].to_chain,"tron");
 });
 
+test("blank monitor fields stay blank instead of becoming velocity 1 and dormant 1",()=>{
+  const h=harness();
+  for(const blank of [null,undefined,""," "]){
+    const workspace=h.sanitizeWorkspace({
+      watchlist:[{chain:"ethereum",address:"0xabc",thresholds:{min_amount:blank,aggregate_24h:blank,velocity_24h:blank,dormant_days:blank}}]
+    },"group-i-1");
+    const thresholds=workspace.watchlist[0].thresholds;
+    assert.equal(thresholds.min_amount,null);
+    assert.equal(thresholds.aggregate_24h,null);
+    assert.equal(thresholds.velocity_24h,null);
+    assert.equal(thresholds.dormant_days,null);
+  }
+});
+
+test("a deliberate threshold keeps its value and a monitor baseline can carry the risk label",()=>{
+  const h=harness();
+  const workspace=h.sanitizeWorkspace({
+    watchlist:[{chain:"ethereum",address:"0xabc",thresholds:{velocity_24h:1,dormant_days:"30",asset:"USDT"},last_snapshot:{risk_label:"ELEVATED"}}]
+  },"group-i-1");
+  const watch=workspace.watchlist[0];
+  assert.equal(watch.thresholds.velocity_24h,1);
+  assert.equal(watch.thresholds.dormant_days,30);
+  assert.equal(watch.thresholds.asset,"USDT");
+  assert.equal(watch.thresholds_version,2);
+  assert.equal(watch.last_snapshot.risk_label,"ELEVATED");
+});
+
 test("watch thresholds are bounded and malformed chains are rejected",()=>{
   const h=harness();
   const workspace=h.sanitizeWorkspace({

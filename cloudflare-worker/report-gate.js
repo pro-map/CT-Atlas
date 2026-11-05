@@ -153,6 +153,59 @@ function exchangeAddressKey(chainValue, addressValue) {
   return valid ? `${chain}:${address}` : "";
 }
 
+// Blank monitor fields used to be saved as velocity 1 and dormant 1 (and 0 for the
+// amounts), which alerted on every transaction. A deliberate 1 looks the same, but
+// is far rarer and easily set again. thresholds_version 2 marks values saved since.
+function repairCryptoWatch(watch) {
+  if (!watch?.thresholds || Number(watch.thresholds_version) >= 2) return watch;
+  const { min_amount, aggregate_24h, velocity_24h, dormant_days } = watch.thresholds;
+  return {
+    ...watch,
+    thresholds: {
+      ...watch.thresholds,
+      min_amount: min_amount || null,
+      aggregate_24h: aggregate_24h || null,
+      velocity_24h: velocity_24h === 1 ? null : velocity_24h,
+      dormant_days: dormant_days === 1 ? null : dormant_days
+    }
+  };
+}
+
+function cryptoWorkspaceView(stored, username, now) {
+  const workspace = stored || {
+    version: "crypto-workspace-v1",
+    username,
+    labels: [],
+    watchlist: [],
+    cases: [],
+    alerts: [],
+    updated_at: new Date(now).toISOString()
+  };
+  return {
+    ...workspace,
+    watchlist: (Array.isArray(workspace.watchlist) ? workspace.watchlist : []).map(repairCryptoWatch),
+    revision: Number(workspace.revision) || 0
+  };
+}
+
+// The gate owns monitor output. A page holds a copy that can predate the last
+// scheduled run, so it may edit a watch or acknowledge an alert, but it never
+// replaces a baseline or the alert list.
+function mergeCryptoWorkspace(stored, incoming) {
+  const baselines = new Map((Array.isArray(stored?.watchlist) ? stored.watchlist : []).map(watch => [watch?.id, watch?.last_snapshot]));
+  const acknowledged = new Map((Array.isArray(incoming.alerts) ? incoming.alerts : []).map(alert => [alert?.id, alert?.acknowledged === true]));
+  return {
+    ...incoming,
+    watchlist: (Array.isArray(incoming.watchlist) ? incoming.watchlist : []).map(watch => ({
+      ...watch,
+      last_snapshot: baselines.get(watch?.id) || null
+    })),
+    alerts: (Array.isArray(stored?.alerts) ? stored.alerts : []).map(alert =>
+      acknowledged.has(alert?.id) ? { ...alert, acknowledged: acknowledged.get(alert.id) } : alert
+    )
+  };
+}
+
 export class ReportGate {
   constructor(state, env) {
     this.state = state;
@@ -1301,7 +1354,7 @@ export class ReportGate {
         const username = normalizeUsername(workspace?.username || String(key).slice("crypto-workspace:".length));
         if (!isAllowedUser(username, this.env)) continue;
         const labels = Array.isArray(workspace?.labels) ? workspace.labels : [];
-        for (const watch of Array.isArray(workspace?.watchlist) ? workspace.watchlist : []) {
+        for (const watch of (Array.isArray(workspace?.watchlist) ? workspace.watchlist : []).map(repairCryptoWatch)) {
           if (watch?.enabled === false || !watch?.chain || !watch?.address || !watch?.id) continue;
           const sensitiveLabels = labels
             .filter(label => label?.chain === watch.chain && sensitive.has(String(label?.category || "").toUpperCase()))
@@ -1362,14 +1415,17 @@ export class ReportGate {
           newest_tx_id: cleanText(snapshot.newest_tx_id, 180),
           newest_tx_time: cleanText(snapshot.newest_tx_time, 64),
           tx_count: Number(snapshot.tx_count || 0),
-          aggregate_value: Number(snapshot.aggregate_value || 0)
+          aggregate_value: Number(snapshot.aggregate_value || 0),
+          risk_label: cleanText(snapshot.risk_label, 24)
         };
         watch.updated_at = new Date(now).toISOString();
       }
 
       workspace.alerts = Array.isArray(workspace.alerts) ? workspace.alerts : [];
+      // day_bucket lets a windowed alert fire again on a later day: without it the
+      // first crossing of a 24h threshold silenced that alert for good.
       const signatures = new Set(workspace.alerts.map(item =>
-        [item?.watch_id, item?.type, item?.tx_id || "", item?.title].join("|")
+        [item?.watch_id, item?.type, item?.tx_id || "", item?.title, item?.day_bucket || ""].join("|")
       ));
       let added = 0;
       for (const raw of Array.isArray(body.alerts) ? body.alerts.slice(0, 40) : []) {
@@ -1385,10 +1441,11 @@ export class ReportGate {
           title: cleanText(raw?.title, 180),
           detail: cleanText(raw?.detail, 1200),
           tx_id: cleanText(raw?.tx_id, 180),
+          day_bucket: cleanText(raw?.day_bucket, 10),
           created_at: cleanText(raw?.created_at, 64) || new Date(now).toISOString(),
           acknowledged: false
         };
-        const signature = [alert.watch_id, alert.type, alert.tx_id || "", alert.title].join("|");
+        const signature = [alert.watch_id, alert.type, alert.tx_id || "", alert.title, alert.day_bucket].join("|");
         if (!alert.type || !alert.title || signatures.has(signature)) continue;
         signatures.add(signature);
         workspace.alerts.unshift(alert);
@@ -1655,17 +1712,8 @@ export class ReportGate {
       if (!isAllowedUser(username, this.env)) {
         return Response.json({ error: "Unknown user." }, { status: 400 });
       }
-      const key = `crypto-workspace:${username}`;
-      const workspace = (await this.state.storage.get(key)) || {
-        version: "crypto-workspace-v1",
-        username,
-        labels: [],
-        watchlist: [],
-        cases: [],
-        alerts: [],
-        updated_at: new Date(now).toISOString()
-      };
-      return Response.json({ ok: true, workspace });
+      const workspace = cryptoWorkspaceView(await this.state.storage.get(`crypto-workspace:${username}`), username, now);
+      return Response.json({ ok: true, workspace, revision: workspace.revision });
     }
 
     if (url.pathname === "/crypto-workspace-put") {
@@ -1678,12 +1726,26 @@ export class ReportGate {
         return Response.json({ error: "Missing crypto workspace." }, { status: 400 });
       }
       const key = `crypto-workspace:${username}`;
-      await this.state.storage.put(key, {
-        ...workspace,
+      const stored = await this.state.storage.get(key);
+      const current = cryptoWorkspaceView(stored, username, now);
+      // A missing revision is stale too: a page whose load failed holds a blank
+      // default, and accepting it replaced every label, watch and case.
+      if (body.revision === null || body.revision === undefined || Number(body.revision) !== current.revision) {
+        return Response.json({
+          error: "This Crypto workspace changed elsewhere. Reload it before saving.",
+          code: "stale_revision",
+          revision: current.revision,
+          workspace: current
+        }, { status: 409 });
+      }
+      const saved = {
+        ...mergeCryptoWorkspace(stored, workspace),
         username,
+        revision: current.revision + 1,
         updated_at: new Date(now).toISOString()
-      });
-      return Response.json({ ok: true, workspace: { ...workspace, username, updated_at: new Date(now).toISOString() } });
+      };
+      await this.state.storage.put(key, saved);
+      return Response.json({ ok: true, workspace: saved, revision: saved.revision });
     }
 
     if (url.pathname === "/cache-get") {
