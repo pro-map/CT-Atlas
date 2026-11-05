@@ -1,4 +1,5 @@
 import argparse
+import attack_points
 import radnuc
 import threat_categories
 import collection_config
@@ -4252,7 +4253,8 @@ INCIDENT / CASE MODEL (mandatory):
   RECORD ITSELF reports, not the historical event mentioned in background.
 - Set is_attack=true ONLY when the current record describes an actual
   terrorist/militant act of violence that occurred. A trial, arrest,
-  investigation, anniversary or later update ABOUT an attack is not an attack.
+  investigation, anniversary, reaction, funeral, condolence, official statement
+  or later update ABOUT an attack is not an attack.
 - ATTEMPTED_ATTACK means violence was attempted but the attack did not
   successfully occur; DISRUPTED_PLOT means authorities disrupted a plot before
   an attack attempt.
@@ -4265,7 +4267,9 @@ INCIDENT / CASE MODEL (mandatory):
   "Solingen attack Germany 2024-08-23". If the record is an unrelated new
   arrest/case, give it its own anchor.
 - update_type=INITIAL for the underlying incident itself; otherwise use the
-  appropriate FOLLOW_UP/ARREST_UPDATE/INVESTIGATION_UPDATE/OTHER_UPDATE.
+  appropriate FOLLOW_UP/ARREST_UPDATE/INVESTIGATION_UPDATE/OTHER_UPDATE. A
+  record whose main news is a reaction, funeral, condolence, statement or visit
+  after the incident is FOLLOW_UP, never INITIAL.
 These fields are used to count DISTINCT incidents in country analysis. Never
 turn multiple articles or follow-up developments about one case into multiple
 attacks.
@@ -9773,11 +9777,12 @@ def _weekly_event_time(event):
     )
 
 
-def _weekly_geo_breakdown(events, field_name, limit=8):
+def _weekly_geo_breakdown(events, field_name, limit=8, attack_updates=()):
     """
     Incident-based geographic picture. Raw records/articles never determine
     operational significance. Distinct incident_id values are counted once,
-    with attacks counted only when is_attack is explicitly true.
+    with attacks counted only when is_attack is explicitly true. The records
+    in attack_updates (see _weekly_attack_updates) add reporting volume only.
     """
     records = Counter()
     incident_sets = defaultdict(lambda: defaultdict(set))
@@ -9791,7 +9796,7 @@ def _weekly_geo_breakdown(events, field_name, limit=8):
 
         records[location] += 1
         incident_id = clean_text(event.get("incident_id") or event.get("id") or "")
-        if not incident_id:
+        if not incident_id or id(event) in attack_updates:
             continue
 
         primary = clean_text(event.get("primary_event_type") or "OTHER_CT").upper()
@@ -9869,7 +9874,22 @@ def _weekly_category_counts(events):
     )
 
 
-def _weekly_stats(events):
+def _weekly_attack_updates(events):
+    """
+    The follow-ups of attacks, so a week holding only the follow-up does not
+    count the attack. Taken on the whole database before the windows are cut,
+    as events.json carries no flag, and held as object identities because old
+    event ids repeat: _weekly_windows keeps the same dicts.
+    """
+    return {
+        id(events[index])
+        for index in attack_points.attack_update_indexes(
+            events
+        )
+    }
+
+
+def _weekly_stats(events, attack_updates=()):
     return {
         "event_count":
             len(
@@ -9884,12 +9904,14 @@ def _weekly_stats(events):
                 events,
                 "country",
                 10,
+                attack_updates,
             ),
         "top_regions_by_incident_activity":
             _weekly_geo_breakdown(
                 events,
                 "region",
                 8,
+                attack_updates,
             ),
     }
 
@@ -10328,6 +10350,10 @@ def generate_weekly_analysis(events, existing_weekly=None):
         )
     ]
 
+    attack_updates = _weekly_attack_updates(
+        events
+    )
+
     payload = {
         "reporting_period": {
             "current_start":
@@ -10347,11 +10373,13 @@ def generate_weekly_analysis(events, existing_weekly=None):
         },
         "current_period_stats":
             _weekly_stats(
-                current
+                current,
+                attack_updates,
             ),
         "comparison_period_stats":
             _weekly_stats(
-                previous
+                previous,
+                attack_updates,
             ),
         "current_priority_events":
             current_payload,
