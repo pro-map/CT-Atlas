@@ -5,7 +5,7 @@ import {
   jsonResponse,
   gateCall
 } from "./shared.js";
-import { tronAddress } from "./address-utils.js";
+import { tronAddress, isValidWalletAddress } from "./address-utils.js";
 import { loadSanctions, screenAnalysis, sanctionsObservation } from "./sanctions.js";
 import { resolveExchangeLabels } from "./exchange-addresses.js";
 import { detectExchangeBehavior, EXCHANGE_BEHAVIOR_VERSION } from "./exchange-behavior.mjs";
@@ -25,7 +25,12 @@ const HEX64_RE = /^[a-fA-F0-9]{64}$/;
 const EVM_ADDRESS_RE = /^0x[a-fA-F0-9]{40}$/;
 const EVM_TX_RE = /^0x[a-fA-F0-9]{64}$/;
 const TRON_ADDRESS_RE = /^T[1-9A-HJ-NP-Za-km-z]{33}$/;
-const BTC_ADDRESS_RE = /^(?:bc1[ac-hj-np-z02-9]{11,71}|[13][a-km-zA-HJ-NP-Z1-9]{24,33})$/i;
+const BTC_BASE58_RE = /^[13][a-km-zA-HJ-NP-Z1-9]{24,33}$/;
+const BTC_BECH32_RE = /^bc1[ac-hj-np-z02-9]{11,71}$/i;
+const PROVIDER_TIMEOUT_MS = 12000;
+const RATE_LIMIT_RETRY_MS = 1100;
+const RATE_LIMIT_RE = /rate limit|too many requests/i;
+const NO_ROWS_RE = /no (?:\w+ )?(?:transactions|records) found/i;
 
 function finiteNumber(value, fallback = 0) {
   const number = Number(value);
@@ -44,19 +49,32 @@ function normalizeChainHint(value) {
   return hint || "auto";
 }
 
+function looksLikeBitcoinAddress(value) {
+  return BTC_BASE58_RE.test(value) || BTC_BECH32_RE.test(value);
+}
+
+// Bech32 is case-insensitive and QR codes use upper case, but providers answer in
+// lower case: an upper-case seed would never match its own rows.
+function addressTarget(chain, value) {
+  if (!isValidWalletAddress(chain, value)) {
+    return { error: "This address fails its checksum. Check that it was copied in full." };
+  }
+  return { chain, kind: "address", value: /^bc1/i.test(value) ? value.toLowerCase() : value };
+}
+
 function detectCryptoInput(query, chainHint = "auto") {
   const value = cleanText(query, 180);
   const hint = normalizeChainHint(chainHint);
   if (!value) return { error: "Enter a wallet address or transaction hash." };
 
   if (hint === "bitcoin") {
-    if (BTC_ADDRESS_RE.test(value)) return { chain: "bitcoin", kind: "address", value };
+    if (looksLikeBitcoinAddress(value)) return addressTarget("bitcoin", value);
     if (HEX64_RE.test(value)) return { chain: "bitcoin", kind: "transaction", value: value.toLowerCase() };
     return { error: "This does not look like a Bitcoin address or transaction ID." };
   }
 
   if (hint === "tron") {
-    if (TRON_ADDRESS_RE.test(value)) return { chain: "tron", kind: "address", value };
+    if (TRON_ADDRESS_RE.test(value)) return addressTarget("tron", value);
     if (HEX64_RE.test(value)) return { chain: "tron", kind: "transaction", value: value.toLowerCase() };
     return { error: "This does not look like a TRON address or transaction ID." };
   }
@@ -67,9 +85,9 @@ function detectCryptoInput(query, chainHint = "auto") {
     return { error: "This does not look like an EVM address or transaction hash." };
   }
 
-  if (TRON_ADDRESS_RE.test(value)) return { chain: "tron", kind: "address", value };
+  if (TRON_ADDRESS_RE.test(value)) return addressTarget("tron", value);
   if (EVM_ADDRESS_RE.test(value)) return { chain: "ethereum", kind: "address", value: value.toLowerCase() };
-  if (BTC_ADDRESS_RE.test(value)) return { chain: "bitcoin", kind: "address", value };
+  if (looksLikeBitcoinAddress(value)) return addressTarget("bitcoin", value);
   if (EVM_TX_RE.test(value)) {
     return {
       error: "A 0x transaction hash can exist on several EVM chains. Select Ethereum, BNB Chain, Polygon, Arbitrum or Base."
@@ -90,11 +108,36 @@ async function readJson(response, label) {
     const message = payload?.error || payload?.message || response.statusText || "request failed";
     throw new Error(label + ": " + cleanText(message, 220));
   }
+  // A maintenance or challenge page arrives as 200 HTML; read as data it would
+  // pass for an empty, clean wallet.
+  if (payload === null) throw new Error(label + ": the provider did not return JSON.");
   return payload;
 }
 
+const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+// Etherscan reports its rate limit as an HTTP 200, so the status code alone would
+// miss it. One retry only: every attempt spends a subrequest.
 async function getJson(url, options, label) {
-  return readJson(await fetch(url, options), label);
+  for (let attempt = 0; ; attempt++) {
+    let response;
+    try {
+      response = await fetch(url, { ...options, signal: AbortSignal.timeout(PROVIDER_TIMEOUT_MS) });
+    } catch (error) {
+      if (error?.name === "TimeoutError") throw new Error(label + ": the provider did not answer in time.");
+      throw error;
+    }
+    if (response.status === 429 && attempt === 0) {
+      await pause(RATE_LIMIT_RETRY_MS);
+      continue;
+    }
+    const payload = await readJson(response, label);
+    if (attempt === 0 && typeof payload?.result === "string" && RATE_LIMIT_RE.test(payload.result)) {
+      await pause(RATE_LIMIT_RETRY_MS);
+      continue;
+    }
+    return payload;
+  }
 }
 
 function sortTransactionsByTime(transactions) {
@@ -427,9 +470,11 @@ function etherscanUrl(params, apiKey) {
 
 function parseEtherscanList(payload, label) {
   if (payload?.status === "1" && Array.isArray(payload.result)) return payload.result;
-  const message = String(payload?.result || payload?.message || "");
-  if (/no transactions found/i.test(message)) return [];
-  throw new Error(label + ": " + cleanText(message || "provider error", 240));
+  // The empty answer is status "0" with result []. An empty array is truthy, so
+  // `result || message` read as "" and every wallet with an empty list failed.
+  const detail = typeof payload?.result === "string" && payload.result ? payload.result : String(payload?.message || "");
+  if (NO_ROWS_RE.test(detail)) return [];
+  throw new Error(label + ": " + cleanText(detail || "provider error", 240));
 }
 
 function evmRows(address, nativeRows, tokenRows, chain) {
@@ -503,7 +548,9 @@ async function analyzeEvm(target, limit, env) {
       {},
       "Etherscan transaction lookup"
     );
-    if (!payload?.result) throw new Error("Etherscan did not return this transaction on the selected chain.");
+    if (!payload?.result || typeof payload.result !== "object") {
+      throw new Error("Etherscan did not return this transaction on the selected chain.");
+    }
     const tx = payload.result;
     return {
       chain: target.chain,
