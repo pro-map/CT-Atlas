@@ -993,7 +993,7 @@
     "INTERPOL English News"
   ],
   "last_updated": "2026-11-04T23:36:29.849196+00:00",
-  "number_of_events": 6387,
+  "number_of_events": 6379,
   "events": [
     {
       "id": "94bb9d67e1251fe8",
@@ -144888,85 +144888,6 @@
       "dedup_review_required": true
     },
     {
-      "id": "fcda5ee663091d4e",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "BFM TV: Hitler's book found at home of suspect in terrorist attack near Paris",
-      "summary": "Russian media reporting on French reports that Hitler's book was found at the residence of the suspect in the recent attack near Paris.",
-      "original_title": "BFM TV: У подозреваемого в теракте под Парижем нашли книгу Гитлера",
-      "original_summary": "BFM TV: У подозреваемого в теракте под Парижем нашли книгу Гитлера Life.ru",
-      "original_language": "ru",
-      "collection_language": "ru",
-      "collection_language_name": "Russian",
-      "collection_locale": "RU:ru",
-      "published": "2026-10-25T11:59:35+00:00",
-      "source": "Life.ru",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOYW5BLTZRQTZhUWZnMm1kSFFfZmpscW9nTmdGVXRmcUM5dDN0UWhCX2VLQnFjd0hWRldfSnNfaG5FM21mMlh3bHpLU19HY2Q3Sk5Bb2EtYnZ5cFFLa2wwN2trLS00TmxHb2FRRkpGV29HTEpUSWpuX25xMDY4Q2h4ZXVnYnp0M1g5aFd2Uw?oc=5",
-      "collector": "Google News RSS",
-      "country": "France",
-      "country_code": "FR",
-      "city": "Paris",
-      "region": null,
-      "latitude": 48.85341,
-      "longitude": 2.3488,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "3b7b6b51eedf256edf8a2422606123f85ce3062f1deb9600c26c90d0acc46ec7"
-      ],
-      "sources": [
-        "Life.ru"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-10-25T11:59:35+00:00",
-      "last_reported": "2026-10-25T11:59:35+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Provides operational search details following a terrorist attack.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Paris shooting attack 2026-10-23",
-      "update_type": "FOLLOW_UP",
-      "incident_id": "inc-5e0ab64943203f1e",
-      "translated_to_english": true,
-      "ai_canonical_event": "Hitler book found at suspect home Trappes France",
-      "title_variants": [
-        "Hitler book found at suspect home Trappes France"
-      ],
-      "actor_scope": "UNKNOWN",
-      "cbrn_subgroups": [],
-      "threat_categories": [],
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "reported_status": "CONFIRMED",
-      "location_confidence_score": 0.85,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "suspect in terrorist attack near Paris"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Search of suspect's home following the attack near Paris.",
-      "ai_geo_fingerprint": "3e87269753b25874c60b98b45673b5f6373b302d7e934b19e5cd030efb4be831",
-      "ai_geo_inferred": true,
-      "dedup_review_required": true
-    },
-    {
       "id": "c5447413603003f2",
       "category": "Counter Terrorism Action",
       "categories": [
@@ -146318,7 +146239,7 @@
       "collection_locale": "BR:pt-419",
       "published": "2026-10-25T11:03:00+00:00",
       "source": "RFI",
-      "source_count": 5,
+      "source_count": 6,
       "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxNTTk3Q3pJM1NhbVhMY2ZkQzY2MnlWR3JrbkMwdUZYSWk0a3RBRWlyZFdCbGk0UlAwbEdpMlZ5YVZnSnhZSTc4RGJla1ZZZmtMSkVWUHhoOE9tUzFGTllqZnpXbXBuNlVDRHZ5Z3lRTU52YmphSjRIdXpURktvS1FuUVJmY3RjUHAyNDFxVERmMm94SnFEOEZkby1jVnk0Mk1iX0FkU0VtSWFmNDRCd2ZhQ0lvQ0xyN29WbThhVnREMUFnekxmNGJ4eVR0SFU?oc=5",
       "collector": "Google News RSS",
       "country": "France",
@@ -146333,6 +146254,7 @@
       "source_article_fingerprints": [
         "2f73df856405755c9ad59ecd8d5db5ec4f2edba7752f7421fed4f87846a74e0c",
         "35b439ade7ea92941629cae281064a7302a53d5734e39734ecb30480399c68be",
+        "3b7b6b51eedf256edf8a2422606123f85ce3062f1deb9600c26c90d0acc46ec7",
         "696260053170cd42697dc0053d9c1d5577f7b32ddf040a0b5668c2dd4c4fced1",
         "d5f1263c6682beeb2d033406acdb396554b0d3d68ba459273fc0b4f28c84adba",
         "f9ab3a0e340f6ba4f63e6782037acb3e0d6a9971075e235ea10a2f0d84620699"
@@ -146345,7 +146267,8 @@
         "СВТВ Либертарианское СМИ",
         "RFI",
         "BOL",
-        "Terra"
+        "Terra",
+        "Life.ru"
       ],
       "related_articles": [
         {
@@ -146383,15 +146306,24 @@
           "published": "2026-10-25T11:03:00+00:00",
           "source": "The Straits Times",
           "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQTzBHR1JfNjMzUHZBOEpzVkFzZVVQX2dzWDkxeDdEUkhuZDljbnJDd1dPQ2J4MkFNN0N4TlFYMDhDckZ3OTVMT2NaX0ZUUFpHdHVEUG5obXFUSmJiODBfdWxMV3BZQTNqUmhPYlBaYnM1YkJzN1IzZTNXLVloQXAtdmpoX3hISDhsN2NueFRiV3pITDNWMGZ5Y1AxN2lla3NvSlF4X0R2NTQtbGczLTE3NTNpNzA?oc=5"
+        },
+        {
+          "title": "BFM TV: Hitler's book found at home of suspect in terrorist attack near Paris",
+          "original_title": "BFM TV: У подозреваемого в теракте под Парижем нашли книгу Гитлера",
+          "original_language": "ru",
+          "summary": "Russian media reporting on French reports that Hitler's book was found at the residence of the suspect in the recent attack near Paris.",
+          "published": "2026-10-25T11:59:35+00:00",
+          "source": "Life.ru",
+          "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOYW5BLTZRQTZhUWZnMm1kSFFfZmpscW9nTmdGVXRmcUM5dDN0UWhCX2VLQnFjd0hWRldfSnNfaG5FM21mMlh3bHpLU19HY2Q3Sk5Bb2EtYnZ5cFFLa2wwN2trLS00TmxHb2FRRkpGV29HTEpUSWpuX25xMDY4Q2h4ZXVnYnp0M1g5aFd2Uw?oc=5"
         }
       ],
-      "article_count": 5,
+      "article_count": 6,
       "first_reported": "2026-10-25T11:03:00+00:00",
       "last_reported": "2026-10-25T17:31:53+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v7-standalone-threat-topics",
       "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
+      "ai_relevance_score": 80,
       "ai_relevance_reason": "Follow-up custody status update for the suspect of the recent terrorist/racist shooting.",
       "ai_current_ct_event": true,
       "ai_selected": true,
@@ -367037,7 +366969,8 @@
       "ai_geo_reason": "Projectile lands near King Fahd Airport in Dammam, Saudi Arabia.",
       "ai_geo_fingerprint": "ddb9667cef788263ab22d6090f7b8c4b605df00d5f6060ec147abc0b6727ba6f",
       "ai_geo_inferred": false,
-      "threat_categories": []
+      "threat_categories": [],
+      "dedup_review_required": true
     },
     {
       "id": "1a1627d3f6f8dd3a",
@@ -384100,7 +384033,8 @@
       "ai_geo_inferred": false,
       "threat_categories": [
         "Chemicals and Explosives"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "e428b8eeb71b7268",
@@ -401312,7 +401246,8 @@
         "paraphrase_entity_context",
         "very_high_title_similarity",
         "actor_country_action_signature"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "fc813dc9f1a0ed9d",
@@ -411094,7 +411029,8 @@
       "threat_categories": [
         "Chemicals and Explosives"
       ],
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "b77317ddee16779d",
@@ -411615,9 +411551,9 @@
       "actor_group": "",
       "primary_event_type": "OTHER_CT",
       "is_attack": false,
-      "incident_anchor": "Cava de Tirreni bomb manuals arrest 2026-10-03",
+      "incident_anchor": "Anarchist bomb instructions arrest Italy 2026",
       "update_type": "INVESTIGATION_UPDATE",
-      "incident_id": "inc-6ba299ad346fc821",
+      "incident_id": "inc-b10211d00a4c1458",
       "translated_to_english": false,
       "ai_canonical_event": "Investigation into travel route of Salerno terror suspect Mirwais Safi",
       "title_variants": [
@@ -411787,7 +411723,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Anbar desert, Iraq.",
       "ai_geo_fingerprint": "56ba9a7c3ffcb1b0d4f4faa867e58bf38d15c2af25f6e9b1b1c6657432a55f2b",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "8713ea476ca046a6",
@@ -411941,7 +411878,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The flight's destination/context is Israel.",
       "ai_geo_fingerprint": "3db76080975b78a543ad4a513971d4c158318df95f9ad1a61750ee8d1bc4338b",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "c4e8371297468026",
@@ -417839,7 +417777,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Detention in Novosibirsk, Russia.",
       "ai_geo_fingerprint": "e42e32a573768f660f12d2ad013b467ec0038362cb96d1a8b0a92569fab23653",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "0057fac5f5899ced",
@@ -419012,7 +418951,8 @@
       "ai_geo_reason": "Drone strike in Moscow region, Russia.",
       "ai_geo_fingerprint": "0537044fa959543f2b631207aa79adad0cdf7f452af4c8d2de2e2c1425cdddca",
       "ai_geo_inferred": false,
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "95a2e5f77f52a269",
@@ -420333,7 +420273,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_incident"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "7068fa1163380dd0",
@@ -422009,7 +421950,8 @@
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "threat_categories": [
         "Chemicals and Explosives"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "5827dddba0681925",
@@ -423252,7 +423194,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The attack occurred in Kirkuk, Iraq.",
       "ai_geo_fingerprint": "f63d7db9ea57ddf16d791e890c8b8e04bfaeac493fc36636e641404d7cb9f16f",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "bece1f92bc5ec91f",
@@ -423463,7 +423406,8 @@
       "dedup_confidence": 0.865,
       "dedup_methods": [
         "very_high_title_similarity"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "9edcce24006533ee",
@@ -432322,9 +432266,9 @@
       "actor_group": "Hamas",
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
-      "incident_anchor": "Hamas senior militant elimination Gaza 2026",
+      "incident_anchor": "IDF elimination of militant Gaza 2026",
       "update_type": "FOLLOW_UP",
-      "incident_id": "inc-8884a4f0bf319bff",
+      "incident_id": "inc-620fe1cf54ce4ce3",
       "translated_to_english": true,
       "ai_canonical_event": "IDF killing of Nukhba operative",
       "title_variants": [
@@ -432425,7 +432369,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The event occurs in Russia, but no specific city is provided in the summary.",
       "ai_geo_fingerprint": "4e532114b240330b389b13a83164b0ac6387bcee558b9e7e8fbe3bcf023c4774",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "530cda2c174c4155",
@@ -433771,7 +433716,8 @@
       "ai_geo_reason": "The FSB conducted detentions within Russia.",
       "ai_geo_fingerprint": "26287cd8a39911a482cdaeba81cb5a46f0679d7c6924636c56a3949a458ebdf3",
       "ai_geo_inferred": false,
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "8135527c93d341c2",
@@ -435006,7 +434952,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_incident"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "32b5480db816e812",
@@ -438545,7 +438492,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Prime Minister Benjamin Netanyahu ordered the review following threats to Israeli aviation.",
       "ai_geo_fingerprint": "122c80abfc3b370bc102bd288c853bd478a2d688a417f373d0e7388378d1b3a7",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "07362faf9b8cc52e",
@@ -439040,9 +438988,9 @@
       "actor_group": "Hamas",
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
-      "incident_anchor": "Hamas senior militant elimination Gaza 2026",
+      "incident_anchor": "IDF elimination of militant Gaza 2026",
       "update_type": "FOLLOW_UP",
-      "incident_id": "inc-8884a4f0bf319bff",
+      "incident_id": "inc-620fe1cf54ce4ce3",
       "translated_to_english": true,
       "ai_canonical_event": "IDF eliminates Hamas Nukhba terrorist posing as aid worker",
       "title_variants": [
@@ -439165,7 +439113,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Linked to the terrorist plot targeting Ben Gurion Airport in Israel.",
       "ai_geo_fingerprint": "291eb9524e10d4eafd68a30b219515453abc6a1bf634382d2b93470ff9e15c40",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "cfdf840a59941de3",
@@ -440159,7 +440108,8 @@
       "ai_geo_reason": "The disrupted terror plot targets Ben Gurion Airport and Israeli airspace/infrastructure.",
       "ai_geo_fingerprint": "dc0c1b02be78c10b8af96d2ec692e26bd0bda7ffff434e16c4257255fc12f16b",
       "ai_geo_inferred": true,
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "03284d34f5a59feb",
@@ -447276,7 +447226,8 @@
       "threat_categories": [
         "Radiological/Nuclear"
       ],
-      "legacy_category": "CBRN"
+      "legacy_category": "CBRN",
+      "dedup_review_required": true
     },
     {
       "id": "1a7776295549ae36",
@@ -447721,102 +447672,6 @@
       "dedup_methods": [
         "same_url"
       ]
-    },
-    {
-      "id": "6231d807960e4d6c",
-      "category": "Arrests",
-      "categories": [
-        "Arrests",
-        "Weapons",
-        "Chemicals and Explosives"
-      ],
-      "title": "Terrorism alert in Italy: Clandestine weapons and bomb-making materials found",
-      "summary": "Italian authorities uncover clandestine weapons and bomb-making materials amid a terrorism alert.",
-      "original_title": "Allarme terrorismo in Italia, trovate armi e materiale per costruire bombe",
-      "original_summary": "Allarme terrorismo in Italia, trovate armi e materiale per costruire bombe The Social Post",
-      "original_language": "it",
-      "collection_language": "it",
-      "collection_language_name": "Italian",
-      "collection_locale": "IT:it",
-      "published": "2026-10-03T12:22:44+00:00",
-      "source": "The Social Post",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQN1Zia1FiUTNYWVhFTnNjT2l0cW03a1BtYXMtMXZJTGZMSFgzWjhQSF9JbTlKZDRTSUJkRDk4OERqZTgxTGtVU1pnbTRzODRVQnFReUFzNnM2cVJiZ0RtLVRVbUVia3pVN2dha2NTaHBHanNLX0hUcElGMF90anN1R1hBMHgzTEJ4VXVqeVBNQldHX0c5TEM4cVVYOERxTlpHSHY0THpsdWpmenpOaW5FZm5Cb1Y?oc=5",
-      "collector": "Google News RSS",
-      "country": "Italy",
-      "country_code": "IT",
-      "city": "Rome",
-      "region": null,
-      "latitude": 41.89193,
-      "longitude": 12.51133,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "bb79f9c3c9ffdb406308277e9f0acb2204405af4143f4f2784e32f07a90a51a6",
-        "f0e1f45a1a51a52b9d292e53dc1ccfc45a038ef0dc3a04382e9a22ded1faaa14"
-      ],
-      "sources": [
-        "The Social Post",
-        "bigodino.it"
-      ],
-      "related_articles": [
-        {
-          "title": "Allarme terrorismo in Italia, trovato materiale per costruire bombe e armi clandestine",
-          "original_title": "Allarme terrorismo in Italia, trovato materiale per costruire bombe e armi clandestine",
-          "original_language": "it",
-          "summary": "Allarme terrorismo in Italia, trovato materiale per costruire bombe e armi clandestine bigodino.it",
-          "published": "2026-10-03T12:32:56+00:00",
-          "source": "bigodino.it",
-          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOSmZ2blRDb3N6amRVQTA2RGkwX0VzeE9uMEgtTnVHUndZVEliSTBRLXQtZ0lQQ0xtVV9vNFdQX0VacWRCWXdNRTdZbU54ZW56bGNsTGdleTVfVVZNY1d6dThRTWx4U0FQRnFfeFFuQW1HMHgtSm5uU1hqeHdENkpaN25uS2txUTF0QjRobUNjcW1ibFE3X3pEX3FlNEpaQQ?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-10-03T12:22:44+00:00",
-      "last_reported": "2026-10-03T12:32:56+00:00",
-      "dedup_confidence": 0.889,
-      "dedup_methods": [
-        "very_high_title_similarity"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete security raid and seizure of explosives and clandestine weapons linked to terrorism investigations.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Italy bomb materials weapons seizure 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-af3c50bcbb561ffc",
-      "translated_to_english": true,
-      "ai_canonical_event": "discovery of clandestine weapons and bomb materials in Italy",
-      "title_variants": [
-        "discovery of clandestine weapons and bomb materials in Italy"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Italian authorities uncover clandestine weapons"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The event took place in Italy as reported by Italian authorities.",
-      "ai_geo_fingerprint": "d36d820ba4ec9ddabbed018904542c7e636ab24c14b2ebf692608a5fc72e4b74",
-      "ai_geo_inferred": false,
-      "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "threat_categories": [
-        "Chemicals and Explosives"
-      ],
-      "cbrn_subgroups": []
     },
     {
       "id": "c015c034faeb74fc",
@@ -449088,9 +448943,9 @@
       "actor_group": "Houthis",
       "primary_event_type": "ARREST",
       "is_attack": false,
-      "incident_anchor": "Cava de Tirreni bomb manuals arrest 2026-10-03",
+      "incident_anchor": "Anarchist bomb instructions arrest Italy 2026",
       "update_type": "INITIAL",
-      "incident_id": "inc-6ba299ad346fc821",
+      "incident_id": "inc-b10211d00a4c1458",
       "translated_to_english": true,
       "ai_canonical_event": "Saudi-led coalition operation and strikes against Houthis in Yemen",
       "title_variants": [
@@ -449123,7 +448978,8 @@
       "threat_categories": [
         "Chemicals and Explosives"
       ],
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "22ee89e0b2adca3b",
@@ -449372,9 +449228,9 @@
       "actor_group": "",
       "primary_event_type": "ARREST",
       "is_attack": false,
-      "incident_anchor": "Cava de Tirreni bomb manuals arrest 2026-10-03",
+      "incident_anchor": "Anarchist bomb instructions arrest Italy 2026",
       "update_type": "FOLLOW_UP",
-      "incident_id": "inc-6ba299ad346fc821",
+      "incident_id": "inc-b10211d00a4c1458",
       "translated_to_english": true,
       "ai_canonical_event": "Arrest of individual for terror plot in Italy",
       "title_variants": [
@@ -450487,7 +450343,8 @@
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "threat_categories": [
         "Chemicals and Explosives"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "689461625ef37154",
@@ -452624,9 +452481,9 @@
       "actor_group": "",
       "primary_event_type": "DISRUPTED_PLOT",
       "is_attack": false,
-      "incident_anchor": "Widdecombe Farage plot investigation 2026",
+      "incident_anchor": "Nigel Farage terror plot charges 2026",
       "update_type": "INVESTIGATION_UPDATE",
-      "incident_id": "inc-02fd9f13563999a1",
+      "incident_id": "inc-784aa6baa4f4705e",
       "translated_to_english": true,
       "ai_canonical_event": "Assassination plot targeting Nigel Farage in Widdecombe case",
       "title_variants": [
@@ -453385,7 +453242,8 @@
       "ai_geo_reason": "The intended target of the attack was Tel Aviv, Israel.",
       "ai_geo_fingerprint": "a40cb0e829379c95092b30511fa6cba338def396cfe197c705bac9bfd959b763",
       "ai_geo_inferred": false,
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "20a82132c86d6ea1",
@@ -453481,7 +453339,7 @@
       "collection_locale": "IT:it",
       "published": "2026-10-03T06:02:00+00:00",
       "source": "ANSA",
-      "source_count": 2,
+      "source_count": 4,
       "url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxPZTJyMTRqOFM5ZFRZdS1vR0ZuTmlRNHM1Z0dHY0JXU0NxWUZYWkwxdkJpRm41WXNJd2FEUjZwUzdzODdYTUp0WWhsWnluWWVId2ZZdTRDUGxpOC15cm5Sc0Vna2JiWUJoVk1qQ0EzdTEwRUc0RHhYcW9Hejgxc1hMSmt6RFZwdk9mVENxNVVtanJBWTdxcEhuZ3p0Smp3ZEUwRlYzT1FsdWh1SDhBZmpZUGJydmpfNlNNMV9OTE9JSkpaa0hoYTA1RElKekNzUDc4dXU3UEdwd21FYWJqLVpyT1ROOFk5MFdCZFN1NXBXZWxUcDhJbENvadIB_gFBVV95cUxQRVZxQXhjLUZHdnNBSklzSkxTelo4TXlBRWhYMldUZFdZZUljS2I5alV6Q0NMVkozeGpneWctbG1MV0phN1lpaTBOdG1KalV3VGRtekgxYThqWlZrcEJyX0p0NU9GUTVoMWhBeEtUWEZobk9odGl0Tm9HUFl0MU1RN0ZjX3hEZ3RZcGhjR0dQbldNOTFVWm9UMzIxZ1NfV0VXa0RieWVzMFlLUFhIeERCUURaRDlfaVVOV2tkc3FUTnhrUjMtRl9XQUJVMjlXR1l4UGo5bWJPWndxTk9PR2o3Y29IVTBRRXVuUE82b1RJX1dUa1dWNFdjSWV6UGRNQQ?oc=5",
       "collector": "Google News RSS",
       "country": "Italy",
@@ -453499,11 +453357,15 @@
         "77092323226f11d7740d133aa4044d9545bfad0fed90a80a8b4b725f87363500",
         "8708c0201360eae289a7233d998a2beb7b35d7fe66f5457dd687c01c69dedfd3",
         "9b9f8b9206618c9ff23530b3aebabe39aa5ab7a2a76a01d71594c89f9fb7d2e1",
-        "a54ad2f9f4b08186426253886cb18c9e07ee90086fe5dcee688362385c1f8e9f"
+        "a54ad2f9f4b08186426253886cb18c9e07ee90086fe5dcee688362385c1f8e9f",
+        "bb79f9c3c9ffdb406308277e9f0acb2204405af4143f4f2784e32f07a90a51a6",
+        "f0e1f45a1a51a52b9d292e53dc1ccfc45a038ef0dc3a04382e9a22ded1faaa14"
       ],
       "sources": [
         "ANSA",
-        "la Repubblica"
+        "la Repubblica",
+        "The Social Post",
+        "bigodino.it"
       ],
       "related_articles": [
         {
@@ -453523,11 +453385,29 @@
           "published": "2026-10-03T07:02:16+00:00",
           "source": "la Repubblica",
           "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNaXdNSUNrckZkejRldG1xVmVhcTFFckFPMllMNnZKLVlKZXB1bmtNbDdOVlFuUmF4Vm1VdTRCbG9FOUpsZW1qUm13YlFPV3hueFJmWVU0MmFhckxlSjFhM1ItSEhUYVZPc1ZRWDZhRlk1RVJfYlI2dGJUaVZNdmYzbXdRVjBkMnQtYVNKOTFRcWRXMGczV25HQjI3R3RKQ204RklyMzlxQzlPZ0tkNWo4LVRqLVJZUdIBuwFBVV95cUxOc2dtOWEyWHgySnRNYUpGQU10NHFDbzlseGYwZGtlZVJzbW9rX3cxUWF3YXA5bVhIeGFIWEtMMFNURXBoaUh3RDVSeVRBMkFIamJweER4a1l0c3Rzdmd3Sk9xVlhLUzJ2SjRuY2JxVDY2d041eER6NGF0RVRpNFlEVFo5YWg0dmR0YnIxSmt4NjEyQ245UkQ0S25TZFJqZVpUZzY5cElUTzBLdkdteEJJbmRmRFVqamxaalNZ?oc=5"
+        },
+        {
+          "title": "Terrorism alert in Italy: Clandestine weapons and bomb-making materials found",
+          "original_title": "Allarme terrorismo in Italia, trovate armi e materiale per costruire bombe",
+          "original_language": "it",
+          "summary": "Italian authorities uncover clandestine weapons and bomb-making materials amid a terrorism alert.",
+          "published": "2026-10-03T12:22:44+00:00",
+          "source": "The Social Post",
+          "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQN1Zia1FiUTNYWVhFTnNjT2l0cW03a1BtYXMtMXZJTGZMSFgzWjhQSF9JbTlKZDRTSUJkRDk4OERqZTgxTGtVU1pnbTRzODRVQnFReUFzNnM2cVJiZ0RtLVRVbUVia3pVN2dha2NTaHBHanNLX0hUcElGMF90anN1R1hBMHgzTEJ4VXVqeVBNQldHX0c5TEM4cVVYOERxTlpHSHY0THpsdWpmenpOaW5FZm5Cb1Y?oc=5"
+        },
+        {
+          "title": "Allarme terrorismo in Italia, trovato materiale per costruire bombe e armi clandestine",
+          "original_title": "Allarme terrorismo in Italia, trovato materiale per costruire bombe e armi clandestine",
+          "original_language": "it",
+          "summary": "Allarme terrorismo in Italia, trovato materiale per costruire bombe e armi clandestine bigodino.it",
+          "published": "2026-10-03T12:32:56+00:00",
+          "source": "bigodino.it",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOSmZ2blRDb3N6amRVQTA2RGkwX0VzeE9uMEgtTnVHUndZVEliSTBRLXQtZ0lQQ0xtVV9vNFdQX0VacWRCWXdNRTdZbU54ZW56bGNsTGdleTVfVVZNY1d6dThRTWx4U0FQRnFfeFFuQW1HMHgtSm5uU1hqeHdENkpaN25uS2txUTF0QjRobUNjcW1ibFE3X3pEX3FlNEpaQQ?oc=5"
         }
       ],
-      "article_count": 3,
+      "article_count": 5,
       "first_reported": "2026-10-03T06:02:00+00:00",
-      "last_reported": "2026-10-03T07:02:16+00:00",
+      "last_reported": "2026-10-03T12:22:44+00:00",
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "very_high_title_similarity",
@@ -453572,7 +453452,9 @@
       "threat_categories": [
         "Chemicals and Explosives"
       ],
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true,
+      "primary_source_published": "2026-10-03T06:02:00+00:00"
     },
     {
       "id": "0e40f2f7a1d18346",
@@ -454170,181 +454052,6 @@
       "ai_geo_reason": "The security seizure took place in Culiacán, Mexico.",
       "ai_geo_fingerprint": "399a708133c40ef6809b3fb33ef6450dffa379a0ea787ba5f4391d43f581b67c",
       "ai_geo_inferred": false
-    },
-    {
-      "id": "e68a4b9e690e657e",
-      "category": "Attacks",
-      "categories": [
-        "Attacks",
-        "Weapons",
-        "Counter Terrorism Action",
-        "Arrests"
-      ],
-      "title": "Colombian soldier killed in drone attack by FARC dissidents",
-      "summary": "A Colombian soldier is killed during a drone attack carried out by FARC dissident factions.",
-      "original_title": "Muere un soldado colombiano en un ataque con drones de disidencias de las FARC",
-      "original_summary": "Muere un soldado colombiano en un ataque con drones de disidencias de las FARC AlbertoNews - Periodismo sin censura",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish / Latin America",
-      "collection_locale": "MX:es-419",
-      "published": "2026-10-03T01:34:33+00:00",
-      "source": "AlbertoNews - Periodismo sin censura",
-      "source_count": 10,
-      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNS0YwZ2tZSlYtckZLZVE0TkRfS1hRdks4VlR1c1VwVHhld1ZBTTZCVVFtNEhIb1ZzZV9vZTZnS1BUUzBscWF4M29zY1MzMDFtT2swbE01aVBuZE8tamczRkY4QzRhVFVLaEJBWDJrc2xKNjNVRW1yR3kyTndaMzdsaDh2bWZ6OWF3elVHVFZ0eE00SzBNbl8wTEdIMmtvd2pqMG83U1I1cHI5eXYzWTJCMW84R3A2YWhsRWtF?oc=5",
-      "collector": "Google News RSS",
-      "country": "Colombia",
-      "country_code": "CO",
-      "city": "Bogotá",
-      "region": null,
-      "latitude": 4.60971,
-      "longitude": -74.08175,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "439e0bad1a9baea006109a291aaf0c0ebc1a3a2a10c6a7f77362cb8a71374b39",
-        "47a1cceae79fde8b5735b7a0f3690623b8024ef0f22a1a69a81c022777f27564",
-        "49e7993615c1f7eee9c7dcadf08ef239bf6c4772e32cb2e460ae4fe70f15d98d",
-        "4afa1cb93402e08c81a1cacf80503cac673a4ef414dc40a24e1d37e55feccc64",
-        "6afcef01549fb38b454601aeaecce522a15ca39576c59b0ca7ce734605d95d28",
-        "6e2df0a8f0821c268e0ec2132457723b102dc7b4cacbab8c23aeb6c2fad9a9c4",
-        "82393fb54c06a5584db0e248035d93a37f41d58a28862e4e4fa0ee2cf9a6d1ff",
-        "c0211a4ed296553d649770ee89794b55c0553573156cc115190788f846d5191c",
-        "c3017e7932af9cd42192d672b3f5ec0c192d1844eb4ec3fb4fa959c12acc50cb",
-        "dfd8c9dfdc98d535b36293253132ac5e71227793cf3e84fbdb014836a10f6823"
-      ],
-      "sources": [
-        "Zona Cero",
-        "AlbertoNews - Periodismo sin censura",
-        "Infobae",
-        "AlbertoNews",
-        "El Tiempo",
-        "El Comentario",
-        "Eje21",
-        "CAMBIO Colombia",
-        "NTN24",
-        "Revista Semana"
-      ],
-      "related_articles": [
-        {
-          "title": "Muere soldado en ataque con drones de disidencias de las FARC",
-          "original_title": "Muere soldado en ataque con drones de disidencias de las FARC",
-          "original_language": "es",
-          "summary": "Muere soldado en ataque con drones de disidencias de las FARC Zona Cero",
-          "published": "2026-10-03T02:27:54+00:00",
-          "source": "Zona Cero",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOVmVSNE9IZzhRaWNIdWdNU1FzOXlwUUVOUWkxNGZwQlN1SXI1aGc5Y3ZlWTdIM0tyclR5ZW9OMzhFeVFCYWU0SFIxWS1IVjZkVTVwcFJUU19ZUTFadjgyMnQ5RWdFTDluazVNSEJ6RFg0cEFMQ3BndjE2b25BbGZNZWZ2Yy1MR1lDdnBkZ0pwQUtCMzJUVVJIaA?oc=5"
-        },
-        {
-          "title": "Muere un soldado colombiano en un ataque con drones de disidencias de las FARC",
-          "original_title": "Muere un soldado colombiano en un ataque con drones de disidencias de las FARC",
-          "original_language": "es",
-          "summary": "Muere un soldado colombiano en un ataque con drones de disidencias de las FARC Infobae",
-          "published": "2026-10-03T01:34:33+00:00",
-          "source": "Infobae",
-          "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxOUHhWcnVPSlpRSzFSTEwxbUpDOGl2eVFiYkxvWTFJVVFxLTdRNGZsa3NpZDlaeE5MZnJFVTZ6OE1td2kxdUx0aHVfaTZONkFkSEtoSzlsR3J4S1pRYUt0ZWpjbWw3MEU3ZlpwVi1TNUlIWjNTQ1E2RVFNOTFZeUJFSkxXWmQ4YjZPWWllcWNmdk5pTDY3WUFvaWUzemlWR09wckVoTjJUTWUzajRxSHI4T1lPWXdYbFdldWVnTU41Z0psMlUxTVlHelVkY9IB5gFBVV95cUxOVW1ZWFBkdmo2S2M2cU8zbjRmZ01GanN5WHBDSHZhUkVGdlE1dTJCYjNJQWN0c0k2RjRWTDNNMGJLUWNwQVFUanBCU19feXkyVU9jYlRIUzUyZU1rYm5ISVptRWV2LUEzaUw2bVhvTmRBRjRrTEtpV29aU2Z5Q0plME5zTjJ6Qk5VQlJhS0xjMmx3MGVBZXYzUW01WDd6ZGE2ZWpJT0tVV1ROdTdselA3UFJTbThjYjFxREx6ZFZkdlp3cHBsV1owTnBIcUtoVjBFYWo5dnBvZXYybUZRSHd3ekU1amZFdw?oc=5"
-        },
-        {
-          "title": "Blow to Front 44 of 'Iván Mordisco': Five captures for homicides and attacks against public forces",
-          "original_title": "Golpe al Frente 44 de ‘Iván Mordisco’: cinco capturas por homicidios y ataques contra la Fuerza Pública",
-          "original_language": "es",
-          "summary": "Colombian authorities captured five alleged members of the Frente 44 of the FARC dissident structure led by 'Iván Mordisco' for homicides and attacks against security forces.",
-          "published": "2026-10-03T14:48:05+00:00",
-          "source": "El Tiempo",
-          "url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxQdXlQS1YxQTdFS1dQNWxkMDlaa1hDX0l2R3FxT2ljWGRndXFObnR4M2h6ZVFHcXZld24xZVNocUJ0RzhvYm9feFpONTBOdnJyR3U4Z2ZFakhwS2dDNExINnN2TGo0UzlhOFhLZkFDWkJLOTBtX09iLU5KQ1MzT3gzcm5iaTF2RDI1T2hlSXRaTERQb1U4RTV1aDJGaFl1bkdWN21oM2RlQjRfS2NsWFBUc0RFczR6MUFyNFRQS0NLN2JaZzM5NXEySkRlbmRFYjFlTDJMTFFTRDAydkZQRTY5OExBUkFnLU1jVkVTUHhNckViSEdpVUwtV1p4VdIBgAJBVV95cUxPWWRmaVNaclltRHEwQlZITE12U2ZvengySVhfZlF1U2o1Q29qaHNnRUFudzhGb01sZ1Zwd19jOXZwNFRBQ1o1TFBKU1l1Y2VaZXRVS3BmNm9aRDBkc0dkN0ZjTmRMTjJkN2EzaWNiaEtNX0FkMTVBTnVvdl8zMkhZTWI3LXpZVTcxY0dpQnZsZEJFN1RNU25LSHkxNDJvcVJFVWJXejEyYnpBNmZDZnZ6clZHeFZIT3NYY2xqcUFCZVl5cnJCMmJ1UmxPRmluVUU5MmNSeTkwa1kyNk5wc2tqWjRiTThQeWM5bkVMcDBzOUxycmg1OW41YzhCdDNFcFhi?oc=5"
-        },
-        {
-          "title": "Colombian Army rescues 2 minors recruited by FARC dissidents",
-          "original_title": "Ejército colombiano rescata a 2 menores reclutados por las disidencias de las FARC",
-          "original_language": "es",
-          "summary": "The Colombian army rescued two minors who had been forcibly recruited by FARC dissident factions.",
-          "published": "2026-10-03T15:29:46+00:00",
-          "source": "El Comentario",
-          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5Vd0hVMHh4ZC1pazVyTURnZUYxM1B1aG9qR0RnMzN0WTZraU1WX1ktV1pDUFJNUFFhd0hJazZYZnoxb2pxcWo3UUlEc1RuTmc?oc=5"
-        },
-        {
-          "title": "Colombian soldier killed in drone attack by FARC dissidents",
-          "original_title": "Muere un soldado colombiano en un ataque con drones de disidencias de las FARC",
-          "original_language": "es",
-          "summary": "A Colombian soldier was killed in a drone attack carried out by FARC dissident factions.",
-          "published": "2026-10-04T05:36:25+00:00",
-          "source": "Eje21",
-          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPV0c5S0FpVVpocjFaWmdDd0F4NEw5b092dkxFSWhFT3hmTjdrNzFIQ0Z1U21KTXRYM1VMRDRJS01zdjR4SXVpLXFvRHdxbENhYTlEVHYxdXpwbkFNMkk0YXdXc1hRR1JhR0Y4Z3F3LUlNRy15WHhwaWJnOERpOXdNdDM2eEtzU1VYend1MTVBM3RuV1JTMXFpSF8tdHJWTVh3bTRERlNXLWJIYm1qTzVDbUJ3?oc=5"
-        },
-        {
-          "title": "Drone attack in Aipecito, Neiva: One soldier killed and another injured",
-          "original_title": "Ataque con drones en Aipecito, Neiva: un soldado muerto y otro herido",
-          "original_language": "es",
-          "summary": "A drone attack in Aipecito, Neiva, resulted in the death of one soldier and injuries to another.",
-          "published": "2026-10-03T16:43:06+00:00",
-          "source": "CAMBIO Colombia",
-          "url": "https://news.google.com/rss/articles/CBMijgJBVV95cUxPSlA4d2NBMUh3ejlRNW1JLUhFSGo1RG05QTZlbzZZajA0X3FLZ2xWX241TlktaDNxc1MwRTR4d2hkZXBDVlF3VkM3TUw1Z1BOWnU1WDRtVHlZSEtqNUxoWllnWUFUQ1cxOEhDd3JUUFpZVkRYR2tPakZyVjFTY1hWUUxhMW1DRDNYbVZFMEJiZ2tFbHlOdE9uUGFEamx4andDWGtLbGYyOUhBRDFhTW9RRXdERE9mXzQtUmo5MHBWYmZIaG9vZGRXNUJsdlc4T0dHN0Vnb3BucmJBVFNoTmcwenhGX1RwUTlEcGI0ZXdKOWl2NTJHbGZZTG9iOGFGaUswaDF0Q1hHS3NsdzZ1YWc?oc=5"
-        },
-        {
-          "title": "Colombian police dismantle two FARC dissident centers",
-          "original_title": "Nuevo golpe de Abelardo en Colombia: Gaula de la Policía desmanteló dos importantes centros de FARC",
-          "original_language": "es",
-          "summary": "The Gaula unit of the Colombian National Police dismantled two significant logistics and operations centers belonging to FARC dissidents.",
-          "published": "2026-10-04T22:35:03+00:00",
-          "source": "NTN24",
-          "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQQUhjaVVDNWNlN0NyTXVubzdDcnNacjA2bzczMkxwMTc0eEQxeERrMTI1Mkk2ZXNRdW0wYVJqWEJ5SGN6bFU0YzBlSTJhVS1oRUJocEtfMGVsd01QVGRzRm9TVl9LdzZxTXF5el83Wmd6amd3c1NydWgxV2k1cmRqM21WZjdIR2liUWNIT18zV2MzakRKbmVFSUwtcTBPa255VktOS3g0YXJnQ2dqMkFvOWpoNUtwckhNaDI1SWtPSWVrZ2hmdExGMkswcTVZR2NuSzQ1b1dFRmF1VmNNYWJQMtIB4AFBVV95cUxPeEhLS1FPNnBvMnlTOVFOVENISVk5ZmdoaUdrdHdheUtFUld5UkV1cno2eFJORFVfWHJQSHNsWWlNV09tMG54T0pXM2RfR2FneUdCajJEOHA1d0pVdEtZUEJjUWlVbEtLM2JvUFh2VmdPc01jQnZlNDlNdVA1SzR2VHRKQURvWWFrc0VJTDZiZkpDN0VjSEtYdHpLRk1rLUJueXhlNERESnliZjh2SXo5UERjZTRfbW4xSU9CdTBpSGw2cTdHUk9LdDhNZW4yQmtIQTBTaDNUeTVFWk9obTlzcQ?oc=5"
-        },
-        {
-          "title": "FARC dissidents 'Lobo' and 'Zamanta' captured in Colombia",
-          "original_title": "Alias Lobo y Zamanta, los disidentes de Farc de confianza de Primo Gay, capturados tras orden del presidente De La Espriella",
-          "original_language": "es",
-          "summary": "FARC dissident leaders known as alias 'Lobo' and 'Zamanta' were captured following an order by authorities in Colombia.",
-          "published": "2026-10-05T19:32:57+00:00",
-          "source": "Revista Semana",
-          "url": "https://news.google.com/rss/articles/CBMi_gFBVV95cUxPM1JOVjl5QkszcnlNbTRkcGh3NVpjbll2LUIwN0FJT0stb0tsdlpONlZiakZ5S2IyNy05T3BFVkIyaVFKc2NqemZUdGdSV3RHaG9mZVBfQUJJVTRoWDlSUVRkeEpta0VLTHdFTk5vUlFzUS11a3NTNEVwOGZ0d05FRzBvM1hnaEFjMWROajZGcUh3akpZdkFCdk1sWlAzSFdnTXZxbmhFbnlieEdxUUlVYnpwRVl0dTNTRjhVNVV6eWdEZUFPU3dIaFRQLWNkdm01LUdqYVB4Y293Nl9VZUtQQ2gxSGc2VmNHcTNLY0RIelJKNjE4a3NKMEpxYlBXUQ?oc=5"
-        }
-      ],
-      "article_count": 9,
-      "first_reported": "2026-10-03T01:34:33+00:00",
-      "last_reported": "2026-10-04T22:35:03+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "very_high_title_similarity",
-        "same_url",
-        "same_normalized_title",
-        "same_incident",
-        "entity_actor_event_signature"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 80,
-      "ai_relevance_reason": "Concrete operational militant attack by FARC dissidents resulting in a fatality.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "FARC dissidents",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "FARC dissidents drone attack Colombia 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-0de530537a3bba93",
-      "translated_to_english": true,
-      "ai_canonical_event": "Colombian soldier killed in FARC dissidents drone attack",
-      "title_variants": [
-        "Colombian soldier killed in FARC dissidents drone attack"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Colombian soldier killed in drone attack by FARC dissidents"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The event involves the Colombian military and FARC dissidents in Colombia.",
-      "ai_geo_fingerprint": "0d22a2a10b5708d3ccba581369904de31a7ad2b785632b741162afccf7efca68",
-      "ai_geo_inferred": true
     },
     {
       "id": "e3d036146493538b",
@@ -455789,7 +455496,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Embassies in Brazil (specifically Brasilia) closed following threats.",
       "ai_geo_fingerprint": "93bb192c76554cb4a289e11b2fc6b322d91bf86bef0dc1e8d6f4323ae2558e20",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "a3d1448c13a0656e",
@@ -457192,9 +456900,9 @@
       "actor_group": "",
       "primary_event_type": "PIRACY",
       "is_attack": false,
-      "incident_anchor": "MT Honour hijacking Somalia",
+      "incident_anchor": "MT Honour pirate hijacking Puntland April 2026",
       "update_type": "FOLLOW_UP",
-      "incident_id": "inc-d03d40f739649290",
+      "incident_id": "inc-0b31449d648db837",
       "translated_to_english": false,
       "ai_canonical_event": "Repatriation of remains of Pakistani sailors killed on tanker in Somalia",
       "title_variants": [
@@ -457221,8 +456929,7 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The maritime attack and killing of the sailors took place in Somalia.",
       "ai_geo_fingerprint": "ce89dcff413b6835bdeeced9f9afa853e9169c1449f4134628ab087a7d7b8eaf",
-      "ai_geo_inferred": false,
-      "dedup_review_required": true
+      "ai_geo_inferred": false
     },
     {
       "id": "a2ba517ac520d456",
@@ -457296,9 +457003,9 @@
       "actor_group": "",
       "primary_event_type": "PIRACY",
       "is_attack": false,
-      "incident_anchor": "hijacked ship rescue seafarer fatalities 2026",
+      "incident_anchor": "South Africa maritime rescue 2026-10-01",
       "update_type": "INITIAL",
-      "incident_id": "inc-428c528e04b8b341",
+      "incident_id": "inc-c95b74a38cdf700b",
       "translated_to_english": false,
       "ai_canonical_event": "youth killed in Somali pirate attack",
       "title_variants": [
@@ -457324,7 +457031,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The maritime pirate attack occurred off the coast of Somalia.",
       "ai_geo_fingerprint": "9d4439b57c1d251c689ed08fdd71ad16af54baf0862585b49e76bf931d1d7e6a",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "7835106da407b0d2",
@@ -457754,7 +457462,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Operation targeting the ELN guerrilla group, active in Colombia.",
       "ai_geo_fingerprint": "9b3474a3552c5b87e03d28597030532f7d2e69198f7364ba763d71f297883ff4",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "66cb9e2280bb5408",
@@ -458294,136 +458003,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Military operation took place in Orellana province, Ecuador.",
       "ai_geo_fingerprint": "7396002b1c73570dbbbb030f3551a1c4f8215e5b8fd5f31877d04703371b3921",
-      "ai_geo_inferred": false
-    },
-    {
-      "id": "ffc76b2fa519126f",
-      "category": "Maritime Piracy",
-      "categories": [
-        "Maritime Piracy",
-        "Attacks"
-      ],
-      "title": "IMO Secretary-General mourns seafarers killed during rescue of hijacked ship",
-      "summary": "The IMO Secretary-General expressed condolences following the death of seafarers killed during a rescue operation for a hijacked vessel.",
-      "original_title": "IMO Secretary-General mourns seafarers killed during rescue of hijacked ship",
-      "original_summary": "IMO Secretary-General mourns seafarers killed during rescue of hijacked ship American Journal of Transportation",
-      "original_language": "en",
-      "collection_language": "en",
-      "collection_language_name": "English / Africa",
-      "collection_locale": "NG:en",
-      "published": "2026-10-02T16:55:00+00:00",
-      "source": "American Journal of Transportation",
-      "source_count": 6,
-      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQMG9KREhKSjN6R3RycENGUS1tWEQySmJBNlpKTUpFdGl5SU1namllUzZoeTE4RkpUZ1pzeVdSMmNYaE0xUG5ZeVRER3hESTd1X2szaGhCcWVuVVUyODZSeDZrMHgzX3Blb3pxcUt0YVhoSUYxdzVQaTJRSEEtMTFDOEFZRW5OSXNUaE9KLUtYZm5ITjVETEdEMUJhRHd2NzY0QXNGSA?oc=5",
-      "collector": "Google News RSS",
-      "country": "Somalia",
-      "country_code": "SO",
-      "city": "Mogadishu",
-      "region": null,
-      "latitude": 2.03711,
-      "longitude": 45.34375,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "targeted_source_query",
-      "targeted_source": "The Maritime Executive",
-      "targeted_source_kind": "specialist_media",
-      "source_article_fingerprints": [
-        "1fe01423ecb9b487baa4d8b650c8fdbeccee7634064da72227fd274006dfa011",
-        "676e3ae833855c7b064e7fe81de7c148d9ae24efecbeed14fbf24b6e14898cb3",
-        "8ac1afde4d6c8f9f38d3019aff9e73b8ff74f4a6c84c0ae383032dd1e503620a",
-        "cc096fbe60997d0dcd3151bbaaf31f937b2a969eebee36e96900b19ae48b4ed5",
-        "d1ec9a0ebd777bc6c473003779cd2840fe0f0eb9fa4f1fc1892a52e2201952c7",
-        "e19911dd8bf0c54b432bd3da33c350ad7a4f0e329842dfd3f18d96583964b268"
-      ],
-      "sources": [
-        "The Maritime Executive",
-        "Le marin",
-        "ajot.com",
-        "American Journal of Transportation",
-        "India Shipping News",
-        "Ships & Ports"
-      ],
-      "related_articles": [
-        {
-          "title": "\"Let's end piracy\": International tribute to five sailors killed during a hostage-taking in the Middle East",
-          "original_title": "« Mettons fin à la piraterie » : hommage international aux cinq marins tués lors d’une prise d’otage au Moyen Orient",
-          "original_language": "fr",
-          "summary": "An international tribute was paid to five sailors killed during a maritime hostage-taking and piracy incident in the Middle East.",
-          "published": "2026-10-03T12:00:36+00:00",
-          "source": "Le marin",
-          "url": "https://news.google.com/rss/articles/CBMilAJBVV95cUxOU0hUX1p3Rk5QZHg5NUhPYUVGVlowUTM5VkZhcEJvYzFScW8xekNFcWJialc5N20teXBfQjdoZzN6MjlmR0JMc1JWbjZCR1ppbHNMSVJUSjlSNk9CLWRrMUlISE9vc0RyejNxb3h3SE54SURVaERXYjYzVjNrTTdyM09pSnlXLUpVR1hvWnhEcVM0T29QQ3dLSFB2YnFQUDM4SFM4MjVscDAtdGlaaFIxUV9uV2xmSjVhd0tOall0aTB3WUZuVGUwRG5fdVFBcVJ1ajhMNmZaYUR4dGhFeDQxOFBLWVJrelBONEYyUUQ1a0tTeVRmS3VETU8wV3RpRGRnSmFXQ1VfclFYUEVCZ0xobW1QTjA?oc=5"
-        },
-        {
-          "title": "IMO Secretary-General Mourns Seafarers Killed in Rescue of Hijacked Ships",
-          "original_title": "IMO Secretary-General Mourns Seafarers Killed in Rescue of Hijacked Ships",
-          "original_language": "en",
-          "summary": "The IMO Secretary-General expressed mourning for seafarers killed during an operation to rescue hijacked vessels.",
-          "published": "2026-10-02T16:55:00+00:00",
-          "source": "The Maritime Executive",
-          "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNV2liQ0FZYUh0dUNKYjh0VkxWZTAyd1lIN080T3ROLXFpRHBodDZBZThOUUFBQlQ5WkIyenFiamd1MXN2RE44SndWQTJyaUpFSHd2UjB0SERHTExuXzBaVDFHa0MxMHV3SEFnT2tUR0V1QWtoOGs3bjhlTTNnZC1VRC1FY01ScjJxU1NfdzlaR1JINi1VT24wNHU3aVFWWVhMTDV4RmYtSnUzNTBQbGdOdmJidkw?oc=5"
-        },
-        {
-          "title": "IMO Secretary-General mourns seafarers killed during hijacked ship rescue",
-          "original_title": "IMO Secretary-General mourns seafarers killed during rescue of hijacked ship",
-          "original_language": "en",
-          "summary": "The IMO Secretary-General expressed condolences for the seafarers killed during a recent rescue operation involving a hijacked vessel.",
-          "published": "2026-10-06T03:28:03+00:00",
-          "source": "India Shipping News",
-          "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNdHQ3eTF3aVJ0NFBJd2kyM0Y3VGxKUDl1VHRBWUdndUxESmhISG1JbUdPb1QyZnR2eS1QbzhyODJTbXNsRTBaeWQ2M2tiT1JEWFBqLVNfTnA3M3hwbEM1MVNhRnNCVzhvTm93bTFWVkFJcjFtaFVhQXFtd0x1VUFGLUxoZXBFQWZlVGhkM2YtYUg1QzJZT3h2a1pfTzE1QVJwZi1nVkdoaTY2UWowc2k1ODFIUjJnY1ZNeWx1VFZVT19ETXlzZDRLZjhB?oc=5"
-        },
-        {
-          "title": "5 Seafarers Killed During Rescue of Hijacked Ship Off Somalia",
-          "original_title": "5 Seafarers Killed During Rescue of Hijacked Ship Off Somalia",
-          "original_language": "en",
-          "summary": "Five seafarers were killed during an operation to rescue a hijacked vessel off the coast of Somalia.",
-          "published": "2026-10-07T06:06:34+00:00",
-          "source": "Ships & Ports",
-          "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxObTNVbmwwbkpybVNQRjdqOE9QRWp2VVJTcVpSR3N2aFEyMmJ0Sk5aaVV6WXg5Nm1KV3BEN2FTNUlJNTJCY3pGOWhfUjdGZkN5Z291RkFkenRhU29ielFwdXJvQ1hDb241T0hoZ1pSc0oxUEdtalI2NHF3VFE4bXBBUE9oRVlHdl9IUlFEeTRqNmR6TDRnWmc?oc=5"
-        }
-      ],
-      "article_count": 5,
-      "first_reported": "2026-10-02T16:55:00+00:00",
-      "last_reported": "2026-10-07T06:06:34+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Directly reports on maritime piracy, ship hijacking, and casualties during rescue operations.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "PIRACY",
-      "is_attack": false,
-      "incident_anchor": "South Africa maritime rescue 2026-10-01",
-      "update_type": "FOLLOW_UP",
-      "incident_id": "inc-c95b74a38cdf700b",
-      "translated_to_english": false,
-      "ai_canonical_event": "seafarers killed during rescue of hijacked ship",
-      "title_variants": [
-        "seafarers killed in hijacked ship rescue 2026"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_incident",
-        "very_high_title_similarity"
-      ],
-      "location_confidence_score": 0.85,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "IMO mourning seafarers killed in hijacked ship rescue, related to piracy in the Horn of Africa / Somalia region."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": true,
-      "ai_geo_rescue_status": "located",
-      "ai_geo_rescue_model": "gemini-3.7-flash",
-      "ai_geo_rescue_reason": "The incident refers to the rescue operation of hijacked vessels off the coast of Somalia / Gulf of Aden / Middle East involving pirate crossfire.",
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The incident refers to the rescue operation of hijacked vessels off the coast of Somalia / Gulf of Aden / Middle East involving pirate crossfire.",
-      "ai_geo_fingerprint": "d33e517301acd0b80b760b3d98fe551ffe0f211f7128c129b7f470197b550442",
-      "ai_geo_inferred": true,
-      "cbrn_subgroups": []
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "2339b97b48f5454c",
@@ -458523,7 +458104,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "very_high_title_similarity"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "d938e203bf2d68b5",
@@ -459348,7 +458930,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Australian embassy in Brasilia closed due to terror threat.",
       "ai_geo_fingerprint": "a098043676aa558ae8bc9e9ef273103648f4cb3ede1dd4d8857648f362c04c3c",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "ec10b01b7ddc7b77",
@@ -459578,7 +459161,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Attack took place in Borno State, Nigeria.",
       "ai_geo_fingerprint": "e904418ce310bcf38141d428bf311730b0c92501e58b36df52bbf818118a3233",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "fb4a62db66a07487",
@@ -460590,7 +460174,9 @@
         "Attacks",
         "Online / Cyber / AI",
         "Weapons",
-        "Chemicals and Explosives"
+        "Chemicals and Explosives",
+        "Counter Terrorism Action",
+        "Arrests"
       ],
       "title": "Drone attack kills soldier in Neiva, Colombia",
       "summary": "An explosive drone attack in Neiva, Colombia, resulted in the death of one soldier and injury to another.",
@@ -460602,7 +460188,7 @@
       "collection_locale": "MX:es-419",
       "published": "2026-10-02T13:35:49+00:00",
       "source": "Diario La Libertad",
-      "source_count": 10,
+      "source_count": 17,
       "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOZnZ1T1JrVlMtMUk3bWRQSGViNl9COEstSUljMWVrZE9NS3pmZ1o4N19SVzFwbmtJNHpwaEwxRXd4LXlvanZLUFBEWjl1d09SdTNZZTdibllSb2RiZTQ0YjU4QWtjaDBiWWswQzREVUg0NlRacEllNDdTNHBhVk9DZXFmVElPaVFMcjlXd0VOSXdtTTRjNk51UnpSSDEwRE5HXzFOZ0M2MnpSel9XS2JCY0N3bi1nUQ?oc=5",
       "collector": "Google News RSS",
       "country": "Colombia",
@@ -460621,13 +460207,23 @@
         "379797ca0adf7ec40301f09bf590cf2889d55c10529822300b9b4cb8151dfad5",
         "3a1dcf1714ee7694f6f6c2e40a1933ae2a912e5213fa1fba8b599d06c6e65a22",
         "3f4db01af0f02521e668f1f868499d189c070d41a3882796e2e05f9ddf3e6dbc",
+        "439e0bad1a9baea006109a291aaf0c0ebc1a3a2a10c6a7f77362cb8a71374b39",
+        "47a1cceae79fde8b5735b7a0f3690623b8024ef0f22a1a69a81c022777f27564",
         "4898143fc207789a4da6b79cc610f61de82bd6041a1d3a7ed931eb99e176c984",
+        "49e7993615c1f7eee9c7dcadf08ef239bf6c4772e32cb2e460ae4fe70f15d98d",
+        "4afa1cb93402e08c81a1cacf80503cac673a4ef414dc40a24e1d37e55feccc64",
         "554caf2bd99dd8d178b01c86ccc3c13bafc4cb7a0f00e91d2e457ef26e44e719",
+        "6afcef01549fb38b454601aeaecce522a15ca39576c59b0ca7ce734605d95d28",
+        "6e2df0a8f0821c268e0ec2132457723b102dc7b4cacbab8c23aeb6c2fad9a9c4",
+        "82393fb54c06a5584db0e248035d93a37f41d58a28862e4e4fa0ee2cf9a6d1ff",
         "834a27fd28119c08c718266d8fd617509fc56a5d71fc30e3e453586a6c64600c",
         "84b2f1467e7508190ace548cdd62f938d0cca23aa549ba6d63699e40b66f9303",
         "91312ff8dc93c37450316bc83d2136a5327fc7ac8e510bf3a10ca331e9980841",
         "9563a2a57e824e5ca41ede7fda68218062dad9ccf5fa31531f169702414fcf08",
+        "c0211a4ed296553d649770ee89794b55c0553573156cc115190788f846d5191c",
+        "c3017e7932af9cd42192d672b3f5ec0c192d1844eb4ec3fb4fa959c12acc50cb",
         "c49e8fe0032bf865bb6d8ebb49bc7b6cafad49d453e0177e7898479660a3dc3a",
+        "dfd8c9dfdc98d535b36293253132ac5e71227793cf3e84fbdb014836a10f6823",
         "e8e10cd6bf4e4bd7f65e674eb87d33763c895a1cdef5ffb209b0702f9fea9eaf",
         "f3e8071ecf50f7b1e195c8ca66f8b255f3dc8ac61ef1a258e98145fae895e800"
       ],
@@ -460641,7 +460237,14 @@
         "Infobae",
         "La FM",
         "Diario La Libertad",
-        "Vanguardia"
+        "Vanguardia",
+        "Zona Cero",
+        "AlbertoNews - Periodismo sin censura",
+        "AlbertoNews",
+        "El Comentario",
+        "Eje21",
+        "CAMBIO Colombia",
+        "NTN24"
       ],
       "related_articles": [
         {
@@ -460751,9 +460354,90 @@
           "published": "2026-10-02T13:35:49+00:00",
           "source": "El Tiempo",
           "url": "https://news.google.com/rss/articles/CBMimgJBVV95cUxQUDh2V1l6a0dDejVWR1doTFNFRXJQNFBUSkZpWHo5bURBQzVVbUtvc3p6V1lVQWtDNTgxd2RXS1habEtSSVBUNDVhejl3ZkxyTWdZeTc2SzRNV3BfVkk5ZThGZ01Mam00dXpGRXBfblBCVEF1emQxWHpCQzRRWVd3YzFabjBXVFF3TDRCbWMwd1BEbDhfSXV6N3RiaXUydjluRzI0cFdreUhXa2l6cjNuZS03M0xlYWJUR09JLU14LWtlY0JpQkNWcVl3TWRDbnAwSGlfN2FRMC1TRTNVYXR2T1BwM2l1S0huV2s0WTFDMUNYZTFGT2hLN2VMTzFQaHBYaEpjVGh4Skl4VW1sdTBvSFBLU1ZPSGJtR0HSAZ8CQVVfeXFMTVI4QjBFY3NvN0RNVklyZkNzOC15STdwa0VITXRYaDhEdGFmTFI3a3lPUS1BSWtpbUxzMGpPaWtLN0NBdy1IbkZBTk9hSFBZeUZjR2l5UU9vM09sTUVjODZGd3JxVnBaSC1QOEFZRzVlSGxSZzdmMi1kRWtzdUdjQncydGc5VnVCMDdGWFlEX25kMHd2RklEY1N0V3R2QkdvVFVWUUpBdEF2NGRsYlF5bkpJcEVvUDlMZWZfTjdIWWRrbzgyckszSVhHbGFzakdYbmxhZnhJU05WbGMwczJYMTJwOEFqQlNQUUpzNkJNcW5hdVpHc04tYVFkQTl6X0RMYzNWM0FHMURqdHlZd0dpNHUzX0FxMDR3Y0tydVJYNU0?oc=5"
+        },
+        {
+          "title": "Colombian soldier killed in drone attack by FARC dissidents",
+          "original_title": "Muere un soldado colombiano en un ataque con drones de disidencias de las FARC",
+          "original_language": "es",
+          "summary": "A Colombian soldier is killed during a drone attack carried out by FARC dissident factions.",
+          "published": "2026-10-03T01:34:33+00:00",
+          "source": "AlbertoNews - Periodismo sin censura",
+          "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNS0YwZ2tZSlYtckZLZVE0TkRfS1hRdks4VlR1c1VwVHhld1ZBTTZCVVFtNEhIb1ZzZV9vZTZnS1BUUzBscWF4M29zY1MzMDFtT2swbE01aVBuZE8tamczRkY4QzRhVFVLaEJBWDJrc2xKNjNVRW1yR3kyTndaMzdsaDh2bWZ6OWF3elVHVFZ0eE00SzBNbl8wTEdIMmtvd2pqMG83U1I1cHI5eXYzWTJCMW84R3A2YWhsRWtF?oc=5"
+        },
+        {
+          "title": "Muere soldado en ataque con drones de disidencias de las FARC",
+          "original_title": "Muere soldado en ataque con drones de disidencias de las FARC",
+          "original_language": "es",
+          "summary": "Muere soldado en ataque con drones de disidencias de las FARC Zona Cero",
+          "published": "2026-10-03T02:27:54+00:00",
+          "source": "Zona Cero",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOVmVSNE9IZzhRaWNIdWdNU1FzOXlwUUVOUWkxNGZwQlN1SXI1aGc5Y3ZlWTdIM0tyclR5ZW9OMzhFeVFCYWU0SFIxWS1IVjZkVTVwcFJUU19ZUTFadjgyMnQ5RWdFTDluazVNSEJ6RFg0cEFMQ3BndjE2b25BbGZNZWZ2Yy1MR1lDdnBkZ0pwQUtCMzJUVVJIaA?oc=5"
+        },
+        {
+          "title": "Muere un soldado colombiano en un ataque con drones de disidencias de las FARC",
+          "original_title": "Muere un soldado colombiano en un ataque con drones de disidencias de las FARC",
+          "original_language": "es",
+          "summary": "Muere un soldado colombiano en un ataque con drones de disidencias de las FARC Infobae",
+          "published": "2026-10-03T01:34:33+00:00",
+          "source": "Infobae",
+          "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxOUHhWcnVPSlpRSzFSTEwxbUpDOGl2eVFiYkxvWTFJVVFxLTdRNGZsa3NpZDlaeE5MZnJFVTZ6OE1td2kxdUx0aHVfaTZONkFkSEtoSzlsR3J4S1pRYUt0ZWpjbWw3MEU3ZlpwVi1TNUlIWjNTQ1E2RVFNOTFZeUJFSkxXWmQ4YjZPWWllcWNmdk5pTDY3WUFvaWUzemlWR09wckVoTjJUTWUzajRxSHI4T1lPWXdYbFdldWVnTU41Z0psMlUxTVlHelVkY9IB5gFBVV95cUxOVW1ZWFBkdmo2S2M2cU8zbjRmZ01GanN5WHBDSHZhUkVGdlE1dTJCYjNJQWN0c0k2RjRWTDNNMGJLUWNwQVFUanBCU19feXkyVU9jYlRIUzUyZU1rYm5ISVptRWV2LUEzaUw2bVhvTmRBRjRrTEtpV29aU2Z5Q0plME5zTjJ6Qk5VQlJhS0xjMmx3MGVBZXYzUW01WDd6ZGE2ZWpJT0tVV1ROdTdselA3UFJTbThjYjFxREx6ZFZkdlp3cHBsV1owTnBIcUtoVjBFYWo5dnBvZXYybUZRSHd3ekU1amZFdw?oc=5"
+        },
+        {
+          "title": "Blow to Front 44 of 'Iván Mordisco': Five captures for homicides and attacks against public forces",
+          "original_title": "Golpe al Frente 44 de ‘Iván Mordisco’: cinco capturas por homicidios y ataques contra la Fuerza Pública",
+          "original_language": "es",
+          "summary": "Colombian authorities captured five alleged members of the Frente 44 of the FARC dissident structure led by 'Iván Mordisco' for homicides and attacks against security forces.",
+          "published": "2026-10-03T14:48:05+00:00",
+          "source": "El Tiempo",
+          "url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxQdXlQS1YxQTdFS1dQNWxkMDlaa1hDX0l2R3FxT2ljWGRndXFObnR4M2h6ZVFHcXZld24xZVNocUJ0RzhvYm9feFpONTBOdnJyR3U4Z2ZFakhwS2dDNExINnN2TGo0UzlhOFhLZkFDWkJLOTBtX09iLU5KQ1MzT3gzcm5iaTF2RDI1T2hlSXRaTERQb1U4RTV1aDJGaFl1bkdWN21oM2RlQjRfS2NsWFBUc0RFczR6MUFyNFRQS0NLN2JaZzM5NXEySkRlbmRFYjFlTDJMTFFTRDAydkZQRTY5OExBUkFnLU1jVkVTUHhNckViSEdpVUwtV1p4VdIBgAJBVV95cUxPWWRmaVNaclltRHEwQlZITE12U2ZvengySVhfZlF1U2o1Q29qaHNnRUFudzhGb01sZ1Zwd19jOXZwNFRBQ1o1TFBKU1l1Y2VaZXRVS3BmNm9aRDBkc0dkN0ZjTmRMTjJkN2EzaWNiaEtNX0FkMTVBTnVvdl8zMkhZTWI3LXpZVTcxY0dpQnZsZEJFN1RNU25LSHkxNDJvcVJFVWJXejEyYnpBNmZDZnZ6clZHeFZIT3NYY2xqcUFCZVl5cnJCMmJ1UmxPRmluVUU5MmNSeTkwa1kyNk5wc2tqWjRiTThQeWM5bkVMcDBzOUxycmg1OW41YzhCdDNFcFhi?oc=5"
+        },
+        {
+          "title": "Colombian Army rescues 2 minors recruited by FARC dissidents",
+          "original_title": "Ejército colombiano rescata a 2 menores reclutados por las disidencias de las FARC",
+          "original_language": "es",
+          "summary": "The Colombian army rescued two minors who had been forcibly recruited by FARC dissident factions.",
+          "published": "2026-10-03T15:29:46+00:00",
+          "source": "El Comentario",
+          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5Vd0hVMHh4ZC1pazVyTURnZUYxM1B1aG9qR0RnMzN0WTZraU1WX1ktV1pDUFJNUFFhd0hJazZYZnoxb2pxcWo3UUlEc1RuTmc?oc=5"
+        },
+        {
+          "title": "Colombian soldier killed in drone attack by FARC dissidents",
+          "original_title": "Muere un soldado colombiano en un ataque con drones de disidencias de las FARC",
+          "original_language": "es",
+          "summary": "A Colombian soldier was killed in a drone attack carried out by FARC dissident factions.",
+          "published": "2026-10-04T05:36:25+00:00",
+          "source": "Eje21",
+          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPV0c5S0FpVVpocjFaWmdDd0F4NEw5b092dkxFSWhFT3hmTjdrNzFIQ0Z1U21KTXRYM1VMRDRJS01zdjR4SXVpLXFvRHdxbENhYTlEVHYxdXpwbkFNMkk0YXdXc1hRR1JhR0Y4Z3F3LUlNRy15WHhwaWJnOERpOXdNdDM2eEtzU1VYend1MTVBM3RuV1JTMXFpSF8tdHJWTVh3bTRERlNXLWJIYm1qTzVDbUJ3?oc=5"
+        },
+        {
+          "title": "Drone attack in Aipecito, Neiva: One soldier killed and another injured",
+          "original_title": "Ataque con drones en Aipecito, Neiva: un soldado muerto y otro herido",
+          "original_language": "es",
+          "summary": "A drone attack in Aipecito, Neiva, resulted in the death of one soldier and injuries to another.",
+          "published": "2026-10-03T16:43:06+00:00",
+          "source": "CAMBIO Colombia",
+          "url": "https://news.google.com/rss/articles/CBMijgJBVV95cUxPSlA4d2NBMUh3ejlRNW1JLUhFSGo1RG05QTZlbzZZajA0X3FLZ2xWX241TlktaDNxc1MwRTR4d2hkZXBDVlF3VkM3TUw1Z1BOWnU1WDRtVHlZSEtqNUxoWllnWUFUQ1cxOEhDd3JUUFpZVkRYR2tPakZyVjFTY1hWUUxhMW1DRDNYbVZFMEJiZ2tFbHlOdE9uUGFEamx4andDWGtLbGYyOUhBRDFhTW9RRXdERE9mXzQtUmo5MHBWYmZIaG9vZGRXNUJsdlc4T0dHN0Vnb3BucmJBVFNoTmcwenhGX1RwUTlEcGI0ZXdKOWl2NTJHbGZZTG9iOGFGaUswaDF0Q1hHS3NsdzZ1YWc?oc=5"
+        },
+        {
+          "title": "Colombian police dismantle two FARC dissident centers",
+          "original_title": "Nuevo golpe de Abelardo en Colombia: Gaula de la Policía desmanteló dos importantes centros de FARC",
+          "original_language": "es",
+          "summary": "The Gaula unit of the Colombian National Police dismantled two significant logistics and operations centers belonging to FARC dissidents.",
+          "published": "2026-10-04T22:35:03+00:00",
+          "source": "NTN24",
+          "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQQUhjaVVDNWNlN0NyTXVubzdDcnNacjA2bzczMkxwMTc0eEQxeERrMTI1Mkk2ZXNRdW0wYVJqWEJ5SGN6bFU0YzBlSTJhVS1oRUJocEtfMGVsd01QVGRzRm9TVl9LdzZxTXF5el83Wmd6amd3c1NydWgxV2k1cmRqM21WZjdIR2liUWNIT18zV2MzakRKbmVFSUwtcTBPa255VktOS3g0YXJnQ2dqMkFvOWpoNUtwckhNaDI1SWtPSWVrZ2hmdExGMkswcTVZR2NuSzQ1b1dFRmF1VmNNYWJQMtIB4AFBVV95cUxPeEhLS1FPNnBvMnlTOVFOVENISVk5ZmdoaUdrdHdheUtFUld5UkV1cno2eFJORFVfWHJQSHNsWWlNV09tMG54T0pXM2RfR2FneUdCajJEOHA1d0pVdEtZUEJjUWlVbEtLM2JvUFh2VmdPc01jQnZlNDlNdVA1SzR2VHRKQURvWWFrc0VJTDZiZkpDN0VjSEtYdHpLRk1rLUJueXhlNERESnliZjh2SXo5UERjZTRfbW4xSU9CdTBpSGw2cTdHUk9LdDhNZW4yQmtIQTBTaDNUeTVFWk9obTlzcQ?oc=5"
+        },
+        {
+          "title": "FARC dissidents 'Lobo' and 'Zamanta' captured in Colombia",
+          "original_title": "Alias Lobo y Zamanta, los disidentes de Farc de confianza de Primo Gay, capturados tras orden del presidente De La Espriella",
+          "original_language": "es",
+          "summary": "FARC dissident leaders known as alias 'Lobo' and 'Zamanta' were captured following an order by authorities in Colombia.",
+          "published": "2026-10-05T19:32:57+00:00",
+          "source": "Revista Semana",
+          "url": "https://news.google.com/rss/articles/CBMi_gFBVV95cUxPM1JOVjl5QkszcnlNbTRkcGh3NVpjbll2LUIwN0FJT0stb0tsdlpONlZiakZ5S2IyNy05T3BFVkIyaVFKc2NqemZUdGdSV3RHaG9mZVBfQUJJVTRoWDlSUVRkeEpta0VLTHdFTk5vUlFzUS11a3NTNEVwOGZ0d05FRzBvM1hnaEFjMWROajZGcUh3akpZdkFCdk1sWlAzSFdnTXZxbmhFbnlieEdxUUlVYnpwRVl0dTNTRjhVNVV6eWdEZUFPU3dIaFRQLWNkdm01LUdqYVB4Y293Nl9VZUtQQ2gxSGc2VmNHcTNLY0RIelJKNjE4a3NKMEpxYlBXUQ?oc=5"
         }
       ],
-      "article_count": 13,
+      "article_count": 22,
       "first_reported": "2026-10-02T13:35:49+00:00",
       "last_reported": "2026-10-03T11:38:50+00:00",
       "ai_selection_complete": true,
@@ -460798,7 +460482,8 @@
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "threat_categories": [
         "Chemicals and Explosives"
-      ]
+      ],
+      "primary_source_published": "2026-10-02T13:35:49+00:00"
     },
     {
       "id": "966f9f272a33c4d4",
@@ -461284,26 +460969,28 @@
       "dedup_methods": [
         "very_high_title_similarity"
       ],
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "8fd35fa46d40f079",
       "category": "Maritime Piracy",
       "categories": [
-        "Maritime Piracy"
+        "Maritime Piracy",
+        "Attacks"
       ],
-      "title": "IMO Chief Mourns Seafarers Killed in Hijacked Ship Rescue",
-      "summary": "The IMO Secretary-General expressed condolences following the deaths of seafarers killed during a rescue operation on a hijacked vessel.",
-      "original_title": "IMO Chief Mourns Seafarers Killed in Hijacked Ship Rescue",
-      "original_summary": "IMO Chief Mourns Seafarers Killed in Hijacked Ship Rescue Mirage News",
+      "title": "IMO Secretary-General mourns seafarers killed during rescue of hijacked ship",
+      "summary": "The IMO Secretary-General expressed condolences following the death of seafarers killed during a rescue operation for a hijacked vessel.",
+      "original_title": "IMO Secretary-General mourns seafarers killed during rescue of hijacked ship",
+      "original_summary": "IMO Secretary-General mourns seafarers killed during rescue of hijacked ship American Journal of Transportation",
       "original_language": "en",
       "collection_language": "en",
-      "collection_language_name": "English / East Africa",
-      "collection_locale": "KE:en",
+      "collection_language_name": "English / Africa",
+      "collection_locale": "NG:en",
       "published": "2026-10-02T13:14:00+00:00",
-      "source": "Mirage News",
-      "source_count": 5,
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOdDlDZ2FhbGxOSkRhdkMybHRDZDFmLW82WHcyOC1BWVFsNFhneGNmQUVZUmZPV3F3emY0UC1QOHZMWEZ0MU1EZktROXkydmhZZXhFODVjLWI1SHJwOUNhejJldFgzMUc3NnNhd3ZldHhJQ3dzX2tTZ2loQS1Dc0pKdS1SenUwbXZn?oc=5",
+      "source": "American Journal of Transportation",
+      "source_count": 11,
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQMG9KREhKSjN6R3RycENGUS1tWEQySmJBNlpKTUpFdGl5SU1namllUzZoeTE4RkpUZ1pzeVdSMmNYaE0xUG5ZeVRER3hESTd1X2szaGhCcWVuVVUyODZSeDZrMHgzX3Blb3pxcUt0YVhoSUYxdzVQaTJRSEEtMTFDOEFZRW5OSXNUaE9KLUtYZm5ITjVETEdEMUJhRHd2NzY0QXNGSA?oc=5",
       "collector": "Google News RSS",
       "country": "Somalia",
       "country_code": "SO",
@@ -461315,10 +461002,16 @@
       "location_confidence": "high",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
+        "1fe01423ecb9b487baa4d8b650c8fdbeccee7634064da72227fd274006dfa011",
         "2a5f1139696bb09310c6b0fa156ae5fb30ec28ca9f9e08f65bd7f3defce449b2",
         "309dace4c9dc538fb264359d0fe00814cf1a95102b2ea92d19326d6d64a65613",
+        "676e3ae833855c7b064e7fe81de7c148d9ae24efecbeed14fbf24b6e14898cb3",
         "7fff8f5ae879cf4288958f277f39c40151e334d74b1cce2b60603856e9904033",
+        "8ac1afde4d6c8f9f38d3019aff9e73b8ff74f4a6c84c0ae383032dd1e503620a",
+        "cc096fbe60997d0dcd3151bbaaf31f937b2a969eebee36e96900b19ae48b4ed5",
         "cf845b8d9b5a87bb84021b5ab71b364b1c57f26f19544d60c31e4709f024ac0d",
+        "d1ec9a0ebd777bc6c473003779cd2840fe0f0eb9fa4f1fc1892a52e2201952c7",
+        "e19911dd8bf0c54b432bd3da33c350ad7a4f0e329842dfd3f18d96583964b268",
         "e49df642c42c9ece4c9e286106e184a092cc0d64f487eaa3a190ff5dab9de4a0"
       ],
       "sources": [
@@ -461326,7 +461019,13 @@
         "rivieramm.com",
         "Arab News PK",
         "nation.com.pk",
-        "Aaj English TV"
+        "Aaj English TV",
+        "The Maritime Executive",
+        "Le marin",
+        "ajot.com",
+        "American Journal of Transportation",
+        "India Shipping News",
+        "Ships & Ports"
       ],
       "related_articles": [
         {
@@ -461364,9 +461063,54 @@
           "published": "2026-10-03T02:44:08+00:00",
           "source": "Aaj English TV",
           "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBVczFORFYyak9iQUhzaGRIcWxmQU05MGNTQVFlYlV5eDByZWxIX3V3ZUtmZWtMNkhjcEFDMDYyNm9CcThjLWVldWhRZExlQQ?oc=5"
+        },
+        {
+          "title": "\"Let's end piracy\": International tribute to five sailors killed during a hostage-taking in the Middle East",
+          "original_title": "« Mettons fin à la piraterie » : hommage international aux cinq marins tués lors d’une prise d’otage au Moyen Orient",
+          "original_language": "fr",
+          "summary": "An international tribute was paid to five sailors killed during a maritime hostage-taking and piracy incident in the Middle East.",
+          "published": "2026-10-03T12:00:36+00:00",
+          "source": "Le marin",
+          "url": "https://news.google.com/rss/articles/CBMilAJBVV95cUxOU0hUX1p3Rk5QZHg5NUhPYUVGVlowUTM5VkZhcEJvYzFScW8xekNFcWJialc5N20teXBfQjdoZzN6MjlmR0JMc1JWbjZCR1ppbHNMSVJUSjlSNk9CLWRrMUlISE9vc0RyejNxb3h3SE54SURVaERXYjYzVjNrTTdyM09pSnlXLUpVR1hvWnhEcVM0T29QQ3dLSFB2YnFQUDM4SFM4MjVscDAtdGlaaFIxUV9uV2xmSjVhd0tOall0aTB3WUZuVGUwRG5fdVFBcVJ1ajhMNmZaYUR4dGhFeDQxOFBLWVJrelBONEYyUUQ1a0tTeVRmS3VETU8wV3RpRGRnSmFXQ1VfclFYUEVCZ0xobW1QTjA?oc=5"
+        },
+        {
+          "title": "IMO Secretary-General Mourns Seafarers Killed in Rescue of Hijacked Ships",
+          "original_title": "IMO Secretary-General Mourns Seafarers Killed in Rescue of Hijacked Ships",
+          "original_language": "en",
+          "summary": "The IMO Secretary-General expressed mourning for seafarers killed during an operation to rescue hijacked vessels.",
+          "published": "2026-10-02T16:55:00+00:00",
+          "source": "The Maritime Executive",
+          "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNV2liQ0FZYUh0dUNKYjh0VkxWZTAyd1lIN080T3ROLXFpRHBodDZBZThOUUFBQlQ5WkIyenFiamd1MXN2RE44SndWQTJyaUpFSHd2UjB0SERHTExuXzBaVDFHa0MxMHV3SEFnT2tUR0V1QWtoOGs3bjhlTTNnZC1VRC1FY01ScjJxU1NfdzlaR1JINi1VT24wNHU3aVFWWVhMTDV4RmYtSnUzNTBQbGdOdmJidkw?oc=5"
+        },
+        {
+          "title": "IMO Secretary-General mourns seafarers killed during hijacked ship rescue",
+          "original_title": "IMO Secretary-General mourns seafarers killed during rescue of hijacked ship",
+          "original_language": "en",
+          "summary": "The IMO Secretary-General expressed condolences for the seafarers killed during a recent rescue operation involving a hijacked vessel.",
+          "published": "2026-10-06T03:28:03+00:00",
+          "source": "India Shipping News",
+          "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNdHQ3eTF3aVJ0NFBJd2kyM0Y3VGxKUDl1VHRBWUdndUxESmhISG1JbUdPb1QyZnR2eS1QbzhyODJTbXNsRTBaeWQ2M2tiT1JEWFBqLVNfTnA3M3hwbEM1MVNhRnNCVzhvTm93bTFWVkFJcjFtaFVhQXFtd0x1VUFGLUxoZXBFQWZlVGhkM2YtYUg1QzJZT3h2a1pfTzE1QVJwZi1nVkdoaTY2UWowc2k1ODFIUjJnY1ZNeWx1VFZVT19ETXlzZDRLZjhB?oc=5"
+        },
+        {
+          "title": "5 Seafarers Killed During Rescue of Hijacked Ship Off Somalia",
+          "original_title": "5 Seafarers Killed During Rescue of Hijacked Ship Off Somalia",
+          "original_language": "en",
+          "summary": "Five seafarers were killed during an operation to rescue a hijacked vessel off the coast of Somalia.",
+          "published": "2026-10-07T06:06:34+00:00",
+          "source": "Ships & Ports",
+          "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxObTNVbmwwbkpybVNQRjdqOE9QRWp2VVJTcVpSR3N2aFEyMmJ0Sk5aaVV6WXg5Nm1KV3BEN2FTNUlJNTJCY3pGOWhfUjdGZkN5Z291RkFkenRhU29ielFwdXJvQ1hDb241T0hoZ1pSc0oxUEdtalI2NHF3VFE4bXBBUE9oRVlHdl9IUlFEeTRqNmR6TDRnWmc?oc=5"
+        },
+        {
+          "title": "IMO Chief Mourns Seafarers Killed in Hijacked Ship Rescue",
+          "original_title": "IMO Chief Mourns Seafarers Killed in Hijacked Ship Rescue",
+          "original_language": "en",
+          "summary": "The IMO Secretary-General expressed condolences following the deaths of seafarers killed during a rescue operation on a hijacked vessel.",
+          "published": "2026-10-02T13:14:00+00:00",
+          "source": "Mirage News",
+          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOdDlDZ2FhbGxOSkRhdkMybHRDZDFmLW82WHcyOC1BWVFsNFhneGNmQUVZUmZPV3F3emY0UC1QOHZMWEZ0MU1EZktROXkydmhZZXhFODVjLWI1SHJwOUNhejJldFgzMUc3NnNhd3ZldHhJQ3dzX2tTZ2loQS1Dc0pKdS1SenUwbXZn?oc=5"
         }
       ],
-      "article_count": 5,
+      "article_count": 10,
       "first_reported": "2026-10-02T13:14:00+00:00",
       "last_reported": "2026-10-02T18:49:16+00:00",
       "ai_selection_complete": true,
@@ -461379,11 +461123,11 @@
       "actor_group": "",
       "primary_event_type": "PIRACY",
       "is_attack": false,
-      "incident_anchor": "hijacked ship rescue seafarer fatalities 2026",
+      "incident_anchor": "South Africa maritime rescue 2026-10-01",
       "update_type": "FOLLOW_UP",
-      "incident_id": "inc-428c528e04b8b341",
+      "incident_id": "inc-c95b74a38cdf700b",
       "translated_to_english": false,
-      "ai_canonical_event": "seafarer fatalities during rescue operation on hijacked vessel",
+      "ai_canonical_event": "seafarers killed during rescue of hijacked ship",
       "title_variants": [
         "seafarer fatalities during rescue operation on hijacked vessel"
       ],
@@ -461407,7 +461151,9 @@
       "dedup_methods": [
         "same_incident",
         "paraphrase_entity_context"
-      ]
+      ],
+      "primary_source_published": "2026-10-02T16:55:00+00:00",
+      "cbrn_subgroups": []
     },
     {
       "id": "fd82dd088de60916",
@@ -463835,7 +463581,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Military headquarters are typically located in the capital, Addis Ababa.",
       "ai_geo_fingerprint": "9e2821b2b4f31e6641a1556b33b34f9713a8dfe17a5a264b38abf6fc5f47a814",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "10cc783595fac847",
@@ -464425,7 +464172,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Rescue and relocation following piracy off the coast of Somalia.",
       "ai_geo_fingerprint": "10b06a661bc01f6ba4e7f7f5f20590a4cdc7652779201ab39f24df0136c4daf6",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "a4e2771a11ce007c",
@@ -466629,187 +466377,6 @@
       "ai_geo_inferred": false
     },
     {
-      "id": "1208f30831ee26cf",
-      "category": "Counter Terrorism Action",
-      "categories": [
-        "Counter Terrorism Action",
-        "Attacks"
-      ],
-      "title": "Senior Hamas terrorist who held many hostages eliminated",
-      "summary": "Israeli forces have eliminated a senior Hamas militant who was involved in holding numerous hostages.",
-      "original_title": "חוסל מחבל בכיר בחמאס שהחזיק חטופים רבים",
-      "original_summary": "חוסל מחבל בכיר בחמאס שהחזיק חטופים רבים סרוגים",
-      "original_language": "he",
-      "collection_language": "he",
-      "collection_language_name": "Hebrew",
-      "collection_locale": "IL:he",
-      "published": "2026-10-02T05:26:25+00:00",
-      "source": "סרוגים",
-      "source_count": 9,
-      "url": "https://news.google.com/rss/articles/CBMi2gJBVV95cUxPOTc5REdFRDdFUUwxQ0c1aExISFZwaGY1emFmZHlPQzQyRzVfU3hlUzVJaGNDN0tWVkpYcnNmYjRNLU1mai1oT3QzdUFIQ2VTTkgyZEoyMWRJN19LVW42VmdNcE1oMXdBVzd6MmJoSDdmMjFTTWtDWUJQUi1fZHh1SmdWaHZwc05YX0Y1S0psX0VvUXZhMlNwckRYazc1Vm1IRkk3OXRhSWo4am51RURIVFl6M1lXak9Memh4SUVHLVJZNVVsUWxpLWdoNWpMR21ZOGlOWkNmOXlMM3pyZmJTR2V0c2ZrbTlvbEktV1dicUptLVBQUGVCcHBoYnc5bEhxYkFXUF9sTkNtd3JuYVcwUG1LVzFxeUs1RkxXakF4UzVjdUo3UXZkYmpIdG1YbkdoUjE4WjkwMUdwa2NGR0ZlUXFUNDVfSFQ3RzdnNk1fazN2RkNYdm5XNGxn?oc=5",
-      "collector": "Google News RSS",
-      "country": "Israel",
-      "country_code": "IL",
-      "city": "Jerusalem",
-      "region": null,
-      "latitude": 31.76904,
-      "longitude": 35.21633,
-      "location_precision": "country_capital",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_discovery",
-      "source_article_fingerprints": [
-        "255c632fd525ddcc657d137e228d15b821b0f6348d73273249d6a9f86fc93309",
-        "3fd956d99a90c30ccdad263a7cbf3b4582a1137dd6038786d83fe1692d9ee15d",
-        "542d870c30278584bcd14eecd5dc74d6b07521df1405cda2542739b691afade0",
-        "5487f5a475e6f9ab5be82a8cd00fdc2c3c778390eb7b41ef50d36c5fd8248efe",
-        "65b68c0c5ddf8ea673d210ce2198fa36daf96d5870da32a84dafbc153634787d",
-        "6776820f5545f12817d6edbb4d9d409040a59d203445820f39a419f8aa0a376f",
-        "6baa9194308c13cc17abc5f275eae9666972b0babbe4195ecef8a3ca3ac7cb04",
-        "758cf93bf9563ec95a629d1d172723396a5535eddd12f95c0476cb737f52c74d",
-        "76630bd89512ea4d8bd7f6b430dbb85e735af1692a9db8d8ffc2d665d5e6ce8e",
-        "ea27533b63e31575665597a062f05178328c4fcec88dcdb147516ae200f90295",
-        "feb5f9acd452a3db35afdd3bcddf0132a9e98119b7235abe8f3d141e2484bf5d"
-      ],
-      "sources": [
-        "סרוגים",
-        "srugim.co.il",
-        "تلفزيون سوريا",
-        "الجزيرة نت",
-        "Vanguard News",
-        "tagesschau.de",
-        "YNET",
-        "JDN",
-        "Infobae"
-      ],
-      "related_articles": [
-        {
-          "title": "Senior Hamas operative holding numerous hostages eliminated",
-          "original_title": "חוסל מחבל בכיר בחמאס שהחזיק חטופים רבים",
-          "original_language": "he",
-          "summary": "A senior Hamas militant who held numerous hostages was killed in a targeted operation.",
-          "published": "2026-10-02T05:26:25+00:00",
-          "source": "סרוגים",
-          "url": "https://news.google.com/rss/articles/CBMi2wJBVV95cUxORlJtby1paFFxUVZRYWdrX1p1S2NTT2pfNHpBQmtJeS1hWXpTcGJFcTJmRjBidkhfbWxzY1B3ckczeU9wQnBCV1RvWnJPVEdMZkMzTWcxQ1FXUWphalV2QzFmcXFsSkJXMndIdUNQNHhEMlViOGlNZEZRaWl4LWpheXZBNGJLYTFTYVIwTTNROFUwUmFFQTJVQmdBLWgzS0VUQnNycVBqMlRQNm1xLWFKLXBDQXZfUUJmVm1nQU9xVkYwQXQyNFl1RkozYi1oejZyTzNHTy1pc3AxRTBzUXFkUmdUdmZUeHpINTYtU29YbmFhZHpWZzFsaTBZb0RuQU9tZnptcUNLTmROa01NcnNhZGlFelczTUF3bW9KYVY3ZXVLRmFRU0xKU18xbERWdDExWUQxUndiSHE2eF96bE9wMzNzNmpGYjFKTUN5cjMwUF9ZelRzWU51djEwRQ?oc=5"
-        },
-        {
-          "title": "Five Palestinians killed in Israeli shelling in Gaza",
-          "original_title": "بينهم أربع نساء.. مقتل خمسة فلسطينيين بقصف للاحتلال الإسرائيلي على غزة | تلفزيون سوريا",
-          "original_language": "ar",
-          "summary": "Five Palestinians, including four women, were reported killed in an Israeli strike in Gaza.",
-          "published": "2026-10-03T09:52:40+00:00",
-          "source": "تلفزيون سوريا",
-          "url": "https://news.google.com/rss/articles/CBMimwRBVV95cUxNeUdLZ240Q05BcmtRb0dQd09kczBTLTBNRVlJWnFLNmVzaFcxTE4tWWlVd3gteUNyRFR4aFREM19XaUd4SFQ4YTUtNExYQndsMGZsNHh2dVNaUXhKM20zcTdCR1dZaXFEeXJ4T3VHM3FwY3RJV1BYdjEzZnhQemY0UHdfN1JCeldJZkdKMGdBcVdnakRTVlU4TWJDWE5lMERfZUJ3NnVPbzNfczhSZXp1U1FDTXdOa1V2WTFnVzhWOGI1bWkwU09nOGdTaG5wU29IYndKemttLXoxUkExNzk5aDJMWXQwUzdIaFhPWU9LUjE2UHhVbjN1eDNUYVEyNVR3azM4R2NWQ1UzOGdRZ2c0N2gwYTRVSWFvUzBFODl0S01rYnpBRmdRZTY2Qk1GZWxZYVY3VG5waGJQWENLTVQwUmdBUTJMLTFTb29GUGlXY2V1NlMyckhVRE5TWURBaHVvSm9Yem5mSk4xdi00TkMyQWQyazM5ZUg3QndIZUd4R3pKcjFhNENOWm9wT1R0UzV6NVRSR1hiTkg3U3ZsWjZEZXdJZFJjYXFDVzlBc0pXbkpfOXE1MGJKTmozZ0xGcE9id3lDOFpOM1ZidTBhemZBOXBjUUhzVVdkaXQ5d2I4NVA0c0xxQkNzTmtOZ2l6dzdvX2pJbzFDdllCRlBjZGxLb05hT0ZMLWp3S21teWFtTUdFV2JRcS1tdkhsWdIBmwRBVV95cUxNeUdLZ240Q05BcmtRb0dQd09kczBTLTBNRVlJWnFLNmVzaFcxTE4tWWlVd3gteUNyRFR4aFREM19XaUd4SFQ4YTUtNExYQndsMGZsNHh2dVNaUXhKM20zcTdCR1dZaXFEeXJ4T3VHM3FwY3RJV1BYdjEzZnhQemY0UHdfN1JCeldJZkdKMGdBcVdnakRTVlU4TWJDWE5lMERfZUJ3NnVPbzNfczhSZXp1U1FDTXdOa1V2WTFnVzhWOGI1bWkwU09nOGdTaG5wU29IYndKemttLXoxUkExNzk5aDJMWXQwUzdIaFhPWU9LUjE2UHhVbjN1eDNUYVEyNVR3azM4R2NWQ1UzOGdRZ2c0N2gwYTRVSWFvUzBFODl0S01rYnpBRmdRZTY2Qk1GZWxZYVY3VG5waGJQWENLTVQwUmdBUTJMLTFTb29GUGlXY2V1NlMyckhVRE5TWURBaHVvSm9Yem5mSk4xdi00TkMyQWQyazM5ZUg3QndIZUd4R3pKcjFhNENOWm9wT1R0UzV6NVRSR1hiTkg3U3ZsWjZEZXdJZFJjYXFDVzlBc0pXbkpfOXE1MGJKTmozZ0xGcE9id3lDOFpOM1ZidTBhemZBOXBjUUhzVVdkaXQ5d2I4NVA0c0xxQkNzTmtOZ2l6dzdvX2pJbzFDdllCRlBjZGxLb05hT0ZMLWp3S21teWFtTUdFV2JRcS1tdkhsWQ?oc=5"
-        },
-        {
-          "title": "Israeli occupation targets Hamas leader Ali Al-Amoudi in a strike on Gaza",
-          "original_title": "الاحتلال الإسرائيلي يستهدف القيادي في حماس علي العمودي في غارة على غزة | تلفزيون سوريا",
-          "original_language": "ar",
-          "summary": "Israeli airstrike in Gaza targets Hamas military/political leader Ali Al-Amoudi.",
-          "published": "2026-10-03T12:32:09+00:00",
-          "source": "تلفزيون سوريا",
-          "url": "https://news.google.com/rss/articles/CBMipARBVV95cUxPY0djTTJSZkdlRmpqTkZXbjZXcHp0d0Iwc3hQNEpjcUttWWpMVHloY0p1eEJ5SzU3VXVHYXNmQTU1WVdSd1F3LWM4Uks2Q2R6bUFMTENXU3JSVHdiSHZJYkF3a0k2cVNtYUYyVGFQVXRXdVRGMWpLTnlsQ2Ruc1hzODI2bE55QVFNWUJhRjh1MU92b3RlVWRjSENra3o5a01FbVR3a1k4eHlWenVTU1VLQmdUS2tKUFNHTFU2MzJHc2xYclIySEVtWWxRdjgwaGZnY1hFYUNFdWZ6Si15QXNHeHhvQmJGQkw5ZXJSU3Bud3NJbjdzaDk1NzhqcjRyanpxYmR4UkdsWERWMU1iVkd0U1dSRzY0aHdjdjVwRWY0U2JZMFRBczRrWmYxTUtGWG5PeEI2SUR4MlNtenBUcWpSWERoOEpyaVkxbmxWeUM0QTd5RVZic21BcmRpNHZ2cXRSd3czekc2Zm1XOThSQjhtWThWTHdQQkFsSVZENTRscUV0aHZoQ1BaM0Q5SkJBbzFwS3lSUGxHa1VjYl9OVFhHQTB3QTlOd3dsRDY0NllkYXBpS0c3bDdvWFV6ckZLQkN5aWwta2FkTVJ6SWtJOUM4QW5ZeGpvVDFRbEtwQkhzX0Q4TjlTb0NWZV9XR2stdGJGUkJxdkd3UEJXdVJtV1p0ZUpMd29OcHl2azdzRWk4cmRqakRnenZrVUR3NW9NUkRpOUVJeNIBpARBVV95cUxPY0djTTJSZkdlRmpqTkZXbjZXcHp0d0Iwc3hQNEpjcUttWWpMVHloY0p1eEJ5SzU3VXVHYXNmQTU1WVdSd1F3LWM4Uks2Q2R6bUFMTENXU3JSVHdiSHZJYkF3a0k2cVNtYUYyVGFQVXRXdVRGMWpLTnlsQ2Ruc1hzODI2bE55QVFNWUJhRjh1MU92b3RlVWRjSENra3o5a01FbVR3a1k4eHlWenVTU1VLQmdUS2tKUFNHTFU2MzJHc2xYclIySEVtWWxRdjgwaGZnY1hFYUNFdWZ6Si15QXNHeHhvQmJGQkw5ZXJSU3Bud3NJbjdzaDk1NzhqcjRyanpxYmR4UkdsWERWMU1iVkd0U1dSRzY0aHdjdjVwRWY0U2JZMFRBczRrWmYxTUtGWG5PeEI2SUR4MlNtenBUcWpSWERoOEpyaVkxbmxWeUM0QTd5RVZic21BcmRpNHZ2cXRSd3czekc2Zm1XOThSQjhtWThWTHdQQkFsSVZENTRscUV0aHZoQ1BaM0Q5SkJBbzFwS3lSUGxHa1VjYl9OVFhHQTB3QTlOd3dsRDY0NllkYXBpS0c3bDdvWFV6ckZLQkN5aWwta2FkTVJ6SWtJOUM4QW5ZeGpvVDFRbEtwQkhzX0Q4TjlTb0NWZV9XR2stdGJGUkJxdkd3UEJXdVJtV1p0ZUpMd29OcHl2azdzRWk4cmRqakRnenZrVUR3NW9NUkRpOUVJeA?oc=5"
-        },
-        {
-          "title": "Reported Israeli strike targeting senior Hamas leader Ali al-Amoudi in Gaza",
-          "original_title": "عاجل | إذاعة الجيش الإسرائيلي: محاولة اغتيال علي العامودي القيادي البارز في حماس بغزة الليلة الماضية على ما...",
-          "original_language": "ar",
-          "summary": "Israeli Army Radio reports an overnight assassination attempt targeting Ali al-Amoudi, a prominent Hamas leader in Gaza.",
-          "published": "2026-10-03T13:50:41+00:00",
-          "source": "الجزيرة نت",
-          "url": "https://news.google.com/rss/articles/CBMiyAJBVV95cUxPa19va2dIWXJ4Szd4S0RJVnpMbV9sdmQ2bjZ3dnhGOXhxaWdzRERoWS1wQXVIMDlNUHotZklmOFVObF9qaFltNEw0cXBUTmFZRHVjWnV6aTlMMDdyRVFKYjQ3RUZsYThkTnZjZWJYeDRWMDNxeklneXNyOG9rOFdXczVIZWk5bHVpek1NM2VTV2ZYUGZQZEpXeUVsZ1hncjZ4UTUwN1VqYWQ1Nk9FeEVRUC1YZlBlRUswdlNYWGpYcURZSXJFQnBnbHlyNUREd0ZQeWRfTkRxb1g5cGxtT1RXR2xSelJ1MjVKclpUYlJpUV85RkxjY0VtTlBjZVBMdFhHSW8wY2gxUzZqa0ZlUURKNkNEaDlDSDNoM3FGQUZEaVRNQUd5V3lPTHBlUjFfcW5JQlZ1Zi00T1NxUUF5MXl2Q0RxWGppVlZD0gHOAkFVX3lxTE9oOC1FdzFXaXRoZFpNdDdFLVNjZ29wTXJsaXBVQ3NxTlI1R0VURW9KaDVWYkJLQUdSa1JGU2RURERHaUlNb2c1OEpxQmc4YTh4dVJ1VG9OalJHN0JTZWtNSVhsQnp5R3YxRWxCY0REYnpha1lpSHFpOXZ2czUyc1BDTS1VSjRCRWZsRkdkSWtaRWU2YkRTUkpVb3FjX3dCTzhvdG1rSHV3Yi1XRjRnSlFuMmlvREhJM0ZxcVgyWkM5dktIMDUzUnQ5VlVaYWsxTDNYZGw4YWtBbjJ1Z28tam5wRWo2ZzlCZnhRclJHMzZHRURNVkwwcHVXREpsUF9RSldYcm52dEdDMlhDcGR4RzNEbFJXOS16ZGo1eGdjcXZ5WThpdzNqZWVLcldDbHNlS1NsbUR2RkVORjdxTFRQak1PdWMtSW5tUnpvMzMxUEE?oc=5"
-        },
-        {
-          "title": "Israel targets top Hamas leader in deadly Gaza strike",
-          "original_title": "Israel targets top Hamas leader in deadly Gaza strike on anniversary",
-          "original_language": "en",
-          "summary": "Israeli forces target a top Hamas leader in a deadly airstrike in Gaza.",
-          "published": "2026-10-04T03:40:35+00:00",
-          "source": "Vanguard News",
-          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPSGJBMy1wSGp6SkdPWkpmWHh4Vkw4azQ5alRUTk0tcEI3WXRMN2JVbjZCMEZReTF4cjR2U2UyTlplZVpZVGd1VEFvWnNick1CYTJvVzdWSXlSNWljWFZlT1FsS0VDcm1GRVczSDVvNFlyV0VxeFgxekpYY2JXbGVuRTBvbzhtOVB5MEphTG1VZUFZYkZfLU15SEdSa1ZQempybklKeUczWDPSAa4BQVVfeXFMTkw0b0plaDFScDh5WENldy1mMGNIOW51ZjNkanVoOWV4RTI3bDJqR0JCQllsMHp5NGo3ZnRNTTRaRFpsOFpSazRMUG5pSllQOF81WXlQR3M1Z3dZN19vaFkxRm5xYnF6cE5BX092a2ItdjhBem9BVUtpWWJHYWlwZjJ2TzZ2bGpGTU1zTjVVVXdaV0V0MmFfM3V3NlFFbjJrU3Z5YUZZVGZKSEVfbEVn?oc=5"
-        },
-        {
-          "title": "Airstrike in Gaza Strip reported by rescue services",
-          "original_title": "Luftangriff: Rettungskräfte melden Tote im Gazastreifen",
-          "original_language": "de",
-          "summary": "Emergency services in Gaza reported casualties following an airstrike.",
-          "published": "2026-10-03T23:54:00+00:00",
-          "source": "tagesschau.de",
-          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9rZXU3X0ExekNZQWt1SDkwSld5bDF5bkN2TFlwR1VQMG5fMmg5U2czeUMyQUZlN2JZX21WekZCam4ycnp4SU1uOVpPWkFndHdmaHprZm00eDNaa29MWVlXcEpMdUFPYWRLVE1IYnhQRXYxLTJXNzZIdQ?oc=5"
-        },
-        {
-          "title": "IDF: 'Humanitarian activist' with ties to Turkish leadership eliminated in Gaza",
-          "original_title": "צה\"ל: חוסל בעזה \"פעיל הומניטרי\" שהיה בקשר עם גורמים בהנהגת טורקיה",
-          "original_language": "he",
-          "summary": "The IDF announced the elimination in Gaza of a militant operative who maintained contact with figures in the Turkish leadership.",
-          "published": "2026-10-04T16:37:50+00:00",
-          "source": "YNET",
-          "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE93clVZTGdVVldhN0RNNW5sMmVybGIzcFdmOWtrRVljdXZGMG5Mem5oYklTWWVob1ZWY2Y2ZDRKZFNRcnV6S09TdjF4VnhZa0NKVWhlN1NxeDFXUQ?oc=5"
-        },
-        {
-          "title": "Nukhba terrorist killed after hiding in a Turkish aid organization",
-          "original_title": "מחבל נוח'בה שהשתתף בטבח הסתתר מאחורי ארגון סיוע טורקי, וחוסל",
-          "original_language": "he",
-          "summary": "A member of the Nukhba force involved in the massacre was tracked, eliminated, and found to have been hiding under the cover of a Turkish aid organization.",
-          "published": "2026-10-04T20:37:30+00:00",
-          "source": "JDN",
-          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9GSlNtWUU1MC1OVHFhc05WZC1ZOXZDN3Z2V0xkN0daTldudWVPbExQZlBfMTVPNGxpb3BzUVJMbzc5YTZyWXlaMi13V3EwLWs?oc=5"
-        },
-        {
-          "title": "Four Palestinians killed in Israeli attacks, including a Turkish NGO volunteer",
-          "original_title": "Cuatro palestinos muertos en ataques israelíes, incluido un voluntario de una ONG turca",
-          "original_language": "es",
-          "summary": "Four individuals were killed during military action in a conflict zone, including a volunteer aid worker.",
-          "published": "2026-10-05T01:34:07+00:00",
-          "source": "Infobae",
-          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxPRElsVkJKWVRnSnF4REF5cm5DMm93Sy02a2NRZ1FWZnRud1JWcUlneXU0SzJmaUFTcFJoNWdlc25iSVc1SVQwZlVrVGlvTVRHNzl4eFV4ZGlyemNaTWlweVZYWXctTy11bndQaXd2eDRkQ00zTlNELTM2N3JhcHV5Z2hRRk54ZnhTZmhxZVpwbEVUTUFPZVROS0RXRXNGbnJ1d0VoM0dNZmxSd0tqY1c4eFBlZEJ1T3pHNlBMamptSW1BYVAzUi1yanZYQUpKMTlDQ0E0R0JR0gHwAUFVX3lxTE02dzVtMHhqMGFlVzdqemFKcEFBY3dQWHRjVVRJcWZjVnBtT1VDaEJua0FPYkVuQ0JZVW4yaGFKVUdWWnNYRjd0M0ViZFZWRDY1Mm1DREozYnFWWFZUTFF1SFJHZk9IOEJjUDlNMXZfNDhiRnhwZkJhY0xJWG5oODBZalp4QkhuLThyMlI0VmpfQkc5djFvV3ZrR0pMSW5BalVKRlJJcXJZUDh1T0NNSS1QLXZSc1VIRkZEc3BjUXN0NFFwUFpIdmxvMjlpN2V3MTg4ZlQ0MU5iYmlMQ1BmZzVRMkJZTkJXcXV0N3dwQlJiWQ?oc=5"
-        }
-      ],
-      "article_count": 10,
-      "first_reported": "2026-10-02T05:26:25+00:00",
-      "last_reported": "2026-10-05T01:34:07+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 85,
-      "ai_relevance_reason": "Concrete counter-terrorism military operation resulting in the killing of a senior militant commander.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "Hamas",
-      "primary_event_type": "CT_OPERATION",
-      "is_attack": false,
-      "incident_anchor": "Hamas senior militant elimination Gaza 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-8884a4f0bf319bff",
-      "translated_to_english": true,
-      "ai_canonical_event": "Elimination of senior Hamas militant holding hostages",
-      "title_variants": [
-        "Elimination of senior Hamas militant holding hostages"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_country_capital",
-      "location_evidence": [
-        "Israeli forces have eliminated a senior Hamas militant"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Operations by Israeli forces against Hamas are attributed to Israel / operational zones.",
-      "ai_geo_fingerprint": "f8352d316a0f315da501b17673c41cb99eaae485fc51f2c3b35ed2ff2f905837",
-      "ai_geo_inferred": true,
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "very_high_title_similarity",
-        "same_url",
-        "same_incident"
-      ],
-      "cbrn_subgroups": []
-    },
-    {
       "id": "b23eaff537ddb332",
       "category": "Attacks",
       "categories": [
@@ -466969,7 +466536,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The ship seizure and killing occurred off the coast of Somalia.",
       "ai_geo_fingerprint": "1f5bded599862396f70284608180aabb26b077adb4d40b2fbd1440e00e70af86",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "d66bd5c6b973c53d",
@@ -467179,7 +466747,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "One of the major developments is the cell dismantling in Sistan and Baluchestan, Iran.",
       "ai_geo_fingerprint": "6fb69b2b83e33169bf1c2f9f960aac0985780d47d24b6a682c9c780ee57fff23",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "11c9c67cbb4c6ac0",
@@ -467775,7 +467344,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Terrorists killed 15 farmers in Borno State.",
       "ai_geo_fingerprint": "e5b2fe760f3a19ba2cc7ebf1848469e848f43e5a285e0e4be14e73fb555c1da4",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "2444f701a7ebeba6",
@@ -468530,7 +468100,8 @@
         "title_plus_anchor",
         "paraphrase_entity_context",
         "same_url"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "d0579cdfc256d6cc",
@@ -468634,7 +468205,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Maritime incident and rescue operation off the coast of South Africa.",
       "ai_geo_fingerprint": "5c5f773d10cb8c66c0132866770df55f8787cecc798b7110947fb4e396900957",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "738eaecbb5b9e1ea",
@@ -468710,163 +468282,6 @@
       "ai_geo_reason": "The announcement is made by Iraq's National Security Advisor regarding Iraqi nationals, placing the core administrative event in Iraq.",
       "ai_geo_fingerprint": "f9ec7cd9b4a6a0240c3fe170e7e960c9b4d1af69a73cf1ac7bfc3bd51b3e5cb6",
       "ai_geo_inferred": true
-    },
-    {
-      "id": "2c2cc6e04d6cddd2",
-      "category": "Terrorist Financing",
-      "categories": [
-        "Terrorist Financing"
-      ],
-      "title": "Sinaloa Cartel linked to Baja California government contracts",
-      "summary": "Reports suggest a company linked to the Sinaloa Cartel received millions in contracts from the Baja California Prosecutor's Office.",
-      "original_title": "Una empresa ligada al Cártel de Sinaloa habría recibido más de 200 millones de pesos de la Fiscalía de Baja California en contratos, según MCCI",
-      "original_summary": "Una empresa ligada al Cártel de Sinaloa habría recibido más de 200 millones de pesos de la Fiscalía de Baja California en contratos, según MCCI Infobae",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish / Latin America",
-      "collection_locale": "MX:es-419",
-      "published": "2026-10-01T22:24:00+00:00",
-      "source": "Infobae",
-      "source_count": 5,
-      "url": "https://news.google.com/rss/articles/CBMikwJBVV95cUxQVWYwWlB0T0J0M0ZOUWQ3eVZfY2Z2b1dHdmxWMHNwZjlyU1V5QXBhV2lHMDZOcVhxbnVkcEhYVkNUUGJOYTNrSmRvTS1Ob0hXdGpwVGpyd1VfeThpbDNxUTYtZ2NNT3Nvd3prUFZZZ0pkYk1abFREbzRidVlZUUpMcUhoaktkWDVZa3RwMkVxZHlZd1ZFN2VpUnJVaVdvSlNabndnV2NVRGJQaTQyeWRTeFZXNFFHOWlIRHVhM3JxSFJXV2puM0pWa2ZaTXNFRlp3Y21BVkVxZUZjZFNfMDl1SFRHN1pyTVI3bzVibmZtS1BGamNTN3Z6RlQ1cEFxOG1Vdm5JOUEwT0ZHc0hJZUhMVjdQTdIBrgJBVV95cUxPOHhqWVkyLUp3Znp5RkdQUDZqMUhJWVd2d2xiSkdVZ3hrLTN2cVVkbFlQUEU1QXpLcjVnQmxMMjhNWUI0YkRDbnBDeTdoQUV4V2hlbmRuWHRGNEg5VmdyMWF3YTU1YU1Yc2lSd1U4NzMxZGxpeHRfUmVpMnRNMVZOTDVNZzEtNzUwQVRBRkwwajJOVUd1cEk2TEstQ2lGSHVRYzZVZ3ZReWwwWVFjY3ZfMWY2TEIwaVpUMk5sN2NVZjZwSmxnb0hVbm1LVmdYMjZ6UG41N1BBc1hJRXNwSTBhWUpaZHVUV2pVQ0dqajJndWdDaGJPU3F2UEs1UEJJR1N4SHByb1k2VlVpNXBHaUxhYnNtNEI2cDA2ZEk2ME1Ub3ZRRzJfT2FValpGdHhXUQ?oc=5",
-      "collector": "Google News RSS",
-      "country": "Mexico",
-      "country_code": "MX",
-      "city": null,
-      "region": "Baja California",
-      "latitude": 30.8406,
-      "longitude": -115.2838,
-      "location_precision": "region",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "infobae.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "324fca53eb80afba97dcba21cb2945283d64056e330bf3d6c0fd7ad7c6cbaaa9",
-        "56501d16b43ba72abd440d12e57c1dfac8f62bd7a7ea63e68fdc07e878cf053e",
-        "7988035bf875e6ec1805a830694e14fe8240a4cd54cdd3833e895620ad846bf7",
-        "94fcca55b7eba1a49efae5da45de60d48e6129d80bad0ba92153919470041e7d",
-        "aa5f74103dd7d84c70943d3fb79362c0483edfc32c68ac29c10637b00c2afccd",
-        "aeb0cb9c1499004b164bd9b3f4b2f0038c67caff46c10171f858204d30a27c88",
-        "bbe41c9f1c8f39fc116f78d97bf4797e2a76c1569bfa0be1bed059bcb6811f5b",
-        "e6ba0530fbdd814eb1b15627053d49d6cb37937dcd449304c7fbe557738d53cf"
-      ],
-      "sources": [
-        "Infobae",
-        "MILENIO",
-        "عين ليبيا",
-        "El Universal",
-        "Vietnam.vn"
-      ],
-      "related_articles": [
-        {
-          "title": "Una empresa está vinculada al Cártel de Sinaloa en Baja California",
-          "original_title": "Una empresa está vinculada al Cártel de Sinaloa en Baja California",
-          "original_language": "es",
-          "summary": "Una empresa está vinculada al Cártel de Sinaloa en Baja California MILENIO",
-          "published": "2026-10-02T00:44:00+00:00",
-          "source": "MILENIO",
-          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNcG5xXzVsNFYwSXkyR2pvT0xmb2l3aDlnZXE2blhkTkg1aDR5SlZYdDVoTE1vMGlQNkpiQk1RUWpTTUhNbUx6RHBJX2pfbkVTQy1WMy1Icjhqc2hjcWRIVUJpWWJrWHZCM2tmdnFFWm16UHJtUVdDNFJySnJmUUJIQ2duQ3JPRUNmM2pRRzBjQ0JFOHl3RGZ5d3kwWjJJRG16ZzdlVWUtTdIBpwFBVV95cUxQRFhOZHh1LXY5UVZHdUd4NkwtZlc3NUxBSHhqTW9kYkMtUVZsMElpV0ZXRnpxc0FPTXBSRTM5TnlpbjJIcWotYWVNU0p4US1FVXVRcUpWcm5Jbms2YWh5T2hBR1VEdTlwcHowODRlTEJaWWkzZGs3YnBiX042MjNPVGM5TF9QSEdUdldFc2t6cEQ4MXQxdktFOUtzR0w4YVZzMXlVUDRGWQ?oc=5"
-        },
-        {
-          "title": "«احتيال إلكتروني» يستهدف حسابات المواطنين.. ضبط متهم بالاستيلاء على 200 ألف دينار",
-          "original_title": "«احتيال إلكتروني» يستهدف حسابات المواطنين.. ضبط متهم بالاستيلاء على 200 ألف دينار",
-          "original_language": "ar",
-          "summary": "«احتيال إلكتروني» يستهدف حسابات المواطنين.. ضبط متهم بالاستيلاء على 200 ألف دينار عين ليبيا",
-          "published": "2026-10-02T06:57:56+00:00",
-          "source": "عين ليبيا",
-          "url": "https://news.google.com/rss/articles/CBMiswJBVV95cUxQdWZhUUZLa3czZjlWRkRzcHB2MkVrSnA1a0Zac0tIcGNzQ1VRRFFVX1ZfbWRrOGdRYnBlSHlQNDV3RVZBQmpZS3Fwa2ZwZmdsajZXZkNCR3JaZmYzOE1tU3U2Y1pjeFpjRzdzQU11NEV0RHpJUE84ZEtGZGlhUGh5akF4ajlkZGFvejhpblZZWjdiaGhWUDZCS0JEQTlqelFPaTdFYUk1dEh2WXRySWQ5b2hxX0Z2cUFQLWJvQmFqNFl1OVVfQjZ3Skl2MmxLb1ZZSnlIM1FkRUVZLU5wdDVDcFItTS1GVThzQjNyUGVUTnd2emVYclM1RmdYVEJGck1Lc2hNcVZlaG9md3ZIRlQtM0lsdEZ4R0ZibGQ4ZExYZWdjUWdDNFRiaHl3WHpZcUhEc2Zz?oc=5"
-        },
-        {
-          "title": "Baja California y Sonora contrataron firmas sancionadas por lavado; EU relaciona empresas al Cártel de Sinaloa",
-          "original_title": "Baja California y Sonora contrataron firmas sancionadas por lavado; EU relaciona empresas al Cártel de Sinaloa",
-          "original_language": "es",
-          "summary": "Baja California y Sonora contrataron firmas sancionadas por lavado; EU relaciona empresas al Cártel de Sinaloa El Universal",
-          "published": "2026-10-02T11:00:00+00:00",
-          "source": "El Universal",
-          "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxNOGhKanBtLWdZZHBmM1B1VE1aZ19EZ0IycHV6RGdjbWN4VnpKalYwR0lacGlmVktOSEFCRlpwQzhkSFBYaGhQTElxSHYyajJRYXZROGR1UlBQOHNhbVZJQ3hYQ2pPVE9fUFJsSFBvYUlObkVzcWlUMFFEbzFVSmRsZnNwMlhHRlpsRkpwVHZCajR1cW85d2VDR2ZYQXNpMkNieDY2WkNYb0lzM2tGSmxCNm9BNENiaHRXRy1FUXZCcmZiaktheUJyemxKd2RLOHBBSlN4UzJMOS1oZm9ZZGU5Wm1n0gH2AUFVX3lxTFBaU1lSSmE5RnJXMmZZNGhxakcxU1d1Vk1fejZEUGJPQ0MwVzVKdnNnVXYwTy01VVBBRE1iTFFBbnY5NEJzc1dNcGI2UlV6TkFBMUJuN2FLUW80TWs1TFk1SFZRZUFSZy1tMDNVb0pyZzA1ZUV1WV9pS1U1QTFTamlfQ1VGaUpDT1R5dWpnZGo1bWszNHhacjlSckVFekRNMlJCcEhaQ2FWVFd0Z1NqQk9WcDU2QmNLbFBmUGZLckRnUElNRnBna3lqa0d0Y3l0N0pnMGdPdHZhNlVzTG5nakg4dWZWVENXdTZrUjJjSDZLb0dRYk9Ndw?oc=5"
-        },
-        {
-          "title": "Zar de la frontera destaca récord de 200 mil arrestos migratorios en EU; intensificará deportaciones el próximo año, anuncia",
-          "original_title": "Zar de la frontera destaca récord de 200 mil arrestos migratorios en EU; intensificará deportaciones el próximo año, anuncia",
-          "original_language": "es",
-          "summary": "Zar de la frontera destaca récord de 200 mil arrestos migratorios en EU; intensificará deportaciones el próximo año, anuncia El Universal",
-          "published": "2026-10-02T15:43:56+00:00",
-          "source": "El Universal",
-          "url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxOMFVPN1FtcllabU02RGtIZ0Nhcmt1R1ZqX3dWaElETmRwVXJ4UjR3aGlSZjRqRmx2eXFTY0p0clRvcExHU3hzdXFnaWZ3X3cwUDliREIwbTQxaFBtWE5DVThpaUQ0THllbHFyOWNvMFI5cmEzcHlpdEFpQnNwcm5OMTdqa2VnR2dTZ0F2akxDcHVZLXFVZW5IbnRKZEU2YnFZaGRLQllrMlNIcHlxWVBZelVwcmJTVHJOem9XMm9OVU5LemJUNXlMRzhmWTc2ak12QThSOG9CNUJnWm4xWUlSd1ZjOVMzenlMc1kwaVJxWm82UdIBhgJBVV95cUxNUExNelZGTVN1aGNOdE1XU0hSUXZIcW5NelVsUVpNM2d0MXcybWJ1V1U2aVQwUkIyeDRYVzZ2MTBoalZWeW43dzNOdlJxb002c3Z2blYyZkw1bzVzWUMwYVVYazZiNFF1MkRPUkI0dFo0RU9sdVB6T0tPUmNkc3hQbWlDM0l4aGVaX3VfcjhyN25wNldYbFlrZ1o4SjBtcU9JaWJXUS1qM092UEpLTTgwd0E0elZDdHpoc0QzSkNxYmVLLUNoRDNOWDVyc0NrZ0xieEZydVAxd3A2UE83Z3Q0SC12VU16QkdkanFYY2RLbEFDVU5mMG9aYnBEc1kyeGo2VlJDcVln?oc=5"
-        },
-        {
-          "title": "Consulado de México en Nueva York celebra 200 años de creación y Lotería Nacional devela su billete",
-          "original_title": "Consulado de México en Nueva York celebra 200 años de creación y Lotería Nacional devela su billete",
-          "original_language": "es",
-          "summary": "Consulado de México en Nueva York celebra 200 años de creación y Lotería Nacional devela su billete El Universal",
-          "published": "2026-10-02T19:53:09+00:00",
-          "source": "El Universal",
-          "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxOeFJaUnlpa1NwWUpMTk5nWHpZaFlTZldsNGJqclpnSHVRcURFd2NZRWZ6RkFnclIzZ3B5blBnckR3V2lRakdObjRwMWJ2dFZvekE3U19jS3A5OFcxMmtjZUZ0OU4wV1JDR3M3THJuQmtGOGRPTUlpM2ozTHJ3YzQtVVp2czhRNUU0MjI5TjE4UENPX29nWC1mT094U01Cdmh1YjEwX0x5OEp6dUMwYWtMb1N4VTlpZDBuZ2EwWXVpOHlDV3ZlSWlmNGo2TFVUZTAtaDFZ0gHnAUFVX3lxTFB6YlBzd0lTQXFZSHJrcUNZbXJvMzdQdkNEa1R3NTEzNTZEWnRNazEyMjNHaWFzREdvMy1BaExPWVFwXzJBQ1gyU1ViTUt5V2JCZEp3TjFyZnNjUk9UNnRXVDdKX09naTJKVkxvdTE3ZFNBek9tcGVkM056aTZ6aEJMd0lUZXZySHEyVEdIT3Vldk8tRDRnemg3cE1xYjBXLXo5dGJSajNFR2hxcDJzbVowSWtCMFpLel9JRWVoa0hvVlBZOXYxd2VXUDRkcl9FNEl4Y3VXSF9RUGRHc2lmVUVTVHBqZjhLYw?oc=5"
-        },
-        {
-          "title": "Tabasco: 20 mil familias reciben apoyo con 200 millones anuales",
-          "original_title": "Tabasco: 20 mil familias reciben apoyo con 200 millones anuales",
-          "original_language": "es",
-          "summary": "Tabasco: 20 mil familias reciben apoyo con 200 millones anuales MILENIO",
-          "published": "2026-10-02T21:27:31+00:00",
-          "source": "MILENIO",
-          "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOMy1BcWtTdUQtQ01HZVZUd3FhcUFBWUJVLU5qVndmUlJlQ2htSnlIQ0RWVHV4akFPOHNUaFVXN195MUIzSS0xYTVJN3FGdlNEcDFyY1pad1BTOGoxMUtaX3VBRUR1c1Ridk00V2ZCOWQybEN2dWFyNkwtVG5ZSUhqeURNYVExSVZPQ1ZvcXpMMVY0Yk9vZzA5UWRLVDZRdlg2UWRSSktKQ1NIbG9DRERLWVluWU5iZ9IBtgFBVV95cUxOMy1BcWtTdUQtQ01HZVZUd3FhcUFBWUJVLU5qVndmUlJlQ2htSnlIQ0RWVHV4akFPOHNUaFVXN195MUIzSS0xYTVJN3FGdlNEcDFyY1pad1BTOGoxMUtaX3VBRUR1c1Ridk00V2ZCOWQybEN2dWFyNkwtVG5ZSUhqeURNYVExSVZPQ1ZvcXpMMVY0Yk9vZzA5UWRLVDZRdlg2UWRSSktKQ1NIbG9DRERLWVluWU5iZw?oc=5"
-        },
-        {
-          "title": "Более 200 сотрудников полиции принимают участие в учениях по борьбе с терроризмом и освобождению заложников.",
-          "original_title": "Более 200 сотрудников полиции принимают участие в учениях по борьбе с терроризмом и освобождению заложников.",
-          "original_language": "ru",
-          "summary": "Более 200 сотрудников полиции принимают участие в учениях по борьбе с терроризмом и освобождению заложников. Vietnam.vn",
-          "published": "2026-10-04T14:50:16+00:00",
-          "source": "Vietnam.vn",
-          "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPM2JCS2ZDdXp1am5Zc29FdnU2LUVOaVI0MjdHMHpVWTNPbERrZmZCckloSUZwZHRSM1hHcVlSODJDM0lYVE9oYkRocHgzRTJBTzdDb0Q3NlBqMnI5ajhsUWlSd1J5YUxWRXdtWVZYNmhWZjRVMU94QjhsNjlYWTZDUVV0cnY0YzZHVEpv?oc=5"
-        }
-      ],
-      "article_count": 8,
-      "first_reported": "2026-10-01T22:24:00+00:00",
-      "last_reported": "2026-10-04T14:50:16+00:00",
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "title_plus_anchor",
-        "very_high_title_similarity",
-        "entity_actor_event_signature"
-      ],
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.1-flash-lite",
-      "ai_relevance_score": 65,
-      "ai_relevance_reason": "Reports on illicit financing/contractual links involving a criminal organization.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "Sinaloa Cartel",
-      "primary_event_type": "FINANCING",
-      "is_attack": false,
-      "incident_anchor": "Sinaloa Cartel Mexico contract corruption 2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-936aaeee7a45ba94",
-      "translated_to_english": true,
-      "ai_canonical_event": "Sinaloa Cartel linked to government contracts in Baja California",
-      "title_variants": [
-        "Sinaloa Cartel linked to government contracts in Baja California"
-      ],
-      "location_confidence_score": 0.9,
-      "location_method": "ai_region_coordinates",
-      "location_evidence": [
-        "Baja California"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The event involves government contracts from the Baja California Prosecutor's Office.",
-      "ai_geo_fingerprint": "219afbb8061e6f4878ccf435d7fcfa4317c5933fbbb9d494d8027dda1794678f",
-      "ai_geo_inferred": false,
-      "dedup_review_required": true
     },
     {
       "id": "e2a08141d2d6c8e3",
@@ -468954,9 +468369,9 @@
       "actor_group": "",
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
-      "incident_anchor": "Imo corps members rescue 2026",
+      "incident_anchor": "Imo-abduction-2026-10-01",
       "update_type": "INITIAL",
-      "incident_id": "inc-2c253e0d87311f58",
+      "incident_id": "inc-c10b4e3f5d031a5d",
       "translated_to_english": false,
       "ai_canonical_event": "troops rescue abducted corps members Imo 2026",
       "title_variants": [
@@ -469919,8 +469334,7 @@
       "dedup_confidence": 0.833,
       "dedup_methods": [
         "title_plus_anchor"
-      ],
-      "dedup_review_required": true
+      ]
     },
     {
       "id": "1e109c13a13107ba",
@@ -472273,9 +471687,9 @@
       "actor_group": "",
       "primary_event_type": "PIRACY",
       "is_attack": false,
-      "incident_anchor": "MT Honour hijacking Somalia",
+      "incident_anchor": "MT Honour pirate hijacking Puntland April 2026",
       "update_type": "INVESTIGATION_UPDATE",
-      "incident_id": "inc-d03d40f739649290",
+      "incident_id": "inc-0b31449d648db837",
       "translated_to_english": false,
       "ai_canonical_event": "Hijacking/abduction of MT Honour crew off Somalia",
       "title_variants": [
@@ -472296,8 +471710,7 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The diplomatic engagement relates to maritime actions involving Somalia.",
       "ai_geo_fingerprint": "2a18bee22933be9769de9d69b419a6d632b57bc5766e6f83027e71b58b579114",
-      "ai_geo_inferred": true,
-      "dedup_review_required": true
+      "ai_geo_inferred": true
     },
     {
       "id": "b9c094518d50f1b1",
@@ -472605,7 +472018,8 @@
       "dedup_methods": [
         "title_plus_anchor",
         "actor_country_action_signature"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "a2688c303f269d8d",
@@ -474332,7 +473746,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Explosion at the army HQ in the capital city of Ethiopia (Addis Ababa).",
       "ai_geo_fingerprint": "943e63748c0a7fe4b466275c4c68a7fbd0078c0dc1fa0f0c8db6f9b0f4e32b74",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "6ae9b1fa065e3579",
@@ -476472,7 +475887,8 @@
       "threat_categories": [
         "Chemicals and Explosives"
       ],
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "c6d2d4d2d1916da1",
@@ -476561,7 +475977,8 @@
       "threat_categories": [
         "Chemicals and Explosives"
       ],
-      "primary_source_published": "2026-10-01T09:30:00+00:00"
+      "primary_source_published": "2026-10-01T09:30:00+00:00",
+      "dedup_review_required": true
     },
     {
       "id": "b65576c105ab3c7d",
@@ -476826,7 +476243,8 @@
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "threat_categories": [
         "Chemicals and Explosives"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "5fe7b22494858789",
@@ -476976,7 +476394,8 @@
       "ai_geo_reason": "Related articles specifically identify Deir ez-Zor and Jazrat al-Buhamid as the location of the security incident.",
       "ai_geo_fingerprint": "70680bbe26be37bf2009b8c576e7ecfc99ecd35801c1529c391dc886d2fab65d",
       "ai_geo_inferred": true,
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "85ae09d237ef2587",
@@ -477239,7 +476658,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The event took place in İslahiye district, Gaziantep province, Turkey.",
       "ai_geo_fingerprint": "ca150f57928f026a9296a44ea330ae52cfcefff4d009ea2d6fa44579004ef4bb",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "85b5d5c1466cc6b0",
@@ -477440,7 +476860,7 @@
       "collection_locale": "FR:fr",
       "published": "2026-10-01T08:07:10+00:00",
       "source": "RadioJ",
-      "source_count": 10,
+      "source_count": 16,
       "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxQVlBFaXlRNl84NWhNb2NOTHozMVp5VjNpMzZaVFY0VlFQaGZ1YThDNXJUcThYb2FkUjdlOHV4X2NPVEhhd2dZY3ltQlBRc1BDSElPbGlocVJDTWZSZktDMUI4bEEzRXExeUREWlpiX25zYjZ1UjRaMHJpTDFUYmd0WG82eU1yNW9GVm8tcmd2QUVEdncxclZWdVVrZk9jZEVGaGM3Q1YxNS1MX0tCWDgzd2ZDeVJNdnpwRHlfQXNPZlFTa1Jja3N4aldlQlpfcFVEYklBaHdGM0hYUWxmSm9XT2RiTkMteWM?oc=5",
       "collector": "Google News RSS",
       "country": "Israel",
@@ -477454,9 +476874,18 @@
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "0872ebf7fa53762c62128d4bc1e6b399ef6ab710d9004340c3fe44ccd83428c8",
+        "255c632fd525ddcc657d137e228d15b821b0f6348d73273249d6a9f86fc93309",
         "3459c5cbbb140acf692847a60cfeeb4e16117d6db64484143d1814f4f8bbb055",
+        "3fd956d99a90c30ccdad263a7cbf3b4582a1137dd6038786d83fe1692d9ee15d",
         "456556b36fc62b14b863a305330a8bdae87eae8b0983071d66e9b1e12bb58137",
+        "542d870c30278584bcd14eecd5dc74d6b07521df1405cda2542739b691afade0",
+        "5487f5a475e6f9ab5be82a8cd00fdc2c3c778390eb7b41ef50d36c5fd8248efe",
+        "65b68c0c5ddf8ea673d210ce2198fa36daf96d5870da32a84dafbc153634787d",
+        "6776820f5545f12817d6edbb4d9d409040a59d203445820f39a419f8aa0a376f",
+        "6baa9194308c13cc17abc5f275eae9666972b0babbe4195ecef8a3ca3ac7cb04",
         "6fbfb883dae551ff4649ebd857e892d790c21950b8eabe822c1401837e166fa5",
+        "758cf93bf9563ec95a629d1d172723396a5535eddd12f95c0476cb737f52c74d",
+        "76630bd89512ea4d8bd7f6b430dbb85e735af1692a9db8d8ffc2d665d5e6ce8e",
         "7e15ccf0eb33d70531e1560c7ca5c72fc1a447d158b2c019af515d628ef40377",
         "867d2c4f13b27e5903d8497e8c22a64469338bc155e570f7361cd9976c05f58d",
         "bdd3cd52a8286333b97e04e875af03de6e2444aa2764b60581851f373422525b",
@@ -477464,8 +476893,10 @@
         "c91d2c32d34c09675b38b7e32f262706d1d79cb98677ca3f312e171c6b855d1d",
         "d77c6b2233341b4669a82cbae3ef435f808d41950b87fed0a87ed01d1f1972b6",
         "e5c73579d4519d70ad9d58e43229ebc4f82e45e326967f89b554e98e24132151",
+        "ea27533b63e31575665597a062f05178328c4fcec88dcdb147516ae200f90295",
         "f4f3dc645085bf25aa237fddcb9577c6cbbf178fb909b5652053093571b14a74",
-        "fbe98fa20f2b4233d960afb1b8c45f2e154150651e66a5fb3cb9009d99b69c4a"
+        "fbe98fa20f2b4233d960afb1b8c45f2e154150651e66a5fb3cb9009d99b69c4a",
+        "feb5f9acd452a3db35afdd3bcddf0132a9e98119b7235abe8f3d141e2484bf5d"
       ],
       "sources": [
         "RadioJ",
@@ -477477,7 +476908,13 @@
         "זמן ישראל",
         "Infobae",
         "The Libya Observer",
-        "JDN"
+        "JDN",
+        "סרוגים",
+        "srugim.co.il",
+        "تلفزيون سوريا",
+        "الجزيرة نت",
+        "Vanguard News",
+        "tagesschau.de"
       ],
       "related_articles": [
         {
@@ -477569,11 +477006,101 @@
           "published": "2026-10-01T15:16:51+00:00",
           "source": "JDN",
           "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE9ZaGcyaE16U0YweUNZVDlIZlpDLW92a2J5ZV9SZlVmQVZibW5wVll1Y0NJOU9vMnRTR0xSYTQ1THptV0JVekdyVU5qaw?oc=5"
+        },
+        {
+          "title": "Senior Hamas terrorist who held many hostages eliminated",
+          "original_title": "חוסל מחבל בכיר בחמאס שהחזיק חטופים רבים",
+          "original_language": "he",
+          "summary": "Israeli forces have eliminated a senior Hamas militant who was involved in holding numerous hostages.",
+          "published": "2026-10-02T05:26:25+00:00",
+          "source": "סרוגים",
+          "url": "https://news.google.com/rss/articles/CBMi2gJBVV95cUxPOTc5REdFRDdFUUwxQ0c1aExISFZwaGY1emFmZHlPQzQyRzVfU3hlUzVJaGNDN0tWVkpYcnNmYjRNLU1mai1oT3QzdUFIQ2VTTkgyZEoyMWRJN19LVW42VmdNcE1oMXdBVzd6MmJoSDdmMjFTTWtDWUJQUi1fZHh1SmdWaHZwc05YX0Y1S0psX0VvUXZhMlNwckRYazc1Vm1IRkk3OXRhSWo4am51RURIVFl6M1lXak9Memh4SUVHLVJZNVVsUWxpLWdoNWpMR21ZOGlOWkNmOXlMM3pyZmJTR2V0c2ZrbTlvbEktV1dicUptLVBQUGVCcHBoYnc5bEhxYkFXUF9sTkNtd3JuYVcwUG1LVzFxeUs1RkxXakF4UzVjdUo3UXZkYmpIdG1YbkdoUjE4WjkwMUdwa2NGR0ZlUXFUNDVfSFQ3RzdnNk1fazN2RkNYdm5XNGxn?oc=5"
+        },
+        {
+          "title": "Senior Hamas operative holding numerous hostages eliminated",
+          "original_title": "חוסל מחבל בכיר בחמאס שהחזיק חטופים רבים",
+          "original_language": "he",
+          "summary": "A senior Hamas militant who held numerous hostages was killed in a targeted operation.",
+          "published": "2026-10-02T05:26:25+00:00",
+          "source": "סרוגים",
+          "url": "https://news.google.com/rss/articles/CBMi2wJBVV95cUxORlJtby1paFFxUVZRYWdrX1p1S2NTT2pfNHpBQmtJeS1hWXpTcGJFcTJmRjBidkhfbWxzY1B3ckczeU9wQnBCV1RvWnJPVEdMZkMzTWcxQ1FXUWphalV2QzFmcXFsSkJXMndIdUNQNHhEMlViOGlNZEZRaWl4LWpheXZBNGJLYTFTYVIwTTNROFUwUmFFQTJVQmdBLWgzS0VUQnNycVBqMlRQNm1xLWFKLXBDQXZfUUJmVm1nQU9xVkYwQXQyNFl1RkozYi1oejZyTzNHTy1pc3AxRTBzUXFkUmdUdmZUeHpINTYtU29YbmFhZHpWZzFsaTBZb0RuQU9tZnptcUNLTmROa01NcnNhZGlFelczTUF3bW9KYVY3ZXVLRmFRU0xKU18xbERWdDExWUQxUndiSHE2eF96bE9wMzNzNmpGYjFKTUN5cjMwUF9ZelRzWU51djEwRQ?oc=5"
+        },
+        {
+          "title": "Five Palestinians killed in Israeli shelling in Gaza",
+          "original_title": "بينهم أربع نساء.. مقتل خمسة فلسطينيين بقصف للاحتلال الإسرائيلي على غزة | تلفزيون سوريا",
+          "original_language": "ar",
+          "summary": "Five Palestinians, including four women, were reported killed in an Israeli strike in Gaza.",
+          "published": "2026-10-03T09:52:40+00:00",
+          "source": "تلفزيون سوريا",
+          "url": "https://news.google.com/rss/articles/CBMimwRBVV95cUxNeUdLZ240Q05BcmtRb0dQd09kczBTLTBNRVlJWnFLNmVzaFcxTE4tWWlVd3gteUNyRFR4aFREM19XaUd4SFQ4YTUtNExYQndsMGZsNHh2dVNaUXhKM20zcTdCR1dZaXFEeXJ4T3VHM3FwY3RJV1BYdjEzZnhQemY0UHdfN1JCeldJZkdKMGdBcVdnakRTVlU4TWJDWE5lMERfZUJ3NnVPbzNfczhSZXp1U1FDTXdOa1V2WTFnVzhWOGI1bWkwU09nOGdTaG5wU29IYndKemttLXoxUkExNzk5aDJMWXQwUzdIaFhPWU9LUjE2UHhVbjN1eDNUYVEyNVR3azM4R2NWQ1UzOGdRZ2c0N2gwYTRVSWFvUzBFODl0S01rYnpBRmdRZTY2Qk1GZWxZYVY3VG5waGJQWENLTVQwUmdBUTJMLTFTb29GUGlXY2V1NlMyckhVRE5TWURBaHVvSm9Yem5mSk4xdi00TkMyQWQyazM5ZUg3QndIZUd4R3pKcjFhNENOWm9wT1R0UzV6NVRSR1hiTkg3U3ZsWjZEZXdJZFJjYXFDVzlBc0pXbkpfOXE1MGJKTmozZ0xGcE9id3lDOFpOM1ZidTBhemZBOXBjUUhzVVdkaXQ5d2I4NVA0c0xxQkNzTmtOZ2l6dzdvX2pJbzFDdllCRlBjZGxLb05hT0ZMLWp3S21teWFtTUdFV2JRcS1tdkhsWdIBmwRBVV95cUxNeUdLZ240Q05BcmtRb0dQd09kczBTLTBNRVlJWnFLNmVzaFcxTE4tWWlVd3gteUNyRFR4aFREM19XaUd4SFQ4YTUtNExYQndsMGZsNHh2dVNaUXhKM20zcTdCR1dZaXFEeXJ4T3VHM3FwY3RJV1BYdjEzZnhQemY0UHdfN1JCeldJZkdKMGdBcVdnakRTVlU4TWJDWE5lMERfZUJ3NnVPbzNfczhSZXp1U1FDTXdOa1V2WTFnVzhWOGI1bWkwU09nOGdTaG5wU29IYndKemttLXoxUkExNzk5aDJMWXQwUzdIaFhPWU9LUjE2UHhVbjN1eDNUYVEyNVR3azM4R2NWQ1UzOGdRZ2c0N2gwYTRVSWFvUzBFODl0S01rYnpBRmdRZTY2Qk1GZWxZYVY3VG5waGJQWENLTVQwUmdBUTJMLTFTb29GUGlXY2V1NlMyckhVRE5TWURBaHVvSm9Yem5mSk4xdi00TkMyQWQyazM5ZUg3QndIZUd4R3pKcjFhNENOWm9wT1R0UzV6NVRSR1hiTkg3U3ZsWjZEZXdJZFJjYXFDVzlBc0pXbkpfOXE1MGJKTmozZ0xGcE9id3lDOFpOM1ZidTBhemZBOXBjUUhzVVdkaXQ5d2I4NVA0c0xxQkNzTmtOZ2l6dzdvX2pJbzFDdllCRlBjZGxLb05hT0ZMLWp3S21teWFtTUdFV2JRcS1tdkhsWQ?oc=5"
+        },
+        {
+          "title": "Israeli occupation targets Hamas leader Ali Al-Amoudi in a strike on Gaza",
+          "original_title": "الاحتلال الإسرائيلي يستهدف القيادي في حماس علي العمودي في غارة على غزة | تلفزيون سوريا",
+          "original_language": "ar",
+          "summary": "Israeli airstrike in Gaza targets Hamas military/political leader Ali Al-Amoudi.",
+          "published": "2026-10-03T12:32:09+00:00",
+          "source": "تلفزيون سوريا",
+          "url": "https://news.google.com/rss/articles/CBMipARBVV95cUxPY0djTTJSZkdlRmpqTkZXbjZXcHp0d0Iwc3hQNEpjcUttWWpMVHloY0p1eEJ5SzU3VXVHYXNmQTU1WVdSd1F3LWM4Uks2Q2R6bUFMTENXU3JSVHdiSHZJYkF3a0k2cVNtYUYyVGFQVXRXdVRGMWpLTnlsQ2Ruc1hzODI2bE55QVFNWUJhRjh1MU92b3RlVWRjSENra3o5a01FbVR3a1k4eHlWenVTU1VLQmdUS2tKUFNHTFU2MzJHc2xYclIySEVtWWxRdjgwaGZnY1hFYUNFdWZ6Si15QXNHeHhvQmJGQkw5ZXJSU3Bud3NJbjdzaDk1NzhqcjRyanpxYmR4UkdsWERWMU1iVkd0U1dSRzY0aHdjdjVwRWY0U2JZMFRBczRrWmYxTUtGWG5PeEI2SUR4MlNtenBUcWpSWERoOEpyaVkxbmxWeUM0QTd5RVZic21BcmRpNHZ2cXRSd3czekc2Zm1XOThSQjhtWThWTHdQQkFsSVZENTRscUV0aHZoQ1BaM0Q5SkJBbzFwS3lSUGxHa1VjYl9OVFhHQTB3QTlOd3dsRDY0NllkYXBpS0c3bDdvWFV6ckZLQkN5aWwta2FkTVJ6SWtJOUM4QW5ZeGpvVDFRbEtwQkhzX0Q4TjlTb0NWZV9XR2stdGJGUkJxdkd3UEJXdVJtV1p0ZUpMd29OcHl2azdzRWk4cmRqakRnenZrVUR3NW9NUkRpOUVJeNIBpARBVV95cUxPY0djTTJSZkdlRmpqTkZXbjZXcHp0d0Iwc3hQNEpjcUttWWpMVHloY0p1eEJ5SzU3VXVHYXNmQTU1WVdSd1F3LWM4Uks2Q2R6bUFMTENXU3JSVHdiSHZJYkF3a0k2cVNtYUYyVGFQVXRXdVRGMWpLTnlsQ2Ruc1hzODI2bE55QVFNWUJhRjh1MU92b3RlVWRjSENra3o5a01FbVR3a1k4eHlWenVTU1VLQmdUS2tKUFNHTFU2MzJHc2xYclIySEVtWWxRdjgwaGZnY1hFYUNFdWZ6Si15QXNHeHhvQmJGQkw5ZXJSU3Bud3NJbjdzaDk1NzhqcjRyanpxYmR4UkdsWERWMU1iVkd0U1dSRzY0aHdjdjVwRWY0U2JZMFRBczRrWmYxTUtGWG5PeEI2SUR4MlNtenBUcWpSWERoOEpyaVkxbmxWeUM0QTd5RVZic21BcmRpNHZ2cXRSd3czekc2Zm1XOThSQjhtWThWTHdQQkFsSVZENTRscUV0aHZoQ1BaM0Q5SkJBbzFwS3lSUGxHa1VjYl9OVFhHQTB3QTlOd3dsRDY0NllkYXBpS0c3bDdvWFV6ckZLQkN5aWwta2FkTVJ6SWtJOUM4QW5ZeGpvVDFRbEtwQkhzX0Q4TjlTb0NWZV9XR2stdGJGUkJxdkd3UEJXdVJtV1p0ZUpMd29OcHl2azdzRWk4cmRqakRnenZrVUR3NW9NUkRpOUVJeA?oc=5"
+        },
+        {
+          "title": "Reported Israeli strike targeting senior Hamas leader Ali al-Amoudi in Gaza",
+          "original_title": "عاجل | إذاعة الجيش الإسرائيلي: محاولة اغتيال علي العامودي القيادي البارز في حماس بغزة الليلة الماضية على ما...",
+          "original_language": "ar",
+          "summary": "Israeli Army Radio reports an overnight assassination attempt targeting Ali al-Amoudi, a prominent Hamas leader in Gaza.",
+          "published": "2026-10-03T13:50:41+00:00",
+          "source": "الجزيرة نت",
+          "url": "https://news.google.com/rss/articles/CBMiyAJBVV95cUxPa19va2dIWXJ4Szd4S0RJVnpMbV9sdmQ2bjZ3dnhGOXhxaWdzRERoWS1wQXVIMDlNUHotZklmOFVObF9qaFltNEw0cXBUTmFZRHVjWnV6aTlMMDdyRVFKYjQ3RUZsYThkTnZjZWJYeDRWMDNxeklneXNyOG9rOFdXczVIZWk5bHVpek1NM2VTV2ZYUGZQZEpXeUVsZ1hncjZ4UTUwN1VqYWQ1Nk9FeEVRUC1YZlBlRUswdlNYWGpYcURZSXJFQnBnbHlyNUREd0ZQeWRfTkRxb1g5cGxtT1RXR2xSelJ1MjVKclpUYlJpUV85RkxjY0VtTlBjZVBMdFhHSW8wY2gxUzZqa0ZlUURKNkNEaDlDSDNoM3FGQUZEaVRNQUd5V3lPTHBlUjFfcW5JQlZ1Zi00T1NxUUF5MXl2Q0RxWGppVlZD0gHOAkFVX3lxTE9oOC1FdzFXaXRoZFpNdDdFLVNjZ29wTXJsaXBVQ3NxTlI1R0VURW9KaDVWYkJLQUdSa1JGU2RURERHaUlNb2c1OEpxQmc4YTh4dVJ1VG9OalJHN0JTZWtNSVhsQnp5R3YxRWxCY0REYnpha1lpSHFpOXZ2czUyc1BDTS1VSjRCRWZsRkdkSWtaRWU2YkRTUkpVb3FjX3dCTzhvdG1rSHV3Yi1XRjRnSlFuMmlvREhJM0ZxcVgyWkM5dktIMDUzUnQ5VlVaYWsxTDNYZGw4YWtBbjJ1Z28tam5wRWo2ZzlCZnhRclJHMzZHRURNVkwwcHVXREpsUF9RSldYcm52dEdDMlhDcGR4RzNEbFJXOS16ZGo1eGdjcXZ5WThpdzNqZWVLcldDbHNlS1NsbUR2RkVORjdxTFRQak1PdWMtSW5tUnpvMzMxUEE?oc=5"
+        },
+        {
+          "title": "Israel targets top Hamas leader in deadly Gaza strike",
+          "original_title": "Israel targets top Hamas leader in deadly Gaza strike on anniversary",
+          "original_language": "en",
+          "summary": "Israeli forces target a top Hamas leader in a deadly airstrike in Gaza.",
+          "published": "2026-10-04T03:40:35+00:00",
+          "source": "Vanguard News",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPSGJBMy1wSGp6SkdPWkpmWHh4Vkw4azQ5alRUTk0tcEI3WXRMN2JVbjZCMEZReTF4cjR2U2UyTlplZVpZVGd1VEFvWnNick1CYTJvVzdWSXlSNWljWFZlT1FsS0VDcm1GRVczSDVvNFlyV0VxeFgxekpYY2JXbGVuRTBvbzhtOVB5MEphTG1VZUFZYkZfLU15SEdSa1ZQempybklKeUczWDPSAa4BQVVfeXFMTkw0b0plaDFScDh5WENldy1mMGNIOW51ZjNkanVoOWV4RTI3bDJqR0JCQllsMHp5NGo3ZnRNTTRaRFpsOFpSazRMUG5pSllQOF81WXlQR3M1Z3dZN19vaFkxRm5xYnF6cE5BX092a2ItdjhBem9BVUtpWWJHYWlwZjJ2TzZ2bGpGTU1zTjVVVXdaV0V0MmFfM3V3NlFFbjJrU3Z5YUZZVGZKSEVfbEVn?oc=5"
+        },
+        {
+          "title": "Airstrike in Gaza Strip reported by rescue services",
+          "original_title": "Luftangriff: Rettungskräfte melden Tote im Gazastreifen",
+          "original_language": "de",
+          "summary": "Emergency services in Gaza reported casualties following an airstrike.",
+          "published": "2026-10-03T23:54:00+00:00",
+          "source": "tagesschau.de",
+          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9rZXU3X0ExekNZQWt1SDkwSld5bDF5bkN2TFlwR1VQMG5fMmg5U2czeUMyQUZlN2JZX21WekZCam4ycnp4SU1uOVpPWkFndHdmaHprZm00eDNaa29MWVlXcEpMdUFPYWRLVE1IYnhQRXYxLTJXNzZIdQ?oc=5"
+        },
+        {
+          "title": "IDF: 'Humanitarian activist' with ties to Turkish leadership eliminated in Gaza",
+          "original_title": "צה\"ל: חוסל בעזה \"פעיל הומניטרי\" שהיה בקשר עם גורמים בהנהגת טורקיה",
+          "original_language": "he",
+          "summary": "The IDF announced the elimination in Gaza of a militant operative who maintained contact with figures in the Turkish leadership.",
+          "published": "2026-10-04T16:37:50+00:00",
+          "source": "YNET",
+          "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE93clVZTGdVVldhN0RNNW5sMmVybGIzcFdmOWtrRVljdXZGMG5Mem5oYklTWWVob1ZWY2Y2ZDRKZFNRcnV6S09TdjF4VnhZa0NKVWhlN1NxeDFXUQ?oc=5"
+        },
+        {
+          "title": "Nukhba terrorist killed after hiding in a Turkish aid organization",
+          "original_title": "מחבל נוח'בה שהשתתף בטבח הסתתר מאחורי ארגון סיוע טורקי, וחוסל",
+          "original_language": "he",
+          "summary": "A member of the Nukhba force involved in the massacre was tracked, eliminated, and found to have been hiding under the cover of a Turkish aid organization.",
+          "published": "2026-10-04T20:37:30+00:00",
+          "source": "JDN",
+          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9GSlNtWUU1MC1OVHFhc05WZC1ZOXZDN3Z2V0xkN0daTldudWVPbExQZlBfMTVPNGxpb3BzUVJMbzc5YTZyWXlaMi13V3EwLWs?oc=5"
+        },
+        {
+          "title": "Four Palestinians killed in Israeli attacks, including a Turkish NGO volunteer",
+          "original_title": "Cuatro palestinos muertos en ataques israelíes, incluido un voluntario de una ONG turca",
+          "original_language": "es",
+          "summary": "Four individuals were killed during military action in a conflict zone, including a volunteer aid worker.",
+          "published": "2026-10-05T01:34:07+00:00",
+          "source": "Infobae",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxPRElsVkJKWVRnSnF4REF5cm5DMm93Sy02a2NRZ1FWZnRud1JWcUlneXU0SzJmaUFTcFJoNWdlc25iSVc1SVQwZlVrVGlvTVRHNzl4eFV4ZGlyemNaTWlweVZYWXctTy11bndQaXd2eDRkQ00zTlNELTM2N3JhcHV5Z2hRRk54ZnhTZmhxZVpwbEVUTUFPZVROS0RXRXNGbnJ1d0VoM0dNZmxSd0tqY1c4eFBlZEJ1T3pHNlBMamptSW1BYVAzUi1yanZYQUpKMTlDQ0E0R0JR0gHwAUFVX3lxTE02dzVtMHhqMGFlVzdqemFKcEFBY3dQWHRjVVRJcWZjVnBtT1VDaEJua0FPYkVuQ0JZVW4yaGFKVUdWWnNYRjd0M0ViZFZWRDY1Mm1DREozYnFWWFZUTFF1SFJHZk9IOEJjUDlNMXZfNDhiRnhwZkJhY0xJWG5oODBZalp4QkhuLThyMlI0VmpfQkc5djFvV3ZrR0pMSW5BalVKRlJJcXJZUDh1T0NNSS1QLXZSc1VIRkZEc3BjUXN0NFFwUFpIdmxvMjlpN2V3MTg4ZlQ0MU5iYmlMQ1BmZzVRMkJZTkJXcXV0N3dwQlJiWQ?oc=5"
         }
       ],
-      "article_count": 11,
+      "article_count": 21,
       "first_reported": "2026-10-01T08:07:10+00:00",
-      "last_reported": "2026-10-01T15:16:05+00:00",
+      "last_reported": "2026-10-02T05:26:25+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -477597,7 +477124,8 @@
         "paraphrase_entity_context",
         "title_plus_anchor",
         "very_high_title_similarity",
-        "same_url"
+        "same_url",
+        "same_incident"
       ],
       "location_confidence_score": 0.9,
       "location_method": "ai_country_capital",
@@ -477614,98 +477142,9 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Carried out by the IDF against a participant of the October 7 attacks.",
       "ai_geo_fingerprint": "de7f34f60b9194e86602123eca1184ef1cdfe33089a53de196ae801da7c161b1",
-      "ai_geo_inferred": true
-    },
-    {
-      "id": "28c084a5095c83ba",
-      "category": "Attacks",
-      "categories": [
-        "Attacks"
-      ],
-      "title": "Armed attack seriously injures Ministry of Defense officer in Al-Sanamayn amid Division 40 tensions",
-      "summary": "An armed attack by unknown assailants in Al-Sanamayn, Daraa countryside, left a Syrian Ministry of Defense officer with severe injuries following tensions involving Division 40.",
-      "original_title": "عقب توترات ضمن الفرقة 40.. اســتــهــدافٌ مســلــح يوقع ضابطاً من وزارة الدفاع بجروح بالغة في الصنمين",
-      "original_summary": "عقب توترات ضمن الفرقة 40.. اســتــهــدافٌ مســلــح يوقع ضابطاً من وزارة الدفاع بجروح بالغة في الصنمين المرصد السوري لحقوق الإنسان",
-      "original_language": "ar",
-      "collection_language": "ar",
-      "collection_language_name": "Arabic / Syria",
-      "collection_locale": "SA:ar",
-      "published": "2026-10-01T07:53:49+00:00",
-      "source": "المرصد السوري لحقوق الإنسان",
-      "source_count": 2,
-      "url": "https://news.google.com/rss/articles/CBMivwJBVV95cUxNaS1oZUJsQUszek1vckw5b2JHcGRkakk0SVZRb1lXTXJuNGRQWEhJdFdCY0c1VnlTUm1OcVVGelVIeWc0UTFETlpxWlQ0Q1RJOWx4X1B3Q0swOTlqWWx6dklxZk1SSUFiS1Faemdfd0t4aFhlZEJuSXhleXZWQzVYeHN4enl0a2Z1b3lmNjl2R1VfbXFOVmFUVVBVNm9GY3ExdENWZnl4YVdSUk9fQlA1RGFfXzFlLTgxMVU3eVo5RzduMDd6NlQ2eVlCNDNsSEZSTzhyN2ZBRVVpYkQtSkZXMEVGN0didFVxRXZjNHlYb0VpOHdmX2ZyUC1fR3RJVVhxNXZycHJuVmlWQXM3eUlWYks3M0dsb1FsTG9JSXREcmxacjVLYndCQ3BBSnFZZUFHdXFzdmRkT2dtSnlQc19J?oc=5",
-      "collector": "Google News RSS",
-      "country": "Syria",
-      "country_code": "SY",
-      "city": "Aş Şanamayn",
-      "region": null,
-      "latitude": 33.07186,
-      "longitude": 36.18316,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "syriahr.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "12b0b9c22730860718b84350940be3f63fb8771cc40851be6934bfc12b2f808c",
-        "5f48a56e9a799986aa1e262b39bd8fac2ff4697039a208a6cff691cdfce2a74e"
-      ],
-      "sources": [
-        "المرصد السوري لحقوق الإنسان",
-        "عنب بلدي"
-      ],
-      "related_articles": [
-        {
-          "title": "Daraa: Unidentified individuals target army officer in Al-Sanamayn",
-          "original_title": "درعا.. مجهولون يستهدفون ضابطًا في الجيش بالصنمين",
-          "original_language": "ar",
-          "summary": "Unidentified attackers targeted a military officer with gunfire in the city of Al-Sanamayn in Daraa governorate.",
-          "published": "2026-10-01T14:49:42+00:00",
-          "source": "عنب بلدي",
-          "url": "https://news.google.com/rss/articles/CBMi0gJBVV95cUxPRnZsdEVfNkVUOG9hQmlSN0kxTjl1cU84Sklob3NNa2J6R215Q2ZJREZQMk1jY3BOa1RJMVNhWkdnWDllVHFZWDNNQzVzdGw1eWZpTDBEUzh4aXF2WHNLYnpoSm5vaGlhX3p4YlMxelI3b1pmQnVEeUFKSDR2QVM4QjJldWh0a1pBNXMtbVl0bDBLN085VHNOOTMybTJtN0ZYNkJzQzRKMjZTYmFTZ0s3dzZpVmlVbHlUemdQemxpZ1FOUnpVb2FsYTVBbGhkdXpRTjJYU1FTbnJKZWE1V0FVYWIxSUNKWVZac184WFBfQmNkc1hFRVprMTlzeV9tSldUYk0zMFpfUXpNYkJCZkNZUmRxbzhjWUw5cVVPNEx6OU5TX0JqbXpWbFoySzFObDRDbll4YWo0X1lfMUI2WUQ4QndSUndrX05FR0pGN1paRVNiZ9IB2gJBVV95cUxQcW5TTDFDWHQwM1kxUV9ISm4yeGNmM1ppdmtRU01FT3VBMVRoTWhmYUhHVzBjNlktbDNSSjMxQWJ4bkc0cU9WMTNBRHdTcmY3V01md0RwdnRoLWc3ajlwLW1VbVNpNWF0Z0RoYjBnUnpFbUlQcVBVVDdjVUVhS0Y5STkwWTB6djYyRTV0ZHp6aXdkTE9rLUtyWjZNU2RWeEtXRFgwUjVPWXNBMklubmF4S3JvTHNzS1ljam1CbGVrS2xxNlFkN1duRWVpMHBzcE9Nd0k5Nmowb3dKTzlEXzBFQ2dSUTJsVzVTTDA1R2hsYlkzOHlaYzVERUZJbHZaT3lCVnJENG9JZDNZczJrUVNuNzBmMmlualNETDJ0a0RiMm84WFZ4S3JlNzRLb2h3SGxKVmpzSTRIU0xQZ1JoWTJjRFJOY3NaalhXanpCODRwdThNVGhMR3B1UlhR?oc=5"
-        }
-      ],
-      "article_count": 2,
-      "first_reported": "2026-10-01T07:53:49+00:00",
-      "last_reported": "2026-10-01T14:49:42+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 75,
-      "ai_relevance_reason": "Concrete armed attack on a military officer in Syria.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "",
-      "primary_event_type": "ATTACK",
-      "is_attack": true,
-      "incident_anchor": "Al-Sanamayn officer attack 2026-10-01",
-      "update_type": "INITIAL",
-      "incident_id": "inc-a6dc3fff99fd70fe",
-      "translated_to_english": true,
-      "ai_canonical_event": "Armed attack injures MoD officer in Al-Sanamayn 2026-10-01",
-      "title_variants": [
-        "Armed attack injures MoD officer in Al-Sanamayn 2026-10-01"
-      ],
-      "dedup_confidence": 1.0,
-      "dedup_methods": [
-        "same_incident"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "Armed attack seriously injures Ministry of Defense officer in Al-Sanamayn amid Division 40 tensions"
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "The armed attack occurred in Al-Sanamayn in the Daraa countryside of Syria.",
-      "ai_geo_fingerprint": "b4184e9564855231808c693fdeb33186f63a5c6b23b5b930b4c668efaaf7d8f6",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": true,
+      "primary_source_published": "2026-10-01T08:07:10+00:00",
+      "cbrn_subgroups": []
     },
     {
       "id": "5683d0fb0ec9655e",
@@ -479057,7 +478496,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Refers to the recent terrorist incident in Rask, Iran.",
       "ai_geo_fingerprint": "b03bf08c1bb270d4bdda369c7d1095a72460ca90cbe6a74fafe45e61c8987928",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "fab5eb60caa20a12",
@@ -479650,7 +479090,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Refers to the 2013 Reyhanli bombing in Turkey, which serves as the geographic context of the event.",
       "ai_geo_fingerprint": "de5120c7be93322fa41a2221ffea01d8bb755657aef331c368ae7f612b0022ef",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "a8c303625f0d4e47",
@@ -479726,82 +479167,6 @@
       "ai_geo_reason": "Operation conducted by the Indian Coast Guard.",
       "ai_geo_fingerprint": "55b238170c53b9d30a137346ba681373cbb01058c2ea74802c620db602a0df32",
       "ai_geo_inferred": true
-    },
-    {
-      "id": "c287dbc0c2ba5049",
-      "category": "Arrests",
-      "categories": [
-        "Arrests"
-      ],
-      "title": "DEA issues search notice for 'Mayito Flaco' with last location in Mexico City",
-      "summary": "The DEA issues a wanted poster and search notice for Ismael Zambada Imperial ('Mayito Flaco'), indicating his last known location was Mexico City.",
-      "original_title": "DEA gira ficha de búsqueda para localizar al 'Mayito Flaco'; su última ubicación fue CdMx",
-      "original_summary": "DEA gira ficha de búsqueda para localizar al 'Mayito Flaco'; su última ubicación fue CdMx Milenio",
-      "original_language": "es",
-      "collection_language": "es",
-      "collection_language_name": "Spanish / Latin America",
-      "collection_locale": "MX:es-419",
-      "published": "2026-09-30T20:34:00+00:00",
-      "source": "Milenio",
-      "source_count": 1,
-      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOdUdrbEc1UTE0c0t1THF6Vmh5QnRMeldMYUx0SjA3bGJnMWRrLTFrU1JKZWF4bmJKRDdtNXNBdHN1dVZuaXdvbmJ1d29QeWVzQWNBTGc1aElTdEtKaHpYVXQ0dHExYnc3OHlBZ1ZrSmludGJnTjIxOGlCd25fMW5YTjhEMC00Zk5GdENIMDd3UHIybDjSAZMBQVVfeXFMTkVFQmFocU0yY2NWRjBsSTdERlBDRGt1UV8wYkxnMWN6aXJoSmJiaFBVVXd4LTZzbm5MRDhxekFRY0RfTzdpOXpfV1paVjg5UHYzSmVCbVRxTFpkNkhpWkhDRHZoOUM4c1hlXzlwanZvX3diX0QtUHRVUjlMekJjZzJVNTNJZy1fUThvbS1BWkRmZUN3?oc=5",
-      "collector": "Google News RSS",
-      "country": "Mexico",
-      "country_code": "MX",
-      "city": "Mexico City",
-      "region": null,
-      "latitude": 19.42847,
-      "longitude": -99.12766,
-      "location_precision": "city",
-      "location_confidence": "high",
-      "acquisition_channel": "multilingual_targeted_source",
-      "targeted_source": "milenio.com",
-      "targeted_source_kind": "local_language_media",
-      "source_article_fingerprints": [
-        "d20fc768702c36e9ef59f7a58dea8872637dea61e87677d67fef39195df31120"
-      ],
-      "sources": [
-        "Milenio"
-      ],
-      "related_articles": [],
-      "article_count": 1,
-      "first_reported": "2026-09-30T20:34:00+00:00",
-      "last_reported": "2026-09-30T20:34:00+00:00",
-      "ai_selection_complete": true,
-      "ai_selection_version": "gemini-ct-selection-v6-incident-model",
-      "ai_selection_model": "gemini-3.5-flash-lite",
-      "ai_relevance_score": 60,
-      "ai_relevance_reason": "Law enforcement and narcotics-related international tracking notice targeting a major cartel figure.",
-      "ai_current_ct_event": true,
-      "ai_selected": true,
-      "actor_group": "Sinaloa Cartel",
-      "primary_event_type": "ARREST",
-      "is_attack": false,
-      "incident_anchor": "el_mayito_flaco_dea_sanctions_2026",
-      "update_type": "INITIAL",
-      "incident_id": "inc-edfb37078ea0f1c7",
-      "translated_to_english": true,
-      "ai_canonical_event": "DEA search notice for Mayito Flaco in Mexico City",
-      "title_variants": [
-        "DEA search notice for Mayito Flaco in Mexico City"
-      ],
-      "location_confidence_score": 0.95,
-      "location_method": "ai_city_geonames",
-      "location_evidence": [
-        "DEA issues search notice for 'Mayito Flaco' with last location in Mexico City."
-      ],
-      "excluded_from_map": false,
-      "ai_geo_complete": true,
-      "ai_geo_rescue_complete": false,
-      "ai_geo_rescue_status": null,
-      "ai_geo_rescue_model": null,
-      "ai_geo_rescue_reason": null,
-      "ai_geo_version": "gemini-ai-first-v5.2-one-shot-rescue",
-      "ai_geo_model": "gemini-3.5-flash-lite",
-      "ai_geo_reason": "Explicitly states Mexico City as the last known location.",
-      "ai_geo_fingerprint": "bba8f8c8506701cf5e3747cca2c2e8af39a1d430a80c22b5b9300f19186bbb50",
-      "ai_geo_inferred": false,
-      "dedup_review_required": true
     },
     {
       "id": "dd19e9d6b1da92cc",
@@ -480235,9 +479600,9 @@
       "actor_group": "Sinaloa Cartel",
       "primary_event_type": "FINANCING",
       "is_attack": false,
-      "incident_anchor": "el_mayito_flaco_dea_sanctions_2026",
+      "incident_anchor": "Sinaloa Cartel US Treasury sanctions Tijuana 2026",
       "update_type": "INVESTIGATION_UPDATE",
-      "incident_id": "inc-edfb37078ea0f1c7",
+      "incident_id": "inc-863c60d8cfe5b592",
       "translated_to_english": true,
       "ai_canonical_event": "DEA updates 'El Mayito Flaco' fugitive file and sanctions Mexico networks",
       "title_variants": [
@@ -480258,8 +479623,7 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Mentions links in Mexico City (CDMX).",
       "ai_geo_fingerprint": "b10e5d34b4628d52906746ac09cb76cb154b68c0924e2b7873ee5abb0420559c",
-      "ai_geo_inferred": true,
-      "dedup_review_required": true
+      "ai_geo_inferred": true
     },
     {
       "id": "0edd66e0203afca4",
@@ -480311,9 +479675,9 @@
       "actor_group": "Sinaloa Cartel",
       "primary_event_type": "FINANCING",
       "is_attack": false,
-      "incident_anchor": "culiacan_hotel_cartel_financing_2026",
+      "incident_anchor": "Sinaloa Cartel financial asset freeze Mexico 2026",
       "update_type": "INVESTIGATION_UPDATE",
-      "incident_id": "inc-b7eff720c6843817",
+      "incident_id": "inc-4a3e8fb9b7edc8f3",
       "translated_to_english": true,
       "ai_canonical_event": "Culiacan hotel enterprise linked to Sinaloa Cartel faction financing",
       "title_variants": [
@@ -480334,8 +479698,7 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Explicitly mentions Culiacan, Mexico.",
       "ai_geo_fingerprint": "927bb86b3522c4a9409cb9b25d4ea027f8a76f04858ab7e3b29e27b3752f843e",
-      "ai_geo_inferred": false,
-      "dedup_review_required": true
+      "ai_geo_inferred": false
     },
     {
       "id": "9437afb92eba4648",
@@ -481523,7 +480886,8 @@
       "id": "ea24f15cfc7f5129",
       "category": "Terrorist Financing",
       "categories": [
-        "Terrorist Financing"
+        "Terrorist Financing",
+        "Arrests"
       ],
       "title": "From Mayito Flaco to a currency exchange house in Tijuana: The money laundering route sanctioned by the US Treasury",
       "summary": "Details emerge regarding the money laundering and financial network linking cartel figures to a currency exchange in Tijuana, recently sanctioned by the US Treasury Department.",
@@ -481535,7 +480899,7 @@
       "collection_locale": "MX:es-419",
       "published": "2026-09-30T16:07:41+00:00",
       "source": "infobae.com",
-      "source_count": 1,
+      "source_count": 2,
       "url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxQb250azhWdXZYM3JWYjRfRmhqUEQzNENKTUc2alZWLTZGUW1zbjQ2N3NHWjJDSE5xZXVmbUV6QUlGZTNlcl9wV2FOVFNfeDJPTU12dndEOUY3YlF1Si12QjJ4R3I2TG1BMVNNcWRXZjg2dlJ3Q1Bzc3NVakUxa3MxT3M4VHdZNEhSeEdiOWZVdW8xbzRLTDBVX2x5SWNxNkpYRlVTdkpmbjBnbzRRc25kQy1WOGVIZk9KaFl3SkNDa1l4bm95SExMZDZXZlB4MFZpeVJNQ0s5cDE0Z0tCLWRnTnRvei1jd2pjUHBXMjJkTWx0QdIB8gFBVV95cUxQb250azhWdXZYM3JWYjRfRmhqUEQzNENKTUc2alZWLTZGUW1zbjQ2N3NHWjJDSE5xZXVmbUV6QUlGZTNlcl9wV2FOVFNfeDJPTU12dndEOUY3YlF1Si12QjJ4R3I2TG1BMVNNcWRXZjg2dlJ3Q1Bzc3NVakUxa3MxT3M4VHdZNEhSeEdiOWZVdW8xbzRLTDBVX2x5SWNxNkpYRlVTdkpmbjBnbzRRc25kQy1WOGVIZk9KaFl3SkNDa1l4bm95SExMZDZXZlB4MFZpeVJNQ0s5cDE0Z0tCLWRnTnRvei1jd2pjUHBXMjJkTWx0QQ?oc=5",
       "collector": "Google News RSS",
       "country": "Mexico",
@@ -481549,10 +480913,12 @@
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "8d5c97182fd7cf403cdcfc9f159c238c71a9763b719519ab0e9e85be419dde13",
-        "a48beba0444d2448c4edb0d34916e168bc20003a293d571af41bd7d42a1105cf"
+        "a48beba0444d2448c4edb0d34916e168bc20003a293d571af41bd7d42a1105cf",
+        "d20fc768702c36e9ef59f7a58dea8872637dea61e87677d67fef39195df31120"
       ],
       "sources": [
-        "infobae.com"
+        "infobae.com",
+        "Milenio"
       ],
       "related_articles": [
         {
@@ -481563,14 +480929,24 @@
           "published": "2026-09-30T16:21:33+00:00",
           "source": "infobae.com",
           "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxPczBzdlVSbjIwb3E1YWowVUtEWVBZdWd3VkZyUEdOS1RoZXdmUy10dnhkYlVPNjAzalUzQWVyZ0VjaDA0RDZwdlQyRUZxNnhQbU1QZlFtUi1JTzVNMFNkbThKUW5sLWRoY2FDLWV3azM4VjBNVWRVVmhsRjlxd3Y5M1Zka29DYS1fZEptLWpEOXpqN09Wc0IxcVJGUVprYkFadzRERXN0QUVvclExRjlrQVRkZjR2LVdwWVFwZWtvWl9BaVZSdW5fbVhZNzlJUUt5YUd2Z3llNNIB8gFBVV95cUxQb250azhWdXZYM3JWYjRfRmhqUEQzNENKTUc2alZWLTZGUW1zbjQ2N3NHWjJDSE5xZXVmbUV6QUlGZTNlcl9wV2FOVFNfeDJPTU12dndEOUY3YlF1Si12QjJ4R3I2TG1BMVNNcWRXZjg2dlJ3Q1Bzc3NVakUxa3MxT3M4VHdZNEhSeEdiOWZVdW8xbzRLTDBVX2x5SWNxNkpYRlVTdkpmbjBnbzRRc25kQy1WOGVIZk9KaFl3SkNDa1l4bm95SExMZDZXZlB4MFZpeVJNQ0s5cDE0Z0tCLWRnTnRvei1jd2pjUHBXMjJkTWx0QQ?oc=5"
+        },
+        {
+          "title": "DEA issues search notice for 'Mayito Flaco' with last location in Mexico City",
+          "original_title": "DEA gira ficha de búsqueda para localizar al 'Mayito Flaco'; su última ubicación fue CdMx",
+          "original_language": "es",
+          "summary": "The DEA issues a wanted poster and search notice for Ismael Zambada Imperial ('Mayito Flaco'), indicating his last known location was Mexico City.",
+          "published": "2026-09-30T20:34:00+00:00",
+          "source": "Milenio",
+          "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOdUdrbEc1UTE0c0t1THF6Vmh5QnRMeldMYUx0SjA3bGJnMWRrLTFrU1JKZWF4bmJKRDdtNXNBdHN1dVZuaXdvbmJ1d29QeWVzQWNBTGc1aElTdEtKaHpYVXQ0dHExYnc3OHlBZ1ZrSmludGJnTjIxOGlCd25fMW5YTjhEMC00Zk5GdENIMDd3UHIybDjSAZMBQVVfeXFMTkVFQmFocU0yY2NWRjBsSTdERlBDRGt1UV8wYkxnMWN6aXJoSmJiaFBVVXd4LTZzbm5MRDhxekFRY0RfTzdpOXpfV1paVjg5UHYzSmVCbVRxTFpkNkhpWkhDRHZoOUM4c1hlXzlwanZvX3diX0QtUHRVUjlMekJjZzJVNTNJZy1fUThvbS1BWkRmZUN3?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 3,
       "first_reported": "2026-09-30T16:07:41+00:00",
-      "last_reported": "2026-09-30T16:21:33+00:00",
-      "dedup_confidence": 0.99,
+      "last_reported": "2026-09-30T20:34:00+00:00",
+      "dedup_confidence": 1.0,
       "dedup_methods": [
-        "same_normalized_title"
+        "same_normalized_title",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
@@ -481606,7 +480982,8 @@
       "ai_geo_reason": "The event location is explicitly named as Tijuana, Mexico.",
       "ai_geo_fingerprint": "69af9d4b6f3258e86b782ac3ee74da7ced02177e3484fba8325aafe2144a1e8c",
       "ai_geo_inferred": false,
-      "dedup_review_required": true
+      "primary_source_published": "2026-09-30T16:07:41+00:00",
+      "cbrn_subgroups": []
     },
     {
       "id": "d2cf05cced697be2",
@@ -484009,7 +483386,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The geopolitical maritime region of Bab al-Mandab adjacent to Yemen.",
       "ai_geo_fingerprint": "9c9068db4764b1c6870f461b8f22e28aaf0fce7d5dadebde9df2dccc55e01e3e",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "36f8e4f08a7113a5",
@@ -486975,9 +486353,9 @@
       "actor_group": "Houthis",
       "primary_event_type": "PIRACY",
       "is_attack": false,
-      "incident_anchor": "EU Aspides mission Houthi shipping protection 2026",
+      "incident_anchor": "EU naval deployment Red Sea shipping protection 2026",
       "update_type": "FOLLOW_UP",
-      "incident_id": "inc-3938f026c4af3c6a",
+      "incident_id": "inc-57fe7e8275e0583b",
       "translated_to_english": true,
       "ai_canonical_event": "EU Aspides mission provides protection to 260 vessels amid Houthi attacks",
       "title_variants": [
@@ -489254,7 +488632,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The incident occurred in the Ramallah area in the West Bank.",
       "ai_geo_fingerprint": "c532d00fa603818d55777f798c896a29262a5663d560ec8798e944678754b9eb",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "daaf37552e48f85d",
@@ -490876,9 +490255,9 @@
       "actor_group": "Houthis",
       "primary_event_type": "PIRACY",
       "is_attack": false,
-      "incident_anchor": "MT Honour hijacking Somalia",
+      "incident_anchor": "MT Honour pirate hijacking Puntland April 2026",
       "update_type": "FOLLOW_UP",
-      "incident_id": "inc-d03d40f739649290",
+      "incident_id": "inc-0b31449d648db837",
       "translated_to_english": false,
       "ai_canonical_event": "Release of Egyptian crew from hijacked tanker off Yemen",
       "title_variants": [
@@ -490905,8 +490284,7 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Maritime piracy incident occurred off the coast of Yemen.",
       "ai_geo_fingerprint": "776a1cce48cbe5e690c01c417543dca5b297c359f8b273e18e0484039b83856a",
-      "ai_geo_inferred": false,
-      "dedup_review_required": true
+      "ai_geo_inferred": false
     },
     {
       "id": "4541aed69f2c76db",
@@ -491154,9 +490532,9 @@
       "actor_group": "",
       "primary_event_type": "PIRACY",
       "is_attack": false,
-      "incident_anchor": "MT Honour hijacking Somalia",
+      "incident_anchor": "MT Honour pirate hijacking Puntland April 2026",
       "update_type": "INITIAL",
-      "incident_id": "inc-d03d40f739649290",
+      "incident_id": "inc-0b31449d648db837",
       "translated_to_english": false,
       "ai_canonical_event": "Rescue of 44 pirate hostages and killing of 5 seafarers off Gulf of Aden",
       "title_variants": [
@@ -491266,7 +490644,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_url"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "a5a460665e089c1d",
@@ -491858,7 +491237,7 @@
       "collection_locale": "MX:es-419",
       "published": "2026-09-29T17:59:00+00:00",
       "source": "Reporte Indigo",
-      "source_count": 8,
+      "source_count": 10,
       "url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxOTHA0TXE2ZW9WZEFJTWdaY3pLNjhGbGNRZUl4OEpxaGpRT0N4M3FrdU56dDJ0dGNnbTNoUmYwTG1tUDA5WFMwbVU2d3NISlRfT0w2WmM0V3p0VE9MWlFRal9KSlljTEhlWVpnbGtWYk50S2VrMS1xOG4xS0hLeUhQenhaYWx2X1dMR3NvUlJHZTl6TzFyeWxoXzhaREhwN3YyY1BJdjFBVFJHeVA1UGY0bmMyUkptXzR5TGdKcVJ0cVZNdk5qRFhRbldIaDFPb2FHRnNQX1ExV2J4cEhnd3dJYW5zMlkzSlJi0gHuAUFVX3lxTE95SWlULXFtTTNweWRQRlZJYWFlWDJkaGR0eWpldmRsdkxJVHdjVTJ1aUlvRl9VSW5UajFDa0JiUGs0dUgzeXI2SE1qNDBtN3ZQV0hReTcxQmhDRGVfbVVkMDY4RjBXZnpMZmU3R1R0OEJlYkE4S2ZEYlRJOFFObzVmTk1QQlpvazlNTXBNUUNuUFNON2lqNzlfSDBFT2F6TlRKQV9GSmhFaGNIRnRIYUFwRFk4X2NrOHRhTDVSY3VKdWZqR1pBRV81amhZYW1xeDNHR0tnN1YxWFMtT1B4U0ZlbGQxbnVRQ1EyNU5YMGc?oc=5",
       "collector": "Google News RSS",
       "country": "Mexico",
@@ -491876,19 +491255,27 @@
         "0a249b67f893e07cde66e56dc77f12910997e13ecac3062b64603690962c759d",
         "1cdd5e8b0827ead9a6a4360db9249735205325eea82aba5e34dad9363ce1d7a5",
         "24aead5433d8631412123a8e82d156603f19db6fbceb5c05e7439f1186614cb5",
+        "324fca53eb80afba97dcba21cb2945283d64056e330bf3d6c0fd7ad7c6cbaaa9",
         "38f83030e49b76e7261784d9a9ef5c8e228bb22de76e3dc84e260f5a2299dba1",
         "436051e7a309f16a02fffbecb35010cfdcfd7a71053bcaf499f36af3dea29c7e",
         "55fd1bf45e48d9a6cc3972b480635699ebf9772d0842dc2de525eea1052ded06",
+        "56501d16b43ba72abd440d12e57c1dfac8f62bd7a7ea63e68fdc07e878cf053e",
         "6268c9235d2510f1764d71177b75f9e7b00297652defe985c576082d412157ac",
         "63fe784407e161650f78357530692db9286706a639a3c351922a238cc4bad295",
         "6765e565e056d825ff7cfbae817509e73b5871108191ef0b5191457d6fb4f55c",
         "788e98ab027320305f86f4d81814d252dbc66045ca283fd778644f973fc12617",
+        "7988035bf875e6ec1805a830694e14fe8240a4cd54cdd3833e895620ad846bf7",
+        "94fcca55b7eba1a49efae5da45de60d48e6129d80bad0ba92153919470041e7d",
         "a6708881126ee1f6d27660e7c251554d8a098a3b44102a7e0dff99d33692d94c",
+        "aa5f74103dd7d84c70943d3fb79362c0483edfc32c68ac29c10637b00c2afccd",
+        "aeb0cb9c1499004b164bd9b3f4b2f0038c67caff46c10171f858204d30a27c88",
         "b5991b2fcf6a65efe85246d714247b839bb5f3ae1f520579644de10781c22758",
         "baa52c520dd44f3c7000eab11d599d013d0d801d004c8759c5aed438c410dc02",
+        "bbe41c9f1c8f39fc116f78d97bf4797e2a76c1569bfa0be1bed059bcb6811f5b",
         "c32ed8db4f49c18e398c377ecf54654309d1009137d1bd8b26a17e165c7f9325",
         "c8746ae704f3a28c00ae565474a3e7641ff23ea6254026ca397db68ab2dd5b87",
         "e50ab7bf1304a9ed508c9af1d114e4e6818c91bb41187a54dd1e8464cb0974a9",
+        "e6ba0530fbdd814eb1b15627053d49d6cb37937dcd449304c7fbe557738d53cf",
         "e76410bc889f34cbbe46c9655697f46632a977ba7d263ed7fbf9a7ecffefe331"
       ],
       "sources": [
@@ -491899,7 +491286,9 @@
         "El Universal",
         "apocaliptic.com",
         "quiero tv",
-        "La Jornada"
+        "La Jornada",
+        "عين ليبيا",
+        "Vietnam.vn"
       ],
       "related_articles": [
         {
@@ -491991,17 +491380,90 @@
           "published": "2026-09-30T09:37:11+00:00",
           "source": "Infobae",
           "url": "https://news.google.com/rss/articles/CBMirgJBVV95cUxQRm16dGh3c3FXMnVKS1JMYktOTjhRVnUtOWpJUThUSUFXNjVtY2p4NURCbURmUUFCbWNEaGhqSVhEbV9NZEtDRDBNSW1fS090RWZTTGFNaDR2cGFvaENRQUNLUHBmTGhINXBpOUpzM2ZyVWY2UDdPVFlBM2NoeHNYN0xpeF9udUpPaEJTZXBlS0VrMlphSDNiSHFXZWRHbWFQd3RVZEVQRzVKdnJkTmdUckxIWm0yLUpWUGhVWTN4MnRvU1l4SGJTVFp1ZG9Kd0xQT3V5RnY2LXpQV2w3M1B5Z1RrSTM4T2IwcWllSGlpaE1vc3NJbnkyZG5rbDRXLXppRWV2SlFra3UwVXZ1N2htSDJZcmI3Y1dxMnNEMlhSVmFZMy1uQ2RGUmt2RTZJQdIBrgJBVV95cUxQRm16dGh3c3FXMnVKS1JMYktOTjhRVnUtOWpJUThUSUFXNjVtY2p4NURCbURmUUFCbWNEaGhqSVhEbV9NZEtDRDBNSW1fS090RWZTTGFNaDR2cGFvaENRQUNLUHBmTGhINXBpOUpzM2ZyVWY2UDdPVFlBM2NoeHNYN0xpeF9udUpPaEJTZXBlS0VrMlphSDNiSHFXZWRHbWFQd3RVZEVQRzVKdnJkTmdUckxIWm0yLUpWUGhVWTN4MnRvU1l4SGJTVFp1ZG9Kd0xQT3V5RnY2LXpQV2w3M1B5Z1RrSTM4T2IwcWllSGlpaE1vc3NJbnkyZG5rbDRXLXppRWV2SlFra3UwVXZ1N2htSDJZcmI3Y1dxMnNEMlhSVmFZMy1uQ2RGUmt2RTZJQQ?oc=5"
+        },
+        {
+          "title": "Sinaloa Cartel linked to Baja California government contracts",
+          "original_title": "Una empresa ligada al Cártel de Sinaloa habría recibido más de 200 millones de pesos de la Fiscalía de Baja California en contratos, según MCCI",
+          "original_language": "es",
+          "summary": "Reports suggest a company linked to the Sinaloa Cartel received millions in contracts from the Baja California Prosecutor's Office.",
+          "published": "2026-10-01T22:24:00+00:00",
+          "source": "Infobae",
+          "url": "https://news.google.com/rss/articles/CBMikwJBVV95cUxQVWYwWlB0T0J0M0ZOUWQ3eVZfY2Z2b1dHdmxWMHNwZjlyU1V5QXBhV2lHMDZOcVhxbnVkcEhYVkNUUGJOYTNrSmRvTS1Ob0hXdGpwVGpyd1VfeThpbDNxUTYtZ2NNT3Nvd3prUFZZZ0pkYk1abFREbzRidVlZUUpMcUhoaktkWDVZa3RwMkVxZHlZd1ZFN2VpUnJVaVdvSlNabndnV2NVRGJQaTQyeWRTeFZXNFFHOWlIRHVhM3JxSFJXV2puM0pWa2ZaTXNFRlp3Y21BVkVxZUZjZFNfMDl1SFRHN1pyTVI3bzVibmZtS1BGamNTN3Z6RlQ1cEFxOG1Vdm5JOUEwT0ZHc0hJZUhMVjdQTdIBrgJBVV95cUxPOHhqWVkyLUp3Znp5RkdQUDZqMUhJWVd2d2xiSkdVZ3hrLTN2cVVkbFlQUEU1QXpLcjVnQmxMMjhNWUI0YkRDbnBDeTdoQUV4V2hlbmRuWHRGNEg5VmdyMWF3YTU1YU1Yc2lSd1U4NzMxZGxpeHRfUmVpMnRNMVZOTDVNZzEtNzUwQVRBRkwwajJOVUd1cEk2TEstQ2lGSHVRYzZVZ3ZReWwwWVFjY3ZfMWY2TEIwaVpUMk5sN2NVZjZwSmxnb0hVbm1LVmdYMjZ6UG41N1BBc1hJRXNwSTBhWUpaZHVUV2pVQ0dqajJndWdDaGJPU3F2UEs1UEJJR1N4SHByb1k2VlVpNXBHaUxhYnNtNEI2cDA2ZEk2ME1Ub3ZRRzJfT2FValpGdHhXUQ?oc=5"
+        },
+        {
+          "title": "Una empresa está vinculada al Cártel de Sinaloa en Baja California",
+          "original_title": "Una empresa está vinculada al Cártel de Sinaloa en Baja California",
+          "original_language": "es",
+          "summary": "Una empresa está vinculada al Cártel de Sinaloa en Baja California MILENIO",
+          "published": "2026-10-02T00:44:00+00:00",
+          "source": "MILENIO",
+          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNcG5xXzVsNFYwSXkyR2pvT0xmb2l3aDlnZXE2blhkTkg1aDR5SlZYdDVoTE1vMGlQNkpiQk1RUWpTTUhNbUx6RHBJX2pfbkVTQy1WMy1Icjhqc2hjcWRIVUJpWWJrWHZCM2tmdnFFWm16UHJtUVdDNFJySnJmUUJIQ2duQ3JPRUNmM2pRRzBjQ0JFOHl3RGZ5d3kwWjJJRG16ZzdlVWUtTdIBpwFBVV95cUxQRFhOZHh1LXY5UVZHdUd4NkwtZlc3NUxBSHhqTW9kYkMtUVZsMElpV0ZXRnpxc0FPTXBSRTM5TnlpbjJIcWotYWVNU0p4US1FVXVRcUpWcm5Jbms2YWh5T2hBR1VEdTlwcHowODRlTEJaWWkzZGs3YnBiX042MjNPVGM5TF9QSEdUdldFc2t6cEQ4MXQxdktFOUtzR0w4YVZzMXlVUDRGWQ?oc=5"
+        },
+        {
+          "title": "«احتيال إلكتروني» يستهدف حسابات المواطنين.. ضبط متهم بالاستيلاء على 200 ألف دينار",
+          "original_title": "«احتيال إلكتروني» يستهدف حسابات المواطنين.. ضبط متهم بالاستيلاء على 200 ألف دينار",
+          "original_language": "ar",
+          "summary": "«احتيال إلكتروني» يستهدف حسابات المواطنين.. ضبط متهم بالاستيلاء على 200 ألف دينار عين ليبيا",
+          "published": "2026-10-02T06:57:56+00:00",
+          "source": "عين ليبيا",
+          "url": "https://news.google.com/rss/articles/CBMiswJBVV95cUxQdWZhUUZLa3czZjlWRkRzcHB2MkVrSnA1a0Zac0tIcGNzQ1VRRFFVX1ZfbWRrOGdRYnBlSHlQNDV3RVZBQmpZS3Fwa2ZwZmdsajZXZkNCR3JaZmYzOE1tU3U2Y1pjeFpjRzdzQU11NEV0RHpJUE84ZEtGZGlhUGh5akF4ajlkZGFvejhpblZZWjdiaGhWUDZCS0JEQTlqelFPaTdFYUk1dEh2WXRySWQ5b2hxX0Z2cUFQLWJvQmFqNFl1OVVfQjZ3Skl2MmxLb1ZZSnlIM1FkRUVZLU5wdDVDcFItTS1GVThzQjNyUGVUTnd2emVYclM1RmdYVEJGck1Lc2hNcVZlaG9md3ZIRlQtM0lsdEZ4R0ZibGQ4ZExYZWdjUWdDNFRiaHl3WHpZcUhEc2Zz?oc=5"
+        },
+        {
+          "title": "Baja California y Sonora contrataron firmas sancionadas por lavado; EU relaciona empresas al Cártel de Sinaloa",
+          "original_title": "Baja California y Sonora contrataron firmas sancionadas por lavado; EU relaciona empresas al Cártel de Sinaloa",
+          "original_language": "es",
+          "summary": "Baja California y Sonora contrataron firmas sancionadas por lavado; EU relaciona empresas al Cártel de Sinaloa El Universal",
+          "published": "2026-10-02T11:00:00+00:00",
+          "source": "El Universal",
+          "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxNOGhKanBtLWdZZHBmM1B1VE1aZ19EZ0IycHV6RGdjbWN4VnpKalYwR0lacGlmVktOSEFCRlpwQzhkSFBYaGhQTElxSHYyajJRYXZROGR1UlBQOHNhbVZJQ3hYQ2pPVE9fUFJsSFBvYUlObkVzcWlUMFFEbzFVSmRsZnNwMlhHRlpsRkpwVHZCajR1cW85d2VDR2ZYQXNpMkNieDY2WkNYb0lzM2tGSmxCNm9BNENiaHRXRy1FUXZCcmZiaktheUJyemxKd2RLOHBBSlN4UzJMOS1oZm9ZZGU5Wm1n0gH2AUFVX3lxTFBaU1lSSmE5RnJXMmZZNGhxakcxU1d1Vk1fejZEUGJPQ0MwVzVKdnNnVXYwTy01VVBBRE1iTFFBbnY5NEJzc1dNcGI2UlV6TkFBMUJuN2FLUW80TWs1TFk1SFZRZUFSZy1tMDNVb0pyZzA1ZUV1WV9pS1U1QTFTamlfQ1VGaUpDT1R5dWpnZGo1bWszNHhacjlSckVFekRNMlJCcEhaQ2FWVFd0Z1NqQk9WcDU2QmNLbFBmUGZLckRnUElNRnBna3lqa0d0Y3l0N0pnMGdPdHZhNlVzTG5nakg4dWZWVENXdTZrUjJjSDZLb0dRYk9Ndw?oc=5"
+        },
+        {
+          "title": "Zar de la frontera destaca récord de 200 mil arrestos migratorios en EU; intensificará deportaciones el próximo año, anuncia",
+          "original_title": "Zar de la frontera destaca récord de 200 mil arrestos migratorios en EU; intensificará deportaciones el próximo año, anuncia",
+          "original_language": "es",
+          "summary": "Zar de la frontera destaca récord de 200 mil arrestos migratorios en EU; intensificará deportaciones el próximo año, anuncia El Universal",
+          "published": "2026-10-02T15:43:56+00:00",
+          "source": "El Universal",
+          "url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxOMFVPN1FtcllabU02RGtIZ0Nhcmt1R1ZqX3dWaElETmRwVXJ4UjR3aGlSZjRqRmx2eXFTY0p0clRvcExHU3hzdXFnaWZ3X3cwUDliREIwbTQxaFBtWE5DVThpaUQ0THllbHFyOWNvMFI5cmEzcHlpdEFpQnNwcm5OMTdqa2VnR2dTZ0F2akxDcHVZLXFVZW5IbnRKZEU2YnFZaGRLQllrMlNIcHlxWVBZelVwcmJTVHJOem9XMm9OVU5LemJUNXlMRzhmWTc2ak12QThSOG9CNUJnWm4xWUlSd1ZjOVMzenlMc1kwaVJxWm82UdIBhgJBVV95cUxNUExNelZGTVN1aGNOdE1XU0hSUXZIcW5NelVsUVpNM2d0MXcybWJ1V1U2aVQwUkIyeDRYVzZ2MTBoalZWeW43dzNOdlJxb002c3Z2blYyZkw1bzVzWUMwYVVYazZiNFF1MkRPUkI0dFo0RU9sdVB6T0tPUmNkc3hQbWlDM0l4aGVaX3VfcjhyN25wNldYbFlrZ1o4SjBtcU9JaWJXUS1qM092UEpLTTgwd0E0elZDdHpoc0QzSkNxYmVLLUNoRDNOWDVyc0NrZ0xieEZydVAxd3A2UE83Z3Q0SC12VU16QkdkanFYY2RLbEFDVU5mMG9aYnBEc1kyeGo2VlJDcVln?oc=5"
+        },
+        {
+          "title": "Consulado de México en Nueva York celebra 200 años de creación y Lotería Nacional devela su billete",
+          "original_title": "Consulado de México en Nueva York celebra 200 años de creación y Lotería Nacional devela su billete",
+          "original_language": "es",
+          "summary": "Consulado de México en Nueva York celebra 200 años de creación y Lotería Nacional devela su billete El Universal",
+          "published": "2026-10-02T19:53:09+00:00",
+          "source": "El Universal",
+          "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxOeFJaUnlpa1NwWUpMTk5nWHpZaFlTZldsNGJqclpnSHVRcURFd2NZRWZ6RkFnclIzZ3B5blBnckR3V2lRakdObjRwMWJ2dFZvekE3U19jS3A5OFcxMmtjZUZ0OU4wV1JDR3M3THJuQmtGOGRPTUlpM2ozTHJ3YzQtVVp2czhRNUU0MjI5TjE4UENPX29nWC1mT094U01Cdmh1YjEwX0x5OEp6dUMwYWtMb1N4VTlpZDBuZ2EwWXVpOHlDV3ZlSWlmNGo2TFVUZTAtaDFZ0gHnAUFVX3lxTFB6YlBzd0lTQXFZSHJrcUNZbXJvMzdQdkNEa1R3NTEzNTZEWnRNazEyMjNHaWFzREdvMy1BaExPWVFwXzJBQ1gyU1ViTUt5V2JCZEp3TjFyZnNjUk9UNnRXVDdKX09naTJKVkxvdTE3ZFNBek9tcGVkM056aTZ6aEJMd0lUZXZySHEyVEdIT3Vldk8tRDRnemg3cE1xYjBXLXo5dGJSajNFR2hxcDJzbVowSWtCMFpLel9JRWVoa0hvVlBZOXYxd2VXUDRkcl9FNEl4Y3VXSF9RUGRHc2lmVUVTVHBqZjhLYw?oc=5"
+        },
+        {
+          "title": "Tabasco: 20 mil familias reciben apoyo con 200 millones anuales",
+          "original_title": "Tabasco: 20 mil familias reciben apoyo con 200 millones anuales",
+          "original_language": "es",
+          "summary": "Tabasco: 20 mil familias reciben apoyo con 200 millones anuales MILENIO",
+          "published": "2026-10-02T21:27:31+00:00",
+          "source": "MILENIO",
+          "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOMy1BcWtTdUQtQ01HZVZUd3FhcUFBWUJVLU5qVndmUlJlQ2htSnlIQ0RWVHV4akFPOHNUaFVXN195MUIzSS0xYTVJN3FGdlNEcDFyY1pad1BTOGoxMUtaX3VBRUR1c1Ridk00V2ZCOWQybEN2dWFyNkwtVG5ZSUhqeURNYVExSVZPQ1ZvcXpMMVY0Yk9vZzA5UWRLVDZRdlg2UWRSSktKQ1NIbG9DRERLWVluWU5iZ9IBtgFBVV95cUxOMy1BcWtTdUQtQ01HZVZUd3FhcUFBWUJVLU5qVndmUlJlQ2htSnlIQ0RWVHV4akFPOHNUaFVXN195MUIzSS0xYTVJN3FGdlNEcDFyY1pad1BTOGoxMUtaX3VBRUR1c1Ridk00V2ZCOWQybEN2dWFyNkwtVG5ZSUhqeURNYVExSVZPQ1ZvcXpMMVY0Yk9vZzA5UWRLVDZRdlg2UWRSSktKQ1NIbG9DRERLWVluWU5iZw?oc=5"
+        },
+        {
+          "title": "Более 200 сотрудников полиции принимают участие в учениях по борьбе с терроризмом и освобождению заложников.",
+          "original_title": "Более 200 сотрудников полиции принимают участие в учениях по борьбе с терроризмом и освобождению заложников.",
+          "original_language": "ru",
+          "summary": "Более 200 сотрудников полиции принимают участие в учениях по борьбе с терроризмом и освобождению заложников. Vietnam.vn",
+          "published": "2026-10-04T14:50:16+00:00",
+          "source": "Vietnam.vn",
+          "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPM2JCS2ZDdXp1am5Zc29FdnU2LUVOaVI0MjdHMHpVWTNPbERrZmZCckloSUZwZHRSM1hHcVlSODJDM0lYVE9oYkRocHgzRTJBTzdDb0Q3NlBqMnI5ajhsUWlSd1J5YUxWRXdtWVZYNmhWZjRVMU94QjhsNjlYWTZDUVV0cnY0YzZHVEpv?oc=5"
         }
       ],
-      "article_count": 10,
+      "article_count": 18,
       "first_reported": "2026-09-29T17:59:00+00:00",
-      "last_reported": "2026-09-30T09:37:11+00:00",
+      "last_reported": "2026-10-01T22:24:00+00:00",
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "paraphrase_entity_context",
         "entity_actor_event_signature",
         "very_high_title_similarity",
-        "title_plus_anchor"
+        "title_plus_anchor",
+        "same_incident"
       ],
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
@@ -492037,7 +491499,8 @@
       "ai_geo_reason": "Mexico's UIF blocks accounts following US sanctions on Sinaloa Cartel associates.",
       "ai_geo_fingerprint": "c1d190152fdfbf44787fce35a781608ab9fd17c5610d959ce90d174a471f8f65",
       "ai_geo_inferred": false,
-      "dedup_review_required": true
+      "primary_source_published": "2026-09-29T17:59:00+00:00",
+      "cbrn_subgroups": []
     },
     {
       "id": "80608e957df15e8a",
@@ -493519,7 +492982,8 @@
       "threat_categories": [
         "Chemicals and Explosives"
       ],
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "00c587a0dac5348e",
@@ -493629,7 +493093,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_incident"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "86642962a35e57b1",
@@ -493756,7 +493221,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The conflict and Houthi operations are centered in Yemen.",
       "ai_geo_fingerprint": "b5d772e502d9e1d25a910b9d8ed6a0f2dd02c2f84ad16a6e0477349ec6b4424f",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "f1a1b8b4c718e60e",
@@ -494393,8 +493859,7 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The operation took place in Puntland, an autonomous region of Somalia.",
       "ai_geo_fingerprint": "dfdd994d4e99d96ea754ceff4416a62466cab6654966a7797f8fbe794ab20565",
-      "ai_geo_inferred": false,
-      "dedup_review_required": true
+      "ai_geo_inferred": false
     },
     {
       "id": "ac80bdceea9e07a0",
@@ -495579,7 +495044,8 @@
       "ai_geo_reason": "Explicitly names Ibb Governorate, Yemen.",
       "ai_geo_fingerprint": "0848f44f9026b3700b7688eac9a23e4c5a79da77a35b2627a82750c923556f64",
       "ai_geo_inferred": false,
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "5073063ae12342d9",
@@ -495613,7 +495079,9 @@
       "targeted_source": "syriahr.com",
       "targeted_source_kind": "local_language_media",
       "source_article_fingerprints": [
+        "12b0b9c22730860718b84350940be3f63fb8771cc40851be6934bfc12b2f808c",
         "5db56490376c82868c26d3f2b2ef1c10c32f4e576131ce2527f7c50e0eb4d630",
+        "5f48a56e9a799986aa1e262b39bd8fac2ff4697039a208a6cff691cdfce2a74e",
         "b8dbd7bb03d7874d56e1be2c1be51f5900d1ecb761d74d7e4d911acd737f2dd3"
       ],
       "sources": [
@@ -495629,11 +495097,29 @@
           "published": "2026-09-29T14:25:57+00:00",
           "source": "عنب بلدي",
           "url": "https://news.google.com/rss/articles/CBMi0gJBVV95cUxOZTRFejNUc29xTEpZMlNrOS1oc2pIcUpWODdHZFIzcGpYTzBzMTZIdUFvcWsyZVExV0tYMmJzVGExcS1STEE0RWNlTndzbk5qTHIwb29fYUI3QklUeUtUNERldndxaXpwdzJCM3dxM3FmRzRPQ1IwbmJ0TmVaS25DenE4WUJTRkZ2ZEIyUDlLRGQ4azUyRU1qTWEwZTNXWmE0NnJIZnFiejRzWGVrLTc0dUV1blNnYnJqcmRJYzhJMVkzYThnRW1jR2VSSDMyVWo4UDJ5RDgwYUphbkMyLXlVcTBCeWs3Q3hGNkw1MXh5OC13WWRqS2VhNEZUQVQxcjZBZ2F3NDhSY1g3MHJhdS1McjhuZk1wWHFIU1c2Sy00TFFYLXpqMExOVjF6S0lvZ2hLNnNPTE44TWUwWklxalBNaW1TQ2JQVVZnYXdoY0Nmbk9Vd9IB2gJBVV95cUxQeGtxMUdIajdhNWN6dGJVWDhObmltOUNiS2tIVlRpblFCZ2pNUkI2UUpFT0RSblhvNng0VTJqSnU3R1FzeDQtemFSR3FnUWoyM1hhandVazR0a29XaDdjQkFRTTl6V21HMEwwZFNkTnZ4NXltSGRHMWRvV0VGVDZYeG1Bb2dJRG1mMmVFbWxHcU1LaUFEWUE1RVh3UW9zeUxhNnNMVlQ3OFVKVXoxRDFIWmZYZHQ3c0VQS3Zhb2RlbExiMWVzX0JaNVJaT3ZSejJXZ05KV3BBa1VYa0JfOFRmd2wxSXduSGJrdTByNEV5SGppeThWdHAxTkxvT2VOVXRsYnd2N1pPc0ZlQndPSDI5d0F4enRfOS1OR2hHZXJsNjlXbEE3ck5nbEdIOVVQUzA1cHl1RWJPamxXV2NxSVpUNGZBWVNIemFYay1QOERNMi1jNC12bXF0QTFB?oc=5"
+        },
+        {
+          "title": "Armed attack seriously injures Ministry of Defense officer in Al-Sanamayn amid Division 40 tensions",
+          "original_title": "عقب توترات ضمن الفرقة 40.. اســتــهــدافٌ مســلــح يوقع ضابطاً من وزارة الدفاع بجروح بالغة في الصنمين",
+          "original_language": "ar",
+          "summary": "An armed attack by unknown assailants in Al-Sanamayn, Daraa countryside, left a Syrian Ministry of Defense officer with severe injuries following tensions involving Division 40.",
+          "published": "2026-10-01T07:53:49+00:00",
+          "source": "المرصد السوري لحقوق الإنسان",
+          "url": "https://news.google.com/rss/articles/CBMivwJBVV95cUxNaS1oZUJsQUszek1vckw5b2JHcGRkakk0SVZRb1lXTXJuNGRQWEhJdFdCY0c1VnlTUm1OcVVGelVIeWc0UTFETlpxWlQ0Q1RJOWx4X1B3Q0swOTlqWWx6dklxZk1SSUFiS1Faemdfd0t4aFhlZEJuSXhleXZWQzVYeHN4enl0a2Z1b3lmNjl2R1VfbXFOVmFUVVBVNm9GY3ExdENWZnl4YVdSUk9fQlA1RGFfXzFlLTgxMVU3eVo5RzduMDd6NlQ2eVlCNDNsSEZSTzhyN2ZBRVVpYkQtSkZXMEVGN0didFVxRXZjNHlYb0VpOHdmX2ZyUC1fR3RJVVhxNXZycHJuVmlWQXM3eUlWYks3M0dsb1FsTG9JSXREcmxacjVLYndCQ3BBSnFZZUFHdXFzdmRkT2dtSnlQc19J?oc=5"
+        },
+        {
+          "title": "Daraa: Unidentified individuals target army officer in Al-Sanamayn",
+          "original_title": "درعا.. مجهولون يستهدفون ضابطًا في الجيش بالصنمين",
+          "original_language": "ar",
+          "summary": "Unidentified attackers targeted a military officer with gunfire in the city of Al-Sanamayn in Daraa governorate.",
+          "published": "2026-10-01T14:49:42+00:00",
+          "source": "عنب بلدي",
+          "url": "https://news.google.com/rss/articles/CBMi0gJBVV95cUxPRnZsdEVfNkVUOG9hQmlSN0kxTjl1cU84Sklob3NNa2J6R215Q2ZJREZQMk1jY3BOa1RJMVNhWkdnWDllVHFZWDNNQzVzdGw1eWZpTDBEUzh4aXF2WHNLYnpoSm5vaGlhX3p4YlMxelI3b1pmQnVEeUFKSDR2QVM4QjJldWh0a1pBNXMtbVl0bDBLN085VHNOOTMybTJtN0ZYNkJzQzRKMjZTYmFTZ0s3dzZpVmlVbHlUemdQemxpZ1FOUnpVb2FsYTVBbGhkdXpRTjJYU1FTbnJKZWE1V0FVYWIxSUNKWVZac184WFBfQmNkc1hFRVprMTlzeV9tSldUYk0zMFpfUXpNYkJCZkNZUmRxbzhjWUw5cVVPNEx6OU5TX0JqbXpWbFoySzFObDRDbll4YWo0X1lfMUI2WUQ4QndSUndrX05FR0pGN1paRVNiZ9IB2gJBVV95cUxQcW5TTDFDWHQwM1kxUV9ISm4yeGNmM1ppdmtRU01FT3VBMVRoTWhmYUhHVzBjNlktbDNSSjMxQWJ4bkc0cU9WMTNBRHdTcmY3V01md0RwdnRoLWc3ajlwLW1VbVNpNWF0Z0RoYjBnUnpFbUlQcVBVVDdjVUVhS0Y5STkwWTB6djYyRTV0ZHp6aXdkTE9rLUtyWjZNU2RWeEtXRFgwUjVPWXNBMklubmF4S3JvTHNzS1ljam1CbGVrS2xxNlFkN1duRWVpMHBzcE9Nd0k5Nmowb3dKTzlEXzBFQ2dSUTJsVzVTTDA1R2hsYlkzOHlaYzVERUZJbHZaT3lCVnJENG9JZDNZczJrUVNuNzBmMmlualNETDJ0a0RiMm84WFZ4S3JlNzRLb2h3SGxKVmpzSTRIU0xQZ1JoWTJjRFJOY3NaalhXanpCODRwdThNVGhMR3B1UlhR?oc=5"
         }
       ],
-      "article_count": 2,
+      "article_count": 4,
       "first_reported": "2026-09-29T07:19:03+00:00",
-      "last_reported": "2026-09-29T14:25:57+00:00",
+      "last_reported": "2026-10-01T07:53:49+00:00",
       "ai_selection_complete": true,
       "ai_selection_version": "gemini-ct-selection-v6-incident-model",
       "ai_selection_model": "gemini-3.5-flash-lite",
@@ -495671,7 +495157,9 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_incident"
-      ]
+      ],
+      "primary_source_published": "2026-09-29T07:19:03+00:00",
+      "cbrn_subgroups": []
     },
     {
       "id": "36b7dd4002f3c8fb",
@@ -496477,7 +495965,8 @@
       "ai_geo_reason": "Related articles detail that suspects were caught in counter-terrorism operations in Istanbul and Gaziantep.",
       "ai_geo_fingerprint": "61e46870774094a313dc02b1db3662fe10bf616e0675ef92cdae4034b9eefcb5",
       "ai_geo_inferred": true,
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "e17d36329571093b",
@@ -497453,7 +496942,8 @@
       "ai_geo_reason": "Refers to Houthi activities and the Red Sea corridor adjacent to Yemen.",
       "ai_geo_fingerprint": "27ca35832257135db98a3b683d134e40e31419e4935c965999d4d31dc9c0d7c3",
       "ai_geo_inferred": true,
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "2890367fedaa8200",
@@ -499111,7 +498601,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Israeli forces completed a counter-terrorism operation in al-Mansouri, southern Lebanon.",
       "ai_geo_fingerprint": "5983f9f49ed5af26edd532c34b1b993086c0836eee897f440963065ba79fac47",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "0c6bf107806a4989",
@@ -499737,7 +499228,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Attacks and security response discussed are located in Plateau State, Nigeria.",
       "ai_geo_fingerprint": "c61838dc39eeae17b4da025f784e90ac2b33c7249349c04a7b8b72e551a70b30",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "5739d1b60cf6689f",
@@ -499831,7 +499323,8 @@
       "dedup_methods": [
         "very_high_title_similarity",
         "same_url"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "83833d3be21c4f26",
@@ -499996,7 +499489,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Terrorist attacks on communities during curfew in Plateau State, Nigeria.",
       "ai_geo_fingerprint": "96503d7b6f361c94a836aa95241a00f31f237fbd913da80a78352e2c4cd19797",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "0e0f09d5f42f86e7",
@@ -500191,7 +499685,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The incident occurred in the West Bank.",
       "ai_geo_fingerprint": "65289abe81a6c85d3de95e0721cece0185abe017f092182a763d77e0fdbfcad5",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "1abe2b7a71d9049a",
@@ -501299,7 +500794,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Turkish authorities investigating FETÖ ties.",
       "ai_geo_fingerprint": "feb0a691da03b7b7e2a6a74cf58bc653698645ddb214c24f87b9b2dcc0b3b0cf",
-      "ai_geo_inferred": true
+      "ai_geo_inferred": true,
+      "dedup_review_required": true
     },
     {
       "id": "b573478a96b43a9a",
@@ -502355,7 +501851,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Over 80 people abducted in twin attacks in Nigeria.",
       "ai_geo_fingerprint": "5963563dd3d1690a9d8827a0bf84cb66e4b7e70923555f5f1298392be0976d44",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "71c76c0c63ce8d8f",
@@ -504240,7 +503737,8 @@
         "entity_actor_event_signature",
         "same_incident"
       ],
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "25326c793c8fe3b5",
@@ -504315,7 +503813,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Turkish Interior Minister announced detentions across Turkey.",
       "ai_geo_fingerprint": "ce8cc86b927bee256b8423dee7670346dd2a8a2300231f1d5fe1ace83deec936",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "3982f6728b41fe1c",
@@ -504522,7 +504021,8 @@
       "ai_geo_reason": "JMIC maritime security updates relate primarily to Red Sea / Gulf of Aden shipping lanes adjacent to Yemen.",
       "ai_geo_fingerprint": "b3d58669fe566ea5e8d8af8300b9423163fed42b776e8190d52cab7e7071e78b",
       "ai_geo_inferred": true,
-      "cbrn_subgroups": []
+      "cbrn_subgroups": [],
+      "dedup_review_required": true
     },
     {
       "id": "cbc8cccb822c437b",
@@ -504808,7 +504308,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Arrest made in the Daraa countryside, Syria.",
       "ai_geo_fingerprint": "fb6a7193594e4d539a0c6c6c790a603c86860f17979cbb8ffa1f08e67d5b82ff",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "b0fcd74303998458",
@@ -505062,7 +504563,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_incident"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "e548a8be61498157",
@@ -713594,7 +713096,8 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Operations took place in the Haut-Uele province of the DRC.",
       "ai_geo_fingerprint": "eea83d2262121023d68dfc177c0904dc4d71f778653749e138c416b965467e13",
-      "ai_geo_inferred": false
+      "ai_geo_inferred": false,
+      "dedup_review_required": true
     },
     {
       "id": "3ada0cd57989bc17",
@@ -713832,7 +713335,8 @@
       "is_attack": true,
       "incident_anchor": "ADF village attacks eastern DRC 2026-06",
       "update_type": "INITIAL",
-      "incident_id": "inc-9afd1a8a384a8bd9"
+      "incident_id": "inc-9afd1a8a384a8bd9",
+      "dedup_review_required": true
     },
     {
       "id": "ff22f313f9b68683",
@@ -716840,7 +716344,8 @@
       "dedup_confidence": 1.0,
       "dedup_methods": [
         "same_url"
-      ]
+      ],
+      "dedup_review_required": true
     },
     {
       "id": "06f786a88a25e71d",
@@ -721793,9 +721298,9 @@
       "actor_group": "ISIS",
       "primary_event_type": "CT_OPERATION",
       "is_attack": false,
-      "incident_anchor": "Al-Minouki death 2026-05-17",
+      "incident_anchor": "Death of ISWAP commander Al-Minuki 2026-05-16",
       "update_type": "FOLLOW_UP",
-      "incident_id": "inc-9d79b7a49bfaad15",
+      "incident_id": "inc-3b352f2036a6038f",
       "translated_to_english": false,
       "ai_canonical_event": "Death of ISIS senior leader in joint operation",
       "title_variants": [
@@ -721820,8 +721325,7 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Analytical overview regarding the death of ISWAP commander Al-Minuki, whose context relates to Nigeria.",
       "ai_geo_fingerprint": "d6ea96ae75b78dcde4eeb7b2dd9ecd9443b80a903d5c022167893b8d580d6de2",
-      "ai_geo_inferred": true,
-      "dedup_review_required": true
+      "ai_geo_inferred": true
     },
     {
       "id": "4561159e20c03948",
@@ -722379,8 +721883,7 @@
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The Nigerian military and presidency confirmed the identity of the killed ISWAP commander.",
       "ai_geo_fingerprint": "ebef08dfd14dcdc06d6b7762a0ef4ddfdb895ea56919e8fc6a76e7ed2fce999a",
-      "ai_geo_inferred": false,
-      "dedup_review_required": true
+      "ai_geo_inferred": false
     },
     {
       "id": "f34a995e0b0b120d",
