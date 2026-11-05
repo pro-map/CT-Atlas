@@ -107,6 +107,15 @@ this environment; do not present these seed records as complete current PoR list
 - `/crypto-analyze` also returns exchange-behaviour screening for each analysed
   wallet. A candidate is shown only at 80/100 or above; the rules-based score is not
   a calibrated probability and does not prove exchange ownership or custody.
+- `/crypto-analyze` also returns `risk_assessment`, from the pure rules in
+  `crypto-risk.mjs`. The label is an automated indicator for analyst review, not a
+  finding. Its thresholds have only been checked on synthetic fixtures, and the
+  response says so. `coverage` states how much history was read.
+- `/crypto-workspace` returns a `revision`. A save must send it back and gets 409 with
+  the current workspace if it is stale or missing. Alerts and `last_snapshot` belong to
+  the gate: a page can edit watches and acknowledge alerts, not replace either.
+- `POST /crypto-monitor-check` runs one monitored wallet through the same alert builder
+  as the schedule, because the gate will not take alerts from the page.
 - In Crypto → Labels & Attribution, analysts can propose an `EXCHANGE` label. Admins
   can review the queue, collect existing private exchange labels for review, or
   import verified CSV/JSON data. Imports are approved immediately and must include
@@ -132,7 +141,7 @@ tags; they are not added to the reviewed registry automatically. API keys belong
 Cloudflare secrets and must not be committed to Git. The current Worker can keep both
 optional flags unset for a no-new-cost setup.
 
-Deploy `index.js`, `crypto.js`, `crypto-workspace.js`, `exchange-addresses.js`,
-`exchange-behavior.mjs`, `report-gate.js`, and their existing shared dependencies together to the existing
+Deploy `index.js`, `crypto.js`, `crypto-risk.mjs`, `crypto-monitor.js`, `crypto-workspace.js`,
+`exchange-addresses.js`, `exchange-behavior.mjs`, `report-gate.js`, and their existing shared dependencies together to the existing
 Worker. GitHub Pages deploys only the Crypto UI; it does not deploy these Worker
 routes or Durable Object changes.
