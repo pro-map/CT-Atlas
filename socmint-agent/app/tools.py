@@ -23,6 +23,16 @@ MAX_LINKS = 50
 DEFAULT_TIMEOUT = 12
 ALLOWED_SCHEMES = {"http", "https"}
 
+# These platforms' terms or robots notices forbid automated fetching. Their URLs
+# may appear as search-index leads but are never retrieved, here or through a
+# redirect. Keep in step with NO_DIRECT_FETCH_HOSTS in
+# cloudflare-worker/social-intel.js.
+NO_DIRECT_FETCH_HOSTS = (
+    "linkedin.com", "lnkd.in", "facebook.com", "fb.com", "fb.me", "fb.watch",
+    "instagram.com", "instagr.am", "threads.net", "threads.com", "x.com",
+    "twitter.com", "t.co", "tiktok.com", "reddit.com", "redd.it",
+)
+
 BTC_RE = re.compile(r"\b(?:bc1[a-zA-HJ-NP-Z0-9]{20,87}|[13][a-km-zA-HJ-NP-Z1-9]{25,34})\b")
 EVM_RE = re.compile(r"\b0x[a-fA-F0-9]{40}\b")
 TRON_RE = re.compile(r"\bT[1-9A-HJ-NP-Za-km-z]{33}\b")
@@ -154,8 +164,29 @@ def _validate_public_url(value: str) -> str:
     return urlunsplit(parsed)
 
 
+class PolicyBlockedError(ValueError):
+    """The URL is on a platform CT Atlas never fetches directly."""
+
+
+def is_no_direct_fetch(url: str) -> bool:
+    try:
+        host = (urlsplit(str(url or "").strip()).hostname or "").lower().rstrip(".")
+    except ValueError:
+        return False
+    return any(host == blocked or host.endswith("." + blocked) for blocked in NO_DIRECT_FETCH_HOSTS)
+
+
+def _validate_fetch_target(url: str) -> str:
+    if is_no_direct_fetch(url):
+        raise PolicyBlockedError(
+            "CT Atlas does not retrieve pages from this platform. Treat any search "
+            "snippet as an index lead only, not as a directly observed page."
+        )
+    return _validate_public_url(url)
+
+
 def _manual_fetch(url: str, timeout: int = DEFAULT_TIMEOUT) -> requests.Response:
-    current = _validate_public_url(url)
+    current = _validate_fetch_target(url)
     for _ in range(4):
         response = requests.get(
             current,
@@ -169,7 +200,7 @@ def _manual_fetch(url: str, timeout: int = DEFAULT_TIMEOUT) -> requests.Response
             response.close()
             if not location:
                 raise ValueError("Redirect did not provide a destination.")
-            current = _validate_public_url(urljoin(current, location))
+            current = _validate_fetch_target(urljoin(current, location))
             continue
         response.raise_for_status()
         response._ct_atlas_final_url = current
@@ -252,6 +283,9 @@ def fetch_public_url(url: str) -> dict[str, Any]:
     It blocks localhost/private-network targets, follows at most three
     validated redirects, limits response size, and returns readable page text
     plus public links that may be explored in later tool calls.
+
+    It returns status 'policy_blocked' for LinkedIn, Facebook, Instagram, Threads,
+    X, TikTok and Reddit: CT Atlas never retrieves those pages, so do not retry.
     """
     try:
         response = _manual_fetch(url)
@@ -259,7 +293,9 @@ def fetch_public_url(url: str) -> dict[str, Any]:
         content_type = response.headers.get("Content-Type", "")
         body = _read_limited(response)
         response.close()
-        return _page_payload(final_url, body, content_type)
+        return {**_page_payload(final_url, body, content_type), "requested_url": _clean(url, 1500)}
+    except PolicyBlockedError as exc:
+        return {"status": "policy_blocked", "url": _clean(url, 1500), "reason": str(exc)}
     except Exception as exc:
         return {
             "status": "error",
@@ -1300,7 +1336,8 @@ def search_linkedin_public(
     result["result_type"] = selected
     result["access_note"] = (
         "Results come from public-web indexing only. LinkedIn login-gated or "
-        "non-public content is not accessed."
+        "non-public content is not accessed, and CT Atlas never fetches LinkedIn "
+        "pages: these snippets are index leads, not directly observed pages."
     )
     return result
 
@@ -1960,7 +1997,8 @@ def transcribe_public_media(url: str, language: str = "") -> dict[str, Any]:
             "text": "",
         }
     try:
-        safe_url = _validate_public_url(url)
+        # Groq would fetch the URL for us, so the direct-fetch policy applies here too.
+        safe_url = _validate_fetch_target(url)
         payload: dict[str, str] = {
             "model": os.getenv("GROQ_WHISPER_MODEL", "whisper-large-v3-turbo").strip()
             or "whisper-large-v3-turbo",
@@ -1985,6 +2023,8 @@ def transcribe_public_media(url: str, language: str = "") -> dict[str, Any]:
             "source_url": safe_url,
             "text": _clean(data.get("text"), 20000),
         }
+    except PolicyBlockedError as exc:
+        return {"status": "policy_blocked", "provider": "groq", "source_url": _clean(url, 1200), "text": "", "reason": str(exc)}
     except Exception as exc:
         return {
             "status": "error",

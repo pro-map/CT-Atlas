@@ -143,6 +143,24 @@ function safePublicUrl(value) {
   }
 }
 
+// These platforms' terms or robots notices forbid automated fetching. Their URLs may
+// appear as search-index leads but are never retrieved, here or through a redirect.
+// Keep in step with NO_DIRECT_FETCH_HOSTS in socmint-agent/app/tools.py.
+const NO_DIRECT_FETCH_HOSTS = [
+  "linkedin.com", "lnkd.in", "facebook.com", "fb.com", "fb.me", "fb.watch",
+  "instagram.com", "instagr.am", "threads.net", "threads.com", "x.com",
+  "twitter.com", "t.co", "tiktok.com", "reddit.com", "redd.it"
+];
+
+function isNoDirectFetch(value) {
+  try {
+    const host = new URL(String(value || "").trim()).hostname.toLowerCase().replace(/\.$/, "");
+    return NO_DIRECT_FETCH_HOSTS.some(blocked => host === blocked || host.endsWith("." + blocked));
+  } catch (_) {
+    return false;
+  }
+}
+
 function listText(value, maxItems=30, maxLen=120) {
   if (Array.isArray(value)) {
     return value.map(x => cleanText(x, maxLen)).filter(Boolean).slice(0,maxItems);
@@ -325,21 +343,31 @@ function htmlToEvidenceText(value) {
 }
 
 async function fetchPublicEvidencePage(source) {
-  const url = safePublicUrl(source?.url);
+  let url = safePublicUrl(source?.url);
   if (!url) return { ...source, fetched: false, fetch_status: "invalid_url", evidence_text: "" };
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8000);
   try {
-    const response = await fetch(url, {
-      method: "GET",
-      redirect: "follow",
-      signal: controller.signal,
-      headers: {
-        "Accept": "text/html,application/xhtml+xml,text/plain;q=0.9,*/*;q=0.5",
-        "User-Agent": "CT-Atlas-Public-Research/1.0"
+    let response;
+    for (let hop = 0; ; hop++) {
+      if (isNoDirectFetch(url)) {
+        return { ...source, fetched: false, fetch_status: "snippet_only_policy", evidence_text: "" };
       }
-    });
+      response = await fetch(url, {
+        method: "GET",
+        redirect: "manual",
+        signal: controller.signal,
+        headers: {
+          "Accept": "text/html,application/xhtml+xml,text/plain;q=0.9,*/*;q=0.5",
+          "User-Agent": "CT-Atlas-Public-Research/1.0"
+        }
+      });
+      const location = response.headers.get("Location");
+      if (![301,302,303,307,308].includes(response.status) || !location) break;
+      url = hop < 3 ? safePublicUrl(new URL(location, url).toString()) : "";
+      if (!url) return { ...source, fetched: false, fetch_status: "bad_redirect", evidence_text: "" };
+    }
     const type = String(response.headers.get("Content-Type") || "").toLowerCase();
     const length = Number(response.headers.get("Content-Length") || 0);
     if (!response.ok) {
@@ -357,7 +385,7 @@ async function fetchPublicEvidencePage(source) {
       ...source,
       fetched: Boolean(evidenceText),
       fetch_status: evidenceText ? "observed_public_page" : "empty",
-      observed_url: safePublicUrl(response.url) || url,
+      observed_url: url,
       evidence_text: evidenceText
     };
   } catch (error) {
@@ -373,13 +401,17 @@ async function fetchPublicEvidencePage(source) {
 }
 
 async function fetchBraveEvidencePages(sources) {
-  const selected = (Array.isArray(sources) ? sources : []).slice(0, 6);
   const results = [];
-  for (const source of selected) {
-    results.push(await fetchPublicEvidencePage(source));
-  }
-  for (const source of (Array.isArray(sources) ? sources : []).slice(6, 10)) {
-    results.push({ ...source, fetched: false, fetch_status: "snippet_only", evidence_text: "" });
+  let attempts = 0;
+  for (const source of Array.isArray(sources) ? sources : []) {
+    if (isNoDirectFetch(source?.url)) {
+      results.push({ ...source, fetched: false, fetch_status: "snippet_only_policy", evidence_text: "" });
+    } else if (attempts < 6) {
+      attempts++;
+      results.push(await fetchPublicEvidencePage(source));
+    } else {
+      results.push({ ...source, fetched: false, fetch_status: "snippet_only", evidence_text: "" });
+    }
   }
   return results;
 }
@@ -681,22 +713,28 @@ function geminiFailure(response, detail, model, useSearch) {
 }
 
 async function geminiSocmintOnce(env, query, useSearch, model) {
+  // url_context has Google fetch the pages for us, so the fetch policy applies to it.
+  const urls = query.urls.filter(url => !isNoDirectFetch(url));
+  const withheld = query.urls.length - urls.length;
   const tools = [];
   if (useSearch) tools.push({ type: "google_search", search_types: ["web_search"] });
-  if (query.urls.length) tools.push({ type: "url_context" });
+  if (urls.length) tools.push({ type: "url_context" });
 
   const input = [
     "Conduct the requested public-source SOCMINT investigation.",
     "Search parameters:",
-    JSON.stringify(query),
-    query.urls.length
+    JSON.stringify({ ...query, urls }),
+    urls.length
       ? "Known public URLs supplied by the analyst must be examined when accessible."
       : "No known URLs were supplied by the analyst.",
+    withheld
+      ? `${withheld} URL(s) supplied by the analyst are on platforms CT Atlas does not retrieve. Say so in source_coverage and do not describe those pages as observed.`
+      : "",
     useSearch
       ? "Use public Google web search to discover relevant public material, including publicly indexed social-media pages and reliable reporting. Search across the requested platforms where publicly indexed."
       : "Do not claim web discovery beyond the supplied URLs.",
     "Return the structured SOCMINT assessment."
-  ].join("\n\n");
+  ].filter(Boolean).join("\n\n");
 
   const body = {
     model,
