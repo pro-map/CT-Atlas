@@ -1,7 +1,10 @@
 """CI gates in front of the scheduled collection, and no workflow left pointing
 at a deleted script. Reads the workflow files only; nothing is dispatched."""
 import ast
+import os
 import re
+import subprocess
+import textwrap
 import unittest
 from pathlib import Path
 
@@ -128,6 +131,40 @@ class CollectionFailFastTests(unittest.TestCase):
         self.assertEqual(geolocate.count("python -u geolocate.py"), 3)
 
 
+class CollectionDispatchTests(unittest.TestCase):
+    def test_daily_rejects_historical_dispatch_before_setup_and_accepts_daily_recovery(self):
+        workflow = read("update-map.yml")
+        validation = workflow.split("  validate_mode:", 1)[1].split("\n  update:", 1)[0]
+        update = workflow.split("\n  update:", 1)[1]
+        self.assertIn("needs: validate_mode", update)
+        self.assertNotIn("secrets.", validation)
+        self.assertNotIn("actions/checkout", validation)
+        self.assertNotIn("pip install", validation)
+        self.assertIn('cron: "17 10 * * *"', workflow)
+        self.assertIn('cron: "17 18 * * *"', workflow)
+        options = workflow.split("        options:\n", 1)[1].split("      force_ai:", 1)[0]
+        self.assertEqual([line.strip()[2:] for line in options.splitlines() if line.strip()],
+                         ["daily", "resume-pending"])
+        script = textwrap.dedent(validation.split("        run: |\n", 1)[1])
+        for mode, accepted in (("daily", True), ("resume-pending", True),
+                               ("backfill", False), ("backfill-new-sources", False),
+                               ("unknown-mode", False)):
+            with self.subTest(mode=mode):
+                result = subprocess.run(["bash", "-c", script],
+                                        env={**os.environ, "COLLECTION_MODE": mode},
+                                        capture_output=True, text=True, check=False)
+                self.assertEqual(result.returncode == 0, accepted, result.stdout + result.stderr)
+
+    def test_empty_review_queue_has_no_schedule(self):
+        # The review queue has been empty since 2026-10-05: its daily run was
+        # a no-op in the RadNuc job's concurrency group, so it is manual only.
+        review = read("review-archive-backlog.yml")
+        self.assertNotIn("  schedule:", review)
+        self.assertNotIn("cron:", review)
+        self.assertIn("  workflow_dispatch:", review)
+        self.assertIn("tools/review_pending_archive.py", review)
+
+
 class WorkflowScriptReferenceTests(unittest.TestCase):
     def test_every_script_a_workflow_runs_exists(self):
         # Obsolete one-off workflows were deleted with their scripts on
@@ -142,7 +179,10 @@ class WorkflowScriptReferenceTests(unittest.TestCase):
 
     def test_obsolete_one_off_workflows_stay_removed(self):
         for name in ("repair-source-geolocation.yml", "chinese-backfill-feed-smoke.yml",
-                     "apply-ct-atlas-label-cleanup.yml", "apply-deep-search-all-languages.yml"):
+                     "apply-ct-atlas-label-cleanup.yml", "apply-deep-search-all-languages.yml",
+                     "groq-free-backfill.yml", "enrich-radnuc.yml", "enrich-chinese-gemini.yml",
+                     "enrich-archive.yml", "backfill-gdelt-acled.yml", "backfill-actor-group.yml",
+                     "recategorize-ct-action.yml", "backfill-record-integrity.yml"):
             self.assertFalse((WORKFLOWS / name).exists(), name)
 
 
