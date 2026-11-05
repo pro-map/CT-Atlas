@@ -422,6 +422,18 @@ test('/database-events with no category filter returns every category, newest fi
   assert.equal(byId.a.match_key,vm.runInContext('eventUniqueKey',c)(events[0]));
 });
 
+test('/database-events keeps follow-ups in the list and tells the page which they are',async()=>{
+  const now=new Date().toISOString();
+  const attack={country:'Mali',primary_event_type:'ATTACK',is_attack:true,category:'Attacks',published:now,incident_id:'inc-1'};
+  const c=workerContext([{id:'point',title:'Attack',...attack},{id:'update',title:'Funeral',...attack,attack_update:true}]);
+  const result=plain(await c.handleDatabaseEvents({json:async()=>({user_id:'analyst',topic:'Attacks',period_days:7}),headers:{get:()=>'token'}},{}));
+  assert.equal(result.body.total,2);
+  const byId=Object.fromEntries(result.body.events.map(e=>[e.id,e]));
+  assert.equal(byId.point.attack_update,false);
+  assert.equal(byId.update.attack_update,true);
+  assert.equal(byId.update.incident_id,'inc-1');
+});
+
 test('/database-events refuses a session that belongs to another user',async()=>{
   const c=workerContext([{id:'a',title:'x',published:new Date().toISOString()}],'someone-else');
   const result=plain(await c.handleDatabaseEvents({json:async()=>({user_id:'analyst'}),headers:{get:()=>'token'}},{}));

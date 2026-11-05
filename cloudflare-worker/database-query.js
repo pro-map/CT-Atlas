@@ -178,6 +178,8 @@ function databaseEventRow(event, index) {
     actor_group: cleanText(event.actor_group, 100),
     primary_event_type: cleanText(event.primary_event_type, 40),
     is_attack: event.is_attack === true,
+    attack_update: event.attack_update === true,
+    incident_id: cleanText(event.incident_id, 80),
     ai_relevance_score: number(event.ai_relevance_score) || 0,
     ai_relevance_reason: cleanText(event.ai_relevance_reason, 300),
     source: cleanText(event.source, 140),
