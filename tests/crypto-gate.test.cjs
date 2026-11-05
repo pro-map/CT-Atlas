@@ -148,6 +148,16 @@ test("a watch added by the page starts with no baseline, because the page cannot
   assert.equal((await get(call)).workspace.watchlist[0].last_snapshot,null);
 });
 
+test("asking for one monitored wallet is scoped to its owner and leaves the rotation alone",async()=>{
+  const {call,values}=harness();
+  await put(call,{...empty,watchlist:[WATCH]},0);
+  const one=await call("/crypto-monitor-targets",{username:"analyst",watch_id:"w1"});
+  assert.equal(one.body.targets.length,1);
+  assert.equal(values.has("crypto-monitor-cursor"),false);
+  const other=await call("/crypto-monitor-targets",{username:"someone-else",watch_id:"w1"});
+  assert.equal(other.body.targets.length,0);
+});
+
 test("stored blank thresholds are repaired on read, for the page and for the monitor",async()=>{
   const {call,values}=harness();
   const legacy={min_amount:0,aggregate_24h:0,velocity_24h:1,dormant_days:1};

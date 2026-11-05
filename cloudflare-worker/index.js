@@ -34,7 +34,7 @@ import { SANCTIONS_VERSION, sanctionsHealth } from "./sanctions.js";
 import { handleHealthStatus } from "./health-status.js";
 import { handleCryptoWorkspace, CRYPTO_WORKSPACE_VERSION } from "./crypto-workspace.js";
 import { handleExchangeAddressLabels, EXCHANGE_ADDRESS_VERSION } from "./exchange-addresses.js";
-import { runCryptoMonitor, CRYPTO_MONITOR_VERSION } from "./crypto-monitor.js";
+import { runCryptoMonitor, handleCryptoMonitorCheck, CRYPTO_MONITOR_VERSION } from "./crypto-monitor.js";
 import { handleSourceImage, SOURCE_PREVIEW_VERSION } from "./source-preview.js";
 import { handleReportIllustration, illustrationCandidates, REPORT_ILLUSTRATION_VERSION } from "./report-illustration.js";
 import { handleSocialInvestigate, handleSocialWorkspace, SOCIAL_INTEL_VERSION } from "./social-intel.js";
@@ -227,6 +227,9 @@ return handleExchangeAttribution(request, env);
 }
 if (url.pathname === "/crypto-workspace" && ["GET","POST","PUT"].includes(request.method)) {
 return handleCryptoWorkspace(request, env);
+}
+if (url.pathname === "/crypto-monitor-check" && request.method === "POST") {
+return handleCryptoMonitorCheck(request, env);
 }
 if (url.pathname === "/crypto-address-labels" && ["GET", "POST"].includes(request.method)) {
 return handleExchangeAddressLabels(request, env);

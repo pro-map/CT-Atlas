@@ -1382,6 +1382,12 @@ export class ReportGate {
       }
 
       targets.sort((a,b) => (a.username + ":" + a.watch.id).localeCompare(b.username + ":" + b.watch.id));
+      // One wallet on request: this must not move the scheduled rotation.
+      if (body.watch_id) {
+        const username = normalizeUsername(body.username);
+        const watchId = cleanText(body.watch_id, 80);
+        return Response.json({ ok: true, targets: targets.filter(item => item.username === username && item.watch.id === watchId) });
+      }
       if (!targets.length) return Response.json({ ok: true, targets: [], total: 0 });
 
       const cursorRaw = Number((await this.state.storage.get("crypto-monitor-cursor")) || 0);

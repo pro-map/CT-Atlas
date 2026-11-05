@@ -940,6 +940,7 @@ export {
   detectSuspiciousPatterns,
   withSanctionsScreening,
   analyzeCryptoAddress,
+  authenticate,
   handleCrypto
 };
 
