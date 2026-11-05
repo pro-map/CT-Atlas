@@ -170,6 +170,22 @@
 
       <div id="cryptoKpis" class="crypto-kpis"></div>
 
+      <article id="cryptoRisk" class="crypto-card risk-card" hidden>
+        <div class="crypto-card-head">
+          <div>
+            <div class="crypto-card-title">Risk indicators (automated, not a finding)</div>
+            <div class="crypto-card-note">Prompts for analyst review from the seed wallet's own records. Transaction filters do not change them.</div>
+          </div>
+          <div class="intel-actions">
+            <button id="cryptoOneHop" class="crypto-small-button" type="button" title="Analyses the top 5 counterparties by value: 5 extra provider look-ups">CHECK ONE HOP</button>
+            <span id="cryptoRiskBadge" class="intel-badge">—</span>
+          </div>
+        </div>
+        <div class="crypto-card-body">
+          <div id="cryptoRiskBody" class="intel-list" aria-live="polite"></div>
+        </div>
+      </article>
+
       <article id="cryptoSanctions" class="crypto-card sanctions-card">
         <div class="crypto-card-head">
           <div>
