@@ -257,6 +257,22 @@ def headline_words(event):
     return {x for x in re.findall(r'[^\W\d_]+', value) if len(x) >= 4 and x not in GENERIC}
 
 
+def grounded_title(event):
+    """A generated English title less the words a Latin-script source's own
+    title and summary do not contain: a place the model took from a list of
+    known incidents must not prove the article belongs to one. Other scripts
+    cannot be compared word by word, so their title stays whole."""
+    def fold(value):
+        value = unicodedata.normalize('NFKD', str(value or ''))
+        return ''.join(ch for ch in value if not unicodedata.combining(ch)).casefold()
+    title, original = str(event.get('title') or ''), fold(event.get('original_title'))
+    letters = [ch for ch in original if ch.isalpha()]
+    if not letters or sum(ch.isascii() for ch in letters) / len(letters) < 0.5:
+        return title
+    source = original + ' ' + fold(event.get('original_summary'))
+    return ' '.join(re.sub(r'[^\W\d_]+', lambda word: word.group() if fold(word.group()) in source else '', title).split())
+
+
 def _country_key(event):
     return str(event.get('country_code') or event.get('country') or '').upper()
 

@@ -134,6 +134,7 @@ def runtime_telemetry():
             "maintenance_pending":lanes["maintenance"]["pending"],
             "budget_reached":budget_hit,"gemini_429":hit429,"overflow_429":overflow429,
             "partial_recovery":is_partial,"reasons":reasons,"lanes":lanes,
+            "known_incidents":collector.KNOWN_INCIDENT_TELEMETRY,
             "budgets":{"primary":{"per_run":RUN_BUDGET,"per_day":DAY_BUDGET,
                                     "used_this_run":calls,"used_today":today_calls()},
                        "overflow":{"model":OVERFLOW_MODEL or None,"per_run":OVERFLOW_RUN_BUDGET,

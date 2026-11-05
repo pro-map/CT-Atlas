@@ -3,6 +3,7 @@ import threat_categories
 import collection_config
 import retired_categories
 import daily_pipeline
+import known_incidents
 import feedparser
 import hashlib
 import html
@@ -90,6 +91,11 @@ GDELT_STATS = Counter()
 GOOGLE_NEWS_WAVE_RESPONSES = None
 COLLECTION_STATUS = {}
 AI_SELECTION_PARTIAL_CHECKPOINT = None
+# Set only while the daily lanes run. A global, not a parameter: the quota
+# wrapper replaces the selection functions with fixed signatures and
+# apply_ai_selection has many callers.
+KNOWN_INCIDENTS = None
+KNOWN_INCIDENT_TELEMETRY = {}
 SERVER_ERROR_STREAK = 0
 
 
@@ -136,6 +142,11 @@ AI_SELECTION_BATCH_SIZE = max(
 
 AI_SELECTION_VERSION = "gemini-ct-selection-v7-standalone-threat-topics"
 AI_SELECTION_CACHE_FILE = "ai_article_selection_cache.json"
+
+# Known-incident reuse in the daily lanes: "off" is today's request and order;
+# "shadow" sends the list and logs what would be reused, changing no incident
+# id; "on" applies the reuse. Any other value means shadow.
+AI_KNOWN_INCIDENTS = os.getenv("AI_KNOWN_INCIDENTS", "shadow").strip().lower()
 
 AI_SELECTION_ATTEMPTS = 5
 # A 5xx/network outage is usually over in a minute: three tries per batch,
@@ -3805,6 +3816,8 @@ AI_SELECTION_SCHEMA = {
     ],
 }
 
+AI_SELECTION_SCHEMA_KNOWN = known_incidents.schema_with_ref(AI_SELECTION_SCHEMA)
+
 
 AI_SELECTION_INSTRUCTIONS = """
 You are the final editorial relevance filter for an operational
@@ -4686,6 +4699,8 @@ def call_ai_selection_batch(
             "AI article selection cannot run."
         )
 
+    known_rows, known_refs = KNOWN_INCIDENTS.for_batch(batch) if KNOWN_INCIDENTS is not None else ([], {})
+
     body = {
         "model":
             AI_SELECTION_MODEL,
@@ -4695,8 +4710,11 @@ def call_ai_selection_batch(
                 "Review every candidate CT event below. "
                 "Return exactly one result for every event_id.\n\n"
                 +
+                (known_incidents.KNOWN_INCIDENT_NOTE + "\n\n" if known_rows else "")
+                +
                 json.dumps(
                     {
+                        **({"known_incidents": known_rows} if known_rows else {}),
                         "events":
                             batch
                     },
@@ -4718,7 +4736,7 @@ def call_ai_selection_batch(
                 "application/json",
 
             "schema":
-                AI_SELECTION_SCHEMA,
+                AI_SELECTION_SCHEMA_KNOWN if known_rows else AI_SELECTION_SCHEMA,
         },
 
         "generation_config": {
@@ -4839,6 +4857,9 @@ def call_ai_selection_batch(
                     "Gemini selection result has no results array."
                 )
 
+            if known_rows:
+                KNOWN_INCIDENTS.translate(results, known_refs)
+
             time.sleep(
                 AI_SELECTION_PAUSE_SECONDS
             )
@@ -4954,6 +4975,13 @@ def process_ai_selection_batch(
 
 
 AI_SELECTION_INSTRUCTIONS += radnuc.SELECTION_NOTE + threat_categories.SELECTION_NOTE
+
+
+def anchor_incident_id(anchor):
+    normalized_anchor = unicodedata.normalize("NFKD", anchor)
+    normalized_anchor = "".join(ch for ch in normalized_anchor if not unicodedata.combining(ch))
+    normalized_anchor = re.sub(r"[^a-z0-9]+", " ", normalized_anchor.lower()).strip()
+    return "inc-" + hashlib.sha256(normalized_anchor.encode("utf-8")).hexdigest()[:16]
 
 
 def apply_ai_selection(
@@ -5160,15 +5188,15 @@ def apply_ai_selection(
 
     event["primary_event_type"] = primary_event_type
     event["is_attack"] = is_attack
-    event["incident_anchor"] = incident_anchor
+    # A recovered run applies a decision twice; the incident's anchor stays.
+    if not event.get("incident_reuse"):
+        event["incident_anchor"] = incident_anchor
     event["update_type"] = update_type
 
     # Never replace an id incident consolidation already settled on.
-    if incident_anchor and not event.get("incident_id"):
-        normalized_anchor = unicodedata.normalize("NFKD", incident_anchor)
-        normalized_anchor = "".join(ch for ch in normalized_anchor if not unicodedata.combining(ch))
-        normalized_anchor = re.sub(r"[^a-z0-9]+", " ", normalized_anchor.lower()).strip()
-        event["incident_id"] = "inc-" + hashlib.sha256(normalized_anchor.encode("utf-8")).hexdigest()[:16]
+    fresh_incident_id = not event.get("incident_id")
+    if incident_anchor and fresh_incident_id:
+        event["incident_id"] = anchor_incident_id(incident_anchor)
 
     event[
         "translated_to_english"
@@ -5237,6 +5265,9 @@ def apply_ai_selection(
         event["ai_current_ct_event"] = False
         event["ai_scope_rejection"] = scope_reason
         return False
+
+    if fresh_incident_id and event["ai_selected"] and KNOWN_INCIDENTS is not None:
+        KNOWN_INCIDENTS.settle(event, result)
 
     return event["ai_selected"]
 
@@ -5491,6 +5522,26 @@ def persist_background_articles(rejected_events):
         persist_background_articles_to_local_file(rejected_events)
 
 
+def arm_known_incidents(existing, now, engine):
+    """Daily lanes only: backfill, archive review, cleanup and Groq never see
+    the list. The selection runs as before if the index cannot be built."""
+    global KNOWN_INCIDENTS, KNOWN_INCIDENT_TELEMETRY
+    if AI_KNOWN_INCIDENTS == "off":
+        return
+    from map_evidence_integrity import consolidation_weak_words
+    country_names = [alias for names in COUNTRY_CANONICAL.values() for alias in names]
+    try:
+        KNOWN_INCIDENTS = known_incidents.build(
+            existing, load_incident_state().get("aliases") or {}, now,
+            consolidation_weak_words(existing, country_names), country_names, engine,
+            "on" if AI_KNOWN_INCIDENTS == "on" else "shadow")
+    except Exception as error:
+        print(f"Known incidents unavailable this run: {error}")
+        return
+    KNOWN_INCIDENT_TELEMETRY = KNOWN_INCIDENTS.stats
+    print(f"Known incidents ({KNOWN_INCIDENTS.mode}): {len(KNOWN_INCIDENTS.incidents)} indexed.")
+
+
 def ai_select_events(
     events,
     lane=None,
@@ -5611,6 +5662,9 @@ def ai_select_events(
         f"Need AI review: "
         f"{len(pending)}"
     )
+
+    if KNOWN_INCIDENTS is not None:
+        pending = known_incidents.story_order(pending, AI_SELECTION_BATCH_SIZE)
 
     total_batches = (
         (
@@ -5748,6 +5802,9 @@ def ai_select_events(
             reviewed_event = event_by_id[
                 event_id
             ]
+
+            if KNOWN_INCIDENTS is not None:
+                KNOWN_INCIDENTS.observe(reviewed_event, result, AI_SELECTION_THRESHOLD)
 
             cache_item = {
                 "version":
@@ -11104,7 +11161,7 @@ def consolidate_incidents(events, state=None, max_calls=None, now=None, use_gemi
 
 
 def main():
-    global COLLECTION_STATUS
+    global COLLECTION_STATUS, KNOWN_INCIDENTS
     effective_config = collection_config.validate_runtime(globals())
     print('Effective configured collection: ' + json.dumps(effective_config, ensure_ascii=False))
     existing_weekly_analysis = load_existing_weekly_analysis()
@@ -11171,8 +11228,10 @@ def main():
         "errors": QUERY_STATS["failed"] + GDELT_STATS["failed"]}
     atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
     print(f"Separate daily queues: {len(recent)} recent; {len(backlog)} older. Recent review runs first.")
+    arm_known_incidents(existing, run_now, daily_engine)
     selected_recent = ai_select_events(recent, lane="recent")
     selected_backlog = ai_select_events(backlog, lane="backlog") if selected_recent is not None else None
+    KNOWN_INCIDENTS = None
     selected_fresh = (selected_recent + selected_backlog
         if selected_recent is not None and selected_backlog is not None else None)
 
