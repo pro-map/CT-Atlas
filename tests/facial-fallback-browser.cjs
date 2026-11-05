@@ -111,13 +111,17 @@ async function until(check,label,timeoutMs=8000){
     assert.equal(uploads.length,1,"hosting was tried once");
     assert.match(await status(),/stub hosting failure/);
     assert.match(await status(),/Nothing was sent/);
-    assert.equal((await pages()).length,1,"the placeholder tab is closed");
-    assert.equal(await evaluate("document.hasFocus()"),true,"closing the tab gives the focus back to CT Atlas");
+    await until(async()=>(await pages()).length===1,"the placeholder tab to close");
+    await until(()=>evaluate("document.hasFocus()"),"the focus to come back to CT Atlas");
     assert.match(await evaluate(`document.querySelector("#fcPasteText").textContent`),/nothing was sent to Yandex Images/);
 
     await click('[data-fc-paste="copy"]');
     await until(async()=>/Face F1 copied/.test(await status())||/blocked/.test(await status()),"the copy");
-    assert.match(await status(),/Face F1 copied\. On Yandex Images open the image-upload box and press Ctrl\+V/);
+    // A click may open a tab for 5 s. On a busy machine the copy can outlast that (6.9 s measured under full CPU
+    // load): the tab is then blocked and the row's real link, a fresh gesture, has to do the same job.
+    const blocked=/blocked the new tab/.test(await status());
+    if(blocked)await click(".fc-more-link");
+    else assert.match(await status(),/Face F1 copied\. On Yandex Images open the image-upload box and press Ctrl\+V/);
     const yandex=await until(async()=>(await pages()).find(target=>target.url.startsWith("https://yandex.com/")),"the Yandex tab");
     assert.match(yandex.url,/^https:\/\/yandex\.com\/images\/search\?rpt=imageview$/);
     assert.ok(!yandex.url.includes("url="),"its own upload page, no link");
@@ -131,7 +135,7 @@ async function until(check,label,timeoutMs=8000){
     assert.deepEqual(stored.types,["image/png"]);
     assert.ok(stored.size>10000&&stored.width>=100,"a real crop is on the clipboard: "+JSON.stringify(stored));
     ws.close();
-    console.log("Chrome: hosting failure closed the blank tab, the dialog click copied a "+stored.width+"x"+stored.height+" crop and opened Yandex's own page");
+    console.log("Chrome: hosting failure closed the blank tab, the dialog click copied a "+stored.width+"x"+stored.height+" crop and "+(blocked?"the row's link":"the same click")+" opened Yandex's own page");
   }finally{
     const exited=new Promise(resolve=>chrome.once("exit",resolve));
     chrome.kill();
