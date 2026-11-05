@@ -1,11 +1,10 @@
-"""No-network contracts for shared daily/history source configuration."""
+"""No-network contracts for the shared daily source configuration."""
 import copy
 import hashlib
 import json
 import sys
 import tempfile
 import unittest
-from datetime import date
 from pathlib import Path
 from unittest.mock import patch
 
@@ -14,27 +13,8 @@ sys.path[:0] = [str(ROOT), str(ROOT / 'tools')]
 import collector
 import collection_config as config
 import threat_categories as topics
-import enrich_threat_categories as specialist
-import enrich_chinese_map as chinese
-import enrich_archive
-import radnuc_vocabulary
-import enrich_radnuc
 
 CODES = {'ar','bn','de','en','es','fa','fr','ha','he','hi','id','it','ps','pt','ru','so','sw','tr','ur','zh','zh-Hant'}
-# SHA-256 of full plans after the user retired Judicial on 2026-10-14.
-# Existing task keys remain readable; removed court keywords no longer retrieve.
-# A renamed query with a reset checkpoint must not pass as unchanged work.
-BASELINE = {
-    topics.RN: (7560, '0cccef797a34f8be9f866a343201927898334e4079ef135ca77eade454e1cd29'),
-    topics.CE: (3321, '2c2bf60aa5164e7aa1171480398851ffe5cc5d7eb6cc7568476e5681295daed6'),
-    topics.BIO: (3105, 'c023473386141c9ea49bafafb050d93746eded2abee552848fd0278baf9beb5c'),
-    'chinese': (1092, 'dc231adbbcede0323e0ac9180e3499101288c4843d5702ba7fda46f6924fb677'),
-    'general_archive': (12266, '8f9d8d5e2e049ea3977f0e885c29dfcf198be7a45d2e9d7c08a901bfc193f869'),
-}
-
-
-def fingerprint(value):
-    return hashlib.sha256(json.dumps(value, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
 
 
 class CollectionConfigurationTests(unittest.TestCase):
@@ -54,32 +34,12 @@ class CollectionConfigurationTests(unittest.TestCase):
                 actual = {q['term'] for q in profile['queries'] if q['category']==category}
                 self.assertTrue(set(expected) <= actual)
 
-    def test_daily_and_history_use_identical_native_query_strings(self):
-        for category in topics.LABELS:
-            plan = specialist.plan_tasks(category,date(2026,10,8),collector)
-            for code in CODES:
-                historical = {task['query'] for task in plan if task['source']=='google' and task['code']==code}
-                self.assertEqual(set(topics.collection_queries(category,code)), historical)
-
-    def test_history_uses_daily_language_and_edition_inventory(self):
+    def test_specialist_profiles_match_daily_editions_and_are_copies(self):
         identity = lambda p: tuple(p[k] for k in ('code','hl','gl','ceid'))
-        self.assertEqual({identity(p) for p in enrich_radnuc.profiles(collector)},
-                         {identity(p) for p in collector.MULTILINGUAL_PROFILES})
         profiles = config.specialist_profiles(collector.MULTILINGUAL_PROFILES)
+        self.assertEqual({identity(p) for p in profiles}, {identity(p) for p in collector.MULTILINGUAL_PROFILES})
         profiles[-1]['code'] = 'changed'
         self.assertNotIn('changed', {p['code'] for p in collector.MULTILINGUAL_PROFILES})
-
-    def test_active_historical_full_plans_have_stable_tasks_and_order(self):
-        plans = {category:specialist.plan_tasks(category,date(2026,10,8),collector) for category in topics.LABELS}
-        plans['chinese'] = chinese.plan_tasks(chinese.configuration(ROOT,collector),collector)
-        plans['general_archive'] = enrich_archive.plan_tasks(date(2026,10,12),collector)
-        for key,plan in plans.items():
-            self.assertEqual((len(plan),fingerprint(plan)),BASELINE[key],key)
-
-    def test_supplement_stays_181_terms_and_5238_root_tasks(self):
-        plan = specialist.plan_tasks(topics.RN,date(2026,10,8),collector)
-        self.assertEqual(len(radnuc_vocabulary.all_terms()),181)
-        self.assertEqual(sum(bool(t.get('supplemental_vocabulary')) for t in plan),5238)
 
     def test_core_english_queries_and_curated_lists_unchanged(self):
         for category in topics.LABELS:
@@ -123,14 +83,6 @@ class CollectionConfigurationTests(unittest.TestCase):
         self.assertNotIn('published',report)
         self.assertNotIn('completed',report)
         self.assertEqual(before,{p:hashlib.sha256(p.read_bytes()).hexdigest() for p in paths})
-
-    def test_legacy_native_api_delegates_to_single_json_vocabulary(self):
-        import historical_specialist_queries as legacy
-        for code in legacy.SEEDS:
-            for category in (topics.CE,topics.BIO):
-                self.assertEqual(legacy.queries(category,code),topics.seed_queries(category,code))
-        with patch.object(topics,'seed_queries',return_value=['shared-test-query']):
-            self.assertEqual(legacy.queries(topics.CE,'de'),['shared-test-query'])
 
     def test_no_false_local_editions_and_no_shared_mutable_query_lists(self):
         profiles=[];config.extend_specialist_profiles(profiles)

@@ -64,34 +64,3 @@ def gdelt_queries(query, max_bytes=GDELT_QUERY_BYTES):
             raise ValueError('A single query term plus its context exceeds the provider query ceiling')
         pending[:0] = children
     return list(dict.fromkeys(output))
-
-
-def narrower_queries(query):
-    """Refine a saturated one-day search by query, not by silently losing hits."""
-    return [render(parts) for parts in divide(groups(query))]
-
-
-def provider_tasks(task, key_function):
-    if task['source'] != 'gdelt':
-        return [task]
-    result = []
-    for query in gdelt_queries(task['query']):
-        child = {**task, 'query': query}
-        child['key'] = key_function(child)
-        if child['key'] != task['key']:
-            child['legacy_query_key'] = task['key']
-        result.append(child)
-    return result
-
-
-def split_saturated(task, key_function):
-    result = []
-    try:
-        queries = narrower_queries(task['query'])
-    except ValueError:
-        return []  # Unsupported expressions stay explicitly coverage-limited.
-    for query in queries:
-        child = {**task, 'query': query, 'query_split_parent': task['key']}
-        child['key'] = key_function(child)
-        result.append(child)
-    return result

@@ -10,7 +10,6 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 import collector
 import threat_categories as topics
-import enrich_radnuc
 
 
 class ChineseDailyTests(unittest.TestCase):
@@ -63,12 +62,6 @@ class ChineseDailyTests(unittest.TestCase):
         self.assertIn("AI_SELECTION_MODEL: \"gemini-3.5-flash-lite\"", workflow)
         self.assertIn("AI_SELECTION_DAILY_CALL_BUDGET: \"60\"", workflow)
         self.assertNotIn("QWEN_BACKFILL_URL", workflow)
-
-    def test_chinese_specialist_backfill_remains_independent(self):
-        plan = enrich_radnuc.profiles(collector)
-        for edition in collector.CHINESE_DAILY_PROFILES:
-            self.assertEqual(sum(1 for p in plan if
-                                 (p["code"], p["ceid"]) == (edition["code"], edition["ceid"])), 1)
 
 
 if __name__ == "__main__":
