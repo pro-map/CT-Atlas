@@ -3599,41 +3599,7 @@ def _collect_all_once(days):
         )
 
     # ========================================================
-    # 4. GDELT DOC 2.0 DISCOVERY (additional source, not a replacement)
-    #    Provider-compatible query fragments per category, spaced to respect
-    #    GDELT's limit; a persistent refusal pauses this source for the run.
-    # ========================================================
-
-    print()
-    print("=" * 70)
-    print("GDELT DOC 2.0 DISCOVERY")
-    print("=" * 70)
-
-    gdelt_total = 0
-    gdelt_categories = list(CATEGORIES.keys())
-
-    for category_number, category in enumerate(gdelt_categories, start=1):
-        print()
-        print(
-            f"[GDELT {category_number}/{len(gdelt_categories)}] "
-            f"{category}"
-        )
-
-        results = collect_gdelt_category_query(category, days)
-
-        records.extend(results)
-        gdelt_total += len(results)
-
-        print(f"      accepted → {len(results)}")
-
-        if category_number < len(gdelt_categories) and not GDELT_STATS.get("circuit_open"):
-            time.sleep(GDELT_DOC_QUERY_SPACING_SECONDS)
-
-    print()
-    print(f"GDELT TOTAL: {gdelt_total}")
-
-    # ========================================================
-    # 5. MULTILINGUAL DISCOVERY
+    # 4. MULTILINGUAL DISCOVERY
     # ========================================================
 
     multilingual_records = collect_multilingual(
@@ -3663,10 +3629,6 @@ def _collect_all_once(days):
     print(
         f"Targeted-source records: "
         f"{targeted_total}"
-    )
-    print(
-        f"GDELT DOC 2.0 records: "
-        f"{gdelt_total}"
     )
     print(
         f"Multilingual records: "
