@@ -3,6 +3,8 @@ from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 import json
 from pathlib import Path
+import subprocess
+import sys
 import tempfile
 from types import SimpleNamespace
 import unittest
@@ -102,6 +104,14 @@ class DailyPipelineTests(unittest.TestCase):
                 daily.load_queue(path)
             self.assertEqual(path.read_text(), '{"events": "broken"}')
 
+    def test_collector_refuses_the_removed_backfill_commands(self):
+        # A temporary folder: were the guard to fail, nothing would land in the repository.
+        with tempfile.TemporaryDirectory() as folder:
+            result = subprocess.run([sys.executable, str(Path(collector.__file__).resolve()), "backfill"],
+                                    cwd=folder, capture_output=True, text=True, timeout=120)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("no argument other than 'daily'", result.stderr)
+
     def test_daily_calls_recent_then_backlog_then_maintenance_and_checkpoints_originals(self):
         existing = [article("legacy", 15)]
         calls, snapshots = [], []
@@ -110,8 +120,6 @@ class DailyPipelineTests(unittest.TestCase):
             calls.append(lane)
             return []
         patches = {
-            "parse_collection_mode": lambda: (False, "daily"),
-            "initialize_incremental_state": lambda _: None,
             "load_existing_weekly_analysis": lambda: {}, "load_existing": lambda: existing,
             "load_database_strict": lambda: {"events": existing, "last_updated": "previous"},
             "collect_all": lambda _: fresh, "deduplicate_events": lambda rows: rows,

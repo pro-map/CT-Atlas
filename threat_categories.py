@@ -284,11 +284,7 @@ def install_collection(namespace):
             for query in replay_queries:
                 item = {'term':query,'category':label}
                 if item not in profile['queries']: profile['queries'].append(item)
-    # Freeze the PRE-ALIGNMENT daily replay surface for the older general
-    # archive planner. Expanding daily intake must not recreate historical work.
-    import copy
     import collection_config
-    namespace.setdefault('HISTORICAL_REPLAY_PROFILES', copy.deepcopy(namespace['MULTILINGUAL_PROFILES']))
     collection_config.extend_specialist_profiles(namespace['MULTILINGUAL_PROFILES'])
     for profile in namespace['MULTILINGUAL_PROFILES']:
         for label in LABELS:

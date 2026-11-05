@@ -49,14 +49,13 @@ class CollectionConfigurationTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256('\n'.join(english).encode()).hexdigest(),
                          '581ffe4ef31139281b82c926237dec24cf09975bb68494aeb56de3eaefd97ddd')
 
-    def test_install_is_idempotent_and_keeps_original_archive_replay_surface(self):
+    def test_install_is_idempotent(self):
         namespace = {key:copy.deepcopy(getattr(collector,key)) for key in
             ('CATEGORIES','CORE_SEARCH_QUERIES','OFFICIAL_SOURCE_QUERIES','TARGETED_MEDIA_CATEGORY_TERMS',
-             'MULTILINGUAL_PROFILES','CATEGORY_RELEVANCE','ACTION_TERMS','HISTORICAL_REPLAY_PROFILES')}
+             'MULTILINGUAL_PROFILES','CATEGORY_RELEVANCE','ACTION_TERMS')}
         before = copy.deepcopy(namespace)
         topics.install_collection(namespace)
         self.assertEqual(namespace,before)
-        self.assertEqual(config.language_metadata(namespace['HISTORICAL_REPLAY_PROFILES'])['language_variants'],15)
 
     def test_old_cbrn_source_hints_survive_but_no_parent_category_is_allowed(self):
         self.assertTrue(any(s.get('category_hint')=='CBRN' for s in collector.TARGETED_SOURCE_SITES))

@@ -83,14 +83,6 @@ class LatinAmericaCoverageTests(unittest.TestCase):
         self.assertNotEqual(latam["gl"], spain["gl"])
         self.assertNotEqual(latam["sites"], spain["sites"])
 
-    def test_latin_america_profiles_are_included_in_backfill_new_sources(self):
-        self.assertIn("Spanish / Latin America", collector.REGIONAL_BACKFILL_PROFILE_NAMES)
-        self.assertIn("Portuguese / Brazil", collector.REGIONAL_BACKFILL_PROFILE_NAMES)
-        profiles = collector.regional_backfill_profiles()
-        names = {p["name"] for p in profiles}
-        self.assertIn("Spanish / Latin America", names)
-        self.assertIn("Portuguese / Brazil", names)
-
     def test_latin_american_armed_groups_are_recognised_as_non_state_actors(self):
         # out_of_scope_reason() returning "" means the article is treated as in-scope;
         # without this, these groups' own headlines could fall through to the

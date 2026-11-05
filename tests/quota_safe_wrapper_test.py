@@ -136,7 +136,6 @@ LANE_SELECTION = textwrap.dedent('''
     spec.loader.exec_module(wrapper)
     collector = wrapper.collector
     collector.AI_SELECTION_ENABLED = True
-    collector.BACKFILL_ACTIVE = False
     wrapper.official_result = lambda event: None
     wrapper.time = SimpleNamespace(monotonic=lambda: 0.0, sleep=lambda seconds: None)
     cache = {"version": collector.AI_SELECTION_VERSION, "items": {}}
@@ -200,10 +199,6 @@ LANE_SELECTION = textwrap.dedent('''
             cache["items"][collector.selection_fingerprint(item)]={
                 "version":collector.AI_SELECTION_VERSION,"result":verdict}
         result=collector.ai_select_events(events,lane="maintenance")
-    elif mode == "manual_backfill":
-        collector.BACKFILL_ACTIVE=True
-        events=[event("b"+str(index),20+index) for index in range(5)]
-        result=collector.ai_select_events(events,lane="backlog")
     elif mode == "repeat":
         events = events[:1]
         result = collector.ai_select_events(events, lane="recent")
@@ -361,11 +356,6 @@ class QuotaSafeWrapperTests(unittest.TestCase):
         self.assertEqual(data["sent"], ["maintenance"])
         lane=data["telemetry"]["lanes"]["maintenance"]
         self.assertEqual((lane["cached"],lane["new_reviews"],lane["pending"]), (1,1,0))
-
-    def test_explicit_manual_backfill_keeps_its_global_envelope(self):
-        data=self.lanes("manual_backfill")
-        self.assertEqual(len(data["sent"]),5)
-        self.assertEqual(data["telemetry"]["lanes"]["backlog"]["pending"],0)
 
     def test_translated_fingerprints_remain_reviewed_and_do_not_recount_or_spend_again(self):
         data = self.lanes("repeat")

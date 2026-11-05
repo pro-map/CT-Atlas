@@ -5,7 +5,6 @@ criteria. The old multilingual queries and saved task identities remain intact.
 """
 from __future__ import annotations
 import json
-from datetime import date, timedelta
 from functools import lru_cache
 from pathlib import Path
 from tools.backfill_query import gdelt_queries
@@ -95,62 +94,3 @@ CHINESE_SUPPLEMENT_QUERIES = {
         ],
     },
 }
-
-
-def backfill_tasks(key_function):
-    config = vocabulary()
-    anchor = date.fromisoformat(config['backfill']['anchor'])
-    first, through = anchor-timedelta(days=int(config['backfill']['window_days'])), anchor+timedelta(days=1)
-    monday = first-timedelta(days=first.weekday())
-    windows = []
-    while monday < through:
-        windows.append((monday,max(monday,first),min(monday+timedelta(days=7),through)))
-        monday += timedelta(days=7)
-    tasks = []
-    for week, low, high in reversed(windows):
-        for source in ('google','gdelt'):
-            for query in queries():
-                task = {'group':'radnuc_supplement_'+source,'source':source,'query':query,
-                        'category':'Radiological/Nuclear','week':week.isoformat(),
-                        'start':low.isoformat(),'end':high.isoformat(),
-                        'supplemental_vocabulary':config['version']}
-                if source=='google':
-                    task.update(locale='en-US|US|US:en',code='en',name='English RN supplement',
-                                hl='en-US',gl='US',ceid='US:en')
-                else:
-                    task.update(locale='all',code='mul',name='All indexed GDELT source languages')
-                task['key'] = key_function(task)
-                tasks.append(task)
-        # Separate Chinese script editions are searchable without creating
-        # new keywords or resetting any prior English/GDELT task identity.
-        for code, profile in CHINESE_SUPPLEMENT_QUERIES.items():
-            for query in profile['queries']:
-                task = {'group':'radnuc_supplement_google_chinese',
-                        'source':'google','query':query,
-                        'category':'Radiological/Nuclear','week':week.isoformat(),
-                        'start':low.isoformat(),'end':high.isoformat(),
-                        'supplemental_vocabulary':config['version'],
-                        'locale':f"{profile['hl']}|{profile['gl']}|{profile['ceid']}",
-                        'code':code,'name':profile['name'],
-                        'hl':profile['hl'],'gl':profile['gl'],'ceid':profile['ceid']}
-                task['key'] = key_function(task)
-                tasks.append(task)
-    return list({task['key']:task for task in tasks}.values())
-
-
-def progress(plan,state):
-    config = vocabulary()
-    selected = [t for t in plan if t.get('supplemental_vocabulary')==config['version']]
-    roots = {t['key'] for t in selected}
-    done = set(state.get('done') or {})
-    children = [t for t in (state.get('children') or {}).values()
-                if t.get('supplemental_vocabulary')==config['version'] and t['key'] not in done]
-    reviews = [item for item in (state.get('pending_reviews') or [])
-               if item.get('_task',{}).get('supplemental_vocabulary')==config['version']]
-    pending = (roots-done) | {t['key'] for t in children} | {x['_task']['key'] for x in reviews}
-    anchor = date.fromisoformat(config['backfill']['anchor'])
-    return {'version':config['version'],'supplied_keywords':len(all_terms()),
-            'from':(anchor-timedelta(days=config['backfill']['window_days'])).isoformat(),
-            'through':anchor.isoformat(),'planned_searches':len(roots),
-            'completed_searches':len(roots & done),'pending_searches':len(pending),
-            'queued_candidates':len(reviews),'processing_complete':bool(roots) and not pending}
