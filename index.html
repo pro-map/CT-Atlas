@@ -6923,9 +6923,12 @@ function loadEventsDatabase() {
 
 // The map shows only real and foiled attacks: executed attacks (ATTACK with
 // is_attack), attempted attacks and disrupted plots. Legacy records without a
-// primary_event_type fall back to the "Attacks" category. Same rule as
-// tools/build_events_map.py.
+// primary_event_type fall back to the "Attacks" category. attack_update marks a
+// follow-up of an attack that has its point: one point per incident. Same rule
+// as attack_points.py. The flag exists only in events-map.json and
+// events-lite.json, so the last-resort events.json fallback draws every record.
 function isMapAttackEvent(event) {
+    if (event.attack_update === true) return false;
     if (isRetiredJudicialEvent(event)) return false;
     const type = String(event.primary_event_type || "").trim().toUpperCase();
     if (type) {
@@ -7001,7 +7004,7 @@ function loadMapDatabase() {
         return {
             ...data,
             // Unlocated attacks stay: never drawn, but in the ticker and the
-            // header counts.
+            // header counts. Follow-ups (attack_update) go to recent_events.
             events: all.filter(isMapAttackEvent),
             recent_events: all.filter(event => {
                 if (isMapAttackEvent(event)) return false;
@@ -7756,7 +7759,9 @@ const MAP_SCOPE_TITLES = {
 };
 
 // The events of the map's period in the "Show on map" scope, located or not:
-// attacks from the map's file, other categories from its recent_events.
+// attacks from the map's file, other categories from its recent_events. Follow-ups
+// of attacks (attack_update) travel there too, for the header counts and links
+// only: the attack's own point stands for them on the map.
 function mapScopeMatches(event, scope) {
     if (isRetiredJudicialEvent(event)) return false;
     if (scope === "ALL") return true;
@@ -7773,7 +7778,8 @@ function mapScopeEvents() {
     const attacks = scope === "ATTACKS" || scope === "ALL" ? filteredAllEvents()
         : filteredAllEvents().filter(event => mapScopeMatches(event, scope));
     const others = scope === "ATTACKS" ? [] : recentContextEvents.filter(event =>
-        withinDays(event.published, selectedDays)
+        event.attack_update !== true
+        && withinDays(event.published, selectedDays)
         && mapScopeMatches(event, scope)
         && groupMatches(event)
         && searchMatches(event)
@@ -7789,7 +7795,8 @@ function mapScopeCandidates() {
     const attacks = scope === "ATTACKS" || scope === "ALL" ? allEvents.filter(event => !isRetiredJudicialEvent(event))
         : allEvents.filter(event => mapScopeMatches(event, scope));
     const others = scope === "ATTACKS" ? [] : recentContextEvents.filter(event =>
-        mapScopeMatches(event, scope)
+        event.attack_update !== true
+        && mapScopeMatches(event, scope)
     );
     return others.length ? [...attacks, ...others] : attacks;
 }
@@ -7982,10 +7989,14 @@ function createMarker(
 
     // Normalised (Maritime Piracy -> Maritime Security, the legacy digital
     // categories -> Online / Cyber / AI), as the category styles are keyed.
+    // Red is for attacks: a CT operation or arrest filed first under Attacks
+    // takes its next category, or the neutral style.
     const primaryCategory =
-        eventCategories(event)[0]
-        ||
-        event.category;
+        isMapAttackEvent(event)
+        ?
+        eventCategories(event)[0] || event.category
+        :
+        eventCategories(event).find(category => category !== "Attacks");
 
 
     const style =
@@ -8327,11 +8338,6 @@ function createMarker(
 
 function isHeatEligibleEvent(event) {
 
-    const categories =
-        eventCategories(
-            event
-        );
-
     /*
        HEAT ZONES represent the geography of actual violent CT activity,
        not the overall density of CT reporting/events.
@@ -8350,16 +8356,12 @@ function isHeatEligibleEvent(event) {
        - online/cyber/AI
        - other non-violent CT activity
 
-       The map now only holds executed, attempted and foiled attacks
-       (isMapAttackEvent), so every map event feeds the heat -- a foiled plot
-       filed under Counter Terrorism Action included.
+       Every executed, attempted and foiled attack (isMapAttackEvent) feeds
+       the heat -- a foiled plot filed under Counter Terrorism Action included,
+       a record merely filed under Attacks not.
     */
     if (
         isMapAttackEvent(event)
-        ||
-        categories.includes(
-            "Attacks"
-        )
     ) {
         return true;
     }
@@ -9645,7 +9647,7 @@ function focusChronologyEvent(
 ) {
 
     const event =
-        allEvents.find(
+        [...allEvents, ...recentContextEvents].find(
 
             candidate =>
                 candidate._mapKey
@@ -14742,6 +14744,9 @@ function databaseEventCardNote(event) {
     if (event.archive_only === true || event.kind === "radnuc_background") {
         return "Background information: included in the database and Excel export, not an operational incident and not shown on the map.";
     }
+    if (event.attack_update === true) {
+        return "Follow-up report of an attack: the map shows one point per incident. This report is in the CT Atlas database.";
+    }
     const attack = isMapAttackEvent(event);
     const label = attack ? "Attack" : "Event";
     if (mapCategoryScope === "ATTACKS" && !attack) {
@@ -14843,10 +14848,12 @@ function renderAttackTicker() {
             : date.toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
         const place = event.city || event.country || "";
         const type = String(event.primary_event_type || "").toUpperCase();
-        const badge = type === "DISRUPTED_PLOT" ? "FOILED" : (type === "ATTEMPTED_ATTACK" ? "ATTEMPT" : "");
+        const badges = [type === "DISRUPTED_PLOT" ? "FOILED" : (type === "ATTEMPTED_ATTACK" ? "ATTEMPT" : ""),
+            String(event.update_type || "INITIAL").trim().toUpperCase() === "INITIAL" ? "" : "UPDATE"]
+            .filter(Boolean).map(badge => ' <em class="ticker-badge">' + badge + "</em>").join("");
         return `<li${copy ? ' aria-hidden="true"' : ""}>
             <button type="button" class="ticker-item" data-key="${escapeHtml(event._mapKey)}"${copy ? ' tabindex="-1"' : ""}>
-                <span class="ticker-meta">${escapeHtml(when)}${place ? " · " + escapeHtml(place) : ""}${badge ? ' <em class="ticker-badge">' + badge + "</em>" : ""}</span>
+                <span class="ticker-meta">${escapeHtml(when)}${place ? " · " + escapeHtml(place) : ""}${badges}</span>
                 <span class="ticker-title">${escapeHtml(event.title || "Untitled attack")}</span>
             </button>
         </li>`;
