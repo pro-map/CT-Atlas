@@ -13,7 +13,9 @@ import base64
 import hashlib
 import io
 import os
+import shutil
 import sys
+import time
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -363,6 +365,46 @@ class ImageLimits(unittest.TestCase):
         ratio = 1280 / 2600
         top = int(box["y"] * ratio)
         self.assertGreater(preview[top, int((box["x"] + box["w"] / 2) * ratio)].mean(), 200, "the box is drawn where the face is")
+
+
+class OcrStatus(unittest.TestCase):
+    def run_ocr(self, deadline=None, **behaviour):
+        with mock.patch.object(app.pytesseract, "image_to_string", **behaviour) as call:
+            return app._ocr(np.zeros((40, 40, 3), np.uint8), deadline), call
+
+    def test_text_and_no_text_are_told_apart(self):
+        self.assertEqual(self.run_ocr(return_value=" Hello  world\n")[0], ("Hello world", "ok"))
+        self.assertEqual(self.run_ocr(return_value=" \n")[0], ("", "no_text"))
+
+    def test_a_timeout_or_a_crash_is_not_reported_as_an_empty_image(self):
+        self.assertEqual(self.run_ocr(side_effect=RuntimeError("Tesseract process timeout"))[0], ("", "timeout"))
+        self.assertEqual(self.run_ocr(side_effect=app.pytesseract.TesseractError(1, "no language pack"))[0], ("", "failed"))
+
+    def test_the_languages_and_the_per_call_timeout_reach_tesseract(self):
+        _, call = self.run_ocr(return_value="x")
+        self.assertEqual(call.call_args.kwargs["lang"], "eng+fra+ara+rus")
+        self.assertEqual(call.call_args.kwargs["timeout"], app.OCR_TIMEOUT_SECONDS)
+
+    def test_a_call_cannot_run_past_the_request_budget_and_none_starts_once_it_is_spent(self):
+        _, call = self.run_ocr(deadline=time.monotonic() + 2, return_value="x")
+        self.assertLessEqual(call.call_args.kwargs["timeout"], 2)
+        result, call = self.run_ocr(deadline=time.monotonic() - 1, return_value="x")
+        self.assertEqual(result, ("", "skipped"))
+        call.assert_not_called()
+
+
+@unittest.skipUnless(shutil.which("tesseract"), "tesseract is installed in the service image only")
+class OcrInTheServiceImage(unittest.TestCase):
+    def test_the_language_packs_are_installed_and_ocr_runs(self):
+        self.assertLessEqual({"eng", "fra", "ara", "rus"}, set(app.pytesseract.get_languages()))
+        frame = np.full((200, 900, 3), 255, np.uint8)
+        cv2.putText(frame, "CT ATLAS 2026", (30, 120), cv2.FONT_HERSHEY_SIMPLEX, 2.5, (0, 0, 0), 5)
+        self.assertNotEqual(app._ocr(frame)[1], "failed")
+        # Printed, not asserted: a slow runner must not block a deployment, but the 6 s timeout needs this number.
+        for name, sample in (("text line", frame), ("1600 px photo", cv2.imread(str(HERE / "fixtures" / "astronaut_1600.jpg")))):
+            started = time.monotonic()
+            status = app._ocr(sample)[1]
+            print(f"OCR {app.OCR_LANGUAGES} on {name}: {status} in {time.monotonic() - started:.1f} s")
 
 
 if __name__ == "__main__":

@@ -8,6 +8,7 @@ import math
 import os
 import tempfile
 import threading
+import time
 from pathlib import Path
 from typing import Any
 
@@ -24,6 +25,9 @@ MAX_TOTAL_BYTES = 30 * 1024 * 1024
 MAX_IMAGE_SIDE = 2200
 MAX_IMAGE_PIXELS = 50_000_000  # a 435 KB PNG can decode to a 412 MiB frame, and the service has 1 GiB
 MAX_VIDEO_FRAMES = 8
+OCR_LANGUAGES = "eng+fra+ara+rus"
+OCR_TIMEOUT_SECONDS = 6
+OCR_BUDGET_SECONDS = 60  # per request: ten videos at 4 frames x 6 s would use most of Cloud Run's 180 s
 QUALITY_SIDE = 112  # raw Laplacian variance falls as resolution rises, so faces are measured at one size
 QUALITY_FULL_SHARPNESS = 400.0
 QUALITY_MIN_SHARPNESS = 30.0  # below this a face is blurred however large it is
@@ -277,13 +281,21 @@ def _phash(frame: np.ndarray) -> str:
     return str(imagehash.phash(Image.fromarray(rgb)))
 
 
-def _ocr(work: np.ndarray) -> str:
+def _ocr(work: np.ndarray, deadline: float | None = None) -> tuple[str, str]:
+    """(text, status). The status tells "no text" from "OCR did not work": ok, no_text, timeout, failed, or
+    skipped when the request's OCR budget has run out."""
+    remaining = OCR_TIMEOUT_SECONDS if deadline is None else deadline - time.monotonic()
+    if remaining <= 0:
+        return "", "skipped"
     try:
         rgb = cv2.cvtColor(work, cv2.COLOR_BGR2RGB)
-        text = pytesseract.image_to_string(rgb, config="--psm 11", timeout=6)
-        return _clean(text, 4000)
-    except Exception:
-        return ""
+        text = pytesseract.image_to_string(
+            rgb, lang=OCR_LANGUAGES, config="--psm 11", timeout=min(OCR_TIMEOUT_SECONDS, remaining)
+        )
+    except Exception as exc:
+        return "", "timeout" if "timeout" in str(exc).lower() else "failed"
+    text = _clean(text, 4000)
+    return text, "ok" if text else "no_text"
 
 
 def _rational(value: Any) -> float | None:
@@ -371,9 +383,12 @@ def _decode_image(raw: bytes) -> np.ndarray:
     return frame
 
 
-def _analyze_frame(frame: np.ndarray, label: str, timestamp: float | None = None, do_ocr: bool = True) -> dict[str, Any]:
+def _analyze_frame(
+    frame: np.ndarray, label: str, timestamp: float | None = None, do_ocr: bool = True, ocr_deadline: float | None = None
+) -> dict[str, Any]:
     work, scale = _resize_for_analysis(frame)  # once: each step copying a large frame is what exhausts memory
     faces = _detect_faces(frame, (work, scale))
+    ocr_text, ocr_status = _ocr(work, ocr_deadline) if do_ocr else ("", "not_run")
     return {
         "label": label,
         "face_detector": _load_detector()[1],
@@ -382,15 +397,16 @@ def _analyze_frame(frame: np.ndarray, label: str, timestamp: float | None = None
         "height": int(frame.shape[0]),
         "faces": faces,
         "face_count": len(faces),
-        "ocr_text": _ocr(work) if do_ocr else "",
+        "ocr_text": ocr_text,
+        "ocr_status": ocr_status,
         "phash": _phash(work),
         "annotated_preview": _annotated_data_uri(work, faces, scale),
     }
 
 
-def _analyze_image(name: str, raw: bytes) -> dict[str, Any]:
+def _analyze_image(name: str, raw: bytes, ocr_deadline: float | None = None) -> dict[str, Any]:
     frame = _decode_image(raw)
-    item = _analyze_frame(frame, name)
+    item = _analyze_frame(frame, name, ocr_deadline=ocr_deadline)
     item.update(
         {
             "kind": "image",
@@ -402,7 +418,7 @@ def _analyze_image(name: str, raw: bytes) -> dict[str, Any]:
     return item
 
 
-def _analyze_video(name: str, raw: bytes, suffix: str) -> dict[str, Any]:
+def _analyze_video(name: str, raw: bytes, suffix: str, ocr_deadline: float | None = None) -> dict[str, Any]:
     with tempfile.NamedTemporaryFile(suffix=suffix or ".mp4") as temp:
         temp.write(raw)
         temp.flush()
@@ -423,7 +439,7 @@ def _analyze_video(name: str, raw: bytes, suffix: str) -> dict[str, Any]:
             if not ok or frame is None:
                 continue
             timestamp = (pos / fps) if fps > 0 else None
-            frames.append(_analyze_frame(frame, f"{name} · frame {pos}", timestamp, do_ocr=(idx < 4)))
+            frames.append(_analyze_frame(frame, f"{name} · frame {pos}", timestamp, do_ocr=(idx < 4), ocr_deadline=ocr_deadline))
         cap.release()
         return {
             "kind": "video",
@@ -435,6 +451,11 @@ def _analyze_video(name: str, raw: bytes, suffix: str) -> dict[str, Any]:
             "sampled_frames": frames,
             "face_count": sum(int(frame.get("face_count") or 0) for frame in frames),
         }
+
+
+def _ocr_skipped(items: list[dict[str, Any]]) -> int:
+    frames = [frame for item in items for frame in item.get("sampled_frames", [item])]
+    return sum(1 for frame in frames if frame.get("ocr_status") == "skipped")
 
 
 def _hex_distance(a: str, b: str) -> int:
@@ -502,15 +523,16 @@ async def analyze(
 
     results: list[dict[str, Any]] = []
     errors: list[dict[str, str]] = []
+    ocr_deadline = time.monotonic() + OCR_BUDGET_SECONDS
     for upload, raw in payloads:
         name = Path(upload.filename or "file").name
         content_type = (upload.content_type or "").lower()
         suffix = Path(name).suffix.lower()
         try:
             if content_type.startswith("image/") or suffix in {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tif", ".tiff"}:
-                results.append(_analyze_image(name, raw))
+                results.append(_analyze_image(name, raw, ocr_deadline))
             elif content_type.startswith("video/") or suffix in {".mp4", ".mov", ".m4v", ".avi", ".webm", ".mkv"}:
-                results.append(_analyze_video(name, raw, suffix))
+                results.append(_analyze_video(name, raw, suffix, ocr_deadline))
             else:
                 errors.append({"filename": name, "error": "Unsupported file type."})
         except Exception as exc:
@@ -532,6 +554,7 @@ async def analyze(
         },
         "files": results,
         "similarity_pairs": _similarity_pairs(results),
+        "ocr_skipped": _ocr_skipped(results),
         "errors": errors,
         "notice": (
             "Face boxes and visual similarities are descriptive signals only. "
