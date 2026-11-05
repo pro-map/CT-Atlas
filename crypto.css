@@ -383,10 +383,12 @@ button,input,select{font:inherit}
 .risk-card{margin-bottom:12px}
 .risk-card.high{border-color:#a94a4a}
 .risk-card.elevated{border-color:#a27935}
+.risk-card .crypto-card-head{flex-wrap:wrap}
 .risk-summary{font-size:10px;line-height:1.55;color:#dceaf2}
 .risk-reasons{margin:0;padding-left:15px;font-size:9px;line-height:1.55;color:#a8bcc7}
 .risk-finding{border:1px solid #2f4654;background:#111d26;border-radius:5px;padding:7px 10px}
 .risk-finding summary{display:flex;justify-content:space-between;gap:8px;align-items:center;cursor:pointer;font-size:9px;font-weight:900;letter-spacing:.04em;color:#e9f2f6}
+.risk-finding summary .intel-badge{flex:0 0 auto;white-space:nowrap}
 .risk-hop{font:700 8px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;color:#cfe0e8;overflow-wrap:anywhere}
 .graph-risk-chip rect{fill:#162a33;stroke:#436b7a}
 .graph-risk-chip.high rect{fill:#32191b;stroke:#a94a4a}
