@@ -318,6 +318,47 @@ class SupportComponentTests(unittest.TestCase):
         self.assertNotIn("dedup_review_required", king)
         self.assertEqual({e["incident_id"] for e in events if e is not king}, {"inc-a"})
 
+    def windows_in_three_regions(self):
+        return [
+            record("Karak church attack", "2026-10-23T09:00:00+00:00", "inc-j1", "Jordan", "JO"),
+            record("Karak church funeral", "2026-10-23T12:00:00+00:00", "inc-j2", "Jordan", "JO"),
+            record("Trappes shooting", "2026-10-23T09:00:00+00:00", "inc-f1", "France", "FR"),
+            record("Trappes gunman", "2026-10-23T12:00:00+00:00", "inc-f2", "France", "FR"),
+            record("Planadas bomb attack", "2026-10-23T09:00:00+00:00", "inc-c1", "Colombia", "CO"),
+            record("Planadas bomb victims", "2026-10-23T12:00:00+00:00", "inc-c2", "Colombia", "CO"),
+        ]
+
+    def test_a_503_skips_one_window_and_the_pass_goes_on(self):
+        good = GeminiStub(["karak", "trappes", "planadas"])
+        calls = []
+
+        def flaky(*args, **kwargs):
+            calls.append(1)
+            if len(calls) == 1:
+                raise collector.AISelectionTransientError("Gemini unavailable (HTTP 503).")
+            return good(*args, **kwargs)
+
+        events, stats = self.run_pass(self.windows_in_three_regions(), flaky)
+        self.assertEqual((len(calls), stats["windows_pending"], stats["windows_reviewed"]), (3, 3, 2))
+        self.assertIn("503", stats["error"])
+        self.assertEqual(len(self.state["reviewed"]), 4, "the failed window stays pending")
+
+    def test_three_503s_in_a_row_pause_the_pass(self):
+        calls = []
+
+        def down(*args, **kwargs):
+            calls.append(1)
+            raise collector.AISelectionTransientError("Gemini unavailable (HTTP 503).")
+
+        events = self.windows_in_three_regions() + [
+            record("Poonch hideout raid", "2026-10-23T09:00:00+00:00", "inc-i1", "India", "IN"),
+            record("Poonch hideout arms", "2026-10-23T12:00:00+00:00", "inc-i2", "India", "IN"),
+        ]
+        _, stats = self.run_pass(events, down)
+        self.assertEqual(len(calls), collector.INCIDENT_MAX_CONSECUTIVE_UNAVAILABLE)
+        self.assertEqual((stats["windows_pending"], stats["windows_reviewed"]), (4, 0))
+        self.assertEqual(self.state["reviewed"], {})
+
     def test_the_rule_version_survives_a_save_and_load(self):
         self.run_pass(self.karak(), GeminiStub(["karak"]), reopen=True)
         with tempfile.TemporaryDirectory() as folder:

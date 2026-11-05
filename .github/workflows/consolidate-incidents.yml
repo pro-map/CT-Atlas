@@ -19,6 +19,12 @@ on:
     # delayed map updates and held their shared lock.
     - cron: "37 7 * * *"
       timezone: "Europe/Paris"
+  # A new consolidation rule re-opens refused incidents: review them at once.
+  push:
+    branches: [main]
+    paths:
+      - "tools/consolidate_incidents.py"
+      - ".github/workflows/consolidate-incidents.yml"
   workflow_dispatch:
     inputs:
       max_calls:

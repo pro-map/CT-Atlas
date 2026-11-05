@@ -198,6 +198,7 @@ AI_WEEKLY_TIMEOUT = 240
 AI_WEEKLY_MAX_CURRENT_EVENTS = 70
 AI_WEEKLY_MAX_PREVIOUS_EVENTS = 70
 AI_WEEKLY_VERSION = "weekly-analysis-v2-analytical-synthesis"
+WEEKLY_REQUEST_FILE = "weekly-analysis-request.json"
 
 PARIS_TZ = ZoneInfo("Europe/Paris")
 
@@ -10161,6 +10162,27 @@ def _weekly_analysis_quality_issue(analysis):
     return ""
 
 
+def _aware_time(value):
+    try:
+        moment = datetime.fromisoformat(str(value or "").replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return moment if moment.tzinfo else moment.replace(tzinfo=timezone.utc)
+
+
+def weekly_refresh_requested(existing_weekly, path=None):
+    """The owner can ask for an assessment outside the Sunday slot: commit a
+    new requested_at in weekly-analysis-request.json and the next collector
+    run answers it once, because the report's generated_at then passes it."""
+    try:
+        with open(path or WEEKLY_REQUEST_FILE, encoding="utf-8") as handle:
+            requested = _aware_time(json.load(handle).get("requested_at"))
+    except (OSError, ValueError, AttributeError):
+        return False
+    generated = _aware_time(existing_weekly.get("generated_at"))
+    return requested is not None and (generated is None or requested > generated)
+
+
 def should_generate_weekly_analysis(existing_weekly):
     """
     First-ever report: generate immediately on the next collector run.
@@ -10169,12 +10191,16 @@ def should_generate_weekly_analysis(existing_weekly):
       Sunday after 06:00 Europe/Paris.
       If 06:17 generation fails, the report key remains old/missing, so
       the 12:17 and 18:17 Sunday runs automatically retry.
+    Any day: when weekly_refresh_requested says the owner asked for one.
     """
     if not existing_weekly:
         return True, "first_report"
 
     if existing_weekly.get("version") != AI_WEEKLY_VERSION:
         return True, "analytical_quality_upgrade"
+
+    if weekly_refresh_requested(existing_weekly):
+        return True, "owner_request"
 
     now_paris = datetime.now(
         PARIS_TZ
@@ -10730,6 +10756,7 @@ INCIDENT_WINDOW_MAX = 120
 INCIDENT_CONSOLIDATION_MAX_CALLS = int(os.getenv("INCIDENT_CONSOLIDATION_MAX_CALLS", "10"))
 INCIDENT_INITIAL_MERGE_DAYS = 3.0
 INCIDENT_UPDATE_MERGE_DAYS = 1.5
+INCIDENT_MAX_CONSECUTIVE_UNAVAILABLE = 3
 # How a Gemini group is checked against the headlines. Changing it re-opens,
 # once, the incidents an earlier rule refused to merge (dedup_review_required),
 # so their windows are reviewed again under the new rule.
@@ -11189,13 +11216,25 @@ def consolidate_incidents(events, state=None, max_calls=None, now=None, use_gemi
                                        for i in profiles[a]["indices"] for j in profiles[b]["indices"])
             return link_cache[pair]
 
+        unavailable = 0
         for keys in pending[:max(0, max_calls)]:
             try:
                 groups = review_incident_window(keys, profiles)
+            except AISelectionTransientError as error:
+                # 2026-11-04: one 503 on the first window ended a 90-window
+                # pass. The window stays pending; the model gets another chance.
+                stats["error"] = str(error)[:300]
+                unavailable += 1
+                if unavailable >= INCIDENT_MAX_CONSECUTIVE_UNAVAILABLE:
+                    print(f"Incident consolidation paused: {stats['error']}")
+                    break
+                print(f"Incident window skipped for now: {stats['error']}")
+                continue
             except Exception as error:  # noqa: BLE001 - keep progress, retry next run
                 stats["error"] = str(error)[:300]
                 print(f"Incident consolidation paused: {stats['error']}")
                 break
+            unavailable = 0
             stats["windows_reviewed"] += 1
             reviewed_keys.update(keys)
             for group in groups:

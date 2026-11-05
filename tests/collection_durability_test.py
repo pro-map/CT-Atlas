@@ -231,5 +231,41 @@ class TransientSelectionTests(unittest.TestCase):
         self.assertEqual(collector.AI_SELECTION_ATTEMPTS, 5, "429s keep their own retries")
 
 
+class WeeklyRequestTests(unittest.TestCase):
+    """A weekly assessment can be asked for outside the Sunday slot."""
+
+    def setUp(self):
+        self.folder = tempfile.TemporaryDirectory()
+        self.addCleanup(self.folder.cleanup)
+        self.path = os.path.join(self.folder.name, "request.json")
+        self.report = {"version": collector.AI_WEEKLY_VERSION, "generated_at": "2026-11-01T17:14:23+00:00"}
+
+    def write(self, text):
+        with open(self.path, "w", encoding="utf-8") as handle:
+            handle.write(text)
+
+    def test_a_request_newer_than_the_report_is_answered_once(self):
+        self.write('{"requested_at": "2026-11-05T06:30:00+00:00"}')
+        self.assertTrue(collector.weekly_refresh_requested(self.report, self.path))
+        answered = dict(self.report, generated_at="2026-11-05T16:00:00+00:00")
+        self.assertFalse(collector.weekly_refresh_requested(answered, self.path))
+
+    def test_a_missing_or_malformed_request_asks_for_nothing(self):
+        self.assertFalse(collector.weekly_refresh_requested(self.report, self.path))
+        for text in ("not json", "[]", "{}", '{"requested_at": "soon"}'):
+            with self.subTest(text=text):
+                self.write(text)
+                self.assertFalse(collector.weekly_refresh_requested(self.report, self.path))
+
+    def test_the_request_overrides_the_weekday_check(self):
+        original = collector.WEEKLY_REQUEST_FILE
+        collector.WEEKLY_REQUEST_FILE = self.path
+        try:
+            self.write('{"requested_at": "2026-11-05T06:30:00Z"}')
+            self.assertEqual(collector.should_generate_weekly_analysis(self.report), (True, "owner_request"))
+        finally:
+            collector.WEEKLY_REQUEST_FILE = original
+
+
 if __name__ == "__main__":
     unittest.main()

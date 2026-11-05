@@ -1,0 +1,4 @@
+{
+  "requested_at": "2026-11-05T06:30:00+00:00",
+  "note": "The next collector run generates a weekly assessment if this time is newer than the report's generated_at."
+}
