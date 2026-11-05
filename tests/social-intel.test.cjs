@@ -129,7 +129,7 @@ test("the retained SOCMINT client contains friendly quota handling",()=>{
 
 test("SOCMINT version is explicit",()=>{
   const h=harness();
-  assert.match(h.SOCIAL_INTEL_VERSION,/socmint-v6/);
+  assert.match(h.SOCIAL_INTEL_VERSION,/socmint-v7/);
 });
 
 
@@ -222,5 +222,5 @@ test("wallet screening never fails a report: an unreachable list yields status '
 
 test("persistReport screens wallets before sanitising and storing the report",()=>{
   const src=fs.readFileSync("cloudflare-worker/social-intel.js","utf8");
-  assert.match(src,/async function persistReport\(env, username, report, query = null\) \{\s*await attachWalletScreening\(env, report\);/);
+  assert.match(src,/async function persistReport\(env, username, report\) \{\s*await attachWalletScreening\(env, report\);/);
 });

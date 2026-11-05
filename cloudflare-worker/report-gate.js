@@ -1,4 +1,4 @@
-import{getAllowedUsers,REPORT_COOLDOWN_MS,SESSION_TTL_MS,QUICK_ASK_COOLDOWN_MS,QUICK_ASK_DAILY_LIMIT,QUICK_ASK_GLOBAL_DAILY_LIMIT,FEEDBACK_COOLDOWN_MS,FEEDBACK_DAILY_LIMIT,FEEDBACK_GLOBAL_DAILY_LIMIT,normalizeUsername,isAllowedUser,parisDayKey,usageTemplate,cleanText}from"./shared.js";
+import{getAllowedUsers,REPORT_COOLDOWN_MS,SESSION_TTL_MS,QUICK_ASK_COOLDOWN_MS,QUICK_ASK_DAILY_LIMIT,QUICK_ASK_GLOBAL_DAILY_LIMIT,SOCMINT_DAILY_LIMIT,SOCMINT_GLOBAL_DAILY_LIMIT,SOCMINT_RUN_LOCK_MS,FEEDBACK_COOLDOWN_MS,FEEDBACK_DAILY_LIMIT,FEEDBACK_GLOBAL_DAILY_LIMIT,normalizeUsername,isAllowedUser,parisDayKey,usageTemplate,cleanText}from"./shared.js";
 
 const ADMIN_DISPLAY_NAMES=Object.freeze({
   "group-i-1":"Ed",
@@ -75,6 +75,7 @@ const USAGE_LOG_FIELDS = Object.freeze({
   report_generator: { region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], period_days: ["num"], compare: ["bool"], outcome: ["text", 20], title: ["text", 200] },
   deep_search: { question: ["text", 1200], region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], scope: ["text", 200], outcome: ["text", 20], title: ["text", 200], period: ["text", 120] },
   blockchain: { query: ["text", 180], kind: ["text", 20], chain: ["text", 40], chain_hint: ["text", 40], origin: ["text", 16], limit: ["num"] },
+  social: { mode: ["text", 20], target: ["text", 400], usernames: ["list", 40, 160], platforms: ["list", 16, 40], keywords: ["list", 40, 160], urls: ["list", 20, 300], countries_regions: ["list", 20, 120], languages: ["list", 20, 60], date_from: ["text", 10], date_to: ["text", 10], objective: ["text", 1500], title: ["text", 200], discovery_mode: ["text", 60], outcome: ["text", 20] },
   facial_extraction: { files: ["num"], videos: ["num"], bytes: ["num"] },
   facial_search: { engines: ["list", 4, 20], face: ["text", 40] },
   event_list: { text: ["text", 200], region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], period_days: ["num"], scope: ["text", 200], country: ["text", 120], sort: ["text", 10], results: ["num"] },
@@ -85,7 +86,8 @@ const USAGE_LOG_FIELDS = Object.freeze({
 // Only these fields of a logged request can change afterwards (the report outcome).
 const USAGE_LOG_UPDATES = Object.freeze({
   report_generator: ["outcome", "title"],
-  deep_search: ["outcome", "title", "period"]
+  deep_search: ["outcome", "title", "period"],
+  social: ["outcome", "title", "discovery_mode"]
 });
 const USAGE_LOG_OUTCOMES = new Set(["cached", "generated", "no_events", "failed"]);
 // Admin counter (or workspace tab) -> the logged features that explain it.
@@ -1419,26 +1421,89 @@ export class ReportGate {
       return Response.json({ ok: true, workspace });
     }
 
-    if (url.pathname === "/social-workspace-put") {
+    // The read and the write happen inside the object, so overlapping runs on a
+    // shared account cannot overwrite each other's reports.
+    if (url.pathname === "/social-report-add") {
       const username = normalizeUsername(body.username);
       if (!isAllowedUser(username, this.env)) {
         return Response.json({ error: "Unknown user." }, { status: 400 });
       }
-      const workspace = body.workspace && typeof body.workspace === "object" ? body.workspace : null;
-      if (!workspace) {
-        return Response.json({ error: "Missing social workspace." }, { status: 400 });
+      const report = body.report && typeof body.report === "object" ? body.report : null;
+      if (!report) {
+        return Response.json({ error: "Missing social report." }, { status: 400 });
       }
-      let safeWorkspace = {
-        version: cleanText(workspace.version || "socmint-v1-public-web-report", 80),
+      const key = `social-workspace:${username}`;
+      const current = await this.readSocialWorkspace(key);
+      const pruned = await this.pruneSocialWorkspace({
+        version: cleanText(report.version || "socmint-v1-public-web-report", 80),
         username,
-        reports: Array.isArray(workspace.reports) ? workspace.reports.slice(0, 50) : [],
+        reports: [report, ...(Array.isArray(current?.reports) ? current.reports : [])].slice(0, 50),
         updated_at: new Date(now).toISOString()
-      };
-      const pruned = await this.pruneSocialWorkspace(safeWorkspace, now);
-      safeWorkspace = pruned.workspace;
-      await this.writeSocialWorkspace(`social-workspace:${username}`, safeWorkspace);
+      }, now);
+      await this.writeSocialWorkspace(key, pruned.workspace);
       if (pruned.nextExpiry != null) await this.scheduleExpiry(pruned.nextExpiry);
-      return Response.json({ ok: true, workspace: safeWorkspace });
+      return Response.json({ ok: true });
+    }
+
+    if (url.pathname === "/social-acquire") {
+      const username = normalizeUsername(body.username);
+      if (!isAllowedUser(username, this.env)) {
+        return Response.json({ error: "Unknown user." }, { status: 400 });
+      }
+      const runId = crypto.randomUUID();
+      if (username !== "admin") {
+        const day = parisDayKey(now);
+        const activeKey = `social-active:${username}`;
+        const userKey = `social-usage:${username}`;
+        const globalKey = "social-usage-global";
+        const [active, userUsage, globalUsage] = await Promise.all([
+          this.state.storage.get(activeKey),
+          this.state.storage.get(userKey),
+          this.state.storage.get(globalKey)
+        ]);
+        const used = usage => usage?.day === day ? Number(usage.count || 0) : 0;
+        const lockAge = now - Number(active?.started_at || 0);
+        if (lockAge < SOCMINT_RUN_LOCK_MS) {
+          return Response.json({
+            error: "An investigation is already running on this account. Wait for it to finish.",
+            code: "SOCMINT_ACTIVE_RUN_QUOTA",
+            retry_after_seconds: Math.ceil((SOCMINT_RUN_LOCK_MS - lockAge) / 1000)
+          }, { status: 429 });
+        }
+        if (used(userUsage) >= SOCMINT_DAILY_LIMIT) {
+          return Response.json({
+            error: `Daily limit reached: maximum ${SOCMINT_DAILY_LIMIT} SOCMINT investigations per account per day. Admin is exempt.`,
+            code: "SOCMINT_USER_QUOTA_EXHAUSTED"
+          }, { status: 429 });
+        }
+        if (used(globalUsage) >= SOCMINT_GLOBAL_DAILY_LIMIT) {
+          return Response.json({
+            error: "Daily SOCMINT limit reached for all users.",
+            code: "SOCMINT_GLOBAL_QUOTA_EXHAUSTED",
+            retry_after_seconds: 3600
+          }, { status: 429 });
+        }
+        await this.state.storage.put({
+          [activeKey]: { run_id: runId, started_at: now },
+          [userKey]: { day, count: used(userUsage) + 1 },
+          [globalKey]: { day, count: used(globalUsage) + 1 }
+        });
+      }
+      const log = this.usageLogEntry(username, "social", body.details, now);
+      await this.incrementUsage(username, {}, now, log);
+      return Response.json({ ok: true, run_id: runId, log_id: log?.key || "" });
+    }
+
+    if (url.pathname === "/social-release") {
+      const username = normalizeUsername(body.username);
+      if (!isAllowedUser(username, this.env)) {
+        return Response.json({ error: "Unknown user." }, { status: 400 });
+      }
+      const activeKey = `social-active:${username}`;
+      const active = await this.state.storage.get(activeKey);
+      if (active?.run_id && active.run_id === body.run_id) await this.state.storage.delete(activeKey);
+      if (body.log_update) await this.updateUsageLog(username, body.log_update);
+      return Response.json({ ok: true });
     }
 
     if (url.pathname === "/social-report-delete") {

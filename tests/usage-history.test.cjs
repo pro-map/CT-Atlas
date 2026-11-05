@@ -209,7 +209,7 @@ test("an IP lookup is counted with its canonical target only when its slot is gr
   assert.equal((await h.gate.usageStats("today")).users.find(item => item.username === "group-i-11").ip_lookups, 0);
 });
 
-test("workspace openings list their times and retired Social requests and history are excluded", async () => {
+test("workspace openings list their times; Social searches keep a history row but no counter or tab row", async () => {
   const h = await harness();
   assert.equal((await h.call("/usage-record", { username: "group-s-11", action: "tab_access", tab: "crypto" })).status, 200);
   const opened = (await h.history("group-s-11", "tab:crypto")).body;
@@ -227,16 +227,21 @@ test("workspace openings list their times and retired Social requests and histor
   });
   assert.equal((await h.history("group-s-11", "social_intel_requests")).status, 400);
   assert.equal((await h.history("group-s-11", "tab:social")).status, 400);
-  // Historical Social rows must also stay out of ALL ACTIVITY.
+  // Historical Social workspace openings must stay out of ALL ACTIVITY.
   const stamp = Date.now();
   const day = h.shared.parisDayKey(stamp);
-  await h.storage.put(`usage-log:${day}:group-s-11:social:${stamp}:legacy`, {at:new Date(stamp).toISOString(),feature:"social",target:"old search"});
   await h.storage.put(`usage-log:${day}:group-s-11:tab_social:${stamp}:legacy`, {at:new Date(stamp).toISOString(),feature:"tab_social"});
   // A Worker module cannot write a workspace-opening row through /usage-increment.
   await h.call("/usage-increment", { username: "group-s-11", metrics: {}, log: { feature: "tab_ip" } });
   assert.equal((await h.history("group-s-11", "tab:ip")).body.rows.length, 0);
-  const all = (await h.history("group-s-11", "all")).body.rows.map(row => row.feature).sort();
-  assert.deepEqual(all, ["tab_crypto"]);
+  const rows = (await h.history("group-s-11", "all")).body.rows;
+  assert.deepEqual(rows.map(row => row.feature).sort(), ["social", "tab_crypto"]);
+  const social = rows.find(row => row.feature === "social");
+  assert.equal(social.target, "Example Person");
+  assert.equal(social.usernames.length, 40);
+  assert.equal(social.objective.length, 1500);
+  assert.equal(social.urls.length, 1);
+  assert.equal(social.urls[0].length, 300);
 });
 
 test("the alarm stays armed while history rows exist, so the 90-day purge happens without logins", async () => {

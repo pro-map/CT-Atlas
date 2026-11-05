@@ -14,8 +14,7 @@ import {
 } from "./social-agent-client.js";
 import { loadSanctions, screenReportWallets } from "./sanctions.js";
 
-const SOCIAL_INTEL_VERSION = "socmint-v6-resilient-discovery";
-const SOCIAL_REPORT_LIMIT = 50;
+const SOCIAL_INTEL_VERSION = "socmint-v7-evidence-ledger";
 
 const SOCIAL_SCHEMA = {
   type: "object",
@@ -863,37 +862,77 @@ async function attachWalletScreening(env, report) {
   }
 }
 
-// query: the analyst's own sanitized request (report.query can hold discovered URLs instead).
-function socialLogDetails(query, report) {
+function socialLogDetails(query) {
   return {
     mode: query?.mode, target: query?.target, usernames: query?.usernames, platforms: query?.platforms,
     keywords: query?.keywords, urls: query?.urls, countries_regions: query?.countries_regions,
     languages: query?.languages, date_from: query?.date_from, date_to: query?.date_to,
-    objective: query?.objective, title: report?.title, discovery_mode: report?.discovery_mode
+    objective: query?.objective
   };
 }
 
-async function persistReport(env, username, report, query = null) {
+// The history row is written here, before anything leaves CT Atlas, so that the
+// record of who looked up whom does not depend on the run succeeding.
+async function acquireSocialRun(env, username, query) {
+  let response;
+  try {
+    response = await gateCall(env, "/social-acquire", { username, details: socialLogDetails(query) });
+  } catch (error) {
+    console.error("SOCMINT run could not be registered", error);
+    return { denied: { error: "SOCMINT is temporarily unavailable. Please retry.", code: "SOCMINT_GATE_UNAVAILABLE" }, status: 503 };
+  }
+  const payload = await response.json().catch(() => ({}));
+  if (response.ok) return payload;
+  return {
+    denied: {
+      error: payload.error || "SOCMINT run limit reached.",
+      code: payload.code || "SOCMINT_RUN_REFUSED",
+      retry_after_seconds: payload.retry_after_seconds || null
+    },
+    status: response.status
+  };
+}
+
+async function releaseSocialRun(env, username, permit, report) {
+  try {
+    await gateCall(env, "/social-release", {
+      username,
+      run_id: permit.run_id,
+      log_update: {
+        id: permit.log_id,
+        outcome: report ? "generated" : "failed",
+        title: report?.title,
+        discovery_mode: report?.discovery_mode
+      }
+    });
+  } catch (error) {
+    console.error("SOCMINT run could not be released", error);
+  }
+}
+
+async function persistReport(env, username, report) {
   await attachWalletScreening(env, report);
-  const currentResponse = await gateCall(env, "/social-workspace-get", { username });
-  const currentPayload = await currentResponse.json().catch(() => ({}));
-  const workspace = currentPayload?.workspace && typeof currentPayload.workspace === "object"
-    ? currentPayload.workspace
-    : { version: SOCIAL_INTEL_VERSION, username, reports: [] };
-  const safeReport = sanitizeSocialReport(report);
-  const reports = Array.isArray(workspace.reports) ? workspace.reports : [];
-  reports.unshift(safeReport || { id: crypto.randomUUID(), generated_at: new Date().toISOString(), title: "CT Atlas SOCMINT Assessment" });
-  workspace.version = SOCIAL_INTEL_VERSION;
-  workspace.username = username;
-  workspace.reports = reports.map(item => sanitizeSocialReport(item)).filter(Boolean).slice(0, SOCIAL_REPORT_LIMIT);
-  workspace.updated_at = new Date().toISOString();
-  const saved = await gateCall(env, "/social-workspace-put", { username, workspace });
-  if (!saved.ok) throw new Error("The Social report could not be saved. Please retry.");
-  await gateCall(env, "/usage-increment", {
-    username,
-    metrics: { social_intel_requests: 1 },
-    ...(query ? { log: { feature: "social", details: socialLogDetails(query, safeReport || report) } } : {})
-  });
+  const saved = await gateCall(env, "/social-report-add", { username, report: sanitizeSocialReport(report) });
+  if (!saved.ok) throw new Error("The Social report could not be saved.");
+}
+
+// By now the analyst has waited for this report and Gemini has been spent on it: a
+// storage failure must neither discard it nor start the investigation again.
+async function respondWithReport(env, run, report, extra = {}) {
+  run.report = report;
+  try {
+    await persistReport(env, run.username, report);
+    return jsonResponse({ ok: true, report, saved: true, ...extra }, 200, env);
+  } catch (error) {
+    console.error("SOCMINT report save failed", error);
+    return jsonResponse({
+      ok: true,
+      report,
+      saved: false,
+      warning: "The report could not be saved to your history. Export it now if you need to keep it.",
+      ...extra
+    }, 200, env);
+  }
 }
 
 async function handleSocialWorkspace(request, env) {
@@ -949,12 +988,25 @@ async function handleSocialInvestigate(request, env) {
     return jsonResponse({ error: "Analyze URLs mode requires at least one public URL." }, 400, env);
   }
 
+  const permit = await acquireSocialRun(env, username, query);
+  if (permit.denied) return jsonResponse(permit.denied, permit.status, env);
+  const run = { username, report: null };
+  try {
+    return await runSocialInvestigation(env, run, query, agentConfigured);
+  } finally {
+    await releaseSocialRun(env, username, permit, run.report);
+  }
+}
+
+async function runSocialInvestigation(env, run, query, agentConfigured) {
   let agentFailure = null;
 
   if (agentConfigured) {
+    let agentReport = null;
     try {
-      const agentResult = await runSocialAgent(env, username, query);
-      const sources = normalizeAgentSources(agentResult.report, query);
+      const agentResult = await runSocialAgent(env, run.username, query);
+      const partial = Boolean(agentResult.meta?.partial);
+      const sources = normalizeAgentSources(agentResult.report, query, agentResult.meta?.evidence_ledger);
       if (needsIndependentDiscoveryFallback(query, sources)) {
         const error = new Error("SOCMINT ADK agent completed without any usable public source.");
         error.code = "SOCMINT_AGENT_EMPTY_EVIDENCE";
@@ -966,7 +1018,7 @@ async function handleSocialInvestigate(request, env) {
         query,
         sources,
         "ADK · " + cleanText(agentResult.meta?.agent_version || SOCIAL_AGENT_CLIENT_VERSION, 80),
-        "adk_agent"
+        partial ? "adk_agent_partial" : "adk_agent"
       );
       report.agent_meta = {
         agent: true,
@@ -974,10 +1026,12 @@ async function handleSocialInvestigate(request, env) {
         agent_version: cleanText(agentResult.meta?.agent_version, 80),
         investigation_id: cleanText(agentResult.meta?.session_id, 100),
         event_count: Number(agentResult.meta?.event_count || 0),
-        max_llm_calls: Number(agentResult.meta?.max_llm_calls || 0)
+        llm_calls: Number(agentResult.meta?.llm_calls || 0),
+        max_llm_calls: Number(agentResult.meta?.max_llm_calls || 0),
+        partial,
+        stop_reason: cleanText(agentResult.meta?.stop_reason, 40)
       };
-      await persistReport(env, username, report, query);
-      return jsonResponse({ ok: true, report, agent: true }, 200, env);
+      agentReport = report;
     } catch (error) {
       const status = Number(error?.status || 0);
       const agentQuota = status === 429 || /QUOTA/.test(String(error?.code || ""));
@@ -1017,8 +1071,7 @@ async function handleSocialInvestigate(request, env) {
               directly_observed_sources: evidence.filter(item => item?.fetched).length,
               agent_failure: agentFailure
             };
-            await persistReport(env, username, report, query);
-            return jsonResponse({ ok: true, report, agent: false, fallback: "brave_evidence_synthesis" }, 200, env);
+            return await respondWithReport(env, run, report, { agent: false, fallback: "brave_evidence_synthesis" });
           } catch (synthesisError) {
             try {
               const fallbackResult = await geminiSocmint(env, fallbackQuery, false);
@@ -1044,8 +1097,7 @@ async function handleSocialInvestigate(request, env) {
                 agent_failure: agentFailure,
                 synthesis_failure: cleanText(synthesisError?.message, 700)
               };
-              await persistReport(env, username, report, query);
-              return jsonResponse({ ok: true, report, agent: false, fallback: "brave_url_context_secondary" }, 200, env);
+              return await respondWithReport(env, run, report, { agent: false, fallback: "brave_url_context_secondary" });
             } catch (fallbackError) {
               const report = normalizeReport(
                 buildDiscoveryOnlyReport(query, reportSources, fallbackError),
@@ -1064,8 +1116,7 @@ async function handleSocialInvestigate(request, env) {
                 synthesis_failure: cleanText(synthesisError?.message, 700),
                 analysis_failure: cleanText(fallbackError?.message, 700)
               };
-              await persistReport(env, username, report, query);
-              return jsonResponse({ ok: true, report, agent: false, fallback: "brave_evidence_only" }, 200, env);
+              return await respondWithReport(env, run, report, { agent: false, fallback: "brave_evidence_only" });
             }
           }
         }
@@ -1096,6 +1147,10 @@ async function handleSocialInvestigate(request, env) {
           detail: agentFailure.message || null
         }, 503, env);
       }
+    }
+    if (agentReport) {
+      const partial = agentReport.agent_meta.partial;
+      return respondWithReport(env, run, agentReport, { agent: true, ...(partial ? { partial } : {}) });
     }
   }
 
@@ -1167,8 +1222,14 @@ async function handleSocialInvestigate(request, env) {
     if (!sources.some(s => s.url === url)) sources.push({ url, title: "", snippet: "", kind: "analyst_supplied" });
   }
   const report = normalizeReport(result.parsed, query, sources, result.model, discoveryMode);
-  await persistReport(env, username, report, query);
-  return jsonResponse({ ok: true, report }, 200, env);
+  if (!urlOnlyAgentFallback) return respondWithReport(env, run, report);
+  report.agent_meta = {
+    agent: false,
+    fallback: true,
+    fallback_stage: "url_context",
+    agent_failure: agentFailure
+  };
+  return respondWithReport(env, run, report, { agent: false, fallback: "url_context_agent_fallback" });
 }
 
 export {
