@@ -22,6 +22,9 @@ MAX_FILES = 10
 MAX_TOTAL_BYTES = 30 * 1024 * 1024
 MAX_IMAGE_SIDE = 2200
 MAX_VIDEO_FRAMES = 8
+QUALITY_SIDE = 112  # raw Laplacian variance falls as resolution rises, so faces are measured at one size
+QUALITY_FULL_SHARPNESS = 400.0
+QUALITY_MIN_SHARPNESS = 30.0  # below this a face is blurred however large it is
 
 api = FastAPI(title="CT Atlas Facial Intelligence", version=SERVICE_VERSION)
 
@@ -205,17 +208,26 @@ def _detect_faces(frame: np.ndarray) -> list[dict[str, Any]]:
         if crop.size == 0:
             continue
         crop_gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
-        sharpness = float(cv2.Laplacian(crop_gray, cv2.CV_64F).var())
         brightness = float(crop_gray.mean())
-        contrast = float(crop_gray.std())
+        side = min(x1 - x0, y1 - y0)
+        normal = cv2.resize(
+            crop_gray,
+            (QUALITY_SIDE, QUALITY_SIDE),
+            interpolation=cv2.INTER_AREA if side >= QUALITY_SIDE else cv2.INTER_LINEAR,
+        )
+        sharpness = float(cv2.Laplacian(normal, cv2.CV_64F).var())
+        contrast = float(normal.std())
         ratio = ((x1 - x0) * (y1 - y0)) / float(max(1, w * h))
+        # Absolute face size, not its share of the frame: a sharp face in a group photo is still a good crop.
         quality_score = min(
             100.0,
-            (min(sharpness / 180.0, 1.0) * 45.0)
-            + (min(ratio / 0.08, 1.0) * 35.0)
+            (min(sharpness / QUALITY_FULL_SHARPNESS, 1.0) * 45.0)
+            + (min(side / float(QUALITY_SIDE), 1.0) * 35.0)
             + (min(contrast / 55.0, 1.0) * 20.0),
         )
         quality = "HIGH" if quality_score >= 70 else ("MEDIUM" if quality_score >= 42 else "LOW")
+        if sharpness < QUALITY_MIN_SHARPNESS:
+            quality = "LOW"
         results.append(
             {
                 "face_id": index,

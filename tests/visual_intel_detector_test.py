@@ -278,5 +278,45 @@ class ServiceOutput(unittest.TestCase):
         self.assertEqual(app.SERVICE_VERSION, "ct-atlas-visual-intel-v2")
 
 
+class FaceQuality(unittest.TestCase):
+    """The label is the only guidance on which crop to search. Raw Laplacian variance falls as resolution rises and
+    the face's share of the frame punishes group photos, so the same face used to go from HIGH at 400 px to LOW at
+    2200 px, and a sharp 285 px face read LOW while a 27 px one read HIGH."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.base = cv2.imread(str(HERE / "fixtures" / "astronaut_1600.jpg"))
+
+    def at(self, side):
+        interpolation = cv2.INTER_AREA if side < 1600 else cv2.INTER_CUBIC
+        faces = app._detect_faces(cv2.resize(self.base, (side, side), interpolation=interpolation))
+        self.assertEqual(len(faces), 1, side)
+        return faces[0]
+
+    def test_the_same_face_does_not_get_worse_as_the_resolution_rises(self):
+        sides = (150, 400, 800, 1600, 2200)
+        scores = [self.at(side)["quality_score"] for side in sides]
+        self.assertEqual(scores, sorted(scores))
+        self.assertEqual([self.at(side)["quality"] for side in sides], ["LOW", "MEDIUM", "HIGH", "HIGH", "HIGH"])
+
+    def test_a_tiny_face_cannot_read_high(self):
+        face = self.at(150)
+        self.assertLess(min(face["box"]["w"], face["box"]["h"]), 40)
+        self.assertEqual(face["quality"], "LOW")
+
+    def test_a_sharp_face_in_a_large_frame_is_not_punished_for_the_empty_space_around_it(self):
+        canvas = np.full((3000, 4000, 3), 128, np.uint8)
+        canvas[1000:1800, 1500:2300] = cv2.resize(self.base, (800, 800), interpolation=cv2.INTER_AREA)
+        face = app._detect_faces(canvas)[0]
+        self.assertLess(face["size_ratio"], 0.01)
+        self.assertEqual(face["quality"], "HIGH")
+
+    def test_a_large_blurred_face_is_low_whatever_its_size_earns_it(self):
+        face = app._detect_faces(cv2.GaussianBlur(self.base, (0, 0), 8))[0]
+        self.assertLess(face["sharpness"], app.QUALITY_MIN_SHARPNESS)
+        self.assertGreaterEqual(face["quality_score"], 42, "without the floor this blurred face would read MEDIUM")
+        self.assertEqual(face["quality"], "LOW")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
