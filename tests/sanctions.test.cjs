@@ -390,8 +390,8 @@ test("report wallet screening is capped and tolerates malformed reports",async()
   const state=await api.loadSanctions(ENV);
   assert.equal(api.screenReportWallets(null,state).wallets_found,0);
   assert.equal(api.screenReportWallets({key_findings:"oops",entities:null},state).wallets_found,0);
-  const many=Array.from({length:60},(_,i)=>"0x"+i.toString(16).padStart(40,"0")).join(" ");
-  assert.equal(api.screenReportWallets({executive_assessment:many},state).wallets_found,40);
+  const many=Array.from({length:260},(_,i)=>"0x"+i.toString(16).padStart(40,"0")).join(" ");
+  assert.equal(api.screenReportWallets({executive_assessment:many},state).wallets_found,200);
 });
 
 test("the retained SOCMINT client handles wallet screening but is not loaded by the placeholder",()=>{

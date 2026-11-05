@@ -593,6 +593,10 @@ function normalizeTelegramEvidence(raw) {
   if (!raw || typeof raw !== "object") return null;
   const array = value => Array.isArray(value) ? value : [];
   const text = (value, max=300) => cleanText(value, max);
+  // The agent sends wallets per chain ({bitcoin:[...]}); stored reports hold a flat list.
+  const walletList = (value, max) => [...new Set(
+    (Array.isArray(value) ? value : Object.values(value && typeof value === "object" ? value : {}).flat()).map(x => text(x, 180)).filter(Boolean)
+  )].slice(0, max);
   const seen = new Set();
   const messages = array(raw.messages).slice(0, 120).flatMap(item => {
     const url = safePublicUrl(item?.url);
@@ -605,6 +609,7 @@ function normalizeTelegramEvidence(raw) {
       media:array(item.media).slice(0,10).map(x=>text(x,40)),
       links:array(item.links).slice(0,15).map(safePublicUrl).filter(Boolean),
       views:Number.isFinite(item.views)?Math.max(0,item.views):null,
+      wallets:walletList(item.wallets,30),
       mentioned_channels:array(item.mentioned_channels).slice(0,15).map(x=>text(x,40))}];
   });
   const allowed = new Set(messages.map(item=>item.url));
@@ -618,7 +623,7 @@ function normalizeTelegramEvidence(raw) {
     channels:array(raw.channels).slice(0,5).map(item=>({channel:text(item?.channel,40),title:text(item?.title,200),
       description:text(item?.description,1200),status:text(item?.status,40),pages_read:Math.max(0,Math.min(25,Number(item?.pages_read)||0)),
       next_before:Number(item?.next_before)||null,stop_reason:text(item?.stop_reason,500)})),
-    messages,relationships,messages_retained:messages.length,
+    messages,relationships,messages_retained:messages.length,wallets:walletList(raw.wallets,200),
     messages_observed:Math.max(messages.length,Math.min(10000,Number(raw.messages_observed)||0)),
     truncated:Boolean(raw.truncated || array(raw.messages).length>120),
     relationships_truncated:Boolean(raw.relationships_truncated || array(raw.relationships).length>300),
