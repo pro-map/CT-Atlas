@@ -9001,12 +9001,13 @@ def prune_old(events, aged_out=None):
 
 
 AGED_OUT_ARCHIVE_DIR = "archive"
-# What the background archive needs from an aged-out map event (its related
-# articles already reached the archive while it was on the map).
+# What the background archive keeps of an aged-out map event. Its related
+# articles stay with it: this file is their only copy, because the nightly sync
+# keeps one article per incident and D1 never holds them.
 AGED_OUT_ARCHIVE_FIELDS = (
     "id", "incident_id", "url", "title", "summary", "original_title", "original_language",
     "source", "published", "category", "categories", "actor_group", "primary_event_type",
-    "country", "region", "ai_relevance_score", "ai_relevance_reason",
+    "country", "region", "ai_relevance_score", "ai_relevance_reason", "related_articles",
 )
 
 

@@ -60,7 +60,7 @@ class ArchiveFileTests(unittest.TestCase):
             self.assertEqual(Path(path).name, "removed-events-aged-out-202610.json")
             data = json.loads(Path(path).read_text(encoding="utf-8"))
             self.assertEqual([e["url"] for e in data["events"]], ["https://a.test/old", "https://a.test/b"])
-            self.assertNotIn("related_articles", data["events"][0])
+            self.assertEqual(data["events"][0]["related_articles"], old["related_articles"])
             self.assertNotIn("source_article_fingerprints", data["events"][0])
 
             rows = list(sync.removed_events([path], "2026-10-02T09:00:00+00:00"))
