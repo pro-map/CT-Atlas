@@ -162,6 +162,15 @@ add("same forwarding habit twice stays at moderate strength",["LOW"],["RAPID_PAS
 }
 
 {
+  const rows=[btc(-HOUR,"IN",500,"bc1qfunding")];
+  for(let i=0;i<6;i++){
+    const payees=Array.from({length:40},(_,j)=>"bc1qpayee"+i+"x"+j);
+    rows.push(btc(i*10*MIN,"OUT",0.08+i*0.001,payees[0],{counterparties:payees.slice(0,12),all_counterparties:payees}));
+  }
+  add("a large payout batch is not dust just because its funding was huge",["LOW"],[],bitcoin(rows),{},{absent:["DUST_SPRAY"]});
+}
+
+{
   const exchanges=[a(31),a(32),a(33)];
   const labels=exchanges.map((address,i)=>({address,category:"EXCHANGE",name:"Exchange "+i}));
   add("unsourced exchange labels never count",["LOW"],[],wallet([

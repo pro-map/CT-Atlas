@@ -110,7 +110,9 @@ function prepare(analysis) {
   const rows = [];
   const self = [];
   const zero = [];
-  const byParty = new Map();
+  const screening = analysis?.sanctions_screening || null;
+  const listed = new Map((Array.isArray(screening?.counterparty_matches) ? screening.counterparty_matches : [])
+    .map(match => [partyKey(chain, match.address), []]));
 
   for (const raw of Array.isArray(analysis?.transactions) ? analysis.transactions : []) {
     const parties = Array.isArray(raw?.all_counterparties) ? raw.all_counterparties : Array.isArray(raw?.counterparties) ? raw.counterparties : [];
@@ -124,11 +126,8 @@ function prepare(analysis) {
       assetKey: String(raw?.asset_key || raw?.token_contract || "native").toLowerCase(),
       cps
     };
-    // Exposure reads every link, including rows the behaviour rules drop.
-    for (const party of new Set([...cps, ...coInputs])) {
-      if (!byParty.has(party)) byParty.set(party, []);
-      byParty.get(party).push(row);
-    }
+    // Exposure reads every link to a listed address, including rows the behaviour rules drop.
+    for (const party of new Set([...cps, ...coInputs])) listed.get(party)?.push(row);
     if (raw?.failed === true) excluded.failed++;
     else if (!Number.isFinite(row.t)) excluded.pending++;
     else if (row.direction === "SELF" || raw?.self_spend === true) self.push(row);
@@ -147,7 +146,7 @@ function prepare(analysis) {
     if (!byAsset.has(row.assetKey)) byAsset.set(row.assetKey, []);
     byAsset.get(row.assetKey).push(row);
   }
-  return { chain, rows, self, zero, byAsset, byParty, excluded, screening: analysis?.sanctions_screening || null };
+  return { chain, rows, self, zero, byAsset, listed, excluded, screening };
 }
 
 function coverageOf(analysis, data) {
@@ -201,6 +200,31 @@ function bestWindow(rows, span, measure = list => list.length) {
     }
   }
   return best;
+}
+
+// bestWindow by distinct parties. Counted incrementally, because one Bitcoin row can
+// carry thousands: rebuilding a set per position took seconds on a busy hot wallet.
+function widestWindow(rows, span) {
+  const counts = new Map();
+  let left = 0;
+  let best = [0, 0];
+  let bestSize = 0;
+  for (let right = 0; right < rows.length; right++) {
+    for (const party of rows[right].cps) counts.set(party, (counts.get(party) || 0) + 1);
+    while (rows[right].t - rows[left].t > span) {
+      for (const party of rows[left].cps) {
+        const count = counts.get(party) - 1;
+        if (count) counts.set(party, count);
+        else counts.delete(party);
+      }
+      left++;
+    }
+    if (counts.size > bestSize) {
+      bestSize = counts.size;
+      best = [left, right + 1];
+    }
+  }
+  return rows.slice(best[0], best[1]);
 }
 
 // FIFO inside one asset: an outgoing amount explains one incoming amount once.
@@ -313,7 +337,7 @@ function detectVelocity({ rows }) {
 function detectFanOut({ byAsset, chain }) {
   let best = null;
   for (const rows of byAsset.values()) {
-    const sends = bestWindow(rows.filter(isOut), DAY, list => uniqueParties(list).size);
+    const sends = widestWindow(rows.filter(isOut), DAY);
     const receivers = uniqueParties(sends);
     if (receivers.size < 8) continue;
     const start = sends[0].t;
@@ -603,14 +627,14 @@ function detectDustSpray({ byAsset }) {
   let best = null;
   for (const rows of byAsset.values()) {
     const largest = Math.max(...rows.map(row => row.amount));
-    // Per recipient, since one Bitcoin transaction can pay many. An unknown token
-    // counts only by ratio here: its value is unknown, not known to be small.
+    // Per recipient, since one Bitcoin transaction can pay many. A floor decides where
+    // one exists; an unknown token has none, so only its own scale can call it tiny.
     const tiny = rows.filter(row => {
       if (!isOut(row)) return false;
       const each = row.amount / Math.max(1, row.cps.length);
-      return each <= largest * 0.0001 || (!row.token_contract && isDustRow({ ...row, amount: each }));
+      return row.token_contract && row.stable !== true ? each <= largest * 0.0001 : isDustRow({ ...row, amount: each });
     });
-    const spray = bestWindow(tiny, DAY, list => uniqueParties(list).size);
+    const spray = widestWindow(tiny, DAY);
     const recipients = uniqueParties(spray).size;
     if (recipients < 20) continue;
     best = stronger(best, finding({
@@ -696,7 +720,7 @@ function directSanctionsFinding(match, linked) {
 }
 
 function exposureFindings(data, labels) {
-  const { chain, screening, byParty, rows } = data;
+  const { chain, screening, listed, rows } = data;
   const found = [];
   if (screening?.seed_match) {
     found.push(finding({
@@ -713,7 +737,7 @@ function exposureFindings(data, labels) {
   }
 
   const matches = Array.isArray(screening?.counterparty_matches) ? screening.counterparty_matches : [];
-  for (const match of matches) found.push(directSanctionsFinding(match, byParty.get(partyKey(chain, match.address)) || []));
+  for (const match of matches) found.push(directSanctionsFinding(match, listed.get(partyKey(chain, match.address)) || []));
 
   const mixers = new Map(MIXER_REGISTRY[chain] || []);
   for (const label of labels) {

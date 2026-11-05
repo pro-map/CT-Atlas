@@ -1,6 +1,6 @@
 const {test}=require("node:test");
 const assert=require("node:assert/strict");
-const {cases,wallet,native,usdt,a,DAY,MIN}=require("./fixtures/crypto-risk/cases.cjs");
+const {cases,wallet,native,usdt,a,DAY,HOUR,MIN}=require("./fixtures/crypto-risk/cases.cjs");
 
 const risk=import("../cloudflare-worker/crypto-risk.mjs");
 const scoring=result=>result.findings.filter(item=>item.points>0);
@@ -220,6 +220,30 @@ test("a dormancy finding says when it only saw the sample",async()=>{
   const entry=assessWallet(find("dormancy then").analysis).findings.find(item=>item.code==="DORMANT_THEN_BURST");
   assert.match(entry.explanation,/Only gaps inside the sample/);
   assert.equal(entry.metrics.sample_complete,false);
+});
+
+test("the busiest window is found by distinct parties, however the rows are spread",async()=>{
+  const {assessWallet}=await risk;
+  // A quiet day, then one wide day: the wide day must be the window that is measured.
+  const rows=[usdt(-HOUR,"IN",10000,a(10))];
+  for(let i=0;i<3;i++)rows.push(usdt(-20*DAY+i*DAY,"OUT",10,a(2700)));
+  for(let i=0;i<9;i++)rows.push(usdt(i*MIN,"OUT",1000+i*37,a(2800+i)));
+  const entry=assessWallet(wallet(rows)).findings.find(item=>item.code==="FAN_OUT");
+  assert.equal(entry.metrics.receivers,9);
+});
+
+test("a busy Bitcoin hot wallet stays cheap to assess: this runs on every search",async()=>{
+  const {assessWallet}=await risk;
+  const start=Date.parse("2026-10-01T00:00:00Z");
+  const rows=Array.from({length:100},(_,index)=>{
+    const parties=Array.from({length:2000},(_unused,party)=>"bc1qparty"+index+"x"+party);
+    return {id:"tx"+index,time:new Date(start+index*600000).toISOString(),direction:"OUT",asset:"BTC",asset_key:"native",amount:4,counterparties:parties.slice(0,12),all_counterparties:parties};
+  });
+  const analysis={chain:"bitcoin",kind:"address",query:"bc1qseed",transactions:rows,sanctions_screening:{status:"ok",hit:false,counterparty_matches:[]},coverage:{complete:false}};
+  assessWallet(analysis);
+  const before=performance.now();
+  assessWallet(analysis);
+  assert.ok(performance.now()-before<1500,"this took 3.3 s before the window was counted incrementally");
 });
 
 test("the stablecoin allow-list matches by contract, never by symbol",async()=>{
