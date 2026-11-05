@@ -32,7 +32,7 @@ const retirementDataSource=categoryRuleSource+extract('normalizeActiveEvent')+
 const attackRule=vm.createContext({});
 vm.runInContext(retirementRuleSource+extract('isMapAttackEvent'),attackRule);
 
-test('the map and tools/build_events_map.py use the same attack rule',()=>{
+test('the map and attack_points.py use the same attack rule',()=>{
   const cases=[
     [{primary_event_type:'ATTACK',is_attack:true},true],
     [{primary_event_type:'ATTACK',is_attack:false},false],
@@ -47,10 +47,11 @@ test('the map and tools/build_events_map.py use the same attack rule',()=>{
   for(const [event,expected] of cases){
     assert.equal(attackRule.isMapAttackEvent(event),expected,JSON.stringify(event));
   }
-  const python=fs.readFileSync('tools/build_events_map.py','utf8');
+  const python=fs.readFileSync('attack_points.py','utf8');
   assert.match(python,/MAP_TYPES = \("ATTACK", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT"\)/);
   assert.match(python,/return event\.get\("is_attack"\) is True/);
   assert.match(python,/return "Attacks" in event_categories\(event\)/);
+  assert.match(python,/return event\.get\("attack_update"\) is not True and is_attack_record\(event\)/);
 });
 
 async function runLoader(responses){

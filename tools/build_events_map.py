@@ -11,6 +11,11 @@ Legacy records that predate the incident model have no primary_event_type; for
 those the "Attacks" category stands in, since it groups executed, attempted and
 foiled attacks the same way.
 
+The map shows one point per attack incident (attack_points.py). The other
+attack records of an incident are stamped attack_update and travel with
+recent_events, as non-attacks: the map never draws them, but the header's
+casualty counts and the Key Developments still reach them.
+
 recent_events carries the last RECENT_DAYS of every OTHER category: the map
 draws them when "Show on map" asks for all events or one of those categories
 (its periods are 24h, 7 days, 30 days, 90 days and 180 days), the header's terrorists killed/captured
@@ -42,9 +47,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+from attack_points import (  # noqa: E402
+    attack_groups, attack_update_indexes, event_categories, is_attack_record, is_historic_update,
+    is_map_attack, published_at,
+)
 from retired_categories import active_event, is_retired_judicial_event  # noqa: E402
 FORMAT = "events-map-v1"
-MAP_TYPES = ("ATTACK", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT")
 # The map's longest period (180 days) plus a day of slack: the site is
 # republished at least twice a day. Also covers the header's casualty window
 # (yesterday's full Paris day).
@@ -55,23 +63,6 @@ lite = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(lite)
 
 
-def event_categories(event: dict) -> list[str]:
-    raw = event.get("categories")
-    if isinstance(raw, list) and raw:
-        return [str(value) for value in raw]
-    return [str(event["category"])] if event.get("category") else []
-
-
-def is_map_attack(event: dict) -> bool:
-    """Executed attacks (ATTACK with is_attack), attempted attacks and disrupted plots."""
-    event_type = str(event.get("primary_event_type") or "").strip().upper()
-    if event_type:
-        if event_type == "ATTACK":
-            return event.get("is_attack") is True
-        return event_type in MAP_TYPES
-    return "Attacks" in event_categories(event)
-
-
 def database_summary(events: list[dict]) -> dict:
     visible = [active_event(event) for event in events if event.get("excluded_from_map") is not True
                and not is_retired_judicial_event(event)]
@@ -80,14 +71,6 @@ def database_summary(events: list[dict]) -> dict:
         "total_events": len(visible),
         "by_category": dict(by_category.most_common()),
     }
-
-
-def published_at(event: dict) -> datetime | None:
-    try:
-        value = datetime.fromisoformat(str(event.get("published") or "").replace("Z", "+00:00"))
-    except ValueError:
-        return None
-    return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
 
 
 def development_event_ids(database: dict) -> set[str]:
@@ -112,7 +95,8 @@ def build_map(database: dict, excluded: list[str], now: datetime | None = None) 
     # A development can cite an event first published before the recent
     # window (a materially updated incident): keep it so its link still opens.
     cited_ids = development_event_ids(database)
-    drop = set(excluded)
+    drop = {*excluded, *lite.DERIVED_FIELDS}
+    updates = attack_update_indexes(events)
     map_events = []
     recent_events = []
     for index, event in enumerate(events):
@@ -122,7 +106,9 @@ def build_map(database: dict, excluded: list[str], now: datetime | None = None) 
             continue
         event = active_event(event)
         lite_event = {name: value for name, value in event.items() if name not in drop}
-        if is_map_attack(event):
+        if index in updates:
+            lite_event["attack_update"] = True
+        if is_attack_record(event) and index not in updates:
             # Unlocated attacks (excluded_from_map) stay too: the map never
             # draws them, but the ticker, the header's casualty counts and the
             # Key Development links still need them, as with the full file.
@@ -153,6 +139,8 @@ def validate(output: dict, database: dict) -> None:
     for index, event in enumerate(output["events"]):
         if is_retired_judicial_event(event):
             raise ValueError(f"Map event #{index} belongs to the retired Judicial collection.")
+        if event.get("attack_update") is True:
+            raise ValueError(f"Map event #{index} is a follow-up; follow-ups belong in recent_events.")
         if not is_map_attack(event):
             raise ValueError(f"Map event #{index} is not an attack.")
         for name in lite.REQUIRED:
@@ -163,10 +151,18 @@ def validate(output: dict, database: dict) -> None:
             raise ValueError(f"Recent event #{index} belongs to the retired Judicial collection.")
         if is_map_attack(event):
             raise ValueError(f"Recent event #{index} is an attack; attacks belong in events.")
-    expected = sum(1 for event in database["events"] if isinstance(event, dict)
-                   and not is_retired_judicial_event(event) and is_map_attack(event))
+    source = database["events"]
+    groups = attack_groups(source)
+    updates = attack_update_indexes(source)
+    expected = sum(index not in updates for positions in groups.values() for index in positions)
     if len(output["events"]) != expected:
-        raise ValueError(f"Map has {len(output['events'])} events but the source has {expected} attacks.")
+        raise ValueError(f"Map has {len(output['events'])} events but the source has {expected} attack points.")
+    pointed = {str(event.get("incident_id") or "").strip() for event in output["events"]}
+    for incident, positions in groups.items():
+        # A record with no incident_id is keyed by position: the count above covers it.
+        if (isinstance(incident, str) and incident not in pointed
+                and not all(is_historic_update(source[index]) for index in positions)):
+            raise ValueError(f"Incident {incident} has lost its attack point.")
     for key in database:
         if key != "events" and key not in output:
             raise ValueError(f"Top-level key {key} was dropped.")
