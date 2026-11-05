@@ -219,7 +219,8 @@ function sanctionsSection(model){
 function riskFindingDetail(item){
   const lines=[];
   const metrics=list(item.metrics).map(pair=>text(list(pair)[0])+": "+text(list(pair)[1])).join(" · ");
-  if(metrics||item.window)lines.push("Observed: "+[metrics,text(item.window)].filter(Boolean).join(" · "));
+  const observed=[text(item.explanation),metrics,text(item.window)].filter(Boolean).join(" · ");
+  if(observed)lines.push("Observed: "+observed);
   for(const hop of list(item.hops)){
     lines.push("Hop: "+text(hop.from)+" → "+text(hop.to)+" · "+fmtAmount(hop.forwarded)+" of "+fmtAmount(hop.received)+" "+text(hop.asset)+" · after "+(num(hop.minutes)??"—")+" min");
   }

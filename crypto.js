@@ -646,6 +646,7 @@ function labelledMixerFinding(){
   return {
     code:"DIRECT_MIXER_EXPOSURE",family:"EXPOSURE",strength:"strong",points:45,overlay:true,
     title:"Direct transfer with a wallet labelled as a mixer in this workspace",
+    explanation:"A record in this sample links this wallet directly to a wallet an analyst labelled as a mixer.",
     metrics:{records:rows.length},tx_ids:[...new Set(rows.map(row=>row.id))].slice(0,12),
     benign:["Using a privacy service is not illicit in itself.","The label is an analyst attribution with its own source and confidence."],
     limits:"Uses the labels saved in this workspace, which the automated rules cannot see."
@@ -695,6 +696,7 @@ function oneHopFinding(){
   return {
     code:"ONE_HOP_EXPOSURE",family:"EXPOSURE",strength:top.best?"strong":"moderate",points:top.points,overlay:true,
     title:"A direct counterparty also transacted with a listed address",
+    explanation:"A wallet this seed transacted with has a listed address among its own counterparties, 2 hops from the seed.",
     metrics:{list_entry:top.match.summary||"Listed address",via_wallet:short(top.entry.address,8),listed_links:links.length,value_order_fits:top.best?"yes":"no",...flow},
     tx_ids:(top.best?[top.best.first.id,top.best.second.id]:Array.isArray(top.match.tx_ids)?top.match.tx_ids:[]).slice(0,12),
     benign:["A shared counterparty does not mean the same funds moved on.","The intermediate wallet may serve many unrelated users."],
@@ -753,6 +755,7 @@ function peelChainFinding(){
   return {
     code:"PEEL_CHAIN",family:"FRAGMENTATION",strength:"strong",points:30,overlay:true,
     title:"Value passed on hop after hop in shrinking amounts",
+    explanation:"Consecutive analysed wallets each passed on most of what they received within 24 hours, in a smaller amount.",
     metrics:{forwarding_hops:hops.length,asset:hops[0].asset,first_amount:hops[0].received,last_amount:hops[hops.length-1].forwarded},
     tx_ids:hops.map(hop=>hop.tx_id).slice(0,12),hops,
     benign:["Ordinary payments that return change to a new address look similar.","A service can move its own balance between wallets this way."],
@@ -769,15 +772,10 @@ function riskLabelOf(value){
   return RISK_BADGE_CLASS[label]?label:"NOT_ASSESSED";
 }
 
-function serviceDiscountFactor(value){
-  if(value===true)return 0.25;
-  const factor=Number(value);
-  return factor>0&&factor<1?factor:1;
-}
-
 // The Worker's rules decide what a finding is worth. This repeats only their arithmetic, so that an
 // overlay counts the same way: the best finding per family, the service discount, the behaviour cap,
-// then exposure on top. An overlay adds evidence, so it can never lower the Worker's result.
+// then the best finding per exposure code on top. An overlay adds evidence, so it can never lower
+// the Worker's result.
 function combineRisk(base,overlays){
   const findings=[...(Array.isArray(base?.findings)?base.findings:[]),...overlays]
     .sort((a,b)=>(Number(b.points)||0)-(Number(a.points)||0));
@@ -785,17 +783,22 @@ function combineRisk(base,overlays){
   const workerScore=Number.isFinite(Number(base?.score))?Number(base.score):0;
   if(!base||!overlays.length)return {label:workerLabel,score:workerScore,findings};
 
-  const high=Number(base.thresholds?.high)||60,elevated=Number(base.thresholds?.elevated)||25;
-  const bestByFamily=new Map();
-  let exposure=0;
+  const limits=base.thresholds||{};
+  const high=Number(limits.high)||60,elevated=Number(limits.elevated)||25;
+  // Sorted by points above, so the first finding of a family or a code is its best.
+  const bestByFamily=new Map(),bestByCode=new Map();
   for(const item of findings){
-    if(item.family==="EXPOSURE")exposure+=Number(item.points)||0;
-    else if(!bestByFamily.has(item.family))bestByFamily.set(item.family,item);
+    const group=item.family==="EXPOSURE"?bestByCode:bestByFamily;
+    const key=item.family==="EXPOSURE"?item.code:item.family;
+    if(!group.has(key))group.set(key,item);
   }
+  const pointsOf=items=>items.reduce((sum,item)=>sum+(Number(item.points)||0),0);
   const best=[...bestByFamily.values()];
-  let behaviour=best.reduce((sum,item)=>sum+(Number(item.points)||0),0)*serviceDiscountFactor(base.service_discount);
-  if(best.filter(item=>item.strength==="strong").length<3)behaviour=Math.min(behaviour,high-1);
-  const score=Math.max(workerScore,Math.min(100,Math.round(behaviour+exposure)));
+  let behaviour=pointsOf(best)*(base.service_discount?Number(limits.service_factor)||0.25:1);
+  if(best.filter(item=>item.strength==="strong").length<(Number(limits.strong_families_for_high)||3)){
+    behaviour=Math.min(behaviour,Number(limits.behaviour_cap)||high-1);
+  }
+  const score=Math.max(workerScore,Math.min(100,Math.round(behaviour+pointsOf([...bestByCode.values()]))));
   let label=findings.some(item=>item.floor==="HIGH")||score>=high?"HIGH":score>=elevated?"ELEVATED":"LOW";
   if(RISK_ORDER.indexOf(label)<RISK_ORDER.indexOf(workerLabel))label=workerLabel;
   if(label==="LOW"&&workerLabel==="NOT_ASSESSED")label=workerLabel;
@@ -842,7 +845,7 @@ function riskFindingView(item,coverage){
     ?"The whole history the provider returned was read."
     :"Only this sample was read; older records are not part of this finding.");
   return {
-    code:String(item.code||""),title:String(item.title||item.code||"Indicator"),family:String(item.family||""),
+    code:String(item.code||""),title:String(item.title||item.code||"Indicator"),explanation:String(item.explanation||""),family:String(item.family||""),
     strength:String(item.strength||""),points:Number(item.points)||0,metrics,window:window_,
     txs:(Array.isArray(item.tx_ids)?item.tx_ids:[]).map(id=>({id:String(id),url:explorerUrlFor(id)})),
     benign:(Array.isArray(item.benign)?item.benign:[]).map(String),limits:limits.join(" "),
@@ -850,11 +853,17 @@ function riskFindingView(item,coverage){
   };
 }
 
+function ruleName(code){
+  const text=String(code).replaceAll("_"," ").toLowerCase();
+  return text.charAt(0).toUpperCase()+text.slice(1);
+}
+
+// The Worker lists the two browser rules as always pending; only the page knows if they have run.
 function notEvaluatedRules(base,findings){
-  const rules=(Array.isArray(base?.not_evaluated)?base.not_evaluated:[]).map(item=>typeof item==="string"
-    ?{rule:item,reason:""}
-    :{rule:String(item?.title||item?.rule||item?.code||""),reason:String(item?.reason||"")}
-  ).filter(item=>item.rule);
+  const rules=(Array.isArray(base?.not_evaluated)?base.not_evaluated:[])
+    .map(item=>({code:String(item?.code||item||""),reason:String(item?.reason||"")}))
+    .filter(item=>item.code&&item.code!=="ONE_HOP_EXPOSURE"&&item.code!=="PEEL_CHAIN")
+    .map(item=>({rule:ruleName(item.code),reason:item.reason}));
   const found=code=>findings.some(item=>item.code===code);
   if(!oneHopRun&&!found("ONE_HOP_EXPOSURE"))rules.push({rule:"One-hop exposure",reason:"Runs on request: CHECK ONE HOP analyses the top "+ONE_HOP_LIMIT+" counterparties by value."});
   if(!found("PEEL_CHAIN")&&tracePayloads.size<PEEL_MIN_HOPS)rules.push({rule:"Multi-hop peel chain",reason:"Needs AUTO TRACE: at least "+PEEL_MIN_HOPS+" consecutive expanded hops."});
@@ -882,7 +891,7 @@ function riskView(){
     ?base.reasons.map(item=>typeof item==="string"?item:item?.title)
     :findings.filter(item=>Number(item.points)>0).map(item=>item.title);
   const chips=[];
-  if(serviceDiscountFactor(base?.service_discount)<1)chips.push({cls:"low",text:"SERVICE-LIKE WALLET"});
+  if(base?.service_discount)chips.push({cls:"low",text:"SERVICE-LIKE WALLET"});
   if(lastPayload.sanctions_screening?.status==="stale")chips.push({cls:"unscreened",text:"LIST OLDER THAN 7 DAYS"});
   return {
     available:Boolean(base),label,labelText:label.replace("_"," "),badgeClass:RISK_BADGE_CLASS[label],
@@ -906,7 +915,7 @@ function riskFindingHtml(item,open){
   const badge=item.points?item.points+" pts":"INFO";
   return '<details class="risk-finding" data-code="'+esc(item.code)+'"'+(open?" open":"")+"><summary>"+esc(item.title)+
     '<span class="intel-badge pattern">'+esc(badge)+"</span></summary>"+
-    (metrics||item.window?'<div class="intel-detail"><strong>Observed:</strong> '+metrics+(item.window?esc(item.window):"")+"</div>":"")+
+    (item.explanation||metrics||item.window?'<div class="intel-detail"><strong>Observed:</strong> '+esc(item.explanation)+" "+metrics+esc(item.window)+"</div>":"")+
     (hops?'<div class="intel-detail">'+hops+"</div>":"")+
     (txs?'<div class="intel-detail"><strong>Transactions:</strong> '+txs+"</div>":"")+
     (item.benign.length?'<div class="intel-detail"><strong>Ordinary explanations:</strong> '+item.benign.map(esc).join(" · ")+"</div>":"")+
@@ -1011,7 +1020,7 @@ function patternFromFinding(item,entry){
     severity:strength==="strong"?"high":strength==="info"?"low":"medium",
     level:strength||"indicator",
     metric:[entry?"H"+entry.depth+" · "+short(entry.address,8):"Across the trace",metrics].filter(Boolean).join(" · "),
-    detail:benign?"Ordinary explanations: "+benign+".":""
+    detail:[item.explanation,benign?"Ordinary explanations: "+benign+".":""].filter(Boolean).join(" ")
   };
 }
 
@@ -1990,7 +1999,42 @@ function monitorSeed(){
   scheduleWorkspaceSave();
   renderAlerts();
   renderWatchlist();
-  document.getElementById("monitorStatus").textContent="Seed is monitored. Baseline saved; automatic checks rotate every 6 hours. CHECK NOW remains available.";
+  document.getElementById("monitorStatus").textContent="Seed is monitored. Automatic checks rotate every 6 hours. CHECK NOW remains available.";
+}
+
+// A Worker with revisions takes alerts and baselines only from its own monitor, so a save from this
+// page could not add them: the check has to run there. An older Worker has no revisions or route.
+async function checkMonitoredOnServer(watches,status){
+  let created=0,checked=0,failed=0;
+  for(const watch of watches){
+    status.textContent="Checking "+(checked+failed+1)+"/"+watches.length+" · "+short(watch.address,8);
+    try{
+      const response=await fetch(API_BASE+"/crypto-monitor-check",{
+        method:"POST",
+        headers:sessionHeaders({"Content-Type":"application/json"}),
+        body:JSON.stringify({user_id:user(),watch_id:watch.id})
+      });
+      const payload=await response.json().catch(()=>({}));
+      if(response.status===401){redirectToLogin();return;}
+      if(!response.ok)throw new Error(payload.error||"Monitor check failed.");
+      created+=Number(payload.alerts_added)||0;
+      checked++;
+    }catch(error){
+      failed++;
+      console.warn("Monitor check failed",watch.address,error);
+    }
+    await sleep(250);
+  }
+  let refreshed=true;
+  try{
+    adoptServerWorkspace(await fetchCryptoWorkspace(),workspaceBase);
+    renderWorkspaceUi();
+  }catch(error){
+    refreshed=false;
+    console.warn("Crypto workspace refresh failed",error);
+  }
+  status.textContent="Monitoring check complete · "+checked+" wallet(s) checked · "+created+" new alert(s)"+
+    (failed?" · "+failed+" could not be checked":"")+(refreshed?".":". Reload the page to see them.");
 }
 
 async function checkMonitored(){
@@ -2001,6 +2045,10 @@ async function checkMonitored(){
   if(button){button.disabled=true;button.textContent="CHECKING…";}
   let created=0,checked=0;
   try{
+    if(workspaceRevision!==null){
+      await checkMonitoredOnServer(watches.slice(0,50),status);
+      return;
+    }
     for(const watch of watches.slice(0,50)){
       status.textContent="Checking "+(checked+1)+"/"+Math.min(watches.length,50)+" · "+short(watch.address,8);
       try{
@@ -3755,7 +3803,10 @@ async function start(){
   syncWorkspaceControls();
   const autoRun=applyUrlQuery();
   const ok=await verifySession();
-  if(!ok)return;
+  if(!ok){
+    syncWorkspaceControls(true);
+    return;
+  }
   renderExchangeAdminAccess();
   await providerHealth();
   await loadCryptoWorkspace();

@@ -43,7 +43,7 @@ function harness({respond}={}){
       setPayloadOnly(payload){lastPayload=payload;},
       detectPatterns,renderPatterns,riskView,renderRisk,combineRisk,checkOneHop,oneHopCandidates,peelChainFinding,oneHopFinding,
       riskOverlays,snapshotFromPayload,paintGraphFrame,render,exportCasePdf,
-      renderWatchlist,toggleWatch,deleteWatch,acknowledgeAlert,renderAlerts,monitorSeed,
+      renderWatchlist,toggleWatch,deleteWatch,acknowledgeAlert,renderAlerts,monitorSeed,checkMonitored,
       selectCase(id){activeCaseId=id;},
       traceKeys(){return [...tracePayloads.keys()];},
       traceRun(){return autoTraceRun;},
@@ -688,20 +688,29 @@ test("behaviour alone reaches HIGH only with three strong families",()=>{
   assert.equal(three.label,"HIGH");
 });
 
-test("the service discount applies to behaviour only, as a flag or a factor",()=>{
+test("the service discount applies to behaviour only",()=>{
   const h=harness();
   const peel=finding("PEEL_CHAIN","FRAGMENTATION","strong",30);
   const hop=finding("ONE_HOP_EXPOSURE","EXPOSURE","strong",45);
-  for(const service_discount of [true,0.25]){
-    assert.equal(scored(h,assessment({service_discount,findings:[finding("A","FLOW","strong",30)]}),[peel,hop]).score,60);
-  }
+  assert.equal(scored(h,assessment({service_discount:true,findings:[finding("A","FLOW","strong",30)]}),[peel,hop]).score,60);
   assert.equal(scored(h,assessment({service_discount:false,findings:[]}),[peel]).score,30);
 });
 
-test("the thresholds come from the payload",()=>{
+test("each exposure code counts once, at its best, as the Worker scores it",()=>{
+  const h=harness();
+  const hop=finding("ONE_HOP_EXPOSURE","EXPOSURE","moderate",30);
+  const twoLinks=[finding("LISTED_LINK","EXPOSURE","info",20),finding("LISTED_LINK","EXPOSURE","info",15)];
+  assert.equal(scored(h,assessment({findings:twoLinks}),[hop]).score,50);
+});
+
+test("every scoring constant comes from the payload",()=>{
   const h=harness();
   const peel=finding("PEEL_CHAIN","FRAGMENTATION","strong",30);
   assert.equal(scored(h,assessment({thresholds:{elevated:35,high:70}}),[peel]).label,"LOW");
+  const custom={elevated:25,high:60,behaviour_cap:40,strong_families_for_high:2,service_factor:0.5};
+  assert.equal(scored(h,assessment({thresholds:custom,findings:[finding("A","FLOW","moderate",30)]}),[peel]).score,40,"one strong family: the payload's cap applies");
+  assert.equal(scored(h,assessment({thresholds:custom,findings:[finding("A","FLOW","strong",30)]}),[peel]).score,60,"two strong families lift the cap here");
+  assert.equal(scored(h,assessment({thresholds:custom,service_discount:true,findings:[finding("A","FLOW","strong",30)]}),[peel]).score,30,"the payload's service factor");
 });
 
 test("an overlay never lowers the Worker's result, and LOW never replaces NOT ASSESSED",()=>{
@@ -762,12 +771,13 @@ test("the coverage line states the sample, its period and what was excluded",()=
 
 test("findings expand to what was observed, transaction links, ordinary explanations and limits",()=>{
   const h=harness();
-  const item=finding("RAPID_PASS_THROUGH","FLOW","strong",30,{tx_ids:["a","b"],metrics:{matched_pairs:3,pass_ratio:0.9},window:{from:iso(0),to:iso(60)}});
+  const item=finding("RAPID_PASS_THROUGH","FLOW","strong",30,{explanation:"Most of what arrived left within minutes.",tx_ids:["a","b"],metrics:{matched_pairs:3,pass_ratio:0.9},window:{from:iso(0),to:iso(60)}});
   h.api.seed(wallet(addr(1),[tx("a",0,"OUT","ETH",1,addr(2),{explorer_url:"https://example.invalid/tx/a"}),tx("b",1,"OUT","ETH",1,addr(2),{explorer_url:"javascript:alert(1)"})],
     {risk_assessment:assessment({label:"ELEVATED",score:30,reasons:["Funds left soon after arriving"],findings:[item]})}));
   h.api.renderRisk();
   const html=h.el("cryptoRiskBody").innerHTML;
   assert.match(html,/<details class="risk-finding" data-code="RAPID_PASS_THROUGH">/);
+  assert.match(html,/Observed:<\/strong> Most of what arrived left within minutes\./);
   assert.match(html,/matched pairs: 3/);
   assert.match(html,/2026-11-01 00:00 to 2026-11-01 01:00 UTC/);
   assert.match(html,/href="https:\/\/example\.invalid\/tx\/a"/);
@@ -779,15 +789,26 @@ test("findings expand to what was observed, transaction links, ordinary explanat
   assert.ok(html.includes(Report.RISK_WORDING.disclaimer));
 });
 
-test("rules not evaluated are listed with their reason, in either shape the Worker sends",()=>{
+test("rules not evaluated are listed with their reason, and the browser rules are not listed twice",()=>{
   const h=harness();
-  h.api.seed(wallet(addr(1),[],{risk_assessment:assessment({not_evaluated:["PEEL_STEP",{code:"STRUCTURING_BAND",reason:"native assets not evaluated"}]})}));
+  h.api.seed(wallet(addr(1),[],{risk_assessment:assessment({not_evaluated:[
+    {code:"STRUCTURING_BAND",reason:"native assets not evaluated"},{code:"PEEL_STEP",reason:"Needs the wallet's complete history."},
+    {code:"ONE_HOP_EXPOSURE",reason:"Runs in the browser, on request."},{code:"PEEL_CHAIN",reason:"Runs in the browser, on traced wallets."}
+  ]})}));
   const rules=plain(h.api.riskView().notEvaluated);
-  assert.deepEqual(rules.slice(0,2),[{rule:"PEEL_STEP",reason:""},{rule:"STRUCTURING_BAND",reason:"native assets not evaluated"}]);
+  assert.deepEqual(rules.slice(0,2),[{rule:"Structuring band",reason:"native assets not evaluated"},{rule:"Peel step",reason:"Needs the wallet's complete history."}]);
+  assert.equal(rules.length,4);
   assert.ok(rules.some(item=>item.rule==="One-hop exposure"&&/CHECK ONE HOP/.test(item.reason)));
   assert.ok(rules.some(item=>item.rule==="Multi-hop peel chain"&&/AUTO TRACE/.test(item.reason)));
   h.api.renderRisk();
   assert.match(h.el("cryptoRiskBody").innerHTML,/Rules not evaluated \(4\)/);
+});
+
+test("a browser rule leaves the list once it has run, whatever the Worker says",async()=>{
+  const h=harness({respond:call=>call.url.endsWith("/crypto-analyze")?{json:wallet(call.body.query,[])}:{json:{}}});
+  h.api.seed(wallet(addr(1),[tx("a",0,"OUT","USDT",1,addr(2),USDT)],{risk_assessment:assessment({not_evaluated:[{code:"ONE_HOP_EXPOSURE",reason:"Runs in the browser, on request."}]})}));
+  await h.api.checkOneHop();
+  assert.ok(!plain(h.api.riskView().notEvaluated).some(item=>/one.hop/i.test(item.rule)));
 });
 
 test("a service-like wallet and a stale list each show a chip",()=>{
@@ -838,7 +859,10 @@ test("generated titles and explanations avoid over-claiming words",()=>{
   const overlays=plain(h.api.riskOverlays());
   assert.deepEqual(overlays.map(item=>item.code).sort(),["DIRECT_MIXER_EXPOSURE","ONE_HOP_EXPOSURE","PEEL_CHAIN"]);
   const view=plain(h.api.riskView());
-  for(const item of overlays)for(const value of [item.title,item.limits,...item.benign])assert.ok(!banned.test(value),value);
+  for(const item of overlays){
+    assert.ok(item.explanation,item.code+" says what was observed");
+    for(const value of [item.title,item.explanation,item.limits,...item.benign])assert.ok(!banned.test(value),value);
+  }
   for(const item of view.notEvaluated)assert.ok(!banned.test(item.rule+" "+item.reason));
   for(const key of ["HIGH","ELEVATED","LOW","NOT_ASSESSED","missing"])assert.ok(!banned.test(Report.RISK_WORDING[key]),key);
 });
@@ -944,6 +968,51 @@ test("a full watchlist says so and refuses another wallet instead of dropping th
   assert.match(h.el("monitorStatus").textContent,/Seed is monitored/,"updating a wallet already on the list still works");
 });
 
+test("with revisions, CHECK NOW runs in the Worker, because the gate only takes alerts and baselines from its monitor",async()=>{
+  const alert={id:"srv",type:"NEW_TRANSACTION",severity:"LOW",title:"New transaction observed",created_at:iso(0),acknowledged:false};
+  let reads=0;
+  const h=harness({respond:call=>{
+    if(call.url.endsWith("/crypto-monitor-check"))return call.body.watch_id==="w2"?{status:503,json:{error:"provider down"}}:{json:{ok:true,alerts_added:1}};
+    if(call.method==="GET")return {json:{ok:true,revision:++reads,workspace:emptyWorkspace({watchlist:[watchItem("w1"),watchItem("w2"),watchItem("paused",{enabled:false})],alerts:reads>1?[alert]:[]})}};
+    return {json:{}};
+  }});
+  await h.api.loadCryptoWorkspace();
+  h.api.live().labels.unshift({id:"unsaved"});
+  await h.api.checkMonitored();
+  const checks=h.calls.filter(call=>call.url.endsWith("/crypto-monitor-check"));
+  assert.deepEqual(checks.map(call=>call.body.watch_id),["w1","w2"],"paused wallets are skipped");
+  assert.equal(checks[0].body.user_id,"analyst");
+  assert.equal(analysis(h.calls).length,0,"the page no longer builds alerts itself");
+  assert.deepEqual(h.api.workspace().alerts.map(item=>item.id),["srv"],"the server's alerts are read back");
+  assert.equal(h.api.workspace().labels[0].id,"unsaved","an edit not saved yet survives the refresh");
+  assert.equal(h.api.state().revision,2);
+  assert.equal(h.el("monitorStatus").textContent,"Monitoring check complete · 1 wallet(s) checked · 1 new alert(s) · 1 could not be checked.");
+  assert.equal(h.el("monitorCheckButton").disabled,false);
+});
+
+test("without revisions, an older Worker keeps the page's own check",async()=>{
+  const h=harness({respond:call=>{
+    if(call.url.endsWith("/crypto-analyze"))return {json:wallet(call.body.query,[tx("new",9999,"IN","ETH",1,addr(2))])};
+    return {json:{ok:true,workspace:call.method==="GET"?emptyWorkspace({watchlist:[watchItem("w1",{last_snapshot:{checked_at:iso(0),newest_tx_id:"old",newest_tx_time:iso(0)}})]}):call.body.workspace}};
+  }});
+  await h.api.loadCryptoWorkspace();
+  await h.api.checkMonitored();
+  assert.equal(h.calls.filter(call=>call.url.endsWith("/crypto-monitor-check")).length,0);
+  assert.equal(analysis(h.calls).length,1);
+  assert.equal(h.api.workspace().alerts[0].type,"NEW_TRANSACTION");
+});
+
+test("a check whose refresh fails says so instead of showing stale alerts as current",async()=>{
+  let reads=0;
+  const h=harness({respond:call=>{
+    if(call.url.endsWith("/crypto-monitor-check"))return {json:{ok:true,alerts_added:0}};
+    return ++reads===1?{json:{ok:true,revision:1,workspace:emptyWorkspace({watchlist:[watchItem("w1")]})}}:{status:503,json:{error:"down"}};
+  }});
+  await h.api.loadCryptoWorkspace();
+  await h.api.checkMonitored();
+  assert.match(h.el("monitorStatus").textContent,/Reload the page to see them/);
+});
+
 test("an unexpected severity cannot break out of the class attribute",async()=>{
   const h=harness({respond:()=>({json:{ok:true,workspace:emptyWorkspace({alerts:[{id:"a",title:"t",severity:'x" onmouseover="alert(1)'}]})}})});
   await h.api.loadCryptoWorkspace();
@@ -958,6 +1027,10 @@ test("the watchlist and acknowledge controls are wired on the page",()=>{
   assert.ok(home.includes('id="cryptoWatchlist"'),"visible without running an analysis first");
   assert.ok(client.includes('getElementById("cryptoWatchlist")?.addEventListener("click"'));
   assert.ok(client.includes('getElementById("cryptoAlerts")?.addEventListener("click"'));
+});
+
+test("the privacy notice says indicators are automated and decide nothing",()=>{
+  assert.match(fs.readFileSync("privacy.html","utf8"),/Automated risk indicators are generated[^<]*no decision is made automatically\./);
 });
 
 test("the Risk Indicators card sits directly above the sanctions card, with the exact title",()=>{

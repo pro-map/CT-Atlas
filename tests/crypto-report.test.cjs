@@ -445,6 +445,9 @@ test("the risk section follows the sanctions section and carries label, score, c
   assert.match(section,/Multi-hop peel chain: Needs AUTO TRACE/);
   const table=report.blocks.find(b=>b.type==="table"&&b.columns.some(c=>c.key==="points"));
   assert.match(table.rows[0].detail,/Observed: matched pairs: 3 · asset: USDT · 2026-10-01 10:00 to/);
+  const explained=R.build(fixture({risk:riskFixture({findings:[{...riskFixture().findings[0],explanation:"Most of what arrived left within minutes."}]})}));
+  const row=explained.blocks.find(b=>b.type==="table"&&b.columns.some(c=>c.key==="points")).rows[0];
+  assert.match(row.detail,/Observed: Most of what arrived left within minutes\. · matched pairs: 3/);
   assert.match(table.rows[0].detail,/Ordinary explanations: exchange or payment hot wallet; arbitrage or bot activity/);
   assert.ok(table.rows[0].detail.includes("Transactions: "+HASH(1)));
   assert.match(table.rows[0].detail,/Limits of this sample: Only this sample was read/);
