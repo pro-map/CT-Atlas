@@ -33,7 +33,14 @@ function harness({respond}={}){
     globalThis.api={
       loadCryptoWorkspace,saveCryptoWorkspace,scheduleWorkspaceSave,syncWorkspaceControls,mergeWorkspace,
       live(){return cryptoWorkspace;},
-      state(){return {loaded:workspaceLoaded,revision:workspaceRevision};}
+      state(){return {loaded:workspaceLoaded,revision:workspaceRevision};},
+      seed(payload){lastPayload=payload;resetTraceState(payload);currentNetworkModel=buildNetworkModel(payload);},
+      setLabels(labels){cryptoWorkspace.labels=labels;},
+      addTrace(address,payload,depth){const key=traceKey(address,lastPayload.chain);tracePayloads.set(key,{key,address,payload,depth});traceExpanded.add(key);currentNetworkModel=buildNetworkModel(lastPayload);},
+      expandTraceNode,autoTrace,clearTrace,
+      traceKeys(){return [...tracePayloads.keys()];},
+      traceRun(){return autoTraceRun;},
+      isAutoTraceActive(){return autoTraceActive;}
     };
   })();`);
   vm.runInContext(source,context);
@@ -205,4 +212,66 @@ test("the merge keeps an acknowledgement from either side and takes the alert's 
     emptyWorkspace({alerts:[{...alert,title:"server"}]})
   );
   assert.deepEqual(JSON.parse(JSON.stringify(merged.alerts)),[{id:"a",title:"server",acknowledged:true}]);
+});
+
+// ---------------------------------------------------------------- trace generation guard
+
+const t0=Date.parse("2026-11-01T00:00:00Z");
+const iso=minutes=>new Date(t0+minutes*60000).toISOString();
+const addr=i=>"0x"+String(i).padStart(40,"0");
+const tx=(id,minutes,direction,asset,amount,cp,extra={})=>({id,time:iso(minutes),confirmed:true,direction,asset,amount,counterparties:[cp],...extra});
+const wallet=(query,transactions,extra={})=>({kind:"address",chain:"ethereum",query,transactions,...extra});
+const analysis=(calls,matcher)=>calls.filter(call=>call.url.endsWith("/crypto-analyze")&&(!matcher||matcher(call)));
+
+test("a trace response that arrives after a new search stays out of the new graph",async()=>{
+  let release;
+  const h=harness({respond:call=>new Promise(resolve=>{release=()=>resolve({json:wallet(call.body.query,[tx("old",0,"OUT","ETH",1,addr(3))])});})});
+  h.api.seed(wallet(addr(1),[tx("a",0,"OUT","ETH",1,addr(2))]));
+  const pending=h.api.expandTraceNode(addr(2),{quiet:true});
+  await new Promise(resolve=>setImmediate(resolve));
+  h.api.seed(wallet(addr(7),[tx("b",0,"OUT","ETH",1,addr(8))]));
+  release();
+  assert.equal(await pending,false);
+  assert.deepEqual(plain(h.api.traceKeys()),[addr(7)]);
+});
+
+test("a failed trace response from an older search is dropped without an error",async()=>{
+  let fail;
+  const h=harness({respond:()=>new Promise(resolve=>{fail=()=>resolve({status:503,json:{error:"down"}});})});
+  h.api.seed(wallet(addr(1),[tx("a",0,"OUT","ETH",1,addr(2))]));
+  const pending=h.api.expandTraceNode(addr(2));
+  await new Promise(resolve=>setImmediate(resolve));
+  h.api.seed(wallet(addr(7),[tx("b",0,"OUT","ETH",1,addr(8))]));
+  fail();
+  assert.equal(await pending,false);
+  assert.doesNotMatch(h.el("cryptoTraceStatus").textContent,/down/);
+});
+
+test("an automatic trace stops when the search changes, and leaves no state behind",async()=>{
+  const queue=[];
+  const h=harness({respond:call=>new Promise(resolve=>queue.push(()=>resolve({json:wallet(call.body.query,[tx("n"+call.body.query,1,"OUT","ETH",1,addr(90))])})))});
+  h.api.seed(wallet(addr(1),[tx("a",0,"OUT","ETH",1,addr(2)),tx("b",0,"OUT","ETH",1,addr(3))]));
+  const running=h.api.autoTrace();
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(h.api.isAutoTraceActive(),true);
+  h.api.seed(wallet(addr(7),[tx("c",0,"OUT","ETH",1,addr(8))]));
+  assert.equal(h.api.isAutoTraceActive(),false,"the new graph is not treated as being auto-traced");
+  assert.equal(h.el("cryptoAutoTrace").disabled,false,"AUTO TRACE is available again for the new seed");
+  queue.shift()();
+  await running;
+  assert.equal(analysis(h.calls).length,1,"no further wallet is requested for the old seed");
+  assert.deepEqual(plain(h.api.traceKeys()),[addr(7)]);
+  assert.equal(h.api.traceRun(),null);
+});
+
+test("CLEAR TRACE also drops what was in flight",async()=>{
+  let release;
+  const h=harness({respond:call=>new Promise(resolve=>{release=()=>resolve({json:wallet(call.body.query,[])});})});
+  h.api.seed(wallet(addr(1),[tx("a",0,"OUT","ETH",1,addr(2))]));
+  const pending=h.api.expandTraceNode(addr(2),{quiet:true});
+  await new Promise(resolve=>setImmediate(resolve));
+  h.api.clearTrace();
+  release();
+  await pending;
+  assert.deepEqual(plain(h.api.traceKeys()),[addr(1)]);
 });

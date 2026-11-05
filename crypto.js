@@ -23,6 +23,8 @@ let autoTraceRun=null;
 let exchangeAttributions=new Map();
 // While an automatic trace runs, the graph keeps its whole frontier (no node cap).
 let autoTraceActive=false;
+// Raised by a new search or a cleared trace: whatever an older trace was waiting for is dropped.
+let traceGeneration=0;
 let currentNetworkModel=null;
 let graphDisplayModel=null;
 let exchangeGraphMode="auto";
@@ -2376,6 +2378,7 @@ async function expandTraceNode(address,options={}){
   }
   if(traceBusy.has(key))return false;
 
+  const generation=traceGeneration;
   traceBusy.add(key);
   renderFilteredViews();
   if(!options.quiet)setTraceStatus("Expanding "+short(address,9)+" from H"+node.depth+" to H"+(node.depth+1)+"…","working");
@@ -2383,6 +2386,7 @@ async function expandTraceNode(address,options={}){
   try{
     // The automatic trace reads a larger sample: the exchange score needs it.
     const payload=await fetchAddressAnalysis(address,lastPayload.chain,options.limit||40);
+    if(generation!==traceGeneration)return false;
     absorbExchangeLabels(payload,false);
     tracePayloads.set(key,{key,address,payload,depth:node.depth});
     traceExpanded.add(key);
@@ -2393,11 +2397,14 @@ async function expandTraceNode(address,options={}){
     }
     return true;
   }catch(error){
+    if(generation!==traceGeneration)return false;
     if(!options.quiet)setTraceStatus(error?.message||"Trace expansion failed.","error");
     throw error;
   }finally{
-    traceBusy.delete(key);
-    renderFilteredViews();
+    if(generation===traceGeneration){
+      traceBusy.delete(key);
+      renderFilteredViews();
+    }
   }
 }
 
@@ -2469,12 +2476,14 @@ async function requestExchangeAttributions(model,exchanges){
       assets:node?.assets||[],related_exchange:item.behavior?.related_exchange?.name||"",labelled_neighbours:neighbours.slice(0,12)};
   });
   if(!wallets.length)return 0;
+  const generation=traceGeneration;
   const response=await fetch(API_BASE+"/crypto-exchange-attribution",{
     method:"POST",
     headers:sessionHeaders({"Content-Type":"application/json"}),
     body:JSON.stringify({user_id:user(),chain,wallets})
   });
   const payload=await response.json().catch(()=>({}));
+  if(generation!==traceGeneration)return 0;
   if(!response.ok)throw new Error(payload.error||"AI attribution unavailable.");
   let count=0;
   for(const item of Array.isArray(payload.attributions)?payload.attributions:[]){
@@ -2502,6 +2511,8 @@ async function autoTrace(){
   const depthSelect=document.getElementById("traceMaxDepth");
   if(depthSelect)depthSelect.value=String(AUTO_TRACE_MAX_DEPTH);
   const settings=traceSettings();
+  const generation=traceGeneration;
+  const cancelled=()=>generation!==traceGeneration;
   if(button){button.disabled=true;button.textContent="TRACING…";}
   autoTraceActive=true;
   setTraceStatus("Automatic trace started: following the strongest branches until they reach a documented exchange (up to H"+AUTO_TRACE_MAX_DEPTH+", "+AUTO_TRACE_MAX_WALLETS+" wallets).","working");
@@ -2536,6 +2547,7 @@ async function autoTrace(){
         break;
       }
       for(let i=0;i<candidates.length;i++){
+        if(cancelled())return;
         if(run.expanded+run.failed>=AUTO_TRACE_MAX_WALLETS){run.stop="wallet budget reached ("+AUTO_TRACE_MAX_WALLETS+")";break;}
         const node=candidates[i];
         setTraceStatus("Auto trace H"+depth+" → H"+(depth+1)+" · "+(i+1)+"/"+candidates.length+" · "+short(node.id,8)+
@@ -2554,6 +2566,7 @@ async function autoTrace(){
         }
         await sleep(400);
       }
+      if(cancelled())return;
       if(run.stop)break;
     }
     if(!run.stop)run.stop="maximum depth H"+AUTO_TRACE_MAX_DEPTH+" reached";
@@ -2582,6 +2595,7 @@ async function autoTrace(){
       }catch(error){
         run.attribution="unavailable: "+(error?.message||"AI attribution failed");
       }
+      if(cancelled())return;
     }
     run.finishedAt=new Date().toISOString();
     autoTraceRun=run;
@@ -2602,18 +2616,29 @@ async function autoTrace(){
       "success"
     );
   }catch(error){
-    setTraceStatus(error?.message||"Automatic trace failed.","error");
+    if(!cancelled())setTraceStatus(error?.message||"Automatic trace failed.","error");
   }finally{
-    if(autoTraceActive){
-      autoTraceActive=false;
-      renderFilteredViews();
+    // A cancelled run has already handed the page over to whatever cancelled it.
+    if(!cancelled()){
+      if(autoTraceActive){
+        autoTraceActive=false;
+        renderFilteredViews();
+      }
+      if(button){button.disabled=false;button.textContent="AUTO TRACE";}
     }
-    if(button){button.disabled=false;button.textContent="AUTO TRACE";}
   }
+}
+
+function cancelTraceWork(){
+  traceGeneration++;
+  autoTraceActive=false;
+  const button=document.getElementById("cryptoAutoTrace");
+  if(button){button.disabled=false;button.textContent="AUTO TRACE";}
 }
 
 function clearTrace(){
   if(!lastPayload||lastPayload.kind!=="address")return;
+  cancelTraceWork();
   const root=String(lastPayload.query||"");
   const key=traceKey(root,lastPayload.chain);
   tracePayloads=new Map([[key,{key,address:root,payload:lastPayload,depth:0}]]);
@@ -3104,6 +3129,7 @@ function renderFilteredViews(){
 }
 
 function resetTraceState(payload){
+  cancelTraceWork();
   exchangeGraphMode="auto";
   selectedExchangePath="";
   activeExchangePath=null;
@@ -3162,6 +3188,7 @@ async function run({silent=false}={}){
 
   const finishSound=silent?null:window.CTAtlasSound?.begin();
   if(button){button.disabled=true;button.textContent="ANALYSING…";}
+  cancelTraceWork();
   setStatus("Querying on-chain provider and building transaction relationships…","working");
   const result=document.getElementById("cryptoResult");
   if(result)result.hidden=true;
