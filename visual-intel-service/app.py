@@ -503,8 +503,10 @@ async def health() -> dict[str, Any]:
     }
 
 
+# A plain def, so FastAPI runs it in its threadpool: this is all CPU work, and on the event loop it kept /health
+# and every other request waiting until the analysis ended.
 @api.post("/analyze")
-async def analyze(
+def analyze(
     files: list[UploadFile] = File(...),
     x_ct_atlas_visual_key: str | None = Header(default=None),
 ) -> dict[str, Any]:
@@ -515,7 +517,7 @@ async def analyze(
     payloads: list[tuple[UploadFile, bytes]] = []
     total = 0
     for upload in files:
-        raw = await upload.read()
+        raw = upload.file.read()
         total += len(raw)
         if total > MAX_TOTAL_BYTES:
             raise HTTPException(status_code=413, detail="Combined upload exceeds 30 MB.")

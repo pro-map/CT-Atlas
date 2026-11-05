@@ -101,3 +101,9 @@ test("deployment runs the detector tests in the built image before pushing it, t
   assert.match(wf,/face_count"\] == 1/);
   assert.ok(fs.statSync("tests/fixtures/astronaut.jpg").size>20_000);
 });
+
+test("each service instance runs one analysis at a time, so a second analyst is not queued behind a long job on 1 vCPU",()=>{
+  const deploy=read(".github/workflows/deploy-visual-intel.yml").match(/gcloud run deploy[\s\S]*?--set-env-vars/)[0];
+  assert.match(deploy,/--concurrency 1 /);
+  assert.match(read("visual-intel-service/app.py"),/^def analyze\(/m);
+});

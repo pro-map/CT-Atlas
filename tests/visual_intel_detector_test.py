@@ -11,6 +11,7 @@ Run:  python3 tests/visual_intel_detector_test.py
 import asyncio
 import base64
 import hashlib
+import inspect
 import io
 import os
 import shutil
@@ -405,6 +406,45 @@ class OcrInTheServiceImage(unittest.TestCase):
             started = time.monotonic()
             status = app._ocr(sample)[1]
             print(f"OCR {app.OCR_LANGUAGES} on {name}: {status} in {time.monotonic() - started:.1f} s")
+
+
+class AnalyzeEndpoint(unittest.TestCase):
+    def setUp(self):
+        patcher = mock.patch.dict(os.environ, {"CT_ATLAS_VISUAL_SHARED_SECRET": "test-key"})
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    @staticmethod
+    def call(name, raw, content_type="image/jpeg"):
+        upload = app.UploadFile(file=io.BytesIO(raw), filename=name, headers={"content-type": content_type})
+        return app.analyze(files=[upload], x_ct_atlas_visual_key="test-key")
+
+    def test_analysis_stays_off_the_event_loop_so_health_answers_during_it(self):
+        self.assertFalse(inspect.iscoroutinefunction(app.analyze))
+        self.assertTrue(inspect.iscoroutinefunction(app.health))
+
+    def test_a_file_nothing_can_decode_comes_back_as_not_ok_with_its_reason(self):
+        result = self.call("broken.jpg", b"not an image")
+        self.assertIs(result["ok"], False)
+        self.assertEqual(result["files"], [])
+        self.assertEqual(result["errors"], [{"filename": "broken.jpg", "error": "Unable to decode image."}])
+
+    def test_every_frame_says_how_ocr_went_and_a_spent_budget_is_counted(self):
+        with mock.patch.object(app.pytesseract, "image_to_string", return_value="") as ocr:
+            result = self.call("astronaut.jpg", FIXTURE.read_bytes())
+            self.assertEqual(result["files"][0]["ocr_status"], "no_text")
+            self.assertEqual(result["ocr_skipped"], 0)
+            ocr.reset_mock()
+            with mock.patch.object(app, "OCR_BUDGET_SECONDS", 0):
+                result = self.call("astronaut.jpg", FIXTURE.read_bytes())
+            ocr.assert_not_called()
+        self.assertIs(result["ok"], True, "the analysis itself still completes")
+        self.assertEqual(result["files"][0]["ocr_status"], "skipped")
+        self.assertEqual(result["ocr_skipped"], 1)
+
+    def test_video_frames_count_towards_the_skipped_total(self):
+        items = [{"kind": "video", "sampled_frames": [{"ocr_status": "skipped"}, {"ocr_status": "ok"}, {"ocr_status": "not_run"}]}, {"kind": "image", "ocr_status": "skipped"}]
+        self.assertEqual(app._ocr_skipped(items), 2)
 
 
 if __name__ == "__main__":
