@@ -29,6 +29,14 @@ let exchangeGraphMode="auto";
 let selectedExchangePath="";
 let activeExchangePath=null;
 let cryptoWorkspace={version:"crypto-workspace-v1",labels:[],watchlist:[],cases:[],alerts:[]};
+// The server stores a save whole, so a save from the blank default would wipe the analyst's
+// workspace: nothing is saved until a load has succeeded.
+let workspaceLoaded=false;
+// The last copy the server acknowledged, and its revision: what a stale save merges against.
+let workspaceBase=null;
+let workspaceRevision=null;
+let workspaceSaveRunning=false;
+let workspaceSaveQueued=false;
 let sharedExchangeLabels=new Map();
 let activeCaseId="";
 let lastFoundPath=null;
@@ -143,45 +151,159 @@ function makeId(prefix){
   return prefix+"-"+id;
 }
 
+const WORKSPACE_CONTROL_IDS=[
+  "caseNewButton","caseCreateButton","caseAddSeedButton","caseSavePathButton","caseOffchainToggle","caseCrosschainToggle",
+  "offchainSaveButton","crosschainSaveButton","caseAddNoteButton","labelSeedButton","labelSaveButton",
+  "monitorSeedButton","monitorCheckButton"
+];
+const WORKSPACE_SAVE_ATTEMPTS=3;
+
+function syncWorkspaceControls(loadFailed=false){
+  for(const id of WORKSPACE_CONTROL_IDS){
+    const control=document.getElementById(id);
+    if(control)control.disabled=!workspaceLoaded;
+  }
+  const notice=document.getElementById("workspaceLoadNotice");
+  if(notice)notice.hidden=workspaceLoaded||!loadFailed;
+}
+
+function normalizeWorkspace(workspace){
+  const copy={...workspace};
+  for(const key of ["labels","watchlist","cases","alerts"])copy[key]=Array.isArray(copy[key])?copy[key]:[];
+  return copy;
+}
+
+function workspaceCopy(workspace){return JSON.parse(JSON.stringify(workspace));}
+
+function revisionOf(payload){
+  const value=payload?.revision??payload?.workspace?.revision;
+  return typeof value==="number"&&Number.isFinite(value)?value:null;
+}
+
+async function fetchCryptoWorkspace(){
+  const response=await fetch(API_BASE+"/crypto-workspace?user_id="+encodeURIComponent(user()),{
+    headers:sessionHeaders(),cache:"no-store"
+  });
+  const payload=await response.json().catch(()=>({}));
+  if(!response.ok)throw new Error(payload.error||"Unable to load Crypto workspace.");
+  if(!payload.workspace||typeof payload.workspace!=="object")throw new Error("The Crypto workspace response was empty.");
+  return payload;
+}
+
 async function loadCryptoWorkspace(){
   try{
-    const response=await fetch(API_BASE+"/crypto-workspace?user_id="+encodeURIComponent(user()),{
-      headers:sessionHeaders(),cache:"no-store"
-    });
-    const payload=await response.json().catch(()=>({}));
-    if(!response.ok)throw new Error(payload.error||"Unable to load Crypto workspace.");
-    cryptoWorkspace=payload.workspace||cryptoWorkspace;
-    cryptoWorkspace.labels=Array.isArray(cryptoWorkspace.labels)?cryptoWorkspace.labels:[];
-    cryptoWorkspace.watchlist=Array.isArray(cryptoWorkspace.watchlist)?cryptoWorkspace.watchlist:[];
-    cryptoWorkspace.cases=Array.isArray(cryptoWorkspace.cases)?cryptoWorkspace.cases:[];
-    cryptoWorkspace.alerts=Array.isArray(cryptoWorkspace.alerts)?cryptoWorkspace.alerts:[];
+    const payload=await fetchCryptoWorkspace();
+    cryptoWorkspace=normalizeWorkspace(payload.workspace);
+    workspaceBase=workspaceCopy(cryptoWorkspace);
+    workspaceRevision=revisionOf(payload);
+    workspaceLoaded=true;
+    syncWorkspaceControls();
     renderWorkspaceUi();
     return true;
   }catch(error){
     console.warn("Crypto workspace load failed",error);
+    syncWorkspaceControls(true);
     setStatus("Crypto analysis is available, but the persistent investigation workspace could not be loaded.","warning");
     return false;
   }
 }
 
+// A three-way merge by id: what this page changed since `base` is replayed on the server's newer
+// copy, and everything else stays as the server has it. `resolve(mine,theirs,old)` settles an item
+// changed here that the server also holds.
+function mergeById(base,local,server,resolve=mine=>mine){
+  const idOf=item=>String(item?.id||"");
+  const before=new Map((base||[]).map(item=>[idOf(item),item]));
+  const mine=new Map((local||[]).map(item=>[idOf(item),item]));
+  const theirs=new Set((server||[]).map(idOf));
+  const added=(local||[]).filter(item=>!before.has(idOf(item))&&!theirs.has(idOf(item)));
+  const kept=(server||[]).filter(item=>!before.has(idOf(item))||mine.has(idOf(item))).map(item=>{
+    const edited=mine.get(idOf(item)),old=before.get(idOf(item));
+    return !edited||JSON.stringify(edited)===JSON.stringify(old)?item:resolve(edited,item,old);
+  });
+  return [...added,...kept];
+}
+
+function newerSnapshot(a,b){
+  if(!a||!b)return a||b||null;
+  return (Date.parse(a.checked_at||"")||0)>=(Date.parse(b.checked_at||"")||0)?a:b;
+}
+
+function mergeCase(mine,theirs,old){
+  const merged={...theirs};
+  for(const key of ["name","description","status","chain"]){
+    if(mine[key]!==old?.[key])merged[key]=mine[key];
+  }
+  for(const key of ["saved_paths","notes","offchain_nodes","crosschain_links"]){
+    merged[key]=mergeById(old?.[key],mine[key],theirs[key]);
+  }
+  const seeds=(mine.seed_addresses||[]).filter(address=>!(old?.seed_addresses||[]).includes(address));
+  merged.seed_addresses=[...new Set([...(theirs.seed_addresses||[]),...seeds])];
+  return merged;
+}
+
+function mergeWorkspace(base,local,server){
+  return {
+    ...server,
+    labels:mergeById(base?.labels,local.labels,server.labels),
+    watchlist:mergeById(base?.watchlist,local.watchlist,server.watchlist,(mine,theirs)=>({
+      ...mine,last_snapshot:newerSnapshot(mine.last_snapshot,theirs.last_snapshot)
+    })),
+    cases:mergeById(base?.cases,local.cases,server.cases,mergeCase),
+    // The monitor owns an alert's content; the page only ever adds alerts or acknowledges them.
+    alerts:mergeById(base?.alerts,local.alerts,server.alerts,(mine,theirs)=>({
+      ...theirs,acknowledged:mine.acknowledged===true||theirs.acknowledged===true
+    }))
+  };
+}
+
+function adoptServerWorkspace(payload,base){
+  const server=normalizeWorkspace(payload.workspace);
+  cryptoWorkspace=mergeWorkspace(base,cryptoWorkspace,server);
+  workspaceBase=workspaceCopy(server);
+  workspaceRevision=revisionOf(payload)??workspaceRevision;
+}
+
 async function saveCryptoWorkspace(){
+  if(!workspaceLoaded){
+    setStatus("Not saved: the persistent workspace has not been loaded.","warning");
+    return false;
+  }
+  if(workspaceSaveRunning){workspaceSaveQueued=true;return false;}
+  workspaceSaveRunning=true;
   document.body.classList.add("workspace-saving");
   try{
-    const response=await fetch(API_BASE+"/crypto-workspace",{
-      method:"POST",
-      headers:sessionHeaders({"Content-Type":"application/json"}),
-      body:JSON.stringify({user_id:user(),workspace:cryptoWorkspace})
-    });
-    const payload=await response.json().catch(()=>({}));
-    if(!response.ok)throw new Error(payload.error||"Unable to save Crypto workspace.");
-    cryptoWorkspace=payload.workspace||cryptoWorkspace;
-    return true;
+    for(let attempt=0;attempt<WORKSPACE_SAVE_ATTEMPTS;attempt++){
+      const sent=workspaceCopy(cryptoWorkspace);
+      const response=await fetch(API_BASE+"/crypto-workspace",{
+        method:"POST",
+        headers:sessionHeaders({"Content-Type":"application/json"}),
+        body:JSON.stringify({user_id:user(),workspace:sent,revision:workspaceRevision})
+      });
+      const payload=await response.json().catch(()=>({}));
+      if(response.status===409){
+        // Another tab or the scheduled monitor saved first: this page's edits go on top of that copy.
+        adoptServerWorkspace(payload.workspace?payload:await fetchCryptoWorkspace(),workspaceBase);
+        renderWorkspaceUi();
+        renderFilteredViews();
+        continue;
+      }
+      if(!response.ok)throw new Error(payload.error||"Unable to save Crypto workspace.");
+      if(payload.workspace)adoptServerWorkspace(payload,sent);
+      return true;
+    }
+    throw new Error("The workspace kept changing elsewhere, so this save did not finish. Your edits are still on this page.");
   }catch(error){
     console.warn("Crypto workspace save failed",error);
     setStatus(error?.message||"Unable to save Crypto workspace.","warning");
     return false;
   }finally{
+    workspaceSaveRunning=false;
     document.body.classList.remove("workspace-saving");
+    if(workspaceSaveQueued){
+      workspaceSaveQueued=false;
+      scheduleWorkspaceSave();
+    }
   }
 }
 
@@ -1631,8 +1753,12 @@ async function checkMonitored(){
           }
         }
 
-        watch.last_snapshot=snap;
-        watch.updated_at=new Date().toISOString();
+        // A save can replace the workspace objects while this check waits on the provider.
+        const live=(cryptoWorkspace.watchlist||[]).find(item=>item.id===watch.id);
+        if(live){
+          live.last_snapshot=snap;
+          live.updated_at=new Date().toISOString();
+        }
         checked++;
       }catch(error){
         console.warn("Monitor check failed",watch.address,error);
@@ -3191,6 +3317,7 @@ function bind(){
   document.getElementById("crosschainSaveButton")?.addEventListener("click",saveCrosschainLink);
   document.getElementById("monitorSeedButton")?.addEventListener("click",monitorSeed);
   document.getElementById("monitorCheckButton")?.addEventListener("click",checkMonitored);
+  document.getElementById("workspaceRetryButton")?.addEventListener("click",loadCryptoWorkspace);
 
   FILTER_IDS.forEach(id=>{
     const el=document.getElementById(id);
@@ -3202,6 +3329,7 @@ function bind(){
 
 async function start(){
   bind();
+  syncWorkspaceControls();
   const autoRun=applyUrlQuery();
   const ok=await verifySession();
   if(!ok)return;
