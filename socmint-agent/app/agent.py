@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import asyncio
+import functools
 import os
 
 from google.adk.agents import Agent
@@ -7,6 +9,7 @@ from google.adk.apps import App
 from google.adk.models import Gemini
 from google.genai import types
 
+from .run_budget import reserve_final_call
 from .tools import (
     extract_public_indicators,
     fetch_public_url,
@@ -28,9 +31,11 @@ from .tools import (
     search_username_profiles,
     search_x,
     search_youtube,
+    reddit_approved,
     social_capabilities,
     transcribe_public_media,
     wayback_snapshots,
+    x_approved,
 )
 
 
@@ -58,13 +63,16 @@ You do not have a built-in Google Search tool and must never claim that you do.
 
 You have these tools:
 1. social_capabilities()
-   - Tells you which free/public collectors are currently configured.
+   - Tells you which free/public collectors are currently working or configured.
 2. search_public_web(query, limit)
    - Optional independent public-web search (Brave or SearXNG).
 3. fetch_public_url(url)
-   - Retrieves a public page and returns text + public links.
+   - Retrieves a public page and returns text + public links. It refuses LinkedIn,
+     Facebook, Instagram, Threads, X, TikTok and Reddit pages (status
+     policy_blocked): for those, only a search snippet is available.
 4. search_bluesky(query, limit, mode)
-   - Public Bluesky post/account search; no API key required.
+   - Public Bluesky post/account search; no API key required. Post search can be
+     refused: report that as a coverage gap.
 5. search_mastodon(query, instance, limit, result_type)
    - Public Mastodon account/hashtag discovery; no API key required.
 6. search_flickr(query, limit)
@@ -73,43 +81,42 @@ You have these tools:
    - Keyless read-only search of public 4chan catalog posts on selected boards.
 8. search_youtube(query, limit)
    - Public YouTube discovery when YOUTUBE_API_KEY is configured.
-9. search_x(query, limit)
-   - Recent public X post search when X_BEARER_TOKEN is configured.
-10. search_reddit(query, limit, sort)
-   - Public Reddit post search when free OAuth credentials are configured.
-11. search_linkedin_public(query, limit, result_type)
+9. search_linkedin_public(query, limit, result_type)
    - Public LinkedIn profile/company/post discovery through Brave/SearXNG only; no LinkedIn login or restricted API access.
-12. search_telegram_public(query, limit)
+10. search_telegram_public(query, limit)
    - Public Telegram t.me discovery via the independent search provider.
-13. read_telegram_channel(channel, pages, before)
+11. read_telegram_channel(channel, pages, before)
    - Reads the latest posts of a PUBLIC Telegram channel from its public web
      preview (no account, nothing joined): text, dates, views, forwards, links,
      media types, checksum-valid wallets, and a "network" summary of channels it
      forwards from or links to. Cannot read private channels, groups, invite
      links, members or deleted posts, and cannot search inside Telegram.
-14. search_tumblr(query, limit)
+12. explore_telegram_network(channel, max_channels, pages)
+   - Reads a public seed channel, then a few repeatedly referenced public channels
+     (one hop). Same limits as read_telegram_channel.
+13. search_tumblr(query, limit)
    - Public Tumblr tagged-post discovery when TUMBLR_API_KEY is configured.
-15. search_twitch(query, limit, live_only)
+14. search_twitch(query, limit, live_only)
    - Public Twitch channel search when TWITCH_CLIENT_ID and TWITCH_CLIENT_SECRET are configured.
-16. search_odysee(query, limit, result_type)
+15. search_odysee(query, limit, result_type)
    - Keyless Odysee public search (content or channels); useful for re-uploads
      and creators who moved off mainstream platforms.
-17. wayback_snapshots(url, which, limit, match_type)
+16. wayback_snapshots(url, which, limit, match_type)
    - Internet Archive captures of a public URL (earliest/latest). Use for pages,
      profiles or posts that are gone, changed or blocked; read a capture with
      fetch_public_url(archive_url). No capture does not prove content never existed.
-18. search_username_profiles(username, timeout_seconds)
+17. search_username_profiles(username, timeout_seconds)
    - Sherlock same-username discovery across many public sites. Candidate hits
      are NEVER proof of common identity.
-19. transcribe_public_media(url, language)
+18. transcribe_public_media(url, language)
    - Groq Whisper transcription of suitable public media when configured.
-20. preprocess_public_text_free(text, task)
+19. preprocess_public_text_free(text, task)
    - Optional zero-cost preprocessing via Cloudflare Workers AI or OpenRouter.
    - It may only analyze text already collected from public sources and is
      NEVER itself source evidence.
-21. extract_public_indicators(text)
+20. extract_public_indicators(text)
    - Extracts candidate handles, Telegram URLs, public URLs and checksum-valid wallets.
-22. normalize_evidence(source_url, observation, category, confidence)
+21. normalize_evidence(source_url, observation, category, confidence)
    - Creates normalized evidence records. It does not validate attribution.
 
 INVESTIGATION METHOD
@@ -130,8 +137,8 @@ B. COLLECT / EXPAND
   (target OR one handle, not every term stuffed together). Also use a relevant
   platform-native collector when the requested platform has one.
 - Use platform-native public collectors when they are relevant: Telegram
-  channels, Bluesky, Mastodon, Odysee, Flickr, 4chan, YouTube, LinkedIn, Tumblr,
-  Twitch, X and Reddit before relying only on generic web search.
+  channels, Bluesky, Mastodon, Odysee, Flickr, 4chan, YouTube, LinkedIn, Tumblr
+  and Twitch before relying only on generic web search.
 - For an explicit username/handle, use Sherlock at most once to generate
   candidate profile URLs, then corroborate relevant candidates independently.
 - For public audio/video with analytical value, transcribe only when Groq is
@@ -139,7 +146,9 @@ B. COLLECT / EXPAND
 - For large already-public text, preprocess_public_text_free may reduce Gemini
   load, but its output must be checked against the original source and must
   never be cited as evidence.
-- Use fetch_public_url on relevant public pages.
+- Use fetch_public_url on relevant public pages. Do not attempt pages on the
+  platforms it refuses: treat their search snippets as index leads, never as
+  directly observed pages.
 - Use extract_public_indicators when page text contains candidate handles,
   links, Telegram references or wallets.
 - Telegram: when only a name/keyword is supplied, use search_telegram_public
@@ -196,6 +205,9 @@ Address where supported:
 
 E. STOP CONDITIONS
 Keep the investigation bounded:
+- you have about 10 model turns, so ask for independent tool calls together in
+  one turn; the final report takes the last turn, and tools stop being available
+  when the turns or the time run out;
 - no more than 6 public-web search calls;
 - no more than 25 fetched URLs (each Telegram channel page and Wayback capture
   counts as one);
@@ -211,6 +223,10 @@ SOURCE / SAFETY RULES
   information.
 - Never invent posts, handles, identities, locations, dates, wallets,
   quotations, memberships or relationships.
+- Cite only URLs a tool returned to you. CT Atlas checks every cited URL against
+  the tool outputs of this run, removes any other as unverified and lowers the
+  confidence of findings left without a citation. It also sets each source's kind
+  itself.
 - Do not infer protected personal characteristics.
 - Do not unnecessarily reproduce extremist propaganda.
 - If evidence is insufficient, say so.
@@ -278,6 +294,17 @@ The executive assessment must explain what the evidence means, not merely list
 events or source counts.
 """
 
+
+def _off_thread(tool):
+    """ADK calls a plain function on the event loop, so a 60 s Sherlock scan would
+    stall /health and every other request. Same signature and docstring, so the
+    declaration the model sees does not change."""
+    @functools.wraps(tool)
+    async def run_off_thread(*args, **kwargs):
+        return await asyncio.to_thread(tool, *args, **kwargs)
+    return run_off_thread
+
+
 root_agent = Agent(
     name="ct_atlas_socmint_agent",
     model=Gemini(
@@ -296,7 +323,8 @@ root_agent = Agent(
         "structured report."
     ),
     instruction=INSTRUCTION,
-    tools=[
+    before_model_callback=reserve_final_call,
+    tools=[_off_thread(tool) for tool in (
         social_capabilities,
         search_public_web,
         fetch_public_url,
@@ -306,8 +334,8 @@ root_agent = Agent(
         search_mastodon,
         search_linkedin_public,
         search_youtube,
-        search_x,
-        search_reddit,
+        *([search_x] if x_approved() else []),
+        *([search_reddit] if reddit_approved() else []),
         search_telegram_public,
         read_telegram_channel,
         explore_telegram_network,
@@ -320,7 +348,7 @@ root_agent = Agent(
         preprocess_public_text_free,
         extract_public_indicators,
         normalize_evidence,
-    ],
+    )],
 )
 
 app = App(

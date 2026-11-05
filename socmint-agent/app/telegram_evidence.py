@@ -11,6 +11,7 @@ class TelegramEvidence:
         self.channels = {}
         self.messages = {}
         self.observed = set()
+        self.wallets = {}
         self.retrieved_at = datetime.now(timezone.utc).isoformat()
 
     def capture(self, name, response):
@@ -37,6 +38,9 @@ class TelegramEvidence:
                 if not url:
                     continue
                 self.observed.add(url)
+                # Beyond the retained posts too: every wallet seen must be screened.
+                for found in (message.get("wallets") or {}).values():
+                    self.wallets.update(dict.fromkeys(found))
                 if url in self.messages or len(self.messages) >= MAX_MESSAGES:
                     continue
                 self.messages[url] = {**deepcopy(message), "channel": channel}
@@ -71,6 +75,7 @@ class TelegramEvidence:
             "messages": list(self.messages.values()),
             "messages_observed": len(self.observed),
             "messages_retained": len(self.messages),
+            "wallets": list(self.wallets),
             "truncated": len(self.observed) > len(self.messages),
             "relationships": [{**item, "count": len(item["source_urls"])} for item in edges[:300]],
             "relationships_truncated": len(edges) > 300,
