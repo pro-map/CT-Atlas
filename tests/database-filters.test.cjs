@@ -88,6 +88,33 @@ test('report statistics exclude retired developments and preserve operational in
   assert.ok(!Object.hasOwn(result.top_countries_by_incident_activity[0],'judicial_cases'));
 });
 
+test('report statistics count an attack once: follow-ups and unconfirmed attacks add reporting volume only',()=>{
+  const attack={country:'France',primary_event_type:'ATTACK',is_attack:true,categories:['Attacks']};
+  const result=plain(shared.stats([
+    event('point',{...attack,incident_id:'inc-1'}),
+    event('update',{...attack,incident_id:'inc-1',attack_update:true}),
+    event('update-only',{...attack,incident_id:'inc-2',attack_update:true}),
+    event('foiled-update',{...attack,primary_event_type:'DISRUPTED_PLOT',incident_id:'inc-3',attack_update:true}),
+    event('threat',{...attack,is_attack:false,incident_id:'inc-4'}),
+    event('attempt',{...attack,primary_event_type:'ATTEMPTED_ATTACK',is_attack:false,incident_id:'inc-5'}),
+  ]));
+  const row=result.top_countries_by_incident_activity[0];
+  assert.equal(row.unique_attacks,1,'a window with only the follow-up does not count the attack');
+  assert.equal(row.disrupted_plots,0);
+  assert.equal(row.attempted_attacks,1);
+  assert.equal(row.reporting_records,6);
+  assert.equal(result.record_count,6);
+  // A database with no flags (the full events.json fallback) counts as before.
+  const unflagged=plain(shared.stats([event('a',{...attack,incident_id:'inc-1'}),event('b',{...attack,incident_id:'inc-2'})]));
+  assert.equal(unflagged.top_countries_by_incident_activity[0].unique_attacks,2);
+});
+
+test('report sources tell the model which records are follow-ups',()=>{
+  assert.equal(shared.compactEvent(event('a',{attack_update:true})).attack_update,true);
+  assert.equal(shared.compactEvent(event('b',{})).attack_update,false);
+  assert.match(fs.readFileSync('cloudflare-worker/shared.js','utf8'),/attack_update=true is a follow-up/);
+});
+
 test('groups match case-insensitively and events without a group form their own bucket',()=>{
   assert.equal(shared.matchesGroup(event('a',{actor_group:'Al-Shabaab'}),'al-shabaab'),true);
   assert.equal(shared.matchesGroup(event('a',{actor_group:'Al-Shabaab'}),'ISIS'),false);

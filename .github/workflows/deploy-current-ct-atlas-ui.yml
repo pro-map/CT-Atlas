@@ -31,6 +31,7 @@ on:
       - "tools/compact_mirror_json.py"
       - "daily_reliability.py"
       - "retired_categories.py"
+      - "attack_points.py"
       - "index.html"
       - "main.html"
       - "privacy.html"

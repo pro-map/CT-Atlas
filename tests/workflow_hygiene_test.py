@@ -112,7 +112,7 @@ class CollectionFailFastTests(unittest.TestCase):
         imported = re.search(r'python -c "[^"]*?import ([\w, ]+)"', smoke)[1].replace(" ", "").split(",")
         expected = ["collector.py", "geolocate.py", "daily_pipeline.py", "daily_reliability.py",
                     "daily_source_retry.py", "map_evidence_integrity.py", "retired_categories.py",
-                    "tools/run_collector_quota_safe.py"]
+                    "attack_points.py", "tools/run_collector_quota_safe.py"]
         self.assertEqual(compiled, expected)
         for path in compiled:
             self.assertTrue((ROOT / path).is_file(), path)

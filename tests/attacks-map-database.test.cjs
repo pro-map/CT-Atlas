@@ -32,9 +32,13 @@ const retirementDataSource=categoryRuleSource+extract('normalizeActiveEvent')+
 const attackRule=vm.createContext({});
 vm.runInContext(retirementRuleSource+extract('isMapAttackEvent'),attackRule);
 
-test('the map and tools/build_events_map.py use the same attack rule',()=>{
+test('the map and attack_points.py use the same attack rule',()=>{
   const cases=[
     [{primary_event_type:'ATTACK',is_attack:true},true],
+    [{primary_event_type:'ATTACK',is_attack:true,attack_update:true},false],
+    [{primary_event_type:'DISRUPTED_PLOT',attack_update:true},false],
+    [{categories:['Attacks'],attack_update:true},false],
+    [{primary_event_type:'ATTACK',is_attack:true,attack_update:false},true],
     [{primary_event_type:'ATTACK',is_attack:false},false],
     [{primary_event_type:'attack',is_attack:true},true],
     [{primary_event_type:'ATTEMPTED_ATTACK'},true],
@@ -47,10 +51,11 @@ test('the map and tools/build_events_map.py use the same attack rule',()=>{
   for(const [event,expected] of cases){
     assert.equal(attackRule.isMapAttackEvent(event),expected,JSON.stringify(event));
   }
-  const python=fs.readFileSync('tools/build_events_map.py','utf8');
+  const python=fs.readFileSync('attack_points.py','utf8');
   assert.match(python,/MAP_TYPES = \("ATTACK", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT"\)/);
   assert.match(python,/return event\.get\("is_attack"\) is True/);
   assert.match(python,/return "Attacks" in event_categories\(event\)/);
+  assert.match(python,/return event\.get\("attack_update"\) is not True and is_attack_record\(event\)/);
 });
 
 async function runLoader(responses){
@@ -95,6 +100,20 @@ test('without events-map.json the map filters events-lite.json with the same rul
   assert.deepEqual(data.recent_events.map(e=>e.id),['arrest','arrest20','cited-old-operation']);
   assert.equal(data.database_summary.total_events,5);
   assert.equal(data.trend_summary.overview,'whole database');
+});
+
+test('the lite fallback honours the stamped follow-ups; the full events.json fallback keeps every record',async()=>{
+  const now=new Date().toISOString();
+  const attack={primary_event_type:'ATTACK',is_attack:true,published:now,category:'Attacks',incident_id:'inc-1'};
+  const records=[{id:'point',...attack,update_type:'INITIAL'},{id:'follow-up',...attack,update_type:'FOLLOW_UP',attack_update:true}];
+  const {data,source}=await runLoader({'events-lite.json':{events:records}});
+  assert.equal(source,'events-lite.json');
+  assert.deepEqual(data.events.map(e=>e.id),['point']);
+  assert.deepEqual(data.recent_events.map(e=>e.id),['follow-up']);
+  assert.equal(data.database_summary.total_events,2,'the Database totals stay record-based');
+  const full=await runLoader({'events.json':{events:records.map(({attack_update,...record})=>record)}});
+  assert.equal(full.source,'events.json');
+  assert.deepEqual(full.data.events.map(e=>e.id),['point','follow-up']);
 });
 
 test('the start-up chain uses the map loader and gives every event a unique key',()=>{
@@ -328,6 +347,64 @@ test('list and ticker clicks only zoom to events the map shows; the rest open th
   assert.match(c.databaseEventCardNote({primary_event_type:'ATTACK',is_attack:true,latitude:1,longitude:2,published:'2020-01-01T00:00:00Z'}),/last 24 hours/);
   assert.match(c.databaseEventCardNote({primary_event_type:'ATTACK',is_attack:true,latitude:1,longitude:2,published:new Date().toISOString()}),/after the map was loaded/);
   assert.match(c.databaseEventCardNote({primary_event_type:'ATTACK',is_attack:true,location_precision:'unlocated'}),/not precise enough/);
+  for(const scope of ['ATTACKS','ALL']){
+    c.mapCategoryScope=scope;
+    const note=c.databaseEventCardNote({primary_event_type:'ATTACK',is_attack:true,attack_update:true,latitude:1,longitude:2,published:new Date().toISOString()});
+    assert.match(note,/Follow-up report of an attack: the map shows one point per incident/);
+    assert.doesNotMatch(note,/reload the page|attacks only/);
+  }
+});
+
+test('a follow-up row and its map record link, stay off the map and open their card',()=>{
+  const key='follow-up#0';
+  const mapped={id:'follow-up',published:'2026-09-30T08:00:00Z',title:'Funeral',primary_event_type:'ATTACK',is_attack:true,attack_update:true,_mapKey:key};
+  const c=vm.createContext({allEvents:[],recentContextEvents:[mapped],databaseResults:[{...mapped,_mapKey:'db-0'}]});
+  vm.runInContext(retirementRuleSource+extract('isMapAttackEvent')+extract('eventMatchKey')+extract('linkDatabaseRowsToMap'),c);
+  c.linkDatabaseRowsToMap();
+  assert.equal(c.databaseResults[0]._mapEventKey,key);
+});
+
+test('a non-attack record on the map can be focused from its Database row',()=>{
+  assert.match(extract('focusChronologyEvent'),/\[\.\.\.allEvents, \.\.\.recentContextEvents\]\.find\(/);
+});
+
+test('the ticker badges the points that are not the first report of their attack',()=>{
+  const list={classList:{remove(){},add(){}},style:{setProperty(){}},dataset:{bound:'1'},innerHTML:'',scrollHeight:0};
+  const events=[
+    {_mapKey:'a',title:'Blast',primary_event_type:'ATTACK',update_type:'INITIAL',published:'2026-09-30T08:00:00Z'},
+    {_mapKey:'b',title:'New drone attack',primary_event_type:'ATTACK',update_type:'FOLLOW_UP',published:'2026-09-29T08:00:00Z'},
+    {_mapKey:'c',title:'Foiled',primary_event_type:'DISRUPTED_PLOT',update_type:'ARREST_UPDATE',published:'2026-09-28T08:00:00Z'},
+    {_mapKey:'d',title:'Legacy',category:'Attacks',published:'2026-09-27T08:00:00Z'},
+  ];
+  const c=vm.createContext({Date,window:{},selectedDays:7,filteredAllEvents:()=>events,escapeHtml:String,
+    document:{getElementById:id=>id==='attackTickerList'?list:id==='attackTickerViewport'?{clientHeight:100}:null}});
+  vm.runInContext(extract('renderAttackTicker'),c);
+  c.renderAttackTicker();
+  const badges=list.innerHTML.split('<li').slice(1).map(item=>[...item.matchAll(/ticker-badge">(\w+)</g)].map(match=>match[1]));
+  assert.deepEqual(badges,[[],['UPDATE'],['FOILED','UPDATE'],[]]);
+});
+
+test('red markers and heat are for attacks: a record merely filed under Attacks takes its next category',()=>{
+  const c=vm.createContext({
+    categoryStyle:{Attacks:{code:'AT',className:'attacks'},Arrests:{code:'AR',className:'arrests'},'Counter Terrorism Action':{code:'CT',className:'ct'}},
+    L:{divIcon:icon=>icon,marker:(position,options)=>({options,bindPopup(){return this;},on(){return this;}})},
+    escapeHtml:String,
+  });
+  vm.runInContext(categoryRuleSource+extract('isMapAttackEvent')+extract('createMarker')+extract('isHeatEligibleEvent'),c);
+  const marker=event=>{
+    const {options}=c.createMarker({latitude:1,longitude:2,title:'x',...event});
+    return [/ct-marker (\w+)/.exec(options.icon.html)[1],options.ctAttack];
+  };
+  assert.deepEqual(marker({primary_event_type:'ATTACK',is_attack:true,categories:['Attacks']}),['attacks',true]);
+  assert.deepEqual(marker({categories:['Attacks','Weapons']}),['attacks',true],'legacy attack');
+  assert.deepEqual(marker({primary_event_type:'CT_OPERATION',categories:['Attacks','Counter Terrorism Action']}),['ct',false]);
+  assert.deepEqual(marker({primary_event_type:'ARREST',categories:['Attacks','Arrests']}),['arrests',false]);
+  assert.deepEqual(marker({primary_event_type:'ATTACK',is_attack:false,categories:['Attacks']}),['neutral',false]);
+  assert.deepEqual(marker({primary_event_type:'ATTACK',is_attack:false,category:'Attacks'}),['neutral',false]);
+  assert.equal(c.isHeatEligibleEvent({primary_event_type:'ATTACK',is_attack:true,categories:['Attacks']}),true);
+  assert.equal(c.isHeatEligibleEvent({primary_event_type:'DISRUPTED_PLOT',categories:['Counter Terrorism Action']}),true);
+  assert.equal(c.isHeatEligibleEvent({primary_event_type:'ARREST',categories:['Attacks'],title:'Arrest after the attack'}),false);
+  assert.equal(c.isHeatEligibleEvent({primary_event_type:'CT_OPERATION',categories:['Attacks'],title:'Armed clashes in Kidal'}),true);
 });
 
 test('chronology and Excel links only accept http(s) URLs',()=>{
@@ -421,6 +498,18 @@ test('/database-events with no category filter returns every category, newest fi
   assert.equal(byId.a.match_key,vm.runInContext('eventUniqueKey',c)(events[0]));
 });
 
+test('/database-events keeps follow-ups in the list and tells the page which they are',async()=>{
+  const now=new Date().toISOString();
+  const attack={country:'Mali',primary_event_type:'ATTACK',is_attack:true,category:'Attacks',published:now,incident_id:'inc-1'};
+  const c=workerContext([{id:'point',title:'Attack',...attack},{id:'update',title:'Funeral',...attack,attack_update:true}]);
+  const result=plain(await c.handleDatabaseEvents({json:async()=>({user_id:'analyst',topic:'Attacks',period_days:7}),headers:{get:()=>'token'}},{}));
+  assert.equal(result.body.total,2);
+  const byId=Object.fromEntries(result.body.events.map(e=>[e.id,e]));
+  assert.equal(byId.point.attack_update,false);
+  assert.equal(byId.update.attack_update,true);
+  assert.equal(byId.update.incident_id,'inc-1');
+});
+
 test('/database-events refuses a session that belongs to another user',async()=>{
   const c=workerContext([{id:'a',title:'x',published:new Date().toISOString()}],'someone-else');
   const result=plain(await c.handleDatabaseEvents({json:async()=>({user_id:'analyst'}),headers:{get:()=>'token'}},{}));
@@ -481,6 +570,29 @@ test('the map shows all events by default and filters every category over 1, 7, 
   assert.deepEqual(arrests.mapped,['r1'],'one category: no attacks');
   assert.deepEqual(arrests.scope,['r1','u1'],'the counter also counts events without a location');
   assert.equal(plain(h.ids('anything else',1)).state,'ATTACKS','an unknown value falls back to attacks');
+});
+
+test('a follow-up in recent_events is never drawn or counted, in any scope, and adds no period to an old attack',()=>{
+  const h=mapScopeHarness();
+  const now=new Date().toISOString();
+  h.context.followUps=[
+    {id:'update',category:'Attacks',categories:['Attacks','Weapons'],attack_update:true,published:now,latitude:1,longitude:1},
+    {id:'plot-update',category:'Arrests',attack_update:true,published:now,latitude:1,longitude:1},
+    {id:'plain-arrest',category:'Arrests',attack_update:false,published:now,latitude:2,longitude:2},
+  ];
+  vm.runInContext('recentContextEvents.push(...followUps);',h.context);
+  // a7 is five days old: its fresh follow-up does not bring it back into the 24h view.
+  assert.deepEqual(plain(h.ids('ALL',1)).mapped,['a1','r1','plain-arrest']);
+  assert.deepEqual(plain(h.ids('ALL',1)).scope,['a1','r1','u1','plain-arrest']);
+  assert.deepEqual(plain(h.ids('ATTACKS',1)).mapped,['a1']);
+  assert.ok(!plain(h.ids('Weapons',7)).scope.includes('update'));
+  assert.ok(!plain(h.ids('Arrests',7)).scope.includes('plot-update'));
+  h.ids('ALL',1);
+  const candidates=plain(vm.runInContext('mapScopeCandidates().map(e=>e.id)',h.context));
+  assert.ok(candidates.includes('plain-arrest'));
+  assert.ok(!candidates.includes('update')&&!candidates.includes('plot-update'));
+  // The header's casualty counts still see them.
+  assert.match(html,/\[\.\.\.allEvents, \.\.\.recentContextEvents\]\.filter\(\s*isCurrentCasualtyEvent/);
 });
 
 test('the "Show on map" selector defaults to all events and the map file covers 180 days of other categories',()=>{

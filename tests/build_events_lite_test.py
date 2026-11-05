@@ -51,6 +51,46 @@ class BuildLiteTest(unittest.TestCase):
         self.assertEqual(lite['lite']['source_event_count'], 2)
         self.assertEqual(lite['lite']['excluded_fields'], ['related_articles'])
 
+    def follow_up_database(self):
+        attack = {'primary_event_type': 'ATTACK', 'is_attack': True, 'incident_id': 'i-1'}
+        return {'events': [
+            {'id': 'a1', 'published': '2026-09-25T08:00:00Z', 'title': 'Attack', 'update_type': 'INITIAL', **attack},
+            {'id': 'a2', 'published': '2026-09-26T08:00:00Z', 'title': 'Funeral', 'update_type': 'FOLLOW_UP', **attack},
+        ]}
+
+    def test_a_follow_up_is_stamped_and_passes_validation_with_the_source_unchanged(self):
+        database = self.follow_up_database()
+        lite = b.build_lite(database, ['related_articles'])
+        self.assertNotIn('attack_update', lite['events'][0])
+        self.assertIs(lite['events'][1]['attack_update'], True)
+        self.assertFalse(any('attack_update' in event for event in database['events']))
+        b.validate(lite, database)
+
+    def test_validate_rejects_a_missing_or_invented_flag(self):
+        database = self.follow_up_database()
+        lite = b.build_lite(database, ['related_articles'])
+        del lite['events'][1]['attack_update']
+        with self.assertRaisesRegex(ValueError, 'attack_update'):
+            b.validate(lite, database)
+        lite = b.build_lite(database, ['related_articles'])
+        lite['events'][0]['attack_update'] = True
+        with self.assertRaisesRegex(ValueError, 'attack_update'):
+            b.validate(lite, database)
+
+    def test_validate_still_rejects_any_other_added_field(self):
+        database = self.follow_up_database()
+        lite = b.build_lite(database, ['related_articles'])
+        lite['events'][1]['invented'] = 1
+        with self.assertRaises(ValueError):
+            b.validate(lite, database)
+
+    def test_a_stale_flag_stored_in_the_source_never_reaches_the_lite_file(self):
+        database = self.follow_up_database()
+        database['events'][0]['attack_update'] = True
+        lite = b.build_lite(database, ['related_articles'])
+        self.assertNotIn('attack_update', lite['events'][0])
+        b.validate(lite, database)
+
     def test_does_not_modify_the_source_database(self):
         database = sample_database()
         b.build_lite(database, ['related_articles'])

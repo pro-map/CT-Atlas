@@ -5,6 +5,7 @@ import json
 import sys
 import tempfile
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
 
@@ -13,6 +14,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 import daily_publication_audit as audit
 import compact_mirror_json as mirror
 import build_events_lite as light
+import build_events_map as map_file
 
 
 class PublicationAuditTests(unittest.TestCase):
@@ -52,6 +54,31 @@ class PublicationAuditTests(unittest.TestCase):
             self.assertEqual(result["files"]["events-map.json"]["sha256_bytes"],
                              hashlib.sha256((root / "events-map.json").read_bytes()).hexdigest())
             self.assertEqual(set(result["files"]), set(audit.FILES))
+
+    def test_manifest_accepts_a_dataset_with_stamped_follow_ups(self):
+        # A field added to events-lite.json fails validate(), and the builder's
+        # failure path deletes the file: the unguarded manifest step then blocks
+        # the whole publication.
+        attack = {"primary_event_type": "ATTACK", "is_attack": True, "incident_id": "inc-1", "summary": "Example"}
+        data = {"events": [
+            {"id": "a", "title": "Attack", "published": "2026-11-01T08:00:00Z", "update_type": "INITIAL", **attack},
+            {"id": "b", "title": "Funeral", "published": "2026-11-02T08:00:00Z", "update_type": "FOLLOW_UP", **attack},
+            {"id": "c", "title": "Arrest", "published": "2026-11-02T08:00:00Z", "primary_event_type": "ARREST"},
+        ]}
+        excluded = light.load_excluded()
+        lite = light.build_lite(data, excluded)
+        mapped = map_file.build_map(data, excluded, now=datetime(2026, 11, 3, tzinfo=timezone.utc))
+        map_file.validate(mapped, data)
+        self.assertEqual([event["id"] for event in mapped["events"]], ["a"])
+        self.assertEqual([event["id"] for event in mapped["recent_events"]], ["b", "c"])
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            audit.write(root / "events.json", data)
+            audit.write(root / "events-lite.json", lite)
+            audit.write(root / "events-map.json", mapped)
+            result = audit.manifest(root, root / "publication-manifest.json")
+        self.assertEqual(result["files"]["events-lite.json"]["record_count"], 3)
+        self.assertEqual(result["files"]["events-map.json"]["record_count"], 3)
 
     def test_manifest_reconstructs_chunked_derived_files(self):
         # The mirror chunks events-lite.json and events-map.json once they

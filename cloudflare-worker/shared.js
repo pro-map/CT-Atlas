@@ -168,7 +168,10 @@ and translated by many outlets) -- none of that reflects real operational
 activity on the ground. A location only qualifies as a hub/hotspot when
 top_countries_by_incident_activity shows genuinely high DISTINCT operational
 incident counts. unique_attacks counts only incident IDs whose current record
-was explicitly classified primary_event_type=ATTACK and is_attack=true.
+was explicitly classified primary_event_type=ATTACK and is_attack=true and is
+the attack itself. A record with attack_update=true is a follow-up of an attack
+already counted when it happened: it adds to reporting_records only, whatever
+period it falls in.
 Attempted attacks, disrupted plots, CT operations and arrests
 are separate measures. reporting_records is collection/reporting volume only
 and MUST NEVER be treated as attack frequency or threat intensity. When you cite a country as significant, name
@@ -829,6 +832,7 @@ function compactEvent(event) {
     actor_group: cleanText(event.actor_group, 100),
     primary_event_type: cleanText(event.primary_event_type, 40),
     is_attack: event.is_attack === true,
+    attack_update: event.attack_update === true,
     incident_id: cleanText(event.incident_id, 80),
     incident_anchor: cleanText(event.incident_anchor, 220),
     update_type: cleanText(event.update_type, 40),
@@ -887,14 +891,10 @@ function stats(events) {
 
     reportingRecords[country] = (reportingRecords[country] || 0) + 1;
     const incidentId = cleanText(e.incident_id || e.id || e._mapKey || "", 100);
-    if (!incidentId) continue;
+    if (!incidentId || e.attack_update === true) continue;
 
     const primary = cleanText(e.primary_event_type || "OTHER_CT", 40).toUpperCase();
-    if (e.is_attack === true && primary === "ATTACK") {
-      bucket(country, "ATTACK").add(incidentId);
-    } else {
-      bucket(country, primary).add(incidentId);
-    }
+    if (primary !== "ATTACK" || e.is_attack === true) bucket(country, primary).add(incidentId);
   }
 
   const count = (country, type) => incidentSets[country]?.[type]?.size || 0;

@@ -16,6 +16,7 @@ on:
       - "tools/daily_publication_audit.py"
       - "daily_reliability.py"
       - "retired_categories.py"
+      - "attack_points.py"
       - "tools/build_events_lite.py"
       - "tools/build_events_map.py"
       - "tools/wrangler_retry.py"
