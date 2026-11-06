@@ -1,5 +1,6 @@
 """CT Atlas phase-test Gemini optimiser. Keeps collector.py as the main engine."""
 import hashlib, json, os, re, sys, time
+from collections import Counter
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -51,6 +52,10 @@ calls=0; hit429=False; budget_hit=False; auto_count=0; partial=False; recent_cou
 overflow_calls=0; overflow429=False; primary_spent=False
 # Candidates the overflow model reviewed this run, so their decisions say so.
 OVERFLOW_IDS=set(); RUN_STARTED=datetime.now(timezone.utc).isoformat()
+# The temporary failures of this run, as "model:status". GitHub logs need admin
+# rights, so the run also reports them in a public annotation.
+TRANSIENT_STATUSES={408,409,500,502,503,504}
+SELECTION_FAILURES=Counter()
 EVENT_ID_RE=re.compile(r'"event_id":\s*"((?:[^"\\]|\\.)*)"')
 LANES=("recent","backlog","maintenance")
 ACTIVE_LANE="recent"
@@ -135,6 +140,7 @@ def runtime_telemetry():
             "budget_reached":budget_hit,"gemini_429":hit429,"overflow_429":overflow429,
             "partial_recovery":is_partial,"reasons":reasons,"lanes":lanes,
             "known_incidents":collector.KNOWN_INCIDENT_TELEMETRY,
+            "temporary_failures":dict(SELECTION_FAILURES),
             "budgets":{"primary":{"per_run":RUN_BUDGET,"per_day":DAY_BUDGET,
                                     "used_this_run":calls,"used_today":today_calls()},
                        "overflow":{"model":OVERFLOW_MODEL or None,"per_run":OVERFLOW_RUN_BUDGET,
@@ -232,7 +238,13 @@ def overflow_post(url,args,kwargs):
     kwargs=dict(kwargs,json=dict(kwargs["json"],model=OVERFLOW_MODEL))
     OVERFLOW_IDS.update(EVENT_ID_RE.findall(str(kwargs["json"].get("input") or "")))
     pace()
-    r=POST(url,*args,**kwargs)
+    try:
+        r=POST(url,*args,**kwargs)
+    except collector.requests.RequestException as error:
+        SELECTION_FAILURES[f"{OVERFLOW_MODEL}:{type(error).__name__}"]+=1
+        raise
+    if getattr(r,"status_code",None) in TRANSIENT_STATUSES:
+        SELECTION_FAILURES[f"{OVERFLOW_MODEL}:{r.status_code}"]+=1
     if getattr(r,"status_code",None)==429:
         overflow429=True
         print(f"   Overflow model {OVERFLOW_MODEL} returned 429; stopping the selection.")
@@ -266,7 +278,21 @@ def post(url,*args,**kwargs):
         calls+=1
         LANE_CALLS[ACTIVE_LANE]["primary"]+=1
     if gemini: pace()
-    r=POST(url,*args,**kwargs)
+    try:
+        r=POST(url,*args,**kwargs)
+    except collector.requests.RequestException as error:
+        if not sel: raise
+        SELECTION_FAILURES[f"{collector.AI_SELECTION_MODEL}:{type(error).__name__}"]+=1
+        if not overflow_left(): raise
+        print(f"   Gemini article-selection {type(error).__name__}; trying this batch on {OVERFLOW_MODEL}.")
+        return overflow_post(url,args,kwargs)
+    if sel and getattr(r,"status_code",None) in TRANSIENT_STATUSES:
+        # 5 November 2026: 3.5 Flash Lite answered 5xx through two runs while
+        # 3.1 Flash Lite worked, and the map got no new events for a day.
+        SELECTION_FAILURES[f"{collector.AI_SELECTION_MODEL}:{r.status_code}"]+=1
+        if overflow_left():
+            print(f"   Gemini article-selection HTTP {r.status_code}; trying this batch on {OVERFLOW_MODEL}.")
+            return overflow_post(url,args,kwargs)
     if sel and getattr(r,"status_code",None)==429:
         hit429=True; primary_spent=True
         try: detail=" ".join(json.dumps(r.json(),ensure_ascii=False).split())[:1000]
@@ -498,6 +524,15 @@ def weekly(events,existing_weekly=None):
     return WEEKLY(events,existing_weekly=existing_weekly)
 collector.generate_weekly_analysis=weekly
 
+def report_selection_health():
+    """Annotations are public, so a run that starves the map cannot go unnoticed."""
+    recent=runtime_telemetry()["lanes"]["recent"]
+    if SELECTION_FAILURES:
+        print("::warning title=Gemini selection failures::"+", ".join(f"{key} x{count}" for key,count in sorted(SELECTION_FAILURES.items())))
+    if recent["pending"] and not recent["new_reviews"]:
+        print(f"::error title=No new articles reviewed::{recent['pending']} recent articles are waiting and this run reviewed none of them: the map gets no new events.")
+
+
 def run_main():
     if RESUME_PENDING:
         # No sources are fetched. Only the already durable daily queue is read.
@@ -509,7 +544,10 @@ def run_main():
         consolidate=collector.consolidate_incidents
         collector.consolidate_incidents=lambda events,state=None,**kwargs: consolidate(events,state,max_calls=0,use_gemini=False)
         print(f'QUEUE-ONLY RECOVERY: at most {RUN_BUDGET} primary and {OVERFLOW_RUN_BUDGET} overflow calls; ordinary slots reserved.')
-    collector.main()
+    try:
+        collector.main()
+    finally:
+        report_selection_health()
     slot=os.getenv('CT_ATLAS_SCHEDULE','')
     if not RESUME_PENDING and slot in SLOTS and pacific_day()==START_DAY:
         COMPLETED_SLOTS.add(slot)

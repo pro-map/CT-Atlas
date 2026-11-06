@@ -153,8 +153,12 @@ AI_SELECTION_ATTEMPTS = 5
 # A 5xx/network outage is usually over in a minute: three tries per batch,
 # then the batch waits for the next run instead of spending five requests.
 AI_SELECTION_TRANSIENT_ATTEMPTS = int(os.getenv("AI_SELECTION_TRANSIENT_ATTEMPTS", "3"))
-# Batches that may fail on a temporary error in a row before the lane stops.
-AI_SELECTION_MAX_CONSECUTIVE_TRANSIENT = int(os.getenv("AI_SELECTION_MAX_CONSECUTIVE_TRANSIENT", "2"))
+# Batches that may fail on a temporary error in a row before the lane stops,
+# waiting longer after each one, so a lane outlasts about ten minutes of outage.
+# At two, with no wait, a short outage ended both runs of 2026-11-05 and the
+# map received no new events that day.
+AI_SELECTION_MAX_CONSECUTIVE_TRANSIENT = int(os.getenv("AI_SELECTION_MAX_CONSECUTIVE_TRANSIENT", "5"))
+AI_SELECTION_TRANSIENT_PAUSE_SECONDS = int(os.getenv("AI_SELECTION_TRANSIENT_PAUSE_SECONDS", "60"))
 AI_SELECTION_TIMEOUT = 240
 AI_SELECTION_PAUSE_SECONDS = 8.0
 
@@ -5747,6 +5751,7 @@ def ai_select_events(
                 hook = globals().get("selection_batch_skipped")
                 if callable(hook):
                     hook(error)
+                time.sleep(AI_SELECTION_TRANSIENT_PAUSE_SECONDS * consecutive_transient)
                 continue
             save_selection_cache(cache)
             print()

@@ -75,7 +75,10 @@ OVERFLOW = textwrap.dedent('''
     sent, statuses = [], list(json.loads(sys.argv[3]) if len(sys.argv) > 3 else [])
     def fake_post(url, *args, **kwargs):
         sent.append(kwargs["json"]["model"])
-        return SimpleNamespace(status_code=statuses.pop(0) if statuses else 200, json=lambda: {}, text="")
+        status = statuses.pop(0) if statuses else 200
+        if status == "timeout":
+            raise wrapper.collector.requests.exceptions.ReadTimeout("slow")
+        return SimpleNamespace(status_code=status, json=lambda: {}, text="")
     wrapper.POST = fake_post
     body = {"model": "gemini-3.5-flash-lite", "system_instruction": "You are the final editorial relevance filter",
             "input": "Review every candidate. " + json.dumps({"events": [{"event_id": "evt-9"}]})}
@@ -86,12 +89,15 @@ OVERFLOW = textwrap.dedent('''
             wrapper.collector.requests.post(gemini, json=body)
         except wrapper.collector.AISelectionQuotaError as error:
             errors.append(str(error)[:60])
+        except wrapper.collector.requests.RequestException as error:
+            errors.append("network: " + str(error)[:40])
     cache = {"items": {"fp-new": {"reviewed_at": "2999-01-01T00:00:00+00:00", "result": {"event_id": "evt-9"}},
                        "fp-old": {"reviewed_at": "2000-01-01T00:00:00+00:00", "result": {"event_id": "evt-9"}}}}
     usage = wrapper.inject(cache)["selection_quota_usage"]
     print(json.dumps({"sent": sent, "errors": errors, "body_model": body["model"], "hit429": wrapper.hit429,
                       "overflow429": wrapper.overflow429, "budget_hit": wrapper.budget_hit,
                       "overflow_calls": usage["overflow_calls"], "calls": usage["calls"],
+                      "failures": dict(wrapper.SELECTION_FAILURES),
                       "marked": sorted(k for k, v in cache["items"].items() if v.get("model"))}))
 ''')
 
@@ -136,6 +142,7 @@ LANE_SELECTION = textwrap.dedent('''
     spec.loader.exec_module(wrapper)
     collector = wrapper.collector
     collector.AI_SELECTION_ENABLED = True
+    collector.AI_SELECTION_TRANSIENT_PAUSE_SECONDS = 0
     wrapper.official_result = lambda event: None
     wrapper.time = SimpleNamespace(monotonic=lambda: 0.0, sleep=lambda seconds: None)
     cache = {"version": collector.AI_SELECTION_VERSION, "items": {}}
@@ -258,6 +265,24 @@ class QuotaSafeWrapperTests(unittest.TestCase):
         self.assertEqual(data["sent"][:2], ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite"])
         self.assertTrue(data["hit429"], "3.5 Flash Lite is spent: the weekly analysis is skipped as before")
         self.assertEqual(data["overflow_calls"], 2)
+
+    def test_a_temporary_failure_on_the_main_model_moves_that_batch_to_the_overflow_model(self):
+        # 5 November 2026: 3.5 Flash Lite answered 5xx through two runs, 3.1 Flash
+        # Lite worked, and the map received no new events.
+        for failure, key in (("503", "503"), ('"timeout"', "ReadTimeout")):
+            with self.subTest(failure=failure):
+                data = self.overflow("on", f"[{failure}]")
+                self.assertEqual(data["sent"][:2], ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite"])
+                self.assertFalse(data["hit429"], "3.5 Flash Lite is not out of quota")
+                self.assertEqual(data["failures"], {"gemini-3.5-flash-lite:" + key: 1})
+                self.assertEqual(data["marked"], ["fp-new"], "the review names the model that made it")
+
+    def test_a_temporary_failure_without_overflow_goes_back_to_the_collector_retries(self):
+        data = self.overflow("off", "[503]")
+        self.assertEqual(data["sent"], ["gemini-3.5-flash-lite"])
+        self.assertEqual(data["failures"], {"gemini-3.5-flash-lite:503": 1})
+        data = self.overflow("off", '["timeout"]')
+        self.assertIn("network: slow", data["errors"])
 
     def test_a_429_on_the_overflow_model_stops_the_selection(self):
         data = self.overflow("on", "[200, 429]")

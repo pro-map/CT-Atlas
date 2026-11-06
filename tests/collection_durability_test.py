@@ -180,7 +180,7 @@ class GoogleNewsTests(unittest.TestCase):
 
 
 class TransientSelectionTests(unittest.TestCase):
-    def run_selection(self, failing_batches):
+    def run_selection(self, failing_batches, limit=None):
         events = [{"id": f"evt-{n}", "title": f"Attack number {n} on a police post", "summary": "s",
                    "url": f"https://outlet.test/{n}", "source": "Outlet", "published": "2026-11-03T10:00:00+00:00",
                    "category": "Attacks", "categories": ["Attacks"], "related_articles": []} for n in range(6)]
@@ -194,7 +194,8 @@ class TransientSelectionTests(unittest.TestCase):
                     for item in batch]
 
         names = ("AI_SELECTION_ENABLED", "AI_SELECTION_CACHE_FILE", "AI_SELECTION_BATCH_SIZE",
-                 "process_ai_selection_batch", "persist_background_articles", "_SELECTION_CACHE_PRUNED")
+                 "process_ai_selection_batch", "persist_background_articles", "_SELECTION_CACHE_PRUNED",
+                 "AI_SELECTION_MAX_CONSECUTIVE_TRANSIENT", "time")
         saved = {name: getattr(collector, name) for name in names}
         skipped = []
         collector.selection_batch_skipped = skipped.append
@@ -205,6 +206,9 @@ class TransientSelectionTests(unittest.TestCase):
             collector.process_ai_selection_batch = fake_batch
             collector.persist_background_articles = lambda rejected: None
             collector._SELECTION_CACHE_PRUNED = True
+            collector.AI_SELECTION_MAX_CONSECUTIVE_TRANSIENT = limit or saved["AI_SELECTION_MAX_CONSECUTIVE_TRANSIENT"]
+            self.pauses = []
+            collector.time = SimpleNamespace(sleep=self.pauses.append, monotonic=time.monotonic)
             try:
                 result = collector.ai_select_events(events)
                 items = json.load(open(collector.AI_SELECTION_CACHE_FILE, encoding="utf-8"))["items"]
@@ -221,8 +225,17 @@ class TransientSelectionTests(unittest.TestCase):
         self.assertIsNone(result, "undecided candidates: partial publication, they stay queued")
         self.assertEqual(len(skipped), 1)
 
-    def test_two_failed_batches_in_a_row_stop_the_lane(self):
+    def test_a_short_outage_no_longer_ends_the_lane(self):
+        # Two failed batches in a row stopped both runs of 2026-11-05.
         result, calls, items, skipped = self.run_selection({1, 2})
+        self.assertEqual(len(calls), 3, "the lane waits and goes on")
+        self.assertEqual(len(items), 2)
+        pauses = [seconds for seconds in self.pauses if seconds >= collector.AI_SELECTION_TRANSIENT_PAUSE_SECONDS]
+        self.assertEqual(pauses, [60, 120], "each failure waits longer")
+        self.assertIsNone(result)
+
+    def test_a_long_outage_still_stops_the_lane(self):
+        result, calls, items, skipped = self.run_selection({1, 2}, limit=2)
         self.assertEqual(len(calls), 2)
         self.assertIsNone(result)
 
