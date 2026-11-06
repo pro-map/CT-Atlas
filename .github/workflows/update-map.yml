@@ -152,19 +152,22 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           AI_SELECTION_MODEL: "gemini-3.5-flash-lite"
-          AI_SELECTION_BATCH_SIZE: "32"
+          AI_SELECTION_BATCH_SIZE: "40"
           AI_SELECTION_MAX_CALLS_PER_RUN: "30"
           AI_SELECTION_DAILY_CALL_BUDGET: "60"
           # Candidates left when 3.5 Flash Lite's budget is spent go to 3.1 Flash
-          # Lite (its own free quota) instead of falling off the feeds: 25 a run,
-          # 50 a Pacific day, part of the background jobs' share of that model.
+          # Lite (its own free quota) instead of falling off the feeds: 55 a run,
+          # 110 a Pacific day, part of the background jobs' share of that model,
+          # which must stay under 400 a day. The per-day figure is twice the
+          # per-run one, so each timed slot keeps its whole reservation.
           AI_SELECTION_OVERFLOW_MODEL: "gemini-3.1-flash-lite"
-          AI_SELECTION_OVERFLOW_MAX_CALLS_PER_RUN: "25"
-          AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET: "50"
+          AI_SELECTION_OVERFLOW_MAX_CALLS_PER_RUN: "55"
+          AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET: "110"
           AI_SELECTION_RECENT_PRIORITY_DAYS: "3"
           # These are sub-envelopes, sharing the unchanged request caps above.
-          # Recent candidates always run before older recovery or maintenance.
-          AI_SELECTION_HISTORICAL_MAX_CALLS_PER_RUN: "10"
+          # Recent candidates always run before older recovery or maintenance, so
+          # the older queue only gets what the recent lane left of this run.
+          AI_SELECTION_HISTORICAL_MAX_CALLS_PER_RUN: "20"
           AI_SELECTION_MAINTENANCE_MAX_CALLS_PER_RUN: "2"
         run: |
           set -euo pipefail

@@ -271,6 +271,45 @@ class StarvedRunTests(unittest.TestCase):
         self.assertIn('- "Refresh daily collection status"', mirror)
 
 
+class SelectionCapacityTests(unittest.TestCase):
+    def setUp(self):
+        self.source = read("update-map.yml")
+
+    def value(self, name):
+        return int(re.search(rf'(?m)^          {name}: "(\d+)"$', self.source).group(1))
+
+    def test_one_run_can_clear_a_backlog_like_that_of_5_november(self):
+        # About 2,500 reviews a day met about 2,600 arrivals, and 2,616 waiting
+        # articles took 4 to 6 runs to clear.
+        per_run = self.value("AI_SELECTION_MAX_CALLS_PER_RUN") + self.value("AI_SELECTION_OVERFLOW_MAX_CALLS_PER_RUN")
+        self.assertEqual((self.value("AI_SELECTION_BATCH_SIZE"), per_run), (40, 85))
+        self.assertGreater(per_run * self.value("AI_SELECTION_BATCH_SIZE"), 2616)
+
+    def test_the_wrapper_accepts_the_batch_size_as_set(self):
+        wrapper = (ROOT / "tools/run_collector_quota_safe.py").read_text(encoding="utf-8")
+        self.assertIn('BATCH=max(1,min(40,int(os.getenv("AI_SELECTION_BATCH_SIZE","25"))))', wrapper)
+
+    def test_each_timed_slot_keeps_its_whole_reservation(self):
+        for run, day in (("AI_SELECTION_MAX_CALLS_PER_RUN", "AI_SELECTION_DAILY_CALL_BUDGET"),
+                         ("AI_SELECTION_OVERFLOW_MAX_CALLS_PER_RUN", "AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET")):
+            self.assertEqual(self.value(day), 2 * self.value(run))
+
+    def test_background_use_of_31_flash_lite_stays_under_the_contract(self):
+        # The owner's contract keeps it under 400 a day; enrichment's 100 are gone.
+        self.assertFalse((WORKFLOWS / "enrich-archive.yml").exists())
+        archive = int(re.search(r'ARCHIVE_REVIEW_DAILY_CALLS: "(\d+)"', read("review-archive-backlog.yml")).group(1))
+        radnuc = int(re.search(r'ARCHIVE_REVIEW_DAILY_CALLS: "(\d+)"', read("daily-radnuc-background.yml")).group(1))
+        consolidation = 120
+        geolocation_fallback = 3 * 12  # two slots and a recovery run, at most the whole cap each
+        total = archive + radnuc + consolidation + self.value("AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET") + geolocation_fallback
+        self.assertLess(total, 400)
+
+    def test_older_work_stays_a_share_of_the_run_not_of_the_reservation(self):
+        self.assertEqual(self.value("AI_SELECTION_HISTORICAL_MAX_CALLS_PER_RUN"), 20)
+        self.assertLess(self.value("AI_SELECTION_HISTORICAL_MAX_CALLS_PER_RUN"),
+                        self.value("AI_SELECTION_MAX_CALLS_PER_RUN") + self.value("AI_SELECTION_OVERFLOW_MAX_CALLS_PER_RUN"))
+
+
 class CollectionDispatchTests(unittest.TestCase):
     def test_daily_rejects_historical_dispatch_before_setup_and_accepts_daily_recovery(self):
         workflow = read("update-map.yml")

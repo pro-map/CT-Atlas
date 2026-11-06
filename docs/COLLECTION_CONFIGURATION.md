@@ -70,11 +70,25 @@ committed and retained in recovery artifacts even after failures, so articles
 do not disappear merely because a later feed no longer includes them. It is
 excluded from the published site.
 
-Scheduled selection uses 32 candidates per batch. Request ceilings stay at
-30/run and 60/Pacific day for the primary model, with 25/run and 50/day for
-overflow. Historical recovery and maintenance together may use at most ten
+Scheduled selection uses 40 candidates per batch. Request ceilings stay at
+30/run and 60/Pacific day for the primary model, with 55/run and 110/day for
+overflow. Historical recovery and maintenance together may use at most twenty
 requests per run, including a maintenance cap of two. These are sub-envelopes
 inside the existing caps; they do not create additional provider quota.
+
+After a temporary Gemini failure the recent lane gets a second pass 15 minutes
+later, and the older lanes wait for it. A timed slot that leaves at least 300
+recent articles waiting dispatches a queue-only `resume-pending` run when
+`recovery_caps` allows one; a recovery run never dispatches another. When Google
+News is blocked or answers with a consent page, the run drops that feed and
+still reviews the durable queue, with `source.status` set to `failed`.
+
+`collection_status.status` stays `partial` nearly always, because the older queue
+and category work are rarely finished. `collection_status.health` says whether the
+run kept the map current: `state` is `healthy`, `degraded` or `starved`, with
+`events_published_last_24h`, the 14-day median and the thresholds used. A starved
+run fails the workflow's last job, after the commit and the deploy, so GitHub
+notifies the owner.
 
 The map exposes `events.json.collection_status` independently of GitHub's job
 conclusion. It reports recent reviewed/pending candidates, the earlier backlog,
