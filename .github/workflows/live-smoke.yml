@@ -240,3 +240,16 @@ jobs:
             grep -Fi "Access-Control-Allow-Origin: $origin" /tmp/cors.headers
           done
 
+  # Its own job, so that a failure above cannot hide a stale map, and because its
+  # retries outlast the CDN cache (max-age=600) and the 12 minutes above.
+  map-publication:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout the publication checks
+        uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Check the map served by ct-atlas.com and the mirror
+        run: python3 tools/daily_publication_audit.py live --url "https://ct-atlas.com" --mirror-url "https://ct-atlas-mirror.fairpeace.workers.dev"
+

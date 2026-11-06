@@ -196,5 +196,24 @@ class DeliberateShrinkTests(unittest.TestCase):
                 self.assertIn(workflow_name(source), listed)
 
 
+class LiveMapAlarmTests(unittest.TestCase):
+    def test_the_scheduled_smoke_run_checks_the_map_on_both_sites(self):
+        # live-smoke ran green 51 of 51 times through the 7-day mirror failure and the
+        # starved 5 Nov: it never fetched events-map.json or publication-manifest.json.
+        source = read("live-smoke.yml")
+        self.assertIn("schedule:", source)
+        job = source[source.index("\n  map-publication:\n"):]
+        self.assertNotRegex(job.split("    steps:\n")[0], r"(?m)^    if:", "The alarm must run on every smoke run")
+        self.assertNotIn("continue-on-error", job, "A stale map must turn the run red")
+        command = step(job, "Check the map served by ct-atlas.com and the mirror")
+        self.assertIn('daily_publication_audit.py live --url "https://ct-atlas.com" '
+                      '--mirror-url "https://ct-atlas-mirror.fairpeace.workers.dev"', command)
+
+    def test_the_job_outlasts_its_retries(self):
+        # Eleven minutes of retries cover Pages' max-age=600.
+        job = read("live-smoke.yml").split("\n  map-publication:\n")[1]
+        self.assertGreater(int(re.search(r"timeout-minutes: (\d+)", job)[1]), 12)
+
+
 if __name__ == "__main__":
     unittest.main()

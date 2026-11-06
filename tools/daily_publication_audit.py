@@ -24,6 +24,14 @@ LIVE_SITE = 'https://ct-atlas.com'
 MIN_RECORD_SHARE = 0.9
 MIN_LOCATED_SHARE = 0.5
 MAX_UNREADABLE_DATES = 0.01
+# Gaps between map updates, 5 Oct to 5 Nov: usually 18.7 h overnight, because GitHub
+# starts the first slot hours late, and 23.8 h at worst, across a failed run.
+MAX_MAP_AGE_HOURS = 26
+# Records of the 24 h before each of 46 collection runs: median 92, lowest 47, except
+# 21 and 7 on the starved runs of 5 Nov.
+MIN_RECORDS_24H = 30
+# The mirror followed Pages within 9 minutes on every run since its last repair.
+MIRROR_CATCH_UP_HOURS = 2
 
 
 def read(path):
@@ -229,13 +237,85 @@ def served_revision(url):
     return None
 
 
+def read_live(url):
+    """What a site serves at the URLs users fetch, so through the CDN cache."""
+    def fetch(name):
+        request = urllib.request.Request(url.rstrip('/')+'/'+name,
+            headers={'Accept-Encoding': 'identity', 'User-Agent': 'CT-Atlas-Publication-Check/1.0'})
+        with urllib.request.urlopen(request, timeout=60) as response:
+            return response.read()
+    try:
+        document, payload = json.loads(fetch('publication-manifest.json')), fetch('events-map.json')
+        return {'url': url, 'manifest': document, 'map': json.loads(payload),
+                'sha256_bytes': hashlib.sha256(payload).hexdigest()}
+    except Exception as error:
+        raise RuntimeError(f'{url}: {type(error).__name__}: {str(error)[:160]}') from error
+
+
+def moment(value):
+    return published_at({'published': value})
+
+
+def records_24h(document):
+    """Records of the 24 h before the last collection run. Not before now: late in a long
+    gap that window holds hours no run has reached yet, and a healthy map looks starved.
+    Not before last_updated either: a repair moves it without collecting anything."""
+    since = moment(document['collection_status']['last_attempt_at']) - timedelta(hours=24)
+    dates = [published_at(event) for event in document['events'] + document['recent_events']]
+    return sum(1 for when in dates if when and when >= since)
+
+
+def live_problems(main, mirror, now):
+    problems = [f"{site['url']}: events-map.json is not the file its manifest names"
+                for site in (main, mirror)
+                if site['sha256_bytes'] != site['manifest']['files']['events-map.json']['sha256_bytes']]
+    updated = main['map']['last_updated']
+    age = (now - moment(updated)).total_seconds() / 3600
+    if age > MAX_MAP_AGE_HOURS:
+        problems.append(f'the map was last updated {age:.1f} h ago, at {updated}')
+    count = records_24h(main['map'])
+    if count < MIN_RECORDS_24H:
+        problems.append(f'only {count} records were published in the 24 h before the last collection run')
+    # Comparing the two created_at alone would read an 18.7 h overnight gap as lag in
+    # the minute before the mirror follows Pages, so the clock starts at the publication.
+    ours, theirs = main['manifest'], mirror['manifest']
+    if ours['files']['events.json']['sha256_canonical_json'] != theirs['files']['events.json']['sha256_canonical_json']:
+        published, mirrored = moment(ours['created_at']), moment(theirs['created_at'])
+        if mirrored < published and now - published > timedelta(hours=MIRROR_CATCH_UP_HOURS):
+            problems.append(f"the mirror still serves the publication of {theirs['created_at']}, "
+                            f"the site that of {ours['created_at']}")
+    return problems
+
+
+def live_check(url, mirror_url, attempts=12, sleep=time.sleep, now=None):
+    """Fail while the public map is stale or the sites disagree. Retried for 11 minutes
+    because Pages can serve a new manifest beside the old map until max-age=600 ends."""
+    if not (url.startswith('https://') and mirror_url.startswith('https://')):
+        raise ValueError('An HTTPS deployment URL is required')
+    for attempt in range(attempts):
+        try:
+            main, mirror = read_live(url), read_live(mirror_url)
+            problems = live_problems(main, mirror, now or datetime.now(timezone.utc))
+        except Exception as error:
+            problems = [f'{type(error).__name__}: {str(error)[:240]}']
+        if not problems:
+            print(f"Live map consistent: updated {main['map']['last_updated']}, "
+                  f"{records_24h(main['map'])} records in the 24 h before its last collection run.")
+            return
+        print(f'Attempt {attempt+1} of {attempts}: ' + '; '.join(problems), flush=True)
+        if attempt+1 < attempts:
+            sleep(60)
+    raise RuntimeError('Live publication check failed: ' + '; '.join(problems))
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('mode', choices=['snapshot', 'repair', 'receipt', 'manifest', 'verify', 'served-revision'])
+    p.add_argument('mode', choices=['snapshot', 'repair', 'receipt', 'manifest', 'verify', 'served-revision', 'live'])
     p.add_argument('--before', default=os.getenv('RUNNER_TEMP', '.')+'/daily-before.json')
     p.add_argument('--output', default='publication-audit.json')
     p.add_argument('--directory', default='.')
     p.add_argument('--url')
+    p.add_argument('--mirror-url')
     p.add_argument('--expected', default='publication-manifest.json')
     p.add_argument('--apply', action='store_true')
     p.add_argument('--repair-known-geography', action='store_true')
@@ -246,5 +326,6 @@ def main():
     elif a.mode=='manifest': manifest(a.directory, a.output)
     elif a.mode=='verify': verify(a.url or '', a.expected, a.output)
     elif a.mode=='served-revision': print(served_revision(a.url or '') or '')
+    elif a.mode=='live': live_check(a.url or '', a.mirror_url or '')
 
 if __name__=='__main__': main()
