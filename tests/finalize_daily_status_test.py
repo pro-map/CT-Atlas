@@ -1,14 +1,15 @@
 """Publication safety and honest counters across failure and partial recovery."""
 import importlib.util
+import io
 import json
 import subprocess
 import tempfile
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import patch
 
-SPEC = importlib.util.spec_from_file_location("finalize_daily_status", Path(__file__).resolve().parents[1] / "tools/finalize_daily_status.py")
+SPEC =importlib.util.spec_from_file_location("finalize_daily_status", Path(__file__).resolve().parents[1] / "tools/finalize_daily_status.py")
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
 START = "2026-10-14T10:00:00+00:00"
@@ -291,6 +292,126 @@ class FinalizeDailyStatusTests(unittest.TestCase):
             second = self.run_finalize()
         self.assertEqual(second["finalized_at"], "2026-10-14T13:00:00+00:00")
         self.assertNotEqual(first["finalized_at"], second["finalized_at"])
+
+    def main_outputs(self, *extra):
+        output = self.root / "github-output.txt"
+        with patch.dict("os.environ", {"GITHUB_OUTPUT": str(output)}), \
+             patch("sys.stdout", new=io.StringIO()):
+            MODULE.main(["--database", str(self.path), "--repository", str(self.root), "--cache", str(self.cache),
+                         "--status", str(self.sidecar), "--radnuc-status", str(self.radnuc),
+                         "--collect-outcome", "success", "--geolocate-outcome", "success",
+                         "--run-started-at", START, *extra])
+        return dict(line.split("=", 1) for line in output.read_text(encoding="utf-8").splitlines()) if output.exists() else {}
+
+    def test_a_run_tells_the_workflow_whether_a_recovery_run_is_wanted(self):
+        budgets = {"primary": {"per_run": 30, "per_day": 60}, "overflow": {"per_run": 25, "per_day": 50}}
+        self.write(self.sidecar, progress(recent=lane(2616, 0, 2616), budgets=budgets))
+        today = datetime.now(MODULE.PACIFIC).date().isoformat()
+        self.write(self.cache, {"items": {}, "selection_quota_usage": {
+            "pacific_day": today, "calls": 30, "overflow_calls": 0,
+            "completed_daily_slots": ["17 10 * * *", "17 18 * * *"]}})
+        self.assertEqual(self.main_outputs()["recovery_wanted"], "true")
+        self.write(self.sidecar, progress(recent=lane(2616, 2500, 116), budgets=budgets))
+        self.assertEqual(self.main_outputs()["recovery_wanted"], "false")
+
+    def test_a_status_refresh_asks_for_no_recovery_run(self):
+        self.write(self.sidecar, progress())
+        self.run_finalize()
+        self.assertEqual(self.main_outputs("--refresh-existing"), {})
+
+    def events(self, *counts):
+        """counts[0] events in the 24 h before the run, then one count per earlier day."""
+        start = datetime.fromisoformat(START)
+        return [{"id": f"e{day}-{n}", "ai_geo_complete": True,
+                 "published": (start - timedelta(hours=24 * day + 1)).isoformat()}
+                for day, total in enumerate(counts) for n in range(total)]
+
+    def health(self, events=(), *, collect="success", geo="success", **status):
+        self.write(self.path, {**self.original, "events": list(events)})
+        self.write(self.sidecar, progress(**status))
+        return self.run_finalize(collect=collect, geo=geo)["health"]
+
+    def reviews(self, new_reviews, pending):
+        return {"recent": {**lane(new_reviews + pending, new_reviews, pending), "new_reviews": new_reviews}}
+
+    def test_the_permanent_partial_is_not_a_health_problem(self):
+        # 132 of 135 statuses said partial, 0 complete: these are always open.
+        health = self.health(self.events(90, *[100] * 14), **self.reviews(1400, 0), reasons=["backlog_pending"],
+                             backlog=lane(1600, 0, 1600), categories=[{"category": "Radiological/Nuclear", "status": "partial"}])
+        self.assertEqual((health["state"], health["reasons"]), ("healthy", []))
+        self.assertEqual(health["events_published_last_24h"], 90)
+        self.assertEqual(health["events_published_median_14d"], 100)
+
+    def test_the_first_run_of_5_november_is_starved_by_both_measures(self):
+        # 19 events against a median near 130, 32 reviewed, 1,862 waiting.
+        health = self.health(self.events(19, *[135] * 14), **self.reviews(32, 1862))
+        self.assertEqual(health["state"], "starved")
+        self.assertEqual(health["reasons"], ["few_events_published", "reviews_far_below_arrivals"])
+        self.assertEqual(health["review_share"], 0.017)
+
+    def test_the_run_of_16_october_is_starved_by_its_reviews(self):
+        # 47 events alone would only be degraded; 128 reviewed, 1,375 waiting is not.
+        health = self.health(self.events(47, *[102] * 14), **self.reviews(128, 1375))
+        self.assertEqual((health["state"], health["reasons"]),
+                         ("starved", ["reviews_far_below_arrivals", "few_events_published"]))
+        self.assertEqual(self.health(self.events(47, *[102] * 14), **self.reviews(1400, 0))["state"], "degraded")
+
+    def test_a_dry_source_is_starved_by_the_event_count_alone(self):
+        health = self.health(self.events(10, *[100] * 14), **self.reviews(0, 0))
+        self.assertEqual((health["state"], health["reasons"]), ("starved", ["few_events_published"]))
+
+    def test_a_failed_collection_is_starved(self):
+        self.write(self.cache, {})
+        self.write(self.sidecar, progress())
+        self.assertEqual(self.run_finalize(collect="failure", geo="skipped")["health"]["state"], "starved")
+
+    def test_falling_behind_is_degraded_not_starved(self):
+        # 28 October: 704 reviewed, 1,162 waiting; slot 2 caught up.
+        health = self.health(self.events(76, *[128] * 14), **self.reviews(704, 1162))
+        self.assertEqual((health["state"], health["reasons"]), ("degraded", ["reviews_below_arrivals"]))
+        health = self.health(self.events(62, *[146] * 14), **self.reviews(1344, 91))
+        self.assertEqual((health["state"], health["reasons"]), ("degraded", ["few_events_published"]))
+
+    def test_a_blocked_source_or_failed_geolocation_is_degraded(self):
+        days = self.events(100, *[100] * 14)
+        blocked = self.health(days, **self.reviews(900, 0), source={"status": "failed", "failure": "soft block"})
+        self.assertEqual((blocked["state"], blocked["reasons"]), ("degraded", ["source_failed"]))
+        crashed = self.health(days, **self.reviews(900, 0), geo="failure")
+        self.assertEqual((crashed["state"], crashed["reasons"]), ("degraded", ["geolocation_incomplete"]))
+
+    def test_a_handful_of_waiting_articles_starves_nothing(self):
+        health = self.health(self.events(100, *[100] * 14), **self.reviews(0, 40))
+        self.assertEqual(health["state"], "healthy")
+
+    def test_the_window_ends_at_the_run_start_so_a_refresh_changes_nothing(self):
+        # A later clock must not read the long gap between two runs as starvation.
+        self.health(self.events(90, *[100] * 14), **self.reviews(1400, 0))
+        first = json.loads(self.path.read_text())["collection_status"]
+        self.assertEqual(self.refresh_later()["health"], first["health"])
+        self.assertEqual(json.loads(self.path.read_text())["collection_status"]["finalized_at"], first["finalized_at"])
+
+    def test_the_status_keeps_the_temporary_failures_and_the_thresholds(self):
+        self.write(self.cache, {"selection_runtime_telemetry": {
+            "schema_version": 2, "run_started_at": START, "lanes": {}, "temporary_failures": {"gemini-3.5-flash-lite:503": 6}}})
+        self.write(self.sidecar, progress())
+        result = self.run_finalize()
+        self.assertEqual(result["temporary_failures"], {"gemini-3.5-flash-lite:503": 6})
+        self.assertEqual(json.loads(self.sidecar.read_text())["health"], result["health"])
+        self.assertEqual(result["health"]["thresholds"]["starved_events_ratio"], 0.25)
+
+    def test_a_starved_run_is_announced_and_reaches_the_workflow(self):
+        self.write(self.path, {**self.original, "events": self.events(7, *[140] * 14)})
+        self.write(self.sidecar, progress(**self.reviews(0, 2616)))
+        with patch("sys.stdout", new=io.StringIO()) as printed, \
+             patch.dict("os.environ", {"GITHUB_OUTPUT": str(self.root / "out.txt")}):
+            MODULE.main(["--database", str(self.path), "--repository", str(self.root), "--cache", str(self.cache),
+                         "--status", str(self.sidecar), "--radnuc-status", str(self.radnuc),
+                         "--collect-outcome", "success", "--geolocate-outcome", "success", "--run-started-at", START])
+        self.assertIn("::error title=Map starved::7 events published in the last 24 h (14-day median 140)", printed.getvalue())
+        outputs = (self.root / "out.txt").read_text(encoding="utf-8")
+        self.assertIn("map_health=starved\n", outputs)
+        self.assertIn("map_health_summary=7 events published", outputs)
+        self.assertEqual(outputs.count("\n"), 3, "one line per output, or the step output breaks")
 
     def test_independent_radnuc_partial_is_visible_with_its_own_attempt_timestamp(self):
         self.write(self.sidecar, progress())

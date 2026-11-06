@@ -66,6 +66,9 @@ jobs:
     outputs:
       checkpoint_outcome: ${{ steps.commit.outcome }}
       data_sha: ${{ steps.commit.outputs.data_sha }}
+      recovery_wanted: ${{ steps.finalize_status.outputs.recovery_wanted }}
+      map_health: ${{ steps.finalize_status.outputs.map_health }}
+      map_health_summary: ${{ steps.finalize_status.outputs.map_health_summary }}
     env:
       CT_ATLAS_SCHEDULE: ${{ github.event.schedule || inputs.slot || '' }}
       COLLECTION_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'daily' }}
@@ -149,19 +152,22 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           AI_SELECTION_MODEL: "gemini-3.5-flash-lite"
-          AI_SELECTION_BATCH_SIZE: "32"
+          AI_SELECTION_BATCH_SIZE: "40"
           AI_SELECTION_MAX_CALLS_PER_RUN: "30"
           AI_SELECTION_DAILY_CALL_BUDGET: "60"
           # Candidates left when 3.5 Flash Lite's budget is spent go to 3.1 Flash
-          # Lite (its own free quota) instead of falling off the feeds: 25 a run,
-          # 50 a Pacific day, part of the background jobs' share of that model.
+          # Lite (its own free quota) instead of falling off the feeds: 55 a run,
+          # 110 a Pacific day, part of the background jobs' share of that model,
+          # which must stay under 400 a day. The per-day figure is twice the
+          # per-run one, so each timed slot keeps its whole reservation.
           AI_SELECTION_OVERFLOW_MODEL: "gemini-3.1-flash-lite"
-          AI_SELECTION_OVERFLOW_MAX_CALLS_PER_RUN: "25"
-          AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET: "50"
+          AI_SELECTION_OVERFLOW_MAX_CALLS_PER_RUN: "55"
+          AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET: "110"
           AI_SELECTION_RECENT_PRIORITY_DAYS: "3"
           # These are sub-envelopes, sharing the unchanged request caps above.
-          # Recent candidates always run before older recovery or maintenance.
-          AI_SELECTION_HISTORICAL_MAX_CALLS_PER_RUN: "10"
+          # Recent candidates always run before older recovery or maintenance, so
+          # the older queue only gets what the recent lane left of this run.
+          AI_SELECTION_HISTORICAL_MAX_CALLS_PER_RUN: "20"
           AI_SELECTION_MAINTENANCE_MAX_CALLS_PER_RUN: "2"
         run: |
           set -euo pipefail
@@ -197,6 +203,8 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_GEO_MODEL: "gemini-3.5-flash-lite"
+          # On a temporary failure of the model above, as the selection does.
+          GEMINI_GEO_FALLBACK_MODEL: "gemini-3.1-flash-lite"
           # Deprecated 3.7 redirects to 3.8; deprecated 3.5 Flash redirects
           # to 3.6 (reserved for interactive reports/Deep Search).
           # The optional 3.8 rescue is disabled until account-specific billing
@@ -221,7 +229,9 @@ jobs:
 
       - name: Reconcile validated category metadata without AI calls
         id: reconcile
-        if: ${{ steps.collect.outcome == 'success' }}
+        # Not skipped by a failed geolocation, or the commit would refuse the run
+        # and its reviews and quota ledger would be lost.
+        if: ${{ !cancelled() && steps.collect.outcome == 'success' }}
         run: python -u tools/daily_publication_audit.py repair --apply --output "$RUNNER_TEMP/daily-label-repair.json"
 
       - name: Finalize visible daily progress
@@ -276,17 +286,22 @@ jobs:
           STATUS_OUTCOME: ${{ steps.finalize_status.outcome }}
           AUDIT_OUTCOME: ${{ steps.audit.outcome }}
           RECONCILE_OUTCOME: ${{ steps.reconcile.outcome }}
+          REFUSAL_FILE: ${{ runner.temp }}/publication-refusal.txt
         run: |
           set -euo pipefail
           git config user.name "CT Intelligence Map Bot"
           git config user.email "actions@github.com"
           python - <<'PY'
-          import json, os, subprocess
+          import json, os, subprocess, sys
           from pathlib import Path
+          collected = os.environ['COLLECT_OUTCOME'] == 'success'
+          refusal = None
           if os.environ['AUDIT_OUTCOME'] != 'success':
-              raise RuntimeError('Publication audit failed; recovery files retained')
-          if os.environ['COLLECT_OUTCOME'] == 'success' and os.environ['RECONCILE_OUTCOME'] != 'success':
-              raise RuntimeError('Metadata reconciliation failed; refusing to publish')
+              refusal = 'Publication audit failed; recovery files retained'
+          elif collected and os.environ['RECONCILE_OUTCOME'] != 'success':
+              refusal = 'Metadata reconciliation failed; refusing to publish'
+          elif os.environ['STATUS_OUTCOME'] != 'success':
+              refusal = 'Progress finalization failed; refusing to publish an unverified checkpoint'
           cache = Path("ai_article_selection_cache.json")
           if cache.exists():
               obj = json.loads(cache.read_text(encoding="utf-8"))
@@ -294,13 +309,19 @@ jobs:
                   raise RuntimeError("Invalid AI checkpoint file; recovery artifact retained")
               subprocess.run(["git", "add", "--", str(cache)], check=True)
           queue = Path("daily_candidate_queue.json")
-          if queue.exists():
+          # A successful collection has already taken its reviewed articles out of
+          # this queue. If its database is refused, committing the queue would lose
+          # them: the committed queue and the cache publish them on the next run.
+          if queue.exists() and not (refusal and collected):
               obj = json.loads(queue.read_text(encoding="utf-8"))
               if not isinstance(obj, dict) or obj.get("version") != 1 or not isinstance(obj.get("events"), list) or not all(isinstance(event, dict) for event in obj["events"]):
                   raise RuntimeError("Invalid daily candidate queue; recovery artifact retained")
               subprocess.run(["git", "add", "--", str(queue)], check=True)
-          if os.environ["STATUS_OUTCOME"] != "success":
-              raise RuntimeError("Progress finalization failed; refusing to publish an unverified checkpoint")
+          if refusal:
+              # Reviews and the quota ledger still leave the runner, or the next
+              # run would review them again and overspend the daily budget.
+              Path(os.environ["REFUSAL_FILE"]).write_text(refusal, encoding="utf-8")
+              sys.exit(0)
           # Finalization has restored the Git database when collection failed.
           # Its status-only update still needs publication so failures are visible.
           db = json.loads(Path("events.json").read_text(encoding="utf-8"))
@@ -326,14 +347,28 @@ jobs:
               if Path(generated).exists():
                   subprocess.run(["git", "add", "--", generated], check=True)
           PY
+          finish() {
+            echo "data_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+            if [ -s "$REFUSAL_FILE" ]; then
+              echo "::error::$(cat "$REFUSAL_FILE")"
+              exit 1
+            fi
+            exit 0
+          }
           if git diff --cached --quiet; then
             echo "No database or cache changes to commit."
-            echo "data_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-            exit 0
+            finish
           fi
           # GitHub refuses files over 100 MiB: say so before the push fails.
           python3 tools/check_committed_sizes.py
-          git commit -m "Update CT database and resumable AI checkpoints"
+          if [ -s "$REFUSAL_FILE" ]; then
+            git commit -m "Keep the AI checkpoint of a run that could not publish"
+            # Only that checkpoint leaves this runner: the refused files are in the
+            # recovery artifact, and the rebase below needs a clean worktree.
+            git checkout -- .
+          else
+            git commit -m "Update CT database and resumable AI checkpoints"
+          fi
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             if ! git rebase origin/main; then
@@ -342,8 +377,7 @@ jobs:
               exit 1
             fi
             if git push origin HEAD:main; then
-              echo "data_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-              exit 0
+              finish
             fi
             sleep $((attempt * 4))
           done
@@ -390,3 +424,33 @@ jobs:
             publication-receipt-pages.json
           retention-days: 7
           if-no-files-found: ignore
+
+  recovery:
+    needs: [update, deploy]
+    # Timed slots only, so a recovery run can never start another. It runs after
+    # this one: both share the ct-map-update-main lock. The ledger must be pushed.
+    if: ${{ always() && needs.update.outputs.checkpoint_outcome == 'success' && needs.update.outputs.recovery_wanted == 'true' && (github.event_name == 'schedule' || (inputs.mode == 'daily' && inputs.slot != '')) }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Dispatch a queue-only recovery run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run update-map.yml --repo "$GITHUB_REPOSITORY" --ref main -f mode=resume-pending -f force_ai=false
+
+  health:
+    needs: [update, deploy, recovery]
+    # Last of all, once the data is committed and published: a red run is what
+    # makes GitHub notify the owner. The mirror does not follow a red run directly;
+    # it follows the status refresh, which runs after any conclusion and republishes.
+    if: ${{ always() && needs.update.outputs.map_health == 'starved' }}
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Fail visibly because this run starved the map
+        env:
+          SUMMARY: ${{ needs.update.outputs.map_health_summary }}
+        run: |
+          echo "::error title=Map starved::$SUMMARY"
+          exit 1

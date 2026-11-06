@@ -133,6 +133,30 @@ class ReliabilityTests(unittest.TestCase):
                   {'pacific_day':'2026-10-20','calls':True,'overflow_calls':0}):
             self.assertEqual(safe.recovery_caps(u,'2026-10-20',30,60,25,50),(0,0))
 
+    def test_recovery_is_wanted_when_recent_articles_wait_and_the_ledger_allows_it(self):
+        # After slot 2 on 5 November: 2,616 recent articles waited and (30, 25)
+        # calls were left, unused until the Pacific reset.
+        budgets={'primary':{'per_run':30,'per_day':60},'overflow':{'per_run':25,'per_day':50}}
+        status={'recent':{'pending':2616},'budgets':budgets}
+        usage={'pacific_day':'2026-11-05','calls':30,'overflow_calls':0,'completed_daily_slots':list(safe.SLOTS)}
+        self.assertEqual(safe.recovery_caps(usage,'2026-11-05',30,60,25,50),(30,25))
+        self.assertTrue(safe.recovery_wanted(status,usage,'2026-11-05'))
+        self.assertTrue(safe.recovery_wanted({**status,'recent':{'pending':300}},usage,'2026-11-05'))
+        self.assertFalse(safe.recovery_wanted({**status,'recent':{'pending':299}},usage,'2026-11-05'))
+
+    def test_recovery_is_not_wanted_without_budget_or_known_counts(self):
+        budgets={'primary':{'per_run':30,'per_day':60},'overflow':{'per_run':25,'per_day':50}}
+        spent={'pacific_day':'2026-11-05','calls':60,'overflow_calls':50,'completed_daily_slots':list(safe.SLOTS)}
+        reserved={'pacific_day':'2026-11-05','calls':30,'overflow_calls':25,'completed_daily_slots':[safe.SLOTS[0]]}
+        status={'recent':{'pending':2616},'budgets':budgets}
+        self.assertFalse(safe.recovery_wanted(status,spent,'2026-11-05'))
+        self.assertFalse(safe.recovery_wanted(status,reserved,'2026-11-05'),'slot 2 keeps its reservation')
+        self.assertFalse(safe.recovery_wanted(status,spent,'2026-11-06'),'another Pacific day has no ledger yet')
+        self.assertFalse(safe.recovery_wanted(status,None,'2026-11-05'))
+        spare={**spent,'calls':30}
+        self.assertFalse(safe.recovery_wanted({'recent':{'pending':None},'budgets':budgets},spare,'2026-11-05'))
+        self.assertFalse(safe.recovery_wanted({'recent':{'pending':2616}},spare,'2026-11-05'))
+
     def test_retry_delay_is_bounded_and_long_retry_after_is_deferred(self):
         self.assertEqual([safe.retry_delay(i,jitter=0) for i in range(6)],[4,8,16,32,60,60])
         self.assertIsNone(safe.retry_delay(0,SimpleNamespace(headers={'Retry-After':'300'}),jitter=0))

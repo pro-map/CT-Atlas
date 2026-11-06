@@ -4,6 +4,7 @@ compact), every events.json writer produces the same bytes, Google News
 failures end a wave early instead of running into the step timeout, and one
 temporary Gemini error no longer abandons the rest of a selection lane."""
 import importlib.util
+import itertools
 import json
 import os
 import tempfile
@@ -111,8 +112,8 @@ class OneJsonFormatTests(unittest.TestCase):
 
 
 class Response:
-    def __init__(self, status):
-        self.status_code, self.headers = status, {}
+    def __init__(self, status, content=b""):
+        self.status_code, self.headers, self.content = status, {}, content
 
     def raise_for_status(self):
         if self.status_code >= 400:
@@ -158,9 +159,34 @@ class GoogleNewsTests(unittest.TestCase):
     def test_the_collection_stops_at_its_deadline(self):
         collector.COLLECTION_STARTED = time.monotonic() - (collector.COLLECTION_DEADLINE_MINUTES + 1) * 60
         self.answer(200)
-        with self.assertRaises(RuntimeError) as raised:
+        with self.assertRaises(collector.GoogleNewsUnavailable) as raised:
             collector._request_google_news_network("https://news.google.com/rss/search?q=x")
         self.assertIn("deadline", str(raised.exception))
+
+    def wave(self, *replies):
+        # Every planned query of a real wave, through the real feed parser.
+        answers = itertools.cycle(replies)
+        collector.session = SimpleNamespace(get=lambda url, timeout: Response(200, next(answers)))
+        return collector._collect_all_once(3)
+
+    def test_a_consent_page_answering_http_200_counts_as_a_failed_source(self):
+        page = (b'<!DOCTYPE html><html><head><title>Before you continue to Google News</title></head>'
+                b'<body><form action="https://consent.google.com/save"><button>Accept all</button></form></body></html>')
+        with self.assertRaises(collector.GoogleNewsUnavailable) as raised:
+            self.wave(page)
+        self.assertIn("soft block", str(raised.exception))
+        self.assertIn("Too many Google News queries failed", str(raised.exception), "collect_all retries it once")
+        self.assertEqual(collector.QUERY_STATS["failed"], 0, "no query looked failed")
+        self.assertEqual(collector.QUERY_STATS["empty_feeds"], collector.QUERY_STATS["successful"])
+
+    def test_the_empty_searches_of_a_normal_wave_are_no_block(self):
+        # 18 of 60 real queries came back empty on 2026-11-06.
+        empty = b'<?xml version="1.0"?><rss version="2.0"><channel><title>News</title></channel></rss>'
+        story = (b'<?xml version="1.0"?><rss version="2.0"><channel><title>News</title><item>'
+                 b'<title>Police arrest ISIS suspect - Outlet</title><link>https://news.google.com/rss/articles/x</link>'
+                 b'<pubDate>Thu, 05 Nov 2026 10:00:00 GMT</pubDate></item></channel></rss>')
+        self.wave(empty, empty, empty, story, story, story, story, story, story, story)
+        self.assertGreater(collector.QUERY_STATS["empty_feeds"], 300)
 
     def test_no_second_wave_late_in_the_run(self):
         calls = []

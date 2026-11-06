@@ -338,6 +338,10 @@ GOOGLE_NEWS_GLOBAL_RETRY_ATTEMPTS = int(
 )
 # The failure rate is judged once this many queries have answered.
 GOOGLE_NEWS_EARLY_ABORT_AFTER = int(os.getenv("GOOGLE_NEWS_EARLY_ABORT_AFTER", "60"))
+# A consent page answers HTTP 200 and parses to no entries, so every query looks
+# successful. Above this share of empty feeds the wave counts as blocked: real
+# searches come back empty about 30% of the time (60 sampled on 2026-11-06).
+GOOGLE_NEWS_SOFT_BLOCK_SHARE = float(os.getenv("GOOGLE_NEWS_SOFT_BLOCK_SHARE", "0.8"))
 # A second collection wave starts only this early in the run.
 GOOGLE_NEWS_RETRY_WAVE_MAX_ELAPSED_MINUTES = float(
     os.getenv("GOOGLE_NEWS_RETRY_WAVE_MAX_ELAPSED_MINUTES", "60")
@@ -2703,29 +2707,44 @@ def _request_google_news_network(
     return None
 
 
+class GoogleNewsUnavailable(RuntimeError):
+    """This run's feeds cannot be trusted. main() drops them and still reviews
+    the durable queue, which does not depend on Google."""
+
+
 def stop_if_google_news_is_failing():
     """End the wave as soon as the failure rate is clear, instead of spending
     up to an hour per hundred throttled queries before the end-of-wave check
     in _collect_all_once (same message, so collect_all can retry once)."""
     answered = QUERY_STATS["successful"] + QUERY_STATS["failed"]
     if answered >= GOOGLE_NEWS_EARLY_ABORT_AFTER and QUERY_STATS["failed"] / answered > 0.20:
-        raise RuntimeError(
+        raise GoogleNewsUnavailable(
             "Too many Google News queries failed "
-            f"({QUERY_STATS['failed']}/{answered} so far). "
-            "Database not replaced to avoid an incomplete collection."
+            f"({QUERY_STATS['failed']}/{answered} so far)."
         )
 
 
 def check_collection_deadline():
     """A collection that is still searching this late will not finish inside
-    its workflow step: stop it cleanly (the checkpoint is committed) rather
-    than be killed by the step timeout."""
+    its workflow step: stop the searches cleanly rather than be killed by the
+    step timeout."""
     elapsed = (time.monotonic() - COLLECTION_STARTED) / 60
     if COLLECTION_DEADLINE_MINUTES > 0 and elapsed >= COLLECTION_DEADLINE_MINUTES:
-        raise RuntimeError(
+        raise GoogleNewsUnavailable(
             f"Google News collection deadline reached ({elapsed:.0f} min; "
             f"COLLECTION_DEADLINE_MINUTES={COLLECTION_DEADLINE_MINUTES:.0f})."
         )
+
+
+def parse_google_feed(response):
+    feed = feedparser.parse(
+        response.content
+    )
+
+    if not feed.entries:
+        QUERY_STATS["empty_feeds"] += 1
+
+    return feed
 
 
 def entry_to_event(
@@ -2881,8 +2900,8 @@ def collect_query(
     if response is None:
         return []
 
-    feed = feedparser.parse(
-        response.content
+    feed = parse_google_feed(
+        response
     )
 
     results = []
@@ -2961,8 +2980,8 @@ def collect_broad_query(
     if response is None:
         return []
 
-    feed = feedparser.parse(
-        response.content
+    feed = parse_google_feed(
+        response
     )
 
     results = []
@@ -3278,8 +3297,8 @@ def collect_multilingual_query(
     if response is None:
         return []
 
-    feed = feedparser.parse(
-        response.content
+    feed = parse_google_feed(
+        response
     )
 
     results = []
@@ -3677,8 +3696,8 @@ def _collect_all_once(days):
         ]
     )
 
-    # Never silently build a database update from a severely throttled sample.
-    # A failed workflow leaves the previous events.json untouched.
+    # Never silently build a database update from a severely throttled sample:
+    # its records are dropped and only the durable queue is reviewed.
     if (
         total_requests >= 10
         and
@@ -3690,10 +3709,26 @@ def _collect_all_once(days):
         >
         0.20
     ):
-        raise RuntimeError(
+        raise GoogleNewsUnavailable(
             "Too many Google News queries failed "
-            f"({QUERY_STATS['failed']}/{total_requests}). "
-            "Database not replaced to avoid an incomplete update."
+            f"({QUERY_STATS['failed']}/{total_requests})."
+        )
+
+    if (
+        total_requests >= 10
+        and
+        QUERY_STATS[
+            "empty_feeds"
+        ]
+        /
+        total_requests
+        >
+        GOOGLE_NEWS_SOFT_BLOCK_SHARE
+    ):
+        raise GoogleNewsUnavailable(
+            "Too many Google News queries failed: "
+            f"{QUERY_STATS['empty_feeds']}/{total_requests} answered "
+            "with an empty feed (soft block)."
         )
 
     return records
@@ -4218,8 +4253,8 @@ def collect_all(*args, **kwargs):
 
             if attempt >= attempts:
                 print(
-                    "[google-news] Global retry exhausted. "
-                    "Aborting safely; existing database will not be replaced."
+                    "[google-news] Global retry exhausted; "
+                    "this run's feed results will not be used."
                 )
                 raise
 
@@ -4227,7 +4262,7 @@ def collect_all(*args, **kwargs):
             if elapsed >= GOOGLE_NEWS_RETRY_WAVE_MAX_ELAPSED_MINUTES:
                 print(
                     f"[google-news] {elapsed:.0f} min already spent; no second "
-                    "collection wave. Aborting safely."
+                    "collection wave."
                 )
                 raise
 
@@ -11218,8 +11253,15 @@ def main():
     daily_engine = SimpleNamespace(**globals())
     COLLECTION_STATUS = daily_pipeline.begin_status(run_now, load_database_strict().get("last_updated"))
     atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
+    source_failure = None
     try:
         fresh = exclude_reviewed_articles(collect_all(days), existing)
+    except GoogleNewsUnavailable as error:
+        # The durable queue does not depend on Google: review it, as
+        # resume-pending does, instead of leaving thousands of articles waiting.
+        source_failure = str(error)
+        print(f"Google News unavailable: {error} Reviewing the durable queue only.")
+        fresh = []
     except Exception:
         COLLECTION_STATUS = daily_pipeline.finish_status(COLLECTION_STATUS, {}, QUERY_STATS, GDELT_STATS, run_now)
         COLLECTION_STATUS["status"] = "failed"
@@ -11259,6 +11301,8 @@ def main():
         backlog={"candidates": len(backlog), "reviewed": 0, "pending": len(backlog)})
     COLLECTION_STATUS["source"] = {"google": dict(QUERY_STATS), "gdelt": dict(GDELT_STATS),
         "errors": QUERY_STATS["failed"] + GDELT_STATS["failed"]}
+    if source_failure:
+        COLLECTION_STATUS["source"].update(status="failed", failure=source_failure)
     atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
     print(f"Separate daily queues: {len(recent)} recent; {len(backlog)} older. Recent review runs first.")
     arm_known_incidents(existing, run_now, daily_engine)
@@ -11387,7 +11431,7 @@ def main():
 
     telemetry = globals().get("selection_runtime_status", lambda: {})()
     COLLECTION_STATUS = daily_pipeline.finish_status(COLLECTION_STATUS, telemetry,
-        QUERY_STATS, GDELT_STATS, run_now, DAILY_LOOKBACK_DAYS)
+        QUERY_STATS, GDELT_STATS, run_now, DAILY_LOOKBACK_DAYS, source_failure)
     remaining_maintenance = sum(not event.get("primary_event_type") or not event.get("incident_id")
                                 for event in existing)
     maintenance = COLLECTION_STATUS.setdefault("maintenance", {})

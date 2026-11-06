@@ -150,6 +150,20 @@ def recovery_caps(usage, day, primary_run, primary_day, overflow_run, overflow_d
             min(overflow_run, max(0, overflow_day-values[1]-reserved_slots*overflow_run)))
 
 
+RECOVERY_MIN_RECENT_PENDING = 300
+
+
+def recovery_wanted(status, usage, day):
+    """Whether enough recent articles wait, within the ledger, for a queue-only recovery run."""
+    budgets = status.get('budgets') or {}
+    primary, overflow = budgets.get('primary') or {}, budgets.get('overflow') or {}
+    limits = (primary.get('per_run'), primary.get('per_day'), overflow.get('per_run'), overflow.get('per_day'))
+    pending = (status.get('recent') or {}).get('pending')
+    if type(pending) is not int or any(type(v) is not int for v in limits):
+        return False
+    return pending >= RECOVERY_MIN_RECENT_PENDING and any(recovery_caps(usage, day, *limits))
+
+
 def retry_delay(attempt, response=None, jitter=None):
     """Bounded exponential wait; a long Retry-After is deferred, never shortened."""
     delay = min(60.0, 4.0 * 2 ** min(max(0, attempt), 4))

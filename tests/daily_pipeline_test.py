@@ -47,7 +47,7 @@ class DailyPipelineTests(unittest.TestCase):
         self.assertEqual(backlog, [])
         self.assertEqual((dropped["expired"], dropped["retired"], dropped["cancelled_history"]), (1, 1, 1))
 
-    def test_cancelled_specialist_history_filters_old_legacy_queue_but_keeps_recent_bio(self):
+    def test_cancelled_history_stops_stale_feed_rows_and_never_touches_the_queue(self):
         disabled = daily.CANCELLED_BACKLOG_CATEGORIES
         queued = [article('queued-old-bio',20,'Biological Terrorism'),
                   article('queued-old-cbrn',20,'CBRN'),
@@ -59,9 +59,36 @@ class DailyPipelineTests(unittest.TestCase):
         with patch.object(collector,'deduplicate_events',side_effect=lambda rows:rows):
             recent,backlog,dropped=daily.prepare(fresh,queued,[],collector,NOW,disabled)
         self.assertEqual({row['id'] for row in recent},{'queued-recent-cbrne','fresh-recent-bio'})
-        self.assertEqual([row['id'] for row in backlog],['fresh-old-arrest'])
-        self.assertEqual(dropped['cancelled_history'],3)
+        self.assertEqual({row['id'] for row in backlog},{'queued-old-bio','queued-old-cbrn','fresh-old-arrest'})
+        self.assertEqual(dropped['cancelled_history'],1)
+        self.assertEqual(dropped['from_queue']['cancelled_history'],0)
         self.assertEqual((fresh,queued),originals)
+
+    def test_a_waiting_candidate_past_three_days_is_not_deleted_unreviewed(self):
+        # 887 waiting candidates vanished between 14 October and 5 November, 664 of
+        # them 3 to 4 days old, among them a Colombian car bomb report. Attacks plus
+        # Chemicals and Explosives was dropped while plain Attacks was kept.
+        queued = [{**article('car-bomb', 3.1, 'Attacks'), 'categories': ['Attacks', 'Chemicals and Explosives']},
+                  article('hezbollah-explosives', 3.5, 'Chemicals and Explosives'),
+                  article('plain-attack', 3.1, 'Attacks')]
+        with patch.object(collector, 'deduplicate_events', side_effect=lambda rows: rows):
+            _, backlog, dropped = daily.prepare([], queued, [], collector, NOW, daily.CANCELLED_BACKLOG_CATEGORIES)
+        self.assertEqual({row['id'] for row in backlog}, {'car-bomb', 'hezbollah-explosives', 'plain-attack'})
+        self.assertEqual(dropped['from_queue']['cancelled_history'], 0)
+
+    def test_a_stale_feed_row_also_tagged_attacks_is_not_cancelled_history(self):
+        both = {**article('attack-and-explosives', 9, 'Attacks'), 'categories': ['Attacks', 'Chemicals and Explosives']}
+        _, backlog, dropped = daily.partition([both, article('only-explosives', 9, 'Chemicals and Explosives')],
+                                              collector, NOW, daily.CANCELLED_BACKLOG_CATEGORIES)
+        self.assertEqual([row['id'] for row in backlog], ['attack-and-explosives'])
+        self.assertEqual(dropped['cancelled_history'], 1)
+
+    def test_queue_losses_are_reported_apart_from_feed_rows(self):
+        with patch.object(collector, 'deduplicate_events', side_effect=lambda rows: rows):
+            _, _, dropped = daily.prepare([article('old-feed-row', 190)], [article('old-queued', 200)], [],
+                                          collector, NOW, daily.CANCELLED_BACKLOG_CATEGORIES)
+        self.assertEqual(dropped['expired'], 1)
+        self.assertEqual(dropped['from_queue']['expired'], 1)
 
     def test_cancelled_categories_stay_in_recent_daily_collection(self):
         bio = collector.threat_categories.BIO
@@ -145,6 +172,56 @@ class DailyPipelineTests(unittest.TestCase):
         self.assertEqual(calls, ["recent", "backlog", "maintenance"])
         self.assertEqual([row["id"] for row in snapshots[0]], ["new", "old"])
         self.assertEqual(snapshots[0], snapshots[-1], "Unreviewed rows remain durable.")
+
+    def run_main_with_queue(self, collect_all):
+        """collector.main() over one queued article, every provider call stubbed."""
+        waiting = {**article("waiting"), "published": (datetime.now(timezone.utc)-timedelta(days=1)).isoformat()}
+        reviewed, published = [], []
+        def select(rows, lane=None):
+            reviewed.extend((lane, row["id"]) for row in rows)
+            return []
+        patches = {
+            "load_existing_weekly_analysis": lambda: {}, "load_existing": lambda: [],
+            "load_database_strict": lambda: {"events": [], "last_updated": "previous"},
+            "collect_all": collect_all, "deduplicate_events": lambda rows: rows,
+            "ai_select_events": select, "deduplicate_incremental": lambda old, new: old,
+            "prune_old": lambda rows, aged=None: rows, "archive_aged_out_events": lambda rows: None,
+            "load_incident_state": lambda: {}, "consolidate_incidents": lambda rows, state: (rows, {}),
+            "save_incident_state": lambda *args: None, "generate_24h_trend_summary": lambda rows: {},
+            "generate_weekly_analysis": lambda rows, **kwargs: {},
+            "save_database": lambda *args, **kwargs: published.append(args),
+            "load_selection_cache": lambda: {"items": {}}, "atomic_json_write": lambda *args: None,
+        }
+        from contextlib import ExitStack
+        with ExitStack() as stack:
+            for name, replacement in patches.items():
+                stack.enter_context(patch.object(collector, name, replacement))
+            stack.enter_context(patch.object(collector.collection_config, "validate_runtime", return_value={}))
+            stack.enter_context(patch.object(daily, "load_queue", return_value=[waiting]))
+            stack.enter_context(patch.object(daily, "save_queue"))
+            collector.main()
+        return reviewed, published
+
+    def test_a_google_news_block_still_reviews_the_durable_queue(self):
+        # Run on a scratch export, this ended with 0 Gemini requests and a queue
+        # of 4,228 articles untouched although Gemini was fine.
+        def blocked(days):
+            raise collector.GoogleNewsUnavailable("Too many Google News queries failed (70/100).")
+        reviewed, published = self.run_main_with_queue(blocked)
+        self.assertIn(("recent", "waiting"), reviewed)
+        self.assertEqual(len(published), 1, "the run publishes what it reviewed")
+        source = collector.COLLECTION_STATUS["source"]
+        self.assertEqual(source["status"], "failed")
+        self.assertEqual(source["failure"], "Too many Google News queries failed (70/100).")
+        self.assertIn("source_errors", collector.COLLECTION_STATUS["reasons"])
+        self.assertEqual(collector.COLLECTION_STATUS["status"], "partial")
+
+    def test_any_other_collection_crash_still_fails_the_run(self):
+        def broken(days):
+            raise ValueError("a bug, not a block")
+        with self.assertRaises(ValueError):
+            self.run_main_with_queue(broken)
+        self.assertEqual(collector.COLLECTION_STATUS["status"], "failed")
 
     def test_gdelt_rate_limit_is_visible_independently_of_google(self):
         collector.GDELT_STATS.clear()

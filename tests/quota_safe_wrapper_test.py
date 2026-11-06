@@ -2,6 +2,7 @@
 wrappers; each must keep the signature collector.main() calls it with. The
 wrapper is imported in a child process so its monkeypatches never leak into
 the other tests."""
+import json
 import subprocess
 import sys
 import textwrap
@@ -78,15 +79,16 @@ OVERFLOW = textwrap.dedent('''
         status = statuses.pop(0) if statuses else 200
         if status == "timeout":
             raise wrapper.collector.requests.exceptions.ReadTimeout("slow")
-        return SimpleNamespace(status_code=status, json=lambda: {}, text="")
+        status, text = status if isinstance(status, list) else (status, "")
+        return SimpleNamespace(status_code=status, json=lambda: {}, text=text)
     wrapper.POST = fake_post
     body = {"model": "gemini-3.5-flash-lite", "system_instruction": "You are the final editorial relevance filter",
             "input": "Review every candidate. " + json.dumps({"events": [{"event_id": "evt-9"}]})}
     gemini = "https://generativelanguage.googleapis.com/v1beta/interactions"
-    errors = []
+    errors, answers = [], []
     for _ in range(4):
         try:
-            wrapper.collector.requests.post(gemini, json=body)
+            answers.append(wrapper.collector.requests.post(gemini, json=body).status_code)
         except wrapper.collector.AISelectionQuotaError as error:
             errors.append(str(error)[:60])
         except wrapper.collector.requests.RequestException as error:
@@ -94,7 +96,7 @@ OVERFLOW = textwrap.dedent('''
     cache = {"items": {"fp-new": {"reviewed_at": "2999-01-01T00:00:00+00:00", "result": {"event_id": "evt-9"}},
                        "fp-old": {"reviewed_at": "2000-01-01T00:00:00+00:00", "result": {"event_id": "evt-9"}}}}
     usage = wrapper.inject(cache)["selection_quota_usage"]
-    print(json.dumps({"sent": sent, "errors": errors, "body_model": body["model"], "hit429": wrapper.hit429,
+    print(json.dumps({"sent": sent, "errors": errors, "answers": answers, "body_model": body["model"], "hit429": wrapper.hit429,
                       "overflow429": wrapper.overflow429, "budget_hit": wrapper.budget_hit,
                       "overflow_calls": usage["overflow_calls"], "calls": usage["calls"],
                       "failures": dict(wrapper.SELECTION_FAILURES),
@@ -117,6 +119,33 @@ QUOTA_RESTORE=textwrap.dedent('''
     wrapper=importlib.util.module_from_spec(spec)
     spec.loader.exec_module(wrapper)
     print(json.dumps({"primary":wrapper.today_calls(),"overflow":wrapper.today_overflow()}))
+''')
+
+
+# Slot 2 crashes, as a Google block used to make it do: its reservation must go.
+SLOT_CRASH=textwrap.dedent('''
+    import importlib.util, json, os, sys
+    from datetime import datetime
+    from pathlib import Path
+    from zoneinfo import ZoneInfo
+    root,slot=sys.argv[1:3]
+    day=datetime.now(ZoneInfo("America/Los_Angeles")).date().isoformat()
+    path=Path("ai_article_selection_cache.json")
+    path.write_text(json.dumps({"version":"any","items":{},"selection_quota_usage":{
+        "pacific_day":day,"calls":30,"overflow_calls":25,"completed_daily_slots":["17 10 * * *"]}}))
+    os.environ["CT_ATLAS_SCHEDULE"]=slot
+    sys.path.insert(0,os.path.join(root,"tools"))
+    spec=importlib.util.spec_from_file_location("quota_safe",os.path.join(root,"tools","run_collector_quota_safe.py"))
+    wrapper=importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(wrapper)
+    def crash(): raise RuntimeError("Too many Google News queries failed")
+    wrapper.collector.main=crash
+    raised=None
+    try: wrapper.run_main()
+    except RuntimeError as error: raised=str(error)
+    usage=json.loads(path.read_text())["selection_quota_usage"]
+    print(json.dumps({"raised":raised,"slots":usage["completed_daily_slots"],
+                      "caps":wrapper.recovery_caps(usage,day,30,60,25,50)}))
 ''')
 
 
@@ -144,7 +173,11 @@ LANE_SELECTION = textwrap.dedent('''
     collector.AI_SELECTION_ENABLED = True
     collector.AI_SELECTION_TRANSIENT_PAUSE_SECONDS = 0
     wrapper.official_result = lambda event: None
-    wrapper.time = SimpleNamespace(monotonic=lambda: 0.0, sleep=lambda seconds: None)
+    waits = []
+    # "late": the run reaches selection 195 minutes in, the wait would pass the deadline.
+    started = wrapper.PROCESS_START
+    wrapper.time = SimpleNamespace(monotonic=lambda: started + (195 * 60 if mode == "late" else 0),
+                                   sleep=lambda seconds: waits.append(seconds) if seconds > 60 else None)
     cache = {"version": collector.AI_SELECTION_VERSION, "items": {}}
     collector.load_selection_cache = lambda: cache
     wrapper.SAVE_CACHE = lambda current: cache.update(current)
@@ -173,6 +206,10 @@ LANE_SELECTION = textwrap.dedent('''
         batches.append([candidate["event_id"] for candidate in batch])
         fail = len(batches) == 2 or mode == "cached"
         if fail and mode in ("transient", "cached"):
+            raise collector.AISelectionTransientError("Temporary provider failure")
+        if mode == "stubborn" and batches[-1] == ["r2"]:
+            raise collector.AISelectionTransientError("Temporary provider failure")
+        if (mode == "outage" and len(batches) <= 5) or (mode in ("long_outage", "late") and batches[-1][0].startswith("r")):
             raise collector.AISelectionTransientError("Temporary provider failure")
         if fail and mode == "incomplete":
             raise collector.AISelectionIncompleteError("Missing result in response")
@@ -211,9 +248,14 @@ LANE_SELECTION = textwrap.dedent('''
         result = collector.ai_select_events(events, lane="recent")
         collector.ai_select_events(events, lane="recent")
         collector.ai_select_events([], lane="backlog")
+    elif mode in ("outage", "long_outage", "late"):
+        events = [event("r%d" % n) for n in range(1, 8)]
+        result = collector.ai_select_events(events, lane="recent")
+        result = result + collector.ai_select_events([event("b1", 20), event("b2", 19)], lane="backlog")
+        result = result + collector.ai_select_events([event("m1", 45)], lane="maintenance")
     else:
         result = collector.ai_select_events(events, lane="recent")
-    print(json.dumps({"retained": [item["id"] for item in result], "sent": sent, "batches": batches,
+    print(json.dumps({"retained": [item["id"] for item in result], "sent": sent, "batches": batches, "waits": waits,
                       "telemetry": collector.selection_runtime_status(), "background": background,
                       "complete": [collector.selection_review_complete(item) for item in events],
                       "mutated_pending": [item["id"] for item in events if not collector.selection_review_complete(item)
@@ -291,6 +333,28 @@ class QuotaSafeWrapperTests(unittest.TestCase):
         self.assertFalse(data["hit429"], "3.5 Flash Lite itself is not out of quota")
         self.assertEqual(len(data["errors"]), 3)
 
+    def test_a_per_minute_429_on_the_detour_goes_back_to_the_retries(self):
+        # One overflow 429 during a primary 5xx stopped the lane with 0 of 1,900
+        # reviewed, and the older lane then took the primary calls.
+        per_minute = "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+        data = self.overflow("on", json.dumps([503, [429, per_minute]]))
+        self.assertEqual(data["answers"][0], 503, "the collector sees the primary's failure and retries")
+        self.assertFalse(data["overflow429"], "a one-minute limit leaves the overflow model available")
+        self.assertEqual(data["sent"], ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.1-flash-lite"])
+        self.assertEqual(data["failures"], {"gemini-3.5-flash-lite:503": 1, "gemini-3.1-flash-lite:429": 1})
+
+    def test_a_429_on_the_detour_around_a_timeout_raises_the_timeout(self):
+        data = self.overflow("on", json.dumps(["timeout", 429]))
+        self.assertIn("network: slow", data["errors"])
+        self.assertFalse(data["overflow429"])
+
+    def test_a_per_day_429_on_the_detour_closes_the_overflow_model_only(self):
+        per_day = "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+        data = self.overflow("on", json.dumps([503, [429, per_day]]))
+        self.assertEqual(data["answers"], [503], "that batch still goes back to the retries")
+        self.assertTrue(data["overflow429"])
+        self.assertEqual(data["sent"], ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite"])
+
     def test_without_an_overflow_model_the_budget_stops_the_selection(self):
         data = self.overflow("off")
         self.assertEqual(data["sent"], ["gemini-3.5-flash-lite"])
@@ -308,6 +372,25 @@ class QuotaSafeWrapperTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as empty:
             data=run(QUOTA_RESTORE,os.getcwd(),cwd=empty)
         self.assertEqual(data,{"primary":17,"overflow":9})
+
+    def slot_crash(self, slot):
+        import os
+        import tempfile
+        with tempfile.TemporaryDirectory() as empty:
+            return run(SLOT_CRASH, os.getcwd(), slot, cwd=empty)
+
+    def test_a_slot_that_crashed_still_releases_its_reservation(self):
+        # The ledger kept only slot 1, so recovery_caps answered (0, 0) instead of
+        # (30, 25) for the rest of that day.
+        data = self.slot_crash("17 18 * * *")
+        self.assertEqual(data["raised"], "Too many Google News queries failed", "the failure still reaches the run")
+        self.assertEqual(data["slots"], ["17 10 * * *", "17 18 * * *"])
+        self.assertEqual(data["caps"], [30, 25])
+
+    def test_a_run_that_is_no_timed_slot_releases_nothing(self):
+        data = self.slot_crash("")
+        self.assertEqual(data["slots"], ["17 10 * * *"])
+        self.assertEqual(data["caps"], [0, 0])
 
     def test_recent_and_backlog_use_separate_newest_first_batches(self):
         data = self.lanes("mixed")
@@ -357,7 +440,7 @@ class QuotaSafeWrapperTests(unittest.TestCase):
         # A temporary error skips its batch (r2 stays queued) and the lane goes
         # on (r3 is reviewed); an incomplete answer still stops the lane.
         for mode, reason, retained, complete in (
-                ("transient", "transient_error", ["r1", "r3"], [True, False, True]),
+                ("stubborn", "transient_error", ["r1", "r3"], [True, False, True]),
                 ("incomplete", "incomplete_response", ["r1"], [True, False, False])):
             with self.subTest(mode=mode):
                 data = self.lanes(mode)
@@ -366,6 +449,50 @@ class QuotaSafeWrapperTests(unittest.TestCase):
                 self.assertEqual(data["telemetry"]["lanes"]["recent"]["reasons"], [reason])
                 self.assertFalse(data["telemetry"]["budget_reached"])
                 self.assertEqual(data["complete"], complete)
+
+    def test_a_skipped_batch_gets_the_second_pass_and_the_run_is_complete(self):
+        data = self.lanes("transient")
+        self.assertEqual(data["batches"], [["r1"], ["r2"], ["r3"], ["r2"]])
+        self.assertEqual(data["retained"], ["r1", "r3", "r2"])
+        self.assertEqual(data["complete"], [True, True, True])
+        self.assertEqual(data["waits"], [900])
+        recent = data["telemetry"]["lanes"]["recent"]
+        self.assertEqual((recent["new_reviews"], recent["pending"], recent["reasons"]), (3, 0, []))
+        self.assertFalse(data["telemetry"]["partial"])
+
+    def test_after_an_outage_the_recovered_gemini_reviews_recent_articles_first(self):
+        # 5 November 2026, 23:11 UTC: recent 0 reviewed, then backlog 64 reviewed
+        # on the recovered Gemini while 2,616 recent articles waited.
+        data = self.lanes("outage")
+        self.assertEqual(data["sent"], ["recent"] * 7 + ["backlog"] * 2 + ["maintenance"])
+        self.assertEqual(data["waits"], [900], "one wait, before the second pass")
+        lanes = data["telemetry"]["lanes"]
+        self.assertEqual((lanes["recent"]["new_reviews"], lanes["recent"]["pending"]), (7, 0))
+        self.assertEqual((lanes["backlog"]["new_reviews"], lanes["backlog"]["pending"]), (2, 0))
+
+    def test_older_lanes_do_not_start_while_an_outage_holds_recent_articles_back(self):
+        data = self.lanes("long_outage")
+        self.assertEqual(data["sent"], [])
+        self.assertFalse([batch for batch in data["batches"] if not batch[0].startswith("r")])
+        self.assertEqual(len(data["batches"]), 10, "two passes of five failed batches, and no third")
+        lanes = data["telemetry"]["lanes"]
+        self.assertEqual(lanes["recent"]["pending"], 7)
+        self.assertEqual(lanes["recent"]["reasons"], ["transient_error"])
+        for lane, waiting in (("backlog", 2), ("maintenance", 1)):
+            self.assertEqual(lanes[lane]["pending"], waiting)
+            self.assertEqual(lanes[lane]["reasons"], ["transient_error"])
+
+    def test_no_second_pass_when_the_wait_would_run_past_the_deadline(self):
+        data = self.lanes("late")
+        self.assertEqual(data["waits"], [])
+        self.assertEqual(len(data["batches"]), 5)
+        self.assertEqual(data["telemetry"]["lanes"]["backlog"]["reasons"], ["transient_error"])
+
+    def test_a_healthy_run_waits_for_nothing(self):
+        self.assertEqual(self.lanes("mixed")["waits"], [])
+
+    def test_a_lane_stopped_by_the_budget_gets_no_second_pass(self):
+        self.assertEqual(self.lanes("budget")["waits"], [])
 
     def test_cached_retained_and_rejected_decisions_do_not_count_as_new_ai_reviews(self):
         data = self.lanes("cached")

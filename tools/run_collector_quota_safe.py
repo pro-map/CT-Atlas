@@ -34,6 +34,8 @@ OVERFLOW_DAY_BUDGET=max(0,int(os.getenv("AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET
 # No overflow request this late in a run: the geolocation and the commit
 # steps still need their time.
 OVERFLOW_DEADLINE_MINUTES=float(os.getenv("AI_SELECTION_OVERFLOW_DEADLINE_MINUTES","200") or 200)
+# The wait before the recent lane's second pass after a temporary failure.
+RECENT_RETRY_WAIT_SECONDS=max(0.0,float(os.getenv("AI_SELECTION_RECENT_RETRY_WAIT_SECONDS","900") or 900))
 PROCESS_START=time.monotonic()
 PACIFIC=ZoneInfo("America/Los_Angeles")
 collector.AI_SELECTION_BATCH_SIZE=BATCH
@@ -228,9 +230,13 @@ def pace():
         if wait>0: time.sleep(wait)
     last_gemini_call=time.monotonic()
 
-def overflow_post(url,args,kwargs):
+def overflow_post(url,args,kwargs,primary_failure=None):
     """The same selection request on the overflow model, without mutating the
-    collector's retry body or exceeding either lane or free-tier envelope."""
+    collector's retry body or exceeding either lane or free-tier envelope.
+
+    primary_failure is the primary's temporary failure when this is only a
+    detour around it: a 429 then goes back to the collector's retry and skip
+    logic instead of stopping the lane on what may be a one-minute limit."""
     global overflow_calls,overflow429,budget_hit
     check_lane_budget()
     overflow_calls+=1
@@ -246,6 +252,13 @@ def overflow_post(url,args,kwargs):
     if getattr(r,"status_code",None) in TRANSIENT_STATUSES:
         SELECTION_FAILURES[f"{OVERFLOW_MODEL}:{r.status_code}"]+=1
     if getattr(r,"status_code",None)==429:
+        SELECTION_FAILURES[f"{OVERFLOW_MODEL}:429"]+=1
+        if primary_failure is not None:
+            # Only a per-day answer closes the overflow model for this run.
+            overflow429=overflow429 or "PerDay" in str(getattr(r,"text","") or "")
+            print(f"   Overflow model {OVERFLOW_MODEL} returned 429; back to the retries on the primary model.")
+            if isinstance(primary_failure,Exception): raise primary_failure
+            return primary_failure
         overflow429=True
         print(f"   Overflow model {OVERFLOW_MODEL} returned 429; stopping the selection.")
         quota_stop("overflow_quota_429",f"Gemini overflow model {OVERFLOW_MODEL} returned 429. Cached progress is preserved.")
@@ -285,14 +298,14 @@ def post(url,*args,**kwargs):
         SELECTION_FAILURES[f"{collector.AI_SELECTION_MODEL}:{type(error).__name__}"]+=1
         if not overflow_left(): raise
         print(f"   Gemini article-selection {type(error).__name__}; trying this batch on {OVERFLOW_MODEL}.")
-        return overflow_post(url,args,kwargs)
+        return overflow_post(url,args,kwargs,primary_failure=error)
     if sel and getattr(r,"status_code",None) in TRANSIENT_STATUSES:
         # 5 November 2026: 3.5 Flash Lite answered 5xx through two runs while
         # 3.1 Flash Lite worked, and the map got no new events for a day.
         SELECTION_FAILURES[f"{collector.AI_SELECTION_MODEL}:{r.status_code}"]+=1
         if overflow_left():
             print(f"   Gemini article-selection HTTP {r.status_code}; trying this batch on {OVERFLOW_MODEL}.")
-            return overflow_post(url,args,kwargs)
+            return overflow_post(url,args,kwargs,primary_failure=r)
     if sel and getattr(r,"status_code",None)==429:
         hit429=True; primary_spent=True
         try: detail=" ".join(json.dumps(r.json(),ensure_ascii=False).split())[:1000]
@@ -375,6 +388,16 @@ def recover(events):
     return selected
 
 
+def recent_held_back():
+    """Recent candidates left undecided by a temporary failure, not by the budget."""
+    return (any(not record["reviewed"] for record in LANE_RECORDS["recent"].values())
+            and any(error["reason"]=="transient_error" for error in SELECTION_ERRORS["recent"]))
+
+
+def selection_budget_left():
+    return (not primary_spent and calls<RUN_BUDGET and today_calls()<DAY_BUDGET) or overflow_left()
+
+
 def _select_lane(events,lane):
     global auto_count,partial,recent_count,backlog_count,ACTIVE_LANE,CURRENT_FAILURE,LANE_SKIPPED_BATCH
     previous_lane=ACTIVE_LANE; ACTIVE_LANE=lane; CURRENT_FAILURE=None; LANE_SKIPPED_BATCH=False
@@ -432,7 +455,11 @@ def _select_lane(events,lane):
     if OVERFLOW_MODEL: print(f"Overflow: {OVERFLOW_MODEL}, {OVERFLOW_RUN_BUDGET}/run, {OVERFLOW_DAY_BUDGET}/Pacific day | Used before run: {START_OVERFLOW}")
     try:
         try:
-            out=AI_SELECT(remaining,lane=lane) if remaining else []
+            if remaining and lane!="recent" and recent_held_back():
+                record_failure("transient_error","Older reviews wait while a temporary failure holds recent articles back.")
+                out=None
+            else:
+                out=AI_SELECT(remaining,lane=lane) if remaining else []
         except RECOGNIZED_ERRORS as error:
             if CURRENT_FAILURE is None:
                 reason="transient_error" if isinstance(error,collector.AISelectionTransientError) else "incomplete_response" if isinstance(error,collector.AISelectionIncompleteError) else "selection_quota"
@@ -465,6 +492,22 @@ def _select_lane(events,lane):
         ACTIVE_LANE=previous_lane
 
 
+def _select_recent(events):
+    """One more pass after a wait, so a short outage does not end recent review.
+
+    5 November 2026, 23:11 UTC: recent stopped at 0 reviewed, then the older lane
+    reviewed 64 articles on the recovered Gemini while 2,616 recent ones waited.
+    """
+    kept=_select_lane(events,"recent")
+    resumes_at=(time.monotonic()-PROCESS_START+RECENT_RETRY_WAIT_SECONDS)/60
+    if not recent_held_back() or not selection_budget_left() or resumes_at>=OVERFLOW_DEADLINE_MINUTES:
+        return kept
+    waiting=[e for e in events if not LANE_RECORDS["recent"][original_fingerprint(e)]["reviewed"]]
+    print(f"Recent lane: {len(waiting)} candidate(s) held back by a temporary failure; second pass in {RECENT_RETRY_WAIT_SECONDS:.0f}s.")
+    time.sleep(RECENT_RETRY_WAIT_SECONDS)
+    return kept+_select_lane(waiting,"recent")
+
+
 def optimized_select(events,lane=None):
     """Review recent reporting before old backlog; each uses separate batches.
 
@@ -475,12 +518,14 @@ def optimized_select(events,lane=None):
         raise ValueError(f"Unknown selection lane: {lane}")
     events=list(events)
     if not collector.AI_SELECTION_ENABLED: return events
+    if lane=="recent":
+        return _select_recent(events)
     if lane is not None:
         return _select_lane(events,lane)
     cutoff=datetime.now(timezone.utc)-timedelta(days=RECENT_DAYS)
     recent=[e for e in events if dtkey(e)>=cutoff]
     backlog=[e for e in events if dtkey(e)<cutoff]
-    return _select_lane(recent,"recent")+_select_lane(backlog,"backlog")
+    return _select_recent(recent)+_select_lane(backlog,"backlog")
 collector.ai_select_events=optimized_select
 
 def prune(events,aged_out=None):
@@ -524,13 +569,19 @@ def weekly(events,existing_weekly=None):
     return WEEKLY(events,existing_weekly=existing_weekly)
 collector.generate_weekly_analysis=weekly
 
-def report_selection_health():
-    """Annotations are public, so a run that starves the map cannot go unnoticed."""
-    recent=runtime_telemetry()["lanes"]["recent"]
+def report_selection_failures():
+    """Public, unlike the run logs. tools/finalize_daily_status.py judges the run."""
     if SELECTION_FAILURES:
         print("::warning title=Gemini selection failures::"+", ".join(f"{key} x{count}" for key,count in sorted(SELECTION_FAILURES.items())))
-    if recent["pending"] and not recent["new_reviews"]:
-        print(f"::error title=No new articles reviewed::{recent['pending']} recent articles are waiting and this run reviewed none of them: the map gets no new events.")
+
+
+def release_slot():
+    """A slot that ran gives up its reservation, even after a crash: recovery_caps
+    otherwise goes on reserving for it and recovery stays closed for the day."""
+    slot=os.getenv('CT_ATLAS_SCHEDULE','')
+    if not RESUME_PENDING and slot in SLOTS and pacific_day()==START_DAY:
+        COMPLETED_SLOTS.add(slot)
+        collector.save_selection_cache(collector.load_selection_cache())
 
 
 def run_main():
@@ -547,11 +598,8 @@ def run_main():
     try:
         collector.main()
     finally:
-        report_selection_health()
-    slot=os.getenv('CT_ATLAS_SCHEDULE','')
-    if not RESUME_PENDING and slot in SLOTS and pacific_day()==START_DAY:
-        COMPLETED_SLOTS.add(slot)
-        collector.save_selection_cache(collector.load_selection_cache())
+        report_selection_failures()
+        release_slot()
 
 if __name__=="__main__": run_main()
 
