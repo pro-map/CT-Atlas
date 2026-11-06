@@ -17,7 +17,7 @@ class FixedDate extends Date {
 
 function reader({events=[],allowed=true,session='group-p-1',eventsOk=true}={}){
   const calls={gate:0,events:0};
-  const shared=vm.createContext({Date:FixedDate,Intl,Response,console,TextEncoder,crypto:globalThis.crypto});
+  const shared=vm.createContext({Date:FixedDate,Intl,Response,ReadableStream,console,TextEncoder,crypto:globalThis.crypto});
   vm.runInContext(strip(fs.readFileSync('cloudflare-worker/shared.js','utf8')),shared);
   const source=fs.readFileSync('cloudflare-worker/database-query.js','utf8');
   const names=source.match(/^import\s*\{([\s\S]*?)\}\s*from\s*"\.\/shared.js"/m)[1]

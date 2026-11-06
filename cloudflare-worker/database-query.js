@@ -6,6 +6,7 @@
 import {
   cleanText,
   jsonResponse,
+  jsonStreamResponse,
   gateCall,
   normalizeUsername,
   isAllowedUser,
@@ -27,6 +28,8 @@ const DATABASE_QUERY_VERSION = "database-query-v5-unified-background";
 // cap only guards against a runaway response.
 const MAX_DATABASE_RESULTS = 32000;
 const MAX_BACKGROUND_RESULTS = 8000;
+// Rows built and sent at a time. Every field of a row is capped, so this bounds a batch.
+const ROW_BATCH = 256;
 const RADNUC_CATEGORY = "Radiological/Nuclear";
 const BACKGROUND_SCOPE_SQL = `kind = 'radnuc_background'
   AND category = 'Radiological/Nuclear' AND primary_event_type = 'BACKGROUND_INFO'`;
@@ -144,10 +147,14 @@ async function fetchRadnucBackground(env, filters, now) {
   }
 }
 
+function eventRowPublished(event) {
+  const date = parseEventDate(event);
+  return date ? date.toISOString() : cleanText(event.published, 40);
+}
+
 // Explicit fields -- the ones the list, the Excel export and the map export
 // read -- never a copy of the whole event.
 function databaseEventRow(event, index) {
-  const date = parseEventDate(event);
   const number = value => (Number.isFinite(Number(value)) ? Number(value) : null);
   const url = cleanText(event.url, 1200);
   return {
@@ -161,7 +168,7 @@ function databaseEventRow(event, index) {
     original_title: cleanText(event.original_title, 400),
     original_summary: cleanText(event.original_summary, 900),
     original_language: cleanText(event.original_language || event.collection_language, 12),
-    published: date ? date.toISOString() : cleanText(event.published, 40),
+    published: eventRowPublished(event),
     country: cleanText(event.country, 100),
     country_code: cleanText(event.country_code, 8),
     region: cleanText(event.region, 100),
@@ -204,6 +211,28 @@ async function authenticate(request, body, env) {
   return null;
 }
 
+// A list's JSON, a batch at a time and without its brackets. Each entry is dropped as its row
+// goes out, so memory falls as the answer is sent.
+function* rowBatches(entries, toRow) {
+  for (let start = 0; start < entries.length; start += ROW_BATCH) {
+    const rows = entries.slice(start, start + ROW_BATCH).map(toRow);
+    entries.fill(null, start, start + ROW_BATCH);
+    yield (start ? "," : "") + JSON.stringify(rows).slice(1, -1);
+  }
+}
+
+// The text of JSON.stringify({ ...summary, events, background_articles }), piece by piece: the
+// rows, their text and the whole body cost more than the records they come from, and together
+// passed the Worker's 128 MB before the database reached its plateau.
+function* databaseEventsJson(summary, entries, backgroundArticles) {
+  const [beforeItems, afterItems] = JSON.stringify({ ...backgroundArticles, items: [] }).split('"items":[]');
+  yield `${JSON.stringify(summary).slice(0, -1)},"events":[`;
+  yield* rowBatches(entries, entry => entry.event ? databaseEventRow(entry.event, entry.index) : entry);
+  yield `],"background_articles":${beforeItems}"items":[`;
+  yield* rowBatches(backgroundArticles.items, row => row);
+  yield `]${afterItems}}`;
+}
+
 async function handleDatabaseEvents(request, env) {
   let body;
   try { body = await request.json(); } catch { return jsonResponse({ error: "Invalid JSON request." }, 400, env); }
@@ -236,12 +265,13 @@ async function handleDatabaseEvents(request, env) {
     .map(event => ({ event, time: parseEventDate(event)?.getTime() || 0 }))
     .sort((a, b) => b.time - a.time);
   const backgroundArticles = await fetchRadnucBackground(env, filters, now);
-  const operationalRows = matched.map((item, index) => databaseEventRow(item.event, index));
-  const rows = [...operationalRows, ...backgroundArticles.items]
+  // Rows are built as they are sent: an entry keeps its record and the date that places it.
+  const operationalEntries = matched.map((item, index) => ({ event: item.event, index, published: eventRowPublished(item.event) }));
+  const entries = [...operationalEntries, ...backgroundArticles.items]
     .sort((a, b) => (Date.parse(b.published || b.collected_at) || 0) - (Date.parse(a.published || a.collected_at) || 0));
   const total = matched.length + backgroundArticles.total;
 
-  return jsonResponse({
+  const summary = {
     version: DATABASE_QUERY_VERSION,
     scope: databaseFiltersLabel(filters),
     database_version: cleanText(db?.last_updated || db?.updated_at || "unknown", 100),
@@ -250,10 +280,9 @@ async function handleDatabaseEvents(request, env) {
     operational_total: matched.length,
     incomplete: backgroundArticles.included && !backgroundArticles.available,
     truncated: total > MAX_DATABASE_RESULTS,
-    groups,
-    events: rows.slice(0, MAX_DATABASE_RESULTS),
-    background_articles: backgroundArticles
-  }, 200, env);
+    groups
+  };
+  return jsonStreamResponse(databaseEventsJson(summary, entries.slice(0, MAX_DATABASE_RESULTS), backgroundArticles), 200, env);
 }
 
 export { handleDatabaseEvents, databaseEventRow, backgroundArticleRow, fetchRadnucBackground, parisDayBounds,
