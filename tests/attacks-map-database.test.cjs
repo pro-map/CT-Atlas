@@ -438,6 +438,7 @@ function workerContext(events,sessionUser='analyst'){
     gateCall:async()=>({ok:true,json:async()=>({username:sessionUser})}),
     fetchEventsDatabase:async()=>({ok:true,db:{last_updated:'2026-09-30T10:00:00Z',events}}),
     jsonResponse:(body,status)=>({status,body}),
+    jsonStreamResponse:(pieces,status)=>({status,body:JSON.parse([...pieces].join(''))}),
     Response,console
   });
   vm.runInContext(strip(fs.readFileSync('cloudflare-worker/database-query.js','utf8')),c);

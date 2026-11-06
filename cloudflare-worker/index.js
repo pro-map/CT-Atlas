@@ -41,6 +41,53 @@ import { handleSourceImage, SOURCE_PREVIEW_VERSION } from "./source-preview.js";
 import { handleReportIllustration, illustrationCandidates, REPORT_ILLUSTRATION_VERSION } from "./report-illustration.js";
 import { fetchBackgroundContext, corpusStats } from "./background-corpus.js";
 import { handleDatabaseEvents } from "./database-query.js";
+
+// All a report takes from the database: its cached answer or, failing that, the selection. The
+// parsed copy lives in this frame only: a report goes on to wait for the archive and the model,
+// up to four at a time, and a local of fetch() stays reachable across those awaits.
+async function readReportInput(env, { region, topic, actorGroup, periodDays, compare }) {
+const eventsDatabase = await fetchEventsDatabase(env);
+if (!eventsDatabase.ok) return null;
+const db = eventsDatabase.db;
+const allEvents = Array.isArray(db) ? db : (Array.isArray(db.events) ? db.events : []);
+const databaseVersion = cleanText(db.updated_at || db.generated_at || db.last_updated || "unknown", 100);
+const cacheKey = await sha256(JSON.stringify({ region, topic, actorGroup, periodDays, compare, databaseVersion, version: REPORT_GENERATOR_VERSION }));
+const cachedResponse = await gateCall(env, "/cache-get", { cacheKey });
+const cached = await cachedResponse.json();
+if (cached?.hit && cached?.report) return { cachedReport: cached.report };
+const now = new Date();
+const currentStart = new Date(now.getTime() - periodDays * 86400000);
+const previousStart = new Date(currentStart.getTime() - periodDays * 86400000);
+// Held reports await a second outlet: the map, the counts and reports all leave them out.
+const matching = allEvents.filter(e => e.held_for_corroboration !== true && matchesRegion(e, region) && matchesTopic(e, topic) && matchesGroup(e, actorGroup));
+const current = [], previous = [];
+for (const event of matching) {
+const dt = parseEventDate(event);
+if (!dt) continue;
+if (dt >= currentStart && dt <= now) current.push(event);
+else if (compare && dt >= previousStart && dt < currentStart) previous.push(event);
+}
+current.sort((a,b)=>priority(b)-priority(a)); previous.sort((a,b)=>priority(b)-priority(a));
+// Assign a sequential source_id (S01, S02...) to every event handed to
+// Gemini, in the same [Sxx] convention Deep Search already uses, so the
+// model can cite a specific record instead of writing unsupported prose --
+// and so the response can carry back a real, clickable sources list plus a
+// citation-coverage metric instead of a plain block of text.
+let sourceSeq = 0;
+const withSourceId = event => ({ ...compactEvent(event), source_id: `S${String(++sourceSeq).padStart(2, "0")}` });
+const currentSourced = current.slice(0, MAX_EVENTS_CURRENT).map(withSourceId);
+const previousSourced = compare ? previous.slice(0, MAX_EVENTS_PREVIOUS).map(withSourceId) : [];
+return {
+databaseVersion, cacheKey, now, currentStart, previousStart, currentSourced, previousSourced,
+currentStats: stats(current),
+previousStats: stats(previous),
+// The events' original-language headlines travel along for story matching
+// only (an archive row repeating one in its own language is not sent again);
+// the Gemini dataset keeps the compact records.
+storyEvents: currentSourced.map((event, index) => ({ ...event, original_title: cleanText(current[index]?.original_title, 280) }))
+};
+}
+
 export default {
 async fetch(request, env, ctx) {
 // A fresh per-request copy, never a mutation of the shared env object --
@@ -58,7 +105,7 @@ if (url.pathname === "/database-stats" && request.method === "GET") {
 return jsonResponse({ background_corpus: await corpusStats(env) }, 200, env);
 }
 if (url.pathname === "/health" && request.method === "GET") {
-return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.40", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, background_corpus: typeof env.BACKGROUND_DB?.prepare === "function", feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_exchange_address_version: EXCHANGE_ADDRESS_VERSION, crypto_exchange_attribution_version: EXCHANGE_ATTRIBUTION_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_risk_version: RISK_VERSION, crypto_auto_monitoring: true, sanctions_version: SANCTIONS_VERSION, sanctions: await sanctionsHealth(env), crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, report_illustration_version: REPORT_ILLUSTRATION_VERSION, schedule_dispatcher_configured: Boolean(env.GITHUB_DISPATCH_TOKEN),crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, crypto_exchange_label_providers: { tronscan_enabled: env.TRONSCAN_TAG_LOOKUP_ENABLED === "true" && Boolean(env.TRONSCAN_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
+return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.41", deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, background_corpus: typeof env.BACKGROUND_DB?.prepare === "function", feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_exchange_address_version: EXCHANGE_ADDRESS_VERSION, crypto_exchange_attribution_version: EXCHANGE_ATTRIBUTION_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_risk_version: RISK_VERSION, crypto_auto_monitoring: true, sanctions_version: SANCTIONS_VERSION, sanctions: await sanctionsHealth(env), crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, report_illustration_version: REPORT_ILLUSTRATION_VERSION, schedule_dispatcher_configured: Boolean(env.GITHUB_DISPATCH_TOKEN),crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, crypto_exchange_label_providers: { tronscan_enabled: env.TRONSCAN_TAG_LOOKUP_ENABLED === "true" && Boolean(env.TRONSCAN_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
 }
 if (url.pathname === "/health/status" && request.method === "GET") {
 return handleHealthStatus(env, {
@@ -252,12 +299,6 @@ if (!token) return jsonResponse({ error: "Authenticated session required. Please
 const sessionResponse = await gateCall(env, "/session-get", { session_token: token });
 const session = await sessionResponse.json();
 if (!sessionResponse.ok || session?.username !== username) return jsonResponse({ error: "Unauthorized session." }, 401, env);
-const eventsDatabase = await fetchEventsDatabase(env);
-if (!eventsDatabase.ok) return jsonResponse({ error: "Unable to read current events database." }, 503, env);
-const db = eventsDatabase.db;
-const allEvents = Array.isArray(db) ? db : (Array.isArray(db.events) ? db.events : []);
-const databaseVersion = cleanText(db.updated_at || db.generated_at || db.last_updated || "unknown", 100);
-const cacheKey = await sha256(JSON.stringify({ region, topic, actorGroup, periodDays, compare, databaseVersion, version: REPORT_GENERATOR_VERSION }));
 const permitResponse = await gateCall(env, "/acquire", { username, kind: "report_generator", details: { region, topic, actor_group: actorGroup, period_days: periodDays, compare } });
 const permit = await permitResponse.json();
 if (!permitResponse.ok || !permit?.permit_id) return jsonResponse({ error: permit?.error || "Report capacity temporarily unavailable.", retry_after_seconds: permit?.retry_after_seconds || 20 }, permitResponse.status || 429, env);
@@ -267,50 +308,26 @@ const logId = cleanText(permit.log_id, 200);
 const logOutcome = (outcome, title = "") => logId ? { id: logId, outcome, ...(title ? { title } : {}) } : undefined;
 const recordOutcome = outcome => { if (logId) ctx.waitUntil(gateCall(env, "/usage-log-update", { username, log_update: logOutcome(outcome) }).catch(() => {})); };
 try {
-const cachedResponse = await gateCall(env, "/cache-get", { cacheKey });
-const cached = await cachedResponse.json();
-if (cached?.hit && cached?.report) {
+// After the gate, so that a refused request, or a fifth report at once, never parses the database.
+const input = await readReportInput(env, { region, topic, actorGroup, periodDays, compare });
+if (!input) { recordOutcome("failed"); return jsonResponse({ error: "Unable to read current events database." }, 503, env); }
+if (input.cachedReport) {
 const commitResponse = await gateCall(env, "/commit-report", { permitId, username });
 if (!commitResponse.ok) {
 const commitError = await commitResponse.json().catch(()=>({}));
 throw new Error(commitError?.error || "Unable to finalize report allowance.");
 }
-await gateCall(env, "/usage-increment", { username, metrics: { cached_reports: 1 }, log_update: logOutcome("cached", cached.report.title) });
-return jsonResponse({ ...cached.report, cached: true }, 200, env);
+await gateCall(env, "/usage-increment", { username, metrics: { cached_reports: 1 }, log_update: logOutcome("cached", input.cachedReport.title) });
+return jsonResponse({ ...input.cachedReport, cached: true }, 200, env);
 }
-const now = new Date();
-const currentStart = new Date(now.getTime() - periodDays * 86400000);
-const previousStart = new Date(currentStart.getTime() - periodDays * 86400000);
-// Held reports await a second outlet: the map, the counts and reports all leave them out.
-const matching = allEvents.filter(e => e.held_for_corroboration !== true && matchesRegion(e, region) && matchesTopic(e, topic) && matchesGroup(e, actorGroup));
-const current = [], previous = [];
-for (const event of matching) {
-const dt = parseEventDate(event);
-if (!dt) continue;
-if (dt >= currentStart && dt <= now) current.push(event);
-else if (compare && dt >= previousStart && dt < currentStart) previous.push(event);
-}
-if (!current.length) { recordOutcome("no_events"); return jsonResponse({ error: "No matching events found for the selected current period." }, 422, env); }
-current.sort((a,b)=>priority(b)-priority(a)); previous.sort((a,b)=>priority(b)-priority(a));
-// Assign a sequential source_id (S01, S02...) to every event handed to
-// Gemini, in the same [Sxx] convention Deep Search already uses, so the
-// model can cite a specific record instead of writing unsupported prose --
-// and so the response can carry back a real, clickable sources list plus a
-// citation-coverage metric instead of a plain block of text.
-let sourceSeq = 0;
-const withSourceId = event => ({ ...compactEvent(event), source_id: `S${String(++sourceSeq).padStart(2, "0")}` });
-const currentSourced = current.slice(0, MAX_EVENTS_CURRENT).map(withSourceId);
-const previousSourced = compare ? previous.slice(0, MAX_EVENTS_PREVIOUS).map(withSourceId) : [];
+const { databaseVersion, cacheKey, now, currentStart, previousStart, currentSourced, previousSourced, currentStats, previousStats, storyEvents } = input;
+if (!currentSourced.length) { recordOutcome("no_events"); return jsonResponse({ error: "No matching events found for the selected current period." }, 422, env); }
 const allSourced = [...currentSourced, ...previousSourced];
 // Wider reporting from the D1 background corpus (never map events); an
 // empty list when the corpus is unavailable, so reports still work without it.
-// The events' original-language headlines travel along for story matching
-// only (an archive row repeating one in its own language is not sent again);
-// the Gemini dataset below keeps the compact records.
-const storyEvents = currentSourced.map((event, index) => ({ ...event, original_title: cleanText(current[index]?.original_title, 280) }));
 const background = await fetchBackgroundContext(env, { events: storyEvents, start: currentStart, end: now });
 const contextItems = background.items;
-const dataset = { selection: { region, topic, actor_group: actorGroup, period_days: periodDays, compare }, database_version: databaseVersion, current_period: { start: currentStart.toISOString(), end: now.toISOString(), stats: stats(current), priority_events: currentSourced }, comparison_period: compare ? { start: previousStart.toISOString(), end: currentStart.toISOString(), stats: stats(previous), priority_events: previousSourced } : null, background_context: { note: "Reporting that is NOT on the map; see BACKGROUND CONTEXT RULES.", items: contextItems.map(({ url, ...item }) => item) } };
+const dataset = { selection: { region, topic, actor_group: actorGroup, period_days: periodDays, compare }, database_version: databaseVersion, current_period: { start: currentStart.toISOString(), end: now.toISOString(), stats: currentStats, priority_events: currentSourced }, comparison_period: compare ? { start: previousStart.toISOString(), end: currentStart.toISOString(), stats: previousStats, priority_events: previousSourced } : null, background_context: { note: "Reporting that is NOT on the map; see BACKGROUND CONTEXT RULES.", items: contextItems.map(({ url, ...item }) => item) } };
 const generated = await callGemini(env, dataset);
 const periodLabel = periodDays === 1 ? "last 24 hours" : `last ${periodDays} days`;
 const meta = `${region === "GLOBAL" ? "Global" : region} · ${topic === "ALL" ? "All CT activity" : topic}${actorGroup === "ALL" ? "" : ` · ${actorGroup}`} · ${periodLabel}${compare ? " vs previous equivalent period" : ""} · generated ${new Date().toISOString()}`;

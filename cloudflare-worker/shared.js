@@ -274,6 +274,21 @@ function jsonResponse(body, status, env) {
   });
 }
 
+// jsonResponse for an answer too large to exist whole: `pieces` yields its JSON text in order,
+// and each piece is made only when the stream is ready for it. A piece that throws after the
+// status has gone out cuts the body short, so the client's JSON parse fails.
+function jsonStreamResponse(pieces, status, env) {
+  const encoder = new TextEncoder();
+  const body = new ReadableStream({
+    pull(controller) {
+      const { value, done } = pieces.next();
+      if (done) controller.close();
+      else controller.enqueue(encoder.encode(value));
+    }
+  });
+  return new Response(body, { status, headers: corsHeaders(env) });
+}
+
 function cleanText(value, max = 700) {
   return String(value || "").replace(/\s+/g, " ").trim().slice(0, max);
 }
@@ -1403,6 +1418,7 @@ export {
   SYSTEM_INSTRUCTION,
   corsHeaders,
   jsonResponse,
+  jsonStreamResponse,
   cleanText,
   normalizeUsername,
   isAllowedUser,
