@@ -9,7 +9,7 @@ const source=fs.readFileSync("cloudflare-worker/address-utils.js","utf8")
 function load(){
   const context=vm.createContext({});
   vm.runInContext(source,context);
-  return vm.runInContext("({sha256,base58Encode,tronAddress,isValidWalletAddress,findWalletCandidates})",context);
+  return vm.runInContext("({sha256,base58Encode,tronAddress,isValidWalletAddress})",context);
 }
 
 const hex=bytes=>Array.from(bytes,b=>b.toString(16).padStart(2,"0")).join("");
@@ -70,26 +70,4 @@ test("corrupted, mixed-case or wrong-family strings fail validation",()=>{
   }
   assert.equal(u.isValidWalletAddress("tron",VALID.bitcoin[0]),false,"a Bitcoin address is not a TRON address");
   assert.equal(u.isValidWalletAddress("dogecoin","D8vFz4p1L37jdg47HXKtW9U5dgmNhHm1J1"),false);
-});
-
-test("findWalletCandidates keeps only checksum-valid wallets, de-duplicated across the text",()=>{
-  const u=load();
-  const text="Donate 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa or 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNb; "+
-    "again 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa. TRON TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t, "+
-    "EVM 0x52908400098527886E0F7030069857D2E4169EE7 and 0x52908400098527886e0f7030069857d2e4169ee7, "+
-    "bech32 bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4.";
-  const found=Array.from(u.findWalletCandidates(text),item=>item.family+":"+item.address);
-  assert.deepEqual(found.sort(),[
-    "bitcoin:1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
-    "bitcoin:bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4",
-    "evm:0x52908400098527886E0F7030069857D2E4169EE7",
-    "tron:TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
-  ].sort());
-});
-
-test("findWalletCandidates returns nothing for ordinary prose",()=>{
-  const u=load();
-  assert.equal(u.findWalletCandidates("The 3 quick brown foxes met at 10:30 near Tunis; ref 1234567890.").length,0);
-  assert.equal(u.findWalletCandidates("").length,0);
-  assert.equal(u.findWalletCandidates(undefined).length,0);
 });

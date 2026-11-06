@@ -21,15 +21,6 @@ EXTRA_ALLOWED_ORIGINS = "https://ct-atlas-mirror.fairpeace.workers.dev,https://p
 # workflows have their own schedule: triggers, or every slot runs twice.
 SCHEDULE_DISPATCH_ENABLED = "false"
 
-# Optional Workers AI binding for title/excerpt translation. Merely adding this
-# binding does NOT turn on external Dark Web transmission. Both separate Worker
-# environment variables must be set manually after institutional approval:
-#   DARKWEB_TRANSLATION_PROVIDER=cloudflare
-#   DARKWEB_EXTERNAL_AI_APPROVED=true
-# No secrets are recorded in this file. Gemini remains the default.
-[ai]
-binding = "AI"
-
 [[durable_objects.bindings]]
 name = "REPORT_GATE"
 class_name = "ReportGate"
@@ -38,12 +29,9 @@ class_name = "ReportGate"
 type = "durable-object"
 storage = "sqlite"
 
-# Temporary (10 min) hosting of one face crop per object so reverse-image engines can fetch it
-# by URL; each object deletes itself. See face-share.js.
-[[durable_objects.bindings]]
-name = "FACE_SHARE"
-class_name = "FaceShare"
-
+# Retired with Facial Intelligence. No binding reaches this namespace; index.js keeps an empty
+# class only so the namespace is retained. Do not set state = "deleted" here: that destroys
+# its data permanently and is the owner's decision. index.js says how.
 [exports.FaceShare]
 type = "durable-object"
 storage = "sqlite"
@@ -74,9 +62,3 @@ database_id = "7c00bac7-05b6-443c-a305-c2bd9352c857"
 # them apart by controller.cron, so it must stay identical to DISPATCH_CRON.
 [triggers]
 crons = ["17 */6 * * *", "7,17,27,37,47,57 * * * *"]
-
-# Create this private Standard bucket before deploying this binding.
-# Keep public access (r2.dev and custom domains) disabled.
-[[r2_buckets]]
-binding = "DARKWEB_FILES"
-bucket_name = "ct-atlas-darkweb-files"

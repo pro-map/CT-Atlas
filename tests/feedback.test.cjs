@@ -77,16 +77,16 @@ test('buildEmail includes the selected workspace and its overall rating',()=>{
  assert.match(text,/Feedback type: \(none\)/);
 });
 
-test('buildEmail formats a social workspace bug report',()=>{
+test('buildEmail formats a crypto workspace bug report',()=>{
  const {text,subject}=harness().buildEmail('group-s-1',{
-  kind:'issue',workspace:'social',feedback_type:'bug',
-  description:'The social investigation returned no sources.'
+  kind:'issue',workspace:'crypto',feedback_type:'bug',
+  description:'The trace returned no counterparties.'
  });
- assert.match(subject,/Social Media \(Beta\)/);
+ assert.match(subject,/Crypto Intelligence/);
  assert.match(subject,/bug report/);
- assert.match(text,/Workspace: Social Media \(Beta\)/);
+ assert.match(text,/Workspace: Crypto Intelligence/);
  assert.match(text,/Feedback type: Bug report/);
- assert.match(text,/The social investigation returned no sources\./);
+ assert.match(text,/The trace returned no counterparties\./);
 });
 
 test('IP Intelligence is a selectable and accepted feedback workspace',()=>{
@@ -98,11 +98,11 @@ test('IP Intelligence is a selectable and accepted feedback workspace',()=>{
 
 test('buildEmail supports a rating and free-text comment in one submission',()=>{
  const {text,subject}=harness().buildEmail('group-i-1',{
-  kind:'evaluation',workspace:'facial',rating:5,
-  feedback_type:'comment',description:'The image quality panel is useful.'
+  kind:'evaluation',workspace:'ip',rating:5,
+  feedback_type:'comment',description:'The provider contacts panel is useful.'
  });
  assert.match(subject,/evaluation \+ comment/);
  assert.match(text,/Overall rating: 5\/5/);
  assert.match(text,/Feedback type: Comment/);
- assert.match(text,/The image quality panel is useful\./);
+ assert.match(text,/The provider contacts panel is useful\./);
 });

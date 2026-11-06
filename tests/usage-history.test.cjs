@@ -130,17 +130,17 @@ test("only the admin reads the history, for a known user and a known counter", a
 test("rows stay with their user: group-i-1 never sees group-i-10's searches, and ALL ACTIVITY is newest first", async () => {
   const h = await harness();
   const now = Date.now();
-  await h.gate.incrementUsage("group-i-10", { darkweb_searches: 1 }, now - 3000, h.gate.usageLogEntry("group-i-10", "darkweb_search", { text: "other user" }, now - 3000));
-  await h.gate.incrementUsage("group-i-1", { darkweb_searches: 1 }, now - 2000, h.gate.usageLogEntry("group-i-1", "darkweb_search", { text: "mine", outlet: "Outlet B", view: "latest" }, now - 2000));
+  await h.gate.incrementUsage("group-i-10", { event_list_searches: 1 }, now - 3000, h.gate.usageLogEntry("group-i-10", "event_list", { text: "other user" }, now - 3000));
+  await h.gate.incrementUsage("group-i-1", { event_list_searches: 1 }, now - 2000, h.gate.usageLogEntry("group-i-1", "event_list", { text: "mine", region: "GLOBAL" }, now - 2000));
   await h.gate.incrementUsage("group-i-1", { blockchain_searches: 1 }, now - 1000, h.gate.usageLogEntry("group-i-1", "blockchain", { query: "bc1qexample", chain: "bitcoin", origin: "search" }, now - 1000));
-  const darkweb = (await h.history("group-i-1", "darkweb_searches")).body.rows;
-  assert.deepEqual(darkweb.map(row => row.text), ["mine"]);
+  const list = (await h.history("group-i-1", "event_list_searches")).body.rows;
+  assert.deepEqual(list.map(row => row.text), ["mine"]);
   const all = (await h.history("group-i-1", "all")).body.rows;
-  assert.deepEqual(all.map(row => row.feature), ["blockchain", "darkweb_search"]);
+  assert.deepEqual(all.map(row => row.feature), ["blockchain", "event_list"]);
   assert.equal(all[0].query, "bc1qexample");
   assert.deepEqual((await h.history("group-i-10", "all")).body.rows.map(row => row.text), ["other user"]);
   const stats = (await h.gate.usageStats("today")).users.find(item => item.username === "group-i-1");
-  assert.equal(stats.darkweb_searches, 1);
+  assert.equal(stats.event_list_searches, 1);
   assert.equal(stats.blockchain_searches, 1);
 });
 
@@ -209,39 +209,34 @@ test("an IP lookup is counted with its canonical target only when its slot is gr
   assert.equal((await h.gate.usageStats("today")).users.find(item => item.username === "group-i-11").ip_lookups, 0);
 });
 
-test("workspace openings list their times; Social searches keep a history row but no counter or tab row", async () => {
+test("workspace openings list their times; rows of retired tools stay stored, unlisted and refused", async () => {
   const h = await harness();
   assert.equal((await h.call("/usage-record", { username: "group-s-11", action: "tab_access", tab: "crypto" })).status, 200);
   const opened = (await h.history("group-s-11", "tab:crypto")).body;
   assert.equal(opened.display_name, "Adrien CBRN");
   assert.deepEqual(opened.rows.map(row => row.feature), ["tab_crypto"]);
 
-  await h.call("/usage-increment", {
-    username: "group-s-11", metrics: { social_intel_requests: 1 },
-    log: { feature: "social", details: {
-      target: "Example Person", mode: "discover",
-      usernames: Array.from({ length: 50 }, (_, i) => "handle" + i),
-      urls: ["https://example.com/" + "p".repeat(400), { nested: true }],
-      objective: "o".repeat(2000)
-    } }
-  });
-  assert.equal((await h.history("group-s-11", "social_intel_requests")).status, 400);
-  assert.equal((await h.history("group-s-11", "tab:social")).status, 400);
-  // Historical Social workspace openings must stay out of ALL ACTIVITY.
+  for (const metric of ["social_intel_requests", "facial_extractions", "facial_searches", "darkweb_searches", "tab:social", "tab:facial", "tab:darkweb"]) {
+    assert.equal((await h.history("group-s-11", metric)).status, 400, metric);
+  }
+  // A row written before a tool was retired, whatever its feature, must not break the list.
   const stamp = Date.now();
   const day = h.shared.parisDayKey(stamp);
-  await h.storage.put(`usage-log:${day}:group-s-11:tab_social:${stamp}:legacy`, {at:new Date(stamp).toISOString(),feature:"tab_social"});
-  // A Worker module cannot write a workspace-opening row through /usage-increment.
+  const legacy = ["social", "facial_extraction", "facial_search", "darkweb_search", "tab_social", "tab_facial", "tab_darkweb"];
+  for (const feature of legacy) {
+    await h.storage.put(`usage-log:${day}:group-s-11:${feature}:${stamp}:legacy`, { at: new Date(stamp).toISOString(), feature, target: "Example Person" });
+  }
+  // Nor can a retired feature, or a workspace opening, write a row through /usage-increment.
   await h.call("/usage-increment", { username: "group-s-11", metrics: {}, log: { feature: "tab_ip" } });
+  await h.call("/usage-increment", { username: "group-s-11", metrics: {}, log: { feature: "social", details: { target: "new" } } });
   assert.equal((await h.history("group-s-11", "tab:ip")).body.rows.length, 0);
   const rows = (await h.history("group-s-11", "all")).body.rows;
-  assert.deepEqual(rows.map(row => row.feature).sort(), ["social", "tab_crypto"]);
-  const social = rows.find(row => row.feature === "social");
-  assert.equal(social.target, "Example Person");
-  assert.equal(social.usernames.length, 40);
-  assert.equal(social.objective.length, 1500);
-  assert.equal(social.urls.length, 1);
-  assert.equal(social.urls[0].length, 300);
+  assert.deepEqual(rows.map(row => row.feature), ["tab_crypto"]);
+  assert.equal(h.logKeys().filter(key => key.endsWith(":legacy")).length, legacy.length, "listing them less does not delete them");
+  assert.equal(h.logKeys().filter(key => key.includes(":social:")).length, 1, "the refused write added nothing");
+  // Their outcome can no longer be changed either.
+  const update = await h.call("/usage-log-update", { username: "group-s-11", log_update: { id: `usage-log:${day}:group-s-11:social:${stamp}:legacy`, outcome: "failed" } });
+  assert.equal(update.body.updated, false);
 });
 
 test("the alarm stays armed while history rows exist, so the 90-day purge happens without logins", async () => {
@@ -274,10 +269,10 @@ test("a scripted flood is counted but keeps at most 120 history rows per user pe
   const h = await harness();
   const now = Date.now();
   for (let i = 0; i < 125; i++) {
-    await h.gate.incrementUsage("group-i-11", { darkweb_searches: 1 }, now, h.gate.usageLogEntry("group-i-11", "darkweb_search", { text: "flood " + i }, now));
+    await h.gate.incrementUsage("group-i-11", { event_list_searches: 1 }, now, h.gate.usageLogEntry("group-i-11", "event_list", { text: "flood " + i }, now));
   }
-  assert.equal((await h.gate.usageStats("today")).users.find(item => item.username === "group-i-11").darkweb_searches, 125);
+  assert.equal((await h.gate.usageStats("today")).users.find(item => item.username === "group-i-11").event_list_searches, 125);
   assert.equal(h.logKeys().length, 120);
-  assert.ok(h.gate.usageLogEntry("group-i-1", "darkweb_search", { text: "other user" }, now), "the cap is per user");
-  assert.ok(h.gate.usageLogEntry("group-i-11", "darkweb_search", { text: "next minute" }, now + 60000), "and per minute");
+  assert.ok(h.gate.usageLogEntry("group-i-1", "event_list", { text: "other user" }, now), "the cap is per user");
+  assert.ok(h.gate.usageLogEntry("group-i-11", "event_list", { text: "next minute" }, now + 60000), "and per minute");
 });

@@ -34,40 +34,38 @@ function harness(){
  return {gate:new ReportGate({storage},{users:['admin','group-i-1','group-p-1']}),storage};
 }
 
-test('tab access stats count the five active workspaces and exclude old Social opens',async()=>{
+test('tab access stats count the three active workspaces and exclude opens of retired tabs',async()=>{
  const {gate,storage}=harness();
  const now=Date.UTC(2026,8,28,12);
  await gate.recordTabAccess('group-i-1','crypto',now);
  await gate.recordTabAccess('group-i-1','crypto',now);
  await gate.recordTabAccess('group-i-1','map',now);
- await gate.recordTabAccess('group-i-1','darkweb',now);
  await gate.recordTabAccess('group-i-1','ip',now);
- assert.equal(await gate.recordTabAccess('group-i-1','social',now-86400000),false);
+ for(const tab of ['social','facial','darkweb'])assert.equal(await gate.recordTabAccess('group-i-1',tab,now-86400000),false,tab);
  const total=storage.values.get('tab-access-total:group-i-1');
- storage.values.set('tab-access-total:group-i-1',{...total,social:99});
- await gate.recordTabAccess('group-p-1','facial',now);
+ storage.values.set('tab-access-total:group-i-1',{...total,social:99,facial:7,darkweb:8});
+ await gate.recordTabAccess('group-p-1','map',now);
 
  const today=await gate.tabAccessStats('today',now);
  const analyst=today.users.find(row=>row.username==='group-i-1');
  const second=today.users.find(row=>row.username==='group-p-1');
  assert.deepEqual(
-  {crypto:analyst.crypto,facial:analyst.facial,map:analyst.map},
-  {crypto:2,facial:0,map:1}
+  {crypto:analyst.crypto,map:analyst.map},
+  {crypto:2,map:1}
  );
- assert.equal(second.facial,1);
- assert.equal(analyst.darkweb,1);
+ assert.equal(second.map,1);
  assert.equal(analyst.ip,1);
  assert.equal(today.users.length,3);
  assert.equal(Object.keys(analyst).some(key=>['searches','logins','report_requests'].includes(key)),false);
 
  const lastSevenDays=await gate.tabAccessStats('7',now);
- assert.ok(!Object.hasOwn(lastSevenDays.users.find(row=>row.username==='group-i-1'),'social'));
+ for(const tab of ['social','facial','darkweb'])assert.ok(!Object.hasOwn(lastSevenDays.users.find(row=>row.username==='group-i-1'),tab),tab);
  const allTime=await gate.tabAccessStats('all',now);
  assert.equal(allTime.users.find(row=>row.username==='group-i-1').crypto,2);
- assert.ok(!Object.hasOwn(allTime.users.find(row=>row.username==='group-i-1'),'social'));
+ for(const tab of ['social','facial','darkweb'])assert.ok(!Object.hasOwn(allTime.users.find(row=>row.username==='group-i-1'),tab),tab);
 });
 
-test('tab access rejects values outside the five active workspaces',async()=>{
+test('tab access rejects values outside the three active workspaces',async()=>{
  const {gate,storage}=harness();
  const result=await gate.recordTabAccess('group-i-1','other',Date.UTC(2026,8,28,12));
  assert.equal(result,false);

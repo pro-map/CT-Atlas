@@ -1,7 +1,6 @@
-// Address helpers shared by Crypto Intelligence and the Social report wallet
-// screening: SHA-256, base58check, bech32 checksum validation and wallet
-// extraction. Checksums prove only that a string is a well-formed address --
-// not that it is in use, or who controls it.
+// Address helpers for Crypto Intelligence: SHA-256, base58check and bech32
+// checksum validation. Checksums prove only that a string is a well-formed
+// address -- not that it is in use, or who controls it.
 
 const BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 const BECH32_CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
@@ -140,34 +139,9 @@ function isValidWalletAddress(family, address) {
   return false;
 }
 
-const WALLET_PATTERNS = [
-  ["evm", /\b0x[a-fA-F0-9]{40}\b/g],
-  ["tron", /\bT[1-9A-HJ-NP-Za-km-z]{33}\b/g],
-  ["bitcoin", /\bbc1[ac-hj-np-z02-9]{11,71}\b|\bBC1[AC-HJ-NP-Z02-9]{11,71}\b|\b[13][a-km-zA-HJ-NP-Z1-9]{25,34}\b/g]
-];
-
-// Regex candidates filtered by checksum, so random tokens that merely resemble
-// an address are not reported as wallets. De-duplicated, first-seen order.
-function findWalletCandidates(text) {
-  const value = String(text || "");
-  const found = [];
-  const seen = new Set();
-  for (const [family, pattern] of WALLET_PATTERNS) {
-    for (const match of value.matchAll(pattern)) {
-      const address = match[0];
-      const key = family + ":" + (family === "evm" ? address.toLowerCase() : address);
-      if (seen.has(key) || !isValidWalletAddress(family, address)) continue;
-      seen.add(key);
-      found.push({ family, address });
-    }
-  }
-  return found;
-}
-
 export {
   sha256,
   base58Encode,
   tronAddress,
-  isValidWalletAddress,
-  findWalletCandidates
+  isValidWalletAddress
 };

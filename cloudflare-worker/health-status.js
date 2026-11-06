@@ -1,25 +1,18 @@
 import { jsonResponse, cleanText } from "./shared.js";
 import { sanctionsHealth } from "./sanctions.js";
 
-// Live status behind the "Health status" button of the Crypto, Social and Facial
-// tabs. /health only says what is configured; this actually reaches each
-// dependency from the Worker, so a dead provider or a sleeping/broken Cloud Run
-// service shows up as such. Public like /health: it returns statuses, latencies
-// and version strings only -- never keys, URLs or error text containing a secret.
+// Live status behind the "Health status" button of the Crypto tab. /health only
+// says what is configured; this actually reaches each dependency from the Worker,
+// so a dead provider shows up as such. Public like /health: it returns statuses,
+// latencies and version strings only -- never keys, URLs or error text containing a secret.
 const HEALTH_STATUS_VERSION = "health-status-v1";
 
 const PROBE_TIMEOUT_MS = 7000;
-// Cloud Run services (SOCMINT agent, Facial) scale to zero when idle: the first
-// request after a quiet period pays a container cold start of several seconds.
-// That is slow, not down, so they get a much longer timeout.
-const COLD_START_TIMEOUT_MS = 25000;
 const SLOW_MS = 3500;
 const CACHE_OK_MS = 60 * 1000;
-// A failure is cached only briefly so a transient one (or a service that has just
-// woken up) does not stay on screen for a minute.
+// A failure is cached only briefly so a transient one does not stay on screen for a minute.
 const CACHE_DOWN_MS = 10 * 1000;
 const FORCE_REFRESH_MIN_AGE_MS = 5 * 1000;
-const COLD_START_NOTE = "Slow response: likely a cold start after inactivity (the service scales to zero when idle).";
 
 let statusCache = { at: 0, body: null };
 
@@ -37,56 +30,35 @@ function redact(text, secrets) {
 
 // Runs one probe. The probe returns extra fields (and may set its own `status`,
 // e.g. "degraded"); a throw becomes "down". Latency above SLOW_MS is "degraded":
-// a Cloud Run cold start or an overloaded provider is worth seeing.
-async function timedProbe(run, secrets = [], { coldStart = false } = {}) {
+// an overloaded provider is worth seeing.
+async function timedProbe(run, secrets = []) {
   const started = Date.now();
   try {
     const detail = (await run()) || {};
     const latency = Date.now() - started;
-    const slow = latency > SLOW_MS;
     return {
       ...detail,
-      status: detail.status || (slow ? "degraded" : "operational"),
-      latency_ms: latency,
-      ...(slow && coldStart ? { note: COLD_START_NOTE } : {})
+      status: detail.status || (latency > SLOW_MS ? "degraded" : "operational"),
+      latency_ms: latency
     };
   } catch (error) {
     const timedOut = error?.name === "TimeoutError" || error?.name === "AbortError";
-    const limit = coldStart ? COLD_START_TIMEOUT_MS : PROBE_TIMEOUT_MS;
     return {
       status: "down",
       latency_ms: Date.now() - started,
-      error: cleanText(timedOut ? "Timed out after " + Math.round(limit / 1000) + "s" : redact(error?.message || "Request failed", secrets), 160)
+      error: cleanText(timedOut ? "Timed out after " + Math.round(PROBE_TIMEOUT_MS / 1000) + "s" : redact(error?.message || "Request failed", secrets), 160)
     };
   }
 }
 
-async function probeFetch(url, init = {}, timeoutMs = PROBE_TIMEOUT_MS) {
-  const response = await fetch(url, { ...init, signal: AbortSignal.timeout(timeoutMs) });
+async function probeFetch(url, init = {}) {
+  const response = await fetch(url, { ...init, signal: AbortSignal.timeout(PROBE_TIMEOUT_MS) });
   if (!response.ok) throw new Error("HTTP " + response.status);
   return response;
 }
 
 function notConfigured() {
   return { status: "not_configured" };
-}
-
-function httpsBase(value) {
-  try {
-    const url = new URL(String(value || "").trim());
-    return url.protocol === "https:" ? url.toString().replace(/\/+$/, "") : "";
-  } catch (_) {
-    return "";
-  }
-}
-
-// Only plain true/false facts from a service's own /health (collector flags).
-function booleanFlags(source) {
-  const flags = {};
-  for (const [key, value] of Object.entries(source && typeof source === "object" ? source : {})) {
-    if (typeof value === "boolean") flags[cleanText(key, 60)] = value;
-  }
-  return flags;
 }
 
 function probeBitcoin() {
@@ -140,56 +112,6 @@ async function probeSanctions(env) {
   };
 }
 
-// The agent's /health is public, so a stale shared key looks healthy there while
-// every investigation is refused. Only a clear refusal counts: an agent older than
-// /auth-check answers 404, which says nothing about the key.
-async function probeAgentAuth(base, key) {
-  try {
-    const response = await fetch(base + "/auth-check", {
-      headers: { "X-CT-Atlas-Agent-Key": key },
-      signal: AbortSignal.timeout(PROBE_TIMEOUT_MS)
-    });
-    if (response.status === 401 || response.status === 403) return "rejected";
-    return response.ok ? "ok" : "unknown";
-  } catch (_) {
-    return "unknown";
-  }
-}
-
-function probeAgent(env) {
-  const base = httpsBase(env?.SOCMINT_AGENT_URL);
-  const key = String(env?.SOCMINT_AGENT_SHARED_SECRET || "").trim();
-  if (!base || !key) return notConfigured();
-  return timedProbe(async () => {
-    const payload = await (await probeFetch(base + "/health", {}, COLD_START_TIMEOUT_MS)).json();
-    if (!payload?.ok) throw new Error("Agent reported not ok");
-    const auth = await probeAgentAuth(base, key);
-    return {
-      version: cleanText(payload.version, 80),
-      model: cleanText(payload.model, 80),
-      search_provider: cleanText(payload.search_provider, 40),
-      collectors: booleanFlags(payload.social_sources),
-      auth,
-      ...(auth === "rejected" ? { status: "down", error: "The agent refused the Worker's key: investigations will fail." } : {})
-    };
-  }, [base, key], { coldStart: true });
-}
-
-function probeVisual(env) {
-  const base = httpsBase(env?.VISUAL_INTEL_URL);
-  if (!base || !String(env?.VISUAL_INTEL_SHARED_SECRET || "").trim()) return notConfigured();
-  return timedProbe(async () => {
-    const payload = await (await probeFetch(base + "/health", {}, COLD_START_TIMEOUT_MS)).json();
-    if (!payload?.ok) throw new Error("Service reported not ok");
-    return {
-      version: cleanText(payload.version, 80),
-      face_detection: cleanText(payload.face_detection, 60),
-      ocr: cleanText(payload.ocr, 60),
-      identity_recognition: payload.identity_recognition === true
-    };
-  }, [base], { coldStart: true });
-}
-
 // Credentials that are present but deliberately not exercised (each call would
 // spend quota): reported as "configured", never as "operational".
 function credentialOnly(value) {
@@ -197,13 +119,11 @@ function credentialOnly(value) {
 }
 
 async function buildHealthStatus(env, versions = {}) {
-  const [bitcoin, evm, tron, sanctions, agent, visual] = await Promise.all([
+  const [bitcoin, evm, tron, sanctions] = await Promise.all([
     probeBitcoin(),
     probeEvm(env),
     probeTron(env),
-    probeSanctions(env),
-    probeAgent(env),
-    probeVisual(env)
+    probeSanctions(env)
   ]);
   return {
     ok: true,
@@ -212,8 +132,7 @@ async function buildHealthStatus(env, versions = {}) {
     versions: Object.fromEntries(Object.entries(versions).map(([key, value]) => [cleanText(key, 40), cleanText(value, 80)])),
     components: {
       worker: { status: "operational" },
-      bitcoin, evm, tron, sanctions, agent, visual,
-      brave: credentialOnly(env?.BRAVE_SEARCH_API_KEY),
+      bitcoin, evm, tron, sanctions,
       gemini: credentialOnly(env?.GEMINI_API_KEY)
     }
   };

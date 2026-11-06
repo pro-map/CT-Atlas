@@ -18,13 +18,6 @@ const QUICK_ASK_GLOBAL_DAILY_LIMIT = 800;
 const FEEDBACK_COOLDOWN_MS = 30 * 1000;
 const FEEDBACK_DAILY_LIMIT = 20;
 const FEEDBACK_GLOBAL_DAILY_LIMIT = 200;
-// SOCMINT shares Gemini 3.5 Flash Lite with reports and Deep Search, and one run can
-// spend 12 agent calls: ten runs stay inside the ~200 requests/day kept for
-// interactive use. The lock outlives the Worker's longest run and clears itself
-// if a run dies without releasing it.
-const SOCMINT_DAILY_LIMIT = 3;
-const SOCMINT_GLOBAL_DAILY_LIMIT = 10;
-const SOCMINT_RUN_LOCK_MS = 3 * 60 * 1000;
 // Bump whenever the report SHAPE changes (new fields, schema, citation
 // rules) so an existing cache entry from before the change is never served
 // as-is -- folded into the cache key in index.js's /report handler.
@@ -321,9 +314,6 @@ function usageTemplate(username = "") {
     blocked_report_requests: 0,
     quick_ask_requests: 0,
     blockchain_searches: 0,
-    facial_extractions: 0,
-    facial_searches: 0,
-    darkweb_searches: 0,
     ip_lookups: 0,
     feedback_submissions: 0,
     quiz_answers: 0,
@@ -1302,9 +1292,6 @@ export {
   QUICK_ASK_COOLDOWN_MS,
   QUICK_ASK_DAILY_LIMIT,
   QUICK_ASK_GLOBAL_DAILY_LIMIT,
-  SOCMINT_DAILY_LIMIT,
-  SOCMINT_GLOBAL_DAILY_LIMIT,
-  SOCMINT_RUN_LOCK_MS,
   FEEDBACK_COOLDOWN_MS,
   FEEDBACK_DAILY_LIMIT,
   FEEDBACK_GLOBAL_DAILY_LIMIT,

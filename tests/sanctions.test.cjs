@@ -23,7 +23,7 @@ function harness(fetchImpl){
   });
   vm.runInContext(addressUtilsSource,context);
   vm.runInContext(source,context);
-  const api=vm.runInContext("({chainFamily,normalizeSanctionsAddress,buildSanctionsIndex,loadSanctions,resetSanctionsCache,screenAnalysis,screenReportWallets,sanctionsObservation,SANCTIONS_VERSION})",context);
+  const api=vm.runInContext("({chainFamily,normalizeSanctionsAddress,buildSanctionsIndex,loadSanctions,resetSanctionsCache,screenAnalysis,sanctionsObservation,SANCTIONS_VERSION})",context);
   return {api,calls};
 }
 
@@ -332,93 +332,3 @@ test("CI refreshes the sanctions list daily, publishes it, and smoke-tests the W
 // --- wallets found in SOCMINT reports ---------------------------------------
 
 const GENESIS="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa";
-
-function socialReport(){
-  return {
-    query:{objective:"Check "+TRON+" if present"},
-    sources:[{url:"https://example.org/"+GENESIS}],
-    executive_assessment:"The channel posted a donation address "+TRON+" (USDT) on several occasions.",
-    financial_crypto_indicators:"Also lists "+GENESIS+" and a mistyped 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNb.",
-    key_findings:[{finding:"No wallet here",basis:"none"}],
-    entities:[
-      {type:"WALLET",value:"0x52908400098527886E0F7030069857D2E4169EE7",basis:"posted in channel"}
-    ],
-    watchpoints:[{issue:"donations",indicator:"new address rotation"}]
-  };
-}
-
-test("report wallets are checksum-validated, screened, and listed ones sort first",async()=>{
-  const {api}=harness(okFetch(fixture()));
-  const state=await api.loadSanctions(ENV);
-  const result=api.screenReportWallets(socialReport(),state);
-  assert.equal(result.status,"ok");
-  assert.equal(result.hit,true);
-  assert.equal(result.wallets_found,3,"tron + genesis + evm; the checksum-invalid lookalike must be dropped");
-  assert.equal(result.wallets[0].address,TRON);
-  assert.equal(result.wallets[0].listed,true);
-  assert.equal(result.wallets[0].entities[0].terrorism,true);
-  assert.match(result.wallets[0].summary,/ISIL KHORASAN/);
-  const genesis=result.wallets.find(wallet=>wallet.address===GENESIS);
-  assert.equal(genesis.listed,false);
-  assert.equal(genesis.screened,true);
-  assert.match(result.scope_note,/proves only that they are well-formed/);
-  assert.match(result.scope_note,/does NOT mean an address is safe/);
-});
-
-test("only what the investigation reports is screened: the analyst's query and the source list are ignored",async()=>{
-  const {api}=harness(okFetch(fixture()));
-  const state=await api.loadSanctions(ENV);
-  const report={query:{objective:TRON},sources:[{url:"https://x.test/"+TRON}],executive_assessment:"nothing observed"};
-  const result=api.screenReportWallets(report,state);
-  assert.equal(result.wallets_found,0);
-  assert.equal(result.hit,false);
-});
-
-test("an unavailable list marks report wallets as unscreened instead of clean",async()=>{
-  const {api}=harness(async()=>{throw new Error("down");});
-  const state=await api.loadSanctions(ENV);
-  const result=api.screenReportWallets(socialReport(),state);
-  assert.equal(result.status,"unavailable");
-  assert.equal(result.hit,false);
-  assert.ok(result.wallets.length>0);
-  assert.ok(result.wallets.every(wallet=>wallet.screened===false&&wallet.listed===false));
-  assert.ok(result.reason);
-});
-
-test("report wallet screening is capped and tolerates malformed reports",async()=>{
-  const {api}=harness(okFetch(fixture()));
-  const state=await api.loadSanctions(ENV);
-  assert.equal(api.screenReportWallets(null,state).wallets_found,0);
-  assert.equal(api.screenReportWallets({key_findings:"oops",entities:null},state).wallets_found,0);
-  const many=Array.from({length:260},(_,i)=>"0x"+i.toString(16).padStart(40,"0")).join(" ");
-  assert.equal(api.screenReportWallets({executive_assessment:many},state).wallets_found,200);
-});
-
-test("the retained SOCMINT client handles wallet screening but is not loaded by the placeholder",()=>{
-  const html=fs.readFileSync("social.html","utf8");
-  const client=fs.readFileSync("social.js","utf8");
-  const css=fs.readFileSync("social.css","utf8");
-  for(const id of ["reportWalletsSection","reportWalletsStatus","reportWallets","reportWalletsScope"]){
-    assert.ok(!html.includes('id="'+id+'"'),"retired Social content must stay removed: "+id);
-  }
-  assert.ok(client.includes("function renderWallets"));
-  assert.ok(client.includes("renderWallets(report);"));
-  assert.ok(client.includes("NOT SCREENED"));
-  assert.ok(client.includes("was NOT performed"));
-  // Older reports (no wallet_screening) and reports without wallets must hide the section.
-  assert.match(client,/if\(!screening\|\|!wallets\.length\)\{section\.hidden=true;return;\}/);
-  // window.open without noopener so the Crypto tab inherits sessionStorage (same origin).
-  assert.ok(client.includes('window.open(cryptoUrl(button.dataset.cryptoAddress),"_blank")'));
-  assert.ok(!client.includes("noopener,noreferrer\"),\"_blank\")"));
-  assert.ok(client.includes('url.searchParams.set("autorun","1")'));
-  assert.ok(client.includes("WALLETS & SANCTIONS SCREENING"),"the PDF export must include the screening");
-  assert.ok(css.includes(".wallet-status.hit")&&css.includes(".wallet-item.listed"));
-  assert.ok(!html.includes('src="social.js'),"the placeholder does not load the retired investigation client");
-});
-
-test("Social placeholder removes all platform search choices",()=>{
-  const html=fs.readFileSync("social.html","utf8");
-  const values=[...html.matchAll(/name="platform" value="([^"]+)"/g)].map(match=>match[1]);
-  assert.equal(values.length,0,"the old platform controls have been retired");
-  assert.ok(html.includes("UNDER CONSTRUCTION"));
-});

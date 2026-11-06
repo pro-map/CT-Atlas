@@ -1,4 +1,4 @@
-import{getAllowedUsers,REPORT_COOLDOWN_MS,SESSION_TTL_MS,QUICK_ASK_COOLDOWN_MS,QUICK_ASK_DAILY_LIMIT,QUICK_ASK_GLOBAL_DAILY_LIMIT,SOCMINT_DAILY_LIMIT,SOCMINT_GLOBAL_DAILY_LIMIT,SOCMINT_RUN_LOCK_MS,FEEDBACK_COOLDOWN_MS,FEEDBACK_DAILY_LIMIT,FEEDBACK_GLOBAL_DAILY_LIMIT,normalizeUsername,isAllowedUser,parisDayKey,usageTemplate,cleanText}from"./shared.js";
+import{getAllowedUsers,REPORT_COOLDOWN_MS,SESSION_TTL_MS,QUICK_ASK_COOLDOWN_MS,QUICK_ASK_DAILY_LIMIT,QUICK_ASK_GLOBAL_DAILY_LIMIT,FEEDBACK_COOLDOWN_MS,FEEDBACK_DAILY_LIMIT,FEEDBACK_GLOBAL_DAILY_LIMIT,normalizeUsername,isAllowedUser,parisDayKey,usageTemplate,cleanText}from"./shared.js";
 
 const ADMIN_DISPLAY_NAMES=Object.freeze({
   "group-i-1":"Ed",
@@ -49,23 +49,21 @@ function withAdminDisplayName(row){
   const displayName=ADMIN_DISPLAY_NAMES[normalizeUsername(row?.username)]||"";
   return displayName?{...row,display_name:displayName}:row;
 }
-// Dark Web: English title kinds that need no further title work.
-const DARKWEB_TITLE_DONE = new Set(["translation", "original"]);
-// A record whose collected page declares English, and whose title has no letters in
-// another script, keeps that title as its English title without a model call.
-function darkwebEnglishOriginal(record) {
-  return record?.source_language === "en" && !!record.title && !/[^\P{L}\p{Script=Latin}]/u.test(String(record.title));
-}
+// Social Intelligence is retired, but its saved reports still age out: see purgeExpired.
 const SOCIAL_REPORT_RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
-const TAB_ACCESS_FIELDS = Object.freeze({ map: true, crypto: true, facial: true, darkweb: true, ip: true });
+// Stored totals keep the counters of retired tools. They are history, not current activity,
+// so the admin statistics leave them out; nothing removes them from storage.
+const RETIRED_USAGE_COUNTERS = Object.freeze(["social_intel_requests", "facial_extractions", "facial_searches", "darkweb_searches"]);
+const TAB_ACCESS_FIELDS = Object.freeze({ map: true, crypto: true, ip: true });
 function tabAccessTemplate(username = "") {
-  return { username, map: 0, crypto: 0, facial: 0, darkweb: 0, ip: 0 };
+  return { username, map: 0, crypto: 0, ip: 0 };
 }
 
 // Per-user search history behind the admin counters. One small value per search,
 // written in the same storage put as the counter it explains, under
 // usage-log:<Paris day>:<username>:<feature>:<epoch ms>:<random>, so a clicked
-// count lists its own rows and old days are removed with one range delete.
+// count lists its own rows and old days are removed with one range delete. Rows of a retired
+// feature are simply no longer listed; that delete still removes them on time.
 const USAGE_LOG_PREFIX = "usage-log:";
 const USAGE_LOG_RETENTION_DAYS = 90;
 const USAGE_LOG_STARTED = "2026-10-06";
@@ -75,19 +73,14 @@ const USAGE_LOG_FIELDS = Object.freeze({
   report_generator: { region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], period_days: ["num"], compare: ["bool"], outcome: ["text", 20], title: ["text", 200] },
   deep_search: { question: ["text", 1200], region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], scope: ["text", 200], outcome: ["text", 20], title: ["text", 200], period: ["text", 120] },
   blockchain: { query: ["text", 180], kind: ["text", 20], chain: ["text", 40], chain_hint: ["text", 40], origin: ["text", 16], limit: ["num"] },
-  social: { mode: ["text", 20], target: ["text", 400], usernames: ["list", 40, 160], platforms: ["list", 16, 40], keywords: ["list", 40, 160], urls: ["list", 20, 300], countries_regions: ["list", 20, 120], languages: ["list", 20, 60], date_from: ["text", 10], date_to: ["text", 10], objective: ["text", 1500], title: ["text", 200], discovery_mode: ["text", 60], outcome: ["text", 20] },
-  facial_extraction: { files: ["num"], videos: ["num"], bytes: ["num"] },
-  facial_search: { engines: ["list", 4, 20], face: ["text", 40], sha256: ["text", 64], bytes: ["num"], outcome: ["text", 20] },
   event_list: { text: ["text", 200], region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], period_days: ["num"], scope: ["text", 200], country: ["text", 120], sort: ["text", 10], results: ["num"] },
-  darkweb_search: { text: ["text", 200], view: ["text", 16], outlet: ["text", 120], material: ["text", 16], results: ["num"], loaded_back_to: ["text", 10] },
   ip_lookup: { target: ["text", 253], kind: ["text", 10], registered_domain: ["text", 253], parent_domain: ["text", 253] },
   ...Object.fromEntries(Object.keys(TAB_ACCESS_FIELDS).map(tab => ["tab_" + tab, {}]))
 });
 // Only these fields of a logged request can change afterwards (the report outcome).
 const USAGE_LOG_UPDATES = Object.freeze({
   report_generator: ["outcome", "title"],
-  deep_search: ["outcome", "title", "period"],
-  social: ["outcome", "title", "discovery_mode"]
+  deep_search: ["outcome", "title", "period"]
 });
 const USAGE_LOG_OUTCOMES = new Set(["cached", "generated", "no_events", "failed"]);
 // Admin counter (or workspace tab) -> the logged features that explain it.
@@ -100,9 +93,6 @@ const USAGE_HISTORY_METRICS = Object.freeze({
   map_searches: [],
   quick_ask_requests: [],
   blockchain_searches: ["blockchain"],
-  facial_extractions: ["facial_extraction"],
-  facial_searches: ["facial_search"],
-  darkweb_searches: ["darkweb_search"],
   ip_lookups: ["ip_lookup"],
   ...Object.fromEntries(Object.keys(TAB_ACCESS_FIELDS).map(tab => ["tab:" + tab, ["tab_" + tab]])),
   all: Object.keys(USAGE_LOG_FIELDS)
@@ -316,6 +306,8 @@ export class ReportGate {
       }
     }
 
+    // Social Intelligence is retired and nothing writes these any more. Reports already saved
+    // keep ageing out on the schedule the privacy notice promises.
     let socialStartAfter = "";
     for (let page = 0; page < 100; page++) {
       const options = { prefix: "social-workspace:", limit: 250 };
@@ -618,9 +610,6 @@ export class ReportGate {
           "blocked_report_requests",
           "quick_ask_requests",
           "blockchain_searches",
-          "facial_extractions",
-          "facial_searches",
-          "darkweb_searches",
           "ip_lookups",
           "feedback_submissions",
           "quiz_answers",
@@ -640,12 +629,11 @@ export class ReportGate {
     }
 
     const rows = users.map(username => rowsByUser.get(username));
-    // Legacy totals may still contain the retired Social counter.
-    for (const row of rows) delete row.social_intel_requests;
+    for (const row of rows) for (const counter of RETIRED_USAGE_COUNTERS) delete row[counter];
 
     const summary = {
       active_users: rows.filter(row =>
-        ["logins", "searches", "report_requests", "report_generator_requests", "deep_search_requests", "reports_generated", "cached_reports", "quick_ask_requests", "blockchain_searches", "facial_extractions", "facial_searches", "darkweb_searches", "ip_lookups", "feedback_submissions", "quiz_answers"]
+        ["logins", "searches", "report_requests", "report_generator_requests", "deep_search_requests", "reports_generated", "cached_reports", "quick_ask_requests", "blockchain_searches", "ip_lookups", "feedback_submissions", "quiz_answers"]
           .some(metric => Number(row[metric] || 0) > 0)
       ).length,
       logins: 0,
@@ -660,9 +648,6 @@ export class ReportGate {
       blocked_report_requests: 0,
       quick_ask_requests: 0,
       blockchain_searches: 0,
-      facial_extractions: 0,
-      facial_searches: 0,
-      darkweb_searches: 0,
       ip_lookups: 0,
       feedback_submissions: 0,
       quiz_answers: 0,
@@ -684,9 +669,6 @@ export class ReportGate {
         "blocked_report_requests",
         "quick_ask_requests",
         "blockchain_searches",
-        "facial_extractions",
-        "facial_searches",
-        "darkweb_searches",
         "ip_lookups",
         "feedback_submissions",
         "quiz_answers",
@@ -842,423 +824,6 @@ export class ReportGate {
           this.usageLogEntry(body.username, "ip_lookup", body.log, now));
       }
       return response;
-    }
-
-    // One-time, user-requested removal of the pre-selection feed. Keep outlet
-    // settings and known-URL history so rescans do not manufacture new alerts.
-    if (url.pathname.startsWith("/darkweb-")) {
-      await this.state.storage.transaction(async tx => {
-        const marker = "darkweb:publication-selection-migration:1";
-        if (await tx.get(marker)) return;
-        const rows = await tx.list({ prefix: "darkweb:item:", limit: 1000 });
-        let removed = 0;
-        for (const [key, item] of rows) {
-          if (item.selection_version !== 1) { await tx.delete(key); removed++; }
-        }
-        await tx.put(marker, { removed, completed_at: new Date(now).toISOString() });
-      });
-    }
-
-    if (url.pathname.startsWith("/darkweb-")) {
-      await this.state.storage.transaction(async tx => {
-        if (await tx.get("darkweb:controlled-collection:2")) return;
-        const rows = await tx.list({ prefix: "darkweb:item:", limit: 1000 });
-        for (const [key] of rows) await tx.delete(key);
-        const outlets = await tx.get("darkweb:outlets") || [];
-        for (const outlet of outlets) {
-          delete outlet.initialized_at;
-          outlet.collection_phase = "backfill";
-          outlet.pages_scanned = outlet.pending_pages = outlet.failed_pages = outlet.undated_count = 0;
-          outlet.last_scan = outlet.last_success = ""; outlet.scan_ok = outlet.crawl_complete = outlet.truncated = false;
-        }
-        await tx.put("darkweb:outlets", outlets);
-        await tx.put("darkweb:policy", { epoch: 2, from: "2025-01-01", through: "2026-12-31", pages_per_scan: 10, paused: false, previews: true });
-        await tx.delete("darkweb:summary");
-        await tx.put("darkweb:controlled-collection:2", true);
-      });
-    }
-    if (url.pathname === "/darkweb-files-info") {
-      const files = {};
-      for (const hash of (Array.isArray(body.hashes) ? body.hashes : []).slice(0,600)) {
-        if (/^[a-f0-9]{64}$/.test(hash)) {
-          const file = await this.state.storage.get("darkweb:file:" + hash);
-          if (file) files[hash] = file;
-        }
-      }
-      const usage = await this.state.storage.get("darkweb:files-usage") || { stored_bytes: 0, reserved_bytes: 0, files: 0 };
-      const policy = await this.state.storage.get("darkweb:files-policy") || { limit_bytes: 8000000000 };
-      return Response.json({ files, usage: { ...usage, ...policy } });
-    }
-    if (url.pathname === "/darkweb-files-policy") {
-      if (!Number.isSafeInteger(body.limit_bytes) || body.limit_bytes < 1000000 || body.limit_bytes > 10000000000) return Response.json({ error: "Storage limit must be between 1 MB and 10 GB." }, { status: 400 });
-      await this.state.storage.put("darkweb:files-policy", { limit_bytes: body.limit_bytes });
-      return Response.json({ ok: true });
-    }
-    if (["/darkweb-file-check", "/darkweb-file-commit"].includes(url.pathname)) {
-      return this.state.storage.transaction(async tx => {
-        const reject = (error, status=409) => Response.json({ error }, { status });
-        if (!/^[a-f0-9]{64}$/.test(body.id || "") || !/^[a-f0-9]{64}$/.test(body.sha256 || "")) return reject("Invalid PDF reference.", 400);
-        const policy = await tx.get("darkweb:policy");
-        const item = await tx.get(`darkweb:publication:${policy.epoch}:${body.id}`);
-        const file = item?.attachments?.find(a => a.type === "pdf" && a.acquired && a.sha256 === body.sha256);
-        if (!file || !Number.isSafeInteger(file.bytes) || file.bytes < 5) return reject("PDF attachment is not registered in this collection.", 404);
-        if (body.upload_access) {
-          const outlets = await tx.get("darkweb:outlets") || [];
-          if (policy.paused || body.epoch !== policy.epoch || item.outlet_id !== body.outlet_id || !outlets.some(o => o.id === body.outlet_id && o.enabled)) return reject("Reload collection configuration.");
-        }
-        const key = "darkweb:file:" + body.sha256;
-        let stored = await tx.get(key);
-        if (stored && stored.bytes !== file.bytes) return reject("PDF size conflicts with its recorded hash.");
-        const usage = await tx.get("darkweb:files-usage") || { stored_bytes: 0, reserved_bytes: 0, files: 0 };
-        if (url.pathname === "/darkweb-file-commit") {
-          if (!body.upload_access || !stored || body.bytes !== file.bytes) return reject("No matching PDF reservation.");
-          if (stored.status !== "ready") {
-            stored = { ...stored, status: "ready", stored_at: new Date(now).toISOString() };
-            usage.reserved_bytes -= file.bytes; usage.stored_bytes += file.bytes; usage.files++;
-            await tx.put(key, stored); await tx.put("darkweb:files-usage", usage);
-          }
-          return Response.json({ ok: true, stored: true, stored_at: stored.stored_at });
-        }
-        if (body.reserve && body.upload_access && !stored) {
-          const config = await tx.get("darkweb:files-policy") || { limit_bytes: 8000000000 };
-          if (usage.stored_bytes + usage.reserved_bytes + file.bytes > config.limit_bytes) return reject("Private PDF storage limit reached. Local files are preserved.", 507);
-          stored = { status: "reserved", bytes: file.bytes, reserved_at: new Date(now).toISOString() };
-          usage.reserved_bytes += file.bytes;
-          await tx.put(key, stored); await tx.put("darkweb:files-usage", usage);
-        }
-        return Response.json({ file, stored: stored?.status === "ready" });
-      });
-    }
-    if (url.pathname === "/darkweb-policy") {
-      const result = await this.state.storage.transaction(async tx => {
-        const prior = await tx.get("darkweb:policy");
-        const policy = { ...prior, ...body.policy };
-        let recrawl = false;
-        if (body.reset) {
-          policy.epoch = prior.epoch + 1;
-          const rows = await tx.list({ prefix: "darkweb:item:", limit: 1000 });
-          for (const [key] of rows) await tx.delete(key);
-          // Delete structured archives in bounded batches, independently of feed retention.
-          for (const prefix of ["darkweb:publication:", "darkweb:publication-index:", "darkweb:publication-pending:"]) {
-            while (true) {
-              const archived = await tx.list({ prefix, limit: 128 });
-              if (!archived.size) break;
-              await tx.delete([...archived.keys()]);
-            }
-          }
-          const outlets = await tx.get("darkweb:outlets") || [];
-          for (const outlet of outlets) { delete outlet.initialized_at; delete outlet.period_backfill; Object.assign(outlet, { collection_phase: "backfill", pages_scanned: 0, pending_pages: 0, failed_pages: 0, undated_count: 0, last_scan: "", last_success: "", scan_ok: false, crawl_complete: false, truncated: false }); }
-          await tx.put("darkweb:outlets", outlets);
-          await tx.delete("darkweb:summary");
-        } else if (policy.from > prior.from || policy.through < prior.through) {
-          return { error: "Narrowing the period requires Reset & collect." };
-        } else if (policy.from < prior.from || (policy.through > prior.through && prior.through < new Date(now).toISOString().slice(0, 10))) {
-          // Widening keeps the epoch and every stored record. Outlets re-crawl in
-          // backfill for the newly covered past dates; /darkweb-ingest ends it.
-          const outlets = await tx.get("darkweb:outlets") || [];
-          for (const outlet of outlets) {
-            outlet.period_backfill = { requested_at: new Date(now).toISOString(), after_watch: outlet.collection_phase === "watch", reports: 0, last_pages: Number(outlet.pages_scanned) || 0, fresh: false };
-            outlet.collection_phase = "backfill";
-          }
-          await tx.put("darkweb:outlets", outlets);
-          recrawl = outlets.length > 0;
-        }
-        await tx.put("darkweb:policy", policy);
-        return { ok: true, policy, recrawl };
-      });
-      return Response.json(result, { status: result.error ? 400 : 200 });
-    }
-    if (url.pathname === "/darkweb-preview") {
-      const policy = await this.state.storage.get("darkweb:policy");
-      const item = await this.state.storage.get(`darkweb:publication:${policy.epoch}:${body.id}`) || await this.state.storage.get("darkweb:item:" + body.id);
-      return Response.json({ preview: item?.preview || "" });
-    }
-    if (url.pathname === "/darkweb-item") {
-      const policy = await this.state.storage.get("darkweb:policy");
-      const item = await this.state.storage.get(`darkweb:publication:${policy.epoch}:${body.id}`) || await this.state.storage.get("darkweb:item:" + body.id);
-      if (!item) return Response.json({ error: "Publication unavailable in this collection." }, { status: 404 });
-      const { preview, ...record } = item;
-      return Response.json({ item: { ...record, has_preview: !!preview } });
-    }
-    if (url.pathname === "/darkweb-archive") {
-      const policy = await this.state.storage.get("darkweb:policy"), prefix = `darkweb:publication-index:${policy.epoch}:`;
-      const rows = await this.state.storage.list({ prefix, reverse: true, limit: 51, ...(body.cursor ? { end: prefix + body.cursor } : {}) });
-      const page = [...rows.entries()].slice(0,50), items = [];
-      for (const [, id] of page) {
-        const record = await this.state.storage.get(`darkweb:publication:${policy.epoch}:${id}`);
-        if (record) { const { preview, original_text, ...item } = record; items.push({ ...item, has_preview: !!preview }); }
-      }
-      return Response.json({ items, next_cursor: rows.size > 50 ? page.at(-1)[0].slice(prefix.length) : "", epoch: policy.epoch });
-    }
-    if (url.pathname === "/darkweb-enrich-candidates") {
-      const policy = await this.state.storage.get("darkweb:policy");
-      // One-time Arabic backfill: records collected before the translation fix may
-      // have exhausted their retry counter without ever receiving English. Requeue
-      // them without touching source text, attachments, dates or collection state.
-      const arabicMigrationKey = `darkweb:arabic-translation-v2-cursor:${policy.epoch}`;
-      const arabicCursor = await this.state.storage.get(arabicMigrationKey) || "";
-      if (arabicCursor !== "done") {
-        const prefix = `darkweb:publication-index:${policy.epoch}:`;
-        const page = await this.state.storage.list({ prefix, reverse: true, limit: 100, ...(arabicCursor ? { end: arabicCursor } : {}) });
-        for (const id of page.values()) {
-          const archiveKey = `darkweb:publication:${policy.epoch}:${id}`;
-          const item = await this.state.storage.get(archiveKey);
-          const arabic = item && (item.source_language === "ar" || /[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]/.test(String(item.title || "")));
-          if (arabic && !DARKWEB_TITLE_DONE.has(item.title_en_kind)) {
-            await this.state.storage.put(archiveKey, { ...item, enrich_attempts: 0 });
-            await this.state.storage.put(`darkweb:publication-pending:${policy.epoch}:${id}`, id);
-          }
-        }
-        await this.state.storage.put(arabicMigrationKey, page.size === 100 ? [...page.keys()].at(-1) : "done");
-      }
-      // Requeue already-enriched archive records once for faithful translations.
-      // This migration never resets publication text, files or collection progress.
-      const migrationKey = `darkweb:title-translation-cursor:${policy.epoch}`;
-      const cursor = await this.state.storage.get(migrationKey) || "";
-      if (cursor !== "done") {
-        const prefix = `darkweb:publication-index:${policy.epoch}:`;
-        const page = await this.state.storage.list({ prefix, reverse: true, limit: 100, ...(cursor ? { end: cursor } : {}) });
-        for (const id of page.values()) {
-          const item = await this.state.storage.get(`darkweb:publication:${policy.epoch}:${id}`);
-          if (item && !DARKWEB_TITLE_DONE.has(item.title_en_kind)) await this.state.storage.put(`darkweb:publication-pending:${policy.epoch}:${id}`, id);
-        }
-        await this.state.storage.put(migrationKey, page.size === 100 ? [...page.keys()].at(-1) : "done");
-      }
-      // Daily-first translation queue: the newest publication day always wins over
-      // historical backlog. A newest-day title that previously exhausted attempts is
-      // reset so an old quota/provider problem cannot leave today's feed untranslated.
-      const items = [], seen = new Set();
-      const indexPrefix = `darkweb:publication-index:${policy.epoch}:`;
-      const newestIndex = await this.state.storage.list({ prefix: indexPrefix, reverse: true, limit: 100 });
-      let newestDay = "";
-      for (const [key, id] of newestIndex) {
-        const suffix = key.slice(indexPrefix.length);
-        const day = suffix.slice(0, 10);
-        if (!newestDay) newestDay = day;
-        if (day !== newestDay) break;
-        const archiveKey = `darkweb:publication:${policy.epoch}:${id}`;
-        let record = await this.state.storage.get(archiveKey);
-        if (!record || DARKWEB_TITLE_DONE.has(record.title_en_kind)) continue;
-        if (record.enrich_attempts >= 3) {
-          record = { ...record, enrich_attempts: 0 };
-          await this.state.storage.put(archiveKey, record);
-        }
-        await this.state.storage.put(`darkweb:publication-pending:${policy.epoch}:${id}`, id);
-        items.push(record); seen.add(id);
-        if (items.length >= 10) break;
-      }
-      // Only if today's/newest-day publications leave spare capacity do we use it for
-      // older pending records. Exhausted historical records remain dormant.
-      let startAfter = "";
-      for (let page = 0; page < 5 && items.length < 10; page++) {
-        const pending = await this.state.storage.list({ prefix: `darkweb:publication-pending:${policy.epoch}:`, limit: 128, ...(startAfter ? { startAfter } : {}) });
-        for (const [key, id] of pending) {
-          startAfter = key;
-          if (seen.has(id)) continue;
-          const record = await this.state.storage.get(`darkweb:publication:${policy.epoch}:${id}`);
-          if (!record || DARKWEB_TITLE_DONE.has(record.title_en_kind)) {
-            await this.state.storage.delete(key);
-            continue;
-          }
-          if (!(record.enrich_attempts >= 3)) { items.push(record); seen.add(id); }
-          if (items.length >= 10) break;
-        }
-        if (pending.size < 128) break;
-      }
-      return Response.json({ items, newest_day: newestDay });
-    }
-    if (url.pathname === "/darkweb-enrich-lock") {
-      return Response.json(await this.state.storage.transaction(async tx => {
-        const until = await tx.get("darkweb:enrich-until") || 0;
-        if (until > now) return { ok: false, reason: "lock", retry_at: new Date(until).toISOString() };
-        const backoff = await tx.get("darkweb:enrich-backoff");
-        if (backoff?.until > now) return { ok: false, reason: "backoff", retry_at: new Date(backoff.until).toISOString() };
-        // Daily ledger per Pacific day, the reset day of the Gemini free quota.
-        const parts = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date(now)).map(p => [p.type, p.value]));
-        const day = `${parts.year}-${parts.month}-${parts.day}`;
-        const ledger = await tx.get("darkweb:enrich-ledger");
-        const used = ledger?.day === day ? ledger.count : 0;
-        const limit = Number.isSafeInteger(body.daily_limit) && body.daily_limit >= 0 ? body.daily_limit : 40;
-        if (used >= limit) return { ok: false, reason: "daily_limit", used, limit };
-        await tx.put("darkweb:enrich-ledger", { day, count: used + 1 });
-        await tx.put("darkweb:enrich-until", now + 60000);
-        return { ok: true, used: used + 1, limit };
-      }));
-    }
-    if (url.pathname === "/darkweb-enrich-save") {
-      return Response.json(await this.state.storage.transaction(async tx => {
-        const policy = await tx.get("darkweb:policy");
-        if (body.epoch !== policy.epoch) return { ok: false };
-        let saved = 0;
-        for (const title of body.titles || []) {
-          const key = "darkweb:item:" + title.id, archiveKey = `darkweb:publication:${policy.epoch}:${title.id}`;
-          const item = await tx.get(archiveKey) || await tx.get(key);
-          if (item && item.title === title.original && item.excerpt === title.excerpt && (!item.publication_version || item.content_hash === title.content_hash)) {
-            // "original" is accepted only for a record that still qualifies, and always stores its own title.
-            const original = title.title_en_kind === "original";
-            if (original && !darkwebEnglishOriginal(item)) continue;
-            const updated = { ...item, title_en: original ? item.title : title.title, title_en_kind: original ? "original" : title.title_en_kind === "translation" ? "translation" : "generated", title_en_generated_at: new Date(now).toISOString() };
-            if (item.publication_version) {
-              await tx.put(archiveKey, updated);
-              if (DARKWEB_TITLE_DONE.has(updated.title_en_kind)) await tx.delete(`darkweb:publication-pending:${policy.epoch}:${title.id}`);
-            }
-            if (await tx.get(key)) { const { original_text, ...card } = updated; await tx.put(key, card); }
-            saved++;
-          }
-        }
-        if (body.summary) await tx.put("darkweb:summary", body.summary);
-        // Count unfinished attempts on the record itself; a source change resets it at ingest.
-        for (const entry of (Array.isArray(body.attempted) ? body.attempted : []).slice(0, 10)) {
-          const key = "darkweb:item:" + entry.id, archiveKey = `darkweb:publication:${policy.epoch}:${entry.id}`;
-          const archived = await tx.get(archiveKey), card = await tx.get(key), item = archived || card;
-          if (!item || item.title !== entry.original || item.excerpt !== entry.excerpt || (item.publication_version && item.content_hash !== entry.content_hash)) continue;
-          if (DARKWEB_TITLE_DONE.has(item.title_en_kind)) continue;
-          const enrich_attempts = (item.enrich_attempts || 0) + 1;
-          if (archived) await tx.put(archiveKey, { ...archived, enrich_attempts });
-          if (card) await tx.put(key, { ...card, enrich_attempts });
-        }
-        if (/^[a-f0-9]{64}$/.test(body.summary_fingerprint || "")) await tx.put("darkweb:summary-attempt", { fingerprint: body.summary_fingerprint, at: new Date(now).toISOString() });
-        // After a failed or useless call, back off 15 min doubling up to 6 h; any saved result resets it.
-        if (saved || body.summary) await tx.delete("darkweb:enrich-backoff");
-        else {
-          const failures = Math.min(((await tx.get("darkweb:enrich-backoff"))?.failures || 0) + 1, 16);
-          await tx.put("darkweb:enrich-backoff", { failures, until: now + Math.min(900000 * 2 ** (failures - 1), 21600000) });
-        }
-        return { ok: true, saved };
-      }));
-    }
-
-    // Curated outlet watch: private metadata only, bounded to 500 retained items.
-    // Serialize read/modify/write with storage transactions so collector retries
-    // and parallel outlet saves cannot lose records or duplicate alerts.
-    if (url.pathname === "/darkweb-state") {
-      const outlets = (await this.state.storage.get("darkweb:outlets")) || [];
-      const rows = await this.state.storage.list({ prefix: "darkweb:item:", limit: 500 });
-      const items = [...rows.values()].map(({ preview, ...item }) => ({ ...item, has_preview: !!preview })).sort((a, b) => b.first_seen.localeCompare(a.first_seen));
-      const seen = body.username ? await this.state.storage.get("darkweb:seen:" + body.username) : "";
-      const unread = items.filter(i => !i.baseline && i.first_seen > (seen || ""));
-      return Response.json({ policy: await this.state.storage.get("darkweb:policy"), summary: await this.state.storage.get("darkweb:summary") || null, outlets, items, unread_count: unread.length,
-        keyword_alert_count: unread.filter(i => i.keyword_matches?.length).length,
-        seen_through: seen || "", generated_at: new Date(now).toISOString(), retention_limit: 500 });
-    }
-    if (url.pathname === "/darkweb-seen") {
-      await this.state.storage.transaction(async tx => {
-        const key = "darkweb:seen:" + body.username;
-        const previous = await tx.get(key) || "";
-        await tx.put(key, String(body.through) > previous ? body.through : previous);
-      });
-      return Response.json({ ok: true });
-    }
-    if (url.pathname === "/darkweb-outlet-save") {
-      const result = await this.state.storage.transaction(async tx => {
-        const outlets = await tx.get("darkweb:outlets") || [];
-        const prior = outlets.find(o => o.id === body.outlet.id);
-        if (!prior && outlets.length >= 20) return { error: "Outlet limit reached (20)." };
-        const outlet = { ...prior, ...body.outlet, updated_at: new Date(now).toISOString() };
-        const next = outlets.filter(o => o.id !== outlet.id).concat(outlet);
-        await tx.put("darkweb:outlets", next);
-        return { ok: true, outlet };
-      });
-      return Response.json(result, { status: result.error ? 400 : 200 });
-    }
-    if (url.pathname === "/darkweb-ingest") {
-      const result = await this.state.storage.transaction(async tx => {
-        const policy = await tx.get("darkweb:policy");
-        if (policy.paused || body.collection_epoch !== policy.epoch) return { error: "Collection policy changed; reload configuration." };
-        const outlets = await tx.get("darkweb:outlets") || [];
-        const outlet = outlets.find(o => o.id === body.outlet_id && o.enabled);
-        if (!outlet) return { error: "Unknown or disabled outlet." };
-        const timestamp = new Date(now).toISOString();
-        let added = 0;
-        const knownBuckets = new Map();
-        // Only a completed, non-truncated first inventory establishes the baseline.
-        const baseline = !outlet.initialized_at || body.inventory_phase === "backfill";
-        // Received items are stored even when the pass failed; scan_ok only sets outlet status and the baseline.
-        for (const item of body.items) {
-          const key = "darkweb:item:" + item.id;
-          // Keep small URL-history shards independently from the 500-row feed.
-          // Otherwise listing pages larger than the retained feed would create
-          // the same "new" discoveries every time evicted links are scanned.
-          const bucketKey = "darkweb:known:" + outlet.id + ":" + item.id.slice(0, 2);
-          if (!knownBuckets.has(bucketKey)) knownBuckets.set(bucketKey, await tx.get(bucketKey) || {});
-          const bucket = knownBuckets.get(bucketKey);
-          const archiveKey = `darkweb:publication:${policy.epoch}:${item.id}`;
-          const stored = await tx.get(archiveKey) || await tx.get(key);
-          const prior = stored || bucket[item.id];
-          // A legacy collector or a revisited listing cannot replace complete source text.
-          if (prior?.publication_version && (!item.publication_version || (prior.text_status !== "listing" && item.text_status === "listing"))) continue;
-          if (!prior) added++;
-          const sameContent = prior?.title === item.title && prior?.excerpt === item.excerpt && prior?.content_hash === item.content_hash;
-          // A backfill revisit (such as after a period widening) keeps an alert already stored in this collection.
-          const record = { ...prior, ...item, title_en: sameContent ? prior?.title_en || "" : "", title_en_kind: sameContent ? prior?.title_en_kind || "" : "", overview_en: sameContent ? prior?.overview_en || "" : "", ...(sameContent ? {} : { enrich_attempts: 0 }), first_seen: prior?.first_seen || timestamp,
-            preview: item.preview || prior?.preview || "", last_seen: timestamp, baseline: baseline ? stored?.baseline !== false : prior ? prior.baseline : false,
-            sha256: item.sha256 || prior?.sha256 || "", acquired: item.acquired || prior?.acquired || false,
-            bytes: item.bytes ?? prior?.bytes ?? null };
-          // The outlet-translation flag describes the stored text: an unchanged re-send without it
-          // (an older collector) keeps it, new text without it drops it. It never enters content_hash.
-          if (!item.source_translation && !sameContent) delete record.source_translation;
-          // An English original needs no title translation: no model call and no daily ledger unit.
-          if (darkwebEnglishOriginal(record)) Object.assign(record, { title_en: record.title, title_en_kind: "original" });
-          // Relabelled to another language: the title is queued for translation. Attempts spent on
-          // the original's overview must not keep the title out of the queue.
-          else if (record.title_en_kind === "original") Object.assign(record, { title_en: "", title_en_kind: "", enrich_attempts: 0 });
-          if (item.publication_version) {
-            const oldFiles = new Map((prior?.attachments || []).map(a => [a.url,a]));
-            record.attachments = item.attachments.map(a => a.acquired || !oldFiles.get(a.url)?.acquired ? a : { ...a, ...oldFiles.get(a.url) });
-            if (prior?.published_at && prior.published_at !== item.published_at) await tx.delete(`darkweb:publication-index:${policy.epoch}:${prior.published_at}:${item.id}`);
-            await tx.put(archiveKey, record);
-            await tx.put(`darkweb:publication-index:${policy.epoch}:${item.published_at}:${item.id}`, item.id);
-            if (!record.title_en || !DARKWEB_TITLE_DONE.has(record.title_en_kind)) await tx.put(`darkweb:publication-pending:${policy.epoch}:${item.id}`, item.id);
-            else await tx.delete(`darkweb:publication-pending:${policy.epoch}:${item.id}`);
-          }
-          const { original_text, ...card } = record;
-          await tx.put(key, card);
-          bucket[item.id] = { first_seen: record.first_seen, baseline: record.baseline,
-            sha256: record.sha256, acquired: record.acquired, bytes: record.bytes };
-        }
-        // 256 shards × 128 records per outlet; each value stays below the
-        // Durable Object value-size limit. This is still a bounded history.
-        for (const [key, bucket] of knownBuckets) {
-          const entries = Object.entries(bucket).sort((a, b) => b[1].first_seen.localeCompare(a[1].first_seen)).slice(0, 128);
-          await tx.put(key, Object.fromEntries(entries));
-        }
-        const widening = outlet.period_backfill;
-        if (widening) {
-          // A pass that read the configuration before a widening may still report, so
-          // only a crawl restarted afterwards (fewer pages in its run) covers the new dates.
-          const pages = body.pages_scanned || 0;
-          if ((widening.after_watch ? body.inventory_phase === "backfill" : widening.reports > 0) && pages < widening.last_pages) widening.fresh = true;
-          widening.reports++; widening.last_pages = pages;
-        }
-        outlet.undated_count = body.undated_count || 0;
-        outlet.last_out_of_period = body.out_of_period || 0;
-        outlet.last_scan = timestamp;
-        if (body.inventory_phase === "backfill") outlet.collection_phase = "backfill";
-        outlet.scan_ok = body.scan_ok === true;
-        outlet.error = body.error;
-        outlet.truncated = body.truncated === true;
-        outlet.pages_scanned = body.pages_scanned || 0;
-        outlet.pending_pages = body.pending_pages || 0;
-        outlet.failed_pages = body.failed_pages || 0;
-        outlet.crawl_complete = body.scan_complete === true && !body.truncated;
-        if (body.scan_ok && body.scan_complete) {
-          outlet.last_success = timestamp;
-          if (!body.truncated) {
-            outlet.initialized_at ||= timestamp;
-            // A crawl begun before a widening ends; the collector then restarts from the start page.
-            if (!widening || widening.fresh) { delete outlet.period_backfill; outlet.collection_phase = "watch"; }
-            else widening.fresh = true;
-          }
-        }
-        outlet.last_added = added;
-        await tx.put("darkweb:outlets", outlets);
-        const rows = await tx.list({ prefix: "darkweb:item:", limit: 1000 });
-        // Publication cards keep their archive record, so they leave the feed before legacy cards.
-        const oldest = [...rows.entries()].sort((a, b) => (b[1].publication_version ? 1 : 0) - (a[1].publication_version ? 1 : 0) || a[1].first_seen.localeCompare(b[1].first_seen));
-        for (const [key] of oldest.slice(0, Math.max(0, oldest.length - 500))) await tx.delete(key);
-        return { ok: true, added, baseline, retained_limit: 500, out_of_period: body.out_of_period || 0 };
-      });
-      return Response.json(result, { status: result.error ? 400 : 200 });
     }
 
     if (url.pathname === "/migration-status") {
@@ -1463,130 +1028,6 @@ export class ReportGate {
       workspace.updated_at = new Date(now).toISOString();
       await this.state.storage.put(key, workspace);
       return Response.json({ ok: true, alerts_added: added });
-    }
-
-    if (url.pathname === "/social-workspace-get") {
-      const username = normalizeUsername(body.username);
-      if (!isAllowedUser(username, this.env)) {
-        return Response.json({ error: "Unknown user." }, { status: 400 });
-      }
-      const key = `social-workspace:${username}`;
-      let workspace = (await this.readSocialWorkspace(key)) || {
-        version: "socmint-v1-public-web-report",
-        username,
-        reports: [],
-        updated_at: new Date(now).toISOString()
-      };
-      const pruned = await this.pruneSocialWorkspace(workspace, now);
-      workspace = pruned.workspace;
-      if (pruned.changed) await this.writeSocialWorkspace(key, workspace);
-      if (pruned.nextExpiry != null) await this.scheduleExpiry(pruned.nextExpiry);
-      return Response.json({ ok: true, workspace });
-    }
-
-    // The read and the write happen inside the object, so overlapping runs on a
-    // shared account cannot overwrite each other's reports.
-    if (url.pathname === "/social-report-add") {
-      const username = normalizeUsername(body.username);
-      if (!isAllowedUser(username, this.env)) {
-        return Response.json({ error: "Unknown user." }, { status: 400 });
-      }
-      const report = body.report && typeof body.report === "object" ? body.report : null;
-      if (!report) {
-        return Response.json({ error: "Missing social report." }, { status: 400 });
-      }
-      const key = `social-workspace:${username}`;
-      const current = await this.readSocialWorkspace(key);
-      const pruned = await this.pruneSocialWorkspace({
-        version: cleanText(report.version || "socmint-v1-public-web-report", 80),
-        username,
-        reports: [report, ...(Array.isArray(current?.reports) ? current.reports : [])].slice(0, 50),
-        updated_at: new Date(now).toISOString()
-      }, now);
-      await this.writeSocialWorkspace(key, pruned.workspace);
-      if (pruned.nextExpiry != null) await this.scheduleExpiry(pruned.nextExpiry);
-      return Response.json({ ok: true });
-    }
-
-    if (url.pathname === "/social-acquire") {
-      const username = normalizeUsername(body.username);
-      if (!isAllowedUser(username, this.env)) {
-        return Response.json({ error: "Unknown user." }, { status: 400 });
-      }
-      const runId = crypto.randomUUID();
-      if (username !== "admin") {
-        const day = parisDayKey(now);
-        const activeKey = `social-active:${username}`;
-        const userKey = `social-usage:${username}`;
-        const globalKey = "social-usage-global";
-        const [active, userUsage, globalUsage] = await Promise.all([
-          this.state.storage.get(activeKey),
-          this.state.storage.get(userKey),
-          this.state.storage.get(globalKey)
-        ]);
-        const used = usage => usage?.day === day ? Number(usage.count || 0) : 0;
-        const lockAge = now - Number(active?.started_at || 0);
-        if (lockAge < SOCMINT_RUN_LOCK_MS) {
-          return Response.json({
-            error: "An investigation is already running on this account. Wait for it to finish.",
-            code: "SOCMINT_ACTIVE_RUN_QUOTA",
-            retry_after_seconds: Math.ceil((SOCMINT_RUN_LOCK_MS - lockAge) / 1000)
-          }, { status: 429 });
-        }
-        if (used(userUsage) >= SOCMINT_DAILY_LIMIT) {
-          return Response.json({
-            error: `Daily limit reached: maximum ${SOCMINT_DAILY_LIMIT} SOCMINT investigations per account per day. Admin is exempt.`,
-            code: "SOCMINT_USER_QUOTA_EXHAUSTED"
-          }, { status: 429 });
-        }
-        if (used(globalUsage) >= SOCMINT_GLOBAL_DAILY_LIMIT) {
-          return Response.json({
-            error: "Daily SOCMINT limit reached for all users.",
-            code: "SOCMINT_GLOBAL_QUOTA_EXHAUSTED",
-            retry_after_seconds: 3600
-          }, { status: 429 });
-        }
-        await this.state.storage.put({
-          [activeKey]: { run_id: runId, started_at: now },
-          [userKey]: { day, count: used(userUsage) + 1 },
-          [globalKey]: { day, count: used(globalUsage) + 1 }
-        });
-      }
-      const log = this.usageLogEntry(username, "social", body.details, now);
-      await this.incrementUsage(username, {}, now, log);
-      return Response.json({ ok: true, run_id: runId, log_id: log?.key || "" });
-    }
-
-    if (url.pathname === "/social-release") {
-      const username = normalizeUsername(body.username);
-      if (!isAllowedUser(username, this.env)) {
-        return Response.json({ error: "Unknown user." }, { status: 400 });
-      }
-      const activeKey = `social-active:${username}`;
-      const active = await this.state.storage.get(activeKey);
-      if (active?.run_id && active.run_id === body.run_id) await this.state.storage.delete(activeKey);
-      if (body.log_update) await this.updateUsageLog(username, body.log_update);
-      return Response.json({ ok: true });
-    }
-
-    if (url.pathname === "/social-report-delete") {
-      const username = normalizeUsername(body.username);
-      const reportId = cleanText(body.report_id, 80);
-      if (!isAllowedUser(username, this.env)) {
-        return Response.json({ error: "Unknown user." }, { status: 400 });
-      }
-      const key = `social-workspace:${username}`;
-      const workspace = (await this.readSocialWorkspace(key)) || {
-        version: "socmint-v1-public-web-report",
-        username,
-        reports: []
-      };
-      workspace.reports = Array.isArray(workspace.reports)
-        ? workspace.reports.filter(item => cleanText(item?.id, 80) !== reportId).slice(0, 50)
-        : [];
-      workspace.updated_at = new Date(now).toISOString();
-      await this.writeSocialWorkspace(key, workspace);
-      return Response.json({ ok: true, workspace });
     }
 
     if (url.pathname === "/crypto-exchange-labels-lookup") {
@@ -2021,9 +1462,6 @@ export class ReportGate {
           searches: 1,
           event_list_searches: 1
         }, now, body.details ? this.usageLogEntry(username, "event_list", body.details, now) : null);
-      } else if (action === "darkweb_search") {
-        await this.incrementUsage(username, { darkweb_searches: 1 }, now,
-          this.usageLogEntry(username, "darkweb_search", body.details, now));
       } else {
         return Response.json({ error: "Unsupported action." }, { status: 400 });
       }

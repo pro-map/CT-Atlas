@@ -39,13 +39,8 @@ import { runCryptoMonitor, handleCryptoMonitorCheck, CRYPTO_MONITOR_VERSION } fr
 import { DISPATCH_CRON, runScheduleDispatcher } from "./schedule-dispatcher.js";
 import { handleSourceImage, SOURCE_PREVIEW_VERSION } from "./source-preview.js";
 import { handleReportIllustration, illustrationCandidates, REPORT_ILLUSTRATION_VERSION } from "./report-illustration.js";
-import { handleSocialInvestigate, handleSocialWorkspace, SOCIAL_INTEL_VERSION } from "./social-intel.js";
-import { SOCIAL_AGENT_CLIENT_VERSION, isSocialAgentConfigured } from "./social-agent-client.js";
-import { handleVisualAnalyze, isVisualIntelConfigured, VISUAL_INTEL_VERSION } from "./visual-intel.js";
-import { handleFaceShareUpload, handleFaceShareGet, FACE_SHARE_VERSION } from "./face-share.js";
 import { fetchBackgroundContext, corpusStats } from "./background-corpus.js";
 import { handleDatabaseEvents } from "./database-query.js";
-import { handleDarkweb, DARKWEB_VERSION } from "./darkweb.js";
 import { handleIPIntelligence, IP_INTELLIGENCE_VERSION } from "./ip-intelligence.js";
 export default {
 async fetch(request, env, ctx) {
@@ -58,7 +53,6 @@ if (request.method === "OPTIONS") {
 return new Response(null, { status: 204, headers: corsHeaders(env) });
 }
 if (url.pathname.startsWith("/ip-intelligence/")) return handleIPIntelligence(request, env);
-if (url.pathname.startsWith("/darkweb/")) return handleDarkweb(request, env, ctx);
 if (url.pathname === "/database-events" && request.method === "POST") {
 return handleDatabaseEvents(request, env);
 }
@@ -66,16 +60,14 @@ if (url.pathname === "/database-stats" && request.method === "GET") {
 return jsonResponse({ background_corpus: await corpusStats(env) }, 200, env);
 }
 if (url.pathname === "/health" && request.method === "GET") {
-return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.38", ip_intelligence_domain_enabled: true, ip_intelligence_version: IP_INTELLIGENCE_VERSION, ip_intelligence_enrichment_configured: Boolean(env.IPINFO_TOKEN), ip_intelligence_vpn_detection_enabled: env.PROXYCHECK_ENABLED !== "false" || (env.IPAPI_IS_ENABLED !== "false" && Boolean(env.IPAPI_IS_KEY)), ip_intelligence_ipapi_is_key_configured: Boolean(env.IPAPI_IS_KEY), ip_intelligence_ipapi_is_enabled: env.IPAPI_IS_ENABLED !== "false" && Boolean(env.IPAPI_IS_KEY), ip_intelligence_proxycheck_key_configured: Boolean(env.PROXYCHECK_API_KEY), darkweb_version: DARKWEB_VERSION, darkweb_pdf_storage_configured: Boolean(env.DARKWEB_FILES), darkweb_collector_configured: String(env.DARKWEB_INGEST_TOKEN || "").length >= 32, deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, background_corpus: typeof env.BACKGROUND_DB?.prepare === "function", feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_exchange_address_version: EXCHANGE_ADDRESS_VERSION, crypto_exchange_attribution_version: EXCHANGE_ATTRIBUTION_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_risk_version: RISK_VERSION, crypto_auto_monitoring: true, sanctions_version: SANCTIONS_VERSION, sanctions: await sanctionsHealth(env), crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, report_illustration_version: REPORT_ILLUSTRATION_VERSION, social_intel_version: SOCIAL_INTEL_VERSION, social_intel: true, social_agent_client_version: SOCIAL_AGENT_CLIENT_VERSION, social_agent_configured: isSocialAgentConfigured(env), social_worker_search_provider: env.BRAVE_SEARCH_API_KEY ? "brave" : "disabled", visual_intel_version: VISUAL_INTEL_VERSION, visual_intel: true, visual_intel_configured: isVisualIntelConfigured(env), face_share_version: FACE_SHARE_VERSION, face_share_configured: Boolean(env.FACE_SHARE), schedule_dispatcher_configured: Boolean(env.GITHUB_DISPATCH_TOKEN),crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, crypto_exchange_label_providers: { tronscan_enabled: env.TRONSCAN_TAG_LOOKUP_ENABLED === "true" && Boolean(env.TRONSCAN_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
+return jsonResponse({ ok: true, service: "ct-report-generator", version: "5.39", ip_intelligence_domain_enabled: true, ip_intelligence_version: IP_INTELLIGENCE_VERSION, ip_intelligence_enrichment_configured: Boolean(env.IPINFO_TOKEN), ip_intelligence_vpn_detection_enabled: env.PROXYCHECK_ENABLED !== "false" || (env.IPAPI_IS_ENABLED !== "false" && Boolean(env.IPAPI_IS_KEY)), ip_intelligence_ipapi_is_key_configured: Boolean(env.IPAPI_IS_KEY), ip_intelligence_ipapi_is_enabled: env.IPAPI_IS_ENABLED !== "false" && Boolean(env.IPAPI_IS_KEY), ip_intelligence_proxycheck_key_configured: Boolean(env.PROXYCHECK_API_KEY), deep_search: true, deep_search_version: DEEP_SEARCH_VERSION, report_generator_version: REPORT_GENERATOR_VERSION, background_corpus: typeof env.BACKGROUND_DB?.prepare === "function", feedback_version: FEEDBACK_VERSION, crypto_version: CRYPTO_VERSION, crypto_workspace_version: CRYPTO_WORKSPACE_VERSION, crypto_exchange_address_version: EXCHANGE_ADDRESS_VERSION, crypto_exchange_attribution_version: EXCHANGE_ATTRIBUTION_VERSION, crypto_monitor_version: CRYPTO_MONITOR_VERSION, crypto_risk_version: RISK_VERSION, crypto_auto_monitoring: true, sanctions_version: SANCTIONS_VERSION, sanctions: await sanctionsHealth(env), crypto_monitor_schedule: "every 6 hours", source_preview_version: SOURCE_PREVIEW_VERSION, report_illustration_version: REPORT_ILLUSTRATION_VERSION, schedule_dispatcher_configured: Boolean(env.GITHUB_DISPATCH_TOKEN),crypto_providers: { bitcoin: true, evm: Boolean(env.ETHERSCAN_API_KEY), tron: Boolean(env.TRONGRID_API_KEY) }, crypto_exchange_label_providers: { tronscan_enabled: env.TRONSCAN_TAG_LOOKUP_ENABLED === "true" && Boolean(env.TRONSCAN_API_KEY) }, quiz_tracking: true, quiz_history: true, quiz_protocol: 3, model: "gemini-3.5-flash-lite", auth_mode: authMode(env) }, 200, env);
 }
 if (url.pathname === "/health/status" && request.method === "GET") {
 return handleHealthStatus(env, {
 crypto: CRYPTO_VERSION,
 crypto_monitor: CRYPTO_MONITOR_VERSION,
 crypto_risk: RISK_VERSION,
-sanctions: SANCTIONS_VERSION,
-social: SOCIAL_INTEL_VERSION,
-visual: VISUAL_INTEL_VERSION
+sanctions: SANCTIONS_VERSION
 }, Date.now(), { force: url.searchParams.get("refresh") === "1" });
 }
 if (url.pathname === "/auth-login" && request.method === "POST") {
@@ -156,9 +148,9 @@ if (!sessionResponse.ok || session?.username !== username) return jsonResponse({
 let usagePayload = { username, action };
 if (action === "tab_access") {
   const tab = cleanText(usageBody.tab, 16).toLowerCase();
-  if (!["map", "crypto", "facial", "social", "darkweb", "ip"].includes(tab)) return jsonResponse({ error: "Unsupported workspace tab." }, 400, env);
+  if (!["map", "crypto", "ip"].includes(tab)) return jsonResponse({ error: "Unsupported workspace tab." }, 400, env);
   usagePayload.tab = tab;
-} else if (!["map_search", "event_list_search", "darkweb_search"].includes(action)) {
+} else if (!["map_search", "event_list_search"].includes(action)) {
   return jsonResponse({ error: "Unsupported usage action." }, 400, env);
 } else if (usageBody.details && typeof usageBody.details === "object" && !Array.isArray(usageBody.details)) {
   // What was searched, for the admin search history; the gate keeps only whitelisted, capped fields.
@@ -237,26 +229,11 @@ return handleCryptoMonitorCheck(request, env);
 if (url.pathname === "/crypto-address-labels" && ["GET", "POST"].includes(request.method)) {
 return handleExchangeAddressLabels(request, env);
 }
-if (url.pathname === "/social-investigate" && request.method === "POST") {
-return handleSocialInvestigate(request, env);
-}
-if (url.pathname === "/social-workspace" && ["GET","POST"].includes(request.method)) {
-return handleSocialWorkspace(request, env);
-}
-if (url.pathname === "/visual-analyze" && request.method === "POST") {
-return handleVisualAnalyze(request, env);
-}
 if (url.pathname === "/report-illustration" && request.method === "POST") {
 return handleReportIllustration(request, env);
 }
 if (url.pathname.startsWith("/source-image/") && request.method === "GET") {
 return handleSourceImage(request, env);
-}
-if (url.pathname === "/face-share" && request.method === "POST") {
-return handleFaceShareUpload(request, env);
-}
-if (url.pathname.startsWith("/face-share/") && ["GET", "HEAD"].includes(request.method)) {
-return handleFaceShareGet(request, env);
 }
 if (url.pathname !== "/report" || request.method !== "POST") return jsonResponse({ error: "Not found" }, 404, env);
 let body;
@@ -375,4 +352,10 @@ async scheduled(controller, env, ctx) {
 }
 };
 export { ReportGate } from "./report-gate.js";
-export { FaceShare } from "./face-share.js";
+// Facial Intelligence is retired. This empty class serves nothing and no binding reaches it.
+// It exists only because Cloudflare keeps a Durable Object namespace, and whatever it stores,
+// only while the deployed Worker still exports the class. The namespace stays until the owner
+// deletes it. To do that (Cloudflare docs): remove this class, set [exports.FaceShare] in
+// wrangler.toml to type = "durable-object" and state = "deleted", and deploy. That destroys
+// the namespace's data permanently, so it is the owner's decision and no one else's.
+export class FaceShare {}
