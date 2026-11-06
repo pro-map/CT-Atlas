@@ -86,7 +86,11 @@ jobs:
           test -s vendor/leaflet.markercluster-1.5.3/leaflet.markercluster.js
           test -s vendor/leaflet.heat-0.2.0/leaflet-heat.js
           grep -q 'id="databasePanel"' index.html
-          grep -q 'id="attackTickerList"' index.html
+          grep -q 'id="dataStateBadge"' index.html
+          if grep -q 'id="attackTicker"\|id="weeklyAnalysisButton"' index.html; then
+            echo "A removed map panel is still present" >&2
+            exit 1
+          fi
           grep -q 'CT Atlas Infrastructure' index.html
           grep -q 'id="readme"' main.html
           grep -q 'Use only for authorised duties.' main.html

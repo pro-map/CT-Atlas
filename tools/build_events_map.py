@@ -123,8 +123,8 @@ def build_map(database: dict, excluded: list[str], now: datetime | None = None) 
                               location_from_record=lender.get("id"))
         if is_attack_record(event) and index not in updates:
             # Unlocated attacks (excluded_from_map) stay too: the map never
-            # draws them, but the ticker, the header's casualty counts and the
-            # Key Development links still need them, as with the full file.
+            # draws them, but the header's casualty counts and the Key
+            # Development links still need them, as with the full file.
             map_events.append(lite_event)
         else:
             published = published_at(event)

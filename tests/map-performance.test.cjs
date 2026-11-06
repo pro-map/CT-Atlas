@@ -81,12 +81,6 @@ test("the day cache of a tab left open for weeks stays bounded",()=>{
   assert.ok(vm.runInContext("parisDayByTimestamp.size",h.c)<=limit);
 });
 
-test("the ticker shares one date formatter instead of building one per row",()=>{
-  assert.match(html,/const TICKER_TIME_FORMAT = new Intl\.DateTimeFormat\(/);
-  assert.match(extract("renderAttackTicker"),/TICKER_TIME_FORMAT\.format\(date\)/);
-  assert.doesNotMatch(extract("renderAttackTicker"),/toLocaleString\("en-GB", \{/);
-});
-
 test("the heat layer can never abort refreshDashboard(): its construction is wrapped in try/catch",()=>{
   const heatBlock=normBetween("if ( showHeat","const totalSelected =");
   assert.ok(/\btry\s*\{/.test(heatBlock),"heat layer construction must be inside a try block");

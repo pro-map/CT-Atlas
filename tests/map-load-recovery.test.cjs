@@ -118,16 +118,13 @@ function pageHarness(loader){
 }
 const retryIn=node=>node.children.find(child=>typeof child!=="string");
 
-test("a total failure is visible in the header and the ticker, with a Retry that works",async()=>{
+test("a total failure is visible in the header, with a Retry that works",async()=>{
   let fail=true;
   const h=pageHarness(async()=>{if(fail)throw new Error("all three files failed");return {events:[]};});
   await h.c.startMapLoad();
   assert.equal(h.node("lastUpdated").textContent.trim(),"Database unavailable");
   const button=retryIn(h.node("lastUpdated"));
   assert.equal(button.textContent,"RETRY");
-  const row=h.node("attackTickerList").children[0];
-  assert.match(row.textContent,/could not be loaded/);
-  assert.equal(retryIn(row).textContent,"RETRY");
   assert.equal(h.c.mapInitialLoadComplete,true,"the refresh poll is released");
   assert.equal(vm.runInContext("mapLoadFailed",h.c),true);
   fail=false;

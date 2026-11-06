@@ -66,8 +66,6 @@ test("every date on the page is Paris time and says so",()=>{
   vm.runInContext(formats,c);
   const when=new Date("2026-11-05T23:10:25Z");
   assert.equal(vm.runInContext("EVENT_TIME_FORMAT",c).format(when),"06 Nov 2026, 00:10");
-  assert.match(html,/const TICKER_TIME_FORMAT = new Intl\.DateTimeFormat\("en-GB", \{ timeZone: "Europe\/Paris"/);
-  assert.match(html,/Executed, attempted and foiled attacks, in Paris time\./);
   assert.match(html,/Attacks over time · 30 days · Paris days/);
   assert.match(extract("renderChronology"),/" · times in Paris time"/);
   assert.match(extract("showDatabaseEventCard"),/EVENT_TIME_FORMAT\.format\(published\) \+ " Paris"/);

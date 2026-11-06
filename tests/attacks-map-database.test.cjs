@@ -97,7 +97,7 @@ test('without events-map.json the map filters events-lite.json with the same rul
   };
   const {data,source}=await runLoader({'events-map.json':{events:[],recent_events:[],map:{recent_events_days:8}},'events-lite.json':lite});
   assert.equal(source,'events-lite.json');
-  // Unlocated attacks stay (never drawn, but in the ticker and header counts),
+  // Unlocated attacks stay (never drawn, but in the header counts),
   // like tools/build_events_map.py.
   assert.deepEqual(data.events.map(e=>e.id),['attack','unlocated-attack']);
   assert.deepEqual(data.recent_events.map(e=>e.id),['arrest','arrest20','cited-old-operation']);
@@ -340,10 +340,8 @@ test('a list that no longer matches the filters is never shown or exported',()=>
   assert.match(extract('queryDatabase'),/const seq = \+\+databaseQuerySeq;[\s\S]*?chronologySelectedKeys\.clear\(\);[\s\S]*?const promise = fetch/);
 });
 
-test('list and ticker clicks only zoom to events the map shows; the rest open their card',()=>{
-  assert.match(extract('openDatabaseEvent'),/if \(isOnMapNow\(event\._mapEventKey\)\)/);
-  assert.match(extract('openMapEventOrCard'),/if \(isOnMapNow\(event\._mapKey\)\)[\s\S]*showDatabaseEventCard\(event\)/);
-  assert.match(extract('renderAttackTicker'),/openMapEventOrCard\(allEvents\.find\(/);
+test('list clicks only zoom to events the map shows; the rest open their card',()=>{
+  assert.match(extract('openDatabaseEvent'),/if \(isOnMapNow\(event\._mapEventKey\)\)[\s\S]*showDatabaseEventCard\(event\)/);
   const c=vm.createContext({selectedDays:1,mapCategoryScope:'ATTACKS'});
   vm.runInContext(retirementRuleSource+extract('isMapAttackEvent')+extract('withinDays')+extract('databaseEventCardNote'),c);
   assert.match(c.databaseEventCardNote({primary_event_type:'ARREST'}),/attacks only/);
@@ -372,23 +370,6 @@ test('a follow-up row and its map record link, stay off the map and open their c
 
 test('a non-attack record on the map can be focused from its Database row',()=>{
   assert.match(extract('focusChronologyEvent'),/\[\.\.\.allEvents, \.\.\.recentContextEvents\]\.find\(/);
-});
-
-test('the ticker badges the points that are not the first report of their attack',()=>{
-  const list={classList:{remove(){},add(){}},style:{setProperty(){}},dataset:{bound:'1'},innerHTML:'',scrollHeight:0};
-  const events=[
-    {_mapKey:'a',title:'Blast',primary_event_type:'ATTACK',update_type:'INITIAL',published:'2026-09-30T08:00:00Z'},
-    {_mapKey:'b',title:'New drone attack',primary_event_type:'ATTACK',update_type:'FOLLOW_UP',published:'2026-09-29T08:00:00Z'},
-    {_mapKey:'c',title:'Foiled',primary_event_type:'DISRUPTED_PLOT',update_type:'ARREST_UPDATE',published:'2026-09-28T08:00:00Z'},
-    {_mapKey:'d',title:'Legacy',category:'Attacks',published:'2026-09-27T08:00:00Z'},
-  ];
-  const c=vm.createContext({Date,window:{},selectedDays:7,filteredAllEvents:()=>events,escapeHtml:String,TICKER_TIME_FORMAT:new Intl.DateTimeFormat('en-GB'),
-    attackTickerTitle:()=>'',mapDataOlderThan:()=>false,
-    document:{getElementById:id=>id==='attackTickerList'?list:id==='attackTickerViewport'?{clientHeight:100}:null}});
-  vm.runInContext(extract('renderAttackTicker'),c);
-  c.renderAttackTicker();
-  const badges=list.innerHTML.split('<li').slice(1).map(item=>[...item.matchAll(/ticker-badge">(\w+)</g)].map(match=>match[1]));
-  assert.deepEqual(badges,[[],['UPDATE'],['FOILED','UPDATE'],[]]);
 });
 
 test('red markers and heat are for attacks: a record merely filed under Attacks takes its next category',()=>{
@@ -429,13 +410,13 @@ test('the event card only links http(s) URLs and escapes every field',()=>{
   assert.equal(c.safeHttpUrl('https://example.com/a'),'https://example.com/a');
 });
 
-test('the ticker lists the period attacks, pauses on hover, respects reduced motion and hides on phones',()=>{
-  assert.match(extract('refreshDashboard'),/renderEvents\(\);\s*renderAttackTicker\(\);/);
-  assert.match(html,/@media \(prefers-reduced-motion: reduce\) \{\s*#attackTickerList\.ticker-animated \{ animation: none; \}/);
-  assert.match(html,/#attackTickerViewport:hover #attackTickerList/);
-  assert.match(html,/@media \(max-width: 820px\) \{\s*#attackTicker \{ display: none; \}/);
-  assert.match(extract('renderAttackTicker'),/if \(!reducedMotion && list\.scrollHeight/,'no hidden duplicate list without the animation');
-  assert.match(html,/new ResizeObserver\(/,'re-measured once the page is unlocked');
+test('the attack list beside the map is gone at every width and the map keeps the whole stage',()=>{
+  assert.doesNotMatch(html,/ticker/i);
+  assert.ok(!/openMapEventOrCard/.test(html),'only that list opened events this way');
+  assert.match(html,/<div id="map"><\/div>\s*<div id="timelineDock">/);
+  const css=html.replace(/\r\n/g,'\n');
+  assert.match(css,/#mapStage \{\n    position: relative;\n    min-width: 0;\n    height: 100%;/);
+  assert.match(css,/#map \{\n    width: 100%;\n    height: 100%;/);
 });
 
 test('the Database route is protected by the session wrapper and scripts are cache-busted',()=>{
@@ -623,8 +604,8 @@ test('the "Show on map" selector defaults to all events and the map file covers 
   assert.match(html,/_filteredMappedEventsCache = mapScopeEvents\(\)\.filter\(/);
   assert.match(html,/const MAP_RECENT_EVENT_DAYS = 181;/);
   assert.match(fs.readFileSync('tools/build_events_map.py','utf8'),/^RECENT_DAYS = 181$/m);
-  // The ticker and KPIs stay about attacks whatever the map shows.
-  assert.match(html,/const events = filteredAllEvents\(\)\s*\n?\s*\.map/);
+  // The coverage figures stay about attacks whatever the map shows.
+  assert.match(extract('updateCoverage'),/filteredAllEvents\(\)/);
 });
 
 test('attacks pulse in red on the map, clusters holding one too; the offices are small and static',()=>{
@@ -834,9 +815,9 @@ test('an open map ages a RadNuc item out of the 24h badge and marker cache witho
   ];
   Object.assign(c,{
     updateKPIs:()=>{}, updateFacetCounts:()=>{facets=vm.runInContext('mapScopeCandidates().filter(e=>withinDays(e.published,1)).length',c);},
-    renderEvents:()=>{draws++;},updateCoverage:()=>{},updateTopLocations:()=>{},renderAttackTicker:()=>{},
+    renderEvents:()=>{draws++;},updateCoverage:()=>{},updateTopLocations:()=>{},
     updateCommandCenterPanels:()=>{},updateHealthStatusPanel:()=>{},renderHeaderSituationBrief:()=>{},
-    renderDataStateBadge:()=>{},attackTickerTitle:()=>'',
+    renderDataStateBadge:()=>{},
   });
   vm.runInContext('let dashboardClockMinute = -1; let mapPopupOpen = false; let mapSpiderfied = false; let mapRebuildDeferred = false; attacks=[];allEvents=[];recentContextEvents=clockEvents;selectedDays=1;setMapCategoryScope("Radiological/Nuclear");invalidateFilterCache();'+extract('rebuildAgedMap')+extract('refreshTimeSensitiveDashboard'),c);
   assert.equal(vm.runInContext('filteredMappedEvents().length',c),2);

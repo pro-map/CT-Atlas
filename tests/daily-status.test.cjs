@@ -5,7 +5,7 @@ const vm=require('node:vm');
 
 const html=fs.readFileSync('index.html','utf8');
 const start=html.indexOf('// Update completeness is collection metadata');
-const end=html.indexOf('// Written where it shows: in the header and the ticker.',start);
+const end=html.indexOf('// Written in the header, which every width shows.',start);
 assert.ok(start>=0&&end>start,'collection status helpers are present');
 const source=html.slice(start,end);
 function context(document={getElementById:()=>null}) {

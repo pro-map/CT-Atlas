@@ -41,7 +41,7 @@ class MapAttackTests(unittest.TestCase):
             ['attack', 'attempt', 'plot', 'legacy-attack', 'unlocated-attack'],
         )
 
-    def test_unlocated_attacks_stay_for_the_ticker_and_the_header_counts(self):
+    def test_unlocated_attacks_stay_for_the_header_counts(self):
         output = m.build_map(sample_database(), [])
         unlocated = [e for e in output['events'] if e['id'] == 'unlocated-attack']
         self.assertEqual(len(unlocated), 1)
@@ -292,7 +292,7 @@ class AttackPointTests(unittest.TestCase):
             attack('located-update', '2026-09-29T08:00:00Z', update='FOLLOW_UP'),
         ), ['located-update'])
         self.assertEqual(self.points(attack('no-place', place=UNLOCATED)), ['no-place'],
-                         'An incident nobody could place still reaches the ticker and the header')
+                         'An incident nobody could place still reaches the header')
 
     def test_a_historic_record_never_takes_over_an_unlocated_point(self):
         self.assertEqual(self.points(

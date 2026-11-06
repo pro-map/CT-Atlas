@@ -21,7 +21,7 @@ function extract(name){
   return html.slice(start,i+1);
 }
 
-const statusBlock=html.slice(html.indexOf("// Update completeness is collection metadata"),html.indexOf("// Written where it shows: in the header and the ticker."));
+const statusBlock=html.slice(html.indexOf("// Update completeness is collection metadata"),html.indexOf("// Written in the header, which every width shows."));
 
 // The live collection status of 5 Nov 23:10 UTC, trimmed to the fields in play.
 const fiveNovember={
@@ -222,37 +222,12 @@ test("a day the collection did not finish shows a dash, not 0; figures already r
   assert.equal(finished("headerVictimsDeaths24"),"0","a finished quiet day is a real zero");
 });
 
-function tickerContext(status,nowMs,selectedDays){
-  const c=vm.createContext({Date:{now:()=>nowMs,parse:Date.parse},Intl,Number,selectedDays,collectionStatusDate:value=>"DATE("+new Date(value).toISOString()+")",
-    formatTrendGeneratedAt:()=>"06 Nov, 00:10",mapDataFacts:facts(status)});
-  vm.runInContext(extract("dataPublishedTime")+extract("mapDataOlderThan")+"const MAP_WINDOW_NOTE_MS = 60 * 60 * 1000;"+extract("attackTickerTitle")+extract("attackTickerEmptyText"),c);
-  return c;
-}
-
-test("older data than the window says so instead of 'No attack reported'",()=>{
-  // Measured: 3.5 days after publication the 24H view read as a quiet world.
-  const stale=tickerContext(goodRun,hours(84),1);
-  assert.equal(stale.attackTickerEmptyText(),"No data published since DATE(2026-11-05T23:10:25.362Z).");
-  const week=tickerContext(goodRun,hours(84),7);
-  assert.equal(week.attackTickerEmptyText(),"No attack reported in this period.","the data still reaches into 7 days");
-  const fresh=tickerContext(goodRun,hours(2),1);
-  assert.equal(fresh.attackTickerEmptyText(),"No attack reported in this period.");
-});
-
-test("24h figures say where the data ends once it stops being current",()=>{
-  assert.equal(tickerContext(goodRun,hours(0.5),1).attackTickerTitle(),"ATTACKS · LAST 24H");
-  assert.equal(tickerContext(goodRun,hours(8),1).attackTickerTitle(),"ATTACKS · LAST 24H · DATA TO 06 NOV, 00:10 PARIS");
-  assert.equal(tickerContext(goodRun,hours(8),7).attackTickerTitle(),"ATTACKS · LAST 7 DAYS");
+test("the 24h button says where the data ends, and a period it no longer reaches shows a dash",()=>{
   assert.match(extract("updateFacetCounts"),/Rolling 24 hours from now; the data ends/);
-});
-
-test("a period the data no longer reaches shows a dash on its button and in the ticker count",()=>{
   assert.match(extract("updateFacetCounts"),/count === 0 && mapDataOlderThan\(days\)\s*\?\s*"—"/);
-  assert.match(extract("renderAttackTicker"),/!events\.length && mapDataOlderThan\(selectedDays\) \? "—"/);
 });
 
-test("the ticker's title follows the data age on the minute tick, without waiting for the list to change",()=>{
-  assert.match(extract("refreshTimeSensitiveDashboard"),/tickerTitle\.textContent !== attackTickerTitle\(\)/);
+test("the badge follows the data age on the minute tick and the period on every redraw",()=>{
   assert.match(extract("refreshTimeSensitiveDashboard"),/renderDataStateBadge\(\);/);
   assert.match(extract("refreshDashboard"),/renderDataStateBadge\(\);/);
 });

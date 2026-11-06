@@ -63,7 +63,8 @@ jobs:
               && grep -q 'const MAP_RECENT_EVENT_DAYS = 181;' /tmp/index.html \
               && grep -q 'usage-admin.js?v=retired-ip-20261106' /tmp/main.html \
               && ! grep -q '<th>SOCIAL</th>\|SOCIAL MEDIA SEARCH' /tmp/usage-admin.js \
-              && grep -q 'id="attackTickerList"' /tmp/index.html \
+              && grep -q 'id="dataStateBadge"' /tmp/index.html \
+              && ! grep -q 'id="attackTicker"\|id="weeklyAnalysisButton"' /tmp/index.html \
               && grep -q 'id="databasePanel"' /tmp/index.html \
               && grep -q 'window.CTAtlasPdf' /tmp/pdf-export.js \
               && grep -q 'Behavioral Pattern Detection' /tmp/crypto.html \

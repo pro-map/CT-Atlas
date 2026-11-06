@@ -80,5 +80,6 @@ test("the live smoke test waits for GitHub Pages to publish the new map before v
   const smoke=fs.readFileSync(".github/workflows/live-smoke.yml","utf8");
   const loop=smoke.slice(smoke.indexOf("for attempt in {1..18}"),smoke.indexOf("Updated PDF assets did not become available"));
   assert.match(loop,/time-button active.*data-days="7"/,"the retry loop must wait for the 7-day default");
-  assert.ok(loop.includes('id="attackTickerList"'),"the retry loop must wait for the attacks ticker");
+  assert.ok(loop.includes(`grep -q 'id="dataStateBadge"'`),"the retry loop must wait for the Published badge");
+  assert.ok(loop.includes(`! grep -q 'id="attackTicker"`),"and until the old page with the attack list is gone");
 });
