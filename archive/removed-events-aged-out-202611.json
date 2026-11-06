@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-05T18:02:01.181774+00:00",
+  "removed_at": "2026-11-06T17:39:15.173641+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -594,6 +594,136 @@
       "region": "Yobe",
       "ai_relevance_score": 90,
       "ai_relevance_reason": "Reports a concrete, large-scale militant attack and subsequent counter-attack."
+    },
+    {
+      "id": "88f62422d565124d",
+      "incident_id": "inc-665707bbc468a5cd",
+      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE9RQWFUZnJiSHVDVThNdWxUZEU5YkxmdDBacWM0VzlFamxwWHl0eUF2dm5PaHBMNFBQbDNER3NuV0VoWDZuOFpnVW5nY2w?oc=5",
+      "title": "Counter-Terrorism Service seizes weapons caches and dismantles ISIS hideout in Hamrin Mountains and Diyala",
+      "summary": "Iraq's Counter-Terrorism Service announced the seizure of two weapons caches and the dismantling of an ISIS hideout in the Hamrin Mountains and Diyala governorate.",
+      "original_title": "مكافحة الإرهاب: ضبط كدسين للعتاد وتفكيك وكر لداعش في جبال حمرين وديالى",
+      "original_language": "ar",
+      "source": "وكالة الانباء العراقية (واع)",
+      "published": "2026-05-10T11:36:52+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Weapons"
+      ],
+      "actor_group": "ISIS",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Iraq",
+      "region": "Diyala",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a counter-terrorism operation dismantling an ISIS hideout and seizing weapons caches.",
+      "related_articles": []
+    },
+    {
+      "id": "226473ee41944e07",
+      "incident_id": "inc-5718620ea59e1aee",
+      "url": "https://news.google.com/rss/articles/CBMimwJBVV95cUxNMm1lZjNvTWNZWmR1STlpZ3hRaF9TQTd5V3ZONTVuOURuaWNHeG1xbno1blhxZE01V2pLSEJjUGtDNkVZbERUcHhMOFRKdko5WTlIS1Y0VVN4Z3RsM284enk5Z1l4VFJRZlR4ZTlTQkZmUFR5S3NoSmlNZGRUaDVnLURaWkJsaXhNelFFdzNkeEJhWmFDdGZiMzdHdVBtVGpNbU94THJsRzhZWEdmRFBBT3NiNEl3TXlTZy1UUHJjUG53R08zQ3NRRnlOUm8yZjB4WU1QVF80Q29vZFhYQ3NwM21pSnlkUGFhX2NIOUYwRHRYdUhOSE9DTHRDcHJJd0NTQlF1ZVhMUlRFRWptWF9uTm9adVhMVmtkYjNR?oc=5",
+      "title": "Syrian cities: Civilians and police on the lookout for dormant terrorist cells",
+      "summary": "An operational report detailing vigilance and patrols by local security forces and civilians in Syrian cities targeting active dormant terrorist cells.",
+      "original_title": "« Ils ont des cellules dormantes dans le quartier. Et nous, on est vigilants » : dans les villes syriennes, civils et policiers à l’affût des terroristes",
+      "original_language": "fr",
+      "source": "Le Figaro",
+      "published": "2026-05-10T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Syria",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Describes active security patrols and operations tracking dormant terrorist cells.",
+      "related_articles": []
+    },
+    {
+      "id": "4dedaa9e3b787e17",
+      "incident_id": "inc-a60fd7910390c5bf",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNZWJzTGtlZEFfTHBoRms3UEVFQm80blk3UWJaOWZKOEhKT3JEN3FkeVhZY2praGZVQllta05xWk9uQVZWaHFYTnA1dGxUR19zbEplUXlNVUVMQ1lsSXlzS0ljaHJDRUR0Z3hIR21UQWpXZmdXbTJ2dHFlTkJVYjVJX3NfUlhpb3ZVUnlmYkNnNWxPZ3VjSVM5al9BanBaNFFLeGVpMmp1ai0?oc=5",
+      "title": "15 policemen killed in suicide assault on Bannu police post",
+      "summary": "Fifteen police officers were killed in a suicide bombing assault targeting a police post in Bannu, Pakistan.",
+      "original_title": "15 policemen martyred in suicide assault on Bannu Police post",
+      "original_language": "ur",
+      "source": "Pakistan Today",
+      "published": "2026-05-10T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Pakistan",
+      "ai_relevance_score": 88,
+      "ai_relevance_reason": "Reports a concrete suicide attack resulting in multiple fatalities.",
+      "related_articles": []
+    },
+    {
+      "id": "dce4341ee7bcfc18",
+      "incident_id": "inc-6b10e909dd64a0cf",
+      "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE9Ia0xTdTYyY3ZfOTNPTVh5X3VTTFdwTnJLMUt6Q2lBczVWZHNQTkxjTmYyVUt2SS1tQ09STDNaMnhxVVIwTHdB?oc=5",
+      "title": "Car bomb explodes in Al-Wuroud district, Damascus",
+      "summary": "A car bomb exploded in the Al-Wuroud neighborhood of Damascus, Syria.",
+      "original_title": "سوريا.. انفجار سيارة مفخخة في حي الورود بدمشق",
+      "original_language": "ar",
+      "source": "صدى البلد",
+      "published": "2026-05-10T07:00:00+00:00",
+      "category": "Attacks",
+      "categories": [
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ATTACK",
+      "country": "Syria",
+      "ai_relevance_score": 70,
+      "ai_relevance_reason": "Concrete militant/terrorist attack using a vehicle-borne explosive device.",
+      "related_articles": []
+    },
+    {
+      "id": "52d840506624882f",
+      "incident_id": "inc-956e0901ed02f6e1",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNcmxHdDU5dV8yUjd3aUdGRE9LaldnWmJtZ1VLWm03SEdDZWZ6a3gtZ0xoM3oxTG1sOVlxNTZCVkNJNEp1eDJWZUNBQ0tRbFdXWmFZbWNBeDdYVUt6Q01Nekp0RVNETkE2QmotLUxiYXNUbHJrN0cxbVA5OTRlWThLMnAtRVZpY2M3cTZYeW92a2d2UUxhVTF4YXd5MnByUUJSY2ZVLThpZjl3ZTRRaGQyV2xhX1hQYlNJQ3ExYVMzdkR4MXlkSGxwa2dB?oc=5",
+      "title": "Malian army conducts targeted strikes against terrorist groups in Gao",
+      "summary": "The Malian Armed Forces (FAMa) conducted targeted strikes against unidentified armed terrorist groups in the Gao region.",
+      "original_title": "Gao : les FAMa mènent des frappes ciblées contre des groupes armés terroristes",
+      "original_language": "fr",
+      "source": "malijet.com",
+      "published": "2026-05-10T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Mali",
+      "ai_relevance_score": 80,
+      "ai_relevance_reason": "Reports a concrete offensive military operation against militants.",
+      "related_articles": []
+    },
+    {
+      "id": "96e1ae934dbe9088",
+      "incident_id": "inc-d8902fc11bbfd025",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPcHIwUXZHWlYtT2l6b1FmWGJfOG5wTDIxN01Ja2UzV3FabDIwTXBmbW9UX1lNSnNoTldyZC1BemlhSnNSckRuT3dCaGhVQTJSZmdTcXBJQVpXVjlvbVk2SkdaR01pOC1IbDZianlhWXVJTTZlbk9RazBhWk1vSVJTSUZvXzJBZ3d2SlNpQ1dSTWw2OU41RC1aanZ3Z1lDYWtJUkZ1VGlaRmJUNVBpOFVV?oc=5",
+      "title": "Report of Somali pirate seizure of dhow for mothership",
+      "summary": "Reports indicate Somali pirates have hijacked a dhow, allegedly for use as a mothership for further operations.",
+      "original_title": "Report That Somali Pirates Seized Another Dhow for Potential Mothership",
+      "original_language": "en",
+      "source": "The Maritime Executive",
+      "published": "2026-05-10T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "Somalia",
+      "ai_relevance_score": 75,
+      "ai_relevance_reason": "Reports a concrete instance of vessel hijacking by pirates.",
+      "related_articles": []
     }
   ]
 }
