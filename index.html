@@ -10977,6 +10977,31 @@ function parisNowParts() {
 }
 
 
+// Building an Intl.DateTimeFormat is what froze the page: this ran for every
+// event, several times per pass, once a minute. One formatter serves every call
+// and each timestamp is formatted once; the bound keeps a tab left open for
+// weeks from growing without limit.
+const PARIS_DAY_FORMAT =
+    new Intl.DateTimeFormat(
+        "en-CA",
+        {
+            timeZone:
+                "Europe/Paris",
+            year:
+                "numeric",
+            month:
+                "2-digit",
+            day:
+                "2-digit"
+        }
+    );
+
+const PARIS_DAY_CACHE_LIMIT = 100000;
+
+const parisDayByTimestamp =
+    new Map();
+
+
 function parisCalendarDateString(
     date
 ) {
@@ -10991,21 +11016,22 @@ function parisCalendarDateString(
         return "";
     }
 
+    const time =
+        date.getTime();
+
+    const known =
+        parisDayByTimestamp.get(
+            time
+        );
+
+    if (
+        known !== undefined
+    ) {
+        return known;
+    }
+
     const parts =
-        new Intl.DateTimeFormat(
-            "en-CA",
-            {
-                timeZone:
-                    "Europe/Paris",
-                year:
-                    "numeric",
-                month:
-                    "2-digit",
-                day:
-                    "2-digit"
-            }
-        )
-        .formatToParts(
+        PARIS_DAY_FORMAT.formatToParts(
             date
         );
 
@@ -11026,13 +11052,27 @@ function parisCalendarDateString(
         }
     );
 
-    return (
+    const day =
         obj.year
         + "-"
         + obj.month
         + "-"
-        + obj.day
+        + obj.day;
+
+    if (
+        parisDayByTimestamp.size
+        >=
+        PARIS_DAY_CACHE_LIMIT
+    ) {
+        parisDayByTimestamp.clear();
+    }
+
+    parisDayByTimestamp.set(
+        time,
+        day
     );
+
+    return day;
 }
 
 
@@ -11080,13 +11120,42 @@ function shiftCalendarDateString(
 }
 
 
+// Asked for once per event: the answer can only change on a minute boundary
+// (Paris offsets are whole hours), so a whole pass shares one computation and
+// the current time never reaches the per-timestamp cache event by event.
+let parisYesterdayMinute = null;
+let parisYesterdayValue = "";
+
 function parisYesterdayDateString() {
-    return shiftCalendarDateString(
-        parisCalendarDateString(
-            new Date()
-        ),
-        -1
-    );
+
+    const now =
+        new Date();
+
+    const minute =
+        Math.floor(
+            now.getTime()
+            /
+            60000
+        );
+
+    if (
+        minute
+        !==
+        parisYesterdayMinute
+    ) {
+        parisYesterdayMinute =
+            minute;
+
+        parisYesterdayValue =
+            shiftCalendarDateString(
+                parisCalendarDateString(
+                    now
+                ),
+                -1
+            );
+    }
+
+    return parisYesterdayValue;
 }
 
 
@@ -14817,6 +14886,8 @@ function closeDatabaseEventCard() {
     panel.setAttribute("aria-hidden", "true");
 }
 
+const TICKER_TIME_FORMAT = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+
 // Scrolling list of the period's attacks on the right of the map. The list is
 // doubled and moved up by exactly one copy for a seamless loop; it only
 // scrolls when it overflows, pauses on hover, and stays still for readers
@@ -14847,7 +14918,7 @@ function renderAttackTicker() {
         const date = new Date(event.published || 0);
         const when = isNaN(date.getTime())
             ? ""
-            : date.toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+            : TICKER_TIME_FORMAT.format(date);
         const place = event.city || event.country || "";
         const type = String(event.primary_event_type || "").toUpperCase();
         const badges = [type === "DISRUPTED_PLOT" ? "FOILED" : (type === "ATTEMPTED_ATTACK" ? "ATTEMPT" : ""),
