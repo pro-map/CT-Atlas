@@ -1453,6 +1453,24 @@ function databaseEvidenceRows(db, plan, window, filters) {
   });
 }
 
+// All a search takes from the database. The parsed copy lives in this frame only: a local of
+// the handler stays reachable through the news search and the model calls that follow.
+async function readDatabaseEvidence(env, plan, window, filters) {
+  let db = { events: [] }, databaseVersion = "unavailable";
+  try {
+    const eventsDatabase = await fetchEventsDatabase(env);
+    if (eventsDatabase.ok) {
+      db = eventsDatabase.db;
+      databaseVersion = cleanText(db.updated_at || db.generated_at || db.last_updated || "unknown", 100);
+    }
+  } catch (_) {}
+  return {
+    databaseVersion,
+    databaseRows: databaseEvidenceRows(db, plan, window, filters),
+    mapEvents: candidateMapEvents(db, window)
+  };
+}
+
 // An external article that the Atlas comparison matched to one of the
 // database evidence events is not a new finding: fold it into that event as
 // a corroborating source instead of spending a separate evidence slot on it.
@@ -1775,15 +1793,7 @@ export async function handleDeepSearch(request, env, ctx) {
 
     // 1. The CT Atlas database first (same single events fetch as before,
     //    just moved ahead of the external search -- no extra subrequest).
-    let db = { events: [] }, databaseVersion = "unavailable";
-    try {
-      const eventsDatabase = await fetchEventsDatabase(env);
-      if (eventsDatabase.ok) {
-        db = eventsDatabase.db;
-        databaseVersion = cleanText(db.updated_at || db.generated_at || db.last_updated || "unknown", 100);
-      }
-    } catch (_) {}
-    const databaseRows = databaseEvidenceRows(db, plan, window, filters);
+    const { databaseVersion, databaseRows, mapEvents } = await readDatabaseEvidence(env, plan, window, filters);
 
     // 2. Then external search.
     const retrieval = await retrieveNews(plan, window, priorityLanguages);
@@ -1809,7 +1819,7 @@ export async function handleDeepSearch(request, env, ctx) {
       ? "No current reporting could be retrieved: the search providers failed or were rate-limited for every query. Say so at the top of KEY JUDGEMENTS, answer from general knowledge [GK] only, and set every confidence level to low for anything recent."
       : "No current reporting was found for this question and period in the CT Atlas database or the multilingual search. Say so at the top of KEY JUDGEMENTS and answer from general knowledge [GK] only.";
 
-    const compared = compareWithAtlas(unique, candidateMapEvents(db, window));
+    const compared = compareWithAtlas(unique, mapEvents);
     const externalRows = foldIntoDatabaseEvidence(databaseRows, compared);
     const evidence = [
       ...databaseRows.map(evidenceItem),

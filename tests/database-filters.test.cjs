@@ -253,7 +253,8 @@ test('buildEvidence honours a reduced slot count',()=>{
 test('Deep Search consults the database before external search and numbers evidence database-first',()=>{
   const source=fs.readFileSync('cloudflare-worker/deep-search.js','utf8');
   const handler=source.slice(source.indexOf('export async function handleDeepSearch('));
-  assert.ok(handler.indexOf('databaseEvidenceRows(db, plan, window, filters)')<handler.indexOf('await retrieveNews('),'database first');
+  assert.ok(handler.indexOf('readDatabaseEvidence(env, plan, window, filters)')>=0,'the handler reads the database');
+  assert.ok(handler.indexOf('readDatabaseEvidence(env, plan, window, filters)')<handler.indexOf('await retrieveNews('),'database first');
   assert.match(handler,/const noCurrentReporting = !unique\.length && !databaseRows\.length;/);
   assert.match(handler,/\.\.\.databaseRows\.map\(evidenceItem\),\s*\.\.\.buildEvidence\(externalRows, priorityLanguages, DEEP_SEARCH_MAX_EVIDENCE - databaseRows\.length\)/);
   assert.equal((source.match(/fetchEventsDatabase\(env\)/g)||[]).length,1,'still a single events fetch');
