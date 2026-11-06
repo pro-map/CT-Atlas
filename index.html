@@ -11372,16 +11372,19 @@ function isCurrentCasualtyEvent(
 
 function casualtyTextForEvent(event) {
 
+    // Only thousands separators go: elsewhere a comma ends a figure's phrase, or
+    // "Two dead, 5 wounded" reads as "dead 5". Fields end one the same way: a title
+    // ending "killing 8" must not take the summary's "Unidentified armed attackers".
     return (
         (event.title || "")
-        + " "
+        + " . "
         + (event.summary || "")
-        + " "
+        + " . "
         + (event.original_title || "")
-        + " "
+        + " . "
         + (event.original_summary || "")
     )
-    .replace(/,/g, "")
+    .replace(/(\d),(?=\d{3}\b)/g, "$1")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -11456,9 +11459,177 @@ const TERRORIST_SIDE_CASUALTY_WORDS = new Set(
         "insurgent", "insurgents",
         "gunman", "gunmen",
         "jihadist", "jihadists",
-        "bomber", "bombers"
+        "bomber", "bombers",
+        "bandit", "bandits",
+        "rebel", "rebels",
+        "extremist", "extremists"
     ]
 );
+
+
+const CASUALTY_NUMBER_WORDS = {
+    one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9,
+    ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15,
+    sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19,
+    twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90
+};
+
+// "No one was killed" is no death, and "mother of eight arrested" one arrest.
+const CASUALTY_NUMBER =
+    "(?<!\\bno\\s)(?<!\\bnot\\s)(?<!\\b(?:mother|father|parent)\\s+of\\s)(\\d{1,5}"
+    + "|(?:twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)(?:[-\\s](?:one|two|three|four|five|six|seven|eight|nine))?"
+    + "|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen)";
+
+const CASUALTY_APPROXIMATION =
+    "(?:at\\s+least\\s+|more\\s+than\\s+|over\\s+)?";
+
+const CASUALTY_TERRORIST_NOUNS =
+    Array.from(TERRORIST_SIDE_CASUALTY_WORDS).join("|");
+
+const CASUALTY_TERRORIST_PLURALS =
+    Array.from(TERRORIST_SIDE_CASUALTY_WORDS).filter(word => /(?:s|men)$/.test(word)).join("|");
+
+const CASUALTY_TERRORIST_SINGULARS =
+    Array.from(TERRORIST_SIDE_CASUALTY_WORDS).filter(word => !/(?:s|men)$/.test(word)).join("|");
+
+// A singular noun counts only after "one": in "Frente 4 member arrested" the
+// figure belongs to the name of the unit.
+function casualtyNounPattern(plurals, singulars) {
+    return "(?:(?:" + plurals + ")\\s+|(?<=\\b(?:one|1)\\s)(?:" + singulars + ")\\s+)?";
+}
+
+const CASUALTY_NOUN =
+    casualtyNounPattern(
+        "people|persons|civilians|soldiers|troops|officers|police|policemen|security\\s+personnel|security\\s+forces|victims|" + CASUALTY_TERRORIST_PLURALS,
+        "person|civilian|soldier|officer|policeman|victim|" + CASUALTY_TERRORIST_SINGULARS
+    );
+
+const CASUALTY_CAPTURED_NOUN =
+    casualtyNounPattern(
+        "people|persons|suspects|militants|terrorists|attackers|fighters|jihadists|extremists|members",
+        "person|suspect|militant|terrorist|attacker|fighter|jihadist|extremist|member"
+    );
+
+// The word after "killed 14" says whose dead they are, and an adjective or two
+// may come first ("killed 14 armed bandits"). A preposition ends the search:
+// in "killed 12 in a terrorist attack" the word names the attack, not the dead.
+const CASUALTY_NAMED_SIDE =
+    "(?:(?!in\\b|at\\b|on\\b|by\\b|near\\b|during\\b|after\\b|from\\b|and\\b|but\\b|as\\b|while\\b|when\\b|to\\b|for\\b|with\\b)[a-z'-]+\\s+){0,2}?(?:"
+    + CASUALTY_TERRORIST_NOUNS
+    + ")\\b";
+
+const CASUALTY_PATTERNS = {
+    death: [
+        new RegExp("\\b" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\s+" + CASUALTY_NOUN + "(?:(?:were|was)\\s+)?(?:killed|dead|died)\\b", "gi"),
+        new RegExp("\\b(?:killed|dead|fatalities|deaths)\\s*[:\\-]?\\s*" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\b(?:\\s+" + CASUALTY_NAMED_SIDE + ")?", "gi"),
+        /\bdeath\s+toll(?:\s+(?:has\s+)?(?:risen|rose|rises|climbed|stands|reached|reaches|at))?\s*(?:to|at|:)?\s*(\d{1,5})\b/gi,
+        new RegExp("\\b" + CASUALTY_NUMBER + "\\s+(?:fatalities|deaths)\\b", "gi"),
+        // "Army kills 2 terrorists": without the side word this form stays unread,
+        // because "killing 30" alone says nothing about who died.
+        new RegExp("\\bkill(?:s|ing)?\\s+" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\s+" + CASUALTY_NAMED_SIDE, "gi")
+    ],
+    wounded: [
+        new RegExp("\\b" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\s+" + CASUALTY_NOUN + "(?:(?:were|was)\\s+)?(?:wounded|injured|hurt)\\b", "gi"),
+        new RegExp("\\b(?:wounded|injured|hurt)\\s*[:\\-]?\\s*" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\b", "gi")
+    ],
+    captured: [
+        new RegExp("\\b" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\s+" + CASUALTY_CAPTURED_NOUN + "(?:(?:were|was)\\s+)?(?:arrested|detained|captured|apprehended)\\b", "gi"),
+        new RegExp("\\b(?:arrested|detained|captured|apprehended)\\s*[:\\-]?\\s*" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\b", "gi")
+    ]
+};
+
+
+function casualtyNumber(raw) {
+
+    const text =
+        String(raw).toLowerCase();
+
+    return /^\d+$/.test(text)
+        ?
+        Number(text)
+        :
+        text.split(/[-\s]+/).reduce(
+            (sum, word) =>
+                sum
+                +
+                (CASUALTY_NUMBER_WORDS[word] || 0),
+            0
+        );
+}
+
+
+/*
+   Every statement in the text with its figure. "Over 30 militants killed" and
+   "30 militants killed" are one toll in two wordings, so callers keep the
+   largest figure per side instead of adding phrases.
+*/
+function casualtyStatements(
+    text,
+    patterns
+) {
+
+    const matches = [];
+
+    patterns.forEach(
+        pattern => {
+
+            let match;
+
+            while (
+                (
+                    match =
+                        pattern.exec(
+                            text
+                        )
+                )
+                !==
+                null
+            ) {
+
+                const value =
+                    casualtyNumber(
+                        match[
+                            1
+                        ]
+                    );
+
+                if (
+                    !Number.isFinite(
+                        value
+                    )
+                    ||
+                    value < 0
+                    ||
+                    value > 100000
+                ) {
+                    continue;
+                }
+
+                const phrase =
+                    match[
+                        0
+                    ]
+                    .toLowerCase()
+                    .replace(
+                        /\s+/g,
+                        " "
+                    )
+                    .trim();
+
+                matches.push(
+                    {
+                        value,
+                        phrase
+                    }
+                );
+
+            }
+
+        }
+    );
+
+    return matches;
+}
 
 
 /*
@@ -11566,86 +11737,21 @@ function extractStrict24hCasualtyBreakdown(
     }
 
     /*
-       Capture explicit killed/wounded statements. We keep unique matched
-       phrases so duplicated source wording is not counted twice.
-       Different groups in the same incident CAN be added together:
-       e.g. "6 security personnel killed" + "21 militants killed" = 27,
-       split here into victim=6 and terrorist=21 instead of merged.
+       Capture explicit killed/wounded statements.
+       The two sides of an incident stay separate: "6 security personnel
+       killed" + "21 militants killed" is victim=6 and terrorist=21.
     */
-    const patterns =
-        kind === "death"
-        ?
-        [
-            /\b(?:at\s+least\s+|more\s+than\s+|over\s+)?(\d{1,5})\s+(?:people\s+|persons\s+|civilians\s+|soldiers\s+|troops\s+|officers\s+|police\s+|security\s+personnel\s+|security\s+forces\s+|militants\s+|terrorists\s+|attackers\s+|assailants\s+|fighters\s+|suspects\s+|victims\s+)?(?:were\s+)?(?:killed|dead|died)\b/gi,
-            /\b(?:killed|dead|fatalities|deaths)\s*[:\-]?\s*(?:at\s+least\s+|more\s+than\s+|over\s+)?(\d{1,5})\b/gi,
-            /\bdeath\s+toll(?:\s+(?:has\s+)?(?:risen|rose|rises|climbed|stands|reached|reaches|at))?\s*(?:to|at|:)?\s*(\d{1,5})\b/gi,
-            /\b(\d{1,5})\s+fatalities\b/gi
-        ]
-        :
-        [
-            /\b(?:at\s+least\s+|more\s+than\s+|over\s+)?(\d{1,5})\s+(?:people\s+|persons\s+|civilians\s+|soldiers\s+|troops\s+|officers\s+|police\s+|security\s+personnel\s+|security\s+forces\s+|militants\s+|terrorists\s+|attackers\s+|assailants\s+|fighters\s+|victims\s+)?(?:were\s+)?(?:wounded|injured|hurt)\b/gi,
-            /\b(?:wounded|injured|hurt)\s*[:\-]?\s*(?:at\s+least\s+|more\s+than\s+|over\s+)?(\d{1,5})\b/gi
-        ];
-
-    const matches = [];
-
-    patterns.forEach(
-        pattern => {
-
-            let match;
-
-            while (
-                (
-                    match =
-                        pattern.exec(
-                            text
-                        )
-                )
-                !==
-                null
-            ) {
-
-                const value =
-                    Number(
-                        match[
-                            1
-                        ]
-                    );
-
-                if (
-                    !Number.isFinite(
-                        value
-                    )
-                    ||
-                    value < 0
-                    ||
-                    value > 100000
-                ) {
-                    continue;
-                }
-
-                const phrase =
-                    match[
-                        0
-                    ]
-                    .toLowerCase()
-                    .replace(
-                        /\s+/g,
-                        " "
-                    )
-                    .trim();
-
-                matches.push(
-                    {
-                        value,
-                        phrase
-                    }
-                );
-
-            }
-
-        }
-    );
+    const matches =
+        casualtyStatements(
+            text,
+            CASUALTY_PATTERNS[
+                kind === "death"
+                ?
+                "death"
+                :
+                "wounded"
+            ]
+        );
 
     if (!matches.length) {
         return {
@@ -11690,49 +11796,34 @@ function extractStrict24hCasualtyBreakdown(
     }
 
     /*
-       Otherwise sum distinct casualty statements, but only once per
-       normalized phrase, bucketing each by which side its qualifier
-       word names.
+       Otherwise the largest figure per side: a title, a summary and the
+       original text restate the same toll, so adding them doubled it
+       ("138 people arrested" read 276).
     */
-    const unique =
-        new Map();
+    let terrorist = 0;
+    let victim = 0;
 
     matches.forEach(
         item => {
 
             if (
-                !unique.has(
-                    item.phrase
-                )
-            ) {
-                unique.set(
-                    item.phrase,
-                    item.value
-                );
-            }
-
-        }
-    );
-
-    let terrorist = 0;
-    let victim = 0;
-
-    unique.forEach(
-        (
-            value,
-            phrase
-        ) => {
-
-            if (
                 casualtyPhraseSide(
-                    phrase
+                    item.phrase
                 )
                 ===
                 "terrorist"
             ) {
-                terrorist += value;
+                terrorist =
+                    Math.max(
+                        terrorist,
+                        item.value
+                    );
             } else {
-                victim += value;
+                victim =
+                    Math.max(
+                        victim,
+                        item.value
+                    );
             }
 
         }
@@ -11830,106 +11921,21 @@ function extractStrict24hCapturedCount(
         return 0;
     }
 
-    const patterns = [
-        /\b(?:at\s+least\s+|more\s+than\s+|over\s+)?(\d{1,5})\s+(?:people\s+|persons\s+|suspects\s+|militants\s+|terrorists\s+|attackers\s+|fighters\s+|jihadists\s+|extremists\s+|members\s+)?(?:were\s+)?(?:arrested|detained|captured|apprehended)\b/gi,
-        /\b(?:arrested|detained|captured|apprehended)\s*[:\-]?\s*(?:at\s+least\s+|more\s+than\s+|over\s+)?(\d{1,5})\b/gi
-    ];
+    const matches =
+        casualtyStatements(
+            text,
+            CASUALTY_PATTERNS.captured
+        );
 
-    const matches = [];
-
-    patterns.forEach(
-        pattern => {
-
-            let match;
-
-            while (
-                (
-                    match =
-                        pattern.exec(
-                            text
-                        )
-                )
-                !==
-                null
-            ) {
-
-                const value =
-                    Number(
-                        match[
-                            1
-                        ]
-                    );
-
-                if (
-                    !Number.isFinite(
-                        value
-                    )
-                    ||
-                    value < 0
-                    ||
-                    value > 100000
-                ) {
-                    continue;
-                }
-
-                const phrase =
-                    match[
-                        0
-                    ]
-                    .toLowerCase()
-                    .replace(
-                        /\s+/g,
-                        " "
-                    )
-                    .trim();
-
-                matches.push(
-                    {
-                        value,
-                        phrase
-                    }
-                );
-
-            }
-
-        }
-    );
-
-    if (!matches.length) {
-        return 0;
-    }
-
-    const unique =
-        new Map();
-
-    matches.forEach(
-        item => {
-
-            if (
-                !unique.has(
-                    item.phrase
-                )
-            ) {
-                unique.set(
-                    item.phrase,
-                    item.value
-                );
-            }
-
-        }
-    );
-
-    return Array.from(
-        unique.values()
-    )
-    .reduce(
+    return matches.reduce(
         (
-            sum,
-            value
+            largest,
+            item
         ) =>
-            sum
-            +
-            value,
+            Math.max(
+                largest,
+                item.value
+            ),
         0
     );
 }
@@ -11993,9 +11999,13 @@ function updateHeaderCasualties24() {
     // Terrorists killed/captured come from counter-terrorism and arrest
     // reports, which are not on the attacks-only map: recentContextEvents
     // carries the last few days of those categories.
+    // A follow-up restates its attack's toll: the attack's own record counts it.
     const relevantEvents =
         [...allEvents, ...recentContextEvents].filter(
             isCurrentCasualtyEvent
+        ).filter(
+            event =>
+                event.attack_update !== true
         );
 
     const deathTotals = {
