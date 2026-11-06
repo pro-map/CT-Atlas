@@ -188,6 +188,8 @@ AI_TREND_MODEL = os.getenv(
 AI_TREND_ATTEMPTS = 3
 AI_TREND_TIMEOUT = 180
 AI_TREND_MAX_CANDIDATES = 80
+# Normal runs reach the cap; the starved runs of 5 Nov 2026 had 27 and 8.
+AI_TREND_THIN_CANDIDATES = 40
 
 
 # ============================================================
@@ -212,6 +214,9 @@ AI_WEEKLY_MAX_CURRENT_EVENTS = 70
 AI_WEEKLY_MAX_PREVIOUS_EVENTS = 70
 AI_WEEKLY_VERSION = "weekly-analysis-v2-analytical-synthesis"
 WEEKLY_REQUEST_FILE = "weekly-analysis-request.json"
+# A share of the fortnight's upper quartile. Normal days stayed above 45% of it
+# in every snapshot from 28 Oct to 5 Nov 2026; the starved 5 Nov was at 5%.
+WEEKLY_STARVED_DAY_SHARE = 0.25
 
 PARIS_TZ = ZoneInfo("Europe/Paris")
 
@@ -241,9 +246,18 @@ Your job is ANALYSIS, not counting, listing, or paraphrasing reporting.
 COMPARISON FRAME:
 - CURRENT PERIOD = the most recent 7 days;
 - COMPARISON PERIOD = the immediately preceding 7 days.
-- The supplied reporting_period timestamps are authoritative.
-- The first sentence of EXECUTIVE ASSESSMENT MUST state both date ranges in
-  readable form. Never guess or omit them.
+- The supplied reporting_period values are authoritative. They follow
+  Europe/Paris time, as the report panel does.
+- The first sentence of EXECUTIVE ASSESSMENT MUST state both date ranges,
+  using current_dates and comparison_dates as written. Never guess or omit
+  them.
+
+DATA COVERAGE:
+data_coverage gives the records published per day over both periods. A day in
+starved_days lost most of its collection: its activity is missing, not absent.
+When starved_days is not empty, say so in EXECUTIVE ASSESSMENT, name those
+days, and do not present a fall, a country dropping out or apparent stability
+as a finding when missing data could explain it.
 
 CORE ANALYTICAL RULE:
 Every substantive paragraph must answer at least one of these questions:
@@ -282,6 +296,12 @@ EVIDENCE DISCIPLINE:
 - Preserve uncertainty and attribution.
 - Do not invent causal explanations, coordination, intent, identities or
   trends.
+- actor_or_group is the named actor, when the record has one; do not attribute
+  a record that has none. incident_anchor is the short case label and often
+  names the method and the target.
+- A record with an empty city and location_precision "country" reports no city:
+  its map marker sits on the capital only as a placeholder. Write the country,
+  and name a city only if the record's title or summary states it.
 - You MAY make bounded analytical inferences when multiple supplied records
   support them, but clearly distinguish observation from assessment using
   language such as "indicates", "suggests", "is consistent with", or
@@ -453,8 +473,11 @@ actually meet the CRITICAL/HIGH/SIGNIFICANT bar above -- never pad the list
 with routine or weak cases just to reach six. For every selected development, copy the
 event_id EXACTLY from the corresponding supplied event. Never invent or alter
 an event_id. Each development must use the most specific supported location
-available. Do not invent facts, casualty figures, locations, identities,
-responsibility claims or significance. Preserve uncertainty and attribution.
+available. A record with an empty city and location_precision "country" reports
+no city: its map marker sits on the capital only as a placeholder, so write the
+country and name a city only if the record's title or summary states it. Do not
+invent facts, casualty figures, locations, identities, responsibility claims or
+significance. Preserve uncertainty and attribution.
 
 Severity meanings:
 - CRITICAL: exceptional immediate/high-impact CT development;
@@ -9249,6 +9272,22 @@ def _trend_priority(event):
     return score
 
 
+def _reported_city(event):
+    """
+    A country_capital record names no city: the capital is only where its map
+    marker sits. Sent as the place, it put a foiled plot against a synagogue
+    in Rome when the source never names Rome.
+    """
+    if event.get("location_precision") == "country_capital":
+        return ""
+    return clean_text(event.get("city", ""))
+
+
+def _reported_precision(event):
+    precision = clean_text(event.get("location_precision", ""))
+    return "country" if precision == "country_capital" else precision
+
+
 def _trend_payload(event, index):
     return {
         "event_id":
@@ -9282,8 +9321,12 @@ def _trend_payload(event, index):
                 event.get("region", "")
             ),
         "city":
-            clean_text(
-                event.get("city", "")
+            _reported_city(
+                event
+            ),
+        "location_precision":
+            _reported_precision(
+                event
             ),
         "first_reported":
             str(
@@ -9326,6 +9369,27 @@ def _trend_payload(event, index):
     }
 
 
+def _trend_overview(text, generated_at, candidate_events):
+    """
+    The header prints this text and nothing else, clamped to three lines, so
+    the date and any thin-data warning come first. Between late runs a brief
+    can be 18 hours old under the title SITUATION 24H, and on 5 Nov 2026 one
+    rested on 8 events instead of 80 with nothing to show it.
+    """
+    text = clean_text(text)
+    if not text:
+        return ""
+
+    moment = _parse_iso_utc(generated_at).astimezone(PARIS_TZ)
+    lead = f"As of {moment:%d %b, %H:%M} Paris"
+    if 0 < candidate_events < AI_TREND_THIN_CANDIDATES:
+        lead += (
+            f", from only {candidate_events} reviewed events (normally "
+            f"{AI_TREND_MAX_CANDIDATES}), so developments may be missing"
+        )
+    return f"{lead}: {text}"
+
+
 def _trend_fallback(candidates, generated_at, reason=""):
     developments = []
 
@@ -9353,7 +9417,7 @@ def _trend_fallback(candidates, generated_at, reason=""):
         location = ", ".join(
             value
             for value in [
-                clean_text(event.get("city", "")),
+                _reported_city(event),
                 clean_text(event.get("region", "")),
                 clean_text(event.get("country", "")),
             ]
@@ -9394,10 +9458,14 @@ def _trend_fallback(candidates, generated_at, reason=""):
         "window_hours": 24,
         "generated_at": generated_at,
         "candidate_events": len(candidates),
-        "overview": (
-            "AI trend synthesis was unavailable for this update. "
-            "The highest-relevance CT events reported or updated in the last "
-            "24 hours are shown below without additional analytical synthesis."
+        # Developments are stored but no panel prints them: name the cases here.
+        "overview": _trend_overview(
+            "AI synthesis was unavailable for this update. Top-ranked reports "
+            "of the last 24 hours, without analysis: "
+            + "; ".join(selection_compact_text(event.get("title"), 110) for event in candidates[:3])
+            + ".",
+            generated_at,
+            len(candidates),
         ),
         "developments": developments,
         "warning": reason,
@@ -9462,9 +9530,12 @@ def generate_24h_trend_summary(events):
             "window_hours": 24,
             "generated_at": generated_at,
             "candidate_events": 0,
-            "overview": (
-                "No significant CT developments were available for the "
-                "24-hour trend brief at the time of this update."
+            "overview": _trend_overview(
+                "No reviewed events are available for the last 24 hours, so "
+                "no assessment can be made. This does not mean that nothing "
+                "happened.",
+                generated_at,
+                0,
             ),
             "developments": [],
         }
@@ -9592,6 +9663,11 @@ def generate_24h_trend_summary(events):
                     "window_hours": 24,
                     "generated_at": generated_at,
                     "candidate_events": len(recent),
+                    "overview": _trend_overview(
+                        result.get("overview"),
+                        generated_at,
+                        len(recent),
+                    ),
                 }
             )
 
@@ -9658,9 +9734,11 @@ def load_existing_weekly_analysis():
 
 def _weekly_event_time(event):
     """
-    Prefer explicit occurrence/incident dates when available.
-    Fall back to the event's report/update recency so the weekly analysis
-    remains usable for records that do not yet carry a structured event date.
+    Prefer explicit occurrence/incident dates when available, then the
+    publication date, which is how the map and the Report Generator place a
+    record. A later follow-up must not move it: with last_reported, an attack
+    published on 15 Oct counted in the week of 5 Nov, and the week read 231
+    attack incidents against 205 by publication date.
     """
     for field in (
         "event_date",
@@ -9678,9 +9756,7 @@ def _weekly_event_time(event):
         if dt is not None:
             return dt
 
-    return _trend_recency(
-        event
-    )
+    return _parse_iso_utc(event.get("published")) or _trend_recency(event)
 
 
 def _weekly_geo_breakdown(events, field_name, limit=8, attack_updates=()):
@@ -9880,11 +9956,12 @@ def _weekly_compact_event(event, index):
                 )
             ),
         "city":
-            clean_text(
-                event.get(
-                    "city",
-                    ""
-                )
+            _reported_city(
+                event
+            ),
+        "location_precision":
+            _reported_precision(
+                event
             ),
         "event_or_report_time":
             (
@@ -9925,27 +10002,13 @@ def _weekly_compact_event(event, index):
             selection_compact_text(event.get("ai_canonical_event", ""), 360),
         "actor_or_group":
             selection_compact_text(
-                event.get("group")
-                or event.get("actor")
-                or event.get("organization")
-                or event.get("perpetrator")
-                or "",
+                event.get("actor_group"),
                 180,
             ),
-        "target":
+        # No record has a target or tactic field: this label is what names them.
+        "incident_anchor":
             selection_compact_text(
-                event.get("target")
-                or event.get("target_type")
-                or "",
-                180,
-            ),
-        "tactics_or_weapons":
-            selection_compact_text(
-                event.get("modus_operandi")
-                or event.get("attack_type")
-                or event.get("weapons")
-                or event.get("weapon")
-                or "",
+                event.get("incident_anchor"),
                 220,
             ),
         "primary_source":
@@ -10034,6 +10097,89 @@ def _weekly_windows(events):
         "previous":
             previous,
     }
+
+
+def _weekly_reporting_period(windows):
+    """
+    In Paris time, as the panel prints these instants. In UTC, a report
+    generated at 23:10 opened with 29 Oct to 5 Nov under a panel saying
+    30 Oct to 6 Nov.
+    """
+    now, current_start, previous_start = (
+        windows[name].astimezone(PARIS_TZ) for name in ("now", "current_start", "previous_start")
+    )
+    return {
+        "current_start": current_start.isoformat(),
+        "current_end": now.isoformat(),
+        "comparison_start": previous_start.isoformat(),
+        "comparison_end": current_start.isoformat(),
+        "current_dates": f"{current_start:%d %b %Y} to {now:%d %b %Y}",
+        "comparison_dates": f"{previous_start:%d %b %Y} to {current_start:%d %b %Y}",
+    }
+
+
+def _weekly_coverage(windows):
+    """
+    Records published per Paris day over both periods. A starved run leaves a
+    day far below the others, and a fall between the weeks then cannot be told
+    from missing data: the report of 5 Nov 2026 called the picture stable on
+    a day that held 7 records. Later runs refill a day, so only the file as it
+    stands counts. The first day is cut by the window. The day in progress is
+    judged on the part of it that has passed, once half of it has.
+    """
+    now = windows["now"].astimezone(PARIS_TZ)
+    today = now.date()
+    counts = Counter(
+        _weekly_event_time(event).astimezone(PARIS_TZ).date()
+        for event in windows["current"] + windows["previous"]
+    )
+
+    first_day = windows["previous_start"].astimezone(PARIS_TZ).date() + timedelta(days=1)
+    whole_days = [first_day + timedelta(days=offset) for offset in range((today - first_day).days)]
+
+    # The upper quartile, as a long outage would drag a median down with it.
+    typical_day = sorted(counts[day] for day in whole_days)[len(whole_days) * 3 // 4]
+    floor = typical_day * WEEKLY_STARVED_DAY_SHARE
+    starved = [day for day in whole_days if counts[day] < floor]
+
+    elapsed = (now.hour * 60 + now.minute) / 1440
+    if elapsed >= 0.5 and counts[today] < floor * elapsed:
+        starved.append(today)
+
+    return {
+        "records_published_per_day": {day.isoformat(): counts[day] for day in [*whole_days, today]},
+        "typical_day": typical_day,
+        "starved_days": [{"date": day.isoformat(), "records": counts[day]} for day in starved],
+    }
+
+
+def _weekly_data_note(coverage, sent_events):
+    """
+    Written here, not left to the model, so the reader always gets it. It sits
+    above the first heading, where the panel prints unsectioned text.
+    """
+    notes = []
+
+    if coverage["starved_days"]:
+        days = ", ".join(
+            f"{datetime.fromisoformat(row['date']):%d %b %Y} ({row['records']} records)"
+            for row in coverage["starved_days"]
+        )
+        notes.append(
+            f"Collection was incomplete on {days}, against about "
+            f"{coverage['typical_day']} records on a normal day, so a change "
+            "between the two periods may reflect missing data."
+        )
+
+    country_level = sum(row["location_precision"] == "country" for row in sent_events)
+    if country_level:
+        notes.append(
+            f"{country_level} of the {len(sent_events)} records assessed give "
+            "a country only: the capital marking them on the map is a "
+            "placeholder, not a reported location."
+        )
+
+    return "DATA NOTE: " + " ".join(notes) if notes else ""
 
 
 def _weekly_sunday_key(now_paris):
@@ -10260,23 +10406,12 @@ def generate_weekly_analysis(events, existing_weekly=None):
         events
     )
 
+    coverage = _weekly_coverage(windows)
+    print(f"Starved days: {coverage['starved_days'] or 'none'}")
+
     payload = {
-        "reporting_period": {
-            "current_start":
-                windows[
-                    "current_start"
-                ].isoformat(),
-            "current_end":
-                now_utc.isoformat(),
-            "comparison_start":
-                windows[
-                    "previous_start"
-                ].isoformat(),
-            "comparison_end":
-                windows[
-                    "current_start"
-                ].isoformat(),
-        },
+        "reporting_period": _weekly_reporting_period(windows),
+        "data_coverage": coverage,
         "current_period_stats":
             _weekly_stats(
                 current,
@@ -10428,6 +10563,10 @@ def generate_weekly_analysis(events, existing_weekly=None):
                     + quality_issue
                 )
 
+            data_note = _weekly_data_note(coverage, current_payload + previous_payload)
+            if data_note:
+                analysis = f"{data_note}\n\n{analysis}"
+
             weekly = {
                 "status":
                     "ok",
@@ -10477,6 +10616,8 @@ def generate_weekly_analysis(events, existing_weekly=None):
                     len(
                         previous
                     ),
+                "data_coverage":
+                    coverage,
             }
 
             print(
