@@ -177,8 +177,9 @@ jobs:
           node --check pdf-export.js
           node --check crypto-launcher.js
       - name: Run the Node regression suite
-        # The map and Database logic inline in index.html is covered only here;
-        # the Cloudflare mirror deploys this UI only after this workflow succeeds.
+        # The map and Database logic inline in index.html is covered only here. A failure
+        # stops this deploy, not the Cloudflare mirror: it also deploys main on its own
+        # push trigger and after the other publishing workflows, the status refresh among them.
         run: node --test tests/*.test.cjs
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6

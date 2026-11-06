@@ -125,9 +125,9 @@ def loaded_by_importing(modules):
 
 class RunnerImageTests(unittest.TestCase):
     def test_every_workflow_running_the_node_tests_declares_node_24(self):
-        # ubuntu-24.04 ships Node 22, ubuntu-26.04 Node 24, and the 128 MB heap test of
-        # worker-events-stream only fits on 24: left to the image, the same commit
-        # passed in one job and failed in another.
+        # ubuntu-24.04 ships Node 22 and ubuntu-26.04 Node 24, and the image must not
+        # choose which Node runs the suite: the same commit passed in one job and
+        # failed in another.
         for path in WORKFLOWS.glob("*.yml"):
             source = path.read_text(encoding="utf-8")
             suite = re.search(r"(?m)^[^#\n]*\bnode --test\b", source)
