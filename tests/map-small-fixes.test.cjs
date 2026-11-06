@@ -110,11 +110,13 @@ test("heat weighs a capital placeholder less, by the value the data really uses"
   assert.doesNotMatch(body,/location_precision === "country" /);
 });
 
-test("the weekly panel shows the report's own period: 29 Oct to 5 Nov, as its text says, not 30 Oct to 6 Nov",()=>{
+test("the weekly panel prints its period in Paris time, like the rest of the page and the report's text",()=>{
+  // The collector states the same Paris dates to the model (reporting_period), so
+  // a report made at 23:10 UTC on 5 Nov reads 30 Oct to 6 Nov in both places.
   const c=vm.createContext({Date});
   vm.runInContext(extract("formatWeeklyDate"),c);
-  assert.equal(c.formatWeeklyDate("2026-10-29T23:10:16.238248+00:00"),"29 Oct 2026");
-  assert.equal(c.formatWeeklyDate("2026-11-05T23:10:16.238248+00:00"),"05 Nov 2026");
+  assert.equal(c.formatWeeklyDate("2026-10-29T23:10:16.238248+00:00"),"30 Oct 2026");
+  assert.equal(c.formatWeeklyDate("2026-11-05T23:10:16.238248+00:00"),"06 Nov 2026");
   assert.equal(c.formatWeeklyDate("not a date"),"—");
 });
 

@@ -14199,8 +14199,6 @@ async function downloadGeneratedReportPdf() {
     }
 }
 
-// The report's periods are UTC, and its text is written from them: on a report made
-// late in the evening a Paris date put the panel a day after its own text.
 function formatWeeklyDate(
     value
 ) {
@@ -14222,7 +14220,7 @@ function formatWeeklyDate(
         "en-GB",
         {
             timeZone:
-                "UTC",
+                "Europe/Paris",
             day:
                 "2-digit",
             month:
