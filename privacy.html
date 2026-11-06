@@ -92,12 +92,11 @@
     request made with an account is recorded with its time and what was searched,
     so that the administrator can review how CT Atlas is used: the event-list
     search text and the filters it ran with; the Report Generator selection; the
-    Deep Search question and scope; the crypto address or transaction looked up
-    (and whether it came from a search, a trace expansion or a monitor check); and
-    the IP address or domain looked up in IP Intelligence. The outcome of a report
-    request (generated, served from cache, no matching events or failed) and the
-    report title may be added. Only the administrator can view this history; it is
-    kept for 90 days and then deleted automatically.</li>
+    Deep Search question and scope; and the crypto address or transaction looked up
+    (and whether it came from a search, a trace expansion or a monitor check). The
+    outcome of a report request (generated, served from cache, no matching events
+    or failed) and the report title may be added. Only the administrator can view
+    this history; it is kept for 90 days and then deleted automatically.</li>
     <li><strong>Report Generator.</strong> The selected region, topic, period and
     relevant public-event dataset are sent to Google's Gemini API to generate
     the analytical report. The generated report is cached in CT Atlas for up to
@@ -117,9 +116,6 @@
     Crypto workspace &mdash; such as labels, watchlists, cases, notes, saved paths,
     monitoring snapshots and alerts &mdash; is stored persistently for that account
     until it is deleted or the workspace is removed. Automated risk indicators are generated from the public data to prompt analyst review, and no decision is made automatically.</li>
-    <li><strong>IP Intelligence.</strong> A lookup records the IP address or domain looked up
-    (not the full web address you pasted, nor the optional incident details, which
-    stay in your page).</li>
   </ul>
 
   <h1>What we don't collect</h1>
@@ -175,16 +171,18 @@
   <p>The search history behind the usage counters is kept for 90 days: entries
   older than that are deleted automatically, whole days at a time. The counters
   themselves (numbers only) are kept for the pilot period.</p>
-  <p>Social Intelligence (SOCMINT), Dark Web Intelligence and Facial Intelligence were
-  withdrawn in November 2026. They can no longer be used, they collect nothing new, and
-  CT Atlas no longer sends anything to the third parties only they relied on. What they
-  had already stored has not been erased. Saved SOCMINT reports are removed once they
-  are 90 days old, and the search-history entries of these workspaces follow the 90-day
+  <p>Social Intelligence (SOCMINT), Dark Web Intelligence, Facial Intelligence and IP
+  Intelligence were withdrawn in November 2026. They can no longer be used, they collect
+  nothing new, and CT Atlas no longer sends anything to the third parties only they
+  relied on. What they had already stored has not been erased. Saved SOCMINT reports are
+  removed once they are 90 days old, and the search-history entries of these workspaces,
+  including the IP addresses and domains looked up in IP Intelligence, follow the 90-day
   rule above. Their usage counters remain with the others. Dark Web publication records
-  and files, and the storage used for temporary face-crop hosting, including any crop
-  still hosted at that moment, remain in CT Atlas's private Cloudflare storage, out of
-  reach of the application, until the administrator deletes them. Anything those third
-  parties already received stays subject to their own retention rules.</p>
+  and files, the storage used for temporary face-crop hosting, including any crop still
+  hosted at that moment, and the per-account rate-limit counters of IP Intelligence
+  (numbers only) remain in CT Atlas's private Cloudflare storage, out of reach of the
+  application, until the administrator deletes them. Anything those third parties
+  already received stays subject to their own retention rules.</p>
   <p>Login/security records are retained only as long as needed for security
   auditing; the application keeps a bounded recent login log. Account records
   persist for the duration of the testing/pilot period they were created for.</p>
@@ -203,9 +201,7 @@
   organisation's usual internal channels.</p>
 
   <h1>Security and data location</h1>
-  <p>Passwords and your own IP address are never stored in plain text (an IP
-  address you look up in IP Intelligence is search content and is kept in the
-  search history, see above). All
+  <p>Passwords and your own IP address are never stored in plain text. All
   connections to CT Atlas use HTTPS encryption. The primary CT Atlas Durable
   Object used for persistent application state is created through Cloudflare's
   <strong>European Union jurisdiction</strong>, constraining that Durable Object's

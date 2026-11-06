@@ -47,7 +47,6 @@ function inject(){
               '<option value="general">General · all CT Atlas</option>'+
               '<option value="map">Intelligence Map</option>'+
               '<option value="crypto">Crypto Intelligence</option>'+
-              '<option value="ip">IP Intelligence</option>'+
             '</select>'+
           '</label>'+
           '<label class="fb-toggle"><input id="fbIncludeRating" type="checkbox"><span>Include an overall evaluation</span></label>'+

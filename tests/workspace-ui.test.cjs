@@ -40,15 +40,15 @@ test('navigation ignores modified/external clicks and restores after back or tim
  h.listeners.pageshow({persisted:true});assert.equal(h.classes.has('ct-loading'),false);
  h.listeners.click({target:link,button:0});h.fire(10000);assert.equal(h.classes.has('ct-loading'),false);
 });
-test('every workspace ships the shared loader and the hub lists the three that remain, in order',()=>{
- for(const name of ['main','index','crypto','ip']){
+test('every workspace ships the shared loader and the hub lists the two that remain, in order',()=>{
+ for(const name of ['main','index','crypto']){
   const html=fs.readFileSync(name+'.html','utf8');
   assert.ok(html.includes('workspace-ui.js'));assert.ok(html.includes('workspace-ui.css'));assert.ok(html.includes('class="ct-page-loading"'));
   assert.ok(html.indexOf('<meta charset="UTF-8">')<1024);
  }
  const main=fs.readFileSync('main.html','utf8');
  const links=[...main.matchAll(/class="hub-card[^\"]*" href="([^\"]+)"/g)].map(x=>x[1]);
- assert.deepEqual(links,['index.html?workspace=map','crypto.html','ip.html']);
+ assert.deepEqual(links,['index.html?workspace=map','crypto.html']);
  assert.doesNotMatch(main,/hub-beta|class="under"|\.under\{/);
 });
 test('the README waits behind a native button: closed by default, keyboard-operable, text intact',()=>{
@@ -66,13 +66,22 @@ test('the README waits behind a native button: closed by default, keyboard-opera
  for(const text of ['Use only for authorised duties.','Verify before relying on results.','Keep outputs transparent.','Protect access and report concerns.','Do not use CT ATLAS for prohibited purposes.','Do not enter confidential or sensitive information.','Do not search sensitive categories during the pilot.','Do not ingest or share unverified outputs.','Do not retain results on CT ATLAS beyond relevance assessment.']){
   assert.ok(readme.includes(text),text);
  }
- assert.doesNotMatch(readme,/facial|dark web|social|socmint/i,'no wording about a retired tool');
- assert.ok(readme.includes('Coverage may be incomplete or outdated. IP location and cryptocurrency links do not establish identity, ownership or criminal involvement.'));
+ assert.doesNotMatch(readme,/facial|dark web|social|socmint|IP location|IP intelligence/i,'no wording about a retired tool');
+ assert.ok(readme.includes('Coverage may be incomplete or outdated. Cryptocurrency links do not establish identity, ownership or criminal involvement.'));
 });
-test('hub grid shows three equal columns, then one: no orphan card on a row of its own',()=>{
+test('the news only says the other workspaces are being renovated',()=>{
  const main=fs.readFileSync('main.html','utf8');
- assert.match(main,/\.hub-grid\{display:grid;grid-template-columns:repeat\(3,minmax\(0,1fr\)\);gap:12px\}/);
- assert.doesNotMatch(main,/\.hub-grid\{grid-template-columns:repeat\((?:2|6),/,'two columns would leave the third card alone on its row');
+ const start=main.indexOf('<ul class="hub-updates-list">');
+ const items=[...main.slice(start,main.indexOf('</ul>',start)).matchAll(/<li[^>]*>.*?<\/li>/g)].map(x=>x[0]);
+ assert.deepEqual(items,['<li class="hub-updates-pending"><strong>Other workspaces:</strong> currently being renovated, they will be back very soon.</li>']);
+ assert.match(main,/<time class="hub-updates-time" datetime="2026-11-06">6 November 2026<\/time>/);
+});
+test('hub grid shows two equal columns, then one: no empty column at any width',()=>{
+ const main=fs.readFileSync('main.html','utf8');
+ assert.match(main,/\.hub-grid\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\);gap:12px\}/);
+ assert.equal((main.match(/<a class="hub-card[^"]*" href=/g)||[]).length,2,'one card for each column');
+ assert.match(main,/\.hub-card\{min-width:0;min-height:240px;/,'a wide card holds its text on one line: a taller minimum would only leave a gap');
+ assert.doesNotMatch(main,/\.hub-grid\{grid-template-columns:repeat\((?:3|6),/,'a wider step would leave a column empty');
  assert.match(main,/@media\(max-width:760px\)\{[^\n]*\.hub-grid\{grid-template-columns:1fr\}/);
  assert.match(main,/\.hub-card-title\{[^}]*overflow-wrap:anywhere/);
 });

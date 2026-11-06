@@ -52,7 +52,7 @@ test('only module navigation is audible; modified/external clicks and arbitrary 
  for(const event of ['mouseover','scroll','input','change'])assert.equal(h.listeners[event],undefined);
 });
 test('all workspaces and both hosting builds include sound assets',()=>{
- for(const name of ['main','index','crypto','ip','privacy','sound-check']){
+ for(const name of ['main','index','crypto','privacy','sound-check']){
   const html=fs.readFileSync(name+'.html','utf8');assert.match(html,/sound-effects\.js\?v=20261004c/);if(html.includes('workspace-ui.js'))assert.ok(html.indexOf('sound-effects.js')<html.indexOf('workspace-ui.js'));
  }
  assert.match(fs.readFileSync('tools/deploy_mirror.sh','utf8'),/sound-effects\.js/);

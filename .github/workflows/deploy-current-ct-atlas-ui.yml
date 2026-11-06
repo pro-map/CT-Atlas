@@ -42,11 +42,6 @@ on:
       - "daily-quiz.js"
       - "daily-quiz.css"
       - "daily-quiz.json"
-      - "ip.html"
-      - "ip.js"
-      - "ip.css"
-      - "ip-report.js"
-      - "ip-intelligence.svg"
       - "intelligence-map.svg"
       - "crypto-intelligence.svg"
       - "tab-health.js"
@@ -132,16 +127,10 @@ jobs:
           grep -q 'Behavioral Pattern Detection' crypto.html
           grep -q 'Case Workspace' crypto.html
           grep -q 'Monitoring & Alerts' crypto.html
-          test -s ip.html
-          test -s ip.css
-          test -s ip-intelligence.svg
-          node --check ip.js
-          node --check ip-report.js
           test -s main.html
           grep -q 'Intelligence Map' main.html
           grep -q 'Crypto Intelligence' main.html
-          grep -q 'IP Intelligence' main.html
-          if grep -q 'darkweb\.\|facial\.\|social\.' main.html; then
+          if grep -q 'darkweb\.\|facial\.\|social\.\|ip\.html\|ip-intelligence' main.html; then
             echo "A retired tool is still linked from the main page" >&2
             exit 1
           fi

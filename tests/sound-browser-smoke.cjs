@@ -20,13 +20,13 @@ const root=path.resolve(__dirname,'..');
    await route.fulfill({body:fs.readFileSync(file),contentType:types[ext]||'text/plain'});return;
   }
   if(url.pathname==='/session-check'){await route.fulfill({json:{ok:true,username:'sound-test',expires_at:'2099-01-01T00:00:00Z'}});return;}
-  if(/crypto-analyze|ip-intelligence\/lookup/.test(url.pathname)){
+  if(/crypto-analyze/.test(url.pathname)){
    await new Promise(r=>setTimeout(r,200));await route.fulfill({status:503,json:{error:'Controlled test failure'}});return;
   }
   await route.fulfill({json:{ok:true,items:[],reports:[],labels:[],cases:[],monitored:[],outlets:[],policy:{},sources:[],providers:[]}});
  });
  const page=await context.newPage();
- for(const name of ['main','index','crypto','ip','privacy','sound-check']){
+ for(const name of ['main','index','crypto','privacy','sound-check']){
   await page.goto('https://sound-test.invalid/'+name+'.html');
   await page.locator('#ctSoundEffects').waitFor({state:'attached'});
   await page.evaluate(()=>document.documentElement.classList.remove('ct-loading'));
@@ -44,8 +44,7 @@ const root=path.resolve(__dirname,'..');
   console.log(name+': global switch, persistence, silence and mobile layout OK');
  }
  for(const [name,input,value,button] of [
-  ['crypto','#cryptoQuery','3FoD1f6Tfnq3s8MYHgJqFPWv9cUrtUdBSv','#cryptoRun'],
-  ['ip','#ipAddress','8.8.8.8','#lookupButton']
+  ['crypto','#cryptoQuery','3FoD1f6Tfnq3s8MYHgJqFPWv9cUrtUdBSv','#cryptoRun']
  ]){
   await page.goto('https://sound-test.invalid/'+name+'.html');await page.evaluate(()=>document.documentElement.classList.remove('ct-loading'));
   await page.locator(input).fill(value);await page.locator(button).click();

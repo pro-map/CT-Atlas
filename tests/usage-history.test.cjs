@@ -194,21 +194,6 @@ test("periods follow the counters' Paris days and rows older than 90 days are pu
   assert.equal((await h.gate.usageStats("all")).users.find(item => item.username === "group-i-1").blockchain_searches, 4, "counters are not touched");
 });
 
-test("an IP lookup is counted with its canonical target only when its slot is granted", async () => {
-  const h = await harness();
-  const log = { target: "8.8.8.8", kind: "ip", raw: "https://example.com/?token=secret" };
-  for (let i = 0; i < 6; i++) assert.equal((await h.call("/ip-intelligence-limit", { username: "group-i-1", log })).status, 200);
-  assert.equal((await h.call("/ip-intelligence-limit", { username: "group-i-1", log })).status, 429);
-  const stats = (await h.gate.usageStats("today")).users.find(item => item.username === "group-i-1");
-  assert.equal(stats.ip_lookups, 6, "a refused lookup is not counted");
-  const rows = (await h.history("group-i-1", "ip_lookups")).body.rows;
-  assert.equal(rows.length, 6);
-  assert.deepEqual(Object.keys(rows[0]).sort(), ["at", "feature", "id", "kind", "target"]);
-  // A domain's own IP analyses take slots without a log: not counted as searches.
-  await h.call("/ip-intelligence-limit", { username: "group-i-11" });
-  assert.equal((await h.gate.usageStats("today")).users.find(item => item.username === "group-i-11").ip_lookups, 0);
-});
-
 test("workspace openings list their times; rows of retired tools stay stored, unlisted and refused", async () => {
   const h = await harness();
   assert.equal((await h.call("/usage-record", { username: "group-s-11", action: "tab_access", tab: "crypto" })).status, 200);
@@ -216,24 +201,26 @@ test("workspace openings list their times; rows of retired tools stay stored, un
   assert.equal(opened.display_name, "Adrien CBRN");
   assert.deepEqual(opened.rows.map(row => row.feature), ["tab_crypto"]);
 
-  for (const metric of ["social_intel_requests", "facial_extractions", "facial_searches", "darkweb_searches", "tab:social", "tab:facial", "tab:darkweb"]) {
+  for (const metric of ["social_intel_requests", "facial_extractions", "facial_searches", "darkweb_searches", "ip_lookups", "tab:social", "tab:facial", "tab:darkweb", "tab:ip"]) {
     assert.equal((await h.history("group-s-11", metric)).status, 400, metric);
   }
   // A row written before a tool was retired, whatever its feature, must not break the list.
   const stamp = Date.now();
   const day = h.shared.parisDayKey(stamp);
-  const legacy = ["social", "facial_extraction", "facial_search", "darkweb_search", "tab_social", "tab_facial", "tab_darkweb"];
+  const legacy = ["social", "facial_extraction", "facial_search", "darkweb_search", "ip_lookup", "tab_social", "tab_facial", "tab_darkweb", "tab_ip"];
   for (const feature of legacy) {
     await h.storage.put(`usage-log:${day}:group-s-11:${feature}:${stamp}:legacy`, { at: new Date(stamp).toISOString(), feature, target: "Example Person" });
   }
   // Nor can a retired feature, or a workspace opening, write a row through /usage-increment.
-  await h.call("/usage-increment", { username: "group-s-11", metrics: {}, log: { feature: "tab_ip" } });
+  await h.call("/usage-increment", { username: "group-s-11", metrics: {}, log: { feature: "tab_map" } });
   await h.call("/usage-increment", { username: "group-s-11", metrics: {}, log: { feature: "social", details: { target: "new" } } });
-  assert.equal((await h.history("group-s-11", "tab:ip")).body.rows.length, 0);
+  await h.call("/usage-increment", { username: "group-s-11", metrics: {}, log: { feature: "ip_lookup", details: { target: "8.8.8.8" } } });
+  assert.equal((await h.history("group-s-11", "tab:map")).body.rows.length, 0);
   const rows = (await h.history("group-s-11", "all")).body.rows;
   assert.deepEqual(rows.map(row => row.feature), ["tab_crypto"]);
   assert.equal(h.logKeys().filter(key => key.endsWith(":legacy")).length, legacy.length, "listing them less does not delete them");
   assert.equal(h.logKeys().filter(key => key.includes(":social:")).length, 1, "the refused write added nothing");
+  assert.equal(h.logKeys().filter(key => key.includes(":ip_lookup:")).length, 1, "the refused write added nothing");
   // Their outcome can no longer be changed either.
   const update = await h.call("/usage-log-update", { username: "group-s-11", log_update: { id: `usage-log:${day}:group-s-11:social:${stamp}:legacy`, outcome: "failed" } });
   assert.equal(update.body.updated, false);

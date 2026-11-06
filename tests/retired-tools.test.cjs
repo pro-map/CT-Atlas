@@ -1,6 +1,6 @@
 "use strict";
-// Social, Dark Web and Facial Intelligence are retired: their code is gone, what they stored is
-// not. Only the owner may delete stored data, so these tests pin both halves: nothing can reach
+// Social, Dark Web, Facial and IP Intelligence are retired: their code is gone, what they stored
+// is not. Only the owner may delete stored data, so these tests pin both halves: nothing can reach
 // the tools any more, and nothing here removes their data sooner than it would have gone anyway.
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
@@ -94,7 +94,7 @@ test("no Worker module still reads Workers AI or a binding or secret of the reti
   const dir = path.join(ROOT, "cloudflare-worker");
   for (const name of fs.readdirSync(dir).filter(file => /\.m?js$/.test(file))) {
     const source = fs.readFileSync(path.join(dir, name), "utf8");
-    assert.doesNotMatch(source, /env\??\.(AI\b|DARKWEB_|SOCMINT_|VISUAL_INTEL_|FACE_SHARE|BRAVE_SEARCH_API_KEY|GEMINI_SOCMINT_)/, name);
+    assert.doesNotMatch(source, /env\??\.(AI\b|DARKWEB_|SOCMINT_|VISUAL_INTEL_|FACE_SHARE|BRAVE_SEARCH_API_KEY|GEMINI_SOCMINT_|IPINFO_|PROXYCHECK_|IPAPI_IS_)/, name);
   }
 });
 
@@ -104,14 +104,15 @@ test("the retired routes answer 404 and /health no longer mentions the tools", a
   for (const [method, route] of [
     ["POST", "/social-investigate"], ["GET", "/social-workspace"], ["POST", "/social-workspace"], ["POST", "/visual-analyze"],
     ["POST", "/face-share"], ["GET", "/face-share/AAAAAAAAAAAAAAAAAAAAAA.jpg"], ["HEAD", "/face-share/AAAAAAAAAAAAAAAAAAAAAA.jpg"],
-    ["GET", "/darkweb/state"], ["POST", "/darkweb/ingest"], ["POST", "/darkweb/policy"]
+    ["GET", "/darkweb/state"], ["POST", "/darkweb/ingest"], ["POST", "/darkweb/policy"],
+    ["POST", "/ip-intelligence/lookup"], ["GET", "/ip-intelligence/lookup"]
   ]) {
     const response = await app.fetch(new Request("https://worker.test" + route, { method, headers: session }), workerEnv(), { waitUntil() {} });
     assert.equal(response.status, 404, method + " " + route);
   }
   const health = await (await app.fetch(new Request("https://worker.test/health"), workerEnv(), { waitUntil() {} })).json();
   assert.equal(health.ok, true);
-  assert.deepEqual(Object.keys(health).filter(key => /social|darkweb|visual|face/.test(key)), []);
+  assert.deepEqual(Object.keys(health).filter(key => /social|darkweb|visual|face|ip_intelligence/.test(key)), []);
 });
 
 test("a stale page can no longer record a retired tab or search", async () => {
@@ -119,7 +120,7 @@ test("a stale page can no longer record a retired tab or search", async () => {
   const record = body => app.fetch(new Request("https://worker.test/usage-record", {
     method: "POST", headers: { "X-Session-Token": "token" }, body: JSON.stringify({ username: "group-i-1", ...body })
   }), workerEnv(), { waitUntil() {} });
-  for (const tab of ["facial", "social", "darkweb"]) assert.equal((await record({ action: "tab_access", tab })).status, 400, tab);
+  for (const tab of ["facial", "social", "darkweb", "ip"]) assert.equal((await record({ action: "tab_access", tab })).status, 400, tab);
   assert.equal((await record({ action: "darkweb_search" })).status, 400);
 });
 
@@ -160,7 +161,7 @@ test("search-history rows of the retired tools still leave at 90 days, and not a
   const now = Date.now();
   const dayKey = when => new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris" }).format(new Date(when));
   const key = (age, feature) => `usage-log:${dayKey(now - age * DAY)}:group-i-1:${feature}:${String(now - age * DAY).padStart(13, "0")}:abc123`;
-  const features = ["social", "facial_extraction", "facial_search", "darkweb_search", "tab_facial", "tab_darkweb"];
+  const features = ["social", "facial_extraction", "facial_search", "darkweb_search", "ip_lookup", "tab_facial", "tab_darkweb", "tab_ip"];
   for (const feature of features) {
     await storage.put(key(100, feature), { feature });
     await storage.put(key(80, feature), { feature });
@@ -188,19 +189,33 @@ test("everything else the retired tools stored survives the alarm and every reti
     "social-usage:group-i-1": { day: "2026-01-01", count: 1 },
     "social-usage-global": { day: "2026-01-01", count: 1 },
     "social-active:group-i-1": { run_id: "dead", started_at: 1 },
-    "usage-total:group-i-1": { username: "group-i-1", facial_searches: 3, darkweb_searches: 4 },
-    "tab-access-total:group-i-1": { username: "group-i-1", facial: 5, darkweb: 6 }
+    "ip-intelligence:limit:group-i-1": { count: 2, until: 1 },
+    "ip-intelligence:keyed-day": "2026-11-05",
+    "ip-intelligence:keyed:2026-11-05": 12,
+    "ip-intelligence:keyed:2026-11-05:group-i-1": 3,
+    "usage-total:group-i-1": { username: "group-i-1", facial_searches: 3, darkweb_searches: 4, ip_lookups: 7 },
+    "tab-access-total:group-i-1": { username: "group-i-1", facial: 5, darkweb: 6, ip: 8 }
   };
   await storage.put(seeded);
   const before = JSON.stringify([...storage.values].sort());
   await reportGate.alarm();
-  for (const route of ["/darkweb-state", "/darkweb-policy", "/darkweb-ingest", "/darkweb-file-commit", "/social-workspace-get", "/social-report-delete", "/social-acquire", "/social-release"]) {
+  for (const route of ["/darkweb-state", "/darkweb-policy", "/darkweb-ingest", "/darkweb-file-commit", "/social-workspace-get", "/social-report-delete", "/social-acquire", "/social-release", "/ip-intelligence-limit"]) {
     const response = await reportGate.fetch(new Request("https://gate.internal" + route, {
-      method: "POST", body: JSON.stringify({ username: "group-i-1", reset: true, report_id: "x", policy: {} })
+      method: "POST", body: JSON.stringify({ username: "group-i-1", reset: true, report_id: "x", policy: {}, keyed: true, log: { target: "8.8.8.8" } })
     }));
     assert.equal(response.status, 404, route);
   }
   assert.equal(JSON.stringify([...storage.values].sort()), before);
+});
+
+test("the IP Intelligence modules are gone and what stays in the Worker does not need them", () => {
+  for (const file of ["ip-intelligence.js", "domain-intelligence.js", "domain-data.js"]) {
+    assert.equal(fs.existsSync(path.join(ROOT, "cloudflare-worker", file)), false, file);
+  }
+  const dir = path.join(ROOT, "cloudflare-worker");
+  for (const name of fs.readdirSync(dir).filter(file => /\.m?js$/.test(file))) {
+    assert.doesNotMatch(fs.readFileSync(path.join(dir, name), "utf8"), /ip-intelligence|domain-intelligence|domain-data|handleIPIntelligence|\bip_lookup\b/, name);
+  }
 });
 
 test("the retired pages and assets are gone and nothing the site serves points at them", () => {
@@ -210,25 +225,52 @@ test("the retired pages and assets are gone and nothing the site serves points a
     }
   }
   assert.equal(fs.existsSync(path.join(ROOT, "facial-crops.js")), false);
+  for (const file of ["ip.html", "ip.js", "ip.css", "ip-report.js", "ip-intelligence.svg"]) {
+    assert.equal(fs.existsSync(path.join(ROOT, file)), false, file);
+  }
   const pages = fs.readdirSync(ROOT).filter(file => /\.(?:html|js|css)$/.test(file));
   assert.ok(pages.includes("main.html") && pages.includes("feedback.js"));
   for (const page of pages.concat("tools/deploy_mirror.sh")) {
     assert.doesNotMatch(read(page), /\b(?:social|darkweb|facial)(?:-intelligence\.svg|-crops\.js|\.html|\.js|\.css)/, page);
-    assert.doesNotMatch(read(page), /value="(?:social|darkweb|facial)"/, page);
+    assert.doesNotMatch(read(page), /value="(?:social|darkweb|facial|ip)"/, page);
+    assert.doesNotMatch(read(page), /\bip(?:-intelligence\.svg|-report\.js|\.html|\.js|\.css)|CTAtlasIPReport/, page);
+    // The notice has to keep naming the tool: it says what happens to what the tool stored.
+    if (page !== "privacy.html") assert.doesNotMatch(read(page), /IP Intelligence/, page);
   }
+});
+
+test("the deploys expect no IP Intelligence file and the live check waits for its card to go", () => {
+  const deploy = read(".github/workflows/deploy-current-ct-atlas-ui.yml");
+  const smoke = read(".github/workflows/live-smoke.yml");
+  assert.doesNotMatch(deploy + smoke, /\bip(?:-intelligence\.svg|-report\.js|\.html"|\.js|\.css)|&& grep -q 'IP Intelligence'|grep -q 'IP Intelligence' main\.html/);
+  assert.match(smoke, /&& ! grep -q 'IP Intelligence' \/tmp\/main\.html; then/);
+  assert.match(deploy, /if grep -q [^\n]*ip\\\.html[^\n]* main\.html; then/, "a link back to the page fails the deploy");
+});
+
+test("an old IP row in the admin view is simply not offered: no column, no filter, no label", () => {
+  const admin = read("usage-admin.js");
+  assert.doesNotMatch(admin, /IP INTELLIGENCE|IP LOOKUP|ip_lookups?|tab:ip|tab_ip|registered_domain|parent_domain|IP or domain/);
+  assert.match(read("tab-access.js"), /new Set\(\["map","crypto"\]\)/);
+  assert.doesNotMatch(read("pdf-export.js"), /block\.inline|jurisdiction/i, "only the IP briefs placed inline flags");
 });
 
 test("the privacy notice drops what only these tools did and says what stays stored", () => {
   const notice = read("privacy.html");
   assert.doesNotMatch(notice, /Yandex|Telegram|4chan|Bluesky|Brave Search|Groq|Workers AI|Cloud Run|reverse-image/);
+  assert.doesNotMatch(notice, /IPinfo|proxycheck|ipapi|RIPEstat|<strong>IP Intelligence|you look up in IP Intelligence/i);
   assert.match(notice, /Last updated: 6 November 2026/);
   assert.match(notice, /withdrawn in November 2026/);
   assert.match(notice, /has not been erased/);
   assert.match(notice, /until the administrator deletes them/);
+  assert.match(notice, /and IP\s+Intelligence were withdrawn in November 2026/);
+  assert.match(notice, /including the IP addresses and domains looked up in IP Intelligence, follow the 90-day/);
+  assert.match(notice, /rate-limit counters of IP Intelligence/);
+  assert.match(notice, /one-way hashed version of your\s+IP address/, "the login record is not the tool and stays described");
+  assert.equal(fs.existsSync(path.join(ROOT, "docs/IP_INTELLIGENCE.md")), false);
 });
 
-test("the gate has no code that deletes Dark Web records or a namespace of a retired tool", () => {
+test("the gate has no code that deletes Dark Web or IP limiter records or a namespace of a retired tool", () => {
   const gateSource = read("cloudflare-worker/report-gate.js");
-  assert.doesNotMatch(gateSource, /darkweb:|"\/darkweb-/);
+  assert.doesNotMatch(gateSource, /darkweb:|"\/darkweb-|ip-intelligence/);
   assert.equal((gateSource.match(/deleteAll\(/g) || []).length, 1, "only the existing /migration-retire route");
 });

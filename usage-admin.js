@@ -216,21 +216,20 @@ function adminCountCell(value,item,metric){
 const ADMIN_HISTORY_TITLES={
   all:"ALL ACTIVITY",report_requests:"REPORT REQUESTS",report_generator_requests:"SITUATION REPORT",deep_search_requests:"CUSTOM INTELLIGENCE",
   searches:"SEARCHES",event_list_searches:"EVENT LIST SEARCH",blockchain_searches:"BLOCKCHAIN SEARCH",
-  ip_lookups:"IP LOOKUP",quick_ask_requests:"QUICK Q&A (RETIRED)","tab:crypto":"CRYPTO OPENED","tab:map":"MAP OPENED",
-  "tab:ip":"IP INTELLIGENCE OPENED"
+  quick_ask_requests:"QUICK Q&A (RETIRED)","tab:crypto":"CRYPTO OPENED","tab:map":"MAP OPENED"
 };
 const ADMIN_FEATURE_LABELS={
-  report_generator:"SITUATION REPORT",deep_search:"CUSTOM INTELLIGENCE",event_list:"EVENT LIST",blockchain:"BLOCKCHAIN",ip_lookup:"IP LOOKUP",
-  tab_map:"MAP OPENED",tab_crypto:"CRYPTO OPENED",tab_ip:"IP INTELLIGENCE OPENED"
+  report_generator:"SITUATION REPORT",deep_search:"CUSTOM INTELLIGENCE",event_list:"EVENT LIST",blockchain:"BLOCKCHAIN",
+  tab_map:"MAP OPENED",tab_crypto:"CRYPTO OPENED"
 };
 const ADMIN_HISTORY_FIELDS=[
   ["region","Region"],["topic","Category"],["actor_group","Group"],["period_days","Period"],["compare","Comparison"],["scope","Database scope"],
   ["country","Country"],["sort","Sort"],
   ["results","Results shown"],["kind","Type"],["chain","Chain"],["chain_hint","Chain selected"],["origin","Origin"],["limit","Transactions"],
-  ["registered_domain","Registered domain"],["parent_domain","From domain"],["period","Period found"],["title","Result"],["outcome","Outcome"]
+  ["period","Period found"],["title","Result"],["outcome","Outcome"]
 ];
 const ADMIN_OUTCOMES={cached:"Served from cache",generated:"Generated",no_events:"No matching events",failed:"Failed"};
-const ADMIN_MAIN_FIELD={deep_search:"question",event_list:"text",blockchain:"query",ip_lookup:"target"};
+const ADMIN_MAIN_FIELD={deep_search:"question",event_list:"text",blockchain:"query"};
 
 function adminHistoryValue(name,value){
   if(Array.isArray(value))return value.join(", ");
@@ -278,8 +277,8 @@ function adminHistoryHtml(rows){
 
 // A user counts as connected in the selected period when they logged in, opened a workspace
 // or used any feature in it -- a session opened the day before still counts once it is used.
-const ADMIN_TAB_FIELDS=["crypto","map","ip"];
-const ADMIN_ACTIVITY_FIELDS=["logins","searches","map_searches","event_list_searches","report_requests","report_generator_requests","deep_search_requests","reports_generated","cached_reports","quick_ask_requests","blockchain_searches","ip_lookups","feedback_submissions","quiz_answers"];
+const ADMIN_TAB_FIELDS=["crypto","map"];
+const ADMIN_ACTIVITY_FIELDS=["logins","searches","map_searches","event_list_searches","report_requests","report_generator_requests","deep_search_requests","reports_generated","cached_reports","quick_ask_requests","blockchain_searches","feedback_submissions","quiz_answers"];
 
 function adminUsername(item){return String(item?.username||"").trim().toLowerCase();}
 
@@ -413,18 +412,18 @@ function injectAdminUi(){
           '<div class="admin-usage-section-title">WORKSPACE ACCESS</div>'+
           '<div class="admin-usage-table-wrap">'+
             '<table id="adminUsageTable">'+
-              '<thead><tr><th>USER</th><th>CRYPTO</th><th>MAP</th><th>IP INTELLIGENCE</th></tr></thead>'+
+              '<thead><tr><th>USER</th><th>CRYPTO</th><th>MAP</th></tr></thead>'+
               '<tbody id="adminUsageRows"></tbody>'+
             '</table>'+
           '</div>'+
           '<div class="admin-usage-section-title">FEATURE ACTIVITY</div>'+
           '<div class="admin-usage-table-wrap">'+
             '<table id="adminFeatureUsageTable">'+
-              '<thead><tr><th>USER</th><th>SITUATION REPORT</th><th>CUSTOM INTELLIGENCE</th><th>EVENT LIST SEARCH</th><th>BLOCKCHAIN SEARCH</th><th>IP LOOKUP</th><th>QUICK Q&amp;A (RETIRED)</th></tr></thead>'+
+              '<thead><tr><th>USER</th><th>SITUATION REPORT</th><th>CUSTOM INTELLIGENCE</th><th>EVENT LIST SEARCH</th><th>BLOCKCHAIN SEARCH</th><th>QUICK Q&amp;A (RETIRED)</th></tr></thead>'+
               '<tbody id="adminFeatureUsageRows"></tbody>'+
             '</table>'+
           '</div>'+
-          '<div id="adminUsageNote">Click a number to see the details behind it: the time, what was searched (text, question, address, IP or domain, filters) and the outcome; ALL ACTIVITY lists everything a connected user did in the period. Details are recorded since 6 October 2026 and kept 90 days, so older counts have no detail; a list shows at most the newest 500 entries. The IP LOOKUP counter also starts on 6 October 2026. Activity in retired tools is no longer listed; those entries expire with the rest. Workspace access counts page openings. Event list searches are counted once per settled search since 6 October 2026 (previously at every typing pause).</div>'+
+          '<div id="adminUsageNote">Click a number to see the details behind it: the time, what was searched (text, question, address, filters) and the outcome; ALL ACTIVITY lists everything a connected user did in the period. Details are recorded since 6 October 2026 and kept 90 days, so older counts have no detail; a list shows at most the newest 500 entries. Activity in retired tools is no longer listed; those entries expire with the rest. Workspace access counts page openings. Event list searches are counted once per settled search since 6 October 2026 (previously at every typing pause).</div>'+
         '</div>'+
       '</div>'+
       '<div id="adminHistoryPanel" hidden>'+
@@ -579,9 +578,8 @@ async function loadAdmin(period){
           adminUserCell(item,connectedNames.has(adminUsername(item)))+
           adminCountCell(item.crypto,item,"tab:crypto")+
           adminCountCell(item.map,item,"tab:map")+
-          adminCountCell(item.ip,item,"tab:ip")+
         "</tr>"
-      ).join("")||'<tr><td colspan="4">No users found for this period.</td></tr>';
+      ).join("")||'<tr><td colspan="3">No users found for this period.</td></tr>';
     }
 
     const summary=usagePayload.summary||{};
@@ -606,10 +604,9 @@ async function loadAdmin(period){
           adminCountCell(item.deep_search_requests,item,"deep_search_requests")+
           adminCountCell(item.event_list_searches,item,"event_list_searches")+
           adminCountCell(item.blockchain_searches,item,"blockchain_searches")+
-          adminCountCell(item.ip_lookups,item,"ip_lookups")+
           adminCountCell(item.quick_ask_requests,item,"quick_ask_requests")+
         "</tr>"
-      ).join("")||'<tr><td colspan="7">No users found for this period.</td></tr>';
+      ).join("")||'<tr><td colspan="6">No users found for this period.</td></tr>';
     }
 
     if(status){
