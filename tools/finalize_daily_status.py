@@ -313,8 +313,13 @@ def finalize(database_path, *, collect_outcome, geolocate_outcome, started_at,
     if any(item.get("status") in ("partial", "failed") or count(item.get("pending")) for item in categories):
         reasons.append("category_pending")
     actual_attempt = (status.get("last_attempt_at") or telemetry.get("last_run_at") or legacy_telemetry.get("last_run_at")) if refresh_existing else status.get("last_attempt_at") or started_at
-    status.update(schema_version=2, last_attempt_at=actual_attempt,
-                  published_at=database.get("last_updated"),
+    # Only a collection moves the age of the data. A repair moves last_updated too, as
+    # the publication version, and copying that here would pass it off as a collection.
+    collected = not refresh_existing and collect_outcome == "success"
+    published_at = database.get("last_updated")
+    if not collected and isinstance(existing, dict):
+        published_at = existing.get("published_at") or published_at
+    status.update(schema_version=2, last_attempt_at=actual_attempt, published_at=published_at,
                   finalized_at=datetime.now(timezone.utc).isoformat())
     if not refresh_existing:
         status.update(collect_outcome=collect_outcome, geolocate_outcome=geolocate_outcome)

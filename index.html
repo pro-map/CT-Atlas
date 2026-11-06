@@ -4389,7 +4389,7 @@ html, body {
         top: 47px !important;
         z-index: 1001 !important;
         width: min(84vw, 320px) !important;
-        max-height: calc(100% - 106px) !important;
+        max-height: calc(100% - 106px - env(safe-area-inset-bottom, 0px)) !important;
     }
 
     body:not(.sidebar-open) #sidebar {
@@ -4398,7 +4398,19 @@ html, body {
 
     /* Above the timeline, which it would otherwise cover. */
     .leaflet-bottom {
-        bottom: 58px;
+        bottom: calc(58px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* The bell is fixed to the screen's bottom left on every page. Beside the
+       timeline it covers neither that nor the attribution and panel above it,
+       which is why those two rise with the home bar as the timeline does. */
+    #timelineDock {
+        left: 45px !important;
+    }
+
+    #ctSoundEffects {
+        left: calc(7px + env(safe-area-inset-left, 0px));
+        bottom: calc(15px + env(safe-area-inset-bottom, 0px));
     }
 }
 
@@ -6993,7 +7005,7 @@ function collectionHealth(status) {
     return share < 0.5 && pending > 600 ? "behind" : "ok";
 }
 
-// Status-only refreshes bump last_updated, so the run's own date comes first.
+// Repairs move last_updated without collecting anything, so the run's own date comes first.
 function dataPublishedTime(facts) {
     const time = Date.parse(facts?.collection_status?.published_at || facts?.last_updated || "");
     return Number.isFinite(time) ? time : null;
