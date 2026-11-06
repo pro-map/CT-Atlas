@@ -100,6 +100,14 @@ test("what looks like a figure but is not one reads as nothing",()=>{
   assert.equal(captured({title:"One suspect arrested in Lyon"}),1);
 });
 
+test("no lookbehind in the page: Safari before 16.4 throws on it and the whole script stops",()=>{
+  assert.doesNotMatch(html,/\(\?<[=!]/);
+  assert.equal(captured({title:"No one arrested, not 5 detained, one suspect apprehended"}),1);
+  assert.equal(wounded({title:"Parent of two injured"}),0);
+  assert.deepEqual(deaths({title:"Mother of 4 killed, 3 people dead"}),{terrorist:0,victim:3});
+  assert.deepEqual(deaths({title:"1 soldier killed and 1 terrorist killed"}),{terrorist:1,victim:1});
+});
+
 test("death toll and total statements still take precedence",()=>{
   assert.deepEqual(deaths({title:"Death toll rises to 25 after Kano bombing, 3 attackers killed"}),{terrorist:0,victim:25});
   assert.deepEqual(deaths({title:"Fatalities: 9 in Kabul"}),{terrorist:0,victim:9});

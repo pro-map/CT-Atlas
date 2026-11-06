@@ -11413,11 +11413,19 @@ const CASUALTY_NUMBER_WORDS = {
     twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90
 };
 
-// "No one was killed" is no death, and "mother of eight arrested" one arrest.
-const CASUALTY_NUMBER =
-    "(?<!\\bno\\s)(?<!\\bnot\\s)(?<!\\b(?:mother|father|parent)\\s+of\\s)(\\d{1,5}"
+const CASUALTY_FIGURE =
+    "\\d{1,5}"
     + "|(?:twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)(?:[-\\s](?:one|two|three|four|five|six|seven|eight|nine))?"
-    + "|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen)";
+    + "|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen";
+
+const CASUALTY_NUMBER =
+    "(" + CASUALTY_FIGURE + ")";
+
+// "No one was killed" is no death, and "mother of eight arrested" one arrest. Taken out
+// of the text first, because a lookbehind here throws at load on Safari before 16.4,
+// which would end the whole script and leave the page on "Loading database...".
+const CASUALTY_NOT_A_FIGURE =
+    new RegExp("\\b(?:no|not|(?:mother|father|parent)\\s+of)\\s(?:" + CASUALTY_FIGURE + ")\\b", "gi");
 
 const CASUALTY_APPROXIMATION =
     "(?:at\\s+least\\s+|more\\s+than\\s+|over\\s+)?";
@@ -11432,19 +11440,19 @@ const CASUALTY_TERRORIST_SINGULARS =
     Array.from(TERRORIST_SIDE_CASUALTY_WORDS).filter(word => !/(?:s|men)$/.test(word)).join("|");
 
 // A singular noun counts only after "one": in "Frente 4 member arrested" the
-// figure belongs to the name of the unit.
-function casualtyNounPattern(plurals, singulars) {
-    return "(?:(?:" + plurals + ")\\s+|(?<=\\b(?:one|1)\\s)(?:" + singulars + ")\\s+)?";
+// figure belongs to the name of the unit. That "one" is the second capture group.
+function casualtySubjectPattern(plurals, singulars) {
+    return "(?:" + CASUALTY_NUMBER + "\\s+(?:(?:" + plurals + ")\\s+)?|(one|1)\\s+(?:" + singulars + ")\\s+)";
 }
 
-const CASUALTY_NOUN =
-    casualtyNounPattern(
+const CASUALTY_SUBJECT =
+    casualtySubjectPattern(
         "people|persons|civilians|soldiers|troops|officers|police|policemen|security\\s+personnel|security\\s+forces|victims|" + CASUALTY_TERRORIST_PLURALS,
         "person|civilian|soldier|officer|policeman|victim|" + CASUALTY_TERRORIST_SINGULARS
     );
 
-const CASUALTY_CAPTURED_NOUN =
-    casualtyNounPattern(
+const CASUALTY_CAPTURED_SUBJECT =
+    casualtySubjectPattern(
         "people|persons|suspects|militants|terrorists|attackers|fighters|jihadists|extremists|members",
         "person|suspect|militant|terrorist|attacker|fighter|jihadist|extremist|member"
     );
@@ -11459,7 +11467,7 @@ const CASUALTY_NAMED_SIDE =
 
 const CASUALTY_PATTERNS = {
     death: [
-        new RegExp("\\b" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\s+" + CASUALTY_NOUN + "(?:(?:were|was)\\s+)?(?:killed|dead|died)\\b", "gi"),
+        new RegExp("\\b" + CASUALTY_APPROXIMATION + CASUALTY_SUBJECT + "(?:(?:were|was)\\s+)?(?:killed|dead|died)\\b", "gi"),
         new RegExp("\\b(?:killed|dead|fatalities|deaths)\\s*[:\\-]?\\s*" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\b(?:\\s+" + CASUALTY_NAMED_SIDE + ")?", "gi"),
         /\bdeath\s+toll(?:\s+(?:has\s+)?(?:risen|rose|rises|climbed|stands|reached|reaches|at))?\s*(?:to|at|:)?\s*(\d{1,5})\b/gi,
         new RegExp("\\b" + CASUALTY_NUMBER + "\\s+(?:fatalities|deaths)\\b", "gi"),
@@ -11468,11 +11476,11 @@ const CASUALTY_PATTERNS = {
         new RegExp("\\bkill(?:s|ing)?\\s+" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\s+" + CASUALTY_NAMED_SIDE, "gi")
     ],
     wounded: [
-        new RegExp("\\b" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\s+" + CASUALTY_NOUN + "(?:(?:were|was)\\s+)?(?:wounded|injured|hurt)\\b", "gi"),
+        new RegExp("\\b" + CASUALTY_APPROXIMATION + CASUALTY_SUBJECT + "(?:(?:were|was)\\s+)?(?:wounded|injured|hurt)\\b", "gi"),
         new RegExp("\\b(?:wounded|injured|hurt)\\s*[:\\-]?\\s*" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\b", "gi")
     ],
     captured: [
-        new RegExp("\\b" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\s+" + CASUALTY_CAPTURED_NOUN + "(?:(?:were|was)\\s+)?(?:arrested|detained|captured|apprehended)\\b", "gi"),
+        new RegExp("\\b" + CASUALTY_APPROXIMATION + CASUALTY_CAPTURED_SUBJECT + "(?:(?:were|was)\\s+)?(?:arrested|detained|captured|apprehended)\\b", "gi"),
         new RegExp("\\b(?:arrested|detained|captured|apprehended)\\s*[:\\-]?\\s*" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\b", "gi")
     ]
 };
@@ -11509,6 +11517,12 @@ function casualtyStatements(
 
     const matches = [];
 
+    const readable =
+        text.replace(
+            CASUALTY_NOT_A_FIGURE,
+            "."
+        );
+
     patterns.forEach(
         pattern => {
 
@@ -11518,7 +11532,7 @@ function casualtyStatements(
                 (
                     match =
                         pattern.exec(
-                            text
+                            readable
                         )
                 )
                 !==
@@ -11529,6 +11543,10 @@ function casualtyStatements(
                     casualtyNumber(
                         match[
                             1
+                        ]
+                        ||
+                        match[
+                            2
                         ]
                     );
 
