@@ -110,3 +110,41 @@ jobs:
           done
           echo "Push failed after retries."
           exit 1
+
+  # A cleanup is the shrink the publication gate exists to question, and only this
+  # run knows it is deliberate: left to the next daily run, a large one would block it.
+  # Runs even when nothing was removed, so a failed deploy can be retried from here.
+  deploy:
+    needs: cleanup
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    env:
+      ALLOW_SHRINK: "1"
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout updated main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
+      - name: Build active map and Database data
+        uses: ./.github/actions/build-events-lite
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v5
+        with:
+          name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
+          path: "."
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
+        with:
+          artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Verify the data actually served by GitHub Pages
+        run: python3 tools/daily_publication_audit.py verify --url "${{ steps.deployment.outputs.page_url }}" --expected publication-manifest.json --output publication-receipt-pages.json

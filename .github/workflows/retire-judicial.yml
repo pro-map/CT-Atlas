@@ -92,6 +92,9 @@ jobs:
   deploy:
     needs: retire
     runs-on: ubuntu-latest
+    env:
+      # The Judicial retirement removed 21.2% of the database in one commit.
+      ALLOW_SHRINK: "1"
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

@@ -11,12 +11,19 @@ import subprocess
 import sys
 import time
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from attack_points import _located, is_map_attack, published_at
 from daily_reliability import digest, metadata_repair, publication_delta, rows, timing, repair_known_city
 FILES = ('events.json', 'events-lite.json', 'events-map.json')
+# The site the mirror follows, so both publication gates compare with it: a mirror
+# compared with itself would refuse the shrink a retirement has just published.
+LIVE_SITE = 'https://ct-atlas.com'
+MIN_RECORD_SHARE = 0.9
+MIN_LOCATED_SHARE = 0.5
+MAX_UNREADABLE_DATES = 0.01
 
 
 def read(path):
@@ -92,12 +99,46 @@ def receipt(before, output):
     return report
 
 
-def manifest(directory, output):
+def content_problems(full, mapped, points, cutoff):
+    """Damage that matching identifiers cannot see. No freshness rule on purpose:
+    a failed collection must still be able to publish its honest status."""
+    dates = {identifier: published_at(event) for identifier, event in full.items()}
+    lost = sorted(identifier for identifier, when in dates.items()
+                  if when and when >= cutoff and identifier not in mapped)
+    unreadable = sum(when is None for when in dates.values())
+    located = sum(_located(event) for event in full.values())
+    problems = []
+    if lost:
+        problems.append(f'{len(lost)} records inside the map window are not in the map, such as {lost[0]}')
+    if unreadable > MAX_UNREADABLE_DATES * len(full):
+        problems.append(f'{unreadable} of {len(full)} published dates are unreadable')
+    if located < MIN_LOCATED_SHARE * len(full):
+        problems.append(f'only {located} of {len(full)} records are located')
+    if not any(is_map_attack(event) and _located(event) for event in points):
+        problems.append('the map has no attack point')
+    return problems
+
+
+def shrink_problems(files):
+    if os.getenv('ALLOW_SHRINK') == '1':
+        return []
+    live = served_manifest(LIVE_SITE)
+    try:
+        return [f"{name} has {files[name]['record_count']} records, the live site {live['files'][name]['record_count']}"
+                for name in FILES if files[name]['record_count'] < MIN_RECORD_SHARE * live['files'][name]['record_count']]
+    except (KeyError, TypeError):
+        print('::warning::The live manifest could not be read, so the shrink check was skipped.')
+        return []
+
+
+def manifest(directory, output, now=None):
+    now = now or datetime.now(timezone.utc)
     root = Path(directory)
     from compact_mirror_json import read_mirror_bytes
     payloads = {name: read_mirror_bytes(root, name) for name in FILES}
     documents = {name: json.loads(content) for name, content in payloads.items()}
     import build_events_lite as light
+    import build_events_map as map_file
     from retired_categories import active_event, is_retired_judicial_event
     light.validate(documents['events-lite.json'], documents['events.json'])
     full = {e['id']:active_event(e) for e in documents['events.json']['events'] if not is_retired_judicial_event(e)}
@@ -109,7 +150,7 @@ def manifest(directory, output):
             for field in ('title', 'summary', 'categories', 'threat_categories', 'latitude', 'longitude'):
                 if field in row and row[field] != full[identifier].get(field):
                     raise ValueError(f'Derived data differs: {name}/{identifier}/{field}')
-    result = {'version': 1, 'created_at': datetime.now(timezone.utc).isoformat(),
+    result = {'version': 1, 'created_at': now.isoformat(),
               'source_revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
               'files': {name: {'sha256_canonical_json': digest(document),
                               'sha256_bytes': hashlib.sha256(payloads[name]).hexdigest(),
@@ -118,6 +159,10 @@ def manifest(directory, output):
                               'collection_status_finalized_at': (document.get('collection_status') or {}).get('finalized_at'),
                               'record_count': len(rows(document, name=='events-map.json'))}
                         for name, document in documents.items()}}
+    problems = content_problems(full, mapped, documents['events-map.json']['events'],
+                                now - timedelta(days=map_file.RECENT_DAYS)) + shrink_problems(result['files'])
+    if problems:
+        raise ValueError('Publication refused: ' + '; '.join(problems))
     write(output, result)
     return result
 
@@ -161,18 +206,24 @@ def verify(url, expected_path, output, attempts=5, sleep=time.sleep):
     raise RuntimeError('Deployment content verification failed; see receipt')
 
 
-def served_revision(url):
-    """Source revision of the manifest a deployment serves now; None when unknown."""
+def served_manifest(url):
+    """The manifest a deployment serves now; None when it cannot be read."""
     if not url.startswith('https://'):
         raise ValueError('An HTTPS deployment URL is required')
     try:
         request = urllib.request.Request(url.rstrip('/')+'/publication-manifest.json?integrity='+str(time.time_ns()),
             headers={'Cache-Control': 'no-cache', 'User-Agent': 'CT-Atlas-Publication-Check/1.0'})
         with urllib.request.urlopen(request, timeout=30) as response:
-            revision = json.loads(response.read(1024 * 1024)).get('source_revision')
+            document = json.loads(response.read(1024 * 1024))
     except Exception:
-        # Unknown means "deploy": a skipped redeploy must never hide a stale site.
         return None
+    return document if isinstance(document, dict) else None
+
+
+def served_revision(url):
+    """Source revision of the manifest a deployment serves now; None when unknown."""
+    # Unknown means "deploy": a skipped redeploy must never hide a stale site.
+    revision = (served_manifest(url) or {}).get('source_revision')
     if isinstance(revision, str) and len(revision) == 40 and all(c in '0123456789abcdef' for c in revision):
         return revision
     return None

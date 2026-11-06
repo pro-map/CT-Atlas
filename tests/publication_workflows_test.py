@@ -174,5 +174,27 @@ class StatusRefreshPublicationTests(unittest.TestCase):
                       '--expected publication-manifest.json', verify)
 
 
+class DeliberateShrinkTests(unittest.TestCase):
+    def test_only_the_workflows_that_shrink_on_purpose_may_skip_the_shrink_rule(self):
+        skipping = {path.name for path in WORKFLOWS.glob("*.yml") if "ALLOW_SHRINK" in path.read_text(encoding="utf-8")}
+        self.assertEqual(skipping, {"retire-judicial.yml", "cleanup-events.yml"})
+        for path in (ROOT / ".github/actions").rglob("*.yml"):
+            self.assertNotIn("ALLOW_SHRINK", path.read_text(encoding="utf-8"))
+
+    def test_each_of_them_publishes_its_own_shrink(self):
+        # cleanup-events.yml only committed: the next daily publication, which has no
+        # ALLOW_SHRINK, would then have met the gate. The flag must sit on the job
+        # that builds the manifest, and the mirror must follow that job.
+        listed = items(trigger(read(MIRROR), "workflow_run"), "workflows")
+        for name in ("retire-judicial.yml", "cleanup-events.yml"):
+            with self.subTest(workflow=name):
+                source = read(name)
+                deploy = source[source.index("\n  deploy:\n"):]
+                self.assertIn('ALLOW_SHRINK: "1"', deploy[:deploy.index("    steps:\n")])
+                self.assertIn("uses: ./.github/actions/build-events-lite", deploy)
+                self.assertTrue(deploys_pages(deploy))
+                self.assertIn(workflow_name(source), listed)
+
+
 if __name__ == "__main__":
     unittest.main()

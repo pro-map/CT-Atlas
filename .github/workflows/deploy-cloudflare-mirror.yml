@@ -33,6 +33,7 @@ on:
       - "Reconcile daily dataset integrity"
       - "Apply reviewed map evidence corrections"
       - "Retire Judicial collection"
+      - "Clean up existing events database"
       - "Actualiser le logo uniquement"
     types: [completed]
     branches: [main]
