@@ -4592,6 +4592,59 @@ html, body {
     }
 }
 
+/* ============================================================
+   PORTRAIT PHONE
+   The two-column grid above is !important, so without this the
+   map stayed 230px wide with most of it under the sidebar. The
+   panel opens over the full-width map from its own button.
+   ============================================================ */
+#sidebarToggle {
+    display: none;
+}
+
+@media (max-width: 640px) {
+    #main {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    #updated {
+        flex: 1 1 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+
+    #sidebarToggle {
+        display: block;
+        position: absolute;
+        z-index: 1001;
+        top: 7px;
+        left: 7px;
+        min-height: 34px;
+        padding: 6px 12px;
+        border: 1px solid rgba(95, 176, 232, .55);
+        border-radius: 4px;
+        background: rgba(5, 16, 24, .94);
+        color: #cfe6f2;
+        font: 700 10px Arial, sans-serif;
+        letter-spacing: .08em;
+    }
+
+    #sidebar {
+        top: 47px !important;
+        width: min(84vw, 320px) !important;
+        max-height: calc(100% - 106px) !important;
+    }
+
+    body:not(.sidebar-open) #sidebar {
+        display: none !important;
+    }
+
+    /* Above the timeline, which it would otherwise cover. */
+    .leaflet-bottom {
+        bottom: 58px;
+    }
+}
+
 </style>
 
 <script src="pdf-export.js?v=20261003" defer></script>
@@ -5123,6 +5176,9 @@ html, body {
 
 
 <div id="main">
+
+
+<button id="sidebarToggle" type="button" aria-controls="sidebar" aria-expanded="false">FILTERS</button>
 
 
 <div id="sidebar">
@@ -6049,6 +6105,33 @@ const TILE_LOAD_TUNING = {
     updateWhenZooming:
         false
 };
+
+
+// Portrait phones: the zoom control sits on the right, clear of the panel, and the
+// panel starts closed so the first thing seen is the map (see PORTRAIT PHONE in the CSS).
+const phoneLayout =
+    window.matchMedia(
+        "(max-width: 640px)"
+    );
+
+function applyPhoneLayout() {
+    map.zoomControl.setPosition(phoneLayout.matches ? "topright" : "topleft");
+    map.invalidateSize();
+}
+
+function setPhoneSidebarOpen(open) {
+    document.body.classList.toggle("sidebar-open", open);
+    const toggle = document.getElementById("sidebarToggle");
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.textContent = open ? "CLOSE" : "FILTERS";
+}
+
+phoneLayout.addEventListener("change", applyPhoneLayout);
+applyPhoneLayout();
+
+document.getElementById("sidebarToggle").addEventListener("click", () => {
+    setPhoneSidebarOpen(!document.body.classList.contains("sidebar-open"));
+});
 
 
 const englishBaseLayer =
