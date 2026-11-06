@@ -38,8 +38,8 @@ const published=Date.parse(fiveNovember.published_at);
 const hours=count=>published+count*3600000;
 
 function statusContext(document={getElementById:()=>null}){
-  const c=vm.createContext({document,Date,Number,Array,Set,Math});
-  vm.runInContext(statusBlock,c);
+  const c=vm.createContext({document,Date,Number,Array,Set,Math,selectedDays:7});
+  vm.runInContext(statusBlock+extract("formatTrendGeneratedAt"),c);
   return c;
 }
 const facts=status=>({collection_status:status,last_updated:status?.published_at});
@@ -47,7 +47,7 @@ const facts=status=>({collection_status:status,last_updated:status?.published_at
 test("the 5 Nov run reads as stalled even in a file with no health field",()=>{
   const c=statusContext();
   assert.equal(c.collectionHealth(fiveNovember),"stalled");
-  const view=c.dataStateView(facts(fiveNovember),hours(1));
+  const view=c.dataStateView(facts(fiveNovember),hours(0.5));
   assert.equal(view.level,"bad");
   assert.equal(view.text,"UPDATE STALLED");
   assert.match(view.detail,/Latest update partial/);
@@ -57,7 +57,7 @@ test("the 5 Nov run reads as stalled even in a file with no health field",()=>{
 test("a normal run is not flagged: partial is the everyday state, and the backlog does not count",()=>{
   const c=statusContext();
   assert.equal(c.collectionHealth(goodRun),"ok");
-  const view=c.dataStateView(facts(goodRun),hours(1));
+  const view=c.dataStateView(facts(goodRun),hours(0.5));
   assert.equal(view.level,"ok");
   assert.equal(view.text,"UPDATE OK");
 });
@@ -72,14 +72,14 @@ test("the pipeline's health state wins, and a value it adds later is ignored",()
   assert.equal(c.collectionHealth({...goodRun,health:health("starved")}),"stalled");
   assert.equal(c.collectionHealth({...goodRun,health:health("unheard-of")}),"ok","falls back to the counters");
   assert.equal(c.collectionHealth({...goodRun,health:{}}),"ok");
-  assert.equal(c.dataStateView(facts({...goodRun,health:health("degraded")}),hours(1)).text,"UPDATE BEHIND");
-  assert.equal(c.dataStateView(facts({...goodRun,health:health("starved")}),hours(1)).text,"UPDATE STALLED");
-  assert.equal(c.dataStateView(facts({...fiveNovember,health:health("healthy")}),hours(1)).text,"UPDATE OK");
+  assert.equal(c.dataStateView(facts({...goodRun,health:health("degraded")}),hours(0.5)).text,"UPDATE BEHIND");
+  assert.equal(c.dataStateView(facts({...goodRun,health:health("starved")}),hours(0.5)).text,"UPDATE STALLED");
+  assert.equal(c.dataStateView(facts({...fiveNovember,health:health("healthy")}),hours(0.5)).text,"UPDATE OK");
 });
 
 test("a failed collection says so, although the pipeline calls it starved too",()=>{
   const c=statusContext();
-  assert.equal(c.dataStateView(facts({...goodRun,status:"failed",health:health("starved")}),hours(1)).text,"UPDATE FAILED");
+  assert.equal(c.dataStateView(facts({...goodRun,status:"failed",health:health("starved")}),hours(0.5)).text,"UPDATE FAILED");
 });
 
 test("a file without health or counters stays neutral, never green",()=>{
@@ -87,23 +87,55 @@ test("a file without health or counters stays neutral, never green",()=>{
   assert.equal(c.collectionHealth(undefined),"");
   assert.equal(c.collectionHealth({status:"partial",recent:{candidates:50,reviewed:30,pending:20}}),"");
   assert.equal(c.collectionHealth({status:"failed"}),"failed");
-  const partial=c.dataStateView(facts({status:"partial",published_at:fiveNovember.published_at,recent:{candidates:50,reviewed:30,pending:20},backlog:{pending:0}}),hours(1));
+  const partial=c.dataStateView(facts({status:"partial",published_at:fiveNovember.published_at,recent:{candidates:50,reviewed:30,pending:20},backlog:{pending:0}}),hours(0.5));
   assert.deepEqual([partial.level,partial.text],["neutral","UPDATE PARTIAL"]);
-  const none=c.dataStateView({last_updated:fiveNovember.published_at},hours(1));
+  const none=c.dataStateView({last_updated:fiveNovember.published_at},hours(0.5));
   assert.deepEqual([none.level,none.text],["neutral","STATUS NOT REPORTED"]);
-  const nothing=c.dataStateView(null,hours(1));
+  const nothing=c.dataStateView(null,hours(0.5));
   assert.deepEqual([nothing.level,nothing.text],["neutral","STATUS NOT REPORTED"]);
 });
 
 test("the badge warns after one missed run, and says how old the data is",()=>{
   const c=statusContext();
-  assert.equal(c.dataStateView(facts(goodRun),hours(18.7)).level,"ok","the measured overnight gap is a normal day");
-  assert.equal(c.dataStateView(facts(goodRun),hours(19.9)).text,"UPDATE OK");
-  const missed=c.dataStateView(facts(goodRun),hours(20));
-  assert.deepEqual([missed.level,missed.text],["warn","NO UPDATE FOR 20 H"]);
-  assert.deepEqual((({level,text})=>[level,text])(c.dataStateView(facts(goodRun),hours(84))),["bad","NO UPDATE FOR 3 DAYS"]);
-  assert.equal(c.dataStateView(facts(fiveNovember),hours(21)).text,"UPDATE STALLED · 21 H OLD");
-  assert.equal(c.dataStateView(facts(fiveNovember),hours(84)).text,"UPDATE STALLED · 3 DAYS OLD");
+  const end=" · DATA TO 06 NOV, 00:10 PARIS";
+  assert.equal(c.dataStateView(facts(goodRun),hours(18.7),7).level,"ok","the measured overnight gap is a normal day");
+  assert.equal(c.dataStateView(facts(goodRun),hours(19.9),7).text,"UPDATE OK · 19 H OLD"+end);
+  const missed=c.dataStateView(facts(goodRun),hours(20),7);
+  assert.deepEqual([missed.level,missed.text],["warn","NO UPDATE FOR 20 H"+end]);
+  assert.deepEqual((({level,text})=>[level,text])(c.dataStateView(facts(goodRun),hours(84),7)),["bad","NO UPDATE FOR 3 DAYS"+end]);
+  assert.equal(c.dataStateView(facts(fiveNovember),hours(21),7).text,"UPDATE STALLED · 21 H OLD"+end);
+  assert.equal(c.dataStateView(facts(fiveNovember),hours(84),7).text,"UPDATE STALLED · 3 DAYS OLD"+end);
+});
+
+test("the badge says where the data ends as soon as it stops being current, on every period",()=>{
+  const c=statusContext();
+  assert.equal(c.dataStateView(facts(goodRun),hours(0.5),1).text,"UPDATE OK");
+  for(const days of [1,7,30])assert.equal(c.dataStateView(facts(goodRun),hours(8),days).text,"UPDATE OK · 8 H OLD · DATA TO 06 NOV, 00:10 PARIS");
+  const partial=c.dataStateView({collection_status:{status:"partial",published_at:fiveNovember.published_at,recent:{candidates:50,reviewed:30,pending:20},backlog:{pending:0}}},hours(8),7);
+  assert.equal(partial.text,"UPDATE PARTIAL · 8 H OLD · DATA TO 06 NOV, 00:10 PARIS");
+  assert.equal(c.dataStateView(null,hours(8),7).text,"STATUS NOT REPORTED","no date, nothing to say about it");
+});
+
+test("a period the data no longer reaches reads as no data, not as a quiet world",()=>{
+  // Measured: 3.5 days after publication the 24H view read as a quiet world.
+  const c=statusContext();
+  assert.equal(c.dataStateView(facts(goodRun),hours(84),1).text,"NO UPDATE FOR 3 DAYS · NO DATA SINCE 06 NOV, 00:10 PARIS");
+  assert.equal(c.dataStateView(facts(goodRun),hours(84),7).text,"NO UPDATE FOR 3 DAYS · DATA TO 06 NOV, 00:10 PARIS","the data still reaches into 7 days");
+  assert.equal(c.dataStateView(facts(goodRun),hours(23.9),1).text,"NO UPDATE FOR 23 H · DATA TO 06 NOV, 00:10 PARIS");
+  assert.equal(c.dataStateView(facts(goodRun),hours(24.1),1).text,"NO UPDATE FOR 24 H · NO DATA SINCE 06 NOV, 00:10 PARIS");
+  assert.equal(c.dataStateView(facts(fiveNovember),hours(84),1).text,"UPDATE STALLED · 3 DAYS OLD · NO DATA SINCE 06 NOV, 00:10 PARIS");
+});
+
+test("the badge reads the period the map is showing",()=>{
+  const nodes=new Map([["dataStateBadge",{hidden:true,dataset:{}}]]);
+  const c=statusContext({getElementById:id=>nodes.get(id)||null});
+  c.Date=class extends Date { static now(){return hours(84);} };
+  vm.runInContext("mapDataFacts = "+JSON.stringify(facts(goodRun))+"; selectedDays = 1;",c);
+  c.renderDataStateBadge();
+  assert.match(nodes.get("dataStateBadge").textContent,/NO DATA SINCE/);
+  vm.runInContext("selectedDays = 7;",c);
+  c.renderDataStateBadge();
+  assert.match(nodes.get("dataStateBadge").textContent,/ DATA TO /);
 });
 
 test("age is taken from the publication, not from a status refresh that moved last_updated",()=>{

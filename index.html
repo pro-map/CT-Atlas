@@ -7141,7 +7141,12 @@ function dataPublishedTime(facts) {
 // first slot hours late (5 Oct to 5 Nov). Older than this, a run did not happen.
 const MAP_DATA_STALE_MS = 20 * 60 * 60 * 1000;
 
-function dataStateView(facts, now) {
+// Rolling windows follow the clock and the data stops at the last publication, so
+// "last 24h" shrinks towards zero between runs and reads like a quiet day. From this
+// age the badge says how old the data is and where it ends.
+const MAP_WINDOW_NOTE_MS = 60 * 60 * 1000;
+
+function dataStateView(facts, now, days) {
     const view = collectionStatusView(facts);
     const health = collectionHealth(facts?.collection_status);
     const published = dataPublishedTime(facts);
@@ -7149,17 +7154,22 @@ function dataStateView(facts, now) {
     const hours = Math.floor(age / 3600000);
     const ageText = hours >= 48 ? Math.floor(hours / 24) + " DAYS" : hours + " H";
     const stale = age >= MAP_DATA_STALE_MS;
+    const aged = age >= MAP_WINDOW_NOTE_MS ? " · " + ageText + " OLD" : "";
     const problem = { failed: ["bad", "UPDATE FAILED"], stalled: ["bad", "UPDATE STALLED"], behind: ["warn", "UPDATE BEHIND"] }[health];
     let level, text;
     if (problem) {
-        [level, text] = problem;
-        if (stale) text += " · " + ageText + " OLD";
+        [level, text] = [problem[0], problem[1] + aged];
     } else if (stale) {
         [level, text] = [hours >= 48 ? "bad" : "warn", "NO UPDATE FOR " + ageText];
     } else if (health === "ok" || view.state === "complete") {
-        [level, text] = ["ok", "UPDATE OK"];
+        [level, text] = ["ok", "UPDATE OK" + aged];
     } else {
-        [level, text] = ["neutral", view.state === "unknown" ? "STATUS NOT REPORTED" : "UPDATE PARTIAL"];
+        [level, text] = ["neutral", (view.state === "unknown" ? "STATUS NOT REPORTED" : "UPDATE PARTIAL") + aged];
+    }
+    if (aged) {
+        // A period the data no longer reaches is empty for that reason, not a quiet one.
+        text += (age > days * 86400000 ? " · NO DATA SINCE " : " · DATA TO ")
+            + formatTrendGeneratedAt(published).toUpperCase() + " PARIS";
     }
     return { level, text, detail: view.title + ". Last attempt: " + view.attempt + ". Published data: " + view.published + ". " + view.reasons };
 }
@@ -7173,7 +7183,7 @@ function mapDataOlderThan(days) {
 }
 
 function renderDataStateBadge() {
-    const view = dataStateView(mapDataFacts, Date.now());
+    const view = dataStateView(mapDataFacts, Date.now(), selectedDays);
     const badge = document.getElementById("dataStateBadge");
     if (badge) {
         badge.hidden = false;
@@ -14400,10 +14410,6 @@ function closeDatabaseEventCard() {
 }
 
 const TICKER_TIME_FORMAT = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Paris", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
-
-// Rolling windows follow the clock and the data stops at the last publication, so
-// "last 24h" shrinks towards zero between runs and reads like a quiet day.
-const MAP_WINDOW_NOTE_MS = 60 * 60 * 1000;
 
 function attackTickerTitle() {
     if (selectedDays !== 1) return "ATTACKS · LAST " + selectedDays + " DAYS";
