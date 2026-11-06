@@ -357,6 +357,27 @@ def far_named_place(incoming, existing, country):
     return all(_far_apart(a, b) for a in theirs.values() for b in ours.values())
 
 
+def headline_leaves_location(new, existing):
+    """Whether new's headline, promoted onto a geolocated record, would sit on a
+    point it does not describe: geolocation answers once per record, so the point
+    would stay on the old headline's place ('Debris falls in Jeddah' on Sanaa)."""
+    country = existing.get('country_code')
+    if existing.get('ai_geo_complete') is not True or existing.get('latitude') is None or not country:
+        return False
+    if new.get('country_code') and new['country_code'] != country:
+        return True
+    stored = (float(existing['latitude']), float(existing['longitude']))
+    precise = existing.get('location_precision') in ('city', 'region')
+    if precise and new.get('location_precision') in ('city', 'region') and new.get('latitude') is not None:
+        return _far_apart([stored], [(float(new['latitude']), float(new['longitude']))])
+    places = headline_places(str(new.get('title') or ''), country)
+    if not places or set(places) & stored_place_names(existing):
+        return False
+    if precise:
+        return all(_far_apart(points, [stored]) for points in places.values())
+    return far_named_place(new, existing, country)
+
+
 # Shared vocabulary is not evidence that two keys are one case. A word is weak
 # everywhere when its headlines span WEAK_WORD_MIN_COUNTRIES countries and
 # WEAK_WORD_MIN_BUCKETS (country, ISO week) pairs ('atentado', 'Anschlag',

@@ -1,5 +1,5 @@
 import attack_points
-from map_evidence_integrity import repair_text
+from map_evidence_integrity import headline_leaves_location, repair_text
 import radnuc
 import threat_categories
 import collection_config
@@ -7987,6 +7987,11 @@ def merge_event(
                 "source",
                 "",
             )
+        )
+        and
+        not headline_leaves_location(
+            new,
+            existing,
         )
     ):
         old_representative = {
