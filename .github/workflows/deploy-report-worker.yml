@@ -21,7 +21,9 @@ concurrency:
 
 jobs:
   deploy-worker:
-    runs-on: ubuntu-latest
+    # This job runs the system python3 and node, and ubuntu-latest moves to 26.04
+    # job by job until 2026-11-19: one commit could meet two images.
+    runs-on: ubuntu-24.04
     concurrency:
       group: ct-atlas-shared-worker-deployment
       queue: max
@@ -43,7 +45,13 @@ jobs:
             node --input-type=module --check < "$file"
           done
           node --check crypto.js
-          node --test tests/*.test.cjs
+
+      - name: Run the Node regression suite
+        run: node --test tests/*.test.cjs
+
+      - name: Run the Python release checks
+        run: |
+          python3 --version
           python3 tests/quiz_source_test.py
           python3 tests/update_sanctions_test.py
           python3 tests/build_events_lite_test.py
@@ -62,3 +70,30 @@ jobs:
 
       - name: Deploy Worker
         run: python3 tools/wrangler_retry.py deploy --keep-vars --config cloudflare-worker/wrangler.toml
+
+  next-runner-canary:
+    # Never blocks a deploy. Job logs are not public, annotations are: this names
+    # what 26.04 would break, so the pin above can go once it reports nothing.
+    runs-on: ubuntu-26.04
+    continue-on-error: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Report what Ubuntu 26.04 would break
+        shell: bash
+        run: |
+          echo "::notice title=Ubuntu 26.04::$(python3 --version), node $(node --version)"
+          for check in "node --test tests/*.test.cjs" \
+            "python3 tests/quiz_source_test.py" \
+            "python3 tests/update_sanctions_test.py" \
+            "python3 tests/build_events_lite_test.py" \
+            "python3 tests/build_events_map_test.py"; do
+            if ! output="$($check 2>&1)"; then
+              printf '%s\n' "$output" | tail -n 40
+              summary="$(printf '%s\n' "$output" | grep -E '^(✖|not ok)|Error|FAILED' | head -n 4 | tr '\n' ' ' | cut -c1-400)"
+              echo "::warning title=Ubuntu 26.04 $check::$summary"
+            fi
+          done

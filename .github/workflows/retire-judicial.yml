@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   retire:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - name: Checkout current main
@@ -91,7 +91,7 @@ jobs:
 
   deploy:
     needs: retire
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       # The Judicial retirement removed 21.2% of the database in one commit.
       ALLOW_SHRINK: "1"
