@@ -269,6 +269,13 @@ test('the page never queries the database on load, only on the first use of the 
   assert.match(extract('onDatabaseFiltersChanged'),/if \(!databaseActivated && !chronologyOpen\) return;/);
 });
 
+test('a Database answer cut off after the 200 is an error, never an empty result',()=>{
+  // The list is streamed: workerd can end a cut body as if it were whole.
+  const query=extract('queryDatabase');
+  assert.match(query,/await response\.json\(\)\.catch\(\(\) => null\)/);
+  assert.match(query,/if \(!payload\) throw new Error\("The database answer was cut off\. Please retry\."\);/);
+});
+
 test('database rows only link to the map when they are attacks themselves, by the unique key',()=>{
   const c=vm.createContext({
     allEvents:[

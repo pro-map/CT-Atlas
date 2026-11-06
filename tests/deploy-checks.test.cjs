@@ -48,8 +48,7 @@ test("every page asks for one version of a shared script, the one live-smoke pin
 });
 
 test("the UI deploy runs the whole Node suite before it publishes",()=>{
-  // Map and Database logic inline in index.html is tested only by this suite,
-  // and the mirror now deploys pushed UI files only after this workflow passes.
+  // Map and Database logic inline in index.html is tested only by this suite.
   const steps=workflow.split(/\n      - /);
   const suite=steps.findIndex(step=>/^\s*run: node --test tests\/\*\.test\.cjs\s*$/m.test(step));
   const configure=steps.findIndex(step=>step.startsWith("name: Configure GitHub Pages"));

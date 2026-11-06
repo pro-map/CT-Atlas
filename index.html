@@ -14050,10 +14050,13 @@ function queryDatabase(force = false) {
         body: JSON.stringify({ ...filters, user_id: reportGeneratorUserId(), min_database_version: mapDatabaseVersion })
     })
     .then(async response => {
-        const payload = await response.json().catch(() => ({}));
+        const payload = await response.json().catch(() => null);
         if (!response.ok) {
-            throw new Error(payload.error || ("Database query failed (HTTP " + response.status + ")."));
+            throw new Error(payload?.error || ("Database query failed (HTTP " + response.status + ")."));
         }
+        // The Worker streams this answer: a failure after the first batch
+        // ends a 200 early, and a cut body must not read as an empty list.
+        if (!payload) throw new Error("The database answer was cut off. Please retry.");
         return payload;
     })
     .then(payload => {

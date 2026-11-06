@@ -442,6 +442,12 @@ class LivePublicationTests(unittest.TestCase):
             with self.subTest(now=now):
                 self.assertEqual(self.problems(now), [])
 
+    def test_a_repair_does_not_silence_the_frozen_map_alarm(self):
+        main = self.site(self.MAIN, updated="2026-11-05T23:36:00+00:00")
+        main["map"]["collection_status"]["published_at"] = "2026-11-04T23:36:00+00:00"
+        found = self.problems("2026-11-06T02:00:00+00:00", main=main)
+        self.assertTrue(any("the map was last updated 26.4 h ago" in problem for problem in found), found)
+
     def test_a_frozen_map_turns_the_run_red(self):
         found = self.problems("2026-11-06T02:00:00+00:00")
         self.assertEqual(len(found), 1)

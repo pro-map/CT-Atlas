@@ -277,7 +277,8 @@ def live_problems(main, mirror, now):
     problems = [f"{site['url']}: events-map.json is not the file its manifest names"
                 for site in (main, mirror)
                 if site['sha256_bytes'] != site['manifest']['files']['events-map.json']['sha256_bytes']]
-    updated = main['map']['last_updated']
+    # A repair moves last_updated without collecting anything: a frozen map stays frozen.
+    updated = main['map'].get('collection_status', {}).get('published_at') or main['map']['last_updated']
     age = (now - moment(updated)).total_seconds() / 3600
     if age > MAX_MAP_AGE_HOURS:
         problems.append(f'the map was last updated {age:.1f} h ago, at {updated}')
