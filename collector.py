@@ -188,6 +188,8 @@ AI_TREND_MODEL = os.getenv(
 AI_TREND_ATTEMPTS = 3
 AI_TREND_TIMEOUT = 180
 AI_TREND_MAX_CANDIDATES = 80
+# Normal runs reach the cap; the starved runs of 5 Nov 2026 had 27 and 8.
+AI_TREND_THIN_CANDIDATES = 40
 
 
 # ============================================================
@@ -9332,6 +9334,27 @@ def _trend_payload(event, index):
     }
 
 
+def _trend_overview(text, generated_at, candidate_events):
+    """
+    The header prints this text and nothing else, clamped to three lines, so
+    the date and any thin-data warning come first. Between late runs a brief
+    can be 18 hours old under the title SITUATION 24H, and on 5 Nov 2026 one
+    rested on 8 events instead of 80 with nothing to show it.
+    """
+    text = clean_text(text)
+    if not text:
+        return ""
+
+    moment = _parse_iso_utc(generated_at).astimezone(PARIS_TZ)
+    lead = f"As of {moment:%d %b, %H:%M} Paris"
+    if 0 < candidate_events < AI_TREND_THIN_CANDIDATES:
+        lead += (
+            f", from only {candidate_events} reviewed events (normally "
+            f"{AI_TREND_MAX_CANDIDATES}), so developments may be missing"
+        )
+    return f"{lead}: {text}"
+
+
 def _trend_fallback(candidates, generated_at, reason=""):
     developments = []
 
@@ -9400,10 +9423,14 @@ def _trend_fallback(candidates, generated_at, reason=""):
         "window_hours": 24,
         "generated_at": generated_at,
         "candidate_events": len(candidates),
-        "overview": (
-            "AI trend synthesis was unavailable for this update. "
-            "The highest-relevance CT events reported or updated in the last "
-            "24 hours are shown below without additional analytical synthesis."
+        # Developments are stored but no panel prints them: name the cases here.
+        "overview": _trend_overview(
+            "AI synthesis was unavailable for this update. Top-ranked reports "
+            "of the last 24 hours, without analysis: "
+            + "; ".join(selection_compact_text(event.get("title"), 110) for event in candidates[:3])
+            + ".",
+            generated_at,
+            len(candidates),
         ),
         "developments": developments,
         "warning": reason,
@@ -9468,9 +9495,12 @@ def generate_24h_trend_summary(events):
             "window_hours": 24,
             "generated_at": generated_at,
             "candidate_events": 0,
-            "overview": (
-                "No significant CT developments were available for the "
-                "24-hour trend brief at the time of this update."
+            "overview": _trend_overview(
+                "No reviewed events are available for the last 24 hours, so "
+                "no assessment can be made. This does not mean that nothing "
+                "happened.",
+                generated_at,
+                0,
             ),
             "developments": [],
         }
@@ -9598,6 +9628,11 @@ def generate_24h_trend_summary(events):
                     "window_hours": 24,
                     "generated_at": generated_at,
                     "candidate_events": len(recent),
+                    "overview": _trend_overview(
+                        result.get("overview"),
+                        generated_at,
+                        len(recent),
+                    ),
                 }
             )
 
