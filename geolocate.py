@@ -35,6 +35,7 @@ import requests
 # Environment variables:
 #   GEMINI_API_KEY      required
 #   GEMINI_GEO_MODEL    optional, default: gemini-3.5-flash-lite
+#   GEMINI_GEO_FALLBACK_MODEL optional, used on a temporary failure; default: none
 #   GEMINI_RESCUE_MODELS optional, comma-separated, tried in turn;
 #                        default: gemini-3.8-flash
 #   GEMINI_RESCUE_BILLING_VERIFIED optional; default false (rescue is paused
