@@ -10,9 +10,11 @@ import tempfile
 import textwrap
 import unittest
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOWS = ROOT / ".github/workflows"
+COMPOSITE = "./.github/actions/build-events-lite"
 
 
 def read(name):
@@ -31,6 +33,55 @@ def trigger_paths(source, event):
     block = source.split("\n  " + event + ":\n", 1)[1]
     block = re.split(r"(?m)^  \S", block, 1)[0]
     return re.findall(r'(?m)^      - "([^"]+)"', block)
+
+
+def jobs(source):
+    parts = re.split(r"(?m)^  ([\w-]+):\n", source.split("\njobs:\n", 1)[1])
+    return dict(zip(parts[1::2], parts[2::2]))
+
+
+def action_source(path):
+    return (ROOT / path / "action.yml").read_text(encoding="utf-8")
+
+
+def run_order(block):
+    """The steps of a job or composite as the runner meets them: the unnamed ones
+    too, and a local composite's own steps in its place."""
+    body = re.split(r"(?m)^ *steps:\n", block, maxsplit=1)[1]
+    indent = re.search(r"(?m)^( *)- ", body)[1]
+    order = []
+    for step in re.split(rf"(?m)^{indent}- ", body)[1:]:
+        local = re.search(r"(?m)^ *uses: (\./\S+)", step)
+        order += run_order(action_source(local[1])) if local else [step]
+    return order
+
+
+def python_commands(step):
+    # Comments do not count: one that matched got python-tests.yml pinned for nothing.
+    script = re.split(r"(?m)^ *run: ?", step, maxsplit=1)[1:]
+    return [line.strip() for text in script for line in text.splitlines()
+            if re.search(r"\bpython3?\s+[-\w./]", line) and not line.lstrip().startswith("#")]
+
+
+def undeclared_python(source):
+    """{job: commands that reach the image's Python where they must not}. That
+    Python is allowed on a pinned image, in a job that never sets up another."""
+    found = {}
+    for name, block in jobs(source).items():
+        commands, declared = [], False
+        for step in run_order(block):
+            if re.search(r"(?m)^ *uses: actions/setup-python@", step):
+                declared = True
+            elif not declared:
+                commands += python_commands(step)
+        if commands and (declared or re.search(r"(?m)^    runs-on: ubuntu-latest$", block)):
+            found[name] = commands
+    return found
+
+
+def workflow(runner, *job_steps):
+    return f"on: push\njobs:\n  check:\n    runs-on: {runner}\n    steps:\n" + \
+        "".join(f"      - {step}\n" for step in job_steps)
 
 
 LOCAL = {**{p.stem: p for p in (ROOT / "tools").glob("*.py")}, **{p.stem: p for p in ROOT.glob("*.py")}}
@@ -86,14 +137,49 @@ class RunnerImageTests(unittest.TestCase):
                     self.assertIsNotNone(setup)
                     self.assertLess(setup.start(), suite.start())
 
-    def test_no_workflow_on_the_system_python_rides_the_moving_label(self):
+    def test_no_job_on_the_system_python_rides_the_moving_label(self):
         # During a migration ubuntu-latest changes image job by job: one commit would
-        # meet two system python3 versions.
+        # meet two system python3 versions. A pinned image is fine, but Python run before
+        # a later setup, such as the composite's, would give one job two versions.
         for path in WORKFLOWS.glob("*.yml"):
-            source = path.read_text(encoding="utf-8")
             with self.subTest(workflow=path.name):
-                if re.search(r"\bpython3?\s+[-\w./]", source) and "setup-python" not in source:
-                    self.assertNotIn("runs-on: ubuntu-latest", source)
+                self.assertEqual(undeclared_python(path.read_text(encoding="utf-8")), {})
+
+    def test_the_publication_composite_first_declares_the_python_ci_tests_on(self):
+        first = run_order(action_source(COMPOSITE))[0]
+        self.assertIn("uses: actions/setup-python@v6", first)
+        version = r'python-version: "([\d.]+)"'
+        self.assertEqual(re.search(version, first)[1], re.search(version, read("python-tests.yml"))[1])
+
+    def test_a_composite_without_setup_python_fails_the_deploy_jobs(self):
+        stripped = re.sub(r"(?s)    - name: Set up Python\n.*?(?=    - name: Build events-lite)", "",
+                          action_source(COMPOSITE))
+        self.assertNotIn("setup-python", stripped)
+        with mock.patch(__name__ + ".action_source", return_value=stripped):
+            for name in ("update-map.yml", "cleanup-events.yml", "reconcile-daily-integrity.yml",
+                         "repair-map-evidence.yml"):
+                with self.subTest(workflow=name):
+                    commands = undeclared_python(read(name))["deploy"]
+                    self.assertIn("if python3 tools/build_events_lite.py; then", commands)
+
+    def test_the_scan_fails_a_job_on_the_system_python(self):
+        setup = "uses: actions/setup-python@v6"
+        command = "python3 tools/check.py"
+        self.assertEqual(undeclared_python(workflow("ubuntu-latest", "run: " + command)), {"check": [command]})
+        self.assertIn("check", undeclared_python(workflow("ubuntu-latest", "run: python -u tools/check.py", setup)))
+        self.assertIn("check", undeclared_python(workflow("ubuntu-24.04", "run: " + command, "uses: " + COMPOSITE)))
+        # What a scan per file could not see: another job's setup says nothing about this one.
+        deploy = f"  deploy:\n    runs-on: ubuntu-latest\n    steps:\n      - run: {command}\n"
+        self.assertEqual(undeclared_python(workflow("ubuntu-latest", setup) + deploy), {"deploy": [command]})
+
+    def test_the_scan_accepts_a_declared_python_and_a_pinned_image(self):
+        command = "run: python3 tools/check.py"
+        for source in (workflow("ubuntu-latest", "uses: actions/setup-python@v6", command),
+                       workflow("ubuntu-latest", "uses: " + COMPOSITE, command),
+                       workflow("ubuntu-24.04", command),
+                       workflow("ubuntu-latest", "run: |\n          # python3 tools/check.py\n          true")):
+            with self.subTest(source=source):
+                self.assertEqual(undeclared_python(source), {})
 
     def test_the_worker_deploy_names_the_failing_stage(self):
         names = [step_name(step) for step in steps(read("deploy-report-worker.yml"))]
