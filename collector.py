@@ -285,6 +285,9 @@ EVIDENCE DISCIPLINE:
 - actor_or_group is the named actor, when the record has one; do not attribute
   a record that has none. incident_anchor is the short case label and often
   names the method and the target.
+- A record with an empty city and location_precision "country" reports no city:
+  its map marker sits on the capital only as a placeholder. Write the country,
+  and name a city only if the record's title or summary states it.
 - You MAY make bounded analytical inferences when multiple supplied records
   support them, but clearly distinguish observation from assessment using
   language such as "indicates", "suggests", "is consistent with", or
@@ -452,8 +455,11 @@ actually meet the CRITICAL/HIGH/SIGNIFICANT bar above -- never pad the list
 with routine or weak cases just to reach six. For every selected development, copy the
 event_id EXACTLY from the corresponding supplied event. Never invent or alter
 an event_id. Each development must use the most specific supported location
-available. Do not invent facts, casualty figures, locations, identities,
-responsibility claims or significance. Preserve uncertainty and attribution.
+available. A record with an empty city and location_precision "country" reports
+no city: its map marker sits on the capital only as a placeholder, so write the
+country and name a city only if the record's title or summary states it. Do not
+invent facts, casualty figures, locations, identities, responsibility claims or
+significance. Preserve uncertainty and attribution.
 
 Severity meanings:
 - CRITICAL: exceptional immediate/high-impact CT development;
@@ -9217,6 +9223,22 @@ def _trend_priority(event):
     return score
 
 
+def _reported_city(event):
+    """
+    A country_capital record names no city: the capital is only where its map
+    marker sits. Sent as the place, it put a foiled plot against a synagogue
+    in Rome when the source never names Rome.
+    """
+    if event.get("location_precision") == "country_capital":
+        return ""
+    return clean_text(event.get("city", ""))
+
+
+def _reported_precision(event):
+    precision = clean_text(event.get("location_precision", ""))
+    return "country" if precision == "country_capital" else precision
+
+
 def _trend_payload(event, index):
     return {
         "event_id":
@@ -9250,8 +9272,12 @@ def _trend_payload(event, index):
                 event.get("region", "")
             ),
         "city":
-            clean_text(
-                event.get("city", "")
+            _reported_city(
+                event
+            ),
+        "location_precision":
+            _reported_precision(
+                event
             ),
         "first_reported":
             str(
@@ -9321,7 +9347,7 @@ def _trend_fallback(candidates, generated_at, reason=""):
         location = ", ".join(
             value
             for value in [
-                clean_text(event.get("city", "")),
+                _reported_city(event),
                 clean_text(event.get("region", "")),
                 clean_text(event.get("country", "")),
             ]
@@ -9848,11 +9874,12 @@ def _weekly_compact_event(event, index):
                 )
             ),
         "city":
-            clean_text(
-                event.get(
-                    "city",
-                    ""
-                )
+            _reported_city(
+                event
+            ),
+        "location_precision":
+            _reported_precision(
+                event
             ),
         "event_or_report_time":
             (

@@ -84,5 +84,24 @@ class WeeklyEventFieldTests(unittest.TestCase):
         self.assertNotIn("tactics_or_weapons", row)
 
 
+class CapitalPlaceholderTests(unittest.TestCase):
+    def test_the_capital_of_a_country_level_record_is_not_sent_as_its_place(self):
+        for row in (collector._weekly_compact_event(SYNAGOGUE, 0), collector._trend_payload(SYNAGOGUE, 0)):
+            self.assertEqual((row["city"], row["country"], row["location_precision"]), ("", "Italy", "country"))
+
+    def test_a_located_city_is_kept(self):
+        for row in (collector._weekly_compact_event(CIZRE, 0), collector._trend_payload(CIZRE, 0)):
+            self.assertEqual((row["city"], row["location_precision"]), ("Cizre", "city"))
+
+    def test_the_fallback_brief_does_not_name_it_either(self):
+        development = collector._trend_fallback([SYNAGOGUE], GENERATED.isoformat())["developments"][0]
+        self.assertEqual(development["location"], "Italy")
+
+    def test_both_prompts_explain_the_blank_city(self):
+        for instructions in (collector.AI_WEEKLY_INSTRUCTIONS, collector.AI_TREND_INSTRUCTIONS):
+            self.assertIn('location_precision "country"', " ".join(instructions.split()))
+            self.assertIn("only as a placeholder", " ".join(instructions.split()))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -185,6 +185,10 @@ counter-terrorism operations, clashes, disrupted plots, weapons/explosives,
 terrorist financing, CBRN, cyber and emerging-technology developments when
 materially relevant to the selected topic.
 
+A record with an empty city and location_precision "country" reports no city:
+its map marker sits on the capital only as a placeholder. Write the country,
+and name a city only if the record's title or summary states it.
+
 Do not invent facts, casualty figures, attribution, coordination, causes or
 predictions. Preserve uncertainty. Use only the supplied records, statistics
 and background context. Interpretation is expected, but every assessment
@@ -818,6 +822,9 @@ function matchesRegion(event, region) {
 }
 
 function compactEvent(event) {
+  // A country_capital record names no city: the capital is only where its map
+  // marker sits, and sent as the place it reads as a reported location.
+  const countryLevel = event.location_precision === "country_capital";
   return {
     id: String(event.id || event._mapKey || ""),
     title: cleanText(event.title, 280),
@@ -825,7 +832,8 @@ function compactEvent(event) {
     categories: eventCategories(event),
     country: cleanText(event.country, 80),
     region: cleanText(event.region, 100),
-    city: cleanText(event.city, 100),
+    city: countryLevel ? "" : cleanText(event.city, 100),
+    location_precision: countryLevel ? "country" : cleanText(event.location_precision, 20),
     actor_group: cleanText(event.actor_group, 100),
     primary_event_type: cleanText(event.primary_event_type, 40),
     is_attack: event.is_attack === true,

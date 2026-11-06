@@ -115,6 +115,15 @@ test('report sources tell the model which records are follow-ups',()=>{
   assert.match(fs.readFileSync('cloudflare-worker/shared.js','utf8'),/attack_update=true is a follow-up/);
 });
 
+test('report sources do not give a map marker as the place: a country_capital record names no city',()=>{
+  // The source of this foiled synagogue plot never names Rome.
+  const marker=plain(shared.compactEvent(event('babe896d8fab7e12',{country:'Italy',city:'Rome',location_precision:'country_capital'})));
+  assert.deepEqual([marker.city,marker.country,marker.location_precision],['','Italy','country']);
+  const located=plain(shared.compactEvent(event('e7ba970ebd0b6e26',{country:'Turkey',city:'Cizre',location_precision:'city'})));
+  assert.deepEqual([located.city,located.location_precision],['Cizre','city']);
+  assert.match(fs.readFileSync('cloudflare-worker/shared.js','utf8'),/location_precision "country" reports no city/);
+});
+
 test('groups match case-insensitively and events without a group form their own bucket',()=>{
   assert.equal(shared.matchesGroup(event('a',{actor_group:'Al-Shabaab'}),'al-shabaab'),true);
   assert.equal(shared.matchesGroup(event('a',{actor_group:'Al-Shabaab'}),'ISIS'),false);
