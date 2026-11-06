@@ -22,7 +22,6 @@ const LEGACY_EVALUATION_ITEMS = [
   ["ct_atlas_ai", "CT Atlas AI"],
   ["heat_map", "Heat Map"],
   ["situation_24h", "Situation 24H"],
-  ["weekly_analysis", "Weekly Analysis"],
   ["database", "Events Database"],
   ["security", "Security Features"]
 ];

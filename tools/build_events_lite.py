@@ -86,7 +86,7 @@ def build_lite(database: dict, excluded: list[str]) -> dict:
     if not lite_events:
         raise ValueError("The source database has no active events; refusing to build an empty lite file.")
 
-    # Every non-event key (trend_summary, weekly_analysis, last_updated, ...) is kept as is:
+    # Every non-event key (trend_summary, last_updated, ...) is kept as is:
     # together they are ~17 KB and the map and the report cache key read some of them.
     lite = {key: value for key, value in database.items() if key != "events"}
     lite["events"] = lite_events

@@ -305,7 +305,7 @@ class QuotaSafeWrapperTests(unittest.TestCase):
     def test_a_429_on_the_main_model_is_resent_on_the_overflow_model(self):
         data = self.overflow("on", "[429]")
         self.assertEqual(data["sent"][:2], ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite"])
-        self.assertTrue(data["hit429"], "3.5 Flash Lite is spent: the weekly analysis is skipped as before")
+        self.assertTrue(data["hit429"], "3.5 Flash Lite is spent, and the run reports it")
         self.assertEqual(data["overflow_calls"], 2)
 
     def test_a_temporary_failure_on_the_main_model_moves_that_batch_to_the_overflow_model(self):

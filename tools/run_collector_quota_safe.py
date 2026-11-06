@@ -48,7 +48,6 @@ AI_SELECT=collector.ai_select_events
 SAVE_CACHE=collector.save_selection_cache
 TREND=collector.generate_24h_trend_summary
 PRUNE=collector.prune_old
-WEEKLY=collector.generate_weekly_analysis
 PROCESS_BATCH=collector.process_ai_selection_batch
 calls=0; hit429=False; budget_hit=False; auto_count=0; partial=False; recent_count=0; backlog_count=0; last_gemini_call=None
 overflow_calls=0; overflow429=False; primary_spent=False
@@ -562,13 +561,6 @@ def guarded_trend(events):
     return r
 collector.generate_24h_trend_summary=guarded_trend
 
-def weekly(events,existing_weekly=None):
-    if hit429:
-        print("Weekly AI analysis skipped because article selection returned Gemini 429.")
-        return existing_weekly if isinstance(existing_weekly,dict) else {}
-    return WEEKLY(events,existing_weekly=existing_weekly)
-collector.generate_weekly_analysis=weekly
-
 def report_selection_failures():
     """Public, unlike the run logs. tools/finalize_daily_status.py judges the run."""
     if SELECTION_FAILURES:
@@ -591,7 +583,6 @@ def run_main():
         previous=collector.load_database_strict()
         collector.collect_all=lambda *args,**kwargs: []
         collector.generate_24h_trend_summary=lambda events: previous.get('trend_summary',{})
-        collector.generate_weekly_analysis=lambda events,existing_weekly=None: existing_weekly or previous.get('weekly_analysis',{})
         consolidate=collector.consolidate_incidents
         collector.consolidate_incidents=lambda events,state=None,**kwargs: consolidate(events,state,max_calls=0,use_gemini=False)
         print(f'QUEUE-ONLY RECOVERY: at most {RUN_BUDGET} primary and {OVERFLOW_RUN_BUDGET} overflow calls; ordinary slots reserved.')

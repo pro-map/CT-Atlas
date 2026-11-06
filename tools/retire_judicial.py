@@ -95,7 +95,6 @@ def migrate(input_path: Path, archive_path: Path, *, dry_run=False, now=None):
             raise ValueError("Retirement evidence validation failed; source database left untouched.")
         archive.update({"removed_at": timestamp, "reason": RETIREMENT_REASON, "events": archived})
         archive.setdefault("previous_trend_summary", database.get("trend_summary", {}))
-        archive.setdefault("previous_weekly_analysis", database.get("weekly_analysis", {}))
         atomic_json_write(archive_path, archive)
         # Verify the persisted evidence, not just the in-memory archive.
         saved = json.loads(archive_path.read_text(encoding="utf-8"))
@@ -107,9 +106,6 @@ def migrate(input_path: Path, archive_path: Path, *, dry_run=False, now=None):
     database["number_of_events"] = len(active)
     database["last_updated"] = timestamp
     database["category_retirement"] = {"category": "Legal / Judicial", "applied_at": timestamp, **report}
-    # A cached weekly AI text contains old category counts; preserve it in the
-    # evidence archive and let the ordinary daily workflow regenerate it.
-    database["weekly_analysis"] = {}
     trend = database.get("trend_summary")
     if isinstance(trend, dict) and isinstance(trend.get("developments"), list):
         active_ids = {str(event.get("id") or "") for event in active}

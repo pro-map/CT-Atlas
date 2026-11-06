@@ -19,7 +19,6 @@ def sample_database():
     return {
         'last_updated': '2026-09-30T10:00:00Z',
         'trend_summary': {'overview': 'whole-database 24h assessment'},
-        'weekly_analysis': {'analysis': 'weekly'},
         'events': [
             event('attack', primary_event_type='ATTACK', is_attack=True, category='Attacks', related_articles=[1]),
             event('attack-not-flagged', primary_event_type='ATTACK', is_attack=False, category='Attacks'),
@@ -61,10 +60,9 @@ class MapAttackTests(unittest.TestCase):
         output = m.build_map(sample_database(), ['related_articles'])
         self.assertNotIn('related_articles', output['events'][0])
 
-    def test_top_level_keys_are_kept_for_the_24h_and_weekly_panels(self):
+    def test_top_level_keys_are_kept_for_the_24h_panel(self):
         output = m.build_map(sample_database(), ['related_articles'])
         self.assertEqual(output['trend_summary'], {'overview': 'whole-database 24h assessment'})
-        self.assertEqual(output['weekly_analysis'], {'analysis': 'weekly'})
 
     def test_database_summary_counts_every_visible_category(self):
         summary = m.build_map(sample_database(), [])['database_summary']
@@ -477,7 +475,7 @@ class HeldReportTests(unittest.TestCase):
         afrin = dict(report('afrin', 'Haber 7'), primary_event_type='CT_OPERATION')
         database = {'events': [afrin, report('other', 'Reuters')]}
         self.assertNotIn('afrin', [e['id'] for e in m.build_map(database, [], now=self.now)['recent_events']])
-        self.assertEqual(m.attack_update_indexes(database['events']), {0}, 'The Worker and the weekly counts skip it')
+        self.assertEqual(m.attack_update_indexes(database['events']), {0}, 'The Worker skips it')
 
     def test_a_key_development_citing_a_held_record_keeps_its_link(self):
         database = {'trend_summary': {'developments': [{'event_id': 'cited'}]},

@@ -3259,232 +3259,6 @@ html, body {
 
 
 /* ============================================================
-   WEEKLY ANALYSIS
-   ============================================================ */
-
-#headerSituationActions {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex: 0 0 auto;
-}
-
-#weeklyAnalysisButton {
-    min-height: 27px;
-    padding: 5px 10px;
-    border: 1px solid #385d72;
-    border-radius: 3px;
-    background: #0b202d;
-    color: #a9c8d9;
-    font-size: 7.3px;
-    font-weight: 800;
-    letter-spacing: .07em;
-    cursor: pointer;
-    white-space: nowrap;
-}
-
-#weeklyAnalysisButton:hover {
-    color: #ffffff;
-    border-color: #6c9bb4;
-    background: #153447;
-}
-
-#weeklyAnalysisPanel {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 5000;
-    background: rgba(1, 7, 11, .76);
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-}
-
-#weeklyAnalysisPanel.open {
-    display: block;
-}
-
-#weeklyAnalysisWindow {
-    position: absolute;
-    top: 7vh;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(820px, calc(100vw - 40px));
-    max-height: 86vh;
-    overflow: hidden;
-    background: #07131c;
-    border: 1px solid #34566a;
-    box-shadow: 0 18px 60px rgba(0, 0, 0, .55);
-}
-
-#weeklyAnalysisHeader {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 13px 16px 11px;
-    border-bottom: 1px solid #233d4d;
-    background: #091923;
-}
-
-#weeklyAnalysisTitle {
-    color: #e7f2f7;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: .07em;
-}
-
-#weeklyAnalysisSubtitle {
-    margin-top: 4px;
-    color: #718d9d;
-    font-size: 8px;
-    letter-spacing: .035em;
-}
-
-#weeklyAnalysisClose {
-    width: 28px;
-    height: 28px;
-    border: 1px solid #34566a;
-    background: #0a1d29;
-    color: #9db7c6;
-    cursor: pointer;
-    font-size: 17px;
-}
-
-#weeklyAnalysisBody {
-    max-height: calc(86vh - 58px);
-    overflow-y: auto;
-    padding: 16px 19px 18px;
-}
-
-#weeklyAnalysisMeta {
-    margin-bottom: 14px;
-    color: #718b9a;
-    font-size: 8px;
-    line-height: 1.45;
-    letter-spacing: .035em;
-}
-
-#weeklyAnalysisReport {
-    color: #d1dee5;
-    font-size: 11px;
-    line-height: 1.62;
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
-}
-
-#weeklyAnalysisMethodNote {
-    margin-top: 18px;
-    padding: 9px 11px;
-    border-left: 2px solid #315369;
-    background: rgba(3, 11, 17, .45);
-    color: #6f8999;
-    font-size: 8px;
-    line-height: 1.5;
-}
-
-@media (max-width: 640px) {
-    #headerSituationActions {
-        gap: 4px;
-    }
-
-    #weeklyAnalysisButton {
-        min-height: 22px;
-        padding: 3px 6px;
-        font-size: 6.1px;
-        letter-spacing: .03em;
-    }
-
-    #weeklyAnalysisWindow {
-        top: 40px;
-        width: calc(100vw - 16px);
-        max-height: calc(100dvh - 80px);
-    }
-
-    #weeklyAnalysisBody {
-        max-height: calc(100dvh - 145px);
-        padding: 12px 13px 15px;
-    }
-
-    #weeklyAnalysisReport {
-        font-size: 10px;
-        line-height: 1.52;
-    }
-}
-
-
-/* ============================================================
-   WEEKLY ANALYSIS — REPORT TYPOGRAPHY
-   ============================================================ */
-
-#weeklyAnalysisReport {
-    color: #d1dee5;
-    font-size: 11px;
-    line-height: 1.72;
-    white-space: normal !important;
-    overflow-wrap: break-word;
-}
-
-.weekly-section {
-    display: block;
-    margin: 0 0 23px;
-}
-
-.weekly-section-title {
-    display: block;
-    margin: 0 0 10px;
-    padding: 0 0 7px;
-    color: #91d7ff;
-    font-size: 13.5px;
-    font-weight: 800;
-    line-height: 1.2;
-    letter-spacing: .055em;
-    text-transform: uppercase;
-    border-bottom: 1px solid rgba(145, 215, 255, .24);
-}
-
-.weekly-section-text {
-    display: block;
-    margin: 0;
-    color: #d1dee5;
-}
-
-.weekly-section-text p {
-    display: block;
-    margin: 0 0 11px;
-}
-
-.weekly-section-text p:last-child {
-    margin-bottom: 0;
-}
-
-.weekly-unsectioned {
-    display: block;
-    margin: 0 0 23px;
-}
-
-@media (max-width: 640px) {
-    #weeklyAnalysisReport {
-        font-size: 10px;
-        line-height: 1.62;
-    }
-
-    .weekly-section {
-        margin-bottom: 19px;
-    }
-
-    .weekly-section-title {
-        margin-bottom: 8px;
-        padding-bottom: 6px;
-        font-size: 11.5px;
-    }
-
-    .weekly-section-text p {
-        margin-bottom: 9px;
-    }
-}
-
-
-/* ============================================================
    REPORT GENERATOR
    ============================================================ */
 
@@ -4041,14 +3815,6 @@ html, body {
     margin-bottom: 6px !important;
 }
 
-#headerSituationActions {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 6px;
-}
-
 #headerSituationTitle {
     display: inline-block;
     margin-top: 2px;
@@ -4504,8 +4270,7 @@ html, body {
     padding: 5px 9px 7px !important;
     overflow: hidden !important;
 }
-/* Title and buttons share one row (the title used to sit on a second row,
-   which is what pushed the text down). */
+/* The title keeps to one row (a second row is what pushed the text down). */
 #headerSituationTopline {
     flex-direction: row !important;
     align-items: center !important;
@@ -4517,11 +4282,6 @@ html, body {
     order: 0;
     margin-top: 0 !important;
 }
-#headerSituationActions {
-    order: 1;
-    width: auto !important;
-    flex: 0 0 auto;
-}
 #headerSituationText {
     display: -webkit-box !important;
     -webkit-box-orient: vertical !important;
@@ -4530,14 +4290,6 @@ html, body {
     max-height: 42px !important;
     font-size: 9.8px !important;
     line-height: 1.32 !important;
-}
-#headerSituationActions {
-    gap: 4px !important;
-}
-#weeklyAnalysisButton {
-    min-height: 22px !important;
-    padding: 3px 6px !important;
-    font-size: 6.3px !important;
 }
 #commandMeta {
     order: 5 !important;
@@ -5163,9 +4915,6 @@ html, body {
 
     <div id="headerSituationBrief">
         <div id="headerSituationTopline">
-            <div id="headerSituationActions">
-                <button id="weeklyAnalysisButton" type="button">WEEKLY ANALYSIS</button>
-            </div>
             <span id="headerSituationTitle">SITUATION 24H</span>
         </div>
         <div id="headerSituationText">
@@ -5704,27 +5453,6 @@ Visible rate
         <div id="reportGeneratorDisclaimer">
           AI-assisted analysis based on deduplicated open-source events held in the CT Atlas database. It does not constitute verified intelligence and must be independently validated before operational or decision-making use.
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div id="weeklyAnalysisPanel" aria-hidden="true">
-  <div id="weeklyAnalysisWindow" role="dialog" aria-modal="true" aria-labelledby="weeklyAnalysisTitle">
-    <div id="weeklyAnalysisHeader">
-      <div>
-        <div id="weeklyAnalysisTitle">WEEKLY ANALYSIS</div>
-        <div id="weeklyAnalysisSubtitle">Comparative CT criminal analysis · latest 7 days vs preceding 7 days</div>
-      </div>
-      <button id="weeklyAnalysisClose" type="button" aria-label="Close weekly analysis">×</button>
-    </div>
-
-    <div id="weeklyAnalysisBody">
-      <div id="weeklyAnalysisMeta">Loading weekly analysis…</div>
-      <div id="weeklyAnalysisReport"></div>
-      <div id="weeklyAnalysisMethodNote">
-        AI-assisted comparative analysis based only on deduplicated open-source CT events in the map database. The report compares the most recent seven days with the immediately preceding seven days. It is not verified intelligence and should be independently validated before operational or decision-making use.
       </div>
     </div>
   </div>
@@ -6721,10 +6449,6 @@ let trendSummaryData =
     null;
 
 
-let weeklyAnalysisData =
-    null;
-
-
 // Other categories covering every map period, also used by the header's
 // casualty counts.
 let recentContextEvents =
@@ -7595,12 +7319,6 @@ function applyMapDatabase(data) {
 
         trendSummaryData =
             data.trend_summary
-            ||
-            null;
-
-
-        weeklyAnalysisData =
-            data.weekly_analysis
             ||
             null;
 
@@ -14208,364 +13926,6 @@ async function downloadGeneratedReportPdf() {
     }
 }
 
-function formatWeeklyDate(
-    value
-) {
-
-    const date =
-        new Date(
-            value
-        );
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-        return "—";
-    }
-
-    return date.toLocaleDateString(
-        "en-GB",
-        {
-            timeZone:
-                "Europe/Paris",
-            day:
-                "2-digit",
-            month:
-                "short",
-            year:
-                "numeric"
-        }
-    );
-}
-
-
-function renderWeeklyAnalysisPanel() {
-
-    const title =
-        document.getElementById(
-            "weeklyAnalysisTitle"
-        );
-
-    const meta =
-        document.getElementById(
-            "weeklyAnalysisMeta"
-        );
-
-    const report =
-        document.getElementById(
-            "weeklyAnalysisReport"
-        );
-
-    if (
-        !title
-        ||
-        !meta
-        ||
-        !report
-    ) {
-        return;
-    }
-
-    if (
-        !weeklyAnalysisData
-        ||
-        !weeklyAnalysisData.analysis
-    ) {
-        title.textContent =
-            "WEEKLY ANALYSIS";
-
-        meta.textContent =
-            "No weekly report has been generated yet.";
-
-        report.textContent =
-            "The first weekly comparative analysis will be generated during the next successful collector run. Thereafter, a new report is scheduled for Sunday from the 10:17 Europe/Paris update, with a retry opportunity at 18:17 if necessary.";
-
-        return;
-    }
-
-    title.textContent =
-        weeklyAnalysisData.title
-        ||
-        "WEEKLY CT CRIMINAL ANALYSIS";
-
-    meta.textContent =
-        "Current period "
-        +
-        formatWeeklyDate(
-            weeklyAnalysisData.current_period_start
-        )
-        +
-        " → "
-        +
-        formatWeeklyDate(
-            weeklyAnalysisData.current_period_end
-        )
-        +
-        " · compared with "
-        +
-        formatWeeklyDate(
-            weeklyAnalysisData.comparison_period_start
-        )
-        +
-        " → "
-        +
-        formatWeeklyDate(
-            weeklyAnalysisData.comparison_period_end
-        )
-        +
-        " · generated "
-        +
-        formatTrendGeneratedAt(
-            weeklyAnalysisData.generated_at
-        )
-        +
-        " Paris";
-
-    const rawAnalysis =
-        weeklyAnalysisData.analysis
-        ||
-        "";
-
-    const sectionNames = [
-        "EXECUTIVE ASSESSMENT",
-        "KEY CHANGES",
-        "GEOGRAPHIC / OPERATIONAL SHIFTS",
-        "SIGNIFICANT DEVELOPMENTS",
-        "OUTLOOK / WATCHPOINTS"
-    ];
-
-    function escapeRegExpWeekly(value) {
-        return String(value).replace(
-            /[.*+?^${}()|[\]\\]/g,
-            "\\$&"
-        );
-    }
-
-    /*
-       Build real, separate blocks:
-       TITLE
-       paragraph(s)
-
-       TITLE
-       paragraph(s)
-
-       This intentionally avoids placing heading DIVs inside paragraph DIVs.
-    */
-    const normalizedAnalysis =
-        String(rawAnalysis)
-        .replace(/\r\n?/g, "\n")
-        .trim();
-
-    const headingPattern =
-        new RegExp(
-            "("
-            +
-            sectionNames
-                .map(escapeRegExpWeekly)
-                .join("|")
-            +
-            ")\\s*:?",
-            "gi"
-        );
-
-    const matches =
-        Array.from(
-            normalizedAnalysis.matchAll(
-                headingPattern
-            )
-        );
-
-    const blocks = [];
-
-    if (!matches.length) {
-        const paragraphs =
-            normalizedAnalysis
-            .split(/\n{2,}/)
-            .map(value => value.trim())
-            .filter(Boolean);
-
-        blocks.push(
-            '<div class="weekly-unsectioned">'
-            +
-            paragraphs
-                .map(
-                    paragraph =>
-                        '<p>'
-                        +
-                        escapeHtml(paragraph)
-                            .replace(/\n/g, "<br>")
-                        +
-                        '</p>'
-                )
-                .join("")
-            +
-            '</div>'
-        );
-    } else {
-        const beforeFirst =
-            normalizedAnalysis
-            .slice(
-                0,
-                matches[0].index
-            )
-            .trim();
-
-        if (beforeFirst) {
-            blocks.push(
-                '<div class="weekly-unsectioned">'
-                +
-                '<p>'
-                +
-                escapeHtml(beforeFirst)
-                    .replace(/\n/g, "<br>")
-                +
-                '</p>'
-                +
-                '</div>'
-            );
-        }
-
-        matches.forEach(
-            (
-                match,
-                index
-            ) => {
-                const rawHeading =
-                    String(
-                        match[1]
-                        ||
-                        ""
-                    ).toUpperCase();
-
-                const canonicalHeading =
-                    sectionNames.find(
-                        name =>
-                            name.toUpperCase()
-                            ===
-                            rawHeading
-                    )
-                    ||
-                    rawHeading;
-
-                const textStart =
-                    match.index
-                    +
-                    match[0].length;
-
-                const textEnd =
-                    index
-                    <
-                    matches.length - 1
-                    ?
-                    matches[index + 1].index
-                    :
-                    normalizedAnalysis.length;
-
-                const sectionText =
-                    normalizedAnalysis
-                    .slice(
-                        textStart,
-                        textEnd
-                    )
-                    .trim()
-                    .replace(/^[-–—:\s]+/, "");
-
-                const paragraphs =
-                    sectionText
-                    .split(/\n{2,}/)
-                    .map(value => value.trim())
-                    .filter(Boolean);
-
-                blocks.push(
-                    '<section class="weekly-section">'
-                    +
-                    '<div class="weekly-section-title">'
-                    +
-                    escapeHtml(canonicalHeading)
-                    +
-                    '</div>'
-                    +
-                    '<div class="weekly-section-text">'
-                    +
-                    (
-                        paragraphs.length
-                        ?
-                        paragraphs
-                            .map(
-                                paragraph =>
-                                    '<p>'
-                                    +
-                                    escapeHtml(paragraph)
-                                        .replace(/\n/g, "<br>")
-                                    +
-                                    '</p>'
-                            )
-                            .join("")
-                        :
-                        '<p>—</p>'
-                    )
-                    +
-                    '</div>'
-                    +
-                    '</section>'
-                );
-            }
-        );
-    }
-
-    report.innerHTML =
-        blocks.join("");
-}
-
-
-function openWeeklyAnalysis() {
-
-    renderWeeklyAnalysisPanel();
-
-    const panel =
-        document.getElementById(
-            "weeklyAnalysisPanel"
-        );
-
-    if (
-        panel
-    ) {
-        panel.classList.add(
-            "open"
-        );
-
-        panel.setAttribute(
-            "aria-hidden",
-            "false"
-        );
-    }
-}
-
-
-function closeWeeklyAnalysis() {
-
-    const panel =
-        document.getElementById(
-            "weeklyAnalysisPanel"
-        );
-
-    if (
-        panel
-    ) {
-        panel.classList.remove(
-            "open"
-        );
-
-        panel.setAttribute(
-            "aria-hidden",
-            "true"
-        );
-    }
-}
-
-
 document.addEventListener(
     "DOMContentLoaded",
     () => {
@@ -14627,48 +13987,6 @@ document.addEventListener(
                     "reportGeneratorPanel"
                 ) {
                     closeReportGenerator();
-                }
-            }
-        );
-
-        document.getElementById(
-            "weeklyAnalysisButton"
-        )?.addEventListener(
-            "click",
-            openWeeklyAnalysis
-        );
-
-        document.getElementById(
-            "weeklyAnalysisClose"
-        )?.addEventListener(
-            "click",
-            closeWeeklyAnalysis
-        );
-
-        document.getElementById(
-            "weeklyAnalysisPanel"
-        )?.addEventListener(
-            "click",
-            event => {
-                if (
-                    event.target.id
-                    ===
-                    "weeklyAnalysisPanel"
-                ) {
-                    closeWeeklyAnalysis();
-                    closeReportGenerator();
-                }
-            }
-        );
-
-
-        document.addEventListener(
-            "keydown",
-            event => {
-                if (
-                    event.key === "Escape"
-                ) {
-                    closeWeeklyAnalysis();
                 }
             }
         );

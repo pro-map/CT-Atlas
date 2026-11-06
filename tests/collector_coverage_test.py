@@ -108,6 +108,12 @@ class LatinAmericaCoverageTests(unittest.TestCase):
         for name in ("ELN", "Sendero Luminoso", "Tren de Aragua", "Sinaloa Cartel", "CJNG", "MS-13"):
             self.assertIn(name, text, name)
 
+    def test_the_selection_prompt_keeps_reactions_out_of_initial(self):
+        self.assertIn("reaction, funeral, condolence, statement or visit", collector.AI_SELECTION_INSTRUCTIONS)
+
+    def test_the_split_window_is_the_collector_merge_window(self):
+        self.assertEqual(collector.attack_points.SPLIT_DAYS, collector.INCIDENT_INITIAL_MERGE_DAYS)
+
 
 class OpinionAndAnalysisFilterTests(unittest.TestCase):
     def test_non_event_patterns_now_flag_analysis_and_editorial_language(self):

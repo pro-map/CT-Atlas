@@ -35,10 +35,10 @@ test('buildEmail marks an out-of-range or missing rating as not rated, never a b
  assert.match(text,/Report Generator: \(not rated\)/);
  assert.match(text,/Deep Search \(BETA\): \(not rated\)/);
  assert.match(text,/CT Atlas AI: \(not rated\)/);
- for(const label of ['Heat Map','Situation 24H','Weekly Analysis','Events Database','Security Features']){
+ for(const label of ['Heat Map','Situation 24H','Events Database','Security Features']){
   assert.match(text,new RegExp(`${label}: \\(not rated\\)`),`missing evaluation item: ${label}`);
  }
- assert.doesNotMatch(text,/Key Developments/,'the page has no such panel to rate');
+ assert.doesNotMatch(text,/Key Developments|Weekly Analysis/,'the page has no such panel to rate');
  assert.match(text,/Other:\n\(none\)/);
 });
 

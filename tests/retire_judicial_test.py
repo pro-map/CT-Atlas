@@ -70,7 +70,6 @@ class MigrationTests(unittest.TestCase):
                        category="Legal / Judicial", categories=["Attacks", "Legal / Judicial"], latitude=1, longitude=2)
         data = {"number_of_events": 3, "events": [court, active,
                 event("old-label", primary_event_type="OTHER_CT", category="Legal / Judicial")],
-                "weekly_analysis": {"analysis": "old Judicial counts"},
                 "trend_summary": {"developments": [{"event_id": "shared-id"}, {"event_id": "old-label"}]}}
         source.write_text(json.dumps(data), encoding="utf-8")
         return source, archive, data
@@ -83,13 +82,11 @@ class MigrationTests(unittest.TestCase):
             saved = json.loads(source.read_text(encoding="utf-8"))
             evidence = json.loads(archive.read_text(encoding="utf-8"))
             self.assertEqual(evidence["events"][0]["related_articles"], original["events"][0]["related_articles"])
-            self.assertEqual(evidence["previous_weekly_analysis"], original["weekly_analysis"])
             self.assertTrue(all(e["_cleanup_reason"].startswith("retired Judicial") for e in evidence["events"]))
             self.assertEqual(saved["events"][0]["categories"], ["Attacks"])
             self.assertEqual(saved["events"][0]["latitude"], 1)
             self.assertEqual(saved["number_of_events"], 1)
             self.assertEqual(saved["trend_summary"]["developments"], [{"event_id": "shared-id"}])
-            self.assertEqual(saved["weekly_analysis"], {})
             before = (source.read_bytes(), archive.read_bytes())
             self.assertEqual(migration.migrate(source, archive), {"retired": 0, "cleaned": 0, "active": 1})
             self.assertEqual((source.read_bytes(), archive.read_bytes()), before)

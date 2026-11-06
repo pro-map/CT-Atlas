@@ -72,7 +72,6 @@ test("every date on the page is Paris time and says so",()=>{
   assert.match(extract("renderChronology"),/" · times in Paris time"/);
   assert.match(extract("showDatabaseEventCard"),/EVENT_TIME_FORMAT\.format\(published\) \+ " Paris"/);
   assert.match(extract("applyMapDatabase"),/"Published "\s*\+\s*collectionStatusDate\(/);
-  assert.match(extract("renderWeeklyAnalysisPanel"),/generated_at\s*\)\s*\+\s*" Paris"/);
 });
 
 test("the timeline counts Paris days: a reader in Auckland saw a last bar dated 07 Nov",()=>{
@@ -110,14 +109,10 @@ test("heat weighs a capital placeholder less, by the value the data really uses"
   assert.doesNotMatch(body,/location_precision === "country" /);
 });
 
-test("the weekly panel prints its period in Paris time, like the rest of the page and the report's text",()=>{
-  // The collector states the same Paris dates to the model (reporting_period), so
-  // a report made at 23:10 UTC on 5 Nov reads 30 Oct to 6 Nov in both places.
-  const c=vm.createContext({Date});
-  vm.runInContext(extract("formatWeeklyDate"),c);
-  assert.equal(c.formatWeeklyDate("2026-10-29T23:10:16.238248+00:00"),"30 Oct 2026");
-  assert.equal(c.formatWeeklyDate("2026-11-05T23:10:16.238248+00:00"),"06 Nov 2026");
-  assert.equal(c.formatWeeklyDate("not a date"),"—");
+test("the Weekly Analysis is gone from the page, the 24H brief is not",()=>{
+  assert.doesNotMatch(html,/weekly/i);
+  assert.match(html,/id="headerSituationBrief"/);
+  assert.match(html,/trendSummaryData =\s*data\.trend_summary/);
 });
 
 test("the page no longer computes a trends panel it never shows, nor offers Key Developments for rating",()=>{

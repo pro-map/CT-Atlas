@@ -147,14 +147,14 @@ class DailyPipelineTests(unittest.TestCase):
             calls.append(lane)
             return []
         patches = {
-            "load_existing_weekly_analysis": lambda: {}, "load_existing": lambda: existing,
+            "load_existing": lambda: existing,
             "load_database_strict": lambda: {"events": existing, "last_updated": "previous"},
             "collect_all": lambda _: fresh, "deduplicate_events": lambda rows: rows,
             "ai_select_events": select, "deduplicate_incremental": lambda old, new: old,
             "prune_old": lambda rows, aged=None: rows, "archive_aged_out_events": lambda rows: None,
             "load_incident_state": lambda: {}, "consolidate_incidents": lambda rows, state: (rows, {}),
             "save_incident_state": lambda *args: None, "generate_24h_trend_summary": lambda rows: {},
-            "generate_weekly_analysis": lambda rows, **kwargs: {}, "save_database": lambda *args, **kwargs: None,
+            "save_database": lambda *args, **kwargs: None,
             "load_selection_cache": lambda: {"items": {}}, "atomic_json_write": lambda *args: None,
         }
         from contextlib import ExitStack
@@ -181,14 +181,13 @@ class DailyPipelineTests(unittest.TestCase):
             reviewed.extend((lane, row["id"]) for row in rows)
             return []
         patches = {
-            "load_existing_weekly_analysis": lambda: {}, "load_existing": lambda: [],
+            "load_existing": lambda: [],
             "load_database_strict": lambda: {"events": [], "last_updated": "previous"},
             "collect_all": collect_all, "deduplicate_events": lambda rows: rows,
             "ai_select_events": select, "deduplicate_incremental": lambda old, new: old,
             "prune_old": lambda rows, aged=None: rows, "archive_aged_out_events": lambda rows: None,
             "load_incident_state": lambda: {}, "consolidate_incidents": lambda rows, state: (rows, {}),
             "save_incident_state": lambda *args: None, "generate_24h_trend_summary": lambda rows: {},
-            "generate_weekly_analysis": lambda rows, **kwargs: {},
             "save_database": lambda *args, **kwargs: published.append(args),
             "load_selection_cache": lambda: {"items": {}}, "atomic_json_write": lambda *args: None,
         }
