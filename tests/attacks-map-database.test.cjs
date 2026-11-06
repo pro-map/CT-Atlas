@@ -817,7 +817,7 @@ test('an open map ages a RadNuc item out of the 24h badge and marker cache witho
     renderEvents:()=>{draws++;},updateCoverage:()=>{},updateTopLocations:()=>{},renderAttackTicker:()=>{},
     updateTrends:()=>{},updateCommandCenterPanels:()=>{},updateHealthStatusPanel:()=>{},renderHeaderSituationBrief:()=>{},
   });
-  vm.runInContext('let dashboardClockMinute = -1; attacks=[];allEvents=[];recentContextEvents=clockEvents;selectedDays=1;setMapCategoryScope("Radiological/Nuclear");invalidateFilterCache();'+extract('refreshTimeSensitiveDashboard'),c);
+  vm.runInContext('let dashboardClockMinute = -1; let mapPopupOpen = false; let mapSpiderfied = false; let mapRebuildDeferred = false; attacks=[];allEvents=[];recentContextEvents=clockEvents;selectedDays=1;setMapCategoryScope("Radiological/Nuclear");invalidateFilterCache();'+extract('rebuildAgedMap')+extract('refreshTimeSensitiveDashboard'),c);
   assert.equal(vm.runInContext('filteredMappedEvents().length',c),2);
   c.refreshTimeSensitiveDashboard(); assert.equal(facets,2);assert.equal(draws,0);
   now+=61000;

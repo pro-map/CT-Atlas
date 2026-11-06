@@ -6193,16 +6193,6 @@ L.markerClusterGroup({
     spiderfyOnMaxZoom:
         true,
 
-    // renderEvents() rebuilds every marker (thousands of events) from scratch on load, on every
-    // filter/category/search change. Without chunking, addLayer() runs synchronously for all of
-    // them in one go and blocks the main thread -- the exact freeze/lag this option exists for.
-    // Chunked loading spreads that work over animation frames instead.
-    chunkedLoading:
-        true,
-
-    chunkDelay:
-        30,
-
     // The default cluster icon, red and pulsing when it holds an attack.
     iconCreateFunction:
         cluster => {
@@ -6222,6 +6212,50 @@ L.markerClusterGroup({
 map.addLayer(
     markerCluster
 );
+
+
+// renderEvents() rebuilds every marker (thousands of events) from scratch on load and on every
+// filter change, so insertion is spread over short slices to keep the page responsive. The
+// plugin's own chunkedLoading did that too, but clearLayers() cannot cancel the chunks it has
+// queued: on a slow device a quick change from 6 MONTHS to 24H left thousands of the previous
+// period's markers on the map. Here a newer render simply ends the older one.
+const MARKER_CHUNK_SIZE = 400;
+const MARKER_CHUNK_DELAY_MS = 30;
+
+let markerRenderGeneration = 0;
+
+function addMarkersInChunks(markers) {
+    const generation = markerRenderGeneration;
+    let next = 0;
+    const addChunk = () => {
+        if (generation !== markerRenderGeneration) return;
+        markerCluster.addLayers(markers.slice(next, next + MARKER_CHUNK_SIZE));
+        next += MARKER_CHUNK_SIZE;
+        if (next < markers.length) setTimeout(addChunk, MARKER_CHUNK_DELAY_MS);
+    };
+    addChunk();
+}
+
+
+// A rebuild closes an open popup and folds a spiderfied stack. When the only reason
+// is that an event aged out of the window, it waits until the analyst has finished.
+let mapPopupOpen = false;
+let mapSpiderfied = false;
+let mapRebuildDeferred = false;
+
+function rebuildAgedMap() {
+    if (!mapRebuildDeferred || mapPopupOpen || mapSpiderfied) return;
+    mapRebuildDeferred = false;
+    renderEvents();
+    updateCoverage();
+    updateTopLocations();
+}
+
+map.on("popupopen", () => { mapPopupOpen = true; });
+// Later in the same tick: moving to another marker closes one popup, then opens the next.
+map.on("popupclose", () => { mapPopupOpen = false; setTimeout(rebuildAgedMap, 0); });
+markerCluster.on("spiderfied", () => { mapSpiderfied = true; });
+markerCluster.on("unspiderfied", () => { mapSpiderfied = false; setTimeout(rebuildAgedMap, 0); });
 
 // ============================================================
 // INTERPOL OFFICES
@@ -8404,6 +8438,12 @@ function isHeatEligibleEvent(event) {
 function renderEvents() {
 
 
+    markerRenderGeneration += 1;
+
+
+    mapRebuildDeferred = false;
+
+
     markerCluster.clearLayers();
 
 
@@ -8434,11 +8474,10 @@ function renderEvents() {
         showMarkers
     ) {
 
-        // Built up front and added in one bulk addLayers() call below instead of one
-        // addLayer() per event: addLayer() always inserts synchronously (chunkedLoading has
-        // no effect on it), while addLayers() is the method the cluster group actually
-        // chunks across animation frames -- with thousands of events, that bulk call is
-        // what keeps this from freezing the tab on every load/filter/search change.
+        // Built up front and added in bulk slices below instead of one addLayer() per
+        // event: addLayers() refreshes the clusters once per slice, while addLayer() does
+        // it for every marker -- with thousands of events, that is what keeps this from
+        // freezing the tab on every load/filter/search change.
         const newMarkers =
             [];
 
@@ -8483,7 +8522,7 @@ function renderEvents() {
         );
 
 
-        markerCluster.addLayers(
+        addMarkersInChunks(
             newMarkers
         );
 
@@ -9718,8 +9757,13 @@ function focusChronologyEvent(
     );
 
 
+    // Not yet in the cluster while a large render is still adding its slices.
     if (
         !marker
+        ||
+        !markerCluster.hasLayer(
+            marker
+        )
     ) {
 
         map.setView(
@@ -15224,12 +15268,8 @@ function refreshTimeSensitiveDashboard() {
     invalidateFilterCache();
     updateKPIs();
     updateFacetCounts();
-    const mappedChanged = mappedBefore !== filteredMappedEvents().map(event => event._mapKey).join("\n");
-    if (mappedChanged) {
-        renderEvents();
-        updateCoverage();
-        updateTopLocations();
-    }
+    if (mappedBefore !== filteredMappedEvents().map(event => event._mapKey).join("\n")) mapRebuildDeferred = true;
+    rebuildAgedMap();
     if (attacksBefore !== filteredAllEvents().map(event => event._mapKey).join("\n")) renderAttackTicker();
     updateTrends();
     updateCommandCenterPanels();

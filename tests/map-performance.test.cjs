@@ -101,22 +101,93 @@ test("the heat layer can never abort refreshDashboard(): its construction is wra
 });
 
 test("a single malformed event can never abort marker rendering for every event after it",()=>{
-  const loopBlock=normBetween("visible.forEach(","markerCluster.addLayers(");
+  const loopBlock=normBetween("visible.forEach(","addMarkersInChunks(");
   assert.ok(/\btry\s*\{/.test(loopBlock),"createMarker(event) must be called inside a try block");
   assert.ok(loopBlock.includes("catch (markerError)"),"missing a catch around createMarker(event)");
   assert.ok(loopBlock.includes("console.warn"));
   assert.ok(loopBlock.includes("Skipping unmappable event"));
 });
 
-test("markers are added in one bulk addLayers() call so chunkedLoading actually applies",()=>{
-  // addLayer() (singular) always inserts synchronously in Leaflet.markercluster -- chunkedLoading
-  // only chunks the bulk addLayers() method. Regression guard against reintroducing a per-event
-  // markerCluster.addLayer(...) call in the main render loop, which would silence the perf fix below
-  // while leaving the chunkedLoading:true option looking like it does something.
-  assert.ok(norm.includes("markerCluster.addLayers( newMarkers );"),
-    "expected a bulk markerCluster.addLayers(newMarkers) call");
+test("markers go in bulk, in slices this page can cancel, not through the plugin's chunkedLoading",()=>{
+  // addLayer() (singular) refreshes the clusters per marker. Regression guard against
+  // reintroducing a per-event call in the main render loop. The plugin's chunkedLoading cannot be
+  // cancelled by clearLayers(): at 4x CPU, 6 MONTHS then 24H left 2,243-3,843 markers where 6 belonged.
+  assert.ok(norm.includes("addMarkersInChunks( newMarkers );"),"expected the bulk slice loader");
+  assert.ok(!/markerCluster\.addLayer\(/.test(norm));
   const clusterOptions=normBetween("const markerCluster = L.markerClusterGroup({","});");
-  assert.ok(clusterOptions.includes("chunkedLoading: true"));
+  assert.ok(!clusterOptions.includes("chunkedLoading"));
+});
+
+function chunkHarness(){
+  const added=[],timers=[];
+  const c=vm.createContext({markerCluster:{addLayers:layers=>added.push(...layers)},setTimeout:callback=>timers.push(callback)});
+  const start=html.indexOf("const MARKER_CHUNK_SIZE");
+  vm.runInContext(html.slice(start,html.indexOf("function addMarkersInChunks(",start))+extract("addMarkersInChunks"),c);
+  return {c,added,timers,flush(){while(timers.length)timers.shift()();}};
+}
+
+test("a large period reaches the map in full, slice by slice",()=>{
+  const h=chunkHarness();
+  const markers=Array.from({length:6037},(_,index)=>index);
+  h.c.addMarkersInChunks(markers);
+  assert.equal(h.added.length,vm.runInContext("MARKER_CHUNK_SIZE",h.c),"the first slice goes in at once");
+  h.flush();
+  assert.deepEqual(h.added,markers);
+});
+
+test("a small period reaches the map in the same tick, with no timer",()=>{
+  const h=chunkHarness();
+  h.c.addMarkersInChunks([1,2,3,4,5,6]);
+  assert.equal(h.added.length,6);
+  assert.equal(h.timers.length,0);
+});
+
+test("a newer render ends the older one: 6 MONTHS then 24H leaves only the 24H markers",()=>{
+  const h=chunkHarness();
+  h.c.addMarkersInChunks(Array.from({length:6037},(_,index)=>"old"+index));
+  h.added.length=0;
+  vm.runInContext("markerRenderGeneration += 1",h.c);
+  h.c.addMarkersInChunks(["a","b","c","d","e","f"]);
+  h.flush();
+  assert.deepEqual(h.added,["a","b","c","d","e","f"]);
+});
+
+test("renderEvents cancels pending slices before it clears the cluster",()=>{
+  const body=extract("renderEvents");
+  assert.ok(body.indexOf("markerRenderGeneration += 1")<body.indexOf("markerCluster.clearLayers()"));
+});
+
+function agingHarness(){
+  let draws=0;
+  const c=vm.createContext({renderEvents(){draws++;},updateCoverage(){},updateTopLocations(){}});
+  vm.runInContext("let mapPopupOpen = false; let mapSpiderfied = false; let mapRebuildDeferred = true;"+extract("rebuildAgedMap"),c);
+  return {c,draws:()=>draws,set:code=>vm.runInContext(code,c)};
+}
+
+test("an event ageing out waits for an open popup or a spiderfied stack, then the map catches up",()=>{
+  // Verified live: an open popup closed by itself about every 15 minutes.
+  const h=agingHarness();
+  h.set("mapPopupOpen = true");
+  h.c.rebuildAgedMap();
+  assert.equal(h.draws(),0);
+  h.set("mapPopupOpen = false; mapSpiderfied = true");
+  h.c.rebuildAgedMap();
+  assert.equal(h.draws(),0);
+  h.set("mapSpiderfied = false");
+  h.c.rebuildAgedMap();
+  assert.equal(h.draws(),1);
+  h.c.rebuildAgedMap();
+  assert.equal(h.draws(),1,"once per change");
+});
+
+test("closing a popup lets a waiting rebuild run, after the next popup had the chance to open",()=>{
+  assert.match(html,/map\.on\("popupclose", \(\) => \{ mapPopupOpen = false; setTimeout\(rebuildAgedMap, 0\); \}\);/);
+  assert.match(html,/markerCluster\.on\("unspiderfied", \(\) => \{ mapSpiderfied = false; setTimeout\(rebuildAgedMap, 0\); \}\);/);
+  assert.match(extract("refreshTimeSensitiveDashboard"),/mapRebuildDeferred = true;\s*rebuildAgedMap\(\);/);
+});
+
+test("a marker still waiting for its slice falls back to centring the map instead of throwing",()=>{
+  assert.match(extract("focusChronologyEvent"),/!marker\s*\|\|\s*!markerCluster\.hasLayer\(\s*marker\s*\)/);
 });
 
 test("both basemap tile layers keep a larger tile buffer and skip mid-zoom refetches",()=>{
