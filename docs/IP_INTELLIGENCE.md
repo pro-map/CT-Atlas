@@ -1,6 +1,6 @@
 # IP Intelligence
 
-IP Intelligence is an investigator-oriented workspace for the existing authenticated CT Atlas users. It has the same session access as the other workspaces; there is no separate police-account grant. The main page orders the six equal desktop cards as Map, Crypto, Dark Web, Facial, IP Intelligence, Social (Beta).
+IP Intelligence is an investigator-oriented workspace for the existing authenticated CT Atlas users. It has the same session access as the other workspaces; there is no separate police-account grant. The main page orders the three equal desktop cards as Map, Crypto, IP Intelligence.
 
 ## What works after deployment
 

@@ -209,6 +209,15 @@ test("the retired pages and assets are gone and nothing the site serves points a
   }
 });
 
+test("the privacy notice drops what only these tools did and says what stays stored", () => {
+  const notice = read("privacy.html");
+  assert.doesNotMatch(notice, /Yandex|Telegram|4chan|Bluesky|Brave Search|Groq|Workers AI|Cloud Run|reverse-image/);
+  assert.match(notice, /Last updated: 6 November 2026/);
+  assert.match(notice, /withdrawn in November 2026/);
+  assert.match(notice, /has not been erased/);
+  assert.match(notice, /until the administrator deletes them/);
+});
+
 test("the gate has no code that deletes Dark Web records or a namespace of a retired tool", () => {
   const gateSource = read("cloudflare-worker/report-gate.js");
   assert.doesNotMatch(gateSource, /darkweb:|"\/darkweb-/);

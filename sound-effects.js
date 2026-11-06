@@ -79,7 +79,7 @@ function navigate(event,url){
 document.addEventListener("click",event=>{
  if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
  const target=event.target instanceof Element?event.target:null;
- const control=target?.closest("[data-view], [data-ct-sound='tab']");
+ const control=target?.closest("[data-ct-sound='tab']");
  if(control&&!control.disabled&&control.getAttribute("aria-pressed")!=="true"&&control.getAttribute("aria-selected")!=="true"&&!control.classList.contains("active")){void play();return;}
  if(target?.closest("#mainHubButton")){navigate(event,new URL("main.html",location.href).href);return;}
  const link=target?.closest("a[href]");
