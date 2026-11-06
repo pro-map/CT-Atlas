@@ -14,8 +14,7 @@ const FEEDBACK_TYPES = new Set(["comment", "bug"]);
 const WORKSPACES = Object.freeze({
   general: "General CT Atlas",
   map: "Intelligence Map",
-  crypto: "Crypto Intelligence",
-  ip: "IP Intelligence"
+  crypto: "Crypto Intelligence"
 });
 const LEGACY_EVALUATION_ITEMS = [
   ["report_generator", "Report Generator"],

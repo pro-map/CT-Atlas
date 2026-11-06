@@ -53,10 +53,10 @@ function withAdminDisplayName(row){
 const SOCIAL_REPORT_RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
 // Stored totals keep the counters of retired tools. They are history, not current activity,
 // so the admin statistics leave them out; nothing removes them from storage.
-const RETIRED_USAGE_COUNTERS = Object.freeze(["social_intel_requests", "facial_extractions", "facial_searches", "darkweb_searches"]);
-const TAB_ACCESS_FIELDS = Object.freeze({ map: true, crypto: true, ip: true });
+const RETIRED_USAGE_COUNTERS = Object.freeze(["social_intel_requests", "facial_extractions", "facial_searches", "darkweb_searches", "ip_lookups"]);
+const TAB_ACCESS_FIELDS = Object.freeze({ map: true, crypto: true });
 function tabAccessTemplate(username = "") {
-  return { username, map: 0, crypto: 0, ip: 0 };
+  return { username, map: 0, crypto: 0 };
 }
 
 // Per-user search history behind the admin counters. One small value per search,
@@ -74,7 +74,6 @@ const USAGE_LOG_FIELDS = Object.freeze({
   deep_search: { question: ["text", 1200], region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], scope: ["text", 200], outcome: ["text", 20], title: ["text", 200], period: ["text", 120] },
   blockchain: { query: ["text", 180], kind: ["text", 20], chain: ["text", 40], chain_hint: ["text", 40], origin: ["text", 16], limit: ["num"] },
   event_list: { text: ["text", 200], region: ["text", 100], topic: ["text", 120], actor_group: ["text", 100], period_days: ["num"], scope: ["text", 200], country: ["text", 120], sort: ["text", 10], results: ["num"] },
-  ip_lookup: { target: ["text", 253], kind: ["text", 10], registered_domain: ["text", 253], parent_domain: ["text", 253] },
   ...Object.fromEntries(Object.keys(TAB_ACCESS_FIELDS).map(tab => ["tab_" + tab, {}]))
 });
 // Only these fields of a logged request can change afterwards (the report outcome).
@@ -93,7 +92,6 @@ const USAGE_HISTORY_METRICS = Object.freeze({
   map_searches: [],
   quick_ask_requests: [],
   blockchain_searches: ["blockchain"],
-  ip_lookups: ["ip_lookup"],
   ...Object.fromEntries(Object.keys(TAB_ACCESS_FIELDS).map(tab => ["tab:" + tab, ["tab_" + tab]])),
   all: Object.keys(USAGE_LOG_FIELDS)
 });
@@ -610,7 +608,6 @@ export class ReportGate {
           "blocked_report_requests",
           "quick_ask_requests",
           "blockchain_searches",
-          "ip_lookups",
           "feedback_submissions",
           "quiz_answers",
           "quiz_correct",
@@ -633,7 +630,7 @@ export class ReportGate {
 
     const summary = {
       active_users: rows.filter(row =>
-        ["logins", "searches", "report_requests", "report_generator_requests", "deep_search_requests", "reports_generated", "cached_reports", "quick_ask_requests", "blockchain_searches", "ip_lookups", "feedback_submissions", "quiz_answers"]
+        ["logins", "searches", "report_requests", "report_generator_requests", "deep_search_requests", "reports_generated", "cached_reports", "quick_ask_requests", "blockchain_searches", "feedback_submissions", "quiz_answers"]
           .some(metric => Number(row[metric] || 0) > 0)
       ).length,
       logins: 0,
@@ -648,7 +645,6 @@ export class ReportGate {
       blocked_report_requests: 0,
       quick_ask_requests: 0,
       blockchain_searches: 0,
-      ip_lookups: 0,
       feedback_submissions: 0,
       quiz_answers: 0,
       quiz_correct: 0,
@@ -669,7 +665,6 @@ export class ReportGate {
         "blocked_report_requests",
         "quick_ask_requests",
         "blockchain_searches",
-        "ip_lookups",
         "feedback_submissions",
         "quiz_answers",
         "quiz_correct",
@@ -786,45 +781,6 @@ export class ReportGate {
     const url = new URL(request.url);
     const body = await request.json().catch(()=>({}));
     const now = Date.now();
-
-    if (url.pathname === "/ip-intelligence-limit") {
-      if (!isAllowedUser(body.username, this.env)) return Response.json({ error: "Unknown user." }, { status: 403 });
-      // The first slot of an analyst's lookup carries the target: once granted, it is
-      // counted and kept in the admin search history (the domain's own IPs are not).
-      const response = await this.state.storage.transaction(async tx => {
-        const key = "ip-intelligence:limit:" + body.username;
-        let counter = await tx.get(key);
-        if (!counter || counter.until <= now) counter = { count: 0, until: now + 60000 };
-        if (counter.count >= 6) return Response.json({ error: "Rate limit." }, { status: 429 });
-        counter.count++;
-        await tx.put(key, counter);
-        if (body.keyed !== true) return Response.json({ ok: true });
-        // Shared daily budget for the keyed VPN-detection providers (Proxycheck,
-        // ipapi.is: about 1,000 free requests a day each), so one analyst cannot
-        // use up the quota every other analyst relies on.
-        const day = new Date(now).toISOString().slice(0, 10);
-        const dayKey = "ip-intelligence:keyed-day";
-        const previous = await tx.get(dayKey);
-        if (previous !== day) {
-          if (previous) {
-            const stale = await tx.list({ prefix: "ip-intelligence:keyed:" + previous });
-            if (stale.size) await tx.delete([...stale.keys()]);
-          }
-          await tx.put(dayKey, day);
-        }
-        const globalKey = "ip-intelligence:keyed:" + day, userKey = globalKey + ":" + body.username;
-        const used = await tx.get(globalKey) || 0, usedByUser = await tx.get(userKey) || 0;
-        if (used >= 800 || usedByUser >= 300) return Response.json({ ok: true, keyed: false });
-        await tx.put(globalKey, used + 1);
-        await tx.put(userKey, usedByUser + 1);
-        return Response.json({ ok: true, keyed: true });
-      });
-      if (body.log && response.ok) {
-        await this.incrementUsage(body.username, { ip_lookups: 1 }, now,
-          this.usageLogEntry(body.username, "ip_lookup", body.log, now));
-      }
-      return response;
-    }
 
     if (url.pathname === "/migration-status") {
       return Response.json({

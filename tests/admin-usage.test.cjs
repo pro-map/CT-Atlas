@@ -54,14 +54,14 @@ test("admin usage returns current per-user counters and leaves out the counters 
     quick_ask_requests: 4,
     blockchain_searches: 5
   };
-  const retired = { social_intel_requests: 6, facial_extractions: 7, facial_searches: 8, darkweb_searches: 9 };
+  const retired = { social_intel_requests: 6, facial_extractions: 7, facial_searches: 8, darkweb_searches: 9, ip_lookups: 10 };
   await gate.incrementUsage("group-s-2", metrics);
   // Existing data may include retired counters. They must never reappear.
   for (const key of [`usage-total:group-s-2`, `usage-day:${parisDayKey()}:group-s-2`]) {
     const legacy = await gate.state.storage.get(key);
     await gate.state.storage.put(key, { ...legacy, ...retired });
   }
-  await gate.incrementUsage("group-p-9", { social_intel_requests: 1, facial_searches: 1, darkweb_searches: 1 });
+  await gate.incrementUsage("group-p-9", { social_intel_requests: 1, facial_searches: 1, darkweb_searches: 1, ip_lookups: 1 });
 
   const allTime = await gate.usageStats("all");
   const row = allTime.users.find(item => item.username === "group-s-2");
@@ -82,6 +82,7 @@ test("admin usage returns current per-user counters and leaves out the counters 
     assert.ok(!Object.hasOwn(daily.summary, metric), metric);
   }
   assert.equal((await gate.state.storage.get("usage-total:group-s-2")).facial_searches, 8, "reporting less never changes what is stored");
+  assert.equal((await gate.state.storage.get("usage-total:group-s-2")).ip_lookups, 10, "reporting less never changes what is stored");
   assert.equal(allTime.users.find(item => item.username === "group-p-9").display_name, "MTS");
   assert.equal(parisDayKey(), parisDayKey(Date.now()));
 });
