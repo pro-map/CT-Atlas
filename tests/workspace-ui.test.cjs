@@ -51,6 +51,24 @@ test('every workspace ships the shared loader and the hub lists the three that r
  assert.deepEqual(links,['index.html?workspace=map','crypto.html','ip.html']);
  assert.doesNotMatch(main,/hub-beta|class="under"|\.under\{/);
 });
+test('the README waits behind a native button: closed by default, keyboard-operable, text intact',()=>{
+ const main=fs.readFileSync('main.html','utf8');
+ const open=main.match(/<details id="readme"[^>]*>/);
+ assert.ok(open,'id="readme" is the disclosure itself, and the UI deploy greps it');
+ assert.doesNotMatch(open[0],/\sopen\b/,'closed until the user opens it');
+ assert.doesNotMatch(main,/\.open=|setAttribute\("open"|<section id="readme"/,'nothing opens it for the user or shows it in full');
+ const readme=main.slice(main.indexOf('<details id="readme"'),main.indexOf('</details>'));
+ assert.match(readme,/^<details id="readme"[^>]*>\s*<summary class="hub-readme-toggle"><h2 id="readmeTitle"[^>]*>README<\/h2><\/summary>/,'the summary comes first, so everything else is hidden');
+ assert.doesNotMatch(readme,/tabindex|role="button"/,'a native summary is already focusable and answers Enter and Space');
+ assert.match(main,/\.hub-readme-toggle\{[^}]*list-style:none/);
+ assert.match(main,/\.hub-readme-toggle::-webkit-details-marker\{display:none\}/);
+ assert.match(main,/\.hub-readme-toggle:focus-visible\{[^}]*outline:2px solid/,'keyboard focus stays visible');
+ for(const text of ['Use only for authorised duties.','Verify before relying on results.','Keep outputs transparent.','Protect access and report concerns.','Do not use CT ATLAS for prohibited purposes.','Do not enter confidential or sensitive information.','Do not search sensitive categories during the pilot.','Do not ingest or share unverified outputs.','Do not retain results on CT ATLAS beyond relevance assessment.']){
+  assert.ok(readme.includes(text),text);
+ }
+ assert.doesNotMatch(readme,/facial|dark web|social|socmint/i,'no wording about a retired tool');
+ assert.ok(readme.includes('Coverage may be incomplete or outdated. IP location and cryptocurrency links do not establish identity, ownership or criminal involvement.'));
+});
 test('hub grid shows three equal columns, then one: no orphan card on a row of its own',()=>{
  const main=fs.readFileSync('main.html','utf8');
  assert.match(main,/\.hub-grid\{display:grid;grid-template-columns:repeat\(3,minmax\(0,1fr\)\);gap:12px\}/);
