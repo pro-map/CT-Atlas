@@ -3709,6 +3709,14 @@ html, body {
     overflow-wrap: break-word;
 }
 
+/* Until deep-search.css arrives the panel stands unstyled in the page flow. For that
+   one frame it took 320 px of the map's height on a desktop and all of it on a phone,
+   and a size Leaflet read then stayed: tiles missing from the lower part of the map,
+   and leaflet.heat throwing on every move at 0 px, until the window was resized. */
+#deepSearchPanel:not(.open) {
+    display: none;
+}
+
 /* Reuses .deep-evidence / .deep-citation etc. from deep-search.css, which
    loads on every page view regardless of whether Deep Search itself is
    opened -- see usage-auth-fix.js's loadDeepSearch(). Only the badge here

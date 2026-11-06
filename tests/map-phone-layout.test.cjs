@@ -66,6 +66,17 @@ test("the zoom control moves clear of the panel on a phone and back on a wider s
   assert.match(html,/phoneLayout\.addEventListener\("change", applyPhoneLayout\);\napplyPhoneLayout\(\);/);
 });
 
+test("the Deep Search panel cannot take the map's height while its stylesheet loads",()=>{
+  // Measured: for one frame #deepSearchPanel stood in the flow at 320 px on a desktop and
+  // 740 px at 360x740, so #main fell to 487 and 0. Leaflet kept that size on about half of
+  // the loads: 6 tiles instead of 18, and an IndexSizeError from leaflet.heat on each zoom.
+  const rule=html.indexOf("#deepSearchPanel:not(.open) {\n    display: none;");
+  assert.ok(rule>=0);
+  assert.ok(rule<html.indexOf("<body"),"in the page's own stylesheet, which is there before the panel is");
+  const css=fs.readFileSync("deep-search.css","utf8");
+  assert.match(css,/#deepSearchPanel\.open\{display:flex\}/,"opening it must still win");
+});
+
 test("the status line uses the width of the phone instead of 72 px",()=>{
   assert.match(phoneBlock,/#updated \{\n        flex: 1 1 100% !important;\n        min-width: 0 !important;\n        max-width: none !important;/);
 });
