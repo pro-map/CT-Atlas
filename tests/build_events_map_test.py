@@ -514,6 +514,70 @@ class HoaxTests(unittest.TestCase):
         self.assertEqual(m.attack_update_indexes([{'primary_event_type': 'ARREST', 'reported_status': 'HOAX'}]), set())
 
 
+AMMAN = {'latitude': 31.95, 'longitude': 35.93, 'location_precision': 'country_capital', 'city': 'Amman',
+         'country_code': 'JO', 'location_method': 'ai_country_capital', 'location_confidence': 'high'}
+KARAK = {'latitude': 31.18, 'longitude': 35.70, 'location_precision': 'city', 'city': 'Karak', 'country_code': 'JO',
+         'location_method': 'source_name_geonames_correction', 'location_confidence': 'medium',
+         'location_evidence': ['Karak']}
+
+
+class SiblingLocationTests(unittest.TestCase):
+    now = datetime(2026, 10, 30, 12, tzinfo=timezone.utc)
+
+    def drawn(self, *records):
+        database = {'events': list(records)}
+        output = m.build_map(database, [], now=self.now)
+        m.validate(output, database)
+        return output['events'][0]
+
+    def test_the_karak_church_attack_is_drawn_on_karak_not_on_amman(self):
+        point = attack('funeral', '2026-10-23T08:00:00Z', place=AMMAN, title='Karak: Funeral shooting at a church')
+        arrest = event('arrest', primary_event_type='ARREST', incident_id='inc-1', update_type='ARREST_UPDATE',
+                       published='2026-10-24T08:00:00Z', **KARAK)
+        drawn = self.drawn(point, arrest)
+        self.assertEqual((drawn['latitude'], drawn['city'], drawn['location_precision']), (31.18, 'Karak', 'city'))
+        self.assertEqual(drawn['location_from_record'], 'arrest')
+        self.assertEqual(point['latitude'], 31.95, 'The stored record keeps its location')
+
+    def test_the_lite_file_keeps_the_stored_location(self):
+        database = {'events': [attack('funeral', place=AMMAN), attack('later', update='FOLLOW_UP', place=KARAK)]}
+        lite = m.lite.build_lite(database, [])
+        self.assertEqual(lite['events'][0]['latitude'], 31.95)
+        m.lite.validate(lite, database)
+
+    def test_a_sibling_in_another_country_lends_nothing(self):
+        kirkuk = {**KARAK, 'latitude': 35.47, 'longitude': 44.39, 'city': 'Kirkuk', 'country_code': 'IQ'}
+        self.assertEqual(self.drawn(attack('point', place=AMMAN), attack('false-merge', update='FOLLOW_UP', place=kirkuk))['city'], 'Amman')
+
+    def test_siblings_must_agree_on_one_place(self):
+        aqaba = {**KARAK, 'latitude': 29.53, 'longitude': 35.0, 'city': 'Aqaba'}
+        self.assertEqual(self.drawn(attack('point', place=AMMAN), attack('a', update='FOLLOW_UP', place=KARAK),
+                                    attack('b', update='FOLLOW_UP', place=aqaba))['city'], 'Amman')
+
+    def test_two_spellings_of_one_town_agree_and_a_sibling_on_the_capital_itself_is_no_rival(self):
+        al_karak = {**KARAK, 'latitude': 31.17, 'longitude': 35.71, 'city': 'Al-Karak'}
+        amman_city = {**KARAK, 'latitude': 31.96, 'longitude': 35.94, 'city': 'Amman'}
+        drawn = self.drawn(attack('point', place=AMMAN), attack('a', '2026-09-28T08:00:00Z', update='FOLLOW_UP', place=KARAK),
+                           attack('b', update='FOLLOW_UP', place=al_karak), attack('c', update='FOLLOW_UP', place=amman_city))
+        self.assertEqual(drawn['city'], 'Karak')
+
+    def test_a_region_point_keeps_its_place_when_the_sibling_is_far(self):
+        saxony = {'latitude': 51.05, 'longitude': 13.35, 'location_precision': 'region', 'region': 'Saxony', 'country_code': 'DE'}
+        eschweiler = {'latitude': 50.82, 'longitude': 6.27, 'location_precision': 'city', 'city': 'Eschweiler', 'country_code': 'DE'}
+        self.assertEqual(self.drawn(attack('point', place=saxony), attack('a', update='FOLLOW_UP', place=eschweiler))['region'], 'Saxony')
+
+    def test_a_region_point_moves_to_a_city_of_that_region(self):
+        kashmir = {'latitude': 34.0, 'longitude': 76.0, 'location_precision': 'region', 'region': 'Jammu and Kashmir', 'country_code': 'IN'}
+        anantnag = {'latitude': 33.73, 'longitude': 75.15, 'location_precision': 'city', 'city': 'Anantnag', 'country_code': 'IN'}
+        self.assertEqual(self.drawn(attack('point', place=kashmir), attack('a', update='FOLLOW_UP', place=anantnag))['city'], 'Anantnag')
+
+    def test_a_city_point_and_a_doubtful_sibling_change_nothing(self):
+        far = {**KARAK, 'latitude': 30.0, 'city': 'Maan'}
+        self.assertEqual(self.drawn(attack('point', place=KARAK), attack('a', update='FOLLOW_UP', place=far))['city'], 'Karak')
+        self.assertEqual(self.drawn(attack('point', place=AMMAN),
+                                    attack('a', update='FOLLOW_UP', place=KARAK, geolocation_review_required=True))['city'], 'Amman')
+
+
 if __name__ == '__main__':
     unittest.main()
 

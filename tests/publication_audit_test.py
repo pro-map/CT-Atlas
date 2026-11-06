@@ -80,6 +80,29 @@ class PublicationAuditTests(unittest.TestCase):
         self.assertEqual(result["files"]["events-lite.json"]["record_count"], 3)
         self.assertEqual(result["files"]["events-map.json"]["record_count"], 3)
 
+    def test_manifest_accepts_a_point_drawn_on_a_sibling_record_only(self):
+        attack = {"primary_event_type": "ATTACK", "is_attack": True, "incident_id": "inc-1", "summary": "Example",
+                  "country_code": "JO"}
+        data = {"events": [
+            {"id": "a", "title": "Attack", "published": "2026-10-23T08:00:00Z", "update_type": "INITIAL", "city": "Amman",
+             "latitude": 31.95, "longitude": 35.93, "location_precision": "country_capital", **attack},
+            {"id": "b", "title": "Arrest", "published": "2026-10-24T08:00:00Z", "update_type": "FOLLOW_UP", "city": "Karak",
+             "latitude": 31.18, "longitude": 35.70, "location_precision": "city", **attack},
+        ]}
+        excluded = light.load_excluded()
+        mapped = map_file.build_map(data, excluded, now=datetime(2026, 11, 3, tzinfo=timezone.utc))
+        self.assertEqual(mapped["events"][0]["latitude"], 31.18)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            audit.write(root / "events.json", data)
+            audit.write(root / "events-lite.json", light.build_lite(data, excluded))
+            audit.write(root / "events-map.json", mapped)
+            audit.manifest(root, root / "publication-manifest.json")
+            mapped["events"][0]["latitude"] = 1.0
+            audit.write(root / "events-map.json", mapped)
+            with self.assertRaisesRegex(ValueError, "Derived data differs"):
+                audit.manifest(root, root / "publication-manifest.json")
+
     def test_manifest_reconstructs_chunked_derived_files(self):
         # The mirror chunks events-lite.json and events-map.json once they
         # outgrow the asset cap; the manifest must still read and check them.

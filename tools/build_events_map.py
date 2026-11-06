@@ -16,7 +16,10 @@ attack records of an incident are stamped attack_update and travel with
 recent_events, as non-attacks: the map never draws them, but the header's
 casualty counts and the Key Developments still reach them. Reports held for
 corroboration are stamped too and stay out of this file, so nothing here counts
-them; a Key Development citing one still links to it.
+them; a Key Development citing one still links to it. A point on a capital or a
+region is drawn on its incident's city when attack_points.sibling_locations
+finds one: location_from_record names the record that lent it, and events.json
+keeps its own location.
 
 recent_events carries the last RECENT_DAYS of every OTHER category: the map
 draws them when "Show on map" asks for all events or one of those categories
@@ -50,8 +53,8 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 from attack_points import (  # noqa: E402
-    attack_groups, attack_update_indexes, event_categories, held_indexes, is_attack_record,
-    is_historic_update, is_map_attack, published_at,
+    LOCATION_FIELDS, attack_groups, attack_update_indexes, event_categories, held_indexes, is_attack_record,
+    is_historic_update, is_map_attack, published_at, sibling_locations,
 )
 from retired_categories import active_event, is_retired_judicial_event  # noqa: E402
 FORMAT = "events-map-v1"
@@ -100,6 +103,7 @@ def build_map(database: dict, excluded: list[str], now: datetime | None = None) 
     drop = {*excluded, *lite.DERIVED_FIELDS}
     updates = attack_update_indexes(events)
     held = held_indexes(events)
+    borrowed = sibling_locations(events)
     map_events = []
     recent_events = []
     for index, event in enumerate(events):
@@ -113,6 +117,10 @@ def build_map(database: dict, excluded: list[str], now: datetime | None = None) 
             lite_event["attack_update"] = True
         if index in held:
             lite_event["held_for_corroboration"] = True
+        if index in borrowed:
+            lender = active_event(events[borrowed[index]])
+            lite_event.update({name: lender.get(name) for name in LOCATION_FIELDS},
+                              location_from_record=lender.get("id"))
         if is_attack_record(event) and index not in updates:
             # Unlocated attacks (excluded_from_map) stay too: the map never
             # draws them, but the ticker, the header's casualty counts and the

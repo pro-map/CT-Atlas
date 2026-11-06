@@ -40,6 +40,14 @@ REINDEX_BURST_ITEMS = 4
 # Stored on a record the collector marked; the rule below is what decides.
 HOLD_FIELD = "corroboration_hold"
 GDELT_COLLECTOR = "GDELT DOC 2.0"
+# The fields of a map point, as a sibling's city replaces them.
+LOCATION_FIELDS = ("latitude", "longitude", "city", "region", "location_precision",
+                   "location_confidence", "location_method", "location_evidence")
+# Two city records this close are one place ('Karak' and 'Al-Karak').
+SAME_PLACE_KM = 25.0
+# A region's own coordinates are evidence, unlike a capital's: 12 devices found
+# in Saxony stay in Saxony although a sibling names a town 483 km away.
+REGION_SIBLING_KM = 150.0
 
 
 def event_categories(event: dict) -> list[str]:
@@ -213,3 +221,37 @@ def attack_update_indexes(events: list) -> set[int]:
                    if isinstance(event, dict) and not is_retired_judicial_event(event)
                    and is_hoax(event) and _attack_by_type(active_event(event)))
     return updates
+
+
+def sibling_locations(events: list) -> dict[int, int]:
+    """Position of a point on a capital or a region -> position of the record
+    whose city it should be drawn on: same incident, same country (false merges
+    join Tartus to Kirkuk), and every such city of the incident is one place.
+    Stored records stay as they are: the map file borrows the location."""
+    def place_key(event):
+        return str(event.get("incident_id") or "").strip(), event.get("country_code")
+
+    cities = defaultdict(list)
+    for index, event in enumerate(events):
+        if (isinstance(event, dict) and not is_retired_judicial_event(event) and all(place_key(event))
+                and _located(event) and event.get("location_precision") == "city"
+                and not event.get("geolocation_review_required")):
+            cities[place_key(event)].append(index)
+    updates = attack_update_indexes(events)
+    borrowed = {}
+    for positions in attack_groups(events).values():
+        for index in set(positions) - updates:
+            event = events[index]
+            precision = event.get("location_precision")
+            if precision not in ("country_capital", "region") or not _located(event):
+                continue
+            siblings = [other for other in cities.get(place_key(event), ())
+                        if (_distance_km(event, events[other]) or 0) > SAME_PLACE_KM]
+            if not siblings or any((_distance_km(events[first], events[second]) or 0) > SAME_PLACE_KM
+                                   for first in siblings for second in siblings):
+                continue
+            if precision == "region" and any((_distance_km(event, events[other]) or 0) > REGION_SIBLING_KM
+                                             for other in siblings):
+                continue
+            borrowed[index] = min(siblings, key=lambda other: (published_at(events[other]) or _UNDATED, other))
+    return borrowed

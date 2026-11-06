@@ -106,8 +106,11 @@ def manifest(directory, output):
         raise ValueError('Derived dataset identifiers do not match the full dataset')
     for name, subset in [('events-lite.json', lite), ('events-map.json', mapped)]:
         for identifier, row in subset.items():
+            # A map point on its incident's city shows the record that lent it.
+            lender = full.get(row.get('location_from_record'), full[identifier])
             for field in ('title', 'summary', 'categories', 'threat_categories', 'latitude', 'longitude'):
-                if field in row and row[field] != full[identifier].get(field):
+                source = lender if field in ('latitude', 'longitude') else full[identifier]
+                if field in row and row[field] != source.get(field):
                     raise ValueError(f'Derived data differs: {name}/{identifier}/{field}')
     result = {'version': 1, 'created_at': datetime.now(timezone.utc).isoformat(),
               'source_revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
