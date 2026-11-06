@@ -10,9 +10,11 @@ import tempfile
 import textwrap
 import unittest
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOWS = ROOT / ".github/workflows"
+COMPOSITE = "./.github/actions/build-events-lite"
 
 
 def read(name):
@@ -31,6 +33,75 @@ def trigger_paths(source, event):
     block = source.split("\n  " + event + ":\n", 1)[1]
     block = re.split(r"(?m)^  \S", block, 1)[0]
     return re.findall(r'(?m)^      - "([^"]+)"', block)
+
+
+def jobs(source):
+    """{job: its lines}. Every line two spaces in starts a job, however its key is written."""
+    body = re.split(r"(?m)^jobs:[ \t]*(?:#.*)?\n", source, maxsplit=1)[1]
+    blocks = re.split(r"(?m)^  (?=[^\s#])", body)[1:]
+    # A job missed here would pass under the setup of the job above it.
+    assert len(blocks) == len(re.findall(r"(?m)^ +runs-on:", body)), "not one runs-on per job"
+    return {block.split(":", 1)[0].strip("\"' "): block for block in blocks}
+
+
+def action_source(path):
+    return (ROOT / path / "action.yml").read_text(encoding="utf-8")
+
+
+def run_order(block):
+    """The steps of a job or composite as the runner meets them: the unnamed ones
+    too, and a local composite's own steps in its place, under the call's condition."""
+    body = re.split(r"(?m)^ *steps:\n", block, maxsplit=1)[1]
+    indent = re.search(r"(?m)^( *)- ", body)[1]
+    order = []
+    for step in re.split(rf"(?m)^{indent}- ", body)[1:]:
+        local = re.search(r"(?m)^ *uses: (\./\S+)", step)
+        condition = re.findall(r"(?m)^ *if:.*$", step)
+        order += ["\n".join(condition + [inner]) for inner in run_order(action_source(local[1]))] if local else [step]
+    return order
+
+
+# The Node suite counts: several of its tests spawn python3 themselves.
+PYTHON = re.compile(r"(?<![\w.-])python3?(?:\.\d+)?(?![\w.-])|\bnode --test tests/\*\.test\.cjs")
+
+
+def python_commands(step):
+    shell = re.search(r"(?m)^ *shell:.*", step)
+    if shell and PYTHON.search(shell[0]):
+        return [shell[0].strip()]
+    # Comments do not count: one that matched got python-tests.yml pinned for nothing.
+    script = re.split(r"(?m)^ *run: ?", step, maxsplit=1)[1:]
+    return [line.strip() for text in script for line in text.splitlines()
+            if PYTHON.search(line) and not line.lstrip().startswith("#")]
+
+
+def pinned(block):
+    """Only a numbered image is pinned: any other runs-on counts as the moving label."""
+    image = re.search(r"(?m)^    runs-on:(.*)$", block)
+    return image and re.fullmatch(r"ubuntu-\d+\.\d+", image[1].split("#")[0].strip(" \"'"))
+
+
+def undeclared_python(source):
+    """{job: commands that reach the image's Python where they must not}. That
+    Python is allowed on a pinned image, in a job that never sets up another. A
+    setup under a condition may not run, so it declares nothing, yet it is another."""
+    found = {}
+    for name, block in jobs(source).items():
+        commands, declared, another = [], False, False
+        for step in run_order(block):
+            setup = re.search(r"(?m)^ *uses: actions/setup-python@", step)
+            another = another or bool(setup)
+            declared = declared or bool(setup and not re.search(r"(?m)^ *if:", step))
+            if not declared:
+                commands += python_commands(step)
+        if commands and (another or not pinned(block)):
+            found[name] = commands
+    return found
+
+
+def workflow(runner, *job_steps):
+    return f"on: push\njobs:\n  check:\n    runs-on: {runner}\n    steps:\n" + \
+        "".join(f"      - {step}\n" for step in job_steps)
 
 
 LOCAL = {**{p.stem: p for p in (ROOT / "tools").glob("*.py")}, **{p.stem: p for p in ROOT.glob("*.py")}}
@@ -74,9 +145,9 @@ def loaded_by_importing(modules):
 
 class RunnerImageTests(unittest.TestCase):
     def test_every_workflow_running_the_node_tests_declares_node_24(self):
-        # ubuntu-24.04 ships Node 22, ubuntu-26.04 Node 24, and the 128 MB heap test of
-        # worker-events-stream only fits on 24: left to the image, the same commit
-        # passed in one job and failed in another.
+        # ubuntu-24.04 ships Node 22 and ubuntu-26.04 Node 24, and the image must not
+        # choose which Node runs the suite: the same commit passed in one job and
+        # failed in another.
         for path in WORKFLOWS.glob("*.yml"):
             source = path.read_text(encoding="utf-8")
             suite = re.search(r"(?m)^[^#\n]*\bnode --test\b", source)
@@ -86,14 +157,98 @@ class RunnerImageTests(unittest.TestCase):
                     self.assertIsNotNone(setup)
                     self.assertLess(setup.start(), suite.start())
 
-    def test_no_workflow_on_the_system_python_rides_the_moving_label(self):
+    def test_no_job_on_the_system_python_rides_the_moving_label(self):
         # During a migration ubuntu-latest changes image job by job: one commit would
-        # meet two system python3 versions.
+        # meet two system python3 versions. A pinned image is fine, but Python run before
+        # a later setup, such as the composite's, would give one job two versions.
         for path in WORKFLOWS.glob("*.yml"):
-            source = path.read_text(encoding="utf-8")
             with self.subTest(workflow=path.name):
-                if re.search(r"\bpython3?\s+[-\w./]", source) and "setup-python" not in source:
-                    self.assertNotIn("runs-on: ubuntu-latest", source)
+                self.assertEqual(undeclared_python(path.read_text(encoding="utf-8")), {})
+
+    def test_the_publication_composite_first_declares_the_python_ci_tests_on(self):
+        first = run_order(action_source(COMPOSITE))[0]
+        self.assertIn("uses: actions/setup-python@v6", first)
+        version = r'python-version: "([\d.]+)"'
+        self.assertEqual(re.search(version, first)[1], re.search(version, read("python-tests.yml"))[1])
+
+    def test_a_composite_without_setup_python_fails_the_deploy_jobs(self):
+        stripped = re.sub(r"(?s)    - name: Set up Python\n.*?(?=    - name: Build events-lite)", "",
+                          action_source(COMPOSITE))
+        self.assertNotIn("setup-python", stripped)
+        with mock.patch(__name__ + ".action_source", return_value=stripped):
+            for name in ("update-map.yml", "cleanup-events.yml", "reconcile-daily-integrity.yml",
+                         "repair-map-evidence.yml"):
+                with self.subTest(workflow=name):
+                    commands = undeclared_python(read(name))["deploy"]
+                    self.assertIn("if python3 tools/build_events_lite.py; then", commands)
+
+    def test_the_scan_fails_a_job_on_the_system_python(self):
+        setup = "uses: actions/setup-python@v6"
+        command = "python3 tools/check.py"
+        self.assertEqual(undeclared_python(workflow("ubuntu-latest", "run: " + command)), {"check": [command]})
+        self.assertIn("check", undeclared_python(workflow("ubuntu-latest", "run: python -u tools/check.py", setup)))
+        self.assertIn("check", undeclared_python(workflow("ubuntu-24.04", "run: " + command, "uses: " + COMPOSITE)))
+        # What a scan per file could not see: another job's setup says nothing about this one.
+        deploy = f"  deploy:\n    runs-on: ubuntu-latest\n    steps:\n      - run: {command}\n"
+        self.assertEqual(undeclared_python(workflow("ubuntu-latest", setup) + deploy), {"deploy": [command]})
+
+    def test_the_scan_sees_every_way_of_calling_python(self):
+        for command in ("python3 <<'PY'", 'python3 "tools/check.py"', "python3 $RUNNER_TEMP/check.py",
+                        "python3.12 tools/check.py", "/usr/bin/python3 -V", "node --test tests/*.test.cjs"):
+            with self.subTest(command=command):
+                self.assertEqual(undeclared_python(workflow("ubuntu-latest", "run: " + command)), {"check": [command]})
+        shell = workflow("ubuntu-latest", "shell: python\n        run: print(1)")
+        self.assertEqual(undeclared_python(shell), {"check": ["shell: python"]})
+
+    def test_the_ui_deploy_needs_python_before_its_node_suite(self):
+        # The composite comes after the suite, so its setup would leave the job two Pythons.
+        source = read("deploy-current-ct-atlas-ui.yml")
+        stripped = re.sub(r"(?s)      - name: Set up Python\n.*?(?=      - name: )", "", source)
+        self.assertNotEqual(stripped, source)
+        for edited in (stripped, stripped.replace("runs-on: ubuntu-24.04", "runs-on: ubuntu-latest")):
+            self.assertEqual(undeclared_python(edited), {"deploy": ["node --test tests/*.test.cjs"]})
+
+    def test_the_scan_treats_any_runner_but_a_numbered_image_as_moving(self):
+        command = "run: python3 tools/check.py"
+        for runner in ('"ubuntu-latest"', "ubuntu-latest # moving", "[ubuntu-latest]", "\n      - ubuntu-latest",
+                       "${{ matrix.os }}"):
+            with self.subTest(runner=runner):
+                self.assertIn("check", undeclared_python(workflow(runner, command)))
+        for runner in ('"ubuntu-24.04"', "ubuntu-24.04 # pinned"):
+            with self.subTest(runner=runner):
+                self.assertEqual(undeclared_python(workflow(runner, command)), {})
+
+    def test_the_scan_separates_jobs_however_their_keys_are_written(self):
+        first = workflow("ubuntu-latest", "uses: actions/setup-python@v6")
+        for key in ("deploy: # publishes", '"deploy":', "'deploy':", "deploy: "):
+            second = f"  {key}\n    runs-on: ubuntu-latest\n    steps:\n      - run: python3 tools/check.py\n"
+            with self.subTest(key=key):
+                self.assertEqual(undeclared_python(first + second), {"deploy": ["python3 tools/check.py"]})
+
+    def test_the_scan_refuses_jobs_it_cannot_separate(self):
+        wider = "jobs:\n    check:\n        runs-on: ubuntu-latest\n        steps:\n            - run: python3 x.py\n"
+        with self.assertRaises(AssertionError):
+            undeclared_python(wider)
+
+    def test_a_setup_under_a_condition_declares_nothing(self):
+        command = "run: python3 tools/check.py"
+        for runner in ("ubuntu-latest", "ubuntu-24.04"):
+            for setup in ("actions/setup-python@v6", COMPOSITE):
+                with self.subTest(runner=runner, setup=setup):
+                    source = workflow(runner, f"uses: {setup}\n        if: github.ref == 'refs/heads/main'", command)
+                    self.assertIn("python3 tools/check.py", undeclared_python(source)["check"])
+
+    def test_the_scan_accepts_a_declared_python_and_a_pinned_image(self):
+        command = "run: python3 tools/check.py"
+        for source in (workflow("ubuntu-latest", "uses: actions/setup-python@v6", command),
+                       workflow("ubuntu-latest", "uses: " + COMPOSITE, command),
+                       workflow("ubuntu-24.04", command),
+                       workflow("ubuntu-24.04", "run: node --test tests/*.test.cjs"),
+                       workflow("ubuntu-latest", "run: node --test tests/crypto.test.cjs"),
+                       workflow("ubuntu-latest", "run: cat .python-version python-tests.log tools/python3.py"),
+                       workflow("ubuntu-latest", "run: |\n          # python3 tools/check.py\n          true")):
+            with self.subTest(source=source):
+                self.assertEqual(undeclared_python(source), {})
 
     def test_the_worker_deploy_names_the_failing_stage(self):
         names = [step_name(step) for step in steps(read("deploy-report-worker.yml"))]

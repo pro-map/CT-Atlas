@@ -27,6 +27,11 @@ jobs:
         with:
           ref: main
 
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
       - name: Update only logo URLs
         shell: bash
         run: |

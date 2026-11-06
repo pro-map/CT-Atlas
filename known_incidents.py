@@ -58,7 +58,7 @@ The date in incident_anchor is the day of the incident, not of the article."""
 
 def schema_with_ref(schema):
     """A copy with a required ref: an optional field would mostly be left out,
-    and the shared schema also serves Groq, which forces every property."""
+    and a batch sent without a list keeps the shared schema, with nothing to cite."""
     copied = copy.deepcopy(schema)
     items = copied["properties"]["results"]["items"]
     items["properties"]["known_incident_ref"] = {"type": "string"}

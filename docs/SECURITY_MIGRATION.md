@@ -10,15 +10,15 @@ Create a JSON object whose values are SHA-256 password hashes:
 {"group-i-1":"<64-hex-character-sha256>","admin":"<64-hex-character-sha256>"}
 ```
 
-Store the complete JSON as the GitHub Actions repository secret:
+Store the complete JSON as the Cloudflare Worker secret `AUTH_USERS_JSON`, the only source of the roster apart from the optional extra accounts below:
 
 ```
-CT_ATLAS_AUTH_USERS_JSON
+npx wrangler secret put AUTH_USERS_JSON --config cloudflare-worker/wrangler.toml
 ```
 
-The Worker deployment workflow provisions it automatically when the secret exists. After deployment, `/health` must report `{"auth_mode":"secret"}`.
+No workflow provisions it. The Worker deployment workflow only checks that the secret exists and refuses to deploy without it. After deployment, `/health` must report `{"auth_mode":"secret"}`.
 
-Only then should the legacy compatibility roster in `cloudflare-worker/shared.js` be removed and all user passwords rotated.
+The legacy compatibility roster is gone from `cloudflare-worker/shared.js`: when the secret is missing or invalid, the Worker rejects every login.
 
 ## Adding accounts later
 
