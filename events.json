@@ -154,7 +154,7 @@
     "status": "partial",
     "run_started_at": "2026-11-06T16:47:13.997361+00:00",
     "last_attempt_at": "2026-11-06T16:47:13.997361+00:00",
-    "published_at": "2026-11-06T17:39:56.468669+00:00",
+    "published_at": "2026-11-06T19:42:31.840026+00:00",
     "recent": {
       "candidates": 5077,
       "reviewed": 2564,
@@ -250,12 +250,12 @@
     "geolocation": {
       "status": "complete",
       "pending": 0,
-      "located": 6276,
-      "unlocated": 205,
-      "completed_unlocated": 205,
+      "located": 6283,
+      "unlocated": 198,
+      "completed_unlocated": 198,
       "outcome": "success",
       "processed_this_run": 106,
-      "review_required": 130
+      "review_required": 123
     },
     "categories": [
       {
@@ -282,7 +282,15 @@
     ],
     "finalized_at": "2026-11-06T17:47:31.250848+00:00",
     "collect_outcome": "success",
-    "geolocate_outcome": "success"
+    "geolocate_outcome": "success",
+    "data_maintenance": {
+      "kind": "reviewed_map_evidence_repair",
+      "applied_at": "2026-11-06T19:42:31.840026+00:00",
+      "changed_records": 7,
+      "removed_records": 0,
+      "new_records": 0,
+      "ai_calls": 0
+    }
   },
   "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",
   "relevance_filter": "Deterministic CT candidate filter + Gemini semantic final selection",
@@ -723,7 +731,7 @@
     "UK Government / Counter-Terrorism",
     "INTERPOL English News"
   ],
-  "last_updated": "2026-11-06T17:39:56.468669+00:00",
+  "last_updated": "2026-11-06T19:42:31.840026+00:00",
   "number_of_events": 6481,
   "events": [
     {
@@ -5846,12 +5854,12 @@
       "collector": "Google News RSS",
       "country": "Colombia",
       "country_code": "CO",
-      "city": null,
+      "city": "Bogotá",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 4.60971,
+      "longitude": -74.08175,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "semana.com",
       "targeted_source_kind": "local_language_media",
@@ -5889,8 +5897,8 @@
         "Biological Terrorism"
       ],
       "cbrn_subgroups": [],
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Alcald3a de Bogot3"
       ],
@@ -5903,12 +5911,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The terrorist threats were sent from the email account of the Bogot3 Mayor's Office.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Bogot3",
       "ai_geo_fingerprint": "a14adb5c52c71c6a6ec1e5ad6cdd206c5b7a82ec570595e6739e7f729fa13785",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.",
+      "geolocation_resolution_geonameid": 3688689
     },
     {
       "id": "a2cb194fb52533e6",
@@ -48888,12 +48896,12 @@
       "collector": "Google News RSS",
       "country": "Colombia",
       "country_code": "CO",
-      "city": null,
+      "city": "Balboa",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 2.04183,
+      "longitude": -77.21646,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "10316645347cd824469266f310b5c6172194913c8ea3eb98f385f46be244707f",
@@ -49109,8 +49117,8 @@
         "same_normalized_title",
         "title_plus_anchor"
       ],
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "A motorcycle car bomb attack was detonated near a hospital in Balboa, Cauca"
       ],
@@ -49123,12 +49131,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The attack took place in Balboa, department of Cauca, Colombia.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Balboa",
       "ai_geo_fingerprint": "4a35500b8a59ba8f184d74ae12fd5d7fddf9141329481aa2158c9bcd5e5ef3cb",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The record's text names the state of exactly one same-country namesake of the requested locality; no new location was inferred.",
+      "geolocation_resolution_geonameid": 3689292
     },
     {
       "id": "e477f2c3b1c6d498",
@@ -78368,12 +78376,12 @@
       "collector": "Google News RSS",
       "country": "Colombia",
       "country_code": "CO",
-      "city": null,
+      "city": "Puerto Guzmán",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 0.97028,
+      "longitude": -76.58583,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "12444086548561a55071dcb8f941264834924d1d2a94c485ad1cebdc32f587c3",
@@ -78443,8 +78451,8 @@
       ],
       "actor_scope": "NON_STATE",
       "reported_status": "CONFIRMED",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Puerto Guzmán, Putumayo"
       ],
@@ -78457,8 +78465,7 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The source explicitly states the controlled destruction of an explosive cache occurred in Puerto Guzmán, Putumayo.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Puerto Guzmán",
       "ai_geo_fingerprint": "669e6f36626217e73b998fbbd23e6ccc97c9f7b0c994d32f8eb3a735b68ac3c2",
       "ai_geo_inferred": false,
@@ -78467,8 +78474,9 @@
         "very_high_title_similarity",
         "same_incident"
       ],
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location.",
-      "primary_source_published": "2026-10-30T15:45:00+00:00"
+      "location_review_reason": "The record's text names the state of exactly one same-country namesake of the requested locality; no new location was inferred.",
+      "primary_source_published": "2026-10-30T15:45:00+00:00",
+      "geolocation_resolution_geonameid": 3792398
     },
     {
       "id": "8022d906bb976bb5",
@@ -90826,12 +90834,12 @@
       "collector": "Google News RSS",
       "country": "Mexico",
       "country_code": "MX",
-      "city": null,
+      "city": "Matamoros",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 25.87972,
+      "longitude": -97.50417,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_targeted_source",
       "targeted_source": "infobae.com",
       "targeted_source_kind": "local_language_media",
@@ -90883,8 +90891,8 @@
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
       "dedup_review_required": true,
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Detención de objetivo prioritario en Matamoros provoca narcobloqueos en Tamaulipas"
       ],
@@ -90897,12 +90905,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "The arrest occurred in Matamoros, Tamaulipas, triggering blockades across the state.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Matamoros",
       "ai_geo_fingerprint": "021245e8e1efb45fb5520ac1a18612a4d0bd132476284d941e0cbce63adde301",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The record's text names the state of exactly one same-country namesake of the requested locality; no new location was inferred.",
+      "geolocation_resolution_geonameid": 3523466
     },
     {
       "id": "b3d454d971d33e17",
@@ -226700,12 +226708,12 @@
       "collector": "Google News RSS",
       "country": "Colombia",
       "country_code": "CO",
-      "city": null,
+      "city": "Villanueva",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 5.28333,
+      "longitude": -71.96667,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "01a9011138b917062bdfc2afa6044006bd1659d3f84bd867ee857652185065d2",
@@ -227189,8 +227197,8 @@
       "threat_categories": [
         "Chemicals and Explosives"
       ],
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Atentado terrorista con vehículo cargado de explosivos en peaje de Villanueva, Casanare"
       ],
@@ -227203,12 +227211,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Explicitly names Villanueva toll booth in Casanare as the site of the car bomb attack.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Villanueva",
       "ai_geo_fingerprint": "0dd1275bb17f8919c9db1b239b61d9af9b7a5f49537264b7205be2aacdbb7ff9",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The record's text names the state of exactly one same-country namesake of the requested locality; no new location was inferred.",
+      "geolocation_resolution_geonameid": 3665951
     },
     {
       "id": "6a55549883e64c0a",
@@ -564352,12 +564360,12 @@
       "collector": "Google News RSS",
       "country": "Mexico",
       "country_code": "MX",
-      "city": null,
+      "city": "Mazatlán",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 23.22163,
+      "longitude": -106.41885,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "a65aa97d89ff0f8b4b3226de0fc03282385b680f79a1832ea462dd09c62d87f7"
@@ -564391,8 +564399,8 @@
       "cbrn_subgroups": [],
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Mazatlán"
       ],
@@ -564405,12 +564413,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Incident took place in the Mazatlán sierra, Sinaloa, Mexico.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Mazatlán",
       "ai_geo_fingerprint": "7f1eb14c9967e0a6d4876c9bc7dd45ab016726b6442af988217c21ae4835070f",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The record's text names the state of exactly one same-country namesake of the requested locality; no new location was inferred.",
+      "geolocation_resolution_geonameid": 3996322
     },
     {
       "id": "2e8132cb37575c05",
@@ -733843,12 +733851,12 @@
       "collector": "Google News RSS",
       "country": "Mexico",
       "country_code": "MX",
-      "city": null,
+      "city": "Aquila",
       "region": null,
-      "latitude": null,
-      "longitude": null,
-      "location_precision": "unlocated",
-      "location_confidence": "low",
+      "latitude": 18.59925,
+      "longitude": -103.50371,
+      "location_precision": "city",
+      "location_confidence": "medium",
       "acquisition_channel": "multilingual_discovery",
       "source_article_fingerprints": [
         "3aff040451035e546f9cd42ca479522139ff4948983cb8a9b9b02da1aa9ea214",
@@ -733986,8 +733994,8 @@
       "actor_scope": "NON_STATE",
       "threat_categories": [],
       "threat_taxonomy_version": "threat-topics-v1-20261008",
-      "location_confidence_score": 0.0,
-      "location_method": "unresolved_city_no_capital_fallback",
+      "location_confidence_score": 0.75,
+      "location_method": "source_name_geonames_correction",
       "location_evidence": [
         "Reportan ataque armado del CJNG contra comunidad indígena de Aquila, Michoacán"
       ],
@@ -734000,12 +734008,12 @@
       "ai_geo_version": "gemini-ai-first-v5.3-source-faithful",
       "ai_geo_model": "gemini-3.5-flash-lite",
       "ai_geo_reason": "Attack occurred in Aquila, Michoacán, Mexico.",
-      "geolocation_review_required": true,
-      "geolocation_validation_issue": "ambiguous_or_unresolved_city",
+      "geolocation_review_required": false,
       "geolocation_requested_city": "Aquila",
       "ai_geo_fingerprint": "14368e4b46907c3577bd80faebfdb7493a206857bd78e36cf0a09e5970ca8537",
       "ai_geo_inferred": false,
-      "location_review_reason": "The requested locality could not be resolved unambiguously; a country capital is not evidence of the incident location."
+      "location_review_reason": "The record's text names the state of exactly one same-country namesake of the requested locality; no new location was inferred.",
+      "geolocation_resolution_geonameid": 4018373
     },
     {
       "id": "09fa81d5186367fc",
@@ -737210,21 +737218,21 @@
     "cached_events": 6375,
     "ai_processed_this_run": 106,
     "ai_pending_at_start": 106,
-    "city": 2352,
+    "city": 2359,
     "region": 2126,
     "country_capital": 1798,
-    "unlocated": 205,
-    "mapped_total": 6276,
+    "unlocated": 198,
+    "mapped_total": 6283,
     "high_confidence": 5727,
-    "medium_confidence": 584,
-    "low_confidence": 170,
+    "medium_confidence": 591,
+    "low_confidence": 163,
     "methods": {
       "ai_region_coordinates": 2123,
       "ai_country_capital": 1797,
       "ai_city_geonames": 2206,
-      "unresolved_city_no_capital_fallback": 97,
+      "unresolved_city_no_capital_fallback": 90,
+      "source_name_geonames_correction": 28,
       "ai_unlocated": 68,
-      "source_name_geonames_correction": 21,
       "ai_city_coordinates": 119,
       "reviewed_unsupported_point_withdrawn": 18,
       "ai_unlocated_final": 21,
@@ -737233,5 +737241,13 @@
       "source_verified_country": 1,
       "source_verified_unlocated": 1
     }
+  },
+  "map_integrity_audit": {
+    "version": "map-evidence-review-20261022",
+    "new_events": 0,
+    "quarantined_records": 0,
+    "folded_duplicate_records": 0,
+    "review_required": 123,
+    "scope": "Structural scan and reviewed source-excerpt corrections; not independent verification of every incident or location."
   }
 }
