@@ -825,6 +825,8 @@ export class ReportGate {
     }
 
     if (url.pathname === "/migration-import") {
+      // A pass that lags behind holds old data, and users may have changed these records since.
+      if (await this.state.storage.get("__eu_migration_complete")) return Response.json({ ok: true, imported: 0 });
       const entries = Array.isArray(body.entries) ? body.entries.slice(0, MIGRATION_PAGE_SIZE) : [];
       const writes = {};
       for (const item of entries) {

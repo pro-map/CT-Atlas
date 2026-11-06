@@ -168,7 +168,8 @@ URL, query string, header or key, at most 120 characters.
 
 `checked_at: null` with empty `providers` means no run has finished yet. `stale: true` means the
 last run is over 130 minutes old, so the result no longer describes the present. `read_failed: true`
-means the Durable Object did not answer within 800 ms; `/health` still answers. An ok on Etherscan
+means the Durable Object did not answer within 800 ms; `/health` still answers. It reads the object
+directly, so it never waits for the EU migration or starts it. An ok on Etherscan
 proves the `balance` call for that chain; the status is read through a 60-second cache.
 
 Deploy `index.js`, `crypto.js`, `crypto-risk.mjs`, `crypto-monitor.js`, `crypto-provider-health.js`, `crypto-workspace.js`,

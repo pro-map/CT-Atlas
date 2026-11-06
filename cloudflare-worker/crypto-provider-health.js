@@ -1,4 +1,4 @@
-import { cleanText, gateCall } from "./shared.js";
+import { cleanText, gateCall, gateRead } from "./shared.js";
 import { EVM_CHAINS, BLOCKSTREAM_API, TRONGRID_API, etherscanUrl, tronHeaders, tronHistoryQuery } from "./crypto.js";
 import { tronscanTagEnabled, tronscanTagRequest } from "./exchange-addresses.js";
 
@@ -205,9 +205,9 @@ async function probeProviders(env, previous, fetcher, limits) {
   return providers;
 }
 
-async function gateJson(env, path, payload, ms) {
+async function gateJson(call, env, path, payload, ms) {
   return withTimeout((async () => {
-    const response = await gateCall(env, path, payload);
+    const response = await call(env, path, payload);
     if (!response.ok) throw new Error("The gate answered " + response.status);
     return response.json();
   })(), ms);
@@ -224,10 +224,10 @@ async function runCryptoProviderProbe(env, scheduledTime, { fetcher = fetch, ...
   const limits = { ...RUN_LIMITS, ...overrides };
   try {
     const slot = Math.floor(Number(scheduledTime) / 60000) * 60000;
-    const claim = await gateJson(env, "/crypto-provider-status-claim", { slot, monitor_tick: monitorRunsAt(slot) }, limits.gateTimeoutMs);
+    const claim = await gateJson(gateCall, env, "/crypto-provider-status-claim", { slot, monitor_tick: monitorRunsAt(slot) }, limits.gateTimeoutMs);
     if (claim?.claimed !== true) return false;
     const providers = await probeProviders(env, claim.previous, fetcher, limits);
-    await gateJson(env, "/crypto-provider-status-put", { checked_at: new Date().toISOString(), providers }, limits.gateTimeoutMs);
+    await gateJson(gateCall, env, "/crypto-provider-status-put", { checked_at: new Date().toISOString(), providers }, limits.gateTimeoutMs);
     return true;
   } catch (error) {
     console.error("Crypto provider probe stopped", cleanText(error?.name, 40));
@@ -249,7 +249,9 @@ async function readCryptoProviderStatus(env, now = Date.now()) {
   if (cached && now - healthCache.at < (cached.read_failed ? HEALTH_RETRY_MS : HEALTH_CACHE_MS)) return cached;
   let value;
   try {
-    const stored = await gateJson(env, "/crypto-provider-status-get", {}, HEALTH_READ_TIMEOUT_MS);
+// gateRead, not gateCall: on a cold isolate gateCall can run the EU migration, which a public route
+// must not start. Before that migration the record is simply absent, the same as no run yet.
+    const stored = await gateJson(gateRead, env, "/crypto-provider-status-get", {}, HEALTH_READ_TIMEOUT_MS);
     const checkedAt = stored?.checked_at || null;
     value = { checked_at: checkedAt, stale: now - Date.parse(checkedAt) > STALE_AFTER_MS, providers: stored?.providers || {} };
   } catch {
