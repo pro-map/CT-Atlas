@@ -424,7 +424,7 @@ function injectAdminUi(){
               '<tbody id="adminFeatureUsageRows"></tbody>'+
             '</table>'+
           '</div>'+
-          '<div id="adminUsageNote">Click a number to see the details behind it: the time, what was searched (text, question, address, IP or domain, filters) and the outcome; ALL ACTIVITY lists everything a connected user did in the period. Details are recorded since 6 October 2026 and kept 90 days, so older counts have no detail; a list shows at most the newest 500 entries. The IP LOOKUP counter also starts on 6 October 2026. Workspace access counts page openings. Event list searches are counted once per settled search since 6 October 2026 (previously at every typing pause).</div>'+
+          '<div id="adminUsageNote">Click a number to see the details behind it: the time, what was searched (text, question, address, IP or domain, filters) and the outcome; ALL ACTIVITY lists everything a connected user did in the period. Details are recorded since 6 October 2026 and kept 90 days, so older counts have no detail; a list shows at most the newest 500 entries. The IP LOOKUP counter also starts on 6 October 2026. Activity in retired tools is no longer listed; those entries expire with the rest. Workspace access counts page openings. Event list searches are counted once per settled search since 6 October 2026 (previously at every typing pause).</div>'+
         '</div>'+
       '</div>'+
       '<div id="adminHistoryPanel" hidden>'+

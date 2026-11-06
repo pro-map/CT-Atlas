@@ -6,7 +6,7 @@ const vm=require("node:vm");
 const stripModuleSyntax=file=>fs.readFileSync(file,"utf8")
   .replace(/^import[\s\S]*?from "\.\/[^"]+";\s*/gm,"")
   .replace(/export \{[\s\S]*?\};\s*$/,"");
-const sources=["address-utils","sanctions","health-status"].map(name=>stripModuleSyntax("cloudflare-worker/"+name+".js"));
+const sources=["sanctions","health-status"].map(name=>stripModuleSyntax("cloudflare-worker/"+name+".js"));
 
 function cleanText(value,max=10000){
   return String(value??"").replace(/\s+/g," ").trim().slice(0,max);

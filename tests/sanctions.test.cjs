@@ -6,7 +6,6 @@ const vm=require("node:vm");
 const stripModuleSyntax=file=>fs.readFileSync(file,"utf8")
   .replace(/^import[\s\S]*?from "\.\/[^"]+";\s*/gm,"")
   .replace(/export \{[\s\S]*?\};\s*$/,"");
-const addressUtilsSource=stripModuleSyntax("cloudflare-worker/address-utils.js");
 const source=stripModuleSyntax("cloudflare-worker/sanctions.js");
 
 function cleanText(value,max=10000){
@@ -21,7 +20,6 @@ function harness(fetchImpl){
     console,
     fetch:async(...args)=>{calls.push(args);return fetchImpl(...args);}
   });
-  vm.runInContext(addressUtilsSource,context);
   vm.runInContext(source,context);
   const api=vm.runInContext("({chainFamily,normalizeSanctionsAddress,buildSanctionsIndex,loadSanctions,resetSanctionsCache,screenAnalysis,sanctionsObservation,SANCTIONS_VERSION})",context);
   return {api,calls};
