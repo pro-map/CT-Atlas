@@ -287,22 +287,40 @@ test('the list streams the same bytes, status and headers as one JSON.stringify 
  }
 });
 
-test('a batch that fails midway reaches the client as a failed read, never as a shorter list',async()=>{
+test('a batch that fails midway leaves a body that never parses, so it cannot pass for a shorter list',async()=>{
  const db=JSON.parse(liteBytes.toString('utf8'));
- const failing=()=>{
-  const {context,list}=listWorker(db);
-  vm.runInContext("const realRow=databaseEventRow;databaseEventRow=(event,index)=>{if(index===1000)throw new Error('row failed');return realRow(event,index);};",context);
-  return list({period_days:180},{});
- };
- const response=await failing();
+ const {context,list}=listWorker(db);
+ vm.runInContext("const realRow=databaseEventRow;databaseEventRow=(event,index)=>{if(index===1000)throw new Error('row failed');return realRow(event,index);};",context);
+ const response=await list({period_days:180},{});
  assert.equal(response.status,200,'the status went out with the first batch');
  const reader=response.body.getReader();
  const received=[];
- await assert.rejects(async()=>{for(;;){const {value,done}=await reader.read();if(done)return;received.push(value);}},/row failed/);
+ // How the read ends is the engine's: Node rejects it, workerd ends the body as if it were whole.
+ // Only the parse is the same on both, so only the parse is held here.
+ try{for(;;){const {value,done}=await reader.read();if(done)break;received.push(value);}}catch{}
  const partial=Buffer.concat(received);
  assert.ok(partial.length>1000,'the batches before it were sent');
  assert.throws(()=>JSON.parse(partial.toString('utf8')),SyntaxError);
- await assert.rejects((await failing()).json(),/row failed/);
+});
+
+test('a client that stops reading stops the list: rows are built only as they are read',async()=>{
+ const db=JSON.parse(liteBytes.toString('utf8'));
+ const {context,list}=listWorker(db);
+ vm.runInContext('globalThis.rowsBuilt=0;const realRow=databaseEventRow;databaseEventRow=(event,index)=>{rowsBuilt++;return realRow(event,index);};',context);
+ const batch=vm.runInContext('ROW_BATCH',context);
+ assert.ok(db.events.length>10*batch,'the list must be far longer than what may run ahead');
+ const reader=(await list({},{})).body.getReader();
+ const afterPause=async()=>{
+  for(let tick=0;tick<20;tick++)await new Promise(resolve=>setImmediate(resolve));
+  return vm.runInContext('rowsBuilt',context);
+ };
+ await reader.read();
+ const paused=await afterPause();
+ assert.ok(paused<=2*batch,`${paused} rows built after one read`);
+ await reader.read();
+ const resumed=await afterPause();
+ assert.ok(resumed>paused&&resumed<=3*batch,`${resumed} rows built after two reads`);
+ await reader.cancel();
 });
 
 // ---------------------------------------------------------------- the report route
@@ -480,7 +498,8 @@ const PLATEAU_EVENTS=21700;
 // nothing exact about the Worker's own 128 MB.
 // The read: one parsed copy is 62 MB, a second one held through a refresh makes 114.
 const READ_BUDGET_MB=88;
-// The list: 67 MB, the records plus their selection. Building every row first makes 93.
+// The list: 68 MB, the records plus their selection. Building every row first makes 95, a clone
+// of the body in the route 89, and buffering it there 162.
 const LIST_BUDGET_MB=80;
 // The fallback: 98 MB with every field but related_articles, 160 with that field.
 const FALLBACK_BUDGET_MB=128;
@@ -488,7 +507,8 @@ const FALLBACK_BUDGET_MB=128;
 const LIST_PIECE_LIMIT=2e6;
 
 const MEMORY_CHILD=String.raw`
-const fs=require('node:fs'),vm=require('node:vm');
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+const {pathToFileURL}=require('node:url');
 const [,file,mode]=process.argv;
 const stages=[];
 function measure(stage,sent=0){
@@ -512,21 +532,21 @@ vm.runInContext(strip(fs.readFileSync('cloudflare-worker/shared.js','utf8')),sha
 // The end of a parse is when a copy held from before would sit beside the new one.
 vm.runInContext('const realParse=parseEventsStream;let parses=0;parseEventsStream=async body=>{const parsed=await realParse(body);measure("end of parse "+(++parses));return parsed;};',shared);
 const env={EVENTS_URL:'https://x.test/events.json',EVENTS_LITE_URL:'https://x.test/events-lite.json',ALLOWED_ORIGIN:'https://x.test'};
-const WATCH_TEXT='const realStringify=JSON.stringify;globalThis.largestText=0;JSON.stringify=function(...args){const text=realStringify.apply(this,args);largestText=Math.max(largestText,text?.length||0);return text;};';
+// The list goes through the real route: anything there that buffers or clones the body counts.
 async function list(){
- const text=fs.readFileSync('cloudflare-worker/database-query.js','utf8');
- const names=text.match(/^import\s*\{([\s\S]*?)\}\s*from\s*"\.\/shared.js"/m)[1].split(',').map(name=>name.trim()).filter(Boolean);
- const imported=Object.fromEntries(names.map(name=>[name,vm.runInContext(name,shared)]));
- const streamed=imported.jsonStreamResponse;
- imported.jsonStreamResponse=(...args)=>{measure('selected');return streamed(...args);};
- const context=vm.createContext({...imported,Intl,console,isAllowedUser:()=>true,gateCall:async()=>({ok:true,json:async()=>({username:'group-p-1'})})});
- vm.runInContext(strip(text),context);
- vm.runInContext(WATCH_TEXT,context);
- vm.runInContext(WATCH_TEXT,shared);
- const request={json:async()=>({user_id:'group-p-1',period_days:180}),headers:new Headers({'X-Session-Token':'s'})};
- const response=await context.handleDatabaseEvents(request,env);
+ globalThis.fetch=fetchFile;
+ const realStringify=JSON.stringify;
+ let largestText=0;
+ JSON.stringify=function(...args){const text=realStringify.apply(this,args);largestText=Math.max(largestText,text?.length||0);return text;};
+ // Making the streamed Response is the handler's last act: its selection is still in the frame.
+ const RealResponse=Response;
+ globalThis.Response=class extends RealResponse{constructor(body,init){if(body instanceof ReadableStream)measure('selected');super(body,init);}};
+ const gate={fetch:async url=>Response.json(new URL(url).pathname==='/session-get'?{username:'analyst'}:{ok:true})};
+ const {default:worker}=await import(pathToFileURL(path.resolve('cloudflare-worker/index.js')).href);
+ const response=await worker.fetch(new Request('https://x.test/database-events',{method:'POST',headers:{'X-Session-Token':'s'},body:JSON.stringify({user_id:'analyst',period_days:180})}),
+  {...env,AUTH_USERS_JSON:JSON.stringify({analyst:'a'.repeat(64)}),REPORT_GATE:{idFromName:()=>'global',get:()=>gate}},{waitUntil(){}});
  if(response.status!==200)throw new Error('status '+response.status);
- measure('handler returned');
+ measure('route returned');
  const reader=response.body.getReader();
  let head='',sent=0,batches=0,largestChunk=0;
  for(;;){
@@ -538,7 +558,6 @@ async function list(){
   if(++batches%8===0)measure('sent',sent);
  }
  measure('all sent',sent);
- const largestText=Math.max(vm.runInContext('largestText',context),vm.runInContext('largestText',shared));
  return {count:Number(head.match(/"database_total":(\d+)/)[1]),sent,largestChunk,largestText};
 }
 async function read(){
@@ -604,6 +623,7 @@ test(`a version refresh stays under ${READ_BUDGET_MB} MB: it never holds two par
 test(`the Database list, the heaviest caller, stays under ${LIST_BUDGET_MB} MB and lets records go as it sends`,()=>{
  const {count,peak,trail,stages,sent,largestChunk,largestText}=liveBytes(plateau(),'list');
  assert.equal(count,PLATEAU_EVENTS);
+ assert.equal(stages[0].stage,'selected',trail);
  assert.ok(sent>30e6,`${sent} bytes is not the whole list`);
  assert.ok(peak<LIST_BUDGET_MB,trail);
  assert.ok(largestChunk<LIST_PIECE_LIMIT,`${largestChunk} bytes in one batch`);
