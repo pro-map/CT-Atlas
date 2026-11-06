@@ -29,7 +29,8 @@ const MESSAGE_MAX = 120;
 const MESSAGE_INPUT_MAX = 2000;
 const REDACTED = "[redacted]";
 const URL_RE = /\b[a-z][a-z0-9+.-]*:\/\/\S+/gi;
-const HOST_RE = /\b(?:[a-z0-9-]+\.)+(?:com|net|org|io|info|dev|app)\b(?:[/?#]\S*)?/gi;
+// A last label that opens with a letter keeps "v1.2" and "3.5 per sec" out of it.
+const HOST_RE = /\b(?:(?:[a-z0-9-]+\.)+[a-z][a-z0-9-]*[a-z0-9]|(?:\d{1,3}\.){3}\d{1,3})\b(?::\d+)?(?:[/?#]\S*)?/gi;
 const HEADER_RE = /\b(?:(?:[a-z0-9]+-)+[a-z0-9]+|api[-_ ]?key|token|secret|password|authorization|cookie|host|accept|origin|referer|server|via)["']?\s*[:=]\s*["']?(?:bearer\s+)?[^\s"',;}]+/gi;
 const QUERY_RE = /[?&]?\b[\w.%-]+=[^\s&]*(?:&[\w.%-]+=[^\s&]*)*/g;
 const LONG_TOKEN_RE = /[A-Za-z0-9_+/=%-]{20,}/g;
@@ -39,6 +40,9 @@ const LONG_TOKEN_RE = /[A-Za-z0-9_+/=%-]{20,}/g;
 const AUTH_RE = /(?:invalid|missing)\b.{0,12}api[- _]?key|api[- _]?key\s+(?:not exists?|does not exist|is (?:invalid|missing|required))|unauthori[sz]ed/i;
 const PLAN_RE = /free api access is not supported|not supported for this chain|upgrade your api plan|api pro endpoint/i;
 const RATE_RE = /rate limit|limit reached|too many requests|frequency limit/i;
+// Etherscan's throttle on the calling IP, gone in 30 seconds. It says "invalid api key" but proves
+// nothing about this Worker's key, so it is tested before AUTH_RE.
+const IP_THROTTLE_RE = /too many invalid/i;
 
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -80,6 +84,7 @@ function providerText(payload) {
 
 function classifyAnswer(check, http, payload) {
   const text = providerText(payload);
+  if (IP_THROTTLE_RE.test(text)) return "rate_limited";
   if (AUTH_RE.test(text)) return "auth_failed";
   if (PLAN_RE.test(text)) return "plan_restricted";
   if (http === 429 || RATE_RE.test(text)) return "rate_limited";
@@ -244,13 +249,13 @@ function resetCryptoProviderStatusCache() {
 }
 
 // Never rejects: a slow or broken gate costs /health one short wait, then an honest empty answer.
+// gateRead, not gateCall: on a cold isolate gateCall can run the EU migration, which a public route
+// must not start. Before that migration the record is simply absent, the same as no run yet.
 async function readCryptoProviderStatus(env, now = Date.now()) {
   const cached = healthCache.value;
   if (cached && now - healthCache.at < (cached.read_failed ? HEALTH_RETRY_MS : HEALTH_CACHE_MS)) return cached;
   let value;
   try {
-// gateRead, not gateCall: on a cold isolate gateCall can run the EU migration, which a public route
-// must not start. Before that migration the record is simply absent, the same as no run yet.
     const stored = await gateJson(gateRead, env, "/crypto-provider-status-get", {}, HEALTH_READ_TIMEOUT_MS);
     const checkedAt = stored?.checked_at || null;
     value = { checked_at: checkedAt, stale: now - Date.parse(checkedAt) > STALE_AFTER_MS, providers: stored?.providers || {} };

@@ -143,7 +143,7 @@ const ETHERSCAN_ANSWERS=[
   ["the shared free pool, which also says upgrade","rate_limited",notok("Community Free API limit reached. Resets 2026-06-24 12:00:00 UTC. For higher, uninterrupted limits, please upgrade to API Pro: https://etherscan.io/apis")],
   ["Invalid API Key","auth_failed",notok("Invalid API Key")],
   ["Missing/Invalid API Key","auth_failed",notok("Missing/Invalid API Key")],
-  ["repeated bad keys, which is about the key and not the rate","auth_failed",notok("Too many invalid api key attempts, please try again later")],
+  ["the 30-second throttle on the IP after repeated bad keys, which proves nothing about this key","rate_limited",notok("Too many invalid api key attempts, please try again later")],
   ["status 1 that still reports a bad key","auth_failed",json({status:"1",message:"OK-Missing/Invalid API Key, rate limit of 1/5sec applied",result:"0"})],
   ["Free API access","plan_restricted",notok("Free API access is not supported for this chain. Please upgrade your api plan for full chain coverage. https://etherscan.io/apis")],
   ["a chain Etherscan no longer serves, which no plan fixes","unavailable",notok("Missing or unsupported chainid parameter (required for v2 api), please see chainlist for the list of supported chainids")],
@@ -263,6 +263,24 @@ test("the sanitiser removes URLs, query strings, headers and keys, however they 
     assert.equal(clean.includes(key.slice(0,12)),false,text);
     assert.equal(clean.includes(tron.slice(-12)),false,text);
   }
+});
+
+test("a URL with no scheme goes whatever its TLD, and so does an IP address",async()=>{
+  const {sanitizeProviderMessage}=await health;
+  assert.equal(sanitizeProviderMessage("see api.etherscan.xyz/v2/api and www.example.co.uk/path?x=1 and 10.0.0.1:8080/v1"),"see and and");
+  const hosts=["api.etherscan.xyz","api.etherscan.xyz:8443","api.etherscan.xyz:8443/v2/api","www.example.co.uk","www.example.co.uk/path?x=1","node.example.xn--p1ai/rpc","API.ETHERSCAN.XYZ/V2","10.0.0.1","10.0.0.1:8080","10.0.0.1:8080/v1","192.168.1.20/rpc#top"];
+  for(const host of hosts)assert.equal(sanitizeProviderMessage("failed at "+host+" today"),"failed at today",host);
+});
+
+test("broadening the host rule leaves a provider's ordinary sentences alone",async()=>{
+  const {sanitizeProviderMessage}=await health;
+  for(const text of [
+    "Max calls per sec rate limit reached (3/sec)",
+    "Community Free API limit reached. Resets 2026-06-24 12:00:00 UTC.",
+    "Error! Invalid address format.",
+    "Free API access is not supported for this chain. Please upgrade your api plan.",
+    "Rate 3.5 per second on v1.2, e.g. now"
+  ])assert.equal(sanitizeProviderMessage(text),text);
 });
 
 // The layers overlap on purpose, so each of these is a case only that layer can catch.

@@ -160,8 +160,8 @@ URL, query string, header or key, at most 120 characters.
 | `status` | Meaning |
 | --- | --- |
 | `ok` | The provider answered this key with real data. |
-| `rate_limited` | Over a per-second, daily or shared-pool limit. Usually passes by itself. |
-| `plan_restricted` | The key works, but its plan does not cover this chain. |
+| `rate_limited` | Over a per-second, daily or shared-pool limit, or a short throttle on the Worker's IP after invalid keys. Usually passes by itself. |
+| `plan_restricted` | This key's tier does not cover the chain. It says nothing about whether the key is valid: Etherscan answers the same to a key it does not know. Read `etherscan_ethereum` for that. |
 | `auth_failed` | The provider refused the key. |
 | `unavailable` | No usable answer: down, timed out, not JSON, or an unknown refusal. |
 | `not_configured` | No key in the Worker, so no call was made. |
