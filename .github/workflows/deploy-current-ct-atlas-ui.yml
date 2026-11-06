@@ -78,6 +78,11 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: "24"
+      # The composite sets it up too, but the Node suite runs python3 before that.
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
       - name: Validate updated labels
         shell: bash
         run: |
@@ -177,8 +182,8 @@ jobs:
           node --check pdf-export.js
           node --check crypto-launcher.js
       - name: Run the Node regression suite
-        # The map and Database logic inline in index.html is covered only here. A failure
-        # stops this deploy, not the Cloudflare mirror: it also deploys main on its own
+        # The map and Database logic inline in index.html is covered only by this Node suite.
+        # A failure stops this deploy, not the Cloudflare mirror: it also deploys main on its own
         # push trigger and after the other publishing workflows, the status refresh among them.
         run: node --test tests/*.test.cjs
       - name: Configure GitHub Pages

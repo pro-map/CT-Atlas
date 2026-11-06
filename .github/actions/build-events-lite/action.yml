@@ -10,7 +10,7 @@ description: >
 runs:
   using: composite
   steps:
-    # The deploy jobs set up no Python of their own, so ubuntu-latest would choose one
+    # Most deploy jobs set up no Python of their own, so ubuntu-latest would choose one
     # job by job. It stays set for the rest of the job: their verify steps use it too.
     - name: Set up Python
       uses: actions/setup-python@v6
