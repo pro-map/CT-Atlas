@@ -103,6 +103,53 @@ class CapitalPlaceholderTests(unittest.TestCase):
             self.assertIn("only as a placeholder", " ".join(instructions.split()))
 
 
+class WeeklyCoverageTests(unittest.TestCase):
+    def test_the_starved_day_of_5_november_is_found(self):
+        coverage = coverage_at(GENERATED, PUBLISHED_PER_DAY)
+        self.assertEqual(coverage["starved_days"], [{"date": "2026-11-05", "records": 7}])
+        self.assertEqual(coverage["typical_day"], 149)
+        self.assertEqual(coverage["records_published_per_day"]["2026-11-04"], 87)
+
+    def test_ordinary_days_are_not_a_starved_run(self):
+        # The same fortnight with 5 Nov as it would have been; weekends stay low.
+        self.assertEqual(coverage_at(GENERATED, {**PUBLISHED_PER_DAY, "2026-11-05": 141})["starved_days"], [])
+
+    def test_a_day_refilled_by_a_later_run_stops_counting(self):
+        later = GENERATED + timedelta(days=2)
+        per_day = {**PUBLISHED_PER_DAY, "2026-11-05": 120, "2026-11-06": 130, "2026-11-07": 110}
+        self.assertEqual(coverage_at(later, per_day)["starved_days"], [])
+
+    def test_the_day_in_progress_is_judged_on_what_has_passed(self):
+        before = {day: count for day, count in PUBLISHED_PER_DAY.items() if day < "2026-11-05"}
+        # 18:04 UTC on 5 Nov: 7 records and 32 reviews. The run of the day before
+        # had 38 at the same hour, a thin but working run that ended on 87.
+        starved = coverage_at(datetime(2026, 11, 5, 18, 4, tzinfo=timezone.utc), {**before, "2026-11-05": 7})
+        self.assertEqual(starved["starved_days"], [{"date": "2026-11-05", "records": 7}])
+        thin = coverage_at(datetime(2026, 11, 4, 18, 9, tzinfo=timezone.utc), {**before, "2026-11-04": 38})
+        self.assertEqual(thin["starved_days"], [])
+
+    def test_a_morning_run_says_nothing_about_a_day_barely_begun(self):
+        before = {day: count for day, count in PUBLISHED_PER_DAY.items() if day < "2026-11-02"}
+        self.assertEqual(coverage_at(datetime(2026, 11, 2, 7, 58, tzinfo=timezone.utc), before)["starved_days"], [])
+
+    def test_a_long_outage_does_not_become_the_norm(self):
+        days = sorted(PUBLISHED_PER_DAY)
+        per_day = {**PUBLISHED_PER_DAY, **{day: 7 for day in days[-8:]}}
+        self.assertEqual(len(coverage_at(GENERATED, per_day)["starved_days"]), 8)
+
+    def test_the_note_is_for_the_reader_and_stays_out_of_the_panel_headings(self):
+        coverage = coverage_at(GENERATED, PUBLISHED_PER_DAY)
+        note = collector._weekly_data_note(coverage, [{"location_precision": "country"}, {"location_precision": "city"}])
+        self.assertIn("Collection was incomplete on 05 Nov 2026 (7 records), against about 149 records", note)
+        self.assertIn("1 of the 2 records assessed give a country only", note)
+        for heading in collector.WEEKLY_REQUIRED_SECTIONS:
+            self.assertNotIn(heading, note.upper())
+
+    def test_no_note_when_nothing_needs_saying(self):
+        clean = {"starved_days": [], "typical_day": 149}
+        self.assertEqual(collector._weekly_data_note(clean, [{"location_precision": "city"}]), "")
+
+
 class WeeklyReportTests(unittest.TestCase):
     ANALYSIS = " ".join(collector.WEEKLY_REQUIRED_SECTIONS) + " " + "operational shift indicates a pattern of disruption. " * 150
 
@@ -129,6 +176,25 @@ class WeeklyReportTests(unittest.TestCase):
                              ("comparison_period_start", "23 Oct 2026"), ("comparison_period_end", "30 Oct 2026")):
             self.assertEqual(datetime.fromisoformat(weekly[field]).astimezone(collector.PARIS_TZ).strftime("%d %b %Y"), dates)
         self.assertIn("current_dates and comparison_dates", " ".join(collector.AI_WEEKLY_INSTRUCTIONS.split()))
+
+    def test_a_starved_period_is_flagged_to_the_model_and_to_the_reader(self):
+        weekly, payload = self.generate(records(PUBLISHED_PER_DAY))
+        self.assertEqual(payload["data_coverage"]["starved_days"], [{"date": "2026-11-05", "records": 7}])
+        self.assertIn("starved_days", collector.AI_WEEKLY_INSTRUCTIONS)
+        self.assertTrue(weekly["analysis"].startswith("DATA NOTE: Collection was incomplete on 05 Nov 2026"))
+        self.assertEqual(weekly["data_coverage"], payload["data_coverage"])
+
+    def test_the_note_leaves_the_assessment_intact(self):
+        weekly, _ = self.generate(records(PUBLISHED_PER_DAY))
+        note, assessment = weekly["analysis"].split("\n\n", 1)
+        self.assertEqual(assessment, collector.clean_text(self.ANALYSIS))
+        self.assertEqual(collector._weekly_analysis_quality_issue(weekly["analysis"]), "")
+        self.assertEqual(weekly["version"], "weekly-analysis-v2-analytical-synthesis")
+
+    def test_a_whole_fortnight_with_located_records_carries_no_note(self):
+        weekly, payload = self.generate(records({**PUBLISHED_PER_DAY, "2026-11-05": 141}))
+        self.assertEqual(payload["data_coverage"]["starved_days"], [])
+        self.assertTrue(weekly["analysis"].startswith("EXECUTIVE ASSESSMENT"))
 
 
 if __name__ == "__main__":

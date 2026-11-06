@@ -212,6 +212,9 @@ AI_WEEKLY_MAX_CURRENT_EVENTS = 70
 AI_WEEKLY_MAX_PREVIOUS_EVENTS = 70
 AI_WEEKLY_VERSION = "weekly-analysis-v2-analytical-synthesis"
 WEEKLY_REQUEST_FILE = "weekly-analysis-request.json"
+# A share of the fortnight's upper quartile. Normal days stayed above 45% of it
+# in every snapshot from 28 Oct to 5 Nov 2026; the starved 5 Nov was at 5%.
+WEEKLY_STARVED_DAY_SHARE = 0.25
 
 PARIS_TZ = ZoneInfo("Europe/Paris")
 
@@ -246,6 +249,13 @@ COMPARISON FRAME:
 - The first sentence of EXECUTIVE ASSESSMENT MUST state both date ranges,
   using current_dates and comparison_dates as written. Never guess or omit
   them.
+
+DATA COVERAGE:
+data_coverage gives the records published per day over both periods. A day in
+starved_days lost most of its collection: its activity is missing, not absent.
+When starved_days is not empty, say so in EXECUTIVE ASSESSMENT, name those
+days, and do not present a fall, a country dropping out or apparent stability
+as a finding when missing data could explain it.
 
 CORE ANALYTICAL RULE:
 Every substantive paragraph must answer at least one of these questions:
@@ -10038,6 +10048,70 @@ def _weekly_reporting_period(windows):
     }
 
 
+def _weekly_coverage(windows):
+    """
+    Records published per Paris day over both periods. A starved run leaves a
+    day far below the others, and a fall between the weeks then cannot be told
+    from missing data: the report of 5 Nov 2026 called the picture stable on
+    a day that held 7 records. Later runs refill a day, so only the file as it
+    stands counts. The first day is cut by the window. The day in progress is
+    judged on the part of it that has passed, once half of it has.
+    """
+    now = windows["now"].astimezone(PARIS_TZ)
+    today = now.date()
+    counts = Counter(
+        _weekly_event_time(event).astimezone(PARIS_TZ).date()
+        for event in windows["current"] + windows["previous"]
+    )
+
+    first_day = windows["previous_start"].astimezone(PARIS_TZ).date() + timedelta(days=1)
+    whole_days = [first_day + timedelta(days=offset) for offset in range((today - first_day).days)]
+
+    # The upper quartile, as a long outage would drag a median down with it.
+    typical_day = sorted(counts[day] for day in whole_days)[len(whole_days) * 3 // 4]
+    floor = typical_day * WEEKLY_STARVED_DAY_SHARE
+    starved = [day for day in whole_days if counts[day] < floor]
+
+    elapsed = (now.hour * 60 + now.minute) / 1440
+    if elapsed >= 0.5 and counts[today] < floor * elapsed:
+        starved.append(today)
+
+    return {
+        "records_published_per_day": {day.isoformat(): counts[day] for day in [*whole_days, today]},
+        "typical_day": typical_day,
+        "starved_days": [{"date": day.isoformat(), "records": counts[day]} for day in starved],
+    }
+
+
+def _weekly_data_note(coverage, sent_events):
+    """
+    Written here, not left to the model, so the reader always gets it. It sits
+    above the first heading, where the panel prints unsectioned text.
+    """
+    notes = []
+
+    if coverage["starved_days"]:
+        days = ", ".join(
+            f"{datetime.fromisoformat(row['date']):%d %b %Y} ({row['records']} records)"
+            for row in coverage["starved_days"]
+        )
+        notes.append(
+            f"Collection was incomplete on {days}, against about "
+            f"{coverage['typical_day']} records on a normal day, so a change "
+            "between the two periods may reflect missing data."
+        )
+
+    country_level = sum(row["location_precision"] == "country" for row in sent_events)
+    if country_level:
+        notes.append(
+            f"{country_level} of the {len(sent_events)} records assessed give "
+            "a country only: the capital marking them on the map is a "
+            "placeholder, not a reported location."
+        )
+
+    return "DATA NOTE: " + " ".join(notes) if notes else ""
+
+
 def _weekly_sunday_key(now_paris):
     return now_paris.date().isoformat()
 
@@ -10262,8 +10336,12 @@ def generate_weekly_analysis(events, existing_weekly=None):
         events
     )
 
+    coverage = _weekly_coverage(windows)
+    print(f"Starved days: {coverage['starved_days'] or 'none'}")
+
     payload = {
         "reporting_period": _weekly_reporting_period(windows),
+        "data_coverage": coverage,
         "current_period_stats":
             _weekly_stats(
                 current,
@@ -10415,6 +10493,10 @@ def generate_weekly_analysis(events, existing_weekly=None):
                     + quality_issue
                 )
 
+            data_note = _weekly_data_note(coverage, current_payload + previous_payload)
+            if data_note:
+                analysis = f"{data_note}\n\n{analysis}"
+
             weekly = {
                 "status":
                     "ok",
@@ -10464,6 +10546,8 @@ def generate_weekly_analysis(events, existing_weekly=None):
                     len(
                         previous
                     ),
+                "data_coverage":
+                    coverage,
             }
 
             print(
