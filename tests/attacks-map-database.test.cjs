@@ -60,14 +60,14 @@ test('the map and attack_points.py use the same attack rule',()=>{
 
 async function runLoader(responses){
   const c=vm.createContext({
-    window:{},Date,Number,Array,
+    window:{},Date,Number,Array,AbortController,setTimeout,clearTimeout,
     fetch:async url=>{
       const body=responses[url];
       if(body===undefined)return {ok:false,status:404,json:async()=>{throw new Error('404');}};
       return {ok:true,status:200,json:async()=>body};
     }
   });
-  vm.runInContext(retirementDataSource+extract('isMapAttackEvent')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 181;'+extract('readMapSnapshotResponse')+extract('loadMapDatabase'),c);
+  vm.runInContext(retirementDataSource+extract('isMapAttackEvent')+'const MAP_DOWNLOAD_STALL_MS = 30000;'+extract('guardMapDownload')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 181;'+extract('readMapSnapshotResponse')+extract('loadMapDatabase'),c);
   const data=await vm.runInContext('loadMapDatabase()',c);
   return {data:plain(data),source:c.window.eventsDataSource};
 }

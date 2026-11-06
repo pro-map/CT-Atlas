@@ -4437,6 +4437,17 @@ html, body {
     font-size: 6.4px;
     line-height: 1.2;
 }
+.map-retry-button {
+    margin: 2px 0 0;
+    padding: 2px 6px;
+    border: 1px solid #d8b164;
+    border-radius: 2px;
+    background: transparent;
+    color: #e1bf7b;
+    font: 700 8px Arial, sans-serif;
+    letter-spacing: .06em;
+    cursor: pointer;
+}
 #headerCasualties24 {
     column-gap: 4px !important;
     margin-top: 3px !important;
@@ -6892,13 +6903,46 @@ function removeRetiredJudicialData(data) {
     return result;
 }
 
+// A stalled connection never rejects by itself, so neither the fallbacks nor the
+// retry would run and the page stayed on "Loading database..." until reloaded. The
+// clock restarts on every chunk: it stops a silent server, not a slow link, which
+// needs minutes for the full file on a poor connection.
+const MAP_DOWNLOAD_STALL_MS = 30 * 1000;
+
+function guardMapDownload(start) {
+    const controller = new AbortController();
+    let timer = 0;
+    const alive = () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => controller.abort(), MAP_DOWNLOAD_STALL_MS);
+    };
+    const watch = response => {
+        alive();
+        if (!response.body || typeof TransformStream !== "function") return response;
+        return new Response(response.body.pipeThrough(new TransformStream({
+            transform(chunk, stream) {
+                alive();
+                stream.enqueue(chunk);
+            }
+        })), { status: response.status });
+    };
+    alive();
+    return start(controller.signal, watch).finally(() => clearTimeout(timer));
+}
+
+
 // The map reads events-lite.json: only the fields it uses (~64% smaller than events.json).
 // It is derived at publication time from the events.json being deployed, so it is never older
 // than it; if it is missing or unusable, fall back to the full file.
+// no-cache, not no-store: the browser revalidates on every load, so nothing stale is
+// shown, and an unchanged file costs a 304 instead of 3.8 MB.
 function loadEventsDatabase() {
 
-    return fetch(
-        "events-lite.json", { cache: "no-store" }
+    return guardMapDownload((signal, watch) => fetch(
+        "events-lite.json", { cache: "no-cache", signal }
+    )
+    .then(
+        watch
     )
     .then(
         response => {
@@ -6916,7 +6960,7 @@ function loadEventsDatabase() {
             return response.json();
 
         }
-    )
+    ))
     .then(
         data => {
 
@@ -6944,8 +6988,11 @@ function loadEventsDatabase() {
         }
     )
     .catch(
-        () => fetch(
-            "events.json", { cache: "no-store" }
+        () => guardMapDownload((signal, watch) => fetch(
+            "events.json", { cache: "no-cache", signal }
+        )
+        .then(
+            watch
         )
         .then(
             response => {
@@ -6966,7 +7013,7 @@ function loadEventsDatabase() {
                 return response.json();
 
             }
-        )
+        ))
     ).then(removeRetiredJudicialData);
 
 }
@@ -7005,9 +7052,9 @@ function eventMatchKey(event) {
 // day of slack between two publications (tools/build_events_map.py).
 const MAP_RECENT_EVENT_DAYS = 181;
 
-// The map's own file (events-map.json, built at publication time: attacks only,
-// ~1/4 of events-lite.json) or, if it is missing or unusable, the full database
-// reduced to the same shape here.
+// The map's own file (events-map.json, built at publication time: attacks, plus
+// the other categories of the last 181 days) or, if it is missing or unusable,
+// the full database reduced to the same shape here.
 // Keep a fingerprint of the received bytes before internal map keys are attached.
 function readMapSnapshotResponse(response) {
     if (typeof response.arrayBuffer !== "function" || !globalThis.crypto?.subtle) return response.json();
@@ -7024,11 +7071,12 @@ function readMapSnapshotResponse(response) {
 
 function loadMapDatabase() {
 
-    return fetch("events-map.json", { cache: "no-store" })
+    return guardMapDownload((signal, watch) => fetch("events-map.json", { cache: "no-cache", signal })
+    .then(watch)
     .then(response => {
         if (!response.ok) throw new Error("events-map.json unavailable");
         return readMapSnapshotResponse(response);
-    })
+    }))
     .then(data => {
         if (!data || !Array.isArray(data.events) || !Array.isArray(data.recent_events)) {
             throw new Error("events-map.json invalid");
@@ -7242,12 +7290,43 @@ function renderCollectionStatus(data) {
     }
 }
 
+// Written where it shows: in the header and the ticker. Phones hide the ticker.
+function renderMapLoadFailure() {
+    const retryButton = () => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "map-retry-button";
+        button.textContent = "RETRY";
+        button.addEventListener("click", () => startMapLoad());
+        return button;
+    };
+    document.getElementById("lastUpdated")?.replaceChildren("Database unavailable ", retryButton());
+    const row = document.createElement("li");
+    row.className = "ticker-empty";
+    row.append("The map data could not be loaded. ", retryButton());
+    document.getElementById("attackTickerList")?.replaceChildren(row);
+}
+
+let mapLoadFailed = false;
+let mapLoadPromise = null;
+
+function startMapLoad() {
+
+    if (mapLoadPromise) return mapLoadPromise;
+
+    const status = document.getElementById("lastUpdated");
+    if (status) status.textContent = "Loading database...";
+
+    mapLoadPromise =
+
 loadMapDatabase()
 
 .then(
     data => {
         renderCollectionStatus(data);
         applyMapDatabase(data);
+        mapLoadFailed = false;
+        clearMapRefreshBackoff();
     }
 )
 
@@ -7260,18 +7339,26 @@ loadMapDatabase()
         );
 
 
+        mapLoadFailed = true;
+
         renderCollectionStatus(null);
         const statusTitle = document.getElementById("collectionStatusTitle");
         if (statusTitle) statusTitle.textContent = "Update status unavailable";
 
-        document.getElementById(
-            "counter"
-        ).innerText =
-            "Database unavailable";
+        renderMapLoadFailure();
 
     }
 )
-.finally(() => { mapInitialLoadComplete = true; });
+.finally(() => {
+    mapInitialLoadComplete = true;
+    mapLoadPromise = null;
+});
+
+    return mapLoadPromise;
+
+}
+
+startMapLoad();
 
 
 
@@ -7283,6 +7370,26 @@ let mapPublicationSignature = "";
 let mapPublicationCheckedAt = 0;
 let mapPublicationPromise = null;
 const MAP_PUBLICATION_POLL_MS = 60 * 1000;
+
+// A disagreement a download cannot settle (the CDN caught between two files, a page
+// on a fallback) used to fetch 12 to 44 MB per tab every minute. The manifest stays
+// on its one-minute poll; only the map download waits.
+const MAP_REFRESH_BACKOFF_MS = [5, 15, 60].map(minutes => minutes * 60 * 1000);
+let mapRefreshFailures = 0;
+let mapRefreshRetryAt = 0;
+let mapRefreshFailedSignature = "";
+
+function deferMapRefresh(signature) {
+    mapRefreshFailedSignature = signature;
+    mapRefreshRetryAt = Date.now() + MAP_REFRESH_BACKOFF_MS[Math.min(mapRefreshFailures, MAP_REFRESH_BACKOFF_MS.length - 1)];
+    mapRefreshFailures += 1;
+}
+
+function clearMapRefreshBackoff() {
+    mapRefreshFailures = 0;
+    mapRefreshRetryAt = 0;
+    mapRefreshFailedSignature = "";
+}
 
 function applyMapDatabase(data) {
         for (const id of ['collectionQueryCount', 'healthQueryCount']) {
@@ -7399,6 +7506,16 @@ function applyMapDatabase(data) {
         }
 
 
+        else {
+
+            document.getElementById(
+                "lastUpdated"
+            ).innerText =
+                "Publication date not reported";
+
+        }
+
+
         refreshDashboard();
 
 }
@@ -7421,7 +7538,14 @@ function refreshMapPublication(force = false) {
         return Promise.resolve();
     }
     mapPublicationCheckedAt = Date.now();
+    // Nothing is on screen after a failed first load: start over, whatever the manifest says.
+    if (mapLoadFailed) {
+        if (!force && Date.now() < mapRefreshRetryAt) return Promise.resolve();
+        deferMapRefresh("");
+        return startMapLoad();
+    }
     const previousSource = window.eventsDataSource;
+    let downloading = "";
     mapPublicationPromise = fetch("publication-manifest.json", { cache: "no-store" })
         .then(response => {
             if (!response.ok) throw new Error("Publication manifest unavailable");
@@ -7441,18 +7565,30 @@ function refreshMapPublication(force = false) {
                 mapPublicationSignature = signature;
                 return;
             }
+            // A new publication can settle what the last one could not.
+            if (signature !== mapRefreshFailedSignature) clearMapRefreshBackoff();
+            else if (!force && Date.now() < mapRefreshRetryAt) return;
+            downloading = signature;
             const data = await loadMapDatabase();
-            if (!mapPublicationMatches(data, target)) {
+            // The manifest hashes events-map.json only: a fallback file can match its
+            // date but never its bytes, and retrying for that was the per-minute download.
+            const fallback = window.eventsDataSource !== "events-map.json";
+            const version = String(data.last_updated || data.updated_at || "");
+            if (fallback ? version !== target.last_updated : !mapPublicationMatches(data, target)) {
                 throw new Error("Published map and manifest are not yet synchronized");
             }
             if (chronologySelectedKeys.size) return;
-            renderCollectionStatus(data);
-            applyMapDatabase(data);
+            if (!fallback || version !== mapDatabaseVersion) {
+                renderCollectionStatus(data);
+                applyMapDatabase(data);
+            }
             mapPublicationSignature = signature;
+            clearMapRefreshBackoff();
         })
         .catch(error => {
             // Keep the last successful map throughout transient publication or network failures.
             window.eventsDataSource = previousSource;
+            if (downloading) deferMapRefresh(downloading);
             console.warn("Map refresh deferred:", error.message || error);
         })
         .finally(() => { mapPublicationPromise = null; });
