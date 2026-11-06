@@ -21,6 +21,20 @@ function extract(name){
 
 const phoneBlock=html.slice(html.indexOf("PORTRAIT PHONE"),html.indexOf("</style>",html.indexOf("PORTRAIT PHONE")));
 
+function phoneRule(name){
+  const media=phoneBlock.indexOf("@media (max-width: 640px)");
+  const start=phoneBlock.indexOf(name+" {",media);
+  assert.ok(start>media,name+" must be inside the phone rules");
+  return phoneBlock.slice(start,phoneBlock.indexOf("}",start));
+}
+
+// The dock's row above the home bar.
+function dockRow(){
+  const thin=html.slice(html.indexOf("Timeline is deliberately thin on phones."));
+  return {bottom:Number(thin.match(/bottom: calc\((\d+)px \+ env\(safe-area-inset-bottom, 0px\)\) !important;/)[1]),
+    height:Number(thin.match(/height: (\d+)px !important;/)[1])};
+}
+
 test("the phone rule comes after both !important desktop grids, so it wins",()=>{
   const grids=[...html.matchAll(/grid-template-columns: (?:250|230)px minmax\(0, 1fr\) !important;/g)];
   assert.equal(grids.length,2);
@@ -90,26 +104,37 @@ test("on a phone the bell stands beside the timeline, not on it, and the desktop
   assert.match(bell,/position:fixed;left:14px;bottom:14px;/,"the desktop position lives here, and stays");
   const size=Number(bell.match(/;width:(\d+)px/)[1]);
 
-  const media=phoneBlock.indexOf("@media (max-width: 640px)");
-  const phoneRule=name=>{
-    const start=phoneBlock.indexOf(name+" {",media);
-    assert.ok(start>media,name+" must be inside the phone rules");
-    return phoneBlock.slice(start,phoneBlock.indexOf("}",start));
-  };
   const dockLeft=Number(phoneRule("#timelineDock").match(/left: (\d+)px !important;/)[1]);
   const bellRule=phoneRule("#ctSoundEffects");
   const bellLeft=Number(bellRule.match(/left: calc\((\d+)px \+ env\(safe-area-inset-left, 0px\)\);/)[1]);
   assert.ok(bellLeft+size<dockLeft,"the bell must end before the dock starts");
 
   // The dock's row, including the iPhone home bar: the bell is fixed to the screen.
-  const thin=html.slice(html.indexOf("Timeline is deliberately thin on phones."));
-  const dockBottom=Number(thin.match(/bottom: calc\((\d+)px \+ env\(safe-area-inset-bottom, 0px\)\) !important;/)[1]);
-  const dockHeight=Number(thin.match(/height: (\d+)px !important;/)[1]);
+  const dock=dockRow();
   const bellBottom=Number(bellRule.match(/bottom: calc\((\d+)px \+ env\(safe-area-inset-bottom, 0px\)\);/)[1]);
-  assert.equal(bellBottom+size/2,dockBottom+dockHeight/2,"centred on the dock");
+  assert.equal(bellBottom+size/2,dock.bottom+dock.height/2,"centred on the dock");
+  assert.ok(size<dock.height,"so whatever clears the dock clears the bell");
 
   // Without !important the bell's rule wins only by coming after the shared stylesheet,
   // and the dock's only by coming after the thin-timeline rule.
   assert.ok(html.indexOf("workspace-ui.css")<html.indexOf("PORTRAIT PHONE"));
   assert.ok(html.indexOf("Timeline is deliberately thin on phones.")<html.indexOf("PORTRAIT PHONE"));
+});
+
+test("the attribution and the open panel rise with the timeline, or the home bar puts the bell on them",()=>{
+  // With a 34 px inset at 390x844 the bell lay on the attribution at 54 of 81 sampled points,
+  // and on Health Status at 28 with the panel at the end of its scroll, where nothing clears it.
+  const offset=(rule,pattern)=>{
+    const found=phoneRule(rule).match(pattern);
+    assert.ok(found,rule+" must follow env(safe-area-inset-bottom)");
+    return Number(found[1]);
+  };
+  const attribution=offset(".leaflet-bottom",/bottom: calc\((\d+)px \+ env\(safe-area-inset-bottom, 0px\)\);/);
+  const panelTop=offset("#sidebar",/top: (\d+)px !important;/);
+  const panelSpare=offset("#sidebar",/max-height: calc\(100% - (\d+)px - env\(safe-area-inset-bottom, 0px\)\) !important;/);
+
+  // All three stand on the same inset, so it drops out of the comparison.
+  const dock=dockRow(),dockTop=dock.bottom+dock.height;
+  assert.ok(attribution>=dockTop,"the attribution must end above the dock");
+  assert.ok(panelSpare-panelTop>=dockTop,"the open panel must end above the dock");
 });

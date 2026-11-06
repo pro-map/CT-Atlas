@@ -4389,7 +4389,7 @@ html, body {
         top: 47px !important;
         z-index: 1001 !important;
         width: min(84vw, 320px) !important;
-        max-height: calc(100% - 106px) !important;
+        max-height: calc(100% - 106px - env(safe-area-inset-bottom, 0px)) !important;
     }
 
     body:not(.sidebar-open) #sidebar {
@@ -4398,11 +4398,12 @@ html, body {
 
     /* Above the timeline, which it would otherwise cover. */
     .leaflet-bottom {
-        bottom: 58px;
+        bottom: calc(58px + env(safe-area-inset-bottom, 0px));
     }
 
     /* The bell is fixed to the screen's bottom left on every page. Beside the
-       timeline it covers neither that nor the attribution and panel above it. */
+       timeline it covers neither that nor the attribution and panel above it,
+       which is why those two rise with the home bar as the timeline does. */
     #timelineDock {
         left: 45px !important;
     }
