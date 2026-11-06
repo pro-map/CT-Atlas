@@ -5500,12 +5500,12 @@ Visible rate
         <div id="attackTickerViewport">
             <ul id="attackTickerList"></ul>
         </div>
-        <div id="attackTickerFooter">Executed, attempted and foiled attacks. Other categories: SHOW ON MAP; full database in the DATABASE panel.</div>
+        <div id="attackTickerFooter">Executed, attempted and foiled attacks, in Paris time. Other categories: SHOW ON MAP; full database in the DATABASE panel.</div>
     </aside>
 
     <div id="timelineDock">
         <div id="timelineHeader">
-            <span>Attacks over time · 30 days</span>
+            <span>Attacks over time · 30 days · Paris days</span>
             <strong id="timelineTodayLabel">Today —</strong>
         </div>
         <div id="timelineBars"></div>
@@ -8323,6 +8323,13 @@ function updateKPIs() {
 
 
 
+// Shared: this runs per marker and per list row, and every date on the page is Paris
+// time and says so, like the header. A viewer's own zone made the same record read
+// differently from the Paris day it is counted under.
+const POPUP_DATE_FORMAT = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Paris" });
+const EVENT_TIME_FORMAT = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Paris", day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+
+
 function createMarker(
     event
 ) {
@@ -8418,15 +8425,21 @@ function createMarker(
 
 
     if (
-        event.published
+        Number.isFinite(
+            Date.parse(
+                event.published
+            )
+        )
     ) {
 
         dateText =
-            new Date(
-                event.published
-            ).toLocaleDateString(
-                "en-GB"
-            );
+            POPUP_DATE_FORMAT.format(
+                new Date(
+                    event.published
+                )
+            )
+            +
+            " Paris";
 
     }
 
@@ -8605,7 +8618,9 @@ function createMarker(
 
         &&
 
-        event.url
+        safeHttpUrl(
+            event.url
+        )
     ) {
 
         sourceBlock = `
@@ -8615,7 +8630,7 @@ function createMarker(
                 Source:
 
                 <a
-                    href="${escapeHtml(event.url)}"
+                    href="${escapeHtml(safeHttpUrl(event.url))}"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -9762,7 +9777,11 @@ function renderChronology() {
 
         +
 
-        databaseFiltersText();
+        databaseFiltersText()
+
+        +
+
+        " · times in Paris time";
 
 
     list.innerHTML =
@@ -9958,23 +9977,8 @@ function renderChronology() {
 
                 ?
 
-                published.toLocaleString(
-
-                    "en-GB",
-
-                    {
-                        day:
-                            "2-digit",
-                        month:
-                            "short",
-                        year:
-                            "numeric",
-                        hour:
-                            "2-digit",
-                        minute:
-                            "2-digit"
-                    }
-
+                EVENT_TIME_FORMAT.format(
+                    published
                 )
 
                 :
@@ -12152,6 +12156,10 @@ function updateHeaderCasualties24() {
 }
 
 
+// Timeline dates are calendar days held at noon UTC (shiftCalendarDateStringToDate).
+const TIMELINE_DAY_FORMAT = new Intl.DateTimeFormat("en-GB", { timeZone: "UTC", day: "2-digit", month: "short" });
+
+
 function updateCommandCenterPanels() {
 
     updateHeaderCasualties24();
@@ -12435,8 +12443,43 @@ function updateCommandCenterPanels() {
         timelineBars
     ) {
 
-        const now =
-            new Date();
+        // Paris days, like the header: the viewer's own days put the last bar of
+        // a reader in Auckland a day ahead of the data.
+        const today =
+            parisCalendarDateString(
+                new Date()
+            );
+
+        const countsByDay =
+            new Map();
+
+        allEvents.forEach(
+            event => {
+
+                const day =
+                    parisCalendarDateString(
+                        new Date(
+                            event.published
+                            ||
+                            ""
+                        )
+                    );
+
+                countsByDay.set(
+                    day,
+                    (
+                        countsByDay.get(
+                            day
+                        )
+                        ||
+                        0
+                    )
+                    +
+                    1
+                );
+
+            }
+        );
 
         const counts =
             [];
@@ -12447,64 +12490,23 @@ function updateCommandCenterPanels() {
             offset--
         ) {
 
-            const dayStart =
-                new Date(
-                    now
+            const day =
+                shiftCalendarDateString(
+                    today,
+                    -offset
                 );
-
-            dayStart.setHours(
-                0,
-                0,
-                0,
-                0
-            );
-
-            dayStart.setDate(
-                dayStart.getDate()
-                -
-                offset
-            );
-
-            const dayEnd =
-                new Date(
-                    dayStart
-                );
-
-            dayEnd.setDate(
-                dayEnd.getDate()
-                +
-                1
-            );
-
-            const count =
-                allEvents.filter(
-                    event => {
-
-                        if (
-                            !event.published
-                        ) {
-                            return false;
-                        }
-
-                        const published =
-                            new Date(
-                                event.published
-                            );
-
-                        return (
-                            published >= dayStart
-                            &&
-                            published < dayEnd
-                        );
-
-                    }
-                ).length;
 
             counts.push({
                 count:
-                    count,
+                    countsByDay.get(
+                        day
+                    )
+                    ||
+                    0,
                 date:
-                    dayStart
+                    shiftCalendarDateStringToDate(
+                        day
+                    )
             });
 
         }
@@ -12551,14 +12553,8 @@ function updateCommandCenterPanels() {
                         "";
 
                     const label =
-                        item.date.toLocaleDateString(
-                            "en-GB",
-                            {
-                                day:
-                                    "2-digit",
-                                month:
-                                    "short"
-                            }
+                        TIMELINE_DAY_FORMAT.format(
+                            item.date
                         );
 
                     return `
@@ -12592,16 +12588,10 @@ function updateCommandCenterPanels() {
 
         setText(
             "timelineStartLabel",
-            counts[
-                0
-            ].date.toLocaleDateString(
-                "en-GB",
-                {
-                    day:
-                        "2-digit",
-                    month:
-                        "short"
-                }
+            TIMELINE_DAY_FORMAT.format(
+                counts[
+                    0
+                ].date
             )
         );
 
@@ -13812,7 +13802,7 @@ function reportSourcesHtml(sources, grounding) {
                         <div class="deep-evidence-title">${escapeHtml(item.title || "")}</div>
                         <div class="deep-evidence-meta">${escapeHtml(dateLabel)}${item.country ? " · " + escapeHtml(item.country) : ""}</div>
                         <div class="deep-evidence-links">
-                            ${item.url ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">OPEN ARTICLE</a>` : ""}
+                            ${safeHttpUrl(item.url) ? `<a href="${escapeHtml(safeHttpUrl(item.url))}" target="_blank" rel="noopener noreferrer">OPEN ARTICLE</a>` : ""}
                         </div>
                     </article>`;
 
@@ -14188,6 +14178,8 @@ async function downloadGeneratedReportPdf() {
     }
 }
 
+// The report's periods are UTC, and its text is written from them: on a report made
+// late in the evening a Paris date put the panel a day after its own text.
 function formatWeeklyDate(
     value
 ) {
@@ -14209,7 +14201,7 @@ function formatWeeklyDate(
         "en-GB",
         {
             timeZone:
-                "Europe/Paris",
+                "UTC",
             day:
                 "2-digit",
             month:
@@ -14299,7 +14291,9 @@ function renderWeeklyAnalysisPanel() {
         +
         formatTrendGeneratedAt(
             weeklyAnalysisData.generated_at
-        );
+        )
+        +
+        " Paris";
 
     const rawAnalysis =
         weeklyAnalysisData.analysis
@@ -15018,7 +15012,7 @@ function showDatabaseEventCard(event) {
 
     const published = event.published ? new Date(event.published) : null;
     const dateText = published && !isNaN(published.getTime())
-        ? published.toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })
+        ? EVENT_TIME_FORMAT.format(published) + " Paris"
         : "Unknown date";
     const url = safeHttpUrl(event.url);
 
@@ -15052,7 +15046,7 @@ function closeDatabaseEventCard() {
     panel.setAttribute("aria-hidden", "true");
 }
 
-const TICKER_TIME_FORMAT = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+const TICKER_TIME_FORMAT = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Paris", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
 
 // Rolling windows follow the clock and the data stops at the last publication, so
 // "last 24h" shrinks towards zero between runs and reads like a quiet day.
@@ -15182,7 +15176,7 @@ async function exportDatabaseMapJpeg(events, button) {
             <div class="database-map-export-title">
                 <strong>CT ATLAS · DATABASE HEAT MAP</strong>
                 <span>${escapeHtml(databaseFiltersText())}</span>
-                <span>${located.length.toLocaleString("en-GB")} located event${located.length === 1 ? "" : "s"}${located.length < events.length ? " of " + events.length.toLocaleString("en-GB") + " selected" : ""} · exported ${escapeHtml(new Date().toLocaleString("en-GB"))}</span>
+                <span>${located.length.toLocaleString("en-GB")} located event${located.length === 1 ? "" : "s"}${located.length < events.length ? " of " + events.length.toLocaleString("en-GB") + " selected" : ""} · exported ${escapeHtml(collectionStatusDate(Date.now()))}</span>
             </div>
             <div class="database-map-export-legend">Heat = concentration of the selected events · dots = individual events${located.length > MAX_EXPORT_MAP_DOTS ? " (the first " + MAX_EXPORT_MAP_DOTS.toLocaleString("en-GB") + " only; the heat covers all)" : ""} · open-source data, unverified</div>
         `;
@@ -15221,7 +15215,7 @@ async function exportDatabaseMapJpeg(events, button) {
                 located.map(event => [
                     Number(event.latitude),
                     Number(event.longitude),
-                    event.location_precision === "country" ? 0.4 : 1
+                    event.location_precision === "country_capital" ? 0.4 : 1
                 ]),
                 { radius: 28, blur: 22, maxZoom: 7, minOpacity: 0.35 }
             ).addTo(exportMap);
@@ -15548,6 +15542,11 @@ document.getElementById(
 );
 
 
+// At six months a render is 1.2-1.5 s of blocked page: once per pause, not per key.
+const CHRONOLOGY_SEARCH_DELAY_MS = 200;
+
+let chronologySearchTimer = null;
+
 document.getElementById(
     "chronologySearch"
 ).addEventListener(
@@ -15562,7 +15561,16 @@ document.getElementById(
             .toLowerCase();
 
 
-        renderChronology();
+        clearTimeout(
+            chronologySearchTimer
+        );
+
+
+        chronologySearchTimer =
+            setTimeout(
+                renderChronology,
+                CHRONOLOGY_SEARCH_DELAY_MS
+            );
 
     }
 
