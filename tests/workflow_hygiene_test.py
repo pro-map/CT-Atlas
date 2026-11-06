@@ -1,9 +1,12 @@
 """CI gates in front of the scheduled collection, and no workflow left pointing
 at a deleted script. Reads the workflow files only; nothing is dispatched."""
 import ast
+import json
 import os
 import re
 import subprocess
+import sys
+import tempfile
 import textwrap
 import unittest
 from pathlib import Path
@@ -134,6 +137,84 @@ class CollectionFailFastTests(unittest.TestCase):
 def job(source, name):
     block = source.split(f"\n  {name}:\n", 1)[1]
     return re.split(r"(?m)^  \S", block, 1)[0]
+
+
+class CheckpointSurvivalTests(unittest.TestCase):
+    """The commit step's real Python block, in a throwaway Git repository."""
+
+    def setUp(self):
+        self.source = read("update-map.yml")
+        update = job(self.source, "update")
+        self.step = next(step for step in steps(update) if step_name(step) == "Commit database and checkpoints safely")
+        self.script = textwrap.dedent(self.step.split("python - <<'PY'\n", 1)[1].split("\n          PY\n", 1)[0])
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        self.root = Path(folder.name)
+        self.refusal = self.root.parent / (self.root.name + "-refusal.txt")
+        self.addCleanup(lambda: self.refusal.unlink(missing_ok=True))
+        self.git("init", "--quiet")
+        self.git("config", "user.email", "test@example.test")
+        self.git("config", "user.name", "Test")
+        self.write(cache=0, queue=["reviewed", "waiting"], events=[])
+        self.git("add", ".")
+        self.git("commit", "--quiet", "-m", "Published snapshot")
+
+    def git(self, *args):
+        return subprocess.run(["git", *args], cwd=self.root, check=True, capture_output=True, text=True).stdout
+
+    def write(self, *, cache, queue, events):
+        (self.root / "ai_article_selection_cache.json").write_text(json.dumps(
+            {"items": {}, "selection_quota_usage": {"calls": cache}}), encoding="utf-8")
+        (self.root / "daily_candidate_queue.json").write_text(json.dumps(
+            {"version": 1, "events": [{"id": key} for key in queue]}), encoding="utf-8")
+        (self.root / "events.json").write_text(json.dumps(
+            {"events": [{"id": key} for key in events], "collection_status": {"status": "partial"}}), encoding="utf-8")
+
+    def commit_step(self, *, collect="success", reconcile="success", audit="success", status="success"):
+        # After the run: 30 calls spent, "reviewed" published and out of the queue.
+        self.write(cache=30, queue=["waiting"], events=["reviewed"])
+        result = subprocess.run([sys.executable, "-c", self.script], cwd=self.root, capture_output=True, text=True,
+                                env={**os.environ, "COLLECT_OUTCOME": collect, "RECONCILE_OUTCOME": reconcile,
+                                     "AUDIT_OUTCOME": audit, "STATUS_OUTCOME": status, "REFUSAL_FILE": str(self.refusal)})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return set(self.git("diff", "--cached", "--name-only").split()), \
+            self.refusal.read_text(encoding="utf-8") if self.refusal.exists() else None
+
+    def test_a_failed_geolocation_no_longer_skips_reconciliation(self):
+        # The implicit success() skipped this step after a geolocation crash, and
+        # the commit then refused the run: up to 55 calls of reviews, the queue
+        # and the ledger were lost, so the next run overspent the daily cap.
+        update = job(self.source, "update")
+        step = next(step for step in steps(update) if step_name(step).startswith("Reconcile validated"))
+        self.assertIn("if: ${{ !cancelled() && steps.collect.outcome == 'success' }}", step)
+
+    def test_a_run_whose_geolocation_crashed_publishes_like_any_other(self):
+        staged, refusal = self.commit_step()
+        self.assertIsNone(refusal)
+        self.assertEqual(staged, {"ai_article_selection_cache.json", "daily_candidate_queue.json", "events.json"})
+
+    def test_a_refused_publication_keeps_the_ledger_and_the_reviews(self):
+        for failure in ({"reconcile": "failure"}, {"reconcile": "skipped"}, {"audit": "failure"}, {"status": "failure"}):
+            with self.subTest(failure=failure):
+                self.git("reset", "--quiet", "--hard")
+                self.refusal.unlink(missing_ok=True)
+                staged, refusal = self.commit_step(**failure)
+                self.assertTrue(refusal)
+                self.assertEqual(staged, {"ai_article_selection_cache.json"},
+                                 "this queue lost the reviewed articles the refused database carries")
+
+    def test_a_failed_collection_keeps_its_queue_too(self):
+        # Its queue was saved before any review, so nothing can be lost by it.
+        staged, refusal = self.commit_step(collect="failure", audit="failure")
+        self.assertTrue(refusal)
+        self.assertEqual(staged, {"ai_article_selection_cache.json", "daily_candidate_queue.json"})
+
+    def test_the_refused_checkpoint_is_pushed_and_the_step_still_fails(self):
+        self.assertIn('git commit -m "Keep the AI checkpoint of a run that could not publish"', self.step)
+        self.assertIn("git checkout -- .", self.step, "git rebase refuses a dirty worktree")
+        finish = self.step.split("finish() {", 1)[1].split("\n          }\n", 1)[0]
+        self.assertIn('[ -s "$REFUSAL_FILE" ]', finish)
+        self.assertIn("exit 1", finish)
 
 
 class AutomaticRecoveryTests(unittest.TestCase):
