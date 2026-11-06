@@ -2,8 +2,8 @@ name: Retire Social and Facial cloud services
 
 # One-shot, removed by the next commit once it has run. The owner retired the
 # Social, Dark Web and Facial tools on 2026-11-06: this stops their two public
-# Cloud Run services and removes the Worker secrets only they used. Stateless
-# compute and configuration only: no stored data is touched.
+# Cloud Run services and deletes the images they ran. Stateless compute only:
+# no stored data and no secret is touched.
 on:
   push:
     branches: [main]
@@ -18,19 +18,11 @@ jobs:
   retire:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    concurrency:
-      group: ct-atlas-shared-worker-deployment
-      queue: max
-      cancel-in-progress: false
     env:
       GCP_PROJECT_ID: ct-atlas
       GCP_REGION: ${{ vars.GCP_REGION || 'europe-west1' }}
       ARTIFACT_REPOSITORY: ct-atlas-agents
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
     steps:
-      - uses: actions/checkout@v6
-
       - uses: google-github-actions/auth@v3
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
@@ -63,21 +55,5 @@ jobs:
               echo "::notice title=Retired::Images of $package deleted"
             else
               echo "::warning title=Retire images::Could not delete the images of $package"
-            fi
-          done
-
-      - name: Remove the Worker secrets only these tools used
-        shell: bash
-        run: |
-          set -uo pipefail
-          for name in SOCMINT_AGENT_URL SOCMINT_AGENT_SHARED_SECRET BRAVE_SEARCH_API_KEY \
-                      VISUAL_INTEL_URL VISUAL_INTEL_SHARED_SECRET DARKWEB_INGEST_TOKEN \
-                      DARKWEB_ENRICH_DAILY DARKWEB_GEMINI_MODEL DARKWEB_GEMINI_MODELS \
-                      DARKWEB_TRANSLATION_PROVIDER DARKWEB_EXTERNAL_AI_APPROVED \
-                      GEMINI_SOCMINT_MODEL GEMINI_SOCMINT_SEARCH_MODEL; do
-            if printf 'y\n' | python3 tools/wrangler_retry.py secret delete "$name" --config cloudflare-worker/wrangler.toml; then
-              echo "::notice title=Retired::Worker secret $name removed"
-            else
-              echo "$name was not a Worker secret, or was already gone."
             fi
           done
