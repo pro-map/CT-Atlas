@@ -242,9 +242,11 @@ test("a busy Bitcoin hot wallet stays cheap to assess: this runs on every search
   });
   const analysis={chain:"bitcoin",kind:"address",query:"bc1qseed",transactions:rows,sanctions_screening:{status:"ok",hit:false,counterparty_matches:[]},coverage:{complete:false}};
   assessWallet(analysis);
-  const before=performance.now();
+  // CPU time: other test files run in parallel and stretch wall-clock time.
+  const before=process.cpuUsage();
   assessWallet(analysis);
-  assert.ok(performance.now()-before<1500,"this took 3.3 s before the window was counted incrementally");
+  const {user,system}=process.cpuUsage(before);
+  assert.ok((user+system)/1000<1500,"this took 3.3 s before the window was counted incrementally");
 });
 
 test("the stablecoin allow-list matches by contract, never by symbol",async()=>{

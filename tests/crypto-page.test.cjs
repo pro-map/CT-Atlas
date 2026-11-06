@@ -540,9 +540,11 @@ test("PEEL_CHAIN ends in bounded time on a dense trace",()=>{
   };
   h.api.seed(wallet(ring[0],rowsFor(0)));
   for(let i=1;i<ring.length;i++)h.api.addTrace(ring[i],wallet(ring[i],rowsFor(i)),1);
-  const started=Date.now();
+  // CPU time: other test files run in parallel and stretch wall-clock time.
+  const started=process.cpuUsage();
   h.api.peelChainFinding();
-  assert.ok(Date.now()-started<1000,"it runs on every repaint, so the search has a step budget");
+  const {user,system}=process.cpuUsage(started);
+  assert.ok((user+system)/1000<1000,"it runs on every repaint, so the search has a step budget");
 });
 
 // ---------------------------------------------------------------- ONE_HOP_EXPOSURE
