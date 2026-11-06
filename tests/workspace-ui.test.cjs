@@ -69,6 +69,16 @@ test('the README waits behind a native button: closed by default, keyboard-opera
  assert.doesNotMatch(readme,/facial|dark web|social|socmint|IP location|IP intelligence/i,'no wording about a retired tool');
  assert.ok(readme.includes('Coverage may be incomplete or outdated. Cryptocurrency links do not establish identity, ownership or criminal involvement.'));
 });
+test('the news says the other workspaces are being renovated, and leaves the earlier items as they were',()=>{
+ const main=fs.readFileSync('main.html','utf8');
+ const start=main.indexOf('<ul class="hub-updates-list">');
+ const items=[...main.slice(start,main.indexOf('</ul>',start)).matchAll(/<li[^>]*>.*?<\/li>/g)].map(x=>x[0]);
+ assert.equal(items.length,3);
+ assert.match(items[0],/^<li><strong>Daily updates:<\/strong> ChemEx, RadNuc and Bio are included alongside the other categories\.<\/li>$/);
+ assert.match(items[1],/^<li class="hub-updates-pending"><strong>Bio:<\/strong> Daily collection includes relevant hoaxes,.*All historical backfills have been stopped\.<\/li>$/);
+ assert.equal(items[2],'<li class="hub-updates-pending"><strong>Other workspaces:</strong> currently being renovated, they will be back very soon.</li>');
+ assert.match(main,/<time class="hub-updates-time" datetime="2026-11-06">6 November 2026<\/time>/);
+});
 test('hub grid shows two equal columns, then one: no empty column at any width',()=>{
  const main=fs.readFileSync('main.html','utf8');
  assert.match(main,/\.hub-grid\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\);gap:12px\}/);
