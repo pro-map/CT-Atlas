@@ -119,7 +119,7 @@ def begin_status(now, previous_published=None):
             "maintenance": deepcopy(unknown), "source": {}, "reasons": []}
 
 
-def finish_status(status, telemetry, google, gdelt, now, recent_days=3):
+def finish_status(status, telemetry, google, gdelt, now, recent_days=3, source_failure=None):
     result = deepcopy(status)
     lanes = telemetry.get("lanes") or {}
     for lane in ("recent", "backlog", "maintenance"):
@@ -129,14 +129,16 @@ def finish_status(status, telemetry, google, gdelt, now, recent_days=3):
                             window_end=now.isoformat())
     source_errors = int(google.get("failed", 0)) + int(gdelt.get("failed", 0))
     result["source"] = {"google": dict(google), "gdelt": dict(gdelt), "errors": source_errors,
-                        "status": "partial" if source_errors else "complete"}
+                        "status": "failed" if source_failure else "partial" if source_errors else "complete"}
+    if source_failure:
+        result["source"]["failure"] = source_failure
     reasons = list(telemetry.get("reasons") or [])
     for lane in ("recent", "backlog", "maintenance"):
         if result[lane].get("pending", 0):
             reason = f"{lane}_pending"
             if reason not in reasons:
                 reasons.append(reason)
-    if source_errors:
+    if source_errors or source_failure:
         reasons.append("source_errors")
     result["reasons"] = list(dict.fromkeys(reasons))
     result["budgets"] = deepcopy(telemetry.get("budgets") or {})

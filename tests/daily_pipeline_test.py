@@ -173,6 +173,56 @@ class DailyPipelineTests(unittest.TestCase):
         self.assertEqual([row["id"] for row in snapshots[0]], ["new", "old"])
         self.assertEqual(snapshots[0], snapshots[-1], "Unreviewed rows remain durable.")
 
+    def run_main_with_queue(self, collect_all):
+        """collector.main() over one queued article, every provider call stubbed."""
+        waiting = {**article("waiting"), "published": (datetime.now(timezone.utc)-timedelta(days=1)).isoformat()}
+        reviewed, published = [], []
+        def select(rows, lane=None):
+            reviewed.extend((lane, row["id"]) for row in rows)
+            return []
+        patches = {
+            "load_existing_weekly_analysis": lambda: {}, "load_existing": lambda: [],
+            "load_database_strict": lambda: {"events": [], "last_updated": "previous"},
+            "collect_all": collect_all, "deduplicate_events": lambda rows: rows,
+            "ai_select_events": select, "deduplicate_incremental": lambda old, new: old,
+            "prune_old": lambda rows, aged=None: rows, "archive_aged_out_events": lambda rows: None,
+            "load_incident_state": lambda: {}, "consolidate_incidents": lambda rows, state: (rows, {}),
+            "save_incident_state": lambda *args: None, "generate_24h_trend_summary": lambda rows: {},
+            "generate_weekly_analysis": lambda rows, **kwargs: {},
+            "save_database": lambda *args, **kwargs: published.append(args),
+            "load_selection_cache": lambda: {"items": {}}, "atomic_json_write": lambda *args: None,
+        }
+        from contextlib import ExitStack
+        with ExitStack() as stack:
+            for name, replacement in patches.items():
+                stack.enter_context(patch.object(collector, name, replacement))
+            stack.enter_context(patch.object(collector.collection_config, "validate_runtime", return_value={}))
+            stack.enter_context(patch.object(daily, "load_queue", return_value=[waiting]))
+            stack.enter_context(patch.object(daily, "save_queue"))
+            collector.main()
+        return reviewed, published
+
+    def test_a_google_news_block_still_reviews_the_durable_queue(self):
+        # Run on a scratch export, this ended with 0 Gemini requests and a queue
+        # of 4,228 articles untouched although Gemini was fine.
+        def blocked(days):
+            raise collector.GoogleNewsUnavailable("Too many Google News queries failed (70/100).")
+        reviewed, published = self.run_main_with_queue(blocked)
+        self.assertIn(("recent", "waiting"), reviewed)
+        self.assertEqual(len(published), 1, "the run publishes what it reviewed")
+        source = collector.COLLECTION_STATUS["source"]
+        self.assertEqual(source["status"], "failed")
+        self.assertEqual(source["failure"], "Too many Google News queries failed (70/100).")
+        self.assertIn("source_errors", collector.COLLECTION_STATUS["reasons"])
+        self.assertEqual(collector.COLLECTION_STATUS["status"], "partial")
+
+    def test_any_other_collection_crash_still_fails_the_run(self):
+        def broken(days):
+            raise ValueError("a bug, not a block")
+        with self.assertRaises(ValueError):
+            self.run_main_with_queue(broken)
+        self.assertEqual(collector.COLLECTION_STATUS["status"], "failed")
+
     def test_gdelt_rate_limit_is_visible_independently_of_google(self):
         collector.GDELT_STATS.clear()
         response = SimpleNamespace(status_code=429)
