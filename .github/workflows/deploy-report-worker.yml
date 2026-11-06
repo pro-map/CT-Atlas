@@ -75,22 +75,3 @@ jobs:
 
       - name: Deploy Worker
         run: python3 tools/wrangler_retry.py deploy --keep-vars --config cloudflare-worker/wrangler.toml
-
-  node-22-report:
-    # Never blocks a deploy. Job logs are not public, annotations are: this names
-    # what fails on the Node 22 of ubuntu-24.04 while the deploy runs on Node 24.
-    runs-on: ubuntu-24.04
-    continue-on-error: true
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with:
-          ref: main
-
-      - name: Report what fails on Node 22
-        shell: bash
-        run: |
-          echo "::notice title=Node report::$(node --version)"
-          node --test --test-reporter=tap tests/*.test.cjs > node-22.txt 2>&1 || true
-          summary="$(grep -E -A2 '^ *(not ok|error:)' node-22.txt | grep -v '^--' | head -n 45 | cut -c1-170 | awk '{printf "%s%%0A", $0}')"
-          if [ -n "$summary" ]; then echo "::warning title=Fails on Node 22::$summary"; fi
