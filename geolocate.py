@@ -80,6 +80,13 @@ GEMINI_RESCUE_BILLING_VERIFIED = os.getenv(
 ).strip().lower() in {"true", "1", "yes"}
 GEMINI_RESCUE_MODEL = GEMINI_RESCUE_MODELS[0] if GEMINI_RESCUE_MODELS else None
 
+# A temporary failure of the primary model moves the run to this model, as the
+# article selection does. Off when no model is set. Its requests count against
+# AI_GEO_MAX_CALLS_PER_RUN, so a run can never send more than that in total.
+GEMINI_FALLBACK_MODEL = os.getenv(
+    "GEMINI_GEO_FALLBACK_MODEL", ""
+).strip()
+
 # New cache version: every event must be geolocated by the current AI engine.
 AI_GEO_VERSION = "gemini-ai-first-v5.3-source-faithful"
 BATCH_SIZE = max(
@@ -993,8 +1000,10 @@ def call_gemini_batch(
     thinking_level = (
         "minimal"
         if active_model
-        ==
-        GEMINI_MODEL
+        in (
+            GEMINI_MODEL,
+            GEMINI_FALLBACK_MODEL,
+        )
         else
         "low"
     )
@@ -1369,6 +1378,63 @@ def process_batch_resilient(
             right_results
         )
 
+
+def process_batch_with_fallback(
+    batch,
+    model,
+):
+    """
+    Answer one primary batch despite a temporary failure of its model.
+
+    Returns (results, model for the next batch). results is None when the
+    failure leaves this batch to a later run. A failed primary keeps the rest
+    of the run on the fallback: each further attempt on it would spend up to
+    REQUEST_ATTEMPTS requests of the run's cap.
+    """
+
+    try:
+        return (
+            process_batch_resilient(
+                batch,
+                model_override=
+                    model,
+            ),
+            model,
+        )
+
+    except GeminiTransientError as error:
+        print(
+            f"   {model} temporarily unavailable: {error}"
+        )
+
+        if (
+            not GEMINI_FALLBACK_MODEL
+            or
+            model == GEMINI_FALLBACK_MODEL
+        ):
+            return None, model
+
+    print(
+        f"   Trying this batch on {GEMINI_FALLBACK_MODEL}."
+    )
+
+    try:
+        return (
+            process_batch_resilient(
+                batch,
+                model_override=
+                    GEMINI_FALLBACK_MODEL,
+            ),
+            GEMINI_FALLBACK_MODEL,
+        )
+
+    except GeminiTransientError as error:
+        print(
+            f"   {GEMINI_FALLBACK_MODEL} temporarily "
+            f"unavailable: {error}"
+        )
+
+        return None, GEMINI_FALLBACK_MODEL
 
 
 # ============================================================
@@ -2569,6 +2635,7 @@ def main():
     )
 
     completed = 0
+    batch_model = GEMINI_MODEL
 
     if pending:
         total_batches = math.ceil(
@@ -2607,16 +2674,12 @@ def main():
             )
 
             try:
-                results = process_batch_resilient(
+                results, batch_model = process_batch_with_fallback(
                     batch,
-                    model_override=
-                        GEMINI_MODEL,
+                    batch_model,
                 )
 
-            except (
-                GeminiQuotaError,
-                GeminiTransientError,
-            ) as error:
+            except GeminiQuotaError as error:
                 print()
                 print(
                     "Gemini request cap for this run reached."
@@ -2638,6 +2701,14 @@ def main():
                 )
 
                 break
+
+            if results is None:
+                print(
+                    "   This batch stays pending for a later "
+                    "run; the next batch goes on."
+                )
+
+                continue
 
             result_by_id = {
                 str(
@@ -2686,6 +2757,10 @@ def main():
                         event_id
                     ],
                 )
+
+                event_by_id[
+                    event_id
+                ]["ai_geo_model"] = batch_model
 
                 completed += 1
 

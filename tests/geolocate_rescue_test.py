@@ -278,6 +278,88 @@ class RunCapTests(unittest.TestCase):
         self.assertEqual((event["city"], event["latitude"], event["longitude"]), (None, None, None))
 
 
+class TemporaryFailureTests(unittest.TestCase):
+    """5 November, 18:07 UTC: 7 new events, 0 located, because one failed batch
+    ended the step while selection carried on on 3.1 Flash Lite."""
+
+    PRIMARY, FALLBACK = "gemini-3.5-flash-lite", "gemini-3.1-flash-lite"
+
+    def run_main(self, events, *, failing, fallback=FALLBACK, cap=12):
+        directory = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, directory, True)
+        path = os.path.join(directory, "events.json")
+        with open(path, "w", encoding="utf-8") as handle:
+            json.dump({"events": events}, handle)
+        sent = []
+
+        def post(url, headers=None, json=None, timeout=None):
+            sent.append(json["model"])
+            if failing(json["model"], len(sent)):
+                return mock.Mock(status_code=503, headers={}, text="unavailable")
+            return gemini_reply(country_answers(json))
+
+        with mock.patch.dict(os.environ, {"GEMINI_API_KEY": "test"}), \
+             mock.patch.object(geolocate, "INPUT_FILE", path), \
+             mock.patch.object(geolocate, "OUTPUT_FILE", path), \
+             mock.patch.object(geolocate, "FORCE_AI", False), \
+             mock.patch.object(geolocate, "BATCH_SIZE", 1), \
+             mock.patch.object(geolocate, "MAX_CALLS_PER_RUN", cap), \
+             mock.patch.object(geolocate, "GEMINI_REQUESTS_SENT", 0), \
+             mock.patch.object(geolocate, "GEMINI_MODEL", self.PRIMARY), \
+             mock.patch.object(geolocate, "GEMINI_FALLBACK_MODEL", fallback), \
+             mock.patch.object(geolocate.requests, "post", side_effect=post), \
+             mock.patch.object(geolocate.time, "sleep"), \
+             contextlib.redirect_stdout(io.StringIO()):
+            os.environ.pop("AI_GEO_PRESERVE_IDS_FILE", None)
+            geolocate.main()
+        with open(path, encoding="utf-8") as handle:
+            return {event["id"]: event for event in json.load(handle)["events"]}, sent
+
+    @staticmethod
+    def events(count):
+        return [{"id": f"new{n}", "title": f"Attack {n}"} for n in range(count)]
+
+    def test_a_primary_outage_no_longer_keeps_accepted_events_off_the_map(self):
+        saved, sent = self.run_main(self.events(7), failing=lambda model, n: model == self.PRIMARY)
+        self.assertEqual(sent, [self.PRIMARY] * geolocate.REQUEST_ATTEMPTS + [self.FALLBACK] * 7,
+                         "the rest of the run stays on the fallback, inside the 12-request cap")
+        for event in saved.values():
+            self.assertIs(event["ai_geo_complete"], True)
+            self.assertEqual(event["ai_geo_model"], self.FALLBACK, "the record names the model that answered")
+
+    def test_a_failed_batch_does_not_end_the_step(self):
+        # Without a fallback: the first batch fails all its attempts, then the
+        # primary recovers and the next batches are still answered.
+        saved, sent = self.run_main(self.events(3), fallback="",
+                                    failing=lambda model, n: n <= geolocate.REQUEST_ATTEMPTS)
+        self.assertEqual(len(sent), geolocate.REQUEST_ATTEMPTS + 2)
+        self.assertIs(saved["new0"]["ai_geo_complete"], False, "it stays pending for the next run")
+        for key in ("new1", "new2"):
+            self.assertIs(saved[key]["ai_geo_complete"], True)
+            self.assertEqual(saved[key]["ai_geo_model"], self.PRIMARY)
+
+    def test_both_models_down_stops_at_the_request_cap_with_everything_pending(self):
+        saved, sent = self.run_main(self.events(4), failing=lambda model, n: True)
+        self.assertEqual(len(sent), 12)
+        self.assertTrue(all(event["ai_geo_complete"] is False for event in saved.values()))
+
+    def test_the_fallback_is_answered_like_the_flash_lite_primary(self):
+        bodies = []
+        with mock.patch.dict(os.environ, {"GEMINI_API_KEY": "test"}), \
+             mock.patch.object(geolocate, "GEMINI_FALLBACK_MODEL", self.FALLBACK), \
+             mock.patch.object(geolocate, "GEMINI_REQUESTS_SENT", 0), \
+             mock.patch.object(geolocate.requests, "post", side_effect=lambda *a, **k: bodies.append(k["json"]) or
+                               gemini_reply(country_answers(k["json"]))), \
+             mock.patch.object(geolocate.time, "sleep"):
+            geolocate.call_gemini_batch([payload(1)], model_override=self.FALLBACK)
+        self.assertEqual(bodies[0]["generation_config"]["thinking_level"], "minimal")
+
+    def test_the_workflow_sets_the_fallback_model(self):
+        with open(".github/workflows/update-map.yml", encoding="utf-8") as handle:
+            workflow = handle.read()
+        self.assertIn(f'GEMINI_GEO_FALLBACK_MODEL: "{self.FALLBACK}"', workflow)
+
+
 class StoredLocationRepairTests(unittest.TestCase):
     """Zero-AI repairs run by geolocate.py itself on every run."""
 
