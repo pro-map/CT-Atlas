@@ -137,14 +137,23 @@ class CompactMirrorJsonTests(unittest.TestCase):
         self.assertIn('run_worker_first = ["/events.json", "/events-lite.json", "/events-map.json"]', script)
 
     def test_deploy_script_copies_the_logo_the_pages_request(self):
-        # The pages and the logo workflow use CT-ATLAS.png; the lowercase
-        # duplicate would keep serving an old logo after a logo-only update.
+        # The other pages use CT-ATLAS.png; the lowercase duplicate would keep
+        # serving an old logo after a logo-only update. The map and the hub
+        # serve the 256 px copy, which the logo workflow versions.
         script = (ROOT / "tools/deploy_mirror.sh").read_text(encoding="utf-8")
         self.assertIn('cp CT-ATLAS.png "$STAGING/CT-ATLAS.png"', script)
+        self.assertIn('cp CT-ATLAS-256.png "$STAGING/CT-ATLAS-256.png"', script)
         self.assertNotIn("cp ct-atlas.png", script)
-        self.assertIn('src="CT-ATLAS.png', (ROOT / "index.html").read_text(encoding="utf-8"))
+        self.assertIn('src="CT-ATLAS-256.png', (ROOT / "index.html").read_text(encoding="utf-8"))
+        self.assertIn('src="CT-ATLAS.png', (ROOT / "crypto.html").read_text(encoding="utf-8"))
         logo = (ROOT / ".github/workflows/refresh-logo-only.yml").read_text(encoding="utf-8")
-        self.assertIn('Path("CT-ATLAS.png")', logo)
+        self.assertIn('Path("CT-ATLAS-256.png")', logo)
+        self.assertIn("CT-ATLAS-256|", logo, "The workflow must still find the URLs it rewrites")
+
+    def test_deploy_script_stages_the_map_libraries(self):
+        script = (ROOT / "tools/deploy_mirror.sh").read_text(encoding="utf-8")
+        self.assertIn('cp -R vendor "$STAGING/vendor"', script)
+        self.assertLess(script.index('cp -R vendor "$STAGING/vendor"'), script.index("--check-directory"))
 
     def test_every_publication_file_over_the_asset_cap_is_chunked_losslessly(self):
         row = json.dumps({"summary": "عربي 中文 😀 " * 64, "n": 1.5}, ensure_ascii=False,

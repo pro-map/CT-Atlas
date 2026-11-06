@@ -18,25 +18,25 @@
 
 <link
     rel="icon"
-    href="CT-ATLAS.png?v=06bb772f344f57a1"
+    href="CT-ATLAS-256.png?v=c5f0e5829c29b521"
 >
 
 
 <link
     rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    href="vendor/leaflet-1.9.4/leaflet.css"
 />
 
 
 <link
     rel="stylesheet"
-    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
+    href="vendor/leaflet.markercluster-1.5.3/MarkerCluster.css"
 />
 
 
 <link
     rel="stylesheet"
-    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
+    href="vendor/leaflet.markercluster-1.5.3/MarkerCluster.Default.css"
 />
 
 <link rel="stylesheet" href="usage-admin.css?v=usage-history-20261006">
@@ -4951,7 +4951,7 @@ html, body {
 
 <div id="access-screen">
     <div id="access-box">
-        <img id="access-logo" src="CT-ATLAS.png?v=06bb772f344f57a1" alt="">
+        <img id="access-logo" src="CT-ATLAS-256.png?v=c5f0e5829c29b521" alt="">
         
         <div class="ctatlas-login-brand" aria-label="CT ATLAS — Global Counter-Terrorism Intelligence">
             <div class="ctatlas-login-title">
@@ -4999,7 +4999,7 @@ html, body {
 
         <img
             id="logo"
-            src="CT-ATLAS.png?v=06bb772f344f57a1"
+            src="CT-ATLAS-256.png?v=c5f0e5829c29b521"
             alt=""
         >
 
@@ -5929,24 +5929,19 @@ Visible rate
 </script>
 
 <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    src="vendor/leaflet-1.9.4/leaflet.js"
 >
 </script>
 
 
 <script
-    src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"
+    src="vendor/leaflet.markercluster-1.5.3/leaflet.markercluster.js"
 >
 </script>
 
 
 <script
-    src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"
->
-</script>
-
-<script
-    src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"
+    src="vendor/leaflet.heat-0.2.0/leaflet-heat.js"
 >
 </script>
 
@@ -10532,6 +10527,23 @@ function selectedDatabaseEvents() {
 }
 
 
+// Under a megabyte used only on export: loaded on the first click, so neither
+// its size nor an outage of its host stands in front of the map.
+let xlsxLoaderPromise = null;
+function loadXlsxForExport() {
+    if (typeof XLSX !== "undefined") return Promise.resolve();
+    if (xlsxLoaderPromise) return xlsxLoaderPromise;
+    xlsxLoaderPromise = new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js";
+        script.onload = () => typeof XLSX !== "undefined" ? resolve() : reject(new Error("xlsx did not initialise."));
+        script.onerror = () => { xlsxLoaderPromise = null; reject(new Error("Unable to load the Excel export library.")); };
+        document.head.appendChild(script);
+    });
+    return xlsxLoaderPromise;
+}
+
+
 function exportChronologyExcel() {
 
     const selectedEvents =
@@ -10560,12 +10572,25 @@ function exportChronologyExcel() {
         "undefined"
     ) {
 
-        alert(
-            "The Excel export library could not be loaded."
-        );
+        const button = document.getElementById("chronologyExport");
+        const label = button ? button.textContent : "";
+        if (button) {
+            button.disabled = true;
+            button.textContent = "PREPARING…";
+        }
 
-
-        return;
+        return loadXlsxForExport()
+            .then(exportChronologyExcel)
+            .catch(error => {
+                console.error(error);
+                alert("The Excel export library could not be loaded.");
+            })
+            .finally(() => {
+                if (button) {
+                    button.disabled = false;
+                    button.textContent = label;
+                }
+            });
 
     }
 

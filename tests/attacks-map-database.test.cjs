@@ -376,7 +376,7 @@ test('the ticker badges the points that are not the first report of their attack
     {_mapKey:'c',title:'Foiled',primary_event_type:'DISRUPTED_PLOT',update_type:'ARREST_UPDATE',published:'2026-09-28T08:00:00Z'},
     {_mapKey:'d',title:'Legacy',category:'Attacks',published:'2026-09-27T08:00:00Z'},
   ];
-  const c=vm.createContext({Date,window:{},selectedDays:7,filteredAllEvents:()=>events,escapeHtml:String,
+  const c=vm.createContext({Date,window:{},selectedDays:7,filteredAllEvents:()=>events,escapeHtml:String,TICKER_TIME_FORMAT:new Intl.DateTimeFormat('en-GB'),
     document:{getElementById:id=>id==='attackTickerList'?list:id==='attackTickerViewport'?{clientHeight:100}:null}});
   vm.runInContext(extract('renderAttackTicker'),c);
   c.renderAttackTicker();

@@ -37,6 +37,8 @@ on:
       - "privacy.html"
       - "robots.txt"
       - "CT-ATLAS.png"
+      - "CT-ATLAS-256.png"
+      - "vendor/**"
       - "daily-quiz.js"
       - "daily-quiz.css"
       - "daily-quiz.json"
@@ -83,6 +85,11 @@ jobs:
           set -euo pipefail
           grep -q 'initialiseInterpolOffices' index.html
           grep -q 'fetch("events-map.json",' index.html
+          test -s CT-ATLAS-256.png
+          test -s vendor/leaflet-1.9.4/leaflet.js
+          test -s vendor/leaflet-1.9.4/leaflet.css
+          test -s vendor/leaflet.markercluster-1.5.3/leaflet.markercluster.js
+          test -s vendor/leaflet.heat-0.2.0/leaflet-heat.js
           grep -q 'id="databasePanel"' index.html
           grep -q 'id="attackTickerList"' index.html
           grep -q 'CT Atlas Infrastructure' index.html
