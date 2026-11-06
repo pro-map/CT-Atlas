@@ -216,32 +216,26 @@ function adminCountCell(value,item,metric){
 const ADMIN_HISTORY_TITLES={
   all:"ALL ACTIVITY",report_requests:"REPORT REQUESTS",report_generator_requests:"SITUATION REPORT",deep_search_requests:"CUSTOM INTELLIGENCE",
   searches:"SEARCHES",event_list_searches:"EVENT LIST SEARCH",blockchain_searches:"BLOCKCHAIN SEARCH",
-  facial_extractions:"FACIAL EXTRACTION",facial_searches:"FACIAL SEARCH",darkweb_searches:"DARK WEB SEARCH",ip_lookups:"IP LOOKUP",
-  quick_ask_requests:"QUICK Q&A (RETIRED)","tab:crypto":"CRYPTO OPENED","tab:facial":"FACIAL OPENED","tab:map":"MAP OPENED",
-  "tab:darkweb":"DARK WEB OPENED","tab:ip":"IP INTELLIGENCE OPENED"
+  ip_lookups:"IP LOOKUP",quick_ask_requests:"QUICK Q&A (RETIRED)","tab:crypto":"CRYPTO OPENED","tab:map":"MAP OPENED",
+  "tab:ip":"IP INTELLIGENCE OPENED"
 };
 const ADMIN_FEATURE_LABELS={
-  report_generator:"SITUATION REPORT",deep_search:"CUSTOM INTELLIGENCE",event_list:"EVENT LIST",blockchain:"BLOCKCHAIN",social:"SOCMINT",
-  facial_extraction:"FACIAL EXTRACTION",facial_search:"FACIAL SEARCH",darkweb_search:"DARK WEB",ip_lookup:"IP LOOKUP",
-  tab_map:"MAP OPENED",tab_crypto:"CRYPTO OPENED",tab_facial:"FACIAL OPENED",tab_darkweb:"DARK WEB OPENED",tab_ip:"IP INTELLIGENCE OPENED"
+  report_generator:"SITUATION REPORT",deep_search:"CUSTOM INTELLIGENCE",event_list:"EVENT LIST",blockchain:"BLOCKCHAIN",ip_lookup:"IP LOOKUP",
+  tab_map:"MAP OPENED",tab_crypto:"CRYPTO OPENED",tab_ip:"IP INTELLIGENCE OPENED"
 };
 const ADMIN_HISTORY_FIELDS=[
-  ["usernames","Usernames"],["keywords","Keywords"],["platforms","Platforms"],["urls","URLs"],["objective","Objective"],["mode","Mode"],
-  ["countries_regions","Regions"],["languages","Languages"],["date_from","From"],["date_to","To"],["discovery_mode","Collection path"],
   ["region","Region"],["topic","Category"],["actor_group","Group"],["period_days","Period"],["compare","Comparison"],["scope","Database scope"],
-  ["country","Country"],["sort","Sort"],["view","View"],["outlet","Outlet"],["material","Material"],["loaded_back_to","Loaded back to"],
+  ["country","Country"],["sort","Sort"],
   ["results","Results shown"],["kind","Type"],["chain","Chain"],["chain_hint","Chain selected"],["origin","Origin"],["limit","Transactions"],
-  ["registered_domain","Registered domain"],["parent_domain","From domain"],["files","Files"],
-  ["videos","Videos"],["bytes","Upload size"],["engines","Engines"],["face","Face"],["sha256","Crop SHA-256"],["period","Period found"],["title","Result"],["outcome","Outcome"]
+  ["registered_domain","Registered domain"],["parent_domain","From domain"],["period","Period found"],["title","Result"],["outcome","Outcome"]
 ];
-const ADMIN_OUTCOMES={cached:"Served from cache",generated:"Generated",no_events:"No matching events",failed:"Failed",hosted:"Crop hosted"};
-const ADMIN_MAIN_FIELD={deep_search:"question",event_list:"text",darkweb_search:"text",blockchain:"query",ip_lookup:"target",social:"target"};
+const ADMIN_OUTCOMES={cached:"Served from cache",generated:"Generated",no_events:"No matching events",failed:"Failed"};
+const ADMIN_MAIN_FIELD={deep_search:"question",event_list:"text",blockchain:"query",ip_lookup:"target"};
 
 function adminHistoryValue(name,value){
   if(Array.isArray(value))return value.join(", ");
   if(typeof value==="boolean")return value?"Yes":"No";
   if(name==="period_days")return Number(value)===1?"24 hours":value+" days";
-  if(name==="bytes")return (Number(value||0)/1048576).toFixed(1)+" MB";
   if(name==="outcome")return ADMIN_OUTCOMES[value]||String(value);
   if(value==="GLOBAL")return "Global";
   if(value==="ALL")return "All";
@@ -258,13 +252,9 @@ function adminHistoryEntry(row){
   else if(feature==="report_generator"){
     main=["region","topic","actor_group","period_days"].filter(name=>row[name]!==undefined).map(name=>adminHistoryValue(name,row[name])).join(" · ");
     ["region","topic","actor_group","period_days"].forEach(name=>skip.add(name));
-  }else if(feature==="facial_search"){
-    main="Face "+(row.face||"?")+" · reverse-image search";skip.add("face");
-  }else if(feature==="facial_extraction"){
-    main=(row.files||0)+" file(s) analysed";skip.add("files");
   }else if(feature.startsWith("tab_")){
     main="Workspace opened";
-  }else if(feature==="event_list"||feature==="darkweb_search"||feature==="social"){
+  }else if(feature==="event_list"){
     main="(filters only)";
   }
   const details=ADMIN_HISTORY_FIELDS.filter(([name])=>!skip.has(name)&&row[name]!==undefined&&row[name]!==""&&!(Array.isArray(row[name])&&!row[name].length))
@@ -275,7 +265,6 @@ function adminHistoryEntry(row){
 }
 
 function adminHistoryHtml(rows){
-  rows=rows.filter(row=>row.feature!=="tab_social");
   if(!rows.length)return '<div class="admin-history-empty">No details recorded for this period.</div>';
   return rows.map(row=>{
     const [when,label,main,details]=adminHistoryEntry(row);
@@ -289,8 +278,8 @@ function adminHistoryHtml(rows){
 
 // A user counts as connected in the selected period when they logged in, opened a workspace
 // or used any feature in it -- a session opened the day before still counts once it is used.
-const ADMIN_TAB_FIELDS=["crypto","facial","map","darkweb","ip"];
-const ADMIN_ACTIVITY_FIELDS=["logins","searches","map_searches","event_list_searches","report_requests","report_generator_requests","deep_search_requests","reports_generated","cached_reports","quick_ask_requests","blockchain_searches","facial_extractions","facial_searches","darkweb_searches","ip_lookups","feedback_submissions","quiz_answers"];
+const ADMIN_TAB_FIELDS=["crypto","map","ip"];
+const ADMIN_ACTIVITY_FIELDS=["logins","searches","map_searches","event_list_searches","report_requests","report_generator_requests","deep_search_requests","reports_generated","cached_reports","quick_ask_requests","blockchain_searches","ip_lookups","feedback_submissions","quiz_answers"];
 
 function adminUsername(item){return String(item?.username||"").trim().toLowerCase();}
 
@@ -424,18 +413,18 @@ function injectAdminUi(){
           '<div class="admin-usage-section-title">WORKSPACE ACCESS</div>'+
           '<div class="admin-usage-table-wrap">'+
             '<table id="adminUsageTable">'+
-              '<thead><tr><th>USER</th><th>CRYPTO</th><th>FACIAL</th><th>MAP</th><th>DARK WEB</th><th>IP INTELLIGENCE</th></tr></thead>'+
+              '<thead><tr><th>USER</th><th>CRYPTO</th><th>MAP</th><th>IP INTELLIGENCE</th></tr></thead>'+
               '<tbody id="adminUsageRows"></tbody>'+
             '</table>'+
           '</div>'+
           '<div class="admin-usage-section-title">FEATURE ACTIVITY</div>'+
           '<div class="admin-usage-table-wrap">'+
             '<table id="adminFeatureUsageTable">'+
-              '<thead><tr><th>USER</th><th>SITUATION REPORT</th><th>CUSTOM INTELLIGENCE</th><th>EVENT LIST SEARCH</th><th>BLOCKCHAIN SEARCH</th><th>FACIAL EXTRACTION</th><th>FACIAL SEARCH</th><th>DARK WEB SEARCH</th><th>IP LOOKUP</th><th>QUICK Q&amp;A (RETIRED)</th></tr></thead>'+
+              '<thead><tr><th>USER</th><th>SITUATION REPORT</th><th>CUSTOM INTELLIGENCE</th><th>EVENT LIST SEARCH</th><th>BLOCKCHAIN SEARCH</th><th>IP LOOKUP</th><th>QUICK Q&amp;A (RETIRED)</th></tr></thead>'+
               '<tbody id="adminFeatureUsageRows"></tbody>'+
             '</table>'+
           '</div>'+
-          '<div id="adminUsageNote">Click a number to see the details behind it: the time, what was searched (text, question, address, IP or domain, filters) and the outcome; ALL ACTIVITY lists everything a connected user did in the period. Details are recorded since 6 October 2026 and kept 90 days, so older counts have no detail; a list shows at most the newest 500 entries. The DARK WEB SEARCH and IP LOOKUP counters also start on 6 October 2026. Facial entries hold counts and face labels only, never images. Workspace access counts page openings. Event list searches are counted once per settled search since 6 October 2026 (previously at every typing pause).</div>'+
+          '<div id="adminUsageNote">Click a number to see the details behind it: the time, what was searched (text, question, address, IP or domain, filters) and the outcome; ALL ACTIVITY lists everything a connected user did in the period. Details are recorded since 6 October 2026 and kept 90 days, so older counts have no detail; a list shows at most the newest 500 entries. The IP LOOKUP counter also starts on 6 October 2026. Workspace access counts page openings. Event list searches are counted once per settled search since 6 October 2026 (previously at every typing pause).</div>'+
         '</div>'+
       '</div>'+
       '<div id="adminHistoryPanel" hidden>'+
@@ -589,12 +578,10 @@ async function loadAdmin(period){
         "<tr"+adminRowClass(item,connectedNames)+">"+
           adminUserCell(item,connectedNames.has(adminUsername(item)))+
           adminCountCell(item.crypto,item,"tab:crypto")+
-          adminCountCell(item.facial,item,"tab:facial")+
           adminCountCell(item.map,item,"tab:map")+
-          adminCountCell(item.darkweb,item,"tab:darkweb")+
           adminCountCell(item.ip,item,"tab:ip")+
         "</tr>"
-      ).join("")||'<tr><td colspan="6">No users found for this period.</td></tr>';
+      ).join("")||'<tr><td colspan="4">No users found for this period.</td></tr>';
     }
 
     const summary=usagePayload.summary||{};
@@ -619,13 +606,10 @@ async function loadAdmin(period){
           adminCountCell(item.deep_search_requests,item,"deep_search_requests")+
           adminCountCell(item.event_list_searches,item,"event_list_searches")+
           adminCountCell(item.blockchain_searches,item,"blockchain_searches")+
-          adminCountCell(item.facial_extractions,item,"facial_extractions")+
-          adminCountCell(item.facial_searches,item,"facial_searches")+
-          adminCountCell(item.darkweb_searches,item,"darkweb_searches")+
           adminCountCell(item.ip_lookups,item,"ip_lookups")+
           adminCountCell(item.quick_ask_requests,item,"quick_ask_requests")+
         "</tr>"
-      ).join("")||'<tr><td colspan="10">No users found for this period.</td></tr>';
+      ).join("")||'<tr><td colspan="7">No users found for this period.</td></tr>';
     }
 
     if(status){

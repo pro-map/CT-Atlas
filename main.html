@@ -6,15 +6,15 @@
 <script>document.documentElement.classList.add("ct-loading");window.ctLoadingFallback=setTimeout(function(){document.documentElement.classList.remove("ct-loading");},10000);</script>
 <link rel="stylesheet" href="workspace-ui.css?v=20261004c">
 <script src="sound-effects.js?v=20261004c" defer></script>
-<script src="workspace-ui.js?v=20261003ip" defer></script>
+<script src="workspace-ui.js?v=retired-tools-20261106" defer></script>
 <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CT ATLAS — Main</title>
 <link rel="icon" href="CT-ATLAS.png">
 <link rel="stylesheet" href="usage-admin.css?v=usage-history-20261006">
 <link rel="stylesheet" href="feedback.css?v=20260928">
-<script src="usage-admin.js?v=no-social-20261006" defer></script>
-<script src="feedback.js?v=20261004ip" defer></script>
+<script src="usage-admin.js?v=retired-tools-20261106" defer></script>
+<script src="feedback.js?v=retired-tools-20261106" defer></script>
 <!-- Daily quiz retired at the owner's request. -->
 <style>
 *{box-sizing:border-box}
@@ -39,7 +39,7 @@ body{display:flex;min-height:100vh}
 .hub-updates-list strong{color:#edf3f6;font-weight:700}
 .hub-updates-list .hub-updates-pending::before{background:#d6b96f}
 @media(max-width:900px){.hub-updates-list{grid-template-columns:1fr;gap:6px}.hub-updates{padding:11px 12px}}
-.hub-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.hub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .hub-card{min-width:0;min-height:300px;display:flex;flex-direction:column;padding:clamp(14px,1.6vw,26px);border:1px solid #344958;border-radius:8px;background:linear-gradient(180deg,#172630,#111d26);color:#fff;text-decoration:none;box-shadow:0 12px 30px rgba(0,0,0,.24);transition:transform .15s ease,border-color .15s ease,background .15s ease,box-shadow .15s ease}
 .hub-card:hover,.hub-card:focus-visible{transform:translateY(-3px);border-color:#edf3f6;background:linear-gradient(180deg,#20313d,#14242e);box-shadow:0 0 0 1px rgba(255,255,255,.2),0 0 24px rgba(220,235,245,.10),0 16px 32px rgba(0,0,0,.3);outline:none}
 .hub-card:hover .hub-card-foot,.hub-card:focus-visible .hub-card-foot{color:#fff}
@@ -49,12 +49,10 @@ body{display:flex;min-height:100vh}
 .hub-card-title{margin-top:23px;font-size:17px;font-weight:900;line-height:1.25;letter-spacing:.025em;overflow-wrap:anywhere}
 .hub-card-text{margin-top:10px;color:#8fa5b2;font-size:11px;line-height:1.6}
 .hub-card-foot{margin-top:auto;padding-top:22px;color:#8fb6ca;font-size:9px;font-weight:900;letter-spacing:.09em}
-.under{display:inline-block;margin-top:12px;padding:5px 7px;border:1px solid #705f38;background:#282316;color:#d6b96f;border-radius:3px;font-size:8px;font-weight:900;letter-spacing:.08em}
 .hub-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;margin:19px 0 8px}
 #adminUsageButton,#feedbackButton{min-height:36px;width:auto;padding:9px 14px;border-radius:4px;font:800 9px/1.2 Arial,sans-serif;letter-spacing:.08em;cursor:pointer}
 #adminUsageButton{grid-column:auto}
 #feedbackButton{margin:0}
-.hub-beta{display:inline-block;margin-left:8px;padding:4px 6px;border:1px solid #705f38;background:#282316;color:#d6b96f;border-radius:3px;font-size:8px;line-height:1;vertical-align:middle;letter-spacing:.08em}
 .hub-quiz{display:flex;justify-content:flex-end;margin-top:20px}
 .hub-footer{margin-top:24px;color:#647b89;font-size:9px;line-height:1.5}
 .hub-readme{margin-top:28px;padding:24px;border:1px solid #344958;border-radius:8px;background:#111d26}
@@ -67,8 +65,6 @@ body{display:flex;min-height:100vh}
 .hub-readme-list li:last-child{margin-bottom:0}
 .hub-readme-list strong{color:#edf3f6}
 @media(max-width:900px){.hub-readme-grid{grid-template-columns:1fr;gap:24px}.hub-readme{padding:20px 16px}}
-@media(max-width:1180px){.hub-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:900px){.hub-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.hub{width:calc(100% - 32px)}.hub-header{align-items:flex-start;flex-direction:column}.hub-card{min-height:220px}.hub-grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -112,20 +108,6 @@ body{display:flex;min-height:100vh}
       <div class="hub-card-foot">OPEN WORKSPACE →</div>
     </a>
 
-    <a class="hub-card darkweb" href="darkweb.html">
-      <div class="hub-card-icon"><img src="darkweb-intelligence.svg" alt="" aria-hidden="true"></div>
-      <div class="hub-card-title">Dark Web Intelligence</div>
-      <div class="hub-card-text">Curated onion outlet monitoring through a Tor collector, new-material feed, keyword alerts and optional local evidence acquisition.</div>
-      <div class="hub-card-foot">OPEN WORKSPACE →</div>
-    </a>
-
-    <a class="hub-card facial" href="facial.html">
-      <div class="hub-card-icon"><img src="facial-intelligence.svg" alt="" aria-hidden="true"></div>
-      <div class="hub-card-title">Facial Intelligence</div>
-      <div class="hub-card-text">Non-identifying visual evidence analysis for images and video: face detection, frame extraction, OCR, EXIF/GPS, quality assessment and perceptual similarity.</div>
-      <div class="hub-card-foot">OPEN WORKSPACE →</div>
-    </a>
-
     <a class="hub-card crypto" href="crypto.html">
       <div class="hub-card-icon"><img src="crypto-intelligence.svg" alt="" aria-hidden="true"></div>
       <div class="hub-card-title">Crypto Intelligence</div>
@@ -137,13 +119,6 @@ body{display:flex;min-height:100vh}
       <div class="hub-card-icon"><img src="ip-intelligence.svg" alt="" aria-hidden="true"></div>
       <div class="hub-card-title">IP Intelligence</div>
       <div class="hub-card-text">IP network and operator identification, approximate geolocation, VPN indicators, provider contacts and downloadable investigation briefs.</div>
-      <div class="hub-card-foot">OPEN WORKSPACE →</div>
-    </a>
-
-    <a class="hub-card social" href="social.html">
-      <div class="hub-card-icon"><img src="social-intelligence.svg" alt="" aria-hidden="true"></div>
-      <div class="hub-card-title">Social Intelligence <span class="hub-beta">BETA</span></div>
-      <div class="hub-card-text">AI-assisted public-source SOCMINT investigations with structured search fields, source-grounded findings, entity extraction and downloadable analytical reports.</div>
       <div class="hub-card-foot">OPEN WORKSPACE →</div>
     </a>
   </section>

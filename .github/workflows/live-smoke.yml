@@ -6,11 +6,6 @@ on:
     paths:
       - "index.html"
       - "main.html"
-      - "social.html"
-      - "social.js"
-      - "social.css"
-      - "facial.html"
-      - "facial-crops.js"
       - "tab-health.js"
       - "tab-health.css"
       - "pdf-export.js"
@@ -56,25 +51,17 @@ jobs:
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/crypto.js >/tmp/crypto.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/crypto-report.js >/tmp/crypto-report.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/main.html >/tmp/main.html \
-              && curl --fail --silent --show-error --max-time 25 'https://ct-atlas.com/usage-admin.js?v=no-social-20261006' >/tmp/usage-admin.js \
-              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.html >/tmp/social.html \
-              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.js >/tmp/social.js \
-              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/social.css >/tmp/social.css \
+              && curl --fail --silent --show-error --max-time 25 'https://ct-atlas.com/usage-admin.js?v=retired-tools-20261106' >/tmp/usage-admin.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/tab-health.js >/tmp/tab-health.js \
-              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/facial.html >/tmp/facial.html \
-              && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/facial-crops.js >/tmp/facial-crops.js \
-              && grep -q 'buildZip' /tmp/facial-crops.js \
-              && grep -q 'fcBar' /tmp/facial.html \
               && grep -q '/health/status' /tmp/tab-health.js \
               && grep -q 'data-health-scope="crypto"' /tmp/crypto.html \
-              && grep -q 'data-health-scope="facial"' /tmp/facial.html \
               && grep -q 'pdf-export.js' /tmp/index.html \
               && tr -d '\r' < /tmp/index.html | tr '\n' ' ' | grep -qE 'class="time-button active"[[:space:]]+data-days="7"' \
               && grep -q 'data-days="30"' /tmp/index.html \
               && grep -q 'data-days="90"' /tmp/index.html \
               && grep -q 'data-days="180"' /tmp/index.html \
               && grep -q 'const MAP_RECENT_EVENT_DAYS = 181;' /tmp/index.html \
-              && grep -q 'usage-admin.js?v=no-social-20261006' /tmp/main.html \
+              && grep -q 'usage-admin.js?v=retired-tools-20261106' /tmp/main.html \
               && ! grep -q '<th>SOCIAL</th>\|SOCIAL MEDIA SEARCH' /tmp/usage-admin.js \
               && grep -q 'id="attackTickerList"' /tmp/index.html \
               && grep -q 'id="databasePanel"' /tmp/index.html \
@@ -90,10 +77,7 @@ jobs:
               && grep -q 'crypto-workspace' /tmp/crypto.js \
               && grep -q 'Intelligence Map' /tmp/main.html \
               && grep -q 'Crypto Intelligence' /tmp/main.html \
-              && grep -q 'UNDER CONSTRUCTION' /tmp/social.html \
-              && grep -q '30 free OSINT Industries credits per month' /tmp/social.html \
-              && grep -q 'international law-enforcement organizations' /tmp/social.html \
-              && grep -q 'osint.industries/industries/law-enforcement' /tmp/social.html; then
+              && grep -q 'IP Intelligence' /tmp/main.html; then
               break
             fi
             if [ "$attempt" -eq 18 ]; then
@@ -191,19 +175,6 @@ jobs:
           done
           echo "Worker did not report a loaded sanctions list in time; the strict health check will decide."
 
-      # Same convergence wait for the temporary face hosting (Durable Object binding) that
-      # Facial Intelligence's direct reverse-image search relies on.
-      - name: Wait for the Worker to expose the face hosting
-        run: |
-          for attempt in {1..24}; do
-            if curl --silent --max-time 25 https://ct-report-generator.fairpeace.workers.dev/health | grep -q '"face_share_configured":true'; then
-              echo "Face hosting is configured in the Worker."
-              exit 0
-            fi
-            sleep 15
-          done
-          echo "Worker did not report the face hosting in time; the strict health check will decide."
-
       - name: Check Worker health
         run: |
           set -euo pipefail
@@ -211,8 +182,6 @@ jobs:
           node - <<'NODE'
           const fs = require("fs");
           const health = JSON.parse(fs.readFileSync("/tmp/health.json", "utf8"));
-          if (!health.face_share_version) throw new Error("Face hosting version missing");
-          if (health.face_share_configured !== true) throw new Error("Face hosting (FACE_SHARE binding) is not configured in the Worker");
           for (const key of ["ok", "deep_search", "quiz_tracking"]) {
             if (health[key] !== true) throw new Error("Worker health flag is not true: " + key);
           }
@@ -228,10 +197,6 @@ jobs:
           if (!(health.sanctions.address_count > 500)) throw new Error("Sanctions list looks truncated: " + health.sanctions.address_count);
           if (health.crypto_auto_monitoring !== true) throw new Error("Crypto automatic monitoring flag missing");
           if (!health.source_preview_version) throw new Error("Source preview version missing");
-          if (!health.social_intel_version) throw new Error("SOCMINT backend version missing");
-          if (health.social_intel !== true) throw new Error("SOCMINT backend flag missing");
-          if (!health.social_agent_client_version) throw new Error("SOCMINT ADK client version missing");
-          if (typeof health.social_agent_configured !== "boolean") throw new Error("SOCMINT ADK configured state missing");
           if (!health.crypto_providers || health.crypto_providers.bitcoin !== true) throw new Error("Bitcoin Crypto provider health missing");
           if (health.crypto_providers.evm !== true) throw new Error("ETHERSCAN_API_KEY is not active in the Worker");
           if (health.crypto_providers.tron !== true) throw new Error("TRONGRID_API_KEY is not active in the Worker");
@@ -241,22 +206,9 @@ jobs:
           console.log("Worker health valid:", health.version, health.auth_mode);
           NODE
 
-      # Face hosting must refuse anonymous uploads and must never answer for an unknown link.
-      # Nothing is uploaded here.
-      - name: Check face hosting refuses anonymous access
-        run: |
-          set -euo pipefail
-          api=https://ct-report-generator.fairpeace.workers.dev
-          status="$(curl --silent --max-time 25 -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: image/jpeg' --data-binary 'x' "$api/face-share")"
-          [ "$status" = "401" ] || { echo "Anonymous upload answered HTTP $status (expected 401)" >&2; exit 1; }
-          headers="$(curl --silent --max-time 25 -D - -o /dev/null "$api/face-share/AAAAAAAAAAAAAAAAAAAAAA.jpg")"
-          echo "$headers" | head -1 | grep -q ' 404' || { echo "Unknown face link did not answer 404" >&2; exit 1; }
-          echo "$headers" | grep -qi '^cache-control: no-store' || { echo "Unknown face link is missing Cache-Control: no-store" >&2; exit 1; }
-          echo "Face hosting refuses anonymous uploads and unknown links."
-
-      # The Health status button of the Crypto / Social / Facial tabs reads this
-      # endpoint. Only its shape and the Worker itself are asserted: an external
-      # provider or a Cloud Run cold start being briefly slow must not fail a deploy.
+      # The Health status button of the Crypto tab reads this endpoint. Only its
+      # shape and the Worker itself are asserted: an external provider being briefly
+      # slow must not fail a deploy.
       - name: Check live health status endpoint
         run: |
           set -euo pipefail
@@ -267,7 +219,7 @@ jobs:
           const status = JSON.parse(raw);
           if (status.ok !== true) throw new Error("Health status is not ok");
           const components = status.components || {};
-          for (const key of ["worker", "bitcoin", "evm", "tron", "sanctions", "agent", "visual", "brave", "gemini"]) {
+          for (const key of ["worker", "bitcoin", "evm", "tron", "sanctions", "gemini"]) {
             if (!components[key] || typeof components[key].status !== "string") throw new Error("Health status component missing: " + key);
           }
           if (components.worker.status !== "operational") throw new Error("Worker component is not operational");

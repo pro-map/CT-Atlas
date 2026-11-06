@@ -4,24 +4,20 @@ const fs=require("node:fs");
 
 const read=file=>fs.readFileSync(file,"utf8");
 
-test("Crypto and Facial load their health component; the Social placeholder omits its former health controls",()=>{
-  for(const [page,scope] of [["crypto","crypto"],["facial","facial"]]){
-    const html=read(page+".html");
-    assert.ok(html.includes('href="tab-health.css'),page+" must load tab-health.css");
-    assert.match(html,new RegExp('<script src="tab-health\\.js\\?v=\\d+" data-health-scope="'+scope+'"></script>'),page+" scope");
-    // The component must load after the page's own script so it never delays start-up.
-    assert.ok(html.indexOf("tab-health.js")>html.indexOf(page+".js"),page+": tab-health.js should come last");
-  }
-  const social=read("social.html");
-  assert.ok(!social.includes('data-health-scope="social"'));
-  assert.ok(social.includes("UNDER CONSTRUCTION"));
+test("Crypto loads its health component after its own script",()=>{
+  const html=read("crypto.html");
+  assert.ok(html.includes('href="tab-health.css'),"crypto must load tab-health.css");
+  assert.match(html,/<script src="tab-health\.js\?v=\d+" data-health-scope="crypto"><\/script>/);
+  // The component must load after the page's own script so it never delays start-up.
+  assert.ok(html.indexOf("tab-health.js")>html.indexOf("crypto.js"),"tab-health.js should come last");
 });
 
-test("the health component reads the live status endpoint and covers every scope",()=>{
+test("the health component reads the live status endpoint and covers the Crypto tab only",()=>{
   const js=read("tab-health.js");
   assert.ok(js.includes('"/health/status"'));
-  for(const scope of ["crypto","social","facial"])assert.match(js,new RegExp("\\n  "+scope+":\\{"),"missing scope "+scope);
-  for(const key of ["bitcoin","evm","tron","sanctions","agent","visual"])assert.ok(js.includes('key:"'+key+'"'),"missing component "+key);
+  assert.match(js,/\n  crypto:\{/);
+  assert.doesNotMatch(js,/\n  (?:social|facial):\{|COLLECTORS|agent_search/,"the retired scopes are gone");
+  for(const key of ["bitcoin","evm","tron","sanctions"])assert.ok(js.includes('key:"'+key+'"'),"missing component "+key);
   // Honest wording: credentials that are not exercised must not read as healthy.
   assert.ok(js.includes("Configured · not probed"));
   assert.ok(js.includes("Status unavailable"));
@@ -53,5 +49,5 @@ test("the static mirror and the Pages workflow ship the health component",()=>{
   assert.ok(ui.includes('"tab-health.js"')&&ui.includes('"tab-health.css"'));
   const smoke=read(".github/workflows/live-smoke.yml");
   assert.ok(smoke.includes("/health/status"));
-  assert.ok(smoke.includes('data-health-scope="facial"'));
+  assert.ok(smoke.includes('data-health-scope="crypto"'));
 });

@@ -85,7 +85,7 @@ document.addEventListener("click",event=>{
  const link=target?.closest("a[href]");
  if(!link||link.hasAttribute("download")||(link.target&&link.target!=="_self"))return;
  const url=new URL(link.href,location.href);
- if(url.origin===location.origin&&/(?:^|\/)(?:main|index|crypto|facial|social|darkweb|ip)\.html$/.test(url.pathname)&&url.href!==location.href)navigate(event,url.href);
+ if(url.origin===location.origin&&/(?:^|\/)(?:main|index|crypto|ip)\.html$/.test(url.pathname)&&url.href!==location.href)navigate(event,url.href);
 },true);
 window.addEventListener("storage",event=>{if(event.key===KEY||event.key===null)setEnabled(event.newValue!=="off",false);});
 window.addEventListener("pagehide",stop);

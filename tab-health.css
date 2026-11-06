@@ -1,4 +1,4 @@
-/* Health status button + panel shared by the Crypto, Social and Facial tabs. */
+/* Health status button + panel of the Crypto tab. */
 .th-group{display:flex;align-items:center;gap:8px}
 .th-button{display:inline-flex;align-items:center;gap:7px;border:1px solid #405563;background:#202f3b;color:#fff;border-radius:5px;padding:9px 12px;cursor:pointer;font-size:11px;font-weight:800;letter-spacing:.06em;font-family:inherit}
 .th-button:hover{background:#28394a;border-color:#5a7386}
@@ -24,7 +24,6 @@
 .th-row{padding:6px 0;border-bottom:1px solid rgba(107,142,162,.09);font-size:10px;line-height:1.4}
 .th-row:last-child{border-bottom:0}
 .th-row-main{display:flex;justify-content:space-between;gap:14px;color:#8fa6b6}
-.th-row-main em{color:#5f7686;font-size:8px;font-style:normal;text-transform:uppercase;letter-spacing:.08em}
 .th-row-main strong{color:#dce8ef;font-weight:700;text-align:right}
 .th-detail{margin-top:2px;color:#6f8899;font-size:9px;word-break:break-word}
 .th-operational{color:#66d9a7!important}

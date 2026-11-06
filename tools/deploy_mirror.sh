@@ -16,16 +16,15 @@ STAGING=_pages_mirror
 rm -rf "$STAGING"
 mkdir -p "$STAGING"
 
-cp index.html main.html crypto.html social.html facial.html privacy.html robots.txt ct-atlas-runtime.json \
+cp index.html main.html crypto.html privacy.html robots.txt ct-atlas-runtime.json \
    pdf-export.js deep-search.js deep-search.css report-illustration.js feedback.js feedback.css \
-   crypto.js crypto-report.js crypto.css crypto-launcher.js social.js social.css facial.js facial.css \
-   intelligence-map.svg crypto-intelligence.svg social-intelligence.svg facial-intelligence.svg \
+   crypto.js crypto-report.js crypto.css crypto-launcher.js \
+   intelligence-map.svg crypto-intelligence.svg \
    daily-quiz.js daily-quiz.css daily-quiz.json \
    usage-admin.js usage-admin.css usage-auth-fix.js \
    workspace-ui.js workspace-ui.css sound-effects.js sound-check.html \
-   tab-health.js tab-health.css tab-access.js facial-crops.js \
+   tab-health.js tab-health.css tab-access.js \
    ip.html ip.js ip.css ip-report.js ip-intelligence.svg \
-   darkweb.html darkweb.js darkweb.css darkweb-intelligence.svg \
    "$STAGING"/
 
 # Preserve the complete fallback, using byte chunks when compaction alone cannot
@@ -53,9 +52,9 @@ python3 tools/daily_publication_audit.py manifest --directory "$STAGING" --outpu
 # tracked lowercase ct-atlas.png duplicate is not what the pages use).
 cp CT-ATLAS.png "$STAGING/CT-ATLAS.png"
 
-for required in facial.html facial.js facial.css facial-intelligence.svg tab-health.js tab-health.css facial-crops.js; do
+for required in tab-health.js tab-health.css; do
   if [ ! -s "$STAGING/$required" ]; then
-    echo "Mirror is missing required Facial Intelligence asset: $required" >&2
+    echo "Mirror is missing required asset: $required" >&2
     exit 1
   fi
 done

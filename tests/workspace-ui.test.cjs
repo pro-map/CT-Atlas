@@ -40,23 +40,21 @@ test('navigation ignores modified/external clicks and restores after back or tim
  h.listeners.pageshow({persisted:true});assert.equal(h.classes.has('ct-loading'),false);
  h.listeners.click({target:link,button:0});h.fire(10000);assert.equal(h.classes.has('ct-loading'),false);
 });
-test('every workspace ships the shared loader and hub order retains only Social beta',()=>{
- for(const name of ['main','index','crypto','facial','social','darkweb','ip']){
+test('every workspace ships the shared loader and the hub lists the three that remain, in order',()=>{
+ for(const name of ['main','index','crypto','ip']){
   const html=fs.readFileSync(name+'.html','utf8');
   assert.ok(html.includes('workspace-ui.js'));assert.ok(html.includes('workspace-ui.css'));assert.ok(html.includes('class="ct-page-loading"'));
   assert.ok(html.indexOf('<meta charset="UTF-8">')<1024);
  }
  const main=fs.readFileSync('main.html','utf8');
  const links=[...main.matchAll(/class="hub-card[^\"]*" href="([^\"]+)"/g)].map(x=>x[1]);
- assert.deepEqual(links,['index.html?workspace=map','darkweb.html','facial.html','crypto.html','ip.html','social.html']);
- assert.equal((main.match(/class="hub-beta"/g)||[]).length,1);
- assert.match(main,/grid-template-columns:repeat\(6,minmax\(0,1fr\)\)/);
+ assert.deepEqual(links,['index.html?workspace=map','crypto.html','ip.html']);
+ assert.doesNotMatch(main,/hub-beta|class="under"|\.under\{/);
 });
-test('hub grid steps down 6 -> 3 -> 2 -> 1 columns so titles never overflow tablet-width cards',()=>{
+test('hub grid shows three equal columns, then one: no orphan card on a row of its own',()=>{
  const main=fs.readFileSync('main.html','utf8');
- const three=main.indexOf('@media(max-width:1180px){.hub-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}');
- const two=main.indexOf('@media(max-width:900px){.hub-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}');
- const one=main.indexOf('@media(max-width:760px)');
- assert.ok(three>0&&two>three&&one>two,'later, narrower breakpoints must follow the wider ones');
+ assert.match(main,/\.hub-grid\{display:grid;grid-template-columns:repeat\(3,minmax\(0,1fr\)\);gap:12px\}/);
+ assert.doesNotMatch(main,/\.hub-grid\{grid-template-columns:repeat\((?:2|6),/,'two columns would leave the third card alone on its row');
+ assert.match(main,/@media\(max-width:760px\)\{[^\n]*\.hub-grid\{grid-template-columns:1fr\}/);
  assert.match(main,/\.hub-card-title\{[^}]*overflow-wrap:anywhere/);
 });

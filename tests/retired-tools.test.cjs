@@ -194,6 +194,21 @@ test("everything else the retired tools stored survives the alarm and every reti
   assert.equal(JSON.stringify([...storage.values].sort()), before);
 });
 
+test("the retired pages and assets are gone and nothing the site serves points at them", () => {
+  for (const name of ["social", "darkweb", "facial"]) {
+    for (const file of [name + ".html", name + ".js", name + ".css", name + "-intelligence.svg"]) {
+      assert.equal(fs.existsSync(path.join(ROOT, file)), false, file);
+    }
+  }
+  assert.equal(fs.existsSync(path.join(ROOT, "facial-crops.js")), false);
+  const pages = fs.readdirSync(ROOT).filter(file => /\.(?:html|js|css)$/.test(file));
+  assert.ok(pages.includes("main.html") && pages.includes("feedback.js"));
+  for (const page of pages.concat("tools/deploy_mirror.sh")) {
+    assert.doesNotMatch(read(page), /\b(?:social|darkweb|facial)(?:-intelligence\.svg|-crops\.js|\.html|\.js|\.css)/, page);
+    assert.doesNotMatch(read(page), /value="(?:social|darkweb|facial)"/, page);
+  }
+});
+
 test("the gate has no code that deletes Dark Web records or a namespace of a retired tool", () => {
   const gateSource = read("cloudflare-worker/report-gate.js");
   assert.doesNotMatch(gateSource, /darkweb:|"\/darkweb-/);

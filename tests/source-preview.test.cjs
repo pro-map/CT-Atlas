@@ -58,14 +58,11 @@ test("frontend contains authenticated hub and source visual surfaces",()=>{
   const deep=fs.readFileSync("deep-search.js","utf8");
   const pdf=fs.readFileSync("pdf-export.js","utf8");
   const main=fs.readFileSync("main.html","utf8");
-  const social=fs.readFileSync("social.html","utf8");
   assert.ok(index.includes('window.location.href = "main.html"'));
   assert.ok(index.includes('id="mainHubButton"'));
   assert.ok(main.includes("Intelligence Map"));
   assert.ok(main.includes("Crypto Intelligence"));
-  assert.ok(main.includes("Social Intelligence"));
-  assert.ok(social.includes("UNDER CONSTRUCTION"));
-  assert.ok(!social.includes("RUN SOCMINT INVESTIGATION"));
+  assert.ok(main.includes("IP Intelligence"));
   assert.ok(index.includes('id="reportResultIllustration"'));
   assert.ok(deep.includes('id="deepSearchIllustration"'));
   assert.ok(pdf.includes('block.type==="image"'));

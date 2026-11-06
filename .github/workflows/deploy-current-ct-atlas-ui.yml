@@ -45,21 +45,8 @@ on:
       - "ip.css"
       - "ip-report.js"
       - "ip-intelligence.svg"
-      - "darkweb.html"
-      - "darkweb.js"
-      - "darkweb.css"
-      - "darkweb-intelligence.svg"
       - "intelligence-map.svg"
       - "crypto-intelligence.svg"
-      - "social-intelligence.svg"
-      - "social.html"
-      - "social.js"
-      - "social.css"
-      - "facial.html"
-      - "facial.js"
-      - "facial-crops.js"
-      - "facial.css"
-      - "facial-intelligence.svg"
       - "tab-health.js"
       - "tab-health.css"
       - "ct-atlas-runtime.json"
@@ -143,39 +130,18 @@ jobs:
           test -s ip-intelligence.svg
           node --check ip.js
           node --check ip-report.js
-          test -s darkweb.html
-          test -s darkweb.css
-          test -s darkweb-intelligence.svg
-          node --check darkweb.js
           test -s main.html
-          test -s social.html
           grep -q 'Intelligence Map' main.html
           grep -q 'Crypto Intelligence' main.html
-          grep -q 'Social Intelligence' main.html
-          grep -q 'hub-beta">BETA' main.html
-          grep -q 'Facial Intelligence' main.html
+          grep -q 'IP Intelligence' main.html
+          if grep -q 'darkweb\.\|facial\.\|social\.' main.html; then
+            echo "A retired tool is still linked from the main page" >&2
+            exit 1
+          fi
           test -s intelligence-map.svg
           test -s crypto-intelligence.svg
-          test -s social-intelligence.svg
-          test -s facial-intelligence.svg
-          test -s facial.html
-          test -s facial.js
-          test -s facial.css
-          grep -q 'RUN VISUAL ANALYSIS' facial.html
-          grep -q 'visual-analyze' facial.js
-          grep -q 'THE ANALYSIS DOES NOT IDENTIFY ANYONE' facial.html
-          node --check facial.js
-          test -s facial-crops.js
-          node --check facial-crops.js
-          grep -q 'CTAtlasFaceCrops' facial.js
-          grep -q 'THIRD-PARTY SEARCH' facial.html
           grep -q 'cryptoTestExample' crypto.html
           grep -q 'cryptoTestExample' crypto.js
-          test -s social.css
-          grep -q 'UNDER CONSTRUCTION' social.html
-          grep -q '30 free OSINT Industries credits per month' social.html
-          grep -q 'international law-enforcement organizations' social.html
-          grep -q 'osint.industries/industries/law-enforcement' social.html
           grep -q 'main.html' crypto.html
           grep -q 'reportResultIllustration' index.html
           grep -q 'deepSearchIllustration' deep-search.js

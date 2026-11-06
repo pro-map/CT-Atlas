@@ -41,18 +41,27 @@ test("history rows read as what was searched, with its filters and outcome",()=>
   const deep=api.adminHistoryEntry({at,feature:"deep_search",question:"Who claimed the attack?",scope:"Global",outcome:"generated",period:"Last 30 days"});
   assert.equal(deep[2],"Who claimed the attack?");
   assert.deepEqual([...deep[3]].map(pair=>pair[0]),["Database scope","Period found","Outcome"]);
-  assert.equal(api.adminHistoryEntry({at,feature:"darkweb_search",outlet:"Outlet B"})[2],"(filters only)");
-  const face=api.adminHistoryEntry({at,feature:"facial_search",face:"F2 @ 3.5s",engines:["yandex"],sha256:"ab".repeat(32),bytes:2097152,outcome:"hosted"});
-  assert.equal(face[2],"Face F2 @ 3.5s · reverse-image search");
-  assert.deepEqual([...face[3]].map(pair=>[...pair]),[["Upload size","2.0 MB"],["Engines","yandex"],["Crop SHA-256","ab".repeat(32)],["Outcome","Crop hosted"]]);
-  assert.equal(api.adminHistoryEntry({at,feature:"facial_extraction",files:3,videos:1,bytes:3145728})[3].find(pair=>pair[0]==="Upload size")[1],"3.0 MB");
-  assert.match(api.adminHistoryHtml([{at,feature:"tab_social"}]),/No details recorded/);
-  const social=api.adminHistoryEntry({at,feature:"social",target:"Example Person",usernames:["handle"],platforms:["Telegram"],objective:"Find links",outcome:"failed"});
-  assert.deepEqual([social[1],social[2]],["SOCMINT","Example Person"]);
-  assert.deepEqual([...social[3]].map(pair=>[...pair]),[["Usernames","handle"],["Platforms","Telegram"],["Objective","Find links"],["Outcome","Failed"]]);
-  assert.match(api.adminHistoryHtml([{at,feature:"social",target:"Example Person"}]),/Example Person/);
+  assert.equal(api.adminHistoryEntry({at,feature:"event_list",region:"GLOBAL"})[2],"(filters only)");
   assert.equal(api.adminHistoryEntry({at,feature:"tab_crypto"})[1],"CRYPTO OPENED");
   assert.equal(api.adminHistoryEntry({at,feature:"ip_lookup",target:"8.8.8.8",kind:"ip"})[2],"8.8.8.8");
+});
+
+test("a row of a retired tool, should one still arrive, renders without breaking the list",()=>{
+  const api=helpers();
+  const at="2026-10-06T08:30:00.000Z";
+  const legacy=[
+    {at,feature:"social",target:"Example Person",usernames:["handle"],platforms:["Telegram"],objective:"Find links",outcome:"failed"},
+    {at,feature:"facial_search",face:"F2 @ 3.5s",engines:["yandex"],sha256:"ab".repeat(32),bytes:2097152,outcome:"hosted"},
+    {at,feature:"facial_extraction",files:3,videos:1,bytes:3145728},
+    {at,feature:"darkweb_search",text:"term",outlet:"Outlet B"},
+    {at,feature:"tab_social"},{at,feature:"tab_facial"},{at,feature:"tab_darkweb"}
+  ];
+  for(const row of legacy){
+    const entry=api.adminHistoryEntry(row);
+    assert.equal(entry[1],row.feature.toUpperCase(),row.feature);
+  }
+  assert.equal((api.adminHistoryHtml(legacy).match(/<article /g)||[]).length,legacy.length);
+  assert.match(api.adminHistoryHtml([{at,feature:"social",outcome:"hosted"}]),/hosted/);
 });
 
 test("searched text is escaped before it reaches the page",()=>{
@@ -65,14 +74,14 @@ test("searched text is escaped before it reaches the page",()=>{
 
 test("both tables wire every count to its counter, with the new columns",()=>{
   const loader=client.slice(client.indexOf("async function loadAdmin"),client.indexOf("\ndocument.addEventListener"));
-  for(const tab of ["crypto","facial","map","darkweb","ip"])assert.ok(loader.includes('adminCountCell(item.'+tab+',item,"tab:'+tab+'")'),tab);
-  for(const metric of ["report_generator_requests","deep_search_requests","event_list_searches","blockchain_searches","facial_extractions","facial_searches","darkweb_searches","ip_lookups","quick_ask_requests"]){
+  for(const tab of ["crypto","map","ip"])assert.ok(loader.includes('adminCountCell(item.'+tab+',item,"tab:'+tab+'")'),tab);
+  for(const metric of ["report_generator_requests","deep_search_requests","event_list_searches","blockchain_searches","ip_lookups","quick_ask_requests"]){
     assert.ok(loader.includes("adminCountCell(item."+metric+',item,"'+metric+'")'),metric);
   }
-  assert.ok(client.includes("<th>EVENT LIST SEARCH</th>")&&client.includes("<th>DARK WEB SEARCH</th>")&&client.includes("<th>IP LOOKUP</th>"));
-  assert.ok(loader.includes('colspan="10"'));
-  assert.ok(loader.includes('colspan="6"'));
-  assert.ok(!client.includes('<th>SOCIAL</th>')&&!client.includes('SOCIAL MEDIA SEARCH'));
+  assert.ok(client.includes("<th>EVENT LIST SEARCH</th>")&&client.includes("<th>IP LOOKUP</th>"));
+  assert.ok(loader.includes('colspan="7"'));
+  assert.ok(loader.includes('colspan="4"'));
+  assert.doesNotMatch(client,/<th>(?:SOCIAL|FACIAL|DARK WEB)|SOCIAL MEDIA SEARCH/);
   const opener=client.slice(client.indexOf("async function openUsageHistory"),client.indexOf("function closeAdmin"));
   assert.match(opener,/nativeFetch\(API_BASE\+"\/usage-history"\+query,\{method:"GET",headers:\{"X-Session-Token":token\(\)\}\}\)/);
   assert.ok(opener.includes("adminHistoryHtml(rows)"),"rows are rendered through the escaping helper");

@@ -47,9 +47,6 @@ function inject(){
               '<option value="general">General · all CT Atlas</option>'+
               '<option value="map">Intelligence Map</option>'+
               '<option value="crypto">Crypto Intelligence</option>'+
-              '<option value="facial">Facial Intelligence</option>'+
-              '<option value="social">Social Media (Beta)</option>'+
-              '<option value="darkweb">Dark Web Intelligence (Beta)</option>'+
               '<option value="ip">IP Intelligence</option>'+
             '</select>'+
           '</label>'+
