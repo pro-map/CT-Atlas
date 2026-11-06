@@ -62,14 +62,24 @@ test("a normal run is not flagged: partial is the everyday state, and the backlo
   assert.equal(view.text,"UPDATE OK");
 });
 
-test("the pipeline's health field wins, in either shape, and a value it adds later is ignored",()=>{
+// As tools/finalize_daily_status.py writes it: state is healthy, degraded or starved.
+const health=state=>({state,reasons:[],events_published_last_24h:140,events_published_median_14d:130,new_reviews:800,recent_pending:500,review_share:0.615});
+
+test("the pipeline's health state wins, and a value it adds later is ignored",()=>{
   const c=statusContext();
-  assert.equal(c.collectionHealth({...goodRun,health:"behind"}),"behind");
-  assert.equal(c.collectionHealth({...fiveNovember,health:"ok"}),"ok");
-  assert.equal(c.collectionHealth({...goodRun,health:{state:"stalled",last_ok_at:"2026-11-04T18:00:00Z"}}),"stalled");
-  assert.equal(c.collectionHealth({...goodRun,health:"unheard-of"}),"ok","falls back to the counters");
-  assert.equal(c.dataStateView(facts({...goodRun,health:"behind"}),hours(1)).text,"UPDATE BEHIND");
-  assert.equal(c.dataStateView(facts({...goodRun,health:"failed"}),hours(1)).text,"UPDATE FAILED");
+  assert.equal(c.collectionHealth({...fiveNovember,health:health("healthy")}),"ok");
+  assert.equal(c.collectionHealth({...goodRun,health:health("degraded")}),"behind");
+  assert.equal(c.collectionHealth({...goodRun,health:health("starved")}),"stalled");
+  assert.equal(c.collectionHealth({...goodRun,health:health("unheard-of")}),"ok","falls back to the counters");
+  assert.equal(c.collectionHealth({...goodRun,health:{}}),"ok");
+  assert.equal(c.dataStateView(facts({...goodRun,health:health("degraded")}),hours(1)).text,"UPDATE BEHIND");
+  assert.equal(c.dataStateView(facts({...goodRun,health:health("starved")}),hours(1)).text,"UPDATE STALLED");
+  assert.equal(c.dataStateView(facts({...fiveNovember,health:health("healthy")}),hours(1)).text,"UPDATE OK");
+});
+
+test("a failed collection says so, although the pipeline calls it starved too",()=>{
+  const c=statusContext();
+  assert.equal(c.dataStateView(facts({...goodRun,status:"failed",health:health("starved")}),hours(1)).text,"UPDATE FAILED");
 });
 
 test("a file without health or counters stays neutral, never green",()=>{
@@ -138,7 +148,8 @@ test("the header's day is finished only by a healthy run that started after it e
   assert.equal(dayState(goodRun,"2026-11-06T09:00:00Z"),"incomplete");
   assert.equal(dayState({...lateRun,recent:fiveNovember.recent},"2026-11-06T14:00:00Z"),"incomplete","a later run that reviewed nothing");
   assert.equal(dayState({...lateRun,status:"failed"},"2026-11-06T14:00:00Z"),"incomplete");
-  assert.equal(dayState({...lateRun,health:"behind"},"2026-11-06T14:00:00Z"),"incomplete");
+  assert.equal(dayState({...lateRun,health:health("degraded")},"2026-11-06T14:00:00Z"),"incomplete");
+  assert.equal(dayState({...lateRun,health:health("healthy")},"2026-11-06T14:00:00Z"),"finished");
   assert.equal(dayState(goodRun,"2026-11-08T09:00:00Z"),"missing","no run at all on 7 Nov");
 });
 

@@ -7381,11 +7381,14 @@ function renderCollectionStatus(data) {
 // "partial" is the normal state of every run, so it cannot tell an outage from a
 // good day. The pipeline's health field does; snapshots without it get the same
 // test on their own counters, so a starved run such as 5 Nov is still recognised.
+const COLLECTION_HEALTH_NAMES = { healthy: "ok", degraded: "behind", starved: "stalled" };
+
 function collectionHealth(status) {
     if (!status || typeof status !== "object") return "";
-    const reported = typeof status.health === "string" ? status.health : status.health?.state;
-    if (["ok", "behind", "stalled", "failed"].includes(reported)) return reported;
+    // Before the health field: to the pipeline a failed collection is also "starved".
     if (status.status === "failed") return "failed";
+    const reported = COLLECTION_HEALTH_NAMES[status.health?.state];
+    if (reported) return reported;
     const reviewed = collectionStatusCount(status.recent?.new_reviews);
     const pending = collectionStatusCount(status.recent?.pending);
     if (reviewed === null || pending === null) return "";
