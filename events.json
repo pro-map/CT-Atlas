@@ -280,7 +280,7 @@
         "stop_code": "budget_reached"
       }
     ],
-    "finalized_at": "2026-11-06T17:47:31.250848+00:00",
+    "finalized_at": "2026-11-06T19:45:48.446146+00:00",
     "collect_outcome": "success",
     "geolocate_outcome": "success",
     "data_maintenance": {
@@ -290,6 +290,29 @@
       "removed_records": 0,
       "new_records": 0,
       "ai_calls": 0
+    },
+    "temporary_failures": {
+      "gemini-3.5-flash-lite:503": 3
+    },
+    "health": {
+      "state": "degraded",
+      "reasons": [
+        "few_events_published",
+        "reviews_below_arrivals"
+      ],
+      "events_published_last_24h": 59,
+      "events_published_median_14d": 124.0,
+      "new_reviews": 1664,
+      "recent_pending": 2513,
+      "review_share": 0.398,
+      "thresholds": {
+        "starved_events_ratio": 0.25,
+        "degraded_events_ratio": 0.5,
+        "starved_review_share": 0.1,
+        "degraded_review_share": 0.5,
+        "starved_min_waiting": 100,
+        "degraded_min_waiting": 600
+      }
     }
   },
   "collector": "Google News RSS multilingual + expanded Arabic/Africa and maritime/CBRN sources + Gemini selection/translation",

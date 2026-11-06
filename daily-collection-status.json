@@ -3,7 +3,7 @@
   "status": "partial",
   "run_started_at": "2026-11-06T16:47:13.997361+00:00",
   "last_attempt_at": "2026-11-06T16:47:13.997361+00:00",
-  "published_at": "2026-11-06T17:39:56.468669+00:00",
+  "published_at": "2026-11-06T19:42:31.840026+00:00",
   "recent": {
     "candidates": 5077,
     "reviewed": 2564,
@@ -99,12 +99,12 @@
   "geolocation": {
     "status": "complete",
     "pending": 0,
-    "located": 6276,
-    "unlocated": 205,
-    "completed_unlocated": 205,
+    "located": 6283,
+    "unlocated": 198,
+    "completed_unlocated": 198,
     "outcome": "success",
     "processed_this_run": 106,
-    "review_required": 130
+    "review_required": 123
   },
   "categories": [
     {
@@ -129,7 +129,38 @@
       "stop_code": "budget_reached"
     }
   ],
-  "finalized_at": "2026-11-06T17:47:31.250848+00:00",
+  "finalized_at": "2026-11-06T19:45:48.446146+00:00",
   "collect_outcome": "success",
-  "geolocate_outcome": "success"
+  "geolocate_outcome": "success",
+  "data_maintenance": {
+    "kind": "reviewed_map_evidence_repair",
+    "applied_at": "2026-11-06T19:42:31.840026+00:00",
+    "changed_records": 7,
+    "removed_records": 0,
+    "new_records": 0,
+    "ai_calls": 0
+  },
+  "temporary_failures": {
+    "gemini-3.5-flash-lite:503": 3
+  },
+  "health": {
+    "state": "degraded",
+    "reasons": [
+      "few_events_published",
+      "reviews_below_arrivals"
+    ],
+    "events_published_last_24h": 59,
+    "events_published_median_14d": 124.0,
+    "new_reviews": 1664,
+    "recent_pending": 2513,
+    "review_share": 0.398,
+    "thresholds": {
+      "starved_events_ratio": 0.25,
+      "degraded_events_ratio": 0.5,
+      "starved_review_share": 0.1,
+      "degraded_review_share": 0.5,
+      "starved_min_waiting": 100,
+      "degraded_min_waiting": 600
+    }
+  }
 }
