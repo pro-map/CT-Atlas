@@ -5362,19 +5362,6 @@ Database <span id="databaseTotalCount" class="database-total" hidden></span>
 
 
 <div class="section-title">
-Top trends — 30 days
-</div>
-
-
-<ul
-    class="analytics-list"
-    id="trendList"
->
-</ul>
-
-
-
-<div class="section-title">
 Top countries
 </div>
 
@@ -5577,7 +5564,6 @@ Visible rate
         <div id="categoryMiniBars"></div>
     </div>
 
-    <div class="analytics-card" id="trendCard"></div>
     <div class="analytics-card" id="countriesCard"></div>
     <div class="analytics-card" id="hotspotsCard"></div>
 
@@ -7901,8 +7887,8 @@ function normalizeCategoryName(category) {
 // Memoized on the event object itself: allEvents is loaded once from JSON and
 // never mutated afterward, so the derived category list never changes for a
 // given event -- but eventCategories() is called 15+ places across a single
-// refreshDashboard() (categoryMatches, updateFacetCounts, updateTrends,
-// chronology, command-center panels...), each redoing the same Set/regex work
+// refreshDashboard() (categoryMatches, updateFacetCounts, chronology,
+// command-center panels...), each redoing the same Set/regex work
 // from scratch without this cache. Callers only ever read the returned array
 // (see the mutation-safety check kept in the map-performance test), never push
 // onto it, so returning the same cached array is safe.
@@ -8102,8 +8088,8 @@ function invalidateFilterCache() {
 }
 
 // What "Show on map" draws: "ALL" (the default), "ATTACKS", or one other
-// category. filteredAllEvents() stays attacks only: the ticker, the KPIs and
-// the trends are about attacks whatever the map shows.
+// category. filteredAllEvents() stays attacks only: the ticker and the KPIs
+// are about attacks whatever the map shows.
 let mapCategoryScope = "ALL";
 
 const MAP_SCOPE_TITLES = {
@@ -8871,8 +8857,8 @@ function renderEvents() {
     // login unlock swaps it from visibility:hidden to visible) with a momentarily
     // zero-height client rect: leaflet.heat sizes its canvas from that rect and throws
     // (IndexSizeError) if it is 0, which -- uncaught -- would abort every call after
-    // renderEvents() in refreshDashboard() (updateCoverage, updateTrends, renderChronology,
-    // etc.). Wrapping this in try/catch keeps that guarantee real instead of just commented.
+    // renderEvents() in refreshDashboard() (updateCoverage, renderChronology, etc.).
+    // Wrapping this in try/catch keeps that guarantee real instead of just commented.
     if (
         showHeat
         &&
@@ -9227,402 +9213,6 @@ function updateTopLocations() {
     renderRanking("topCountries",countries);
     renderRanking("topHotspots",hotspots);
 }
-
-
-function updateTrends() {
-
-
-    const selected =
-        selectedCategories();
-
-
-    const now =
-        Date.now();
-
-
-    const day =
-        24
-        *
-        60
-        *
-        60
-        *
-        1000;
-
-
-    const currentStart =
-        now
-        -
-        30
-        *
-        day;
-
-
-    const previousStart =
-        now
-        -
-        60
-        *
-        day;
-
-
-    const rows =
-        [];
-
-
-    Object.keys(
-        categoryStyle
-    ).forEach(
-
-        category => {
-
-
-            if (
-                !selected.includes(
-                    category
-                )
-            ) {
-
-                return;
-
-            }
-
-
-            let current =
-                0;
-
-
-            let previous =
-                0;
-
-
-            allEvents.forEach(
-
-                event => {
-
-
-                    if (
-                        !eventCategories(
-                            event
-                        ).includes(
-                            category
-                        )
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    const time =
-                        new Date(
-                            event.published
-                        ).getTime();
-
-
-                    if (
-                        isNaN(
-                            time
-                        )
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    if (
-
-                        time
-                        >=
-                        currentStart
-
-                        &&
-
-                        time
-                        <=
-                        now
-
-                    ) {
-
-
-                        current++;
-
-
-                    }
-
-
-                    else if (
-
-                        time
-                        >=
-                        previousStart
-
-                        &&
-
-                        time
-                        <
-                        currentStart
-
-                    ) {
-
-
-                        previous++;
-
-                    }
-
-                }
-
-            );
-
-
-            let display =
-                "→ 0%";
-
-
-            let cssClass =
-                "trend-flat";
-
-
-            let numericChange =
-                0;
-
-
-            if (
-
-                previous
-                ===
-                0
-
-                &&
-
-                current
-                >
-                0
-
-            ) {
-
-
-                display =
-                    "NEW";
-
-
-                cssClass =
-                    "trend-up";
-
-
-                numericChange =
-                    9999;
-
-            }
-
-
-            else if (
-                previous
-                >
-                0
-            ) {
-
-
-                const change =
-
-                    (
-                        current
-                        -
-                        previous
-                    )
-
-                    /
-
-                    previous
-
-                    *
-
-                    100;
-
-
-                numericChange =
-                    change;
-
-
-                if (
-                    change
-                    >
-                    5
-                ) {
-
-
-                    display =
-                        "↑ "
-                        +
-                        Math.round(
-                            change
-                        )
-                        +
-                        "%";
-
-
-                    cssClass =
-                        "trend-up";
-
-
-                }
-
-
-                else if (
-                    change
-                    <
-                    -5
-                ) {
-
-
-                    display =
-                        "↓ "
-                        +
-                        Math.abs(
-                            Math.round(
-                                change
-                            )
-                        )
-                        +
-                        "%";
-
-
-                    cssClass =
-                        "trend-down";
-
-
-                }
-
-
-                else {
-
-
-                    display =
-                        "→ "
-                        +
-                        Math.round(
-                            change
-                        )
-                        +
-                        "%";
-
-                }
-
-            }
-
-
-            rows.push({
-
-                category,
-                current,
-                previous,
-                numericChange,
-                display,
-                cssClass
-
-            });
-
-        }
-
-    );
-
-
-    rows.sort(
-
-        (a,b) =>
-            b.numericChange
-            -
-            a.numericChange
-
-    );
-
-
-    const list =
-        document.getElementById(
-            "trendList"
-        );
-
-
-    list.innerHTML =
-        "";
-
-
-    rows.slice(
-        0,
-        5
-    ).forEach(
-
-        row => {
-
-
-            const shortNames = {
-
-                "Terrorist Financing":
-                    "Financing",
-
-                "Weapons":
-                    "Weapons",
-
-                "Maritime Security":
-                    "Maritime Security",
-
-                "Radiological/Nuclear": "Radiological/Nuclear",
-                "Chemicals and Explosives": "Chemicals and Explosives",
-                "Biological Terrorism": "Biological Terrorism",
-
-                "Online / Cyber / AI":
-                    "Online / Cyber / AI",
-
-                "Attacks":
-                    "Attacks",
-
-                "Counter Terrorism Action":
-                    "Counter Terrorism Action",
-
-                "Arrests":
-                    "Arrests"
-
-            };
-
-
-            const li =
-                document.createElement(
-                    "li"
-                );
-
-
-            li.className =
-                "analytics-item";
-
-
-            li.innerHTML = `
-
-                <span class="analytics-name">
-
-                    ${shortNames[row.category] || row.category}
-
-                </span>
-
-                <span class="analytics-value ${row.cssClass}">
-
-                    ${row.display}
-
-                </span>
-
-            `;
-
-
-            list.appendChild(
-                li
-            );
-
-        }
-
-    );
-
-}
-
 
 
 // ============================================================
@@ -11216,11 +10806,6 @@ function initialiseCommandCenterLayout() {
 
     }
 
-
-    moveAnalyticsBlock(
-        "trendCard",
-        "trendList"
-    );
 
     moveAnalyticsBlock(
         "countriesCard",
@@ -15770,7 +15355,6 @@ function refreshTimeSensitiveDashboard() {
     const tickerTitle = document.getElementById("attackTickerTitle");
     if (attacksBefore !== filteredAllEvents().map(event => event._mapKey).join("\n")
         || (tickerTitle && tickerTitle.textContent !== attackTickerTitle())) renderAttackTicker();
-    updateTrends();
     updateCommandCenterPanels();
     updateHealthStatusPanel();
     renderHeaderSituationBrief();
@@ -15794,8 +15378,6 @@ function refreshDashboard() {
     updateCoverage();
 
     updateTopLocations();
-
-    updateTrends();
 
     updateCommandCenterPanels();
 

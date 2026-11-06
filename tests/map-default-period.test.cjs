@@ -25,8 +25,7 @@ test("the initial selectedDays matches the active button, so the first render an
   assert.equal(Number(match[1]),7);
 });
 
-test("the fixed 30-day widgets (KPI, timeline, trends) are untouched by the map period; the timeline counts attacks",()=>{
-  assert.ok(html.includes("Top trends — 30 days"));
+test("the fixed 30-day widgets (KPI, timeline) are untouched by the map period; the timeline counts attacks",()=>{
   assert.ok(html.includes("Attacks over time · 30 days"));
   assert.ok(!html.includes("Events over time"));
   assert.ok(html.includes('id="kpi30"'));
