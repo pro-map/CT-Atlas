@@ -103,5 +103,33 @@ class CapitalPlaceholderTests(unittest.TestCase):
             self.assertIn("only as a placeholder", " ".join(instructions.split()))
 
 
+class WeeklyReportTests(unittest.TestCase):
+    ANALYSIS = " ".join(collector.WEEKLY_REQUIRED_SECTIONS) + " " + "operational shift indicates a pattern of disruption. " * 150
+
+    def generate(self, events):
+        response = MagicMock(status_code=200)
+        answer = json.dumps({"title": "Weekly", "analysis": self.ANALYSIS})
+        with frozen_at(GENERATED), \
+             patch.object(collector, "should_generate_weekly_analysis", return_value=(True, "owner_request")), \
+             patch.dict(collector.os.environ, {"GEMINI_API_KEY": "not-a-key"}), \
+             patch.object(collector, "extract_interaction_text", return_value=answer), \
+             patch.object(collector.requests, "post", return_value=response) as post:
+            weekly = collector.generate_weekly_analysis(events)
+        return weekly, json.loads(post.call_args.kwargs["json"]["input"].split("\n\n", 1)[1])
+
+    def test_the_period_text_and_the_panel_fields_give_the_same_dates(self):
+        weekly, payload = self.generate(records(PUBLISHED_PER_DAY))
+        period = payload["reporting_period"]
+        self.assertEqual(period["current_dates"], "30 Oct 2026 to 06 Nov 2026")
+        self.assertEqual(period["comparison_dates"], "23 Oct 2026 to 30 Oct 2026")
+        self.assertEqual(period["current_start"][:10], "2026-10-30")
+        self.assertEqual(period["current_end"][:10], "2026-11-06")
+        # The panel prints these stored instants in Paris time.
+        for field, dates in (("current_period_start", "30 Oct 2026"), ("current_period_end", "06 Nov 2026"),
+                             ("comparison_period_start", "23 Oct 2026"), ("comparison_period_end", "30 Oct 2026")):
+            self.assertEqual(datetime.fromisoformat(weekly[field]).astimezone(collector.PARIS_TZ).strftime("%d %b %Y"), dates)
+        self.assertIn("current_dates and comparison_dates", " ".join(collector.AI_WEEKLY_INSTRUCTIONS.split()))
+
+
 if __name__ == "__main__":
     unittest.main()

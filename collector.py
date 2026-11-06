@@ -241,9 +241,11 @@ Your job is ANALYSIS, not counting, listing, or paraphrasing reporting.
 COMPARISON FRAME:
 - CURRENT PERIOD = the most recent 7 days;
 - COMPARISON PERIOD = the immediately preceding 7 days.
-- The supplied reporting_period timestamps are authoritative.
-- The first sentence of EXECUTIVE ASSESSMENT MUST state both date ranges in
-  readable form. Never guess or omit them.
+- The supplied reporting_period values are authoritative. They follow
+  Europe/Paris time, as the report panel does.
+- The first sentence of EXECUTIVE ASSESSMENT MUST state both date ranges,
+  using current_dates and comparison_dates as written. Never guess or omit
+  them.
 
 CORE ANALYTICAL RULE:
 Every substantive paragraph must answer at least one of these questions:
@@ -10017,6 +10019,25 @@ def _weekly_windows(events):
     }
 
 
+def _weekly_reporting_period(windows):
+    """
+    In Paris time, as the panel prints these instants. In UTC, a report
+    generated at 23:10 opened with 29 Oct to 5 Nov under a panel saying
+    30 Oct to 6 Nov.
+    """
+    now, current_start, previous_start = (
+        windows[name].astimezone(PARIS_TZ) for name in ("now", "current_start", "previous_start")
+    )
+    return {
+        "current_start": current_start.isoformat(),
+        "current_end": now.isoformat(),
+        "comparison_start": previous_start.isoformat(),
+        "comparison_end": current_start.isoformat(),
+        "current_dates": f"{current_start:%d %b %Y} to {now:%d %b %Y}",
+        "comparison_dates": f"{previous_start:%d %b %Y} to {current_start:%d %b %Y}",
+    }
+
+
 def _weekly_sunday_key(now_paris):
     return now_paris.date().isoformat()
 
@@ -10242,22 +10263,7 @@ def generate_weekly_analysis(events, existing_weekly=None):
     )
 
     payload = {
-        "reporting_period": {
-            "current_start":
-                windows[
-                    "current_start"
-                ].isoformat(),
-            "current_end":
-                now_utc.isoformat(),
-            "comparison_start":
-                windows[
-                    "previous_start"
-                ].isoformat(),
-            "comparison_end":
-                windows[
-                    "current_start"
-                ].isoformat(),
-        },
+        "reporting_period": _weekly_reporting_period(windows),
         "current_period_stats":
             _weekly_stats(
                 current,
