@@ -172,13 +172,20 @@ async function verify(){
   if(!token){location.replace("index.html");return;}
   try{
     const response=await fetch(API+"/session-check",{headers:{"X-Session-Token":token},cache:"no-store"});
+    if(response.status===401||response.status===403){clear();location.replace("index.html");return;}
     const payload=await response.json().catch(()=>({}));
-    if(!response.ok||!payload.ok||!payload.username)throw new Error("Session expired");
+    if(!response.ok||!payload.ok||!payload.username)throw new Error("No usable answer");
     sessionStorage.setItem(USER,String(payload.username).toLowerCase());
     sessionStorage.setItem(AUTHORIZED,"yes");
     sessionStorage.setItem(EXPIRY,String(payload.expires_at||""));
     document.getElementById("hubUser").textContent=String(payload.username).toUpperCase();
-  }catch(_){clear();location.replace("index.html");}
+  }catch(_){
+    // Only the Worker's own refusal ends a session: an outage keeps the token and the page.
+    const user=String(sessionStorage.getItem(USER)||"");
+    if(!user){clear();location.replace("index.html");return;}
+    document.getElementById("hubUser").textContent=user.toUpperCase()+" · SESSION CHECK UNAVAILABLE";
+    setTimeout(verify,60000);
+  }
 }
 async function signout(){
   const token=String(sessionStorage.getItem(TOKEN)||"");

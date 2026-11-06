@@ -4432,6 +4432,11 @@ html, body {
     font-size: 7.2px !important;
     line-height: 1.2 !important;
 }
+#sessionCheckNote {
+    color: #e1bf7b;
+    font-size: 6.4px;
+    line-height: 1.2;
+}
 #headerCasualties24 {
     column-gap: 4px !important;
     margin-top: 3px !important;
@@ -5052,6 +5057,8 @@ html, body {
                 </div>
             </div>
         </div>
+
+        <div id="sessionCheckNote" hidden>Session check unavailable, retrying</div>
 
         <div id="counter" style="display:none" aria-hidden="true">—</div>
 
@@ -5789,6 +5796,7 @@ Visible rate
     const SESSION_USER_KEY = "ct_map_username";
     const TOKEN_KEY = "ct_map_session_token";
     const TOKEN_EXPIRY_KEY = "ct_map_session_expires";
+    const SESSION_RECHECK_MS = 60 * 1000;
 
     function lock() {
         sessionStorage.removeItem(SESSION_KEY);
@@ -5872,6 +5880,11 @@ Visible rate
         }
     }
 
+    function showSessionCheckNote(visible) {
+        const note = document.getElementById("sessionCheckNote");
+        if (note) note.hidden = !visible;
+    }
+
     async function restoreSession() {
         const token = String(sessionStorage.getItem(TOKEN_KEY) || "");
         if (!token) {
@@ -5883,16 +5896,25 @@ Visible rate
             const response = await fetch(API_BASE + "/session-check", {
                 headers: { "X-Session-Token": token }
             });
+            if (response.status === 401 || response.status === 403) {
+                lock();
+                return;
+            }
             const payload = await response.json().catch(() => ({}));
-            if (!response.ok || !payload.ok || !payload.username) throw new Error("Session expired.");
+            if (!response.ok || !payload.ok || !payload.username) throw new Error("No usable answer (HTTP " + response.status + ").");
             sessionStorage.setItem(TOKEN_EXPIRY_KEY, String(payload.expires_at || ""));
             unlock(payload.username);
-            const workspace = new URLSearchParams(window.location.search).get("workspace");
-            if (workspace !== "map") window.location.replace("main.html");
+            showSessionCheckNote(false);
         } catch (restoreError) {
-            console.warn("Session restore failed:", restoreError);
-            lock();
+            // Only the Worker's own refusal ends a session. Signing out on an outage
+            // would wipe a valid token for a login screen that needs the same Worker.
+            console.warn("Session check unavailable:", restoreError);
+            unlock(sessionStorage.getItem(SESSION_USER_KEY));
+            showSessionCheckNote(true);
+            setTimeout(restoreSession, SESSION_RECHECK_MS);
         }
+        const workspace = new URLSearchParams(window.location.search).get("workspace");
+        if (workspace !== "map") window.location.replace("main.html");
     }
 
     async function logout() {
