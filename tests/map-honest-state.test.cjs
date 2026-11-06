@@ -161,6 +161,13 @@ test("the badge is real text on the page, next to the Published date, and reache
   assert.doesNotMatch(html.slice(html.indexOf("#dataStateBadge {"),html.indexOf("#dataStateBadge[hidden]")),/display: none/);
 });
 
+test("the badge's two lines fit the header, so its text costs the map no height",()=>{
+  // Measured at 1000-1920 px: at 118 px wide it took three lines and the header grew by 16.
+  const css=html.replace(/\r\n/g,"\n");
+  assert.match(css,/#updated \{\n    order: 3 !important;\n    flex-basis: 172px !important;/);
+  assert.match(css,/@media \(max-width: 1250px\) \{[\s\S]{0,400}#updated \{\n        flex-basis: 160px !important;/);
+});
+
 function headerContext(now){
   class Clock extends Date { constructor(...args){if(args.length)super(...args);else super(now);} static now(){return now;} }
   const c=vm.createContext({document:{getElementById:()=>null},Date:Clock,Intl,Map,Number,Array,Set,Math});
