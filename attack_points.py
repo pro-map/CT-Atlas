@@ -9,9 +9,10 @@ update_type is unreliable in both directions: a reaction piece can be labelled
 INITIAL and a real attack FOLLOW_UP. It therefore only chooses the point and
 proves nothing about timing, and an incident with no INITIAL keeps a point.
 
-Two kinds of record read as attacks and are no points either, and carry the
-same flag: hoaxes, and reports held until a second outlet carries them
-(held_indexes). A held record stays in events.json and the Database.
+Other records read as attacks and are no points either, and carry the same
+flag: hoaxes, a point repeating another incident's (duplicate_point_indexes),
+and reports held until a second outlet carries them (held_indexes). A held
+record stays in events.json and the Database.
 """
 from __future__ import annotations
 
@@ -20,6 +21,7 @@ import re
 from collections import defaultdict
 from datetime import datetime, timezone
 
+from map_evidence_integrity import consolidation_weak_words, headline_words
 from retired_categories import active_event, is_retired_judicial_event
 
 MAP_TYPES = ("ATTACK", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT")
@@ -48,6 +50,12 @@ SAME_PLACE_KM = 25.0
 # A region's own coordinates are evidence, unlike a capital's: 12 devices found
 # in Saxony stay in Saxony although a sibling names a town 483 km away.
 REGION_SIBLING_KM = 150.0
+# Two points of one country within SPLIT_DAYS and this far, whose headlines share
+# this many distinctive words of one script, are one attack that consolidation
+# left under two ids. Two words join separate blasts (Manbij in both scripts), and
+# a wrong match still leaves a point within DUPLICATE_KM.
+DUPLICATE_KM = 60.0
+DUPLICATE_WORDS = 3
 
 
 def event_categories(event: dict) -> list[str]:
@@ -209,12 +217,44 @@ def _points(events: list, positions: list[int]) -> list[int]:
     return points
 
 
+def duplicate_point_indexes(events: list) -> set[int]:
+    """List positions of the points repeating another point under another
+    incident id (DUPLICATE_WORDS). A city point outlives a region or a capital
+    ('Culiacan' over 'Sinaloa'), then the earliest stays. Nothing is merged: they
+    are stamped like any follow-up, and a later publication can bring one back."""
+    weak = consolidation_weak_words([event for event in events if isinstance(event, dict)
+                                     and not is_retired_judicial_event(event)])
+    points = sorted((index for positions in attack_groups(events).values() for index in _points(events, positions)),
+                    key=lambda index: (events[index].get("location_precision") != "city",
+                                       published_at(events[index]) or _UNDATED, index))
+    kept = defaultdict(list)
+    duplicates = set()
+    for index in points:
+        event = events[index]
+        country, moment = event.get("country_code"), published_at(event)
+        if not (country and moment and _located(event)):
+            continue
+        words = headline_words(event)
+        for earlier in kept[country]:
+            distance = _distance_km(event, events[earlier])
+            if (abs((moment - published_at(events[earlier])).total_seconds()) <= SPLIT_DAYS * 86400
+                    and distance is not None and distance <= DUPLICATE_KM):
+                shared = weak.distinctive(words & headline_words(events[earlier]), country)
+                latin = sum(word.isascii() for word in shared)
+                if max(latin, len(shared) - latin) >= DUPLICATE_WORDS:
+                    duplicates.add(index)
+                    break
+        else:
+            kept[country].append(index)
+    return duplicates
+
+
 def attack_update_indexes(events: list) -> set[int]:
     """List positions of the records that read as attacks but are not points:
-    follow-ups, held reports and hoaxes. Positions, not ids: old event ids are
-    not unique. Non-object and retired records are skipped, so the raw list and
-    the active list flag the same records."""
-    updates = held_indexes(events)
+    follow-ups, duplicates, held reports and hoaxes. Positions, not ids: old event
+    ids are not unique. Non-object and retired records are skipped, so the raw
+    list and the active list flag the same records."""
+    updates = held_indexes(events) | duplicate_point_indexes(events)
     for positions in attack_groups(events).values():
         updates.update(set(positions) - set(_points(events, positions)))
     updates.update(index for index, event in enumerate(events)

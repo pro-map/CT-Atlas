@@ -53,8 +53,8 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 from attack_points import (  # noqa: E402
-    LOCATION_FIELDS, attack_groups, attack_update_indexes, event_categories, held_indexes, is_attack_record,
-    is_historic_update, is_map_attack, published_at, sibling_locations,
+    LOCATION_FIELDS, attack_groups, attack_update_indexes, duplicate_point_indexes, event_categories, held_indexes,
+    is_attack_record, is_historic_update, is_map_attack, published_at, sibling_locations,
 )
 from retired_categories import active_event, is_retired_judicial_event  # noqa: E402
 FORMAT = "events-map-v1"
@@ -172,9 +172,10 @@ def validate(output: dict, database: dict) -> None:
     if len(output["events"]) != expected:
         raise ValueError(f"Map has {len(output['events'])} events but the source has {expected} attack points.")
     pointed = {str(event.get("incident_id") or "").strip() for event in output["events"]}
+    duplicates = duplicate_point_indexes(source)
     for incident, positions in groups.items():
         # A record with no incident_id is keyed by position: the count above covers it.
-        if (isinstance(incident, str) and incident not in pointed
+        if (isinstance(incident, str) and incident not in pointed and not duplicates & set(positions)
                 and not all(is_historic_update(source[index]) for index in positions)):
             raise ValueError(f"Incident {incident} has lost its attack point.")
     for key in database:

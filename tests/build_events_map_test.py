@@ -514,6 +514,68 @@ class HoaxTests(unittest.TestCase):
         self.assertEqual(m.attack_update_indexes([{'primary_event_type': 'ARREST', 'reported_status': 'HOAX'}]), set())
 
 
+HOFHEIM = {'latitude': 50.09, 'longitude': 8.45, 'location_precision': 'city', 'country_code': 'DE'}
+LEIPZIG = {'latitude': 51.34, 'longitude': 12.37, 'location_precision': 'city', 'country_code': 'DE'}
+MANBIJ = {'latitude': 36.53, 'longitude': 37.95, 'location_precision': 'city', 'country_code': 'SY'}
+
+
+class DuplicatePointTests(unittest.TestCase):
+    """Two incident ids that consolidation left apart, from the audit of 2026-11-05."""
+    now = datetime(2026, 10, 30, 12, tzinfo=timezone.utc)
+
+    def points(self, *records):
+        database = {'events': list(records)}
+        output = m.build_map(database, [], now=self.now)
+        m.validate(output, database)
+        m.lite.validate(m.lite.build_lite(database, []), database)
+        return [e['id'] for e in output['events']]
+
+    def test_the_leipzig_fence_is_one_point(self):
+        self.assertEqual(self.points(
+            attack('first', '2026-10-18T08:00:00Z', 'inc-a', place=LEIPZIG, title='Car breaks through fence - Another attack on Leipzig airport?',
+                   original_title='Auto durchbricht Zaun - wieder Angriff auf Flughafen Leipzig?'),
+            attack('second', '2026-10-18T09:00:00Z', 'inc-b', place=LEIPZIG, title='Car breaches fence at Leipzig Airport, attack clarified',
+                   original_title='Auto durchbricht Zaun am Flughafen Leipzig, Angriff aufgeklaert'),
+        ), ['first'])
+
+    def test_a_duplicate_keeps_its_record_and_its_flag(self):
+        records = [attack('first', '2026-10-13T08:00:00Z', 'inc-a', place=LEIPZIG, title='Hostigamiento a la estacion del municipio de Silvia'),
+                   attack('second', '2026-10-13T09:00:00Z', 'inc-b', place=LEIPZIG, title='Hostigamiento en el municipio de Silvia, Cauca')]
+        output = m.build_map({'events': records}, [], now=self.now)
+        self.assertEqual([e['id'] for e in output['recent_events']], ['second'])
+        self.assertIs(output['recent_events'][0]['attack_update'], True)
+        self.assertEqual(records[1]['incident_id'], 'inc-b')
+
+    def test_a_city_point_outlives_an_earlier_region_point(self):
+        sinaloa = {'latitude': 24.5085, 'longitude': -107.4604, 'location_precision': 'region', 'country_code': 'MX'}
+        culiacan = {'latitude': 24.80209, 'longitude': -107.39421, 'location_precision': 'city', 'country_code': 'MX'}
+        self.assertEqual(self.points(
+            attack('region', '2026-10-27T21:44:41Z', 'inc-a', place=sinaloa, title='Former campaign office attacked in Sinaloa, Mexico',
+                   original_title='Balean antigua casa de campaña de Rubén Rocha en Sinaloa'),
+            attack('city', '2026-10-28T04:46:40Z', 'inc-b', place=culiacan, title='Building shot at in Culiacán',
+                   original_title='Balean inmueble que habría sido casa de campaña de Rubén Rocha Moya en Culiacán'),
+        ), ['city'])
+
+    def test_a_place_in_two_scripts_is_not_three_words(self):
+        self.assertEqual(self.points(
+            attack('family', '2026-10-31T08:00:00Z', 'inc-a', place=MANBIJ, title='Man and son killed in Manbij, Syria', original_title='مقتل رجل وابنه في منبج'),
+            attack('mine', '2026-10-29T08:00:00Z', 'inc-b', place=MANBIJ, title='Seven injured by a landmine explosion in the countryside of Manbij',
+                   original_title='إصابة سبعة بانفجار لغم في ريف منبج'),
+        ), ['family', 'mine'])
+
+    def test_far_apart_or_days_apart_stay_two_points(self):
+        title = 'Hostigamiento a la estacion del municipio de Silvia'
+        self.assertEqual(self.points(attack('a', '2026-10-13T08:00:00Z', 'inc-a', place=LEIPZIG, title=title),
+                                     attack('b', '2026-10-13T08:00:00Z', 'inc-b', place=HOFHEIM, title=title)), ['a', 'b'])
+        self.assertEqual(self.points(attack('a', '2026-10-13T08:00:00Z', 'inc-a', place=LEIPZIG, title=title),
+                                     attack('b', '2026-10-17T08:00:00Z', 'inc-b', place=LEIPZIG, title=title)), ['a', 'b'])
+
+    def test_another_country_stays_a_second_point(self):
+        title = 'Fires at Starlink antennas reported following sabotage'
+        self.assertEqual(self.points(attack('a', '2026-10-14T08:00:00Z', 'inc-a', place=LEIPZIG, title=title),
+                                     attack('b', '2026-10-14T08:00:00Z', 'inc-b', place={**LEIPZIG, 'country_code': 'PL'}, title=title)), ['a', 'b'])
+
+
 AMMAN = {'latitude': 31.95, 'longitude': 35.93, 'location_precision': 'country_capital', 'city': 'Amman',
          'country_code': 'JO', 'location_method': 'ai_country_capital', 'location_confidence': 'high'}
 KARAK = {'latitude': 31.18, 'longitude': 35.70, 'location_precision': 'city', 'city': 'Karak', 'country_code': 'JO',
