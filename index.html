@@ -6929,6 +6929,7 @@ function loadEventsDatabase() {
 // events-lite.json, so the last-resort events.json fallback draws every record.
 function isMapAttackEvent(event) {
     if (event.attack_update === true) return false;
+    if (String(event.reported_status || "").trim().toUpperCase() === "HOAX") return false;
     if (isRetiredJudicialEvent(event)) return false;
     const type = String(event.primary_event_type || "").trim().toUpperCase();
     if (type) {
@@ -14745,6 +14746,12 @@ function openDatabaseEvent(event) {
 function databaseEventCardNote(event) {
     if (event.archive_only === true || event.kind === "radnuc_background") {
         return "Background information: included in the database and Excel export, not an operational incident and not shown on the map.";
+    }
+    if (event.held_for_corroboration === true) {
+        return "Held for corroboration: a single outlet carries this report and its date may come from a re-indexed archive, so it stays off the map and out of the counts until a second outlet reports it. This report is in the CT Atlas database.";
+    }
+    if (String(event.reported_status || "").trim().toUpperCase() === "HOAX") {
+        return "Reported as a hoax: not an attack, so it is not on the map. This report is in the CT Atlas database.";
     }
     if (event.attack_update === true) {
         return "Follow-up report of an attack: the map shows one point per incident. This report is in the CT Atlas database.";

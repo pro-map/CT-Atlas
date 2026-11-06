@@ -403,6 +403,243 @@ class AttackPointTests(unittest.TestCase):
         self.assertEqual([e['id'] for e in output['events']], ['other'])
 
 
+def report(event_id, source, published='2026-10-15T09:17:00+00:00', incident=None, **fields):
+    return attack(event_id, published, incident or 'inc-' + event_id, source=source, sources=[source], **fields)
+
+
+class HeldReportTests(unittest.TestCase):
+    """Re-dated archive articles (audit of 2026-11-05). Held records stay in the
+    database; they leave the map and every count until a second outlet reports them."""
+    now = datetime(2026, 10, 20, 12, tzinfo=timezone.utc)
+
+    def build(self, *records):
+        database = {'events': list(records)}
+        output = m.build_map(database, [], now=self.now)
+        m.validate(output, database)
+        return output
+
+    def test_a_sole_source_report_of_a_listed_outlet_is_no_point_and_is_not_counted(self):
+        rawda = report('rawda', 'Orange Actualités', title='Au moins 235 morts dans un attentat en Égypte')
+        output = self.build(report('other', 'Reuters'), rawda)
+        self.assertEqual([e['id'] for e in output['events']], ['other'])
+        self.assertEqual(output['recent_events'], [], 'The header counts read recent_events')
+        self.assertEqual(output['database_summary']['total_events'], 2)
+        self.assertEqual(m.held_indexes([rawda]), {0})
+        self.assertNotIn('held_for_corroboration', rawda)
+
+    def test_a_second_outlet_in_the_record_or_the_incident_releases_it(self):
+        merged = attack('h7', '2026-10-15T09:17:00+00:00', source='Haber 7', sources=['Haber 7', 'TRT Haber'])
+        self.assertEqual([e['id'] for e in self.build(merged)['events']], ['h7'])
+        self.assertEqual([e['id'] for e in self.build(
+            report('h7', 'Haber 7', incident='inc-1'),
+            report('trt', 'TRT Haber', incident='inc-1', update='FOLLOW_UP'))['events']], ['h7'])
+
+    def test_another_record_of_the_same_outlet_is_no_corroboration(self):
+        output = self.build(report('first', 'Haber 7', incident='inc-1'),
+                            report('second', 'Haber 7', incident='inc-1', update='FOLLOW_UP'),
+                            report('unrelated', 'Reuters'))
+        self.assertEqual([e['id'] for e in output['events']], ['unrelated'])
+
+    def burst(self, source='verify-sy.com', stamp='2026-10-01T09:30:00+00:00', count=4):
+        return [report(f'{source}-{n}', source, stamp, title=f'Headline {n}') for n in range(count)]
+
+    def test_four_items_of_one_outlet_in_one_minute_are_a_re_index(self):
+        output = self.build(*self.burst(), report('elsewhere', 'Reuters', '2026-10-01T09:31:00+00:00'))
+        self.assertEqual([e['id'] for e in output['events']], ['elsewhere'])
+
+    def test_three_items_are_not_and_a_query_repeating_one_article_is_not_a_second_item(self):
+        self.assertEqual(len(self.build(*self.burst(count=3))['events']), 3)
+        same = [report(f'copy-{n}', 'verify-sy.com', '2026-10-01T09:30:00+00:00', title='One headline') for n in range(6)]
+        self.assertEqual(len(self.build(*same)['events']), 6)
+
+    def test_folded_articles_count_towards_a_burst(self):
+        records = self.burst(count=2)
+        records[0]['related_articles'] = [
+            {'title': f'Folded {n}', 'source': 'verify-sy.com', 'published': '2026-10-01T09:30:00+00:00'} for n in range(2)]
+        self.assertEqual(self.build(*records)['events'], [])
+
+    def test_a_stamp_on_the_hour_is_a_date_only_feed_not_a_burst(self):
+        self.assertEqual(len(self.build(*self.burst('Daily Trust', '2026-09-04T07:00:00+00:00', 7))['events']), 7)
+
+    def test_gdelt_crawl_times_are_not_an_outlets_stamp(self):
+        records = self.burst('dw.com')
+        for record in records:
+            record['collector'] = 'GDELT DOC 2.0'
+        self.assertEqual(len(self.build(*records)['events']), 4)
+
+    def test_the_mark_set_at_ingest_holds_a_record_until_a_second_outlet_comes(self):
+        marked = report('marked', 'Le Monde.fr', corroboration_hold='same_minute_burst')
+        self.assertEqual(self.build(marked, report('other', 'Reuters'))['events'][0]['id'], 'other')
+        marked['sources'] = ['Le Monde.fr', 'AFP']
+        self.assertEqual(self.build(marked)['events'][0]['id'], 'marked')
+
+    def test_held_records_of_other_types_leave_the_counts_too(self):
+        afrin = dict(report('afrin', 'Haber 7'), primary_event_type='CT_OPERATION')
+        database = {'events': [afrin, report('other', 'Reuters')]}
+        self.assertNotIn('afrin', [e['id'] for e in m.build_map(database, [], now=self.now)['recent_events']])
+        self.assertEqual(m.attack_update_indexes(database['events']), {0}, 'The Worker and the weekly counts skip it')
+
+    def test_a_key_development_citing_a_held_record_keeps_its_link(self):
+        database = {'trend_summary': {'developments': [{'event_id': 'cited'}]},
+                    'events': [report('cited', 'Haber 7'), report('other', 'Reuters')]}
+        output = m.build_map(database, [], now=self.now)
+        kept = output['recent_events'][0]
+        self.assertEqual(kept['id'], 'cited')
+        self.assertIs(kept['held_for_corroboration'], True)
+        self.assertFalse(m.is_map_attack(kept))
+        m.validate(output, database)
+
+
+class HoaxTests(unittest.TestCase):
+    now = datetime(2026, 10, 20, 12, tzinfo=timezone.utc)
+
+    def test_a_hoax_is_no_attack_whatever_its_type(self):
+        for fields in ({'primary_event_type': 'ATTACK', 'is_attack': True}, {'primary_event_type': 'DISRUPTED_PLOT'},
+                       {'primary_event_type': 'ATTEMPTED_ATTACK'}, {'categories': ['Attacks']}):
+            self.assertFalse(m.is_attack_record({**fields, 'reported_status': 'HOAX'}), fields)
+            self.assertFalse(m.is_attack_record({**fields, 'reported_status': ' hoax '}), fields)
+            self.assertTrue(m.is_attack_record({**fields, 'reported_status': 'THREAT'}), fields)
+
+    def test_the_school_hoaxes_leave_the_map_and_the_counts_of_the_worker(self):
+        hoax = attack('hoax', '2026-10-10T08:00:00Z', title='Schools in the UK, Hungary, and Serbia receive bomb threat hoaxes',
+                      reported_status='HOAX')
+        database = {'events': [hoax, attack('real', '2026-10-10T08:00:00Z', 'inc-2')]}
+        output = m.build_map(database, [], now=self.now)
+        m.validate(output, database)
+        self.assertEqual([e['id'] for e in output['events']], ['real'])
+        self.assertEqual([e['id'] for e in output['recent_events']], ['hoax'])
+        self.assertIs(output['recent_events'][0]['attack_update'], True)
+
+    def test_a_hoax_arrest_is_not_flagged_as_an_attack(self):
+        self.assertEqual(m.attack_update_indexes([{'primary_event_type': 'ARREST', 'reported_status': 'HOAX'}]), set())
+
+
+HOFHEIM = {'latitude': 50.09, 'longitude': 8.45, 'location_precision': 'city', 'country_code': 'DE'}
+LEIPZIG = {'latitude': 51.34, 'longitude': 12.37, 'location_precision': 'city', 'country_code': 'DE'}
+MANBIJ = {'latitude': 36.53, 'longitude': 37.95, 'location_precision': 'city', 'country_code': 'SY'}
+
+
+class DuplicatePointTests(unittest.TestCase):
+    """Two incident ids that consolidation left apart, from the audit of 2026-11-05."""
+    now = datetime(2026, 10, 30, 12, tzinfo=timezone.utc)
+
+    def points(self, *records):
+        database = {'events': list(records)}
+        output = m.build_map(database, [], now=self.now)
+        m.validate(output, database)
+        m.lite.validate(m.lite.build_lite(database, []), database)
+        return [e['id'] for e in output['events']]
+
+    def test_the_leipzig_fence_is_one_point(self):
+        self.assertEqual(self.points(
+            attack('first', '2026-10-18T08:00:00Z', 'inc-a', place=LEIPZIG, title='Car breaks through fence - Another attack on Leipzig airport?',
+                   original_title='Auto durchbricht Zaun - wieder Angriff auf Flughafen Leipzig?'),
+            attack('second', '2026-10-18T09:00:00Z', 'inc-b', place=LEIPZIG, title='Car breaches fence at Leipzig Airport, attack clarified',
+                   original_title='Auto durchbricht Zaun am Flughafen Leipzig, Angriff aufgeklaert'),
+        ), ['first'])
+
+    def test_a_duplicate_keeps_its_record_and_its_flag(self):
+        records = [attack('first', '2026-10-13T08:00:00Z', 'inc-a', place=LEIPZIG, title='Hostigamiento a la estacion del municipio de Silvia'),
+                   attack('second', '2026-10-13T09:00:00Z', 'inc-b', place=LEIPZIG, title='Hostigamiento en el municipio de Silvia, Cauca')]
+        output = m.build_map({'events': records}, [], now=self.now)
+        self.assertEqual([e['id'] for e in output['recent_events']], ['second'])
+        self.assertIs(output['recent_events'][0]['attack_update'], True)
+        self.assertEqual(records[1]['incident_id'], 'inc-b')
+
+    def test_a_city_point_outlives_an_earlier_region_point(self):
+        sinaloa = {'latitude': 24.5085, 'longitude': -107.4604, 'location_precision': 'region', 'country_code': 'MX'}
+        culiacan = {'latitude': 24.80209, 'longitude': -107.39421, 'location_precision': 'city', 'country_code': 'MX'}
+        self.assertEqual(self.points(
+            attack('region', '2026-10-27T21:44:41Z', 'inc-a', place=sinaloa, title='Former campaign office attacked in Sinaloa, Mexico',
+                   original_title='Balean antigua casa de campaña de Rubén Rocha en Sinaloa'),
+            attack('city', '2026-10-28T04:46:40Z', 'inc-b', place=culiacan, title='Building shot at in Culiacán',
+                   original_title='Balean inmueble que habría sido casa de campaña de Rubén Rocha Moya en Culiacán'),
+        ), ['city'])
+
+    def test_a_place_in_two_scripts_is_not_three_words(self):
+        self.assertEqual(self.points(
+            attack('family', '2026-10-31T08:00:00Z', 'inc-a', place=MANBIJ, title='Man and son killed in Manbij, Syria', original_title='مقتل رجل وابنه في منبج'),
+            attack('mine', '2026-10-29T08:00:00Z', 'inc-b', place=MANBIJ, title='Seven injured by a landmine explosion in the countryside of Manbij',
+                   original_title='إصابة سبعة بانفجار لغم في ريف منبج'),
+        ), ['family', 'mine'])
+
+    def test_far_apart_or_days_apart_stay_two_points(self):
+        title = 'Hostigamiento a la estacion del municipio de Silvia'
+        self.assertEqual(self.points(attack('a', '2026-10-13T08:00:00Z', 'inc-a', place=LEIPZIG, title=title),
+                                     attack('b', '2026-10-13T08:00:00Z', 'inc-b', place=HOFHEIM, title=title)), ['a', 'b'])
+        self.assertEqual(self.points(attack('a', '2026-10-13T08:00:00Z', 'inc-a', place=LEIPZIG, title=title),
+                                     attack('b', '2026-10-17T08:00:00Z', 'inc-b', place=LEIPZIG, title=title)), ['a', 'b'])
+
+    def test_another_country_stays_a_second_point(self):
+        title = 'Fires at Starlink antennas reported following sabotage'
+        self.assertEqual(self.points(attack('a', '2026-10-14T08:00:00Z', 'inc-a', place=LEIPZIG, title=title),
+                                     attack('b', '2026-10-14T08:00:00Z', 'inc-b', place={**LEIPZIG, 'country_code': 'PL'}, title=title)), ['a', 'b'])
+
+
+AMMAN = {'latitude': 31.95, 'longitude': 35.93, 'location_precision': 'country_capital', 'city': 'Amman',
+         'country_code': 'JO', 'location_method': 'ai_country_capital', 'location_confidence': 'high'}
+KARAK = {'latitude': 31.18, 'longitude': 35.70, 'location_precision': 'city', 'city': 'Karak', 'country_code': 'JO',
+         'location_method': 'source_name_geonames_correction', 'location_confidence': 'medium',
+         'location_evidence': ['Karak']}
+
+
+class SiblingLocationTests(unittest.TestCase):
+    now = datetime(2026, 10, 30, 12, tzinfo=timezone.utc)
+
+    def drawn(self, *records):
+        database = {'events': list(records)}
+        output = m.build_map(database, [], now=self.now)
+        m.validate(output, database)
+        return output['events'][0]
+
+    def test_the_karak_church_attack_is_drawn_on_karak_not_on_amman(self):
+        point = attack('funeral', '2026-10-23T08:00:00Z', place=AMMAN, title='Karak: Funeral shooting at a church')
+        arrest = event('arrest', primary_event_type='ARREST', incident_id='inc-1', update_type='ARREST_UPDATE',
+                       published='2026-10-24T08:00:00Z', **KARAK)
+        drawn = self.drawn(point, arrest)
+        self.assertEqual((drawn['latitude'], drawn['city'], drawn['location_precision']), (31.18, 'Karak', 'city'))
+        self.assertEqual(drawn['location_from_record'], 'arrest')
+        self.assertEqual(point['latitude'], 31.95, 'The stored record keeps its location')
+
+    def test_the_lite_file_keeps_the_stored_location(self):
+        database = {'events': [attack('funeral', place=AMMAN), attack('later', update='FOLLOW_UP', place=KARAK)]}
+        lite = m.lite.build_lite(database, [])
+        self.assertEqual(lite['events'][0]['latitude'], 31.95)
+        m.lite.validate(lite, database)
+
+    def test_a_sibling_in_another_country_lends_nothing(self):
+        kirkuk = {**KARAK, 'latitude': 35.47, 'longitude': 44.39, 'city': 'Kirkuk', 'country_code': 'IQ'}
+        self.assertEqual(self.drawn(attack('point', place=AMMAN), attack('false-merge', update='FOLLOW_UP', place=kirkuk))['city'], 'Amman')
+
+    def test_siblings_must_agree_on_one_place(self):
+        aqaba = {**KARAK, 'latitude': 29.53, 'longitude': 35.0, 'city': 'Aqaba'}
+        self.assertEqual(self.drawn(attack('point', place=AMMAN), attack('a', update='FOLLOW_UP', place=KARAK),
+                                    attack('b', update='FOLLOW_UP', place=aqaba))['city'], 'Amman')
+
+    def test_two_spellings_of_one_town_agree_and_a_sibling_on_the_capital_itself_is_no_rival(self):
+        al_karak = {**KARAK, 'latitude': 31.17, 'longitude': 35.71, 'city': 'Al-Karak'}
+        amman_city = {**KARAK, 'latitude': 31.96, 'longitude': 35.94, 'city': 'Amman'}
+        drawn = self.drawn(attack('point', place=AMMAN), attack('a', '2026-09-28T08:00:00Z', update='FOLLOW_UP', place=KARAK),
+                           attack('b', update='FOLLOW_UP', place=al_karak), attack('c', update='FOLLOW_UP', place=amman_city))
+        self.assertEqual(drawn['city'], 'Karak')
+
+    def test_a_region_point_keeps_its_place_when_the_sibling_is_far(self):
+        saxony = {'latitude': 51.05, 'longitude': 13.35, 'location_precision': 'region', 'region': 'Saxony', 'country_code': 'DE'}
+        eschweiler = {'latitude': 50.82, 'longitude': 6.27, 'location_precision': 'city', 'city': 'Eschweiler', 'country_code': 'DE'}
+        self.assertEqual(self.drawn(attack('point', place=saxony), attack('a', update='FOLLOW_UP', place=eschweiler))['region'], 'Saxony')
+
+    def test_a_region_point_moves_to_a_city_of_that_region(self):
+        kashmir = {'latitude': 34.0, 'longitude': 76.0, 'location_precision': 'region', 'region': 'Jammu and Kashmir', 'country_code': 'IN'}
+        anantnag = {'latitude': 33.73, 'longitude': 75.15, 'location_precision': 'city', 'city': 'Anantnag', 'country_code': 'IN'}
+        self.assertEqual(self.drawn(attack('point', place=kashmir), attack('a', update='FOLLOW_UP', place=anantnag))['city'], 'Anantnag')
+
+    def test_a_city_point_and_a_doubtful_sibling_change_nothing(self):
+        far = {**KARAK, 'latitude': 30.0, 'city': 'Maan'}
+        self.assertEqual(self.drawn(attack('point', place=KARAK), attack('a', update='FOLLOW_UP', place=far))['city'], 'Karak')
+        self.assertEqual(self.drawn(attack('point', place=AMMAN),
+                                    attack('a', update='FOLLOW_UP', place=KARAK, geolocation_review_required=True))['city'], 'Amman')
+
+
 if __name__ == '__main__':
     unittest.main()
 

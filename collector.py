@@ -1,4 +1,5 @@
 import attack_points
+from map_evidence_integrity import headline_leaves_location, repair_text
 import radnuc
 import threat_categories
 import collection_config
@@ -2011,7 +2012,7 @@ def clean_text(text):
     if not text:
         return ""
 
-    text = html.unescape(text)
+    text = repair_text(text)
     text = re.sub(r"<[^>]+>", " ", text)
     text = re.sub(r"\s+", " ", text)
     return text.strip()
@@ -2560,6 +2561,24 @@ def article_urls(events):
                 if url:
                     urls.add(url)
     return urls
+
+
+def mark_corroboration_holds(records):
+    """Mark what attack_points holds until a second outlet reports it. A run sees
+    the whole re-index, also the articles the AI selection goes on to reject,
+    which the stored records of a later publication no longer show."""
+    bursts = attack_points.reindex_bursts(records)
+    for record in records:
+        if attack_points.outlet_key(record.get("source")) in attack_points.HOLD_OUTLETS:
+            record[attack_points.HOLD_FIELD] = "listed_outlet"
+            COLLECTION_STATS["corroboration_hold_listed_outlet"] += 1
+        elif attack_points.burst_key(record) in bursts:
+            record[attack_points.HOLD_FIELD] = "same_minute_burst"
+            COLLECTION_STATS["corroboration_hold_same_minute_burst"] += 1
+    print(f"Held for corroboration at ingest: "
+          f"{COLLECTION_STATS['corroboration_hold_listed_outlet']} from listed outlets, "
+          f"{COLLECTION_STATS['corroboration_hold_same_minute_burst']} in same-minute bursts")
+    return records
 
 
 def exclude_reviewed_articles(fresh, existing):
@@ -5050,6 +5069,32 @@ def anchor_incident_id(anchor):
     return "inc-" + hashlib.sha256(normalized_anchor.encode("utf-8")).hexdigest()[:16]
 
 
+# The model files the Houthi land war under Maritime Piracy first: 117 records
+# named no ship or sea (audit of 2026-11-05), 49 of them map points.
+MARITIME_WORDS = re.compile(
+    r"\b(?:ships?|shipping|vessels?|tankers?|maritime|seas?|naval|navy|ports?|harbou?rs?|straits?|gulf|boats?"
+    r"|piracy|pirates?|cargo|freighters?|offshore|seafarers?|crews?|dhows?|skiffs?|coasts?|coastal|coastguard"
+    r"|bab[- ]?(?:el|al)[- ]?mand[ae]b|hormuz|ukmto|recaap|navires?|bateaux?|buques?|barcos?|gemi|deniz"
+    r"|سفينة|سفن|ناقلة|بحر|البحر|بحري|البحرية|ميناء|مرفأ|قرصنة)\b",
+    re.IGNORECASE,
+)
+
+
+def correct_primary_category(event):
+    """Move Maritime Piracy behind the record's other categories when nothing in
+    its text is maritime. A record with no other category, or typed PIRACY, keeps it."""
+    categories = event.get("categories") or []
+    text = " ".join(str(event.get(field) or "") for field in (
+        "title", "summary", "original_title", "original_summary"))
+    if (len(categories) < 2 or categories[0] != "Maritime Piracy"
+            or str(event.get("primary_event_type") or "").upper() == "PIRACY"
+            or MARITIME_WORDS.search(text)):
+        return False
+    event["categories"] = categories[1:] + categories[:1]
+    event["category"] = event["categories"][0]
+    return True
+
+
 def apply_ai_selection(
     event,
     result,
@@ -5320,6 +5365,7 @@ def apply_ai_selection(
                          if category in CATEGORIES]
     event["categories"] = active_categories
     event["category"] = active_categories[0] if active_categories else ""
+    correct_primary_category(event)
     scope_reason = threat_categories.scope_reason(event, result)
     scope_reason = scope_reason or out_of_scope_reason(event)
     if not event["ai_current_ct_event"]:
@@ -7559,13 +7605,27 @@ def profile_pair_score(
     )
 
 
+def shared_country_code(incoming, existing):
+    """The record's stored country or, before geolocation, the one both texts name."""
+    code = existing.get("country_code") or incoming.get("country_code")
+    if code:
+        return code
+    shared = build_profile(incoming)["countries"] & build_profile(existing)["countries"]
+    if len(shared) != 1:
+        return None
+    from map_evidence_integrity import country_code_for
+    return country_code_for(next(iter(shared)))
+
+
 def event_match(
     incoming,
     existing,
 ):
-    from map_evidence_integrity import primary_pair_supported
+    from map_evidence_integrity import far_named_place, primary_pair_supported
     if not primary_pair_supported(incoming, existing):
         return (False, 0.0, "unverified_primary_evidence")
+    if far_named_place(incoming, existing, shared_country_code(incoming, existing)):
+        return (False, 0.0, "different_named_place")
     best_match = (
         False,
         0.0,
@@ -7827,6 +7887,10 @@ def merge_event(
         + new.get("source_article_fingerprints", [])
     ))
     merge_acled_metadata(existing, new)
+    # Whichever article of one outlet leads the cluster: a second outlet is what
+    # ends a hold, and attack_points checks that at publication.
+    if new.get(attack_points.HOLD_FIELD):
+        existing.setdefault(attack_points.HOLD_FIELD, new[attack_points.HOLD_FIELD])
 
     # Keep a history of genuinely different articles/headlines.
     known_article_ids = article_identities(
@@ -7981,6 +8045,11 @@ def merge_event(
                 "source",
                 "",
             )
+        )
+        and
+        not headline_leaves_location(
+            new,
+            existing,
         )
     ):
         old_representative = {
@@ -8341,6 +8410,15 @@ def deduplicate_events(records):
     return events
 
 
+def repair_stored_text(event):
+    for field in ("title", "summary", "city", "region", "incident_anchor", "geolocation_requested_city"):
+        if isinstance(event.get(field), str):
+            event[field] = repair_text(event[field])
+    if isinstance(event.get("location_evidence"), list):
+        event["location_evidence"] = [repair_text(value) if isinstance(value, str) else value
+                                      for value in event["location_evidence"]]
+
+
 def load_existing():
     events = [retired_categories.active_event(event)
               for event in load_database_strict()["events"]
@@ -8350,6 +8428,8 @@ def load_existing():
         if categories:
             event["categories"] = categories
             event["category"] = categories[0]
+        correct_primary_category(event)
+        repair_stored_text(event)
     return events
 
 
@@ -11396,7 +11476,7 @@ def main():
     atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
     source_failure = None
     try:
-        fresh = exclude_reviewed_articles(collect_all(days), existing)
+        fresh = exclude_reviewed_articles(mark_corroboration_holds(collect_all(days)), existing)
     except GoogleNewsUnavailable as error:
         # The durable queue does not depend on Google: review it, as
         # resume-pending does, instead of leaving thousands of articles waiting.

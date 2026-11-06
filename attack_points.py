@@ -8,6 +8,11 @@ and update_type after collection and a stored flag would go stale.
 update_type is unreliable in both directions: a reaction piece can be labelled
 INITIAL and a real attack FOLLOW_UP. It therefore only chooses the point and
 proves nothing about timing, and an incident with no INITIAL keeps a point.
+
+Other records read as attacks and are no points either, and carry the same
+flag: hoaxes, a point repeating another incident's (duplicate_point_indexes),
+and reports held until a second outlet carries them (held_indexes). A held
+record stays in events.json and the Database.
 """
 from __future__ import annotations
 
@@ -16,6 +21,7 @@ import re
 from collections import defaultdict
 from datetime import datetime, timezone
 
+from map_evidence_integrity import consolidation_weak_words, headline_words
 from retired_categories import active_event, is_retired_judicial_event
 
 MAP_TYPES = ("ATTACK", "ATTEMPTED_ATTACK", "DISRUPTED_PLOT")
@@ -26,6 +32,30 @@ SPLIT_DAYS = 3.0
 SPLIT_KM = 100.0
 _ANCHOR_YEAR = re.compile(r"(?<!\d)((?:19|20)\d{2})(?!\d)")
 _UNDATED = datetime.max.replace(tzinfo=timezone.utc)
+# Google News re-dates old articles of an outlet when it re-indexes them, and
+# the feed date is all the age gate sees: Haber 7 supplied 33 of the 39 Turkish
+# points of 30 days and Orange Actualites what looks like the 2017 Rawda attack,
+# dated 15 October 2026. Their sole-source reports are held, and so is any
+# outlet's re-index: REINDEX_BURST_ITEMS different articles stamped with one minute.
+HOLD_OUTLETS = frozenset({"haber 7", "orange actualités"})
+REINDEX_BURST_ITEMS = 4
+# Stored on a record the collector marked; the rule below is what decides.
+HOLD_FIELD = "corroboration_hold"
+GDELT_COLLECTOR = "GDELT DOC 2.0"
+# The fields of a map point, as a sibling's city replaces them.
+LOCATION_FIELDS = ("latitude", "longitude", "city", "region", "location_precision",
+                   "location_confidence", "location_method", "location_evidence")
+# Two city records this close are one place ('Karak' and 'Al-Karak').
+SAME_PLACE_KM = 25.0
+# A region's own coordinates are evidence, unlike a capital's: 12 devices found
+# in Saxony stay in Saxony although a sibling names a town 483 km away.
+REGION_SIBLING_KM = 150.0
+# Two points of one country within SPLIT_DAYS and this far, whose headlines share
+# this many distinctive words of one script, are one attack that consolidation
+# left under two ids. Two words join separate blasts (Manbij in both scripts), and
+# a wrong match still leaves a point within DUPLICATE_KM.
+DUPLICATE_KM = 60.0
+DUPLICATE_WORDS = 3
 
 
 def event_categories(event: dict) -> list[str]:
@@ -35,8 +65,11 @@ def event_categories(event: dict) -> list[str]:
     return [str(event["category"])] if event.get("category") else []
 
 
-def is_attack_record(event: dict) -> bool:
-    """Executed attacks (ATTACK with is_attack), attempted attacks and disrupted plots."""
+def is_hoax(event: dict) -> bool:
+    return str(event.get("reported_status") or "").strip().upper() == "HOAX"
+
+
+def _attack_by_type(event: dict) -> bool:
     event_type = str(event.get("primary_event_type") or "").strip().upper()
     if event_type:
         if event_type == "ATTACK":
@@ -45,17 +78,78 @@ def is_attack_record(event: dict) -> bool:
     return "Attacks" in event_categories(event)
 
 
+def is_attack_record(event: dict) -> bool:
+    """Executed attacks (ATTACK with is_attack), attempted attacks and disrupted plots, never a hoax."""
+    return not is_hoax(event) and _attack_by_type(event)
+
+
 def is_map_attack(event: dict) -> bool:
     """An attack record that is a point on the map, not an update of one."""
     return event.get("attack_update") is not True and is_attack_record(event)
 
 
-def published_at(event: dict) -> datetime | None:
+def _parse_time(value) -> datetime | None:
     try:
-        value = datetime.fromisoformat(str(event.get("published") or "").replace("Z", "+00:00"))
+        moment = datetime.fromisoformat(str(value or "").replace("Z", "+00:00"))
     except ValueError:
         return None
-    return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+    return moment if moment.tzinfo else moment.replace(tzinfo=timezone.utc)
+
+
+def published_at(event: dict) -> datetime | None:
+    return _parse_time(event.get("published"))
+
+
+def outlet_key(name) -> str:
+    return " ".join(str(name or "").casefold().split())
+
+
+def burst_key(article: dict) -> tuple | None:
+    """(outlet, minute) of an article, or None when its stamp cannot show a
+    burst: GDELT's says when it crawled the page, and date-only feeds stamp every
+    item on the hour (07:00 or 08:00 UTC, 75% of the on-the-hour stamps stored)."""
+    moment = _parse_time(article.get("primary_source_published") or article.get("published"))
+    outlet = outlet_key(article.get("source"))
+    if (not moment or not outlet or article.get("collector") == GDELT_COLLECTOR
+            or (moment.minute == 0 and moment.second == 0)):
+        return None
+    return outlet, moment.astimezone(timezone.utc).replace(second=0, microsecond=0)
+
+
+def reindex_bursts(articles) -> set:
+    """burst_keys shared by REINDEX_BURST_ITEMS or more different headlines. The
+    same article found again through other queries counts once."""
+    headlines = defaultdict(set)
+    for article in articles:
+        title = " ".join(str(article.get("original_title") or article.get("title") or "").casefold().split())
+        key = burst_key(article)
+        if title and key:
+            headlines[key].add(title)
+    return {key for key, found in headlines.items() if len(found) >= REINDEX_BURST_ITEMS}
+
+
+def _articles(event: dict) -> list[dict]:
+    return [event, *(article for article in event.get("related_articles") or [] if isinstance(article, dict))]
+
+
+def held_indexes(events: list) -> set[int]:
+    """List positions of the records held for corroboration: a sole-source
+    report of a HOLD_OUTLETS outlet, or of any outlet's re-index, marked at
+    ingest or seen in the stored stamps. A second outlet anywhere in the incident
+    releases them: nothing here is stored, so the next publication does it."""
+    live = [(index, event) for index, event in enumerate(events)
+            if isinstance(event, dict) and not is_retired_judicial_event(event)]
+    bursts = reindex_bursts(article for _, event in live for article in _articles(event))
+    outlets = defaultdict(set)
+    incidents = {}
+    for index, event in live:
+        incidents[index] = str(event.get("incident_id") or "").strip() or index
+        outlets[incidents[index]].update(outlet_key(article.get("source")) for article in _articles(event))
+        outlets[incidents[index]].update(outlet_key(name) for name in event.get("sources") or [])
+    return {index for index, event in live
+            if len(outlets[incidents[index]] - {""}) < 2 and (
+                event.get(HOLD_FIELD) or outlet_key(event.get("source")) in HOLD_OUTLETS
+                or burst_key(event) in bursts)}
 
 
 def is_initial(event: dict) -> bool:
@@ -95,10 +189,12 @@ def _separate_attacks(first: dict, second: dict) -> bool:
 
 
 def attack_groups(events: list) -> dict:
-    """Positions of the attack records by incident_id; with none, a record stands alone under its position."""
+    """Positions of the attack records by incident_id, held reports aside; with
+    no id, a record stands alone under its position."""
+    held = held_indexes(events)
     groups = defaultdict(list)
     for index, event in enumerate(events):
-        if (isinstance(event, dict) and not is_retired_judicial_event(event)
+        if (index not in held and isinstance(event, dict) and not is_retired_judicial_event(event)
                 and is_attack_record(active_event(event))):
             groups[str(event.get("incident_id") or "").strip() or index].append(index)
     return groups
@@ -121,11 +217,81 @@ def _points(events: list, positions: list[int]) -> list[int]:
     return points
 
 
+def duplicate_point_indexes(events: list) -> set[int]:
+    """List positions of the points repeating another point under another
+    incident id (DUPLICATE_WORDS). A city point outlives a region or a capital
+    ('Culiacan' over 'Sinaloa'), then the earliest stays. Nothing is merged: they
+    are stamped like any follow-up, and a later publication can bring one back."""
+    weak = consolidation_weak_words([event for event in events if isinstance(event, dict)
+                                     and not is_retired_judicial_event(event)])
+    points = sorted((index for positions in attack_groups(events).values() for index in _points(events, positions)),
+                    key=lambda index: (events[index].get("location_precision") != "city",
+                                       published_at(events[index]) or _UNDATED, index))
+    kept = defaultdict(list)
+    duplicates = set()
+    for index in points:
+        event = events[index]
+        country, moment = event.get("country_code"), published_at(event)
+        if not (country and moment and _located(event)):
+            continue
+        words = headline_words(event)
+        for earlier in kept[country]:
+            distance = _distance_km(event, events[earlier])
+            if (abs((moment - published_at(events[earlier])).total_seconds()) <= SPLIT_DAYS * 86400
+                    and distance is not None and distance <= DUPLICATE_KM):
+                shared = weak.distinctive(words & headline_words(events[earlier]), country)
+                latin = sum(word.isascii() for word in shared)
+                if max(latin, len(shared) - latin) >= DUPLICATE_WORDS:
+                    duplicates.add(index)
+                    break
+        else:
+            kept[country].append(index)
+    return duplicates
+
+
 def attack_update_indexes(events: list) -> set[int]:
-    """List positions of the attack records that are not points. Positions, not
-    ids: old event ids are not unique. Non-object and retired records are skipped,
-    so the raw list and the active list flag the same records."""
-    updates: set[int] = set()
+    """List positions of the records that read as attacks but are not points:
+    follow-ups, duplicates, held reports and hoaxes. Positions, not ids: old event
+    ids are not unique. Non-object and retired records are skipped, so the raw
+    list and the active list flag the same records."""
+    updates = held_indexes(events) | duplicate_point_indexes(events)
     for positions in attack_groups(events).values():
         updates.update(set(positions) - set(_points(events, positions)))
+    updates.update(index for index, event in enumerate(events)
+                   if isinstance(event, dict) and not is_retired_judicial_event(event)
+                   and is_hoax(event) and _attack_by_type(active_event(event)))
     return updates
+
+
+def sibling_locations(events: list) -> dict[int, int]:
+    """Position of a point on a capital or a region -> position of the record
+    whose city it should be drawn on: same incident, same country (false merges
+    join Tartus to Kirkuk), and every such city of the incident is one place.
+    Stored records stay as they are: the map file borrows the location."""
+    def place_key(event):
+        return str(event.get("incident_id") or "").strip(), event.get("country_code")
+
+    cities = defaultdict(list)
+    for index, event in enumerate(events):
+        if (isinstance(event, dict) and not is_retired_judicial_event(event) and all(place_key(event))
+                and _located(event) and event.get("location_precision") == "city"
+                and not event.get("geolocation_review_required")):
+            cities[place_key(event)].append(index)
+    updates = attack_update_indexes(events)
+    borrowed = {}
+    for positions in attack_groups(events).values():
+        for index in set(positions) - updates:
+            event = events[index]
+            precision = event.get("location_precision")
+            if precision not in ("country_capital", "region") or not _located(event):
+                continue
+            siblings = [other for other in cities.get(place_key(event), ())
+                        if (_distance_km(event, events[other]) or 0) > SAME_PLACE_KM]
+            if not siblings or any((_distance_km(events[first], events[second]) or 0) > SAME_PLACE_KM
+                                   for first in siblings for second in siblings):
+                continue
+            if precision == "region" and any((_distance_km(event, events[other]) or 0) > REGION_SIBLING_KM
+                                             for other in siblings):
+                continue
+            borrowed[index] = min(siblings, key=lambda other: (published_at(events[other]) or _UNDATED, other))
+    return borrowed

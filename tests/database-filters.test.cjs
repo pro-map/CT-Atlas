@@ -133,6 +133,10 @@ test('a period reaching back before the 13 Oct expansion says its counts are not
   assert.match(fs.readFileSync('cloudflare-worker/shared.js','utf8'),/stats carry coverage_note/);
 });
 
+test('a held report reaches the Database with its flag',()=>{
+  assert.match(fs.readFileSync('cloudflare-worker/database-query.js','utf8'),/held_for_corroboration: event\.held_for_corroboration === true/);
+});
+
 test('groups match case-insensitively and events without a group form their own bucket',()=>{
   assert.equal(shared.matchesGroup(event('a',{actor_group:'Al-Shabaab'}),'al-shabaab'),true);
   assert.equal(shared.matchesGroup(event('a',{actor_group:'Al-Shabaab'}),'ISIS'),false);

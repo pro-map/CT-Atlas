@@ -351,6 +351,46 @@ for key in CITY_INDEX:
     )
 
 
+# GeoNames admin1 codes, which geonamescache lists without names, of the two
+# countries where most unresolved namesakes are (audit of 2026-11-05: Matamoros,
+# Balboa, Villanueva, Aquila): a text naming the state settles them.
+STATE_NAMES = {
+    "MX": {
+        "01": "Aguascalientes", "02": "Baja California", "03": "Baja California Sur",
+        "04": "Campeche", "05": "Chiapas", "06": "Chihuahua", "07": "Coahuila",
+        "08": "Colima", "10": "Durango", "11": "Guanajuato", "12": "Guerrero",
+        "13": "Hidalgo", "14": "Jalisco", "16": "Michoacán", "17": "Morelos",
+        "18": "Nayarit", "19": "Nuevo León", "20": "Oaxaca", "21": "Puebla",
+        "22": "Querétaro", "23": "Quintana Roo", "24": "San Luis Potosí",
+        "25": "Sinaloa", "26": "Sonora", "27": "Tabasco", "28": "Tamaulipas",
+        "29": "Tlaxcala", "30": "Veracruz", "31": "Yucatán", "32": "Zacatecas",
+    },
+    "CO": {
+        "01": "Amazonas", "02": "Antioquia", "03": "Arauca", "04": "Atlántico",
+        "08": "Caquetá", "09": "Cauca", "10": "Cesar", "11": "Chocó", "12": "Córdoba",
+        "14": "Guaviare", "15": "Guainía", "16": "Huila", "17": "La Guajira",
+        "19": "Meta", "20": "Nariño", "21": "Norte de Santander", "22": "Putumayo",
+        "23": "Quindío", "24": "Risaralda", "26": "Santander", "27": "Sucre",
+        "28": "Tolima", "29": "Valle del Cauca", "30": "Vaupés", "31": "Vichada",
+        "32": "Casanare", "33": "Cundinamarca", "35": "Bolívar", "36": "Boyacá",
+        "37": "Caldas", "38": "Magdalena",
+    },
+}
+STATE_CODES = {
+    country: {normalize_name(name): code for code, name in names.items()}
+    for country, names in STATE_NAMES.items()
+}
+STATE_POINTS = defaultdict(list)
+for city in CITIES.values():
+    if city.get("countrycode") in STATE_NAMES:
+        STATE_POINTS[city["countrycode"], city.get("admin1code")].append(
+            (float(city["latitude"]), float(city["longitude"]))
+        )
+# On normalize_name output.
+STATE_NAME_NOISE = re.compile(r"\bjalisco (?:nueva generacion|new generation)\b|\bcartel(?:es)?(?: del?)? \w+|\b\w+ cartel\b")
+ALIAS_PLACE_MIN_POPULATION = 15000
+
+
 # ============================================================
 # EVENT INPUT / CACHE
 # ============================================================
@@ -1595,11 +1635,43 @@ def resolve_country_code(
     return ""
 
 
-def resolve_city(city_name, country_code, latitude=None, longitude=None):
-    # The model's own point, when given, picks among same-country namesakes.
+def named_states(country_code, context):
+    """The STATE_NAMES of the country the text names, longest first so 'Valle
+    del Cauca' is not read as Cauca. A cartel's name says nothing of the place."""
+    states = STATE_CODES.get(country_code)
+    if not states:
+        return set()
+    text = " " + STATE_NAME_NOISE.sub(" ", normalize_name(context)) + " "
+    found = set()
+    for name in sorted(states, key=len, reverse=True):
+        if " " + name + " " in text:
+            found.add(states[name])
+            text = text.replace(" " + name + " ", " ")
+    return found
+
+
+def city_in_named_state(candidates, country_code, context):
+    """The namesake of the one state the text names (Balboa with Cauca, not Balboa
+    in Risaralda); within that state, its most populous entry. Any namesake
+    counts, by main name or alias: Matamoros in Tamaulipas is 'Heroica Matamoros'."""
+    states = named_states(country_code, context)
+    matches = [city for city in candidates
+               if city.get("countrycode") == country_code and city.get("admin1code") in states]
+    if len({city.get("admin1code") for city in matches}) != 1:
+        return None
+    return max(matches, key=lambda city: city.get("population") or 0)
+
+
+def resolve_city(city_name, country_code, latitude=None, longitude=None, context=""):
+    # The model's own point, when given, picks among same-country namesakes; so
+    # does the state the text names, when it is given a text.
     from daily_reliability import canonical_city
     name = normalize_name(city_name)
-    return canonical_city(CITY_INDEX.get(name, []), name, country_code, latitude, longitude)
+    pool = CITY_INDEX.get(name, [])
+    city = canonical_city(pool, name, country_code, latitude, longitude)
+    if city is None and context:
+        city = city_in_named_state(pool, country_code, context)
+    return city
 
 
 def resolve_capital(
@@ -1657,6 +1729,20 @@ def country_place_within(
         and distance_km(latitude, longitude, lat, lon) <= km
         for lat, lon in COUNTRY_POINTS.get(country_code, ())
     )
+
+
+def named_place_points(name, country_code):
+    """Points of a place a headline names (normalized name, country): a state
+    stands for all its places, a town for all its namesakes. An alias must belong
+    to a real town: short aliases of villages collide with ordinary words."""
+    state = STATE_CODES.get(country_code, {}).get(name)
+    if state:
+        return STATE_POINTS[country_code, state]
+    pool = [city for city in CITY_INDEX.get(name, ()) if city.get("countrycode") == country_code]
+    if not any(name in {normalize_name(city.get("name")), normalize_name(city.get("asciiname"))}
+               or (city.get("population") or 0) >= ALIAS_PLACE_MIN_POPULATION for city in pool):
+        return []
+    return [(float(city["latitude"]), float(city["longitude"])) for city in pool]
 
 
 # A model point this far from every place of its country, whose mirror
@@ -1774,14 +1860,29 @@ def clear_location(
     event["excluded_from_map"] = False
 
 
+def state_named_answer(event, result):
+    """An answer naming a namesake the model's point cannot settle, moved onto
+    the namesake of the state the text names. Any other answer stays as it is."""
+    from map_evidence_integrity import event_place_text
+    place = (result.get("city"), result.get("country_code"), result.get("latitude"), result.get("longitude"))
+    if result.get("precision") != "city" or not result.get("city") or resolve_city(*place):
+        return result
+    context = " ".join((event_place_text(event), str(result.get("region") or ""), str(result.get("evidence") or "")))
+    city = resolve_city(*place, context)
+    if city is None:
+        return result
+    return dict(result, city=city["name"], latitude=float(city["latitude"]), longitude=float(city["longitude"]))
+
+
 def apply_ai_result(
     event,
     result,
     fingerprint
 ):
     from daily_reliability import city_resolution_guard
-    result = city_resolution_guard(event, dict(result, country_code=resolve_country_code(result),
-                                               city=html.unescape(str(result.get('city') or ''))),
+    from map_evidence_integrity import repair_text
+    result = city_resolution_guard(event, state_named_answer(event, dict(
+        result, country_code=resolve_country_code(result), city=repair_text(result.get('city')))),
                                    CITY_INDEX, normalize_name)
     issue = result.get('_city_validation_issue')
     if issue:
@@ -1834,20 +1935,16 @@ def apply_ai_result(
         ""
     ).strip()
 
-    region_name = str(
+    region_name = repair_text(
         result.get(
             "region"
         )
-        or
-        ""
     ).strip()
 
-    evidence = str(
+    evidence = repair_text(
         result.get(
             "evidence"
         )
-        or
-        ""
     ).strip()
 
     reason = str(
