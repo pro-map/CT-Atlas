@@ -144,7 +144,11 @@ LANE_SELECTION = textwrap.dedent('''
     collector.AI_SELECTION_ENABLED = True
     collector.AI_SELECTION_TRANSIENT_PAUSE_SECONDS = 0
     wrapper.official_result = lambda event: None
-    wrapper.time = SimpleNamespace(monotonic=lambda: 0.0, sleep=lambda seconds: None)
+    waits = []
+    # "late": the run reaches selection 195 minutes in, the wait would pass the deadline.
+    started = wrapper.PROCESS_START
+    wrapper.time = SimpleNamespace(monotonic=lambda: started + (195 * 60 if mode == "late" else 0),
+                                   sleep=lambda seconds: waits.append(seconds) if seconds > 60 else None)
     cache = {"version": collector.AI_SELECTION_VERSION, "items": {}}
     collector.load_selection_cache = lambda: cache
     wrapper.SAVE_CACHE = lambda current: cache.update(current)
@@ -173,6 +177,10 @@ LANE_SELECTION = textwrap.dedent('''
         batches.append([candidate["event_id"] for candidate in batch])
         fail = len(batches) == 2 or mode == "cached"
         if fail and mode in ("transient", "cached"):
+            raise collector.AISelectionTransientError("Temporary provider failure")
+        if mode == "stubborn" and batches[-1] == ["r2"]:
+            raise collector.AISelectionTransientError("Temporary provider failure")
+        if (mode == "outage" and len(batches) <= 5) or (mode in ("long_outage", "late") and batches[-1][0].startswith("r")):
             raise collector.AISelectionTransientError("Temporary provider failure")
         if fail and mode == "incomplete":
             raise collector.AISelectionIncompleteError("Missing result in response")
@@ -211,9 +219,14 @@ LANE_SELECTION = textwrap.dedent('''
         result = collector.ai_select_events(events, lane="recent")
         collector.ai_select_events(events, lane="recent")
         collector.ai_select_events([], lane="backlog")
+    elif mode in ("outage", "long_outage", "late"):
+        events = [event("r%d" % n) for n in range(1, 8)]
+        result = collector.ai_select_events(events, lane="recent")
+        result = result + collector.ai_select_events([event("b1", 20), event("b2", 19)], lane="backlog")
+        result = result + collector.ai_select_events([event("m1", 45)], lane="maintenance")
     else:
         result = collector.ai_select_events(events, lane="recent")
-    print(json.dumps({"retained": [item["id"] for item in result], "sent": sent, "batches": batches,
+    print(json.dumps({"retained": [item["id"] for item in result], "sent": sent, "batches": batches, "waits": waits,
                       "telemetry": collector.selection_runtime_status(), "background": background,
                       "complete": [collector.selection_review_complete(item) for item in events],
                       "mutated_pending": [item["id"] for item in events if not collector.selection_review_complete(item)
@@ -357,7 +370,7 @@ class QuotaSafeWrapperTests(unittest.TestCase):
         # A temporary error skips its batch (r2 stays queued) and the lane goes
         # on (r3 is reviewed); an incomplete answer still stops the lane.
         for mode, reason, retained, complete in (
-                ("transient", "transient_error", ["r1", "r3"], [True, False, True]),
+                ("stubborn", "transient_error", ["r1", "r3"], [True, False, True]),
                 ("incomplete", "incomplete_response", ["r1"], [True, False, False])):
             with self.subTest(mode=mode):
                 data = self.lanes(mode)
@@ -366,6 +379,50 @@ class QuotaSafeWrapperTests(unittest.TestCase):
                 self.assertEqual(data["telemetry"]["lanes"]["recent"]["reasons"], [reason])
                 self.assertFalse(data["telemetry"]["budget_reached"])
                 self.assertEqual(data["complete"], complete)
+
+    def test_a_skipped_batch_gets_the_second_pass_and_the_run_is_complete(self):
+        data = self.lanes("transient")
+        self.assertEqual(data["batches"], [["r1"], ["r2"], ["r3"], ["r2"]])
+        self.assertEqual(data["retained"], ["r1", "r3", "r2"])
+        self.assertEqual(data["complete"], [True, True, True])
+        self.assertEqual(data["waits"], [900])
+        recent = data["telemetry"]["lanes"]["recent"]
+        self.assertEqual((recent["new_reviews"], recent["pending"], recent["reasons"]), (3, 0, []))
+        self.assertFalse(data["telemetry"]["partial"])
+
+    def test_after_an_outage_the_recovered_gemini_reviews_recent_articles_first(self):
+        # 5 November 2026, 23:11 UTC: recent 0 reviewed, then backlog 64 reviewed
+        # on the recovered Gemini while 2,616 recent articles waited.
+        data = self.lanes("outage")
+        self.assertEqual(data["sent"], ["recent"] * 7 + ["backlog"] * 2 + ["maintenance"])
+        self.assertEqual(data["waits"], [900], "one wait, before the second pass")
+        lanes = data["telemetry"]["lanes"]
+        self.assertEqual((lanes["recent"]["new_reviews"], lanes["recent"]["pending"]), (7, 0))
+        self.assertEqual((lanes["backlog"]["new_reviews"], lanes["backlog"]["pending"]), (2, 0))
+
+    def test_older_lanes_do_not_start_while_an_outage_holds_recent_articles_back(self):
+        data = self.lanes("long_outage")
+        self.assertEqual(data["sent"], [])
+        self.assertFalse([batch for batch in data["batches"] if not batch[0].startswith("r")])
+        self.assertEqual(len(data["batches"]), 10, "two passes of five failed batches, and no third")
+        lanes = data["telemetry"]["lanes"]
+        self.assertEqual(lanes["recent"]["pending"], 7)
+        self.assertEqual(lanes["recent"]["reasons"], ["transient_error"])
+        for lane, waiting in (("backlog", 2), ("maintenance", 1)):
+            self.assertEqual(lanes[lane]["pending"], waiting)
+            self.assertEqual(lanes[lane]["reasons"], ["transient_error"])
+
+    def test_no_second_pass_when_the_wait_would_run_past_the_deadline(self):
+        data = self.lanes("late")
+        self.assertEqual(data["waits"], [])
+        self.assertEqual(len(data["batches"]), 5)
+        self.assertEqual(data["telemetry"]["lanes"]["backlog"]["reasons"], ["transient_error"])
+
+    def test_a_healthy_run_waits_for_nothing(self):
+        self.assertEqual(self.lanes("mixed")["waits"], [])
+
+    def test_a_lane_stopped_by_the_budget_gets_no_second_pass(self):
+        self.assertEqual(self.lanes("budget")["waits"], [])
 
     def test_cached_retained_and_rejected_decisions_do_not_count_as_new_ai_reviews(self):
         data = self.lanes("cached")

@@ -34,6 +34,8 @@ OVERFLOW_DAY_BUDGET=max(0,int(os.getenv("AI_SELECTION_OVERFLOW_DAILY_CALL_BUDGET
 # No overflow request this late in a run: the geolocation and the commit
 # steps still need their time.
 OVERFLOW_DEADLINE_MINUTES=float(os.getenv("AI_SELECTION_OVERFLOW_DEADLINE_MINUTES","200") or 200)
+# The wait before the recent lane's second pass after a temporary failure.
+RECENT_RETRY_WAIT_SECONDS=max(0.0,float(os.getenv("AI_SELECTION_RECENT_RETRY_WAIT_SECONDS","900") or 900))
 PROCESS_START=time.monotonic()
 PACIFIC=ZoneInfo("America/Los_Angeles")
 collector.AI_SELECTION_BATCH_SIZE=BATCH
@@ -375,6 +377,16 @@ def recover(events):
     return selected
 
 
+def recent_held_back():
+    """Recent candidates left undecided by a temporary failure, not by the budget."""
+    return (any(not record["reviewed"] for record in LANE_RECORDS["recent"].values())
+            and any(error["reason"]=="transient_error" for error in SELECTION_ERRORS["recent"]))
+
+
+def selection_budget_left():
+    return (not primary_spent and calls<RUN_BUDGET and today_calls()<DAY_BUDGET) or overflow_left()
+
+
 def _select_lane(events,lane):
     global auto_count,partial,recent_count,backlog_count,ACTIVE_LANE,CURRENT_FAILURE,LANE_SKIPPED_BATCH
     previous_lane=ACTIVE_LANE; ACTIVE_LANE=lane; CURRENT_FAILURE=None; LANE_SKIPPED_BATCH=False
@@ -432,7 +444,11 @@ def _select_lane(events,lane):
     if OVERFLOW_MODEL: print(f"Overflow: {OVERFLOW_MODEL}, {OVERFLOW_RUN_BUDGET}/run, {OVERFLOW_DAY_BUDGET}/Pacific day | Used before run: {START_OVERFLOW}")
     try:
         try:
-            out=AI_SELECT(remaining,lane=lane) if remaining else []
+            if remaining and lane!="recent" and recent_held_back():
+                record_failure("transient_error","Older reviews wait while a temporary failure holds recent articles back.")
+                out=None
+            else:
+                out=AI_SELECT(remaining,lane=lane) if remaining else []
         except RECOGNIZED_ERRORS as error:
             if CURRENT_FAILURE is None:
                 reason="transient_error" if isinstance(error,collector.AISelectionTransientError) else "incomplete_response" if isinstance(error,collector.AISelectionIncompleteError) else "selection_quota"
@@ -465,6 +481,22 @@ def _select_lane(events,lane):
         ACTIVE_LANE=previous_lane
 
 
+def _select_recent(events):
+    """One more pass after a wait, so a short outage does not end recent review.
+
+    5 November 2026, 23:11 UTC: recent stopped at 0 reviewed, then the older lane
+    reviewed 64 articles on the recovered Gemini while 2,616 recent ones waited.
+    """
+    kept=_select_lane(events,"recent")
+    resumes_at=(time.monotonic()-PROCESS_START+RECENT_RETRY_WAIT_SECONDS)/60
+    if not recent_held_back() or not selection_budget_left() or resumes_at>=OVERFLOW_DEADLINE_MINUTES:
+        return kept
+    waiting=[e for e in events if not LANE_RECORDS["recent"][original_fingerprint(e)]["reviewed"]]
+    print(f"Recent lane: {len(waiting)} candidate(s) held back by a temporary failure; second pass in {RECENT_RETRY_WAIT_SECONDS:.0f}s.")
+    time.sleep(RECENT_RETRY_WAIT_SECONDS)
+    return kept+_select_lane(waiting,"recent")
+
+
 def optimized_select(events,lane=None):
     """Review recent reporting before old backlog; each uses separate batches.
 
@@ -475,12 +507,14 @@ def optimized_select(events,lane=None):
         raise ValueError(f"Unknown selection lane: {lane}")
     events=list(events)
     if not collector.AI_SELECTION_ENABLED: return events
+    if lane=="recent":
+        return _select_recent(events)
     if lane is not None:
         return _select_lane(events,lane)
     cutoff=datetime.now(timezone.utc)-timedelta(days=RECENT_DAYS)
     recent=[e for e in events if dtkey(e)>=cutoff]
     backlog=[e for e in events if dtkey(e)<cutoff]
-    return _select_lane(recent,"recent")+_select_lane(backlog,"backlog")
+    return _select_recent(recent)+_select_lane(backlog,"backlog")
 collector.ai_select_events=optimized_select
 
 def prune(events,aged_out=None):
