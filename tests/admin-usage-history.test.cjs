@@ -43,7 +43,6 @@ test("history rows read as what was searched, with its filters and outcome",()=>
   assert.deepEqual([...deep[3]].map(pair=>pair[0]),["Database scope","Period found","Outcome"]);
   assert.equal(api.adminHistoryEntry({at,feature:"event_list",region:"GLOBAL"})[2],"(filters only)");
   assert.equal(api.adminHistoryEntry({at,feature:"tab_crypto"})[1],"CRYPTO OPENED");
-  assert.equal(api.adminHistoryEntry({at,feature:"ip_lookup",target:"8.8.8.8",kind:"ip"})[2],"8.8.8.8");
 });
 
 test("a row of a retired tool, should one still arrive, renders without breaking the list",()=>{
@@ -54,7 +53,8 @@ test("a row of a retired tool, should one still arrive, renders without breaking
     {at,feature:"facial_search",face:"F2 @ 3.5s",engines:["yandex"],sha256:"ab".repeat(32),bytes:2097152,outcome:"hosted"},
     {at,feature:"facial_extraction",files:3,videos:1,bytes:3145728},
     {at,feature:"darkweb_search",text:"term",outlet:"Outlet B"},
-    {at,feature:"tab_social"},{at,feature:"tab_facial"},{at,feature:"tab_darkweb"}
+    {at,feature:"ip_lookup",target:"8.8.8.8",kind:"ip",registered_domain:"example.com",parent_domain:"example.com"},
+    {at,feature:"tab_social"},{at,feature:"tab_facial"},{at,feature:"tab_darkweb"},{at,feature:"tab_ip"}
   ];
   for(const row of legacy){
     const entry=api.adminHistoryEntry(row);
@@ -74,14 +74,14 @@ test("searched text is escaped before it reaches the page",()=>{
 
 test("both tables wire every count to its counter, with the new columns",()=>{
   const loader=client.slice(client.indexOf("async function loadAdmin"),client.indexOf("\ndocument.addEventListener"));
-  for(const tab of ["crypto","map","ip"])assert.ok(loader.includes('adminCountCell(item.'+tab+',item,"tab:'+tab+'")'),tab);
-  for(const metric of ["report_generator_requests","deep_search_requests","event_list_searches","blockchain_searches","ip_lookups","quick_ask_requests"]){
+  for(const tab of ["crypto","map"])assert.ok(loader.includes('adminCountCell(item.'+tab+',item,"tab:'+tab+'")'),tab);
+  for(const metric of ["report_generator_requests","deep_search_requests","event_list_searches","blockchain_searches","quick_ask_requests"]){
     assert.ok(loader.includes("adminCountCell(item."+metric+',item,"'+metric+'")'),metric);
   }
-  assert.ok(client.includes("<th>EVENT LIST SEARCH</th>")&&client.includes("<th>IP LOOKUP</th>"));
-  assert.ok(loader.includes('colspan="7"'));
-  assert.ok(loader.includes('colspan="4"'));
-  assert.doesNotMatch(client,/<th>(?:SOCIAL|FACIAL|DARK WEB)|SOCIAL MEDIA SEARCH/);
+  assert.ok(client.includes("<th>EVENT LIST SEARCH</th>"));
+  assert.ok(loader.includes('colspan="6"'));
+  assert.ok(loader.includes('colspan="3"'));
+  assert.doesNotMatch(client,/<th>(?:SOCIAL|FACIAL|DARK WEB|IP )|SOCIAL MEDIA SEARCH|IP LOOKUP|ip_lookups?|tab:ip/);
   const opener=client.slice(client.indexOf("async function openUsageHistory"),client.indexOf("function closeAdmin"));
   assert.match(opener,/nativeFetch\(API_BASE\+"\/usage-history"\+query,\{method:"GET",headers:\{"X-Session-Token":token\(\)\}\}\)/);
   assert.ok(opener.includes("adminHistoryHtml(rows)"),"rows are rendered through the escaping helper");

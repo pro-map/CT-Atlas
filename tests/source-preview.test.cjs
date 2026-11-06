@@ -62,7 +62,6 @@ test("frontend contains authenticated hub and source visual surfaces",()=>{
   assert.ok(index.includes('id="mainHubButton"'));
   assert.ok(main.includes("Intelligence Map"));
   assert.ok(main.includes("Crypto Intelligence"));
-  assert.ok(main.includes("IP Intelligence"));
   assert.ok(index.includes('id="reportResultIllustration"'));
   assert.ok(deep.includes('id="deepSearchIllustration"'));
   assert.ok(pdf.includes('block.type==="image"'));

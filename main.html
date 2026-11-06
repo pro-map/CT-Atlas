@@ -13,8 +13,8 @@
 <link rel="icon" href="CT-ATLAS.png">
 <link rel="stylesheet" href="usage-admin.css?v=usage-history-20261006">
 <link rel="stylesheet" href="feedback.css?v=20260928">
-<script src="usage-admin.js?v=retired-tools-20261106" defer></script>
-<script src="feedback.js?v=retired-tools-20261106" defer></script>
+<script src="usage-admin.js?v=retired-ip-20261106" defer></script>
+<script src="feedback.js?v=retired-ip-20261106" defer></script>
 <!-- Daily quiz retired at the owner's request. -->
 <style>
 *{box-sizing:border-box}
@@ -39,8 +39,8 @@ body{display:flex;min-height:100vh}
 .hub-updates-list strong{color:#edf3f6;font-weight:700}
 .hub-updates-list .hub-updates-pending::before{background:#d6b96f}
 @media(max-width:900px){.hub-updates-list{grid-template-columns:1fr;gap:6px}.hub-updates{padding:11px 12px}}
-.hub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.hub-card{min-width:0;min-height:300px;display:flex;flex-direction:column;padding:clamp(14px,1.6vw,26px);border:1px solid #344958;border-radius:8px;background:linear-gradient(180deg,#172630,#111d26);color:#fff;text-decoration:none;box-shadow:0 12px 30px rgba(0,0,0,.24);transition:transform .15s ease,border-color .15s ease,background .15s ease,box-shadow .15s ease}
+.hub-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.hub-card{min-width:0;min-height:240px;display:flex;flex-direction:column;padding:clamp(14px,1.6vw,26px);border:1px solid #344958;border-radius:8px;background:linear-gradient(180deg,#172630,#111d26);color:#fff;text-decoration:none;box-shadow:0 12px 30px rgba(0,0,0,.24);transition:transform .15s ease,border-color .15s ease,background .15s ease,box-shadow .15s ease}
 .hub-card:hover,.hub-card:focus-visible{transform:translateY(-3px);border-color:#edf3f6;background:linear-gradient(180deg,#20313d,#14242e);box-shadow:0 0 0 1px rgba(255,255,255,.2),0 0 24px rgba(220,235,245,.10),0 16px 32px rgba(0,0,0,.3);outline:none}
 .hub-card:hover .hub-card-foot,.hub-card:focus-visible .hub-card-foot{color:#fff}
 @media(prefers-reduced-motion:reduce){.hub-card{transition:none}.hub-card:hover,.hub-card:focus-visible{transform:none}}
@@ -122,13 +122,6 @@ body{display:flex;min-height:100vh}
       <div class="hub-card-text">Multi-chain wallet and transaction analysis, tracing up to H6, cases, exposure, sourced attribution, monitoring and alerts.</div>
       <div class="hub-card-foot">OPEN WORKSPACE →</div>
     </a>
-
-    <a class="hub-card ip" href="ip.html">
-      <div class="hub-card-icon"><img src="ip-intelligence.svg" alt="" aria-hidden="true"></div>
-      <div class="hub-card-title">IP Intelligence</div>
-      <div class="hub-card-text">IP network and operator identification, approximate geolocation, VPN indicators, provider contacts and downloadable investigation briefs.</div>
-      <div class="hub-card-foot">OPEN WORKSPACE →</div>
-    </a>
   </section>
 
   <details id="readme" class="hub-readme" aria-labelledby="readmeTitle">
@@ -139,7 +132,7 @@ body{display:flex;min-height:100vh}
         <h3 id="readmeDoTitle" class="hub-readme-heading">Do</h3>
         <ul class="hub-readme-list">
           <li><strong>Use only for authorised duties.</strong> Every activity must have a lawful, specific, necessary and proportionate professional purpose. Use nominal or other personal data only within applicable SOPs and regulatory texts. Apply the principles of lawfulness, transparency, quality, security and confidentiality. Keep sources, keywords and monitoring duration targeted; reassess when the purpose or scope changes.</li>
-          <li><strong>Verify before relying on results.</strong> Assess and corroborate original sources. Check URLs, dates, refresh times and available search steps. AI summaries, translations and suggested links may be wrong. Coverage may be incomplete or outdated. IP location and cryptocurrency links do not establish identity, ownership or criminal involvement.</li>
+          <li><strong>Verify before relying on results.</strong> Assess and corroborate original sources. Check URLs, dates, refresh times and available search steps. AI summaries, translations and suggested links may be wrong. Coverage may be incomplete or outdated. Cryptocurrency links do not establish identity, ownership or criminal involvement.</li>
           <li><strong>Keep outputs transparent.</strong> Preserve source references, uncertainty, handling restrictions and relevant limitations in authorised exports. Disclose AI assistance where applicable and retain AI notices. No consequential measure may rely solely on an unverified result or automated alert.</li>
           <li><strong>Protect access and report concerns.</strong> Protect credentials and exported material. Document purpose and scope as required by SOPs, using approved records outside the platform where necessary. Report misuse, security incidents and material errors promptly. Stop and seek competent guidance if authority is unclear.</li>
         </ul>

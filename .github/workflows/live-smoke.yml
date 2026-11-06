@@ -51,7 +51,7 @@ jobs:
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/crypto.js >/tmp/crypto.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/crypto-report.js >/tmp/crypto-report.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/main.html >/tmp/main.html \
-              && curl --fail --silent --show-error --max-time 25 'https://ct-atlas.com/usage-admin.js?v=retired-tools-20261106' >/tmp/usage-admin.js \
+              && curl --fail --silent --show-error --max-time 25 'https://ct-atlas.com/usage-admin.js?v=retired-ip-20261106' >/tmp/usage-admin.js \
               && curl --fail --silent --show-error --max-time 25 https://ct-atlas.com/tab-health.js >/tmp/tab-health.js \
               && grep -q '/health/status' /tmp/tab-health.js \
               && grep -q 'data-health-scope="crypto"' /tmp/crypto.html \
@@ -61,7 +61,7 @@ jobs:
               && grep -q 'data-days="90"' /tmp/index.html \
               && grep -q 'data-days="180"' /tmp/index.html \
               && grep -q 'const MAP_RECENT_EVENT_DAYS = 181;' /tmp/index.html \
-              && grep -q 'usage-admin.js?v=retired-tools-20261106' /tmp/main.html \
+              && grep -q 'usage-admin.js?v=retired-ip-20261106' /tmp/main.html \
               && ! grep -q '<th>SOCIAL</th>\|SOCIAL MEDIA SEARCH' /tmp/usage-admin.js \
               && grep -q 'id="attackTickerList"' /tmp/index.html \
               && grep -q 'id="databasePanel"' /tmp/index.html \
@@ -77,7 +77,7 @@ jobs:
               && grep -q 'crypto-workspace' /tmp/crypto.js \
               && grep -q 'Intelligence Map' /tmp/main.html \
               && grep -q 'Crypto Intelligence' /tmp/main.html \
-              && grep -q 'IP Intelligence' /tmp/main.html; then
+              && ! grep -q 'IP Intelligence' /tmp/main.html; then
               break
             fi
             if [ "$attempt" -eq 18 ]; then

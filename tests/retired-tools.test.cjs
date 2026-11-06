@@ -225,12 +225,33 @@ test("the retired pages and assets are gone and nothing the site serves points a
     }
   }
   assert.equal(fs.existsSync(path.join(ROOT, "facial-crops.js")), false);
+  for (const file of ["ip.html", "ip.js", "ip.css", "ip-report.js", "ip-intelligence.svg"]) {
+    assert.equal(fs.existsSync(path.join(ROOT, file)), false, file);
+  }
   const pages = fs.readdirSync(ROOT).filter(file => /\.(?:html|js|css)$/.test(file));
   assert.ok(pages.includes("main.html") && pages.includes("feedback.js"));
   for (const page of pages.concat("tools/deploy_mirror.sh")) {
     assert.doesNotMatch(read(page), /\b(?:social|darkweb|facial)(?:-intelligence\.svg|-crops\.js|\.html|\.js|\.css)/, page);
-    assert.doesNotMatch(read(page), /value="(?:social|darkweb|facial)"/, page);
+    assert.doesNotMatch(read(page), /value="(?:social|darkweb|facial|ip)"/, page);
+    assert.doesNotMatch(read(page), /\bip(?:-intelligence\.svg|-report\.js|\.html|\.js|\.css)|CTAtlasIPReport/, page);
+    // The notice has to keep naming the tool: it says what happens to what the tool stored.
+    if (page !== "privacy.html") assert.doesNotMatch(read(page), /IP Intelligence/, page);
   }
+});
+
+test("the deploys expect no IP Intelligence file and the live check waits for its card to go", () => {
+  const deploy = read(".github/workflows/deploy-current-ct-atlas-ui.yml");
+  const smoke = read(".github/workflows/live-smoke.yml");
+  assert.doesNotMatch(deploy + smoke, /\bip(?:-intelligence\.svg|-report\.js|\.html"|\.js|\.css)|&& grep -q 'IP Intelligence'|grep -q 'IP Intelligence' main\.html/);
+  assert.match(smoke, /&& ! grep -q 'IP Intelligence' \/tmp\/main\.html; then/);
+  assert.match(deploy, /if grep -q [^\n]*ip\\\.html[^\n]* main\.html; then/, "a link back to the page fails the deploy");
+});
+
+test("an old IP row in the admin view is simply not offered: no column, no filter, no label", () => {
+  const admin = read("usage-admin.js");
+  assert.doesNotMatch(admin, /IP INTELLIGENCE|IP LOOKUP|ip_lookups?|tab:ip|tab_ip|registered_domain|parent_domain|IP or domain/);
+  assert.match(read("tab-access.js"), /new Set\(\["map","crypto"\]\)/);
+  assert.doesNotMatch(read("pdf-export.js"), /block\.inline|jurisdiction/i, "only the IP briefs placed inline flags");
 });
 
 test("the privacy notice drops what only these tools did and says what stays stored", () => {
