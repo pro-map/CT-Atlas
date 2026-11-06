@@ -67,6 +67,8 @@ jobs:
       checkpoint_outcome: ${{ steps.commit.outcome }}
       data_sha: ${{ steps.commit.outputs.data_sha }}
       recovery_wanted: ${{ steps.finalize_status.outputs.recovery_wanted }}
+      map_health: ${{ steps.finalize_status.outputs.map_health }}
+      map_health_summary: ${{ steps.finalize_status.outputs.map_health_summary }}
     env:
       CT_ATLAS_SCHEDULE: ${{ github.event.schedule || inputs.slot || '' }}
       COLLECTION_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'daily' }}
@@ -433,3 +435,19 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run update-map.yml --repo "$GITHUB_REPOSITORY" --ref main -f mode=resume-pending -f force_ai=false
+
+  health:
+    needs: [update, deploy, recovery]
+    # Last of all, once the data is committed and published: a red run is what
+    # makes GitHub notify the owner. The mirror does not follow a red run directly;
+    # it follows the status refresh, which runs after any conclusion and republishes.
+    if: ${{ always() && needs.update.outputs.map_health == 'starved' }}
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Fail visibly because this run starved the map
+        env:
+          SUMMARY: ${{ needs.update.outputs.map_health_summary }}
+        run: |
+          echo "::error title=Map starved::$SUMMARY"
+          exit 1

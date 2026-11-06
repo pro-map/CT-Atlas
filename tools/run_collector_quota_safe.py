@@ -569,13 +569,10 @@ def weekly(events,existing_weekly=None):
     return WEEKLY(events,existing_weekly=existing_weekly)
 collector.generate_weekly_analysis=weekly
 
-def report_selection_health():
-    """Annotations are public, so a run that starves the map cannot go unnoticed."""
-    recent=runtime_telemetry()["lanes"]["recent"]
+def report_selection_failures():
+    """Public, unlike the run logs. tools/finalize_daily_status.py judges the run."""
     if SELECTION_FAILURES:
         print("::warning title=Gemini selection failures::"+", ".join(f"{key} x{count}" for key,count in sorted(SELECTION_FAILURES.items())))
-    if recent["pending"] and not recent["new_reviews"]:
-        print(f"::error title=No new articles reviewed::{recent['pending']} recent articles are waiting and this run reviewed none of them: the map gets no new events.")
 
 
 def release_slot():
@@ -601,7 +598,7 @@ def run_main():
     try:
         collector.main()
     finally:
-        report_selection_health()
+        report_selection_failures()
         release_slot()
 
 if __name__=="__main__": run_main()

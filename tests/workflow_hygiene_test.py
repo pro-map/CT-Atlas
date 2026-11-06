@@ -243,6 +243,34 @@ class AutomaticRecoveryTests(unittest.TestCase):
         self.assertNotIn("actions/checkout", self.job, "no repository code runs with that permission")
 
 
+class StarvedRunTests(unittest.TestCase):
+    def setUp(self):
+        self.source = read("update-map.yml")
+        self.job = job(self.source, "health")
+
+    def test_a_starved_run_fails_last_after_everything_is_published(self):
+        # On 5 November both runs ended green and GitHub told nobody.
+        self.assertIn("needs: [update, deploy, recovery]", self.job)
+        self.assertIn("if: ${{ always() && needs.update.outputs.map_health == 'starved' }}", self.job)
+        self.assertIn("exit 1", self.job)
+        self.assertEqual(self.source.rindex("\n  health:\n") > self.source.rindex("\n  recovery:\n"), True)
+
+    def test_the_gate_runs_no_repository_code_and_holds_no_permission(self):
+        self.assertIn("permissions: {}", self.job)
+        self.assertNotIn("actions/checkout", self.job)
+        self.assertNotIn("secrets.", self.job)
+        self.assertIn("SUMMARY: ${{ needs.update.outputs.map_health_summary }}", self.job,
+                      "the text reaches the shell through the environment, never into the script")
+
+    def test_a_red_run_still_reaches_the_mirror_through_the_status_refresh(self):
+        refresh = read("refresh-daily-status.yml")
+        self.assertIn('workflows: ["Daily CT Intelligence Map Update"]', refresh)
+        self.assertIn("types: [completed]", refresh, "it runs after any conclusion, red included")
+        self.assertIn('[ "$TRIGGER_CONCLUSION" != "success" ]', refresh, "and then republishes main")
+        mirror = read("deploy-cloudflare-mirror.yml")
+        self.assertIn('- "Refresh daily collection status"', mirror)
+
+
 class CollectionDispatchTests(unittest.TestCase):
     def test_daily_rejects_historical_dispatch_before_setup_and_accepts_daily_recovery(self):
         workflow = read("update-map.yml")

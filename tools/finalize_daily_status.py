@@ -13,10 +13,12 @@ import copy
 import json
 import math
 import os
+import statistics
 import subprocess
 import sys
 import tempfile
-from datetime import datetime, timezone
+from collections import Counter
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,6 +28,17 @@ from daily_reliability import PACIFIC, recovery_wanted
 LANES = ("recent", "backlog", "maintenance")
 DERIVED_REASONS = {"recent_pending", "backlog_pending", "maintenance_pending", "category_pending",
                    "geolocation_pending", "geolocation_review_required", "source_errors", "radnuc_background_partial"}
+DAY = timedelta(hours=24)
+MEDIAN_DAYS = 14
+# Run health. On the 46 stored runs from 14 October to 5 November 2026 these give
+# 38 healthy, 4 degraded and 4 starved: 16 October, both runs of 5 November and the
+# failed collection of 30 October. The lowest healthy events ratio was 0.56.
+STARVED_EVENTS_RATIO = 0.25      # events of the last 24 h against the 14-day median
+DEGRADED_EVENTS_RATIO = 0.50
+STARVED_REVIEW_SHARE = 0.10      # new reviews / (new reviews + recent articles waiting)
+DEGRADED_REVIEW_SHARE = 0.50
+STARVED_MIN_WAITING = 100        # a handful of waiting articles starves nothing
+DEGRADED_MIN_WAITING = 600
 
 
 def timestamp(value):
@@ -103,6 +116,56 @@ def atomic_write(path, value):
     finally:
         if os.path.exists(temporary):
             os.unlink(temporary)
+
+
+def run_health(status, events):
+    """Whether this run kept the map current, apart from the permanent 'partial':
+    the older queue, category work and locations awaiting review are always open.
+
+    Events are counted by publication date up to the start of the run, not up to
+    now (a long gap is not starvation) or last_updated (repairs move it). The
+    median of the 14 days before is read from the same database, so it needs no
+    history. It runs higher than the live count, which has not caught up yet.
+    """
+    until = timestamp(status.get("last_attempt_at")) or datetime.now(timezone.utc)
+    published = [when for when in (timestamp(event.get("published")) for event in events) if when]
+    last_24h = sum(when >= until - DAY for when in published)
+    days = Counter((until - when) // DAY for when in published if when < until - DAY)
+    median = statistics.median(days[day] for day in range(1, MEDIAN_DAYS + 1))
+    recent = status.get("recent") if isinstance(status.get("recent"), dict) else {}
+    new_reviews, waiting = count(recent.get("new_reviews")), count(recent.get("pending"))
+    share = (new_reviews / (new_reviews + waiting) if new_reviews is not None and waiting is not None
+             and new_reviews + waiting else None)
+    starved, degraded = [], []
+    if status.get("collect_outcome") not in (None, "success"):
+        starved.append("collection_failed")
+    if median and last_24h < STARVED_EVENTS_RATIO * median:
+        starved.append("few_events_published")
+    elif median and last_24h < DEGRADED_EVENTS_RATIO * median:
+        degraded.append("few_events_published")
+    if share is not None and share < STARVED_REVIEW_SHARE and waiting >= STARVED_MIN_WAITING:
+        starved.append("reviews_far_below_arrivals")
+    elif share is not None and share < DEGRADED_REVIEW_SHARE and waiting > DEGRADED_MIN_WAITING:
+        degraded.append("reviews_below_arrivals")
+    if (status.get("source") or {}).get("status") == "failed":
+        degraded.append("source_failed")
+    geolocation = status.get("geolocation") or {}
+    if geolocation.get("status") == "failed" or count(geolocation.get("pending")):
+        degraded.append("geolocation_incomplete")
+    return {"state": "starved" if starved else "degraded" if degraded else "healthy",
+            "reasons": starved + degraded, "events_published_last_24h": last_24h,
+            "events_published_median_14d": median, "new_reviews": new_reviews, "recent_pending": waiting,
+            "review_share": None if share is None else round(share, 3),
+            "thresholds": {"starved_events_ratio": STARVED_EVENTS_RATIO, "degraded_events_ratio": DEGRADED_EVENTS_RATIO,
+                           "starved_review_share": STARVED_REVIEW_SHARE, "degraded_review_share": DEGRADED_REVIEW_SHARE,
+                           "starved_min_waiting": STARVED_MIN_WAITING, "degraded_min_waiting": DEGRADED_MIN_WAITING}}
+
+
+def health_summary(health):
+    return (f"{health['events_published_last_24h']} events published in the last 24 h "
+            f"(14-day median {health['events_published_median_14d']:g}); "
+            f"{health['new_reviews']} new reviews, {health['recent_pending']} recent articles waiting; "
+            + ", ".join(health["reasons"]))
 
 
 def radnuc_row(value):
@@ -273,6 +336,9 @@ def finalize(database_path, *, collect_outcome, geolocate_outcome, started_at,
         reasons.append('geolocation_review_required')
         if status['status']=='complete': status['status']='partial'
     status["reasons"] = list(dict.fromkeys(reason for reason in reasons if isinstance(reason, str)))
+    if telemetry.get("temporary_failures"):
+        status["temporary_failures"] = copy.deepcopy(telemetry["temporary_failures"])
+    status["health"] = run_health(status, events)
     # A refresh that changes nothing but the clock keeps the published
     # finalized_at and leaves both files untouched: git then sees no diff, so
     # nothing is committed or redeployed, and open maps (whose publication
@@ -312,11 +378,18 @@ def main(argv=None):
     print(json.dumps({"status": status["status"], "recent_pending": status["recent"]["pending"],
                       "backlog_pending": status["backlog"]["pending"], "geolocation_pending": status["geolocation"]["pending"],
                       "reasons": status["reasons"]}))
+    health = status["health"]
+    if not args.refresh_existing and health["state"] != "healthy":
+        # Annotations are public; GitHub run logs need admin rights.
+        level = "error" if health["state"] == "starved" else "warning"
+        print(f"::{level} title=Map {health['state']}::{health_summary(health)}")
     if os.getenv("GITHUB_OUTPUT") and not args.refresh_existing:
         usage = read_object(args.cache).get("selection_quota_usage")
         wanted = recovery_wanted(status, usage, datetime.now(PACIFIC).date().isoformat())
         with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as stream:
             stream.write(f"recovery_wanted={str(wanted).lower()}\n")
+            stream.write(f"map_health={health['state']}\n")
+            stream.write(f"map_health_summary={health_summary(health)}\n")
     return 0
 
 
