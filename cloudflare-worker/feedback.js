@@ -24,7 +24,6 @@ const LEGACY_EVALUATION_ITEMS = [
   ["heat_map", "Heat Map"],
   ["situation_24h", "Situation 24H"],
   ["weekly_analysis", "Weekly Analysis"],
-  ["key_developments", "Key Developments"],
   ["database", "Events Database"],
   ["security", "Security Features"]
 ];

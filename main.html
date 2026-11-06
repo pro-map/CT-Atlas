@@ -10,7 +10,7 @@
 <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CT ATLAS — Main</title>
-<link rel="icon" href="CT-ATLAS.png">
+<link rel="icon" href="CT-ATLAS-256.png">
 <link rel="stylesheet" href="usage-admin.css?v=usage-history-20261006">
 <link rel="stylesheet" href="feedback.css?v=20260928">
 <script src="usage-admin.js?v=retired-tools-20261106" defer></script>
@@ -81,7 +81,7 @@ body{display:flex;min-height:100vh}
 <main class="hub">
   <header class="hub-header">
     <div class="hub-brand">
-      <img src="CT-ATLAS.png" alt="CT Atlas">
+      <img src="CT-ATLAS-256.png" alt="CT Atlas">
       <div>
         <div class="hub-title">CT ATLAS</div>
         <div class="hub-subtitle">Analytical Workspaces</div>
@@ -172,13 +172,20 @@ async function verify(){
   if(!token){location.replace("index.html");return;}
   try{
     const response=await fetch(API+"/session-check",{headers:{"X-Session-Token":token},cache:"no-store"});
+    if(response.status===401||response.status===403){clear();location.replace("index.html");return;}
     const payload=await response.json().catch(()=>({}));
-    if(!response.ok||!payload.ok||!payload.username)throw new Error("Session expired");
+    if(!response.ok||!payload.ok||!payload.username)throw new Error("No usable answer");
     sessionStorage.setItem(USER,String(payload.username).toLowerCase());
     sessionStorage.setItem(AUTHORIZED,"yes");
     sessionStorage.setItem(EXPIRY,String(payload.expires_at||""));
     document.getElementById("hubUser").textContent=String(payload.username).toUpperCase();
-  }catch(_){clear();location.replace("index.html");}
+  }catch(_){
+    // Only the Worker's own refusal ends a session: an outage keeps the token and the page.
+    const user=String(sessionStorage.getItem(USER)||"");
+    if(!user){clear();location.replace("index.html");return;}
+    document.getElementById("hubUser").textContent=user.toUpperCase()+" · SESSION CHECK UNAVAILABLE";
+    setTimeout(verify,60000);
+  }
 }
 async function signout(){
   const token=String(sessionStorage.getItem(TOKEN)||"");

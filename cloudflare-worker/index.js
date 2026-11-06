@@ -96,6 +96,8 @@ if (url.pathname === "/session-check" && request.method === "GET") {
 const token = cleanText(request.headers.get("X-Session-Token"), 160);
 if (!token) return jsonResponse({ error: "Session expired." }, 401, env);
 const sessionResponse = await gateCall(env, "/session-get", { session_token: token });
+// The pages sign out on a 401, so a failing gate must not be reported as an expired session.
+if (sessionResponse.status >= 500) return jsonResponse({ error: "Session check unavailable." }, 503, env);
 const session = await sessionResponse.json().catch(() => ({}));
 if (!sessionResponse.ok || !session?.username || !isAllowedUser(session.username, env)) return jsonResponse({ error: "Session expired." }, 401, env);
 return jsonResponse({ ok: true, username: session.username, expires_at: session.expires_at }, 200, env);

@@ -27,6 +27,10 @@ cp index.html main.html crypto.html privacy.html robots.txt ct-atlas-runtime.jso
    ip.html ip.js ip.css ip-report.js ip-intelligence.svg \
    "$STAGING"/
 
+# The map's own copies of Leaflet and its plugins: the mirror exists for networks
+# that block things, so it must not depend on a third-party script host.
+cp -R vendor "$STAGING/vendor"
+
 # Preserve the complete fallback, using byte chunks when compaction alone cannot
 # meet the 25 MiB asset cap. The Worker streams it at the same /events.json URL
 # (and the derived files below at theirs).
@@ -51,8 +55,11 @@ python3 tools/daily_publication_audit.py manifest --directory "$STAGING" --outpu
 # Workers assets are an exact-match lookup, so stage that exact name (the
 # tracked lowercase ct-atlas.png duplicate is not what the pages use).
 cp CT-ATLAS.png "$STAGING/CT-ATLAS.png"
+cp CT-ATLAS-256.png "$STAGING/CT-ATLAS-256.png"
 
-for required in tab-health.js tab-health.css; do
+for required in tab-health.js tab-health.css \
+    vendor/leaflet-1.9.4/leaflet.js vendor/leaflet.markercluster-1.5.3/leaflet.markercluster.js \
+    vendor/leaflet.heat-0.2.0/leaflet-heat.js; do
   if [ ! -s "$STAGING/$required" ]; then
     echo "Mirror is missing required asset: $required" >&2
     exit 1

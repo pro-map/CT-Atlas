@@ -18,25 +18,25 @@
 
 <link
     rel="icon"
-    href="CT-ATLAS.png?v=06bb772f344f57a1"
+    href="CT-ATLAS-256.png?v=c5f0e5829c29b521"
 >
 
 
 <link
     rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    href="vendor/leaflet-1.9.4/leaflet.css"
 />
 
 
 <link
     rel="stylesheet"
-    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
+    href="vendor/leaflet.markercluster-1.5.3/MarkerCluster.css"
 />
 
 
 <link
     rel="stylesheet"
-    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
+    href="vendor/leaflet.markercluster-1.5.3/MarkerCluster.Default.css"
 />
 
 <link rel="stylesheet" href="usage-admin.css?v=usage-history-20261006">
@@ -3709,6 +3709,14 @@ html, body {
     overflow-wrap: break-word;
 }
 
+/* Until deep-search.css arrives the panel stands unstyled in the page flow. For that
+   one frame it took 320 px of the map's height on a desktop and all of it on a phone,
+   and a size Leaflet read then stayed: tiles missing from the lower part of the map,
+   and leaflet.heat throwing on every move at 0 px, until the window was resized. */
+#deepSearchPanel:not(.open) {
+    display: none;
+}
+
 /* Reuses .deep-evidence / .deep-citation etc. from deep-search.css, which
    loads on every page view regardless of whether Deep Search itself is
    opened -- see usage-auth-fix.js's loadDeepSearch(). Only the badge here
@@ -4422,15 +4430,47 @@ html, body {
 }
 #updated {
     order: 3 !important;
-    flex-basis: 94px !important;
-    min-width: 94px !important;
-    max-width: 94px !important;
+    flex-basis: 136px !important;
+    min-width: 136px !important;
+    max-width: 136px !important;
     padding: 4px 0 0 7px !important;
     font-size: 7.6px !important;
 }
 #lastUpdated {
     font-size: 7.2px !important;
     line-height: 1.2 !important;
+}
+#sessionCheckNote {
+    color: #e1bf7b;
+    font-size: 6.4px;
+    line-height: 1.2;
+}
+#dataStateBadge {
+    align-self: flex-start;
+    margin-top: 2px;
+    padding: 1px 4px;
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    color: #a9bdca;
+    font-size: 7.4px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: .04em;
+}
+#dataStateBadge[hidden] { display: none; }
+#dataStateBadge[data-state="ok"] { color: #8bcbb2; }
+#dataStateBadge[data-state="warn"] { color: #f4cf7d; background: rgba(216, 177, 100, .16); }
+#dataStateBadge[data-state="bad"] { color: #ffa99f; background: rgba(209, 132, 123, .2); }
+.map-retry-button {
+    margin: 2px 0 0;
+    padding: 2px 6px;
+    border: 1px solid #d8b164;
+    border-radius: 2px;
+    background: transparent;
+    color: #e1bf7b;
+    font: 700 8px Arial, sans-serif;
+    letter-spacing: .06em;
+    cursor: pointer;
 }
 #headerCasualties24 {
     column-gap: 4px !important;
@@ -4515,9 +4555,9 @@ html, body {
         font-size: 6px !important;
     }
     #updated {
-        flex-basis: 88px !important;
-        min-width: 88px !important;
-        max-width: 88px !important;
+        flex-basis: 118px !important;
+        min-width: 118px !important;
+        max-width: 118px !important;
     }
     #headerSituationText { font-size: 9.4px !important; }
 }
@@ -4557,6 +4597,59 @@ html, body {
 @media (max-width: 640px) {
     .report-compare-note {
         font-size: 7px;
+    }
+}
+
+/* ============================================================
+   PORTRAIT PHONE
+   The two-column grid above is !important, so without this the
+   map stayed 230px wide with most of it under the sidebar. The
+   panel opens over the full-width map from its own button.
+   ============================================================ */
+#sidebarToggle {
+    display: none;
+}
+
+@media (max-width: 640px) {
+    #main {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    #updated {
+        flex: 1 1 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+
+    #sidebarToggle {
+        display: block;
+        position: absolute;
+        z-index: 1001;
+        top: 7px;
+        left: 7px;
+        min-height: 34px;
+        padding: 6px 12px;
+        border: 1px solid rgba(95, 176, 232, .55);
+        border-radius: 4px;
+        background: rgba(5, 16, 24, .94);
+        color: #cfe6f2;
+        font: 700 10px Arial, sans-serif;
+        letter-spacing: .08em;
+    }
+
+    #sidebar {
+        top: 47px !important;
+        width: min(84vw, 320px) !important;
+        max-height: calc(100% - 106px) !important;
+    }
+
+    body:not(.sidebar-open) #sidebar {
+        display: none !important;
+    }
+
+    /* Above the timeline, which it would otherwise cover. */
+    .leaflet-bottom {
+        bottom: 58px;
     }
 }
 
@@ -4951,7 +5044,7 @@ html, body {
 
 <div id="access-screen">
     <div id="access-box">
-        <img id="access-logo" src="CT-ATLAS.png?v=06bb772f344f57a1" alt="">
+        <img id="access-logo" src="CT-ATLAS-256.png?v=c5f0e5829c29b521" alt="">
         
         <div class="ctatlas-login-brand" aria-label="CT ATLAS — Global Counter-Terrorism Intelligence">
             <div class="ctatlas-login-title">
@@ -4999,7 +5092,7 @@ html, body {
 
         <img
             id="logo"
-            src="CT-ATLAS.png?v=06bb772f344f57a1"
+            src="CT-ATLAS-256.png?v=c5f0e5829c29b521"
             alt=""
         >
 
@@ -5027,8 +5120,10 @@ html, body {
 
         </div>
 
-        <div id="headerCasualties24" title="Casualties for the most recently completed Paris calendar day (yesterday, 00:00-24:00 Paris time -- used because today's collector update mostly finishes covering yesterday, not today). Event date is preferred; recent article date is used when no occurrence date is available. Victims = everyone the attack harmed, killed or wounded. Terrorists = attackers/militants killed, or captured -- either during a raid/firefight (Counter Terrorism Action) or by a plain arrest.">
-            <div id="headerCasualtiesWindow">FULL DAY (PARIS)</div>
+        <div id="dataStateBadge" data-state="neutral" hidden></div>
+
+        <div id="headerCasualties24" title="Casualties for the most recently completed Paris calendar day (yesterday, 00:00-24:00 Paris time -- used because today's collector update mostly finishes covering yesterday, not today), by publication date. FULL DAY means a healthy collection started after that day ended. INCOMPLETE means the last collection started before it ended or left much of it unreviewed, and NO DATA that none ran on it: a dash then means not known, not zero. Victims = everyone the attack harmed, killed or wounded. Terrorists = attackers/militants killed, or captured -- either during a raid/firefight (Counter Terrorism Action) or by a plain arrest.">
+            <div id="headerCasualtiesWindow">YESTERDAY (PARIS)</div>
             <div class="header-casualty-group">
                 <span class="header-casualty-group-label">VICTIMS</span>
                 <div class="header-casualty">
@@ -5052,6 +5147,8 @@ html, body {
                 </div>
             </div>
         </div>
+
+        <div id="sessionCheckNote" hidden>Session check unavailable, retrying</div>
 
         <div id="counter" style="display:none" aria-hidden="true">—</div>
 
@@ -5087,6 +5184,9 @@ html, body {
 
 
 <div id="main">
+
+
+<button id="sidebarToggle" type="button" aria-controls="sidebar" aria-expanded="false">FILTERS</button>
 
 
 <div id="sidebar">
@@ -5270,19 +5370,6 @@ Database <span id="databaseTotalCount" class="database-total" hidden></span>
 
 
 <div class="section-title">
-Top trends — 30 days
-</div>
-
-
-<ul
-    class="analytics-list"
-    id="trendList"
->
-</ul>
-
-
-
-<div class="section-title">
 Top countries
 </div>
 
@@ -5421,12 +5508,12 @@ Visible rate
         <div id="attackTickerViewport">
             <ul id="attackTickerList"></ul>
         </div>
-        <div id="attackTickerFooter">Executed, attempted and foiled attacks. Other categories: SHOW ON MAP; full database in the DATABASE panel.</div>
+        <div id="attackTickerFooter">Executed, attempted and foiled attacks, in Paris time. Other categories: SHOW ON MAP; full database in the DATABASE panel.</div>
     </aside>
 
     <div id="timelineDock">
         <div id="timelineHeader">
-            <span>Attacks over time · 30 days</span>
+            <span>Attacks over time · 30 days · Paris days</span>
             <strong id="timelineTodayLabel">Today —</strong>
         </div>
         <div id="timelineBars"></div>
@@ -5485,7 +5572,6 @@ Visible rate
         <div id="categoryMiniBars"></div>
     </div>
 
-    <div class="analytics-card" id="trendCard"></div>
     <div class="analytics-card" id="countriesCard"></div>
     <div class="analytics-card" id="hotspotsCard"></div>
 
@@ -5522,6 +5608,7 @@ Visible rate
 
       <div class="health-section">
         <div class="health-section-title">LATEST COLLECTION</div>
+        <div class="health-row"><span>Data state</span><strong id="healthDataState">Not reported</strong></div>
         <div class="health-row"><span>Update completeness</span><strong id="healthUpdateStatus">Not reported</strong></div>
         <div class="health-row"><span>Recent candidates reviewed</span><strong id="healthRecentReviewed">Not reported</strong></div>
         <div class="health-row"><span>Recent candidates pending</span><strong id="healthRecentPending">Not reported</strong></div>
@@ -5789,6 +5876,7 @@ Visible rate
     const SESSION_USER_KEY = "ct_map_username";
     const TOKEN_KEY = "ct_map_session_token";
     const TOKEN_EXPIRY_KEY = "ct_map_session_expires";
+    const SESSION_RECHECK_MS = 60 * 1000;
 
     function lock() {
         sessionStorage.removeItem(SESSION_KEY);
@@ -5872,6 +5960,11 @@ Visible rate
         }
     }
 
+    function showSessionCheckNote(visible) {
+        const note = document.getElementById("sessionCheckNote");
+        if (note) note.hidden = !visible;
+    }
+
     async function restoreSession() {
         const token = String(sessionStorage.getItem(TOKEN_KEY) || "");
         if (!token) {
@@ -5883,16 +5976,25 @@ Visible rate
             const response = await fetch(API_BASE + "/session-check", {
                 headers: { "X-Session-Token": token }
             });
+            if (response.status === 401 || response.status === 403) {
+                lock();
+                return;
+            }
             const payload = await response.json().catch(() => ({}));
-            if (!response.ok || !payload.ok || !payload.username) throw new Error("Session expired.");
+            if (!response.ok || !payload.ok || !payload.username) throw new Error("No usable answer (HTTP " + response.status + ").");
             sessionStorage.setItem(TOKEN_EXPIRY_KEY, String(payload.expires_at || ""));
             unlock(payload.username);
-            const workspace = new URLSearchParams(window.location.search).get("workspace");
-            if (workspace !== "map") window.location.replace("main.html");
+            showSessionCheckNote(false);
         } catch (restoreError) {
-            console.warn("Session restore failed:", restoreError);
-            lock();
+            // Only the Worker's own refusal ends a session. Signing out on an outage
+            // would wipe a valid token for a login screen that needs the same Worker.
+            console.warn("Session check unavailable:", restoreError);
+            unlock(sessionStorage.getItem(SESSION_USER_KEY));
+            showSessionCheckNote(true);
+            setTimeout(restoreSession, SESSION_RECHECK_MS);
         }
+        const workspace = new URLSearchParams(window.location.search).get("workspace");
+        if (workspace !== "map") window.location.replace("main.html");
     }
 
     async function logout() {
@@ -5929,24 +6031,19 @@ Visible rate
 </script>
 
 <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    src="vendor/leaflet-1.9.4/leaflet.js"
 >
 </script>
 
 
 <script
-    src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"
+    src="vendor/leaflet.markercluster-1.5.3/leaflet.markercluster.js"
 >
 </script>
 
 
 <script
-    src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"
->
-</script>
-
-<script
-    src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"
+    src="vendor/leaflet.heat-0.2.0/leaflet-heat.js"
 >
 </script>
 
@@ -6002,6 +6099,33 @@ const TILE_LOAD_TUNING = {
     updateWhenZooming:
         false
 };
+
+
+// Portrait phones: the zoom control sits on the right, clear of the panel, and the
+// panel starts closed so the first thing seen is the map (see PORTRAIT PHONE in the CSS).
+const phoneLayout =
+    window.matchMedia(
+        "(max-width: 640px)"
+    );
+
+function applyPhoneLayout() {
+    map.zoomControl.setPosition(phoneLayout.matches ? "topright" : "topleft");
+    map.invalidateSize();
+}
+
+function setPhoneSidebarOpen(open) {
+    document.body.classList.toggle("sidebar-open", open);
+    const toggle = document.getElementById("sidebarToggle");
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.textContent = open ? "CLOSE" : "FILTERS";
+}
+
+phoneLayout.addEventListener("change", applyPhoneLayout);
+applyPhoneLayout();
+
+document.getElementById("sidebarToggle").addEventListener("click", () => {
+    setPhoneSidebarOpen(!document.body.classList.contains("sidebar-open"));
+});
 
 
 const englishBaseLayer =
@@ -6176,16 +6300,6 @@ L.markerClusterGroup({
     spiderfyOnMaxZoom:
         true,
 
-    // renderEvents() rebuilds every marker (thousands of events) from scratch on load, on every
-    // filter/category/search change. Without chunking, addLayer() runs synchronously for all of
-    // them in one go and blocks the main thread -- the exact freeze/lag this option exists for.
-    // Chunked loading spreads that work over animation frames instead.
-    chunkedLoading:
-        true,
-
-    chunkDelay:
-        30,
-
     // The default cluster icon, red and pulsing when it holds an attack.
     iconCreateFunction:
         cluster => {
@@ -6205,6 +6319,50 @@ L.markerClusterGroup({
 map.addLayer(
     markerCluster
 );
+
+
+// renderEvents() rebuilds every marker (thousands of events) from scratch on load and on every
+// filter change, so insertion is spread over short slices to keep the page responsive. The
+// plugin's own chunkedLoading did that too, but clearLayers() cannot cancel the chunks it has
+// queued: on a slow device a quick change from 6 MONTHS to 24H left thousands of the previous
+// period's markers on the map. Here a newer render simply ends the older one.
+const MARKER_CHUNK_SIZE = 400;
+const MARKER_CHUNK_DELAY_MS = 30;
+
+let markerRenderGeneration = 0;
+
+function addMarkersInChunks(markers) {
+    const generation = markerRenderGeneration;
+    let next = 0;
+    const addChunk = () => {
+        if (generation !== markerRenderGeneration) return;
+        markerCluster.addLayers(markers.slice(next, next + MARKER_CHUNK_SIZE));
+        next += MARKER_CHUNK_SIZE;
+        if (next < markers.length) setTimeout(addChunk, MARKER_CHUNK_DELAY_MS);
+    };
+    addChunk();
+}
+
+
+// A rebuild closes an open popup and folds a spiderfied stack. When the only reason
+// is that an event aged out of the window, it waits until the analyst has finished.
+let mapPopupOpen = false;
+let mapSpiderfied = false;
+let mapRebuildDeferred = false;
+
+function rebuildAgedMap() {
+    if (!mapRebuildDeferred || mapPopupOpen || mapSpiderfied) return;
+    mapRebuildDeferred = false;
+    renderEvents();
+    updateCoverage();
+    updateTopLocations();
+}
+
+map.on("popupopen", () => { mapPopupOpen = true; });
+// Later in the same tick: moving to another marker closes one popup, then opens the next.
+map.on("popupclose", () => { mapPopupOpen = false; setTimeout(rebuildAgedMap, 0); });
+markerCluster.on("spiderfied", () => { mapSpiderfied = true; });
+markerCluster.on("unspiderfied", () => { mapSpiderfied = false; setTimeout(rebuildAgedMap, 0); });
 
 // ============================================================
 // INTERPOL OFFICES
@@ -6841,13 +6999,46 @@ function removeRetiredJudicialData(data) {
     return result;
 }
 
+// A stalled connection never rejects by itself, so neither the fallbacks nor the
+// retry would run and the page stayed on "Loading database..." until reloaded. The
+// clock restarts on every chunk: it stops a silent server, not a slow link, which
+// needs minutes for the full file on a poor connection.
+const MAP_DOWNLOAD_STALL_MS = 30 * 1000;
+
+function guardMapDownload(start) {
+    const controller = new AbortController();
+    let timer = 0;
+    const alive = () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => controller.abort(), MAP_DOWNLOAD_STALL_MS);
+    };
+    const watch = response => {
+        alive();
+        if (!response.body || typeof TransformStream !== "function") return response;
+        return new Response(response.body.pipeThrough(new TransformStream({
+            transform(chunk, stream) {
+                alive();
+                stream.enqueue(chunk);
+            }
+        })), { status: response.status });
+    };
+    alive();
+    return start(controller.signal, watch).finally(() => clearTimeout(timer));
+}
+
+
 // The map reads events-lite.json: only the fields it uses (~64% smaller than events.json).
 // It is derived at publication time from the events.json being deployed, so it is never older
 // than it; if it is missing or unusable, fall back to the full file.
+// no-cache, not no-store: the browser revalidates on every load, so nothing stale is
+// shown, and an unchanged file costs a 304 instead of 3.8 MB.
 function loadEventsDatabase() {
 
-    return fetch(
-        "events-lite.json", { cache: "no-store" }
+    return guardMapDownload((signal, watch) => fetch(
+        "events-lite.json", { cache: "no-cache", signal }
+    )
+    .then(
+        watch
     )
     .then(
         response => {
@@ -6865,7 +7056,7 @@ function loadEventsDatabase() {
             return response.json();
 
         }
-    )
+    ))
     .then(
         data => {
 
@@ -6893,8 +7084,11 @@ function loadEventsDatabase() {
         }
     )
     .catch(
-        () => fetch(
-            "events.json", { cache: "no-store" }
+        () => guardMapDownload((signal, watch) => fetch(
+            "events.json", { cache: "no-cache", signal }
+        )
+        .then(
+            watch
         )
         .then(
             response => {
@@ -6915,7 +7109,7 @@ function loadEventsDatabase() {
                 return response.json();
 
             }
-        )
+        ))
     ).then(removeRetiredJudicialData);
 
 }
@@ -6955,9 +7149,9 @@ function eventMatchKey(event) {
 // day of slack between two publications (tools/build_events_map.py).
 const MAP_RECENT_EVENT_DAYS = 181;
 
-// The map's own file (events-map.json, built at publication time: attacks only,
-// ~1/4 of events-lite.json) or, if it is missing or unusable, the full database
-// reduced to the same shape here.
+// The map's own file (events-map.json, built at publication time: attacks, plus
+// the other categories of the last 181 days) or, if it is missing or unusable,
+// the full database reduced to the same shape here.
 // Keep a fingerprint of the received bytes before internal map keys are attached.
 function readMapSnapshotResponse(response) {
     if (typeof response.arrayBuffer !== "function" || !globalThis.crypto?.subtle) return response.json();
@@ -6974,11 +7168,12 @@ function readMapSnapshotResponse(response) {
 
 function loadMapDatabase() {
 
-    return fetch("events-map.json", { cache: "no-store" })
+    return guardMapDownload((signal, watch) => fetch("events-map.json", { cache: "no-cache", signal })
+    .then(watch)
     .then(response => {
         if (!response.ok) throw new Error("events-map.json unavailable");
         return readMapSnapshotResponse(response);
-    })
+    }))
     .then(data => {
         if (!data || !Array.isArray(data.events) || !Array.isArray(data.recent_events)) {
             throw new Error("events-map.json invalid");
@@ -7192,12 +7387,116 @@ function renderCollectionStatus(data) {
     }
 }
 
+// "partial" is the normal state of every run, so it cannot tell an outage from a
+// good day. The pipeline's health field does; snapshots without it get the same
+// test on their own counters, so a starved run such as 5 Nov is still recognised.
+const COLLECTION_HEALTH_NAMES = { healthy: "ok", degraded: "behind", starved: "stalled" };
+
+function collectionHealth(status) {
+    if (!status || typeof status !== "object") return "";
+    // Before the health field: to the pipeline a failed collection is also "starved".
+    if (status.status === "failed") return "failed";
+    const reported = COLLECTION_HEALTH_NAMES[status.health?.state];
+    if (reported) return reported;
+    const reviewed = collectionStatusCount(status.recent?.new_reviews);
+    const pending = collectionStatusCount(status.recent?.pending);
+    if (reviewed === null || pending === null) return "";
+    if (pending < 100) return "ok";
+    const share = reviewed / (reviewed + pending);
+    if (share < 0.1) return "stalled";
+    return share < 0.5 && pending > 600 ? "behind" : "ok";
+}
+
+// Status-only refreshes bump last_updated, so the run's own date comes first.
+function dataPublishedTime(facts) {
+    const time = Date.parse(facts?.collection_status?.published_at || facts?.last_updated || "");
+    return Number.isFinite(time) ? time : null;
+}
+
+// About one missed run: a publication older than this means one did not happen.
+const MAP_DATA_STALE_MS = 14 * 60 * 60 * 1000;
+
+function dataStateView(facts, now) {
+    const view = collectionStatusView(facts);
+    const health = collectionHealth(facts?.collection_status);
+    const published = dataPublishedTime(facts);
+    const age = published === null ? 0 : Math.max(0, now - published);
+    const hours = Math.floor(age / 3600000);
+    const ageText = hours >= 48 ? Math.floor(hours / 24) + " DAYS" : hours + " H";
+    const stale = age >= MAP_DATA_STALE_MS;
+    const problem = { failed: ["bad", "UPDATE FAILED"], stalled: ["bad", "UPDATE STALLED"], behind: ["warn", "UPDATE BEHIND"] }[health];
+    let level, text;
+    if (problem) {
+        [level, text] = problem;
+        if (stale) text += " · " + ageText + " OLD";
+    } else if (stale) {
+        [level, text] = [hours >= 48 ? "bad" : "warn", "NO UPDATE FOR " + ageText];
+    } else if (health === "ok" || view.state === "complete") {
+        [level, text] = ["ok", "UPDATE OK"];
+    } else {
+        [level, text] = ["neutral", view.state === "unknown" ? "STATUS NOT REPORTED" : "UPDATE PARTIAL"];
+    }
+    return { level, text, detail: view.title + ". Last attempt: " + view.attempt + ". Published data: " + view.published + ". " + view.reasons };
+}
+
+// What the page knows about its data, kept apart from the event arrays.
+let mapDataFacts = null;
+
+function mapDataOlderThan(days) {
+    const published = dataPublishedTime(mapDataFacts);
+    return published !== null && Date.now() - published > days * 86400000;
+}
+
+function renderDataStateBadge() {
+    const view = dataStateView(mapDataFacts, Date.now());
+    const badge = document.getElementById("dataStateBadge");
+    if (badge) {
+        badge.hidden = false;
+        badge.dataset.state = view.level;
+        badge.textContent = view.text;
+        badge.title = view.detail;
+    }
+    const health = document.getElementById("healthDataState");
+    if (health) health.textContent = view.text;
+}
+
+// Written where it shows: in the header and the ticker. Phones hide the ticker.
+function renderMapLoadFailure() {
+    const retryButton = () => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "map-retry-button";
+        button.textContent = "RETRY";
+        button.addEventListener("click", () => startMapLoad());
+        return button;
+    };
+    document.getElementById("lastUpdated")?.replaceChildren("Database unavailable ", retryButton());
+    const row = document.createElement("li");
+    row.className = "ticker-empty";
+    row.append("The map data could not be loaded. ", retryButton());
+    document.getElementById("attackTickerList")?.replaceChildren(row);
+}
+
+let mapLoadFailed = false;
+let mapLoadPromise = null;
+
+function startMapLoad() {
+
+    if (mapLoadPromise) return mapLoadPromise;
+
+    const status = document.getElementById("lastUpdated");
+    if (status) status.textContent = "Loading database...";
+
+    mapLoadPromise =
+
 loadMapDatabase()
 
 .then(
     data => {
         renderCollectionStatus(data);
         applyMapDatabase(data);
+        mapLoadFailed = false;
+        clearMapRefreshBackoff();
     }
 )
 
@@ -7210,18 +7509,26 @@ loadMapDatabase()
         );
 
 
+        mapLoadFailed = true;
+
         renderCollectionStatus(null);
         const statusTitle = document.getElementById("collectionStatusTitle");
         if (statusTitle) statusTitle.textContent = "Update status unavailable";
 
-        document.getElementById(
-            "counter"
-        ).innerText =
-            "Database unavailable";
+        renderMapLoadFailure();
 
     }
 )
-.finally(() => { mapInitialLoadComplete = true; });
+.finally(() => {
+    mapInitialLoadComplete = true;
+    mapLoadPromise = null;
+});
+
+    return mapLoadPromise;
+
+}
+
+startMapLoad();
 
 
 
@@ -7233,6 +7540,26 @@ let mapPublicationSignature = "";
 let mapPublicationCheckedAt = 0;
 let mapPublicationPromise = null;
 const MAP_PUBLICATION_POLL_MS = 60 * 1000;
+
+// A disagreement a download cannot settle (the CDN caught between two files, a page
+// on a fallback) used to fetch 12 to 44 MB per tab every minute. The manifest stays
+// on its one-minute poll; only the map download waits.
+const MAP_REFRESH_BACKOFF_MS = [5, 15, 60].map(minutes => minutes * 60 * 1000);
+let mapRefreshFailures = 0;
+let mapRefreshRetryAt = 0;
+let mapRefreshFailedSignature = "";
+
+function deferMapRefresh(signature) {
+    mapRefreshFailedSignature = signature;
+    mapRefreshRetryAt = Date.now() + MAP_REFRESH_BACKOFF_MS[Math.min(mapRefreshFailures, MAP_REFRESH_BACKOFF_MS.length - 1)];
+    mapRefreshFailures += 1;
+}
+
+function clearMapRefreshBackoff() {
+    mapRefreshFailures = 0;
+    mapRefreshRetryAt = 0;
+    mapRefreshFailedSignature = "";
+}
 
 function applyMapDatabase(data) {
         for (const id of ['collectionQueryCount', 'healthQueryCount']) {
@@ -7278,6 +7605,7 @@ function applyMapDatabase(data) {
             null;
 
 
+        mapDataFacts = { collection_status: data.collection_status, last_updated: data.last_updated || data.updated_at };
         mapDatabaseVersion = String(data.last_updated || data.updated_at || "");
         mapSnapshotStatusFinalizedAt = String(data.collection_status?.finalized_at || "");
         mapSnapshotBytesHash = String(data._publicationBytesHash || "");
@@ -7324,14 +7652,8 @@ function applyMapDatabase(data) {
 
 
         if (
-            data.last_updated
+            dataPublishedTime(mapDataFacts) !== null
         ) {
-
-
-            const updated =
-                new Date(
-                    data.last_updated
-                );
 
 
             document.getElementById(
@@ -7342,9 +7664,19 @@ function applyMapDatabase(data) {
 
                 +
 
-                updated.toLocaleString(
-                    "en-GB"
+                collectionStatusDate(
+                    dataPublishedTime(mapDataFacts)
                 );
+
+        }
+
+
+        else {
+
+            document.getElementById(
+                "lastUpdated"
+            ).innerText =
+                "Publication date not reported";
 
         }
 
@@ -7371,7 +7703,14 @@ function refreshMapPublication(force = false) {
         return Promise.resolve();
     }
     mapPublicationCheckedAt = Date.now();
+    // Nothing is on screen after a failed first load: start over, whatever the manifest says.
+    if (mapLoadFailed) {
+        if (!force && Date.now() < mapRefreshRetryAt) return Promise.resolve();
+        deferMapRefresh("");
+        return startMapLoad();
+    }
     const previousSource = window.eventsDataSource;
+    let downloading = "";
     mapPublicationPromise = fetch("publication-manifest.json", { cache: "no-store" })
         .then(response => {
             if (!response.ok) throw new Error("Publication manifest unavailable");
@@ -7391,18 +7730,30 @@ function refreshMapPublication(force = false) {
                 mapPublicationSignature = signature;
                 return;
             }
+            // A new publication can settle what the last one could not.
+            if (signature !== mapRefreshFailedSignature) clearMapRefreshBackoff();
+            else if (!force && Date.now() < mapRefreshRetryAt) return;
+            downloading = signature;
             const data = await loadMapDatabase();
-            if (!mapPublicationMatches(data, target)) {
+            // The manifest hashes events-map.json only: a fallback file can match its
+            // date but never its bytes, and retrying for that was the per-minute download.
+            const fallback = window.eventsDataSource !== "events-map.json";
+            const version = String(data.last_updated || data.updated_at || "");
+            if (fallback ? version !== target.last_updated : !mapPublicationMatches(data, target)) {
                 throw new Error("Published map and manifest are not yet synchronized");
             }
             if (chronologySelectedKeys.size) return;
-            renderCollectionStatus(data);
-            applyMapDatabase(data);
+            if (!fallback || version !== mapDatabaseVersion) {
+                renderCollectionStatus(data);
+                applyMapDatabase(data);
+            }
             mapPublicationSignature = signature;
+            clearMapRefreshBackoff();
         })
         .catch(error => {
             // Keep the last successful map throughout transient publication or network failures.
             window.eventsDataSource = previousSource;
+            if (downloading) deferMapRefresh(downloading);
             console.warn("Map refresh deferred:", error.message || error);
         })
         .finally(() => { mapPublicationPromise = null; });
@@ -7548,8 +7899,8 @@ function normalizeCategoryName(category) {
 // Memoized on the event object itself: allEvents is loaded once from JSON and
 // never mutated afterward, so the derived category list never changes for a
 // given event -- but eventCategories() is called 15+ places across a single
-// refreshDashboard() (categoryMatches, updateFacetCounts, updateTrends,
-// chronology, command-center panels...), each redoing the same Set/regex work
+// refreshDashboard() (categoryMatches, updateFacetCounts, chronology,
+// command-center panels...), each redoing the same Set/regex work
 // from scratch without this cache. Callers only ever read the returned array
 // (see the mutation-safety check kept in the map-performance test), never push
 // onto it, so returning the same cached array is safe.
@@ -7749,8 +8100,8 @@ function invalidateFilterCache() {
 }
 
 // What "Show on map" draws: "ALL" (the default), "ATTACKS", or one other
-// category. filteredAllEvents() stays attacks only: the ticker, the KPIs and
-// the trends are about attacks whatever the map shows.
+// category. filteredAllEvents() stays attacks only: the ticker and the KPIs
+// are about attacks whatever the map shows.
 let mapCategoryScope = "ALL";
 
 const MAP_SCOPE_TITLES = {
@@ -7984,6 +8335,13 @@ function updateKPIs() {
 
 
 
+// Shared: this runs per marker and per list row, and every date on the page is Paris
+// time and says so, like the header. A viewer's own zone made the same record read
+// differently from the Paris day it is counted under.
+const POPUP_DATE_FORMAT = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Paris" });
+const EVENT_TIME_FORMAT = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Paris", day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+
+
 function createMarker(
     event
 ) {
@@ -8079,15 +8437,21 @@ function createMarker(
 
 
     if (
-        event.published
+        Number.isFinite(
+            Date.parse(
+                event.published
+            )
+        )
     ) {
 
         dateText =
-            new Date(
-                event.published
-            ).toLocaleDateString(
-                "en-GB"
-            );
+            POPUP_DATE_FORMAT.format(
+                new Date(
+                    event.published
+                )
+            )
+            +
+            " Paris";
 
     }
 
@@ -8266,7 +8630,9 @@ function createMarker(
 
         &&
 
-        event.url
+        safeHttpUrl(
+            event.url
+        )
     ) {
 
         sourceBlock = `
@@ -8276,7 +8642,7 @@ function createMarker(
                 Source:
 
                 <a
-                    href="${escapeHtml(event.url)}"
+                    href="${escapeHtml(safeHttpUrl(event.url))}"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -8388,6 +8754,12 @@ function isHeatEligibleEvent(event) {
 function renderEvents() {
 
 
+    markerRenderGeneration += 1;
+
+
+    mapRebuildDeferred = false;
+
+
     markerCluster.clearLayers();
 
 
@@ -8418,11 +8790,10 @@ function renderEvents() {
         showMarkers
     ) {
 
-        // Built up front and added in one bulk addLayers() call below instead of one
-        // addLayer() per event: addLayer() always inserts synchronously (chunkedLoading has
-        // no effect on it), while addLayers() is the method the cluster group actually
-        // chunks across animation frames -- with thousands of events, that bulk call is
-        // what keeps this from freezing the tab on every load/filter/search change.
+        // Built up front and added in bulk slices below instead of one addLayer() per
+        // event: addLayers() refreshes the clusters once per slice, while addLayer() does
+        // it for every marker -- with thousands of events, that is what keeps this from
+        // freezing the tab on every load/filter/search change.
         const newMarkers =
             [];
 
@@ -8467,7 +8838,7 @@ function renderEvents() {
         );
 
 
-        markerCluster.addLayers(
+        addMarkersInChunks(
             newMarkers
         );
 
@@ -8513,8 +8884,8 @@ function renderEvents() {
     // login unlock swaps it from visibility:hidden to visible) with a momentarily
     // zero-height client rect: leaflet.heat sizes its canvas from that rect and throws
     // (IndexSizeError) if it is 0, which -- uncaught -- would abort every call after
-    // renderEvents() in refreshDashboard() (updateCoverage, updateTrends, renderChronology,
-    // etc.). Wrapping this in try/catch keeps that guarantee real instead of just commented.
+    // renderEvents() in refreshDashboard() (updateCoverage, renderChronology, etc.).
+    // Wrapping this in try/catch keeps that guarantee real instead of just commented.
     if (
         showHeat
         &&
@@ -8869,402 +9240,6 @@ function updateTopLocations() {
     renderRanking("topCountries",countries);
     renderRanking("topHotspots",hotspots);
 }
-
-
-function updateTrends() {
-
-
-    const selected =
-        selectedCategories();
-
-
-    const now =
-        Date.now();
-
-
-    const day =
-        24
-        *
-        60
-        *
-        60
-        *
-        1000;
-
-
-    const currentStart =
-        now
-        -
-        30
-        *
-        day;
-
-
-    const previousStart =
-        now
-        -
-        60
-        *
-        day;
-
-
-    const rows =
-        [];
-
-
-    Object.keys(
-        categoryStyle
-    ).forEach(
-
-        category => {
-
-
-            if (
-                !selected.includes(
-                    category
-                )
-            ) {
-
-                return;
-
-            }
-
-
-            let current =
-                0;
-
-
-            let previous =
-                0;
-
-
-            allEvents.forEach(
-
-                event => {
-
-
-                    if (
-                        !eventCategories(
-                            event
-                        ).includes(
-                            category
-                        )
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    const time =
-                        new Date(
-                            event.published
-                        ).getTime();
-
-
-                    if (
-                        isNaN(
-                            time
-                        )
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    if (
-
-                        time
-                        >=
-                        currentStart
-
-                        &&
-
-                        time
-                        <=
-                        now
-
-                    ) {
-
-
-                        current++;
-
-
-                    }
-
-
-                    else if (
-
-                        time
-                        >=
-                        previousStart
-
-                        &&
-
-                        time
-                        <
-                        currentStart
-
-                    ) {
-
-
-                        previous++;
-
-                    }
-
-                }
-
-            );
-
-
-            let display =
-                "→ 0%";
-
-
-            let cssClass =
-                "trend-flat";
-
-
-            let numericChange =
-                0;
-
-
-            if (
-
-                previous
-                ===
-                0
-
-                &&
-
-                current
-                >
-                0
-
-            ) {
-
-
-                display =
-                    "NEW";
-
-
-                cssClass =
-                    "trend-up";
-
-
-                numericChange =
-                    9999;
-
-            }
-
-
-            else if (
-                previous
-                >
-                0
-            ) {
-
-
-                const change =
-
-                    (
-                        current
-                        -
-                        previous
-                    )
-
-                    /
-
-                    previous
-
-                    *
-
-                    100;
-
-
-                numericChange =
-                    change;
-
-
-                if (
-                    change
-                    >
-                    5
-                ) {
-
-
-                    display =
-                        "↑ "
-                        +
-                        Math.round(
-                            change
-                        )
-                        +
-                        "%";
-
-
-                    cssClass =
-                        "trend-up";
-
-
-                }
-
-
-                else if (
-                    change
-                    <
-                    -5
-                ) {
-
-
-                    display =
-                        "↓ "
-                        +
-                        Math.abs(
-                            Math.round(
-                                change
-                            )
-                        )
-                        +
-                        "%";
-
-
-                    cssClass =
-                        "trend-down";
-
-
-                }
-
-
-                else {
-
-
-                    display =
-                        "→ "
-                        +
-                        Math.round(
-                            change
-                        )
-                        +
-                        "%";
-
-                }
-
-            }
-
-
-            rows.push({
-
-                category,
-                current,
-                previous,
-                numericChange,
-                display,
-                cssClass
-
-            });
-
-        }
-
-    );
-
-
-    rows.sort(
-
-        (a,b) =>
-            b.numericChange
-            -
-            a.numericChange
-
-    );
-
-
-    const list =
-        document.getElementById(
-            "trendList"
-        );
-
-
-    list.innerHTML =
-        "";
-
-
-    rows.slice(
-        0,
-        5
-    ).forEach(
-
-        row => {
-
-
-            const shortNames = {
-
-                "Terrorist Financing":
-                    "Financing",
-
-                "Weapons":
-                    "Weapons",
-
-                "Maritime Security":
-                    "Maritime Security",
-
-                "Radiological/Nuclear": "Radiological/Nuclear",
-                "Chemicals and Explosives": "Chemicals and Explosives",
-                "Biological Terrorism": "Biological Terrorism",
-
-                "Online / Cyber / AI":
-                    "Online / Cyber / AI",
-
-                "Attacks":
-                    "Attacks",
-
-                "Counter Terrorism Action":
-                    "Counter Terrorism Action",
-
-                "Arrests":
-                    "Arrests"
-
-            };
-
-
-            const li =
-                document.createElement(
-                    "li"
-                );
-
-
-            li.className =
-                "analytics-item";
-
-
-            li.innerHTML = `
-
-                <span class="analytics-name">
-
-                    ${shortNames[row.category] || row.category}
-
-                </span>
-
-                <span class="analytics-value ${row.cssClass}">
-
-                    ${row.display}
-
-                </span>
-
-            `;
-
-
-            list.appendChild(
-                li
-            );
-
-        }
-
-    );
-
-}
-
 
 
 // ============================================================
@@ -9702,8 +9677,13 @@ function focusChronologyEvent(
     );
 
 
+    // Not yet in the cluster while a large render is still adding its slices.
     if (
         !marker
+        ||
+        !markerCluster.hasLayer(
+            marker
+        )
     ) {
 
         map.setView(
@@ -9809,7 +9789,11 @@ function renderChronology() {
 
         +
 
-        databaseFiltersText();
+        databaseFiltersText()
+
+        +
+
+        " · times in Paris time";
 
 
     list.innerHTML =
@@ -10005,23 +9989,8 @@ function renderChronology() {
 
                 ?
 
-                published.toLocaleString(
-
-                    "en-GB",
-
-                    {
-                        day:
-                            "2-digit",
-                        month:
-                            "short",
-                        year:
-                            "numeric",
-                        hour:
-                            "2-digit",
-                        minute:
-                            "2-digit"
-                    }
-
+                EVENT_TIME_FORMAT.format(
+                    published
                 )
 
                 :
@@ -10533,6 +10502,23 @@ function selectedDatabaseEvents() {
 }
 
 
+// Under a megabyte used only on export: loaded on the first click, so neither
+// its size nor an outage of its host stands in front of the map.
+let xlsxLoaderPromise = null;
+function loadXlsxForExport() {
+    if (typeof XLSX !== "undefined") return Promise.resolve();
+    if (xlsxLoaderPromise) return xlsxLoaderPromise;
+    xlsxLoaderPromise = new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js";
+        script.onload = () => typeof XLSX !== "undefined" ? resolve() : reject(new Error("xlsx did not initialise."));
+        script.onerror = () => { xlsxLoaderPromise = null; reject(new Error("Unable to load the Excel export library.")); };
+        document.head.appendChild(script);
+    });
+    return xlsxLoaderPromise;
+}
+
+
 function exportChronologyExcel() {
 
     const selectedEvents =
@@ -10561,12 +10547,25 @@ function exportChronologyExcel() {
         "undefined"
     ) {
 
-        alert(
-            "The Excel export library could not be loaded."
-        );
+        const button = document.getElementById("chronologyExport");
+        const label = button ? button.textContent : "";
+        if (button) {
+            button.disabled = true;
+            button.textContent = "PREPARING…";
+        }
 
-
-        return;
+        return loadXlsxForExport()
+            .then(exportChronologyExcel)
+            .catch(error => {
+                console.error(error);
+                alert("The Excel export library could not be loaded.");
+            })
+            .finally(() => {
+                if (button) {
+                    button.disabled = false;
+                    button.textContent = label;
+                }
+            });
 
     }
 
@@ -10825,11 +10824,6 @@ function initialiseCommandCenterLayout() {
 
 
     moveAnalyticsBlock(
-        "trendCard",
-        "trendList"
-    );
-
-    moveAnalyticsBlock(
         "countriesCard",
         "topCountries"
     );
@@ -10978,6 +10972,31 @@ function parisNowParts() {
 }
 
 
+// Building an Intl.DateTimeFormat is what froze the page: this ran for every
+// event, several times per pass, once a minute. One formatter serves every call
+// and each timestamp is formatted once; the bound keeps a tab left open for
+// weeks from growing without limit.
+const PARIS_DAY_FORMAT =
+    new Intl.DateTimeFormat(
+        "en-CA",
+        {
+            timeZone:
+                "Europe/Paris",
+            year:
+                "numeric",
+            month:
+                "2-digit",
+            day:
+                "2-digit"
+        }
+    );
+
+const PARIS_DAY_CACHE_LIMIT = 100000;
+
+const parisDayByTimestamp =
+    new Map();
+
+
 function parisCalendarDateString(
     date
 ) {
@@ -10992,21 +11011,22 @@ function parisCalendarDateString(
         return "";
     }
 
+    const time =
+        date.getTime();
+
+    const known =
+        parisDayByTimestamp.get(
+            time
+        );
+
+    if (
+        known !== undefined
+    ) {
+        return known;
+    }
+
     const parts =
-        new Intl.DateTimeFormat(
-            "en-CA",
-            {
-                timeZone:
-                    "Europe/Paris",
-                year:
-                    "numeric",
-                month:
-                    "2-digit",
-                day:
-                    "2-digit"
-            }
-        )
-        .formatToParts(
+        PARIS_DAY_FORMAT.formatToParts(
             date
         );
 
@@ -11027,13 +11047,27 @@ function parisCalendarDateString(
         }
     );
 
-    return (
+    const day =
         obj.year
         + "-"
         + obj.month
         + "-"
-        + obj.day
+        + obj.day;
+
+    if (
+        parisDayByTimestamp.size
+        >=
+        PARIS_DAY_CACHE_LIMIT
+    ) {
+        parisDayByTimestamp.clear();
+    }
+
+    parisDayByTimestamp.set(
+        time,
+        day
     );
+
+    return day;
 }
 
 
@@ -11081,13 +11115,42 @@ function shiftCalendarDateString(
 }
 
 
+// Asked for once per event: the answer can only change on a minute boundary
+// (Paris offsets are whole hours), so a whole pass shares one computation and
+// the current time never reaches the per-timestamp cache event by event.
+let parisYesterdayMinute = null;
+let parisYesterdayValue = "";
+
 function parisYesterdayDateString() {
-    return shiftCalendarDateString(
-        parisCalendarDateString(
-            new Date()
-        ),
-        -1
-    );
+
+    const now =
+        new Date();
+
+    const minute =
+        Math.floor(
+            now.getTime()
+            /
+            60000
+        );
+
+    if (
+        minute
+        !==
+        parisYesterdayMinute
+    ) {
+        parisYesterdayMinute =
+            minute;
+
+        parisYesterdayValue =
+            shiftCalendarDateString(
+                parisCalendarDateString(
+                    now
+                ),
+                -1
+            );
+    }
+
+    return parisYesterdayValue;
 }
 
 
@@ -11257,16 +11320,19 @@ function isCurrentCasualtyEvent(
 
 function casualtyTextForEvent(event) {
 
+    // Only thousands separators go: elsewhere a comma ends a figure's phrase, or
+    // "Two dead, 5 wounded" reads as "dead 5". Fields end one the same way: a title
+    // ending "killing 8" must not take the summary's "Unidentified armed attackers".
     return (
         (event.title || "")
-        + " "
+        + " . "
         + (event.summary || "")
-        + " "
+        + " . "
         + (event.original_title || "")
-        + " "
+        + " . "
         + (event.original_summary || "")
     )
-    .replace(/,/g, "")
+    .replace(/(\d),(?=\d{3}\b)/g, "$1")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -11341,9 +11407,195 @@ const TERRORIST_SIDE_CASUALTY_WORDS = new Set(
         "insurgent", "insurgents",
         "gunman", "gunmen",
         "jihadist", "jihadists",
-        "bomber", "bombers"
+        "bomber", "bombers",
+        "bandit", "bandits",
+        "rebel", "rebels",
+        "extremist", "extremists"
     ]
 );
+
+
+const CASUALTY_NUMBER_WORDS = {
+    one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9,
+    ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15,
+    sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19,
+    twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90
+};
+
+const CASUALTY_FIGURE =
+    "\\d{1,5}"
+    + "|(?:twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)(?:[-\\s](?:one|two|three|four|five|six|seven|eight|nine))?"
+    + "|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen";
+
+const CASUALTY_NUMBER =
+    "(" + CASUALTY_FIGURE + ")";
+
+// "No one was killed" is no death, and "mother of eight arrested" one arrest. Taken out
+// of the text first, because a lookbehind here throws at load on Safari before 16.4,
+// which would end the whole script and leave the page on "Loading database...".
+const CASUALTY_NOT_A_FIGURE =
+    new RegExp("\\b(?:no|not|(?:mother|father|parent)\\s+of)\\s(?:" + CASUALTY_FIGURE + ")\\b", "gi");
+
+const CASUALTY_APPROXIMATION =
+    "(?:at\\s+least\\s+|more\\s+than\\s+|over\\s+)?";
+
+const CASUALTY_TERRORIST_NOUNS =
+    Array.from(TERRORIST_SIDE_CASUALTY_WORDS).join("|");
+
+const CASUALTY_TERRORIST_PLURALS =
+    Array.from(TERRORIST_SIDE_CASUALTY_WORDS).filter(word => /(?:s|men)$/.test(word)).join("|");
+
+const CASUALTY_TERRORIST_SINGULARS =
+    Array.from(TERRORIST_SIDE_CASUALTY_WORDS).filter(word => !/(?:s|men)$/.test(word)).join("|");
+
+// A singular noun counts only after "one": in "Frente 4 member arrested" the
+// figure belongs to the name of the unit. That "one" is the second capture group.
+function casualtySubjectPattern(plurals, singulars) {
+    return "(?:" + CASUALTY_NUMBER + "\\s+(?:(?:" + plurals + ")\\s+)?|(one|1)\\s+(?:" + singulars + ")\\s+)";
+}
+
+const CASUALTY_SUBJECT =
+    casualtySubjectPattern(
+        "people|persons|civilians|soldiers|troops|officers|police|policemen|security\\s+personnel|security\\s+forces|victims|" + CASUALTY_TERRORIST_PLURALS,
+        "person|civilian|soldier|officer|policeman|victim|" + CASUALTY_TERRORIST_SINGULARS
+    );
+
+const CASUALTY_CAPTURED_SUBJECT =
+    casualtySubjectPattern(
+        "people|persons|suspects|militants|terrorists|attackers|fighters|jihadists|extremists|members",
+        "person|suspect|militant|terrorist|attacker|fighter|jihadist|extremist|member"
+    );
+
+// The word after "killed 14" says whose dead they are, and an adjective or two
+// may come first ("killed 14 armed bandits"). A preposition ends the search:
+// in "killed 12 in a terrorist attack" the word names the attack, not the dead.
+const CASUALTY_NAMED_SIDE =
+    "(?:(?!in\\b|at\\b|on\\b|by\\b|near\\b|during\\b|after\\b|from\\b|and\\b|but\\b|as\\b|while\\b|when\\b|to\\b|for\\b|with\\b)[a-z'-]+\\s+){0,2}?(?:"
+    + CASUALTY_TERRORIST_NOUNS
+    + ")\\b";
+
+const CASUALTY_PATTERNS = {
+    death: [
+        new RegExp("\\b" + CASUALTY_APPROXIMATION + CASUALTY_SUBJECT + "(?:(?:were|was)\\s+)?(?:killed|dead|died)\\b", "gi"),
+        new RegExp("\\b(?:killed|dead|fatalities|deaths)\\s*[:\\-]?\\s*" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\b(?:\\s+" + CASUALTY_NAMED_SIDE + ")?", "gi"),
+        /\bdeath\s+toll(?:\s+(?:has\s+)?(?:risen|rose|rises|climbed|stands|reached|reaches|at))?\s*(?:to|at|:)?\s*(\d{1,5})\b/gi,
+        new RegExp("\\b" + CASUALTY_NUMBER + "\\s+(?:fatalities|deaths)\\b", "gi"),
+        // "Army kills 2 terrorists": without the side word this form stays unread,
+        // because "killing 30" alone says nothing about who died.
+        new RegExp("\\bkill(?:s|ing)?\\s+" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\s+" + CASUALTY_NAMED_SIDE, "gi")
+    ],
+    wounded: [
+        new RegExp("\\b" + CASUALTY_APPROXIMATION + CASUALTY_SUBJECT + "(?:(?:were|was)\\s+)?(?:wounded|injured|hurt)\\b", "gi"),
+        new RegExp("\\b(?:wounded|injured|hurt)\\s*[:\\-]?\\s*" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\b", "gi")
+    ],
+    captured: [
+        new RegExp("\\b" + CASUALTY_APPROXIMATION + CASUALTY_CAPTURED_SUBJECT + "(?:(?:were|was)\\s+)?(?:arrested|detained|captured|apprehended)\\b", "gi"),
+        new RegExp("\\b(?:arrested|detained|captured|apprehended)\\s*[:\\-]?\\s*" + CASUALTY_APPROXIMATION + CASUALTY_NUMBER + "\\b", "gi")
+    ]
+};
+
+
+function casualtyNumber(raw) {
+
+    const text =
+        String(raw).toLowerCase();
+
+    return /^\d+$/.test(text)
+        ?
+        Number(text)
+        :
+        text.split(/[-\s]+/).reduce(
+            (sum, word) =>
+                sum
+                +
+                (CASUALTY_NUMBER_WORDS[word] || 0),
+            0
+        );
+}
+
+
+/*
+   Every statement in the text with its figure. "Over 30 militants killed" and
+   "30 militants killed" are one toll in two wordings, so callers keep the
+   largest figure per side instead of adding phrases.
+*/
+function casualtyStatements(
+    text,
+    patterns
+) {
+
+    const matches = [];
+
+    const readable =
+        text.replace(
+            CASUALTY_NOT_A_FIGURE,
+            "."
+        );
+
+    patterns.forEach(
+        pattern => {
+
+            let match;
+
+            while (
+                (
+                    match =
+                        pattern.exec(
+                            readable
+                        )
+                )
+                !==
+                null
+            ) {
+
+                const value =
+                    casualtyNumber(
+                        match[
+                            1
+                        ]
+                        ||
+                        match[
+                            2
+                        ]
+                    );
+
+                if (
+                    !Number.isFinite(
+                        value
+                    )
+                    ||
+                    value < 0
+                    ||
+                    value > 100000
+                ) {
+                    continue;
+                }
+
+                const phrase =
+                    match[
+                        0
+                    ]
+                    .toLowerCase()
+                    .replace(
+                        /\s+/g,
+                        " "
+                    )
+                    .trim();
+
+                matches.push(
+                    {
+                        value,
+                        phrase
+                    }
+                );
+
+            }
+
+        }
+    );
+
+    return matches;
+}
 
 
 /*
@@ -11451,86 +11703,21 @@ function extractStrict24hCasualtyBreakdown(
     }
 
     /*
-       Capture explicit killed/wounded statements. We keep unique matched
-       phrases so duplicated source wording is not counted twice.
-       Different groups in the same incident CAN be added together:
-       e.g. "6 security personnel killed" + "21 militants killed" = 27,
-       split here into victim=6 and terrorist=21 instead of merged.
+       Capture explicit killed/wounded statements.
+       The two sides of an incident stay separate: "6 security personnel
+       killed" + "21 militants killed" is victim=6 and terrorist=21.
     */
-    const patterns =
-        kind === "death"
-        ?
-        [
-            /\b(?:at\s+least\s+|more\s+than\s+|over\s+)?(\d{1,5})\s+(?:people\s+|persons\s+|civilians\s+|soldiers\s+|troops\s+|officers\s+|police\s+|security\s+personnel\s+|security\s+forces\s+|militants\s+|terrorists\s+|attackers\s+|assailants\s+|fighters\s+|suspects\s+|victims\s+)?(?:were\s+)?(?:killed|dead|died)\b/gi,
-            /\b(?:killed|dead|fatalities|deaths)\s*[:\-]?\s*(?:at\s+least\s+|more\s+than\s+|over\s+)?(\d{1,5})\b/gi,
-            /\bdeath\s+toll(?:\s+(?:has\s+)?(?:risen|rose|rises|climbed|stands|reached|reaches|at))?\s*(?:to|at|:)?\s*(\d{1,5})\b/gi,
-            /\b(\d{1,5})\s+fatalities\b/gi
-        ]
-        :
-        [
-            /\b(?:at\s+least\s+|more\s+than\s+|over\s+)?(\d{1,5})\s+(?:people\s+|persons\s+|civilians\s+|soldiers\s+|troops\s+|officers\s+|police\s+|security\s+personnel\s+|security\s+forces\s+|militants\s+|terrorists\s+|attackers\s+|assailants\s+|fighters\s+|victims\s+)?(?:were\s+)?(?:wounded|injured|hurt)\b/gi,
-            /\b(?:wounded|injured|hurt)\s*[:\-]?\s*(?:at\s+least\s+|more\s+than\s+|over\s+)?(\d{1,5})\b/gi
-        ];
-
-    const matches = [];
-
-    patterns.forEach(
-        pattern => {
-
-            let match;
-
-            while (
-                (
-                    match =
-                        pattern.exec(
-                            text
-                        )
-                )
-                !==
-                null
-            ) {
-
-                const value =
-                    Number(
-                        match[
-                            1
-                        ]
-                    );
-
-                if (
-                    !Number.isFinite(
-                        value
-                    )
-                    ||
-                    value < 0
-                    ||
-                    value > 100000
-                ) {
-                    continue;
-                }
-
-                const phrase =
-                    match[
-                        0
-                    ]
-                    .toLowerCase()
-                    .replace(
-                        /\s+/g,
-                        " "
-                    )
-                    .trim();
-
-                matches.push(
-                    {
-                        value,
-                        phrase
-                    }
-                );
-
-            }
-
-        }
-    );
+    const matches =
+        casualtyStatements(
+            text,
+            CASUALTY_PATTERNS[
+                kind === "death"
+                ?
+                "death"
+                :
+                "wounded"
+            ]
+        );
 
     if (!matches.length) {
         return {
@@ -11575,49 +11762,34 @@ function extractStrict24hCasualtyBreakdown(
     }
 
     /*
-       Otherwise sum distinct casualty statements, but only once per
-       normalized phrase, bucketing each by which side its qualifier
-       word names.
+       Otherwise the largest figure per side: a title, a summary and the
+       original text restate the same toll, so adding them doubled it
+       ("138 people arrested" read 276).
     */
-    const unique =
-        new Map();
+    let terrorist = 0;
+    let victim = 0;
 
     matches.forEach(
         item => {
 
             if (
-                !unique.has(
-                    item.phrase
-                )
-            ) {
-                unique.set(
-                    item.phrase,
-                    item.value
-                );
-            }
-
-        }
-    );
-
-    let terrorist = 0;
-    let victim = 0;
-
-    unique.forEach(
-        (
-            value,
-            phrase
-        ) => {
-
-            if (
                 casualtyPhraseSide(
-                    phrase
+                    item.phrase
                 )
                 ===
                 "terrorist"
             ) {
-                terrorist += value;
+                terrorist =
+                    Math.max(
+                        terrorist,
+                        item.value
+                    );
             } else {
-                victim += value;
+                victim =
+                    Math.max(
+                        victim,
+                        item.value
+                    );
             }
 
         }
@@ -11715,117 +11887,91 @@ function extractStrict24hCapturedCount(
         return 0;
     }
 
-    const patterns = [
-        /\b(?:at\s+least\s+|more\s+than\s+|over\s+)?(\d{1,5})\s+(?:people\s+|persons\s+|suspects\s+|militants\s+|terrorists\s+|attackers\s+|fighters\s+|jihadists\s+|extremists\s+|members\s+)?(?:were\s+)?(?:arrested|detained|captured|apprehended)\b/gi,
-        /\b(?:arrested|detained|captured|apprehended)\s*[:\-]?\s*(?:at\s+least\s+|more\s+than\s+|over\s+)?(\d{1,5})\b/gi
-    ];
+    const matches =
+        casualtyStatements(
+            text,
+            CASUALTY_PATTERNS.captured
+        );
 
-    const matches = [];
-
-    patterns.forEach(
-        pattern => {
-
-            let match;
-
-            while (
-                (
-                    match =
-                        pattern.exec(
-                            text
-                        )
-                )
-                !==
-                null
-            ) {
-
-                const value =
-                    Number(
-                        match[
-                            1
-                        ]
-                    );
-
-                if (
-                    !Number.isFinite(
-                        value
-                    )
-                    ||
-                    value < 0
-                    ||
-                    value > 100000
-                ) {
-                    continue;
-                }
-
-                const phrase =
-                    match[
-                        0
-                    ]
-                    .toLowerCase()
-                    .replace(
-                        /\s+/g,
-                        " "
-                    )
-                    .trim();
-
-                matches.push(
-                    {
-                        value,
-                        phrase
-                    }
-                );
-
-            }
-
-        }
-    );
-
-    if (!matches.length) {
-        return 0;
-    }
-
-    const unique =
-        new Map();
-
-    matches.forEach(
-        item => {
-
-            if (
-                !unique.has(
-                    item.phrase
-                )
-            ) {
-                unique.set(
-                    item.phrase,
-                    item.value
-                );
-            }
-
-        }
-    );
-
-    return Array.from(
-        unique.values()
-    )
-    .reduce(
+    return matches.reduce(
         (
-            sum,
-            value
+            largest,
+            item
         ) =>
-            sum
-            +
-            value,
+            Math.max(
+                largest,
+                item.value
+            ),
         0
     );
 }
 
 
 /*
-   Renders the exact date of the completed Paris day the header numbers
-   cover (e.g. "SEP 8, 2026 · FULL DAY (PARIS)"), which is YESTERDAY --
-   see the comment on isCurrentCasualtyEvent() for why.
+   Whether the collection finished the day the header covers. On 5 Nov the
+   header read FULL DAY with 0 killed, from 7 records against about 140 on a
+   normal day, while the brief beside it reported deaths. A day is finished
+   only by a healthy run that started after it ended: until then the file
+   held 51-91% of the day's eventual records.
 */
-function parisCasualtyWindowLabel() {
+function headerCasualtyDayState(
+    facts,
+    targetDay
+) {
+
+    const status =
+        facts?.collection_status;
+
+    const runDay =
+        parisCalendarDateString(
+            new Date(
+                status?.run_started_at
+                ||
+                status?.last_attempt_at
+                ||
+                status?.published_at
+                ||
+                facts?.last_updated
+                ||
+                ""
+            )
+        );
+
+    if (
+        !runDay
+        ||
+        runDay < targetDay
+    ) {
+        return "missing";
+    }
+
+    if (
+        runDay === targetDay
+    ) {
+        return "incomplete";
+    }
+
+    const health =
+        collectionHealth(
+            status
+        );
+
+    return !health || health === "ok"
+        ?
+        "finished"
+        :
+        "incomplete";
+}
+
+
+/*
+   Renders the exact date of the Paris day the header numbers cover (e.g.
+   "SEP 8, 2026 · FULL DAY (PARIS)"), which is YESTERDAY -- see the comment
+   on isCurrentCasualtyEvent() for why -- and how far the collection got.
+*/
+function parisCasualtyWindowLabel(
+    dayState
+) {
 
     const dateLabel =
         new Intl.DateTimeFormat(
@@ -11845,7 +11991,11 @@ function parisCasualtyWindowLabel() {
     return (
         dateLabel.toUpperCase()
         +
-        " · FULL DAY (PARIS)"
+        {
+            finished: " · FULL DAY (PARIS)",
+            incomplete: " · INCOMPLETE (PARIS)",
+            missing: " · NO DATA (PARIS)"
+        }[dayState]
     );
 }
 
@@ -11878,9 +12028,13 @@ function updateHeaderCasualties24() {
     // Terrorists killed/captured come from counter-terrorism and arrest
     // reports, which are not on the attacks-only map: recentContextEvents
     // carries the last few days of those categories.
+    // A follow-up restates its attack's toll: the attack's own record counts it.
     const relevantEvents =
         [...allEvents, ...recentContextEvents].filter(
             isCurrentCasualtyEvent
+        ).filter(
+            event =>
+                event.attack_update !== true
         );
 
     const deathTotals = {
@@ -11964,6 +12118,13 @@ function updateHeaderCasualties24() {
         }
     );
 
+    const dayState =
+        headerCasualtyDayState(
+            mapDataFacts,
+            parisYesterdayDateString()
+        );
+
+    // Figures already read stand as a floor; a zero would claim a quiet day.
     const setCasualtyNode = (
         id,
         value
@@ -11978,6 +12139,10 @@ function updateHeaderCasualties24() {
             node
         ) {
             node.textContent =
+                value === 0 && dayState !== "finished"
+                ?
+                "—"
+                :
                 value.toLocaleString(
                     "en-US"
                 );
@@ -12014,9 +12179,15 @@ function updateHeaderCasualties24() {
         windowNode
     ) {
         windowNode.textContent =
-            parisCasualtyWindowLabel();
+            parisCasualtyWindowLabel(
+                dayState
+            );
     }
 }
+
+
+// Timeline dates are calendar days held at noon UTC (shiftCalendarDateStringToDate).
+const TIMELINE_DAY_FORMAT = new Intl.DateTimeFormat("en-GB", { timeZone: "UTC", day: "2-digit", month: "short" });
 
 
 function updateCommandCenterPanels() {
@@ -12302,8 +12473,43 @@ function updateCommandCenterPanels() {
         timelineBars
     ) {
 
-        const now =
-            new Date();
+        // Paris days, like the header: the viewer's own days put the last bar of
+        // a reader in Auckland a day ahead of the data.
+        const today =
+            parisCalendarDateString(
+                new Date()
+            );
+
+        const countsByDay =
+            new Map();
+
+        allEvents.forEach(
+            event => {
+
+                const day =
+                    parisCalendarDateString(
+                        new Date(
+                            event.published
+                            ||
+                            ""
+                        )
+                    );
+
+                countsByDay.set(
+                    day,
+                    (
+                        countsByDay.get(
+                            day
+                        )
+                        ||
+                        0
+                    )
+                    +
+                    1
+                );
+
+            }
+        );
 
         const counts =
             [];
@@ -12314,64 +12520,23 @@ function updateCommandCenterPanels() {
             offset--
         ) {
 
-            const dayStart =
-                new Date(
-                    now
+            const day =
+                shiftCalendarDateString(
+                    today,
+                    -offset
                 );
-
-            dayStart.setHours(
-                0,
-                0,
-                0,
-                0
-            );
-
-            dayStart.setDate(
-                dayStart.getDate()
-                -
-                offset
-            );
-
-            const dayEnd =
-                new Date(
-                    dayStart
-                );
-
-            dayEnd.setDate(
-                dayEnd.getDate()
-                +
-                1
-            );
-
-            const count =
-                allEvents.filter(
-                    event => {
-
-                        if (
-                            !event.published
-                        ) {
-                            return false;
-                        }
-
-                        const published =
-                            new Date(
-                                event.published
-                            );
-
-                        return (
-                            published >= dayStart
-                            &&
-                            published < dayEnd
-                        );
-
-                    }
-                ).length;
 
             counts.push({
                 count:
-                    count,
+                    countsByDay.get(
+                        day
+                    )
+                    ||
+                    0,
                 date:
-                    dayStart
+                    shiftCalendarDateStringToDate(
+                        day
+                    )
             });
 
         }
@@ -12418,14 +12583,8 @@ function updateCommandCenterPanels() {
                         "";
 
                     const label =
-                        item.date.toLocaleDateString(
-                            "en-GB",
-                            {
-                                day:
-                                    "2-digit",
-                                month:
-                                    "short"
-                            }
+                        TIMELINE_DAY_FORMAT.format(
+                            item.date
                         );
 
                     return `
@@ -12459,16 +12618,10 @@ function updateCommandCenterPanels() {
 
         setText(
             "timelineStartLabel",
-            counts[
-                0
-            ].date.toLocaleDateString(
-                "en-GB",
-                {
-                    day:
-                        "2-digit",
-                    month:
-                        "short"
-                }
+            TIMELINE_DAY_FORMAT.format(
+                counts[
+                    0
+                ].date
             )
         );
 
@@ -12726,10 +12879,25 @@ function updateFacetCounts() {
                 badge
             ) {
                 badge.textContent =
+                    count === 0 && mapDataOlderThan(days)
+                    ?
+                    "—"
+                    :
                     count.toLocaleString(
                         "en-GB"
                     );
             }
+
+            button.title =
+                days === 1 && dataPublishedTime(mapDataFacts) !== null
+                ?
+                "Rolling 24 hours from now; the data ends "
+                +
+                collectionStatusDate(
+                    dataPublishedTime(mapDataFacts)
+                )
+                :
+                "";
 
         }
     );
@@ -12830,6 +12998,54 @@ function formatTrendGeneratedAt(value) {
 
 
 
+// A normal brief rests on about 80 events.
+const SITUATION_BRIEF_LOW_EVENTS = 30;
+
+// The brief can be about 18 hours old under this title, and a starved one can
+// rest on a handful of events: both are said beside it.
+function situationBriefTitle(
+    brief
+) {
+
+    if (
+        !Number.isFinite(
+            Date.parse(
+                brief?.generated_at
+            )
+        )
+    ) {
+        return "SITUATION 24H";
+    }
+
+    const candidates =
+        Number(
+            brief.candidate_events
+        );
+
+    return (
+        "SITUATION 24H · AS OF "
+        +
+        formatTrendGeneratedAt(
+            brief.generated_at
+        ).toUpperCase()
+        +
+        " PARIS"
+        +
+        (
+            brief.status !== "fallback"
+            &&
+            candidates > 0
+            &&
+            candidates < SITUATION_BRIEF_LOW_EVENTS
+            ?
+            " · ONLY " + candidates + " EVENTS REVIEWED"
+            :
+            ""
+        )
+    );
+}
+
+
 function renderHeaderSituationBrief() {
 
     const text =
@@ -12841,6 +13057,18 @@ function renderHeaderSituationBrief() {
         return;
     }
 
+    const title =
+        document.getElementById(
+            "headerSituationTitle"
+        );
+
+    if (title) {
+        title.textContent =
+            situationBriefTitle(
+                trendSummaryData
+            );
+    }
+
     if (
         !trendSummaryData
         ||
@@ -12850,6 +13078,32 @@ function renderHeaderSituationBrief() {
             "No 24-hour intelligence brief is stored in the current database. "
             +
             "The situation assessment will be generated during the next successful collection update.";
+        return;
+    }
+
+    // The stored texts of these two cases promise events "shown below", which the
+    // page has no place for, and read as an all-clear when nothing was reviewed.
+    if (
+        trendSummaryData.status === "fallback"
+    ) {
+        text.textContent =
+            "The AI brief was unavailable for this update, so no assessment was written. "
+            +
+            "The map and the event list are not affected.";
+        return;
+    }
+
+    if (
+        Number(
+            trendSummaryData.candidate_events
+        )
+        ===
+        0
+    ) {
+        text.textContent =
+            "No reviewed events were available for this brief. "
+            +
+            "This does not mean that nothing happened.";
         return;
     }
 
@@ -13578,7 +13832,7 @@ function reportSourcesHtml(sources, grounding) {
                         <div class="deep-evidence-title">${escapeHtml(item.title || "")}</div>
                         <div class="deep-evidence-meta">${escapeHtml(dateLabel)}${item.country ? " · " + escapeHtml(item.country) : ""}</div>
                         <div class="deep-evidence-links">
-                            ${item.url ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">OPEN ARTICLE</a>` : ""}
+                            ${safeHttpUrl(item.url) ? `<a href="${escapeHtml(safeHttpUrl(item.url))}" target="_blank" rel="noopener noreferrer">OPEN ARTICLE</a>` : ""}
                         </div>
                     </article>`;
 
@@ -14065,7 +14319,9 @@ function renderWeeklyAnalysisPanel() {
         +
         formatTrendGeneratedAt(
             weeklyAnalysisData.generated_at
-        );
+        )
+        +
+        " Paris";
 
     const rawAnalysis =
         weeklyAnalysisData.analysis
@@ -14790,7 +15046,7 @@ function showDatabaseEventCard(event) {
 
     const published = event.published ? new Date(event.published) : null;
     const dateText = published && !isNaN(published.getTime())
-        ? published.toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })
+        ? EVENT_TIME_FORMAT.format(published) + " Paris"
         : "Unknown date";
     const url = safeHttpUrl(event.url);
 
@@ -14824,6 +15080,25 @@ function closeDatabaseEventCard() {
     panel.setAttribute("aria-hidden", "true");
 }
 
+const TICKER_TIME_FORMAT = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Paris", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+
+// Rolling windows follow the clock and the data stops at the last publication, so
+// "last 24h" shrinks towards zero between runs and reads like a quiet day.
+const MAP_WINDOW_NOTE_MS = 60 * 60 * 1000;
+
+function attackTickerTitle() {
+    if (selectedDays !== 1) return "ATTACKS · LAST " + selectedDays + " DAYS";
+    const published = dataPublishedTime(mapDataFacts);
+    if (published === null || Date.now() - published < MAP_WINDOW_NOTE_MS) return "ATTACKS · LAST 24H";
+    return "ATTACKS · LAST 24H · DATA TO " + formatTrendGeneratedAt(published).toUpperCase() + " PARIS";
+}
+
+function attackTickerEmptyText() {
+    return mapDataOlderThan(selectedDays)
+        ? "No data published since " + collectionStatusDate(dataPublishedTime(mapDataFacts)) + "."
+        : "No attack reported in this period.";
+}
+
 // Scrolling list of the period's attacks on the right of the map. The list is
 // doubled and moved up by exactly one copy for a seamless loop; it only
 // scrolls when it overflows, pauses on hover, and stays still for readers
@@ -14840,13 +15115,13 @@ function renderAttackTicker() {
         .sort((a, b) => b.time - a.time)
         .map(item => item.event);
 
-    if (title) title.textContent = selectedDays === 1 ? "ATTACKS · LAST 24H" : "ATTACKS · LAST " + selectedDays + " DAYS";
-    if (count) count.textContent = events.length.toLocaleString("en-GB");
+    if (title) title.textContent = attackTickerTitle();
+    if (count) count.textContent = !events.length && mapDataOlderThan(selectedDays) ? "—" : events.length.toLocaleString("en-GB");
 
     list.classList.remove("ticker-animated");
 
     if (!events.length) {
-        list.innerHTML = '<li class="ticker-empty">No attack reported in this period.</li>';
+        list.innerHTML = '<li class="ticker-empty">' + escapeHtml(attackTickerEmptyText()) + "</li>";
         return;
     }
 
@@ -14854,7 +15129,7 @@ function renderAttackTicker() {
         const date = new Date(event.published || 0);
         const when = isNaN(date.getTime())
             ? ""
-            : date.toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+            : TICKER_TIME_FORMAT.format(date);
         const place = event.city || event.country || "";
         const type = String(event.primary_event_type || "").toUpperCase();
         const badges = [type === "DISRUPTED_PLOT" ? "FOILED" : (type === "ATTEMPTED_ATTACK" ? "ATTEMPT" : ""),
@@ -14935,7 +15210,7 @@ async function exportDatabaseMapJpeg(events, button) {
             <div class="database-map-export-title">
                 <strong>CT ATLAS · DATABASE HEAT MAP</strong>
                 <span>${escapeHtml(databaseFiltersText())}</span>
-                <span>${located.length.toLocaleString("en-GB")} located event${located.length === 1 ? "" : "s"}${located.length < events.length ? " of " + events.length.toLocaleString("en-GB") + " selected" : ""} · exported ${escapeHtml(new Date().toLocaleString("en-GB"))}</span>
+                <span>${located.length.toLocaleString("en-GB")} located event${located.length === 1 ? "" : "s"}${located.length < events.length ? " of " + events.length.toLocaleString("en-GB") + " selected" : ""} · exported ${escapeHtml(collectionStatusDate(Date.now()))}</span>
             </div>
             <div class="database-map-export-legend">Heat = concentration of the selected events · dots = individual events${located.length > MAX_EXPORT_MAP_DOTS ? " (the first " + MAX_EXPORT_MAP_DOTS.toLocaleString("en-GB") + " only; the heat covers all)" : ""} · open-source data, unverified</div>
         `;
@@ -14974,7 +15249,7 @@ async function exportDatabaseMapJpeg(events, button) {
                 located.map(event => [
                     Number(event.latitude),
                     Number(event.longitude),
-                    event.location_precision === "country" ? 0.4 : 1
+                    event.location_precision === "country_capital" ? 0.4 : 1
                 ]),
                 { radius: 28, blur: 22, maxZoom: 7, minOpacity: 0.35 }
             ).addTo(exportMap);
@@ -15103,17 +15378,15 @@ function refreshTimeSensitiveDashboard() {
     invalidateFilterCache();
     updateKPIs();
     updateFacetCounts();
-    const mappedChanged = mappedBefore !== filteredMappedEvents().map(event => event._mapKey).join("\n");
-    if (mappedChanged) {
-        renderEvents();
-        updateCoverage();
-        updateTopLocations();
-    }
-    if (attacksBefore !== filteredAllEvents().map(event => event._mapKey).join("\n")) renderAttackTicker();
-    updateTrends();
+    if (mappedBefore !== filteredMappedEvents().map(event => event._mapKey).join("\n")) mapRebuildDeferred = true;
+    rebuildAgedMap();
+    const tickerTitle = document.getElementById("attackTickerTitle");
+    if (attacksBefore !== filteredAllEvents().map(event => event._mapKey).join("\n")
+        || (tickerTitle && tickerTitle.textContent !== attackTickerTitle())) renderAttackTicker();
     updateCommandCenterPanels();
     updateHealthStatusPanel();
     renderHeaderSituationBrief();
+    renderDataStateBadge();
 }
 
 function refreshDashboard() {
@@ -15134,13 +15407,13 @@ function refreshDashboard() {
 
     updateTopLocations();
 
-    updateTrends();
-
     updateCommandCenterPanels();
 
     updateHealthStatusPanel();
 
     renderHeaderSituationBrief();
+
+    renderDataStateBadge();
 
     // The event list shows the Database panel's results, not the map: it only
     // needs re-rendering when it is open.
@@ -15303,6 +15576,11 @@ document.getElementById(
 );
 
 
+// At six months a render is 1.2-1.5 s of blocked page: once per pause, not per key.
+const CHRONOLOGY_SEARCH_DELAY_MS = 200;
+
+let chronologySearchTimer = null;
+
 document.getElementById(
     "chronologySearch"
 ).addEventListener(
@@ -15317,7 +15595,16 @@ document.getElementById(
             .toLowerCase();
 
 
-        renderChronology();
+        clearTimeout(
+            chronologySearchTimer
+        );
+
+
+        chronologySearchTimer =
+            setTimeout(
+                renderChronology,
+                CHRONOLOGY_SEARCH_DELAY_MS
+            );
 
     }
 

@@ -311,6 +311,7 @@ function loaderHarness(routes){
  const calls=[];
  const window={};
  const c=vm.createContext({window,CATEGORY_ALIASES:new Map(),eventLooksLikeMaritimePiracy:()=>false,
+  AbortController,setTimeout,clearTimeout,MAP_DOWNLOAD_STALL_MS:30000,
   fetch:async url=>{
    calls.push(url);
    const route=routes[url];
@@ -319,7 +320,7 @@ function loaderHarness(routes){
    return route;
   }});
  for(const name of ['isJudicialCategory','isRetiredJudicialEvent','normalizeCategoryName','eventCategories',
-                    'normalizeActiveEvent','eventMatchKey','removeRetiredJudicialData','loadEventsDatabase']){
+                    'normalizeActiveEvent','eventMatchKey','removeRetiredJudicialData','guardMapDownload','loadEventsDatabase']){
   vm.runInContext(extractBrowserFunction(html,name),c);
  }
  return {load:async()=>JSON.parse(JSON.stringify(await vm.runInContext('loadEventsDatabase',c)())),calls,window};

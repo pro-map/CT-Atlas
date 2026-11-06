@@ -63,14 +63,14 @@ test('the map and attack_points.py use the same attack rule',()=>{
 
 async function runLoader(responses){
   const c=vm.createContext({
-    window:{},Date,Number,Array,
+    window:{},Date,Number,Array,AbortController,setTimeout,clearTimeout,
     fetch:async url=>{
       const body=responses[url];
       if(body===undefined)return {ok:false,status:404,json:async()=>{throw new Error('404');}};
       return {ok:true,status:200,json:async()=>body};
     }
   });
-  vm.runInContext(retirementDataSource+extract('isMapAttackEvent')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 181;'+extract('readMapSnapshotResponse')+extract('loadMapDatabase'),c);
+  vm.runInContext(retirementDataSource+extract('isMapAttackEvent')+'const MAP_DOWNLOAD_STALL_MS = 30000;'+extract('guardMapDownload')+extract('loadEventsDatabase')+'const MAP_RECENT_EVENT_DAYS = 181;'+extract('readMapSnapshotResponse')+extract('loadMapDatabase'),c);
   const data=await vm.runInContext('loadMapDatabase()',c);
   return {data:plain(data),source:c.window.eventsDataSource};
 }
@@ -382,7 +382,8 @@ test('the ticker badges the points that are not the first report of their attack
     {_mapKey:'c',title:'Foiled',primary_event_type:'DISRUPTED_PLOT',update_type:'ARREST_UPDATE',published:'2026-09-28T08:00:00Z'},
     {_mapKey:'d',title:'Legacy',category:'Attacks',published:'2026-09-27T08:00:00Z'},
   ];
-  const c=vm.createContext({Date,window:{},selectedDays:7,filteredAllEvents:()=>events,escapeHtml:String,
+  const c=vm.createContext({Date,window:{},selectedDays:7,filteredAllEvents:()=>events,escapeHtml:String,TICKER_TIME_FORMAT:new Intl.DateTimeFormat('en-GB'),
+    attackTickerTitle:()=>'',mapDataOlderThan:()=>false,
     document:{getElementById:id=>id==='attackTickerList'?list:id==='attackTickerViewport'?{clientHeight:100}:null}});
   vm.runInContext(extract('renderAttackTicker'),c);
   c.renderAttackTicker();
@@ -394,7 +395,7 @@ test('red markers and heat are for attacks: a record merely filed under Attacks 
   const c=vm.createContext({
     categoryStyle:{Attacks:{code:'AT',className:'attacks'},Arrests:{code:'AR',className:'arrests'},'Counter Terrorism Action':{code:'CT',className:'ct'}},
     L:{divIcon:icon=>icon,marker:(position,options)=>({options,bindPopup(){return this;},on(){return this;}})},
-    escapeHtml:String,
+    escapeHtml:String,POPUP_DATE_FORMAT:new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris'}),safeHttpUrl:()=>'',
   });
   vm.runInContext(categoryRuleSource+extract('isMapAttackEvent')+extract('createMarker')+extract('isHeatEligibleEvent'),c);
   const marker=event=>{
@@ -461,6 +462,19 @@ function workerContext(events,sessionUser='analyst'){
   vm.runInContext(strip(fs.readFileSync('cloudflare-worker/database-query.js','utf8')),c);
   return c;
 }
+
+test('a global list over 8,000 rows comes back whole, so its export loses nothing',async()=>{
+  // The database reaches 8,000 events around 18 Nov 2026 and the oldest rows were cut.
+  const start=Date.now()-86400000;
+  const events=Array.from({length:9000},(_,index)=>({id:'e'+index,title:'Event '+index,category:'Attacks',
+    published:new Date(start+index).toISOString()}));
+  const c=workerContext(events);
+  const result=plain(await c.handleDatabaseEvents({json:async()=>({user_id:'analyst',period_days:7}),headers:{get:()=>'token'}},{}));
+  assert.equal(result.body.total,9000);
+  assert.equal(result.body.events.length,9000);
+  assert.equal(result.body.truncated,false);
+  assert.ok(vm.runInContext('MAX_DATABASE_RESULTS',c)>=22500+8000,'180 days at 125 events a day, plus every background row');
+});
 
 test('/database-events filters every category and lists the groups of the scope',async()=>{
   const now=new Date().toISOString();
@@ -609,7 +623,7 @@ test('the "Show on map" selector defaults to all events and the map file covers 
   assert.match(html,/_filteredMappedEventsCache = mapScopeEvents\(\)\.filter\(/);
   assert.match(html,/const MAP_RECENT_EVENT_DAYS = 181;/);
   assert.match(fs.readFileSync('tools/build_events_map.py','utf8'),/^RECENT_DAYS = 181$/m);
-  // The ticker, KPIs and trends stay about attacks whatever the map shows.
+  // The ticker and KPIs stay about attacks whatever the map shows.
   assert.match(html,/const events = filteredAllEvents\(\)\s*\n?\s*\.map/);
 });
 
@@ -821,9 +835,10 @@ test('an open map ages a RadNuc item out of the 24h badge and marker cache witho
   Object.assign(c,{
     updateKPIs:()=>{}, updateFacetCounts:()=>{facets=vm.runInContext('mapScopeCandidates().filter(e=>withinDays(e.published,1)).length',c);},
     renderEvents:()=>{draws++;},updateCoverage:()=>{},updateTopLocations:()=>{},renderAttackTicker:()=>{},
-    updateTrends:()=>{},updateCommandCenterPanels:()=>{},updateHealthStatusPanel:()=>{},renderHeaderSituationBrief:()=>{},
+    updateCommandCenterPanels:()=>{},updateHealthStatusPanel:()=>{},renderHeaderSituationBrief:()=>{},
+    renderDataStateBadge:()=>{},attackTickerTitle:()=>'',
   });
-  vm.runInContext('let dashboardClockMinute = -1; attacks=[];allEvents=[];recentContextEvents=clockEvents;selectedDays=1;setMapCategoryScope("Radiological/Nuclear");invalidateFilterCache();'+extract('refreshTimeSensitiveDashboard'),c);
+  vm.runInContext('let dashboardClockMinute = -1; let mapPopupOpen = false; let mapSpiderfied = false; let mapRebuildDeferred = false; attacks=[];allEvents=[];recentContextEvents=clockEvents;selectedDays=1;setMapCategoryScope("Radiological/Nuclear");invalidateFilterCache();'+extract('rebuildAgedMap')+extract('refreshTimeSensitiveDashboard'),c);
   assert.equal(vm.runInContext('filteredMappedEvents().length',c),2);
   c.refreshTimeSensitiveDashboard(); assert.equal(facets,2);assert.equal(draws,0);
   now+=61000;
