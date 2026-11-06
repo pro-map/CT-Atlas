@@ -5011,6 +5011,32 @@ def anchor_incident_id(anchor):
     return "inc-" + hashlib.sha256(normalized_anchor.encode("utf-8")).hexdigest()[:16]
 
 
+# The model files the Houthi land war under Maritime Piracy first: 117 records
+# named no ship or sea (audit of 2026-11-05), 49 of them map points.
+MARITIME_WORDS = re.compile(
+    r"\b(?:ships?|shipping|vessels?|tankers?|maritime|seas?|naval|navy|ports?|harbou?rs?|straits?|gulf|boats?"
+    r"|piracy|pirates?|cargo|freighters?|offshore|seafarers?|crews?|dhows?|skiffs?|coasts?|coastal|coastguard"
+    r"|bab[- ]?(?:el|al)[- ]?mand[ae]b|hormuz|ukmto|recaap|navires?|bateaux?|buques?|barcos?|gemi|deniz"
+    r"|سفينة|سفن|ناقلة|بحر|البحر|بحري|البحرية|ميناء|مرفأ|قرصنة)\b",
+    re.IGNORECASE,
+)
+
+
+def correct_primary_category(event):
+    """Move Maritime Piracy behind the record's other categories when nothing in
+    its text is maritime. A record with no other category, or typed PIRACY, keeps it."""
+    categories = event.get("categories") or []
+    text = " ".join(str(event.get(field) or "") for field in (
+        "title", "summary", "original_title", "original_summary"))
+    if (len(categories) < 2 or categories[0] != "Maritime Piracy"
+            or str(event.get("primary_event_type") or "").upper() == "PIRACY"
+            or MARITIME_WORDS.search(text)):
+        return False
+    event["categories"] = categories[1:] + categories[:1]
+    event["category"] = event["categories"][0]
+    return True
+
+
 def apply_ai_selection(
     event,
     result,
@@ -5281,6 +5307,7 @@ def apply_ai_selection(
                          if category in CATEGORIES]
     event["categories"] = active_categories
     event["category"] = active_categories[0] if active_categories else ""
+    correct_primary_category(event)
     scope_reason = threat_categories.scope_reason(event, result)
     scope_reason = scope_reason or out_of_scope_reason(event)
     if not event["ai_current_ct_event"]:
@@ -8324,6 +8351,7 @@ def load_existing():
         if categories:
             event["categories"] = categories
             event["category"] = categories[0]
+        correct_primary_category(event)
         repair_stored_text(event)
     return events
 
