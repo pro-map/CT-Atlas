@@ -328,7 +328,3 @@ test("CI refreshes the sanctions list daily, publishes it, and smoke-tests the W
   assert.ok(deploy.includes("cloudflare-worker/*.js"));
   assert.ok(deploy.includes("--input-type=module --check"));
 });
-
-// --- wallets found in SOCMINT reports ---------------------------------------
-
-const GENESIS="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa";

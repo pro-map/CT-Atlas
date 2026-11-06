@@ -8,7 +8,6 @@ ROOT = Path(__file__).resolve().parents[1]
 KEEP_THEIR_ENDINGS = {
     "index.html": "crlf",
     "privacy.html": "mixed",
-    "darkweb-collector/start-collector.cmd": "crlf",
     "requirements.txt": "crlf",
     "crypto.css": "mixed",
     "crypto.js": "mixed",

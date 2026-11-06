@@ -79,7 +79,7 @@ class PythonTestTriggerTests(unittest.TestCase):
             with self.subTest(event=event):
                 paths = trigger_paths(source, event)
                 for glob in ("*.py", "*.json", ".github/workflows/**", ".github/actions/**",
-                             "tools/**", "tests/**", "darkweb-collector/**", "requirements.txt"):
+                             "tools/**", "tests/**", "requirements.txt"):
                     self.assertIn(glob, paths)
 
 
