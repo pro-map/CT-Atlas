@@ -138,12 +138,30 @@ test("the badge reads the period the map is showing",()=>{
   assert.match(nodes.get("dataStateBadge").textContent,/ DATA TO /);
 });
 
-test("age is taken from the publication, not from a status refresh that moved last_updated",()=>{
+test("age is taken from the collection, not from a repair that moved last_updated",()=>{
   const c=statusContext();
   assert.equal(c.dataPublishedTime({collection_status:{published_at:fiveNovember.published_at},last_updated:"2026-11-07T00:00:00Z"}),published);
   assert.equal(c.dataPublishedTime({last_updated:fiveNovember.published_at}),published);
   assert.equal(c.dataPublishedTime({}),null);
   assert.equal(c.dataPublishedTime(null),null);
+});
+
+test("a repair moves neither the badge nor the age: 6 Nov read DATA TO 20:42 for a collection of 18:39",()=>{
+  const collection=Date.parse("2026-11-06T17:39:56Z"),repair="2026-11-06T19:42:31.840026+00:00";
+  const collected={collection_status:{...goodRun,published_at:new Date(collection).toISOString()},last_updated:new Date(collection).toISOString()};
+  // As tools/repair_map_evidence.py writes it: a new version, the collection's date untouched.
+  const repaired={last_updated:repair,collection_status:{...collected.collection_status,
+    data_maintenance:{kind:"reviewed_map_evidence_repair",applied_at:repair,changed_records:7,removed_records:0,new_records:0,ai_calls:0}}};
+  const c=statusContext();
+  const shown=(document,now)=>(({level,text,detail})=>({level,text,detail}))(c.dataStateView(document,now,1));
+  for(const [elapsed,text] of [[3,"UPDATE OK · 3 H OLD · DATA TO 06 NOV, 18:39 PARIS"],[19,"UPDATE OK · 19 H OLD · DATA TO 06 NOV, 18:39 PARIS"],
+    [20,"NO UPDATE FOR 20 H · DATA TO 06 NOV, 18:39 PARIS"],[25,"NO UPDATE FOR 25 H · NO DATA SINCE 06 NOV, 18:39 PARIS"]]){
+    const now=collection+elapsed*3600000;
+    assert.equal(shown(repaired,now).text,text);
+    assert.deepEqual(shown(repaired,now),shown(collected,now));
+  }
+  assert.equal(c.dataPublishedTime(repaired),collection,"the header date, the 24H window and the period dashes all read this");
+  assert.equal(c.collectionStatusView(repaired).published,"06 Nov 2026, 18:39 Paris");
 });
 
 test("the badge is real text on the page, next to the Published date, and reaches the Health panel",()=>{

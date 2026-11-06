@@ -184,6 +184,29 @@ class FinalizeDailyStatusTests(unittest.TestCase):
         self.assertEqual(result["geolocation"]["processed_this_run"], 1)
         self.assertEqual(result["published_at"], self.original["last_updated"])
 
+    def repaired_after_collection(self):
+        """6 Nov: a collection published at 17:39, then a repair moved last_updated to 19:42."""
+        self.write(self.path, {**self.original, "last_updated": "2026-11-06T19:42:31+00:00",
+                               "collection_status": progress(published_at="2026-11-06T17:39:56+00:00")})
+        subprocess.run(["git", "commit", "--quiet", "-am", "Repaired snapshot"], cwd=self.root, check=True)
+
+    def test_a_refresh_after_a_repair_keeps_the_date_of_the_collection(self):
+        # The refresh of 19:45 copied last_updated back, which a repair alone no longer writes.
+        self.repaired_after_collection()
+        self.assertEqual(self.run_finalize(refresh=True)["published_at"], "2026-11-06T17:39:56+00:00")
+        self.assertEqual(json.loads(self.path.read_text())["last_updated"], "2026-11-06T19:42:31+00:00")
+
+    def test_a_failed_collection_after_a_repair_keeps_the_date_of_the_last_good_one(self):
+        self.repaired_after_collection()
+        result = self.run_finalize(collect="failure", geo="skipped")
+        self.assertEqual(result["published_at"], "2026-11-06T17:39:56+00:00")
+
+    def test_a_successful_collection_moves_the_date_past_any_repair(self):
+        self.repaired_after_collection()
+        self.write(self.path, {**self.original, "last_updated": "2026-11-06T22:10:00+00:00",
+                               "collection_status": progress(published_at="2026-11-06T17:39:56+00:00")})
+        self.assertEqual(self.run_finalize()["published_at"], "2026-11-06T22:10:00+00:00")
+
     def test_refresh_clears_derived_radnuc_pending_reason_after_category_completes(self):
         previous = progress(status="partial", reasons=["category_pending", "radnuc_background_partial"],
                             categories=[{"category": "Radiological/Nuclear", "status": "partial", "pending": 9}],

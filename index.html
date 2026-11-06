@@ -6993,7 +6993,7 @@ function collectionHealth(status) {
     return share < 0.5 && pending > 600 ? "behind" : "ok";
 }
 
-// Status-only refreshes bump last_updated, so the run's own date comes first.
+// Repairs move last_updated without collecting anything, so the run's own date comes first.
 function dataPublishedTime(facts) {
     const time = Date.parse(facts?.collection_status?.published_at || facts?.last_updated || "");
     return Number.isFinite(time) ? time : null;

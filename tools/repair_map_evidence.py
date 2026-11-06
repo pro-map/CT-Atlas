@@ -17,12 +17,13 @@ def run(path, report_path, *, apply=False, resolve_city=None, now=None):
     changed = bool(report['changes'] or report['removed'])
     if changed and apply:
         timestamp = (now or datetime.now(timezone.utc)).isoformat()
+        # The new version open maps and the Worker's caches key on.
         result['last_updated'] = timestamp
         status = result.get('collection_status')
         if isinstance(status, dict):
             # A new data publication is not a new collection or an AI run.
-            # Preserve the actual attempt date, coverage and provider counters.
-            status['published_at'] = timestamp
+            # Preserve the collection's dates, coverage and provider counters:
+            # published_at is what the page reads as the age of the data.
             status['data_maintenance'] = {
                 'kind': 'reviewed_map_evidence_repair', 'applied_at': timestamp,
                 'changed_records': len(report['changes']),
