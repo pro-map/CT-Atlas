@@ -206,6 +206,63 @@ class PublicationGateTests(unittest.TestCase):
         self.refused(data, "1 records inside the map window are not in the map, such as arrest",
                      lambda mapped: mapped.update(recent_events=[]))
 
+    def report(self, identifier, outlet, **fields):
+        return {"id": identifier, "title": "Report", "summary": "Example", "source": outlet,
+                "published": "2026-11-02T08:00:00Z", "incident_id": identifier, **POINT, **fields}
+
+    def test_a_report_held_for_corroboration_may_stay_out_of_the_map(self):
+        # The real file of 6 Nov: 110 such records, and this check refused the publication.
+        data = self.database()
+        data["events"].append(self.report("held", "Haber 7"))
+        self.publish(data)
+        self.assertNotIn("held", audit.rows(audit.read(self.root / "events-map.json"), True))
+        self.assertIn("held", audit.rows(audit.read(self.root / "events-lite.json")), "the Database still has it")
+
+    def test_a_report_a_second_outlet_released_must_be_back_on_the_map(self):
+        data = self.database()
+        data["events"].append(self.report("released", "Haber 7", related_articles=[{"source": "Reuters"}]))
+        self.publish(data)
+        (self.root / "publication-manifest.json").unlink()
+        self.refused(data, "1 records inside the map window are not in the map, such as released",
+                     lambda mapped: mapped.update(events=[e for e in mapped["events"] if e["id"] != "released"]))
+
+    def test_a_flag_on_a_damaged_map_excuses_nothing(self):
+        data = self.database()
+        data["events"].append(self.report("dropped", "Reuters"))
+
+        def lose_it(mapped):
+            mapped["events"] = [e for e in mapped["events"] if e["id"] != "dropped"]
+            for event in mapped["events"]:
+                event["held_for_corroboration"] = True
+
+        self.refused(data, "1 records inside the map window are not in the map, such as dropped", lose_it)
+
+    def test_a_cited_held_report_keeps_its_link_and_a_held_report_of_any_type_passes(self):
+        data = self.database()
+        data["trend_summary"] = {"developments": [{"event_id": "cited"}]}
+        data["events"] += [self.report("cited", "Haber 7"),
+                           self.report("arrest", "Haber 7", primary_event_type="ARREST", is_attack=False)]
+        self.publish(data)
+        mapped = audit.rows(audit.read(self.root / "events-map.json"), True)
+        self.assertIn("cited", mapped)
+        self.assertNotIn("arrest", mapped)
+
+    def test_only_what_the_builder_leaves_out_is_excused(self):
+        # One of each: a follow-up, a hoax, a repeated point and an unlocated attack all
+        # travel in the map file, so none needs the exemption the held report gets.
+        data = self.database()
+        data["events"] += [
+            self.report("point", "Reuters", incident_id="shared"),
+            self.report("follow-up", "AFP", incident_id="shared", update_type="FOLLOW_UP"),
+            self.report("hoax", "AFP", reported_status="HOAX"),
+            self.report("unlocated", "AFP", latitude=None, longitude=None, excluded_from_map=True),
+            self.report("retired", "AFP", primary_event_type="JUDICIAL", is_attack=False),
+            self.report("held", "Haber 7"),
+        ]
+        self.publish(data)
+        mapped = audit.rows(audit.read(self.root / "events-map.json"), True)
+        self.assertEqual({"point", "follow-up", "hoax", "unlocated", "retired", "held"} - mapped.keys(), {"retired", "held"})
+
     def test_a_record_older_than_the_window_may_leave_the_map(self):
         data = self.database()
         window = self.NOW - timedelta(days=map_file.RECENT_DAYS)

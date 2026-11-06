@@ -15,7 +15,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from attack_points import _located, is_map_attack, published_at
+from attack_points import _located, held_indexes, is_map_attack, published_at
 from daily_reliability import digest, metadata_repair, publication_delta, rows, timing, repair_known_city
 FILES = ('events.json', 'events-lite.json', 'events-map.json')
 # The site the mirror follows, so both publication gates compare with it: a mirror
@@ -107,12 +107,12 @@ def receipt(before, output):
     return report
 
 
-def content_problems(full, mapped, points, cutoff):
+def content_problems(full, mapped, points, cutoff, held):
     """Damage that matching identifiers cannot see. No freshness rule on purpose:
     a failed collection must still be able to publish its honest status."""
     dates = {identifier: published_at(event) for identifier, event in full.items()}
     lost = sorted(identifier for identifier, when in dates.items()
-                  if when and when >= cutoff and identifier not in mapped)
+                  if when and when >= cutoff and identifier not in mapped and identifier not in held)
     unreadable = sum(when is None for when in dates.values())
     located = sum(_located(event) for event in full.values())
     problems = []
@@ -170,8 +170,13 @@ def manifest(directory, output, now=None):
                               'collection_status_finalized_at': (document.get('collection_status') or {}).get('finalized_at'),
                               'record_count': len(rows(document, name=='events-map.json'))}
                         for name, document in documents.items()}}
+    # The map leaves out two kinds of record at any date: the retired Judicial ones, which
+    # full has already dropped, and these. Read from the source, as the builder does, so
+    # that a flag on a damaged derived file cannot excuse a missing record.
+    sources = documents['events.json']['events']
+    held = {sources[index]['id'] for index in held_indexes(sources)}
     problems = content_problems(full, mapped, documents['events-map.json']['events'],
-                                now - timedelta(days=map_file.RECENT_DAYS)) + shrink_problems(result['files'])
+                                now - timedelta(days=map_file.RECENT_DAYS), held) + shrink_problems(result['files'])
     if problems:
         raise ValueError('Publication refused: ' + '; '.join(problems))
     write(output, result)
