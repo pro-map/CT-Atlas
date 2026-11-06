@@ -9623,9 +9623,11 @@ def load_existing_weekly_analysis():
 
 def _weekly_event_time(event):
     """
-    Prefer explicit occurrence/incident dates when available.
-    Fall back to the event's report/update recency so the weekly analysis
-    remains usable for records that do not yet carry a structured event date.
+    Prefer explicit occurrence/incident dates when available, then the
+    publication date, which is how the map and the Report Generator place a
+    record. A later follow-up must not move it: with last_reported, an attack
+    published on 15 Oct counted in the week of 5 Nov, and the week read 231
+    attack incidents against 205 by publication date.
     """
     for field in (
         "event_date",
@@ -9643,9 +9645,7 @@ def _weekly_event_time(event):
         if dt is not None:
             return dt
 
-    return _trend_recency(
-        event
-    )
+    return _parse_iso_utc(event.get("published")) or _trend_recency(event)
 
 
 def _weekly_geo_breakdown(events, field_name, limit=8, attack_updates=()):
