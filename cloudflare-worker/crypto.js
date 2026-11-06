@@ -28,6 +28,8 @@ const EVM_TX_RE = /^0x[a-fA-F0-9]{64}$/;
 const TRON_ADDRESS_RE = /^T[1-9A-HJ-NP-Za-km-z]{33}$/;
 const BTC_BASE58_RE = /^[13][a-km-zA-HJ-NP-Z1-9]{24,33}$/;
 const BTC_BECH32_RE = /^bc1[ac-hj-np-z02-9]{11,71}$/i;
+const BLOCKSTREAM_API = "https://blockstream.info/api";
+const TRONGRID_API = "https://api.trongrid.io";
 const PROVIDER_TIMEOUT_MS = 12000;
 const RATE_LIMIT_RETRY_MS = 1100;
 const RATE_LIMIT_RE = /rate limit|too many requests/i;
@@ -348,7 +350,7 @@ function coverageNotes(failedSources, summaryMissing = false) {
 }
 
 async function analyzeBitcoin(target, limit) {
-  const base = "https://blockstream.info/api";
+  const base = BLOCKSTREAM_API;
 
   if (target.kind === "transaction") {
     const tx = await getJson(base + "/tx/" + encodeURIComponent(target.value), {}, "Blockstream transaction lookup");
@@ -663,6 +665,8 @@ function tronHeaders(env) {
   };
 }
 
+const tronHistoryQuery = limit => "only_confirmed=true&limit=" + limit + "&order_by=block_timestamp,desc";
+
 // TronGrid's /v1/accounts/.../transactions endpoint returns raw_data addresses
 // as 21-byte hex ("41...") rather than the base58check "T..." form users paste
 // and explorers show; tronAddress() converts so the analysed wallet matches its
@@ -752,7 +756,7 @@ async function analyzeTron(target, limit, env, options = {}) {
   if (!env.TRONGRID_API_KEY) {
     throw new Error("TRON analysis is installed but TRONGRID_API_KEY is not configured in the Cloudflare Worker.");
   }
-  const base = "https://api.trongrid.io";
+  const base = TRONGRID_API;
   const headers = tronHeaders(env);
 
   if (target.kind === "transaction") {
@@ -789,7 +793,7 @@ async function analyzeTron(target, limit, env, options = {}) {
   }
 
   const bounded = Math.min(100, Math.max(10, limit));
-  const q = "only_confirmed=true&limit=" + bounded + "&order_by=block_timestamp,desc";
+  const q = tronHistoryQuery(bounded);
   const account = base + "/v1/accounts/" + encodeURIComponent(target.value);
   const history = (path, label) => getJson(account + path, { headers }, label).then(payload => tronRows(payload, label));
   const historyLabels = ["TronGrid TRC-20 history", "TronGrid outgoing history", "TronGrid incoming history"];
@@ -973,6 +977,11 @@ async function handleCrypto(request, env) {
 export {
   CRYPTO_VERSION,
   EVM_CHAINS,
+  BLOCKSTREAM_API,
+  TRONGRID_API,
+  etherscanUrl,
+  tronHeaders,
+  tronHistoryQuery,
   detectCryptoInput,
   aggregateFlows,
   buildObservations,

@@ -271,17 +271,23 @@ async function lookupShared(env, entries) {
 
 const KNOWN_EXCHANGE_NAME_RE = /\b(binance|coinbase|kraken|okx|bybit|bitfinex|kucoin|htx|huobi|gate\.io|crypto\.com|bitstamp|gemini|bitget|mexc|upbit|bithumb|poloniex|deribit|bitmart|whitebit|phemex|ascendex|lbank|coincheck|bitflyer|paybis|celsius|ftx)\b/i;
 
+function tronscanTagEnabled(env) {
+  return env.TRONSCAN_TAG_LOOKUP_ENABLED === "true" && Boolean(env.TRONSCAN_API_KEY);
+}
+
+function tronscanTagRequest(address, env) {
+  const url = new URL("https://apilist.tronscanapi.com/api/account/tag");
+  url.searchParams.set("address", address);
+  return { url, options: { headers: { "TRON-PRO-API-KEY": env.TRONSCAN_API_KEY } } };
+}
+
 async function lookupTronScan(env, entries) {
-  if (env.TRONSCAN_TAG_LOOKUP_ENABLED !== "true" || !env.TRONSCAN_API_KEY) return [];
+  if (!tronscanTagEnabled(env)) return [];
   const labels = [];
   for (const entry of entries.filter(item => item.chain === "tron").slice(0, 6)) {
     try {
-      const url = new URL("https://apilist.tronscanapi.com/api/account/tag");
-      url.searchParams.set("address", entry.address);
-      const response = await fetch(url, {
-        headers: { "TRON-PRO-API-KEY": env.TRONSCAN_API_KEY },
-        signal: AbortSignal.timeout(6000)
-      });
+      const { url, options } = tronscanTagRequest(entry.address, env);
+      const response = await fetch(url, { ...options, signal: AbortSignal.timeout(6000) });
       if (!response.ok) continue;
       const payload = await response.json();
       const tags = [payload?.publicTag, payload?.blueTag, payload?.greyTag, payload?.redTag]
@@ -411,5 +417,7 @@ export {
   sanitizeExchangeLabel,
   collectAddressEntries,
   resolveExchangeLabels,
-  handleExchangeAddressLabels
+  handleExchangeAddressLabels,
+  tronscanTagEnabled,
+  tronscanTagRequest
 };

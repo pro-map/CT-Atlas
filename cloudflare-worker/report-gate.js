@@ -161,6 +161,23 @@ function repairCryptoWatch(watch) {
   };
 }
 
+// The hourly provider probe (crypto-provider-health.js) keeps one small record here, overwritten.
+// The key matches no prefix purgeExpired walks and the record has no expires_at, so retention
+// leaves it alone, and it arms no alarm.
+const CRYPTO_PROVIDER_STATUS_KEY = "crypto-provider-status";
+const CRYPTO_PROVIDER_PROBE_INTERVAL_MS = 60 * 60 * 1000;
+const CRYPTO_PROVIDER_MAX_ENTRIES = 12;
+const CRYPTO_PROVIDER_STATUSES = new Set(["ok", "rate_limited", "plan_restricted", "auth_failed", "unavailable", "not_configured"]);
+
+function cryptoProviderStatusView(record) {
+  const providers = {};
+  for (const [id, entry] of Object.entries(record?.providers || {}).slice(0, CRYPTO_PROVIDER_MAX_ENTRIES)) {
+    if (!/^[a-z_]{1,32}$/.test(id) || !CRYPTO_PROVIDER_STATUSES.has(entry?.status)) continue;
+    providers[id] = { status: entry.status, checked_at: cleanText(entry.checked_at, 40), message: cleanText(entry.message, 120) };
+  }
+  return { checked_at: cleanText(record?.checked_at, 40), providers };
+}
+
 function cryptoWorkspaceView(stored, username, now) {
   const workspace = stored || {
     version: "crypto-workspace-v1",
@@ -1173,6 +1190,32 @@ export class ReportGate {
         startAfter = lastKey;
       }
       return Response.json({ ok: true, proposals_added: reviewed, skipped });
+    }
+
+    // A claim is taken before the first upstream call, so a run that dies still counts: the hour
+    // holds across isolates and crashes. `slot` is the cron's own minute, which keeps a 60-minute
+    // gap from reading as 59:59 and slipping a tick. The six-hour monitor spends the same keys on
+    // its tick, so only a first run, with nothing to show yet, may share it.
+    if (url.pathname === "/crypto-provider-status-claim") {
+      const slot = Number(body.slot);
+      const stored = await this.state.storage.get(CRYPTO_PROVIDER_STATUS_KEY);
+      const claimedAt = Number(stored?.claimed_at || 0);
+      if (!Number.isFinite(slot) || slot <= 0 || (claimedAt && (body.monitor_tick === true || slot - claimedAt < CRYPTO_PROVIDER_PROBE_INTERVAL_MS))) {
+        return Response.json({ ok: true, claimed: false });
+      }
+      const previous = cryptoProviderStatusView(stored);
+      await this.state.storage.put(CRYPTO_PROVIDER_STATUS_KEY, { ...previous, claimed_at: slot });
+      return Response.json({ ok: true, claimed: true, previous });
+    }
+
+    if (url.pathname === "/crypto-provider-status-put") {
+      const stored = await this.state.storage.get(CRYPTO_PROVIDER_STATUS_KEY);
+      await this.state.storage.put(CRYPTO_PROVIDER_STATUS_KEY, { ...cryptoProviderStatusView(body), claimed_at: Number(stored?.claimed_at || 0) });
+      return Response.json({ ok: true });
+    }
+
+    if (url.pathname === "/crypto-provider-status-get") {
+      return Response.json({ ok: true, ...cryptoProviderStatusView(await this.state.storage.get(CRYPTO_PROVIDER_STATUS_KEY)) });
     }
 
     if (url.pathname === "/crypto-workspace-get") {

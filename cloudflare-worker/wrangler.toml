@@ -58,7 +58,8 @@ database_id = "7c00bac7-05b6-443c-a305-c2bd9352c857"
 
 # Automatic Crypto watchlist monitoring. The Worker rotates a maximum of
 # 8 monitored wallets per run to protect explorer/API and subrequest quotas.
-# The second expression wakes schedule-dispatcher.js instead. scheduled() in index.js tells
-# them apart by controller.cron, so it must stay identical to DISPATCH_CRON.
+# The second expression wakes schedule-dispatcher.js and the hourly provider probe
+# (crypto-provider-health.js) instead. scheduled() in index.js tells them apart by
+# controller.cron, so it must stay identical to DISPATCH_CRON.
 [triggers]
 crons = ["17 */6 * * *", "7,17,27,37,47,57 * * * *"]

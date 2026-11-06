@@ -31,14 +31,15 @@ function github(runs=[],{listStatus=200,postStatus=204}={}){
   return {calls,fetcher};
 }
 
-// The real scheduled() from index.js, with its two jobs replaced by recorders.
-function scheduledHandler({crypto=async()=>{}}={}){
+// The real scheduled() from index.js, with its jobs replaced by recorders.
+function scheduledHandler({crypto=async()=>{},probe=async()=>{}}={}){
   const source=read("cloudflare-worker/index.js").match(/async scheduled\(controller, env, ctx\) \{[\s\S]*?\n\}(?=\n\};)/)[0];
   const calls=[],errors=[],waits=[];
   const sandbox=vm.createContext({
     DISPATCH_CRON,
     console:{error:message=>errors.push(message)},
     runCryptoMonitor:env=>{calls.push({job:"crypto",env});return crypto();},
+    runCryptoProviderProbe:(env,time)=>{calls.push({job:"probe",env,time});return probe();},
     runScheduleDispatcher:async(env,time)=>{calls.push({job:"dispatch",env,time});return [];}
   });
   const {scheduled}=vm.runInContext(`({${source}})`,sandbox);
@@ -197,16 +198,37 @@ test("a crypto monitor failure stays logged and contained",async()=>{
   assert.deepEqual(handler.errors,["Scheduled Crypto monitoring failed"]);
 });
 
-test("the ten-minute cron runs the dispatcher with its scheduled time and never the crypto monitor",async()=>{
+test("the ten-minute cron runs the dispatcher, then the provider probe, and never the crypto monitor",async()=>{
   const env={marker:"env"};
   const time=at("2026-11-05T09:17:00Z");
   const handler=scheduledHandler();
   await handler.fire({cron:DISPATCH_CRON,scheduledTime:time},env);
-  assert.equal(handler.calls.length,1);
+  assert.deepEqual(handler.calls.map(call=>call.job),["dispatch","probe"]);
+  for(const call of handler.calls){
+    assert.equal(call.env,env);
+    assert.equal(call.time,time);
+  }
+  assert.equal(handler.waits.length,2,"each job in its own waitUntil");
+});
+
+test("a provider probe that fails stays contained and logs no error object that could quote a key",async()=>{
+  const handler=scheduledHandler({probe:async()=>{throw new Error("https://api.example.test/?apikey=test-value-not-a-token");}});
+  await handler.fire({cron:DISPATCH_CRON,scheduledTime:at("2026-11-05T09:17:00Z")},{});
+  assert.deepEqual(handler.calls.map(call=>call.job),["dispatch","probe"]);
+  assert.deepEqual(handler.errors,["Crypto provider probe failed"]);
+});
+
+test("a provider probe that hangs never holds up the dispatcher",async()=>{
+  const handler=scheduledHandler({probe:()=>new Promise(()=>{})});
+  handler.fire({cron:DISPATCH_CRON,scheduledTime:at("2026-11-05T09:17:00Z")},{});
+  await handler.waits[0];
   assert.equal(handler.calls[0].job,"dispatch");
-  assert.equal(handler.calls[0].env,env);
-  assert.equal(handler.calls[0].time,time);
-  assert.equal(handler.waits.length,1);
+});
+
+test("the six-hour cron never runs the provider probe",async()=>{
+  const handler=scheduledHandler();
+  await handler.fire({cron:SIX_HOUR_CRON,scheduledTime:at("2026-11-05T12:17:00Z")},{});
+  assert.deepEqual(handler.calls.map(call=>call.job),["crypto"]);
 });
 
 test("wrangler.toml keeps the six-hour cron, adds the dispatcher's and holds no token",()=>{
