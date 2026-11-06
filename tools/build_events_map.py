@@ -14,7 +14,9 @@ foiled attacks the same way.
 The map shows one point per attack incident (attack_points.py). The other
 attack records of an incident are stamped attack_update and travel with
 recent_events, as non-attacks: the map never draws them, but the header's
-casualty counts and the Key Developments still reach them.
+casualty counts and the Key Developments still reach them. Reports held for
+corroboration are stamped too and stay out of this file, so nothing here counts
+them; a Key Development citing one still links to it.
 
 recent_events carries the last RECENT_DAYS of every OTHER category: the map
 draws them when "Show on map" asks for all events or one of those categories
@@ -48,8 +50,8 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 from attack_points import (  # noqa: E402
-    attack_groups, attack_update_indexes, event_categories, is_attack_record, is_historic_update,
-    is_map_attack, published_at,
+    attack_groups, attack_update_indexes, event_categories, held_indexes, is_attack_record,
+    is_historic_update, is_map_attack, published_at,
 )
 from retired_categories import active_event, is_retired_judicial_event  # noqa: E402
 FORMAT = "events-map-v1"
@@ -97,6 +99,7 @@ def build_map(database: dict, excluded: list[str], now: datetime | None = None) 
     cited_ids = development_event_ids(database)
     drop = {*excluded, *lite.DERIVED_FIELDS}
     updates = attack_update_indexes(events)
+    held = held_indexes(events)
     map_events = []
     recent_events = []
     for index, event in enumerate(events):
@@ -108,6 +111,8 @@ def build_map(database: dict, excluded: list[str], now: datetime | None = None) 
         lite_event = {name: value for name, value in event.items() if name not in drop}
         if index in updates:
             lite_event["attack_update"] = True
+        if index in held:
+            lite_event["held_for_corroboration"] = True
         if is_attack_record(event) and index not in updates:
             # Unlocated attacks (excluded_from_map) stay too: the map never
             # draws them, but the ticker, the header's casualty counts and the
@@ -115,7 +120,8 @@ def build_map(database: dict, excluded: list[str], now: datetime | None = None) 
             map_events.append(lite_event)
         else:
             published = published_at(event)
-            if (published and published >= recent_cutoff) or str(event.get("id") or "") in cited_ids:
+            recent = published and published >= recent_cutoff and index not in held
+            if recent or str(event.get("id") or "") in cited_ids:
                 recent_events.append(lite_event)
 
     output = {key: value for key, value in database.items() if key != "events"}

@@ -115,6 +115,10 @@ test('report sources tell the model which records are follow-ups',()=>{
   assert.match(fs.readFileSync('cloudflare-worker/shared.js','utf8'),/attack_update=true is a follow-up/);
 });
 
+test('a held report reaches the Database with its flag',()=>{
+  assert.match(fs.readFileSync('cloudflare-worker/database-query.js','utf8'),/held_for_corroboration: event\.held_for_corroboration === true/);
+});
+
 test('groups match case-insensitively and events without a group form their own bucket',()=>{
   assert.equal(shared.matchesGroup(event('a',{actor_group:'Al-Shabaab'}),'al-shabaab'),true);
   assert.equal(shared.matchesGroup(event('a',{actor_group:'Al-Shabaab'}),'ISIS'),false);

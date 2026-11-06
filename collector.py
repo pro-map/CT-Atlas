@@ -2535,6 +2535,24 @@ def article_urls(events):
     return urls
 
 
+def mark_corroboration_holds(records):
+    """Mark what attack_points holds until a second outlet reports it. A run sees
+    the whole re-index, also the articles the AI selection goes on to reject,
+    which the stored records of a later publication no longer show."""
+    bursts = attack_points.reindex_bursts(records)
+    for record in records:
+        if attack_points.outlet_key(record.get("source")) in attack_points.HOLD_OUTLETS:
+            record[attack_points.HOLD_FIELD] = "listed_outlet"
+            COLLECTION_STATS["corroboration_hold_listed_outlet"] += 1
+        elif attack_points.burst_key(record) in bursts:
+            record[attack_points.HOLD_FIELD] = "same_minute_burst"
+            COLLECTION_STATS["corroboration_hold_same_minute_burst"] += 1
+    print(f"Held for corroboration at ingest: "
+          f"{COLLECTION_STATS['corroboration_hold_listed_outlet']} from listed outlets, "
+          f"{COLLECTION_STATS['corroboration_hold_same_minute_burst']} in same-minute bursts")
+    return records
+
+
 def exclude_reviewed_articles(fresh, existing):
     known = reviewed_article_fingerprints(existing)
     # A re-fetched copy whose snippet, headline or outlet label changed has a
@@ -7769,6 +7787,10 @@ def merge_event(
         + new.get("source_article_fingerprints", [])
     ))
     merge_acled_metadata(existing, new)
+    # Whichever article of one outlet leads the cluster: a second outlet is what
+    # ends a hold, and attack_points checks that at publication.
+    if new.get(attack_points.HOLD_FIELD):
+        existing.setdefault(attack_points.HOLD_FIELD, new[attack_points.HOLD_FIELD])
 
     # Keep a history of genuinely different articles/headlines.
     known_article_ids = article_identities(
@@ -11219,7 +11241,7 @@ def main():
     COLLECTION_STATUS = daily_pipeline.begin_status(run_now, load_database_strict().get("last_updated"))
     atomic_json_write(daily_pipeline.STATUS_FILE, COLLECTION_STATUS)
     try:
-        fresh = exclude_reviewed_articles(collect_all(days), existing)
+        fresh = exclude_reviewed_articles(mark_corroboration_holds(collect_all(days)), existing)
     except Exception:
         COLLECTION_STATUS = daily_pipeline.finish_status(COLLECTION_STATUS, {}, QUERY_STATS, GDELT_STATS, run_now)
         COLLECTION_STATUS["status"] = "failed"

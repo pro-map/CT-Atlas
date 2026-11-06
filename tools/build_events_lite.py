@@ -15,8 +15,10 @@ The list names what is REMOVED, not what is kept: any field that is not listed (
 the collector adds tomorrow) stays, so a consumer can never lose data it starts to read.
 tests/events-lite.test.cjs proves that no listed field is read by the map or the Worker.
 
-attack_update (attack_points.py) is the one field added: it marks the follow-ups of an attack
-that already has its map point, and exists only in the derived files.
+attack_update (attack_points.py) is added: it marks the records that read as attacks but are
+no map point, such as the follow-ups of an attack that already has its point. So is
+held_for_corroboration, on reports the map and the counts leave out until a second outlet
+carries them. Both exist only in the derived files.
 
 It is a DERIVED file, generated at publication time from the events.json being deployed and
 never committed: it can therefore never be older than the database it was built from. The
@@ -39,14 +41,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
-from attack_points import attack_update_indexes  # noqa: E402
+from attack_points import attack_update_indexes, held_indexes  # noqa: E402
 from retired_categories import active_event, is_retired_judicial_event  # noqa: E402
 EXCLUDED_FILE = Path(__file__).resolve().parent / "events-lite-excluded-fields.json"
 FORMAT = "events-lite-v2"
 # Fields without which an event is meaningless to every consumer: never excludable.
 REQUIRED = ("id", "published", "title")
 # Stamped here at publication, never stored in events.json.
-DERIVED_FIELDS = ("attack_update",)
+DERIVED_FIELDS = ("attack_update", "held_for_corroboration")
 
 
 def load_excluded(path: Path = EXCLUDED_FILE) -> list[str]:
@@ -68,6 +70,7 @@ def build_lite(database: dict, excluded: list[str]) -> dict:
 
     drop = {*excluded, *DERIVED_FIELDS}
     updates = attack_update_indexes(events)
+    held = held_indexes(events)
     lite_events = []
     for index, event in enumerate(events):
         if not isinstance(event, dict):
@@ -78,6 +81,8 @@ def build_lite(database: dict, excluded: list[str]) -> dict:
         lite_events.append({name: value for name, value in event.items() if name not in drop})
         if index in updates:
             lite_events[-1]["attack_update"] = True
+        if index in held:
+            lite_events[-1]["held_for_corroboration"] = True
     if not lite_events:
         raise ValueError("The source database has no active events; refusing to build an empty lite file.")
 
@@ -99,6 +104,7 @@ def validate(lite: dict, database: dict) -> None:
         raise ValueError(f"Lite has {len(events)} events but the source has {len(source)}.")
     excluded = {*lite["lite"]["excluded_fields"], *DERIVED_FIELDS}
     updates = attack_update_indexes(source)
+    held = held_indexes(source)
     for index, (kept, original) in enumerate(zip(events, source)):
         for name in REQUIRED:
             if name in original and name not in kept:
@@ -112,6 +118,8 @@ def validate(lite: dict, database: dict) -> None:
             raise ValueError(f"Event #{index} differs from its source beyond the excluded fields.")
         if (kept.get("attack_update") is True) != (index in updates):
             raise ValueError(f"Event #{index} has the wrong attack_update flag.")
+        if (kept.get("held_for_corroboration") is True) != (index in held):
+            raise ValueError(f"Event #{index} has the wrong held_for_corroboration flag.")
     for key in database:
         if key != "events" and key not in lite:
             raise ValueError(f"Top-level key {key} was dropped.")

@@ -77,6 +77,20 @@ class BuildLiteTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'attack_update'):
             b.validate(lite, database)
 
+    def test_a_held_report_stays_in_the_lite_file_with_its_flag(self):
+        held = {'id': 'h7', 'published': '2026-10-31T08:49:00+00:00', 'title': 'Terror attack in Van', 'primary_event_type': 'ATTACK',
+                'is_attack': True, 'source': 'Haber 7', 'sources': ['Haber 7'], 'related_articles': []}
+        database = {'events': [held, {**held, 'id': 'trt', 'source': 'TRT Haber', 'sources': ['TRT Haber']}]}
+        lite = b.build_lite(database, ['related_articles'])
+        self.assertIs(lite['events'][0]['held_for_corroboration'], True)
+        self.assertIs(lite['events'][0]['attack_update'], True)
+        self.assertNotIn('held_for_corroboration', lite['events'][1])
+        self.assertNotIn('held_for_corroboration', database['events'][0])
+        b.validate(lite, database)
+        del lite['events'][0]['held_for_corroboration']
+        with self.assertRaisesRegex(ValueError, 'held_for_corroboration'):
+            b.validate(lite, database)
+
     def test_validate_still_rejects_any_other_added_field(self):
         database = self.follow_up_database()
         lite = b.build_lite(database, ['related_articles'])

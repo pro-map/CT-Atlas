@@ -67,13 +67,15 @@ test('the lite file preserves every active event in order and every top-level ke
  assert.equal(lite.last_updated,full.last_updated,'the report cache key reads last_updated');
 });
 
-test('active events lose exactly the excluded fields, gain only the derived flag, and nothing else',()=>{
+test('active events lose exactly the excluded fields, gain only the derived flags, and nothing else',()=>{
  const drop=new Set(excluded);
  activeEvents.forEach((event,i)=>{
   assert.ok(!('attack_update' in event),'the flag is never stored in events.json');
+  assert.ok(!('held_for_corroboration' in event),'the flag is never stored in events.json');
   const expected=Object.fromEntries(Object.entries(event).filter(([k])=>!drop.has(k)));
-  const {attack_update:flag,...kept}=lite.events[i];
+  const {attack_update:flag,held_for_corroboration:held,...kept}=lite.events[i];
   assert.ok(flag===undefined||flag===true,`event #${i}`);
+  assert.ok(held===undefined||(held===true&&flag===true),`event #${i}`);
   assert.deepEqual(kept,expected,`event #${i}`);
  });
 });
@@ -180,8 +182,8 @@ function reportInputs(shared){
 test('report generator: same selection, ranking, statistics and payload from lite as from full',()=>{
  const shared=sharedContext();
  const {regions,topics,periods}=reportInputs(shared);
- // attack_update is the lite file's one addition, and it is meant to change the
- // counts: with the flag copied over, the removed fields must change nothing.
+ // attack_update is the lite file's one addition that reports read, and it is meant to
+ // change the counts: with the flag copied over, the removed fields must change nothing.
  const key=event=>[event.id,event.published,event.title].join('|');
  const followUps=new Set(lite.events.filter(event=>event.attack_update===true).map(key));
  const stamped=full.events.map(event=>followUps.has(key(event))?{...event,attack_update:true}:event);

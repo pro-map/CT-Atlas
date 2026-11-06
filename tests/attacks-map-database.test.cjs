@@ -39,6 +39,9 @@ test('the map and attack_points.py use the same attack rule',()=>{
     [{primary_event_type:'DISRUPTED_PLOT',attack_update:true},false],
     [{categories:['Attacks'],attack_update:true},false],
     [{primary_event_type:'ATTACK',is_attack:true,attack_update:false},true],
+    [{primary_event_type:'ATTACK',is_attack:true,reported_status:'HOAX'},false],
+    [{primary_event_type:'DISRUPTED_PLOT',reported_status:' hoax '},false],
+    [{primary_event_type:'ATTEMPTED_ATTACK',reported_status:'THREAT'},true],
     [{primary_event_type:'ATTACK',is_attack:false},false],
     [{primary_event_type:'attack',is_attack:true},true],
     [{primary_event_type:'ATTEMPTED_ATTACK'},true],
@@ -353,6 +356,9 @@ test('list and ticker clicks only zoom to events the map shows; the rest open th
     assert.match(note,/Follow-up report of an attack: the map shows one point per incident/);
     assert.doesNotMatch(note,/reload the page|attacks only/);
   }
+  const attack={primary_event_type:'ATTACK',is_attack:true,attack_update:true,latitude:1,longitude:2};
+  assert.match(c.databaseEventCardNote({...attack,held_for_corroboration:true}),/until a second outlet reports it/);
+  assert.match(c.databaseEventCardNote({...attack,reported_status:'HOAX'}),/Reported as a hoax/);
 });
 
 test('a follow-up row and its map record link, stay off the map and open their card',()=>{
