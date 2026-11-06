@@ -26,6 +26,10 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
 
       - name: Apply usage/admin patch to index.html
         shell: bash

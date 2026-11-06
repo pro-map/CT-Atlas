@@ -25,6 +25,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
       - name: Validate Worker JavaScript and full regression suite
         run: |
           for file in cloudflare-worker/*.js; do

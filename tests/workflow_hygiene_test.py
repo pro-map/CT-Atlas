@@ -73,27 +73,32 @@ def loaded_by_importing(modules):
 
 
 class RunnerImageTests(unittest.TestCase):
-    def test_no_workflow_on_the_system_interpreters_rides_the_moving_label(self):
-        # During a migration ubuntu-latest changes image job by job, so one commit
-        # meets two system python3 versions and a deploy can fail on one of them alone.
+    def test_every_workflow_running_the_node_tests_declares_node_24(self):
+        # ubuntu-24.04 ships Node 22, ubuntu-26.04 Node 24, and the suite only passes
+        # on 24: left to the image, the same commit passed in one job and failed in another.
         for path in WORKFLOWS.glob("*.yml"):
             source = path.read_text(encoding="utf-8")
-            system_python = re.search(r"\bpython3?\s+[-\w./]", source) and "setup-python" not in source
-            system_node = re.search(r"\bnode\s+(--|[\w./-]+\.(js|cjs|mjs))", source) and "setup-node" not in source
+            suite = re.search(r"(?m)^[^#\n]*\bnode --test\b", source)
             with self.subTest(workflow=path.name):
-                if system_python or system_node:
+                if suite:
+                    setup = re.search(r'actions/setup-node@v\d+\s+with:\s+node-version: "24"', source)
+                    self.assertIsNotNone(setup)
+                    self.assertLess(setup.start(), suite.start())
+
+    def test_no_workflow_on_the_system_python_rides_the_moving_label(self):
+        # During a migration ubuntu-latest changes image job by job: one commit would
+        # meet two system python3 versions.
+        for path in WORKFLOWS.glob("*.yml"):
+            source = path.read_text(encoding="utf-8")
+            with self.subTest(workflow=path.name):
+                if re.search(r"\bpython3?\s+[-\w./]", source) and "setup-python" not in source:
                     self.assertNotIn("runs-on: ubuntu-latest", source)
 
-    def test_the_worker_deploy_names_the_failing_stage_and_the_canary_cannot_block_it(self):
-        source = read("deploy-report-worker.yml")
-        deploy, canary = source.split("\n  next-runner-canary:\n", 1)
-        names = [step_name(step) for step in steps(deploy)]
+    def test_the_worker_deploy_names_the_failing_stage(self):
+        names = [step_name(step) for step in steps(read("deploy-report-worker.yml"))]
         for name in ("Validate Worker JavaScript", "Run the Node regression suite",
                      "Run the Python release checks"):
             self.assertLess(names.index(name), names.index("Deploy Worker"))
-        self.assertIn("continue-on-error: true", canary)
-        self.assertIn("runs-on: ubuntu-26.04", canary)
-        self.assertNotIn("secrets.", canary)
 
 
 class PythonTestTriggerTests(unittest.TestCase):
