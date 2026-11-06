@@ -389,7 +389,7 @@ test('red markers and heat are for attacks: a record merely filed under Attacks 
   const c=vm.createContext({
     categoryStyle:{Attacks:{code:'AT',className:'attacks'},Arrests:{code:'AR',className:'arrests'},'Counter Terrorism Action':{code:'CT',className:'ct'}},
     L:{divIcon:icon=>icon,marker:(position,options)=>({options,bindPopup(){return this;},on(){return this;}})},
-    escapeHtml:String,
+    escapeHtml:String,POPUP_DATE_FORMAT:new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris'}),safeHttpUrl:()=>'',
   });
   vm.runInContext(categoryRuleSource+extract('isMapAttackEvent')+extract('createMarker')+extract('isHeatEligibleEvent'),c);
   const marker=event=>{
@@ -456,6 +456,19 @@ function workerContext(events,sessionUser='analyst'){
   vm.runInContext(strip(fs.readFileSync('cloudflare-worker/database-query.js','utf8')),c);
   return c;
 }
+
+test('a global list over 8,000 rows comes back whole, so its export loses nothing',async()=>{
+  // The database reaches 8,000 events around 18 Nov 2026 and the oldest rows were cut.
+  const start=Date.now()-86400000;
+  const events=Array.from({length:9000},(_,index)=>({id:'e'+index,title:'Event '+index,category:'Attacks',
+    published:new Date(start+index).toISOString()}));
+  const c=workerContext(events);
+  const result=plain(await c.handleDatabaseEvents({json:async()=>({user_id:'analyst',period_days:7}),headers:{get:()=>'token'}},{}));
+  assert.equal(result.body.total,9000);
+  assert.equal(result.body.events.length,9000);
+  assert.equal(result.body.truncated,false);
+  assert.ok(vm.runInContext('MAX_DATABASE_RESULTS',c)>=22500+8000,'180 days at 125 events a day, plus every background row');
+});
 
 test('/database-events filters every category and lists the groups of the scope',async()=>{
   const now=new Date().toISOString();
@@ -604,7 +617,7 @@ test('the "Show on map" selector defaults to all events and the map file covers 
   assert.match(html,/_filteredMappedEventsCache = mapScopeEvents\(\)\.filter\(/);
   assert.match(html,/const MAP_RECENT_EVENT_DAYS = 181;/);
   assert.match(fs.readFileSync('tools/build_events_map.py','utf8'),/^RECENT_DAYS = 181$/m);
-  // The ticker, KPIs and trends stay about attacks whatever the map shows.
+  // The ticker and KPIs stay about attacks whatever the map shows.
   assert.match(html,/const events = filteredAllEvents\(\)\s*\n?\s*\.map/);
 });
 
@@ -816,7 +829,7 @@ test('an open map ages a RadNuc item out of the 24h badge and marker cache witho
   Object.assign(c,{
     updateKPIs:()=>{}, updateFacetCounts:()=>{facets=vm.runInContext('mapScopeCandidates().filter(e=>withinDays(e.published,1)).length',c);},
     renderEvents:()=>{draws++;},updateCoverage:()=>{},updateTopLocations:()=>{},renderAttackTicker:()=>{},
-    updateTrends:()=>{},updateCommandCenterPanels:()=>{},updateHealthStatusPanel:()=>{},renderHeaderSituationBrief:()=>{},
+    updateCommandCenterPanels:()=>{},updateHealthStatusPanel:()=>{},renderHeaderSituationBrief:()=>{},
     renderDataStateBadge:()=>{},attackTickerTitle:()=>'',
   });
   vm.runInContext('let dashboardClockMinute = -1; let mapPopupOpen = false; let mapSpiderfied = false; let mapRebuildDeferred = false; attacks=[];allEvents=[];recentContextEvents=clockEvents;selectedDays=1;setMapCategoryScope("Radiological/Nuclear");invalidateFilterCache();'+extract('rebuildAgedMap')+extract('refreshTimeSensitiveDashboard'),c);

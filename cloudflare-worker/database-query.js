@@ -21,10 +21,12 @@ import {
 } from "./shared.js";
 
 const DATABASE_QUERY_VERSION = "database-query-v5-unified-background";
-// Everything the database holds today fits (180 days, ~4-5k events); the cap
-// only guards against a runaway response if the database grows a lot.
-const MAX_DATABASE_RESULTS = 8000;
-const MAX_BACKGROUND_RESULTS = 8000; // Same export ceiling as operational rows.
+// 8,000 was reached in November 2026 and cut the oldest rows from global lists and
+// their exports. The database grows 125 events a day and levels off near 22,000 at
+// 180 days' retention, so this holds all of it plus every background row below; the
+// cap only guards against a runaway response.
+const MAX_DATABASE_RESULTS = 32000;
+const MAX_BACKGROUND_RESULTS = 8000;
 const RADNUC_CATEGORY = "Radiological/Nuclear";
 const BACKGROUND_SCOPE_SQL = `kind = 'radnuc_background'
   AND category = 'Radiological/Nuclear' AND primary_event_type = 'BACKGROUND_INFO'`;
