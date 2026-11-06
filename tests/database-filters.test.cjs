@@ -124,6 +124,15 @@ test('report sources do not give a map marker as the place: a country_capital re
   assert.match(fs.readFileSync('cloudflare-worker/shared.js','utf8'),/location_precision "country" reports no city/);
 });
 
+test('a period reaching back before the 13 Oct expansion says its counts are not comparable',()=>{
+  // A 30-day report of 6 Nov compares with 7 Sep to 7 Oct, on a quarter of the queries.
+  const comparison=plain(shared.stats([event('old',{country:'France',published:'2026-10-05T10:00:00Z'})]));
+  assert.match(comparison.coverage_note,/13 Oct 2026/);
+  const current=plain(shared.stats([event('new',{country:'France',published:'2026-10-13T00:00:00Z'})]));
+  assert.ok(!Object.hasOwn(current,'coverage_note'));
+  assert.match(fs.readFileSync('cloudflare-worker/shared.js','utf8'),/stats carry coverage_note/);
+});
+
 test('groups match case-insensitively and events without a group form their own bucket',()=>{
   assert.equal(shared.matchesGroup(event('a',{actor_group:'Al-Shabaab'}),'al-shabaab'),true);
   assert.equal(shared.matchesGroup(event('a',{actor_group:'Al-Shabaab'}),'ISIS'),false);

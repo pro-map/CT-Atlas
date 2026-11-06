@@ -156,7 +156,9 @@ When a comparison period is supplied, focus on WHAT CHANGED between the current
 period and the immediately preceding equivalent period. Distinguish reporting volume from evidence of an actual operational change.
 ARTICLES measure reporting; records measure developments; distinct incident_id
 values measure operational cases. Never use record/article counts as a proxy
-for attack counts.
+for attack counts. A period whose stats carry coverage_note was collected more
+narrowly: never present a rise against it as a real change, and say so in
+SOURCE / CONFIDENCE NOTES.
 
 HUB / HOTSPOT RULE (critical -- this has been a real error in past reports):
 in GEOGRAPHIC PATTERNS, never call a country or region a "hub", an "emerging
@@ -877,6 +879,12 @@ function citationMetrics(analysis, validIds) {
   };
 }
 
+// Search queries went from about 300 to 1,132 between 5 and 15 Oct 2026, so a
+// period reaching back before the expansion rises against today for that reason
+// alone. The 180-day retention clears this by itself in April 2027.
+const COVERAGE_EXPANDED_AT = Date.parse("2026-10-13T00:00:00Z");
+const COVERAGE_NOTE = "This period includes records from before collection expanded on 13 Oct 2026, when the map ran about a quarter of today's search queries. Its counts are not comparable with later periods.";
+
 function stats(events) {
   const activeEvents = events.filter(event => !isRetiredJudicialEvent(event));
   const category = {};
@@ -926,7 +934,8 @@ function stats(events) {
   return {
     record_count: activeEvents.length,
     categories: category,
-    top_countries_by_incident_activity: countries
+    top_countries_by_incident_activity: countries,
+    ...(activeEvents.some(e => parseEventDate(e)?.getTime() < COVERAGE_EXPANDED_AT) ? { coverage_note: COVERAGE_NOTE } : {})
   };
 }
 
