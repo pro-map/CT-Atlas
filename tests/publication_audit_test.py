@@ -1,12 +1,12 @@
 """Regression coverage for large datasets and mirror publication receipts."""
+import contextlib
 import hashlib
 import io
 import json
+import os
 import sys
 import tempfile
 import unittest
-import contextlib
-import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import patch
@@ -378,12 +378,12 @@ class LivePublicationTests(unittest.TestCase):
         mirror = self.site(self.MIRROR, created="2026-11-04T10:00:00+00:00")
         self.assertEqual(self.problems("2026-11-05T06:47:00+00:00", mirror=mirror), [])
 
-    def check(self, reads, attempts=12):
+    def check(self, reads, **options):
         with patch.object(audit, "read_live", side_effect=reads) as reader, contextlib.redirect_stdout(io.StringIO()) as printed:
             pauses = []
             try:
-                audit.live_check(self.MAIN, self.MIRROR, attempts=attempts, sleep=pauses.append,
-                                 now=datetime(2026, 11, 5, 6, 47, tzinfo=timezone.utc))
+                audit.live_check(self.MAIN, self.MIRROR, sleep=pauses.append,
+                                 now=datetime(2026, 11, 5, 6, 47, tzinfo=timezone.utc), **options)
             finally:
                 self.calls = [call[0][0] for call in reader.call_args_list]
                 self.pauses = pauses
@@ -419,8 +419,10 @@ class LivePublicationTests(unittest.TestCase):
 
     def test_only_https_urls_are_read(self):
         for urls in (("http://ct-atlas.com", self.MIRROR), (self.MAIN, ""), ("", "")):
-            with self.subTest(urls=urls), self.assertRaises(ValueError):
-                audit.live_check(*urls)
+            with self.subTest(urls=urls), patch.object(audit, "read_live") as reader:
+                with self.assertRaises(ValueError):
+                    audit.live_check(*urls, attempts=1)
+                reader.assert_not_called()
 
     def test_the_sites_are_read_at_the_urls_users_fetch(self):
         # verify reads ?integrity= URLs, which bypass the CDN cache users go through.
