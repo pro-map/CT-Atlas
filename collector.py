@@ -5477,8 +5477,8 @@ def persist_background_articles(rejected_events):
 
 
 def arm_known_incidents(existing, now, engine):
-    """Daily lanes only: backfill, archive review, cleanup and Groq never see
-    the list. The selection runs as before if the index cannot be built."""
+    """Daily lanes only: the maintenance batch, archive review and cleanup never
+    see the list. The selection runs as before if the index cannot be built."""
     global KNOWN_INCIDENTS, KNOWN_INCIDENT_TELEMETRY
     if AI_KNOWN_INCIDENTS == "off":
         return
