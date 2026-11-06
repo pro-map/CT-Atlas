@@ -32,8 +32,8 @@ test("Situation 24H text keeps its 3-line clamp (pinned by the deploy workflows)
   assert.ok(html.includes("V12 — COMPACT HEADER"));
 });
 
-test("Situation 24H title and buttons share one row so the text keeps enough room",()=>{
+test("Situation 24H title keeps to one row so the text keeps enough room",()=>{
   assert.equal(lastValue("#headerSituationTopline","flex-direction"),"row");
   assert.equal(lastValue("#headerSituationTopline","justify-content"),"space-between");
-  assert.equal(lastValue("#headerSituationActions","width"),"auto");
+  assert.ok(!html.includes("headerSituationActions"),"its only button was the Weekly Analysis");
 });
