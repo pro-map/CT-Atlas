@@ -131,6 +131,37 @@ class CollectionFailFastTests(unittest.TestCase):
         self.assertEqual(geolocate.count("python -u geolocate.py"), 3)
 
 
+def job(source, name):
+    block = source.split(f"\n  {name}:\n", 1)[1]
+    return re.split(r"(?m)^  \S", block, 1)[0]
+
+
+class AutomaticRecoveryTests(unittest.TestCase):
+    def setUp(self):
+        self.source = read("update-map.yml")
+        self.job = job(self.source, "recovery")
+
+    def test_recovery_follows_the_publication_and_needs_a_pushed_ledger(self):
+        self.assertIn("needs: [update, deploy]", self.job)
+        self.assertIn("needs.update.outputs.checkpoint_outcome == 'success'", self.job)
+        self.assertIn("needs.update.outputs.recovery_wanted == 'true'", self.job)
+        self.assertIn("recovery_wanted: ${{ steps.finalize_status.outputs.recovery_wanted }}", job(self.source, "update"))
+
+    def test_only_a_timed_slot_dispatches_so_a_recovery_run_never_chains(self):
+        condition = re.search(r"(?m)^    if: (.+)$", self.job).group(1)
+        self.assertIn("github.event_name == 'schedule' || (inputs.mode == 'daily' && inputs.slot != '')", condition)
+        self.assertNotIn("github.event_name == 'workflow_dispatch'", condition)
+        self.assertNotIn("resume-pending", condition)
+        self.assertIn("-f mode=resume-pending", self.job)
+        self.assertNotIn("-f slot=", self.job, "a slot would make the recovery run look like a timed one")
+
+    def test_only_the_recovery_job_can_write_to_actions(self):
+        self.assertEqual(self.source.count("actions: write"), 1)
+        self.assertIn("    permissions:\n      actions: write\n", self.job)
+        self.assertIn("permissions:\n  actions: read\n", self.source)
+        self.assertNotIn("actions/checkout", self.job, "no repository code runs with that permission")
+
+
 class CollectionDispatchTests(unittest.TestCase):
     def test_daily_rejects_historical_dispatch_before_setup_and_accepts_daily_recovery(self):
         workflow = read("update-map.yml")

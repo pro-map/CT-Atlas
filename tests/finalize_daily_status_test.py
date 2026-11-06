@@ -1,5 +1,6 @@
 """Publication safety and honest counters across failure and partial recovery."""
 import importlib.util
+import io
 import json
 import subprocess
 import tempfile
@@ -291,6 +292,32 @@ class FinalizeDailyStatusTests(unittest.TestCase):
             second = self.run_finalize()
         self.assertEqual(second["finalized_at"], "2026-10-14T13:00:00+00:00")
         self.assertNotEqual(first["finalized_at"], second["finalized_at"])
+
+    def main_outputs(self, *extra):
+        output = self.root / "github-output.txt"
+        with patch.dict("os.environ", {"GITHUB_OUTPUT": str(output)}), \
+             patch("sys.stdout", new=io.StringIO()):
+            MODULE.main(["--database", str(self.path), "--repository", str(self.root), "--cache", str(self.cache),
+                         "--status", str(self.sidecar), "--radnuc-status", str(self.radnuc),
+                         "--collect-outcome", "success", "--geolocate-outcome", "success",
+                         "--run-started-at", START, *extra])
+        return dict(line.split("=", 1) for line in output.read_text(encoding="utf-8").splitlines()) if output.exists() else {}
+
+    def test_a_run_tells_the_workflow_whether_a_recovery_run_is_wanted(self):
+        budgets = {"primary": {"per_run": 30, "per_day": 60}, "overflow": {"per_run": 25, "per_day": 50}}
+        self.write(self.sidecar, progress(recent=lane(2616, 0, 2616), budgets=budgets))
+        today = datetime.now(MODULE.PACIFIC).date().isoformat()
+        self.write(self.cache, {"items": {}, "selection_quota_usage": {
+            "pacific_day": today, "calls": 30, "overflow_calls": 0,
+            "completed_daily_slots": ["17 10 * * *", "17 18 * * *"]}})
+        self.assertEqual(self.main_outputs()["recovery_wanted"], "true")
+        self.write(self.sidecar, progress(recent=lane(2616, 2500, 116), budgets=budgets))
+        self.assertEqual(self.main_outputs()["recovery_wanted"], "false")
+
+    def test_a_status_refresh_asks_for_no_recovery_run(self):
+        self.write(self.sidecar, progress())
+        self.run_finalize()
+        self.assertEqual(self.main_outputs("--refresh-existing"), {})
 
     def test_independent_radnuc_partial_is_visible_with_its_own_attempt_timestamp(self):
         self.write(self.sidecar, progress())

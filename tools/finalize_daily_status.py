@@ -14,11 +14,15 @@ import json
 import math
 import os
 import subprocess
+import sys
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from daily_reliability import PACIFIC, recovery_wanted
+
 LANES = ("recent", "backlog", "maintenance")
 DERIVED_REASONS = {"recent_pending", "backlog_pending", "maintenance_pending", "category_pending",
                    "geolocation_pending", "geolocation_review_required", "source_errors", "radnuc_background_partial"}
@@ -308,6 +312,11 @@ def main(argv=None):
     print(json.dumps({"status": status["status"], "recent_pending": status["recent"]["pending"],
                       "backlog_pending": status["backlog"]["pending"], "geolocation_pending": status["geolocation"]["pending"],
                       "reasons": status["reasons"]}))
+    if os.getenv("GITHUB_OUTPUT") and not args.refresh_existing:
+        usage = read_object(args.cache).get("selection_quota_usage")
+        wanted = recovery_wanted(status, usage, datetime.now(PACIFIC).date().isoformat())
+        with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as stream:
+            stream.write(f"recovery_wanted={str(wanted).lower()}\n")
     return 0
 
 

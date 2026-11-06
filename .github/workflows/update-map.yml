@@ -66,6 +66,7 @@ jobs:
     outputs:
       checkpoint_outcome: ${{ steps.commit.outcome }}
       data_sha: ${{ steps.commit.outputs.data_sha }}
+      recovery_wanted: ${{ steps.finalize_status.outputs.recovery_wanted }}
     env:
       CT_ATLAS_SCHEDULE: ${{ github.event.schedule || inputs.slot || '' }}
       COLLECTION_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'daily' }}
@@ -390,3 +391,17 @@ jobs:
             publication-receipt-pages.json
           retention-days: 7
           if-no-files-found: ignore
+
+  recovery:
+    needs: [update, deploy]
+    # Timed slots only, so a recovery run can never start another. It runs after
+    # this one: both share the ct-map-update-main lock. The ledger must be pushed.
+    if: ${{ always() && needs.update.outputs.checkpoint_outcome == 'success' && needs.update.outputs.recovery_wanted == 'true' && (github.event_name == 'schedule' || (inputs.mode == 'daily' && inputs.slot != '')) }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Dispatch a queue-only recovery run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run update-map.yml --repo "$GITHUB_REPOSITORY" --ref main -f mode=resume-pending -f force_ai=false

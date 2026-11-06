@@ -578,6 +578,15 @@ def report_selection_health():
         print(f"::error title=No new articles reviewed::{recent['pending']} recent articles are waiting and this run reviewed none of them: the map gets no new events.")
 
 
+def release_slot():
+    """A slot that ran gives up its reservation, even after a crash: recovery_caps
+    otherwise goes on reserving for it and recovery stays closed for the day."""
+    slot=os.getenv('CT_ATLAS_SCHEDULE','')
+    if not RESUME_PENDING and slot in SLOTS and pacific_day()==START_DAY:
+        COMPLETED_SLOTS.add(slot)
+        collector.save_selection_cache(collector.load_selection_cache())
+
+
 def run_main():
     if RESUME_PENDING:
         # No sources are fetched. Only the already durable daily queue is read.
@@ -593,10 +602,7 @@ def run_main():
         collector.main()
     finally:
         report_selection_health()
-    slot=os.getenv('CT_ATLAS_SCHEDULE','')
-    if not RESUME_PENDING and slot in SLOTS and pacific_day()==START_DAY:
-        COMPLETED_SLOTS.add(slot)
-        collector.save_selection_cache(collector.load_selection_cache())
+        release_slot()
 
 if __name__=="__main__": run_main()
 
