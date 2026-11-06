@@ -47,7 +47,7 @@ class DailyPipelineTests(unittest.TestCase):
         self.assertEqual(backlog, [])
         self.assertEqual((dropped["expired"], dropped["retired"], dropped["cancelled_history"]), (1, 1, 1))
 
-    def test_cancelled_specialist_history_filters_old_legacy_queue_but_keeps_recent_bio(self):
+    def test_cancelled_history_stops_stale_feed_rows_and_never_touches_the_queue(self):
         disabled = daily.CANCELLED_BACKLOG_CATEGORIES
         queued = [article('queued-old-bio',20,'Biological Terrorism'),
                   article('queued-old-cbrn',20,'CBRN'),
@@ -59,9 +59,36 @@ class DailyPipelineTests(unittest.TestCase):
         with patch.object(collector,'deduplicate_events',side_effect=lambda rows:rows):
             recent,backlog,dropped=daily.prepare(fresh,queued,[],collector,NOW,disabled)
         self.assertEqual({row['id'] for row in recent},{'queued-recent-cbrne','fresh-recent-bio'})
-        self.assertEqual([row['id'] for row in backlog],['fresh-old-arrest'])
-        self.assertEqual(dropped['cancelled_history'],3)
+        self.assertEqual({row['id'] for row in backlog},{'queued-old-bio','queued-old-cbrn','fresh-old-arrest'})
+        self.assertEqual(dropped['cancelled_history'],1)
+        self.assertEqual(dropped['from_queue']['cancelled_history'],0)
         self.assertEqual((fresh,queued),originals)
+
+    def test_a_waiting_candidate_past_three_days_is_not_deleted_unreviewed(self):
+        # 887 waiting candidates vanished between 14 October and 5 November, 664 of
+        # them 3 to 4 days old, among them a Colombian car bomb report. Attacks plus
+        # Chemicals and Explosives was dropped while plain Attacks was kept.
+        queued = [{**article('car-bomb', 3.1, 'Attacks'), 'categories': ['Attacks', 'Chemicals and Explosives']},
+                  article('hezbollah-explosives', 3.5, 'Chemicals and Explosives'),
+                  article('plain-attack', 3.1, 'Attacks')]
+        with patch.object(collector, 'deduplicate_events', side_effect=lambda rows: rows):
+            _, backlog, dropped = daily.prepare([], queued, [], collector, NOW, daily.CANCELLED_BACKLOG_CATEGORIES)
+        self.assertEqual({row['id'] for row in backlog}, {'car-bomb', 'hezbollah-explosives', 'plain-attack'})
+        self.assertEqual(dropped['from_queue']['cancelled_history'], 0)
+
+    def test_a_stale_feed_row_also_tagged_attacks_is_not_cancelled_history(self):
+        both = {**article('attack-and-explosives', 9, 'Attacks'), 'categories': ['Attacks', 'Chemicals and Explosives']}
+        _, backlog, dropped = daily.partition([both, article('only-explosives', 9, 'Chemicals and Explosives')],
+                                              collector, NOW, daily.CANCELLED_BACKLOG_CATEGORIES)
+        self.assertEqual([row['id'] for row in backlog], ['attack-and-explosives'])
+        self.assertEqual(dropped['cancelled_history'], 1)
+
+    def test_queue_losses_are_reported_apart_from_feed_rows(self):
+        with patch.object(collector, 'deduplicate_events', side_effect=lambda rows: rows):
+            _, _, dropped = daily.prepare([article('old-feed-row', 190)], [article('old-queued', 200)], [],
+                                          collector, NOW, daily.CANCELLED_BACKLOG_CATEGORIES)
+        self.assertEqual(dropped['expired'], 1)
+        self.assertEqual(dropped['from_queue']['expired'], 1)
 
     def test_cancelled_categories_stay_in_recent_daily_collection(self):
         bio = collector.threat_categories.BIO

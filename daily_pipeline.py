@@ -8,8 +8,9 @@ from pathlib import Path
 
 QUEUE_FILE = "daily_candidate_queue.json"
 STATUS_FILE = "daily-collection-status.json"
-# Older queued reporting in these categories is never reviewed: their historical
-# collection was cancelled on 2026-10-21 and Legal / Judicial is retired.
+# Older feed results only in these categories are not queued: their historical
+# collection was cancelled on 2026-10-21 and Legal / Judicial is retired. What
+# already waits in the durable queue is daily reporting and is always reviewed.
 CANCELLED_BACKLOG_CATEGORIES = frozenset({
     "Radiological/Nuclear", "Chemicals and Explosives", "Biological Terrorism",
     "Legal / Judicial", "CBRN", "CBRNE",
@@ -63,7 +64,7 @@ def partition(events, engine, now, disabled_history=()):
             categories = item.get("categories") or [item.get("category")]
             if isinstance(categories, str):
                 categories = [categories]
-            if any(category in disabled_history for category in categories):
+            if all(category in disabled_history for category in categories):
                 dropped["cancelled_history"] += 1
                 continue
             backlog.append(item)
@@ -79,6 +80,10 @@ def prepare(fresh, queued, existing, engine, now, disabled_history=()):
     New stories are clustered separately in each lane. Their source fingerprints
     and links prevent feeds from reintroducing copies already held in the
     durable queue, including a copy whose headline or snippet was edited since.
+
+    The cancelled-history rule stops stale feed rows from entering the queue. It
+    never applies to the queue itself: an article that merely waited there past
+    the recent window was lost unreviewed (887 between 14 October and 5 November).
     """
     queued = engine.exclude_reviewed_articles(queued, existing)
     known = {engine.selection_fingerprint(item) for item in queued}
@@ -89,9 +94,10 @@ def prepare(fresh, queued, existing, engine, now, disabled_history=()):
     fresh = [item for item in fresh if engine.selection_fingerprint(item) not in known
              and engine.canonical_url(item.get("url") or "") not in known_urls]
     recent, backlog, dropped = partition(fresh, engine, now, disabled_history)
-    old_recent, old_backlog, old_dropped = partition(queued, engine, now, disabled_history)
-    for key in dropped:
-        dropped[key] += old_dropped[key]
+    old_recent, old_backlog, old_dropped = partition(queued, engine, now)
+    # Feed rows are noise by the thousand; a queue loss is an article that had
+    # been waiting for review, so it is counted on its own.
+    dropped["from_queue"] = old_dropped
     return (old_recent + engine.deduplicate_events(recent),
             old_backlog + engine.deduplicate_events(backlog), dropped)
 
