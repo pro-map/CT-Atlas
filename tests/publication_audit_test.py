@@ -4,6 +4,8 @@ import hashlib
 import io
 import json
 import os
+import re
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -17,6 +19,7 @@ import daily_publication_audit as audit
 import compact_mirror_json as mirror
 import build_events_lite as light
 import build_events_map as map_file
+import finalize_daily_status as finalizer
 
 POINT = {"primary_event_type": "ATTACK", "is_attack": True, "latitude": 33.3, "longitude": 44.4}
 
@@ -349,6 +352,63 @@ class PublicationGateTests(unittest.TestCase):
         data = self.database()
         data["last_updated"] = "2026-06-01T00:00:00+00:00"
         self.publish(data)
+
+
+class RunToReadersTests(unittest.TestCase):
+    """What one collection run writes is what the page's badge and the live check read."""
+    STARTED = "2026-11-05T22:40:38+00:00"
+    PAGE = (ROOT / "index.html").read_text(encoding="utf-8")
+
+    def setUp(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.root = Path(directory.name)
+        audit.write(self.root / "events.json", {"last_updated": "2026-11-05T12:00:00+00:00", "events": [
+            {"id": f"e{index}", "title": "Record", "summary": "Example", "published": "2026-11-05T08:00:00+00:00",
+             "incident_id": f"incident-{index}", **POINT} for index in range(40)]})
+        for command in (["init", "--quiet"], ["config", "user.email", "test@example.test"], ["config", "user.name", "Test"],
+                        ["add", "events.json"], ["commit", "--quiet", "-m", "Published snapshot"]):
+            subprocess.run(["git", *command], cwd=self.root, check=True, capture_output=True)
+
+    def run_pipeline(self, outcome="success"):
+        lane = {"candidates": 900, "reviewed": 800, "new_reviews": 700, "pending": 100, "status": "partial"}
+        audit.write(self.root / "status.json", {
+            "schema_version": 2, "status": "partial", "run_started_at": self.STARTED, "last_attempt_at": self.STARTED,
+            "recent": lane, "backlog": lane, "maintenance": lane, "source": {"status": "complete"}, "reasons": []})
+        finalizer.finalize(self.root / "events.json", collect_outcome=outcome, geolocate_outcome="success",
+                           started_at=self.STARTED, repository=self.root, cache_path=self.root / "cache.json",
+                           status_path=self.root / "status.json", radnuc_path=self.root / "radnuc.json")
+        return map_file.build_map(audit.read(self.root / "events.json"), [], now=datetime(2026, 11, 6, tzinfo=timezone.utc))
+
+    def test_the_badge_knows_every_state_the_pipeline_writes(self):
+        names = re.search(r"COLLECTION_HEALTH_NAMES = \{([^}]*)\}", self.PAGE).group(1)
+        self.assertEqual(sorted(re.findall(r"(\w+):", names)), ["degraded", "healthy", "starved"])
+        states = {finalizer.run_health({"last_attempt_at": self.STARTED, "recent": {"new_reviews": reviews, "pending": waiting}},
+                                       [{"published": f"2026-11-0{day}T12:00:00+00:00"} for day in range(1, 6)])["state"]
+                  for reviews, waiting in ((900, 100), (300, 700), (1, 700))}
+        self.assertEqual(states, {"healthy", "degraded", "starved"})
+
+    def test_a_run_fills_every_name_the_page_reads_and_they_reach_the_map_file(self):
+        status = self.run_pipeline()["collection_status"]
+        for read in ("status.health?.state", "status.recent?.new_reviews", "status.recent?.pending",
+                     "collection_status?.published_at", "status.last_attempt_at", "status.status"):
+            self.assertIn(read, self.PAGE)
+        self.assertEqual(status["health"]["state"], "healthy")
+        self.assertEqual((status["recent"]["new_reviews"], status["recent"]["pending"]), (700, 100))
+        self.assertEqual(status["published_at"], "2026-11-05T12:00:00+00:00")
+        self.assertEqual(status["status"], "partial")
+
+    def test_the_live_check_finds_the_last_attempt_in_the_map_file(self):
+        mapped = self.run_pipeline()
+        self.assertEqual(mapped["collection_status"]["last_attempt_at"], self.STARTED)
+        self.assertEqual(audit.records_24h(mapped), 40)
+
+    def test_a_failed_collection_still_tells_all_three_readers(self):
+        mapped = self.run_pipeline("failure")
+        status = mapped["collection_status"]
+        self.assertEqual((status["status"], status["health"]["state"]), ("failed", "starved"))
+        self.assertEqual(status["last_attempt_at"], self.STARTED)
+        self.assertEqual(audit.records_24h(mapped), 40)
 
 
 class LivePublicationTests(unittest.TestCase):
