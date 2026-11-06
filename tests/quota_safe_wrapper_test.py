@@ -2,6 +2,7 @@
 wrappers; each must keep the signature collector.main() calls it with. The
 wrapper is imported in a child process so its monkeypatches never leak into
 the other tests."""
+import json
 import subprocess
 import sys
 import textwrap
@@ -78,15 +79,16 @@ OVERFLOW = textwrap.dedent('''
         status = statuses.pop(0) if statuses else 200
         if status == "timeout":
             raise wrapper.collector.requests.exceptions.ReadTimeout("slow")
-        return SimpleNamespace(status_code=status, json=lambda: {}, text="")
+        status, text = status if isinstance(status, list) else (status, "")
+        return SimpleNamespace(status_code=status, json=lambda: {}, text=text)
     wrapper.POST = fake_post
     body = {"model": "gemini-3.5-flash-lite", "system_instruction": "You are the final editorial relevance filter",
             "input": "Review every candidate. " + json.dumps({"events": [{"event_id": "evt-9"}]})}
     gemini = "https://generativelanguage.googleapis.com/v1beta/interactions"
-    errors = []
+    errors, answers = [], []
     for _ in range(4):
         try:
-            wrapper.collector.requests.post(gemini, json=body)
+            answers.append(wrapper.collector.requests.post(gemini, json=body).status_code)
         except wrapper.collector.AISelectionQuotaError as error:
             errors.append(str(error)[:60])
         except wrapper.collector.requests.RequestException as error:
@@ -94,7 +96,7 @@ OVERFLOW = textwrap.dedent('''
     cache = {"items": {"fp-new": {"reviewed_at": "2999-01-01T00:00:00+00:00", "result": {"event_id": "evt-9"}},
                        "fp-old": {"reviewed_at": "2000-01-01T00:00:00+00:00", "result": {"event_id": "evt-9"}}}}
     usage = wrapper.inject(cache)["selection_quota_usage"]
-    print(json.dumps({"sent": sent, "errors": errors, "body_model": body["model"], "hit429": wrapper.hit429,
+    print(json.dumps({"sent": sent, "errors": errors, "answers": answers, "body_model": body["model"], "hit429": wrapper.hit429,
                       "overflow429": wrapper.overflow429, "budget_hit": wrapper.budget_hit,
                       "overflow_calls": usage["overflow_calls"], "calls": usage["calls"],
                       "failures": dict(wrapper.SELECTION_FAILURES),
@@ -303,6 +305,28 @@ class QuotaSafeWrapperTests(unittest.TestCase):
         self.assertTrue(data["overflow429"] and data["budget_hit"])
         self.assertFalse(data["hit429"], "3.5 Flash Lite itself is not out of quota")
         self.assertEqual(len(data["errors"]), 3)
+
+    def test_a_per_minute_429_on_the_detour_goes_back_to_the_retries(self):
+        # One overflow 429 during a primary 5xx stopped the lane with 0 of 1,900
+        # reviewed, and the older lane then took the primary calls.
+        per_minute = "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+        data = self.overflow("on", json.dumps([503, [429, per_minute]]))
+        self.assertEqual(data["answers"][0], 503, "the collector sees the primary's failure and retries")
+        self.assertFalse(data["overflow429"], "a one-minute limit leaves the overflow model available")
+        self.assertEqual(data["sent"], ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.1-flash-lite"])
+        self.assertEqual(data["failures"], {"gemini-3.5-flash-lite:503": 1, "gemini-3.1-flash-lite:429": 1})
+
+    def test_a_429_on_the_detour_around_a_timeout_raises_the_timeout(self):
+        data = self.overflow("on", json.dumps(["timeout", 429]))
+        self.assertIn("network: slow", data["errors"])
+        self.assertFalse(data["overflow429"])
+
+    def test_a_per_day_429_on_the_detour_closes_the_overflow_model_only(self):
+        per_day = "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+        data = self.overflow("on", json.dumps([503, [429, per_day]]))
+        self.assertEqual(data["answers"], [503], "that batch still goes back to the retries")
+        self.assertTrue(data["overflow429"])
+        self.assertEqual(data["sent"], ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite"])
 
     def test_without_an_overflow_model_the_budget_stops_the_selection(self):
         data = self.overflow("off")

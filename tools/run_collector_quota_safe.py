@@ -230,9 +230,13 @@ def pace():
         if wait>0: time.sleep(wait)
     last_gemini_call=time.monotonic()
 
-def overflow_post(url,args,kwargs):
+def overflow_post(url,args,kwargs,primary_failure=None):
     """The same selection request on the overflow model, without mutating the
-    collector's retry body or exceeding either lane or free-tier envelope."""
+    collector's retry body or exceeding either lane or free-tier envelope.
+
+    primary_failure is the primary's temporary failure when this is only a
+    detour around it: a 429 then goes back to the collector's retry and skip
+    logic instead of stopping the lane on what may be a one-minute limit."""
     global overflow_calls,overflow429,budget_hit
     check_lane_budget()
     overflow_calls+=1
@@ -248,6 +252,13 @@ def overflow_post(url,args,kwargs):
     if getattr(r,"status_code",None) in TRANSIENT_STATUSES:
         SELECTION_FAILURES[f"{OVERFLOW_MODEL}:{r.status_code}"]+=1
     if getattr(r,"status_code",None)==429:
+        SELECTION_FAILURES[f"{OVERFLOW_MODEL}:429"]+=1
+        if primary_failure is not None:
+            # Only a per-day answer closes the overflow model for this run.
+            overflow429=overflow429 or "PerDay" in str(getattr(r,"text","") or "")
+            print(f"   Overflow model {OVERFLOW_MODEL} returned 429; back to the retries on the primary model.")
+            if isinstance(primary_failure,Exception): raise primary_failure
+            return primary_failure
         overflow429=True
         print(f"   Overflow model {OVERFLOW_MODEL} returned 429; stopping the selection.")
         quota_stop("overflow_quota_429",f"Gemini overflow model {OVERFLOW_MODEL} returned 429. Cached progress is preserved.")
@@ -287,14 +298,14 @@ def post(url,*args,**kwargs):
         SELECTION_FAILURES[f"{collector.AI_SELECTION_MODEL}:{type(error).__name__}"]+=1
         if not overflow_left(): raise
         print(f"   Gemini article-selection {type(error).__name__}; trying this batch on {OVERFLOW_MODEL}.")
-        return overflow_post(url,args,kwargs)
+        return overflow_post(url,args,kwargs,primary_failure=error)
     if sel and getattr(r,"status_code",None) in TRANSIENT_STATUSES:
         # 5 November 2026: 3.5 Flash Lite answered 5xx through two runs while
         # 3.1 Flash Lite worked, and the map got no new events for a day.
         SELECTION_FAILURES[f"{collector.AI_SELECTION_MODEL}:{r.status_code}"]+=1
         if overflow_left():
             print(f"   Gemini article-selection HTTP {r.status_code}; trying this batch on {OVERFLOW_MODEL}.")
-            return overflow_post(url,args,kwargs)
+            return overflow_post(url,args,kwargs,primary_failure=r)
     if sel and getattr(r,"status_code",None)==429:
         hit429=True; primary_spent=True
         try: detail=" ".join(json.dumps(r.json(),ensure_ascii=False).split())[:1000]
