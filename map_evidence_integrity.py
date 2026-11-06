@@ -128,7 +128,7 @@ def repair_unresolved_city(event, resolve_city):
                  location_confidence='medium', location_confidence_score=0.75,
                  geolocation_review_required=False,
                  geolocation_resolution_geonameid=city.get('geonameid'),
-                 location_review_reason='The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.')
+                 location_review_reason=reason)
     event.pop('geolocation_validation_issue', None)
     return True
 
@@ -242,6 +242,119 @@ def same_primary_identity(left, right):
         return True
     a, b = str(left.get('title')or '').casefold().strip(), str(right.get('title')or '').casefold().strip()
     return bool(a and b and (a==b or (min(len(a),len(b))>=8 and (a.startswith(b+' ') or b.startswith(a+' ')))))
+
+
+# Two places named in headlines are different incidents when every point of one
+# is further than this from every point of the other: Abu Dhabi and Dubai (120 km)
+# or Dadaab and Garissa (90 km) can name one attack, Hama and Jaramana cannot.
+PLACE_FAR_KM = 150
+# Words that introduce the place of an event, in the languages collected.
+PLACE_CUES = frozenset('in at near outside around en dans bei nahe im em no na perto cerca à au aux sur vicino presso dekat di'.split())
+PLACE_CONNECTORS = frozenset('de del la el al an am ad as ar ash bin ibn abu of the y do da dos das san santa sidi ben bir ras tel tell'.split())
+PLACE_LIST_WORDS = frozenset('and y et und e ve'.split())
+# The name before these is a region or an organisation, not the town of that
+# name: Saratov Oblast, the Mopti region, the Sinaloa Cartel.
+NOT_A_TOWN_AFTER = frozenset('oblast region province state krai county governorate department prefecture republic territory departamento provincia estado cartel cartels gang clan brigade brigades front faction'.split())
+HEADLINE_WORD = re.compile(r"[^\W\d_]+(?:['’\-][^\W\d_]+)*")
+TURKISH_LOCATIVE = re.compile(r'(?:n?[dt][ae])(?:ki)?')
+
+
+@lru_cache(maxsize=1)
+def _gazetteer():
+    """geolocate and every country name. Imported here, on the first comparison
+    of two located headlines: a job that never compares any does not read GeoNames."""
+    import geolocate
+    names = [*geolocate.COUNTRY_BY_NAME, *geolocate.COUNTRY_NAME_ALIASES]
+    return geolocate, frozenset(geolocate.normalize_name(name) for name in names)
+
+
+def _headline_word(word):
+    """A word without its apostrophe ending, and whether that ending is the
+    Turkish locative: Van'da, Hakkari'deki. L'Aquila keeps the name after it."""
+    word = word.replace('’', "'")
+    if "'" not in word:
+        return word, False
+    head, tail = word.split("'", 1)
+    if len(head) <= 2:
+        return tail, False
+    return head, bool(TURKISH_LOCATIVE.fullmatch(tail.casefold()))
+
+
+def _place_at(words, index, country):
+    """(word count, name, points) of the longest place starting at a word."""
+    geolocate, country_names = _gazetteer()
+    for size in (3, 2, 1):
+        chunk = [word for word, _ in words[index:index + size]]
+        if len(chunk) < size or not chunk[-1][:1].isupper():
+            continue
+        if any(not word[:1].isupper() and word.casefold() not in PLACE_CONNECTORS for word in chunk):
+            continue
+        name = geolocate.normalize_name(' '.join(chunk))
+        points = geolocate.named_place_points(name, country) if len(name) >= 4 and name not in country_names else []
+        if points:
+            return size, name, points
+    return None
+
+
+@lru_cache(maxsize=50000)
+def headline_places(title, country):
+    """{name: points} of the places of one country a headline says something
+    happened in: only names a locative introduces ('in Hattingen', 'Hakkari'deki',
+    'Karak: ...') or a list continues ('in Kaduna and Kano'). A bare capitalised
+    word is not enough: Calarca is a town and a FARC commander, Orange a town and
+    a Hong Kong outlet, and Moscow in a headline is often the government."""
+    spans = list(HEADLINE_WORD.finditer(title))
+    words = [_headline_word(span.group()) for span in spans]
+    found, index, list_end = {}, 0, None
+    while index < len(words):
+        place = _place_at(words, index, country) if words[index][0][:1].isupper() else None
+        if place is None:
+            index += 1
+            continue
+        size, name, points = place
+        end = index + size
+        following = words[end][0].casefold() if end < len(words) else ''
+        listed = list_end is not None and (
+            (index == list_end and ',' in title[spans[index - 1].end():spans[index].start()])
+            or (index == list_end + 1 and words[list_end][0].casefold() in PLACE_LIST_WORDS))
+        cued = (listed or words[end - 1][1] or (index > 0 and words[index - 1][0].casefold() in PLACE_CUES)
+                or (index == 0 and title[spans[end - 1].end():].lstrip().startswith(':')))
+        # 'in Puerto de la Cruz': the longer name is not the town it starts with.
+        longer_name = following in PLACE_CONNECTORS and end + 1 < len(words) and words[end + 1][0][:1].isupper()
+        if cued and following not in NOT_A_TOWN_AFTER and not longer_name:
+            found[name] = points
+            list_end = end
+        index = end
+    return found
+
+
+def _far_apart(first, second):
+    from daily_reliability import distance_km
+    return all(distance_km(*a, *b) > PLACE_FAR_KM for a in first for b in second)
+
+
+def stored_place_names(event):
+    normalize = _gazetteer()[0].normalize_name
+    return {normalize(event.get(key)) for key in ('city', 'region', 'geolocation_requested_city') if event.get(key)}
+
+
+@lru_cache(maxsize=None)
+def country_code_for(name):
+    return _gazetteer()[0].resolve_country_code({'country': name})
+
+
+def far_named_place(incoming, existing, country):
+    """A veto only: the two headlines name places of one country far apart, and
+    the incoming one does not name the record's stored place. An article of the
+    same primary identity is never vetoed. The record's own headline decides, not
+    the variants folded into it: a wrong variant must not attract more articles."""
+    if not country or same_primary_identity(incoming, existing):
+        return False
+    theirs = headline_places(str(incoming.get('title') or ''), country)
+    ours = headline_places(str(existing.get('title') or ''), country) if theirs else {}
+    if not ours or set(ours) & set(theirs) or set(theirs) & stored_place_names(existing):
+        return False
+    return all(_far_apart(a, b) for a in theirs.values() for b in ours.values())
 
 
 # Shared vocabulary is not evidence that two keys are one case. A word is weak

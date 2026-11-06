@@ -7547,13 +7547,27 @@ def profile_pair_score(
     )
 
 
+def shared_country_code(incoming, existing):
+    """The record's stored country or, before geolocation, the one both texts name."""
+    code = existing.get("country_code") or incoming.get("country_code")
+    if code:
+        return code
+    shared = build_profile(incoming)["countries"] & build_profile(existing)["countries"]
+    if len(shared) != 1:
+        return None
+    from map_evidence_integrity import country_code_for
+    return country_code_for(next(iter(shared)))
+
+
 def event_match(
     incoming,
     existing,
 ):
-    from map_evidence_integrity import primary_pair_supported
+    from map_evidence_integrity import far_named_place, primary_pair_supported
     if not primary_pair_supported(incoming, existing):
         return (False, 0.0, "unverified_primary_evidence")
+    if far_named_place(incoming, existing, shared_country_code(incoming, existing)):
+        return (False, 0.0, "different_named_place")
     best_match = (
         False,
         0.0,

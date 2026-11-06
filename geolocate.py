@@ -1664,6 +1664,20 @@ def country_place_within(
     )
 
 
+def named_place_points(name, country_code):
+    """Points of a place a headline names (normalized name, country): a state
+    stands for all its places, a town for all its namesakes. An alias must belong
+    to a real town: short aliases of villages collide with ordinary words."""
+    state = STATE_CODES.get(country_code, {}).get(name)
+    if state:
+        return STATE_POINTS[country_code, state]
+    pool = [city for city in CITY_INDEX.get(name, ()) if city.get("countrycode") == country_code]
+    if not any(name in {normalize_name(city.get("name")), normalize_name(city.get("asciiname"))}
+               or (city.get("population") or 0) >= ALIAS_PLACE_MIN_POPULATION for city in pool):
+        return []
+    return [(float(city["latitude"]), float(city["longitude"])) for city in pool]
+
+
 # A model point this far from every place of its country, whose mirror
 # (lat, -lon) lies within SIGN_FLIP_MATCH_KM of one, lost its minus sign.
 # The every-run repair of stored points reaches 300 km (Segou, Mali, stored
