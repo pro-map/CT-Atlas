@@ -623,6 +623,13 @@ test("retention and alarms leave the record alone, and it arms no alarm of its o
   }
 });
 
+test("the gate's read hands out the status, not its own claim",async()=>{
+  const {gate,record}=await probeOnce({});
+  assert.ok(record.claimed_at>0);
+  const body=await (await gate.fetch(new Request("https://gate.internal/crypto-provider-status-get",{method:"POST",body:"{}"}))).json();
+  assert.deepEqual(Object.keys(body).sort(),["checked_at","ok","providers"]);
+});
+
 test("the gate stores only what it recognises, whatever it is handed",async()=>{
   const setup=await rig();
   const put=body=>setup.gate.fetch(new Request("https://gate.internal/crypto-provider-status-put",{method:"POST",body:JSON.stringify(body)}));
@@ -729,10 +736,8 @@ test("/health stays fast when the gate hangs, and does not ask it again straight
   assert.equal(body.ok,true);
   assert.equal(body.crypto_provider_status.read_failed,true);
   assert.ok(took<1500,"took "+took+" ms");
-  const quick=Date.now();
   await getHealth(env);
-  assert.ok(Date.now()-quick<200);
-  assert.equal(gatePaths.filter(path=>path.endsWith("-get")).length,1);
+  assert.equal(gatePaths.filter(path=>path.endsWith("-get")).length,1,"the failure is remembered, so the next visitor does not wait");
 });
 
 test("a failed read is retried after a short wait, not after a full minute",async()=>{
