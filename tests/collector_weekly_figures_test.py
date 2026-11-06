@@ -72,5 +72,17 @@ class WeeklyWindowTests(unittest.TestCase):
                          datetime(2026, 11, 2, 8, 47, tzinfo=timezone.utc))
 
 
+class WeeklyEventFieldTests(unittest.TestCase):
+    def test_the_actor_and_the_case_label_reach_the_model(self):
+        row = collector._weekly_compact_event(KEBBI, 0)
+        self.assertEqual(row["actor_or_group"], "Lakurawa")
+        self.assertEqual(row["incident_anchor"], "Kebbi communities Lakurawa attack 2026")
+
+    def test_no_field_stays_that_no_record_can_fill(self):
+        row = collector._weekly_compact_event(KEBBI, 0)
+        self.assertNotIn("target", row)
+        self.assertNotIn("tactics_or_weapons", row)
+
+
 if __name__ == "__main__":
     unittest.main()

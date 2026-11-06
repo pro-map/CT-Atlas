@@ -282,6 +282,9 @@ EVIDENCE DISCIPLINE:
 - Preserve uncertainty and attribution.
 - Do not invent causal explanations, coordination, intent, identities or
   trends.
+- actor_or_group is the named actor, when the record has one; do not attribute
+  a record that has none. incident_anchor is the short case label and often
+  names the method and the target.
 - You MAY make bounded analytical inferences when multiple supplied records
   support them, but clearly distinguish observation from assessment using
   language such as "indicates", "suggests", "is consistent with", or
@@ -9890,27 +9893,13 @@ def _weekly_compact_event(event, index):
             selection_compact_text(event.get("ai_canonical_event", ""), 360),
         "actor_or_group":
             selection_compact_text(
-                event.get("group")
-                or event.get("actor")
-                or event.get("organization")
-                or event.get("perpetrator")
-                or "",
+                event.get("actor_group"),
                 180,
             ),
-        "target":
+        # No record has a target or tactic field: this label is what names them.
+        "incident_anchor":
             selection_compact_text(
-                event.get("target")
-                or event.get("target_type")
-                or "",
-                180,
-            ),
-        "tactics_or_weapons":
-            selection_compact_text(
-                event.get("modus_operandi")
-                or event.get("attack_type")
-                or event.get("weapons")
-                or event.get("weapon")
-                or "",
+                event.get("incident_anchor"),
                 220,
             ),
         "primary_source":
