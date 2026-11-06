@@ -1250,6 +1250,87 @@ async function callGemini(env, input) {
   }
   throw lastError || new Error("Gemini request failed.");
 }
+// Parses a database file from its byte stream with one event's text in memory at a time:
+// response.json() holds the whole text beside the parsed records, which brings the Worker
+// towards its 128 MB limit. Each event is parsed on its own; the rest of the file, its
+// "events" array left empty, is parsed at the end, keys after "events" included. The result
+// is what JSON.parse returns, and a malformed or cut-off file throws as it would, so a
+// truncated publication can never pass for a shorter list. Any JSON spacing is accepted.
+// Nothing in the Worker reads related_articles, the largest field of events.json and absent
+// from the lite file: dropping it per event keeps the fallback to that file within the limit.
+async function parseEventsStream(body) {
+  const QUOTE = 34, BACKSLASH = 92, COMMA = 44, COLON = 58;
+  const OPEN_ARRAY = 91, CLOSE_ARRAY = 93, OPEN_OBJECT = 123, CLOSE_OBJECT = 125;
+  const reader = body.getReader();
+  const decoder = new TextDecoder();
+  const events = [];
+  const addEvent = text => {
+    const event = JSON.parse(text);
+    if (!("related_articles" in Object(event))) return events.push(event);
+    const { related_articles, ...kept } = event;
+    events.push(kept);
+  };
+  let outer = "", element = "", key = "";
+  let depth = 0, eventsDepth = -1;
+  let inString = false, escaped = false, inKey = false, afterEventsKey = false;
+  try {
+    for (;;) {
+      const { value, done } = await reader.read();
+      const text = done ? decoder.decode() : decoder.decode(value, { stream: true });
+      let start = 0;
+      for (let at = 0; at < text.length; at++) {
+        const c = text.charCodeAt(at);
+        if (inString) {
+          if (inKey) key += text[at];
+          if (escaped) escaped = false;
+          else if (c === BACKSLASH) escaped = true;
+          else if (c === QUOTE) inString = inKey = false;
+          continue;
+        }
+        // A top-level array is the older form of the database: it is the events list itself.
+        const opensEvents = c === OPEN_ARRAY && (depth === 0 || afterEventsKey);
+        if (c > 32) afterEventsKey = false; // JSON's whitespace is all below 33.
+        if (c === QUOTE) {
+          inString = true;
+          if (depth === 1 && eventsDepth < 0) { inKey = true; key = '"'; }
+        } else if (c === OPEN_OBJECT || c === OPEN_ARRAY) {
+          depth++;
+          if (opensEvents) {
+            eventsDepth = depth;
+            events.length = 0; // Of a repeated key, JSON.parse keeps the last value.
+            outer += text.slice(start, at + 1);
+            start = at + 1;
+          }
+        } else if (c === CLOSE_OBJECT || c === CLOSE_ARRAY) {
+          if (c === CLOSE_ARRAY && depth === eventsDepth) {
+            const last = element + text.slice(start, at);
+            if (events.length || last.trim()) addEvent(last);
+            element = "";
+            start = at;
+            eventsDepth = -1;
+          }
+          depth--;
+        } else if (c === COMMA && depth === eventsDepth) {
+          addEvent(element + text.slice(start, at));
+          element = "";
+          start = at + 1;
+        } else if (c === COLON && depth === 1 && eventsDepth < 0) {
+          afterEventsKey = key === '"events"';
+        }
+      }
+      if (eventsDepth > 0) element += text.slice(start);
+      else outer += text.slice(start);
+      if (done) break;
+    }
+  } finally {
+    reader.cancel().catch(() => {});
+  }
+  const db = JSON.parse(outer);
+  if (Array.isArray(db)) return events;
+  if (Array.isArray(db?.events) && !db.events.length) db.events = events;
+  return db;
+}
+
 // Reads the events database for reports, Quick Ask and Deep Search. It prefers
 // events-lite.json (only the event fields the Worker reads, ~64% smaller; built at
 // publication time from the very events.json being deployed, so it is never older than
@@ -1265,13 +1346,16 @@ async function fetchEventsDatabase(env, { minVersion = "" } = {}) {
   async function read(url, options) {
     const response = await fetch(url, options);
     if (!response.ok) return { ok: false, status: response.status, db: null };
-    const db = await response.json();
+    const db = await parseEventsStream(response.body);
     const events = Array.isArray(db) ? db : db?.events;
     return { ok: Array.isArray(events) && events.length > 0, status: response.status, db };
   }
   async function load(url) {
     const result = await read(url, normalOptions);
     if (!result.ok || currentEnough(result.db)) return result;
+    // Whether an engine frees a dead local across the await below varies (Node's does not):
+    // release the stale copy here, so two parsed copies never depend on that.
+    result.db = null;
     // The map has a newer published snapshot. A versioned URL bypasses both
     // the Worker cache and an upstream cache of the unversioned static file.
     const freshUrl = new URL(url);

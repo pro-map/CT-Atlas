@@ -230,7 +230,7 @@ test('Deep Search: same Atlas records to compare against from lite as from full'
 
 function fetchHarness(routes){
  const calls=[];
- const c=vm.createContext({crypto,TextEncoder,console,URL,
+ const c=vm.createContext({crypto,TextEncoder,TextDecoder,console,URL,
   fetch:async(url,options)=>{
    calls.push({url,options:JSON.parse(JSON.stringify(options||null))});
    const route=routes[url];
@@ -242,8 +242,9 @@ function fetchHarness(routes){
  // Results are built inside the vm realm: normalise them so deepEqual compares plain data.
  return {call:async (env,options)=>JSON.parse(JSON.stringify(await vm.runInContext('fetchEventsDatabase',c)(env,options))),calls};
 }
-const jsonResponse=(body,ok=true,status=200)=>({ok,status,json:async()=>body});
-const brokenJson={ok:true,status:200,json:async()=>{throw new SyntaxError('Unexpected token');}};
+// The browser loader calls json(); the Worker reads the byte stream.
+const jsonResponse=(body,ok=true,status=200)=>({ok,status,json:async()=>body,get body(){return new Response(JSON.stringify(body)).body;}});
+const brokenJson={ok:true,status:200,json:async()=>{throw new SyntaxError('Unexpected token');},get body(){return new Response('<!doctype html>').body;}};
 const ENV={EVENTS_URL:'https://x.test/events.json',EVENTS_LITE_URL:'https://x.test/events-lite.json'};
 const FULL={events:[{id:'f1',title:'full'}],last_updated:'full'};
 const LITE={events:[{id:'l1',title:'lite'}],last_updated:'lite'};
