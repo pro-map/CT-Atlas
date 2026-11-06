@@ -104,7 +104,8 @@ export default {
         "X-Content-Type-Options": "nosniff",
         "Access-Control-Allow-Origin": "*"
       };
-      if (request.headers.get("If-None-Match") === etag) {
+      // Cloudflare weakens the ETag when it compresses the body, so browsers send it back as W/"...".
+      if (request.headers.get("If-None-Match")?.replace(/^W\//, "") === etag) {
         return new Response(null, { status: 304, headers });
       }
       headers["Content-Length"] = String(manifest.size_bytes);

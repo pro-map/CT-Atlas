@@ -11,12 +11,27 @@ import subprocess
 import sys
 import time
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from attack_points import _located, is_map_attack, published_at
 from daily_reliability import digest, metadata_repair, publication_delta, rows, timing, repair_known_city
 FILES = ('events.json', 'events-lite.json', 'events-map.json')
+# The site the mirror follows, so both publication gates compare with it: a mirror
+# compared with itself would refuse the shrink a retirement has just published.
+LIVE_SITE = 'https://ct-atlas.com'
+MIN_RECORD_SHARE = 0.9
+MIN_LOCATED_SHARE = 0.5
+MAX_UNREADABLE_DATES = 0.01
+# Gaps between map updates, 5 Oct to 5 Nov: usually 18.7 h overnight, because GitHub
+# starts the first slot hours late, and 23.8 h at worst, across a failed run.
+MAX_MAP_AGE_HOURS = 26
+# Records of the 24 h before each of 46 collection runs: median 92, lowest 47, except
+# 21 and 7 on the starved runs of 5 Nov.
+MIN_RECORDS_24H = 30
+# The mirror followed Pages within 9 minutes on every run since its last repair.
+MIRROR_CATCH_UP_HOURS = 2
 
 
 def read(path):
@@ -92,12 +107,46 @@ def receipt(before, output):
     return report
 
 
-def manifest(directory, output):
+def content_problems(full, mapped, points, cutoff):
+    """Damage that matching identifiers cannot see. No freshness rule on purpose:
+    a failed collection must still be able to publish its honest status."""
+    dates = {identifier: published_at(event) for identifier, event in full.items()}
+    lost = sorted(identifier for identifier, when in dates.items()
+                  if when and when >= cutoff and identifier not in mapped)
+    unreadable = sum(when is None for when in dates.values())
+    located = sum(_located(event) for event in full.values())
+    problems = []
+    if lost:
+        problems.append(f'{len(lost)} records inside the map window are not in the map, such as {lost[0]}')
+    if unreadable > MAX_UNREADABLE_DATES * len(full):
+        problems.append(f'{unreadable} of {len(full)} published dates are unreadable')
+    if located < MIN_LOCATED_SHARE * len(full):
+        problems.append(f'only {located} of {len(full)} records are located')
+    if not any(is_map_attack(event) and _located(event) for event in points):
+        problems.append('the map has no attack point')
+    return problems
+
+
+def shrink_problems(files):
+    if os.getenv('ALLOW_SHRINK') == '1':
+        return []
+    live = served_manifest(LIVE_SITE)
+    try:
+        return [f"{name} has {files[name]['record_count']} records, the live site {live['files'][name]['record_count']}"
+                for name in FILES if files[name]['record_count'] < MIN_RECORD_SHARE * live['files'][name]['record_count']]
+    except (KeyError, TypeError):
+        print('::warning::The live manifest could not be read, so the shrink check was skipped.')
+        return []
+
+
+def manifest(directory, output, now=None):
+    now = now or datetime.now(timezone.utc)
     root = Path(directory)
     from compact_mirror_json import read_mirror_bytes
     payloads = {name: read_mirror_bytes(root, name) for name in FILES}
     documents = {name: json.loads(content) for name, content in payloads.items()}
     import build_events_lite as light
+    import build_events_map as map_file
     from retired_categories import active_event, is_retired_judicial_event
     light.validate(documents['events-lite.json'], documents['events.json'])
     full = {e['id']:active_event(e) for e in documents['events.json']['events'] if not is_retired_judicial_event(e)}
@@ -112,7 +161,7 @@ def manifest(directory, output):
                 source = lender if field in ('latitude', 'longitude') else full[identifier]
                 if field in row and row[field] != source.get(field):
                     raise ValueError(f'Derived data differs: {name}/{identifier}/{field}')
-    result = {'version': 1, 'created_at': datetime.now(timezone.utc).isoformat(),
+    result = {'version': 1, 'created_at': now.isoformat(),
               'source_revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
               'files': {name: {'sha256_canonical_json': digest(document),
                               'sha256_bytes': hashlib.sha256(payloads[name]).hexdigest(),
@@ -121,6 +170,10 @@ def manifest(directory, output):
                               'collection_status_finalized_at': (document.get('collection_status') or {}).get('finalized_at'),
                               'record_count': len(rows(document, name=='events-map.json'))}
                         for name, document in documents.items()}}
+    problems = content_problems(full, mapped, documents['events-map.json']['events'],
+                                now - timedelta(days=map_file.RECENT_DAYS)) + shrink_problems(result['files'])
+    if problems:
+        raise ValueError('Publication refused: ' + '; '.join(problems))
     write(output, result)
     return result
 
@@ -164,30 +217,108 @@ def verify(url, expected_path, output, attempts=5, sleep=time.sleep):
     raise RuntimeError('Deployment content verification failed; see receipt')
 
 
-def served_revision(url):
-    """Source revision of the manifest a deployment serves now; None when unknown."""
+def served_manifest(url):
+    """The manifest a deployment serves now; None when it cannot be read."""
     if not url.startswith('https://'):
         raise ValueError('An HTTPS deployment URL is required')
     try:
         request = urllib.request.Request(url.rstrip('/')+'/publication-manifest.json?integrity='+str(time.time_ns()),
             headers={'Cache-Control': 'no-cache', 'User-Agent': 'CT-Atlas-Publication-Check/1.0'})
         with urllib.request.urlopen(request, timeout=30) as response:
-            revision = json.loads(response.read(1024 * 1024)).get('source_revision')
+            document = json.loads(response.read(1024 * 1024))
     except Exception:
-        # Unknown means "deploy": a skipped redeploy must never hide a stale site.
         return None
+    return document if isinstance(document, dict) else None
+
+
+def served_revision(url):
+    """Source revision of the manifest a deployment serves now; None when unknown."""
+    # Unknown means "deploy": a skipped redeploy must never hide a stale site.
+    revision = (served_manifest(url) or {}).get('source_revision')
     if isinstance(revision, str) and len(revision) == 40 and all(c in '0123456789abcdef' for c in revision):
         return revision
     return None
 
 
+def read_live(url):
+    """What a site serves at the URLs users fetch, so through the CDN cache."""
+    def fetch(name):
+        request = urllib.request.Request(url.rstrip('/')+'/'+name,
+            headers={'Accept-Encoding': 'identity', 'User-Agent': 'CT-Atlas-Publication-Check/1.0'})
+        with urllib.request.urlopen(request, timeout=60) as response:
+            return response.read()
+    try:
+        document, payload = json.loads(fetch('publication-manifest.json')), fetch('events-map.json')
+        return {'url': url, 'manifest': document, 'map': json.loads(payload),
+                'sha256_bytes': hashlib.sha256(payload).hexdigest()}
+    except Exception as error:
+        raise RuntimeError(f'{url}: {type(error).__name__}: {str(error)[:160]}') from error
+
+
+def moment(value):
+    return published_at({'published': value})
+
+
+def records_24h(document):
+    """Records of the 24 h before the last collection run. Not before now: late in a long
+    gap that window holds hours no run has reached yet, and a healthy map looks starved.
+    Not before last_updated either: a repair moves it without collecting anything."""
+    since = moment(document['collection_status']['last_attempt_at']) - timedelta(hours=24)
+    dates = [published_at(event) for event in document['events'] + document['recent_events']]
+    return sum(1 for when in dates if when and when >= since)
+
+
+def live_problems(main, mirror, now):
+    problems = [f"{site['url']}: events-map.json is not the file its manifest names"
+                for site in (main, mirror)
+                if site['sha256_bytes'] != site['manifest']['files']['events-map.json']['sha256_bytes']]
+    updated = main['map']['last_updated']
+    age = (now - moment(updated)).total_seconds() / 3600
+    if age > MAX_MAP_AGE_HOURS:
+        problems.append(f'the map was last updated {age:.1f} h ago, at {updated}')
+    count = records_24h(main['map'])
+    if count < MIN_RECORDS_24H:
+        problems.append(f'only {count} records were published in the 24 h before the last collection run')
+    # Comparing the two created_at alone would read an 18.7 h overnight gap as lag in
+    # the minute before the mirror follows Pages, so the clock starts at the publication.
+    ours, theirs = main['manifest'], mirror['manifest']
+    if ours['files']['events.json']['sha256_canonical_json'] != theirs['files']['events.json']['sha256_canonical_json']:
+        published, mirrored = moment(ours['created_at']), moment(theirs['created_at'])
+        if mirrored < published and now - published > timedelta(hours=MIRROR_CATCH_UP_HOURS):
+            problems.append(f"the mirror still serves the publication of {theirs['created_at']}, "
+                            f"the site that of {ours['created_at']}")
+    return problems
+
+
+def live_check(url, mirror_url, attempts=12, sleep=time.sleep, now=None):
+    """Fail while the public map is stale or the sites disagree. Retried for 11 minutes
+    because Pages can serve a new manifest beside the old map until max-age=600 ends."""
+    if not (url.startswith('https://') and mirror_url.startswith('https://')):
+        raise ValueError('An HTTPS deployment URL is required')
+    for attempt in range(attempts):
+        try:
+            main, mirror = read_live(url), read_live(mirror_url)
+            problems = live_problems(main, mirror, now or datetime.now(timezone.utc))
+        except Exception as error:
+            problems = [f'{type(error).__name__}: {str(error)[:240]}']
+        if not problems:
+            print(f"Live map consistent: updated {main['map']['last_updated']}, "
+                  f"{records_24h(main['map'])} records in the 24 h before its last collection run.")
+            return
+        print(f'Attempt {attempt+1} of {attempts}: ' + '; '.join(problems), flush=True)
+        if attempt+1 < attempts:
+            sleep(60)
+    raise RuntimeError('Live publication check failed: ' + '; '.join(problems))
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('mode', choices=['snapshot', 'repair', 'receipt', 'manifest', 'verify', 'served-revision'])
+    p.add_argument('mode', choices=['snapshot', 'repair', 'receipt', 'manifest', 'verify', 'served-revision', 'live'])
     p.add_argument('--before', default=os.getenv('RUNNER_TEMP', '.')+'/daily-before.json')
     p.add_argument('--output', default='publication-audit.json')
     p.add_argument('--directory', default='.')
     p.add_argument('--url')
+    p.add_argument('--mirror-url')
     p.add_argument('--expected', default='publication-manifest.json')
     p.add_argument('--apply', action='store_true')
     p.add_argument('--repair-known-geography', action='store_true')
@@ -198,5 +329,6 @@ def main():
     elif a.mode=='manifest': manifest(a.directory, a.output)
     elif a.mode=='verify': verify(a.url or '', a.expected, a.output)
     elif a.mode=='served-revision': print(served_revision(a.url or '') or '')
+    elif a.mode=='live': live_check(a.url or '', a.mirror_url or '')
 
 if __name__=='__main__': main()

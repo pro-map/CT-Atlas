@@ -174,5 +174,46 @@ class StatusRefreshPublicationTests(unittest.TestCase):
                       '--expected publication-manifest.json', verify)
 
 
+class DeliberateShrinkTests(unittest.TestCase):
+    def test_only_the_workflows_that_shrink_on_purpose_may_skip_the_shrink_rule(self):
+        skipping = {path.name for path in WORKFLOWS.glob("*.yml") if "ALLOW_SHRINK" in path.read_text(encoding="utf-8")}
+        self.assertEqual(skipping, {"retire-judicial.yml", "cleanup-events.yml"})
+        for path in (ROOT / ".github/actions").rglob("*.yml"):
+            self.assertNotIn("ALLOW_SHRINK", path.read_text(encoding="utf-8"))
+
+    def test_each_of_them_publishes_its_own_shrink(self):
+        # cleanup-events.yml only committed: the next daily publication, which has no
+        # ALLOW_SHRINK, would then have met the gate. The flag must sit on the job
+        # that builds the manifest, and the mirror must follow that job.
+        listed = items(trigger(read(MIRROR), "workflow_run"), "workflows")
+        for name in ("retire-judicial.yml", "cleanup-events.yml"):
+            with self.subTest(workflow=name):
+                source = read(name)
+                deploy = source[source.index("\n  deploy:\n"):]
+                self.assertIn('ALLOW_SHRINK: "1"', deploy[:deploy.index("    steps:\n")])
+                self.assertIn("uses: ./.github/actions/build-events-lite", deploy)
+                self.assertTrue(deploys_pages(deploy))
+                self.assertIn(workflow_name(source), listed)
+
+
+class LiveMapAlarmTests(unittest.TestCase):
+    def test_the_scheduled_smoke_run_checks_the_map_on_both_sites(self):
+        # live-smoke ran green 51 of 51 times through the 7-day mirror failure and the
+        # starved 5 Nov: it never fetched events-map.json or publication-manifest.json.
+        source = read("live-smoke.yml")
+        self.assertIn("schedule:", source)
+        job = source[source.index("\n  map-publication:\n"):]
+        self.assertNotRegex(job.split("    steps:\n")[0], r"(?m)^    if:", "The alarm must run on every smoke run")
+        self.assertNotIn("continue-on-error", job, "A stale map must turn the run red")
+        command = step(job, "Check the map served by ct-atlas.com and the mirror")
+        self.assertIn('daily_publication_audit.py live --url "https://ct-atlas.com" '
+                      '--mirror-url "https://ct-atlas-mirror.fairpeace.workers.dev"', command)
+
+    def test_the_job_outlasts_its_retries(self):
+        # Eleven minutes of retries cover Pages' max-age=600.
+        job = read("live-smoke.yml").split("\n  map-publication:\n")[1]
+        self.assertGreater(int(re.search(r"timeout-minutes: (\d+)", job)[1]), 12)
+
+
 if __name__ == "__main__":
     unittest.main()

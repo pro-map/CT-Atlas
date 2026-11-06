@@ -115,6 +115,25 @@ test("matching ETag avoids downloading chunk bodies", async () => {
   assert.equal(requests.length, 2);
 });
 
+test("the weak ETag a browser got from Cloudflare also answers 304", async () => {
+  // Live on events.json: W/"sha256-..." returned 200 and 13.3 MB. events-lite.json
+  // and events-map.json reach this chunked path around 30 Dec.
+  for (const filename of ["events.json", "events-lite.json", "events-map.json"]) {
+    const { env, requests, manifest } = fixture(Buffer.from('{"events":[]}'), 7, filename);
+    const response = await (await workerPromise).fetch(new Request(`https://mirror.test/${filename}`, {
+      headers: { "If-None-Match": `W/"sha256-${manifest.sha256}"` }
+    }), env);
+    assert.equal(response.status, 304, filename);
+    assert.equal(response.headers.get("ETag"), `"sha256-${manifest.sha256}"`);
+    assert.equal(requests.length, 2, "No chunk may be read for a 304");
+  }
+  const { env } = fixture(Buffer.from('{"events":[]}'));
+  const stale = await (await workerPromise).fetch(new Request("https://mirror.test/events.json", {
+    headers: { "If-None-Match": 'W/"sha256-old"' }
+  }), env);
+  assert.equal(stale.status, 200);
+});
+
 test("missing first chunk returns an explicit uncacheable failure", async () => {
   const { env, files, manifest } = fixture(Buffer.from('{"events":[]}'));
   files.delete("/" + manifest.parts[0].path);
