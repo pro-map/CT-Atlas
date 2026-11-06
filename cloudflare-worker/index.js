@@ -281,7 +281,8 @@ return jsonResponse({ ...cached.report, cached: true }, 200, env);
 const now = new Date();
 const currentStart = new Date(now.getTime() - periodDays * 86400000);
 const previousStart = new Date(currentStart.getTime() - periodDays * 86400000);
-const matching = allEvents.filter(e => matchesRegion(e, region) && matchesTopic(e, topic) && matchesGroup(e, actorGroup));
+// Held reports await a second outlet: the map, the counts and reports all leave them out.
+const matching = allEvents.filter(e => e.held_for_corroboration !== true && matchesRegion(e, region) && matchesTopic(e, topic) && matchesGroup(e, actorGroup));
 const current = [], previous = [];
 for (const event of matching) {
 const dt = parseEventDate(event);

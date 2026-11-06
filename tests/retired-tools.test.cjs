@@ -274,3 +274,18 @@ test("the gate has no code that deletes Dark Web or IP limiter records or a name
   assert.doesNotMatch(gateSource, /darkweb:|"\/darkweb-|ip-intelligence/);
   assert.equal((gateSource.match(/deleteAll\(/g) || []).length, 1, "only the existing /migration-retire route");
 });
+
+test("reports and Deep Search leave out what the map holds for corroboration",()=>{
+  assert.match(read("cloudflare-worker/index.js"),/allEvents\.filter\(e => e\.held_for_corroboration !== true/);
+  assert.equal((read("cloudflare-worker/deep-search.js").match(/held_for_corroboration === true/g)||[]).length,2);
+});
+
+test("the versioned database read uses no cf cache option workerd refuses beside no-store",()=>{
+  assert.match(read("cloudflare-worker/shared.js"),/const freshOptions = \{ cache: "no-store" \};/);
+});
+
+test("only /session-check can end a session: a 401 elsewhere asks it first",()=>{
+  const source=read("usage-auth-fix.js");
+  assert.match(source,/new URL\("\/session-check",url\)/);
+  assert.match(source,/if\(check&&check\.status===401\)\{/);
+});

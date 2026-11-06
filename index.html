@@ -3234,10 +3234,6 @@ html, body {
 }
 
 @media (max-width: 640px) {
-    #headerCasualtiesWindow {
-        display: none;
-    }
-
     .header-casualty-group {
         padding-top: 2px;
     }
@@ -4391,6 +4387,7 @@ html, body {
 
     #sidebar {
         top: 47px !important;
+        z-index: 1001 !important;
         width: min(84vw, 320px) !important;
         max-height: calc(100% - 106px) !important;
     }
@@ -5713,6 +5710,8 @@ function setPhoneSidebarOpen(open) {
 
 phoneLayout.addEventListener("change", applyPhoneLayout);
 applyPhoneLayout();
+// The header can grow after Leaflet read the size, for example when the badge appears.
+new ResizeObserver(() => map.invalidateSize()).observe(document.getElementById("map"));
 
 document.getElementById("sidebarToggle").addEventListener("click", () => {
     setPhoneSidebarOpen(!document.body.classList.contains("sidebar-open"));
@@ -7021,7 +7020,7 @@ function dataStateView(facts, now, days) {
     const problem = { failed: ["bad", "UPDATE FAILED"], stalled: ["bad", "UPDATE STALLED"], behind: ["warn", "UPDATE BEHIND"] }[health];
     let level, text;
     if (problem) {
-        [level, text] = [problem[0], problem[1] + aged];
+        [level, text] = [hours >= 48 ? "bad" : problem[0], problem[1] + aged];
     } else if (stale) {
         [level, text] = [hours >= 48 ? "bad" : "warn", "NO UPDATE FOR " + ageText];
     } else if (health === "ok" || view.state === "complete") {
@@ -7066,6 +7065,10 @@ function renderMapLoadFailure() {
     button.textContent = "RETRY";
     button.addEventListener("click", () => startMapLoad());
     document.getElementById("lastUpdated")?.replaceChildren("Database unavailable ", button);
+    const brief = document.getElementById("headerSituationText");
+    if (brief) brief.textContent = "The brief is unavailable until the database loads.";
+    const list = document.getElementById("chronologyList");
+    if (list) list.textContent = "The event list is unavailable until the database loads.";
 }
 
 let mapLoadFailed = false;
@@ -11018,7 +11021,7 @@ const CASUALTY_NUMBER =
 // of the text first, because a lookbehind here throws at load on Safari before 16.4,
 // which would end the whole script and leave the page on "Loading database...".
 const CASUALTY_NOT_A_FIGURE =
-    new RegExp("\\b(?:no|not|(?:mother|father|parent)\\s+of)\\s(?:" + CASUALTY_FIGURE + ")\\b", "gi");
+    new RegExp("\\b(?:no|not|(?:mother|father|parent)\\s+of)\\s(?:" + CASUALTY_FIGURE + ")\\b|\\b[a-z]{1,4}-\\d+\\b", "gi");
 
 const CASUALTY_APPROXIMATION =
     "(?:at\\s+least\\s+|more\\s+than\\s+|over\\s+)?";
@@ -14589,6 +14592,7 @@ document.getElementById(
 
         if (chronologyOpen) {
             setChronologyOpen(false);
+            setPhoneSidebarOpen(false);
             return;
         }
 

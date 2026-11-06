@@ -1340,7 +1340,8 @@ async function fetchEventsDatabase(env, { minVersion = "" } = {}) {
   const currentEnough = db => !Number.isFinite(required)
     || Date.parse(db?.last_updated || db?.updated_at || "") >= required;
   const normalOptions = { cf: { cacheTtl: 60, cacheEverything: true } };
-  const freshOptions = { cache: "no-store", cf: { cacheTtl: 0, cacheEverything: true } };
+  // workerd refuses cf.cacheTtl beside cache: "no-store": the fetch throws before leaving.
+  const freshOptions = { cache: "no-store" };
 
   async function read(url, options) {
     const response = await fetch(url, options);

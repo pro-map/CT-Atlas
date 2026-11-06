@@ -85,8 +85,7 @@ def requested_city_label(requested):
     """The source's own spelling, as the live geolocation shows it ('Karak',
     'Hodeidah'), not the GeoNames main name ('Qir Moav', 'Al Hudaydah'); only
     the coordinates and the geonameid come from GeoNames."""
-    import html
-    return ' '.join(html.unescape(str(requested or '')).split())
+    return ' '.join(repair_text(requested).split())
 
 
 def restore_requested_city_label(event):

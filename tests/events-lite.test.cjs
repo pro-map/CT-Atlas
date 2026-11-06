@@ -221,7 +221,9 @@ test('Deep Search: same Atlas records to compare against from lite as from full'
  const shared=sharedContext();
  const deep=moduleContext(shared,deepSource,'cloudflare-worker/deep-search.js');
  const candidates=vm.runInContext("(function(db){return JSON.stringify(candidateMapEvents(db,{startDt:new Date('2026-09-01T00:00:00Z')}))})",deep);
- const fromFull=candidates({events:full.events});
+ // The hold is derived at publication, so the full file needs it stamped to compare.
+ const held=new Set(lite.events.filter(event=>event.held_for_corroboration).map(event=>event.id));
+ const fromFull=candidates({events:full.events.map(event=>held.has(event.id)?{...event,held_for_corroboration:true}:event)});
  assert.ok(JSON.parse(fromFull).length>500);
  assert.equal(candidates(lite),fromFull);
 });

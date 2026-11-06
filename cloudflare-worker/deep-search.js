@@ -1375,6 +1375,7 @@ function candidateMapEvents(db, window) {
   const cutoff = window.startDt.getTime() - (14 * 86400000);
   return all.filter(event => {
     if (isRetiredJudicialEvent(event)) return false;
+    if (event.held_for_corroboration === true) return false;
     const dt = parseEventDate(event);
     return !dt || dt.getTime() >= cutoff;
   }).map(event => {
@@ -1407,6 +1408,7 @@ function databaseEvidenceRows(db, plan, window, filters) {
 
   const scored = [];
   for (const event of all) {
+    if (event.held_for_corroboration === true) continue;
     if (!matchesDatabaseFilters(event, filters, window.endDt, { ignorePeriod: true })) continue;
     const date = parseEventDate(event);
     if (!date || date.getTime() < start || date.getTime() > end) continue;

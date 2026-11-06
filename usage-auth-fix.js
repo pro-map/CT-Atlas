@@ -53,8 +53,12 @@ window.fetch=async function(input,init){
 
   const response=await priorFetch(input,options);
   if(response.status===401&&protectedPath.test(url)&&!/\/auth-login(?:\?|$)/.test(url)){
-    lockLocalSession();
-    refreshAdminUsageButton();
+    // Other routes answer 401 when the gate itself fails: only /session-check can say the session ended.
+    const check=/\/session-check(?:\?|$)/.test(url)?response:await priorFetch(new URL("/session-check",url),{headers:{"X-Session-Token":token},cache:"no-store"}).catch(()=>null);
+    if(check&&check.status===401){
+      lockLocalSession();
+      refreshAdminUsageButton();
+    }
   }
   return response;
 };
