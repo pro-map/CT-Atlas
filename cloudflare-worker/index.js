@@ -352,10 +352,14 @@ async scheduled(controller, env, ctx) {
 }
 };
 export { ReportGate } from "./report-gate.js";
-// Facial Intelligence is retired. This empty class serves nothing and no binding reaches it.
+// Facial Intelligence is retired. This class serves nothing and no binding reaches it.
 // It exists only because Cloudflare keeps a Durable Object namespace, and whatever it stores,
 // only while the deployed Worker still exports the class. The namespace stays until the owner
 // deletes it. To do that (Cloudflare docs): remove this class, set [exports.FaceShare] in
 // wrangler.toml to type = "durable-object" and state = "deleted", and deploy. That destroys
 // the namespace's data permanently, so it is the owner's decision and no one else's.
-export class FaceShare {}
+export class FaceShare {
+  constructor(state) { this.state = state; }
+  // A crop hosted just before the retirement deploy keeps its 10-minute expiry.
+  async alarm() { await this.state.storage.deleteAll(); }
+}

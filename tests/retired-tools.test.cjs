@@ -62,11 +62,20 @@ test("the Worker entry module links and exports exactly the gate and the FaceSha
   assert.equal(typeof module.default.scheduled, "function");
 });
 
-test("FaceShare is inert: no request handler, no alarm, and nothing that touches storage", async () => {
+test("FaceShare has no request handler and only keeps the expiry of a crop already hosted", async () => {
   const { FaceShare } = await worker;
-  assert.deepEqual(Object.getOwnPropertyNames(FaceShare.prototype), ["constructor"]);
-  const storage = new Proxy({}, { get() { throw new Error("the stub must not touch storage"); } });
-  new FaceShare({ storage }, {});
+  assert.deepEqual(Object.getOwnPropertyNames(FaceShare.prototype).sort(), ["alarm", "constructor"]);
+  let cleared = 0;
+  const storage = new Proxy({ deleteAll: async () => { cleared += 1; } }, {
+    get(target, name) {
+      if (name in target) return target[name];
+      throw new Error("the stub may only clear its own expired crop");
+    }
+  });
+  const stub = new FaceShare({ storage }, {});
+  assert.equal(cleared, 0, "nothing is deleted unless the crop's own alarm fires");
+  await stub.alarm();
+  assert.equal(cleared, 1);
   assert.equal(fs.existsSync(path.join(ROOT, "cloudflare-worker/face-share.js")), false);
 });
 
@@ -78,7 +87,7 @@ test("wrangler keeps the FaceShare namespace and drops every binding of the reti
   assert.doesNotMatch(active, /state\s*=/, "state = \"deleted\" permanently destroys a namespace");
   assert.doesNotMatch(active, /FACE_SHARE|DARKWEB_FILES|r2_buckets/);
   assert.doesNotMatch(active, /^\[ai\]/m, "nothing else uses env.AI");
-  assert.match(read("cloudflare-worker/index.js"), /export class FaceShare \{\}/);
+  assert.match(read("cloudflare-worker/index.js"), /export class FaceShare \{/);
 });
 
 test("no Worker module still reads Workers AI or a binding or secret of the retired tools", () => {
