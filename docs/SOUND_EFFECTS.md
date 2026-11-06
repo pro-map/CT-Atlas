@@ -1,7 +1,7 @@
 # Interface sound effects
 
 The small **bell** at the lower-left of every page (green On, red/slashed Off) is shared by the hub, Intelligence
-Map, Crypto and IP workspaces, login, privacy and the sound-check page. It defaults to On at a
+Map and Crypto workspaces, login, privacy and the sound-check page. It defaults to On at a
 low fixed gain (0.12). The preference lives in `ct_atlas_sound_effects` in
 localStorage (`on` / `off`), per browser origin; the main site and its Cloudflare
 mirror therefore have separate preferences.
@@ -18,7 +18,7 @@ principal saves are wired. Hover, scrolling, form edits, map filters, automatic
 refresh and Crypto URL autorun are silent. Save clicks in the Crypto workspace
 acknowledge the local action; they do not claim that its deferred server save
 has completed. Analysis result cues follow the actual response path; degraded
-results use the error cue in IP and Custom Intelligence.
+results use the error cue in Custom Intelligence.
 
 `CTAtlasSound.begin()` plays the action click and returns a one-shot completion
 callback accepting `success` or `error`. Muting invalidates pending callbacks,

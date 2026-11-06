@@ -257,10 +257,16 @@ test("an old IP row in the admin view is simply not offered: no column, no filte
 test("the privacy notice drops what only these tools did and says what stays stored", () => {
   const notice = read("privacy.html");
   assert.doesNotMatch(notice, /Yandex|Telegram|4chan|Bluesky|Brave Search|Groq|Workers AI|Cloud Run|reverse-image/);
+  assert.doesNotMatch(notice, /IPinfo|proxycheck|ipapi|RIPEstat|<strong>IP Intelligence|you look up in IP Intelligence/i);
   assert.match(notice, /Last updated: 6 November 2026/);
   assert.match(notice, /withdrawn in November 2026/);
   assert.match(notice, /has not been erased/);
   assert.match(notice, /until the administrator deletes them/);
+  assert.match(notice, /and IP\s+Intelligence were withdrawn in November 2026/);
+  assert.match(notice, /including the IP addresses and domains looked up in IP Intelligence, follow the 90-day/);
+  assert.match(notice, /rate-limit counters of IP Intelligence/);
+  assert.match(notice, /one-way hashed version of your\s+IP address/, "the login record is not the tool and stays described");
+  assert.equal(fs.existsSync(path.join(ROOT, "docs/IP_INTELLIGENCE.md")), false);
 });
 
 test("the gate has no code that deletes Dark Web or IP limiter records or a namespace of a retired tool", () => {
