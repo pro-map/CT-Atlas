@@ -1,4 +1,5 @@
 import attack_points
+from map_evidence_integrity import repair_text
 import radnuc
 import threat_categories
 import collection_config
@@ -1984,7 +1985,7 @@ def clean_text(text):
     if not text:
         return ""
 
-    text = html.unescape(text)
+    text = repair_text(text)
     text = re.sub(r"<[^>]+>", " ", text)
     text = re.sub(r"\s+", " ", text)
     return text.strip()
@@ -8305,6 +8306,15 @@ def deduplicate_events(records):
     return events
 
 
+def repair_stored_text(event):
+    for field in ("title", "summary", "city", "region", "incident_anchor", "geolocation_requested_city"):
+        if isinstance(event.get(field), str):
+            event[field] = repair_text(event[field])
+    if isinstance(event.get("location_evidence"), list):
+        event["location_evidence"] = [repair_text(value) if isinstance(value, str) else value
+                                      for value in event["location_evidence"]]
+
+
 def load_existing():
     events = [retired_categories.active_event(event)
               for event in load_database_strict()["events"]
@@ -8314,6 +8324,7 @@ def load_existing():
         if categories:
             event["categories"] = categories
             event["category"] = categories[0]
+        repair_stored_text(event)
     return events
 
 

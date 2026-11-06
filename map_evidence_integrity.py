@@ -6,6 +6,7 @@ of one real-world incident. Uncertain cases remain separate and reviewable.
 from __future__ import annotations
 import copy
 import hashlib
+import html
 import json
 import re
 import unicodedata
@@ -19,6 +20,20 @@ SPECIALIST = {'Radiological/Nuclear', 'Chemicals and Explosives', 'Biological Te
 ARTICLE_FIELDS = ('title','summary','original_title','original_summary','original_language','source','url','published')
 # Generic actions, actors and numbers cannot anchor distinct cases together.
 GENERIC = set('the this that with from into after before during following over under against about near across alleged suspected reported reports report says said more than killed kills killing dead death deaths injured attack attacks attacked terrorist terrorists terrorism terror militant militants police officer officers forces security army military troops arrest arrested arrests arresting detained detention suspects suspect operation operations weapons weapon explosive explosives bomb bombing bombs plot thwarted foiled counter raid raids seize seized seizure smuggling group groups members member leader officials official people killed two three four five houthi houthis hezbollah hamas isis isil iswap daesh qaeda taliban farc current news update latest material support investigation announces video authorities government new national state country year years children teenager teenagers'.split())
+
+
+# Spellings stored with a lost byte (audit of 2026-11-05).
+TEXT_REPAIRS = (('Bogot3', 'Bogotá'), ('Choc3', 'Chocó'), ('Alcald3a', 'Alcaldía'),
+                ('Baden-W¼rttemberg', 'Baden-Württemberg'), ('Nari\x11o', 'Nariño'), ('S\x92gou', 'Ségou'))
+CONTROL_CHARACTERS = re.compile('[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]')
+
+
+def repair_text(value):
+    """Decode entities, restore TEXT_REPAIRS and drop control characters."""
+    text = html.unescape(str(value or ''))
+    for broken, word in TEXT_REPAIRS:
+        text = text.replace(broken, word)
+    return CONTROL_CHARACTERS.sub('', text)
 
 
 def original_article_key(event):
@@ -85,15 +100,26 @@ def restore_requested_city_label(event):
     return True
 
 
+def event_place_text(event):
+    """The record's own words about its place, not its folded articles'."""
+    fields = [event.get(key) for key in ('title', 'summary', 'original_title', 'original_summary')]
+    return ' '.join(str(value) for value in [*fields, *(event.get('location_evidence') or [])] if value)
+
+
 def repair_unresolved_city(event, resolve_city):
-    """Reapply only an exact country-locked lookup after text normalization fixes."""
+    """Reapply only an exact country-locked lookup after text normalization fixes,
+    then with the state the record's own text names, for a namesake."""
     if event.get('geolocation_validation_issue') != 'ambiguous_or_unresolved_city':
         return False
-    requested = event.get('geolocation_requested_city')
+    requested = repair_text(event.get('geolocation_requested_city'))
     country = event.get('country_code')
     if not requested or not country:
         return False
+    reason = 'The previously requested locality now resolves uniquely in its recorded country after Unicode/HTML normalization; no new location was inferred.'
     city = resolve_city(requested, country)
+    if not city:
+        reason = "The record's text names the state of exactly one same-country namesake of the requested locality; no new location was inferred."
+        city = resolve_city(requested, country, None, None, event_place_text(event))
     if not city or city.get('countrycode') != country:
         return False
     event.update(city=requested_city_label(requested) or city['name'], region=None, latitude=float(city['latitude']),
