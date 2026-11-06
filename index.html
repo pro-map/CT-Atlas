@@ -4422,9 +4422,9 @@ html, body {
 }
 #updated {
     order: 3 !important;
-    flex-basis: 94px !important;
-    min-width: 94px !important;
-    max-width: 94px !important;
+    flex-basis: 136px !important;
+    min-width: 136px !important;
+    max-width: 136px !important;
     padding: 4px 0 0 7px !important;
     font-size: 7.6px !important;
 }
@@ -4437,6 +4437,22 @@ html, body {
     font-size: 6.4px;
     line-height: 1.2;
 }
+#dataStateBadge {
+    align-self: flex-start;
+    margin-top: 2px;
+    padding: 1px 4px;
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    color: #a9bdca;
+    font-size: 7.4px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: .04em;
+}
+#dataStateBadge[hidden] { display: none; }
+#dataStateBadge[data-state="ok"] { color: #8bcbb2; }
+#dataStateBadge[data-state="warn"] { color: #f4cf7d; background: rgba(216, 177, 100, .16); }
+#dataStateBadge[data-state="bad"] { color: #ffa99f; background: rgba(209, 132, 123, .2); }
 .map-retry-button {
     margin: 2px 0 0;
     padding: 2px 6px;
@@ -4531,9 +4547,9 @@ html, body {
         font-size: 6px !important;
     }
     #updated {
-        flex-basis: 88px !important;
-        min-width: 88px !important;
-        max-width: 88px !important;
+        flex-basis: 118px !important;
+        min-width: 118px !important;
+        max-width: 118px !important;
     }
     #headerSituationText { font-size: 9.4px !important; }
 }
@@ -5043,8 +5059,10 @@ html, body {
 
         </div>
 
-        <div id="headerCasualties24" title="Casualties for the most recently completed Paris calendar day (yesterday, 00:00-24:00 Paris time -- used because today's collector update mostly finishes covering yesterday, not today). Event date is preferred; recent article date is used when no occurrence date is available. Victims = everyone the attack harmed, killed or wounded. Terrorists = attackers/militants killed, or captured -- either during a raid/firefight (Counter Terrorism Action) or by a plain arrest.">
-            <div id="headerCasualtiesWindow">FULL DAY (PARIS)</div>
+        <div id="dataStateBadge" data-state="neutral" hidden></div>
+
+        <div id="headerCasualties24" title="Casualties for the most recently completed Paris calendar day (yesterday, 00:00-24:00 Paris time -- used because today's collector update mostly finishes covering yesterday, not today), by publication date. FULL DAY means a healthy collection started after that day ended. INCOMPLETE means the last collection started before it ended or left much of it unreviewed, and NO DATA that none ran on it: a dash then means not known, not zero. Victims = everyone the attack harmed, killed or wounded. Terrorists = attackers/militants killed, or captured -- either during a raid/firefight (Counter Terrorism Action) or by a plain arrest.">
+            <div id="headerCasualtiesWindow">YESTERDAY (PARIS)</div>
             <div class="header-casualty-group">
                 <span class="header-casualty-group-label">VICTIMS</span>
                 <div class="header-casualty">
@@ -5540,6 +5558,7 @@ Visible rate
 
       <div class="health-section">
         <div class="health-section-title">LATEST COLLECTION</div>
+        <div class="health-row"><span>Data state</span><strong id="healthDataState">Not reported</strong></div>
         <div class="health-row"><span>Update completeness</span><strong id="healthUpdateStatus">Not reported</strong></div>
         <div class="health-row"><span>Recent candidates reviewed</span><strong id="healthRecentReviewed">Not reported</strong></div>
         <div class="health-row"><span>Recent candidates pending</span><strong id="healthRecentPending">Not reported</strong></div>
@@ -7290,6 +7309,76 @@ function renderCollectionStatus(data) {
     }
 }
 
+// "partial" is the normal state of every run, so it cannot tell an outage from a
+// good day. The pipeline's health field does; snapshots without it get the same
+// test on their own counters, so a starved run such as 5 Nov is still recognised.
+function collectionHealth(status) {
+    if (!status || typeof status !== "object") return "";
+    const reported = typeof status.health === "string" ? status.health : status.health?.state;
+    if (["ok", "behind", "stalled", "failed"].includes(reported)) return reported;
+    if (status.status === "failed") return "failed";
+    const reviewed = collectionStatusCount(status.recent?.new_reviews);
+    const pending = collectionStatusCount(status.recent?.pending);
+    if (reviewed === null || pending === null) return "";
+    if (pending < 100) return "ok";
+    const share = reviewed / (reviewed + pending);
+    if (share < 0.1) return "stalled";
+    return share < 0.5 && pending > 600 ? "behind" : "ok";
+}
+
+// Status-only refreshes bump last_updated, so the run's own date comes first.
+function dataPublishedTime(facts) {
+    const time = Date.parse(facts?.collection_status?.published_at || facts?.last_updated || "");
+    return Number.isFinite(time) ? time : null;
+}
+
+// About one missed run: a publication older than this means one did not happen.
+const MAP_DATA_STALE_MS = 14 * 60 * 60 * 1000;
+
+function dataStateView(facts, now) {
+    const view = collectionStatusView(facts);
+    const health = collectionHealth(facts?.collection_status);
+    const published = dataPublishedTime(facts);
+    const age = published === null ? 0 : Math.max(0, now - published);
+    const hours = Math.floor(age / 3600000);
+    const ageText = hours >= 48 ? Math.floor(hours / 24) + " DAYS" : hours + " H";
+    const stale = age >= MAP_DATA_STALE_MS;
+    const problem = { failed: ["bad", "UPDATE FAILED"], stalled: ["bad", "UPDATE STALLED"], behind: ["warn", "UPDATE BEHIND"] }[health];
+    let level, text;
+    if (problem) {
+        [level, text] = problem;
+        if (stale) text += " · " + ageText + " OLD";
+    } else if (stale) {
+        [level, text] = [hours >= 48 ? "bad" : "warn", "NO UPDATE FOR " + ageText];
+    } else if (health === "ok" || view.state === "complete") {
+        [level, text] = ["ok", "UPDATE OK"];
+    } else {
+        [level, text] = ["neutral", view.state === "unknown" ? "STATUS NOT REPORTED" : "UPDATE PARTIAL"];
+    }
+    return { level, text, detail: view.title + ". Last attempt: " + view.attempt + ". Published data: " + view.published + ". " + view.reasons };
+}
+
+// What the page knows about its data, kept apart from the event arrays.
+let mapDataFacts = null;
+
+function mapDataOlderThan(days) {
+    const published = dataPublishedTime(mapDataFacts);
+    return published !== null && Date.now() - published > days * 86400000;
+}
+
+function renderDataStateBadge() {
+    const view = dataStateView(mapDataFacts, Date.now());
+    const badge = document.getElementById("dataStateBadge");
+    if (badge) {
+        badge.hidden = false;
+        badge.dataset.state = view.level;
+        badge.textContent = view.text;
+        badge.title = view.detail;
+    }
+    const health = document.getElementById("healthDataState");
+    if (health) health.textContent = view.text;
+}
+
 // Written where it shows: in the header and the ticker. Phones hide the ticker.
 function renderMapLoadFailure() {
     const retryButton = () => {
@@ -7435,6 +7524,7 @@ function applyMapDatabase(data) {
             null;
 
 
+        mapDataFacts = { collection_status: data.collection_status, last_updated: data.last_updated || data.updated_at };
         mapDatabaseVersion = String(data.last_updated || data.updated_at || "");
         mapSnapshotStatusFinalizedAt = String(data.collection_status?.finalized_at || "");
         mapSnapshotBytesHash = String(data._publicationBytesHash || "");
@@ -7481,14 +7571,8 @@ function applyMapDatabase(data) {
 
 
         if (
-            data.last_updated
+            dataPublishedTime(mapDataFacts) !== null
         ) {
-
-
-            const updated =
-                new Date(
-                    data.last_updated
-                );
 
 
             document.getElementById(
@@ -7499,8 +7583,8 @@ function applyMapDatabase(data) {
 
                 +
 
-                updated.toLocaleString(
-                    "en-GB"
+                collectionStatusDate(
+                    dataPublishedTime(mapDataFacts)
                 );
 
         }
@@ -12122,11 +12206,70 @@ function extractStrict24hCapturedCount(
 
 
 /*
-   Renders the exact date of the completed Paris day the header numbers
-   cover (e.g. "SEP 8, 2026 · FULL DAY (PARIS)"), which is YESTERDAY --
-   see the comment on isCurrentCasualtyEvent() for why.
+   Whether the collection finished the day the header covers. On 5 Nov the
+   header read FULL DAY with 0 killed, from 7 records against about 140 on a
+   normal day, while the brief beside it reported deaths. A day is finished
+   only by a healthy run that started after it ended: until then the file
+   held 51-91% of the day's eventual records.
 */
-function parisCasualtyWindowLabel() {
+function headerCasualtyDayState(
+    facts,
+    targetDay
+) {
+
+    const status =
+        facts?.collection_status;
+
+    const runDay =
+        parisCalendarDateString(
+            new Date(
+                status?.run_started_at
+                ||
+                status?.last_attempt_at
+                ||
+                status?.published_at
+                ||
+                facts?.last_updated
+                ||
+                ""
+            )
+        );
+
+    if (
+        !runDay
+        ||
+        runDay < targetDay
+    ) {
+        return "missing";
+    }
+
+    if (
+        runDay === targetDay
+    ) {
+        return "incomplete";
+    }
+
+    const health =
+        collectionHealth(
+            status
+        );
+
+    return !health || health === "ok"
+        ?
+        "finished"
+        :
+        "incomplete";
+}
+
+
+/*
+   Renders the exact date of the Paris day the header numbers cover (e.g.
+   "SEP 8, 2026 · FULL DAY (PARIS)"), which is YESTERDAY -- see the comment
+   on isCurrentCasualtyEvent() for why -- and how far the collection got.
+*/
+function parisCasualtyWindowLabel(
+    dayState
+) {
 
     const dateLabel =
         new Intl.DateTimeFormat(
@@ -12146,7 +12289,11 @@ function parisCasualtyWindowLabel() {
     return (
         dateLabel.toUpperCase()
         +
-        " · FULL DAY (PARIS)"
+        {
+            finished: " · FULL DAY (PARIS)",
+            incomplete: " · INCOMPLETE (PARIS)",
+            missing: " · NO DATA (PARIS)"
+        }[dayState]
     );
 }
 
@@ -12269,6 +12416,13 @@ function updateHeaderCasualties24() {
         }
     );
 
+    const dayState =
+        headerCasualtyDayState(
+            mapDataFacts,
+            parisYesterdayDateString()
+        );
+
+    // Figures already read stand as a floor; a zero would claim a quiet day.
     const setCasualtyNode = (
         id,
         value
@@ -12283,6 +12437,10 @@ function updateHeaderCasualties24() {
             node
         ) {
             node.textContent =
+                value === 0 && dayState !== "finished"
+                ?
+                "—"
+                :
                 value.toLocaleString(
                     "en-US"
                 );
@@ -12319,7 +12477,9 @@ function updateHeaderCasualties24() {
         windowNode
     ) {
         windowNode.textContent =
-            parisCasualtyWindowLabel();
+            parisCasualtyWindowLabel(
+                dayState
+            );
     }
 }
 
@@ -13031,10 +13191,25 @@ function updateFacetCounts() {
                 badge
             ) {
                 badge.textContent =
+                    count === 0 && mapDataOlderThan(days)
+                    ?
+                    "—"
+                    :
                     count.toLocaleString(
                         "en-GB"
                     );
             }
+
+            button.title =
+                days === 1 && dataPublishedTime(mapDataFacts) !== null
+                ?
+                "Rolling 24 hours from now; the data ends "
+                +
+                collectionStatusDate(
+                    dataPublishedTime(mapDataFacts)
+                )
+                :
+                "";
 
         }
     );
@@ -13135,6 +13310,54 @@ function formatTrendGeneratedAt(value) {
 
 
 
+// A normal brief rests on about 80 events.
+const SITUATION_BRIEF_LOW_EVENTS = 30;
+
+// The brief can be about 18 hours old under this title, and a starved one can
+// rest on a handful of events: both are said beside it.
+function situationBriefTitle(
+    brief
+) {
+
+    if (
+        !Number.isFinite(
+            Date.parse(
+                brief?.generated_at
+            )
+        )
+    ) {
+        return "SITUATION 24H";
+    }
+
+    const candidates =
+        Number(
+            brief.candidate_events
+        );
+
+    return (
+        "SITUATION 24H · AS OF "
+        +
+        formatTrendGeneratedAt(
+            brief.generated_at
+        ).toUpperCase()
+        +
+        " PARIS"
+        +
+        (
+            brief.status !== "fallback"
+            &&
+            candidates > 0
+            &&
+            candidates < SITUATION_BRIEF_LOW_EVENTS
+            ?
+            " · ONLY " + candidates + " EVENTS REVIEWED"
+            :
+            ""
+        )
+    );
+}
+
+
 function renderHeaderSituationBrief() {
 
     const text =
@@ -13146,6 +13369,18 @@ function renderHeaderSituationBrief() {
         return;
     }
 
+    const title =
+        document.getElementById(
+            "headerSituationTitle"
+        );
+
+    if (title) {
+        title.textContent =
+            situationBriefTitle(
+                trendSummaryData
+            );
+    }
+
     if (
         !trendSummaryData
         ||
@@ -13155,6 +13390,32 @@ function renderHeaderSituationBrief() {
             "No 24-hour intelligence brief is stored in the current database. "
             +
             "The situation assessment will be generated during the next successful collection update.";
+        return;
+    }
+
+    // The stored texts of these two cases promise events "shown below", which the
+    // page has no place for, and read as an all-clear when nothing was reviewed.
+    if (
+        trendSummaryData.status === "fallback"
+    ) {
+        text.textContent =
+            "The AI brief was unavailable for this update, so no assessment was written. "
+            +
+            "The map and the event list are not affected.";
+        return;
+    }
+
+    if (
+        Number(
+            trendSummaryData.candidate_events
+        )
+        ===
+        0
+    ) {
+        text.textContent =
+            "No reviewed events were available for this brief. "
+            +
+            "This does not mean that nothing happened.";
         return;
     }
 
@@ -15125,6 +15386,23 @@ function closeDatabaseEventCard() {
 
 const TICKER_TIME_FORMAT = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
 
+// Rolling windows follow the clock and the data stops at the last publication, so
+// "last 24h" shrinks towards zero between runs and reads like a quiet day.
+const MAP_WINDOW_NOTE_MS = 60 * 60 * 1000;
+
+function attackTickerTitle() {
+    if (selectedDays !== 1) return "ATTACKS · LAST " + selectedDays + " DAYS";
+    const published = dataPublishedTime(mapDataFacts);
+    if (published === null || Date.now() - published < MAP_WINDOW_NOTE_MS) return "ATTACKS · LAST 24H";
+    return "ATTACKS · LAST 24H · DATA TO " + formatTrendGeneratedAt(published).toUpperCase() + " PARIS";
+}
+
+function attackTickerEmptyText() {
+    return mapDataOlderThan(selectedDays)
+        ? "No data published since " + collectionStatusDate(dataPublishedTime(mapDataFacts)) + "."
+        : "No attack reported in this period.";
+}
+
 // Scrolling list of the period's attacks on the right of the map. The list is
 // doubled and moved up by exactly one copy for a seamless loop; it only
 // scrolls when it overflows, pauses on hover, and stays still for readers
@@ -15141,13 +15419,13 @@ function renderAttackTicker() {
         .sort((a, b) => b.time - a.time)
         .map(item => item.event);
 
-    if (title) title.textContent = selectedDays === 1 ? "ATTACKS · LAST 24H" : "ATTACKS · LAST " + selectedDays + " DAYS";
-    if (count) count.textContent = events.length.toLocaleString("en-GB");
+    if (title) title.textContent = attackTickerTitle();
+    if (count) count.textContent = !events.length && mapDataOlderThan(selectedDays) ? "—" : events.length.toLocaleString("en-GB");
 
     list.classList.remove("ticker-animated");
 
     if (!events.length) {
-        list.innerHTML = '<li class="ticker-empty">No attack reported in this period.</li>';
+        list.innerHTML = '<li class="ticker-empty">' + escapeHtml(attackTickerEmptyText()) + "</li>";
         return;
     }
 
@@ -15406,11 +15684,14 @@ function refreshTimeSensitiveDashboard() {
     updateFacetCounts();
     if (mappedBefore !== filteredMappedEvents().map(event => event._mapKey).join("\n")) mapRebuildDeferred = true;
     rebuildAgedMap();
-    if (attacksBefore !== filteredAllEvents().map(event => event._mapKey).join("\n")) renderAttackTicker();
+    const tickerTitle = document.getElementById("attackTickerTitle");
+    if (attacksBefore !== filteredAllEvents().map(event => event._mapKey).join("\n")
+        || (tickerTitle && tickerTitle.textContent !== attackTickerTitle())) renderAttackTicker();
     updateTrends();
     updateCommandCenterPanels();
     updateHealthStatusPanel();
     renderHeaderSituationBrief();
+    renderDataStateBadge();
 }
 
 function refreshDashboard() {
@@ -15438,6 +15719,8 @@ function refreshDashboard() {
     updateHealthStatusPanel();
 
     renderHeaderSituationBrief();
+
+    renderDataStateBadge();
 
     // The event list shows the Database panel's results, not the map: it only
     // needs re-rendering when it is open.

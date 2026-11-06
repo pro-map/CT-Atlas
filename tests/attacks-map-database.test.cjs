@@ -377,6 +377,7 @@ test('the ticker badges the points that are not the first report of their attack
     {_mapKey:'d',title:'Legacy',category:'Attacks',published:'2026-09-27T08:00:00Z'},
   ];
   const c=vm.createContext({Date,window:{},selectedDays:7,filteredAllEvents:()=>events,escapeHtml:String,TICKER_TIME_FORMAT:new Intl.DateTimeFormat('en-GB'),
+    attackTickerTitle:()=>'',mapDataOlderThan:()=>false,
     document:{getElementById:id=>id==='attackTickerList'?list:id==='attackTickerViewport'?{clientHeight:100}:null}});
   vm.runInContext(extract('renderAttackTicker'),c);
   c.renderAttackTicker();
@@ -816,6 +817,7 @@ test('an open map ages a RadNuc item out of the 24h badge and marker cache witho
     updateKPIs:()=>{}, updateFacetCounts:()=>{facets=vm.runInContext('mapScopeCandidates().filter(e=>withinDays(e.published,1)).length',c);},
     renderEvents:()=>{draws++;},updateCoverage:()=>{},updateTopLocations:()=>{},renderAttackTicker:()=>{},
     updateTrends:()=>{},updateCommandCenterPanels:()=>{},updateHealthStatusPanel:()=>{},renderHeaderSituationBrief:()=>{},
+    renderDataStateBadge:()=>{},attackTickerTitle:()=>'',
   });
   vm.runInContext('let dashboardClockMinute = -1; let mapPopupOpen = false; let mapSpiderfied = false; let mapRebuildDeferred = false; attacks=[];allEvents=[];recentContextEvents=clockEvents;selectedDays=1;setMapCategoryScope("Radiological/Nuclear");invalidateFilterCache();'+extract('rebuildAgedMap')+extract('refreshTimeSensitiveDashboard'),c);
   assert.equal(vm.runInContext('filteredMappedEvents().length',c),2);

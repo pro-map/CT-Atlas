@@ -124,8 +124,8 @@ test("attack_update rows are skipped: a follow-up restates its attack's toll",()
   const event={title:"At least 11 people were killed in a suicide bombing",categories:["Attacks"]};
   const h=vm.createContext({...c,document:{getElementById:node},allEvents:[event],
     recentContextEvents:[{...event,attack_update:true},{title:"Over 30 arrested",categories:["Arrests"],attack_update:true}],
-    eventCategories:row=>row.categories,headerCasualtyDayStatus:()=>({finished:true,label:"NOV 5, 2026 · FULL DAY (PARIS)",note:""}),
-    parisCasualtyWindowLabel:()=>"NOV 5, 2026 · FULL DAY (PARIS)"});
+    eventCategories:row=>row.categories,mapDataFacts:null,parisYesterdayDateString:()=>"2026-11-05",
+    headerCasualtyDayState:()=>"finished",parisCasualtyWindowLabel:()=>"NOV 5, 2026 · FULL DAY (PARIS)"});
   vm.runInContext(html.slice(html.indexOf("const TERRORIST_SIDE_CASUALTY_WORDS"),html.indexOf("function casualtyNumber("))+
     ["casualtyTextForEvent","explicitStructuredCasualtyValue","casualtyPhraseSide","casualtyNumber","casualtyStatements",
       "extractStrict24hCasualtyBreakdown","extractStrict24hCapturedCount","updateHeaderCasualties24"].map(extract).join("\n")+
