@@ -32,6 +32,21 @@ test("every file the deploy checks or syntax-checks exists",()=>{
 });
 
 
+test("every page asks for one version of a shared script, the one live-smoke pins",()=>{
+  const versions=new Map();
+  for(const page of ["index.html","main.html","crypto.html","sound-check.html","privacy.html"]){
+    for(const [,script,version] of fs.readFileSync(page,"utf8").matchAll(/src="([\w-]+\.js)\?v=([^"]+)"/g)){
+      if(!versions.has(script))versions.set(script,new Set());
+      versions.get(script).add(version);
+    }
+  }
+  for(const [script,seen] of versions)assert.equal(seen.size,1,script+": "+[...seen].join(", "));
+  const smoke=fs.readFileSync(".github/workflows/live-smoke.yml","utf8");
+  const pins=[...smoke.matchAll(/([\w-]+\.js)\?v=([\w-]+)/g)];
+  assert.ok(pins.length>0);
+  for(const [,script,version] of pins)assert.ok(versions.get(script)?.has(version),script+" is pinned at "+version);
+});
+
 test("the UI deploy runs the whole Node suite before it publishes",()=>{
   // Map and Database logic inline in index.html is tested only by this suite,
   // and the mirror now deploys pushed UI files only after this workflow passes.

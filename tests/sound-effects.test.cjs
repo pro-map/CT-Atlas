@@ -53,7 +53,7 @@ test('only module navigation is audible; modified/external clicks and arbitrary 
 });
 test('all workspaces and both hosting builds include sound assets',()=>{
  for(const name of ['main','index','crypto','privacy','sound-check']){
-  const html=fs.readFileSync(name+'.html','utf8');assert.match(html,/sound-effects\.js\?v=20261004c/);if(html.includes('workspace-ui.js'))assert.ok(html.indexOf('sound-effects.js')<html.indexOf('workspace-ui.js'));
+  const html=fs.readFileSync(name+'.html','utf8');assert.match(html,/sound-effects\.js\?v=retired-ip-20261106/);if(html.includes('workspace-ui.js'))assert.ok(html.indexOf('sound-effects.js')<html.indexOf('workspace-ui.js'));
  }
  assert.match(fs.readFileSync('tools/deploy_mirror.sh','utf8'),/sound-effects\.js/);
  assert.match(fs.readFileSync('.github/workflows/deploy-current-ct-atlas-ui.yml','utf8'),/sound-effects\.js/);
