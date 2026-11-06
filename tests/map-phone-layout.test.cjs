@@ -80,3 +80,36 @@ test("the Deep Search panel cannot take the map's height while its stylesheet lo
 test("the status line uses the width of the phone instead of 72 px",()=>{
   assert.match(phoneBlock,/#updated \{\n        flex: 1 1 100% !important;\n        min-width: 0 !important;\n        max-width: none !important;/);
 });
+
+test("on a phone the bell stands beside the timeline, not on it, and the desktop keeps both as they were",()=>{
+  // Measured at 390x844 and 360x740: all 1,024 px2 of the bell lay on the chart, over its
+  // title and first two bars. Above the dock it would cover the attribution, which reaches
+  // 3 px from the dock at 360 px, so the room comes out of the dock's own width.
+  const css=fs.readFileSync("workspace-ui.css","utf8");
+  const bell=css.slice(css.indexOf("#ctSoundEffects{"),css.indexOf("}",css.indexOf("#ctSoundEffects{")));
+  assert.match(bell,/position:fixed;left:14px;bottom:14px;/,"the desktop position lives here, and stays");
+  const size=Number(bell.match(/;width:(\d+)px/)[1]);
+
+  const media=phoneBlock.indexOf("@media (max-width: 640px)");
+  const phoneRule=name=>{
+    const start=phoneBlock.indexOf(name+" {",media);
+    assert.ok(start>media,name+" must be inside the phone rules");
+    return phoneBlock.slice(start,phoneBlock.indexOf("}",start));
+  };
+  const dockLeft=Number(phoneRule("#timelineDock").match(/left: (\d+)px !important;/)[1]);
+  const bellRule=phoneRule("#ctSoundEffects");
+  const bellLeft=Number(bellRule.match(/left: calc\((\d+)px \+ env\(safe-area-inset-left, 0px\)\);/)[1]);
+  assert.ok(bellLeft+size<dockLeft,"the bell must end before the dock starts");
+
+  // The dock's row, including the iPhone home bar: the bell is fixed to the screen.
+  const thin=html.slice(html.indexOf("Timeline is deliberately thin on phones."));
+  const dockBottom=Number(thin.match(/bottom: calc\((\d+)px \+ env\(safe-area-inset-bottom, 0px\)\) !important;/)[1]);
+  const dockHeight=Number(thin.match(/height: (\d+)px !important;/)[1]);
+  const bellBottom=Number(bellRule.match(/bottom: calc\((\d+)px \+ env\(safe-area-inset-bottom, 0px\)\);/)[1]);
+  assert.equal(bellBottom+size/2,dockBottom+dockHeight/2,"centred on the dock");
+
+  // Without !important the bell's rule wins only by coming after the shared stylesheet,
+  // and the dock's only by coming after the thin-timeline rule.
+  assert.ok(html.indexOf("workspace-ui.css")<html.indexOf("PORTRAIT PHONE"));
+  assert.ok(html.indexOf("Timeline is deliberately thin on phones.")<html.indexOf("PORTRAIT PHONE"));
+});
