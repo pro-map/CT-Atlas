@@ -7137,8 +7137,9 @@ function dataPublishedTime(facts) {
     return Number.isFinite(time) ? time : null;
 }
 
-// About one missed run: a publication older than this means one did not happen.
-const MAP_DATA_STALE_MS = 14 * 60 * 60 * 1000;
+// Gaps between publications run up to 18.7 h overnight, because GitHub starts the
+// first slot hours late (5 Oct to 5 Nov). Older than this, a run did not happen.
+const MAP_DATA_STALE_MS = 20 * 60 * 60 * 1000;
 
 function dataStateView(facts, now) {
     const view = collectionStatusView(facts);

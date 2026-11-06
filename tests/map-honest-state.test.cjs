@@ -97,11 +97,12 @@ test("a file without health or counters stays neutral, never green",()=>{
 
 test("the badge warns after one missed run, and says how old the data is",()=>{
   const c=statusContext();
-  assert.equal(c.dataStateView(facts(goodRun),hours(13.9)).text,"UPDATE OK");
-  const missed=c.dataStateView(facts(goodRun),hours(14));
-  assert.deepEqual([missed.level,missed.text],["warn","NO UPDATE FOR 14 H"]);
+  assert.equal(c.dataStateView(facts(goodRun),hours(18.7)).level,"ok","the measured overnight gap is a normal day");
+  assert.equal(c.dataStateView(facts(goodRun),hours(19.9)).text,"UPDATE OK");
+  const missed=c.dataStateView(facts(goodRun),hours(20));
+  assert.deepEqual([missed.level,missed.text],["warn","NO UPDATE FOR 20 H"]);
   assert.deepEqual((({level,text})=>[level,text])(c.dataStateView(facts(goodRun),hours(84))),["bad","NO UPDATE FOR 3 DAYS"]);
-  assert.equal(c.dataStateView(facts(fiveNovember),hours(15)).text,"UPDATE STALLED · 15 H OLD");
+  assert.equal(c.dataStateView(facts(fiveNovember),hours(21)).text,"UPDATE STALLED · 21 H OLD");
   assert.equal(c.dataStateView(facts(fiveNovember),hours(84)).text,"UPDATE STALLED · 3 DAYS OLD");
 });
 
