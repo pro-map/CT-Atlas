@@ -1856,7 +1856,9 @@ function collectReportModel(){
     caseContext:caseContextForReport()
   };
   if(isTransaction){
-    return {...base,counts:{},transactionFields:Object.entries(payload.transaction||{}).map(([key,value])=>[key,flattenField(value)])};
+    const {token_transfers:tokenTransfers,...fields}=payload.transaction||{};
+    return {...base,counts:{},transactionFields:Object.entries(fields).map(([key,value])=>[key,flattenField(value)]),
+      tokenTransfers:Array.isArray(tokenTransfers)?{rows:tokenTransfers,total:fields.token_transfers_total??null,unscreened:fields.token_parties_unscreened||""}:null};
   }
 
   // The graph and its node table are the screen as the analyst arranged it; everything else uses all records.
@@ -2392,6 +2394,8 @@ function sanctionsView(){
   const list=rootScreening?.list||usable[0]?.list||null;
   const source=list?.sources?.[0];
   const unscreened=!rootScreening||rootScreening.status==="unavailable";
+  // A transaction whose receipt was not fully read has token parties nobody checked.
+  const tokenGap=lastPayload.kind==="transaction"?String(rootScreening?.token_parties_unscreened||""):"";
 
   const note=source
     ? (source.name||source.id)+(source.published?" · published "+source.published:"")+" · "+fmtNumber(list.address_count)+" listed addresses"
@@ -2404,6 +2408,8 @@ function sanctionsView(){
       ". The absence of a match below must not be read as a clean result.");
   }else if(entries.length>usable.length){
     warnings.push((entries.length-usable.length)+" of "+entries.length+" analysed wallet(s) could not be screened; results below are partial.");
+  }else if(tokenGap){
+    warnings.push("The token transfer parties of this transaction were NOT screened ("+tokenGap+"). The absence of a match below must not be read as a clean result.");
   }
   if(usable.some(item=>item.status==="stale")){
     warnings.push("The sanctions list is older than 7 days or could not be refreshed; recent designations may be missing.");
@@ -2412,6 +2418,7 @@ function sanctionsView(){
   let badge;
   if(hits.length)badge={cls:"intel-badge high",text:hits.length+(hits.length>1?" MATCHES":" MATCH")};
   else if(unscreened)badge={cls:"intel-badge unscreened",text:"NOT SCREENED"};
+  else if(tokenGap)badge={cls:"intel-badge unscreened",text:"TOKEN PARTIES NOT SCREENED"};
   else badge={cls:"intel-badge clear",text:"NO MATCH"};
 
   const hitViews=hits.map(hit=>{
@@ -2420,7 +2427,8 @@ function sanctionsView(){
     const via=[...hit.via];
     let context="";
     if(hit.role==="party"){
-      context="Input or output of this transaction.";
+      context=lastPayload.chain==="bitcoin"?"Input or output of this transaction."
+        :"Sender, recipient, contract or token transfer party of this transaction. Any contract can emit a token transfer event: check its contract under Transaction Details.";
     }else if(hit.role!=="wallet"){
       context="Seen with "+via.slice(0,3).map(address=>short(address,8)).join(", ")+(via.length>3?" +"+(via.length-3)+" more":"")+
         ": received from "+hit.in_count+"× · sent to "+hit.out_count+"×"+(hit.spent_count?" · spent together "+hit.spent_count+"×":"")+" in the returned sample"+
@@ -2434,13 +2442,13 @@ function sanctionsView(){
   });
 
   let noMatchText="";
-  if(!hits.length&&!unscreened){
+  if(!hits.length&&!unscreened&&!tokenGap){
     const checked=usable.reduce((sum,item)=>sum+Number(item.counterparties_checked||0),0);
     noMatchText="No match among the analysed wallet(s) and "+checked+" screened counterpart"+(checked===1?"y":"ies")+
       ". No match does not mean an address is safe.";
   }
   const scope=rootScreening?.scope_note||usable[0]?.scope_note||"";
-  return {unscreened,badge,note,warnings,hits:hitViews,noMatchText,scope};
+  return {unscreened,incomplete:Boolean(tokenGap),badge,note,warnings,hits:hitViews,noMatchText,scope};
 }
 
 function renderSanctions(){
@@ -2453,7 +2461,7 @@ function renderSanctions(){
   const view=sanctionsView();
   note.textContent=view.note;
   card.classList.toggle("hit",view.hits.length>0);
-  card.classList.toggle("unscreened",view.unscreened&&view.hits.length===0);
+  card.classList.toggle("unscreened",(view.unscreened||view.incomplete)&&view.hits.length===0);
   badge.className=view.badge.cls;
   badge.textContent=view.badge.text;
 
@@ -2497,6 +2505,7 @@ function renderKpis(payload,filteredRows){
       kpi("Chain",payload.chain_name||payload.chain),
       kpi("Value",value==="—"?"—":fmtNumber(value)+" "+asset),
       kpi("Block",tx.block_number??"—"),
+      kpi("Status",tx.execution_result||"—"),
       kpi("Provider",payload.provider||"—")
     ].join("");
     return;
@@ -3652,6 +3661,34 @@ function resetTraceState(payload){
   traceExpanded.add(key);
 }
 
+// Brief: the JSON below keeps every field. A symbol and an amount come only from an allow-listed contract.
+function renderTokenTransfers(payload){
+  const box=document.getElementById("cryptoTokenTransfers");
+  if(!box)return;
+  const tx=payload.transaction||{};
+  const rows=Array.isArray(tx.token_transfers)?tx.token_transfers:[];
+  const gap=String(tx.token_parties_unscreened||"");
+  const total=Number(tx.token_transfers_total)||rows.length;
+  const parts=[];
+  if(gap)parts.push('<div class="sanctions-warning">'+esc("Token transfer parties NOT screened: "+gap)+"</div>");
+  if(rows.length){
+    parts.push('<div class="crypto-card-note">'+esc("Token transfers: "+(total>rows.length?"first "+rows.length+" of "+total+(gap?"":", all screened"):rows.length))+"</div>");
+  }else if(tx.token_call&&!gap){
+    parts.push('<div class="crypto-card-note">'+esc("Called "+tx.token_call.method+" to "+tx.token_call.to+", but no Transfer event was emitted.")+"</div>");
+  }
+  for(const row of rows){
+    const title=row.stable?fmtNumber(row.amount)+" "+row.asset
+      :row.token_id?"Unverified token · ID "+row.token_id
+        :"Unverified token · "+(row.amount_raw??"—")+" base units, decimals unknown";
+    parts.push('<div class="intel-item"><div class="intel-item-head">'+
+      '<div class="intel-title">'+esc(title)+"</div>"+
+      (row.stable?'<span class="intel-badge category">ALLOW-LISTED</span>':'<span class="intel-badge medium">UNVERIFIED</span>')+"</div>"+
+      '<div class="intel-detail">From '+esc(row.from)+"<br>To "+esc(row.to)+"<br>Contract "+esc(row.contract)+"</div></div>");
+  }
+  box.innerHTML=parts.join("");
+  box.hidden=!parts.length;
+}
+
 function render(payload){
   lastPayload=payload;
   absorbExchangeLabels(payload,true);
@@ -3671,6 +3708,7 @@ function render(payload){
     renderKpis(payload,[]);
     const pre=document.getElementById("cryptoTransactionJson");
     if(pre)pre.textContent=JSON.stringify(payload.transaction||{},null,2);
+    renderTokenTransfers(payload);
     renderRisk();
     renderSanctions();
   }else{

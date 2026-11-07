@@ -5,7 +5,7 @@ import { cleanText } from "./shared.js";
 // digital-currency addresses (currently the OFAC SDN list, refreshed by
 // tools/update_sanctions.py into sanctions-crypto.json). Bump whenever the
 // screening output SHAPE changes.
-const SANCTIONS_VERSION = "sanctions-screening-v2-co-inputs";
+const SANCTIONS_VERSION = "sanctions-screening-v3-token-parties";
 
 const SANCTIONS_CACHE_TTL_MS = 30 * 60 * 1000;
 const SANCTIONS_STALE_AFTER_MS = 7 * 24 * 60 * 60 * 1000;
@@ -210,6 +210,10 @@ function screenAnalysis(analysis, state, now = Date.now()) {
     scope_note: SCOPE_NOTE
   };
   if (state?.reason) base.reason = state.reason;
+  // Token transfer parties exist only in a receipt the lookup could not fully read, so "no
+  // match" would cover parties nobody checked.
+  const tokenGap = analysis?.kind === "transaction" ? cleanText(analysis.transaction?.token_parties_unscreened, 300) : "";
+  if (tokenGap) base.token_parties_unscreened = tokenGap;
   if (!state?.index) return base;
 
   const family = chainFamily(analysis?.chain);

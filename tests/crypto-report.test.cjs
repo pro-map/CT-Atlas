@@ -376,6 +376,27 @@ test("the report renders through the PDF engine: every address and hash is drawn
   for(const needle of [SEED,CP1,CP2,HASH(1),HASH(2)])assert.ok(layer.includes(needle),needle+" can be selected and searched in the PDF");
 });
 
+test("a token-transfer lookup lists its transfers briefly, says when their parties were not screened, and renders",async()=>{
+  const usdt={from:"TE2f4FXH8b2u27xgv3sNz3p4Kg8suym6Rw",to:"TGJVc32ig2u8tQsYMLE7KXHT5NDQroaVNU",contract:"TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",asset:"USDT",amount:1000,amount_raw:"1000000000",decimals:6,stable:true};
+  const fake={from:"TE2f4FXH8b2u27xgv3sNz3p4Kg8suym6Rw",to:"TGJVc32ig2u8tQsYMLE7KXHT5NDQroaVNU",contract:"TFakeContract",asset:null,amount:null,amount_raw:"30000000",decimals:null};
+  const model=over=>({generatedAt:"2026-09-26T14:05:33.000Z",subject:{kind:"transaction",chain:"tron",chainName:"TRON",query:HASH(7),provider:"TronGrid"},
+    sanctions:{badge:{text:"1 MATCH"},warnings:[],hits:[],scope:""},transactionFields:[["id",HASH(7)]],counts:{},
+    tokenTransfers:{rows:[usdt,fake],total:2,unscreened:""},...over});
+  const report=R.build(model());
+  assert.deepEqual(headings(report.blocks),["SUMMARY","SANCTIONS-LIST SCREENING","TOKEN TRANSFERS","TRANSACTION DETAILS","METHOD & LIMITATIONS"]);
+  const all=textOf(report.blocks);
+  assert.match(all,/USDT\n1,000\nFrom TE2f4FXH8b2u27xgv3sNz3p4Kg8suym6Rw\nTo TGJVc32ig2u8tQsYMLE7KXHT5NDQroaVNU\nContract TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t/);
+  assert.match(all,/Unverified token\n30000000 base units/);
+  assert.doesNotMatch(all,/first 2 of/);
+  const gap=textOf(R.build(model({tokenTransfers:{rows:[],total:null,unscreened:"the receipt could not be read: down"}})).blocks);
+  assert.match(gap,/Token transfer parties were NOT screened: the receipt could not be read: down/);
+  assert.doesNotMatch(gap,/holds no token Transfer event/);
+  assert.match(textOf(R.build(model({tokenTransfers:{rows:[],total:0,unscreened:""}})).blocks),/The receipt holds no token Transfer event\./);
+  assert.ok(!headings(R.build(model({tokenTransfers:null})).blocks).includes("TOKEN TRANSFERS"),"a Bitcoin lookup reads no receipt");
+  const {result}=await pdfHarness().run(report);
+  assert.ok(result.pages>=1);
+});
+
 test("a transaction-lookup report also renders",async()=>{
   const h=pdfHarness();
   const {result}=await h.run(R.build({generatedAt:"2026-09-26T14:05:33.000Z",subject:{kind:"transaction",chain:"bitcoin",chainName:"Bitcoin",query:HASH(4),provider:"Blockstream Esplora"},

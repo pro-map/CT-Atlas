@@ -241,6 +241,8 @@ function collectAddressEntries(result) {
     for (const field of ["from", "to", "from_address", "to_address", "owner_address", "address"]) add(tx?.[field]);
     for (const address of Array.isArray(tx?.counterparties) ? tx.counterparties : []) add(address);
     for (const address of [...(Array.isArray(tx?.input_addresses) ? tx.input_addresses : []), ...(Array.isArray(tx?.output_addresses) ? tx.output_addresses : [])]) add(address);
+    // A single transaction's every party, token transfers included, before the display caps.
+    for (const address of Array.isArray(tx?.all_addresses) ? tx.all_addresses : []) add(address);
   }
   for (const flow of Array.isArray(result?.flows) ? result.flows : []) {
     add(flow?.from);

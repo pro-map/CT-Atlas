@@ -33,7 +33,7 @@ function harness(fetchImpl,overrides={}){
   vm.runInContext(stripped("cloudflare-worker/address-utils.js"),context);
   vm.runInContext(stripped("cloudflare-worker/sanctions.js"),context);
   Object.assign(context,moduleExports(context,"cloudflare-worker/exchange-behavior.mjs",["detectExchangeBehavior","EXCHANGE_BEHAVIOR_VERSION"]));
-  Object.assign(context,moduleExports(context,"cloudflare-worker/crypto-risk.mjs",["isStablecoin","assessWallet","derivePatterns","deriveAlertSummary"]));
+  Object.assign(context,moduleExports(context,"cloudflare-worker/crypto-risk.mjs",["isStablecoin","stablecoinUnits","assessWallet","derivePatterns","deriveAlertSummary"]));
   vm.runInContext(stripped("cloudflare-worker/crypto.js"),context);
   return vm.runInContext("({detectCryptoInput,analyzeCryptoAddress,runAnalysis,aggregateFlows,buildObservations,handleCrypto,CRYPTO_VERSION})",context);
 }
@@ -475,12 +475,12 @@ const trc20=(id,from,to,over={})=>({
 });
 
 // Answers TronGrid by path and query; a Response answer stands for a failed call.
-function trongrid({account={data:[{balance:5000000,create_time:1600000000000}]},tokens=[],out=[],incoming=[]}={}){
+function trongrid({account={data:[{balance:5000000,create_time:1600000000000}]},tokens=[],out=[],incoming=[],sanctions=SANCTIONS}={}){
   const answer=value=>value instanceof Response?value:json({success:true,data:value});
   const paths=[];
   const fetchImpl=async url=>{
     const parsed=new URL(String(url));
-    if(parsed.hostname==="sanctions.test")return json(SANCTIONS);
+    if(parsed.hostname==="sanctions.test")return json(sanctions);
     paths.push(parsed.pathname+parsed.search);
     if(parsed.pathname.endsWith("/trc20"))return answer(tokens);
     if(parsed.searchParams.get("only_from"))return answer(out);
@@ -551,6 +551,22 @@ test("one failed TRON list is partial, all failing still fails, and a bad shape 
   await assert.rejects(harness(all.fetchImpl).analyzeCryptoAddress(TRON_SEED,"tron",50,ENV));
   const fetchImpl=async url=>new URL(String(url)).hostname==="sanctions.test"?json(SANCTIONS):html();
   await assert.rejects(harness(fetchImpl).analyzeCryptoAddress(TRON_SEED,"tron",50,ENV),/did not return JSON/);
+});
+
+test("a wallet's token rows screen the other party, whether the token was sent or received",async()=>{
+  const listedEvm="0x3333333333333333333333333333333333333333";
+  const evmList={...LIST_WITH_LISTED,addresses:[{a:listedEvm,c:"USDT",f:"evm",e:[0]}]};
+  for(const row of [tokenTx({from:listedEvm,to:ETH}),tokenTx({from:ETH,to:listedEvm})]){
+    const {fetchImpl}=etherscan({balance:OK("0"),txlist:EMPTY,tokentx:OK([row])},evmList);
+    const result=await harness(fetchImpl).analyzeCryptoAddress(ETH,"ethereum",50,ENV);
+    assert.equal(result.sanctions_screening.counterparty_matches[0]?.address,listedEvm,row.from===ETH?"sent":"received");
+  }
+  const tronList={...LIST_WITH_LISTED,addresses:[{a:TRON_OTHER,c:"USDT",f:"tron",e:[0]}]};
+  for(const row of [trc20("in",TRON_OTHER,TRON_SEED),trc20("out",TRON_SEED,TRON_OTHER)]){
+    const {fetchImpl}=trongrid({tokens:[row],sanctions:tronList});
+    const result=await harness(fetchImpl).analyzeCryptoAddress(TRON_SEED,"tron",50,ENV);
+    assert.equal(result.sanctions_screening.counterparty_matches[0]?.address,TRON_OTHER,row.transaction_id);
+  }
 });
 
 test("the monitor's history-only read skips TronGrid's account call",async()=>{

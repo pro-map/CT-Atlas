@@ -1,0 +1,64 @@
+{
+ "about": "TRC-20 USDT transfer() to TGJVc32ig2u8tQsYMLE7KXHT5NDQroaVNU, listed by OFAC (GAZA NOW, SDGT). Found with TronGrid /v1/accounts/.../transactions/trc20.",
+ "source": "api.trongrid.io keyless, /walletsolidity/gettransactionbyid and /walletsolidity/gettransactioninfobyid, fetched 2026-11-07",
+ "transaction": {
+  "raw_data": {
+   "ref_block_bytes": "85a4",
+   "ref_block_hash": "22f24416e56a7545",
+   "expiration": 1696903635000,
+   "contract": [
+    {
+     "parameter": {
+      "value": {
+       "owner_address": "412c87802bf6200170a2b3fa6a793bf9abd22414b7",
+       "contract_address": "41a614f803b6fd780986a42c78ec9c7f77e6ded13c",
+       "data": "a9059cbb0000000000000000000000414576847b1cf999843ba6620815e65a9c5e8a4021000000000000000000000000000000000000000000000000000000003b9aca00"
+      },
+      "type_url": "type.googleapis.com/protocol.TriggerSmartContract"
+     },
+     "type": "TriggerSmartContract"
+    }
+   ],
+   "timestamp": 1696867635000,
+   "fee_limit": 27396600
+  },
+  "signature": [
+   "dc480a0c6a1b6112b42bfb327d2151a2e169bf2473b28d94a3bc87e722df30a323b29a727d14eabf7c39a0758f095c0e3e83cf7ec51926ed371d1b8e3514afc900"
+  ],
+  "ret": [
+   {
+    "contractRet": "SUCCESS"
+   }
+  ],
+  "raw_data_hex": "0a0285a4220822f24416e56a754540b8c0dabab1315aae01081f12a9010a31747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e54726967676572536d617274436f6e747261637412740a15412c87802bf6200170a2b3fa6a793bf9abd22414b7121541a614f803b6fd780986a42c78ec9c7f77e6ded13c2244a9059cbb0000000000000000000000414576847b1cf999843ba6620815e65a9c5e8a4021000000000000000000000000000000000000000000000000000000003b9aca0070b89ec5a9b1319001f893880d",
+  "txID": "0efbfae2ad1d1e07059e637f9ffcf36125424d2093875157abe213b02f60ec83"
+ },
+ "receipt": {
+  "id": "0efbfae2ad1d1e07059e637f9ffcf36125424d2093875157abe213b02f60ec83",
+  "fee": 27255900,
+  "blockNumber": 55412133,
+  "blockTimeStamp": 1696867638000,
+  "contractResult": [
+   "0000000000000000000000000000000000000000000000000000000000000000"
+  ],
+  "contract_address": "41a614f803b6fd780986a42c78ec9c7f77e6ded13c",
+  "receipt": {
+   "energy_fee": 27255900,
+   "energy_usage_total": 64895,
+   "net_usage": 345,
+   "result": "SUCCESS",
+   "energy_penalty_total": 35245
+  },
+  "log": [
+   {
+    "address": "a614f803b6fd780986a42c78ec9c7f77e6ded13c",
+    "topics": [
+     "ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+     "0000000000000000000000002c87802bf6200170a2b3fa6a793bf9abd22414b7",
+     "0000000000000000000000004576847b1cf999843ba6620815e65a9c5e8a4021"
+    ],
+    "data": "000000000000000000000000000000000000000000000000000000003b9aca00"
+   }
+  ]
+ }
+}

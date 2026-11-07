@@ -11,7 +11,7 @@
 // control; a sanctions-list match is an address-string match, not a compliance determination; NOT SCREENED is never
 // presented as clean; absence statements are scoped to the sample, never absolute.
 
-const LIMITS=Object.freeze({transactions:1500,nodes:80,counterparties:40,labels:60,patterns:20,exchangeFindings:60,exposure:60,crosschain:50,alerts:20,notes:30,txDetailFields:60});
+const LIMITS=Object.freeze({transactions:1500,nodes:80,counterparties:40,labels:60,patterns:20,exchangeFindings:60,exposure:60,crosschain:50,alerts:20,notes:30,txDetailFields:60,tokenTransfers:20});
 
 const DISCLAIMER="Transaction linkage is not identity attribution, common ownership, criminality, terrorist financing, or proof of control. Multi-input Bitcoin transactions, smart-contract execution and token routing can require specialist interpretation. Validate significant findings against the source explorer and other evidence before operational use.";
 const EXCHANGE_LIMITATIONS="The 0–100 behaviour score is a rules-based screening score, not a calibrated probability. An exchange-like pattern can also come from bridges, payment services, protocols, or other high-throughput wallets; it does not confirm that the wallet is an exchange or identify its operator.";
@@ -452,6 +452,26 @@ function transactionsSection(model){
   return blocks;
 }
 
+// Present only for chains whose lookup reads a receipt (EVM, TRON).
+function tokenTransfersSection(model){
+  const t=model.tokenTransfers;
+  if(!t)return [];
+  const rows=list(t.rows).slice(0,LIMITS.tokenTransfers);
+  const blocks=[heading("TOKEN TRANSFERS"),small("Decoded from the Transfer events of the transaction receipt. Any contract can emit such an event, so a token name and an amount are given only for allow-listed contracts; for any other token the value is in base units, its decimals unknown.")];
+  if(text(t.unscreened))blocks.push(alert("Token transfer parties were NOT screened: "+text(t.unscreened)));
+  else if(!rows.length)blocks.push(noneRecorded("The receipt holds no token Transfer event."));
+  if(!rows.length)return blocks;
+  blocks.push({type:"table",fontSize:14,columns:[{key:"asset",label:"Token",width:4},{key:"amount",label:"Amount",width:8,align:"right"}],
+    rows:rows.map(row=>({
+      asset:row.stable?text(row.asset):"Unverified token",
+      amount:row.stable?fmtAmount(row.amount):row.token_id!==undefined?"ID "+text(row.token_id):(text(row.amount_raw)||"—")+" base units",
+      detail:"From "+text(row.from)+"\nTo "+text(row.to)+"\nContract "+text(row.contract)
+    }))});
+  const total=num(t.total);
+  if(total!==null&&total>rows.length)blocks.push(alert("This table lists the first "+rows.length+" of "+total+" token transfers; every decoded transfer was screened."));
+  return blocks;
+}
+
 function transactionDetailSection(model){
   const fields=list(model.transactionFields).slice(0,LIMITS.txDetailFields);
   const blocks=[heading("TRANSACTION DETAILS")];
@@ -509,7 +529,7 @@ function build(model){
     ...observationsSection(m)
   ];
   if(isTransaction){
-    blocks.push(...transactionDetailSection(m));
+    blocks.push(...tokenTransfersSection(m),...transactionDetailSection(m));
   }else{
     blocks.push(
       ...autoTraceSection(m),

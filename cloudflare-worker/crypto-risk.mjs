@@ -27,20 +27,22 @@ const DISCLAIMER = "Indicator, not proof. Automated rules applied to a bounded p
 // Only contracts confirmed on 2026-11-05 on an issuer or explorer page. Left out for
 // now: USDT and USDC on BSC and USDT on Polygon (the explorers refused the check),
 // USDC on TRON (Tronscan shows "USD Coin Old"), USDT on Base (BaseScan says Tether
-// does not issue it) and bridged USDC variants.
+// does not issue it) and bridged USDC variants. Symbols and decimals were read from
+// each contract on 2026-11-07 (TRON: TronGrid's token_info), because a transaction
+// receipt carries neither.
 const STABLECOINS = Object.freeze({
-  ethereum: new Set([
-    "0xdac17f958d2ee523a2206206994597c13d831ec7", // USDT: etherscan.io, tether.to
-    "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", // USDC: developers.circle.com
-    "0x6b175474e89094c44da98b954eedeac495271d0f" // DAI: etherscan.io
+  ethereum: new Map([
+    ["0xdac17f958d2ee523a2206206994597c13d831ec7", { symbol: "USDT", decimals: 6 }], // etherscan.io, tether.to
+    ["0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", { symbol: "USDC", decimals: 6 }], // developers.circle.com
+    ["0x6b175474e89094c44da98b954eedeac495271d0f", { symbol: "DAI", decimals: 18 }] // etherscan.io
   ]),
-  polygon: new Set(["0x3c499c542cef5e3811e1192ce70d8cc03d5c3359"]), // USDC: developers.circle.com
-  arbitrum: new Set([
-    "0xaf88d065e77c8cc2239327c5edb3a432268e5831", // USDC: developers.circle.com
-    "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9" // USD₮0: arbiscan.io
+  polygon: new Map([["0x3c499c542cef5e3811e1192ce70d8cc03d5c3359", { symbol: "USDC", decimals: 6 }]]), // developers.circle.com
+  arbitrum: new Map([
+    ["0xaf88d065e77c8cc2239327c5edb3a432268e5831", { symbol: "USDC", decimals: 6 }], // developers.circle.com
+    ["0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9", { symbol: "USD₮0", decimals: 6 }] // arbiscan.io
   ]),
-  base: new Set(["0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"]), // USDC: developers.circle.com
-  tron: new Set(["tr7nhqjekqxgtci8q8zy4pl8otszgjlj6t"]) // USDT: tether.to
+  base: new Map([["0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", { symbol: "USDC", decimals: 6 }]]), // developers.circle.com
+  tron: new Map([["tr7nhqjekqxgtci8q8zy4pl8otszgjlj6t", { symbol: "USDT", decimals: 6 }]]) // tether.to
 });
 
 // Public Etherscan name tags, checked 2026-11-05. Not on the current sanctions list.
@@ -64,6 +66,10 @@ const STABLE_SMALL_PAYMENT = 200;
 
 function isStablecoin(chain, contract) {
   return Boolean(STABLECOINS[chain]?.has(String(contract || "").toLowerCase()));
+}
+
+function stablecoinUnits(chain, contract) {
+  return STABLECOINS[chain]?.get(String(contract || "").toLowerCase()) || null;
 }
 
 function partyKey(chain, address) {
@@ -910,6 +916,7 @@ export {
   THRESHOLDS,
   DISCLAIMER,
   isStablecoin,
+  stablecoinUnits,
   assessWallet,
   derivePatterns,
   deriveAlertSummary

@@ -9,7 +9,7 @@ import { tronAddress, isValidWalletAddress } from "./address-utils.js";
 import { loadSanctions, screenAnalysis, sanctionsObservation } from "./sanctions.js";
 import { resolveExchangeLabels } from "./exchange-addresses.js";
 import { detectExchangeBehavior, EXCHANGE_BEHAVIOR_VERSION } from "./exchange-behavior.mjs";
-import { isStablecoin, assessWallet, derivePatterns, deriveAlertSummary } from "./crypto-risk.mjs";
+import { isStablecoin, stablecoinUnits, assessWallet, derivePatterns, deriveAlertSummary } from "./crypto-risk.mjs";
 
 const CRYPTO_VERSION = "crypto-intel-v6-risk-assessment";
 
@@ -40,6 +40,14 @@ const RATE_LIMIT_RETRY_MS = 1100;
 const RATE_LIMIT_RE = /rate limit|too many requests/i;
 const NO_ROWS_RE = /no (?:\w+ )?(?:transactions|records) found/i;
 const DISPLAY_COUNTERPARTIES = 12;
+const DISPLAY_TOKEN_TRANSFERS = 20;
+// keccak256("Transfer(address,address,uint256)"), shared by ERC-20, ERC-721 and TRC-20.
+const TRANSFER_TOPIC = "ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+const TRANSFER_CALLS = {
+  a9059cbb: { method: "transfer", args: ["to", "value"] },
+  "23b872dd": { method: "transferFrom", args: ["from", "to", "value"] }
+};
+const HEX_WORD_RE = /^[0-9a-f]{64}$/;
 const BTC_PAGE_SIZE = 25;
 const MAX_OUT_VALUES = 30;
 const COINJOIN_MIN_PARTIES = 5;
@@ -574,6 +582,96 @@ function evmRows(target, { nativeRows, tokenRows, internalRows }, chain) {
     .sort((a, b) => String(b.time).localeCompare(String(a.time)));
 }
 
+const bareHex = value => String(value ?? "").replace(/^0x/i, "").toLowerCase();
+const hexWords = hex => /^(?:[0-9a-f]{64})*$/.test(hex) ? hex.match(/.{64}/g) || [] : null;
+
+// A receipt names no token, so a symbol and an amount come only from the allow-list.
+function tokenAmountFields(chainKey, contract, word) {
+  const units = stablecoinUnits(chainKey, contract);
+  const raw = word ? BigInt("0x" + word).toString() : null;
+  return {
+    contract,
+    asset: units ? units.symbol : null,
+    amount: units && raw !== null ? Number(raw) / 10 ** units.decimals : null,
+    amount_raw: raw,
+    decimals: units ? units.decimals : null,
+    ...(units ? { stable: true } : {})
+  };
+}
+
+// Any contract can emit a Transfer event, so every one is kept with its contract and
+// screened. One that cannot be read is counted, so the screening can say it is incomplete.
+function decodeTransferLogs(chainKey, logs, formatAddress) {
+  const rows = [];
+  let undecoded = 0;
+  for (const log of Array.isArray(logs) ? logs : []) {
+    const topics = Array.isArray(log?.topics) ? log.topics.map(bareHex) : [];
+    if (topics[0] !== TRANSFER_TOPIC) continue;
+    const data = hexWords(bareHex(log.data));
+    const contract = bareHex(log.address);
+    // Indexed parties (ERC-20 and TRC-20; ERC-721 adds the token id), or every argument in the data, as early tokens did.
+    const [from, to, value, tokenId] =
+      topics.length === 3 ? [topics[1], topics[2], data?.length === 1 ? data[0] : null]
+        : topics.length === 4 ? [topics[1], topics[2], null, topics[3]]
+          : topics.length === 1 && data?.length === 3 ? data
+            : [];
+    const words = tokenId ? [from, to, tokenId] : [from, to];
+    if (!/^[0-9a-f]{40}$/.test(contract) || !words.every(word => HEX_WORD_RE.test(word || ""))) {
+      undecoded++;
+      continue;
+    }
+    rows.push({
+      from: formatAddress(from.slice(-40)),
+      to: formatAddress(to.slice(-40)),
+      ...tokenAmountFields(chainKey, formatAddress(contract), value),
+      ...(tokenId ? { token_id: BigInt("0x" + tokenId).toString() } : {})
+    });
+  }
+  return { rows, undecoded };
+}
+
+// What the sender asked for. A failed transfer leaves no event, but its recipient is still
+// named here. An ABI address is the low 20 bytes of its word: TRON pads it with 41.
+function decodeTransferCall(chainKey, input, contract, sender, formatAddress) {
+  const data = bareHex(input);
+  const call = TRANSFER_CALLS[data.slice(0, 8)];
+  if (!call || !contract) return null;
+  const args = Object.fromEntries(call.args.map((name, index) => [name, data.slice(8 + index * 64, 72 + index * 64)]));
+  if (!Object.values(args).every(word => HEX_WORD_RE.test(word))) return null;
+  return {
+    method: call.method,
+    from: args.from ? formatAddress(args.from.slice(-40)) : sender,
+    to: formatAddress(args.to.slice(-40)),
+    ...tokenAmountFields(chainKey, contract, args.value)
+  };
+}
+
+// The display is capped; screening and labels read every party through all_addresses.
+// Without the receipt, or with an event left unread, a clean screening would be false.
+function tokenTransferFields(decoded, unread) {
+  const gap = unread ? "the receipt could not be read: " + unread
+    : decoded.undecoded ? decoded.undecoded + " Transfer event(s) could not be decoded" : "";
+  return {
+    token_transfers: decoded.rows.slice(0, DISPLAY_TOKEN_TRANSFERS),
+    token_transfers_total: unread ? null : decoded.rows.length,
+    token_transfers_truncated: decoded.rows.length > DISPLAY_TOKEN_TRANSFERS,
+    ...(gap ? { token_parties_unscreened: gap } : {})
+  };
+}
+
+function transactionParties(addresses, call, decoded) {
+  return [...new Set([
+    ...addresses,
+    ...(call ? [call.from, call.to] : []),
+    ...decoded.rows.flatMap(row => [row.from, row.to, row.contract])
+  ].filter(Boolean))];
+}
+
+// A refused Etherscan call carries the provider's own text where the result should be.
+function providerText(payload) {
+  return typeof payload?.result === "string" ? cleanText(payload.result, 240) : "";
+}
+
 async function analyzeEvm(target, limit, env, options = {}) {
   if (!env.ETHERSCAN_API_KEY) {
     throw new Error("EVM analysis is installed but ETHERSCAN_API_KEY is not configured in the Cloudflare Worker.");
@@ -583,15 +681,32 @@ async function analyzeEvm(target, limit, env, options = {}) {
   const common = { chainid: chain.chainid };
 
   if (target.kind === "transaction") {
-    const payload = await getJson(
-      etherscanUrl({ ...common, module: "proxy", action: "eth_getTransactionByHash", txhash: target.value }, env.ETHERSCAN_API_KEY),
+    const lookup = (action, label) => getJson(
+      etherscanUrl({ ...common, module: "proxy", action, txhash: target.value }, env.ETHERSCAN_API_KEY),
       {},
-      "Etherscan transaction lookup"
+      label
     );
+    const payload = await lookup("eth_getTransactionByHash", "Etherscan transaction lookup");
     if (!payload?.result || typeof payload.result !== "object") {
-      throw new Error("Etherscan did not return this transaction on the selected chain.");
+      // A rate limit or a plan refusal is not a sign that the hash belongs to another chain.
+      const refusal = providerText(payload);
+      throw new Error(refusal ? "Etherscan transaction lookup: " + refusal : "Etherscan did not return this transaction on the selected chain.");
     }
     const tx = payload.result;
+    // Asked only once the transaction exists, one call after the other: the Free plan allows 3 a second.
+    let receipt = null;
+    let unread = "";
+    try {
+      const answer = await lookup("eth_getTransactionReceipt", "Etherscan receipt lookup");
+      if (Array.isArray(answer?.result?.logs)) receipt = answer.result;
+      else unread = providerText(answer) || "Etherscan has no receipt yet; the transaction may be pending.";
+    } catch (error) {
+      unread = cleanText(error?.message || "Etherscan receipt lookup failed.", 240);
+    }
+    const evmAddress = hex => "0x" + hex;
+    const contract = String(tx.to || "").toLowerCase();
+    const decoded = decodeTransferLogs(target.chain, receipt?.logs, evmAddress);
+    const call = decodeTransferCall(target.chain, tx.input, contract, String(tx.from || "").toLowerCase(), evmAddress);
     return {
       chain: target.chain,
       chain_name: chain.name,
@@ -606,11 +721,15 @@ async function analyzeEvm(target, limit, env, options = {}) {
         value: tx.value ? parseInt(tx.value, 16) / 1e18 : 0,
         asset: chain.symbol,
         block_number: tx.blockNumber ? parseInt(tx.blockNumber, 16) : null,
-        input_bytes: tx.input ? Math.max(0, (tx.input.length - 2) / 2) : 0
+        input_bytes: tx.input ? Math.max(0, (tx.input.length - 2) / 2) : 0,
+        execution_result: receipt?.status === "0x1" ? "SUCCESS" : receipt?.status === "0x0" ? "FAILED" : "",
+        ...(call ? { token_call: call } : {}),
+        ...tokenTransferFields(decoded, unread),
+        all_addresses: transactionParties([tx.from, tx.to], call, decoded)
       },
       transactions: [],
       flows: [],
-      observations: ["Transaction-level view from the selected EVM chain. Contract calls and token transfers may require log-level interpretation beyond this first transaction view."],
+      observations: ["Transaction view from the selected EVM chain, with the token Transfer events of its receipt. Any contract can emit such an event, so a symbol and an amount are given only for allow-listed contracts."],
       suspicious_patterns: []
     };
   }
@@ -776,13 +895,29 @@ async function analyzeTron(target, limit, env, options = {}) {
   const headers = tronHeaders(env);
 
   if (target.kind === "transaction") {
-    const [body, receipt] = await Promise.all([
+    const [bodyResult, receiptResult] = await Promise.allSettled([
       getJson(base + "/walletsolidity/gettransactionbyid", { method: "POST", headers, body: JSON.stringify({ value: target.value }) }, "TronGrid transaction"),
       getJson(base + "/walletsolidity/gettransactioninfobyid", { method: "POST", headers, body: JSON.stringify({ value: target.value }) }, "TronGrid transaction receipt")
     ]);
-    if (!body?.txID && !receipt?.id) throw new Error("TronGrid did not return this solidified transaction.");
-    const contract = body?.raw_data?.contract?.[0];
+    // The body names the parties of a TRX transfer, which the receipt does not: without it
+    // nothing can be screened.
+    if (bodyResult.status === "rejected") throw bodyResult.reason;
+    const body = bodyResult.value;
+    if (!body?.txID) throw new Error("TronGrid did not return this solidified transaction.");
+    const receipt = receiptResult.status === "fulfilled" && receiptResult.value?.id ? receiptResult.value : null;
+    const contract = body.raw_data?.contract?.[0];
     const value = contract?.parameter?.value || {};
+    const type = String(contract?.type || "");
+    const owner = tronAddress(value.owner_address);
+    const recipient = tronAddress(value.to_address);
+    const contractAddress = tronAddress(value.contract_address);
+    const tronHex = hex => tronAddress("41" + hex);
+    // Only contract execution writes logs, so a TRX transfer is fully screened without the receipt.
+    const unread = receipt || !/SmartContract$/.test(type) ? ""
+      : receiptResult.status === "rejected" ? cleanText(receiptResult.reason?.message || "TronGrid transaction receipt failed.", 240)
+        : "TronGrid returned no receipt for this transaction.";
+    const decoded = decodeTransferLogs("tron", receipt?.log, tronHex);
+    const call = type === "TriggerSmartContract" ? decodeTransferCall("tron", value.data, contractAddress, owner, tronHex) : null;
     return {
       chain: "tron",
       chain_name: "TRON",
@@ -791,19 +926,23 @@ async function analyzeTron(target, limit, env, options = {}) {
       provider: "TronGrid",
       explorer_url: "https://tronscan.org/#/transaction/" + target.value,
       transaction: {
-        id: body?.txID || receipt?.id || target.value,
-        contract_type: contract?.type || "",
-        owner_address: tronAddress(value.owner_address),
-        to_address: tronAddress(value.to_address),
+        id: body.txID,
+        contract_type: type,
+        owner_address: owner,
+        to_address: recipient,
+        ...(contractAddress ? { contract_address: contractAddress } : {}),
         amount_trx: value.amount ? finiteNumber(value.amount) / 1e6 : null,
-        fee_trx: receipt?.fee ? finiteNumber(receipt.fee) / 1e6 : 0,
+        fee_trx: receipt ? finiteNumber(receipt.fee) / 1e6 : null,
         block_number: receipt?.blockNumber ?? null,
         time: receipt?.blockTimeStamp ? new Date(Number(receipt.blockTimeStamp)).toISOString() : "",
-        execution_result: receipt?.receipt?.result || body?.ret?.[0]?.contractRet || ""
+        execution_result: receipt?.receipt?.result || body.ret?.[0]?.contractRet || "",
+        ...(call ? { token_call: call } : {}),
+        ...tokenTransferFields(decoded, unread),
+        all_addresses: transactionParties([owner, recipient, contractAddress], call, decoded)
       },
       transactions: [],
       flows: [],
-      observations: ["Solidified TRON transaction body and receipt. Smart-contract token movements can require event-level interpretation."],
+      observations: ["Solidified TRON transaction body and receipt, with the TRC-20 Transfer events of the receipt. Any contract can emit such an event, so a symbol and an amount are given only for allow-listed contracts."],
       suspicious_patterns: []
     };
   }
