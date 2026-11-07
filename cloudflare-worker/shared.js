@@ -971,7 +971,9 @@ async function sha256(text) {
   return [...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,"0")).join("");
 }
 
-let euGateMigrationPromise = null;
+// A flag, never a promise. When a request ends its gate call is dropped, so a promise it left here
+// would never settle, and every later gateCall in the isolate would wait on it for good.
+let euGateMigrated = false;
 
 function reportGateStub(env, jurisdiction = "") {
   const namespace = jurisdiction && typeof env.REPORT_GATE?.jurisdiction === "function"
@@ -991,13 +993,17 @@ async function rawGateFetch(stub, path, payload = {}) {
 
 async function ensureEuGateMigrated(env) {
   if (typeof env.REPORT_GATE?.jurisdiction !== "function") return;
-  if (euGateMigrationPromise) return euGateMigrationPromise;
 
-  euGateMigrationPromise = (async () => {
+  // Until one succeeds, each request checks for itself and, if it must, runs its own pass. Passes
+  // can overlap or stop halfway: /migration-import refuses once the gate is marked complete.
+  if (!euGateMigrated) {
     const euStub = reportGateStub(env, "eu");
     const statusResponse = await rawGateFetch(euStub, "/migration-status");
     const status = await statusResponse.json().catch(() => ({}));
-    if (statusResponse.ok && status?.migrated) return;
+    if (statusResponse.ok && status?.migrated) {
+      euGateMigrated = true;
+      return;
+    }
 
     const legacyStub = reportGateStub(env);
     let startAfter = "";
@@ -1032,18 +1038,19 @@ async function ensureEuGateMigrated(env) {
     if (!retireResponse.ok) {
       console.warn("CT Atlas EU migration completed, but legacy Durable Object retirement failed.");
     }
-  })().catch(error => {
-    euGateMigrationPromise = null;
-    throw error;
-  });
+    euGateMigrated = true;
+  }
+}
 
-  return euGateMigrationPromise;
+// For a read that can do without the migration: it neither waits for one nor starts one.
+async function gateRead(env, path, payload) {
+  const stub = reportGateStub(env, typeof env.REPORT_GATE?.jurisdiction === "function" ? "eu" : "");
+  return rawGateFetch(stub, path, payload);
 }
 
 async function gateCall(env, path, payload) {
   await ensureEuGateMigrated(env);
-  const stub = reportGateStub(env, typeof env.REPORT_GATE?.jurisdiction === "function" ? "eu" : "");
-  return rawGateFetch(stub, path, payload);
+  return gateRead(env, path, payload);
 }
 
 async function extractGeminiText(payload) {
@@ -1448,6 +1455,7 @@ export {
   priority,
   sha256,
   gateCall,
+  gateRead,
   extractGeminiText,
   callGemini,
   waitBeforeGeminiRetry

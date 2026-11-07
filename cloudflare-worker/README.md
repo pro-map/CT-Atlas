@@ -140,7 +140,39 @@ tags; they are not added to the reviewed registry automatically. API keys belong
 Cloudflare secrets and must not be committed to Git. The current Worker can keep both
 optional flags unset for a no-new-cost setup.
 
-Deploy `index.js`, `crypto.js`, `crypto-risk.mjs`, `crypto-monitor.js`, `crypto-workspace.js`,
+## Crypto provider status
+
+`GET /health` carries `crypto_provider_status`, which answers "which Crypto provider really
+works right now, with the real keys?". `/health/status` cannot: it asks Etherscan about chain 1
+only, and a plan can allow one chain and refuse another.
+
+`crypto-provider-health.js` runs on the ten-minute cron, at most once an hour, and within ten
+minutes of the first deploy. No route can start it. It makes one small call to Blockstream, to
+Etherscan V2 for each chain in `EVM_CHAINS`, and to TronGrid, through the same request code as a
+real analysis: at most 7 upstream calls an hour, none of them Gemini, and no retry. When
+`TRONSCAN_TAG_LOOKUP_ENABLED` and its key are set, Tronscan takes turns with Blockstream, so the
+two are each up to two hours old and the budget stays 7. A run skips the six-hour monitor's tick,
+which spends the same keys.
+
+Each entry of `providers` has a `status`, its own `checked_at` and a `message` stripped of any
+URL, query string, header or key, at most 120 characters.
+
+| `status` | Meaning |
+| --- | --- |
+| `ok` | The provider answered this key with real data. |
+| `rate_limited` | Over a per-second, daily or shared-pool limit, or a short throttle on the Worker's IP after invalid keys. Usually passes by itself. |
+| `plan_restricted` | This key's tier does not cover the chain. It says nothing about whether the key is valid: Etherscan answers the same to a key it does not know. Read `etherscan_ethereum` for that. |
+| `auth_failed` | The provider refused the key. |
+| `unavailable` | No usable answer: down, timed out, not JSON, or an unknown refusal. |
+| `not_configured` | No key in the Worker, so no call was made. |
+
+`checked_at: null` with empty `providers` means no run has finished yet. `stale: true` means the
+last run is over 130 minutes old, so the result no longer describes the present. `read_failed: true`
+means the Durable Object did not answer within 800 ms; `/health` still answers. It reads the object
+directly, so it never waits for the EU migration or starts it. An ok on Etherscan
+proves the `balance` call for that chain; the status is read through a 60-second cache.
+
+Deploy `index.js`, `crypto.js`, `crypto-risk.mjs`, `crypto-monitor.js`, `crypto-provider-health.js`, `crypto-workspace.js`,
 `exchange-addresses.js`, `exchange-behavior.mjs`, `report-gate.js`, and their existing shared dependencies together to the existing
 Worker. GitHub Pages deploys only the Crypto UI; it does not deploy these Worker
 routes or Durable Object changes.

@@ -36,6 +36,7 @@ import { handleHealthStatus } from "./health-status.js";
 import { handleCryptoWorkspace, CRYPTO_WORKSPACE_VERSION } from "./crypto-workspace.js";
 import { handleExchangeAddressLabels, EXCHANGE_ADDRESS_VERSION } from "./exchange-addresses.js";
 import { runCryptoMonitor, handleCryptoMonitorCheck, CRYPTO_MONITOR_VERSION } from "./crypto-monitor.js";
+import { runCryptoProviderProbe, withCryptoProviderStatus } from "./crypto-provider-health.js";
 import { DISPATCH_CRON, runScheduleDispatcher } from "./schedule-dispatcher.js";
 import { handleSourceImage, SOURCE_PREVIEW_VERSION } from "./source-preview.js";
 import { handleReportIllustration, illustrationCandidates, REPORT_ILLUSTRATION_VERSION } from "./report-illustration.js";
@@ -90,6 +91,7 @@ storyEvents: currentSourced.map((event, index) => ({ ...event, original_title: c
 
 export default {
 async fetch(request, env, ctx) {
+return withCryptoProviderStatus(request, env, async () => {
 // A fresh per-request copy, never a mutation of the shared env object --
 // concurrent requests in the same isolate must never see each other's
 // Origin. See corsHeaders() in shared.js for how this is consumed.
@@ -354,6 +356,7 @@ recordOutcome("failed");
 const status = Number(error?.code) === 429 ? 429 : 503;
 return jsonResponse({ error: cleanText(error?.message || "Report generation failed.", 300), ...(status === 429 ? { retry_after_seconds: 300 } : {}) }, status, env);
 } finally { ctx.waitUntil(gateCall(env, "/release", { permitId, username })); }
+});
 },
 async scheduled(controller, env, ctx) {
   // Cloudflare calls this once per cron expression. Without this branch the ten-minute
@@ -361,6 +364,10 @@ async scheduled(controller, env, ctx) {
   if (controller.cron === DISPATCH_CRON) {
     ctx.waitUntil(
       runScheduleDispatcher(env, controller.scheduledTime).catch(error => console.error("Scheduled dispatch failed", error))
+    );
+    // Its own waitUntil, so the dispatcher never waits for it. An error here could quote a URL, so it is not logged.
+    ctx.waitUntil(
+      runCryptoProviderProbe(env, controller.scheduledTime).catch(() => console.error("Crypto provider probe failed"))
     );
     return;
   }
