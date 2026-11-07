@@ -187,6 +187,9 @@ chain". The analysable chains are now Bitcoin, Ethereum, Polygon, Arbitrum One a
   chain would drop a label, watch or cross-chain link at the next save. The page shows them with
   the chain's name and a link to bscscan.com or basescan.org, from its display-only
   `RETIRED_CHAINS`.
+- A case on a retired chain takes no new seed or path. Neither has a chain of its own, and nothing
+  read now is on that chain, so the page refuses and points to a new case or a cross-chain link.
+  Its case PDF says which read its analysis sections come from.
 - The monitor does not check these watches. The gate keeps them out of the rotation, so they cost
   no batch slot, and reports them as `retired`; the run counts them under `skipped`. Baselines and
   alerts stay as they are. The page marks them NOT CHECKED and leaves them out of CHECK MONITORED

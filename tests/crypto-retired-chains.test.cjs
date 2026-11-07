@@ -368,11 +368,14 @@ function page({search="",respond}={}){
   const source=fs.readFileSync("crypto.js","utf8").replace(/\}\)\(\);\s*$/,`
     globalThis.api={
       applyUrlQuery,run,providerHealth,loadCryptoWorkspace,saveCryptoWorkspace,renderWorkspaceUi,checkMonitored,openCryptoSearch,
-      autoTrace,expandTraceNode,buildNetworkModel,exportCasePdf,crossChainFindings,renderCaseUi,
+      autoTrace,expandTraceNode,buildNetworkModel,exportCasePdf,crossChainFindings,renderCaseUi,renderLabelList,renderAlerts,
+      addSeedToCase,savePathToCase,refreshExchangeProposals,
       reportModel:()=>collectReportModel(),
       retired:()=>RETIRED_CHAINS,
       live(){return cryptoWorkspace;},
       seed(payload){lastPayload=payload;resetTraceState(payload);currentNetworkModel=buildNetworkModel(payload);},
+      paintGraph(){paintGraphFrame(lastPayload,currentNetworkModel);},
+      foundPath(path){lastFoundPath=path;},
       selectCase(id){activeCaseId=id;}
     };
   })();`);
@@ -510,6 +513,112 @@ test("saved alerts, labels and cases show the chain's name and a working explore
   assert.match(detail,/ethereum 0x[a-f0-9…]+ +→ Base 0x/);
 });
 
+test("a seed on a retired case carries its own explorer link in the case panel",async()=>{
+  for(const [chain,,explorer] of RETIRED){
+    const h=page({respond:workspaceAnswer(savedWorkspace({cases:[{...CASE,chain,crosschain_links:[]}]}))});
+    await h.api.loadCryptoWorkspace();
+    h.api.selectCase("c1");
+    h.api.renderCaseUi();
+    const pill=h.el("caseDetail").innerHTML.match(/<span class="case-pill">.*?<\/span>/)[0];
+    assert.ok(pill.includes('href="'+explorer+"/address/"+WALLET+'"'));
+    assert.ok(pill.includes(">"+explorer.split("/")[2]+"</a>"));
+  }
+});
+
+test("labels on a retired chain stay on the list past the cap, and with another wallet open",async()=>{
+  const newer=Array.from({length:60},(_,index)=>({...label("l-"+index,"ethereum"),address:"0x"+String(index).padStart(40,"0")}));
+  const h=page({respond:workspaceAnswer(savedWorkspace({labels:[...newer,label("l-bsc","bsc"),label("l-base","base")]}))});
+  await h.api.loadCryptoWorkspace();
+  const list=()=>h.el("cryptoLabelList").innerHTML;
+  const items=()=>list().split('<div class="intel-item">').length-1;
+  const assertRetiredListed=()=>{
+    for(const [chain,name,explorer] of RETIRED){
+      assert.match(list(),new RegExp('intel-meta">'+name+" · EXCHANGE"));
+      assert.ok(list().includes('href="'+explorer+"/address/"+WALLET+'"'));
+      assert.ok(list().includes('data-id="l-'+chain+'"'),"the analyst can still remove it");
+    }
+  };
+  assert.equal(items(),52,"the cap still holds for chains a wallet can bring back");
+  assert.ok(list().includes('data-id="l-49"'));
+  assert.equal(list().includes('data-id="l-50"'),false);
+  assertRetiredListed();
+
+  h.api.seed(liveWallet());
+  h.api.renderLabelList();
+  assert.equal(items(),2,"with a wallet open, only what is visible on it, and these");
+  assertRetiredListed();
+  assert.equal(h.api.live().labels.length,62);
+});
+
+test("a retired alert stays on the list past the cap, once, and the cap holds for the rest",async()=>{
+  const newer=Array.from({length:35},(_,index)=>({...ALERT,id:"e"+index,chain:"ethereum",watch_id:"w-live",tx_id:""}));
+  const items=html=>html.split('class="intel-item alert-item').length-1;
+  const late=page({respond:workspaceAnswer(savedWorkspace({alerts:[...newer,ALERT]}))});
+  await late.api.loadCryptoWorkspace();
+  const html=late.el("cryptoAlerts").innerHTML;
+  assert.equal(items(html),31);
+  assert.ok(html.includes('href="https://bscscan.com/tx/'+TX+'"'));
+  assert.ok(html.includes('data-alert-ack="a1"'),"it can still be acknowledged");
+  assert.equal(html.includes('data-alert-ack="e30"'),false);
+
+  const early=page({respond:workspaceAnswer(savedWorkspace({alerts:[ALERT,...newer]}))});
+  await early.api.loadCryptoWorkspace();
+  assert.equal(items(early.el("cryptoAlerts").innerHTML),30);
+});
+
+test("an exchange proposal on a retired chain reaches the admin by the chain's name",async()=>{
+  const proposals=RETIRED.map(([chain])=>({id:"p-"+chain,chain,address:WALLET,name:"Binance",wallet_role:"HOT_WALLET",confidence:"MEDIUM",source_title:"Disclosure"}));
+  const h=page({respond:call=>call.url.endsWith("/crypto-address-labels")?{json:{ok:true,proposals}}:{json:{}}});
+  await h.api.refreshExchangeProposals();
+  const html=h.el("exchangeProposalList").innerHTML;
+  for(const [,name] of RETIRED)assert.match(html,new RegExp('intel-meta">'+name+" · HOT_WALLET"));
+});
+
+// ---------------------------------------------------------------- a retired case takes no new wallets
+
+for(const [chain,name] of RETIRED){
+  test("a wallet read on Ethereum cannot join a "+name+" case, as a seed or on a path, and the case stays as it was",async()=>{
+    const saved=savedWorkspace({cases:[{...CASE,chain}]});
+    const h=page({respond:workspaceAnswer(saved)});
+    await h.api.loadCryptoWorkspace();
+    h.api.selectCase("c1");
+    h.api.seed(liveWallet());
+    h.calls.length=0;
+    const refused=new RegExp("^Not added: this case is on "+name+", no longer analysed, and this read is on Ethereum\\..*open a new case, or save a cross-chain link");
+
+    h.api.addSeedToCase();
+    assert.match(h.el("cryptoStatus").textContent,refused);
+    assert.match(h.el("cryptoStatus").className,/warning/);
+
+    h.el("cryptoStatus").textContent="";
+    h.api.foundPath([LIVE_WALLET,"0x"+"d".repeat(40)]);
+    h.api.savePathToCase();
+    assert.match(h.el("cryptoStatus").textContent,refused);
+
+    await new Promise(resolve=>setTimeout(resolve,10));
+    assert.deepEqual(plain(h.api.live().cases),saved.cases);
+    assert.deepEqual(h.calls,[],"nothing to save");
+  });
+}
+
+test("a case on a live chain still takes seeds and paths, and an empty one still takes the chain it was seeded from",async()=>{
+  const h=page({respond:workspaceAnswer(savedWorkspace({cases:[{...structuredClone(CASE),id:"c-live",chain:"polygon"},{...structuredClone(CASE),id:"c-new",chain:""}]}))});
+  await h.api.loadCryptoWorkspace();
+  h.api.seed(liveWallet());
+  h.api.foundPath([LIVE_WALLET,"0x"+"d".repeat(40)]);
+  for(const [id,chain] of [["c-live","polygon"],["c-new","ethereum"]]){
+    h.api.selectCase(id);
+    h.api.addSeedToCase();
+    assert.equal(h.el("cryptoStatus").textContent,"Current seed added to case.");
+    h.api.savePathToCase();
+    assert.equal(h.el("cryptoStatus").textContent,"Current path saved to case.");
+    const item=h.api.live().cases.find(entry=>entry.id===id);
+    assert.deepEqual(plain(item.seed_addresses),[WALLET,LIVE_WALLET]);
+    assert.equal(item.saved_paths.length,2);
+    assert.equal(item.chain,chain);
+  }
+});
+
 test("an explorer link is only ever a well-formed address or hash on a retired chain",async()=>{
   const odd='0x"><img src=x onerror=alert(1)>';
   const h=page({respond:workspaceAnswer(savedWorkspace({alerts:[{...ALERT,tx_id:"",address:odd}],
@@ -531,29 +640,86 @@ test("the graph and findings name a retired destination in full",async()=>{
   assert.equal(finding.destination_chain,"Base");
 });
 
-test("the case PDF and the full report name the chains and carry their explorers, with no analysis",async()=>{
+test("a graph node for a link to a retired chain is named in full, in its tooltip and on its label",async()=>{
+  const unnamed=(id,chain)=>({...link(id,"ethereum",LIVE_WALLET,chain,WALLET),service:""});
+  const h=page({respond:workspaceAnswer(savedWorkspace({cases:[{...CASE,crosschain_links:RETIRED.map(([chain])=>unnamed("x-"+chain,chain))}]}))});
+  await h.api.loadCryptoWorkspace();
+  h.api.selectCase("c1");
+  h.api.seed(liveWallet());
+  h.api.paintGraph();
+  const svg=h.el("flowGraph").innerHTML;
+  for(const [chain,name] of RETIRED){
+    const node=svg.match(new RegExp('data-to-chain="'+chain+'"[\\s\\S]*?</g>'))[0];
+    assert.ok(node.includes("<title>Cross-chain link · MEDIUM · "+name+" · "+WALLET+"</title>"));
+    assert.ok(node.includes('class="graph-label" x="0" y="-2" text-anchor="middle">'+name+"</text>"));
+  }
+});
+
+// Each block's text, so a line can be read in its place rather than found anywhere in the file.
+async function casePdf(h){
   const docs=[];
-  const h=page({respond:workspaceAnswer(savedWorkspace())});
   h.context.window.CTAtlasPdf={download:async doc=>{docs.push(doc);return {};}};
+  await h.api.exportCasePdf();
+  return plain(docs[0].blocks).map(block=>block.text||"");
+}
+
+test("the case PDF and the full report name the chains and carry their explorers, with no analysis",async()=>{
+  const h=page({respond:workspaceAnswer(savedWorkspace())});
   await h.api.loadCryptoWorkspace();
   h.api.selectCase("c1");
 
-  await h.api.exportCasePdf();
-  const pdf=plain(docs[0].blocks).map(block=>block.text||"").join("\n");
+  const blocks=await casePdf(h);
+  const pdf=blocks.join("\n");
   assert.match(pdf,/CHAIN: BNB Smart Chain \(no longer analysed\)/);
-  assert.ok(pdf.includes("BNB Smart Chain: "+WALLET+" · https://bscscan.com/address/"+WALLET),"the seed and the link");
+  assert.equal(blocks[blocks.indexOf("SEED ADDRESSES")+1],WALLET+" · https://bscscan.com/address/"+WALLET,"the seed, under the case's CHAIN line");
+  assert.ok(pdf.includes("BNB Smart Chain: "+WALLET+" · https://bscscan.com/address/"+WALLET),"the link, which has a chain of its own");
   assert.ok(pdf.includes("→ Base: "+WALLET+" · https://basescan.org/address/"+WALLET));
   assert.ok(pdf.includes("→ ethereum: "+LIVE_WALLET),"a live chain reads as before");
 
   h.api.seed(liveWallet());
   const model=plain(h.api.reportModel());
-  assert.equal(model.caseContext.chain,"BNB Smart Chain");
+  assert.equal(model.caseContext.chain,"BNB Smart Chain (no longer analysed)");
   assert.equal(model.caseContext.crosschain[0].from,"BNB Smart Chain: "+WALLET+" · https://bscscan.com/address/"+WALLET);
   assert.equal(model.caseContext.crosschain[1].to,"Base: "+WALLET+" · https://basescan.org/address/"+WALLET);
   const report=Report.build(model).blocks.map(block=>block.text||"").join("\n");
-  assert.ok(report.includes("Bridge case · OPEN · BNB Smart Chain"));
+  assert.ok(report.includes("Bridge case · OPEN · BNB Smart Chain (no longer analysed)"));
   assert.ok(report.includes("https://bscscan.com/address/"+WALLET));
   assert.deepEqual(analyses(h.calls),[]);
+});
+
+test("the case PDF never states a chain for a seed, even an old one that may not be on the case's chain",async()=>{
+  const h=page({respond:workspaceAnswer(savedWorkspace({cases:[{...CASE,seed_addresses:[WALLET,LIVE_WALLET],crosschain_links:[]}]}))});
+  await h.api.loadCryptoWorkspace();
+  h.api.selectCase("c1");
+  const blocks=await casePdf(h);
+  assert.equal(blocks.join("\n").includes("BNB Smart Chain: "),false);
+  assert.equal(blocks[blocks.indexOf("SEED ADDRESSES")+1].split("\n")[1],LIVE_WALLET+" · https://bscscan.com/address/"+LIVE_WALLET);
+});
+
+test("the case PDF of a retired case says what its analysis sections really read",async()=>{
+  for(const [chain,name] of RETIRED){
+    const h=page({respond:workspaceAnswer(savedWorkspace({cases:[{...CASE,chain}]}))});
+    await h.api.loadCryptoWorkspace();
+    h.api.selectCase("c1");
+    const note=blocks=>blocks[blocks.indexOf("SEED ADDRESSES")+2];
+    assert.equal(note(await casePdf(h)),"ANALYSIS SECTIONS: nothing was open at export. "+name+" was not read.");
+    h.api.seed(liveWallet());
+    const blocks=await casePdf(h);
+    assert.equal(note(blocks),"ANALYSIS SECTIONS: Ethereum · "+LIVE_WALLET+", open at export. "+name+" was not read.");
+    assert.ok(blocks.indexOf(note(blocks))<blocks.indexOf("RISK INDICATORS (AUTOMATED, NOT A FINDING)"),"above the first section it speaks for");
+  }
+});
+
+test("the case PDF and the report of a live case read as before: no note, no suffix, no explorer",async()=>{
+  const h=page({respond:workspaceAnswer(savedWorkspace({cases:[{...CASE,chain:"ethereum",seed_addresses:[LIVE_WALLET],crosschain_links:[]}]}))});
+  await h.api.loadCryptoWorkspace();
+  h.api.selectCase("c1");
+  h.api.seed(liveWallet());
+  const blocks=await casePdf(h);
+  assert.equal(blocks[blocks.indexOf("SEED ADDRESSES")+1],LIVE_WALLET);
+  assert.ok(blocks.includes("STATUS: OPEN · CHAIN: ethereum"));
+  assert.equal(blocks.some(text=>text.startsWith("ANALYSIS SECTIONS")),false);
+  assert.equal(plain(h.api.reportModel()).caseContext.chain,"ethereum");
 });
 
 for(const [title,revision] of [["CHECK MONITORED NOW",4],["the check against a Worker without revisions",null]]){

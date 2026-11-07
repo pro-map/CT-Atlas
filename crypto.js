@@ -140,11 +140,13 @@ function retiredExplorerLink(chain,value){
   const url=retiredExplorerUrl(chain,value);
   return url?'<a class="tx-link" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+esc(url.split("/")[2])+"</a>":"";
 }
-// One saved wallet as a PDF line: the chain's name, plus the explorer once the tool cannot read it.
-function chainEntry(chain,address){
-  const url=retiredExplorerUrl(chain,address);
-  return chainName(chain)+": "+address+(url?" · "+url:"");
+function explorerSuffix(chain,value){
+  const url=retiredExplorerUrl(chain,value);
+  return url?" · "+url:"";
 }
+// One saved wallet with a chain of its own as a PDF line: its name, plus the explorer once the tool cannot read it.
+function chainEntry(chain,address){return chainName(chain)+": "+address+explorerSuffix(chain,address);}
+function caseChainText(chain){return chainName(chain)+(retiredChain(chain)?" (no longer analysed)":"");}
 
 async function verifySession(){
   if(!user()||!token()){redirectToLogin();return false;}
@@ -347,10 +349,9 @@ function scheduleWorkspaceSave(){
   workspaceSaveTimer=setTimeout(()=>saveCryptoWorkspace(),250);
 }
 
-// Saved labels and watches on a retired chain are still compared by this key.
 function normalizeAddressForChain(address,chain){
   const value=String(address||"");
-  return ["ethereum","bsc","polygon","arbitrum","base"].includes(chain)?value.toLowerCase():value;
+  return ["ethereum","polygon","arbitrum"].includes(chain)?value.toLowerCase():value;
 }
 
 function exchangeLabelKey(address,chain){
@@ -1368,7 +1369,10 @@ function runPathFinder(){
 function renderLabelList(){
   const box=document.getElementById("cryptoLabelList");
   if(!box)return;
-  const labels=lastPayload?visibleRelevantLabels():(cryptoWorkspace.labels||[]).slice(0,50);
+  const stored=cryptoWorkspace.labels||[];
+  const onRetiredChain=label=>retiredChain(label.chain);
+  // No read can bring these back on screen, so neither the open wallet nor the cap may hide them.
+  const labels=[...(lastPayload?visibleRelevantLabels():stored.filter(label=>!onRetiredChain(label)).slice(0,50)),...stored.filter(onRetiredChain)];
   if(!labels.length){
     box.innerHTML='<div class="intel-result">No sourced labels are attached to the currently visible network.</div>';
     return;
@@ -1626,9 +1630,17 @@ function activeCase(){
   return (cryptoWorkspace.cases||[]).find(item=>item.id===activeCaseId)||null;
 }
 
+// Seeds and paths have no chain but their case's, and nothing read now can be on a retired one.
+function refuseRetiredCase(item){
+  if(!retiredChain(item.chain))return false;
+  setStatus("Not added: this case is on "+chainName(item.chain)+", no longer analysed, and this read is on "+(lastPayload?.chain_name||lastPayload?.chain)+". The case would name the wrong chain: open a new case, or save a cross-chain link, which names its own chains.","warning");
+  return true;
+}
+
 function addSeedToCase(){
   const item=activeCase();
   if(!item||!lastPayload?.query){setStatus("Select a case first.","warning");return;}
+  if(refuseRetiredCase(item))return;
   item.seed_addresses=Array.isArray(item.seed_addresses)?item.seed_addresses:[];
   if(!item.seed_addresses.includes(lastPayload.query))item.seed_addresses.push(lastPayload.query);
   item.chain=item.chain||lastPayload.chain;
@@ -1641,6 +1653,7 @@ function savePathToCase(){
   const item=activeCase();
   if(!item){setStatus("Select a case first.","warning");return;}
   if(!lastFoundPath||lastFoundPath.length<2){setStatus("Run Path Finder first, then save the resulting path.","warning");return;}
+  if(refuseRetiredCase(item))return;
   item.saved_paths=Array.isArray(item.saved_paths)?item.saved_paths:[];
   item.saved_paths.unshift({
     id:makeId("path"),
@@ -1729,9 +1742,11 @@ async function exportCasePdf(){
   const blocks=[
     {text:"CASE SUMMARY",type:"heading"},
     {text:item.description||"No description provided.",type:"body"},
-    {text:"STATUS: "+(item.status||"OPEN")+" · CHAIN: "+(chainName(item.chain)||lastPayload?.chain||"—")+(retiredChain(item.chain)?" (no longer analysed)":""),type:"meta"},
+    {text:"STATUS: "+(item.status||"OPEN")+" · CHAIN: "+(caseChainText(item.chain)||lastPayload?.chain||"—"),type:"meta"},
     {text:"SEED ADDRESSES",type:"heading"},
-    {text:(item.seed_addresses||[]).map(address=>retiredExplorerUrl(item.chain,address)?chainEntry(item.chain,address):address).join("\n")||"No seeds saved.",type:"body"},
+    {text:(item.seed_addresses||[]).map(address=>address+explorerSuffix(item.chain,address)).join("\n")||"No seeds saved.",type:"body"},
+    // The sections below read whatever is open, which on a retired case is always another chain.
+    ...(retiredChain(item.chain)?[{text:"ANALYSIS SECTIONS: "+(lastPayload?(lastPayload.chain_name||lastPayload.chain)+" · "+lastPayload.query+", open at export":"nothing was open at export")+". "+chainName(item.chain)+" was not read.",type:"meta"}]:[]),
     ...(risk?window.CTAtlasCryptoReport?.riskSection?.({risk})||[]:[]),
     {text:"BEHAVIORAL PATTERNS",type:"heading"},
     ...((patterns.length?patterns:[{name:"No configured pattern threshold crossed",metric:"",detail:""}]).map(p=>({
@@ -1816,7 +1831,7 @@ function caseContextForReport(){
   const item=activeCase();
   if(!item)return null;
   return {
-    name:item.name,status:item.status,chain:chainName(item.chain),description:item.description,
+    name:item.name,status:item.status,chain:caseChainText(item.chain),description:item.description,
     notes:(item.notes||[]).map(note=>note.text),
     savedPaths:(item.saved_paths||[]).map(path=>({name:path.name,nodes:path.nodes||[]})),
     offchain:(item.offchain_nodes||[]).map(node=>({type:node.type,label:node.label,linked:node.linked_address,notes:node.notes})),
@@ -2197,7 +2212,9 @@ async function checkMonitored(){
 function renderAlerts(){
   const box=document.getElementById("cryptoAlerts");
   if(!box)return;
-  const alerts=(cryptoWorkspace.alerts||[]).slice(0,30);
+  const stored=cryptoWorkspace.alerts||[];
+  // Past the cap too: with no read of the chain, no report can bring these back.
+  const alerts=[...stored.slice(0,30),...stored.slice(30).filter(item=>retiredChain(item.chain))];
   if(!alerts.length){box.innerHTML='<div class="intel-result">No saved monitoring alerts.</div>';return;}
   box.innerHTML=alerts.map(item=>{
     const severity=esc(String(item.severity||"low").toLowerCase());
