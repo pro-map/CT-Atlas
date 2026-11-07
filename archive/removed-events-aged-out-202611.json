@@ -1,5 +1,5 @@
 {
-  "removed_at": "2026-11-06T17:39:15.173641+00:00",
+  "removed_at": "2026-11-07T16:42:46.588883+00:00",
   "reason": "Aged out of the map's 180-day retention; kept for the background archive.",
   "events": [
     {
@@ -723,6 +723,139 @@
       "country": "Somalia",
       "ai_relevance_score": 75,
       "ai_relevance_reason": "Reports a concrete instance of vessel hijacking by pirates.",
+      "related_articles": []
+    },
+    {
+      "id": "9938952acc2af90f",
+      "incident_id": "inc-439a1374f79d93cc",
+      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQNmd4ZU1YcXpwVDlBSjNLdVdzSmEwYVlBcHhZejRZMGRLZFllcGhKSXc1cnBzSlFneVZaTEtwWnpBb3JpblU1QTV0c1NvR0hJV1dIUjNNTktRd1Fnb1piY21pR0REaEdYQzlvNjdxMkpHNi1GekFaY2U3c2lvdHpsS1ZyZWtxNlhZZHE5bFcyMVM4ZUx5Wm1ZOFNUU2M0MWRGUEZSY194Z0dHWndNVzYweENTOE5JWTdzTXRGOWdENA?oc=5",
+      "title": "Troops Ambush Terrorists in Kogi State, Neutralise One, Recover Arms and Cash",
+      "summary": "Nigerian troops successfully ambushed terrorists in Kogi State, neutralizing one operative and recovering arms and cash.",
+      "original_title": "Troops Ambush Terrorists in Kogi State, Neutralise One, Recover Arms and Cash",
+      "original_language": "en",
+      "source": "zagazola.org",
+      "published": "2026-05-11T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Weapons"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "region": "Kogi State",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a successful troop ambush neutralizing a terrorist and seizing weapons.",
+      "related_articles": [
+        {
+          "title": "Troops Ambush Terrorists, Neutralise One, Recover Arms and Logistics in Borno State",
+          "original_title": "Troops Ambush Terrorists, Neutralise One, Recover Arms and Logistics in Borno State",
+          "original_language": "en",
+          "summary": "Nigerian troops successfully ambushed terrorists in Borno State, neutralizing one operative and recovering weapons and logistics supplies.",
+          "published": "2026-05-11T07:00:00+00:00",
+          "source": "zagazola.org",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxObUpidW1lVE9HRXJ6T0E4RVFmTFpEdG4tR2xNR3NBOWxDRWVwTXVBTFEySS1MTDQ3Z05jQjFqZW93VTREV1hzS3kzOGpCdmpYV3hOWm1CNHl4Z0d5TEMwVHJlZ1kxb19xOXZjYmhoX09QamJsRUlRWkRfRGZfQTd0QkZvN0Y4V19xVGVKYmpWN0VzZlE1akZOU3ByRTZ0UTg2U3U1MHRjWUQ1T1RMb3JaQWtadkF6YW9kVjdMdFpDeTkzend6?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "bbbda70884868f6e",
+      "incident_id": "inc-e914e5b9be34edd9",
+      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE5CR2dVeDN3ak9DWVZOUm54dTdpdW9xTFlPNXFOeXpjQmEweEFoVWZfWXV1SzFMclVRRVB6bWZzM2NsSGxzV29YQQ?oc=5",
+      "title": "Plot to coerce girl into carrying out terrorist attack in Islamabad thwarted, CM Bugti says",
+      "summary": "Pakistani authorities thwarted a terrorist plot involving the coercion of a young girl to execute a suicide attack in Islamabad.",
+      "original_title": "Plot to coerce girl into carrying out terrorist attack in Islamabad thwarted, CM Bugti says",
+      "original_language": "en",
+      "source": "Dawn",
+      "published": "2026-05-11T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action",
+        "Attacks",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Pakistan",
+      "ai_relevance_score": 87,
+      "ai_relevance_reason": "Reports a concrete counter-terrorism disruption of a terrorist plot.",
+      "related_articles": []
+    },
+    {
+      "id": "c2bac2fd8792024f",
+      "incident_id": "inc-08799437e0a0c297",
+      "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxOQS1tLVVLSHc2Y21BRGN1VlB0dXVveVk5Z0NEblJuTW9tRW14OWk4OG4ybVhtbDJvR21WSWVpMV9Ud2pKUzVQeGhGNjhOMkxFLUhBQ3hOakZ3OUg2N2dESlJ5bEgtTmRraXdCRXFybVRsWWtPSXZpdzluQTNSdm1vWUVIVnFoMHhaXy04WUV2bDd1YWh6Z19fYXdlTmpHZjk2d2RKN1h5WFhpZDJCenJIeVdiQnY4ajlTSlE0dURiZFpqX3g1WkdsOWdHRVoteXVzSENhNVRTZFdyUXRDNEJZUHVSUkVMbDdsX3c?oc=5",
+      "title": "Hamburg: 17-year-old arrested for preparing explosive attack",
+      "summary": "A 17-year-old was arrested in Hamburg on suspicion of preparing a serious violent act involving explosives, following an intelligence tip.",
+      "original_title": "Hamburg: 17-Jähriger wegen Vorbereitung von Sprengstoffanschlag festgenommen",
+      "original_language": "de",
+      "source": "Spiegel",
+      "published": "2026-05-11T07:00:00+00:00",
+      "category": "Arrests",
+      "categories": [
+        "Arrests",
+        "Weapons",
+        "Counter Terrorism Action",
+        "Chemicals and Explosives"
+      ],
+      "actor_group": "",
+      "primary_event_type": "ARREST",
+      "country": "Germany",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Operational arrest and disruption of an explosive attack plot based on intelligence.",
+      "related_articles": [
+        {
+          "title": "Terror suspect in Hamburg: Tip came from Iraqi intelligence",
+          "original_title": "Terrorverdächtiger in Hamburg: Hinweis kam vom irakischen Geheimdienst",
+          "original_language": "de",
+          "summary": "Investigations reveal that the tip leading to the arrest of the terror suspect in Hamburg originated from Iraqi intelligence services.",
+          "published": "2026-05-13T07:00:00+00:00",
+          "source": "NDR.de",
+          "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNeGFEbFZveUVpN2t1cFgybFR1Rzc1cUtpU00xQ3JfR0JDdGZwcTJXWkF0UXctX1ZVTHNzczlPdzJ4cG96M0NGZVd4S0h4Ry1fQ09fbmUwQzFmZzFoeTh5Sml1SFRpTHlRRV9nVWVMczRkMmVmX2k5d0JDOGZnTjhHYXJCM0JFV2plX1oxZk1fNHRUT0M3Q2JxajdmY21HSjFPeHQtTDRrcFNDLTc0UDJKR3JGUVlScTUxOGJKTml2SEt2VjQ?oc=5"
+        }
+      ]
+    },
+    {
+      "id": "cb431a66c4e44013",
+      "incident_id": "inc-746f3e5f9e5abc47",
+      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNU1NOMFN6elJmcnBNUmJoNHVYV2g3ODRuTGZjYVRhY3FlTWZmcV9zdmNERHUwSnZUYkRzelFXQkNnQmM3UHF6ZzAydlltbXNWa0hIbDBKdlZQZ1lPdjduUnVmRXhEZ2FraU1zQkNILUFna25OcmttMGdPSXhXN0pmMUtveWxGTmxjZU9wS2lR?oc=5",
+      "title": "Hijacked dhows indicate new piracy threats in Somalia",
+      "summary": "Reports of hijacked dhows confirm an increase in piracy activity in Somalia.",
+      "original_title": "Hijacked dhows raise alarm over new piracy threats in Somalia",
+      "original_language": "en",
+      "source": "safety4sea",
+      "published": "2026-05-11T07:00:00+00:00",
+      "category": "Maritime Piracy",
+      "categories": [
+        "Maritime Piracy"
+      ],
+      "actor_group": "",
+      "primary_event_type": "PIRACY",
+      "country": "Somalia",
+      "ai_relevance_score": 60,
+      "ai_relevance_reason": "Concrete reports of pirate hijacking incidents.",
+      "related_articles": []
+    },
+    {
+      "id": "b8c4b3494633856a",
+      "incident_id": "inc-5aaa748e6bac3761",
+      "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQSVhYUEh0NHVONWxLcmVjUnlnV3JtZGVZZjVnNTZuSWxLVVpVSTc3THdZY3drcUcwQndnRXhQSk9aWjZzTUhhSFFqdXptLVNBYkQ0T2FrUEY0UEZmWEtGZklvV0xYUldDb3IwRk5PUjRYMUNSU0FsODNwTVNNZ3RVUWhKb2U0R3BpWDBHYzczZVF2RDBTUnUzTV9fOTZwSldLdnRaOGZMTklwMEFCMHc5Wl9tQ25MV2hTT1owOGkyOFlnQjZUVlE?oc=5",
+      "title": "Troops neutralize terrorist and recover supplies in Adamawa ambush",
+      "summary": "Nigerian military forces killed a terrorist and recovered logistics supplies during an ambush operation in Adamawa State.",
+      "original_title": "Troops Neutralise Terrorist, Recover Logistics Supplies in Adamawa Ambush Operation",
+      "original_language": "en",
+      "source": "ZAgazola",
+      "published": "2026-05-11T07:00:00+00:00",
+      "category": "Counter Terrorism Action",
+      "categories": [
+        "Counter Terrorism Action"
+      ],
+      "actor_group": "",
+      "primary_event_type": "CT_OPERATION",
+      "country": "Nigeria",
+      "region": "Adamawa State",
+      "ai_relevance_score": 85,
+      "ai_relevance_reason": "Reports a concrete, dated counter-terrorism combat operation.",
       "related_articles": []
     }
   ]
