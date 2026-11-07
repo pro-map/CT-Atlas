@@ -525,6 +525,31 @@ test("a wallet that reads empty again keeps the time it was first found empty, s
   assert.equal(h.buildMonitorAlerts(watchWith({},legacy),{transactions:[]},NOW).snapshot.empty_since,"2026-09-20T06:00:00.000Z");
 });
 
+test("a first payment read while unconfirmed keeps the empty-wallet time, so a stale read cannot put its block before the baseline",()=>{
+  const h=harness();
+  const at=hours=>Date.parse("2026-09-20T00:00:00Z")+hours*3600000;
+  const watchAt=snapshot=>watchWith({min_amount:10},snapshot);
+  const pending=eth({id:"p1",amount:50,time:""});
+  const mined={...pending,time:new Date(at(6.5)).toISOString()};
+  const empty=h.buildMonitorAlerts(watchAt(null),{transactions:[]},at(0)).snapshot;
+  // 6h: the payment is listed unconfirmed. 12h: a stale view still lists it so, although it was mined at 6h30.
+  const seen=h.buildMonitorAlerts(watchAt(empty),{transactions:[pending]},at(6));
+  assert.deepEqual(types(seen),["NEW_TRANSACTION"]);
+  assert.equal(seen.snapshot.empty_since,empty.checked_at,"a payment with no block time is no dated activity yet");
+  const stale=h.buildMonitorAlerts(watchAt(seen.snapshot),{transactions:[pending]},at(12)).snapshot;
+  assert.equal(stale.checked_at,new Date(at(12)).toISOString());
+  assert.equal(stale.empty_since,empty.checked_at);
+  const confirmed=h.buildMonitorAlerts(watchAt(stale),{transactions:[mined]},at(18));
+  assert.deepEqual(types(confirmed),["LARGE_TRANSFER"]);
+  assert.equal("empty_since" in confirmed.snapshot,false);
+  // A new watch whose first read lists only an unconfirmed payment counts from that read.
+  const first=h.buildMonitorAlerts(watchAt(null),{transactions:[pending]},at(6)).snapshot;
+  assert.equal(first.empty_since,new Date(at(6)).toISOString());
+  const again=h.buildMonitorAlerts(watchAt(first),{transactions:[pending]},at(12)).snapshot;
+  assert.equal(again.empty_since,first.empty_since);
+  assert.deepEqual(types(h.buildMonitorAlerts(watchAt(again),{transactions:[mined]},at(18))),["LARGE_TRANSFER"]);
+});
+
 test("CHECK NOW records a failed read and answers with its reason",async()=>{
   const {h,calls}=monitorRoute({
     "/crypto-monitor-targets":{ok:true,targets:[TARGET]},

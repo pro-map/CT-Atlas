@@ -99,8 +99,8 @@ function alertBase(watch, type, severity, title, detail, txId = "", dayBucket = 
   };
 }
 
-// When an empty baseline was first found empty. A snapshot saved before empty_since existed
-// only has the time of its own check.
+// When a baseline with no dated activity was first found so: empty, or holding only payments not
+// yet in a block. A snapshot saved before empty_since existed only has the time of its own check.
 function emptySince(previous) {
   const since = Date.parse(previous?.empty_since || "");
   return Number.isFinite(since) ? since : Date.parse(previous?.checked_at || "");
@@ -115,16 +115,18 @@ function buildMonitorAlerts(target, analysis, now = Date.now()) {
   const dayBucket = new Date(now).toISOString().slice(0, 10);
   const alerts = [];
 
-  // No snapshot means no baseline yet. A snapshot with no time means the wallet was
-  // empty when it was taken: what came after that check is new, but what an empty read
-  // missed from before it is not, or one bad read would turn a whole history into alerts.
+  // No snapshot means no baseline yet. A snapshot with no time means the wallet had no
+  // dated activity when it was taken (empty, or only unconfirmed payments): what came after
+  // that check is new, but what such a read missed from before it is not, or one bad read
+  // would turn a whole history into alerts.
   const previousTime = Date.parse(previous?.newest_tx_time || "");
   const hasBaselineTime = Number.isFinite(previousTime);
   const since = hasBaselineTime ? previousTime : emptySince(previous) - EMPTY_BASELINE_MARGIN_MS;
-  // A wallet that reads empty again keeps the time it was first found empty. Moved to this check,
-  // it would put activity that this read missed before the baseline, and that activity would never alert.
-  if (!snapshot.newest_tx_id) {
-    const first = previous && !previous.newest_tx_id ? emptySince(previous) : NaN;
+  // A wallet that still has no dated activity keeps the time it was first found so. Moved to this
+  // check, it would put activity that this read missed, or still listed as unconfirmed, before the
+  // baseline, and that activity would never alert.
+  if (!Number.isFinite(Date.parse(snapshot.newest_tx_time))) {
+    const first = previous && !hasBaselineTime ? emptySince(previous) : NaN;
     snapshot.empty_since = Number.isFinite(first) ? new Date(first).toISOString() : snapshot.checked_at;
   }
   const notNew = time => Number.isFinite(since) && time <= since;

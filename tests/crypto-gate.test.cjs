@@ -371,6 +371,16 @@ test("an empty baseline keeps the time the wallet was first found empty, and a b
   assert.equal("empty_since" in (await watchNow(call)).last_snapshot,false);
 });
 
+test("a baseline whose only payment is still unconfirmed keeps the time too: it has no dated activity yet",async()=>{
+  const {call}=harness();
+  await put(call,{...empty,watchlist:[WATCH]},0);
+  const save=snapshot=>monitorUpdate(call,{snapshot,alerts:[],check:{ok:true,error:""}});
+  await save({checked_at:"2026-11-06T00:00:00.000Z",newest_tx_id:"p1",newest_tx_time:"",empty_since:"2026-11-04T00:00:00.000Z"});
+  assert.equal((await watchNow(call)).last_snapshot.empty_since,"2026-11-04T00:00:00.000Z");
+  await save({checked_at:"2026-11-07T00:00:00.000Z",newest_tx_id:"p1",newest_tx_time:""});
+  assert.equal((await watchNow(call)).last_snapshot.empty_since,"2026-11-07T00:00:00.000Z","with no time of its own, from its own check");
+});
+
 // ---------------------------------------------------------------- saves that fail, and runs that never report
 
 const SANCTIONS_ALERT={type:"SANCTIONS_EXPOSURE",severity:"HIGH",title:"Direct exposure to a sanctioned address",detail:"d",tx_id:"tx9"};

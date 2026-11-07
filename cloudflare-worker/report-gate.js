@@ -272,17 +272,17 @@ function applyCryptoMonitorUpdate(workspace, watch, update, now) {
   const at = new Date(now).toISOString();
   const snapshot = update.snapshot && typeof update.snapshot === "object" ? update.snapshot : null;
   if (snapshot) {
-    const newest = cleanText(snapshot.newest_tx_id, 180);
+    const newestTime = cleanText(snapshot.newest_tx_time, 64);
     watch.last_snapshot = {
       checked_at: cleanText(snapshot.checked_at, 64),
-      newest_tx_id: newest,
-      newest_tx_time: cleanText(snapshot.newest_tx_time, 64),
+      newest_tx_id: cleanText(snapshot.newest_tx_id, 180),
+      newest_tx_time: newestTime,
       tx_count: Number(snapshot.tx_count || 0),
       aggregate_value: Number(snapshot.aggregate_value || 0),
       risk_label: cleanText(snapshot.risk_label, 24),
-      // An empty baseline keeps the time the wallet was first found empty (crypto-monitor.js): activity
-      // from after that time is new, however many empty reads came since.
-      ...(newest ? {} : { empty_since: cleanText(snapshot.empty_since, 64) || cleanText(snapshot.checked_at, 64) })
+      // A baseline with no dated activity, empty or only unconfirmed, keeps the time the wallet was first
+      // found so (crypto-monitor.js): activity from after that time is new, however many reads came since.
+      ...(Number.isFinite(Date.parse(newestTime)) ? {} : { empty_since: cleanText(snapshot.empty_since, 64) || cleanText(snapshot.checked_at, 64) })
     };
     watch.updated_at = at;
   }

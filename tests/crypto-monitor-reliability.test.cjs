@@ -346,6 +346,27 @@ test("a new wallet that reads empty twice still alerts on the payment the second
   assert.equal(workspace.watchlist[0].last_snapshot.newest_tx_id,paid.txid);
 });
 
+test("a first payment read while unconfirmed still alerts once mined, after a stale read that lists it unconfirmed again",async()=>{
+  const setup=await rig();
+  const wallet=p2pkh("donation-mempool");
+  await seed(setup,[watch("w1",wallet,null,{min_amount:0.5})]);
+  // Mined 6.5 hours after the first check, so the 6-hour read lists it unconfirmed.
+  const mined=payment(wallet,0,-6.5);
+  const pending={...mined,status:{confirmed:false}};
+  const inMempool={chain_stats:{tx_count:0,funded_txo_sum:0,spent_txo_sum:0},mempool_stats:{tx_count:1,funded_txo_sum:100000000,spent_txo_sum:0}};
+  await runAt(setup,(_,kind)=>kind==="info"?info(0):[],0);
+  const firstCheck=(await saved(setup)).watchlist[0].last_snapshot.checked_at;
+  await runAt(setup,(_,kind)=>kind==="info"?inMempool:kind==="txs"?[pending]:[],6*HOUR);
+  // At 12 hours the address read is down and the history is a stale view that still lists it unconfirmed.
+  await runAt(setup,(_,kind)=>kind==="info"?null:kind==="txs"?[pending]:[],12*HOUR);
+  let workspace=await saved(setup);
+  assert.equal(workspace.watchlist[0].last_snapshot.empty_since,firstCheck,"no dated activity yet, so the first time holds");
+  await runAt(setup,(_,kind)=>kind==="info"?info(1):kind==="txs"?[mined]:[],18*HOUR);
+  workspace=await saved(setup);
+  assert.deepEqual(workspace.alerts.map(alert=>alert.type+" "+alert.tx_id).sort(),["LARGE_TRANSFER "+mined.txid,"NEW_TRANSACTION "+mined.txid]);
+  assert.equal("empty_since" in workspace.watchlist[0].last_snapshot,false);
+});
+
 // Three wallets read in full, the second with a payment from a listed address in its history.
 async function threeWallets(intercept){
   (await sanctions).resetSanctionsCache();
