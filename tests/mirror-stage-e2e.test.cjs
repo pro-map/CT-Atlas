@@ -185,15 +185,25 @@ function writeDatabase(file, now) {
   return { sha256: hash.digest("hex"), size };
 }
 
+// The environment of every child process: no rehearsal cap of the caller's, and no
+// Cloudflare credentials, which the report Worker's deploy job runs this suite with.
+const CHILD_ENV = Object.fromEntries(Object.entries(process.env)
+  .filter(([name]) => !/^(CLOUDFLARE_|CF_|CT_ATLAS_MIRROR_REHEARSAL_CAP$)/i.test(name)));
+CHILD_ENV.PYTHONIOENCODING = "utf-8";
+
 // tools/deploy_mirror.sh works in the folder above its own: the tracked tree as hard links
-// (copies where a link is refused), with the synthetic events.json in place of the real one.
+// (copies where a link is refused), with the synthetic events.json in place of the real one,
+// and without the uploader, so that a script going past --prepare-only fails instead of
+// deploying the synthetic database to the real mirror.
 // The script writes only into its staging folder, so no linked file is ever written.
 function plantTree(tree) {
   const listed = execFileSync("git", ["ls-files", "-z", "--cached", "--others", "--exclude-standard"], { cwd: ROOT, encoding: "utf8" });
   for (const name of new Set(listed.split("\0"))) {
+    if (!name || name === "events.json" || name === "tools/wrangler_retry.py") continue;
     const source = path.join(ROOT, name), target = path.join(tree, name);
-    // Skips a file deleted here, and on Windows the case twin of one already planted.
-    if (!name || name === "events.json" || !fs.existsSync(source) || fs.existsSync(target)) continue;
+    // Skips a file deleted here, an untracked repository or worktree (listed as its folder),
+    // and on Windows the case twin of one already planted.
+    if (!fs.statSync(source, { throwIfNoEntry: false })?.isFile() || fs.existsSync(target)) continue;
     fs.mkdirSync(path.dirname(target), { recursive: true });
     try { fs.linkSync(source, target); } catch { fs.copyFileSync(source, target); }
   }
@@ -336,10 +346,8 @@ before(async () => {
   const oracle = path.join(tmp, "oracle");
   plantTree(tree);
   const database = writeDatabase(path.join(tree, "events.json"), Date.now());
-  const env = { ...process.env, PYTHONIOENCODING: "utf-8" };
-  delete env.CT_ATLAS_MIRROR_REHEARSAL_CAP;
   const deployEnv = {
-    ...env,
+    ...CHILD_ENV,
     ...(REAL_CAP ? {} : { CT_ATLAS_MIRROR_REHEARSAL_CAP: String(CAP) }),
     // The manifest names the revision it was built from, and refuses a database much
     // smaller than the live site's unless the shrink is intended: a synthetic one is.
@@ -351,7 +359,7 @@ before(async () => {
     run("bash", ["tools/deploy_mirror.sh", "--prepare-only"], { cwd: tree, env: deployEnv }),
     ...[["build_events_lite", "events-lite.json"], ["build_events_map", "events-map.json"]].map(([tool, name]) =>
       run("python3", [`tools/${tool}.py`, "--input", path.join(tree, "events.json"), "--output", path.join(oracle, name)],
-        { cwd: ROOT, env })),
+        { cwd: ROOT, env: CHILD_ENV })),
   ]);
   assert.equal(deploy.status, 0, deploy.stderr || deploy.stdout);
   for (const build of builds) assert.equal(build.status, 0, build.stderr);
@@ -531,7 +539,7 @@ for (const [fault, [damage, outcome]] of Object.entries(FAULTS)) {
 test("the publication audit confirms the rehearsal mirror, and refuses it with a chunk missing", async () => {
   const receipt = path.join(tmp, "publication-receipt-mirror.json");
   const audit = () => run("python3", ["-c", AUDIT, base.replace("http://", "https://"), path.join(staging, "publication-manifest.json"), receipt],
-    { cwd: ROOT, env: { ...process.env, PYTHONIOENCODING: "utf-8" } });
+    { cwd: ROOT, env: CHILD_ENV });
   const confirmed = await audit();
   assert.equal(confirmed.status, 0, confirmed.stderr);
   const proof = JSON.parse(fs.readFileSync(receipt, "utf8"));
@@ -559,7 +567,7 @@ test("a real deploy refuses the rehearsal cap before it stages anything", async 
   fs.mkdirSync(path.join(alone, "tools"), { recursive: true });
   fs.copyFileSync(path.join(ROOT, "tools/deploy_mirror.sh"), path.join(alone, "tools/deploy_mirror.sh"));
   const refused = await run("bash", ["tools/deploy_mirror.sh"], { cwd: alone,
-    env: { ...process.env, CT_ATLAS_MIRROR_REHEARSAL_CAP: String(CAP) } });
+    env: { ...CHILD_ENV, CT_ATLAS_MIRROR_REHEARSAL_CAP: String(CAP) } });
   assert.equal(refused.status, 2, refused.stderr);
   assert.match(refused.stderr, /only for --prepare-only/);
   assert.ok(!fs.existsSync(path.join(alone, "_pages_mirror")));
