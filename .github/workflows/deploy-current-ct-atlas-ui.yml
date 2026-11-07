@@ -186,6 +186,14 @@ jobs:
         # A failure stops this deploy, not the Cloudflare mirror: it also deploys main on its own
         # push trigger and after the other publishing workflows, the status refresh among them.
         run: node --test tests/*.test.cjs
+      - name: Name the failing Node tests
+        # Job logs are not public, annotations are.
+        if: failure()
+        shell: bash
+        run: |
+          node --test --test-reporter=tap tests/*.test.cjs > node-suite.txt 2>&1 || true
+          summary="$(grep -E -A3 '^ *(not ok|error:)' node-suite.txt | grep -v '^--' | head -n 60 | cut -c1-200 | awk '{printf "%s%%0A", $0}')"
+          echo "::error title=Node suite::${summary:-the suite failed but named no test}"
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6
       - name: Build lightweight map data (events-lite.json)

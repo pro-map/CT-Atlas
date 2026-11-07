@@ -54,6 +54,15 @@ jobs:
       - name: Run the Node regression suite
         run: node --test tests/*.test.cjs
 
+      - name: Name the failing Node tests
+        # Job logs are not public, annotations are.
+        if: failure()
+        shell: bash
+        run: |
+          node --test --test-reporter=tap tests/*.test.cjs > node-suite.txt 2>&1 || true
+          summary="$(grep -E -A3 '^ *(not ok|error:)' node-suite.txt | grep -v '^--' | head -n 60 | cut -c1-200 | awk '{printf "%s%%0A", $0}')"
+          echo "::error title=Node suite::${summary:-the suite failed but named no test}"
+
       - name: Run the Python release checks
         run: |
           python3 --version
