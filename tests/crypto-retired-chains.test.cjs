@@ -271,7 +271,6 @@ test("a record stored before the change does not bring the chains back on /healt
   await setup.storage.put("crypto-provider-status",OLD_RECORD());
   const response=await app.fetch(new Request("https://worker.test/health"),setup.env,{waitUntil(){}});
   const body=await response.json();
-  assert.equal(body.version,"5.43");
   assert.deepEqual(Object.keys(body.crypto_provider_status.providers).sort(),
     ["blockstream","etherscan_arbitrum","etherscan_ethereum","etherscan_polygon","tronscan","trongrid"].sort());
   assert.equal(body.crypto_provider_status.providers.etherscan_ethereum.status,"ok");

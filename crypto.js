@@ -2525,7 +2525,7 @@ function renderKpis(payload,filteredRows){
       kpi("Chain",payload.chain_name||payload.chain),
       kpi("Value",value==="—"?"—":fmtNumber(value)+" "+asset),
       kpi("Block",tx.block_number??"—"),
-      kpi("Status",tx.execution_result||"—"),
+      kpi("Status",tx.execution_result||(tx.confirmed===true?"CONFIRMED":tx.confirmed===false?"UNCONFIRMED":"—")),
       kpi("Provider",payload.provider||"—")
     ].join("");
     return;
