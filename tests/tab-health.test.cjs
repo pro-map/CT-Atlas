@@ -1,6 +1,7 @@
 const {test}=require("node:test");
 const assert=require("node:assert/strict");
 const fs=require("node:fs");
+const vm=require("node:vm");
 
 const read=file=>fs.readFileSync(file,"utf8");
 
@@ -31,7 +32,41 @@ test("the panel's details show the monitor's last run as /health/status summaris
   const js=read("tab-health.js");
   assert.ok(js.includes('["Last monitor run",data.monitor_run&&data.monitor_run.summary]'));
   assert.ok(js.includes("config.facts(versions,state.data)"));
-  assert.match(read("crypto.html"),/<script src="tab-health\.js\?v=3" /,"a cached copy without the line is replaced");
+  assert.match(read("crypto.html"),/<script src="tab-health\.js\?v=4" /,"a cached copy without the monitor verdict is replaced");
+});
+
+// The component on a minimal page, fed one /health/status answer: the colour its button takes.
+async function verdict(data){
+  const made=[];
+  const element=()=>{
+    const item={dataset:{},hidden:false,innerHTML:"",setAttribute(){},append(){},appendChild(){},addEventListener(){},
+      contains:()=>false,querySelector:()=>element()};
+    made.push(item);
+    return item;
+  };
+  const timers=[];
+  const document={readyState:"complete",currentScript:{dataset:{healthScope:"crypto"}},body:element(),
+    createElement:element,querySelector:()=>null,addEventListener(){}};
+  vm.runInContext(read("tab-health.js"),vm.createContext({
+    document,AbortController,Date,
+    setTimeout:callback=>timers.push(callback),clearTimeout(){},setInterval(){},clearInterval(){},
+    fetch:async()=>({ok:true,json:async()=>data})
+  }));
+  await timers.shift()();
+  return made.find(item=>item.id==="tabHealthButton").dataset.state;
+}
+const up={bitcoin:{status:"operational"},evm:{status:"operational"},tron:{status:"operational"},sanctions:{status:"operational"}};
+
+test("a monitor run that failed, in full or in part, or is overdue turns the Health button to degraded",async()=>{
+  assert.equal(await verdict({components:up,monitor_run:{status:"ok",stale:false}}),"operational");
+  for(const run of [{status:"failed",stale:false},{status:"degraded",stale:false},{status:"ok",stale:true}]){
+    assert.equal(await verdict({components:up,monitor_run:run}),"degraded",JSON.stringify(run));
+  }
+  for(const run of [{status:"running",stale:false},{status:"none"},{status:"unavailable"},undefined]){
+    assert.equal(await verdict({components:up,monitor_run:run}),"operational","nothing known against it: "+JSON.stringify(run));
+  }
+  const allDown={...up,bitcoin:{status:"down"},evm:{status:"down"},tron:{status:"down"}};
+  assert.equal(await verdict({components:allDown,monitor_run:{status:"failed"}}),"down","no provider is still an outage");
 });
 
 test("the health component escapes everything it renders and never uses eval-like APIs",()=>{

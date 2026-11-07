@@ -23,7 +23,7 @@ const OVERALL={0:["operational","All systems operational"],1:["degraded","Degrad
 
 // Verdict: a section flagged outageIfAllDown whose rows are all down means "Outage"
 // (the tab cannot do its main job). Any other row that is down / degraded / not
-// configured means "Degraded".
+// configured, or a monitor run that failed or is overdue, means "Degraded".
 const SCOPES={
   crypto:{
     title:"CRYPTO INTELLIGENCE",
@@ -74,7 +74,8 @@ function rowHtml(label,component,key){
     (detail?'<div class="th-detail">'+esc(detail)+'</div>':"")+'</div>';
 }
 
-function computeOverall(config,components){
+function computeOverall(config,data){
+  const components=data.components||{};
   let worst=-1;
   for(const section of config.sections){
     const ranks=[];
@@ -86,6 +87,10 @@ function computeOverall(config,components){
     }
     if(section.outageIfAllDown&&ranks.length&&ranks.every(rank=>rank===2))return 2;
   }
+  // A monitor run that failed, in full or in part, or that no later run has followed in time, leaves
+  // watched wallets unread: "Degraded", as for a degraded component. Analysis still works, so never "Outage".
+  const run=data.monitor_run;
+  if(run&&(run.status==="failed"||run.status==="degraded"||run.stale===true))worst=Math.max(worst,1);
   return worst;
 }
 
@@ -94,7 +99,7 @@ function overallState(config){
   // check (or no data yet) changes it.
   if(state.phase==="error")return ["down","Status unavailable"];
   if(!state.data)return ["unknown","Checking…"];
-  const worst=computeOverall(config,state.data.components||{});
+  const worst=computeOverall(config,state.data);
   return OVERALL[worst]||["unknown","Checking…"];
 }
 
