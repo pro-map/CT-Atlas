@@ -434,6 +434,38 @@ test("the wallets of a run that never reported read CHECK FAILING once the next 
   assert.deepEqual(workspace.watchlist.slice(8).map(item=>item.monitor.failures),[0,0,0,0,0,0,0,0]);
 });
 
+test("a run started while another is under way reads nothing, so the first run's lost wallets are still marked",async()=>{
+  (await sanctions).resetSanctionsCache();
+  const {runCryptoMonitor}=await monitor;
+  // The schedule fires twice: the second run starts while the first is saving, and the first's save is lost.
+  let phase="first",second=null;
+  const setup=await rig({},()=>{},async path=>{
+    if(path!=="/crypto-monitor-update"||phase==="done")return null;
+    if(phase==="first"){
+      phase="second";
+      second=await runCryptoMonitor(setup.env);
+      phase="lost";
+    }
+    return phase==="lost"?json({error:"Network connection lost."},500):null;
+  });
+  const wallets=Array.from({length:16},(_,index)=>p2pkh("overlap"+index));
+  const rows=new Map(wallets.map(wallet=>[wallet,history(wallet,30)]));
+  await seed(setup,wallets.map((wallet,index)=>watch("w"+String(index).padStart(2,"0"),wallet,baselineOf(rows.get(wallet)))));
+  const answer=(wallet,kind)=>FULL(kind,rows.get(wallet));
+  await assert.rejects(()=>runAt(setup,answer,0),/Network connection lost/);
+  assert.equal(second.status,"already_running");
+  assert.equal(saves(setup).length,2,"only the first run saved, and it tried twice");
+  assert.match((await runRecord(setup)).summary,/ UTC · Running: 8 wallets to read$/,"the record is still the first run's");
+  phase="done";
+  await runAt(setup,answer,6*HOUR);
+  const workspace=await saved(setup);
+  for(const item of workspace.watchlist.slice(0,8)){
+    assert.equal(item.monitor?.failures,1,item.id);
+    assert.match(item.monitor.last_error,/never reported a result\.$/,item.id);
+  }
+  assert.deepEqual(workspace.watchlist.slice(8).map(item=>item.monitor.failures),[0,0,0,0,0,0,0,0]);
+});
+
 // The workspace route checks the session with the gate first.
 function withSession(binding){
   return {idFromName:binding.idFromName,get:id=>{

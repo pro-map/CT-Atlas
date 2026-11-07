@@ -403,6 +403,20 @@ test("an update sent again under the same id saves nothing twice: failures, aler
   assert.deepEqual(workspace.alerts.map(alert=>alert.type),["CHECK_FAILING","SANCTIONS_EXPOSURE"]);
 });
 
+test("a retry still finds the attempt it repeats after a CHECK NOW saved in between, so the newer read stays",async()=>{
+  const {call}=harness();
+  await put(call,{...empty,watchlist:[WATCH]},0);
+  const send=(id,newest,alerts=[])=>call("/crypto-monitor-update",{update_id:id,updates:[{username:"analyst",watch_id:"w1",
+    snapshot:{checked_at:"2026-11-07T06:17:00.000Z",newest_tx_id:newest,newest_tx_time:"2026-11-07T05:00:00.000Z"},alerts,check:{ok:true,error:""}}]});
+  assert.equal((await send("run-1","run-tx",[SANCTIONS_ALERT])).body.alerts_added,1);
+  // The run's answer is lost; before its retry a second later, the analyst presses CHECK NOW on a newer payment.
+  await send("check-now","newer-tx");
+  assert.deepEqual((await send("run-1","run-tx",[SANCTIONS_ALERT])).body,{ok:true,alerts_added:1,missing:0},"the answer the first attempt would have had");
+  const {workspace}=await get(call);
+  assert.equal(workspace.watchlist[0].last_snapshot.newest_tx_id,"newer-tx","the run's older read is not put back");
+  assert.equal(workspace.alerts.length,1);
+});
+
 test("a run that never reports leaves each wallet it owed a result a failed check when the next run starts",async()=>{
   let offset=0;
   const {call,values}=harness(["analyst"],{clock:()=>Date.now()+offset});
@@ -419,11 +433,16 @@ test("a run that never reports leaves each wallet it owed a result a failed chec
   // The run never reports, and a CHECK NOW reads w2 while it is out.
   offset=60000;
   await call("/crypto-monitor-update",{update_id:"check-now",updates:[{username:"analyst",watch_id:"w2",snapshot:null,alerts:[],check:{ok:true,error:""}}]});
-  // Ten minutes in, the run may still be running: a start then (a schedule firing twice) marks nothing.
+  // Ten minutes in, the run may still be running: a start then (a schedule firing twice) reads nothing,
+  // marks nothing, and leaves the first run's record and what it owes in place.
   offset=10*60000;
-  await start();
+  const twice=await start();
+  assert.deepEqual(Array.from(twice.targets),[]);
+  assert.equal(twice.running_since,values.get("crypto-monitor-run").started_at);
+  assert.equal(twice.run_id,undefined);
   assert.equal((await byId()).get("w1").monitor,undefined);
-  values.set("crypto-monitor-pending",lost);
+  assert.deepEqual(values.get("crypto-monitor-pending"),lost);
+  assert.equal(values.get("crypto-monitor-run").run_id,first.run_id);
 
   offset=6*3600000;
   const second=await start();
@@ -433,10 +452,10 @@ test("a run that never reports leaves each wallet it owed a result a failed chec
   assert.equal(watches.get("w2").monitor.failures,0,"checked since the run started");
   assert.equal(watches.get("t1").monitor,undefined);
   assert.equal(values.get("crypto-monitor-pending").run_id,second.run_id);
-  // The same lost run seen again marks nothing twice.
+  // The same lost run seen again, by a start past the second run's report window, marks nothing twice.
   const current=values.get("crypto-monitor-pending");
   values.set("crypto-monitor-pending",lost);
-  offset+=60000;
+  offset+=16*60000;
   await start();
   assert.equal((await byId()).get("w1").monitor.failures,1);
   values.set("crypto-monitor-pending",current);
@@ -451,13 +470,17 @@ test("a run that never reports leaves each wallet it owed a result a failed chec
 });
 
 test("a run's report clears what it owed, and a run a later one replaced can overwrite neither record",async()=>{
-  const {call,values}=harness();
+  let offset=0;
+  const {call,values}=harness(["analyst"],{clock:()=>Date.now()+offset});
   await put(call,{...empty,watchlist:[WATCH]},0);
   const report=runId=>call("/crypto-monitor-update",{update_id:runId,updates:[
     {username:"analyst",watch_id:"w1",snapshot:null,alerts:[],check:{ok:true,error:""}}
   ],run:{selected:1,checked:1,partial:0,failed:0}});
   const older=(await call("/crypto-monitor-targets",{limit:8})).body.run_id;
+  // Past the older run's report window, so the newer one starts.
+  offset=16*60000;
   const newer=(await call("/crypto-monitor-targets",{limit:8})).body.run_id;
+  assert.match(newer,/^[0-9a-f-]{36}$/);
   await report(older);
   assert.equal((await call("/crypto-monitor-run-get",{})).body.run.status,"running");
   assert.equal(values.get("crypto-monitor-pending").run_id,newer);

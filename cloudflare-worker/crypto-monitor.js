@@ -406,6 +406,11 @@ async function runCryptoMonitor(env) {
   if (!targetResponse.ok) {
     throw new Error(targetPayload?.error || "Unable to read Crypto monitoring targets.");
   }
+  // The schedule fired twice: the run already under way keeps this slot, and this one reads nothing.
+  if (targetPayload.running_since) {
+    console.log("Crypto automatic monitor: the run started at " + cleanText(targetPayload.running_since, 40) + " is still under way; this one reads nothing.");
+    return { ok: true, status: "already_running", version: CRYPTO_MONITOR_VERSION, generated_at: new Date().toISOString(), selected: 0, alerts_added: 0 };
+  }
 
   const targets = Array.isArray(targetPayload.targets) ? targetPayload.targets : [];
   // Retired-chain watches stay out of the rotation, so the gate only counts them. One that

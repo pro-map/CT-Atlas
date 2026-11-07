@@ -1121,6 +1121,14 @@ export class ReportGate {
       const rotation = targets.filter(item => !RETIRED_CRYPTO_CHAINS.has(item.watch.chain));
       const retired = targets.length - rotation.length;
       if (!rotation.length) return Response.json({ ok: true, targets: [], total: 0, retired });
+      // A run inside its report window may still be reading (the schedule fired twice). A second run would
+      // count the same wallets' failures twice, or replace what the first owes and hide its loss if it
+      // never reports, so it is given nothing to read.
+      const current = await this.state.storage.get(CRYPTO_MONITOR_RUN_KEY);
+      const runningSince = Date.parse(current?.started_at || "");
+      if (!current?.finished_at && Number.isFinite(runningSince) && now - runningSince <= CRYPTO_MONITOR_REPORT_MS) {
+        return Response.json({ ok: true, targets: [], total: rotation.length, retired, running_since: current.started_at });
+      }
 
       const cursorRaw = Number((await this.state.storage.get("crypto-monitor-cursor")) || 0);
       const cursor = ((cursorRaw % rotation.length) + rotation.length) % rotation.length;
@@ -1159,7 +1167,8 @@ export class ReportGate {
         return Response.json({ error: "Invalid monitoring update." }, { status: 400 });
       }
       // A retry carries the id of the attempt it repeats. A wallet that attempt saved keeps the id in its
-      // check record and is not saved again, so its failures and alerts count once.
+      // check record and is not saved again, so its failures and alerts count once. It keeps the last two
+      // ids, so a CHECK NOW saved in between does not make the retry put the run's older read back.
       const updateId = cleanText(body.update_id, 80);
       const byAnalyst = new Map();
       let added = 0;
@@ -1189,12 +1198,14 @@ export class ReportGate {
             missing++;
             continue;
           }
-          if (updateId && watch.monitor?.update_id === updateId) {
-            added += monitorCount(watch.monitor.update_alerts);
+          const done = Array.isArray(watch.monitor?.updates) ? watch.monitor.updates : [];
+          const earlier = updateId ? done.find(item => item?.id === updateId) : null;
+          if (earlier) {
+            added += monitorCount(earlier.alerts);
             continue;
           }
           const count = applyCryptoMonitorUpdate(workspace, watch, update, now);
-          if (updateId) watch.monitor = { ...(watch.monitor || {}), update_id: updateId, update_alerts: count };
+          if (updateId) watch.monitor = { ...(watch.monitor || {}), updates: [{ id: updateId, alerts: count }, ...done].slice(0, 2) };
           analystAdded += count;
           applied.push({ username, watch_id: watchId, read: update?.check?.ok === true });
         }
