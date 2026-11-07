@@ -591,7 +591,9 @@ test("the whole run has a total time bound, even when calls ignore their abort s
   const setup=await rig();
   const fetcher=()=>new Promise(()=>{});
   const started=Date.now();
-  const finished=await runCryptoProviderProbe(setup.env,at("2026-11-06T22:27:00Z"),{fetcher,etherscanSpacingMs:0,budgetMs:150,callTimeoutMs:60});
+  // One call outlasts the budget, so the last chain finds no time left on any timer precision:
+  // with 60 ms calls it reached the deadline on Windows but not on Linux.
+  const finished=await runCryptoProviderProbe(setup.env,at("2026-11-06T22:27:00Z"),{fetcher,etherscanSpacingMs:0,budgetMs:150,callTimeoutMs:300});
   assert.ok(Date.now()-started<1500);
   assert.equal(finished,true,"what is known is still written");
   const {providers:result}=await stored(setup);
