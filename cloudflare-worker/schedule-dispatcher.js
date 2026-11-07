@@ -21,7 +21,13 @@ const SCHEDULE_SLOTS = Object.freeze([
   { workflow: "daily-radnuc-background.yml", hour: 10, minute: 27 },
   { workflow: "update-map.yml", hour: 18, minute: 17, inputs: { mode: "daily" } },
   { workflow: "daily-radnuc-background.yml", hour: 18, minute: 27 },
-  { workflow: "sync-background-corpus.yml", hour: 20, minute: 47 }
+  { workflow: "sync-background-corpus.yml", hour: 20, minute: 47 },
+  { workflow: "refresh-sanctions.yml", hour: 4, minute: 47 },
+  { workflow: "refresh-sanctions.yml", hour: 9, minute: 47 },
+  { workflow: "refresh-sanctions.yml", hour: 15, minute: 47 },
+  { workflow: "refresh-sanctions.yml", hour: 17, minute: 47 },
+  { workflow: "refresh-sanctions.yml", hour: 20, minute: 47 },
+  { workflow: "refresh-sanctions.yml", hour: 22, minute: 47 }
 ]);
 
 const slotExpression = slot => `${slot.minute} ${slot.hour} * * *`;

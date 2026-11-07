@@ -1,14 +1,28 @@
 name: Refresh OFAC sanctions list
+# cloudflare-worker/schedule-dispatcher.js recognises a started slot by this title.
+run-name: ${{ inputs.slot && format('Slot {0}', inputs.slot) || github.workflow }}
 
 # The Worker screens crypto analyses against sanctions-crypto.json as ct-atlas.com
 # serves it. OFAC usually publishes in the US afternoon (19:33 UTC on 2026-11-06),
 # after the map update's morning slot, which was the only refresh until then.
 # This is the only writer of that file. An unchanged list is not downloaded
 # (tools/update_sanctions.py compares OFAC's Last-Modified) and not committed.
+#
+# The slots are Paris times, the same as the dispatcher's: 20:47 and 22:47 follow
+# OFAC's afternoon (14:47 and 16:47 in Washington), and 22:47 is still after
+# 20:00 UTC in summer. GitHub's own schedule starts these runs 3-10 hours late
+# and never creates some; only the dispatcher, once enabled, starts them on time.
 on:
   schedule:
-    - cron: "23 3,9,15,18,20,22 * * *"
+    - cron: "47 4,9,15,17,20,22 * * *"
+      timezone: "Europe/Paris"
   workflow_dispatch:
+    inputs:
+      slot:
+        description: "Timed slot this run stands for, sent by the dispatcher; empty for a manual run"
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: read
@@ -90,8 +104,11 @@ jobs:
         env:
           CHANGED: ${{ steps.commit.outputs.changed }}
           EVENT: ${{ github.event_name }}
+          SLOT: ${{ inputs.slot }}
         run: |
-          if [ "$CHANGED" = "true" ] || [ "$EVENT" = "workflow_dispatch" ]; then
+          # A slot the dispatcher starts is a timed run; only a manual run always
+          # redeploys.
+          if [ "$CHANGED" = "true" ] || { [ "$EVENT" = "workflow_dispatch" ] && [ -z "$SLOT" ]; }; then
             echo "pages=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi

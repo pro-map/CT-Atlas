@@ -11,12 +11,15 @@ import subprocess
 import tempfile
 import textwrap
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOWS = ROOT / ".github/workflows"
 NAME = "refresh-sanctions.yml"
 SOURCE = (WORKFLOWS / NAME).read_text(encoding="utf-8")
+DISPATCHER = (ROOT / "cloudflare-worker/schedule-dispatcher.js").read_text(encoding="utf-8")
 
 
 def job(name):
@@ -58,19 +61,37 @@ def cron_hours(field):
 
 
 class ScheduleTests(unittest.TestCase):
-    def test_it_runs_several_times_a_day_and_after_the_us_afternoon(self):
+    def paris_slots(self):
         triggers = SOURCE.split("\non:\n", 1)[1].split("\npermissions:", 1)[0]
         self.assertIn("  workflow_dispatch:", triggers)
-        self.assertNotIn("timezone:", triggers, "the hours below are UTC")
-        crons = re.findall(r'(?m)^    - cron: "([^"]+)"$', triggers)
-        self.assertTrue(crons)
-        hours = sorted(set().union(*(cron_hours(cron.split()[1]) for cron in crons)))
+        crons = re.findall(r'(?m)^    - cron: "([^"]+)"\n      timezone: "Europe/Paris"$', triggers)
+        self.assertEqual(len(crons), triggers.count("- cron:"), "every slot is a Paris time, like the dispatcher's")
+        slots = set()
         for cron in crons:
-            self.assertEqual(cron.split()[2:], ["*", "*", "*"], "every day")
-        self.assertGreaterEqual(len(hours), 4)
-        self.assertTrue([hour for hour in hours if hour >= 20], "OFAC published at 19:33 UTC on 2026-11-06")
-        gaps = [(later - earlier) % 24 for earlier, later in zip(hours, hours[1:] + hours[:1])]
-        self.assertLessEqual(max(gaps), 8, "a new list never waits most of a day")
+            minute, hours, *days = cron.split()
+            self.assertEqual(days, ["*", "*", "*"], "every day")
+            slots.update((hour, int(minute)) for hour in cron_hours(hours))
+        return slots
+
+    def test_it_runs_several_times_a_day_and_after_the_us_afternoon_in_both_seasons(self):
+        slots = self.paris_slots()
+        self.assertGreaterEqual(len(slots), 4)
+        for day in ("2026-11-06", "2027-07-06"):
+            with self.subTest(day=day):
+                utc = sorted(datetime.fromisoformat(f"{day}T{hour:02d}:{minute:02d}")
+                             .replace(tzinfo=ZoneInfo("Europe/Paris")).astimezone(timezone.utc)
+                             for hour, minute in slots)
+                self.assertTrue([time for time in utc if time.hour >= 20], "OFAC published at 19:33 UTC on 2026-11-06")
+                minutes = [time.hour * 60 + time.minute for time in utc]
+                gaps = [(later - earlier) % 1440 for earlier, later in zip(minutes, minutes[1:] + minutes[:1])]
+                self.assertLessEqual(max(gaps), 8 * 60, "a new list never waits most of a day")
+
+    def test_the_dispatcher_can_start_every_slot_on_time(self):
+        # GitHub's own schedule starts this repository's runs 3-10 hours late and
+        # never creates some; the dispatcher starts the same slots on time.
+        dispatched = {(int(hour), int(minute)) for hour, minute in re.findall(
+            r'\{ workflow: "refresh-sanctions\.yml", hour: (\d+), minute: (\d+) \}', DISPATCHER)}
+        self.assertEqual(dispatched, self.paris_slots())
 
 
 class LockTests(unittest.TestCase):
@@ -225,18 +246,25 @@ class QuietUnchangedTests(unittest.TestCase):
         self.assertEqual(self.git("show", "--name-only", "--format=", pushed, cwd=self.origin).split(),
                          ["sanctions-crypto.json"])
 
-    def decide(self, served=None, changed="", event="schedule"):
+    def decide(self, served=None, changed="", event="schedule", slot=""):
         served_file = self.temp / "served.json"
         if served is not None:
             served_file.write_bytes(served)
         curl = f'curl() {{ cat "{served_file.as_posix()}"; }}' if served is not None else "curl() { return 22; }"
-        return self.run_step("Decide whether GitHub Pages needs the list", {"CHANGED": changed, "EVENT": event}, curl)
+        return self.run_step("Decide whether GitHub Pages needs the list",
+                             {"CHANGED": changed, "EVENT": event, "SLOT": slot}, curl)
 
     def test_a_list_pages_already_serves_is_not_redeployed(self):
-        result, output = self.decide(served=(self.repo / "sanctions-crypto.json").read_bytes())
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertNotIn("pages=true", output)
-        self.assertNotIn("::", result.stdout + result.stderr)
+        # A dispatched slot is a timed run: otherwise each one would deploy Pages and the mirror.
+        current = (self.repo / "sanctions-crypto.json").read_bytes()
+        for name, case in {"scheduled run": {},
+                           "dispatched slot": {"event": "workflow_dispatch", "slot": "47 22 * * *"}}.items():
+            with self.subTest(case=name):
+                self.output.write_text("", encoding="utf-8")
+                result, output = self.decide(served=current, **case)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertNotIn("pages=true", output)
+                self.assertNotIn("::", result.stdout + result.stderr)
 
     def test_a_new_list_a_manual_run_or_an_unpublished_list_deploys(self):
         current = (self.repo / "sanctions-crypto.json").read_bytes()
@@ -244,6 +272,8 @@ class QuietUnchangedTests(unittest.TestCase):
             "pushed just now": {"served": current, "changed": "true"},
             "manual run": {"served": current, "event": "workflow_dispatch"},
             "an earlier deploy failed": {"served": b'{"addresses":["old"]}\n'},
+            "an earlier deploy failed, seen by a dispatched slot":
+                {"served": b'{"addresses":["old"]}\n', "event": "workflow_dispatch", "slot": "47 22 * * *"},
             "ct-atlas.com unreachable": {},
         }
         for name, case in cases.items():
