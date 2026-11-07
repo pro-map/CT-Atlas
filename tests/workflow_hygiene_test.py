@@ -257,6 +257,15 @@ class RunnerImageTests(unittest.TestCase):
             self.assertLess(names.index(name), names.index("Deploy Worker"))
 
 
+class DeployGateTriggerTests(unittest.TestCase):
+    def test_a_test_only_fix_reruns_the_deploys_the_node_suite_blocked(self):
+        # On 2026-11-07 the fix touched a test alone: the Worker redeployed and the
+        # page stayed on the release the suite had stopped.
+        for name in ("deploy-current-ct-atlas-ui.yml", "deploy-report-worker.yml"):
+            with self.subTest(workflow=name):
+                self.assertIn("tests/**", trigger_paths(read(name), "push"))
+
+
 class PythonTestTriggerTests(unittest.TestCase):
     def test_python_ci_runs_for_every_root_module_json_and_workflow_change(self):
         # collector.py imports daily_pipeline, daily_source_retry,
